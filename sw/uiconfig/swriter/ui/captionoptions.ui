@@ -102,9 +102,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
+                        <property name="tooltip_text" translatable="yes" context="captionoptions|tooltip_text|level">Specify the maximum outline level of the immediately prior heading number to include in the caption number.</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="level-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="captionoptions|extended_tip|level">Select the number of outline levels from the top of the chapter hierarchy down to include in the caption label.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="captionoptions|extended_tip|level">Specify the maximum outline level of the immediately prior heading number to include in the caption number. For numbers to appear, the selected heading must have numbering applied.</property>
                           </object>
                         </child>
                       </object>
@@ -135,7 +136,7 @@
                       <object class="GtkLabel" id="label5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="captionoptions|label5">_Level:</property>
+                        <property name="label" translatable="yes" context="captionoptions|label5">_Outline level:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">level</property>
                         <property name="xalign">1</property>

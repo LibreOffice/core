@@ -147,10 +147,11 @@
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="tooltip_text" translatable="yes" context="optcaptionpage|tooltip_text|separator">Enter optional text characters to appear after the caption category and number.</property>
                         <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="separator-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|separator">Defines the character to be displayed after the number of the heading or chapter level.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|separator">Enter optional text characters to appear after the caption category and number.</property>
                           </object>
                         </child>
                       </object>
@@ -255,7 +256,7 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="optcaptionpage|label4">Level:</property>
+                        <property name="label" translatable="yes" context="optcaptionpage|label4">Outline level:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">level</property>
                         <property name="xalign">0</property>
@@ -287,9 +288,10 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="truncate-multiline">True</property>
+                        <property name="tooltip_text" translatable="yes" context="captionoptions|tooltip_text|chapseparator">Defines the character to be displayed after the selected chapter number and before the caption number.</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="chapseparator-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|chapseparator">Defines the character to be displayed after the number of the heading or chapter level.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|chapseparator">Defines the character to be displayed after the selected chapter number and before the caption number.</property>
                           </object>
                         </child>
                       </object>
@@ -304,12 +306,13 @@
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
+                        <property name="tooltip_text" translatable="yes" context="optcaptionpage|tooltip_text|level">Specify the maximum outline level of the immediately prior heading to prepend to the caption number.</property>
                         <items>
                           <item translatable="yes" context="optcaptionpage|level">None</item>
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="level-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|level">Specifies the headings or chapter levels where you want the numbering to start.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|level">Use this option to specify the outline level of the heading number that should be prepended to the caption number. The first immediately prior heading with an outline level no greater than the specified number here is used to supply the numbering that is prepended.</property>
                           </object>
                         </child>
                       </object>

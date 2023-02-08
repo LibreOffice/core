@@ -345,7 +345,7 @@
               <object class="GtkLabel" id="levelft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="flddocumentpage|levelft">_Level</property>
+                <property name="label" translatable="yes" context="flddocumentpage|levelft">_Outline level</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">level</property>
                 <property name="xalign">0</property>
@@ -361,9 +361,10 @@
                 <property name="can_focus">True</property>
                 <property name="adjustment">adjustment1</property>
                 <property name="truncate-multiline">True</property>
+                <property name="tooltip_text" translatable="yes" context="flddocumentpage|level|tooltip_text">Specifies the maximum outline level of the immediately prior heading to be used.</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="level-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="flddocumentpage|extended_tip|level">Select the chapter heading level that you want to include in the selected field.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="flddocumentpage|extended_tip|level">The first immediately prior heading with an outline level equal or less than the specified number is selected for display. If “Chapter number” is selected, then numbering must be applied in the Chapter Numbering dialog (see Tools menu).</property>
                   </object>
                 </child>
               </object>

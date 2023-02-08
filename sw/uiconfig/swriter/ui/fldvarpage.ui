@@ -429,12 +429,13 @@
                       <object class="GtkComboBoxText" id="level">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes" context="fldvarpage|level|tooltip_text">Choose the maximum outline level of the heading number to prepend to the displayed field.</property>
                         <items>
                           <item translatable="yes" context="fldvarpage|level">None</item>
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="level-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|level">Choose the heading or chapter level at which to restart numbering in the document.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|level">Choose the maximum outline level of the heading number to prepend to the displayed field. The selected heading number comes from the first immediately prior heading with the specified outline level or less. No heading number is displayed if “None” is selected.</property>
                           </object>
                         </child>
                       </object>
