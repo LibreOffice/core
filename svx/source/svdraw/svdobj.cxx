@@ -32,6 +32,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/units/Range2DLWrap.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <drawinglayer/processor2d/contourextractor2d.hxx>
 #include <drawinglayer/processor2d/linegeometryextractor2d.hxx>
@@ -949,13 +950,9 @@ void SdrObject::SetNavigationPosition (const sal_uInt32 nNewPosition)
 // GetCurrentBoundRect().
 const tools::Rectangle& SdrObject::GetCurrentBoundRect() const
 {
-    auto const& rRectangle = getOutRectangle();
-    if (rRectangle.IsEmpty())
-    {
-        const_cast< SdrObject* >(this)->RecalcBoundRect();
-    }
-
-    return rRectangle;
+    if (isOutRectangleEmpty())
+        const_cast<SdrObject*>(this)->RecalcBoundRect();
+    return getOutRectangle();
 }
 
 // To have a possibility to get the last calculated BoundRect e.g for producing
@@ -993,13 +990,12 @@ void SdrObject::RecalcBoundRect()
 
     if (!aRange.isEmpty())
     {
-        tools::Rectangle aNewRectangle(
-            tools::Long(floor(aRange.getMinX())),
-            tools::Long(floor(aRange.getMinY())),
-            tools::Long(ceil(aRange.getMaxX())),
-            tools::Long(ceil(aRange.getMaxY())));
-        setOutRectangle(aNewRectangle);
-        return;
+        const basegfx::B2DRange aRoundedRange(
+            std::floor(aRange.getMinX()),
+            std::floor(aRange.getMinY()),
+            std::ceil(aRange.getMaxX()),
+            std::ceil(aRange.getMaxY()));
+        m_aOutterRange = gfx::Range2DLWrap::create(aRoundedRange, getSdrModelFromSdrObject().getUnit());
     }
 }
 
@@ -3145,27 +3141,41 @@ void SdrObject::ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygo
 
 const tools::Rectangle& SdrObject::getOutRectangle() const
 {
-    return m_aOutRect;
+    return m_aOutterRange.toToolsRect();
+}
+
+bool SdrObject::isOutRectangleEmpty() const
+{
+    return getOutRectangle().IsEmpty();
 }
 
 void SdrObject::setOutRectangleConst(tools::Rectangle const& rRectangle) const
 {
-    m_aOutRect = rRectangle;
+    auto eUnit = getSdrModelFromSdrObject().getUnit();
+    m_aOutterRange = gfx::Range2DLWrap::create(rRectangle, eUnit);
 }
 
 void SdrObject::setOutRectangle(tools::Rectangle const& rRectangle)
 {
-    m_aOutRect = rRectangle;
+    auto eUnit = getSdrModelFromSdrObject().getUnit();
+    m_aOutterRange = gfx::Range2DLWrap::create(rRectangle, eUnit);
 }
 
 void SdrObject::resetOutRectangle()
 {
-    m_aOutRect = tools::Rectangle();
+    m_aOutterRange.reset();
 }
 
 void SdrObject::moveOutRectangle(sal_Int32 nXDelta, sal_Int32 nYDelta)
 {
-    m_aOutRect.Move(nXDelta, nYDelta);
+    if (nXDelta == 0 && nYDelta == 0)
+        return;
+
+    auto eUnit = getSdrModelFromSdrObject().getUnit();
+    auto xDelta = gfx::Length::from(eUnit, nXDelta);
+    auto yDelta = gfx::Length::from(eUnit, nYDelta);
+
+    m_aOutterRange.shift(xDelta, yDelta);
 }
 
 E3dScene* DynCastE3dScene(SdrObject* pObj)

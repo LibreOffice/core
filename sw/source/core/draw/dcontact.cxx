@@ -2438,10 +2438,8 @@ void SwDrawVirtObj::NbcSetAnchorPos(const Point& rPnt)
 
 const tools::Rectangle& SwDrawVirtObj::GetCurrentBoundRect() const
 {
-    if (getOutRectangle().IsEmpty())
-    {
+    if (isOutRectangleEmpty())
         const_cast<SwDrawVirtObj*>(this)->RecalcBoundRect();
-    }
 
     return getOutRectangle();
 }

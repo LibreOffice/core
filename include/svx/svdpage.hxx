@@ -406,6 +406,14 @@ public:
     tools::Long upperUnit() const { return maUpper.as(meUnit); }
     tools::Long lowerUnit() const { return maLower.as(meUnit); }
 
+    bool operator==(Border const& other) const
+    {
+        return maLeft == other.maLeft
+        &&  maRight == other.maRight
+        &&  maUpper == other.maUpper
+        &&  maLower == other.maLower;
+    }
+
     tools::Rectangle toToolsRect() const
     {
         return tools::Rectangle(leftUnit(), upperUnit(), rightUnit(), lowerUnit());
@@ -596,10 +604,7 @@ public:
         return maBorder;
     }
 
-    virtual void setBorder(svx::Border const& rBorder)
-    {
-        maBorder = rBorder;
-    }
+    virtual void setBorder(svx::Border const& rBorder);
 
     virtual void  SetBorder(sal_Int32 nLeft, sal_Int32 nUpper, sal_Int32 nRight, sal_Int32 Lower);
     virtual void  SetLeftBorder(sal_Int32 nBorder);
