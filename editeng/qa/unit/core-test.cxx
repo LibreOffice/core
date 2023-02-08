@@ -101,6 +101,8 @@ public:
 
     void testTdf148148();
 
+    void testSingleLine();
+
     DECL_STATIC_LINK( Test, CalcFieldValueHdl, EditFieldInfo*, void );
 
     CPPUNIT_TEST_SUITE(Test);
@@ -125,6 +127,7 @@ public:
     CPPUNIT_TEST(testTransliterate);
     CPPUNIT_TEST(testTdf147196);
     CPPUNIT_TEST(testTdf148148);
+    CPPUNIT_TEST(testSingleLine);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1973,6 +1976,19 @@ void Test::testTdf148148()
     CPPUNIT_ASSERT_EQUAL(OUString("-1   "), lcl_translitTest(editEng, sText6, esel, TF::UPPERCASE_LOWERCASE));
 
 
+}
+
+void Test::testSingleLine()
+{
+    EditEngine aEditEngine( mpItemPool.get() );
+
+    OUString sText("Bolivian\nSanta Cruz de la Sierra");
+    aEditEngine.SetSingleLine(true);
+    aEditEngine.SetText(sText);
+    aEditEngine.QuickFormatDoc(true);
+    CPPUNIT_ASSERT_EQUAL(true, aEditEngine.IsFormatted());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEditEngine.GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEditEngine.GetLineCount(0));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
