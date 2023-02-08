@@ -84,6 +84,7 @@
 #include <comphelper/indexedpropertyvalues.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/unotext.hxx>
+#include <o3tl/deleter.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/temporary.hxx>
 #include <oox/mathml/imexport.hxx>
@@ -451,7 +452,7 @@ DomainMapper_Impl::~DomainMapper_Impl()
     if (m_bIsNewDoc)
     {
         RemoveLastParagraph();
-        GetStyleSheetTable()->ApplyClonedTOCStyles();
+        suppress_fun_call_w_exception(GetStyleSheetTable()->ApplyClonedTOCStyles());
     }
     if (hasTableManager())
     {
