@@ -1152,7 +1152,7 @@ FIELD_INSERT:
             break;
         }
 
-        rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+        rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::UPDATE_FORM_FIELD, nullptr);
         rSh.StartAction();
         comphelper::SequenceAsHashMap aMap(aField);
         itParam->second = aMap["FieldCommand"];
@@ -1168,7 +1168,7 @@ FIELD_INSERT:
         SwTranslateHelper::PasteHTMLToPaM(rSh, &aPaM, aFieldResult.toUtf8(), true);
 
         rSh.EndAction();
-        rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+        rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::UPDATE_FORM_FIELD, nullptr);
     }
     break;
         default:
