@@ -56,6 +56,8 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::linguistic2;
 
+constexpr OUStringLiteral sDuden = u"duden";
+
 namespace
 {
 constexpr size_t MAX_SUGGESTIONS_SIZE = 10;
@@ -335,8 +337,17 @@ uno::Sequence<Locale> SAL_CALL LanguageToolGrammarChecker::getLocales()
 
     SvtLinguConfig aLinguCfg;
     uno::Sequence<OUString> aLocaleList;
-    aLinguCfg.GetLocaleListFor("GrammarCheckers", "org.openoffice.lingu.LanguageToolGrammarChecker",
-                               aLocaleList);
+
+    if (LanguageToolCfg::RestProtocol::get().value_or("") == sDuden)
+    {
+        aLocaleList.realloc(3);
+        aLocaleList.getArray()[0] = "de-DE";
+        aLocaleList.getArray()[1] = "en-US";
+        aLocaleList.getArray()[2] = "en-GB";
+    }
+    else
+        aLinguCfg.GetLocaleListFor("GrammarCheckers",
+                                   "org.openoffice.lingu.LanguageToolGrammarChecker", aLocaleList);
 
     auto nLength = aLocaleList.getLength();
     m_aSuppLocales.realloc(nLength);

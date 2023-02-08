@@ -117,6 +117,7 @@
 #include <com/sun/star/linguistic2/LanguageGuessing.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
+#include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <com/sun/star/i18n/LocaleCalendar2.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -226,6 +227,8 @@ using namespace css;
 using namespace vcl;
 using namespace desktop;
 using namespace utl;
+
+using LanguageToolCfg = officecfg::Office::Linguistic::GrammarChecking::LanguageTool;
 
 static LibLibreOffice_Impl *gImpl = nullptr;
 static bool lok_preinit_2_called = false;
@@ -5760,12 +5763,28 @@ static void doc_resetSelection(LibreOfficeKitDocument* pThis)
     pDoc->resetSelection();
 }
 
+static void addLocale(boost::property_tree::ptree& rValues, css::lang::Locale const & rLocale)
+{
+    boost::property_tree::ptree aChild;
+    OUString sLanguage;
+    const LanguageTag aLanguageTag( rLocale );
+    sLanguage = SvtLanguageTable::GetLanguageString(aLanguageTag.getLanguageType());
+    if (sLanguage.endsWith("}"))
+        return;
+
+    sLanguage += ";" + aLanguageTag.getBcp47(false);
+    aChild.put("", sLanguage.toUtf8());
+    rValues.push_back(std::make_pair("", aChild));
+}
+
 static char* getLanguages(LibreOfficeKitDocument* pThis, const char* pCommand)
 {
     css::uno::Sequence< css::lang::Locale > aLocales;
+    css::uno::Sequence< css::lang::Locale > aGrammarLocales;
 
     if (xContext.is())
     {
+        // SpellChecker
         css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv = css::linguistic2::LinguServiceManager::create(xContext);
         if (xLangSrv.is())
         {
@@ -5773,6 +5792,18 @@ static char* getLanguages(LibreOfficeKitDocument* pThis, const char* pCommand)
             if (xSpell.is())
                 aLocales = xSpell->getLocales();
         }
+
+        // LanguageTool
+        if (LanguageToolCfg::IsEnabled::get())
+        {
+            uno::Reference< linguistic2::XProofreader > xGC(
+                    xContext->getServiceManager()->createInstanceWithContext("org.openoffice.lingu.LanguageToolGrammarChecker", xContext),
+                    uno::UNO_QUERY_THROW );
+            uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xGC, uno::UNO_QUERY_THROW );
+            aGrammarLocales = xSuppLoc->getLocales();
+        }
+
+        // Fallback
 
         /* FIXME: To obtain the document languages the spell checker can be disabled,
            so a future re-work of the getLanguages function is needed in favor to use
@@ -5788,19 +5819,10 @@ static char* getLanguages(LibreOfficeKitDocument* pThis, const char* pCommand)
     boost::property_tree::ptree aTree;
     aTree.put("commandName", pCommand);
     boost::property_tree::ptree aValues;
-    boost::property_tree::ptree aChild;
-    OUString sLanguage;
-    for ( css::lang::Locale const & locale : std::as_const(aLocales) )
-    {
-        const LanguageTag aLanguageTag( locale );
-        sLanguage = SvtLanguageTable::GetLanguageString(aLanguageTag.getLanguageType());
-        if (sLanguage.startsWith("{") && sLanguage.endsWith("}"))
-            continue;
-
-        sLanguage += ";" + aLanguageTag.getBcp47(false);
-        aChild.put("", sLanguage.toUtf8());
-        aValues.push_back(std::make_pair("", aChild));
-    }
+    for ( css::lang::Locale const & rLocale : std::as_const(aLocales) )
+        addLocale(aValues, rLocale);
+    for ( css::lang::Locale const & rLocale : std::as_const(aGrammarLocales) )
+        addLocale(aValues, rLocale);
     aTree.add_child("commandValues", aValues);
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
@@ -7276,6 +7298,8 @@ static void preLoadShortCutAccelerators()
     batch->commit();
 }
 
+void setLanguageToolConfig();
+
 /// Used only by LibreOfficeKit when used by Online to pre-initialize
 static void preloadData()
 {
@@ -7293,6 +7317,9 @@ static void preloadData()
     bool bAbort = desktop::Desktop::CheckExtensionDependencies();
     if(bAbort)
         std::cerr << "CheckExtensionDependencies failed" << std::endl;
+
+    // setup LanguageTool config before spell checking init
+    setLanguageToolConfig();
 
     // preload all available dictionaries
     css::uno::Reference<css::linguistic2::XLinguServiceManager> xLngSvcMgr =
@@ -7513,11 +7540,19 @@ void setLanguageToolConfig()
                 if (xSpell.is())
                 {
                     Sequence<OUString> aEmpty;
+                    static constexpr OUStringLiteral cSpell(SN_SPELLCHECKER);
                     Sequence<css::lang::Locale> aLocales = xSpell->getLocales();
+
+                    uno::Reference<linguistic2::XProofreader> xGC(
+                        xContext->getServiceManager()->createInstanceWithContext("org.openoffice.lingu.LanguageToolGrammarChecker", xContext),
+                        uno::UNO_QUERY_THROW);
+                    uno::Reference<linguistic2::XSupportedLocales> xSuppLoc(xGC, uno::UNO_QUERY_THROW);
 
                     for (int itLocale = 0; itLocale < aLocales.getLength(); itLocale++)
                     {
-                        xLangSrv->setConfiguredServices(SN_SPELLCHECKER, aLocales[itLocale], aEmpty);
+                        // turn off spell checker if LanguageTool supports the locale already
+                        if (xSuppLoc->hasLocale(aLocales[itLocale]))
+                            xLangSrv->setConfiguredServices(cSpell, aLocales[itLocale], aEmpty);
                     }
                 }
             }
