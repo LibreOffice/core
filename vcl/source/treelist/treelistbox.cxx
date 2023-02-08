@@ -428,14 +428,12 @@ IMPL_LINK( SvTreeListBox, CloneHdl_Impl, SvTreeListEntry*, pEntry, SvTreeListEnt
 sal_uInt32 SvTreeListBox::Insert( SvTreeListEntry* pEntry, SvTreeListEntry* pParent, sal_uInt32 nPos )
 {
     sal_uInt32 nInsPos = pModel->Insert( pEntry, pParent, nPos );
-    pEntry->SetBackColor( GetBackground().GetColor() );
     return nInsPos;
 }
 
 sal_uInt32 SvTreeListBox::Insert( SvTreeListEntry* pEntry,sal_uInt32 nRootPos )
 {
     sal_uInt32 nInsPos = pModel->Insert( pEntry, nRootPos );
-    pEntry->SetBackColor( GetBackground().GetColor() );
     return nInsPos;
 }
 
@@ -2658,10 +2656,6 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
                 else
                     rRenderContext.SetTextColor(aBackupTextColor);
                 rRenderContext.SetFont(aBackupFont);
-            }
-            else
-            {
-                aWallpaper.SetColor(rEntry.GetBackColor());
             }
         }
 

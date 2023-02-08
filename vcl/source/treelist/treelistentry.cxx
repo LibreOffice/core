@@ -54,7 +54,6 @@ SvTreeListEntry::SvTreeListEntry()
     , mnExtraIndent(0)
     , pUserData(nullptr)
     , nEntryFlags(SvTLEntryFlags::NONE)
-    , maBackColor(Application::GetSettings().GetStyleSettings().GetWindowColor())
 {
 }
 

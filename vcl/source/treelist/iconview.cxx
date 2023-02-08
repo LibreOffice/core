@@ -151,10 +151,6 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
             }
             aWallpaper.SetColor(aNewWallColor);
         }
-        else // no selection
-        {
-            aWallpaper.SetColor(rEntry.GetBackColor());
-        }
 
         Color aBackgroundColor = aWallpaper.GetColor();
         if (aBackgroundColor != COL_TRANSPARENT)

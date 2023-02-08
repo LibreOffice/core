@@ -68,7 +68,6 @@ class VCL_DLLPUBLIC SvTreeListEntry
     ItemsType           m_Items;
     void*               pUserData;
     SvTLEntryFlags      nEntryFlags;
-    Color               maBackColor;
     std::optional<Color> mxTextColor;
 
 private:
@@ -113,9 +112,6 @@ public:
 
     SvTLEntryFlags GetFlags() const { return nEntryFlags;}
     void SetFlags( SvTLEntryFlags nFlags );
-
-    void SetBackColor( const Color& rColor ) { maBackColor = rColor; }
-    const Color& GetBackColor() const { return maBackColor; }
 
     void SetTextColor( std::optional<Color> xColor ) { mxTextColor = xColor; }
     std::optional<Color> const & GetTextColor() const { return mxTextColor; }
