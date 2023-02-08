@@ -97,6 +97,8 @@ public:
 
     void testTransliterate();
 
+    void testSingleLine();
+
     DECL_STATIC_LINK( Test, CalcFieldValueHdl, EditFieldInfo*, void );
 
     CPPUNIT_TEST_SUITE(Test);
@@ -119,6 +121,7 @@ public:
     CPPUNIT_TEST(testSectionAttributes);
     CPPUNIT_TEST(testLargeParaCopyPaste);
     CPPUNIT_TEST(testTransliterate);
+    CPPUNIT_TEST(testSingleLine);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1754,6 +1757,19 @@ void Test::testTransliterate()
     aEditEngine.SetText(sText);
     aEditEngine.TransliterateText(ESelection(0, 0, 0, sText.getLength()), TransliterationFlags::TITLE_CASE);
     CPPUNIT_ASSERT_EQUAL(OUString("One (Two) Three"), aEditEngine.GetText());
+}
+
+void Test::testSingleLine()
+{
+    EditEngine aEditEngine( mpItemPool.get() );
+
+    OUString sText("Bolivian\nSanta Cruz de la Sierra");
+    aEditEngine.SetControlWord(aEditEngine.GetControlWord() | EEControlBits::SINGLELINE);
+    aEditEngine.SetText(sText);
+    aEditEngine.QuickFormatDoc(true);
+    CPPUNIT_ASSERT_EQUAL(true, aEditEngine.IsFormatted());
+    CPPUNIT_ASSERT_EQUAL(1, aEditEngine.GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(1, aEditEngine.GetLineCount(0));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
