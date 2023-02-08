@@ -3453,9 +3453,9 @@ bool SwCursorShell::IsInRightToLeftText() const
     return SvxFrameDirection::Vertical_LR_TB == nDir || SvxFrameDirection::Horizontal_RL_TB == nDir;
 }
 
-/// If the current cursor position is inside a hidden range, the hidden range
-/// is selected.
-bool SwCursorShell::SelectHiddenRange()
+/// If the current cursor position is inside a hidden range true is returned. If bSelect is
+/// true, the hidden range is selected. If bSelect is false, the hidden range is not selected.
+bool SwCursorShell::IsInHiddenRange(const bool bSelect)
 {
     bool bRet = false;
     if ( !GetViewOptions()->IsShowHiddenChar() && !m_pCurrentCursor->HasMark() )
@@ -3472,9 +3472,12 @@ bool SwCursorShell::SelectHiddenRange()
             SwScriptInfo::GetBoundsOfHiddenRange( *pNode, nPos, nHiddenStart, nHiddenEnd );
             if ( COMPLETE_STRING != nHiddenStart )
             {
-                // make selection:
-                m_pCurrentCursor->SetMark();
-                m_pCurrentCursor->GetMark()->SetContent(nHiddenEnd);
+                if (bSelect)
+                {
+                    // make selection:
+                    m_pCurrentCursor->SetMark();
+                    m_pCurrentCursor->GetMark()->SetContent(nHiddenEnd);
+                }
                 bRet = true;
             }
         }

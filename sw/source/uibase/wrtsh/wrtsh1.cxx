@@ -233,7 +233,7 @@ void SwWrtShell::Insert( const OUString &rStr )
          bCallIns = m_bIns /*|| bHasSel*/;
     bool bDeleted = false;
 
-    if( bHasSel || ( !m_bIns && SelectHiddenRange() ) )
+    if( bHasSel || ( !m_bIns && IsInHiddenRange(/*bSelect=*/true) ) )
     {
             // Only here parenthesizing, because the normal
             // insert is already in parentheses at Editshell.
@@ -2046,11 +2046,8 @@ bool SwWrtShell::Pop(SwCursorShell::PopMode const eDelete, ::std::optional<SwCal
     bool bRet = SwCursorShell::Pop(eDelete, roLink);
     if( bRet && IsSelection() )
     {
-        if (!IsAddMode())
-        {
-            m_fnSetCursor = &SwWrtShell::SetCursorKillSel;
-            m_fnKillSel = &SwWrtShell::ResetSelect;
-        }
+        m_fnSetCursor = &SwWrtShell::SetCursorKillSel;
+        m_fnKillSel = &SwWrtShell::ResetSelect;
     }
     return bRet;
 }

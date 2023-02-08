@@ -274,7 +274,7 @@ bool lcl_TryMoveToNonHiddenField(SwEditShell& rShell, const SwTextNode& rNd, con
     // 3. Check for hidden text attribute
     if(rNd.IsHidden())
         return false;
-    if(!rShell.GotoFormatField(rField) || rShell.SelectHiddenRange())
+    if(!rShell.GotoFormatField(rField) || rShell.IsInHiddenRange(/*bSelect=*/false))
     {
         rShell.SwCursorShell::ClearMark();
         return false;
@@ -1673,7 +1673,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             // 3. Check for hidden text attribute
             if ( !pTNd->IsHidden() &&
                   mrSh.GotoINetAttr( p->rINetAttr ) &&
-                 !mrSh.SelectHiddenRange() )
+                 !mrSh.IsInHiddenRange(/*bSelect=*/false) )
             {
                 // Select the hyperlink:
                 mrSh.SwCursorShell::Right( 1, SwCursorSkipMode::Chars );
@@ -1991,7 +1991,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
             // 1. Check if the whole paragraph is hidden
             // 2. Check for hidden text attribute
-            if (rTNd.GetTextNode()->IsHidden() || mrSh.SelectHiddenRange()
+            if (rTNd.GetTextNode()->IsHidden() || mrSh.IsInHiddenRange(/*bSelect=*/false)
                 || (mrSh.GetLayout()->IsHideRedlines()
                     && sw::IsFootnoteDeleted(pDoc->getIDocumentRedlineAccess(), *pTextFootnote)))
             {

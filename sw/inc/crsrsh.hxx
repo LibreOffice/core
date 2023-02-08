@@ -851,9 +851,9 @@ public:
     bool   bColumnChange();
     static void FireSectionChangeEvent(sal_uInt16 nOldSection, sal_uInt16 nNewSection);
     static void FireColumnChangeEvent(sal_uInt16 nOldColumn, sal_uInt16 nNewColumn);
-    // If the current cursor position is inside a hidden range, the hidden range
-    // is selected and true is returned:
-    bool SelectHiddenRange();
+    // If the current cursor position is inside a hidden range true is returned. If bSelect is
+    // true, the hidden range is selected. If bSelect is false, the hidden range is not selected.
+    bool IsInHiddenRange(const bool bSelect);
 
     // remove all invalid cursors
     void ClearUpCursors();

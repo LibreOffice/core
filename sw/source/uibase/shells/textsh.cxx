@@ -605,14 +605,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
     SvtModuleOptions aMOpt;
     SfxObjectCreateMode eCreateMode =
                         GetView().GetDocShell()->GetCreateMode();
-
-    bool bCursorInHidden = false;
-    if( !rSh.HasMark() )
-    {
-        rSh.Push();
-        bCursorInHidden = rSh.SelectHiddenRange();
-        rSh.Pop();
-    }
+    const bool bCursorInHidden = rSh.IsInHiddenRange(/*bSelect=*/false);
 
     while ( nWhich )
     {
