@@ -1309,11 +1309,11 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
 
     bool bUseDarkMode(false);
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    if (userDefaults != nil)
+    if (@available(macOS 10.14, iOS 13, *))
     {
-        NSString* setting = [userDefaults stringForKey: @"AppleInterfaceStyle"];
-        bUseDarkMode = (setting && [setting isEqual: @"Dark"]);
+        NSAppearanceName match = [mpNSView.effectiveAppearance bestMatchFromAppearancesWithNames: @[
+                                  NSAppearanceNameAqua, NSAppearanceNameDarkAqua]];
+        bUseDarkMode = [match isEqualToString: NSAppearanceNameDarkAqua];
     }
     // there is no sukapura_dark, at the time of writing at least, so whatever
     // is considered the default dark icon set will be used
