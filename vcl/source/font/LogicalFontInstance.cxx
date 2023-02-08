@@ -289,8 +289,7 @@ void close_path_func(hb_draw_funcs_t*, void* pDrawData, hb_draw_state_t*, void* 
 }
 }
 
-bool LogicalFontInstance::GetGlyphOutlineUntransformed(sal_GlyphId nGlyph,
-                                                       basegfx::B2DPolyPolygon& rPolyPoly) const
+basegfx::B2DPolyPolygon LogicalFontInstance::GetGlyphOutlineUntransformed(sal_GlyphId nGlyph) const
 {
     if (!m_pHbDrawFuncs)
     {
@@ -306,8 +305,9 @@ bool LogicalFontInstance::GetGlyphOutlineUntransformed(sal_GlyphId nGlyph,
         hb_draw_funcs_set_close_path_func(m_pHbDrawFuncs, close_path_func, pUserData, nullptr);
     }
 
-    hb_font_get_glyph_shape(GetHbFontUntransformed(), nGlyph, m_pHbDrawFuncs, &rPolyPoly);
-    return true;
+    basegfx::B2DPolyPolygon aPolyPoly;
+    hb_font_get_glyph_shape(GetHbFontUntransformed(), nGlyph, m_pHbDrawFuncs, &aPolyPoly);
+    return aPolyPoly;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

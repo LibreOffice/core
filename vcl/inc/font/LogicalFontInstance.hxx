@@ -103,7 +103,7 @@ public: // TODO: make data members private
 
     bool GetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const;
     virtual bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const = 0;
-    bool GetGlyphOutlineUntransformed(sal_GlyphId, basegfx::B2DPolyPolygon&) const;
+    basegfx::B2DPolyPolygon GetGlyphOutlineUntransformed(sal_GlyphId) const;
 
     sal_GlyphId GetGlyphIndex(uint32_t, uint32_t = 0) const;
 

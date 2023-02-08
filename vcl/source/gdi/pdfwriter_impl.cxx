@@ -6257,11 +6257,7 @@ void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
                 else if (!aBitmap.empty())
                     rNewGlyphEmit.setColorBitmap(aBitmap, aRect);
                 else if (bVariations)
-                {
-                    basegfx::B2DPolyPolygon aOutline;
-                    if (pFont->GetGlyphOutlineUntransformed(nFontGlyphId, aOutline))
-                        rNewGlyphEmit.setOutline(aOutline);
-                }
+                    rNewGlyphEmit.setOutline(pFont->GetGlyphOutlineUntransformed(nFontGlyphId));
 
                 // add new glyph to font mapping
                 Glyph& rNewGlyph = rSubset.m_aMapping[nFontGlyphId];
