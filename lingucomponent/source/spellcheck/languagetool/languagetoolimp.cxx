@@ -112,15 +112,25 @@ sal_Bool SAL_CALL LanguageToolGrammarChecker::hasLocale(const Locale& rLocale)
 
 Sequence<Locale> SAL_CALL LanguageToolGrammarChecker::getLocales()
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard aGuard(GetLinguMutex());
 
     if (m_aSuppLocales.hasElements())
         return m_aSuppLocales;
 
     SvtLinguConfig aLinguCfg;
-    uno::Sequence< OUString > aLocaleList;
-    aLinguCfg.GetLocaleListFor( "GrammarCheckers",
-            "org.openoffice.lingu.LanguageToolGrammarChecker", aLocaleList );
+    uno::Sequence<OUString> aLocaleList;
+
+    SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
+    if (rLanguageOpts.getRestProtocol() == sDuden)
+    {
+        aLocaleList.realloc(3);
+        aLocaleList.getArray()[0] = "de-DE";
+        aLocaleList.getArray()[1] = "en-US";
+        aLocaleList.getArray()[2] = "en-GB";
+    }
+    else
+        aLinguCfg.GetLocaleListFor("GrammarCheckers",
+                                   "org.openoffice.lingu.LanguageToolGrammarChecker", aLocaleList);
 
     auto nLength = aLocaleList.getLength();
     m_aSuppLocales.realloc(nLength);
@@ -235,8 +245,9 @@ ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
     }
     else
     {
-        OString postData(OUStringToOString(
-                         OUStringConcatenation("text=" + aText + "&language=" + langTag), RTL_TEXTENCODING_UTF8));
+        OString postData(
+            OUStringToOString(OUStringConcatenation("text=" + aText + "&language=" + langTag),
+                              RTL_TEXTENCODING_UTF8));
         response_body = makeHttpRequest(checkerURL, HTTP_METHOD::HTTP_POST, postData, http_code);
     }
 
@@ -273,7 +284,8 @@ void LanguageToolGrammarChecker::parseDudenResponse(ProofreadingResult& rResult,
     std::stringstream aStream(aJSONBody.data());
     boost::property_tree::read_json(aStream, aRoot);
 
-    const boost::optional<boost::property_tree::ptree&> aPositions = aRoot.get_child_optional("check-positions");
+    const boost::optional<boost::property_tree::ptree&> aPositions
+        = aRoot.get_child_optional("check-positions");
     if (!aPositions || !(nSize = aPositions.get().size()))
     {
         return;
@@ -286,7 +298,7 @@ void LanguageToolGrammarChecker::parseDudenResponse(ProofreadingResult& rResult,
     while (itPos != aPositions.get().end())
     {
         const boost::property_tree::ptree& rTree = itPos->second;
-        const std::string sType= rTree.get<std::string>("type", "");
+        const std::string sType = rTree.get<std::string>("type", "");
         const int nOffset = rTree.get<int>("offset", 0);
         const int nLength = rTree.get<int>("length", 0);
 
@@ -297,8 +309,8 @@ void LanguageToolGrammarChecker::parseDudenResponse(ProofreadingResult& rResult,
         //pChecks[nIndex1].aFullComment = ??
         pChecks[nIndex1].aProperties = lcl_GetLineColorPropertyFromErrorId(sType);
 
-        const boost::optional<const boost::property_tree::ptree&> aProposals =
-            rTree.get_child_optional("proposals");
+        const boost::optional<const boost::property_tree::ptree&> aProposals
+            = rTree.get_child_optional("proposals");
         if (aProposals && (nProposalSize = aProposals.get().size()))
         {
             pChecks[nIndex1].aSuggestions.realloc(std::min(nProposalSize, MAX_SUGGESTIONS_SIZE));
@@ -308,8 +320,8 @@ void LanguageToolGrammarChecker::parseDudenResponse(ProofreadingResult& rResult,
             auto pSuggestions = pChecks[nIndex1].aSuggestions.getArray();
             while (itProp != aProposals.get().end() && nIndex2 < MAX_SUGGESTIONS_SIZE)
             {
-                pSuggestions[nIndex2++] =
-                    OStringToOUString(itProp->second.data(), RTL_TEXTENCODING_UTF8);
+                pSuggestions[nIndex2++]
+                    = OStringToOUString(itProp->second.data(), RTL_TEXTENCODING_UTF8);
                 itProp++;
             }
         }
@@ -389,7 +401,8 @@ void LanguageToolGrammarChecker::parseProofreadingJSONResponse(ProofreadingResul
     rResult.aErrors = aErrors;
 }
 
-std::string LanguageToolGrammarChecker::makeDudenHttpRequest(std::string_view aURL, HTTP_METHOD method,
+std::string LanguageToolGrammarChecker::makeDudenHttpRequest(std::string_view aURL,
+                                                             HTTP_METHOD method,
                                                              const OString& aData,
                                                              tools::Long& nCode)
 {
@@ -401,8 +414,8 @@ std::string LanguageToolGrammarChecker::makeDudenHttpRequest(std::string_view aU
     std::string sResponseBody;
     struct curl_slist* pList = nullptr;
     SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
-    OString sAccessToken = OString("access_token: ") +
-        OUStringToOString(rLanguageOpts.getApiKey(), RTL_TEXTENCODING_UTF8);
+    OString sAccessToken = OString("access_token: ")
+                           + OUStringToOString(rLanguageOpts.getApiKey(), RTL_TEXTENCODING_UTF8);
 
     pList = curl_slist_append(pList, "Cache-Control: no-cache");
     pList = curl_slist_append(pList, "Content-Type: application/json");
@@ -432,12 +445,12 @@ std::string LanguageToolGrammarChecker::makeDudenHttpRequest(std::string_view aU
     CURLcode cc = curl_easy_perform(curl.get());
     if (cc != CURLE_OK)
     {
-        SAL_WARN("languagetool", "CURL request returned with error: " << static_cast<sal_Int32>(cc));
+        SAL_WARN("languagetool",
+                 "CURL request returned with error: " << static_cast<sal_Int32>(cc));
     }
 
     curl_easy_getinfo(curl.get(), CURLINFO_RESPONSE_CODE, &nCode);
     return sResponseBody;
-
 }
 
 std::string LanguageToolGrammarChecker::makeHttpRequest(std::string_view aURL, HTTP_METHOD method,
@@ -492,7 +505,8 @@ std::string LanguageToolGrammarChecker::makeHttpRequest(std::string_view aURL, H
     CURLcode cc = curl_easy_perform(curl.get());
     if (cc != CURLE_OK)
     {
-        SAL_WARN("languagetool", "CURL request returned with error: " << static_cast<sal_Int32>(cc));
+        SAL_WARN("languagetool",
+                 "CURL request returned with error: " << static_cast<sal_Int32>(cc));
     }
     curl_easy_getinfo(curl.get(), CURLINFO_RESPONSE_CODE, &nStatusCode);
     return response_body;
