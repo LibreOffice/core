@@ -130,8 +130,18 @@ Sequence<Locale> SAL_CALL LanguageToolGrammarChecker::getLocales()
 
     SvtLinguConfig aLinguCfg;
     uno::Sequence<OUString> aLocaleList;
-    aLinguCfg.GetLocaleListFor("GrammarCheckers", "org.openoffice.lingu.LanguageToolGrammarChecker",
-                               aLocaleList);
+
+    SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
+    if (rLanguageOpts.getRestProtocol() == sDuden)
+    {
+        aLocaleList.realloc(3);
+        aLocaleList.getArray()[0] = "de-DE";
+        aLocaleList.getArray()[1] = "en-US";
+        aLocaleList.getArray()[2] = "en-GB";
+    }
+    else
+        aLinguCfg.GetLocaleListFor("GrammarCheckers",
+                                   "org.openoffice.lingu.LanguageToolGrammarChecker", aLocaleList);
 
     auto nLength = aLocaleList.getLength();
     m_aSuppLocales.realloc(nLength);
