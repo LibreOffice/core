@@ -421,10 +421,10 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
             const int nRunLen = nEndRunPos - nMinRunPos;
 
             int nHbFlags = HB_BUFFER_FLAGS_DEFAULT;
-#if HB_VERSION_ATLEAST(5, 1, 0)
+
             // Produce HB_GLYPH_FLAG_SAFE_TO_INSERT_TATWEEL that we use below.
             nHbFlags |= HB_BUFFER_FLAG_PRODUCE_SAFE_TO_INSERT_TATWEEL;
-#endif
+
             if (nMinRunPos == 0)
                 nHbFlags |= HB_BUFFER_FLAG_BOT; /* Beginning-of-text */
             if (nEndRunPos == nLength)
@@ -545,13 +545,8 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                 if (hb_glyph_info_get_glyph_flags(&pHbGlyphInfos[i]) & HB_GLYPH_FLAG_UNSAFE_TO_BREAK)
                     nGlyphFlags |= GlyphItemFlags::IS_UNSAFE_TO_BREAK;
 
-#if HB_VERSION_ATLEAST(5, 1, 0)
                 if (hb_glyph_info_get_glyph_flags(&pHbGlyphInfos[i]) & HB_GLYPH_FLAG_SAFE_TO_INSERT_TATWEEL)
                     nGlyphFlags |= GlyphItemFlags::IS_SAFE_TO_INSERT_KASHIDA;
-#else
-                // If support is not present, then allow kashida anywhere.
-                nGlyphFlags |= GlyphItemFlags::IS_SAFE_TO_INSERT_KASHIDA;
-#endif
 
                 DeviceCoordinate nAdvance, nXOffset, nYOffset;
                 if (aSubRun.maDirection == HB_DIRECTION_TTB)
