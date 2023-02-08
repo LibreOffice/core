@@ -23,6 +23,7 @@
 #include <stdio.h>
 
 #include <osl/diagnose.h>
+#include <osl/thread.h>
 #include <rtl/character.hxx>
 
 #include <command.hxx>
@@ -127,12 +128,14 @@ bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
 static bool ResponseFile( std::vector<OUString> * pList, int argc, char ** argv )
 {
     // program name
-    pList->push_back( OUString::createFromAscii(*argv) );
+    pList->push_back( OStringToOUString(*argv, osl_getThreadTextEncoding()) );
     for( int i = 1; i < argc; i++ )
     {
         if( '@' == **(argv +i) )
         { // when @, then response file
-            SvFileStream aStm( OUString::createFromAscii((*(argv +i)) +1), StreamMode::STD_READ );
+            SvFileStream aStm(
+                OStringToOUString((*(argv +i)) +1, osl_getThreadTextEncoding()),
+                StreamMode::STD_READ );
             if( aStm.GetError() != ERRCODE_NONE )
                 return false;
 
@@ -158,7 +161,7 @@ static bool ResponseFile( std::vector<OUString> * pList, int argc, char ** argv 
             }
         }
         else if( argv[ i ] )
-            pList->push_back( OUString::createFromAscii( argv[ i ] ) );
+            pList->push_back( OStringToOUString( argv[ i ], osl_getThreadTextEncoding() ) );
     }
     return true;
 }
