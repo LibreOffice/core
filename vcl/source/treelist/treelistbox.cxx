@@ -389,8 +389,6 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     DragSourceHelper(this),
     mpImpl(new SvTreeListBoxImpl(*this)),
     mbContextBmpExpanded(false),
-    mbAlternatingRowColors(false),
-    mbUpdateAlternatingRows(false),
     mbQuickSearch(false),
     mbActivateOnSingleClick(false),
     mbHoverSelection(false),
@@ -431,7 +429,6 @@ sal_uInt32 SvTreeListBox::Insert( SvTreeListEntry* pEntry, SvTreeListEntry* pPar
 {
     sal_uInt32 nInsPos = pModel->Insert( pEntry, pParent, nPos );
     pEntry->SetBackColor( GetBackground().GetColor() );
-    SetAlternatingRowColors( mbAlternatingRowColors );
     return nInsPos;
 }
 
@@ -439,7 +436,6 @@ sal_uInt32 SvTreeListBox::Insert( SvTreeListEntry* pEntry,sal_uInt32 nRootPos )
 {
     sal_uInt32 nInsPos = pModel->Insert( pEntry, nRootPos );
     pEntry->SetBackColor( GetBackground().GetColor() );
-    SetAlternatingRowColors( mbAlternatingRowColors );
     return nInsPos;
 }
 
@@ -2056,7 +2052,6 @@ bool SvTreeListBox::Expand( SvTreeListEntry* pParent )
             pImpl->EntryExpanded( pParent );
             pHdlEntry = pParent;
             ExpandedHdl();
-            SetAlternatingRowColors( mbAlternatingRowColors );
         }
         nFlags = pParent->GetFlags();
         nFlags &= ~SvTLEntryFlags::NO_NODEBMP;
@@ -2093,7 +2088,6 @@ bool SvTreeListBox::Collapse( SvTreeListEntry* pParent )
         pImpl->EntryCollapsed( pParent );
         pHdlEntry = pParent;
         ExpandedHdl();
-        SetAlternatingRowColors( mbAlternatingRowColors );
     }
 
     // #i92103#
@@ -2308,8 +2302,6 @@ void SvTreeListBox::MouseMove( const MouseEvent& rMEvt )
 void SvTreeListBox::SetUpdateMode( bool bUpdate )
 {
     pImpl->SetUpdateMode( bUpdate );
-    mbUpdateAlternatingRows = bUpdate;
-    SetAlternatingRowColors( mbAlternatingRowColors );
 }
 
 void SvTreeListBox::SetSpaceBetweenEntries( short nOffsLogic )
@@ -3125,40 +3117,6 @@ Size SvTreeListBox::GetOptimalSize() const
         aRet.AdjustWidth(GetSettings().GetStyleSettings().GetScrollBarSize());
 
     return aRet;
-}
-
-void SvTreeListBox::SetAlternatingRowColors( bool bEnable )
-{
-    if( !mbUpdateAlternatingRows )
-    {
-        mbAlternatingRowColors = bEnable;
-        return;
-    }
-
-    if( bEnable )
-    {
-        SvTreeListEntry* pEntry = pModel->First();
-        for(size_t i = 0; pEntry; ++i)
-        {
-            pEntry->SetBackColor( i % 2 == 0 ? GetBackground().GetColor() : GetSettings().GetStyleSettings().GetAlternatingRowColor());
-            SvTreeListEntry *pNextEntry = nullptr;
-            if( IsExpanded( pEntry ) )
-                pNextEntry = pModel->FirstChild( pEntry );
-            else
-                pNextEntry = pEntry->NextSibling();
-
-            if( !pNextEntry )
-                pEntry = pModel->Next( pEntry );
-            else
-                pEntry = pNextEntry;
-        }
-    }
-    else if( mbAlternatingRowColors )
-        for(SvTreeListEntry* pEntry = pModel->First(); pEntry; pEntry = pModel->Next(pEntry))
-            pEntry->SetBackColor( GetBackground().GetColor() );
-
-    mbAlternatingRowColors = bEnable;
-    pImpl->UpdateAll(true);
 }
 
 void SvTreeListBox::SetForceMakeVisible( bool bEnable )

@@ -211,8 +211,6 @@ class VCL_DLLPUBLIC SvTreeListBox
     sal_uInt16      nLastSelTab;
     tools::Long mnCheckboxItemWidth;
     bool mbContextBmpExpanded;
-    bool mbAlternatingRowColors;
-    bool mbUpdateAlternatingRows;
     bool mbQuickSearch; // Enables type-ahead search in the check list box.
     bool mbActivateOnSingleClick; // Make single click "activate" a row like a double-click normally does
     bool mbHoverSelection; // Make mouse over a row "select" a row like a single-click normally does
@@ -658,8 +656,6 @@ public:
     tools::Long            getPreferredDimensions(std::vector<tools::Long> &rWidths) const;
 
     virtual Size    GetOptimalSize() const override;
-
-    void            SetAlternatingRowColors( const bool bEnable );
 
     // Enables type-ahead search in the check list box.
     void            SetQuickSearch(bool bEnable) { mbQuickSearch = bEnable; }
