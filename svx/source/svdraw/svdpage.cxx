@@ -1429,16 +1429,11 @@ rtl::Reference<SdrPage> SdrPage::CloneSdrPage(SdrModel& rTargetModel) const
 
 void SdrPage::setSize(gfx::Size2DLWrap const& rSize)
 {
-    bool bChanged = false;
+    if (maSize == rSize)
+        return;
 
-    if (maSize != rSize)
-    {
-        maSize = rSize;
-        bChanged = true;
-    }
-
-    if (bChanged)
-        SetChanged();
+    maSize = rSize;
+    SetChanged();
 }
 
 void SdrPage::SetOrientation(Orientation eOri)
@@ -1462,6 +1457,14 @@ Orientation SdrPage::GetOrientation() const
     return Orientation::Portrait;
 }
 
+void SdrPage::setBorder(svx::Border const& rBorder)
+{
+    if (maBorder == rBorder)
+        return;
+
+    maBorder = rBorder;
+    SetChanged();
+}
 
 void  SdrPage::SetBorder(sal_Int32 nLeft, sal_Int32 nUpper, sal_Int32 nRight, sal_Int32 nLower)
 {

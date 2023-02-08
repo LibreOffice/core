@@ -35,6 +35,7 @@
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 #include <unotools/resmgr.hxx>
+#include <basegfx/units/Range2DLWrap.hxx>
 
 #include <unordered_set>
 
@@ -874,13 +875,14 @@ public:
 protected:
     const tools::Rectangle& getOutRectangle() const;
     bool isOutRectangleSet() const { return m_bOutRectangleSet; }
+    bool isOutRectangleEmpty() const;
     void setOutRectangleConst(tools::Rectangle const& rRectangle) const; // need to do something about this
     void setOutRectangle(tools::Rectangle const& rRectangle);
     void resetOutRectangle();
     void moveOutRectangle(sal_Int32 nXDelta, sal_Int32 nYDelta);
 
-    mutable tools::Rectangle m_aOutRect;     // surrounding rectangle for Paint (incl. LineWidth, ...)
-    mutable bool                m_bOutRectangleSet; // empty is a valid rectangle, so we need a separate flag to know when the cached value is not yet set
+    mutable gfx::Range2DLWrap m_aOutterRange; // surrounding rectangle for Paint (incl. LineWidth, ...)
+    mutable bool m_bOutRectangleSet; // empty is a valid rectangle, so we need a separate flag to know when the cached value is not yet set
     Point                       m_aAnchor;      // anchor position (Writer)
     SdrObjUserCall*             m_pUserCall;
     std::unique_ptr<SdrObjPlusData>

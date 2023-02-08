@@ -522,10 +522,7 @@ public:
         return maBorder;
     }
 
-    virtual void setBorder(svx::Border const& rBorder)
-    {
-        maBorder = rBorder;
-    }
+    virtual void setBorder(svx::Border const& rBorder);
 
     virtual void  SetBorder(sal_Int32 nLeft, sal_Int32 nUpper, sal_Int32 nRight, sal_Int32 Lower);
     virtual void  SetLeftBorder(sal_Int32 nBorder);

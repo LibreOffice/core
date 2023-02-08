@@ -67,6 +67,12 @@ public:
     tools::Long upperUnit() const { return maUpper.as(meUnit); }
     tools::Long lowerUnit() const { return maLower.as(meUnit); }
 
+    bool operator==(Border const& other) const
+    {
+        return maLeft == other.maLeft && maRight == other.maRight && maUpper == other.maUpper
+               && maLower == other.maLower;
+    }
+
     tools::Rectangle toToolsRect() const
     {
         return tools::Rectangle(leftUnit(), upperUnit(), rightUnit(), lowerUnit());
