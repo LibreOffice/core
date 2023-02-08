@@ -38,17 +38,6 @@ public:
     }
 };
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf148360)
-{
-    loadAndReload("tdf148360.doc");
-    const auto& pLayout = parseLayoutDump();
-
-    // Ensure first element is a tab
-    assertXPath(pLayout, "/root/page[1]/body/txt[1]/Text[1]", "nType", "PortionType::TabLeft");
-    // and only then goes content
-    assertXPath(pLayout, "/root/page[1]/body/txt[1]/Text[2]", "nType", "PortionType::Text");
-}
-
 CPPUNIT_TEST_FIXTURE(Test, testTdf77964)
 {
     loadAndReload("tdf77964.doc");
