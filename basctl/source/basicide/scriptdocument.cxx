@@ -52,6 +52,7 @@
 #include <i18nlangtag/languagetag.hxx>
 
 #include <comphelper/diagnose_ex.hxx>
+#include <config_folders.h>
 #include <tools/debug.hxx>
 
 #include <comphelper/documentinfo.hxx>
@@ -945,9 +946,9 @@ namespace basctl
                 OSL_VERIFY( aFileItem.getFileStatus( aFileStatus ) == ::osl::FileBase::E_None );
                 OUString aCanonicalFileURL( aFileStatus.getFileURL() );
 
-                if( aCanonicalFileURL.indexOf( "share/basic" ) >= 0 ||
-                    aCanonicalFileURL.indexOf( "share/uno_packages" ) >= 0 ||
-                    aCanonicalFileURL.indexOf( "share/extensions" ) >= 0 )
+                if( aCanonicalFileURL.indexOf( LIBO_SHARE_FOLDER "/basic" ) >= 0 ||
+                    aCanonicalFileURL.indexOf( LIBO_SHARE_FOLDER "/uno_packages" ) >= 0 ||
+                    aCanonicalFileURL.indexOf( LIBO_SHARE_FOLDER "/extensions" ) >= 0 )
                         bIsShared = true;
             }
         }
