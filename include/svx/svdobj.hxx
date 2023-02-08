@@ -35,6 +35,7 @@
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 #include <unotools/resmgr.hxx>
+#include <basegfx/units/Range2DLWrap.hxx>
 
 #include <unordered_set>
 
@@ -870,13 +871,15 @@ public:
     void ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon) const noexcept;
 
 protected:
-    const tools::Rectangle& getOutRectangle() const;
+    tools::Rectangle const& getOutRectangle() const;
+    bool isOutRectangleEmpty() const;
     void setOutRectangleConst(tools::Rectangle const& rRectangle) const; // need to do something about this
     void setOutRectangle(tools::Rectangle const& rRectangle);
     void resetOutRectangle();
     void moveOutRectangle(sal_Int32 nXDelta, sal_Int32 nYDelta);
 
-    mutable tools::Rectangle m_aOutRect;     // surrounding rectangle for Paint (incl. LineWidth, ...)
+    mutable gfx::Range2DLWrap m_aOutterRange; // surrounding rectangle for Paint (incl. LineWidth, ...)
+
     Point                       m_aAnchor;      // anchor position (Writer)
     SdrObjUserCall*             m_pUserCall;
     std::unique_ptr<SdrObjPlusData>
