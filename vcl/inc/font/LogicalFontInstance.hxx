@@ -156,10 +156,8 @@ private:
     // The value is initialized and used in NeedOffsetCorrection().
     std::optional<FontFamilyEnum> m_xeFontFamilyEnum;
 
-#if HB_VERSION_ATLEAST(4, 0, 0)
     mutable hb_draw_funcs_t* m_pHbDrawFuncs = nullptr;
     basegfx::B2DPolygon m_aDrawPolygon;
-#endif
 };
 
 inline hb_font_t* LogicalFontInstance::GetHbFont()

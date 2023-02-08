@@ -54,10 +54,8 @@ LogicalFontInstance::~LogicalFontInstance()
     if (m_pHbFontUntransformed)
         hb_font_destroy(m_pHbFontUntransformed);
 
-#if HB_VERSION_ATLEAST(4, 0, 0)
     if (m_pHbDrawFuncs)
         hb_draw_funcs_destroy(m_pHbDrawFuncs);
-#endif
 }
 
 hb_font_t* LogicalFontInstance::InitHbFont()
@@ -75,12 +73,10 @@ hb_font_t* LogicalFontInstance::InitHbFont()
     if (!aVariations.empty())
         hb_font_set_variations(pHbFont, aVariations.data(), aVariations.size());
 
-#if HB_VERSION_ATLEAST(3, 3, 0)
     // If we are applying artificial italic, instruct HarfBuzz to do the same
     // so that mark positioning is also transformed.
     if (NeedsArtificialItalic())
         hb_font_set_synthetic_slant(pHbFont, ARTIFICIAL_ITALIC_SKEW);
-#endif
 
     ImplInitHbFont(pHbFont);
 
@@ -91,7 +87,6 @@ hb_font_t* LogicalFontInstance::GetHbFontUntransformed() const
 {
     auto* pHbFont = const_cast<LogicalFontInstance*>(this)->GetHbFont();
 
-#if HB_VERSION_ATLEAST(3, 3, 0)
     if (NeedsArtificialItalic()) // || NeedsArtificialBold()
     {
         if (!m_pHbFontUntransformed)
@@ -103,7 +98,7 @@ hb_font_t* LogicalFontInstance::GetHbFontUntransformed() const
         }
         return m_pHbFontUntransformed;
     }
-#endif
+
     return pHbFont;
 }
 
@@ -259,7 +254,6 @@ bool LogicalFontInstance::NeedsArtificialItalic() const
     return m_aFontSelData.GetItalic() != ITALIC_NONE && m_pFontFace->GetItalic() == ITALIC_NONE;
 }
 
-#if HB_VERSION_ATLEAST(4, 0, 0)
 namespace
 {
 void move_to_func(hb_draw_funcs_t*, void* /*pDrawData*/, hb_draw_state_t*, float to_x, float to_y,
@@ -294,12 +288,10 @@ void close_path_func(hb_draw_funcs_t*, void* pDrawData, hb_draw_state_t*, void* 
     pPoly->clear();
 }
 }
-#endif
 
 bool LogicalFontInstance::GetGlyphOutlineUntransformed(sal_GlyphId nGlyph,
                                                        basegfx::B2DPolyPolygon& rPolyPoly) const
 {
-#if HB_VERSION_ATLEAST(4, 0, 0)
     if (!m_pHbDrawFuncs)
     {
         m_pHbDrawFuncs = hb_draw_funcs_create();
@@ -316,9 +308,6 @@ bool LogicalFontInstance::GetGlyphOutlineUntransformed(sal_GlyphId nGlyph,
 
     hb_font_get_glyph_shape(GetHbFontUntransformed(), nGlyph, m_pHbDrawFuncs, &rPolyPoly);
     return true;
-#else
-    return false;
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
