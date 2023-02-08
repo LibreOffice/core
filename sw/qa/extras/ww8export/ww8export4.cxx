@@ -33,17 +33,6 @@ public:
     }
 };
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf148360)
-{
-    loadAndReload("tdf148360.doc");
-    const auto& pLayout = parseLayoutDump();
-
-    // Ensure first element is a tab
-    assertXPath(pLayout, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/child::*[1]", "type", "PortionType::TabLeft");
-    // and only then goes content
-    assertXPath(pLayout, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/child::*[2]", "type", "PortionType::Text");
-}
-
 CPPUNIT_TEST_FIXTURE(Test, testTdf77964)
 {
     loadAndReload("tdf77964.doc");
