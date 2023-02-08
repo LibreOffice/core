@@ -528,6 +528,11 @@ IMPL_LINK_NOARG(SwView, AttrChangedNotify, LinkParamNone*, void)
     if ( GetEditWin().IsChainMode() )
         GetEditWin().SetChainMode( false );
 
+    if (!m_pWrtShell || !GetDocShell())
+    {
+        return;
+    }
+
     //Opt: Not if PaintLocked. During unlock a notify will be once more triggered.
     if( !m_pWrtShell->IsPaintLocked() && !g_bNoInterrupt &&
         GetDocShell()->IsReadOnly() )
