@@ -1381,12 +1381,7 @@ bool ModulWindow::IsPasteAllowed()
     if ( xClipboard.is() )
     {
 
-        Reference< datatransfer::XTransferable > xTransf;
-        {
-            SolarMutexReleaser aReleaser;
-            // get clipboard content
-            xTransf = xClipboard->getContents();
-        }
+        Reference< datatransfer::XTransferable > xTransf = xClipboard->getContents();
         if ( xTransf.is() )
         {
             datatransfer::DataFlavor aFlavor;
