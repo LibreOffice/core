@@ -522,24 +522,18 @@ void E3dScene::Notify(SfxBroadcaster &rBC, const SfxHint  &rHint)
 
 void E3dScene::RotateScene (const Point& rRef, double sn, double cs)
 {
-    Point UpperLeft, LowerRight, Center, NewCenter;
+    Point NewCenter;
 
     auto const& rRectangle = getOutRectangle();
-    UpperLeft = rRectangle.TopLeft();
-    LowerRight = rRectangle.BottomRight();
-
-    tools::Long dxOutRectHalf = std::abs(UpperLeft.X() - LowerRight.X());
-    dxOutRectHalf /= 2;
-    tools::Long dyOutRectHalf = std::abs(UpperLeft.Y() - LowerRight.Y());
-    dyOutRectHalf /= 2;
+    Point Center = rRectangle.Center();
 
         // Only the center is moved. The corners are moved by NbcMove. For the
         // rotation a cartesian coordinate system is used in which the pivot
         // point is the origin, and the y-axis increases upward, the X-axis to
         // the right. This must be especially noted for the Y-values.
         // (When considering a flat piece of paper the Y-axis pointing downwards
-    Center.setX( (UpperLeft.X() + dxOutRectHalf) - rRef.X() );
-    Center.setY( -((UpperLeft.Y() + dyOutRectHalf) - rRef.Y()) );
+    Center.setX(Center.X() - rRef.X());
+    Center.setY(rRef.Y() - Center.Y());
                   // A few special cases has to be dealt with first (n * 90 degrees n integer)
     if (sn==1.0 && cs==0.0) { // 90deg
         NewCenter.setX( -Center.Y() );
