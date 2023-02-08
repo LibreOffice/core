@@ -1616,8 +1616,9 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                 if( !nDigitLevel )
                 {
                     SwNumFormat aFormat( aRule.Get( nLvl ) );
+                    const OUString sPrefix = aPrefix.getToken(0, u'\x0001', nPrefixIdx);
                     aFormat.SetStart( o3tl::narrowing<sal_uInt16>(o3tl::toInt32(o3tl::getToken(aPrefix, 0, u'\x0001', nPrefixIdx ))));
-                    aFormat.SetListFormat(aPrefix.getToken(0, u'\x0001', nPrefixIdx), aPostfix.getToken(0, u'\x0001'), nLvl);
+                    aFormat.SetListFormat(sPrefix, aPostfix.getToken(0, u'\x0001'), nLvl);
                     aFormat.SetIncludeUpperLevels( 0 );
 
                     if( !aFormat.GetCharFormat() )
@@ -1639,8 +1640,8 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                     {
                         SwNumFormat aFormat( aRule.Get( n ) );
 
-                        aFormat.SetStart( o3tl::narrowing<sal_uInt16>(o3tl::toInt32(o3tl::getToken(aPrefix, 0, u'\x0001', nPrefixIdx )) ));
                         const OUString sPrefix = n ? "" : aPrefix.getToken(0, u'\x0001', nPrefixIdx);
+                        aFormat.SetStart( o3tl::narrowing<sal_uInt16>(o3tl::toInt32(o3tl::getToken(aPrefix, 0, u'\x0001', nPrefixIdx )) ));
                         aFormat.SetListFormat(sPrefix, aPostfix.getToken(0, u'\x0001', nPostfixIdx), n);
                         aFormat.SetIncludeUpperLevels( MAXLEVEL );
                         if( n < aNumTypes.getLength() )
