@@ -3904,6 +3904,20 @@ void SAL_CALL ToolbarLayoutManager::elementReplaced( const ui::ConfigurationEven
         pParentLayouter->requestLayout();
 }
 
+void ToolbarLayoutManager::updateToolbarsTips()
+{
+    SolarMutexGuard g;
+
+    for (auto& elem : m_aUIElements)
+    {
+        uno::Reference< ui::XUIElementSettings > xElementSettings(elem.m_xUIElement, uno::UNO_QUERY);
+        if (!xElementSettings.is())
+            continue;
+        xElementSettings->updateSettings();
+    }
+}
+
+
 uno::Reference< ui::XUIElement > ToolbarLayoutManager::getToolbar( std::u16string_view aName )
 {
     return implts_findToolbar( aName ).m_xUIElement;

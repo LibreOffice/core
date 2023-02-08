@@ -63,6 +63,8 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <config_features.h>
 
+#include <com/sun/star/frame/LayoutManager.hpp>
+
 // namespaces
 
 using namespace css;
@@ -1480,6 +1482,13 @@ bool SfxAcceleratorConfigPage::FillItemSet(SfxItemSet*)
     try
     {
         m_xAct->store();
+        css::uno::Reference<css::beans::XPropertySet> xFrameProps(m_xFrame,
+                                                                  css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::frame::XLayoutManager> xLayoutManager;
+        xFrameProps->getPropertyValue("LayoutManager") >>= xLayoutManager;
+        css::uno::Reference<css::beans::XPropertySet> xLayoutProps(xLayoutManager,
+                                                                   css::uno::UNO_QUERY_THROW);
+        xLayoutProps->setPropertyValue("RefreshContextToolbarToolTip", css::uno::Any(true));
     }
     catch (const uno::RuntimeException&)
     {

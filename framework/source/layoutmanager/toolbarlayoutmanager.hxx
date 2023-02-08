@@ -115,6 +115,8 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
         css::uno::Reference< css::ui::XUIElement > getToolbar( std::u16string_view aName );
         css::uno::Sequence< css::uno::Reference< css::ui::XUIElement > > getToolbars();
 
+        void updateToolbarsTips();
+
         // child window notifications
         void childWindowEvent( VclSimpleEvent const * pEvent );
 

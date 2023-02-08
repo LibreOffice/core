@@ -130,6 +130,7 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
     registerProperty( LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER, beans::PropertyAttribute::TRANSIENT, &m_bMenuBarCloseButton, cppu::UnoType<decltype(m_bMenuBarCloseButton)>::get() );
     registerPropertyNoMember( LAYOUTMANAGER_PROPNAME_ASCII_REFRESHVISIBILITY, LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY, beans::PropertyAttribute::TRANSIENT, cppu::UnoType<bool>::get(), css::uno::Any(false) );
     registerProperty( LAYOUTMANAGER_PROPNAME_ASCII_PRESERVE_CONTENT_SIZE, LAYOUTMANAGER_PROPHANDLE_PRESERVE_CONTENT_SIZE, beans::PropertyAttribute::TRANSIENT, &m_bPreserveContentSize, cppu::UnoType<decltype(m_bPreserveContentSize)>::get() );
+    registerPropertyNoMember( LAYOUTMANAGER_PROPNAME_ASCII_REFRESHTOOLTIP, LAYOUTMANAGER_PROPHANDLE_REFRESHTOOLTIP, beans::PropertyAttribute::TRANSIENT, cppu::UnoType<bool>::get(), css::uno::Any(false) );
 }
 
 LayoutManager::~LayoutManager()
@@ -3001,7 +3002,7 @@ void SAL_CALL LayoutManager::elementReplaced( const ui::ConfigurationEvent& Even
 void SAL_CALL LayoutManager::setFastPropertyValue_NoBroadcast( sal_Int32       nHandle,
                                                                const uno::Any& aValue  )
 {
-    if ( nHandle != LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY )
+    if ( (nHandle != LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY) && (nHandle != LAYOUTMANAGER_PROPHANDLE_REFRESHTOOLTIP) )
         LayoutManager_PBase::setFastPropertyValue_NoBroadcast( nHandle, aValue );
 
     switch( nHandle )
@@ -3029,6 +3030,12 @@ void SAL_CALL LayoutManager::setFastPropertyValue_NoBroadcast( sal_Int32       n
         case LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI:
             implts_setCurrentUIVisibility( !m_bHideCurrentUI );
             break;
+
+        case LAYOUTMANAGER_PROPHANDLE_REFRESHTOOLTIP:
+            if (m_xToolbarManager.is())
+                m_xToolbarManager->updateToolbarsTips();
+            break;
+
         default: break;
     }
 }
