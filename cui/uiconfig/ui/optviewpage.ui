@@ -506,7 +506,7 @@
                     </items>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="appearance-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | iconstyle">Specifies the icon style for icons in toolbars and dialogs.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | appearance">Specifies whether to follow the system appearance mode or override Dark or Light.</property>
                       </object>
                     </child>
                   </object>
@@ -521,7 +521,7 @@
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="optviewpage|label7">Mode:</property>
                     <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">iconstyle</property>
+                    <property name="mnemonic-widget">appearance</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
