@@ -908,8 +908,6 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, SystemTextColorFl
         {
             if (aColor.IsBright() && !pParent->GetControlBackground().IsDark())
                 aColor = COL_BLACK;
-            else if (aColor.IsDark() && !pParent->GetControlBackground().IsBright())
-                aColor = COL_WHITE;
         }
     }
 #endif
