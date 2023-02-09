@@ -53,14 +53,14 @@
       </info>
       <prop oor:name="DisableExtensionInstallation" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>Specifies whether to disable extension installation via the Extension Manager dialog.</desc>
+          <desc>Specifies whether to disable extension installation via the Extensions dialog.</desc>
           <label>Disable Extension Installation</label>
         </info>
         <value>false</value>
       </prop>
       <prop oor:name="DisableExtensionRemoval" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>Specifies whether to disable extension removal via the Extension Manager dialog.</desc>
+          <desc>Specifies whether to disable extension removal via the Extensions dialog.</desc>
           <label>Disable Extension Removal</label>
         </info>
         <value>false</value>

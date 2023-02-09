@@ -225,7 +225,7 @@ interface XPackageManager
         <p>
         Normally one would call a method and handle the exception
         if writing failed. However, a GUI interface may need to know beforehand
-        if writing is allowed. For example, the Extension Manager dialog
+        if writing is allowed. For example, the Extensions dialog
         needs to enable / disable the Add button depending if the user has
         write permission. Only the XPackageManager implementation knows the
         location of the installed extensions. Therefore it is not possible

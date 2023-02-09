@@ -92,7 +92,7 @@ u"\n"
 " remove                  remove extensions by identifier\n"
 " reinstall               expert feature: reinstall all deployed extensions\n"
 " list                    list information about deployed extensions\n"
-" gui                     raise Extension Manager Graphical User Interface (GUI)\n"
+" gui                     raise Extensions dialog\n"
 "\n"
 "options:\n"
 " -h, --help              this help\n"
@@ -110,7 +110,7 @@ u"\n"
 " --deployment-context    expert feature: explicit deployment context\n"
 "     <context>\n"
 "\n"
-"To learn more about the Extension Manager and extensions, see:\n"
+"To learn more about extensions, see:\n"
 "https://wiki.documentfoundation.org/Documentation/DevGuide/Extensions\n\n";
 
 

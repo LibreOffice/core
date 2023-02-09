@@ -69,8 +69,7 @@
         <desc>Defines a Module. The options dialog displays entries in its tree
 	  view only if they are defined to belong to the Module for which the
 	  options dialog is being displayed. The exception is the options dialog
-	  which is invoked from the Extension Manager, where the Module is
-	  irrelevant.</desc>
+	  which is invoked from the Extensions dialog, where the Module is irrelevant.</desc>
       </info>
       <set oor:name="Nodes" oor:node-type="OrderedNode">
         <info>
