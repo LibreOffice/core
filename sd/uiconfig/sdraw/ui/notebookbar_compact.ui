@@ -8602,9 +8602,9 @@
                             <property name="valign">center</property>
                             <property name="show_arrow">False</property>
                             <child>
-                              <object class="GtkToolButton" id="Text-IncrementIndent">
+                              <object class="GtkToolButton" id="Text-OutlineRight">
                                 <property name="visible">True</property>
-                                <property name="action_name">.uno:IncrementIndent</property>
+                                <property name="action_name">.uno:OutlineRight</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -8612,9 +8612,9 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkToolButton" id="Text-DecrementIndent">
+                              <object class="GtkToolButton" id="Text-OutlineLeft">
                                 <property name="visible">True</property>
-                                <property name="action_name">.uno:DecrementIndent</property>
+                                <property name="action_name">.uno:OutlineLeft</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -10064,9 +10064,9 @@
                             <property name="valign">center</property>
                             <property name="show_arrow">False</property>
                             <child>
-                              <object class="GtkToolButton" id="Table-IncrementIndent1">
+                              <object class="GtkToolButton" id="Table-OutlineRight1">
                                 <property name="visible">True</property>
-                                <property name="action_name">.uno:IncrementIndent</property>
+                                <property name="action_name">.uno:OutlineRight</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -10074,9 +10074,9 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkToolButton" id="Table-DecrementIndent1">
+                              <object class="GtkToolButton" id="Table-OutlineLeft1">
                                 <property name="visible">True</property>
-                                <property name="action_name">.uno:DecrementIndent</property>
+                                <property name="action_name">.uno:OutlineLeft</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>

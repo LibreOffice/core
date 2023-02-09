@@ -9005,11 +9005,11 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="Home-IncrementIndent1">
+                                      <object class="GtkToolButton" id="Home-OutlineRight1">
                                         <property name="visible">True</property>
                                         <property name="halign">center</property>
                                         <property name="hexpand">True</property>
-                                        <property name="action_name">.uno:IncrementIndent</property>
+                                        <property name="action_name">.uno:OutlineRight</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -9017,11 +9017,11 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="Home-DecrementIndent1">
+                                      <object class="GtkToolButton" id="Home-OutlineLeft1">
                                         <property name="visible">True</property>
                                         <property name="halign">center</property>
                                         <property name="hexpand">True</property>
-                                        <property name="action_name">.uno:DecrementIndent</property>
+                                        <property name="action_name">.uno:OutlineLeft</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
