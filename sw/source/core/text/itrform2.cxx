@@ -1933,7 +1933,6 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
             m_pCurr->Height( GetFrameRstHeight() + 1, false );
             m_pCurr->SetRealHeight( GetFrameRstHeight() + 1 );
 
-            if (m_pFrame)
             {
                 // Don't oversize the line in case of split flys, so we don't try to move the anchor
                 // of a precede fly forward, next to its follow.
