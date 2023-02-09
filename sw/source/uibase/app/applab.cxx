@@ -181,6 +181,8 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
     }
 
     SfxViewFrame* pViewFrame = SfxViewFrame::DisplayNewDocument( *xDocSh, rReq );
+    if (!pViewFrame)
+        return;
 
     SwView      *pNewView = static_cast<SwView*>( pViewFrame->GetViewShell());
     pNewView->AttrChangedNotify(nullptr);// So that SelectShell is being called.
