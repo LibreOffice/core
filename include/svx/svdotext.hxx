@@ -29,6 +29,7 @@
 #include <tools/datetime.hxx>
 #include <svl/style.hxx>
 #include <svx/svdtext.hxx>
+#include <svx/svdmodel.hxx>
 #include <svx/svxdllapi.h>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <memory>
@@ -164,31 +165,44 @@ protected:
     // The "aRect" is also the rect of RectObj and CircObj.
     // When mbTextFrame=true the text will be formatted into this rect
     // When mbTextFrame=false the text will be centered around its middle
-    tools::Rectangle maRectangle;
+    gfx::Range2DLWrap maRectangleRange;
 
     tools::Rectangle const& getRectangle() const
     {
-        return maRectangle;
+        return maRectangleRange.toToolsRect();
     }
 
     void setRectangle(tools::Rectangle const& rRectangle)
     {
-        maRectangle = rRectangle;
+        auto eUnit = getSdrModelFromSdrObject().getUnit();
+        maRectangleRange = gfx::Range2DLWrap::create(rRectangle, eUnit);
     }
 
     void setRectangleSize(sal_Int32 nWidth, sal_Int32 nHeight)
     {
-        maRectangle.SetSize(Size(nWidth, nHeight));
+        auto eUnit = getSdrModelFromSdrObject().getUnit();
+        auto width = gfx::Length::from(eUnit, nWidth);
+        auto height = gfx::Length::from(eUnit, nHeight);
+        maRectangleRange.setSize(width, height);
     }
 
     void moveRectangle(sal_Int32 nXDelta, sal_Int32 nYDelta)
     {
-        maRectangle.Move(nXDelta, nYDelta);
+        if (nXDelta == 0 && nYDelta == 0)
+            return;
+
+        auto eUnit = getSdrModelFromSdrObject().getUnit();
+        auto xDelta = gfx::Length::from(eUnit, nXDelta);
+        auto yDelta = gfx::Length::from(eUnit, nYDelta);
+        maRectangleRange.shift(xDelta, yDelta);
     }
 
     void moveRectanglePosition(sal_Int32 nX, sal_Int32 nY)
     {
-        maRectangle.SetPos(Point(nX, nY));
+        auto eUnit = getSdrModelFromSdrObject().getUnit();
+        auto x = gfx::Length::from(eUnit, nX);
+        auto y = gfx::Length::from(eUnit, nY);
+        maRectangleRange.setPosition(x, y);
     }
 
     // The GeoStat contains the rotation and shear angles
