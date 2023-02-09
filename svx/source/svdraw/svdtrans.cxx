@@ -477,47 +477,62 @@ tools::Polygon Rect2Poly(const tools::Rectangle& rRect, const GeoStat& rGeo)
     return aPol;
 }
 
-void Poly2Rect(const tools::Polygon& rPol, tools::Rectangle& rRect, GeoStat& rGeo)
+namespace svx
 {
-    rGeo.nRotationAngle=GetAngle(rPol[1]-rPol[0]);
-    rGeo.nRotationAngle=NormAngle36000(rGeo.nRotationAngle);
+tools::Rectangle polygonToRectangle(const tools::Polygon& rPolygon, GeoStat& rGeo)
+{
+    rGeo.nRotationAngle = GetAngle(rPolygon[1] - rPolygon[0]);
+    rGeo.nRotationAngle = NormAngle36000(rGeo.nRotationAngle);
+
     // rotation successful
     rGeo.RecalcSinCos();
 
-    Point aPt1(rPol[1]-rPol[0]);
-    if (rGeo.nRotationAngle) RotatePoint(aPt1,Point(0,0),-rGeo.mfSinRotationAngle,rGeo.mfCosRotationAngle); // -Sin to reverse rotation
-    tools::Long nWdt=aPt1.X();
+    Point aPoint1(rPolygon[1] - rPolygon[0]);
+    if (rGeo.nRotationAngle)
+        RotatePoint(aPoint1, Point(0,0), -rGeo.mfSinRotationAngle, rGeo.mfCosRotationAngle); // -Sin to reverse rotation
+    tools::Long nWidth = aPoint1.X();
 
-    Point aPt0(rPol[0]);
-    Point aPt3(rPol[3]-rPol[0]);
-    if (rGeo.nRotationAngle) RotatePoint(aPt3,Point(0,0),-rGeo.mfSinRotationAngle,rGeo.mfCosRotationAngle); // -Sin to reverse rotation
-    tools::Long nHgt=aPt3.Y();
+    Point aPoint0(rPolygon[0]);
+    Point aPoint3(rPolygon[3] - rPolygon[0]);
+    if (rGeo.nRotationAngle)
+        RotatePoint(aPoint3, Point(0,0), -rGeo.mfSinRotationAngle, rGeo.mfCosRotationAngle); // -Sin to reverse rotation
+    tools::Long nHeight = aPoint3.Y();
 
+    Degree100 nShearAngle = GetAngle(aPoint3);
+    nShearAngle -= 27000_deg100; // ShearWink is measured against a vertical line
+    nShearAngle = -nShearAngle;  // negating, because '+' is shearing clock-wise
 
-    Degree100 nShW=GetAngle(aPt3);
-    nShW-=27000_deg100; // ShearWink is measured against a vertical line
-    nShW=-nShW;  // negating, because '+' is shearing clock-wise
-
-    bool bMirr=aPt3.Y()<0;
-    if (bMirr) { // "exchange of points" when mirroring
-        nHgt=-nHgt;
-        nShW+=18000_deg100;
-        aPt0=rPol[3];
+    bool bMirror = aPoint3.Y() < 0;
+    if (bMirror)
+    {   // "exchange of points" when mirroring
+        nHeight = -nHeight;
+        nShearAngle += 18000_deg100;
+        aPoint0 = rPolygon[3];
     }
-    nShW=NormAngle18000(nShW);
-    if (nShW<-9000_deg100 || nShW>9000_deg100) {
-        nShW=NormAngle18000(nShW+18000_deg100);
+
+    nShearAngle = NormAngle18000(nShearAngle);
+    if (nShearAngle < -9000_deg100 || nShearAngle > 9000_deg100)
+    {
+        nShearAngle = NormAngle18000(nShearAngle + 18000_deg100);
     }
-    if (nShW<-SDRMAXSHEAR) nShW=-SDRMAXSHEAR; // limit ShearWinkel (shear angle) to +/- 89.00 deg
-    if (nShW>SDRMAXSHEAR)  nShW=SDRMAXSHEAR;
-    rGeo.nShearAngle=nShW;
+
+    if (nShearAngle < -SDRMAXSHEAR)
+        nShearAngle = -SDRMAXSHEAR; // limit ShearWinkel (shear angle) to +/- 89.00 deg
+
+    if (nShearAngle > SDRMAXSHEAR)
+        nShearAngle = SDRMAXSHEAR;
+
+    rGeo.nShearAngle = nShearAngle;
     rGeo.RecalcTan();
-    Point aRU(aPt0);
-    aRU.AdjustX(nWdt );
-    aRU.AdjustY(nHgt );
-    rRect=tools::Rectangle(aPt0,aRU);
+
+    Point aRU(aPoint0);
+    aRU.AdjustX(nWidth);
+    aRU.AdjustY(nHeight);
+
+    return tools::Rectangle(aPoint0, aRU);
 }
 
+} // end svx
 
 void OrthoDistance8(const Point& rPt0, Point& rPt, bool bBigOrtho)
 {

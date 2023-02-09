@@ -3146,7 +3146,7 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
             aPol[2]=aPol0[3];
             aPol[3]=aPol0[2];
             aPol[4]=aPol0[1];
-            Poly2Rect(aPol,aRectangle,aNewGeo);
+            aRectangle = svx::polygonToRectangle(aPol, aNewGeo);
         }
         if ( bMirroredY )
         {
@@ -3169,7 +3169,7 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
             aPol[2]=aPol0[3]; // it was *not* wrong even when the reordering
             aPol[3]=aPol0[2]; // *seems* to be specific for X-Mirrorings. Oh
             aPol[4]=aPol0[1]; // will I be happy when this old stuff is |gone| with aw080 (!)
-            Poly2Rect(aPol, aRectangle, aNewGeo);
+            aRectangle = svx::polygonToRectangle(aPol, aNewGeo);
         }
     }
 

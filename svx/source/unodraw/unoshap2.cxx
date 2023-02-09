@@ -1644,7 +1644,7 @@ awt::Point SAL_CALL SvxCustomShape::getPosition()
                 aPol[2]=aPol0[3];
                 aPol[3]=aPol0[2];
                 aPol[4]=aPol0[1];
-                Poly2Rect(aPol,aRectangle,aNewGeo);
+                aRectangle = svx::polygonToRectangle(aPol, aNewGeo);
             }
             if ( bMirroredY )
             {
@@ -1666,7 +1666,7 @@ awt::Point SAL_CALL SvxCustomShape::getPosition()
                 aPol[2]=aPol0[3];
                 aPol[3]=aPol0[2];
                 aPol[4]=aPol0[1];
-                Poly2Rect( aPol, aRectangle, aNewGeo );
+                aRectangle = svx::polygonToRectangle(aPol, aNewGeo);
             }
         }
         Point aPt( aRectangle.TopLeft() );
