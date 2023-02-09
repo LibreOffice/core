@@ -141,7 +141,7 @@ DerivedData
 *.opensdf
 *.vcxproj*
 /.vs
-/.vscode
+/.vscode*
 *.VC.db
 LibreOffice.VC.VC.opendb
 
