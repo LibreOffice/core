@@ -3889,9 +3889,9 @@ rtl::Reference<SdrObject> SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItem
                 }
                 if (bOk && DFF_msofbtBSE == aHd.nRecType)
                 {
-                    const sal_uLong nSkipBLIPLen = 20;
-                    const sal_uLong nSkipShapePos = 4;
-                    const sal_uLong nSkipBLIP = 4;
+                    const sal_uInt8 nSkipBLIPLen = 20;
+                    const sal_uInt8 nSkipShapePos = 4;
+                    const sal_uInt8 nSkipBLIP = 4;
                     const sal_uLong nSkip =
                         nSkipBLIPLen + 4 + nSkipShapePos + 4 + nSkipBLIP;
 
