@@ -83,7 +83,8 @@ void ScAutoStyleList::AddInitial( const ScRange& rRange, const OUString& rStyle1
 
 IMPL_LINK_NOARG(ScAutoStyleList, InitHdl, Timer *, void)
 {
-    for (const auto& rInitial : aInitials)
+    std::vector<ScAutoStyleInitData> aLocalInitials(std::move(aInitials));
+    for (const auto& rInitial : aLocalInitials)
     {
         //  apply first style immediately
         pDocSh->DoAutoStyle(rInitial.aRange, rInitial.aStyle1);
@@ -92,8 +93,6 @@ IMPL_LINK_NOARG(ScAutoStyleList, InitHdl, Timer *, void)
         if (rInitial.nTimeout)
             AddEntry(rInitial.nTimeout, rInitial.aRange, rInitial.aStyle2 );
     }
-
-    aInitials.clear();
 }
 
 void ScAutoStyleList::AddEntry( sal_uLong nTimeout, const ScRange& rRange, const OUString& rStyle )
