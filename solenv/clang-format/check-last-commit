@@ -65,7 +65,11 @@ sub check_style()
     {
         print("\nERROR: The above differences were found between the code to commit \n");
         print("and the clang-format rules. Tips:\n");
-        print("\n- You may run '/opt/lo/bin/clang-format -i <problematic file>' to fix up style automatically.\n");
+        print("\n- On your local machine you may check how clang-format would modify the problematic file by saying\n");
+        print("  diff --unified <problematic file> <(/opt/lo/bin/clang-format <problematic file>)\n");
+        print("- NOTE: you should only correct the lines that you changed. Do not add unrelated formatting to your patch.\n");
+        print("- If the suggested corrections only apply to the lines you changed, you may run\n");
+        print("  '/opt/lo/bin/clang-format -i <problematic file>' to fix up style automatically.\n");
         print("- See solenv/clang-format/README on where to get the required version of clang-format binaries.\n");
         print("- If you renamed an excluded file, update solenv/clang-format/excludelist accordingly to keep it excluded.\n");
         print("\nsolenv/clang-format/check-last-commit: KO\n");
