@@ -842,7 +842,7 @@ SdrTableObj::SdrTableObj(SdrModel& rSdrModel, SdrTableObj const & rSource)
     TableModelNotifyGuard aGuard( mpImpl.is() ? mpImpl->mxTable.get() : nullptr );
 
     maLogicRect = rSource.maLogicRect;
-    maRectangle = rSource.maRectangle;
+    maRectangleRange = rSource.maRectangleRange;
     maGeo = rSource.maGeo;
     meTextKind = rSource.meTextKind;
     mbTextFrame = rSource.mbTextFrame;
