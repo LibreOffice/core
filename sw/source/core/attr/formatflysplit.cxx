@@ -24,6 +24,18 @@
 SwFormatFlySplit::SwFormatFlySplit(bool bSplit)
     : SfxBoolItem(RES_FLY_SPLIT, bSplit)
 {
+    // Once this pool item is true, a floating table (text frame + table inside it) is meant to
+    // split across multiple pages.
+    //
+    // The layout representation is the following:
+    //
+    // - We assume that the anchor type is at-para for such fly frames, and SwFlyAtContentFrame
+    // derives from SwFlowFrame to be able to split in general.
+    //
+    // - Both the master fly and the follow flys need an anchor. At the same time, we want all text
+    // of the anchor frame to be wrapped around the last follow fly frame, for Word compatibility.
+    // These are solved by splitting the anchor frame as many times as needed, always at text
+    // TextFrameIndex 0.
     if (getenv("SW_FORCE_FLY_SPLIT"))
     {
         SetValue(true);

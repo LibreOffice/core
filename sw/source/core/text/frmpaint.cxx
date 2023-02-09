@@ -601,7 +601,8 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                 }
 
                 // Don't show the paragraph mark for collapsed paragraphs, when they are hidden
-                if ( EmptyHeight( ) > 1 )
+                // No paragraph marker in the non-last part of a split fly anchor, either.
+                if ( EmptyHeight( ) > 1 && !HasNonLastSplitFlyDrawObj() )
                 {
                     SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), CH_PAR, 0, 1 );
                     aDrawInf.SetPos( aPos );
