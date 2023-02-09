@@ -28,7 +28,7 @@ $(call gb_ExternalProject_get_state_target,pixman,build) :
 		$(if $(filter ANDROID,$(OS)),--disable-arm-simd --disable-arm-neon --disable-arm-a64-neon --disable-arm-iwmmxt) \
 		$(gb_CONFIGURE_PLATFORMS) \
 		$(if $(CROSS_COMPILING),$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no)) \
-		$(if $(filter EMSCRIPTEN,$(OS)),CFLAGS="-O3 -pthread") \
+		$(if $(filter EMSCRIPTEN,$(OS)),CFLAGS="-O3 -pthread -msimd128") \
 		&& $(MAKE) \
 	)
 	$(call gb_Trace_EndRange,pixman,EXTERNAL)
