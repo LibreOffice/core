@@ -56,6 +56,7 @@ protected:
     tools::Long                m_nTokenIndex;      // current token index to detect loops for seeking backwards
     tools::Long                nTokenValue;        // additional value (RTF)
     bool                bTokenHasValue;     // indicates whether nTokenValue is valid
+    bool                bFuzzing;           // indicates we are in Fuzzing mode
     SvParserState       eState;             // status also in derived classes
 
     rtl_TextEncoding    eSrcEnc;            // Source encoding

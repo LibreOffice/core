@@ -1054,7 +1054,11 @@ HtmlTokenId HTMLParser::GetNextToken_()
                         sTmpBuffer.appendUtf32( nNextCh );
                         nNextCh = GetNextChar();
                         if (std::u16string_view(sTmpBuffer) == u"![CDATA[")
+                            break;
+                        if (bFuzzing && sTmpBuffer.getLength() > 1024)
                         {
+                            SAL_WARN("svtools", "abandoning import for performance reasons with long tokens");
+                            eState = SvParserState::Error;
                             break;
                         }
                     } while( '>' != nNextCh && '/' != nNextCh && !rtl::isAsciiWhiteSpace( nNextCh ) &&

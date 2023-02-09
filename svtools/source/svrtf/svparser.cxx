@@ -26,6 +26,7 @@
 #include <rtl/character.hxx>
 #include <sal/log.hxx>
 #include <unicode/ucsdet.h>
+#include <unotools/configmgr.hxx>
 
 #include <vector>
 
@@ -81,6 +82,7 @@ SvParser<T>::SvParser( SvStream& rIn, sal_uInt8 nStackSize )
     , m_nTokenIndex(0)
     , nTokenValue( 0 )
     , bTokenHasValue( false )
+    , bFuzzing(utl::ConfigManager::IsFuzzing())
     , eState( SvParserState::NotStarted )
     , eSrcEnc( RTL_TEXTENCODING_DONTKNOW )
     , nNextChPos(0)
