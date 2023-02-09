@@ -80,6 +80,38 @@ DECLARE_OOXMLEXPORT_TEST(testTdf147646, "tdf147646_mergedCellNumbering.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("2."),parseDump("/root/page/body/tab/row[4]/cell/txt/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']","expand"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf153042_largeTab, "tdf153042_largeTab.docx")
+{
+    // This is not the greatest test because it is slightly weird, and has a different layout
+    // in MS Word 2010/2003 than it does in Word 2019. This tests for the 2019 layout.
+    // Additionally (in Word 2019), going to paragraph properties and hitting OK changes the layout.
+    // It changes back by going to outline numbering properties and hitting OK.
+
+    // export does not keep the tabstop when exporting non-numbering. (Probably a good thing...)
+    if (isExported())
+        return;
+
+    const auto& pLayout = parseLayoutDump();
+    // Ensure a large tabstop is used in the pseudo-numbering (numbering::NONE followed by tabstop)
+    assertXPath(pLayout, "//SwFixPortion", "width", "1701");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf153042_noTab, "tdf153042_noTab.docx")
+{
+    // This is not the greatest test because it is slightly weird.
+    // It is the same as the "largeTab" file, except the paragraph properties were viewed
+    // and OK'ed, and now it looks like how Word 2010 and 2003 were laying it out.
+    // Amazingly, LO is handling both documents correctly at the moment, so let's unit test that...
+
+    // export does not keep the tabstop when exporting non-numbering. (Probably a good thing...)
+    if (isExported())
+        return;
+
+    const auto& pLayout = parseLayoutDump();
+    // Ensure a miniscule tab is used in the pseudo-numbering (numbering::NONE followed by tabstop)
+    assertXPath(pLayout, "//SwFixPortion", "width", "10");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
 {
     // Given a docx document with a shape with vert="mongolianVert".

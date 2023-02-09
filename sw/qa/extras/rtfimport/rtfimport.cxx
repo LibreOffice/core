@@ -743,6 +743,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116265)
     // matching \fi in list definition (and with invalid level numbers).
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
                          getProperty<sal_Int32>(getParagraph(2), "ParaFirstLineIndent"));
+
+    const auto& pLayout = parseLayoutDump();
+    // Ensure that there is a tabstop in the pseudo-numbering (numbering::NONE followed by tabstop)
+    assertXPath(pLayout, "//SwFixPortion", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo66565)
@@ -1422,6 +1426,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf78506)
             // This was '0', invalid \levelnumbers wasn't ignored.
             CPPUNIT_ASSERT(rProp.Value.get<OUString>().isEmpty());
     }
+
+    const auto& pLayout = parseLayoutDump();
+    // Ensure that there is a tabstop in the pseudo-numbering (numbering::NONE followed by tabstop)
+    assertXPath(pLayout, "//SwFixPortion", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf117403)
