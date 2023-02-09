@@ -707,8 +707,9 @@ bool SdrCircObj::MovCreate(SdrDragStat& rStat)
     ImpSetCreateParams(rStat);
     ImpCircUser* pU=static_cast<ImpCircUser*>(rStat.GetUser());
     rStat.SetActionRect(pU->aR);
-    setRectangle(pU->aR); // for ObjName
-    ImpJustifyRect(maRectangle);
+    auto aRectangle = pU->aR;
+    ImpJustifyRect(aRectangle);
+    setRectangle(aRectangle); // for ObjName
     m_nStartAngle=pU->nStart;
     m_nEndAngle=pU->nEnd;
     SetBoundRectDirty();
@@ -1051,8 +1052,9 @@ void SdrCircObj::NbcSetSnapRect(const tools::Rectangle& rRect)
         NbcResize(maSnapRect.TopLeft(),Fraction(nWdt1,nWdt0),Fraction(nHgt1,nHgt0));
         NbcMove(Size(rRect.Left()-aSR0.Left(),rRect.Top()-aSR0.Top()));
     } else {
-        setRectangle(rRect);
-        ImpJustifyRect(maRectangle);
+        tools::Rectangle aRectangle(rRect);
+        ImpJustifyRect(aRectangle);
+        setRectangle(aRectangle);
     }
     SetBoundAndSnapRectsDirty();
     SetXPolyDirty();
