@@ -410,7 +410,9 @@ bool SwTextFrame::FormatEmpty()
     bool bCollapse = EmptyHeight( ) == 1 && IsCollapse( );
 
     // sw_redlinehide: just disable FormatEmpty optimisation for now
-    if (HasFollow() || GetMergedPara() || GetTextNodeFirst()->GetpSwpHints() ||
+    // Split fly frames: non-last parts of the anchor want this optimization to clear the old
+    // content.
+    if ((HasFollow() && mnOffset != GetFollow()->GetOffset()) || GetMergedPara() || GetTextNodeFirst()->GetpSwpHints() ||
         nullptr != GetTextNodeForParaProps()->GetNumRule() ||
         GetTextNodeFirst()->HasHiddenCharAttribute(true) ||
          IsInFootnote() || ( HasPara() && GetPara()->IsPrepMustFit() ) )

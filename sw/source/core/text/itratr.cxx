@@ -1451,10 +1451,10 @@ sal_uInt16 SwTextFrame::GetScalingOfSelectedText(
     return o3tl::narrowing<sal_uInt16>( nWidth ? ((100 * aIter.GetFnt()->GetTextSize_( aDrawInf ).Height()) / nWidth ) : 0 );
 }
 
-std::vector<SwFlyAtContentFrame*> SwTextFrame::GetSplitFlyDrawObjs()
+std::vector<SwFlyAtContentFrame*> SwTextFrame::GetSplitFlyDrawObjs() const
 {
     std::vector<SwFlyAtContentFrame*> aObjs;
-    SwSortedObjs* pSortedObjs = GetDrawObjs();
+    const SwSortedObjs* pSortedObjs = GetDrawObjs();
     if (!pSortedObjs)
     {
         return aObjs;
@@ -1477,6 +1477,19 @@ std::vector<SwFlyAtContentFrame*> SwTextFrame::GetSplitFlyDrawObjs()
     }
 
     return aObjs;
+}
+
+bool SwTextFrame::HasNonLastSplitFlyDrawObj() const
+{
+    for (const auto& pFly : GetSplitFlyDrawObjs())
+    {
+        if (pFly->GetFollow())
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 SwTwips SwTextNode::GetWidthOfLeadingTabs() const

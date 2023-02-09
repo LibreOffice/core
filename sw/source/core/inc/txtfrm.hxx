@@ -332,6 +332,9 @@ class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
 
     virtual void SwClientNotify(SwModify const& rModify, SfxHint const& rHint) override;
 
+    /// Like GetDrawObjs(), but limit to fly frames which are allowed to split.
+    std::vector<SwFlyAtContentFrame*> GetSplitFlyDrawObjs() const;
+
 public:
 
     virtual const SvxFormatBreakItem& GetBreakItem() const override;
@@ -784,8 +787,9 @@ public:
     OUString GetCurWord(SwPosition const&) const;
     sal_uInt16 GetScalingOfSelectedText(TextFrameIndex nStt, TextFrameIndex nEnd);
 
-    /// Like GetDrawObjs(), but limit to fly frames which are allowed to split.
-    std::vector<SwFlyAtContentFrame*> GetSplitFlyDrawObjs();
+    /// This text frame may have a split fly frames anchored to it. Is any of them a frame that has
+    /// a follow, i.e. not the last in a master -> follow 1 -> ... -> last follow chain?
+    bool HasNonLastSplitFlyDrawObj() const;
 
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
 };

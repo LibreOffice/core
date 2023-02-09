@@ -581,14 +581,11 @@ void SwTextFrame::AdjustFollow_( SwTextFormatter &rLine,
             if (GetFollow()->IsDeleteForbidden())
                 return;
 
-            for (const auto& pFlyFrame : GetSplitFlyDrawObjs())
+            if (HasNonLastSplitFlyDrawObj())
             {
                 // If a fly frame is anchored to us that has a follow, then don't join the anchor.
                 // First those fly frames have to be joined.
-                if (pFlyFrame->GetFollow())
-                {
-                    return;
-                }
+                return;
             }
 
             JoinFrame();
@@ -1838,7 +1835,18 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
         return;
     }
 
-    const TextFrameIndex nStrLen(GetText().getLength());
+    TextFrameIndex nStrLen(GetText().getLength());
+
+    SwTextFrame* pFollow = GetFollow();
+    if (pFollow && pFollow->GetOffset() == mnOffset)
+    {
+        if (HasNonLastSplitFlyDrawObj())
+        {
+            // Non-last part of split fly anchor: consider this empty.
+            nStrLen = TextFrameIndex(0);
+        }
+    }
+
     if ( nStrLen || !FormatEmpty() )
     {
 
