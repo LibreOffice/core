@@ -121,6 +121,16 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
     if ( !bStart || m_bIsInDrag )
         return;
 
+    // If the add selection mode has been pushed in the MouseButtonDown handler it needs to be
+    // popped or it will remain active and noticable in the statusbar selection control until the
+    // next MouseButtonUp event after the DnD, since a MouseButtonUp event is not received by the
+    // edit window when DnD is done.
+    if (g_bModePushed)
+    {
+        rSh.PopMode();
+        g_bModePushed = false;
+    }
+
     m_bMBPressed = false;
     ReleaseMouse();
     g_bFrameDrag = false;

@@ -295,6 +295,7 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 };
 
+extern bool g_bModePushed;
 extern bool g_bFrameDrag;
 extern bool g_bDDTimerStarted;
 extern bool g_bDDINetAttr;

@@ -173,7 +173,7 @@ static bool g_bHoldSelection      = false;
 
 bool g_bFrameDrag                   = false;
 static bool g_bValidCursorPos       = false;
-static bool g_bModePushed         = false;
+bool g_bModePushed = false;
 bool g_bDDTimerStarted            = false;
 bool g_bDDINetAttr                = false;
 static SdrHdlKind g_eSdrMoveHdl   = SdrHdlKind::User;
