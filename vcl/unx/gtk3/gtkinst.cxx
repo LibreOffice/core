@@ -18571,7 +18571,11 @@ public:
 
     virtual ~GtkInstanceDrawingArea() override
     {
+#if GTK_CHECK_VERSION(4,0,0)
+        gtk_widget_remove_controller(m_pMouseEventBox, GTK_EVENT_CONTROLLER(m_pZoomGesture));
+#else
         g_clear_object(&m_pZoomGesture);
+#endif
 
         ImplGetDefaultWindow()->RemoveEventListener(LINK(this, GtkInstanceDrawingArea, SettingsChangedHdl));
 
