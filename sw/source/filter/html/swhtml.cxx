@@ -43,7 +43,6 @@
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/ctrltool.hxx>
-#include <unotools/configmgr.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/event.hxx>
@@ -310,7 +309,6 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_bBodySeen( false ),
     m_bReadingHeaderOrFooter( false ),
     m_bNotifyMacroEventRead( false ),
-    m_bFuzzing(utl::ConfigManager::IsFuzzing()),
     m_isInTableStructure(false),
     m_nTableDepth( 0 ),
     m_nFloatingFrames( 0 ),
@@ -318,7 +316,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_pTempViewFrame(nullptr)
 {
     // If requested explicitly, then force ignoring of comments (don't create postits for them).
-    if (!m_bFuzzing)
+    if (!bFuzzing)
     {
         if (officecfg::Office::Writer::Filter::Import::HTML::IgnoreComments::get())
             m_bIgnoreHTMLComments = true;
@@ -335,7 +333,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     memset(m_xAttrTab.get(), 0, sizeof(HTMLAttrTable));
 
     // Read the font sizes 1-7 from the INI file
-    if (!m_bFuzzing)
+    if (!bFuzzing)
     {
         m_aFontHeights[0] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_1::get() * 20;
         m_aFontHeights[1] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_2::get() * 20;
@@ -372,7 +370,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_xDoc->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, true);
 
     m_pCSS1Parser.reset(new SwCSS1Parser(m_xDoc.get(), *this, m_aFontHeights, m_sBaseURL, IsNewDoc()));
-    if (!m_bFuzzing)
+    if (!bFuzzing)
         m_pCSS1Parser->SetIgnoreFontFamily( officecfg::Office::Common::Filter::HTML::Import::FontSetting::get() );
 
     if( bReadUTF8 )
@@ -888,7 +886,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
         }
 
         // adjust AutoLoad in DocumentProperties
-        if (!m_bFuzzing && IsNewDoc())
+        if (!bFuzzing && IsNewDoc())
         {
             SwDocShell *pDocShell(m_xDoc->GetDocShell());
             OSL_ENSURE(pDocShell, "no SwDocShell");
@@ -1467,7 +1465,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         break;
 
     case HtmlTokenId::IFRAME_ON:
-        if (m_bFuzzing && m_nFloatingFrames > 64)
+        if (bFuzzing && m_nFloatingFrames > 64)
             SAL_WARN("sw.html", "Not importing any more FloatingFrames for fuzzing performance");
         else
         {
@@ -1831,7 +1829,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
             EndPara();
         }
 
-        if (m_bFuzzing && m_nListItems > 1024)
+        if (bFuzzing && m_nListItems > 1024)
         {
             SAL_WARN("sw.html", "skipping remaining bullet import for performance during fuzzing");
         }
@@ -4628,7 +4626,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
     short nFirstLineIndent = 0;                     // indentations
 
     auto nDepth = m_aContexts.size();
-    if (m_bFuzzing && nDepth > 128)
+    if (bFuzzing && nDepth > 128)
     {
         SAL_WARN("sw.html", "Not applying any more text collection attributes to a deeply nested node for fuzzing performance");
         nDepth = 0;

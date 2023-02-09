@@ -473,7 +473,6 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
     bool m_bBodySeen : 1;
     bool m_bReadingHeaderOrFooter : 1;
     bool m_bNotifyMacroEventRead : 1;
-    bool m_bFuzzing;
     bool m_isInTableStructure;
 
     int m_nTableDepth;
