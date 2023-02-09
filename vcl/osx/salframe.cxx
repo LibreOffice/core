@@ -1262,7 +1262,7 @@ void AquaSalFrame::UpdateDarkMode()
 {
     if (@available(macOS 10.14, iOS 13, *))
     {
-        switch (Application::GetSettings().GetMiscSettings().GetDarkMode())
+        switch (MiscSettings::GetDarkMode())
         {
             case 0: // auto
             default:
