@@ -1997,6 +1997,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142387)
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del/w:r/w:delText", "inserts ");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf147892)
+{
+    loadAndSave("tdf147892.fodt");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // w:del in w:ins is exported correctly
+    // (both w:del and w:ins were exported for para marker)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:del", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:ins", 0);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf123054, "tdf123054.docx")
 {
     CPPUNIT_ASSERT_EQUAL(OUString("No Spacing"),

@@ -1510,13 +1510,13 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
 
     if ( pRedlineParagraphMarkerDeleted )
     {
-        StartRedline( pRedlineParagraphMarkerDeleted );
-        EndRedline( pRedlineParagraphMarkerDeleted );
+        StartRedline( pRedlineParagraphMarkerDeleted, /*bLastRun=*/true );
+        EndRedline( pRedlineParagraphMarkerDeleted, /*bLastRun=*/true );
     }
     if ( pRedlineParagraphMarkerInserted )
     {
-        StartRedline( pRedlineParagraphMarkerInserted );
-        EndRedline( pRedlineParagraphMarkerInserted );
+        StartRedline( pRedlineParagraphMarkerInserted, /*bLastRun=*/true );
+        EndRedline( pRedlineParagraphMarkerInserted, /*bLastRun=*/true );
     }
 
     // mergeTopMarks() after paragraph mark properties child elements.
@@ -1623,7 +1623,7 @@ void DocxAttributeOutput::StartRun( const SwRedlineData* pRedlineData, sal_Int32
     m_pSerializer->mark(Tag_StartRun_3); // let's call it "postponed text"
 }
 
-void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_Int32 nLen, bool /*bLastRun*/)
+void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_Int32 nLen, bool bLastRun)
 {
     int nFieldsInPrevHyperlink = m_nFieldsInHyperlink;
     // Reset m_nFieldsInHyperlink if a new hyperlink is about to start
@@ -1707,9 +1707,9 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
             // InputField with extra grabbag params - it is sdt field
             (pIt->eType == ww::eFILLIN && static_cast<const SwInputField*>(pIt->pField.get())->getGrabBagParams().hasElements())))
         {
-            StartRedline( m_pRedlineData );
+            StartRedline( m_pRedlineData, bLastRun );
             StartField_Impl( pNode, nPos, *pIt, true );
-            EndRedline( m_pRedlineData );
+            EndRedline( m_pRedlineData, bLastRun );
 
             if (m_startedHyperlink)
                 ++m_nFieldsInHyperlink;
@@ -1778,7 +1778,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
     }
 
     // if there is some redlining in the document, output it
-    StartRedline( m_pRedlineData );
+    StartRedline( m_pRedlineData, bLastRun );
 
     // XML_r node should be surrounded with bookmark-begin and bookmark-end nodes if it has bookmarks.
     // The same is applied for permission ranges.
@@ -1863,7 +1863,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
 
     // if there is some redlining in the document, output it
     // (except in the case of fields with multiple runs)
-    EndRedline( m_pRedlineData );
+    EndRedline( m_pRedlineData, bLastRun );
 
     // enclose in a sdt block, if necessary: if one is already started, then don't do it for now
     // (so on export sdt blocks are never nested ATM)
@@ -1967,7 +1967,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
 
     if ( m_pRedlineData )
     {
-        EndRedline( m_pRedlineData );
+        EndRedline( m_pRedlineData, bLastRun );
         m_pRedlineData = nullptr;
     }
 
@@ -3930,13 +3930,14 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
 // The difference between 'Redline' and 'StartRedline'+'EndRedline' is that:
 // 'Redline' is used for tracked changes of formatting information of a run like Bold, Underline. (the '<w:rPrChange>' is inside the 'run' node)
 // 'StartRedline' is used to output tracked changes of run insertion and deletion (the run is inside the '<w:ins>' node)
-void DocxAttributeOutput::StartRedline( const SwRedlineData * pRedlineData )
+void DocxAttributeOutput::StartRedline( const SwRedlineData * pRedlineData, bool bLastRun )
 {
     if ( !pRedlineData )
         return;
 
     // write out stack of this redline recursively (first the oldest)
-    StartRedline( pRedlineData->Next() );
+    if ( !bLastRun )
+        StartRedline( pRedlineData->Next(), false );
 
     OString aId( OString::number( m_nRedlineId++ ) );
 
@@ -3981,7 +3982,7 @@ void DocxAttributeOutput::StartRedline( const SwRedlineData * pRedlineData )
     }
 }
 
-void DocxAttributeOutput::EndRedline( const SwRedlineData * pRedlineData )
+void DocxAttributeOutput::EndRedline( const SwRedlineData * pRedlineData, bool bLastRun )
 {
     if ( !pRedlineData || m_bWritingField )
         return;
@@ -4007,7 +4008,8 @@ void DocxAttributeOutput::EndRedline( const SwRedlineData * pRedlineData )
     }
 
     // write out stack of this redline recursively (first the newest)
-    EndRedline( pRedlineData->Next() );
+    if ( !bLastRun )
+        EndRedline( pRedlineData->Next(), false );
 }
 
 void DocxAttributeOutput::FormatDrop( const SwTextNode& /*rNode*/, const SwFormatDrop& /*rSwFormatDrop*/, sal_uInt16 /*nStyle*/, ww8::WW8TableNodeInfo::Pointer_t /*pTextNodeInfo*/, ww8::WW8TableNodeInfoInner::Pointer_t )
