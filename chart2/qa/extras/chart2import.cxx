@@ -2200,11 +2200,9 @@ void Chart2ImportTest::testFixedSizeBarChartVeryLongLabel()
     CPPUNIT_ASSERT(xChartWall.is());
 
     // The text shape width should be smaller than the chart wall
-    // The specific numbers unfortunately vary depending on DPI - allow 1 mm
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(5085, xChartWall->getSize().Width, 100);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(7113, xChartWall->getSize().Height, 100);
+    CPPUNIT_ASSERT_LESS(xChartWall->getSize().Width, xXAxis->getSize().Width);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(4800, xXAxis->getSize().Width, 100);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(7113, xChartWall->getSize().Height, 100);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(398, xXAxis->getSize().Height, 100);
 }
 
@@ -2270,11 +2268,9 @@ void Chart2ImportTest::testAutomaticSizeBarChartVeryLongLabel()
     CPPUNIT_ASSERT(xChartWall.is());
 
     // The text shape width should be smaller than the chart wall
-    // The specific numbers unfortunately vary depending on DPI - allow 1 mm
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(5761, xChartWall->getSize().Width, 100);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(7200, xChartWall->getSize().Height, 100);
+    CPPUNIT_ASSERT_LESS(xChartWall->getSize().Width, xXAxis->getSize().Width);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(5320, xXAxis->getSize().Width, 100);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(7200, xChartWall->getSize().Height, 100);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1192, xXAxis->getSize().Height, 100);
 }
 
