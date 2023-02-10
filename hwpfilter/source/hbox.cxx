@@ -581,7 +581,6 @@ OUString Outline::GetUnicode() const
                 OStringBuffer buf;
                 int i;
 
-                buf[0] = 0;
                 for (i = 0; i <= level; i++)
                 {
                     levelnum = ((number[i] < 1) ? 1 : number[i]);
