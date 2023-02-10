@@ -424,6 +424,16 @@ ScStyleSheet* ScStyleSheetPool::FindCaseIns( const OUString& rName, SfxStyleFami
     return first;
 }
 
+ScStyleSheet* ScStyleSheetPool::FindAutoStyle(const OUString& rName)
+{
+    ScStyleSheet* pStyleSheet = FindCaseIns(rName, SfxStyleFamily::Para);
+    if (!pStyleSheet)
+        if (auto pFound = Find(ScResId(STR_STYLENAME_STANDARD), SfxStyleFamily::Para))
+            if (pFound->isScStyleSheet()) // we do not know what kind of sheets we have
+                pStyleSheet = static_cast<ScStyleSheet*>(pFound);
+    return pStyleSheet;
+}
+
 void ScStyleSheetPool::setAllParaStandard()
 {
     SfxStyleSheetBase* pSheet = First(SfxStyleFamily::Para);

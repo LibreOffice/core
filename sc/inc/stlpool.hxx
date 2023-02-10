@@ -51,6 +51,8 @@ public:
     bool                HasStandardStyles() const { return bHasStandardStyles; }
 
     ScStyleSheet*       FindCaseIns( const OUString& rName, SfxStyleFamily eFam );
+    // Finds Para style with given name case-insensitively, or STR_STYLENAME_STANDARD
+    ScStyleSheet*       FindAutoStyle(const OUString& rName);
 
     virtual SfxStyleSheetBase& Make( const OUString&, SfxStyleFamily eFam,
                                      SfxStyleSearchBits nMask = SfxStyleSearchBits::All) override;

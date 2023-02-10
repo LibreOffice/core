@@ -41,6 +41,7 @@
 #include <dpobject.hxx>
 #include <tokenarray.hxx>
 #include <globalnames.hxx>
+#include <stlpool.hxx>
 #include <stlsheet.hxx>
 #include <dpcache.hxx>
 
@@ -2595,38 +2596,54 @@ void ScInterpreter::ScStyle()
     if (!MustHaveParamCount(nParamCount, 1, 3))
         return;
 
-    OUString aStyle2;                           // Template after timer
+    OUString aStyle2;                           // Style after timer
     if (nParamCount >= 3)
         aStyle2 = GetString().getString();
     tools::Long nTimeOut = 0;                          // timeout
     if (nParamCount >= 2)
         nTimeOut = static_cast<tools::Long>(GetDouble()*1000.0);
-    OUString aStyle1 = GetString().getString(); // Template for immediate
+    OUString aStyle1 = GetString().getString(); // Style for immediate
 
     if (nTimeOut < 0)
         nTimeOut = 0;
 
-    // Execute request to apply template
+    // Execute request to apply style
     if ( !mrDoc.IsClipOrUndo() )
     {
         SfxObjectShell* pShell = mrDoc.GetDocumentShell();
         if (pShell)
         {
+            // Normalize style names right here, making sure that character case is correct,
+            // and that we only apply anything when there's something to apply
+            auto pPool = mrDoc.GetStyleSheetPool();
+            if (!aStyle1.isEmpty())
+            {
+                if (auto pNewStyle = pPool->FindAutoStyle(aStyle1))
+                    aStyle1 = pNewStyle->GetName();
+                else
+                    aStyle1.clear();
+            }
+            if (!aStyle2.isEmpty())
+            {
+                if (auto pNewStyle = pPool->FindAutoStyle(aStyle2))
+                    aStyle2 = pNewStyle->GetName();
+                else
+                    aStyle2.clear();
+            }
             // notify object shell directly!
-            bool bNotify = true;
-            if (aStyle2.isEmpty())
+            if (!aStyle1.isEmpty() || !aStyle2.isEmpty())
             {
                 const ScStyleSheet* pStyle = mrDoc.GetStyle(aPos.Col(), aPos.Row(), aPos.Tab());
 
-                if (pStyle && pStyle->GetName() == aStyle1)
-                    bNotify = false;
-            }
-
-            if (bNotify)
-            {
-                ScRange aRange(aPos);
-                ScAutoStyleHint aHint( aRange, aStyle1, nTimeOut, aStyle2 );
-                pShell->Broadcast( aHint );
+                const bool bNotify = !pStyle
+                                     || (!aStyle1.isEmpty() && pStyle->GetName() != aStyle1)
+                                     || (!aStyle2.isEmpty() && pStyle->GetName() != aStyle2);
+                if (bNotify)
+                {
+                    ScRange aRange(aPos);
+                    ScAutoStyleHint aHint(aRange, aStyle1, nTimeOut, aStyle2);
+                    pShell->Broadcast(aHint);
+                }
             }
         }
     }
