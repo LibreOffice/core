@@ -33,6 +33,7 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/units/Range2DLWrap.hxx>
+#include <basegfx/units/LengthTypes.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <drawinglayer/processor2d/contourextractor2d.hxx>
 #include <drawinglayer/processor2d/linegeometryextractor2d.hxx>
@@ -970,10 +971,8 @@ void SdrObject::RecalcBoundRect()
     if ((getSdrModelFromSdrObject().isLocked()) || comphelper::IsFuzzing())
         return;
 
-    auto const& rRectangle = getOutRectangle();
-
     // central new method which will calculate the BoundRect using primitive geometry
-    if (!rRectangle.IsEmpty())
+    if (!isOutRectangleEmpty())
         return;
 
     // Use view-independent data - we do not want any connections
@@ -1428,24 +1427,32 @@ void SdrObject::NbcMove(const Size& rSize)
 
 void SdrObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    bool bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
-    bool bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
-    if (bXMirr || bYMirr) {
+    bool bXMirror = (xFact.GetNumerator() < 0) != (xFact.GetDenominator() < 0);
+    bool bYMirror = (yFact.GetNumerator() < 0) != (yFact.GetDenominator() < 0);
+    if (bXMirror || bYMirror)
+    {
         Point aRef1(GetSnapRect().Center());
-        if (bXMirr) {
+        if (bXMirror)
+        {
             Point aRef2(aRef1);
             aRef2.AdjustY( 1 );
-            NbcMirrorGluePoints(aRef1,aRef2);
+            NbcMirrorGluePoints(aRef1, aRef2);
         }
-        if (bYMirr) {
+        if (bYMirror)
+        {
             Point aRef2(aRef1);
             aRef2.AdjustX( 1 );
-            NbcMirrorGluePoints(aRef1,aRef2);
+            NbcMirrorGluePoints(aRef1, aRef2);
         }
     }
-    auto aRectangle = getOutRectangle();
-    ResizeRect(aRectangle, rRef, xFact, yFact);
-    setOutRectangle(aRectangle);
+
+    auto eUnit = getSdrModelFromSdrObject().getUnit();
+    gfx::Tuple2DL aReference{
+        gfx::Length::from(eUnit, rRef.X()),
+        gfx::Length::from(eUnit, rRef.Y())};
+    double fFactorX = xFact.IsValid() ? double(xFact) : 1.0;
+    double fFactorY = yFact.IsValid() ? double(yFact) : 1.0;
+    svx::resizeRange(m_aOutterRange, aReference, fFactorX, fFactorY);
 
     SetBoundAndSnapRectsDirty();
 }
