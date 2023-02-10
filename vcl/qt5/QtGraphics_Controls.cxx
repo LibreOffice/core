@@ -762,7 +762,7 @@ bool QtGraphics_Controls::getNativeControlRegion(ControlType type, ControlPart p
             int nBottom = qMax(nLine, upscale(fo.rect.bottom() - aSubRect.bottom(), Round::Ceil));
             boundingRect.adjust(nLeft, nTop, nRight, nBottom);
 
-            // tdf#150451: ensure a minimium size that fits text content + frame at top and bottom.
+            // tdf#150451: ensure a minimum size that fits text content + frame at top and bottom.
             // Themes may use the widget type for determining the actual frame width to use,
             // so pass a dummy QLineEdit
             //
