@@ -235,12 +235,12 @@ public:
     ///
     /// Start of the tag that encloses the run, fills the info according to
     /// the value of pRedlineData.
-    void StartRedline( const SwRedlineData * pRedlineData );
+    void StartRedline( const SwRedlineData * pRedlineData, bool bLastRun );
 
     /// Output redlining.
     ///
     /// End of the tag that encloses the run.
-    void EndRedline( const SwRedlineData * pRedlineData );
+    void EndRedline( const SwRedlineData * pRedlineData, bool bLastRun );
 
     virtual void SetStateOfFlyFrame( FlyProcessingState nStateOfFlyFrame ) override;
     virtual void SetAnchorIsLinkedToNode( bool bAnchorLinkedToNode ) override;
