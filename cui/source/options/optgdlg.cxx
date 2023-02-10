@@ -548,6 +548,7 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xMouseMiddleLB(m_xBuilder->weld_combo_box("mousemiddle"))
     , m_xMoreIcons(m_xBuilder->weld_button("btnMoreIcons"))
     , m_xRunGPTests(m_xBuilder->weld_button("btn_rungptest"))
+    , m_sAutoStr(m_xIconStyleLB->get_text(0))
 {
     OUString sToolKitName(Application::GetToolkitName());
     if (sToolKitName.startsWith("gtk"))
@@ -561,8 +562,18 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
 
     m_xUseSkia->connect_toggled(LINK(this, OfaViewTabPage, OnUseSkiaToggled));
 
+    UpdateIconThemes();
+
+    m_xIconStyleLB->set_active(0);
+
+    m_xMoreIcons->set_from_icon_name("cmd/sc_additionsdialog.png");
+    m_xMoreIcons->connect_clicked(LINK(this, OfaViewTabPage, OnMoreIconsClick));
+    m_xRunGPTests->connect_clicked( LINK( this, OfaViewTabPage, OnRunGPTestClick));
+}
+
+void OfaViewTabPage::UpdateIconThemes()
+{
     // Set known icon themes
-    OUString sAutoStr( m_xIconStyleLB->get_text( 0 ) );
     m_xIconStyleLB->clear();
     StyleSettings aStyleSettings = Application::GetSettings().GetStyleSettings();
     mInstalledIconThemes = aStyleSettings.GetInstalledIconThemes();
@@ -572,9 +583,7 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     OUString autoThemeId = aStyleSettings.GetAutomaticallyChosenIconTheme();
     const vcl::IconThemeInfo& autoIconTheme = vcl::IconThemeInfo::FindIconThemeById(mInstalledIconThemes, autoThemeId);
 
-    OUString entryForAuto = sAutoStr + " (" +
-                                autoIconTheme.GetDisplayName() +
-                                ")";
+    OUString entryForAuto = m_sAutoStr + " (" + autoIconTheme.GetDisplayName() + ")";
     m_xIconStyleLB->append("auto", entryForAuto); // index 0 means choose style automatically
 
     // separate auto and other icon themes
@@ -582,12 +591,6 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
 
     for (auto const& installIconTheme : mInstalledIconThemes)
         m_xIconStyleLB->append(installIconTheme.GetThemeId(), installIconTheme.GetDisplayName());
-
-    m_xIconStyleLB->set_active(0);
-
-    m_xMoreIcons->set_from_icon_name("cmd/sc_additionsdialog.png");
-    m_xMoreIcons->connect_clicked(LINK(this, OfaViewTabPage, OnMoreIconsClick));
-    m_xRunGPTests->connect_clicked( LINK( this, OfaViewTabPage, OnRunGPTestClick));
 }
 
 OfaViewTabPage::~OfaViewTabPage()
@@ -920,6 +923,9 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
         nNotebookbarSizeLB_InitialSelection = 2;
     m_xNotebookbarIconSizeLB->set_active(nNotebookbarSizeLB_InitialSelection);
     m_xNotebookbarIconSizeLB->save_value();
+
+    // tdf#153497 set name of automatic icon theme, it may have changed due to "Apply" while this page is visible
+    UpdateIconThemes();
 
     if (aMiscOptions.IconThemeWasSetAutomatically()) {
         nStyleLB_InitialSelection = 0;
