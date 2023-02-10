@@ -1,6 +1,14 @@
 # -*- Mode: Diff -*-
 --- src/base/ftsystem.c
 +++ src/base/ftsystem.c
+@@ -24,6 +24,7 @@
+    *
+    */
+ 
++#include <unistd.h>
+ 
+ #include <ft2build.h>
+ #include FT_CONFIG_CONFIG_H
 @@ -237,6 +237,8 @@
                    const char*  filepathname )
    {
