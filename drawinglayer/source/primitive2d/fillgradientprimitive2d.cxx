@@ -38,8 +38,8 @@ namespace drawinglayer::primitive2d
             rEntries.clear();
 
             // make sure steps is not too high/low
-            const basegfx::BColor aStart(getFillGradient().getStartColor());
-            const basegfx::BColor aEnd(getFillGradient().getEndColor());
+            const basegfx::BColor aStart(getFillGradient().getColorSteps().front().getColor());
+            const basegfx::BColor aEnd(getFillGradient().getColorSteps().back().getColor());
             const sal_uInt32 nMaxSteps(sal_uInt32((aStart.getMaximumDistance(aEnd) * 127.5) + 0.5));
             sal_uInt32 nSteps(getFillGradient().getSteps());
 

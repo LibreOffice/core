@@ -258,19 +258,20 @@ void VclMetafileProcessor2D::impConvertFillGradientAttributeToVCLGradient(
     Gradient& o_rVCLGradient, const attribute::FillGradientAttribute& rFiGrAtt,
     bool bIsTransparenceGradient) const
 {
+    const basegfx::BColor aStartColor(rFiGrAtt.getColorSteps().front().getColor());
+    const basegfx::BColor aEndColor(rFiGrAtt.getColorSteps().back().getColor());
+
     if (bIsTransparenceGradient)
     {
         // it's about transparence channel intensities (black/white), do not use color modifier
-        o_rVCLGradient.SetStartColor(Color(rFiGrAtt.getStartColor()));
-        o_rVCLGradient.SetEndColor(Color(rFiGrAtt.getEndColor()));
+        o_rVCLGradient.SetStartColor(Color(aStartColor));
+        o_rVCLGradient.SetEndColor(Color(aEndColor));
     }
     else
     {
         // use color modifier to influence start/end color of gradient
-        o_rVCLGradient.SetStartColor(
-            Color(maBColorModifierStack.getModifiedColor(rFiGrAtt.getStartColor())));
-        o_rVCLGradient.SetEndColor(
-            Color(maBColorModifierStack.getModifiedColor(rFiGrAtt.getEndColor())));
+        o_rVCLGradient.SetStartColor(Color(maBColorModifierStack.getModifiedColor(aStartColor)));
+        o_rVCLGradient.SetEndColor(Color(maBColorModifierStack.getModifiedColor(aEndColor)));
     }
 
     o_rVCLGradient.SetAngle(

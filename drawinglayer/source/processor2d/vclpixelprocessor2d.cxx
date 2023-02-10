@@ -498,8 +498,10 @@ void VclPixelProcessor2D::processPolyPolygonGradientPrimitive2D(
 {
     // direct draw of gradient
     const attribute::FillGradientAttribute& rGradient(rPolygonCandidate.getFillGradient());
-    basegfx::BColor aStartColor(maBColorModifierStack.getModifiedColor(rGradient.getStartColor()));
-    basegfx::BColor aEndColor(maBColorModifierStack.getModifiedColor(rGradient.getEndColor()));
+    basegfx::BColor aStartColor(
+        maBColorModifierStack.getModifiedColor(rGradient.getColorSteps().front().getColor()));
+    basegfx::BColor aEndColor(
+        maBColorModifierStack.getModifiedColor(rGradient.getColorSteps().back().getColor()));
     basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolygonCandidate.getB2DPolyPolygon());
 
     if (!aLocalPolyPolygon.count())
@@ -935,6 +937,14 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
 {
     const attribute::FillGradientAttribute& rFillGradient = rPrimitive.getFillGradient();
 
+    // MCGR: If GradientSteps are used, use decomposition since vcl is not able
+    // to render multi-color gradients
+    if (rFillGradient.getColorSteps().size() > 2)
+    {
+        process(rPrimitive);
+        return;
+    }
+
     // VCL should be able to handle all styles, but for tdf#133477 the VCL result
     // is different from processing the gradient manually by drawinglayer
     // (and the Writer unittest for it fails). Keep using the drawinglayer code
@@ -983,8 +993,8 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
 
     GradientStyle eGradientStyle = convertGradientStyle(rFillGradient.getStyle());
 
-    Gradient aGradient(eGradientStyle, Color(rFillGradient.getStartColor()),
-                       Color(rFillGradient.getEndColor()));
+    Gradient aGradient(eGradientStyle, Color(rFillGradient.getColorSteps().front().getColor()),
+                       Color(rFillGradient.getColorSteps().back().getColor()));
 
     aGradient.SetAngle(Degree10(static_cast<int>(basegfx::rad2deg<10>(rFillGradient.getAngle()))));
     aGradient.SetBorder(rFillGradient.getBorder() * 100);

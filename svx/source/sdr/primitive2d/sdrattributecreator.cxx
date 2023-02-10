@@ -503,6 +503,7 @@ namespace drawinglayer::primitive2d
                                 toRadians(aXGradient.GetAngle()),
                                 aStart,
                                 aEnd,
+                                nullptr,
                                 rSet.Get(XATTR_GRADIENTSTEPCOUNT).GetValue());
 
                             break;
