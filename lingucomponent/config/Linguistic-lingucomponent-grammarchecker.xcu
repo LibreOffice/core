@@ -21,7 +21,7 @@
         <node oor:name="GrammarCheckers">
             <node oor:name="org.openoffice.lingu.LanguageToolGrammarChecker" oor:op="fuse">
                 <prop oor:name="Locales" oor:type="oor:string-list">
-                    <value>ar ast-ES be-BY br-FR ca-ES ca-ES-valencia zh-CN da-DK nl nl-BE en en-AU en-CA en-CA en-GB en-NZ en-ZA en-US fr gl-ES de de-AT de-DE de-DE de-CH el-GR ga-IE it ja-JP km-KH nb no fa pl-PL pt pt-AO pt-BR pt-MZ pt-PT ro-RO ru-RU de-DE-x-simple-language sk-SK sl-SI es es-AR sv tl-PH ta-IN uk-UA</value>
+                    <value>ar ast-ES be-BY br-FR ca-ES ca-ES-valencia zh-CN da-DK nl nl-BE en en-AU en-CA en-GB en-NZ en-ZA en-US fr gl-ES de de-AT de-DE de-CH el-GR ga-IE it ja-JP km-KH nb no fa pl-PL pt pt-AO pt-BR pt-MZ pt-PT ro-RO ru-RU de-DE-x-simple-language sk-SK sl-SI es es-AR sv tl-PH ta-IN uk-UA</value>
                 </prop>
             </node>
         </node>
