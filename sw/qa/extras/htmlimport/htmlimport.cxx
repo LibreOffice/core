@@ -574,6 +574,27 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testRGBAColor)
     CPPUNIT_ASSERT_EQUAL(nBackColor, getProperty<Color>(xRun, "CharBackColor"));
 }
 
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf153341)
+{
+    createSwWebDoc("tdf153341.html");
+
+    const uno::Reference<text::XTextRange> xPara1 = getParagraph(1);
+    const uno::Reference<beans::XPropertySet> xRun1(getRun(xPara1,1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0x00, 0xFF, 0x00, 0x00), getProperty<Color>(xRun1, "CharColor"));
+
+    const uno::Reference<text::XTextRange> xPara2 = getParagraph(2);
+    const uno::Reference<beans::XPropertySet> xRun2(getRun(xPara2,1), uno::UNO_QUERY);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: rgba[ff00007f]
+    // - Actual  : rgba[ff0000ff]
+    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0x80, 0xFF, 0x00, 0x00), getProperty<Color>(xRun2, "CharColor"));
+
+    const uno::Reference<text::XTextRange> xPara3 = getParagraph(3);
+    const uno::Reference<beans::XPropertySet> xRun3(getRun(xPara3,1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xB3, 0xFF, 0x00, 0x00), getProperty<Color>(xRun3, "CharColor"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
