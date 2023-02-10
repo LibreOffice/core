@@ -61,6 +61,22 @@ void ResizeRect(tools::Rectangle& rRect, const Point& rRef, const Fraction& rxFa
     rRect.Normalize();
 }
 
+namespace svx
+{
+
+void resizeRange(gfx::Range2DLWrap& rRange, gfx::Tuple2DL const& rReference, double fFactorX, double fFactorY)
+{
+    auto left = rReference.getX() + ((rRange.getMinX() - rReference.getX()) * fFactorX);
+    auto right = rReference.getX() + ((rRange.getMaxX() - rReference.getX()) * fFactorX);
+
+    auto top = rReference.getY() + ((rRange.getMinY() - rReference.getY()) * fFactorY);
+    auto bottom = rReference.getY() + ((rRange.getMaxY() - rReference.getY()) * fFactorY);
+
+    rRange = gfx::Range2DLWrap(left, top, right, bottom, rRange.getUnit());
+}
+
+} // end svx namespace
+
 
 void ResizePoly(tools::Polygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
