@@ -29,6 +29,9 @@
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 
+#include <basegfx/units/Range2DLWrap.hxx>
+#include <basegfx/units/LengthTypes.hxx>
+
 // That maximum shear angle
 inline constexpr Degree100 SDRMAXSHEAR(8900);
 
@@ -39,6 +42,12 @@ inline void MovePoly(tools::Polygon& rPoly, const Size& S)      { rPoly.Move(S.W
 void MoveXPoly(XPolygon& rPoly, const Size& S);
 
 SVXCORE_DLLPUBLIC void ResizeRect(tools::Rectangle& rRect, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
+
+namespace svx
+{
+SVXCORE_DLLPUBLIC void resizeRange(gfx::Range2DLWrap& rRange, gfx::Tuple2DL const& rReference, double fFactorX, double fFactorY);
+}
+
 inline void ResizePoint(Point& rPnt, const Point& rRef, const Fraction& xFract, const Fraction& yFract);
 void ResizePoly(tools::Polygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
 void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
