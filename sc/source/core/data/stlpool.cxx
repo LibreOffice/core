@@ -408,14 +408,20 @@ ScStyleSheet* ScStyleSheetPool::FindCaseIns( const OUString& rName, SfxStyleFami
     CaseInsensitiveNamePredicate aPredicate(rName, eFam);
     std::vector<sal_Int32> aFoundPositions = GetIndexedStyleSheets().FindPositionsByPredicate(aPredicate);
 
+    ScStyleSheet* first = nullptr; // first case insensitive match found
     for (const auto& rPos : aFoundPositions)
     {
         SfxStyleSheetBase *pFound = GetStyleSheetByPositionInIndex(rPos);
         // we do not know what kind of sheets we have.
         if (pFound->isScStyleSheet())
-            return static_cast<ScStyleSheet*>(pFound);
+        {
+            if (pFound->GetName() == rName) // exact case sensitive match
+                return static_cast<ScStyleSheet*>(pFound);
+            if (!first)
+                first = static_cast<ScStyleSheet*>(pFound);
+        }
     }
-    return nullptr;
+    return first;
 }
 
 void ScStyleSheetPool::setAllParaStandard()
