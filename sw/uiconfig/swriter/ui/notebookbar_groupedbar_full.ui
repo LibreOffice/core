@@ -1640,6 +1640,13 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="MenuGrid-SectionBoundaries">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:SectionBoundaries</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="MenuGrid-ShowGraphics">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -3728,6 +3735,13 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:TableBoundaries</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuView-SectionBoundaries">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:SectionBoundaries</property>
       </object>
     </child>
     <child>

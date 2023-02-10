@@ -2386,6 +2386,13 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="SectionBoundariesD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:SectionBoundaries</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="ShowGraphicsD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
