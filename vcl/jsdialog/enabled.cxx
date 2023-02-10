@@ -76,6 +76,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/swriter/ui/contentcontroldlg.ui"
         || rUIFile == u"modules/swriter/ui/contentcontrollistitemdlg.ui"
         || rUIFile == u"modules/swriter/ui/insertcaption.ui"
+        || rUIFile == u"modules/swriter/ui/linenumbering.ui"
         || rUIFile == u"modules/swriter/ui/splittable.ui"
         || rUIFile == u"modules/swriter/ui/translationdialog.ui"
         || rUIFile == u"modules/swriter/ui/pagenumberdlg.ui"
