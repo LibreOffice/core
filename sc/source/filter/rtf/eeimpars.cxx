@@ -528,7 +528,13 @@ bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, ScEEParseEntry* pE )
     }
     // Distribute line height difference between all affected lines
     SCROW nRowSpan = pE->nRowOverlap;
+
+    assert(nRowSpan != 0);
+    if ( nRowSpan == 0 )
+        return bHasGraphics;
+
     nHeight /= nRowSpan;
+
     if ( nHeight == 0 )
         nHeight = 1; // For definite comparison
     for ( SCROW nR = nRow; nR < nRow + nRowSpan; nR++ )
