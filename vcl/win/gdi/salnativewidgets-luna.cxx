@@ -403,7 +403,7 @@ bool UseDarkMode()
         return false;
 
     bool bRet(false);
-    switch (Application::GetSettings().GetMiscSettings().GetDarkMode())
+    switch (MiscSettings::GetDarkMode())
     {
         case 0: // auto
         default:
