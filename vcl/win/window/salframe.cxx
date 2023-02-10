@@ -261,12 +261,16 @@ void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
     }
 }
 
+namespace {
+
 enum PreferredAppMode
 {
     AllowDark = 1,
     ForceDark = 2,
     ForceLight = 3
 };
+
+}
 
 static void UpdateDarkMode(HWND hWnd)
 {
