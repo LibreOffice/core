@@ -2592,48 +2592,46 @@ void ScInterpreter::ScCurrent()
 void ScInterpreter::ScStyle()
 {
     sal_uInt8 nParamCount = GetByte();
-    if (nParamCount >= 1 && nParamCount <= 3)
+    if (!MustHaveParamCount(nParamCount, 1, 3))
+        return;
+
+    OUString aStyle2;                           // Template after timer
+    if (nParamCount >= 3)
+        aStyle2 = GetString().getString();
+    tools::Long nTimeOut = 0;                          // timeout
+    if (nParamCount >= 2)
+        nTimeOut = static_cast<tools::Long>(GetDouble()*1000.0);
+    OUString aStyle1 = GetString().getString(); // Template for immediate
+
+    if (nTimeOut < 0)
+        nTimeOut = 0;
+
+    // Execute request to apply template
+    if ( !mrDoc.IsClipOrUndo() )
     {
-        OUString aStyle2;                           // Template after timer
-        if (nParamCount >= 3)
-            aStyle2 = GetString().getString();
-        tools::Long nTimeOut = 0;                          // timeout
-        if (nParamCount >= 2)
-            nTimeOut = static_cast<tools::Long>(GetDouble()*1000.0);
-        OUString aStyle1 = GetString().getString(); // Template for immediate
-
-        if (nTimeOut < 0)
-            nTimeOut = 0;
-
-        // Execute request to apply template
-        if ( !mrDoc.IsClipOrUndo() )
+        SfxObjectShell* pShell = mrDoc.GetDocumentShell();
+        if (pShell)
         {
-            SfxObjectShell* pShell = mrDoc.GetDocumentShell();
-            if (pShell)
+            // notify object shell directly!
+            bool bNotify = true;
+            if (aStyle2.isEmpty())
             {
-                // notify object shell directly!
-                bool bNotify = true;
-                if (aStyle2.isEmpty())
-                {
-                    const ScStyleSheet* pStyle = mrDoc.GetStyle(aPos.Col(), aPos.Row(), aPos.Tab());
+                const ScStyleSheet* pStyle = mrDoc.GetStyle(aPos.Col(), aPos.Row(), aPos.Tab());
 
-                    if (pStyle && pStyle->GetName() == aStyle1)
-                        bNotify = false;
-                }
+                if (pStyle && pStyle->GetName() == aStyle1)
+                    bNotify = false;
+            }
 
-                if (bNotify)
-                {
-                    ScRange aRange(aPos);
-                    ScAutoStyleHint aHint( aRange, aStyle1, nTimeOut, aStyle2 );
-                    pShell->Broadcast( aHint );
-                }
+            if (bNotify)
+            {
+                ScRange aRange(aPos);
+                ScAutoStyleHint aHint( aRange, aStyle1, nTimeOut, aStyle2 );
+                pShell->Broadcast( aHint );
             }
         }
-
-        PushDouble(0.0);
     }
-    else
-        PushIllegalParameter();
+
+    PushDouble(0.0);
 }
 
 static ScDdeLink* lcl_GetDdeLink( const sfx2::LinkManager* pLinkMgr,
