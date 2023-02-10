@@ -2274,13 +2274,10 @@ void StyleSettings::Set3DColors( const Color& rColor )
             mxData->maDarkShadowColor.IncreaseLuminance(100);
         }
 
-        sal_uLong   nRed    = mxData->maLightColor.GetRed();
-        sal_uLong   nGreen  = mxData->maLightColor.GetGreen();
-        sal_uLong   nBlue   = mxData->maLightColor.GetBlue();
-        nRed   += static_cast<sal_uLong>(mxData->maShadowColor.GetRed());
-        nGreen += static_cast<sal_uLong>(mxData->maShadowColor.GetGreen());
-        nBlue  += static_cast<sal_uLong>(mxData->maShadowColor.GetBlue());
-        mxData->maCheckedColor = Color( static_cast<sal_uInt8>(nRed/2), static_cast<sal_uInt8>(nGreen/2), static_cast<sal_uInt8>(nBlue/2) );
+        sal_uInt8 nRed = (mxData->maLightColor.GetRed() + mxData->maShadowColor.GetRed()) / 2;
+        sal_uInt8 nGreen = (mxData->maLightColor.GetGreen() + mxData->maShadowColor.GetGreen()) / 2;
+        sal_uInt8 nBlue = (mxData->maLightColor.GetBlue() + mxData->maShadowColor.GetBlue()) / 2;
+        mxData->maCheckedColor = Color(nRed, nGreen, nBlue);
     }
     else
     {
