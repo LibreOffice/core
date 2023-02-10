@@ -9,6 +9,11 @@
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">cmd/sc_additionsdialog.png</property>
+  </object>
   <!-- n-columns=2 n-rows=1 -->
   <object class="GtkGrid" id="OptViewPage">
     <property name="visible">True</property>
@@ -450,9 +455,8 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
                     <property name="tooltip-text" translatable="yes" context="optviewpage|btnMoreIcons">Add more icon themes via extension</property>
-                    <child>
-                      <placeholder/>
-                    </child>
+                    <property name="image">image1</property>
+                    <property name="always-show-image">True</property>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
