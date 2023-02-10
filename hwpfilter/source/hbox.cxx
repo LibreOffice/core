@@ -579,10 +579,11 @@ OUString Outline::GetUnicode() const
             case OLSTY_NUMS2:
             {
                 OStringBuffer buf;
-                int i;
-
-                for (i = 0; i <= level; i++)
+                for (unsigned int i = 0; i <= level; ++i)
                 {
+                    if (i >= std::size(number))
+                        break;
+
                     levelnum = ((number[i] < 1) ? 1 : number[i]);
                     buf.append(OString::number(levelnum));
                     if (!(shape == OLSTY_NUMS2 && i && i == level))
