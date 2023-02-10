@@ -13120,6 +13120,12 @@ then
     if test "$MOC6" = "no"; then
         AC_MSG_ERROR([Qt Meta Object Compiler not found.  Please specify
 the root of your Qt installation by exporting QT6DIR before running "configure".])
+    else
+        moc6_test_ver="`$MOC6 -v 2>&1 | $SED -n -e 's/^moc \(6.*\)/\1/p'`"
+        if test -z "$moc6_test_ver"; then
+            AC_MSG_ERROR([Wrong moc for Qt6 found.])
+        fi
+        AC_MSG_NOTICE([Detected moc version: $moc_test_ver])
     fi
 fi
 AC_SUBST(QT6_CFLAGS)
