@@ -299,8 +299,22 @@ void writeSdrFillAttribute(::tools::XmlWriter& rWriter,
         rWriter.attribute("offsetY", rGradient.getOffsetY());
         rWriter.attribute("angle", rGradient.getAngle());
         rWriter.attribute("steps", rGradient.getSteps());
-        rWriter.attribute("startColor", convertColorToString(rGradient.getStartColor()));
-        rWriter.attribute("endColor", convertColorToString(rGradient.getEndColor()));
+
+        auto const& rColorSteps(rGradient.getColorSteps());
+        for (size_t a(0); a < rColorSteps.size(); a++)
+        {
+            if (0 == a)
+                rWriter.attribute("startColor", convertColorToString(rColorSteps[a].getColor()));
+            else if (rColorSteps.size() == a + 1)
+                rWriter.attribute("endColor", convertColorToString(rColorSteps[a].getColor()));
+            else
+            {
+                rWriter.startElement("colorStep");
+                rWriter.attribute("offset", rColorSteps[a].getOffset());
+                rWriter.attribute("color", convertColorToString(rColorSteps[a].getColor()));
+                rWriter.endElement();
+            }
+        }
         rWriter.endElement();
     }
 

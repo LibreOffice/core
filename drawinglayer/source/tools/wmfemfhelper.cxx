@@ -718,6 +718,7 @@ namespace wmfemfhelper
             toRadians(rGradient.GetAngle()),
             aStart,
             aEnd,
+            nullptr,
             rGradient.GetSteps());
     }
 
@@ -919,10 +920,10 @@ namespace wmfemfhelper
     {
         drawinglayer::attribute::FillGradientAttribute aAttribute(createFillGradientAttribute(rGradient));
 
-        if(aAttribute.getStartColor() == aAttribute.getEndColor())
+        if(aAttribute.hasSingleColor())
         {
             // not really a gradient. Create filled rectangle
-            return CreateColorWallpaper(rRange, aAttribute.getStartColor(), rPropertyHolder);
+            return CreateColorWallpaper(rRange, aAttribute.getColorSteps().front().getColor(), rPropertyHolder);
         }
         else
         {
@@ -2089,7 +2090,7 @@ namespace wmfemfhelper
                             drawinglayer::attribute::FillGradientAttribute aAttribute(createFillGradientAttribute(rGradient));
                             basegfx::B2DPolyPolygon aOutline(basegfx::utils::createPolygonFromRect(aRange));
 
-                            if(aAttribute.getStartColor() == aAttribute.getEndColor())
+                            if(aAttribute.hasSingleColor())
                             {
                                 // not really a gradient. Create filled rectangle
                                 createFillPrimitive(
@@ -2799,13 +2800,13 @@ namespace wmfemfhelper
                                 const Gradient& rGradient = pA->GetGradient();
                                 drawinglayer::attribute::FillGradientAttribute aAttribute(createFillGradientAttribute(rGradient));
 
-                                if(aAttribute.getStartColor() == aAttribute.getEndColor())
+                                if(aAttribute.hasSingleColor())
                                 {
                                     // not really a gradient; create UnifiedTransparencePrimitive2D
                                     rTargetHolders.Current().append(
                                         new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                                             std::move(xSubContent),
-                                            aAttribute.getStartColor().luminance()));
+                                            aAttribute.getColorSteps().front().getColor().luminance()));
                                 }
                                 else
                                 {
@@ -2919,13 +2920,13 @@ namespace wmfemfhelper
                                 const Gradient& rGradient = pMetaGradientExAction->GetGradient();
                                 drawinglayer::attribute::FillGradientAttribute aAttribute(createFillGradientAttribute(rGradient));
 
-                                if(aAttribute.getStartColor() == aAttribute.getEndColor())
+                                if(aAttribute.hasSingleColor())
                                 {
                                     // not really a gradient
                                     rTargetHolders.Current().append(
                                         new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                                             std::move(aPolyPolygon),
-                                            aAttribute.getStartColor()));
+                                            aAttribute.getColorSteps().front().getColor()));
                                 }
                                 else
                                 {

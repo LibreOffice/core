@@ -18,8 +18,6 @@
  */
 
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
-#include <basegfx/color/bcolor.hxx>
-
 
 namespace drawinglayer::attribute
 {
@@ -31,8 +29,7 @@ namespace drawinglayer::attribute
             double                                  mfOffsetX;
             double                                  mfOffsetY;
             double                                  mfAngle;
-            basegfx::BColor                         maStartColor;
-            basegfx::BColor                         maEndColor;
+            FillGradientAttribute::ColorSteps       maColorSteps;
             GradientStyle                           meStyle;
             sal_uInt16                              mnSteps;
 
@@ -44,16 +41,62 @@ namespace drawinglayer::attribute
                 double fAngle,
                 const basegfx::BColor& rStartColor,
                 const basegfx::BColor& rEndColor,
+                const FillGradientAttribute::ColorSteps* pColorSteps,
                 sal_uInt16 nSteps)
             :   mfBorder(fBorder),
                 mfOffsetX(fOffsetX),
                 mfOffsetY(fOffsetY),
                 mfAngle(fAngle),
-                maStartColor(rStartColor),
-                maEndColor(rEndColor),
+                maColorSteps(),
                 meStyle(eStyle),
                 mnSteps(nSteps)
             {
+                // always add start color to guarentee a color at all. It's also just safer
+                // to have one and not an empty vector, that spares many checks in the using code
+                maColorSteps.emplace_back(0.0, rStartColor);
+
+                // if we have ColorSteps, integrate these
+                if(nullptr != pColorSteps)
+                {
+                    for(const auto& candidate : *pColorSteps)
+                    {
+                        // only allow ]0.0 .. 1.0[ as offset values, *excluding* 0.0 and 1.0
+                        // explicitely - these are reserved for start/end color
+                        if(basegfx::fTools::more(candidate.getOffset(), 0.0) && basegfx::fTools::less(candidate.getOffset(), 1.0))
+                        {
+                            // ignore same offsets, independent from color (so 1st one wins)
+                            // having two or more same offsets is an error (may assert evtl.)
+                            bool bAccept(true);
+
+                            for(const auto& compare : maColorSteps)
+                            {
+                                if(basegfx::fTools::equal(compare.getOffset(), candidate.getOffset()))
+                                {
+                                    bAccept = false;
+                                    break;
+                                }
+                            }
+
+                            if(bAccept)
+                            {
+                                maColorSteps.push_back(candidate);
+                            }
+                        }
+                    }
+
+                    // sort by offset when colors were added
+                    if(maColorSteps.size() > 1)
+                    {
+                        std::sort(maColorSteps.begin(), maColorSteps.end());
+                    }
+                }
+
+                // add end color if different from last color - which is the start color
+                // when no ColorSteps are given
+                if(rEndColor != maColorSteps.back().getColor())
+                {
+                    maColorSteps.emplace_back(1.0, rEndColor);
+                }
             }
 
             ImpFillGradientAttribute()
@@ -61,9 +104,12 @@ namespace drawinglayer::attribute
                 mfOffsetX(0.0),
                 mfOffsetY(0.0),
                 mfAngle(0.0),
+                maColorSteps(),
                 meStyle(GradientStyle::Linear),
                 mnSteps(0)
             {
+                // always add a fallback color, see above
+                maColorSteps.emplace_back(0.0, basegfx::BColor());
             }
 
             // data read access
@@ -72,9 +118,24 @@ namespace drawinglayer::attribute
             double getOffsetX() const { return mfOffsetX; }
             double getOffsetY() const { return mfOffsetY; }
             double getAngle() const { return mfAngle; }
-            const basegfx::BColor& getStartColor() const { return maStartColor; }
-            const basegfx::BColor& getEndColor() const { return maEndColor; }
+            const FillGradientAttribute::ColorSteps& getColorSteps() const { return maColorSteps; }
             sal_uInt16 getSteps() const { return mnSteps; }
+
+            bool hasSingleColor() const
+            {
+                // no entries (should not happen, see comments for startColor)
+                if (0 == maColorSteps.size())
+                    return true;
+
+                // check if not all colors are the same
+                const basegfx::BColor& rColor(maColorSteps[0].getColor());
+                for (size_t a(1); a < maColorSteps.size(); a++)
+                    if (maColorSteps[a].getColor() != rColor)
+                        return false;
+
+                // all colors are the same
+                return true;
+            }
 
             bool operator==(const ImpFillGradientAttribute& rCandidate) const
             {
@@ -83,8 +144,7 @@ namespace drawinglayer::attribute
                     && getOffsetX() == rCandidate.getOffsetX()
                     && getOffsetY() == rCandidate.getOffsetY()
                     && getAngle() == rCandidate.getAngle()
-                    && getStartColor() == rCandidate.getStartColor()
-                    && getEndColor() == rCandidate.getEndColor()
+                    && getColorSteps() == rCandidate.getColorSteps()
                     && getSteps() == rCandidate.getSteps());
             }
         };
@@ -106,9 +166,10 @@ namespace drawinglayer::attribute
             double fAngle,
             const basegfx::BColor& rStartColor,
             const basegfx::BColor& rEndColor,
+            const ColorSteps* pColorSteps,
             sal_uInt16 nSteps)
         :   mpFillGradientAttribute(ImpFillGradientAttribute(
-                eStyle, fBorder, fOffsetX, fOffsetY, fAngle, rStartColor, rEndColor, nSteps))
+                eStyle, fBorder, fOffsetX, fOffsetY, fAngle, rStartColor, rEndColor, pColorSteps, nSteps))
         {
         }
 
@@ -128,6 +189,11 @@ namespace drawinglayer::attribute
             return mpFillGradientAttribute.same_object(theGlobalDefault());
         }
 
+        bool FillGradientAttribute::hasSingleColor() const
+        {
+            return mpFillGradientAttribute->hasSingleColor();
+        }
+
         FillGradientAttribute& FillGradientAttribute::operator=(const FillGradientAttribute&) = default;
 
         FillGradientAttribute& FillGradientAttribute::operator=(FillGradientAttribute&&) = default;
@@ -141,14 +207,9 @@ namespace drawinglayer::attribute
             return rCandidate.mpFillGradientAttribute == mpFillGradientAttribute;
         }
 
-        const basegfx::BColor& FillGradientAttribute::getStartColor() const
+        const FillGradientAttribute::ColorSteps& FillGradientAttribute::getColorSteps() const
         {
-            return mpFillGradientAttribute->getStartColor();
-        }
-
-        const basegfx::BColor& FillGradientAttribute::getEndColor() const
-        {
-            return mpFillGradientAttribute->getEndColor();
+            return mpFillGradientAttribute->getColorSteps();
         }
 
         double FillGradientAttribute::getBorder() const
