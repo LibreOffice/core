@@ -570,11 +570,13 @@ hchar_string Outline::GetUnicode() const
             case OLSTY_NUMS2:
             {
                 char cur_num_str[10], buf[80];
-                int i;
 
                 buf[0] = 0;
-                for (i = 0; i <= level; i++)
+                for (unsigned int i = 0; i <= level; ++i)
                 {
+                    if (i >= std::size(number))
+                        break;
+
                     levelnum = ((number[i] < 1) ? 1 : number[i]);
                     if (shape == OLSTY_NUMS2 && i && i == level)
                         sprintf(cur_num_str, "%d%c", levelnum, 0);
