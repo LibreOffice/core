@@ -88,6 +88,7 @@ public:
     void testContentXLS_XML();
     void testContentGnumeric();
     void testCondFormatOperatorsSameRangeXLSX();
+    void testTdf139934();
     void testTdf150452();
     void testTdf119292();
     void testTdf48731();
@@ -219,6 +220,7 @@ public:
     CPPUNIT_TEST(testContentXLS_XML);
     CPPUNIT_TEST(testContentGnumeric);
     CPPUNIT_TEST(testCondFormatOperatorsSameRangeXLSX);
+    CPPUNIT_TEST(testTdf139934);
     CPPUNIT_TEST(testTdf150452);
     CPPUNIT_TEST(testTdf119292);
     CPPUNIT_TEST(testTdf48731);
@@ -561,6 +563,19 @@ void ScFiltersTest::testTdf119292()
     CPPUNIT_ASSERT_EQUAL(Point(108, 54), aPoly270Pos1);
     CPPUNIT_ASSERT_EQUAL(Point(111, 57), aPoly270Pos2);
     CPPUNIT_ASSERT_EQUAL(Point(114, 54), aPoly270Pos3);
+}
+
+void ScFiltersTest::testTdf139934()
+{
+    createScDoc("xlsx/tdf139934.xlsx");
+
+    ScDocument* pDoc = getScDoc();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1/20/2021
+    // - Actual  : 44216
+    CPPUNIT_ASSERT_EQUAL(OUString("1/20/2021"), pDoc->GetString(0, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("11/25/2020"), pDoc->GetString(0, 61, 0));
 }
 
 void ScFiltersTest::testTdf150452()
