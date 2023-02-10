@@ -1540,11 +1540,7 @@ void ScDocShell::DoHardRecalc()
 void ScDocShell::DoAutoStyle( const ScRange& rRange, const OUString& rStyle )
 {
     ScStyleSheetPool* pStylePool = m_aDocument.GetStyleSheetPool();
-    ScStyleSheet* pStyleSheet =
-        pStylePool->FindCaseIns( rStyle, SfxStyleFamily::Para );
-    if (!pStyleSheet)
-        pStyleSheet = static_cast<ScStyleSheet*>(
-            pStylePool->Find( ScResId(STR_STYLENAME_STANDARD), SfxStyleFamily::Para ));
+    ScStyleSheet* pStyleSheet = pStylePool->FindAutoStyle(rStyle);
     if (!pStyleSheet)
         return;
 
