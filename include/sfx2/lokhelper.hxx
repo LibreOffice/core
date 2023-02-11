@@ -182,10 +182,6 @@ public:
     /// Helper for diagnosing run-time problems
     static void dumpState(rtl::OStringBuffer &rState);
 
-    /// Notify all views of a media update.
-    /// This could be a new insertion or property modifications to an existing one.
-    static void notifyMediaUpdate(boost::property_tree::ptree& json);
-
     /// Process the mouse event in the currently active in-place component (if any).
     /// Returns true if the event has been processed, and no further processing is necessary.
     static bool testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell, int nType, int nX,

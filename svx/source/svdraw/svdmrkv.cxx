@@ -823,10 +823,12 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
     }
 
     {
+        OStringBuffer aExtraInfo;
         OString sSelectionText;
         OString sSelectionTextView;
         boost::property_tree::ptree aTableJsonTree;
         boost::property_tree::ptree aGluePointsTree;
+        const bool bMediaObj = (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == SdrObjKind::Media);
         bool bTableSelection = false;
         bool bConnectorSelection = false;
 
@@ -839,6 +841,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
         {
             bConnectorSelection = dumpGluePointsToJSON(aGluePointsTree);
         }
+
         if (GetMarkedObjectCount())
         {
             SdrMark* pM = GetSdrMarkByIndex(0);
@@ -848,7 +851,6 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             // (SwVirtFlyDrawObj with a SwGrfNode)
             bool bWriterGraphic = pO->HasLimitedRotation();
 
-            OStringBuffer aExtraInfo;
             OString handleArrayStr;
 
             aExtraInfo.append("{\"id\":\""
@@ -1101,13 +1103,23 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                 sSelectionText = aSelection.toString() +
                     ", " + OString::number(nRotAngle.get());
             }
+
             if (!aExtraInfo.isEmpty())
             {
                 sSelectionTextView = sSelectionText + ", " + aExtraInfo + "}";
+
+                if (bMediaObj && pOtherShell == nullptr)
+                {
+                    // Add the URL only if we have a Media Object and
+                    // we are the selecting view.
+                    SdrMediaObj* mediaObj = dynamic_cast<SdrMediaObj*>(mpMarkedObj);
+                    if (mediaObj)
+                        aExtraInfo.append(", \"url\": \"" + mediaObj->getTempURL().toUtf8() + "\"");
+                }
+
                 aExtraInfo.append(handleArrayStr
                     + "}");
                 sSelectionText += ", " + aExtraInfo;
-                aExtraInfo.setLength(0);
             }
         }
 
@@ -1149,15 +1161,8 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             // We have a new selection, so both pViewShell and the
             // other views want to know about it.
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelectionText);
-            SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionTextView);
-        }
 
-        if (comphelper::LibreOfficeKit::isActive() && mpMarkedObj
-            && mpMarkedObj->GetObjIdentifier() == SdrObjKind::Media)
-        {
-            SdrMediaObj* mediaObj = dynamic_cast<SdrMediaObj*>(mpMarkedObj);
-            if (mediaObj)
-                mediaObj->notifyPropertiesForLOKit();
+            SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionTextView);
         }
     }
 }

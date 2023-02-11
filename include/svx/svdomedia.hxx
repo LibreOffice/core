@@ -75,9 +75,6 @@ public:
 
         virtual bool shouldKeepAspectRatio() const override { return true; }
 
-        /// When Lokit is enabled, notify the media details.
-        void notifyPropertiesForLOKit();
-
 private:
         void                mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );
         virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
