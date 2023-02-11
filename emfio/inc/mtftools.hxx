@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_EMFIO_INC_MTFTOOLS_HXX
-#define INCLUDED_EMFIO_INC_MTFTOOLS_HXX
+#pragma once
 
 #include <config_options.h>
 #include <basegfx/utils/b2dclipstate.hxx>
@@ -837,7 +835,5 @@ namespace emfio
         ~MtfTools() COVERITY_NOEXCEPT_FALSE;
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
