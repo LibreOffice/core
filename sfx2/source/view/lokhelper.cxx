@@ -988,15 +988,6 @@ void SfxLokHelper::dumpState(rtl::OStringBuffer &rState)
     }
 }
 
-void SfxLokHelper::notifyMediaUpdate(boost::property_tree::ptree& json)
-{
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, json, /*pretty=*/ false);
-    const std::string str = aStream.str();
-
-    SfxLokHelper::notifyAllViews(LOK_CALLBACK_MEDIA_SHAPE, str.c_str());
-}
-
 bool SfxLokHelper::testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell, int nType, int nX,
                                                      int nY, int nCount, int nButtons,
                                                      int nModifier, double fScaleX, double fScaleY,
