@@ -354,9 +354,10 @@
                         <property name="use-underline">True</property>
                         <property name="active">True</property>
                         <property name="draw-indicator">True</property>
+                        <property name="tooltip_text" translatable="yes" context="tocindexpage|fromheadings|tooltip_text">Creates the index from all paragraphs that have an outline level equal to or greater than “1”.</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="fromheadings-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|fromheadings">Creates the index using outline levels. Paragraphs formatted with one of the predefined heading styles (Heading 1-10) are added to the index.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|fromheadings">Creates the index from all paragraphs that have an outline level equal to or greater than “1”.</property>
                           </object>
                         </child>
                       </object>
@@ -502,6 +503,7 @@
                                 <property name="receives-default">False</property>
                                 <property name="use-underline">True</property>
                                 <property name="draw-indicator">True</property>
+                                <property name="tooltip_text" translatable="yes" context="tocindexpage|addstylescb|tooltip_text">Include selected paragraph styles with outline level “Text Body” in the index.</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="addstylescb-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|addstylescb">Includes the paragraph styles that you specify in the Assign Styles dialog as index entries. To select the paragraph styles that you want to include in the index, click the Assign Styles (...) button to the right of this box.</property>
@@ -549,7 +551,7 @@
                             </accessibility>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="styles-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|styles">Opens the Assign Styles dialog, where you can select the paragraph styles to include in the index. Choose the proper heading level on which the style will be included in the index.</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|styles">Opens the Assign Styles dialog, where you can select the paragraph styles to include in the index by choosing the outline level for where the style should be placed.</property>
                               </object>
                             </child>
                           </object>
@@ -1014,7 +1016,7 @@
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="combinesame-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|combinesame">Replaces identical index entries with a single entry that lists the page numbers where the entry occurs in the document. For example, the entries "View 10, View 43" are combined as "View 10, 43".</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|combinesame">Replaces identical index entries with a single entry that lists the page numbers where the entry occurs in the document. For example, the entries “View 10, View 43” are combined as “View 10, 43”.</property>
                           </object>
                         </child>
                       </object>
@@ -1034,7 +1036,7 @@
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="useff-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|useff">Replaces identical index entries that occur on the directly following page(s), with a single entry that lists the first page number and a "f" or "ff". For example, the entries "View 10, View 11" are combined as "View 10f", and "View 10, View 11, View 12" as "View 10ff". Actual appearance depends on the locale setting, but can be overridden with Sort - Language.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|useff">Replaces identical index entries that occur on the directly following page(s), with a single entry that lists the first page number and a “f” or “ff”. For example, the entries “View 10, View 11” are combined as “View 10f”, and “View 10, View 11, View 12” as “View 10ff”. Actual appearance depends on the locale setting, but can be overridden with Sort - Language.</property>
                           </object>
                         </child>
                       </object>
@@ -1054,7 +1056,7 @@
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="usedash-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|usedash">Replaces identical index entries that occur on consecutive pages with a single entry and the page range where the entry occurs. For example, the entries "View 10, View 11, View 12" are combined as "View 10-12".</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|usedash">Replaces identical index entries that occur on consecutive pages with a single entry and the page range where the entry occurs. For example, the entries “View 10, View 11, View 12” are combined as “View 10-12”.</property>
                           </object>
                         </child>
                       </object>
