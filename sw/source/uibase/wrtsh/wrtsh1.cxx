@@ -1349,12 +1349,9 @@ void SwWrtShell::SplitNode( bool bAutoFormat )
 // cursor position in the document.
 void SwWrtShell::NumOrBulletOn(bool bNum)
 {
-    // determine numbering rule found at current cursor position in the document.
-    const SwNumRule* pCurRule = GetNumRuleAtCurrCursorPos();
-
     StartUndo(SwUndoId::NUMORNONUM);
 
-    const SwNumRule * pNumRule = pCurRule;
+    const SwNumRule* pNumRule = GetNumRuleAtCurrCursorPos();
 
     // - activate outline rule respectively turning on outline rule for
     //   current text node. But, only for turning on a numbering (<bNum> == true).
