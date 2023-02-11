@@ -95,6 +95,7 @@
 #include <fuformatpaintbrush.hxx>
 #include <fuzoom.hxx>
 #include <sdmod.hxx>
+#include <basegfx/utils/zoomtools.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1189,8 +1190,11 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_ZOOM_OUT:  // BASIC
         {
+            const sal_uInt16 nOldZoom = GetActiveWindow()->GetZoom();
+            const sal_uInt16 nNewZoom = basegfx::zoomtools::zoomOut(nOldZoom);
+            SetZoom(nNewZoom);
+
             mbZoomOnPage = false;
-            SetZoom( std::max<::tools::Long>( GetActiveWindow()->GetZoom() / 2, GetActiveWindow()->GetMinZoom() ) );
             ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0),
                                               GetActiveWindow()->GetOutputSizePixel()) );
             mpZoomList->InsertZoomRect(aVisAreaWin);
@@ -1203,8 +1207,11 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_ZOOM_IN:
         {
+            const sal_uInt16 nOldZoom = GetActiveWindow()->GetZoom();
+            const sal_uInt16 nNewZoom = basegfx::zoomtools::zoomIn(nOldZoom);
+            SetZoom(nNewZoom);
+
             mbZoomOnPage = false;
-            SetZoom( std::min<::tools::Long>( GetActiveWindow()->GetZoom() * 2, GetActiveWindow()->GetMaxZoom() ) );
             ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0),
                                               GetActiveWindow()->GetOutputSizePixel()) );
             mpZoomList->InsertZoomRect(aVisAreaWin);
