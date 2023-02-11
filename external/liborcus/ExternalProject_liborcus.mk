@@ -99,6 +99,8 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
                        $(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
                        --disable-spreadsheet-model \
                        --without-tools \
+                       --without-benchmark \
+                       --without-doc-example \
                        --disable-python \
                        --disable-werror \
                        $(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
