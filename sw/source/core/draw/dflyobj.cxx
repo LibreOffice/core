@@ -130,6 +130,12 @@ SwFlyDrawObj::SwFlyDrawObj(SdrModel& rSdrModel)
 {
 }
 
+SwFlyDrawObj::SwFlyDrawObj(SdrModel& rSdrModel, SwFlyDrawObj const& rSource)
+    : SdrObject(rSdrModel, rSource)
+    , mbIsTextBox(false)
+{
+}
+
 SwFlyDrawObj::~SwFlyDrawObj()
 {
 }
@@ -143,6 +149,11 @@ SdrInventor SwFlyDrawObj::GetObjInventor() const
 SdrObjKind SwFlyDrawObj::GetObjIdentifier() const
 {
     return SdrObjKind::SwFlyDrawObjIdentifier;
+}
+
+rtl::Reference<SdrObject> SwFlyDrawObj::CloneSdrObject(SdrModel& rTargetModel) const
+{
+    return new SwFlyDrawObj(rTargetModel);
 }
 
 // TODO: Need own primitive to get the FlyFrame paint working

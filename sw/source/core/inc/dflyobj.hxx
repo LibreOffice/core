@@ -44,8 +44,11 @@ private:
 
 public:
     SwFlyDrawObj(SdrModel& rSdrModel);
+    SwFlyDrawObj(SdrModel& rSdrModel, SwFlyDrawObj const& rSource);
 
-    // for instantiation of this class while loading (via factory)
+    // for instantiation of this class while loading (via factory
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
+
     virtual SdrInventor GetObjInventor()     const override;
     virtual SdrObjKind GetObjIdentifier()   const override;
     virtual bool IsTextBox() const override { return mbIsTextBox; }

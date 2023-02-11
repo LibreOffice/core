@@ -1048,11 +1048,6 @@ bool SdrObject::HasLimitedRotation() const
     return false;
 }
 
-rtl::Reference<SdrObject> SdrObject::CloneSdrObject(SdrModel& rTargetModel) const
-{
-    return new SdrObject(rTargetModel, *this);
-}
-
 OUString SdrObject::TakeObjNameSingul() const
 {
     OUString sName(SvxResId(STR_ObjNameSingulNONE));
@@ -3329,7 +3324,7 @@ rtl::Reference<SdrObject> SdrObjFactory::MakeNewObject(
                 }
             }
             break;
-            case SdrObjKind::NONE       : pObj=new SdrObject(rSdrModel);                   break;
+            case SdrObjKind::NONE       : pObj = nullptr; break;
             case SdrObjKind::Group       : pObj=new SdrObjGroup(rSdrModel);                 break;
             case SdrObjKind::Polygon       : pObj=new SdrPathObj(rSdrModel, SdrObjKind::Polygon       ); break;
             case SdrObjKind::PolyLine       : pObj=new SdrPathObj(rSdrModel, SdrObjKind::PolyLine       ); break;

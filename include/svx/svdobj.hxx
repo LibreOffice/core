@@ -442,7 +442,7 @@ public:
     virtual bool HasLimitedRotation() const;
 
     // Returns a copy of the object. Every inherited class must reimplement this.
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const = 0;
     // helper, since Clone always return the type of the current subclass
     template<class T>
     static rtl::Reference<T> Clone(T const & rObj, SdrModel& rTargetModel)
