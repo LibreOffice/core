@@ -478,6 +478,7 @@ LIBO_VERSION_PATCH=$4
 
 LIBO_VERSION_SUFFIX=$5
 
+
 # Split out LIBO_VERSION_SUFFIX_SUFFIX... horrible crack. But apparently wanted separately in
 # openoffice.lst as ABOUTBOXPRODUCTVERSIONSUFFIX. Note that the double brackets are for m4's sake,
 # they get undoubled before actually passed to sed.
@@ -5436,6 +5437,24 @@ AC_SUBST(PLATFORMID)
 AC_SUBST(WINDOWS_X64)
 AC_DEFINE_UNQUOTED(SDKDIR, "$INSTDIR/$SDKDIRNAME")
 AC_DEFINE_UNQUOTED(WORKDIR,"$WORKDIR")
+
+
+dnl ===================================================================
+dnl Create json file with LibreOffice version data
+dnl ===================================================================
+
+echo \
+"{
+    \"LIBO_VERSION_MAJOR\": $LIBO_VERSION_MAJOR,
+    \"LIBO_VERSION_MINOR\": $LIBO_VERSION_MINOR,
+    \"LIBO_VERSION_MICRO\": $LIBO_VERSION_MICRO,
+    \"LIBO_VERSION_PATCH\": $LIBO_VERSION_PATCH,
+    \"LIBO_VERSION_SUFFIX\": \"$LIBO_VERSION_SUFFIX\",
+    \"LIBO_VERSION\": \"$PACKAGE_VERSION\",
+    \"PACKAGE_NAME\": \"$PACKAGE_NAME\"
+}" > "$SRC_ROOT/msicreator/lo_data.json"
+
+
 
 if test "$OS" = WNT -a "$COM" = MSC; then
     case "$CPUNAME" in

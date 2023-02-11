@@ -109,7 +109,7 @@ $(instsetoo_installer_targets): $(SRCDIR)/solenv/bin/make_installer.pl \
 	    $(SRCDIR)/solenv/bin/call_installer.sh $(if $(verbose),-verbose,-quiet) $(subst ‧,:,$@),\
 	    $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/$(if $(filter en-US$(COMMA)%,$(instsetoo_installer_langs)),$(subst $(instsetoo_installer_langs),multilang,$@),$@).log)
 	$(call gb_Trace_EndRange,$@,INSTALLER)
-
+	$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/msicreator/generate_msi.py
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony: $(instsetoo_installer_targets)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
