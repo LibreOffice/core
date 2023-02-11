@@ -529,7 +529,7 @@ void ScaleTabPage::SetNumFormat()
     if( !pNumFormatItem )
         return;
 
-    sal_uLong nFmt = pNumFormatItem->GetValue();
+    sal_uInt32 nFmt = pNumFormatItem->GetValue();
 
     Formatter& rFmtFldMax = m_xFmtFldMax->GetFormatter();
     rFmtFldMax.SetFormatKey(nFmt);
