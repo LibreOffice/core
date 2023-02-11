@@ -470,8 +470,7 @@ bool SwGrfNode::SwapIn(bool bWaitForData)
 
                 maGrfObj.SetGraphic( Graphic() );
                 onGraphicChanged();
-                SwMsgPoolItem aMsgHint( RES_GRAPHIC_PIECE_ARRIVED );
-                CallSwClientNotify(sw::LegacyModifyHint(&aMsgHint, &aMsgHint));
+                CallSwClientNotify(sw::GraphicPieceArrivedHint());
             }
         }
         else
@@ -861,8 +860,7 @@ void SwGrfNode::ApplyInputStream(
             mxInputStream = xInputStream;
             mbIsStreamReadOnly = bIsStreamReadOnly;
             mbLinkedInputStreamReady = true;
-            SwMsgPoolItem aMsgHint( RES_LINKED_GRAPHIC_STREAM_ARRIVED );
-            CallSwClientNotify(sw::LegacyModifyHint(&aMsgHint, &aMsgHint));
+            CallSwClientNotify(sw::LinkedGraphicStreamArrivedHint());
         }
     }
 }

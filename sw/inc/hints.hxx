@@ -153,10 +153,24 @@ class GrfRereadAndInCacheHint final : public SfxHint
 
 class PreGraphicArrivedHint final : public SfxHint
 {
+public:
+    PreGraphicArrivedHint() : SfxHint(SfxHintId::SwPreGraphicArrived) {}
 };
 
 class PostGraphicArrivedHint final : public SfxHint
 {
+};
+
+class GraphicPieceArrivedHint final : public SfxHint
+{
+public:
+    GraphicPieceArrivedHint() : SfxHint(SfxHintId::SwGraphicPieceArrived) {}
+};
+
+class LinkedGraphicStreamArrivedHint final : public SfxHint
+{
+public:
+    LinkedGraphicStreamArrivedHint() : SfxHint(SfxHintId::SwLinkedGraphicStreamArrived) {}
 };
 
 class MoveTableLineHint final : public SfxHint

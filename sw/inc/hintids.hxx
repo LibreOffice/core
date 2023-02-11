@@ -429,7 +429,6 @@ constexpr TypedWhichId<SwTableFormulaUpdate> RES_TABLEFML_UPDATE(170);
 constexpr TypedWhichId<SwMsgPoolItem> RES_UPDATEDDETBL(171);
 constexpr TypedWhichId<SwMsgPoolItem> RES_TBLHEADLINECHG(172);
 constexpr TypedWhichId<SwAutoFormatGetDocNode> RES_AUTOFMT_DOCNODE(173);
-constexpr TypedWhichId<SwMsgPoolItem> RES_GRAPHIC_PIECE_ARRIVED(177);
 constexpr TypedWhichId<SwMsgPoolItem> RES_HIDDENPARA_PRINT(178);
 constexpr TypedWhichId<SwVirtPageNumInfo> RES_VIRTPAGENUM_INFO(180);
 constexpr TypedWhichId<SwPtrMsgPoolItem> RES_REMOVE_UNO_OBJECT(181);
@@ -438,7 +437,6 @@ constexpr TypedWhichId<SwFindNearestNode> RES_FINDNEARESTNODE(184);
 constexpr TypedWhichId<SwPtrMsgPoolItem> RES_CONTENT_VISIBLE(185);
 constexpr TypedWhichId<SwStringMsgPoolItem> RES_TITLE_CHANGED(188);
 constexpr TypedWhichId<SwStringMsgPoolItem> RES_DESCRIPTION_CHANGED(189);
-constexpr TypedWhichId<SwMsgPoolItem> RES_LINKED_GRAPHIC_STREAM_ARRIVED(189);
 constexpr sal_uInt16 RES_MSG_END(190);
 
 // An ID for the RTF-reader. The stylesheets are treated like attributes,
