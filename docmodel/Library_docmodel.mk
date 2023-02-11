@@ -14,6 +14,7 @@ $(eval $(call gb_Library_add_exception_objects,docmodel,\
     docmodel/source/uno/UnoTheme \
     docmodel/source/theme/ColorSet \
     docmodel/source/theme/Theme \
+    docmodel/source/theme/ThemeColorJSON \
 ))
 
 $(eval $(call gb_Library_set_include,docmodel,\
@@ -22,7 +23,8 @@ $(eval $(call gb_Library_set_include,docmodel,\
 ))
 
 $(eval $(call gb_Library_use_externals,docmodel,\
-	libxml2 \
+    libxml2 \
+    boost_headers \
 ))
 
 $(eval $(call gb_Library_add_defs,docmodel,\

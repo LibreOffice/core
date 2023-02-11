@@ -78,6 +78,7 @@
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>
 #include <docmodel/uno/UnoThemeColor.hxx>
+#include <docmodel/theme/ThemeColorJSON.hxx>
 #include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;
@@ -1367,6 +1368,13 @@ SvxColorItem::SvxColorItem( const Color& rCol, const sal_uInt16 nId ) :
 {
 }
 
+SvxColorItem::SvxColorItem(Color const& rColor, model::ThemeColor const& rThemeColor, const sal_uInt16 nId)
+    : SfxPoolItem(nId)
+    , mColor(rColor)
+    , maThemeColor(rThemeColor)
+{
+}
+
 SvxColorItem::~SvxColorItem()
 {
 }
@@ -1436,12 +1444,18 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= nValue;
             break;
         }
-       case MID_COLOR_THEME_REFERENCE:
+        case MID_COLOR_THEME_REFERENCE:
         {
             auto xThemeColor = model::theme::createXThemeColor(maThemeColor);
             rVal <<= xThemeColor;
             break;
         }
+        case MID_COLOR_THEME_REFERENCE_JSON:
+        {
+            rVal <<= OStringToOUString(model::theme::convertToJSON(maThemeColor), RTL_TEXTENCODING_UTF8);
+            break;
+        }
+        case MID_COLOR_RGB:
         default:
         {
             rVal <<= mColor;
@@ -1528,6 +1542,23 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             }
         }
         break;
+
+        case MID_COLOR_THEME_REFERENCE_JSON:
+        {
+            OUString sThemeJson;
+            if (!(rVal >>= sThemeJson))
+                return false;
+
+            if (sThemeJson.isEmpty())
+            {
+                return false;
+            }
+            OString aJSON = OUStringToOString(sThemeJson, RTL_TEXTENCODING_ASCII_US);
+            model::theme::convertFromJSON(aJSON, maThemeColor);
+        }
+        break;
+
+        case MID_COLOR_RGB:
         default:
         {
             return rVal >>= mColor;

@@ -39,6 +39,7 @@ public:
 
     explicit SvxColorItem(const sal_uInt16 nId);
     SvxColorItem(const Color& aColor, const sal_uInt16 nId);
+    SvxColorItem(const Color& aColor, model::ThemeColor const& rThemeColor, const sal_uInt16 nId);
     virtual ~SvxColorItem() override;
 
     // "pure virtual Methods" from SfxPoolItem
@@ -62,6 +63,11 @@ public:
     model::ThemeColor& GetThemeColor() { return maThemeColor; }
 
     const model::ThemeColor& GetThemeColor() const { return maThemeColor; }
+
+    void setThemeColor(model::ThemeColor const& rThemeColor)
+    {
+        maThemeColor = rThemeColor;
+    }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

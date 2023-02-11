@@ -189,6 +189,7 @@
 #define MID_COLOR_LUM_MOD       6
 #define MID_COLOR_LUM_OFF       7
 #define MID_COLOR_THEME_REFERENCE 8
+#define MID_COLOR_THEME_REFERENCE_JSON 9
 
 
 #endif
