@@ -1681,15 +1681,16 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
             if (bHasItem)
             {
+                auto* pColorItem = static_cast<const SvxColorItem*>(pItem);
                 SwEditWin& rEditWin = GetView().GetEditWin();
-                rEditWin.SetWaterCanTextColor(aSet);
+                rEditWin.SetWaterCanTextColor(pColorItem->GetValue());
                 SwApplyTemplate* pApply = rEditWin.GetApplyTemplate();
 
                 // If there is a selection, then set the color on it
                 // otherwise, it'll be the color for the next text to be typed
-                if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_EXT)
+                if (!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_EXT)
                 {
-                    rWrtSh.SetAttrItem(SvxColorItem (aSet, RES_CHRATR_COLOR));
+                    rWrtSh.SetAttrItem(SvxColorItem(pColorItem->GetValue(), pColorItem->GetThemeColor(), RES_CHRATR_COLOR));
                 }
 
                 rReq.Done();

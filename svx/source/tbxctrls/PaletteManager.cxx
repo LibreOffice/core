@@ -41,6 +41,11 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
+#include <docmodel/theme/ThemeColor.hxx>
+#include <docmodel/theme/ThemeColorJSON.hxx>
+#include <editeng/colritem.hxx>
+#include <svx/svxids.hrc>
+#include <editeng/memberids.h>
 
 #include <palettes.hxx>
 
@@ -420,6 +425,7 @@ void PaletteManager::PopupColorPicker(weld::Window* pParent, const OUString& aCo
 
 void PaletteManager::DispatchColorCommand(const OUString& aCommand, const svx::NamedThemedColor& rColor)
 {
+    using namespace css;
     using namespace css::uno;
     using namespace css::frame;
     using namespace css::beans;
@@ -435,13 +441,22 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const svx::N
     INetURLObject aObj( aCommand );
 
     std::vector<PropertyValue> aArgs{
-        comphelper::makePropertyValue(aObj.GetURLPath(), sal_Int32(rColor.m_aColor)),
+        comphelper::makePropertyValue(aObj.GetURLPath()+ ".Color", sal_Int32(rColor.m_aColor)),
     };
+
     if (rColor.m_nThemeIndex != -1)
     {
-        aArgs.push_back(comphelper::makePropertyValue("ColorThemeIndex", rColor.m_nThemeIndex));
-        aArgs.push_back(comphelper::makePropertyValue("ColorLumMod", rColor.m_nLumMod));
-        aArgs.push_back(comphelper::makePropertyValue("ColorLumOff", rColor.m_nLumOff));
+        model::ThemeColor aThemeColor;
+        aThemeColor.setType(model::convertToThemeColorType(rColor.m_nThemeIndex));
+        if (rColor.m_nLumMod != 10000)
+            aThemeColor.addTransformation({model::TransformationType::LumMod, rColor.m_nLumMod});
+        if (rColor.m_nLumMod != 0)
+            aThemeColor.addTransformation({model::TransformationType::LumOff, rColor.m_nLumOff});
+
+        uno::Any aAny;
+        aAny <<= OStringToOUString(model::theme::convertToJSON(aThemeColor), RTL_TEXTENCODING_UTF8);
+
+        aArgs.push_back(comphelper::makePropertyValue(aObj.GetURLPath() + ".ThemeReferenceJSON", aAny));
     }
 
     URL aTargetURL;
