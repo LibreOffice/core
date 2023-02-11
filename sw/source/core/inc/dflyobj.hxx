@@ -53,6 +53,8 @@ public:
     virtual SdrObjKind GetObjIdentifier()   const override;
     virtual bool IsTextBox() const override { return mbIsTextBox; }
     void SetTextBox(bool bIsTextBox) { mbIsTextBox = bIsTextBox; }
+
+    virtual void NbcRotate(const Point& rRef, Degree100 nAngle, double sinAnle, double cosAngle) override;
 };
 
 // virtual objects for Flys
@@ -120,6 +122,7 @@ public:
     virtual       void       Crop(const basegfx::B2DPoint& rRef, double fxFact, double fyFact) override;
     virtual       void       addCropHandles(SdrHdlList& rTarget) const override;
     virtual       void       Rotate(const Point& rRef, Degree100 nAngle, double sn, double cs) override;
+
 
     // FullDrag support
     virtual rtl::Reference<SdrObject> getFullDragClone() const override;

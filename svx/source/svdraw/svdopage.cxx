@@ -172,4 +172,9 @@ OUString SdrPageObj::TakeObjNamePlural() const
     return SvxResId(STR_ObjNamePluralPAGE);
 }
 
+void SdrPageObj::NbcRotate(const Point& /*rRef*/, Degree100 /*nAngle*/, double /*sinAngle*/, double /*cosAngle*/)
+{
+    assert(false);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1441,33 +1441,6 @@ void SdrObject::NbcRotate(const Point& rRef, Degree100 nAngle)
 
 namespace
 {
-
-tools::Rectangle lclRotateRectangle(tools::Rectangle const& rRectangle, Point const& rRef, double sn, double cs)
-{
-    tools::Rectangle aRectangle(rRectangle);
-    aRectangle.Move(-rRef.X(),-rRef.Y());
-    tools::Rectangle R(aRectangle);
-    if (sn==1.0 && cs==0.0) { // 90deg
-        aRectangle.SetLeft(-R.Bottom() );
-        aRectangle.SetRight(-R.Top() );
-        aRectangle.SetTop(R.Left() );
-        aRectangle.SetBottom(R.Right() );
-    } else if (sn==0.0 && cs==-1.0) { // 180deg
-        aRectangle.SetLeft(-R.Right() );
-        aRectangle.SetRight(-R.Left() );
-        aRectangle.SetTop(-R.Bottom() );
-        aRectangle.SetBottom(-R.Top() );
-    } else if (sn==-1.0 && cs==0.0) { // 270deg
-        aRectangle.SetLeft(R.Top() );
-        aRectangle.SetRight(R.Bottom() );
-        aRectangle.SetTop(-R.Right() );
-        aRectangle.SetBottom(-R.Left() );
-    }
-    aRectangle.Move(rRef.X(),rRef.Y());
-    aRectangle.Normalize(); // just in case
-    return aRectangle;
-}
-
 tools::Rectangle lclMirrorRectangle(tools::Rectangle const& rRectangle, Point const& rRef1, Point const& rRef2)
 {
     tools::Rectangle aRectangle(rRectangle);
@@ -1498,17 +1471,6 @@ tools::Rectangle lclMirrorRectangle(tools::Rectangle const& rRectangle, Point co
 }
 
 } // end anonymous namespace
-
-void SdrObject::NbcRotate(const Point& rRef,  Degree100 nAngle, double sn, double cs)
-{
-    SetGlueReallyAbsolute(true);
-    tools::Rectangle aRectangle = getOutRectangle();
-    aRectangle = lclRotateRectangle(aRectangle, rRef, sn, cs);
-    setOutRectangle(aRectangle);
-    SetBoundAndSnapRectsDirty();
-    NbcRotateGluePoints(rRef, nAngle, sn, cs);
-    SetGlueReallyAbsolute(false);
-}
 
 void SdrObject::NbcMirror(const Point& rRef1, const Point& rRef2)
 {

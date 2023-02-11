@@ -64,6 +64,8 @@ public:
 
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
+
+    void NbcRotate(const Point& rRef, Degree100 nAngle, double sinAngle, double cosAngle) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

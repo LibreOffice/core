@@ -156,6 +156,11 @@ rtl::Reference<SdrObject> SwFlyDrawObj::CloneSdrObject(SdrModel& rTargetModel) c
     return new SwFlyDrawObj(rTargetModel);
 }
 
+void SwFlyDrawObj::NbcRotate(const Point& /*rRef*/, Degree100 /*nAngle*/, double /*sinAngle*/, double /*cosAngle*/)
+{
+    assert(false);
+}
+
 // TODO: Need own primitive to get the FlyFrame paint working
 namespace drawinglayer::primitive2d
 {
