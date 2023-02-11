@@ -2271,7 +2271,7 @@ bool SwRefPageGetFieldType::MakeSetList(SetGetExpFields& rTmpLst,
 {
     IDocumentRedlineAccess const& rIDRA(m_rDoc.getIDocumentRedlineAccess());
     std::vector<SwFormatField*> vFields;
-    GatherFields(vFields);
+    m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::RefPageSet)->GatherFields(vFields);
     for(auto pFormatField: vFields)
     {
         // update only the GetRef fields
