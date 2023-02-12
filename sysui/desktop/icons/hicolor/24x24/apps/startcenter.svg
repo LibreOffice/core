@@ -1,3 +1,77 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
-<svg id="SVGRoot" width="24px" height="24px" version="1.1" viewBox="0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="linearGradient4349" x1="3" x2="21" y1="23" y2="1" gradientUnits="userSpaceOnUse"><stop stop-color="#4b4b4b" offset="0"/><stop stop-color="#969696" offset="1"/></linearGradient><linearGradient id="linearGradient2256" x1="18" x2="6" y1="19" y2="4" gradientUnits="userSpaceOnUse"><stop stop-color="#fafafa" stop-opacity=".80286" offset="0"/><stop stop-color="#fafafa" offset="1"/></linearGradient></defs><g fill-rule="evenodd" stroke-linecap="square"><path d="m5 0c-1.662 0-3 1.338-3 3v18c0 1.662 1.338 3 3 3h14c1.662 0 3-1.338 3-3v-12l-9-9h-8zm10 0 7 7v-7h-7z" fill="url(#linearGradient4349)"/><g fill-opacity=".19965"><path d="m2 20v1c0 1.662 1.338 3 3 3h14c1.662 0 3-1.338 3-3v-1c0 1.662-1.338 3-3 3h-14c-1.662 0-3-1.338-3-3z"/><path d="m15 0h1.4l5.6 5.6v1.4z"/></g><g fill-rule="evenodd" stroke-linecap="round" stroke-width="2"><path d="m5 3v17h14v-10l-7-7z" fill="url(#linearGradient2256)"/><path d="m12 3 7 7h-7z" fill="#fafafa"/><path d="m11 3v9h8v-2h-7v-7h-1z" fill-opacity=".046907" fill-rule="evenodd" stroke-linecap="square" stroke-width="2"/></g></g></svg>
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="134.19557mm"
+   height="134.19557mm"
+   viewBox="0 0 134.19557 134.19557"
+   version="1.1"
+   id="svg4519"
+   sodipodi:docname="collabora-online-logo.svg"
+   inkscape:version="0.92.0 unknown">
+  <defs
+     id="defs4513" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="256.04006"
+     inkscape:cy="260.75029"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1301"
+     inkscape:window-height="744"
+     inkscape:window-x="65"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata4516">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(164.06501,-114.9656)">
+    <polygon
+       id="polygon14"
+       points="17.772,20.172 30.958,32.599 17.914,44.893 17.358,44.386 17.258,20.718 "
+       style="fill:#ffffff"
+       transform="matrix(2.8998956,0,0,2.8998956,-195.59046,87.816779)" />
+    <polygon
+       style="fill:#5c2983;fill-opacity:1"
+       id="polygon16"
+       points="30.379,33.145 17.914,44.893 28.654,55.638 51.742,32.55 28.561,9.362 17.763,20.162 17.772,20.172 30.379,32.053 30.958,32.599 "
+       transform="matrix(2.8998956,0,0,2.8998956,-195.59046,87.816779)" />
+    <polygon
+       id="polygon18"
+       points="17.358,44.386 17.258,20.718 29.864,32.599 "
+       style="fill:#c8c8c8"
+       transform="matrix(2.8998956,0,0,2.8998956,-195.59046,87.816779)" />
+    <polygon
+       style="fill:#2d0b47;fill-opacity:1"
+       id="polygon20"
+       points="27.743,35.628 18.807,44.052 31.847,41.483 "
+       transform="matrix(2.8998956,0,0,2.8998956,-195.59046,87.816779)" />
+  </g>
+</svg>
