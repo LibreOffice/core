@@ -26,6 +26,7 @@ import time
 import ast
 import platform
 from com.sun.star.uri.RelativeUriExcessParentSegments import RETAIN
+from urllib.parse import unquote
 
 class LogLevel:
     NONE = 0   # production level
@@ -854,7 +855,7 @@ def getPackageName2PathMap( sfa, storageType ):
         paths = getPathsFromPackage( j, sfa )
         if len( paths ) > 0:
             # map package name to url, we need this later
-            log.isErrorLevel() and log.error( "adding Package " + transientPathElement + " " + str( paths ) )
+            log.debug( "adding Package " + transientPathElement + " " + str( paths ) )
             ret[ lastElement( j ) ] = Package( paths, transientPathElement )
     return ret
 
@@ -941,7 +942,7 @@ def expandUri(  uri ):
     if uri.startswith( "vnd.sun.star.expand:" ):
         uri = uri.replace( "vnd.sun.star.expand:", "",1)
         uri = uno.getComponentContext().getByName(
-                    "/singletons/com.sun.star.util.theMacroExpander" ).expandMacros( uri )
+                    "/singletons/com.sun.star.util.theMacroExpander" ).expandMacros( unquote(uri) )
     if uri.startswith( "file:" ):
         uri = uno.absolutize("",uri)   # necessary to get rid of .. in uri
     return uri
