@@ -58,6 +58,7 @@
 #include <vcl/weld.hxx>
 #include <svx/zoomsliderctrl.hxx>
 #include <svx/zoomslideritem.hxx>
+#include <basegfx/utils/zoomtools.hxx>
 
 constexpr sal_Int32 TAB_HEIGHT_MARGIN = 10;
 
@@ -67,6 +68,17 @@ namespace basctl
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
+
+static void lcl_InvalidateZoomSlots(SfxBindings* pBindings)
+{
+    if (!pBindings)
+        return;
+
+    static sal_uInt16 const aInval[] = {
+        SID_ZOOM_OUT, SID_ZOOM_IN, SID_ATTR_ZOOMSLIDER, 0
+    };
+    pBindings->Invalidate(aInval);
+}
 
 void Shell::ExecuteSearch( SfxRequest& rReq )
 {
@@ -771,6 +783,22 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
 
             if (pArgs && pArgs->GetItemState(SID_ATTR_ZOOMSLIDER, true, &pItem ) == SfxItemState::SET)
                 SetGlobalEditorZoomLevel(static_cast<const SvxZoomSliderItem*>(pItem)->GetValue());
+
+            lcl_InvalidateZoomSlots(GetBindingsPtr());
+        }
+        break;
+
+        case SID_ZOOM_IN:
+        case SID_ZOOM_OUT:
+        {
+            const sal_uInt16 nOldZoom = GetCurrentZoomSliderValue();
+            sal_uInt16 nNewZoom;
+            if (nSlot == SID_ZOOM_IN)
+                nNewZoom = std::min<sal_uInt16>(GetMaxZoom(), basegfx::zoomtools::zoomIn(nOldZoom));
+            else
+                nNewZoom = std::max<sal_uInt16>(GetMinZoom(), basegfx::zoomtools::zoomOut(nOldZoom));
+            SetGlobalEditorZoomLevel(nNewZoom);
+            lcl_InvalidateZoomSlots(GetBindingsPtr());
         }
         break;
 
@@ -1133,6 +1161,16 @@ void Shell::GetState(SfxItemSet &rSet)
                 Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
                 if ( ( xModLibContainer.is() && xModLibContainer->hasByName( m_aCurLibName ) && xModLibContainer->isLibraryReadOnly( m_aCurLibName ) ) ||
                      ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( m_aCurLibName ) && xDlgLibContainer->isLibraryReadOnly( m_aCurLibName ) ) )
+                    rSet.DisableItem(nWh);
+            }
+            break;
+
+            case SID_ZOOM_IN:
+            case SID_ZOOM_OUT:
+            {
+                const sal_uInt16 nCurrentZoom = GetCurrentZoomSliderValue();
+                if ((nWh == SID_ZOOM_IN && nCurrentZoom >= GetMaxZoom()) ||
+                    (nWh == SID_ZOOM_OUT && nCurrentZoom <= GetMinZoom()))
                     rSet.DisableItem(nWh);
             }
             break;

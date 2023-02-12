@@ -337,6 +337,18 @@ shell basctl_Shell
         StateMethod     = GetState;
     ]
 
+    SID_ZOOM_IN
+    [
+        ExecMethod      = ExecuteGlobal;
+        StateMethod     = GetState;
+    ]
+
+    SID_ZOOM_OUT
+    [
+        ExecMethod      = ExecuteGlobal;
+        StateMethod     = GetState;
+    ]
+
     SID_BASICIDE_CURRENT_ZOOM
     [
         StateMethod     = GetState;
