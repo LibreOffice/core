@@ -50,7 +50,7 @@ export instsetoo_OUT := $(WORKDIR)/installation
 export LOCAL_OUT := $(instsetoo_OUT)
 export LOCAL_COMMON_OUT := $(instsetoo_OUT)
 
-ifeq (WNT,$(OS))
+ifeq ($(filter $(OS),MACOSX WNT),$(OS))
 instsetoo_installer_langs := $(subst $(WHITESPACE),$(COMMA),$(strip en-US $(filter-out en-US,$(gb_WITH_LANG))))
 else
 instsetoo_installer_langs := en-US
@@ -70,7 +70,7 @@ instsetoo_installer_targets := $(foreach pkgformat,$(PKGFORMAT),\
         $(if $(filter ODK,$(BUILD_TYPE)),sdkoo‧en-US‧_SDK‧‧$(pkgformat)‧nostrip) \
         $(if $(and $(filter HELP,$(BUILD_TYPE)),$(filter-out MACOSX,$(OS))), \
             $(foreach lang,$(gb_HELP_LANGS),ooohelppack‧$(lang)‧‧-helppack‧$(pkgformat)‧nostrip)) \
-        $(if $(filter-out WNT,$(OS)), \
+        $(if $(and $(filter-out WNT,$(OS)),$(filter-out MACOSX,$(OS))), \
             $(foreach lang,$(filter-out en-US,$(gb_WITH_LANG)),ooolangpack‧$(lang)‧‧-languagepack‧$(pkgformat)‧nostrip)))
 endif
 
