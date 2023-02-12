@@ -51,7 +51,7 @@ namespace drawinglayer::attribute
                 meStyle(eStyle),
                 mnSteps(nSteps)
             {
-                // always add start color to guarentee a color at all. It's also just safer
+                // always add start color to guarantee a color at all. It's also just safer
                 // to have one and not an empty vector, that spares many checks in the using code
                 maColorSteps.emplace_back(0.0, rStartColor);
 
@@ -61,7 +61,7 @@ namespace drawinglayer::attribute
                     for(const auto& candidate : *pColorSteps)
                     {
                         // only allow ]0.0 .. 1.0[ as offset values, *excluding* 0.0 and 1.0
-                        // explicitely - these are reserved for start/end color
+                        // explicitly - these are reserved for start/end color
                         if(basegfx::fTools::more(candidate.getOffset(), 0.0) && basegfx::fTools::less(candidate.getOffset(), 1.0))
                         {
                             // ignore same offsets, independent from color (so 1st one wins)
