@@ -110,7 +110,7 @@ public:
 
        Start/EndColor will be added to the internal ColorSteps with
        the according default offsets. A rigid correction/input data
-       testing is done by the construtor, including to sort the
+       testing is done by the constructor, including to sort the
        ColorSteps by offset.
 
        To access e.g. the StartColor, use getColorSteps().front(), and
