@@ -114,7 +114,7 @@ public:
        ColorSteps by offset.
 
        To access e.g. the StartColor, use getColorSteps().front(), and
-       getColorSteps().back(), accordingly, for EndColor. The existance
+       getColorSteps().back(), accordingly, for EndColor. The existence
        of at least one entry is guaranteed, so no need to check before
        accessing using of front()/back() calls. If only one color entry
        exists, start == end color is assumed, so not really a gradient
