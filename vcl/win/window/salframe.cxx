@@ -2668,6 +2668,34 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     Color aMenuBarRolloverTextColor;
     Color aHighlightTextColor = ImplWinColorToSal(GetSysColor(COLOR_HIGHLIGHTTEXT));
 
+    BOOL bFlatMenus = FALSE;
+    SystemParametersInfoW( SPI_GETFLATMENU, 0, &bFlatMenus, 0);
+    if( bFlatMenus )
+    {
+        aStyleSettings.SetUseFlatMenus( true );
+        // flat borders for our controls etc. as well in this mode (ie, no 3d borders)
+        // this is not active in the classic style appearance
+        aStyleSettings.SetUseFlatBorders( true );
+    }
+    else
+    {
+        aStyleSettings.SetUseFlatMenus( false );
+        aStyleSettings.SetUseFlatBorders( false );
+    }
+
+    if( bFlatMenus )
+    {
+        aStyleSettings.SetMenuHighlightColor( ImplWinColorToSal( GetSysColor( COLOR_MENUHILIGHT ) ) );
+        aStyleSettings.SetMenuBarRolloverColor( ImplWinColorToSal( GetSysColor( COLOR_MENUHILIGHT ) ) );
+        aStyleSettings.SetMenuBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DSHADOW ) ) );
+    }
+    else
+    {
+        aStyleSettings.SetMenuHighlightColor( ImplWinColorToSal( GetSysColor( COLOR_HIGHLIGHT ) ) );
+        aStyleSettings.SetMenuBarRolloverColor( ImplWinColorToSal( GetSysColor( COLOR_HIGHLIGHT ) ) );
+        aStyleSettings.SetMenuBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DLIGHT ) ) );
+    }
+
     const bool bUseDarkMode(UseDarkMode());
 
     OUString sThemeName(!bUseDarkMode ? u"colibre" : u"colibre_dark");
@@ -2711,6 +2739,8 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         hTheme = OpenThemeData(mhWnd, L"Toolbar");
         GetThemeColor(hTheme, 0, 0, TMT_FILLCOLOR, &color);
         aStyleSettings.SetInactiveTabColor( ImplWinColorToSal( color ) );
+        // see ImplDrawNativeControl for dark mode
+        aStyleSettings.SetMenuBarColor( aStyleSettings.GetWindowColor() );
         CloseThemeData(hTheme);
 
         hTheme = OpenThemeData(mhWnd, L"Textstyle");
@@ -2738,6 +2768,10 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetMenuTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
         aMenuBarTextColor = ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) );
         aMenuBarRolloverTextColor = aHighlightTextColor;
+        if( bFlatMenus )
+            aStyleSettings.SetMenuBarColor( ImplWinColorToSal( GetSysColor( COLOR_MENUBAR ) ) );
+        else
+            aStyleSettings.SetMenuBarColor( ImplWinColorToSal( GetSysColor( COLOR_MENU ) ) );
         aStyleSettings.SetActiveTabColor( aStyleSettings.GetWindowColor() );
         aStyleSettings.SetInactiveTabColor( aStyleSettings.GetFaceColor() );
     }
@@ -2801,7 +2835,6 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetHighlightTextColor(aHighlightTextColor);
     aStyleSettings.SetListBoxWindowHighlightColor( aStyleSettings.GetHighlightColor() );
     aStyleSettings.SetListBoxWindowHighlightTextColor( aStyleSettings.GetHighlightTextColor() );
-    aStyleSettings.SetMenuHighlightColor( aStyleSettings.GetHighlightColor() );
     aStyleSettings.SetMenuHighlightTextColor( aStyleSettings.GetHighlightTextColor() );
 
     ImplSVData* pSVData = ImplGetSVData();
@@ -2810,30 +2843,12 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     pSVData->maNWFData.maMenuBarHighlightTextColor = COL_TRANSPARENT;
     GetSalData()->mbThemeMenuSupport = false;
     aStyleSettings.SetMenuColor( ImplWinColorToSal( GetSysColor( COLOR_MENU ) ) );
-    aStyleSettings.SetMenuBarColor( aStyleSettings.GetMenuColor() );
-    aStyleSettings.SetMenuBarRolloverColor( aStyleSettings.GetHighlightColor() );
-    aStyleSettings.SetMenuBorderColor( aStyleSettings.GetLightBorderColor() ); // overridden below for flat menus
-    aStyleSettings.SetUseFlatBorders( false );
-    aStyleSettings.SetUseFlatMenus( false );
     aStyleSettings.SetMenuBarHighlightTextColor(aStyleSettings.GetMenuHighlightTextColor());
     aStyleSettings.SetActiveColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVECAPTION ) ) );
     aStyleSettings.SetActiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_CAPTIONTEXT ) ) );
     aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTION ) ) );
     aStyleSettings.SetDeactiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTIONTEXT ) ) );
-    BOOL bFlatMenus = FALSE;
-    SystemParametersInfoW( SPI_GETFLATMENU, 0, &bFlatMenus, 0);
-    if( bFlatMenus )
-    {
-        aStyleSettings.SetUseFlatMenus( true );
-        aStyleSettings.SetMenuBarColor( ImplWinColorToSal( GetSysColor( COLOR_MENUBAR ) ) );
-        aStyleSettings.SetMenuHighlightColor( ImplWinColorToSal( GetSysColor( COLOR_MENUHILIGHT ) ) );
-        aStyleSettings.SetMenuBarRolloverColor( ImplWinColorToSal( GetSysColor( COLOR_MENUHILIGHT ) ) );
-        aStyleSettings.SetMenuBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DSHADOW ) ) );
 
-        // flat borders for our controls etc. as well in this mode (ie, no 3d borders)
-        // this is not active in the classic style appearance
-        aStyleSettings.SetUseFlatBorders( true );
-    }
     aStyleSettings.SetCheckedColorSpecialCase( );
 
     // caret width
