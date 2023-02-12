@@ -1395,6 +1395,7 @@
 #define RID_SVXSTR_OUTLINENUM_DESCRIPTION_7                 NC_("RID_SVXSTR_OUTLINENUM_DESCRIPTION_7", "Right pointing bullet, right pointing arrow bullet, solid diamond bullet, solid small circular bullet")
 
 #define RID_SVXSTR_SAFEMODE_ZIP_FAILURE                     NC_("RID_SVXSTR_SAFEMODE_ZIP_FAILURE", "The zip file could not be created.")
+#define RID_SVXSTR_SAFEMODE_USER_PROFILE_EXPORTED           NC_("RID_SVXSTR_SAFEMODE_USER_PROFILE_EXPORTED", "Your user profile has been exported as 'libreoffice-profile.zip'.")
 
 #define RID_SVXSTR_STYLEFAMILY_TABLEDESIGN                  NC_("RID_SVXSTR_STYLEFAMILY_TABLEDESIGN", "Table Design Styles")
 

@@ -283,7 +283,7 @@ IMPL_LINK(SafeModeDialog, CreateZipBtnHdl, weld::Button&, /*rBtn*/, void)
         return;
     }
 
-    FileExportedDialog aDialog(m_xDialog.get(),"Your user profile has been exported as 'libreoffice-profile.zip'.");
+    FileExportedDialog aDialog(m_xDialog.get(), SvxResId(RID_SVXSTR_SAFEMODE_USER_PROFILE_EXPORTED));
     aDialog.run();
 }
 
