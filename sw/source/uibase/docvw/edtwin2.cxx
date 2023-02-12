@@ -372,15 +372,12 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         }
                         case SwFieldIds::TableOfAuthorities:
                         {
-                            const auto pAuthorityField
-                                = static_cast<const SwAuthorityField*>(pField);
-                            sText = pAuthorityField->GetAuthority(aContentAtPos.pFndTextAttr,
-                                                                  rSh.GetLayout());
+                            const auto pAuthorityField = static_cast<const SwAuthorityField*>(pField);
+                            sText = pAuthorityField->GetAuthority(rSh.GetLayout());
+
                             if (pAuthorityField->HasURL())
                             {
-                                const OUString& rURL
-                                    = pAuthorityField->GetAuthEntry()->GetAuthorField(
-                                        AUTH_FIELD_URL);
+                                const OUString& rURL = pAuthorityField->GetURI(false);
                                 sText += "\n" + SfxHelp::GetURLHelpText(rURL);
                             }
                             break;

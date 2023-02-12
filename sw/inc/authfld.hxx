@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SW_INC_AUTHFLD_HXX
 #define INCLUDED_SW_INC_AUTHFLD_HXX
 
+#include <sal/config.h>
+
 #include "swdllapi.h"
 #include "fldbas.hxx"
 #include "toxe.hxx"
@@ -31,6 +33,7 @@
 
 class SwTOXInternational;
 class SwTextAttr;
+class SwForm;
 
 class SwAuthEntry final : public salhelper::SimpleReferenceObject
 {
@@ -186,11 +189,23 @@ public:
 
     virtual OUString GetDescription() const override;
 
-    /// Returns the line matching the source's default row in the ToX.
-    OUString GetAuthority(const SwTextAttr* pTextAttr, const SwRootFrame* pLayout) const;
+    /**
+     * Returns the line matching the source's default row in the ToX.
+     *
+     * \param   pLayout     layout to be used
+     * \param   pTOX        bibliography table to take the format of the string from
+     * \return              entry formated as the appropriate authority type in the table
+     */
+    OUString GetAuthority(const SwRootFrame *pLayout,
+                          const SwForm *pTOX = nullptr) const;
 
     bool HasURL() const;
     OUString GetAbsoluteURL() const;
+    /**
+     * Returns full URI for the URL, relative if specified
+     * \param   bRelative   whether the path should be relative (when dealing with local files)
+     */
+    OUString GetURI(bool bRelative) const;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

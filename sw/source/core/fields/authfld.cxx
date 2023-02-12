@@ -17,14 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <memory>
 
 #include <libxml/xmlwriter.h>
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/string_view.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
 #include <swtypes.hxx>
@@ -47,6 +51,7 @@
 #include <docsh.hxx>
 
 #include <com/sun/star/beans/PropertyValues.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -559,31 +564,31 @@ OUString SwAuthorityField::GetDescription() const
     return SwResId(STR_AUTHORITY_ENTRY);
 }
 
-OUString SwAuthorityField::GetAuthority(const SwTextAttr* pTextAttr,
-                                        const SwRootFrame* pLayout) const
+OUString SwAuthorityField::GetAuthority(const SwRootFrame* pLayout, const SwForm* pTOX) const
 {
     OUString aText;
 
-    SwForm aForm(TOX_AUTHORITIES);
-    if (!pTextAttr)
+    std::unique_ptr<SwForm> pDefaultTOX;
+    if (!pTOX)
     {
-        return aText;
+        pDefaultTOX = std::make_unique<SwForm>(TOX_AUTHORITIES);
+        pTOX = pDefaultTOX.get();
     }
 
-    auto& rFormatField = const_cast<SwFormatField&>(pTextAttr->GetFormatField());
-    SwTextField* pTextField = rFormatField.GetTextField();
-    if (!pTextField)
-    {
-        return aText;
-    }
-
-    const SwTextNode& rNode = pTextField->GetTextNode();
-    const auto pFieldType = static_cast<const SwAuthorityFieldType*>(GetTyp());
+    SwAuthorityFieldType* pFieldType = static_cast<SwAuthorityFieldType*>(GetTyp());
     std::unique_ptr<SwTOXInternational> pIntl(pFieldType->CreateTOXInternational());
-    SwTOXAuthority aAuthority(rNode, rFormatField, *pIntl);
-    sal_uInt16 nLevel = aAuthority.GetLevel();
-    SwFormTokens aPattern = aForm.GetPattern(nLevel);
-    aAuthority.InitText(pLayout);
+
+    // This is based on SwTOXAuthority::GetLevel()
+    OUString sText = GetFieldText(AUTH_FIELD_AUTHORITY_TYPE);
+    ToxAuthorityType nAuthorityKind = AUTH_TYPE_ARTICLE;
+    if (pIntl->IsNumeric(sText))
+        nAuthorityKind = static_cast<ToxAuthorityType>(sText.toUInt32());
+    if (nAuthorityKind > AUTH_TYPE_END)
+        nAuthorityKind = AUTH_TYPE_ARTICLE;
+
+    // Must be incremented by 1, since the pattern 0 is for the heading
+    const SwFormTokens& aPattern = pTOX->GetPattern(static_cast<int>(nAuthorityKind) + 1);
+
     for (const auto& rToken : aPattern)
     {
         switch (rToken.eTokenType)
@@ -595,8 +600,30 @@ OUString SwAuthorityField::GetAuthority(const SwTextAttr* pTextAttr,
             }
             case TOKEN_AUTHORITY:
             {
-                sal_uInt16 eField = rToken.nAuthorityField;
-                aText += aAuthority.GetText(eField, pLayout);
+                ToxAuthorityField eField = static_cast<ToxAuthorityField>(rToken.nAuthorityField);
+
+                if (AUTH_FIELD_IDENTIFIER == eField)
+                {
+                    // Why isn't there a way to get the identifier without parentheses???
+                    OUString sTmp = ExpandField(true, pLayout);
+                    if (sal_Unicode cPref = pFieldType->GetPrefix(); cPref && cPref != ' ')
+                        sTmp = sTmp.copy(1);
+                    if (sal_Unicode cSuff = pFieldType->GetSuffix(); cSuff && cSuff != ' ')
+                        sTmp = sTmp.copy(0, sTmp.getLength() - 1);
+                    aText += sTmp;
+                }
+                else if (AUTH_FIELD_AUTHORITY_TYPE == eField)
+                {
+                    aText += SwAuthorityFieldType::GetAuthTypeName(nAuthorityKind);
+                }
+                else if (AUTH_FIELD_URL == eField)
+                {
+                    aText += GetURI(true);
+                }
+                else
+                {
+                    aText += GetFieldText(eField);
+                }
                 break;
             }
             default:
@@ -621,6 +648,50 @@ OUString SwAuthorityField::GetAbsoluteURL() const
     OUString aBasePath = pDocShell->getDocumentBaseURL();
     return INetURLObject::GetAbsURL(aBasePath, rURL, INetURLObject::EncodeMechanism::WasEncoded,
                                     INetURLObject::DecodeMechanism::WithCharset);
+}
+
+OUString SwAuthorityField::GetURI(bool bRelative) const
+{
+    OUString sTmp = GetFieldText(AUTH_FIELD_URL);
+
+    SwDoc* pDoc = static_cast<SwAuthorityFieldType*>(GetTyp())->GetDoc();
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    const OUString aBaseURL = pDocShell->getDocumentBaseURL();
+    std::u16string_view aBaseURIScheme;
+    sal_Int32 nSep = aBaseURL.indexOf(':');
+    if (nSep != -1)
+    {
+        aBaseURIScheme = aBaseURL.subView(0, nSep);
+    }
+
+    uno::Reference<uri::XUriReferenceFactory> xUriReferenceFactory
+        = uri::UriReferenceFactory::create(comphelper::getProcessComponentContext());
+    uno::Reference<uri::XUriReference> xUriRef;
+    try
+    {
+        xUriRef = xUriReferenceFactory->parse(sTmp);
+    }
+    catch (const uno::Exception& rException)
+    {
+        SAL_WARN("sw.core",
+                 "SwTOXAuthority::GetSourceURL: failed to parse url: " << rException.Message);
+    }
+    if (xUriRef.is() && xUriRef->getFragment().startsWith("page="))
+    {
+        xUriRef->clearFragment();
+        sTmp = xUriRef->getUriReference();
+    }
+
+    // If the URI is not supposed to be relative, we return here the full URI
+    if (!bRelative)
+        return sTmp;
+
+    bool bSaveRelFSys = officecfg::Office::Common::Save::URL::FileSystem::get();
+    if (xUriRef.is() && bSaveRelFSys && xUriRef->getScheme() == aBaseURIScheme)
+    {
+        sTmp = INetURLObject::GetRelURL(aBaseURL, sTmp);
+    }
+    return sTmp;
 }
 
 void SwAuthorityField::dumpAsXml(xmlTextWriterPtr pWriter) const

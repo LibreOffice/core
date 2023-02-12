@@ -106,7 +106,7 @@ OUString SwTOXInternational::ToUpper( const OUString& rStr, sal_Int32 nPos ) con
     return m_pCharClass->uppercase( rStr, nPos, 1 );
 }
 
-inline bool SwTOXInternational::IsNumeric( const OUString& rStr ) const
+bool SwTOXInternational::IsNumeric( const OUString& rStr ) const
 {
     return m_pCharClass->isNumeric( rStr );
 }

@@ -113,7 +113,7 @@ public:
     OUString GetFollowingText( bool bMorePages ) const;
 
     OUString ToUpper( const OUString& rStr, sal_Int32 nPos ) const;
-    inline bool IsNumeric( const OUString& rStr ) const;
+    bool IsNumeric( const OUString& rStr ) const;
 };
 
 /**
