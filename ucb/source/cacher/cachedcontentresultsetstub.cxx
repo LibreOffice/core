@@ -91,11 +91,12 @@ Any SAL_CALL CachedContentResultSetStub
 // own methods.  ( inherited )
 
 
-//virtual
+//virtual, only called from ContentResultSetWrapperListener
 void CachedContentResultSetStub
     ::impl_propertyChange( const PropertyChangeEvent& rEvt )
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     //don't notify events on fetchsize and fetchdirection to the above CachedContentResultSet
     //because it will ignore them anyway and we can save this remote calls
@@ -107,15 +108,16 @@ void CachedContentResultSetStub
     aEvt.Source = static_cast< XPropertySet * >( this );
     aEvt.Further = false;
 
-    impl_notifyPropertyChangeListeners( aEvt );
+    impl_notifyPropertyChangeListeners( aGuard, aEvt );
 }
 
 
-//virtual
+//virtual, only called from ContentResultSetWrapperListener
 void CachedContentResultSetStub
     ::impl_vetoableChange( const PropertyChangeEvent& rEvt )
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     //don't notify events on fetchsize and fetchdirection to the above CachedContentResultSet
     //because it will ignore them anyway and we can save this remote calls
@@ -127,7 +129,7 @@ void CachedContentResultSetStub
     aEvt.Source = static_cast< XPropertySet * >( this );
     aEvt.Further = false;
 
-    impl_notifyVetoableChangeListeners( aEvt );
+    impl_notifyVetoableChangeListeners( aGuard, aEvt );
 }
 
 
@@ -181,22 +183,23 @@ css::uno::Sequence< OUString > SAL_CALL CachedContentResultSetStub::getSupported
 
 
 FetchResult CachedContentResultSetStub::impl_fetchHelper(
+        std::unique_lock<std::mutex>& rGuard,
         sal_Int32 nRowStartPosition, sal_Int32 nRowCount, bool bDirection,
-        std::function<void( css::uno::Any& rRowContent)> impl_loadRow)
+        std::function<void( std::unique_lock<std::mutex>&, css::uno::Any& rRowContent)> impl_loadRow)
 {
-    impl_EnsureNotDisposed();
+    impl_EnsureNotDisposed(rGuard);
     if( !m_xResultSetOrigin.is() )
     {
         OSL_FAIL( "broadcaster was disposed already" );
         throw RuntimeException();
     }
-    impl_propagateFetchSizeAndDirection( nRowCount, bDirection );
+    impl_propagateFetchSizeAndDirection( rGuard, nRowCount, bDirection );
     FetchResult aRet;
     aRet.StartIndex = nRowStartPosition;
     aRet.Orientation = bDirection;
     aRet.FetchError = FetchError::SUCCESS; /*ENDOFDATA, EXCEPTION*/
     sal_Int32 nOldOriginal_Pos = m_xResultSetOrigin->getRow();
-    if( impl_isForwardOnly() )
+    if( impl_isForwardOnly(rGuard) )
     {
         if( nOldOriginal_Pos != nRowStartPosition )
         {
@@ -211,7 +214,7 @@ FetchResult CachedContentResultSetStub::impl_fetchHelper(
 
         try
         {
-            impl_loadRow( aRet.Rows.getArray()[0] );
+            impl_loadRow( rGuard, aRet.Rows.getArray()[0] );
         }
         catch( SQLException& )
         {
@@ -258,7 +261,7 @@ FetchResult CachedContentResultSetStub::impl_fetchHelper(
         }
         for( ; nN <= nRowCount; )
         {
-            impl_loadRow( pRows[nN-1] );
+            impl_loadRow( rGuard, pRows[nN-1] );
             nN++;
             if( nN <= nRowCount )
             {
@@ -302,22 +305,20 @@ FetchResult SAL_CALL CachedContentResultSetStub
     ::fetch( sal_Int32 nRowStartPosition
     , sal_Int32 nRowCount, sal_Bool bDirection )
 {
-    impl_init_xRowOrigin();
-    return impl_fetchHelper( nRowStartPosition, nRowCount, bDirection,
-        [&](css::uno::Any& rRowContent)
-        { return impl_getCurrentRowContent(rRowContent, m_xRowOrigin); });
+    std::unique_lock aGuard(m_aMutex);
+    impl_init_xRowOrigin(aGuard);
+    return impl_fetchHelper( aGuard, nRowStartPosition, nRowCount, bDirection,
+        [&](std::unique_lock<std::mutex>& rGuard, css::uno::Any& rRowContent)
+        { return impl_getCurrentRowContent(rGuard, rRowContent, m_xRowOrigin); });
 }
 
 sal_Int32 CachedContentResultSetStub
-    ::impl_getColumnCount()
+    ::impl_getColumnCount(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     sal_Int32 nCount;
     bool bCached;
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        nCount = m_nColumnCount;
-        bCached = m_bColumnCountCached;
-    }
+    nCount = m_nColumnCount;
+    bCached = m_bColumnCountCached;
     if( !bCached )
     {
         try
@@ -332,17 +333,16 @@ sal_Int32 CachedContentResultSetStub
             nCount = 0;
         }
     }
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_nColumnCount = nCount;
     m_bColumnCountCached = true;
     return m_nColumnCount;
 }
 
 void CachedContentResultSetStub
-    ::impl_getCurrentRowContent( Any& rRowContent
+    ::impl_getCurrentRowContent( std::unique_lock<std::mutex>& rGuard, Any& rRowContent
         , const Reference< XRow >& xRow )
 {
-    sal_Int32 nCount = impl_getColumnCount();
+    sal_Int32 nCount = impl_getColumnCount(rGuard);
 
     Sequence< Any > aContent( nCount );
     auto aContentRange = asNonConstRange(aContent);
@@ -355,7 +355,7 @@ void CachedContentResultSetStub
 }
 
 void CachedContentResultSetStub
-    ::impl_propagateFetchSizeAndDirection( sal_Int32 nFetchSize, bool bFetchDirection )
+    ::impl_propagateFetchSizeAndDirection( std::unique_lock<std::mutex>& rGuard, sal_Int32 nFetchSize, bool bFetchDirection )
 {
     //this is done only for the case, that there is another CachedContentResultSet in the chain of underlying ResultSets
 
@@ -371,13 +371,10 @@ void CachedContentResultSetStub
     sal_Int32 nLastSize;
     bool bLastDirection;
     bool bFirstPropagationDone;
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        bNeedAction             = m_bNeedToPropagateFetchSize;
-        nLastSize               = m_nLastFetchSize;
-        bLastDirection          = m_bLastFetchDirection;
-        bFirstPropagationDone   = m_bFirstFetchSizePropagationDone;
-    }
+    bNeedAction             = m_bNeedToPropagateFetchSize;
+    nLastSize               = m_nLastFetchSize;
+    bLastDirection          = m_bLastFetchDirection;
+    bFirstPropagationDone   = m_bFirstFetchSizePropagationDone;
     if( !bNeedAction )
         return;
 
@@ -396,7 +393,6 @@ void CachedContentResultSetStub
 
         if(!bHasSize || !bHasDirection)
         {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
             m_bNeedToPropagateFetchSize = false;
             return;
         }
@@ -405,12 +401,9 @@ void CachedContentResultSetStub
     bool bSetSize       = ( nLastSize       !=nFetchSize        ) || !bFirstPropagationDone;
     bool bSetDirection  = ( bLastDirection  !=bFetchDirection   ) || !bFirstPropagationDone;
 
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        m_bFirstFetchSizePropagationDone = true;
-        m_nLastFetchSize        = nFetchSize;
-        m_bLastFetchDirection   = bFetchDirection;
-    }
+    m_bFirstFetchSizePropagationDone = true;
+    m_nLastFetchSize        = nFetchSize;
+    m_bLastFetchDirection   = bFetchDirection;
 
     if( bSetSize )
     {
@@ -418,7 +411,7 @@ void CachedContentResultSetStub
         aValue <<= nFetchSize;
         try
         {
-            setPropertyValue( m_aPropertyNameForFetchSize, aValue );
+            setPropertyValueImpl( rGuard, m_aPropertyNameForFetchSize, aValue );
         }
         catch( css::uno::Exception& ) {}
     }
@@ -432,7 +425,7 @@ void CachedContentResultSetStub
     aValue <<= nFetchDirection;
     try
     {
-        setPropertyValue( m_aPropertyNameForFetchDirection, aValue );
+        setPropertyValueImpl( rGuard, m_aPropertyNameForFetchDirection, aValue );
     }
     catch( css::uno::Exception& ) {}
 }
@@ -442,21 +435,21 @@ void CachedContentResultSetStub
 
 
 void CachedContentResultSetStub
-    ::impl_getCurrentContentIdentifierString( Any& rAny
+    ::impl_getCurrentContentIdentifierString( std::unique_lock<std::mutex>& /*rGuard*/, Any& rAny
         , const Reference< XContentAccess >& xContentAccess )
 {
      rAny <<= xContentAccess->queryContentIdentifierString();
 }
 
 void CachedContentResultSetStub
-    ::impl_getCurrentContentIdentifier( Any& rAny
+    ::impl_getCurrentContentIdentifier( std::unique_lock<std::mutex>& /*rGuard*/, Any& rAny
         , const Reference< XContentAccess >& xContentAccess )
 {
      rAny <<= xContentAccess->queryContentIdentifier();
 }
 
 void CachedContentResultSetStub
-    ::impl_getCurrentContent( Any& rAny
+    ::impl_getCurrentContent( std::unique_lock<std::mutex>& /*rGuard*/, Any& rAny
         , const Reference< XContentAccess >& xContentAccess )
 {
      rAny <<= xContentAccess->queryContent();
@@ -467,10 +460,11 @@ FetchResult SAL_CALL CachedContentResultSetStub
     ::fetchContentIdentifierStrings( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
 {
-    impl_init_xContentAccessOrigin();
-    return impl_fetchHelper( nRowStartPosition, nRowCount, bDirection,
-        [&](css::uno::Any& rRowContent)
-        { return impl_getCurrentContentIdentifierString(rRowContent, m_xContentAccessOrigin); });
+    std::unique_lock aGuard( m_aMutex );
+    impl_init_xContentAccessOrigin(aGuard);
+    return impl_fetchHelper( aGuard, nRowStartPosition, nRowCount, bDirection,
+        [&](std::unique_lock<std::mutex>& rGuard, css::uno::Any& rRowContent)
+        { return impl_getCurrentContentIdentifierString(rGuard, rRowContent, m_xContentAccessOrigin); });
 }
 
 //virtual
@@ -478,10 +472,11 @@ FetchResult SAL_CALL CachedContentResultSetStub
     ::fetchContentIdentifiers( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
 {
-    impl_init_xContentAccessOrigin();
-    return impl_fetchHelper( nRowStartPosition, nRowCount, bDirection,
-        [&](css::uno::Any& rRowContent)
-        { return impl_getCurrentContentIdentifier(rRowContent, m_xContentAccessOrigin); });
+    std::unique_lock aGuard( m_aMutex );
+    impl_init_xContentAccessOrigin(aGuard);
+    return impl_fetchHelper( aGuard, nRowStartPosition, nRowCount, bDirection,
+        [&](std::unique_lock<std::mutex>& rGuard, css::uno::Any& rRowContent)
+        { return impl_getCurrentContentIdentifier(rGuard, rRowContent, m_xContentAccessOrigin); });
 }
 
 //virtual
@@ -489,10 +484,11 @@ FetchResult SAL_CALL CachedContentResultSetStub
     ::fetchContents( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
 {
-    impl_init_xContentAccessOrigin();
-    return impl_fetchHelper( nRowStartPosition, nRowCount, bDirection,
-        [&](css::uno::Any& rRowContent)
-        { return impl_getCurrentContent(rRowContent, m_xContentAccessOrigin); });
+    std::unique_lock aGuard( m_aMutex );
+    impl_init_xContentAccessOrigin(aGuard);
+    return impl_fetchHelper( aGuard, nRowStartPosition, nRowCount, bDirection,
+        [&](std::unique_lock<std::mutex>& rGuard, css::uno::Any& rRowContent)
+        { return impl_getCurrentContent(rGuard, rRowContent, m_xContentAccessOrigin); });
 }
 
 

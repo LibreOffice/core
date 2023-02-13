@@ -51,56 +51,37 @@ ContentResultSetWrapper::ContentResultSetWrapper(
 };
 
 
-void ContentResultSetWrapper::impl_init_xRowOrigin()
+void ContentResultSetWrapper::impl_init_xRowOrigin(std::unique_lock<std::mutex>&)
 {
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        if(m_xRowOrigin.is())
-            return;
-    }
+    if(m_xRowOrigin.is())
+        return;
 
     Reference< XRow > xOrgig( m_xResultSetOrigin, UNO_QUERY );
-
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        m_xRowOrigin = xOrgig;
-        OSL_ENSURE( m_xRowOrigin.is(), "interface XRow is required" );
-    }
+    m_xRowOrigin = xOrgig;
+    OSL_ENSURE( m_xRowOrigin.is(), "interface XRow is required" );
 }
 
-void ContentResultSetWrapper::impl_init_xContentAccessOrigin()
+void ContentResultSetWrapper::impl_init_xContentAccessOrigin(std::unique_lock<std::mutex>&)
 {
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        if(m_xContentAccessOrigin.is())
-            return;
-    }
+    if(m_xContentAccessOrigin.is())
+        return;
 
     Reference< XContentAccess > xOrgig( m_xResultSetOrigin, UNO_QUERY );
 
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        m_xContentAccessOrigin = xOrgig;
-        OSL_ENSURE( m_xContentAccessOrigin.is(), "interface XContentAccess is required" );
-    }
+    m_xContentAccessOrigin = xOrgig;
+    OSL_ENSURE( m_xContentAccessOrigin.is(), "interface XContentAccess is required" );
 }
 
 
-void ContentResultSetWrapper::impl_init_xPropertySetOrigin()
+void ContentResultSetWrapper::impl_init_xPropertySetOrigin(std::unique_lock<std::mutex>&)
 {
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        if( m_xPropertySetOrigin.is() )
-            return;
-    }
+    if( m_xPropertySetOrigin.is() )
+        return;
 
     Reference< XPropertySet > xOrig( m_xResultSetOrigin, UNO_QUERY );
 
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        m_xPropertySetOrigin = xOrig;
-        OSL_ENSURE( m_xPropertySetOrigin.is(), "interface XPropertySet is required" );
-    }
+    m_xPropertySetOrigin = xOrig;
+    OSL_ENSURE( m_xPropertySetOrigin.is(), "interface XPropertySet is required" );
 }
 
 void ContentResultSetWrapper::impl_init()
@@ -127,106 +108,90 @@ void ContentResultSetWrapper::impl_deinit()
 }
 
 //virtual
-void ContentResultSetWrapper::impl_initPropertySetInfo()
+void ContentResultSetWrapper::impl_initPropertySetInfo(std::unique_lock<std::mutex>& rGuard)
 {
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        if( m_xPropertySetInfo.is() )
-            return;
+    if( m_xPropertySetInfo.is() )
+        return;
 
-        impl_init_xPropertySetOrigin();
-        if( !m_xPropertySetOrigin.is() )
-            return;
-    }
+    impl_init_xPropertySetOrigin(rGuard);
+    if( !m_xPropertySetOrigin.is() )
+        return;
 
     Reference< XPropertySetInfo > xOrig =
             m_xPropertySetOrigin->getPropertySetInfo();
 
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        m_xPropertySetInfo = xOrig;
-    }
+    m_xPropertySetInfo = xOrig;
 }
 
-void ContentResultSetWrapper::impl_EnsureNotDisposed()
+void ContentResultSetWrapper::impl_EnsureNotDisposed(std::unique_lock<std::mutex>& /*rGuard*/)
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if( m_bDisposed )
         throw DisposedException();
 }
 
-void ContentResultSetWrapper::impl_getPropertyChangeListenerContainer()
+void ContentResultSetWrapper::impl_getPropertyChangeListenerContainer(std::unique_lock<std::mutex>& /*rGuard*/)
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if ( !m_pPropertyChangeListeners )
         m_pPropertyChangeListeners.reset(
-            new PropertyChangeListenerContainer_Impl( m_aContainerMutex ) );
+            new PropertyChangeListenerContainer_Impl() );
 }
 
-void ContentResultSetWrapper::impl_getVetoableChangeListenerContainer()
+void ContentResultSetWrapper::impl_getVetoableChangeListenerContainer(std::unique_lock<std::mutex>& /*rGuard*/)
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if ( !m_pVetoableChangeListeners )
         m_pVetoableChangeListeners.reset(
-            new VetoableChangeListenerContainer_Impl( m_aContainerMutex ) );
+            new VetoableChangeListenerContainer_Impl() );
 }
 
-void ContentResultSetWrapper::impl_notifyPropertyChangeListeners( const PropertyChangeEvent& rEvt )
+void ContentResultSetWrapper::impl_notifyPropertyChangeListeners( std::unique_lock<std::mutex>& rGuard, const PropertyChangeEvent& rEvt )
 {
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        if( !m_pPropertyChangeListeners )
-            return;
-    }
+    if( !m_pPropertyChangeListeners )
+        return;
 
     // Notify listeners interested especially in the changed property.
-    OInterfaceContainerHelper3<XPropertyChangeListener>* pContainer =
-            m_pPropertyChangeListeners->getContainer( rEvt.PropertyName );
+    OInterfaceContainerHelper4<XPropertyChangeListener>* pContainer =
+            m_pPropertyChangeListeners->getContainer( rGuard, rEvt.PropertyName );
     if( pContainer )
     {
-        pContainer->notifyEach( &XPropertyChangeListener::propertyChange, rEvt );
+        pContainer->notifyEach( rGuard, &XPropertyChangeListener::propertyChange, rEvt );
     }
 
     // Notify listeners interested in all properties.
-    pContainer = m_pPropertyChangeListeners->getContainer( OUString() );
+    pContainer = m_pPropertyChangeListeners->getContainer( rGuard, OUString() );
     if( pContainer )
     {
-        pContainer->notifyEach( &XPropertyChangeListener::propertyChange, rEvt );
+        pContainer->notifyEach( rGuard, &XPropertyChangeListener::propertyChange, rEvt );
     }
 }
 
-void ContentResultSetWrapper::impl_notifyVetoableChangeListeners( const PropertyChangeEvent& rEvt )
+void ContentResultSetWrapper::impl_notifyVetoableChangeListeners( std::unique_lock<std::mutex>& rGuard, const PropertyChangeEvent& rEvt )
 {
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        if( !m_pVetoableChangeListeners )
-            return;
-    }
+    if( !m_pVetoableChangeListeners )
+        return;
 
     // Notify listeners interested especially in the changed property.
-    OInterfaceContainerHelper3<XVetoableChangeListener>* pContainer =
-            m_pVetoableChangeListeners->getContainer( rEvt.PropertyName );
+    OInterfaceContainerHelper4<XVetoableChangeListener>* pContainer =
+            m_pVetoableChangeListeners->getContainer( rGuard, rEvt.PropertyName );
     if( pContainer )
     {
-        pContainer->notifyEach( &XVetoableChangeListener::vetoableChange, rEvt );
+        pContainer->notifyEach( rGuard, &XVetoableChangeListener::vetoableChange, rEvt );
     }
 
     // Notify listeners interested in all properties.
-    pContainer = m_pVetoableChangeListeners->getContainer( OUString() );
+    pContainer = m_pVetoableChangeListeners->getContainer( rGuard, OUString() );
     if( pContainer )
     {
-        pContainer->notifyEach( &XVetoableChangeListener::vetoableChange, rEvt );
+        pContainer->notifyEach( rGuard, &XVetoableChangeListener::vetoableChange, rEvt );
     }
 }
 
-bool ContentResultSetWrapper::impl_isForwardOnly()
+bool ContentResultSetWrapper::impl_isForwardOnly(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     //m_nForwardOnly == 2 -> don't know
     //m_nForwardOnly == 1 -> YES
     //m_nForwardOnly == 0 -> NO
 
     //@todo replace this with lines in comment
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_nForwardOnly = 0;
     return false;
 
@@ -293,17 +258,17 @@ css::uno::Any SAL_CALL ContentResultSetWrapper::queryInterface( const css::uno::
 // virtual
 void SAL_CALL ContentResultSetWrapper::dispose()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     bool isCleared = false;
-    osl::ResettableMutexGuard aGuard(m_aMutex);
     if( m_bInDispose || m_bDisposed )
         return;
     m_bInDispose = true;
 
     if( m_xPropertySetOrigin.is() )
     {
-        aGuard.clear();
+        aGuard.unlock();
         isCleared = true;
         try
         {
@@ -331,53 +296,30 @@ void SAL_CALL ContentResultSetWrapper::dispose()
 
     if (isCleared)
     {
-        aGuard.reset();
+        aGuard.lock();
         isCleared = false;
     }
-    if( m_pDisposeEventListeners && m_pDisposeEventListeners->getLength() )
+    if( m_pDisposeEventListeners && m_pDisposeEventListeners->getLength(aGuard) )
     {
         EventObject aEvt;
         aEvt.Source = static_cast< XComponent * >( this );
-
-        aGuard.clear();
-        isCleared = true;
-        m_pDisposeEventListeners->disposeAndClear( aEvt );
+        m_pDisposeEventListeners->disposeAndClear( aGuard, aEvt );
     }
 
-    if (isCleared)
-    {
-        aGuard.reset();
-        isCleared = false;
-    }
     if( m_pPropertyChangeListeners )
     {
         EventObject aEvt;
         aEvt.Source = static_cast< XPropertySet * >( this );
-
-        aGuard.clear();
-        isCleared = true;
-        m_pPropertyChangeListeners->disposeAndClear( aEvt );
+        m_pPropertyChangeListeners->disposeAndClear( aGuard, aEvt );
     }
 
-    if (isCleared)
-    {
-        aGuard.reset();
-        isCleared = false;
-    }
     if( m_pVetoableChangeListeners )
     {
         EventObject aEvt;
         aEvt.Source = static_cast< XPropertySet * >( this );
-
-        aGuard.clear();
-        isCleared = true;
-        m_pVetoableChangeListeners->disposeAndClear( aEvt );
+        m_pVetoableChangeListeners->disposeAndClear( aGuard, aEvt );
     }
 
-    if (isCleared)
-    {
-        aGuard.reset();
-    }
     m_bDisposed = true;
     m_bInDispose = false;
 }
@@ -386,25 +328,25 @@ void SAL_CALL ContentResultSetWrapper::dispose()
 // virtual
 void SAL_CALL ContentResultSetWrapper::addEventListener( const Reference< XEventListener >& Listener )
 {
-    impl_EnsureNotDisposed();
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
+    impl_EnsureNotDisposed(aGuard);
 
     if ( !m_pDisposeEventListeners )
         m_pDisposeEventListeners.reset(
-                    new OInterfaceContainerHelper3<XEventListener>( m_aContainerMutex ) );
+                    new OInterfaceContainerHelper4<XEventListener>() );
 
-    m_pDisposeEventListeners->addInterface( Listener );
+    m_pDisposeEventListeners->addInterface( aGuard, Listener );
 }
 
 
 // virtual
 void SAL_CALL ContentResultSetWrapper::removeEventListener( const Reference< XEventListener >& Listener )
 {
-    impl_EnsureNotDisposed();
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
+    impl_EnsureNotDisposed(aGuard);
 
     if ( m_pDisposeEventListeners )
-        m_pDisposeEventListeners->removeInterface( Listener );
+        m_pDisposeEventListeners->removeInterface( aGuard, Listener );
 }
 
 
@@ -413,7 +355,10 @@ void SAL_CALL ContentResultSetWrapper::removeEventListener( const Reference< XEv
 //virtual
 void SAL_CALL ContentResultSetWrapper::close()
 {
-    impl_EnsureNotDisposed();
+    {
+        std::unique_lock aGuard( m_aMutex );
+        impl_EnsureNotDisposed(aGuard);
+    }
     dispose();
 }
 
@@ -423,9 +368,9 @@ void SAL_CALL ContentResultSetWrapper::close()
 //virtual
 Reference< XResultSetMetaData > SAL_CALL ContentResultSetWrapper::getMetaData()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
-    osl::ResettableMutexGuard aGuard(m_aMutex);
     if( !m_xMetaDataFromOrigin.is() && m_xResultSetOrigin.is() )
     {
         Reference< XResultSetMetaDataSupplier > xMetaDataSupplier(
@@ -433,12 +378,12 @@ Reference< XResultSetMetaData > SAL_CALL ContentResultSetWrapper::getMetaData()
 
         if( xMetaDataSupplier.is() )
         {
-            aGuard.clear();
+            aGuard.unlock();
 
             Reference< XResultSetMetaData > xMetaData
                 = xMetaDataSupplier->getMetaData();
 
-            aGuard.reset();
+            aGuard.lock();
             m_xMetaDataFromOrigin = xMetaData;
         }
     }
@@ -451,21 +396,32 @@ Reference< XResultSetMetaData > SAL_CALL ContentResultSetWrapper::getMetaData()
 // virtual
 Reference< XPropertySetInfo > SAL_CALL ContentResultSetWrapper::getPropertySetInfo()
 {
-    impl_EnsureNotDisposed();
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        if( m_xPropertySetInfo.is() )
-            return m_xPropertySetInfo;
-    }
-    impl_initPropertySetInfo();
+    std::unique_lock aGuard( m_aMutex );
+    return getPropertySetInfoImpl(aGuard);
+}
+
+// virtual
+Reference< XPropertySetInfo > ContentResultSetWrapper::getPropertySetInfoImpl(std::unique_lock<std::mutex>& rGuard)
+{
+    impl_EnsureNotDisposed(rGuard);
+    if( m_xPropertySetInfo.is() )
+        return m_xPropertySetInfo;
+    impl_initPropertySetInfo(rGuard);
     return m_xPropertySetInfo;
 }
 
 // virtual
 void SAL_CALL ContentResultSetWrapper::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
 {
-    impl_EnsureNotDisposed();
-    impl_init_xPropertySetOrigin();
+    std::unique_lock aGuard( m_aMutex );
+    return setPropertyValueImpl(aGuard, rPropertyName, rValue);
+}
+
+// virtual
+void ContentResultSetWrapper::setPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, const OUString& rPropertyName, const Any& rValue )
+{
+    impl_EnsureNotDisposed(rGuard);
+    impl_init_xPropertySetOrigin(rGuard);
     if( !m_xPropertySetOrigin.is() )
     {
         OSL_FAIL( "broadcaster was disposed already" );
@@ -478,8 +434,9 @@ void SAL_CALL ContentResultSetWrapper::setPropertyValue( const OUString& rProper
 // virtual
 Any SAL_CALL ContentResultSetWrapper::getPropertyValue( const OUString& rPropertyName )
 {
-    impl_EnsureNotDisposed();
-    impl_init_xPropertySetOrigin();
+    std::unique_lock aGuard( m_aMutex );
+    impl_EnsureNotDisposed(aGuard);
+    impl_init_xPropertySetOrigin(aGuard);
     if( !m_xPropertySetOrigin.is() )
     {
         OSL_FAIL( "broadcaster was disposed already" );
@@ -492,7 +449,8 @@ Any SAL_CALL ContentResultSetWrapper::getPropertyValue( const OUString& rPropert
 // virtual
 void SAL_CALL ContentResultSetWrapper::addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard( m_aMutex );
+    impl_EnsureNotDisposed(aGuard);
 
     if( !getPropertySetInfo().is() )
     {
@@ -506,20 +464,17 @@ void SAL_CALL ContentResultSetWrapper::addPropertyChangeListener( const OUString
         //throws UnknownPropertyException, if so
     }
 
-    impl_getPropertyChangeListenerContainer();
-    bool bNeedRegister = !m_pPropertyChangeListeners->hasContainedTypes();
-    m_pPropertyChangeListeners->addInterface( aPropertyName, xListener );
+    impl_getPropertyChangeListenerContainer(aGuard);
+    bool bNeedRegister = !m_pPropertyChangeListeners->hasContainedTypes(aGuard);
+    m_pPropertyChangeListeners->addInterface( aGuard, aPropertyName, xListener );
     if( !bNeedRegister )
         return;
 
-    impl_init_xPropertySetOrigin();
+    impl_init_xPropertySetOrigin(aGuard);
+    if( !m_xPropertySetOrigin.is() )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        if( !m_xPropertySetOrigin.is() )
-        {
-            OSL_FAIL( "broadcaster was disposed already" );
-            return;
-        }
+        OSL_FAIL( "broadcaster was disposed already" );
+        return;
     }
     try
     {
@@ -528,7 +483,7 @@ void SAL_CALL ContentResultSetWrapper::addPropertyChangeListener( const OUString
     }
     catch( Exception& )
     {
-        m_pPropertyChangeListeners->removeInterface( aPropertyName, xListener );
+        m_pPropertyChangeListeners->removeInterface( aGuard, aPropertyName, xListener );
         throw;
     }
 }
@@ -537,7 +492,8 @@ void SAL_CALL ContentResultSetWrapper::addPropertyChangeListener( const OUString
 // virtual
 void SAL_CALL ContentResultSetWrapper::addVetoableChangeListener( const OUString& rPropertyName, const Reference< XVetoableChangeListener >& xListener )
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard( m_aMutex );
+    impl_EnsureNotDisposed(aGuard);
 
     if( !getPropertySetInfo().is() )
     {
@@ -550,15 +506,14 @@ void SAL_CALL ContentResultSetWrapper::addVetoableChangeListener( const OUString
         //throws UnknownPropertyException, if so
     }
 
-    impl_getVetoableChangeListenerContainer();
-    bool bNeedRegister = !m_pVetoableChangeListeners->hasContainedTypes();
-    m_pVetoableChangeListeners->addInterface( rPropertyName, xListener );
+    impl_getVetoableChangeListenerContainer(aGuard);
+    bool bNeedRegister = !m_pVetoableChangeListeners->hasContainedTypes(aGuard);
+    m_pVetoableChangeListeners->addInterface( aGuard, rPropertyName, xListener );
     if( !bNeedRegister )
         return;
 
-    impl_init_xPropertySetOrigin();
+    impl_init_xPropertySetOrigin(aGuard);
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( !m_xPropertySetOrigin.is() )
         {
             OSL_FAIL( "broadcaster was disposed already" );
@@ -572,7 +527,7 @@ void SAL_CALL ContentResultSetWrapper::addVetoableChangeListener( const OUString
     }
     catch( Exception& )
     {
-        m_pVetoableChangeListeners->removeInterface( rPropertyName, xListener );
+        m_pVetoableChangeListeners->removeInterface( aGuard, rPropertyName, xListener );
         throw;
     }
 }
@@ -581,16 +536,15 @@ void SAL_CALL ContentResultSetWrapper::addVetoableChangeListener( const OUString
 // virtual
 void SAL_CALL ContentResultSetWrapper::removePropertyChangeListener( const OUString& rPropertyName, const Reference< XPropertyChangeListener >& xListener )
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard( m_aMutex );
+    impl_EnsureNotDisposed(aGuard);
 
-    {
-        //noop, if no listener registered
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        if( !m_pPropertyChangeListeners )
-            return;
-    }
-    OInterfaceContainerHelper3<XPropertyChangeListener>* pContainer =
-        m_pPropertyChangeListeners->getContainer( rPropertyName );
+    //noop, if no listener registered
+    if( !m_pPropertyChangeListeners )
+        return;
+
+    OInterfaceContainerHelper4<XPropertyChangeListener>* pContainer =
+        m_pPropertyChangeListeners->getContainer( aGuard, rPropertyName );
 
     if( !pContainer )
     {
@@ -605,19 +559,16 @@ void SAL_CALL ContentResultSetWrapper::removePropertyChangeListener( const OUStr
         return; //the listener was not registered
     }
 
-    m_pPropertyChangeListeners->removeInterface( rPropertyName, xListener );
+    m_pPropertyChangeListeners->removeInterface( aGuard, rPropertyName, xListener );
 
-    if( m_pPropertyChangeListeners->hasContainedTypes() )
+    if( m_pPropertyChangeListeners->hasContainedTypes(aGuard) )
         return;
 
-    impl_init_xPropertySetOrigin();
+    impl_init_xPropertySetOrigin(aGuard);
+    if( !m_xPropertySetOrigin.is() )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        if( !m_xPropertySetOrigin.is() )
-        {
-            OSL_FAIL( "broadcaster was disposed already" );
-            return;
-        }
+        OSL_FAIL( "broadcaster was disposed already" );
+        return;
     }
     try
     {
@@ -634,16 +585,14 @@ void SAL_CALL ContentResultSetWrapper::removePropertyChangeListener( const OUStr
 // virtual
 void SAL_CALL ContentResultSetWrapper::removeVetoableChangeListener( const OUString& rPropertyName, const Reference< XVetoableChangeListener >& xListener )
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard( m_aMutex );
+    impl_EnsureNotDisposed(aGuard);
 
-    {
-        //noop, if no listener registered
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        if( !m_pVetoableChangeListeners )
-            return;
-    }
-    OInterfaceContainerHelper3<XVetoableChangeListener>* pContainer =
-        m_pVetoableChangeListeners->getContainer( rPropertyName );
+    //noop, if no listener registered
+    if( !m_pVetoableChangeListeners )
+        return;
+    OInterfaceContainerHelper4<XVetoableChangeListener>* pContainer =
+        m_pVetoableChangeListeners->getContainer( aGuard, rPropertyName );
 
     if( !pContainer )
     {
@@ -658,19 +607,16 @@ void SAL_CALL ContentResultSetWrapper::removeVetoableChangeListener( const OUStr
         return; //the listener was not registered
     }
 
-    m_pVetoableChangeListeners->removeInterface( rPropertyName, xListener );
+    m_pVetoableChangeListeners->removeInterface( aGuard, rPropertyName, xListener );
 
-    if( m_pVetoableChangeListeners->hasContainedTypes() )
+    if( m_pVetoableChangeListeners->hasContainedTypes(aGuard) )
         return;
 
-    impl_init_xPropertySetOrigin();
+    impl_init_xPropertySetOrigin(aGuard);
+    if( !m_xPropertySetOrigin.is() )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        if( !m_xPropertySetOrigin.is() )
-        {
-            OSL_FAIL( "broadcaster was disposed already" );
-            return;
-        }
+        OSL_FAIL( "broadcaster was disposed already" );
+        return;
     }
     try
     {
@@ -687,12 +633,12 @@ void SAL_CALL ContentResultSetWrapper::removeVetoableChangeListener( const OUStr
 // own methods.
 
 
-//virtual
+//virtual, only called from ContentResultSetWrapperListener
 void ContentResultSetWrapper::impl_disposing( const EventObject& )
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
 
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    impl_EnsureNotDisposed(aGuard);
 
     if( !m_xResultSetOrigin.is() )
         return;
@@ -710,27 +656,30 @@ void ContentResultSetWrapper::impl_disposing( const EventObject& )
         m_xPropertySetInfo.clear();
 }
 
-//virtual
+//virtual, only called from ContentResultSetWrapperListener
 void ContentResultSetWrapper::impl_propertyChange( const PropertyChangeEvent& rEvt )
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+
+    impl_EnsureNotDisposed(aGuard);
 
     PropertyChangeEvent aEvt( rEvt );
     aEvt.Source = static_cast< XPropertySet * >( this );
     aEvt.Further = false;
-    impl_notifyPropertyChangeListeners( aEvt );
+    impl_notifyPropertyChangeListeners( aGuard, aEvt );
 }
 
-//virtual
+//virtual, only called from ContentResultSetWrapperListener
 void ContentResultSetWrapper::impl_vetoableChange( const PropertyChangeEvent& rEvt )
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     PropertyChangeEvent aEvt( rEvt );
     aEvt.Source = static_cast< XPropertySet * >( this );
     aEvt.Further = false;
 
-    impl_notifyVetoableChangeListeners( aEvt );
+    impl_notifyVetoableChangeListeners( aGuard, aEvt );
 }
 
 
@@ -740,8 +689,14 @@ void ContentResultSetWrapper::impl_vetoableChange( const PropertyChangeEvent& rE
 // virtual
 OUString SAL_CALL ContentResultSetWrapper::queryContentIdentifierString()
 {
-    impl_EnsureNotDisposed();
-    impl_init_xContentAccessOrigin();
+    std::unique_lock aGuard(m_aMutex);
+    return queryContentIdentifierStringImpl(aGuard);
+}
+// virtual
+OUString ContentResultSetWrapper::queryContentIdentifierStringImpl(std::unique_lock<std::mutex>& rGuard)
+{
+    impl_EnsureNotDisposed(rGuard);
+    impl_init_xContentAccessOrigin(rGuard);
     if( !m_xContentAccessOrigin.is() )
     {
         OSL_FAIL( "broadcaster was disposed already" );
@@ -754,8 +709,9 @@ OUString SAL_CALL ContentResultSetWrapper::queryContentIdentifierString()
 // virtual
 Reference< XContentIdentifier > SAL_CALL ContentResultSetWrapper::queryContentIdentifier()
 {
-    impl_EnsureNotDisposed();
-    impl_init_xContentAccessOrigin();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
+    impl_init_xContentAccessOrigin(aGuard);
     if( !m_xContentAccessOrigin.is() )
     {
         OSL_FAIL( "broadcaster was disposed already" );
@@ -768,8 +724,9 @@ Reference< XContentIdentifier > SAL_CALL ContentResultSetWrapper::queryContentId
 // virtual
 Reference< XContent > SAL_CALL ContentResultSetWrapper::queryContent()
 {
-    impl_EnsureNotDisposed();
-    impl_init_xContentAccessOrigin();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
+    impl_init_xContentAccessOrigin(aGuard);
     if( !m_xContentAccessOrigin.is() )
     {
         OSL_FAIL( "broadcaster was disposed already" );
@@ -785,7 +742,8 @@ Reference< XContent > SAL_CALL ContentResultSetWrapper::queryContent()
 
 sal_Bool SAL_CALL ContentResultSetWrapper::next()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     if( !m_xResultSetOrigin.is() )
     {
@@ -798,7 +756,8 @@ sal_Bool SAL_CALL ContentResultSetWrapper::next()
 //virtual
 sal_Bool SAL_CALL ContentResultSetWrapper::previous()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     if( !m_xResultSetOrigin.is() )
     {
@@ -811,7 +770,8 @@ sal_Bool SAL_CALL ContentResultSetWrapper::previous()
 //virtual
 sal_Bool SAL_CALL ContentResultSetWrapper::absolute( sal_Int32 row )
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     if( !m_xResultSetOrigin.is() )
     {
@@ -824,7 +784,8 @@ sal_Bool SAL_CALL ContentResultSetWrapper::absolute( sal_Int32 row )
 //virtual
 sal_Bool SAL_CALL ContentResultSetWrapper::relative( sal_Int32 rows )
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     if( !m_xResultSetOrigin.is() )
     {
@@ -838,7 +799,8 @@ sal_Bool SAL_CALL ContentResultSetWrapper::relative( sal_Int32 rows )
 //virtual
 sal_Bool SAL_CALL ContentResultSetWrapper::first()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     if( !m_xResultSetOrigin.is() )
     {
@@ -851,7 +813,8 @@ sal_Bool SAL_CALL ContentResultSetWrapper::first()
 //virtual
 sal_Bool SAL_CALL ContentResultSetWrapper::last()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     if( !m_xResultSetOrigin.is() )
     {
@@ -864,7 +827,8 @@ sal_Bool SAL_CALL ContentResultSetWrapper::last()
 //virtual
 void SAL_CALL ContentResultSetWrapper::beforeFirst()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     if( !m_xResultSetOrigin.is() )
     {
@@ -877,7 +841,8 @@ void SAL_CALL ContentResultSetWrapper::beforeFirst()
 //virtual
 void SAL_CALL ContentResultSetWrapper::afterLast()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     if( !m_xResultSetOrigin.is() )
     {
@@ -890,7 +855,8 @@ void SAL_CALL ContentResultSetWrapper::afterLast()
 //virtual
 sal_Bool SAL_CALL ContentResultSetWrapper::isAfterLast()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     if( !m_xResultSetOrigin.is() )
     {
@@ -903,7 +869,8 @@ sal_Bool SAL_CALL ContentResultSetWrapper::isAfterLast()
 //virtual
 sal_Bool SAL_CALL ContentResultSetWrapper::isBeforeFirst()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     if( !m_xResultSetOrigin.is() )
     {
@@ -916,7 +883,8 @@ sal_Bool SAL_CALL ContentResultSetWrapper::isBeforeFirst()
 //virtual
 sal_Bool SAL_CALL ContentResultSetWrapper::isFirst()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     if( !m_xResultSetOrigin.is() )
     {
@@ -929,7 +897,8 @@ sal_Bool SAL_CALL ContentResultSetWrapper::isFirst()
 //virtual
 sal_Bool SAL_CALL ContentResultSetWrapper::isLast()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     if( !m_xResultSetOrigin.is() )
     {
@@ -943,7 +912,8 @@ sal_Bool SAL_CALL ContentResultSetWrapper::isLast()
 //virtual
 sal_Int32 SAL_CALL ContentResultSetWrapper::getRow()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     if( !m_xResultSetOrigin.is() )
     {
@@ -956,7 +926,8 @@ sal_Int32 SAL_CALL ContentResultSetWrapper::getRow()
 //virtual
 void SAL_CALL ContentResultSetWrapper::refreshRow()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     if( !m_xResultSetOrigin.is() )
     {
@@ -969,7 +940,8 @@ void SAL_CALL ContentResultSetWrapper::refreshRow()
 //virtual
 sal_Bool SAL_CALL ContentResultSetWrapper::rowUpdated()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     if( !m_xResultSetOrigin.is() )
     {
@@ -982,7 +954,8 @@ sal_Bool SAL_CALL ContentResultSetWrapper::rowUpdated()
 //virtual
 sal_Bool SAL_CALL ContentResultSetWrapper::rowInserted()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     if( !m_xResultSetOrigin.is() )
     {
@@ -995,7 +968,8 @@ sal_Bool SAL_CALL ContentResultSetWrapper::rowInserted()
 //virtual
 sal_Bool SAL_CALL ContentResultSetWrapper::rowDeleted()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     if( !m_xResultSetOrigin.is() )
     {
@@ -1008,7 +982,8 @@ sal_Bool SAL_CALL ContentResultSetWrapper::rowDeleted()
 //virtual
 Reference< XInterface > SAL_CALL ContentResultSetWrapper::getStatement()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
     //@todo ?return anything
     return Reference< XInterface >();
 }
@@ -1019,8 +994,9 @@ Reference< XInterface > SAL_CALL ContentResultSetWrapper::getStatement()
 
 void ContentResultSetWrapper::verifyGet()
 {
-    impl_EnsureNotDisposed();
-    impl_init_xRowOrigin();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
+    impl_init_xRowOrigin(aGuard);
     if( !m_xRowOrigin.is() )
     {
         OSL_FAIL( "broadcaster was disposed already" );
@@ -1031,8 +1007,9 @@ void ContentResultSetWrapper::verifyGet()
 //virtual
 sal_Bool SAL_CALL ContentResultSetWrapper::wasNull()
 {
-    impl_EnsureNotDisposed();
-    impl_init_xRowOrigin();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
+    impl_init_xRowOrigin(aGuard);
     if( !m_xRowOrigin.is() )
     {
         OSL_FAIL( "broadcaster was disposed already" );
@@ -1145,8 +1122,9 @@ Any SAL_CALL ContentResultSetWrapper::getObject( sal_Int32 columnIndex, const Re
     //if you change this macro please pay attention to
     //define XROW_GETXXX, where this is similar implemented
 
-    impl_EnsureNotDisposed();
-    impl_init_xRowOrigin();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
+    impl_init_xRowOrigin(aGuard);
     if( !m_xRowOrigin.is() )
     {
         OSL_FAIL( "broadcaster was disposed already" );

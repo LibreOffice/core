@@ -54,14 +54,13 @@ using namespace cppu;
 template<typename T> T CachedContentResultSet::rowOriginGet(
     T (SAL_CALL css::sdbc::XRow::* f)(sal_Int32), sal_Int32 columnIndex)
 {
-    impl_EnsureNotDisposed();
-    osl::ResettableMutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
     sal_Int32 nRow = m_nRow;
     sal_Int32 nFetchSize = m_nFetchSize;
     sal_Int32 nFetchDirection = m_nFetchDirection;
     if( !m_aCache.hasRow( nRow ) )
     {
-        bool isCleared = false;
         if( !m_aCache.hasCausedException( nRow ) )
         {
             if( !m_xFetchProvider.is() )
@@ -69,23 +68,17 @@ template<typename T> T CachedContentResultSet::rowOriginGet(
                 OSL_FAIL( "broadcaster was disposed already" );
                 throw SQLException();
             }
-            aGuard.clear();
-            isCleared = true;
-            if( impl_isForwardOnly() )
-                applyPositionToOrigin( nRow );
+            if( impl_isForwardOnly(aGuard) )
+                applyPositionToOrigin( aGuard, nRow );
 
-            impl_fetchData( nRow, nFetchSize, nFetchDirection );
-        }
-        if (isCleared)
-        {
-            aGuard.reset();
+            impl_fetchData( aGuard, nRow, nFetchSize, nFetchDirection );
         }
         if( !m_aCache.hasRow( nRow ) )
         {
             m_bLastReadWasFromCache = false;
-            aGuard.clear();
-            applyPositionToOrigin( nRow );
-            impl_init_xRowOrigin();
+            applyPositionToOrigin( aGuard, nRow );
+            impl_init_xRowOrigin(aGuard);
+            aGuard.unlock();
             return (m_xRowOrigin.get()->*f)( columnIndex );
         }
     }
@@ -96,7 +89,7 @@ template<typename T> T CachedContentResultSet::rowOriginGet(
     /* Last chance. Try type converter service... */
     if ( m_bLastCachedReadWasNull && rValue.hasValue() )
     {
-        Reference< XTypeConverter > xConverter = getTypeConverter();
+        Reference< XTypeConverter > xConverter = getTypeConverter(aGuard);
         if ( xConverter.is() )
         {
             try
@@ -665,9 +658,9 @@ CachedContentResultSet::~CachedContentResultSet()
 
 
 bool CachedContentResultSet
-    ::applyPositionToOrigin( sal_Int32 nRow )
+    ::applyPositionToOrigin( std::unique_lock<std::mutex>& rGuard, sal_Int32 nRow )
 {
-    impl_EnsureNotDisposed();
+    impl_EnsureNotDisposed(rGuard);
 
     /**
     @returns
@@ -675,7 +668,6 @@ bool CachedContentResultSet
         the result set.
     */
 
-    osl::ResettableMutexGuard aGuard(m_aMutex);
     OSL_ENSURE( nRow >= 0, "only positive values supported" );
     if( !m_xResultSetOrigin.is() )
     {
@@ -689,7 +681,7 @@ bool CachedContentResultSet
     bool bAfterLast = m_bAfterLast;
     sal_Int32 nForwardOnly = m_nForwardOnly;
 
-    aGuard.clear();
+    rGuard.unlock();
 
     if( bAfterLastApplied || nLastAppliedPos != nRow )
     {
@@ -706,7 +698,7 @@ bool CachedContentResultSet
                     break;
             }
 
-            aGuard.reset();
+            rGuard.lock();
             m_nLastAppliedPos += nM;
             m_bAfterLastApplied = nRow != m_nLastAppliedPos;
             return nRow == m_nLastAppliedPos;
@@ -716,7 +708,7 @@ bool CachedContentResultSet
         {
             m_xResultSetOrigin->beforeFirst();
 
-            aGuard.reset();
+            rGuard.lock();
             m_nLastAppliedPos = 0;
             m_bAfterLastApplied = false;
             return false;
@@ -729,7 +721,7 @@ bool CachedContentResultSet
             {
                 bool bValid = m_xResultSetOrigin->absolute( nRow );
 
-                aGuard.reset();
+                rGuard.lock();
                 m_nLastAppliedPos = nRow;
                 m_bAfterLastApplied = !bValid;
                 return bValid;
@@ -738,7 +730,7 @@ bool CachedContentResultSet
             {
                 bool bValid = m_xResultSetOrigin->relative( nRow - nLastAppliedPos );
 
-                aGuard.reset();
+                rGuard.lock();
                 m_nLastAppliedPos += ( nRow - nLastAppliedPos );
                 m_bAfterLastApplied = !bValid;
                 return bValid;
@@ -746,7 +738,8 @@ bool CachedContentResultSet
         }
         catch (const SQLException&)
         {
-            if( !bAfterLastApplied && !bAfterLast && nRow > nLastAppliedPos && impl_isForwardOnly() )
+            rGuard.lock();
+            if( !bAfterLastApplied && !bAfterLast && nRow > nLastAppliedPos && impl_isForwardOnly(rGuard) )
             {
                 sal_Int32 nN = nRow - nLastAppliedPos;
                 sal_Int32 nM;
@@ -756,7 +749,6 @@ bool CachedContentResultSet
                         break;
                 }
 
-                aGuard.reset();
                 m_nLastAppliedPos += nM;
                 m_bAfterLastApplied = nRow != m_nLastAppliedPos;
             }
@@ -778,27 +770,25 @@ bool bDirection = !!(                                           \
     nFetchDirection != FetchDirection::REVERSE );                   \
 FetchResult aResult =                                               \
     fetchInterface->fetchMethod( nRow, nFetchSize, bDirection );    \
-osl::ClearableGuard< osl::Mutex > aGuard2( m_aMutex );              \
 aCache.loadData( aResult );                                         \
 sal_Int32 nMax = aCache.getMaxRow();                                \
 sal_Int32 nCurCount = m_nKnownCount;                                \
 bool bIsFinalCount = aCache.hasKnownLast();                     \
 bool bCurIsFinalCount = m_bFinalCount;                          \
-aGuard2.clear();                                                    \
 if( nMax > nCurCount )                                              \
-    impl_changeRowCount( nCurCount, nMax );                         \
+    impl_changeRowCount( rGuard, nCurCount, nMax );                         \
 if( bIsFinalCount && !bCurIsFinalCount )                            \
-    impl_changeIsRowCountFinal( bCurIsFinalCount, bIsFinalCount );
+    impl_changeIsRowCountFinal( rGuard, bCurIsFinalCount, bIsFinalCount );
 
 void CachedContentResultSet
-    ::impl_fetchData( sal_Int32 nRow
+    ::impl_fetchData( std::unique_lock<std::mutex>& rGuard, sal_Int32 nRow
         , sal_Int32 nFetchSize, sal_Int32 nFetchDirection )
 {
     FETCH_XXX( m_aCache, m_xFetchProvider, fetch );
 }
 
 void CachedContentResultSet
-    ::impl_changeRowCount( sal_Int32 nOld, sal_Int32 nNew )
+    ::impl_changeRowCount( std::unique_lock<std::mutex>& rGuard, sal_Int32 nOld, sal_Int32 nNew )
 {
     OSL_ENSURE( nNew > nOld, "RowCount only can grow" );
     if( nNew <= nOld )
@@ -806,22 +796,19 @@ void CachedContentResultSet
 
     //create PropertyChangeEvent and set value
     PropertyChangeEvent aEvt;
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        aEvt.Source =  static_cast< XPropertySet * >( this );
-        aEvt.Further = false;
-        aEvt.OldValue <<= nOld;
-        aEvt.NewValue <<= nNew;
+    aEvt.Source =  static_cast< XPropertySet * >( this );
+    aEvt.Further = false;
+    aEvt.OldValue <<= nOld;
+    aEvt.NewValue <<= nNew;
 
-        m_nKnownCount = nNew;
-    }
+    m_nKnownCount = nNew;
 
     //send PropertyChangeEvent to listeners
-    impl_notifyPropertyChangeListeners( aEvt );
+    impl_notifyPropertyChangeListeners( rGuard, aEvt );
 }
 
 void CachedContentResultSet
-    ::impl_changeIsRowCountFinal( bool bOld, bool bNew )
+    ::impl_changeIsRowCountFinal( std::unique_lock<std::mutex>& rGuard, bool bOld, bool bNew )
 {
     OSL_ENSURE( !bOld && bNew, "This change is not allowed for IsRowCountFinal" );
     if( bOld || !bNew )
@@ -829,29 +816,26 @@ void CachedContentResultSet
 
     //create PropertyChangeEvent and set value
     PropertyChangeEvent aEvt;
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        aEvt.Source =  static_cast< XPropertySet * >( this );
-        aEvt.Further = false;
-        aEvt.OldValue <<= bOld;
-        aEvt.NewValue <<= bNew;
+    aEvt.Source =  static_cast< XPropertySet * >( this );
+    aEvt.Further = false;
+    aEvt.OldValue <<= bOld;
+    aEvt.NewValue <<= bNew;
 
-        m_bFinalCount = bNew;
-    }
+    m_bFinalCount = bNew;
 
     //send PropertyChangeEvent to listeners
-    impl_notifyPropertyChangeListeners( aEvt );
+    impl_notifyPropertyChangeListeners( rGuard, aEvt );
 }
 
 bool CachedContentResultSet
-    ::impl_isKnownValidPosition( sal_Int32 nRow ) const
+    ::impl_isKnownValidPosition( std::unique_lock<std::mutex>& /*rGuard*/, sal_Int32 nRow ) const
 {
     return m_nKnownCount && nRow
             && nRow <= m_nKnownCount;
 }
 
 bool CachedContentResultSet
-    ::impl_isKnownInvalidPosition( sal_Int32 nRow ) const
+    ::impl_isKnownInvalidPosition( std::unique_lock<std::mutex>& /*rGuard*/, sal_Int32 nRow ) const
 {
     if( !nRow )
         return true;
@@ -863,11 +847,10 @@ bool CachedContentResultSet
 
 //virtual
 void CachedContentResultSet
-    ::impl_initPropertySetInfo()
+    ::impl_initPropertySetInfo(std::unique_lock<std::mutex>& rGuard)
 {
-    ContentResultSetWrapper::impl_initPropertySetInfo();
+    ContentResultSetWrapper::impl_initPropertySetInfo(rGuard);
 
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if( m_xMyPropertySetInfo.is() )
         return;
     m_xMyPropertySetInfo = new CCRS_PropertySetInfo( m_xPropertySetInfo );
@@ -948,12 +931,12 @@ css::uno::Sequence< OUString > SAL_CALL CachedContentResultSet::getSupportedServ
 
 
 // virtual
-void SAL_CALL CachedContentResultSet
-    ::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
+void CachedContentResultSet
+    ::setPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, const OUString& aPropertyName, const Any& aValue )
 {
-    impl_EnsureNotDisposed();
+    impl_EnsureNotDisposed(rGuard);
 
-    if( !getPropertySetInfo().is() )
+    if( !getPropertySetInfoImpl(rGuard).is() )
     {
         OSL_FAIL( "broadcaster was disposed already" );
         throw UnknownPropertyException();
@@ -988,21 +971,18 @@ void SAL_CALL CachedContentResultSet
 
         //create PropertyChangeEvent and set value
         PropertyChangeEvent aEvt;
-        {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
-            aEvt.Source =  static_cast< XPropertySet * >( this );
-            aEvt.PropertyName = aPropertyName;
-            aEvt.Further = false;
-            aEvt.PropertyHandle = m_xMyPropertySetInfo->
-                                    m_nFetchDirectionPropertyHandle;
-            aEvt.OldValue <<= m_nFetchDirection;
-            aEvt.NewValue <<= nNew;
+        aEvt.Source =  static_cast< XPropertySet * >( this );
+        aEvt.PropertyName = aPropertyName;
+        aEvt.Further = false;
+        aEvt.PropertyHandle = m_xMyPropertySetInfo->
+                                m_nFetchDirectionPropertyHandle;
+        aEvt.OldValue <<= m_nFetchDirection;
+        aEvt.NewValue <<= nNew;
 
-            m_nFetchDirection = nNew;
-        }
+        m_nFetchDirection = nNew;
 
         //send PropertyChangeEvent to listeners
-        impl_notifyPropertyChangeListeners( aEvt );
+        impl_notifyPropertyChangeListeners( rGuard, aEvt );
     }
     else if( aProp.Name == g_sPropertyNameForFetchSize )
     {
@@ -1020,32 +1000,26 @@ void SAL_CALL CachedContentResultSet
 
         //create PropertyChangeEvent and set value
         PropertyChangeEvent aEvt;
-        {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
-            aEvt.Source =  static_cast< XPropertySet * >( this );
-            aEvt.PropertyName = aPropertyName;
-            aEvt.Further = false;
-            aEvt.PropertyHandle = m_xMyPropertySetInfo->
-                                    m_nFetchSizePropertyHandle;
-            aEvt.OldValue <<= m_nFetchSize;
-            aEvt.NewValue <<= nNew;
+        aEvt.Source =  static_cast< XPropertySet * >( this );
+        aEvt.PropertyName = aPropertyName;
+        aEvt.Further = false;
+        aEvt.PropertyHandle = m_xMyPropertySetInfo->
+                                m_nFetchSizePropertyHandle;
+        aEvt.OldValue <<= m_nFetchSize;
+        aEvt.NewValue <<= nNew;
 
-            m_nFetchSize = nNew;
-        }
+        m_nFetchSize = nNew;
 
         //send PropertyChangeEvent to listeners
-        impl_notifyPropertyChangeListeners( aEvt );
+        impl_notifyPropertyChangeListeners( rGuard, aEvt );
     }
     else
     {
-        impl_init_xPropertySetOrigin();
+        impl_init_xPropertySetOrigin(rGuard);
+        if( !m_xPropertySetOrigin.is() )
         {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
-            if( !m_xPropertySetOrigin.is() )
-            {
-                OSL_FAIL( "broadcaster was disposed already" );
-                return;
-            }
+            OSL_FAIL( "broadcaster was disposed already" );
+            return;
         }
         m_xPropertySetOrigin->setPropertyValue( aPropertyName, aValue );
     }
@@ -1056,9 +1030,10 @@ void SAL_CALL CachedContentResultSet
 Any SAL_CALL CachedContentResultSet
     ::getPropertyValue( const OUString& rPropertyName )
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
-    if( !getPropertySetInfo().is() )
+    if( !getPropertySetInfoImpl(aGuard).is() )
     {
         OSL_FAIL( "broadcaster was disposed already" );
         throw UnknownPropertyException();
@@ -1070,35 +1045,29 @@ Any SAL_CALL CachedContentResultSet
     Any aValue;
     if( rPropertyName == g_sPropertyNameForCount )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         aValue <<= m_nKnownCount;
     }
     else if( rPropertyName == g_sPropertyNameForFinalCount )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         aValue <<= m_bFinalCount;
     }
     else if( rPropertyName == g_sPropertyNameForFetchSize )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         aValue <<= m_nFetchSize;
     }
     else if( rPropertyName == g_sPropertyNameForFetchDirection )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         aValue <<= m_nFetchDirection;
     }
     else
     {
-        impl_init_xPropertySetOrigin();
+        impl_init_xPropertySetOrigin(aGuard);
+        if( !m_xPropertySetOrigin.is() )
         {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
-            if( !m_xPropertySetOrigin.is() )
-            {
-                OSL_FAIL( "broadcaster was disposed already" );
-                throw UnknownPropertyException();
-            }
+            OSL_FAIL( "broadcaster was disposed already" );
+            throw UnknownPropertyException();
         }
+        aGuard.unlock();
         aValue = m_xPropertySetOrigin->getPropertyValue( rPropertyName );
     }
     return aValue;
@@ -1108,13 +1077,13 @@ Any SAL_CALL CachedContentResultSet
 // own methods.  ( inherited )
 
 
-//virtual
+//virtual, only called from ContentResultSetWrapperListener
 void CachedContentResultSet
     ::impl_disposing( const EventObject& rEventObject )
 {
     {
-        impl_EnsureNotDisposed();
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard(m_aMutex);
+        impl_EnsureNotDisposed(aGuard);
         //release all references to the broadcaster:
         m_xFetchProvider.clear();
         m_xFetchProviderForContentAccess.clear();
@@ -1122,11 +1091,12 @@ void CachedContentResultSet
     ContentResultSetWrapper::impl_disposing( rEventObject );
 }
 
-//virtual
+//virtual, only called from ContentResultSetWrapperListener
 void CachedContentResultSet
     ::impl_propertyChange( const PropertyChangeEvent& rEvt )
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     PropertyChangeEvent aEvt( rEvt );
     aEvt.Source = static_cast< XPropertySet * >( this );
@@ -1153,7 +1123,7 @@ void CachedContentResultSet
                 return;
             }
 
-            impl_changeRowCount( m_nKnownCount, nNew );
+            impl_changeRowCount( aGuard, m_nKnownCount, nNew );
         }
         else if( aEvt.PropertyName == g_sPropertyNameForFinalCount )
         {//IsRowCountFinal changed
@@ -1165,21 +1135,22 @@ void CachedContentResultSet
                 OSL_FAIL( "PropertyChangeEvent contains wrong data" );
                 return;
             }
-            impl_changeIsRowCountFinal( m_bFinalCount, bNew );
+            impl_changeIsRowCountFinal( aGuard, m_bFinalCount, bNew );
         }
         return;
     }
 
 
-    impl_notifyPropertyChangeListeners( aEvt );
+    impl_notifyPropertyChangeListeners( aGuard, aEvt );
 }
 
 
-//virtual
+//virtual, only called from ContentResultSetWrapperListener
 void CachedContentResultSet
     ::impl_vetoableChange( const PropertyChangeEvent& rEvt )
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     //don't notify events on my properties, cause they are not vetoable
     if( CCRS_PropertySetInfo
@@ -1193,7 +1164,7 @@ void CachedContentResultSet
     aEvt.Source = static_cast< XPropertySet * >( this );
     aEvt.Further = false;
 
-    impl_notifyVetoableChangeListeners( aEvt );
+    impl_notifyVetoableChangeListeners( aGuard, aEvt );
 }
 
 
@@ -1201,8 +1172,7 @@ void CachedContentResultSet
 
 
 #define XCONTENTACCESS_queryXXX( queryXXX, XXX, TYPE )      \
-impl_EnsureNotDisposed();                                   \
-osl::ResettableMutexGuard aGuard(m_aMutex);                 \
+impl_EnsureNotDisposed(rGuard);                                   \
 sal_Int32 nRow = m_nRow;                                    \
 sal_Int32 nFetchSize = m_nFetchSize;                        \
 sal_Int32 nFetchDirection = m_nFetchDirection;              \
@@ -1210,7 +1180,6 @@ if( !m_aCache##XXX.hasRow( nRow ) )                         \
 {                                                           \
     try                                                     \
     {                                                       \
-        bool isCleared = false;                             \
         if( !m_aCache##XXX.hasCausedException( nRow ) )     \
         {                                                   \
             if( !m_xFetchProviderForContentAccess.is() )    \
@@ -1218,22 +1187,15 @@ if( !m_aCache##XXX.hasRow( nRow ) )                         \
                 OSL_FAIL( "broadcaster was disposed already" ); \
                 throw RuntimeException();                   \
             }                                               \
-            aGuard.clear();                                 \
-            isCleared = true;                               \
-            if( impl_isForwardOnly() )                      \
-                applyPositionToOrigin( nRow );              \
+            if( impl_isForwardOnly(rGuard) )                      \
+                applyPositionToOrigin( rGuard, nRow );              \
                                                             \
             FETCH_XXX( m_aCache##XXX, m_xFetchProviderForContentAccess, fetch##XXX##s ); \
         }                                                   \
-        if (isCleared)                                      \
-        {                                                   \
-            aGuard.reset();                                 \
-        }                                                   \
         if( !m_aCache##XXX.hasRow( nRow ) )                 \
         {                                                   \
-            aGuard.clear();                                 \
-            applyPositionToOrigin( nRow );                  \
-            TYPE aRet = ContentResultSetWrapper::queryXXX();\
+            applyPositionToOrigin( rGuard, nRow );                  \
+            TYPE aRet = ContentResultSetWrapper::query##XXX();\
             if( m_xContentIdentifierMapping.is() )          \
                 return m_xContentIdentifierMapping->map##XXX( aRet );\
             return aRet;                                    \
@@ -1254,8 +1216,8 @@ if( !m_aCache##XXX.hasRow( nRow ) )                         \
 return m_aCache##XXX.get##XXX( nRow );
 
 // virtual
-OUString SAL_CALL CachedContentResultSet
-    ::queryContentIdentifierString()
+OUString CachedContentResultSet
+    ::queryContentIdentifierStringImpl(std::unique_lock<std::mutex>& rGuard)
 {
     XCONTENTACCESS_queryXXX( queryContentIdentifierString, ContentIdentifierString, OUString )
 }
@@ -1265,6 +1227,7 @@ OUString SAL_CALL CachedContentResultSet
 Reference< XContentIdentifier > SAL_CALL CachedContentResultSet
     ::queryContentIdentifier()
 {
+    std::unique_lock rGuard(m_aMutex);
     XCONTENTACCESS_queryXXX( queryContentIdentifier, ContentIdentifier, Reference< XContentIdentifier > )
 }
 
@@ -1273,6 +1236,7 @@ Reference< XContentIdentifier > SAL_CALL CachedContentResultSet
 Reference< XContent > SAL_CALL CachedContentResultSet
     ::queryContent()
 {
+    std::unique_lock rGuard(m_aMutex);
     XCONTENTACCESS_queryXXX( queryContent, Content, Reference< XContent > )
 }
 
@@ -1284,24 +1248,24 @@ Reference< XContent > SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::next()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
-    osl::ResettableMutexGuard aGuard(m_aMutex);
     //after last
     if( m_bAfterLast )
         return false;
     //last
-    aGuard.clear();
+    aGuard.unlock();
     if( isLast() )
     {
-        aGuard.reset();
+        aGuard.lock();
         m_nRow++;
         m_bAfterLast = true;
         return false;
     }
-    aGuard.reset();
+    aGuard.lock();
     //known valid position
-    if( impl_isKnownValidPosition( m_nRow + 1 ) )
+    if( impl_isKnownValidPosition( aGuard, m_nRow + 1 ) )
     {
         m_nRow++;
         return true;
@@ -1309,11 +1273,9 @@ sal_Bool SAL_CALL CachedContentResultSet
 
     //unknown position
     sal_Int32 nRow = m_nRow;
-    aGuard.clear();
 
-    bool bValid = applyPositionToOrigin( nRow + 1 );
+    bool bValid = applyPositionToOrigin( aGuard, nRow + 1 );
 
-    aGuard.reset();
     m_nRow = nRow + 1;
     m_bAfterLast = !bValid;
     return bValid;
@@ -1323,12 +1285,12 @@ sal_Bool SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::previous()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
-    if( impl_isForwardOnly() )
+    if( impl_isForwardOnly(aGuard) )
         throw SQLException();
 
-    osl::ResettableMutexGuard aGuard(m_aMutex);
     //before first ?:
     if( !m_bAfterLast && !m_nRow )
         return false;
@@ -1340,7 +1302,7 @@ sal_Bool SAL_CALL CachedContentResultSet
         return false;
     }
     //known valid position ?:
-    if( impl_isKnownValidPosition( m_nRow - 1 ) )
+    if( impl_isKnownValidPosition( aGuard, m_nRow - 1 ) )
     {
         m_nRow--;
         m_bAfterLast = false;
@@ -1348,11 +1310,9 @@ sal_Bool SAL_CALL CachedContentResultSet
     }
     //unknown position:
     sal_Int32 nRow = m_nRow;
-    aGuard.clear();
 
-    bool bValid = applyPositionToOrigin( nRow - 1  );
+    bool bValid = applyPositionToOrigin( aGuard, nRow - 1  );
 
-    aGuard.reset();
     m_nRow = nRow - 1;
     m_bAfterLast = false;
     return bValid;
@@ -1362,15 +1322,14 @@ sal_Bool SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::absolute( sal_Int32 row )
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     if( !row )
         throw SQLException();
 
-    if( impl_isForwardOnly() )
+    if( impl_isForwardOnly(aGuard) )
         throw SQLException();
-
-    osl::ResettableMutexGuard aGuard(m_aMutex);
 
     if( !m_xResultSetOrigin.is() )
     {
@@ -1393,11 +1352,11 @@ sal_Bool SAL_CALL CachedContentResultSet
             return bValid;
         }
         //unknown final count:
-        aGuard.clear();
+        aGuard.unlock();
 
         bool bValid = m_xResultSetOrigin->absolute( row );
 
-        aGuard.reset();
+        aGuard.lock();
         if( m_bFinalCount )
         {
             sal_Int32 nNewRow = m_nKnownCount + 1 + row;
@@ -1408,11 +1367,11 @@ sal_Bool SAL_CALL CachedContentResultSet
             m_bAfterLastApplied = m_bAfterLast = false;
             return bValid;
         }
-        aGuard.clear();
+        aGuard.unlock();
 
         sal_Int32 nCurRow = m_xResultSetOrigin->getRow();
 
-        aGuard.reset();
+        aGuard.lock();
         m_nLastAppliedPos = nCurRow;
         m_nRow = nCurRow;
         m_bAfterLast = false;
@@ -1432,11 +1391,11 @@ sal_Bool SAL_CALL CachedContentResultSet
         return true;
     }
     //unknown new position:
-    aGuard.clear();
+    aGuard.unlock();
 
     bool bValid = m_xResultSetOrigin->absolute( row );
 
-    aGuard.reset();
+    aGuard.lock();
     if( m_bFinalCount )
     {
         sal_Int32 nNewRow = row;
@@ -1452,12 +1411,12 @@ sal_Bool SAL_CALL CachedContentResultSet
         m_nRow = nNewRow;
         return bValid;
     }
-    aGuard.clear();
+    aGuard.unlock();
 
     sal_Int32 nCurRow = m_xResultSetOrigin->getRow();
     bool bIsAfterLast = m_xResultSetOrigin->isAfterLast();
 
-    aGuard.reset();
+    aGuard.lock();
     m_nLastAppliedPos = nCurRow;
     m_nRow = nCurRow;
     m_bAfterLastApplied = m_bAfterLast = bIsAfterLast;
@@ -1468,13 +1427,13 @@ sal_Bool SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::relative( sal_Int32 rows )
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
-    if( impl_isForwardOnly() )
+    if( impl_isForwardOnly(aGuard) )
         throw SQLException();
 
-    osl::ResettableMutexGuard aGuard(m_aMutex);
-    if( m_bAfterLast || impl_isKnownInvalidPosition( m_nRow ) )
+    if( m_bAfterLast || impl_isKnownInvalidPosition( aGuard, m_nRow ) )
         throw SQLException();
 
     if( !rows )
@@ -1484,7 +1443,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     if( nNewRow < 0 )
             nNewRow = 0;
 
-    if( impl_isKnownValidPosition( nNewRow ) )
+    if( impl_isKnownValidPosition( aGuard, nNewRow ) )
     {
         m_nRow = nNewRow;
         m_bAfterLast = false;
@@ -1506,10 +1465,7 @@ sal_Bool SAL_CALL CachedContentResultSet
             return false;
         }
         //unknown new position:
-        aGuard.clear();
-        bool bValid = applyPositionToOrigin( nNewRow );
-
-        aGuard.reset();
+        bool bValid = applyPositionToOrigin( aGuard, nNewRow );
         m_nRow = nNewRow;
         m_bAfterLast = !bValid; // only nNewRow > 0 possible here
         return bValid;
@@ -1521,30 +1477,26 @@ sal_Bool SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::first()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
-    if( impl_isForwardOnly() )
+    if( impl_isForwardOnly(aGuard) )
         throw SQLException();
 
-    osl::ResettableMutexGuard aGuard(m_aMutex);
-    if( impl_isKnownValidPosition( 1 ) )
+    if( impl_isKnownValidPosition( aGuard, 1 ) )
     {
         m_nRow = 1;
         m_bAfterLast = false;
         return true;
     }
-    if( impl_isKnownInvalidPosition( 1 ) )
+    if( impl_isKnownInvalidPosition( aGuard, 1 ) )
     {
         m_nRow = 1;
         m_bAfterLast = false;
         return false;
     }
     //unknown position
-    aGuard.clear();
-
-    bool bValid = applyPositionToOrigin( 1 );
-
-    aGuard.reset();
+    bool bValid = applyPositionToOrigin( aGuard, 1 );
     m_nRow = 1;
     m_bAfterLast = false;
     return bValid;
@@ -1554,12 +1506,12 @@ sal_Bool SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::last()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
-    if( impl_isForwardOnly() )
+    if( impl_isForwardOnly(aGuard) )
         throw SQLException();
 
-    osl::ResettableMutexGuard aGuard(m_aMutex);
     if( m_bFinalCount )
     {
         m_nRow = m_nKnownCount;
@@ -1572,11 +1524,11 @@ sal_Bool SAL_CALL CachedContentResultSet
         OSL_FAIL( "broadcaster was disposed already" );
         return false;
     }
-    aGuard.clear();
+    aGuard.unlock();
 
     bool bValid = m_xResultSetOrigin->last();
 
-    aGuard.reset();
+    aGuard.lock();
     m_bAfterLastApplied = m_bAfterLast = false;
     if( m_bFinalCount )
     {
@@ -1584,11 +1536,11 @@ sal_Bool SAL_CALL CachedContentResultSet
         m_nRow = m_nKnownCount;
         return bValid;
     }
-    aGuard.clear();
+    aGuard.unlock();
 
     sal_Int32 nCurRow = m_xResultSetOrigin->getRow();
 
-    aGuard.reset();
+    aGuard.lock();
     m_nLastAppliedPos = nCurRow;
     m_nRow = nCurRow;
     OSL_ENSURE( nCurRow >= m_nKnownCount, "position of last row < known Count, that could not be" );
@@ -1601,12 +1553,12 @@ sal_Bool SAL_CALL CachedContentResultSet
 void SAL_CALL CachedContentResultSet
     ::beforeFirst()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
-    if( impl_isForwardOnly() )
+    if( impl_isForwardOnly(aGuard) )
         throw SQLException();
 
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_nRow = 0;
     m_bAfterLast = false;
 }
@@ -1615,12 +1567,12 @@ void SAL_CALL CachedContentResultSet
 void SAL_CALL CachedContentResultSet
     ::afterLast()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
-    if( impl_isForwardOnly() )
+    if( impl_isForwardOnly(aGuard) )
         throw SQLException();
 
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_nRow = 1;
     m_bAfterLast = true;
 }
@@ -1629,9 +1581,9 @@ void SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::isAfterLast()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
-    osl::ResettableMutexGuard aGuard(m_aMutex);
     if( !m_bAfterLast )
         return false;
     if( m_nKnownCount )
@@ -1644,14 +1596,14 @@ sal_Bool SAL_CALL CachedContentResultSet
         OSL_FAIL( "broadcaster was disposed already" );
         return false;
     }
-    aGuard.clear();
+    aGuard.unlock();
 
     //find out whether the original resultset contains rows or not
     m_xResultSetOrigin->afterLast();
 
-    aGuard.reset();
+    aGuard.lock();
     m_bAfterLastApplied = true;
-    aGuard.clear();
+    aGuard.unlock();
 
     return m_xResultSetOrigin->isAfterLast();
 }
@@ -1660,9 +1612,9 @@ sal_Bool SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::isBeforeFirst()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
-    osl::ResettableMutexGuard aGuard(m_aMutex);
     if( m_bAfterLast )
         return false;
     if( m_nRow )
@@ -1677,15 +1629,15 @@ sal_Bool SAL_CALL CachedContentResultSet
         OSL_FAIL( "broadcaster was disposed already" );
         return false;
     }
-    aGuard.clear();
+    aGuard.unlock();
 
     //find out whether the original resultset contains rows or not
     m_xResultSetOrigin->beforeFirst();
 
-    aGuard.reset();
+    aGuard.lock();
     m_bAfterLastApplied = false;
     m_nLastAppliedPos = 0;
-    aGuard.clear();
+    aGuard.unlock();
 
     return m_xResultSetOrigin->isBeforeFirst();
 }
@@ -1694,63 +1646,55 @@ sal_Bool SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::isFirst()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     sal_Int32 nRow = 0;
     Reference< XResultSet > xResultSetOrigin;
 
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        if( m_bAfterLast )
-            return false;
-        if( m_nRow != 1 )
-            return false;
-        if( m_nKnownCount )
-            return true;
-        if( m_bFinalCount )
-            return false;
+    if( m_bAfterLast )
+        return false;
+    if( m_nRow != 1 )
+        return false;
+    if( m_nKnownCount )
+        return true;
+    if( m_bFinalCount )
+        return false;
 
-        nRow = m_nRow;
-        xResultSetOrigin = m_xResultSetOrigin;
-    }
+    nRow = m_nRow;
+    xResultSetOrigin = m_xResultSetOrigin;
 
     //need to ask origin
-    {
-        if( applyPositionToOrigin( nRow ) )
-            return xResultSetOrigin->isFirst();
-        else
-            return false;
-    }
+    if( !applyPositionToOrigin( aGuard, nRow ) )
+        return false;
+    aGuard.unlock();
+    return xResultSetOrigin->isFirst();
 }
 
 //virtual
 sal_Bool SAL_CALL CachedContentResultSet
     ::isLast()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     sal_Int32 nRow = 0;
     Reference< XResultSet > xResultSetOrigin;
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        if( m_bAfterLast )
-            return false;
-        if( m_nRow < m_nKnownCount )
-            return false;
-        if( m_bFinalCount )
-            return m_nKnownCount && m_nRow == m_nKnownCount;
+    if( m_bAfterLast )
+        return false;
+    if( m_nRow < m_nKnownCount )
+        return false;
+    if( m_bFinalCount )
+        return m_nKnownCount && m_nRow == m_nKnownCount;
 
-        nRow = m_nRow;
-        xResultSetOrigin = m_xResultSetOrigin;
-    }
+    nRow = m_nRow;
+    xResultSetOrigin = m_xResultSetOrigin;
 
     //need to ask origin
-    {
-        if( applyPositionToOrigin( nRow ) )
-            return xResultSetOrigin->isLast();
-        else
-            return false;
-    }
+    if( !applyPositionToOrigin( aGuard, nRow ) )
+        return false;
+    aGuard.unlock();
+    return xResultSetOrigin->isLast();
 }
 
 
@@ -1758,9 +1702,9 @@ sal_Bool SAL_CALL CachedContentResultSet
 sal_Int32 SAL_CALL CachedContentResultSet
     ::getRow()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if( m_bAfterLast )
         return 0;
     return m_nRow;
@@ -1770,7 +1714,8 @@ sal_Int32 SAL_CALL CachedContentResultSet
 void SAL_CALL CachedContentResultSet
     ::refreshRow()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     //the ContentResultSet is static and will not change
     //therefore we don't need to reload anything
@@ -1780,7 +1725,8 @@ void SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::rowUpdated()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     //the ContentResultSet is static and will not change
     return false;
@@ -1789,7 +1735,8 @@ sal_Bool SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::rowInserted()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     //the ContentResultSet is static and will not change
     return false;
@@ -1799,7 +1746,8 @@ sal_Bool SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::rowDeleted()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
 
     //the ContentResultSet is static and will not change
     return false;
@@ -1809,7 +1757,8 @@ sal_Bool SAL_CALL CachedContentResultSet
 Reference< XInterface > SAL_CALL CachedContentResultSet
     ::getStatement()
 {
-    impl_EnsureNotDisposed();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
     //@todo ?return anything
     return Reference< XInterface >();
 }
@@ -1822,18 +1771,17 @@ Reference< XInterface > SAL_CALL CachedContentResultSet
 sal_Bool SAL_CALL CachedContentResultSet
     ::wasNull()
 {
-    impl_EnsureNotDisposed();
-    impl_init_xRowOrigin();
+    std::unique_lock aGuard(m_aMutex);
+    impl_EnsureNotDisposed(aGuard);
+    impl_init_xRowOrigin(aGuard);
+    if( m_bLastReadWasFromCache )
+        return m_bLastCachedReadWasNull;
+    if( !m_xRowOrigin.is() )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        if( m_bLastReadWasFromCache )
-            return m_bLastCachedReadWasNull;
-        if( !m_xRowOrigin.is() )
-        {
-            OSL_FAIL( "broadcaster was disposed already" );
-            return false;
-        }
+        OSL_FAIL( "broadcaster was disposed already" );
+        return false;
     }
+    aGuard.unlock();
     return m_xRowOrigin->wasNull();
 }
 
@@ -1952,13 +1900,12 @@ Any SAL_CALL CachedContentResultSet
     //if you change this function please pay attention to
     //function template rowOriginGet, where this is similar implemented
 
-    osl::ResettableMutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
     sal_Int32 nRow = m_nRow;
     sal_Int32 nFetchSize = m_nFetchSize;
     sal_Int32 nFetchDirection = m_nFetchDirection;
     if( !m_aCache.hasRow( nRow ) )
     {
-        bool isCleared = false;
         if( !m_aCache.hasCausedException( nRow ) )
         {
             if( !m_xFetchProvider.is() )
@@ -1966,21 +1913,14 @@ Any SAL_CALL CachedContentResultSet
                 OSL_FAIL( "broadcaster was disposed already" );
                 return Any();
             }
-            isCleared = true;
-            aGuard.clear();
-
-            impl_fetchData( nRow, nFetchSize, nFetchDirection );
-        }
-        if (isCleared)
-        {
-            aGuard.reset();
+            impl_fetchData( aGuard, nRow, nFetchSize, nFetchDirection );
         }
         if( !m_aCache.hasRow( nRow ) )
         {
             m_bLastReadWasFromCache = false;
-            aGuard.clear();
-            applyPositionToOrigin( nRow );
-            impl_init_xRowOrigin();
+            applyPositionToOrigin( aGuard, nRow );
+            impl_init_xRowOrigin(aGuard);
+            aGuard.unlock();
             return m_xRowOrigin->getObject( columnIndex, typeMap );
         }
     }
@@ -2027,10 +1967,8 @@ Reference< XArray > SAL_CALL CachedContentResultSet
 // Type Converter Support
 
 
-const Reference< XTypeConverter >& CachedContentResultSet::getTypeConverter()
+const Reference< XTypeConverter >& CachedContentResultSet::getTypeConverter(std::unique_lock<std::mutex>& )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
     if ( !m_bTriedToGetTypeConverter && !m_xTypeConverter.is() )
     {
         m_bTriedToGetTypeConverter = true;

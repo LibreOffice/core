@@ -21,7 +21,6 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
-#include <osl/mutex.hxx>
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sdbc/XCloseable.hpp>
@@ -30,8 +29,8 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <comphelper/interfacecontainer3.hxx>
-#include <comphelper/multiinterfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
+#include <comphelper/multiinterfacecontainer4.hxx>
 #include <memory>
 
 
@@ -47,15 +46,15 @@ class ContentResultSetWrapper
                 , public css::sdbc::XRow
 {
 protected:
-    typedef comphelper::OMultiTypeInterfaceContainerHelperVar3<css::beans::XPropertyChangeListener, OUString>
+    typedef comphelper::OMultiTypeInterfaceContainerHelperVar4<OUString, css::beans::XPropertyChangeListener>
         PropertyChangeListenerContainer_Impl;
-    typedef comphelper::OMultiTypeInterfaceContainerHelperVar3<css::beans::XVetoableChangeListener, OUString>
+    typedef comphelper::OMultiTypeInterfaceContainerHelperVar4<OUString, css::beans::XVetoableChangeListener>
         VetoableChangeListenerContainer_Impl;
 
     //members
 
     //my Mutex
-    osl::Mutex              m_aMutex;
+    std::mutex              m_aMutex;
 
     //different Interfaces from Origin:
     css::uno::Reference< css::sdbc::XResultSet >
@@ -86,8 +85,7 @@ private:
     //management of listeners
     bool                m_bDisposed; ///Dispose call ready.
     bool                m_bInDispose;///In dispose call
-    osl::Mutex              m_aContainerMutex;
-    std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>>
+    std::unique_ptr<comphelper::OInterfaceContainerHelper4<css::lang::XEventListener>>
                             m_pDisposeEventListeners;
     std::unique_ptr<PropertyChangeListenerContainer_Impl>
                             m_pPropertyChangeListeners;
@@ -98,10 +96,10 @@ private:
     //methods:
 private:
     void
-    impl_getPropertyChangeListenerContainer();
+    impl_getPropertyChangeListenerContainer(std::unique_lock<std::mutex>& rGuard);
 
     void
-    impl_getVetoableChangeListenerContainer();
+    impl_getVetoableChangeListenerContainer(std::unique_lock<std::mutex>& rGuard);
 
     void verifyGet();
 
@@ -117,30 +115,32 @@ protected:
 
     //--
 
-    void impl_init_xRowOrigin();
-    void impl_init_xContentAccessOrigin();
-    void impl_init_xPropertySetOrigin();
+    void impl_init_xRowOrigin(std::unique_lock<std::mutex>&);
+    void impl_init_xContentAccessOrigin(std::unique_lock<std::mutex>&);
+    void impl_init_xPropertySetOrigin(std::unique_lock<std::mutex>&);
 
     //--
 
-    virtual void impl_initPropertySetInfo(); //helping XPropertySet
+    virtual void impl_initPropertySetInfo(std::unique_lock<std::mutex>& rGuard); //helping XPropertySet
 
     /// @throws css::lang::DisposedException
     /// @throws css::uno::RuntimeException
     void
-    impl_EnsureNotDisposed();
+    impl_EnsureNotDisposed(std::unique_lock<std::mutex>& rGuard);
 
     void
     impl_notifyPropertyChangeListeners(
+            std::unique_lock<std::mutex>& rGuard,
             const css::beans::PropertyChangeEvent& rEvt );
 
     /// @throws css::beans::PropertyVetoException
     /// @throws css::uno::RuntimeException
     void
     impl_notifyVetoableChangeListeners(
+            std::unique_lock<std::mutex>& rGuard,
             const css::beans::PropertyChangeEvent& rEvt );
 
-    bool impl_isForwardOnly();
+    bool impl_isForwardOnly(std::unique_lock<std::mutex>& rGuard);
 
 public:
 
@@ -154,7 +154,7 @@ public:
     // XComponent
 
     virtual void SAL_CALL
-    dispose() override;
+    dispose() override final;
 
     virtual void SAL_CALL
     addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) override;
@@ -178,11 +178,16 @@ public:
     // XPropertySet
 
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
-    getPropertySetInfo() override;
+    getPropertySetInfo() override final;
+    css::uno::Reference< css::beans::XPropertySetInfo >
+    getPropertySetInfoImpl(std::unique_lock<std::mutex>& rGuard);
 
     virtual void SAL_CALL
     setPropertyValue( const OUString& aPropertyName,
-                      const css::uno::Any& aValue ) override;
+                      const css::uno::Any& aValue ) final override;
+    virtual void
+    setPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, const OUString& aPropertyName,
+                      const css::uno::Any& aValue );
 
     virtual css::uno::Any SAL_CALL
     getPropertyValue( const OUString& PropertyName ) override;
@@ -223,7 +228,9 @@ public:
     // XContentAccess
 
     virtual OUString SAL_CALL
-    queryContentIdentifierString() override;
+    queryContentIdentifierString() override final;
+    virtual OUString
+    queryContentIdentifierStringImpl(std::unique_lock<std::mutex>& rGuard);
 
     virtual css::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
     queryContentIdentifier() override;

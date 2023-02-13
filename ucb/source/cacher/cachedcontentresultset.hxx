@@ -150,29 +150,29 @@ class CachedContentResultSet
 private:
 
     //helping XPropertySet methods.
-    virtual void impl_initPropertySetInfo() override;
+    virtual void impl_initPropertySetInfo(std::unique_lock<std::mutex>& rGuard) override;
 
     /// @throws css::sdbc::SQLException
     /// @throws css::uno::RuntimeException
     bool
-    applyPositionToOrigin( sal_Int32 nRow );
+    applyPositionToOrigin( std::unique_lock<std::mutex>& rGuard, sal_Int32 nRow );
 
     /// @throws css::uno::RuntimeException
     void
-    impl_fetchData( sal_Int32 nRow, sal_Int32 nCount
+    impl_fetchData( std::unique_lock<std::mutex>& rGuard, sal_Int32 nRow, sal_Int32 nCount
                     , sal_Int32 nFetchDirection );
 
     bool
-    impl_isKnownValidPosition( sal_Int32 nRow ) const;
+    impl_isKnownValidPosition( std::unique_lock<std::mutex>& rGuard, sal_Int32 nRow ) const;
 
     bool
-    impl_isKnownInvalidPosition( sal_Int32 nRow ) const;
+    impl_isKnownInvalidPosition( std::unique_lock<std::mutex>& rGuard, sal_Int32 nRow ) const;
 
     void
-    impl_changeRowCount( sal_Int32 nOld, sal_Int32 nNew );
+    impl_changeRowCount( std::unique_lock<std::mutex>& rGuard, sal_Int32 nOld, sal_Int32 nNew );
 
     void
-    impl_changeIsRowCountFinal( bool bOld, bool bNew );
+    impl_changeIsRowCountFinal( std::unique_lock<std::mutex>& rGuard, bool bOld, bool bNew );
 
 public:
     CachedContentResultSet(
@@ -203,8 +203,8 @@ public:
     // XPropertySet inherited
 
 
-    virtual void SAL_CALL
-    setPropertyValue( const OUString& aPropertyName,
+    virtual void
+    setPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, const OUString& aPropertyName,
                       const css::uno::Any& aValue ) override;
 
     virtual css::uno::Any SAL_CALL
@@ -225,8 +225,8 @@ public:
 
     // XContentAccess inherited
 
-    virtual OUString SAL_CALL
-    queryContentIdentifierString() override;
+    virtual OUString
+    queryContentIdentifierStringImpl(std::unique_lock<std::mutex>& rGuard) override;
 
     virtual css::uno::Reference<
                 css::ucb::XContentIdentifier > SAL_CALL
@@ -350,7 +350,7 @@ private:
     css::uno::Reference< css::script::XTypeConverter > m_xTypeConverter;
 
     const css::uno::Reference<
-        css::script::XTypeConverter >& getTypeConverter();
+        css::script::XTypeConverter >& getTypeConverter(std::unique_lock<std::mutex>& rGuard);
 
     template<typename T> T rowOriginGet(
         T (SAL_CALL css::sdbc::XRow::* f)(sal_Int32), sal_Int32 columnIndex);
