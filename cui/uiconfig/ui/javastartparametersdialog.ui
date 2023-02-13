@@ -193,6 +193,9 @@
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="javastartparametersdialog|label6">For example: -Dmyprop=c:\\program files\\java</property>
                     <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.9"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
