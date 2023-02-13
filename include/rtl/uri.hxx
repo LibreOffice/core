@@ -92,7 +92,7 @@ inline rtl::OUString Uri::encode(rtl::OUString const & rText,
                                  rtl_TextEncoding eCharset)
 {
     rtl::OUString aResult;
-    rtl_uriEncode(const_cast< rtl::OUString & >(rText).pData,
+    rtl_uriEncode(rText.pData,
                   pCharClass,
                   eMechanism,
                   eCharset,
@@ -106,7 +106,7 @@ inline rtl::OUString Uri::encode(rtl::OUString const & rText,
                                  rtl_TextEncoding eCharset)
 {
     rtl::OUString aResult;
-    rtl_uriEncode(const_cast< rtl::OUString & >(rText).pData,
+    rtl_uriEncode(rText.pData,
                   rtl_getUriCharClass(eCharClass),
                   eMechanism,
                   eCharset,
@@ -119,7 +119,7 @@ inline rtl::OUString Uri::decode(rtl::OUString const & rText,
                                  rtl_TextEncoding eCharset)
 {
     rtl::OUString aResult;
-    rtl_uriDecode(const_cast< rtl::OUString & >(rText).pData,
+    rtl_uriDecode(rText.pData,
                   eMechanism,
                   eCharset,
                   &aResult.pData);
@@ -132,8 +132,8 @@ inline rtl::OUString Uri::convertRelToAbs(rtl::OUString const & rBaseUriRef,
     rtl::OUString aResult;
     rtl::OUString aException;
     if (!rtl_uriConvertRelToAbs(
-            const_cast< rtl::OUString & >(rBaseUriRef).pData,
-            const_cast< rtl::OUString & >(rRelUriRef).pData, &aResult.pData,
+            rBaseUriRef.pData,
+            rRelUriRef.pData, &aResult.pData,
             &aException.pData))
         throw MalformedUriException(aException);
     return aResult;
