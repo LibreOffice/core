@@ -1,0 +1,14 @@
+--- a/hsqldb/src/org/hsqldb/DatabaseCommandInterpreter.java	2023-02-13 11:08:11.297243034 +0000
++++ b/hsqldb/src/org/hsqldb/DatabaseCommandInterpreter.java	2023-02-13 13:49:17.973089433 +0000
+@@ -403,6 +403,11 @@
+                     throw Trace.error(Trace.INVALID_IDENTIFIER);
+                 }
+ 
++                // added condition to avoid execution of spurious command in .script or .log file
++                if (session.isProcessingScript() || session.isProcessingLog()) {
++                    return new Result(ResultConstants.UPDATECOUNT);
++                }
++
+                 dsw = new ScriptWriterText(database, token, true, true, true);
+ 
+                 dsw.writeAll();
