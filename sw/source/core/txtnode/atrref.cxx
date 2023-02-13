@@ -32,6 +32,9 @@
 #include <comphelper/lok.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
+#include <pam.hxx>
+#include <translatehelper.hxx>
+#include <wrtsh.hxx>
 
 SwFormatRefMark::~SwFormatRefMark( )
 {
@@ -118,6 +121,8 @@ SwTextRefMark::SwTextRefMark( SwFormatRefMark& rAttr,
     }
     SetDontMoveAttr( true );
     SetOverlapAllowedAttr( true );
+    SetDontExpand( true );  // like hyperlinks, reference markers shouldn't expand
+    SetLockExpandFlag( true ); // protect the flag
 }
 
 SwTextRefMark::~SwTextRefMark()
@@ -152,6 +157,53 @@ void SwTextRefMark::SetEnd(sal_Int32 n)
     if (m_pHints)
         m_pHints->EndPosChanged();
 }
+
+void SwTextRefMark::UpdateFieldContent(SwDoc* pDoc, SwWrtShell& rWrtSh, OUString aContent)
+{
+    if (!this->End())
+    {
+        return;
+    }
+
+    // Insert markers to remember where the paste positions are.
+    const SwTextNode& rTextNode = this->GetTextNode();
+    SwPaM aMarkers(SwPosition(rTextNode, *this->End()));
+    IDocumentContentOperations& rIDCO = pDoc->getIDocumentContentOperations();
+    this->SetLockExpandFlag(false);
+    this->SetDontExpand(false);
+    if (rIDCO.InsertString(aMarkers, "XY"))
+    {
+        SwPaM aPasteEnd(SwPosition(rTextNode, *this->End()));
+        aPasteEnd.Move(fnMoveBackward, GoInContent);
+
+        // Paste HTML content.
+        SwPaM* pCursorPos = rWrtSh.GetCursor();
+        *pCursorPos = aPasteEnd;
+        SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aContent.toUtf8(), true);
+
+        // Update the refmark to point to the new content.
+        sal_Int32 nOldStart = this->GetStart();
+        sal_Int32 nNewStart = *this->End();
+        // First grow it to include text till the end of the paste position.
+        this->SetEnd(aPasteEnd.GetPoint()->GetContentIndex());
+        // Then shrink it to only start at the paste start: we know that the refmark was
+        // truncated to the paste start, as the refmark has to stay inside a single text node
+        this->SetStart(nNewStart);
+        rTextNode.GetSwpHints().SortIfNeedBe();
+        SwPaM aEndMarker(*aPasteEnd.GetPoint());
+        aEndMarker.SetMark();
+        aEndMarker.GetMark()->AdjustContent(1);
+        SwPaM aStartMarker(SwPosition(rTextNode, nOldStart), SwPosition(rTextNode, nNewStart));
+
+        // Remove markers. The start marker includes the old content as well.
+        rIDCO.DeleteAndJoin(aStartMarker);
+        rIDCO.DeleteAndJoin(aEndMarker);
+    }
+    // Restore flags.
+    this->SetDontExpand(true);
+    this->SetLockExpandFlag(true);
+}
+
 
 void SwTextRefMark::dumpAsXml(xmlTextWriterPtr pWriter) const
 {

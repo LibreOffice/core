@@ -840,45 +840,7 @@ bool UpdateFieldContents(SfxRequest& rReq, SwWrtShell& rWrtSh)
 
         OUString aContent = aMap["Content"].get<OUString>();
         auto pTextRefMark = const_cast<SwTextRefMark*>(pRefMark->GetTextRefMark());
-        if (!pTextRefMark->End())
-        {
-            continue;
-        }
-
-        // Insert markers to remember where the paste positions are.
-        const SwTextNode& rTextNode = pTextRefMark->GetTextNode();
-        SwPaM aMarkers(SwPosition(rTextNode, *pTextRefMark->End()));
-        IDocumentContentOperations& rIDCO = pDoc->getIDocumentContentOperations();
-        pTextRefMark->SetDontExpand(false);
-        bool bSuccess = rIDCO.InsertString(aMarkers, "XY");
-        if (bSuccess)
-        {
-            SwPaM aPasteEnd(SwPosition(rTextNode, *pTextRefMark->End()));
-            aPasteEnd.Move(fnMoveBackward, GoInContent);
-
-            // Paste HTML content.
-            SwPaM* pCursorPos = rWrtSh.GetCursor();
-            *pCursorPos = aPasteEnd;
-            SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aContent.toUtf8(), true);
-
-            // Update the refmark to point to the new content.
-            sal_Int32 nOldStart = pTextRefMark->GetStart();
-            sal_Int32 nNewStart = *pTextRefMark->End();
-            // First grow it to include text till the end of the paste position.
-            pTextRefMark->SetEnd(aPasteEnd.GetPoint()->GetContentIndex());
-            // Then shrink it to only start at the paste start: we know that the refmark was
-            // truncated to the paste start, as the refmark has to stay inside a single text node
-            pTextRefMark->SetStart(nNewStart);
-            rTextNode.GetSwpHints().SortIfNeedBe();
-            SwPaM aEndMarker(*aPasteEnd.GetPoint());
-            aEndMarker.SetMark();
-            aEndMarker.GetMark()->AdjustContent(1);
-            SwPaM aStartMarker(SwPosition(rTextNode, nOldStart), SwPosition(rTextNode, nNewStart));
-
-            // Remove markers. The start marker includes the old content as well.
-            rIDCO.DeleteAndJoin(aStartMarker);
-            rIDCO.DeleteAndJoin(aEndMarker);
-        }
+        pTextRefMark->UpdateFieldContent(pDoc, rWrtSh, aContent);
     }
 
     rWrtSh.EndAction();
@@ -945,46 +907,7 @@ void UpdateFieldContent(SfxRequest& rReq, SwWrtShell& rWrtSh)
 
     OUString aContent = aMap["Content"].get<OUString>();
     auto pTextRefMark = const_cast<SwTextRefMark*>(rRefmark.GetTextRefMark());
-    if (!pTextRefMark->End())
-    {
-        return;
-    }
-
-    // Insert markers to remember where the paste positions are.
-    const SwTextNode& rTextNode = pTextRefMark->GetTextNode();
-    SwPaM aMarkers(SwPosition(rTextNode, *pTextRefMark->End()));
-    IDocumentContentOperations& rIDCO = pDoc->getIDocumentContentOperations();
-    pTextRefMark->SetDontExpand(false);
-    if (!rIDCO.InsertString(aMarkers, "XY"))
-    {
-        return;
-    }
-
-    SwPaM aPasteEnd(SwPosition(rTextNode, *pTextRefMark->End()));
-    aPasteEnd.Move(fnMoveBackward, GoInContent);
-
-    // Paste HTML content.
-    SwPaM* pCursorPos = rWrtSh.GetCursor();
-    *pCursorPos = aPasteEnd;
-    SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aContent.toUtf8(), true);
-
-    // Update the refmark to point to the new content.
-    sal_Int32 nOldStart = pTextRefMark->GetStart();
-    sal_Int32 nNewStart = *pTextRefMark->End();
-    // First grow it to include text till the end of the paste position.
-    pTextRefMark->SetEnd(aPasteEnd.GetPoint()->GetContentIndex());
-    // Then shrink it to only start at the paste start: we know that the refmark was
-    // truncated to the paste start, as the refmark has to stay inside a single text node
-    pTextRefMark->SetStart(nNewStart);
-    rTextNode.GetSwpHints().SortIfNeedBe();
-    SwPaM aEndMarker(*aPasteEnd.GetPoint());
-    aEndMarker.SetMark();
-    aEndMarker.GetMark()->AdjustContent(1);
-    SwPaM aStartMarker(SwPosition(rTextNode, nOldStart), SwPosition(rTextNode, nNewStart));
-
-    // Remove markers. The start marker includes the old content as well.
-    rIDCO.DeleteAndJoin(aStartMarker);
-    rIDCO.DeleteAndJoin(aEndMarker);
+    pTextRefMark->UpdateFieldContent(pDoc, rWrtSh, aContent);
 }
 }
 
