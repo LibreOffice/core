@@ -208,23 +208,16 @@ namespace XSLT
     OUString
     XSLTFilter::expandUrl(const OUString& sUrl)
     {
-        try
-            {
-                OUString sPreparedURL(sUrl);
-                if (sPreparedURL.startsWithIgnoreAsciiCase("vnd.sun.star.expand:", &sPreparedURL))
-                {
-                    sPreparedURL = rtl::Uri::decode(sPreparedURL, rtl_UriDecodeWithCharset,
-                                                    RTL_TEXTENCODING_UTF8);
-                    css::uno::Reference<XMacroExpander>
-                        xMacroExpander = theMacroExpander::get(m_xContext);
-                    sPreparedURL = xMacroExpander->expandMacros(sPreparedURL);
-                }
-                return sPreparedURL;
-            }
-        catch (const Exception&)
-            {
-            }
-        return {};
+        OUString sPreparedURL(sUrl);
+        if (sPreparedURL.startsWithIgnoreAsciiCase("vnd.sun.star.expand:", &sPreparedURL))
+        {
+            sPreparedURL = rtl::Uri::decode(sPreparedURL, rtl_UriDecodeWithCharset,
+                                            RTL_TEXTENCODING_UTF8);
+            css::uno::Reference<XMacroExpander>
+                xMacroExpander = theMacroExpander::get(m_xContext);
+            sPreparedURL = xMacroExpander->expandMacros(sPreparedURL);
+        }
+        return sPreparedURL;
     }
 
     css::uno::Reference<xslt::XXSLTTransformer>
