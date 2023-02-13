@@ -54,11 +54,11 @@ public:
                 aInterfaceTypes.push_back(rPair.first);
         return aInterfaceTypes;
     }
-    inline bool hasContainedTypes() const
+    inline bool hasContainedTypes(std::unique_lock<std::mutex>& rGuard) const
     {
         for (const auto& rPair : m_aMap)
             // are interfaces added to this container?
-            if (rPair.second->getLength())
+            if (rPair.second->getLength(rGuard))
                 return true;
         return false;
     }
@@ -68,9 +68,10 @@ public:
       @return the container created under this key. If the container
                  was not created, null was returned.
      */
-    inline OInterfaceContainerHelper4<listener>* getContainer(const key& rKey) const
+    inline OInterfaceContainerHelper4<listener>* getContainer(std::unique_lock<std::mutex>& rGuard,
+                                                              const key& rKey) const
     {
-        auto iter = find(rKey);
+        auto iter = find(rGuard, rKey);
         if (iter != m_aMap.end())
             return (*iter).second.get();
         return nullptr;
@@ -94,7 +95,7 @@ public:
     inline sal_Int32 addInterface(::std::unique_lock<::std::mutex>& rGuard, const key& rKey,
                                   const css::uno::Reference<listener>& rListener)
     {
-        auto iter = find(rKey);
+        auto iter = find(rGuard, rKey);
         if (iter == m_aMap.end())
         {
             auto pLC = new OInterfaceContainerHelper4<listener>();
@@ -117,7 +118,7 @@ public:
                                      const css::uno::Reference<listener>& rListener)
     {
         // search container with id nUik
-        auto iter = find(rKey);
+        auto iter = find(rGuard, rKey);
         // container found?
         if (iter != m_aMap.end())
             return (*iter).second->removeInterface(rGuard, rListener);
@@ -158,7 +159,7 @@ public:
     /**
       Remove all elements of all containers. Does not delete the container.
      */
-    inline void clear()
+    inline void clear(std::unique_lock<std::mutex>& /*rGuard*/)
     {
         for (const auto& rPair : m_aMap)
             rPair.second->clear();
@@ -169,7 +170,8 @@ private:
     typedef ::std::vector<std::pair<key, std::unique_ptr<OInterfaceContainerHelper4<listener>>>>
         InterfaceMap;
     InterfaceMap m_aMap;
-    typename InterfaceMap::const_iterator find(const key& rKey) const
+    typename InterfaceMap::const_iterator find(std::unique_lock<std::mutex>& /*rGuard*/,
+                                               const key& rKey) const
     {
         auto iter = m_aMap.begin();
         auto end = m_aMap.end();

@@ -123,7 +123,7 @@ void SfxStatusDispatcher::ReleaseAll()
 void SfxStatusDispatcher::sendStatusChanged(const OUString& rURL, const css::frame::FeatureStateEvent& rEvent)
 {
     std::unique_lock aGuard(maMutex);
-    ::comphelper::OInterfaceContainerHelper4<css::frame::XStatusListener>* pContnr = maListeners.getContainer(rURL);
+    ::comphelper::OInterfaceContainerHelper4<css::frame::XStatusListener>* pContnr = maListeners.getContainer(aGuard, rURL);
     if (!pContnr)
         return;
     pContnr->forEach(aGuard,

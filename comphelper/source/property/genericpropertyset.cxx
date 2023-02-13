@@ -142,7 +142,7 @@ void GenericPropertySet::_setPropertyValues( const PropertyMapEntry** ppEntries,
 
     while( *ppEntries )
     {
-        OInterfaceContainerHelper4<XPropertyChangeListener> * pHelper = m_aListener.getContainer((*ppEntries)->maName);
+        OInterfaceContainerHelper4<XPropertyChangeListener> * pHelper = m_aListener.getContainer(aGuard, (*ppEntries)->maName);
 
         maAnyMap[ (*ppEntries)->maName ] = *pValues;
 
