@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_PAGEFRM_HXX
 
 #include <viewsh.hxx>
+#include <swdllapi.h>
 #include "ftnboss.hxx"
 #include "hffrm.hxx"
 
@@ -54,7 +55,7 @@ namespace o3tl {
 
 /// A page of the document layout. Upper frame is expected to be an SwRootFrame
 /// instance. At least an SwBodyFrame lower is expected.
-class SAL_DLLPUBLIC_RTTI SwPageFrame final: public SwFootnoteBossFrame
+class SW_DLLPUBLIC SwPageFrame final: public SwFootnoteBossFrame
 {
     friend class SwFrame;
 

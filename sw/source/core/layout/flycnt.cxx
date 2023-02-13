@@ -1552,14 +1552,49 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
     auto pFly = dynamic_cast<SwFlyAtContentFrame*>(FindFlyFrame());
     assert(pFly && "GetNextFlyLeaf: missing fly frame");
 
-    SwLayoutFrame *pLayLeaf = GetNextLayoutLeaf();
-    if (!pLayLeaf)
+    SwLayoutFrame *pLayLeaf = nullptr;
+    // Look up the first candidate.
+    if (IsTabFrame())
     {
-        if (eMakePage == MAKEPAGE_INSERT)
+        // If we're in a table, try to find the next frame of the table's last content.
+        SwFrame* pContent = static_cast<SwTabFrame*>(this)->FindLastContentOrTable();
+        pLayLeaf = pContent ? pContent->GetUpper() : nullptr;
+    }
+    else
+    {
+        pLayLeaf = GetNextLayoutLeaf();
+    }
+
+    SwLayoutFrame* pOldLayLeaf = nullptr;
+    while (true)
+    {
+        if (pLayLeaf)
         {
-            InsertPage(FindPageFrame(), false);
-            pLayLeaf = GetNextLayoutLeaf();
+            // If we have a candidate, make sure that it's a child of our follow.
+            if (pFly->IsFlySplitAllowed())
+            {
+                if (pFly->GetFollow() != pLayLeaf->FindFlyFrame())
+                {
+                    // It's not in our follow, reject.
+                    pOldLayLeaf = pLayLeaf;
+                    pLayLeaf = pLayLeaf->GetNextLayoutLeaf();
+                    continue;
+                }
+            }
         }
+        else
+        {
+            // No candidate: insert a page and try again.
+            if (eMakePage == MAKEPAGE_INSERT)
+            {
+                InsertPage(FindPageFrame(), false);
+                // If we already had a cancidate, continue trying with that instead of starting from
+                // scratch.
+                pLayLeaf = pOldLayLeaf ? pOldLayLeaf : GetNextLayoutLeaf();
+                continue;
+            }
+        }
+        break;
     }
 
     if( pLayLeaf )

@@ -21,6 +21,8 @@
 
 #include <sal/config.h>
 
+#include <swdllapi.h>
+
 #include "flyfrm.hxx"
 #include "flowfrm.hxx"
 
@@ -30,7 +32,7 @@ double getLocalFrameRotation_from_SwNoTextFrame(const SwNoTextFrame& rNoTextFram
 
 // Base class for those Flys that can "move freely" or better that are not
 // bound in Content.
-class SwFlyFreeFrame : public SwFlyFrame
+class SW_DLLPUBLIC SwFlyFreeFrame : public SwFlyFrame
 {
 private:
     // #i34753# - flag for at-page anchored Writer fly frames
@@ -157,7 +159,7 @@ public:
 };
 
 // Flys that are bound to Content but not in Content
-class SwFlyAtContentFrame final: public SwFlyFreeFrame, public SwFlowFrame
+class SW_DLLPUBLIC SwFlyAtContentFrame final: public SwFlyFreeFrame, public SwFlowFrame
 {
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
 
@@ -198,6 +200,7 @@ public:
     SwFlyAtContentFrame* GetFollow();
     const SwFlyAtContentFrame* GetPrecede() const;
     SwFlyAtContentFrame* GetPrecede();
+    void dumpAsXmlAttributes(xmlTextWriterPtr pWriter) const override;
 };
 
 // Flys that are bound to a character in Content
