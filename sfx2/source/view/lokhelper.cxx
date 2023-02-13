@@ -587,8 +587,10 @@ void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
     {
         if (!rItem.first.isEmpty() && !rItem.second.isEmpty())
         {
-            aPayload.append(", \"" + rItem.first + "\": \"" +
-                    rItem.second).append('"');
+            auto aFirst = rItem.first.replaceAll("\"", "\\\"");
+            auto aSecond = rItem.second.replaceAll("\"", "\\\"");
+            aPayload.append(", \"" + aFirst + "\": \"" +
+                    aSecond).append('"');
         }
     }
     aPayload.append('}');
