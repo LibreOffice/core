@@ -9,7 +9,7 @@ from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.uno.propertyvalue import mkPropertyValues
-#Bug 152722 - NatNum12 number format (spell out): add/delete decimal places is loosing format
+#Bug 152722 - NatNum12 number format (spell out): add/delete decimal places is losing format
 
 class tdf152722(UITestCase):
     def test_tdf152722_NatNum_modifier_decimal_value(self):
