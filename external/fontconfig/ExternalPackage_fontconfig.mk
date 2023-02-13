@@ -11,6 +11,8 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,fontconfig,fontconfig))
 
 $(eval $(call gb_ExternalPackage_use_external_project,fontconfig,fontconfig))
 
+ifeq ($(DISABLE_DYNLOADING),)
 $(eval $(call gb_ExternalPackage_add_file,fontconfig,$(LIBO_LIB_FOLDER)/libfontconfig-lo.so.1.12.0,src/.libs/libfontconfig-lo.so.1.12.0))
+endif
 
 # vim: set noet sw=4 ts=4:

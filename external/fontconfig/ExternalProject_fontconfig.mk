@@ -48,11 +48,14 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 			    --enable-libxml2 \
 			    ac_cv_func_fstatfs=no ac_cv_func_fstatvfs=no \
 			) \
-			$(if $(filter LINUX,$(OS)), \
-				--disable-static \
-				--prefix=/ \
-				--with-add-fonts=$(fontconfig_add_fonts) \
-				--with-cache-dir=/usr/lib/fontconfig/cache \
+			$(if $(filter FUZZERS,$(BUILD_TYPE)), \
+				--disable-shared, \
+				$(if $(filter LINUX,$(OS)), \
+					--disable-static \
+					--prefix=/ \
+					--with-add-fonts=$(fontconfig_add_fonts) \
+					--with-cache-dir=/usr/lib/fontconfig/cache \
+				) \
 			) \
 		&& $(MAKE) -C src && $(MAKE) fonts.conf \
 	)
