@@ -3739,7 +3739,7 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
             m_pImpl->appendTextPortion("\n", pContext);
         }
 
-        if (!m_pImpl->GetFootnoteContext())
+        if (!m_pImpl->GetFootnoteContext() && !m_pImpl->IsInShape() && !m_pImpl->IsInComments())
         {
             if (m_pImpl->isBreakDeferred(PAGE_BREAK))
                 m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_PAGE_BEFORE));
@@ -4061,7 +4061,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             const bool bSingleParagraphAfterRedline = m_pImpl->GetIsFirstParagraphInSection(/*bAfterRedline=*/true) &&
                     m_pImpl->GetIsLastParagraphInSection();
             PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
-            if (!m_pImpl->GetFootnoteContext())
+            if (!m_pImpl->GetFootnoteContext() && !m_pImpl->IsInShape() && !m_pImpl->IsInComments())
             {
                 if (m_pImpl->isBreakDeferred(PAGE_BREAK))
                 {
@@ -4137,7 +4137,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         {
             // GetTopContext() is changed by inserted breaks, but we want to keep the current context
             PropertyMapPtr pContext = m_pImpl->GetTopContext();
-            if (!m_pImpl->GetFootnoteContext())
+            if (!m_pImpl->GetFootnoteContext() && !m_pImpl->IsInShape() && !m_pImpl->IsInComments())
             {
                 if (m_pImpl->isBreakDeferred(PAGE_BREAK))
                 {
