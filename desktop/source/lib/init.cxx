@@ -5628,7 +5628,7 @@ static void addLocale(boost::property_tree::ptree& rValues, css::lang::Locale co
     rValues.push_back(std::make_pair("", aChild));
 }
 
-static char* getLanguages(LibreOfficeKitDocument* pThis, const char* pCommand)
+static char* getLanguages(const char* pCommand)
 {
     css::uno::Sequence< css::lang::Locale > aLocales;
     css::uno::Sequence< css::lang::Locale > aGrammarLocales;
@@ -6001,7 +6001,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
 
     if (!strcmp(pCommand, ".uno:LanguageStatus"))
     {
-        return getLanguages(pThis, pCommand);
+        return getLanguages(pCommand);
     }
     else if (!strcmp(pCommand, ".uno:CharFontName"))
     {
