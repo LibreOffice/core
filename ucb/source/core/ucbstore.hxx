@@ -87,15 +87,15 @@ class PropertySetRegistry : public cppu::WeakImplHelper <
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xConfigProvider;
     css::uno::Reference< css::uno::XInterface >           m_xRootReadAccess;
     css::uno::Reference< css::uno::XInterface >           m_xRootWriteAccess;
-    osl::Mutex                        m_aMutex;
+    std::mutex                        m_aMutex;
     bool                              m_bTriedToGetRootReadAccess;
     bool                              m_bTriedToGetRootWriteAccess;
 
 private:
     css::uno::Reference< css::lang::XMultiServiceFactory >
-    getConfigProvider();
+    getConfigProvider(std::unique_lock<std::mutex>& l);
 
-    void add   ( PersistentPropertySet* pSet );
+    void add   ( std::unique_lock<std::mutex>& rCreatorGuard, PersistentPropertySet* pSet );
     void remove( PersistentPropertySet* pSet );
 
     void renamePropertySet( const OUString& rOldKey,
@@ -138,6 +138,11 @@ public:
     getRootConfigReadAccess();
     css::uno::Reference< css::uno::XInterface >
     getConfigWriteAccess( const OUString& rPath );
+private:
+    css::uno::Reference< css::uno::XInterface >
+    getRootConfigReadAccessImpl(std::unique_lock<std::mutex>& l);
+    css::uno::Reference< css::uno::XInterface >
+    getConfigWriteAccessImpl( std::unique_lock<std::mutex>& l, const OUString& rPath );
 };
 
 
@@ -170,6 +175,7 @@ private:
 
 public:
     PersistentPropertySet(
+        std::unique_lock<std::mutex>& rCreatorGuard,
         PropertySetRegistry& rCreator,
         OUString aKey );
     virtual ~PersistentPropertySet() override;

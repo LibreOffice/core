@@ -240,122 +240,121 @@ css::uno::Sequence< OUString > SAL_CALL PropertySetRegistry::getSupportedService
 Reference< XPersistentPropertySet > SAL_CALL
 PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
 {
-    if ( !key.isEmpty() )
+    if ( key.isEmpty() )
+        return Reference< XPersistentPropertySet >();
+
+    std::unique_lock aGuard( m_aMutex );
+
+    PropertySetMap_Impl& rSets = m_aPropSets;
+
+    PropertySetMap_Impl::const_iterator it = rSets.find( key );
+    if ( it != rSets.end() )
+        // Already instantiated.
+        return Reference< XPersistentPropertySet >( (*it).second );
+
+    // Create new instance.
+    Reference< XNameAccess > xRootNameAccess(
+                            getRootConfigReadAccessImpl(aGuard), UNO_QUERY );
+    if ( !xRootNameAccess.is() )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        SAL_WARN( "ucb", "no root access" );
+        return Reference< XPersistentPropertySet >();
+    }
 
-        PropertySetMap_Impl& rSets = m_aPropSets;
+    // Propertyset in registry?
+    if ( xRootNameAccess->hasByName( key ) )
+    {
+        // Yep!
+        return Reference< XPersistentPropertySet >(
+                                new PersistentPropertySet(
+                                        aGuard, *this, key ) );
+    }
+    else if ( create )
+    {
+        // No. Create entry for propertyset.
 
-        PropertySetMap_Impl::const_iterator it = rSets.find( key );
-        if ( it != rSets.end() )
+        Reference< XSingleServiceFactory > xFac(
+                getConfigWriteAccessImpl( aGuard, OUString() ), UNO_QUERY );
+        Reference< XChangesBatch >  xBatch( xFac, UNO_QUERY );
+        Reference< XNameContainer > xContainer( xFac, UNO_QUERY );
+
+        OSL_ENSURE( xFac.is(),
+                    "PropertySetRegistry::openPropertySet - "
+                    "No factory!" );
+
+        OSL_ENSURE( xBatch.is(),
+                    "PropertySetRegistry::openPropertySet - "
+                    "No batch!" );
+
+        OSL_ENSURE( xContainer.is(),
+                    "PropertySetRegistry::openPropertySet - "
+                    "No container!" );
+
+        if ( xFac.is() && xBatch.is() && xContainer.is() )
         {
-            // Already instantiated.
-            return Reference< XPersistentPropertySet >( (*it).second );
-        }
-        else
-        {
-            // Create new instance.
-            Reference< XNameAccess > xRootNameAccess(
-                                    getRootConfigReadAccess(), UNO_QUERY );
-            if ( xRootNameAccess.is() )
+            try
             {
-                // Propertyset in registry?
-                if ( xRootNameAccess->hasByName( key ) )
+                // Create new "Properties" config item.
+                Reference< XNameReplace > xNameReplace(
+                            xFac->createInstance(), UNO_QUERY );
+
+                if ( xNameReplace.is() )
                 {
-                    // Yep!
+                    // Fill new item...
+
+                    // Insert new item.
+                    xContainer->insertByName(
+                            key, Any( xNameReplace ) );
+                    // Commit changes.
+                    xBatch->commitChanges();
+
                     return Reference< XPersistentPropertySet >(
-                                            new PersistentPropertySet(
-                                                    *this, key ) );
-                }
-                else if ( create )
-                {
-                    // No. Create entry for propertyset.
-
-                    Reference< XSingleServiceFactory > xFac(
-                            getConfigWriteAccess( OUString() ), UNO_QUERY );
-                    Reference< XChangesBatch >  xBatch( xFac, UNO_QUERY );
-                    Reference< XNameContainer > xContainer( xFac, UNO_QUERY );
-
-                    OSL_ENSURE( xFac.is(),
-                                "PropertySetRegistry::openPropertySet - "
-                                "No factory!" );
-
-                    OSL_ENSURE( xBatch.is(),
-                                "PropertySetRegistry::openPropertySet - "
-                                "No batch!" );
-
-                    OSL_ENSURE( xContainer.is(),
-                                "PropertySetRegistry::openPropertySet - "
-                                "No container!" );
-
-                    if ( xFac.is() && xBatch.is() && xContainer.is() )
-                    {
-                        try
-                        {
-                            // Create new "Properties" config item.
-                            Reference< XNameReplace > xNameReplace(
-                                        xFac->createInstance(), UNO_QUERY );
-
-                            if ( xNameReplace.is() )
-                            {
-                                // Fill new item...
-
-                                // Insert new item.
-                                xContainer->insertByName(
-                                        key, Any( xNameReplace ) );
-                                // Commit changes.
-                                xBatch->commitChanges();
-
-                                return Reference< XPersistentPropertySet >(
-                                            new PersistentPropertySet(
-                                                    *this, key ) );
-                            }
-                        }
-                        catch (const IllegalArgumentException&)
-                        {
-                            // insertByName
-
-                            OSL_FAIL( "PropertySetRegistry::openPropertySet - "
-                                        "caught IllegalArgumentException!" );
-                        }
-                        catch (const ElementExistException&)
-                        {
-                            // insertByName
-
-                            OSL_FAIL( "PropertySetRegistry::openPropertySet - "
-                                        "caught ElementExistException!" );
-                        }
-                        catch (const WrappedTargetException&)
-                        {
-                            // insertByName, commitChanges
-
-                            OSL_FAIL( "PropertySetRegistry::openPropertySet - "
-                                        "caught WrappedTargetException!" );
-                        }
-                        catch (const RuntimeException&)
-                        {
-                            OSL_FAIL( "PropertySetRegistry::openPropertySet - "
-                                        "caught RuntimeException!" );
-                        }
-                        catch (const Exception&)
-                        {
-                            // createInstance
-
-                            OSL_FAIL( "PropertySetRegistry::openPropertySet - "
-                                        "caught Exception!" );
-                        }
-                    }
-                }
-                else
-                {
-                    // No entry. Fail, but no error.
-                    return Reference< XPersistentPropertySet >();
+                                new PersistentPropertySet(
+                                        aGuard, *this, key ) );
                 }
             }
+            catch (const IllegalArgumentException&)
+            {
+                // insertByName
 
-            SAL_WARN( "ucb", "no root access" );
+                OSL_FAIL( "PropertySetRegistry::openPropertySet - "
+                            "caught IllegalArgumentException!" );
+            }
+            catch (const ElementExistException&)
+            {
+                // insertByName
+
+                OSL_FAIL( "PropertySetRegistry::openPropertySet - "
+                            "caught ElementExistException!" );
+            }
+            catch (const WrappedTargetException&)
+            {
+                // insertByName, commitChanges
+
+                OSL_FAIL( "PropertySetRegistry::openPropertySet - "
+                            "caught WrappedTargetException!" );
+            }
+            catch (const RuntimeException&)
+            {
+                OSL_FAIL( "PropertySetRegistry::openPropertySet - "
+                            "caught RuntimeException!" );
+            }
+            catch (const Exception&)
+            {
+                // createInstance
+
+                OSL_FAIL( "PropertySetRegistry::openPropertySet - "
+                            "caught Exception!" );
+            }
         }
     }
+    else
+    {
+        // No entry. Fail, but no error.
+        return Reference< XPersistentPropertySet >();
+    }
+
+    SAL_WARN( "ucb", "no root access" );
 
     return Reference< XPersistentPropertySet >();
 }
@@ -367,17 +366,17 @@ void SAL_CALL PropertySetRegistry::removePropertySet( const OUString& key )
     if ( key.isEmpty() )
         return;
 
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     Reference< XNameAccess > xRootNameAccess(
-                                    getRootConfigReadAccess(), UNO_QUERY );
+                                    getRootConfigReadAccessImpl(aGuard), UNO_QUERY );
     if ( xRootNameAccess.is() )
     {
         // Propertyset in registry?
         if ( !xRootNameAccess->hasByName( key ) )
             return;
         Reference< XChangesBatch > xBatch(
-                            getConfigWriteAccess( OUString() ), UNO_QUERY );
+                            getConfigWriteAccessImpl( aGuard, OUString() ), UNO_QUERY );
         Reference< XNameContainer > xContainer( xBatch, UNO_QUERY );
 
         if ( xBatch.is() && xContainer.is() )
@@ -430,8 +429,6 @@ css::uno::Type SAL_CALL PropertySetRegistry::getElementType()
 // virtual
 sal_Bool SAL_CALL PropertySetRegistry::hasElements()
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
     Reference< XElementAccess > xElemAccess(
                                     getRootConfigReadAccess(), UNO_QUERY );
     if ( xElemAccess.is() )
@@ -447,8 +444,6 @@ sal_Bool SAL_CALL PropertySetRegistry::hasElements()
 // virtual
 Any SAL_CALL PropertySetRegistry::getByName( const OUString& aName )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
     Reference< XNameAccess > xNameAccess(
                                     getRootConfigReadAccess(), UNO_QUERY );
     if ( xNameAccess.is() )
@@ -475,8 +470,6 @@ Any SAL_CALL PropertySetRegistry::getByName( const OUString& aName )
 // virtual
 Sequence< OUString > SAL_CALL PropertySetRegistry::getElementNames()
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
     Reference< XNameAccess > xNameAccess(
                                     getRootConfigReadAccess(), UNO_QUERY );
     if ( xNameAccess.is() )
@@ -490,8 +483,6 @@ Sequence< OUString > SAL_CALL PropertySetRegistry::getElementNames()
 // virtual
 sal_Bool SAL_CALL PropertySetRegistry::hasByName( const OUString& aName )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
     Reference< XNameAccess > xNameAccess(
                                     getRootConfigReadAccess(), UNO_QUERY );
     if ( xNameAccess.is() )
@@ -503,13 +494,14 @@ sal_Bool SAL_CALL PropertySetRegistry::hasByName( const OUString& aName )
 }
 
 
-void PropertySetRegistry::add( PersistentPropertySet* pSet )
+void PropertySetRegistry::add(
+        std::unique_lock<std::mutex>& /*rCreatorGuard*/,
+        PersistentPropertySet* pSet )
 {
     OUString key( pSet->getKey() );
 
     if ( !key.isEmpty() )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         m_aPropSets[ key ] = pSet;
     }
 }
@@ -522,7 +514,7 @@ void PropertySetRegistry::remove( PersistentPropertySet* pSet )
     if ( key.isEmpty() )
         return;
 
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     PropertySetMap_Impl& rSets = m_aPropSets;
 
@@ -836,34 +828,30 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
 }
 
 
-Reference< XMultiServiceFactory > PropertySetRegistry::getConfigProvider()
+Reference< XMultiServiceFactory > PropertySetRegistry::getConfigProvider(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     if ( !m_xConfigProvider.is() )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        if ( !m_xConfigProvider.is() )
+        const Sequence< Any >& rInitArgs = m_aInitArgs;
+
+        if ( rInitArgs.hasElements() )
         {
-            const Sequence< Any >& rInitArgs = m_aInitArgs;
+            // Extract config provider from service init args.
+            rInitArgs[ 0 ] >>= m_xConfigProvider;
 
-            if ( rInitArgs.hasElements() )
+            OSL_ENSURE( m_xConfigProvider.is(),
+                        "PropertySetRegistry::getConfigProvider - "
+                        "No config provider!" );
+        }
+        else
+        {
+            try
             {
-                // Extract config provider from service init args.
-                rInitArgs[ 0 ] >>= m_xConfigProvider;
-
-                OSL_ENSURE( m_xConfigProvider.is(),
-                            "PropertySetRegistry::getConfigProvider - "
-                            "No config provider!" );
+                m_xConfigProvider = theDefaultProvider::get( m_xContext );
             }
-            else
+            catch (const Exception&)
             {
-                try
-                {
-                    m_xConfigProvider = theDefaultProvider::get( m_xContext );
-                }
-                catch (const Exception&)
-                {
-                    TOOLS_WARN_EXCEPTION( "ucb", "");
-                }
+                TOOLS_WARN_EXCEPTION( "ucb", "");
             }
         }
     }
@@ -874,10 +862,14 @@ Reference< XMultiServiceFactory > PropertySetRegistry::getConfigProvider()
 
 Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
 {
+    std::unique_lock aGuard( m_aMutex );
+    return getRootConfigReadAccessImpl(aGuard);
+}
+
+Reference< XInterface > PropertySetRegistry::getRootConfigReadAccessImpl(std::unique_lock<std::mutex>& rGuard)
+{
     try
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
         if ( !m_xRootReadAccess.is() )
         {
             if ( m_bTriedToGetRootReadAccess )
@@ -887,7 +879,7 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
                 return Reference< XInterface >();
             }
 
-            getConfigProvider();
+            getConfigProvider(rGuard);
 
             if ( m_xConfigProvider.is() )
             {
@@ -930,10 +922,15 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
 Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
                                                     const OUString& rPath )
 {
+    std::unique_lock aGuard( m_aMutex );
+    return getConfigWriteAccessImpl(aGuard, rPath);
+}
+
+Reference< XInterface > PropertySetRegistry::getConfigWriteAccessImpl(std::unique_lock<std::mutex>& rGuard,
+                                                    const OUString& rPath )
+{
     try
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
         if ( !m_xRootWriteAccess.is() )
         {
             if ( m_bTriedToGetRootWriteAccess )
@@ -943,7 +940,7 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
                 return Reference< XInterface >();
             }
 
-            getConfigProvider();
+            getConfigProvider(rGuard);
 
             if ( m_xConfigProvider.is() )
             {
@@ -1014,12 +1011,13 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
 
 
 PersistentPropertySet::PersistentPropertySet(
+                        std::unique_lock<std::mutex>& rCreatorGuard,
                         PropertySetRegistry& rCreator,
                         OUString aKey )
 : m_pCreator( &rCreator ), m_aKey(std::move( aKey ))
 {
     // register at creator.
-    rCreator.add( this );
+    rCreator.add( rCreatorGuard, this );
 }
 
 
