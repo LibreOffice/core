@@ -1910,7 +1910,7 @@ void PersistentPropertySet::notifyPropertyChangeEvent(
 
     // Get "normal" listeners for the property.
     OInterfaceContainerHelper4<XPropertyChangeListener>* pContainer =
-            m_pPropertyChangeListeners->getContainer( rEvent.PropertyName );
+            m_pPropertyChangeListeners->getContainer( aGuard, rEvent.PropertyName );
     if ( pContainer && pContainer->getLength(aGuard) )
     {
         pContainer->notifyEach( aGuard, &XPropertyChangeListener::propertyChange, rEvent );
@@ -1918,7 +1918,7 @@ void PersistentPropertySet::notifyPropertyChangeEvent(
 
     // Get "normal" listeners for all properties.
     OInterfaceContainerHelper4<XPropertyChangeListener>* pNoNameContainer =
-            m_pPropertyChangeListeners->getContainer( OUString() );
+            m_pPropertyChangeListeners->getContainer( aGuard, OUString() );
     if ( pNoNameContainer && pNoNameContainer->getLength(aGuard) )
     {
         pNoNameContainer->notifyEach( aGuard, &XPropertyChangeListener::propertyChange, rEvent );
