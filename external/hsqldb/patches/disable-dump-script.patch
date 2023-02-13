@@ -1,0 +1,36 @@
+--- a/hsqldb/src/org/hsqldb/DatabaseCommandInterpreter.java	2023-02-13 11:08:11.297243034 +0000
++++ b/hsqldb/src/org/hsqldb/DatabaseCommandInterpreter.java	2023-02-13 13:49:17.973089433 +0000
+@@ -392,31 +392,19 @@
+      */
+     private Result processScript() throws IOException, HsqlException {
+ 
+-        String           token = tokenizer.getString();
+-        ScriptWriterText dsw   = null;
++        tokenizer.getString();
+ 
+         session.checkAdmin();
+ 
+         try {
+             if (tokenizer.wasValue()) {
+-                if (tokenizer.getType() != Types.VARCHAR) {
+-                    throw Trace.error(Trace.INVALID_IDENTIFIER);
+-                }
+-
+-                dsw = new ScriptWriterText(database, token, true, true, true);
+-
+-                dsw.writeAll();
+-
+-                return new Result(ResultConstants.UPDATECOUNT);
++                throw Trace.error(Trace.ACCESS_IS_DENIED);
+             } else {
+                 tokenizer.back();
+ 
+                 return DatabaseScript.getScript(database, false);
+             }
+         } finally {
+-            if (dsw != null) {
+-                dsw.close();
+-            }
+         }
+     }
+ 
