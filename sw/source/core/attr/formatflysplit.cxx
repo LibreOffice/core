@@ -21,6 +21,8 @@
 
 #include <libxml/xmlwriter.h>
 
+static std::optional<bool> g_oForce;
+
 SwFormatFlySplit::SwFormatFlySplit(bool bSplit)
     : SfxBoolItem(RES_FLY_SPLIT, bSplit)
 {
@@ -34,9 +36,9 @@ SwFormatFlySplit::SwFormatFlySplit(bool bSplit)
     //
     // - Both the master fly and the follow flys need an anchor. At the same time, we want all text
     // of the anchor frame to be wrapped around the last follow fly frame, for Word compatibility.
-    // These are solved by splitting the anchor frame as many times as needed, always at text
+    // These are solved by splitting the anchor frame as many times as needed, always at
     // TextFrameIndex 0.
-    if (getenv("SW_FORCE_FLY_SPLIT"))
+    if (SwFormatFlySplit::GetForce())
     {
         SetValue(true);
     }
@@ -55,6 +57,18 @@ void SwFormatFlySplit::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                       BAD_CAST(OString::boolean(GetValue()).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
+}
+
+void SwFormatFlySplit::SetForce(bool bForce) { g_oForce = bForce; }
+
+bool SwFormatFlySplit::GetForce()
+{
+    if (g_oForce.has_value())
+    {
+        return *g_oForce;
+    }
+
+    return getenv("SW_FORCE_FLY_SPLIT") != nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

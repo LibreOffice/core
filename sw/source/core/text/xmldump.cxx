@@ -26,6 +26,7 @@
 #include <libxml/xmlwriter.h>
 #include <SwPortionHandler.hxx>
 #include <view.hxx>
+#include <flyfrms.hxx>
 #include <svx/svdobj.hxx>
 
 #include "porlay.hxx"
@@ -394,6 +395,11 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
         else
         {
             dumpChildrenAsXml( writer );
+            if (IsFlyFrame())
+            {
+                auto pFlyFrame = static_cast<const SwFlyFrame*>(this);
+                pFlyFrame->SwAnchoredObject::dumpAsXml(writer);
+            }
         }
         (void)xmlTextWriterEndElement( writer );
     }
@@ -494,6 +500,12 @@ void SwAnchoredObject::dumpAsXml( xmlTextWriterPtr writer ) const
 
     (void)xmlTextWriterStartElement( writer, BAD_CAST( getElementName() ) );
     (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ptr" ), "%p", this );
+    (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("anchor-frame"), BAD_CAST(OString::number(mpAnchorFrame->GetFrameId()).getStr()));
+    SwTextFrame* pAnchorCharFrame = const_cast<SwAnchoredObject*>(this)->FindAnchorCharFrame();
+    if (pAnchorCharFrame)
+    {
+        (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("anchor-char-frame"), BAD_CAST(OString::number(pAnchorCharFrame->GetFrameId()).getStr()));
+    }
 
     (void)xmlTextWriterStartElement( writer, BAD_CAST( "bounds" ) );
     // don't call GetObjBoundRect(), it modifies the layout
@@ -535,6 +547,24 @@ void SwTextFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
         (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwTextFrame*>(m_pPrecede)->GetFrameId() );
 
     (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("offset"), BAD_CAST(OString::number(static_cast<sal_Int32>(mnOffset)).getStr()));
+}
+
+void SwFlyAtContentFrame::dumpAsXmlAttributes(xmlTextWriterPtr pWriter) const
+{
+    SwFlyFreeFrame::dumpAsXmlAttributes(pWriter);
+
+    if (m_pFollow != nullptr)
+    {
+        (void)xmlTextWriterWriteAttribute(
+            pWriter, BAD_CAST("follow"),
+            BAD_CAST(OString::number(m_pFollow->GetFrame().GetFrameId()).getStr()));
+    }
+    if (m_pPrecede != nullptr)
+    {
+        (void)xmlTextWriterWriteAttribute(
+            pWriter, BAD_CAST("precede"),
+            BAD_CAST(OString::number(m_pPrecede->GetFrame().GetFrameId()).getStr()));
+    }
 }
 
 void SwSectionFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const

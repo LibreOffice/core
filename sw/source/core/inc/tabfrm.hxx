@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_TABFRM_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_TABFRM_HXX
 
+#include <swdllapi.h>
+
 #include "layfrm.hxx"
 #include "flowfrm.hxx"
 
@@ -43,7 +45,7 @@ namespace o3tl {
 }
 
 /// SwTabFrame is one table in the document layout, containing rows (which contain cells).
-class SAL_DLLPUBLIC_RTTI SwTabFrame final: public SwLayoutFrame, public SwFlowFrame
+class SW_DLLPUBLIC SwTabFrame final: public SwLayoutFrame, public SwFlowFrame
 {
     friend void CalcContent( SwLayoutFrame *pLay, bool bNoColl );
 
