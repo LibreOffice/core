@@ -156,10 +156,9 @@ uno::Reference<rdf::XURI> createBaseURI(
 
     // #i108078# workaround non-hierarchical vnd.sun.star.expand URIs
     // this really should be done somewhere else, not here.
-    if (pkgURI.matchIgnoreAsciiCase("vnd.sun.star.expand:"))
+    if (pkgURI.startsWithIgnoreAsciiCase("vnd.sun.star.expand:", &pkgURI))
     {
         // expand it here (makeAbsolute requires hierarchical URI)
-        pkgURI = pkgURI.copy( RTL_CONSTASCII_LENGTH("vnd.sun.star.expand:") );
         if (!pkgURI.isEmpty()) {
             pkgURI = ::rtl::Uri::decode(
                     pkgURI, rtl_UriDecodeStrict, RTL_TEXTENCODING_UTF8);

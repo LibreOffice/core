@@ -103,10 +103,9 @@ namespace basprov
                     }
                     else if ( aScheme.equalsIgnoreAsciiCase("vnd.sun.star.pkg") )
                     {
-                        OUString aAuthority = xUriRef->getAuthority();
-                        if ( aAuthority.matchIgnoreAsciiCase( "vnd.sun.star.expand:" ) )
+                        OUString aDecodedURL = xUriRef->getAuthority();
+                        if ( aDecodedURL.startsWithIgnoreAsciiCase( "vnd.sun.star.expand:", &aDecodedURL ) )
                         {
-                            OUString aDecodedURL( aAuthority.copy( sizeof ( "vnd.sun.star.expand:" ) - 1 ) );
                             aDecodedURL = ::rtl::Uri::decode( aDecodedURL, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
                             Reference<util::XMacroExpander> xMacroExpander =
                                 util::theMacroExpander::get(m_xContext);

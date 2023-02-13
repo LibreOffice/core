@@ -31,6 +31,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/uri.hxx>
 
 #include <comphelper/interaction.hxx>
 
@@ -207,20 +208,20 @@ namespace XSLT
     OUString
     XSLTFilter::expandUrl(const OUString& sUrl)
     {
-        OUString sExpandedUrl;
         try
             {
+                OUString sPreparedURL(sUrl);
+                if (sPreparedURL.startsWithIgnoreAsciiCase("vnd.sun.star.expand:", &sPreparedURL))
+                    sPreparedURL = rtl::Uri::decode(sPreparedURL, rtl_UriDecodeWithCharset,
+                                                    RTL_TEXTENCODING_UTF8);
                 css::uno::Reference<XMacroExpander>
                         xMacroExpander = theMacroExpander::get(m_xContext);
-                sExpandedUrl = xMacroExpander->expandMacros(sUrl);
-                sal_Int32 nPos = sExpandedUrl.indexOf( "vnd.sun.star.expand:" );
-                if (nPos != -1)
-                    sExpandedUrl = sExpandedUrl.copy(nPos + 20);
+                return xMacroExpander->expandMacros(sPreparedURL);
             }
         catch (const Exception&)
             {
             }
-        return sExpandedUrl;
+        return {};
     }
 
     css::uno::Reference<xslt::XXSLTTransformer>

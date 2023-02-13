@@ -300,9 +300,7 @@ OUString expandUnoRcTerm( OUString const & term_ )
 OUString makeRcTerm( OUString const & url )
 {
     OSL_ASSERT( url.match( "vnd.sun.star.expand:" ));
-    if (url.match( "vnd.sun.star.expand:" )) {
-        // cut protocol:
-        OUString rcterm( url.copy( sizeof ("vnd.sun.star.expand:") - 1 ) );
+    if (OUString rcterm; url.startsWithIgnoreAsciiCase("vnd.sun.star.expand:", &rcterm)) {
         // decode uric class chars:
         rcterm = ::rtl::Uri::decode(
             rcterm, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
@@ -315,9 +313,7 @@ OUString makeRcTerm( OUString const & url )
 
 OUString expandUnoRcUrl( OUString const & url )
 {
-    if (url.match( "vnd.sun.star.expand:" )) {
-        // cut protocol:
-        OUString rcurl( url.copy( sizeof ("vnd.sun.star.expand:") - 1 ) );
+    if (OUString rcurl; url.startsWithIgnoreAsciiCase("vnd.sun.star.expand:", &rcurl)) {
         // decode uric class chars:
         rcurl = ::rtl::Uri::decode(
             rcurl, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );

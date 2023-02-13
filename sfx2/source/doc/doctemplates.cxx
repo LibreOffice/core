@@ -20,6 +20,7 @@
 #include <osl/mutex.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
+#include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <utility>
@@ -542,8 +543,6 @@ void SfxDocTplService_Impl::getDirList()
     maTemplateDirs = Sequence< OUString >( nCount );
 
     uno::Reference< util::XMacroExpander > xExpander = util::theMacroExpander::get(mxContext);
-    static const OUStringLiteral aPrefix(
-        u"vnd.sun.star.expand:"  );
 
     sal_Int32 nIdx{ 0 };
     for (auto& rTemplateDir : asNonConstRange(maTemplateDirs))
@@ -552,13 +551,10 @@ void SfxDocTplService_Impl::getDirList()
         aURL.SetURL( o3tl::getToken(aDirs, 0, C_DELIM, nIdx ) );
         rTemplateDir = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
-        if ( xExpander.is() )
+        if (xExpander && rTemplateDir.startsWithIgnoreAsciiCase("vnd.sun.star.expand:", &rTemplateDir))
         {
-            const sal_Int32 nIndex{ rTemplateDir.indexOf( aPrefix ) };
-            if (nIndex<0)
-                continue;
-
-            rTemplateDir = rTemplateDir.replaceAt(nIndex, aPrefix.getLength(), u"");
+            rTemplateDir
+                = rtl::Uri::decode(rTemplateDir, rtl_UriDecodeStrict, RTL_TEXTENCODING_UTF8);
             rTemplateDir = xExpander->expandMacros( rTemplateDir );
         }
     }

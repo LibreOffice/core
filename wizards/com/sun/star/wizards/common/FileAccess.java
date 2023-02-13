@@ -21,6 +21,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.Locale;
 import com.sun.star.uno.Exception;
 import com.sun.star.util.XMacroExpander;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
@@ -29,6 +30,7 @@ import com.sun.star.io.XActiveDataSink;
 import com.sun.star.io.XInputStream;
 import com.sun.star.io.XTextInputStream;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lib.util.StringHelper;
 import com.sun.star.ucb.CommandAbortedException;
 import com.sun.star.ucb.XFileIdentifierConverter;
 import com.sun.star.ucb.XSimpleFileAccess;
@@ -184,9 +186,11 @@ public class FileAccess
             for (int i = 0; i < Template_internal.length; i++)
             {
                 String sPath = Template_internal[i];
-                if (sPath.startsWith("vnd."))
+                if (sPath.toLowerCase().startsWith("vnd.sun.star.expand:"))
                 {
-                    String sPathToExpand = sPath.substring("vnd.sun.star.Expand:".length());
+                    String sPathToExpand = URLDecoder.decode(StringHelper.replace(
+                         sPath.substring("vnd.sun.star.expand:".length()),
+                         '+', "%2B"), "UTF-8");
 
                     XMacroExpander xExpander = Helper.getMacroExpander(xMSF);
                     sPath = xExpander.expandMacros(sPathToExpand);
@@ -201,7 +205,7 @@ public class FileAccess
             aPathList.add(Template_writable);
         // There was a bug here, because we have to search through the whole list of paths
         }
-        catch (Exception exception)
+        catch (java.lang.Exception exception)
         {
             exception.printStackTrace(System.err);
         }

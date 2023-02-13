@@ -30,8 +30,6 @@
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <comphelper/diagnose_ex.hxx>
 
-#define EXPAND_PROTOCOL "vnd.sun.star.expand"
-
 
 using namespace ::com::sun::star;
 
@@ -114,18 +112,15 @@ OUString ExpandContentProviderImpl::expandUri(
     uno::Reference< ucb::XContentIdentifier > const & xIdentifier ) const
 {
     OUString uri( xIdentifier->getContentIdentifier() );
-    if (!uri.startsWith(EXPAND_PROTOCOL ":"))
+    if (!uri.startsWithIgnoreAsciiCase("vnd.sun.star.expand:", &uri))
     {
         throw ucb::IllegalIdentifierException(
-            "expected protocol " EXPAND_PROTOCOL "!",
+            "expected protocol vnd.sun.star.expand!",
             static_cast< OWeakObject * >(
                 const_cast< ExpandContentProviderImpl * >(this) ) );
     }
-    // cut protocol
-    OUString str( uri.copy( sizeof (EXPAND_PROTOCOL ":") -1 ) );
     // decode uric class chars
-    str = ::rtl::Uri::decode(
-        str, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+    OUString str = ::rtl::Uri::decode(uri, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
     // expand macro string
     return m_xMacroExpander->expandMacros( str );
 }
