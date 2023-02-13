@@ -987,6 +987,7 @@ void SvxFontPrevWindow::SetFromItemSet(const SfxItemSet &rSet, bool bPreviewBack
 
     if( !bPreviewBackgroundToCharacter )
     {
+        bool bBackColorFound = false;
         if( GetWhich( rSet, SID_ATTR_BRUSH, nWhich ) )
         {
             const SvxBrushItem& rBrush = static_cast<const  SvxBrushItem&>( rSet.Get( nWhich ) );
@@ -994,9 +995,14 @@ void SvxFontPrevWindow::SetFromItemSet(const SfxItemSet &rSet, bool bPreviewBack
             {
                 const Color& rBrushColor = rBrush.GetColor();
                 if (rBrushColor != COL_TRANSPARENT)
+                {
                     pImpl->mxBackColor = rBrush.GetColor();
+                    bBackColorFound = true;
+                }
             }
         }
+        if (!bBackColorFound)
+            pImpl->mxBackColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
     }
 
     // Font
