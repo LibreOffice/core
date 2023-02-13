@@ -118,7 +118,7 @@ local file="$1"
         */_uuid.cpython-*.so)
             allowlist="${allowlist} libuuid.so.1"
         ;;
-        */libcairo.so.2)
+        */libcairo-lo.so.2)
             allowlist="${allowlist} ${x11allowlist} libxcb-shm.so.0 libxcb.so.1 libxcb-render.so.0"
         ;;
         */libcairocanvaslo.so)
