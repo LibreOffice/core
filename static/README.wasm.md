@@ -1,6 +1,6 @@
 # Support for Emscripten Cross Build
 
-This subdirecctory provides support for building LibreOffice as WASM, with the Emscripten toolchain.
+This subdirectory provides support for building LibreOffice as WASM, with the Emscripten toolchain.
 
 You can build LibreOffice for WASM for two separate purposes: 1)
 Either to produce a WASM binary of LibreOffice as such, using Qt5 for
