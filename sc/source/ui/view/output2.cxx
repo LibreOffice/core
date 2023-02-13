@@ -2436,8 +2436,15 @@ bool ScOutputData::DrawEditParam::readCellContent(
                later the attributes are loaded, so no way to ignore line breaks */
             if (!mbBreak && pData->GetSharedStrings().size() > 1)
             {
-                mpEngine->SetControlWord(mpEngine->GetControlWord() | EEControlBits::SINGLELINE);
+                EEControlBits nControlWord = mpEngine->GetControlWord() | EEControlBits::SINGLELINE;
+                bool bUndoAttribs = bool(nControlWord & EEControlBits::UNDOATTRIBS);
+                if (bUndoAttribs)
+                    nControlWord &= ~EEControlBits::UNDOATTRIBS;
+                mpEngine->SetControlWord(nControlWord);
                 mpEngine->SetTextCurrentDefaults(maString);
+                mpEngine->SetSingleLineCharAttribs(pData);
+                if (bUndoAttribs)
+                    mpEngine->SetControlWord(nControlWord | EEControlBits::UNDOATTRIBS);
             }
             else
             {

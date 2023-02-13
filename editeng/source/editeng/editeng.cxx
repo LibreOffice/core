@@ -1771,6 +1771,11 @@ const SfxPoolItem& EditEngine::GetParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich
     return pImpEditEngine->GetParaAttrib( nPara, nWhich );
 }
 
+void EditEngine::SetSingleLineCharAttribs(const EditTextObject* pTxtObj)
+{
+    pImpEditEngine->SetSingleLineCharAttribs(pTxtObj);
+}
+
 void EditEngine::SetCharAttribs(sal_Int32 nPara, const SfxItemSet& rSet)
 {
     EditSelection aSel(pImpEditEngine->ConvertSelection(nPara, 0, nPara, GetTextLen(nPara)));
