@@ -212,11 +212,14 @@ namespace XSLT
             {
                 OUString sPreparedURL(sUrl);
                 if (sPreparedURL.startsWithIgnoreAsciiCase("vnd.sun.star.expand:", &sPreparedURL))
+                {
                     sPreparedURL = rtl::Uri::decode(sPreparedURL, rtl_UriDecodeWithCharset,
                                                     RTL_TEXTENCODING_UTF8);
-                css::uno::Reference<XMacroExpander>
+                    css::uno::Reference<XMacroExpander>
                         xMacroExpander = theMacroExpander::get(m_xContext);
-                return xMacroExpander->expandMacros(sPreparedURL);
+                    sPreparedURL = xMacroExpander->expandMacros(sPreparedURL);
+                }
+                return sPreparedURL;
             }
         catch (const Exception&)
             {
