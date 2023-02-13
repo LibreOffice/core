@@ -349,9 +349,6 @@
                 <property name="wrap">True</property>
                 <property name="max-width-chars">60</property>
                 <property name="xalign">0</property>
-                <attributes>
-                  <attribute name="scale" value="1.1"/>
-                </attributes>
               </object>
               <packing>
                 <property name="left-attach">1</property>

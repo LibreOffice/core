@@ -284,6 +284,9 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="optadvancedpage|javapath">Location: </property>
                     <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.9"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
