@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <deque>
+#include <optional>
 #include <stack>
 #include <string.h>
 #include <string_view>
@@ -7695,12 +7696,14 @@ public:
         GtkWidget* pPage = gtk_assistant_get_nth_page(m_pAssistant, nOldIndex);
 
         g_object_ref(pPage);
-        auto const title = gtk_assistant_get_page_title(m_pAssistant, pPage);
-        OString sTitle(title == nullptr ? "" : title);
+        std::optional<OString> sTitle;
+        if (auto const title = gtk_assistant_get_page_title(m_pAssistant, pPage)) {
+            sTitle = title;
+        }
         gtk_assistant_remove_page(m_pAssistant, nOldIndex);
         gtk_assistant_insert_page(m_pAssistant, pPage, nNewIndex);
         gtk_assistant_set_page_type(m_pAssistant, pPage, GTK_ASSISTANT_PAGE_CUSTOM);
-        gtk_assistant_set_page_title(m_pAssistant, pPage, sTitle.getStr());
+        gtk_assistant_set_page_title(m_pAssistant, pPage, sTitle ? sTitle->getStr() : nullptr);
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_container_forall(GTK_CONTAINER(m_pSidebar), wrap_sidebar_label, nullptr);
 #endif
