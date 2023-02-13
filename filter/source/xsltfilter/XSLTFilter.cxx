@@ -236,17 +236,7 @@ namespace XSLT
         // service name there)
         if (rTransformer.toBoolean() || rTransformer.startsWith("com.sun."))
         {
-            try
-            {
-                xTransformer = xslt::XSLT2Transformer::create(m_xContext, rArgs);
-            }
-            catch (const Exception&)
-            {
-                // TODO: put a dialog telling about the need to install
-                // xslt2-transformer extension here
-                SAL_WARN("filter.xslt", "could not create XSLT 2.0 transformer");
-                throw;
-            }
+            xTransformer = xslt::XSLT2Transformer::create(m_xContext, rArgs);
         }
 
         // instantiation of XSLT 2.0 transformer service failed, or the
