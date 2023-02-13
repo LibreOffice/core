@@ -359,6 +359,10 @@ For instance, this autogen.input works for me:
 `--disable-gui`
 `--with-main-module=writer`
 
+For building LO core for use in COWASM, it is known to work to use
+Emscripten 3.1.30 (and not just 2.0.31 which is what the LO+Qt5 work
+has been using).
+
 ### That's all
 
 After all, in this case you are building LO core headless for it to be used by other software.
