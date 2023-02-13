@@ -290,6 +290,37 @@ namespace connectivity
                         } // if ( xStream.is() )
                         ::comphelper::disposeComponent(xStream);
                     }
+
+                    // disallow any database/script files that contain a "SCRIPT[.*]" entry (this is belt and braces
+                    // in that bundled hsqldb 1.8.0 is patched to also reject them)
+                    //
+                    // hsqldb 2.6.0 release notes have: added system role SCRIPT_OPS for export / import of database structure and data
+                    // which seems to provide a builtin way to do this with contemporary hsqldb
+                    const OUString sScript( "script" );
+                    if (!bIsNewDatabase && xStorage->isStreamElement(sScript))
+                    {
+                        Reference<XStream > xStream = xStorage->openStreamElement(sScript, ElementModes::READ);
+                        if (xStream.is())
+                        {
+                            std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream(xStream));
+                            if (pStream)
+                            {
+                                OString sLine;
+                                while (pStream->ReadLine(sLine))
+                                {
+                                    OString sText = sLine.trim();
+                                    if (sText.startsWithIgnoreAsciiCase("SCRIPT"))
+                                    {
+                                        ::connectivity::SharedResources aResources;
+                                        sMessage = aResources.getResourceString(STR_COULD_NOT_LOAD_FILE).replaceFirst("$filename$", sSystemPath);
+                                        break;
+                                    }
+                                }
+                            }
+                        } // if ( xStream.is() )
+                        ::comphelper::disposeComponent(xStream);
+                    }
+
                 }
                 catch(Exception&)
                 {
