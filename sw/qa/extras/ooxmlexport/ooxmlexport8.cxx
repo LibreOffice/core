@@ -789,6 +789,9 @@ DECLARE_OOXMLEXPORT_TEST(testFdo53985, "fdo53985.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("TextSection is protected", true, getProperty<bool>(xSect, "IsProtected"));
     xSect.set(xSections->getByIndex(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Section3 is protected", false, getProperty<bool>(xSect, "IsProtected"));
+
+    // This was increasing by 3 every round-trip - an extra paragraph after each table in sections
+    CPPUNIT_ASSERT_EQUAL(9, getParagraphs());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo59638, "fdo59638.docx")
