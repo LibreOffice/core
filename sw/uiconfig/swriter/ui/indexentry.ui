@@ -167,7 +167,7 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="margin-end">6</property>
-                        <property name="label" translatable="yes" context="indexentry|typeft">Index</property>
+                        <property name="label" translatable="yes" context="indexentry|typeft">Index:</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">typecb</property>
                         <property name="xalign">0</property>
@@ -212,7 +212,7 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="margin-end">6</property>
-                        <property name="label" translatable="yes" context="indexentry|label3">Entry</property>
+                        <property name="label" translatable="yes" context="indexentry|label3">Entry:</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">entryed</property>
                         <property name="xalign">0</property>
@@ -228,7 +228,7 @@
                         <property name="sensitive">False</property>
                         <property name="can-focus">False</property>
                         <property name="margin-end">6</property>
-                        <property name="label" translatable="yes" context="indexentry|key1ft">1st key</property>
+                        <property name="label" translatable="yes" context="indexentry|key1ft">1st key:</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">key1cb</property>
                         <property name="xalign">0</property>
@@ -244,7 +244,7 @@
                         <property name="sensitive">False</property>
                         <property name="can-focus">False</property>
                         <property name="margin-end">6</property>
-                        <property name="label" translatable="yes" context="indexentry|key2ft">2nd key</property>
+                        <property name="label" translatable="yes" context="indexentry|key2ft">2nd key:</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">key2cb</property>
                         <property name="xalign">0</property>
@@ -259,7 +259,7 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="margin-end">6</property>
-                        <property name="label" translatable="yes" context="indexentry|levelft">Level</property>
+                        <property name="label" translatable="yes" context="indexentry|levelft">Level:</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">levelnf</property>
                         <property name="xalign">0</property>
