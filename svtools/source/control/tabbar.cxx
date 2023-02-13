@@ -884,6 +884,15 @@ void TabBar::ImplShowPage( sal_uInt16 nPos )
 
 IMPL_LINK( TabBar, ImplClickHdl, weld::Button&, rBtn, void )
 {
+    if ((GetPointerState().mnState & (MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT)) == 0)
+    {
+        // like tdf#149482 if we didn't see a mouse up, but find that the mouse is no
+        // longer pressed at this point, then bail
+        mpImpl->mxButtonBox->m_xPrevRepeater->Stop();
+        mpImpl->mxButtonBox->m_xNextRepeater->Stop();
+        return;
+    }
+
     EndEditMode();
 
     sal_uInt16 nNewPos = mnFirstPos;
@@ -922,6 +931,14 @@ IMPL_LINK( TabBar, ImplClickHdl, weld::Button&, rBtn, void )
 
 IMPL_LINK_NOARG(TabBar, ImplAddClickHandler, weld::Button&, void)
 {
+    if ((GetPointerState().mnState & (MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT)) == 0)
+    {
+        // tdf#149482 if we didn't see a mouse up, but find that the mouse is no
+        // longer pressed at this point, then bail
+        mpImpl->mxButtonBox->m_xAddRepeater->Stop();
+        return;
+    }
+
     EndEditMode();
     AddTabClick();
 }
