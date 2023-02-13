@@ -234,10 +234,7 @@ namespace XSLT
         {
             xTransformer = xslt::XSLT2Transformer::create(m_xContext, rArgs);
         }
-
-        // instantiation of XSLT 2.0 transformer service failed, or the
-        // filter does not need it
-        if (!xTransformer.is())
+        else
         {
             xTransformer = xslt::XSLTTransformer::create(m_xContext, rArgs);
         }
