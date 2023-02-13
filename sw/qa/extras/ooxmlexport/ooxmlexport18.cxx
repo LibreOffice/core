@@ -93,6 +93,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153613_sdtAfterPgBreak, "tdf153613_sdtAfterPgBre
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf153592_columnBreaks)
+{
+    loadAndSave("tdf153592_columnBreaks.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // The two column breaks were lost on import. (I wouldn't complain if they were at 3,5)
+    assertXPath(pXmlDoc, "//w:br", 2);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
 {
     // Given a docx document with a shape with vert="mongolianVert".
