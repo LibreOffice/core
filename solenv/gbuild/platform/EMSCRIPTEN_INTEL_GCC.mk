@@ -71,6 +71,8 @@ ifeq ($(HAVE_EXTERNAL_DWARF),TRUE)
 gb_DEBUGINFO_FLAGS += -gseparate-dwarf
 endif
 
+gb_COMPILEROPTFLAGS := -O3
+
 # We need at least code elimination, otherwise linking OOMs even with 64GB.
 # So we "fake" -Og support to mean -O1 for Emscripten and always enable it for debug in configure.
 gb_COMPILERDEBUGOPTFLAGS := -O1
