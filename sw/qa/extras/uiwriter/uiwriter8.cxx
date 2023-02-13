@@ -842,6 +842,60 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146248)
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, "HeaderIsOn"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf152964)
+{
+    createSwDoc();
+
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    Scheduler::ProcessEventsToIdle();
+
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "Rows", uno::Any(sal_Int32(2)) }, { "Columns", uno::Any(sal_Int32(2)) } }));
+
+    dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTextTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTextTable->getColumns()->getCount());
+
+    SwDoc* pDoc = getSwDoc();
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pEditShell->GetRedlineCount());
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+    dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pEditShell->GetRedlineCount());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(0), pEditShell->GetRedlineCount());
+
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pEditShell->GetRedlineCount());
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf107427)
 {
     createSwDoc();
