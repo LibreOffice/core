@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <osl/conditn.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/interfacecontainer3.hxx>
@@ -150,7 +150,7 @@ class DynamicResultSetWrapperListener
                 , public css::ucb::XDynamicResultSetListener
 {
     DynamicResultSetWrapper*    m_pOwner;
-    osl::Mutex                  m_aMutex;
+    std::mutex                  m_aMutex;
 
 public:
     DynamicResultSetWrapperListener( DynamicResultSetWrapper* pOwner );

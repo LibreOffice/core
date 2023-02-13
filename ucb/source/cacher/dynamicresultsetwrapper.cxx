@@ -459,7 +459,7 @@ css::uno::Any SAL_CALL DynamicResultSetWrapperListener::queryInterface( const cs
 //virtual
 void SAL_CALL DynamicResultSetWrapperListener::disposing( const EventObject& rEventObject )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if( m_pOwner )
         m_pOwner->impl_disposing( rEventObject );
@@ -468,7 +468,7 @@ void SAL_CALL DynamicResultSetWrapperListener::disposing( const EventObject& rEv
 //virtual
 void SAL_CALL DynamicResultSetWrapperListener::notify( const ListEvent& Changes )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if( m_pOwner )
         m_pOwner->impl_notify( Changes );
@@ -480,7 +480,7 @@ void SAL_CALL DynamicResultSetWrapperListener::notify( const ListEvent& Changes 
 
 void DynamicResultSetWrapperListener::impl_OwnerDies()
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     m_pOwner = nullptr;
 }
