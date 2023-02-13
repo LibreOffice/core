@@ -143,7 +143,10 @@ public:
 
 };
 
-/** invariant for SwAuthorityField is that it is always registered at its
+/** Represents an inserted bibliography entry, created using Insert -> Table of Contents and Index
+    -> Bibliography Entry.
+
+    invariant for SwAuthorityField is that it is always registered at its
     SwAuthorityFieldType via AddField()/RemoveField() & therefore has m_nHandle
     set - but it's possible that multiple SwAuthorityField have the same
     m_nHandle & so the number of instances is an upper bound on
