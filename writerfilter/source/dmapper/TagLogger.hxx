@@ -33,8 +33,8 @@ namespace writerfilter
     class TagLogger
     {
     private:
-        xmlTextWriterPtr pWriter;
-        const char* pName;
+        xmlTextWriterPtr m_pWriter;
+        const char* m_pName;
 
     public:
         explicit TagLogger();

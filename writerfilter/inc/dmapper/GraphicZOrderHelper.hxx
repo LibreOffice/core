@@ -22,7 +22,7 @@ public:
 
 private:
     using Items = std::map<sal_Int32, css::uno::Reference<css::beans::XPropertySet>>;
-    Items items;
+    Items m_items;
 };
 
 } // namespace writerfilter::dmapper

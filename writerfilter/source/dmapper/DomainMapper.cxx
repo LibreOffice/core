@@ -4511,9 +4511,9 @@ SettingsTablePtr const & DomainMapper::GetSettingsTable()
 
 GraphicZOrderHelper* DomainMapper::graphicZOrderHelper()
 {
-    if (zOrderHelper == nullptr)
-        zOrderHelper.reset( new GraphicZOrderHelper );
-    return zOrderHelper.get();
+    if (m_zOrderHelper == nullptr)
+        m_zOrderHelper.reset( new GraphicZOrderHelper );
+    return m_zOrderHelper.get();
 }
 
 uno::Reference<drawing::XShape> DomainMapper::PopPendingShape()

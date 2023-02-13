@@ -59,16 +59,16 @@ namespace
 {
 class RTFSprms_compare
 {
-    Id keyword;
+    Id m_keyword;
 
 public:
-    RTFSprms_compare(Id kw)
-        : keyword{ kw }
+    RTFSprms_compare(Id keyword)
+        : m_keyword{ keyword }
     {
     }
     bool operator()(const std::pair<Id, RTFValue::Pointer_t>& raPair) const
     {
-        return raPair.first == keyword;
+        return raPair.first == m_keyword;
     }
 };
 }

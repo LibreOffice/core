@@ -272,7 +272,7 @@ text::WrapTextMode WrapHandler::getWrapMode( ) const
 
 void GraphicZOrderHelper::addItem(uno::Reference<beans::XPropertySet> const& props, sal_Int32 const relativeHeight)
 {
-    items[ relativeHeight ] = props;
+    m_items[ relativeHeight ] = props;
 }
 
 // The relativeHeight value in .docx is an arbitrary number, where only the relative ordering matters.
@@ -281,7 +281,7 @@ void GraphicZOrderHelper::addItem(uno::Reference<beans::XPropertySet> const& pro
 sal_Int32 GraphicZOrderHelper::findZOrder( sal_Int32 relativeHeight, bool bOldStyle )
 {
     // std::map is iterated sorted by key
-    auto it = std::find_if(items.cbegin(), items.cend(),
+    auto it = std::find_if(m_items.cbegin(), m_items.cend(),
         [relativeHeight, bOldStyle](const Items::value_type& rItem) {
             // Old-style ordering differs in what should happen when there is already an item with the same z-order:
             // we belong under it in case of new-style, but we belong above it in case of old-style.
@@ -289,9 +289,9 @@ sal_Int32 GraphicZOrderHelper::findZOrder( sal_Int32 relativeHeight, bool bOldSt
         }
     );
     sal_Int32 itemZOrderOffset(0); // before the item
-    if( it == items.end()) // we're topmost
+    if( it == m_items.end()) // we're topmost
     {
-        if( items.empty())
+        if( m_items.empty())
             return 0;
         --it;
         itemZOrderOffset = 1; // after the topmost

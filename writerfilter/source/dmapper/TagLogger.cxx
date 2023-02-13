@@ -28,20 +28,20 @@ using namespace css;
 namespace writerfilter
 {
     TagLogger::TagLogger()
-        : pWriter( nullptr ), pName( "DOMAINMAPPER" )
+        : m_pWriter( nullptr ), m_pName( "DOMAINMAPPER" )
     {
     }
 
     TagLogger::~TagLogger()
     {
-        pWriter = nullptr;
-        pName = nullptr;
+        m_pWriter = nullptr;
+        m_pName = nullptr;
     }
 
 #ifdef DBG_UTIL
     void TagLogger::setFileName( const std::string & filename )
     {
-        if ( pWriter )
+        if ( m_pWriter )
             endDocument();
 
         std::string fileName;
@@ -64,30 +64,30 @@ namespace writerfilter
         fileName += "/";
         fileName += sPrefix;
         fileName += ".";
-        fileName += pName;
+        fileName += m_pName;
         fileName += ".xml";
 
-        pWriter = xmlNewTextWriterFilename( fileName.c_str(), 0 );
-        xmlTextWriterSetIndent(pWriter,1);
-        (void)xmlTextWriterSetIndentString(pWriter, BAD_CAST("  "));
-        xmlTextWriterSetIndent( pWriter, 4 );
+        m_pWriter = xmlNewTextWriterFilename( fileName.c_str(), 0 );
+        xmlTextWriterSetIndent(m_pWriter,1);
+        (void)xmlTextWriterSetIndentString(m_pWriter, BAD_CAST("  "));
+        xmlTextWriterSetIndent( m_pWriter, 4 );
     }
 
     void TagLogger::startDocument()
     {
-        if (!pWriter)
+        if (!m_pWriter)
             return;
-        (void)xmlTextWriterStartDocument( pWriter, nullptr, nullptr, nullptr );
-        (void)xmlTextWriterStartElement( pWriter, BAD_CAST( "root" ) );
+        (void)xmlTextWriterStartDocument( m_pWriter, nullptr, nullptr, nullptr );
+        (void)xmlTextWriterStartElement( m_pWriter, BAD_CAST( "root" ) );
     }
 
     void TagLogger::endDocument()
     {
-        if (!pWriter)
+        if (!m_pWriter)
             return;
-        (void)xmlTextWriterEndDocument( pWriter );
-        xmlFreeTextWriter( pWriter );
-        pWriter = nullptr;
+        (void)xmlTextWriterEndDocument( m_pWriter );
+        xmlFreeTextWriter( m_pWriter );
+        m_pWriter = nullptr;
     }
 
 #endif
@@ -139,21 +139,21 @@ namespace writerfilter
 
     void TagLogger::startElement(const std::string & name)
     {
-        if (!pWriter)
+        if (!m_pWriter)
             return;
         xmlChar* xmlName = xmlCharStrdup( name.c_str() );
-        (void)xmlTextWriterStartElement( pWriter, xmlName );
+        (void)xmlTextWriterStartElement( m_pWriter, xmlName );
         xmlFree( xmlName );
     }
 #endif
 
     void TagLogger::attribute(const std::string & name, const std::string & value)
     {
-        if (!pWriter)
+        if (!m_pWriter)
             return;
         xmlChar* xmlName = xmlCharStrdup( name.c_str() );
         xmlChar* xmlValue = xmlCharStrdup( value.c_str() );
-        (void)xmlTextWriterWriteAttribute( pWriter, xmlName, xmlValue );
+        (void)xmlTextWriterWriteAttribute( m_pWriter, xmlName, xmlValue );
 
         xmlFree( xmlValue );
         xmlFree( xmlName );
@@ -167,27 +167,27 @@ namespace writerfilter
 
     void TagLogger::attribute(const std::string & name, sal_uInt32 value)
     {
-        if (!pWriter)
+        if (!m_pWriter)
             return;
         xmlChar* xmlName = xmlCharStrdup( name.c_str() );
-        (void)xmlTextWriterWriteFormatAttribute( pWriter, xmlName,
+        (void)xmlTextWriterWriteFormatAttribute( m_pWriter, xmlName,
                "%" SAL_PRIuUINT32, value );
         xmlFree( xmlName );
     }
 
     void TagLogger::attribute(const std::string & name, float value)
     {
-        if (!pWriter)
+        if (!m_pWriter)
             return;
         xmlChar* xmlName = xmlCharStrdup( name.c_str() );
-        (void)xmlTextWriterWriteFormatAttribute( pWriter, xmlName,
+        (void)xmlTextWriterWriteFormatAttribute( m_pWriter, xmlName,
                "%f", value );
         xmlFree( xmlName );
     }
 
     void TagLogger::attribute(const std::string & name, const uno::Any& aAny)
     {
-        if (!pWriter)
+        if (!m_pWriter)
             return;
 
         sal_Int32 nInt = 0;
@@ -197,12 +197,12 @@ namespace writerfilter
         xmlChar* xmlName = xmlCharStrdup( name.c_str() );
         if ( aAny >>= nInt )
         {
-            (void)xmlTextWriterWriteFormatAttribute( pWriter, xmlName,
+            (void)xmlTextWriterWriteFormatAttribute( m_pWriter, xmlName,
                    "%" SAL_PRIdINT32, nInt );
         }
         else if ( aAny >>= nFloat )
         {
-            (void)xmlTextWriterWriteFormatAttribute( pWriter, xmlName,
+            (void)xmlTextWriterWriteFormatAttribute( m_pWriter, xmlName,
                    "%f", nFloat );
         }
         else if ( aAny >>= aStr )
@@ -214,10 +214,10 @@ namespace writerfilter
 
     void TagLogger::chars(const std::string & rChars)
     {
-        if (!pWriter)
+        if (!m_pWriter)
             return;
         xmlChar* xmlChars = xmlCharStrdup( rChars.c_str() );
-        (void)xmlTextWriterWriteString( pWriter, xmlChars );
+        (void)xmlTextWriterWriteString( m_pWriter, xmlChars );
         xmlFree( xmlChars );
     }
 
@@ -228,9 +228,9 @@ namespace writerfilter
 
     void TagLogger::endElement()
     {
-        if (!pWriter)
+        if (!m_pWriter)
             return;
-        (void)xmlTextWriterEndElement( pWriter );
+        (void)xmlTextWriterEndElement( m_pWriter );
     }
 
 #endif
