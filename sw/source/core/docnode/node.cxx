@@ -1143,15 +1143,10 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
                     // Do not mangle pointers if it is the upper-most format!
                     if(pFormat && GetRegisteredIn() == pFormat)
                     {
-                        if(pFormat->GetRegisteredIn())
-                        {
-                            // If Parent, register anew in the new Parent
-                            pFormat->GetRegisteredIn()->Add(this);
-                            pFormatColl = GetFormatColl();
-                        }
-                        else
-                            EndListeningAll();
-                        bSetParent = true;
+                        // As ~SwFormat calls CheckRegistrationFormat before
+                        // ~SwModify, which sends the RES_OBJECTDYING, we should never
+                        // reach this point.
+                        assert(false);
                     }
                 }
                 break;
