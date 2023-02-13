@@ -1588,7 +1588,7 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
             if (eMakePage == MAKEPAGE_INSERT)
             {
                 InsertPage(FindPageFrame(), false);
-                // If we already had a cancidate, continue trying with that instead of starting from
+                // If we already had a candidate, continue trying with that instead of starting from
                 // scratch.
                 pLayLeaf = pOldLayLeaf ? pOldLayLeaf : GetNextLayoutLeaf();
                 continue;
