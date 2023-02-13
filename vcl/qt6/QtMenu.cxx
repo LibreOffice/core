@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <QtWidgets/QMenu>
+
 #include "../qt5/QtMenu.cxx"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
