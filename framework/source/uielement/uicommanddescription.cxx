@@ -71,7 +71,7 @@ namespace {
 class ConfigurationAccess_UICommand : // Order is necessary for right initialization!
                                         public  ::cppu::WeakImplHelper<XNameAccess,XContainerListener>
 {
-    osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
     public:
                                   ConfigurationAccess_UICommand( std::u16string_view aModuleName, const Reference< XNameAccess >& xGenericUICommands, const Reference< XComponentContext >& rxContext );
         virtual                   ~ConfigurationAccess_UICommand() override;
@@ -176,7 +176,7 @@ ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( std::u16string_vie
 ConfigurationAccess_UICommand::~ConfigurationAccess_UICommand()
 {
     // SAFE
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
         xContainer->removeContainerListener(m_xConfigListener);
@@ -188,7 +188,7 @@ ConfigurationAccess_UICommand::~ConfigurationAccess_UICommand()
 // XNameAccess
 Any ConfigurationAccess_UICommand::getByNameImpl( const OUString& rCommandURL )
 {
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
     if ( !m_bConfigAccessInitialized )
     {
         initializeConfigAccess();
@@ -432,7 +432,7 @@ Any ConfigurationAccess_UICommand::getInfoFromCommand( const OUString& rCommandU
 Sequence< OUString > ConfigurationAccess_UICommand::getAllCommands()
 {
     // SAFE
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
 
     if ( !m_bConfigAccessInitialized )
     {
@@ -523,21 +523,21 @@ void ConfigurationAccess_UICommand::initializeConfigAccess()
 // container.XContainerListener
 void SAL_CALL ConfigurationAccess_UICommand::elementInserted( const ContainerEvent& )
 {
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
     m_bCacheFilled = false;
     fillCache();
 }
 
 void SAL_CALL ConfigurationAccess_UICommand::elementRemoved( const ContainerEvent& )
 {
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
     m_bCacheFilled = false;
     fillCache();
 }
 
 void SAL_CALL ConfigurationAccess_UICommand::elementReplaced( const ContainerEvent& )
 {
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
     m_bCacheFilled = false;
     fillCache();
 }
@@ -547,7 +547,7 @@ void SAL_CALL ConfigurationAccess_UICommand::disposing( const EventObject& aEven
 {
     // SAFE
     // remove our reference to the config access
-    osl::MutexGuard g(m_aMutex);
+    std::unique_lock g(m_aMutex);
 
     Reference< XInterface > xIfac1( aEvent.Source, UNO_QUERY );
     Reference< XInterface > xIfac2( m_xConfigAccess, UNO_QUERY );
