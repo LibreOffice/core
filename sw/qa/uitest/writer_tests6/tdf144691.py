@@ -28,19 +28,20 @@ class tdf144691(UITestCase):
 
                 defaultLanguage = get_state_as_dict(xWesternLanguage)['SelectEntryText']
 
-                # Select another language
-                select_by_text(xWesternLanguage, "Tajik")
-                self.assertEqual("Tajik", get_state_as_dict(xWesternLanguage)['SelectEntryText'])
+                try:
+                    # Select another language
+                    select_by_text(xWesternLanguage, "Tajik")
+                    self.assertEqual("Tajik", get_state_as_dict(xWesternLanguage)['SelectEntryText'])
 
-                xApply = xDialog.getChild("apply")
-                xApply.executeAction("CLICK", tuple())
+                    xApply = xDialog.getChild("apply")
+                    xApply.executeAction("CLICK", tuple())
 
-                # Without the fix in place, this test would have failed with
-                # AssertionError: 'Tajik' != 'English (USA)'
-                self.assertEqual("Tajik", get_state_as_dict(xWesternLanguage)['SelectEntryText'])
-
-                # Select the default language
-                select_by_text(xWesternLanguage, defaultLanguage)
-                self.assertEqual(defaultLanguage, get_state_as_dict(xWesternLanguage)['SelectEntryText'])
+                    # Without the fix in place, this test would have failed with
+                    # AssertionError: 'Tajik' != 'English (USA)'
+                    self.assertEqual("Tajik", get_state_as_dict(xWesternLanguage)['SelectEntryText'])
+                finally:
+                    # Select the default language
+                    select_by_text(xWesternLanguage, defaultLanguage)
+                    self.assertEqual(defaultLanguage, get_state_as_dict(xWesternLanguage)['SelectEntryText'])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
