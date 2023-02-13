@@ -1054,27 +1054,28 @@ css::uno::Sequence< OUString > SAL_CALL PersistentPropertySet::getSupportedServi
 // virtual
 void SAL_CALL PersistentPropertySet::dispose()
 {
+    std::unique_lock l(m_aMutex);
     if ( m_pDisposeEventListeners &&
-         m_pDisposeEventListeners->getLength() )
+         m_pDisposeEventListeners->getLength(l) )
     {
         EventObject aEvt;
         aEvt.Source = static_cast< XComponent * >( this  );
-        m_pDisposeEventListeners->disposeAndClear( aEvt );
+        m_pDisposeEventListeners->disposeAndClear( l, aEvt );
     }
 
     if ( m_pPropSetChangeListeners &&
-         m_pPropSetChangeListeners->getLength() )
+         m_pPropSetChangeListeners->getLength(l) )
     {
         EventObject aEvt;
         aEvt.Source = static_cast< XPropertySetInfoChangeNotifier * >( this  );
-        m_pPropSetChangeListeners->disposeAndClear( aEvt );
+        m_pPropSetChangeListeners->disposeAndClear( l, aEvt );
     }
 
     if ( m_pPropertyChangeListeners )
     {
         EventObject aEvt;
         aEvt.Source = static_cast< XPropertySet * >( this  );
-        m_pPropertyChangeListeners->disposeAndClear( aEvt );
+        m_pPropertyChangeListeners->disposeAndClear( l, aEvt );
     }
 }
 
@@ -1083,11 +1084,13 @@ void SAL_CALL PersistentPropertySet::dispose()
 void SAL_CALL PersistentPropertySet::addEventListener(
                             const Reference< XEventListener >& Listener )
 {
+    std::unique_lock l(m_aMutex);
+
     if ( !m_pDisposeEventListeners )
         m_pDisposeEventListeners.reset(
-                    new OInterfaceContainerHelper3<css::lang::XEventListener>( m_aMutex ) );
+                    new OInterfaceContainerHelper4<css::lang::XEventListener>() );
 
-    m_pDisposeEventListeners->addInterface( Listener );
+    m_pDisposeEventListeners->addInterface( l, Listener );
 }
 
 
@@ -1095,8 +1098,9 @@ void SAL_CALL PersistentPropertySet::addEventListener(
 void SAL_CALL PersistentPropertySet::removeEventListener(
                             const Reference< XEventListener >& Listener )
 {
+    std::unique_lock l(m_aMutex);
     if ( m_pDisposeEventListeners )
-        m_pDisposeEventListeners->removeInterface( Listener );
+        m_pDisposeEventListeners->removeInterface( l, Listener );
 
     // Note: Don't want to delete empty container here -> performance.
 }
@@ -1108,7 +1112,7 @@ void SAL_CALL PersistentPropertySet::removeEventListener(
 // virtual
 Reference< XPropertySetInfo > SAL_CALL PersistentPropertySet::getPropertySetInfo()
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock l(m_aMutex);
 
     if ( !m_pInfo.is() )
     {
@@ -1122,13 +1126,13 @@ Reference< XPropertySetInfo > SAL_CALL PersistentPropertySet::getPropertySetInfo
 void SAL_CALL PersistentPropertySet::setPropertyValue( const OUString& aPropertyName,
                                                        const Any& aValue )
 {
-    osl::ClearableGuard< osl::Mutex > aCGuard( m_aMutex );
+    std::unique_lock aCGuard(m_aMutex);
 
     Reference< XHierarchicalNameAccess > xRootHierNameAccess(
                 m_pCreator->getRootConfigReadAccess(), UNO_QUERY );
     if ( xRootHierNameAccess.is() )
     {
-        OUString aFullPropName( getFullKey() + "/" );
+        OUString aFullPropName( getFullKeyImpl(aCGuard) + "/" );
         aFullPropName += makeHierarchalNameSegment( aPropertyName );
 
         // Does property exist?
@@ -1153,7 +1157,6 @@ void SAL_CALL PersistentPropertySet::setPropertyValue( const OUString& aProperty
                     // Check value type.
                     if ( aOldValue.getValueType() != aValue.getValueType() )
                     {
-                        aCGuard.clear();
                         throw IllegalArgumentException();
                     }
 
@@ -1187,7 +1190,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValue( const OUString& aProperty
                         aEvt.NewValue       = aValue;
 
                         // Callback follows!
-                        aCGuard.clear();
+                        aCGuard.unlock();
 
                         notifyPropertyChangeEvent( aEvt );
                     }
@@ -1217,13 +1220,13 @@ void SAL_CALL PersistentPropertySet::setPropertyValue( const OUString& aProperty
 Any SAL_CALL PersistentPropertySet::getPropertyValue(
                                             const OUString& PropertyName )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard(m_aMutex);
 
     Reference< XHierarchicalNameAccess > xNameAccess(
                 m_pCreator->getRootConfigReadAccess(), UNO_QUERY );
     if ( xNameAccess.is() )
     {
-        OUString aFullPropName( getFullKey() + "/" );
+        OUString aFullPropName( getFullKeyImpl(aGuard) + "/" );
         aFullPropName += makeHierarchalNameSegment( PropertyName ) + "/Value";
         try
         {
@@ -1246,12 +1249,12 @@ void SAL_CALL PersistentPropertySet::addPropertyChangeListener(
 {
 //  load();
 
-    if ( !m_pPropertyChangeListeners )
-        m_pPropertyChangeListeners.reset(
-                    new PropertyListeners_Impl( m_aMutex ) );
+    std::unique_lock aGuard(m_aMutex);
 
-    m_pPropertyChangeListeners->addInterface(
-                                                aPropertyName, xListener );
+    if ( !m_pPropertyChangeListeners )
+        m_pPropertyChangeListeners.reset( new PropertyListeners_Impl() );
+
+    m_pPropertyChangeListeners->addInterface(aGuard, aPropertyName, xListener );
 }
 
 
@@ -1262,8 +1265,10 @@ void SAL_CALL PersistentPropertySet::removePropertyChangeListener(
 {
 //  load();
 
+    std::unique_lock aGuard(m_aMutex);
+
     if ( m_pPropertyChangeListeners )
-        m_pPropertyChangeListeners->removeInterface(
+        m_pPropertyChangeListeners->removeInterface(aGuard,
                                                 aPropertyName, aListener );
 
     // Note: Don't want to delete empty container here -> performance.
@@ -1343,7 +1348,7 @@ void SAL_CALL PersistentPropertySet::addProperty(
     if ( eTypeClass == TypeClass_INTERFACE )
         throw IllegalTypeException();
 
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard(m_aMutex);
 
     // Property already in set?
 
@@ -1353,7 +1358,7 @@ void SAL_CALL PersistentPropertySet::addProperty(
                 m_pCreator->getRootConfigReadAccess(), UNO_QUERY );
     if ( xRootHierNameAccess.is() )
     {
-        aFullValuesName = getFullKey();
+        aFullValuesName = getFullKeyImpl(aGuard);
         OUString aFullPropName = aFullValuesName + "/";
         aFullPropName += makeHierarchalNameSegment( Name );
 
@@ -1432,7 +1437,7 @@ void SAL_CALL PersistentPropertySet::addProperty(
 
                 // Notify propertyset info change listeners.
                 if ( m_pPropSetChangeListeners &&
-                     m_pPropSetChangeListeners->getLength() )
+                     m_pPropSetChangeListeners->getLength(aGuard) )
                 {
                     PropertySetInfoChangeEvent evt(
                                     static_cast< OWeakObject * >( this ),
@@ -1491,13 +1496,13 @@ void SAL_CALL PersistentPropertySet::addProperty(
 // virtual
 void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard(m_aMutex);
 
     Reference< XHierarchicalNameAccess > xRootHierNameAccess(
                 m_pCreator->getRootConfigReadAccess(), UNO_QUERY );
     if ( xRootHierNameAccess.is() )
     {
-        OUString aFullValuesName = getFullKey();
+        OUString aFullValuesName = getFullKeyImpl(aGuard);
         OUString aFullPropName   = aFullValuesName + "/";
         aFullPropName   += makeHierarchalNameSegment( Name );
 
@@ -1557,7 +1562,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
                 sal_Int32 nHandle = -1;
 
                 if ( m_pPropSetChangeListeners &&
-                       m_pPropSetChangeListeners->getLength() )
+                       m_pPropSetChangeListeners->getLength(aGuard) )
                 {
                     // Obtain property handle ( needed for propertysetinfo
                     // change event )...
@@ -1590,7 +1595,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
 
                 // Notify propertyset info change listeners.
                 if ( m_pPropSetChangeListeners &&
-                      m_pPropSetChangeListeners->getLength() )
+                      m_pPropSetChangeListeners->getLength(aGuard) )
                 {
                     PropertySetInfoChangeEvent evt(
                                     static_cast< OWeakObject * >( this ),
@@ -1633,11 +1638,13 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
 void SAL_CALL PersistentPropertySet::addPropertySetInfoChangeListener(
                 const Reference< XPropertySetInfoChangeListener >& Listener )
 {
+    std::unique_lock aGuard(m_aMutex);
+
     if ( !m_pPropSetChangeListeners )
         m_pPropSetChangeListeners.reset(
-                    new OInterfaceContainerHelper3<XPropertySetInfoChangeListener>( m_aMutex ) );
+                    new OInterfaceContainerHelper4<XPropertySetInfoChangeListener>() );
 
-    m_pPropSetChangeListeners->addInterface( Listener );
+    m_pPropSetChangeListeners->addInterface( aGuard, Listener );
 }
 
 
@@ -1645,8 +1652,9 @@ void SAL_CALL PersistentPropertySet::addPropertySetInfoChangeListener(
 void SAL_CALL PersistentPropertySet::removePropertySetInfoChangeListener(
                 const Reference< XPropertySetInfoChangeListener >& Listener )
 {
+    std::unique_lock aGuard(m_aMutex);
     if ( m_pPropSetChangeListeners )
-        m_pPropSetChangeListeners->removeInterface( Listener );
+        m_pPropSetChangeListeners->removeInterface( aGuard, Listener );
 }
 
 
@@ -1656,7 +1664,7 @@ void SAL_CALL PersistentPropertySet::removePropertySetInfoChangeListener(
 // virtual
 Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard(m_aMutex);
 
     Reference< XHierarchicalNameAccess > xRootHierNameAccess(
                 m_pCreator->getRootConfigReadAccess(), UNO_QUERY );
@@ -1665,7 +1673,7 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
         try
         {
             Reference< XNameAccess > xNameAccess;
-            xRootHierNameAccess->getByHierarchicalName(getFullKey())
+            xRootHierNameAccess->getByHierarchicalName(getFullKeyImpl(aGuard))
                 >>= xNameAccess;
             if ( xNameAccess.is() )
             {
@@ -1789,7 +1797,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
     if ( !aProps.hasElements() )
         return;
 
-    osl::ClearableGuard< osl::Mutex > aCGuard( m_aMutex );
+    std::unique_lock aCGuard(m_aMutex);
 
     Reference< XHierarchicalNameAccess > xRootHierNameAccess(
                 m_pCreator->getRootConfigReadAccess(), UNO_QUERY );
@@ -1797,7 +1805,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
     {
         std::vector< PropertyChangeEvent > aEvents;
 
-        OUString aFullPropNamePrefix( getFullKey() + "/" );
+        OUString aFullPropNamePrefix( getFullKeyImpl(aCGuard) + "/" );
 
         // Iterate over given property value sequence.
         for ( const PropertyValue& rNewValue : aProps )
@@ -1875,11 +1883,11 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
             }
         }
 
-        // Callback follows!
-        aCGuard.clear();
-
         if ( m_pPropertyChangeListeners )
         {
+            // Callback follows!
+            aCGuard.unlock();
+
             // Notify property changes.
             for (auto const& event : aEvents)
             {
@@ -1900,20 +1908,22 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
 void PersistentPropertySet::notifyPropertyChangeEvent(
                                     const PropertyChangeEvent& rEvent ) const
 {
+    std::unique_lock aGuard(m_aMutex);
+
     // Get "normal" listeners for the property.
-    OInterfaceContainerHelper3<XPropertyChangeListener>* pContainer =
+    OInterfaceContainerHelper4<XPropertyChangeListener>* pContainer =
             m_pPropertyChangeListeners->getContainer( rEvent.PropertyName );
-    if ( pContainer && pContainer->getLength() )
+    if ( pContainer && pContainer->getLength(aGuard) )
     {
-        pContainer->notifyEach( &XPropertyChangeListener::propertyChange, rEvent );
+        pContainer->notifyEach( aGuard, &XPropertyChangeListener::propertyChange, rEvent );
     }
 
     // Get "normal" listeners for all properties.
-    OInterfaceContainerHelper3<XPropertyChangeListener>* pNoNameContainer =
+    OInterfaceContainerHelper4<XPropertyChangeListener>* pNoNameContainer =
             m_pPropertyChangeListeners->getContainer( OUString() );
-    if ( pNoNameContainer && pNoNameContainer->getLength() )
+    if ( pNoNameContainer && pNoNameContainer->getLength(aGuard) )
     {
-        pNoNameContainer->notifyEach( &XPropertyChangeListener::propertyChange, rEvent );
+        pNoNameContainer->notifyEach( aGuard, &XPropertyChangeListener::propertyChange, rEvent );
     }
 }
 
@@ -1921,24 +1931,28 @@ void PersistentPropertySet::notifyPropertyChangeEvent(
 void PersistentPropertySet::notifyPropertySetInfoChange(
                                 const PropertySetInfoChangeEvent& evt ) const
 {
+    std::unique_lock aGuard(m_aMutex);
+
     if ( !m_pPropSetChangeListeners )
         return;
 
     // Notify event listeners.
-    m_pPropSetChangeListeners->notifyEach( &XPropertySetInfoChangeListener::propertySetInfoChange, evt );
+    m_pPropSetChangeListeners->notifyEach( aGuard, &XPropertySetInfoChangeListener::propertySetInfoChange, evt );
 }
 
 
-const OUString& PersistentPropertySet::getFullKey()
+OUString PersistentPropertySet::getFullKey()
+{
+    std::unique_lock aGuard(m_aMutex);
+    return getFullKeyImpl(aGuard);
+}
+
+const OUString& PersistentPropertySet::getFullKeyImpl(std::unique_lock<std::mutex>& )
 {
     if ( m_aFullKey.isEmpty() )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        if ( m_aFullKey.isEmpty() )
-        {
-            m_aFullKey = makeHierarchalNameSegment( m_aKey );
-            m_aFullKey += "/Values";
-        }
+        m_aFullKey = makeHierarchalNameSegment( m_aKey );
+        m_aFullKey += "/Values";
     }
 
     return m_aFullKey;
