@@ -29,6 +29,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,hsqldb,\
 		external/hsqldb/patches/jdbc-4.1.patch \
 		external/hsqldb/patches/multipleResultSets.patch \
 	) \
+	external/hsqldb/patches/disable-dump-script.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
