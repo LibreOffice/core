@@ -30,7 +30,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::std;
 
 namespace sdext::presenter {
 
@@ -51,7 +50,7 @@ public:
     sal_Int32 mnRight;
     sal_Int32 mnBottom;
 
-    vector<sal_Int32> ToVector()
+    std::vector<sal_Int32> ToVector()
     {
         return
         {
@@ -199,7 +198,7 @@ public:
     OUString GetStyleName (const OUString& rsResourceName) const;
 
 private:
-    typedef map<OUString, OUString> StyleAssociations;
+    typedef std::map<OUString, OUString> StyleAssociations;
     StyleAssociations maStyleAssociations;
 
     void ProcessStyleAssociation(
@@ -227,7 +226,7 @@ public:
     StyleAssociationContainer maStyleAssociations;
     Reference<container::XHierarchicalNameAccess> mxThemeRoot;
     std::shared_ptr<PresenterBitmapContainer> mpIconContainer;
-    typedef map<OUString,SharedFontDescriptor> FontContainer;
+    typedef std::map<OUString,SharedFontDescriptor> FontContainer;
     FontContainer maFontContainer;
 
     SharedPaneStyle GetPaneStyle (const OUString& rsStyleName) const;

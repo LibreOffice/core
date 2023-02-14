@@ -54,7 +54,6 @@ constexpr OUStringLiteral SERVICE_NAME = u"com.sun.star.security.AccessControlle
 constexpr OUStringLiteral USER_CREDS  = u"access-control.user-credentials.id";
 
 
-using namespace ::std;
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -296,11 +295,11 @@ class AccessController
     bool m_defaultPerm_init;
     bool m_singleUser_init;
     // for multi-user mode
-    lru_cache< OUString, PermissionCollection, OUStringHash, equal_to< OUString > >
+    lru_cache< OUString, PermissionCollection, OUStringHash, std::equal_to< OUString > >
         m_user2permissions;
 
     ThreadData m_rec;
-    typedef vector< pair< OUString, Any > > t_rec_vec;
+    typedef std::vector< std::pair< OUString, Any > > t_rec_vec;
     void clearPostPoned();
     void checkAndClearPostPoned();
 
@@ -600,7 +599,7 @@ PermissionCollection AccessController::getEffectivePermissions(
         if (demanded_perm.hasValue())
         {
             // enqueue
-            rec->push_back( pair< OUString, Any >( userId, demanded_perm ) );
+            rec->push_back( std::pair< OUString, Any >( userId, demanded_perm ) );
         }
 #ifdef __DIAGNOSE
         SAL_INFO("stoc", "> info: recurring call of user: " << userId );

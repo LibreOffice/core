@@ -55,7 +55,6 @@
 #include <cfgitem.hxx>
 
 using namespace ::cppu;
-using namespace ::std;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -812,7 +811,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                 // this is get
                 SmModule *pp = SM_MOD();
                 const SmSymbolManager &rManager = pp->GetSymbolManager();
-                vector < const SmSym * > aVector;
+                std::vector < const SmSym * > aVector;
 
                 const SymbolPtrVec_t aSymbols( rManager.GetSymbols() );
                 for (const SmSym* pSymbol : aSymbols)

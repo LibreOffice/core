@@ -33,7 +33,6 @@
 #include <osl/doublecheckedlocking.h>
 #include <osl/getglobalmutex.hxx>
 
-using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 

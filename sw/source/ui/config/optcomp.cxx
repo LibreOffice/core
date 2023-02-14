@@ -39,7 +39,6 @@
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::uno;
-using namespace ::std;
 
 struct SwCompatibilityOptPage_Impl
 {

@@ -45,7 +45,6 @@
 #include <unordered_map>
 #include <vector>
 
-using namespace ::std;
 using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace css::uno;
@@ -811,7 +810,7 @@ Reference< XInterface > FactoryImpl::createAdapter(
                 &adapter_set, m_receiver2adapters, xKey.get(), rTypes );
             if (nullptr == that) // again no entry
             {
-                pair< t_ptr_set::const_iterator, bool > i(adapter_set->insert(pNew));
+                std::pair< t_ptr_set::const_iterator, bool > i(adapter_set->insert(pNew));
                 SAL_WARN_IF(
                     !i.second, "stoc",
                     "set already contains " << *(i.first) << " != " << pNew);

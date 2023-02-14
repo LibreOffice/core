@@ -11,7 +11,6 @@
 #include <RemoteServer.hxx>
 
 using namespace ::sd;
-using namespace ::std;
 
 RemoteDialog::RemoteDialog(weld::Window* pWindow)
     : GenericDialogController(pWindow, "modules/simpress/ui/remotedialog.ui", "RemoteDialog")

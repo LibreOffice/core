@@ -26,7 +26,6 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-using namespace ::std;
 using namespace com::sun::star;
 
 

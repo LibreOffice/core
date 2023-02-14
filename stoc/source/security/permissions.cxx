@@ -38,7 +38,6 @@
 
 #include "permissions.h"
 
-using namespace ::std;
 using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace css::uno;
@@ -491,7 +490,7 @@ PermissionCollection::PermissionCollection(
 
 Sequence< OUString > PermissionCollection::toStrings() const
 {
-    vector< OUString > strings;
+    std::vector< OUString > strings;
     strings.reserve( 8 );
     for ( Permission * perm = m_head.get(); perm; perm = perm->m_next.get() )
     {

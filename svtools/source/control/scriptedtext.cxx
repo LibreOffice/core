@@ -28,7 +28,6 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 
 
-using namespace ::std;
 using namespace ::com::sun::star;
 
 
@@ -42,9 +41,9 @@ private:
     vcl::Font                   maDefltFont;        /// The default font of the output device.
     OUString                    maText;             /// The text.
 
-    vector< sal_Int32 >         maPosVec;           /// The start position of each text portion.
-    vector< sal_Int16 >         maScriptVec;        /// The script type of each text portion.
-    vector< sal_Int32 >         maWidthVec;         /// The output width of each text portion.
+    std::vector< sal_Int32 >         maPosVec;           /// The start position of each text portion.
+    std::vector< sal_Int16 >         maScriptVec;        /// The script type of each text portion.
+    std::vector< sal_Int32 >         maWidthVec;         /// The output width of each text portion.
     Size                        maTextSize;         /// The size the text will take in the current output device.
 
                                 /** Gets the font of the given script type. */
@@ -112,7 +111,7 @@ void SvtScriptedTextHelper_Impl::CalculateSizes()
     if( !maPosVec.empty() )
     {
         DBG_ASSERT( maPosVec.size() - 1 == maScriptVec.size(),
-            "SvtScriptedTextHelper_Impl::CalculateWidth - invalid vectors" );
+            "SvtScriptedTextHelper_Impl::CalculateWidth - invalid std::vectors" );
 
         sal_Int32 nThisPos = maPosVec[ 0 ];
         sal_Int32 nNextPos;
@@ -244,8 +243,8 @@ void SvtScriptedTextHelper_Impl::DrawText( const Point& _rPos )
     if( maText.isEmpty() || maPosVec.empty() )
         return;
 
-    DBG_ASSERT( maPosVec.size() - 1 == maScriptVec.size(), "SvtScriptedTextHelper_Impl::DrawText - invalid vectors" );
-    DBG_ASSERT( maScriptVec.size() == maWidthVec.size(), "SvtScriptedTextHelper_Impl::DrawText - invalid vectors" );
+    DBG_ASSERT( maPosVec.size() - 1 == maScriptVec.size(), "SvtScriptedTextHelper_Impl::DrawText - invalid std::vectors" );
+    DBG_ASSERT( maScriptVec.size() == maWidthVec.size(), "SvtScriptedTextHelper_Impl::DrawText - invalid std::vectors" );
 
     mrOutDevice.Push(vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
 

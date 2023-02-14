@@ -53,7 +53,6 @@
 
 #include <comphelper/propertyvalue.hxx>
 
-using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::awt;
@@ -70,7 +69,7 @@ using namespace ::com::sun::star::presentation;
 
 static void ImpExtractCustomShow( const Reference< XModel >& rxModel, std::u16string_view rCustomShowName )
 {
-    vector< Reference< XDrawPage > > vNonUsedPageList;
+    std::vector< Reference< XDrawPage > > vNonUsedPageList;
     try
     {
         PageCollector::CollectNonCustomShowPages( rxModel, rCustomShowName, vNonUsedPageList );
@@ -87,7 +86,7 @@ static void ImpExtractCustomShow( const Reference< XModel >& rxModel, std::u16st
 
 static void ImpDeleteUnusedMasterPages( const Reference< XModel >& rxModel )
 {
-    vector< PageCollector::MasterPageEntity > aMasterPageList;
+    std::vector< PageCollector::MasterPageEntity > aMasterPageList;
     PageCollector::CollectMasterPages( rxModel, aMasterPageList );
 
     // now master pages that are not marked can be deleted

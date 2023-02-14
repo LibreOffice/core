@@ -114,7 +114,6 @@
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
 
-using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
@@ -460,7 +459,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                                 m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(
                                 i, m_pWrtShell->GetLayout(), true, false, false), ' '));
                 aEntry = SwNavigationPI::CleanEntry(aEntry);
-                auto pCnt(make_unique<SwOutlineContent>(this, aEntry, i, nLevel,
+                auto pCnt(std::make_unique<SwOutlineContent>(this, aEntry, i, nLevel,
                                                         m_pWrtShell->IsOutlineMovable(i), nYPos));
                 m_pMember->insert(std::move(pCnt));
             }
@@ -507,7 +506,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                     if (SwTable* pTable = SwTable::FindTable(&rTableFormat))
                         nYPos = getYPos(*pTable->GetTableNode());
                 }
-                auto pCnt = make_unique<SwContent>(this, rTableFormat.GetName(), nYPos);
+                auto pCnt = std::make_unique<SwContent>(this, rTableFormat.GetName(), nYPos);
                 if( !rTableFormat.GetInfo( aAskItem ) &&
                         !aAskItem.pObject )     // not visible
                     pCnt->SetInvisible();
@@ -758,7 +757,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                         = rFormatFootnote.GetViewNumStr(*m_pWrtShell->GetDoc(),
                                                         m_pWrtShell->GetLayout(), true)
                           + " " + lcl_GetFootnoteText(*pTextFootnote);
-                    auto pCnt(make_unique<SwTextFootnoteContent>(
+                    auto pCnt(std::make_unique<SwTextFootnoteContent>(
                         this, sText, pTextFootnote, ++nPos));
                     if (!pTextFootnote->GetTextNode().getLayoutFrame(m_pWrtShell->GetLayout()))
                         pCnt->SetInvisible();
@@ -836,7 +835,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
             {
                 for (auto& r : aArr)
                 {
-                    auto pCnt(make_unique<SwURLFieldContent>(this, r.sText, INetURLObject::decode(
+                    auto pCnt(std::make_unique<SwURLFieldContent>(this, r.sText, INetURLObject::decode(
                                                     r.rINetAttr.GetINetFormat().GetValue(),
                                                     INetURLObject::DecodeMechanism::Unambiguous),
                                                              &r.rINetAttr, 0));
@@ -898,7 +897,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
             SwGetINetAttrs::size_type n = 0;
             for (auto p : aStableSortINetAttrsArray)
             {
-                auto pCnt = make_unique<SwURLFieldContent>(this, p->sText,
+                auto pCnt = std::make_unique<SwURLFieldContent>(this, p->sText,
                             INetURLObject::decode(p->rINetAttr.GetINetFormat().GetValue(),
                                                   INetURLObject::DecodeMechanism::Unambiguous),
                             &p->rINetAttr, ++n);

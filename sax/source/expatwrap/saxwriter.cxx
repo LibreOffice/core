@@ -41,7 +41,6 @@
 #include <rtl/character.hxx>
 #include <sal/log.hxx>
 
-using namespace ::std;
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;

@@ -61,7 +61,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
-using namespace ::std;
 
 // Constants for type offsets per Country/Language (CL)
 #define ZF_STANDARD              0

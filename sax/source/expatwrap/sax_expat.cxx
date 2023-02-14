@@ -45,7 +45,6 @@
 
 #include <expat.h>
 
-using namespace ::std;
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::lang;
@@ -160,7 +159,7 @@ public: // module scope
     rtl::Reference < comphelper::AttributeList > rAttrList;
 
     // External entity stack
-    vector<struct Entity>   vecEntity;
+    std::vector<struct Entity>   vecEntity;
     void pushEntity( Entity &&entity )
         { vecEntity.push_back( std::move(entity) ); }
     void popEntity()

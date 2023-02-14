@@ -68,7 +68,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
-using namespace ::std;
 
 typedef std::pair< TextRangeList_t * const, SwTextAttr const * const > PortionList_t;
 typedef std::stack< PortionList_t > PortionStack_t;
