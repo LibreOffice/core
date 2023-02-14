@@ -2960,24 +2960,22 @@ css::uno::Reference< css::drawing::XShape > SdrObject::getUnoShape()
     return xShape;
 }
 
-svx::PropertyChangeNotifier& SdrObject::getShapePropertyChangeNotifier()
-{
-    DBG_TESTSOLARMUTEX();
-
-    SvxShape* pSvxShape = getSvxShape();
-    ENSURE_OR_THROW( pSvxShape, "no SvxShape, yet!" );
-    return pSvxShape->getShapePropertyChangeNotifier();
-}
-
 void SdrObject::notifyShapePropertyChange( const svx::ShapePropertyProviderId _eProperty ) const
 {
     DBG_TESTSOLARMUTEX();
 
     SvxShape* pSvxShape = const_cast< SdrObject* >( this )->getSvxShape();
     if ( pSvxShape )
-        return pSvxShape->getShapePropertyChangeNotifier().notifyPropertyChange( _eProperty );
+        return pSvxShape->notifyPropertyChange( _eProperty );
 }
 
+void SdrObject::registerProvider( const svx::ShapePropertyProviderId _eProperty, std::unique_ptr<svx::PropertyValueProvider> provider )
+{
+    DBG_TESTSOLARMUTEX();
+
+    SvxShape* pSvxShape = getSvxShape();
+    return pSvxShape->registerProvider( _eProperty, std::move(provider) );
+}
 
 // transformation interface for StarOfficeAPI. This implements support for
 // homogeneous 3x3 matrices containing the transformation of the SdrObject. At the

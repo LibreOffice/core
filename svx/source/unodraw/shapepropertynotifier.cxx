@@ -63,9 +63,8 @@ namespace svx
         _out_rValue = xContextProps->getPropertyValue( getPropertyName() );
     }
 
-    PropertyChangeNotifier::PropertyChangeNotifier( ::cppu::OWeakObject& _rOwner, ::osl::Mutex& _rMutex )
+    PropertyChangeNotifier::PropertyChangeNotifier( ::cppu::OWeakObject& _rOwner )
         :m_rContext( _rOwner )
-        ,m_aPropertyChangeListeners( _rMutex )
     {
     }
 
@@ -83,7 +82,7 @@ namespace svx
         m_aProviders[ _eProperty ] = std::move(_rProvider);
     }
 
-    void PropertyChangeNotifier::notifyPropertyChange( const ShapePropertyProviderId _eProperty ) const
+    void PropertyChangeNotifier::notifyPropertyChange( std::unique_lock<std::mutex>& rGuard, const ShapePropertyProviderId _eProperty ) const
     {
         auto & provPos = m_aProviders[ _eProperty ];
         OSL_ENSURE( provPos, "PropertyChangeNotifier::notifyPropertyChange: no factory!" );
@@ -92,8 +91,8 @@ namespace svx
 
         const OUString & sPropertyName( provPos->getPropertyName() );
 
-        ::comphelper::OInterfaceContainerHelper3<XPropertyChangeListener>* pPropListeners = m_aPropertyChangeListeners.getContainer( sPropertyName );
-        ::comphelper::OInterfaceContainerHelper3<XPropertyChangeListener>* pAllListeners = m_aPropertyChangeListeners.getContainer( OUString() );
+        ::comphelper::OInterfaceContainerHelper4<XPropertyChangeListener>* pPropListeners = m_aPropertyChangeListeners.getContainer( rGuard, sPropertyName );
+        ::comphelper::OInterfaceContainerHelper4<XPropertyChangeListener>* pAllListeners = m_aPropertyChangeListeners.getContainer( rGuard, OUString() );
         if ( !pPropListeners && !pAllListeners )
             return;
 
@@ -106,9 +105,9 @@ namespace svx
             provPos->getCurrentValue( aEvent.NewValue );
 
             if ( pPropListeners )
-                pPropListeners->notifyEach( &XPropertyChangeListener::propertyChange, aEvent );
+                pPropListeners->notifyEach( rGuard, &XPropertyChangeListener::propertyChange, aEvent );
             if ( pAllListeners )
-                pAllListeners->notifyEach( &XPropertyChangeListener::propertyChange, aEvent );
+                pAllListeners->notifyEach( rGuard, &XPropertyChangeListener::propertyChange, aEvent );
         }
         catch( const Exception& )
         {
@@ -117,23 +116,23 @@ namespace svx
     }
 
 
-    void PropertyChangeNotifier::addPropertyChangeListener( const OUString& _rPropertyName, const Reference< XPropertyChangeListener >& _rxListener )
+    void PropertyChangeNotifier::addPropertyChangeListener( std::unique_lock<std::mutex>& rGuard, const OUString& _rPropertyName, const Reference< XPropertyChangeListener >& _rxListener )
     {
-        m_aPropertyChangeListeners.addInterface( _rPropertyName, _rxListener );
+        m_aPropertyChangeListeners.addInterface( rGuard, _rPropertyName, _rxListener );
     }
 
 
-    void PropertyChangeNotifier::removePropertyChangeListener( const OUString& _rPropertyName, const Reference< XPropertyChangeListener >& _rxListener )
+    void PropertyChangeNotifier::removePropertyChangeListener( std::unique_lock<std::mutex>& rGuard, const OUString& _rPropertyName, const Reference< XPropertyChangeListener >& _rxListener )
     {
-        m_aPropertyChangeListeners.removeInterface( _rPropertyName, _rxListener );
+        m_aPropertyChangeListeners.removeInterface( rGuard, _rPropertyName, _rxListener );
     }
 
 
-    void PropertyChangeNotifier::disposing()
+    void PropertyChangeNotifier::disposing(std::unique_lock<std::mutex>& rGuard)
     {
         EventObject aEvent;
         aEvent.Source = m_rContext;
-        m_aPropertyChangeListeners.disposeAndClear( aEvent );
+        m_aPropertyChangeListeners.disposeAndClear( rGuard, aEvent );
     }
 
 

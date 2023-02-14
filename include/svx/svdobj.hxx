@@ -79,7 +79,7 @@ enum class PointerStyle;
 class Graphic;
 class SvxShape;
 namespace svx { enum class ShapePropertyProviderId; }
-
+namespace svx { class PropertyValueProvider; }
 namespace basegfx
 {
     class B2DPoint;
@@ -91,7 +91,6 @@ namespace sdr { class ObjectUser; }
 namespace sdr::properties { class BaseProperties; }
 namespace sdr::contact { class ViewContact; }
 
-namespace svx { class PropertyChangeNotifier; }
 namespace com::sun::star::drawing { class XShape; }
 namespace svx::diagram { class IDiagramHelper; }
 
@@ -782,21 +781,14 @@ public:
 
     static SdrObject* getSdrObjectFromXShape( const css::uno::Reference< css::uno::XInterface >& xInt );
 
-    // retrieves the instance responsible for notifying changes in the properties of the shape associated with
-    // the SdrObject
-    //
-    // @precond
-    //     There already exists an SvxShape instance associated with the SdrObject
-    // @throws css::uno::RuntimeException
-    //     if there does nt yet exists an SvxShape instance associated with the SdrObject.
-    svx::PropertyChangeNotifier& getShapePropertyChangeNotifier();
-
     // notifies a change in the given property, to all applicable listeners registered at the associated SvxShape
     //
     // This method is equivalent to calling getShapePropertyChangeNotifier().notifyPropertyChange( _eProperty ),
     // exception that it is allowed to be called when there does not yet exist an associated SvxShape - in which
     // case the method will silently return without doing anything.
     void notifyShapePropertyChange( const svx::ShapePropertyProviderId _eProperty ) const;
+
+    void registerProvider( const svx::ShapePropertyProviderId _eProperty, std::unique_ptr<svx::PropertyValueProvider> propProvider );
 
     // transformation interface for StarOfficeAPI. This implements support for
     // homogen 3x3 matrices containing the transformation of the SdrObject. At the

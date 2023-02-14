@@ -125,15 +125,14 @@ struct SvxShapeImpl
     ::unotools::WeakReference< SdrObject > mxCreatedObj;
 
     // for xComponent
-    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> maDisposeListeners;
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> maDisposeListeners;
     svx::PropertyChangeNotifier       maPropertyNotifier;
 
-    SvxShapeImpl( SvxShape& _rAntiImpl, ::osl::Mutex& _rMutex )
+    SvxShapeImpl( SvxShape& _rAntiImpl )
         :mnObjId( SdrObjKind::NONE )
         ,mpMaster( nullptr )
         ,mbDisposing( false )
-        ,maDisposeListeners( _rMutex )
-        ,maPropertyNotifier( _rAntiImpl, _rMutex )
+        ,maPropertyNotifier( _rAntiImpl )
     {
     }
 };
@@ -195,7 +194,7 @@ sal_Int16 GetTextFitToSizeScale(SdrObject* pObject)
 
 SvxShape::SvxShape( SdrObject* pObject )
 :   maSize(100,100)
-,   mpImpl( new SvxShapeImpl( *this, m_aMutex ) )
+,   mpImpl( new SvxShapeImpl( *this ) )
 ,   mbIsMultiPropertyCall(false)
 ,   mpPropSet(getSvxMapProvider().GetPropertySet(SVXMAP_SHAPE, SdrObject::GetGlobalDrawObjectItemPool()))
 ,   maPropMapEntries(getSvxMapProvider().GetMap(SVXMAP_SHAPE))
@@ -208,7 +207,7 @@ SvxShape::SvxShape( SdrObject* pObject )
 
 SvxShape::SvxShape( SdrObject* pObject, o3tl::span<const SfxItemPropertyMapEntry> pEntries, const SvxItemPropertySet* pPropertySet )
 :   maSize(100,100)
-,   mpImpl( new SvxShapeImpl( *this, m_aMutex ) )
+,   mpImpl( new SvxShapeImpl( *this ) )
 ,   mbIsMultiPropertyCall(false)
 ,   mpPropSet(pPropertySet)
 ,   maPropMapEntries(pEntries)
@@ -290,11 +289,16 @@ sal_Int64 SAL_CALL SvxShape::getSomething( const css::uno::Sequence< sal_Int8 >&
 }
 
 
-svx::PropertyChangeNotifier& SvxShape::getShapePropertyChangeNotifier()
+void SvxShape::notifyPropertyChange(svx::ShapePropertyProviderId eProp)
 {
-    return mpImpl->maPropertyNotifier;
+    std::unique_lock g(m_aMutex);
+    mpImpl->maPropertyNotifier.notifyPropertyChange(g, eProp);
 }
 
+void SvxShape::registerProvider(svx::ShapePropertyProviderId eProp, std::unique_ptr<svx::PropertyValueProvider> provider)
+{
+    mpImpl->maPropertyNotifier.registerProvider(eProp, std::move(provider));
+}
 
 void SvxShape::impl_construct()
 {
@@ -1195,7 +1199,7 @@ OUString SAL_CALL SvxShape::getShapeType()
 
 void SAL_CALL SvxShape::dispose()
 {
-    ::SolarMutexGuard aGuard;
+    std::unique_lock g(m_aMutex);
 
     if( mpImpl->mbDisposing )
         return; // caught a recursion
@@ -1204,8 +1208,8 @@ void SAL_CALL SvxShape::dispose()
 
     lang::EventObject aEvt;
     aEvt.Source = *static_cast<OWeakAggObject*>(this);
-    mpImpl->maDisposeListeners.disposeAndClear(aEvt);
-    mpImpl->maPropertyNotifier.disposing();
+    mpImpl->maDisposeListeners.disposeAndClear(g, aEvt);
+    mpImpl->maPropertyNotifier.disposing(g);
 
     rtl::Reference<SdrObject> pObject = mxSdrObject;
     if (!pObject)
@@ -1235,13 +1239,15 @@ void SAL_CALL SvxShape::dispose()
 
 void SAL_CALL SvxShape::addEventListener( const Reference< lang::XEventListener >& xListener )
 {
-    mpImpl->maDisposeListeners.addInterface(xListener);
+    std::unique_lock g(m_aMutex);
+    mpImpl->maDisposeListeners.addInterface(g, xListener);
 }
 
 
 void SAL_CALL SvxShape::removeEventListener( const Reference< lang::XEventListener >& aListener )
 {
-   mpImpl->maDisposeListeners.removeInterface(aListener);
+    std::unique_lock g(m_aMutex);
+    mpImpl->maDisposeListeners.removeInterface(g, aListener);
 }
 
 // XPropertySet
@@ -1269,15 +1275,15 @@ Reference< beans::XPropertySetInfo > const &
 
 void SAL_CALL SvxShape::addPropertyChangeListener( const OUString& _propertyName, const Reference< beans::XPropertyChangeListener >& _listener  )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    mpImpl->maPropertyNotifier.addPropertyChangeListener( _propertyName, _listener );
+    std::unique_lock g(m_aMutex);
+    mpImpl->maPropertyNotifier.addPropertyChangeListener( g, _propertyName, _listener );
 }
 
 
 void SAL_CALL SvxShape::removePropertyChangeListener( const OUString& _propertyName, const Reference< beans::XPropertyChangeListener >& _listener  )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    mpImpl->maPropertyNotifier.removePropertyChangeListener( _propertyName, _listener );
+    std::unique_lock g(m_aMutex);
+    mpImpl->maPropertyNotifier.removePropertyChangeListener( g, _propertyName, _listener );
 }
 
 

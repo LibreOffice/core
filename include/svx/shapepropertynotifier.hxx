@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SHAPEPROPERTYNOTIFIER_HXX
 
 #include <svx/svxdllapi.h>
-#include <comphelper/multiinterfacecontainer3.hxx>
+#include <comphelper/multiinterfacecontainer4.hxx>
 #include <rtl/ustring.hxx>
 #include <o3tl/enumarray.hxx>
 
@@ -102,12 +102,12 @@ namespace svx
                 the owner instance of the notifier. Will be used as css.lang.EventObject.Source when
                 notifying events.
         */
-        PropertyChangeNotifier( ::cppu::OWeakObject& _rOwner, ::osl::Mutex& _rMutex );
+        PropertyChangeNotifier( ::cppu::OWeakObject& _rOwner );
         ~PropertyChangeNotifier();
 
         // listener maintenance
-        void addPropertyChangeListener( const OUString& _rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener );
-        void removePropertyChangeListener( const OUString& _rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener );
+        void addPropertyChangeListener( std::unique_lock<std::mutex>& rGuard, const OUString& _rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener );
+        void removePropertyChangeListener( std::unique_lock<std::mutex>& rGuard, const OUString& _rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener );
 
         /** registers an PropertyValueProvider
         */
@@ -118,11 +118,11 @@ namespace svx
             If no property value provider for the given property ID is registered, this is worth an assertion in a
             non-product build, and otherwise ignored.
         */
-        void    notifyPropertyChange( const ShapePropertyProviderId _eProperty ) const;
+        void    notifyPropertyChange( std::unique_lock<std::mutex>& rGuard, const ShapePropertyProviderId _eProperty ) const;
 
         /** is called to dispose the instance
         */
-        void    disposing();
+        void    disposing(std::unique_lock<std::mutex>& rGuard);
 
     private:
         PropertyChangeNotifier(const PropertyChangeNotifier&) = delete;
@@ -130,7 +130,7 @@ namespace svx
 
         ::cppu::OWeakObject&            m_rContext;
         o3tl::enumarray<ShapePropertyProviderId, std::unique_ptr<PropertyValueProvider>>  m_aProviders;
-        comphelper::OMultiTypeInterfaceContainerHelperVar3<css::beans::XPropertyChangeListener, OUString> m_aPropertyChangeListeners;
+        comphelper::OMultiTypeInterfaceContainerHelperVar4<OUString, css::beans::XPropertyChangeListener> m_aPropertyChangeListeners;
     };
 
 

@@ -97,7 +97,6 @@ typedef ::cppu::WeakAggImplHelper12<
     css::beans::XMultiPropertyStates> SvxShape_UnoImplHelper;
 
 class SVXCORE_DLLPUBLIC SvxShape :
-                 public cppu::BaseMutex,
                  public SvxShape_UnoImplHelper,
                  public SfxListener
 {
@@ -177,7 +176,8 @@ public:
     /// @throws css::uno::RuntimeException
     css::uno::Any GetBitmap( bool bMetaFile = false ) const;
 
-    svx::PropertyChangeNotifier& getShapePropertyChangeNotifier();
+    void notifyPropertyChange(svx::ShapePropertyProviderId eProp);
+    void registerProvider(svx::ShapePropertyProviderId eProp, std::unique_ptr<svx::PropertyValueProvider> provider);
 
     void setShapeKind( SdrObjKind nKind );
     SdrObjKind getShapeKind() const;
@@ -312,6 +312,7 @@ private:
     /// CTOR-Impl
     SVX_DLLPRIVATE void impl_construct();
 
+    std::mutex m_aMutex;
     css::awt::Size maSize;
     css::awt::Point maPosition;
     OUString maShapeType;
