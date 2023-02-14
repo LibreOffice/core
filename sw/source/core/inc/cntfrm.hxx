@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_CNTFRM_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_CNTFRM_HXX
 
+#include <swdllapi.h>
 #include "frame.hxx"
 #include "flowfrm.hxx"
 #include <cshtyp.hxx>
@@ -54,7 +55,7 @@ namespace o3tl {
  * SwContentFrame is the layout for content nodes: a common base class for text (paragraph) and
  * non-text (e.g. graphic) frames.
  */
-class SAL_DLLPUBLIC_RTTI SwContentFrame: public SwFrame, public SwFlowFrame
+class SW_DLLPUBLIC SwContentFrame: public SwFrame, public SwFlowFrame
 {
     friend void MakeNxt( SwFrame *pFrame, SwFrame *pNxt );    // calls MakePrtArea
 

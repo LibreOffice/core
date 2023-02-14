@@ -412,7 +412,8 @@ bool SwTextFrame::FormatEmpty()
     // sw_redlinehide: just disable FormatEmpty optimisation for now
     // Split fly frames: non-last parts of the anchor want this optimization to clear the old
     // content.
-    if ((HasFollow() && mnOffset != GetFollow()->GetOffset()) || GetMergedPara() || GetTextNodeFirst()->GetpSwpHints() ||
+    bool bHasNonLastSplitFlyDrawObj = HasNonLastSplitFlyDrawObj();
+    if ((HasFollow() && !bHasNonLastSplitFlyDrawObj) || GetMergedPara() || GetTextNodeFirst()->GetpSwpHints() ||
         nullptr != GetTextNodeForParaProps()->GetNumRule() ||
         GetTextNodeFirst()->HasHiddenCharAttribute(true) ||
          IsInFootnote() || ( HasPara() && GetPara()->IsPrepMustFit() ) )
@@ -433,7 +434,7 @@ bool SwTextFrame::FormatEmpty()
     SwRect aRect;
     bool bFirstFlyCheck = 0 != getFramePrintArea().Height();
     if ( !bCollapse && bFirstFlyCheck &&
-            aTextFly.IsOn() && aTextFly.IsAnyObj( aRect ) )
+            aTextFly.IsOn() && aTextFly.IsAnyObj( aRect ) && !bHasNonLastSplitFlyDrawObj )
         return false;
 
     // only need to check one node because of early return on GetMerged()
