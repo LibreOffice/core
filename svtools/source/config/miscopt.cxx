@@ -47,6 +47,8 @@ constexpr OUStringLiteral PROPERTYNAME_SYMBOLSET = u"SymbolSet";
 #define PROPERTYHANDLE_SYMBOLSET                0
 constexpr OUStringLiteral PROPERTYNAME_ICONTHEME = u"SymbolStyle";
 #define PROPERTYHANDLE_SYMBOLSTYLE              1
+constexpr OUStringLiteral PROPERTYNAME_SIDEBARICONSIZE = u"SidebarIconSize";
+constexpr OUStringLiteral PROPERTYNAME_NOTEBOOKBARICONSIZE = u"NotebookbarIconSize";
 
 static std::mutex & GetInitMutex()
 {
@@ -359,6 +361,11 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
     {
         PROPERTYNAME_SYMBOLSET,
         PROPERTYNAME_ICONTHEME,
+        // SidebarIconSize and NotebookbarIconSize so
+        // notifications for their changes are also broadcast
+        // from SvtMiscOptions
+        PROPERTYNAME_SIDEBARICONSIZE,
+        PROPERTYNAME_NOTEBOOKBARICONSIZE
     };
 }
 
