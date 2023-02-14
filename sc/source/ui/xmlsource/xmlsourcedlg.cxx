@@ -448,31 +448,33 @@ void getFieldLinks(
     ScOrcusImportXMLParam::RangeLink& rRangeLink, std::vector<size_t>& rNamespaces,
     const weld::TreeView& rTree, const weld::TreeIter& rEntry)
 {
+    OUString aPath = getXPath(rTree, rEntry, rNamespaces);
+    const ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(rTree, rEntry);
+
+    if (pUserData)
+    {
+        if (pUserData->meType == ScOrcusXMLTreeParam::ElementRepeat)
+            // nested repeat element automatically becomes a row-group node.
+            rRangeLink.maRowGroups.push_back(
+                OUStringToOString(aPath, RTL_TEXTENCODING_UTF8));
+
+        if (pUserData->mbLeafNode && !aPath.isEmpty())
+            // XPath should never be empty anyway, but it won't hurt to check...
+            rRangeLink.maFieldPaths.push_back(OUStringToOString(aPath, RTL_TEXTENCODING_UTF8));
+    }
+
     std::unique_ptr<weld::TreeIter> xChild(rTree.make_iterator(&rEntry));
+
     if (!rTree.iter_children(*xChild))
         // No more children.  We're done.
         return;
 
     do
     {
-        OUString aPath = getXPath(rTree, *xChild, rNamespaces);
-        const ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(rTree, *xChild);
-
-        if (pUserData)
-        {
-            if (pUserData->meType == ScOrcusXMLTreeParam::ElementRepeat)
-                // nested repeat element automatically becomes a row-group node.
-                rRangeLink.maRowGroups.push_back(
-                    OUStringToOString(aPath, RTL_TEXTENCODING_UTF8));
-
-            if (pUserData->mbLeafNode && !aPath.isEmpty())
-                // XPath should never be empty anyway, but it won't hurt to check...
-                rRangeLink.maFieldPaths.push_back(OUStringToOString(aPath, RTL_TEXTENCODING_UTF8));
-        }
-
         // Walk recursively.
         getFieldLinks(rRangeLink, rNamespaces, rTree, *xChild);
-    } while (rTree.iter_next_sibling(*xChild));
+    }
+    while (rTree.iter_next_sibling(*xChild));
 }
 
 void removeDuplicates(std::vector<size_t>& rArray)
