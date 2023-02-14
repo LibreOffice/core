@@ -207,13 +207,17 @@ void maybeOutputTimestamp(std::ostringstream &s) {
     static const std::pair<bool, bool> aEnvFlags = getTimestampFlags(getLogLevelEnvVar());
     const auto& [outputTimestamp, outputRelativeTimer] = (pLogSelector == nullptr ? aEnvFlags : getTimestampFlags(pLogSelector));
 
+    if (!(outputTimestamp || outputRelativeTimer)) {
+        return;
+    }
+    TimeValue now;
+    osl_getSystemTime(&now);
+
     if (outputTimestamp)
     {
         char ts[100];
-        TimeValue systemTime;
-        osl_getSystemTime(&systemTime);
         TimeValue localTime;
-        osl_getLocalTimeFromSystemTime(&systemTime, &localTime);
+        osl_getLocalTimeFromSystemTime(&now, &localTime);
         oslDateTime dateTime;
         osl_getDateTimeFromTimeValue(&localTime, &dateTime);
         struct tm tm;
@@ -231,23 +235,22 @@ void maybeOutputTimestamp(std::ostringstream &s) {
                  static_cast<unsigned>(dateTime.NanoSeconds / 1000000));
         s << ts << '.' << milliSecs << ':';
     }
-    if (!outputRelativeTimer)
-        return;
 
-    TimeValue now;
-    osl_getSystemTime(&now);
-    int seconds = now.Seconds - aStartTime.aTime.Seconds;
-    int milliSeconds;
-    if (now.Nanosec < aStartTime.aTime.Nanosec)
+    if (outputRelativeTimer)
     {
-        seconds--;
-        milliSeconds = 1000 - (aStartTime.aTime.Nanosec - now.Nanosec) / 1000000;
+        int seconds = now.Seconds - aStartTime.aTime.Seconds;
+        int milliSeconds;
+        if (now.Nanosec < aStartTime.aTime.Nanosec)
+        {
+            seconds--;
+            milliSeconds = 1000 - (aStartTime.aTime.Nanosec - now.Nanosec) / 1000000;
+        }
+        else
+            milliSeconds = (now.Nanosec - aStartTime.aTime.Nanosec) / 1000000;
+        char relativeTimestamp[100];
+        snprintf(relativeTimestamp, sizeof(relativeTimestamp), "%d.%03d", seconds, milliSeconds);
+        s << relativeTimestamp << ':';
     }
-    else
-        milliSeconds = (now.Nanosec - aStartTime.aTime.Nanosec) / 1000000;
-    char relativeTimestamp[100];
-    snprintf(relativeTimestamp, sizeof(relativeTimestamp), "%d.%03d", seconds, milliSeconds);
-    s << relativeTimestamp << ':';
 }
 
 #endif
