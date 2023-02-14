@@ -40,7 +40,6 @@
 #include <osl/diagnose.h>
 #include <mutex>
 
-using namespace ::std;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::com::sun::star::io;
@@ -116,7 +115,7 @@ private:
     bool m_bValidStream;
 
     MemRingBuffer m_aRingBuffer;
-    map<sal_Int32,sal_Int32,less< sal_Int32 > > m_mapMarks;
+    std::map<sal_Int32,sal_Int32,std::less< sal_Int32 > > m_mapMarks;
     sal_Int32 m_nCurrentPos;
     sal_Int32 m_nCurrentMark;
 
@@ -204,7 +203,7 @@ sal_Int32 OMarkableOutputStream::createMark()
 void OMarkableOutputStream::deleteMark(sal_Int32 Mark)
 {
     std::unique_lock guard( m_mutex );
-    map<sal_Int32,sal_Int32,less<sal_Int32> >::iterator ii = m_mapMarks.find( Mark );
+    std::map<sal_Int32,sal_Int32,std::less<sal_Int32> >::iterator ii = m_mapMarks.find( Mark );
 
     if( ii == m_mapMarks.end() ) {
         throw IllegalArgumentException(
@@ -218,7 +217,7 @@ void OMarkableOutputStream::deleteMark(sal_Int32 Mark)
 void OMarkableOutputStream::jumpToMark(sal_Int32 nMark)
 {
     std::unique_lock guard( m_mutex );
-    map<sal_Int32,sal_Int32,less<sal_Int32> >::iterator ii = m_mapMarks.find( nMark );
+    std::map<sal_Int32,sal_Int32,std::less<sal_Int32> >::iterator ii = m_mapMarks.find( nMark );
 
     if( ii == m_mapMarks.end() ) {
         throw IllegalArgumentException(
@@ -239,7 +238,7 @@ sal_Int32 OMarkableOutputStream::offsetToMark(sal_Int32 nMark)
 {
 
     std::unique_lock guard( m_mutex );
-    map<sal_Int32,sal_Int32,less<sal_Int32> >::const_iterator ii = m_mapMarks.find( nMark );
+    std::map<sal_Int32,sal_Int32,std::less<sal_Int32> >::const_iterator ii = m_mapMarks.find( nMark );
 
     if( ii == m_mapMarks.end() )
     {
@@ -424,7 +423,7 @@ private:
     bool m_bValidStream;
 
     std::unique_ptr<MemRingBuffer> m_pBuffer;
-    map<sal_Int32,sal_Int32,less< sal_Int32 > > m_mapMarks;
+    std::map<sal_Int32,sal_Int32,std::less< sal_Int32 > > m_mapMarks;
     sal_Int32 m_nCurrentPos;
     sal_Int32 m_nCurrentMark;
 
@@ -600,7 +599,7 @@ sal_Int32 OMarkableInputStream::createMark()
 void OMarkableInputStream::deleteMark(sal_Int32 Mark)
 {
     std::unique_lock guard( m_mutex );
-    map<sal_Int32,sal_Int32,less<sal_Int32> >::iterator ii = m_mapMarks.find( Mark );
+    std::map<sal_Int32,sal_Int32,std::less<sal_Int32> >::iterator ii = m_mapMarks.find( Mark );
 
     if( ii == m_mapMarks.end() ) {
         throw IllegalArgumentException(
@@ -614,7 +613,7 @@ void OMarkableInputStream::deleteMark(sal_Int32 Mark)
 void OMarkableInputStream::jumpToMark(sal_Int32 nMark)
 {
     std::unique_lock guard( m_mutex );
-    map<sal_Int32,sal_Int32,less<sal_Int32> >::iterator ii = m_mapMarks.find( nMark );
+    std::map<sal_Int32,sal_Int32,std::less<sal_Int32> >::iterator ii = m_mapMarks.find( nMark );
 
     if( ii == m_mapMarks.end() )
     {
@@ -635,7 +634,7 @@ void OMarkableInputStream::jumpToFurthest()
 sal_Int32 OMarkableInputStream::offsetToMark(sal_Int32 nMark)
 {
     std::unique_lock guard( m_mutex );
-    map<sal_Int32,sal_Int32,less<sal_Int32> >::const_iterator ii = m_mapMarks.find( nMark );
+    std::map<sal_Int32,sal_Int32,std::less<sal_Int32> >::const_iterator ii = m_mapMarks.find( nMark );
 
     if( ii == m_mapMarks.end() )
     {

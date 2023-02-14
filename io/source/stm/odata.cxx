@@ -40,7 +40,6 @@
 
 using namespace ::cppu;
 using namespace ::osl;
-using namespace ::std;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -1039,7 +1038,7 @@ private:
     Reference < XComponentContext >     m_rCxt;
     bool                m_bValidMarkable;
     Reference < XMarkableStream > m_rMarkable;
-    vector < Reference<  XPersistObject > > m_aPersistVector;
+    std::vector < Reference<  XPersistObject > > m_aPersistVector;
 
 };
 

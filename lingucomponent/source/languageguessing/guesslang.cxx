@@ -46,7 +46,6 @@
 #include <textcat.h>
 #endif
 
-using namespace ::std;
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -194,7 +193,7 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getAvailableLanguages(  )
     EnsureInitialized();
 
     Sequence< css::lang::Locale > aRes;
-    vector<Guess> gs = m_aGuesser.GetAllManagedLanguages();
+    std::vector<Guess> gs = m_aGuesser.GetAllManagedLanguages();
     aRes.realloc(gs.size());
 
     css::lang::Locale *pRes = aRes.getArray();
@@ -216,7 +215,7 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getEnabledLanguages(  )
     EnsureInitialized();
 
     Sequence< css::lang::Locale > aRes;
-    vector<Guess> gs = m_aGuesser.GetAvailableLanguages();
+    std::vector<Guess> gs = m_aGuesser.GetAvailableLanguages();
     aRes.realloc(gs.size());
 
     css::lang::Locale *pRes = aRes.getArray();
@@ -238,7 +237,7 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getDisabledLanguages(  )
     EnsureInitialized();
 
     Sequence< css::lang::Locale > aRes;
-    vector<Guess> gs = m_aGuesser.GetUnavailableLanguages();
+    std::vector<Guess> gs = m_aGuesser.GetUnavailableLanguages();
     aRes.realloc(gs.size());
 
     css::lang::Locale *pRes = aRes.getArray();
@@ -262,7 +261,7 @@ void SAL_CALL LangGuess_Impl::disableLanguages(
 
     for (const Locale& rLanguage : rLanguages)
     {
-        string language;
+        std::string language;
 
         OString l = OUStringToOString( rLanguage.Language, RTL_TEXTENCODING_ASCII_US );
         OString c = OUStringToOString( rLanguage.Country, RTL_TEXTENCODING_ASCII_US );
@@ -283,7 +282,7 @@ void SAL_CALL LangGuess_Impl::enableLanguages(
 
     for (const Locale& rLanguage : rLanguages)
     {
-        string language;
+        std::string language;
 
         OString l = OUStringToOString( rLanguage.Language, RTL_TEXTENCODING_ASCII_US );
         OString c = OUStringToOString( rLanguage.Country, RTL_TEXTENCODING_ASCII_US );

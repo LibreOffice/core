@@ -29,7 +29,6 @@
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <vector>
 
-using namespace ::std;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
@@ -51,7 +50,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL ManifestReader::readManifestSeque
     Reference < XParser > xParser  = Parser::create(m_xContext);
     try
     {
-        vector < Sequence < PropertyValue > > aManVector;
+        std::vector < Sequence < PropertyValue > > aManVector;
         Reference < XDocumentHandler > xFilter = new ManifestImport( aManVector );
         InputSource aParserInput;
         aParserInput.aInputStream = rStream;

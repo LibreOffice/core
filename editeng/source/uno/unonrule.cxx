@@ -50,7 +50,6 @@ using ::com::sun::star::util::XCloneable;
 using ::com::sun::star::ucb::XAnyCompare;
 
 
-using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
