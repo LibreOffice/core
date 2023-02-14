@@ -24,18 +24,13 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/XTopWindow.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/util/XCloseable.hpp>
 
-#include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <test/bootstrapfixture.hxx>
+#include <test/a11y/accessibletestbase.hxx>
 #include <vcl/scheduler.hxx>
 
 #include <test/a11y/AccessibilityTools.hxx>
@@ -48,15 +43,12 @@ using namespace css;
 
 namespace
 {
-class AccessibleStatusBarTest : public test::BootstrapFixture
+class AccessibleStatusBarTest : public test::AccessibleTestBase
 {
 private:
-    uno::Reference<frame::XDesktop2> mxDesktop;
-
     uno::Reference<accessibility::XAccessibleContext>
     getTestObject(const uno::Reference<awt::XWindow>& xWindow);
-    void runAllTests(const uno::Reference<awt::XWindow>& xWindow);
-    uno::Reference<lang::XComponent> openDocument(std::string_view sKind);
+    void runAllTests();
     void testDocument(std::string_view sKind);
 
     void testWriterDoc() { testDocument("swriter"); }
@@ -66,8 +58,6 @@ private:
     void testCalcDoc() { testDocument("scalc"); }
 
 public:
-    virtual void setUp() override;
-
     CPPUNIT_TEST_SUITE(AccessibleStatusBarTest);
     CPPUNIT_TEST(testWriterDoc);
     CPPUNIT_TEST(testMathDoc);
@@ -76,13 +66,6 @@ public:
     CPPUNIT_TEST(testCalcDoc);
     CPPUNIT_TEST_SUITE_END();
 };
-
-void AccessibleStatusBarTest::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop = frame::Desktop::create(mxComponentContext);
-}
 
 uno::Reference<accessibility::XAccessibleContext>
 AccessibleStatusBarTest::getTestObject(const uno::Reference<awt::XWindow>& xWindow)
@@ -108,9 +91,9 @@ AccessibleStatusBarTest::getTestObject(const uno::Reference<awt::XWindow>& xWind
     return xContext;
 }
 
-void AccessibleStatusBarTest::runAllTests(const uno::Reference<awt::XWindow>& xWindow)
+void AccessibleStatusBarTest::runAllTests()
 {
-    auto xContext = getTestObject(xWindow);
+    auto xContext = getTestObject(mxWindow);
 
     uno::Reference<accessibility::XAccessibleComponent> xAccessibleComponent(xContext,
                                                                              uno::UNO_QUERY_THROW);
@@ -127,53 +110,25 @@ void AccessibleStatusBarTest::runAllTests(const uno::Reference<awt::XWindow>& xW
 
     uno::Reference<accessibility::XAccessibleEventBroadcaster> xAccessibleEventBroadcaster(
         xContext, uno::UNO_QUERY_THROW);
-    XAccessibleEventBroadcasterTester eventBroadcasterTester(xAccessibleEventBroadcaster, xWindow);
+    XAccessibleEventBroadcasterTester eventBroadcasterTester(xAccessibleEventBroadcaster, mxWindow);
     eventBroadcasterTester.testAll();
-}
-
-uno::Reference<lang::XComponent> AccessibleStatusBarTest::openDocument(std::string_view sKind)
-{
-    /* not sure what's that about, but from SOfficeFactory.java:openDoc() */
-    // that noargs thing for load attributes
-    std::vector<beans::PropertyValue> aArgs;
-    if (sKind == "simpress")
-    {
-        beans::PropertyValue aValue;
-        aValue.Name = "OpenFlags";
-        aValue.Handle = -1;
-        aValue.Value <<= OUString("S");
-        aValue.State = beans::PropertyState_DIRECT_VALUE;
-        aArgs.push_back(aValue);
-    }
-
-    rtl::OUStringBuffer sURL("private:factory/");
-    sURL.appendAscii(sKind.data(), sKind.length());
-
-    return mxDesktop->loadComponentFromURL(sURL.makeStringAndClear(), "_blank", 40,
-                                           comphelper::containerToSequence(aArgs));
 }
 
 void AccessibleStatusBarTest::testDocument(std::string_view sKind)
 {
-    auto xDoc = openDocument(sKind);
-    std::cout << "got document: " << xDoc << std::endl;
-    CPPUNIT_ASSERT(xDoc.is());
-    uno::Reference<frame::XModel> xModel(xDoc, uno::UNO_QUERY_THROW);
-    std::cout << "got model: " << xModel << std::endl;
-    uno::Reference<awt::XWindow> xWindow(
-        xModel->getCurrentController()->getFrame()->getContainerWindow());
-    std::cout << "got window: " << xWindow << std::endl;
-    uno::Reference<awt::XTopWindow> xTopWindow(xWindow, uno::UNO_QUERY_THROW);
-    std::cout << "got top window: " << xTopWindow << std::endl;
-    xTopWindow->toFront();
+    rtl::OUStringBuffer sURL("private:factory/");
+    sURL.appendAscii(sKind.data(), sKind.length());
+
+    load(sURL.makeStringAndClear());
+
+    std::cout << "got document: " << mxDocument << std::endl;
 
     Scheduler::ProcessEventsToIdle();
 
-    runAllTests(xWindow);
+    runAllTests();
 
     // close document
-    uno::Reference<css::util::XCloseable> xCloseable(xDoc, uno::UNO_QUERY_THROW);
-    xCloseable->close(false);
+    close();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(AccessibleStatusBarTest);
