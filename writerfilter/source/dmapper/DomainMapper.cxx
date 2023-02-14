@@ -3494,9 +3494,9 @@ void DomainMapper::lcl_startParagraphGroup()
     if (m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) != m_pImpl->GetTopContext())
         m_pImpl->PushProperties(CONTEXT_PARAGRAPH);
 
-    if (m_pImpl->GetTopContext())
+    if (!m_pImpl->IsInShape() && !m_pImpl->IsInComments())
     {
-        if (!m_pImpl->IsInShape() && !m_pImpl->IsInComments())
+        if (m_pImpl->GetTopContext())
         {
             const OUString& sDefaultParaStyle = m_pImpl->GetDefaultParaStyleName();
             m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, uno::Any( sDefaultParaStyle ) );
@@ -3508,15 +3508,15 @@ void DomainMapper::lcl_startParagraphGroup()
                 m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_COLUMN_BEFORE));
             mbWasShapeInPara = false;
         }
-
-        if (m_pImpl->isParaSdtEndDeferred())
-            m_pImpl->GetTopContext()->Insert(PROP_PARA_SDT_END_BEFORE, uno::Any(true), true, PARA_GRAB_BAG);
+        m_pImpl->clearDeferredBreaks();
     }
+
+    if (m_pImpl->isParaSdtEndDeferred() && m_pImpl->GetTopContext())
+        m_pImpl->GetTopContext()->Insert(PROP_PARA_SDT_END_BEFORE, uno::Any(true), true, PARA_GRAB_BAG);
+    m_pImpl->setParaSdtEndDeferred(false);
+
     m_pImpl->SetIsFirstRun(true);
     m_pImpl->SetIsOutsideAParagraph(false);
-    if (!m_pImpl->IsInShape())
-        m_pImpl->clearDeferredBreaks();
-    m_pImpl->setParaSdtEndDeferred(false);
 }
 
 void DomainMapper::lcl_endParagraphGroup()
