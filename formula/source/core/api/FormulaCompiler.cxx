@@ -27,8 +27,6 @@
 #include <core_resource.hxx>
 #include <core_resource.hrc>
 
-#include <osl/mutex.hxx>
-
 #include <svl/zforlist.hxx>
 #include <unotools/charclass.hxx>
 #include <vcl/svapp.hxx>
@@ -38,6 +36,7 @@
 #include <com/sun/star/sheet/FormulaMapGroup.hpp>
 #include <com/sun/star/sheet/FormulaMapGroupSpecialOffset.hpp>
 #include <algorithm>
+#include <mutex>
 
 namespace formula
 {
@@ -318,7 +317,7 @@ const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr, sal_Unicode c )
 struct OpCodeMapData
 {
     FormulaCompiler::NonConstOpCodeMapPtr mxSymbolMap;
-    osl::Mutex maMtx;
+    std::mutex maMtx;
 };
 
 
@@ -966,7 +965,7 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::CreateOpCodeMap(
 static bool lcl_fillNativeSymbols( FormulaCompiler::NonConstOpCodeMapPtr& xMap, FormulaCompiler::InitSymbols eWhat = FormulaCompiler::InitSymbols::INIT )
 {
     static OpCodeMapData aSymbolMap;
-    osl::MutexGuard aGuard(&aSymbolMap.maMtx);
+    std::unique_lock aGuard(aSymbolMap.maMtx);
 
     if (eWhat == FormulaCompiler::InitSymbols::ASK)
     {
@@ -1012,7 +1011,7 @@ bool FormulaCompiler::InitSymbolsNative( FormulaCompiler::InitSymbols eWhat ) co
 bool FormulaCompiler::InitSymbolsEnglish( FormulaCompiler::InitSymbols eWhat ) const
 {
     static OpCodeMapData aMap;
-    osl::MutexGuard aGuard(&aMap.maMtx);
+    std::unique_lock aGuard(aMap.maMtx);
     if (eWhat == InitSymbols::ASK)
         return bool(aMap.mxSymbolMap);
     else if (eWhat == InitSymbols::DESTROY)
@@ -1026,7 +1025,7 @@ bool FormulaCompiler::InitSymbolsEnglish( FormulaCompiler::InitSymbols eWhat ) c
 bool FormulaCompiler::InitSymbolsPODF( FormulaCompiler::InitSymbols eWhat ) const
 {
     static OpCodeMapData aMap;
-    osl::MutexGuard aGuard(&aMap.maMtx);
+    std::unique_lock aGuard(aMap.maMtx);
     if (eWhat == InitSymbols::ASK)
         return bool(aMap.mxSymbolMap);
     else if (eWhat == InitSymbols::DESTROY)
@@ -1040,7 +1039,7 @@ bool FormulaCompiler::InitSymbolsPODF( FormulaCompiler::InitSymbols eWhat ) cons
 bool FormulaCompiler::InitSymbolsAPI( FormulaCompiler::InitSymbols eWhat ) const
 {
     static OpCodeMapData aMap;
-    osl::MutexGuard aGuard(&aMap.maMtx);
+    std::unique_lock aGuard(aMap.maMtx);
     if (eWhat == InitSymbols::ASK)
         return bool(aMap.mxSymbolMap);
     else if (eWhat == InitSymbols::DESTROY)
@@ -1054,7 +1053,7 @@ bool FormulaCompiler::InitSymbolsAPI( FormulaCompiler::InitSymbols eWhat ) const
 bool FormulaCompiler::InitSymbolsODFF( FormulaCompiler::InitSymbols eWhat ) const
 {
     static OpCodeMapData aMap;
-    osl::MutexGuard aGuard(&aMap.maMtx);
+    std::unique_lock aGuard(aMap.maMtx);
     if (eWhat == InitSymbols::ASK)
         return bool(aMap.mxSymbolMap);
     else if (eWhat == InitSymbols::DESTROY)
@@ -1068,7 +1067,7 @@ bool FormulaCompiler::InitSymbolsODFF( FormulaCompiler::InitSymbols eWhat ) cons
 bool FormulaCompiler::InitSymbolsEnglishXL( FormulaCompiler::InitSymbols eWhat ) const
 {
     static OpCodeMapData aMap;
-    osl::MutexGuard aGuard(&aMap.maMtx);
+    std::unique_lock aGuard(aMap.maMtx);
     if (eWhat == InitSymbols::ASK)
         return bool(aMap.mxSymbolMap);
     else if (eWhat == InitSymbols::DESTROY)
@@ -1092,7 +1091,7 @@ bool FormulaCompiler::InitSymbolsEnglishXL( FormulaCompiler::InitSymbols eWhat )
 bool FormulaCompiler::InitSymbolsOOXML( FormulaCompiler::InitSymbols eWhat ) const
 {
     static OpCodeMapData aMap;
-    osl::MutexGuard aGuard(&aMap.maMtx);
+    std::unique_lock aGuard(aMap.maMtx);
     if (eWhat == InitSymbols::ASK)
         return bool(aMap.mxSymbolMap);
     else if (eWhat == InitSymbols::DESTROY)
