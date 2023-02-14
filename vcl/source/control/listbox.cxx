@@ -883,6 +883,20 @@ bool ListBox::PreNotify( NotifyEvent& rNEvt )
         }
     }
 
+    if (rNEvt.GetType() == NotifyEventType::MOUSEMOVE)
+    {
+        const MouseEvent* pMouseEvt = rNEvt.GetMouseEvent();
+        if (pMouseEvt && (pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow()))
+        {
+            // trigger redraw as mouse over state has changed
+            if (IsNativeControlSupported(ControlType::Listbox, ControlPart::Entire)
+                && !IsNativeControlSupported(ControlType::Listbox, ControlPart::ButtonDown))
+            {
+                GetWindow(GetWindowType::Border)->Invalidate(InvalidateFlags::NoErase);
+            }
+        }
+    }
+
     return bDone || Control::PreNotify( rNEvt );
 }
 

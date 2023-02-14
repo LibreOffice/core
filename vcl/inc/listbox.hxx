@@ -559,7 +559,6 @@ public:
     virtual void    Resize() override;
     virtual void    GetFocus() override;
     virtual void    LoseFocus() override;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 
     sal_Int32       GetItemPos() const { return mnItemPos; }
     void            SetItemPos( sal_Int32  n ) { mnItemPos = n; }
