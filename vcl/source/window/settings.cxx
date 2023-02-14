@@ -85,9 +85,14 @@ void Window::UpdateSettings( const AllSettings& rSettings, bool bChild )
     if ( mpWindowImpl->mpBorderWindow )
     {
         mpWindowImpl->mpBorderWindow->UpdateSettings( rSettings );
-        if ( (mpWindowImpl->mpBorderWindow->GetType() == WindowType::BORDERWINDOW) &&
-             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow )
-            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow->UpdateSettings( rSettings, true );
+        if (mpWindowImpl->mpBorderWindow->GetType() == WindowType::BORDERWINDOW)
+        {
+            ImplBorderWindow* pImpl = static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get());
+            if (pImpl->mpMenuBarWindow)
+                pImpl->mpMenuBarWindow->UpdateSettings(rSettings, true);
+            if (pImpl->mpNotebookBar)
+                pImpl->mpNotebookBar->UpdateSettings(rSettings, true);
+        }
     }
 
     AllSettings aOldSettings(*mpWindowImpl->mxOutDev->moSettings);
