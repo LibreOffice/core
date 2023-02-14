@@ -1187,10 +1187,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValue( const OUString& aProperty
                         aEvt.OldValue       = aOldValue;
                         aEvt.NewValue       = aValue;
 
-                        // Callback follows!
-                        aCGuard.unlock();
-
-                        notifyPropertyChangeEvent( aEvt );
+                        notifyPropertyChangeEvent( aCGuard, aEvt );
                     }
                     return;
                 }
@@ -1442,7 +1439,7 @@ void SAL_CALL PersistentPropertySet::addProperty(
                                     Name,
                                     -1,
                                     PropertySetInfoChange::PROPERTY_INSERTED );
-                    notifyPropertySetInfoChange( evt );
+                    notifyPropertySetInfoChange(aGuard, evt);
                 }
 
                 // Success.
@@ -1600,7 +1597,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
                                     Name,
                                     nHandle,
                                     PropertySetInfoChange::PROPERTY_REMOVED );
-                    notifyPropertySetInfoChange( evt );
+                    notifyPropertySetInfoChange( aGuard, evt );
                 }
 
                 // Success.
@@ -1883,13 +1880,10 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
 
         if ( m_pPropertyChangeListeners )
         {
-            // Callback follows!
-            aCGuard.unlock();
-
             // Notify property changes.
             for (auto const& event : aEvents)
             {
-                notifyPropertyChangeEvent( event );
+                notifyPropertyChangeEvent( aCGuard, event );
             }
         }
 
@@ -1904,38 +1898,36 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
 
 
 void PersistentPropertySet::notifyPropertyChangeEvent(
+                                    std::unique_lock<std::mutex>& rGuard,
                                     const PropertyChangeEvent& rEvent ) const
 {
-    std::unique_lock aGuard(m_aMutex);
-
     // Get "normal" listeners for the property.
     OInterfaceContainerHelper4<XPropertyChangeListener>* pContainer =
-            m_pPropertyChangeListeners->getContainer( aGuard, rEvent.PropertyName );
-    if ( pContainer && pContainer->getLength(aGuard) )
+            m_pPropertyChangeListeners->getContainer( rGuard, rEvent.PropertyName );
+    if ( pContainer && pContainer->getLength(rGuard) )
     {
-        pContainer->notifyEach( aGuard, &XPropertyChangeListener::propertyChange, rEvent );
+        pContainer->notifyEach( rGuard, &XPropertyChangeListener::propertyChange, rEvent );
     }
 
     // Get "normal" listeners for all properties.
     OInterfaceContainerHelper4<XPropertyChangeListener>* pNoNameContainer =
-            m_pPropertyChangeListeners->getContainer( aGuard, OUString() );
-    if ( pNoNameContainer && pNoNameContainer->getLength(aGuard) )
+            m_pPropertyChangeListeners->getContainer( rGuard, OUString() );
+    if ( pNoNameContainer && pNoNameContainer->getLength(rGuard) )
     {
-        pNoNameContainer->notifyEach( aGuard, &XPropertyChangeListener::propertyChange, rEvent );
+        pNoNameContainer->notifyEach( rGuard, &XPropertyChangeListener::propertyChange, rEvent );
     }
 }
 
 
 void PersistentPropertySet::notifyPropertySetInfoChange(
+                                std::unique_lock<std::mutex>& rGuard,
                                 const PropertySetInfoChangeEvent& evt ) const
 {
-    std::unique_lock aGuard(m_aMutex);
-
     if ( !m_pPropSetChangeListeners )
         return;
 
     // Notify event listeners.
-    m_pPropSetChangeListeners->notifyEach( aGuard, &XPropertySetInfoChangeListener::propertySetInfoChange, evt );
+    m_pPropSetChangeListeners->notifyEach( rGuard, &XPropertySetInfoChangeListener::propertySetInfoChange, evt );
 }
 
 

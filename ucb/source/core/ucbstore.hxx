@@ -169,8 +169,10 @@ class PersistentPropertySet : public cppu::WeakImplHelper <
 
 private:
     void notifyPropertyChangeEvent(
+        std::unique_lock<std::mutex>& rGuard,
         const css::beans::PropertyChangeEvent& rEvent ) const;
     void notifyPropertySetInfoChange(
+        std::unique_lock<std::mutex>& rGuard,
         const css::beans::PropertySetInfoChangeEvent& evt ) const;
 
 public:
