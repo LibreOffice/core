@@ -398,11 +398,8 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                 "unsupported dispatch request <" << aName << ">");
             if( xDispatcher.is() )
             {
-                {
-                    osl::MutexGuard aGuard(m_mutex);
-                    // Remember request so we can find it in statusChanged!
-                    m_nRequestCount++;
-                }
+                // Remember request so we can find it in statusChanged!
+                m_nRequestCount++;
 
                 // Use local vector to store dispatcher because we have to fill our request container before
                 // we can dispatch. Otherwise it would be possible that statusChanged is called before we dispatched all requests!!
@@ -770,18 +767,13 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                 xDisp->dispatchWithNotification( aDispatche.aURL, aArgs, this );
             else
             {
-                {
-                    osl::MutexGuard aGuard(m_mutex);
-                    m_nRequestCount--;
-                }
+                m_nRequestCount--;
                 xDispatch->dispatch( aDispatche.aURL, aArgs );
             }
         }
     }
 
-    ::osl::ClearableMutexGuard aGuard(m_mutex);
     bool bEmpty = (m_nRequestCount == 0);
-    aGuard.clear();
 
     // No more asynchronous requests?
     // The requests are removed from the request container after they called back to this
@@ -809,9 +801,7 @@ void SAL_CALL DispatchWatcher::disposing( const css::lang::EventObject& )
 
 void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& )
 {
-    osl::ClearableMutexGuard aGuard(m_mutex);
-    sal_Int16 nCount = --m_nRequestCount;
-    aGuard.clear();
+    int nCount = --m_nRequestCount;
     RequestHandler::RequestsCompleted();
     if ( !nCount && !RequestHandler::AreRequestsPending() )
     {

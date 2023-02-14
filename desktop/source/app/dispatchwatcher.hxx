@@ -22,7 +22,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <optional>
-
+#include <atomic>
 #include <vector>
 
 namespace desktop
@@ -77,9 +77,8 @@ class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResu
         bool executeDispatchRequests( const std::vector<DispatchRequest>& aDispatches, bool bNoTerminate );
 
     private:
-        osl::Mutex m_mutex;
 
-        sal_Int16                   m_nRequestCount;
+        std::atomic<int> m_nRequestCount;
 };
 
 }
