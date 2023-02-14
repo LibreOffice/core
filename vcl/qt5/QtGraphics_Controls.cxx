@@ -40,7 +40,9 @@ static QStyle::State vclStateValue2StateFlag(ControlState nControlState,
 {
     QStyle::State nState
         = ((nControlState & ControlState::ENABLED) ? QStyle::State_Enabled : QStyle::State_None)
-          | ((nControlState & ControlState::FOCUSED) ? QStyle::State_HasFocus : QStyle::State_None)
+          | ((nControlState & ControlState::FOCUSED)
+                 ? QStyle::State_HasFocus | QStyle::State_KeyboardFocusChange
+                 : QStyle::State_None)
           | ((nControlState & ControlState::PRESSED) ? QStyle::State_Sunken : QStyle::State_None)
           | ((nControlState & ControlState::SELECTED) ? QStyle::State_Selected : QStyle::State_None)
           | ((nControlState & ControlState::ROLLOVER) ? QStyle::State_MouseOver
