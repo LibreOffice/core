@@ -40,11 +40,13 @@
 #include <svdata.hxx>
 #include <vcl/svapp.hxx>
 
+#if HAVE_FEATURE_UI
 #if USING_X11
 #define UNIX_DESKTOP_DETECT 1
 #include <unx/desktops.hxx>
 #else
 #define UNIX_DESKTOP_DETECT 0
+#endif
 #endif
 
 #if defined(DISABLE_DYNLOADING) || !HAVE_FEATURE_UI
