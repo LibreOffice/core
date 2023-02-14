@@ -200,7 +200,7 @@ public:
             this parameter only here to make that this container is accessed while locked
     */
     template <typename FuncT>
-    inline void forEach(std::unique_lock<std::mutex>& rGuard, FuncT const& func);
+    inline void forEach(std::unique_lock<std::mutex>& rGuard, FuncT const& func) const;
 
     /** Calls a UNO listener method for each contained listener.
 
@@ -227,7 +227,7 @@ public:
     template <typename EventT>
     inline void notifyEach(std::unique_lock<std::mutex>& rGuard,
                            void (SAL_CALL ListenerT::*NotificationMethod)(const EventT&),
-                           const EventT& Event);
+                           const EventT& Event) const;
 
 private:
     friend class OInterfaceIteratorHelper4<ListenerT>;
@@ -279,14 +279,15 @@ inline OInterfaceContainerHelper4<T>::OInterfaceContainerHelper4()
 template <class T>
 template <typename FuncT>
 inline void OInterfaceContainerHelper4<T>::forEach(std::unique_lock<std::mutex>& rGuard,
-                                                   FuncT const& func)
+                                                   FuncT const& func) const
 {
     if (std::as_const(maData)->size() == 0)
     {
         return;
     }
-    maData.make_unique(); // so we can iterate over the data without holding the lock
-    OInterfaceIteratorHelper4<T> iter(rGuard, *this);
+    const_cast<OInterfaceContainerHelper4&>(*this)
+        .maData.make_unique(); // so we can iterate over the data without holding the lock
+    OInterfaceIteratorHelper4<T> iter(rGuard, const_cast<OInterfaceContainerHelper4&>(*this));
     rGuard.unlock();
     while (iter.hasMoreElements())
     {
@@ -312,7 +313,7 @@ template <class ListenerT>
 template <typename EventT>
 inline void OInterfaceContainerHelper4<ListenerT>::notifyEach(
     std::unique_lock<std::mutex>& rGuard,
-    void (SAL_CALL ListenerT::*NotificationMethod)(const EventT&), const EventT& Event)
+    void (SAL_CALL ListenerT::*NotificationMethod)(const EventT&), const EventT& Event) const
 {
     forEach<NotifySingleListener<EventT>>(rGuard,
                                           NotifySingleListener<EventT>(NotificationMethod, Event));

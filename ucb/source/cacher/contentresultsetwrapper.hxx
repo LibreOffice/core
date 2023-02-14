@@ -85,8 +85,8 @@ private:
     //management of listeners
     bool                m_bDisposed; ///Dispose call ready.
     bool                m_bInDispose;///In dispose call
-    std::unique_ptr<comphelper::OInterfaceContainerHelper4<css::lang::XEventListener>>
-                            m_pDisposeEventListeners;
+    comphelper::OInterfaceContainerHelper4<css::lang::XEventListener>
+                            m_aDisposeEventListeners;
     std::unique_ptr<PropertyChangeListenerContainer_Impl>
                             m_pPropertyChangeListeners;
     std::unique_ptr<VetoableChangeListenerContainer_Impl>

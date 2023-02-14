@@ -1053,20 +1053,18 @@ css::uno::Sequence< OUString > SAL_CALL PersistentPropertySet::getSupportedServi
 void SAL_CALL PersistentPropertySet::dispose()
 {
     std::unique_lock l(m_aMutex);
-    if ( m_pDisposeEventListeners &&
-         m_pDisposeEventListeners->getLength(l) )
+    if ( m_aDisposeEventListeners.getLength(l) )
     {
         EventObject aEvt;
         aEvt.Source = static_cast< XComponent * >( this  );
-        m_pDisposeEventListeners->disposeAndClear( l, aEvt );
+        m_aDisposeEventListeners.disposeAndClear( l, aEvt );
     }
 
-    if ( m_pPropSetChangeListeners &&
-         m_pPropSetChangeListeners->getLength(l) )
+    if ( m_aPropSetChangeListeners.getLength(l) )
     {
         EventObject aEvt;
         aEvt.Source = static_cast< XPropertySetInfoChangeNotifier * >( this  );
-        m_pPropSetChangeListeners->disposeAndClear( l, aEvt );
+        m_aPropSetChangeListeners.disposeAndClear( l, aEvt );
     }
 
     if ( m_pPropertyChangeListeners )
@@ -1084,11 +1082,7 @@ void SAL_CALL PersistentPropertySet::addEventListener(
 {
     std::unique_lock l(m_aMutex);
 
-    if ( !m_pDisposeEventListeners )
-        m_pDisposeEventListeners.reset(
-                    new OInterfaceContainerHelper4<css::lang::XEventListener>() );
-
-    m_pDisposeEventListeners->addInterface( l, Listener );
+    m_aDisposeEventListeners.addInterface( l, Listener );
 }
 
 
@@ -1097,8 +1091,7 @@ void SAL_CALL PersistentPropertySet::removeEventListener(
                             const Reference< XEventListener >& Listener )
 {
     std::unique_lock l(m_aMutex);
-    if ( m_pDisposeEventListeners )
-        m_pDisposeEventListeners->removeInterface( l, Listener );
+    m_aDisposeEventListeners.removeInterface( l, Listener );
 
     // Note: Don't want to delete empty container here -> performance.
 }
@@ -1431,8 +1424,7 @@ void SAL_CALL PersistentPropertySet::addProperty(
                     m_pInfo->reset();
 
                 // Notify propertyset info change listeners.
-                if ( m_pPropSetChangeListeners &&
-                     m_pPropSetChangeListeners->getLength(aGuard) )
+                if ( m_aPropSetChangeListeners.getLength(aGuard) )
                 {
                     PropertySetInfoChangeEvent evt(
                                     static_cast< OWeakObject * >( this ),
@@ -1556,8 +1548,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
             {
                 sal_Int32 nHandle = -1;
 
-                if ( m_pPropSetChangeListeners &&
-                       m_pPropSetChangeListeners->getLength(aGuard) )
+                if ( m_aPropSetChangeListeners.getLength(aGuard) )
                 {
                     // Obtain property handle ( needed for propertysetinfo
                     // change event )...
@@ -1589,8 +1580,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
                     m_pInfo->reset();
 
                 // Notify propertyset info change listeners.
-                if ( m_pPropSetChangeListeners &&
-                      m_pPropSetChangeListeners->getLength(aGuard) )
+                if (  m_aPropSetChangeListeners.getLength(aGuard) )
                 {
                     PropertySetInfoChangeEvent evt(
                                     static_cast< OWeakObject * >( this ),
@@ -1635,11 +1625,7 @@ void SAL_CALL PersistentPropertySet::addPropertySetInfoChangeListener(
 {
     std::unique_lock aGuard(m_aMutex);
 
-    if ( !m_pPropSetChangeListeners )
-        m_pPropSetChangeListeners.reset(
-                    new OInterfaceContainerHelper4<XPropertySetInfoChangeListener>() );
-
-    m_pPropSetChangeListeners->addInterface( aGuard, Listener );
+    m_aPropSetChangeListeners.addInterface( aGuard, Listener );
 }
 
 
@@ -1648,8 +1634,7 @@ void SAL_CALL PersistentPropertySet::removePropertySetInfoChangeListener(
                 const Reference< XPropertySetInfoChangeListener >& Listener )
 {
     std::unique_lock aGuard(m_aMutex);
-    if ( m_pPropSetChangeListeners )
-        m_pPropSetChangeListeners->removeInterface( aGuard, Listener );
+    m_aPropSetChangeListeners.removeInterface( aGuard, Listener );
 }
 
 
@@ -1923,11 +1908,8 @@ void PersistentPropertySet::notifyPropertySetInfoChange(
                                 std::unique_lock<std::mutex>& rGuard,
                                 const PropertySetInfoChangeEvent& evt ) const
 {
-    if ( !m_pPropSetChangeListeners )
-        return;
-
     // Notify event listeners.
-    m_pPropSetChangeListeners->notifyEach( rGuard, &XPropertySetInfoChangeListener::propertySetInfoChange, evt );
+    m_aPropSetChangeListeners.notifyEach( rGuard, &XPropertySetInfoChangeListener::propertySetInfoChange, evt );
 }
 
 

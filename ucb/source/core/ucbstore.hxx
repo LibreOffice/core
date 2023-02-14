@@ -163,8 +163,8 @@ class PersistentPropertySet : public cppu::WeakImplHelper <
     OUString                    m_aKey;
     OUString                    m_aFullKey;
     mutable std::mutex          m_aMutex;
-    std::unique_ptr<comphelper::OInterfaceContainerHelper4<css::lang::XEventListener>>  m_pDisposeEventListeners;
-    std::unique_ptr<comphelper::OInterfaceContainerHelper4<css::beans::XPropertySetInfoChangeListener>>  m_pPropSetChangeListeners;
+    comphelper::OInterfaceContainerHelper4<css::lang::XEventListener>  m_aDisposeEventListeners;
+    comphelper::OInterfaceContainerHelper4<css::beans::XPropertySetInfoChangeListener>  m_aPropSetChangeListeners;
     std::unique_ptr<PropertyListeners_Impl>      m_pPropertyChangeListeners;
 
 private:

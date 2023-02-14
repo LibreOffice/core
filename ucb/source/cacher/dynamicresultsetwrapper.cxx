@@ -133,11 +133,11 @@ void SAL_CALL DynamicResultSetWrapper::dispose()
 
     xSourceComponent = m_xSource;
 
-    if( m_pDisposeEventListeners && m_pDisposeEventListeners->getLength(aGuard) )
+    if( m_aDisposeEventListeners.getLength(aGuard) )
     {
         EventObject aEvt;
         aEvt.Source = static_cast< XComponent * >( this );
-        m_pDisposeEventListeners->disposeAndClear( aGuard, aEvt );
+        m_aDisposeEventListeners.disposeAndClear( aGuard, aEvt );
     }
 
     /* //@todo ?? ( only if java collection needs to long )
@@ -156,11 +156,7 @@ void SAL_CALL DynamicResultSetWrapper::addEventListener( const Reference< XEvent
     impl_EnsureNotDisposed();
     std::unique_lock aGuard( m_aMutex );
 
-    if ( !m_pDisposeEventListeners )
-        m_pDisposeEventListeners.reset(
-                    new OInterfaceContainerHelper4<XEventListener>() );
-
-    m_pDisposeEventListeners->addInterface( aGuard, Listener );
+    m_aDisposeEventListeners.addInterface( aGuard, Listener );
 }
 
 
@@ -170,8 +166,7 @@ void SAL_CALL DynamicResultSetWrapper::removeEventListener( const Reference< XEv
     impl_EnsureNotDisposed();
     std::unique_lock aGuard( m_aMutex );
 
-    if ( m_pDisposeEventListeners )
-        m_pDisposeEventListeners->removeInterface( aGuard, Listener );
+    m_aDisposeEventListeners.removeInterface( aGuard, Listener );
 }
 
 

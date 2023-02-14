@@ -289,12 +289,11 @@ ScCellFieldsObj::~ScCellFieldsObj()
     osl_atomic_increment( &m_refCount );
 
     std::unique_lock g(aMutex);
-    if (mpRefreshListeners)
+    if (maRefreshListeners.getLength(g))
     {
         lang::EventObject aEvent;
         aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-        mpRefreshListeners->disposeAndClear(g, aEvent);
-        mpRefreshListeners.reset();
+        maRefreshListeners.disposeAndClear(g, aEvent);
     }
 }
 
@@ -387,12 +386,12 @@ void SAL_CALL ScCellFieldsObj::removeContainerListener(
 void SAL_CALL ScCellFieldsObj::refresh(  )
 {
     std::unique_lock g(aMutex);
-    if (mpRefreshListeners)
+    if (maRefreshListeners.getLength(g))
     {
         //  Call all listeners.
         lang::EventObject aEvent;
         aEvent.Source.set(uno::Reference< util::XRefreshable >(this));
-        mpRefreshListeners->notifyEach( g, &util::XRefreshListener::refreshed, aEvent );
+        maRefreshListeners.notifyEach( g, &util::XRefreshListener::refreshed, aEvent );
     }
 }
 
@@ -401,9 +400,7 @@ void SAL_CALL ScCellFieldsObj::addRefreshListener( const uno::Reference< util::X
     if (xListener.is())
     {
         std::unique_lock g(aMutex);
-        if (!mpRefreshListeners)
-            mpRefreshListeners.reset( new comphelper::OInterfaceContainerHelper4<util::XRefreshListener>() );
-        mpRefreshListeners->addInterface(g, xListener);
+        maRefreshListeners.addInterface(g, xListener);
     }
 }
 
@@ -412,8 +409,7 @@ void SAL_CALL ScCellFieldsObj::removeRefreshListener( const uno::Reference<util:
     if (xListener.is())
     {
         std::unique_lock g(aMutex);
-        if (mpRefreshListeners)
-            mpRefreshListeners->removeInterface(g, xListener);
+        maRefreshListeners.removeInterface(g, xListener);
     }
 }
 
@@ -431,12 +427,11 @@ ScHeaderFieldsObj::~ScHeaderFieldsObj()
     osl_atomic_increment( &m_refCount );
 
     std::unique_lock g(aMutex);
-    if (mpRefreshListeners)
+    if (maRefreshListeners.getLength(g))
     {
         lang::EventObject aEvent;
         aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-        mpRefreshListeners->disposeAndClear(g, aEvent);
-        mpRefreshListeners.reset();
+        maRefreshListeners.disposeAndClear(g, aEvent);
     }
 }
 
@@ -539,12 +534,12 @@ void SAL_CALL ScHeaderFieldsObj::removeContainerListener(
 void SAL_CALL ScHeaderFieldsObj::refresh(  )
 {
     std::unique_lock g(aMutex);
-    if (mpRefreshListeners)
+    if (maRefreshListeners.getLength(g))
     {
         //  Call all listeners.
         lang::EventObject aEvent;
         aEvent.Source.set(uno::Reference< util::XRefreshable >(this));
-        mpRefreshListeners->notifyEach( g, &util::XRefreshListener::refreshed, aEvent);
+        maRefreshListeners.notifyEach( g, &util::XRefreshListener::refreshed, aEvent);
     }
 }
 
@@ -553,9 +548,7 @@ void SAL_CALL ScHeaderFieldsObj::addRefreshListener( const uno::Reference< util:
     if (xListener.is())
     {
         std::unique_lock g(aMutex);
-        if (!mpRefreshListeners)
-            mpRefreshListeners.reset(new comphelper::OInterfaceContainerHelper4<util::XRefreshListener>());
-        mpRefreshListeners->addInterface(g, xListener);
+        maRefreshListeners.addInterface(g, xListener);
     }
 }
 
@@ -564,8 +557,7 @@ void SAL_CALL ScHeaderFieldsObj::removeRefreshListener( const uno::Reference<uti
     if (xListener.is())
     {
         std::unique_lock g(aMutex);
-        if (mpRefreshListeners)
-            mpRefreshListeners->removeInterface(g, xListener);
+        maRefreshListeners.removeInterface(g, xListener);
     }
 }
 
