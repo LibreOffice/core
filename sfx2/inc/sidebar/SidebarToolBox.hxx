@@ -65,7 +65,8 @@ protected:
     DECL_LINK(ClickHandler, ToolBox*, void);
     DECL_LINK(DoubleClickHandler, ToolBox*, void);
     DECL_LINK(SelectHandler, ToolBox*, void);
-    DECL_LINK(ChangedIconSizeHandler, LinkParamNone*, void );
+    DECL_LINK(ChangedIconHandler, LinkParamNone*, void );
+    DECL_LINK(ChangedDataHandler, const DataChangedEvent*, void );
 
     css::uno::Reference<css::frame::XToolbarController> GetControllerForItemId(const ToolBoxItemId nItemId) const;
 

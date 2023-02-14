@@ -66,7 +66,8 @@ SidebarToolBox::SidebarToolBox (vcl::Window* pParentWindow)
     SetPaintTransparent(true);
     SetToolboxButtonSize(GetDefaultButtonSize());
 
-    SvtMiscOptions().AddListenerLink(LINK(this, SidebarToolBox, ChangedIconSizeHandler));
+    SvtMiscOptions().AddListenerLink(LINK(this, SidebarToolBox, ChangedIconHandler));
+    SetDataChangedHdl(LINK(this, SidebarToolBox, ChangedDataHandler));
     if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
     {
         auto xFrame(pViewFrm->GetFrame().GetFrameInterface());
@@ -86,7 +87,8 @@ SidebarToolBox::~SidebarToolBox()
 
 void SidebarToolBox::dispose()
 {
-    SvtMiscOptions().RemoveListenerLink(LINK(this, SidebarToolBox, ChangedIconSizeHandler));
+    SvtMiscOptions().RemoveListenerLink(LINK(this, SidebarToolBox, ChangedIconHandler));
+    SetDataChangedHdl(Link<const DataChangedEvent*, void>());
 
     ControllerContainer aControllers;
     aControllers.swap(maControllers);
@@ -237,7 +239,7 @@ IMPL_LINK(SidebarToolBox, SelectHandler, ToolBox*, pToolBox, void)
         xController->execute(static_cast<sal_Int16>(pToolBox->GetModifier()));
 }
 
-IMPL_LINK_NOARG(SidebarToolBox, ChangedIconSizeHandler, LinkParamNone*, void)
+IMPL_LINK_NOARG(SidebarToolBox, ChangedIconHandler, LinkParamNone*, void)
 {
     SolarMutexGuard g;
 
@@ -264,6 +266,16 @@ IMPL_LINK_NOARG(SidebarToolBox, ChangedIconSizeHandler, LinkParamNone*, void)
 
     Resize();
     queue_resize();
+}
+
+IMPL_LINK(SidebarToolBox, ChangedDataHandler, const DataChangedEvent*, pDataChangedEvent, void)
+{
+    if ((( pDataChangedEvent->GetType() == DataChangedEventType::SETTINGS )   ||
+        (  pDataChangedEvent->GetType() == DataChangedEventType::DISPLAY  ))  &&
+        ( pDataChangedEvent->GetFlags() & AllSettingsFlags::STYLE        ))
+    {
+        ChangedIconHandler(nullptr);
+    }
 }
 
 void SidebarToolBox::InitToolBox(VclBuilder::stringmap& rMap)
