@@ -2257,12 +2257,23 @@ void StyleSettings::Set3DColors( const Color& rColor )
     mxData->maDarkShadowColor   = COL_BLACK;
     if ( rColor != COL_LIGHTGRAY )
     {
-        mxData->maLightColor    = rColor;
-        mxData->maShadowColor   = rColor;
-        mxData->maDarkShadowColor=rColor;
-        mxData->maLightColor.IncreaseLuminance( 64 );
-        mxData->maShadowColor.DecreaseLuminance( 64 );
-        mxData->maDarkShadowColor.DecreaseLuminance( 100 );
+        mxData->maLightColor = rColor;
+        mxData->maShadowColor = rColor;
+        mxData->maDarkShadowColor = rColor;
+
+        if (!rColor.IsDark())
+        {
+            mxData->maLightColor.IncreaseLuminance(64);
+            mxData->maShadowColor.DecreaseLuminance(64);
+            mxData->maDarkShadowColor.DecreaseLuminance(100);
+        }
+        else
+        {
+            mxData->maLightColor.DecreaseLuminance(64);
+            mxData->maShadowColor.IncreaseLuminance(64);
+            mxData->maDarkShadowColor.IncreaseLuminance(100);
+        }
+
         sal_uLong   nRed    = mxData->maLightColor.GetRed();
         sal_uLong   nGreen  = mxData->maLightColor.GetGreen();
         sal_uLong   nBlue   = mxData->maLightColor.GetBlue();
