@@ -19,6 +19,7 @@
 #include <rootfrm.hxx>
 #include <sortedobjs.hxx>
 #include <tabfrm.hxx>
+#include <txtfrm.hxx>
 
 namespace
 {
@@ -75,6 +76,11 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWithTable)
     CPPUNIT_ASSERT(pPage2Table);
     CPPUNIT_ASSERT(pPage2Table->GetPrecede());
     CPPUNIT_ASSERT(!pPage2Table->GetFollow());
+    // Page 1 anchor has no text:
+    auto pPage1Anchor = dynamic_cast<SwTextFrame*>(pPage1->FindLastBodyContent());
+    CPPUNIT_ASSERT(pPage1Anchor);
+    // This failed, page 1 anchor had unexpected, leftover text.
+    CPPUNIT_ASSERT(!pPage1Anchor->HasPara());
 }
 }
 

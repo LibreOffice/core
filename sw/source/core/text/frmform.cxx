@@ -1837,14 +1837,10 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
 
     TextFrameIndex nStrLen(GetText().getLength());
 
-    SwTextFrame* pFollow = GetFollow();
-    if (pFollow && pFollow->GetOffset() == mnOffset)
+    if (HasNonLastSplitFlyDrawObj())
     {
-        if (HasNonLastSplitFlyDrawObj())
-        {
-            // Non-last part of split fly anchor: consider this empty.
-            nStrLen = TextFrameIndex(0);
-        }
+        // Non-last part of split fly anchor: consider this empty.
+        nStrLen = TextFrameIndex(0);
     }
 
     if ( nStrLen || !FormatEmpty() )

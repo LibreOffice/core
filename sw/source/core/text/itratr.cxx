@@ -1481,6 +1481,20 @@ std::vector<SwFlyAtContentFrame*> SwTextFrame::GetSplitFlyDrawObjs() const
 
 bool SwTextFrame::HasNonLastSplitFlyDrawObj() const
 {
+    const SwTextFrame* pFollow = GetFollow();
+    if (!pFollow)
+    {
+        return false;
+    }
+
+    if (mnOffset != pFollow->GetOffset())
+    {
+        return false;
+    }
+
+    // At this point we know what we're part of a chain that is an anchor for split fly frames, but
+    // we're not the last one. See if we have a matching fly.
+
     for (const auto& pFly : GetSplitFlyDrawObjs())
     {
         if (pFly->GetFollow())
