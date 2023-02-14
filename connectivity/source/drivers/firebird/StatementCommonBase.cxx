@@ -43,7 +43,6 @@ using namespace ::com::sun::star::util;
 
 using namespace ::comphelper;
 using namespace ::osl;
-using namespace ::std;
 
 OStatementCommonBase::OStatementCommonBase(Connection* _pConnection)
     : OStatementCommonBase_Base(m_aMutex),

@@ -33,7 +33,6 @@ namespace basctl
 {
 
 using namespace ::cppu;
-using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

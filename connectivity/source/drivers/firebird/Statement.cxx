@@ -40,7 +40,6 @@ using namespace com::sun::star::util;
 
 using namespace ::comphelper;
 using namespace ::osl;
-using namespace ::std;
 
 // ---- XBatchExecution - UNSUPPORTED ----------------------------------------
 void SAL_CALL OStatement::addBatch(const OUString&)

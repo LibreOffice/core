@@ -66,7 +66,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
-using namespace ::std;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -630,7 +629,7 @@ std::vector< std::vector< rtl::Reference< DataSeries > > >
     if (!xDiagram)
         return {};
 
-    vector< std::vector< rtl::Reference< DataSeries > > > aResult;
+    std::vector< std::vector< rtl::Reference< DataSeries > > > aResult;
 
     //iterate through all coordinate systems
     for( rtl::Reference< BaseCoordinateSystem > const & coords : xDiagram->getBaseCoordinateSystems() )

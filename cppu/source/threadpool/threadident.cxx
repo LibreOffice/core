@@ -27,7 +27,6 @@
 
 #include "current.hxx"
 
-using namespace ::std;
 using namespace ::osl;
 using namespace ::cppu;
 

@@ -30,7 +30,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
-using namespace ::std;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -58,8 +57,8 @@ InterpretedData BubbleDataInterpreter::interpretDataSource(
     std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aData = DataInterpreter::getDataSequences(xSource);
 
     uno::Reference< chart2::data::XLabeledDataSequence > xValuesX;
-    vector< uno::Reference< chart2::data::XLabeledDataSequence > > aYValuesVector;
-    vector< uno::Reference< chart2::data::XLabeledDataSequence > > aSizeValuesVector;
+    std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aYValuesVector;
+    std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aSizeValuesVector;
 
     uno::Reference< chart2::data::XLabeledDataSequence > xCategories;
     bool bHasCategories = HasCategories( aArguments, aData );
@@ -119,7 +118,7 @@ InterpretedData BubbleDataInterpreter::interpretDataSource(
 
     // create DataSeries
     std::size_t nSeriesIndex = 0;
-    vector< rtl::Reference< DataSeries > > aSeriesVec;
+    std::vector< rtl::Reference< DataSeries > > aSeriesVec;
     aSeriesVec.reserve( aSizeValuesVector.size());
 
     Reference< data::XLabeledDataSequence > xClonedXValues = xValuesX;
@@ -127,7 +126,7 @@ InterpretedData BubbleDataInterpreter::interpretDataSource(
 
     for( size_t nN = 0; nN < aSizeValuesVector.size(); ++nN, ++nSeriesIndex )
     {
-        vector< uno::Reference< chart2::data::XLabeledDataSequence > > aNewData;
+        std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aNewData;
         if( xValuesX.is() )
         {
             if( nN > 0 && xCloneableX.is() )
@@ -177,7 +176,7 @@ InterpretedData BubbleDataInterpreter::reinterpretDataSeries(
                 ! xValuesY.is() ||
                 ! xValuesSize.is() )
             {
-                vector< uno::Reference< chart2::data::XLabeledDataSequence > > aValueSeqVec(
+                std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aValueSeqVec(
                     DataSeriesHelper::getAllDataSequencesByRole(
                         aSeries[i]->getDataSequences2(), "values" ));
                 if( xValuesX.is())

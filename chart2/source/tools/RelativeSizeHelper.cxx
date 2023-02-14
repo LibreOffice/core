@@ -27,7 +27,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
-using namespace ::std;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
@@ -45,7 +44,7 @@ double RelativeSizeHelper::calculate(
         rOldReferenceSize.Height <= 0 )
         return fValue;
 
-    return min(
+    return std::min(
         static_cast< double >( rNewReferenceSize.Width )  / static_cast< double >( rOldReferenceSize.Width ),
         static_cast< double >( rNewReferenceSize.Height ) / static_cast< double >( rOldReferenceSize.Height ))
         * fValue;
@@ -58,7 +57,7 @@ void RelativeSizeHelper::adaptFontSizes(
 {
     float fFontHeight = 0;
 
-    vector< OUString > aProperties;
+    std::vector< OUString > aProperties;
     aProperties.emplace_back("CharHeight" );
     aProperties.emplace_back("CharHeightAsian" );
     aProperties.emplace_back("CharHeightComplex" );
@@ -92,7 +91,7 @@ void RelativeSizeHelper::adaptFontSizes(
 
     float fFontHeight = 0;
 
-    vector< OUString > aProperties;
+    std::vector< OUString > aProperties;
     aProperties.emplace_back("CharHeight" );
     aProperties.emplace_back("CharHeightAsian" );
     aProperties.emplace_back("CharHeightComplex" );

@@ -13,12 +13,11 @@ using namespace ::connectivity;
 using namespace ::connectivity::firebird;
 
 using namespace ::osl;
-using namespace ::std;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdbc;
 
-Indexes::Indexes(Table* pTable, Mutex& rMutex, const vector<OUString>& rVector)
+Indexes::Indexes(Table* pTable, Mutex& rMutex, const std::vector<OUString>& rVector)
     : OIndexesHelper(pTable, rMutex, rVector)
     , m_pTable(pTable)
 {

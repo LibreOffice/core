@@ -31,7 +31,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
-using namespace ::std;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -68,7 +67,7 @@ InterpretedData DataInterpreter::interpretDataSource(
     std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aData = getDataSequences(xSource);
 
     uno::Reference< chart2::data::XLabeledDataSequence > xCategories;
-    vector< uno::Reference< chart2::data::XLabeledDataSequence > > aSequencesVec;
+    std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aSequencesVec;
 
     // check if we should use categories
 
@@ -102,7 +101,7 @@ InterpretedData DataInterpreter::interpretDataSource(
 
     // create DataSeries
     std::size_t nSeriesIndex = 0;
-    vector< rtl::Reference< DataSeries > > aSeriesVec;
+    std::vector< rtl::Reference< DataSeries > > aSeriesVec;
     aSeriesVec.reserve( aSequencesVec.size());
 
     for (auto const& elem : aSequencesVec)
@@ -252,7 +251,7 @@ private:
 rtl::Reference< DataSource > DataInterpreter::mergeInterpretedData(
     const InterpretedData& aInterpretedData )
 {
-    vector< Reference< data::XLabeledDataSequence > > aResultVec;
+    std::vector< Reference< data::XLabeledDataSequence > > aResultVec;
     aResultVec.reserve( aInterpretedData.Series.size() +
                         1 // categories
         );

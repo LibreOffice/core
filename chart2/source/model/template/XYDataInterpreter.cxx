@@ -31,7 +31,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
-using namespace ::std;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -59,7 +58,7 @@ InterpretedData XYDataInterpreter::interpretDataSource(
     std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aData = DataInterpreter::getDataSequences(xSource);
 
     uno::Reference< chart2::data::XLabeledDataSequence > xValuesX;
-    vector< uno::Reference< chart2::data::XLabeledDataSequence > > aSequencesVec;
+    std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aSequencesVec;
 
     uno::Reference< chart2::data::XLabeledDataSequence > xCategories;
     bool bHasCategories = HasCategories( aArguments, aData );
@@ -103,7 +102,7 @@ InterpretedData XYDataInterpreter::interpretDataSource(
     }
 
     // create DataSeries
-    vector< rtl::Reference< DataSeries > > aSeriesVec;
+    std::vector< rtl::Reference< DataSeries > > aSeriesVec;
     aSeriesVec.reserve( aSequencesVec.size());
 
     Reference< data::XLabeledDataSequence > xClonedXValues = xValuesX;
@@ -112,7 +111,7 @@ InterpretedData XYDataInterpreter::interpretDataSource(
     std::size_t nSeriesIndex = 0;
     for (auto const& elem : aSequencesVec)
     {
-        vector< uno::Reference< chart2::data::XLabeledDataSequence > > aNewData;
+        std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aNewData;
 
         if( nSeriesIndex && xCloneable.is() )
             xClonedXValues.set( xCloneable->createClone(), uno::UNO_QUERY );
@@ -159,7 +158,7 @@ InterpretedData XYDataInterpreter::reinterpretDataSeries(
             if( ! xValuesX.is() ||
                 ! xValuesY.is())
             {
-                vector< uno::Reference< chart2::data::XLabeledDataSequence > > aValueSeqVec(
+                std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aValueSeqVec(
                     DataSeriesHelper::getAllDataSequencesByRole(
                         aSeries[i]->getDataSequences2(), "values" ));
                 if( xValuesX.is())
