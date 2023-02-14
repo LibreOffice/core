@@ -99,8 +99,8 @@ class ReaderThread : public salhelper::Thread
     size_t mnColCount;
     std::atomic<bool> mbTerminate;
 
-    std::queue<std::unique_ptr<DataStream::LinesType>> maPendingLines;
-    std::queue<std::unique_ptr<DataStream::LinesType>> maUsedLines;
+    std::queue<DataStream::LinesType> maPendingLines;
+    std::queue<DataStream::LinesType> maUsedLines;
     std::mutex maMtxLines;
 
     osl::Condition maCondReadStream;
@@ -142,7 +142,7 @@ public:
         maCondConsume.reset();
     }
 
-    std::unique_ptr<DataStream::LinesType> popNewLines()
+    DataStream::LinesType popNewLines()
     {
         auto pLines = std::move(maPendingLines.front());
         maPendingLines.pop();
@@ -160,7 +160,7 @@ public:
         return !maPendingLines.empty();
     }
 
-    void pushUsedLines( std::unique_ptr<DataStream::LinesType> pLines )
+    void pushUsedLines( DataStream::LinesType pLines )
     {
         maUsedLines.push(std::move(pLines));
     }
@@ -175,24 +175,24 @@ private:
     {
         while (!isTerminateRequested())
         {
-            std::unique_ptr<DataStream::LinesType> pLines;
+            std::optional<DataStream::LinesType> oLines;
             std::unique_lock aGuard(maMtxLines);
 
             if (!maUsedLines.empty())
             {
                 // Re-use lines from previous runs.
-                pLines = std::move(maUsedLines.front());
+                oLines = std::move(maUsedLines.front());
                 maUsedLines.pop();
                 aGuard.unlock(); // unlock
             }
             else
             {
                 aGuard.unlock(); // unlock
-                pLines.reset(new DataStream::LinesType(10));
+                oLines.emplace(10);
             }
 
             // Read & store new lines from stream.
-            for (DataStream::Line & rLine : *pLines)
+            for (DataStream::Line & rLine : *oLines)
             {
                 rLine.maCells.clear();
                 mpStream->ReadLine(rLine.maLine);
@@ -210,7 +210,7 @@ private:
                 maCondReadStream.reset();
                 aGuard.lock(); // lock
             }
-            maPendingLines.push(std::move(pLines));
+            maPendingLines.push(std::move(*oLines));
             maCondConsume.set();
             if (!mpStream->good())
                 requestTerminate();
@@ -305,20 +305,23 @@ DataStream::~DataStream()
         mxReaderThread->endThread();
         mxReaderThread->join();
     }
-    mpLines.reset();
+    moLines.reset();
 }
 
 DataStream::Line DataStream::ConsumeLine()
 {
-    if (!mpLines || mnLinesCount >= mpLines->size())
+    if (!moLines || mnLinesCount >= moLines->size())
     {
         mnLinesCount = 0;
         if (mxReaderThread->isTerminateRequested())
             return Line();
 
         std::unique_lock aGuard(mxReaderThread->getLinesMutex());
-        if (mpLines)
-            mxReaderThread->pushUsedLines(std::move(mpLines));
+        if (moLines)
+        {
+            mxReaderThread->pushUsedLines(std::move(*moLines));
+            moLines.reset();
+        }
 
         while (!mxReaderThread->hasNewLines())
         {
@@ -327,10 +330,10 @@ DataStream::Line DataStream::ConsumeLine()
             aGuard.lock(); // lock
         }
 
-        mpLines = mxReaderThread->popNewLines();
+        moLines = mxReaderThread->popNewLines();
         mxReaderThread->resumeReadStream();
     }
-    return mpLines->at(mnLinesCount++);
+    return moLines->at(mnLinesCount++);
 }
 
 ScRange DataStream::GetRange() const

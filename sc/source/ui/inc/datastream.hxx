@@ -15,7 +15,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/timer.hxx>
 #include <address.hxx>
-
+#include <optional>
 #include <vector>
 
 #include <documentstreamaccess.hxx>
@@ -107,7 +107,7 @@ private:
     bool mbRunning;
     bool mbValuesInLine;
     bool mbRefreshOnEmptyLine;
-    std::unique_ptr<LinesType> mpLines;
+    std::optional<LinesType> moLines;
     size_t mnLinesCount;
     size_t mnLinesSinceRefresh;
     double mfLastRefreshTime;
