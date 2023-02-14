@@ -101,7 +101,7 @@ class ReaderThread : public salhelper::Thread
 
     std::queue<std::unique_ptr<DataStream::LinesType>> maPendingLines;
     std::queue<std::unique_ptr<DataStream::LinesType>> maUsedLines;
-    osl::Mutex maMtxLines;
+    std::mutex maMtxLines;
 
     osl::Condition maCondReadStream;
     osl::Condition maCondConsume;
@@ -165,7 +165,7 @@ public:
         maUsedLines.push(std::move(pLines));
     }
 
-    osl::Mutex& getLinesMutex()
+    std::mutex& getLinesMutex()
     {
         return maMtxLines;
     }
@@ -176,18 +176,18 @@ private:
         while (!isTerminateRequested())
         {
             std::unique_ptr<DataStream::LinesType> pLines;
-            osl::ResettableMutexGuard aGuard(maMtxLines);
+            std::unique_lock aGuard(maMtxLines);
 
             if (!maUsedLines.empty())
             {
                 // Re-use lines from previous runs.
                 pLines = std::move(maUsedLines.front());
                 maUsedLines.pop();
-                aGuard.clear(); // unlock
+                aGuard.unlock(); // unlock
             }
             else
             {
-                aGuard.clear(); // unlock
+                aGuard.unlock(); // unlock
                 pLines.reset(new DataStream::LinesType(10));
             }
 
@@ -201,14 +201,14 @@ private:
                 parser.parse();
             }
 
-            aGuard.reset(); // lock
+            aGuard.lock(); // lock
             while (!isTerminateRequested() && maPendingLines.size() >= 8)
             {
                 // pause reading for a bit
-                aGuard.clear(); // unlock
+                aGuard.unlock(); // unlock
                 maCondReadStream.wait();
                 maCondReadStream.reset();
-                aGuard.reset(); // lock
+                aGuard.lock(); // lock
             }
             maPendingLines.push(std::move(pLines));
             maCondConsume.set();
@@ -316,15 +316,15 @@ DataStream::Line DataStream::ConsumeLine()
         if (mxReaderThread->isTerminateRequested())
             return Line();
 
-        osl::ResettableMutexGuard aGuard(mxReaderThread->getLinesMutex());
+        std::unique_lock aGuard(mxReaderThread->getLinesMutex());
         if (mpLines)
             mxReaderThread->pushUsedLines(std::move(mpLines));
 
         while (!mxReaderThread->hasNewLines())
         {
-            aGuard.clear(); // unlock
+            aGuard.unlock(); // unlock
             mxReaderThread->waitForNewLines();
-            aGuard.reset(); // lock
+            aGuard.lock(); // lock
         }
 
         mpLines = mxReaderThread->popNewLines();
