@@ -32,6 +32,7 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/compbase.hxx>
@@ -114,9 +115,9 @@ private:
     std::unique_ptr<ScEditSource> mpEditSource;
 
     /// List of refresh listeners.
-    std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::util::XRefreshListener>> mpRefreshListeners;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper4<css::util::XRefreshListener>> mpRefreshListeners;
     /// mutex to lock the InterfaceContainerHelper
-    osl::Mutex                  aMutex;
+    std::mutex                  aMutex;
 
     css::uno::Reference< css::text::XTextField>
             GetObjectByIndex_Impl(sal_Int32 Index) const;
