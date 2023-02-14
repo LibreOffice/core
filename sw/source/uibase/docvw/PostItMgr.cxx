@@ -169,6 +169,7 @@ namespace {
 
             aAnnotation.put("id", pField->GetPostItId());
             aAnnotation.put("parent", pWin->CalcParent());
+            aAnnotation.put("paraIdParent", pField->GetParentId());
             aAnnotation.put("author", pField->GetPar1().toUtf8().getStr());
             aAnnotation.put("text", pField->GetPar2().toUtf8().getStr());
             aAnnotation.put("resolved", pField->GetResolved() ? "true" : "false");
