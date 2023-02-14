@@ -81,13 +81,6 @@ SwUpdateAttr::SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW, std::vect
 {
 }
 
-SwRefMarkFieldUpdate::SwRefMarkFieldUpdate( OutputDevice* pOutput )
-    : SwMsgPoolItem( RES_REFMARKFLD_UPDATE ),
-    pOut( pOutput )
-{
-    OSL_ENSURE( pOut, "No OutputDevice pointer" );
-}
-
 SwDocPosUpdate::SwDocPosUpdate( const SwTwips nDcPos )
     : SwMsgPoolItem( RES_DOCPOS_UPDATE ), nDocPos(nDcPos)
 {

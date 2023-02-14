@@ -90,7 +90,7 @@ namespace com::sun::star::uno { class Any; }
         @retval true             update was successful
         @retval false            else
     */
-    virtual bool UpdateField(SwTextField * rDstFormatField, SwField & rSrcField, SwMsgPoolItem * pMsgHint, bool bUpdateTableFields) = 0;
+    virtual bool UpdateField(SwTextField * rDstFormatField, SwField & rSrcField, const SwMsgPoolItem * pMsgHint, bool bUpdateTableFields) = 0;
 
     virtual void UpdateRefFields() = 0;
 

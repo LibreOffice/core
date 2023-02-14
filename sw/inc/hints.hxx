@@ -255,21 +255,6 @@ public:
     }
 };
 
-/** SwRefMarkFieldUpdate is sent when the referencemarks should be updated.
-     To determine Page- / chapternumbers the current frame has to be asked.
-      For this we need the current outputdevice */
-class SwRefMarkFieldUpdate final : public SwMsgPoolItem
-{
-    VclPtr<OutputDevice> pOut; ///< pointer to the current output device
-public:
-    /** Is sent if reference marks should be updated.
-
-        To get the page/chapter number, the frame has to be asked. For that we need
-        the current OutputDevice.
-    */
-    SwRefMarkFieldUpdate( OutputDevice* );
-};
-
 /** SwDocPosUpdate is sent to signal that only the frames from or to a specified document-global position
    have to be updated. At the moment this is only needed when updating pagenumber fields. */
 class SwDocPosUpdate final : public SwMsgPoolItem

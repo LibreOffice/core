@@ -492,7 +492,7 @@ void DocumentFieldsManager::PutValueToField(const SwPosition & rPos,
 }
 
 bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & rSrcField,
-                      SwMsgPoolItem * pMsgHint,
+                      const SwMsgPoolItem * pMsgHint,
                       bool bUpdateFields)
 {
     OSL_ENSURE(pDstTextField, "no field to update!");

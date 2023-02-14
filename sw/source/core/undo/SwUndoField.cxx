@@ -57,7 +57,7 @@ SwPosition SwUndoField::GetPosition()
 SwUndoFieldFromDoc::SwUndoFieldFromDoc(const SwPosition & rPos,
                          const SwField & rOldField,
                          const SwField & rNewField,
-                         SwMsgPoolItem * _pHint, bool _bUpdate)
+                         const SwMsgPoolItem * _pHint, bool _bUpdate)
     : SwUndoField(rPos)
     , m_pOldField(rOldField.CopyField())
     , m_pNewField(rNewField.CopyField())

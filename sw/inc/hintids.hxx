@@ -134,7 +134,6 @@ class SwTableBoxNumFormat;
 class SwTextGridItem;
 class SwTransparencyGrf;
 class SwFormatRuby;
-class SwRefMarkFieldUpdate;
 class SwTableFormulaUpdate;
 class SwAutoFormatGetDocNode;
 class SwVirtPageNumInfo;
@@ -423,7 +422,7 @@ constexpr TypedWhichId<SwPtrMsgPoolItem> RES_OBJECTDYING(RES_MSG_BEGIN); // 161
 constexpr TypedWhichId<SwFormatChg> RES_FMT_CHG(162);
 constexpr TypedWhichId<SwAttrSetChg> RES_ATTRSET_CHG(163);
 constexpr TypedWhichId<SwUpdateAttr> RES_UPDATE_ATTR(167);
-constexpr TypedWhichId<SwRefMarkFieldUpdate> RES_REFMARKFLD_UPDATE(168);
+constexpr TypedWhichId<SwPtrMsgPoolItem> RES_REFMARKFLD_UPDATE(168);
 constexpr TypedWhichId<SwDocPosUpdate> RES_DOCPOS_UPDATE(169);
 constexpr TypedWhichId<SwTableFormulaUpdate> RES_TABLEFML_UPDATE(170);
 constexpr TypedWhichId<SwMsgPoolItem> RES_UPDATEDDETBL(171);
