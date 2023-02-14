@@ -26,12 +26,22 @@ class tdf144457(UITestCase):
 
                 xDatePatterns = xDialog.getChild("datepatterns")
 
-                xDatePatterns.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-                xDatePatterns.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-                xDatePatterns.executeAction("TYPE", mkPropertyValues({"TEXT":"m/d/y"}))
+                self.assertEqual("M/D/Y;M/D", get_state_as_dict(xDatePatterns)['Text'])
 
-                # Without the fix in place, this test would have failed with
-                # AssertionError: 'M/D/Y' != 'm/M/dM/M/d/M/M/dM/M/d/yM/M/dM/M/d/M/M/dM/M/d/y'
-                self.assertEqual("M/D/Y", get_state_as_dict(xDatePatterns)['Text'])
+                try:
+                    xDatePatterns.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                    xDatePatterns.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                    xDatePatterns.executeAction("TYPE", mkPropertyValues({"TEXT":"m/d/y"}))
+
+                    # Without the fix in place, this test would have failed with
+                    # AssertionError: 'M/D/Y' != 'm/M/dM/M/d/M/M/dM/M/d/yM/M/dM/M/d/M/M/dM/M/d/y'
+                    self.assertEqual("M/D/Y", get_state_as_dict(xDatePatterns)['Text'])
+                finally:
+                    # reset default value
+                    xDatePatterns.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                    xDatePatterns.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                    xDatePatterns.executeAction("TYPE", mkPropertyValues({"TEXT":"m/d/y;m/d"}))
+
+                    self.assertEqual("M/D/Y;M/D", get_state_as_dict(xDatePatterns)['Text'])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
