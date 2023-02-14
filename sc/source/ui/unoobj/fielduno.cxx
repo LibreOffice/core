@@ -276,21 +276,24 @@ ScCellFieldsObj::ScCellFieldsObj(
 
 ScCellFieldsObj::~ScCellFieldsObj()
 {
-    SolarMutexGuard g;
+    {
+        SolarMutexGuard g;
 
-    if (pDocShell)
-        pDocShell->GetDocument().RemoveUnoObject(*this);
+        if (pDocShell)
+            pDocShell->GetDocument().RemoveUnoObject(*this);
 
-    mpEditSource.reset();
+        mpEditSource.reset();
+    }
 
     // increment refcount to prevent double call off dtor
     osl_atomic_increment( &m_refCount );
 
+    std::unique_lock g(aMutex);
     if (mpRefreshListeners)
     {
         lang::EventObject aEvent;
         aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-        mpRefreshListeners->disposeAndClear(aEvent);
+        mpRefreshListeners->disposeAndClear(g, aEvent);
         mpRefreshListeners.reset();
     }
 }
@@ -383,12 +386,13 @@ void SAL_CALL ScCellFieldsObj::removeContainerListener(
 // XRefreshable
 void SAL_CALL ScCellFieldsObj::refresh(  )
 {
+    std::unique_lock g(aMutex);
     if (mpRefreshListeners)
     {
         //  Call all listeners.
         lang::EventObject aEvent;
         aEvent.Source.set(uno::Reference< util::XRefreshable >(this));
-        mpRefreshListeners->notifyEach( &util::XRefreshListener::refreshed, aEvent );
+        mpRefreshListeners->notifyEach( g, &util::XRefreshListener::refreshed, aEvent );
     }
 }
 
@@ -396,10 +400,10 @@ void SAL_CALL ScCellFieldsObj::addRefreshListener( const uno::Reference< util::X
 {
     if (xListener.is())
     {
-        SolarMutexGuard aGuard;
+        std::unique_lock g(aMutex);
         if (!mpRefreshListeners)
-            mpRefreshListeners.reset( new comphelper::OInterfaceContainerHelper3<util::XRefreshListener>(aMutex) );
-        mpRefreshListeners->addInterface(xListener);
+            mpRefreshListeners.reset( new comphelper::OInterfaceContainerHelper4<util::XRefreshListener>() );
+        mpRefreshListeners->addInterface(g, xListener);
     }
 }
 
@@ -407,9 +411,9 @@ void SAL_CALL ScCellFieldsObj::removeRefreshListener( const uno::Reference<util:
 {
     if (xListener.is())
     {
-        SolarMutexGuard aGuard;
+        std::unique_lock g(aMutex);
         if (mpRefreshListeners)
-            mpRefreshListeners->removeInterface(xListener);
+            mpRefreshListeners->removeInterface(g, xListener);
     }
 }
 
