@@ -317,6 +317,12 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
     switch (rItem.Which())
         {
+        case RES_MARGIN_FIRSTLINE:
+        case RES_MARGIN_TEXTLEFT:
+        case RES_MARGIN_RIGHT:
+            assert(false); // is only called for frame formats?
+            break;
+
         case RES_LR_SPACE:
         {
             SvxLRSpaceItem& rLRSpace = dynamic_cast<SvxLRSpaceItem&>(rItem);
@@ -351,6 +357,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
                 case MID_FIRST_LINE_INDENT:
                 {
+                    assert(false); // it looks like this can't be called? (frame formats only, aTableItemMap)
                     sal_Int32 nProp = 100;
                     sal_Int32 nAbs = 0;
 
@@ -366,6 +373,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
                 case MID_FIRST_AUTO:
                 {
+                    assert(false); // it looks like this can't be called? (frame formats only, aTableItemMap)
                     bool bAutoFirst(false);
                     bOk = ::sax::Converter::convertBool( bAutoFirst, rValue );
                     if( bOk )

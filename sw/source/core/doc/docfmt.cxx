@@ -1649,7 +1649,8 @@ void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
         if( pTNd )
         {
             pTNd = sw::GetParaPropsNode(*pLayout, aIdx.GetNode());
-            SvxLRSpaceItem aLS(pTNd->SwContentNode::GetAttr(RES_LR_SPACE));
+            SvxFirstLineIndentItem firstLine(pTNd->SwContentNode::GetAttr(RES_MARGIN_FIRSTLINE));
+            SvxTextLeftMarginItem leftMargin(pTNd->SwContentNode::GetAttr(RES_MARGIN_TEXTLEFT));
 
             // #i93873# See also lcl_MergeListLevelIndentAsLRSpaceItem in thints.cxx
             if ( pTNd->AreListLevelIndentsApplicable() )
@@ -1663,14 +1664,14 @@ void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
                         const SwNumFormat& rFormat = pRule->Get(o3tl::narrowing<sal_uInt16>(nListLevel));
                         if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
                         {
-                            aLS.SetTextLeft( rFormat.GetIndentAt() );
-                            aLS.SetTextFirstLineOffset( static_cast<short>(rFormat.GetFirstLineIndent()) );
+                            leftMargin.SetTextLeft(rFormat.GetIndentAt());
+                            firstLine.SetTextFirstLineOffset(static_cast<short>(rFormat.GetFirstLineIndent()));
                         }
                     }
                 }
             }
 
-            tools::Long nNext = aLS.GetTextLeft();
+            tools::Long nNext = leftMargin.GetTextLeft();
             if( bModulus )
                 nNext = ( nNext / nDefDist ) * nDefDist;
 
@@ -1680,10 +1681,11 @@ void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
                 if(nNext >0) // fdo#75936 set limit for decreasing indent
                     nNext -= nDefDist;
 
-            aLS.SetTextLeft( nNext );
+            leftMargin.SetTextLeft( nNext );
 
             SwRegHistory aRegH( pTNd, *pTNd, pHistory );
-            pTNd->SetAttr( aLS );
+            pTNd->SetAttr(firstLine);
+            pTNd->SetAttr(leftMargin);
             aIdx = *sw::GetFirstAndLastNode(*pLayout, aIdx.GetNode()).second;
         }
         ++aIdx;

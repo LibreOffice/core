@@ -559,6 +559,13 @@ protected:
     /// Sfx item RES_PAPER_BIN
     virtual void FormatPaperBin( const SvxPaperBinItem& ) = 0;
 
+    /// Sfx item RES_MARGIN_FIRSTLINE
+    virtual void FormatFirstLineIndent(const SvxFirstLineIndentItem & rFirstLine) = 0;
+    /// Sfx item RES_MARGIN_TEXTLEFT
+    virtual void FormatTextLeftMargin(const SvxTextLeftMarginItem & rTextLeftMargin) = 0;
+    /// Sfx item RES_MARGIN_RIGHT
+    virtual void FormatRightMargin(const SvxRightMarginItem & rRightMargin) = 0;
+
     /// Sfx item RES_LR_SPACE
     virtual void FormatLRSpace( const SvxLRSpaceItem& ) = 0;
 

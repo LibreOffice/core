@@ -368,6 +368,11 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
     switch ( rItem.Which() )
     {
+        case RES_MARGIN_FIRSTLINE:
+        case RES_MARGIN_TEXTLEFT:
+        case RES_MARGIN_RIGHT:
+            assert(false); // is only called for frame formats?
+            break;
 
         case RES_LR_SPACE:
         {

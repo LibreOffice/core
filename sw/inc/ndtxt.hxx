@@ -41,7 +41,8 @@
 class SfxHint;
 class SwNumRule;
 class SwNodeNum;
-class SvxLRSpaceItem;
+class SvxFirstLineIndentItem;
+class SvxTextLeftMarginItem;
 class SwXParagraph;
 
 namespace utl {
@@ -535,7 +536,9 @@ public:
 
     SwTwips GetAdditionalIndentForStartingNewList() const;
 
-    void ClearLRSpaceItemDueToListLevelIndents( std::shared_ptr<SvxLRSpaceItem>& o_rLRSpaceItem ) const;
+    void ClearLRSpaceItemDueToListLevelIndents(
+        std::unique_ptr<SvxFirstLineIndentItem>& o_rFirstLineItem,
+        std::unique_ptr<SvxTextLeftMarginItem>& o_rTextLeftMarginItem) const;
 
     /** return left margin for tab stop position calculation
 

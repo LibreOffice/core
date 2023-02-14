@@ -2374,13 +2374,16 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
     case SwFillMode::Indent:
         if( nullptr != (pCNd = aPos.GetNode().GetContentNode() ))
         {
+            assert(pCNd->IsTextNode()); // ???
             SfxItemSetFixed<
                     RES_PARATR_ADJUST, RES_PARATR_ADJUST,
-                    RES_LR_SPACE, RES_LR_SPACE>  aSet( GetDoc()->GetAttrPool() );
-            SvxLRSpaceItem aLR(pCNd->GetAttr(RES_LR_SPACE));
-            aLR.SetTextLeft( aFPos.nTabCnt );
-            aLR.SetTextFirstLineOffset( 0 );
-            aSet.Put( aLR );
+                    RES_MARGIN_FIRSTLINE, RES_MARGIN_TEXTLEFT> aSet(GetDoc()->GetAttrPool());
+            SvxFirstLineIndentItem firstLine(pCNd->GetAttr(RES_MARGIN_FIRSTLINE));
+            SvxTextLeftMarginItem leftMargin(pCNd->GetAttr(RES_MARGIN_TEXTLEFT));
+            firstLine.SetTextFirstLineOffset(0);
+            leftMargin.SetTextLeft(aFPos.nTabCnt);
+            aSet.Put(firstLine);
+            aSet.Put(leftMargin);
 
             const SvxAdjustItem& rAdj = pCNd->GetAttr(RES_PARATR_ADJUST);
             if( SvxAdjust::Left != rAdj.GetAdjust() )

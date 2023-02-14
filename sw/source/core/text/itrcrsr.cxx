@@ -161,7 +161,8 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
     GetInfo().SetFont( GetFnt() );
     const SwTextNode *const pNode = m_pFrame->GetTextNodeForParaProps();
 
-    const SvxLRSpaceItem &rSpace = pNode->GetSwAttrSet().GetLRSpace();
+    SvxFirstLineIndentItem const& rFirstLine(pNode->GetSwAttrSet().GetFirstLineIndent());
+    SvxTextLeftMarginItem const& rTextLeftMargin(pNode->GetSwAttrSet().GetTextLeftMargin());
     // #i95907#
     // #i111284#
     const SwTextNode *pTextNode = m_pFrame->GetTextNodeForParaProps();
@@ -193,7 +194,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
                 // rSpace.GetLeft() + rSpace.GetTextLeft();
                 ( bListLevelIndentsApplicableAndLabelAlignmentActive
                   ? 0
-                  : ( rSpace.GetLeft() - rSpace.GetTextLeft() ) );
+                  : (rTextLeftMargin.GetLeft(rFirstLine) - rTextLeftMargin.GetTextLeft()));
     }
     else
     {
@@ -211,12 +212,12 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
                     // #i111284#
                     ( bListLevelIndentsApplicableAndLabelAlignmentActive
                       ? 0
-                      : ( rSpace.GetLeft() - rSpace.GetTextLeft() ) );
+                      : (rTextLeftMargin.GetLeft(rFirstLine) - rTextLeftMargin.GetTextLeft()));
         }
         else
         {
             mnLeft = m_pFrame->getFrameArea().Left() +
-                    std::max( tools::Long( rSpace.GetTextLeft() + nLMWithNum ),
+                std::max(tools::Long(rTextLeftMargin.GetTextLeft() + nLMWithNum),
                          m_pFrame->getFramePrintArea().Left() );
         }
     }
@@ -242,7 +243,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
         short nFLOfst = 0;
         tools::Long nFirstLineOfs = 0;
         if( !pNode->GetFirstLineOfsWithNum( nFLOfst ) &&
-            rSpace.IsAutoFirst() )
+            rFirstLine.IsAutoFirst())
         {
             nFirstLineOfs = GetFnt()->GetSize( GetFnt()->GetActual() ).Height();
             LanguageType const aLang = m_pFrame->GetLangOfChar(
@@ -325,7 +326,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
         else
         {
               mnFirst = m_pFrame->getFrameArea().Left() +
-                     std::max( rSpace.GetTextLeft() + nLMWithNum+ nFirstLineOfs,
+                 std::max(rTextLeftMargin.GetTextLeft() + nLMWithNum + nFirstLineOfs,
                           m_pFrame->getFramePrintArea().Left() );
         }
 

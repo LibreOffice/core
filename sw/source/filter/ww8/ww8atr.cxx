@@ -342,10 +342,17 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
         // switch off the numbering?
         const SfxPoolItem* pLRItem;
         if ( pRuleItem->GetValue().isEmpty() &&
-             SfxItemState::SET != rSet.GetItemState( RES_LR_SPACE, false) &&
-             (pLRItem = rSet.GetItemIfSet( RES_LR_SPACE )) )
+             SfxItemState::SET != rSet.GetItemState(RES_MARGIN_FIRSTLINE, false) &&
+             (pLRItem = rSet.GetItemIfSet(RES_MARGIN_FIRSTLINE)) )
         {
-            // the set the LR-Space of the parentformat!
+            // set the LR-Space of the parentformat!
+            AttrOutput().OutputItem( *pLRItem );
+        }
+        if ( pRuleItem->GetValue().isEmpty() &&
+             SfxItemState::SET != rSet.GetItemState(RES_MARGIN_TEXTLEFT, false) &&
+             (pLRItem = rSet.GetItemIfSet(RES_MARGIN_TEXTLEFT)) )
+        {
+            // set the LR-Space of the parentformat!
             AttrOutput().OutputItem( *pLRItem );
         }
     }
@@ -866,12 +873,14 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
                      rNFormat.GetAbsLSpace() )
                 {
                     SfxItemSet aSet( rFormat.GetAttrSet() );
-                    SvxLRSpaceItem aLR(aSet.Get(RES_LR_SPACE));
+                    SvxFirstLineIndentItem firstLine(aSet.Get(RES_MARGIN_FIRSTLINE));
+                    SvxTextLeftMarginItem leftMargin(aSet.Get(RES_MARGIN_TEXTLEFT));
 
-                    aLR.SetTextLeft( aLR.GetTextLeft() + rNFormat.GetAbsLSpace() );
-                    aLR.SetTextFirstLineOffset( GetWordFirstLineOffset(rNFormat));
+                    leftMargin.SetTextLeft(leftMargin.GetTextLeft() + rNFormat.GetAbsLSpace());
+                    firstLine.SetTextFirstLineOffset(GetWordFirstLineOffset(rNFormat));
 
-                    aSet.Put( aLR );
+                    aSet.Put(firstLine);
+                    aSet.Put(leftMargin);
                     CorrectTabStopInSet( aSet, rNFormat.GetAbsLSpace() );
                     OutputItemSet( aSet, bPapFormat, bChpFormat,
                         i18n::ScriptType::LATIN, m_bExportModeRTF);
@@ -888,8 +897,10 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
                 if ( m_bStyDef && DisallowInheritingOutlineNumbering(rFormat) )
                 {
                     SfxItemSet aSet( rFormat.GetAttrSet() );
-                    const SvxLRSpaceItem& aLR = aSet.Get(RES_LR_SPACE);
-                    aSet.Put( aLR );
+                    SvxFirstLineIndentItem const& rFirstLine(aSet.Get(RES_MARGIN_FIRSTLINE));
+                    SvxTextLeftMarginItem const& rLeftMargin(aSet.Get(RES_MARGIN_TEXTLEFT));
+                    aSet.Put(rFirstLine);
+                    aSet.Put(rLeftMargin);
                     OutputItemSet( aSet, bPapFormat, bChpFormat,
                         css::i18n::ScriptType::LATIN, m_bExportModeRTF);
                     bCallOutSet = false;
@@ -4190,6 +4201,33 @@ void WW8AttributeOutput::FormatPaperBin( const SvxPaperBinItem& rPaperBin )
     }
 }
 
+void WW8AttributeOutput::FormatFirstLineIndent(SvxFirstLineIndentItem const& rFirstLine)
+{
+    // sprmPDxaLeft1
+    m_rWW8Export.InsUInt16( 0x8460 );        //asian version ?
+    m_rWW8Export.InsUInt16( rFirstLine.GetTextFirstLineOffset() );
+}
+
+void WW8AttributeOutput::FormatTextLeftMargin(SvxTextLeftMarginItem const& rTextLeftMargin)
+{                                          // normal paragraphs
+    // sprmPDxaLeft
+    m_rWW8Export.InsUInt16( 0x845E );        //asian version ?
+    m_rWW8Export.InsUInt16( o3tl::narrowing<sal_uInt16>(rTextLeftMargin.GetTextLeft()) );
+}
+
+void WW8AttributeOutput::FormatRightMargin(SvxRightMarginItem const& rRightMargin)
+{
+    // (paragraph case, this will be an else branch once others are converted)
+#if 0
+    else
+#endif
+    {                                          // normal paragraphs
+        // sprmPDxaRight
+        m_rWW8Export.InsUInt16( 0x845D );        //asian version ?
+        m_rWW8Export.InsUInt16( o3tl::narrowing<sal_uInt16>(rRightMargin.GetRight()) );
+    }
+}
+
 void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
 {
     // Flys are still missing ( see RTF )
@@ -5370,10 +5408,12 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
     tools::Long nCurrentLeft = 0;
     if ( bTabsRelativeToIndex )
     {
-        if(const SfxPoolItem* pItem = m_rWW8Export.HasItem( RES_LR_SPACE ))
+        if (const SfxPoolItem* pItem = m_rWW8Export.HasItem(RES_MARGIN_TEXTLEFT))
         {
-            if(const auto pLR = pItem->DynamicWhichCast(RES_LR_SPACE))
-                nCurrentLeft = pLR->GetTextLeft();
+            if (const auto pLeft = pItem->DynamicWhichCast(RES_MARGIN_TEXTLEFT))
+            {
+                nCurrentLeft = pLeft->GetTextLeft();
+            }
             else
                 // FIXME: This fails in sw.ww8export/testCommentExport::Load_Verify_Reload_Verify
                 SAL_WARN("sw.ww8", "m_rWW8Export has an RES_LR_SPACE item, but it's of the wrong type.");
@@ -5398,8 +5438,8 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
         tools::Long nParentLeft = 0;
         if ( bTabsRelativeToIndex )
         {
-            const SvxLRSpaceItem &rStyleLR = pParentStyle->GetAttrSet().Get( RES_LR_SPACE );
-            nParentLeft = rStyleLR.GetTextLeft();
+            SvxTextLeftMarginItem const& rLeftMargin(pParentStyle->GetAttrSet().Get(RES_MARGIN_TEXTLEFT));
+            nParentLeft = rLeftMargin.GetTextLeft();
         }
 
         ParaTabStopDelAdd( m_rWW8Export, aParentTabs, nParentLeft, rTabStops, nCurrentLeft );
@@ -5421,8 +5461,8 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
         tools::Long nStyleLeft = 0;
         if ( bTabsRelativeToIndex )
         {
-            const SvxLRSpaceItem &rStyleLR = m_rWW8Export.m_pStyAttr->Get(RES_LR_SPACE);
-            nStyleLeft = rStyleLR.GetTextLeft();
+            SvxTextLeftMarginItem const& rLeftMargin(m_rWW8Export.m_pStyAttr->Get(RES_MARGIN_TEXTLEFT));
+            nStyleLeft = rLeftMargin.GetTextLeft();
         }
 
         ParaTabStopDelAdd( m_rWW8Export,
@@ -5609,6 +5649,15 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             break;
         case RES_PAPER_BIN:
             FormatPaperBin( static_cast< const SvxPaperBinItem& >( rHt ) );
+            break;
+        case RES_MARGIN_FIRSTLINE:
+            FormatFirstLineIndent(static_cast<const SvxFirstLineIndentItem &>(rHt));
+            break;
+        case RES_MARGIN_TEXTLEFT:
+            FormatTextLeftMargin(static_cast<const SvxTextLeftMarginItem &>(rHt));
+            break;
+        case RES_MARGIN_RIGHT:
+            FormatRightMargin(static_cast<const SvxRightMarginItem &>(rHt));
             break;
         case RES_LR_SPACE:
             FormatLRSpace( static_cast< const SvxLRSpaceItem& >( rHt ) );

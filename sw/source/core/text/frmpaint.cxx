@@ -570,11 +570,13 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                 pFnt->ChgPhysFnt( pSh, *pSh->GetOut() );
                 Point aPos = getFrameArea().Pos() + getFramePrintArea().Pos();
 
-                const SvxLRSpaceItem &rSpace =
-                    GetTextNodeForParaProps()->GetSwAttrSet().GetLRSpace();
+                const SvxFirstLineIndentItem& rFirstLine(
+                    GetTextNodeForParaProps()->GetSwAttrSet().GetFirstLineIndent());
 
-                if ( rSpace.GetTextFirstLineOffset() > 0 )
-                    aPos.AdjustX(rSpace.GetTextFirstLineOffset() );
+                if (0 < rFirstLine.GetTextFirstLineOffset())
+                {
+                    aPos.AdjustX(rFirstLine.GetTextFirstLineOffset());
+                }
 
                 std::unique_ptr<SwSaveClip, o3tl::default_delete<SwSaveClip>> xClip;
                 if( IsUndersized() )

@@ -210,11 +210,13 @@ namespace
                                     SvxNumberFormat::LABEL_WIDTH_AND_POSITION &&
                         ( rNFormat.GetAbsLSpace() || rNFormat.GetFirstLineOffset() ) )
                 {
-                    SvxLRSpaceItem aLR( pColl->GetFormatAttr( RES_LR_SPACE ) );
-                    aLR.SetTextFirstLineOffsetValue( rNFormat.GetFirstLineOffset() );
+                    SvxFirstLineIndentItem firstLine(pColl->GetFormatAttr(RES_MARGIN_FIRSTLINE));
+                    SvxTextLeftMarginItem leftMargin(pColl->GetFormatAttr(RES_MARGIN_TEXTLEFT));
+                    firstLine.SetTextFirstLineOffsetValue(rNFormat.GetFirstLineOffset());
                         //TODO: overflow
-                    aLR.SetTextLeft( rNFormat.GetAbsLSpace() );
-                    pColl->SetFormatAttr( aLR );
+                    leftMargin.SetTextLeft(rNFormat.GetAbsLSpace());
+                    pColl->SetFormatAttr(firstLine);
+                    pColl->SetFormatAttr(leftMargin);
                 }
 
                 // All paragraph styles, which are assigned to a level of the
@@ -229,11 +231,11 @@ namespace
     void lcl_SetRegister( SwDoc& rDoc, SfxItemSet& rSet, sal_uInt16 nFact,
                             bool bHeader, bool bTab )
     {
-        SvxLRSpaceItem aLR( RES_LR_SPACE );
         sal_uInt16 nLeft = o3tl::convert(5 * nFact, o3tl::Length::mm, o3tl::Length::twip);
-        aLR.SetTextLeft( nLeft );
-
-        rSet.Put( aLR );
+        SvxFirstLineIndentItem const firstLine(0, RES_MARGIN_FIRSTLINE);
+        SvxTextLeftMarginItem const leftMargin(nLeft, RES_MARGIN_TEXTLEFT);
+        rSet.Put(firstLine);
+        rSet.Put(leftMargin);
         if( bHeader )
         {
             SetAllScriptItem( rSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ) );
@@ -255,14 +257,13 @@ namespace
                             sal_uInt16 nNxt, SwTwips nEZ, SwTwips nLeft,
                             SwTwips nUpper, SwTwips nLower )
     {
-
-        SvxLRSpaceItem aLR( RES_LR_SPACE );
+        SvxFirstLineIndentItem const firstLine(sal_uInt16(nEZ), RES_MARGIN_FIRSTLINE);
+        SvxTextLeftMarginItem const leftMargin(sal_uInt16(nLeft), RES_MARGIN_TEXTLEFT);
+        rSet.Put(firstLine);
+        rSet.Put(leftMargin);
         SvxULSpaceItem aUL( RES_UL_SPACE );
-        aLR.SetTextFirstLineOffset( sal_uInt16(nEZ) );
-        aLR.SetTextLeft( sal_uInt16(nLeft) );
         aUL.SetUpper( sal_uInt16(nUpper) );
         aUL.SetLower( sal_uInt16(nLower) );
-        rSet.Put( aLR );
         rSet.Put( aUL );
 
         if( pColl )
@@ -706,49 +707,58 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             break;
         case RES_POOLCOLL_TEXT_IDENT:           // Text body indentation
             {
-                SvxLRSpaceItem aLR( RES_LR_SPACE );
-                aLR.SetTextFirstLineOffset(o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip));
-                aSet.Put( aLR );
+                auto const first(o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip));
+                SvxFirstLineIndentItem const firstLine(first, RES_MARGIN_FIRSTLINE);
+                SvxTextLeftMarginItem const leftMargin(0, RES_MARGIN_TEXTLEFT);
+                aSet.Put(firstLine);
+                aSet.Put(leftMargin);
             }
             break;
         case RES_POOLCOLL_TEXT_NEGIDENT:        // Text body neg. indentation
             {
-                SvxLRSpaceItem aLR( RES_LR_SPACE );
-                aLR.SetTextFirstLineOffset(-o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip));
-                aLR.SetTextLeft(o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip));
+                auto const first(-o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip));
+                auto const left(o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip));
+                SvxFirstLineIndentItem const firstLine(first, RES_MARGIN_FIRSTLINE);
+                SvxTextLeftMarginItem const leftMargin(left, RES_MARGIN_TEXTLEFT);
+                aSet.Put(firstLine);
+                aSet.Put(leftMargin);
+
                 SvxTabStopItem aTStops(RES_PARATR_TABSTOP);
                 aTStops.Insert( SvxTabStop( 0 ));
-
-                aSet.Put( aLR );
                 aSet.Put( aTStops );
             }
             break;
         case RES_POOLCOLL_TEXT_MOVE:            // Text body move
             {
-                SvxLRSpaceItem aLR( RES_LR_SPACE );
-                aLR.SetTextLeft(o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip));
-                aSet.Put( aLR );
+                auto const left(o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip));
+                SvxFirstLineIndentItem const firstLine(0, RES_MARGIN_FIRSTLINE);
+                SvxTextLeftMarginItem const leftMargin(left, RES_MARGIN_TEXTLEFT);
+                aSet.Put(firstLine);
+                aSet.Put(leftMargin);
             }
             break;
 
         case RES_POOLCOLL_CONFRONTATION:    // Text body confrontation
             {
-                SvxLRSpaceItem aLR( RES_LR_SPACE );
-                aLR.SetTextFirstLineOffset(
-                    -o3tl::convert(45, o3tl::Length::mm, o3tl::Length::twip));
-                aLR.SetTextLeft(o3tl::convert(5, o3tl::Length::cm, o3tl::Length::twip));
+                auto const first(-o3tl::convert(45, o3tl::Length::mm, o3tl::Length::twip));
+                auto const left(o3tl::convert(5, o3tl::Length::cm, o3tl::Length::twip));
+                SvxFirstLineIndentItem const firstLine(first, RES_MARGIN_FIRSTLINE);
+                SvxTextLeftMarginItem const leftMargin(left, RES_MARGIN_TEXTLEFT);
+                aSet.Put(firstLine);
+                aSet.Put(leftMargin);
+
                 SvxTabStopItem aTStops( RES_PARATR_TABSTOP );
                 aTStops.Insert( SvxTabStop( 0 ));
-
-                aSet.Put( aLR );
                 aSet.Put( aTStops );
             }
             break;
         case RES_POOLCOLL_MARGINAL:         // Text body marginal
             {
-                SvxLRSpaceItem aLR( RES_LR_SPACE );
-                aLR.SetTextLeft(o3tl::convert(4, o3tl::Length::cm, o3tl::Length::twip));
-                aSet.Put( aLR );
+                auto const left(o3tl::convert(4, o3tl::Length::cm, o3tl::Length::twip));
+                SvxFirstLineIndentItem const firstLine(0, RES_MARGIN_FIRSTLINE);
+                SvxTextLeftMarginItem const leftMargin(left, RES_MARGIN_TEXTLEFT);
+                aSet.Put(firstLine);
+                aSet.Put(leftMargin);
             }
             break;
 
@@ -938,11 +948,14 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_FOOTNOTE:             // paragraph style Footnote
         case RES_POOLCOLL_ENDNOTE:              // paragraph style Endnote
             {
-                SvxLRSpaceItem aLR( RES_LR_SPACE );
-                aLR.SetTextFirstLineOffset(-o3tl::convert(6, o3tl::Length::mm, o3tl::Length::twip));
-                aLR.SetTextLeft(o3tl::convert(6, o3tl::Length::mm, o3tl::Length::twip));
+                auto const first(-o3tl::convert(6, o3tl::Length::mm, o3tl::Length::twip));
+                auto const left(o3tl::convert(6, o3tl::Length::mm, o3tl::Length::twip));
+                SvxFirstLineIndentItem const firstLine(first, RES_MARGIN_FIRSTLINE);
+                SvxTextLeftMarginItem const leftMargin(left, RES_MARGIN_TEXTLEFT);
+                aSet.Put(firstLine);
+                aSet.Put(leftMargin);
+
                 SetAllScriptItem( aSet, SvxFontHeightItem( PT_10, 100, RES_CHRATR_FONTSIZE ) );
-                aSet.Put( aLR );
                 SwFormatLineNumber aLN;
                 aLN.SetCountLines( false );
                 aSet.Put( aLN );
@@ -1344,10 +1357,15 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
 
         case RES_POOLCOLL_HTML_BLOCKQUOTE:
             {
-                SvxLRSpaceItem aLR( RES_LR_SPACE );
-                aLR.SetLeft(o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip));
-                aLR.SetRight(o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip));
-                aSet.Put( aLR );
+                auto const left(o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip));
+                auto const right(o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip));
+                SvxFirstLineIndentItem const firstLine(0, RES_MARGIN_FIRSTLINE);
+                SvxTextLeftMarginItem const leftMargin(left, RES_MARGIN_TEXTLEFT);
+                SvxRightMarginItem const rightMargin(right, RES_MARGIN_RIGHT);
+                aSet.Put(firstLine);
+                aSet.Put(leftMargin);
+                aSet.Put(rightMargin);
+
                 std::unique_ptr<SvxULSpaceItem> aUL(pNewColl->GetULSpace().Clone());
                 aUL->SetLower( HTML_PARSPACE );
                 aSet.Put(std::move(aUL));
@@ -1395,22 +1413,20 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
 
         case RES_POOLCOLL_HTML_DD:
             {
-                std::unique_ptr<SvxLRSpaceItem> aLR(pNewColl->GetLRSpace().Clone());
                 // We indent by 1 cm. The IDs are always 2 away from each other!
-                aLR->SetLeft(o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip));
-                aSet.Put(std::move(aLR));
+                auto const left(o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip));
+                SvxTextLeftMarginItem const leftMargin(left, RES_MARGIN_TEXTLEFT);
+                aSet.Put(leftMargin);
             }
             break;
         case RES_POOLCOLL_HTML_DT:
             {
-                std::unique_ptr<SvxLRSpaceItem> aLR;
                 {
                     pNewColl->SetNextTextFormatColl( *GetTextCollFromPool( RES_POOLCOLL_HTML_DD ));
-                    aLR.reset(pNewColl->GetLRSpace().Clone());
                 }
                 // We indent by 0 cm. The IDs are always 2 away from each other!
-                aLR->SetLeft( 0 );
-                aSet.Put( std::move(aLR) );
+                SvxTextLeftMarginItem const leftMargin(0, RES_MARGIN_TEXTLEFT);
+                aSet.Put(leftMargin);
             }
             break;
         }

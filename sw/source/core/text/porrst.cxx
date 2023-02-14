@@ -427,8 +427,10 @@ bool SwTextFrame::FormatEmpty()
     const SvxLineSpacingItem &rSpacing = aSet.GetLineSpacing();
     if( !bCollapse && ( SvxLineSpaceRule::Min == rSpacing.GetLineSpaceRule() ||
         SvxLineSpaceRule::Fix == rSpacing.GetLineSpaceRule() ||
-        aSet.GetLRSpace().IsAutoFirst() ) )
+        aSet.GetFirstLineIndent().IsAutoFirst()))
+    {
         return false;
+    }
 
     SwTextFly aTextFly( this );
     SwRect aRect;

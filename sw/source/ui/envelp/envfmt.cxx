@@ -217,7 +217,7 @@ void SwEnvFormatPage::Edit(std::string_view rIdent, bool bSender)
         aTmpSet.Put( aTabPos );
 
         // left border as offset
-        const tools::Long nOff = aTmpSet.Get( RES_LR_SPACE ).GetTextLeft();
+        const tools::Long nOff = aTmpSet.Get(RES_MARGIN_TEXTLEFT).GetTextLeft();
         SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
         aTmpSet.Put( aOff );
 
@@ -269,7 +269,8 @@ SfxItemSet *SwEnvFormatPage::GetCollItemSet(SwTextFormatColl const * pColl, bool
         static WhichRangesContainer const aRanges(svl::Items<
             RES_PARATR_BEGIN, RES_PARATR_ADJUST,
             RES_PARATR_TABSTOP, RES_PARATR_END-1,
-            RES_LR_SPACE, RES_UL_SPACE,
+            RES_MARGIN_FIRSTLINE, RES_MARGIN_RIGHT,
+            RES_UL_SPACE, RES_UL_SPACE,
             RES_BACKGROUND, RES_SHADOW,
             SID_ATTR_TABSTOP_DEFAULTS, SID_ATTR_TABSTOP_DEFAULTS,
             SID_ATTR_TABSTOP_POS, SID_ATTR_TABSTOP_POS,

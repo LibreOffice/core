@@ -2638,13 +2638,13 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 {
                     // Allow MSO to emulate LO footnote text starting at left margin - only meaningful with hanging indent
                     sal_Int32 nFirstLineIndent=0;
-                    SfxItemSetFixed<RES_LR_SPACE, RES_LR_SPACE> aSet( m_rDoc.GetAttrPool() );
+                    SfxItemSetFixed<RES_MARGIN_FIRSTLINE, RES_MARGIN_FIRSTLINE> aSet( m_rDoc.GetAttrPool() );
 
                     if ( pTextNode && pTextNode->GetAttr(aSet) )
                     {
-                        const SvxLRSpaceItem* pLRSpace = aSet.GetItem<SvxLRSpaceItem>(RES_LR_SPACE);
-                        if ( pLRSpace )
-                            nFirstLineIndent = pLRSpace->GetTextFirstLineOffset();
+                        const SvxFirstLineIndentItem *const pFirstLine(aSet.GetItem<SvxFirstLineIndentItem>(RES_MARGIN_FIRSTLINE));
+                        if (pFirstLine)
+                            nFirstLineIndent = pFirstLine->GetTextFirstLineOffset();
                     }
 
                     // Insert tab for aesthetic purposes #i24762#
@@ -2932,12 +2932,13 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 if( !oTmpSet )
                     oTmpSet.emplace( rNode.GetSwAttrSet() );
 
-                SvxLRSpaceItem aLR(oTmpSet->Get(RES_LR_SPACE));
+                SvxFirstLineIndentItem firstLine(oTmpSet->Get(RES_MARGIN_FIRSTLINE));
+                SvxTextLeftMarginItem leftMargin(oTmpSet->Get(RES_MARGIN_TEXTLEFT));
                 // #i86652#
                 if ( pFormat->GetPositionAndSpaceMode() ==
                                         SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    aLR.SetTextLeft( aLR.GetTextLeft() + pFormat->GetAbsLSpace() );
+                    leftMargin.SetTextLeft(leftMargin.GetTextLeft() + pFormat->GetAbsLSpace());
                 }
 
                 if( rNode.IsNumbered() && rNode.IsCountedInList() )
@@ -2948,11 +2949,11 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     {
                         if (bParaRTL)
                         {
-                            aLR.SetTextFirstLineOffsetValue(aLR.GetTextFirstLineOffset() + pFormat->GetAbsLSpace() - pFormat->GetFirstLineOffset()); //TODO: overflow
+                            firstLine.SetTextFirstLineOffsetValue(firstLine.GetTextFirstLineOffset() + pFormat->GetAbsLSpace() - pFormat->GetFirstLineOffset()); //TODO: overflow
                         }
                         else
                         {
-                            aLR.SetTextFirstLineOffset(aLR.GetTextFirstLineOffset() + GetWordFirstLineOffset(*pFormat));
+                            firstLine.SetTextFirstLineOffset(firstLine.GetTextFirstLineOffset() + GetWordFirstLineOffset(*pFormat));
                         }
                     }
 
@@ -2972,7 +2973,8 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                                                 SvxNumberFormat::LABEL_ALIGNMENT &&
                              !rNode.AreListLevelIndentsApplicable() )
                         {
-                            oTmpSet->Put( aLR );
+                            oTmpSet->Put(firstLine);
+                            oTmpSet->Put(leftMargin);
                         }
                     }
                 }
@@ -2983,7 +2985,8 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 if ( pFormat->GetPositionAndSpaceMode() ==
                                         SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    oTmpSet->Put(aLR);
+                    oTmpSet->Put(firstLine);
+                    oTmpSet->Put(leftMargin);
 
                     //#i21847#
                     SvxTabStopItem aItem(oTmpSet->Get(RES_PARATR_TABSTOP));
@@ -3039,11 +3042,14 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     oTmpSet.emplace(rNode.GetSwAttrSet());
 
                 // create new LRSpace item, based on the current (if present)
-                const SfxPoolItem* pLrSpaceItem = oTmpSet->GetItemIfSet(RES_LR_SPACE);
-                SvxLRSpaceItem aLRSpace(
-                    ( pLrSpaceItem == nullptr )
-                        ? SvxLRSpaceItem(0, 0, 0, RES_LR_SPACE)
-                        : *static_cast<const SvxLRSpaceItem*>( pLrSpaceItem ) );
+                const SvxFirstLineIndentItem *const pFirstLineIndent(oTmpSet->GetItemIfSet(RES_MARGIN_FIRSTLINE));
+                const SvxTextLeftMarginItem *const pTextLeftMargin(oTmpSet->GetItemIfSet(RES_MARGIN_TEXTLEFT));
+                SvxFirstLineIndentItem firstLine(pFirstLineIndent
+                        ? *pFirstLineIndent
+                        : SvxFirstLineIndentItem(0, RES_MARGIN_FIRSTLINE));
+                SvxTextLeftMarginItem leftMargin(pTextLeftMargin
+                        ? *pTextLeftMargin
+                        : SvxTextLeftMarginItem(0, RES_MARGIN_TEXTLEFT));
 
                 // new left margin = old left + label space
                 const SwNumRule* pRule = rNode.GetNumRule();
@@ -3061,20 +3067,23 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 if ( rNumFormat.GetPositionAndSpaceMode() ==
                                         SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    aLRSpace.SetTextLeft( aLRSpace.GetLeft() + rNumFormat.GetAbsLSpace() );
+                    leftMargin.SetTextLeft(leftMargin.GetLeft(firstLine) + rNumFormat.GetAbsLSpace());
                 }
                 else
                 {
-                    aLRSpace.SetTextLeft( aLRSpace.GetLeft() + rNumFormat.GetIndentAt() );
+                    leftMargin.SetTextLeft(leftMargin.GetLeft(firstLine) + rNumFormat.GetIndentAt());
                 }
 
                 // new first line indent = 0
                 // (first line indent is ignored)
                 if (!bParaRTL)
-                    aLRSpace.SetTextFirstLineOffset( 0 );
+                {
+                    firstLine.SetTextFirstLineOffset(0);
+                }
 
                 // put back the new item
-                oTmpSet->Put( aLRSpace );
+                oTmpSet->Put(firstLine);
+                oTmpSet->Put(leftMargin);
 
                 // assure that numbering rule is in <oTmpSet>
                 if (SfxItemState::SET != oTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )

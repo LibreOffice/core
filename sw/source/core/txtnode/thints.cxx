@@ -2121,10 +2121,10 @@ static void lcl_MergeListLevelIndentAsLRSpaceItem( const SwTextNode& rTextNode,
         const SwNumFormat& rFormat = pRule->Get(o3tl::narrowing<sal_uInt16>(rTextNode.GetActualListLevel()));
         if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
-            SvxLRSpaceItem aLR( RES_LR_SPACE );
-            aLR.SetTextLeft( rFormat.GetIndentAt() );
-            aLR.SetTextFirstLineOffset( static_cast<short>(rFormat.GetFirstLineIndent()) );
-            rSet.Put( aLR );
+            SvxTextLeftMarginItem const leftMargin(rFormat.GetIndentAt(), RES_MARGIN_TEXTLEFT);
+            SvxFirstLineIndentItem const firstLine(static_cast<short>(rFormat.GetFirstLineIndent()), RES_MARGIN_FIRSTLINE);
+            rSet.Put(firstLine);
+            rSet.Put(leftMargin);
         }
     }
 }

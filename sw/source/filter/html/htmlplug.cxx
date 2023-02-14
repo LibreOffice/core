@@ -258,22 +258,25 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
     }
 
     // set left/right margin
-    if( const SvxLRSpaceItem* pLRItem = rCSS1ItemSet.GetItemIfSet( RES_LR_SPACE ) )
+    // note: parser never creates SvxLeftMarginItem! must be converted
+    if (const SvxTextLeftMarginItem *const pLeft = rCSS1ItemSet.GetItemIfSet(RES_MARGIN_TEXTLEFT))
     {
-        // if applicable remove the first line indent
-        SvxLRSpaceItem aLRItem( *pLRItem );
-        aLRItem.SetTextFirstLineOffset( 0 );
         if( rCSS1PropInfo.m_bLeftMargin )
         {
-            nLeftSpace = aLRItem.GetLeft();
+            // should be SvxLeftMarginItem... "cast" it
+            nLeftSpace = pLeft->GetTextLeft();
             rCSS1PropInfo.m_bLeftMargin = false;
         }
+        rCSS1ItemSet.ClearItem(RES_MARGIN_TEXTLEFT);
+    }
+    if (const SvxRightMarginItem *const pRight = rCSS1ItemSet.GetItemIfSet(RES_MARGIN_RIGHT))
+    {
         if( rCSS1PropInfo.m_bRightMargin )
         {
-            nRightSpace = aLRItem.GetRight();
+            nRightSpace = pRight->GetRight();
             rCSS1PropInfo.m_bRightMargin = false;
         }
-        rCSS1ItemSet.ClearItem( RES_LR_SPACE );
+        rCSS1ItemSet.ClearItem(RES_MARGIN_RIGHT);
     }
     if( nLeftSpace > 0 || nRightSpace > 0 )
     {

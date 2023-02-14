@@ -2769,7 +2769,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
             // which can't be set. Because the attributes are inserted with
             // SETATTR_DONTREPLACE, they should be able to be set later.
             bSetAttr = ( nEndParaIdx < rEndPos.GetNodeIndex() &&
-                         (RES_LR_SPACE != nWhich || !GetNumInfo().GetNumRule()) ) ||
+                         ((RES_MARGIN_FIRSTLINE != nWhich && RES_MARGIN_TEXTLEFT != nWhich) || !GetNumInfo().GetNumRule()) ) ||
                        ( !pAttr->IsLikePara() &&
                          nEndParaIdx == rEndPos.GetNodeIndex() &&
                          pAttr->GetEndContent() < nEndCnt &&
@@ -2951,6 +2951,12 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                     continue;
 
                 case RES_LR_SPACE:
+                    assert(false);
+                    break;
+
+                case RES_MARGIN_FIRSTLINE:
+                case RES_MARGIN_TEXTLEFT:
+                case RES_MARGIN_RIGHT:
                     if( aAttrPam.GetPoint()->GetNodeIndex() ==
                         aAttrPam.GetMark()->GetNodeIndex())
                     {
@@ -4396,10 +4402,10 @@ void SwHTMLParser::NewDefList()
     {
 
         // and the one of the DT-style of the current level
-        SvxLRSpaceItem rLRSpace =
+        SvxTextLeftMarginItem const& rTextLeftMargin =
             m_pCSS1Parser->GetTextFormatColl(RES_POOLCOLL_HTML_DD, OUString())
-                       ->GetLRSpace();
-        nLeft = nLeft + static_cast< sal_uInt16 >(rLRSpace.GetTextLeft());
+                       ->GetTextLeftMargin();
+        nLeft = nLeft + static_cast<sal_uInt16>(rTextLeftMargin.GetTextLeft());
     }
 
     xCntxt->SetMargins( nLeft, nRight, nIndent );
@@ -4738,20 +4744,20 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
         const SwTextFormatColl *pTopColl =
             m_pCSS1Parser->GetTextFormatColl( nTopColl, rTopClass );
         const SfxItemSet& rItemSet = pTopColl->GetAttrSet();
-        if( const SvxLRSpaceItem *pLRItem = rItemSet.GetItemIfSet(RES_LR_SPACE) )
+        if (rItemSet.GetItemIfSet(RES_MARGIN_FIRSTLINE)
+            || rItemSet.GetItemIfSet(RES_MARGIN_TEXTLEFT)
+            || rItemSet.GetItemIfSet(RES_MARGIN_RIGHT))
         {
-            sal_Int32 nLeft = pLRItem->GetTextLeft();
-            sal_Int32 nRight = pLRItem->GetRight();
-            nFirstLineIndent = pLRItem->GetTextFirstLineOffset();
+            sal_Int32 nLeft = rItemSet.Get(RES_MARGIN_TEXTLEFT).GetTextLeft();
+            sal_Int32 nRight = rItemSet.Get(RES_MARGIN_RIGHT).GetRight();
+            nFirstLineIndent = rItemSet.Get(RES_MARGIN_FIRSTLINE).GetTextFirstLineOffset();
 
             // In Definition lists the margins also contain the margins from the previous levels
             if( RES_POOLCOLL_HTML_DD == nTopColl )
             {
-                const SvxLRSpaceItem& rDTLRSpace = m_pCSS1Parser
-                    ->GetTextFormatColl(RES_POOLCOLL_HTML_DT, OUString())
-                    ->GetLRSpace();
-                nLeft -= rDTLRSpace.GetTextLeft();
-                nRight -= rDTLRSpace.GetRight();
+                auto const*const pColl(m_pCSS1Parser->GetTextFormatColl(RES_POOLCOLL_HTML_DT, OUString()));
+                nLeft -= pColl->GetTextLeftMargin().GetTextLeft();
+                nRight -= pColl->GetRightMargin().GetRight();
             }
             else if( RES_POOLCOLL_HTML_DT == nTopColl )
             {
@@ -4776,13 +4782,18 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
     if( !pCollToSet )
     {
         pCollToSet = m_pCSS1Parser->GetTextCollFromPool( nDfltColl );
-        const SvxLRSpaceItem& rLRItem = pCollToSet->GetLRSpace();
         if( !nLeftMargin )
-            nLeftMargin = static_cast< sal_uInt16 >(rLRItem.GetTextLeft());
+        {
+            nLeftMargin = static_cast<sal_uInt16>(pCollToSet->GetTextLeftMargin().GetTextLeft());
+        }
         if( !nRightMargin )
-            nRightMargin = static_cast< sal_uInt16 >(rLRItem.GetRight());
+        {
+            nRightMargin = static_cast<sal_uInt16>(pCollToSet->GetRightMargin().GetRight());
+        }
         if( !nFirstLineIndent )
-            nFirstLineIndent = rLRItem.GetTextFirstLineOffset();
+        {
+            nFirstLineIndent = pCollToSet->GetFirstLineIndent().GetTextFirstLineOffset();
+        }
     }
 
     // remove previous hard attribution of paragraph
@@ -4794,25 +4805,41 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
     m_xDoc->SetTextFormatColl( *m_pPam, pCollToSet );
 
     // if applicable correct the paragraph indent
-    const SvxLRSpaceItem& rLRItem = pCollToSet->GetLRSpace();
-    bool bSetLRSpace = nLeftMargin != rLRItem.GetTextLeft() ||
-                      nFirstLineIndent != rLRItem.GetTextFirstLineOffset() ||
-                      nRightMargin != rLRItem.GetRight();
+    const SvxFirstLineIndentItem & rFirstLine = pCollToSet->GetFirstLineIndent();
+    const SvxTextLeftMarginItem & rTextLeftMargin = pCollToSet->GetTextLeftMargin();
+    const SvxRightMarginItem & rRightMargin = pCollToSet->GetRightMargin();
+    bool bSetLRSpace = nLeftMargin != rTextLeftMargin.GetTextLeft() ||
+                      nFirstLineIndent != rFirstLine.GetTextFirstLineOffset() ||
+                      nRightMargin != rRightMargin.GetRight();
 
     if( bSetLRSpace )
     {
-        SvxLRSpaceItem aLRItem( rLRItem );
-        aLRItem.SetTextLeft( nLeftMargin );
-        aLRItem.SetRight( nRightMargin );
-        aLRItem.SetTextFirstLineOffset( nFirstLineIndent );
+        SvxFirstLineIndentItem firstLine(rFirstLine);
+        SvxTextLeftMarginItem leftMargin(rTextLeftMargin);
+        SvxRightMarginItem rightMargin(rRightMargin);
+        firstLine.SetTextFirstLineOffset(nFirstLineIndent);
+        leftMargin.SetTextLeft(nLeftMargin);
+        rightMargin.SetRight(nRightMargin);
         if( pItemSet )
-            pItemSet->Put( aLRItem );
+        {
+            pItemSet->Put(firstLine);
+            pItemSet->Put(leftMargin);
+            pItemSet->Put(rightMargin);
+        }
         else
         {
-            NewAttr(m_xAttrTab, &m_xAttrTab->pLRSpace, aLRItem);
-            m_xAttrTab->pLRSpace->SetLikePara();
-            m_aParaAttrs.push_back( m_xAttrTab->pLRSpace );
-            EndAttr( m_xAttrTab->pLRSpace, false );
+            NewAttr(m_xAttrTab, &m_xAttrTab->pFirstLineIndent, firstLine);
+            m_xAttrTab->pFirstLineIndent->SetLikePara();
+            m_aParaAttrs.push_back(m_xAttrTab->pFirstLineIndent);
+            EndAttr(m_xAttrTab->pFirstLineIndent, false);
+            NewAttr(m_xAttrTab, &m_xAttrTab->pTextLeftMargin, leftMargin);
+            m_xAttrTab->pTextLeftMargin->SetLikePara();
+            m_aParaAttrs.push_back(m_xAttrTab->pTextLeftMargin);
+            EndAttr(m_xAttrTab->pTextLeftMargin, false);
+            NewAttr(m_xAttrTab, &m_xAttrTab->pRightMargin, rightMargin);
+            m_xAttrTab->pRightMargin->SetLikePara();
+            m_aParaAttrs.push_back(m_xAttrTab->pRightMargin);
+            EndAttr(m_xAttrTab->pRightMargin, false);
         }
     }
 
@@ -5035,13 +5062,16 @@ void SwHTMLParser::InsertSpacer()
                 GetMarginsFromContextWithNumberBullet( nLeft, nRight, nIndent );
                 nIndent = nIndent + static_cast<short>(nSize);
 
-                SvxLRSpaceItem aLRItem( RES_LR_SPACE );
-                aLRItem.SetTextLeft( nLeft );
-                aLRItem.SetRight( nRight );
-                aLRItem.SetTextFirstLineOffset( nIndent );
+                SvxFirstLineIndentItem const firstLine(nIndent, RES_MARGIN_FIRSTLINE);
+                SvxTextLeftMarginItem const leftMargin(nLeft, RES_MARGIN_TEXTLEFT);
+                SvxRightMarginItem const rightMargin(nRight, RES_MARGIN_RIGHT);
 
-                NewAttr(m_xAttrTab, &m_xAttrTab->pLRSpace, aLRItem);
-                EndAttr( m_xAttrTab->pLRSpace, false );
+                NewAttr(m_xAttrTab, &m_xAttrTab->pFirstLineIndent, firstLine);
+                EndAttr(m_xAttrTab->pFirstLineIndent, false);
+                NewAttr(m_xAttrTab, &m_xAttrTab->pTextLeftMargin, leftMargin);
+                EndAttr(m_xAttrTab->pTextLeftMargin, false);
+                NewAttr(m_xAttrTab, &m_xAttrTab->pRightMargin, rightMargin);
+                EndAttr(m_xAttrTab->pRightMargin, false);
             }
             else
             {
@@ -5332,27 +5362,36 @@ void SwHTMLParser::InsertHorzRule()
             const SwFormatColl *pColl = (static_cast<tools::Long>(nWidth) < nBrowseWidth) ? GetCurrFormatColl() : nullptr;
             if (pColl)
             {
-                SvxLRSpaceItem aLRItem( pColl->GetLRSpace() );
                 tools::Long nDist = nBrowseWidth - nWidth;
+                ::std::optional<SvxTextLeftMarginItem> oLeft;
+                ::std::optional<SvxRightMarginItem> oRight;
 
                 switch( eAdjust )
                 {
                 case SvxAdjust::Right:
-                    aLRItem.SetTextLeft( o3tl::narrowing<sal_uInt16>(nDist) );
+                    oLeft.emplace(o3tl::narrowing<sal_uInt16>(nDist), RES_MARGIN_RIGHT);
                     break;
                 case SvxAdjust::Left:
-                    aLRItem.SetRight( o3tl::narrowing<sal_uInt16>(nDist) );
+                    oRight.emplace(o3tl::narrowing<sal_uInt16>(nDist));
                     break;
                 case SvxAdjust::Center:
                 default:
                     nDist /= 2;
-                    aLRItem.SetTextLeft( o3tl::narrowing<sal_uInt16>(nDist) );
-                    aLRItem.SetRight( o3tl::narrowing<sal_uInt16>(nDist) );
+                    oLeft.emplace(o3tl::narrowing<sal_uInt16>(nDist));
+                    oRight.emplace(o3tl::narrowing<sal_uInt16>(nDist));
                     break;
                 }
 
-                HTMLAttr* pTmp = new HTMLAttr(*m_pPam->GetPoint(), aLRItem, nullptr, std::shared_ptr<HTMLAttrTable>());
-                m_aSetAttrTab.push_back( pTmp );
+                if (oLeft)
+                {
+                    HTMLAttr* pTmp = new HTMLAttr(*m_pPam->GetPoint(), *oLeft, nullptr, std::shared_ptr<HTMLAttrTable>());
+                    m_aSetAttrTab.push_back( pTmp );
+                }
+                if (oRight)
+                {
+                    HTMLAttr* pTmp = new HTMLAttr(*m_pPam->GetPoint(), *oRight, nullptr, std::shared_ptr<HTMLAttrTable>());
+                    m_aSetAttrTab.push_back( pTmp );
+                }
             }
         }
     }

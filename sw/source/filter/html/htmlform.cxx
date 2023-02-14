@@ -886,22 +886,25 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         uno::Reference< beans::XPropertySet > xShapePropSet( xCreate, UNO_QUERY );
 
         // set left/right border
-        if( const SvxLRSpaceItem* pLRItem = rCSS1ItemSet.GetItemIfSet( RES_LR_SPACE ) )
+        // note: parser never creates SvxLeftMarginItem! must be converted
+        if (const SvxTextLeftMarginItem *const pLeft = rCSS1ItemSet.GetItemIfSet(RES_MARGIN_TEXTLEFT))
         {
-            // Flatten first line indent
-            SvxLRSpaceItem aLRItem( *pLRItem );
-            aLRItem.SetTextFirstLineOffset( 0 );
             if( rCSS1PropInfo.m_bLeftMargin )
             {
-                nLeftSpace = convertTwipToMm100( aLRItem.GetLeft() );
+                // should be SvxLeftMarginItem... "cast" it
+                nLeftSpace = convertTwipToMm100(pLeft->GetTextLeft());
                 rCSS1PropInfo.m_bLeftMargin = false;
             }
+            rCSS1ItemSet.ClearItem(RES_MARGIN_TEXTLEFT);
+        }
+        if (const SvxRightMarginItem *const pRight = rCSS1ItemSet.GetItemIfSet(RES_MARGIN_RIGHT))
+        {
             if( rCSS1PropInfo.m_bRightMargin )
             {
-                nRightSpace = convertTwipToMm100( aLRItem.GetRight() );
+                nRightSpace = convertTwipToMm100(pRight->GetRight());
                 rCSS1PropInfo.m_bRightMargin = false;
             }
-            rCSS1ItemSet.ClearItem( RES_LR_SPACE );
+            rCSS1ItemSet.ClearItem(RES_MARGIN_RIGHT);
         }
         if( nLeftSpace || nRightSpace )
         {

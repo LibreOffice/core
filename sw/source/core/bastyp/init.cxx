@@ -357,6 +357,12 @@ SfxItemInfo aSlotTab[] =
     { 0, true },                           // RES_FILL_ORDER
     { 0, true },                           // RES_FRM_SIZE
     { SID_ATTR_PAGE_PAPERBIN, true },      // RES_PAPER_BIN
+    { SID_ATTR_PARA_FIRSTLINESPACE, true }, // RES_MARGIN_FIRSTLINE
+    { SID_ATTR_PARA_LEFTSPACE, true },      // RES_MARGIN_TEXTLEFT
+    { SID_ATTR_PARA_RIGHTSPACE, true },     // RES_MARGIN_RIGHT
+    { 0, true },                            // RES_MARGIN_LEFT
+    { 0, true },                            // RES_MARGIN_GUTTER
+    { 0, true },                            // RES_MARGIN_GUTTER_RIGHT
     { SID_ATTR_LRSPACE, true },            // RES_LR_SPACE
     { SID_ATTR_ULSPACE, true },            // RES_UL_SPACE
     { 0, false },                               // RES_PAGEDESC
@@ -562,6 +568,12 @@ void InitCore()
     aAttrTab[ RES_FILL_ORDER- POOLATTR_BEGIN ] =            new SwFormatFillOrder;
     aAttrTab[ RES_FRM_SIZE- POOLATTR_BEGIN ] =              new SwFormatFrameSize;
     aAttrTab[ RES_PAPER_BIN- POOLATTR_BEGIN ] =             new SvxPaperBinItem( RES_PAPER_BIN );
+    aAttrTab[ RES_MARGIN_FIRSTLINE - POOLATTR_BEGIN ] =     new SvxFirstLineIndentItem(RES_MARGIN_FIRSTLINE);
+    aAttrTab[ RES_MARGIN_TEXTLEFT - POOLATTR_BEGIN ] =      new SvxTextLeftMarginItem(RES_MARGIN_TEXTLEFT);
+    aAttrTab[ RES_MARGIN_RIGHT - POOLATTR_BEGIN ] =         new SvxRightMarginItem(RES_MARGIN_RIGHT);
+    aAttrTab[ RES_MARGIN_LEFT - POOLATTR_BEGIN ] =          new SvxLeftMarginItem(RES_MARGIN_LEFT);
+    aAttrTab[ RES_MARGIN_GUTTER - POOLATTR_BEGIN ] =        new SvxGutterLeftMarginItem(RES_MARGIN_GUTTER);
+    aAttrTab[ RES_MARGIN_GUTTER_RIGHT - POOLATTR_BEGIN ] =  new SvxGutterRightMarginItem(RES_MARGIN_GUTTER_RIGHT);
     aAttrTab[ RES_LR_SPACE- POOLATTR_BEGIN ] =              new SvxLRSpaceItem( RES_LR_SPACE );
     aAttrTab[ RES_UL_SPACE- POOLATTR_BEGIN ] =              new SvxULSpaceItem( RES_UL_SPACE );
     aAttrTab[ RES_PAGEDESC- POOLATTR_BEGIN ] =              new SwFormatPageDesc;

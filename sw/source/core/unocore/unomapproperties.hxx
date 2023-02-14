@@ -147,10 +147,10 @@
         { UNO_NAME_PARA_GRAPHIC,                        RES_BACKGROUND,                cppu::UnoType<css::graphic::XGraphic>::get(),      PropertyAttribute::MAYBEVOID, MID_GRAPHIC                        }, \
         { UNO_NAME_PARA_GRAPHIC_FILTER,                 RES_BACKGROUND,                cppu::UnoType<OUString>::get(),      PropertyAttribute::MAYBEVOID, MID_GRAPHIC_FILTER                     }, \
         { UNO_NAME_PARA_GRAPHIC_LOCATION,               RES_BACKGROUND,                cppu::UnoType<css::style::GraphicLocation>::get(),    PropertyAttribute::MAYBEVOID, MID_GRAPHIC_POSITION                   }, \
-        { UNO_NAME_PARA_LEFT_MARGIN,                    RES_LR_SPACE,                  cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, MID_TXT_LMARGIN        | CONVERT_TWIPS }, \
-        { UNO_NAME_PARA_RIGHT_MARGIN,                   RES_LR_SPACE,                  cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, MID_R_MARGIN           | CONVERT_TWIPS }, \
-        { UNO_NAME_PARA_IS_AUTO_FIRST_LINE_INDENT,      RES_LR_SPACE,                  cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, MID_FIRST_AUTO                         }, \
-        { UNO_NAME_PARA_FIRST_LINE_INDENT,              RES_LR_SPACE,                  cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, MID_FIRST_LINE_INDENT  | CONVERT_TWIPS }, \
+        { UNO_NAME_PARA_LEFT_MARGIN,                    RES_MARGIN_TEXTLEFT,           cppu::UnoType<sal_Int32>::get(),     PropertyAttribute::MAYBEVOID, MID_TXT_LMARGIN        | CONVERT_TWIPS }, \
+        { UNO_NAME_PARA_RIGHT_MARGIN,                   RES_MARGIN_RIGHT,              cppu::UnoType<sal_Int32>::get(),     PropertyAttribute::MAYBEVOID, MID_R_MARGIN           | CONVERT_TWIPS }, \
+        { UNO_NAME_PARA_IS_AUTO_FIRST_LINE_INDENT,      RES_MARGIN_FIRSTLINE,          cppu::UnoType<bool>::get(),          PropertyAttribute::MAYBEVOID, MID_FIRST_AUTO                         }, \
+        { UNO_NAME_PARA_FIRST_LINE_INDENT,              RES_MARGIN_FIRSTLINE,          cppu::UnoType<sal_Int32>::get(),     PropertyAttribute::MAYBEVOID, MID_FIRST_LINE_INDENT  | CONVERT_TWIPS }, \
         STANDARD_FONT_PROPERTIES \
         CJK_FONT_PROPERTIES \
         CTL_FONT_PROPERTIES \
@@ -392,13 +392,13 @@
                     { UNO_NAME_CHAR_OVERLINE, RES_CHRATR_OVERLINE ,  cppu::UnoType<sal_Int16>::get(),      PROPERTY_NONE, MID_TL_STYLE},\
                     { UNO_NAME_CHAR_OVERLINE_COLOR, RES_CHRATR_OVERLINE ,  cppu::UnoType<sal_Int32>::get(),            PROPERTY_NONE, MID_TL_COLOR},\
                     { UNO_NAME_CHAR_OVERLINE_HAS_COLOR, RES_CHRATR_OVERLINE ,  cppu::UnoType<bool>::get(),              PROPERTY_NONE, MID_TL_HASCOLOR},\
-                    { UNO_NAME_PARA_LEFT_MARGIN, RES_LR_SPACE,            cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_TXT_LMARGIN|CONVERT_TWIPS},\
-                    { UNO_NAME_PARA_RIGHT_MARGIN, RES_LR_SPACE,           cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},\
-                    { UNO_NAME_PARA_LEFT_MARGIN_RELATIVE, RES_LR_SPACE,          cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE,        MID_L_REL_MARGIN},\
-                    { UNO_NAME_PARA_RIGHT_MARGIN_RELATIVE, RES_LR_SPACE,         cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE,        MID_R_REL_MARGIN},\
-                    { UNO_NAME_PARA_IS_AUTO_FIRST_LINE_INDENT, RES_LR_SPACE,          cppu::UnoType<bool>::get(),      PROPERTY_NONE, MID_FIRST_AUTO},\
-                    { UNO_NAME_PARA_FIRST_LINE_INDENT, RES_LR_SPACE,           cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_FIRST_LINE_INDENT|CONVERT_TWIPS},\
-                    { UNO_NAME_PARA_FIRST_LINE_INDENT_RELATIVE, RES_LR_SPACE,         cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_FIRST_LINE_REL_INDENT|CONVERT_TWIPS},\
+                    { UNO_NAME_PARA_LEFT_MARGIN, RES_MARGIN_TEXTLEFT, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_TXT_LMARGIN|CONVERT_TWIPS},\
+                    { UNO_NAME_PARA_RIGHT_MARGIN, RES_MARGIN_RIGHT, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},\
+                    { UNO_NAME_PARA_LEFT_MARGIN_RELATIVE, RES_MARGIN_TEXTLEFT, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE,        MID_L_REL_MARGIN},\
+                    { UNO_NAME_PARA_RIGHT_MARGIN_RELATIVE, RES_MARGIN_RIGHT, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE,        MID_R_REL_MARGIN},\
+                    { UNO_NAME_PARA_IS_AUTO_FIRST_LINE_INDENT, RES_MARGIN_FIRSTLINE, cppu::UnoType<bool>::get(),      PROPERTY_NONE, MID_FIRST_AUTO},\
+                    { UNO_NAME_PARA_FIRST_LINE_INDENT, RES_MARGIN_FIRSTLINE, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_FIRST_LINE_INDENT|CONVERT_TWIPS},\
+                    { UNO_NAME_PARA_FIRST_LINE_INDENT_RELATIVE, RES_MARGIN_FIRSTLINE, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_FIRST_LINE_REL_INDENT|CONVERT_TWIPS},\
                     { UNO_NAME_CHAR_KERNING, RES_CHRATR_KERNING    ,  cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,  CONVERT_TWIPS},\
                     { UNO_NAME_CHAR_NO_HYPHENATION, RES_CHRATR_NOHYPHEN   ,   cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},\
                     { UNO_NAME_CHAR_SHADOWED, RES_CHRATR_SHADOWED  ,  cppu::UnoType<bool>::get()  ,       PROPERTY_NONE, 0},\
@@ -505,10 +505,10 @@
                     { UNO_NAME_NUMBERING_RULES, RES_PARATR_NUMRULE,cppu::UnoType<sal_Int16>::get(), PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},    \
                     { UNO_NAME_PARA_ADJUST, RES_PARATR_ADJUST,      cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_PARA_ADJUST}, \
                     { UNO_NAME_PARA_BOTTOM_MARGIN, RES_UL_SPACE,          cppu::UnoType<sal_Int32>::get(),           PropertyAttribute::MAYBEVOID, MID_LO_MARGIN|CONVERT_TWIPS}, \
-                    { UNO_NAME_PARA_FIRST_LINE_INDENT, RES_LR_SPACE,           cppu::UnoType<sal_Int32>::get(),      PropertyAttribute::MAYBEVOID, MID_FIRST_LINE_INDENT|CONVERT_TWIPS}, \
-                    { UNO_NAME_PARA_LEFT_MARGIN, RES_LR_SPACE,            cppu::UnoType<sal_Int32>::get(),           PropertyAttribute::MAYBEVOID, MID_TXT_LMARGIN|CONVERT_TWIPS},   \
+                    { UNO_NAME_PARA_FIRST_LINE_INDENT, RES_MARGIN_FIRSTLINE, cppu::UnoType<sal_Int32>::get(),      PropertyAttribute::MAYBEVOID, MID_FIRST_LINE_INDENT|CONVERT_TWIPS}, \
+                    { UNO_NAME_PARA_LEFT_MARGIN, RES_MARGIN_TEXTLEFT, cppu::UnoType<sal_Int32>::get(),           PropertyAttribute::MAYBEVOID, MID_TXT_LMARGIN|CONVERT_TWIPS},   \
                     { UNO_NAME_PARA_LINE_SPACING, RES_PARATR_LINESPACING, cppu::UnoType<css::style::LineSpacing>::get(),       PropertyAttribute::MAYBEVOID,     CONVERT_TWIPS},   \
-                    { UNO_NAME_PARA_RIGHT_MARGIN, RES_LR_SPACE,           cppu::UnoType<sal_Int32>::get(),           PropertyAttribute::MAYBEVOID, MID_R_MARGIN|CONVERT_TWIPS},  \
+                    { UNO_NAME_PARA_RIGHT_MARGIN, RES_MARGIN_RIGHT, cppu::UnoType<sal_Int32>::get(),           PropertyAttribute::MAYBEVOID, MID_R_MARGIN|CONVERT_TWIPS},  \
                     { UNO_NAME_TABSTOPS, RES_PARATR_TABSTOP,   cppu::UnoType< cppu::UnoSequenceType<css::style::TabStop> >::get(),   PropertyAttribute::MAYBEVOID, CONVERT_TWIPS}, \
 
 #define FILL_PROPERTIES_SW_BMP \

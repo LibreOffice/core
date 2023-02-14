@@ -105,6 +105,9 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, bool bIsValueSearch)
     pLineSpaceItem ,
     pLineNumItem ,
     pKeepItem ,
+    pFirstLineIndent,
+    pTextLeftMargin,
+    pRightMargin,
     pLRItem ,
     pULItem ,
     pBackItem ,
@@ -246,6 +249,15 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, bool bIsValueSearch)
             break;
             case  RES_UL_SPACE:
                 pTempItem = funcClone(nWID, pULItem);
+            break;
+            case  RES_MARGIN_FIRSTLINE:
+                pTempItem = funcClone(nWID, pFirstLineIndent);
+            break;
+            case  RES_MARGIN_TEXTLEFT:
+                pTempItem = funcClone(nWID, pTextLeftMargin);
+            break;
+            case  RES_MARGIN_RIGHT:
+                pTempItem = funcClone(nWID, pRightMargin);
             break;
             case  RES_LR_SPACE:
                 pTempItem = funcClone(nWID, pLRItem);

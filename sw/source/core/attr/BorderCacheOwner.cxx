@@ -29,6 +29,9 @@ void BorderCacheOwner::InvalidateInSwCache(const sal_uInt16 nWhich)
         case RES_FMT_CHG:
         case RES_ATTRSET_CHG:
         case RES_UL_SPACE:
+        case RES_MARGIN_FIRSTLINE:
+        case RES_MARGIN_TEXTLEFT:
+        case RES_MARGIN_RIGHT:
         case RES_LR_SPACE:
         case RES_BOX:
         case RES_SHADOW:

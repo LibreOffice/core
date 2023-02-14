@@ -418,7 +418,8 @@ void SwView::ExecSearch(SfxRequest& rReq)
 /*16 */         RES_PARATR_LINESPACING, RES_PARATR_HYPHENZONE,
 /*18 */         RES_PARATR_REGISTER,    RES_PARATR_REGISTER,
 /*20 */         RES_PARATR_VERTALIGN,   RES_PARATR_VERTALIGN,
-/*22 */         RES_LR_SPACE,           RES_UL_SPACE,
+                RES_MARGIN_FIRSTLINE,   RES_MARGIN_RIGHT,
+                RES_UL_SPACE,           RES_UL_SPACE,
 /*24 */         SID_ATTR_PARA_MODEL,    SID_ATTR_PARA_KEEP
             >);
 

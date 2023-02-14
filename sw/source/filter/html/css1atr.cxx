@@ -138,6 +138,9 @@ static Writer& OutCSS1_SvxTextLn_SvxCrOut_SvxBlink( Writer& rWrt,
 static Writer& OutCSS1_SvxFontWeight( Writer& rWrt, const SfxPoolItem& rHt );
 static Writer& OutCSS1_SvxPosture( Writer& rWrt, const SfxPoolItem& rHt );
 static Writer& OutCSS1_SvxULSpace( Writer& rWrt, const SfxPoolItem& rHt );
+static Writer& OutCSS1_SvxFirstLineIndent(Writer& rWrt, const SfxPoolItem& rHt);
+static Writer& OutCSS1_SvxTextLeftMargin(Writer& rWrt, const SfxPoolItem& rHt);
+static Writer& OutCSS1_SvxRightMargin(Writer& rWrt, const SfxPoolItem& rHt);
 static Writer& OutCSS1_SvxLRSpace( Writer& rWrt, const SfxPoolItem& rHt );
 static Writer& OutCSS1_SvxULSpace_SvxLRSpace( Writer& rWrt,
                                         const SvxULSpaceItem *pULSpace,
@@ -2862,6 +2865,67 @@ static Writer& OutCSS1_SwFormatFrameSize( Writer& rWrt, const SfxPoolItem& rHt,
     return rWrt;
 }
 
+static Writer& OutCSS1_SvxFirstLineIndent(Writer & rWrt, SfxPoolItem const& rHt)
+{
+    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
+
+    const SvxFirstLineIndentItem & rFirstLine(static_cast<const SvxFirstLineIndentItem&>(rHt));
+
+    // No Export of a firm attribute is needed if the new values
+    // match that of the current template
+
+    // The LineIndent of the first line might contain the room for numbering
+    tools::Long nFirstLineIndent = static_cast<tools::Long>(rFirstLine.GetTextFirstLineOffset())
+            - rHTMLWrt.m_nFirstLineIndent;
+    if (rHTMLWrt.m_nDfltFirstLineIndent != nFirstLineIndent)
+    {
+        rHTMLWrt.OutCSS1_UnitProperty(sCSS1_P_text_indent, nFirstLineIndent);
+    }
+
+    return rWrt;
+}
+
+static Writer& OutCSS1_SvxTextLeftMargin(Writer & rWrt, SfxPoolItem const& rHt)
+{
+    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
+
+    const SvxTextLeftMarginItem& rLeftMargin(static_cast<const SvxTextLeftMarginItem&>(rHt));
+
+    // No Export of a firm attribute is needed if the new values
+    // match that of the current template
+
+    // A left margin can exist because of a list nearby
+    tools::Long nLeftMargin = rLeftMargin.GetTextLeft() - rHTMLWrt.m_nLeftMargin;
+    if (rHTMLWrt.m_nDfltLeftMargin != nLeftMargin)
+    {
+        rHTMLWrt.OutCSS1_UnitProperty(sCSS1_P_margin_left, nLeftMargin);
+
+        // max-width = max-width - margin-left for TOC paragraphs with dot leaders
+        if (rHTMLWrt.m_bParaDotLeaders)
+            rHTMLWrt.OutCSS1_UnitProperty(sCSS1_P_max_width, tools::Long(DOT_LEADERS_MAX_WIDTH/2.54*72*20) - nLeftMargin);
+
+    }
+
+    return rWrt;
+}
+
+static Writer& OutCSS1_SvxRightMargin(Writer & rWrt, SfxPoolItem const& rHt)
+{
+    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
+
+    const SvxRightMarginItem& rRightMargin(static_cast<const SvxRightMarginItem&>(rHt));
+
+    // No Export of a firm attribute is needed if the new values
+    // match that of the current template
+
+    if (rHTMLWrt.m_nDfltRightMargin != rRightMargin.GetRight())
+    {
+        rHTMLWrt.OutCSS1_UnitProperty(sCSS1_P_margin_right, rRightMargin.GetRight());
+    }
+
+    return rWrt;
+}
+
 static Writer& OutCSS1_SvxLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
@@ -3531,6 +3595,12 @@ SwAttrFnTab const aCSS1AttrFnTab = {
 /* RES_FILL_ORDER   */              nullptr,
 /* RES_FRM_SIZE */                  nullptr,
 /* RES_PAPER_BIN    */              nullptr,
+/* RES_MARGIN_FIRSTLINE */          OutCSS1_SvxFirstLineIndent,
+/* RES_MARGIN_TEXTLEFT */           OutCSS1_SvxTextLeftMargin,
+/* RES_MARGIN_RIGHT */              OutCSS1_SvxRightMargin,
+/* RES_MARGIN_LEFT */               nullptr,
+/* RES_MARGIN_GUTTER */             nullptr,
+/* RES_MARGIN_GUTTER_RIGHT */       nullptr,
 /* RES_LR_SPACE */                  OutCSS1_SvxLRSpace,
 /* RES_UL_SPACE */                  OutCSS1_SvxULSpace,
 /* RES_PAGEDESC */                  nullptr,

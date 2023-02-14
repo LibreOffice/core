@@ -1431,16 +1431,18 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
         else
         {
             const SvxTabStopItem &rRuler = pSet->GetTabStops();
-            const SvxLRSpaceItem &rLRSpace = pSet->GetLRSpace();
+            const SvxFirstLineIndentItem& rFirstLine(pSet->GetFirstLineIndent());
+            const SvxTextLeftMarginItem& rTextLeftMargin(pSet->GetTextLeftMargin());
+            const SvxRightMarginItem& rRightMargin(pSet->GetRightMargin());
 
             SwRect &rRect = rFill.Fill().aCursor;
             rRect.Top( rFill.Bottom() + (nDiff+1) * nDist - nLineHeight );
             if( nFirst && nDiff > -1 )
                 rRect.Top( rRect.Top() + nFirst );
             rRect.Height( nLineHeight );
-            SwTwips nLeft = rFill.Left() + rLRSpace.GetLeft() +
+            SwTwips nLeft = rFill.Left() + rTextLeftMargin.GetLeft(rFirstLine) +
                             GetTextNodeForParaProps()->GetLeftMarginWithNum();
-            SwTwips nRight = rFill.Right() - rLRSpace.GetRight();
+            SwTwips nRight = rFill.Right() - rRightMargin.GetRight();
             SwTwips nCenter = ( nLeft + nRight ) / 2;
             rRect.Left( nLeft );
             if( SwFillMode::Margin == rFill.Mode() )
@@ -1510,7 +1512,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                 }
                 else if( rFill.X() > nLeft )
                 {
-                    SwTwips nTextLeft = rFill.Left() + rLRSpace.GetTextLeft() +
+                    SwTwips nTextLeft = rFill.Left() + rTextLeftMargin.GetTextLeft() +
                         GetTextNodeForParaProps()->GetLeftMarginWithNum(true);
                     rFill.nLineWidth += rFill.bFirstLine ? nLeft : nTextLeft;
                     SwTwips nLeftTab;

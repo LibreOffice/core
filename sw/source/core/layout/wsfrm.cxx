@@ -541,6 +541,9 @@ void SwFrame::UpdateAttrFrame( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         case RES_SHADOW:
             Prepare( PrepareHint::FixSizeChanged );
             [[fallthrough]];
+        case RES_MARGIN_FIRSTLINE:
+        case RES_MARGIN_TEXTLEFT:
+        case RES_MARGIN_RIGHT:
         case RES_LR_SPACE:
         case RES_UL_SPACE:
         case RES_RTL_GUTTER:
@@ -2490,6 +2493,9 @@ void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pN
                 rInvFlags |= SwContentFrameInvFlags::SetNextCompletePaint;
                 [[fallthrough]];
             }
+        case RES_MARGIN_FIRSTLINE:
+        case RES_MARGIN_TEXTLEFT:
+        case RES_MARGIN_RIGHT:
         case RES_LR_SPACE:
         case RES_BOX:
         case RES_SHADOW:

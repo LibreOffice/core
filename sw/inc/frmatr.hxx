@@ -41,6 +41,18 @@
 // Implementation of FrameAttribute methods of SwAttrSet.
 inline const SvxPaperBinItem &SwAttrSet::GetPaperBin(bool bInP) const
     { return Get( RES_PAPER_BIN,bInP); }
+inline const SvxLeftMarginItem& SwAttrSet::GetLeftMargin(bool const bInP) const
+    { return Get(RES_MARGIN_LEFT, bInP); }
+inline const SvxTextLeftMarginItem& SwAttrSet::GetTextLeftMargin(bool const bInP) const
+    { return Get(RES_MARGIN_TEXTLEFT, bInP); }
+inline const SvxFirstLineIndentItem& SwAttrSet::GetFirstLineIndent(bool const bInP) const
+    { return Get(RES_MARGIN_FIRSTLINE, bInP); }
+inline const SvxRightMarginItem& SwAttrSet::GetRightMargin(bool const bInP) const
+    { return Get(RES_MARGIN_RIGHT, bInP); }
+inline const SvxGutterLeftMarginItem& SwAttrSet::GetGutterLeftMargin(bool const bInP) const
+    { return Get(RES_MARGIN_GUTTER, bInP); }
+inline const SvxGutterRightMarginItem& SwAttrSet::GetGutterRightMargin(bool const bInP) const
+    { return Get(RES_MARGIN_GUTTER_RIGHT, bInP); }
 inline const SvxLRSpaceItem &SwAttrSet::GetLRSpace(bool bInP) const
     { return Get( RES_LR_SPACE,bInP); }
 inline const SvxULSpaceItem &SwAttrSet::GetULSpace(bool bInP) const
@@ -71,6 +83,18 @@ inline const SdrTextVertAdjustItem &SwAttrSet::GetTextVertAdjust(bool bInP) cons
 // Implementation of FrameAttribute methods of SwFormat.
 inline const SvxPaperBinItem &SwFormat::GetPaperBin(bool bInP) const
     { return m_aSet.GetPaperBin(bInP); }
+inline const SvxLeftMarginItem& SwFormat::GetLeftMargin(bool bInP) const
+    { return m_aSet.GetLeftMargin(bInP); }
+inline const SvxTextLeftMarginItem& SwFormat::GetTextLeftMargin(bool const bInP) const
+    { return m_aSet.GetTextLeftMargin(bInP); }
+inline const SvxFirstLineIndentItem& SwFormat::GetFirstLineIndent(bool const bInP) const
+    { return m_aSet.GetFirstLineIndent(bInP); }
+inline const SvxRightMarginItem& SwFormat::GetRightMargin(bool const bInP) const
+    { return m_aSet.GetRightMargin(bInP); }
+inline const SvxGutterLeftMarginItem& SwFormat::GetGutterLeftMargin(bool const bInP) const
+    { return m_aSet.GetGutterLeftMargin(bInP); }
+inline const SvxGutterRightMarginItem& SwFormat::GetGutterRightMargin(bool const bInP) const
+    { return m_aSet.GetGutterRightMargin(bInP); }
 inline const SvxLRSpaceItem &SwFormat::GetLRSpace(bool bInP) const
     { return m_aSet.GetLRSpace(bInP); }
 inline const SvxULSpaceItem &SwFormat::GetULSpace(bool bInP) const

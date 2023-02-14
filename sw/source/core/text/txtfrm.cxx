@@ -1756,7 +1756,7 @@ void SwTextFrame::CalcLineSpace()
         return;
 
     if( GetDrawObjs() ||
-        GetTextNodeForParaProps()->GetSwAttrSet().GetLRSpace().IsAutoFirst())
+        GetTextNodeForParaProps()->GetSwAttrSet().GetFirstLineIndent().IsAutoFirst())
     {
         Init();
         return;

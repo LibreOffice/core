@@ -367,11 +367,15 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
 
     // remember all the different default spacings from the style or
     // the comparison style.
-    const SvxLRSpaceItem &rLRSpace =
-        (pReferenceFormat ? pReferenceFormat : pFormat)->GetLRSpace();
-    nLeftMargin = rLRSpace.GetTextLeft();
-    nRightMargin = rLRSpace.GetRight();
-    nFirstLineIndent = rLRSpace.GetTextFirstLineOffset();
+    SvxFirstLineIndentItem const& rFirstLine(
+        (pReferenceFormat ? pReferenceFormat : pFormat)->GetFirstLineIndent());
+    SvxTextLeftMarginItem const& rTextLeftMargin(
+        (pReferenceFormat ? pReferenceFormat : pFormat)->GetTextLeftMargin());
+    SvxRightMarginItem const& rRightMargin(
+        (pReferenceFormat ? pReferenceFormat : pFormat)->GetRightMargin());
+    nLeftMargin = rTextLeftMargin.GetTextLeft();
+    nRightMargin = rRightMargin.GetRight();
+    nFirstLineIndent = rFirstLine.GetTextFirstLineOffset();
 
     const SvxULSpaceItem &rULSpace =
         (pReferenceFormat ? pReferenceFormat : pFormat)->GetULSpace();
@@ -628,17 +632,20 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
                         (rWrt.m_pCurrentPam->GetPoint()->GetNodeIndex() !=
                          rWrt.m_pCurrentPam->GetMark()->GetNodeIndex());
     // If styles are exported, indented paragraphs become definition lists
-    const SvxLRSpaceItem& rLRSpace =
-        pNodeItemSet ? pNodeItemSet->Get(RES_LR_SPACE)
-                     : rFormat.GetLRSpace();
+    SvxFirstLineIndentItem const& rFirstLine(
+        pNodeItemSet ? pNodeItemSet->Get(RES_MARGIN_FIRSTLINE)
+                     : rFormat.GetFirstLineIndent());
+    SvxTextLeftMarginItem const& rTextLeftMargin(
+        pNodeItemSet ? pNodeItemSet->Get(RES_MARGIN_TEXTLEFT)
+                     : rFormat.GetTextLeftMargin());
     if( (!rHWrt.m_bCfgOutStyles || bForceDL) && !rInfo.bInNumberBulletList )
     {
         sal_Int32 nLeftMargin;
         if( bForceDL )
-            nLeftMargin = rLRSpace.GetTextLeft();
+            nLeftMargin = rTextLeftMargin.GetTextLeft();
         else
-            nLeftMargin = rLRSpace.GetTextLeft() > pFormatInfo->nLeftMargin
-                ? rLRSpace.GetTextLeft() - pFormatInfo->nLeftMargin
+            nLeftMargin = rTextLeftMargin.GetTextLeft() > pFormatInfo->nLeftMargin
+                ? rTextLeftMargin.GetTextLeft() - pFormatInfo->nLeftMargin
                 : 0;
 
         if( nLeftMargin > 0 && rHWrt.m_nDefListMargin > 0 )
@@ -706,10 +713,10 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     if( rInfo.bInNumberBulletList )
     {
         if( !rHWrt.IsHTMLMode( HTMLMODE_LSPACE_IN_NUMBER_BULLET ) )
-            rHWrt.m_nDfltLeftMargin = rLRSpace.GetTextLeft();
+            rHWrt.m_nDfltLeftMargin = rTextLeftMargin.GetTextLeft();
 
         // In numbered lists, don't output a first line indent.
-        rHWrt.m_nFirstLineIndent = rLRSpace.GetTextFirstLineOffset();
+        rHWrt.m_nFirstLineIndent = rFirstLine.GetTextFirstLineOffset();
     }
 
     if( rInfo.bInNumberBulletList && bNumbered && bPara && !rHWrt.m_bCfgOutStyles )
@@ -2029,10 +2036,15 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
             aHtml.endAttribute();
             return rHTMLWrt;
         }
-        if( const SvxLRSpaceItem* pItem = pItemSet->GetItemIfSet( RES_LR_SPACE, false ))
+        if (pItemSet->GetItemIfSet(RES_MARGIN_FIRSTLINE, false)
+            || pItemSet->GetItemIfSet(RES_MARGIN_TEXTLEFT, false)
+            || pItemSet->GetItemIfSet(RES_MARGIN_RIGHT, false))
         {
-            sal_Int32 nLeft = pItem->GetLeft();
-            sal_Int32 nRight = pItem->GetRight();
+            SvxFirstLineIndentItem const& rFirstLine(pItemSet->Get(RES_MARGIN_FIRSTLINE));
+            SvxTextLeftMarginItem const& rTextLeftMargin(pItemSet->Get(RES_MARGIN_TEXTLEFT));
+            SvxRightMarginItem const& rRightMargin(pItemSet->Get(RES_MARGIN_RIGHT));
+            sal_Int32 const nLeft(rTextLeftMargin.GetLeft(rFirstLine));
+            sal_Int32 const nRight(rRightMargin.GetRight());
             if( nLeft || nRight )
             {
                 const SwFrameFormat& rPgFormat =
@@ -3311,6 +3323,12 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_FILL_ORDER   */              nullptr,
 /* RES_FRM_SIZE */                  nullptr,
 /* RES_PAPER_BIN    */              nullptr,
+/* RES_MARGIN_FIRSTLINE */          nullptr,
+/* RES_MARGIN_TEXTLEFT */           nullptr,
+/* RES_MARGIN_RIGHT */              nullptr,
+/* RES_MARGIN_LEFT */               nullptr,
+/* RES_MARGIN_GUTTER */             nullptr,
+/* RES_MARGIN_GUTTER_RIGHT */       nullptr,
 /* RES_LR_SPACE */                  nullptr,
 /* RES_UL_SPACE */                  nullptr,
 /* RES_PAGEDESC */                  nullptr,

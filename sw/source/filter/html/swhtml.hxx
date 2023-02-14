@@ -88,7 +88,9 @@ struct HTMLAttrTable
     HTMLAttr* pBreak;
     HTMLAttr* pPageDesc;
 
-    HTMLAttr* pLRSpace; // paragraph attributes
+    HTMLAttr* pFirstLineIndent; // paragraph attributes
+    HTMLAttr* pTextLeftMargin;
+    HTMLAttr* pRightMargin;
     HTMLAttr* pULSpace;
     HTMLAttr* pLineSpacing;
     HTMLAttr* pAdjust;

@@ -50,7 +50,8 @@ private:
 
     SvxParaPrevWindow m_aExampleWin;
 
-    // indention
+    // indentation
+    bool m_bSplitLRSpace = false; ///< which items to use?
     std::unique_ptr<SvxRelativeField> m_xLeftIndent;
 
     std::unique_ptr<SvxRelativeField> m_xRightIndent;

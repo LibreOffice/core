@@ -1751,7 +1751,8 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
                 RES_PARATR_TABSTOP, RES_PARATR_TABSTOP,
                 RES_PARATR_NUMRULE, RES_PARATR_NUMRULE,
                 RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1,
-                RES_LR_SPACE, RES_UL_SPACE>
+                RES_MARGIN_FIRSTLINE, RES_MARGIN_RIGHT,
+                RES_UL_SPACE, RES_UL_SPACE>
         aSet( const_cast<SwAttrPool&>(pTextNode->GetDoc().GetAttrPool()) );
 
     if ( pTextNode->HasBullet() || pTextNode->HasNumber() )
@@ -1759,7 +1760,9 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
         aSet.Put( pTextNode->GetAttr(RES_PARATR_LIST_LEVEL) );
     }
     aSet.Put( pTextNode->SwContentNode::GetAttr(RES_UL_SPACE) );
-    aSet.Put( pTextNode->SwContentNode::GetAttr(RES_LR_SPACE) );
+    aSet.Put( pTextNode->SwContentNode::GetAttr(RES_MARGIN_FIRSTLINE) );
+    aSet.Put( pTextNode->SwContentNode::GetAttr(RES_MARGIN_TEXTLEFT) );
+    aSet.Put( pTextNode->SwContentNode::GetAttr(RES_MARGIN_RIGHT) );
     aSet.Put( pTextNode->SwContentNode::GetAttr(RES_PARATR_ADJUST) );
 
     tAccParaPropValMap aSupplementalAttrSeq;

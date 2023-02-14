@@ -59,10 +59,10 @@
 #include <wrtsh.hxx>
 
 namespace {
-    void lcl_ResetIndentAttrs(SwDoc *pDoc, const SwPaM &rPam, sal_uInt16 marker,
+    void lcl_ResetIndentAttrs(SwDoc *pDoc, const SwPaM &rPam,
+            const o3tl::sorted_vector<sal_uInt16> aResetAttrsArray,
             SwRootFrame const*const pLayout)
     {
-        const o3tl::sorted_vector<sal_uInt16> aResetAttrsArray{ marker };
         // #i114929#
         // On a selection setup a corresponding Point-and-Mark in order to get
         // the indentation attribute reset on all paragraphs touched by the selection
@@ -978,7 +978,8 @@ OUString SwDoc::SetNumRule( const SwPaM& rPam,
     if ( bResetIndentAttrs
          && pNewOrChangedNumRule->Get( 0 ).GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
     {
-        ::lcl_ResetIndentAttrs(this, aPam, RES_LR_SPACE, pLayout);
+        const o3tl::sorted_vector<sal_uInt16> attrs{ RES_MARGIN_FIRSTLINE, RES_MARGIN_TEXTLEFT, RES_MARGIN_RIGHT };
+        ::lcl_ResetIndentAttrs(this, aPam, attrs, pLayout);
     }
 
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -996,7 +997,8 @@ void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted,
 {
     if ( bCounted )
     {
-        ::lcl_ResetIndentAttrs(this, rPam, RES_PARATR_LIST_ISCOUNTED, pLayout);
+        const o3tl::sorted_vector<sal_uInt16> attrs{ RES_PARATR_LIST_ISCOUNTED };
+        ::lcl_ResetIndentAttrs(this, rPam, attrs, pLayout);
     }
     else
     {

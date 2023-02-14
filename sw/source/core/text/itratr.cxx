@@ -1026,8 +1026,9 @@ void SwTextNode::GetMinMaxSize( SwNodeOffset nIndex, sal_uLong& rMin, sal_uLong 
     rMax = 0;
     rAbsMin = 0;
 
-    const SvxLRSpaceItem &rSpace = GetSwAttrSet().GetLRSpace();
-    tools::Long nLROffset = rSpace.GetTextLeft() + GetLeftMarginWithNum( true );
+    SvxTextLeftMarginItem const& rTextLeftMargin(GetSwAttrSet().GetTextLeftMargin());
+    SvxRightMarginItem const& rRightMargin(GetSwAttrSet().GetRightMargin());
+    tools::Long nLROffset = rTextLeftMargin.GetTextLeft() + GetLeftMarginWithNum( true );
     short nFLOffs;
     // For enumerations a negative first line indentation is probably filled already
     if( !GetFirstLineOfsWithNum( nFLOffs ) || nFLOffs > nLROffset )
@@ -1037,7 +1038,7 @@ void SwTextNode::GetMinMaxSize( SwNodeOffset nIndex, sal_uLong& rMin, sal_uLong 
     aNodeArgs.m_nMinWidth = 0;
     aNodeArgs.m_nMaxWidth = 0;
     aNodeArgs.m_nLeftRest = nLROffset;
-    aNodeArgs.m_nRightRest = rSpace.GetRight();
+    aNodeArgs.m_nRightRest = rRightMargin.GetRight();
     aNodeArgs.m_nLeftDiff = 0;
     aNodeArgs.m_nRightDiff = 0;
     if( nIndex )
@@ -1057,7 +1058,7 @@ void SwTextNode::GetMinMaxSize( SwNodeOffset nIndex, sal_uLong& rMin, sal_uLong 
         aNodeArgs.m_nMaxWidth -= aNodeArgs.m_nLeftRest;
 
     if (aNodeArgs.m_nRightRest < 0)
-        aNodeArgs.Minimum(rSpace.GetRight() - aNodeArgs.m_nRightRest);
+        aNodeArgs.Minimum(rRightMargin.GetRight() - aNodeArgs.m_nRightRest);
     aNodeArgs.m_nRightRest -= aNodeArgs.m_nRightDiff;
     if (aNodeArgs.m_nRightRest < 0)
         aNodeArgs.m_nMaxWidth -= aNodeArgs.m_nRightRest;
@@ -1230,7 +1231,7 @@ void SwTextNode::GetMinMaxSize( SwNodeOffset nIndex, sal_uLong& rMin, sal_uLong 
     if (static_cast<tools::Long>(rMax) < aArg.m_nRowWidth)
         rMax = aArg.m_nRowWidth;
 
-    nLROffset += rSpace.GetRight();
+    nLROffset += rRightMargin.GetRight();
 
     rAbsMin += nLROffset;
     rAbsMin += nAdd;

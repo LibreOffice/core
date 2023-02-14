@@ -655,6 +655,13 @@ protected:
     /// Sfx item RES_PAPER_BIN
     virtual void FormatPaperBin( const SvxPaperBinItem& ) override;
 
+    /// Sfx item RES_MARGIN_FIRSTLINE
+    virtual void FormatFirstLineIndent(const SvxFirstLineIndentItem & rFirstLine) override;
+    /// Sfx item RES_MARGIN_TEXTLEFT
+    virtual void FormatTextLeftMargin(const SvxTextLeftMarginItem & rTextLeftMargin) override;
+    /// Sfx item RES_MARGIN_RIGHT
+    virtual void FormatRightMargin(const SvxRightMarginItem & rRightMargin) override;
+
     /// Sfx item RES_LR_SPACE
     virtual void FormatLRSpace( const SvxLRSpaceItem& rLRSpace ) override;
 
@@ -786,6 +793,7 @@ private:
     rtl::Reference<sax_fastparser::FastAttributeList> m_pEastAsianLayoutAttrList;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pCharLangAttrList;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pSectionSpacingAttrList;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pLRSpaceAttrList;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pParagraphSpacingAttrList;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pHyperlinkAttrList;
     std::shared_ptr<SwContentControl> m_pContentControl;

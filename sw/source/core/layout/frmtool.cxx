@@ -2234,9 +2234,6 @@ SwBorderAttrs::SwBorderAttrs(const sw::BorderCacheOwner* pOwner, const SwFrame* 
                         : static_cast<const SwNoTextFrame*>(pConstructor)->GetNode()->GetSwAttrSet()
                     : static_cast<const SwLayoutFrame*>(pConstructor)->GetFormat()->GetAttrSet())
     , m_rUL(m_rAttrSet.GetULSpace())
-    // #i96772#
-    // LRSpaceItem is copied due to the possibility that it is adjusted - see below
-    , m_xLR(m_rAttrSet.GetLRSpace().Clone())
     , m_rBox(m_rAttrSet.GetBox())
     , m_rShadow(m_rAttrSet.GetShadow())
     , m_aFrameSize(m_rAttrSet.GetFrameSize().GetSize())
@@ -2257,14 +2254,23 @@ SwBorderAttrs::SwBorderAttrs(const sw::BorderCacheOwner* pOwner, const SwFrame* 
     const SwTextFrame* pTextFrame = pConstructor->DynCastTextFrame();
     if ( pTextFrame )
     {
-        pTextFrame->GetTextNodeForParaProps()->ClearLRSpaceItemDueToListLevelIndents( m_xLR );
+        m_pFirstLineIndent.reset(m_rAttrSet.GetFirstLineIndent().Clone());
+        m_pTextLeftMargin.reset(m_rAttrSet.GetTextLeftMargin().Clone());
+        m_pRightMargin.reset(m_rAttrSet.GetRightMargin().Clone());
+        pTextFrame->GetTextNodeForParaProps()->ClearLRSpaceItemDueToListLevelIndents(m_pFirstLineIndent, m_pTextLeftMargin);
+        assert(m_pFirstLineIndent);
+        assert(m_pTextLeftMargin);
     }
-    else if ( pConstructor->IsNoTextFrame() )
+    else
     {
-        m_xLR = std::make_shared<SvxLRSpaceItem>(RES_LR_SPACE);
+        // LRSpaceItem is copied due to the possibility that it is adjusted
+        m_xLR.reset(m_rAttrSet.GetLRSpace().Clone());
+        if (pConstructor->IsNoTextFrame())
+        {
+            m_xLR = std::make_shared<SvxLRSpaceItem>(RES_LR_SPACE);
+        }
+        assert(m_xLR);
     }
-
-    assert(m_xLR && "always exists");
 
     // Caution: The USHORTs for the cached values are not initialized by intention!
 
@@ -2298,7 +2304,7 @@ void SwBorderAttrs::CalcTop_()
 
     bool bGutterAtTop = m_rAttrSet.GetDoc()->getIDocumentSettingAccess().get(
         DocumentSettingId::GUTTER_AT_TOP);
-    if (bGutterAtTop)
+    if (bGutterAtTop && m_xLR)
     {
         // Decrease the print area: the top space is the sum of top and gutter margins.
         m_nTop += m_xLR->GetGutterMargin();
@@ -2327,8 +2333,17 @@ tools::Long SwBorderAttrs::CalcRight( const SwFrame* pCaller ) const
 
     }
     // for paragraphs, "left" is "before text" and "right" is "after text"
-    if ( pCaller->IsTextFrame() && pCaller->IsRightToLeft() )
-        nRight += m_xLR->GetLeft();
+    if (pCaller->IsTextFrame())
+    {
+        if (pCaller->IsRightToLeft())
+        {
+            nRight += m_pTextLeftMargin->GetLeft(*m_pFirstLineIndent);
+        }
+        else
+        {
+            nRight += m_pRightMargin->GetRight();
+        }
+    }
     else
         nRight += m_xLR->GetRight();
 
@@ -2391,7 +2406,7 @@ tools::Long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
 
     // for paragraphs, "left" is "before text" and "right" is "after text"
     if ( pCaller->IsTextFrame() && pCaller->IsRightToLeft() )
-        nLeft += m_xLR->GetRight();
+        nLeft += m_pRightMargin->GetRight();
     else
     {
         bool bIgnoreMargin = false;
@@ -2407,8 +2422,12 @@ tools::Long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
                 else if (pTextFrame->FindPrev() && pTextFrame->FindPrev()->IsTextFrame() && lcl_hasTabFrame(static_cast<const SwTextFrame*>(pTextFrame->FindPrev())))
                     bIgnoreMargin = true;
             }
+            if (!bIgnoreMargin)
+            {
+                nLeft += m_pTextLeftMargin->GetLeft(*m_pFirstLineIndent);
+            }
         }
-        if (!bIgnoreMargin)
+        else
             nLeft += m_xLR->GetLeft();
     }
 

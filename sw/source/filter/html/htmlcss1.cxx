@@ -268,27 +268,12 @@ static void SetTextCollAttrs( SwTextFormatColl *pColl, SfxItemSet& rItemSet,
                              SwCSS1Parser *pCSS1Parser )
 {
     const SfxItemSet& rCollItemSet = pColl->GetAttrSet();
-    const SvxLRSpaceItem* pCollLRItem;
-    const SvxLRSpaceItem* pLRItem;
 
-    // left, right border and first line indentation
-    if( (rPropInfo.m_bLeftMargin || rPropInfo.m_bRightMargin ||
-         rPropInfo.m_bTextIndent) &&
-        (!rPropInfo.m_bLeftMargin || !rPropInfo.m_bRightMargin ||
-         !rPropInfo.m_bTextIndent) &&
-        (pCollLRItem = rCollItemSet.GetItemIfSet(RES_LR_SPACE)) &&
-        (pLRItem = rItemSet.GetItemIfSet(RES_LR_SPACE,false)) )
-    {
-        SvxLRSpaceItem aLRItem( *pCollLRItem );
-        if( rPropInfo.m_bLeftMargin )
-            aLRItem.SetTextLeft( pLRItem->GetTextLeft() );
-        if( rPropInfo.m_bRightMargin )
-            aLRItem.SetRight( pLRItem->GetRight() );
-        if( rPropInfo.m_bTextIndent )
-            aLRItem.SetTextFirstLineOffset( pLRItem->GetTextFirstLineOffset() );
-
-        rItemSet.Put( aLRItem );
-    }
+    // note: there was some SvxLRSpaceItem code here that was nonobvious
+    // but it looks like the only cases in which it would be required
+    // with split items are if some nProp != 100 or if SetAutoFirst() had
+    // been called (on the pColl items) but it looks like none of these are
+    // possible in HTML import.
 
     // top and bottom border
     const SvxULSpaceItem* pCollULItem;
@@ -444,26 +429,49 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
     bool bChanged = false;
 
     // left, right border and first line indentation
-    const SvxLRSpaceItem *pLRItem;
-    if( (rPropInfo.m_bLeftMargin || rPropInfo.m_bRightMargin) &&
-        (pLRItem = rItemSet.GetItemIfSet(RES_LR_SPACE,false)) )
+    ::std::optional<SvxLRSpaceItem> oLRSpace;
+    assert(!rItemSet.GetItemIfSet(RES_LR_SPACE,false));
+    if (rPropInfo.m_bLeftMargin)
     {
-        const SvxLRSpaceItem* pPageItem;
-        if( (!rPropInfo.m_bLeftMargin || !rPropInfo.m_bRightMargin) &&
-            (pPageItem = rPageItemSet.GetItemIfSet(RES_LR_SPACE)) )
+        // note: parser never creates SvxLeftMarginItem! must be converted
+        if (SvxTextLeftMarginItem const*const pLeft = rItemSet.GetItemIfSet(RES_MARGIN_TEXTLEFT, false))
         {
-            SvxLRSpaceItem aLRItem( *pPageItem );
-            if( rPropInfo.m_bLeftMargin )
-                aLRItem.SetLeft( pLRItem->GetLeft() );
-            if( rPropInfo.m_bRightMargin )
-                aLRItem.SetRight( pLRItem->GetRight() );
-
-            rMaster.SetFormatAttr( aLRItem );
+            if (!oLRSpace)
+            {
+                if (const SvxLRSpaceItem* pPageItem = rPageItemSet.GetItemIfSet(RES_LR_SPACE))
+                {
+                    oLRSpace.emplace(*pPageItem);
+                }
+                else
+                {
+                    oLRSpace.emplace(RES_LR_SPACE);
+                }
+            }
+            oLRSpace->SetLeft(pLeft->GetTextLeft());
         }
-        else
+    }
+    if (rPropInfo.m_bRightMargin)
+    {
+        // note: parser never creates SvxLeftMarginItem! must be converted
+        if (SvxRightMarginItem const*const pRight = rItemSet.GetItemIfSet(RES_MARGIN_RIGHT, false))
         {
-            rMaster.SetFormatAttr( *pLRItem );
+            if (!oLRSpace)
+            {
+                if (const SvxLRSpaceItem* pPageItem = rPageItemSet.GetItemIfSet(RES_LR_SPACE))
+                {
+                    oLRSpace.emplace(*pPageItem);
+                }
+                else
+                {
+                    oLRSpace.emplace(RES_LR_SPACE);
+                }
+            }
+            oLRSpace->SetRight(pRight->GetRight());
         }
+    }
+    if (oLRSpace)
+    {
+        rMaster.SetFormatAttr(*oLRSpace);
         bChanged = true;
     }
 
@@ -1479,12 +1487,13 @@ void SwCSS1Parser::FillDropCap( SwFormatDrop& rDrop,
     rDrop.GetLines() = nLines;
 
     // a right border becomes the spacing to text!
-    if( const SvxLRSpaceItem* pLRSpaceItem = rItemSet.GetItemIfSet( RES_LR_SPACE, false ) )
+    if (const SvxRightMarginItem *const pRightMargin = rItemSet.GetItemIfSet(RES_MARGIN_RIGHT, false))
     {
-        rDrop.GetDistance() = static_cast< sal_uInt16 >(
-            pLRSpaceItem->GetRight() );
-        rItemSet.ClearItem( RES_LR_SPACE );
+        rDrop.GetDistance() = static_cast<sal_uInt16>(pRightMargin->GetRight());
+        rItemSet.ClearItem(RES_MARGIN_RIGHT);
     }
+    rItemSet.ClearItem(RES_MARGIN_FIRSTLINE);
+    rItemSet.ClearItem(RES_MARGIN_TEXTLEFT);
 
     // for every other attribute create a character style
     if( !rItemSet.Count() )
@@ -1598,8 +1607,14 @@ HTMLAttr **SwHTMLParser::GetAttrTabEntry( sal_uInt16 nWhich )
         ppAttr = &m_xAttrTab->pAdjust;
         break;
 
-    case RES_LR_SPACE:
-        ppAttr = &m_xAttrTab->pLRSpace;
+    case RES_MARGIN_FIRSTLINE:
+        ppAttr = &m_xAttrTab->pFirstLineIndent;
+        break;
+    case RES_MARGIN_TEXTLEFT:
+        ppAttr = &m_xAttrTab->pTextLeftMargin;
+        break;
+    case RES_MARGIN_RIGHT:
+        ppAttr = &m_xAttrTab->pRightMargin;
         break;
     case RES_UL_SPACE:
         ppAttr = &m_xAttrTab->pULSpace;

@@ -309,7 +309,9 @@ class SwBorderAttrs final : public SwCacheObj
 {
     const SwAttrSet      &m_rAttrSet;
     const SvxULSpaceItem &m_rUL;
-    // #i96772#
+    std::unique_ptr<SvxFirstLineIndentItem> m_pFirstLineIndent;
+    std::unique_ptr<SvxTextLeftMarginItem> m_pTextLeftMargin;
+    std::unique_ptr<SvxRightMarginItem> m_pRightMargin;
     std::shared_ptr<SvxLRSpaceItem> m_xLR;
     const SvxBoxItem     &m_rBox;
     const SvxShadowItem  &m_rShadow;

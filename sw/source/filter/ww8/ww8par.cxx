@@ -1226,14 +1226,15 @@ tools::Long GetListFirstLineIndent(const SwNumFormat &rFormat)
     return nReverseListIndented;
 }
 
-static tools::Long lcl_GetTrueMargin(const SvxLRSpaceItem &rLR, const SwNumFormat &rFormat,
+static tools::Long lcl_GetTrueMargin(SvxFirstLineIndentItem const& rFirstLine,
+        SvxTextLeftMarginItem const& rLeftMargin, const SwNumFormat &rFormat,
     tools::Long &rFirstLinePos)
 {
     OSL_ENSURE( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
             "<lcl_GetTrueMargin> - misusage: position-and-space-mode does not equal LABEL_WIDTH_AND_POSITION" );
 
-    const tools::Long nBodyIndent = rLR.GetTextLeft();
-    const tools::Long nFirstLineDiff = rLR.GetTextFirstLineOffset();
+    const tools::Long nBodyIndent = rLeftMargin.GetTextLeft();
+    const tools::Long nFirstLineDiff = rFirstLine.GetTextFirstLineOffset();
     rFirstLinePos = nBodyIndent + nFirstLineDiff;
 
     const auto nPseudoListBodyIndent = rFormat.GetAbsLSpace();
@@ -1245,7 +1246,8 @@ static tools::Long lcl_GetTrueMargin(const SvxLRSpaceItem &rLR, const SwNumForma
 
 // #i103711#
 // #i105414#
-void SyncIndentWithList( SvxLRSpaceItem &rLR,
+void SyncIndentWithList( SvxFirstLineIndentItem & rFirstLine,
+                         SvxTextLeftMarginItem & rLeftMargin,
                          const SwNumFormat &rFormat,
                          const bool bFirstLineOfstSet,
                          const bool bLeftIndentSet )
@@ -1253,31 +1255,31 @@ void SyncIndentWithList( SvxLRSpaceItem &rLR,
     if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
         tools::Long nWantedFirstLinePos;
-        tools::Long nExtraListIndent = lcl_GetTrueMargin(rLR, rFormat, nWantedFirstLinePos);
-        rLR.SetTextLeft(nWantedFirstLinePos - nExtraListIndent);
-        rLR.SetTextFirstLineOffset(0);
+        tools::Long nExtraListIndent = lcl_GetTrueMargin(rFirstLine, rLeftMargin, rFormat, nWantedFirstLinePos);
+        rLeftMargin.SetTextLeft(nWantedFirstLinePos - nExtraListIndent);
+        rFirstLine.SetTextFirstLineOffset(0);
     }
     else if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
     {
         if ( !bFirstLineOfstSet && bLeftIndentSet &&
              rFormat.GetFirstLineIndent() != 0 )
         {
-            rLR.SetTextFirstLineOffset( rFormat.GetFirstLineIndent() );
+            rFirstLine.SetTextFirstLineOffset(rFormat.GetFirstLineIndent());
         }
         else if ( bFirstLineOfstSet && !bLeftIndentSet &&
                   rFormat.GetIndentAt() != 0 )
         {
-            rLR.SetTextLeft( rFormat.GetIndentAt() );
+            rLeftMargin.SetTextLeft(rFormat.GetIndentAt());
         }
         else if (!bFirstLineOfstSet && !bLeftIndentSet )
         {
             if ( rFormat.GetFirstLineIndent() != 0 )
             {
-                rLR.SetTextFirstLineOffset( rFormat.GetFirstLineIndent() );
+                rFirstLine.SetTextFirstLineOffset(rFormat.GetFirstLineIndent());
             }
             if ( rFormat.GetIndentAt() != 0 )
             {
-                rLR.SetTextLeft( rFormat.GetIndentAt() );
+                rLeftMargin.SetTextLeft(rFormat.GetIndentAt());
             }
         }
     }
@@ -1341,6 +1343,10 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
     switch (rEntry.m_pAttr->Which())
     {
         case RES_LR_SPACE:
+            assert(false);
+            break;
+        case RES_MARGIN_FIRSTLINE:
+        case RES_MARGIN_TEXTLEFT:
             {
                 /*
                  Loop over the affected nodes and
@@ -1352,7 +1358,19 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 SwPaM aRegion(rTmpPos);
                 if (rEntry.MakeRegion(m_rDoc, aRegion, SwFltStackEntry::RegionMode::NoCheck))
                 {
-                    SvxLRSpaceItem aNewLR( *static_cast<SvxLRSpaceItem*>(rEntry.m_pAttr.get()) );
+                    SvxFirstLineIndentItem firstLineNew(RES_MARGIN_FIRSTLINE);
+                    SvxTextLeftMarginItem leftMarginNew(RES_MARGIN_TEXTLEFT);
+                    if (rEntry.m_pAttr->Which() == RES_MARGIN_FIRSTLINE)
+                    {
+                        SvxFirstLineIndentItem const firstLineEntry(*static_cast<SvxFirstLineIndentItem*>(rEntry.m_pAttr.get()));
+                        firstLineNew.SetTextFirstLineOffset(firstLineEntry.GetTextFirstLineOffset(), firstLineEntry.GetPropTextFirstLineOffset());
+                        firstLineNew.SetAutoFirst(firstLineEntry.IsAutoFirst());
+                    }
+                    else
+                    {
+                        SvxTextLeftMarginItem const leftMarginEntry(*static_cast<SvxTextLeftMarginItem*>(rEntry.m_pAttr.get()));
+                        leftMarginNew.SetTextLeft(leftMarginEntry.GetTextLeft(), leftMarginEntry.GetPropLeft());
+                    }
                     SwNodeOffset nStart = aRegion.Start()->GetNodeIndex();
                     SwNodeOffset nEnd   = aRegion.End()->GetNodeIndex();
                     for(; nStart <= nEnd; ++nStart)
@@ -1362,7 +1380,17 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                             continue;
 
                         SwContentNode* pNd = static_cast<SwContentNode*>(pNode);
-                        SvxLRSpaceItem aOldLR = pNd->GetAttr(RES_LR_SPACE);
+                        SvxFirstLineIndentItem firstLineOld(pNd->GetAttr(RES_MARGIN_FIRSTLINE));
+                        SvxTextLeftMarginItem leftMarginOld(pNd->GetAttr(RES_MARGIN_TEXTLEFT));
+                        if (rEntry.m_pAttr->Which() == RES_MARGIN_FIRSTLINE)
+                        {
+                            leftMarginNew.SetTextLeft(leftMarginOld.GetTextLeft(), leftMarginOld.GetPropLeft());
+                        }
+                        else
+                        {
+                            firstLineNew.SetTextFirstLineOffset(firstLineOld.GetTextFirstLineOffset(), firstLineOld.GetPropTextFirstLineOffset());
+                            firstLineNew.SetAutoFirst(firstLineOld.IsAutoFirst());
+                        }
 
                         SwTextNode *pTextNode = static_cast<SwTextNode*>(pNode);
 
@@ -1383,16 +1411,19 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                             const bool bLeftIndentSet =
                                 (  m_rReader.m_aTextNodesHavingLeftIndentSet.end() !=
                                     m_rReader.m_aTextNodesHavingLeftIndentSet.find( pNode ) );
-                            SyncIndentWithList( aNewLR, *pNum,
+                            SyncIndentWithList(firstLineNew, leftMarginNew, *pNum,
                                                 bFirstLineIndentSet,
                                                 bLeftIndentSet );
                         }
 
-                        if (aNewLR == aOldLR)
-                            continue;
-
-                        pNd->SetAttr(aNewLR);
-
+                        if (firstLineNew != firstLineOld)
+                        {
+                            pNd->SetAttr(firstLineNew);
+                        }
+                        if (leftMarginNew != leftMarginOld)
+                        {
+                            pNd->SetAttr(leftMarginNew);
+                        }
                     }
                 }
             }
@@ -1462,13 +1493,28 @@ const SfxPoolItem* SwWW8FltControlStack::GetFormatAttr(const SwPosition& rPos,
             not writer format, because that's the style that the filter works
             in (naturally)
             */
-            if (nWhich == RES_LR_SPACE)
+            if (nWhich == RES_MARGIN_FIRSTLINE
+                || nWhich == RES_MARGIN_TEXTLEFT
+                || nWhich == RES_MARGIN_RIGHT)
             {
                 SfxItemState eState = SfxItemState::DEFAULT;
                 if (const SfxItemSet *pSet = pNd->GetpSwAttrSet())
-                    eState = pSet->GetItemState(RES_LR_SPACE, false);
+                    eState = pSet->GetItemState(nWhich, false);
                 if (eState != SfxItemState::SET && m_rReader.m_nCurrentColl < m_rReader.m_vColl.size())
-                    pItem = m_rReader.m_vColl[m_rReader.m_nCurrentColl].maWordLR.get();
+                {
+                    switch (nWhich)
+                    {
+                        case RES_MARGIN_FIRSTLINE:
+                            pItem = m_rReader.m_vColl[m_rReader.m_nCurrentColl].m_pWordFirstLine.get();
+                            break;
+                        case RES_MARGIN_TEXTLEFT:
+                            pItem = m_rReader.m_vColl[m_rReader.m_nCurrentColl].m_pWordLeftMargin.get();
+                            break;
+                        case RES_MARGIN_RIGHT:
+                            pItem = m_rReader.m_vColl[m_rReader.m_nCurrentColl].m_pWordRightMargin.get();
+                            break;
+                    }
+                }
             }
 
             /*

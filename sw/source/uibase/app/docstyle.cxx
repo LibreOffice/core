@@ -1437,10 +1437,10 @@ void SwDocStyleSheet::MergeIndentAttrsOfListStyle( SfxItemSet& rSet )
         const SwNumFormat& rFormat = pRule->Get( 0 );
         if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
-            SvxLRSpaceItem aLR( RES_LR_SPACE );
-            aLR.SetTextLeft( rFormat.GetIndentAt() );
-            aLR.SetTextFirstLineOffset( static_cast<short>(rFormat.GetFirstLineIndent()) );
-            rSet.Put( aLR );
+            SvxFirstLineIndentItem const firstLine(static_cast<short>(rFormat.GetFirstLineIndent()), RES_MARGIN_FIRSTLINE);
+            SvxTextLeftMarginItem const leftMargin(rFormat.GetIndentAt(), RES_MARGIN_TEXTLEFT);
+            rSet.Put(firstLine);
+            rSet.Put(leftMargin);
         }
     }
 }
@@ -1540,10 +1540,17 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
             }
             if ( bResetIndentAttrsAtParagraphStyle &&
                  rSet.GetItemState( RES_PARATR_NUMRULE, false ) == SfxItemState::SET &&
-                 rSet.GetItemState( RES_LR_SPACE, false ) != SfxItemState::SET &&
-                 m_pColl->GetItemState( RES_LR_SPACE, false ) == SfxItemState::SET )
+                 rSet.GetItemState(RES_MARGIN_FIRSTLINE, false) != SfxItemState::SET &&
+                 m_pColl->GetItemState(RES_MARGIN_FIRSTLINE, false) == SfxItemState::SET)
             {
-                m_rDoc.ResetAttrAtFormat( RES_LR_SPACE, *m_pColl );
+                m_rDoc.ResetAttrAtFormat(RES_MARGIN_FIRSTLINE, *m_pColl);
+            }
+            if ( bResetIndentAttrsAtParagraphStyle &&
+                 rSet.GetItemState( RES_PARATR_NUMRULE, false ) == SfxItemState::SET &&
+                 rSet.GetItemState(RES_MARGIN_TEXTLEFT, false) != SfxItemState::SET &&
+                 m_pColl->GetItemState(RES_MARGIN_TEXTLEFT, false) == SfxItemState::SET)
+            {
+                m_rDoc.ResetAttrAtFormat(RES_MARGIN_TEXTLEFT, *m_pColl);
             }
 
             // #i56252: If a standard numbering style is assigned to a standard paragraph style

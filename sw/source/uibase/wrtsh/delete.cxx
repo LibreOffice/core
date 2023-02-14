@@ -63,33 +63,35 @@ bool SwWrtShell::TryRemoveIndent()
 {
     bool bResult = false;
 
-    SfxItemSetFixed<RES_LR_SPACE, RES_LR_SPACE> aAttrSet(GetAttrPool());
+    SfxItemSetFixed<RES_MARGIN_FIRSTLINE, RES_MARGIN_FIRSTLINE> aAttrSet(GetAttrPool());
     GetCurAttr(aAttrSet);
 
-    SvxLRSpaceItem aItem = aAttrSet.Get(RES_LR_SPACE);
-    short aOldFirstLineOfst = aItem.GetTextFirstLineOffset();
+    SvxFirstLineIndentItem firstLine(aAttrSet.Get(RES_MARGIN_FIRSTLINE));
+    SvxTextLeftMarginItem leftMargin(aAttrSet.Get(RES_MARGIN_TEXTLEFT));
+    short aOldFirstLineOfst = firstLine.GetTextFirstLineOffset();
 
     if (aOldFirstLineOfst > 0)
     {
-        aItem.SetTextFirstLineOffset(0);
+        firstLine.SetTextFirstLineOffset(0);
         bResult = true;
     }
     else if (aOldFirstLineOfst < 0)
     {
-        aItem.SetTextFirstLineOffset(0);
-        aItem.SetLeft(aItem.GetLeft() + aOldFirstLineOfst);
-
+        // this used to call SetLeft() but this should be the same result
+        firstLine.SetTextFirstLineOffset(0);
+        leftMargin.SetTextLeft(leftMargin.GetTextLeft() + aOldFirstLineOfst);
         bResult = true;
     }
-    else if (aItem.GetLeft() != 0)
+    else if (leftMargin.GetTextLeft() != 0)
     {
-        aItem.SetLeft(0);
+        leftMargin.SetTextLeft(0);
         bResult = true;
     }
 
     if (bResult)
     {
-        aAttrSet.Put(aItem);
+        aAttrSet.Put(firstLine);
+        aAttrSet.Put(leftMargin);
         SetAttrSet(aAttrSet);
     }
 

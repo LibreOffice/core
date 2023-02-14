@@ -47,7 +47,6 @@ const SvXMLItemMapEntry aTableItemMap[] =
     M_E_SE( STYLE,  REL_WIDTH,      RES_FRM_SIZE,   MID_FRMSIZE_REL_WIDTH ),
     // RES_PAPER_BIN
     // not required
-    // TODO: RES_LR_SPACE
     M_E_SE( FO,     MARGIN,         0xFFFF/*invalid*/, MID_SW_FLAG_NO_ITEM_IMPORT),
     M_E_SIE( FO,    MARGIN_LEFT,        RES_LR_SPACE,   MID_L_MARGIN ),
     M_E_SIE( FO,    MARGIN_RIGHT,       RES_LR_SPACE,   MID_R_MARGIN ),

@@ -2650,10 +2650,15 @@ static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame )
         if ( pFrame->IsTextFrame() )
         {
             nMin = const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pFrame))->CalcFitToContent();
-            const SvxLRSpaceItem &rSpace =
-                static_cast<const SwTextFrame*>(pFrame)->GetTextNodeForParaProps()->GetSwAttrSet().GetLRSpace();
+            auto const& rParaSet(static_cast<const SwTextFrame*>(pFrame)->GetTextNodeForParaProps()->GetSwAttrSet());
+            SvxFirstLineIndentItem const& rFirstLine(rParaSet.GetFirstLineIndent());
+            SvxTextLeftMarginItem const& rLeftMargin(rParaSet.GetTextLeftMargin());
+            SvxRightMarginItem const& rRightMargin(rParaSet.GetRightMargin());
             if (!static_cast<const SwTextFrame*>(pFrame)->IsLocked())
-                nMin += rSpace.GetRight() + rSpace.GetTextLeft() + rSpace.GetTextFirstLineOffset();
+            {
+                nMin += rRightMargin.GetRight() + rLeftMargin.GetTextLeft()
+                        + rFirstLine.GetTextFirstLineOffset();
+            }
         }
         else if ( pFrame->IsTabFrame() )
         {

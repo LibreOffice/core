@@ -212,6 +212,12 @@ public:
     inline const SwFormatAnchor          &GetAnchor( bool = true ) const;
     inline const SwFormatCol                 &GetCol( bool = true ) const;
     inline const SvxPaperBinItem      &GetPaperBin( bool = true ) const;
+    inline const SvxLeftMarginItem &    GetLeftMargin(bool = true) const;
+    inline const SvxTextLeftMarginItem &GetTextLeftMargin(bool = true) const;
+    inline const SvxFirstLineIndentItem &GetFirstLineIndent(bool = true) const;
+    inline const SvxRightMarginItem &   GetRightMargin(bool = true) const;
+    inline const SvxGutterLeftMarginItem &GetGutterLeftMargin(bool = true) const;
+    inline const SvxGutterRightMarginItem &GetGutterRightMargin(bool = true) const;
     inline const SvxLRSpaceItem           &GetLRSpace( bool = true ) const;
     inline const SvxULSpaceItem           &GetULSpace( bool = true ) const;
     inline const SwFormatContent           &GetContent( bool = true ) const;

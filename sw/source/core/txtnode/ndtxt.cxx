@@ -2976,7 +2976,7 @@ void SwTextNode::NumRuleChgd()
     // in the list tree reflected in the layout.
     // Important note:
     {
-        SvxLRSpaceItem& rLR = const_cast<SvxLRSpaceItem&>(GetSwAttrSet().GetLRSpace());
+        SvxTextLeftMarginItem & rLR = const_cast<SvxTextLeftMarginItem&>(GetSwAttrSet().GetTextLeftMargin());
         CallSwClientNotify(sw::LegacyModifyHint(&rLR, &rLR));
     }
 
@@ -3294,7 +3294,10 @@ tools::Long SwTextNode::GetLeftMarginWithNum( bool bTextLeft ) const
             }
 
             if( pRule->IsAbsSpaces() )
-                nRet = nRet - GetSwAttrSet().GetLRSpace().GetLeft();
+            {
+                SvxFirstLineIndentItem const& rFirst(GetSwAttrSet().GetFirstLineIndent());
+                nRet = nRet - GetSwAttrSet().GetTextLeftMargin().GetLeft(rFirst);
+            }
         }
         else if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
@@ -3333,7 +3336,7 @@ bool SwTextNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
 
                 if (!getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
-                    SvxLRSpaceItem aItem = GetSwAttrSet().GetLRSpace();
+                    SvxFirstLineIndentItem const aItem(GetSwAttrSet().GetFirstLineIndent());
                     rFLOffset = rFLOffset + aItem.GetTextFirstLineOffset();
                 }
             }
@@ -3345,7 +3348,7 @@ bool SwTextNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
                 }
                 else if (!getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
-                    SvxLRSpaceItem aItem = GetSwAttrSet().GetLRSpace();
+                    SvxFirstLineIndentItem const aItem(GetSwAttrSet().GetFirstLineIndent());
                     rFLOffset = aItem.GetTextFirstLineOffset();
                 }
             }
@@ -3354,7 +3357,7 @@ bool SwTextNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
         return true;
     }
 
-    rFLOffset = GetSwAttrSet().GetLRSpace().GetTextFirstLineOffset();
+    rFLOffset = GetSwAttrSet().GetFirstLineIndent().GetTextFirstLineOffset();
     return false;
 }
 
@@ -3368,12 +3371,13 @@ SwTwips SwTextNode::GetAdditionalIndentForStartingNewList() const
         const SwNumFormat& rFormat = pRule->Get(lcl_BoundListLevel(GetActualListLevel()));
         if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
         {
-            nAdditionalIndent = GetSwAttrSet().GetLRSpace().GetLeft();
+            SvxFirstLineIndentItem const& rFirst(GetSwAttrSet().GetFirstLineIndent());
+            nAdditionalIndent = GetSwAttrSet().GetTextLeftMargin().GetLeft(rFirst);
 
             if (getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
             {
                 nAdditionalIndent = nAdditionalIndent -
-                                    GetSwAttrSet().GetLRSpace().GetTextFirstLineOffset();
+                    GetSwAttrSet().GetFirstLineIndent().GetTextFirstLineOffset();
             }
         }
         else if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
@@ -3384,25 +3388,29 @@ SwTwips SwTextNode::GetAdditionalIndentForStartingNewList() const
             }
             else
             {
-                nAdditionalIndent = GetSwAttrSet().GetLRSpace().GetLeft();
+                SvxFirstLineIndentItem const& rFirst(GetSwAttrSet().GetFirstLineIndent());
+                nAdditionalIndent = GetSwAttrSet().GetTextLeftMargin().GetLeft(rFirst);
                 if (getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
                     nAdditionalIndent = nAdditionalIndent -
-                                        GetSwAttrSet().GetLRSpace().GetTextFirstLineOffset();
+                        GetSwAttrSet().GetFirstLineIndent().GetTextFirstLineOffset();
                 }
             }
         }
     }
     else
     {
-        nAdditionalIndent = GetSwAttrSet().GetLRSpace().GetLeft();
+        SvxFirstLineIndentItem const& rFirst(GetSwAttrSet().GetFirstLineIndent());
+        nAdditionalIndent = GetSwAttrSet().GetTextLeftMargin().GetLeft(rFirst);
     }
 
     return nAdditionalIndent;
 }
 
 // #i96772#
-void SwTextNode::ClearLRSpaceItemDueToListLevelIndents( std::shared_ptr<SvxLRSpaceItem>& o_rLRSpaceItem ) const
+void SwTextNode::ClearLRSpaceItemDueToListLevelIndents(
+        std::unique_ptr<SvxFirstLineIndentItem>& o_rFirstLineItem,
+        std::unique_ptr<SvxTextLeftMarginItem>& o_rTextLeftMarginItem) const
 {
     if ( AreListLevelIndentsApplicable() )
     {
@@ -3412,7 +3420,8 @@ void SwTextNode::ClearLRSpaceItemDueToListLevelIndents( std::shared_ptr<SvxLRSpa
             const SwNumFormat& rFormat = pRule->Get(lcl_BoundListLevel(GetActualListLevel()));
             if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
             {
-                o_rLRSpaceItem = std::make_shared<SvxLRSpaceItem>(RES_LR_SPACE);
+                o_rFirstLineItem = std::make_unique<SvxFirstLineIndentItem>(RES_MARGIN_FIRSTLINE);
+                o_rTextLeftMarginItem = std::make_unique<SvxTextLeftMarginItem>(RES_MARGIN_TEXTLEFT);
             }
         }
     }
@@ -3439,7 +3448,7 @@ tools::Long SwTextNode::GetLeftMarginForTabCalculation() const
     }
     if ( !bLeftMarginForTabCalcSetToListLevelIndent )
     {
-        nLeftMarginForTabCalc = GetSwAttrSet().GetLRSpace().GetTextLeft();
+        nLeftMarginForTabCalc = GetSwAttrSet().GetTextLeftMargin().GetTextLeft();
     }
 
     return nLeftMarginForTabCalc;
@@ -4690,7 +4699,7 @@ bool SwTextNode::GetListTabStopPosition( tools::Long& nListTabStopPosition ) con
                 }
                 else if (!getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
-                    SvxLRSpaceItem aItem = GetSwAttrSet().GetLRSpace();
+                    SvxTextLeftMarginItem const aItem(GetSwAttrSet().GetTextLeftMargin());
                     nListTabStopPosition -= aItem.GetTextLeft();
                 }
             }

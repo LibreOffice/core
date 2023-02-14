@@ -57,6 +57,8 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
+#include <hintids.hxx>
+
 #include "css1kywd.hxx"
 #include "svxcss1.hxx"
 #include "htmlnum.hxx"
@@ -284,7 +286,7 @@ struct SvxCSS1ItemIds
     sal_uInt16 nOrphans;
     sal_uInt16 nFormatSplit;
 
-    TypedWhichId<SvxLRSpaceItem> nLRSpace{0};
+    // this looks a bit superflous? TypedWhichId<SvxLRSpaceItem> nLRSpace{0};
     TypedWhichId<SvxULSpaceItem> nULSpace{0};
     sal_uInt16 nBox;
     sal_uInt16 nBrush;
@@ -739,7 +741,10 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, OUString aBaseURL,
     aItemIds.nOrphans = initTrueWhich( SID_ATTR_PARA_ORPHANS );
     aItemIds.nFormatSplit = initTrueWhich( SID_ATTR_PARA_SPLIT );
 
-    aItemIds.nLRSpace = TypedWhichId<SvxLRSpaceItem>(initTrueWhich( SID_ATTR_LRSPACE ));
+    // every id that is used must be added
+    m_aWhichMap = m_aWhichMap.MergeRange(RES_MARGIN_FIRSTLINE, RES_MARGIN_FIRSTLINE);
+    m_aWhichMap = m_aWhichMap.MergeRange(RES_MARGIN_TEXTLEFT, RES_MARGIN_TEXTLEFT);
+    m_aWhichMap = m_aWhichMap.MergeRange(RES_MARGIN_RIGHT, RES_MARGIN_RIGHT);
     aItemIds.nULSpace = TypedWhichId<SvxULSpaceItem>(initTrueWhich( SID_ATTR_ULSPACE ));
     aItemIds.nBox = initTrueWhich( SID_ATTR_BORDER_OUTER );
     aItemIds.nBrush = initTrueWhich( SID_ATTR_BRUSH );
@@ -944,25 +949,24 @@ void SvxCSS1Parser::MergeStyles( const SfxItemSet& rSrcSet,
     }
     else
     {
-        SvxLRSpaceItem aLRSpace( rTargetSet.Get(aItemIds.nLRSpace) );
+        // not sure if this is really necessary?
+        SfxItemSet copy(rSrcSet);
+        if (!rSrcInfo.m_bTextIndent)
+        {
+            copy.ClearItem(RES_MARGIN_FIRSTLINE);
+        }
+        if (!rSrcInfo.m_bLeftMargin)
+        {
+            copy.ClearItem(RES_MARGIN_TEXTLEFT);
+        }
+        if (!rSrcInfo.m_bRightMargin)
+        {
+            copy.ClearItem(RES_MARGIN_RIGHT);
+        }
+
         SvxULSpaceItem aULSpace( rTargetSet.Get(aItemIds.nULSpace) );
 
-        rTargetSet.Put( rSrcSet );
-
-        if( rSrcInfo.m_bLeftMargin || rSrcInfo.m_bRightMargin ||
-            rSrcInfo.m_bTextIndent )
-        {
-            const SvxLRSpaceItem& rNewLRSpace = rSrcSet.Get( aItemIds.nLRSpace );
-
-            if( rSrcInfo.m_bLeftMargin )
-                aLRSpace.SetLeft( rNewLRSpace.GetLeft() );
-            if( rSrcInfo.m_bRightMargin )
-                aLRSpace.SetRight( rNewLRSpace.GetRight() );
-            if( rSrcInfo.m_bTextIndent )
-                aLRSpace.SetTextFirstLineOffset( rNewLRSpace.GetTextFirstLineOffset() );
-
-            rTargetSet.Put( aLRSpace );
-        }
+        rTargetSet.Put(copy);
 
         if( rSrcInfo.m_bTopMargin || rSrcInfo.m_bBottomMargin )
         {
@@ -1991,18 +1995,8 @@ static void ParseCSS1_text_indent( const CSS1Expression *pExpr,
     if( !bSet )
         return;
 
-    if( const SvxLRSpaceItem* pItem = rItemSet.GetItemIfSet( aItemIds.nLRSpace, false ) )
-    {
-        SvxLRSpaceItem aLRItem( *pItem );
-        aLRItem.SetTextFirstLineOffset( nIndent );
-        rItemSet.Put( aLRItem );
-    }
-    else
-    {
-        SvxLRSpaceItem aLRItem( aItemIds.nLRSpace );
-        aLRItem.SetTextFirstLineOffset( nIndent );
-        rItemSet.Put( aLRItem );
-    }
+    SvxFirstLineIndentItem const firstLine(nIndent, RES_MARGIN_FIRSTLINE);
+    rItemSet.Put(firstLine);
     rPropInfo.m_bTextIndent = true;
 }
 
@@ -2058,18 +2052,10 @@ static void ParseCSS1_margin_left( const CSS1Expression *pExpr,
     rPropInfo.m_nLeftMargin = nLeft;
     if( nLeft < 0 )
         nLeft = 0;
-    if( const SvxLRSpaceItem* pItem = rItemSet.GetItemIfSet( aItemIds.nLRSpace, false ) )
-    {
-        SvxLRSpaceItem aLRItem( *pItem );
-        aLRItem.SetTextLeft( o3tl::narrowing<sal_uInt16>(nLeft) );
-        rItemSet.Put( aLRItem );
-    }
-    else
-    {
-        SvxLRSpaceItem aLRItem( aItemIds.nLRSpace );
-        aLRItem.SetTextLeft( o3tl::narrowing<sal_uInt16>(nLeft) );
-        rItemSet.Put( aLRItem );
-    }
+
+    // TODO: other things may need a SvxLeftMarginItem ? but they currently convert it anyway so they can convert that too.
+    SvxTextLeftMarginItem const leftMargin(o3tl::narrowing<sal_uInt16>(nLeft), RES_MARGIN_TEXTLEFT);
+    rItemSet.Put(leftMargin);
     rPropInfo.m_bLeftMargin = true;
 }
 
@@ -2121,18 +2107,9 @@ static void ParseCSS1_margin_right( const CSS1Expression *pExpr,
     rPropInfo.m_nRightMargin = nRight;
     if( nRight < 0 )
         nRight = 0;
-    if( const SvxLRSpaceItem* pItem = rItemSet.GetItemIfSet( aItemIds.nLRSpace, false ) )
-    {
-        SvxLRSpaceItem aLRItem( *pItem );
-        aLRItem.SetRight( o3tl::narrowing<sal_uInt16>(nRight) );
-        rItemSet.Put( aLRItem );
-    }
-    else
-    {
-        SvxLRSpaceItem aLRItem( aItemIds.nLRSpace );
-        aLRItem.SetRight( o3tl::narrowing<sal_uInt16>(nRight) );
-        rItemSet.Put( aLRItem );
-    }
+
+    SvxRightMarginItem rightMargin(o3tl::narrowing<sal_uInt16>(nRight), RES_MARGIN_RIGHT);
+    rItemSet.Put(rightMargin);
     rPropInfo.m_bRightMargin = true;
 }
 
@@ -2349,23 +2326,15 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
                 nMargins[1] = 0;
         }
 
-        if( const SvxLRSpaceItem* pItem = rItemSet.GetItemIfSet( aItemIds.nLRSpace, false ) )
+        if (bSetMargins[3])
         {
-            SvxLRSpaceItem aLRItem( *pItem );
-            if( bSetMargins[3] )
-                aLRItem.SetLeft( o3tl::narrowing<sal_uInt16>(nMargins[3]) );
-            if( bSetMargins[1] )
-                aLRItem.SetRight( o3tl::narrowing<sal_uInt16>(nMargins[1]) );
-            rItemSet.Put( aLRItem );
+            SvxTextLeftMarginItem const leftMargin(o3tl::narrowing<sal_uInt16>(nMargins[3]), RES_MARGIN_TEXTLEFT);
+            rItemSet.Put(leftMargin);
         }
-        else
+        if (bSetMargins[1])
         {
-            SvxLRSpaceItem aLRItem( aItemIds.nLRSpace );
-            if( bSetMargins[3] )
-                aLRItem.SetLeft( o3tl::narrowing<sal_uInt16>(nMargins[3]) );
-            if( bSetMargins[1] )
-                aLRItem.SetRight( o3tl::narrowing<sal_uInt16>(nMargins[1]) );
-            rItemSet.Put( aLRItem );
+            SvxRightMarginItem const rightMargin(o3tl::narrowing<sal_uInt16>(nMargins[1]), RES_MARGIN_RIGHT);
+            rItemSet.Put(rightMargin);
         }
     }
 

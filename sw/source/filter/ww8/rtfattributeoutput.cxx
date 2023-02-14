@@ -2997,7 +2997,9 @@ void RtfAttributeOutput::ParaTabStop(const SvxTabStopItem& rTabStop)
     // Tabs are absolute by default.
     if (m_rExport.m_rDoc.getIDocumentSettingAccess().get(
             DocumentSettingId::TABS_RELATIVE_TO_INDENT))
-        nOffset = m_rExport.GetItem(RES_LR_SPACE).GetTextLeft();
+    {
+        nOffset = m_rExport.GetItem(RES_MARGIN_TEXTLEFT).GetTextLeft();
+    }
 
     for (sal_uInt16 n = 0; n < rTabStop.Count(); n++)
     {
@@ -3088,9 +3090,10 @@ void RtfAttributeOutput::ParaNumRule_Impl(const SwTextNode* pTextNd, sal_Int32 n
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_PLAIN);
     m_aStyles.append(' ');
 
-    SvxLRSpaceItem aLR(rNdSet.Get(RES_LR_SPACE));
-    aLR.SetTextLeft(aLR.GetTextLeft() + pFormat->GetIndentAt());
-    aLR.SetTextFirstLineOffset(pFormat->GetFirstLineOffset()); //TODO: overflow
+    SvxFirstLineIndentItem firstLine(rNdSet.Get(RES_MARGIN_FIRSTLINE));
+    SvxTextLeftMarginItem leftMargin(rNdSet.Get(RES_MARGIN_TEXTLEFT));
+    leftMargin.SetTextLeft(leftMargin.GetTextLeft() + pFormat->GetIndentAt());
+    firstLine.SetTextFirstLineOffset(pFormat->GetFirstLineOffset()); //TODO: overflow
 
     sal_uInt16 nStyle = m_rExport.GetId(pFormat->GetCharFormat());
     OString* pString = m_rExport.GetStyle(nStyle);
@@ -3136,7 +3139,8 @@ void RtfAttributeOutput::ParaNumRule_Impl(const SwTextNode* pTextNd, sal_Int32 n
         m_aStyles.append(static_cast<sal_Int32>(m_rExport.GetNumberingId(*pRule)) + 1);
         m_aStyles.append(' ');
     }
-    FormatLRSpace(aLR);
+    FormatFirstLineIndent(firstLine);
+    FormatTextLeftMargin(leftMargin);
 }
 
 void RtfAttributeOutput::ParaScriptSpace(const SfxBoolItem& rScriptSpace)
@@ -3206,6 +3210,34 @@ void RtfAttributeOutput::FormatFrameSize(const SwFormatFrameSize& rSize)
 void RtfAttributeOutput::FormatPaperBin(const SvxPaperBinItem& /*rItem*/)
 {
     SAL_INFO("sw.rtf", "TODO: " << __func__);
+}
+
+void RtfAttributeOutput::FormatFirstLineIndent(SvxFirstLineIndentItem const& rFirstLine)
+{
+    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_FI);
+    m_aStyles.append(static_cast<sal_Int32>(rFirstLine.GetTextFirstLineOffset()));
+}
+
+void RtfAttributeOutput::FormatTextLeftMargin(SvxTextLeftMarginItem const& rTextLeftMargin)
+{
+    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LI);
+    m_aStyles.append(static_cast<sal_Int32>(rTextLeftMargin.GetTextLeft()));
+    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LIN);
+    m_aStyles.append(static_cast<sal_Int32>(rTextLeftMargin.GetTextLeft()));
+}
+
+void RtfAttributeOutput::FormatRightMargin(SvxRightMarginItem const& rRightMargin)
+{
+// (paragraph case, this will be an else branch once others are converted)
+#if 0
+    else
+#endif
+    {
+        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_RI);
+        m_aStyles.append(static_cast<sal_Int32>(rRightMargin.GetRight()));
+        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_RIN);
+        m_aStyles.append(static_cast<sal_Int32>(rRightMargin.GetRight()));
+    }
 }
 
 void RtfAttributeOutput::FormatLRSpace(const SvxLRSpaceItem& rLRSpace)

@@ -1479,7 +1479,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
 
         SwTextFrameInfo aInfo( m_pCurTextFrame );
         nLeftTextPos = aInfo.GetCharPos(nPos);
-        nLeftTextPos -= m_pCurTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().GetLRSpace().GetLeft();
+        nLeftTextPos -= m_pCurTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().GetTextLeftMargin().GetLeft(m_pCurTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().GetFirstLineIndent());
     }
 
     if( m_bMoreLines )
@@ -2414,16 +2414,19 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
                     break;
                 }
 
-                // check for hard spaces or LRSpaces set by the template
+                // check for left margin set by the style
                 if( IsPoolUserFormat( nPoolId ) ||
                     RES_POOLCOLL_STANDARD == nPoolId )
                 {
-                    short nSz;
-                    SvxLRSpaceItem const * pLRSpace = m_pCurTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().
-                        GetItemIfSet( RES_LR_SPACE );
-                    if (pLRSpace &&
-                        ( 0 != (nSz = pLRSpace->GetTextFirstLineOffset()) ||
-                            0 != pLRSpace->GetTextLeft() ) )
+                    SvxFirstLineIndentItem const*const pFirstLineIndent(
+                        m_pCurTextFrame->GetTextNodeForParaProps()
+                            ->GetSwAttrSet().GetItemIfSet(RES_MARGIN_FIRSTLINE));
+                    SvxTextLeftMarginItem const*const pTextLeftMargin(
+                        m_pCurTextFrame->GetTextNodeForParaProps()
+                            ->GetSwAttrSet().GetItemIfSet(RES_MARGIN_TEXTLEFT));
+                    short nSz(pFirstLineIndent ? pFirstLineIndent->GetTextFirstLineOffset() : 0);
+                    if (0 != nSz ||
+                        (pTextLeftMargin && 0 != pTextLeftMargin->GetTextLeft()))
                     {
                         // exception: numbering/enumeration can have an indentation
                         if (IsEnumericChar(*m_pCurTextFrame))
@@ -2446,7 +2449,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
                                 BuildIndent();
                             else if( 0 > nSz )      // negative 1st line indentation
                                 BuildNegIndent( aFInfo.GetLineStart() );
-                            else if( pLRSpace->GetTextLeft() )   // is indentation
+                            else if (pTextLeftMargin && pTextLeftMargin->GetTextLeft() != 0)   // is indentation
                                 BuildTextIndent();
                         }
                         eStat = READ_NEXT_PARA;
@@ -2651,13 +2654,16 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
                 // handle hard attributes
                 if (m_pCurTextFrame->GetTextNodeForParaProps()->HasSwAttrSet())
                 {
-                    short nSz;
-                    SvxLRSpaceItem const * pLRSpace;
+                    SvxFirstLineIndentItem const*const pFirstLineIndent(
+                        m_pCurTextFrame->GetTextNodeForParaProps()
+                            ->GetSwAttrSet().GetItemIfSet(RES_MARGIN_FIRSTLINE, false));
+                    SvxTextLeftMarginItem const*const pTextLeftMargin(
+                        m_pCurTextFrame->GetTextNodeForParaProps()
+                            ->GetSwAttrSet().GetItemIfSet(RES_MARGIN_TEXTLEFT, false));
+                    short nSz(pFirstLineIndent ? pFirstLineIndent->GetTextFirstLineOffset() : 0);
                     if( bReplaceStyles &&
-                        (pLRSpace = m_pCurTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().
-                            GetItemIfSet( RES_LR_SPACE, false )) &&
-                        ( 0 != (nSz = pLRSpace->GetTextFirstLineOffset()) ||
-                            0 != pLRSpace->GetTextLeft() ) )
+                        (0 != nSz ||
+                            (pTextLeftMargin && 0 != pTextLeftMargin->GetTextLeft())))
                     {
                         // then use one of our templates
                         if( 0 < nSz )           // positive 1st line indentation
@@ -2666,7 +2672,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
                         {
                             BuildNegIndent( aFInfo.GetLineStart() );
                         }
-                        else if( pLRSpace->GetTextLeft() )   // is indentation
+                        else if (pTextLeftMargin && pTextLeftMargin->GetTextLeft()) // is indentation
                             BuildTextIndent();
                         else
                             BuildText();

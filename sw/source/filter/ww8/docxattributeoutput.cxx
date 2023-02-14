@@ -1317,6 +1317,7 @@ void DocxAttributeOutput::StartParagraphProperties()
 
 void DocxAttributeOutput::InitCollectedParagraphProperties()
 {
+    m_pLRSpaceAttrList.clear();
     m_pParagraphSpacingAttrList.clear();
 
     // Write the elements in the spec order
@@ -1374,6 +1375,12 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
         m_rExport.SdrExporter().getFlyAttrList().clear();
 
         m_pSerializer->singleElementNS( XML_w, XML_framePr, xAttrList );
+    }
+
+    if (m_pLRSpaceAttrList.is())
+    {
+        rtl::Reference<FastAttributeList> xAttrList = std::move(m_pLRSpaceAttrList);
+        m_pSerializer->singleElementNS(XML_w, XML_ind, xAttrList);
     }
 
     if ( m_pParagraphSpacingAttrList.is() )
@@ -3885,6 +3892,8 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                     // we are done exporting the redline attributes.
                     rtl::Reference<sax_fastparser::FastAttributeList> pFlyAttrList_Original(m_rExport.SdrExporter().getFlyAttrList());
                     m_rExport.SdrExporter().getFlyAttrList().clear();
+                    rtl::Reference<sax_fastparser::FastAttributeList> pLRSpaceAttrList_Original(m_pLRSpaceAttrList);
+                    m_pLRSpaceAttrList.clear();
                     rtl::Reference<sax_fastparser::FastAttributeList> pParagraphSpacingAttrList_Original(m_pParagraphSpacingAttrList);
                     m_pParagraphSpacingAttrList.clear();
 
@@ -3897,6 +3906,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
 
                     // Revert back the original values that were stored in 'm_rExport.SdrExporter().getFlyAttrList()', 'm_pParagraphSpacingAttrList'
                     m_rExport.SdrExporter().getFlyAttrList() = pFlyAttrList_Original;
+                    m_pLRSpaceAttrList = pLRSpaceAttrList_Original;
                     m_pParagraphSpacingAttrList = pParagraphSpacingAttrList_Original;
 
                     m_pSerializer->endElementNS( XML_w, XML_pPr );
@@ -8688,7 +8698,7 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
     // But in ODT, zero position could be page margins or paragraph indent according to used settings.
     tools::Long tabsOffset = 0;
     if (m_rExport.m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::TABS_RELATIVE_TO_INDENT))
-        tabsOffset = m_rExport.GetItem(RES_LR_SPACE).GetTextLeft();
+        tabsOffset = m_rExport.GetItem(RES_MARGIN_TEXTLEFT).GetTextLeft();
 
     // clear unused inherited tabs - otherwise the style will add them back in
     sal_Int32 nCurrTab = 0;
@@ -8848,10 +8858,67 @@ void DocxAttributeOutput::FormatPaperBin( const SvxPaperBinItem& )
     SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::FormatPaperBin()" );
 }
 
+void DocxAttributeOutput::FormatFirstLineIndent(SvxFirstLineIndentItem const& rFirstLine)
+{
+    sal_Int32 const nFirstLineAdjustment(rFirstLine.GetTextFirstLineOffset());
+    if (nFirstLineAdjustment > 0)
+    {
+        AddToAttrList(m_pLRSpaceAttrList, 1, FSNS(XML_w, XML_firstLine),
+                OString::number(nFirstLineAdjustment).getStr());
+    }
+    else
+    {
+        AddToAttrList(m_pLRSpaceAttrList, 1, FSNS(XML_w, XML_hanging),
+                OString::number(- nFirstLineAdjustment).getStr());
+    }
+}
+
+void DocxAttributeOutput::FormatTextLeftMargin(SvxTextLeftMarginItem const& rTextLeftMargin)
+{
+    SvxTextLeftMarginItem const* pTextLeftMargin(&rTextLeftMargin);
+    ::std::optional<SvxTextLeftMarginItem> oCopy;
+    if (dynamic_cast<SwContentNode const*>(GetExport().m_pOutFormatNode) != nullptr)
+    {
+        auto pTextNd(static_cast<SwTextNode const*>(GetExport().m_pOutFormatNode));
+        // WW doesn't have a concept of a paragraph that's in a list but not
+        // counted in the list - see AttributeOutputBase::ParaNumRule()
+        // forcing non-existent numId="0" in this case.
+        // This means WW won't apply the indents from the numbering,
+        // so try to add them as paragraph properties here.
+        if (!pTextNd->IsCountedInList())
+        {
+            SfxItemSetFixed<RES_MARGIN_TEXTLEFT, RES_MARGIN_TEXTLEFT> temp(m_rExport.m_rDoc.GetAttrPool());
+            pTextNd->GetParaAttr(temp, 0, 0, false, true, true, nullptr);
+            if (auto *const pItem = temp.GetItem(RES_MARGIN_TEXTLEFT))
+            {
+                oCopy.emplace(*pItem);
+                pTextLeftMargin = &*oCopy;
+            }
+        }
+    }
+    bool const bEcma1st(m_rExport.GetFilter().getVersion() == oox::core::ECMA_376_1ST_EDITION);
+    AddToAttrList(m_pLRSpaceAttrList, 1,
+        FSNS(XML_w, (bEcma1st ? XML_left : XML_start)),
+        OString::number(pTextLeftMargin->GetTextLeft()).getStr());
+}
+
+void DocxAttributeOutput::FormatRightMargin(SvxRightMarginItem const& rRightMargin)
+{
+    // (paragraph case, this will be an else branch once others are converted)
+#if 0
+    else
+#endif
+    {
+        bool const bEcma1st(m_rExport.GetFilter().getVersion() == oox::core::ECMA_376_1ST_EDITION);
+        AddToAttrList(m_pLRSpaceAttrList, 1,
+            FSNS(XML_w, (bEcma1st ? XML_right : XML_end)),
+            OString::number(rRightMargin.GetRight()).getStr());
+    }
+}
+
 void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
 {
     bool const bEcma = m_rExport.GetFilter().getVersion() == oox::core::ECMA_376_1ST_EDITION;
-
     if (m_rExport.SdrExporter().getTextFrameSyntax())
     {
         m_rExport.SdrExporter().getTextFrameStyle().append(";mso-wrap-distance-left:" + OString::number(double(rLRSpace.GetLeft()) / 20) + "pt");
@@ -8889,29 +8956,10 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
     }
     else
     {
+        // note: this is not possible for SwTextNode but is for EditEngine!
         SvxLRSpaceItem const* pLRSpace(&rLRSpace);
         ::std::optional<SvxLRSpaceItem> oLRSpace;
-        if (dynamic_cast<SwContentNode const*>(GetExport().m_pOutFormatNode) != nullptr)
-        {
-            auto pTextNd(static_cast<SwTextNode const*>(GetExport().m_pOutFormatNode));
-            // WW doesn't have a concept of a paragraph that's in a list but not
-            // counted in the list - see AttributeOutputBase::ParaNumRule()
-            // forcing non-existent numId="0" in this case.
-            // This means WW won't apply the indents from the numbering,
-            // so try to add them as paragraph properties here.
-            if (!pTextNd->IsCountedInList())
-            {
-                SfxItemSetFixed<RES_LR_SPACE, RES_LR_SPACE> temp(m_rExport.m_rDoc.GetAttrPool());
-                pTextNd->GetParaAttr(temp, 0, 0, false, true, true, nullptr);
-                if (auto *const pItem = temp.GetItem(RES_LR_SPACE))
-                {
-                    // but don't use first-line offset from list (should it be 0 or from node?)
-                    oLRSpace.emplace(*pItem);
-                    oLRSpace->SetTextFirstLineOffset(pLRSpace->GetTextFirstLineOffset());
-                    pLRSpace = &*oLRSpace;
-                }
-            }
-        }
+        assert(dynamic_cast<SwContentNode const*>(GetExport().m_pOutFormatNode) == nullptr);
         rtl::Reference<FastAttributeList> pLRSpaceAttrList = FastSerializerHelper::createAttrList();
         if ((0 != pLRSpace->GetTextLeft()) || (pLRSpace->IsExplicitZeroMarginValLeft()))
         {

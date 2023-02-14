@@ -98,22 +98,25 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     }
 
     // set left/right border
-    if( const SvxLRSpaceItem* pLRItem = rCSS1ItemSet.GetItemIfSet( RES_LR_SPACE ) )
+    // note: parser never creates SvxLeftMarginItem! must be converted
+    if (const SvxTextLeftMarginItem *const pLeft = rCSS1ItemSet.GetItemIfSet(RES_MARGIN_TEXTLEFT))
     {
-        // maybe flatten the first line indentation
-        SvxLRSpaceItem aLRItem( *pLRItem );
-        aLRItem.SetTextFirstLineOffset( 0 );
         if( rCSS1PropInfo.m_bLeftMargin )
         {
-            nLeftSpace = static_cast< sal_uInt16 >(aLRItem.GetLeft());
+            // should be SvxLeftMarginItem... "cast" it
+            nLeftSpace = static_cast<sal_uInt16>(pLeft->GetTextLeft());
             rCSS1PropInfo.m_bLeftMargin = false;
         }
+        rCSS1ItemSet.ClearItem(RES_MARGIN_TEXTLEFT);
+    }
+    if (const SvxRightMarginItem *const pRight = rCSS1ItemSet.GetItemIfSet(RES_MARGIN_RIGHT))
+    {
         if( rCSS1PropInfo.m_bRightMargin )
         {
-            nRightSpace = static_cast< sal_uInt16 >(aLRItem.GetRight());
+            nRightSpace = static_cast< sal_uInt16 >(pRight->GetRight());
             rCSS1PropInfo.m_bRightMargin = false;
         }
-        rCSS1ItemSet.ClearItem( RES_LR_SPACE );
+        rCSS1ItemSet.ClearItem(RES_MARGIN_RIGHT);
     }
     if( nLeftSpace || nRightSpace )
     {

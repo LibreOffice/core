@@ -745,10 +745,19 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             case SID_ATTR_PARA_RIGHTSPACE:
             case SID_ATTR_PARA_FIRSTLINESPACE:
             {
-                eState = aCoreSet.GetItemState(RES_LR_SPACE);
+                eState = aCoreSet.GetItemState(RES_MARGIN_FIRSTLINE);
+                eState = std::min(aCoreSet.GetItemState(RES_MARGIN_TEXTLEFT), eState);
+                eState = std::min(aCoreSet.GetItemState(RES_MARGIN_RIGHT), eState);
                 if( eState >= SfxItemState::DEFAULT )
                 {
-                    SvxLRSpaceItem aLR = aCoreSet.Get( RES_LR_SPACE );
+                    SvxLRSpaceItem aLR(RES_LR_SPACE);
+                    SvxFirstLineIndentItem const& rFirstLine(aCoreSet.Get(RES_MARGIN_FIRSTLINE));
+                    SvxTextLeftMarginItem const& rLeftMargin(aCoreSet.Get(RES_MARGIN_TEXTLEFT));
+                    SvxRightMarginItem const& rRightMargin(aCoreSet.Get(RES_MARGIN_RIGHT));
+                    aLR.SetTextFirstLineOffset(rFirstLine.GetTextFirstLineOffset(), rFirstLine.GetPropTextFirstLineOffset());
+                    aLR.SetAutoFirst(rFirstLine.IsAutoFirst());
+                    aLR.SetTextLeft(rLeftMargin.GetTextLeft(), rLeftMargin.GetPropLeft());
+                    aLR.SetRight(rRightMargin.GetRight(), rRightMargin.GetPropRight());
                     aLR.SetWhich(nSlot);
                     rSet.Put(aLR);
                 }

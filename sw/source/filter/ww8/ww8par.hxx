@@ -249,7 +249,9 @@ public:
 
     sal_uInt16  m_n81Flags;           // for bold, italic, ...
     sal_uInt16  m_n81BiDiFlags;       // for bold, italic, ...
-    std::shared_ptr<SvxLRSpaceItem> maWordLR;
+    std::shared_ptr<SvxFirstLineIndentItem> m_pWordFirstLine;
+    std::shared_ptr<SvxTextLeftMarginItem> m_pWordLeftMargin;
+    std::shared_ptr<SvxRightMarginItem> m_pWordRightMargin;
     bool m_bValid;            // empty of valid
     bool m_bImported;         // for recursive imports
     bool m_bColl;             // true-> pFormat is SwTextFormatColl
@@ -281,7 +283,9 @@ public:
         mnWW8OutlineLevel( MAXLEVEL ),
         m_n81Flags( 0 ),
         m_n81BiDiFlags(0),
-        maWordLR(std::make_shared<SvxLRSpaceItem>(RES_LR_SPACE)),
+        m_pWordFirstLine(std::make_shared<SvxFirstLineIndentItem>(RES_MARGIN_FIRSTLINE)),
+        m_pWordLeftMargin(std::make_shared<SvxTextLeftMarginItem>(RES_MARGIN_TEXTLEFT)),
+        m_pWordRightMargin(std::make_shared<SvxRightMarginItem>(RES_MARGIN_RIGHT)),
         m_bValid(false),
         m_bImported(false),
         m_bColl(false),
@@ -1951,7 +1955,8 @@ void UseListIndent(SwWW8StyInf &rStyle, const SwNumFormat &rFormat);
 void SetStyleIndent(SwWW8StyInf &rStyleInfo, const SwNumFormat &rFormat);
 // #i103711#
 // #i105414#
-void SyncIndentWithList( SvxLRSpaceItem &rLR,
+void SyncIndentWithList( SvxFirstLineIndentItem & rFirstLine,
+                         SvxTextLeftMarginItem & rLeftMargin,
                          const SwNumFormat &rFormat,
                          const bool bFirstLineOfStSet,
                          const bool bLeftIndentSet );

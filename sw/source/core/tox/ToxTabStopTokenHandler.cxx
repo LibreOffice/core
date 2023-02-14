@@ -50,11 +50,12 @@ DefaultToxTabStopTokenHandler::HandleTabStopToken(
 
     // check whether a tab adjustment has been specified.
     if (SvxTabAdjust::End > aToken.eTabAlign) {
-        const SvxLRSpaceItem& rLR = targetNode.SwContentNode::GetAttr(RES_LR_SPACE);
-
+        SvxTextLeftMarginItem const& rTextLeftMargin(
+            targetNode.SwContentNode::GetAttr(RES_MARGIN_TEXTLEFT));
         tools::Long nTabPosition = aToken.nTabStopPosition;
-        if (!mTabPositionIsRelativeToParagraphIndent && rLR.GetTextLeft()) {
-            nTabPosition -= rLR.GetTextLeft();
+        if (!mTabPositionIsRelativeToParagraphIndent && rTextLeftMargin.GetTextLeft() != 0)
+        {
+            nTabPosition -= rTextLeftMargin.GetTextLeft();
         }
         result.tabStop = SvxTabStop(nTabPosition, aToken.eTabAlign, cDfltDecimalChar, aToken.cTabFillChar);
         return result;
@@ -73,9 +74,12 @@ DefaultToxTabStopTokenHandler::HandleTabStopToken(
     //#i24363# tab stops relative to indent
     if (mTabStopReferencePolicy == TABSTOPS_RELATIVE_TO_INDENT) {
         // left margin of paragraph style
-        const SvxLRSpaceItem& rLRSpace = targetNode.GetTextColl()->GetLRSpace();
-        nRightMargin -= rLRSpace.GetLeft();
-        nRightMargin -= rLRSpace.GetTextFirstLineOffset();
+        SvxFirstLineIndentItem const& rFirstLine(
+            targetNode.GetTextColl()->GetFirstLineIndent());
+        SvxTextLeftMarginItem const& rTextLeftMargin(
+            targetNode.GetTextColl()->GetTextLeftMargin());
+        nRightMargin -= rTextLeftMargin.GetLeft(rFirstLine);
+        nRightMargin -= rFirstLine.GetTextFirstLineOffset();
     }
 
     result.tabStop = SvxTabStop(nRightMargin, SvxTabAdjust::Right, cDfltDecimalChar, aToken.cTabFillChar);

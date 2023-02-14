@@ -1494,8 +1494,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
             // Left border as offset
             //#i24363# tab stops relative to indent
-            const tools::Long nOff = rWrtSh.getIDocumentSettingAccess().get(DocumentSettingId::TABS_RELATIVE_TO_INDENT) ?
-                aCoreSet.Get( RES_LR_SPACE ).GetTextLeft() : 0;
+            const tools::Long nOff = rWrtSh.getIDocumentSettingAccess().get(DocumentSettingId::TABS_RELATIVE_TO_INDENT)
+                ? aCoreSet.Get(RES_MARGIN_TEXTLEFT).GetTextLeft() : 0;
             SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
             aCoreSet.Put( aOff );
 
@@ -1531,8 +1531,16 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 if ( nSlot == SID_ATTR_PARA_LRSPACE)
                 {
                     SvxLRSpaceItem aParaMargin(static_cast<const SvxLRSpaceItem&>(pArgs->Get(nSlot)));
-                    aParaMargin.SetWhich( RES_LR_SPACE);
-                    aCoreSet.Put(aParaMargin);
+                    SvxFirstLineIndentItem firstLine(RES_MARGIN_FIRSTLINE);
+                    SvxTextLeftMarginItem leftMargin(RES_MARGIN_TEXTLEFT);
+                    SvxRightMarginItem rightMargin(RES_MARGIN_RIGHT);
+                    firstLine.SetTextFirstLineOffset(aParaMargin.GetTextFirstLineOffset(), aParaMargin.GetPropTextFirstLineOffset());
+                    firstLine.SetAutoFirst(aParaMargin.IsAutoFirst());
+                    leftMargin.SetTextLeft(aParaMargin.GetTextLeft(), aParaMargin.GetPropLeft());
+                    rightMargin.SetRight(aParaMargin.GetRight(), aParaMargin.GetPropRight());
+                    aCoreSet.Put(firstLine);
+                    aCoreSet.Put(leftMargin);
+                    aCoreSet.Put(rightMargin);
 
                     sw_ParagraphDialogResult(&aCoreSet, rWrtSh, rReq, pPaM);
                 }

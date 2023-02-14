@@ -319,9 +319,11 @@ void SwHTMLWriter::CollectFlyFrames()
                 (pAnchorNode = rAnchor.GetAnchorNode()) != nullptr &&
                 (pACNd = pAnchorNode->GetContentNode()) != nullptr )
             {
-                const SvxLRSpaceItem& rLRItem =
-                    pACNd->GetAttr(RES_LR_SPACE);
-                if( rLRItem.GetTextLeft() || rLRItem.GetRight() )
+                const SvxTextLeftMarginItem& rTextLeftMargin =
+                    pACNd->GetAttr(RES_MARGIN_TEXTLEFT);
+                const SvxRightMarginItem& rRightMargin =
+                    pACNd->GetAttr(RES_MARGIN_RIGHT);
+                if (rTextLeftMargin.GetTextLeft() || rRightMargin.GetRight())
                 {
                     nMode = aHTMLOutFrameParaFrameTable[eType][m_nExportMode];
                     break;

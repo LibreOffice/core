@@ -565,18 +565,36 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
 
     SfxItemIter aIter( rItemSet );
 
+    const SvxFirstLineIndentItem * pFirstLineItem(nullptr);
+    const SvxTextLeftMarginItem * pTextLeftMargin(nullptr);
+    const SvxRightMarginItem * pRightMargin(nullptr);
+
     for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
     {
-        HTMLAttr **ppAttr = nullptr;
-
         switch( pItem->Which() )
         {
-        case RES_LR_SPACE:
+        case RES_MARGIN_FIRSTLINE:
+            {
+                pFirstLineItem = static_cast<const SvxFirstLineIndentItem*>(pItem);
+            }
+            break;
+        case RES_MARGIN_TEXTLEFT:
+            {
+                pTextLeftMargin = static_cast<const SvxTextLeftMarginItem*>(pItem);
+            }
+            break;
+        case RES_MARGIN_RIGHT:
+            {
+                pRightMargin = static_cast<const SvxRightMarginItem*>(pItem);
+            }
+            break;
+        }
+    }
+
+#if 1
             {
                 // Paragraph indents need to be added and are generated for each paragraphs
                 // (here for the first paragraph only, all the following in SetTextCollAttrs)
-                const SvxLRSpaceItem *pLRItem =
-                    static_cast<const SvxLRSpaceItem *>(pItem);
 
                 // Get old paragraph indents without the top context (that's the one we're editing)
                 sal_uInt16 nOldLeft = 0, nOldRight = 0;
@@ -598,7 +616,8 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 if( rPropInfo.m_bLeftMargin )
                 {
                     OSL_ENSURE( rPropInfo.m_nLeftMargin < 0 ||
-                            rPropInfo.m_nLeftMargin == pLRItem->GetTextLeft(),
+                            !pTextLeftMargin ||
+                            rPropInfo.m_nLeftMargin == pTextLeftMargin->GetTextLeft(),
                             "left margin does not match with item" );
                     if( rPropInfo.m_nLeftMargin < 0 &&
                         -rPropInfo.m_nLeftMargin > nOldLeft )
@@ -609,7 +628,8 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 if( rPropInfo.m_bRightMargin )
                 {
                     OSL_ENSURE( rPropInfo.m_nRightMargin < 0 ||
-                            rPropInfo.m_nRightMargin == pLRItem->GetRight(),
+                            !pRightMargin ||
+                            rPropInfo.m_nRightMargin == pRightMargin->GetRight(),
                             "right margin does not match with item" );
                     if( rPropInfo.m_nRightMargin < 0 &&
                         -rPropInfo.m_nRightMargin > nOldRight )
@@ -617,21 +637,31 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                     else
                         nRight = nOldRight + static_cast< sal_uInt16 >(rPropInfo.m_nRightMargin);
                 }
-                if( rPropInfo.m_bTextIndent )
-                    nIndent = pLRItem->GetTextFirstLineOffset();
+                if (rPropInfo.m_bTextIndent && pFirstLineItem)
+                    nIndent = pFirstLineItem->GetTextFirstLineOffset();
 
                 // Remember the value for the following paragraphs
                 pContext->SetMargins( nLeft, nRight, nIndent );
 
                 // Set the attribute on the current paragraph
-                SvxLRSpaceItem aLRItem( *pLRItem );
-                aLRItem.SetTextFirstLineOffset( nIndent );
-                aLRItem.SetTextLeft( nLeft );
-                aLRItem.SetRight( nRight );
-                NewAttr(m_xAttrTab, &m_xAttrTab->pLRSpace, aLRItem);
-                EndAttr( m_xAttrTab->pLRSpace, false );
+                SvxFirstLineIndentItem const firstLine(nIndent, RES_MARGIN_FIRSTLINE);
+                NewAttr(m_xAttrTab, &m_xAttrTab->pFirstLineIndent, firstLine);
+                EndAttr(m_xAttrTab->pFirstLineIndent, false);
+                SvxTextLeftMarginItem const leftMargin(nLeft, RES_MARGIN_TEXTLEFT);
+                NewAttr(m_xAttrTab, &m_xAttrTab->pTextLeftMargin, leftMargin);
+                EndAttr(m_xAttrTab->pTextLeftMargin, false);
+                SvxRightMarginItem const rightMargin(nRight, RES_MARGIN_RIGHT);
+                NewAttr(m_xAttrTab, &m_xAttrTab->pRightMargin, rightMargin);
+                EndAttr(m_xAttrTab->pRightMargin, false);
             }
-            break;
+#endif
+
+    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    {
+        HTMLAttr **ppAttr = nullptr;
+
+        switch( pItem->Which() )
+        {
 
         case RES_UL_SPACE:
             if( !rPropInfo.m_bTopMargin || !rPropInfo.m_bBottomMargin )

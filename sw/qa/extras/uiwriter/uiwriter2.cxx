@@ -31,6 +31,7 @@
 #include <fmtfsize.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <editeng/acorrcfg.hxx>
+#include <editeng/lrspitem.hxx>
 #include <swacorr.hxx>
 #include <redline.hxx>
 #include <frameformats.hxx>
@@ -151,9 +152,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101534)
     // Go to the second paragraph, assert that we have margins as direct
     // formatting.
     pWrtShell->Down(/*bSelect=*/false);
-    SfxItemSet aSet(pWrtShell->GetAttrPool(), svl::Items<RES_LR_SPACE, RES_LR_SPACE>);
+    SfxItemSet aSet(pWrtShell->GetAttrPool(),
+                    svl::Items<RES_MARGIN_FIRSTLINE, RES_MARGIN_TEXTLEFT>);
     pWrtShell->GetCurAttr(aSet);
-    CPPUNIT_ASSERT(aSet.HasItem(RES_LR_SPACE));
+    CPPUNIT_ASSERT(!aSet.HasItem(RES_MARGIN_FIRSTLINE));
+    CPPUNIT_ASSERT(aSet.HasItem(RES_MARGIN_TEXTLEFT));
+    CPPUNIT_ASSERT_EQUAL(::tools::Long(0), aSet.GetItem(RES_MARGIN_TEXTLEFT)->GetTextLeft());
 
     // Make sure that direct formatting is preserved during paste.
     pWrtShell->EndPara(/*bSelect=*/false);
@@ -162,7 +166,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101534)
     aSet.ClearItem();
     pWrtShell->GetCurAttr(aSet);
     // This failed, direct formatting was lost.
-    CPPUNIT_ASSERT(aSet.HasItem(RES_LR_SPACE));
+    CPPUNIT_ASSERT(!aSet.HasItem(RES_MARGIN_FIRSTLINE));
+    CPPUNIT_ASSERT(aSet.HasItem(RES_MARGIN_TEXTLEFT));
+    CPPUNIT_ASSERT_EQUAL(::tools::Long(0), aSet.GetItem(RES_MARGIN_TEXTLEFT)->GetTextLeft());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineMoveInsertInDelete)

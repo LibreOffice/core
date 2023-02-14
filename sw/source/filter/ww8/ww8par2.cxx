@@ -261,12 +261,14 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
                 {
                     // Allow MSO to emulate LO footnote text starting at left margin - only meaningful with hanging indent
                     sal_Int32 nFirstLineIndent=0;
-                    SfxItemSetFixed<RES_LR_SPACE, RES_LR_SPACE> aSet( m_rDoc.GetAttrPool() );
+                    SfxItemSetFixed<RES_MARGIN_FIRSTLINE, RES_MARGIN_FIRSTLINE> aSet(m_rDoc.GetAttrPool());
                     if ( pTNd->GetAttr(aSet) )
                     {
-                        const SvxLRSpaceItem* pLRSpace = aSet.GetItem<SvxLRSpaceItem>(RES_LR_SPACE);
-                        if ( pLRSpace )
-                            nFirstLineIndent = pLRSpace->GetTextFirstLineOffset();
+                        const SvxFirstLineIndentItem *const pFirstLine(aSet.GetItem<SvxFirstLineIndentItem>(RES_MARGIN_FIRSTLINE));
+                        if (pFirstLine)
+                        {
+                            nFirstLineIndent = pFirstLine->GetTextFirstLineOffset();
+                        }
                     }
 
                     rPaMPointPos.SetContent(0);

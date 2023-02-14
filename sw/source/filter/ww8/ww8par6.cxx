@@ -2618,12 +2618,12 @@ void SwWW8ImplReader::StripNegativeAfterIndent(SwFrameFormat const *pFlyFormat)
         SwTextNode *pNd = aIdx.GetNode().GetTextNode();
         if (pNd)
         {
-            const SvxLRSpaceItem& rLR = pNd->GetAttr(RES_LR_SPACE);
-            if (rLR.GetRight() < 0)
+            const SvxRightMarginItem & rRightMargin(pNd->GetAttr(RES_MARGIN_RIGHT));
+            if (rRightMargin.GetRight() < 0)
             {
-                SvxLRSpaceItem aLR(rLR);
-                aLR.SetRight(0);
-                pNd->SetAttr(aLR);
+                SvxRightMarginItem rightMargin(rRightMargin);
+                rightMargin.SetRight(0);
+                pNd->SetAttr(rightMargin);
             }
         }
         ++aIdx;
@@ -4213,16 +4213,26 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
 {
     if (nLen < 2)  // end of attribute
     {
-        m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_LR_SPACE);
+        m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_MARGIN_FIRSTLINE);
+        m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_MARGIN_TEXTLEFT);
+        m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_MARGIN_RIGHT);
         return;
     }
 
     short nPara = SVBT16ToUInt16( pData );
 
-    std::shared_ptr<SvxLRSpaceItem> aLR(std::make_shared<SvxLRSpaceItem>(RES_LR_SPACE));
-    const SfxPoolItem* pLR = GetFormatAttr(RES_LR_SPACE);
-    if( pLR )
-        aLR.reset(static_cast<SvxLRSpaceItem*>(pLR->Clone()));
+    SfxPoolItem const* pItem(GetFormatAttr(RES_MARGIN_FIRSTLINE));
+    ::std::unique_ptr<SvxFirstLineIndentItem> pFirstLine(pItem
+            ? static_cast<SvxFirstLineIndentItem*>(pItem->Clone())
+            : new SvxFirstLineIndentItem(RES_MARGIN_FIRSTLINE));
+    pItem = GetFormatAttr(RES_MARGIN_TEXTLEFT);
+    ::std::unique_ptr<SvxTextLeftMarginItem> pLeftMargin(pItem
+            ? static_cast<SvxTextLeftMarginItem*>(pItem->Clone())
+            : new SvxTextLeftMarginItem(RES_MARGIN_TEXTLEFT));
+    pItem = GetFormatAttr(RES_MARGIN_RIGHT);
+    ::std::unique_ptr<SvxRightMarginItem> pRightMargin(pItem
+            ? static_cast<SvxRightMarginItem*>(pItem->Clone())
+            : new SvxRightMarginItem(RES_MARGIN_RIGHT));
 
     // Fix the regression issue: #i99822#: Discussion?
     // Since the list level formatting doesn't apply into paragraph style
@@ -4239,10 +4249,11 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             const SwNumFormat* pFormat = pNumRule->GetNumFormat( nLvl );
             if ( pFormat && pFormat->GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
             {
-                aLR->SetTextLeft( pFormat->GetIndentAt() );
-                aLR->SetTextFirstLineOffset( static_cast<short>(pFormat->GetFirstLineIndent()) );
+                pLeftMargin->SetTextLeft(pFormat->GetIndentAt());
+                pFirstLine->SetTextFirstLineOffset(static_cast<short>(pFormat->GetFirstLineIndent()));
                 // make paragraph have hard-set indent attributes
-                pTextNode->SetAttr( *aLR );
+                pTextNode->SetAttr(*pLeftMargin);
+                pTextNode->SetAttr(*pFirstLine);
             }
         }
     }
@@ -4282,7 +4293,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
         case NS_sprm::v6::sprmPDxaLeft:
         case NS_sprm::PDxaLeft80::val:
         case NS_sprm::PDxaLeft::val:
-            aLR->SetTextLeft( nPara );
+            pLeftMargin->SetTextLeft(nPara);
             if (m_pCurrentColl && m_nCurrentColl < m_vColl.size())
             {
                 m_vColl[m_nCurrentColl].m_bListRelevantIndentSet = true;
@@ -4309,13 +4320,13 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
                 SprmResult aIsZeroed = m_xPlcxMan->GetPapPLCF()->HasSprm(NS_sprm::PIlfo::val);
                 if (aIsZeroed.pSprm && aIsZeroed.nRemainingData >= 1 && *aIsZeroed.pSprm == 0)
                 {
-                    const SvxLRSpaceItem &rLR =
-                        m_vColl[m_nCurrentColl].m_pFormat->GetFormatAttr(RES_LR_SPACE);
-                    nPara = nPara - rLR.GetTextFirstLineOffset();
+                    const SvxFirstLineIndentItem & rFirstLine =
+                        m_vColl[m_nCurrentColl].m_pFormat->GetFormatAttr(RES_MARGIN_FIRSTLINE);
+                    nPara = nPara - rFirstLine.GetTextFirstLineOffset();
                 }
             }
 
-            aLR->SetTextFirstLineOffset(nPara);
+            pFirstLine->SetTextFirstLineOffset(nPara);
 
             if (!m_pCurrentColl)
             {
@@ -4325,7 +4336,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
                     {
                         if (!lcl_HasExplicitLeft(m_xPlcxMan.get(), m_bVer67))
                         {
-                            aLR->SetTextLeft(pNumFormat->GetIndentAt());
+                            pLeftMargin->SetTextLeft(pNumFormat->GetIndentAt());
 
                             // If have not explicit left, set number format list tab position is doc default tab
                             const SvxTabStopItem *pDefaultStopItem = m_rDoc.GetAttrPool().GetPoolDefaultItem(RES_PARATR_TABSTOP);
@@ -4345,13 +4356,15 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
         case NS_sprm::v6::sprmPDxaRight:
         case NS_sprm::PDxaRight80::val:
         case NS_sprm::PDxaRight::val:
-            aLR->SetRight( nPara );
+            pRightMargin->SetRight(nPara);
             break;
         default:
             return;
     }
 
-    NewAttr( *aLR, bFirstLinOfstSet, bLeftIndentSet ); // #i103711#, #i105414#
+    NewAttr(*pFirstLine, bFirstLinOfstSet, false); // #i103711#, #i105414#
+    NewAttr(*pLeftMargin, false, bLeftIndentSet);
+    NewAttr(*pRightMargin, false, false);
 }
 
 // Sprm 20
