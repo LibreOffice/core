@@ -645,7 +645,7 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFo
                 static_cast< SdrView* >(this)->TextEditDrawing(rPaintWindow);
         }
 
-        if (comphelper::LibreOfficeKit::isActive() && mbPaintTextEdit && pPageView)
+        if (comphelper::LibreOfficeKit::isActive() && pPageView)
         {
             // Look for active text edits in other views showing the same page,
             // and show them as well. Show only if Page/MasterPage mode is matching.
