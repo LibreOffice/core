@@ -1432,6 +1432,14 @@ void ScGridWindow::LaunchDataSelectMenu(const SCCOL nCol, const SCROW nRow)
     std::vector<ScTypedStrData> aStrings; // case sensitive
     // Fill List
     rDoc.GetDataEntries(nCol, nRow, nTab, aStrings, true /* bValidation */);
+
+    // IsIgnoreBlank allows blank values. Don't add empty string unless "Allow Empty Cells"
+    if (pData && !pData->IsIgnoreBlank())
+    {
+        auto lambda = [](const ScTypedStrData& rStr) { return rStr.GetString().isEmpty(); };
+        aStrings.erase(std::remove_if(aStrings.begin(), aStrings.end(), lambda), aStrings.end());
+    }
+
     if (aStrings.empty())
         bEmpty = true;
 
@@ -1447,10 +1455,8 @@ void ScGridWindow::LaunchDataSelectMenu(const SCCOL nCol, const SCROW nRow)
 
         for (const auto& rString : aStrings)
         {
-            // IsIgnoreBlank allows blank values. Don't add empty string unless "Allow Empty Cells"
             const OUString& rFilterString = rString.GetString();
-            if (!rFilterString.isEmpty() || !pData || pData->IsIgnoreBlank())
-                rFilterBox.append_text(rFilterString);
+            rFilterBox.append_text(rFilterString);
         }
 
         if (bWait)
