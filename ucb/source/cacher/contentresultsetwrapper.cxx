@@ -129,35 +129,18 @@ void ContentResultSetWrapper::impl_EnsureNotDisposed(std::unique_lock<std::mutex
         throw DisposedException();
 }
 
-void ContentResultSetWrapper::impl_getPropertyChangeListenerContainer(std::unique_lock<std::mutex>& /*rGuard*/)
-{
-    if ( !m_pPropertyChangeListeners )
-        m_pPropertyChangeListeners.reset(
-            new PropertyChangeListenerContainer_Impl() );
-}
-
-void ContentResultSetWrapper::impl_getVetoableChangeListenerContainer(std::unique_lock<std::mutex>& /*rGuard*/)
-{
-    if ( !m_pVetoableChangeListeners )
-        m_pVetoableChangeListeners.reset(
-            new VetoableChangeListenerContainer_Impl() );
-}
-
 void ContentResultSetWrapper::impl_notifyPropertyChangeListeners( std::unique_lock<std::mutex>& rGuard, const PropertyChangeEvent& rEvt )
 {
-    if( !m_pPropertyChangeListeners )
-        return;
-
     // Notify listeners interested especially in the changed property.
     OInterfaceContainerHelper4<XPropertyChangeListener>* pContainer =
-            m_pPropertyChangeListeners->getContainer( rGuard, rEvt.PropertyName );
+            m_aPropertyChangeListeners.getContainer( rGuard, rEvt.PropertyName );
     if( pContainer )
     {
         pContainer->notifyEach( rGuard, &XPropertyChangeListener::propertyChange, rEvt );
     }
 
     // Notify listeners interested in all properties.
-    pContainer = m_pPropertyChangeListeners->getContainer( rGuard, OUString() );
+    pContainer = m_aPropertyChangeListeners.getContainer( rGuard, OUString() );
     if( pContainer )
     {
         pContainer->notifyEach( rGuard, &XPropertyChangeListener::propertyChange, rEvt );
@@ -166,19 +149,16 @@ void ContentResultSetWrapper::impl_notifyPropertyChangeListeners( std::unique_lo
 
 void ContentResultSetWrapper::impl_notifyVetoableChangeListeners( std::unique_lock<std::mutex>& rGuard, const PropertyChangeEvent& rEvt )
 {
-    if( !m_pVetoableChangeListeners )
-        return;
-
     // Notify listeners interested especially in the changed property.
     OInterfaceContainerHelper4<XVetoableChangeListener>* pContainer =
-            m_pVetoableChangeListeners->getContainer( rGuard, rEvt.PropertyName );
+            m_aVetoableChangeListeners.getContainer( rGuard, rEvt.PropertyName );
     if( pContainer )
     {
         pContainer->notifyEach( rGuard, &XVetoableChangeListener::vetoableChange, rEvt );
     }
 
     // Notify listeners interested in all properties.
-    pContainer = m_pVetoableChangeListeners->getContainer( rGuard, OUString() );
+    pContainer = m_aVetoableChangeListeners.getContainer( rGuard, OUString() );
     if( pContainer )
     {
         pContainer->notifyEach( rGuard, &XVetoableChangeListener::vetoableChange, rEvt );
@@ -306,18 +286,18 @@ void SAL_CALL ContentResultSetWrapper::dispose()
         m_aDisposeEventListeners.disposeAndClear( aGuard, aEvt );
     }
 
-    if( m_pPropertyChangeListeners )
+    if( m_aPropertyChangeListeners.hasContainedTypes(aGuard) )
     {
         EventObject aEvt;
         aEvt.Source = static_cast< XPropertySet * >( this );
-        m_pPropertyChangeListeners->disposeAndClear( aGuard, aEvt );
+        m_aPropertyChangeListeners.disposeAndClear( aGuard, aEvt );
     }
 
-    if( m_pVetoableChangeListeners )
+    if( m_aVetoableChangeListeners.hasContainedTypes(aGuard) )
     {
         EventObject aEvt;
         aEvt.Source = static_cast< XPropertySet * >( this );
-        m_pVetoableChangeListeners->disposeAndClear( aGuard, aEvt );
+        m_aVetoableChangeListeners.disposeAndClear( aGuard, aEvt );
     }
 
     m_bDisposed = true;
@@ -458,9 +438,8 @@ void SAL_CALL ContentResultSetWrapper::addPropertyChangeListener( const OUString
         //throws UnknownPropertyException, if so
     }
 
-    impl_getPropertyChangeListenerContainer(aGuard);
-    bool bNeedRegister = !m_pPropertyChangeListeners->hasContainedTypes(aGuard);
-    m_pPropertyChangeListeners->addInterface( aGuard, aPropertyName, xListener );
+    bool bNeedRegister = !m_aPropertyChangeListeners.hasContainedTypes(aGuard);
+    m_aPropertyChangeListeners.addInterface( aGuard, aPropertyName, xListener );
     if( !bNeedRegister )
         return;
 
@@ -477,7 +456,7 @@ void SAL_CALL ContentResultSetWrapper::addPropertyChangeListener( const OUString
     }
     catch( Exception& )
     {
-        m_pPropertyChangeListeners->removeInterface( aGuard, aPropertyName, xListener );
+        m_aPropertyChangeListeners.removeInterface( aGuard, aPropertyName, xListener );
         throw;
     }
 }
@@ -500,9 +479,8 @@ void SAL_CALL ContentResultSetWrapper::addVetoableChangeListener( const OUString
         //throws UnknownPropertyException, if so
     }
 
-    impl_getVetoableChangeListenerContainer(aGuard);
-    bool bNeedRegister = !m_pVetoableChangeListeners->hasContainedTypes(aGuard);
-    m_pVetoableChangeListeners->addInterface( aGuard, rPropertyName, xListener );
+    bool bNeedRegister = !m_aVetoableChangeListeners.hasContainedTypes(aGuard);
+    m_aVetoableChangeListeners.addInterface( aGuard, rPropertyName, xListener );
     if( !bNeedRegister )
         return;
 
@@ -521,7 +499,7 @@ void SAL_CALL ContentResultSetWrapper::addVetoableChangeListener( const OUString
     }
     catch( Exception& )
     {
-        m_pVetoableChangeListeners->removeInterface( aGuard, rPropertyName, xListener );
+        m_aVetoableChangeListeners.removeInterface( aGuard, rPropertyName, xListener );
         throw;
     }
 }
@@ -534,11 +512,11 @@ void SAL_CALL ContentResultSetWrapper::removePropertyChangeListener( const OUStr
     impl_EnsureNotDisposed(aGuard);
 
     //noop, if no listener registered
-    if( !m_pPropertyChangeListeners )
+    if( !m_aPropertyChangeListeners.hasContainedTypes(aGuard) )
         return;
 
     OInterfaceContainerHelper4<XPropertyChangeListener>* pContainer =
-        m_pPropertyChangeListeners->getContainer( aGuard, rPropertyName );
+        m_aPropertyChangeListeners.getContainer( aGuard, rPropertyName );
 
     if( !pContainer )
     {
@@ -553,9 +531,9 @@ void SAL_CALL ContentResultSetWrapper::removePropertyChangeListener( const OUStr
         return; //the listener was not registered
     }
 
-    m_pPropertyChangeListeners->removeInterface( aGuard, rPropertyName, xListener );
+    m_aPropertyChangeListeners.removeInterface( aGuard, rPropertyName, xListener );
 
-    if( m_pPropertyChangeListeners->hasContainedTypes(aGuard) )
+    if( m_aPropertyChangeListeners.hasContainedTypes(aGuard) )
         return;
 
     impl_init_xPropertySetOrigin(aGuard);
@@ -583,10 +561,10 @@ void SAL_CALL ContentResultSetWrapper::removeVetoableChangeListener( const OUStr
     impl_EnsureNotDisposed(aGuard);
 
     //noop, if no listener registered
-    if( !m_pVetoableChangeListeners )
+    if( !m_aVetoableChangeListeners.hasContainedTypes(aGuard) )
         return;
     OInterfaceContainerHelper4<XVetoableChangeListener>* pContainer =
-        m_pVetoableChangeListeners->getContainer( aGuard, rPropertyName );
+        m_aVetoableChangeListeners.getContainer( aGuard, rPropertyName );
 
     if( !pContainer )
     {
@@ -601,9 +579,9 @@ void SAL_CALL ContentResultSetWrapper::removeVetoableChangeListener( const OUStr
         return; //the listener was not registered
     }
 
-    m_pVetoableChangeListeners->removeInterface( aGuard, rPropertyName, xListener );
+    m_aVetoableChangeListeners.removeInterface( aGuard, rPropertyName, xListener );
 
-    if( m_pVetoableChangeListeners->hasContainedTypes(aGuard) )
+    if( m_aVetoableChangeListeners.hasContainedTypes(aGuard) )
         return;
 
     impl_init_xPropertySetOrigin(aGuard);

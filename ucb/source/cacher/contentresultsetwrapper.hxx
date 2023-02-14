@@ -87,20 +87,14 @@ private:
     bool                m_bInDispose;///In dispose call
     comphelper::OInterfaceContainerHelper4<css::lang::XEventListener>
                             m_aDisposeEventListeners;
-    std::unique_ptr<PropertyChangeListenerContainer_Impl>
-                            m_pPropertyChangeListeners;
-    std::unique_ptr<VetoableChangeListenerContainer_Impl>
-                            m_pVetoableChangeListeners;
+    PropertyChangeListenerContainer_Impl
+                            m_aPropertyChangeListeners;
+    VetoableChangeListenerContainer_Impl
+                            m_aVetoableChangeListeners;
 
 
     //methods:
 private:
-    void
-    impl_getPropertyChangeListenerContainer(std::unique_lock<std::mutex>& rGuard);
-
-    void
-    impl_getVetoableChangeListenerContainer(std::unique_lock<std::mutex>& rGuard);
-
     void verifyGet();
 
 protected:

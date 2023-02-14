@@ -1067,11 +1067,11 @@ void SAL_CALL PersistentPropertySet::dispose()
         m_aPropSetChangeListeners.disposeAndClear( l, aEvt );
     }
 
-    if ( m_pPropertyChangeListeners )
+    if ( m_aPropertyChangeListeners.hasContainedTypes(l) )
     {
         EventObject aEvt;
         aEvt.Source = static_cast< XPropertySet * >( this  );
-        m_pPropertyChangeListeners->disposeAndClear( l, aEvt );
+        m_aPropertyChangeListeners.disposeAndClear( l, aEvt );
     }
 }
 
@@ -1165,7 +1165,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValue( const OUString& aProperty
                     xBatch->commitChanges();
 
                     PropertyChangeEvent aEvt;
-                    if ( m_pPropertyChangeListeners )
+                    if ( m_aPropertyChangeListeners.hasContainedTypes(aCGuard) )
                     {
                         // Obtain handle
                         aValueName = aFullPropName + "/Handle";
@@ -1239,10 +1239,7 @@ void SAL_CALL PersistentPropertySet::addPropertyChangeListener(
 
     std::unique_lock aGuard(m_aMutex);
 
-    if ( !m_pPropertyChangeListeners )
-        m_pPropertyChangeListeners.reset( new PropertyListeners_Impl() );
-
-    m_pPropertyChangeListeners->addInterface(aGuard, aPropertyName, xListener );
+    m_aPropertyChangeListeners.addInterface(aGuard, aPropertyName, xListener );
 }
 
 
@@ -1255,9 +1252,8 @@ void SAL_CALL PersistentPropertySet::removePropertyChangeListener(
 
     std::unique_lock aGuard(m_aMutex);
 
-    if ( m_pPropertyChangeListeners )
-        m_pPropertyChangeListeners->removeInterface(aGuard,
-                                                aPropertyName, aListener );
+    m_aPropertyChangeListeners.removeInterface(aGuard,
+                                            aPropertyName, aListener );
 
     // Note: Don't want to delete empty container here -> performance.
 }
@@ -1834,7 +1830,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
                         // Commit changes.
                         xBatch->commitChanges();
 
-                        if ( m_pPropertyChangeListeners )
+                        if ( m_aPropertyChangeListeners.hasContainedTypes(aCGuard) )
                         {
                             PropertyChangeEvent aEvt;
                             aEvt.Source         = static_cast<OWeakObject*>(this);
@@ -1863,7 +1859,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
             }
         }
 
-        if ( m_pPropertyChangeListeners )
+        if ( m_aPropertyChangeListeners.hasContainedTypes(aCGuard) )
         {
             // Notify property changes.
             for (auto const& event : aEvents)
@@ -1888,7 +1884,7 @@ void PersistentPropertySet::notifyPropertyChangeEvent(
 {
     // Get "normal" listeners for the property.
     OInterfaceContainerHelper4<XPropertyChangeListener>* pContainer =
-            m_pPropertyChangeListeners->getContainer( rGuard, rEvent.PropertyName );
+            m_aPropertyChangeListeners.getContainer( rGuard, rEvent.PropertyName );
     if ( pContainer && pContainer->getLength(rGuard) )
     {
         pContainer->notifyEach( rGuard, &XPropertyChangeListener::propertyChange, rEvent );
@@ -1896,7 +1892,7 @@ void PersistentPropertySet::notifyPropertyChangeEvent(
 
     // Get "normal" listeners for all properties.
     OInterfaceContainerHelper4<XPropertyChangeListener>* pNoNameContainer =
-            m_pPropertyChangeListeners->getContainer( rGuard, OUString() );
+            m_aPropertyChangeListeners.getContainer( rGuard, OUString() );
     if ( pNoNameContainer && pNoNameContainer->getLength(rGuard) )
     {
         pNoNameContainer->notifyEach( rGuard, &XPropertyChangeListener::propertyChange, rEvent );

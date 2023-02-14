@@ -165,7 +165,7 @@ class PersistentPropertySet : public cppu::WeakImplHelper <
     mutable std::mutex          m_aMutex;
     comphelper::OInterfaceContainerHelper4<css::lang::XEventListener>  m_aDisposeEventListeners;
     comphelper::OInterfaceContainerHelper4<css::beans::XPropertySetInfoChangeListener>  m_aPropSetChangeListeners;
-    std::unique_ptr<PropertyListeners_Impl>      m_pPropertyChangeListeners;
+    PropertyListeners_Impl      m_aPropertyChangeListeners;
 
 private:
     void notifyPropertyChangeEvent(
