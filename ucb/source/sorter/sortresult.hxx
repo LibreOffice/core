@@ -32,7 +32,9 @@
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/ucb/ListAction.hpp>
 #include <comphelper/multiinterfacecontainer3.hxx>
+#include <comphelper/multiinterfacecontainer4.hxx>
 #include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <deque>
@@ -93,16 +95,16 @@ class SortedResultSet: public cppu::WeakImplHelper <
     css::sdbc::XResultSetMetaDataSupplier,
     css::beans::XPropertySet >
 {
-    comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> *mpDisposeEventListeners;
-    std::unique_ptr<comphelper::OMultiTypeInterfaceContainerHelperVar3<css::beans::XPropertyChangeListener, OUString>>    mpPropChangeListeners;
-    std::unique_ptr<comphelper::OMultiTypeInterfaceContainerHelperVar3<css::beans::XVetoableChangeListener, OUString>>    mpVetoChangeListeners;
+    comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> maDisposeEventListeners;
+    comphelper::OMultiTypeInterfaceContainerHelperVar4<OUString, css::beans::XPropertyChangeListener>    maPropChangeListeners;
+    comphelper::OMultiTypeInterfaceContainerHelperVar4<OUString, css::beans::XVetoableChangeListener>    maVetoChangeListeners;
 
     css::uno::Reference < css::sdbc::XResultSet >            mxOriginal;
     css::uno::Reference < css::sdbc::XResultSet >            mxOther;
 
     rtl::Reference<SRSPropertySetInfo> mpPropSetInfo;
     SortInfo*           mpSortInfo;
-    osl::Mutex          maMutex;
+    std::mutex          maMutex;
     SortedEntryList     maS2O;          // maps the sorted entries to the original ones
     std::deque<sal_IntPtr> m_O2S;       /// maps the original Entries to the sorted ones
     std::deque<SortListData*> m_ModList; /// keeps track of modified entries
