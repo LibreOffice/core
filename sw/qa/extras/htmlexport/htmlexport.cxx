@@ -434,8 +434,12 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportOfImagesWithSkipImagesEnabled)
     assertXPath(pDoc, "/html/body/p/img", 0);
 }
 
-DECLARE_HTMLEXPORT_TEST(testSkipImagesEmbedded, "skipimage-embedded.doc")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testSkipImagesEmbedded)
 {
+    createSwDoc("skipimage-embedded.doc");
+    setFilterOptions("SkipImages");
+    save(OUString::createFromAscii(mpFilter));
+
     // Embedded spreadsheet was exported as image, so content was lost. Make
     // sure it's exported as HTML instead.
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
