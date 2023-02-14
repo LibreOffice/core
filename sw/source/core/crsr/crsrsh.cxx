@@ -2525,11 +2525,12 @@ void SwCursorShell::SwClientNotify(const SwModify&, const SfxHint& rHint)
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     auto nWhich = pLegacy->GetWhich();
     if(!nWhich)
-        nWhich = sal::static_int_cast<sal_uInt16>(RES_MSG_BEGIN);
+        nWhich = RES_OBJECTDYING;
     if( m_bCallChgLnk &&
-        ( nWhich < RES_MSG_BEGIN || nWhich >= RES_MSG_END ||
-            nWhich == RES_FMT_CHG || nWhich == RES_UPDATE_ATTR ||
-            nWhich == RES_ATTRSET_CHG ))
+        ( !isFormatMessage(nWhich)
+                || nWhich == RES_FMT_CHG
+                || nWhich == RES_UPDATE_ATTR
+                || nWhich == RES_ATTRSET_CHG ))
         // messages are not forwarded
         // #i6681#: RES_UPDATE_ATTR is implicitly unset in
         // SwTextNode::Insert(SwTextHint*, sal_uInt16); we react here and thus do

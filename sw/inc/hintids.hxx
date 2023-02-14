@@ -417,8 +417,8 @@ constexpr TypedWhichId<SwConditionTextFormatColl> RES_CONDTXTFMTCOLL(160);
 constexpr sal_uInt16 RES_FMT_END(161);
 
 // ID's for Messages in the Formats
-constexpr sal_uInt16 RES_MSG_BEGIN(RES_FMT_END);
-constexpr TypedWhichId<SwPtrMsgPoolItem> RES_OBJECTDYING(RES_MSG_BEGIN); // 161
+constexpr sal_uInt16 RES_FORMAT_MSG_BEGIN(RES_FMT_END);
+constexpr TypedWhichId<SwPtrMsgPoolItem> RES_OBJECTDYING(RES_FORMAT_MSG_BEGIN); // 161
 constexpr TypedWhichId<SwFormatChg> RES_FMT_CHG(162);
 constexpr TypedWhichId<SwAttrSetChg> RES_ATTRSET_CHG(163);
 constexpr TypedWhichId<SwUpdateAttr> RES_UPDATE_ATTR(167);
@@ -436,13 +436,13 @@ constexpr TypedWhichId<SwFindNearestNode> RES_FINDNEARESTNODE(184);
 constexpr TypedWhichId<SwPtrMsgPoolItem> RES_CONTENT_VISIBLE(185);
 constexpr TypedWhichId<SwStringMsgPoolItem> RES_TITLE_CHANGED(188);
 constexpr TypedWhichId<SwStringMsgPoolItem> RES_DESCRIPTION_CHANGED(189);
-constexpr sal_uInt16 RES_MSG_END(190);
+constexpr sal_uInt16 RES_FORMAT_MSG_END(190);
 
 // An ID for the RTF-reader. The stylesheets are treated like attributes,
 // i.e. there is a StyleSheet-attribute. To avoid collision with other
 // Which()-values, the value is listed here. (The help system too defines
 // new attributes!)
-constexpr sal_uInt16 RES_FLTRATTR_BEGIN(RES_MSG_END);
+constexpr sal_uInt16 RES_FLTRATTR_BEGIN(RES_FORMAT_MSG_END);
 constexpr TypedWhichId<SfxStringItem> RES_FLTR_BOOKMARK(RES_FLTRATTR_BEGIN);
 constexpr TypedWhichId<SwFltAnchor> RES_FLTR_ANCHOR(191);
 constexpr TypedWhichId<SfxStringItem> RES_FLTR_NUMRULE(192);
@@ -507,6 +507,10 @@ inline bool isBOXATR(const sal_uInt16 nWhich)
 inline bool isUNKNOWNATR(const sal_uInt16 nWhich)
 {
     return (RES_UNKNOWNATR_BEGIN <= nWhich) && (RES_UNKNOWNATR_END > nWhich);
+}
+inline bool isFormatMessage(const sal_uInt16 nWhich)
+{
+    return (RES_FORMAT_MSG_BEGIN <= nWhich) && (RES_FORMAT_MSG_END > nWhich);
 }
 
 // Take the respective default attribute from the statistical default
