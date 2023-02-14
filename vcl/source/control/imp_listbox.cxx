@@ -2537,25 +2537,6 @@ void ImplWin::FillLayoutData() const
     pThis->ImplDraw(*pThis->GetOutDev(), true);
 }
 
-bool ImplWin::PreNotify( NotifyEvent& rNEvt )
-{
-    if( rNEvt.GetType() == NotifyEventType::MOUSEMOVE )
-    {
-        const MouseEvent* pMouseEvt = rNEvt.GetMouseEvent();
-        if( pMouseEvt && (pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow()) )
-        {
-            // trigger redraw as mouse over state has changed
-            if ( IsNativeControlSupported(ControlType::Listbox, ControlPart::Entire)
-            && ! IsNativeControlSupported(ControlType::Listbox, ControlPart::ButtonDown) )
-            {
-                GetParent()->GetWindow( GetWindowType::Border )->Invalidate( InvalidateFlags::NoErase );
-            }
-        }
-    }
-
-    return Control::PreNotify(rNEvt);
-}
-
 void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
@@ -2591,14 +2572,17 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
             Point aPoint( -nLeft, -nTop );
             tools::Rectangle aCtrlRegion( aPoint - GetPosPixel(), pWin->GetSizePixel() );
 
-            bool bMouseOver = false;
-            vcl::Window *pChild = pWin->GetWindow( GetWindowType::FirstChild );
-            while( pChild )
+            bool bMouseOver = pWin->IsMouseOver();
+            if (!bMouseOver)
             {
-                bMouseOver = pChild->IsMouseOver();
-                if (bMouseOver)
-                    break;
-                pChild = pChild->GetWindow( GetWindowType::Next );
+                vcl::Window *pChild = pWin->GetWindow( GetWindowType::FirstChild );
+                while( pChild )
+                {
+                    bMouseOver = pChild->IsMouseOver();
+                    if (bMouseOver)
+                        break;
+                    pChild = pChild->GetWindow( GetWindowType::Next );
+                }
             }
             if( bMouseOver )
                 nState |= ControlState::ROLLOVER;
