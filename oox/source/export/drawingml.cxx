@@ -28,6 +28,7 @@
 #include <oox/helper/propertyset.hxx>
 #include <oox/drawingml/color.hxx>
 #include <drawingml/fillproperties.hxx>
+#include <drawingml/fontworkhelpers.hxx>
 #include <drawingml/textparagraph.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
@@ -65,6 +66,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
@@ -74,7 +76,6 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -3588,6 +3589,15 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                         && ( sPresetWarp == "textArchDown" || sPresetWarp == "textArchUp"
                             || sPresetWarp == "textButton" || sPresetWarp == "textCircle");
 
+    // Fontwork shapes in LO ignore insets in rendering, Word interpets them.
+    if (GetDocumentType() == DOCUMENT_DOCX && bIsFontworkShape)
+    {
+        nLeft = 0;
+        nRight = 0;
+        nTop = 0;
+        nBottom = 0;
+    }
+
     if (bUpright)
     {
         Degree100 nShapeRotateAngleDeg100(0_deg100);
@@ -3924,6 +3934,27 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     const SdrTextObj* pTxtObj = DynCastSdrTextObj( pSdrObject );
     if (pTxtObj && mpTextExport)
     {
+        std::vector<beans::PropertyValue> aOldCharFillPropVec;
+        if (bIsFontworkShape)
+        {
+            // Users may have set the character fill properties for more convenient editing.
+            // Save the properties before changing them for Fontwork export.
+            FontworkHelpers::collectCharColorProps(xXText, aOldCharFillPropVec);
+            // Word has properties for abc-transform in the run properties of the text of the shape.
+            // Writer has the Fontwork properties as shape properties. Create the character fill
+            // properties needed for export from the shape fill properties
+            // and apply them to all runs.
+            std::vector<beans::PropertyValue> aExportCharFillPropVec;
+            FontworkHelpers::createCharFillPropsFromShape(rXPropSet, aExportCharFillPropVec);
+            FontworkHelpers::applyPropsToRuns(aExportCharFillPropVec, xXText);
+            // Import has converted some items from CharInteropGrabBag to fill and line
+            // properties of the shape. For export we convert them back because users might have
+            // changed them. And we create them in case we come from an odt document.
+            std::vector<beans::PropertyValue> aUpdatePropVec;
+            FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(rXPropSet, aUpdatePropVec);
+            FontworkHelpers::applyUpdatesToCharInteropGrabBag(aUpdatePropVec, xXText);
+        }
+
         std::optional<OutlinerParaObject> pParaObj;
 
         /*
@@ -3943,6 +3974,9 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
             // this is reached only in case some text is attached to the shape
             mpTextExport->WriteOutliner(*pParaObj);
         }
+
+        if (bIsFontworkShape)
+            FontworkHelpers::applyPropsToRuns(aOldCharFillPropVec, xXText);
         return;
     }
 

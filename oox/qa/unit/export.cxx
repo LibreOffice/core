@@ -910,6 +910,111 @@ CPPUNIT_TEST_FIXTURE(Test, testVMLAdjustmentExport)
     OUString sRadius = sAdjustments.copy(nTokenStart);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(5296), sRadius.toInt32(), 2);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFontworkDirectColor)
+{
+    // The document has a Fontwork shape with fill #2e8b57 plus 60% transparency and line color
+    // #ff7f50 with 20% transparency. When exporting to docx, line color was not exported at all
+    // and fill color was replaced with character color.
+    loadFromURL(u"tdf51195_Fontwork_DirectColor.odt");
+
+    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
+    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
+    skipValidation();
+
+    // Save to DOCX:
+    save("Office Open XML Text");
+
+    // Examine the saved markup.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    const OString sElement = "//w:txbxContent/w:p/w:r/w:rPr/";
+
+    // Make sure the fallback in <w:color> has correct value.
+    assertXPath(pXmlDoc, sElement + "w:color", "val", "2E8B57");
+
+    // ... and <w14:textOutline> exists and has correct values.
+    assertXPath(pXmlDoc, sElement + "w14:textOutline", 1);
+    assertXPath(pXmlDoc, sElement + "w14:textOutline/w14:solidFill/w14:srgbClr", "val", "ff7f50");
+    assertXPath(pXmlDoc, sElement + "w14:textOutline/w14:solidFill/w14:srgbClr/w14:alpha", "val",
+                "20000");
+    assertXPath(pXmlDoc, sElement + "w14:textOutline/w14:round", 1);
+
+    // ... and w14:textFill exists and has correct values.
+    assertXPath(pXmlDoc, sElement + "w14:textFill", 1);
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:solidFill/w14:srgbClr", "val", "2e8b57");
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:solidFill/w14:srgbClr/w14:alpha", "val",
+                "60000");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontworkThemeColor)
+{
+    // The document has a Fontwork shape with fill theme color 'lt2' and 50% darker, and a Fontwork
+    // shape with theme color 'dk2' and 40% lighter. When exporting to docx, fill color was not
+    // exported as theme color at all, and it was replaced with character color.
+    loadFromURL(u"tdf51195_Fontwork_ThemeColor.odt");
+
+    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
+    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
+    skipValidation();
+
+    // Save to DOCX:
+    save("Office Open XML Text");
+
+    // Examine the saved markup.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    // shape with 'darker'
+    OString sElement = "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/"
+                       "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/"
+                       "w:rPr/";
+
+    // Make sure the fallback in <w:color> has correct values
+    assertXPath(pXmlDoc, sElement + "w:color", "val", "948A54");
+    assertXPath(pXmlDoc, sElement + "w:color", "themeColor", "background2");
+    assertXPath(pXmlDoc, sElement + "w:color", "themeShade", "80");
+
+    // ... and w14:textFill exists and has correct values.
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:solidFill/w14:schemeClr", "val", "bg2");
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:solidFill/w14:schemeClr/w14:lumMod", "val",
+                "50000");
+
+    // shape with 'lighter'
+    sElement = "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/"
+               "a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/";
+
+    // Make sure the fallback in <w:color> has correct values
+    assertXPath(pXmlDoc, sElement + "w:color", "val", "558ED5");
+    assertXPath(pXmlDoc, sElement + "w:color", "themeColor", "text2");
+    assertXPath(pXmlDoc, sElement + "w:color", "themeTint", "99");
+
+    // ... and w14:textFill exists and has correct values.
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:solidFill/w14:schemeClr", "val", "tx2");
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:solidFill/w14:schemeClr/w14:lumMod", "val",
+                "60000");
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:solidFill/w14:schemeClr/w14:lumOff", "val",
+                "40000");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontworkDistance)
+{
+    // LO ignores 'Spacing to Borders' of the 'Text Attributes' for Fontwork shapes. Word interprets
+    // them. Make sure we force them to zero on export to docx, otherwise Word might wrap the text.
+    loadFromURL(u"tdf51195_Fontwork_Distance.odt");
+
+    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
+    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
+    skipValidation();
+
+    // Save to DOCX:
+    save("Office Open XML Text");
+
+    // Examine the saved markup.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPathAttrs(pXmlDoc,
+                     "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+                     "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:bodyPr",
+                     { { "lIns", "0" }, { "rIns", "0" }, { "tIns", "0" }, { "bIns", "0" } });
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

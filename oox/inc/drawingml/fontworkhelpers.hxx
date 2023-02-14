@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <docmodel/theme/ThemeColor.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <svx/msdffdef.hxx>
@@ -26,7 +27,11 @@
 #include "customshapeproperties.hxx"
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/text/XText.hpp>
 
 namespace FontworkHelpers
 {
@@ -46,5 +51,52 @@ void putCustomShapeIntoTextPathMode(
     If eShapeType is not a Fontwork shape type or the special type is not yet implemented,
     it returns an empty string.*/
 OString GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType);
+
+/** Collects the properties "CharColor", "CharLumMod", "CharLumOff", "CharColorTheme",
+    "CharColorThemeReference" and "CharTransparence" from the first non-empty run in rXText and puts
+    them into rCharPropVec.*/
+void collectCharColorProps(const css::uno::Reference<css::text::XText>& rXText,
+                           std::vector<css::beans::PropertyValue>& rCharPropVec);
+
+/** Applies all properties in rTextPropVec excluding "CharInteropGrabBag" to all non-empty runs in
+    rXText.*/
+void applyPropsToRuns(const std::vector<css::beans::PropertyValue>& rTextPropVec,
+                      css::uno::Reference<css::text::XText>& rXText);
+
+/** Generates the properties "CharColor", "CharLumMod", "CharLumOff", "CharColorTheme",
+    "CharColorThemeReference" and "CharTransparence" from the shape properties "FillColor",
+    "FillColorLumMod, "FillColorLumOff", "FillColorTheme", "FillColorThemeReference" and
+    "FillTransparence" and puts them into rCharPropVec.*/
+void createCharFillPropsFromShape(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+                                  std::vector<css::beans::PropertyValue>& rCharPropVec);
+
+/** Creates the properties "CharTextFillTextEffect", "CharTextOutlineTextEffect", "CharThemeColor",
+    "CharThemeColorShade" or "CharThemeColorTint", and "CharThemeOriginalColor" from the FillFoo and
+    LineBar properties of the shape and puts them into rUpdatePropVec.*/
+void createCharInteropGrabBagUpdatesFromShapeProps(
+    const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+    std::vector<css::beans::PropertyValue>& rUpdatePropVec);
+
+/** Puts all properties in rUpdatePropVec into the "CharInteropGrabBag" of all non-empty runs in rXText.
+    Existing properties are overwritten.*/
+void applyUpdatesToCharInteropGrabBag(const std::vector<css::beans::PropertyValue>& rUpdatePropVec,
+                                      css::uno::Reference<css::text::XText>& rXText);
+
+// ToDo: This is essentially the same as contained in methode DrawingML::WriteOutline. Change it
+// there to use this method too, perhaps move this method to a common location.
+/** Uses LineDash and LineCap to detect, whether the dashing comes from a prstDash in MS Office.
+    If prstDash is detected, the method puts the corresponding string for markup into rsPrstDash
+    and returns true.
+    If no prstDash is detected, the method leaves rsPrstDash unchanged and returns false. */
+bool createPrstDashFromLineDash(const css::drawing::LineDash& rLineDash,
+                                const css::drawing::LineCap& rLineCap, OUString& rsPrstDash);
+
+/** Returns true if a theme color with other type than model::ThemeColorType::Unknown was found.
+    The theme color is then in aThemeColor.
+    Returns false otherwise. aThemeColor is then unchanged or its type is
+    model::ThemeColorType::Unknown */
+bool getThemeColorFromShape(const OUString& rPropertyName,
+                            const css::uno::Reference<css::beans::XPropertySet>& xPropertySet,
+                            model::ThemeColor& aThemeColor);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

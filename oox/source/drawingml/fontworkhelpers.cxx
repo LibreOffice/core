@@ -22,18 +22,35 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <docmodel/uno/UnoThemeColor.hxx>
 #include <drawingml/customshapeproperties.hxx>
 #include <drawingml/presetgeometrynames.hxx>
+#include <oox/helper/grabbagstack.hxx>
 #include <svx/msdffdef.hxx>
+#include <tools/color.hxx>
 #include <tools/helpers.hxx>
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/drawing/DashStyle.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/drawing/LineDash.hpp>
+#include <com/sun/star/drawing/LineJoint.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/util/XThemeColor.hpp>
 
+#include <array>
 #include <map>
 
 using namespace com::sun::star;
@@ -795,6 +812,598 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
 
     auto i(aTypeToMarkupMap.find(eShapeType));
     return i == aTypeToMarkupMap.end() ? OString() : i->second;
+}
+
+void FontworkHelpers::collectCharColorProps(const uno::Reference<text::XText>& rXText,
+                                            std::vector<beans::PropertyValue>& rCharPropVec)
+{
+    if (!rXText.is())
+        return;
+    uno::Reference<text::XTextCursor> rXTextCursor = rXText->createTextCursor();
+    rXTextCursor->gotoStart(false);
+    rXTextCursor->gotoEnd(true);
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess(rXText, uno::UNO_QUERY);
+    if (!paraEnumAccess.is())
+        return;
+    uno::Reference<container::XEnumeration> paraEnum(paraEnumAccess->createEnumeration());
+    while (paraEnum->hasMoreElements())
+    {
+        uno::Reference<text::XTextRange> xParagraph(paraEnum->nextElement(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> runEnumAccess(xParagraph, uno::UNO_QUERY);
+        if (!runEnumAccess.is())
+            continue;
+        uno::Reference<container::XEnumeration> runEnum = runEnumAccess->createEnumeration();
+        while (runEnum->hasMoreElements())
+        {
+            uno::Reference<text::XTextRange> xRun(runEnum->nextElement(), uno::UNO_QUERY);
+            if (xRun->getString().isEmpty())
+                continue;
+            uno::Reference<beans::XPropertySet> xRunPropSet(xRun, uno::UNO_QUERY);
+            if (!xRunPropSet.is())
+                continue;
+            auto xRunPropSetInfo = xRunPropSet->getPropertySetInfo();
+            if (!xRunPropSetInfo.is())
+                continue;
+
+            // We have found a non-empty run. Collect its simple color properties.
+            const std::array<OUString, 6> aNamesArray = { u"CharColor",
+                                                          u"CharLumMod",
+                                                          u"CharLumOff",
+                                                          u"CharColorTheme",
+                                                          u"CharColorThemeReference",
+                                                          u"CharTransparence" };
+            for (const auto& propName : aNamesArray)
+            {
+                if (xRunPropSetInfo->hasPropertyByName(propName))
+                    rCharPropVec.push_back(comphelper::makePropertyValue(
+                        propName, xRunPropSet->getPropertyValue(propName)));
+            }
+            return;
+        }
+    }
+}
+
+void FontworkHelpers::applyPropsToRuns(const std::vector<beans::PropertyValue>& rTextPropVec,
+                                       uno::Reference<text::XText>& rXText)
+{
+    if (!rXText.is())
+        return;
+    uno::Reference<text::XTextCursor> xTextCursor = rXText->createTextCursor();
+    xTextCursor->gotoStart(false);
+    xTextCursor->gotoEnd(true);
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess(rXText, uno::UNO_QUERY);
+    if (!paraEnumAccess.is())
+        return;
+    uno::Reference<container::XEnumeration> paraEnum(paraEnumAccess->createEnumeration());
+    while (paraEnum->hasMoreElements())
+    {
+        uno::Reference<text::XTextRange> xParagraph(paraEnum->nextElement(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> runEnumAccess(xParagraph, uno::UNO_QUERY);
+        if (!runEnumAccess.is())
+            continue;
+        uno::Reference<container::XEnumeration> runEnum = runEnumAccess->createEnumeration();
+        while (runEnum->hasMoreElements())
+        {
+            uno::Reference<text::XTextRange> xRun(runEnum->nextElement(), uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySet> xRunPropSet(xRun, uno::UNO_QUERY);
+            if (!xRunPropSet.is())
+                continue;
+            auto xRunPropSetInfo = xRunPropSet->getPropertySetInfo();
+            if (!xRunPropSetInfo.is())
+                continue;
+
+            for (const beans::PropertyValue& rProp : rTextPropVec)
+            {
+                if (xRunPropSetInfo->hasPropertyByName(rProp.Name)
+                    && !(xRunPropSetInfo->getPropertyByName(rProp.Name).Attributes
+                         & beans::PropertyAttribute::READONLY)
+                    && rProp.Name != u"CharInteropGrabBag")
+                {
+                    xRunPropSet->setPropertyValue(rProp.Name, rProp.Value);
+                }
+            }
+        }
+    }
+}
+
+void FontworkHelpers::createCharFillPropsFromShape(
+    const uno::Reference<beans::XPropertySet>& rXPropSet,
+    std::vector<beans::PropertyValue>& rCharPropVec)
+{
+    auto xPropSetInfo = rXPropSet->getPropertySetInfo();
+    if (!xPropSetInfo.is())
+        return;
+    // CharColor contains the color including all color transformations
+    // FillColor contains darken and lighten but not transparency
+    sal_Int32 nColorRGB = 0;
+    if (xPropSetInfo->hasPropertyByName(u"FillColor")
+        && (rXPropSet->getPropertyValue(u"FillColor") >>= nColorRGB))
+    {
+        ::Color aColor(ColorTransparency, nColorRGB);
+        sal_Int16 nTransPercent = 0;
+        if (xPropSetInfo->hasPropertyByName(u"FillTransparence")
+            && (rXPropSet->getPropertyValue(u"FillTransparence") >>= nTransPercent))
+        {
+            sal_uInt8 nAlpha = 255 - sal_uInt8(std::lround(double(nTransPercent) * 2.55));
+            aColor.SetAlpha(nAlpha);
+        }
+        rCharPropVec.push_back(comphelper::makePropertyValue(u"CharColor", sal_Int32(aColor)));
+    }
+
+    const std::array<OUString, 5> aCharPropNames
+        = { u"CharColorLumMod", u"CharColorLumOff", u"CharColorTheme", u"CharColorThemeReference",
+            u"CharTransparence" };
+    const std::array<OUString, 5> aShapePropNames
+        = { u"FillColorLumMod", u"FillColorLumOff", u"FillColorTheme", u"FillColorThemeReference",
+            u"FillTransparence" };
+    for (size_t i = 0; i < 5; i++)
+    {
+        if (xPropSetInfo->hasPropertyByName(aShapePropNames[i]))
+            rCharPropVec.push_back(comphelper::makePropertyValue(
+                aCharPropNames[i], rXPropSet->getPropertyValue(aShapePropNames[i])));
+    }
+}
+
+bool FontworkHelpers::createPrstDashFromLineDash(const drawing::LineDash& rLineDash,
+                                                 const drawing::LineCap& rLineCap,
+                                                 OUString& rsPrstDash)
+{
+    bool bIsConverted = false;
+
+    bool bIsRelative(rLineDash.Style == drawing::DashStyle_RECTRELATIVE
+                     || rLineDash.Style == drawing::DashStyle_ROUNDRELATIVE);
+    if (bIsRelative && rLineDash.Dots == 1)
+    { // The length were tweaked on import in case of prstDash. Revert it here.
+        sal_uInt32 nDotLen = rLineDash.DotLen;
+        sal_uInt32 nDashLen = rLineDash.DashLen;
+        sal_uInt32 nDistance = rLineDash.Distance;
+        if (rLineCap != drawing::LineCap_BUTT && nDistance >= 99)
+        {
+            nDistance -= 99;
+            nDotLen += 99;
+            if (nDashLen > 0)
+                nDashLen += 99;
+        }
+
+        // LO uses length 0 for 100%, if the attribute is missing in ODF.
+        // Other applications might write 100%. Make is unique for the conditions.
+        if (nDotLen == 0)
+            nDotLen = 100;
+        if (nDashLen == 0 && rLineDash.Dashes > 0)
+            nDashLen = 100;
+
+        bIsConverted = true;
+        if (nDotLen == 100 && rLineDash.Dashes == 0 && nDashLen == 0 && nDistance == 300)
+            rsPrstDash = u"dot";
+        else if (nDotLen == 400 && rLineDash.Dashes == 0 && nDashLen == 0 && nDistance == 300)
+            rsPrstDash = u"dash";
+        else if (nDotLen == 400 && rLineDash.Dashes == 1 && nDashLen == 100 && nDistance == 300)
+            rsPrstDash = u"dashDot";
+        else if (nDotLen == 800 && rLineDash.Dashes == 0 && nDashLen == 0 && nDistance == 300)
+            rsPrstDash = u"lgDash";
+        else if (nDotLen == 800 && rLineDash.Dashes == 1 && nDashLen == 100 && nDistance == 300)
+            rsPrstDash = u"lgDashDot";
+        else if (nDotLen == 800 && rLineDash.Dashes == 2 && nDashLen == 100 && nDistance == 300)
+            rsPrstDash = u"lgDashDotDot";
+        else if (nDotLen == 100 && rLineDash.Dashes == 0 && nDashLen == 0 && nDistance == 100)
+            rsPrstDash = u"sysDot";
+        else if (nDotLen == 300 && rLineDash.Dashes == 0 && nDashLen == 0 && nDistance == 100)
+            rsPrstDash = u"sysDash";
+        else if (nDotLen == 300 && rLineDash.Dashes == 1 && nDashLen == 100 && nDistance == 100)
+            rsPrstDash = u"sysDashDot";
+        else if (nDotLen == 300 && rLineDash.Dashes == 2 && nDashLen == 100 && nDistance == 100)
+            rsPrstDash = "sysDashDotDot";
+        else
+            bIsConverted = false;
+    }
+    return bIsConverted;
+}
+
+bool FontworkHelpers::getThemeColorFromShape(
+    OUString const& rPropertyName, const uno::Reference<beans::XPropertySet>& xPropertySet,
+    model::ThemeColor& aThemeColor)
+{
+    auto xPropSetInfo = xPropertySet->getPropertySetInfo();
+    if (!xPropSetInfo.is())
+        return false;
+    uno::Reference<util::XThemeColor> xThemeColor;
+    if (xPropSetInfo->hasPropertyByName(rPropertyName)
+        && (xPropertySet->getPropertyValue(rPropertyName) >>= xThemeColor) && xThemeColor.is())
+    {
+        model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
+        if (aThemeColor.getType() == model::ThemeColorType::Unknown)
+            return false;
+        else
+            return true;
+    }
+    return false;
+}
+
+namespace
+{
+// Returns the string to be used in w14:schemeClr in case of w14:textOutline or w14:textFill
+OUString lcl_getW14MarkupStringForThemeColor(const model::ThemeColor& rThemeColor)
+{
+    const std::array<OUString, 12> W14ColorNames
+        = { u"tx1",     u"bg1",     u"tx2",     u"bg2",     u"accent1", u"accent2",
+            u"accent3", u"accent4", u"accent5", u"accent6", u"hlink",   u"folHlink" };
+    const sal_uInt8 nClrNameIndex = std::clamp<sal_uInt8>(
+        sal_Int32(rThemeColor.getType()), sal_Int32(model::ThemeColorType::Dark1),
+        sal_Int32(model::ThemeColorType::FollowedHyperlink));
+    return W14ColorNames[nClrNameIndex];
+}
+
+// Returns the string to be used in w:themeColor. It is exported via CharThemeColor.
+OUString lcl_getWMarkupStringForThemeColor(const model::ThemeColor& rThemeColor)
+{
+    const std::array<OUString, 12> WColorNames
+        = { u"text1",   u"background1", u"text2",     u"background2",
+            u"accent1", u"accent2",     u"accent3",   u"accent4",
+            u"accent5", u"accent6",     u"hyperlink", u"followedHyperlink" };
+    const sal_uInt8 nClrNameIndex = std::clamp<sal_uInt8>(
+        sal_Int32(rThemeColor.getType()), sal_Int32(model::ThemeColorType::Dark1),
+        sal_Int32(model::ThemeColorType::FollowedHyperlink));
+    return WColorNames[nClrNameIndex];
+}
+
+// Puts the value of the first occurancy of rType in rThemeColor into rValue and returns true.
+// If such does not exist, rValue is unchanged and the method returns false.
+bool lcl_getThemeColorTransformationValue(const model::ThemeColor& rThemeColor,
+                                          const model::TransformationType& rType, sal_Int16& rValue)
+{
+    const std::vector<model::Transformation> aTransVec(rThemeColor.getTransformations());
+    auto bItemFound
+        = [rType](const model::Transformation& rTrans) { return rType == rTrans.meType; };
+    auto pIt = std::find_if(aTransVec.begin(), aTransVec.end(), bItemFound);
+    if (pIt == aTransVec.end())
+        return false;
+    rValue = (*pIt).mnValue;
+    return true;
+}
+
+// Adds the child elements 'lumMod' and/or 'lumOff' to 'schemeClr' maCurrentElement of
+// pGrabStack, if such exist in rThemeColor. As of Feb 2023, 'alpha' is not contained in the
+// the maTransformations of rThemeColor.
+void lcl_addColorTransformationToGrabBagStack(const model::ThemeColor& rThemeColor,
+                                              std::unique_ptr<oox::GrabBagStack>& pGrabBagStack)
+{
+    if (pGrabBagStack == nullptr)
+        return;
+    for (auto const& rColorTransform : rThemeColor.getTransformations())
+    {
+        switch (rColorTransform.meType)
+        {
+            case model::TransformationType::LumMod:
+                pGrabBagStack->push("lumMod");
+                pGrabBagStack->push("attributes");
+                pGrabBagStack->addInt32("val", rColorTransform.mnValue * 10);
+                pGrabBagStack->pop();
+                pGrabBagStack->pop();
+                break;
+            case model::TransformationType::LumOff:
+                pGrabBagStack->push("lumOff");
+                pGrabBagStack->push("attributes");
+                pGrabBagStack->addInt32("val", rColorTransform.mnValue * 10);
+                pGrabBagStack->pop();
+                pGrabBagStack->pop();
+                break;
+            default: // other child element can be added later if needed for Fontwork
+                break;
+        }
+    }
+}
+} // end namespace
+
+void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
+    const uno::Reference<beans::XPropertySet>& rXPropSet,
+    std::vector<beans::PropertyValue>& rUpdatePropVec)
+{
+    auto xPropSetInfo = rXPropSet->getPropertySetInfo();
+    if (!xPropSetInfo.is())
+        return;
+
+    // GrabBagStack is a special tool for handling the hierachy in a GrabBag
+    std::unique_ptr<oox::GrabBagStack> pGrabBagStack;
+
+    // CharTextFillTextEffect
+    pGrabBagStack.reset(new oox::GrabBagStack("textFill"));
+    drawing::FillStyle eFillStyle = drawing::FillStyle_SOLID;
+    if (xPropSetInfo->hasPropertyByName(u"FillStyle"))
+        rXPropSet->getPropertyValue(u"FillStyle") >>= eFillStyle;
+    switch (eFillStyle)
+    {
+        case drawing::FillStyle_NONE:
+        {
+            pGrabBagStack->appendElement("noFill", uno::Any());
+            break;
+        }
+        case drawing::FillStyle_GRADIENT: // ToDo
+        {
+            // fallback
+            pGrabBagStack->push("solidFill");
+            pGrabBagStack->push("srgbClr");
+            pGrabBagStack->push("attributes");
+            ::Color aColor(ColorTransparency, 7512015); // LO default fill
+            pGrabBagStack->addString("val", aColor.AsRGBHexString());
+            // pop() calls are in the final getRootProperty() method
+            break;
+        }
+        case drawing::FillStyle_SOLID:
+        {
+            pGrabBagStack->push("solidFill");
+            model::ThemeColor aThemeColor;
+            // It is either "schemeClr" or "srgbClr".
+            if (FontworkHelpers::getThemeColorFromShape("FillColorThemeReference", rXPropSet,
+                                                        aThemeColor))
+            {
+                pGrabBagStack->push("schemeClr");
+                pGrabBagStack->push("attributes");
+                pGrabBagStack->addString("val", lcl_getW14MarkupStringForThemeColor(aThemeColor));
+                pGrabBagStack->pop(); // maCurrentElement:'schemeClr', maPropertyList:'attributes'
+                lcl_addColorTransformationToGrabBagStack(aThemeColor, pGrabBagStack);
+                // maCurrentElement:'schemeClr', maPropertyList:'attributes', maybe 'lumMod' and
+                // maybe 'lumOff'
+            }
+            else
+            {
+                pGrabBagStack->push("srgbClr");
+                sal_Int32 nFillColor(0);
+                if (xPropSetInfo->hasPropertyByName(u"FillColor"))
+                    rXPropSet->getPropertyValue(u"FillColor") >>= nFillColor;
+                pGrabBagStack->push("attributes");
+                ::Color aColor(ColorTransparency, nFillColor);
+                pGrabBagStack->addString("val", aColor.AsRGBHexString());
+                pGrabBagStack->pop();
+                // maCurrentElement:'srgbClr', maPropertyList:'attributes'
+            }
+
+            sal_Int16 nFillTransparence(0);
+            if (xPropSetInfo->hasPropertyByName(u"FillTransparence"))
+                rXPropSet->getPropertyValue(u"FillTransparence") >>= nFillTransparence;
+            if (nFillTransparence != 0)
+            {
+                pGrabBagStack->push("alpha");
+                pGrabBagStack->push("attributes");
+                pGrabBagStack->addInt32("val", nFillTransparence * 1000);
+            }
+            // all remaining pop() calls are in the final getRootProperty() method
+            break;
+        }
+        default: // BITMAP is VML only export and does not arrive here. HATCH has to be VML only
+                 // export too, but is not yet implemented.
+            break;
+    }
+    // resolve the stack and put resulting PropertyValue into the update vector
+    beans::PropertyValue aCharTextFillTextEffect;
+    aCharTextFillTextEffect.Name = "CharTextFillTextEffect";
+    aCharTextFillTextEffect.Value <<= pGrabBagStack->getRootProperty();
+    rUpdatePropVec.push_back(aCharTextFillTextEffect);
+
+    // CharTextOutlineTextEffect
+    pGrabBagStack.reset(new oox::GrabBagStack("textOutline"));
+
+    // attributes
+    pGrabBagStack->push("attributes");
+    // line width
+    sal_Int32 nLineWidth(0);
+    if (xPropSetInfo->hasPropertyByName(u"LineWidth"))
+        rXPropSet->getPropertyValue(u"LineWidth") >>= nLineWidth;
+    pGrabBagStack->addInt32("w", nLineWidth * 360);
+    // cap for dashes
+    drawing::LineCap eLineCap = drawing::LineCap_BUTT;
+    if (xPropSetInfo->hasPropertyByName(u"LineCap"))
+        rXPropSet->getPropertyValue(u"LineCap") >>= eLineCap;
+    OUString sCap = u"flat";
+    if (eLineCap == drawing::LineCap_ROUND)
+        sCap = u"rnd";
+    else if (eLineCap == drawing::LineCap_SQUARE)
+        sCap = u"sq";
+    pGrabBagStack->addString("cap", sCap);
+    // LO has no compound lines and always centers the lines
+    pGrabBagStack->addString("cmpd", u"sng");
+    pGrabBagStack->addString("alng", u"ctr");
+    pGrabBagStack->pop();
+    // maCurrentElement:'textOutline', maPropertyList:'attributes'
+
+    // style
+    drawing::LineStyle eLineStyle = drawing::LineStyle_NONE;
+    if (xPropSetInfo->hasPropertyByName(u"LineStyle"))
+        rXPropSet->getPropertyValue(u"LineStyle") >>= eLineStyle;
+    // 'dashed' is not a separate style in Word. Word has a style 'gradFill', but that is not yet
+    // implemented in LO. So only 'noFill' and 'solidFill'.
+    if (eLineStyle == drawing::LineStyle_NONE)
+    {
+        pGrabBagStack->appendElement("noFill", uno::Any());
+    }
+    else
+    {
+        pGrabBagStack->push("solidFill");
+        // It is either "schemeClr" or "srgbClr".
+        model::ThemeColor aThemeColor;
+        if (FontworkHelpers::getThemeColorFromShape("LineColorThemeReference", rXPropSet,
+                                                    aThemeColor))
+        {
+            pGrabBagStack->push("schemeClr");
+            pGrabBagStack->push("attributes");
+            pGrabBagStack->addString("val", lcl_getW14MarkupStringForThemeColor(aThemeColor));
+            pGrabBagStack->pop();
+            lcl_addColorTransformationToGrabBagStack(aThemeColor, pGrabBagStack);
+            // maCurrentElement:'schemeClr', maPropertylist:'attributes'
+        }
+        else // not a theme color
+        {
+            pGrabBagStack->push("srgbClr");
+            pGrabBagStack->push("attributes");
+            sal_Int32 nLineColor(0);
+            if (xPropSetInfo->hasPropertyByName(u"LineColor"))
+                rXPropSet->getPropertyValue(u"LineColor") >>= nLineColor;
+            ::Color aColor(ColorTransparency, nLineColor);
+            pGrabBagStack->addString("val", aColor.AsRGBHexString());
+            pGrabBagStack->pop();
+            // maCurrentElement:'srgbClr', maPropertylist:'attributes'
+        }
+
+        sal_Int16 nLineTransparence(0);
+        if (xPropSetInfo->hasPropertyByName(u"LineTransparence"))
+            rXPropSet->getPropertyValue(u"LineTransparence") >>= nLineTransparence;
+        if (nLineTransparence != 0)
+        {
+            pGrabBagStack->push("alpha");
+            pGrabBagStack->push("attributes");
+            pGrabBagStack->addInt32("val", nLineTransparence * 1000);
+            pGrabBagStack->pop(); // maCurrentElement: 'alpha'
+            pGrabBagStack->pop(); // maCurrentElement: 'srgbClr' or 'schemeClr'
+        }
+        pGrabBagStack->pop();
+        // maCurrentElement:'solidFill', maPropertyList:either 'srgbClr' or 'schemeClr
+        pGrabBagStack->pop();
+    }
+    // maCurrentElement:'textOutline', maPropertyList:'attributes' and either 'noFill' or 'solidFill'
+
+    // prstDash
+    if (eLineStyle == drawing::LineStyle_DASH)
+    {
+        pGrabBagStack->push("prstDash");
+        OUString sPrstDash = u"sysDot";
+        drawing::LineDash aLineDash;
+        if (xPropSetInfo->hasPropertyByName(u"LineDash")
+            && (rXPropSet->getPropertyValue(u"LineDash") >>= aLineDash))
+        {
+            // The outline of abc-transform in Word is not able to use custDash. But we know the line
+            // is dashed. We keep "sysDot" as fallback in case no prstDash is detected.
+            FontworkHelpers::createPrstDashFromLineDash(aLineDash, eLineCap, sPrstDash);
+        }
+        else
+        {
+            // ToDo: There may be a named dash style, but that is unlikely for Fontwork shapes. So
+            // I skip it for now and use the "sysDot" fallback.
+        }
+        pGrabBagStack->push("attributes");
+        pGrabBagStack->addString("val", sPrstDash);
+        pGrabBagStack->pop(); // maCurrentElement:'prstDash'
+        pGrabBagStack->pop(); // maCurrentElement:'textOutline'
+    }
+    // maCurrentElement:'textOutline', maPropertyList:'attributes', either 'noFill' or 'solidFill',
+    // and  maybe 'prstDash'.
+
+    // LineJoint, can be 'round', 'bevel' or 'miter' in Word
+    drawing::LineJoint eLineJoint = drawing::LineJoint_NONE;
+    if (xPropSetInfo->hasPropertyByName(u"LineJoint"))
+        rXPropSet->getPropertyValue(u"LineJoint") >>= eLineJoint;
+    if (eLineJoint == drawing::LineJoint_NONE || eLineJoint == drawing::LineJoint_BEVEL)
+        pGrabBagStack->appendElement("bevel", uno::Any());
+    else if (eLineJoint == drawing::LineJoint_ROUND)
+        pGrabBagStack->appendElement("round", uno::Any());
+    else // MITER or deprecated MIDDLE
+    {
+        pGrabBagStack->push("miter");
+        pGrabBagStack->push("attributes");
+        pGrabBagStack->addInt32("lim", 0); // As of Feb. 2023 LO cannot render other values.
+        pGrabBagStack->pop(); // maCurrentElement:'attributes'
+        pGrabBagStack->pop(); // maCurrentElement:'miter'
+    }
+    // maCurrentElement:'textOutline', maPropertyList:'attributes', either 'noFill' or
+    // 'solidFill', maybe 'prstDash', and either 'bevel', 'round' or 'miter'.
+
+    // resolve the stack and put resulting PropertyValue into the update vector
+    beans::PropertyValue aCharTextOutlineTextEffect;
+    aCharTextOutlineTextEffect.Name = "CharTextOutlineTextEffect";
+    aCharTextOutlineTextEffect.Value <<= pGrabBagStack->getRootProperty();
+    rUpdatePropVec.push_back(aCharTextOutlineTextEffect);
+
+    // CharThemeOriginalColor, CharThemeColor, and CharThemeColorShade or CharThemeColorTint will be
+    // used for <w:color> element. That is evaluated by applications, which do not understand w14
+    // namespace, or if w14:textFill is omitted.
+    model::ThemeColor aThemeColor;
+    if (FontworkHelpers::getThemeColorFromShape("FillColorThemeReference", rXPropSet, aThemeColor))
+    {
+        // CharThemeColor
+        beans::PropertyValue aCharThemeColor;
+        aCharThemeColor.Name = u"CharThemeColor";
+        aCharThemeColor.Value <<= lcl_getWMarkupStringForThemeColor(aThemeColor);
+        rUpdatePropVec.push_back(aCharThemeColor);
+
+        // CharThemeColorShade or CharThemeColorTint
+        // MS Office uses themeTint and themeShade on the luminance in a HSL color space, see 2.1.72
+        // in [MS-OI29500]. That is different from OOXML specification.
+        // We made two assumption here: (1) If LumOff exists and is not zero, it is a 'tint'.
+        // (2) LumMod + LumOff == 10000;
+        sal_Int16 nLumMod;
+        if (lcl_getThemeColorTransformationValue(aThemeColor, model::TransformationType::LumMod,
+                                                 nLumMod))
+        {
+            sal_Int16 nLumOff;
+            bool bIsTint = lcl_getThemeColorTransformationValue(
+                               aThemeColor, model::TransformationType::LumOff, nLumOff)
+                           && nLumOff != 0;
+            sal_uInt8 nValue
+                = std::clamp<sal_uInt8>(lround(double(nLumMod) * 255.0 / 10000.0), 0, 255);
+            OUString sValue = OUString::number(nValue, 16);
+
+            beans::PropertyValue aCharThemeTintOrShade;
+            aCharThemeTintOrShade.Name = bIsTint ? u"CharThemeColorTint" : u"CharThemeColorShade";
+            aCharThemeTintOrShade.Value <<= sValue;
+            rUpdatePropVec.push_back(aCharThemeTintOrShade);
+        }
+    }
+    // ToDo: Are FillColorLumMod, FillColorLumOff and FillColorTheme possible without
+    // FillColorThemeReference? If yes, we need an 'else' part here.
+
+    // CharThemeOriginalColor.
+    beans::PropertyValue aCharThemeOriginalColor;
+    sal_Int32 nFillColor(0);
+    if (xPropSetInfo->hasPropertyByName(u"FillColor"))
+        rXPropSet->getPropertyValue(u"FillColor") >>= nFillColor;
+    aCharThemeOriginalColor.Name = u"CharThemeOriginalColor";
+    ::Color aColor(ColorTransparency, nFillColor);
+    aCharThemeOriginalColor.Value <<= aColor.AsRGBHEXString();
+    rUpdatePropVec.push_back(aCharThemeOriginalColor);
+}
+
+void FontworkHelpers::applyUpdatesToCharInteropGrabBag(
+    const std::vector<beans::PropertyValue>& rUpdatePropVec, uno::Reference<text::XText>& rXText)
+{
+    if (!rXText.is())
+        return;
+    uno::Reference<text::XTextCursor> rXTextCursor = rXText->createTextCursor();
+    rXTextCursor->gotoStart(false);
+    rXTextCursor->gotoEnd(true);
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess(rXText, uno::UNO_QUERY);
+    if (!paraEnumAccess.is())
+        return;
+    uno::Reference<container::XEnumeration> paraEnum(paraEnumAccess->createEnumeration());
+    while (paraEnum->hasMoreElements())
+    {
+        uno::Reference<text::XTextRange> xParagraph(paraEnum->nextElement(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> runEnumAccess(xParagraph, uno::UNO_QUERY);
+        if (!runEnumAccess.is())
+            continue;
+        uno::Reference<container::XEnumeration> runEnum = runEnumAccess->createEnumeration();
+        while (runEnum->hasMoreElements())
+        {
+            uno::Reference<text::XTextRange> xRun(runEnum->nextElement(), uno::UNO_QUERY);
+            if (xRun->getString().isEmpty())
+                continue;
+            uno::Reference<beans::XPropertySet> xRunPropSet(xRun, uno::UNO_QUERY);
+            if (!xRunPropSet.is())
+                continue;
+            auto xRunPropSetInfo = xRunPropSet->getPropertySetInfo();
+            if (!xRunPropSetInfo.is())
+                continue;
+
+            // Now apply the updates to the CharInteropGrabBag of this run
+            uno::Sequence<beans::PropertyValue> aCharInteropGrabBagSeq;
+            if (xRunPropSetInfo->hasPropertyByName("CharInteropGrabBag"))
+                xRunPropSet->getPropertyValue("CharInteropGrabBag") >>= aCharInteropGrabBagSeq;
+            comphelper::SequenceAsHashMap aGrabBagMap(aCharInteropGrabBagSeq);
+            for (const auto& rProp : rUpdatePropVec)
+            {
+                aGrabBagMap[rProp.Name] = rProp.Value; // [] inserts if not exists
+            }
+            xRunPropSet->setPropertyValue("CharInteropGrabBag",
+                                          uno::Any(aGrabBagMap.getAsConstPropertyValueList()));
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
