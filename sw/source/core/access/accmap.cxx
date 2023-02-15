@@ -64,7 +64,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XShapeEventBroadcaster.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <pagepreviewlayout.hxx>
 #include <dcontact.hxx>
 #include <svx/svdmark.hxx>
@@ -120,8 +120,8 @@ namespace {
 class SwDrawModellListener_Impl : public SfxListener,
     public ::cppu::WeakImplHelper< document::XShapeEventBroadcaster >
 {
-    mutable ::osl::Mutex maListenerMutex;
-    ::comphelper::OInterfaceContainerHelper3<css::document::XEventListener> maEventListeners;
+    mutable std::mutex maListenerMutex;
+    ::comphelper::OInterfaceContainerHelper4<css::document::XEventListener> maEventListeners;
     std::unordered_multimap<css::uno::Reference< css::drawing::XShape >, css::uno::Reference< css::document::XShapeEventListener >> maShapeListeners;
     SdrModel *mpDrawModel;
 protected:
@@ -144,7 +144,6 @@ public:
 }
 
 SwDrawModellListener_Impl::SwDrawModellListener_Impl( SdrModel *pDrawModel ) :
-    maEventListeners( maListenerMutex ),
     mpDrawModel( pDrawModel )
 {
     StartListening( *mpDrawModel );
@@ -157,12 +156,14 @@ SwDrawModellListener_Impl::~SwDrawModellListener_Impl()
 
 void SAL_CALL SwDrawModellListener_Impl::addEventListener( const uno::Reference< document::XEventListener >& xListener )
 {
-    maEventListeners.addInterface( xListener );
+    std::unique_lock g(maListenerMutex);
+    maEventListeners.addInterface( g, xListener );
 }
 
 void SAL_CALL SwDrawModellListener_Impl::removeEventListener( const uno::Reference< document::XEventListener >& xListener )
 {
-    maEventListeners.removeInterface( xListener );
+    std::unique_lock g(maListenerMutex);
+    maEventListeners.removeInterface( g, xListener );
 }
 
 void SAL_CALL SwDrawModellListener_Impl::addShapeEventListener(
@@ -170,7 +171,7 @@ void SAL_CALL SwDrawModellListener_Impl::addShapeEventListener(
                 const uno::Reference< document::XShapeEventListener >& xListener )
 {
     assert(xShape.is() && "no shape?");
-    osl::MutexGuard aGuard(maListenerMutex);
+    std::unique_lock aGuard(maListenerMutex);
     maShapeListeners.emplace(xShape, xListener);
 }
 
@@ -178,7 +179,7 @@ void SAL_CALL SwDrawModellListener_Impl::removeShapeEventListener(
                 const css::uno::Reference< css::drawing::XShape >& xShape,
                 const uno::Reference< document::XShapeEventListener >& xListener )
 {
-    osl::MutexGuard aGuard(maListenerMutex);
+    std::unique_lock aGuard(maListenerMutex);
     auto [itBegin, itEnd] = maShapeListeners.equal_range(xShape);
     for (auto it = itBegin; it != itEnd; ++it)
         if (it->second == xListener)
@@ -212,16 +213,19 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
     if( !SvxUnoDrawMSFactory::createEvent( mpDrawModel, pSdrHint, aEvent ) )
         return;
 
-    ::comphelper::OInterfaceIteratorHelper3 aIter( maEventListeners );
-    while( aIter.hasMoreElements() )
     {
-        try
+        std::unique_lock g(maListenerMutex);
+        ::comphelper::OInterfaceIteratorHelper4 aIter( g, maEventListeners );
+        while( aIter.hasMoreElements() )
         {
-            aIter.next()->notifyEvent( aEvent );
-        }
-        catch( uno::RuntimeException const & )
-        {
-            TOOLS_WARN_EXCEPTION("sw.a11y", "Runtime exception caught while notifying shape");
+            try
+            {
+                aIter.next()->notifyEvent( aEvent );
+            }
+            catch( uno::RuntimeException const & )
+            {
+                TOOLS_WARN_EXCEPTION("sw.a11y", "Runtime exception caught while notifying shape");
+            }
         }
     }
 
@@ -230,7 +234,7 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
     {
         auto pSdrObject = const_cast<SdrObject*>(pSdrHint->GetObject());
         uno::Reference<drawing::XShape> xShape(pSdrObject->getUnoShape(), uno::UNO_QUERY);
-        osl::MutexGuard aGuard(maListenerMutex);
+        std::unique_lock aGuard(maListenerMutex);
         auto [itBegin, itEnd] = maShapeListeners.equal_range(xShape);
         for (auto it = itBegin; it != itEnd; ++it)
             it->second->notifyShapeEvent(aEvent);
