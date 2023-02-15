@@ -1178,19 +1178,21 @@ namespace emfio
                             sal_Int32 elpHatch;
                             mpInputStream->ReadUInt32(offBmi).ReadUInt32(cbBmi).ReadUInt32(offBits).ReadUInt32(cbBits);
                             mpInputStream->ReadUInt32(nPenStyle).ReadUInt32(nWidth).ReadUInt32(nBrushStyle);
-                            SAL_INFO("emfio", "\t\tStyle: 0x" << std::hex << nPenStyle << std::dec);
-                            if ((nPenStyle & PS_STYLE_MASK) > PS_INSIDEFRAME)
-                                nPenStyle = PS_COSMETIC;
-                            if ((nPenStyle & PS_GEOMETRIC) == 0)
-                                nWidth = 0;
-                            SAL_INFO("emfio", "\t\tWidth: " << nWidth);
                             Color aColorRef = ReadColor();
                             mpInputStream->ReadInt32(elpHatch).ReadUInt32(elpNumEntries);
 
                             if (!mpInputStream->good())
                                 bStatus = false;
                             else
+                            {
+                                SAL_INFO("emfio", "\t\tStyle: 0x" << std::hex << nPenStyle << std::dec);
+                                if ((nPenStyle & PS_STYLE_MASK) > PS_INSIDEFRAME)
+                                    nPenStyle = PS_COSMETIC;
+                                if ((nPenStyle & PS_GEOMETRIC) == 0)
+                                    nWidth = 0;
+                                SAL_INFO("emfio", "\t\tWidth: " << nWidth);
                                 CreateObjectIndexed(nIndex, std::make_unique<WinMtfLineStyle>(aColorRef, nPenStyle, nWidth));
+                            }
                         }
                     }
                     break;
