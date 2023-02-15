@@ -497,6 +497,8 @@ public:
 
     virtual VclPtr<VirtualDevice> screenshot() override;
 
+    virtual const vcl::ILibreOfficeKitNotifier* GetLOKNotifier() override;
+
     virtual ~SalInstanceWindow() override;
 };
 

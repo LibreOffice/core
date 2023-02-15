@@ -1131,7 +1131,8 @@ void Dialog::EndDialog( tools::Long nResult )
     {
         if(const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
         {
-            pNotifier->notifyWindow(GetLOKWindowId(), "close");
+            if (mpDialogImpl->m_bLOKTunneling)
+                pNotifier->notifyWindow(GetLOKWindowId(), "close");
             ReleaseLOKNotifier();
         }
     }

@@ -213,10 +213,11 @@ std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pP
 }
 
 weld::MessageDialog* Application::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
-                                                      VclButtonsType eButtonType, const OUString& rPrimaryMessage)
+                                                      VclButtonsType eButtonType, const OUString& rPrimaryMessage,
+                                                      const ILibreOfficeKitNotifier* pNotifier)
 {
     if (comphelper::LibreOfficeKit::isActive())
-        return JSInstanceBuilder::CreateMessageDialog(pParent, eMessageType, eButtonType, rPrimaryMessage);
+        return JSInstanceBuilder::CreateMessageDialog(pParent, eMessageType, eButtonType, rPrimaryMessage, pNotifier);
     else
         return ImplGetSVData()->mpDefInst->CreateMessageDialog(pParent, eMessageType, eButtonType, rPrimaryMessage);
 }

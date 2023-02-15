@@ -58,8 +58,12 @@ class DataChangedEvent;
 class Accelerator;
 class Help;
 class OutputDevice;
-namespace vcl { class Window; }
-namespace vcl { class KeyCode; }
+namespace vcl {
+    class KeyCode;
+    class ILibreOfficeKitNotifier;
+    class Window;
+}
+
 class NotifyEvent;
 class KeyEvent;
 class MouseEvent;
@@ -1348,7 +1352,8 @@ public:
     static std::unique_ptr<weld::Builder> CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId = 0);
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
-                                                    VclButtonsType eButtonType, const OUString& rPrimaryMessage);
+                                                    VclButtonsType eButtonType, const OUString& rPrimaryMessage,
+                                                    const ILibreOfficeKitNotifier* pNotifier = nullptr);
 
     static weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow);
 
