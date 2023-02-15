@@ -40,6 +40,7 @@
 
 #include <vector>
 #include <memory>
+#include <mutex>
 
 #include <vcl/timer.hxx>
 
@@ -247,7 +248,7 @@ private: //member
     css::awt::Rectangle m_aResultingDiagramRectangleExcludingAxes;
 
     TimeBasedInfo maTimeBased;
-    osl::Mutex maTimeMutex;
+    std::mutex maTimeMutex;
 };
 
 }

@@ -1357,7 +1357,7 @@ void ChartView::createShapes()
 {
     SolarMutexGuard aSolarGuard;
 
-    osl::MutexGuard aTimedGuard(maTimeMutex);
+    std::unique_lock aTimedGuard(maTimeMutex);
     if(mrChartModel.isTimeBased())
     {
         maTimeBased.bTimeBased = true;
@@ -1844,7 +1844,7 @@ void ChartView::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 void ChartView::setViewDirty()
 {
-    osl::MutexGuard aGuard(maTimeMutex);
+    std::unique_lock aGuard(maTimeMutex);
     m_bViewDirty = true;
 }
 
