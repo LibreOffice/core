@@ -1344,9 +1344,12 @@ void SwDocShell::UpdateStyle(const OUString &rName, SfxStyleFamily nFamily, SwWr
         break;
         case SfxStyleFamily::Table:
         {
-            if(GetFEShell()->IsTableMode())
+            if (SwFEShell* pFEShell = GetFEShell())
             {
-                GetFEShell()->TableCursorToCursor();
+                if(pFEShell->IsTableMode())
+                {
+                    pFEShell->TableCursorToCursor();
+                }
             }
             SwTableAutoFormat aFormat(rName);
             if (pCurrWrtShell->GetTableAutoFormat(aFormat))

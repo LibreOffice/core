@@ -312,11 +312,8 @@ public:
         {
             if ( mpDocShell )
             {
-                SwFEShell* pFEShell = mpDocShell->GetFEShell();
-                if(pFEShell)
-                {
+                if (SwFEShell* pFEShell = mpDocShell->GetFEShell())
                     aReturn <<= pFEShell->GetLineCount();
-                }
             }
         }
         else

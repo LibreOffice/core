@@ -506,7 +506,8 @@ bool SwTable::InsertCol( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
         pPCD->AddRowCols( *this, rBoxes, nCnt, bBehind );
     rDoc.UpdateCharts( GetFrameFormat()->GetName() );
 
-    rDoc.GetDocShell()->GetFEShell()->UpdateTableStyleFormatting();
+    if (SwFEShell* pFEShell = rDoc.GetDocShell()->GetFEShell())
+        pFEShell->UpdateTableStyleFormatting();
 
     return bRes;
 }
@@ -624,7 +625,8 @@ bool SwTable::InsertRow_( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         pPCD->AddRowCols( *this, rBoxes, nCnt, bBehind );
     pDoc->UpdateCharts( GetFrameFormat()->GetName() );
 
-    pDoc->GetDocShell()->GetFEShell()->UpdateTableStyleFormatting(pTableNd);
+    if (SwFEShell* pFEShell = pDoc->GetDocShell()->GetFEShell())
+        pFEShell->UpdateTableStyleFormatting(pTableNd);
 
     return true;
 }
