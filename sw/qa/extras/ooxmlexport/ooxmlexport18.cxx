@@ -121,6 +121,34 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153592_columnBreaks)
     assertXPath(pXmlDoc, "//w:br", 2);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak, "tdf153613_anchoredAfterPgBreak.docx")
+{
+    const auto& pLayout = parseLayoutDump();
+    // An anchored TO character image anchors before the page break.
+    assertXPath(pLayout, "//page[1]//anchored", 1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak2, "tdf153613_anchoredAfterPgBreak2.docx")
+{
+    const auto& pLayout = parseLayoutDump();
+    // An anchored TO character image, followed by more characters moves to the following page
+    assertXPath(pLayout, "//page[2]//anchored", 1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak3, "tdf153613_anchoredAfterPgBreak3.docx")
+{
+    const auto& pLayout = parseLayoutDump();
+    // An anchored TO character image, with setting splitPgBreakAndParaMark moves to the following page
+    assertXPath(pLayout, "//page[2]//anchored", 1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf153613_inlineAfterPgBreak, "tdf153613_inlineAfterPgBreak.docx")
+{
+    const auto& pLayout = parseLayoutDump();
+    // An inline AS character image moves to the following page when after the page break.
+    assertXPath(pLayout, "//page[2]//anchored", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
 {
     // Given a docx document with a shape with vert="mongolianVert".

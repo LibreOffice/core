@@ -2519,7 +2519,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         if ( m_pImpl->IsDiscardHeaderFooter() )
             break;
         //tdf112342: Break before images as well, if there are page break
-        if (m_pImpl->isBreakDeferred(BreakType::PAGE_BREAK))
+        if (m_pImpl->isBreakDeferred(BreakType::PAGE_BREAK)
+            && nSprmId == NS_ooxml::LN_inline_inline)
         {
             m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)
                 ->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_PAGE_BEFORE));
