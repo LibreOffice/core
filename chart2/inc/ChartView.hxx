@@ -20,7 +20,7 @@
 
 #include <chartview/ExplicitValueProvider.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/multicontainer2.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 
 #include <svl/lstner.hxx>
 #include <com/sun/star/awt/Size.hpp>
@@ -201,7 +201,7 @@ private: //methods
     DECL_LINK( UpdateTimeBased, Timer*, void );
 
 private: //member
-    ::osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
 
     css::uno::Reference< css::uno::XComponentContext> m_xCC;
 
@@ -225,8 +225,8 @@ private: //member
 
     std::vector< std::unique_ptr<VCoordinateSystem> > m_aVCooSysList;
 
-    comphelper::OMultiTypeInterfaceContainerHelper2
-                        m_aListenerContainer;
+    comphelper::OInterfaceContainerHelper4<css::util::XModeChangeListener>
+                        m_aModeChangeListeners;
 
     bool m_bViewDirty; //states whether the view needs to be rebuild
     bool m_bInViewUpdate;

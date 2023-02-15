@@ -165,7 +165,6 @@ ChartView::ChartView(
         ChartModel& rModel)
     : m_xCC(std::move(xContext))
     , mrChartModel(rModel)
-    , m_aListenerContainer( m_aMutex )
     , m_bViewDirty(true)
     , m_bInViewUpdate(false)
     , m_bViewUpdatePending(false)
@@ -1559,16 +1558,11 @@ void ChartView::impl_notifyModeChangeListener( const OUString& rNewMode )
 {
     try
     {
-        comphelper::OInterfaceContainerHelper2* pIC = m_aListenerContainer
-            .getContainer( cppu::UnoType<util::XModeChangeListener>::get());
-        if( pIC )
+        std::unique_lock g(m_aMutex);
+        if( m_aModeChangeListeners.getLength(g) )
         {
             util::ModeChangeEvent aEvent( static_cast< uno::XWeak* >( this ), rNewMode );
-            comphelper::OInterfaceIteratorHelper2 aIt( *pIC );
-            while( aIt.hasMoreElements() )
-            {
-                static_cast< util::XModeChangeListener* >( aIt.next() )->modeChanged( aEvent );
-            }
+            m_aModeChangeListeners.notifyEach( g, &css::util::XModeChangeListener::modeChanged, aEvent);
         }
     }
     catch( const uno::Exception& )
@@ -1581,13 +1575,13 @@ void ChartView::impl_notifyModeChangeListener( const OUString& rNewMode )
 
 void SAL_CALL ChartView::addModeChangeListener( const uno::Reference< util::XModeChangeListener >& xListener )
 {
-    m_aListenerContainer.addInterface(
-        cppu::UnoType<util::XModeChangeListener>::get(), xListener );
+    std::unique_lock g(m_aMutex);
+    m_aModeChangeListeners.addInterface(g, xListener );
 }
 void SAL_CALL ChartView::removeModeChangeListener( const uno::Reference< util::XModeChangeListener >& xListener )
 {
-    m_aListenerContainer.removeInterface(
-        cppu::UnoType<util::XModeChangeListener>::get(), xListener );
+    std::unique_lock g(m_aMutex);
+    m_aModeChangeListeners.removeInterface(g, xListener );
 }
 void SAL_CALL ChartView::addModeChangeApproveListener( const uno::Reference< util::XModeChangeApproveListener >& /* _rxListener */ )
 {
