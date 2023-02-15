@@ -536,7 +536,8 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         m_aTableProperties->Insert( PROP_TABLE_BORDER_DISTANCES, uno::Any( aDistances ) );
 
-        if (!rFrameProperties.empty())
+        sal_Int32 nMode = m_rDMapper_Impl.GetSettingsTable()->GetWordCompatibilityMode();
+        if (!rFrameProperties.empty() && nMode < 15)
             lcl_DecrementHoriOrientPosition(rFrameProperties, rInfo.nLeftBorderDistance);
 
         // Set table above/bottom spacing to 0.
@@ -613,7 +614,6 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         // tdf#106742: since MS Word 2013 (compatibilityMode >= 15), top-level tables are handled the same as nested tables;
         // the default behavior when DOCX doesn't define "compatibilityMode" option is to add the cell spacing
-        sal_Int32 nMode = m_rDMapper_Impl.GetSettingsTable()->GetWordCompatibilityMode();
 
         if (0 < nMode && nMode <= 14 && rInfo.nNestLevel == 1)
         {

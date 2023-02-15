@@ -31,6 +31,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/UnitConversion.hxx>
+#include <frameformats.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -1105,7 +1106,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106953, "tdf106953.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf115094v3)
 {
-    loadAndSave("tdf115094v3.docx");
+    createSwDoc("tdf115094v3.docx");
+    {
+        SwDoc* pDoc = getSwDoc();
+        SwFrameFormats& rSpzFormats = *pDoc->GetSpzFrameFormats();
+        SwFrameFormat* pFormat = rSpzFormats[0];
+        // Without the fix, this has failed with:
+        // - Expected: 1991
+        // - Actual  : 1883
+        // i.e. some unwanted ~-2mm left margin appeared.
+        CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(1991), pFormat->GetHoriOrient().GetPos());
+    }
+    save(OUString::createFromAscii(mpFilter));
     // floating table is now exported directly without surrounding frame
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
