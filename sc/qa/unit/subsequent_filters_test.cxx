@@ -187,6 +187,7 @@ public:
     void testCellAnchoredHiddenShapesXLSX();
 
     void testFormulaDependency();
+    void testTdf153444();
     void testTdf151046();
 
     void testRowHeightODS();
@@ -307,6 +308,7 @@ public:
 
     CPPUNIT_TEST(testRowHeightODS);
     CPPUNIT_TEST(testFormulaDependency);
+    CPPUNIT_TEST(testTdf153444);
     CPPUNIT_TEST(testTdf151046);
     CPPUNIT_TEST(testRichTextContentODS);
 
@@ -3113,6 +3115,24 @@ void ScFiltersTest::testFormulaDependency()
 
     // check that the number format is implicitly inherited
     // CPPUNIT_ASSERT_EQUAL(pDoc->GetString(0,4,0), rDoc.GetString(0,5,0));
+}
+
+void ScFiltersTest::testTdf153444()
+{
+    createScDoc("xml/tdf153444.xml");
+
+    ScDocument* pDoc = getScDoc();
+
+    CPPUNIT_ASSERT_EQUAL(OUString(u"time, sec"), pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Body_Right_Z, g"), pDoc->GetString(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Body_Left_Z, g"), pDoc->GetString(2, 0, 0));
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: ÄÖÜ, µm/m
+    // - Actual  : ���, �m/m
+    CPPUNIT_ASSERT_EQUAL(OUString(u"ÄÖÜ, µm/m"), pDoc->GetString(3, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"äöü, µm/m"), pDoc->GetString(4, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"ß, µm/m"), pDoc->GetString(5, 0, 0));
 }
 
 void ScFiltersTest::testTdf151046()

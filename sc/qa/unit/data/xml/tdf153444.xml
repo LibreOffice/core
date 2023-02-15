@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <Worksheet ss:Name="iso-8859-12">
+  <Table ss:ExpandedColumnCount="6" ss:ExpandedRowCount="0000004036" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="60">
+   <Row>
+    <Cell><Data ss:Type="String">time, sec</Data></Cell>
+    <Cell><Data ss:Type="String">Body_Right_Z, g</Data></Cell>
+    <Cell><Data ss:Type="String">Body_Left_Z, g</Data></Cell>
+    <Cell><Data ss:Type="String">ÄÖÜ, µm/m</Data></Cell>
+    <Cell><Data ss:Type="String">äöü, µm/m</Data></Cell>
+    <Cell><Data ss:Type="String">ß, µm/m</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">+0.0000000e+00</Data></Cell>
+    <Cell><Data ss:Type="Number">-2.7905207e-04</Data></Cell>
+    <Cell><Data ss:Type="Number">-1.6600988e-04</Data></Cell>
+    <Cell><Data ss:Type="Number">+0.0000000e+00</Data></Cell>
+    <Cell><Data ss:Type="Number">+0.0000000e+00</Data></Cell>
+    <Cell><Data ss:Type="Number">+0.0000000e+00</Data></Cell>
+   </Row>
+  </Table>
+ </Worksheet>
+</Workbook>
