@@ -72,4 +72,6 @@ inline constexpr OUStringLiteral RID_SVXBMP_LEGTYP3 = u"svx/res/legtyp3.png";
 inline constexpr OUStringLiteral RID_SVXBMP_COMPONENT = u"res/component_16.png";
 inline constexpr OUStringLiteral RID_SVXBMP_MACRO = u"svx/res/id018.png";
 
+inline constexpr OUStringLiteral RID_SVXBMP_STARS_FULL = u"cmd/sc_stars-full.png";
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

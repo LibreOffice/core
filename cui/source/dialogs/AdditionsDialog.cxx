@@ -54,6 +54,8 @@
 #include <orcus/json_parser.hpp>
 #include <orcus/config.hpp>
 
+#include <bitmaps.hlst>
+
 #define PAGE_SIZE 30
 
 using namespace css;
@@ -644,19 +646,19 @@ AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDial
     switch (std::isnan(aExtensionRating) ? 0 : int(std::clamp(aExtensionRating, 0.0, 5.0)))
     {
         case 5:
-            m_xImageVoting5->set_from_icon_name("cmd/sc_stars-full.png");
+            m_xImageVoting5->set_from_icon_name(RID_SVXBMP_STARS_FULL);
             [[fallthrough]];
         case 4:
-            m_xImageVoting4->set_from_icon_name("cmd/sc_stars-full.png");
+            m_xImageVoting4->set_from_icon_name(RID_SVXBMP_STARS_FULL);
             [[fallthrough]];
         case 3:
-            m_xImageVoting3->set_from_icon_name("cmd/sc_stars-full.png");
+            m_xImageVoting3->set_from_icon_name(RID_SVXBMP_STARS_FULL);
             [[fallthrough]];
         case 2:
-            m_xImageVoting2->set_from_icon_name("cmd/sc_stars-full.png");
+            m_xImageVoting2->set_from_icon_name(RID_SVXBMP_STARS_FULL);
             [[fallthrough]];
         case 1:
-            m_xImageVoting1->set_from_icon_name("cmd/sc_stars-full.png");
+            m_xImageVoting1->set_from_icon_name(RID_SVXBMP_STARS_FULL);
             break;
     }
 
