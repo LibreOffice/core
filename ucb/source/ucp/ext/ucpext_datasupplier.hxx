@@ -24,6 +24,7 @@
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
 
+#include <mutex>
 #include <vector>
 
 
@@ -75,7 +76,7 @@ namespace ucb::ucp::ext
             css::uno::Reference< css::sdbc::XRow >  xRow;
         };
         typedef ::std::vector< ResultListEntry >    ResultList;
-        ::osl::Mutex                                m_aMutex;
+        std::mutex                                  m_aMutex;
         ResultList                                  m_aResults;
         ::rtl::Reference< Content >                 m_xContent;
         css::uno::Reference< css::uno::XComponentContext > m_xContext;

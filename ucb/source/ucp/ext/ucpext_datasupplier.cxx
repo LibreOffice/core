@@ -151,7 +151,7 @@ namespace ucb::ucp::ext
 
     OUString DataSupplier::queryContentIdentifierString( sal_uInt32 i_nIndex )
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         if ( i_nIndex < m_aResults.size() )
         {
@@ -167,7 +167,7 @@ namespace ucb::ucp::ext
 
     Reference< XContentIdentifier > DataSupplier::queryContentIdentifier( sal_uInt32 i_nIndex )
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         if ( i_nIndex < m_aResults.size() )
         {
@@ -190,7 +190,7 @@ namespace ucb::ucp::ext
 
     Reference< XContent > DataSupplier::queryContent( sal_uInt32 i_nIndex )
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         ENSURE_OR_RETURN( i_nIndex < m_aResults.size(), "illegal index!", nullptr );
 
 
@@ -222,7 +222,7 @@ namespace ucb::ucp::ext
 
     bool DataSupplier::getResult( sal_uInt32 i_nIndex )
     {
-        ::osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         // true if result already present.
         return m_aResults.size() > i_nIndex;
@@ -231,7 +231,7 @@ namespace ucb::ucp::ext
 
     sal_uInt32 DataSupplier::totalCount()
     {
-        ::osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         return m_aResults.size();
     }
 
@@ -250,7 +250,7 @@ namespace ucb::ucp::ext
 
     Reference< XRow > DataSupplier::queryPropertyValues( sal_uInt32 i_nIndex  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         ENSURE_OR_RETURN( i_nIndex < m_aResults.size(), "DataSupplier::queryPropertyValues: illegal index!", nullptr );
 
         Reference< XRow > xRow = m_aResults[ i_nIndex ].xRow;
@@ -291,7 +291,7 @@ namespace ucb::ucp::ext
 
     void DataSupplier::releasePropertyValues( sal_uInt32 i_nIndex )
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         if ( i_nIndex < m_aResults.size() )
             m_aResults[ i_nIndex ].xRow.clear();
