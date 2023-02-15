@@ -60,30 +60,10 @@ namespace drawinglayer::processor3d
             const attribute::FillGradientAttribute& rFillGradient = rPrimitive.getGradient();
             const basegfx::B2DRange aOutlineRange(0.0, 0.0, rPrimitive.getTextureSize().getX(), rPrimitive.getTextureSize().getY());
             const attribute::GradientStyle aGradientStyle(rFillGradient.getStyle());
-            sal_uInt32 nSteps(rFillGradient.getSteps());
-            const basegfx::BColor aStart(rFillGradient.getColorSteps().front().getColor());
-            const basegfx::BColor aEnd(rFillGradient.getColorSteps().back().getColor());
-            const sal_uInt32 nMaxSteps(sal_uInt32((aStart.getMaximumDistance(aEnd) * 127.5) + 0.5));
             std::shared_ptr< texture::GeoTexSvx > pNewTex;
 
-            if(nMaxSteps)
+            if(!rFillGradient.hasSingleColor())
             {
-                // there IS a color distance
-                if(nSteps == 0)
-                {
-                    nSteps = nMaxSteps;
-                }
-
-                if(nSteps < 2)
-                {
-                    nSteps = 2;
-                }
-
-                if(nSteps > nMaxSteps)
-                {
-                    nSteps = nMaxSteps;
-                }
-
                 switch(aGradientStyle)
                 {
                     case attribute::GradientStyle::Linear:
@@ -91,9 +71,8 @@ namespace drawinglayer::processor3d
                         pNewTex = std::make_shared<texture::GeoTexSvxGradientLinear>(
                                 aOutlineRange,
                                 aOutlineRange,
-                                aStart,
-                                aEnd,
-                                nSteps,
+                                rFillGradient.getSteps(),
+                                rFillGradient.getColorSteps(),
                                 rFillGradient.getBorder(),
                                 rFillGradient.getAngle());
                         break;
@@ -103,9 +82,8 @@ namespace drawinglayer::processor3d
                         pNewTex = std::make_shared<texture::GeoTexSvxGradientAxial>(
                                 aOutlineRange,
                                 aOutlineRange,
-                                aStart,
-                                aEnd,
-                                nSteps,
+                                rFillGradient.getSteps(),
+                                rFillGradient.getColorSteps(),
                                 rFillGradient.getBorder(),
                                 rFillGradient.getAngle());
                         break;
@@ -115,9 +93,8 @@ namespace drawinglayer::processor3d
                         pNewTex =
                             std::make_shared<texture::GeoTexSvxGradientRadial>(
                                 aOutlineRange,
-                                aStart,
-                                aEnd,
-                                nSteps,
+                                rFillGradient.getSteps(),
+                                rFillGradient.getColorSteps(),
                                 rFillGradient.getBorder(),
                                 rFillGradient.getOffsetX(),
                                 rFillGradient.getOffsetY());
@@ -128,9 +105,8 @@ namespace drawinglayer::processor3d
                         pNewTex =
                             std::make_shared<texture::GeoTexSvxGradientElliptical>(
                                 aOutlineRange,
-                                aStart,
-                                aEnd,
-                                nSteps,
+                                rFillGradient.getSteps(),
+                                rFillGradient.getColorSteps(),
                                 rFillGradient.getBorder(),
                                 rFillGradient.getOffsetX(),
                                 rFillGradient.getOffsetY(),
@@ -142,9 +118,8 @@ namespace drawinglayer::processor3d
                         pNewTex =
                             std::make_shared<texture::GeoTexSvxGradientSquare>(
                                 aOutlineRange,
-                                aStart,
-                                aEnd,
-                                nSteps,
+                                rFillGradient.getSteps(),
+                                rFillGradient.getColorSteps(),
                                 rFillGradient.getBorder(),
                                 rFillGradient.getOffsetX(),
                                 rFillGradient.getOffsetY(),
@@ -156,9 +131,8 @@ namespace drawinglayer::processor3d
                         pNewTex =
                             std::make_shared<texture::GeoTexSvxGradientRect>(
                                 aOutlineRange,
-                                aStart,
-                                aEnd,
-                                nSteps,
+                                rFillGradient.getSteps(),
+                                rFillGradient.getColorSteps(),
                                 rFillGradient.getBorder(),
                                 rFillGradient.getOffsetX(),
                                 rFillGradient.getOffsetY(),
@@ -171,7 +145,8 @@ namespace drawinglayer::processor3d
             }
             else
             {
-                // no color distance -> same color, use simple texture
+                // only one color, so no real gradient -> use simple texture
+                const basegfx::BColor aStart(rFillGradient.getColorSteps().front().getColor());
                 pNewTex = std::make_shared<texture::GeoTexSvxMono>(aStart, 1.0 - aStart.luminance());
                 mbSimpleTextureActive = true;
             }

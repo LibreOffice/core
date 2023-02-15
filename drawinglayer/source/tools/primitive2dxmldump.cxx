@@ -44,6 +44,7 @@
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/utils/gradienttools.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 

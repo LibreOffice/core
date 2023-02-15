@@ -29,7 +29,7 @@ namespace basegfx
     {
         return getTextureTransform() == rODFGradientInfo.getTextureTransform()
             && getAspectRatio() == rODFGradientInfo.getAspectRatio()
-            && getSteps() == rODFGradientInfo.getSteps();
+            && getRequestedSteps() == rODFGradientInfo.getRequestedSteps();
     }
 
     const B2DHomMatrix& ODFGradientInfo::getBackTextureTransform() const
@@ -261,6 +261,26 @@ namespace basegfx
 
     namespace utils
     {
+        sal_uInt32 calculateNumberOfSteps(
+            sal_uInt32 nRequestedSteps,
+            const BColor& rStart,
+            const BColor& rEnd)
+        {
+            const sal_uInt32 nMaxSteps(sal_uInt32((rStart.getMaximumDistance(rEnd) * 127.5) + 0.5));
+
+            if (0 == nRequestedSteps)
+            {
+                nRequestedSteps = nMaxSteps;
+            }
+
+            if(nRequestedSteps > nMaxSteps)
+            {
+                nRequestedSteps = nMaxSteps;
+            }
+
+            return std::max(sal_uInt32(1), nRequestedSteps);
+        }
+
         ODFGradientInfo createLinearODFGradientInfo(
             const B2DRange& rTargetArea,
             sal_uInt32 nSteps,
@@ -372,7 +392,7 @@ namespace basegfx
                 return 1.0; // end value for outside
             }
 
-            const sal_uInt32 nSteps(rGradInfo.getSteps());
+            const sal_uInt32 nSteps(rGradInfo.getRequestedSteps());
 
             if(nSteps)
             {
@@ -399,7 +419,7 @@ namespace basegfx
                 return 1.0; // use end value when outside in Y
             }
 
-            const sal_uInt32 nSteps(rGradInfo.getSteps());
+            const sal_uInt32 nSteps(rGradInfo.getRequestedSteps());
 
             if(nSteps)
             {
@@ -419,7 +439,7 @@ namespace basegfx
             }
 
             const double t(1.0 - std::hypot(aCoor.getX(), aCoor.getY()));
-            const sal_uInt32 nSteps(rGradInfo.getSteps());
+            const sal_uInt32 nSteps(rGradInfo.getRequestedSteps());
 
             if(nSteps && t < 1.0)
             {
@@ -452,7 +472,7 @@ namespace basegfx
             }
 
             const double t(1.0 - std::max(fAbsX, fAbsY));
-            const sal_uInt32 nSteps(rGradInfo.getSteps());
+            const sal_uInt32 nSteps(rGradInfo.getRequestedSteps());
 
             if(nSteps && t < 1.0)
             {

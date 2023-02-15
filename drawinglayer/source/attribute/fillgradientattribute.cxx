@@ -18,6 +18,7 @@
  */
 
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
+#include <basegfx/utils/gradienttools.hxx>
 
 namespace drawinglayer::attribute
 {
@@ -29,7 +30,7 @@ namespace drawinglayer::attribute
             double                                  mfOffsetX;
             double                                  mfOffsetY;
             double                                  mfAngle;
-            FillGradientAttribute::ColorSteps       maColorSteps;
+            basegfx::ColorSteps                     maColorSteps;
             GradientStyle                           meStyle;
             sal_uInt16                              mnSteps;
 
@@ -41,7 +42,7 @@ namespace drawinglayer::attribute
                 double fAngle,
                 const basegfx::BColor& rStartColor,
                 const basegfx::BColor& rEndColor,
-                const FillGradientAttribute::ColorSteps* pColorSteps,
+                const basegfx::ColorSteps* pColorSteps,
                 sal_uInt16 nSteps)
             :   mfBorder(fBorder),
                 mfOffsetX(fOffsetX),
@@ -55,47 +56,79 @@ namespace drawinglayer::attribute
                 // to have one and not an empty vector, that spares many checks in the using code
                 maColorSteps.emplace_back(0.0, rStartColor);
 
-                // if we have ColorSteps, integrate these
-                if(nullptr != pColorSteps)
+                // if we have given ColorSteps, integrate these
+                if(nullptr != pColorSteps && !pColorSteps->empty())
                 {
-                    for(const auto& candidate : *pColorSteps)
+                    // append early & sort to local to prepare processing and correction(s)
+                    maColorSteps.insert(maColorSteps.end(), pColorSteps->begin(), pColorSteps->end());
+                    std::sort(maColorSteps.begin(), maColorSteps.end());
+
+                    // use two r/w heads on the data band maColorSteps
+                    size_t curr(0), next(1);
+
+                    // check if all colors are the same. We know the StartColor, so
+                    // to all be the same all have to be equal to StartColor, including
+                    // EndColor
+                    bool bAllTheSameColor(rStartColor == rEndColor);
+
+                    // remove entries < 0.0, > 1.0 and with equal offset. do
+                    // this inside the already sorted local vector by evtl.
+                    // moving entries towards begin to keep and adapting size
+                    // at the end
+                    for(; next < maColorSteps.size(); next++)
                     {
-                        // only allow ]0.0 .. 1.0[ as offset values, *excluding* 0.0 and 1.0
-                        // explicitely - these are reserved for start/end color
-                        if(basegfx::fTools::more(candidate.getOffset(), 0.0) && basegfx::fTools::less(candidate.getOffset(), 1.0))
+                        const double fNextOffset(maColorSteps[next].getOffset());
+
+                        if(basegfx::fTools::less(fNextOffset, 0.0))
+                            continue;
+
+                        if(basegfx::fTools::more(fNextOffset, 1.0))
+                            continue;
+
+                        const double fCurrOffset(maColorSteps[curr].getOffset());
+                        if(basegfx::fTools::equal(fNextOffset, fCurrOffset))
+                            continue;
+
+                        // next is > 0.0, < 1.0 and != curr, so a valid entry.
+                        // take over by evtl. have to move it left
+                        curr++;
+                        if(curr != next)
                         {
-                            // ignore same offsets, independent from color (so 1st one wins)
-                            // having two or more same offsets is an error (may assert evtl.)
-                            bool bAccept(true);
+                            maColorSteps[curr] = maColorSteps[next];
+                        }
 
-                            for(const auto& compare : maColorSteps)
-                            {
-                                if(basegfx::fTools::equal(compare.getOffset(), candidate.getOffset()))
-                                {
-                                    bAccept = false;
-                                    break;
-                                }
-                            }
+                        // new entry added, check it for all the same color
+                        bAllTheSameColor = bAllTheSameColor && maColorSteps[curr].getColor() == rStartColor;
+                    }
 
-                            if(bAccept)
-                            {
-                                maColorSteps.push_back(candidate);
-                            }
+                    if(bAllTheSameColor)
+                    {
+                        // if all the same, reset to StartColor only
+                        maColorSteps.resize(1);
+                    }
+                    else
+                    {
+                        // adapt size to useful entries
+                        curr++;
+                        if(curr != maColorSteps.size())
+                        {
+                            maColorSteps.resize(curr);
+                        }
+
+                        // add EndColor if in-between colors were added
+                        if(curr > 1)
+                        {
+                            maColorSteps.emplace_back(1.0, rEndColor);
                         }
                     }
-
-                    // sort by offset when colors were added
-                    if(maColorSteps.size() > 1)
-                    {
-                        std::sort(maColorSteps.begin(), maColorSteps.end());
-                    }
                 }
-
-                // add end color if different from last color - which is the start color
-                // when no ColorSteps are given
-                if(rEndColor != maColorSteps.back().getColor())
+                else
                 {
-                    maColorSteps.emplace_back(1.0, rEndColor);
+                    // add EndColor if different from StartColor
+                    if(rStartColor != rEndColor)
+                    {
+                        maColorSteps.emplace_back(1.0, rEndColor);
+                    }
                 }
             }
 
@@ -118,23 +151,16 @@ namespace drawinglayer::attribute
             double getOffsetX() const { return mfOffsetX; }
             double getOffsetY() const { return mfOffsetY; }
             double getAngle() const { return mfAngle; }
-            const FillGradientAttribute::ColorSteps& getColorSteps() const { return maColorSteps; }
+            const basegfx::ColorSteps& getColorSteps() const { return maColorSteps; }
             sal_uInt16 getSteps() const { return mnSteps; }
 
             bool hasSingleColor() const
             {
-                // no entries (should not happen, see comments for startColor)
-                if (0 == maColorSteps.size())
-                    return true;
-
-                // check if not all colors are the same
-                const basegfx::BColor& rColor(maColorSteps[0].getColor());
-                for (size_t a(1); a < maColorSteps.size(); a++)
-                    if (maColorSteps[a].getColor() != rColor)
-                        return false;
-
-                // all colors are the same
-                return true;
+                // No entry (should not happen, see comments for startColor above)
+                // or single entry -> no gradient.
+                // No need to check for all-the-same color since this is checked/done
+                // in the constructor already, see there
+                return maColorSteps.size() < 2;
             }
 
             bool operator==(const ImpFillGradientAttribute& rCandidate) const
@@ -166,7 +192,7 @@ namespace drawinglayer::attribute
             double fAngle,
             const basegfx::BColor& rStartColor,
             const basegfx::BColor& rEndColor,
-            const ColorSteps* pColorSteps,
+            const basegfx::ColorSteps* pColorSteps,
             sal_uInt16 nSteps)
         :   mpFillGradientAttribute(ImpFillGradientAttribute(
                 eStyle, fBorder, fOffsetX, fOffsetY, fAngle, rStartColor, rEndColor, pColorSteps, nSteps))
@@ -207,7 +233,7 @@ namespace drawinglayer::attribute
             return rCandidate.mpFillGradientAttribute == mpFillGradientAttribute;
         }
 
-        const FillGradientAttribute::ColorSteps& FillGradientAttribute::getColorSteps() const
+        const basegfx::ColorSteps& FillGradientAttribute::getColorSteps() const
         {
             return mpFillGradientAttribute->getColorSteps();
         }

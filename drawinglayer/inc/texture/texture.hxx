@@ -56,15 +56,15 @@ namespace drawinglayer::texture
         protected:
             basegfx::ODFGradientInfo            maGradientInfo;
             basegfx::B2DRange                   maDefinitionRange;
-            basegfx::BColor                     maStart;
-            basegfx::BColor                     maEnd;
+            sal_uInt32                          mnRequestedSteps;
+            basegfx::ColorSteps                 mnColorSteps;
             double                              mfBorder;
 
         public:
             GeoTexSvxGradient(
                 const basegfx::B2DRange& rDefinitionRange,
-                const basegfx::BColor& rStart,
-                const basegfx::BColor& rEnd,
+                sal_uInt32 nRequestedSteps,
+                const basegfx::ColorSteps& rColorSteps,
                 double fBorder);
             virtual ~GeoTexSvxGradient() override;
 
@@ -87,9 +87,8 @@ namespace drawinglayer::texture
             GeoTexSvxGradientLinear(
                 const basegfx::B2DRange& rDefinitionRange,
                 const basegfx::B2DRange& rOutputRange,
-                const basegfx::BColor& rStart,
-                const basegfx::BColor& rEnd,
-                sal_uInt32 nSteps,
+                sal_uInt32 nRequestedSteps,
+                const basegfx::ColorSteps& rColorSteps,
                 double fBorder,
                 double fAngle);
             virtual ~GeoTexSvxGradientLinear() override;
@@ -109,9 +108,8 @@ namespace drawinglayer::texture
             GeoTexSvxGradientAxial(
                 const basegfx::B2DRange& rDefinitionRange,
                 const basegfx::B2DRange& rOutputRange,
-                const basegfx::BColor& rStart,
-                const basegfx::BColor& rEnd,
-                sal_uInt32 nSteps,
+                sal_uInt32 nRequestedSteps,
+                const basegfx::ColorSteps& rColorSteps,
                 double fBorder,
                 double fAngle);
             virtual ~GeoTexSvxGradientAxial() override;
@@ -127,9 +125,8 @@ namespace drawinglayer::texture
         public:
             GeoTexSvxGradientRadial(
                 const basegfx::B2DRange& rDefinitionRange,
-                const basegfx::BColor& rStart,
-                const basegfx::BColor& rEnd,
-                sal_uInt32 nSteps,
+                sal_uInt32 nRequestedSteps,
+                const basegfx::ColorSteps& rColorSteps,
                 double fBorder,
                 double fOffsetX,
                 double fOffsetY);
@@ -146,9 +143,8 @@ namespace drawinglayer::texture
         public:
             GeoTexSvxGradientElliptical(
                 const basegfx::B2DRange& rDefinitionRange,
-                const basegfx::BColor& rStart,
-                const basegfx::BColor& rEnd,
-                sal_uInt32 nSteps,
+                sal_uInt32 nRequestedSteps,
+                const basegfx::ColorSteps& rColorSteps,
                 double fBorder,
                 double fOffsetX,
                 double fOffsetY,
@@ -166,9 +162,8 @@ namespace drawinglayer::texture
         public:
             GeoTexSvxGradientSquare(
                 const basegfx::B2DRange& rDefinitionRange,
-                const basegfx::BColor& rStart,
-                const basegfx::BColor& rEnd,
-                sal_uInt32 nSteps,
+                sal_uInt32 nRequestedSteps,
+                const basegfx::ColorSteps& rColorSteps,
                 double fBorder,
                 double fOffsetX,
                 double fOffsetY,
@@ -186,9 +181,8 @@ namespace drawinglayer::texture
         public:
             GeoTexSvxGradientRect(
                 const basegfx::B2DRange& rDefinitionRange,
-                const basegfx::BColor& rStart,
-                const basegfx::BColor& rEnd,
-                sal_uInt32 nSteps,
+                sal_uInt32 nRequestedSteps,
+                const basegfx::ColorSteps& rColorSteps,
                 double fBorder,
                 double fOffsetX,
                 double fOffsetY,
