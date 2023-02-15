@@ -2181,8 +2181,10 @@ LanguageTag & LanguageTag::makeFallback()
                 aVec.emplace_back(aLanguage + "-" + aCountry);
             if (aLanguage == "zh")
             {
-                // For zh-HK or zh-MO also list zh-TW, for all other zh-XX also
-                // list zh-CN.
+                // For zh-HK or zh-MO also list zh-TW to get zh-Hant, for all
+                // other zh-XX also list zh-CN to get zh-Hans; both of which we
+                // use the legacy forms instead of the more correct script
+                // tags that unfortunately most pieces don't understand.
                 if (aCountry == "HK" || aCountry == "MO")
                     aVec.emplace_back(aLanguage + "-TW");
                 else if (aCountry != "CN")

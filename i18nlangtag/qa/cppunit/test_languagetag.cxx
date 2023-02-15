@@ -482,6 +482,103 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT_EQUAL( s_es_ES_tradnl, es_ES_tradnl.getBcp47MS() );
     }
 
+    // 'zh-Hans-CN' maps to 'zh-CN' and fallbacks
+    {
+        LanguageTag zh_Hans_CN( "zh-Hans-CN", true );
+        lang::Locale aLocale = zh_Hans_CN.getLocale();
+        CPPUNIT_ASSERT_EQUAL( OUString("zh-CN"), zh_Hans_CN.getBcp47() );
+        CPPUNIT_ASSERT_EQUAL( OUString("zh"), aLocale.Language );
+        CPPUNIT_ASSERT_EQUAL( OUString("CN"), aLocale.Country );
+        CPPUNIT_ASSERT( aLocale.Variant.isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( LANGUAGE_CHINESE_SIMPLIFIED, zh_Hans_CN.getLanguageType() );
+        CPPUNIT_ASSERT( zh_Hans_CN.isValidBcp47() );
+        CPPUNIT_ASSERT( zh_Hans_CN.isIsoLocale() );
+        CPPUNIT_ASSERT( zh_Hans_CN.isIsoODF() );
+        CPPUNIT_ASSERT_EQUAL( OUString("zh"), zh_Hans_CN.getLanguage() );
+        CPPUNIT_ASSERT_EQUAL( OUString("CN"), zh_Hans_CN.getCountry() );
+        CPPUNIT_ASSERT( zh_Hans_CN.getScript().isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( OUString("zh"), zh_Hans_CN.getLanguageAndScript() );
+        ::std::vector< OUString > zh_Hans_CN_Fallbacks( zh_Hans_CN.getFallbackStrings( true));
+        CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(2), zh_Hans_CN_Fallbacks.size());
+        CPPUNIT_ASSERT_EQUAL( OUString("zh-CN"), zh_Hans_CN_Fallbacks[0]);
+        CPPUNIT_ASSERT_EQUAL( OUString("zh"), zh_Hans_CN_Fallbacks[1]);
+        CPPUNIT_ASSERT_EQUAL( OUString("zh-CN"), zh_Hans_CN.makeFallback().getBcp47());
+    }
+
+    // 'zh-Hant-TW' maps to 'zh-TW' and fallbacks
+    {
+        LanguageTag zh_Hant_TW( "zh-Hant-TW", true );
+        lang::Locale aLocale = zh_Hant_TW.getLocale();
+        CPPUNIT_ASSERT_EQUAL( OUString("zh-TW"), zh_Hant_TW.getBcp47() );
+        CPPUNIT_ASSERT_EQUAL( OUString("zh"), aLocale.Language );
+        CPPUNIT_ASSERT_EQUAL( OUString("TW"), aLocale.Country );
+        CPPUNIT_ASSERT( aLocale.Variant.isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( LANGUAGE_CHINESE_TRADITIONAL, zh_Hant_TW.getLanguageType() );
+        CPPUNIT_ASSERT( zh_Hant_TW.isValidBcp47() );
+        CPPUNIT_ASSERT( zh_Hant_TW.isIsoLocale() );
+        CPPUNIT_ASSERT( zh_Hant_TW.isIsoODF() );
+        CPPUNIT_ASSERT_EQUAL( OUString("zh"), zh_Hant_TW.getLanguage() );
+        CPPUNIT_ASSERT_EQUAL( OUString("TW"), zh_Hant_TW.getCountry() );
+        CPPUNIT_ASSERT( zh_Hant_TW.getScript().isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( OUString("zh"), zh_Hant_TW.getLanguageAndScript() );
+        ::std::vector< OUString > zh_Hant_TW_Fallbacks( zh_Hant_TW.getFallbackStrings( true));
+        CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(3), zh_Hant_TW_Fallbacks.size());
+        CPPUNIT_ASSERT_EQUAL( OUString("zh-TW"), zh_Hant_TW_Fallbacks[0]);
+        CPPUNIT_ASSERT_EQUAL( OUString("zh-CN"), zh_Hant_TW_Fallbacks[1]);
+        CPPUNIT_ASSERT_EQUAL( OUString("zh"), zh_Hant_TW_Fallbacks[2]);
+        CPPUNIT_ASSERT_EQUAL( OUString("zh-TW"), zh_Hant_TW.makeFallback().getBcp47());
+    }
+
+    // 'zh-SG' and fallbacks
+    {
+        OUString s_zh_SG( "zh-SG" );
+        LanguageTag zh_SG( s_zh_SG, true );
+        lang::Locale aLocale = zh_SG.getLocale();
+        CPPUNIT_ASSERT_EQUAL( s_zh_SG, zh_SG.getBcp47() );
+        CPPUNIT_ASSERT_EQUAL( OUString("zh"), aLocale.Language );
+        CPPUNIT_ASSERT_EQUAL( OUString("SG"), aLocale.Country );
+        CPPUNIT_ASSERT( aLocale.Variant.isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( LANGUAGE_CHINESE_SINGAPORE, zh_SG.getLanguageType() );
+        CPPUNIT_ASSERT( zh_SG.isValidBcp47() );
+        CPPUNIT_ASSERT( zh_SG.isIsoLocale() );
+        CPPUNIT_ASSERT( zh_SG.isIsoODF() );
+        CPPUNIT_ASSERT_EQUAL( OUString("zh"), zh_SG.getLanguage() );
+        CPPUNIT_ASSERT_EQUAL( OUString("SG"), zh_SG.getCountry() );
+        CPPUNIT_ASSERT( zh_SG.getScript().isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( OUString("zh"), zh_SG.getLanguageAndScript() );
+        ::std::vector< OUString > zh_SG_Fallbacks( zh_SG.getFallbackStrings( true));
+        CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(3), zh_SG_Fallbacks.size());
+        CPPUNIT_ASSERT_EQUAL( OUString("zh-SG"), zh_SG_Fallbacks[0]);
+        CPPUNIT_ASSERT_EQUAL( OUString("zh-CN"), zh_SG_Fallbacks[1]);
+        CPPUNIT_ASSERT_EQUAL( OUString("zh"), zh_SG_Fallbacks[2]);
+        CPPUNIT_ASSERT_EQUAL( OUString("zh-SG"), zh_SG.makeFallback().getBcp47());
+    }
+
+    // 'zh-HK' and fallbacks
+    {
+        OUString s_zh_HK( "zh-HK" );
+        LanguageTag zh_HK( s_zh_HK, true );
+        lang::Locale aLocale = zh_HK.getLocale();
+        CPPUNIT_ASSERT_EQUAL( s_zh_HK, zh_HK.getBcp47() );
+        CPPUNIT_ASSERT_EQUAL( OUString("zh"), aLocale.Language );
+        CPPUNIT_ASSERT_EQUAL( OUString("HK"), aLocale.Country );
+        CPPUNIT_ASSERT( aLocale.Variant.isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( LANGUAGE_CHINESE_HONGKONG, zh_HK.getLanguageType() );
+        CPPUNIT_ASSERT( zh_HK.isValidBcp47() );
+        CPPUNIT_ASSERT( zh_HK.isIsoLocale() );
+        CPPUNIT_ASSERT( zh_HK.isIsoODF() );
+        CPPUNIT_ASSERT_EQUAL( OUString("zh"), zh_HK.getLanguage() );
+        CPPUNIT_ASSERT_EQUAL( OUString("HK"), zh_HK.getCountry() );
+        CPPUNIT_ASSERT( zh_HK.getScript().isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( OUString("zh"), zh_HK.getLanguageAndScript() );
+        ::std::vector< OUString > zh_HK_Fallbacks( zh_HK.getFallbackStrings( true));
+        CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(3), zh_HK_Fallbacks.size());
+        CPPUNIT_ASSERT_EQUAL( OUString("zh-HK"), zh_HK_Fallbacks[0]);
+        CPPUNIT_ASSERT_EQUAL( OUString("zh-TW"), zh_HK_Fallbacks[1]);
+        CPPUNIT_ASSERT_EQUAL( OUString("zh"), zh_HK_Fallbacks[2]);
+        CPPUNIT_ASSERT_EQUAL( OUString("zh-HK"), zh_HK.makeFallback().getBcp47());
+    }
+
     // 'zh-yue-HK' uses redundant 'zh-yue' and should be preferred 'yue-HK'
 #if 0
     /* XXX Disabled because liblangtag in lt_tag_canonicalize() after replacing
