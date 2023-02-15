@@ -1556,6 +1556,11 @@ weld::ScreenShotCollection SalInstanceWindow::collect_screenshot_data()
     return aRet;
 }
 
+const vcl::ILibreOfficeKitNotifier* SalInstanceWindow::GetLOKNotifier()
+{
+    return m_xWindow ? m_xWindow->GetLOKNotifier() : nullptr;
+}
+
 SalInstanceWindow::~SalInstanceWindow()
 {
     // tdf#129745 only undo overriding child help for the normal case, not for

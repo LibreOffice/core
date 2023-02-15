@@ -4456,7 +4456,7 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
     }
 
     std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
-                eType, VclButtonsType::NONE, aMsg));
+                eType, VclButtonsType::NONE, aMsg, GetpApp()));
 
     switch (nStyle)
     {
