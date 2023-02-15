@@ -55,10 +55,8 @@ GenDocumentLockFile::~GenDocumentLockFile()
 {
 }
 
-uno::Reference< io::XInputStream > GenDocumentLockFile::OpenStream()
+uno::Reference< io::XInputStream > GenDocumentLockFile::OpenStream(std::unique_lock<std::mutex>& /*rGuard*/)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     uno::Reference < css::ucb::XCommandEnvironment > xEnv;
     ::ucbhelper::Content aSourceContent( GetURL(), xEnv, comphelper::getProcessComponentContext() );
 
@@ -68,7 +66,7 @@ uno::Reference< io::XInputStream > GenDocumentLockFile::OpenStream()
 
 bool GenDocumentLockFile::CreateOwnLockFile()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     try
     {
@@ -84,7 +82,7 @@ bool GenDocumentLockFile::CreateOwnLockFile()
             throw uno::RuntimeException();
 
         LockFileEntry aNewEntry = GenerateOwnEntry();
-        WriteEntryToStream( aNewEntry, xOutput );
+        WriteEntryToStream( aGuard, aNewEntry, xOutput );
         xOutput->closeOutput();
 
         xSeekable->seek( 0 );
@@ -114,6 +112,8 @@ bool GenDocumentLockFile::CreateOwnLockFile()
 
 bool GenDocumentLockFile::OverwriteOwnLockFile()
 {
+    std::unique_lock aGuard(m_aMutex);
+
     // allows to overwrite the lock file with the current data
     try
     {
@@ -127,7 +127,7 @@ bool GenDocumentLockFile::OverwriteOwnLockFile()
         uno::Reference< io::XTruncate > xTruncate( xOutput, uno::UNO_QUERY_THROW );
 
         xTruncate->truncate();
-        WriteEntryToStream( aNewEntry, xOutput );
+        WriteEntryToStream( aGuard, aNewEntry, xOutput );
         xOutput->closeOutput();
     }
     catch( uno::Exception& )
@@ -140,11 +140,11 @@ bool GenDocumentLockFile::OverwriteOwnLockFile()
 
 void GenDocumentLockFile::RemoveFile()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // TODO/LATER: the removing is not atomic, is it possible in general to make it atomic?
     LockFileEntry aNewEntry = GenerateOwnEntry();
-    LockFileEntry aFileData = GetLockData();
+    LockFileEntry aFileData = GetLockDataImpl(aGuard);
 
     if ( aFileData[LockFileComponent::SYSUSERNAME] != aNewEntry[LockFileComponent::SYSUSERNAME]
       || aFileData[LockFileComponent::LOCALHOST] != aNewEntry[LockFileComponent::LOCALHOST]
@@ -162,6 +162,11 @@ void GenDocumentLockFile::RemoveFileDirectly()
         uno::Any(true));
 }
 
+LockFileEntry GenDocumentLockFile::GetLockData()
+{
+    std::unique_lock aGuard(m_aMutex);
+    return GetLockDataImpl(aGuard);
+}
 
 DocumentLockFile::DocumentLockFile( std::u16string_view aOrigURL )
     : GenDocumentLockFile(GenerateOwnLockFileURL(aOrigURL, u".~lock."))
@@ -174,10 +179,10 @@ DocumentLockFile::~DocumentLockFile()
 }
 
 
-void DocumentLockFile::WriteEntryToStream( const LockFileEntry& aEntry, const uno::Reference< io::XOutputStream >& xOutput )
+void DocumentLockFile::WriteEntryToStream(
+    std::unique_lock<std::mutex>& /*rGuard*/,
+    const LockFileEntry& aEntry, const uno::Reference< io::XOutputStream >& xOutput )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     OUStringBuffer aBuffer(256);
 
     for ( LockFileComponent lft : o3tl::enumrange<LockFileComponent>() )
@@ -194,11 +199,9 @@ void DocumentLockFile::WriteEntryToStream( const LockFileEntry& aEntry, const un
     xOutput->writeBytes( aData );
 }
 
-LockFileEntry DocumentLockFile::GetLockData()
+LockFileEntry DocumentLockFile::GetLockDataImpl(std::unique_lock<std::mutex>& rGuard)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    uno::Reference< io::XInputStream > xInput = OpenStream();
+    uno::Reference< io::XInputStream > xInput = OpenStream(rGuard);
     if ( !xInput.is() )
         throw uno::RuntimeException();
 

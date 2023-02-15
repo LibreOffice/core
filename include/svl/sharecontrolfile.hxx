@@ -56,12 +56,15 @@ public:
     virtual ~ShareControlFile() override;
 
     std::vector< LockFileEntry > GetUsersData();
-    void SetUsersDataAndStore( std::vector< LockFileEntry >&& aUserNames );
+    void SetUsersDataAndStore( std::unique_lock<std::mutex>& rGuard, std::vector< LockFileEntry >&& aUserNames );
     LockFileEntry InsertOwnEntry();
     bool HasOwnEntry();
     void RemoveEntry( const LockFileEntry& aOptionalSpecification );
     void RemoveEntry();
     void RemoveFile();
+private:
+    void RemoveFileImpl(std::unique_lock<std::mutex>& rGuard);
+    std::vector< LockFileEntry > GetUsersDataImpl(std::unique_lock<std::mutex>& rGuard);
 };
 
 }

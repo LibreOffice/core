@@ -24,10 +24,10 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
 #include <o3tl/enumarray.hxx>
 
+#include <mutex>
 #include <string_view>
 #include <vector>
 
@@ -47,7 +47,7 @@ private:
     OUString m_aURL;
 
 protected:
-    ::osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
 
     /// This method generates the URL of the lock file based on the document URL and the specified prefix.
     static OUString GenerateOwnLockFileURL(std::u16string_view aOrigURL, std::u16string_view aPrefix);

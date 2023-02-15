@@ -86,10 +86,9 @@ MSODocumentLockFile::MSODocumentLockFile(std::u16string_view aOrigURL)
 MSODocumentLockFile::~MSODocumentLockFile() {}
 
 void MSODocumentLockFile::WriteEntryToStream(
-    const LockFileEntry& aEntry, const css::uno::Reference<css::io::XOutputStream>& xOutput)
+    std::unique_lock<std::mutex>& /*rGuard*/, const LockFileEntry& aEntry,
+    const css::uno::Reference<css::io::XOutputStream>& xOutput)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
-
     // Reallocate the date with the right size, different lock file size for different components
     int nLockFileSize = m_eAppType == AppType::Word ? MSO_WORD_LOCKFILE_SIZE
                                                     : MSO_EXCEL_AND_POWERPOINT_LOCKFILE_SIZE;
@@ -181,10 +180,9 @@ void MSODocumentLockFile::WriteEntryToStream(
     xOutput->writeBytes(aData);
 }
 
-css::uno::Reference<css::io::XInputStream> MSODocumentLockFile::OpenStream()
+css::uno::Reference<css::io::XInputStream>
+MSODocumentLockFile::OpenStream(std::unique_lock<std::mutex>& /*rGuard*/)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
-
     css::uno::Reference<css::ucb::XCommandEnvironment> xEnv;
     ::ucbhelper::Content aSourceContent(GetURL(), xEnv, comphelper::getProcessComponentContext());
 
@@ -192,12 +190,10 @@ css::uno::Reference<css::io::XInputStream> MSODocumentLockFile::OpenStream()
     return aSourceContent.openStreamNoLock();
 }
 
-LockFileEntry MSODocumentLockFile::GetLockData()
+LockFileEntry MSODocumentLockFile::GetLockDataImpl(std::unique_lock<std::mutex>& rGuard)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
-
     LockFileEntry aResult;
-    css::uno::Reference<css::io::XInputStream> xInput = OpenStream();
+    css::uno::Reference<css::io::XInputStream> xInput = OpenStream(rGuard);
     if (!xInput.is())
         throw css::uno::RuntimeException();
 
@@ -248,11 +244,11 @@ LockFileEntry MSODocumentLockFile::GetLockData()
 
 void MSODocumentLockFile::RemoveFile()
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     // TODO/LATER: the removing is not atomic, is it possible in general to make it atomic?
     LockFileEntry aNewEntry = GenerateOwnEntry();
-    LockFileEntry aFileData = GetLockData();
+    LockFileEntry aFileData = GetLockDataImpl(aGuard);
 
     if (aFileData[LockFileComponent::OOOUSERNAME] != aNewEntry[LockFileComponent::OOOUSERNAME])
         throw css::io::IOException(); // not the owner, access denied

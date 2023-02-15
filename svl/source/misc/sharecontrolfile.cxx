@@ -139,8 +139,12 @@ void ShareControlFile::Close()
 
 std::vector< o3tl::enumarray< LockFileComponent, OUString > > ShareControlFile::GetUsersData()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard(m_aMutex);
+    return GetUsersDataImpl(aGuard);
+}
 
+std::vector< o3tl::enumarray< LockFileComponent, OUString > > ShareControlFile::GetUsersDataImpl(std::unique_lock<std::mutex>& /*rGuard*/)
+{
     if ( !IsValid() )
         throw io::NotConnectedException();
 
@@ -175,10 +179,8 @@ std::vector< o3tl::enumarray< LockFileComponent, OUString > > ShareControlFile::
 }
 
 
-void ShareControlFile::SetUsersDataAndStore( std::vector< LockFileEntry >&& aUsersData )
+void ShareControlFile::SetUsersDataAndStore( std::unique_lock<std::mutex>& /*rGuard*/, std::vector< LockFileEntry >&& aUsersData )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     if ( !IsValid() )
         throw io::NotConnectedException();
 
@@ -210,12 +212,12 @@ void ShareControlFile::SetUsersDataAndStore( std::vector< LockFileEntry >&& aUse
 
 LockFileEntry ShareControlFile::InsertOwnEntry()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( !IsValid() )
         throw io::NotConnectedException();
 
-    GetUsersData();
+    GetUsersDataImpl(aGuard);
     std::vector< LockFileEntry > aNewData( m_aUsersData );
     LockFileEntry aNewEntry = GenerateOwnEntry();
 
@@ -244,7 +246,7 @@ LockFileEntry ShareControlFile::InsertOwnEntry()
     if ( !bExists )
         aNewData.push_back( aNewEntry );
 
-    SetUsersDataAndStore( std::move(aNewData) );
+    SetUsersDataAndStore( aGuard, std::move(aNewData) );
 
     return aNewEntry;
 }
@@ -252,14 +254,14 @@ LockFileEntry ShareControlFile::InsertOwnEntry()
 
 bool ShareControlFile::HasOwnEntry()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( !IsValid() )
     {
         throw io::NotConnectedException();
     }
 
-    GetUsersData();
+    GetUsersDataImpl(aGuard);
     LockFileEntry aEntry = GenerateOwnEntry();
 
     for (LockFileEntry & rEntry : m_aUsersData)
@@ -283,12 +285,12 @@ void ShareControlFile::RemoveEntry()
 
 void ShareControlFile::RemoveEntry( const LockFileEntry& aEntry )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( !IsValid() )
         throw io::NotConnectedException();
 
-    GetUsersData();
+    GetUsersDataImpl(aGuard);
 
     std::vector< LockFileEntry > aNewData;
 
@@ -303,20 +305,24 @@ void ShareControlFile::RemoveEntry( const LockFileEntry& aEntry )
     }
 
     const bool bNewDataEmpty = aNewData.empty();
-    SetUsersDataAndStore( std::move(aNewData) );
+    SetUsersDataAndStore( aGuard, std::move(aNewData) );
 
     if ( bNewDataEmpty )
     {
         // try to remove the file if it is empty
-        RemoveFile();
+        RemoveFileImpl(aGuard);
     }
 }
 
 
 void ShareControlFile::RemoveFile()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard(m_aMutex);
+    return RemoveFileImpl(aGuard);
+}
 
+void ShareControlFile::RemoveFileImpl(std::unique_lock<std::mutex>& /*rGuard*/)
+{
     if ( !IsValid() )
         throw io::NotConnectedException();
 

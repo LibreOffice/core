@@ -33,16 +33,17 @@ private:
     AppType m_eAppType;
 
     virtual void
-    WriteEntryToStream(const LockFileEntry& aEntry,
+    WriteEntryToStream(std::unique_lock<std::mutex>& rGuard, const LockFileEntry& aEntry,
                        const css::uno::Reference<css::io::XOutputStream>& xStream) override;
 
-    virtual css::uno::Reference<css::io::XInputStream> OpenStream() override;
+    virtual css::uno::Reference<css::io::XInputStream>
+    OpenStream(std::unique_lock<std::mutex>& rGuard) override;
+
+    virtual LockFileEntry GetLockDataImpl(std::unique_lock<std::mutex>& rGuard) override;
 
 public:
     MSODocumentLockFile(std::u16string_view aOrigURL);
     virtual ~MSODocumentLockFile() override;
-
-    virtual LockFileEntry GetLockData() override;
 
     virtual void RemoveFile() override;
 
