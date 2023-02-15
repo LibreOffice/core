@@ -331,8 +331,11 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
 
             // c1) there is as minimum 1 frame open, which is visible and contains a document
             //     different from our one. And it's not the help!
+            //     (tdf#30920 consider that closing a frame which is not the backing window (start center) while there is
+            //      another frame that is the backing window open only closes the frame, and not terminate the app, so
+            //      closing the license frame doesn't terminate the app if launched from the start center)
             //     => close our frame only - nothing else.
-            if (!aCheck2.m_lOtherVisibleFrames.empty())
+            if (!aCheck2.m_lOtherVisibleFrames.empty() || (!aCheck2.m_bReferenceIsBacking && aCheck2.m_xBackingComponent.is()))
                 bCloseFrame = true;
             else
 
