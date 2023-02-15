@@ -116,6 +116,47 @@ void ScOrcusGlobalSettings::set_character_set(orcus::character_set_t cs)
         case orcus::character_set_t::gbk:
             mnTextEncoding = RTL_TEXTENCODING_GBK;
             break;
+        case orcus::character_set_t::iso_8859_1:
+        case orcus::character_set_t::iso_8859_1_windows_3_0_latin_1:
+        case orcus::character_set_t::iso_8859_1_windows_3_1_latin_1:
+            mnTextEncoding = RTL_TEXTENCODING_ISO_8859_1;
+            break;
+        case orcus::character_set_t::iso_8859_2:
+        case orcus::character_set_t::iso_8859_2_windows_latin_2:
+            mnTextEncoding = RTL_TEXTENCODING_ISO_8859_2;
+            break;
+        case orcus::character_set_t::iso_8859_3:
+            mnTextEncoding = RTL_TEXTENCODING_ISO_8859_3;
+            break;
+        case orcus::character_set_t::iso_8859_4:
+            mnTextEncoding = RTL_TEXTENCODING_ISO_8859_4;
+            break;
+        case orcus::character_set_t::iso_8859_5:
+            mnTextEncoding = RTL_TEXTENCODING_ISO_8859_5;
+            break;
+        case orcus::character_set_t::iso_8859_6:
+        case orcus::character_set_t::iso_8859_6_e:
+        case orcus::character_set_t::iso_8859_6_i:
+            mnTextEncoding = RTL_TEXTENCODING_ISO_8859_6;
+            break;
+        case orcus::character_set_t::iso_8859_7:
+            mnTextEncoding = RTL_TEXTENCODING_ISO_8859_7;
+            break;
+        case orcus::character_set_t::iso_8859_8:
+        case orcus::character_set_t::iso_8859_8_e:
+        case orcus::character_set_t::iso_8859_8_i:
+            mnTextEncoding = RTL_TEXTENCODING_ISO_8859_8;
+            break;
+        case orcus::character_set_t::iso_8859_9:
+        case orcus::character_set_t::iso_8859_9_windows_latin_5:
+            mnTextEncoding = RTL_TEXTENCODING_ISO_8859_9;
+            break;
+        case orcus::character_set_t::iso_8859_14:
+            mnTextEncoding = RTL_TEXTENCODING_ISO_8859_14;
+            break;
+        case orcus::character_set_t::iso_8859_15:
+            mnTextEncoding = RTL_TEXTENCODING_ISO_8859_15;
+            break;
         case orcus::character_set_t::iso_2022_jp:
         case orcus::character_set_t::iso_2022_jp_2:
             mnTextEncoding = RTL_TEXTENCODING_ISO_2022_JP;
