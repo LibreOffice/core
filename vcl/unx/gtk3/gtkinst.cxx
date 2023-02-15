@@ -6590,6 +6590,12 @@ public:
         return aRet;
     }
 
+    virtual const vcl::ILibreOfficeKitNotifier* GetLOKNotifier() override
+    {
+        // dummy implementation
+        return nullptr;
+    }
+
     virtual ~GtkInstanceWindow() override
     {
         if (m_nToplevelFocusChangedSignalId)

@@ -1156,14 +1156,18 @@ std::unique_ptr<weld::Image> JSInstanceBuilder::weld_image(const OString& id)
 weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent,
                                                             VclMessageType eMessageType,
                                                             VclButtonsType eButtonType,
-                                                            const OUString& rPrimaryMessage)
+                                                            const OUString& rPrimaryMessage,
+                                                            const vcl::ILibreOfficeKitNotifier* pNotifier)
 {
     SalInstanceWidget* pParentInstance = dynamic_cast<SalInstanceWidget*>(pParent);
     SystemWindow* pParentWidget = pParentInstance ? pParentInstance->getSystemWindow() : nullptr;
     VclPtrInstance<::MessageDialog> xMessageDialog(pParentWidget, rPrimaryMessage, eMessageType,
                                                    eButtonType);
 
-    const vcl::ILibreOfficeKitNotifier* pNotifier = xMessageDialog->GetLOKNotifier();
+    if (pNotifier)
+        xMessageDialog->SetLOKNotifier(pNotifier);
+
+    pNotifier = xMessageDialog->GetLOKNotifier();
     if (pNotifier)
     {
         tools::JsonWriter aJsonWriter;
@@ -1445,6 +1449,18 @@ void JSMessageDialog::RememberMessageDialog()
 
     JSInstanceBuilder::InsertWindowToMap(sWindowId);
     JSInstanceBuilder::RememberWidget(sWindowId, sWidgetName, this);
+}
+
+int JSMessageDialog::run()
+{
+    if (GetLOKNotifier())
+    {
+        RememberMessageDialog();
+        sendFullUpdate();
+    }
+
+    int bRet = SalInstanceMessageDialog::run();
+    return bRet;
 }
 
 bool JSMessageDialog::runAsync(std::shared_ptr<weld::DialogController> aOwner,

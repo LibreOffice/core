@@ -41,6 +41,11 @@ class VclMultiLineEdit;
 class SvTabListBox;
 class IconView;
 
+namespace vcl
+{
+class ILibreOfficeKitNotifier;
+}
+
 typedef std::map<OString, weld::Widget*> WidgetMap;
 
 namespace jsdialog
@@ -301,7 +306,8 @@ public:
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent,
                                                     VclMessageType eMessageType,
                                                     VclButtonsType eButtonType,
-                                                    const OUString& rPrimaryMessage);
+                                                    const OUString& rPrimaryMessage,
+                                                    const vcl::ILibreOfficeKitNotifier* pNotifier = nullptr);
 
     static void AddChildWidget(const std::string& nWindowId, const OString& id,
                                weld::Widget* pWidget);
@@ -599,6 +605,7 @@ public:
 
     virtual void response(int response) override;
 
+    virtual int run() override;
     // TODO: move to dialog class so we will not send json when built but on run
     bool runAsync(std::shared_ptr<weld::DialogController> aOwner,
                   const std::function<void(sal_Int32)>& rEndDialogFn) override;

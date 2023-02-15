@@ -319,6 +319,7 @@ void Application::notifyWindow(vcl::LOKWindowId /*nLOKWindowId*/,
                                const OUString& /*rAction*/,
                                const std::vector<vcl::LOKPayloadItem>& /*rPayload = std::vector<LOKPayloadItem>()*/) const
 {
+    SAL_WARN("vcl", "Invoked not implemented method: Application::notifyWindow");
 }
 
 void Application::libreOfficeKitViewCallback(int nType, const char* pPayload) const
