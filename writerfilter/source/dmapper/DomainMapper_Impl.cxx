@@ -2690,8 +2690,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             {
                 m_bAnnotationResolved = item->second.bDone;
                 m_sAnnotationParent = item->second.sParaIdParent;
-                m_sAnnotationImportedParaId = sParaId;
             }
+            m_sAnnotationImportedParaId = sParaId;
         }
     }
 

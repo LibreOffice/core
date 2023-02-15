@@ -885,6 +885,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentReply)
     loadAndSave("CommentReply.docx");
     xmlDocUniquePtr pXmlComm = parseExport("word/comments.xml");
     xmlDocUniquePtr pXmlCommExt = parseExport("word/commentsExtended.xml");
+    CPPUNIT_ASSERT(pXmlComm);
+    CPPUNIT_ASSERT(pXmlCommExt);
     OUString sParentId = getXPath(pXmlComm, "/w:comments/w:comment[1]/w:p[1]", "paraId");
     OUString sChildId = getXPath(pXmlComm, "/w:comments/w:comment[2]/w:p[1]", "paraId");
     OUString sChildIdEx = getXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx", "paraId");
