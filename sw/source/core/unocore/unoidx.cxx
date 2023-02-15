@@ -30,9 +30,7 @@
 #include <com/sun/star/text/BibliographyDataField.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
-#include <osl/mutex.hxx>
 #include <comphelper/interfacecontainer4.hxx>
-#include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/UnitConversion.hxx>
 #include <vcl/svapp.hxx>
@@ -291,12 +289,13 @@ lcl_TypeToPropertyMap_Index(const TOXTypes eType)
 class SwXDocumentIndex::Impl final: public SvtListener
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
     SwSectionFormat* m_pFormat;
 
 public:
     unotools::WeakReference<SwXDocumentIndex> m_wThis;
-    ::comphelper::OMultiTypeInterfaceContainerHelper2 m_Listeners;
+    std::mutex m_Mutex; // just for OInterfaceContainerHelper4
+    ::comphelper::OInterfaceContainerHelper4<util::XRefreshListener> m_RefreshListeners;
+    ::comphelper::OInterfaceContainerHelper4<lang::XEventListener> m_EventListeners;
     SfxItemPropertySet const& m_rPropSet;
     const TOXTypes m_eTOXType;
     bool m_bIsDescriptor;
@@ -307,7 +306,6 @@ public:
 
     Impl(SwDoc& rDoc, const TOXTypes eType, SwTOXBaseSection *const pBaseSection)
         : m_pFormat(pBaseSection ? pBaseSection->GetFormat() : nullptr)
-        , m_Listeners(m_Mutex)
         , m_rPropSet(*aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Index(eType)))
         , m_eTOXType(eType)
         , m_bIsDescriptor(nullptr == pBaseSection)
@@ -376,8 +374,10 @@ void SwXDocumentIndex::Impl::Notify(const SfxHint& rHint)
         {   // fdo#72695: if UNO object is already dead, don't revive it with event
             return;
         }
+        std::unique_lock g(m_Mutex);
         lang::EventObject const ev(static_cast<cppu::OWeakObject*>(xThis.get()));
-        m_Listeners.disposeAndClear(ev);
+        m_RefreshListeners.disposeAndClear(g, ev);
+        m_EventListeners.disposeAndClear(g, ev);
     }
 }
 
@@ -1282,13 +1282,11 @@ void SAL_CALL SwXDocumentIndex::refresh()
         pTOXBase->UpdatePageNum();
     }
 
-    ::comphelper::OInterfaceContainerHelper2 *const pContainer(
-        m_pImpl->m_Listeners.getContainer(
-            cppu::UnoType<util::XRefreshListener>::get()));
-    if (pContainer)
+    std::unique_lock g(m_pImpl->m_Mutex);
+    if (m_pImpl->m_RefreshListeners.getLength(g))
     {
         lang::EventObject const event(static_cast< ::cppu::OWeakObject*>(this));
-        pContainer->notifyEach(& util::XRefreshListener::refreshed, event);
+        m_pImpl->m_RefreshListeners.notifyEach(g, & util::XRefreshListener::refreshed, event);
     }
 }
 
@@ -1296,16 +1294,16 @@ void SAL_CALL SwXDocumentIndex::addRefreshListener(
         const uno::Reference<util::XRefreshListener>& xListener)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
-    m_pImpl->m_Listeners.addInterface(
-            cppu::UnoType<util::XRefreshListener>::get(), xListener);
+    std::unique_lock g(m_pImpl->m_Mutex);
+    m_pImpl->m_RefreshListeners.addInterface(g, xListener);
 }
 
 void SAL_CALL SwXDocumentIndex::removeRefreshListener(
         const uno::Reference<util::XRefreshListener>& xListener)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
-    m_pImpl->m_Listeners.removeInterface(
-            cppu::UnoType<util::XRefreshListener>::get(), xListener);
+    std::unique_lock g(m_pImpl->m_Mutex);
+    m_pImpl->m_RefreshListeners.removeInterface(g, xListener);
 }
 
 void SAL_CALL
@@ -1407,8 +1405,8 @@ SwXDocumentIndex::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
-    m_pImpl->m_Listeners.addInterface(
-            cppu::UnoType<lang::XEventListener>::get(), xListener);
+    std::unique_lock g(m_pImpl->m_Mutex);
+    m_pImpl->m_EventListeners.addInterface(g, xListener);
 }
 
 void SAL_CALL
@@ -1416,8 +1414,8 @@ SwXDocumentIndex::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
-    m_pImpl->m_Listeners.removeInterface(
-            cppu::UnoType<lang::XEventListener>::get(), xListener);
+    std::unique_lock g(m_pImpl->m_Mutex);
+    m_pImpl->m_EventListeners.removeInterface(g, xListener);
 }
 
 OUString SAL_CALL SwXDocumentIndex::getName()
