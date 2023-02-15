@@ -2665,7 +2665,8 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     SwStyleNameMapper::FillUIName(sName, sName, SwGetPoolIdFromName::TabStyle);
                     pTable->SetTableStyleName(sName);
                     SwDoc* pDoc = pFormat->GetDoc();
-                    pDoc->GetDocShell()->GetFEShell()->UpdateTableStyleFormatting(pTable->GetTableNode());
+                    if (SwFEShell* pFEShell = pDoc->GetDocShell()->GetFEShell())
+                        pFEShell->UpdateTableStyleFormatting(pTable->GetTableNode());
                 }
                 break;
 

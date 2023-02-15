@@ -89,8 +89,7 @@ void SwAccessibleSelectionHelper::selectAccessibleChild(
 
     // we can only select fly frames, so we ignore (should: return
     // false) all other attempts at child selection
-    SwFEShell* pFEShell = GetFEShell();
-    if( pFEShell != nullptr )
+    if (GetFEShell())
     {
         const SdrObject *pObj = aChild.GetDrawObject();
         if( pObj )
@@ -142,8 +141,7 @@ bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
 
     // ... and compare to the currently selected frame
     bool bRet = false;
-    const SwFEShell* pFEShell = GetFEShell();
-    if( pFEShell )
+    if (const SwFEShell* pFEShell = GetFEShell())
     {
         if ( aChild.GetSwFrame() != nullptr )
         {
@@ -172,7 +170,7 @@ void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
     // the first we can select, and select it.
 
     SwFEShell* pFEShell = GetFEShell();
-    if( !pFEShell )
+    if (!pFEShell)
         return;
 
     std::list< SwAccessibleChild > aChildren;
@@ -198,8 +196,7 @@ sal_Int64 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
     sal_Int64 nCount = 0;
     // Only one frame can be selected at a time, and we only frames
     // for selectable children.
-    const SwFEShell* pFEShell = GetFEShell();
-    if( pFEShell != nullptr )
+    if (const SwFEShell* pFEShell = GetFEShell())
     {
         const SwFlyFrame* pFlyFrame = pFEShell->GetSelectedFlyFrame();
         if( pFlyFrame )
@@ -251,7 +248,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     // be 0, and a selection must exist, otherwise we have to throw an
     // lang::IndexOutOfBoundsException
     SwFEShell* pFEShell = GetFEShell();
-    if( nullptr == pFEShell )
+    if (!pFEShell)
         throwIndexOutOfBoundsException();
 
     SwAccessibleChild aChild;

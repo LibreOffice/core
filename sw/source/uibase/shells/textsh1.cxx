@@ -1016,7 +1016,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
             rWrtSh.ResetAttr( aAttribs );
 
             // also clear the direct formatting flag inside SwTableBox(es)
-            GetView().GetDocShell()->GetFEShell()->UpdateTableStyleFormatting(nullptr, true);
+            if (SwFEShell* pFEShell = GetView().GetDocShell()->GetFEShell())
+                pFEShell->UpdateTableStyleFormatting(nullptr, true);
 
             rReq.Done();
             break;
