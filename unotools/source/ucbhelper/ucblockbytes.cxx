@@ -978,35 +978,39 @@ UcbLockBytes::~UcbLockBytes()
 
 Reference < XInputStream > UcbLockBytes::getInputStream()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     m_bDontClose = true;
     return m_xInputStream;
 }
 
 void UcbLockBytes::setStream( const Reference<XStream>& aStream )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     if ( aStream.is() )
     {
         m_xOutputStream = aStream->getOutputStream();
-        setInputStream( aStream->getInputStream(), false );
+        setInputStreamImpl( aGuard, aStream->getInputStream(), false );
         m_xSeekable.set( aStream, UNO_QUERY );
     }
     else
     {
         m_xOutputStream.clear();
-        setInputStream( Reference < XInputStream >() );
+        setInputStreamImpl( aGuard, Reference < XInputStream >() );
     }
 }
 
 bool UcbLockBytes::setInputStream( const Reference<XInputStream> &rxInputStream, bool bSetXSeekable )
 {
+    std::unique_lock aGuard( m_aMutex );
+    return setInputStreamImpl(aGuard, rxInputStream, bSetXSeekable);
+}
+
+bool UcbLockBytes::setInputStreamImpl( std::unique_lock<std::mutex>& /*rGuard*/, const Reference<XInputStream> &rxInputStream, bool bSetXSeekable )
+{
     bool bRet = false;
 
     try
     {
-        osl::MutexGuard aGuard( m_aMutex );
-
         if ( !m_bDontClose && m_xInputStream.is() )
             m_xInputStream->closeInput();
 

@@ -21,9 +21,9 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <osl/conditn.hxx>
-#include <osl/mutex.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/errcode.hxx>
+#include <mutex>
 
 namespace com
 {
@@ -63,7 +63,7 @@ class UcbLockBytes : public SvLockBytes
 {
     osl::Condition          m_aInitialized;
     osl::Condition          m_aTerminated;
-    osl::Mutex              m_aMutex;
+    std::mutex              m_aMutex;
 
     css::uno::Reference < css::io::XInputStream >  m_xInputStream;
     css::uno::Reference < css::io::XOutputStream > m_xOutputStream;
@@ -112,19 +112,19 @@ public:
 
     css::uno::Reference < css::io::XInputStream > getInputStream() const
                             {
-                                osl::MutexGuard aGuard( const_cast< UcbLockBytes* >(this)->m_aMutex );
+                                std::unique_lock aGuard( const_cast< UcbLockBytes* >(this)->m_aMutex );
                                 return m_xInputStream;
                             }
 
     css::uno::Reference < css::io::XOutputStream > getOutputStream() const
                             {
-                                osl::MutexGuard aGuard( const_cast< UcbLockBytes* >(this)->m_aMutex );
+                                std::unique_lock aGuard( const_cast< UcbLockBytes* >(this)->m_aMutex );
                                 return m_xOutputStream;
                             }
 
     css::uno::Reference < css::io::XSeekable > getSeekable() const
                             {
-                                osl::MutexGuard aGuard( const_cast< UcbLockBytes* >(this)->m_aMutex );
+                                std::unique_lock aGuard( const_cast< UcbLockBytes* >(this)->m_aMutex );
                                 return m_xSeekable;
                             }
 
@@ -132,6 +132,11 @@ public:
                             { m_bDontClose = true; }
 
     void                    SetStreamValid();
+
+private:
+    bool                    setInputStreamImpl( std::unique_lock<std::mutex>& rGuard,
+                                                 const css::uno::Reference < css::io::XInputStream > &rxInputStream,
+                                                 bool bSetXSeekable = true );
 };
 
 }
