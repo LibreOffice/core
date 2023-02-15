@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/configuration/ReadOnlyAccess.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -63,6 +64,7 @@ public:
     void testKeyReset();
     void testSetSetMemberName();
     void testInsertSetMember();
+    void testLocalizedProperty();
     void testReadCommands();
     void testListener();
     void testRecursive();
@@ -89,6 +91,7 @@ public:
     CPPUNIT_TEST(testKeyReset);
     CPPUNIT_TEST(testSetSetMemberName);
     CPPUNIT_TEST(testInsertSetMember);
+    CPPUNIT_TEST(testLocalizedProperty);
     CPPUNIT_TEST(testReadCommands);
     CPPUNIT_TEST(testListener);
     CPPUNIT_TEST(testRecursive);
@@ -307,6 +310,20 @@ void Test::testInsertSetMember() {
         access, css::uno::UNO_QUERY_THROW)->commitChanges();
     css::uno::Reference<css::lang::XComponent>(
         access, css::uno::UNO_QUERY_THROW)->dispose();
+}
+
+void Test::testLocalizedProperty() {
+    auto const access = css::configuration::ReadOnlyAccess::create(
+        comphelper::getProcessComponentContext(), "*");
+    {
+        // See <https://bugs.documentfoundation.org/show_bug.cgi?id=33638> "Pagination extension
+        // not localized in LibreOffice", which wants to retrieve the non-canonical xml:lang="pt-PT"
+        // value for the passed-in "pt" locale:
+        OUString v;
+        CPPUNIT_ASSERT(
+            access->getByHierarchicalName("/org.libreoffice.unittest/localized/*pt") >>= v);
+        CPPUNIT_ASSERT_EQUAL(OUString("pt-PT"), v);
+    }
 }
 
 void Test::testReadCommands()
