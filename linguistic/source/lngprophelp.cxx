@@ -412,7 +412,7 @@ bool PropertyHelper_Spell::propertyChange_Impl( const PropertyChangeEvent& rEvt 
                 break;
             }
             default:
-                SAL_WARN( "linguistic", "unknown property" );
+                SAL_WARN( "linguistic", "unknown property handle " << rEvt.PropertyHandle << " (check in include/unotools/linguprops.hxx)" );
         }
         if (pbVal)
             rEvt.NewValue >>= *pbVal;
@@ -474,7 +474,7 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
                 case UPH_IS_SPELL_CLOSED_COMPOUND : pbResVal = &bResIsSpellClosedCompound; break;
                 case UPH_IS_SPELL_HYPHENATED_COMPOUND : pbResVal = &bResIsSpellHyphenatedCompound; break;
                 default:
-                    SAL_WARN( "linguistic", "unknown property" );
+                    SAL_WARN( "linguistic", "unknown property handle " << rVal.Handle << " (check in include/unotools/linguprops.hxx)" );
             }
             if (pbResVal)
                 rVal.Value >>= *pbResVal;
@@ -577,7 +577,7 @@ bool PropertyHelper_Hyphen::propertyChange_Impl( const PropertyChangeEvent& rEvt
             case UPH_HYPH_MIN_WORD_LENGTH : pnVal = &nHyphMinWordLength; break;
             case UPH_HYPH_NO_CAPS : pbVal = &bNoHyphenateCaps; break;
             default:
-                SAL_WARN( "linguistic", "unknown property" );
+                SAL_WARN( "linguistic", "unknown property handle " << rEvt.PropertyHandle << " (check in include/unotools/linguprops.hxx)");
         }
         if (pnVal)
             rEvt.NewValue >>= *pnVal;
@@ -629,7 +629,7 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
         else if ( rVal.Name == UPN_HYPH_NO_CAPS )
             pbResVal = &bResNoHyphenateCaps;
 
-        DBG_ASSERT( pnResVal || pbResVal, "unknown property" );
+        SAL_WARN_IF( !(pnResVal || pbResVal), "linguistic", "unknown property '" << rVal.Name << "'");
 
         if (pnResVal)
             rVal.Value >>= *pnResVal;
