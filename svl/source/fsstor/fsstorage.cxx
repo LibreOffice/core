@@ -75,10 +75,10 @@ FSStorage::FSStorage( const ::ucbhelper::Content& aContent,
 
 FSStorage::~FSStorage()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     osl_atomic_increment(&m_refCount); // to call dispose
     try {
-        dispose();
+        disposeImpl(aGuard);
     }
     catch( uno::RuntimeException& )
     {}
@@ -103,7 +103,7 @@ bool FSStorage::MakeFolderNoUI( std::u16string_view rFolder )
 
 ucbhelper::Content& FSStorage::GetContent()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     return m_aContent;
 }
 
@@ -244,14 +244,14 @@ uno::Sequence< sal_Int8 > SAL_CALL FSStorage::getImplementationId()
 
 void SAL_CALL FSStorage::copyToStorage( const uno::Reference< embed::XStorage >& xDest )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( !xDest.is() || xDest == uno::Reference< uno::XInterface >( static_cast< OWeakObject*> ( this ), uno::UNO_QUERY ) )
         throw lang::IllegalArgumentException(); // TODO:
 
     try
     {
-        CopyContentToStorage_Impl( GetContent(), xDest );
+        CopyContentToStorage_Impl( m_aContent, xDest );
     }
     catch( embed::InvalidStorageException& )
     {
@@ -285,8 +285,14 @@ void SAL_CALL FSStorage::copyToStorage( const uno::Reference< embed::XStorage >&
 uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
     const OUString& aStreamName, sal_Int32 nOpenMode )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
+    return openStreamElementImpl(aGuard, aStreamName, nOpenMode);
+}
 
+uno::Reference< io::XStream > FSStorage::openStreamElementImpl(
+    std::unique_lock<std::mutex>& /*rGuard*/,
+    std::u16string_view aStreamName, sal_Int32 nOpenMode )
+{
     // TODO/LATER: may need possibility to create folder if it was removed, since the folder can not be locked
     INetURLObject aFileURL( m_aURL );
     aFileURL.Append( aStreamName );
@@ -383,8 +389,14 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openEncryptedStreamElement(
 uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
             const OUString& aStorName, sal_Int32 nStorageMode )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
+    return openStorageElementImpl(aGuard, aStorName, nStorageMode);
+}
 
+uno::Reference< embed::XStorage > FSStorage::openStorageElementImpl(
+            std::unique_lock<std::mutex>& /*rGuard*/,
+            std::u16string_view aStorName, sal_Int32 nStorageMode )
+{
     if ( ( nStorageMode & embed::ElementModes::WRITE )
       && !( m_nMode & embed::ElementModes::WRITE ) )
           throw io::IOException(); // TODO: error handling
@@ -460,7 +472,7 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
 
 uno::Reference< io::XStream > SAL_CALL FSStorage::cloneStreamElement( const OUString& aStreamName )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // TODO/LATER: may need possibility to create folder if it was removed, since the folder can not be locked
     INetURLObject aFileURL( m_aURL );
@@ -532,7 +544,7 @@ void SAL_CALL FSStorage::copyStorageElementLastCommitTo(
             const OUString& aStorName,
             const uno::Reference< embed::XStorage >& xTargetStorage )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     uno::Reference< embed::XStorage > xSourceStor( openStorageElement( aStorName, embed::ElementModes::READ ),
                                                     uno::UNO_SET_THROW );
@@ -541,7 +553,7 @@ void SAL_CALL FSStorage::copyStorageElementLastCommitTo(
 
 sal_Bool SAL_CALL FSStorage::isStreamElement( const OUString& aElementName )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     INetURLObject aURL( m_aURL );
     aURL.Append( aElementName );
@@ -551,7 +563,7 @@ sal_Bool SAL_CALL FSStorage::isStreamElement( const OUString& aElementName )
 
 sal_Bool SAL_CALL FSStorage::isStorageElement( const OUString& aElementName )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     INetURLObject aURL( m_aURL );
     aURL.Append( aElementName );
@@ -561,7 +573,7 @@ sal_Bool SAL_CALL FSStorage::isStorageElement( const OUString& aElementName )
 
 void SAL_CALL FSStorage::removeElement( const OUString& aElementName )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     INetURLObject aURL( m_aURL );
     aURL.Append( aElementName );
@@ -575,7 +587,7 @@ void SAL_CALL FSStorage::removeElement( const OUString& aElementName )
 
 void SAL_CALL FSStorage::renameElement( const OUString& aElementName, const OUString& aNewName )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     INetURLObject aOldURL( m_aURL );
     aOldURL.Append( aElementName );
@@ -596,7 +608,7 @@ void SAL_CALL FSStorage::renameElement( const OUString& aElementName, const OUSt
         uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
         ::ucbhelper::Content aSourceContent( aOldURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xDummyEnv, comphelper::getProcessComponentContext() );
 
-        GetContent().transferContent(aSourceContent, ::ucbhelper::InsertOperation::Move, aNewName,
+        m_aContent.transferContent(aSourceContent, ::ucbhelper::InsertOperation::Move, aNewName,
                                      ucb::NameClash::ERROR);
     }
     catch( embed::InvalidStorageException& )
@@ -640,7 +652,7 @@ void SAL_CALL FSStorage::copyElementTo( const OUString& aElementName,
                                         const uno::Reference< embed::XStorage >& xDest,
                                         const OUString& aNewName )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( !xDest.is() )
         throw uno::RuntimeException();
@@ -711,7 +723,7 @@ void SAL_CALL FSStorage::moveElementTo( const OUString& aElementName,
                                         const uno::Reference< embed::XStorage >& xDest,
                                         const OUString& aNewName )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     copyElementTo( aElementName, xDest, aNewName );
 
     INetURLObject aOwnURL( m_aURL );
@@ -724,7 +736,7 @@ void SAL_CALL FSStorage::moveElementTo( const OUString& aElementName,
 
 uno::Any SAL_CALL FSStorage::getByName( const OUString& aName )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( aName.isEmpty() )
         throw lang::IllegalArgumentException();
@@ -738,11 +750,11 @@ uno::Any SAL_CALL FSStorage::getByName( const OUString& aName )
 
         if ( ::utl::UCBContentHelper::IsFolder( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
         {
-            aResult <<= openStorageElement( aName, embed::ElementModes::READ );
+            aResult <<= openStorageElementImpl( aGuard, aName, embed::ElementModes::READ );
         }
         else if ( ::utl::UCBContentHelper::IsDocument( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
         {
-            aResult <<= openStreamElement( aName, embed::ElementModes::READ );
+            aResult <<= openStreamElementImpl( aGuard, aName, embed::ElementModes::READ );
         }
         else
             throw container::NoSuchElementException(); // TODO:
@@ -773,7 +785,7 @@ uno::Any SAL_CALL FSStorage::getByName( const OUString& aName )
 
 uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     uno::Sequence< OUString > aResult;
 
@@ -783,7 +795,7 @@ uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
 
         sal_Int32 nSize = 0;
         uno::Reference<sdbc::XResultSet> xResultSet
-            = GetContent().createCursor(aProps, ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS);
+            = m_aContent.createCursor(aProps, ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS);
         uno::Reference< sdbc::XRow > xRow( xResultSet, uno::UNO_QUERY );
         if ( xResultSet.is() )
         {
@@ -825,7 +837,7 @@ uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
 
 sal_Bool SAL_CALL FSStorage::hasByName( const OUString& aName )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( aName.isEmpty() )
         throw lang::IllegalArgumentException();
@@ -845,14 +857,14 @@ uno::Type SAL_CALL FSStorage::getElementType()
 
 sal_Bool SAL_CALL FSStorage::hasElements()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     try
     {
         uno::Sequence<OUString> aProps { "TargetURL" };
 
         uno::Reference<sdbc::XResultSet> xResultSet
-            = GetContent().createCursor(aProps, ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS);
+            = m_aContent.createCursor(aProps, ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS);
         return ( xResultSet.is() && xResultSet->next() );
     }
     catch (const uno::RuntimeException&)
@@ -870,33 +882,33 @@ sal_Bool SAL_CALL FSStorage::hasElements()
 //  XDisposable
 void SAL_CALL FSStorage::dispose()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
+    disposeImpl(aGuard);
+}
 
-    if ( m_pListenersContainer )
+void FSStorage::disposeImpl(std::unique_lock<std::mutex>& rGuard)
+{
+    if ( m_aListenersContainer.getLength(rGuard) )
     {
         lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
-        m_pListenersContainer->disposeAndClear( aSource );
+        m_aListenersContainer.disposeAndClear( rGuard, aSource );
     }
 }
 
 void SAL_CALL FSStorage::addEventListener(
             const uno::Reference< lang::XEventListener >& xListener )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
-    if ( !m_pListenersContainer )
-        m_pListenersContainer.reset(new ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>( m_aMutex ));
-
-    m_pListenersContainer->addInterface( xListener );
+    m_aListenersContainer.addInterface( aGuard, xListener );
 }
 
 void SAL_CALL FSStorage::removeEventListener(
             const uno::Reference< lang::XEventListener >& xListener )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
-    if ( m_pListenersContainer )
-        m_pListenersContainer->removeInterface( xListener );
+    m_aListenersContainer.removeInterface( aGuard, xListener );
 }
 
 //  XPropertySet
@@ -919,7 +931,7 @@ void SAL_CALL FSStorage::setPropertyValue( const OUString& aPropertyName, const 
 
 uno::Any SAL_CALL FSStorage::getPropertyValue( const OUString& aPropertyName )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( aPropertyName == "URL" )
         return uno::Any( m_aURL );
@@ -964,7 +976,7 @@ void SAL_CALL FSStorage::removeVetoableChangeListener(
 //  XHierarchicalStorageAccess
 uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamElementByHierarchicalName( const OUString& sStreamPath, ::sal_Int32 nOpenMode )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( sStreamPath.toChar() == '/' )
         throw lang::IllegalArgumentException();
@@ -1073,7 +1085,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openEncrypte
 
 void SAL_CALL FSStorage::removeStreamElementByHierarchicalName( const OUString& sStreamPath )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // TODO/LATER: may need possibility to create folder if it was removed, since the folder can not be locked
     INetURLObject aBaseURL( m_aURL );

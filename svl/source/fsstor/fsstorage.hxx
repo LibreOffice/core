@@ -27,22 +27,22 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/weak.hxx>
 
 #include <ucbhelper/content.hxx>
 
-class FSStorage : public css::lang::XTypeProvider
+class FSStorage final : public css::lang::XTypeProvider
                 , public css::embed::XStorage
                 , public css::embed::XHierarchicalStorageAccess
                 , public css::beans::XPropertySet
                 , public ::cppu::OWeakObject
 {
-    ::osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
     OUString  m_aURL;
     ::ucbhelper::Content m_aContent;
     sal_Int32 m_nMode;
-    std::unique_ptr<::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>> m_pListenersContainer; // list of listeners
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aListenersContainer; // list of listeners
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
 public:
@@ -171,6 +171,15 @@ public:
     virtual css::uno::Reference< css::embed::XExtendedStorageStream > SAL_CALL openEncryptedStreamElementByHierarchicalName( const OUString& sStreamName, ::sal_Int32 nOpenMode, const OUString& sPassword ) override;
 
     virtual void SAL_CALL removeStreamElementByHierarchicalName( const OUString& sElementPath ) override;
+
+private:
+    css::uno::Reference< css::embed::XStorage > openStorageElementImpl(
+            std::unique_lock<std::mutex>& rGuard,
+            std::u16string_view aStorName, sal_Int32 nStorageMode );
+    css::uno::Reference< css::io::XStream > openStreamElementImpl(
+            std::unique_lock<std::mutex>& rGuard,
+            std::u16string_view aStreamName, sal_Int32 nOpenMode );
+    void disposeImpl(std::unique_lock<std::mutex>& rGuard);
 };
 
 #endif
