@@ -1445,6 +1445,9 @@ MetaISectRegionClipRegionAction::MetaISectRegionClipRegionAction( vcl::Region aR
 
 void MetaISectRegionClipRegionAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(pOut->LogicToPixel(maRegion.GetBoundRect())))
+        return;
+
     pOut->IntersectClipRegion( maRegion );
 }
 
