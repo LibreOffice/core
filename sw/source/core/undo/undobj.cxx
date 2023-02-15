@@ -649,6 +649,9 @@ OUString GetUndoComment(SwUndoId eId)
         case SwUndoId::UPDATE_FORM_FIELD:
             pId = STR_UNDO_UPDATE_FORM_FIELD;
             break;
+        case SwUndoId::UPDATE_FORM_FIELDS:
+            pId = STR_UNDO_UPDATE_FORM_FIELDS;
+            break;
     }
 
     assert(pId);

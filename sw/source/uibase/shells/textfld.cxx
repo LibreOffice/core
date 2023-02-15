@@ -917,7 +917,7 @@ FIELD_INSERT:
             pFields->GetValue() >>= aFields;
         }
 
-        rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+        rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::UPDATE_FORM_FIELDS, nullptr);
         rSh.StartAction();
 
         IDocumentMarkAccess* pMarkAccess = rSh.GetDoc()->getIDocumentMarkAccess();
@@ -964,7 +964,7 @@ FIELD_INSERT:
         }
 
         rSh.EndAction();
-        rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+        rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::UPDATE_FORM_FIELDS, nullptr);
     }
     break;
     case FN_DELETE_TEXT_FORMFIELDS:
