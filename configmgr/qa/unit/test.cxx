@@ -324,6 +324,13 @@ void Test::testLocalizedProperty() {
             access->getByHierarchicalName("/org.libreoffice.unittest/localized/*pt") >>= v);
         CPPUNIT_ASSERT_EQUAL(OUString("pt-PT"), v);
     }
+    {
+        // Make sure a degenerate passed-in "-" locale is handled gracefully:
+        OUString v;
+        CPPUNIT_ASSERT(
+            access->getByHierarchicalName("/org.libreoffice.unittest/localized/*-") >>= v);
+        CPPUNIT_ASSERT_EQUAL(OUString("default"), v);
+    }
 }
 
 void Test::testReadCommands()
