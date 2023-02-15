@@ -214,6 +214,18 @@ public:
     const OUString m_sNew;
     NameChanged(const OUString& rOld, const OUString& rNew) : SfxHint(SfxHintId::NameChanged), m_sOld(rOld), m_sNew(rNew) {};
 };
+class TitleChanged final : public SfxHint
+{
+public:
+    const OUString m_sOld;
+    const OUString m_sNew;
+    TitleChanged(const OUString& rOld, const OUString& rNew) : SfxHint(SfxHintId::SwTitleChanged), m_sOld(rOld), m_sNew(rNew) {};
+};
+class DescriptionChanged final : public SfxHint
+{
+public:
+    DescriptionChanged() : SfxHint(SfxHintId::SwDescriptionChanged) {}
+};
 class SectionHidden final: public SfxHint
 {
 public:

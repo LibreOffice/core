@@ -63,61 +63,45 @@ SwAccessibleTextFrame::~SwAccessibleTextFrame()
 
 void SwAccessibleTextFrame::Notify(const SfxHint& rHint)
 {
-    if(rHint.GetId() == SfxHintId::Dying)
-        EndListeningAll();
-    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    const SwFlyFrame* pFlyFrame = static_cast<const SwFlyFrame*>(GetFrame());
+    const SwFlyFrameFormat* pFlyFrameFormat = pFlyFrame ? pFlyFrame->GetFormat() : nullptr;
+    switch(rHint.GetId())
     {
-        auto pLegacyModifyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
-        const sal_uInt16 nWhich = pLegacyModifyHint->GetWhich();
-        const SwFlyFrame* pFlyFrame = static_cast<const SwFlyFrame*>(GetFrame());
-        switch(nWhich)
+        case SfxHintId::Dying:
+            EndListeningAll();
+            return;
+        default:
+            return;
+        // #i73249#
+        case SfxHintId::SwTitleChanged:
         {
-            // #i73249#
-            case RES_TITLE_CHANGED:
-            {
-                OUString sOldTitle, sNewTitle;
-                const SwStringMsgPoolItem *pOldItem = dynamic_cast<const SwStringMsgPoolItem*>(pLegacyModifyHint->m_pOld);
-                if(pOldItem)
-                    sOldTitle = pOldItem->GetString();
-                const SwStringMsgPoolItem *pNewItem = dynamic_cast<const SwStringMsgPoolItem*>(pLegacyModifyHint->m_pNew);
-                if(pNewItem)
-                    sNewTitle = pNewItem->GetString();
-                if(sOldTitle == sNewTitle)
-                    break;
-                msTitle = sNewTitle;
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::NAME_CHANGED;
-                aEvent.OldValue <<= sOldTitle;
-                aEvent.NewValue <<= msTitle;
-                FireAccessibleEvent( aEvent );
-
-                const SwFlyFrameFormat* pFlyFrameFormat = pFlyFrame->GetFormat();
-                if(!pFlyFrameFormat || !pFlyFrameFormat->GetObjDescription().isEmpty())
-                    break;
-                [[fallthrough]];
-            }
-            case RES_DESCRIPTION_CHANGED:
-            {
-                if(pFlyFrame)
-                {
-                    const OUString sOldDesc(msDesc);
-
-                    const SwFlyFrameFormat* pFlyFrameFormat = pFlyFrame->GetFormat();
-                    const OUString& rDesc = pFlyFrameFormat->GetObjDescription();
-                    msDesc = rDesc;
-                    if(msDesc.isEmpty() && msTitle != GetName())
-                        msDesc = msTitle;
-
-                    if(msDesc != sOldDesc)
-                    {
-                        AccessibleEventObject aEvent;
-                        aEvent.EventId = AccessibleEventId::DESCRIPTION_CHANGED;
-                        aEvent.OldValue <<= sOldDesc;
-                        aEvent.NewValue <<= msDesc;
-                        FireAccessibleEvent(aEvent);
-                    }
-                }
-            }
+            auto rTitleChanged = static_cast<const sw::TitleChanged&>(rHint);
+            msTitle = rTitleChanged.m_sNew;
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::NAME_CHANGED;
+            aEvent.OldValue <<= rTitleChanged.m_sOld;
+            aEvent.NewValue <<= msTitle;
+            FireAccessibleEvent( aEvent );
+            if(!pFlyFrameFormat || !pFlyFrameFormat->GetObjDescription().isEmpty())
+                break;
+            [[fallthrough]];
+        }
+        case SfxHintId::SwDescriptionChanged:
+        {
+            if(!pFlyFrame)
+                return;
+            const OUString sOldDesc(msDesc);
+            msDesc = pFlyFrameFormat->GetObjDescription();
+            if(msDesc.isEmpty() && msTitle != GetName())
+                msDesc = msTitle;
+            if(msDesc == sOldDesc)
+                return;
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::DESCRIPTION_CHANGED;
+            aEvent.OldValue <<= sOldDesc;
+            aEvent.NewValue <<= msDesc;
+            FireAccessibleEvent(aEvent);
+            return;
         }
     }
 }

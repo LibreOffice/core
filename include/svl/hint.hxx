@@ -147,6 +147,8 @@ enum class SfxHintId {
     SwDeleteText,
     SwDeleteChar,
     SwSectionHidden,
+    SwTitleChanged,
+    SwDescriptionChanged,
 
     ThisIsAnSdrHint
 };

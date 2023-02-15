@@ -83,33 +83,23 @@ SwAccessibleNoTextFrame::~SwAccessibleNoTextFrame()
 
 void SwAccessibleNoTextFrame::Notify(const SfxHint& rHint)
 {
-    if(rHint.GetId() == SfxHintId::Dying)
-        EndListeningAll();
-    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    const SwNoTextNode* pNd = GetNoTextNode();
+    switch(rHint.GetId())
     {
-        auto pLegacyModifyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
-        const sal_uInt16 nWhich = pLegacyModifyHint->GetWhich();
-        if (nWhich != RES_TITLE_CHANGED && nWhich != RES_DESCRIPTION_CHANGED)
+        case SfxHintId::Dying:
+            EndListeningAll();
             return;
-        const SwNoTextNode* pNd = GetNoTextNode();
-        switch(nWhich)
-        {
-            // #i73249#
-            case RES_TITLE_CHANGED:
+        default:
+            return;
+        case SfxHintId::SwTitleChanged:
             {
-                OUString sOldTitle, sNewTitle;
-                const SwStringMsgPoolItem* pOldItem = dynamic_cast<const SwStringMsgPoolItem*>(pLegacyModifyHint->m_pOld);
-                if(pOldItem)
-                    sOldTitle = pOldItem->GetString();
-                const SwStringMsgPoolItem* pNewItem = dynamic_cast<const SwStringMsgPoolItem*>(pLegacyModifyHint->m_pNew);
-                if(pNewItem)
-                    sNewTitle = pNewItem->GetString();
-                if(sOldTitle == sNewTitle)
+                auto rTitleChanged = static_cast<const sw::TitleChanged&>(rHint);
+                if(rTitleChanged.m_sOld == rTitleChanged.m_sNew)
                     break;
-                msTitle = sNewTitle;
+                msTitle = rTitleChanged.m_sNew;
                 AccessibleEventObject aEvent;
                 aEvent.EventId = AccessibleEventId::NAME_CHANGED;
-                aEvent.OldValue <<= sOldTitle;
+                aEvent.OldValue <<= rTitleChanged.m_sOld;
                 aEvent.NewValue <<= msTitle;
                 FireAccessibleEvent(aEvent);
 
@@ -117,28 +107,22 @@ void SwAccessibleNoTextFrame::Notify(const SfxHint& rHint)
                     break;
                 [[fallthrough]];
             }
-            case RES_DESCRIPTION_CHANGED:
+        case SfxHintId::SwDescriptionChanged:
+            if(pNd && GetFrame())
             {
-                if(pNd && GetFrame())
-                {
-                    const OUString sOldDesc(msDesc);
-
-                    const OUString& rDesc = pNd->GetDescription();
-                    msDesc = rDesc;
-                    if(msDesc.isEmpty() && msTitle != GetName())
-                        msDesc = msTitle;
-
-                    if(msDesc != sOldDesc)
-                    {
-                        AccessibleEventObject aEvent;
-                        aEvent.EventId = AccessibleEventId::DESCRIPTION_CHANGED;
-                        aEvent.OldValue <<= sOldDesc;
-                        aEvent.NewValue <<= msDesc;
-                        FireAccessibleEvent(aEvent);
-                    }
-                }
+                const OUString sOldDesc(msDesc);
+                msDesc = pNd->GetDescription();
+                if(msDesc.isEmpty() && msTitle != GetName())
+                    msDesc = msTitle;
+                if(msDesc == sOldDesc)
+                    return;
+                AccessibleEventObject aEvent;
+                aEvent.EventId = AccessibleEventId::DESCRIPTION_CHANGED;
+                aEvent.OldValue <<= sOldDesc;
+                aEvent.NewValue <<= msDesc;
+                FireAccessibleEvent(aEvent);
             }
-        }
+            return;
     }
 }
 

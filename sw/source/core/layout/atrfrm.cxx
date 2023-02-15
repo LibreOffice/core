@@ -3204,12 +3204,11 @@ void SwFlyFrameFormat::SetObjTitle( const OUString& rTitle, bool bBroadcast )
         return;
     }
 
-    const SwStringMsgPoolItem aOld(RES_TITLE_CHANGED, pMasterObject->GetTitle());
+    const sw::TitleChanged aHint(pMasterObject->GetTitle(), rTitle);
     pMasterObject->SetTitle(rTitle);
     if(bBroadcast)
     {
-        const SwStringMsgPoolItem aNew(RES_TITLE_CHANGED, rTitle);
-        GetNotifier().Broadcast(sw::LegacyModifyHint(&aOld, &aNew));
+        GetNotifier().Broadcast(aHint);
     }
 }
 
@@ -3247,12 +3246,11 @@ void SwFlyFrameFormat::SetObjDescription( const OUString& rDescription, bool bBr
         return;
     }
 
-    const SwStringMsgPoolItem aOld( RES_DESCRIPTION_CHANGED, pMasterObject->GetDescription() );
-    pMasterObject->SetDescription( rDescription );
+    const sw::DescriptionChanged aHint;
+    pMasterObject->SetDescription(rDescription);
     if(bBroadcast)
     {
-        const SwStringMsgPoolItem aNew( RES_DESCRIPTION_CHANGED, rDescription );
-        GetNotifier().Broadcast(sw::LegacyModifyHint(&aOld, &aNew));
+        GetNotifier().Broadcast(aHint);
     }
 }
 
