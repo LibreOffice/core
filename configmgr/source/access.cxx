@@ -68,6 +68,7 @@
 #include <com/sun/star/util/ElementChange.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/string.hxx>
 #include <comphelper/lok.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <cppu/unotype.hxx>
@@ -1407,12 +1408,11 @@ rtl::Reference< ChildAccess > Access::getChild(OUString const & name) {
             // xml:lang attributes, look for the first entry with the same first
             // segment as the requested language tag before falling back to
             // defaults (see fdo#33638):
-            if (aFallbacks.size() > 0)
-                locale = aFallbacks[aFallbacks.size() - 1];
-            assert(
-                !locale.isEmpty() && locale.indexOf('-') == -1 &&
-                locale.indexOf('_') == -1);
-
+            auto const i = comphelper::string::indexOfAny(locale, u"-_", 1);
+            if (i != -1) {
+                locale = locale.copy(0, i);
+            }
+            assert(!locale.isEmpty());
             std::vector< rtl::Reference< ChildAccess > > children(
                 getAllChildren());
             for (auto const& child : children)
