@@ -916,6 +916,13 @@ void DomainMapper_Impl::PopSdt()
     {
         // Data binding has a value for us, prefer that over the in-document value.
         xCursor->setString(*oData);
+
+        // Such value is always a plain text string, remove the char style of the placeholder.
+        uno::Reference<beans::XPropertyState> xPropertyState(xCursor, uno::UNO_QUERY);
+        if (xPropertyState.is())
+        {
+            xPropertyState->setPropertyToDefault("CharStyleName");
+        }
     }
 
     uno::Reference<text::XTextContent> xContentControl(
