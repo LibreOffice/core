@@ -301,6 +301,29 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlDateDataBinding)
     // i.e. the date was from document.xml, which is considered outdated.
     CPPUNIT_ASSERT_EQUAL(OUString("4/26/2012"), xParagraph->getString());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testContentControlDataBindingColor)
+{
+    // Given a document with an inline content control with data binding, placeholder char color is
+    // set to red, when loading that document:
+    loadFromURL(u"content-control-data-binding-color.docx");
+
+    // Then make sure that the placeholder char color is not in the document, since data binding is
+    // active:
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xCursor->gotoEnd(/*bExpand=*/false);
+    xCursor->goLeft(/*nCount=*/1, /*bExpand=*/false);
+    uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
+    Color nColor;
+    CPPUNIT_ASSERT(xCursorProps->getPropertyValue("CharColor") >>= nColor);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: rgba[ffffff00]
+    // - Actual  : rgba[ff0000ff]
+    // i.e. the char color was red, not the default / automatic.
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, nColor);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
