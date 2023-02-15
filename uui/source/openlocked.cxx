@@ -57,9 +57,6 @@ OpenLockedQueryBox::OpenLockedQueryBox(weld::Window* pParent, const OUString& rH
     , mxNotifyBtn(m_xBuilder->weld_check_button("notify"))
     , mxHiddenText(m_xBuilder->weld_label("hiddentext"))
 {
-    //set up the image
-    mxQuestionMarkImage->set_from_icon_name(u"vcl/res/help.png");
-
     //setup click hdl
     mxOpenReadOnlyBtn->connect_clicked(LINK(this, OpenLockedQueryBox, ClickHdl));
     mxOpenCopyBtn->connect_clicked(LINK(this, OpenLockedQueryBox, ClickHdl));

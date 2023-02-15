@@ -68,6 +68,7 @@
                 <property name="valign">start</property>
                 <property name="margin-start">24</property>
                 <property name="margin-top">70</property>
+                <property name="icon-name">vcl/res/help.png</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="questionmark-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="openlockedquerybox|questionmark">Question mark image</property>
