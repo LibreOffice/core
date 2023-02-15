@@ -255,16 +255,8 @@ IMPL_LINK(ValueSet, ImplScrollHdl, weld::ScrolledWindow&, rScrollWin, void)
 
 void ValueSet::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    if (GetStyle() & WB_FLATVALUESET)
-    {
-        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-        rRenderContext.SetLineColor();
-        rRenderContext.SetFillColor(rStyleSettings.GetFaceColor());
-        tools::Long nOffY = maVirDev->GetOutputSizePixel().Height();
-        Size aWinSize(GetOutputSizePixel());
-        rRenderContext.DrawRect(tools::Rectangle(Point(0, nOffY ), Point( aWinSize.Width(), aWinSize.Height())));
-    }
-
+    rRenderContext.SetBackground(Application::GetSettings().GetStyleSettings().GetFaceColor());
+    rRenderContext.Erase();
     ImplDraw(rRenderContext);
 }
 
@@ -1515,22 +1507,17 @@ void ValueSet::ImplDrawItemText(vcl::RenderContext& rRenderContext, const OUStri
     tools::Long nTxtWidth = rRenderContext.GetTextWidth(rText);
     tools::Long nTxtOffset = mnTextOffset;
 
+    rRenderContext.Push(vcl::PushFlags::TEXTCOLOR);
+
     // delete rectangle and show text
-    if (GetStyle() & WB_FLATVALUESET)
-    {
-        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-        rRenderContext.SetLineColor();
-        rRenderContext.SetFillColor(rStyleSettings.GetFaceColor());
-        rRenderContext.DrawRect(tools::Rectangle(Point(0, nTxtOffset), Point(aWinSize.Width(), aWinSize.Height())));
-        rRenderContext.SetTextColor(rStyleSettings.GetButtonTextColor());
-    }
-    else
-    {
+    const bool bFlat(GetStyle() & WB_FLATVALUESET);
+    if (!bFlat)
         nTxtOffset += NAME_LINE_HEIGHT+NAME_LINE_OFF_Y;
-        rRenderContext.SetBackground(Application::GetSettings().GetStyleSettings().GetFaceColor());
-        rRenderContext.Erase(tools::Rectangle(Point(0, nTxtOffset), Point(aWinSize.Width(), aWinSize.Height())));
-    }
+
+    rRenderContext.SetTextColor(Application::GetSettings().GetStyleSettings().GetButtonTextColor());
     rRenderContext.DrawText(Point((aWinSize.Width() - nTxtWidth) / 2, nTxtOffset + (NAME_OFFSET / 2)), rText);
+
+    rRenderContext.Pop();
 }
 
 void ValueSet::StyleUpdated()
