@@ -90,8 +90,23 @@ void AcceleratorCache::removeKey(const css::awt::KeyEvent& aKey)
     // remove key from primary list
     m_lKey2Commands.erase(aKey);
 
-    // remove key from optimized command list
-    m_lCommand2Keys.erase(sCommand);
+    // get keylist for that command
+    TCommand2Keys::iterator pCommand = m_lCommand2Keys.find(sCommand);
+    if (pCommand == m_lCommand2Keys.end())
+        return;
+    TKeyList& lKeys = pCommand->second;
+
+    // one or more keys assign
+    if (lKeys.size() == 1)
+        // remove key from optimized command list
+        m_lCommand2Keys.erase(sCommand);
+    else // only remove this key from the keylist
+    {
+        auto pKeys = ::std::find(lKeys.begin(), lKeys.end(), aKey);
+
+        if (pKeys != lKeys.end())
+            lKeys.erase(pKeys);
+    }
 }
 
 void AcceleratorCache::removeCommand(const OUString& sCommand)
