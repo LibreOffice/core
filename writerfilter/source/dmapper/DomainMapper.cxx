@@ -3563,14 +3563,14 @@ void DomainMapper::lcl_startShape(uno::Reference<drawing::XShape> const& xShape)
         // started shape will be on the correct page.
         if (m_pImpl->isBreakDeferred(PAGE_BREAK))
         {
-            m_pImpl->clearDeferredBreak(PAGE_BREAK);
-            lcl_startCharacterGroup();
-            sal_uInt8 const sBreak[] = { 0xd };
-            lcl_text(sBreak, 1);
-            lcl_endCharacterGroup();
-            lcl_endParagraphGroup();
-            lcl_startParagraphGroup();
-            m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_PAGE_BEFORE));
+            // RTF doesn't properly report IsFirstRun, so in order to prevent regressions
+            // always split the paragraph for RTF since that is the way it has been done lately.
+            if (!m_pImpl->IsFirstRun() || IsRTFImport())
+            {
+                m_pImpl->m_bIsSplitPara = true;
+                finishParagraph();
+                lcl_startParagraphGroup();
+            }
         }
         m_pImpl->PushShapeContext( xShape );
         lcl_startParagraphGroup();

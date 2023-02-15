@@ -86,6 +86,12 @@ DECLARE_RTFEXPORT_TEST(testN818997, "n818997.rtf")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_RTFEXPORT_TEST(testN818997B, "n818997B.rtf")
+{
+    // \page was ignored between two \shp tokens - this time not IsFirstParagraphInSection.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 DECLARE_RTFEXPORT_TEST(testTdf153613_anchoredAfterPgBreak, "tdf153613_anchoredAfterPgBreak.rtf")
 {
     // An anchored TO character image (followed by nothing) anchors before the page break, no split.

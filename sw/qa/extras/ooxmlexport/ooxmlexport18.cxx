@@ -149,6 +149,23 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153613_inlineAfterPgBreak, "tdf153613_inlineAfte
     assertXPath(pLayout, "//page[2]//anchored", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf153613_textboxAfterPgBreak, "tdf153613_textboxAfterPgBreak.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
+
+    const auto& pLayout = parseLayoutDump();
+    assertXPathContent(pLayout, "//page[2]/body/txt", "There should be no prior carriage return.");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf153613_textboxAfterPgBreak2, "tdf153613_textboxAfterPgBreak2.docx")
+{
+    // same as previous example, except that it is the first paragraph in the section.
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+
+    const auto& pLayout = parseLayoutDump();
+    assertXPathContent(pLayout, "//page[2]/body/txt", "There should be no prior carriage return.");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
 {
     // Given a docx document with a shape with vert="mongolianVert".
