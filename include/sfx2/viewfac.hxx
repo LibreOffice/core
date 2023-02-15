@@ -27,7 +27,7 @@
 class SfxViewFrame;
 class SfxViewShell;
 
-typedef SfxViewShell* (*SfxViewCtor)(SfxViewFrame*, SfxViewShell*);
+typedef SfxViewShell* (*SfxViewCtor)(SfxViewFrame&, SfxViewShell*);
 
 // CLASS -----------------------------------------------------------------
 class SFX2_DLLPUBLIC SfxViewFactory
@@ -36,7 +36,7 @@ public:
     SfxViewFactory( SfxViewCtor fnC,
                     SfxInterfaceId nOrdinal, const char* asciiViewName );
 
-    SfxViewShell*  CreateInstance(SfxViewFrame *pViewFrame, SfxViewShell *pOldSh);
+    SfxViewShell*  CreateInstance(SfxViewFrame& rViewFrame, SfxViewShell *pOldSh);
     SfxInterfaceId GetOrdinal() const { return nOrd; }
 
     /// returns a legacy view name. This is "view" with an appended ordinal/ID.

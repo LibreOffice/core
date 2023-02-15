@@ -34,7 +34,7 @@ public:
     /** This constructor is used by the view factory of the SFX
         macros.
     */
-    PresentationViewShellBase(SfxViewFrame* pFrame, SfxViewShell* pOldShell);
+    PresentationViewShellBase(SfxViewFrame& rFrame, SfxViewShell* pOldShell);
     virtual ~PresentationViewShellBase() override;
 
 protected:

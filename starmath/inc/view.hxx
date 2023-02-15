@@ -291,7 +291,7 @@ class SmViewShell final : public SfxViewShell
 
 public:
 
-    SmViewShell(SfxViewFrame *pFrame, SfxViewShell *pOldSh);
+    SmViewShell(SfxViewFrame& rFrame, SfxViewShell *pOldSh);
     virtual ~SmViewShell() override;
 
     SmDocShell * GetDoc() const

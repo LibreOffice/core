@@ -42,10 +42,10 @@ class DrawDocShell;
 
 SfxViewFactory* PresentationViewShellBase::s_pFactory;
 SfxViewShell* PresentationViewShellBase::CreateInstance (
-    SfxViewFrame *_pFrame, SfxViewShell *pOldView)
+    SfxViewFrame& _rFrame, SfxViewShell *pOldView)
 {
     PresentationViewShellBase* pBase =
-        new PresentationViewShellBase(_pFrame, pOldView);
+        new PresentationViewShellBase(_rFrame, pOldView);
     pBase->LateInit(framework::FrameworkHelper::msPresentationViewURL);
     return pBase;
 }
@@ -61,13 +61,13 @@ void PresentationViewShellBase::InitFactory()
 }
 
 PresentationViewShellBase::PresentationViewShellBase (
-    SfxViewFrame* _pFrame,
+    SfxViewFrame& _rFrame,
     SfxViewShell* pOldShell)
-    : ViewShellBase (_pFrame, pOldShell)
+    : ViewShellBase (_rFrame, pOldShell)
 {
     // Hide the automatic (non-context sensitive) tool bars.
     Reference<beans::XPropertySet> xFrameSet (
-        _pFrame->GetFrame().GetFrameInterface(),
+        _rFrame.GetFrame().GetFrameInterface(),
         UNO_QUERY);
     if (xFrameSet.is())
     {

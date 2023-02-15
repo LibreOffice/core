@@ -34,7 +34,7 @@ public:
     /** This constructor is used by the view factory of the SFX
         macros.
     */
-    ImpressViewShellBase(SfxViewFrame* pFrame, SfxViewShell* pOldShell);
+    ImpressViewShellBase(SfxViewFrame& rFrame, SfxViewShell* pOldShell);
     virtual ~ImpressViewShellBase() override;
 
     /** Callback function for general slot calls.

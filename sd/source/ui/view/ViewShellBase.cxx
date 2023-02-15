@@ -220,17 +220,17 @@ void ViewShellBase::InitInterface_Impl()
 }
 
 ViewShellBase::ViewShellBase (
-    SfxViewFrame* _pFrame,
+    SfxViewFrame& _rFrame,
     SfxViewShell*)
-    : SfxViewShell (_pFrame, SfxViewShellFlags::HAS_PRINTOPTIONS),
+    : SfxViewShell(_rFrame, SfxViewShellFlags::HAS_PRINTOPTIONS),
       mpDocShell (nullptr),
       mpDocument (nullptr)
 {
     mpImpl.reset(new Implementation(*this));
-    mpImpl->mpViewWindow = VclPtr<FocusForwardingWindow>::Create(_pFrame->GetWindow(),*this);
+    mpImpl->mpViewWindow = VclPtr<FocusForwardingWindow>::Create(_rFrame.GetWindow(),*this);
     mpImpl->mpViewWindow->SetBackground(Wallpaper());
 
-    _pFrame->GetWindow().SetBackground(Application::GetSettings().GetStyleSettings().GetLightColor());
+    _rFrame.GetWindow().SetBackground(Application::GetSettings().GetStyleSettings().GetLightColor());
 
     // Set up the members in the correct order.
     if (auto pDrawDocShell = dynamic_cast< DrawDocShell *>( GetViewFrame()->GetObjectShell() ))
@@ -242,7 +242,7 @@ ViewShellBase::ViewShellBase (
     SetWindow(mpImpl->mpViewWindow.get());
 
     // Hide the window to avoid complaints from Sfx...SwitchViewShell...
-    _pFrame->GetWindow().Hide();
+    _rFrame.GetWindow().Hide();
 }
 
 /** In this destructor the order in which some of the members are destroyed

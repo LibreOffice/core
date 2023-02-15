@@ -225,8 +225,7 @@ private:
 public:
                     /** -> Clone Method for Factory
                         Created from a general shell and inherit as much as possible */
-                    ScTabViewShell( SfxViewFrame*           pViewFrame,
-                                    SfxViewShell*           pOldSh );
+                    ScTabViewShell(SfxViewFrame& rViewFrame, SfxViewShell* pOldSh);
 
     virtual         ~ScTabViewShell() override;
 

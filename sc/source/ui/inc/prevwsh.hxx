@@ -84,8 +84,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-                    ScPreviewShell( SfxViewFrame*           pViewFrame,
-                                    SfxViewShell*           pOldSh );
+                    ScPreviewShell(SfxViewFrame& rViewFrame, SfxViewShell* pOldSh);
 
     virtual         ~ScPreviewShell() override;
 

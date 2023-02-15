@@ -21,9 +21,9 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 
-SfxViewShell *SfxViewFactory::CreateInstance(SfxViewFrame *pFrame, SfxViewShell *pOldSh )
+SfxViewShell *SfxViewFactory::CreateInstance(SfxViewFrame& rFrame, SfxViewShell *pOldSh)
 {
-    return (*fnCreate)(pFrame, pOldSh);
+    return (*fnCreate)(rFrame, pOldSh);
 }
 
 OUString SfxViewFactory::GetLegacyViewName() const

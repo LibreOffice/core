@@ -1141,8 +1141,8 @@ void SwPagePreview::Init()
         pESh->ResetModified();
 }
 
-SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
-    SfxViewShell( pViewFrame, SWVIEWFLAGS ),
+SwPagePreview::SwPagePreview(SfxViewFrame& rViewFrame, SfxViewShell* pOldSh):
+    SfxViewShell(rViewFrame, SWVIEWFLAGS),
     m_pViewWin( VclPtr<SwPagePreviewWin>::Create(&GetViewFrame()->GetWindow(), *this ) ),
     m_nNewPage(USHRT_MAX),
     m_sPageStr(SwResId(STR_PAGE)),
@@ -1159,12 +1159,12 @@ SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
 
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Printpreview));
 
-    SfxObjectShell* pObjShell = pViewFrame->GetObjectShell();
+    SfxObjectShell* pObjShell = rViewFrame.GetObjectShell();
     if ( !pOldSh )
     {
         // Exists already a view on the document?
         SfxViewFrame *pF = SfxViewFrame::GetFirst( pObjShell );
-        if ( pF == pViewFrame )
+        if (pF == &rViewFrame)
             pF = SfxViewFrame::GetNext( *pF, pObjShell );
         if ( pF )
             pOldSh = pF->GetViewShell();
@@ -1207,7 +1207,7 @@ SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
         pNew = new SwViewShell( *pVS, m_pViewWin, nullptr, VSHELLFLAG_ISPREVIEW );
     else
         pNew = new SwViewShell(
-                *static_cast<SwDocShell*>(pViewFrame->GetObjectShell())->GetDoc(),
+                *static_cast<SwDocShell*>(rViewFrame.GetObjectShell())->GetDoc(),
                 m_pViewWin, nullptr, nullptr, VSHELLFLAG_ISPREVIEW );
 
     m_pViewWin->SetViewShell( pNew );

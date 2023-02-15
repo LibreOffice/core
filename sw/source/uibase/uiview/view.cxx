@@ -746,13 +746,13 @@ void SwView::CheckReadonlySelection()
     }
 }
 
-SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
-    : SfxViewShell( _pFrame, SWVIEWFLAGS ),
+SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
+    : SfxViewShell(_rFrame, SWVIEWFLAGS),
     m_aTimer( "sw::SwView m_aTimer" ),
     m_nNewPage(USHRT_MAX),
     m_nOldPageNum(0),
     m_pNumRuleNodeFromDoc(nullptr),
-    m_pEditWin( VclPtr<SwEditWin>::Create( &_pFrame->GetWindow(), *this ) ),
+    m_pEditWin( VclPtr<SwEditWin>::Create( &_rFrame.GetWindow(), *this ) ),
     m_pShell(nullptr),
     m_pFormShell(nullptr),
     m_pHScrollbar(nullptr),
@@ -821,7 +821,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     m_aTimer.SetTimeout( 120 );
 
-    SwDocShell& rDocSh = dynamic_cast<SwDocShell&>(*_pFrame->GetObjectShell());
+    SwDocShell& rDocSh = dynamic_cast<SwDocShell&>(*_rFrame.GetObjectShell());
     bool bOldModifyFlag = rDocSh.IsEnableSetModified();
     if (bOldModifyFlag)
         rDocSh.EnableSetModified( false );

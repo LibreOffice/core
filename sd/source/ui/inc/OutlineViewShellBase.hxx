@@ -34,7 +34,7 @@ public:
     /** This constructor is used by the view factory of the SFX
         macros.
     */
-    OutlineViewShellBase(SfxViewFrame* pFrame, SfxViewShell* pOldShell);
+    OutlineViewShellBase(SfxViewFrame& rFrame, SfxViewShell* pOldShell);
     virtual ~OutlineViewShellBase() override;
 };
 

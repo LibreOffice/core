@@ -34,7 +34,7 @@ public:
     /** This constructor is used by the view factory of the SFX
         macros.
     */
-    GraphicViewShellBase(SfxViewFrame* pFrame, SfxViewShell* pOldShell);
+    GraphicViewShellBase(SfxViewFrame& rFrame, SfxViewShell* pOldShell);
     virtual ~GraphicViewShellBase() override;
 
     /** Callback function for general slot calls.

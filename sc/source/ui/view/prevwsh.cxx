@@ -143,17 +143,17 @@ void ScPreviewShell::Construct( vcl::Window* pParent )
     SetName("Preview");
 }
 
-ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
-                                SfxViewShell* pOldSh ) :
-    SfxViewShell( pViewFrame, SfxViewShellFlags::HAS_PRINTOPTIONS ),
-    pDocShell( static_cast<ScDocShell*>(pViewFrame->GetObjectShell()) ),
+ScPreviewShell::ScPreviewShell(SfxViewFrame& rViewFrame,
+                               SfxViewShell* pOldSh) :
+    SfxViewShell(rViewFrame, SfxViewShellFlags::HAS_PRINTOPTIONS),
+    pDocShell( static_cast<ScDocShell*>(rViewFrame.GetObjectShell()) ),
     mpFrameWindow(nullptr),
     nSourceDesignMode( TRISTATE_INDET ),
     nMaxVertPos(0),
     nPrevHThumbPos(0),
     nPrevVThumbPos(0)
 {
-    Construct( &pViewFrame->GetWindow() );
+    Construct(&rViewFrame.GetWindow());
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Printpreview));
 
     if ( auto pTabViewShell = dynamic_cast<ScTabViewShell*>( pOldSh) )

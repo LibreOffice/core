@@ -67,7 +67,7 @@ public:
         terminates and before doing anything else.
     */
     ViewShellBase (
-        SfxViewFrame *pFrame,
+        SfxViewFrame& rFrame,
         SfxViewShell* pOldShell);
 
     virtual ~ViewShellBase() override;

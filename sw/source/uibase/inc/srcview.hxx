@@ -56,7 +56,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    SwSrcView(SfxViewFrame* pFrame, SfxViewShell*);
+    SwSrcView(SfxViewFrame& rFrame, SfxViewShell*);
 
     virtual ~SwSrcView() override;
 

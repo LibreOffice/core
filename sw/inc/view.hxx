@@ -618,7 +618,7 @@ public:
     //apply Accessibility options
     void ApplyAccessibilityOptions(SvtAccessibilityOptions const & rAccessibilityOptions);
 
-    SwView(SfxViewFrame* pFrame, SfxViewShell*);
+    SwView(SfxViewFrame& rFrame, SfxViewShell*);
     virtual ~SwView() override;
 
     void NotifyDBChanged();

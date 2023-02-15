@@ -293,7 +293,7 @@ public:
     */
     void SetVScrollbarThumbPos( const sal_uInt16 _nNewThumbPos );
 
-    SwPagePreview( SfxViewFrame* pFrame, SfxViewShell* );
+    SwPagePreview(SfxViewFrame& rFrame, SfxViewShell*);
     virtual ~SwPagePreview() override;
 };
 

@@ -156,7 +156,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    Shell( SfxViewFrame *pFrame, SfxViewShell *pOldSh );
+    Shell(SfxViewFrame& rFrame, SfxViewShell *pOldSh);
     virtual ~Shell() override;
 
     BaseWindow*      GetCurWindow() const    { return pCurWin; }

@@ -36,7 +36,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    SwWebView(SfxViewFrame* pFrame, SfxViewShell*);
+    SwWebView(SfxViewFrame& rFrame, SfxViewShell*);
     virtual ~SwWebView() override;
 };
 

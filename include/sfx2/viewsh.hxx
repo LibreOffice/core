@@ -128,15 +128,15 @@ class SfxViewFactory;
 private: \
     static SfxViewFactory *s_pFactory; \
 public: \
-    static SfxViewShell  *CreateInstance(SfxViewFrame *pFrame, SfxViewShell *pOldView); \
+    static SfxViewShell  *CreateInstance(SfxViewFrame& rFrame, SfxViewShell *pOldView); \
     static void           RegisterFactory( SfxInterfaceId nPrio ); \
     static SfxViewFactory*Factory() { return s_pFactory; } \
     static void           InitFactory()
 
 #define SFX_IMPL_NAMED_VIEWFACTORY(Class, AsciiViewName) \
     SfxViewFactory* Class::s_pFactory; \
-    SfxViewShell* Class::CreateInstance(SfxViewFrame *pFrame, SfxViewShell *pOldView) \
-    { return new Class(pFrame, pOldView); } \
+    SfxViewShell* Class::CreateInstance(SfxViewFrame& rFrame, SfxViewShell *pOldView) \
+    { return new Class(rFrame, pOldView); } \
     void Class::RegisterFactory( SfxInterfaceId nPrio ) \
     { \
         s_pFactory = new SfxViewFactory(&CreateInstance,nPrio,AsciiViewName);\
@@ -211,7 +211,7 @@ private:
 
 public:
 
-                                SfxViewShell( SfxViewFrame *pFrame, SfxViewShellFlags nFlags );
+                                SfxViewShell( SfxViewFrame& rFrame, SfxViewShellFlags nFlags );
     virtual                     ~SfxViewShell() override;
 
     SfxInPlaceClient*           GetIPClient() const;

@@ -34,9 +34,9 @@ class DrawDocShell;
 
 SfxViewFactory* OutlineViewShellBase::s_pFactory;
 SfxViewShell* OutlineViewShellBase::CreateInstance (
-    SfxViewFrame *pFrame, SfxViewShell *pOldView)
+    SfxViewFrame& rFrame, SfxViewShell *pOldView)
 {
-    OutlineViewShellBase* pBase = new OutlineViewShellBase(pFrame, pOldView);
+    OutlineViewShellBase* pBase = new OutlineViewShellBase(rFrame, pOldView);
     pBase->LateInit(framework::FrameworkHelper::msOutlineViewURL);
     return pBase;
 }
@@ -51,9 +51,9 @@ void OutlineViewShellBase::InitFactory()
 }
 
 OutlineViewShellBase::OutlineViewShellBase (
-    SfxViewFrame* _pFrame,
+    SfxViewFrame& _rFrame,
     SfxViewShell* pOldShell)
-    : ImpressViewShellBase (_pFrame, pOldShell)
+    : ImpressViewShellBase (_rFrame, pOldShell)
 {
 }
 

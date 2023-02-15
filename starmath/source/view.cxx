@@ -2193,10 +2193,10 @@ private:
 };
 }
 
-SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *)
-    : SfxViewShell(pFrame_, SfxViewShellFlags::HAS_PRINTOPTIONS)
+SmViewShell::SmViewShell(SfxViewFrame& rFrame_, SfxViewShell *)
+    : SfxViewShell(rFrame_, SfxViewShellFlags::HAS_PRINTOPTIONS)
     , mxGraphicWindow(VclPtr<SmGraphicWindow>::Create(*this))
-    , maGraphicController(mxGraphicWindow->GetGraphicWidget(), SID_GRAPHIC_SM, pFrame_->GetBindings())
+    , maGraphicController(mxGraphicWindow->GetGraphicWidget(), SID_GRAPHIC_SM, rFrame_.GetBindings())
     , mbPasteState(false)
     , mbInsertIntoEditWindow(false)
 {

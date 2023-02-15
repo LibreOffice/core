@@ -1130,8 +1130,7 @@ IMPL_LINK_NOARG(ScTabViewShell, SimpleRefClose, const OUString*, void)
 static ScTabViewObj* lcl_GetViewObj( const ScTabViewShell& rShell )
 {
     ScTabViewObj* pRet = nullptr;
-    SfxViewFrame* pViewFrame = rShell.GetViewFrame();
-    if (pViewFrame)
+    if (SfxViewFrame* pViewFrame = rShell.GetViewFrame())
     {
         SfxFrame& rFrame = pViewFrame->GetFrame();
         uno::Reference<frame::XController> xController = rFrame.GetController();
@@ -1690,10 +1689,10 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
     SetBorderPixel( aBorder );
 }
 
-ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
+ScTabViewShell::ScTabViewShell( SfxViewFrame& rViewFrame,
                                 SfxViewShell* pOldSh ) :
-    SfxViewShell( pViewFrame, SfxViewShellFlags::HAS_PRINTOPTIONS ),
-    ScDBFunc( &pViewFrame->GetWindow(), static_cast<ScDocShell&>(*pViewFrame->GetObjectShell()), this ),
+    SfxViewShell(rViewFrame, SfxViewShellFlags::HAS_PRINTOPTIONS),
+    ScDBFunc( &rViewFrame.GetWindow(), static_cast<ScDocShell&>(*rViewFrame.GetObjectShell()), this ),
     eCurOST(OST_NONE),
     nDrawSfxId(0),
     aTarget(this),

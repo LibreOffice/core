@@ -34,9 +34,9 @@ class DrawDocShell;
 
 SfxViewFactory* SlideSorterViewShellBase::s_pFactory;
 SfxViewShell* SlideSorterViewShellBase::CreateInstance (
-    SfxViewFrame *pFrame, SfxViewShell *pOldView)
+    SfxViewFrame& rFrame, SfxViewShell *pOldView)
 {
-    SlideSorterViewShellBase* pBase = new SlideSorterViewShellBase(pFrame, pOldView);
+    SlideSorterViewShellBase* pBase = new SlideSorterViewShellBase(rFrame, pOldView);
     pBase->LateInit(framework::FrameworkHelper::msSlideSorterURL);
     return pBase;
 }
@@ -53,9 +53,9 @@ void SlideSorterViewShellBase::InitFactory()
 }
 
 SlideSorterViewShellBase::SlideSorterViewShellBase (
-    SfxViewFrame* _pFrame,
+    SfxViewFrame& _rFrame,
     SfxViewShell* pOldShell)
-    : ImpressViewShellBase (_pFrame, pOldShell)
+    : ImpressViewShellBase (_rFrame, pOldShell)
 {
 }
 

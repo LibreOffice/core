@@ -39,9 +39,9 @@ namespace sd {
 
 SfxViewFactory* ImpressViewShellBase::s_pFactory;
 SfxViewShell* ImpressViewShellBase::CreateInstance (
-    SfxViewFrame *pFrame, SfxViewShell *pOldView)
+    SfxViewFrame& rFrame, SfxViewShell *pOldView)
 {
-    ImpressViewShellBase* pBase = new ImpressViewShellBase(pFrame, pOldView);
+    ImpressViewShellBase* pBase = new ImpressViewShellBase(rFrame, pOldView);
     pBase->LateInit(comphelper::LibreOfficeKit::isActive() ? framework::FrameworkHelper::msImpressViewURL : "");
     return pBase;
 }
@@ -56,9 +56,9 @@ void ImpressViewShellBase::InitFactory()
 }
 
 ImpressViewShellBase::ImpressViewShellBase (
-    SfxViewFrame* _pFrame,
+    SfxViewFrame& _rFrame,
     SfxViewShell* pOldShell)
-    : ViewShellBase (_pFrame, pOldShell)
+    : ViewShellBase (_rFrame, pOldShell)
 {
     MasterPageObserver::Instance().RegisterDocument (*GetDocShell()->GetDoc());
 }

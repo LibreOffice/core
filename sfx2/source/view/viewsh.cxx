@@ -1054,14 +1054,14 @@ ViewShellDocId SfxViewShell::mnCurrentDocId(0);
 
 SfxViewShell::SfxViewShell
 (
-    SfxViewFrame*     pViewFrame,     /*  <SfxViewFrame>, which will be
+    SfxViewFrame&     rViewFrame,     /*  <SfxViewFrame>, which will be
                                           displayed in this View */
     SfxViewShellFlags nFlags          /*  See <SfxViewShell-Flags> */
 )
 
 :   SfxShell(this)
 ,   pImpl( new SfxViewShell_Impl(nFlags, SfxViewShell::mnCurrentDocId) )
-,   pFrame(pViewFrame)
+,   pFrame(&rViewFrame)
 ,   pWindow(nullptr)
 ,   bNoNewWindow( nFlags & SfxViewShellFlags::NO_NEWWINDOW )
 ,   mbPrinterSettingsModified(false)
@@ -1069,10 +1069,10 @@ SfxViewShell::SfxViewShell
 ,   maLOKLocale(LANGUAGE_NONE)
 ,   maLOKDeviceFormFactor(LOKDeviceFormFactor::UNKNOWN)
 {
-    SetMargin( pViewFrame->GetMargin_Impl() );
+    SetMargin( rViewFrame.GetMargin_Impl() );
 
-    SetPool( &pViewFrame->GetObjectShell()->GetPool() );
-    StartListening(*pViewFrame->GetObjectShell());
+    SetPool( &rViewFrame.GetObjectShell()->GetPool() );
+    StartListening(*rViewFrame.GetObjectShell());
 
     // Insert into list
     std::vector<SfxViewShell*> &rViewArr = SfxGetpApp()->GetViewShells_Impl();
@@ -1089,7 +1089,7 @@ SfxViewShell::SfxViewShell
 
         maLOKDeviceFormFactor = SfxLokHelper::getDeviceFormFactor();
 
-        vcl::Window* pFrameWin = pViewFrame->GetWindow().GetFrameWindow();
+        vcl::Window* pFrameWin = rViewFrame.GetWindow().GetFrameWindow();
         if (pFrameWin && !pFrameWin->GetLOKNotifier())
             pFrameWin->SetLOKNotifier(this, true);
     }

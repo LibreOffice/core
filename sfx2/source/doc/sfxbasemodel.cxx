@@ -4262,11 +4262,11 @@ Reference< frame::XController2 > SAL_CALL SfxBaseModel::createViewController(
 
     // determine the ViewFrame belonging to the given XFrame
     SfxViewFrame* pViewFrame = FindOrCreateViewFrame_Impl( i_rFrame, aViewCreationGuard );
-    SAL_WARN_IF( !pViewFrame , "sfx.doc", "SfxBaseModel::createViewController: no frame?" );
+    assert(pViewFrame && "SfxBaseModel::createViewController: no frame");
 
     // delegate to SFX' view factory
     pViewFrame->GetBindings().ENTERREGISTRATIONS();
-    SfxViewShell* pViewShell = pViewFactory->CreateInstance( pViewFrame, pOldViewShell );
+    SfxViewShell* pViewShell = pViewFactory->CreateInstance(*pViewFrame, pOldViewShell);
     pViewFrame->GetBindings().LEAVEREGISTRATIONS();
     ENSURE_OR_THROW( pViewShell, "invalid view shell provided by factory" );
 

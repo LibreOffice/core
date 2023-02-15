@@ -187,9 +187,9 @@ static OUString lcl_ConvertTabsToSpaces( const OUString& sLine )
     return aRet;
 }
 
-SwSrcView::SwSrcView(SfxViewFrame* pViewFrame, SfxViewShell*) :
-    SfxViewShell( pViewFrame, SWSRCVIEWFLAGS ),
-    m_aEditWin( VclPtr<SwSrcEditWindow>::Create( &pViewFrame->GetWindow(), this ) ),
+SwSrcView::SwSrcView(SfxViewFrame& rViewFrame, SfxViewShell*) :
+    SfxViewShell( rViewFrame, SWSRCVIEWFLAGS ),
+    m_aEditWin( VclPtr<SwSrcEditWindow>::Create( &rViewFrame.GetWindow(), this ) ),
     m_bSourceSaved(false),
     m_eLoadEncoding(RTL_TEXTENCODING_DONTKNOW)
 {

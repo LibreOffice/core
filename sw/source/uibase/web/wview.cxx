@@ -81,8 +81,8 @@ void SwWebView::InitInterface_Impl()
 }
 
 
-SwWebView::SwWebView(SfxViewFrame* _pFrame, SfxViewShell* _pShell) :
-    SwView(_pFrame, _pShell)
+SwWebView::SwWebView(SfxViewFrame& _rFrame, SfxViewShell* _pShell) :
+    SwView(_rFrame, _pShell)
 {
 }
 

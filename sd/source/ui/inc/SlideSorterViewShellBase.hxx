@@ -34,7 +34,7 @@ public:
     /** This constructor is used by the view factory of the SFX
         macros.
     */
-    SlideSorterViewShellBase(SfxViewFrame* pFrame, SfxViewShell* pOldShell);
+    SlideSorterViewShellBase(SfxViewFrame& rFrame, SfxViewShell* pOldShell);
     virtual ~SlideSorterViewShellBase() override;
 };
 
