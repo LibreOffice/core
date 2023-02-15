@@ -2101,7 +2101,8 @@ bool SwDoc::DeleteRowCol(const SwSelBoxes& rBoxes, RowColMode const eMode)
             getIDocumentContentOperations().DeleteSection( pTableNd );
         }
 
-        GetDocShell()->GetFEShell()->UpdateTableStyleFormatting();
+        if (SwFEShell* pFEShell = GetDocShell()->GetFEShell())
+            pFEShell->UpdateTableStyleFormatting();
 
         getIDocumentState().SetModified();
         getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, SwNodeOffset(0) );
@@ -2135,7 +2136,8 @@ bool SwDoc::DeleteRowCol(const SwSelBoxes& rBoxes, RowColMode const eMode)
         bRet = rTable.DeleteSel( this, aSelBoxes, nullptr, pUndo.get(), true, true );
         if (bRet)
         {
-            GetDocShell()->GetFEShell()->UpdateTableStyleFormatting();
+            if (SwFEShell* pFEShell = GetDocShell()->GetFEShell())
+                pFEShell->UpdateTableStyleFormatting();
 
             getIDocumentState().SetModified();
             getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, SwNodeOffset(0) );
@@ -2200,7 +2202,8 @@ bool SwDoc::SplitTable( const SwSelBoxes& rBoxes, bool bVert, sal_uInt16 nCnt,
 
         if (bRet)
         {
-            GetDocShell()->GetFEShell()->UpdateTableStyleFormatting();
+            if (SwFEShell* pFEShell = GetDocShell()->GetFEShell())
+                pFEShell->UpdateTableStyleFormatting();
 
             getIDocumentState().SetModified();
             getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, SwNodeOffset(0) );
@@ -3248,8 +3251,11 @@ void SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnM
     UpdateCharts( rTable.GetFrameFormat()->GetName() );
 
     // update table style formatting of both the tables
-    GetDocShell()->GetFEShell()->UpdateTableStyleFormatting(pTNd);
-    GetDocShell()->GetFEShell()->UpdateTableStyleFormatting(pNew);
+    if (SwFEShell* pFEShell = GetDocShell()->GetFEShell())
+    {
+        pFEShell->UpdateTableStyleFormatting(pTNd);
+        pFEShell->UpdateTableStyleFormatting(pNew);
+    }
 
     getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, SwNodeOffset(0) );
 }
@@ -3527,7 +3533,8 @@ bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev, sal_uInt16 nMode
     }
     if( bRet )
     {
-        GetDocShell()->GetFEShell()->UpdateTableStyleFormatting();
+        if (SwFEShell* pFEShell = GetDocShell()->GetFEShell())
+            pFEShell->UpdateTableStyleFormatting();
 
         getIDocumentState().SetModified();
         getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, SwNodeOffset(0) );
@@ -4658,7 +4665,8 @@ void SwDoc::ChgTableStyle(const OUString& rName, const SwTableAutoFormat& rNewFo
         SwFrameFormat* pFrameFormat = &GetTableFrameFormat(i, true);
         SwTable* pTable = SwTable::FindTable(pFrameFormat);
         if (pTable->GetTableStyleName() == rName)
-            GetDocShell()->GetFEShell()->UpdateTableStyleFormatting(pTable->GetTableNode());
+            if (SwFEShell* pFEShell = GetDocShell()->GetFEShell())
+                pFEShell->UpdateTableStyleFormatting(pTable->GetTableNode());
     }
 
     getIDocumentState().SetModified();

@@ -1104,11 +1104,8 @@ void SAL_CALL SwVbaSelection::SplitTable()
     SwDocShell* pDocShell = word::getDocShell( mxModel );
     if( pDocShell )
     {
-        SwFEShell* pFEShell = pDocShell->GetFEShell();
-        if( pFEShell )
-        {
+        if (SwFEShell* pFEShell = pDocShell->GetFEShell())
             pFEShell->SplitTable( SplitTable_HeadlineOption::ContentCopy );
-        }
     }
 }
 
