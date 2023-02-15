@@ -26,7 +26,7 @@
 
 #include <com/sun/star/uno/Sequence.h>
 #include <connectivity/dbtoolsdllapi.hxx>
-#include <salhelper/singletonref.hxx>
+#include <comphelper/singletonref.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <unotools/confignode.hxx>
 
@@ -56,7 +56,7 @@ namespace connectivity
 
     class OOO_DLLPUBLIC_DBTOOLS DriversConfig
     {
-        typedef salhelper::SingletonRef<DriversConfigImpl> OSharedConfigNode;
+        typedef comphelper::SingletonRef<DriversConfigImpl> OSharedConfigNode;
 
         const ::comphelper::NamedValueCollection& impl_get(std::u16string_view _sURL,sal_Int32 _nProps) const;
     public:

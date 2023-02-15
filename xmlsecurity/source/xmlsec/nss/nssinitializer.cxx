@@ -33,7 +33,7 @@
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <unotools/tempfile.hxx>
-#include <salhelper/singletonref.hxx>
+#include <comphelper/singletonref.hxx>
 #include <comphelper/sequence.hxx>
 
 #include <nss/nssinitializer.hxx>
@@ -93,9 +93,9 @@ public:
     }
 };
 
-salhelper::SingletonRef<InitNSSPrivate>* getInitNSSPrivate()
+comphelper::SingletonRef<InitNSSPrivate>* getInitNSSPrivate()
 {
-    static salhelper::SingletonRef<InitNSSPrivate> aInitNSSPrivate;
+    static comphelper::SingletonRef<InitNSSPrivate> aInitNSSPrivate;
     return &aInitNSSPrivate;
 }
 

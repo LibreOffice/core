@@ -28,7 +28,7 @@
 #include <connectivity/IParseContext.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sqlerror.hxx>
-#include <salhelper/singletonref.hxx>
+#include <comphelper/singletonref.hxx>
 
 #include <map>
 
@@ -94,7 +94,7 @@ namespace connectivity
         void clearAndDelete();
     };
 
-    typedef salhelper::SingletonRef<OSQLParseNodesContainer> OSQLParseNodesGarbageCollector;
+    typedef comphelper::SingletonRef<OSQLParseNodesContainer> OSQLParseNodesGarbageCollector;
 
     //= OSQLParser
 
