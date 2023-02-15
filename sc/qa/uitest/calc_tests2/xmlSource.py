@@ -89,4 +89,39 @@ class xmlSource(UITestCase):
             self.assertEqual("v2", get_cell_by_position(calc_doc, 0, 0, 2).getString())
             self.assertEqual("v3", get_cell_by_position(calc_doc, 0, 0, 3).getString())
 
+    def test_tdf146260(self):
+
+        with self.ui_test.create_doc_in_start_center("calc") as calc_doc:
+
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:ManageXMLSource") as xDialog:
+
+                xSource = xDialog.getChild("selectsource")
+
+                with self.ui_test.execute_blocking_action(xSource.executeAction, args=('CLICK', ()), close_button="open") as xOpenDialog:
+                    xFileName = xOpenDialog.getChild("file_name")
+                    xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("tdf146260.xml")}))
+
+                xTree = xDialog.getChild("tree")
+                self.assertEqual('43', get_state_as_dict(xTree)["Children"])
+
+                xTree.getChild('0').executeAction("SELECT", tuple())
+                for i in range(5):
+                    xTree.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
+
+                self.assertEqual("Fp", get_state_as_dict(xTree)["SelectEntryText"])
+                self.assertEqual("38", get_state_as_dict(xTree)["SelectionCount"])
+
+                xEdit = xDialog.getChild("edit")
+                xEdit.executeAction("TYPE", mkPropertyValues({"TEXT": "$A$1"}))
+
+            # Without the fix in place, this test would have failed with
+            # AssertionError: 'data' != ''
+            self.assertEqual("Djh", get_cell_by_position(calc_doc, 0, 0, 0).getString())
+            self.assertEqual("Fpzl", get_cell_by_position(calc_doc, 0, 1, 0).getString())
+
+            for i in range(1, 5):
+                # Without the fix in place, this test would have failed with
+                # AssertionError: '专用发票' != 'ר�÷�Ʊ'
+                self.assertEqual("专用发票", get_cell_by_position(calc_doc, 0, 1, i).getString())
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
