@@ -194,7 +194,7 @@ public:
      *
      * \param   pLayout     layout to be used
      * \param   pTOX        bibliography table to take the format of the string from
-     * \return              entry formated as the appropriate authority type in the table
+     * \return              entry formatted as the appropriate authority type in the table
      */
     OUString GetAuthority(const SwRootFrame *pLayout,
                           const SwForm *pTOX = nullptr) const;
