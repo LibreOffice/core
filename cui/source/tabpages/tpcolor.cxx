@@ -131,7 +131,6 @@ SvxColorTabPage::SvxColorTabPage(weld::Container* pPage, weld::DialogController*
     m_xBtnDelete->set_sensitive(false);
     m_xBtnDelete->set_tooltip_text( CuiResId(RID_CUISTR_DELETEUSERCOLOR1) );
 
-    m_xMoreColors->set_from_icon_name("cmd/sc_additionsdialog.png");
     m_xMoreColors->connect_clicked(LINK(this, SvxColorTabPage, OnMoreColorsClick));
 
     // disable preset color values

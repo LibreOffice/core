@@ -12,6 +12,11 @@
     <property name="can-focus">False</property>
     <property name="icon-name">svx/res/galdetail.png</property>
   </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">cmd/sc_additionsdialog.png</property>
+  </object>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
       <!-- column-name image -->
@@ -329,9 +334,8 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
                         <property name="tooltip-text" translatable="yes" context="sidebargallery|btnMoreGalleries">Add more galleries via extension</property>
-                        <child>
-                          <placeholder/>
-                        </child>
+                        <property name="image">image3</property>
+                        <property name="always-show-image">True</property>
                       </object>
                       <packing>
                         <property name="left-attach">3</property>

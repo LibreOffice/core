@@ -69,7 +69,6 @@ GalleryBrowser1::GalleryBrowser1(
     mxThemes->connect_key_press(LINK(this, GalleryBrowser1, KeyInputHdl));
     mxThemes->set_size_request(-1, mxThemes->get_height_rows(6));
 
-    mxMoreGalleries->set_from_icon_name("cmd/sc_additionsdialog.png");
     mxMoreGalleries->connect_clicked(LINK(this, GalleryBrowser1, OnMoreGalleriesClick));
 
     // disable creation of new themes if a writable directory is not available
