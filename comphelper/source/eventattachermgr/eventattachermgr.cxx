@@ -124,7 +124,7 @@ private:
     void insertEntry(std::unique_lock<std::mutex>&, sal_Int32 Index);
 
     /// @throws Exception
-    Reference< XIdlReflection > getReflection();
+    Reference< XIdlReflection > getReflection(std::unique_lock<std::mutex>&);
 
     /** checks if <arg>_nIndex</arg> is a valid index, throws an <type>IllegalArgumentException</type> if not
     @param _nIndex
@@ -255,7 +255,7 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
         aRet = aIt.next()->approveFiring( aScriptEvent );
         try
         {
-            Reference< XIdlClass > xListenerType = mxManager->getReflection()->
+            Reference< XIdlClass > xListenerType = mxManager->getReflection(l)->
                         forName( Event.ListenerType.getTypeName() );
             Reference< XIdlMethod > xMeth = xListenerType->getMethod( Event.MethodName );
             if( xMeth.is() )
@@ -306,7 +306,7 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
         catch (const CannotConvertException&)
         {
             // silent ignore conversions errors from a script call
-            Reference< XIdlClass > xListenerType = mxManager->getReflection()->
+            Reference< XIdlClass > xListenerType = mxManager->getReflection(l)->
                         forName( Event.ListenerType.getTypeName() );
             Reference< XIdlMethod > xMeth = xListenerType->getMethod( Event.MethodName );
             if( xMeth.is() )
@@ -368,9 +368,8 @@ ImplEventAttacherManager::ImplEventAttacherManager( const Reference< XIntrospect
     }
 }
 
-Reference< XIdlReflection > ImplEventAttacherManager::getReflection()
+Reference< XIdlReflection > ImplEventAttacherManager::getReflection(std::unique_lock<std::mutex>&)
 {
-    std::unique_lock l(m_aMutex);
     // Do we already have a service? If not, create one.
     if( !mxCoreReflection.is() )
     {
