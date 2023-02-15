@@ -116,7 +116,6 @@ void AcceleratorCache::removeCommand(const OUString& sCommand)
     {
         removeKey(lKey);
     }
-    m_lCommand2Keys.erase(sCommand);
 }
 
 } // namespace framework

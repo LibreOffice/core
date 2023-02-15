@@ -614,10 +614,9 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeKeyEvent(const css::awt::K
 
     if (rPrimaryCache.hasKey(aKeyEvent))
     {
-        OUString sDelCommand = rPrimaryCache.getCommandByKey(aKeyEvent);
-        if (!sDelCommand.isEmpty())
+        OUString sOriginalCommand = rPrimaryCache.getCommandByKey(aKeyEvent);
+        if (!sOriginalCommand.isEmpty())
         {
-            OUString sOriginalCommand = rPrimaryCache.getCommandByKey(aKeyEvent);
             if (rSecondaryCache.hasCommand(sOriginalCommand))
             {
                 AcceleratorCache::TKeyList lSecondaryKeys = rSecondaryCache.getKeysByCommand(sOriginalCommand);
