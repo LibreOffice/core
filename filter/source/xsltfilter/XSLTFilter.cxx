@@ -65,7 +65,6 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
-#include <com/sun/star/xml/xslt/XSLT2Transformer.hpp>
 #include <com/sun/star/xml/xslt/XSLTTransformer.hpp>
 #include <utility>
 
@@ -234,7 +233,10 @@ namespace XSLT
         {
             try
             {
-                xTransformer = xslt::XSLT2Transformer::create(m_xContext, rArgs);
+                xTransformer.set(
+                    m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                        "com.sun.star.xml.xslt.XSLT2Transformer", rArgs, m_xContext),
+                    css::uno::UNO_QUERY_THROW);
             }
             catch (const Exception&)
             {
