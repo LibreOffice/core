@@ -51,6 +51,7 @@
 #include <orcus/exception.hpp>
 #include <stylehelper.hxx>
 #include <utility>
+#include <unordered_map>
 
 using namespace com::sun::star;
 
@@ -99,113 +100,55 @@ void ScOrcusGlobalSettings::set_origin_date(int year, int month, int day)
 
 void ScOrcusGlobalSettings::set_character_set(orcus::character_set_t cs)
 {
-    switch (cs)
-    {
-        case orcus::character_set_t::big5:
-            mnTextEncoding = RTL_TEXTENCODING_BIG5;
-            break;
-        case orcus::character_set_t::euc_jp:
-            mnTextEncoding = RTL_TEXTENCODING_EUC_JP;
-            break;
-        case orcus::character_set_t::euc_kr:
-            mnTextEncoding = RTL_TEXTENCODING_EUC_KR;
-            break;
-        case orcus::character_set_t::gb2312:
-            mnTextEncoding = RTL_TEXTENCODING_GB_2312;
-            break;
-        case orcus::character_set_t::gbk:
-            mnTextEncoding = RTL_TEXTENCODING_GBK;
-            break;
-        case orcus::character_set_t::iso_8859_1:
-        case orcus::character_set_t::iso_8859_1_windows_3_0_latin_1:
-        case orcus::character_set_t::iso_8859_1_windows_3_1_latin_1:
-            mnTextEncoding = RTL_TEXTENCODING_ISO_8859_1;
-            break;
-        case orcus::character_set_t::iso_8859_2:
-        case orcus::character_set_t::iso_8859_2_windows_latin_2:
-            mnTextEncoding = RTL_TEXTENCODING_ISO_8859_2;
-            break;
-        case orcus::character_set_t::iso_8859_3:
-            mnTextEncoding = RTL_TEXTENCODING_ISO_8859_3;
-            break;
-        case orcus::character_set_t::iso_8859_4:
-            mnTextEncoding = RTL_TEXTENCODING_ISO_8859_4;
-            break;
-        case orcus::character_set_t::iso_8859_5:
-            mnTextEncoding = RTL_TEXTENCODING_ISO_8859_5;
-            break;
-        case orcus::character_set_t::iso_8859_6:
-        case orcus::character_set_t::iso_8859_6_e:
-        case orcus::character_set_t::iso_8859_6_i:
-            mnTextEncoding = RTL_TEXTENCODING_ISO_8859_6;
-            break;
-        case orcus::character_set_t::iso_8859_7:
-            mnTextEncoding = RTL_TEXTENCODING_ISO_8859_7;
-            break;
-        case orcus::character_set_t::iso_8859_8:
-        case orcus::character_set_t::iso_8859_8_e:
-        case orcus::character_set_t::iso_8859_8_i:
-            mnTextEncoding = RTL_TEXTENCODING_ISO_8859_8;
-            break;
-        case orcus::character_set_t::iso_8859_9:
-        case orcus::character_set_t::iso_8859_9_windows_latin_5:
-            mnTextEncoding = RTL_TEXTENCODING_ISO_8859_9;
-            break;
-        case orcus::character_set_t::iso_8859_14:
-            mnTextEncoding = RTL_TEXTENCODING_ISO_8859_14;
-            break;
-        case orcus::character_set_t::iso_8859_15:
-            mnTextEncoding = RTL_TEXTENCODING_ISO_8859_15;
-            break;
-        case orcus::character_set_t::iso_2022_jp:
-        case orcus::character_set_t::iso_2022_jp_2:
-            mnTextEncoding = RTL_TEXTENCODING_ISO_2022_JP;
-            break;
-        case orcus::character_set_t::jis_x0201:
-            mnTextEncoding = RTL_TEXTENCODING_JIS_X_0201;
-            break;
-        case orcus::character_set_t::shift_jis:
-            mnTextEncoding = RTL_TEXTENCODING_SHIFT_JIS;
-            break;
-        case orcus::character_set_t::us_ascii:
-            mnTextEncoding = RTL_TEXTENCODING_ASCII_US;
-            break;
-        case orcus::character_set_t::utf_7:
-            mnTextEncoding = RTL_TEXTENCODING_UTF7;
-            break;
-        case orcus::character_set_t::utf_8:
-            mnTextEncoding = RTL_TEXTENCODING_UTF8;
-            break;
-        case orcus::character_set_t::windows_1250:
-            mnTextEncoding = RTL_TEXTENCODING_MS_1250;
-            break;
-        case orcus::character_set_t::windows_1251:
-            mnTextEncoding = RTL_TEXTENCODING_MS_1251;
-            break;
-        case orcus::character_set_t::windows_1252:
-            mnTextEncoding = RTL_TEXTENCODING_MS_1252;
-            break;
-        case orcus::character_set_t::windows_1253:
-            mnTextEncoding = RTL_TEXTENCODING_MS_1253;
-            break;
-        case orcus::character_set_t::windows_1254:
-            mnTextEncoding = RTL_TEXTENCODING_MS_1254;
-            break;
-        case orcus::character_set_t::windows_1255:
-            mnTextEncoding = RTL_TEXTENCODING_MS_1255;
-            break;
-        case orcus::character_set_t::windows_1256:
-            mnTextEncoding = RTL_TEXTENCODING_MS_1256;
-            break;
-        case orcus::character_set_t::windows_1257:
-            mnTextEncoding = RTL_TEXTENCODING_MS_1257;
-            break;
-        case orcus::character_set_t::windows_1258:
-            mnTextEncoding = RTL_TEXTENCODING_MS_1258;
-            break;
-        default:
-            ; // Add more as needed.
-    }
+    // Keep the entries sorted by the key.
+    static const std::unordered_map<orcus::character_set_t, rtl_TextEncoding> rules = {
+        { orcus::character_set_t::big5, RTL_TEXTENCODING_BIG5 },
+        { orcus::character_set_t::euc_jp, RTL_TEXTENCODING_EUC_JP },
+        { orcus::character_set_t::euc_kr, RTL_TEXTENCODING_EUC_KR },
+        { orcus::character_set_t::gb2312, RTL_TEXTENCODING_GB_2312 },
+        { orcus::character_set_t::gbk, RTL_TEXTENCODING_GBK },
+        { orcus::character_set_t::iso_2022_cn, RTL_TEXTENCODING_ISO_2022_CN },
+        { orcus::character_set_t::iso_2022_cn_ext, RTL_TEXTENCODING_ISO_2022_CN },
+        { orcus::character_set_t::iso_2022_jp, RTL_TEXTENCODING_ISO_2022_JP },
+        { orcus::character_set_t::iso_2022_jp_2, RTL_TEXTENCODING_ISO_2022_JP },
+        { orcus::character_set_t::iso_8859_1, RTL_TEXTENCODING_ISO_8859_1 },
+        { orcus::character_set_t::iso_8859_14, RTL_TEXTENCODING_ISO_8859_14 },
+        { orcus::character_set_t::iso_8859_15, RTL_TEXTENCODING_ISO_8859_15 },
+        { orcus::character_set_t::iso_8859_1_windows_3_0_latin_1, RTL_TEXTENCODING_ISO_8859_1 },
+        { orcus::character_set_t::iso_8859_1_windows_3_1_latin_1, RTL_TEXTENCODING_ISO_8859_1 },
+        { orcus::character_set_t::iso_8859_2, RTL_TEXTENCODING_ISO_8859_2 },
+        { orcus::character_set_t::iso_8859_2_windows_latin_2, RTL_TEXTENCODING_ISO_8859_2 },
+        { orcus::character_set_t::iso_8859_3, RTL_TEXTENCODING_ISO_8859_3 },
+        { orcus::character_set_t::iso_8859_4, RTL_TEXTENCODING_ISO_8859_4 },
+        { orcus::character_set_t::iso_8859_5, RTL_TEXTENCODING_ISO_8859_5 },
+        { orcus::character_set_t::iso_8859_6, RTL_TEXTENCODING_ISO_8859_6 },
+        { orcus::character_set_t::iso_8859_6_e, RTL_TEXTENCODING_ISO_8859_6 },
+        { orcus::character_set_t::iso_8859_6_i, RTL_TEXTENCODING_ISO_8859_6 },
+        { orcus::character_set_t::iso_8859_7, RTL_TEXTENCODING_ISO_8859_7 },
+        { orcus::character_set_t::iso_8859_8, RTL_TEXTENCODING_ISO_8859_8 },
+        { orcus::character_set_t::iso_8859_8_e, RTL_TEXTENCODING_ISO_8859_8 },
+        { orcus::character_set_t::iso_8859_8_i, RTL_TEXTENCODING_ISO_8859_8 },
+        { orcus::character_set_t::iso_8859_9, RTL_TEXTENCODING_ISO_8859_9 },
+        { orcus::character_set_t::iso_8859_9_windows_latin_5, RTL_TEXTENCODING_ISO_8859_9 },
+        { orcus::character_set_t::jis_x0201, RTL_TEXTENCODING_JIS_X_0201 },
+        { orcus::character_set_t::jis_x0212_1990, RTL_TEXTENCODING_JIS_X_0212 },
+        { orcus::character_set_t::shift_jis, RTL_TEXTENCODING_SHIFT_JIS },
+        { orcus::character_set_t::us_ascii, RTL_TEXTENCODING_ASCII_US },
+        { orcus::character_set_t::utf_7, RTL_TEXTENCODING_UTF7 },
+        { orcus::character_set_t::utf_8, RTL_TEXTENCODING_UTF8 },
+        { orcus::character_set_t::windows_1250, RTL_TEXTENCODING_MS_1250 },
+        { orcus::character_set_t::windows_1251, RTL_TEXTENCODING_MS_1251 },
+        { orcus::character_set_t::windows_1252, RTL_TEXTENCODING_MS_1252 },
+        { orcus::character_set_t::windows_1253, RTL_TEXTENCODING_MS_1253 },
+        { orcus::character_set_t::windows_1254, RTL_TEXTENCODING_MS_1254 },
+        { orcus::character_set_t::windows_1255, RTL_TEXTENCODING_MS_1255 },
+        { orcus::character_set_t::windows_1256, RTL_TEXTENCODING_MS_1256 },
+        { orcus::character_set_t::windows_1257, RTL_TEXTENCODING_MS_1257 },
+        { orcus::character_set_t::windows_1258, RTL_TEXTENCODING_MS_1258 },
+    };
+
+    if (auto it = rules.find(cs); it != rules.end())
+        mnTextEncoding = it->second;
 }
 
 void ScOrcusGlobalSettings::set_default_formula_grammar(os::formula_grammar_t grammar)
