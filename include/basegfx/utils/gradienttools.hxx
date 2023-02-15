@@ -23,13 +23,75 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/color/bcolor.hxx>
 #include <utility>
 #include <basegfx/basegfxdllapi.h>
+#include <vector>
 
 namespace basegfx { class B2DRange; }
 
 namespace basegfx
 {
+    /* MCGR: Provide ColorStep definition
+
+        This is the needed combination of offset and color:
+
+        Offset is defined as:
+        - being in the range of [0.0 .. 1.0] (unit range)
+          - 0.0 being reserved for StartColor
+          - 1.0 being reserved for EndColor
+        - in-between offsets thus being in the range of ]0.0 .. 1.0[
+        - no two equal offsets are allowed
+            - this is an error
+        - missing 1.0 entry (EndColor) is allowed
+          - it means that EndColor == StartColor
+        - at least one value (usually 0.0, StartColor) is required
+            - this allows to avoid massive testing in all places where
+              this data has to be accessed
+
+        Color is defined as:
+        - RGB with unit values [0.0 .. 1.0]
+
+        These definitions are packed in a std::vector<ColorStep> ColorSteps,
+        see typedef below.
+    */
+    class UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) ColorStep
+    {
+    private:
+        double mfOffset;
+        BColor maColor;
+
+    public:
+        // constructor - defaults are needed to have a default constructor
+        // e.g. for usage in std::vector::insert
+        ColorStep(double fOffset = 0.0, const BColor& rColor = BColor())
+            : mfOffset(fOffset)
+            , maColor(rColor)
+        {
+        }
+
+        double getOffset() const { return mfOffset; }
+        const BColor& getColor() const { return maColor; }
+
+        bool operator<(const ColorStep& rCandidate) const
+        {
+            return getOffset() < rCandidate.getOffset();
+        }
+
+        bool operator==(const ColorStep& rCandidate) const
+        {
+            return getOffset() == rCandidate.getOffset() && getColor() == rCandidate.getColor();
+        }
+    };
+
+    /* MCGR: Provide ColorSteps definition to the FillGradientAttribute
+
+        This array is sorted ascending by offsets, from lowest to
+        highest. Since all this primitive data definition is read-only,
+        this can be guaranteed by forcing/checking this in the constructor.
+    */
+    typedef std::vector<ColorStep> ColorSteps;
+
     /** Gradient definition as used in ODF 1.2
 
         This struct collects all data necessary for rendering ODF
@@ -63,22 +125,22 @@ namespace basegfx
            the semantic differs slightly for the different gradient
            types.
          */
-        sal_uInt32      mnSteps;
+        sal_uInt32      mnRequestedSteps;
 
     public:
         ODFGradientInfo()
         :   mfAspectRatio(1.0),
-            mnSteps(0)
+            mnRequestedSteps(0)
         {
         }
 
         ODFGradientInfo(
             B2DHomMatrix aTextureTransform,
             double fAspectRatio,
-            sal_uInt32 nSteps)
+            sal_uInt32 nRequestedSteps)
         :   maTextureTransform(std::move(aTextureTransform)),
             mfAspectRatio(fAspectRatio),
-            mnSteps(nSteps)
+            mnRequestedSteps(nRequestedSteps)
         {
         }
 
@@ -86,7 +148,7 @@ namespace basegfx
         :   maTextureTransform(rODFGradientInfo.getTextureTransform()),
             maBackTextureTransform(rODFGradientInfo.maBackTextureTransform),
             mfAspectRatio(rODFGradientInfo.getAspectRatio()),
-            mnSteps(rODFGradientInfo.getSteps())
+            mnRequestedSteps(rODFGradientInfo.getRequestedSteps())
         {
         }
 
@@ -95,7 +157,7 @@ namespace basegfx
             maTextureTransform = rODFGradientInfo.getTextureTransform();
             maBackTextureTransform = rODFGradientInfo.maBackTextureTransform;
             mfAspectRatio = rODFGradientInfo.getAspectRatio();
-            mnSteps = rODFGradientInfo.getSteps();
+            mnRequestedSteps = rODFGradientInfo.getRequestedSteps();
 
             return *this;
         }
@@ -106,7 +168,7 @@ namespace basegfx
         const B2DHomMatrix& getTextureTransform() const { return maTextureTransform; }
         const B2DHomMatrix& getBackTextureTransform() const;
         double getAspectRatio() const { return mfAspectRatio; }
-        sal_uInt32 getSteps() const { return mnSteps; }
+        sal_uInt32 getRequestedSteps() const { return mnRequestedSteps; }
 
         void setTextureTransform(const B2DHomMatrix& rNew)
         {
@@ -117,6 +179,21 @@ namespace basegfx
 
     namespace utils
     {
+        /* Helper to calculate numberOfSteps needed to represent
+           gradient for the given two colors:
+           - to define only based on color distance, give 0 == nRequestedSteps
+               as wanted value, so color distance will be used
+           - if a wanted value of nRequestedSteps is given, it gets synched
+               against the maximum number of steps defined by the color
+               distance of the two colors
+           - a minimum result of 1 is returned which means a single
+               step -> no real gradient
+        */
+        BASEGFX_DLLPUBLIC sal_uInt32 calculateNumberOfSteps(
+            sal_uInt32 nRequestedSteps,
+            const BColor& rStart,
+            const BColor& rEnd);
+
         /** Create matrix for ODF's linear gradient definition
 
             Note that odf linear gradients are varying in y direction.
@@ -129,7 +206,7 @@ namespace basegfx
             Output area, needed for aspect ratio calculations and
             texture transformation
 
-            @param nSteps
+            @param nRequestedSteps
             Number of gradient steps (from ODF)
 
             @param fBorder
@@ -140,7 +217,7 @@ namespace basegfx
          */
         BASEGFX_DLLPUBLIC ODFGradientInfo createLinearODFGradientInfo(
             const B2DRange& rTargetArea,
-            sal_uInt32 nSteps,
+            sal_uInt32 nRequestedSteps,
             double fBorder,
             double fAngle);
 
@@ -179,7 +256,7 @@ namespace basegfx
             Output area, needed for aspect ratio calculations and
             texture transformation
 
-            @param nSteps
+            @param nRequestedSteps
             Number of gradient steps (from ODF)
 
             @param fBorder
@@ -190,7 +267,7 @@ namespace basegfx
          */
         BASEGFX_DLLPUBLIC ODFGradientInfo createAxialODFGradientInfo(
             const B2DRange& rTargetArea,
-            sal_uInt32 nSteps,
+            sal_uInt32 nRequestedSteps,
             double fBorder,
             double fAngle);
 
@@ -224,7 +301,7 @@ namespace basegfx
             @param rOffset
             Gradient offset value (from ODF)
 
-            @param nSteps
+            @param nRequestedSteps
             Number of gradient steps (from ODF)
 
             @param fBorder
@@ -236,7 +313,7 @@ namespace basegfx
         BASEGFX_DLLPUBLIC ODFGradientInfo createRadialODFGradientInfo(
             const B2DRange& rTargetArea,
             const B2DVector& rOffset,
-            sal_uInt32 nSteps,
+            sal_uInt32 nRequestedSteps,
             double fBorder);
 
 
@@ -269,7 +346,7 @@ namespace basegfx
             @param rOffset
             Gradient offset value (from ODF)
 
-            @param nSteps
+            @param nRequestedSteps
             Number of gradient steps (from ODF)
 
             @param fBorder
@@ -281,7 +358,7 @@ namespace basegfx
         BASEGFX_DLLPUBLIC ODFGradientInfo createEllipticalODFGradientInfo(
             const B2DRange& rTargetArea,
             const B2DVector& rOffset,
-            sal_uInt32 nSteps,
+            sal_uInt32 nRequestedSteps,
             double fBorder,
             double fAngle);
 
@@ -315,7 +392,7 @@ namespace basegfx
             @param rOffset
             Gradient offset value (from ODF)
 
-            @param nSteps
+            @param nRequestedSteps
             Number of gradient steps (from ODF)
 
             @param fBorder
@@ -327,7 +404,7 @@ namespace basegfx
         BASEGFX_DLLPUBLIC ODFGradientInfo createSquareODFGradientInfo(
             const B2DRange& rTargetArea,
             const B2DVector& rOffset,
-            sal_uInt32 nSteps,
+            sal_uInt32 nRequestedSteps,
             double fBorder,
             double fAngle);
 
@@ -361,7 +438,7 @@ namespace basegfx
             @param rOffset
             Gradient offset value (from ODF)
 
-            @param nSteps
+            @param nRequestedSteps
             Number of gradient steps (from ODF)
 
             @param fBorder
@@ -373,7 +450,7 @@ namespace basegfx
         BASEGFX_DLLPUBLIC ODFGradientInfo createRectangularODFGradientInfo(
             const B2DRange& rTargetArea,
             const B2DVector& rOffset,
-            sal_uInt32 nSteps,
+            sal_uInt32 nRequestedSteps,
             double fBorder,
             double fAngle);
 

@@ -28,6 +28,7 @@
 #include <vcl/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/utils/gradienttools.hxx>
 
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/Tools.hxx>

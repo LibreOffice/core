@@ -37,29 +37,6 @@ namespace drawinglayer::primitive2d
         {
             rEntries.clear();
 
-            // make sure steps is not too high/low
-            const basegfx::BColor aStart(getFillGradient().getColorSteps().front().getColor());
-            const basegfx::BColor aEnd(getFillGradient().getColorSteps().back().getColor());
-            const sal_uInt32 nMaxSteps(sal_uInt32((aStart.getMaximumDistance(aEnd) * 127.5) + 0.5));
-            sal_uInt32 nSteps(getFillGradient().getSteps());
-
-            if(nSteps == 0)
-            {
-                nSteps = nMaxSteps;
-            }
-
-            if(nSteps < 2)
-            {
-                nSteps = 2;
-            }
-
-            if(nSteps > nMaxSteps)
-            {
-                nSteps = nMaxSteps;
-            }
-
-            nSteps = std::max(sal_uInt32(1), nSteps);
-
             switch(getFillGradient().getStyle())
             {
                 case attribute::GradientStyle::Linear:
@@ -67,9 +44,8 @@ namespace drawinglayer::primitive2d
                     texture::GeoTexSvxGradientLinear aGradient(
                         getDefinitionRange(),
                         getOutputRange(),
-                        aStart,
-                        aEnd,
-                        nSteps,
+                        getFillGradient().getSteps(),
+                        getFillGradient().getColorSteps(),
                         getFillGradient().getBorder(),
                         getFillGradient().getAngle());
                     aGradient.appendTransformationsAndColors(rEntries, rOuterColor);
@@ -80,9 +56,8 @@ namespace drawinglayer::primitive2d
                     texture::GeoTexSvxGradientAxial aGradient(
                         getDefinitionRange(),
                         getOutputRange(),
-                        aStart,
-                        aEnd,
-                        nSteps,
+                        getFillGradient().getSteps(),
+                        getFillGradient().getColorSteps(),
                         getFillGradient().getBorder(),
                         getFillGradient().getAngle());
                     aGradient.appendTransformationsAndColors(rEntries, rOuterColor);
@@ -92,9 +67,8 @@ namespace drawinglayer::primitive2d
                 {
                     texture::GeoTexSvxGradientRadial aGradient(
                         getDefinitionRange(),
-                        aStart,
-                        aEnd,
-                        nSteps,
+                        getFillGradient().getSteps(),
+                        getFillGradient().getColorSteps(),
                         getFillGradient().getBorder(),
                         getFillGradient().getOffsetX(),
                         getFillGradient().getOffsetY());
@@ -105,9 +79,8 @@ namespace drawinglayer::primitive2d
                 {
                     texture::GeoTexSvxGradientElliptical aGradient(
                         getDefinitionRange(),
-                        aStart,
-                        aEnd,
-                        nSteps,
+                        getFillGradient().getSteps(),
+                        getFillGradient().getColorSteps(),
                         getFillGradient().getBorder(),
                         getFillGradient().getOffsetX(),
                         getFillGradient().getOffsetY(),
@@ -119,9 +92,8 @@ namespace drawinglayer::primitive2d
                 {
                     texture::GeoTexSvxGradientSquare aGradient(
                         getDefinitionRange(),
-                        aStart,
-                        aEnd,
-                        nSteps,
+                        getFillGradient().getSteps(),
+                        getFillGradient().getColorSteps(),
                         getFillGradient().getBorder(),
                         getFillGradient().getOffsetX(),
                         getFillGradient().getOffsetY(),
@@ -133,9 +105,8 @@ namespace drawinglayer::primitive2d
                 {
                     texture::GeoTexSvxGradientRect aGradient(
                         getDefinitionRange(),
-                        aStart,
-                        aEnd,
-                        nSteps,
+                        getFillGradient().getSteps(),
+                        getFillGradient().getColorSteps(),
                         getFillGradient().getBorder(),
                         getFillGradient().getOffsetX(),
                         getFillGradient().getOffsetY(),

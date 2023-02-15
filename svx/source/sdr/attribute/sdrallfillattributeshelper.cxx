@@ -21,6 +21,7 @@
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/utils/gradienttools.hxx>
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <vcl/graph.hxx>

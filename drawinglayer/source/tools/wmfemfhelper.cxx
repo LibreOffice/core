@@ -23,6 +23,7 @@
 #include <vcl/metaact.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/utils/gradienttools.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>

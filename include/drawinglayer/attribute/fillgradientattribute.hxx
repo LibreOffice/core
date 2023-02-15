@@ -21,8 +21,14 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <o3tl/cow_wrapper.hxx>
-#include <basegfx/color/bcolor.hxx>
 #include <vector>
+
+namespace basegfx
+{
+class ColorStep;
+class BColor;
+typedef std::vector<ColorStep> ColorSteps;
+}
 
 namespace drawinglayer::attribute
 {
@@ -42,60 +48,6 @@ class DRAWINGLAYER_DLLPUBLIC FillGradientAttribute
 {
 public:
     typedef o3tl::cow_wrapper<ImpFillGradientAttribute> ImplType;
-
-    /* MCGR: Provide ColorSteps to the FillGradientAttribute
-
-       This is the needed combination of offset and color:
-
-       Offset is defined as:
-       - being in the range of [0.0 .. 1.0] (unit range)
-       - 0.0 being reserved for StartColor
-       - 1.0 being reserved for EndColor
-       - in-between offsets thus being in the range of ]0.0 .. 1.0[
-       - no two equal offsets are allowed
-         - this is an error, but will be ignored (maybe assert?)
-       - missing 1.0 entry (EndColor) is allowed
-       - at least one value (usually 0.0, StartColor) is required
-         - this allows to avoid massive testing in all places where
-           this data has to be accessed
-
-       Color is defined as:
-       - RGB with unit values [0.0 .. 1.0]
-
-       These definitions are packed in a std::vector<ColorStep> ColorSteps,
-       see typedef below. This array is sorted ascending by offsets, from
-       lowest to highest. Since all this primitive data definition is
-       read-only, this can be guaranteed by forcing/checking this in the
-       constructor.
-    */
-    class ColorStep
-    {
-    private:
-        double mfOffset;
-        basegfx::BColor maColor;
-
-    public:
-        ColorStep(double fOffset, const basegfx::BColor& rColor)
-            : mfOffset(fOffset)
-            , maColor(rColor)
-        {
-        }
-
-        double getOffset() const { return mfOffset; }
-        const basegfx::BColor& getColor() const { return maColor; }
-
-        bool operator<(const ColorStep& rCandidate) const
-        {
-            return getOffset() < rCandidate.getOffset();
-        }
-
-        bool operator==(const ColorStep& rCandidate) const
-        {
-            return getOffset() == rCandidate.getOffset() && getColor() == rCandidate.getColor();
-        }
-    };
-
-    typedef std::vector<ColorStep> ColorSteps;
 
 private:
     ImplType mpFillGradientAttribute;
@@ -123,8 +75,8 @@ public:
     /// constructors/assignmentoperator/destructor
     FillGradientAttribute(GradientStyle eStyle, double fBorder, double fOffsetX, double fOffsetY,
                           double fAngle, const basegfx::BColor& rStartColor,
-                          const basegfx::BColor& rEndColor, const ColorSteps* pColorSteps = nullptr,
-                          sal_uInt16 nSteps = 0);
+                          const basegfx::BColor& rEndColor,
+                          const basegfx::ColorSteps* pColorSteps = nullptr, sal_uInt16 nSteps = 0);
     FillGradientAttribute();
     FillGradientAttribute(const FillGradientAttribute&);
     FillGradientAttribute(FillGradientAttribute&&);
@@ -147,7 +99,7 @@ public:
     double getOffsetX() const;
     double getOffsetY() const;
     double getAngle() const;
-    const ColorSteps& getColorSteps() const;
+    const basegfx::ColorSteps& getColorSteps() const;
     sal_uInt16 getSteps() const;
 };
 

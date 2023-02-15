@@ -61,6 +61,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/GraphicLoader.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/utils/gradienttools.hxx>
 #include <svx/svx3ditems.hxx>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
@@ -492,6 +493,16 @@ namespace drawinglayer::primitive2d
                                 aEnd = interpolate(aBlack, aEnd, static_cast<double>(nEndIntens) * 0.01);
                             }
 
+                            basegfx::ColorSteps aColorSteps;
+
+                            // test code here, will be removed later
+                            // if(false)
+                            // {
+                            //     aStart = basegfx::BColor(1.0, 0.0, 0.0); // red
+                            //     aEnd = basegfx::BColor(0.0, 0.0, 1.0); // blue
+                            //     aColorSteps.emplace_back(0.25, basegfx::BColor(0.0, 1.0, 0.0)); // green@25%
+                            // }
+
                             aGradient = attribute::FillGradientAttribute(
                                 XGradientStyleToGradientStyle(aXGradient.GetGradientStyle()),
                                 static_cast<double>(aXGradient.GetBorder()) * 0.01,
@@ -500,7 +511,7 @@ namespace drawinglayer::primitive2d
                                 toRadians(aXGradient.GetAngle()),
                                 aStart,
                                 aEnd,
-                                nullptr,
+                                aColorSteps.empty() ? nullptr : &aColorSteps,
                                 rSet.Get(XATTR_GRADIENTSTEPCOUNT).GetValue());
 
                             break;
