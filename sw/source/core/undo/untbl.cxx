@@ -1783,7 +1783,8 @@ void SwUndoTableNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
 
     // TL_CHART2: need to inform chart of probably changed cell names
     rDoc.UpdateCharts( pTableNd->GetTable().GetFrameFormat()->GetName() );
-    rDoc.GetDocShell()->GetFEShell()->UpdateTableStyleFormatting(pTableNd);
+    if (SwFEShell* pFEShell = rDoc.GetDocShell()->GetFEShell())
+        pFEShell->UpdateTableStyleFormatting(pTableNd);
     if( IsDelBox() )
         m_nSttNode = pTableNd->GetIndex();
     ClearFEShellTabCols(rDoc, nullptr);
