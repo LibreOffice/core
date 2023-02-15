@@ -32,8 +32,6 @@
 #include <osl/diagnose.h>
 
 
-using namespace ::std;
-
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -60,7 +58,7 @@ namespace
 void SvXMLAutoStylePoolP::exportStyleAttributes(
         comphelper::AttributeList&,
         XmlStyleFamily nFamily,
-        const vector< XMLPropertyState >& rProperties,
+        const std::vector< XMLPropertyState >& rProperties,
         const SvXMLExportPropertyMapper& rPropExp,
         const SvXMLUnitConverter&,
         const SvXMLNamespaceMap&
@@ -170,7 +168,7 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
 void SvXMLAutoStylePoolP::exportStyleContent(
         const css::uno::Reference< css::xml::sax::XDocumentHandler > &,
         XmlStyleFamily nFamily,
-        const vector< XMLPropertyState >& rProperties,
+        const std::vector< XMLPropertyState >& rProperties,
         const SvXMLExportPropertyMapper& rPropExp,
         const SvXMLUnitConverter&,
         const SvXMLNamespaceMap&
@@ -325,7 +323,7 @@ void SvXMLAutoStylePoolP::RegisterNames(
     // iterate over sequence(s) and call RegisterName(..) for each pair
     const sal_Int32* pFamilies = aFamilies.getConstArray();
     const OUString* pNames = aNames.getConstArray();
-    sal_Int32 nCount = min( aFamilies.getLength(), aNames.getLength() );
+    sal_Int32 nCount = std::min( aFamilies.getLength(), aNames.getLength() );
     for( sal_Int32 n = 0; n < nCount; n++ )
         RegisterName( static_cast<XmlStyleFamily>(pFamilies[n]), pNames[n] );
 }
@@ -337,7 +335,7 @@ css::uno::Sequence<OUString> SvXMLAutoStylePoolP::GetPropertyNames( )
 }
 
 OUString SvXMLAutoStylePoolP::Add( XmlStyleFamily nFamily,
-                                   vector< XMLPropertyState >&& rProperties )
+                                   std::vector< XMLPropertyState >&& rProperties )
 {
     OUString sName;
     pImpl->Add(sName, nFamily, "", std::move(rProperties) );
@@ -346,7 +344,7 @@ OUString SvXMLAutoStylePoolP::Add( XmlStyleFamily nFamily,
 
 OUString SvXMLAutoStylePoolP::Add( XmlStyleFamily nFamily,
                                   const OUString& rParent,
-                                  vector< XMLPropertyState >&& rProperties, bool bDontSeek )
+                                  std::vector< XMLPropertyState >&& rProperties, bool bDontSeek )
 {
     OUString sName;
     pImpl->Add(sName, nFamily, rParent, std::move(rProperties), bDontSeek);
@@ -367,7 +365,7 @@ bool SvXMLAutoStylePoolP::AddNamed( const OUString& rName, XmlStyleFamily nFamil
 
 OUString SvXMLAutoStylePoolP::Find( XmlStyleFamily nFamily,
                                    const OUString& rParent,
-                                   const vector< XMLPropertyState >& rProperties ) const
+                                   const std::vector< XMLPropertyState >& rProperties ) const
 {
     return pImpl->Find( nFamily, rParent, rProperties );
 }

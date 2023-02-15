@@ -52,7 +52,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::xml;
 using namespace ::com::sun::star::xml::sax;
 
-using namespace ::std;
 using namespace ::xmloff::token;
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::lang::WrappedTargetException;
@@ -105,7 +104,7 @@ void SvXMLImportPropertyMapper::ChainImportMapper(
 
 /** fills the given itemset with the attributes in the given list */
 void SvXMLImportPropertyMapper::importXML(
-        vector< XMLPropertyState >& rProperties,
+        std::vector< XMLPropertyState >& rProperties,
         const Reference< XFastAttributeList >& xAttrList,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
@@ -161,7 +160,7 @@ void SvXMLImportPropertyMapper::importXML(
 }
 
 void SvXMLImportPropertyMapper::importXMLAttribute(
-        vector< XMLPropertyState >& rProperties,
+        std::vector< XMLPropertyState >& rProperties,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
         const sal_uInt32 nPropType,
@@ -346,7 +345,7 @@ void SvXMLImportPropertyMapper::importXMLAttribute(
 /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
 bool SvXMLImportPropertyMapper::handleSpecialItem(
         XMLPropertyState& rProperty,
-        vector< XMLPropertyState >& rProperties,
+        std::vector< XMLPropertyState >& rProperties,
         const OUString& rValue,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap ) const
@@ -430,7 +429,7 @@ void SvXMLImportPropertyMapper::CheckSpecialContext(
 }
 
 bool SvXMLImportPropertyMapper::FillPropertySet(
-            const vector< XMLPropertyState >& aProperties,
+            const std::vector< XMLPropertyState >& aProperties,
             const Reference< XPropertySet >& rPropSet,
             ContextID_Index_Pair* pSpecialContextIds ) const
 {
@@ -469,7 +468,7 @@ bool SvXMLImportPropertyMapper::FillPropertySet(
 }
 
 bool SvXMLImportPropertyMapper::FillPropertySet_(
-    const vector<XMLPropertyState> & rProperties,
+    const std::vector<XMLPropertyState> & rProperties,
     const Reference<XPropertySet> & rPropSet,
     const Reference<XPropertySetInfo> & rPropSetInfo,
     const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
@@ -570,7 +569,7 @@ bool SvXMLImportPropertyMapper::FillPropertySet_(
 }
 
 
-typedef pair<const OUString*, const Any* > PropertyPair;
+typedef std::pair<const OUString*, const Any* > PropertyPair;
 
 namespace {
 
@@ -585,7 +584,7 @@ struct PropertyPairLessFunctor
 }
 
 void SvXMLImportPropertyMapper::PrepareForMultiPropertySet_(
-    const vector<XMLPropertyState> & rProperties,
+    const std::vector<XMLPropertyState> & rProperties,
     const Reference<XPropertySetInfo> & rPropSetInfo,
     const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
     ContextID_Index_Pair* pSpecialContextIds,
@@ -595,7 +594,7 @@ void SvXMLImportPropertyMapper::PrepareForMultiPropertySet_(
     sal_Int32 nCount = rProperties.size();
 
     // property pairs structure stores names + values of properties to be set.
-    vector<PropertyPair> aPropertyPairs;
+    std::vector<PropertyPair> aPropertyPairs;
     aPropertyPairs.reserve( nCount );
 
     // iterate over property states that we want to set
@@ -665,7 +664,7 @@ void SvXMLImportPropertyMapper::PrepareForMultiPropertySet_(
 }
 
 bool SvXMLImportPropertyMapper::FillMultiPropertySet_(
-    const vector<XMLPropertyState> & rProperties,
+    const std::vector<XMLPropertyState> & rProperties,
     const Reference<XMultiPropertySet> & rMultiPropSet,
     const Reference<XPropertySetInfo> & rPropSetInfo,
     const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
@@ -697,7 +696,7 @@ bool SvXMLImportPropertyMapper::FillMultiPropertySet_(
 }
 
 bool SvXMLImportPropertyMapper::FillTolerantMultiPropertySet_(
-    const vector<XMLPropertyState> & rProperties,
+    const std::vector<XMLPropertyState> & rProperties,
     const Reference<XTolerantMultiPropertySet> & rTolMultiPropSet,
     const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
     SvXMLImport& rImport,
@@ -751,7 +750,7 @@ bool SvXMLImportPropertyMapper::FillTolerantMultiPropertySet_(
 }
 
 void SvXMLImportPropertyMapper::finished(
-        vector< XMLPropertyState >& rProperties,
+        std::vector< XMLPropertyState >& rProperties,
         sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
     // nothing to do here

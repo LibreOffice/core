@@ -112,7 +112,6 @@
 #include <o3tl/safeint.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
-using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -190,12 +189,12 @@ namespace
     class TextContentSet
     {
         public:
-            typedef list<Reference<XTextContent>> contents_t;
-            typedef back_insert_iterator<contents_t> inserter_t;
+            typedef std::list<Reference<XTextContent>> contents_t;
+            typedef std::back_insert_iterator<contents_t> inserter_t;
             typedef contents_t::const_iterator const_iterator_t;
 
             inserter_t getInserter()
-                { return back_insert_iterator<contents_t>(m_vTextContents); };
+                { return std::back_insert_iterator<contents_t>(m_vTextContents); };
             const_iterator_t getBegin() const
                 { return m_vTextContents.begin(); };
             const_iterator_t getEnd() const
@@ -439,10 +438,10 @@ namespace xmloff
             const BoundFrames* GetShapes() const
                 { return m_pShapes.get(); };
         private:
-            unique_ptr<BoundFrames> m_pTexts;
-            unique_ptr<BoundFrames> m_pGraphics;
-            unique_ptr<BoundFrames> m_pEmbeddeds;
-            unique_ptr<BoundFrames> m_pShapes;
+            std::unique_ptr<BoundFrames> m_pTexts;
+            std::unique_ptr<BoundFrames> m_pGraphics;
+            std::unique_ptr<BoundFrames> m_pEmbeddeds;
+            std::unique_ptr<BoundFrames> m_pShapes;
     };
 }
 
@@ -680,7 +679,7 @@ void XMLTextParagraphExport::Add( XmlStyleFamily nFamily,
     }
     SAL_WARN_IF( !xPropMapper.is(), "xmloff", "There is the property mapper?" );
 
-    vector< XMLPropertyState > aPropStates =
+    std::vector< XMLPropertyState > aPropStates =
             xPropMapper->Filter(GetExport(), rPropSet);
 
     aPropStates.insert( aPropStates.end(), aAddStates.begin(), aAddStates.end() );
@@ -806,7 +805,7 @@ void XMLTextParagraphExport::Add( XmlStyleFamily nFamily,
     }
     SAL_WARN_IF( !xPropMapper.is(), "xmloff", "There is the property mapper?" );
 
-    vector<XMLPropertyState> aPropStates(xPropMapper->Filter(GetExport(), rPropSet));
+    std::vector<XMLPropertyState> aPropStates(xPropMapper->Filter(GetExport(), rPropSet));
 
     if( rPropSetHelper.hasProperty( NUMBERING_RULES_AUTO ) )
     {
@@ -903,7 +902,7 @@ OUString XMLTextParagraphExport::Find(
     SAL_WARN_IF( !xPropMapper.is(), "xmloff", "There is the property mapper?" );
     if( !xPropMapper.is() )
         return sName;
-    vector<XMLPropertyState> aPropStates(xPropMapper->Filter(GetExport(), rPropSet));
+    std::vector<XMLPropertyState> aPropStates(xPropMapper->Filter(GetExport(), rPropSet));
     aPropStates.insert( aPropStates.end(), aAddStates.begin(), aAddStates.end() );
     if( std::any_of( aPropStates.begin(), aPropStates.end(), lcl_validPropState ) )
         sName = GetAutoStylePool().Find( nFamily, sName, aPropStates );
@@ -918,7 +917,7 @@ OUString XMLTextParagraphExport::FindTextStyle(
         const XMLPropertyState** ppAddStates ) const
 {
     rtl::Reference < SvXMLExportPropertyMapper > xPropMapper(GetTextPropMapper());
-    vector<XMLPropertyState> aPropStates(xPropMapper->Filter(GetExport(), rPropSet));
+    std::vector<XMLPropertyState> aPropStates(xPropMapper->Filter(GetExport(), rPropSet));
 
     // Get parent and remove hyperlinks (they aren't of interest)
     OUString sName;

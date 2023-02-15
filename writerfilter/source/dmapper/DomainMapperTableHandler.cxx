@@ -61,7 +61,6 @@
 namespace writerfilter::dmapper {
 
 using namespace ::com::sun::star;
-using namespace ::std;
 
 #define DEF_BORDER_DIST 190  //0,19cm
 #define CNF_FIRST_ROW               0x800

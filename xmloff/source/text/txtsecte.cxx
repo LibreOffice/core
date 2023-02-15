@@ -32,7 +32,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
-using namespace ::std;
 
 using ::com::sun::star::beans::XPropertySet;
 
@@ -108,7 +107,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
 
         // Build stacks of old and new sections
         // Sections on top of mute sections should not be on the stack
-        vector< Reference<XTextSection> > aOldStack;
+        std::vector< Reference<XTextSection> > aOldStack;
         Reference<XTextSection> aCurrent(rPrevSection);
         while(aCurrent.is())
         {
@@ -121,7 +120,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
             aCurrent.set(aCurrent->getParentSection());
         }
 
-        vector< Reference<XTextSection> > aNewStack;
+        std::vector< Reference<XTextSection> > aNewStack;
         aCurrent.set(rNextSection);
         bool bMute = false;
         while(aCurrent.is())
@@ -139,9 +138,9 @@ void XMLTextParagraphExport::exportListAndSectionChange(
         }
 
         // compare the two stacks
-        vector<Reference<XTextSection> > ::reverse_iterator aOld =
+        std::vector<Reference<XTextSection> > ::reverse_iterator aOld =
             aOldStack.rbegin();
-        vector<Reference<XTextSection> > ::reverse_iterator aNew =
+        std::vector<Reference<XTextSection> > ::reverse_iterator aNew =
             aNewStack.rbegin();
         // compare bottom sections and skip equal section
         while ( (aOld != aOldStack.rend()) &&
@@ -156,7 +155,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
         // (order: newest to oldest)
         if (aOld != aOldStack.rend())
         {
-            vector<Reference<XTextSection> > ::iterator aOldForward(
+            std::vector<Reference<XTextSection> > ::iterator aOldForward(
                 aOldStack.begin());
             while ((aOldForward != aOldStack.end()) &&
                    (*aOldForward != *aOld))

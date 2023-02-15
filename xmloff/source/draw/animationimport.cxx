@@ -70,7 +70,6 @@
 #include <animations.hxx>
 #include <animationimport.hxx>
 
-using namespace ::std;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;

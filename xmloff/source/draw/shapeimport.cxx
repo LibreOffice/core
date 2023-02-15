@@ -54,7 +54,6 @@ class ShapeGroupContext;
 
 }
 
-using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -528,8 +527,8 @@ class ShapeGroupContext
 public:
     uno::Reference< drawing::XShapes > mxShapes;
     std::vector<SdXMLEventContextData> maEventData;
-    vector<ZOrderHint>              maZOrderList;
-    vector<ZOrderHint>              maUnsortedList;
+    std::vector<ZOrderHint>              maZOrderList;
+    std::vector<ZOrderHint>              maUnsortedList;
 
     sal_Int32                       mnCurrentZ;
     std::shared_ptr<ShapeGroupContext> mpParentContext;
@@ -647,7 +646,7 @@ void ShapeGroupContext::popGroupAndPostProcess()
         for (const ZOrderHint& rHint : maZOrderList)
         {
             // fill in the gaps from unordered list
-            for (vector<ZOrderHint>::iterator aIt = maUnsortedList.begin(); aIt != maUnsortedList.end() && nIndex < rHint.nShould; )
+            for (std::vector<ZOrderHint>::iterator aIt = maUnsortedList.begin(); aIt != maUnsortedList.end() && nIndex < rHint.nShould; )
             {
                 pNewOrder[nIndex++] = (*aIt).nIs;
                 aIt = maUnsortedList.erase(aIt);
@@ -672,7 +671,7 @@ void ShapeGroupContext::popGroupAndPostProcess()
     sal_Int32 nIndex = 0;
     for (const ZOrderHint& rHint : maZOrderList)
     {
-        for (vector<ZOrderHint>::iterator aIt = maUnsortedList.begin(); aIt != maUnsortedList.end() && nIndex < rHint.nShould; )
+        for (std::vector<ZOrderHint>::iterator aIt = maUnsortedList.begin(); aIt != maUnsortedList.end() && nIndex < rHint.nShould; )
         {
             moveShape( (*aIt).nIs, nIndex++ );
             aIt = maUnsortedList.erase(aIt);
@@ -793,8 +792,8 @@ void XMLShapeImportHelper::addShapeConnection( css::uno::Reference< css::drawing
 
 void XMLShapeImportHelper::restoreConnections()
 {
-    const vector<ConnectionHint>::size_type nCount = mpImpl->maConnections.size();
-    for( vector<ConnectionHint>::size_type i = 0; i < nCount; i++ )
+    const std::vector<ConnectionHint>::size_type nCount = mpImpl->maConnections.size();
+    for( std::vector<ConnectionHint>::size_type i = 0; i < nCount; i++ )
     {
         ConnectionHint& rHint = mpImpl->maConnections[i];
         uno::Reference< beans::XPropertySet > xConnector( rHint.mxConnector, uno::UNO_QUERY );

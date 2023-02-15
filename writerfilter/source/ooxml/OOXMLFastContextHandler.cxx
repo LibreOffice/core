@@ -57,7 +57,6 @@ namespace writerfilter::ooxml
 {
 using namespace ::com::sun::star;
 using namespace oox;
-using namespace ::std;
 using namespace ::com::sun::star::xml::sax;
 
 /*
@@ -2153,9 +2152,9 @@ OOXMLPropertySet::Pointer_t OOXMLFastContextHandlerWrapper::getPropertySet()
     return pResult;
 }
 
-string OOXMLFastContextHandlerWrapper::getType() const
+std::string OOXMLFastContextHandlerWrapper::getType() const
 {
-    string sResult = "Wrapper(";
+    std::string sResult = "Wrapper(";
 
     if (mxWrappedContext.is())
     {

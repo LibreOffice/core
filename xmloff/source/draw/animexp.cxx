@@ -37,7 +37,6 @@
 #include <anim.hxx>
 
 
-using namespace ::std;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -231,7 +230,7 @@ struct XMLEffectHint
 class AnimExpImpl
 {
 public:
-    list<XMLEffectHint> maEffects;
+    std::list<XMLEffectHint> maEffects;
 
     static constexpr OUStringLiteral gsDimColor = u"DimColor";
     static constexpr OUStringLiteral gsDimHide = u"DimHide";

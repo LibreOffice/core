@@ -71,7 +71,6 @@
 #include <vector>
 
 
-using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
@@ -764,13 +763,13 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
             // a header text.
             Reference<XText> xOurText = GetToplevelText(rTextField->getAnchor()->getText());
 
-            map<Reference<XText>, set<OUString> >::iterator aMapIter =
+            std::map<Reference<XText>, std::set<OUString> >::iterator aMapIter =
                 pUsedMasters->find(xOurText);
 
             // insert a list for our XText (if necessary)
             if (aMapIter == pUsedMasters->end())
             {
-                set<OUString> aSet;
+                std::set<OUString> aSet;
                 (*pUsedMasters)[xOurText] = aSet;
                 aMapIter = pUsedMasters->find(xOurText);
             }
@@ -1903,10 +1902,10 @@ void XMLTextFieldExport::ExportFieldDeclarations(
     const Reference<XText> & rText )
 {
     // store lists for decl elements
-    vector<OUString>                    aVarName;
-    vector<OUString>                    aUserName;
-    vector<OUString>                    aSeqName;
-    vector<OUString>                    aDdeName;
+    std::vector<OUString>                    aVarName;
+    std::vector<OUString>                    aUserName;
+    std::vector<OUString>                    aSeqName;
+    std::vector<OUString>                    aDdeName;
 
     // get text fields supplier and field master name access
     Reference<XTextFieldsSupplier> xTextFieldsSupp(GetExport().GetModel(),
@@ -1929,7 +1928,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                    "written out separately" );
         if (nullptr != pUsedMasters)
         {
-            map<Reference<XText>, set<OUString> > ::iterator aMapIter =
+            std::map<Reference<XText>, std::set<OUString> > ::iterator aMapIter =
                 pUsedMasters->find(rText);
             if (aMapIter != pUsedMasters->end())
             {
@@ -2199,7 +2198,7 @@ void XMLTextFieldExport::SetExportOnlyUsedFieldDeclarations(
 
     // create used masters set (if none is used)
     if (bExportOnlyUsed)
-        pUsedMasters.reset( new map<Reference<XText>, set<OUString> > );
+        pUsedMasters.reset( new std::map<Reference<XText>, std::set<OUString> > );
 }
 
 void XMLTextFieldExport::ExportElement(enum XMLTokenEnum eElementName,

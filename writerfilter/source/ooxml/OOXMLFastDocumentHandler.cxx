@@ -26,7 +26,6 @@
 namespace writerfilter::ooxml
 {
 using namespace ::com::sun::star;
-using namespace ::std;
 
 
 OOXMLFastDocumentHandler::OOXMLFastDocumentHandler(

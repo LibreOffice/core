@@ -74,7 +74,6 @@
 
 using ::com::sun::star::ucb::XAnyCompare;
 
-using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -340,8 +339,8 @@ namespace
     class FieldParamImporter
     {
         public:
-            typedef pair<OUString,OUString> field_param_t;
-            typedef vector<field_param_t> field_params_t;
+            typedef std::pair<OUString,OUString> field_param_t;
+            typedef std::vector<field_param_t> field_params_t;
             FieldParamImporter(const field_params_t* const pInParams, Reference<XNameContainer> const & xOutParams)
                 : m_pInParams(pInParams)
                 , m_xOutParams(xOutParams)

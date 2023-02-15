@@ -32,7 +32,6 @@
 
 #include <algorithm>
 
-using namespace ::std;
 using namespace ::utl;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;

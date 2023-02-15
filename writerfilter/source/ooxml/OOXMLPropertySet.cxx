@@ -29,7 +29,6 @@
 
 namespace writerfilter::ooxml
 {
-using namespace ::std;
 using namespace com::sun::star;
 
 OOXMLProperty::OOXMLProperty(Id id, OOXMLValue::Pointer_t pValue,
@@ -70,9 +69,9 @@ writerfilter::Reference<Properties>::Pointer_t OOXMLProperty::getProps()
 }
 
 #ifdef DBG_UTIL
-string OOXMLProperty::getName() const
+std::string OOXMLProperty::getName() const
 {
-    string sResult(QNameToString(mId));
+    std::string sResult(QNameToString(mId));
 
     if (sResult.length() == 0)
         sResult = fastTokenToId(mId);
@@ -90,9 +89,9 @@ string OOXMLProperty::getName() const
 #endif
 
 #ifdef DBG_UTIL
-string OOXMLProperty::toString() const
+std::string OOXMLProperty::toString() const
 {
-    string sResult = "(";
+    std::string sResult = "(";
 
     sResult += getName();
     sResult += ", ";
@@ -158,7 +157,7 @@ writerfilter::Reference<BinaryObj>::Pointer_t OOXMLValue::getBinary()
 }
 
 #ifdef DBG_UTIL
-string OOXMLValue::toString() const
+std::string OOXMLValue::toString() const
 {
     return "OOXMLValue";
 }
@@ -188,7 +187,7 @@ writerfilter::Reference<BinaryObj>::Pointer_t OOXMLBinaryValue::getBinary()
 }
 
 #ifdef DBG_UTIL
-string OOXMLBinaryValue::toString() const
+std::string OOXMLBinaryValue::toString() const
 {
     return "BinaryObj";
 }
@@ -245,7 +244,7 @@ uno::Any OOXMLBooleanValue::getAny() const
 }
 
 #ifdef DBG_UTIL
-string OOXMLBooleanValue::toString() const
+std::string OOXMLBooleanValue::toString() const
 {
     return mbValue ? "true" : "false";
 }
@@ -280,7 +279,7 @@ OUString OOXMLStringValue::getString() const
 }
 
 #ifdef DBG_UTIL
-string OOXMLStringValue::toString() const
+std::string OOXMLStringValue::toString() const
 {
     return OUStringToOString(mStr, RTL_TEXTENCODING_ASCII_US).getStr();
 }
@@ -309,7 +308,7 @@ uno::Any OOXMLInputStreamValue::getAny() const
 }
 
 #ifdef DBG_UTIL
-string OOXMLInputStreamValue::toString() const
+std::string OOXMLInputStreamValue::toString() const
 {
     return "InputStream";
 }
@@ -399,9 +398,9 @@ OOXMLPropertySet * OOXMLPropertySet::clone() const
 }
 
 #ifdef DBG_UTIL
-string OOXMLPropertySet::toString()
+std::string OOXMLPropertySet::toString()
 {
-    string sResult = "[";
+    std::string sResult = "[";
     char sBuffer[256];
     snprintf(sBuffer, sizeof(sBuffer), "%p", this);
     sResult += sBuffer;
@@ -447,13 +446,13 @@ writerfilter::Reference<Properties>::Pointer_t OOXMLPropertySetValue::getPropert
 }
 
 #ifdef DBG_UTIL
-string OOXMLPropertySetValue::toString() const
+std::string OOXMLPropertySetValue::toString() const
 {
     char sBuffer[256];
 
     snprintf(sBuffer, sizeof(sBuffer), "t:%p, m:%p", this, mpPropertySet.get());
 
-    return "OOXMLPropertySetValue(" + string(sBuffer) + ")";
+    return "OOXMLPropertySetValue(" + std::string(sBuffer) + ")";
 }
 #endif
 
@@ -523,7 +522,7 @@ OOXMLValue * OOXMLIntegerValue::clone() const
 }
 
 #ifdef DBG_UTIL
-string OOXMLIntegerValue::toString() const
+std::string OOXMLIntegerValue::toString() const
 {
     char buffer[256];
     snprintf(buffer, sizeof(buffer), "%" SAL_PRIdINT32, mnValue);
@@ -561,7 +560,7 @@ OOXMLValue * OOXMLHexValue::clone() const
 }
 
 #ifdef DBG_UTIL
-string OOXMLHexValue::toString() const
+std::string OOXMLHexValue::toString() const
 {
     char buffer[256];
     snprintf(buffer, sizeof(buffer), "0x%" SAL_PRIxUINT32, mnValue);
@@ -649,7 +648,7 @@ int OOXMLUniversalMeasureValue::getInt() const
 }
 
 #ifdef DBG_UTIL
-string OOXMLUniversalMeasureValue::toString() const
+std::string OOXMLUniversalMeasureValue::toString() const
 {
     return OString::number(mnValue).getStr();
 }
@@ -679,7 +678,7 @@ int OOXMLMeasurementOrPercentValue::getInt() const
 }
 
 #ifdef DBG_UTIL
-string OOXMLMeasurementOrPercentValue::toString() const
+std::string OOXMLMeasurementOrPercentValue::toString() const
 {
     return OString::number(mnValue).getStr();
 }
@@ -705,7 +704,7 @@ uno::Any OOXMLShapeValue::getAny() const
 }
 
 #ifdef DBG_UTIL
-string OOXMLShapeValue::toString() const
+std::string OOXMLShapeValue::toString() const
 {
     return "Shape";
 }
@@ -736,7 +735,7 @@ uno::Any OOXMLStarMathValue::getAny() const
 }
 
 #ifdef DBG_UTIL
-string OOXMLStarMathValue::toString() const
+std::string OOXMLStarMathValue::toString() const
 {
     return "StarMath";
 }

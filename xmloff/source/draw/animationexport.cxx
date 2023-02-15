@@ -71,7 +71,6 @@
 #include <xmloff/animationexport.hxx>
 
 using namespace css;
-using namespace ::std;
 using namespace ::cppu;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;

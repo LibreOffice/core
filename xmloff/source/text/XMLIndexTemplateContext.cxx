@@ -40,7 +40,6 @@
 
 #include <algorithm>
 
-using namespace ::std;
 using namespace ::xmloff::token;
 
 using ::com::sun::star::beans::XPropertySet;

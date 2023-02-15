@@ -35,7 +35,6 @@
 
 #include <XMLStringBufferImportContext.hxx>
 
-using namespace ::std;
 using namespace ::cppu;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;

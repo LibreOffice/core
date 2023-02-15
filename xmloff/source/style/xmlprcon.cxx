@@ -27,13 +27,12 @@
 #include <xmloff/xmlprmap.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::std;
 
 SvXMLPropertySetContext::SvXMLPropertySetContext(
     SvXMLImport& rImp, sal_Int32 /*nElement*/,
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
     sal_uInt32 nFam,
-    vector< XMLPropertyState > &rProps,
+    std::vector< XMLPropertyState > &rProps,
     rtl::Reference < SvXMLImportPropertyMapper > xMap,
     sal_Int32 nSIdx, sal_Int32 nEIdx )
 :   SvXMLImportContext( rImp )

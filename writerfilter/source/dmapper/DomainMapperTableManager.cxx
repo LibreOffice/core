@@ -36,7 +36,6 @@
 namespace writerfilter::dmapper {
 
 using namespace ::com::sun::star;
-using namespace ::std;
 
 DomainMapperTableManager::DomainMapperTableManager() :
     m_nRow(0),
@@ -108,7 +107,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
 {
 #ifdef DBG_UTIL
     TagLogger::getInstance().startElement("tablemanager.sprm");
-    string sSprm = rSprm.toString();
+    std::string sSprm = rSprm.toString();
     TagLogger::getInstance().chars(sSprm);
     TagLogger::getInstance().endElement();
 #endif
@@ -441,8 +440,8 @@ void DomainMapperTableManager::startLevel( )
         m_aParagraphsToEndTable.top()->pop_back();
     }
 
-    IntVectorPtr pNewGrid = std::make_shared<vector<sal_Int32>>();
-    IntVectorPtr pNewCellWidths = std::make_shared<vector<sal_Int32>>();
+    IntVectorPtr pNewGrid = std::make_shared<std::vector<sal_Int32>>();
+    IntVectorPtr pNewCellWidths = std::make_shared<std::vector<sal_Int32>>();
     TablePositionHandlerPtr pNewPositionHandler;
     m_aTableGrid.push_back( pNewGrid );
     m_aCellWidths.push_back( pNewCellWidths );
@@ -458,7 +457,7 @@ void DomainMapperTableManager::startLevel( )
     m_nCell.push_back( 0 );
     m_nTableWidth = 0;
     m_nLayoutType = 0;
-    TableParagraphVectorPtr pNewParagraphs = std::make_shared<vector<TableParagraph>>();
+    TableParagraphVectorPtr pNewParagraphs = std::make_shared<std::vector<TableParagraph>>();
     m_aParagraphsToEndTable.push( pNewParagraphs );
 
     // And push it back to the right level.

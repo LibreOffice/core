@@ -46,7 +46,6 @@
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmlprhdl.hxx>
 
-using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
@@ -167,7 +166,7 @@ public:
     void AddProperty(const OUString& rApiName, const sal_uInt32 nIndex);
     const uno::Sequence<OUString>& GetApiNames();
     void FillPropertyStateArray(
-            vector< XMLPropertyState >& rPropStates,
+            std::vector< XMLPropertyState >& rPropStates,
             const Reference< XPropertySet >& xPropSet,
             const rtl::Reference< XMLPropertySetMapper >& maPropMapper,
             const bool bDefault,
@@ -247,7 +246,7 @@ const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
 }
 
 void FilterPropertiesInfo_Impl::FillPropertyStateArray(
-        vector< XMLPropertyState >& rPropStates,
+        std::vector< XMLPropertyState >& rPropStates,
         const Reference< XPropertySet >& rPropSet,
         const rtl::Reference< XMLPropertySetMapper >& rPropMapper,
         const bool bDefault,
@@ -532,12 +531,12 @@ std::vector<XMLPropertyState> SvXMLExportPropertyMapper::FilterDefaults(
     return Filter_(rExport, rPropSet, true, false/*bEnableFoFontFamily*/, nullptr);
 }
 
-vector<XMLPropertyState> SvXMLExportPropertyMapper::Filter_(
+std::vector<XMLPropertyState> SvXMLExportPropertyMapper::Filter_(
     SvXMLExport const& rExport,
     const Reference<XPropertySet>& xPropSet, bool bDefault, bool bEnableFoFontFamily,
     const uno::Sequence<OUString>* pOnlyTheseProps ) const
 {
-    vector< XMLPropertyState > aPropStateArray;
+    std::vector< XMLPropertyState > aPropStateArray;
 
     // Retrieve XPropertySetInfo and XPropertyState
     Reference< XPropertySetInfo > xInfo( xPropSet->getPropertySetInfo() );
@@ -671,7 +670,7 @@ vector<XMLPropertyState> SvXMLExportPropertyMapper::Filter_(
 
 void SvXMLExportPropertyMapper::ContextFilter(
         bool bEnableFoFontFamily,
-        vector< XMLPropertyState >& rProperties,
+        std::vector< XMLPropertyState >& rProperties,
         const Reference< XPropertySet >& rPropSet ) const
 {
     // Derived class could implement this.
@@ -684,8 +683,8 @@ void SvXMLExportPropertyMapper::ContextFilter(
 //  2.Index of each element equal ? (So I know whether the propertynames are the same)
 //  3.Value of each element equal ?
 bool SvXMLExportPropertyMapper::Equals(
-        const vector< XMLPropertyState >& aProperties1,
-        const vector< XMLPropertyState >& aProperties2 ) const
+        const std::vector< XMLPropertyState >& aProperties1,
+        const std::vector< XMLPropertyState >& aProperties2 ) const
 {
     if (aProperties1.size() < aProperties2.size())
         return true;
@@ -734,8 +733,8 @@ bool SvXMLExportPropertyMapper::Equals(
 //  2.Index of each element equal ? (So I know whether the propertynames are the same)
 //  3.Value of each element equal ?
 bool SvXMLExportPropertyMapper::LessPartial(
-        const vector< XMLPropertyState >& aProperties1,
-        const vector< XMLPropertyState >& aProperties2 ) const
+        const std::vector< XMLPropertyState >& aProperties1,
+        const std::vector< XMLPropertyState >& aProperties2 ) const
 {
     if (aProperties1.size() < aProperties2.size())
         return true;
