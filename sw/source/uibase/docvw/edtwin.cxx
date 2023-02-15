@@ -6345,11 +6345,11 @@ void QuickHelpData::FillStrArr( SwWrtShell const & rSh, const OUString& rWord )
         }
     }
 
-    salhelper::SingletonRef<SwCalendarWrapper>* pCalendar = s_getCalendarWrapper();
-    (*pCalendar)->LoadDefaultCalendar( rSh.GetCurLang() );
+    SwCalendarWrapper& rCalendar = s_getCalendarWrapper();
+    rCalendar.LoadDefaultCalendar( rSh.GetCurLang() );
 
     // Add matching calendar month and day names
-    for ( const auto& aNames : { (*pCalendar)->getMonths(), (*pCalendar)->getDays() } )
+    for ( const auto& aNames : { rCalendar.getMonths(), rCalendar.getDays() } )
     {
         for ( const auto& rName : aNames )
         {

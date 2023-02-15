@@ -24,11 +24,6 @@
 #include <unotools/calendarwrapper.hxx>
 #include <comphelper/processfactory.hxx>
 
-namespace salhelper
-{
-template <typename> class SingletonRef;
-}
-
 class SwCalendarWrapper : public CalendarWrapper
 {
     LanguageType m_nLang;
@@ -41,7 +36,7 @@ public:
     void LoadDefaultCalendar( LanguageType nLang );
 };
 
-salhelper::SingletonRef<SwCalendarWrapper>* s_getCalendarWrapper();
+SwCalendarWrapper& s_getCalendarWrapper();
 
 #endif
 

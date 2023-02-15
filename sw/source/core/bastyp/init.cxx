@@ -441,10 +441,10 @@ static CharClass* pAppCharClass = nullptr;
 static CollatorWrapper* pCollator = nullptr,
                 *pCaseCollator = nullptr;
 
-salhelper::SingletonRef<SwCalendarWrapper>* s_getCalendarWrapper()
+SwCalendarWrapper& s_getCalendarWrapper()
 {
-    static salhelper::SingletonRef<SwCalendarWrapper> aCalendarWrapper;
-    return &aCalendarWrapper;
+    static SwCalendarWrapper aCalendarWrapper;
+    return aCalendarWrapper;
 }
 
 void InitCore()
