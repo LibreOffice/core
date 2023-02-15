@@ -493,9 +493,12 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest const & rReq )
             // was open
             if (pFrame && SfxApplication::IsTipOfTheDayDue() && !SfxApplication::IsHeadlessOrUITest())
             {
-                // tdf#127946 pass in argument for dialog parent
-                SfxUnoFrameItem aDocFrame(SID_FILLFRAME, pFrame->GetFrameInterface());
-                GetDispatcher()->ExecuteList(SID_TIPOFTHEDAY, SfxCallMode::SLOT, {}, { &aDocFrame });
+                if (SfxDispatcher* pDispatcher = GetDispatcher())
+                {
+                    // tdf#127946 pass in argument for dialog parent
+                    SfxUnoFrameItem aDocFrame(SID_FILLFRAME, pFrame->GetFrameInterface());
+                    pDispatcher->ExecuteList(SID_TIPOFTHEDAY, SfxCallMode::SLOT, {}, { &aDocFrame });
+                }
             }
         }
     }
