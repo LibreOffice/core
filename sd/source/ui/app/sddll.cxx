@@ -91,12 +91,24 @@ void SdDLL::RegisterFactorys()
     {
         ::sd::ImpressViewShellBase::RegisterFactory (
             ::sd::IMPRESS_FACTORY_ID);
-        ::sd::SlideSorterViewShellBase::RegisterFactory (
-            ::sd::SLIDE_SORTER_FACTORY_ID);
-        ::sd::OutlineViewShellBase::RegisterFactory (
-            ::sd::OUTLINE_FACTORY_ID);
-        ::sd::PresentationViewShellBase::RegisterFactory (
-            ::sd::PRESENTATION_FACTORY_ID);
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            ::sd::ImpressViewShellBase::RegisterFactory (
+                ::sd::SLIDE_SORTER_FACTORY_ID);
+            ::sd::ImpressViewShellBase::RegisterFactory (
+                ::sd::OUTLINE_FACTORY_ID);
+            ::sd::ImpressViewShellBase::RegisterFactory (
+                ::sd::PRESENTATION_FACTORY_ID);
+        }
+        else
+        {
+            ::sd::SlideSorterViewShellBase::RegisterFactory (
+                ::sd::SLIDE_SORTER_FACTORY_ID);
+            ::sd::OutlineViewShellBase::RegisterFactory (
+                ::sd::OUTLINE_FACTORY_ID);
+            ::sd::PresentationViewShellBase::RegisterFactory (
+                ::sd::PRESENTATION_FACTORY_ID);
+        }
     }
     if (!utl::ConfigManager::IsFuzzing() && SvtModuleOptions().IsDraw())
     {
