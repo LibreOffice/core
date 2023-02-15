@@ -4769,8 +4769,12 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
                     const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
                     const SwFrameFormat * pFrameFormat = pTabBox->GetFrameFormat();
                     const SvxBoxItem& rBox = pFrameFormat->GetBox( );
-                    sal_uInt16 nLeftDistance = rBox.GetDistance(SvxBoxItemLine::LEFT);
-                    nValue += nLeftDistance;
+                    sal_Int32 nMode = lcl_getWordCompatibilityMode(m_rExport);
+                    if (nMode < 15)
+                    {
+                        sal_uInt16 nLeftDistance = rBox.GetDistance(SvxBoxItemLine::LEFT);
+                        nValue += nLeftDistance;
+                    }
 
                     // 2nd: if a left border is given, revert the shift by half the width
                     // from lcl_DecrementHoriOrientPosition() in writerfilter
