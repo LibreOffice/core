@@ -198,7 +198,6 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
     SwWrtShell *pSh = GetWrtShell();
     if (!pSh)
         pSh = ::GetActiveWrtShell();
-
     if (!pSh)
         return;
 
@@ -490,8 +489,11 @@ void SwFieldRefPage::SubTypeHdl()
 void SwFieldRefPage::UpdateSubType(const OUString& filterString)
 {
     SwWrtShell *pSh = GetWrtShell();
-    if(!pSh)
+    if (!pSh)
         pSh = ::GetActiveWrtShell();
+    if (!pSh)
+        return;
+
     SwGetRefField const*const pRefField(dynamic_cast<SwGetRefField*>(GetCurField()));
     const sal_uInt16 nTypeId = m_xTypeLB->get_id(GetTypeSel()).toUInt32();
 
@@ -980,13 +982,12 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
 
     SwGetRefField const*const pRefField(dynamic_cast<SwGetRefField*>(GetCurField()));
 
-    if (REFFLDFLAG & nTypeId)
+    SwWrtShell *pSh = GetWrtShell();
+    if(!pSh)
+        pSh = ::GetActiveWrtShell();
+
+    if (pSh && REFFLDFLAG & nTypeId)
     {
-        SwWrtShell *pSh = GetWrtShell();
-        if(!pSh)
-        {
-            pSh = ::GetActiveWrtShell();
-        }
         if (nTypeId == REFFLDFLAG_BOOKMARK)     // text marks!
         {
             aName = m_xNameED->get_text();
