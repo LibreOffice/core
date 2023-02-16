@@ -29,7 +29,7 @@
 #include <com/sun/star/util/NotLockedException.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/flagguard.hxx>
 #include <comphelper/asyncnotification.hxx>
@@ -202,13 +202,13 @@ namespace framework
     private:
         ::osl::Mutex                        m_aMutex;
         /// Use different mutex for listeners to prevent ABBA deadlocks
-        ::osl::Mutex                        m_aListenerMutex;
+        std::mutex                          m_aListenerMutex;
         std::mutex                          m_aQueueMutex;
         bool                                m_bAPIActionRunning;
         bool                                m_bProcessingEvents;
         sal_Int32                           m_nLockCount;
-        ::comphelper::OInterfaceContainerHelper3<XUndoManagerListener>   m_aUndoListeners;
-        ::comphelper::OInterfaceContainerHelper3<XModifyListener>   m_aModifyListeners;
+        ::comphelper::OInterfaceContainerHelper4<XUndoManagerListener>   m_aUndoListeners;
+        ::comphelper::OInterfaceContainerHelper4<XModifyListener>   m_aModifyListeners;
         IUndoManagerImplementation&         m_rUndoManagerImplementation;
         ::std::stack< bool >                m_aContextVisibilities;
 #if OSL_DEBUG_LEVEL > 0
@@ -226,8 +226,6 @@ namespace framework
             :m_bAPIActionRunning( false )
             ,m_bProcessingEvents( false )
             ,m_nLockCount( 0 )
-            ,m_aUndoListeners( m_aListenerMutex )
-            ,m_aModifyListeners( m_aListenerMutex )
             ,m_rUndoManagerImplementation( i_undoManagerImpl )
         {
             getUndoManager().AddUndoListener( *this );
@@ -275,22 +273,26 @@ namespace framework
 
         void addUndoManagerListener( const Reference< XUndoManagerListener >& i_listener )
         {
-            m_aUndoListeners.addInterface( i_listener );
+            std::unique_lock g(m_aListenerMutex);
+            m_aUndoListeners.addInterface( g, i_listener );
         }
 
         void removeUndoManagerListener( const Reference< XUndoManagerListener >& i_listener )
         {
-            m_aUndoListeners.removeInterface( i_listener );
+            std::unique_lock g(m_aListenerMutex);
+            m_aUndoListeners.removeInterface( g, i_listener );
         }
 
         void addModifyListener( const Reference< XModifyListener >& i_listener )
         {
-            m_aModifyListeners.addInterface( i_listener );
+            std::unique_lock g(m_aListenerMutex);
+            m_aModifyListeners.addInterface( g, i_listener );
         }
 
         void removeModifyListener( const Reference< XModifyListener >& i_listener )
         {
-            m_aModifyListeners.removeInterface( i_listener );
+            std::unique_lock g(m_aListenerMutex);
+            m_aModifyListeners.removeInterface( g, i_listener );
         }
 
         UndoManagerEvent
@@ -320,9 +322,11 @@ namespace framework
     {
         EventObject aEvent;
         aEvent.Source = getXUndoManager();
-        m_aUndoListeners.disposeAndClear( aEvent );
-        m_aModifyListeners.disposeAndClear( aEvent );
-
+        {
+            std::unique_lock g(m_aListenerMutex);
+            m_aUndoListeners.disposeAndClear( g, aEvent );
+            m_aModifyListeners.disposeAndClear( g, aEvent );
+        }
         ::osl::MutexGuard aGuard( m_aMutex );
 
         getUndoManager().RemoveUndoListener( *this );
@@ -340,7 +344,8 @@ namespace framework
     void UndoManagerHelper_Impl::impl_notifyModified()
     {
         const EventObject aEvent( getXUndoManager() );
-        m_aModifyListeners.notifyEach( &XModifyListener::modified, aEvent );
+        std::unique_lock g(m_aListenerMutex);
+        m_aModifyListeners.notifyEach( g, &XModifyListener::modified, aEvent );
     }
 
     void UndoManagerHelper_Impl::notify( OUString const& i_title,
@@ -354,7 +359,10 @@ namespace framework
         // Fixing this properly would require outsourcing all the notifications into an own thread - which might lead
         // to problems of its own, since clients might expect synchronous notifications.
 
-        m_aUndoListeners.notifyEach( i_notificationMethod, aEvent );
+        {
+            std::unique_lock g(m_aListenerMutex);
+            m_aUndoListeners.notifyEach( g, i_notificationMethod, aEvent );
+        }
         impl_notifyModified();
     }
 
@@ -363,8 +371,10 @@ namespace framework
         const EventObject aEvent( getXUndoManager() );
 
         // TODO: the same comment as in the other notify, regarding SM locking applies here ...
-
-        m_aUndoListeners.notifyEach( i_notificationMethod, aEvent );
+        {
+            std::unique_lock g(m_aListenerMutex);
+            m_aUndoListeners.notifyEach( g, i_notificationMethod, aEvent );
+        }
         impl_notifyModified();
     }
 
@@ -540,7 +550,10 @@ namespace framework
         aGuard.clear();
         // <--- SYNCHRONIZED
 
-        m_aUndoListeners.notifyEach( i_hidden ? &XUndoManagerListener::enteredHiddenContext : &XUndoManagerListener::enteredContext, aEvent );
+        {
+            std::unique_lock g(m_aListenerMutex);
+            m_aUndoListeners.notifyEach( g, i_hidden ? &XUndoManagerListener::enteredHiddenContext : &XUndoManagerListener::enteredContext, aEvent );
+        }
         impl_notifyModified();
     }
 
@@ -597,9 +610,12 @@ namespace framework
         aGuard.clear();
         // <--- SYNCHRONIZED
 
-        if ( bHadRedoActions && !bHasRedoActions )
-            m_aUndoListeners.notifyEach( &XUndoManagerListener::redoActionsCleared, aClearedEvent );
-        m_aUndoListeners.notifyEach( notificationMethod, aContextEvent );
+        {
+            std::unique_lock g(m_aListenerMutex);
+            if ( bHadRedoActions && !bHasRedoActions )
+                m_aUndoListeners.notifyEach( g, &XUndoManagerListener::redoActionsCleared, aClearedEvent );
+            m_aUndoListeners.notifyEach( g, notificationMethod, aContextEvent );
+        }
         impl_notifyModified();
     }
 
@@ -673,9 +689,12 @@ namespace framework
         aGuard.clear();
         // <--- SYNCHRONIZED
 
-        m_aUndoListeners.notifyEach( &XUndoManagerListener::undoActionAdded, aEventAdd );
-        if ( bHadRedoActions && !bHasRedoActions )
-            m_aUndoListeners.notifyEach( &XUndoManagerListener::redoActionsCleared, aEventClear );
+        {
+            std::unique_lock g(m_aListenerMutex);
+            m_aUndoListeners.notifyEach( g, &XUndoManagerListener::undoActionAdded, aEventAdd );
+            if ( bHadRedoActions && !bHasRedoActions )
+                m_aUndoListeners.notifyEach( g, &XUndoManagerListener::redoActionsCleared, aEventClear );
+        }
         impl_notifyModified();
     }
 
@@ -698,7 +717,10 @@ namespace framework
             aEvent = EventObject( getXUndoManager() );
         }
 
-        m_aUndoListeners.notifyEach( &XUndoManagerListener::allActionsCleared, aEvent );
+        {
+            std::unique_lock g(m_aListenerMutex);
+            m_aUndoListeners.notifyEach( g, &XUndoManagerListener::allActionsCleared, aEvent );
+        }
         impl_notifyModified();
     }
 
@@ -720,7 +742,10 @@ namespace framework
         aGuard.clear();
         // <--- SYNCHRONIZED
 
-        m_aUndoListeners.notifyEach( &XUndoManagerListener::redoActionsCleared, aEvent );
+        {
+            std::unique_lock g(m_aListenerMutex);
+            m_aUndoListeners.notifyEach( g, &XUndoManagerListener::redoActionsCleared, aEvent );
+        }
         impl_notifyModified();
     }
 
@@ -739,7 +764,10 @@ namespace framework
         aGuard.clear();
         // <--- SYNCHRONIZED
 
-        m_aUndoListeners.notifyEach( &XUndoManagerListener::resetAll, aEvent );
+        {
+            std::unique_lock g(m_aListenerMutex);
+            m_aUndoListeners.notifyEach( g, &XUndoManagerListener::resetAll, aEvent );
+        }
         impl_notifyModified();
     }
 
@@ -749,7 +777,10 @@ namespace framework
         aEvent.Source = getXUndoManager();
         aEvent.UndoActionTitle = i_actionComment;
         aEvent.UndoContextDepth = 0;    // Undo can happen on level 0 only
-        m_aUndoListeners.notifyEach( &XUndoManagerListener::actionUndone, aEvent );
+        {
+            std::unique_lock g(m_aListenerMutex);
+            m_aUndoListeners.notifyEach( g, &XUndoManagerListener::actionUndone, aEvent );
+        }
         impl_notifyModified();
     }
 
@@ -759,7 +790,10 @@ namespace framework
         aEvent.Source = getXUndoManager();
         aEvent.UndoActionTitle = i_actionComment;
         aEvent.UndoContextDepth = 0;    // Redo can happen on level 0 only
-        m_aUndoListeners.notifyEach( &XUndoManagerListener::actionRedone, aEvent );
+        {
+            std::unique_lock g(m_aListenerMutex);
+            m_aUndoListeners.notifyEach( g, &XUndoManagerListener::actionRedone, aEvent );
+        }
         impl_notifyModified();
     }
 
