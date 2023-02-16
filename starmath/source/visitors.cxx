@@ -2305,11 +2305,11 @@ void SmNodeToTextVisitor::Visit( SmBinVerNode* pNode )
     } else{
         SmNode *pNum    = pNode->GetSubNode( 0 ),
                *pDenom  = pNode->GetSubNode( 2 );
-        Append(u"frac {");
+        Append(u"{ frac {");
         LineToText( pNum );
         Append(u"} {");
         LineToText( pDenom );
-        Append(u"}");
+        Append(u"} }");
     }
 }
 

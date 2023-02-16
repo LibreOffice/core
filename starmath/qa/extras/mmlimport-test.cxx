@@ -160,17 +160,19 @@ void Test::testtdf99556()
 void Test::testTdf103430()
 {
     loadURL(m_directories.getURLFromSrc(u"starmath/qa/extras/data/tdf103430.mml"));
-    CPPUNIT_ASSERT_EQUAL(OUString("frac { { nitalic d ^ 2 nitalic color blue y } } { { color dvip "
-                                  "apricot nitalic d font sans bold italic color red x } }"),
-                         mxDocShell->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("{ frac { { nitalic d ^ 2 nitalic color blue y } } { { color dvip "
+                 "apricot nitalic d font sans bold italic color red x } } }"),
+        mxDocShell->GetText());
 }
 
 void Test::testTdf103500()
 {
     loadURL(m_directories.getURLFromSrc(u"starmath/qa/extras/data/tdf103500.mml"));
-    CPPUNIT_ASSERT_EQUAL(OUString("{ { int csup b csub a { frac { 1 } { x } ` nitalic d x } } = { "
-                                  "intd csup b csub a { frac { 1 } { y } ` nitalic d y } } }"),
-                         mxDocShell->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("{ { int csup b csub a { { frac { 1 } { x } } ` nitalic d x } } = { "
+                 "intd csup b csub a { { frac { 1 } { y } } ` nitalic d y } } }"),
+        mxDocShell->GetText());
 }
 
 void Test::testTdf137008()
@@ -200,7 +202,7 @@ void Test::testMathmlEntities()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
-}
+} // namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

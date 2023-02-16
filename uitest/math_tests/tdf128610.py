@@ -27,6 +27,6 @@ class Tdf128610(UITestCase):
 
             # Without the fix in place, this test would have failed with
             # AssertionError: '{ f _ c = frac { 1 } { K _ m } }' != ''
-            self.assertEqual("{ f _ c = frac { 1 } { K _ m } }", get_state_as_dict(xEditView)["Text"])
+            self.assertEqual("{ f _ c = { frac { 1 } { K _ m } } }", get_state_as_dict(xEditView)["Text"])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
