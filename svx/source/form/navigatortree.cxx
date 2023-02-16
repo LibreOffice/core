@@ -1676,7 +1676,7 @@ namespace svxform
             if ( pCurrent->GetChildList()->size() )
                 continue;
 
-            // one remaining subtile problem, before deleting it : if it's a form and the shell
+            // one remaining subtle problem, before deleting it : if it's a form and the shell
             // knows it as CurrentObject, I have to tell it something else
             if (auto pFormData = dynamic_cast<FmFormData*>( pCurrent))
             {
