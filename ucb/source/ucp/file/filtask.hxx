@@ -46,6 +46,7 @@
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include "filerror.hxx"
 #include "filnot.hxx"
+#include <mutex>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -148,7 +149,7 @@ namespace fileaccess
         typedef std::unordered_map< sal_Int32,TaskHandling > TaskMap;
     private:
 
-        osl::Mutex                                                         m_aMutex;
+        std::mutex                                                          m_aMutex;
         sal_Int32                                                           m_nCommandId;
         TaskMap                                                             m_aTaskMap;
 
@@ -479,6 +480,8 @@ namespace fileaccess
 
     private:
 
+        void insertDefaultProperties( std::unique_lock<std::mutex>& rGuard, const OUString& aUnqPath );
+
         /********************************************************************************/
         /*                              get eventListeners                              */
         /********************************************************************************/
@@ -578,6 +581,7 @@ namespace fileaccess
 
         void
         commit(
+            std::unique_lock<std::mutex>& rGuard,
             const TaskManager::ContentMap::iterator& it,
             const osl::FileStatus& aFileStatus );
 

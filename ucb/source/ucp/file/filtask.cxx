@@ -368,7 +368,7 @@ TaskManager::startTask(
     sal_Int32 CommandId,
     const uno::Reference< XCommandEnvironment >& xCommandEnv )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
     if( it != m_aTaskMap.end() )
     {
@@ -383,7 +383,7 @@ TaskManager::endTask( sal_Int32 CommandId,
                       const OUString& aUncPath,
                       BaseContent* pContent)
 {
-    osl::ClearableMutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
     if( it == m_aTaskMap.end() )
         return;
@@ -397,7 +397,7 @@ TaskManager::endTask( sal_Int32 CommandId,
 
     m_aTaskMap.erase( it );
 
-    aGuard.clear();
+    aGuard.unlock();
 
     if( ErrorCode != TASKHANDLER_NO_ERROR )
         throw_handler(
@@ -412,7 +412,7 @@ TaskManager::endTask( sal_Int32 CommandId,
 
 void TaskManager::clearError( sal_Int32 CommandId )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
     if( it != m_aTaskMap.end() )
         it->second.clearError();
@@ -423,7 +423,7 @@ void TaskManager::retrieveError( sal_Int32 CommandId,
                                           sal_Int32 &ErrorCode,
                                           sal_Int32 &minorCode)
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
     if( it != m_aTaskMap.end() )
     {
@@ -437,7 +437,7 @@ void TaskManager::installError( sal_Int32 CommandId,
                                          sal_Int32 ErrorCode,
                                          sal_Int32 MinorCode )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
     if( it != m_aTaskMap.end() )
         it->second.installError( ErrorCode,MinorCode );
@@ -447,7 +447,7 @@ void TaskManager::installError( sal_Int32 CommandId,
 sal_Int32
 TaskManager::getCommandId()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     return ++m_nCommandId;
 }
 
@@ -456,7 +456,7 @@ void TaskManager::handleTask(
     sal_Int32 CommandId,
     const uno::Reference< task::XInteractionRequest >& request )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
     uno::Reference< task::XInteractionHandler > xInt;
     if( it != m_aTaskMap.end() )
@@ -482,7 +482,7 @@ void TaskManager::handleTask(
 void
 TaskManager::registerNotifier( const OUString& aUnqPath, Notifier* pNotifier )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     ContentMap::iterator it =
         m_aContent.emplace( aUnqPath, UnqPathData() ).first;
@@ -501,7 +501,7 @@ TaskManager::registerNotifier( const OUString& aUnqPath, Notifier* pNotifier )
 void
 TaskManager::deregisterNotifier( const OUString& aUnqPath,Notifier* pNotifier )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     ContentMap::iterator it = m_aContent.find( aUnqPath );
     if( it == m_aContent.end() )
@@ -544,7 +544,7 @@ TaskManager::associate( const OUString& aUnqPath,
         throw beans::PropertyExistException( THROW_WHERE );
 
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         ContentMap::iterator it = m_aContent.emplace( aUnqPath,UnqPathData() ).first;
 
@@ -574,11 +574,11 @@ TaskManager::deassociate( const OUString& aUnqPath,
     if( it1 != m_aDefaultProperties.end() )
         throw beans::NotRemoveableException( THROW_WHERE );
 
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     ContentMap::iterator it = m_aContent.emplace( aUnqPath,UnqPathData() ).first;
 
-    load( it,false );
+    load( it, false );
 
     PropertySet& properties = it->second.properties;
 
@@ -604,6 +604,7 @@ TaskManager::deassociate( const OUString& aUnqPath,
                 m_xFileRegistry->removePropertySet( aUnqPath );
         }
     }
+    aGuard.unlock();
     notifyPropertyRemoved( getPropertySetListeners( aUnqPath ), PropertyName );
 }
 
@@ -817,7 +818,7 @@ TaskManager::info_c()
 uno::Reference< beans::XPropertySetInfo >
 TaskManager::info_p( const OUString& aUnqPath )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     return new XPropertySetInfo_impl( this,aUnqPath );
 }
 
@@ -835,7 +836,7 @@ uno::Sequence< uno::Any >
 TaskManager::setv( const OUString& aUnqPath,
              const uno::Sequence< beans::PropertyValue >& values )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     sal_Int32 propChanged = 0;
     uno::Sequence< uno::Any > ret( values.getLength() );
@@ -880,7 +881,7 @@ TaskManager::setv( const OUString& aUnqPath,
         {
             // Also put logical properties into storage
             if( !it->second.xS.is() )
-                load( it,true );
+                load( it, true );
 
             if( ( values[i].Name == ContentType ) &&
                 it1->getState() == beans::PropertyState_DEFAULT_VALUE )
@@ -1045,10 +1046,11 @@ TaskManager::setv( const OUString& aUnqPath,
         }
     }   // end for
 
+    aGuard.unlock();
     if( propChanged )
     {
         seqChanged.realloc( propChanged );
-        notifyPropertyChanges( getPropertyChangeNotifier( aUnqPath ),seqChanged );
+        notifyPropertyChanges( getPropertyChangeNotifier( aUnqPath ), seqChanged );
     }
 
     return ret;
@@ -1090,10 +1092,10 @@ TaskManager::getv( sal_Int32 CommandId,
                      nError2);
 
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         TaskManager::ContentMap::iterator it = m_aContent.find( aUnqPath );
-        commit( it,aFileStatus );
+        commit( aGuard, it, aFileStatus );
 
         PropertySet& propset = it->second.properties;
 
@@ -1922,12 +1924,16 @@ TaskManager::write( sal_Int32 CommandId,
 
 void TaskManager::insertDefaultProperties( const OUString& aUnqPath )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard(m_aMutex);
+    insertDefaultProperties(aGuard, aUnqPath);
+}
 
+void TaskManager::insertDefaultProperties( std::unique_lock<std::mutex>& /*rGuard*/, const OUString& aUnqPath )
+{
     ContentMap::iterator it =
         m_aContent.emplace( aUnqPath,UnqPathData() ).first;
 
-    load( it,false );
+    load( it, false );
 
     MyProperty ContentTProperty( ContentType );
 
@@ -2241,7 +2247,8 @@ TaskManager::load( const ContentMap::iterator& it, bool create )
 
 
 void
-TaskManager::commit( const TaskManager::ContentMap::iterator& it,
+TaskManager::commit( std::unique_lock<std::mutex>& rGuard,
+               const TaskManager::ContentMap::iterator& it,
                const osl::FileStatus& aFileStatus )
 {
     TaskManager::PropertySet::const_iterator it1;
@@ -2249,7 +2256,7 @@ TaskManager::commit( const TaskManager::ContentMap::iterator& it,
     if( it->second.properties.empty() )
     {
         OUString aPath = it->first;
-        insertDefaultProperties( aPath );
+        insertDefaultProperties( rGuard, aPath );
     }
 
     PropertySet& properties = it->second.properties;
@@ -2511,12 +2518,13 @@ TaskManager::getv(
     else
         aIsRegular = aFileStatus.getFileType() == osl::FileStatus::Regular;
 
-    insertDefaultProperties( aUnqPath );
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
+
+        insertDefaultProperties( aGuard, aUnqPath );
 
         TaskManager::ContentMap::iterator it = m_aContent.find( aUnqPath );
-        commit( it,aFileStatus );
+        commit( aGuard, it, aFileStatus );
 
         PropertySet& propset = it->second.properties;
 
@@ -2543,7 +2551,7 @@ TaskManager::getContentEventListeners( const OUString& aName )
 {
     std::vector< ContentEventNotifier > listeners;
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         TaskManager::ContentMap::iterator it = m_aContent.find( aName );
         if( it != m_aContent.end() && !it->second.notifier.empty() )
         {
@@ -2565,7 +2573,7 @@ TaskManager::getContentDeletedEventListeners( const OUString& aName )
 {
     std::vector< ContentEventNotifier > listeners;
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         TaskManager::ContentMap::iterator it = m_aContent.find( aName );
         if( it != m_aContent.end() && !it->second.notifier.empty() )
         {
@@ -2614,7 +2622,7 @@ TaskManager::getPropertySetListeners( const OUString& aName )
 {
     std::vector< PropertySetInfoChangeNotifier > listeners;
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         TaskManager::ContentMap::iterator it = m_aContent.find( aName );
         if( it != m_aContent.end() && !it->second.notifier.empty() )
         {
@@ -2664,7 +2672,7 @@ TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
     std::vector< OUString > oldChildList;
 
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         if( ! withChildren )
         {
@@ -2676,7 +2684,7 @@ TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
         {
             for (auto const& content : m_aContent)
             {
-                if( isChild( aOldPrefix,content.first ) )
+                if( isChild( aOldPrefix, content.first ) )
                 {
                     oldChildList.push_back( content.first );
                 }
@@ -2749,7 +2757,7 @@ TaskManager::getPropertyChangeNotifier( const OUString& aName )
 {
     std::vector< PropertyChangeNotifier > listeners;
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         TaskManager::ContentMap::iterator it = m_aContent.find( aName );
         if( it != m_aContent.end() && !it->second.notifier.empty() )
         {
@@ -2785,7 +2793,7 @@ TaskManager::erasePersistentSetWithoutChildren( const OUString& aUnqPath )
 {
     {
         // Release possible references
-        osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         ContentMap::iterator it = m_aContent.find( aUnqPath );
         if( it != m_aContent.end() )
         {
