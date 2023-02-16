@@ -73,7 +73,7 @@ SwFieldDBPage::SwFieldDBPage(weld::Container* pPage, weld::DialogController* pCo
 SwFieldDBPage::~SwFieldDBPage()
 {
     // If we have no stored SwWrtShell, it means we didn't do anything useful - no need to revoke.
-    if (SwWrtShell* pSh = GetWrtShell())
+    if (SwWrtShell* pSh = CheckAndGetWrtShell())
     {
         // This would cleanup in the case of cancelled dialog
         SwDBManager* pDbManager = pSh->GetDoc()->GetDBManager();
@@ -140,8 +140,7 @@ void SwFieldDBPage::Reset(const SfxItemSet*)
         }
         else
         {
-            SwWrtShell *pSh = CheckAndGetWrtShell();
-            if(pSh)
+            if (SwWrtShell *pSh = CheckAndGetWrtShell())
             {
                 SwDBData aTmp(pSh->GetDBData());
                 m_xDatabaseTLB->Select(aTmp.sDataSource, aTmp.sCommand, u"");
@@ -197,15 +196,16 @@ bool SwFieldDBPage::FillItemSet(SfxItemSet* )
     aData.sDataSource = m_xDatabaseTLB->GetDBName(sTableName, sColumnName, &bIsTable);
     aData.sCommand = sTableName;
     aData.nCommandType = bIsTable ? 0 : 1;
-    SwWrtShell *pSh = CheckAndGetWrtShell();
-    assert(pSh);
 
-    SwDBManager* pDbManager = pSh->GetDoc()->GetDBManager();
-    if (pDbManager)
-        pDbManager->CommitLastRegistrations();
+    if (SwWrtShell *pSh = CheckAndGetWrtShell())
+    {
+        SwDBManager* pDbManager = pSh->GetDoc()->GetDBManager();
+        if (pDbManager)
+            pDbManager->CommitLastRegistrations();
 
-    if (aData.sDataSource.isEmpty())
-        aData = pSh->GetDBData();
+        if (aData.sDataSource.isEmpty())
+            aData = pSh->GetDBData();
+    }
 
     if(!aData.sDataSource.isEmpty())       // without database no new field command
     {
@@ -292,8 +292,6 @@ void SwFieldDBPage::TypeHdl(const weld::TreeView* pBox)
     if (nOld == GetTypeSel())
         return;
 
-    SwWrtShell *pSh = CheckAndGetWrtShell();
-    assert(pSh);
     bool bCond = false, bSetNo = false, bFormat = false, bDBFormat = false;
     const SwFieldTypesEnum nTypeId = static_cast<SwFieldTypesEnum>(m_xTypeLB->get_id(GetTypeSel()).toUInt32());
 
@@ -315,7 +313,8 @@ void SwFieldDBPage::TypeHdl(const weld::TreeView* pBox)
         {
             if (auto *const pField = dynamic_cast<SwDBNameInfField*>(GetCurField()))
             {
-                aData = pField->GetDBData(pSh->GetDoc());
+                if(SwWrtShell *pSh = CheckAndGetWrtShell())
+                    aData = pField->GetDBData(pSh->GetDoc());
             }
         }
         m_xDatabaseTLB->Select(aData.sDataSource, aData.sCommand, sColumnName);
