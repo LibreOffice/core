@@ -30,7 +30,7 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/ui/ModuleAcceleratorConfiguration.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManager2.hpp>
+#include <com/sun/star/ui/XModuleUIConfigurationManager3.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -83,7 +83,7 @@ namespace {
 class ModuleUIConfigurationManager : public cppu::WeakImplHelper<
                                        css::lang::XServiceInfo,
                                        css::lang::XComponent,
-                                       css::ui::XModuleUIConfigurationManager2 >
+                                       css::ui::XModuleUIConfigurationManager3 >
 {
 public:
     ModuleUIConfigurationManager(

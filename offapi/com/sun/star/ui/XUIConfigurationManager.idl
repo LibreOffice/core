@@ -204,13 +204,6 @@ interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
     */
     com::sun::star::ui::XAcceleratorConfiguration getShortCutManager();
 
-    /**
-        @since LibreOffice 7.6
-        Creates a new configuration manager in case there are different views with different languages.
-        This function enables those views to have short cut keys specific to the languages.
-    */
-    com::sun::star::ui::XAcceleratorConfiguration createShortCutManager();
-
     /** retrieves the events manager from the user interface configuration manager.
 
         <p>

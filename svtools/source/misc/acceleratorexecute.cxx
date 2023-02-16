@@ -24,6 +24,8 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager3.hpp>
+#include <com/sun/star/ui/XModuleUIConfigurationManager3.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
@@ -416,8 +418,10 @@ css::uno::Reference<css::ui::XAcceleratorConfiguration> AcceleratorExecute::lok_
     {
         css::uno::Reference<css::ui::XUIConfigurationManager> xUIManager = xUISupplier->getUIConfigurationManager(sModule);
 
+        css::ui::XModuleUIConfigurationManager3* t = static_cast<css::ui::XModuleUIConfigurationManager3*>(xUIManager.get());
+
         // Return new short cut manager in case current view's language is different from previous ones.
-        return xUIManager->createShortCutManager();
+        return t->createShortCutManager();
     }
     catch(const css::container::NoSuchElementException&)
     {}

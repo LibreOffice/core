@@ -32,7 +32,7 @@
 #include <sfx2/msgpool.hxx>
 #include <o3tl/enumarray.hxx>
 #include "sfxpicklist.hxx"
-#include "com/sun/star/ui/XAcceleratorConfiguration.hpp"
+#include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 
 #include <bitset.hxx>
 #include <memory>

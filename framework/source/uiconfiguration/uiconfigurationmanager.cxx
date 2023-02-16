@@ -40,7 +40,7 @@
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/ui/DocumentAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
-#include <com/sun/star/ui/XUIConfigurationManager2.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager3.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -73,7 +73,7 @@ namespace {
 
 class UIConfigurationManager :   public ::cppu::WeakImplHelper<
                                         css::lang::XServiceInfo  ,
-                                        css::ui::XUIConfigurationManager2 >
+                                        css::ui::XUIConfigurationManager3 >
 {
 public:
     virtual OUString SAL_CALL getImplementationName() override
