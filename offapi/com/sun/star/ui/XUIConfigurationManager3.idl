@@ -19,13 +19,19 @@
 
 module com { module sun { module star { module ui {
 
-/** specifies a user interface configuration manager which controls
-    all customizable user interface elements of an object.
-
-    @since OOo 2.0
+/**
+    @since LibreOffice 7.6
 */
+interface XUIConfigurationManager3
+{
+    interface com::sun::star::ui::XUIConfigurationManager2;
 
-service UIConfigurationManager : XUIConfigurationManager3;
+    /**
+        Creates a new configuration manager in case there are different views with different languages.
+        This function enables those views to have short cut keys specific to the languages.
+    */
+    com::sun::star::ui::XAcceleratorConfiguration createShortCutManager();
+};
 
 
 }; }; }; };

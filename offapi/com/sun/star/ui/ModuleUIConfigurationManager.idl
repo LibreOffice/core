@@ -36,7 +36,7 @@ module com { module sun { module star { module ui {
     @since OOo 2.0
 */
 
-service ModuleUIConfigurationManager : XModuleUIConfigurationManager2
+service ModuleUIConfigurationManager : XModuleUIConfigurationManager3
 {
     /** provides a function to initialize a module user interface configuration manager instance.
 

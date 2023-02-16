@@ -47,6 +47,7 @@
 #include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
@@ -90,6 +91,7 @@
 #include <vector>
 #include <libxml/xmlwriter.h>
 #include <toolkit/awt/vclxmenu.hxx>
+#include <unordered_map>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1396,11 +1398,50 @@ void SfxViewShell::Notify( SfxBroadcaster& rBC,
 
 bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
 {
+    bool setModuleConfig = false; // In case libreofficekit is active, we will re-set the module config class.
     if (!pImpl->m_xAccExec)
     {
         pImpl->m_xAccExec = ::svt::AcceleratorExecute::createAcceleratorHelper();
         pImpl->m_xAccExec->init(::comphelper::getProcessComponentContext(),
             rFrame.GetFrame().GetFrameInterface());
+        setModuleConfig = true;
+    }
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // Get the module name.
+        css::uno::Reference< css::uno::XComponentContext >  xContext      (::comphelper::getProcessComponentContext());
+        css::uno::Reference< css::frame::XModuleManager2 >  xModuleManager(css::frame::ModuleManager::create(xContext));
+        OUString sModule = xModuleManager->identify(rFrame.GetFrame().GetFrameInterface());
+
+        // Get the language name.
+        OUString viewLang = GetLOKLanguageTag().getBcp47();
+
+        // Merge them & have a key.
+        OUString key = sModule + viewLang;
+
+        // Check it in configurations map. Create a configuration manager if there isn't one for the key.
+        std::unordered_map<OUString, css::uno::Reference<com::sun::star::ui::XAcceleratorConfiguration>>& acceleratorConfs = SfxApplication::Get()->GetAcceleratorConfs_Impl();
+        if (acceleratorConfs.find(key) == acceleratorConfs.end())
+        {
+            // Create a new configuration manager for the module.
+
+            OUString actualLang = officecfg::Setup::L10N::ooLocale::get();
+
+            std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+            officecfg::Setup::L10N::ooLocale::set(viewLang, batch);
+            batch->commit();
+
+            // We have set the language. Time to create the config manager.
+            acceleratorConfs[key] = svt::AcceleratorExecute::lok_createNewAcceleratorConfiguration(::comphelper::getProcessComponentContext(), sModule);
+
+            std::shared_ptr<comphelper::ConfigurationChanges> batch2(comphelper::ConfigurationChanges::create());
+            officecfg::Setup::L10N::ooLocale::set(actualLang, batch2);
+            batch2->commit();
+        }
+
+        if (setModuleConfig)
+            pImpl->m_xAccExec->lok_setModuleConfig(acceleratorConfs[key]);
     }
 
     return pImpl->m_xAccExec->execute(aKey.GetKeyCode());

@@ -24,6 +24,8 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager3.hpp>
+#include <com/sun/star/ui/XModuleUIConfigurationManager3.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
@@ -37,6 +39,8 @@
 #include <sal/log.hxx>
 #include <vcl/lok.hxx>
 #include <rtl/ref.hxx>
+
+#include <comphelper/lok.hxx>
 
 namespace svt
 {
@@ -406,6 +410,29 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
     return xAccCfg;
 }
 
+css::uno::Reference<css::ui::XAcceleratorConfiguration> AcceleratorExecute::lok_createNewAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& rxContext, OUString sModule)
+{
+    css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUISupplier(css::ui::theModuleUIConfigurationManagerSupplier::get(rxContext));
+
+    try
+    {
+        css::uno::Reference<css::ui::XUIConfigurationManager> xUIManager = xUISupplier->getUIConfigurationManager(sModule);
+
+        css::ui::XModuleUIConfigurationManager3* t = static_cast<css::ui::XModuleUIConfigurationManager3*>(xUIManager.get());
+
+        // Return new short cut manager in case current view's language is different from previous ones.
+        return t->createShortCutManager();
+    }
+    catch(const css::container::NoSuchElementException&)
+    {}
+
+    return css::uno::Reference<css::ui::XAcceleratorConfiguration>();
+}
+
+void AcceleratorExecute::lok_setModuleConfig(css::uno::Reference<css::ui::XAcceleratorConfiguration> acceleratorConfig)
+{
+    this->m_xModuleCfg = acceleratorConfig;
+}
 
 css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st_openDocConfig(const css::uno::Reference< css::frame::XModel >& xModel)
 {

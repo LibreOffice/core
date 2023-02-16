@@ -25,7 +25,6 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/window.hxx>
 #include <sal/log.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/request.hxx>
@@ -108,6 +107,11 @@ int SfxLokHelper::createView()
     return createView(pViewShell->GetViewFrame(), pViewShell->GetDocId());
 }
 
+std::unordered_map<OUString, css::uno::Reference<com::sun::star::ui::XAcceleratorConfiguration>>& SfxLokHelper::getAcceleratorConfs()
+{
+    return SfxApplication::GetOrCreate()->GetAcceleratorConfs_Impl();
+}
+
 int SfxLokHelper::createView(int nDocId)
 {
     const SfxApplication* pApp = SfxApplication::Get();
@@ -168,12 +172,12 @@ void SfxLokHelper::setView(int nId)
         {
             DisableCallbacks dc;
 
+            if (pViewShell == SfxViewShell::Current())
+                return;
+
             // update the current LOK language and locale for the dialog tunneling
             comphelper::LibreOfficeKit::setLanguageTag(pViewShell->GetLOKLanguageTag());
             comphelper::LibreOfficeKit::setLocale(pViewShell->GetLOKLocale());
-
-            if (pViewShell == SfxViewShell::Current())
-                return;
 
             SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
             rViewFrame.MakeActive_Impl(false);

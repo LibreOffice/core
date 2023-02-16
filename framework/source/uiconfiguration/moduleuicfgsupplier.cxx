@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManager2.hpp>
+#include <com/sun/star/ui/XModuleUIConfigurationManager3.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 
 #include <comphelper/compbase.hxx>
@@ -80,7 +80,7 @@ public:
 private:
     virtual void disposing(std::unique_lock<std::mutex>&) final override;
 
-    typedef std::unordered_map< OUString, css::uno::Reference< css::ui::XModuleUIConfigurationManager2 > > ModuleToModuleCfgMgr;
+    typedef std::unordered_map< OUString, css::uno::Reference< css::ui::XModuleUIConfigurationManager3 > > ModuleToModuleCfgMgr;
 
 //TODO_AS            void impl_initStorages();
 
@@ -99,7 +99,7 @@ ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier( cons
         Reference< XNameAccess > xNameAccess( m_xModuleMgr, UNO_QUERY_THROW );
         const Sequence< OUString >     aNameSeq   = xNameAccess->getElementNames();
         for ( const OUString& rName : aNameSeq )
-            m_aModuleToModuleUICfgMgrMap.emplace( rName, Reference< XModuleUIConfigurationManager2 >() );
+            m_aModuleToModuleUICfgMgrMap.emplace( rName, Reference< XModuleUIConfigurationManager3 >() );
     }
     catch(...)
     {

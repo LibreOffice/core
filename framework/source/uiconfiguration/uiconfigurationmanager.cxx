@@ -40,7 +40,7 @@
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/ui/DocumentAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
-#include <com/sun/star/ui/XUIConfigurationManager2.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager3.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -73,7 +73,7 @@ namespace {
 
 class UIConfigurationManager :   public ::cppu::WeakImplHelper<
                                         css::lang::XServiceInfo  ,
-                                        css::ui::XUIConfigurationManager2 >
+                                        css::ui::XUIConfigurationManager3 >
 {
 public:
     virtual OUString SAL_CALL getImplementationName() override
@@ -113,6 +113,7 @@ public:
     virtual void SAL_CALL insertSettings( const OUString& NewResourceURL, const css::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getImageManager() override;
     virtual css::uno::Reference< css::ui::XAcceleratorConfiguration > SAL_CALL getShortCutManager() override;
+    virtual css::uno::Reference< css::ui::XAcceleratorConfiguration > SAL_CALL createShortCutManager() override;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getEventsManager() override;
 
     // XUIConfigurationPersistence
@@ -1135,6 +1136,11 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager()
     }
 
     return Reference< XInterface >( static_cast<cppu::OWeakObject*>(m_xImageManager.get()), UNO_QUERY );
+}
+
+Reference< XAcceleratorConfiguration > SAL_CALL UIConfigurationManager::createShortCutManager()
+{
+    return DocumentAcceleratorConfiguration::createWithDocumentRoot(m_xContext, m_xDocConfigStorage);
 }
 
 Reference< XAcceleratorConfiguration > SAL_CALL UIConfigurationManager::getShortCutManager()

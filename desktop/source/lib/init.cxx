@@ -217,6 +217,10 @@
 #include <unotools/viewoptions.hxx>
 #include <vcl/settings.hxx>
 
+#include <officecfg/Setup.hxx>
+#include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
+#include <svtools/acceleratorexecute.hxx>
+
 using namespace css;
 using namespace vcl;
 using namespace desktop;
@@ -7147,6 +7151,47 @@ static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit:
     }
 }
 
+/// Used by preloadData (LibreOfficeKit) for providing different shortcuts for different languages.
+static void preLoadShortCutAccelerators()
+{
+    std::unordered_map<OUString, css::uno::Reference<com::sun::star::ui::XAcceleratorConfiguration>>& acceleratorConfs = SfxLokHelper::getAcceleratorConfs();
+    css::uno::Sequence<OUString> installedLocales(officecfg::Setup::Office::InstalledLocales::get()->getElementNames());
+    OUString actualLang = officecfg::Setup::L10N::ooLocale::get();
+
+    for (sal_Int32 i = 0; i < installedLocales.getLength(); i++)
+    {
+        OUString language = LanguageTag(installedLocales[i]).getLocale().Language;
+
+        if (!comphelper::LibreOfficeKit::isAllowlistedLanguage(language))
+        {
+            // Language is listed by COOL and also installed in core. We can create the short cut accelerator.
+
+            // Set the UI language to current one, before creating the accelerator.
+            std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+            officecfg::Setup::L10N::ooLocale::set(installedLocales[i], batch);
+            batch->commit();
+
+            // Supported module names: Writer, Calc, Draw, Impress
+            std::vector<OUString> supportedModuleNames = { "com.sun.star.text.TextDocument", "com.sun.star.sheet.SpreadsheetDocument", "com.sun.star.drawing.DrawingDocument", "com.sun.star.presentation.PresentationDocument" };
+            // Create the accelerators.
+            for (std::size_t j = 0; j < supportedModuleNames.size(); j++)
+            {
+                OUString key = supportedModuleNames[j] + installedLocales[i];
+                acceleratorConfs[key] = svt::AcceleratorExecute::lok_createNewAcceleratorConfiguration(::comphelper::getProcessComponentContext(), supportedModuleNames[j]);
+            }
+        }
+        else
+        {
+            std::cerr << "Language is installed in core but not in the list of COOL languages: " << language << "\n";
+        }
+    }
+
+    // Set the UI language back to default one.
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    officecfg::Setup::L10N::ooLocale::set(actualLang, batch);
+    batch->commit();
+}
+
 /// Used only by LibreOfficeKit when used by Online to pre-initialize
 static void preloadData()
 {
@@ -7209,6 +7254,9 @@ static void preloadData()
     std::cerr << "Preload icons\n";
     ImageTree &images = ImageTree::get();
     images.getImageUrl("forcefed.png", "style", "FO_oo");
+
+    std::cerr << "Preload short cut accelerators\n";
+    preLoadShortCutAccelerators();
 
     std::cerr << "Preload languages\n";
 
