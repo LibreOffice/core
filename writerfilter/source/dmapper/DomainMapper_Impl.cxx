@@ -299,9 +299,6 @@ static bool IsFieldNestingAllowed(const FieldContextPtr& pOuter, const FieldCont
                     return false;
                 }
                 default:
-                    SAL_WARN("writerfilter","found field["<<*pInner->GetFieldId()<<"] defined in FieldTypes.hxx");
-                    assert(false && "looking for example documents using { IF } with fields for condition or result");
-                    return false;
                     break;
             }
             break;
