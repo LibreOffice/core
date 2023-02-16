@@ -21,17 +21,18 @@
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
+#include <mutex>
 #include <optional>
+#include <string_view>
 #include <utility>
 #include <vector>
-#include <string_view>
 
 namespace tdoc_ucp {
 
 struct DataSupplier_Impl;
 class Content;
 
-class ResultSetDataSupplier : public ::ucbhelper::ResultSetDataSupplier
+class ResultSetDataSupplier final : public ::ucbhelper::ResultSetDataSupplier
 {
     struct ResultListEntry
     {
@@ -43,7 +44,7 @@ class ResultSetDataSupplier : public ::ucbhelper::ResultSetDataSupplier
         explicit ResultListEntry( OUString _aURL ) : aURL(std::move( _aURL )) {}
     };
 
-    osl::Mutex                                   m_aMutex;
+    std::mutex                                   m_aMutex;
     std::vector< ResultListEntry >               m_aResults;
     rtl::Reference< Content >                    m_xContent;
     css::uno::Reference< css::uno::XComponentContext >     m_xContext;
@@ -52,7 +53,7 @@ class ResultSetDataSupplier : public ::ucbhelper::ResultSetDataSupplier
     bool                                         m_bThrowException;
 
 private:
-    bool queryNamesOfChildren();
+    bool queryNamesOfChildren(std::unique_lock<std::mutex>& rGuard);
     OUString assembleChildURL( std::u16string_view aName );
 
 public:
@@ -80,6 +81,12 @@ public:
     virtual void close() override;
 
     virtual void validate() override;
+
+private:
+    OUString queryContentIdentifierStringImpl( std::unique_lock<std::mutex>& rGuard, sal_uInt32 nIndex );
+    css::uno::Reference< css::ucb::XContentIdentifier >
+      queryContentIdentifierImpl( std::unique_lock<std::mutex>& rGuard, sal_uInt32 nIndex );
+    bool getResultImpl( std::unique_lock<std::mutex>& rGuard, sal_uInt32 nIndex );
 };
 
 } // namespace tdoc_ucp
