@@ -474,7 +474,7 @@ SortedDynamicResultSetListener::~SortedDynamicResultSetListener()
 void SAL_CALL
 SortedDynamicResultSetListener::disposing( const EventObject& /*Source*/ )
 {
-    osl::Guard< osl::Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
     if ( mpOwner )
         mpOwner->impl_disposing();
@@ -486,7 +486,7 @@ SortedDynamicResultSetListener::disposing( const EventObject& /*Source*/ )
 void SAL_CALL
 SortedDynamicResultSetListener::notify( const ListEvent& Changes )
 {
-    osl::Guard< osl::Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
     if ( mpOwner )
         mpOwner->impl_notify( Changes );
@@ -497,7 +497,7 @@ SortedDynamicResultSetListener::notify( const ListEvent& Changes )
 void
 SortedDynamicResultSetListener::impl_OwnerDies()
 {
-    osl::Guard< osl::Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     mpOwner = nullptr;
 }
 

@@ -113,7 +113,7 @@ class SortedDynamicResultSetListener: public cppu::WeakImplHelper <
     css::ucb::XDynamicResultSetListener >
 {
     SortedDynamicResultSet  *mpOwner;
-    osl::Mutex              maMutex;
+    std::mutex               maMutex;
 
 public:
      SortedDynamicResultSetListener( SortedDynamicResultSet *mOwner );
