@@ -111,7 +111,7 @@
                     </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="levels-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="tocstylespage|extended_tip|levels">Select the index level that you change the formatting of.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tocstylespage|extended_tip|levels">Select the index level to be assigned.</property>
                       </object>
                     </child>
                   </object>
@@ -155,7 +155,7 @@
                     </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="styles-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="tocstylespage|extended_tip|styles">Select the paragraph style that you want to apply to the selected index level, and then click the Assign (&lt;) button.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tocstylespage|extended_tip|styles">Select the paragraph style that you want to assign to the selected index level, then click the Assign (&lt;) button.</property>
                       </object>
                     </child>
                   </object>
@@ -197,7 +197,7 @@
                 <property name="use_underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="edit-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="tocstylespage|extended_tip|edit">Opens the Paragraph Style dialog, where you can modify the selected paragraph style.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="tocstylespage|extended_tip|edit">Open the Paragraph Style dialog for the selected paragraph style.</property>
                   </object>
                 </child>
               </object>
@@ -214,10 +214,11 @@
                 <property name="halign">center</property>
                 <property name="valign">start</property>
                 <property name="image">image1</property>
+                <property name="tooltip_text" translatable="yes" context="tocstylespage|assign">Assign</property>
                 <property name="always-show-image">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="assign-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="tocstylespage|extended_tip|assign">Formats the selected index level with the selected paragraph style.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="tocstylespage|extended_tip|assign">Assign the selected paragraph style to the selected index level.</property>
                   </object>
                 </child>
               </object>
