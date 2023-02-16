@@ -23,6 +23,7 @@
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <mutex>
 
 class FmFormModel;
 
@@ -78,7 +79,7 @@ namespace svxform
         void dispose();
 
     private:
-        ::osl::Mutex            m_aMutex;
+        std::mutex              m_aMutex;
         rtl::Reference<FormScriptListener> m_pScriptListener;
         FmFormModel&            m_rFormModel;
         bool                    m_bDisposed;

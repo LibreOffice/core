@@ -760,7 +760,7 @@ namespace svxform
 
     void FormScriptingEnvironment::impl_registerOrRevoke_throw( const Reference< XEventAttacherManager >& _rxManager, bool _bRegister )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         if ( !_rxManager.is() )
             throw IllegalArgumentException();
@@ -841,7 +841,7 @@ namespace svxform
         (void) m_rFormModel;
 #else
         SolarMutexClearableGuard aSolarGuard;
-        ::osl::ClearableMutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         if ( m_bDisposed )
             return;
@@ -898,7 +898,7 @@ namespace svxform
 
         assert(pScript && "FormScriptingEnvironment::doFireScriptEvent: no script to execute!");
 
-        aGuard.clear();
+        aGuard.unlock();
         aSolarGuard.clear();
 
         Any aIgnoreResult;
@@ -916,7 +916,7 @@ namespace svxform
 
     void FormScriptingEnvironment::dispose()
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         m_bDisposed = true;
         m_pScriptListener->dispose();
         m_pScriptListener.clear();
