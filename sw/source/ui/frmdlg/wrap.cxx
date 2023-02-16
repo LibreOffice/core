@@ -379,9 +379,9 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
     m_nAnchorId = rAnch.GetAnchorId();
     bool bEnable = (m_nAnchorId != RndStdIds::FLY_AS_CHAR);
 
-    if (!m_bDrawMode)
+    SwWrtShell* pSh = m_bFormat ? ::GetActiveWrtShell() : m_pWrtSh;
+    if (pSh && !m_bDrawMode)
     {
-        SwWrtShell* pSh = m_bFormat ? ::GetActiveWrtShell() : m_pWrtSh;
         SwFlyFrameAttrMgr aMgr( m_bNew, pSh, GetItemSet() );
         SvxSwFrameValidation aVal;
 

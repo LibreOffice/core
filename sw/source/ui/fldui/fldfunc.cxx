@@ -312,7 +312,7 @@ IMPL_LINK_NOARG(SwFieldFuncPage, TypeHdl, weld::TreeView&, void)
             m_xNameED->SetDropEnable(true);
             m_xValueFT->set_label(SwResId(STR_INSTEXT));
             SwWrtShell* pSh = GetActiveWrtShell();
-            if (!IsFieldEdit() && pSh )
+            if (!IsFieldEdit() && pSh)
                 m_xValueED->set_text(pSh->GetSelText());
             bName = bValue = true;
             m_xNameED->set_accessible_name(m_xNameFT->get_label());
