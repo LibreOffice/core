@@ -26,15 +26,11 @@ extern bool rtl_string_unittest_invalid_concat;
 
 using namespace rtl;
 
-namespace CppUnit
+template<> inline std::string CppUnit::assertion_traits<std::type_info>::toString(
+    std::type_info const & x)
 {
-template<> struct assertion_traits<std::type_info>
-{
-    static bool equal(std::type_info const & x, std::type_info const & y) { return x == y; }
-
-    static std::string toString(std::type_info const & x) { return x.name(); }
-};
-} // namespace
+    return x.name();
+}
 
 namespace test::oustring {
 

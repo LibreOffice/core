@@ -23,17 +23,11 @@
 // gcc 11.2.0 triggers a spurious -Werror=stringop-overread
 #if !(defined __GNUC__ && __GNUC__ == 11 && __GNUC_MINOR__ == 2)
 
-namespace CppUnit
+template <>
+inline std::string
+CppUnit::assertion_traits<std::u16string_view>::toString(std::u16string_view const& x)
 {
-template <> struct assertion_traits<std::u16string_view>
-{
-    static bool equal(std::u16string_view x, std::u16string_view y) { return x == y; }
-
-    static std::string toString(std::u16string_view x)
-    {
-        return OUStringToOString(x, RTL_TEXTENCODING_UTF8).getStr();
-    }
-};
+    return OUStringToOString(x, RTL_TEXTENCODING_UTF8).getStr();
 }
 
 namespace

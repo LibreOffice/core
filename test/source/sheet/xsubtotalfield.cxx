@@ -21,29 +21,18 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-CPPUNIT_NS_BEGIN
-
-template<> struct assertion_traits<uno::Sequence< sheet::SubTotalColumn > >
+template<> inline std::string
+CPPUNIT_NS::assertion_traits<uno::Sequence< sheet::SubTotalColumn > >::toString(
+    const uno::Sequence< sheet::SubTotalColumn >& x)
 {
-    static bool equal(const uno::Sequence< sheet::SubTotalColumn >& x,
-                      const uno::Sequence< sheet::SubTotalColumn >& y)
-    {
-        return x == y;
-    }
-
-    static std::string toString(const uno::Sequence< sheet::SubTotalColumn >& x)
-    {
-        OStringStream ost;
-        ost << "Sequence: Length: " << x.getLength() << "\n";
-        for (const auto& rElement : x)
-            ost << "Column: " << rElement.Column << " Function:\n";
-            // FIXME: Find a way to print Function
-            //ost << "Column: " << element->Column << " Function: " << element->Function << "\n";
-        return ost.str();
-    }
-};
-
-CPPUNIT_NS_END
+    OStringStream ost;
+    ost << "Sequence: Length: " << x.getLength() << "\n";
+    for (const auto& rElement : x)
+        ost << "Column: " << rElement.Column << " Function:\n";
+        // FIXME: Find a way to print Function
+        //ost << "Column: " << element->Column << " Function: " << element->Function << "\n";
+    return ost.str();
+}
 
 namespace apitest {
 

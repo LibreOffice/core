@@ -28,24 +28,13 @@ using namespace ::com::sun::star::table::BorderLineStyle;
 
 using namespace editeng;
 
-CPPUNIT_NS_BEGIN
-
-template<> struct assertion_traits<SvxBorderLineStyle>
+template<> inline std::string CPPUNIT_NS::assertion_traits<SvxBorderLineStyle>::toString(
+    SvxBorderLineStyle const & x )
 {
-    static bool equal( SvxBorderLineStyle x, SvxBorderLineStyle y )
-    {
-        return x == y;
-    }
-
-    static std::string toString( SvxBorderLineStyle x )
-    {
-        OStringStream ost;
-        ost << static_cast<unsigned int>(x);
-        return ost.str();
-    }
-};
-
-CPPUNIT_NS_END
+    OStringStream ost;
+    ost << static_cast<unsigned int>(x);
+    return ost.str();
+}
 
 namespace {
 

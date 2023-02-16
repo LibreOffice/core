@@ -18,24 +18,13 @@
 
 #define OUSTR_TO_STDSTR( oustr ) std::string( OUStringToOString( oustr, RTL_TEXTENCODING_ASCII_US ).getStr() )
 
-CPPUNIT_NS_BEGIN
-
-template<> struct assertion_traits<INetProtocol>
+template<> inline std::string CPPUNIT_NS::assertion_traits<INetProtocol>::toString(
+    const INetProtocol& x )
 {
-    static bool equal( const INetProtocol& x, const INetProtocol& y )
-    {
-        return x == y;
-    }
-
-    static std::string toString( const INetProtocol& x )
-    {
-        OStringStream ost;
-        ost << static_cast<unsigned int>(x);
-        return ost.str();
-    }
-};
-
-CPPUNIT_NS_END
+    OStringStream ost;
+    ost << static_cast<unsigned int>(x);
+    return ost.str();
+}
 
 namespace tools_urlobj
 {
