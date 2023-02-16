@@ -250,16 +250,11 @@ uno::Reference< frame::XController > ChartModel::impl_getCurrentController()
 
 void ChartModel::impl_notifyCloseListeners()
 {
-    ::comphelper::OInterfaceContainerHelper2* pIC = m_aLifeTimeManager.m_aListenerContainer
-        .getContainer( cppu::UnoType<util::XCloseListener>::get());
-    if( pIC )
+    std::unique_lock aGuard(m_aLifeTimeManager.m_aAccessMutex);
+    if( m_aLifeTimeManager.m_aCloseListeners.getLength(aGuard) )
     {
         lang::EventObject aEvent( static_cast< lang::XComponent*>(this) );
-        ::comphelper::OInterfaceIteratorHelper2 aIt( *pIC );
-        while( aIt.hasMoreElements() )
-        {
-            static_cast< util::XCloseListener* >( aIt.next() )->notifyClosing( aEvent );
-        }
+        m_aLifeTimeManager.m_aCloseListeners.notifyEach(aGuard, &util::XCloseListener::notifyClosing, aEvent);
     }
 }
 
@@ -575,7 +570,8 @@ void SAL_CALL ChartModel::addEventListener( const uno::Reference< lang::XEventLi
     if( m_aLifeTimeManager.impl_isDisposedOrClosed() )
         return; //behave passive if already disposed or closed
 
-    m_aLifeTimeManager.m_aListenerContainer.addInterface( cppu::UnoType<lang::XEventListener>::get(), xListener );
+    std::unique_lock aGuard(m_aLifeTimeManager.m_aAccessMutex);
+    m_aLifeTimeManager.m_aEventListeners.addInterface( aGuard, xListener );
 }
 
 void SAL_CALL ChartModel::removeEventListener( const uno::Reference< lang::XEventListener > & xListener )
@@ -583,7 +579,8 @@ void SAL_CALL ChartModel::removeEventListener( const uno::Reference< lang::XEven
     if( m_aLifeTimeManager.impl_isDisposedOrClosed(false) )
         return; //behave passive if already disposed or closed
 
-    m_aLifeTimeManager.m_aListenerContainer.removeInterface( cppu::UnoType<lang::XEventListener>::get(), xListener );
+    std::unique_lock aGuard(m_aLifeTimeManager.m_aAccessMutex);
+    m_aLifeTimeManager.m_aEventListeners.removeInterface( aGuard, xListener );
 }
 
 // util::XCloseBroadcaster (base of XCloseable)
@@ -597,7 +594,8 @@ void SAL_CALL ChartModel::removeCloseListener( const uno::Reference< util::XClos
     if( m_aLifeTimeManager.impl_isDisposedOrClosed(false) )
         return; //behave passive if already disposed or closed
 
-    m_aLifeTimeManager.m_aListenerContainer.removeInterface( cppu::UnoType<util::XCloseListener>::get(), xListener );
+    std::unique_lock aGuard(m_aLifeTimeManager.m_aAccessMutex);
+    m_aLifeTimeManager.m_aCloseListeners.removeInterface( aGuard, xListener );
 }
 
 // util::XCloseable

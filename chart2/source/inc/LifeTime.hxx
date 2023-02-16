@@ -18,15 +18,19 @@
  */
 #pragma once
 
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <osl/conditn.hxx>
-#include <comphelper/multicontainer2.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include "charttoolsdllapi.hxx"
 
+namespace com::sun::star::document { class XStorageChangeListener; }
 namespace com::sun::star::lang { class XComponent; }
+namespace com::sun::star::lang { class XEventListener; }
 namespace com::sun::star::util { class CloseVetoException; }
 namespace com::sun::star::util { class XCloseListener; }
 namespace com::sun::star::util { class XCloseable; }
+namespace com::sun::star::util { class XModifyListener; }
+namespace com::sun::star::view { class XSelectionChangeListener; }
 
 namespace apphelper
 {
@@ -34,8 +38,6 @@ namespace apphelper
 class OOO_DLLPUBLIC_CHARTTOOLS LifeTimeManager
 {
 friend class LifeTimeGuard;
-protected:
-    mutable ::osl::Mutex                    m_aAccessMutex;
 public:
     LifeTimeManager( css::lang::XComponent* pComponent );
     virtual ~LifeTimeManager();
@@ -44,25 +46,25 @@ public:
     /// @throws css::uno::RuntimeException
     bool    dispose();
 
-public:
-    ::comphelper::OMultiTypeInterfaceContainerHelper2      m_aListenerContainer;
+    mutable std::mutex                    m_aAccessMutex;
+    ::comphelper::OInterfaceContainerHelper4<css::util::XCloseListener> m_aCloseListeners;
+    ::comphelper::OInterfaceContainerHelper4<css::util::XModifyListener> m_aModifyListeners;
+    ::comphelper::OInterfaceContainerHelper4<css::document::XStorageChangeListener> m_aStorageChangeListeners;
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aEventListeners;
+    ::comphelper::OInterfaceContainerHelper4<css::view::XSelectionChangeListener> m_aSelectionChangeListeners;
 
 protected:
-    SAL_DLLPRIVATE virtual bool    impl_canStartApiCall();
-    SAL_DLLPRIVATE virtual void        impl_apiCallCountReachedNull(){}
+    SAL_DLLPRIVATE virtual bool impl_canStartApiCall();
+    SAL_DLLPRIVATE virtual void impl_apiCallCountReachedNull(std::unique_lock<std::mutex>& /*rGuard*/){}
 
     SAL_DLLPRIVATE void        impl_registerApiCall(bool bLongLastingCall);
-    SAL_DLLPRIVATE void        impl_unregisterApiCall(bool bLongLastingCall);
+    SAL_DLLPRIVATE void        impl_unregisterApiCall(std::unique_lock<std::mutex>& rGuard, bool bLongLastingCall);
 
-protected:
     css::lang::XComponent*     m_pComponent;
-
     ::osl::Condition        m_aNoAccessCountCondition;
     sal_Int32               m_nAccessCount;
-
     bool volatile       m_bDisposed;
     bool volatile       m_bInDispose;
-
     ::osl::Condition        m_aNoLongLastingCallCountCondition;
     sal_Int32               m_nLongLastingCallCount;
 };
@@ -96,10 +98,10 @@ public:
 
 private:
     virtual bool    impl_canStartApiCall() override;
-    virtual void    impl_apiCallCountReachedNull() override;
+    virtual void impl_apiCallCountReachedNull(std::unique_lock<std::mutex>& rGuard) override;
 
     void        impl_setOwnership( bool bDeliverOwnership, bool bMyVeto );
-    void        impl_doClose();
+    void        impl_doClose(std::unique_lock<std::mutex>& rGuard);
 };
 
 /*
@@ -178,10 +180,10 @@ public:
     }
     bool startApiCall(bool bLongLastingCall=false);
     ~LifeTimeGuard();
-    void clear() { m_guard.clear(); }
+    void clear() { m_guard.unlock(); }
 
 private:
-    osl::ClearableMutexGuard m_guard;
+    std::unique_lock<std::mutex> m_guard;
     LifeTimeManager&    m_rManager;
     bool            m_bCallRegistered;
     bool            m_bLongLastingCallRegistered;

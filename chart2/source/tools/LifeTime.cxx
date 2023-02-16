@@ -20,10 +20,13 @@
 #include <LifeTime.hxx>
 #include <osl/diagnose.h>
 
+#include <com/sun/star/document/XStorageChangeListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/util/XModifyListener.hpp>
+#include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 
@@ -33,8 +36,7 @@ namespace apphelper
 {
 
 LifeTimeManager::LifeTimeManager( lang::XComponent* pComponent )
-    : m_aListenerContainer( m_aAccessMutex )
-    , m_pComponent(pComponent)
+    : m_pComponent(pComponent)
 {
     m_bDisposed = false;
     m_bInDispose = false;
@@ -85,7 +87,7 @@ void LifeTimeManager::impl_registerApiCall(bool bLongLastingCall)
         m_aNoLongLastingCallCountCondition.reset();
 }
 
-void LifeTimeManager::impl_unregisterApiCall(bool bLongLastingCall)
+void LifeTimeManager::impl_unregisterApiCall(std::unique_lock<std::mutex>& rGuard, bool bLongLastingCall)
 {
     //Mutex needs to be acquired exactly once
     //mutex may be released inbetween in special case of impl_apiCallCountReachedNull()
@@ -101,7 +103,7 @@ void LifeTimeManager::impl_unregisterApiCall(bool bLongLastingCall)
     if( m_nAccessCount== 0)
     {
         m_aNoAccessCountCondition.set();
-        impl_apiCallCountReachedNull();
+        impl_apiCallCountReachedNull(rGuard);
 
     }
 }
@@ -110,7 +112,7 @@ bool LifeTimeManager::dispose()
 {
     //hold no mutex
     {
-        osl::MutexGuard aGuard( m_aAccessMutex );
+        std::unique_lock aGuard( m_aAccessMutex );
 
         if( m_bDisposed || m_bInDispose )
         {
@@ -122,23 +124,19 @@ bool LifeTimeManager::dispose()
         //adding any listener is not allowed anymore
         //new calls will not be accepted
         //still running calls have the freedom to finish their work without crash
-    }
-    //no mutex is acquired
 
-    //--do the disposing of listeners after calling this method
-    {
         uno::Reference< lang::XComponent > xComponent(m_pComponent);
         if(xComponent.is())
         {
             // notify XCLoseListeners
             lang::EventObject aEvent( xComponent );
-            m_aListenerContainer.disposeAndClear( aEvent );
+            m_aCloseListeners.disposeAndClear( aGuard, aEvent );
+            m_aModifyListeners.disposeAndClear( aGuard, aEvent );
+            m_aStorageChangeListeners.disposeAndClear( aGuard, aEvent );
+            m_aEventListeners.disposeAndClear( aGuard, aEvent );
+            m_aSelectionChangeListeners.disposeAndClear( aGuard, aEvent );
         }
-    }
 
-    //no mutex is acquired
-    {
-        osl::MutexGuard aGuard( m_aAccessMutex );
         OSL_ENSURE( !m_bDisposed, "dispose was called already" );
         m_bDisposed = true;
     }
@@ -189,7 +187,7 @@ bool CloseableLifeTimeManager::g_close_startTryClose(bool bDeliverOwnership)
 {
     //no mutex is allowed to be acquired
     {
-        osl::MutexGuard aGuard( m_aAccessMutex );
+        std::unique_lock aGuard( m_aAccessMutex );
         if( impl_isDisposedOrClosed(false) )
             return false;
 
@@ -217,18 +215,16 @@ bool CloseableLifeTimeManager::g_close_startTryClose(bool bDeliverOwnership)
         uno::Reference< util::XCloseable > xCloseable(m_pCloseable);
         if(xCloseable.is())
         {
+            std::unique_lock aGuard( m_aAccessMutex );
             //--call queryClosing on all registered close listeners
-            ::comphelper::OInterfaceContainerHelper2* pIC = m_aListenerContainer.getContainer(
-                        cppu::UnoType<util::XCloseListener>::get());
-            if( pIC )
+            if( m_aCloseListeners.getLength(aGuard) )
             {
                 lang::EventObject aEvent( xCloseable );
-                ::comphelper::OInterfaceIteratorHelper2 aIt( *pIC );
-                while( aIt.hasMoreElements() )
-                {
-                    static_cast< util::XCloseListener* >( aIt.next() )
-                        ->queryClosing( aEvent, bDeliverOwnership );
-                }
+                m_aCloseListeners.forEach(aGuard,
+                    [&aEvent, bDeliverOwnership](const uno::Reference<util::XCloseListener>& l)
+                    {
+                        l->queryClosing(aEvent, bDeliverOwnership);
+                    });
             }
         }
     }
@@ -244,7 +240,7 @@ bool CloseableLifeTimeManager::g_close_startTryClose(bool bDeliverOwnership)
 void CloseableLifeTimeManager::g_close_endTryClose(bool bDeliverOwnership )
 {
     //this method is called, if the try to close was not successful
-    osl::MutexGuard aGuard( m_aAccessMutex );
+    std::unique_lock aGuard( m_aAccessMutex );
     impl_setOwnership( bDeliverOwnership, false );
 
     m_bInTryClose = false;
@@ -252,7 +248,7 @@ void CloseableLifeTimeManager::g_close_endTryClose(bool bDeliverOwnership )
 
     //Mutex needs to be acquired exactly once
     //mutex may be released inbetween in special case of impl_apiCallCountReachedNull()
-    impl_unregisterApiCall(false);
+    impl_unregisterApiCall(aGuard, false);
 }
 
 void CloseableLifeTimeManager::g_close_isNeedToCancelLongLastingCalls( bool bDeliverOwnership, util::CloseVetoException const & ex )
@@ -262,7 +258,7 @@ void CloseableLifeTimeManager::g_close_isNeedToCancelLongLastingCalls( bool bDel
     //it returns true, if some longlasting calls are running, which might be cancelled
     //it throws the given exception, if long calls are running but not cancelable
 
-    osl::MutexGuard aGuard( m_aAccessMutex );
+    std::unique_lock aGuard( m_aAccessMutex );
     //this count cannot grow after try of close has started, because we wait in all those methods for end of try closing
     if( !m_nLongLastingCallCount )
         return;
@@ -274,7 +270,7 @@ void CloseableLifeTimeManager::g_close_isNeedToCancelLongLastingCalls( bool bDel
 
     //Mutex needs to be acquired exactly once
     //mutex may be released inbetween in special case of impl_apiCallCountReachedNull()
-    impl_unregisterApiCall(false);
+    impl_unregisterApiCall(aGuard, false);
 
     throw ex;
 }
@@ -282,15 +278,15 @@ void CloseableLifeTimeManager::g_close_isNeedToCancelLongLastingCalls( bool bDel
 void CloseableLifeTimeManager::g_close_endTryClose_doClose()
 {
     //this method is called, if the try to close was successful
-    osl::MutexGuard aGuard( m_aAccessMutex );
+    std::unique_lock aGuard( m_aAccessMutex );
 
     m_bInTryClose       = false;
     m_aEndTryClosingCondition.set();
 
     //Mutex needs to be acquired exactly once
     //mutex may be released inbetween in special case of impl_apiCallCountReachedNull()
-    impl_unregisterApiCall(false);
-    impl_doClose();
+    impl_unregisterApiCall(aGuard, false);
+    impl_doClose(aGuard);
 }
 
 void CloseableLifeTimeManager::impl_setOwnership( bool bDeliverOwnership, bool bMyVeto )
@@ -298,15 +294,15 @@ void CloseableLifeTimeManager::impl_setOwnership( bool bDeliverOwnership, bool b
     m_bOwnership            = bDeliverOwnership && bMyVeto;
 }
 
-void CloseableLifeTimeManager::impl_apiCallCountReachedNull()
+void CloseableLifeTimeManager::impl_apiCallCountReachedNull(std::unique_lock<std::mutex>& rGuard)
 {
     //Mutex needs to be acquired exactly once
     //mutex will be released inbetween in impl_doClose()
     if( m_pCloseable && m_bOwnership )
-        impl_doClose();
+        impl_doClose(rGuard);
 }
 
-void CloseableLifeTimeManager::impl_doClose()
+void CloseableLifeTimeManager::impl_doClose(std::unique_lock<std::mutex>& rGuard)
 {
     //Mutex needs to be acquired exactly once before calling impl_doClose()
 
@@ -317,26 +313,17 @@ void CloseableLifeTimeManager::impl_doClose()
 
     m_bClosed = true;
 
-    NegativeGuard< osl::Mutex > aNegativeGuard( m_aAccessMutex );
-    //mutex is not acquired, mutex will be reacquired at the end of this method automatically
-
     uno::Reference< util::XCloseable > xCloseable;
+    xCloseable.set(m_pCloseable);
     try
     {
-        xCloseable.set(m_pCloseable);
         if(xCloseable.is())
         {
             //--call notifyClosing on all registered close listeners
-            ::comphelper::OInterfaceContainerHelper2* pIC = m_aListenerContainer.getContainer(
-                        cppu::UnoType<util::XCloseListener>::get());
-            if( pIC )
+            if( m_aCloseListeners.getLength(rGuard) )
             {
                 lang::EventObject aEvent( xCloseable );
-                ::comphelper::OInterfaceIteratorHelper2 aIt( *pIC );
-                while( aIt.hasMoreElements() )
-                {
-                    static_cast< util::XCloseListener* >( aIt.next() )->notifyClosing( aEvent );
-                }
+                m_aCloseListeners.notifyEach(rGuard, &util::XCloseListener::notifyClosing, aEvent);
             }
         }
     }
@@ -345,6 +332,7 @@ void CloseableLifeTimeManager::impl_doClose()
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
+    rGuard.unlock();
     if(xCloseable.is())
     {
         uno::Reference< lang::XComponent > xComponent( xCloseable, uno::UNO_QUERY );
@@ -354,18 +342,18 @@ void CloseableLifeTimeManager::impl_doClose()
             xComponent->dispose();
         }
     }
-    //mutex will be reacquired in destructor of aNegativeGuard
+    rGuard.lock();
 }
 
 void CloseableLifeTimeManager::g_addCloseListener( const uno::Reference< util::XCloseListener > & xListener )
 {
-    osl::MutexGuard aGuard( m_aAccessMutex );
+    std::unique_lock aGuard( m_aAccessMutex );
     //Mutex needs to be acquired exactly once; will be released inbetween
     if( !impl_canStartApiCall() )
         return;
     //mutex is acquired
 
-    m_aListenerContainer.addInterface( cppu::UnoType<util::XCloseListener>::get(),xListener );
+    m_aCloseListeners.addInterface( aGuard, xListener );
     m_bOwnership = false;
 }
 
@@ -386,9 +374,9 @@ bool CloseableLifeTimeManager::impl_canStartApiCall()
         //we need to wait for his end because the result of the preceding call
         //is relevant for our behaviour here
 
-        m_aAccessMutex.release();
+        m_aAccessMutex.unlock();
         m_aEndTryClosingCondition.wait(); //@todo??? this may block??? try closing
-        m_aAccessMutex.acquire();
+        m_aAccessMutex.lock();
         if( m_bDisposed || m_bInDispose || m_bClosed )
             return false; //return if closed already
     }
@@ -421,12 +409,13 @@ LifeTimeGuard::~LifeTimeGuard()
     try
     {
         //do acquire the mutex if it was cleared before
-        osl::MutexGuard g(m_rManager.m_aAccessMutex);
+        if (!m_guard.owns_lock())
+            m_guard.lock();
         if(m_bCallRegistered)
         {
             //Mutex needs to be acquired exactly once
             //mutex may be released inbetween in special case of impl_apiCallCountReachedNull()
-            m_rManager.impl_unregisterApiCall(m_bLongLastingCallRegistered);
+            m_rManager.impl_unregisterApiCall(m_guard, m_bLongLastingCallRegistered);
         }
     }
     catch( uno::Exception& ex )

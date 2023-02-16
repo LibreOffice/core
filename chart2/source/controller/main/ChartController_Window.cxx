@@ -1722,7 +1722,8 @@ void SAL_CALL ChartController::addSelectionChangeListener( const uno::Reference<
         return; //behave passive if already disposed or suspended
 
     //--add listener
-    m_aLifeTimeManager.m_aListenerContainer.addInterface( cppu::UnoType<view::XSelectionChangeListener>::get(), xListener );
+    std::unique_lock aGuard2(m_aLifeTimeManager.m_aAccessMutex);
+    m_aLifeTimeManager.m_aSelectionChangeListeners.addInterface( aGuard2, xListener );
 }
 
 void SAL_CALL ChartController::removeSelectionChangeListener( const uno::Reference<view::XSelectionChangeListener> & xListener )
@@ -1732,22 +1733,18 @@ void SAL_CALL ChartController::removeSelectionChangeListener( const uno::Referen
         return; //behave passive if already disposed or suspended
 
     //--remove listener
-    m_aLifeTimeManager.m_aListenerContainer.removeInterface( cppu::UnoType<view::XSelectionChangeListener>::get(), xListener );
+    std::unique_lock aGuard2(m_aLifeTimeManager.m_aAccessMutex);
+    m_aLifeTimeManager.m_aSelectionChangeListeners.removeInterface( aGuard2, xListener );
 }
 
 void ChartController::impl_notifySelectionChangeListeners()
 {
-    ::comphelper::OInterfaceContainerHelper2* pIC = m_aLifeTimeManager.m_aListenerContainer
-        .getContainer( cppu::UnoType<view::XSelectionChangeListener>::get() );
-    if( pIC )
+    std::unique_lock aGuard(m_aLifeTimeManager.m_aAccessMutex);
+    if( m_aLifeTimeManager.m_aSelectionChangeListeners.getLength(aGuard) )
     {
         uno::Reference< view::XSelectionSupplier > xSelectionSupplier(this);
         lang::EventObject aEvent( xSelectionSupplier );
-        ::comphelper::OInterfaceIteratorHelper2 aIt( *pIC );
-        while( aIt.hasMoreElements() )
-        {
-            static_cast< view::XSelectionChangeListener* >( aIt.next() )->selectionChanged( aEvent );
-        }
+        m_aLifeTimeManager.m_aSelectionChangeListeners.notifyEach(aGuard, &view::XSelectionChangeListener::selectionChanged, aEvent);
     }
 }
 

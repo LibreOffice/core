@@ -863,12 +863,12 @@ void SAL_CALL ChartController::dispose()
 void SAL_CALL ChartController::addEventListener(
     const uno::Reference<lang::XEventListener>& xListener )
 {
-    SolarMutexGuard aGuard;
     if( impl_isDisposedOrSuspended() )//@todo? allow adding of listeners in suspend mode?
         return; //behave passive if already disposed or suspended
 
     //--add listener
-    m_aLifeTimeManager.m_aListenerContainer.addInterface( cppu::UnoType<lang::XEventListener>::get(), xListener );
+    std::unique_lock aGuard2(m_aLifeTimeManager.m_aAccessMutex);
+    m_aLifeTimeManager.m_aEventListeners.addInterface( aGuard2, xListener );
 }
 
 void SAL_CALL ChartController::removeEventListener(
@@ -879,7 +879,8 @@ void SAL_CALL ChartController::removeEventListener(
         return; //behave passive if already disposed or suspended
 
     //--remove listener
-    m_aLifeTimeManager.m_aListenerContainer.removeInterface( cppu::UnoType<lang::XEventListener>::get(), xListener );
+    std::unique_lock aGuard2(m_aLifeTimeManager.m_aAccessMutex);
+    m_aLifeTimeManager.m_aEventListeners.removeInterface( aGuard2, xListener );
 }
 
 // util::XCloseListener
