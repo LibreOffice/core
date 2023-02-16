@@ -190,6 +190,9 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
     // determine frame the object position has to be oriented at.
     const SwTextFrame* pOrientFrame = &rAnchorTextFrame;
     const SwTextFrame* pAnchorFrameForVertPos;
+    // If true, this means that the anchored object is a split fly frame and it's not a master but
+    // one of the follows.
+    bool bFollowSplitFly = false;
     {
         // if object is at-character anchored, determine character-rectangle
         // and frame, position has to be oriented at.
@@ -239,6 +242,8 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                     if (pFollow)
                     {
                         pOrientFrame = pFollow;
+                        // Anchored object has a precede, so it's a follow.
+                        bFollowSplitFly = true;
                     }
                 }
             }
@@ -588,6 +593,12 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                     nVertOffsetToFrameAnchorPos += aRectFnSet.YDiff(nPageBottom, nTopOfOrient);
                 }
                 nRelPosY = nVertOffsetToFrameAnchorPos + aVert.GetPos();
+                if (bFollowSplitFly)
+                {
+                    // This is a follow of a split fly: shift it up to match the anchor position,
+                    // because the vertical offset is meant to be handled only on the first page.
+                    nRelPosY -= aVert.GetPos();
+                }
             }
 
             // <pUpperOfOrientFrame>: layout frame, at which the position has to

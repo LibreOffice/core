@@ -82,6 +82,51 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWithTable)
     // This failed, page 1 anchor had unexpected, leftover text.
     CPPUNIT_ASSERT(!pPage1Anchor->HasPara());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyVertoffset)
+{
+    // Given a document with a floattable, split on 2 pages and a positive vertical offset:
+    SwFormatFlySplit::SetForce(true);
+    comphelper::ScopeGuard g([] { SwFormatFlySplit::SetForce(false); });
+    createSwDoc("floattable-vertoffset.docx");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure that the vert offset has an effect on the master fly, but not on follow flys:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    auto pPage1Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage1Objs[0]);
+    CPPUNIT_ASSERT(pPage1Fly);
+    auto pPage1Anchor = dynamic_cast<SwTextFrame*>(pPage1->FindLastBodyContent());
+    CPPUNIT_ASSERT(pPage1Anchor);
+    SwTwips nPage1AnchorTop = pPage1Anchor->getFrameArea().Top();
+    SwTwips nPage1FlyTop = pPage1Fly->getFrameArea().Top();
+    // First page, the vert offset should be there. This comes from word/document.xml:
+    // <w:tblpPr ... w:tblpY="1135"/>
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(1135), nPage1FlyTop - nPage1AnchorTop);
+
+    // Also verify that the 2nd page has no such offset:
+    auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
+    CPPUNIT_ASSERT(pPage2);
+    const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
+    auto pPage2Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage2Objs[0]);
+    CPPUNIT_ASSERT(pPage2Fly);
+    auto pPage2Anchor = dynamic_cast<SwTextFrame*>(pPage2->FindLastBodyContent());
+    CPPUNIT_ASSERT(pPage2Anchor);
+    SwTwips nPage2AnchorTop = pPage2Anchor->getFrameArea().Top();
+    SwTwips nPage2FlyTop = pPage2Fly->getFrameArea().Top();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1135
+    // i.e. the fly frame on the 2nd page was also shifted down in Writer, but not in Word.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(0), nPage2FlyTop - nPage2AnchorTop);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
