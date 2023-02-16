@@ -41,7 +41,6 @@ private:
     mutable std::unique_ptr<SvNumberFormatter> pFormTable;
     mutable rtl::Reference<SfxItemPool>  pEditPool;     // EditTextObjectPool
     mutable rtl::Reference<SfxItemPool>  pEnginePool;   // EditEnginePool
-    ScDocument&                 m_rSourceDoc;
 
 public:
                 ScPoolHelper( ScDocument& rSourceDoc );

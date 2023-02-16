@@ -29,7 +29,6 @@
 
 ScPoolHelper::ScPoolHelper( ScDocument& rSourceDoc )
     : pDocPool(new ScDocumentPool)
-    , m_rSourceDoc(rSourceDoc)
 {
     pDocPool->FreezeIdRanges();
 
@@ -95,7 +94,8 @@ std::unique_ptr<SvNumberFormatter> ScPoolHelper::CreateNumberFormatter() const
         std::scoped_lock aGuard(maMtxCreateNumFormatter);
         p.reset(new SvNumberFormatter(comphelper::getProcessComponentContext(), LANGUAGE_SYSTEM));
     }
-    p->SetColorLink( LINK(&m_rSourceDoc, ScDocument, GetUserDefinedColor) );
+    assert(mxStylePool->GetDocument());
+    p->SetColorLink( LINK(mxStylePool->GetDocument(), ScDocument, GetUserDefinedColor));
     p->SetEvalDateFormat(NF_EVALDATEFORMAT_INTL_FORMAT);
 
     sal_uInt16 d,m;
