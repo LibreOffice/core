@@ -329,7 +329,16 @@ void Test::testLocalizedProperty() {
         OUString v;
         CPPUNIT_ASSERT(
             access->getByHierarchicalName("/org.libreoffice.unittest/localized/*-") >>= v);
+        //TODO: "default" instead of "en-US" is presumably due to a bug in
+        // LanguageTag::getFallbackStrings, which returns an empty string:
         CPPUNIT_ASSERT_EQUAL(OUString("default"), v);
+    }
+    {
+        // Make sure a degenerate passed-in "-" locale is handled gracefully:
+        OUString v;
+        CPPUNIT_ASSERT(
+            access->getByHierarchicalName("/org.libreoffice.unittest/noDefaultLang/*-") >>= v);
+        CPPUNIT_ASSERT_EQUAL(OUString("en-US"), v);
     }
 }
 

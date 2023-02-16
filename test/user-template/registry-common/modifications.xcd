@@ -12,6 +12,8 @@
   <component>
    <prop oor:name="localized" oor:localized="true" oor:type="xs:string">
    </prop>
+   <prop oor:name="noDefaultLang" oor:localized="true" oor:type="xs:string">
+   </prop>
   </component>
  </oor:component-schema>
  <oor:component-data oor:package="org.libreoffice" oor:name="unittest">
@@ -19,6 +21,9 @@
     <value>default</value>
     <value xml:lang="en-US">en-US</value>
     <value xml:lang="pt-PT">pt-PT</value>
+  </prop>
+  <prop oor:name="noDefaultLang">
+    <value xml:lang="en-US">en-US</value>
   </prop>
  </oor:component-data>
  <oor:component-data xmlns:install="http://openoffice.org/2004/installation" oor:name="VCL" oor:package="org.openoffice">
