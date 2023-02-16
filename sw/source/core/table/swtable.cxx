@@ -1616,7 +1616,7 @@ void SwTable::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTable"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    GetFrameFormat()->dumpAsXml(pWriter);
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("table-format"), "%p", GetFrameFormat());
     for (const auto& pLine : GetTabLines())
     {
         (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTableLine"));
