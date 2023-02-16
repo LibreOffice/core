@@ -164,7 +164,7 @@ SfxRequest::SfxRequest
     if (pImpl->pViewFrame->GetDispatcher()->GetShellAndSlot_Impl(nSlot, &pImpl->pShell, &pImpl->pSlot, true, true))
     {
         pImpl->SetPool( &pImpl->pShell->GetPool() );
-        pImpl->xRecorder = SfxRequest::GetMacroRecorder(pImpl->pViewFrame);
+        pImpl->xRecorder = SfxRequest::GetMacroRecorder(*pImpl->pViewFrame);
         if (pImpl->xRecorder)
             pImpl->xTransform = util::URLTransformer::create(comphelper::getProcessComponentContext());
         pImpl->aTarget = pImpl->pShell->GetName();
@@ -205,7 +205,7 @@ SfxRequest::SfxRequest
     if( pImpl->pViewFrame->GetDispatcher()->GetShellAndSlot_Impl( nSlotId, &pImpl->pShell, &pImpl->pSlot, true, true ) )
     {
         pImpl->SetPool( &pImpl->pShell->GetPool() );
-        pImpl->xRecorder = SfxRequest::GetMacroRecorder( pViewFrame );
+        pImpl->xRecorder = SfxRequest::GetMacroRecorder(*pViewFrame);
         if (pImpl->xRecorder)
             pImpl->xTransform = util::URLTransformer::create(comphelper::getProcessComponentContext());
         pImpl->aTarget = pImpl->pShell->GetName();
@@ -673,7 +673,7 @@ bool SfxRequest::IsDone() const
 }
 
 
-css::uno::Reference< css::frame::XDispatchRecorder > SfxRequest::GetMacroRecorder( SfxViewFrame const * pView )
+css::uno::Reference< css::frame::XDispatchRecorder > SfxRequest::GetMacroRecorder(const SfxViewFrame& rView)
 
 /*  [Description]
 
@@ -687,14 +687,8 @@ css::uno::Reference< css::frame::XDispatchRecorder > SfxRequest::GetMacroRecorde
 {
     css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
 
-    if (!pView)
-        pView = SfxViewFrame::Current();
-
-    if (!pView)
-        return xRecorder;
-
     css::uno::Reference< css::beans::XPropertySet > xSet(
-        pView->GetFrame().GetFrameInterface(),
+        rView.GetFrame().GetFrameInterface(),
         css::uno::UNO_QUERY);
 
     if(xSet.is())
@@ -711,7 +705,7 @@ css::uno::Reference< css::frame::XDispatchRecorder > SfxRequest::GetMacroRecorde
 
 bool SfxRequest::HasMacroRecorder(const SfxViewFrame& rView)
 {
-    return GetMacroRecorder(&rView).is();
+    return GetMacroRecorder(rView).is();
 }
 
 bool SfxRequest::IsAPI() const
