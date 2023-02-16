@@ -2382,7 +2382,7 @@ LanguageTag & LanguageTag::makeFallback()
     }
 
     // Original language-only.
-    if (aLanguage != maBcp47)
+    if (!aLanguage.isEmpty() && aLanguage != maBcp47)
         aVec.push_back( aLanguage);
 
     return aVec;
