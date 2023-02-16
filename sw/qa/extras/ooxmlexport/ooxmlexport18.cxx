@@ -142,6 +142,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak3, "tdf153613_anchore
     assertXPath(pLayout, "//page[2]//anchored", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak6, "tdf153613_anchoredAfterPgBreak6.docx")
+{
+    // An anchored TO character image, followed by more characters moves to the following page
+    // The difference from test 2 is that it is not the first character run
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    CPPUNIT_ASSERT_EQUAL(4, getParagraphs());
+
+    const auto& pLayout = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(OUString("y"), getXPathContent(pLayout, "//page[2]/body/txt[1]"));
+    assertXPath(pLayout, "//page[1]//anchored", 1); // DID YOU FIX ME? This should be page[2]
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_inlineAfterPgBreak, "tdf153613_inlineAfterPgBreak.docx")
 {
     const auto& pLayout = parseLayoutDump();
