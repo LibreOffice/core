@@ -135,7 +135,7 @@ void ScShapeTest::testTdf144242_OpenBezier_noSwapWH()
 
     // Insert default open Bezier curve
     ScTabViewShell* pTabViewShell = getViewShell();
-    SfxRequest aReq(pTabViewShell->GetViewFrame(), SID_DRAW_BEZIER_NOFILL);
+    SfxRequest aReq(&pTabViewShell->GetViewFrame(), SID_DRAW_BEZIER_NOFILL);
     aReq.SetModifier(KEY_MOD1); // Ctrl
     pTabViewShell->ExecDraw(aReq);
     pTabViewShell->SetDrawShell(false);
@@ -168,7 +168,7 @@ void ScShapeTest::testTdf144242_Line_noSwapWH()
 
     // Insert default line
     ScTabViewShell* pTabViewShell = getViewShell();
-    SfxRequest aReq(pTabViewShell->GetViewFrame(), SID_DRAW_LINE);
+    SfxRequest aReq(&pTabViewShell->GetViewFrame(), SID_DRAW_LINE);
     aReq.SetModifier(KEY_MOD1); // Ctrl
     pTabViewShell->ExecDraw(aReq);
     pTabViewShell->SetDrawShell(false);
@@ -611,7 +611,7 @@ void ScShapeTest::testTdf137576_LogicRectInDefaultMeasureline()
 
     // Create default measureline by SfxRequest that corresponds to Ctrl+Click
     ScTabViewShell* pTabViewShell = getViewShell();
-    SfxRequest aReq(pTabViewShell->GetViewFrame(), SID_DRAW_MEASURELINE);
+    SfxRequest aReq(&pTabViewShell->GetViewFrame(), SID_DRAW_MEASURELINE);
     aReq.SetModifier(KEY_MOD1); // Ctrl
     pTabViewShell->ExecDraw(aReq);
 

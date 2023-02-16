@@ -80,8 +80,8 @@ SwVbaWindow::getWindowState()
 {
     sal_Int32 nwindowState = word::WdWindowState::wdWindowStateNormal;
     SwView* pView = word::getView( m_xModel );
-    SfxViewFrame* pViewFrame = pView -> GetViewFrame();
-    WorkWindow* pWork = static_cast<WorkWindow*>( pViewFrame->GetFrame().GetSystemWindow() );
+    SfxViewFrame& rViewFrame = pView->GetViewFrame();
+    WorkWindow* pWork = static_cast<WorkWindow*>( rViewFrame.GetFrame().GetSystemWindow() );
     if ( pWork )
     {
         if ( pWork -> IsMaximized())
@@ -98,8 +98,8 @@ SwVbaWindow::setWindowState( const uno::Any& _windowstate )
     sal_Int32 nwindowState = word::WdWindowState::wdWindowStateMaximize;
     _windowstate >>= nwindowState;
     SwView* pView = word::getView( m_xModel );
-    SfxViewFrame* pViewFrame = pView -> GetViewFrame();
-    WorkWindow* pWork = static_cast<WorkWindow*>( pViewFrame->GetFrame().GetSystemWindow() );
+    SfxViewFrame& rViewFrame = pView->GetViewFrame();
+    WorkWindow* pWork = static_cast<WorkWindow*>( rViewFrame.GetFrame().GetSystemWindow() );
     if ( pWork )
     {
         if ( nwindowState == word::WdWindowState::wdWindowStateMaximize )
@@ -120,7 +120,7 @@ SwVbaWindow::getCaption()
     if( !pView )
         return "";
 
-    uno::Reference< css::beans::XPropertySet > xFrameProps( pView->GetViewFrame()->GetFrame().GetFrameInterface()->getController()->getFrame(), uno::UNO_QUERY );
+    uno::Reference< css::beans::XPropertySet > xFrameProps( pView->GetViewFrame().GetFrame().GetFrameInterface()->getController()->getFrame(), uno::UNO_QUERY );
     if( !xFrameProps.is() )
         return "";
 
@@ -137,7 +137,7 @@ SwVbaWindow::setCaption( const OUString& _caption )
     if( !pView )
         return;
 
-    uno::Reference< css::beans::XPropertySet > xFrameProps( pView->GetViewFrame()->GetFrame().GetFrameInterface()->getController()->getFrame(), uno::UNO_QUERY );
+    uno::Reference< css::beans::XPropertySet > xFrameProps( pView->GetViewFrame().GetFrame().GetFrameInterface()->getController()->getFrame(), uno::UNO_QUERY );
     if( !xFrameProps.is() )
         return;
 

@@ -391,14 +391,11 @@ void  TextViewOutWin::MouseButtonUp( const MouseEvent &rEvt )
     if ( m_pTextView )
     {
         m_pTextView->MouseButtonUp( rEvt );
-        SfxViewFrame *pFrame = static_cast<SwSrcEditWindow*>(GetParent())->GetSrcView()->GetViewFrame();
-        if ( pFrame )
-        {
-            SfxBindings& rBindings = pFrame->GetBindings();
-            rBindings.Invalidate( SID_TABLE_CELL );
-            rBindings.Invalidate( SID_CUT );
-            rBindings.Invalidate( SID_COPY );
-        }
+        SfxViewFrame& rFrame = static_cast<SwSrcEditWindow*>(GetParent())->GetSrcView()->GetViewFrame();
+        SfxBindings& rBindings = rFrame.GetBindings();
+        rBindings.Invalidate( SID_TABLE_CELL );
+        rBindings.Invalidate( SID_CUT );
+        rBindings.Invalidate( SID_COPY );
     }
 }
 
@@ -444,7 +441,7 @@ void  TextViewOutWin::KeyInput( const KeyEvent& rKEvt )
     if(bChange)
         bDone = m_pTextView->KeyInput( rKEvt );
 
-    SfxBindings& rBindings = static_cast<SwSrcEditWindow*>(GetParent())->GetSrcView()->GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = static_cast<SwSrcEditWindow*>(GetParent())->GetSrcView()->GetViewFrame().GetBindings();
     if ( !bDone )
     {
         if ( !SfxViewShell::Current()->KeyInput( rKEvt ) )
@@ -526,7 +523,7 @@ void SwSrcEditWindow::CreateTextEngine()
     InitScrollBars();
     StartListening( *m_pTextEngine );
 
-    SfxBindings& rBind = GetSrcView()->GetViewFrame()->GetBindings();
+    SfxBindings& rBind = GetSrcView()->GetViewFrame().GetBindings();
     rBind.Invalidate( SID_TABLE_CELL );
 }
 
@@ -560,7 +557,7 @@ IMPL_LINK_NOARG(SwSrcEditWindow, HorzScrollHdl, weld::Scrollbar&, void)
     GetTextView()->Scroll( nDiff, 0 );
     m_pTextView->ShowCursor( false );
     m_pHScrollbar->SetThumbPos( m_pTextView->GetStartDocPos().X() );
-    GetSrcView()->GetViewFrame()->GetBindings().Invalidate( SID_TABLE_CELL );
+    GetSrcView()->GetViewFrame().GetBindings().Invalidate( SID_TABLE_CELL );
 }
 
 IMPL_LINK_NOARG(SwSrcEditWindow, VertScrollHdl, weld::Scrollbar&, void)
@@ -569,7 +566,7 @@ IMPL_LINK_NOARG(SwSrcEditWindow, VertScrollHdl, weld::Scrollbar&, void)
     GetTextView()->Scroll( 0, nDiff );
     m_pTextView->ShowCursor( false );
     m_pVScrollbar->SetThumbPos( m_pTextView->GetStartDocPos().Y() );
-    GetSrcView()->GetViewFrame()->GetBindings().Invalidate( SID_TABLE_CELL );
+    GetSrcView()->GetViewFrame().GetBindings().Invalidate( SID_TABLE_CELL );
 }
 
 IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer*, pIdle, void )

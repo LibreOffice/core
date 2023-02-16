@@ -163,7 +163,7 @@ friend class SfxBaseController;
 friend class SfxPrinterController;
 
     std::unique_ptr<struct SfxViewShell_Impl>   pImpl;
-    SfxViewFrame*               pFrame;
+    SfxViewFrame&               rFrame;
     VclPtr<vcl::Window>         pWindow;
     bool                        bNoNewWindow;
     bool                        mbPrinterSettingsModified;
@@ -262,7 +262,22 @@ public:
     const SvBorder&             GetBorderPixel() const;
     void                        SetBorderPixel( const SvBorder &rBorder );
     void                        InvalidateBorder();
-    inline SfxViewFrame*        GetViewFrame() const;
+
+    /*  [Description]
+
+        This method returns a reference to the <SfxViewFrame> Instance in which
+        this SfxViewShell is displayed. This is the instance that was passed
+        on in the constructor. It is guaranteed that the returned reference
+        is a valid SfxViewFrame instance.
+
+        [Cross-reference]
+
+        <SfxShell::GetFrame()const>
+    */
+    SfxViewFrame& GetViewFrame() const
+    {
+        return rFrame;
+    }
 
     // Printing Interface
     virtual SfxPrinter*         GetPrinter( bool bCreate = false );
@@ -442,26 +457,6 @@ public:
     void SetStoringHelper(std::shared_ptr<SfxStoringHelper> xHelper) { m_xHelper = xHelper; }
 };
 
-
-inline SfxViewFrame* SfxViewShell::GetViewFrame() const
-
-/*  [Description]
-
-    This method returns a pointer to the <SfxViewFrame> Instance in which
-    this SfxViewShell is displayed. This is the instance that was passed
-    on in the constructor. It is guaranteed that the returned pointer
-    points on the valid SfxViewFrame instance.
-
-    [Cross-reference]
-
-    <SfxShell::GetFrame()const>
-*/
-
-{
-    return pFrame;
-}
-
 #endif // INCLUDED_SFX2_VIEWSH_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

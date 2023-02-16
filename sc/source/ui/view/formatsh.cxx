@@ -215,7 +215,7 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
             case SID_STYLE_UPDATE_BY_EXAMPLE:
             {
                 std::unique_ptr<SfxUInt16Item> pFamilyItem;
-                pTabViewShell->GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pFamilyItem);
+                pTabViewShell->GetViewFrame().GetBindings().QueryState(SID_STYLE_FAMILY, pFamilyItem);
 
                 bool bPage = pFamilyItem && SfxStyleFamily::Page == static_cast<SfxStyleFamily>(pFamilyItem->GetValue());
 
@@ -230,7 +230,7 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
             case SID_STYLE_SHOW:
             {
                 std::unique_ptr<SfxUInt16Item> pFamilyItem;
-                pTabViewShell->GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pFamilyItem);
+                pTabViewShell->GetViewFrame().GetBindings().QueryState(SID_STYLE_FAMILY, pFamilyItem);
                 bool bPage = pFamilyItem && SfxStyleFamily::Page == static_cast<SfxStyleFamily>(pFamilyItem->GetValue());
 
                 if ( bProtected && !bPage )
@@ -977,7 +977,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
     ScTabViewShell*     pTabViewShell   = GetViewData().GetViewShell();
     const SfxItemSet*   pReqArgs        = rReq.GetArgs();
     sal_uInt16          nSlot           = rReq.GetSlot();
-    SfxBindings&        rBindings       = pTabViewShell->GetViewFrame()->GetBindings();
+    SfxBindings&        rBindings       = pTabViewShell->GetViewFrame().GetBindings();
 
     pTabViewShell->HideListBox();                   // Autofilter-DropDown-Listbox
 

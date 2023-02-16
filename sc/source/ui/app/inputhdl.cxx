@@ -878,7 +878,7 @@ void ScInputHandler::UpdateRefDevice()
         return;
 
     bool bTextWysiwyg = SC_MOD()->GetInputOptions().GetTextWysiwyg();
-    bool bInPlace = pActiveViewSh && pActiveViewSh->GetViewFrame()->GetFrame().IsInPlace();
+    bool bInPlace = pActiveViewSh && pActiveViewSh->GetViewFrame().GetFrame().IsInPlace();
     EEControlBits nCtrl = mpEditEngine->GetControlWord();
     if ( bTextWysiwyg || bInPlace )
         nCtrl |= EEControlBits::FORMAT100;    // EditEngine default: always format for 100%
@@ -2860,11 +2860,11 @@ void ScInputHandler::ShowRefFrame()
         return;
 
     bool bFound = false;
-    SfxViewFrame* pRefFrame = pRefViewSh->GetViewFrame();
+    SfxViewFrame& rRefFrame = pRefViewSh->GetViewFrame();
     SfxViewFrame* pOneFrame = SfxViewFrame::GetFirst();
     while ( pOneFrame && !bFound )
     {
-        if ( pOneFrame == pRefFrame )
+        if ( pOneFrame == &rRefFrame )
             bFound = true;
         pOneFrame = SfxViewFrame::GetNext( *pOneFrame );
     }
@@ -3371,7 +3371,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
 
         if ( pExecuteSh )
         {
-            SfxBindings& rBindings = pExecuteSh->GetViewFrame()->GetBindings();
+            SfxBindings& rBindings = pExecuteSh->GetViewFrame().GetBindings();
 
             sal_uInt16 nId = FID_INPUTLINE_ENTER;
             if ( nBlockMode == ScEnterMode::BLOCK )

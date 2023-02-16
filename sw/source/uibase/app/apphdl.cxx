@@ -310,7 +310,7 @@ SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
         SfxBoolItem aHidden( SID_HIDDEN, true );
         SfxStringItem aReferer(SID_REFERER, pView->GetDocShell()->GetTitle());
         const SfxObjectItem* pItem = static_cast<const SfxObjectItem*>(
-            pView->GetViewFrame()->GetDispatcher()->ExecuteList(SID_OPENDOC,
+            pView->GetViewFrame().GetDispatcher()->ExecuteList(SID_OPENDOC,
                 SfxCallMode::SYNCHRON,
                 { &aURL, &aHidden, &aReferer, &aTargetFrameName }));
         SfxShell* pShell = pItem ? pItem->GetShell() : nullptr;
@@ -323,11 +323,11 @@ SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
                 pNewView = dynamic_cast<SwView*>(pViewShell);
                 if (pNewView)
                 {
-                    pNewView->GetViewFrame()->GetFrame().Appear();
+                    pNewView->GetViewFrame().GetFrame().Appear();
                 }
                 else
                 {
-                    pViewShell->GetViewFrame()->DoClose();
+                    pViewShell->GetViewFrame().DoClose();
                 }
             }
         }
@@ -336,7 +336,7 @@ SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
     {
         SfxStringItem aFactory(SID_NEWDOCDIRECT, SwDocShell::Factory().GetFilterContainer()->GetName());
         const SfxFrameItem* pItem = static_cast<const SfxFrameItem*>(
-            pView->GetViewFrame()->GetDispatcher()->ExecuteList(
+            pView->GetViewFrame().GetDispatcher()->ExecuteList(
                 SID_NEWDOCDIRECT, SfxCallMode::SYNCHRON, { &aFactory }));
         SfxFrame* pFrame = pItem ? pItem->GetFrame() : nullptr;
         SfxViewFrame* pViewFrame = pFrame ? pFrame->GetCurrentViewFrame() : nullptr;
@@ -493,7 +493,7 @@ void SwMailMergeWizardExecutor::ExecutionFinished()
                                        FN_MAILMERGE_PRINT_DOCUMENTS,
                                        FN_MAILMERGE_EMAIL_DOCUMENTS,
                                        0 };
-        m_pView->GetViewFrame()->GetBindings().Invalidate(slotIds);
+        m_pView->GetViewFrame().GetBindings().Invalidate(slotIds);
     }
 
     // release/destroy asynchronously
@@ -579,8 +579,8 @@ void SwMailMergeWizardExecutor::EndDialogHdl(sal_Int32 nRet)
             if(pTargetView && pSourceView)
             {
                 m_pView2Close = pTargetView;
-                pTargetView->GetViewFrame()->GetTopViewFrame()->GetWindow().Hide();
-                pSourceView->GetViewFrame()->GetFrame().AppearWithUpdate();
+                pTargetView->GetViewFrame().GetTopViewFrame()->GetWindow().Hide();
+                pSourceView->GetViewFrame().GetFrame().AppearWithUpdate();
                 // the current view has be set when the target is destroyed
                 m_pView = pSourceView;
                 xMMConfig->SetTargetView(nullptr);
@@ -617,7 +617,7 @@ void SwMailMergeWizardExecutor::EndDialogHdl(sal_Int32 nRet)
             SwView* pSourceView = xMMConfig ? xMMConfig->GetSourceView() : nullptr;
             if(pSourceView)
             {
-                xMMConfig->GetSourceView()->GetViewFrame()->GetFrame().Appear();
+                xMMConfig->GetSourceView()->GetViewFrame().GetFrame().Appear();
             }
             ExecutionFinished();
             break;
@@ -645,13 +645,13 @@ IMPL_LINK_NOARG(SwMailMergeWizardExecutor, CancelHdl, void*, void)
     {
         if (xMMConfig->GetTargetView())
         {
-            xMMConfig->GetTargetView()->GetViewFrame()->DoClose();
+            xMMConfig->GetTargetView()->GetViewFrame().DoClose();
             xMMConfig->SetTargetView(nullptr);
         }
         if (xMMConfig->GetSourceView())
         {
-            auto pViewFrame(xMMConfig->GetSourceView()->GetViewFrame());
-            pViewFrame->GetFrame().AppearWithUpdate();
+            auto& rViewFrame(xMMConfig->GetSourceView()->GetViewFrame());
+            rViewFrame.GetFrame().AppearWithUpdate();
         }
         xMMConfig->Commit();
     }
@@ -670,7 +670,7 @@ IMPL_LINK_NOARG(SwMailMergeWizardExecutor, CloseFrameHdl, void*, void)
 {
     if ( m_pView2Close )
     {
-        m_pView2Close->GetViewFrame()->DoClose();
+        m_pView2Close->GetViewFrame().DoClose();
         m_pView2Close = nullptr;
     }
     m_pWizardToDestroyInCallback.disposeAndClear();
@@ -788,7 +788,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
             rSh.GetDBManager()->Merge(aMergeDesc);
 
             // update enabled / disabled status of the buttons in the toolbar
-            SfxBindings& rBindings = rSh.GetView().GetViewFrame()->GetBindings();
+            SfxBindings& rBindings = rSh.GetView().GetViewFrame().GetBindings();
             rBindings.Invalidate(FN_MAILMERGE_FIRST_ENTRY);
             rBindings.Invalidate(FN_MAILMERGE_PREV_ENTRY);
             rBindings.Invalidate(FN_MAILMERGE_NEXT_ENTRY);
@@ -819,7 +819,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
                 // The connection has been attempted, but failed or no results found,
                 // so invalidate the toolbar buttons in case they need to be disabled.
                 SfxBindings& rBindings
-                    = GetActiveView()->GetWrtShell().GetView().GetViewFrame()->GetBindings();
+                    = GetActiveView()->GetWrtShell().GetView().GetViewFrame().GetBindings();
                 rBindings.Invalidate(FN_MAILMERGE_CREATE_DOCUMENTS);
                 rBindings.Invalidate(FN_MAILMERGE_SAVE_DOCUMENTS);
                 rBindings.Invalidate(FN_MAILMERGE_PRINT_DOCUMENTS);
@@ -837,7 +837,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
                 xConfigItem = SwDBManager::PerformMailMerge(GetActiveView());
 
                 if (xConfigItem && xConfigItem->GetTargetView())
-                    xConfigItem->GetTargetView()->GetViewFrame()->GetFrame().Appear();
+                    xConfigItem->GetTargetView()->GetViewFrame().GetFrame().Appear();
             }
             else
             {
@@ -879,7 +879,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     {
                         // assume that not calling via SwEditShell::SetFixFields
                         // is allowed, because the shell hasn't been created yet
-                        assert(!pWrtSh || pWrtSh->GetView().GetViewFrame()->GetFrame().IsClosing_Impl());
+                        assert(!pWrtSh || pWrtSh->GetView().GetViewFrame().GetFrame().IsClosing_Impl());
                         pDocSh->GetDoc()->getIDocumentFieldsAccess().SetFixFields(nullptr);
                     }
                 }

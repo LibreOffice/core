@@ -205,7 +205,7 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
 
     if ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() && nMouseClickPageId != 0 && nMouseClickPageId != TabBar::PAGE_NOT_FOUND )
     {
-        SfxDispatcher* pDispatcher = pViewData->GetViewShell()->GetViewFrame()->GetDispatcher();
+        SfxDispatcher* pDispatcher = pViewData->GetViewShell()->GetViewFrame().GetDispatcher();
         pDispatcher->Execute( FID_TAB_MENU_RENAME, SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
         return;
     }
@@ -213,7 +213,7 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
     if( nMouseClickPageId == 0 )
     {
         // Click in the area next to the existing tabs:
-        SfxDispatcher* pDispatcher = pViewData->GetViewShell()->GetViewFrame()->GetDispatcher();
+        SfxDispatcher* pDispatcher = pViewData->GetViewShell()->GetViewFrame().GetDispatcher();
         pDispatcher->Execute( FID_TAB_DESELECTALL, SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
         // forget page ID, to be really sure that the dialog is not called twice
         nMouseClickPageId = TabBar::PAGE_NOT_FOUND;
@@ -317,7 +317,7 @@ void ScTabControl::Select()
         // for others this is only needed fidgeting
 
     if ( bRefMode && pViewData->GetRefType() == SC_REFTYPE_REF )
-        if ( pViewData->GetViewShell()->GetViewFrame()->HasChildWindow(SID_OPENDLG_CONSOLIDATE) )
+        if ( pViewData->GetViewShell()->GetViewFrame().HasChildWindow(SID_OPENDLG_CONSOLIDATE) )
         {
             ScRange aRange(
                     pViewData->GetRefStartX(), pViewData->GetRefStartY(), pViewData->GetRefStartZ(),

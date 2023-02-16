@@ -1483,7 +1483,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf65535)
         {
             static const OUStringLiteral sApplyRule(u"Spelling_Baaed");
             SfxStringItem aApplyItem(FN_PARAM_1, sApplyRule);
-            pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(
+            pViewShell->GetViewFrame().GetDispatcher()->ExecuteList(
                 SID_SPELLCHECK_APPLY_SUGGESTION, SfxCallMode::SYNCHRON, { &aApplyItem });
         }
 

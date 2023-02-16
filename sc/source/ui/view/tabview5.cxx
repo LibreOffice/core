@@ -306,16 +306,13 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
     }
 
     // notification for XActivationBroadcaster
-    SfxViewFrame* pViewFrame = aViewData.GetViewShell()->GetViewFrame();
-    if (pViewFrame)
+    SfxViewFrame& rViewFrame = aViewData.GetViewShell()->GetViewFrame();
+    uno::Reference<frame::XController> xController = rViewFrame.GetFrame().GetController();
+    if (xController.is())
     {
-        uno::Reference<frame::XController> xController = pViewFrame->GetFrame().GetController();
-        if (xController.is())
-        {
-            ScTabViewObj* pImp = dynamic_cast<ScTabViewObj*>( xController.get() );
-            if (pImp)
-                pImp->SheetChanged( bSameTabButMoved );
-        }
+        ScTabViewObj* pImp = dynamic_cast<ScTabViewObj*>( xController.get() );
+        if (pImp)
+            pImp->SheetChanged( bSameTabButMoved );
     }
 
     for (int i = 0; i < 4; i++)

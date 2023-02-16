@@ -108,7 +108,7 @@ ScDocShell* ScContentTree::GetManualOrCurrent()
         SfxViewShell* pViewSh = SfxViewShell::Current();
         if ( pViewSh )
         {
-            SfxObjectShell* pObjSh = pViewSh->GetViewFrame()->GetObjectShell();
+            SfxObjectShell* pObjSh = pViewSh->GetViewFrame().GetObjectShell();
             pSh = dynamic_cast<ScDocShell*>( pObjSh  );
         }
     }

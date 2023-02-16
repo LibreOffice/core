@@ -179,7 +179,7 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
             else
             {
                 rReq.Done();
-                SfxBindings& rBind = m_pView->GetViewFrame()->GetBindings();
+                SfxBindings& rBind = m_pView->GetViewFrame().GetBindings();
                 rBind.Invalidate( SID_TWAIN_SELECT );
                 rBind.Invalidate( SID_TWAIN_TRANSFER );
             }
@@ -306,7 +306,7 @@ void SAL_CALL SwClipboardChangeListener::changedContents( const css::datatransfe
                     SwTransferable::IsPasteSpecial( rSh, aDataHelper );
     }
 
-    SfxBindings& rBind = m_pView->GetViewFrame()->GetBindings();
+    SfxBindings& rBind = m_pView->GetViewFrame().GetBindings();
     rBind.Invalidate( SID_PASTE );
     rBind.Invalidate( SID_PASTE_SPECIAL );
     rBind.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );

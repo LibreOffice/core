@@ -34,10 +34,10 @@ weld::Window* ScTabViewShell::GetDialogParent()
     //  (necessary when a slot is executed from the dialog's OK handler)
     if (nCurRefDlgId && nCurRefDlgId == SC_MOD()->GetCurRefDlgId())
     {
-        SfxViewFrame* pViewFrm = GetViewFrame();
-        if (pViewFrm->HasChildWindow(nCurRefDlgId))
+        SfxViewFrame& rViewFrm = GetViewFrame();
+        if (rViewFrm.HasChildWindow(nCurRefDlgId))
         {
-            SfxChildWindow* pChild = pViewFrm->GetChildWindow(nCurRefDlgId);
+            SfxChildWindow* pChild = rViewFrm.GetChildWindow(nCurRefDlgId);
             if (pChild)
             {
                 auto xController = pChild->GetController();

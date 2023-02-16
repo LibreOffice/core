@@ -66,7 +66,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         }
         bool bNewResult = GetShell().SelectionHasNumber();
         if (bNewResult!=bMode) {
-            SfxBindings& rBindings = GetView().GetViewFrame()->GetBindings();
+            SfxBindings& rBindings = GetView().GetViewFrame().GetBindings();
             SfxBoolItem aItem(FN_NUM_NUMBERING_ON,!bNewResult);
             rBindings.SetState(aItem);
             SfxBoolItem aNewItem(FN_NUM_NUMBERING_ON,bNewResult);
@@ -95,7 +95,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         }
         bool bNewResult = GetShell().SelectionHasBullet();
         if (bNewResult!=bMode) {
-            SfxBindings& rBindings = GetView().GetViewFrame()->GetBindings();
+            SfxBindings& rBindings = GetView().GetViewFrame().GetBindings();
             SfxBoolItem aItem(FN_NUM_BULLET_ON,!bNewResult);
             rBindings.SetState(aItem);
             SfxBoolItem aNewItem(FN_NUM_BULLET_ON,bNewResult);
@@ -108,7 +108,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     case FN_NUM_BULLET_OFF:
     {
         GetShell().StartAllAction();
-        SfxRequest aReq(GetView().GetViewFrame(), FN_NUM_BULLET_ON);
+        SfxRequest aReq(&GetView().GetViewFrame(), FN_NUM_BULLET_ON);
         aReq.AppendItem(SfxBoolItem(FN_PARAM_1, false));
         aReq.Done();
         GetShell().NumOrBulletOff();

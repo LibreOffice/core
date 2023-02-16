@@ -367,7 +367,7 @@ SwChapterNumRules*  SwModule::GetChapterNumRules()
 
 void SwModule::ShowDBObj(SwView const & rView, const SwDBData& rData)
 {
-    Reference<XFrame> xFrame = rView.GetViewFrame()->GetFrame().GetFrameInterface();
+    Reference<XFrame> xFrame = rView.GetViewFrame().GetFrame().GetFrameInterface();
 
     uno::Reference<XFrame> xBeamerFrame = xFrame->findFrame("_beamer", FrameSearchFlag::CHILDREN);
     if (!xBeamerFrame.is())

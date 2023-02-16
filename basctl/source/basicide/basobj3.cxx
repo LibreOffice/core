@@ -321,9 +321,9 @@ void BasicStopped(
     if (Shell* pShell = GetShell())
     {
         sal_uInt16 nWait = 0;
-        while ( pShell->GetViewFrame()->GetWindow().IsWait() )
+        while ( pShell->GetViewFrame().GetWindow().IsWait() )
         {
-            pShell->GetViewFrame()->GetWindow().LeaveWait();
+            pShell->GetViewFrame().GetWindow().LeaveWait();
             nWait++;
         }
         if ( pnWaitCount )
@@ -430,7 +430,7 @@ SfxBindings* GetBindingsPtr()
     SfxViewFrame* pFrame = nullptr;
     if (Shell* pShell = GetShell())
     {
-        pFrame = pShell->GetViewFrame();
+        pFrame = &pShell->GetViewFrame();
     }
     else
     {
@@ -454,9 +454,11 @@ SfxBindings* GetBindingsPtr()
 SfxDispatcher* GetDispatcher ()
 {
     if (Shell* pShell = GetShell())
-        if (SfxViewFrame* pViewFrame = pShell->GetViewFrame())
-            if (SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher())
-                return pDispatcher;
+    {
+        SfxViewFrame& rViewFrame = pShell->GetViewFrame();
+        if (SfxDispatcher* pDispatcher = rViewFrame.GetDispatcher())
+            return pDispatcher;
+    }
     return nullptr;
 }
 } // namespace basctl

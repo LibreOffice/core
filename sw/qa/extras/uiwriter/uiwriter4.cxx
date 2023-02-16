@@ -1438,7 +1438,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testCursorWindows)
     SwWrtShell* pWrtShell1 = pDocShell->GetWrtShell();
 
     // Create a second view and type something.
-    pDocShell->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(
+    pDocShell->GetViewShell()->GetViewFrame().GetDispatcher()->Execute(
         SID_NEWWINDOW, SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
     SwWrtShell* pWrtShell2 = pDocShell->GetWrtShell();
     OUString aText("foo");

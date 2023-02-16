@@ -1049,7 +1049,7 @@ bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
                                     FN_TABLE_MODE_VARIABLE,
                                     0
                                 };
-            m_pWrtShell->GetView().GetViewFrame()->GetBindings().Invalidate( aInva );
+            m_pWrtShell->GetView().GetViewFrame().GetBindings().Invalidate( aInva );
         }
 
         bRet = true;

@@ -2607,8 +2607,8 @@ void ScPosWnd::DoEnter()
                 else if (eType == SC_MANAGE_NAMES)
                 {
                     sal_uInt16          nId  = ScNameDlgWrapper::GetChildWindowId();
-                    SfxViewFrame* pViewFrm = pViewSh->GetViewFrame();
-                    SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+                    SfxViewFrame& rViewFrm = pViewSh->GetViewFrame();
+                    SfxChildWindow* pWnd = rViewFrm.GetChildWindow( nId );
 
                     SC_MOD()->SetRefDialog( nId, pWnd == nullptr );
                 }

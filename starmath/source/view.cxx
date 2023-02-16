@@ -106,7 +106,7 @@ using namespace css::accessibility;
 using namespace css::uno;
 
 SmGraphicWindow::SmGraphicWindow(SmViewShell& rShell)
-    : InterimItemWindow(&rShell.GetViewFrame()->GetWindow(), "modules/smath/ui/mathwindow.ui", "MathWindow")
+    : InterimItemWindow(&rShell.GetViewFrame().GetWindow(), "modules/smath/ui/mathwindow.ui", "MathWindow")
     , nLinePixH(GetSettings().GetStyleSettings().GetScrollBarSize())
     , nColumnPixW(nLinePixH)
     , nZoom(100)
@@ -771,7 +771,7 @@ bool SmGraphicWidget::KeyInput(const KeyEvent& rKEvt)
 bool SmGraphicWidget::Command(const CommandEvent& rCEvt)
 {
     bool bCallBase = true;
-    if (!GetView().GetViewFrame()->GetFrame().IsInPlace())
+    if (!GetView().GetViewFrame().GetFrame().IsInPlace())
     {
         switch ( rCEvt.GetCommand() )
         {
@@ -861,8 +861,8 @@ void SmGraphicWindow::SetZoom(sal_uInt16 Factor)
     SetGraphicMapMode(MapMode(SmMapUnit(), Point(), aFraction, aFraction));
     mxGraphic->SetTotalSize();
     SmViewShell& rViewSh = mxGraphic->GetView();
-    rViewSh.GetViewFrame()->GetBindings().Invalidate(SID_ATTR_ZOOM);
-    rViewSh.GetViewFrame()->GetBindings().Invalidate(SID_ATTR_ZOOMSLIDER);
+    rViewSh.GetViewFrame().GetBindings().Invalidate(SID_ATTR_ZOOM);
+    rViewSh.GetViewFrame().GetBindings().Invalidate(SID_ATTR_ZOOMSLIDER);
 }
 
 void SmGraphicWindow::ZoomToFitInWindow()
@@ -965,7 +965,7 @@ void SmCmdBoxWindow::ShowContextMenu(const Point& rPos)
     ToTop();
     SmViewShell *pViewSh = GetView();
     if (pViewSh)
-        pViewSh->GetViewFrame()->GetDispatcher()->ExecutePopup("edit", this, &rPos);
+        pViewSh->GetViewFrame().GetDispatcher()->ExecutePopup("edit", this, &rPos);
 }
 
 void SmCmdBoxWindow::Command(const CommandEvent& rCEvt)
@@ -1065,7 +1065,7 @@ IMPL_LINK_NOARG( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, void )
 
         SmViewShell* pView = GetView();
         assert(pView);
-        bool bInPlace = pView->GetViewFrame()->GetFrame().IsInPlace();
+        bool bInPlace = pView->GetViewFrame().GetFrame().IsInPlace();
         uno::Reference< frame::XFrame > xFrame( GetBindings().GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface());
         if ( bInPlace )
         {
@@ -1545,7 +1545,7 @@ std::unique_ptr<SfxTabPage> SmViewShell::CreatePrintOptionsPage(weld::Container*
 SmEditWindow *SmViewShell::GetEditWindow()
 {
     SmCmdBoxWrapper* pWrapper = static_cast<SmCmdBoxWrapper*>(
-                                    GetViewFrame()->GetChildWindow(SmCmdBoxWrapper::GetChildWindowId()));
+                                    GetViewFrame().GetChildWindow(SmCmdBoxWrapper::GetChildWindowId()));
 
     if (pWrapper != nullptr)
     {
@@ -1559,7 +1559,7 @@ SmEditWindow *SmViewShell::GetEditWindow()
 void SmViewShell::SetStatusText(const OUString& rText)
 {
     maStatusText = rText;
-    GetViewFrame()->GetBindings().Invalidate(SID_TEXTSTATUS);
+    GetViewFrame().GetBindings().Invalidate(SID_TEXTSTATUS);
 }
 
 void SmViewShell::ShowError(const SmErrorDesc* pErrorDesc)
@@ -1623,7 +1623,7 @@ void SmViewShell::Insert( SfxMedium& rMedium )
     pDoc->Parse();
     pDoc->SetModified();
 
-    SfxBindings &rBnd = GetViewFrame()->GetBindings();
+    SfxBindings &rBnd = GetViewFrame().GetBindings();
     rBnd.Invalidate(SID_GRAPHIC_SM);
     rBnd.Invalidate(SID_TEXT);
 }
@@ -1658,7 +1658,7 @@ void SmViewShell::InsertFrom(SfxMedium &rMedium)
     pDoc->Parse();
     pDoc->SetModified();
 
-    SfxBindings& rBnd = GetViewFrame()->GetBindings();
+    SfxBindings& rBnd = GetViewFrame().GetBindings();
     rBnd.Invalidate(SID_GRAPHIC_SM);
     rBnd.Invalidate(SID_TEXT);
 }
@@ -1768,7 +1768,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             {
                 if (pWin->IsAllSelected())
                 {
-                    GetViewFrame()->GetDispatcher()->ExecuteList(
+                    GetViewFrame().GetDispatcher()->ExecuteList(
                                 SID_COPYOBJECT, SfxCallMode::RECORD,
                                 { new SfxVoidItem(SID_COPYOBJECT) });
                 }
@@ -1795,7 +1795,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 }
                 if( bCallExec )
                 {
-                    GetViewFrame()->GetDispatcher()->ExecuteList(
+                    GetViewFrame().GetDispatcher()->ExecuteList(
                             SID_PASTEOBJECT, SfxCallMode::RECORD,
                             { new SfxVoidItem(SID_PASTEOBJECT) });
                 }
@@ -1952,7 +1952,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_ATTR_ZOOM:
         {
-            if ( !GetViewFrame()->GetFrame().IsInPlace() )
+            if ( !GetViewFrame().GetFrame().IsInPlace() )
             {
                 const SfxItemSet *pSet = rReq.GetArgs();
                 if ( pSet )
@@ -1964,7 +1964,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     SfxItemSetFixed<SID_ATTR_ZOOM, SID_ATTR_ZOOM> aSet( SmDocShell::GetPool() );
                     aSet.Put( SvxZoomItem( SvxZoomType::PERCENT, mxGraphicWindow->GetZoom()));
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    ScopedVclPtr<AbstractSvxZoomDialog> xDlg(pFact->CreateSvxZoomDialog(GetViewFrame()->GetWindow().GetFrameWeld(), aSet));
+                    ScopedVclPtr<AbstractSvxZoomDialog> xDlg(pFact->CreateSvxZoomDialog(GetViewFrame().GetWindow().GetFrameWeld(), aSet));
                     xDlg->SetLimits( MINZOOM, MAXZOOM );
                     if (xDlg->Execute() != RET_CANCEL)
                         ZoomByItemSet(xDlg->GetOutputItemSet());
@@ -1989,11 +1989,11 @@ void SmViewShell::Execute(SfxRequest& rReq)
         case SID_ELEMENTSDOCKINGWINDOW:
         {
             // First make sure that the sidebar is visible
-            GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
+            GetViewFrame().ShowChildWindow(SID_SIDEBAR);
 
             sfx2::sidebar::Sidebar::TogglePanel(u"MathElementsPanel",
-                                                GetViewFrame()->GetFrame().GetFrameInterface());
-            GetViewFrame()->GetBindings().Invalidate( SID_ELEMENTSDOCKINGWINDOW );
+                                                GetViewFrame().GetFrame().GetFrameInterface());
+            GetViewFrame().GetBindings().Invalidate( SID_ELEMENTSDOCKINGWINDOW );
 
             rReq.Ignore ();
         }
@@ -2103,7 +2103,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
         case SID_ZOOMIN:
         case SID_ZOOMOUT:
         case SID_ZOOM_OPTIMAL:
-            if ( GetViewFrame()->GetFrame().IsInPlace() )
+            if ( GetViewFrame().GetFrame().IsInPlace() )
                 rSet.DisableItem( nWh );
             break;
 
@@ -2141,7 +2141,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
         case SID_ELEMENTSDOCKINGWINDOW:
             {
                 const bool bState = sfx2::sidebar::Sidebar::IsPanelVisible(
-                    u"MathElementsPanel", GetViewFrame()->GetFrame().GetFrameInterface());
+                    u"MathElementsPanel", GetViewFrame().GetFrame().GetFrameInterface());
                 rSet.Put(SfxBoolItem(SID_ELEMENTSDOCKINGWINDOW, bState));
             }
             break;
@@ -2272,7 +2272,7 @@ IMPL_LINK( SmViewShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, voi
             pDoc->ArrangeFormula();
             pDoc->Repaint();
             // adjust window, repaint, increment ModifyCount,...
-            GetViewFrame()->GetBindings().Invalidate(SID_GRAPHIC_SM);
+            GetViewFrame().GetBindings().Invalidate(SID_GRAPHIC_SM);
         }
     }
 
@@ -2286,7 +2286,7 @@ void SmViewShell::Notify( SfxBroadcaster& , const SfxHint& rHint )
     {
         case SfxHintId::ModeChanged:
         case SfxHintId::DocChanged:
-            GetViewFrame()->GetBindings().InvalidateAll(false);
+            GetViewFrame().GetBindings().InvalidateAll(false);
         break;
         default:
         break;

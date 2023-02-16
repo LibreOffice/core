@@ -276,7 +276,7 @@ getViewFrame( const uno::Reference< frame::XModel >& xModel )
 {
     ScTabViewShell* pViewShell = getBestViewShell( xModel );
     if ( pViewShell )
-        return pViewShell->GetViewFrame();
+        return &pViewShell->GetViewFrame();
     return nullptr;
 }
 

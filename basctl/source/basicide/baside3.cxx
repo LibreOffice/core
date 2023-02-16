@@ -313,7 +313,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
             case SID_SHOW_PROPERTYBROWSER:
             {
                 Shell* pShell = GetShell();
-                SfxViewFrame* pViewFrame = pShell ? pShell->GetViewFrame() : nullptr;
+                SfxViewFrame* pViewFrame = pShell ? &pShell->GetViewFrame() : nullptr;
                 if ( pViewFrame && !pViewFrame->HasChildWindow( SID_SHOW_PROPERTYBROWSER ) && !m_pEditor->GetView().AreObjectsMarked() )
                     rSet.DisableItem( nWh );
 

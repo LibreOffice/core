@@ -92,8 +92,8 @@ void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialogController* pDialo
         static_cast<ScNameDefDlg*>(pDialog)->GetNewData(maName, maScope);
         static_cast<ScNameDefDlg*>(pDialog)->Close();
         sal_uInt16 nId  = ScNameDlgWrapper::GetChildWindowId();
-        SfxViewFrame* pViewFrm = GetViewFrame();
-        SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+        SfxViewFrame& rViewFrm = GetViewFrame();
+        SfxChildWindow* pWnd = rViewFrm.GetChildWindow( nId );
 
         SC_MOD()->SetRefDialog( nId, pWnd == nullptr );
    }
@@ -103,8 +103,8 @@ void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialogController* pDialo
         static_cast<ScNameDlg*>(pDialog)->GetRangeNames(m_RangeMap);
         static_cast<ScNameDlg*>(pDialog)->Close();
         sal_uInt16 nId  = ScNameDefDlgWrapper::GetChildWindowId();
-        SfxViewFrame* pViewFrm = GetViewFrame();
-        SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+        SfxViewFrame& rViewFrm = GetViewFrame();
+        SfxChildWindow* pWnd = rViewFrm.GetChildWindow( nId );
 
         SC_MOD()->SetRefDialog( nId, pWnd == nullptr );
    }

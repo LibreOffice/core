@@ -767,7 +767,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                     uno::Reference< task::XJob > xJob( xFactory->createInstanceWithContext( xContext ), uno::UNO_QUERY_THROW );
                                     ScViewData* pViewData = GetViewData();
                                     SfxViewShell* pViewShell = ( pViewData ? pViewData->GetViewShell() : nullptr );
-                                    SfxViewFrame* pViewFrame = ( pViewShell ? pViewShell->GetViewFrame() : nullptr );
+                                    SfxViewFrame* pViewFrame = ( pViewShell ? &pViewShell->GetViewFrame() : nullptr );
                                     SfxFrame* pFrame = ( pViewFrame ? &pViewFrame->GetFrame() : nullptr );
                                     uno::Reference< frame::XController > xController = ( pFrame ? pFrame->GetController() : nullptr );
                                     uno::Reference< sheet::XSpreadsheetView > xSpreadsheetView( xController, uno::UNO_QUERY_THROW );

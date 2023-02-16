@@ -38,7 +38,7 @@ void DrawSelection::Activate(const sal_uInt16 nSlotId)
     m_pWin->SetObjectSelect(true);
     SwDrawBase::Activate(nSlotId);
 
-    m_pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
+    m_pSh->GetView().GetViewFrame().GetBindings().Invalidate(SID_INSERT_DRAW);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

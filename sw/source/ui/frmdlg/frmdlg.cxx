@@ -159,7 +159,7 @@ void SwFrameDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
         aNewSet.Put( SwMacroAssignDlg::AddEvents(
             m_sDlgType == "PictureDialog" ? MACASSGN_GRAPHIC : m_sDlgType == "ObjectDialog" ? MACASSGN_OLE : MACASSGN_FRMURL ) );
         if (m_pWrtShell)
-            rPage.SetFrame( m_pWrtShell->GetView().GetViewFrame()->GetFrame().GetFrameInterface() );
+            rPage.SetFrame( m_pWrtShell->GetView().GetViewFrame().GetFrame().GetFrameInterface() );
         rPage.PageCreated(aNewSet);
     }
     else if (rId == "borders")

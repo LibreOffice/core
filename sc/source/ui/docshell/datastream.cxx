@@ -240,7 +240,7 @@ void DataStream::MakeToolbarVisible()
         return;
 
     css::uno::Reference< css::frame::XFrame > xFrame =
-        pViewData->GetViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
+        pViewData->GetViewShell()->GetViewFrame().GetFrame().GetFrameInterface();
     if (!xFrame.is())
         return;
 

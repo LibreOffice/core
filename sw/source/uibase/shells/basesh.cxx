@@ -141,13 +141,13 @@ namespace
 {
     SvxContourDlg* GetContourDlg(SwView const &rView)
     {
-        SfxChildWindow *pWnd = rView.GetViewFrame()->GetChildWindow(SvxContourDlgChildWindow::GetChildWindowId());
+        SfxChildWindow *pWnd = rView.GetViewFrame().GetChildWindow(SvxContourDlgChildWindow::GetChildWindowId());
         return pWnd ? static_cast<SvxContourDlg*>(pWnd->GetController().get()) : nullptr;
     }
 
     SvxIMapDlg* GetIMapDlg(SwView const &rView)
     {
-        SfxChildWindow* pWnd = rView.GetViewFrame()->GetChildWindow(SvxIMapDlgChildWindow::GetChildWindowId());
+        SfxChildWindow* pWnd = rView.GetViewFrame().GetChildWindow(SvxIMapDlgChildWindow::GetChildWindowId());
         return pWnd ? static_cast<SvxIMapDlg*>(pWnd->GetController().get()) : nullptr;
     }
 }
@@ -422,11 +422,11 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     bIgnore = true;
                     if(SwTransferable::PasteUnformatted( rSh, aDataHelper ))
                     {
-                        SfxViewFrame* pViewFrame = pView->GetViewFrame();
+                        SfxViewFrame& rViewFrame = pView->GetViewFrame();
                         uno::Reference< frame::XDispatchRecorder > xRecorder =
-                            pViewFrame->GetBindings().GetRecorder();
+                            rViewFrame.GetBindings().GetRecorder();
                         if(xRecorder.is()) {
-                            SfxRequest aReq( pViewFrame, SID_CLIPBOARD_FORMAT_ITEMS );
+                            SfxRequest aReq( &rViewFrame, SID_CLIPBOARD_FORMAT_ITEMS );
                             aReq.AppendItem( SfxUInt32Item( SID_CLIPBOARD_FORMAT_ITEMS, static_cast<sal_uInt32>(SotClipboardFormatId::STRING) ) );
                             aReq.Done();
                         }
@@ -478,11 +478,11 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
 
                         if (bRet)
                         {
-                            SfxViewFrame* pViewFrame = pView->GetViewFrame();
+                            SfxViewFrame& rViewFrame = pView->GetViewFrame();
                             uno::Reference< frame::XDispatchRecorder > xRecorder =
-                                    pViewFrame->GetBindings().GetRecorder();
+                                    rViewFrame.GetBindings().GetRecorder();
                             if(xRecorder.is()) {
-                                SfxRequest aReq( pViewFrame, SID_CLIPBOARD_FORMAT_ITEMS );
+                                SfxRequest aReq( &rViewFrame, SID_CLIPBOARD_FORMAT_ITEMS );
                                 aReq.AppendItem( SfxUInt32Item( SID_CLIPBOARD_FORMAT_ITEMS, static_cast<sal_uInt32>(nFormatId) ) );
                                 aReq.Done();
                             }
@@ -614,7 +614,7 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
         bRepair = pRepairItem->GetValue();
 
     // #i106349#: save pointer: undo/redo may delete the shell, i.e., this!
-    SfxViewFrame *const pViewFrame( GetView().GetViewFrame() );
+    SfxViewFrame& rViewFrame( GetView().GetViewFrame() );
 
     IDocumentUndoRedo& rUndoRedo = rWrtShell.GetIDocumentUndoRedo();
     bool bWasRepair = rUndoRedo.DoesRepair();
@@ -689,7 +689,7 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
         rWrtShell.GetDoc()->GetDocShell()->GetStyleSheetPool()->Broadcast(SfxHint(SfxHintId::StyleSheetModified));
     }
 
-    if (pViewFrame) { pViewFrame->GetBindings().InvalidateAll(false); }
+    rViewFrame.GetBindings().InvalidateAll(false);
 }
 
 // State of undo
@@ -1055,7 +1055,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     rSh.GetLinkManager().UpdateAllLinks( false, true, nullptr );
                     rSh.EndAllAction();
                 }
-                SfxDispatcher &rDis = *rTempView.GetViewFrame()->GetDispatcher();
+                SfxDispatcher &rDis = *rTempView.GetViewFrame().GetDispatcher();
                 rDis.Execute( FN_UPDATE_FIELDS );
                 rDis.Execute( FN_UPDATE_TOX );
                 rDis.Execute( FN_UPDATE_CHARTS );
@@ -1161,7 +1161,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 nGalleryItemType == css::gallery::GalleryItemType::MEDIA  )
             {
                 const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGalleryItem->GetURL() );
-                GetView().GetViewFrame()->GetDispatcher()->ExecuteList(
+                GetView().GetViewFrame().GetDispatcher()->ExecuteList(
                         SID_INSERT_AVMEDIA, SfxCallMode::SYNCHRON,
                         { &aMediaURLItem });
             }
@@ -1195,7 +1195,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 rSh.ChgPageDesc(nCurIdx, aPageDesc);
             }
             else
-                GetView().GetViewFrame()->GetDispatcher()->Execute(FN_FORMAT_PAGE_COLUMN_DLG);
+                GetView().GetViewFrame().GetDispatcher()->Execute(FN_FORMAT_PAGE_COLUMN_DLG);
         }
         break;
         case FN_CONVERT_TABLE_TO_TEXT:
@@ -1271,10 +1271,10 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 SwView& rSaveView = m_rView;
                 bool bInserted = false;
                 //recording:
-                SfxViewFrame* pViewFrame = GetView().GetViewFrame();
-                if( SfxRequest::HasMacroRecorder(pViewFrame) )
+                SfxViewFrame& rViewFrame = GetView().GetViewFrame();
+                if( SfxRequest::HasMacroRecorder(&rViewFrame) )
                 {
-                    SfxRequest aReq( pViewFrame, nSlot);
+                    SfxRequest aReq( &rViewFrame, nSlot);
                     aReq.AppendItem( SfxStringItem( FN_PARAM_1, OUString(cDelim) ));
                     if(bToTable)
                     {
@@ -1357,11 +1357,11 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         {
             sal_uInt16      nId = SvxIMapDlgChildWindow::GetChildWindowId();
 
-            SfxViewFrame* pVFrame = GetView().GetViewFrame();
-            pVFrame->ToggleChildWindow( nId );
-            pVFrame->GetBindings().Invalidate( SID_IMAP );
+            SfxViewFrame& rVFrame = GetView().GetViewFrame();
+            rVFrame.ToggleChildWindow( nId );
+            rVFrame.GetBindings().Invalidate( SID_IMAP );
 
-            if ( pVFrame->HasChildWindow( nId ) && rSh.IsFrameSelected() )
+            if ( rVFrame.HasChildWindow( nId ) && rSh.IsFrameSelected() )
                 lcl_UpdateIMapDlg( rSh );
         }
         break;
@@ -1404,12 +1404,12 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         {
             sal_uInt16 nId = SvxContourDlgChildWindow::GetChildWindowId();
 
-            SfxViewFrame* pVFrame = GetView().GetViewFrame();
-            pVFrame->ToggleChildWindow( nId );
-            pVFrame->GetBindings().Invalidate( SID_CONTOUR_DLG );
+            SfxViewFrame& rVFrame = GetView().GetViewFrame();
+            rVFrame.ToggleChildWindow( nId );
+            rVFrame.GetBindings().Invalidate( SID_CONTOUR_DLG );
 
             SelectionType nSel = rSh.GetSelectionType();
-            if ( pVFrame->HasChildWindow( nId ) &&
+            if ( rVFrame.HasChildWindow( nId ) &&
                  (nSel & (SelectionType::Graphic|SelectionType::Ole)) )
             {
                 lcl_UpdateContourDlg( rSh, nSel );
@@ -1546,7 +1546,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             }
             rSh.EndUndo();
 
-            GetView().GetViewFrame()->GetBindings().Invalidate( SID_ANCHOR_MENU );
+            GetView().GetViewFrame().GetBindings().Invalidate( SID_ANCHOR_MENU );
         }
         break;
 
@@ -1584,7 +1584,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
                     // set from design mode
                     OSL_ENSURE( GetView().GetFormShell() != nullptr, "form shell?" );
-                    SfxRequest aReq( GetView().GetViewFrame(), SID_FM_DESIGN_MODE );
+                    SfxRequest aReq( &GetView().GetViewFrame(), SID_FM_DESIGN_MODE );
                     aReq.AppendItem( SfxBoolItem( SID_FM_DESIGN_MODE, bDesignMode ) );
                     GetView().GetFormShell()->Execute( aReq );
                     aReq.Done();
@@ -1687,7 +1687,7 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl, SwCursorShell&, void)
         return;
 
     bool bProtect = FlyProtectFlags::NONE != rSh.IsSelObjProtected(FlyProtectFlags::Content|FlyProtectFlags::Parent);
-    SfxViewFrame* pVFrame = GetView().GetViewFrame();
+    SfxViewFrame& rVFrame = GetView().GetViewFrame();
     for( const auto nSlot : m_aGrfUpdateSlots )
     {
         bool bSetState = false;
@@ -1698,8 +1698,8 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl, SwCursorShell&, void)
         case SID_IMAP_EXEC:
             {
                 sal_uInt16 nId = SvxIMapDlgChildWindow::GetChildWindowId();
-                SfxChildWindow *pChildWindow = pVFrame->HasChildWindow(nId) ?
-                    pVFrame->GetChildWindow(nId) : nullptr;
+                SfxChildWindow *pChildWindow = rVFrame.HasChildWindow(nId) ?
+                    rVFrame.GetChildWindow(nId) : nullptr;
                 SvxIMapDlg *pDlg = pChildWindow ?
                     static_cast<SvxIMapDlg*>(pChildWindow->GetController().get()) : nullptr;
 
@@ -1720,8 +1720,8 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl, SwCursorShell&, void)
             if( !bProtect )
             {
                 sal_uInt16 nId = SvxContourDlgChildWindow::GetChildWindowId();
-                SfxChildWindow *pChildWindow = pVFrame->HasChildWindow(nId) ?
-                    pVFrame->GetChildWindow(nId) : nullptr;
+                SfxChildWindow *pChildWindow = rVFrame.HasChildWindow(nId) ?
+                    rVFrame.GetChildWindow(nId) : nullptr;
                 SvxIMapDlg *pDlg = pChildWindow ?
                     static_cast<SvxIMapDlg*>(pChildWindow->GetController().get()) : nullptr;
                 if( pDlg && pDlg->GetEditingObject() !=
@@ -1766,7 +1766,7 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl, SwCursorShell&, void)
             if( m_pGetStateSet )
                 m_pGetStateSet->Put( aBool );
             else
-                pVFrame->GetBindings().SetState( aBool );
+                rVFrame.GetBindings().SetState( aBool );
         }
     }
     m_aGrfUpdateSlots.clear();
@@ -1775,7 +1775,7 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl, SwCursorShell&, void)
 void SwBaseShell::GetState( SfxItemSet &rSet )
 {
     SwWrtShell &rSh = GetShell();
-    SfxViewFrame* pVFrame = GetView().GetViewFrame();
+    SfxViewFrame& rVFrame = GetView().GetViewFrame();
     SfxWhichIter aIter( rSet );
     sal_uInt16 nWhich = aIter.FirstWhich();
     m_pGetStateSet = &rSet;
@@ -1876,7 +1876,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 else
                 {
                     const sal_uInt16 nId = SvxIMapDlgChildWindow::GetChildWindowId();
-                    const bool bHas = pVFrame->HasChildWindow( nId );
+                    const bool bHas = rVFrame.HasChildWindow( nId );
                     const bool bFrameSel = rSh.IsFrameSelected();
                     const bool bIsGraphicSelection =
                                 rSh.GetSelectionType() == SelectionType::Graphic;
@@ -1918,7 +1918,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 if( !rSh.IsFrameSelected())
                     bDisable = true;
                 sal_uInt16 nId = SvxIMapDlgChildWindow::GetChildWindowId();
-                if(!bDisable && pVFrame->HasChildWindow( nId ))
+                if(!bDisable && rVFrame.HasChildWindow( nId ))
                 {
                     if(rSh.GetSelectionType() == SelectionType::Graphic
                                     && rSh.IsLinkedGrfSwapOut())
@@ -1956,7 +1956,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 else
                 {
                     sal_uInt16 nId = SvxContourDlgChildWindow::GetChildWindowId();
-                    bool bHas = GetView().GetViewFrame()->HasChildWindow( nId );
+                    bool bHas = GetView().GetViewFrame().HasChildWindow( nId );
                     SelectionType nSel = rSh.GetSelectionType();
                     bool bOk(nSel & (SelectionType::Graphic|SelectionType::Ole));
 
@@ -2003,7 +2003,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 if( !(nSel & (SelectionType::Graphic|SelectionType::Ole)) )
                     bDisable = true;
                 sal_uInt16 nId = SvxContourDlgChildWindow::GetChildWindowId();
-                if( !bDisable && GetView().GetViewFrame()->HasChildWindow( nId ))
+                if( !bDisable && GetView().GetViewFrame().HasChildWindow( nId ))
                 {
                     SvxContourDlg *pDlg = GetContourDlg(GetView());
                     if (pDlg && pDlg->GetEditingObject() != rSh.GetIMapInventor())
@@ -2383,7 +2383,7 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
 void SwBaseShell::SetFrameMode(FlyMode eMode, SwWrtShell *pSh )
 {
     s_eFrameMode = eMode;
-    SfxBindings &rBnd = pSh->GetView().GetViewFrame()->GetBindings();
+    SfxBindings &rBnd = pSh->GetView().GetViewFrame().GetBindings();
 
     if( eMode == FLY_DRAG || pSh->IsFrameSelected() || pSh->IsObjSelected() )
     {
@@ -2548,11 +2548,11 @@ void SwBaseShell::ExecTextCtrl( SfxRequest& rReq )
     else
     {
         if (nSlot == SID_ATTR_CHAR_KERNING)
-            GetView().GetViewFrame()->GetDispatcher()->Execute(SID_CHAR_DLG_POSITION);
+            GetView().GetViewFrame().GetDispatcher()->Execute(SID_CHAR_DLG_POSITION);
         else if (nSlot == SID_ATTR_CHAR_COLOR)
-            GetView().GetViewFrame()->GetDispatcher()->Execute(SID_CHAR_DLG_EFFECT);
+            GetView().GetViewFrame().GetDispatcher()->Execute(SID_CHAR_DLG_EFFECT);
         else
-            GetView().GetViewFrame()->GetDispatcher()->Execute(SID_CHAR_DLG);
+            GetView().GetViewFrame().GetDispatcher()->Execute(SID_CHAR_DLG);
     }
     rReq.Done();
 }
@@ -2754,7 +2754,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
                 const SvxColorItem& rNewColorItem = static_cast<const SvxColorItem&>(pArgs->Get(nSlotId));
                 const Color& rNewColor = rNewColorItem.GetValue();
                 aBrushItem->SetColor(rNewColor);
-                GetView().GetViewFrame()->GetBindings().SetState(rNewColorItem);
+                GetView().GetViewFrame().GetBindings().SetState(rNewColorItem);
             }
             else
             {

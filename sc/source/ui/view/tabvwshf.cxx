@@ -768,7 +768,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             {
                 bool bShowGrid = rViewData.GetShowGrid();
                 rViewData.SetShowGrid(!bShowGrid);
-                SfxBindings& rBindings = GetViewFrame()->GetBindings();
+                SfxBindings& rBindings = GetViewFrame().GetBindings();
                 rBindings.Invalidate( FID_TAB_TOGGLE_GRID );
                 ScDocShellModificator aModificator(*rViewData.GetDocShell());
                 aModificator.SetDocumentModified();
@@ -887,7 +887,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 {
                     ScDocShell* pDocSh = rViewData.GetDocShell();
                     uno::Reference<container::XNameReplace> xEvents( new ScSheetEventsObj( pDocSh, nCurrentTab ) );
-                    uno::Reference<frame::XFrame> xFrame = GetViewFrame()->GetFrame().GetFrameInterface();
+                    uno::Reference<frame::XFrame> xFrame = GetViewFrame().GetFrame().GetFrameInterface();
                     SvxAbstractDialogFactory* pDlgFactory = SvxAbstractDialogFactory::Create();
                     ScopedVclPtr<VclAbstractDialog> pDialog( pDlgFactory->CreateSvxMacroAssignDlg(
                         GetFrameWeld(), xFrame, false, xEvents, 0 ) );

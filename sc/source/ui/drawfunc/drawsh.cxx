@@ -127,7 +127,7 @@ void ScDrawShell::setModified()
 
 static void lcl_invalidateTransformAttr(const ScTabViewShell* pViewShell)
 {
-    SfxBindings& rBindings=pViewShell->GetViewFrame()->GetBindings();
+    SfxBindings& rBindings=pViewShell->GetViewFrame().GetBindings();
     rBindings.Invalidate(SID_ATTR_TRANSFORM_WIDTH);
     rBindings.Invalidate(SID_ATTR_TRANSFORM_HEIGHT);
     rBindings.Invalidate(SID_ATTR_TRANSFORM_POS_X);
@@ -432,7 +432,7 @@ void ScDrawShell::ExecuteMacroAssign(SdrObject* pObj, weld::Window* pWin)
 
     css::uno::Reference < css::frame::XFrame > xFrame;
     if (GetViewShell())
-        xFrame = GetViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
+        xFrame = GetViewShell()->GetViewFrame().GetFrame().GetFrameInterface();
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     ScopedVclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateEventConfigDialog( pWin, aItemSet, xFrame ));

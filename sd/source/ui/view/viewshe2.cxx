@@ -493,7 +493,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
     // handed over undo group to undo manager
     if (pViewShell)
     {
-        pViewShell->GetViewFrame()->GetObjectShell()->GetUndoManager()->AddUndoAction(std::move(pUndoGroup));
+        pViewShell->GetViewFrame().GetObjectShell()->GetUndoManager()->AddUndoAction(std::move(pUndoGroup));
     }
 
     // calculate View-Sizes
@@ -529,9 +529,9 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
 
     if(nullptr != pViewShell)
     {
-        pViewShell->GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
+        pViewShell->GetViewFrame().GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
         // zoom onto (new) page size
-        pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+        pViewShell->GetViewFrame().GetDispatcher()->Execute(SID_SIZE_PAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
     }
 
     Broadcast(ViewShellHint(ViewShellHint::HINT_PAGE_RESIZE_END));
@@ -668,7 +668,7 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
 
             // call dialog "insert OLE object"
             GetDocSh()->SetWaitCursor( false );
-            pViewShell->GetViewFrame()->GetDispatcher()->Execute(
+            pViewShell->GetViewFrame().GetDispatcher()->Execute(
                 SID_INSERT_OBJECT,
                 SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
             xObj = pObj->GetObjRef();
@@ -771,7 +771,7 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
         }
 
         pSdClient->DoVerb(nVerb);   // if necessary, ErrCode is outputted by Sfx
-        pViewShell->GetViewFrame()->GetBindings().Invalidate(
+        pViewShell->GetViewFrame().GetBindings().Invalidate(
             SID_NAVIGATOR_STATE, true);
     }
 
@@ -798,7 +798,7 @@ const ::tools::Rectangle& ViewShell::GetAllWindowRect()
 void ViewShell::ReadUserData()
 {
     // zoom onto VisArea from FrameView
-    GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_VISAREA,
+    GetViewShell()->GetViewFrame().GetDispatcher()->Execute(SID_SIZE_VISAREA,
         SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
 }
 

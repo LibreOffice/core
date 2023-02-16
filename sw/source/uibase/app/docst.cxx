@@ -104,9 +104,9 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
     }
     else
     {
-        SfxViewFrame* pFrame = pShell->GetView().GetViewFrame();
+        SfxViewFrame& rFrame = pShell->GetView().GetViewFrame();
         std::unique_ptr<SfxUInt16Item> pFamilyItem;
-        pFrame->GetBindings().QueryState(SID_STYLE_FAMILY, pFamilyItem);
+        rFrame.GetBindings().QueryState(SID_STYLE_FAMILY, pFamilyItem);
         if (pFamilyItem)
         {
             nActualFamily = static_cast<SfxStyleFamily>(pFamilyItem->GetValue());
@@ -328,7 +328,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
         case SID_STYLE_APPLY:
             if( !pArgs )
             {
-                GetView()->GetViewFrame()->GetDispatcher()->Execute(SID_STYLE_DESIGNER);
+                GetView()->GetViewFrame().GetDispatcher()->Execute(SID_STYLE_DESIGNER);
                 break;
             }
             else
@@ -606,7 +606,7 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
                 FN_INSERT_CTRL, FN_INSERT_OBJ_CTRL,
                 FN_TABLE_INSERT_COL_BEFORE,
                 FN_TABLE_INSERT_COL_AFTER, 0};
-            pView->GetViewFrame()->GetBindings().Invalidate(aInval);
+            pView->GetViewFrame().GetBindings().Invalidate(aInval);
         }
         SfxItemSet aTmpSet( *m_pDlg->GetOutputItemSet() );
         if( SfxStyleFamily::Char == m_nFamily )

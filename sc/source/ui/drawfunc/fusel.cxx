@@ -340,7 +340,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     SetMouseButtonCode(rMEvt.GetButtons());
 
     bool bReturn = FuDraw::MouseButtonUp(rMEvt);
-    bool bOle = rViewShell.GetViewFrame()->GetFrame().IsInPlace();
+    bool bOle = rViewShell.GetViewFrame().GetFrame().IsInPlace();
 
     SdrObject* pObj = nullptr;
     if (aDragTimer.IsActive() )

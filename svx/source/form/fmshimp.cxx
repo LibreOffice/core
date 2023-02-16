@@ -737,7 +737,7 @@ void SAL_CALL FmXFormShell::disposing(const lang::EventObject& e)
         m_aNavControllerFeatures.dispose();
 
         if ( m_pShell )
-            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
+            m_pShell->GetViewShell()->GetViewFrame().GetBindings().InvalidateShell(*m_pShell);
     }
 
     if (e.Source != m_xExternalViewController)
@@ -779,8 +779,8 @@ void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt)
         comphelper::SolarMutex& rSolarSafety = Application::GetSolarMutex();
         if (rSolarSafety.tryToAcquire())
         {
-            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_RECORD_TOTAL, true);
-            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Update(SID_FM_RECORD_TOTAL);
+            m_pShell->GetViewShell()->GetViewFrame().GetBindings().Invalidate(SID_FM_RECORD_TOTAL, true);
+            m_pShell->GetViewShell()->GetViewFrame().GetBindings().Update(SID_FM_RECORD_TOTAL);
             rSolarSafety.release();
         }
         else
@@ -808,7 +808,7 @@ void FmXFormShell::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatu
 
     OSL_ENSURE( !_rFeatures.empty(), "FmXFormShell::invalidateFeatures: invalid arguments!" );
 
-    if ( !(m_pShell->GetViewShell() && m_pShell->GetViewShell()->GetViewFrame()) )
+    if (!m_pShell->GetViewShell())
         return;
 
     // unfortunately, SFX requires sal_uInt16
@@ -821,7 +821,7 @@ void FmXFormShell::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatu
     ::std::sort( aSlotIds.begin(), aSlotIds.end() - 1 );
 
     sal_uInt16 *pSlotIds = aSlotIds.data();
-    m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate( pSlotIds );
+    m_pShell->GetViewShell()->GetViewFrame().GetBindings().Invalidate( pSlotIds );
 }
 
 
@@ -933,11 +933,10 @@ void FmXFormShell::UpdateSlot_Lock(sal_Int16 _nId)
     else
     {
         OSL_ENSURE( _nId, "FmXFormShell::UpdateSlot: can't update the complete shell!" );
-        m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate( _nId, true, true );
-        m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Update( _nId );
+        m_pShell->GetViewShell()->GetViewFrame().GetBindings().Invalidate( _nId, true, true );
+        m_pShell->GetViewShell()->GetViewFrame().GetBindings().Update( _nId );
     }
 }
-
 
 void FmXFormShell::InvalidateSlot_Lock(sal_Int16 nId, bool bWithId)
 {
@@ -951,11 +950,10 @@ void FmXFormShell::InvalidateSlot_Lock(sal_Int16 nId, bool bWithId)
     }
     else
         if (nId)
-            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(nId, true, bWithId);
+            m_pShell->GetViewShell()->GetViewFrame().GetBindings().Invalidate(nId, true, bWithId);
         else
-            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
+            m_pShell->GetViewShell()->GetViewFrame().GetBindings().InvalidateShell(*m_pShell);
 }
-
 
 void FmXFormShell::LockSlotInvalidation_Lock(bool bLock)
 {
@@ -974,7 +972,6 @@ void FmXFormShell::LockSlotInvalidation_Lock(bool bLock)
     }
 }
 
-
 IMPL_LINK_NOARG(FmXFormShell, OnInvalidateSlots_Lock, void*,void)
 {
     if (impl_checkDisposed_Lock())
@@ -985,13 +982,12 @@ IMPL_LINK_NOARG(FmXFormShell, OnInvalidateSlots_Lock, void*,void)
     for (const auto& rInvalidSlot : m_arrInvalidSlots)
     {
         if (rInvalidSlot.id)
-            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(rInvalidSlot.id, true, (rInvalidSlot.flags & 0x01));
+            m_pShell->GetViewShell()->GetViewFrame().GetBindings().Invalidate(rInvalidSlot.id, true, (rInvalidSlot.flags & 0x01));
         else
-            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
+            m_pShell->GetViewShell()->GetViewFrame().GetBindings().InvalidateShell(*m_pShell);
     }
     m_arrInvalidSlots.clear();
 }
-
 
 void FmXFormShell::ForceUpdateSelection_Lock()
 {
@@ -1385,8 +1381,8 @@ void FmXFormShell::ExecuteTabOrderDialog_Lock(const Reference<XTabControllerMode
     try
     {
         Reference< XWindow > xParentWindow;
-        if ( m_pShell->GetViewShell() && m_pShell->GetViewShell()->GetViewFrame() )
-            xParentWindow = VCLUnoHelper::GetInterface ( &m_pShell->GetViewShell()->GetViewFrame()->GetWindow() );
+        if (m_pShell->GetViewShell())
+            xParentWindow = VCLUnoHelper::GetInterface ( &m_pShell->GetViewShell()->GetViewFrame().GetWindow() );
 
         Reference< dialogs::XExecutableDialog > xDialog = form::TabOrderDialog::createWithModel(
                 comphelper::getProcessComponentContext(),
@@ -1539,7 +1535,7 @@ void FmXFormShell::ExecuteSearch_Lock()
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     ScopedVclPtr<AbstractFmSearchDialog> pDialog(
             pFact->CreateFmSearchDialog(
-                m_pShell->GetViewShell()->GetViewFrame()->GetFrameWeld(),
+                m_pShell->GetViewShell()->GetViewFrame().GetFrameWeld(),
                 strInitialText, aContextNames, nInitialContext,
                 LINK(this, FmXFormShell, OnSearchContextRequest_Lock) ));
     pDialog->SetActiveField( strActiveField );
@@ -1778,7 +1774,6 @@ void FmXFormShell::ExecuteFormSlot_Lock( sal_Int32 _nSlot )
     }
 }
 
-
 void FmXFormShell::impl_switchActiveControllerListening_Lock(const bool _bListen)
 {
     if ( !m_xActiveController.is() )
@@ -1789,7 +1784,6 @@ void FmXFormShell::impl_switchActiveControllerListening_Lock(const bool _bListen
     else
         m_xActiveController->removeEventListener( static_cast<XFormControllerListener*>(this) );
 }
-
 
 void FmXFormShell::setActiveController_Lock(const Reference<runtime::XFormController>& xController, bool _bNoSaveOldContent)
 {
@@ -1890,17 +1884,15 @@ void FmXFormShell::setActiveController_Lock(const Reference<runtime::XFormContro
     m_bInActivate = false;
 
     m_pShell->UIFeatureChanged();
-    m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
+    m_pShell->GetViewShell()->GetViewFrame().GetBindings().InvalidateShell(*m_pShell);
 
     InvalidateSlot_Lock(SID_FM_FILTER_NAVIGATOR_CONTROL, true);
 }
-
 
 void FmXFormShell::getCurrentSelection_Lock(InterfaceBag& /* [out] */ _rSelection) const
 {
     _rSelection = m_aCurrentSelection;
 }
-
 
 bool FmXFormShell::setCurrentSelectionFromMark_Lock(const SdrMarkList& _rMarkList)
 {
@@ -2136,25 +2128,23 @@ void FmXFormShell::stopListening_Lock()
     m_xNavigationController = nullptr;
 }
 
-
 void FmXFormShell::ShowSelectionProperties_Lock(bool bShow)
 {
     if (impl_checkDisposed_Lock())
         return;
 
     // if the window is already visible, only update the state
-    bool bHasChild = m_pShell->GetViewShell()->GetViewFrame()->HasChildWindow( SID_FM_SHOW_PROPERTIES );
+    bool bHasChild = m_pShell->GetViewShell()->GetViewFrame().HasChildWindow( SID_FM_SHOW_PROPERTIES );
     if ( bHasChild && bShow )
         UpdateSlot_Lock(SID_FM_PROPERTY_CONTROL);
 
     // else toggle state
     else
-        m_pShell->GetViewShell()->GetViewFrame()->ToggleChildWindow(SID_FM_SHOW_PROPERTIES);
+        m_pShell->GetViewShell()->GetViewFrame().ToggleChildWindow(SID_FM_SHOW_PROPERTIES);
 
     InvalidateSlot_Lock(SID_FM_PROPERTIES, false);
     InvalidateSlot_Lock(SID_FM_CTL_PROPERTIES, false);
 }
-
 
 IMPL_LINK(FmXFormShell, OnFoundData_Lock, FmFoundRecordInformation&, rfriWhere, void)
 {
@@ -2234,10 +2224,9 @@ IMPL_LINK(FmXFormShell, OnFoundData_Lock, FmFoundRecordInformation&, rfriWhere, 
     // generally the (modal) search dialog is of course at the top ... So, force ...
     sal_uInt16 nPos = 0;
     while (DatabaseSlotMap[nPos])
-        m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Update(DatabaseSlotMap[nPos++]);
+        m_pShell->GetViewShell()->GetViewFrame().GetBindings().Update(DatabaseSlotMap[nPos++]);
         // unfortunately the update goes against the invalidate with only individual slots
 }
-
 
 IMPL_LINK(FmXFormShell, OnCanceledNotFound_Lock, FmFoundRecordInformation&, rfriWhere, void)
 {
@@ -2667,23 +2656,20 @@ void FmXFormShell::SetSelection_Lock(const SdrMarkList& rMarkList)
     m_pShell->NotifyMarkListChanged(m_pShell->GetFormView());
 }
 
-
 void FmXFormShell::DetermineSelection_Lock(const SdrMarkList& rMarkList)
 {
     if (setCurrentSelectionFromMark_Lock(rMarkList) && IsPropBrwOpen_Lock())
         ShowSelectionProperties_Lock(true);
 }
 
-
 bool FmXFormShell::IsPropBrwOpen_Lock() const
 {
     if (impl_checkDisposed_Lock())
         return false;
 
-    return m_pShell->GetViewShell() && m_pShell->GetViewShell()->GetViewFrame()
-        && m_pShell->GetViewShell()->GetViewFrame()->HasChildWindow(SID_FM_SHOW_PROPERTIES);
+    return m_pShell->GetViewShell() &&
+           m_pShell->GetViewShell()->GetViewFrame().HasChildWindow(SID_FM_SHOW_PROPERTIES);
 }
-
 
 class FmXFormShell::SuspendPropertyTracking
 {
@@ -2710,7 +2696,6 @@ public:
     }
 };
 
-
 void FmXFormShell::SetDesignMode_Lock(bool bDesign)
 {
     if (impl_checkDisposed_Lock())
@@ -2724,9 +2709,9 @@ void FmXFormShell::SetDesignMode_Lock(bool bDesign)
     // so it can commit it's changes _before_ we load the forms
     if (!bDesign)
     {
-        m_bHadPropertyBrowserInDesignMode = m_pShell->GetViewShell()->GetViewFrame()->HasChildWindow(SID_FM_SHOW_PROPERTIES);
+        m_bHadPropertyBrowserInDesignMode = m_pShell->GetViewShell()->GetViewFrame().HasChildWindow(SID_FM_SHOW_PROPERTIES);
         if (m_bHadPropertyBrowserInDesignMode)
-            m_pShell->GetViewShell()->GetViewFrame()->ToggleChildWindow(SID_FM_SHOW_PROPERTIES);
+            m_pShell->GetViewShell()->GetViewFrame().ToggleChildWindow(SID_FM_SHOW_PROPERTIES);
     }
 
     FmFormView* pFormView = m_pShell->GetFormView();
@@ -2791,11 +2776,10 @@ void FmXFormShell::SetDesignMode_Lock(bool bDesign)
         // So we can't call ShowSelectionProperties directly as the according feature isn't enabled yet.
         // That's why we use an asynchron execution on the dispatcher.
         // (And that's why this has to be done AFTER the UIFeatureChanged.)
-        m_pShell->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SfxCallMode::ASYNCHRON );
+        m_pShell->GetViewShell()->GetViewFrame().GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SfxCallMode::ASYNCHRON );
     }
     m_bChangingDesignMode = false;
 }
-
 
 Reference< XControl> FmXFormShell::impl_getControl_Lock(const Reference<XControlModel>& i_rxModel, const FmFormObj& i_rKnownFormObj)
 {
@@ -2896,7 +2880,6 @@ void FmXFormShell::impl_collectFormSearchContexts_nothrow_Lock( const Reference<
     }
 }
 
-
 void FmXFormShell::startFiltering_Lock()
 {
     if (impl_checkDisposed_Lock())
@@ -2930,17 +2913,16 @@ void FmXFormShell::startFiltering_Lock()
     m_bFilterMode = true;
 
     m_pShell->UIFeatureChanged();
-    SfxViewFrame* pViewFrame = m_pShell->GetViewShell()->GetViewFrame();
-    pViewFrame->GetBindings().InvalidateShell( *m_pShell );
+    SfxViewFrame& rViewFrame = m_pShell->GetViewShell()->GetViewFrame();
+    rViewFrame.GetBindings().InvalidateShell( *m_pShell );
 
-    if  (   pViewFrame->KnowsChildWindow( SID_FM_FILTER_NAVIGATOR )
-        &&  !pViewFrame->HasChildWindow( SID_FM_FILTER_NAVIGATOR )
+    if  (   rViewFrame.KnowsChildWindow( SID_FM_FILTER_NAVIGATOR )
+        &&  !rViewFrame.HasChildWindow( SID_FM_FILTER_NAVIGATOR )
         )
     {
-        pViewFrame->ToggleChildWindow( SID_FM_FILTER_NAVIGATOR );
+        rViewFrame.ToggleChildWindow( SID_FM_FILTER_NAVIGATOR );
     }
 }
-
 
 static void saveFilter(const Reference< runtime::XFormController >& _rxController)
 {
@@ -3066,7 +3048,7 @@ void FmXFormShell::stopFiltering_Lock(bool bSave)
     }
 
     m_pShell->UIFeatureChanged();
-    m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
+    m_pShell->GetViewShell()->GetViewFrame().GetBindings().InvalidateShell(*m_pShell);
 }
 
 
@@ -3566,8 +3548,8 @@ IMPL_LINK_NOARG( FmXFormShell, OnFirstTimeActivation_Lock, void*, void )
         if (isEnhancedForm_Lock())
         {
             // show the data navigator
-            if ( !m_pShell->GetViewShell()->GetViewFrame()->HasChildWindow( SID_FM_SHOW_DATANAVIGATOR ) )
-                m_pShell->GetViewShell()->GetViewFrame()->ToggleChildWindow( SID_FM_SHOW_DATANAVIGATOR );
+            if ( !m_pShell->GetViewShell()->GetViewFrame().HasChildWindow( SID_FM_SHOW_DATANAVIGATOR ) )
+                m_pShell->GetViewShell()->GetViewFrame().ToggleChildWindow( SID_FM_SHOW_DATANAVIGATOR );
         }
     }
 }

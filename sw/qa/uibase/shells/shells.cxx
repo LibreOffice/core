@@ -68,13 +68,13 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testTdf130179)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
 
     SwView* pView = pDoc->GetDocShell()->GetView();
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
     // Make sure SwTextShell is replaced with SwDrawShell right now, not after 120 ms, as set in the
     // SwView ctor.
     pView->StopShellTimer();
 
     std::unique_ptr<SfxPoolItem> pItem;
-    pView->GetViewFrame()->GetBindings().QueryState(FN_POSTIT, pItem);
+    pView->GetViewFrame().GetBindings().QueryState(FN_POSTIT, pItem);
     // Without the accompanying fix in place, this test would have failed with:
     // assertion failed
     // - Expression: !pItem
@@ -99,7 +99,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testShapeTextAlignment)
     // Start shape text edit.
     SwView* pView = pDoc->GetDocShell()->GetView();
     // Select the shape.
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
     pView->StopShellTimer();
     // Start the actual text edit.
     SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
@@ -109,8 +109,8 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testShapeTextAlignment)
     pView->AttrChangedNotify(nullptr);
 
     // Change paragraph adjustment to center.
-    pView->GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_PARA_ADJUST_CENTER,
-                                                    SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(SID_ATTR_PARA_ADJUST_CENTER,
+                                                   SfxCallMode::SYNCHRON);
 
     // End shape text edit.
     pWrtShell->EndTextEdit();
@@ -195,7 +195,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testBibliographyUrlContextMenu)
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
-    SfxDispatcher* pDispatcher = pDocShell->GetViewShell()->GetViewFrame()->GetDispatcher();
+    SfxDispatcher* pDispatcher = pDocShell->GetViewShell()->GetViewFrame().GetDispatcher();
     css::uno::Any aState;
     SfxItemState eState = pDispatcher->QueryState(SID_OPEN_HYPERLINK, aState);
 
@@ -234,7 +234,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testBibliographyLocalCopyContextMenu)
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
-    SfxDispatcher* pDispatcher = pDocShell->GetViewShell()->GetViewFrame()->GetDispatcher();
+    SfxDispatcher* pDispatcher = pDocShell->GetViewShell()->GetViewFrame().GetDispatcher();
     css::uno::Any aState;
     SfxItemState eState = pDispatcher->QueryState(FN_OPEN_LOCAL_URL, aState);
 

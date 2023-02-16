@@ -71,7 +71,7 @@ SwView* SwGotoPageDlg::GetCreateView() const
         SwView* pView = SwModule::GetFirstView();
         while (pView)
         {
-            if (&pView->GetViewFrame()->GetBindings() == m_rBindings)
+            if (&pView->GetViewFrame().GetBindings() == m_rBindings)
             {
                 const_cast<SwGotoPageDlg*>(this)->m_pCreateView = pView;
                 break;

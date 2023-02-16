@@ -76,7 +76,7 @@ IMPL_LINK(SmElementsPanel, ElementClickHandler, OUString, ElementSource, void)
     if (SmViewShell* pViewSh = GetView())
     {
         SfxStringItem aInsertCommand(SID_INSERTCOMMANDTEXT, ElementSource);
-        pViewSh->GetViewFrame()->GetDispatcher()->ExecuteList(
+        pViewSh->GetViewFrame().GetDispatcher()->ExecuteList(
             SID_INSERTCOMMANDTEXT, SfxCallMode::RECORD, { &aInsertCommand });
     }
 }

@@ -319,7 +319,7 @@ void ScViewUtil::ExecuteCharMap(const SvxFontItem& rOldFont,
                                 const ScTabViewShell& rShell)
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    SfxViewFrame& rFrame = *rShell.GetViewFrame();
+    SfxViewFrame& rFrame = rShell.GetViewFrame();
     SfxAllItemSet aSet( rFrame.GetObjectShell()->GetPool() );
     aSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
     aSet.Put( SvxFontItem( rOldFont.GetFamily(), rOldFont.GetFamilyName(), rOldFont.GetStyleName(), rOldFont.GetPitch(), rOldFont.GetCharSet(), aSet.GetPool()->GetWhich( SID_ATTR_CHAR_FONT ) ) );
@@ -330,7 +330,7 @@ void ScViewUtil::ExecuteCharMap(const SvxFontItem& rOldFont,
 
 bool ScViewUtil::IsFullScreen( const SfxViewShell& rViewShell )
 {
-    SfxBindings&    rBindings       = rViewShell.GetViewFrame()->GetBindings();
+    SfxBindings&    rBindings       = rViewShell.GetViewFrame().GetBindings();
     std::unique_ptr<SfxBoolItem> pItem;
     bool            bIsFullScreen   = false;
 

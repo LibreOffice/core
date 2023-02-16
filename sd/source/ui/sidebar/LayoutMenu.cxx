@@ -321,11 +321,8 @@ void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
     if (pViewShell == nullptr)
         return;
 
-    SfxViewFrame* pViewFrame = mrBase.GetViewFrame();
-    if (pViewFrame == nullptr)
-        return;
-
-    SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
+    SfxViewFrame& rViewFrame = mrBase.GetViewFrame();
+    SfxDispatcher* pDispatcher = rViewFrame.GetDispatcher();
     if (pDispatcher == nullptr)
         return;
 
@@ -452,7 +449,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
                 continue;
 
             // Call the SID_ASSIGN_LAYOUT slot with all the necessary parameters.
-            SfxRequest aRequest (mrBase.GetViewFrame(), SID_ASSIGN_LAYOUT);
+            SfxRequest aRequest(&mrBase.GetViewFrame(), SID_ASSIGN_LAYOUT);
             aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATPAGE, (rpPage->GetPageNum()-1)/2));
             aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, aLayout));
             pMainViewShell->ExecuteSlot (aRequest, false);
@@ -465,7 +462,7 @@ SfxRequest LayoutMenu::CreateRequest (
     sal_uInt16 nSlotId,
     AutoLayout aLayout)
 {
-    SfxRequest aRequest (mrBase.GetViewFrame(), nSlotId);
+    SfxRequest aRequest(&mrBase.GetViewFrame(), nSlotId);
 
     do
     {
@@ -599,7 +596,7 @@ void LayoutMenu::ShowContextMenu(const Point* pPos)
     // the document is read-only.
     const SfxPoolItem* pItem = nullptr;
     const SfxItemState aState (
-        mrBase.GetViewFrame()->GetDispatcher()->QueryState(SID_INSERTPAGE, pItem));
+        mrBase.GetViewFrame().GetDispatcher()->QueryState(SID_INSERTPAGE, pItem));
     if (aState == SfxItemState::DISABLED)
         xMenu->set_sensitive("insert", false);
 

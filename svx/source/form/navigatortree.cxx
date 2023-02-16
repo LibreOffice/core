@@ -510,12 +510,12 @@ namespace svxform
                     else if (sIdent == "designmode")
                     {
                         pFormModel->SetOpenInDesignMode( !pFormModel->GetOpenInDesignMode() );
-                        pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_OPEN_READONLY);
+                        pFormShell->GetViewShell()->GetViewFrame().GetBindings().Invalidate(SID_FM_OPEN_READONLY);
                     }
                     else if (sIdent == "controlfocus")
                     {
                         pFormModel->SetAutoControlFocus( !pFormModel->GetAutoControlFocus() );
-                        pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_AUTOCONTROLFOCUS);
+                        pFormShell->GetViewShell()->GetViewFrame().GetBindings().Invalidate(SID_FM_AUTOCONTROLFOCUS);
                     }
                     else if (FmXFormShell::isControlConversionSlot(sIdent))
                     {
@@ -1314,7 +1314,7 @@ namespace svxform
             aSelection.insert( Reference<XInterface>( xNewForm, UNO_QUERY ) );
             pFormShell->GetImpl()->setCurrentSelection_Lock(std::move(aSelection));
 
-            pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_PROPERTIES, true, true);
+            pFormShell->GetViewShell()->GetViewFrame().GetBindings().Invalidate(SID_FM_PROPERTIES, true, true);
         }
         GetNavModel()->SetModified();
 
@@ -1545,7 +1545,7 @@ namespace svxform
         if (pFormShell->GetImpl()->IsPropBrwOpen_Lock() || bForce)
         {
             // and now deliver all to the PropertyBrowser
-            pFormShell->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SfxCallMode::ASYNCHRON );
+            pFormShell->GetViewShell()->GetViewFrame().GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SfxCallMode::ASYNCHRON );
         }
     }
 

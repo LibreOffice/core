@@ -34,7 +34,7 @@ public:
             SetController(pViewShell->CreateRefDialogController(pBindings, this, pInfo, pParentP->GetFrameWeld(), WindowID));
 
         if (pViewShell && !GetController())
-            pViewShell->GetViewFrame()->SetChildWindow( nId, false );
+            pViewShell->GetViewFrame().SetChildWindow( nId, false );
     }
 
     static std::unique_ptr<SfxChildWindow> CreateImpl(

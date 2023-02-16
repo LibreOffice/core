@@ -82,7 +82,7 @@ void LocalizationMgr::handleTranslationbar ()
     static constexpr OUStringLiteral aToolBarResName = u"private:resource/toolbar/translationbar";
 
     Reference< beans::XPropertySet > xFrameProps
-        ( m_pShell->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
+        ( m_pShell->GetViewFrame().GetFrame().GetFrameInterface(), uno::UNO_QUERY );
     if ( !xFrameProps.is() )
         return;
 

@@ -486,8 +486,8 @@ void ScDrawView::MarkListHasChanged()
 
     // adjust verbs
 
-    SfxViewFrame* pViewFrame = pViewSh->GetViewFrame();
-    bool bOle = pViewSh->GetViewFrame()->GetFrame().IsInPlace();
+    SfxViewFrame& rViewFrame = pViewSh->GetViewFrame();
+    bool bOle = pViewSh->GetViewFrame().GetFrame().IsInPlace();
     uno::Sequence< embed::VerbDescriptor > aVerbs;
     if ( pOle2Obj && !bOle )
     {
@@ -522,16 +522,13 @@ void ScDrawView::MarkListHasChanged()
     //  uno object for view returns drawing objects as selection,
     //  so it must notify its SelectionChangeListeners
 
-    if (pViewFrame)
+    SfxFrame& rFrame = rViewFrame.GetFrame();
+    uno::Reference<frame::XController> xController = rFrame.GetController();
+    if (xController.is())
     {
-        SfxFrame& rFrame = pViewFrame->GetFrame();
-        uno::Reference<frame::XController> xController = rFrame.GetController();
-        if (xController.is())
-        {
-            ScTabViewObj* pImp = dynamic_cast<ScTabViewObj*>( xController.get() );
-            if (pImp)
-                pImp->SelectionChanged();
-        }
+        ScTabViewObj* pImp = dynamic_cast<ScTabViewObj*>( xController.get() );
+        if (pImp)
+            pImp->SelectionChanged();
     }
 
     //  update selection transfer object
@@ -572,16 +569,13 @@ bool ScDrawView::SdrBeginTextEdit(
         }
     }
 
-    if ( pViewSh->GetViewFrame() )
+    SfxFrame& rFrame = pViewSh->GetViewFrame().GetFrame();
+    uno::Reference< frame::XController > xController = rFrame.GetController();
+    if (xController.is())
     {
-        SfxFrame& rFrame = pViewSh->GetViewFrame()->GetFrame();
-        uno::Reference< frame::XController > xController = rFrame.GetController();
-        if (xController.is())
-        {
-            ScTabViewObj* pImp = dynamic_cast<ScTabViewObj*>( xController.get() );
-            if (pImp)
-                pImp->SelectionChanged();
-        }
+        ScTabViewObj* pImp = dynamic_cast<ScTabViewObj*>( xController.get() );
+        if (pImp)
+            pImp->SelectionChanged();
     }
 
     return bRet;
@@ -596,16 +590,13 @@ SdrEndTextEditKind ScDrawView::SdrEndTextEdit( bool bDontDeleteReally )
     if (comphelper::LibreOfficeKit::isActive())
         SfxLokHelper::notifyOtherViews(pViewSh, LOK_CALLBACK_VIEW_LOCK, "rectangle", "EMPTY");
 
-    if ( pViewSh->GetViewFrame() )
+    SfxFrame& rFrame = pViewSh->GetViewFrame().GetFrame();
+    uno::Reference< frame::XController > xController = rFrame.GetController();
+    if (xController.is())
     {
-        SfxFrame& rFrame = pViewSh->GetViewFrame()->GetFrame();
-        uno::Reference< frame::XController > xController = rFrame.GetController();
-        if (xController.is())
-        {
-            ScTabViewObj* pImp = dynamic_cast<ScTabViewObj*>( xController.get() );
-            if (pImp)
-                pImp->SelectionChanged();
-        }
+        ScTabViewObj* pImp = dynamic_cast<ScTabViewObj*>( xController.get() );
+        if (pImp)
+            pImp->SelectionChanged();
     }
 
     return eRet;

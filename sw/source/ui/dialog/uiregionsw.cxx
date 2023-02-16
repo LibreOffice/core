@@ -1423,12 +1423,12 @@ short SwInsertSectionTabDialog::Ok()
     OSL_ENSURE(m_pSectionData, "SwInsertSectionTabDialog: no SectionData?");
     const SfxItemSet* pOutputItemSet = GetOutputItemSet();
     m_rWrtSh.InsertSection(*m_pSectionData, pOutputItemSet);
-    SfxViewFrame* pViewFrame = m_rWrtSh.GetView().GetViewFrame();
+    SfxViewFrame& rViewFrame = m_rWrtSh.GetView().GetViewFrame();
     uno::Reference< frame::XDispatchRecorder > xRecorder =
-            pViewFrame->GetBindings().GetRecorder();
+            rViewFrame.GetBindings().GetRecorder();
     if ( xRecorder.is() )
     {
-        SfxRequest aRequest( pViewFrame, FN_INSERT_REGION);
+        SfxRequest aRequest( &rViewFrame, FN_INSERT_REGION);
         if(const SwFormatCol* pCol = pOutputItemSet->GetItemIfSet(RES_COL, false))
         {
             aRequest.AppendItem(SfxUInt16Item(SID_ATTR_COLUMNS,

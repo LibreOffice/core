@@ -78,7 +78,7 @@ void SwBezierShell::Execute(SfxRequest const &rReq)
             if (pSh->IsObjSelected())
             {
                 if (pSdrView->HasMarkedPoints())
-                    pSh->GetView().GetViewFrame()->GetDispatcher()->Execute(SID_BEZIER_DELETE);
+                    pSh->GetView().GetViewFrame().GetDispatcher()->Execute(SID_BEZIER_DELETE);
                 else
                 {
                     pSh->DelSelectedObj();
@@ -121,7 +121,7 @@ void SwBezierShell::Execute(SfxRequest const &rReq)
                                     SID_BEZIER_MOVE,
                                     0
                                 };
-                GetView().GetViewFrame()->GetBindings().Invalidate(aInva);
+                GetView().GetViewFrame().GetBindings().Invalidate(aInva);
             }
             break;
 
@@ -182,7 +182,7 @@ void SwBezierShell::Execute(SfxRequest const &rReq)
                                                 SID_BEZIER_SYMMTR,
                                                 0
                                             };
-                            GetView().GetViewFrame()->GetBindings().Invalidate(aInva);
+                            GetView().GetViewFrame().GetBindings().Invalidate(aInva);
                         }
                         break;
                     }

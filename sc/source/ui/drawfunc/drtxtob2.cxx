@@ -135,17 +135,17 @@ void ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
         case SID_FONTWORK:
             {
                 sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
-                SfxViewFrame* pViewFrm = mrViewData.GetViewShell()->GetViewFrame();
+                SfxViewFrame& rViewFrm = mrViewData.GetViewShell()->GetViewFrame();
 
                 if ( rReq.GetArgs() )
-                    pViewFrm->SetChildWindow( nId,
+                    rViewFrm.SetChildWindow( nId,
                                                static_cast<const SfxBoolItem&>(
                                                 (rReq.GetArgs()->Get(SID_FONTWORK))).
                                                     GetValue() );
                 else
-                    pViewFrm->ToggleChildWindow( nId );
+                    rViewFrm.ToggleChildWindow( nId );
 
-                pViewFrm->GetBindings().Invalidate( SID_FONTWORK );
+                rViewFrm.GetBindings().Invalidate( SID_FONTWORK );
                 rReq.Done();
             }
             break;

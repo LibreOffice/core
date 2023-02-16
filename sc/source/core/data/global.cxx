@@ -824,7 +824,7 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget, bool bIgno
     OUString aReferName;
     if ( pScActiveViewShell )
     {
-        pFrame = pScActiveViewShell->GetViewFrame();
+        pFrame = &pScActiveViewShell->GetViewFrame();
         pObjShell = pFrame->GetObjectShell();
         const SfxMedium* pMed = pObjShell->GetMedium();
         if (pMed)

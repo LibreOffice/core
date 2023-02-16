@@ -153,7 +153,7 @@ void lcl_lokGetWholeFunctionList()
 void ScCellShell::Execute( SfxRequest& rReq )
 {
     ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
-    SfxBindings&        rBindings   = pTabViewShell->GetViewFrame()->GetBindings();
+    SfxBindings&        rBindings   = pTabViewShell->GetViewFrame().GetBindings();
     ScModule*           pScMod      = SC_MOD();
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
     sal_uInt16              nSlot       = rReq.GetSlot();
@@ -170,7 +170,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             case SID_OPENDLG_FUNCTION:
                     //  inplace leads to trouble with EditShell ...
                     //! cannot always be switched ????
-                    if (!pTabViewShell->GetViewFrame()->GetFrame().IsInPlace())
+                    if (!pTabViewShell->GetViewFrame().GetFrame().IsInPlace())
                         pTabViewShell->SetDontSwitch(true);         // do not switch off EditShell
                     [[fallthrough]];
 
@@ -429,8 +429,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 else
                 {
                     sal_uInt16 nId = SID_OPENDLG_FUNCTION;
-                    SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
-                    SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+                    SfxViewFrame& rViewFrm = pTabViewShell->GetViewFrame();
+                    SfxChildWindow* pWnd = rViewFrm.GetChildWindow( nId );
                     bool bVis = comphelper::LibreOfficeKit::isActive() || pWnd == nullptr;
                     pScMod->SetRefDialog( nId, bVis );
                 }
@@ -441,8 +441,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
         case SID_OPENDLG_CONSOLIDATE:
             {
                 sal_uInt16          nId  = ScConsolidateDlgWrapper::GetChildWindowId();
-                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
-                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+                SfxViewFrame& rViewFrm = pTabViewShell->GetViewFrame();
+                SfxChildWindow* pWnd = rViewFrm.GetChildWindow( nId );
 
                 pScMod->SetRefDialog( nId, pWnd == nullptr );
             }
@@ -496,8 +496,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
         case SID_OPENDLG_SOLVE:
             {
                 sal_uInt16          nId  = ScSolverDlgWrapper::GetChildWindowId();
-                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
-                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+                SfxViewFrame& rViewFrm = pTabViewShell->GetViewFrame();
+                SfxChildWindow* pWnd = rViewFrm.GetChildWindow( nId );
 
                 pScMod->SetRefDialog( nId, pWnd == nullptr );
             }
@@ -506,8 +506,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
         case SID_OPENDLG_OPTSOLVER:
             {
                 sal_uInt16 nId = ScOptSolverDlgWrapper::GetChildWindowId();
-                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
-                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+                SfxViewFrame& rViewFrm = pTabViewShell->GetViewFrame();
+                SfxChildWindow* pWnd = rViewFrm.GetChildWindow( nId );
 
                 pScMod->SetRefDialog( nId, pWnd == nullptr );
             }
@@ -516,8 +516,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
         case SID_OPENDLG_TABOP:
             {
                 sal_uInt16          nId  = ScTabOpDlgWrapper::GetChildWindowId();
-                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
-                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+                SfxViewFrame& rViewFrm = pTabViewShell->GetViewFrame();
+                SfxChildWindow* pWnd = rViewFrm.GetChildWindow( nId );
 
                 pScMod->SetRefDialog( nId, pWnd == nullptr );
             }
@@ -695,7 +695,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){
                         if (nResult == RET_OK)
                         {
-                            SfxRequest pRequest(pTabViewShell->GetViewFrame(), FID_ROW_HEIGHT);
+                            SfxRequest pRequest(&pTabViewShell->GetViewFrame(), FID_ROW_HEIGHT);
                             tools::Long nVal = pDlg->GetInputValue();
                             pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_DIRECT, static_cast<sal_uInt16>(nVal) );
 
@@ -735,7 +735,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){
                         if ( nResult == RET_OK )
                         {
-                            SfxRequest pRequest(pTabViewShell->GetViewFrame(), FID_ROW_OPT_HEIGHT);
+                            SfxRequest pRequest(&pTabViewShell->GetViewFrame(), FID_ROW_OPT_HEIGHT);
                             tools::Long nVal = pDlg->GetInputValue();
                             pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_OPTIMAL, static_cast<sal_uInt16>(nVal) );
                             ScGlobal::nLastRowHeightExtra = nVal;
@@ -800,7 +800,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){
                         if ( nResult == RET_OK )
                         {
-                            SfxRequest pRequest(pTabViewShell->GetViewFrame(), FID_COL_WIDTH);
+                            SfxRequest pRequest(&pTabViewShell->GetViewFrame(), FID_COL_WIDTH);
                             tools::Long nVal = pDlg->GetInputValue();
                             pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_DIRECT, static_cast<sal_uInt16>(nVal) );
 
@@ -838,7 +838,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         ScGlobal::nLastColWidthExtra, STD_EXTRA_WIDTH, eMetric, 2, MAX_EXTRA_WIDTH));
 
                     pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){
-                        SfxRequest pRequest(pTabViewShell->GetViewFrame(), FID_COL_OPT_WIDTH);
+                        SfxRequest pRequest(&pTabViewShell->GetViewFrame(), FID_COL_OPT_WIDTH);
                         if ( nResult == RET_OK )
                         {
                             tools::Long nVal = pDlg->GetInputValue();

@@ -181,7 +181,7 @@ static std::shared_ptr<SwTableRep> lcl_TableParamToItemSet( SfxItemSet& rSet, Sw
     {
         rSh.StartAllAction();
         rSh.Push();
-        rSh.GetView().GetViewFrame()->GetDispatcher()->Execute( FN_TABLE_SELECT_ALL );
+        rSh.GetView().GetViewFrame().GetDispatcher()->Execute( FN_TABLE_SELECT_ALL );
     }
     SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
 
@@ -329,7 +329,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
             rSh.Push();
             if(!bTableSel)
             {
-                rSh.GetView().GetViewFrame()->GetDispatcher()->Execute( FN_TABLE_SELECT_ALL );
+                rSh.GetView().GetViewFrame().GetDispatcher()->Execute( FN_TABLE_SELECT_ALL );
             }
             if(bBorder)
                 rSh.SetTabBorders( rSet );
@@ -607,7 +607,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         {
             //#127012# get the bindings before the dialog is called
             // it might happen that this shell is removed after closing the dialog
-            SfxBindings& rBindings = GetView().GetViewFrame()->GetBindings();
+            SfxBindings& rBindings = GetView().GetViewFrame().GetBindings();
             SfxItemSet aCoreSet( GetPool(), aUITableAttrRange);
 
             FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( &rSh.GetView()) != nullptr );
@@ -1004,11 +1004,10 @@ void SwTableShell::Execute(SfxRequest &rReq)
                         ? FN_TABLE_INSERT_COL_AFTER : FN_TABLE_INSERT_ROW_AFTER;
                     SfxUInt16Item aCountItem( nDispatchSlot, pDlg->getInsertCount() );
                     SfxBoolItem  aAfter( FN_PARAM_INSERT_AFTER, !pDlg->isInsertBefore() );
-                    SfxViewFrame* pVFrame = GetView().GetViewFrame();
-                    if( pVFrame )
-                        pVFrame->GetDispatcher()->ExecuteList(nDispatchSlot,
-                            SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
-                            { &aCountItem, &aAfter });
+                    SfxViewFrame& rVFrame = GetView().GetViewFrame();
+                    rVFrame.GetDispatcher()->ExecuteList(nDispatchSlot,
+                        SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
+                        { &aCountItem, &aAfter });
                 }
             }
             break;
@@ -1132,7 +1131,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                                         ? TableChgMode::FixedWidthChangeProp
                                         : TableChgMode::VarWidthChangeAbs );
 
-            SfxBindings& rBind = GetView().GetViewFrame()->GetBindings();
+            SfxBindings& rBind = GetView().GetViewFrame().GetBindings();
             static sal_uInt16 aInva[] =
                             {   FN_TABLE_MODE_FIX,
                                 FN_TABLE_MODE_FIX_PROP,
@@ -1145,10 +1144,10 @@ void SwTableShell::Execute(SfxRequest &rReq)
         }
         case FN_TABLE_AUTOSUM:
         {
-            SfxViewFrame* pVFrame = GetView().GetViewFrame();
-            pVFrame->GetDispatcher()->Execute(FN_EDIT_FORMULA, SfxCallMode::SYNCHRON);
+            SfxViewFrame& rVFrame = GetView().GetViewFrame();
+            rVFrame.GetDispatcher()->Execute(FN_EDIT_FORMULA, SfxCallMode::SYNCHRON);
             const sal_uInt16 nId = SwInputChild::GetChildWindowId();
-            SwInputChild* pChildWin = static_cast<SwInputChild*>(pVFrame->
+            SwInputChild* pChildWin = static_cast<SwInputChild*>(rVFrame.
                                                 GetChildWindow( nId ));
             OUString sSum;
             GetShell().GetAutoSum(sSum);
@@ -1170,7 +1169,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         {
             rSh.StartAction();
             rSh.StartUndo();
-            rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(FN_TABLE_SELECT_ALL);
+            rSh.GetView().GetViewFrame().GetDispatcher()->Execute(FN_TABLE_SELECT_ALL);
             rSh.DeleteTable();
             rSh.EndUndo();
             rSh.EndAction();

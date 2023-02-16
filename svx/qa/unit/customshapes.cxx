@@ -450,7 +450,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf141021ExtrusionNorth)
     pSdrView->MarkObj(&rSdrCustomShape, pSdrView->GetSdrPageView());
 
     // Set direction
-    SfxRequest aReq(pViewShell->GetViewFrame(), SID_EXTRUSION_DIRECTION);
+    SfxRequest aReq(&pViewShell->GetViewFrame(), SID_EXTRUSION_DIRECTION);
     SfxInt32Item aItem(SID_EXTRUSION_DIRECTION, 90);
     aReq.AppendItem(aItem);
     svx::ExtrusionBar::execute(pSdrView, aReq, SfxViewFrame::Current()->GetBindings());

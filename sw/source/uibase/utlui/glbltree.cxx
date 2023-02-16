@@ -559,7 +559,7 @@ void SwGlobalTree::EditContent(const SwGlblDocContent* pCont )
         GotoContent(pCont);
     if(nSlot)
     {
-        m_pActiveShell->GetView().GetViewFrame()->GetDispatcher()->Execute(nSlot);
+        m_pActiveShell->GetView().GetViewFrame().GetDispatcher()->Execute(nSlot);
         if(Update( false ))
             Display();
     }
@@ -577,7 +577,7 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
     std::unique_ptr<SwGlblDocContent> pContCopy;
     if(pCont)
         pContCopy.reset(new SwGlblDocContent(pCont->GetDocPos()));
-    SfxDispatcher& rDispatch = *m_pActiveShell->GetView().GetViewFrame()->GetDispatcher();
+    SfxDispatcher& rDispatch = *m_pActiveShell->GetView().GetViewFrame().GetDispatcher();
     sal_uInt16 nSlot = 0;
     if (rSelectedPopupEntry == "updatesel")
     {
@@ -693,8 +693,8 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
     }
     else if (rSelectedPopupEntry == "insertnewfile")
     {
-        SfxViewFrame* pGlobFrame = m_pActiveShell->GetView().GetViewFrame();
-        SwGlobalFrameListener_Impl aFrameListener(*pGlobFrame);
+        SfxViewFrame& rGlobFrame = m_pActiveShell->GetView().GetViewFrame();
+        SwGlobalFrameListener_Impl aFrameListener(rGlobFrame);
 
         // Creating a new doc
         SfxStringItem aFactory(SID_NEWDOCDIRECT,
@@ -719,7 +719,7 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
             // Bring the own Doc in the foreground
             if(aFrameListener.IsValid() && !sNewFile.isEmpty())
             {
-                pGlobFrame->ToTop();
+                rGlobFrame.ToTop();
                 // Due to the update the entries are invalid
                 if (nEntry != -1)
                 {
@@ -971,7 +971,7 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
         SfxBoolItem aReadOnly(SID_DOC_READONLY, false);
         SfxStringItem aTargetFrameName( SID_TARGETNAME, "_blank" );
         SfxStringItem aReferer(SID_REFERER, m_pActiveShell->GetView().GetDocShell()->GetTitle());
-        m_pActiveShell->GetView().GetViewFrame()->GetDispatcher()->
+        m_pActiveShell->GetView().GetViewFrame().GetDispatcher()->
                 ExecuteList(SID_OPENDOC, SfxCallMode::ASYNCHRON,
                         { &aURL, &aReadOnly, &aReferer, &aTargetFrameName });
     }

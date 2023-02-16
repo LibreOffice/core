@@ -117,7 +117,7 @@ void SwView::InvalidateRulerPos()
         0
     };
 
-    GetViewFrame()->GetBindings().Invalidate(aInval);
+    GetViewFrame().GetBindings().Invalidate(aInval);
 
     assert(m_pHRuler && "Why is the ruler not there?");
     m_pHRuler->ForceUpdate();
@@ -188,9 +188,9 @@ void SwView::DocSzChgd(const Size &rSz)
         SetVisArea( aNewVisArea, false );
 
     if ( UpdateScrollbars() && !m_bInOuterResizePixel && !m_bInInnerResizePixel &&
-            !GetViewFrame()->GetFrame().IsInPlace())
+            !GetViewFrame().GetFrame().IsInPlace())
         OuterResizePixel( Point(),
-                          GetViewFrame()->GetWindow().GetOutputSizePixel() );
+                          GetViewFrame().GetWindow().GetOutputSizePixel() );
 }
 
 // Set VisArea newly
@@ -279,7 +279,7 @@ void SwView::SetVisArea( const tools::Rectangle &rRect, bool bUpdateScrollbar )
 
     if ( bOuterResize && !m_bInOuterResizePixel && !m_bInInnerResizePixel)
             OuterResizePixel( Point(),
-                GetViewFrame()->GetWindow().GetOutputSizePixel() );
+                GetViewFrame().GetWindow().GetOutputSizePixel() );
 }
 
 // Set Pos VisArea
@@ -316,7 +316,7 @@ void SwView::SetVisArea( const Point &rPt, bool bUpdateScrollbar )
 void SwView::CheckVisArea()
 {
     m_pHScrollbar->SetAuto( m_pWrtShell->GetViewOptions()->getBrowseMode() &&
-                            !GetViewFrame()->GetFrame().IsInPlace() );
+                            !GetViewFrame().GetFrame().IsInPlace() );
     if ( IsDocumentBorder() )
     {
         if ( m_aVisArea.Left() != DOCUMENTBORDER ||
@@ -697,7 +697,7 @@ IMPL_LINK(SwView, VertScrollHdl, weld::Scrollbar&, rScrollbar, void)
             {
                 // The end scrollhandler invalidate the FN_STAT_PAGE,
                 // so we don't must do it again.
-        //      if(!GetViewFrame()->GetFrame().IsInPlace())
+        //      if(!GetViewFrame().GetFrame().IsInPlace())
         //            S F X_BINDINGS().Update(FN_STAT_PAGE);
 
                 //QuickHelp:
@@ -758,7 +758,7 @@ void SwView::EndScrollHdl(weld::Scrollbar& rScrollbar, bool bHorizontal)
     else
         SetVisArea( aPos, false );
 
-    GetViewFrame()->GetBindings().Update(FN_STAT_PAGE);
+    GetViewFrame().GetBindings().Update(FN_STAT_PAGE);
 }
 
 IMPL_LINK(SwView, HoriScrollHdl, weld::Scrollbar&, rScrollBar, void)
@@ -799,8 +799,8 @@ void SwView::CalcVisArea( const Size &rOutPixel )
         }
     }
     SetVisArea( aRect );
-    GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
-    GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER ); // for snapping points
+    GetViewFrame().GetBindings().Invalidate( SID_ATTR_ZOOM );
+    GetViewFrame().GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER ); // for snapping points
 }
 
 // Rearrange control elements
@@ -961,7 +961,7 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize, bool )
         Size aSz( rSize );
         SvBorder aBorder;
         CalcAndSetBorderPixel( aBorder );
-        if ( GetViewFrame()->GetFrame().IsInPlace() )
+        if ( GetViewFrame().GetFrame().IsInPlace() )
         {
             Size aViewSize( aSz );
             Point aViewPos( rOfst );

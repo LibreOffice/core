@@ -821,7 +821,7 @@ IMPL_LINK_NOARG(SwMMResultPrintDialog, PrintHdl_Impl, weld::Button&, void)
         pTargetView->SetPrinter(pDocumentPrinter);
     }
 
-    SfxObjectShell* pObjSh = pTargetView->GetViewFrame()->GetObjectShell();
+    SfxObjectShell* pObjSh = pTargetView->GetViewFrame().GetObjectShell();
     SfxGetpApp()->NotifyEvent(SfxEventHint(SfxEventHintId::SwMailMerge, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), pObjSh));
 
     uno::Sequence aProps{ comphelper::makePropertyValue("MonitorVisible", true),

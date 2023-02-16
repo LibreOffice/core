@@ -78,7 +78,7 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
     }
 
     uno::Reference< frame::XDispatchRecorder > xRecorder =
-            GetView().GetViewFrame()->GetBindings().GetRecorder();
+            GetView().GetViewFrame().GetBindings().GetRecorder();
     if ( xRecorder.is() )
     {
         rReq.AppendItem( SfxInt32Item(FN_PARAM_MOVE_COUNT, nCount) );

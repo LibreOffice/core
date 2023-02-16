@@ -1289,7 +1289,7 @@ IMPL_LINK_NOARG(SmSymbolDialog, GetClickHdl, weld::Button&, void)
     {
         OUString aText = "%" + pSym->GetName() + " ";
 
-        rViewSh.GetViewFrame()->GetDispatcher()->ExecuteList(
+        rViewSh.GetViewFrame().GetDispatcher()->ExecuteList(
                 SID_INSERTSPECIAL, SfxCallMode::RECORD,
                 { new SfxStringItem(SID_INSERTSPECIAL, aText) });
     }

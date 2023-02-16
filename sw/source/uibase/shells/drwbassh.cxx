@@ -111,7 +111,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
 
     bool bTopParam = true, bBottomParam = true;
     bool bDone = false;
-    SfxBindings& rBind = GetView().GetViewFrame()->GetBindings();
+    SfxBindings& rBind = GetView().GetViewFrame().GetBindings();
 
     switch (nSlotId)
     {
@@ -328,7 +328,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                                 if(aFrameAttrSet.Count())
                                     pSh->SetDrawingAttr(aFrameAttrSet);
 
-                                GetView().GetViewFrame()->GetBindings().InvalidateAll(false);
+                                GetView().GetViewFrame().GetBindings().InvalidateAll(false);
 
                                 // #i30451#
                                 pSh->EndUndo( SwUndoId::INSFMTATTR );
@@ -647,7 +647,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
         case SID_EDIT_HYPERLINK:
         case SID_HYPERLINK_DIALOG:
         {
-            GetView().GetViewFrame()->SetChildWindow(SID_HYPERLINK_DIALOG, true);
+            GetView().GetViewFrame().SetChildWindow(SID_HYPERLINK_DIALOG, true);
             break;
         }
 

@@ -653,7 +653,7 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
 void SwWrtShell::LaunchOLEObj(sal_Int32 nVerb)
 {
     if ( GetCntType() != CNT_OLE ||
-         GetView().GetViewFrame()->GetFrame().IsInPlace() )
+         GetView().GetViewFrame().GetFrame().IsInPlace() )
         return;
 
     svt::EmbeddedObjectRef& xRef = GetOLEObject();
@@ -2117,7 +2117,7 @@ void SwWrtShell::ApplyViewOptions( const SwViewOption &rOpt )
 {
     SwFEShell::ApplyViewOptions( rOpt );
     //#i115062# invalidate meta character slot
-    GetView().GetViewFrame()->GetBindings().Invalidate( FN_VIEW_META_CHARS );
+    GetView().GetViewFrame().GetBindings().Invalidate( FN_VIEW_META_CHARS );
 }
 
 void SwWrtShell::SetReadonlyOption(bool bSet)

@@ -696,7 +696,7 @@ void SwSpellDialogChildWindow::MakeTextSelection_Impl(SwWrtShell& rShell, ShellM
                     Point aPt(LONG_MIN, LONG_MIN);
                     // go out of the frame
                     rShell.SelectObj(aPt, SW_LEAVE_FRAME);
-                    SfxBindings& rBind = rView.GetViewFrame()->GetBindings();
+                    SfxBindings& rBind = rView.GetViewFrame().GetBindings();
                     rBind.Invalidate( SID_ATTR_SIZE );
                     rShell.EnterStdMode();
                     rView.AttrChangedNotify(nullptr);

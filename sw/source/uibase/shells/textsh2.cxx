@@ -181,12 +181,12 @@ void SwTextShell::ExecDB(SfxRequest const &rReq)
                 if(pColumnItem)
                     aData.m_aDBColumn = pColumnItem->GetValue();
                 aFieldMgr.InsertField(aData);
-                SfxViewFrame* pViewFrame = GetView().GetViewFrame();
+                SfxViewFrame& rViewFrame = GetView().GetViewFrame();
                 uno::Reference< XDispatchRecorder > xRecorder =
-                        pViewFrame->GetBindings().GetRecorder();
+                        rViewFrame.GetBindings().GetRecorder();
                 if ( xRecorder.is() )
                 {
-                    SfxRequest aReq( pViewFrame, FN_INSERT_DBFIELD );
+                    SfxRequest aReq( &rViewFrame, FN_INSERT_DBFIELD );
                     aReq.AppendItem( SfxUInt16Item(FN_PARAM_FIELD_TYPE, static_cast<sal_uInt16>(SwFieldTypesEnum::Database)));
                     aReq.AppendItem( SfxStringItem( FN_INSERT_DBFIELD, sDBName ));
                     aReq.AppendItem( SfxStringItem( FN_PARAM_1, sCommandArg ));

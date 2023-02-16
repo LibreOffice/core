@@ -319,11 +319,11 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             else
             {
                 //#i5788# prevent closing of the field dialog while a modal dialog ( Input field dialog ) is active
-                if(!GetView().GetViewFrame()->IsInModalMode())
+                if(!GetView().GetViewFrame().IsInModalMode())
                 {
-                    SfxViewFrame* pVFrame = GetView().GetViewFrame();
-                    pVFrame->ToggleChildWindow(FN_INSERT_FIELD);
-                    bRes = pVFrame->GetChildWindow( nSlot ) != nullptr;
+                    SfxViewFrame& rVFrame = GetView().GetViewFrame();
+                    rVFrame.ToggleChildWindow(FN_INSERT_FIELD);
+                    bRes = rVFrame.GetChildWindow( nSlot ) != nullptr;
                     Invalidate(rReq.GetSlot());
                     Invalidate(FN_INSERT_FIELD_CTRL);
                     rReq.Ignore();
@@ -335,13 +335,13 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
         case FN_INSERT_REF_FIELD:
         {
-            SfxViewFrame* pVFrame = GetView().GetViewFrame();
-            if (!pVFrame->HasChildWindow(FN_INSERT_FIELD))
-                pVFrame->ToggleChildWindow(FN_INSERT_FIELD);    // Show dialog
+            SfxViewFrame& rVFrame = GetView().GetViewFrame();
+            if (!rVFrame.HasChildWindow(FN_INSERT_FIELD))
+                rVFrame.ToggleChildWindow(FN_INSERT_FIELD);    // Show dialog
 
             // Switch Fielddlg at a new TabPage
             sal_uInt16 nId = SwFieldDlgWrapper::GetChildWindowId();
-            SwFieldDlgWrapper *pWrp = static_cast<SwFieldDlgWrapper*>(pVFrame->GetChildWindow(nId));
+            SwFieldDlgWrapper *pWrp = static_cast<SwFieldDlgWrapper*>(rVFrame.GetChildWindow(nId));
             if (pWrp)
                 pWrp->ShowReferencePage();
             rReq.Ignore();
@@ -828,7 +828,7 @@ FIELD_INSERT:
             }
 
             rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
-            rSh.GetView().GetViewFrame()->GetBindings().Invalidate( SID_UNDO );
+            rSh.GetView().GetViewFrame().GetBindings().Invalidate( SID_UNDO );
         }
         break;
         case FN_INSERT_CHECKBOX_FORMFIELD:
@@ -843,7 +843,7 @@ FIELD_INSERT:
             }
 
             rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
-            rSh.GetView().GetViewFrame()->GetBindings().Invalidate( SID_UNDO );
+            rSh.GetView().GetViewFrame().GetBindings().Invalidate( SID_UNDO );
         }
         break;
         case FN_INSERT_DROPDOWN_FORMFIELD:
@@ -858,7 +858,7 @@ FIELD_INSERT:
             }
 
             rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
-            rSh.GetView().GetViewFrame()->GetBindings().Invalidate( SID_UNDO );
+            rSh.GetView().GetViewFrame().GetBindings().Invalidate( SID_UNDO );
         }
         break;
     case FN_INSERT_DATE_FORMFIELD:
@@ -891,7 +891,7 @@ FIELD_INSERT:
         }
 
         rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
-        rSh.GetView().GetViewFrame()->GetBindings().Invalidate( SID_UNDO );
+        rSh.GetView().GetViewFrame().GetBindings().Invalidate( SID_UNDO );
     }
     break;
     case FN_UPDATE_TEXT_FORMFIELDS:
@@ -1254,11 +1254,11 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                 }
                 else
                 {
-                    SfxViewFrame* pVFrame = GetView().GetViewFrame();
+                    SfxViewFrame& rVFrame = GetView().GetViewFrame();
                     //#i5788# prevent closing of the field dialog while a modal dialog ( Input field dialog ) is active
-                    if(!pVFrame->IsInModalMode() &&
-                        pVFrame->KnowsChildWindow(FN_INSERT_FIELD) && !pVFrame->HasChildWindow(FN_INSERT_FIELD_DATA_ONLY) )
-                        rSet.Put(SfxBoolItem( FN_INSERT_FIELD, pVFrame->HasChildWindow(nWhich)));
+                    if(!rVFrame.IsInModalMode() &&
+                        rVFrame.KnowsChildWindow(FN_INSERT_FIELD) && !rVFrame.HasChildWindow(FN_INSERT_FIELD_DATA_ONLY) )
+                        rSet.Put(SfxBoolItem( FN_INSERT_FIELD, rVFrame.HasChildWindow(nWhich)));
                     else
                         rSet.DisableItem(FN_INSERT_FIELD);
                 }
@@ -1267,8 +1267,8 @@ void SwTextShell::StateField( SfxItemSet &rSet )
 
         case FN_INSERT_REF_FIELD:
             {
-                SfxViewFrame* pVFrame = GetView().GetViewFrame();
-                if ( !pVFrame->KnowsChildWindow(FN_INSERT_FIELD)
+                SfxViewFrame& rVFrame = GetView().GetViewFrame();
+                if ( !rVFrame.KnowsChildWindow(FN_INSERT_FIELD)
                      || rSh.CursorInsideInputField() )
                 {
                     rSet.DisableItem(FN_INSERT_REF_FIELD);
@@ -1283,7 +1283,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                 }
                 else
                 {
-                    rSet.Put(SfxBoolItem( nWhich, GetView().GetViewFrame()->HasChildWindow(FN_INSERT_FIELD)));
+                    rSet.Put(SfxBoolItem( nWhich, GetView().GetViewFrame().HasChildWindow(FN_INSERT_FIELD)));
                 }
             break;
 

@@ -2306,7 +2306,7 @@ IMPL_LINK_NOARG(SwTOXEntryTabPage, EditStyleHdl, weld::Button&, void)
         SfxStringItem aStyle(SID_STYLE_EDIT, m_xCharStyleLB->get_active_text());
         SfxUInt16Item aFamily(SID_STYLE_FAMILY, sal_uInt16(SfxStyleFamily::Char));
         static_cast<SwMultiTOXTabDialog*>(GetDialogController())->GetWrtShell().
-        GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_STYLE_EDIT,
+        GetView().GetViewFrame().GetDispatcher()->ExecuteList(SID_STYLE_EDIT,
                 SfxCallMode::SYNCHRON,
                 { &aStyle, &aFamily });
     }
@@ -3646,7 +3646,7 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, EditStyleHdl, weld::Button&, void)
         SfxStringItem aStyle(SID_STYLE_EDIT, m_xParaLayLB->get_selected_text());
         SfxUInt16Item aFamily(SID_STYLE_FAMILY, sal_uInt16(SfxStyleFamily::Para));
         SwWrtShell& rSh = static_cast<SwMultiTOXTabDialog*>(GetDialogController())->GetWrtShell();
-        rSh.GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_STYLE_EDIT,
+        rSh.GetView().GetViewFrame().GetDispatcher()->ExecuteList(SID_STYLE_EDIT,
                 SfxCallMode::SYNCHRON,
                 { &aStyle, &aFamily });
     }

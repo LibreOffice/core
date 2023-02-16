@@ -73,7 +73,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         CommandEvent aDragEvent( rPosPixel, CommandEventId::StartDrag, true );
         if( rSh.GetDrawView()->Command( aDragEvent, this ) )
         {
-            m_rView.GetViewFrame()->GetBindings().InvalidateAll(false);
+            m_rView.GetViewFrame().GetBindings().InvalidateAll(false);
             return; // Event evaluated by SdrView
         }
     }
@@ -496,12 +496,8 @@ IMPL_LINK_NOARG(SwEditWin, DDHandler, Timer *, void)
     m_bMBPressed = false;
     ReleaseMouse();
     g_bFrameDrag = false;
-
-    if ( m_rView.GetViewFrame() )
-    {
-        g_bExecuteDrag = true;
-        StartExecuteDrag();
-    }
+    g_bExecuteDrag = true;
+    StartExecuteDrag();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

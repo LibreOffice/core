@@ -76,7 +76,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     MakeDrawLayer();
 
     ScTabView* pTabView = GetViewData().GetView();
-    SfxBindings& rBindings = GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = GetViewFrame().GetBindings();
 
     vcl::Window*     pWin    = pTabView->GetActiveWin();
     ScDrawView* pView   = pTabView->GetScDrawView();
@@ -141,7 +141,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         if ( nNewId == SID_FM_CREATE_CONTROL )
         {
             GetViewData().GetDispatcher().Execute(SID_FM_LEAVE_CREATE);
-            GetViewFrame()->GetBindings().InvalidateAll(false);
+            GetViewFrame().GetBindings().InvalidateAll(false);
             //! what kind of slot does the weird controller really need to display this????
         }
 
@@ -155,7 +155,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     {
         // switching from control- to paint function -> deselect in control-controller
         GetViewData().GetDispatcher().Execute(SID_FM_LEAVE_CREATE);
-        GetViewFrame()->GetBindings().InvalidateAll(false);
+        GetViewFrame().GetBindings().InvalidateAll(false);
         //! what kind of slot does the weird controller really need to display this????
     }
 
@@ -289,7 +289,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
                 const SfxStringItem* pEnumCommand = rReq.GetArg<SfxStringItem>(nNewId);
                 if ( pEnumCommand )
                 {
-                    SfxBindings& rBind = GetViewFrame()->GetBindings();
+                    SfxBindings& rBind = GetViewFrame().GetBindings();
                     rBind.Invalidate( nNewId );
                     rBind.Update( nNewId );
 
@@ -397,7 +397,7 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
         {
             case SID_DRAW_CHART:
                 {
-                    bool bOle = GetViewFrame()->GetFrame().IsInPlace();
+                    bool bOle = GetViewFrame().GetFrame().IsInPlace();
                     if ( bOle || !SvtModuleOptions().IsChart() )
                         rSet.DisableItem( nWhich );
                 }

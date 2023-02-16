@@ -2356,7 +2356,7 @@ IMPL_LINK_NOARG(SwContentTree, ContentDoubleClickHdl, weld::TreeView&, bool)
             {
                 if (State::CONSTANT == m_eState)
                 {
-                    m_pActiveShell->GetView().GetViewFrame()->GetWindow().ToTop();
+                    m_pActiveShell->GetView().GetViewFrame().GetWindow().ToTop();
                 }
                 //Jump to content type:
                 GotoContent(pCnt);
@@ -4336,7 +4336,7 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
             {
                 if (State::CONSTANT == m_eState)
                 {
-                    m_pActiveShell->GetView().GetViewFrame()->GetWindow().ToTop();
+                    m_pActiveShell->GetView().GetViewFrame().GetWindow().ToTop();
                 }
 
                 SwContent* pCnt = dynamic_cast<SwContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xEntry)));
@@ -4744,7 +4744,7 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
             }
         case 700:
             {
-                m_pActiveShell->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_OUTLINE_TO_CLIPBOARD);
+                m_pActiveShell->GetView().GetViewFrame().GetDispatcher()->Execute(FN_OUTLINE_TO_CLIPBOARD);
                 break;
             }
         case 800:
@@ -4788,7 +4788,7 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
             else if (eTypeId == ContentTypeId::TABLE)
             {
                 m_pActiveShell->GotoTable(pCnt->GetName());
-                m_pActiveShell->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_TABLE_SELECT_ALL);
+                m_pActiveShell->GetView().GetViewFrame().GetDispatcher()->Execute(FN_TABLE_SELECT_ALL);
             }
             else if (eTypeId == ContentTypeId::REGION)
             {
@@ -5033,7 +5033,7 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
                 SwRewriter aRewriter;
                 aRewriter.AddRule(UndoArg1, sTable);
                 m_pActiveShell->StartUndo(SwUndoId::DELETE, &aRewriter);
-                m_pActiveShell->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_TABLE_SELECT_ALL);
+                m_pActiveShell->GetView().GetViewFrame().GetDispatcher()->Execute(FN_TABLE_SELECT_ALL);
                 m_pActiveShell->DeleteRow();
                 m_pActiveShell->EndUndo();
                 m_pActiveShell->EndAction();
@@ -5113,7 +5113,7 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
                 // allowed despite PROTECT_BOOKMARKS: the dialog itself enforces it
                 SfxStringItem const name(FN_EDIT_BOOKMARK, pCnt->GetName());
                 SfxPoolItem const* args[2] = { &name, nullptr };
-                m_pActiveShell->GetView().GetViewFrame()->
+                m_pActiveShell->GetView().GetViewFrame().
                     GetDispatcher()->Execute(FN_EDIT_BOOKMARK, SfxCallMode::SYNCHRON, args);
             }
         break;
@@ -5194,7 +5194,7 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
                     if(pBase)
                     {
                         SwPtrItem aPtrItem( FN_INSERT_MULTI_TOX, const_cast<SwTOXBase *>(pBase));
-                        m_pActiveShell->GetView().GetViewFrame()->
+                        m_pActiveShell->GetView().GetViewFrame().
                             GetDispatcher()->ExecuteList(FN_INSERT_MULTI_TOX,
                                 SfxCallMode::ASYNCHRON, { &aPtrItem });
 
@@ -5249,7 +5249,7 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
         default: break;
     }
     if(nSlot)
-        m_pActiveShell->GetView().GetViewFrame()->
+        m_pActiveShell->GetView().GetViewFrame().
                     GetDispatcher()->Execute(nSlot, SfxCallMode::SYNCHRON);
     else if(xNameAccess.is())
     {
@@ -5330,7 +5330,7 @@ void SwContentTree::CopyOutlineSelections()
             return false;
         });
         m_pActiveShell->LeaveAddMode();
-        m_pActiveShell->GetView().GetViewFrame()->GetBindings().Execute(SID_COPY);
+        m_pActiveShell->GetView().GetViewFrame().GetBindings().Execute(SID_COPY);
     }
     m_pActiveShell->LockView(false);
 }

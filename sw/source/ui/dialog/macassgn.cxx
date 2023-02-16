@@ -116,7 +116,7 @@ bool SwMacroAssignDlg::INetFormatDlg(weld::Window* pParent, SwWrtShell& rSh,
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     ScopedVclPtr<SfxAbstractDialog> pMacroDlg( pFact->CreateEventConfigDialog(pParent, aSet,
-        rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface() ) );
+        rSh.GetView().GetViewFrame().GetFrame().GetFrameInterface() ) );
     if ( pMacroDlg && pMacroDlg->Execute() == RET_OK )
     {
         const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();

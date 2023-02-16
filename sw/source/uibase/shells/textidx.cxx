@@ -47,7 +47,7 @@ void SwTextShell::ExecIdx(SfxRequest const &rReq)
     if (pArgs)
         pArgs->GetItemState(nSlot, false, &pItem);
 
-    SfxViewFrame* pVFrame = GetView().GetViewFrame();
+    SfxViewFrame& rVFrame = GetView().GetViewFrame();
 
     switch (nSlot)
     {
@@ -137,13 +137,13 @@ void SwTextShell::ExecIdx(SfxRequest const &rReq)
         case FN_INSERT_AUTH_ENTRY_DLG:
         {
             // no BASIC support
-            pVFrame->ToggleChildWindow(FN_INSERT_AUTH_ENTRY_DLG);
+            rVFrame.ToggleChildWindow(FN_INSERT_AUTH_ENTRY_DLG);
             Invalidate(rReq.GetSlot());
         }
         break;
         case FN_INSERT_IDX_ENTRY_DLG:
         {
-            pVFrame->ToggleChildWindow(FN_INSERT_IDX_ENTRY_DLG);
+            rVFrame.ToggleChildWindow(FN_INSERT_IDX_ENTRY_DLG);
             Invalidate(rReq.GetSlot());
         }
         break;
@@ -230,11 +230,11 @@ void SwTextShell::ExecIdx(SfxRequest const &rReq)
 void SwTextShell::GetIdxState(SfxItemSet &rSet)
 {
     SwWrtShell& rSh = GetShell();
-    SfxViewFrame* pVFrame = GetView().GetViewFrame();
+    SfxViewFrame& rVFrame = GetView().GetViewFrame();
     SwInsertIdxMarkWrapper *pIdxMrk = static_cast<SwInsertIdxMarkWrapper*>(
-                        pVFrame->GetChildWindow(FN_INSERT_IDX_ENTRY_DLG));
+                        rVFrame.GetChildWindow(FN_INSERT_IDX_ENTRY_DLG));
 
-    SfxChildWindow* pAuthMark = pVFrame->GetChildWindow(FN_INSERT_AUTH_ENTRY_DLG);
+    SfxChildWindow* pAuthMark = rVFrame.GetChildWindow(FN_INSERT_AUTH_ENTRY_DLG);
 
     const bool bHtmlMode = 0 != ::GetHtmlMode( GetView().GetDocShell() );
     const SwTOXBase* pBase = nullptr;

@@ -399,12 +399,10 @@ void DrawDocShell::ApplySlotFilter() const
 
     while( pTestViewShell )
     {
-        if( pTestViewShell->GetObjectShell()
-            == this
-            && pTestViewShell->GetViewFrame()
-            && pTestViewShell->GetViewFrame()->GetDispatcher() )
+        if( pTestViewShell->GetObjectShell() == this
+            && pTestViewShell->GetViewFrame().GetDispatcher() )
         {
-            SfxDispatcher* pDispatcher = pTestViewShell->GetViewFrame()->GetDispatcher();
+            SfxDispatcher* pDispatcher = pTestViewShell->GetViewFrame().GetDispatcher();
 
             if( !mpFilterSIDs.empty() )
                 pDispatcher->SetSlotFilter( mbFilterEnable ? SfxSlotFilterState::ENABLED : SfxSlotFilterState::DISABLED, mpFilterSIDs );

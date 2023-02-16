@@ -345,7 +345,7 @@ bool SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
         }
     }
 
-    mrDocView.GetViewFrame()->GetBindings().InvalidateAll(false);
+    mrDocView.GetViewFrame().GetBindings().InvalidateAll(false);
 
     return bDone;
 }
@@ -382,7 +382,7 @@ bool SidebarTextControl::MouseButtonDown(const MouseEvent& rMEvt)
 
     bool bRet = WeldEditView::MouseButtonDown(rMEvt);
 
-    mrDocView.GetViewFrame()->GetBindings().InvalidateAll(false);
+    mrDocView.GetViewFrame().GetBindings().InvalidateAll(false);
 
     return bRet;
 }
@@ -404,7 +404,7 @@ IMPL_LINK( SidebarTextControl, OnlineSpellCallback, SpellCallbackInfo&, rInfo, v
 {
     if ( rInfo.nCommand == SpellCallbackCommand::STARTSPELLDLG )
     {
-        mrDocView.GetViewFrame()->GetDispatcher()->Execute( FN_SPELL_GRAMMAR_DIALOG, SfxCallMode::ASYNCHRON);
+        mrDocView.GetViewFrame().GetDispatcher()->Execute( FN_SPELL_GRAMMAR_DIALOG, SfxCallMode::ASYNCHRON);
     }
 }
 

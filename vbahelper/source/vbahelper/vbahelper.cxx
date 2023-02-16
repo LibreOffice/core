@@ -121,7 +121,7 @@ void dispatchExecute(SfxViewShell const * pViewShell, sal_uInt16 nSlot)
 {
     SfxViewFrame* pViewFrame = nullptr;
     if ( pViewShell )
-        pViewFrame = pViewShell->GetViewFrame();
+        pViewFrame = &pViewShell->GetViewFrame();
     if ( pViewFrame )
     {
         SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
@@ -365,7 +365,7 @@ void PrintOutHelper( SfxViewShell const * pViewShell, const uno::Any& From, cons
     PrToFileName >>= sFileName;
     SfxViewFrame* pViewFrame = nullptr;
     if ( pViewShell )
-        pViewFrame = pViewShell->GetViewFrame();
+        pViewFrame = &pViewShell->GetViewFrame();
     if ( !pViewFrame )
         return;
 
@@ -424,7 +424,7 @@ void PrintPreviewHelper( const css::uno::Any& /*EnableChanges*/, SfxViewShell co
 {
     SfxViewFrame* pViewFrame = nullptr;
     if ( pViewShell )
-        pViewFrame = pViewShell->GetViewFrame();
+        pViewFrame = &pViewShell->GetViewFrame();
     if ( pViewFrame )
     {
         if ( !pViewFrame->GetFrame().IsInPlace() )

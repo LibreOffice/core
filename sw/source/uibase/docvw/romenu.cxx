@@ -147,8 +147,8 @@ SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
 
     m_xMenu->EnableItem(m_nReadonlyGraphictogallery, bEnableGraphicToGallery);
 
-    SfxViewFrame * pVFrame = rV.GetViewFrame();
-    SfxDispatcher &rDis = *pVFrame->GetDispatcher();
+    SfxViewFrame& rVFrame = rV.GetViewFrame();
+    SfxDispatcher &rDis = *rVFrame.GetDispatcher();
     const SwPageDesc &rDesc = rSh.GetPageDesc( rSh.GetCurPageDesc() );
     m_xBrushItem = rDesc.GetMaster().makeBackgroundBrushItem();
     bool bEnableBackGallery = false,
@@ -195,12 +195,12 @@ SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
 
     std::unique_ptr<SfxPoolItem> pState;
 
-    SfxItemState eState = pVFrame->GetBindings().QueryState( SID_COPY, pState );
+    SfxItemState eState = rVFrame.GetBindings().QueryState( SID_COPY, pState );
     Check(m_nReadonlyCopy, SID_COPY, rDis);
     if (eState < SfxItemState::DEFAULT)
         m_xMenu->EnableItem(m_nReadonlyCopy, false);
 
-    eState = pVFrame->GetBindings().QueryState( SID_EDITDOC, pState );
+    eState = rVFrame.GetBindings().QueryState( SID_EDITDOC, pState );
     if (
         eState < SfxItemState::DEFAULT ||
         (rSh.IsGlobalDoc() && m_rView.GetDocShell()->IsReadOnlyUI())
@@ -230,7 +230,7 @@ void SwReadOnlyPopup::Execute( vcl::Window* pWin, const Point &rPixPos )
 void SwReadOnlyPopup::Execute( vcl::Window* pWin, sal_uInt16 nId )
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
-    SfxDispatcher &rDis = *m_rView.GetViewFrame()->GetDispatcher();
+    SfxDispatcher &rDis = *m_rView.GetViewFrame().GetDispatcher();
     if (nId >= MN_READONLY_GRAPHICTOGALLERY)
     {
         OUString sTmp;
@@ -280,7 +280,7 @@ void SwReadOnlyPopup::Execute( vcl::Window* pWin, sal_uInt16 nId )
     else if (nId == m_nReadonlySelectionMode)
         nExecId = FN_READONLY_SELECTION_MODE;
     else if (nId == m_nReadonlyReload || nId == m_nReadonlyReloadFrame)
-        rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(SID_RELOAD);
+        rSh.GetView().GetViewFrame().GetDispatcher()->Execute(SID_RELOAD);
     else if (nId == m_nReadonlyBrowseBackward)
         nExecId = SID_BROWSE_BACKWARD;
     else if (nId == m_nReadonlyBrowseForward)

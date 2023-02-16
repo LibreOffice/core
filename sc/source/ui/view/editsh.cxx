@@ -628,7 +628,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
             {
                 // Ensure the field is selected first
                 pEditView->SelectFieldAtCursor();
-                rViewData.GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(
+                rViewData.GetViewShell()->GetViewFrame().GetDispatcher()->Execute(
                     SID_HYPERLINK_DIALOG);
             }
         break;
@@ -1302,14 +1302,14 @@ void ScEditShell::GetUndoState(SfxItemSet &rSet)
 {
     //  Undo state is taken from normal ViewFrame state function
 
-    SfxViewFrame* pViewFrm = rViewData.GetViewShell()->GetViewFrame();
-    if ( pViewFrm && GetUndoManager() )
+    SfxViewFrame& rViewFrm = rViewData.GetViewShell()->GetViewFrame();
+    if ( GetUndoManager() )
     {
         SfxWhichIter aIter(rSet);
         sal_uInt16 nWhich = aIter.FirstWhich();
         while( nWhich )
         {
-            pViewFrm->GetSlotState( nWhich, nullptr, &rSet );
+            rViewFrm.GetSlotState( nWhich, nullptr, &rSet );
             nWhich = aIter.NextWhich();
         }
     }

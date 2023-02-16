@@ -128,7 +128,7 @@ void SwFieldPage::InsertField(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType, con
         m_aMgr.InsertField( aData );
 
         uno::Reference< frame::XDispatchRecorder > xRecorder =
-                pView->GetViewFrame()->GetBindings().GetRecorder();
+                pView->GetViewFrame().GetBindings().GetRecorder();
         if ( xRecorder.is() )
         {
             bool bRecordDB = SwFieldTypesEnum::Database == nTypeId ||
@@ -137,7 +137,7 @@ void SwFieldPage::InsertField(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType, con
                             SwFieldTypesEnum::DatabaseNextSet == nTypeId ||
                             SwFieldTypesEnum::DatabaseName == nTypeId ;
 
-            SfxRequest aReq( pView->GetViewFrame(),
+            SfxRequest aReq( &pView->GetViewFrame(),
                     bRecordDB ?  FN_INSERT_DBFIELD : FN_INSERT_FIELD );
             if(bRecordDB)
             {

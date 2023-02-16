@@ -159,7 +159,7 @@ void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,
     const sal_uInt16 nZoomFac = o3tl::narrowing<sal_uInt16>(nFac);
 
     SwViewOption aOpt( *pOpt );
-    if ( !GetViewFrame()->GetFrame().IsInPlace() )
+    if ( !GetViewFrame().GetFrame().IsInPlace() )
     {
         //Update MasterUsrPrefs and after that update the ViewOptions of the current View.
         if ( !bViewOnly &&
@@ -231,7 +231,7 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly 
 
     SwActContext aActContext(m_pWrtShell.get());
 
-    if ( !GetViewFrame()->GetFrame().IsInPlace() && !bViewOnly )
+    if ( !GetViewFrame().GetFrame().IsInPlace() && !bViewOnly )
     {
         const bool bWeb = dynamic_cast< const SwWebView *>( this ) !=  nullptr;
         SwMasterUsrPref *pUsrPref = const_cast<SwMasterUsrPref*>(SW_MOD()->GetUsrPref(bWeb));
@@ -267,7 +267,7 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly 
     if( bUnLockView )
         m_pWrtShell->LockView( false );
 
-    SfxBindings& rBnd = GetViewFrame()->GetBindings();
+    SfxBindings& rBnd = GetViewFrame().GetBindings();
     rBnd.Invalidate( SID_ATTR_VIEWLAYOUT );
     rBnd.Invalidate( SID_ATTR_ZOOMSLIDER);
 }
@@ -299,7 +299,7 @@ IMPL_LINK( SwView, WindowChildEventListener, VclWindowEvent&, rEvent, void )
 
 void SwView::CreateScrollbar( bool bHori )
 {
-    vcl::Window *pMDI = &GetViewFrame()->GetWindow();
+    vcl::Window *pMDI = &GetViewFrame().GetWindow();
     VclPtr<SwScrollbar>& ppScrollbar = bHori ? m_pHScrollbar : m_pVScrollbar;
 
     assert(!ppScrollbar); //check beforehand!
@@ -423,7 +423,7 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
         break;
         case NID_BKM :
             rSh.EnterStdMode();
-            GetViewFrame()->GetDispatcher()->Execute(bNext ?
+            GetViewFrame().GetDispatcher()->Execute(bNext ?
                                         FN_NEXT_BOOKMARK :
                                             FN_PREV_BOOKMARK);
             break;
@@ -596,7 +596,7 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
                 rSh.EndAction();
                 if (bFound)
                 {
-                    GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT);
+                    GetViewFrame().GetDispatcher()->Execute(FN_POSTIT);
                     if (bWrapped)
                         SvxSearchDialogWrapper::SetSearchLabel(bNext ? SearchLabel::EndWrapped :
                                                                        SearchLabel::StartWrapped);
@@ -725,7 +725,7 @@ IMPL_LINK( SwView, ExecRulerClick, Ruler *, pRuler, void )
     }
 
     SfxStringItem aDefPage(nDefDlg, sDefPage);
-    GetViewFrame()->GetDispatcher()->ExecuteList(nDefDlg,
+    GetViewFrame().GetDispatcher()->ExecuteList(nDefDlg,
                                 SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
                                 { &aDefPage });
 }

@@ -167,7 +167,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             {
                 // Frame already exists, open frame dialog for editing.
                 SfxStringItem aDefPage(FN_FORMAT_FRAME_DLG, "columns");
-                rSh.GetView().GetViewFrame()->GetDispatcher()->ExecuteList(
+                rSh.GetView().GetViewFrame().GetDispatcher()->ExecuteList(
                         FN_FORMAT_FRAME_DLG,
                         SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
                         { &aDefPage });
@@ -246,7 +246,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
         case FN_FRAME_UNCHAIN:
             rSh.Unchain( *rSh.GetFlyFrameFormat() );
-            GetView().GetViewFrame()->GetBindings().Invalidate(FN_FRAME_CHAIN);
+            GetView().GetViewFrame().GetBindings().Invalidate(FN_FRAME_CHAIN);
             break;
         case FN_FORMAT_FOOTNOTE_DLG:
         {
@@ -440,7 +440,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             const SelectionType nSel = rSh.GetSelectionType();
             if (nSel & SelectionType::Graphic)
             {
-                rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(FN_FORMAT_GRAFIC_DLG);
+                rSh.GetView().GetViewFrame().GetDispatcher()->Execute(FN_FORMAT_GRAFIC_DLG);
                 bUpdateMgr = false;
             }
             else
@@ -514,7 +514,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 if(pArgs && (pDlgItem = pArgs->GetItemIfSet(FN_FORMAT_FRAME_DLG, false)))
                     sDefPage = OUStringToOString(pDlgItem->GetValue(), RTL_TEXTENCODING_UTF8);
 
-                aSet.Put(SfxFrameItem( SID_DOCFRAME, &GetView().GetViewFrame()->GetFrame()));
+                aSet.Put(SfxFrameItem( SID_DOCFRAME, &GetView().GetViewFrame().GetFrame()));
                 FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( &GetView()) != nullptr );
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric) ));
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -522,7 +522,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                                         nSel & SelectionType::Graphic ? OUString("PictureDialog") :
                                                         nSel & SelectionType::Ole ? OUString("ObjectDialog"):
                                                                                         OUString("FrameDialog"),
-                                                        GetView().GetViewFrame(),
+                                                        &GetView().GetViewFrame(),
                                                         GetView().GetFrameWeld(),
                                                         aSet,
                                                         false,
@@ -1345,7 +1345,7 @@ void SwFrameShell::ExecDrawAttrArgsTextFrame(SfxRequest const & rReq)
     }
     else
     {
-        SfxDispatcher* pDis = rSh.GetView().GetViewFrame()->GetDispatcher();
+        SfxDispatcher* pDis = rSh.GetView().GetViewFrame().GetDispatcher();
 
         switch(rReq.GetSlot())
         {
@@ -1403,7 +1403,7 @@ void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest const & rReq)
                             0
                         };
 
-                        SfxBindings &rBnd = GetView().GetViewFrame()->GetBindings();
+                        SfxBindings &rBnd = GetView().GetViewFrame().GetBindings();
 
                         rBnd.Invalidate(aInval);
                         rBnd.Update(SID_ATTR_FILL_STYLE);

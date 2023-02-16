@@ -841,8 +841,8 @@ bool ScValidationDlg::EnterRefStatus()
     if( !pTabViewShell ) return false;
 
     sal_uInt16 nId  = SLOTID;
-    SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
-    SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+    SfxViewFrame& rViewFrm = pTabViewShell->GetViewFrame();
+    SfxChildWindow* pWnd = rViewFrm.GetChildWindow( nId );
 
     if (pWnd && pWnd->GetController().get() != this) pWnd = nullptr;
 
@@ -858,8 +858,8 @@ bool ScValidationDlg::LeaveRefStatus()
     if( !pTabViewShell ) return false;
 
     sal_uInt16 nId  = SLOTID;
-    SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
-    if ( pViewFrm->GetChildWindow( nId ) )
+    SfxViewFrame& rViewFrm = pTabViewShell->GetViewFrame();
+    if (rViewFrm.GetChildWindow(nId))
     {
         DoClose( nId );
     }
@@ -888,7 +888,7 @@ bool ScValidationDlg::RemoveRefDlg( bool bRestoreModal /* = true */ )
 
     if( !pTabVwSh ) return false;
 
-    if ( SfxChildWindow* pWnd = pTabVwSh->GetViewFrame()->GetChildWindow( SID_VALIDITY_REFERENCE ) )
+    if ( SfxChildWindow* pWnd = pTabVwSh->GetViewFrame().GetChildWindow( SID_VALIDITY_REFERENCE ) )
     {
         bVisLock = static_cast<ScValidityRefChildWin*>(pWnd)->LockVisible( true );
         bFreeWindowLock = static_cast<ScValidityRefChildWin*>(pWnd)->LockFreeWindow( true );
@@ -905,7 +905,7 @@ bool ScValidationDlg::RemoveRefDlg( bool bRestoreModal /* = true */ )
         }
     }
 
-    if ( SfxChildWindow* pWnd = pTabVwSh->GetViewFrame()->GetChildWindow( SID_VALIDITY_REFERENCE ) )
+    if ( SfxChildWindow* pWnd = pTabVwSh->GetViewFrame().GetChildWindow( SID_VALIDITY_REFERENCE ) )
     {
         static_cast<ScValidityRefChildWin*>(pWnd)->LockVisible( bVisLock );
         static_cast<ScValidityRefChildWin*>(pWnd)->LockFreeWindow( bFreeWindowLock );

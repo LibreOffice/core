@@ -255,7 +255,7 @@ void SwPagePreviewWin::CalcWish( sal_uInt8 nNewRow, sal_uInt8 nNewCol )
         FN_SHOW_TWO_PAGES, FN_SHOW_MULTIPLE_PAGES,
         0
     };
-    SfxBindings& rBindings = mrView.GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = mrView.GetViewFrame().GetBindings();
     rBindings.Invalidate( aInval );
     rBindings.Update( FN_SHOW_TWO_PAGES );
     rBindings.Update( FN_SHOW_MULTIPLE_PAGES );
@@ -360,7 +360,7 @@ bool SwPagePreviewWin::MovePage( int eMoveMode )
         FN_STAT_PAGE, 0
     };
 
-    SfxBindings& rBindings = mrView.GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = mrView.GetViewFrame().GetBindings();
     rBindings.Invalidate( aInval );
 
     return true;
@@ -425,7 +425,7 @@ void  SwPagePreviewWin::KeyInput( const KeyEvent &rKEvt )
         if(nSlot)
         {
             bHandled = true;
-            mrView.GetViewFrame()->GetDispatcher()->Execute(
+            mrView.GetViewFrame().GetDispatcher()->Execute(
                                 nSlot, SfxCallMode::ASYNCHRON );
         }
     }
@@ -488,8 +488,8 @@ void SwPagePreviewWin::MouseButtonDown( const MouseEvent& rMEvt )
                                OUString::number( aDocPos.Y() ) + ";";
         mrView.SetNewCursorPos( sNewCursorPos );
 
-        SfxViewFrame *pTmpFrame = mrView.GetViewFrame();
-        pTmpFrame->GetBindings().Execute( SID_VIEWSHELL0, nullptr,
+        SfxViewFrame& rTmpFrame = mrView.GetViewFrame();
+        rTmpFrame.GetBindings().Execute( SID_VIEWSHELL0, nullptr,
                                                 SfxCallMode::ASYNCHRON );
     }
     else if ( bIsDocPos || bPosInEmptyPage )
@@ -507,7 +507,7 @@ void SwPagePreviewWin::MouseButtonDown( const MouseEvent& rMEvt )
         {
             FN_STAT_PAGE, 0
         };
-        SfxBindings& rBindings = mrView.GetViewFrame()->GetBindings();
+        SfxBindings& rBindings = mrView.GetViewFrame().GetBindings();
         rBindings.Invalidate( aInval );
     }
 }
@@ -563,7 +563,7 @@ void SwPagePreviewWin::DataChanged( const DataChangedEvent& rDCEvt )
         if( rDCEvt.GetFlags() & AllSettingsFlags::STYLE )
             mrView.InvalidateBorder();              // Scrollbar widths
         // zoom has to be disabled if Accessibility support is switched on
-        lcl_InvalidateZoomSlots(mrView.GetViewFrame()->GetBindings());
+        lcl_InvalidateZoomSlots(mrView.GetViewFrame().GetBindings());
         break;
 
     case DataChangedEventType::PRINTER:
@@ -642,7 +642,7 @@ void SwPagePreview::ExecPgUpAndPgDown( const bool  _bPgUp,
                 FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT, FN_PAGEUP, FN_PAGEDOWN,
                 FN_STAT_PAGE, 0
             };
-            SfxBindings& rBindings = GetViewFrame()->GetBindings();
+            SfxBindings& rBindings = GetViewFrame().GetBindings();
             rBindings.Invalidate( aInval );
             m_pViewWin->Invalidate();
         }
@@ -704,7 +704,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
                     FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT, FN_PAGEUP, FN_PAGEDOWN,
                     FN_STAT_PAGE, FN_SHOW_BOOKVIEW, 0
                 };
-                SfxBindings& rBindings = GetViewFrame()->GetBindings();
+                SfxBindings& rBindings = GetViewFrame().GetBindings();
                 rBindings.Invalidate( aInval );
                 m_pViewWin->Invalidate();
             }
@@ -739,7 +739,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
                 aCoreSet.Put( aZoom );
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                pDlg.disposeAndReset(pFact->CreateSvxZoomDialog(GetViewFrame()->GetFrameWeld(), aCoreSet));
+                pDlg.disposeAndReset(pFact->CreateSvxZoomDialog(GetViewFrame().GetFrameWeld(), aCoreSet));
                 pDlg->SetLimits( MINZOOM, MAXZOOM );
 
                 if( pDlg->Execute() != RET_CANCEL )
@@ -822,7 +822,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
                 {
                     FN_STAT_PAGE, 0
                 };
-                SfxBindings& rBindings = GetViewFrame()->GetBindings();
+                SfxBindings& rBindings = GetViewFrame().GetBindings();
                 rBindings.Invalidate( aInval );
                 rReq.Done();
             }
@@ -901,7 +901,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
             //  print preview is now always in the same frame as the tab view
             //  -> always switch this frame back to normal view
             //  (ScTabViewShell ctor reads stored view data)
-            GetViewFrame()->GetDispatcher()->Execute( SID_VIEWSHELL0, SfxCallMode::ASYNCHRON );
+            GetViewFrame().GetDispatcher()->Execute( SID_VIEWSHELL0, SfxCallMode::ASYNCHRON );
             break;
         case FN_INSERT_BREAK:
         {
@@ -911,8 +911,8 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
             if(GetViewShell()->IsDummyPage( nSelPage ) && GetViewShell()->IsDummyPage( --nSelPage ))
                 nSelPage +=2;
             m_nNewPage = nSelPage;
-            SfxViewFrame *pTmpFrame = GetViewFrame();
-            pTmpFrame->GetBindings().Execute( SID_VIEWSHELL0, nullptr,
+            SfxViewFrame& rTmpFrame = GetViewFrame();
+            rTmpFrame.GetBindings().Execute( SID_VIEWSHELL0, nullptr,
                                                     SfxCallMode::ASYNCHRON );
         }
         break;
@@ -1143,7 +1143,7 @@ void SwPagePreview::Init()
 
 SwPagePreview::SwPagePreview(SfxViewFrame& rViewFrame, SfxViewShell* pOldSh):
     SfxViewShell(rViewFrame, SWVIEWFLAGS),
-    m_pViewWin( VclPtr<SwPagePreviewWin>::Create(&GetViewFrame()->GetWindow(), *this ) ),
+    m_pViewWin( VclPtr<SwPagePreviewWin>::Create(&GetViewFrame().GetWindow(), *this ) ),
     m_nNewPage(USHRT_MAX),
     m_sPageStr(SwResId(STR_PAGE)),
     m_pHScrollbar(nullptr),
@@ -1235,12 +1235,12 @@ void SwPagePreview::Activate(bool bMDI)
 
 SwDocShell* SwPagePreview::GetDocShell()
 {
-    return dynamic_cast<SwDocShell*>( GetViewFrame()->GetObjectShell() );
+    return dynamic_cast<SwDocShell*>( GetViewFrame().GetObjectShell() );
 }
 
 void SwPagePreview::CreateScrollbar( bool bHori )
 {
-    vcl::Window *pMDI = &GetViewFrame()->GetWindow();
+    vcl::Window *pMDI = &GetViewFrame().GetWindow();
     VclPtr<SwScrollbar>& ppScrollbar = bHori ? m_pHScrollbar : m_pVScrollbar;
 
     assert(!ppScrollbar); //check beforehand!
@@ -1268,7 +1268,7 @@ bool SwPagePreview::ChgPage( int eMvMode, bool bUpdateScrollbar )
     if( bChg )
     {
         // Update statusbar
-        SfxBindings& rBindings = GetViewFrame()->GetBindings();
+        SfxBindings& rBindings = GetViewFrame().GetBindings();
 
         if( bUpdateScrollbar )
         {
@@ -1514,7 +1514,7 @@ void SwPagePreview::EndScrollHdl(weld::Scrollbar& rScrollbar, bool bHori)
         FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT, FN_PAGEUP, FN_PAGEDOWN,
         FN_STAT_PAGE, 0
     };
-    SfxBindings& rBindings = GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = GetViewFrame().GetBindings();
     rBindings.Invalidate( aInval );
     // control invalidation of window
     if ( bInvalidateWin )
@@ -1696,7 +1696,7 @@ sal_uInt16  SwPagePreview::SetPrinter( SfxPrinter *pNew, SfxPrinterChangeFlags n
         }
 #endif
 
-        GetViewFrame()->GetBindings().Invalidate(aInval);
+        GetViewFrame().GetBindings().Invalidate(aInval);
     }
 
     return 0;
@@ -1886,7 +1886,7 @@ void SwPagePreview::SetZoom(SvxZoomType eType, sal_uInt16 nFactor)
         aOpt.SetZoom(nFactor);
         aOpt.SetZoomType(eType);
         rSh.ApplyViewOptions( aOpt );
-        lcl_InvalidateZoomSlots(GetViewFrame()->GetBindings());
+        lcl_InvalidateZoomSlots(GetViewFrame().GetBindings());
         // #i19975# also consider zoom type
         m_pViewWin->AdjustPreviewToNewZoom( nFactor, eType );
         ScrollViewSzChg();

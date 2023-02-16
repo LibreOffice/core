@@ -174,7 +174,7 @@ Reference<XResource> SAL_CALL BasicViewFactory::createResource (
     // Get the view frame.
     SfxViewFrame* pFrame = nullptr;
     if (mpBase != nullptr)
-        pFrame = mpBase->GetViewFrame();
+        pFrame = &mpBase->GetViewFrame();
 
     if (pFrame != nullptr && mpBase!=nullptr && pWindow!=nullptr)
     {
@@ -483,7 +483,7 @@ void BasicViewFactory::ActivateCenterView (
     // have to request a resize now.
     rpDescriptor->mpViewShell->UIFeatureChanged();
     if (mpBase->GetDocShell()->IsInPlaceActive())
-        mpBase->GetViewFrame()->Resize(true);
+        mpBase->GetViewFrame().Resize(true);
 
     mpBase->GetDrawController()->SetSubController(
         rpDescriptor->mpViewShell->CreateSubController());

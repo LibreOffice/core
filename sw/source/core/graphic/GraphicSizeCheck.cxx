@@ -135,8 +135,8 @@ void GraphicSizeCheckGUIEntry::runProperties()
 {
     markObject();
     SwWrtShell* pWrtShell = m_pDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_FORMAT_GRAFIC_DLG,
-                                                                  SfxCallMode::SYNCHRON);
+    pWrtShell->GetView().GetViewFrame().GetDispatcher()->Execute(FN_FORMAT_GRAFIC_DLG,
+                                                                 SfxCallMode::SYNCHRON);
 }
 
 GraphicSizeCheckGUIResult::GraphicSizeCheckGUIResult(SwDoc* pDocument)

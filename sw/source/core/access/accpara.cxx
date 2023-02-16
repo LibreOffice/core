@@ -464,12 +464,8 @@ void SwAccessibleParagraph::ExecuteAtViewShell( sal_uInt16 nSlot )
     if( !pSfxShell )
         return;
 
-    SfxViewFrame *pFrame = pSfxShell->GetViewFrame();
-    OSL_ENSURE( pFrame != nullptr, "View frame expected!" );
-    if( !pFrame )
-        return;
-
-    SfxDispatcher *pDispatcher = pFrame->GetDispatcher();
+    SfxViewFrame& rFrame = pSfxShell->GetViewFrame();
+    SfxDispatcher *pDispatcher = rFrame.GetDispatcher();
     OSL_ENSURE( pDispatcher != nullptr, "Dispatcher expected!" );
     if( !pDispatcher )
         return;

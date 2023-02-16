@@ -288,17 +288,14 @@ ScChildrenShapes::ScChildrenShapes(ScAccessibleDocument* pAccessibleDocument, Sc
 {
     if (mpViewShell)
     {
-        SfxViewFrame* pViewFrame = mpViewShell->GetViewFrame();
-        if (pViewFrame)
+        SfxViewFrame& rViewFrame = mpViewShell->GetViewFrame();
+        xSelectionSupplier = uno::Reference<view::XSelectionSupplier>(rViewFrame.GetFrame().GetController(), uno::UNO_QUERY);
+        if (xSelectionSupplier.is())
         {
-            xSelectionSupplier = uno::Reference<view::XSelectionSupplier>(pViewFrame->GetFrame().GetController(), uno::UNO_QUERY);
-            if (xSelectionSupplier.is())
-            {
-                xSelectionSupplier->addSelectionChangeListener(mpAccessibleDocument);
-                uno::Reference<drawing::XShapes> xShapes(mpViewShell->getSelectedXShapes());
-                if (xShapes.is())
-                    mnShapesSelected = xShapes->getCount();
-            }
+            xSelectionSupplier->addSelectionChangeListener(mpAccessibleDocument);
+            uno::Reference<drawing::XShapes> xShapes(mpViewShell->getSelectedXShapes());
+            if (xShapes.is())
+                mnShapesSelected = xShapes->getCount();
         }
     }
 

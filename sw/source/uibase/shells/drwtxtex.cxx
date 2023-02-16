@@ -482,7 +482,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         {
             // Ensure the field is selected first
             pOLV->SelectFieldAtCursor();
-            GetView().GetViewFrame()->GetDispatcher()->Execute(SID_HYPERLINK_DIALOG);
+            GetView().GetViewFrame().GetDispatcher()->Execute(SID_HYPERLINK_DIALOG);
         }
         break;
 
@@ -501,7 +501,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 SfxStringItem aTarget(SID_TARGETNAME, pURLField->GetTargetFrame());
                 SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, false);
                 SfxBoolItem aBrowsing(SID_BROWSE, true);
-                GetView().GetViewFrame()->GetDispatcher()->ExecuteList(
+                GetView().GetViewFrame().GetDispatcher()->ExecuteList(
                     SID_OPENDOC, SfxCallMode::SYNCHRON, { &aUrl, &aTarget, &aNewView, &aBrowsing });
             }
         }
@@ -606,17 +606,17 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
     }
     else if (nEEWhich == EE_CHAR_COLOR)
     {
-        GetView().GetViewFrame()->GetDispatcher()->Execute(SID_CHAR_DLG_EFFECT);
+        GetView().GetViewFrame().GetDispatcher()->Execute(SID_CHAR_DLG_EFFECT);
     }
     else if (nEEWhich == EE_CHAR_KERNING)
     {
-        GetView().GetViewFrame()->GetDispatcher()->Execute(SID_CHAR_DLG_POSITION);
+        GetView().GetViewFrame().GetDispatcher()->Execute(SID_CHAR_DLG_POSITION);
     }
 
 
     SetAttrToMarked(aNewAttr);
 
-    GetView().GetViewFrame()->GetBindings().InvalidateAll(false);
+    GetView().GetViewFrame().GetBindings().InvalidateAll(false);
 
     if (IsTextEdit() && pOLV->GetOutliner()->IsModified())
         rSh.SetModified();
@@ -839,11 +839,11 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
             {
                 if (!SvtCJKOptions::IsAnyEnabled())
                 {
-                    GetView().GetViewFrame()->GetBindings().SetVisibleState(nWhich, false);
+                    GetView().GetViewFrame().GetBindings().SetVisibleState(nWhich, false);
                     rSet.DisableItem(nWhich);
                 }
                 else
-                    GetView().GetViewFrame()->GetBindings().SetVisibleState(nWhich, true);
+                    GetView().GetViewFrame().GetBindings().SetVisibleState(nWhich, true);
             }
             break;
 
@@ -917,10 +917,10 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
                 if (!SvtCJKOptions::IsChangeCaseMapEnabled())
                 {
                     rSet.DisableItem(nWhich);
-                    GetView().GetViewFrame()->GetBindings().SetVisibleState(nWhich, false);
+                    GetView().GetViewFrame().GetBindings().SetVisibleState(nWhich, false);
                 }
                 else
-                    GetView().GetViewFrame()->GetBindings().SetVisibleState(nWhich, true);
+                    GetView().GetViewFrame().GetBindings().SetVisibleState(nWhich, true);
             }
             break;
             case SID_INSERT_RLM:
@@ -928,7 +928,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
             {
                 SvtCTLOptions aCTLOptions;
                 bool bEnabled = aCTLOptions.IsCTLFontEnabled();
-                GetView().GetViewFrame()->GetBindings().SetVisibleState(nWhich, bEnabled);
+                GetView().GetViewFrame().GetBindings().SetVisibleState(nWhich, bEnabled);
                 if (!bEnabled)
                     rSet.DisableItem(nWhich);
             }

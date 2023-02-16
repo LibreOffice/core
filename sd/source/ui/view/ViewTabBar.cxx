@@ -147,8 +147,8 @@ vcl::Window* ViewTabBar::GetAnchorWindow(
         && rxViewTabBarId->isBoundToURL(
             FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
     {
-        if (pBase != nullptr && pBase->GetViewFrame() != nullptr)
-            pWindow = &pBase->GetViewFrame()->GetWindow();
+        if (pBase != nullptr)
+            pWindow = &pBase->GetViewFrame().GetWindow();
     }
 
     // The rest is (at the moment) just for the emergency case.

@@ -296,7 +296,7 @@ public:
 
     SmDocShell * GetDoc() const
     {
-        return static_cast<SmDocShell *>( GetViewFrame()->GetObjectShell() );
+        return static_cast<SmDocShell *>( GetViewFrame().GetObjectShell() );
     }
 
     SmEditWindow * GetEditWindow();

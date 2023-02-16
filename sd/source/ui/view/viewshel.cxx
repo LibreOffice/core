@@ -120,7 +120,7 @@ SfxViewFrame* ViewShell::GetViewFrame() const
     const SfxViewShell* pViewShell = GetViewShell();
     if (pViewShell != nullptr)
     {
-        return pViewShell->GetViewFrame();
+        return &pViewShell->GetViewFrame();
     }
     else
     {
@@ -312,7 +312,7 @@ void ViewShell::Activate(bool bIsMDIActivate)
 
         SfxViewShell* pViewShell = GetViewShell();
         OSL_ASSERT (pViewShell!=nullptr);
-        SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
+        SfxBindings& rBindings = pViewShell->GetViewFrame().GetBindings();
         rBindings.Invalidate( SID_3D_STATE, true );
 
         rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );

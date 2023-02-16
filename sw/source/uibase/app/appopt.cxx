@@ -70,7 +70,7 @@ std::optional<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
     SwMasterUsrPref* pPref = bTextDialog ? m_pUsrPref.get() : m_pWebUsrPref.get();
     // no MakeUsrPref, because only options from textdoks can be used here
     SwView* pAppView = GetView();
-    if(pAppView && pAppView->GetViewFrame() != SfxViewFrame::Current())
+    if(pAppView && &pAppView->GetViewFrame() != SfxViewFrame::Current())
         pAppView = nullptr;
     if(pAppView)
     {
@@ -215,7 +215,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
 {
     bool bTextDialog = nId == SID_SW_EDITOPTIONS;
     SwView* pAppView = GetView();
-    if(pAppView && pAppView->GetViewFrame() != SfxViewFrame::Current())
+    if(pAppView && &pAppView->GetViewFrame() != SfxViewFrame::Current())
         pAppView = nullptr;
     if(pAppView)
     {
@@ -228,7 +228,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     SwViewOption aViewOpt = *GetUsrPref(!bTextDialog);
     SwMasterUsrPref* pPref = bTextDialog ? m_pUsrPref.get() : m_pWebUsrPref.get();
 
-    SfxBindings *pBindings = pAppView ? &pAppView->GetViewFrame()->GetBindings()
+    SfxBindings *pBindings = pAppView ? &pAppView->GetViewFrame().GetBindings()
                                  : nullptr;
 
     // Interpret the page Documentview
@@ -273,7 +273,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
             // Outline-folding options have change which require to show all content.
             // Either outline-folding is being switched off or outline-folding is currently on
             // and the treat subs option has changed.
-            pWrtShell->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON);
+            pWrtShell->GetView().GetViewFrame().GetDispatcher()->Execute(FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON);
             if (bTreatSubsChanged)
                 bReFoldOutlineFolding = true; // folding method changed, set flag to refold below
         }
@@ -400,8 +400,8 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
 
     if (bReFoldOutlineFolding)
     {
-        GetActiveWrtShell()->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON);
-        GetActiveWrtShell()->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON);
+        GetActiveWrtShell()->GetView().GetViewFrame().GetDispatcher()->Execute(FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON);
+        GetActiveWrtShell()->GetView().GetViewFrame().GetDispatcher()->Execute(FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON);
     }
 }
 

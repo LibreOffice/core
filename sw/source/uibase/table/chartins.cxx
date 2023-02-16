@@ -137,7 +137,7 @@ SwInsertChart::SwInsertChart( const Link<css::ui::dialogs::DialogClosedEvent*, v
         if (!rWrtShell.IsTableMode())
         {
             // select whole table
-            rWrtShell.GetView().GetViewFrame()->GetDispatcher()->
+            rWrtShell.GetView().GetViewFrame().GetDispatcher()->
                 Execute(FN_TABLE_SELECT_ALL, SfxCallMode::SYNCHRON);
         }
         if( ! rWrtShell.IsTableComplexForChart())

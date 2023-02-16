@@ -233,10 +233,10 @@ static void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std:
             rWrtSh.Insert( sInsert );
             rWrtSh.SetMark();
             rWrtSh.ExtendSelection(false, sInsert.getLength());
-            SfxRequest aReq( rWrtSh.GetView().GetViewFrame(), FN_INSERT_STRING );
+            SfxRequest aReq( &rWrtSh.GetView().GetViewFrame(), FN_INSERT_STRING );
             aReq.AppendItem( SfxStringItem( FN_INSERT_STRING, sInsert ) );
             aReq.Done();
-            SfxRequest aReq1( rWrtSh.GetView().GetViewFrame(), FN_CHAR_LEFT );
+            SfxRequest aReq1( &rWrtSh.GetView().GetViewFrame(), FN_CHAR_LEFT );
             aReq1.AppendItem( SfxInt32Item(FN_PARAM_MOVE_COUNT, nInsert) );
             aReq1.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, true) );
             aReq1.Done();
@@ -255,7 +255,7 @@ static void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std:
         pReq->Done(aTmpSet);
     if(bInsert)
     {
-        SfxRequest aReq1( rWrtSh.GetView().GetViewFrame(), FN_CHAR_RIGHT );
+        SfxRequest aReq1( &rWrtSh.GetView().GetViewFrame(), FN_CHAR_RIGHT );
         aReq1.AppendItem( SfxInt32Item(FN_PARAM_MOVE_COUNT, nInsert) );
         aReq1.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, false) );
         aReq1.Done();
@@ -816,7 +816,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             //!! Remember the view frame right now...
             //!! (call to GetView().GetViewFrame() will break if the
             //!! SwTextShell got destroyed meanwhile.)
-            SfxViewFrame *pViewFrame = GetView().GetViewFrame();
+            SfxViewFrame& rViewFrame = GetView().GetViewFrame();
 
             if (aNewLangText == "*")
             {
@@ -905,7 +905,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
 
             // invalidate slot to get the new language displayed
-            pViewFrame->GetBindings().Invalidate( nSlot );
+            rViewFrame.GetBindings().Invalidate( nSlot );
 
             rReq.Done();
             break;
@@ -967,7 +967,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if ( pDlg->Execute() == RET_OK )
             {
                 const sal_uInt16 nId = pDlg->IsEndNote() ? FN_INSERT_ENDNOTE : FN_INSERT_FOOTNOTE;
-                SfxRequest aReq( GetView().GetViewFrame(), nId );
+                SfxRequest aReq( &GetView().GetViewFrame(), nId );
                 if ( !pDlg->GetStr().isEmpty() )
                     aReq.AppendItem( SfxStringItem( nId, pDlg->GetStr() ) );
                 if ( !pDlg->GetFontName().isEmpty() )
@@ -1212,9 +1212,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
             rWrtSh.AutoFormat( &aFlags );
             aFlags.bWithRedlining = false;
 
-            SfxViewFrame* pVFrame = GetView().GetViewFrame();
-            if (pVFrame->HasChildWindow(FN_REDLINE_ACCEPT))
-                pVFrame->ToggleChildWindow(FN_REDLINE_ACCEPT);
+            SfxViewFrame& rVFrame = GetView().GetViewFrame();
+            if (rVFrame.HasChildWindow(FN_REDLINE_ACCEPT))
+                rVFrame.ToggleChildWindow(FN_REDLINE_ACCEPT);
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             ScopedVclPtr<AbstractSwModalRedlineAcceptDlg> xDlg(pFact->CreateSwModalRedlineAcceptDlg(GetView().GetEditWin().GetFrameWeld()));
@@ -1241,7 +1241,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 rACfg.SetAutoFormatByInput( bSet );
                 rACfg.Commit();
-                GetView().GetViewFrame()->GetBindings().Invalidate( nSlot );
+                GetView().GetViewFrame().GetBindings().Invalidate( nSlot );
                 if ( !pItem )
                     rReq.AppendItem( SfxBoolItem( GetPool().GetWhich(nSlot), bSet ) );
                 rReq.Done();
@@ -1294,14 +1294,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_EDIT_FORMULA:
         {
             const sal_uInt16 nId = SwInputChild::GetChildWindowId();
-            SfxViewFrame* pVFrame = GetView().GetViewFrame();
+            SfxViewFrame& rVFrame = GetView().GetViewFrame();
             if(pItem)
             {
                 //if the ChildWindow is active it has to be removed
-                if( pVFrame->HasChildWindow( nId ) )
+                if( rVFrame.HasChildWindow( nId ) )
                 {
-                    pVFrame->ToggleChildWindow( nId );
-                    pVFrame->GetBindings().InvalidateAll( true );
+                    rVFrame.ToggleChildWindow( nId );
+                    rVFrame.GetBindings().InvalidateAll( true );
                 }
 
                 OUString sFormula(static_cast<const SfxStringItem*>(pItem)->GetValue());
@@ -1346,9 +1346,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
             else
             {
                 rWrtSh.EndAllTableBoxEdit();
-                pVFrame->ToggleChildWindow( nId );
-                if( !pVFrame->HasChildWindow( nId ) )
-                    pVFrame->GetBindings().InvalidateAll( true );
+                rVFrame.ToggleChildWindow( nId );
+                if( !rVFrame.HasChildWindow( nId ) )
+                    rVFrame.GetBindings().InvalidateAll( true );
                 rReq.Ignore();
             }
         }
@@ -1360,7 +1360,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         break;
         case SID_EDIT_HYPERLINK:
-            GetView().GetViewFrame()->SetChildWindow(SID_HYPERLINK_DIALOG, true);
+            GetView().GetViewFrame().SetChildWindow(SID_HYPERLINK_DIALOG, true);
         break;
         case SID_REMOVE_HYPERLINK:
         {
@@ -1754,7 +1754,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_HYPERLINK_DIALOG:
         {
             SfxRequest aReq(nSlot, SfxCallMode::SLOT, SfxGetpApp()->GetPool());
-            GetView().GetViewFrame()->ExecuteSlot( aReq);
+            GetView().GetViewFrame().ExecuteSlot( aReq);
             rReq.Ignore();
         }
         break;
@@ -1790,7 +1790,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             rWrtSh.EnterBlockMode();
         else
             rWrtSh.EnterStdMode();
-        SfxBindings &rBnd = GetView().GetViewFrame()->GetBindings();
+        SfxBindings &rBnd = GetView().GetViewFrame().GetBindings();
         rBnd.Invalidate(FN_STAT_SELMODE);
         rBnd.Update(FN_STAT_SELMODE);
     }
@@ -1878,9 +1878,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                            : DocumentSettingId::PROTECT_BOOKMARKS;
         rIDSA.set(aSettingId, !rIDSA.get(aSettingId));
         // Invalidate so that toggle state gets updated
-        SfxViewFrame* pViewFrame = GetView().GetViewFrame();
-        pViewFrame->GetBindings().Invalidate(nSlot);
-        pViewFrame->GetBindings().Update(nSlot);
+        SfxViewFrame& rViewFrame = GetView().GetViewFrame();
+        rViewFrame.GetBindings().Invalidate(nSlot);
+        rViewFrame.GetBindings().Update(nSlot);
     }
     break;
     case SID_FM_CTL_PROPERTIES:
@@ -1919,7 +1919,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         else
         {
-            SfxRequest aReq( GetView().GetViewFrame(), SID_FM_CTL_PROPERTIES );
+            SfxRequest aReq( &GetView().GetViewFrame(), SID_FM_CTL_PROPERTIES );
             aReq.AppendItem( SfxBoolItem( SID_FM_CTL_PROPERTIES, true ) );
             rWrtSh.GetView().GetFormShell()->Execute( aReq );
         }
@@ -2448,11 +2448,11 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     if( !SvtCJKOptions::IsRubyEnabled()
                         || rSh.CursorInsideInputField() )
                     {
-                        GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, false );
+                        GetView().GetViewFrame().GetBindings().SetVisibleState( nWhich, false );
                         rSet.DisableItem(nWhich);
                     }
                     else
-                        GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, true );
+                        GetView().GetViewFrame().GetBindings().SetVisibleState( nWhich, true );
                 }
                 break;
 
@@ -2476,7 +2476,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
             case SID_HYPERLINK_DIALOG:
                 if( GetView().GetDocShell()->IsReadOnly()
-                    || ( !GetView().GetViewFrame()->HasChildWindow(nWhich)
+                    || ( !GetView().GetViewFrame().HasChildWindow(nWhich)
                          && rSh.HasReadonlySel() )
                     || rSh.CursorInsideInputField() )
                 {
@@ -2484,7 +2484,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 }
                 else
                 {
-                    rSet.Put(SfxBoolItem( nWhich, nullptr != GetView().GetViewFrame()->GetChildWindow( nWhich ) ));
+                    rSet.Put(SfxBoolItem( nWhich, nullptr != GetView().GetViewFrame().GetChildWindow( nWhich ) ));
                 }
                 break;
 
@@ -2520,11 +2520,11 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             {
                 if(!SvtCJKOptions::IsChangeCaseMapEnabled())
                 {
-                    GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, false );
+                    GetView().GetViewFrame().GetBindings().SetVisibleState( nWhich, false );
                     rSet.DisableItem(nWhich);
                 }
                 else
-                    GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, true );
+                    GetView().GetViewFrame().GetBindings().SetVisibleState( nWhich, true );
             }
             break;
             case FN_READONLY_SELECTION_MODE :
@@ -2698,7 +2698,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             {
                 SvtCTLOptions aCTLOptions;
                 bool bEnabled = aCTLOptions.IsCTLFontEnabled();
-                GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, bEnabled );
+                GetView().GetViewFrame().GetBindings().SetVisibleState( nWhich, bEnabled );
                 if(!bEnabled)
                     rSet.DisableItem(nWhich);
             }

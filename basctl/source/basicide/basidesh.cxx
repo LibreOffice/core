@@ -164,10 +164,10 @@ unsigned Shell::nShellCount = 0;
 Shell::Shell( SfxViewFrame& rFrame_, SfxViewShell* /* pOldShell */ ) :
     SfxViewShell( rFrame_, SfxViewShellFlags::NO_NEWWINDOW ),
     m_aCurDocument( ScriptDocument::getApplicationScriptDocument() ),
-    aHScrollBar( VclPtr<ScrollAdaptor>::Create(&GetViewFrame()->GetWindow(), true) ),
-    aVScrollBar( VclPtr<ScrollAdaptor>::Create(&GetViewFrame()->GetWindow(), false) ),
+    aHScrollBar( VclPtr<ScrollAdaptor>::Create(&GetViewFrame().GetWindow(), true) ),
+    aVScrollBar( VclPtr<ScrollAdaptor>::Create(&GetViewFrame().GetWindow(), false) ),
     pLayout(nullptr),
-    aObjectCatalog(VclPtr<ObjectCatalog>::Create(&GetViewFrame()->GetWindow())),
+    aObjectCatalog(VclPtr<ObjectCatalog>::Create(&GetViewFrame().GetWindow())),
     m_bAppBasicModified( false ),
     m_aNotifier( *this )
 {
@@ -192,15 +192,15 @@ void Shell::Init()
     LanguageBoxControl::RegisterControl( SID_BASICIDE_CURRENT_LANG );
     SvxZoomSliderControl::RegisterControl( SID_ATTR_ZOOMSLIDER );
 
-    GetViewFrame()->GetWindow().SetBackground(
-        GetViewFrame()->GetWindow().GetSettings().GetStyleSettings().GetWindowColor()
+    GetViewFrame().GetWindow().SetBackground(
+        GetViewFrame().GetWindow().GetSettings().GetStyleSettings().GetWindowColor()
     );
 
     pCurWin = nullptr;
     m_aCurDocument = ScriptDocument::getApplicationScriptDocument();
     bCreatingWindow = false;
 
-    pTabBar.reset(VclPtr<TabBar>::Create(&GetViewFrame()->GetWindow()));
+    pTabBar.reset(VclPtr<TabBar>::Create(&GetViewFrame().GetWindow()));
 
     nCurKey = 100;
     InitScrollBars();
@@ -427,17 +427,16 @@ void Shell::StoreAllWindowData( bool bPersistent )
     }
 }
 
-
 bool Shell::PrepareClose( bool bUI )
 {
     // reset here because it's modified after printing etc. (DocInfo)
-    GetViewFrame()->GetObjectShell()->SetModified(false);
+    GetViewFrame().GetObjectShell()->SetModified(false);
 
     if ( StarBASIC::IsRunning() )
     {
         if( bUI )
         {
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetViewFrame()->GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetViewFrame().GetFrameWeld(),
                                                           VclMessageType::Info, VclButtonsType::Ok,
                                                           IDEResId(RID_STR_CANNOTCLOSE)));
             xInfoBox->run();

@@ -767,7 +767,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 rSh.SetIndent( static_cast< short >(aParaMargin.GetTextLeft() - rLR.GetTextLeft()), aPos);
                 // #i42921# invalidate state of indent in order to get a ruler update.
                 aParaMargin.SetWhich( nSlot );
-                GetViewFrame()->GetBindings().SetState( aParaMargin );
+                GetViewFrame().GetBindings().SetState( aParaMargin );
             }
             else if( pColl && pColl->IsAutoUpdateOnDirectFormat() )
             {

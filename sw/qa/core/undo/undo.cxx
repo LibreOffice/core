@@ -68,7 +68,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTextboxCutUndo)
     SwDoc* pDoc = pDocShell->GetDoc();
     SwView* pView = pDoc->GetDocShell()->GetView();
 
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
     pView->StopShellTimer();
     rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
     pTransfer->Cut();

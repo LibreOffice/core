@@ -264,7 +264,7 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl, weld::Button&, void)
         const SwFormatCol& rColItem = m_pSelectionSet->Get(RES_COL);
         //only if there actually are columns!
         if(rColItem.GetNumCols() > 1)
-            m_rWrtShell.GetView().GetViewFrame()->GetDispatcher()->Execute(
+            m_rWrtShell.GetView().GetViewFrame().GetDispatcher()->Execute(
                 FN_INSERT_REGION, SfxCallMode::ASYNCHRON, *m_pSelectionSet );
     }
 

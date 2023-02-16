@@ -244,7 +244,7 @@ void SwSrcView::Init()
 
 SwDocShell*     SwSrcView::GetDocShell()
 {
-    SfxObjectShell* pObjShell = GetViewFrame()->GetObjectShell();
+    SfxObjectShell* pObjShell = GetViewFrame().GetObjectShell();
     return dynamic_cast<SwDocShell*>( pObjShell );
 }
 
@@ -366,11 +366,11 @@ void SwSrcView::Execute(SfxRequest& rReq)
         break;
         case SID_UNDO:
             pTextView->Undo();
-            GetViewFrame()->GetBindings().InvalidateAll(false);
+            GetViewFrame().GetBindings().InvalidateAll(false);
         break;
         case SID_REDO:
             pTextView->Redo();
-            GetViewFrame()->GetBindings().InvalidateAll(false);
+            GetViewFrame().GetBindings().InvalidateAll(false);
         break;
         case SID_REPEAT:
         break;
@@ -676,7 +676,7 @@ sal_Int32 SwSrcView::PrintSource(
     aFont.SetColor( COL_BLACK );
     pOutDev->SetFont( aFont );
 
-    OUString aTitle( GetViewFrame()->GetWindow().GetText() );
+    OUString aTitle( GetViewFrame().GetWindow().GetText() );
 
     const tools::Long nLineHeight = pOutDev->GetTextHeight(); // slightly more
     const tools::Long nParaSpace = 10;
@@ -787,7 +787,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
         }
         else
         {
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetViewFrame()->GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetViewFrame().GetFrameWeld(),
                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                       SwResId(STR_ERR_SRCSTREAM)));
             xBox->run();

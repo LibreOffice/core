@@ -906,7 +906,7 @@ void ExecuteOrientationChange()
 void setupSidebar(std::u16string_view sidebarDeckId = u"")
 {
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    SfxViewFrame* pViewFrame = pViewShell ? pViewShell->GetViewFrame() : nullptr;
+    SfxViewFrame* pViewFrame = pViewShell ? &pViewShell->GetViewFrame() : nullptr;
     if (pViewFrame)
     {
         if (!pViewFrame->GetChildWindow(SID_SIDEBAR))
@@ -949,7 +949,7 @@ void setupSidebar(std::u16string_view sidebarDeckId = u"")
 void hideSidebar()
 {
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    SfxViewFrame* pViewFrame = pViewShell? pViewShell->GetViewFrame(): nullptr;
+    SfxViewFrame* pViewFrame = pViewShell ? &pViewShell->GetViewFrame() : nullptr;
     if (pViewFrame)
         pViewFrame->SetChildWindow(SID_SIDEBAR, false , false );
     else
@@ -3422,7 +3422,7 @@ static void doc_iniUnoCommands ()
 
     util::URL aCommandURL;
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    SfxViewFrame* pViewFrame = pViewShell? pViewShell->GetViewFrame(): nullptr;
+    SfxViewFrame* pViewFrame = pViewShell ? &pViewShell->GetViewFrame() : nullptr;
 
     // check if Frame-Controller were created.
     if (!pViewFrame)

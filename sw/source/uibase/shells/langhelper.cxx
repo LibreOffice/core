@@ -108,7 +108,7 @@ namespace SwLangHelper
         //!! Remember the view frame right now...
         //!! (call to GetView().GetViewFrame() will break if the
         //!! SwTextShell got destroyed meanwhile.)
-        SfxViewFrame *pViewFrame = rView.GetViewFrame();
+        SfxViewFrame& rViewFrame = rView.GetViewFrame();
 
         if (aNewLangText == "*" )
         {
@@ -205,7 +205,7 @@ namespace SwLangHelper
         }
 
         // invalidate slot to get the new language displayed
-        pViewFrame->GetBindings().Invalidate( rReq.GetSlot() );
+        rViewFrame.GetBindings().Invalidate( rReq.GetSlot() );
 
         rReq.Done();
         return bRestoreSelection;

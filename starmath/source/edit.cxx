@@ -160,7 +160,7 @@ void SmEditTextWindow::StartCursorMove()
 
 void SmEditWindow::InvalidateSlots()
 {
-    SfxBindings& rBind = GetView()->GetViewFrame()->GetBindings();
+    SfxBindings& rBind = GetView()->GetViewFrame().GetBindings();
     rBind.Invalidate(SID_COPY);
     rBind.Invalidate(SID_CUT);
     rBind.Invalidate(SID_DELETE);
@@ -834,7 +834,7 @@ void SmEditTextWindow::Flush()
         if (SmViewShell *pViewSh = mrEditWindow.GetView())
         {
             std::unique_ptr<SfxStringItem> pTextToFlush = std::make_unique<SfxStringItem>(SID_TEXT, GetText());
-            pViewSh->GetViewFrame()->GetDispatcher()->ExecuteList(
+            pViewSh->GetViewFrame().GetDispatcher()->ExecuteList(
                     SID_TEXT, SfxCallMode::RECORD,
                     { pTextToFlush.get() });
         }

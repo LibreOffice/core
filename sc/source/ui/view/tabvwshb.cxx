@@ -364,7 +364,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
     MakeDrawLayer();
 
-    SfxBindings& rBindings = GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = GetViewFrame().GetBindings();
     ScTabView*   pTabView  = GetViewData().GetView();
     vcl::Window*      pWin      = pTabView->GetActiveWin();
     ScDrawView*  pView     = pTabView->GetScDrawView();
@@ -548,7 +548,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
             break;
 
         case SID_FONTWORK_GALLERY_FLOATER:
-            svx::FontworkBar::execute(*pView, rReq, GetViewFrame()->GetBindings());
+            svx::FontworkBar::execute(*pView, rReq, GetViewFrame().GetBindings());
             rReq.Ignore();
             break;
     }
@@ -556,7 +556,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
 void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
 {
-    bool bOle = GetViewFrame()->GetFrame().IsInPlace();
+    bool bOle = GetViewFrame().GetFrame().IsInPlace();
     bool bTabProt = GetViewData().GetDocument().IsTabProtected(GetViewData().GetTabNo());
     ScDocShell* pDocShell = GetViewData().GetDocShell();
     bool bShared = pDocShell && pDocShell->IsDocShared();
@@ -801,11 +801,11 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
                 if ( bLockPaint )
                     pDocSh->UnlockPaint();
 
-                GetViewFrame()->GetBindings().InvalidateAll(false);
+                GetViewFrame().GetBindings().InvalidateAll(false);
             }
             break;
 //      default:
-//          GetViewFrame()->ExecuteSlot( rReq );
+//          GetViewFrame().ExecuteSlot( rReq );
     }
 }
 
@@ -863,7 +863,7 @@ void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
                 }
                 else
                     // get state from sfx view frame
-                    GetViewFrame()->GetSlotState( nWhich, nullptr, &rSet );
+                    GetViewFrame().GetSlotState( nWhich, nullptr, &rSet );
                 break;
             }
             case SID_REDO:
@@ -888,12 +888,12 @@ void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
                 }
                 else
                     // get state from sfx view frame
-                    GetViewFrame()->GetSlotState( nWhich, nullptr, &rSet );
+                    GetViewFrame().GetSlotState( nWhich, nullptr, &rSet );
                 break;
             }
             default:
                 // get state from sfx view frame
-                GetViewFrame()->GetSlotState( nWhich, nullptr, &rSet );
+                GetViewFrame().GetSlotState( nWhich, nullptr, &rSet );
         }
 
         nWhich = aIter.NextWhich();

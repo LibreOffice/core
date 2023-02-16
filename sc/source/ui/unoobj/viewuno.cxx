@@ -1394,10 +1394,10 @@ void ScTabViewObj::SetZoom(sal_Int16 nZoom)
     pViewSh->PaintGrid();
     pViewSh->PaintTop();
     pViewSh->PaintLeft();
-    pViewSh->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
-    pViewSh->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
-    pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_ZOOM_IN);
-    pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_ZOOM_OUT);
+    pViewSh->GetViewFrame().GetBindings().Invalidate( SID_ATTR_ZOOM );
+    pViewSh->GetViewFrame().GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
+    pViewSh->GetViewFrame().GetBindings().Invalidate(SID_ZOOM_IN);
+    pViewSh->GetViewFrame().GetBindings().Invalidate(SID_ZOOM_OUT);
 }
 
 sal_Int16 ScTabViewObj::GetZoomType() const
@@ -1836,7 +1836,7 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
     pViewSh->PaintExtras();
     pViewSh->InvalidateBorder();
 
-    SfxBindings& rBindings = pViewSh->GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = pViewSh->GetViewFrame().GetBindings();
     rBindings.Invalidate( FID_TOGGLEHEADERS ); // -> check in menu
     rBindings.Invalidate( FID_TOGGLESYNTAX );
 }
@@ -2074,11 +2074,11 @@ uno::Sequence<OUString> SAL_CALL ScTabViewObj::getSupportedServiceNames()
 css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL ScTabViewObj::getTransferable()
 {
     SolarMutexGuard aGuard;
-    ScEditShell* pShell = dynamic_cast<ScEditShell*>( GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0)  );
+    ScEditShell* pShell = dynamic_cast<ScEditShell*>( GetViewShell()->GetViewFrame().GetDispatcher()->GetShell(0)  );
     if (pShell)
         return pShell->GetEditView()->GetTransferable();
 
-    ScDrawTextObjectBar* pTextShell = dynamic_cast<ScDrawTextObjectBar*>( GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0)  );
+    ScDrawTextObjectBar* pTextShell = dynamic_cast<ScDrawTextObjectBar*>( GetViewShell()->GetViewFrame().GetDispatcher()->GetShell(0)  );
     if (pTextShell)
     {
         ScViewData& rViewData = GetViewShell()->GetViewData();
@@ -2088,7 +2088,7 @@ css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL ScTabViewObj::g
             return pOutView->GetEditView().GetTransferable();
     }
 
-    ScDrawShell* pDrawShell = dynamic_cast<ScDrawShell*>( GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0)  );
+    ScDrawShell* pDrawShell = dynamic_cast<ScDrawShell*>( GetViewShell()->GetViewFrame().GetDispatcher()->GetShell(0)  );
     if (pDrawShell)
         return pDrawShell->GetDrawView()->CopyToTransferable();
 
@@ -2098,12 +2098,12 @@ css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL ScTabViewObj::g
 void SAL_CALL ScTabViewObj::insertTransferable( const css::uno::Reference< css::datatransfer::XTransferable >& xTrans )
 {
     SolarMutexGuard aGuard;
-    ScEditShell* pShell = dynamic_cast<ScEditShell*>( GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0)  );
+    ScEditShell* pShell = dynamic_cast<ScEditShell*>( GetViewShell()->GetViewFrame().GetDispatcher()->GetShell(0)  );
     if (pShell)
         pShell->GetEditView()->InsertText( xTrans, OUString(), false );
     else
     {
-        ScDrawTextObjectBar* pTextShell = dynamic_cast<ScDrawTextObjectBar*>( GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0)  );
+        ScDrawTextObjectBar* pTextShell = dynamic_cast<ScDrawTextObjectBar*>( GetViewShell()->GetViewFrame().GetDispatcher()->GetShell(0)  );
         if (pTextShell)
         {
             ScViewData& rViewData = GetViewShell()->GetViewData();

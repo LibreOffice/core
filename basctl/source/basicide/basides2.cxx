@@ -82,7 +82,7 @@ SfxPrinter* Shell::GetPrinter( bool bCreate )
 {
     if ( pCurWin )
     {
-        DocShell* pDocShell = static_cast<DocShell*>(GetViewFrame()->GetObjectShell());
+        DocShell* pDocShell = static_cast<DocShell*>(GetViewFrame().GetObjectShell());
         assert(pDocShell && "DocShell ?!");
         return pDocShell->GetPrinter( bCreate );
     }
@@ -91,7 +91,7 @@ SfxPrinter* Shell::GetPrinter( bool bCreate )
 
 sal_uInt16 Shell::SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags )
 {
-    DocShell* pDocShell = static_cast<DocShell*>(GetViewFrame()->GetObjectShell());
+    DocShell* pDocShell = static_cast<DocShell*>(GetViewFrame().GetObjectShell());
     assert(pDocShell && "DocShell ?!");
     pDocShell->SetPrinter( pNewPrinter );
     return 0;
@@ -114,11 +114,8 @@ void Shell::SetMDITitle()
         aTitle += " " + IDEResId(RID_STR_SIGNED) + " ";
     }
 
-    SfxViewFrame* pViewFrame = GetViewFrame();
-    if ( !pViewFrame )
-        return;
-
-    SfxObjectShell* pShell = pViewFrame->GetObjectShell();
+    SfxViewFrame& rViewFrame = GetViewFrame();
+    SfxObjectShell* pShell = rViewFrame.GetObjectShell();
     if ( pShell && pShell->GetTitle( SFX_TITLE_CAPTION ) != aTitle )
     {
         pShell->SetTitle( aTitle );
@@ -168,7 +165,7 @@ VclPtr<ModulWindow> Shell::CreateBasWin( const ScriptDocument& rDocument, const 
             {
                 // new module window
                 if (!pModulLayout)
-                    pModulLayout.reset(VclPtr<ModulWindowLayout>::Create(&GetViewFrame()->GetWindow(), *aObjectCatalog));
+                    pModulLayout.reset(VclPtr<ModulWindowLayout>::Create(&GetViewFrame().GetWindow(), *aObjectCatalog));
                 pWin = VclPtr<ModulWindow>::Create(pModulLayout.get(), rDocument, aLibName, aModName, aModule);
                 nKey = InsertWindowInTable( pWin );
             }

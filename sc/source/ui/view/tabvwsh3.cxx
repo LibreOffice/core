@@ -166,8 +166,8 @@ namespace
 
 void ScTabViewShell::Execute( SfxRequest& rReq )
 {
-    SfxViewFrame*       pThisFrame  = GetViewFrame();
-    SfxBindings&        rBindings   = pThisFrame->GetBindings();
+    SfxViewFrame&       rThisFrame  = GetViewFrame();
+    SfxBindings&        rBindings   = rThisFrame.GetBindings();
     ScModule*           pScMod      = SC_MOD();
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
     sal_uInt16              nSlot       = rReq.GetSlot();
@@ -209,7 +209,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_OPENDLG_EDIT_PRINTAREA:
             {
                 sal_uInt16          nId  = ScPrintAreasDlgWrapper::GetChildWindowId();
-                SfxChildWindow* pWnd = pThisFrame->GetChildWindow( nId );
+                SfxChildWindow* pWnd = rThisFrame.GetChildWindow( nId );
 
                 pScMod->SetRefDialog( nId, pWnd == nullptr );
             }
@@ -603,7 +603,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case SID_PRINTPREVIEW:
             {
-                if ( !pThisFrame->GetFrame().IsInPlace() )          // not for OLE
+                if ( !rThisFrame.GetFrame().IsInPlace() )          // not for OLE
                 {
                     //  print preview is now always in the same frame as the tab view
                     //  -> always switch this frame back to normal view
@@ -612,7 +612,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     // #102785#; finish input
                     pScMod->InputEnterHandler();
 
-                    pThisFrame->GetDispatcher()->Execute( SID_VIEWSHELL1, SfxCallMode::ASYNCHRON );
+                    rThisFrame.GetDispatcher()->Execute( SID_VIEWSHELL1, SfxCallMode::ASYNCHRON );
                 }
                 //  else error (e.g. Ole)
             }
@@ -669,10 +669,10 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case FID_FUNCTION_BOX:
             {
                 // First make sure that the sidebar is visible
-                pThisFrame->ShowChildWindow(SID_SIDEBAR);
+                rThisFrame.ShowChildWindow(SID_SIDEBAR);
 
                 ::sfx2::sidebar::Sidebar::ShowPanel(u"ScFunctionsPanel",
-                                                    pThisFrame->GetFrame().GetFrameInterface());
+                                                    rThisFrame.GetFrame().GetFrameInterface());
                 rReq.Done ();
             }
             break;
@@ -728,13 +728,13 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case FID_TOGGLEINPUTLINE:
             {
                 sal_uInt16          nId  = ScInputWindowWrapper::GetChildWindowId();
-                SfxChildWindow* pWnd = pThisFrame->GetChildWindow( nId );
+                SfxChildWindow* pWnd = rThisFrame.GetChildWindow( nId );
                 bool bSet = ( pWnd == nullptr );
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET )
                     bSet = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
-                pThisFrame->SetChildWindow( nId, bSet );
+                rThisFrame.SetChildWindow( nId, bSet );
                 rBindings.Invalidate( FID_TOGGLEINPUTLINE );
                 rReq.AppendItem( SfxBoolItem( nSlot, bSet ) );
                 rReq.Done();
@@ -748,7 +748,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 HideNoteMarker();
 
-                if (!GetViewData().GetViewShell()->GetViewFrame()->GetFrame().IsInPlace())
+                if (!GetViewData().GetViewShell()->GetViewFrame().GetFrame().IsInPlace())
                 {
                     //  for ole inplace editing, the scale is defined by the visarea and client size
                     //  and can't be changed directly
@@ -1132,7 +1132,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case FID_CHG_SHOW:
             {
                 sal_uInt16          nId  = ScHighlightChgDlgWrapper::GetChildWindowId();
-                SfxChildWindow* pWnd = pThisFrame->GetChildWindow( nId );
+                SfxChildWindow* pWnd = rThisFrame.GetChildWindow( nId );
 
                 pScMod->SetRefDialog( nId, pWnd == nullptr );
             }
@@ -1140,13 +1140,13 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case FID_CHG_ACCEPT:
             {
-                pThisFrame->ToggleChildWindow(ScAcceptChgDlgWrapper::GetChildWindowId());
-                GetViewFrame()->GetBindings().Invalidate(FID_CHG_ACCEPT);
+                rThisFrame.ToggleChildWindow(ScAcceptChgDlgWrapper::GetChildWindowId());
+                GetViewFrame().GetBindings().Invalidate(FID_CHG_ACCEPT);
                 rReq.Done ();
 
                 /*
                 sal_uInt16          nId  = ScAcceptChgDlgWrapper::GetChildWindowId();
-                SfxChildWindow* pWnd = pThisFrame->GetChildWindow( nId );
+                SfxChildWindow* pWnd = rThisFrame.GetChildWindow( nId );
 
                 pScMod->SetRefDialog( nId, pWnd ? sal_False : sal_True );
                 */

@@ -1067,7 +1067,7 @@ void SwAnnotationWin::ToggleInsMode()
         //change document
         mrView.GetWrtShell().ToggleInsMode();
         //update statusbar
-        SfxBindings &rBnd = mrView.GetViewFrame()->GetBindings();
+        SfxBindings &rBnd = mrView.GetViewFrame().GetBindings();
         rBnd.Invalidate(SID_ATTR_INSERT);
         rBnd.Update(SID_ATTR_INSERT);
     }
@@ -1092,7 +1092,7 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
             if (mrMgr.HasActiveSidebarWin())
                 mrMgr.SetActiveSidebarWin(nullptr);
             SwitchToFieldPos();
-            mrView.GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT);
+            mrView.GetViewFrame().GetDispatcher()->Execute(FN_POSTIT);
 
             if (nSlot == FN_REPLY)
             {
@@ -1126,7 +1126,7 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
         case FN_DELETE_ALL_NOTES:
         case FN_HIDE_ALL_NOTES:
             // not possible as slot as this would require that "this" is the active postit
-            mrView.GetViewFrame()->GetBindings().Execute( nSlot, nullptr, SfxCallMode::ASYNCHRON );
+            mrView.GetViewFrame().GetBindings().Execute( nSlot, nullptr, SfxCallMode::ASYNCHRON );
             break;
         case FN_DELETE_NOTE_AUTHOR:
         case FN_HIDE_NOTE_AUTHOR:
@@ -1136,11 +1136,11 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
             const SfxPoolItem* aItems[2];
             aItems[0] = &aItem;
             aItems[1] = nullptr;
-            mrView.GetViewFrame()->GetBindings().Execute( nSlot, aItems, SfxCallMode::ASYNCHRON );
+            mrView.GetViewFrame().GetBindings().Execute( nSlot, aItems, SfxCallMode::ASYNCHRON );
         }
             break;
         default:
-            mrView.GetViewFrame()->GetBindings().Execute( nSlot );
+            mrView.GetViewFrame().GetBindings().Execute( nSlot );
             break;
     }
 }

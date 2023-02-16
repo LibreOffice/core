@@ -720,10 +720,10 @@ void SAL_CALL NavElementToolBoxControl::statusChanged( const frame::FeatureState
         m_pBox->set_sensitive(true);
 
     SwView* pView = GetActiveView();
-    if (pView && pView->GetViewFrame())
+    if (pView)
     {
-        pView->GetViewFrame()->GetBindings().Invalidate(FN_SCROLL_NEXT);
-        pView->GetViewFrame()->GetBindings().Invalidate(FN_SCROLL_PREV);
+        pView->GetViewFrame().GetBindings().Invalidate(FN_SCROLL_NEXT);
+        pView->GetViewFrame().GetBindings().Invalidate(FN_SCROLL_PREV);
     }
 }
 

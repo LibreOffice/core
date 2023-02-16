@@ -134,9 +134,9 @@ void SwNavigationMgr::goBack()  {
     GotoSwPosition(*m_entries[m_nCurrent]->GetPoint());
     // Refresh the buttons
     if (bForwardWasDisabled)
-        m_rMyShell.GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_FORWARD);
+        m_rMyShell.GetView().GetViewFrame().GetBindings().Invalidate(FN_NAVIGATION_FORWARD);
     if (!backEnabled())
-        m_rMyShell.GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_BACK);
+        m_rMyShell.GetView().GetViewFrame().GetBindings().Invalidate(FN_NAVIGATION_BACK);
 }
 
 // The goForward() method positions the cursor to the next entry in the navigation history
@@ -157,9 +157,9 @@ void SwNavigationMgr::goForward() {
     GotoSwPosition(*m_entries[m_nCurrent]->GetPoint());
     // Refresh the buttons
     if (bBackWasDisabled)
-        m_rMyShell.GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_BACK);
+        m_rMyShell.GetView().GetViewFrame().GetBindings().Invalidate(FN_NAVIGATION_BACK);
     if (!forwardEnabled())
-        m_rMyShell.GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_FORWARD);
+        m_rMyShell.GetView().GetViewFrame().GetBindings().Invalidate(FN_NAVIGATION_FORWARD);
 }
 
 // This method adds the SwPosition rPos to the navigation history
@@ -211,9 +211,9 @@ bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
 
     // Refresh buttons
     if (bBackWasDisabled)
-        m_rMyShell.GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_BACK);
+        m_rMyShell.GetView().GetViewFrame().GetBindings().Invalidate(FN_NAVIGATION_BACK);
     if (bForwardWasEnabled)
-        m_rMyShell.GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_FORWARD);
+        m_rMyShell.GetView().GetViewFrame().GetBindings().Invalidate(FN_NAVIGATION_FORWARD);
 
     return bRet;
 }

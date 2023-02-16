@@ -80,16 +80,13 @@ bool g_isDefaultTimezoneSet = false;
 OUString g_DefaultTimezone;
 }
 
-int SfxLokHelper::createView(SfxViewFrame* pViewFrame, ViewShellDocId docId)
+int SfxLokHelper::createView(SfxViewFrame& rViewFrame, ViewShellDocId docId)
 {
     assert(docId >= ViewShellDocId(0) && "Cannot createView for invalid (negative) DocId.");
 
-    if (pViewFrame == nullptr)
-        return -1;
-
     SfxViewShell::SetCurrentDocId(docId);
-    SfxRequest aRequest(pViewFrame, SID_NEWWINDOW);
-    pViewFrame->ExecView_Impl(aRequest);
+    SfxRequest aRequest(&rViewFrame, SID_NEWWINDOW);
+    rViewFrame.ExecView_Impl(aRequest);
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (pViewShell == nullptr)
         return -1;
@@ -147,9 +144,9 @@ void SfxLokHelper::destroyView(int nId)
     {
         if (pViewShell->GetViewShellId() == nViewShellId)
         {
-            SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
-            SfxRequest aRequest(pViewFrame, SID_CLOSEWIN);
-            pViewFrame->Exec_Impl(aRequest);
+            SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
+            SfxRequest aRequest(&rViewFrame, SID_CLOSEWIN);
+            rViewFrame.Exec_Impl(aRequest);
             break;
         }
     }
@@ -177,11 +174,11 @@ void SfxLokHelper::setView(int nId)
             if (pViewShell == SfxViewShell::Current())
                 return;
 
-            SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
-            pViewFrame->MakeActive_Impl(false);
+            SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
+            rViewFrame.MakeActive_Impl(false);
 
             // Make comphelper::dispatchCommand() find the correct frame.
-            uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame().GetFrameInterface();
+            uno::Reference<frame::XFrame> xFrame = rViewFrame.GetFrame().GetFrameInterface();
             uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
             xDesktop->setActiveFrame(xFrame);
             return;

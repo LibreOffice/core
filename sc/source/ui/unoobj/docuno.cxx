@@ -881,16 +881,16 @@ uno::Reference<datatransfer::XTransferable> ScModelObj::getSelection()
 
     if (ScViewData* pViewData = ScDocShell::GetViewData())
     {
-        if ( ScEditShell * pShell = dynamic_cast<ScEditShell*>( pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) ) )
+        if ( ScEditShell * pShell = dynamic_cast<ScEditShell*>( pViewData->GetViewShell()->GetViewFrame().GetDispatcher()->GetShell(0) ) )
             xTransferable = pShell->GetEditView()->GetTransferable();
-        else if ( nullptr != dynamic_cast<ScDrawTextObjectBar*>( pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) ))
+        else if ( nullptr != dynamic_cast<ScDrawTextObjectBar*>( pViewData->GetViewShell()->GetViewFrame().GetDispatcher()->GetShell(0) ))
         {
             ScDrawView* pView = pViewData->GetScDrawView();
             OutlinerView* pOutView = pView->GetTextEditOutlinerView();
             if (pOutView)
                 xTransferable = pOutView->GetEditView().GetTransferable();
         }
-        else if ( ScDrawShell * pDrawShell = dynamic_cast<ScDrawShell*>( pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) ) )
+        else if ( ScDrawShell * pDrawShell = dynamic_cast<ScDrawShell*>( pViewData->GetViewShell()->GetViewFrame().GetDispatcher()->GetShell(0) ) )
             xTransferable = pDrawShell->GetDrawView()->CopyToTransferable();
         else
             xTransferable = pViewData->GetViewShell()->CopyToTransferable();

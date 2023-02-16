@@ -740,15 +740,13 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                         OUString aCommand = xMenu->getCommand(nId);
                         if (aCommand.isEmpty() )
                         {
-                            if (!ExecuteMenuCommand(xMenu, *GetViewFrame(), nId))
+                            if (!ExecuteMenuCommand(xMenu, GetViewFrame(), nId))
                                 xPopup->Execute(nId);
                         }
                         else
                         {
-                            SfxViewFrame *pSfxViewFrame = GetViewFrame();
-                            uno::Reference< frame::XFrame > xFrame;
-                            if ( pSfxViewFrame )
-                                xFrame = pSfxViewFrame->GetFrame().GetFrameInterface();
+                            SfxViewFrame& rSfxViewFrame = GetViewFrame();
+                            uno::Reference<frame::XFrame> xFrame = rSfxViewFrame.GetFrame().GetFrameInterface();
                             css::util::URL aURL;
                             uno::Reference< frame::XDispatchProvider > xDispatchProvider( xFrame, UNO_QUERY );
 

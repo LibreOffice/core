@@ -48,11 +48,11 @@ void ScTabViewShell::ExecChildWin(const SfxRequest& rReq)
         case SID_GALLERY:
         {
             // First make sure that the sidebar is visible
-            GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
+            GetViewFrame().ShowChildWindow(SID_SIDEBAR);
 
             ::sfx2::sidebar::Sidebar::ShowPanel(
                 u"GalleryPanel",
-                GetViewFrame()->GetFrame().GetFrameInterface());
+                GetViewFrame().GetFrame().GetFrameInterface());
         }
         break;
     }
@@ -81,7 +81,7 @@ void ScTabViewShell::ExecGallery( const SfxRequest& rReq )
         //  for sounds (linked or not), insert a hyperlink button,
         //  like in Impress and Writer
         const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGalleryItem->GetURL() );
-        GetViewFrame()->GetDispatcher()->ExecuteList(SID_INSERT_AVMEDIA,
+        GetViewFrame().GetDispatcher()->ExecuteList(SID_INSERT_AVMEDIA,
                 SfxCallMode::SYNCHRON, { &aMediaURLItem });
     }
 }
@@ -93,12 +93,12 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
     {
         case SID_IMAP:
         {
-            SfxViewFrame* pThisFrame = GetViewFrame();
+            SfxViewFrame& rThisFrame = GetViewFrame();
             sal_uInt16 nId = ScIMapChildWindowId();
-            pThisFrame->ToggleChildWindow( nId );
-            GetViewFrame()->GetBindings().Invalidate( SID_IMAP );
+            rThisFrame.ToggleChildWindow( nId );
+            GetViewFrame().GetBindings().Invalidate( SID_IMAP );
 
-            if ( pThisFrame->HasChildWindow( nId ) )
+            if ( rThisFrame.HasChildWindow( nId ) )
             {
                 SvxIMapDlg* pDlg = GetIMapDlg();
                 if ( pDlg )
@@ -158,10 +158,10 @@ void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
                     // We don't disable this anymore
 
                     bool bThere = false;
-                    SfxViewFrame* pThisFrame = GetViewFrame();
+                    SfxViewFrame& rThisFrame = GetViewFrame();
                     sal_uInt16 nId = ScIMapChildWindowId();
-                    if ( pThisFrame->KnowsChildWindow(nId) )
-                        if ( pThisFrame->HasChildWindow(nId) )
+                    if ( rThisFrame.KnowsChildWindow(nId) )
+                        if ( rThisFrame.HasChildWindow(nId) )
                             bThere = true;
 
                     ObjectSelectionType eType=GetCurObjectSelectionType();

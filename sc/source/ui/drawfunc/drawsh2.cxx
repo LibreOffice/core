@@ -94,8 +94,8 @@ void ScDrawShell::GetState( SfxItemSet& rSet )          // Conditions / Toggles
     rSet.Put( SfxBoolItem( SID_BEZIER_EDIT, !pView->IsFrameDragSingles() ) );
 
     sal_uInt16 nFWId = ScGetFontWorkId();
-    SfxViewFrame* pViewFrm = rViewData.GetViewShell()->GetViewFrame();
-    rSet.Put(SfxBoolItem(SID_FONTWORK, pViewFrm->HasChildWindow(nFWId)));
+    SfxViewFrame& rViewFrm = rViewData.GetViewShell()->GetViewFrame();
+    rSet.Put(SfxBoolItem(SID_FONTWORK, rViewFrm.HasChildWindow(nFWId)));
 
         // Notes always default to Page anchor.
     bool bDisableAnchor = false;

@@ -163,7 +163,7 @@ void FmFormShell::InitInterface_Impl()
 
 FmFormShell::FmFormShell( SfxViewShell* _pParent, FmFormView* pView )
             :SfxShell(_pParent)
-            ,m_pImpl(new FmXFormShell(*this, _pParent->GetViewFrame()))
+            ,m_pImpl(new FmXFormShell(*this, &_pParent->GetViewFrame()))
             ,m_pFormView( pView )
             ,m_pFormModel( nullptr )
             ,m_nLastSlot( 0 )
@@ -266,9 +266,8 @@ void FmFormShell::impl_setDesignMode(bool bDesign)
         UIFeatureChanged();
     }
 
-    GetViewShell()->GetViewFrame()->GetBindings().Invalidate(ControllerSlotMap);
+    GetViewShell()->GetViewFrame().GetBindings().Invalidate(ControllerSlotMap);
 }
-
 
 bool FmFormShell::HasUIFeature(SfxShellFeature nFeature) const
 {
@@ -467,7 +466,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 nullptr
             };
 
-            GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_CREATE_CONTROL, SfxCallMode::ASYNCHRON,
+            GetViewShell()->GetViewFrame().GetDispatcher()->Execute( SID_FM_CREATE_CONTROL, SfxCallMode::ASYNCHRON,
                                       pArgs, rReq.GetModifier(), pInternalArgs );
 
             if ( rReq.GetModifier() & KEY_MOD1 )
@@ -477,7 +476,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 // reusing the SID_FM_TOGGLECONTROLFOCUS is somewhat hacky... which it wouldn't if it would have another
                 // name, so I do not really have a big problem with this...
                 SfxBoolItem aGrabFocusIndicatorItem( SID_FM_TOGGLECONTROLFOCUS, true );
-                GetViewShell()->GetViewFrame()->GetDispatcher()->ExecuteList(
+                GetViewShell()->GetViewFrame().GetDispatcher()->ExecuteList(
                         nSlot, SfxCallMode::ASYNCHRON,
                         { &aGrabFocusIndicatorItem });
             }
@@ -599,15 +598,15 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_FILTER_NAVIGATOR:
         case SID_FM_SHOW_DATANAVIGATOR :
         {
-            GetViewShell()->GetViewFrame()->ToggleChildWindow(nSlot);
+            GetViewShell()->GetViewFrame().ToggleChildWindow(nSlot);
             rReq.Done();
         }   break;
         case SID_FM_SHOW_FMEXPLORER:
         {
             if (!m_pFormView)   // force setting the view
-                GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_CREATE_SW_DRAWVIEW);
+                GetViewShell()->GetViewFrame().GetDispatcher()->Execute(SID_CREATE_SW_DRAWVIEW);
 
-            GetViewShell()->GetViewFrame()->ChildWindowExecute(rReq);
+            GetViewShell()->GetViewFrame().ChildWindowExecute(rReq);
             rReq.Done();
         }
         break;
@@ -638,7 +637,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             DBG_ASSERT(pModel, "FmFormShell::Execute : invalid call !");
                 // should have been disabled in GetState if we don't have a FormModel
             pModel->SetAutoControlFocus( !pModel->GetAutoControlFocus() );
-            GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_AUTOCONTROLFOCUS);
+            GetViewShell()->GetViewFrame().GetBindings().Invalidate(SID_FM_AUTOCONTROLFOCUS);
         }
         break;
         case SID_FM_OPEN_READONLY:
@@ -647,13 +646,13 @@ void FmFormShell::Execute(SfxRequest &rReq)
             DBG_ASSERT(pModel, "FmFormShell::Execute : invalid call !");
                 // should have been disabled in GetState if we don't have a FormModel
             pModel->SetOpenInDesignMode( !pModel->GetOpenInDesignMode() );
-            GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_OPEN_READONLY);
+            GetViewShell()->GetViewFrame().GetBindings().Invalidate(SID_FM_OPEN_READONLY);
         }
         break;
         case SID_FM_USE_WIZARDS:
         {
             GetImpl()->SetWizardUsing_Lock(!GetImpl()->GetWizardUsing_Lock());
-            GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_USE_WIZARDS);
+            GetViewShell()->GetViewFrame().GetBindings().Invalidate(SID_FM_USE_WIZARDS);
         }
         break;
         case SID_FM_SEARCH:
@@ -729,16 +728,16 @@ void FmFormShell::Execute(SfxRequest &rReq)
             {
                 // if the filter navigator is still open, we need to close it, so it can possibly
                 // commit it's most recent changes
-                if ( GetViewShell() && GetViewShell()->GetViewFrame() )
-                    if ( GetViewShell()->GetViewFrame()->HasChildWindow( SID_FM_FILTER_NAVIGATOR ) )
+                if (GetViewShell())
+                    if ( GetViewShell()->GetViewFrame().HasChildWindow( SID_FM_FILTER_NAVIGATOR ) )
                     {
-                        GetViewShell()->GetViewFrame()->ToggleChildWindow( SID_FM_FILTER_NAVIGATOR );
+                        GetViewShell()->GetViewFrame().ToggleChildWindow( SID_FM_FILTER_NAVIGATOR );
                         bReopenNavigator = true;
                     }
 
                 Reference<runtime::XFormController> const xController(GetImpl()->getActiveController_Lock());
 
-                if  (   GetViewShell()->GetViewFrame()->HasChildWindow( SID_FM_FILTER_NAVIGATOR )
+                if  (   GetViewShell()->GetViewFrame().HasChildWindow( SID_FM_FILTER_NAVIGATOR )
                         // closing the window was denied, for instance because of an invalid criterion
 
                     ||  (   xController.is()
@@ -758,7 +757,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             if ( bReopenNavigator )
                 // we closed the navigator only to implicitly commit it (as we do not have another
                 // direct wire to it), but to the user, it should look as it was always open
-                GetViewShell()->GetViewFrame()->ToggleChildWindow( SID_FM_FILTER_NAVIGATOR );
+                GetViewShell()->GetViewFrame().ToggleChildWindow( SID_FM_FILTER_NAVIGATOR );
         }
         break;
 
@@ -769,7 +768,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
 
             // initially open the filter navigator, the whole form based filter is pretty useless without it
             SfxBoolItem aIdentifierItem( SID_FM_FILTER_NAVIGATOR, true );
-            GetViewShell()->GetViewFrame()->GetDispatcher()->ExecuteList(
+            GetViewShell()->GetViewFrame().GetDispatcher()->ExecuteList(
                     SID_FM_FILTER_NAVIGATOR, SfxCallMode::ASYNCHRON,
                     { &aIdentifierItem });
         }   break;
@@ -896,8 +895,8 @@ void FmFormShell::GetState(SfxItemSet &rSet)
             case SID_FM_FILTER_NAVIGATOR:
             case SID_FM_SHOW_DATANAVIGATOR:
             {
-                if ( GetViewShell()->GetViewFrame()->KnowsChildWindow(nWhich) )
-                    rSet.Put( SfxBoolItem( nWhich, GetViewShell()->GetViewFrame()->HasChildWindow(nWhich)) );
+                if ( GetViewShell()->GetViewFrame().KnowsChildWindow(nWhich) )
+                    rSet.Put( SfxBoolItem( nWhich, GetViewShell()->GetViewFrame().HasChildWindow(nWhich)) );
                 else
                     rSet.DisableItem(nWhich);
             }   break;

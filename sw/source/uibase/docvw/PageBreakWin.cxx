@@ -314,7 +314,7 @@ void SwBreakDashedLine::execute(std::string_view rIdent)
             rSh.SetSelection( SwPaM(rNd) );
 
             SfxStringItem aItem(m_pEditWin->GetView().GetPool().GetWhich(FN_FORMAT_TABLE_DLG), "textflow");
-            m_pEditWin->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(
+            m_pEditWin->GetView().GetViewFrame().GetDispatcher()->ExecuteList(
                     FN_FORMAT_TABLE_DLG,
                     SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
                     { &aItem });
@@ -326,7 +326,7 @@ void SwBreakDashedLine::execute(std::string_view rIdent)
             SwPaM aPaM( rNd );
             SwPaMItem aPaMItem( m_pEditWin->GetView().GetPool( ).GetWhich( FN_PARAM_PAM ), &aPaM );
             SfxStringItem aItem( SID_PARA_DLG, "textflow" );
-            m_pEditWin->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(
+            m_pEditWin->GetView().GetViewFrame().GetDispatcher()->ExecuteList(
                     SID_PARA_DLG,
                     SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
                     { &aItem, &aPaMItem });

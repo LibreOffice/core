@@ -250,7 +250,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     }
 
                     pView->SetDragMode(SdrDragMode::Move);
-                    SfxBindings& rBindings = rViewShell.GetViewFrame()->GetBindings();
+                    SfxBindings& rBindings = rViewShell.GetViewFrame().GetBindings();
                     rBindings.Invalidate( SID_OBJECT_ROTATE );
                     rBindings.Invalidate( SID_OBJECT_MIRROR );
                 }
@@ -314,7 +314,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
     {
         pWindow->CaptureMouse();
 //      ForcePointer(&rMEvt);
-        lcl_InvalidateAttribs( rViewShell.GetViewFrame()->GetBindings() );
+        lcl_InvalidateAttribs( rViewShell.GetViewFrame().GetBindings() );
     }
 
     rViewShell.SetActivePointer(pView->GetPreferredPointer(
@@ -368,7 +368,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
         aDragTimer.Stop();
     }
 
-    lcl_InvalidateAttribs( rViewShell.GetViewFrame()->GetBindings() );
+    lcl_InvalidateAttribs( rViewShell.GetViewFrame().GetBindings() );
 
     Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
@@ -485,7 +485,7 @@ bool FuText::KeyInput(const KeyEvent& rKEvt)
     if ( pView->KeyInput(rKEvt, pWindow) )
     {
         bReturn = true;
-        lcl_InvalidateAttribs( rViewShell.GetViewFrame()->GetBindings() );
+        lcl_InvalidateAttribs( rViewShell.GetViewFrame().GetBindings() );
     }
     else
     {
@@ -498,7 +498,7 @@ bool FuText::KeyInput(const KeyEvent& rKEvt)
 void FuText::Activate()
 {
     pView->SetDragMode(SdrDragMode::Move);
-    SfxBindings& rBindings = rViewShell.GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = rViewShell.GetViewFrame().GetBindings();
     rBindings.Invalidate( SID_OBJECT_ROTATE );
     rBindings.Invalidate( SID_OBJECT_MIRROR );
 

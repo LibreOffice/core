@@ -864,7 +864,7 @@ void SwView::Execute(SfxRequest &rReq)
             break;
         case FN_MAILMERGE_SENDMAIL_CHILDWINDOW:
         case FN_REDLINE_ACCEPT:
-            GetViewFrame()->ToggleChildWindow(nSlot);
+            GetViewFrame().ToggleChildWindow(nSlot);
         break;
         case FN_REDLINE_ACCEPT_DIRECT:
         case FN_REDLINE_REJECT_DIRECT:
@@ -985,7 +985,7 @@ void SwView::Execute(SfxRequest &rReq)
             if (FN_REDLINE_ACCEPT_TONEXT == nSlot || FN_REDLINE_REJECT_TONEXT == nSlot)
             {
                 // Go to next change after accepting or rejecting one (tdf#101977)
-                GetViewFrame()->GetDispatcher()->Execute(FN_REDLINE_NEXT_CHANGE, SfxCallMode::ASYNCHRON);
+                GetViewFrame().GetDispatcher()->Execute(FN_REDLINE_NEXT_CHANGE, SfxCallMode::ASYNCHRON);
             }
         }
         break;
@@ -1086,13 +1086,13 @@ void SwView::Execute(SfxRequest &rReq)
 
                     if (nFound > 0 && !bNoAcceptDialog) // show Redline browser
                     {
-                        SfxViewFrame* pVFrame = GetViewFrame();
-                        pVFrame->ShowChildWindow(FN_REDLINE_ACCEPT);
+                        SfxViewFrame& rVFrame = GetViewFrame();
+                        rVFrame.ShowChildWindow(FN_REDLINE_ACCEPT);
 
                         // re-initialize the Redline dialog
                         const sal_uInt16 nId = SwRedlineAcceptChild::GetChildWindowId();
                         SwRedlineAcceptChild *pRed = static_cast<SwRedlineAcceptChild*>(
-                                                pVFrame->GetChildWindow(nId));
+                                                rVFrame.GetChildWindow(nId));
                         if (pRed)
                             pRed->ReInitDlg(GetDocShell());
                     }
@@ -1102,7 +1102,7 @@ void SwView::Execute(SfxRequest &rReq)
             }
         break;
         case FN_SYNC_LABELS:
-            GetViewFrame()->ShowChildWindow(nSlot);
+            GetViewFrame().ShowChildWindow(nSlot);
         break;
         case FN_ESCAPE:
         {
@@ -1132,7 +1132,7 @@ void SwView::Execute(SfxRequest &rReq)
                         Point aPt(LONG_MIN, LONG_MIN);
                         //go out of the frame
                         m_pWrtShell->SelectObj(aPt, SW_LEAVE_FRAME);
-                        SfxBindings& rBind = GetViewFrame()->GetBindings();
+                        SfxBindings& rBind = GetViewFrame().GetBindings();
                         rBind.Invalidate( SID_ATTR_SIZE );
                     }
                     m_pWrtShell->EnterStdMode();
@@ -1163,7 +1163,7 @@ void SwView::Execute(SfxRequest &rReq)
             else
             {
                 SfxBoolItem aItem( SID_WIN_FULLSCREEN, false );
-                GetViewFrame()->GetDispatcher()->ExecuteList(SID_WIN_FULLSCREEN,
+                GetViewFrame().GetDispatcher()->ExecuteList(SID_WIN_FULLSCREEN,
                         SfxCallMode::RECORD, { &aItem });
                 bIgnore = true;
             }
@@ -1195,14 +1195,14 @@ void SwView::Execute(SfxRequest &rReq)
         break;
         case FN_GOTO_PAGE:
         {
-            SwGotoPageDlg aDlg(GetViewFrame()->GetFrameWeld(), &GetViewFrame()->GetBindings());
+            SwGotoPageDlg aDlg(GetViewFrame().GetFrameWeld(), &GetViewFrame().GetBindings());
             if (aDlg.run() == RET_OK)
                 GetWrtShell().GotoPage(aDlg.GetPageSelection(), true);
         }
         break;
         case  FN_EDIT_CURRENT_TOX:
         {
-            GetViewFrame()->GetDispatcher()->Execute(
+            GetViewFrame().GetDispatcher()->Execute(
                                 FN_INSERT_MULTI_TOX, SfxCallMode::ASYNCHRON);
         }
         break;
@@ -1341,7 +1341,7 @@ void SwView::Execute(SfxRequest &rReq)
             auto nOutlinePos = rSh.GetOutlinePos();
             if (nOutlinePos != SwOutlineNodes::npos)
                 nOutlineLevel = rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nOutlinePos);
-            SwNumberInputDlg aDlg(GetViewFrame()->GetFrameWeld(),
+            SwNumberInputDlg aDlg(GetViewFrame().GetFrameWeld(),
                                   SwResId(STR_OUTLINE_LEVELS_SHOWN_TITLE),
                                   SwResId(STR_OUTLINE_LEVELS_SHOWN_SPIN_LABEL),
                                   nOutlineLevel + 1, 1, 10,
@@ -1383,20 +1383,20 @@ void SwView::Execute(SfxRequest &rReq)
         break;
         case SID_GALLERY :
             // First make sure that the sidebar is visible
-            GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
+            GetViewFrame().ShowChildWindow(SID_SIDEBAR);
 
             ::sfx2::sidebar::Sidebar::ShowPanel(
                 u"GalleryPanel",
-                GetViewFrame()->GetFrame().GetFrameInterface());
+                GetViewFrame().GetFrame().GetFrameInterface());
         break;
         case SID_AVMEDIA_PLAYER :
-            GetViewFrame()->ChildWindowExecute(rReq);
+            GetViewFrame().ChildWindowExecute(rReq);
         break;
         case SID_VIEW_DATA_SOURCE_BROWSER:
         {
-            SfxViewFrame* pVFrame = GetViewFrame();
-            pVFrame->ChildWindowExecute(rReq);
-            if(pVFrame->HasChildWindow(SID_BROWSER))
+            SfxViewFrame& rVFrame = GetViewFrame();
+            rVFrame.ChildWindowExecute(rReq);
+            if(rVFrame.HasChildWindow(SID_BROWSER))
             {
                 const SwDBData& rData = GetWrtShell().GetDBData();
                 SwModule::ShowDBObj(*this, rData);
@@ -1409,8 +1409,8 @@ void SwView::Execute(SfxRequest &rReq)
             if( pArgs &&
                 SfxItemState::SET == pArgs->GetItemState(nSlot, false, &pItem ))
                 bShow = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-            if((bShow && m_bInMailMerge) != GetViewFrame()->HasChildWindow(nSlot))
-                GetViewFrame()->ToggleChildWindow(nSlot);
+            if((bShow && m_bInMailMerge) != GetViewFrame().HasChildWindow(nSlot))
+                GetViewFrame().ToggleChildWindow(nSlot);
             //if fields have been successfully inserted call the "real"
             //mail merge dialog
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
@@ -1435,7 +1435,7 @@ void SwView::Execute(SfxRequest &rReq)
             }
 #endif
             m_bInMailMerge &= bShow;
-            GetViewFrame()->GetBindings().Invalidate(FN_INSERT_FIELD);
+            GetViewFrame().GetBindings().Invalidate(FN_INSERT_FIELD);
         }
         break;
         case FN_QRY_MERGE:
@@ -1444,9 +1444,9 @@ void SwView::Execute(SfxRequest &rReq)
             bool bQuery = !pArgs || SfxItemState::SET != pArgs->GetItemState(nSlot);
             if(bQuery)
             {
-                SfxViewFrame* pTmpFrame = GetViewFrame();
+                SfxViewFrame& rTmpFrame = GetViewFrame();
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractMailMergeCreateFromDlg> pDlg(pFact->CreateMailMergeCreateFromDlg(pTmpFrame->GetFrameWeld()));
+                ScopedVclPtr<AbstractMailMergeCreateFromDlg> pDlg(pFact->CreateMailMergeCreateFromDlg(rTmpFrame.GetFrameWeld()));
                 if (RET_OK == pDlg->Execute())
                     bUseCurrentDocument = pDlg->IsThisDocument();
                 else
@@ -1476,15 +1476,15 @@ void SwView::Execute(SfxRequest &rReq)
         }
         case FN_SPELL_GRAMMAR_DIALOG:
         {
-            SfxViewFrame* pViewFrame = GetViewFrame();
+            SfxViewFrame& rViewFrame = GetViewFrame();
             if (rReq.GetArgs() != nullptr)
-                pViewFrame->SetChildWindow (FN_SPELL_GRAMMAR_DIALOG,
+                rViewFrame.SetChildWindow (FN_SPELL_GRAMMAR_DIALOG,
                     static_cast<const SfxBoolItem&>( (rReq.GetArgs()->
                         Get(FN_SPELL_GRAMMAR_DIALOG))).GetValue());
             else
-                pViewFrame->ToggleChildWindow(FN_SPELL_GRAMMAR_DIALOG);
+                rViewFrame.ToggleChildWindow(FN_SPELL_GRAMMAR_DIALOG);
 
-            pViewFrame->GetBindings().Invalidate(FN_SPELL_GRAMMAR_DIALOG);
+            rViewFrame.GetBindings().Invalidate(FN_SPELL_GRAMMAR_DIALOG);
             rReq.Ignore ();
         }
         break;
@@ -1526,7 +1526,7 @@ void SwView::Execute(SfxRequest &rReq)
             }
             //these slots are either re-mapped to text or object alignment
             if (nAlias)
-                GetViewFrame()->GetDispatcher()->Execute(
+                GetViewFrame().GetDispatcher()->Execute(
                                 nAlias, SfxCallMode::ASYNCHRON);
         }
         break;
@@ -1606,13 +1606,13 @@ bool SwView::IsConditionalFastCall( const SfxRequest &rReq )
 /// invalidate page numbering field
 void SwView::UpdatePageNums()
 {
-    SfxBindings &rBnd = GetViewFrame()->GetBindings();
+    SfxBindings &rBnd = GetViewFrame().GetBindings();
     rBnd.Invalidate(FN_STAT_PAGE);
 }
 
 void SwView::UpdateDocStats()
 {
-    SfxBindings &rBnd = GetViewFrame()->GetBindings();
+    SfxBindings &rBnd = GetViewFrame().GetBindings();
     rBnd.Invalidate( FN_STAT_WORDCOUNT );
     rBnd.Update( FN_STAT_WORDCOUNT );
 }
@@ -1782,7 +1782,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 if (m_nPageCnt != nCnt)   // notify Basic
                 {
                     m_nPageCnt = nCnt;
-                    SfxGetpApp()->NotifyEvent(SfxEventHint(SfxEventHintId::SwEventPageCount, SwDocShell::GetEventName(STR_SW_EVENT_PAGE_COUNT), GetViewFrame()->GetObjectShell()), false);
+                    SfxGetpApp()->NotifyEvent(SfxEventHint(SfxEventHintId::SwEventPageCount, SwDocShell::GetEventName(STR_SW_EVENT_PAGE_COUNT), GetViewFrame().GetObjectShell()), false);
                 }
             }
             break;
@@ -1809,7 +1809,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
 
                 rSet.Put( SfxStringItem( FN_STAT_WORDCOUNT, aWordCount ) );
 
-                SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
+                SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(GetViewFrame().GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
                 if (pWrdCnt)
                     pWrdCnt->SetCounts(selectionStats, documentStats);
             }
@@ -2107,14 +2107,14 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
     {
         case FN_STAT_PAGE:
         {
-            GetViewFrame()->GetDispatcher()->Execute( FN_GOTO_PAGE,
+            GetViewFrame().GetDispatcher()->Execute( FN_GOTO_PAGE,
                                       SfxCallMode::SYNCHRON|SfxCallMode::RECORD );
         }
         break;
 
         case FN_STAT_WORDCOUNT:
         {
-            GetViewFrame()->GetDispatcher()->Execute(FN_WORDCOUNT_DIALOG,
+            GetViewFrame().GetDispatcher()->Execute(FN_WORDCOUNT_DIALOG,
                                       SfxCallMode::SYNCHRON|SfxCallMode::RECORD );
         }
         break;
@@ -2141,13 +2141,13 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
 
         case FN_STAT_TEMPLATE:
         {
-            weld::Window* pDialogParent = GetViewFrame()->GetFrameWeld();
+            weld::Window* pDialogParent = GetViewFrame().GetFrameWeld();
             css::uno::Any aAny(pDialogParent->GetXWindow());
             SfxUnoAnyItem aDialogParent(SID_DIALOG_PARENT, aAny);
             const SfxPoolItem* pInternalItems[ 2 ];
             pInternalItems[ 0 ] = &aDialogParent;
             pInternalItems[ 1 ] = nullptr;
-            GetViewFrame()->GetDispatcher()->Execute(FN_FORMAT_PAGE_DLG,
+            GetViewFrame().GetDispatcher()->Execute(FN_FORMAT_PAGE_DLG,
                                         SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
                                         nullptr, 0, pInternalItems);
         }
@@ -2185,7 +2185,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     }
 
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    pDlg.disposeAndReset(pFact->CreateSvxZoomDialog(GetViewFrame()->GetFrameWeld(), aCoreSet));
+                    pDlg.disposeAndReset(pFact->CreateSvxZoomDialog(GetViewFrame().GetFrameWeld(), aCoreSet));
                     pDlg->SetLimits( MINZOOM, MAXZOOM );
                     if( pDlg->Execute() != RET_CANCEL )
                         pSet = pDlg->GetOutputItemSet();
@@ -2278,7 +2278,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     nId = SID_ATTR_TRANSFORM;
             }
             if( nId )
-                GetViewFrame()->GetDispatcher()->Execute(nId,
+                GetViewFrame().GetDispatcher()->Execute(nId,
                     SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
         }
         break;
@@ -2330,7 +2330,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
     }
     if ( bUp )
     {
-        SfxBindings &rBnd = GetViewFrame()->GetBindings();
+        SfxBindings &rBnd = GetViewFrame().GetBindings();
         rBnd.Invalidate(nWhich);
         rBnd.Update(nWhich);
     }
@@ -2365,7 +2365,7 @@ void SwView::EditLinkDlg()
 {
     bool bWeb = dynamic_cast<SwWebView*>( this ) !=  nullptr;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog(GetViewFrame()->GetFrameWeld(), &GetWrtShell().GetLinkManager(), bWeb));
+    ScopedVclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog(GetViewFrame().GetFrameWeld(), &GetWrtShell().GetLinkManager(), bWeb));
     pDlg->Execute();
 }
 
@@ -2716,10 +2716,10 @@ tools::Long SwView::InsertMedium( sal_uInt16 nSlotId, std::unique_ptr<SfxMedium>
     if( bInsert )
     {
         uno::Reference< frame::XDispatchRecorder > xRecorder =
-                GetViewFrame()->GetBindings().GetRecorder();
+                GetViewFrame().GetBindings().GetRecorder();
         if ( xRecorder.is() )
         {
-            SfxRequest aRequest(GetViewFrame(), SID_INSERTDOC);
+            SfxRequest aRequest(&GetViewFrame(), SID_INSERTDOC);
             aRequest.AppendItem(SfxStringItem(SID_INSERTDOC, pMedium->GetOrigURL()));
             if(pMedium->GetFilter())
                 aRequest.AppendItem(SfxStringItem(FN_PARAM_1, pMedium->GetFilter()->GetName()));
@@ -2838,7 +2838,7 @@ tools::Long SwView::InsertMedium( sal_uInt16 nSlotId, std::unique_ptr<SfxMedium>
 void SwView::EnableMailMerge()
 {
     m_bInMailMerge = true;
-    SfxBindings& rBind = GetViewFrame()->GetBindings();
+    SfxBindings& rBind = GetViewFrame().GetBindings();
     rBind.Invalidate(FN_INSERT_FIELD_DATA_ONLY);
     rBind.Update(FN_INSERT_FIELD_DATA_ONLY);
 }
@@ -2897,7 +2897,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             }
             if(bCallAddressPilot)
             {
-                GetViewFrame()->GetDispatcher()->Execute(
+                GetViewFrame().GetDispatcher()->Execute(
                                 SID_ADDRESS_DATA_SOURCE, SfxCallMode::SYNCHRON);
                 if ( lcl_NeedAdditionalDataSource( xDBContext ) )
                     // no additional data source has been created
@@ -2906,15 +2906,15 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             }
 
             //call insert fields with database field page available, only
-            SfxViewFrame* pVFrame = GetViewFrame();
+            SfxViewFrame& rVFrame = GetViewFrame();
             //at first hide the default field dialog if currently visible
-            pVFrame->SetChildWindow(FN_INSERT_FIELD, false);
+            rVFrame.SetChildWindow(FN_INSERT_FIELD, false);
             //enable the status of the db field dialog - it is disabled in the status method
             //to prevent creation of the dialog without mail merge active
             EnableMailMerge();
             //then show the "Data base only" field dialog
             SfxBoolItem aOn(FN_INSERT_FIELD_DATA_ONLY, true);
-            pVFrame->GetDispatcher()->ExecuteList(FN_INSERT_FIELD_DATA_ONLY,
+            rVFrame.GetDispatcher()->ExecuteList(FN_INSERT_FIELD_DATA_ONLY,
                     SfxCallMode::SYNCHRON, { &aOn });
             return;
         }
@@ -3032,12 +3032,12 @@ IMPL_LINK( SwView, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
 
         if ( nFound > 0 ) // show Redline browser
         {
-            SfxViewFrame* pVFrame = GetViewFrame();
-            pVFrame->ShowChildWindow(FN_REDLINE_ACCEPT);
+            SfxViewFrame& rVFrame = GetViewFrame();
+            rVFrame.ShowChildWindow(FN_REDLINE_ACCEPT);
 
             // re-initialize Redline dialog
             sal_uInt16 nId = SwRedlineAcceptChild::GetChildWindowId();
-            SwRedlineAcceptChild* pRed = static_cast<SwRedlineAcceptChild*>(pVFrame->GetChildWindow( nId ));
+            SwRedlineAcceptChild* pRed = static_cast<SwRedlineAcceptChild*>(rVFrame.GetChildWindow( nId ));
             if ( pRed )
                 pRed->ReInitDlg( GetDocShell() );
         }

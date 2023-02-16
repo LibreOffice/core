@@ -188,7 +188,7 @@ public:
     static VclPtr<vcl::Window> getInPlaceDocWindow(SfxViewShell* pViewShell);
 
 private:
-    static int createView(SfxViewFrame* pViewFrame, ViewShellDocId docId);
+    static int createView(SfxViewFrame& rViewFrame, ViewShellDocId docId);
 };
 
 template<typename ViewShellType, typename FunctionType>

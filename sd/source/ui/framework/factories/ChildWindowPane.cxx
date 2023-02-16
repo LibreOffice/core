@@ -50,19 +50,17 @@ ChildWindowPane::ChildWindowPane (
 {
     mrViewShellBase.GetViewShellManager()->ActivateShell(mpShell.get());
 
-    SfxViewFrame* pViewFrame = mrViewShellBase.GetViewFrame();
-    if (pViewFrame == nullptr)
-        return;
+    SfxViewFrame& rViewFrame = mrViewShellBase.GetViewFrame();
 
     if (mrViewShellBase.IsActive())
     {
-        if (pViewFrame->KnowsChildWindow(mnChildWindowId))
+        if (rViewFrame.KnowsChildWindow(mnChildWindowId))
         {
-            if (pViewFrame->HasChildWindow(mnChildWindowId))
+            if (rViewFrame.HasChildWindow(mnChildWindowId))
             {
                 // The ViewShellBase has already been activated.  Make
                 // the child window visible as soon as possible.
-                pViewFrame->SetChildWindow(mnChildWindowId, true);
+                rViewFrame.SetChildWindow(mnChildWindowId, true);
             }
             else
             {
@@ -82,7 +80,7 @@ ChildWindowPane::ChildWindowPane (
         // The ViewShellBase has not yet been activated.  Hide the
         // window and wait a little before it is made visible.  See
         // comments in the GetWindow() method for an explanation.
-        pViewFrame->SetChildWindow(mnChildWindowId, false);
+        rViewFrame.SetChildWindow(mnChildWindowId, false);
     }
 }
 
@@ -92,11 +90,10 @@ ChildWindowPane::~ChildWindowPane()
 
 void ChildWindowPane::Hide()
 {
-    SfxViewFrame* pViewFrame = mrViewShellBase.GetViewFrame();
-    if (pViewFrame != nullptr)
-        if (pViewFrame->KnowsChildWindow(mnChildWindowId))
-            if (pViewFrame->HasChildWindow(mnChildWindowId))
-                pViewFrame->SetChildWindow(mnChildWindowId, false);
+    SfxViewFrame& rViewFrame = mrViewShellBase.GetViewFrame();
+    if (rViewFrame.KnowsChildWindow(mnChildWindowId))
+        if (rViewFrame.HasChildWindow(mnChildWindowId))
+            rViewFrame.SetChildWindow(mnChildWindowId, false);
 
     // Release the window because when the child window is shown again it
     // may use a different window.
@@ -137,25 +134,23 @@ vcl::Window* ChildWindowPane::GetWindow()
             break;
 
         mbHasBeenActivated = true;
-        SfxViewFrame* pViewFrame = mrViewShellBase.GetViewFrame();
-        if (pViewFrame == nullptr)
-            break;
+        SfxViewFrame& rViewFrame = mrViewShellBase.GetViewFrame();
         // The view frame has to know the child window.  This can be the
         // case, when for example the document is in read-only mode:  the
         // task pane is then not available.
-        if ( ! pViewFrame->KnowsChildWindow(mnChildWindowId))
+        if ( ! rViewFrame.KnowsChildWindow(mnChildWindowId))
             break;
 
-        pViewFrame->SetChildWindow(mnChildWindowId, true);
-        SfxChildWindow* pChildWindow = pViewFrame->GetChildWindow(mnChildWindowId);
+        rViewFrame.SetChildWindow(mnChildWindowId, true);
+        SfxChildWindow* pChildWindow = rViewFrame.GetChildWindow(mnChildWindowId);
         if (pChildWindow == nullptr)
-            if (pViewFrame->HasChildWindow(mnChildWindowId))
+            if (rViewFrame.HasChildWindow(mnChildWindowId))
             {
                 // The child window is not yet visible.  Ask the view frame
                 // to show it and try again to get access to the child
                 // window.
-                pViewFrame->ShowChildWindow(mnChildWindowId);
-                pChildWindow = pViewFrame->GetChildWindow(mnChildWindowId);
+                rViewFrame.ShowChildWindow(mnChildWindowId);
+                pChildWindow = rViewFrame.GetChildWindow(mnChildWindowId);
             }
 
         // When the child window is still not visible then we have to try later.

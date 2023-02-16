@@ -162,7 +162,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
 
     case FID_SEARCH_ON:
         s_bJustOpened = true;
-        GetViewFrame()->GetBindings().Invalidate(SID_SEARCH_ITEM);
+        GetViewFrame().GetBindings().Invalidate(SID_SEARCH_ITEM);
         break;
 
     case FID_SEARCH_OFF:
@@ -393,7 +393,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
             }
 
             uno::Reference< frame::XDispatchRecorder > xRecorder =
-                    GetViewFrame()->GetBindings().GetRecorder();
+                    GetViewFrame().GetBindings().GetRecorder();
             //prevent additional dialogs in recorded macros
             if ( xRecorder.is() )
                 rReq.AppendItem(SfxBoolItem(SID_SEARCH_QUIET, true));

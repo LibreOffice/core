@@ -462,15 +462,15 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
         case SID_FONTWORK:
         {
             sal_uInt16 nId = ScGetFontWorkId();
-            SfxViewFrame* pViewFrm = rViewData.GetViewShell()->GetViewFrame();
+            SfxViewFrame& rViewFrm = rViewData.GetViewShell()->GetViewFrame();
 
             if ( rReq.GetArgs() )
-                pViewFrm->SetChildWindow( nId,
+                rViewFrm.SetChildWindow( nId,
                                            static_cast<const SfxBoolItem&>(
                                             (rReq.GetArgs()->Get(SID_FONTWORK))).
                                                 GetValue() );
             else
-                pViewFrm->ToggleChildWindow( nId );
+                rViewFrm.ToggleChildWindow( nId );
 
             rBindings.Invalidate( SID_FONTWORK );
             rReq.Done();

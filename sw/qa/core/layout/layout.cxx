@@ -960,7 +960,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testPageRemoveFlyTable)
 
     // When updating the ToC and incrementally formatting the document:
     SwView* pView = pDoc->GetDocShell()->GetView();
-    SfxDispatcher& rDispatcher = *pView->GetViewFrame()->GetDispatcher();
+    SfxDispatcher& rDispatcher = *pView->GetViewFrame().GetDispatcher();
     rDispatcher.Execute(FN_UPDATE_TOX);
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Reformat();

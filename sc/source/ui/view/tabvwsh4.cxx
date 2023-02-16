@@ -121,13 +121,13 @@ void ScTabViewShell::Activate(bool bMDI)
 
         // RegisterNewTargetNames does not exist anymore
 
-        SfxViewFrame* pThisFrame  = GetViewFrame();
-        if ( mpInputHandler && pThisFrame->HasChildWindow(FID_INPUTLINE_STATUS) )
+        SfxViewFrame& rThisFrame  = GetViewFrame();
+        if ( mpInputHandler && rThisFrame.HasChildWindow(FID_INPUTLINE_STATUS) )
         {
             // actually only required for Reload (last version):
             // The InputWindow remains, but the View along with the InputHandler is newly created,
             // that is why the InputHandler must be set at the InputWindow.
-            SfxChildWindow* pChild = pThisFrame->GetChildWindow(FID_INPUTLINE_STATUS);
+            SfxChildWindow* pChild = rThisFrame.GetChildWindow(FID_INPUTLINE_STATUS);
             if (pChild)
             {
                 ScInputWindow* pWin = static_cast<ScInputWindow*>(pChild->GetWindow());
@@ -190,9 +190,9 @@ void ScTabViewShell::Activate(bool bMDI)
 
         // update change dialog
 
-        if ( pThisFrame->HasChildWindow(FID_CHG_ACCEPT) )
+        if ( rThisFrame.HasChildWindow(FID_CHG_ACCEPT) )
         {
-            SfxChildWindow* pChild = pThisFrame->GetChildWindow(FID_CHG_ACCEPT);
+            SfxChildWindow* pChild = rThisFrame.GetChildWindow(FID_CHG_ACCEPT);
             if (pChild)
             {
                 static_cast<ScAcceptChgDlgWrapper*>(pChild)->ReInitDlg();
@@ -202,7 +202,7 @@ void ScTabViewShell::Activate(bool bMDI)
         if(pScMod->IsRefDialogOpen())
         {
             sal_uInt16 nModRefDlgId=pScMod->GetCurRefDlgId();
-            SfxChildWindow* pChildWnd = pThisFrame->GetChildWindow( nModRefDlgId );
+            SfxChildWindow* pChildWnd = rThisFrame.GetChildWindow( nModRefDlgId );
             if ( pChildWnd )
             {
                 if (auto pController = pChildWnd->GetController())
@@ -253,7 +253,7 @@ void ScTabViewShell::Deactivate(bool bMDI)
 
         ActivateView( false, false );
 
-        if ( GetViewFrame()->GetFrame().IsInPlace() ) // inplace
+        if ( GetViewFrame().GetFrame().IsInPlace() ) // inplace
             GetViewData().GetDocShell()->UpdateOle(GetViewData(), true);
 
         if ( pHdl )
@@ -341,7 +341,7 @@ void ScTabViewShell::UpdateOleZoom()
 void ScTabViewShell::InnerResizePixel( const Point &rOfs, const Size &rSize, bool inplaceEditModeChange )
 {
     Size aNewSize( rSize );
-    if ( GetViewFrame()->GetFrame().IsInPlace() )
+    if ( GetViewFrame().GetFrame().IsInPlace() )
     {
         SvBorder aBorder;
         GetBorderSize( aBorder, rSize );
@@ -457,7 +457,7 @@ void ScTabViewShell::QueryObjAreaPixel( tools::Rectangle& rRect ) const
 
 void ScTabViewShell::Move()
 {
-    Point aNewPos = GetViewFrame()->GetWindow().OutputToScreenPixel(Point());
+    Point aNewPos = GetViewFrame().GetWindow().OutputToScreenPixel(Point());
 
     if (aNewPos != aWinPos)
     {
@@ -1130,13 +1130,11 @@ IMPL_LINK_NOARG(ScTabViewShell, SimpleRefClose, const OUString*, void)
 static ScTabViewObj* lcl_GetViewObj( const ScTabViewShell& rShell )
 {
     ScTabViewObj* pRet = nullptr;
-    if (SfxViewFrame* pViewFrame = rShell.GetViewFrame())
-    {
-        SfxFrame& rFrame = pViewFrame->GetFrame();
-        uno::Reference<frame::XController> xController = rFrame.GetController();
-        if (xController.is())
-            pRet = dynamic_cast<ScTabViewObj*>( xController.get() );
-    }
+    SfxViewFrame& rViewFrame = rShell.GetViewFrame();
+    SfxFrame& rFrame = rViewFrame.GetFrame();
+    uno::Reference<frame::XController> xController = rFrame.GetController();
+    if (xController.is())
+        pRet = dynamic_cast<ScTabViewObj*>( xController.get() );
     return pRet;
 }
 
@@ -1165,7 +1163,7 @@ void ScTabViewShell::StartSimpleRefDialog(
             const OUString& rTitle, const OUString& rInitVal,
             bool bCloseOnButtonUp, bool bSingleCell, bool bMultiSelection )
 {
-    SfxViewFrame* pViewFrm = GetViewFrame();
+    SfxViewFrame& rViewFrm = GetViewFrame();
 
     if ( GetActiveViewShell() != this )
     {
@@ -1173,14 +1171,14 @@ void ScTabViewShell::StartSimpleRefDialog(
         // Then the view has to be activated first, the same way as in Execute for SID_CURRENTDOC.
         // Can't use GrabFocus here, because it needs to take effect immediately.
 
-        pViewFrm->GetFrame().Appear();
+        rViewFrm.GetFrame().Appear();
     }
 
     sal_uInt16 nId = ScSimpleRefDlgWrapper::GetChildWindowId();
 
-    SC_MOD()->SetRefDialog( nId, true, pViewFrm );
+    SC_MOD()->SetRefDialog( nId, true, &rViewFrm );
 
-    ScSimpleRefDlgWrapper* pWnd = static_cast<ScSimpleRefDlgWrapper*>(pViewFrm->GetChildWindow( nId ));
+    ScSimpleRefDlgWrapper* pWnd = static_cast<ScSimpleRefDlgWrapper*>(rViewFrm.GetChildWindow( nId ));
     if (!pWnd)
         return;
 
@@ -1198,10 +1196,10 @@ void ScTabViewShell::StartSimpleRefDialog(
 
 void ScTabViewShell::StopSimpleRefDialog()
 {
-    SfxViewFrame* pViewFrm = GetViewFrame();
+    SfxViewFrame& rViewFrm = GetViewFrame();
     sal_uInt16 nId = ScSimpleRefDlgWrapper::GetChildWindowId();
 
-    ScSimpleRefDlgWrapper* pWnd = static_cast<ScSimpleRefDlgWrapper*>(pViewFrm->GetChildWindow( nId ));
+    ScSimpleRefDlgWrapper* pWnd = static_cast<ScSimpleRefDlgWrapper*>(rViewFrm.GetChildWindow( nId ));
     if (pWnd)
     {
         if (auto pWin = pWnd->GetController())
@@ -1213,8 +1211,8 @@ bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
 {
     ScModule* pScMod = SC_MOD();
 
-    SfxViewFrame* pThisFrame = GetViewFrame();
-    if ( pThisFrame->GetChildWindow( SID_OPENDLG_FUNCTION ) )
+    SfxViewFrame& rThisFrame = GetViewFrame();
+    if ( rThisFrame.GetChildWindow( SID_OPENDLG_FUNCTION ) )
         return false;
 
     vcl::KeyCode aCode = rKEvt.GetKeyCode();
@@ -1314,7 +1312,7 @@ bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
         //  container app and are executed during Window::KeyInput.
         //  -> don't pass keys to input handler that would be used there
         //  but should call slots instead.
-        bool bParent = ( GetViewFrame()->GetFrame().IsInPlace() && eFunc != KeyFuncType::DONTKNOW );
+        bool bParent = ( GetViewFrame().GetFrame().IsInPlace() && eFunc != KeyFuncType::DONTKNOW );
 
         if( !bUsed && !bDraw && nCode != KEY_RETURN && !bParent )
             bUsed = pScMod->InputKeyEvent( rKEvt, true );       // input
@@ -1511,12 +1509,12 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
 
     pCurFrameLine.reset( new ::editeng::SvxBorderLine(&aColBlack, 20, SvxBorderLineStyle::SOLID) );
     StartListening(*GetViewData().GetDocShell(), DuplicateHandling::Prevent);
-    StartListening(*GetViewFrame(), DuplicateHandling::Prevent);
+    StartListening(GetViewFrame(), DuplicateHandling::Prevent);
     StartListening(*pSfxApp, DuplicateHandling::Prevent); // #i62045# #i62046# application is needed for Calc's own hints
 
     SfxViewFrame* pFirst = SfxViewFrame::GetFirst(pDocSh);
     bool bFirstView = !pFirst
-          || (pFirst == GetViewFrame() && !SfxViewFrame::GetNext(*pFirst,pDocSh));
+          || (pFirst == &GetViewFrame() && !SfxViewFrame::GetNext(*pFirst,pDocSh));
 
     if ( pDocSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
     {
@@ -1534,7 +1532,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
         // show the right cells
         GetViewData().SetScreenPos( bNegativePage ? aVisArea.TopRight() : aVisArea.TopLeft() );
 
-        if ( GetViewFrame()->GetFrame().IsInPlace() )                         // inplace
+        if ( GetViewFrame().GetFrame().IsInPlace() )                         // inplace
         {
             pDocSh->SetInplace( true );             // already initiated like this
             if (rDoc.IsEmbedded())
@@ -1560,7 +1558,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
     mpInputHandler.reset(new ScInputHandler);
 
     // old version:
-    //  if ( !GetViewFrame()->ISA(SfxTopViewFrame) )        // OLE or Plug-In
+    //  if ( !GetViewFrame().ISA(SfxTopViewFrame) )        // OLE or Plug-In
     //      pInputHandler = new ScInputHandler;
 
             // create FormShell before MakeDrawView, so that DrawView can be registered at the
@@ -1632,7 +1630,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
             if (bLink)
             {
                 if ( !pFirst )
-                    pFirst = GetViewFrame();
+                    pFirst = &GetViewFrame();
 
                 if(SC_MOD()->GetCurRefDlgId()==0)
                 {
@@ -1661,7 +1659,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
             if (bReImport)
             {
                 if ( !pFirst )
-                    pFirst = GetViewFrame();
+                    pFirst = &GetViewFrame();
                 if(SC_MOD()->GetCurRefDlgId()==0)
                 {
                     pFirst->GetDispatcher()->Execute( SID_REIMPORT_AFTER_LOAD,
@@ -1681,7 +1679,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
     // #105575#; update only in the first creation of the ViewShell
     pDocSh->SetUpdateEnabled(false);
 
-    if ( GetViewFrame()->GetFrame().IsInPlace() )
+    if ( GetViewFrame().GetFrame().IsInPlace() )
         UpdateHeaderWidth(); // The inplace activation requires headers to be calculated
 
     SvBorder aBorder;
@@ -1825,7 +1823,7 @@ ScTabViewShell::~ScTabViewShell()
 
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     EndListening(*pDocSh);
-    EndListening(*GetViewFrame());
+    EndListening(GetViewFrame());
     EndListening(*SfxGetpApp());           // #i62045# #i62046# needed now - SfxViewShell no longer does it
 
     SC_MOD()->ViewShellGone(this);

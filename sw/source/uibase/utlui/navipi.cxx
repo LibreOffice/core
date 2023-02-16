@@ -280,7 +280,7 @@ IMPL_LINK(SwNavigationPI, ToolBoxSelectHdl, const OString&, rCommand, void)
     }
     else if (rCommand == "reminder")
     {
-        rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(FN_SET_REMINDER, SfxCallMode::ASYNCHRON);
+        rSh.GetView().GetViewFrame().GetDispatcher()->Execute(FN_SET_REMINDER, SfxCallMode::ASYNCHRON);
     }
     else if (rCommand == "chapterdown" ||
              rCommand == "movedown" ||
@@ -406,7 +406,7 @@ bool SwNavigationPI::EditAction()
     sal_uInt16 nNewPage = m_xEdit->get_value();
 
     rSh.GotoPage(nNewPage, true);
-    m_pCreateView->GetViewFrame()->GetBindings().Invalidate(FN_STAT_PAGE);
+    m_pCreateView->GetViewFrame().GetBindings().Invalidate(FN_STAT_PAGE);
 
     return true;
 }
@@ -1013,7 +1013,7 @@ sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
         SfxStringItem aOptionsItem( SID_OPTIONS, "HRC" );
         SfxLinkItem aLink( SID_DONELINK,
                             LINK( this, SwNavigationPI, DoneLink ) );
-        GetActiveView()->GetViewFrame()->GetDispatcher()->ExecuteList(
+        GetActiveView()->GetViewFrame().GetDispatcher()->ExecuteList(
                     SID_OPENDOC, SfxCallMode::ASYNCHRON,
                     { &aFileItem, &aOptionsItem, &aLink });
     }
@@ -1138,7 +1138,7 @@ SwView*  SwNavigationPI::GetCreateView() const
         SwView* pView = SwModule::GetFirstView();
         while (pView)
         {
-            if(&pView->GetViewFrame()->GetBindings() == &m_rBindings)
+            if(&pView->GetViewFrame().GetBindings() == &m_rBindings)
             {
                 const_cast<SwNavigationPI*>(this)->m_pCreateView = pView;
                 const_cast<SwNavigationPI*>(this)->StartListening(*m_pCreateView);

@@ -1216,7 +1216,7 @@ void DesktopLOKTest::testSheetDragDrop()
     Scheduler::ProcessEventsToIdle();
     {
         SfxViewShell* pViewShell = SfxViewShell::Current();
-        SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
+        SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
 
         OUString sValue;
         css::uno::Any aValue;
@@ -1228,7 +1228,7 @@ void DesktopLOKTest::testSheetDragDrop()
         aURL.Path = "Address";
         aURL.Main = ".uno:Address";
 
-        pViewFrame->GetBindings().QueryState(pViewFrame->GetBindings().QuerySlotId(aURL), pState);
+        rViewFrame.GetBindings().QueryState(rViewFrame.GetBindings().QuerySlotId(aURL), pState);
         pState->QueryValue(aValue);
         aValue >>= sValue;
         CPPUNIT_ASSERT_EQUAL(OUString("Sheet5.A1:E1"), sValue);
@@ -1272,7 +1272,7 @@ void DesktopLOKTest::testSheetDragDrop()
     Scheduler::ProcessEventsToIdle();
     {
         SfxViewShell* pViewShell = SfxViewShell::Current();
-        SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
+        SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
 
         OUString sValue;
         css::uno::Any aValue;
@@ -1284,7 +1284,7 @@ void DesktopLOKTest::testSheetDragDrop()
         aURL.Path = "Address";
         aURL.Main = ".uno:Address";
 
-        pViewFrame->GetBindings().QueryState(pViewFrame->GetBindings().QuerySlotId(aURL), pState);
+        rViewFrame.GetBindings().QueryState(rViewFrame.GetBindings().QuerySlotId(aURL), pState);
         pState->QueryValue(aValue);
         aValue >>= sValue;
         CPPUNIT_ASSERT_EQUAL(OUString("Sheet5.D1:H1"), sValue);
@@ -2040,7 +2040,7 @@ void DesktopLOKTest::testDialogInput()
     Scheduler::ProcessEventsToIdle();
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    pViewShell->GetViewFrame()->GetBindings().Update();
+    pViewShell->GetViewFrame().GetBindings().Update();
 
     VclPtr<vcl::Window> pWindow(Application::GetActiveTopWindow());
     CPPUNIT_ASSERT(pWindow);
@@ -2970,7 +2970,7 @@ void DesktopLOKTest::testDialogPaste()
     Scheduler::ProcessEventsToIdle();
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    pViewShell->GetViewFrame()->GetBindings().Update();
+    pViewShell->GetViewFrame().GetBindings().Update();
 
     VclPtr<vcl::Window> pWindow(Application::GetActiveTopWindow());
     CPPUNIT_ASSERT(pWindow);
@@ -3249,10 +3249,8 @@ namespace
         SfxViewShell* pViewShell = SfxViewShell::Current();
         CPPUNIT_ASSERT(pViewShell);
 
-        SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
-        CPPUNIT_ASSERT(pViewFrame);
-
-        SfxChildWindow* pSideBar = pViewFrame->GetChildWindow(SID_SIDEBAR);
+        SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
+        SfxChildWindow* pSideBar = rViewFrame.GetChildWindow(SID_SIDEBAR);
         CPPUNIT_ASSERT(pSideBar);
 
         auto pDockingWin = dynamic_cast<sfx2::sidebar::SidebarDockingWindow *>(pSideBar->GetWindow());
@@ -3273,8 +3271,8 @@ void DesktopLOKTest::testControlState()
 
     boost::property_tree::ptree aState;
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    pViewShell->GetViewFrame()->GetBindings().Update();
-    pViewShell->GetViewFrame()->GetBindings().QueryControlState(SID_ATTR_TRANSFORM_WIDTH, aState);
+    pViewShell->GetViewFrame().GetBindings().Update();
+    pViewShell->GetViewFrame().GetBindings().QueryControlState(SID_ATTR_TRANSFORM_WIDTH, aState);
     CPPUNIT_ASSERT(!aState.empty());
 }
 

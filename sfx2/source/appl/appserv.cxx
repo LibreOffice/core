@@ -806,7 +806,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             {
                 // in LOK case we want to apply changes only to the current view
                 if (comphelper::LibreOfficeKit::isActive() &&
-                    pViewFrame != SfxViewShell::Current()->GetViewFrame())
+                    pViewFrame != &SfxViewShell::Current()->GetViewFrame())
                 {
                     pViewFrame = SfxViewFrame::GetNext( *pViewFrame );
                     continue;
@@ -1051,9 +1051,9 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW:
         {
             SfxViewShell* pViewShell = SfxViewShell::Current();
-            SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
+            SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
             auto nID = rReq.GetSlot();
-            pViewFrame->ToggleChildWindow(nID);
+            rViewFrame.ToggleChildWindow(nID);
 
             bDone = true;
             break;
@@ -1061,11 +1061,11 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_INSPECT_SELECTED_OBJECT:
         {
             SfxViewShell* pViewShell = SfxViewShell::Current();
-            SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
+            SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
 
-            pViewFrame->ShowChildWindow(SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW, true);
+            rViewFrame.ShowChildWindow(SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW, true);
 
-            SfxChildWindow* pChild = pViewFrame->GetChildWindow(SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW);
+            SfxChildWindow* pChild = rViewFrame.GetChildWindow(SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW);
             if (!pChild)
                 return;
 
@@ -1280,10 +1280,10 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     auto* pViewShell = SfxViewShell::Current();
                     if (pViewShell)
                     {
-                        auto* pViewFrame = pViewShell->GetViewFrame();
-                        if (pViewFrame && pViewFrame->KnowsChildWindow(nWhich))
+                        auto& rViewFrame = pViewShell->GetViewFrame();
+                        if (rViewFrame.KnowsChildWindow(nWhich))
                         {
-                            rSet.Put(SfxBoolItem(nWhich, pViewFrame->HasChildWindow(nWhich)));
+                            rSet.Put(SfxBoolItem(nWhich, rViewFrame.HasChildWindow(nWhich)));
                             bSuccess = true;
                         }
                     }
@@ -1298,8 +1298,8 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     auto* pViewShell = SfxViewShell::Current();
                     if (pViewShell)
                     {
-                        auto* pViewFrame = pViewShell->GetViewFrame();
-                        if (pViewFrame && pViewFrame->KnowsChildWindow(SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW))
+                        auto& rViewFrame = pViewShell->GetViewFrame();
+                        if (rViewFrame.KnowsChildWindow(SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW))
                         {
                             bSuccess = true;
                         }

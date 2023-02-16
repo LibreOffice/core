@@ -307,7 +307,7 @@ bool SwWrtShell::StartDropDownFieldDlg(SwField* pField, bool bPrevButton, bool b
     GetWin()->PaintImmediately();
     if(RET_YES == nRet)
     {
-        GetView().GetViewFrame()->GetDispatcher()->Execute(FN_EDIT_FIELD, SfxCallMode::SYNCHRON);
+        GetView().GetViewFrame().GetDispatcher()->Execute(FN_EDIT_FIELD, SfxCallMode::SYNCHRON);
     }
     return bRet;
 }
@@ -377,7 +377,7 @@ void SwWrtShell::ClickToField(const SwField& rField, bool bExecHyperlinks)
                 StartUndo( SwUndoId::START );
                 //#97295# immediately select the right shell
                 GetView().StopShellTimer();
-                GetView().GetViewFrame()->GetDispatcher()->Execute( nSlotId,
+                GetView().GetViewFrame().GetDispatcher()->Execute( nSlotId,
                             SfxCallMode::SYNCHRON|SfxCallMode::RECORD );
                 EndUndo( SwUndoId::END );
             }
@@ -539,8 +539,8 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
     OUString sReferer;
     if( pDShell && pDShell->GetMedium() )
         sReferer = pDShell->GetMedium()->GetName();
-    SfxViewFrame* pViewFrame = rSh.GetView().GetViewFrame();
-    SfxFrameItem aView( SID_DOCFRAME, pViewFrame );
+    SfxViewFrame& rViewFrame = rSh.GetView().GetViewFrame();
+    SfxFrameItem aView( SID_DOCFRAME, &rViewFrame );
     SfxStringItem aName( SID_FILE_NAME, rURL );
     SfxStringItem aTargetFrameName( SID_TARGETNAME, sTargetFrame );
     SfxStringItem aReferer( SID_REFERER, sReferer );
@@ -561,7 +561,7 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
                 nullptr
     };
 
-    pViewFrame->GetDispatcher()->GetBindings()->Execute( SID_OPENDOC, aArr,
+    rViewFrame.GetDispatcher()->GetBindings()->Execute( SID_OPENDOC, aArr,
             SfxCallMode::ASYNCHRON|SfxCallMode::RECORD );
 }
 

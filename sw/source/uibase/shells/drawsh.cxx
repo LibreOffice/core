@@ -173,7 +173,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
     SwWrtShell          &rSh = GetShell();
     SdrView             *pSdrView = rSh.GetDrawView();
     const SfxItemSet    *pArgs = rReq.GetArgs();
-    SfxBindings         &rBnd  = GetView().GetViewFrame()->GetBindings();
+    SfxBindings         &rBnd  = GetView().GetViewFrame().GetBindings();
     sal_uInt16               nSlotId = rReq.GetSlot();
     bool bChanged = pSdrView->GetModel().IsChanged();
 
@@ -291,15 +291,15 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         {
             FieldUnit eMetric = ::GetDfltMetric( dynamic_cast<SwWebView*>( &rSh.GetView()) != nullptr );
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
-            SfxViewFrame* pVFrame = GetView().GetViewFrame();
+            SfxViewFrame& rVFrame = GetView().GetViewFrame();
             if (pArgs)
             {
-                pVFrame->SetChildWindow(SvxFontWorkChildWindow::GetChildWindowId(),
+                rVFrame.SetChildWindow(SvxFontWorkChildWindow::GetChildWindowId(),
                     static_cast<const SfxBoolItem&>((pArgs->Get(SID_FONTWORK))).GetValue());
             }
             else
-                pVFrame->ToggleChildWindow( SvxFontWorkChildWindow::GetChildWindowId() );
-            pVFrame->GetBindings().Invalidate(SID_FONTWORK);
+                rVFrame.ToggleChildWindow( SvxFontWorkChildWindow::GetChildWindowId() );
+            rVFrame.GetBindings().Invalidate(SID_FONTWORK);
         }
         break;
         case FN_FORMAT_FOOTNOTE_DLG:
@@ -479,7 +479,7 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                 else
                 {
                     const sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
-                    rSet.Put(SfxBoolItem( nWhich , GetView().GetViewFrame()->HasChildWindow(nId)));
+                    rSet.Put(SfxBoolItem( nWhich , GetView().GetViewFrame().HasChildWindow(nId)));
                 }
             }
             break;

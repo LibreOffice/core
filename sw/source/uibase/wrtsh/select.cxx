@@ -54,9 +54,9 @@ void SwWrtShell::Invalidate()
 {
     // to avoid making the slot volatile, invalidate it every time if something could have been changed
     // this is still much cheaper than asking for the state every 200 ms (and avoid background processing)
-    GetView().GetViewFrame()->GetBindings().Invalidate( FN_STAT_SELMODE );
-    GetView().GetViewFrame()->GetBindings().Update(FN_STAT_SELMODE); // make selection mode control icon update immediately
-    SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(GetView().GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
+    GetView().GetViewFrame().GetBindings().Invalidate( FN_STAT_SELMODE );
+    GetView().GetViewFrame().GetBindings().Update(FN_STAT_SELMODE); // make selection mode control icon update immediately
+    SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(GetView().GetViewFrame().GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
     if (pWrdCnt)
         pWrdCnt->UpdateCounts();
 }
@@ -439,7 +439,7 @@ void SwWrtShell::EndSelect()
             m_fnKillSel = &SwWrtShell::ResetSelect;
         }
     }
-    SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(GetView().GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
+    SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(GetView().GetViewFrame().GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
     if (pWrdCnt)
         pWrdCnt->UpdateCounts();
 
@@ -673,7 +673,7 @@ void SwWrtShell::SetInsMode( bool bOn )
     m_bIns = bOn;
     SwCursorShell::SetOverwriteCursor( !m_bIns );
     const SfxBoolItem aTmp( SID_ATTR_INSERT, m_bIns );
-    GetView().GetViewFrame()->GetBindings().SetState( aTmp );
+    GetView().GetViewFrame().GetBindings().SetState( aTmp );
     StartAction();
     EndAction();
     Invalidate();

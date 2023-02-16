@@ -235,13 +235,13 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
     if ( nSlot == SID_INSERT_OBJECT && pNameItem )
     {
         const SvGlobalName& aClassName = pNameItem->GetValue();
-        xObj = rViewShell.GetViewFrame()->GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( aClassName.GetByteSequence(), aName );
+        xObj = rViewShell.GetViewFrame().GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( aClassName.GetByteSequence(), aName );
     }
     else if ( nSlot == SID_INSERT_SMATH )
     {
         if ( SvtModuleOptions().IsMath() )
         {
-            xObj = rViewShell.GetViewFrame()->GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SM_CLASSID_60 ).GetByteSequence(), aName );
+            xObj = rViewShell.GetViewFrame().GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SM_CLASSID_60 ).GetByteSequence(), aName );
             rReq.AppendItem( SfxGlobalNameItem( SID_INSERT_OBJECT, SvGlobalName( SO3_SM_CLASSID_60 ) ) );
         }
     }

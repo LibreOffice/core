@@ -83,7 +83,7 @@ namespace
         SetController( pViewShell ?                                      \
             pViewShell->CreateRefDialogController( p, this, pInfo, pParentP->GetFrameWeld(), sid ) : nullptr );    \
         if (pViewShell && !GetController())                                     \
-            pViewShell->GetViewFrame()->SetChildWindow( nId, false );           \
+            pViewShell->GetViewFrame().SetChildWindow( nId, false );           \
     }
 
 
@@ -231,7 +231,7 @@ ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(vcl::Window* pParentP,
     else
         SetController( nullptr );
     if (pViewShell && !GetController())
-        pViewShell->GetViewFrame()->SetChildWindow( nId, false );
+        pViewShell->GetViewFrame().SetChildWindow( nId, false );
 }
 
 void ScAcceptChgDlgWrapper::ReInitDlg()
@@ -284,7 +284,7 @@ ScValidityRefChildWin::ScValidityRefChildWin(vcl::Window* pParentP,
         pViewShell = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
     OSL_ENSURE( pViewShell, "missing view shell :-(" );
     if (pViewShell && !xDlg)
-        pViewShell->GetViewFrame()->SetChildWindow( nId, false );
+        pViewShell->GetViewFrame().SetChildWindow( nId, false );
 }
 
 ScValidityRefChildWin::~ScValidityRefChildWin()

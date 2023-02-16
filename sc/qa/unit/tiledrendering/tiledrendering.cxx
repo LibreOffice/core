@@ -1590,8 +1590,8 @@ void ScTiledRenderingTest::testDocumentRepair()
     {
         std::unique_ptr<SfxBoolItem> pItem1;
         std::unique_ptr<SfxBoolItem> pItem2;
-        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem1);
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem2);
+        pView1->GetViewFrame().GetBindings().QueryState(SID_DOC_REPAIR, pItem1);
+        pView2->GetViewFrame().GetBindings().QueryState(SID_DOC_REPAIR, pItem2);
         CPPUNIT_ASSERT(pItem1);
         CPPUNIT_ASSERT(pItem2);
         CPPUNIT_ASSERT_EQUAL(false, pItem1->GetValue());
@@ -1609,8 +1609,8 @@ void ScTiledRenderingTest::testDocumentRepair()
     {
         std::unique_ptr<SfxBoolItem> pItem1;
         std::unique_ptr<SfxBoolItem> pItem2;
-        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem1);
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem2);
+        pView1->GetViewFrame().GetBindings().QueryState(SID_DOC_REPAIR, pItem1);
+        pView2->GetViewFrame().GetBindings().QueryState(SID_DOC_REPAIR, pItem2);
         CPPUNIT_ASSERT(pItem1);
         CPPUNIT_ASSERT(pItem2);
         CPPUNIT_ASSERT_EQUAL(true, pItem1->GetValue());
@@ -1640,8 +1640,8 @@ void ScTiledRenderingTest::testLanguageStatus()
     {
         std::unique_ptr<SfxPoolItem> xItem1;
         std::unique_ptr<SfxPoolItem> xItem2;
-        pView1->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, xItem1);
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, xItem2);
+        pView1->GetViewFrame().GetBindings().QueryState(SID_LANGUAGE_STATUS, xItem1);
+        pView2->GetViewFrame().GetBindings().QueryState(SID_LANGUAGE_STATUS, xItem2);
         const SfxStringItem* pItem1 = dynamic_cast<const SfxStringItem*>(xItem1.get());
         const SfxStringItem* pItem2 = dynamic_cast<const SfxStringItem*>(xItem2.get());
         CPPUNIT_ASSERT(pItem1);
@@ -1652,15 +1652,15 @@ void ScTiledRenderingTest::testLanguageStatus()
 
     {
         SfxStringItem aLangString(SID_LANGUAGE_STATUS, "Default_Spanish (Bolivia)");
-        pView1->GetViewFrame()->GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS,
+        pView1->GetViewFrame().GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS,
             SfxCallMode::SYNCHRON, { &aLangString });
     }
 
     {
         std::unique_ptr<SfxPoolItem> xItem1;
         std::unique_ptr<SfxPoolItem> xItem2;
-        pView1->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, xItem1);
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, xItem2);
+        pView1->GetViewFrame().GetBindings().QueryState(SID_LANGUAGE_STATUS, xItem1);
+        pView2->GetViewFrame().GetBindings().QueryState(SID_LANGUAGE_STATUS, xItem2);
         const SfxStringItem* pItem1 = dynamic_cast<const SfxStringItem*>(xItem1.get());
         const SfxStringItem* pItem2 = dynamic_cast<const SfxStringItem*>(xItem2.get());
         CPPUNIT_ASSERT(pItem1);
@@ -1702,19 +1702,19 @@ void ScTiledRenderingTest::testMultiViewCopyPaste()
 
     // copy text view 1
     pView1->SetCursor(0, 0);
-    pView1->GetViewFrame()->GetBindings().Execute(SID_COPY);
+    pView1->GetViewFrame().GetBindings().Execute(SID_COPY);
 
     // copy text view 2
     pView2->SetCursor(1, 0);
-    pView2->GetViewFrame()->GetBindings().Execute(SID_COPY);
+    pView2->GetViewFrame().GetBindings().Execute(SID_COPY);
 
      // paste text view 1
     pView1->SetCursor(0, 1);
-    pView1->GetViewFrame()->GetBindings().Execute(SID_PASTE);
+    pView1->GetViewFrame().GetBindings().Execute(SID_PASTE);
 
     // paste text view 2
     pView2->SetCursor(1, 1);
-    pView2->GetViewFrame()->GetBindings().Execute(SID_PASTE);
+    pView2->GetViewFrame().GetBindings().Execute(SID_PASTE);
 
     CPPUNIT_ASSERT_EQUAL(OUString("TestCopy1"), pDoc->GetString(ScAddress(0, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("TestCopy2"), pDoc->GetString(ScAddress(1, 1, 0)));
@@ -1768,23 +1768,23 @@ void ScTiledRenderingTest::testFilterDlg()
     SfxViewShell* pView2 = SfxViewShell::Current();
     CPPUNIT_ASSERT(pView1 != pView2);
     {
-        pView2->GetViewFrame()->GetDispatcher()->Execute(SID_FILTER,
+        pView2->GetViewFrame().GetDispatcher()->Execute(SID_FILTER,
             SfxCallMode::SLOT|SfxCallMode::RECORD);
     }
 
     Scheduler::ProcessEventsToIdle();
-    SfxChildWindow* pRefWindow = pView2->GetViewFrame()->GetChildWindow(SID_FILTER);
+    SfxChildWindow* pRefWindow = pView2->GetViewFrame().GetChildWindow(SID_FILTER);
     CPPUNIT_ASSERT(pRefWindow);
 
     // switch to view 1
     SfxLokHelper::setView(nView1);
-    CPPUNIT_ASSERT_EQUAL(true, pView2->GetViewFrame()->GetDispatcher()->IsLocked());
-    CPPUNIT_ASSERT_EQUAL(false, pView1->GetViewFrame()->GetDispatcher()->IsLocked());
+    CPPUNIT_ASSERT_EQUAL(true, pView2->GetViewFrame().GetDispatcher()->IsLocked());
+    CPPUNIT_ASSERT_EQUAL(false, pView1->GetViewFrame().GetDispatcher()->IsLocked());
 
     pRefWindow->GetController()->response(RET_CANCEL);
 
-    CPPUNIT_ASSERT_EQUAL(false, pView2->GetViewFrame()->GetDispatcher()->IsLocked());
-    CPPUNIT_ASSERT_EQUAL(false, pView1->GetViewFrame()->GetDispatcher()->IsLocked());
+    CPPUNIT_ASSERT_EQUAL(false, pView2->GetViewFrame().GetDispatcher()->IsLocked());
+    CPPUNIT_ASSERT_EQUAL(false, pView1->GetViewFrame().GetDispatcher()->IsLocked());
 
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
     SfxLokHelper::setView(nView1);
@@ -1799,11 +1799,11 @@ void ScTiledRenderingTest::testFunctionDlg()
     SfxViewShell* pView1 = SfxViewShell::Current();
     int nView1 = SfxLokHelper::getView();
     {
-        pView1->GetViewFrame()->GetDispatcher()->Execute(SID_OPENDLG_FUNCTION,
+        pView1->GetViewFrame().GetDispatcher()->Execute(SID_OPENDLG_FUNCTION,
             SfxCallMode::SLOT|SfxCallMode::RECORD);
     }
     Scheduler::ProcessEventsToIdle();
-    SfxChildWindow* pRefWindow = pView1->GetViewFrame()->GetChildWindow(SID_OPENDLG_FUNCTION);
+    SfxChildWindow* pRefWindow = pView1->GetViewFrame().GetChildWindow(SID_OPENDLG_FUNCTION);
     CPPUNIT_ASSERT(pRefWindow);
 
     // view #2
@@ -1812,14 +1812,14 @@ void ScTiledRenderingTest::testFunctionDlg()
     CPPUNIT_ASSERT(pView1 != pView2);
 
     // check locking
-    CPPUNIT_ASSERT_EQUAL(true, pView1->GetViewFrame()->GetDispatcher()->IsLocked());
-    CPPUNIT_ASSERT_EQUAL(false, pView2->GetViewFrame()->GetDispatcher()->IsLocked());
+    CPPUNIT_ASSERT_EQUAL(true, pView1->GetViewFrame().GetDispatcher()->IsLocked());
+    CPPUNIT_ASSERT_EQUAL(false, pView2->GetViewFrame().GetDispatcher()->IsLocked());
 
     SfxLokHelper::setView(nView1);
     pRefWindow->GetController()->response(RET_CANCEL);
 
-    CPPUNIT_ASSERT_EQUAL(false, pView1->GetViewFrame()->GetDispatcher()->IsLocked());
-    CPPUNIT_ASSERT_EQUAL(false, pView2->GetViewFrame()->GetDispatcher()->IsLocked());
+    CPPUNIT_ASSERT_EQUAL(false, pView1->GetViewFrame().GetDispatcher()->IsLocked());
+    CPPUNIT_ASSERT_EQUAL(false, pView2->GetViewFrame().GetDispatcher()->IsLocked());
 
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
     SfxLokHelper::setView(nView2);
@@ -2512,7 +2512,7 @@ void ScTiledRenderingTest::testPasteIntoWrapTextCell()
     // copy A1
     pView->SetCursor(0, 0);
     Scheduler::ProcessEventsToIdle();
-    pView->GetViewFrame()->GetBindings().Execute(SID_COPY);
+    pView->GetViewFrame().GetBindings().Execute(SID_COPY);
     Scheduler::ProcessEventsToIdle();
 
     // verify clipboard
@@ -2530,7 +2530,7 @@ void ScTiledRenderingTest::testPasteIntoWrapTextCell()
     pView->SetCursor(0, 1);
     Scheduler::ProcessEventsToIdle();
     aView.m_sInvalidateSheetGeometry = "";
-    pView->GetViewFrame()->GetBindings().Execute(SID_PASTE);
+    pView->GetViewFrame().GetBindings().Execute(SID_PASTE);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sCopyContent, pDoc->GetString(0, 1, 0));
@@ -2542,7 +2542,7 @@ void ScTiledRenderingTest::testPasteIntoWrapTextCell()
     Scheduler::ProcessEventsToIdle();
 
     // cut from A2
-    pView->GetViewFrame()->GetBindings().Execute(SID_CUT);
+    pView->GetViewFrame().GetBindings().Execute(SID_CUT);
     Scheduler::ProcessEventsToIdle();
 
     // verify clipboard
@@ -2559,7 +2559,7 @@ void ScTiledRenderingTest::testPasteIntoWrapTextCell()
     pView->SetCursor(0, 2);
     Scheduler::ProcessEventsToIdle();
     aView.m_sInvalidateSheetGeometry = "";
-    pView->GetViewFrame()->GetBindings().Execute(SID_PASTE);
+    pView->GetViewFrame().GetBindings().Execute(SID_PASTE);
     Scheduler::ProcessEventsToIdle();
 
     // SG invalidations for all

@@ -527,7 +527,7 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
         SfxAllItemSet aNewSet(*aSet.GetPool());
         aNewSet.Put( SwMacroAssignDlg::AddEvents(MACASSGN_ALLFRM) );
         if ( m_pWrtShell )
-            rPage.SetFrame( m_pWrtShell->GetView().GetViewFrame()->GetFrame().GetFrameInterface() );
+            rPage.SetFrame( m_pWrtShell->GetView().GetViewFrame().GetFrame().GetFrameInterface() );
         rPage.PageCreated(aNewSet);
     }
 }

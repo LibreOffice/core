@@ -250,10 +250,10 @@ void MasterPagesSelector::ExecuteCommand(const OString &rIdent)
         assert(pMasterPage); //rhbz#902884
         if (pMasterPage)
             xSelectedMaster.set(pMasterPage->getUnoPage(), uno::UNO_QUERY);
-        SfxViewFrame* pViewFrame = mrBase.GetViewFrame();
-        if (pViewFrame != nullptr && xSelectedMaster.is())
+        SfxViewFrame& rViewFrame = mrBase.GetViewFrame();
+        if (xSelectedMaster.is())
         {
-            SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
+            SfxDispatcher* pDispatcher = rViewFrame.GetDispatcher();
             if (pDispatcher != nullptr)
             {
                 sal_uInt16 nIndex = mxPreviewValueSet->GetSelectedItemId();

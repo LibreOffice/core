@@ -670,8 +670,8 @@ weld::Window* SwViewShell::CareChildWin(SwViewShell const & rVSh)
         return nullptr;
 #if HAVE_FEATURE_DESKTOP
     const sal_uInt16 nId = SvxSearchDialogWrapper::GetChildWindowId();
-    SfxViewFrame* pVFrame = rVSh.mpSfxViewShell->GetViewFrame();
-    SfxChildWindow* pChWin = pVFrame->GetChildWindow( nId );
+    SfxViewFrame& rVFrame = rVSh.mpSfxViewShell->GetViewFrame();
+    SfxChildWindow* pChWin = rVFrame.GetChildWindow( nId );
     if (!pChWin)
         return nullptr;
     weld::DialogController* pController = pChWin->GetController().get();

@@ -203,7 +203,7 @@ void SwView::RecheckBrowseMode()
             0
         };
     // the view must not exist!
-    GetViewFrame()->GetBindings().Invalidate(aInva);
+    GetViewFrame().GetBindings().Invalidate(aInva);
     CheckVisArea();
 
     SvxZoomType eType;

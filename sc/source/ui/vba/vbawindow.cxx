@@ -381,8 +381,8 @@ ScVbaWindow::getWindowState()
     sal_Int32 nwindowState = xlNormal;
     // !! TODO !! get view shell from controller
     ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
-    SfxViewFrame* pViewFrame = pViewShell -> GetViewFrame();
-    WorkWindow* pWork = static_cast<WorkWindow*>( pViewFrame->GetFrame().GetSystemWindow() );
+    SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
+    WorkWindow* pWork = static_cast<WorkWindow*>( rViewFrame.GetFrame().GetSystemWindow() );
     if ( pWork )
     {
         if ( pWork -> IsMaximized())
@@ -400,8 +400,8 @@ ScVbaWindow::setWindowState( const uno::Any& _windowstate )
     _windowstate >>= nwindowState;
     // !! TODO !! get view shell from controller
     ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
-    SfxViewFrame* pViewFrame = pViewShell -> GetViewFrame();
-    WorkWindow* pWork = static_cast<WorkWindow*>( pViewFrame->GetFrame().GetSystemWindow() );
+    SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
+    WorkWindow* pWork = static_cast<WorkWindow*>( rViewFrame.GetFrame().GetSystemWindow() );
     if ( pWork )
     {
         if ( nwindowState == xlMaximized)

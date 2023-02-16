@@ -103,26 +103,26 @@ void SwView::Activate(bool bMDIActivate)
 
         // Initialize Fielddlg newly if necessary (e.g. for TYP_SETVAR)
         sal_uInt16 nId = SwFieldDlgWrapper::GetChildWindowId();
-        SfxViewFrame* pVFrame = GetViewFrame();
-        SwFieldDlgWrapper *pWrp = static_cast<SwFieldDlgWrapper*>(pVFrame->GetChildWindow(nId));
+        SfxViewFrame& rVFrame = GetViewFrame();
+        SwFieldDlgWrapper *pWrp = static_cast<SwFieldDlgWrapper*>(rVFrame.GetChildWindow(nId));
         if (pWrp)
             pWrp->ReInitDlg(GetDocShell());
 
         // Initialize RedlineDlg newly if necessary
         nId = SwRedlineAcceptChild::GetChildWindowId();
-        SwRedlineAcceptChild *pRed = static_cast<SwRedlineAcceptChild*>(pVFrame->GetChildWindow(nId));
+        SwRedlineAcceptChild *pRed = static_cast<SwRedlineAcceptChild*>(rVFrame.GetChildWindow(nId));
         if (pRed)
             pRed->ReInitDlg(GetDocShell());
 
         // reinit IdxMarkDlg
         nId = SwInsertIdxMarkWrapper::GetChildWindowId();
-        SwInsertIdxMarkWrapper *pIdxMrk = static_cast<SwInsertIdxMarkWrapper*>(pVFrame->GetChildWindow(nId));
+        SwInsertIdxMarkWrapper *pIdxMrk = static_cast<SwInsertIdxMarkWrapper*>(rVFrame.GetChildWindow(nId));
         if (pIdxMrk)
             pIdxMrk->ReInitDlg(*m_pWrtShell);
 
         // reinit AuthMarkDlg
         nId = SwInsertAuthMarkWrapper::GetChildWindowId();
-        SwInsertAuthMarkWrapper *pAuthMrk = static_cast<SwInsertAuthMarkWrapper*>(pVFrame->
+        SwInsertAuthMarkWrapper *pAuthMrk = static_cast<SwInsertAuthMarkWrapper*>(rVFrame.
                                                                 GetChildWindow(nId));
         if (pAuthMrk)
             pAuthMrk->ReInitDlg(*m_pWrtShell);
@@ -180,7 +180,7 @@ void SwView::ExecFormatPaintbrush(SfxRequest const & rReq)
         aTemplate.m_pFormatClipboard = m_pFormatClipboard.get();
         GetEditWin().SetApplyTemplate(aTemplate);
     }
-    GetViewFrame()->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
+    GetViewFrame().GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
 }
 
 void SwView::StateFormatPaintbrush(SfxItemSet &rSet)
@@ -201,16 +201,13 @@ void SwView::StateFormatPaintbrush(SfxItemSet &rSet)
 
 void SwView::UpdateWordCount(SfxShell* pShell, sal_uInt16 nSlot)
 {
-    SfxViewFrame* pVFrame = GetViewFrame();
-    if (pVFrame != nullptr)
-    {
-        pVFrame->ToggleChildWindow(FN_WORDCOUNT_DIALOG);
-        pShell->Invalidate(nSlot);
+    SfxViewFrame& rVFrame = GetViewFrame();
+    rVFrame.ToggleChildWindow(FN_WORDCOUNT_DIALOG);
+    pShell->Invalidate(nSlot);
 
-        SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(pVFrame->GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
-        if (pWrdCnt)
-            pWrdCnt->UpdateCounts();
-    }
+    SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(rVFrame.GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
+    if (pWrdCnt)
+        pWrdCnt->UpdateCounts();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -48,7 +48,7 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
 #else
     OUString     aURL;
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
-    vcl::Window&        rWindow = GetView().GetViewFrame()->GetWindow();
+    vcl::Window&        rWindow = GetView().GetViewFrame().GetWindow();
     bool bAPI = false;
 
     const SvxSizeItem* pSizeItem = rReq.GetArg<SvxSizeItem>(FN_PARAM_1);
@@ -77,7 +77,7 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
         {
             rWindow.EnterWait();
 
-            css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(GetView().GetViewFrame()->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY);
+            css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(GetView().GetViewFrame().GetFrame().GetFrameInterface(), css::uno::UNO_QUERY);
 
             rtl::Reference<avmedia::PlayerListener> xPlayerListener(new avmedia::PlayerListener(
                 [xDispatchProvider, aURL, bLink](const css::uno::Reference<css::media::XPlayer>& rPlayer){

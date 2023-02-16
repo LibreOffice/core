@@ -95,7 +95,7 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
                             (nWhich == FN_SET_SUPER_SCRIPT && nTmpEsc > 0) )
                     eEscape = SvxEscapement::Off;
 
-                SfxBindings& rBind = GetView().GetViewFrame()->GetBindings();
+                SfxBindings& rBind = GetView().GetViewFrame().GetBindings();
                 if( nWhich == FN_SET_SUB_SCRIPT )
                     rBind.SetState( SfxBoolItem( FN_SET_SUPER_SCRIPT,
                                                                     false ) );
@@ -409,7 +409,7 @@ SET_LINESPACE:
                 SvxAdjustItem aAdjust( eAdjust, RES_PARATR_ADJUST );
                 aSet.Put( aAdjust );
                 aAdjust.SetWhich(SID_ATTR_PARA_ADJUST);
-                GetView().GetViewFrame()->GetBindings().SetState( aAdjust );
+                GetView().GetViewFrame().GetBindings().SetState( aAdjust );
                 // Toggle numbering alignment
                 const SwNumRule* pCurRule = GetShell().GetNumRuleAtCurrCursorPos();
                 if( pCurRule )

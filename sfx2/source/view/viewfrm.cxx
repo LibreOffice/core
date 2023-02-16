@@ -2255,7 +2255,7 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
     }
 
     if ( pSuccessView )
-        return pSuccessView->GetViewFrame();
+        return &pSuccessView->GetViewFrame();
 
     if ( bOwnFrame )
     {
@@ -3049,8 +3049,8 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         {
             if ( pViewShell->GetName() == "BasicIDE" )
             {
-                SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
-                SfxDispatcher* pDispat = pViewFrame ? pViewFrame->GetDispatcher() : nullptr;
+                SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
+                SfxDispatcher* pDispat = rViewFrame.GetDispatcher();
                 if ( pDispat )
                 {
                     SfxMacroInfoItem aInfoItem( SID_BASICIDE_ARG_MACROINFO, pBasMgr, aLibName, aModuleName, OUString(), OUString() );

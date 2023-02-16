@@ -175,23 +175,23 @@ void SwDrawTextShell::ExecFontWork(SfxRequest const & rReq)
     SwWrtShell &rSh = GetShell();
     FieldUnit eMetric = ::GetDfltMetric( dynamic_cast<SwWebView*>( &rSh.GetView()) != nullptr );
     SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
-    SfxViewFrame* pVFrame = GetView().GetViewFrame();
+    SfxViewFrame& rVFrame = GetView().GetViewFrame();
     if ( rReq.GetArgs() )
     {
-        pVFrame->SetChildWindow(SvxFontWorkChildWindow::GetChildWindowId(),
+        rVFrame.SetChildWindow(SvxFontWorkChildWindow::GetChildWindowId(),
                                 static_cast<const SfxBoolItem&>( (rReq.GetArgs()->
                                 Get(SID_FONTWORK))).GetValue());
     }
     else
-        pVFrame->ToggleChildWindow(SvxFontWorkChildWindow::GetChildWindowId());
+        rVFrame.ToggleChildWindow(SvxFontWorkChildWindow::GetChildWindowId());
 
-    pVFrame->GetBindings().Invalidate(SID_FONTWORK);
+    rVFrame.GetBindings().Invalidate(SID_FONTWORK);
 }
 
 void SwDrawTextShell::StateFontWork(SfxItemSet& rSet)
 {
     const sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
-    rSet.Put(SfxBoolItem(SID_FONTWORK, GetView().GetViewFrame()->HasChildWindow(nId)));
+    rSet.Put(SfxBoolItem(SID_FONTWORK, GetView().GetViewFrame().HasChildWindow(nId)));
 }
 
 // Edit SfxRequests for FontWork
@@ -481,7 +481,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
             return;
     }
 
-    GetView().GetViewFrame()->GetBindings().InvalidateAll(false);
+    GetView().GetViewFrame().GetBindings().InvalidateAll(false);
 
     if (IsTextEdit() && pOLV->GetOutliner()->IsModified())
         rSh.SetModified();
@@ -519,15 +519,15 @@ void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
                             pUndoManager->Redo();
                 }
                 bCallBase = false;
-                GetView().GetViewFrame()->GetBindings().InvalidateAll(false);
+                GetView().GetViewFrame().GetBindings().InvalidateAll(false);
             }
             break;
         }
     }
     if( bCallBase )
     {
-        SfxViewFrame *pSfxViewFrame = GetView().GetViewFrame();
-        pSfxViewFrame->ExecuteSlot(rReq, pSfxViewFrame->GetInterface());
+        SfxViewFrame& rSfxViewFrame = GetView().GetViewFrame();
+        rSfxViewFrame.ExecuteSlot(rReq, rSfxViewFrame.GetInterface());
     }
 }
 
@@ -538,7 +538,7 @@ void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
     if ( !IsTextEdit() )
         return;
 
-    SfxViewFrame *pSfxViewFrame = GetView().GetViewFrame();
+    SfxViewFrame& rSfxViewFrame = GetView().GetViewFrame();
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
     while( nWhich )
@@ -585,7 +585,7 @@ void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
                 auto* pUndoManager = dynamic_cast<IDocumentUndoRedo*>(GetUndoManager());
                 if (pUndoManager)
                     pUndoManager->SetView(&GetView());
-                pSfxViewFrame->GetSlotState(nWhich, pSfxViewFrame->GetInterface(), &rSet);
+                rSfxViewFrame.GetSlotState(nWhich, rSfxViewFrame.GetInterface(), &rSet);
                 if (pUndoManager)
                     pUndoManager->SetView(nullptr);
             }
@@ -725,7 +725,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 
         // If character is selected, it can be shown
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        auto xFrame = m_rView.GetViewFrame()->GetFrame().GetFrameInterface();
+        auto xFrame = m_rView.GetViewFrame().GetFrame().GetFrameInterface();
         ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(m_rView.GetFrameWeld(), aAllSet, xFrame));
         pDlg->Execute();
         return;

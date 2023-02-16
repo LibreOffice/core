@@ -532,13 +532,13 @@ void SwHeaderFooterWin::ExecuteCommand(std::string_view rIdent)
     }
     else if (rIdent == "insert_pagenumber")
     {
-        SfxViewFrame* pVFrame = rSh.GetView().GetViewFrame();
-        pVFrame->GetBindings().Execute(FN_INSERT_FLD_PGNUMBER);
+        SfxViewFrame& rVFrame = rSh.GetView().GetViewFrame();
+        rVFrame.GetBindings().Execute(FN_INSERT_FLD_PGNUMBER);
     }
     else if (rIdent == "insert_pagecount")
     {
-        SfxViewFrame* pVFrame = rSh.GetView().GetViewFrame();
-        pVFrame->GetBindings().Execute(FN_INSERT_FLD_PGCOUNT);
+        SfxViewFrame& rVFrame = rSh.GetView().GetViewFrame();
+        rVFrame.GetBindings().Execute(FN_INSERT_FLD_PGCOUNT);
     }
 }
 

@@ -2958,7 +2958,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
         pFound = FindDSConnection(sDataSource, true);
     }
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    m_pImpl->pMergeDialog = pFact->CreateMailMergeDlg(rSh.GetView().GetViewFrame()->GetFrameWeld(), rSh,
+    m_pImpl->pMergeDialog = pFact->CreateMailMergeDlg(rSh.GetView().GetViewFrame().GetFrameWeld(), rSh,
                                                      sDataSource,
                                                      sDataTableOrQuery,
                                                      nCmdType,
@@ -2972,7 +2972,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
             aDescriptor[svx::DataAccessDescriptorProperty::Cursor] <<= xResSet;
 
         // SfxObjectShellRef is ok, since there should be no control over the document lifetime here
-        SfxObjectShellRef xDocShell = rSh.GetView().GetViewFrame()->GetObjectShell();
+        SfxObjectShellRef xDocShell = rSh.GetView().GetViewFrame().GetObjectShell();
 
         lcl_emitEvent(SfxEventHintId::SwMailMerge, STR_SW_EVENT_MAIL_MERGE, xDocShell.get());
 

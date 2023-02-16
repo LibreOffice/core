@@ -298,7 +298,7 @@ void SwFieldDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
     if(pViewFrame)
     {
         SfxViewShell* pViewShell = SfxViewShell::GetFirst( true, checkSfxViewShell<SwView> );
-        while(pViewShell && pViewShell->GetViewFrame() != pViewFrame)
+        while(pViewShell && &pViewShell->GetViewFrame() != pViewFrame)
         {
             pViewShell = SfxViewShell::GetNext( *pViewShell, true, checkSfxViewShell<SwView> );
         }

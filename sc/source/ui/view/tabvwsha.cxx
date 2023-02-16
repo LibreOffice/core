@@ -177,8 +177,8 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
     SCROW       nPosY       = rViewData.GetCurY();
     SCTAB       nTab        = rViewData.GetTabNo();
 
-    SfxViewFrame* pThisFrame = GetViewFrame();
-    bool bOle = GetViewFrame()->GetFrame().IsInPlace();
+    SfxViewFrame& rThisFrame = GetViewFrame();
+    bool bOle = GetViewFrame().GetFrame().IsInPlace();
 
     SCTAB nTabSelCount = rMark.GetSelectCount();
 
@@ -267,9 +267,9 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 {
                     sal_uInt16 nId = ScInputWindowWrapper::GetChildWindowId();
 
-                    if ( pThisFrame->KnowsChildWindow( nId ) )
+                    if ( rThisFrame.KnowsChildWindow( nId ) )
                     {
-                        SfxChildWindow* pWnd = pThisFrame->GetChildWindow( nId );
+                        SfxChildWindow* pWnd = rThisFrame.GetChildWindow( nId );
                         rSet.Put( SfxBoolItem( nWhich, pWnd != nullptr ) );
                     }
                     else
@@ -353,7 +353,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
             case FID_FUNCTION_BOX:
             {
                 const bool bBoxOpen = ::sfx2::sidebar::Sidebar::IsPanelVisible(u"ScFunctionsPanel",
-                                                    pThisFrame->GetFrame().GetFrameInterface());
+                                                    rThisFrame.GetFrame().GetFrameInterface());
                 rSet.Put(SfxBoolItem(nWhich, bBoxOpen));
                 break;
             }
@@ -472,7 +472,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
             case FID_CHG_ACCEPT:
                 {
                     if(
-                       ( !rDoc.GetChangeTrack() &&  !pThisFrame->HasChildWindow(FID_CHG_ACCEPT) )
+                       ( !rDoc.GetChangeTrack() && !rThisFrame.HasChildWindow(FID_CHG_ACCEPT) )
                        ||
                        ( pDocShell && pDocShell->IsDocShared() )
                       )
@@ -482,7 +482,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     else
                     {
                         rSet.Put(SfxBoolItem(FID_CHG_ACCEPT,
-                            pThisFrame->HasChildWindow(FID_CHG_ACCEPT)));
+                            rThisFrame.HasChildWindow(FID_CHG_ACCEPT)));
                     }
                 }
                 break;
@@ -754,7 +754,7 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
         pHdl->NotifyChange( &aState, bForce, pSourceSh, bStopEditing );
     }
 
-    SfxBindings& rBindings = GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = GetViewFrame().GetBindings();
     rBindings.Invalidate( SID_STATUS_SUM );         // always together with the input row
     rBindings.Invalidate( SID_ATTR_SIZE );
     rBindings.Invalidate( SID_TABLE_CELL );
@@ -838,7 +838,7 @@ void ScTabViewShell::ExecDrawOpt( const SfxRequest& rReq )
     ScViewOptions aViewOptions = GetViewData().GetOptions();
     ScGridOptions aGridOptions = aViewOptions.GetGridOptions();
 
-    SfxBindings& rBindings = GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = GetViewFrame().GetBindings();
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
     sal_uInt16 nSlotId = rReq.GetSlot();

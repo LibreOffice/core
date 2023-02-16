@@ -114,7 +114,7 @@ bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentContro
             }
             else
             {
-                GetView().GetViewFrame()->GetDispatcher()->Execute(SID_CHANGE_PICTURE,
+                GetView().GetViewFrame().GetDispatcher()->Execute(SID_CHANGE_PICTURE,
                                                                    SfxCallMode::SYNCHRON);
             }
             pContentControl->SetShowingPlaceHolder(false);
@@ -253,7 +253,7 @@ void SwWrtShell::DrawSelChanged( )
         0
     };
 
-    GetView().GetViewFrame()->GetBindings().Invalidate(aInval);
+    GetView().GetViewFrame().GetBindings().Invalidate(aInval);
 
     bool bOldVal = g_bNoInterrupt;
     g_bNoInterrupt = true;    // Trick to run AttrChangedNotify by timer.

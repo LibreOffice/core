@@ -218,7 +218,7 @@ uno::Reference < frame::XFrame > const & SfxInPlaceClient_Impl::GetFrame() const
 {
     if ( !m_pClient )
         throw uno::RuntimeException();
-    return m_pClient->GetViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
+    return m_pClient->GetViewShell()->GetViewFrame().GetFrame().GetFrameInterface();
 }
 
 void SAL_CALL SfxInPlaceClient_Impl::saveObject()
@@ -725,7 +725,7 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
         }
     }
 
-    if ( m_pViewSh->GetViewFrame()->GetFrame().IsClosing_Impl() )
+    if ( m_pViewSh->GetViewFrame().GetFrame().IsClosing_Impl() )
         // sometimes applications reconnect clients on shutting down because it happens in their Paint methods
         return;
 
@@ -963,7 +963,7 @@ ErrCode SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
                 {
                     pEditWin->EnableMapMode();
                 }
-                m_pViewSh->GetViewFrame()->GetFrame().LockResize_Impl(true);
+                m_pViewSh->GetViewFrame().GetFrame().LockResize_Impl(true);
                 try
                 {
                     m_xImp->m_xObject->setClientSite( m_xImp );
@@ -1017,9 +1017,9 @@ ErrCode SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
                 {
                     pEditWin->EnableMapMode(false);
                 }
-                SfxViewFrame* pFrame = m_pViewSh->GetViewFrame();
-                pFrame->GetFrame().LockResize_Impl(false);
-                pFrame->GetFrame().Resize();
+                SfxViewFrame& rFrame = m_pViewSh->GetViewFrame();
+                rFrame.GetFrame().LockResize_Impl(false);
+                rFrame.GetFrame().Resize();
             }
         }
     }
@@ -1079,7 +1079,7 @@ void SfxInPlaceClient::DeactivateObject()
             }
         }
 
-        m_pViewSh->GetViewFrame()->GetFrame().LockResize_Impl(true);
+        m_pViewSh->GetViewFrame().GetFrame().LockResize_Impl(true);
 
         if ( m_xImp->m_xObject->getStatus( m_xImp->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
         {
@@ -1097,10 +1097,10 @@ void SfxInPlaceClient::DeactivateObject()
                 m_xImp->m_xObject->changeState( embed::EmbedStates::RUNNING );
         }
 
-        SfxViewFrame* pFrame = m_pViewSh->GetViewFrame();
-        SfxViewFrame::SetViewFrame( pFrame );
-        pFrame->GetFrame().LockResize_Impl(false);
-        pFrame->GetFrame().Resize();
+        SfxViewFrame& rFrame = m_pViewSh->GetViewFrame();
+        SfxViewFrame::SetViewFrame( &rFrame );
+        rFrame.GetFrame().LockResize_Impl(false);
+        rFrame.GetFrame().Resize();
     }
     catch (css::uno::Exception& )
     {}

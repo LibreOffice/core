@@ -105,7 +105,7 @@ void SwModelessRedlineAcceptDlg::Activate()
 
         bool bMod = pSh->IsModified();
         SfxBoolItem aShow(FN_REDLINE_SHOW, true);
-        pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(
+        pSh->GetView().GetViewFrame().GetDispatcher()->ExecuteList(
             FN_REDLINE_SHOW, SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
             { &aShow });
         if (!bMod)
@@ -1082,7 +1082,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, RejectAllHdl, SvxTPView*, void)
 IMPL_LINK_NOARG(SwRedlineAcceptDlg, UndoHdl, SvxTPView*, void)
 {
     SwView * pView = ::GetActiveView();
-    pView->GetViewFrame()->GetDispatcher()->
+    pView->GetViewFrame().GetDispatcher()->
                 Execute(SID_UNDO, SfxCallMode::SYNCHRON);
     m_pTPView->EnableUndo(pView->GetSlotState(SID_UNDO) != nullptr);
 

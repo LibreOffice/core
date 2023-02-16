@@ -40,11 +40,8 @@ static uno::Reference<view::XSelectionSupplier> lcl_GetSelectionSupplier( const 
 {
     if ( pViewShell )
     {
-        SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
-        if (pViewFrame)
-        {
-            return uno::Reference<view::XSelectionSupplier>( pViewFrame->GetFrame().GetController(), uno::UNO_QUERY );
-        }
+        SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
+        return uno::Reference<view::XSelectionSupplier>( rViewFrame.GetFrame().GetController(), uno::UNO_QUERY );
     }
     return uno::Reference<view::XSelectionSupplier>();
 }
@@ -55,7 +52,7 @@ ScDispatchProviderInterceptor::ScDispatchProviderInterceptor(ScTabViewShell* pVi
     if ( !pViewShell )
         return;
 
-    m_xIntercepted.set(uno::Reference<frame::XDispatchProviderInterception>(pViewShell->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY));
+    m_xIntercepted.set(uno::Reference<frame::XDispatchProviderInterception>(pViewShell->GetViewFrame().GetFrame().GetFrameInterface(), uno::UNO_QUERY));
     if (m_xIntercepted.is())
     {
         osl_atomic_increment( &m_refCount );

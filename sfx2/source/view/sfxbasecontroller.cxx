@@ -401,11 +401,11 @@ void SAL_CALL IMPL_SfxBaseController_ListenerHelper::frameAction( const frame::F
         if ( aEvent.Action == frame::FrameAction_FRAME_UI_ACTIVATED )
         {
             if ( !m_pController->GetViewShell_Impl()->GetUIActiveIPClient_Impl() )
-                m_pController->GetViewShell_Impl()->GetViewFrame()->MakeActive_Impl( false );
+                m_pController->GetViewShell_Impl()->GetViewFrame().MakeActive_Impl( false );
         }
         else if ( aEvent.Action == frame::FrameAction_CONTEXT_CHANGED )
         {
-            m_pController->GetViewShell_Impl()->GetViewFrame()->GetBindings().ContextChanged_Impl();
+            m_pController->GetViewShell_Impl()->GetViewFrame().GetBindings().ContextChanged_Impl();
         }
     }
 }
@@ -718,12 +718,12 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
 
     if (!m_pData->m_bDisposing && m_pData->m_pViewShell)
     {
-        SfxViewFrame*           pAct    = m_pData->m_pViewShell->GetViewFrame() ;
+        SfxViewFrame& rAct = m_pData->m_pViewShell->GetViewFrame() ;
         if ( sTargetFrameName == "_beamer" )
         {
             if ( eSearchFlags & frame::FrameSearchFlag::CREATE )
-                pAct->SetChildWindow( SID_BROWSER, true );
-            if (SfxChildWindow* pChildWin = pAct->GetChildWindow(SID_BROWSER))
+                rAct.SetChildWindow( SID_BROWSER, true );
+            if (SfxChildWindow* pChildWin = rAct.GetChildWindow(SID_BROWSER))
             {
                 if (Reference<frame::XFrame> xFrame{ pChildWin->GetFrame() })
                 {
@@ -740,8 +740,8 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
             bool bMasterCommand(!aActCommand.isEmpty());
             if (!bMasterCommand)
                 aActCommand = aURL.Path;
-            const SfxSlot* pSlot = SfxSlotPool::GetSlotPool(pAct).GetUnoSlot(aActCommand);
-            return GetSlotDispatchWithFallback(pAct, aURL, aActCommand, bMasterCommand, pSlot);
+            const SfxSlot* pSlot = SfxSlotPool::GetSlotPool(&rAct).GetUnoSlot(aActCommand);
+            return GetSlotDispatchWithFallback(&rAct, aURL, aActCommand, bMasterCommand, pSlot);
         }
         else if ( aURL.Protocol == "slot:" )
         {
@@ -751,11 +751,11 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
             {
                 const SfxSlot* pSlot = m_pData->m_pViewShell->GetVerbSlot_Impl(nId);
                 if ( pSlot )
-                    return pAct->GetBindings().GetDispatch( pSlot, aURL, false );
+                    return rAct.GetBindings().GetDispatch( pSlot, aURL, false );
             }
 
-            const SfxSlot* pSlot = SfxSlotPool::GetSlotPool(pAct).GetSlot(nId);
-            return GetSlotDispatchWithFallback(pAct, aURL, aURL.Path, false, pSlot);
+            const SfxSlot* pSlot = SfxSlotPool::GetSlotPool(&rAct).GetSlot(nId);
+            return GetSlotDispatchWithFallback(&rAct, aURL, aURL.Path, false, pSlot);
         }
         else if( sTargetFrameName == "_self" || sTargetFrameName.isEmpty() )
         {
@@ -763,10 +763,10 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
             Reference< frame::XModel > xModel = getModel();
             if( xModel.is() && !aURL.Mark.isEmpty() )
             {
-                SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( pAct );
+                SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( &rAct );
                 const SfxSlot* pSlot = rSlotPool.GetSlot( SID_JUMPTOMARK );
                 if( !aURL.Main.isEmpty() && aURL.Main == xModel->getURL() && pSlot )
-                    return Reference< frame::XDispatch >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), pSlot, aURL) );
+                    return Reference< frame::XDispatch >( new SfxOfficeDispatch( rAct.GetBindings(), rAct.GetDispatcher(), pSlot, aURL) );
             }
         }
     }
@@ -882,23 +882,20 @@ void SAL_CALL SfxBaseController::dispose()
     if ( !m_pData->m_pViewShell )
         return;
 
-    SfxViewFrame* pFrame = m_pData->m_pViewShell->GetViewFrame() ;
-    if ( pFrame && pFrame->GetViewShell() == m_pData->m_pViewShell )
-        pFrame->GetFrame().SetIsClosing_Impl();
+    SfxViewFrame& rFrame = m_pData->m_pViewShell->GetViewFrame() ;
+    if (rFrame.GetViewShell() == m_pData->m_pViewShell )
+        rFrame.GetFrame().SetIsClosing_Impl();
     m_pData->m_pViewShell->DisconnectAllClients();
-
-    if ( !pFrame )
-        return;
 
     lang::EventObject aObject;
     aObject.Source = *this ;
 
-    SfxObjectShell* pDoc = pFrame->GetObjectShell() ;
+    SfxObjectShell* pDoc = rFrame.GetObjectShell() ;
     SfxViewFrame *pView = SfxViewFrame::GetFirst(pDoc);
     while( pView )
     {
         // if there is another ViewFrame or currently the ViewShell in my ViewFrame is switched (PagePreview)
-        if ( pView != pFrame || pView->GetViewShell() != m_pData->m_pViewShell )
+        if ( pView != &rFrame || pView->GetViewShell() != m_pData->m_pViewShell )
             break;
         pView = SfxViewFrame::GetNext( *pView, pDoc );
     }
@@ -922,13 +919,13 @@ void SAL_CALL SfxBaseController::dispose()
     m_pData->m_xListener->disposing( aObject );
     SfxViewShell *pShell = m_pData->m_pViewShell;
     m_pData->m_pViewShell = nullptr;
-    if ( pFrame->GetViewShell() == pShell )
+    if (rFrame.GetViewShell() == pShell)
     {
         // Enter registrations only allowed if we are the owner!
-        if ( pFrame->GetFrame().OwnsBindings_Impl() )
-            pFrame->GetBindings().ENTERREGISTRATIONS();
-        pFrame->GetFrame().SetFrameInterface_Impl(  aXFrame );
-        pFrame->GetFrame().DoClose_Impl();
+        if ( rFrame.GetFrame().OwnsBindings_Impl() )
+            rFrame.GetBindings().ENTERREGISTRATIONS();
+        rFrame.GetFrame().SetFrameInterface_Impl(  aXFrame );
+        rFrame.GetFrame().DoClose_Impl();
     }
 }
 
@@ -992,7 +989,7 @@ Reference< task::XStatusIndicator > SAL_CALL SfxBaseController::getStatusIndicat
 {
     SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell && !m_pData->m_xIndicator.is() )
-        m_pData->m_xIndicator = new SfxStatusIndicator( this, m_pData->m_pViewShell->GetViewFrame()->GetFrame().GetWorkWindow_Impl() );
+        m_pData->m_xIndicator = new SfxStatusIndicator( this, m_pData->m_pViewShell->GetViewFrame().GetFrame().GetWorkWindow_Impl() );
     return m_pData->m_xIndicator;
 }
 
@@ -1144,8 +1141,8 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                 &&  ( m_pData->m_pViewShell->GetObjectShell()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
                 )
             {
-                SfxViewFrame* pViewFrm = m_pData->m_pViewShell->GetViewFrame();
-                if ( !pViewFrm->GetFrame().IsInPlace() )
+                SfxViewFrame& rViewFrm = m_pData->m_pViewShell->GetViewFrame();
+                if ( !rViewFrm.GetFrame().IsInPlace() )
                 {
                     // for outplace embedded objects, we want the layout manager to keep the content window
                     // size constant, if possible

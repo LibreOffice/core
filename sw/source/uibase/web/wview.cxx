@@ -108,7 +108,7 @@ void SwWebView::SelectShell()
     SelectionType _nSelectionType = GetSelectionType();
     if ( nNewSelectionType == _nSelectionType )
     {
-        GetViewFrame()->GetBindings().InvalidateAll( false );
+        GetViewFrame().GetBindings().InvalidateAll( false );
         if ( _nSelectionType & SelectionType::Ole ||
              _nSelectionType & SelectionType::Graphic )
             //The verb may of course change for graphics and OLE!
@@ -116,7 +116,7 @@ void SwWebView::SelectShell()
     }
     else
     {
-        SfxDispatcher &rDispatcher = *GetViewFrame()->GetDispatcher();
+        SfxDispatcher &rDispatcher = *GetViewFrame().GetDispatcher();
         SwToolbarConfigItem *pBarCfg = SW_MOD()->GetWebToolbarConfig();
 
         if( GetCurShell() )

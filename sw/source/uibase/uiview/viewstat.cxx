@@ -361,9 +361,9 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_AVMEDIA_PLAYER :
             case FN_REDLINE_ACCEPT :
             {
-                SfxViewFrame* pVFrame = GetViewFrame();
-                if (pVFrame->KnowsChildWindow(nWhich))
-                    rSet.Put(SfxBoolItem( nWhich, pVFrame->HasChildWindow(nWhich)));
+                SfxViewFrame& rVFrame = GetViewFrame();
+                if (rVFrame.KnowsChildWindow(nWhich))
+                    rSet.Put(SfxBoolItem( nWhich, rVFrame.HasChildWindow(nWhich)));
                 else
                     rSet.DisableItem(nWhich);
             }
@@ -483,11 +483,11 @@ void SwView::GetState(SfxItemSet &rSet)
             {
                 if (!SvtCJKOptions::IsAnyEnabled())
                 {
-                    GetViewFrame()->GetBindings().SetVisibleState( nWhich, false );
+                    GetViewFrame().GetBindings().SetVisibleState( nWhich, false );
                     rSet.DisableItem(nWhich);
                 }
                 else
-                    GetViewFrame()->GetBindings().SetVisibleState( nWhich, true );
+                    GetViewFrame().GetBindings().SetVisibleState( nWhich, true );
             }
             break;
             case SID_MAIL_SCROLLBODY_PAGEDOWN:
@@ -508,7 +508,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ) )
                     rSet.Put( SfxVisibilityItem( nWhich, false ) );
                 else
-                    rSet.Put( SfxBoolItem( nWhich, GetViewFrame()->HasChildWindow( SID_BROWSER ) ) );
+                    rSet.Put( SfxBoolItem( nWhich, GetViewFrame().HasChildWindow( SID_BROWSER ) ) );
             break;
             case SID_READONLY_MODE:
                 rSet.Put(SfxBoolItem(nWhich,
@@ -525,7 +525,7 @@ void SwView::GetState(SfxItemSet &rSet)
             }
             break;
             case FN_INSERT_FIELD_DATA_ONLY :
-                if(!m_bInMailMerge && !GetViewFrame()->HasChildWindow(nWhich))
+                if(!m_bInMailMerge && !GetViewFrame().HasChildWindow(nWhich))
                     rSet.DisableItem(nWhich);
             break;
             case FN_MAILMERGE_SENDMAIL_CHILDWINDOW:
@@ -571,7 +571,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 //these slots are either re-mapped to text or object alignment
                 const SfxPoolItem* pState = nullptr;
                 if(nAlias)
-                    GetViewFrame()->GetDispatcher()->QueryState( nAlias, pState );
+                    GetViewFrame().GetDispatcher()->QueryState( nAlias, pState );
                 if(pState)
                 {
                     if (!(m_nSelectionType & SelectionType::DrawObject))

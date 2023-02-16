@@ -92,7 +92,7 @@ void Shell::ExecuteSearch( SfxRequest& rReq )
             break;
         case FID_SEARCH_ON:
             mbJustOpened = true;
-            GetViewFrame()->GetBindings().Invalidate(SID_SEARCH_ITEM);
+            GetViewFrame().GetBindings().Invalidate(SID_SEARCH_ITEM);
             break;
         case SID_BASICIDE_REPEAT_SEARCH:
         case FID_SEARCH_NOW:
@@ -175,8 +175,8 @@ void Shell::ExecuteSearch( SfxRequest& rReq )
                     {
                         if ( !pWin )
                         {
-                            SfxViewFrame* pViewFrame = GetViewFrame();
-                            SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow( SID_SEARCH_DLG ) : nullptr;
+                            SfxViewFrame& rViewFrame = GetViewFrame();
+                            SfxChildWindow* pChildWin = rViewFrame.GetChildWindow(SID_SEARCH_DLG);
                             auto xParent = pChildWin ? pChildWin->GetController() : nullptr;
 
                             std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(xParent ? xParent->getDialog() : nullptr,
@@ -260,7 +260,7 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
         case SID_UNDO:
         case SID_REDO:
             if ( GetUndoManager() && pCurWin->AllowUndo() )
-                GetViewFrame()->ExecuteSlot( rReq );
+                GetViewFrame().ExecuteSlot( rReq );
             break;
         default:
             pCurWin->ExecuteCommand( rReq );
@@ -399,9 +399,8 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                 if ( pModule && !pModule->GetMethods()->Find( rInfo.GetMethod(), SbxClassType::Method ) )
                     CreateMacro( pModule, rInfo.GetMethod() );
             }
-            SfxViewFrame* pViewFrame = GetViewFrame();
-            if ( pViewFrame )
-                pViewFrame->ToTop();
+            SfxViewFrame& rViewFrame = GetViewFrame();
+            rViewFrame.ToTop();
             VclPtr<ModulWindow> pWin = FindBasWin( aDocument, aLibName, rInfo.GetModule(), true );
             DBG_ASSERT( pWin, "Edit/Create Macro: Window was not created/found!" );
             SetCurWindow( pWin, true );
@@ -1047,7 +1046,7 @@ void Shell::GetState(SfxItemSet &rSet)
             case SID_REDO:
             {
                 if( GetUndoManager() )  // recursive GetState else
-                    GetViewFrame()->GetSlotState( nWh, nullptr, &rSet );
+                    GetViewFrame().GetSlotState( nWh, nullptr, &rSet );
             }
             break;
             case SID_BASICIDE_CURRENT_LANG:
@@ -1189,17 +1188,17 @@ void Shell::SetCurWindow( BaseWindow* pNewWin, bool bUpdateTabBar, bool bRemembe
             pLayout = pModulLayout.get();
         else
             pLayout = pDialogLayout.get();
-        AdjustPosSizePixel(Point(0, 0), GetViewFrame()->GetWindow().GetOutputSizePixel());
+        AdjustPosSizePixel(Point(0, 0), GetViewFrame().GetWindow().GetOutputSizePixel());
         pLayout->Activating(*pCurWin);
-        GetViewFrame()->GetWindow().SetHelpId(pCurWin->GetHid());
+        GetViewFrame().GetWindow().SetHelpId(pCurWin->GetHid());
         if (bRememberAsCurrent)
             pCurWin->InsertLibInfo();
-        if (GetViewFrame()->GetWindow().IsVisible()) // SFX will do it later otherwise
+        if (GetViewFrame().GetWindow().IsVisible()) // SFX will do it later otherwise
             pCurWin->Show();
         pCurWin->Init();
         if (!GetExtraData()->ShellInCriticalSection())
         {
-            vcl::Window* pFrameWindow = &GetViewFrame()->GetWindow();
+            vcl::Window* pFrameWindow = &GetViewFrame().GetWindow();
             vcl::Window* pFocusWindow = Application::GetFocusWindow();
             while ( pFocusWindow && ( pFocusWindow != pFrameWindow ) )
                 pFocusWindow = pFocusWindow->GetParent();
@@ -1230,7 +1229,7 @@ void Shell::SetCurWindow( BaseWindow* pNewWin, bool bUpdateTabBar, bool bRemembe
     else if (pLayout)
     {
         SetWindow(pLayout);
-        GetViewFrame()->GetWindow().SetHelpId( HID_BASICIDE_MODULWINDOW );
+        GetViewFrame().GetWindow().SetHelpId( HID_BASICIDE_MODULWINDOW );
         SfxObjectShell::SetCurrentComponent(nullptr);
     }
     aObjectCatalog->SetCurrentEntry(pCurWin);
@@ -1260,7 +1259,7 @@ void Shell::ManageToolbars()
         return;
 
     Reference< beans::XPropertySet > xFrameProps
-        ( GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
+        ( GetViewFrame().GetFrame().GetFrameInterface(), uno::UNO_QUERY );
     if ( !xFrameProps.is() )
         return;
 
@@ -1341,7 +1340,7 @@ BasicDebugFlags Shell::CallBasicBreakHdl( StarBASIC const * pBasic )
             {
                 Shell* pShell = GetShell();
                 for ( sal_uInt16 n = 0; n < nWaitCount; n++ )
-                    pShell->GetViewFrame()->GetWindow().EnterWait();
+                    pShell->GetViewFrame().GetWindow().EnterWait();
             }
         }
     }
@@ -1385,11 +1384,11 @@ VclPtr<ModulWindow> Shell::ShowActiveModuleWindow( StarBASIC const * pBasic )
 void Shell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
 {
     // not if iconified because the whole text would be displaced then at restore
-    if ( GetViewFrame()->GetWindow().GetOutputSizePixel().Height() == 0 )
+    if ( GetViewFrame().GetWindow().GetOutputSizePixel().Height() == 0 )
         return;
 
     Size aTabBarSize;
-    aTabBarSize.setHeight( GetViewFrame()->GetWindow().GetFont().GetFontHeight() + TAB_HEIGHT_MARGIN );
+    aTabBarSize.setHeight( GetViewFrame().GetWindow().GetFont().GetFontHeight() + TAB_HEIGHT_MARGIN );
     aTabBarSize.setWidth( rSize.Width() );
 
     Size aSz( rSize );

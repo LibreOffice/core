@@ -152,7 +152,7 @@ void SmDocShell::SetText(const OUString& rBuffer)
     SmViewShell *pViewSh = SmGetActiveView();
     if( pViewSh )
     {
-        pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_TEXT);
+        pViewSh->GetViewFrame().GetBindings().Invalidate(SID_TEXT);
         if ( SfxObjectCreateMode::EMBEDDED == GetCreateMode() )
         {
             // have SwOleClient::FormatChanged() to align the modified formula properly

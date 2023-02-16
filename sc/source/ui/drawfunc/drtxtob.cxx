@@ -304,7 +304,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             {
                 // Ensure the field is selected first
                 pOutView->SelectFieldAtCursor();
-                mrViewData.GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_HYPERLINK_DIALOG);
+                mrViewData.GetViewShell()->GetViewFrame().GetDispatcher()->Execute(SID_HYPERLINK_DIALOG);
             }
             break;
 
@@ -357,8 +357,8 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 
 void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
 {
-    SfxViewFrame* pViewFrm = mrViewData.GetViewShell()->GetViewFrame();
-    bool bHasFontWork = pViewFrm->HasChildWindow(SID_FONTWORK);
+    SfxViewFrame& rViewFrm = mrViewData.GetViewShell()->GetViewFrame();
+    bool bHasFontWork = rViewFrm.HasChildWindow(SID_FONTWORK);
     bool bDisableFontWork = false;
 
     if (IsNoteEdit())
@@ -417,13 +417,13 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
     }
 
     if( rSet.GetItemState( SID_TRANSLITERATE_HALFWIDTH ) != SfxItemState::UNKNOWN )
-        ScViewUtil::HideDisabledSlot( rSet, pViewFrm->GetBindings(), SID_TRANSLITERATE_HALFWIDTH );
+        ScViewUtil::HideDisabledSlot( rSet, rViewFrm.GetBindings(), SID_TRANSLITERATE_HALFWIDTH );
     if( rSet.GetItemState( SID_TRANSLITERATE_FULLWIDTH ) != SfxItemState::UNKNOWN )
-        ScViewUtil::HideDisabledSlot( rSet, pViewFrm->GetBindings(), SID_TRANSLITERATE_FULLWIDTH );
+        ScViewUtil::HideDisabledSlot( rSet, rViewFrm.GetBindings(), SID_TRANSLITERATE_FULLWIDTH );
     if( rSet.GetItemState( SID_TRANSLITERATE_HIRAGANA ) != SfxItemState::UNKNOWN )
-        ScViewUtil::HideDisabledSlot( rSet, pViewFrm->GetBindings(), SID_TRANSLITERATE_HIRAGANA );
+        ScViewUtil::HideDisabledSlot( rSet, rViewFrm.GetBindings(), SID_TRANSLITERATE_HIRAGANA );
     if( rSet.GetItemState( SID_TRANSLITERATE_KATAKANA ) != SfxItemState::UNKNOWN )
-        ScViewUtil::HideDisabledSlot( rSet, pViewFrm->GetBindings(), SID_TRANSLITERATE_KATAKANA );
+        ScViewUtil::HideDisabledSlot( rSet, rViewFrm.GetBindings(), SID_TRANSLITERATE_KATAKANA );
 
     if ( rSet.GetItemState( SID_ENABLE_HYPHENATION ) != SfxItemState::UNKNOWN )
     {

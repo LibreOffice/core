@@ -3129,13 +3129,13 @@ ScDocFunc& ScViewData::GetDocFunc() const
 SfxBindings& ScViewData::GetBindings()
 {
     assert(pView && "GetBindings() without ViewShell");
-    return pView->GetViewFrame()->GetBindings();
+    return pView->GetViewFrame().GetBindings();
 }
 
 SfxDispatcher& ScViewData::GetDispatcher()
 {
     assert(pView && "GetDispatcher() without ViewShell");
-    return *pView->GetViewFrame()->GetDispatcher();
+    return *pView->GetViewFrame().GetDispatcher();
 }
 
 ScMarkData& ScViewData::GetMarkData()
@@ -3704,7 +3704,7 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
     // + 1, because we have to put the view id in the sequence
     beans::PropertyValue* pSettings = rSettings.getArray();
 
-    sal_uInt16 nViewID(pView->GetViewFrame()->GetCurViewId());
+    sal_uInt16 nViewID(pView->GetViewFrame().GetCurViewId());
     pSettings[SC_VIEW_ID].Name = SC_VIEWID;
     pSettings[SC_VIEW_ID].Value <<= SC_VIEW + OUString::number(nViewID);
 

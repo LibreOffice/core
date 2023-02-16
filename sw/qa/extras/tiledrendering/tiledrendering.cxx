@@ -1823,13 +1823,13 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentInsert)
     SwView* pView = pDoc->GetDocShell()->GetView();
 
     // Select the image.
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
     // Make sure SwTextShell is replaced with SwDrawShell right now, not after 120 ms, as set in the
     // SwView ctor.
     pView->StopShellTimer();
 
     // Add a comment.
-    uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame()->GetFrame().GetFrameInterface();
+    uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
             {"Text", uno::Any(OUString("some text"))},
@@ -2072,7 +2072,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAllTrackedChanges)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), rTable.size());
     {
         SfxVoidItem aItem(FN_REDLINE_REJECT_ALL);
-        pView1->GetViewFrame()->GetDispatcher()->ExecuteList(FN_REDLINE_REJECT_ALL,
+        pView1->GetViewFrame().GetDispatcher()->ExecuteList(FN_REDLINE_REJECT_ALL,
                 SfxCallMode::SYNCHRON, { &aItem });
     }
 
@@ -2095,7 +2095,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAllTrackedChanges)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), rTable.size());
     {
         SfxVoidItem aItem(FN_REDLINE_ACCEPT_ALL);
-        pView1->GetViewFrame()->GetDispatcher()->ExecuteList(FN_REDLINE_ACCEPT_ALL,
+        pView1->GetViewFrame().GetDispatcher()->ExecuteList(FN_REDLINE_ACCEPT_ALL,
                 SfxCallMode::SYNCHRON, { &aItem });
     }
 
@@ -2128,8 +2128,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDocumentRepair)
     {
         std::unique_ptr<SfxBoolItem> pItem1;
         std::unique_ptr<SfxBoolItem> pItem2;
-        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem1);
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem2);
+        pView1->GetViewFrame().GetBindings().QueryState(SID_DOC_REPAIR, pItem1);
+        pView2->GetViewFrame().GetBindings().QueryState(SID_DOC_REPAIR, pItem2);
         CPPUNIT_ASSERT(pItem1);
         CPPUNIT_ASSERT(pItem2);
         CPPUNIT_ASSERT_EQUAL(false, pItem1->GetValue());
@@ -2144,8 +2144,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDocumentRepair)
     {
         std::unique_ptr<SfxBoolItem> pItem1;
         std::unique_ptr<SfxBoolItem> pItem2;
-        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem1);
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem2);
+        pView1->GetViewFrame().GetBindings().QueryState(SID_DOC_REPAIR, pItem1);
+        pView2->GetViewFrame().GetBindings().QueryState(SID_DOC_REPAIR, pItem2);
         CPPUNIT_ASSERT(pItem1);
         CPPUNIT_ASSERT(pItem2);
         CPPUNIT_ASSERT_EQUAL(true, pItem1->GetValue());
@@ -2353,7 +2353,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAtEndOfParagraph)
     pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
 
     std::unique_ptr<SvxWeightItem> pWeightItem;
-    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pWeightItem);
+    pView->GetViewFrame().GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pWeightItem);
     CPPUNIT_ASSERT(pWeightItem);
 
     CPPUNIT_ASSERT_EQUAL(FontWeight::WEIGHT_BOLD, pWeightItem->GetWeight());
@@ -2372,7 +2372,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAtEndOfParagraph)
     pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
 
     std::unique_ptr<SvxWeightItem> pWeightItem2;
-    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pWeightItem2);
+    pView->GetViewFrame().GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pWeightItem2);
     CPPUNIT_ASSERT(pWeightItem2);
 
     CPPUNIT_ASSERT_EQUAL(FontWeight::WEIGHT_NORMAL, pWeightItem2->GetWeight());
@@ -2388,7 +2388,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAtEndOfParagraph)
     pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
 
     std::unique_ptr<SvxWeightItem> pWeightItem3;
-    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pWeightItem3);
+    pView->GetViewFrame().GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pWeightItem3);
     CPPUNIT_ASSERT(pWeightItem3);
 
     CPPUNIT_ASSERT_EQUAL(FontWeight::WEIGHT_BOLD, pWeightItem3->GetWeight());
@@ -2400,7 +2400,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAtEndOfParagraph)
     pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
 
     std::unique_ptr<SvxWeightItem> pWeightItem4;
-    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pWeightItem4);
+    pView->GetViewFrame().GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pWeightItem4);
     CPPUNIT_ASSERT(pWeightItem4);
 
     CPPUNIT_ASSERT_EQUAL(FontWeight::WEIGHT_NORMAL, pWeightItem4->GetWeight());
@@ -2458,7 +2458,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAfterHeader)
     Scheduler::ProcessEventsToIdle();
 
     std::unique_ptr<SvxWeightItem> pWeightItem;
-    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pWeightItem);
+    pView->GetViewFrame().GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pWeightItem);
     CPPUNIT_ASSERT(pWeightItem);
 
     CPPUNIT_ASSERT_EQUAL(FontWeight::WEIGHT_BOLD, pWeightItem->GetWeight());
@@ -2479,7 +2479,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAfterHeader)
     //          c"
 
     std::unique_ptr<SvxWeightItem> pWeightItem2;
-    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pWeightItem2);
+    pView->GetViewFrame().GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pWeightItem2);
     CPPUNIT_ASSERT(pWeightItem2);
 
     CPPUNIT_ASSERT_EQUAL(FontWeight::WEIGHT_NORMAL, pWeightItem2->GetWeight());
@@ -2994,7 +2994,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAnchorTypes)
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
     SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
     SwView* pView = pXTextDocument->GetDocShell()->GetView();
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
     SfxItemSet aSet(pDoc->GetAttrPool(), svl::Items<FN_TOOL_ANCHOR_PAGE, FN_TOOL_ANCHOR_PAGE>);
     SfxBoolItem aItem(FN_TOOL_ANCHOR_PAGE);
     aSet.Put(aItem);
@@ -3010,7 +3010,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testLanguageStatus)
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwView* pView = pXTextDocument->GetDocShell()->GetView();
     std::unique_ptr<SfxPoolItem> pItem;
-    pView->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, pItem);
+    pView->GetViewFrame().GetBindings().QueryState(SID_LANGUAGE_STATUS, pItem);
     auto pStringListItem = dynamic_cast<SfxStringListItem*>(pItem.get());
     CPPUNIT_ASSERT(pStringListItem);
 

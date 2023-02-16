@@ -2164,7 +2164,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     if (DrawMouseButtonUp(rMEvt))       // includes format paint brush handling for drawing objects
     {
         ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-        SfxBindings& rFrmBindings=pViewShell->GetViewFrame()->GetBindings();
+        SfxBindings& rFrmBindings=pViewShell->GetViewFrame().GetBindings();
         rFrmBindings.Invalidate(SID_ATTR_TRANSFORM_WIDTH);
         rFrmBindings.Invalidate(SID_ATTR_TRANSFORM_HEIGHT);
         rFrmBindings.Invalidate(SID_ATTR_TRANSFORM_POS_X);
@@ -2803,24 +2803,21 @@ bool ScGridWindow::PreNotify( NotifyEvent& rNEvt )
         vcl::Window* pWindow = rNEvt.GetWindow();
         if (pWindow == this)
         {
-            SfxViewFrame* pViewFrame = mrViewData.GetViewShell()->GetViewFrame();
-            if (pViewFrame)
+            SfxViewFrame& rViewFrame = mrViewData.GetViewShell()->GetViewFrame();
+            css::uno::Reference<css::frame::XController> xController = rViewFrame.GetFrame().GetController();
+            if (xController.is())
             {
-                css::uno::Reference<css::frame::XController> xController = pViewFrame->GetFrame().GetController();
-                if (xController.is())
+                ScTabViewObj* pImp = dynamic_cast<ScTabViewObj*>( xController.get() );
+                if (pImp && pImp->IsMouseListening())
                 {
-                    ScTabViewObj* pImp = dynamic_cast<ScTabViewObj*>( xController.get() );
-                    if (pImp && pImp->IsMouseListening())
-                    {
-                        css::awt::MouseEvent aEvent;
-                        lcl_InitMouseEvent( aEvent, *rNEvt.GetMouseEvent() );
-                        if ( rNEvt.GetWindow() )
-                            aEvent.Source = rNEvt.GetWindow()->GetComponentInterface();
-                        if ( nType == NotifyEventType::MOUSEBUTTONDOWN)
-                            bDone = pImp->MousePressed( aEvent );
-                        else
-                            bDone = pImp->MouseReleased( aEvent );
-                    }
+                    css::awt::MouseEvent aEvent;
+                    lcl_InitMouseEvent( aEvent, *rNEvt.GetMouseEvent() );
+                    if ( rNEvt.GetWindow() )
+                        aEvent.Source = rNEvt.GetWindow()->GetComponentInterface();
+                    if ( nType == NotifyEventType::MOUSEBUTTONDOWN)
+                        bDone = pImp->MousePressed( aEvent );
+                    else
+                        bDone = pImp->MouseReleased( aEvent );
                 }
             }
         }
@@ -3556,7 +3553,7 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
                 || rLclKeyCode.GetCode() == KEY_RIGHT)
             {
                 ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-                SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
+                SfxBindings& rBindings = pViewShell->GetViewFrame().GetBindings();
                 rBindings.Invalidate(SID_ATTR_TRANSFORM_POS_X);
                 rBindings.Invalidate(SID_ATTR_TRANSFORM_POS_Y);
             }

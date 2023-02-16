@@ -1445,7 +1445,7 @@ bool SwFieldMgr::InsertField(
                 if (pEntry)
                 {
                     SfxStringItem aFormat(FN_NUMBER_FORMAT, pEntry->GetFormatstring());
-                    pCurShell->GetView().GetViewFrame()->GetDispatcher()->
+                    pCurShell->GetView().GetViewFrame().GetDispatcher()->
                         ExecuteList(FN_NUMBER_FORMAT, SfxCallMode::SYNCHRON,
                                 { &aFormat });
                 }

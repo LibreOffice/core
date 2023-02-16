@@ -807,13 +807,13 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, RefHandle, SvxTPFilter*, void)
 
     SC_MOD()->SetRefDialog( nId, true );
 
-    SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
-    ScSimpleRefDlgWrapper* pWnd = static_cast<ScSimpleRefDlgWrapper*>(pViewFrm->GetChildWindow( nId ));
+    SfxViewFrame& rViewFrm = pViewData->GetViewShell()->GetViewFrame();
+    ScSimpleRefDlgWrapper* pWnd = static_cast<ScSimpleRefDlgWrapper*>(rViewFrm.GetChildWindow( nId ));
 
     if(pWnd!=nullptr)
     {
         sal_uInt16 nAcceptId=ScAcceptChgDlgWrapper::GetChildWindowId();
-        pViewFrm->ShowChildWindow(nAcceptId,false);
+        rViewFrm.ShowChildWindow(nAcceptId,false);
         pWnd->SetCloseHdl(LINK( this, ScAcceptChgDlg,RefInfoHandle));
         pWnd->SetRefString(pTPFilter->GetRange());
         ScSimpleRefDlgWrapper::SetAutoReOpen(false);
@@ -830,17 +830,17 @@ IMPL_LINK( ScAcceptChgDlg, RefInfoHandle, const OUString*, pResult, void)
 
     ScSimpleRefDlgWrapper::SetAutoReOpen(true);
 
-    SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
+    SfxViewFrame& rViewFrm = pViewData->GetViewShell()->GetViewFrame();
     if (pResult)
     {
         pTPFilter->SetRange(*pResult);
         FilterHandle(pTPFilter);
 
-        pViewFrm->ShowChildWindow(nId);
+        rViewFrm.ShowChildWindow(nId);
     }
     else
     {
-        pViewFrm->SetChildWindow(nId, false);
+        rViewFrm.SetChildWindow(nId, false);
     }
 }
 

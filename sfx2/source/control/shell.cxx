@@ -136,7 +136,7 @@ SfxViewFrame* SfxShell::GetFrame() const
     if ( pImpl->pFrame )
         return pImpl->pFrame;
     if ( pImpl->pViewSh )
-        return pImpl->pViewSh->GetViewFrame();
+        return &pImpl->pViewSh->GetViewFrame();
     return nullptr;
 }
 
@@ -246,7 +246,7 @@ void SfxShell::Invalidate
         return;
     }
 
-    Invalidate_Impl( GetViewShell()->GetViewFrame()->GetBindings(), nId );
+    Invalidate_Impl( GetViewShell()->GetViewFrame().GetBindings(), nId );
 }
 
 void SfxShell::Invalidate_Impl( SfxBindings& rBindings, sal_uInt16 nId )
@@ -548,7 +548,7 @@ void SfxShell::SetVerbs(const css::uno::Sequence < css::embed::VerbDescriptor >&
     // the Slots
     {
         SfxBindings *pBindings =
-            pViewSh->GetViewFrame()->GetDispatcher()->GetBindings();
+            pViewSh->GetViewFrame().GetDispatcher()->GetBindings();
         sal_uInt16 nCount = pImpl->aSlotArr.size();
         for (sal_uInt16 n1=0; n1<nCount ; n1++)
         {
@@ -597,7 +597,7 @@ void SfxShell::SetVerbs(const css::uno::Sequence < css::embed::VerbDescriptor >&
 
     // The status of SID_OBJECT is collected in the controller directly on
     // the Shell, it is thus enough to encourage a new status update
-    SfxBindings* pBindings = pViewSh->GetViewFrame()->GetDispatcher()->GetBindings();
+    SfxBindings* pBindings = pViewSh->GetViewFrame().GetDispatcher()->GetBindings();
     pBindings->Invalidate(SID_OBJECT, true, true);
 }
 
@@ -656,7 +656,7 @@ const SfxSlot* SfxShell::GetVerbSlot_Impl(sal_uInt16 nId) const
 SfxObjectShell* SfxShell::GetObjectShell()
 {
     if ( GetViewShell() )
-        return GetViewShell()->GetViewFrame()->GetObjectShell();
+        return GetViewShell()->GetViewFrame().GetObjectShell();
     else
         return nullptr;
 }

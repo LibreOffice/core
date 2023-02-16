@@ -130,7 +130,7 @@ bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                 m_pView->BeginTextEdit( pObj, pPV, m_pWin, true );
             }
             m_pView->LeaveDrawCreate();  // Switch to selection mode
-            m_pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
+            m_pSh->GetView().GetViewFrame().GetBindings().Invalidate(SID_INSERT_DRAW);
             break;
 
         case SdrObjKind::Caption:

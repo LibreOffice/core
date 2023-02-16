@@ -144,7 +144,7 @@ void SwSpellPopup::fillLangPopupMenu(
 
     //6--all languages used in current document
     uno::Reference< css::frame::XModel > xModel;
-    uno::Reference< css::frame::XController > xController = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface()->getController();
+    uno::Reference< css::frame::XController > xController = pWrtSh->GetView().GetViewFrame().GetFrame().GetFrameInterface()->getController();
     if ( xController.is() )
         xModel = xController->getModel();
     uno::Reference< document::XDocumentLanguages > xDocumentLanguages( xModel, uno::UNO_QUERY );
@@ -270,7 +270,7 @@ SwSpellPopup::SwSpellPopup(
         }
     }
 
-    uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
+    uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame().GetFrame().GetFrameInterface();
     OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
 
     {
@@ -487,7 +487,7 @@ SwSpellPopup::SwSpellPopup(
         m_xPopupMenu->InsertSeparator(OString(), nPos++);
     }
 
-    uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
+    uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame().GetFrame().GetFrameInterface();
     OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
 
     OUString aIgnoreSelection( SwResId( STR_IGNORE_SELECTION ) );
@@ -687,7 +687,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         sApplyRule += m_xPopupMenu->GetItemText(nId);
 
         SfxStringItem aApplyItem(FN_PARAM_1, sApplyRule);
-        m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_SPELLCHECK_APPLY_SUGGESTION, SfxCallMode::SYNCHRON, { &aApplyItem });
+        m_pSh->GetView().GetViewFrame().GetDispatcher()->ExecuteList(SID_SPELLCHECK_APPLY_SUGGESTION, SfxCallMode::SYNCHRON, { &aApplyItem });
     }
     else if(MN_AUTOCORR_START <= nId && nId <= MN_AUTOCORR_END)
     {
@@ -750,23 +750,23 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     {
         m_pSh->Left(SwCursorSkipMode::Chars, false, 1, false );
         {
-            m_pSh->GetView().GetViewFrame()->GetDispatcher()->
+            m_pSh->GetView().GetViewFrame().GetDispatcher()->
                 Execute( FN_SPELL_GRAMMAR_DIALOG, SfxCallMode::ASYNCHRON );
         }
     }
     else if (nId == m_nCorrectDialogId)
     {
-        m_pSh->GetView().GetViewFrame()->GetDispatcher()->Execute( SID_AUTO_CORRECT_DLG, SfxCallMode::ASYNCHRON );
+        m_pSh->GetView().GetViewFrame().GetDispatcher()->Execute( SID_AUTO_CORRECT_DLG, SfxCallMode::ASYNCHRON );
     }
     else if (nId == MN_IGNORE_SELECTION)
     {
         SfxStringItem aIgnoreString(FN_PARAM_1, m_bGrammarResults ? OUString("Grammar") : OUString("Spelling"));
-        m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_SPELLCHECK_IGNORE, SfxCallMode::SYNCHRON, { &aIgnoreString });
+        m_pSh->GetView().GetViewFrame().GetDispatcher()->ExecuteList(SID_SPELLCHECK_IGNORE, SfxCallMode::SYNCHRON, { &aIgnoreString });
     }
     else if (nId == m_nIgnoreWordId)
     {
         SfxStringItem aIgnoreString(FN_PARAM_1, m_bGrammarResults ? OUString("Grammar") : OUString("Spelling"));
-        m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_SPELLCHECK_IGNORE_ALL, SfxCallMode::SYNCHRON, { &aIgnoreString });
+        m_pSh->GetView().GetViewFrame().GetDispatcher()->ExecuteList(SID_SPELLCHECK_IGNORE_ALL, SfxCallMode::SYNCHRON, { &aIgnoreString });
     }
     else if ((MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END) || nId == m_nAddId)
     {
@@ -832,7 +832,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         else if (nId == m_nRedlinePrevId)
             nId = FN_REDLINE_PREV_CHANGE;
         // Let SwView::Execute() handle the redline actions.
-        SfxRequest aReq(m_pSh->GetView().GetViewFrame(), nId);
+        SfxRequest aReq(&m_pSh->GetView().GetViewFrame(), nId);
         m_pSh->GetView().Execute(aReq);
     }
     else
@@ -840,41 +840,41 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         if (MN_SET_LANGUAGE_SELECTION_START <= nId && nId <= MN_SET_LANGUAGE_SELECTION_END)
         {
             SfxStringItem aLangString(SID_LANGUAGE_STATUS, "Current_" + m_aLangTable_Text[nId]);
-            m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON, { &aLangString });
+            m_pSh->GetView().GetViewFrame().GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON, { &aLangString });
         }
         else if (nId == MN_SET_SELECTION_NONE)
         {
             SfxStringItem aLangString(SID_LANGUAGE_STATUS, "Current_LANGUAGE_NONE");
-            m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON, { &aLangString });
+            m_pSh->GetView().GetViewFrame().GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON, { &aLangString });
         }
         else if (nId == MN_SET_SELECTION_RESET)
         {
             SfxStringItem aLangString(SID_LANGUAGE_STATUS, "Current_RESET_LANGUAGES");
-            m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON, { &aLangString });
+            m_pSh->GetView().GetViewFrame().GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON, { &aLangString });
         }
         else if (nId == MN_SET_SELECTION_MORE)
         {
             SfxStringItem aDlgString(FN_PARAM_1, "font");
-            m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_CHAR_DLG, SfxCallMode::SYNCHRON, { &aDlgString });
+            m_pSh->GetView().GetViewFrame().GetDispatcher()->ExecuteList(SID_CHAR_DLG, SfxCallMode::SYNCHRON, { &aDlgString });
         }
         else if (MN_SET_LANGUAGE_PARAGRAPH_START <= nId && nId <= MN_SET_LANGUAGE_PARAGRAPH_END)
         {
             SfxStringItem aLangString(SID_LANGUAGE_STATUS, "Paragraph_" + m_aLangTable_Paragraph[nId]);
-            m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON, { &aLangString });
+            m_pSh->GetView().GetViewFrame().GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON, { &aLangString });
         }
         else if (nId == MN_SET_PARA_NONE)
         {
             SfxStringItem aLangString(SID_LANGUAGE_STATUS, "Paragraph_LANGUAGE_NONE");
-            m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON, { &aLangString });
+            m_pSh->GetView().GetViewFrame().GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON, { &aLangString });
         }
         else if (nId == MN_SET_PARA_RESET)
         {
             SfxStringItem aLangString(SID_LANGUAGE_STATUS, "Paragraph_RESET_LANGUAGES");
-            m_pSh->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON, { &aLangString });
+            m_pSh->GetView().GetViewFrame().GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON, { &aLangString });
         }
         else if (nId == MN_SET_PARA_MORE)
         {
-            m_pSh->GetView().GetViewFrame()->GetDispatcher()->Execute( SID_CHAR_DLG_FOR_PARAGRAPH );
+            m_pSh->GetView().GetViewFrame().GetDispatcher()->Execute( SID_CHAR_DLG_FOR_PARAGRAPH );
         }
     }
 

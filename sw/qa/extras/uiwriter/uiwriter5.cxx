@@ -1155,10 +1155,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testImageComment)
     pWrtShell->Delete();
 
     // Select the image.
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
 
     // Insert a comment while the image is selected.
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(FN_POSTIT, SfxCallMode::SYNCHRON);
 
     // Verify that the comment is around the image.
     // Without the accompanying fix in place, this test would have failed, as FN_POSTIT was disabled
@@ -1177,9 +1177,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testImageComment)
 
     // Insert content to the comment, and select the image again.
     SfxStringItem aItem(FN_INSERT_STRING, "x");
-    pView->GetViewFrame()->GetDispatcher()->ExecuteList(FN_INSERT_STRING, SfxCallMode::SYNCHRON,
-                                                        { &aItem });
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->ExecuteList(FN_INSERT_STRING, SfxCallMode::SYNCHRON,
+                                                       { &aItem });
+    pView->GetViewFrame().GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
 
 #if !defined(MACOSX)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -1233,7 +1233,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testImageComment)
 #endif
 
     // Now delete the image.
-    pView->GetViewFrame()->GetDispatcher()->Execute(SID_DELETE, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(SID_DELETE, SfxCallMode::SYNCHRON);
     // Without the accompanying fix in place, this test would have failed with 'Expected: 0; Actual:
     // 1', i.e. the comment of the image was not deleted when the image was deleted.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
@@ -1248,10 +1248,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testImageCommentAtChar)
     SwView* pView = pDoc->GetDocShell()->GetView();
 
     // Select the image.
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
 
     // Insert a comment while the image is selected.
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(FN_POSTIT, SfxCallMode::SYNCHRON);
 
     // Verify that the comment is around the image.
     // Without the accompanying fix in place, this test would have failed, as the comment was
@@ -1270,18 +1270,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testImageCommentAtChar)
 
     // Insert content to the comment, and select the image again.
     SfxStringItem aItem(FN_INSERT_STRING, "x");
-    pView->GetViewFrame()->GetDispatcher()->ExecuteList(FN_INSERT_STRING, SfxCallMode::SYNCHRON,
-                                                        { &aItem });
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->ExecuteList(FN_INSERT_STRING, SfxCallMode::SYNCHRON,
+                                                       { &aItem });
+    pView->GetViewFrame().GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
     // Now delete the image.
-    pView->GetViewFrame()->GetDispatcher()->Execute(SID_DELETE, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(SID_DELETE, SfxCallMode::SYNCHRON);
     // Without the accompanying fix in place, this test would have failed with 'Expected: 0; Actual:
     // 1', i.e. the comment of the image was not deleted when the image was deleted.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
                          pDoc->getIDocumentMarkAccess()->getAnnotationMarksCount());
 
     // Undo the deletion and move the image down, so the anchor changes.
-    pView->GetViewFrame()->GetDispatcher()->Execute(SID_UNDO, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(SID_UNDO, SfxCallMode::SYNCHRON);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
                          pDoc->getIDocumentMarkAccess()->getAnnotationMarksCount());
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -1318,7 +1318,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTrackImageDeletion)
     SwView* pView = pDoc->GetDocShell()->GetView();
 
     // select the image
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
 
     // turn on red-lining and show changes
     IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
@@ -1331,7 +1331,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTrackImageDeletion)
         IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     // now delete the image with track changes
-    pView->GetViewFrame()->GetDispatcher()->Execute(SID_DELETE, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(SID_DELETE, SfxCallMode::SYNCHRON);
 
     const SwRedlineTable& rTable = rIDRA.GetRedlineTable();
     // this was 0 (missing recording of deletion of images)
@@ -1452,7 +1452,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testShapePageMove)
     calcLayout();
 
     // Select the shape.
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
     // Make sure SwTextShell is replaced with SwDrawShell right now, not after 120 ms, as set in the
     // SwView ctor.
     pView->StopShellTimer();
@@ -1460,8 +1460,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testShapePageMove)
     // Move the shape down to the 2nd page.
     SfxInt32Item aXItem(SID_ATTR_TRANSFORM_POS_X, 4000);
     SfxInt32Item aYItem(SID_ATTR_TRANSFORM_POS_Y, 12000);
-    pView->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM, SfxCallMode::SYNCHRON,
-                                                        { &aXItem, &aYItem });
+    pView->GetViewFrame().GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM, SfxCallMode::SYNCHRON,
+                                                       { &aXItem, &aYItem });
 
     // Check if the shape anchor was moved to the 2nd page as well.
     SwFrameFormats* pShapeFormats = pDoc->GetSpzFrameFormats();
@@ -1720,8 +1720,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf105330)
     SwView* pView = pDoc->GetDocShell()->GetView();
     SfxUInt16Item aRows(SID_ATTR_TABLE_ROW, 1);
     SfxUInt16Item aColumns(SID_ATTR_TABLE_COLUMN, 1);
-    pView->GetViewFrame()->GetDispatcher()->ExecuteList(FN_INSERT_TABLE, SfxCallMode::SYNCHRON,
-                                                        { &aRows, &aColumns });
+    pView->GetViewFrame().GetDispatcher()->ExecuteList(FN_INSERT_TABLE, SfxCallMode::SYNCHRON,
+                                                       { &aRows, &aColumns });
 
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     rUndoManager.Undo();
@@ -2402,7 +2402,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf128335)
 
     // Select the 3rd textbox.
     SwView* pView = pDoc->GetDocShell()->GetView();
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
     // Make sure SwTextShell is replaced with SwDrawShell right now, not after 120 ms, as set in the
     // SwView ctor.
     pView->StopShellTimer();
@@ -2414,10 +2414,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf128335)
     Scheduler::ProcessEventsToIdle();
 
     // Cut it.
-    pView->GetViewFrame()->GetDispatcher()->Execute(SID_CUT, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(SID_CUT, SfxCallMode::SYNCHRON);
 
     // Paste it: this makes the 3rd textbox anchored in the 2nd one.
-    pView->GetViewFrame()->GetDispatcher()->Execute(SID_PASTE, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(SID_PASTE, SfxCallMode::SYNCHRON);
 
     // Select all shapes.
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -2428,7 +2428,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf128335)
     // Cut them.
     // Without the accompanying fix in place, this test would have crashed as the textboxes were
     // deleted in an incorrect order.
-    pView->GetViewFrame()->GetDispatcher()->Execute(SID_CUT, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(SID_CUT, SfxCallMode::SYNCHRON);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithReject)
@@ -2798,7 +2798,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf128603)
 
     // Select the 3rd textbox.
     SwView* pView = pDoc->GetDocShell()->GetView();
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
     // Make sure SwTextShell is replaced with SwDrawShell right now, not after 120 ms, as set in the
     // SwView ctor.
     pView->StopShellTimer();
@@ -2810,10 +2810,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf128603)
     Scheduler::ProcessEventsToIdle();
 
     // Cut it.
-    pView->GetViewFrame()->GetDispatcher()->Execute(SID_CUT, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(SID_CUT, SfxCallMode::SYNCHRON);
 
     // Paste it: this makes the 3rd textbox anchored in the 2nd one.
-    pView->GetViewFrame()->GetDispatcher()->Execute(SID_PASTE, SfxCallMode::SYNCHRON);
+    pView->GetViewFrame().GetDispatcher()->Execute(SID_PASTE, SfxCallMode::SYNCHRON);
 
     // Undo all of this.
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();

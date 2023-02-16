@@ -578,7 +578,7 @@ void SfxNotebookBar::ReloadNotebookBar(std::u16string_view sUIPath)
     if (SfxNotebookBar::IsActive())
     {
         SfxViewShell* pViewShell = SfxViewShell::Current();
-        sfx2::SfxNotebookBar::StateMethod(pViewShell->GetViewFrame()->GetBindings(), sUIPath, true);
+        sfx2::SfxNotebookBar::StateMethod(pViewShell->GetViewFrame().GetBindings(), sUIPath, true);
     }
 }
 

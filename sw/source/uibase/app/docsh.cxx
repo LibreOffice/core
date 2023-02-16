@@ -341,7 +341,7 @@ bool SwDocShell::Save()
     SetError(nErr ? nErr : nVBWarning);
 
     SfxViewFrame *const pFrame =
-        m_pWrtShell ? m_pWrtShell->GetView().GetViewFrame() : nullptr;
+        m_pWrtShell ? &m_pWrtShell->GetView().GetViewFrame() : nullptr;
     if( pFrame )
     {
         pFrame->GetBindings().SetState(SfxBoolItem(SID_DOC_MODIFIED, false));
@@ -1106,7 +1106,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         case SID_NOTEBOOKBAR:
         {
             SfxViewShell* pViewShell = GetView()? GetView(): SfxViewShell::Current();
-            bool bVisible = sfx2::SfxNotebookBar::StateMethod(pViewShell->GetViewFrame()->GetBindings(),
+            bool bVisible = sfx2::SfxNotebookBar::StateMethod(pViewShell->GetViewFrame().GetBindings(),
                                                               u"modules/swriter/ui/");
             rSet.Put( SfxBoolItem( SID_NOTEBOOKBAR, bVisible ) );
         }

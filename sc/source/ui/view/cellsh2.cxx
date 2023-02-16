@@ -245,10 +245,10 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             {
                 //  check if database beamer is open
 
-                SfxViewFrame* pViewFrame = pTabViewShell->GetViewFrame();
+                SfxViewFrame& rViewFrame = pTabViewShell->GetViewFrame();
                 bool bWasOpen = false;
                 {
-                    uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame().GetFrameInterface();
+                    uno::Reference<frame::XFrame> xFrame = rViewFrame.GetFrame().GetFrameInterface();
                     uno::Reference<frame::XFrame> xBeamerFrame = xFrame->findFrame(
                                                         "_beamer",
                                                         frame::FrameSearchFlag::CHILDREN);
@@ -260,13 +260,13 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 {
                     //  close database beamer: just forward to SfxViewFrame
 
-                    pViewFrame->ExecuteSlot( rReq );
+                    rViewFrame.ExecuteSlot( rReq );
                 }
                 else
                 {
                     //  show database beamer: SfxViewFrame call must be synchronous
 
-                    pViewFrame->ExecuteSlot( rReq, false );      // false = synchronous
+                    rViewFrame.ExecuteSlot( rReq, false );      // false = synchronous
 
                     //  select current database in database beamer
 
@@ -275,7 +275,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     if (pDBData)
                         pDBData->GetImportParam( aImportParam );
 
-                    ScDBDocFunc::ShowInBeamer( aImportParam, pTabViewShell->GetViewFrame() );
+                    ScDBDocFunc::ShowInBeamer( aImportParam, &pTabViewShell->GetViewFrame() );
                 }
                 rReq.Done();        // needed because it's a toggle slot
             }
@@ -528,54 +528,51 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                                     pTabViewShell->UISort( rOutParam );
 
-                                    SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
-                                    if (pViewFrm)
+                                    SfxViewFrame& rViewFrm = pTabViewShell->GetViewFrame();
+                                    SfxRequest aRequest(&rViewFrm, SID_SORT);
+
+                                    if ( rOutParam.bInplace )
                                     {
-                                        SfxRequest aRequest(pViewFrm, SID_SORT);
-
-                                        if ( rOutParam.bInplace )
+                                        aRequest.AppendItem( SfxBoolItem( SID_SORT_BYROW,
+                                            rOutParam.bByRow ) );
+                                        aRequest.AppendItem( SfxBoolItem( SID_SORT_HASHEADER,
+                                            rOutParam.bHasHeader ) );
+                                        aRequest.AppendItem( SfxBoolItem( SID_SORT_CASESENS,
+                                            rOutParam.bCaseSens ) );
+                                        aRequest.AppendItem( SfxBoolItem( SID_SORT_NATURALSORT,
+                                                    rOutParam.bNaturalSort ) );
+                                        aRequest.AppendItem( SfxBoolItem( SID_SORT_INCCOMMENTS,
+                                                    rOutParam.aDataAreaExtras.mbCellNotes ) );
+                                        aRequest.AppendItem( SfxBoolItem( SID_SORT_INCIMAGES,
+                                                    rOutParam.aDataAreaExtras.mbCellDrawObjects ) );
+                                        aRequest.AppendItem( SfxBoolItem( SID_SORT_ATTRIBS,
+                                                    rOutParam.aDataAreaExtras.mbCellFormats ) );
+                                        sal_uInt16 nUser = rOutParam.bUserDef ? ( rOutParam.nUserIndex + 1 ) : 0;
+                                        aRequest.AppendItem( SfxUInt16Item( SID_SORT_USERDEF, nUser ) );
+                                        if ( rOutParam.maKeyState[0].bDoSort )
                                         {
-                                            aRequest.AppendItem( SfxBoolItem( SID_SORT_BYROW,
-                                                rOutParam.bByRow ) );
-                                            aRequest.AppendItem( SfxBoolItem( SID_SORT_HASHEADER,
-                                                rOutParam.bHasHeader ) );
-                                            aRequest.AppendItem( SfxBoolItem( SID_SORT_CASESENS,
-                                                rOutParam.bCaseSens ) );
-                                            aRequest.AppendItem( SfxBoolItem( SID_SORT_NATURALSORT,
-                                                        rOutParam.bNaturalSort ) );
-                                            aRequest.AppendItem( SfxBoolItem( SID_SORT_INCCOMMENTS,
-                                                        rOutParam.aDataAreaExtras.mbCellNotes ) );
-                                            aRequest.AppendItem( SfxBoolItem( SID_SORT_INCIMAGES,
-                                                        rOutParam.aDataAreaExtras.mbCellDrawObjects ) );
-                                            aRequest.AppendItem( SfxBoolItem( SID_SORT_ATTRIBS,
-                                                        rOutParam.aDataAreaExtras.mbCellFormats ) );
-                                            sal_uInt16 nUser = rOutParam.bUserDef ? ( rOutParam.nUserIndex + 1 ) : 0;
-                                            aRequest.AppendItem( SfxUInt16Item( SID_SORT_USERDEF, nUser ) );
-                                            if ( rOutParam.maKeyState[0].bDoSort )
-                                            {
-                                                aRequest.AppendItem( SfxInt32Item( FN_PARAM_1,
-                                                    rOutParam.maKeyState[0].nField + 1 ) );
-                                                aRequest.AppendItem( SfxBoolItem( FN_PARAM_2,
-                                                    rOutParam.maKeyState[0].bAscending ) );
-                                            }
-                                            if ( rOutParam.maKeyState[1].bDoSort )
-                                            {
-                                                aRequest.AppendItem( SfxInt32Item( FN_PARAM_3,
-                                                    rOutParam.maKeyState[1].nField + 1 ) );
-                                                aRequest.AppendItem( SfxBoolItem( FN_PARAM_4,
-                                                    rOutParam.maKeyState[1].bAscending ) );
-                                            }
-                                            if ( rOutParam.maKeyState[2].bDoSort )
-                                            {
-                                                aRequest.AppendItem( SfxInt32Item( FN_PARAM_5,
-                                                    rOutParam.maKeyState[2].nField + 1 ) );
-                                                aRequest.AppendItem( SfxBoolItem( FN_PARAM_6,
-                                                    rOutParam.maKeyState[2].bAscending ) );
-                                            }
+                                            aRequest.AppendItem( SfxInt32Item( FN_PARAM_1,
+                                                rOutParam.maKeyState[0].nField + 1 ) );
+                                            aRequest.AppendItem( SfxBoolItem( FN_PARAM_2,
+                                                rOutParam.maKeyState[0].bAscending ) );
                                         }
-
-                                        aRequest.Done();
+                                        if ( rOutParam.maKeyState[1].bDoSort )
+                                        {
+                                            aRequest.AppendItem( SfxInt32Item( FN_PARAM_3,
+                                                rOutParam.maKeyState[1].nField + 1 ) );
+                                            aRequest.AppendItem( SfxBoolItem( FN_PARAM_4,
+                                                rOutParam.maKeyState[1].bAscending ) );
+                                        }
+                                        if ( rOutParam.maKeyState[2].bDoSort )
+                                        {
+                                            aRequest.AppendItem( SfxInt32Item( FN_PARAM_5,
+                                                rOutParam.maKeyState[2].nField + 1 ) );
+                                            aRequest.AppendItem( SfxBoolItem( FN_PARAM_6,
+                                                rOutParam.maKeyState[2].bAscending ) );
+                                        }
                                     }
+
+                                    aRequest.Done();
                                 }
                                 else
                                 {
@@ -602,8 +599,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 else
                 {
                     sal_uInt16          nId  = ScFilterDlgWrapper::GetChildWindowId();
-                    SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
-                    SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+                    SfxViewFrame& rViewFrm = pTabViewShell->GetViewFrame();
+                    SfxChildWindow* pWnd = rViewFrm.GetChildWindow( nId );
 
                     pScMod->SetRefDialog( nId, pWnd == nullptr );
                 }
@@ -623,8 +620,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 else
                 {
                     sal_uInt16          nId  = ScSpecialFilterDlgWrapper::GetChildWindowId();
-                    SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
-                    SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+                    SfxViewFrame& rViewFrm = pTabViewShell->GetViewFrame();
+                    SfxChildWindow* pWnd = rViewFrm.GetChildWindow( nId );
 
                     pScMod->SetRefDialog( nId, pWnd == nullptr );
                 }
@@ -726,8 +723,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             {
 
                 sal_uInt16          nId  = ScDbNameDlgWrapper::GetChildWindowId();
-                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
-                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+                SfxViewFrame& rViewFrm = pTabViewShell->GetViewFrame();
+                SfxChildWindow* pWnd = rViewFrm.GetChildWindow( nId );
 
                 pScMod->SetRefDialog( nId, pWnd == nullptr );
 
@@ -1135,7 +1132,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                         rSet.Put(SfxVisibilityItem(nWhich, false));
                     else
                         //  get state (BoolItem) from SfxViewFrame
-                        pTabViewShell->GetViewFrame()->GetSlotState( nWhich, nullptr, &rSet );
+                        pTabViewShell->GetViewFrame().GetSlotState( nWhich, nullptr, &rSet );
                 }
                 break;
             case SID_SBA_BRW_INSERT:

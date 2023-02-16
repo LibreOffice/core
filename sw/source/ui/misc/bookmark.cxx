@@ -107,7 +107,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, DeleteHdl, weld::Button&, void)
         OUString sRemoved = pBookmark->GetName();
         IDocumentMarkAccess* const pMarkAccess = m_rSh.getIDocumentMarkAccess();
         pMarkAccess->deleteMark(pMarkAccess->findMark(sRemoved), false);
-        SfxRequest aReq(m_rSh.GetView().GetViewFrame(), FN_DELETE_BOOKMARK);
+        SfxRequest aReq(&m_rSh.GetView().GetViewFrame(), FN_DELETE_BOOKMARK);
         aReq.AppendItem(SfxStringItem(FN_DELETE_BOOKMARK, sRemoved));
         aReq.Done();
         m_aTableBookmarks.erase(std::remove(m_aTableBookmarks.begin(), m_aTableBookmarks.end(),

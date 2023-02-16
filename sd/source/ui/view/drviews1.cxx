@@ -531,7 +531,7 @@ VclPtr<SvxRuler> DrawViewShell::CreateHRuler (::sd::Window* pWin)
     sal_uInt16 nMetric = static_cast<sal_uInt16>(GetDoc()->GetUIUnit());
 
     if( nMetric == 0xffff )
-        nMetric = static_cast<sal_uInt16>(GetViewShellBase().GetViewFrame()->GetDispatcher()->GetModule()->GetFieldUnit());
+        nMetric = static_cast<sal_uInt16>(GetViewShellBase().GetViewFrame().GetDispatcher()->GetModule()->GetFieldUnit());
 
     pRuler->SetUnit( FieldUnit( nMetric ) );
 
@@ -562,7 +562,7 @@ VclPtr<SvxRuler> DrawViewShell::CreateVRuler(::sd::Window* pWin)
     sal_uInt16 nMetric = static_cast<sal_uInt16>(GetDoc()->GetUIUnit());
 
     if( nMetric == 0xffff )
-        nMetric = static_cast<sal_uInt16>(GetViewShellBase().GetViewFrame()->GetDispatcher()->GetModule()->GetFieldUnit());
+        nMetric = static_cast<sal_uInt16>(GetViewShellBase().GetViewFrame().GetDispatcher()->GetModule()->GetFieldUnit());
 
     pRuler->SetUnit( FieldUnit( nMetric ) );
 

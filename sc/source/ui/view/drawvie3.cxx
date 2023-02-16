@@ -229,7 +229,7 @@ void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 void ScDrawView::UpdateIMap( SdrObject* pObj )
 {
     if ( !(pViewData &&
-         pViewData->GetViewShell()->GetViewFrame()->HasChildWindow( ScIMapChildWindowId() ) &&
+         pViewData->GetViewShell()->GetViewFrame().HasChildWindow( ScIMapChildWindowId() ) &&
          pObj && ( dynamic_cast<const SdrGrafObj*>( pObj) != nullptr || dynamic_cast<const SdrOle2Obj*>( pObj) != nullptr )) )
         return;
 

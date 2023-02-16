@@ -140,11 +140,11 @@ void SwListShell::Execute(SfxRequest &rReq)
         case FN_NUM_BULLET_DOWN:
         case FN_NUM_BULLET_UP:
             {
-                SfxViewFrame * pFrame = GetView().GetViewFrame();
+                SfxViewFrame& rFrame = GetView().GetViewFrame();
 
                 rReq.Done();
                 rSh.NumUpDown( nSlot == FN_NUM_BULLET_DOWN );
-                pFrame->GetBindings().Invalidate( SID_TABLE_CELL ); // Update status line!
+                rFrame.GetBindings().Invalidate( SID_TABLE_CELL ); // Update status line!
             }
             break;
 

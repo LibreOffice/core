@@ -205,7 +205,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
                 Graphic aGraphic = *pGraphic;
 
-                CompressGraphicsDialog aDialog(GetView().GetFrameWeld(), std::move(aGraphic), aSize, aCropRectangle, GetView().GetViewFrame()->GetBindings());
+                CompressGraphicsDialog aDialog(GetView().GetFrameWeld(), std::move(aGraphic), aSize, aCropRectangle, GetView().GetViewFrame().GetBindings());
                 if (aDialog.run() == RET_OK)
                 {
                     rSh.StartAllAction();
@@ -382,7 +382,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             aSet.Put(SfxBoolItem(FN_KEEP_ASPECT_RATIO, aUsrPref.IsKeepRatio()));
             aSet.Put(SfxBoolItem( SID_ATTR_GRAF_KEEP_ZOOM, aUsrPref.IsGrfKeepZoom()));
 
-            aSet.Put(SfxFrameItem( SID_DOCFRAME, &GetView().GetViewFrame()->GetFrame()));
+            aSet.Put(SfxFrameItem( SID_DOCFRAME, &GetView().GetViewFrame().GetFrame()));
 
             SfxObjectShell * sh = rSh.GetDoc()->GetPersist();
             if (sh != nullptr && sh->HasName())
@@ -406,7 +406,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog("PictureDialog",
-                                                    GetView().GetViewFrame(),
+                                                    &GetView().GetViewFrame(),
                                                     GetView().GetFrameWeld(),
                                                     aSet, false));
             if (nSlot == FN_DRAW_WRAP_DLG)
@@ -705,7 +705,7 @@ void SwGrfShell::ExecAttr( SfxRequest const &rReq )
         if( aGrfSet.Count() )
             GetShell().SetAttrSet( aGrfSet );
     }
-    GetView().GetViewFrame()->GetBindings().Invalidate(rReq.GetSlot());
+    GetView().GetViewFrame().GetBindings().Invalidate(rReq.GetSlot());
 }
 
 void SwGrfShell::GetAttrState(SfxItemSet &rSet)

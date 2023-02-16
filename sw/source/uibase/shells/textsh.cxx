@@ -525,7 +525,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog("FrameDialog",
-                                                  GetView().GetViewFrame(),
+                                                  &GetView().GetViewFrame(),
                                                   GetView().GetFrameWeld(),
                                                   aSet));
             if(pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet())
@@ -546,7 +546,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 aMgr.InsertFlyFrame();
 
                 uno::Reference< frame::XDispatchRecorder > xRecorder =
-                        GetView().GetViewFrame()->GetBindings().GetRecorder();
+                        GetView().GetViewFrame().GetBindings().GetRecorder();
                 if ( xRecorder.is() )
                 {
                     //FN_INSERT_FRAME
@@ -973,7 +973,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             aAllSet.Put( SfxStringItem( SID_FONT_NAME, aFont->GetFamilyName() ) );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        auto xFrame = GetView().GetViewFrame()->GetFrame().GetFrameInterface();
+        auto xFrame = GetView().GetViewFrame().GetFrame().GetFrameInterface();
         ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(GetView().GetFrameWeld(), aAllSet, xFrame));
         pDlg->Execute();
         return;

@@ -2107,8 +2107,8 @@ void SdTiledRenderingTest::testDisableUndoRepair()
     {
         std::unique_ptr<SfxPoolItem> pItem1;
         std::unique_ptr<SfxPoolItem> pItem2;
-        CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED, pView1->GetViewFrame()->GetBindings().QueryState(SID_UNDO, pItem1));
-        CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED, pView2->GetViewFrame()->GetBindings().QueryState(SID_UNDO, pItem2));
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED, pView1->GetViewFrame().GetBindings().QueryState(SID_UNDO, pItem1));
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED, pView2->GetViewFrame().GetBindings().QueryState(SID_UNDO, pItem2));
     }
 
     // Insert a character in the first view.
@@ -2127,12 +2127,12 @@ void SdTiledRenderingTest::testDisableUndoRepair()
     // Check
     {
         std::unique_ptr<SfxPoolItem> xItem1;
-        pView1->GetViewFrame()->GetBindings().QueryState(SID_UNDO, xItem1);
+        pView1->GetViewFrame().GetBindings().QueryState(SID_UNDO, xItem1);
         const auto* pUInt32Item1 = dynamic_cast<const SfxUInt32Item*>(xItem1.get());
         CPPUNIT_ASSERT(!pUInt32Item1);
 
         std::unique_ptr<SfxPoolItem> xItem2;
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_UNDO, xItem2);
+        pView2->GetViewFrame().GetBindings().QueryState(SID_UNDO, xItem2);
         const auto* pUInt32Item2 = dynamic_cast<const SfxUInt32Item*>(xItem2.get());
         CPPUNIT_ASSERT(pUInt32Item2);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), pUInt32Item2->GetValue());
@@ -2155,13 +2155,13 @@ void SdTiledRenderingTest::testDisableUndoRepair()
     // Check
     {
         std::unique_ptr<SfxPoolItem> xItem1;
-        pView1->GetViewFrame()->GetBindings().QueryState(SID_UNDO, xItem1);
+        pView1->GetViewFrame().GetBindings().QueryState(SID_UNDO, xItem1);
         const SfxUInt32Item* pUInt32Item = dynamic_cast<const SfxUInt32Item*>(xItem1.get());
         CPPUNIT_ASSERT(pUInt32Item);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), pUInt32Item->GetValue());
 
         std::unique_ptr<SfxPoolItem> xItem2;
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_UNDO, xItem2);
+        pView2->GetViewFrame().GetBindings().QueryState(SID_UNDO, xItem2);
         CPPUNIT_ASSERT(!dynamic_cast< const SfxUInt32Item* >(xItem2.get()));
     }
 }
@@ -2184,12 +2184,12 @@ void SdTiledRenderingTest::testDocumentRepair()
     CPPUNIT_ASSERT(pView1 != pView2);
     {
         std::unique_ptr<SfxBoolItem> pItem1;
-        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem1);
+        pView1->GetViewFrame().GetBindings().QueryState(SID_DOC_REPAIR, pItem1);
         CPPUNIT_ASSERT(pItem1);
         CPPUNIT_ASSERT_EQUAL(false, pItem1->GetValue());
 
         std::unique_ptr<SfxBoolItem> pItem2;
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem2);
+        pView2->GetViewFrame().GetBindings().QueryState(SID_DOC_REPAIR, pItem2);
         CPPUNIT_ASSERT(pItem2);
         CPPUNIT_ASSERT_EQUAL(false, pItem2->GetValue());
     }
@@ -2210,12 +2210,12 @@ void SdTiledRenderingTest::testDocumentRepair()
 
     {
         std::unique_ptr<SfxBoolItem> pItem1;
-        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem1);
+        pView1->GetViewFrame().GetBindings().QueryState(SID_DOC_REPAIR, pItem1);
         CPPUNIT_ASSERT(pItem1);
         CPPUNIT_ASSERT_EQUAL(true, pItem1->GetValue());
 
         std::unique_ptr<SfxBoolItem> pItem2;
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem2);
+        pView2->GetViewFrame().GetBindings().QueryState(SID_DOC_REPAIR, pItem2);
         CPPUNIT_ASSERT(pItem2);
         CPPUNIT_ASSERT_EQUAL(true, pItem2->GetValue());
     }
@@ -2231,8 +2231,8 @@ void SdTiledRenderingTest::testLanguageStatus()
     {
         std::unique_ptr<SfxPoolItem> xItem1;
         std::unique_ptr<SfxPoolItem> xItem2;
-        pView1->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, xItem1);
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, xItem2);
+        pView1->GetViewFrame().GetBindings().QueryState(SID_LANGUAGE_STATUS, xItem1);
+        pView2->GetViewFrame().GetBindings().QueryState(SID_LANGUAGE_STATUS, xItem2);
         auto pStringItem = dynamic_cast<const SfxStringItem*>(xItem1.get());
         CPPUNIT_ASSERT(pStringItem);
 
@@ -2455,7 +2455,7 @@ void SdTiledRenderingTest::testTdf115873()
     SdXImpressDocument* pXImpressDocument = createDoc("tdf115873.fodp");
     SfxViewShell* pViewShell = SfxViewShell::Current();
     CPPUNIT_ASSERT(pViewShell);
-    SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = pViewShell->GetViewFrame().GetBindings();
     auto xNavigator = std::make_unique<SdNavigatorWin>(nullptr, &rBindings, nullptr);
     xNavigator->InitTreeLB(pXImpressDocument->GetDoc());
     SdPageObjsTLV& rObjects = xNavigator->GetObjects();
@@ -2488,7 +2488,7 @@ void SdTiledRenderingTest::testTdf115873Group()
     SdXImpressDocument* pXImpressDocument = createDoc("tdf115873-group.fodp");
     SfxViewShell* pViewShell = SfxViewShell::Current();
     CPPUNIT_ASSERT(pViewShell);
-    SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = pViewShell->GetViewFrame().GetBindings();
     auto xNavigator = std::make_unique<SdNavigatorWin>(nullptr, &rBindings, nullptr);
     xNavigator->InitTreeLB(pXImpressDocument->GetDoc());
     SdPageObjsTLV& rObjects = xNavigator->GetObjects();

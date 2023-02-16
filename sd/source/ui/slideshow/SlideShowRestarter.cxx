@@ -46,7 +46,7 @@ SlideShowRestarter::SlideShowRestarter (
       mpSlideShow(std::move(pSlideShow)),
       mpViewShellBase(pViewShellBase),
       mnDisplayCount(Application::GetScreenCount()),
-      mpDispatcher(pViewShellBase->GetViewFrame()->GetDispatcher()),
+      mpDispatcher(pViewShellBase->GetViewFrame().GetDispatcher()),
       mnCurrentSlideNumber(0)
 {
 }
@@ -136,7 +136,7 @@ void SlideShowRestarter::StartPresentation()
         return;
 
     if (mpDispatcher == nullptr && mpViewShellBase!=nullptr)
-        mpDispatcher = mpViewShellBase->GetViewFrame()->GetDispatcher();
+        mpDispatcher = mpViewShellBase->GetViewFrame().GetDispatcher();
 
     // Start the slide show on the saved current slide.
     if (mpDispatcher != nullptr)

@@ -547,9 +547,7 @@ void ToolBarManager::Implementation::SetValid (bool bValid)
     mbIsValid = bValid;
     if (mbIsValid)
     {
-        Reference<frame::XFrame> xFrame;
-        if (mrBase.GetViewFrame() != nullptr)
-            xFrame = mrBase.GetViewFrame()->GetFrame().GetFrameInterface();
+        Reference<frame::XFrame> xFrame = mrBase.GetViewFrame().GetFrame().GetFrameInterface();
         try
         {
             Reference<beans::XPropertySet> xFrameProperties (xFrame, UNO_QUERY_THROW);

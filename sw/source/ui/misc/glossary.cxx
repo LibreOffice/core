@@ -413,9 +413,9 @@ IMPL_LINK(SwGlossaryDlg, GrpSelect, weld::TreeView&, rBox, void)
         ShowAutoText("", "");
     // update controls
     NameModify(*m_xShortNameEdit);
-    if( SfxRequest::HasMacroRecorder( m_pShell->GetView().GetViewFrame() ) )
+    if( SfxRequest::HasMacroRecorder( &m_pShell->GetView().GetViewFrame() ) )
     {
-        SfxRequest aReq( m_pShell->GetView().GetViewFrame(), FN_SET_ACT_GLOSSARY );
+        SfxRequest aReq( &m_pShell->GetView().GetViewFrame(), FN_SET_ACT_GLOSSARY );
         aReq.AppendItem(SfxStringItem(FN_SET_ACT_GLOSSARY, getCurrentGlossary()));
         aReq.Done();
     }
@@ -436,9 +436,9 @@ void SwGlossaryDlg::Apply()
     {
         m_pGlossaryHdl->InsertGlossary(aGlosName);
     }
-    if( SfxRequest::HasMacroRecorder( m_pShell->GetView().GetViewFrame() ) )
+    if( SfxRequest::HasMacroRecorder( &m_pShell->GetView().GetViewFrame() ) )
     {
-        SfxRequest aReq( m_pShell->GetView().GetViewFrame(), FN_INSERT_GLOSSARY );
+        SfxRequest aReq( &m_pShell->GetView().GetViewFrame(), FN_INSERT_GLOSSARY );
         aReq.AppendItem(SfxStringItem(FN_INSERT_GLOSSARY, getCurrentGlossary()));
         aReq.AppendItem(SfxStringItem(FN_PARAM_1, aGlosName));
         aReq.Done();
@@ -593,9 +593,9 @@ IMPL_LINK(SwGlossaryDlg, MenuHdl, const OString&, rItemIdent, void)
             m_xShortNameEdit->set_text(aShortName);
             NameModify(*m_xNameED);       // for toggling the buttons
 
-            if( SfxRequest::HasMacroRecorder( m_pShell->GetView().GetViewFrame() ) )
+            if( SfxRequest::HasMacroRecorder( &m_pShell->GetView().GetViewFrame() ) )
             {
-                SfxRequest aReq(m_pShell->GetView().GetViewFrame(), FN_NEW_GLOSSARY);
+                SfxRequest aReq(&m_pShell->GetView().GetViewFrame(), FN_NEW_GLOSSARY);
                 aReq.AppendItem(SfxStringItem(FN_NEW_GLOSSARY, getCurrentGlossary()));
                 aReq.AppendItem(SfxStringItem(FN_PARAM_1, aShortName));
                 aReq.AppendItem(SfxStringItem(FN_PARAM_2, aStr));
@@ -660,7 +660,7 @@ IMPL_LINK(SwGlossaryDlg, MenuHdl, const OString&, rItemIdent, void)
         const SvxMacroItem* pMacroItem;
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         ScopedVclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateEventConfigDialog(m_xDialog.get(), aSet,
-            m_pShell->GetView().GetViewFrame()->GetFrame().GetFrameInterface() ));
+            m_pShell->GetView().GetViewFrame().GetFrame().GetFrameInterface() ));
         if ( pMacroDlg && pMacroDlg->Execute() == RET_OK &&
             (pMacroItem = pMacroDlg->GetOutputItemSet()->GetItemIfSet( RES_FRMMACRO, false )) )
         {

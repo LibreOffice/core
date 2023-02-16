@@ -491,7 +491,7 @@ void ScVbaWorksheets::PrintPreview( const css::uno::Any& /*EnableChanges*/ )
     ScTabViewShell* pViewShell = excel::getBestViewShell( mxModel );
     SfxViewFrame* pViewFrame = nullptr;
     if ( pViewShell )
-        pViewFrame = pViewShell->GetViewFrame();
+        pViewFrame = &pViewShell->GetViewFrame();
     if ( !pViewFrame )
         return;
 

@@ -449,17 +449,17 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
     SfxLokHelper::notifyDocumentSizeChanged(aViewData.GetViewShell(), sSize, pModel, false);
 }
 
-static bool lcl_IsRefDlgActive(SfxViewFrame* pViewFrm)
+static bool lcl_IsRefDlgActive(SfxViewFrame& rViewFrm)
 {
     ScModule* pScMod = SC_MOD();
     if (!pScMod->IsRefDialogOpen())
        return false;
 
     auto nDlgId = pScMod->GetCurRefDlgId();
-    if (!pViewFrm->HasChildWindow(nDlgId))
+    if (!rViewFrm.HasChildWindow(nDlgId))
         return false;
 
-    SfxChildWindow* pChild = pViewFrm->GetChildWindow(nDlgId);
+    SfxChildWindow* pChild = rViewFrm.GetChildWindow(nDlgId);
     if (!pChild)
         return false;
 
@@ -531,16 +531,13 @@ void ScTabView::SetTabProtectionSymbol( SCTAB nTab, const bool bProtect )
 
 void ScTabView::SelectionChanged(bool bFromPaste)
 {
-    SfxViewFrame* pViewFrame = aViewData.GetViewShell()->GetViewFrame();
-    if (pViewFrame)
+    SfxViewFrame& rViewFrame = aViewData.GetViewShell()->GetViewFrame();
+    uno::Reference<frame::XController> xController = rViewFrame.GetFrame().GetController();
+    if (xController.is())
     {
-        uno::Reference<frame::XController> xController = pViewFrame->GetFrame().GetController();
-        if (xController.is())
-        {
-            ScTabViewObj* pImp = dynamic_cast<ScTabViewObj*>( xController.get() );
-            if (pImp)
-                pImp->SelectionChanged();
-        }
+        ScTabViewObj* pImp = dynamic_cast<ScTabViewObj*>( xController.get() );
+        if (pImp)
+            pImp->SelectionChanged();
     }
 
     UpdateAutoFillMark(bFromPaste);   // also calls CheckSelectionTransfer
@@ -884,14 +881,14 @@ void ScTabView::RemoveHintWindow()
 }
 
 // find window that should not be over the cursor
-static weld::Window* lcl_GetCareWin(SfxViewFrame* pViewFrm)
+static weld::Window* lcl_GetCareWin(SfxViewFrame& rViewFrm)
 {
     //! also spelling ??? (then set the member variables when calling)
 
     // search & replace
-    if (pViewFrm->HasChildWindow(SID_SEARCH_DLG))
+    if (rViewFrm.HasChildWindow(SID_SEARCH_DLG))
     {
-        SfxChildWindow* pChild = pViewFrm->GetChildWindow(SID_SEARCH_DLG);
+        SfxChildWindow* pChild = rViewFrm.GetChildWindow(SID_SEARCH_DLG);
         if (pChild)
         {
             auto xDlgController = pChild->GetController();
@@ -901,9 +898,9 @@ static weld::Window* lcl_GetCareWin(SfxViewFrame* pViewFrm)
     }
 
     // apply changes
-    if ( pViewFrm->HasChildWindow(FID_CHG_ACCEPT) )
+    if ( rViewFrm.HasChildWindow(FID_CHG_ACCEPT) )
     {
-        SfxChildWindow* pChild = pViewFrm->GetChildWindow(FID_CHG_ACCEPT);
+        SfxChildWindow* pChild = rViewFrm.GetChildWindow(FID_CHG_ACCEPT);
         if (pChild)
         {
             auto xDlgController = pChild->GetController();
@@ -2044,8 +2041,8 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
     if (pScMod->IsRefDialogOpen())
     {
         sal_uInt16 nCurRefDlgId=pScMod->GetCurRefDlgId();
-        SfxViewFrame* pViewFrm = aViewData.GetViewShell()->GetViewFrame();
-        SfxChildWindow* pChildWnd = pViewFrm->GetChildWindow( nCurRefDlgId );
+        SfxViewFrame& rViewFrm = aViewData.GetViewShell()->GetViewFrame();
+        SfxChildWindow* pChildWnd = rViewFrm.GetChildWindow( nCurRefDlgId );
         if (pChildWnd)
         {
             if (pChildWnd->GetController())
@@ -2281,7 +2278,7 @@ void ScTabView::KillEditView( bool bNoPaint )
     if (bGrabFocus)
     {
 //      should be done like this, so that Sfx notice it, but it does not work:
-//!     aViewData.GetViewShell()->GetViewFrame()->GetWindow().GrabFocus();
+//!     aViewData.GetViewShell()->GetViewFrame().GetWindow().GrabFocus();
 //      therefore first like this:
         GetActiveWin()->GrabFocus();
     }

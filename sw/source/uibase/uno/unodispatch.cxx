@@ -45,7 +45,7 @@ const char cInternalDBChangeNotification[] = ".uno::Writer/DataSourceChanged";
 SwXDispatchProviderInterceptor::SwXDispatchProviderInterceptor(SwView& rVw) :
     m_pView(&rVw)
 {
-    uno::Reference< frame::XFrame> xUnoFrame = m_pView->GetViewFrame()->GetFrame().GetFrameInterface();
+    uno::Reference< frame::XFrame> xUnoFrame = m_pView->GetViewFrame().GetFrame().GetFrameInterface();
     m_xIntercepted.set(xUnoFrame, uno::UNO_QUERY);
     if(m_xIntercepted.is())
     {
@@ -209,7 +209,7 @@ void SwXDispatch::dispatch(const util::URL& aURL,
     else if(aURL.Complete == cURLFormLetter)
     {
         SfxUnoAnyItem aDBProperties(FN_PARAM_DATABASE_PROPERTIES, uno::Any(aArgs));
-        m_pView->GetViewFrame()->GetDispatcher()->ExecuteList(
+        m_pView->GetViewFrame().GetDispatcher()->ExecuteList(
             FN_MAILMERGE_WIZARD,
             SfxCallMode::ASYNCHRON,
             { &aDBProperties });

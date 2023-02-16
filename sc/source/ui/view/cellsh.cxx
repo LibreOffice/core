@@ -1284,7 +1284,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     if (rDoc.IsTabProtected(rData.GetTabNo()))
                     {
                         bool bVisible = false;
-                        SfxViewFrame* pViewFrame = ( pTabViewShell ? pTabViewShell->GetViewFrame() : nullptr );
+                        SfxViewFrame* pViewFrame = ( pTabViewShell ? &pTabViewShell->GetViewFrame() : nullptr );
                         if ( pViewFrame && pViewFrame->HasChildWindow( nWhich ) )
                         {
                             SfxChildWindow* pChild = pViewFrame->GetChildWindow( nWhich );

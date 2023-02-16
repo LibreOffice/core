@@ -857,7 +857,7 @@ void SwTransferable::DeleteSelection()
             m_pWrtShell->DeleteTable();
         else
         {
-            SfxDispatcher* pDispatch = m_pWrtShell->GetView().GetViewFrame()->GetDispatcher();
+            SfxDispatcher* pDispatch = m_pWrtShell->GetView().GetViewFrame().GetDispatcher();
             pDispatch->Execute(FN_TABLE_DELETE_COL, SfxCallMode::SYNCHRON);
         }
     }
@@ -1517,7 +1517,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
         if (!bSingleCellTable && rData.HasFormat( SotClipboardFormatId::HTML ) &&
                         SwDoc::IsInTable(rSh.GetCursor()->GetPointNode()) != nullptr && rSh.DoesUndo())
         {
-            SfxDispatcher* pDispatch = rSh.GetView().GetViewFrame()->GetDispatcher();
+            SfxDispatcher* pDispatch = rSh.GetView().GetViewFrame().GetDispatcher();
             sal_uInt32 nLevel = 0;
 
             // within Writer table cells, inserting worksheets using HTML format results only plain text, not a native table,
@@ -1619,7 +1619,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
                 rSh.GetCursor()->GetPointNode().GetIndex() == rSh.GetCursor()->GetPointNode().FindTableBoxStartNode()->GetIndex()+1 &&
                 // beginning of the paragraph?
                 !rSh.GetCursor()->GetPoint()->GetContentIndex();
-            SfxDispatcher* pDispatch = rSh.GetView().GetViewFrame()->GetDispatcher();
+            SfxDispatcher* pDispatch = rSh.GetView().GetViewFrame().GetDispatcher();
 
             // go start of the cell
             if (!bStartTableBoxNode)
@@ -2574,7 +2574,7 @@ void SwTransferable::SetSelInShell( SwWrtShell& rSh, bool bSelectFrame,
     if( bSelectFrame )
     {
         // select frames/objects
-        if( pPt && !rSh.GetView().GetViewFrame()->GetDispatcher()->IsLocked() )
+        if( pPt && !rSh.GetView().GetViewFrame().GetDispatcher()->IsLocked() )
         {
             rSh.GetView().NoRotate();
             if( rSh.SelectObj( *pPt ))
@@ -3135,7 +3135,7 @@ bool SwTransferable::PasteFileName( TransferableDataHelper& rData,
             if( ::avmedia::MediaWindow::isMediaURL( aMediaURLStr, ""/*TODO?*/ ) )
             {
                 const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, aMediaURLStr );
-                rSh.GetView().GetViewFrame()->GetDispatcher()->ExecuteList(
+                rSh.GetView().GetViewFrame().GetDispatcher()->ExecuteList(
                                 SID_INSERT_AVMEDIA, SfxCallMode::SYNCHRON,
                                 { &aMediaURLItem });
             }
@@ -3281,7 +3281,7 @@ bool SwTransferable::PasteDBData( const TransferableDataHelper& rData,
             rView.StopShellTimer();
 
             SfxStringItem aDataDesc( nWh, sText );
-            rView.GetViewFrame()->GetDispatcher()->ExecuteList(
+            rView.GetViewFrame().GetDispatcher()->ExecuteList(
                 nWh, SfxCallMode::ASYNCHRON,
                 { &aDataDesc, pConnectionItem.get(), pColumnItem.get(),
                   pSourceItem.get(), pCommandItem.get(), pCommandTypeItem.get(),
@@ -3998,7 +3998,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             rSh.StartAction();
             rSrcSh.StartAction();
 
-            SfxDispatcher* pDispatch = rSrcSh.GetView().GetViewFrame()->GetDispatcher();
+            SfxDispatcher* pDispatch = rSrcSh.GetView().GetViewFrame().GetDispatcher();
             pDispatch->Execute(SID_COPY, SfxCallMode::SYNCHRON);
 
             rSrcSh.Push(); // save selection for later restoration
@@ -4306,7 +4306,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
     }
     else if ( bRet && bTableMove )
     {
-        SfxDispatcher* pDispatch = rSrcSh.GetView().GetViewFrame()->GetDispatcher();
+        SfxDispatcher* pDispatch = rSrcSh.GetView().GetViewFrame().GetDispatcher();
         pDispatch->Execute(FN_TABLE_DELETE_TABLE, SfxCallMode::SYNCHRON);
     }
 

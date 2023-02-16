@@ -135,7 +135,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                         SID_ATTR_FILL_FLOATTRANSPARENCE,
                         0
                     };
-                    SfxBindings &rBnd = GetView().GetViewFrame()->GetBindings();
+                    SfxBindings &rBnd = GetView().GetViewFrame().GetBindings();
                     rBnd.Invalidate(aInval);
                     rBnd.Update(SID_ATTR_FILL_STYLE);
                     rBnd.Update(SID_ATTR_FILL_COLOR);
@@ -196,7 +196,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                         0
                     };
 
-                    GetView().GetViewFrame()->GetBindings().Invalidate(aInval);
+                    GetView().GetViewFrame().GetBindings().Invalidate(aInval);
                 }
 
                 if (rModel.IsChanged())
@@ -265,7 +265,7 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest const & rReq)
     }
     else
     {
-        SfxDispatcher* pDis = pSh->GetView().GetViewFrame()->GetDispatcher();
+        SfxDispatcher* pDis = pSh->GetView().GetViewFrame().GetDispatcher();
         switch (rReq.GetSlot())
         {
             case SID_ATTR_FILL_STYLE:

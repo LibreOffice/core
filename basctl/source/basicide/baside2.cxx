@@ -282,7 +282,7 @@ void ModulWindow::CheckCompileBasic()
 
     bool bDone = false;
 
-    GetShell()->GetViewFrame()->GetWindow().EnterWait();
+    GetShell()->GetViewFrame().GetWindow().EnterWait();
 
     AssertValidEditEngine();
     GetEditorWindow().SetSourceInBasic();
@@ -302,7 +302,7 @@ void ModulWindow::CheckCompileBasic()
         GetBreakPoints().SetBreakPointsInBasic( m_xModule.get() );
     }
 
-    GetShell()->GetViewFrame()->GetWindow().LeaveWait();
+    GetShell()->GetViewFrame().GetWindow().LeaveWait();
 
     m_aStatus.bError = !bDone;
     m_aStatus.bIsRunning = false;
@@ -612,7 +612,7 @@ void ModulWindow::ManageBreakPoints()
 
 void ModulWindow::BasicErrorHdl( StarBASIC const * pBasic )
 {
-    GetShell()->GetViewFrame()->ToTop();
+    GetShell()->GetViewFrame().ToTop();
 
     // Return value: BOOL
     //  FALSE:  cancel

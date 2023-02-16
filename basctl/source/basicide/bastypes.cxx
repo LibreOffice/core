@@ -94,7 +94,7 @@ void BaseWindow::Init()
         pShellHScrollBar->SetScrollHdl( LINK( this, BaseWindow, HorzScrollHdl ) );
 
     // Show the read-only infobar if the module/dialog is read-only
-    GetShell()->GetViewFrame()->RemoveInfoBar(BASIC_IDE_READONLY_INFOBAR);
+    GetShell()->GetViewFrame().RemoveInfoBar(BASIC_IDE_READONLY_INFOBAR);
     if (IsReadOnly())
         ShowReadOnlyInfoBar();
 
@@ -240,7 +240,7 @@ void BaseWindow::ShowReadOnlyInfoBar()
     else
         aMsg = IDEResId(RID_STR_DIALOG_READONLY);
 
-    GetShell()->GetViewFrame()->AppendInfoBar(BASIC_IDE_READONLY_INFOBAR, OUString(),
+    GetShell()->GetViewFrame().AppendInfoBar(BASIC_IDE_READONLY_INFOBAR, OUString(),
                                               aMsg, InfobarType::INFO, true);
 }
 

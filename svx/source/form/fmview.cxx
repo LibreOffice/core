@@ -309,7 +309,7 @@ SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage)
             pFormShellImpl->UpdateForms_Lock(true);
 
             // so that the form navigator can react to the pagechange
-            pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_FMEXPLORER_CONTROL, true);
+            pFormShell->GetViewShell()->GetViewFrame().GetBindings().Invalidate(SID_FM_FMEXPLORER_CONTROL, true);
 
             pFormShellImpl->SetSelection_Lock(GetMarkedObjectList());
         }

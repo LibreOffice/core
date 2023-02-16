@@ -99,7 +99,7 @@ void SwView::ExecDraw(const SfxRequest& rReq)
         if (eNewFormObjKind == m_eFormObjKind || eNewFormObjKind == SdrObjKind::NONE)
         {
             bDeselect = true;
-            GetViewFrame()->GetDispatcher()->Execute(SID_FM_LEAVE_CREATE);  // Button should popping out
+            GetViewFrame().GetDispatcher()->Execute(SID_FM_LEAVE_CREATE);  // Button should popping out
         }
     }
     else if (nSlotId == SID_FM_CREATE_FIELDCONTROL)
@@ -141,7 +141,7 @@ void SwView::ExecDraw(const SfxRequest& rReq)
     }
     else if ( nSlotId == SID_FONTWORK_GALLERY_FLOATER )
     {
-        vcl::Window& rWin = m_pWrtShell->GetView().GetViewFrame()->GetWindow();
+        vcl::Window& rWin = m_pWrtShell->GetView().GetViewFrame().GetWindow();
 
         rWin.EnterWait();
 
@@ -154,7 +154,7 @@ void SwView::ExecDraw(const SfxRequest& rReq)
             std::shared_ptr<svx::FontWorkGalleryDialog> pDlg = std::make_shared<svx::FontWorkGalleryDialog>(rWin.GetFrameWeld(), *pSdrView);
             pDlg->SetSdrObjectRef(&pSdrView->GetModel());
             weld::DialogController::runAsync(pDlg, [this, pDlg](int) {
-                vcl::Window& rWin2 = m_pWrtShell->GetView().GetViewFrame()->GetWindow();
+                vcl::Window& rWin2 = m_pWrtShell->GetView().GetViewFrame().GetWindow();
 
                 SdrObject* pObj = pDlg->GetSdrObjectRef();
                 if ( pObj )
@@ -186,7 +186,7 @@ void SwView::ExecDraw(const SfxRequest& rReq)
             rWin.LeaveWait();
     }
     else if ( m_nFormSfxId != USHRT_MAX )
-        GetViewFrame()->GetDispatcher()->Execute( SID_FM_LEAVE_CREATE );
+        GetViewFrame().GetDispatcher()->Execute( SID_FM_LEAVE_CREATE );
 
     if( nSlotId == SID_DRAW_CS_ID )
     {
@@ -312,7 +312,7 @@ void SwView::ExecDraw(const SfxRequest& rReq)
                 if ( pStringItem )
                 {
                     m_sDrawCustom = pStringItem->GetValue();
-                    SfxBindings& rBind = GetViewFrame()->GetBindings();
+                    SfxBindings& rBind = GetViewFrame().GetBindings();
                     rBind.Invalidate( nSlotId );
                     rBind.Update( nSlotId );
                 }
@@ -324,7 +324,7 @@ void SwView::ExecDraw(const SfxRequest& rReq)
             break;
     }
 
-    GetViewFrame()->GetBindings().Invalidate(SID_ATTRIBUTES_AREA);
+    GetViewFrame().GetBindings().Invalidate(SID_ATTRIBUTES_AREA);
 
     bool bEndTextEdit = true;
     if (pFuncPtr)
@@ -343,7 +343,7 @@ void SwView::ExecDraw(const SfxRequest& rReq)
         if(rReq.GetModifier() == KEY_MOD1 || bCreateDirectly)
         {
             if (bCreateDirectly)
-                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
+                GetViewFrame().GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
             if(SID_OBJECT_SELECT == m_nDrawSfxId )
             {
                 m_pWrtShell->GotoObj(true);
@@ -394,7 +394,7 @@ void SwView::ExitDraw()
         return;
 
     // the shell may be invalid at close/reload/SwitchToViewShell
-    SfxDispatcher* pDispatch = GetViewFrame()->GetDispatcher();
+    SfxDispatcher* pDispatch = GetViewFrame().GetDispatcher();
     sal_uInt16 nIdx = 0;
     SfxShell* pTest = nullptr;
     do
@@ -417,7 +417,7 @@ void SwView::ExitDraw()
     {
         pSdrView->LeaveOneGroup();
         pSdrView->UnmarkAll();
-        GetViewFrame()->GetBindings().Invalidate(SID_ENTER_GROUP);
+        GetViewFrame().GetBindings().Invalidate(SID_ENTER_GROUP);
     }
 
     if (GetDrawFuncPtr())
@@ -429,7 +429,7 @@ void SwView::ExitDraw()
         SetDrawFuncPtr(nullptr);
         LeaveDrawCreate();
 
-        GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
+        GetViewFrame().GetBindings().Invalidate(SID_INSERT_DRAW);
     }
     GetEditWin().SetPointer(PointerStyle::Text);
 }
@@ -444,7 +444,7 @@ void SwView::NoRotate()
         FlipDrawRotate();
 
         const SfxBoolItem aTmp( SID_OBJECT_ROTATE, false );
-        GetViewFrame()->GetBindings().SetState( aTmp );
+        GetViewFrame().GetBindings().SetState( aTmp );
     }
 }
 
@@ -709,9 +709,9 @@ bool SwView::HasOnlyObj(SdrObject const *pSdrObj, SdrInventor eObjInventor) cons
 IMPL_LINK(SwView, OnlineSpellCallback, SpellCallbackInfo&, rInfo, void)
 {
     if (rInfo.nCommand == SpellCallbackCommand::STARTSPELLDLG)
-        GetViewFrame()->GetDispatcher()->Execute( FN_SPELL_GRAMMAR_DIALOG, SfxCallMode::ASYNCHRON);
+        GetViewFrame().GetDispatcher()->Execute( FN_SPELL_GRAMMAR_DIALOG, SfxCallMode::ASYNCHRON);
     else if (rInfo.nCommand == SpellCallbackCommand::AUTOCORRECT_OPTIONS)
-        GetViewFrame()->GetDispatcher()->Execute( SID_AUTO_CORRECT_DLG, SfxCallMode::ASYNCHRON );
+        GetViewFrame().GetDispatcher()->Execute( SID_AUTO_CORRECT_DLG, SfxCallMode::ASYNCHRON );
 }
 
 bool SwView::ExecDrwTextSpellPopup(const Point& rPt)
@@ -751,7 +751,7 @@ void SwView::HyphenateDrawText()
     SfxItemSetFixed<EE_PARA_HYPHENATE, EE_PARA_HYPHENATE> aSet( GetPool() );
     aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, !bHyphenate ) );
     pSdrView->SetAttributes( aSet );
-    GetViewFrame()->GetBindings().Invalidate(FN_HYPHENATE_OPT_DLG);
+    GetViewFrame().GetBindings().Invalidate(FN_HYPHENATE_OPT_DLG);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

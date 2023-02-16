@@ -739,8 +739,8 @@ void ScTabView::UpdateVarZoom()
         PaintGrid();
         PaintTop();
         PaintLeft();
-        aViewData.GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
-        aViewData.GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
+        aViewData.GetViewShell()->GetViewFrame().GetBindings().Invalidate( SID_ATTR_ZOOM );
+        aViewData.GetViewShell()->GetViewFrame().GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
         aViewData.GetBindings().Invalidate(SID_ZOOM_IN);
         aViewData.GetBindings().Invalidate(SID_ZOOM_OUT);
     }
@@ -961,7 +961,7 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
     const CommandWheelData* pData = rCEvt.GetWheelData();
     if (pData && pData->GetMode() == CommandWheelMode::ZOOM)
     {
-        if ( !aViewData.GetViewShell()->GetViewFrame()->GetFrame().IsInPlace() )
+        if ( !aViewData.GetViewShell()->GetViewFrame().GetFrame().IsInPlace() )
         {
             //  for ole inplace editing, the scale is defined by the visarea and client size
             //  and can't be changed directly
@@ -1001,7 +1001,7 @@ bool ScTabView::GestureZoomCommand(const CommandEvent& rCEvt)
     if (!pData)
         return false;
 
-    if (aViewData.GetViewShell()->GetViewFrame()->GetFrame().IsInPlace())
+    if (aViewData.GetViewShell()->GetViewFrame().GetFrame().IsInPlace())
         return false;
 
     if (pData->meEventType == GestureEventZoomType::Begin)
@@ -1409,7 +1409,7 @@ void ScTabView::UpdateHeaderWidth( const ScVSplitPos* pWhich, const SCROW* pPosY
 
     ScDocument& rDoc = aViewData.GetDocument();
     SCROW nEndPos = rDoc.MaxRow();
-    if ( !aViewData.GetViewShell()->GetViewFrame()->GetFrame().IsInPlace() )
+    if ( !aViewData.GetViewShell()->GetViewFrame().GetFrame().IsInPlace() )
     {
         //  for OLE Inplace always MAXROW
 
@@ -2240,17 +2240,14 @@ void ScTabView::SetNewVisArea()
             pGridWin[i]->SetMapMode(aOldMode[i]);
         }
 
-    SfxViewFrame* pViewFrame = aViewData.GetViewShell()->GetViewFrame();
-    if (pViewFrame)
+    SfxViewFrame& rViewFrame = aViewData.GetViewShell()->GetViewFrame();
+    SfxFrame& rFrame = rViewFrame.GetFrame();
+    css::uno::Reference<css::frame::XController> xController = rFrame.GetController();
+    if (xController.is())
     {
-        SfxFrame& rFrame = pViewFrame->GetFrame();
-        css::uno::Reference<css::frame::XController> xController = rFrame.GetController();
-        if (xController.is())
-        {
-            ScTabViewObj* pImp = dynamic_cast<ScTabViewObj*>( xController.get() );
-            if (pImp)
-                pImp->VisAreaChanged();
-        }
+        ScTabViewObj* pImp = dynamic_cast<ScTabViewObj*>( xController.get() );
+        if (pImp)
+            pImp->VisAreaChanged();
     }
     if (aViewData.GetViewShell()->HasAccessibilityObjects())
         aViewData.GetViewShell()->BroadcastAccessibility(SfxHint(SfxHintId::ScAccVisAreaChanged));

@@ -1108,7 +1108,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         {
             if ( pShell->GetController() == xController )
             {
-                pCntrFrame = &pShell->GetViewFrame()->GetFrame();
+                pCntrFrame = &pShell->GetViewFrame().GetFrame();
                 break;
             }
         }

@@ -461,10 +461,10 @@ IMPL_LINK( LibPage, ButtonHdl, weld::Button&, rButton, void )
         {
             Shell* pShell = GetShell();
             if (pShell)
-                pShell->GetViewFrame()->GetWindow().EnterWait();
+                pShell->GetViewFrame().GetWindow().EnterWait();
             xModLibContainer->loadLibrary( aLibName );
             if (pShell)
-                pShell->GetViewFrame()->GetWindow().LeaveWait();
+                pShell->GetViewFrame().GetWindow().LeaveWait();
         }
 
         // load dialog library (if not loaded)
@@ -473,10 +473,10 @@ IMPL_LINK( LibPage, ButtonHdl, weld::Button&, rButton, void )
         {
             Shell* pShell = GetShell();
             if (pShell)
-                pShell->GetViewFrame()->GetWindow().EnterWait();
+                pShell->GetViewFrame().GetWindow().EnterWait();
             xDlgLibContainer->loadLibrary( aLibName );
             if (pShell)
-                pShell->GetViewFrame()->GetWindow().LeaveWait();
+                pShell->GetViewFrame().GetWindow().LeaveWait();
         }
 
         // check, if library is password protected

@@ -1045,7 +1045,7 @@ void EditorWindow::CreateEditEngine()
     // nLines*4: SetText+Formatting+DoHighlight+Formatting
     // it could be cut down on one formatting but you would wait even longer
     // for the text then if the source code is long...
-    pProgress.reset(new ProgressInfo(GetShell()->GetViewFrame()->GetObjectShell(),
+    pProgress.reset(new ProgressInfo(GetShell()->GetViewFrame().GetObjectShell(),
                                      IDEResId(RID_STR_GENERATESOURCE),
                                      nLines * 4));
     setTextEngineText(*pEditEngine, aOUSource);
@@ -1393,7 +1393,7 @@ void EditorWindow::CreateProgress( const OUString& rText, sal_uInt32 nRange )
 {
     DBG_ASSERT( !pProgress, "ProgressInfo exists already" );
     pProgress.reset(new ProgressInfo(
-        GetShell()->GetViewFrame()->GetObjectShell(),
+        GetShell()->GetViewFrame().GetObjectShell(),
         rText,
         nRange
     ));

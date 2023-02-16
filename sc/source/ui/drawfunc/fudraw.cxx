@@ -239,7 +239,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
                 {
-                    bool bOle = rViewShell.GetViewFrame()->GetFrame().IsInPlace();
+                    bool bOle = rViewShell.GetViewFrame().GetFrame().IsInPlace();
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
                     auto pOleObj = dynamic_cast<SdrOle2Obj*>(pObj);
                     if( pOleObj && !bOle )

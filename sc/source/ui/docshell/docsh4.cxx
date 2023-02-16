@@ -1863,7 +1863,7 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
 
                                 // memorizing for GetState():
                                 GetPageOnFromPageStyleSet( &rStyleSet, nCurTab, m_bHeaderOn, m_bFooterOn );
-                                rCaller.GetViewFrame()->GetBindings().Invalidate( SID_HFEDIT );
+                                rCaller.GetViewFrame().GetBindings().Invalidate( SID_HFEDIT );
 
                                 ScStyleSaveData aNewData;
                                 aNewData.InitFromStyle( pStyleSheet );
@@ -2631,7 +2631,7 @@ SfxBindings* ScDocShell::GetViewBindings()
 
     SfxViewShell* pViewSh = GetBestViewShell();
     if (pViewSh)
-        return &pViewSh->GetViewFrame()->GetBindings();
+        return &pViewSh->GetViewFrame().GetBindings();
     else
         return nullptr;
 }
