@@ -1418,11 +1418,14 @@ static void lcl_SetOutlineContentEntriesSensitivities(SwContentTree* pThis, cons
 
     bool bIsRoot = lcl_IsContentType(rEntry, rContentTree);
 
-    if (pThis->GetActiveWrtShell()->GetViewOptions()->IsTreatSubOutlineLevelsAsContent())
+    if (const SwWrtShell* pSh = pThis->GetActiveWrtShell())
     {
-        if (!bIsRoot)
-            rPop.set_sensitive(OString::number(TOGGLE_OUTLINE_CONTENT_VISIBILITY), true);
-        return;
+        if (pSh->GetViewOptions()->IsTreatSubOutlineLevelsAsContent())
+        {
+            if (!bIsRoot)
+                rPop.set_sensitive(OString::number(TOGGLE_OUTLINE_CONTENT_VISIBILITY), true);
+            return;
+        }
     }
 
     const SwNodes& rNodes = pThis->GetWrtShell()->GetNodes();

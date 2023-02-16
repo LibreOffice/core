@@ -308,11 +308,14 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
         }
         else if (SfxStyleFamily::Pseudo == m_nType)
         {
-            SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
-            FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebDocShell*>( pDocShell) !=  nullptr );
+            if (SwWrtShell* pSh = ::GetActiveWrtShell())
+            {
+                SwDocShell* pDocShell = pSh->GetView().GetDocShell();
+                FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebDocShell*>( pDocShell) !=  nullptr );
 
-            aSet.Put ( SfxUInt16Item(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
-            rPage.PageCreated(aSet);
+                aSet.Put ( SfxUInt16Item(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
+                rPage.PageCreated(aSet);
+            }
         }
     }
     else if (rId == "columns")
@@ -472,18 +475,21 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
         std::unique_ptr<weld::ComboBox> xCharFormatLB(xBuilder->weld_combo_box("combobox"));
         xCharFormatLB->clear();
         xCharFormatLB->append_text(SwViewShell::GetShellRes()->aStrNone);
-        SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
-        ::FillCharStyleListBox(*xCharFormatLB,  pDocShell);
+        if (SwWrtShell* pSh = ::GetActiveWrtShell())
+        {
+            SwDocShell* pDocShell = pSh->GetView().GetDocShell();
+            ::FillCharStyleListBox(*xCharFormatLB,  pDocShell);
 
-        std::vector<OUString> aList;
-        aList.reserve(xCharFormatLB->get_count());
-        for (sal_Int32 j = 0; j < xCharFormatLB->get_count(); j++)
-            aList.push_back(xCharFormatLB->get_text(j));
+            std::vector<OUString> aList;
+            aList.reserve(xCharFormatLB->get_count());
+            for (sal_Int32 j = 0; j < xCharFormatLB->get_count(); j++)
+                aList.push_back(xCharFormatLB->get_text(j));
 
-        aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
-        FieldUnit eMetric = ::GetDfltMetric(dynamic_cast< const SwWebDocShell *>( pDocShell ) !=  nullptr);
-        aSet.Put ( SfxUInt16Item(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
-        rPage.PageCreated(aSet);
+            aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
+            FieldUnit eMetric = ::GetDfltMetric(dynamic_cast< const SwWebDocShell *>( pDocShell ) !=  nullptr);
+            aSet.Put ( SfxUInt16Item(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
+            rPage.PageCreated(aSet);
+        }
     }
     else if (rId == "indents")
     {

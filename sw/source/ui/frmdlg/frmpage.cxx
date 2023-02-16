@@ -859,6 +859,9 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
 {
     SwWrtShell* pSh = m_bFormat ? ::GetActiveWrtShell() :
             getFrameDlgParentShell();
+    OSL_ENSURE(pSh , "shell not found");
+    if (!pSh)
+        return;
 
     m_nHtmlMode = ::GetHtmlMode(pSh->GetView().GetDocShell());
     m_bHtmlMode = (m_nHtmlMode & HTMLMODE_ON) != 0;
@@ -902,7 +905,6 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
 
     if ( m_sDlgType == "PictureDialog" || m_sDlgType == "ObjectDialog" )
     {
-        OSL_ENSURE(pSh , "shell not found");
         pSh->GetGrfSize( m_aGrfSize );
 
         if ( !m_bNew )
@@ -1031,9 +1033,7 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
 bool SwFramePage::FillItemSet(SfxItemSet *rSet)
 {
     bool bRet = false;
-    SwWrtShell* pSh = m_bFormat ? ::GetActiveWrtShell()
-                        : getFrameDlgParentShell();
-    OSL_ENSURE( pSh , "shell not found");
+
     const SfxItemSet& rOldSet = GetItemSet();
     const SfxPoolItem* pOldItem = nullptr;
 
@@ -1044,8 +1044,14 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
         pOldItem = GetOldItem(*rSet, RES_ANCHOR);
         if (m_bNew || !pOldItem || eAnchorId != static_cast<const SwFormatAnchor*>(pOldItem)->GetAnchorId())
         {
-            SwFormatAnchor aAnc( eAnchorId, pSh->GetPhyPageNum() );
-            bRet = nullptr != rSet->Put( aAnc );
+            SwWrtShell* pSh = m_bFormat ? ::GetActiveWrtShell()
+                                : getFrameDlgParentShell();
+            OSL_ENSURE( pSh , "shell not found");
+            if (pSh)
+            {
+                SwFormatAnchor aAnc( eAnchorId, pSh->GetPhyPageNum() );
+                bRet = nullptr != rSet->Put( aAnc );
+            }
         }
     }
 
@@ -1703,9 +1709,12 @@ DeactivateRC SwFramePage::DeactivatePage(SfxItemSet * _pSet)
             //the original. But for the other pages we need the current anchor.
             SwWrtShell* pSh = m_bFormat ? ::GetActiveWrtShell()
                                 : getFrameDlgParentShell();
-            RndStdIds eAnchorId = GetAnchor();
-            SwFormatAnchor aAnc( eAnchorId, pSh->GetPhyPageNum() );
-            _pSet->Put( aAnc );
+            if (pSh)
+            {
+                RndStdIds eAnchorId = GetAnchor();
+                SwFormatAnchor aAnc( eAnchorId, pSh->GetPhyPageNum() );
+                _pSet->Put( aAnc );
+            }
         }
     }
 
@@ -1758,6 +1767,9 @@ void SwFramePage::RangeModifyHdl()
     SwWrtShell* pSh = m_bFormat ? ::GetActiveWrtShell()
                         : getFrameDlgParentShell();
     OSL_ENSURE(pSh , "shell not found");
+    if (!pSh)
+        return;
+
     SwFlyFrameAttrMgr aMgr( m_bNew, pSh, GetItemSet() );
     SvxSwFrameValidation        aVal;
 

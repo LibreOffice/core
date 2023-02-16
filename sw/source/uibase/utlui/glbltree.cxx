@@ -205,14 +205,17 @@ sal_Int8 SwGlobalTreeDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 // to not work on an old content.
                 if(n)
                 {
-                    m_rTreeView.GetActiveWrtShell()->GetGlobalDocContent(aTempContents);
-                    // If the file was successfully inserted,
-                    // then the next content must also be fetched.
-                    if(nEntryCount < aTempContents.size())
+                    if (const SwWrtShell* pSh = m_rTreeView.GetActiveWrtShell())
                     {
-                        nEntryCount++;
-                        nAbsContPos++;
-                        pCnt = aTempContents[ nAbsContPos ].get();
+                        pSh->GetGlobalDocContent(aTempContents);
+                        // If the file was successfully inserted,
+                        // then the next content must also be fetched.
+                        if(nEntryCount < aTempContents.size())
+                        {
+                            nEntryCount++;
+                            nAbsContPos++;
+                            pCnt = aTempContents[ nAbsContPos ].get();
+                        }
                     }
                 }
             }

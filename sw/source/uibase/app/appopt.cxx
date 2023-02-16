@@ -263,26 +263,28 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         pElemItem->FillViewOptions( aViewOpt );
 
         // Outline-folding options
-        SwWrtShell* pWrtShell = GetActiveWrtShell();
-        bool bIsOutlineFoldingOn = pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton();
-        bool bTreatSubsChanged = aViewOpt.IsTreatSubOutlineLevelsAsContent()
-                != pWrtShell->GetViewOptions()->IsTreatSubOutlineLevelsAsContent();
-        if (bIsOutlineFoldingOn &&
-                (!aViewOpt.IsShowOutlineContentVisibilityButton() || bTreatSubsChanged))
+        if (SwWrtShell* pWrtShell = GetActiveWrtShell())
         {
-            // Outline-folding options have change which require to show all content.
-            // Either outline-folding is being switched off or outline-folding is currently on
-            // and the treat subs option has changed.
-            pWrtShell->GetView().GetViewFrame().GetDispatcher()->Execute(FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON);
-            if (bTreatSubsChanged)
-                bReFoldOutlineFolding = true; // folding method changed, set flag to refold below
-        }
-        else
-        {
-            // Refold needs to be done when outline-folding is being turned on or off
-            bReFoldOutlineFolding =
-                    pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton() !=
-                    aViewOpt.IsShowOutlineContentVisibilityButton();
+            bool bIsOutlineFoldingOn = pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton();
+            bool bTreatSubsChanged = aViewOpt.IsTreatSubOutlineLevelsAsContent()
+                    != pWrtShell->GetViewOptions()->IsTreatSubOutlineLevelsAsContent();
+            if (bIsOutlineFoldingOn &&
+                    (!aViewOpt.IsShowOutlineContentVisibilityButton() || bTreatSubsChanged))
+            {
+                // Outline-folding options have change which require to show all content.
+                // Either outline-folding is being switched off or outline-folding is currently on
+                // and the treat subs option has changed.
+                pWrtShell->GetView().GetViewFrame().GetDispatcher()->Execute(FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON);
+                if (bTreatSubsChanged)
+                    bReFoldOutlineFolding = true; // folding method changed, set flag to refold below
+            }
+            else
+            {
+                // Refold needs to be done when outline-folding is being turned on or off
+                bReFoldOutlineFolding =
+                        pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton() !=
+                        aViewOpt.IsShowOutlineContentVisibilityButton();
+            }
         }
     }
 
@@ -400,8 +402,11 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
 
     if (bReFoldOutlineFolding)
     {
-        GetActiveWrtShell()->GetView().GetViewFrame().GetDispatcher()->Execute(FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON);
-        GetActiveWrtShell()->GetView().GetViewFrame().GetDispatcher()->Execute(FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON);
+        if (SwWrtShell* pWrtShell = GetActiveWrtShell())
+        {
+            pWrtShell->GetView().GetViewFrame().GetDispatcher()->Execute(FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON);
+            pWrtShell->GetView().GetViewFrame().GetDispatcher()->Execute(FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON);
+        }
     }
 }
 
