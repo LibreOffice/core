@@ -32,6 +32,7 @@
 #include <sfx2/msgpool.hxx>
 #include <o3tl/enumarray.hxx>
 #include "sfxpicklist.hxx"
+#include "com/sun/star/ui/XAcceleratorConfiguration.hpp"
 
 #include <bitset.hxx>
 #include <memory>
@@ -100,6 +101,7 @@ public:
                                 maStbCtrlFactories;
     std::vector<SfxViewFrame*>  maViewFrames;
     std::vector<SfxViewShell*>  maViewShells;
+    std::unordered_map<OUString, css::uno::Reference<css::ui::XAcceleratorConfiguration>> maAcceleratorConfs;
     std::vector<SfxObjectShell*>
                                 maObjShells;
     std::unique_ptr<SfxBasicManagerHolder>

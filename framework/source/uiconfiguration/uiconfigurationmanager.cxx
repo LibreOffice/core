@@ -113,6 +113,7 @@ public:
     virtual void SAL_CALL insertSettings( const OUString& NewResourceURL, const css::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getImageManager() override;
     virtual css::uno::Reference< css::ui::XAcceleratorConfiguration > SAL_CALL getShortCutManager() override;
+    virtual css::uno::Reference< css::ui::XAcceleratorConfiguration > SAL_CALL createShortCutManager() override;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getEventsManager() override;
 
     // XUIConfigurationPersistence
@@ -1135,6 +1136,11 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager()
     }
 
     return Reference< XInterface >( static_cast<cppu::OWeakObject*>(m_xImageManager.get()), UNO_QUERY );
+}
+
+Reference< XAcceleratorConfiguration > SAL_CALL UIConfigurationManager::createShortCutManager()
+{
+    return DocumentAcceleratorConfiguration::createWithDocumentRoot(m_xContext, m_xDocConfigStorage);
 }
 
 Reference< XAcceleratorConfiguration > SAL_CALL UIConfigurationManager::getShortCutManager()

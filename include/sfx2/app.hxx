@@ -27,6 +27,8 @@
 #include <svl/poolitem.hxx>
 #include <vcl/bitmapex.hxx>
 #include <tools/link.hxx>
+#include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
+#include <unordered_map>
 
 #include <sfx2/shell.hxx>
 
@@ -176,6 +178,8 @@ public:
     SAL_DLLPRIVATE SfxChildWinFactory* GetChildWinFactoryById(sal_uInt16 nId) const;
     SAL_DLLPRIVATE std::vector<SfxViewFrame*>& GetViewFrames_Impl() const;
     SAL_DLLPRIVATE std::vector<SfxViewShell*>& GetViewShells_Impl() const;
+    /* unordered_map<ModuleName+Language, acceleratorConfigurationClassInstance> */
+    SAL_DLLPRIVATE std::unordered_map<OUString, css::uno::Reference<css::ui::XAcceleratorConfiguration>>& GetAcceleratorConfs_Impl() const;
     SAL_DLLPRIVATE std::vector<SfxObjectShell*>& GetObjectShells_Impl() const;
     SAL_DLLPRIVATE void         SetViewFrame_Impl(SfxViewFrame *pViewFrame);
 

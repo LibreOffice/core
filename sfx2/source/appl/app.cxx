@@ -367,6 +367,11 @@ std::vector<SfxViewShell*>& SfxApplication::GetViewShells_Impl() const
     return pImpl->maViewShells;
 }
 
+std::unordered_map<OUString, css::uno::Reference<css::ui::XAcceleratorConfiguration>>& SfxApplication::GetAcceleratorConfs_Impl() const
+{
+    return pImpl->maAcceleratorConfs;
+}
+
 std::vector<SfxObjectShell*>& SfxApplication::GetObjectShells_Impl() const
 {
     return pImpl->maObjShells;
