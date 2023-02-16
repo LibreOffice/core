@@ -529,7 +529,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                     pTabViewShell->UISort( rOutParam );
 
                                     SfxViewFrame& rViewFrm = pTabViewShell->GetViewFrame();
-                                    SfxRequest aRequest(&rViewFrm, SID_SORT);
+                                    SfxRequest aRequest(rViewFrm, SID_SORT);
 
                                     if ( rOutParam.bInplace )
                                     {

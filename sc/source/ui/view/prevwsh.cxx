@@ -989,7 +989,7 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
                 if( nPage>0 )
                 {
                     SfxViewFrame& rSfxViewFrame = GetViewFrame();
-                    SfxRequest aSfxRequest( &rSfxViewFrame, SID_PREVIEW_PREVIOUS );
+                    SfxRequest aSfxRequest(rSfxViewFrame, SID_PREVIEW_PREVIOUS);
                     Execute( aSfxRequest );
                 }
             }
@@ -1012,7 +1012,7 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
                 if( nPage<nTotal-1 )
                 {
                     SfxViewFrame& rSfxViewFrame = GetViewFrame();
-                    SfxRequest aSfxRequest( &rSfxViewFrame, SID_PREVIEW_NEXT );
+                    SfxRequest aSfxRequest(rSfxViewFrame, SID_PREVIEW_NEXT);
                     Execute( aSfxRequest );
                 }
             }
@@ -1033,7 +1033,7 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
                 if( nPage>0 )
                 {
                     SfxViewFrame& rSfxViewFrame = GetViewFrame();
-                    SfxRequest aSfxRequest( &rSfxViewFrame, SID_PREVIEW_PREVIOUS );
+                    SfxRequest aSfxRequest(rSfxViewFrame, SID_PREVIEW_PREVIOUS);
                     Execute( aSfxRequest );
                     aCurPos.setY( nVRange );
                 }
@@ -1056,7 +1056,7 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
                 if( nPage<nTotal-1 )
                 {
                     SfxViewFrame& rSfxViewFrame = GetViewFrame();
-                    SfxRequest aSfxRequest( &rSfxViewFrame, SID_PREVIEW_NEXT );
+                    SfxRequest aSfxRequest(rSfxViewFrame, SID_PREVIEW_NEXT);
                     Execute( aSfxRequest );
                     aCurPos.setY( 0 );
                 }
@@ -1072,7 +1072,7 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
                 if( nTotal && nPage != 0 )
                 {
                     SfxViewFrame& rSfxViewFrame = GetViewFrame();
-                    SfxRequest aSfxRequest( &rSfxViewFrame, SID_PREVIEW_FIRST );
+                    SfxRequest aSfxRequest(rSfxViewFrame, SID_PREVIEW_FIRST);
                     Execute( aSfxRequest );
                 }
             }
@@ -1092,7 +1092,7 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
                 if( nTotal && nPage+1 != nTotal )
                 {
                     SfxViewFrame& rSfxViewFrame = GetViewFrame();
-                    SfxRequest aSfxRequest( &rSfxViewFrame, SID_PREVIEW_LAST );
+                    SfxRequest aSfxRequest(rSfxViewFrame, SID_PREVIEW_LAST);
                     Execute( aSfxRequest );
                 }
             }

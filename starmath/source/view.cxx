@@ -719,10 +719,10 @@ bool SmGraphicWidget::KeyInput(const KeyEvent& rKEvt)
         rCursor.Paste();
         break;
     case KeyFuncType::UNDO:
-        GetDoc()->Execute(o3tl::temporary(SfxRequest(GetView().GetFrame(), SID_UNDO)));
+        GetDoc()->Execute(o3tl::temporary(SfxRequest(*GetView().GetFrame(), SID_UNDO)));
         break;
     case KeyFuncType::REDO:
-        GetDoc()->Execute(o3tl::temporary(SfxRequest(GetView().GetFrame(), SID_REDO)));
+        GetDoc()->Execute(o3tl::temporary(SfxRequest(*GetView().GetFrame(), SID_REDO)));
         break;
     default:
         switch (rKEvt.GetKeyCode().GetCode())

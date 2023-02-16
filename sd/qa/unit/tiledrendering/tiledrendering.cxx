@@ -1741,7 +1741,7 @@ void SdTiledRenderingTest::testTdf105502()
     pView->SdrBeginTextEdit(pObject);
     rtl::Reference<sdr::SelectionController> xSelectionController(pView->getSelectionController());
     CPPUNIT_ASSERT(xSelectionController.is());
-    SfxRequest aRequest(pViewShell->GetViewFrame(), SID_TABLE_SELECT_ROW);
+    SfxRequest aRequest(*pViewShell->GetViewFrame(), SID_TABLE_SELECT_ROW);
     xSelectionController->Execute(aRequest);
 
     // Assert that the A1:B1 selection succeeded.

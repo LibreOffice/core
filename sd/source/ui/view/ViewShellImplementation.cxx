@@ -262,7 +262,7 @@ void ViewShell::Implementation::AssignLayout ( SfxRequest const & rRequest, Page
     else
         aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
 
-    SfxRequest aRequest(&mrViewShell.GetViewShellBase().GetViewFrame(), SID_MODIFYPAGE);
+    SfxRequest aRequest(mrViewShell.GetViewShellBase().GetViewFrame(), SID_MODIFYPAGE);
     aRequest.AppendItem(SfxStringItem (ID_VAL_PAGENAME, pPage->GetName()));
     aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, eLayout));
     aRequest.AppendItem(SfxBoolItem(ID_VAL_ISPAGEBACK, aVisibleLayers.IsSet(aBackground)));

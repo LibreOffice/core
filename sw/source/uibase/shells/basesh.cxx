@@ -426,7 +426,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                         uno::Reference< frame::XDispatchRecorder > xRecorder =
                             rViewFrame.GetBindings().GetRecorder();
                         if(xRecorder.is()) {
-                            SfxRequest aReq( &rViewFrame, SID_CLIPBOARD_FORMAT_ITEMS );
+                            SfxRequest aReq(rViewFrame, SID_CLIPBOARD_FORMAT_ITEMS);
                             aReq.AppendItem( SfxUInt32Item( SID_CLIPBOARD_FORMAT_ITEMS, static_cast<sal_uInt32>(SotClipboardFormatId::STRING) ) );
                             aReq.Done();
                         }
@@ -482,7 +482,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                             uno::Reference< frame::XDispatchRecorder > xRecorder =
                                     rViewFrame.GetBindings().GetRecorder();
                             if(xRecorder.is()) {
-                                SfxRequest aReq( &rViewFrame, SID_CLIPBOARD_FORMAT_ITEMS );
+                                SfxRequest aReq(rViewFrame, SID_CLIPBOARD_FORMAT_ITEMS);
                                 aReq.AppendItem( SfxUInt32Item( SID_CLIPBOARD_FORMAT_ITEMS, static_cast<sal_uInt32>(nFormatId) ) );
                                 aReq.Done();
                             }
@@ -1274,7 +1274,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 SfxViewFrame& rViewFrame = GetView().GetViewFrame();
                 if (SfxRequest::HasMacroRecorder(rViewFrame))
                 {
-                    SfxRequest aReq( &rViewFrame, nSlot);
+                    SfxRequest aReq(rViewFrame, nSlot);
                     aReq.AppendItem( SfxStringItem( FN_PARAM_1, OUString(cDelim) ));
                     if(bToTable)
                     {
@@ -1584,7 +1584,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
                     // set from design mode
                     OSL_ENSURE( GetView().GetFormShell() != nullptr, "form shell?" );
-                    SfxRequest aReq( &GetView().GetViewFrame(), SID_FM_DESIGN_MODE );
+                    SfxRequest aReq(GetView().GetViewFrame(), SID_FM_DESIGN_MODE);
                     aReq.AppendItem( SfxBoolItem( SID_FM_DESIGN_MODE, bDesignMode ) );
                     GetView().GetFormShell()->Execute( aReq );
                     aReq.Done();

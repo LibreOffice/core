@@ -281,7 +281,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                     m_pSh->GetView().GetViewFrame().GetBindings().GetRecorder();
                 if ( xRecorder.is() )
                 {
-                    SfxRequest aReq(&m_pSh->GetView().GetViewFrame(),FN_INSERT_FRAME);
+                    SfxRequest aReq(m_pSh->GetView().GetViewFrame(), FN_INSERT_FRAME);
                     aReq .AppendItem(SfxUInt16Item( FN_INSERT_FRAME,
                                 static_cast<sal_uInt16>(RndStdIds::FLY_AT_PARA) ));
                     aReq.AppendItem(SfxPointItem( FN_PARAM_1, m_pSh->GetAnchorObjDiff()));

@@ -233,10 +233,10 @@ static void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std:
             rWrtSh.Insert( sInsert );
             rWrtSh.SetMark();
             rWrtSh.ExtendSelection(false, sInsert.getLength());
-            SfxRequest aReq( &rWrtSh.GetView().GetViewFrame(), FN_INSERT_STRING );
+            SfxRequest aReq(rWrtSh.GetView().GetViewFrame(), FN_INSERT_STRING);
             aReq.AppendItem( SfxStringItem( FN_INSERT_STRING, sInsert ) );
             aReq.Done();
-            SfxRequest aReq1( &rWrtSh.GetView().GetViewFrame(), FN_CHAR_LEFT );
+            SfxRequest aReq1(rWrtSh.GetView().GetViewFrame(), FN_CHAR_LEFT);
             aReq1.AppendItem( SfxInt32Item(FN_PARAM_MOVE_COUNT, nInsert) );
             aReq1.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, true) );
             aReq1.Done();
@@ -255,7 +255,7 @@ static void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std:
         pReq->Done(aTmpSet);
     if(bInsert)
     {
-        SfxRequest aReq1( &rWrtSh.GetView().GetViewFrame(), FN_CHAR_RIGHT );
+        SfxRequest aReq1(rWrtSh.GetView().GetViewFrame(), FN_CHAR_RIGHT);
         aReq1.AppendItem( SfxInt32Item(FN_PARAM_MOVE_COUNT, nInsert) );
         aReq1.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, false) );
         aReq1.Done();
@@ -967,7 +967,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if ( pDlg->Execute() == RET_OK )
             {
                 const sal_uInt16 nId = pDlg->IsEndNote() ? FN_INSERT_ENDNOTE : FN_INSERT_FOOTNOTE;
-                SfxRequest aReq( &GetView().GetViewFrame(), nId );
+                SfxRequest aReq(GetView().GetViewFrame(), nId);
                 if ( !pDlg->GetStr().isEmpty() )
                     aReq.AppendItem( SfxStringItem( nId, pDlg->GetStr() ) );
                 if ( !pDlg->GetFontName().isEmpty() )
@@ -1919,7 +1919,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         else
         {
-            SfxRequest aReq( &GetView().GetViewFrame(), SID_FM_CTL_PROPERTIES );
+            SfxRequest aReq(GetView().GetViewFrame(), SID_FM_CTL_PROPERTIES);
             aReq.AppendItem( SfxBoolItem( SID_FM_CTL_PROPERTIES, true ) );
             rWrtSh.GetView().GetFormShell()->Execute( aReq );
         }

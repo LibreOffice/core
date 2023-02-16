@@ -695,7 +695,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){
                         if (nResult == RET_OK)
                         {
-                            SfxRequest pRequest(&pTabViewShell->GetViewFrame(), FID_ROW_HEIGHT);
+                            SfxRequest pRequest(pTabViewShell->GetViewFrame(), FID_ROW_HEIGHT);
                             tools::Long nVal = pDlg->GetInputValue();
                             pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_DIRECT, static_cast<sal_uInt16>(nVal) );
 
@@ -735,7 +735,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){
                         if ( nResult == RET_OK )
                         {
-                            SfxRequest pRequest(&pTabViewShell->GetViewFrame(), FID_ROW_OPT_HEIGHT);
+                            SfxRequest pRequest(pTabViewShell->GetViewFrame(), FID_ROW_OPT_HEIGHT);
                             tools::Long nVal = pDlg->GetInputValue();
                             pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_OPTIMAL, static_cast<sal_uInt16>(nVal) );
                             ScGlobal::nLastRowHeightExtra = nVal;
@@ -800,7 +800,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){
                         if ( nResult == RET_OK )
                         {
-                            SfxRequest pRequest(&pTabViewShell->GetViewFrame(), FID_COL_WIDTH);
+                            SfxRequest pRequest(pTabViewShell->GetViewFrame(), FID_COL_WIDTH);
                             tools::Long nVal = pDlg->GetInputValue();
                             pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_DIRECT, static_cast<sal_uInt16>(nVal) );
 
@@ -838,7 +838,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         ScGlobal::nLastColWidthExtra, STD_EXTRA_WIDTH, eMetric, 2, MAX_EXTRA_WIDTH));
 
                     pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){
-                        SfxRequest pRequest(&pTabViewShell->GetViewFrame(), FID_COL_OPT_WIDTH);
+                        SfxRequest pRequest(pTabViewShell->GetViewFrame(), FID_COL_OPT_WIDTH);
                         if ( nResult == RET_OK )
                         {
                             tools::Long nVal = pDlg->GetInputValue();

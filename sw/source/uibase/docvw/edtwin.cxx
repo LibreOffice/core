@@ -997,7 +997,7 @@ void SwEditWin::FlushInBuffer()
         // generate request and record
         if (pSfxShell)
         {
-            SfxRequest aReq(&m_rView.GetViewFrame(), FN_INSERT_STRING);
+            SfxRequest aReq(m_rView.GetViewFrame(), FN_INSERT_STRING);
             aReq.AppendItem( SfxStringItem( FN_INSERT_STRING, m_aInBuffer ) );
             aReq.Done();
         }
@@ -2787,7 +2787,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             }
             if( nSlotId && m_rView.GetViewFrame().GetBindings().GetRecorder().is() )
             {
-                SfxRequest aReq(&m_rView.GetViewFrame(), nSlotId);
+                SfxRequest aReq(m_rView.GetViewFrame(), nSlotId);
                 aReq.Done();
             }
             eKeyState = SwKeyState::End;
@@ -5244,7 +5244,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 SfxShell *pSfxShell = lcl_GetTextShellFromDispatcher( m_rView );
                 if ( pSfxShell )
                 {
-                    SfxRequest aReq( &m_rView.GetViewFrame(), SID_STYLE_APPLY );
+                    SfxRequest aReq(m_rView.GetViewFrame(), SID_STYLE_APPLY);
                     aReq.AppendItem( SfxStringItem( SID_STYLE_APPLY, aStyleName ) );
                     aReq.AppendItem( SfxUInt16Item( SID_STYLE_FAMILY, static_cast<sal_uInt16>(m_pApplyTempl->eType) ) );
                     aReq.Done();
@@ -5735,7 +5735,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         // generate request and record
                         if (pSfxShell)
                         {
-                            SfxRequest aReq( &m_rView.GetViewFrame(), FN_INSERT_STRING );
+                            SfxRequest aReq(m_rView.GetViewFrame(), FN_INSERT_STRING);
                             aReq.AppendItem( SfxStringItem( FN_INSERT_STRING, sRecord ) );
                             aReq.Done();
                         }

@@ -56,7 +56,7 @@ private:
     SAL_DLLPRIVATE void Done_Impl( const SfxItemSet *pSet );
 
 public:
-                        SfxRequest( SfxViewFrame*, sal_uInt16 nSlotId );
+                        SfxRequest( SfxViewFrame&, sal_uInt16 nSlotId );
                         SfxRequest( sal_uInt16 nSlot, SfxCallMode nCallMode, SfxItemPool &rPool );
                         SfxRequest( const SfxSlot* pSlot, const css::uno::Sequence < css::beans::PropertyValue >& rArgs,
                                             SfxCallMode nCallMode, SfxItemPool &rPool );

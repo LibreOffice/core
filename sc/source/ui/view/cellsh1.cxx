@@ -345,7 +345,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){
                             if (nResult == RET_OK)
                             {
-                                SfxRequest aRequest(&pTabViewShell->GetViewFrame(), FID_INS_CELL);
+                                SfxRequest aRequest(pTabViewShell->GetViewFrame(), FID_INS_CELL);
                                 InsertCells(pTabViewShell, aRequest, pDlg->GetInsCellCmd());
                             }
                             pDlg->disposeOnce();
@@ -399,7 +399,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){
                             if (nResult == RET_OK)
                             {
-                                SfxRequest aRequest(&pTabViewShell->GetViewFrame(), FID_INS_CELL);
+                                SfxRequest aRequest(pTabViewShell->GetViewFrame(), FID_INS_CELL);
                                 DeleteCells(pTabViewShell, aRequest, pDlg->GetDelCellCmd());
                             }
                             pDlg->disposeOnce();

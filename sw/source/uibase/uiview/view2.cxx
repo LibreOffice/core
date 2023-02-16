@@ -2719,7 +2719,7 @@ tools::Long SwView::InsertMedium( sal_uInt16 nSlotId, std::unique_ptr<SfxMedium>
                 GetViewFrame().GetBindings().GetRecorder();
         if ( xRecorder.is() )
         {
-            SfxRequest aRequest(&GetViewFrame(), SID_INSERTDOC);
+            SfxRequest aRequest(GetViewFrame(), SID_INSERTDOC);
             aRequest.AppendItem(SfxStringItem(SID_INSERTDOC, pMedium->GetOrigURL()));
             if(pMedium->GetFilter())
                 aRequest.AppendItem(SfxStringItem(FN_PARAM_1, pMedium->GetFilter()->GetName()));

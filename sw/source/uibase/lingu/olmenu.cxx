@@ -832,7 +832,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         else if (nId == m_nRedlinePrevId)
             nId = FN_REDLINE_PREV_CHANGE;
         // Let SwView::Execute() handle the redline actions.
-        SfxRequest aReq(&m_pSh->GetView().GetViewFrame(), nId);
+        SfxRequest aReq(m_pSh->GetView().GetViewFrame(), nId);
         m_pSh->GetView().Execute(aReq);
     }
     else

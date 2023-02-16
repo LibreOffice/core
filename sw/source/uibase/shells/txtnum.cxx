@@ -108,7 +108,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     case FN_NUM_BULLET_OFF:
     {
         GetShell().StartAllAction();
-        SfxRequest aReq(&GetView().GetViewFrame(), FN_NUM_BULLET_ON);
+        SfxRequest aReq(GetView().GetViewFrame(), FN_NUM_BULLET_ON);
         aReq.AppendItem(SfxBoolItem(FN_PARAM_1, false));
         aReq.Done();
         GetShell().NumOrBulletOff();

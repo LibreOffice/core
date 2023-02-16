@@ -137,8 +137,8 @@ void SwFieldPage::InsertField(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType, con
                             SwFieldTypesEnum::DatabaseNextSet == nTypeId ||
                             SwFieldTypesEnum::DatabaseName == nTypeId ;
 
-            SfxRequest aReq( &pView->GetViewFrame(),
-                    bRecordDB ?  FN_INSERT_DBFIELD : FN_INSERT_FIELD );
+            SfxRequest aReq(pView->GetViewFrame(),
+                    bRecordDB ? FN_INSERT_DBFIELD : FN_INSERT_FIELD);
             if(bRecordDB)
             {
                 sal_Int32 nIdx{ 0 };

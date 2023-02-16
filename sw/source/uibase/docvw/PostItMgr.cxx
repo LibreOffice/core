@@ -521,7 +521,7 @@ void SwPostItMgr::Focus(const SfxBroadcaster& rBC)
 {
     if (!mpWrtShell->GetViewOptions()->IsPostIts())
     {
-        SfxRequest aRequest(&mpView->GetViewFrame(), SID_TOGGLE_NOTES);
+        SfxRequest aRequest(mpView->GetViewFrame(), SID_TOGGLE_NOTES);
         mpView->ExecViewOptions(aRequest);
     }
 
@@ -535,7 +535,7 @@ void SwPostItMgr::Focus(const SfxBroadcaster& rBC)
                 if (postItField->mpPostIt->IsResolved() &&
                         !mpWrtShell->GetViewOptions()->IsResolvedPostIts())
                 {
-                    SfxRequest aRequest(&mpView->GetViewFrame(), SID_TOGGLE_RESOLVED_NOTES);
+                    SfxRequest aRequest(mpView->GetViewFrame(), SID_TOGGLE_RESOLVED_NOTES);
                     mpView->ExecViewOptions(aRequest);
                 }
                 postItField->mpPostIt->GrabFocus();

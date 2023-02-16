@@ -874,7 +874,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 if (pPrinter->GetName() != pDlgPrinter->GetName())
                 {
                     // user has changed the printer -> macro recording
-                    SfxRequest aReq(&GetViewFrame(), SID_PRINTER_NAME);
+                    SfxRequest aReq(GetViewFrame(), SID_PRINTER_NAME);
                     aReq.AppendItem(SfxStringItem(SID_PRINTER_NAME, pDlgPrinter->GetName()));
                     aReq.Done();
                 }

@@ -134,7 +134,7 @@ void SdMiscTest::testTdf99396()
     sdr::table::SvxTableController* pTableController
         = dynamic_cast<sdr::table::SvxTableController*>(pView->getSelectionController().get());
     CPPUNIT_ASSERT(pTableController);
-    SfxRequest aRequest(pViewShell->GetViewFrame(), SID_TABLE_VERT_BOTTOM);
+    SfxRequest aRequest(*pViewShell->GetViewFrame(), SID_TABLE_VERT_BOTTOM);
     pTableController->Execute(aRequest);
     // This was 0, it wasn't possible to undo a vertical alignment change.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDoc->GetUndoManager()->GetUndoActionCount());
@@ -163,7 +163,7 @@ void SdMiscTest::testTableObjectUndoTest()
     pView->SdrBeginTextEdit(pTableObject);
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     {
-        SfxRequest aRequest(pViewShell->GetViewFrame(), SID_ATTR_PARA_ADJUST_RIGHT);
+        SfxRequest aRequest(*pViewShell->GetViewFrame(), SID_ATTR_PARA_ADJUST_RIGHT);
         SfxItemSet aEditAttr(pDoc->GetPool());
         pView->GetAttributes(aEditAttr);
         SfxItemSet aNewAttr(*(aEditAttr.GetPool()), aEditAttr.GetRanges());
@@ -179,7 +179,7 @@ void SdMiscTest::testTableObjectUndoTest()
         auto pTableController
             = dynamic_cast<sdr::table::SvxTableController*>(pView->getSelectionController().get());
         CPPUNIT_ASSERT(pTableController);
-        SfxRequest aRequest(pViewShell->GetViewFrame(), SID_TABLE_VERT_BOTTOM);
+        SfxRequest aRequest(*pViewShell->GetViewFrame(), SID_TABLE_VERT_BOTTOM);
         pTableController->Execute(aRequest);
     }
     // Global change "Format cell" is applied only - Change the vertical alignment to "Bottom"
@@ -244,7 +244,7 @@ void SdMiscTest::testTableObjectUndoTest()
     pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
     pView->MarkObj(pTableObject, pView->GetSdrPageView()); // select table
     {
-        SfxRequest aRequest(pViewShell->GetViewFrame(), SID_GROW_FONT_SIZE);
+        SfxRequest aRequest(*pViewShell->GetViewFrame(), SID_GROW_FONT_SIZE);
         static_cast<sd::DrawViewShell*>(pViewShell)->ExecChar(aRequest);
     }
     Scheduler::ProcessEventsToIdle();

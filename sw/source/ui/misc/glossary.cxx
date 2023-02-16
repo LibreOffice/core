@@ -415,7 +415,7 @@ IMPL_LINK(SwGlossaryDlg, GrpSelect, weld::TreeView&, rBox, void)
     NameModify(*m_xShortNameEdit);
     if (SfxRequest::HasMacroRecorder(m_pShell->GetView().GetViewFrame()))
     {
-        SfxRequest aReq( &m_pShell->GetView().GetViewFrame(), FN_SET_ACT_GLOSSARY );
+        SfxRequest aReq(m_pShell->GetView().GetViewFrame(), FN_SET_ACT_GLOSSARY);
         aReq.AppendItem(SfxStringItem(FN_SET_ACT_GLOSSARY, getCurrentGlossary()));
         aReq.Done();
     }
@@ -438,7 +438,7 @@ void SwGlossaryDlg::Apply()
     }
     if (SfxRequest::HasMacroRecorder(m_pShell->GetView().GetViewFrame()))
     {
-        SfxRequest aReq( &m_pShell->GetView().GetViewFrame(), FN_INSERT_GLOSSARY );
+        SfxRequest aReq(m_pShell->GetView().GetViewFrame(), FN_INSERT_GLOSSARY);
         aReq.AppendItem(SfxStringItem(FN_INSERT_GLOSSARY, getCurrentGlossary()));
         aReq.AppendItem(SfxStringItem(FN_PARAM_1, aGlosName));
         aReq.Done();
@@ -595,7 +595,7 @@ IMPL_LINK(SwGlossaryDlg, MenuHdl, const OString&, rItemIdent, void)
 
             if (SfxRequest::HasMacroRecorder(m_pShell->GetView().GetViewFrame()))
             {
-                SfxRequest aReq(&m_pShell->GetView().GetViewFrame(), FN_NEW_GLOSSARY);
+                SfxRequest aReq(m_pShell->GetView().GetViewFrame(), FN_NEW_GLOSSARY);
                 aReq.AppendItem(SfxStringItem(FN_NEW_GLOSSARY, getCurrentGlossary()));
                 aReq.AppendItem(SfxStringItem(FN_PARAM_1, aShortName));
                 aReq.AppendItem(SfxStringItem(FN_PARAM_2, aStr));

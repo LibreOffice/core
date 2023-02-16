@@ -85,7 +85,7 @@ int SfxLokHelper::createView(SfxViewFrame& rViewFrame, ViewShellDocId docId)
     assert(docId >= ViewShellDocId(0) && "Cannot createView for invalid (negative) DocId.");
 
     SfxViewShell::SetCurrentDocId(docId);
-    SfxRequest aRequest(&rViewFrame, SID_NEWWINDOW);
+    SfxRequest aRequest(rViewFrame, SID_NEWWINDOW);
     rViewFrame.ExecView_Impl(aRequest);
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (pViewShell == nullptr)
@@ -145,7 +145,7 @@ void SfxLokHelper::destroyView(int nId)
         if (pViewShell->GetViewShellId() == nViewShellId)
         {
             SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
-            SfxRequest aRequest(&rViewFrame, SID_CLOSEWIN);
+            SfxRequest aRequest(rViewFrame, SID_CLOSEWIN);
             rViewFrame.Exec_Impl(aRequest);
             break;
         }

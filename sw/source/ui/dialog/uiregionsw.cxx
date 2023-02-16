@@ -1428,7 +1428,7 @@ short SwInsertSectionTabDialog::Ok()
             rViewFrame.GetBindings().GetRecorder();
     if ( xRecorder.is() )
     {
-        SfxRequest aRequest( &rViewFrame, FN_INSERT_REGION);
+        SfxRequest aRequest(rViewFrame, FN_INSERT_REGION);
         if(const SwFormatCol* pCol = pOutputItemSet->GetItemIfSet(RES_COL, false))
         {
             aRequest.AppendItem(SfxUInt16Item(SID_ATTR_COLUMNS,

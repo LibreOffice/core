@@ -186,7 +186,7 @@ void SwTextShell::ExecDB(SfxRequest const &rReq)
                         rViewFrame.GetBindings().GetRecorder();
                 if ( xRecorder.is() )
                 {
-                    SfxRequest aReq( &rViewFrame, FN_INSERT_DBFIELD );
+                    SfxRequest aReq(rViewFrame, FN_INSERT_DBFIELD);
                     aReq.AppendItem( SfxUInt16Item(FN_PARAM_FIELD_TYPE, static_cast<sal_uInt16>(SwFieldTypesEnum::Database)));
                     aReq.AppendItem( SfxStringItem( FN_INSERT_DBFIELD, sDBName ));
                     aReq.AppendItem( SfxStringItem( FN_PARAM_1, sCommandArg ));

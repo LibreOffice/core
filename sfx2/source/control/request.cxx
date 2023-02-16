@@ -176,13 +176,6 @@ SfxRequest::SfxRequest
 }
 
 
-SfxRequest::SfxRequest
-(
-    SfxViewFrame*   pViewFrame,
-    sal_uInt16          nSlotId
-
-)
-
 /*  [Description]
 
     With this constructor events can subsequently be recorded that are not run
@@ -192,20 +185,21 @@ SfxRequest::SfxRequest
     parameter.
 */
 
-:   nSlot(nSlotId),
-    pImpl( new SfxRequest_Impl(this) )
+SfxRequest::SfxRequest(SfxViewFrame& rViewFrame, sal_uInt16 nSlotId)
+    : nSlot(nSlotId)
+    , pImpl(new SfxRequest_Impl(this))
 {
     pImpl->bDone = false;
     pImpl->bIgnored = false;
-    pImpl->SetPool( &pViewFrame->GetPool() );
+    pImpl->SetPool( &rViewFrame.GetPool() );
     pImpl->pShell = nullptr;
     pImpl->pSlot = nullptr;
     pImpl->nCallMode = SfxCallMode::SYNCHRON;
-    pImpl->pViewFrame = pViewFrame;
+    pImpl->pViewFrame = &rViewFrame;
     if( pImpl->pViewFrame->GetDispatcher()->GetShellAndSlot_Impl( nSlotId, &pImpl->pShell, &pImpl->pSlot, true, true ) )
     {
         pImpl->SetPool( &pImpl->pShell->GetPool() );
-        pImpl->xRecorder = SfxRequest::GetMacroRecorder(*pViewFrame);
+        pImpl->xRecorder = SfxRequest::GetMacroRecorder(rViewFrame);
         if (pImpl->xRecorder)
             pImpl->xTransform = util::URLTransformer::create(comphelper::getProcessComponentContext());
         pImpl->aTarget = pImpl->pShell->GetName();
@@ -636,7 +630,7 @@ void SfxRequest::Done_Impl
                 }
 
                 // Record a Sub-Request
-                SfxRequest aReq( pImpl->pViewFrame, nSlotId );
+                SfxRequest aReq( *pImpl->pViewFrame, nSlotId );
                 if ( aReq.pImpl->pSlot )
                     aReq.AppendItem( *pItem );
                 aReq.Done();

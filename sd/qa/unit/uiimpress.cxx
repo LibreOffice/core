@@ -178,7 +178,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf111522)
     CPPUNIT_ASSERT(pViewShell1 != pViewShell2);
 
     // Have slide 1 in window 1, slide 2 in window 2.
-    SfxRequest aRequest(pViewShell2->GetViewFrame(), SID_SWITCHPAGE);
+    SfxRequest aRequest(*pViewShell2->GetViewFrame(), SID_SWITCHPAGE);
     aRequest.AppendItem(SfxUInt32Item(ID_VAL_WHATPAGE, 1));
     aRequest.AppendItem(
         SfxUInt32Item(ID_VAL_WHATKIND, static_cast<sal_uInt32>(PageKind::Standard)));
@@ -971,7 +971,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf142589)
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
 
-    SfxRequest aRequest(pViewShell->GetViewFrame(), SID_PRESENTATION);
+    SfxRequest aRequest(*pViewShell->GetViewFrame(), SID_PRESENTATION);
     pImpressDocument->GetDoc()->getPresentationSettings().mbCustomShow = true;
     pImpressDocument->GetDoc()->getPresentationSettings().mbStartCustomShow = true;
     sd::slideshowhelp::ShowSlideShow(aRequest, *pImpressDocument->GetDoc());
