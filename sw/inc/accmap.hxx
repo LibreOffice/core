@@ -20,17 +20,17 @@
 #define INCLUDED_SW_INC_ACCMAP_HXX
 
 #include <cppuhelper/weakref.hxx>
-#include <rtl/ref.hxx>
 #include <osl/mutex.hxx>
+#include <o3tl/typed_flags_set.hxx>
+#include <o3tl/sorted_vector.hxx>
+#include <rtl/ref.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/IAccessibleParent.hxx>
-
 #include <svx/AccessibleControlShape.hxx>
-#include <o3tl/typed_flags_set.hxx>
 
-#include <vector>
 #include <memory>
-#include <o3tl/sorted_vector.hxx>
+#include <mutex>
+#include <vector>
 
 class SwAccessibleParagraph;
 class SwViewShell;
@@ -90,7 +90,7 @@ class SwAccessibleMap final : public ::accessibility::IAccessibleViewForwarder,
                 , public std::enable_shared_from_this<SwAccessibleMap>
 {
     mutable ::osl::Mutex maMutex;
-    ::osl::Mutex maEventMutex;
+    std::mutex maEventMutex;
     std::unique_ptr<SwAccessibleContextMap_Impl> mpFrameMap;
     std::unique_ptr<SwAccessibleShapeMap_Impl> mpShapeMap;
     SwShapeList_Impl mvShapes;
@@ -115,6 +115,7 @@ class SwAccessibleMap final : public ::accessibility::IAccessibleViewForwarder,
 
     void FireEvent( const SwAccessibleEvent_Impl& rEvent );
 
+    void AppendEvent( std::unique_lock<std::mutex>& rGuard, const SwAccessibleEvent_Impl& rEvent );
     void AppendEvent( const SwAccessibleEvent_Impl& rEvent );
 
     void InvalidateCursorPosition( const css::uno::Reference<css::accessibility::XAccessible>& rAcc );
