@@ -260,17 +260,19 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     {
         pElemItem->FillViewOptions( aViewOpt );
 
-        SwWrtShell* pWrtShell = GetActiveWrtShell();
-        bFlag = pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton();
-        bool bTreatSubsChanged = aViewOpt.IsTreatSubOutlineLevelsAsContent()
-                != pWrtShell->GetViewOptions()->IsTreatSubOutlineLevelsAsContent();
-        if (bFlag && (!aViewOpt.IsShowOutlineContentVisibilityButton() || bTreatSubsChanged))
+        if (SwWrtShell* pWrtShell = GetActiveWrtShell())
         {
-            // outline mode options have change which require to show all content
-            pWrtShell->MakeAllFoldedOutlineContentVisible();
+            bFlag = pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton();
+            bool bTreatSubsChanged = aViewOpt.IsTreatSubOutlineLevelsAsContent()
+                    != pWrtShell->GetViewOptions()->IsTreatSubOutlineLevelsAsContent();
+            if (bFlag && (!aViewOpt.IsShowOutlineContentVisibilityButton() || bTreatSubsChanged))
+            {
+                // outline mode options have change which require to show all content
+                pWrtShell->MakeAllFoldedOutlineContentVisible();
 
-            if (bTreatSubsChanged)
-                bFlag = false; // folding method changed, set bFlag false to refold below
+                if (bTreatSubsChanged)
+                    bFlag = false; // folding method changed, set bFlag false to refold below
+            }
         }
     }
 
@@ -387,7 +389,10 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         return;
 
     if (!bFlag)
-        GetActiveWrtShell()->MakeAllFoldedOutlineContentVisible(false);
+    {
+        if (SwWrtShell* pWrtShell = GetActiveWrtShell())
+            pWrtShell->MakeAllFoldedOutlineContentVisible(false);
+    }
 }
 
 std::unique_ptr<SfxTabPage> SwModule::CreateTabPage( sal_uInt16 nId, weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet )
