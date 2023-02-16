@@ -806,9 +806,10 @@
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|bookmarks|tooltip_text">Export headings along with hyperlinked entries in Table of Contents as PDF bookmarks.</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="bookmarks-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|bookmarks">Select to export bookmarks of Writer documents as PDF bookmarks. Bookmarks are created for all outline paragraphs (Tools - Chapter Numbering) and for all table of contents entries for which you did assign hyperlinks in the source document.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|bookmarks">PDF bookmarks are created for all paragraphs with outline level 1 or greater and for all “Table of Contents” entries with hyperlinks.</property>
                       </object>
                     </child>
                   </object>
