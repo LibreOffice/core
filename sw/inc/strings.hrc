@@ -263,7 +263,7 @@
 #define SW_STR_READONLY                         NC_("SW_STR_READONLY", "read-only")
 #define STR_READONLY_PATH                       NC_("STR_READONLY_PATH", "The 'AutoText' directories are read-only. Do you want to call the path settings dialog?")
 #define STR_DOC_STAT                            NC_("STR_DOC_STAT", "Statistics")
-#define STR_OUTLINENUMBERING_DISABLED           NC_("STR_OUTLINENUMBERING_DISABLED","This option is disabled when chapter numbering is assigned to a paragraph style")
+#define STR_OUTLINENUMBERING_DISABLED           NC_("STR_OUTLINENUMBERING_DISABLED","This option is disabled when heading numbering is assigned to a paragraph style")
 // Statusbar-titles
 #define STR_STATSTR_W4WREAD                     NC_("STR_STATSTR_W4WREAD", "Importing document...")
 #define STR_STATSTR_W4WWRITE                    NC_("STR_STATSTR_W4WWRITE", "Exporting document...")
@@ -298,7 +298,7 @@
 #define STR_REDLINE_UNKNOWN_AUTHOR              NC_("STR_REDLINE_UNKNOWN_AUTHOR", "Unknown Author")
 #define STR_DELETE_NOTE_AUTHOR                  NC_("STR_DELETE_NOTE_AUTHOR", "Delete ~All Comments by $1")
 #define STR_HIDE_NOTE_AUTHOR                    NC_("STR_HIDE_NOTE_AUTHOR", "H~ide All Comments by $1")
-#define STR_OUTLINE_NUMBERING                   NC_("STR_OUTLINE_NUMBERING", "Chapter Numbering")
+#define STR_OUTLINE_NUMBERING                   NC_("STR_OUTLINE_NUMBERING", "Heading Numbering")
 #define STR_STATSTR_SWTRANSLATE                 NC_("STR_STATSTR_SWTRANSLATE", "Translating document...")
 /* To translators: $1 == will be replaced by STR_WORDCOUNT_WORDARG, and $2 by STR_WORDCOUNT_COLARG
    e.g. Selected: 1 word, 2 characters */
