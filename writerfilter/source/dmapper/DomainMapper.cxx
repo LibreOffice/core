@@ -4168,7 +4168,6 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 {
                     if (m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun() || mbWasShapeInPara)
                     {
-                        mbWasShapeInPara = false;
                         mbIsSplitPara = true;
                         finishParagraph();
                         lcl_startParagraphGroup();
