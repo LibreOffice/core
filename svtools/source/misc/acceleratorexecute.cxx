@@ -38,6 +38,8 @@
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 
+#include <comphelper/lok.hxx>
+
 namespace svt
 {
 
@@ -406,6 +408,25 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
     return xAccCfg;
 }
 
+css::uno::Reference<css::ui::XAcceleratorConfiguration> AcceleratorExecute::lok_createNewAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& rxContext, OUString sModule)
+{
+    css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUISupplier(css::ui::theModuleUIConfigurationManagerSupplier::get(rxContext));
+
+    try
+    {
+        css::uno::Reference<css::ui::XUIConfigurationManager> xUIManager = xUISupplier->getUIConfigurationManager(sModule);
+
+        // Return new short cut manager in case current view's language is different from previous ones.
+        return xUIManager->createShortCutManager();
+    }
+    catch(const css::container::NoSuchElementException&)
+    {}
+}
+
+void AcceleratorExecute::lok_setModuleConfig(css::uno::Reference<css::ui::XAcceleratorConfiguration> acceleratorConfig)
+{
+    this->m_xModuleCfg = acceleratorConfig;
+}
 
 css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st_openDocConfig(const css::uno::Reference< css::frame::XModel >& xModel)
 {
