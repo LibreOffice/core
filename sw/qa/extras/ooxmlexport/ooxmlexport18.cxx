@@ -149,6 +149,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153613_inlineAfterPgBreak, "tdf153613_inlineAfte
     assertXPath(pLayout, "//page[2]//anchored", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf153613_inlineAfterPgBreak2, "tdf153613_inlineAfterPgBreak2.docx")
+{
+    // An inline AS character image moves to the following page when after the page break.
+    // The difference from the previous test is that it is not the first character run
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    CPPUNIT_ASSERT_EQUAL(4, getParagraphs());
+
+    const auto& pLayout = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(OUString("x"), getXPathContent(pLayout, "//page[1]/body/txt[2]"));
+    assertXPath(pLayout, "//page[2]//anchored", 1);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_textboxAfterPgBreak, "tdf153613_textboxAfterPgBreak.docx")
 {
     CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
