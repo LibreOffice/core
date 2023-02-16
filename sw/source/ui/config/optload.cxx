@@ -464,10 +464,11 @@ SwCaptionOptPage::SwCaptionOptPage(weld::Container* pPage, weld::DialogControlle
     SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_FRAME, m_sText);
     SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_DRAWING, m_sDrawing);
 
-    SwWrtShell* pSh = ::GetActiveWrtShell();
 
     // m_xFormatBox
     sal_uInt16 nSelFormat = SVX_NUM_ARABIC;
+    SwWrtShell* pSh = ::GetActiveWrtShell();
+
     if (pSh)
     {
         for ( auto i = m_pMgr->GetFieldTypeCount(); i; )
@@ -663,13 +664,12 @@ void SwCaptionOptPage::UpdateEntry(int nSelEntry)
         m_xCategory->set_sensitive(bChecked);
         m_xPreview->set_sensitive(bChecked);
 
-        SwWrtShell *pSh = ::GetActiveWrtShell();
 
         InsCaptionOpt* pOpt = weld::fromId<InsCaptionOpt*>(m_xCheckLB->get_id(nSelEntry));
 
         m_xCategoryBox->clear();
         m_xCategoryBox->append_text(m_sNone);
-        if (pSh)
+        if (::GetActiveWrtShell())
         {
             const size_t nCount = m_pMgr->GetFieldTypeCount();
 
@@ -867,8 +867,7 @@ void SwCaptionOptPage::InvalidatePreview()
                 aStr += m_xCategoryBox->get_active_text() + " ";
             }
 
-            SwWrtShell *pSh = ::GetActiveWrtShell();
-            if (pSh)
+            if (SwWrtShell *pSh = ::GetActiveWrtShell())
             {
                 SwSetExpFieldType* pFieldType = static_cast<SwSetExpFieldType*>(m_pMgr->GetFieldType(
                                                 SwFieldIds::SetExp, m_xCategoryBox->get_active_text() ));
