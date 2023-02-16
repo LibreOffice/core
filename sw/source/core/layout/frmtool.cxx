@@ -2257,7 +2257,6 @@ SwBorderAttrs::SwBorderAttrs(const sw::BorderCacheOwner* pOwner, const SwFrame* 
         m_pFirstLineIndent.reset(m_rAttrSet.GetFirstLineIndent().Clone());
         m_pTextLeftMargin.reset(m_rAttrSet.GetTextLeftMargin().Clone());
         m_pRightMargin.reset(m_rAttrSet.GetRightMargin().Clone());
-        pTextFrame->GetTextNodeForParaProps()->ClearLRSpaceItemDueToListLevelIndents(m_pFirstLineIndent, m_pTextLeftMargin);
         assert(m_pFirstLineIndent);
         assert(m_pTextLeftMargin);
     }

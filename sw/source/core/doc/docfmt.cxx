@@ -1653,7 +1653,8 @@ void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
             SvxTextLeftMarginItem leftMargin(pTNd->SwContentNode::GetAttr(RES_MARGIN_TEXTLEFT));
 
             // #i93873# See also lcl_MergeListLevelIndentAsLRSpaceItem in thints.cxx
-            if ( pTNd->AreListLevelIndentsApplicable() )
+            ::sw::ListLevelIndents const indents(pTNd->AreListLevelIndentsApplicable());
+            if (indents != ::sw::ListLevelIndents::No)
             {
                 const SwNumRule* pRule = pTNd->GetNumRule();
                 if ( pRule )
@@ -1664,8 +1665,14 @@ void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
                         const SwNumFormat& rFormat = pRule->Get(o3tl::narrowing<sal_uInt16>(nListLevel));
                         if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
                         {
-                            leftMargin.SetTextLeft(rFormat.GetIndentAt());
-                            firstLine.SetTextFirstLineOffset(static_cast<short>(rFormat.GetFirstLineIndent()));
+                            if (indents & ::sw::ListLevelIndents::LeftMargin)
+                            {
+                                leftMargin.SetTextLeft(rFormat.GetIndentAt());
+                            }
+                            if (indents & ::sw::ListLevelIndents::FirstLine)
+                            {
+                                firstLine.SetTextFirstLineOffset(static_cast<short>(rFormat.GetFirstLineIndent()));
+                            }
                         }
                     }
                 }

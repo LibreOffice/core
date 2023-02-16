@@ -38,6 +38,7 @@
 #include <editeng/forbiddenruleitem.hxx>
 #include <editeng/paravertalignitem.hxx>
 #include <editeng/pgrditem.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class SwTextNode;
 class IntlWrapper;
@@ -47,12 +48,20 @@ class IntlWrapper;
 class SwFormatDrop;
 
 namespace sw {
+
+    enum class ListLevelIndents { No, FirstLine, LeftMargin };
+
     class SW_DLLPUBLIC FormatDropDefiner {
         protected:
             virtual ~FormatDropDefiner() {};
         public:
             virtual void FormatDropNotify(const SwFormatDrop&) =0;
     };
+}
+
+namespace o3tl
+{
+    template<> struct typed_flags<sw::ListLevelIndents> : is_typed_flags<sw::ListLevelIndents, 0x03> {};
 }
 
 /** If SwFormatDrop is a Client, it is the CharFormat that describes the font for the

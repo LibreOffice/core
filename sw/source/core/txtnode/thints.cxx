@@ -2112,7 +2112,8 @@ public:
 static void lcl_MergeListLevelIndentAsLRSpaceItem( const SwTextNode& rTextNode,
                                             SfxItemSet& rSet )
 {
-    if ( !rTextNode.AreListLevelIndentsApplicable() )
+    ::sw::ListLevelIndents const indents(rTextNode.AreListLevelIndentsApplicable());
+    if (indents == ::sw::ListLevelIndents::No)
         return;
 
     const SwNumRule* pRule = rTextNode.GetNumRule();
@@ -2121,10 +2122,16 @@ static void lcl_MergeListLevelIndentAsLRSpaceItem( const SwTextNode& rTextNode,
         const SwNumFormat& rFormat = pRule->Get(o3tl::narrowing<sal_uInt16>(rTextNode.GetActualListLevel()));
         if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
-            SvxTextLeftMarginItem const leftMargin(rFormat.GetIndentAt(), RES_MARGIN_TEXTLEFT);
-            SvxFirstLineIndentItem const firstLine(static_cast<short>(rFormat.GetFirstLineIndent()), RES_MARGIN_FIRSTLINE);
-            rSet.Put(firstLine);
-            rSet.Put(leftMargin);
+            if (indents & ::sw::ListLevelIndents::FirstLine)
+            {
+                SvxFirstLineIndentItem const firstLine(static_cast<short>(rFormat.GetFirstLineIndent()), RES_MARGIN_FIRSTLINE);
+                rSet.Put(firstLine);
+            }
+            if (indents & ::sw::ListLevelIndents::LeftMargin)
+            {
+                SvxTextLeftMarginItem const leftMargin(rFormat.GetIndentAt(), RES_MARGIN_TEXTLEFT);
+                rSet.Put(leftMargin);
+            }
         }
     }
 }

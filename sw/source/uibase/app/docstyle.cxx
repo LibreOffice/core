@@ -1422,7 +1422,8 @@ void SwDocStyleSheet::MergeIndentAttrsOfListStyle( SfxItemSet& rSet )
     }
 
     OSL_ENSURE( m_pColl, "<SwDocStyleSheet::MergeIndentAttrsOfListStyle(..)> - missing paragraph style");
-    if ( !m_pColl->AreListLevelIndentsApplicable() )
+    ::sw::ListLevelIndents const indents(m_pColl->AreListLevelIndentsApplicable());
+    if (indents == ::sw::ListLevelIndents::No)
         return;
 
     OSL_ENSURE( m_pColl->GetItemState( RES_PARATR_NUMRULE ) == SfxItemState::SET,
@@ -1437,10 +1438,16 @@ void SwDocStyleSheet::MergeIndentAttrsOfListStyle( SfxItemSet& rSet )
         const SwNumFormat& rFormat = pRule->Get( 0 );
         if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
-            SvxFirstLineIndentItem const firstLine(static_cast<short>(rFormat.GetFirstLineIndent()), RES_MARGIN_FIRSTLINE);
-            SvxTextLeftMarginItem const leftMargin(rFormat.GetIndentAt(), RES_MARGIN_TEXTLEFT);
-            rSet.Put(firstLine);
-            rSet.Put(leftMargin);
+            if (indents & ::sw::ListLevelIndents::FirstLine)
+            {
+                SvxFirstLineIndentItem const firstLine(static_cast<short>(rFormat.GetFirstLineIndent()), RES_MARGIN_FIRSTLINE);
+                rSet.Put(firstLine);
+            }
+            if (indents & ::sw::ListLevelIndents::LeftMargin)
+            {
+                SvxTextLeftMarginItem const leftMargin(rFormat.GetIndentAt(), RES_MARGIN_TEXTLEFT);
+                rSet.Put(leftMargin);
+            }
         }
     }
 }

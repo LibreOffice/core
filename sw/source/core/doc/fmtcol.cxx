@@ -472,7 +472,21 @@ sal_uInt16 SwTextFormatColl::ResetAllFormatAttr()
     return nRet;
 }
 
-bool SwTextFormatColl::AreListLevelIndentsApplicable() const
+::sw::ListLevelIndents SwTextFormatColl::AreListLevelIndentsApplicable() const
+{
+    ::sw::ListLevelIndents ret(::sw::ListLevelIndents::No);
+    if (AreListLevelIndentsApplicableImpl(RES_MARGIN_FIRSTLINE))
+    {
+        ret |= ::sw::ListLevelIndents::FirstLine;
+    }
+    if (AreListLevelIndentsApplicableImpl(RES_MARGIN_TEXTLEFT))
+    {
+        ret |= ::sw::ListLevelIndents::LeftMargin;
+    }
+    return ret;
+}
+
+bool SwTextFormatColl::AreListLevelIndentsApplicableImpl(sal_uInt16 const nWhich) const
 {
     bool bAreListLevelIndentsApplicable( true );
 
@@ -481,7 +495,7 @@ bool SwTextFormatColl::AreListLevelIndentsApplicable() const
         // no list style applied to paragraph style
         bAreListLevelIndentsApplicable = false;
     }
-    else if ( GetItemState( RES_LR_SPACE, false ) == SfxItemState::SET )
+    else if (GetItemState(nWhich, false ) == SfxItemState::SET)
     {
         // paragraph style has hard-set indent attributes
         bAreListLevelIndentsApplicable = false;
@@ -501,7 +515,7 @@ bool SwTextFormatColl::AreListLevelIndentsApplicable() const
         const SwTextFormatColl* pColl = dynamic_cast<const SwTextFormatColl*>(DerivedFrom());
         while ( pColl )
         {
-            if ( pColl->GetAttrSet().GetItemState( RES_LR_SPACE, false ) == SfxItemState::SET )
+            if (pColl->GetAttrSet().GetItemState(nWhich, false) == SfxItemState::SET)
             {
                 // indent attributes found in the paragraph style hierarchy.
                 bAreListLevelIndentsApplicable = false;

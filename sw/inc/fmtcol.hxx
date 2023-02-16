@@ -143,7 +143,8 @@ public:
         return mbStayAssignedToListLevelOfOutlineStyle;
     }
 
-    bool AreListLevelIndentsApplicable() const;
+    ::sw::ListLevelIndents AreListLevelIndentsApplicable() const;
+    bool AreListLevelIndentsApplicableImpl(sal_uInt16 nWhich) const;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
     virtual void FormatDropNotify(const SwFormatDrop& rDrop) override

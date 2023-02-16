@@ -516,9 +516,10 @@ public:
     /**
        Returns the additional indents of this text node and its numbering.
 
-       @param bTextLeft  ???
+       @param bTextLeft return text-left-margin instead of left-margin
+                        (include negative first-line-indent, see lrspitem.hxx)
 
-       @return additional indents
+       @return additional num indents - a delta to be added to node's items
      */
      tools::Long GetLeftMarginWithNum( bool bTextLeft = false ) const;
 
@@ -693,9 +694,10 @@ public:
           style hierarchy from the paragraph to the paragraph style with the
           list style no indent attributes are found.
 
-        @return boolean
+        @return bitmask
     */
-    bool AreListLevelIndentsApplicable() const;
+    ::sw::ListLevelIndents AreListLevelIndentsApplicable() const;
+    bool AreListLevelIndentsApplicableImpl(sal_uInt16 nWhich) const;
 
     /** Retrieves the list tab stop position, if the paragraph's list level defines
         one and this list tab stop has to merged into the tap stops of the paragraph

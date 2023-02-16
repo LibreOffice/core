@@ -4240,7 +4240,8 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
     // W8ImplReader::RegisterNumFormatOnTextNode).
     // Need to apply the list format to the paragraph here.
     SwTextNode* pTextNode = m_pPaM->GetPointNode().GetTextNode();
-    if( pTextNode && pTextNode->AreListLevelIndentsApplicable() )
+    if (pTextNode
+        && pTextNode->AreListLevelIndentsApplicable() != ::sw::ListLevelIndents::No)
     {
         SwNumRule * pNumRule = pTextNode->GetNumRule();
         if( pNumRule )

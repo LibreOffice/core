@@ -2970,11 +2970,17 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                         // style is applied via paragraph style and the list level
                         // indent values are not applicable.
                         if ( pFormat->GetPositionAndSpaceMode() ==
-                                                SvxNumberFormat::LABEL_ALIGNMENT &&
-                             !rNode.AreListLevelIndentsApplicable() )
+                                    SvxNumberFormat::LABEL_ALIGNMENT)
                         {
-                            oTmpSet->Put(firstLine);
-                            oTmpSet->Put(leftMargin);
+                            ::sw::ListLevelIndents const indents(rNode.AreListLevelIndentsApplicable());
+                            if (indents & ::sw::ListLevelIndents::FirstLine)
+                            {
+                                oTmpSet->Put(firstLine);
+                            }
+                            if (indents & ::sw::ListLevelIndents::LeftMargin)
+                            {
+                                oTmpSet->Put(leftMargin);
+                            }
                         }
                     }
                 }

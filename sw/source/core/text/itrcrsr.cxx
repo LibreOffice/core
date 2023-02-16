@@ -167,7 +167,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
     // #i111284#
     const SwTextNode *pTextNode = m_pFrame->GetTextNodeForParaProps();
     const bool bLabelAlignmentActive = IsLabelAlignmentActive( *pTextNode );
-    const bool bListLevelIndentsApplicable = pTextNode->AreListLevelIndentsApplicable();
+    const bool bListLevelIndentsApplicable = pTextNode->AreListLevelIndentsApplicable() != ::sw::ListLevelIndents::No;
     const bool bListLevelIndentsApplicableAndLabelAlignmentActive = bListLevelIndentsApplicable && bLabelAlignmentActive;
 
     // Carefully adjust the text formatting ranges.
@@ -192,9 +192,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
                 // #i95907#
                 // #i111284#
                 // rSpace.GetLeft() + rSpace.GetTextLeft();
-                ( bListLevelIndentsApplicableAndLabelAlignmentActive
-                  ? 0
-                  : (rTextLeftMargin.GetLeft(rFirstLine) - rTextLeftMargin.GetTextLeft()));
+                (rTextLeftMargin.GetLeft(rFirstLine) - rTextLeftMargin.GetTextLeft());
     }
     else
     {
@@ -210,9 +208,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
                     pNode->GetLeftMarginWithNum() -
                     // #i95907#
                     // #i111284#
-                    ( bListLevelIndentsApplicableAndLabelAlignmentActive
-                      ? 0
-                      : (rTextLeftMargin.GetLeft(rFirstLine) - rTextLeftMargin.GetTextLeft()));
+                    (rTextLeftMargin.GetLeft(rFirstLine) - rTextLeftMargin.GetTextLeft());
         }
         else
         {

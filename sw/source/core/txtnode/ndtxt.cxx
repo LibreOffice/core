@@ -3301,17 +3301,28 @@ tools::Long SwTextNode::GetLeftMarginWithNum( bool bTextLeft ) const
         }
         else if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
-            if ( AreListLevelIndentsApplicable() )
+            ::sw::ListLevelIndents const indents(AreListLevelIndentsApplicable());
+            // note: the result is *always* added to either the left-margin
+            // or the text-left-margin of the node itself by the caller.
+            // so first, subtract what the caller has computed anyway,
+            // and then add the value according to combination of
+            // list/paragraph items. (this is rather inelegant)
+            SvxFirstLineIndentItem firstLine(GetSwAttrSet().GetFirstLineIndent());
+            SvxTextLeftMarginItem leftMargin(GetSwAttrSet().GetTextLeftMargin());
+            nRet = bTextLeft
+                ? - leftMargin.GetTextLeft()
+                : - leftMargin.GetLeft(firstLine);
+            if (indents & ::sw::ListLevelIndents::LeftMargin)
             {
-                nRet = rFormat.GetIndentAt();
-                // #i90401#
-                // Only negative first line indents have consider for the left margin
-                if ( !bTextLeft &&
-                     rFormat.GetFirstLineIndent() < 0 )
-                {
-                    nRet = nRet + rFormat.GetFirstLineIndent();
-                }
+                leftMargin.SetTextLeft(rFormat.GetIndentAt());
             }
+            if (indents & ::sw::ListLevelIndents::FirstLine)
+            {
+                firstLine.SetTextFirstLineOffset(rFormat.GetFirstLineIndent());
+            }
+            nRet += bTextLeft
+                ? leftMargin.GetTextLeft()
+                : leftMargin.GetLeft(firstLine);
         }
     }
 
@@ -3342,7 +3353,7 @@ bool SwTextNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
             }
             else if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
             {
-                if ( AreListLevelIndentsApplicable() )
+                if (AreListLevelIndentsApplicable() & ::sw::ListLevelIndents::FirstLine)
                 {
                     rFLOffset = rFormat.GetFirstLineIndent();
                 }
@@ -3382,18 +3393,24 @@ SwTwips SwTextNode::GetAdditionalIndentForStartingNewList() const
         }
         else if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
-            if ( AreListLevelIndentsApplicable() )
+            // note: there was an apparent bug here, list GetIndentAt()
+            // was interpreted as left-margin not text-left-margin unlike every
+            // other use of it.
+            ::sw::ListLevelIndents const indents(AreListLevelIndentsApplicable());
+            SvxFirstLineIndentItem const& rFirst(
+                    indents & ::sw::ListLevelIndents::FirstLine
+                    ? SvxFirstLineIndentItem(rFormat.GetFirstLineIndent(), RES_MARGIN_FIRSTLINE)
+                    : GetSwAttrSet().GetFirstLineIndent());
+            SvxTextLeftMarginItem const& rLeft(
+                    indents & ::sw::ListLevelIndents::LeftMargin
+                    ? SvxTextLeftMarginItem(rFormat.GetIndentAt(), RES_MARGIN_TEXTLEFT)
+                    : GetSwAttrSet().GetTextLeftMargin());
+            nAdditionalIndent = rLeft.GetLeft(rFirst);
+            if (!(indents & ::sw::ListLevelIndents::FirstLine))
             {
-                nAdditionalIndent = rFormat.GetIndentAt() + rFormat.GetFirstLineIndent();
-            }
-            else
-            {
-                SvxFirstLineIndentItem const& rFirst(GetSwAttrSet().GetFirstLineIndent());
-                nAdditionalIndent = GetSwAttrSet().GetTextLeftMargin().GetLeft(rFirst);
                 if (getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
-                    nAdditionalIndent = nAdditionalIndent -
-                        GetSwAttrSet().GetFirstLineIndent().GetTextFirstLineOffset();
+                    nAdditionalIndent = nAdditionalIndent - rFirst.GetTextFirstLineOffset();
                 }
             }
         }
@@ -3412,7 +3429,8 @@ void SwTextNode::ClearLRSpaceItemDueToListLevelIndents(
         std::unique_ptr<SvxFirstLineIndentItem>& o_rFirstLineItem,
         std::unique_ptr<SvxTextLeftMarginItem>& o_rTextLeftMarginItem) const
 {
-    if ( AreListLevelIndentsApplicable() )
+    ::sw::ListLevelIndents const result(AreListLevelIndentsApplicable());
+    if (result != ::sw::ListLevelIndents::No)
     {
         const SwNumRule* pRule = GetNumRule();
         if ( pRule && GetActualListLevel() >= 0 )
@@ -3420,8 +3438,14 @@ void SwTextNode::ClearLRSpaceItemDueToListLevelIndents(
             const SwNumFormat& rFormat = pRule->Get(lcl_BoundListLevel(GetActualListLevel()));
             if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
             {
-                o_rFirstLineItem = std::make_unique<SvxFirstLineIndentItem>(RES_MARGIN_FIRSTLINE);
-                o_rTextLeftMarginItem = std::make_unique<SvxTextLeftMarginItem>(RES_MARGIN_TEXTLEFT);
+                if (result & ::sw::ListLevelIndents::FirstLine)
+                {
+                    o_rFirstLineItem = std::make_unique<SvxFirstLineIndentItem>(RES_MARGIN_FIRSTLINE);
+                }
+                if (result & ::sw::ListLevelIndents::LeftMargin)
+                {
+                    o_rTextLeftMarginItem = std::make_unique<SvxTextLeftMarginItem>(RES_MARGIN_TEXTLEFT);
+                }
             }
         }
     }
@@ -3439,7 +3463,7 @@ tools::Long SwTextNode::GetLeftMarginForTabCalculation() const
         const SwNumFormat& rFormat = pRule->Get(lcl_BoundListLevel(GetActualListLevel()));
         if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
-            if ( AreListLevelIndentsApplicable() )
+            if (AreListLevelIndentsApplicable() & ::sw::ListLevelIndents::LeftMargin)
             {
                 nLeftMarginForTabCalc = rFormat.GetIndentAt();
                 bLeftMarginForTabCalcSetToListLevelIndent = true;
@@ -4610,9 +4634,23 @@ OUString SwTextNode::GetListId() const
       style hierarchy from the paragraph to the paragraph style with the
       list style no indent attributes are found.
 
-    @return boolean
+    @return bitmask
 */
-bool SwTextNode::AreListLevelIndentsApplicable() const
+::sw::ListLevelIndents SwTextNode::AreListLevelIndentsApplicable() const
+{
+    ::sw::ListLevelIndents ret(::sw::ListLevelIndents::No);
+    if (AreListLevelIndentsApplicableImpl(RES_MARGIN_FIRSTLINE))
+    {
+        ret |= ::sw::ListLevelIndents::FirstLine;
+    }
+    if (AreListLevelIndentsApplicableImpl(RES_MARGIN_TEXTLEFT))
+    {
+        ret |= ::sw::ListLevelIndents::LeftMargin;
+    }
+    return ret;
+}
+
+bool SwTextNode::AreListLevelIndentsApplicableImpl(sal_uInt16 const nWhich) const
 {
     bool bAreListLevelIndentsApplicable( true );
 
@@ -4622,7 +4660,7 @@ bool SwTextNode::AreListLevelIndentsApplicable() const
         bAreListLevelIndentsApplicable = false;
     }
     else if ( HasSwAttrSet() &&
-              GetpSwAttrSet()->GetItemState( RES_LR_SPACE, false ) == SfxItemState::SET )
+             GetpSwAttrSet()->GetItemState(nWhich, false) == SfxItemState::SET)
     {
         // paragraph has hard-set indent attributes
         bAreListLevelIndentsApplicable = false;
@@ -4643,7 +4681,7 @@ bool SwTextNode::AreListLevelIndentsApplicable() const
         const SwTextFormatColl* pColl = GetTextColl();
         while ( pColl )
         {
-            if ( pColl->GetAttrSet().GetItemState( RES_LR_SPACE, false ) == SfxItemState::SET )
+            if (pColl->GetAttrSet().GetItemState(nWhich, false) == SfxItemState::SET)
             {
                 // indent attributes found in the paragraph style hierarchy.
                 bAreListLevelIndentsApplicable = false;
@@ -4693,7 +4731,7 @@ bool SwTextNode::GetListTabStopPosition( tools::Long& nListTabStopPosition ) con
             {
                 // tab stop position are treated to be relative to the "before text"
                 // indent value of the paragraph. Thus, adjust <nListTabStopPos>.
-                if ( AreListLevelIndentsApplicable() )
+                if (AreListLevelIndentsApplicable() & ::sw::ListLevelIndents::LeftMargin)
                 {
                     nListTabStopPosition -= rFormat.GetIndentAt();
                 }

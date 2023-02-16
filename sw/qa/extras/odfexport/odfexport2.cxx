@@ -31,6 +31,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <unoprnms.hxx>
+#include <unotxdoc.hxx>
 #include <docsh.hxx>
 
 class Test : public SwModelTestBase
@@ -847,6 +848,168 @@ DECLARE_ODFEXPORT_TEST(testSectionColumnSeparator, "section-columns-separator.fo
         css::style::VerticalAlignment_BOTTOM,
         getProperty<css::style::VerticalAlignment>(xColumns, "SeparatorLineVerticalAlignment"));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xColumns, "SeparatorLineIsOn"));
+}
+
+DECLARE_ODFEXPORT_TEST(testTdf78510, "WordTest_edit.odt")
+{
+    uno::Reference<container::XIndexAccess> const xLevels1(
+        getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules"));
+    ::comphelper::SequenceAsHashMap props1(xLevels1->getByIndex(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1000), props1["FirstLineIndent"].get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), props1["IndentAt"].get<sal_Int32>());
+
+    // 1: inherited from paragraph style and overridden by list
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaRightMargin"));
+    // 2: as 1 + paragraph sets firstline
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(getParagraph(2), "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(2), "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(2), "ParaRightMargin"));
+    // 3: as 1 + paragraph sets textleft
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(3), "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3000), getProperty<sal_Int32>(getParagraph(3), "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(3), "ParaRightMargin"));
+    // 4: as 1 + paragraph sets firstline, textleft
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-2000), getProperty<sal_Int32>(getParagraph(4), "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3000), getProperty<sal_Int32>(getParagraph(4), "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(4), "ParaRightMargin"));
+    // 5: as 1 + paragraph sets firstline
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-2000), getProperty<sal_Int32>(getParagraph(5), "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(5), "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(5), "ParaRightMargin"));
+    // 6: as 1
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(6), "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(6), "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(6), "ParaRightMargin"));
+
+    uno::Reference<container::XIndexAccess> const xLevels8(
+        getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(8), "NumberingRules"));
+    ::comphelper::SequenceAsHashMap props8(xLevels8->getByIndex(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), props8["FirstLineIndent"].get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), props8["IndentAt"].get<sal_Int32>());
+
+    // 8: inherited from paragraph style and overridden by list
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(8), "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(8), "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(8), "ParaRightMargin"));
+    // 9: as 8 + paragraph sets firstline
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(getParagraph(9), "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(9), "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(9), "ParaRightMargin"));
+    // 10: as 8 + paragraph sets textleft
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(10), "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3000), getProperty<sal_Int32>(getParagraph(10), "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(10), "ParaRightMargin"));
+    // 11: as 8 + paragraph sets firstline, textleft
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-2000), getProperty<sal_Int32>(getParagraph(11), "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3000), getProperty<sal_Int32>(getParagraph(11), "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(11), "ParaRightMargin"));
+    // 12: as 8 + paragraph sets firstline
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-2000), getProperty<sal_Int32>(getParagraph(12), "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(12), "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(12), "ParaRightMargin"));
+    // 13: as 8
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(13), "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(13), "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(13), "ParaRightMargin"));
+
+    // unfortunately it appears that the portions don't have a position
+    // so it's not possible to check the first-line-offset that's applied
+    // (the first-line-indent is computed on the fly in SwTextMargin when
+    // painting)
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/infos/prtBounds", "left", "567");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/infos/prtBounds", "right", "9359");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/prtBounds", "left", "1134");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/prtBounds", "right", "9359");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/infos/prtBounds", "left", "1134");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/infos/prtBounds", "right", "9359");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/infos/prtBounds", "left", "567");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/infos/prtBounds", "right", "9359");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/infos/prtBounds", "left", "0");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/infos/prtBounds", "right", "9359");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/infos/prtBounds", "left", "567");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/infos/prtBounds", "right", "9359");
+
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/infos/prtBounds", "left", "567");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/infos/prtBounds", "right", "9359");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds", "left", "567");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds", "right", "9359");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/infos/prtBounds", "left", "1701");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/infos/prtBounds", "right", "9359");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/infos/prtBounds", "left", "567");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/infos/prtBounds", "right", "9359");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/infos/prtBounds", "left", "-567");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/infos/prtBounds", "right", "9359");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/infos/prtBounds", "left", "567");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/infos/prtBounds", "right", "9359");
+    }
+
+    // now check the positions where text is actually painted -
+    // wonder how fragile this is...
+    // FIXME some platform difference, 1st one is 2306 on Linux, 3087 on WNT ?
+#ifndef WNT
+    {
+        SwDocShell *const pShell(dynamic_cast<SwXTextDocument&>(*mxComponent).GetDocShell());
+        std::shared_ptr<GDIMetaFile> pMetaFile = pShell->GetPreviewMetaFile();
+        MetafileXmlDump aDumper;
+        xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *pMetaFile);
+
+        // 1: inherited from paragraph style and overridden by list
+        // bullet char is extra
+
+        assertXPath(pXmlDoc, "//textarray[1]", "x", "2306");
+        // text is after a tab from list - haven't checked if that is correct?
+        assertXPath(pXmlDoc, "//textarray[2]", "x", "2873");
+        // second line
+        assertXPath(pXmlDoc, "//textarray[3]", "x", "2873");
+        // 2: as 1 + paragraph sets firstline
+        assertXPath(pXmlDoc, "//textarray[4]", "x", "3440");
+        assertXPath(pXmlDoc, "//textarray[5]", "x", "3593");
+        assertXPath(pXmlDoc, "//textarray[6]", "x", "2873");
+        // 3: as 1 + paragraph sets textleft
+        assertXPath(pXmlDoc, "//textarray[7]", "x", "2873");
+        assertXPath(pXmlDoc, "//textarray[8]", "x", "3440");
+        assertXPath(pXmlDoc, "//textarray[9]", "x", "3440");
+        // 4: as 1 + paragraph sets firstline, textleft
+        assertXPath(pXmlDoc, "//textarray[10]", "x", "2306");
+        assertXPath(pXmlDoc, "//textarray[11]", "x", "3440");
+        assertXPath(pXmlDoc, "//textarray[12]", "x", "3440");
+        // 5: as 1 + paragraph sets firstline
+        assertXPath(pXmlDoc, "//textarray[13]", "x", "1739");
+        assertXPath(pXmlDoc, "//textarray[14]", "x", "2873");
+        assertXPath(pXmlDoc, "//textarray[15]", "x", "2873");
+        // 6: as 1
+        assertXPath(pXmlDoc, "//textarray[16]", "x", "2306");
+        assertXPath(pXmlDoc, "//textarray[17]", "x", "2873");
+
+        // 8: inherited from paragraph style and overridden by list
+        assertXPath(pXmlDoc, "//textarray[18]", "x", "2873");
+        assertXPath(pXmlDoc, "//textarray[19]", "x", "3746");
+        assertXPath(pXmlDoc, "//textarray[20]", "x", "2306");
+        // 9: as 8 + paragraph sets firstline
+        assertXPath(pXmlDoc, "//textarray[21]", "x", "3440");
+        assertXPath(pXmlDoc, "//textarray[22]", "x", "3746");
+        assertXPath(pXmlDoc, "//textarray[23]", "x", "2306");
+        // 10: as 8 + paragraph sets textleft
+        assertXPath(pXmlDoc, "//textarray[24]", "x", "4007");
+        assertXPath(pXmlDoc, "//textarray[25]", "x", "4880");
+        assertXPath(pXmlDoc, "//textarray[26]", "x", "3440");
+        // 11: as 8 + paragraph sets firstline, textleft
+        assertXPath(pXmlDoc, "//textarray[27]", "x", "2306");
+        assertXPath(pXmlDoc, "//textarray[28]", "x", "3440");
+        assertXPath(pXmlDoc, "//textarray[29]", "x", "3440");
+        // 12: as 8 + paragraph sets firstline
+        assertXPath(pXmlDoc, "//textarray[30]", "x", "1172");
+        assertXPath(pXmlDoc, "//textarray[31]", "x", "1739");
+        assertXPath(pXmlDoc, "//textarray[32]", "x", "2306");
+        // 13: as 8
+        assertXPath(pXmlDoc, "//textarray[33]", "x", "2873");
+        assertXPath(pXmlDoc, "//textarray[34]", "x", "3746");
+    }
+#endif
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
