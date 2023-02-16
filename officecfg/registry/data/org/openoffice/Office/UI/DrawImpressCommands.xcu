@@ -791,6 +791,9 @@
       </node>
       <node oor:name=".uno:DiaMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Sli~de Sorter View</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Sli~de Sorter</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -1896,6 +1899,9 @@
       </node>
       <node oor:name=".uno:NormalMultiPaneGUI" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Normal View</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Normal</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
