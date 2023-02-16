@@ -86,6 +86,58 @@ DECLARE_RTFEXPORT_TEST(testN818997, "n818997.rtf")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf153613_anchoredAfterPgBreak, "tdf153613_anchoredAfterPgBreak.rtf")
+{
+    // An anchored TO character image (followed by nothing) anchors before the page break, no split.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
+
+    const auto& pLayout = parseLayoutDump();
+    assertXPath(pLayout, "//page[1]//anchored", 1);
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf153613_anchoredAfterPgBreak2, "tdf153613_anchoredAfterPgBreak2.rtf")
+{
+    // An anchored TO character image, followed by more characters moves to the following page
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
+
+    const auto& pLayout = parseLayoutDump();
+    assertXPath(pLayout, "//page[2]//anchored", 1);
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf153613_anchoredAfterPgBreak4, "tdf153613_anchoredAfterPgBreak4.rtf")
+{
+    // An anchored TO character image (followed by nothing) anchors before the page break, no split.
+    // This differs from #1 only in that it has a preceding character run before the page break.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    CPPUNIT_ASSERT_MESSAGE("YOU FIXED ME!", 3 != getParagraphs());
+
+    const auto& pLayout = parseLayoutDump();
+    assertXPath(pLayout, "//page[2]//anchored", 1); // DID YOU FIX ME? This should be page[1]
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf153613_anchoredAfterPgBreak5, "tdf153613_anchoredAfterPgBreak5.rtf")
+{
+    // Two anchored TO character images (followed by nothing) splits & anchors after the page break
+    // This differs from #1 only in that it has two anchored images.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
+
+    const auto& pLayout = parseLayoutDump();
+    assertXPath(pLayout, "//page[1]//anchored", 1);
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf153613_inlineAfterPgBreak, "tdf153613_inlineAfterPgBreak.rtf")
+{
+    // An inline AS character image moves to the following page when after the page break.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
+
+    const auto& pLayout = parseLayoutDump();
+    assertXPath(pLayout, "//page[2]//anchored", 1);
+}
+
 DECLARE_RTFEXPORT_TEST(testFdo64671, "fdo64671.rtf")
 {
     // Additional '}' was inserted before the special character.
