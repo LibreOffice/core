@@ -93,17 +93,14 @@ sal_uInt8 FormulaToken::GetParamCount() const
         return 0;       // parameters and specials
                         // ocIf... jump commands not for FAP, have cByte then
 //2do: bool parameter whether FAP or not?
-    else if ( GetByte() )
+    else if (GetByte())
         return GetByte();   // all functions, also ocExternal and ocMacro
-    else if (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP)
-        return 2;           // binary
-    else if ((SC_OPCODE_START_UN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP)
-            || eOp == ocPercentSign)
-        return 1;           // unary
+    else if (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP && eOp != ocAnd && eOp != ocOr)
+        return 2;           // binary operators, compiler checked; OR and AND legacy but are functions
+    else if ((SC_OPCODE_START_UN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP) || eOp == ocPercentSign)
+        return 1;           // unary operators, compiler checked
     else if (SC_OPCODE_START_NO_PAR <= eOp && eOp < SC_OPCODE_STOP_NO_PAR)
         return 0;           // no parameter
-    else if (SC_OPCODE_START_1_PAR <= eOp && eOp < SC_OPCODE_STOP_1_PAR)
-        return 1;           // one parameter
     else if (FormulaCompiler::IsOpCodeJumpCommand( eOp ))
         return 1;           // only the condition counts as parameter
     else
