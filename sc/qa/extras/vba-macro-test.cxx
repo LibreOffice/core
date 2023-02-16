@@ -11,6 +11,8 @@
 #include <test/unoapi_test.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
+#include <vcl/filter/pdfdocument.hxx>
+#include <vcl/filter/PDFiumLibrary.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/svapp.hxx>
 #include <viewdata.hxx>
@@ -834,10 +836,39 @@ void VBAMacroTest::testTdf126457()
 
 void VBAMacroTest::testVbaPDFExport()
 {
-    loadFromURL(u"ExportAsPDF.xlsm");
+    mxComponent = loadFromDesktop("private:factory/scalc");
 
-    executeMacro("vnd.sun.Star.script:VBAProject.Module1.ExportAsPDF?"
-                 "language=Basic&location=document");
+    // Save a copy of the file to get its URL
+    uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
+    utl::TempFileNamed aTempFile(u"testVBA_PDF_Export", true, u".ods");
+    aTempFile.EnableKillingFile();
+    uno::Sequence<beans::PropertyValue> descSaveAs(
+        comphelper::InitPropertySequence({ { "FilterName", uno::Any(OUString("calc8")) } }));
+    xDocStorable->storeAsURL(aTempFile.GetURL(), descSaveAs);
+
+    utl::TempFileNamed aTempPdfFile(u"exportedfile", true, u".pdf");
+    aTempPdfFile.EnableKillingFile();
+
+    css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, uno::UNO_QUERY_THROW);
+    auto xLibs = xDocScr->getBasicLibraries();
+    auto xLibrary = xLibs->createLibrary("TestLibrary");
+    OUString sMacro = "Option VBASupport 1\n"
+                      "Sub ExportAsPDF\n"
+                      "  fileName = \""
+                      + aTempPdfFile.GetFileName()
+                      + "\"\n  ActiveSheet.ExportAsFixedFormat Type:=xlTypePDF, "
+                        "FileName:=fileName, Quality:=xlQualityStandard, "
+                        "IncludeDocProperties:=True, OpenAfterPublish:=False\n"
+                        "End Sub\n";
+    xLibrary->insertByName("TestModule", uno::Any(sMacro));
+
+    executeMacro("vnd.sun.Star.script:TestLibrary.TestModule.ExportAsPDF?language=Basic&location="
+                 "document");
+
+    // Parse the export result.
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(aTempPdfFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get the pdf document", aDocument.Read(aStream));
 }
 CPPUNIT_TEST_SUITE_REGISTRATION(VBAMacroTest);
 
