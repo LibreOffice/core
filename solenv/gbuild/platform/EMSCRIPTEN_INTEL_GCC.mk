@@ -32,6 +32,10 @@ gb_EMSCRIPTEN_QTDEFS := -DQT_NO_LINKED_LIST -DQT_NO_JAVA_STYLE_ITERATORS -DQT_NO
 
 gb_Executable_EXT := .html
 ifeq ($(ENABLE_WASM_EXCEPTIONS),TRUE)
+# Note that to really use WASM exceptions everywhere, you most probably want to also use
+# CC=emcc -pthread -s USE_PTHREADS=1 -fwasm-exceptions -s SUPPORT_LONGJMP=wasm
+# and CXX=em++ -pthread -s USE_PTHREADS=1 -fwasm-exceptions -s SUPPORT_LONGJMP=wasm
+# in your autogen.input. Otherwise these flags won't propagate to all external libraries, I fear.
 gb_EMSCRIPTEN_EXCEPT = -fwasm-exceptions -s SUPPORT_LONGJMP=wasm
 gb_EMSCRIPTEN_CPPFLAGS += -s SUPPORT_LONGJMP=wasm
 else
