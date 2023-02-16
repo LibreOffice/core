@@ -36,15 +36,6 @@ using namespace com::sun::star::uno;
 using namespace comphelper;
 
 
-//  The mutex to synchronize access to containers.
-static osl::Mutex& getContainerMutex()
-{
-    static osl::Mutex ourMutex;
-
-    return ourMutex;
-}
-
-
 // SortedDynamicResultSet
 
 SortedDynamicResultSet::SortedDynamicResultSet(
@@ -53,7 +44,6 @@ SortedDynamicResultSet::SortedDynamicResultSet(
                         const Reference < XAnyCompareFactory > &xCompFac,
                         const Reference < XComponentContext > &rxContext )
 {
-    mpDisposeEventListeners = nullptr;
     mxOwnListener           = new SortedDynamicResultSetListener( this );
 
     mxOriginal  = xOriginal;
@@ -72,7 +62,10 @@ SortedDynamicResultSet::~SortedDynamicResultSet()
     mxOwnListener->impl_OwnerDies();
     mxOwnListener.clear();
 
-    mpDisposeEventListeners.reset();
+    {
+        std::unique_lock aGuard(maMutex);
+        maDisposeEventListeners.clear(aGuard);
+    }
 
     mxOne.clear();
     mxTwo.clear();
@@ -100,13 +93,13 @@ css::uno::Sequence< OUString > SAL_CALL SortedDynamicResultSet::getSupportedServ
 
 void SAL_CALL SortedDynamicResultSet::dispose()
 {
-    osl::Guard< osl::Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
-    if ( mpDisposeEventListeners && mpDisposeEventListeners->getLength() )
+    if ( maDisposeEventListeners.getLength(aGuard) )
     {
         EventObject aEvt;
         aEvt.Source = static_cast< XComponent * >( this );
-        mpDisposeEventListeners->disposeAndClear( aEvt );
+        maDisposeEventListeners.disposeAndClear( aGuard, aEvt );
     }
 
     mxOne.clear();
@@ -119,22 +112,17 @@ void SAL_CALL SortedDynamicResultSet::dispose()
 void SAL_CALL SortedDynamicResultSet::addEventListener(
                             const Reference< XEventListener >& Listener )
 {
-    osl::Guard< osl::Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
-    if ( !mpDisposeEventListeners )
-        mpDisposeEventListeners.reset(
-                    new OInterfaceContainerHelper3<XEventListener>( getContainerMutex() ) );
-
-    mpDisposeEventListeners->addInterface( Listener );
+    maDisposeEventListeners.addInterface( aGuard, Listener );
 }
 
 void SAL_CALL SortedDynamicResultSet::removeEventListener(
                             const Reference< XEventListener >& Listener )
 {
-    osl::Guard< osl::Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
-    if ( mpDisposeEventListeners )
-        mpDisposeEventListeners->removeInterface( Listener );
+    maDisposeEventListeners.removeInterface( aGuard, Listener );
 }
 
 
@@ -143,7 +131,7 @@ void SAL_CALL SortedDynamicResultSet::removeEventListener(
 Reference< XResultSet > SAL_CALL
 SortedDynamicResultSet::getStaticResultSet()
 {
-    osl::Guard< osl::Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
     if ( mxListener.is() )
         throw ListenerAlreadySetException();
@@ -163,12 +151,12 @@ SortedDynamicResultSet::getStaticResultSet()
 void SAL_CALL
 SortedDynamicResultSet::setListener( const Reference< XDynamicResultSetListener >& Listener )
 {
-    osl::Guard< osl::Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
     if ( mxListener.is() )
         throw ListenerAlreadySetException();
 
-    addEventListener( Listener );
+    maDisposeEventListeners.addInterface( aGuard, Listener );
 
     mxListener = Listener;
 
@@ -211,7 +199,7 @@ SortedDynamicResultSet::connectToCache( const Reference< XDynamicResultSet > & x
 
 sal_Int16 SAL_CALL SortedDynamicResultSet::getCapabilities()
 {
-    osl::Guard< osl::Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
     sal_Int16 nCaps = 0;
 
@@ -244,7 +232,7 @@ sal_Int16 SAL_CALL SortedDynamicResultSet::getCapabilities()
 */
 void SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
 {
-    osl::Guard< osl::Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
     bool bHasNew = false;
     bool bHasModified = false;
