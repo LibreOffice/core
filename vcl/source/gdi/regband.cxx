@@ -815,15 +815,16 @@ bool ImplRegionBand::Contains( tools::Long nX )
 
 tools::Long ImplRegionBand::GetXLeftBoundary() const
 {
-    assert(mpFirstSep && "ImplRegionBand::XLeftBoundary -> no separation in band!");
+    SAL_WARN_IF(mpFirstSep == nullptr, "vcl", "ImplRegionBand::XLeftBoundary -> no separation in band!");
 
-    return mpFirstSep->mnXLeft;
+    return mpFirstSep ? mpFirstSep->mnXLeft : 0;
 }
 
 tools::Long ImplRegionBand::GetXRightBoundary() const
 {
     SAL_WARN_IF( mpFirstSep == nullptr, "vcl", "ImplRegionBand::XRightBoundary -> no separation in band!" );
-
+    if (!mpFirstSep)
+        return 0;
     // search last separation
     ImplRegionBandSep* pSep = mpFirstSep;
     while ( pSep->mpNextSep )
