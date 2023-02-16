@@ -38,11 +38,13 @@ namespace
     struct Context
     {
         SvStream& rStream;
+        tsize_t nStart;
         tsize_t nSize;
         bool bAllowOneShortRead;
-        Context(SvStream& rInStream, tsize_t nInSize)
+        Context(SvStream& rInStream)
             : rStream(rInStream)
-            , nSize(nInSize)
+            , nStart(rInStream.Tell())
+            , nSize(rInStream.remainingSize())
             , bAllowOneShortRead(false)
         {
         }
@@ -76,9 +78,10 @@ static toff_t tiff_seek(thandle_t handle, toff_t offset, int whence)
     switch (whence)
     {
         case SEEK_SET:
+            offset = pContext->nStart + offset;
             break;
         case SEEK_CUR:
-            offset = pContext->rStream.Tell() + offset;;
+            offset = pContext->rStream.Tell() + offset;
             break;
         case SEEK_END:
             offset = pContext->rStream.TellEnd() + offset;
@@ -90,7 +93,7 @@ static toff_t tiff_seek(thandle_t handle, toff_t offset, int whence)
 
     pContext->rStream.Seek(offset);
 
-    return offset;
+    return offset - pContext->nStart;
 }
 
 static int tiff_close(thandle_t)
@@ -113,7 +116,7 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
         TIFFSetWarningHandler(origWarningHandler);
     });
 
-    Context aContext(rTIFF, rTIFF.remainingSize());
+    Context aContext(rTIFF);
     TIFF* tif = TIFFClientOpen("libtiff-svstream", "r", &aContext,
                                tiff_read, tiff_write,
                                tiff_seek, tiff_close,
