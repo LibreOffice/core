@@ -125,7 +125,6 @@ public:
     SingletonClass* operator->() const
     {
         // GLOBAL SAFE ->
-        std::unique_lock aLock(SingletonRef::ownStaticLock());
         return m_pInstance;
         // <- GLOBAL SAFE
     }
@@ -135,7 +134,6 @@ public:
     SingletonClass& operator*() const
     {
         // GLOBAL SAFE ->
-        std::unique_lock aLock(SingletonRef::ownStaticLock());
         return *m_pInstance;
         // <- GLOBAL SAFE
     }
