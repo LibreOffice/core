@@ -4022,7 +4022,15 @@ StackVar ScInterpreter::Interpret()
                 else if (sp >= pCur->GetParamCount())
                     nStackBase = sp - pCur->GetParamCount();
                 else
-                    nStackBase = sp;    // underflow?!?
+                {
+                    SAL_WARN("sc.core", "Stack anomaly at " << aPos.Format(
+                                ScRefFlags::VALID | ScRefFlags::FORCE_DOC | ScRefFlags::TAB_3D, &mrDoc)
+                            << "  eOp: " << static_cast<int>(eOp)
+                            << "  params: " << static_cast<int>(pCur->GetParamCount())
+                            << "  nStackBase: " << nStackBase << "  sp: " << sp);
+                    nStackBase = sp;
+                    assert(!"underflow");
+                }
             }
 
             switch( eOp )
