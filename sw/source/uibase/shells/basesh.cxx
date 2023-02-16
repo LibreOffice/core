@@ -1272,7 +1272,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 bool bInserted = false;
                 //recording:
                 SfxViewFrame& rViewFrame = GetView().GetViewFrame();
-                if( SfxRequest::HasMacroRecorder(&rViewFrame) )
+                if (SfxRequest::HasMacroRecorder(rViewFrame))
                 {
                     SfxRequest aReq( &rViewFrame, nSlot);
                     aReq.AppendItem( SfxStringItem( FN_PARAM_1, OUString(cDelim) ));

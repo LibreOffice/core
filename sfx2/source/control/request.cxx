@@ -709,11 +709,10 @@ css::uno::Reference< css::frame::XDispatchRecorder > SfxRequest::GetMacroRecorde
     return xRecorder;
 }
 
-bool SfxRequest::HasMacroRecorder( SfxViewFrame const * pView )
+bool SfxRequest::HasMacroRecorder(const SfxViewFrame& rView)
 {
-    return GetMacroRecorder( pView ).is();
+    return GetMacroRecorder(&rView).is();
 }
-
 
 bool SfxRequest::IsAPI() const
 

@@ -413,7 +413,7 @@ IMPL_LINK(SwGlossaryDlg, GrpSelect, weld::TreeView&, rBox, void)
         ShowAutoText("", "");
     // update controls
     NameModify(*m_xShortNameEdit);
-    if( SfxRequest::HasMacroRecorder( &m_pShell->GetView().GetViewFrame() ) )
+    if (SfxRequest::HasMacroRecorder(m_pShell->GetView().GetViewFrame()))
     {
         SfxRequest aReq( &m_pShell->GetView().GetViewFrame(), FN_SET_ACT_GLOSSARY );
         aReq.AppendItem(SfxStringItem(FN_SET_ACT_GLOSSARY, getCurrentGlossary()));
@@ -436,7 +436,7 @@ void SwGlossaryDlg::Apply()
     {
         m_pGlossaryHdl->InsertGlossary(aGlosName);
     }
-    if( SfxRequest::HasMacroRecorder( &m_pShell->GetView().GetViewFrame() ) )
+    if (SfxRequest::HasMacroRecorder(m_pShell->GetView().GetViewFrame()))
     {
         SfxRequest aReq( &m_pShell->GetView().GetViewFrame(), FN_INSERT_GLOSSARY );
         aReq.AppendItem(SfxStringItem(FN_INSERT_GLOSSARY, getCurrentGlossary()));
@@ -593,7 +593,7 @@ IMPL_LINK(SwGlossaryDlg, MenuHdl, const OString&, rItemIdent, void)
             m_xShortNameEdit->set_text(aShortName);
             NameModify(*m_xNameED);       // for toggling the buttons
 
-            if( SfxRequest::HasMacroRecorder( &m_pShell->GetView().GetViewFrame() ) )
+            if (SfxRequest::HasMacroRecorder(m_pShell->GetView().GetViewFrame()))
             {
                 SfxRequest aReq(&m_pShell->GetView().GetViewFrame(), FN_NEW_GLOSSARY);
                 aReq.AppendItem(SfxStringItem(FN_NEW_GLOSSARY, getCurrentGlossary()));
