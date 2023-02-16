@@ -225,14 +225,12 @@ bool ScViewFunc::CopyToClipSingleRange( ScDocument* pClipDoc, const ScRangeList&
     if (rDoc.HasSelectedBlockMatrixFragment( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row(), rMark ) )
         return false;
 
-    bool bSysClip = false;
     std::shared_ptr<ScDocument> pSysClipDoc;
     if ( !pClipDoc )                                    // no clip doc specified
     {
-        // Create one (deleted by ScTransferObj).
+        // Create one (deleted by ScTransferObj), and copy into system.
         pSysClipDoc = std::make_shared<ScDocument>( SCDOCMODE_CLIP );
         pClipDoc = pSysClipDoc.get();
-        bSysClip = true;                                // and copy into system
     }
     if ( !bCut )
     {
@@ -241,7 +239,7 @@ bool ScViewFunc::CopyToClipSingleRange( ScDocument* pClipDoc, const ScRangeList&
             pChangeTrack->ResetLastCut();
     }
 
-    if ( bSysClip && bIncludeObjects )
+    if ( pSysClipDoc && bIncludeObjects )
     {
         bool bAnyOle = rDoc.HasOLEObjectsInArea( aRange );
         // Update ScGlobal::xDrawClipDocShellRef.
@@ -278,14 +276,14 @@ bool ScViewFunc::CopyToClipSingleRange( ScDocument* pClipDoc, const ScRangeList&
         }
     }
 
-    if ( bSysClip )
+    if ( pSysClipDoc )
     {
         ScDrawLayer::SetGlobalDrawPersist(nullptr);
         ScGlobal::SetClipDocName( rDoc.GetDocumentShell()->GetTitle( SFX_TITLE_FULLNAME ) );
     }
     pClipDoc->ExtendMerge( aRange, true );
 
-    if ( bSysClip )
+    if ( pSysClipDoc )
     {
         ScDocShell* pDocSh = GetViewData().GetDocShell();
         TransferableObjectDescriptor aObjDesc;
