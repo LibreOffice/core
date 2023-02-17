@@ -1091,6 +1091,9 @@ OUString Menu::ImplGetHelpText( sal_uInt16 nItemId ) const
         }
     }
 
+    //Fallback to Menu::GetAccessibleDescription without reentry to GetHelpText()
+    if (pData->aHelpText.isEmpty())
+        return pData->aAccessibleDescription;
     return pData->aHelpText;
 }
 
