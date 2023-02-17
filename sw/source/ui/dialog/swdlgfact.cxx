@@ -1110,12 +1110,12 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateTableMergeDialog(w
 }
 
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateFrameTabDialog(const OUString &rDialogType,
-                                                SfxViewFrame *pFrame, weld::Window *pParent,
+                                                SfxViewFrame& rFrame, weld::Window *pParent,
                                                 const SfxItemSet& rCoreSet,
                                                 bool        bNewFrame,
                                                 const OString&  sDefPage )
 {
-    return VclPtr<AbstractTabController_Impl>::Create(std::make_shared<SwFrameDlg>(pFrame, pParent, rCoreSet, bNewFrame, rDialogType, false/*bFormat*/, sDefPage, nullptr));
+    return VclPtr<AbstractTabController_Impl>::Create(std::make_shared<SwFrameDlg>(rFrame, pParent, rCoreSet, bNewFrame, rDialogType, false/*bFormat*/, sDefPage, nullptr));
 }
 
 VclPtr<SfxAbstractApplyTabDialog> SwAbstractDialogFactory_Impl::CreateTemplateDialog(

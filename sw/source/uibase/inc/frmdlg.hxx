@@ -37,7 +37,7 @@ class SwFrameDlg final : public SfxTabDialogController
     virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
 
 public:
-    SwFrameDlg(SfxViewFrame const *pFrame, weld::Window* pParent,
+    SwFrameDlg(const SfxViewFrame& rFrame, weld::Window* pParent,
                const SfxItemSet& rCoreSet,
                bool bNewFrame,
                const OUString& sResType,

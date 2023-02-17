@@ -522,7 +522,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                                         nSel & SelectionType::Graphic ? OUString("PictureDialog") :
                                                         nSel & SelectionType::Ole ? OUString("ObjectDialog"):
                                                                                         OUString("FrameDialog"),
-                                                        &GetView().GetViewFrame(),
+                                                        GetView().GetViewFrame(),
                                                         GetView().GetFrameWeld(),
                                                         aSet,
                                                         false,

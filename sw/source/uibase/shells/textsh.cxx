@@ -525,7 +525,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog("FrameDialog",
-                                                  &GetView().GetViewFrame(),
+                                                  GetView().GetViewFrame(),
                                                   GetView().GetFrameWeld(),
                                                   aSet));
             if(pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet())

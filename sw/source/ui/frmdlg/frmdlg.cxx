@@ -41,8 +41,8 @@
 #include <comphelper/lok.hxx>
 
 // the dialog's carrier
-SwFrameDlg::SwFrameDlg(SfxViewFrame const * pViewFrame,
-                       weld::Window*        pParent,
+SwFrameDlg::SwFrameDlg(const SfxViewFrame& rViewFrame,
+                       weld::Window*       pParent,
                        const SfxItemSet&   rCoreSet,
                        bool                bNewFrame,
                        const OUString&     sResType,
@@ -56,7 +56,7 @@ SwFrameDlg::SwFrameDlg(SfxViewFrame const * pViewFrame,
     , m_bNew(bNewFrame)
     , m_rSet(rCoreSet)
     , m_sDlgType(sResType)
-    , m_pWrtShell(static_cast<SwView*>(pViewFrame->GetViewShell())->GetWrtShellPtr())
+    , m_pWrtShell(static_cast<SwView*>(rViewFrame.GetViewShell())->GetWrtShellPtr())
 {
     sal_uInt16 nHtmlMode = ::GetHtmlMode(m_pWrtShell->GetView().GetDocShell());
     bool bHTMLMode = (nHtmlMode & HTMLMODE_ON) != 0;
