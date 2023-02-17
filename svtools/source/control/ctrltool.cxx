@@ -452,8 +452,6 @@ OUString FontList::GetStyleName(const FontMetric& rInfo) const
             aStyleName = maNormal;
         else if (aCompareStyleName == "regular")
             aStyleName = maNormal;
-        else if (aCompareStyleName == "medium")
-            aStyleName = maNormal;
         else if (aCompareStyleName == "light")
             aStyleName = maLight;
         else if (aCompareStyleName == "lightitalic")
@@ -483,9 +481,6 @@ OUString FontList::GetStyleName(const FontMetric& rInfo) const
             aStyleName = SvtResId(STR_SVT_STYLE_EXTRALIGHT);
         else if (aCompareStyleName == "extralightitalic")
             aStyleName = SvtResId(STR_SVT_STYLE_EXTRALIGHT_ITALIC);
-        /* Medium is synonym with Normal */
-        else if (aCompareStyleName == "mediumitalic")
-            aStyleName = maNormalItalic;
         else if (aCompareStyleName == "oblique")
             aStyleName = SvtResId(STR_SVT_STYLE_OBLIQUE);
         else if (aCompareStyleName == "semibold")
