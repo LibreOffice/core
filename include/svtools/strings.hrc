@@ -153,6 +153,8 @@
 #define STR_SVT_STYLE_LIGHT_ITALIC              NC_("STR_SVT_STYLE_LIGHT_ITALIC", "Light Italic")
 #define STR_SVT_STYLE_NORMAL                    NC_("STR_SVT_STYLE_NORMAL", "Regular")
 #define STR_SVT_STYLE_NORMAL_ITALIC             NC_("STR_SVT_STYLE_NORMAL_ITALIC", "Italic")
+#define STR_SVT_STYLE_MEDIUM                    NC_("STR_SVT_STYLE_MEDIUM", "Medium")
+#define STR_SVT_STYLE_MEDIUM_ITALIC             NC_("STR_SVT_STYLE_MEDIUM_ITALIC", "Medium Italic")
 #define STR_SVT_STYLE_BOLD                      NC_("STR_SVT_STYLE_BOLD", "Bold")
 #define STR_SVT_STYLE_BOLD_ITALIC               NC_("STR_SVT_STYLE_BOLD_ITALIC", "Bold Italic")
 #define STR_SVT_STYLE_BLACK                     NC_("STR_SVT_STYLE_BLACK", "Black")

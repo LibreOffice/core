@@ -452,8 +452,6 @@ OUString FontList::GetStyleName(const FontMetric& rInfo) const
             aStyleName = maNormal;
         else if (aCompareStyleName == "regular")
             aStyleName = maNormal;
-        else if (aCompareStyleName == "medium")
-            aStyleName = maNormal;
         else if (aCompareStyleName == "light")
             aStyleName = maLight;
         else if (aCompareStyleName == "lightitalic")
@@ -483,15 +481,17 @@ OUString FontList::GetStyleName(const FontMetric& rInfo) const
             aStyleName = SvtResId(STR_SVT_STYLE_EXTRALIGHT);
         else if (aCompareStyleName == "extralightitalic")
             aStyleName = SvtResId(STR_SVT_STYLE_EXTRALIGHT_ITALIC);
-        /* Medium is synonym with Normal */
-        else if (aCompareStyleName == "mediumitalic")
-            aStyleName = maNormalItalic;
         else if (aCompareStyleName == "oblique")
             aStyleName = SvtResId(STR_SVT_STYLE_OBLIQUE);
         else if (aCompareStyleName == "semibold")
             aStyleName = SvtResId(STR_SVT_STYLE_SEMIBOLD);
         else if (aCompareStyleName == "semibolditalic")
             aStyleName = SvtResId(STR_SVT_STYLE_SEMIBOLD_ITALIC);
+        // tdf#147739 medium is not a synonym of normal
+        else if (aCompareStyleName == "medium")
+            aStyleName = SvtResId(STR_SVT_STYLE_MEDIUM);
+        else if (aCompareStyleName == "mediumitalic")
+            aStyleName = SvtResId(STR_SVT_STYLE_MEDIUM_ITALIC);
 
         // fix up StyleName, because the PS Printer driver from
         // W2000 returns wrong StyleNames (e.g. Bold instead of Bold Italic
