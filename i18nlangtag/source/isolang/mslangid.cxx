@@ -246,7 +246,8 @@ bool MsLangId::isRightToLeft( LanguageType nLang )
                 primary(LANGUAGE_SINDHI),
                 primary(LANGUAGE_UIGHUR_CHINA),
                 primary(LANGUAGE_USER_KYRGYZ_CHINA),
-                primary(LANGUAGE_USER_NKO)))
+                primary(LANGUAGE_USER_NKO),
+                primary(LANGUAGE_USER_SARAIKI)))
     {
         return true;
     }
@@ -443,6 +444,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
         primary(LANGUAGE_USER_LIMBU          ),
         primary(LANGUAGE_USER_MAITHILI_INDIA ),
         primary(LANGUAGE_USER_NKO            ),
+        primary(LANGUAGE_USER_SARAIKI        ),
         primary(LANGUAGE_YIDDISH             )))
     {
             nScript = css::i18n::ScriptType::COMPLEX;

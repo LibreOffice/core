@@ -782,6 +782,7 @@ namespace o3tl
 #define LANGUAGE_USER_CATALAN_FRANCE        LanguageType(0x8803)  /* makeLangID( 0x22, getPrimaryLanguage( LANGUAGE_CATALAN)) */
 #define LANGUAGE_USER_CATALAN_ITALY         LanguageType(0x8C03)  /* makeLangID( 0x23, getPrimaryLanguage( LANGUAGE_CATALAN)) */
 #define LANGUAGE_USER_ENGLISH_ANTIGUA_BARBUDA LanguageType(0xB809)  /* makeLangID( 0x2E, getPrimaryLanguage( LANGUAGE_ENGLISH_UK)) */
+#define LANGUAGE_USER_SARAIKI               LanguageType(0x06B0)
 
 
 /* XXX Add new user defined LCIDs ^^^ there.
