@@ -260,6 +260,8 @@ private:
 
     void            SetZoomPercentFromCommand(sal_uInt16 nZoomPercent);
 
+    DECL_STATIC_LINK(ScTabView, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
+
 protected:
     void            UpdateHeaderWidth( const ScVSplitPos* pWhich = nullptr,
                                         const SCROW* pPosY = nullptr );
