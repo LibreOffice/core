@@ -140,7 +140,7 @@ BitmapCache::~BitmapCache()
 
 void BitmapCache::Clear()
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    std::unique_lock aGuard (maMutex);
 
     mpBitmapContainer->clear();
     mnNormalCacheSize = 0;
@@ -150,7 +150,7 @@ void BitmapCache::Clear()
 
 bool BitmapCache::HasBitmap (const CacheKey& rKey)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    std::unique_lock aGuard (maMutex);
 
     CacheBitmapContainer::iterator iEntry (mpBitmapContainer->find(rKey));
     return (iEntry != mpBitmapContainer->end()
@@ -159,7 +159,7 @@ bool BitmapCache::HasBitmap (const CacheKey& rKey)
 
 bool BitmapCache::BitmapIsUpToDate (const CacheKey& rKey)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    std::unique_lock aGuard (maMutex);
 
     bool bIsUpToDate = false;
     CacheBitmapContainer::iterator aIterator (mpBitmapContainer->find(rKey));
@@ -171,14 +171,14 @@ bool BitmapCache::BitmapIsUpToDate (const CacheKey& rKey)
 
 BitmapEx BitmapCache::GetBitmap (const CacheKey& rKey)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    std::unique_lock aGuard (maMutex);
 
     CacheBitmapContainer::iterator iEntry (mpBitmapContainer->find(rKey));
     if (iEntry == mpBitmapContainer->end())
     {
         // Create an empty bitmap for the given key that acts as placeholder
         // until we are given the real one.  Mark it as not being up to date.
-        SetBitmap(rKey, BitmapEx(), false);
+        SetBitmap(aGuard, rKey, BitmapEx(), false);
         iEntry = mpBitmapContainer->find(rKey);
         iEntry->second.SetUpToDate(false);
     }
@@ -189,9 +189,9 @@ BitmapEx BitmapCache::GetBitmap (const CacheKey& rKey)
         // Maybe we have to decompress the preview.
         if ( ! iEntry->second.HasPreview() && iEntry->second.HasReplacement())
         {
-            UpdateCacheSize(iEntry->second, REMOVE);
+            UpdateCacheSize(aGuard, iEntry->second, REMOVE);
             iEntry->second.Decompress();
-            UpdateCacheSize(iEntry->second, ADD);
+            UpdateCacheSize(aGuard, iEntry->second, ADD);
         }
     }
     return iEntry->second.GetPreview();
@@ -199,7 +199,7 @@ BitmapEx BitmapCache::GetBitmap (const CacheKey& rKey)
 
 BitmapEx BitmapCache::GetMarkedBitmap (const CacheKey& rKey)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    std::unique_lock aGuard (maMutex);
 
     CacheBitmapContainer::iterator iEntry (mpBitmapContainer->find(rKey));
     if (iEntry != mpBitmapContainer->end())
@@ -213,19 +213,19 @@ BitmapEx BitmapCache::GetMarkedBitmap (const CacheKey& rKey)
 
 void BitmapCache::ReleaseBitmap (const CacheKey& rKey)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    std::unique_lock aGuard (maMutex);
 
     CacheBitmapContainer::iterator aIterator (mpBitmapContainer->find(rKey));
     if (aIterator != mpBitmapContainer->end())
     {
-        UpdateCacheSize(aIterator->second, REMOVE);
+        UpdateCacheSize(aGuard, aIterator->second, REMOVE);
         mpBitmapContainer->erase(aIterator);
     }
 }
 
 bool BitmapCache::InvalidateBitmap (const CacheKey& rKey)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    std::unique_lock aGuard (maMutex);
 
     CacheBitmapContainer::iterator iEntry (mpBitmapContainer->find(rKey));
     if (iEntry != mpBitmapContainer->end())
@@ -236,9 +236,9 @@ bool BitmapCache::InvalidateBitmap (const CacheKey& rKey)
         // preview itself is kept until a new one is created.
         if (iEntry->second.HasPreview())
         {
-            UpdateCacheSize(iEntry->second, REMOVE);
+            UpdateCacheSize(aGuard, iEntry->second, REMOVE);
             iEntry->second.Invalidate();
-            UpdateCacheSize(iEntry->second, ADD);
+            UpdateCacheSize(aGuard, iEntry->second, ADD);
         }
         return true;
     }
@@ -248,13 +248,13 @@ bool BitmapCache::InvalidateBitmap (const CacheKey& rKey)
 
 void BitmapCache::InvalidateCache()
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    std::unique_lock aGuard (maMutex);
 
     for (auto& rEntry : *mpBitmapContainer)
     {
         rEntry.second.Invalidate();
     }
-    ReCalculateTotalCacheSize();
+    ReCalculateTotalCacheSize(aGuard);
 }
 
 void BitmapCache::SetBitmap (
@@ -262,12 +262,20 @@ void BitmapCache::SetBitmap (
     const BitmapEx& rPreview,
     bool bIsPrecious)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    std::unique_lock aGuard (maMutex);
+    SetBitmap(aGuard, rKey, rPreview, bIsPrecious);
+}
 
+void BitmapCache::SetBitmap (
+    std::unique_lock<std::mutex>& rGuard,
+    const CacheKey& rKey,
+    const BitmapEx& rPreview,
+    bool bIsPrecious)
+{
     CacheBitmapContainer::iterator iEntry (mpBitmapContainer->find(rKey));
     if (iEntry != mpBitmapContainer->end())
     {
-        UpdateCacheSize(iEntry->second, REMOVE);
+        UpdateCacheSize(rGuard, iEntry->second, REMOVE);
         iEntry->second.SetPreview(rPreview);
         iEntry->second.SetUpToDate(true);
         iEntry->second.SetAccessTime(mnCurrentAccessTime++);
@@ -281,37 +289,37 @@ void BitmapCache::SetBitmap (
     }
 
     if (iEntry != mpBitmapContainer->end())
-        UpdateCacheSize(iEntry->second, ADD);
+        UpdateCacheSize(rGuard, iEntry->second, ADD);
 }
 
 void BitmapCache::SetMarkedBitmap (
     const CacheKey& rKey,
     const BitmapEx& rPreview)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    std::unique_lock aGuard (maMutex);
 
     CacheBitmapContainer::iterator iEntry (mpBitmapContainer->find(rKey));
     if (iEntry != mpBitmapContainer->end())
     {
-        UpdateCacheSize(iEntry->second, REMOVE);
+        UpdateCacheSize(aGuard, iEntry->second, REMOVE);
         iEntry->second.SetMarkedPreview(rPreview);
         iEntry->second.SetAccessTime(mnCurrentAccessTime++);
-        UpdateCacheSize(iEntry->second, ADD);
+        UpdateCacheSize(aGuard, iEntry->second, ADD);
     }
 }
 
 void BitmapCache::SetPrecious (const CacheKey& rKey, bool bIsPrecious)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    std::unique_lock aGuard (maMutex);
 
     CacheBitmapContainer::iterator iEntry (mpBitmapContainer->find(rKey));
     if (iEntry != mpBitmapContainer->end())
     {
         if (iEntry->second.IsPrecious() != bIsPrecious)
         {
-            UpdateCacheSize(iEntry->second, REMOVE);
+            UpdateCacheSize(aGuard, iEntry->second, REMOVE);
             iEntry->second.SetPrecious(bIsPrecious);
-            UpdateCacheSize(iEntry->second, ADD);
+            UpdateCacheSize(aGuard, iEntry->second, ADD);
         }
     }
     else if (bIsPrecious)
@@ -320,14 +328,18 @@ void BitmapCache::SetPrecious (const CacheKey& rKey, bool bIsPrecious)
             rKey,
             CacheEntry(BitmapEx(), mnCurrentAccessTime++, bIsPrecious)
             ).first;
-        UpdateCacheSize(iEntry->second, ADD);
+        UpdateCacheSize(aGuard, iEntry->second, ADD);
     }
 }
 
 void BitmapCache::ReCalculateTotalCacheSize()
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    std::unique_lock aGuard (maMutex);
+    ReCalculateTotalCacheSize(aGuard);
+}
 
+void BitmapCache::ReCalculateTotalCacheSize(std::unique_lock<std::mutex>& /*rGuard*/)
+{
     mnNormalCacheSize = 0;
     mnPreciousCacheSize = 0;
     for (const auto& rEntry : *mpBitmapContainer)
@@ -344,7 +356,7 @@ void BitmapCache::ReCalculateTotalCacheSize()
 
 void BitmapCache::Recycle (const BitmapCache& rCache)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    std::unique_lock aGuard (maMutex);
 
     for (const auto& rOtherEntry : *rCache.mpBitmapContainer)
     {
@@ -355,20 +367,20 @@ void BitmapCache::Recycle (const BitmapCache& rCache)
                 rOtherEntry.first,
                 CacheEntry(mnCurrentAccessTime++, true)
                 ).first;
-            UpdateCacheSize(iEntry->second, ADD);
+            UpdateCacheSize(aGuard, iEntry->second, ADD);
         }
         if (iEntry != mpBitmapContainer->end())
         {
-            UpdateCacheSize(iEntry->second, REMOVE);
+            UpdateCacheSize(aGuard, iEntry->second, REMOVE);
             iEntry->second.Recycle(rOtherEntry.second);
-            UpdateCacheSize(iEntry->second, ADD);
+            UpdateCacheSize(aGuard, iEntry->second, ADD);
         }
     }
 }
 
 BitmapCache::CacheIndex BitmapCache::GetCacheIndex() const
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    std::unique_lock aGuard (maMutex);
 
     // Create a copy of the bitmap container.
     SortableBitmapContainer aSortedContainer;
@@ -401,18 +413,18 @@ void BitmapCache::Compress (
     const CacheKey& rKey,
     const std::shared_ptr<BitmapCompressor>& rpCompressor)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    std::unique_lock aGuard (maMutex);
 
     CacheBitmapContainer::iterator iEntry (mpBitmapContainer->find(rKey));
     if (iEntry != mpBitmapContainer->end() && iEntry->second.HasPreview())
     {
-        UpdateCacheSize(iEntry->second, REMOVE);
+        UpdateCacheSize(aGuard, iEntry->second, REMOVE);
         iEntry->second.Compress(rpCompressor);
-        UpdateCacheSize(iEntry->second, ADD);
+        UpdateCacheSize(aGuard, iEntry->second, ADD);
     }
 }
 
-void BitmapCache::UpdateCacheSize (const CacheEntry& rEntry, CacheOperation eOperation)
+void BitmapCache::UpdateCacheSize (std::unique_lock<std::mutex>& /*rGuard*/, const CacheEntry& rEntry, CacheOperation eOperation)
 {
     sal_Int32 nEntrySize (rEntry.GetMemorySize());
     sal_Int32& rCacheSize (rEntry.IsPrecious() ? mnPreciousCacheSize : mnNormalCacheSize);

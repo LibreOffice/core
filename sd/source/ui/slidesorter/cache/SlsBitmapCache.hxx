@@ -20,7 +20,7 @@
 #pragma once
 
 #include <vcl/bitmapex.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <memory>
 
 class SdrPage;
@@ -154,7 +154,7 @@ public:
     void Compress(const CacheKey& rKey, const std::shared_ptr<BitmapCompressor>& rpCompressor);
 
 private:
-    mutable ::osl::Mutex maMutex;
+    mutable std::mutex maMutex;
 
     std::unique_ptr<CacheBitmapContainer> mpBitmapContainer;
 
@@ -200,7 +200,13 @@ private:
         ADD,
         REMOVE
     };
-    void UpdateCacheSize(const CacheEntry& rKey, CacheOperation eOperation);
+    void UpdateCacheSize(std::unique_lock<std::mutex>& rGuard, const CacheEntry& rKey,
+                         CacheOperation eOperation);
+
+    void ReCalculateTotalCacheSize(std::unique_lock<std::mutex>& rGuard);
+
+    void SetBitmap(std::unique_lock<std::mutex>& rGuard, const CacheKey& rKey,
+                   const BitmapEx& rPreview, bool bIsPrecious);
 };
 
 } // end of namespace ::sd::slidesorter::cache
