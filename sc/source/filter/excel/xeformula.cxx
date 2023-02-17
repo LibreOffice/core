@@ -325,7 +325,8 @@ private:
                             const ScAddress* pScBasePos, XclExpRefLog* pRefLog );
 
     void                RecalcTokenClasses();
-    void                RecalcTokenClass( const XclExpTokenConvInfo& rConvInfo, XclFuncParamConv ePrevConv, XclExpClassConv ePrevClassConv, bool bWasRefClass );
+    void                RecalcTokenClass( const XclExpTokenConvInfo& rConvInfo, XclFuncParamConv ePrevConv, XclExpClassConv ePrevClassConv, bool bWasRefClass,
+                                          o3tl::sorted_vector<const XclExpTokenConvInfo*>& rSeenTokens );
 
     void                FinalizeFormula();
     XclTokenArrayRef    CreateTokenArray();
@@ -634,7 +635,8 @@ void XclExpFmlaCompImpl::RecalcTokenClasses()
         XclFuncParamConv eParamConv = bNameFmla ? EXC_PARAMCONV_ARR : EXC_PARAMCONV_VAL;
         XclExpClassConv eClassConv = bNameFmla ? EXC_CLASSCONV_ARR : EXC_CLASSCONV_VAL;
         XclExpTokenConvInfo aConvInfo = { PopOperandPos(), eParamConv, !bNameFmla };
-        RecalcTokenClass( aConvInfo, eParamConv, eClassConv, bNameFmla );
+        o3tl::sorted_vector<const XclExpTokenConvInfo*> aSeenTokens;
+        RecalcTokenClass(aConvInfo, eParamConv, eClassConv, bNameFmla, aSeenTokens);
     }
 
     // clear operand vectors (calls to the expensive InsertZeros() may follow)
@@ -643,9 +645,19 @@ void XclExpFmlaCompImpl::RecalcTokenClasses()
 }
 
 void XclExpFmlaCompImpl::RecalcTokenClass( const XclExpTokenConvInfo& rConvInfo,
-        XclFuncParamConv ePrevConv, XclExpClassConv ePrevClassConv, bool bWasRefClass )
+        XclFuncParamConv ePrevConv, XclExpClassConv ePrevClassConv, bool bWasRefClass,
+        o3tl::sorted_vector<const XclExpTokenConvInfo*>& rSeenTokens )
 {
     OSL_ENSURE( rConvInfo.mnTokPos < GetSize(), "XclExpFmlaCompImpl::RecalcTokenClass - invalid token position" );
+
+    const bool bAlreadySeen = !rSeenTokens.insert(&rConvInfo).second;
+    if (bAlreadySeen)
+    {
+        SAL_WARN("sc.filter", "XclExpFmlaCompImpl::RecalcTokenClass: loop in nested operands");
+        return;
+    }
+    rSeenTokens.insert(&rConvInfo);
+
     sal_uInt8& rnTokenId = mxData->maTokVec[ rConvInfo.mnTokPos ];
     sal_uInt8 nTokClass = GetTokenClass( rnTokenId );
 
@@ -752,7 +764,7 @@ void XclExpFmlaCompImpl::RecalcTokenClass( const XclExpTokenConvInfo& rConvInfo,
     if( rConvInfo.mnTokPos < mxData->maOpListVec.size() )
         if( const XclExpOperandList* pOperands = mxData->maOpListVec[ rConvInfo.mnTokPos ].get() )
             for( const auto& rOperand : *pOperands )
-                RecalcTokenClass( rOperand, eConv, eClassConv, nTokClass == EXC_TOKCLASS_REF );
+                RecalcTokenClass( rOperand, eConv, eClassConv, nTokClass == EXC_TOKCLASS_REF, rSeenTokens );
 }
 
 void XclExpFmlaCompImpl::FinalizeFormula()
