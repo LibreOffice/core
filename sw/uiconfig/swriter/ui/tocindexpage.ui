@@ -347,7 +347,7 @@
                     <property name="column-spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="fromheadings">
-                        <property name="label" translatable="yes" context="tocindexpage|fromheadings">Outline</property>
+                        <property name="label" translatable="yes" context="tocindexpage|fromheadings">Headings</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="no-show-all">True</property>
