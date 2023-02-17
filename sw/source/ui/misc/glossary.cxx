@@ -288,9 +288,9 @@ public:
     }
 };
 
-SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame const * pViewFrame,
+SwGlossaryDlg::SwGlossaryDlg(const SfxViewFrame& rViewFrame,
                              SwGlossaryHdl * pGlosHdl, SwWrtShell *pWrtShell)
-    : SfxDialogController(pViewFrame->GetFrameWeld(), "modules/swriter/ui/autotext.ui", "AutoTextDialog")
+    : SfxDialogController(rViewFrame.GetFrameWeld(), "modules/swriter/ui/autotext.ui", "AutoTextDialog")
     , m_sReadonlyPath(SwResId(STR_READONLY_PATH))
     , m_pGlossaryHdl(pGlosHdl)
     , m_bResume(false)

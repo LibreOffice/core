@@ -69,7 +69,7 @@ struct TextBlockInfo_Impl
 void SwGlossaryHdl::GlossaryDlg()
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractGlossaryDlg> pDlg(pFact->CreateGlossaryDlg(&m_rViewFrame, this, m_pWrtShell));
+    ScopedVclPtr<AbstractGlossaryDlg> pDlg(pFact->CreateGlossaryDlg(m_rViewFrame, this, m_pWrtShell));
     OUString sName;
     OUString sShortName;
 

@@ -502,7 +502,7 @@ public:
                                                 const OString&      sPage,
                                                 SwWrtShell*         pActShell,
                                                 bool                bNew) = 0;
-    virtual VclPtr<AbstractGlossaryDlg>        CreateGlossaryDlg(SfxViewFrame* pViewFrame,
+    virtual VclPtr<AbstractGlossaryDlg>        CreateGlossaryDlg(SfxViewFrame& rViewFrame,
                                                 SwGlossaryHdl* pGlosHdl,
                                                 SwWrtShell *pWrtShell) = 0;
     virtual VclPtr<AbstractFieldInputDlg>        CreateFieldInputDlg(weld::Widget *pParent,

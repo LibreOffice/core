@@ -1130,10 +1130,10 @@ VclPtr<SfxAbstractApplyTabDialog> SwAbstractDialogFactory_Impl::CreateTemplateDi
                                                                                                      sPage, pActShell, bNew));
 }
 
-VclPtr<AbstractGlossaryDlg> SwAbstractDialogFactory_Impl::CreateGlossaryDlg(SfxViewFrame* pViewFrame, SwGlossaryHdl* pGlosHdl,
+VclPtr<AbstractGlossaryDlg> SwAbstractDialogFactory_Impl::CreateGlossaryDlg(SfxViewFrame& rViewFrame, SwGlossaryHdl* pGlosHdl,
                                                                             SwWrtShell *pWrtShell)
 {
-    return VclPtr<AbstractGlossaryDlg_Impl>::Create(std::make_unique<SwGlossaryDlg>(pViewFrame, pGlosHdl, pWrtShell));
+    return VclPtr<AbstractGlossaryDlg_Impl>::Create(std::make_unique<SwGlossaryDlg>(rViewFrame, pGlosHdl, pWrtShell));
 }
 
 VclPtr<AbstractFieldInputDlg> SwAbstractDialogFactory_Impl::CreateFieldInputDlg(weld::Widget *pParent,

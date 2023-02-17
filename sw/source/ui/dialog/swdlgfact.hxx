@@ -794,7 +794,7 @@ public:
                                                 const OString&      sPage,
                                                 SwWrtShell*         pActShell,
                                                 bool                bNew) override;
-    virtual VclPtr<AbstractGlossaryDlg>        CreateGlossaryDlg(SfxViewFrame* pViewFrame,
+    virtual VclPtr<AbstractGlossaryDlg>        CreateGlossaryDlg(SfxViewFrame& rViewFrame,
                                                 SwGlossaryHdl* pGlosHdl,
                                                 SwWrtShell *pWrtShell) override;
     virtual VclPtr<AbstractFieldInputDlg>        CreateFieldInputDlg(weld::Widget *pParent,

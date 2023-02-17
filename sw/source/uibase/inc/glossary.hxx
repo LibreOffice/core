@@ -109,7 +109,7 @@ class SwGlossaryDlg final : public SfxDialogController
 
     void            DeleteEntry();
 public:
-    SwGlossaryDlg(SfxViewFrame const * pViewFrame, SwGlossaryHdl* pGlosHdl, SwWrtShell *pWrtShell);
+    SwGlossaryDlg(const SfxViewFrame& rViewFrame, SwGlossaryHdl* pGlosHdl, SwWrtShell *pWrtShell);
     virtual short run() override;
     virtual ~SwGlossaryDlg() override;
     OUString GetCurrGrpName() const;
