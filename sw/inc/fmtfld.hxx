@@ -166,6 +166,7 @@ public:
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
+    void ForceUpdateTextNode();
     void UpdateTextNode(const SfxPoolItem* pOld, const SfxPoolItem* pNew);
 };
 

@@ -69,6 +69,7 @@ public:
 
     virtual void        QueryValue( css::uno::Any& rVal, sal_uInt16 nMId ) const override;
     virtual void        PutValue( const css::uno::Any& rVal, sal_uInt16 nMId ) override;
+    void EnsureValid();
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
 private:

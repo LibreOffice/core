@@ -371,6 +371,14 @@ void SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     }
 }
 
+void SwUserFieldType::EnsureValid()
+{
+    if(IsValid())
+        return;
+    SwCalc aCalc(*GetDoc());
+    GetValue(aCalc);
+}
+
 void SwUserFieldType::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwUserFieldType"));

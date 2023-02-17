@@ -2363,7 +2363,7 @@ void SwRefPageGetFieldType::UpdateField( SwTextField const * pTextField,
         }
     }
     // start formatting
-    const_cast<SwFormatField&>(pTextField->GetFormatField()).UpdateTextNode(nullptr, nullptr);
+    const_cast<SwFormatField&>(pTextField->GetFormatField()).ForceUpdateTextNode();
 }
 
 // queries for relative page numbering

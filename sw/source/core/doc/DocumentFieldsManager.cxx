@@ -1264,7 +1264,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
                         pInputField->UnlockNotifyContentChange();
                     }
                 });
-            pFormatField->UpdateTextNode(nullptr, nullptr); // trigger formatting
+            pFormatField->ForceUpdateTextNode();
         }
 
         if (pUpdateField == pTextField) // if only this one is updated
@@ -1519,7 +1519,7 @@ void DocumentFieldsManager::SetFixFields( const DateTime* pNewDateTime )
 
                 // Trigger formatting
                 if( bChgd )
-                    pFormatField->UpdateTextNode(nullptr, nullptr);
+                    pFormatField->ForceUpdateTextNode();
             }
         }
     }
