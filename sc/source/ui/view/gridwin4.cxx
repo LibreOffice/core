@@ -2039,13 +2039,16 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                                 //  find right font size for DrawText
                                 aFont.SetFontSize( Size( 0,100 ) );
                                 rRenderContext.SetFont( aFont );
-                                Size aSize100(rRenderContext.GetTextWidth( aThisPageStr ), rRenderContext.GetTextHeight() );
 
-                                //  40% of width or 60% of height
-                                tools::Long nSizeX = 40 * ( aPageEnd.X() - aPageStart.X() ) / aSize100.Width();
-                                tools::Long nSizeY = 60 * ( aPageEnd.Y() - aPageStart.Y() ) / aSize100.Height();
-                                aFont.SetFontSize( Size( 0,std::min(nSizeX,nSizeY) ) );
-                                rRenderContext.SetFont( aFont );
+                                Size aSize100(rRenderContext.GetTextWidth( aThisPageStr ), rRenderContext.GetTextHeight() );
+                                if (aSize100.Width() && aSize100.Height())
+                                {
+                                    //  40% of width or 60% of height
+                                    tools::Long nSizeX = 40 * ( aPageEnd.X() - aPageStart.X() ) / aSize100.Width();
+                                    tools::Long nSizeY = 60 * ( aPageEnd.Y() - aPageStart.Y() ) / aSize100.Height();
+                                    aFont.SetFontSize( Size( 0,std::min(nSizeX,nSizeY) ) );
+                                    rRenderContext.SetFont( aFont );
+                                }
 
                                 //  centered output with DrawText
                                 Size aTextSize(rRenderContext.GetTextWidth( aThisPageStr ), rRenderContext.GetTextHeight() );
