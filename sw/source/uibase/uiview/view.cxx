@@ -1677,7 +1677,7 @@ OUString SwView::GetSelectionTextParam( bool bCompleteWrds, bool bEraseTrail )
 SwGlossaryHdl* SwView::GetGlosHdl()
 {
     if(!m_pGlosHdl)
-        m_pGlosHdl.reset(new SwGlossaryHdl(&GetViewFrame(), m_pWrtShell.get()));
+        m_pGlosHdl.reset(new SwGlossaryHdl(GetViewFrame(), m_pWrtShell.get()));
     return m_pGlosHdl.get();
 }
 

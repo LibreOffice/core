@@ -36,7 +36,7 @@ class SW_DLLPUBLIC SwGlossaryHdl
 
     SwGlossaries&   m_rStatGlossaries;
     OUString        m_aCurGrp;
-    SfxViewFrame*   m_pViewFrame;
+    SfxViewFrame&   m_rViewFrame;
     SwWrtShell*     m_pWrtShell;
     std::unique_ptr<SwTextBlocks>
                     m_pCurGrp;
@@ -91,7 +91,7 @@ public:
 
     bool    ImportGlossaries( const OUString& rName );
 
-            SwGlossaryHdl(SfxViewFrame* pViewFrame, SwWrtShell *);
+            SwGlossaryHdl(SfxViewFrame& rViewFrame, SwWrtShell*);
             ~SwGlossaryHdl();
 };
 

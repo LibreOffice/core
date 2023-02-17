@@ -69,7 +69,7 @@ struct TextBlockInfo_Impl
 void SwGlossaryHdl::GlossaryDlg()
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractGlossaryDlg> pDlg(pFact->CreateGlossaryDlg(m_pViewFrame, this, m_pWrtShell));
+    ScopedVclPtr<AbstractGlossaryDlg> pDlg(pFact->CreateGlossaryDlg(&m_rViewFrame, this, m_pWrtShell));
     OUString sName;
     OUString sShortName;
 
@@ -607,10 +607,10 @@ void SwGlossaryHdl::GetMacros( const OUString &rShortName,
 }
 
 // ctor, dtor
-SwGlossaryHdl::SwGlossaryHdl(SfxViewFrame* pVwFrame, SwWrtShell *pSh)
+SwGlossaryHdl::SwGlossaryHdl(SfxViewFrame& rVwFrame, SwWrtShell *pSh)
     : m_rStatGlossaries( *::GetGlossaries() ),
     m_aCurGrp( SwGlossaries::GetDefName() ),
-    m_pViewFrame( pVwFrame ),
+    m_rViewFrame(rVwFrame),
     m_pWrtShell( pSh )
 {
 }
