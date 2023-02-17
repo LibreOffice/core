@@ -2566,6 +2566,23 @@
      <table:table-cell table:number-columns-repeated="4"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.AGGREGATE(1;2;3;OR())" office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce25" table:formula="of:=[.A39]=[.B39]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A39])" office:value-type="string" office:string-value="=AGGREGATE(1;2;3;OR())" calcext:value-type="string">
+      <text:p>=AGGREGATE(1;2;3;OR())</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce35" table:number-columns-repeated="5"/>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce24"/>
      <table:table-cell table:number-columns-repeated="16"/>
