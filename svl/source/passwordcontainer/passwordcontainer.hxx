@@ -22,6 +22,7 @@
 #include <utility>
 #include <vector>
 #include <map>
+#include <mutex>
 #include <optional>
 #include <com/sun/star/task/XPasswordContainer2.hpp>
 #include <com/sun/star/task/PasswordRequestMode.hpp>
@@ -239,7 +240,7 @@ class PasswordContainer : public ::cppu::WeakImplHelper<
 private:
     PasswordMap      m_aContainer;
     std::optional<StorageItem> m_xStorageFile;
-    ::osl::Mutex mMutex;
+    std::mutex mMutex;
     OUString m_aMasterPassword; // master password is set when the string is not empty
     css::uno::Reference< css::lang::XComponent > mComponent;
     SysCredentialsConfig mUrlContainer;
@@ -385,6 +386,9 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getUrls( sal_Bool OnlyPersistent ) override;
 
     void            Notify();
+private:
+    void removeAllPersistent(std::unique_lock<std::mutex>& rGuard);
+    void removeMasterPassword(std::unique_lock<std::mutex>& rGuard);
 };
 
 
