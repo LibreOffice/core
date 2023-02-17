@@ -29,8 +29,8 @@
 static bool FileMove_Impl( const OUString & rFile1, const OUString & rFile2, bool bMoveAlways )
 {
     //printf( "Move from %s to %s\n", rFile2.GetStr(), rFile1.GetStr() );
-    sal_uLong nC1 = 0;
-    sal_uLong nC2 = 1;
+    size_t nC1 = 0;
+    size_t nC2 = 1;
     if( !bMoveAlways )
     {
         SvFileStream aOutStm1( rFile1, StreamMode::STD_READ );

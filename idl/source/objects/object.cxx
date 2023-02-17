@@ -165,7 +165,7 @@ sal_uInt16 SvMetaClass::WriteSlots( std::string_view rShellName,
     return nSCount;
 }
 
-void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>& rSuperList,
+void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uInt32>& rSuperList,
                             SvMetaClassList &rClassList,
                             const OString& rPrefix, SvIdlDataBase& rBase)
 {
@@ -177,14 +177,14 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>&
     rClassList.push_back( this );
 
     // write all direct attributes
-    sal_uLong n;
+    size_t n;
     for( n = 0; n < aAttrList.size(); n++ )
     {
         SvMetaAttribute * pAttr = aAttrList[n];
 
-        sal_uLong nId = pAttr->GetSlotId().GetValue();
+        sal_uInt32 nId = pAttr->GetSlotId().GetValue();
 
-        std::vector<sal_uLong>::iterator iter = std::find(rSuperList.begin(),
+        std::vector<sal_uInt32>::iterator iter = std::find(rSuperList.begin(),
                                                       rSuperList.end(),nId);
 
         if( iter == rSuperList.end() )
@@ -282,7 +282,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     rOutStm.WriteCharPtr("static SfxFormalArgument a").WriteOString(GetName()).WriteCharPtr("Args_Impl[] =") << endl;
     rOutStm.WriteChar('{') << endl;
 
-    std::vector<sal_uLong> aSuperList;
+    std::vector<sal_uInt32> aSuperList;
     SvMetaClassList classList;
     SvSlotElementList aSlotList;
     InsertSlots(aSlotList, aSuperList, classList, OString(), rBase);

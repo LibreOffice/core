@@ -29,7 +29,7 @@
 class SvStringHashEntry
 {
     OString     aName;
-    sal_uLong   nValue;
+    sal_uInt32   nValue;
 public:
     SvStringHashEntry( OString aName_ )
         : aName(std::move(aName_))
@@ -39,8 +39,8 @@ public:
 
     const OString&  GetName() const { return aName; }
 
-    void            SetValue( sal_uLong n ) { nValue = n; }
-    sal_uLong       GetValue() const { return nValue; }
+    void            SetValue( sal_uInt32 n ) { nValue = n; }
+    sal_uInt32       GetValue() const { return nValue; }
 };
 
 class SvStringHashTable

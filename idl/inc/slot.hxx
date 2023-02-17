@@ -48,7 +48,7 @@ public:
     SvBOOL           aContainer;
     OString          aDisableFlags;
     SvMetaSlot*      pNextSlot;
-    sal_uLong        nListPos;
+    sal_uInt32       nListPos;
     SvBOOL           aReadOnlyDoc;
 
     void            WriteSlot( std::string_view rShellName,
@@ -104,9 +104,9 @@ public:
     bool                GetContainer() const;
     bool                GetReadOnlyDoc() const;
 
-    sal_uLong           GetListPos() const
+    sal_uInt32           GetListPos() const
                         { return nListPos; }
-    void                SetListPos(sal_uLong n)
+    void                SetListPos(sal_uInt32 n)
                         { nListPos = n; }
     void                ResetSlotPointer()
                         { pNextSlot = nullptr; }

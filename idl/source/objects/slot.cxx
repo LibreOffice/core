@@ -541,7 +541,7 @@ void SvMetaSlot::WriteSlot( std::string_view rShellName, sal_uInt16 nCount,
         if( IsMethod() )
         {
             SvMetaType * pType = GetType();
-            sal_uLong nSCount = pType->GetAttrCount();
+            size_t nSCount = pType->GetAttrCount();
             rOutStm
                .WriteOString( OString::number(nSCount) )
                .WriteCharPtr( "/*Count*/," );

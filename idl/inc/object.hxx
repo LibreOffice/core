@@ -71,7 +71,7 @@ private:
                                     SvIdlDataBase & rBase,
                                     SvStream & rOutStm );
 
-    void                    InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>& rSuperList,
+    void                    InsertSlots( SvSlotElementList& rList, std::vector<sal_uInt32>& rSuperList,
                                     SvMetaClassList & rClassList,
                                     const OString& rPrefix, SvIdlDataBase& rBase );
 
