@@ -513,11 +513,11 @@
                     <child>
                       <object class="GtkMenuToolButton" id="headings">
                         <property name="visible">True</property>
-                        <property name="tooltip-text" translatable="yes" context="navigatorpanel|headings|tooltip_text">Heading Levels Shown</property>
+                        <property name="tooltip-text" translatable="yes" context="navigatorpanel|headings|tooltip_text">Show Up to Outline Level</property>
                         <property name="icon-name">sw/res/sc20236.png</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="headings-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|headings">Click this icon, and then choose the number of heading outline levels that you want to view in the Navigator window.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|headings">Use this option to control what headings in the document structure are displayed in the Navigator window. Click the icon, and choose an outline level number. Any heading with an outline number less than or equal to the selected number will be displayed.</property>
                           </object>
                         </child>
                       </object>
