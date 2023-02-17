@@ -2736,7 +2736,13 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             // allowed to split.
             SwTwips nDistToUpperPrtBottom =
                 aRectFnSet.BottomDist( getFrameArea(), aRectFnSet.GetPrtBottom(*GetUpper()));
-            if ( nDistToUpperPrtBottom >= 0 || bTryToSplit )
+            bool bFlySplit = false;
+            if (GetUpper()->IsFlyFrame())
+            {
+                auto pUpperFly = static_cast<SwFlyFrame*>(GetUpper());
+                bFlySplit = pUpperFly->IsFlySplitAllowed();
+            }
+            if ( nDistToUpperPrtBottom >= 0 || bTryToSplit || bFlySplit )
             {
                 lcl_RecalcTable( *this, nullptr, aNotify );
                 m_bLowersFormatted = true;
