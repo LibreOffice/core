@@ -7649,7 +7649,7 @@ void ScInterpreter::ScVLookup()
 void ScInterpreter::ScSubTotal()
 {
     sal_uInt8 nParamCount = GetByte();
-    if ( !MustHaveParamCountMin( nParamCount, 2 ) )
+    if ( !MustHaveParamCountMinWithStackCheck( nParamCount, 2 ) )
         return;
 
     // We must fish the 1st parameter deep from the stack! And push it on top.
@@ -7696,7 +7696,7 @@ void ScInterpreter::ScSubTotal()
 void ScInterpreter::ScAggregate()
 {
     sal_uInt8 nParamCount = GetByte();
-    if ( !MustHaveParamCountMin( nParamCount, 3 ) )
+    if ( !MustHaveParamCountMinWithStackCheck( nParamCount, 3 ) )
         return;
 
     const FormulaError nErr = nGlobalError;
