@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <tools/link.hxx>
 
 struct ImplSVEvent;
@@ -38,8 +38,8 @@ namespace dbaui
     class OAsynchronousLink final
     {
         Link<void*,void>    m_aHandler;
-        ::osl::Mutex        m_aEventSafety;
-        ::osl::Mutex        m_aDestructionSafety;
+        std::mutex          m_aEventSafety;
+        std::mutex          m_aDestructionSafety;
         ImplSVEvent *       m_nEventId;
         DECL_LINK(OnAsyncCall, void*, void);
 
