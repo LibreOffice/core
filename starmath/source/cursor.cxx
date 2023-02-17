@@ -1330,9 +1330,10 @@ void SmCursor::EndEdit(){
     mpDocShell->GetEditEngine().QuickFormatDoc();
 }
 
-void SmCursor::RequestRepaint(){
-    SmViewShell *pViewSh = SmGetActiveView();
-    if( pViewSh ) {
+void SmCursor::RequestRepaint()
+{
+    if (SmViewShell *pViewSh = SmGetActiveView())
+    {
         if (comphelper::LibreOfficeKit::isActive())
         {
             pViewSh->SendCaretToLOK();
