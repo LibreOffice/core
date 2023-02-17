@@ -459,7 +459,7 @@ void OGenericUnoController::InvalidateFeature_Impl()
     bool bEmpty = true;
     FeatureListener aNextFeature;
     {
-        ::osl::MutexGuard aGuard( m_aFeatureMutex);
+        std::unique_lock aGuard( m_aFeatureMutex);
         bEmpty = m_aFeaturesToInvalidate.empty();
         if (!bEmpty)
             aNextFeature = m_aFeaturesToInvalidate.front();
@@ -492,7 +492,7 @@ void OGenericUnoController::InvalidateFeature_Impl()
                 ImplBroadcastFeatureState( aFeaturePos->first, aNextFeature.xListener, aNextFeature.bForceBroadcast );
         }
 
-        ::osl::MutexGuard aGuard( m_aFeatureMutex);
+        std::unique_lock aGuard( m_aFeatureMutex);
         m_aFeaturesToInvalidate.pop_front();
         bEmpty = m_aFeaturesToInvalidate.empty();
         if (!bEmpty)
@@ -521,7 +521,7 @@ void OGenericUnoController::ImplInvalidateFeature( sal_Int32 _nId, const Referen
 
     bool bWasEmpty;
     {
-        ::osl::MutexGuard aGuard( m_aFeatureMutex );
+        std::unique_lock aGuard( m_aFeatureMutex );
         bWasEmpty = m_aFeaturesToInvalidate.empty();
         m_aFeaturesToInvalidate.push_back( aListener );
     }
@@ -547,7 +547,7 @@ void OGenericUnoController::InvalidateAll_Impl()
         ImplBroadcastFeatureState( supportedFeature.first, nullptr, true );
 
     {
-        ::osl::MutexGuard aGuard( m_aFeatureMutex);
+        std::unique_lock aGuard( m_aFeatureMutex);
         OSL_ENSURE(m_aFeaturesToInvalidate.size(), "OGenericUnoController::InvalidateAll_Impl: to be called from within InvalidateFeature_Impl only!");
         m_aFeaturesToInvalidate.pop_front();
         if(!m_aFeaturesToInvalidate.empty())
@@ -680,7 +680,7 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
     }
 
     // now remove the listener from the deque
-    ::osl::MutexGuard aGuard( m_aFeatureMutex );
+    std::unique_lock aGuard( m_aFeatureMutex );
     m_aFeaturesToInvalidate.erase(
         std::remove_if(   m_aFeaturesToInvalidate.begin(),
                             m_aFeaturesToInvalidate.end(),
@@ -717,7 +717,7 @@ void OGenericUnoController::disposing()
 
     m_xDatabaseContext = nullptr;
     {
-        ::osl::MutexGuard aGuard( m_aFeatureMutex);
+        std::unique_lock aGuard( m_aFeatureMutex);
         m_aAsyncInvalidateAll.CancelCall();
         m_aFeaturesToInvalidate.clear();
     }

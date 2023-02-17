@@ -25,6 +25,7 @@
 #include <deque>
 #include <map>
 #include <memory>
+#include <mutex>
 #include <utility>
 #include <vector>
 
@@ -233,7 +234,7 @@ namespace dbaui
         ::std::deque< FeatureListener >
                                 m_aFeaturesToInvalidate;
 
-        ::osl::Mutex            m_aFeatureMutex;        // locked when features are append to or remove from deque
+        std::mutex              m_aFeatureMutex;        // locked when features are append to or remove from deque
         StateCache              m_aStateCache;          // save the current status of feature state
         Dispatch                m_arrStatusListener;    // all our listeners where we dispatch status changes
         OAsynchronousLink       m_aAsyncInvalidateAll;
