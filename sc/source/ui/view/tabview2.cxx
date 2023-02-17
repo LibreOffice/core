@@ -1443,6 +1443,11 @@ void ScTabView::MakeDrawLayer()
     }
 }
 
+IMPL_STATIC_LINK_NOARG(ScTabView, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
+{
+    return GetpApp();
+}
+
 void ScTabView::ErrorMessage(TranslateId pGlobStrId)
 {
     if ( SC_MOD()->IsInExecuteDrop() )
@@ -1468,6 +1473,10 @@ void ScTabView::ErrorMessage(TranslateId pGlobStrId)
     m_xMessageBox.reset(Application::CreateMessageDialog(pParent,
                                                          VclMessageType::Info, VclButtonsType::Ok,
                                                          ScResId(pGlobStrId)));
+
+    if (comphelper::LibreOfficeKit::isActive())
+        m_xMessageBox->SetInstallLOKNotifierHdl(LINK(this, ScTabView, InstallLOKNotifierHdl));
+
     weld::Window* pGrabOnClose = bFocus ? pParent : nullptr;
     m_xMessageBox->runAsync(m_xMessageBox, [this, pGrabOnClose](sal_Int32 /*nResult*/) {
         m_xMessageBox.reset();
