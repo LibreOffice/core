@@ -31,6 +31,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <mutex>
 #include <vector>
 
 using namespace ::com::sun::star;
@@ -67,7 +68,7 @@ class SdGlobalResourceContainer::Implementation
 private:
     friend class SdGlobalResourceContainer;
 
-    ::osl::Mutex maMutex;
+    std::mutex maMutex;
 
     /** All instances of SdGlobalResource in this vector are owned by the
         container and will be destroyed when the container is destroyed.
@@ -94,7 +95,7 @@ SdGlobalResourceContainer& SdGlobalResourceContainer::Instance()
 void SdGlobalResourceContainer::AddResource (
     ::std::unique_ptr<SdGlobalResource> pResource)
 {
-    ::osl::MutexGuard aGuard (mpImpl->maMutex);
+    std::unique_lock aGuard (mpImpl->maMutex);
 
     assert( std::none_of(
                 mpImpl->maResources.begin(),
@@ -108,7 +109,7 @@ void SdGlobalResourceContainer::AddResource (
 void SdGlobalResourceContainer::AddResource (
     const std::shared_ptr<SdGlobalResource>& pResource)
 {
-    ::osl::MutexGuard aGuard (mpImpl->maMutex);
+    std::unique_lock aGuard (mpImpl->maMutex);
 
     Implementation::SharedResourceList::iterator iResource = ::std::find (
         mpImpl->maSharedResources.begin(),
@@ -125,7 +126,7 @@ void SdGlobalResourceContainer::AddResource (
 
 void SdGlobalResourceContainer::AddResource (const Reference<XInterface>& rxResource)
 {
-    ::osl::MutexGuard aGuard (mpImpl->maMutex);
+    std::unique_lock aGuard (mpImpl->maMutex);
 
     Implementation::XInterfaceResourceList::iterator iResource = ::std::find (
         mpImpl->maXInterfaceResources.begin(),
@@ -147,7 +148,7 @@ SdGlobalResourceContainer::SdGlobalResourceContainer()
 
 SdGlobalResourceContainer::~SdGlobalResourceContainer()
 {
-    ::osl::MutexGuard aGuard (mpImpl->maMutex);
+    std::unique_lock aGuard (mpImpl->maMutex);
 
     // Release the resources in reversed order of their addition to the
     // container.  This is because a resource A added before resource B
