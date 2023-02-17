@@ -331,7 +331,7 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="OutlineNumberingDialog-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|OutlineNumberingDialog">Specifies the numbering scheme and the hierarchy for chapter numbering in the current document.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|OutlineNumberingDialog">Use this dialog to specify the numbering scheme for headings in the current document. For each outline level, you can assign a paragraph style and a numbering scheme. Use “1-10” to apply the same setting for all outline levels.</property>
       </object>
     </child>
   </object>

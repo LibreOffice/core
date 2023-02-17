@@ -67,7 +67,7 @@
                 </child>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="level-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|level">Click the chapter and outline level that you want to modify, and then specify the numbering options for the level.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|level">Click the outline level that you want to modify, then specify the numbering options for that level. Use “1-10” to apply the same setting for all outline levels.</property>
                   </object>
                 </child>
               </object>
@@ -182,7 +182,7 @@
                     <property name="hexpand">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="style-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|style">Select the paragraph style that you want to assign to the selected chapter and outline level.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|style">Select the paragraph style to assign to the selected outline level.</property>
                       </object>
                     </child>
                   </object>
@@ -277,7 +277,7 @@
                     <property name="value">1</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="sublevelsnf-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|sublevelsnf">Select the number of outline levels to include in the chapter numbering. For example, select "3" to display three levels of chapter numbering: 1.1.1</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|sublevelsnf">Select the number of outline levels to display in the heading number, where 1 starts at the current level, and increasing the value shows additional previous levels. For example, select “3” to display the current level and the two previous levels in the heading number.</property>
                       </object>
                     </child>
                   </object>
@@ -310,7 +310,7 @@
                     <property name="adjustment">adjustment1</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="startat-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|startat">Enter the number that you want to restart the chapter numbering at.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|startat">Enter the number at which to start the numbering for the selected outline level.</property>
                       </object>
                     </child>
                   </object>
@@ -361,7 +361,7 @@
                     <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="prefix-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|prefix">Enter the text that you want to display before the chapter number.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|prefix">Enter the text that you want to display before the heading number.</property>
                       </object>
                     </child>
                   </object>
@@ -379,7 +379,7 @@
                     <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="suffix-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|suffix">Enter the text that you want to display after the chapter number.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|suffix">Enter the text that you want to display after the heading number.</property>
                       </object>
                     </child>
                   </object>
