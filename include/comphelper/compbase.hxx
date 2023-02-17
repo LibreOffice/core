@@ -50,6 +50,11 @@ public:
     virtual void disposing(std::unique_lock<std::mutex>&);
 
 protected:
+    void throwIfDisposed(std::unique_lock<std::mutex>&)
+    {
+        if (m_bDisposed)
+            throw css::lang::DisposedException(OUString(), static_cast<cppu::OWeakObject*>(this));
+    }
     comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> maEventListeners;
     mutable std::mutex m_aMutex;
     bool m_bDisposed = false;
