@@ -7524,131 +7524,144 @@ void ScInterpreter::ScVLookup()
 void ScInterpreter::ScSubTotal()
 {
     sal_uInt8 nParamCount = GetByte();
-    if ( MustHaveParamCountMin( nParamCount, 2 ) )
-    {
-        // We must fish the 1st parameter deep from the stack! And push it on top.
-        const FormulaToken* p = pStack[ sp - nParamCount ];
-        PushWithoutError( *p );
-        sal_Int32 nFunc = GetInt32();
-        mnSubTotalFlags |= SubtotalFlags::IgnoreNestedStAg | SubtotalFlags::IgnoreFiltered;
-        if (nFunc > 100)
-        {
-            // For opcodes 101 through 111, we need to skip hidden cells.
-            // Other than that these opcodes are identical to 1 through 11.
-            mnSubTotalFlags |= SubtotalFlags::IgnoreHidden;
-            nFunc -= 100;
-        }
+    if ( !MustHaveParamCountMinWithStackCheck( nParamCount, 2 ) )
+        return;
 
-        if ( nGlobalError != FormulaError::NONE || nFunc < 1 || nFunc > 11 )
-            PushIllegalArgument();  // simulate return on stack, not SetError(...)
-        else
-        {
-            cPar = nParamCount - 1;
-            switch( nFunc )
-            {
-                case SUBTOTAL_FUNC_AVE  : ScAverage(); break;
-                case SUBTOTAL_FUNC_CNT  : ScCount();   break;
-                case SUBTOTAL_FUNC_CNT2 : ScCount2();  break;
-                case SUBTOTAL_FUNC_MAX  : ScMax();     break;
-                case SUBTOTAL_FUNC_MIN  : ScMin();     break;
-                case SUBTOTAL_FUNC_PROD : ScProduct(); break;
-                case SUBTOTAL_FUNC_STD  : ScStDev();   break;
-                case SUBTOTAL_FUNC_STDP : ScStDevP();  break;
-                case SUBTOTAL_FUNC_SUM  : ScSum();     break;
-                case SUBTOTAL_FUNC_VAR  : ScVar();     break;
-                case SUBTOTAL_FUNC_VARP : ScVarP();    break;
-                default : PushIllegalArgument();       break;
-            }
-        }
-        mnSubTotalFlags = SubtotalFlags::NONE;
-        // Get rid of the 1st (fished) parameter.
-        FormulaConstTokenRef xRef( PopToken());
-        Pop();
-        PushTokenRef( xRef);
+    // We must fish the 1st parameter deep from the stack! And push it on top.
+    const FormulaToken* p = pStack[ sp - nParamCount ];
+    PushWithoutError( *p );
+    sal_Int32 nFunc = GetInt32();
+    mnSubTotalFlags |= SubtotalFlags::IgnoreNestedStAg | SubtotalFlags::IgnoreFiltered;
+    if (nFunc > 100)
+    {
+        // For opcodes 101 through 111, we need to skip hidden cells.
+        // Other than that these opcodes are identical to 1 through 11.
+        mnSubTotalFlags |= SubtotalFlags::IgnoreHidden;
+        nFunc -= 100;
     }
+
+    if ( nGlobalError != FormulaError::NONE || nFunc < 1 || nFunc > 11 )
+        PushIllegalArgument();  // simulate return on stack, not SetError(...)
+    else
+    {
+        cPar = nParamCount - 1;
+        switch( nFunc )
+        {
+            case SUBTOTAL_FUNC_AVE  : ScAverage(); break;
+            case SUBTOTAL_FUNC_CNT  : ScCount();   break;
+            case SUBTOTAL_FUNC_CNT2 : ScCount2();  break;
+            case SUBTOTAL_FUNC_MAX  : ScMax();     break;
+            case SUBTOTAL_FUNC_MIN  : ScMin();     break;
+            case SUBTOTAL_FUNC_PROD : ScProduct(); break;
+            case SUBTOTAL_FUNC_STD  : ScStDev();   break;
+            case SUBTOTAL_FUNC_STDP : ScStDevP();  break;
+            case SUBTOTAL_FUNC_SUM  : ScSum();     break;
+            case SUBTOTAL_FUNC_VAR  : ScVar();     break;
+            case SUBTOTAL_FUNC_VARP : ScVarP();    break;
+            default : PushIllegalArgument();       break;
+        }
+    }
+    mnSubTotalFlags = SubtotalFlags::NONE;
+    // Get rid of the 1st (fished) parameter.
+    FormulaConstTokenRef xRef( PopToken());
+    Pop();
+    PushTokenRef( xRef);
 }
 
 void ScInterpreter::ScAggregate()
 {
     sal_uInt8 nParamCount = GetByte();
-    if ( MustHaveParamCountMin( nParamCount, 3 ) )
+    if ( !MustHaveParamCountMinWithStackCheck( nParamCount, 3 ) )
+        return;
+
+    const FormulaError nErr = nGlobalError;
+    nGlobalError = FormulaError::NONE;
+
+    // fish the 1st parameter from the stack and push it on top.
+    const FormulaToken* p = pStack[ sp - nParamCount ];
+    PushWithoutError( *p );
+    sal_Int32 nFunc = GetInt32();
+    // fish the 2nd parameter from the stack and push it on top.
+    const FormulaToken* p2 = pStack[ sp - ( nParamCount - 1 ) ];
+    PushWithoutError( *p2 );
+    sal_Int32 nOption = GetInt32();
+
+    if ( nGlobalError != FormulaError::NONE || nFunc < 1 || nFunc > 19 )
     {
-        // fish the 1st parameter from the stack and push it on top.
-        const FormulaToken* p = pStack[ sp - nParamCount ];
-        PushWithoutError( *p );
-        sal_Int32 nFunc = GetInt32();
-        // fish the 2nd parameter from the stack and push it on top.
-        const FormulaToken* p2 = pStack[ sp - ( nParamCount - 1 ) ];
-        PushWithoutError( *p2 );
-        sal_Int32 nOption = GetInt32();
-
-        if ( nGlobalError != FormulaError::NONE || nFunc < 1 || nFunc > 19 )
-            PushIllegalArgument();
-        else
-        {
-            switch ( nOption)
-            {
-                case 0 : // ignore nested SUBTOTAL and AGGREGATE functions
-                    mnSubTotalFlags = SubtotalFlags::IgnoreNestedStAg;
-                    break;
-                case 1 : // ignore hidden rows, nested SUBTOTAL and AGGREGATE functions
-                    mnSubTotalFlags = SubtotalFlags::IgnoreHidden | SubtotalFlags::IgnoreNestedStAg;
-                    break;
-                case 2 : // ignore error values, nested SUBTOTAL and AGGREGATE functions
-                    mnSubTotalFlags = SubtotalFlags::IgnoreErrVal | SubtotalFlags::IgnoreNestedStAg;
-                    break;
-                case 3 : // ignore hidden rows, error values, nested SUBTOTAL and AGGREGATE functions
-                    mnSubTotalFlags = SubtotalFlags::IgnoreHidden | SubtotalFlags::IgnoreErrVal | SubtotalFlags::IgnoreNestedStAg;
-                    break;
-                case 4 : // ignore nothing
-                    mnSubTotalFlags = SubtotalFlags::NONE;
-                    break;
-                case 5 : // ignore hidden rows
-                    mnSubTotalFlags = SubtotalFlags::IgnoreHidden ;
-                    break;
-                case 6 : // ignore error values
-                    mnSubTotalFlags = SubtotalFlags::IgnoreErrVal ;
-                    break;
-                case 7 : // ignore hidden rows and error values
-                    mnSubTotalFlags = SubtotalFlags::IgnoreHidden | SubtotalFlags::IgnoreErrVal ;
-                    break;
-                default :
-                    PushIllegalArgument();
-                    return;
-            }
-
-            cPar = nParamCount - 2;
-            switch ( nFunc )
-            {
-                case AGGREGATE_FUNC_AVE     : ScAverage(); break;
-                case AGGREGATE_FUNC_CNT     : ScCount();   break;
-                case AGGREGATE_FUNC_CNT2    : ScCount2();  break;
-                case AGGREGATE_FUNC_MAX     : ScMax();     break;
-                case AGGREGATE_FUNC_MIN     : ScMin();     break;
-                case AGGREGATE_FUNC_PROD    : ScProduct(); break;
-                case AGGREGATE_FUNC_STD     : ScStDev();   break;
-                case AGGREGATE_FUNC_STDP    : ScStDevP();  break;
-                case AGGREGATE_FUNC_SUM     : ScSum();     break;
-                case AGGREGATE_FUNC_VAR     : ScVar();     break;
-                case AGGREGATE_FUNC_VARP    : ScVarP();    break;
-                case AGGREGATE_FUNC_MEDIAN  : ScMedian();            break;
-                case AGGREGATE_FUNC_MODSNGL : ScModalValue();        break;
-                case AGGREGATE_FUNC_LARGE   : ScLarge();             break;
-                case AGGREGATE_FUNC_SMALL   : ScSmall();             break;
-                case AGGREGATE_FUNC_PERCINC : ScPercentile( true );  break;
-                case AGGREGATE_FUNC_QRTINC  : ScQuartile( true );    break;
-                case AGGREGATE_FUNC_PERCEXC : ScPercentile( false ); break;
-                case AGGREGATE_FUNC_QRTEXC  : ScQuartile( false );   break;
-                default : PushIllegalArgument();       break;
-            }
-            mnSubTotalFlags = SubtotalFlags::NONE;
-        }
-        FormulaConstTokenRef xRef( PopToken());
-        // Get rid of the 1st and 2nd (fished) parameters.
-        Pop();
-        Pop();
-        PushTokenRef( xRef);
+        nGlobalError = nErr;
+        PushIllegalArgument();
     }
+    else
+    {
+        switch ( nOption)
+        {
+            case 0 : // ignore nested SUBTOTAL and AGGREGATE functions
+                mnSubTotalFlags = SubtotalFlags::IgnoreNestedStAg;
+                break;
+            case 1 : // ignore hidden rows, nested SUBTOTAL and AGGREGATE functions
+                mnSubTotalFlags = SubtotalFlags::IgnoreHidden | SubtotalFlags::IgnoreNestedStAg;
+                break;
+            case 2 : // ignore error values, nested SUBTOTAL and AGGREGATE functions
+                mnSubTotalFlags = SubtotalFlags::IgnoreErrVal | SubtotalFlags::IgnoreNestedStAg;
+                break;
+            case 3 : // ignore hidden rows, error values, nested SUBTOTAL and AGGREGATE functions
+                mnSubTotalFlags = SubtotalFlags::IgnoreHidden | SubtotalFlags::IgnoreErrVal | SubtotalFlags::IgnoreNestedStAg;
+                break;
+            case 4 : // ignore nothing
+                mnSubTotalFlags = SubtotalFlags::NONE;
+                break;
+            case 5 : // ignore hidden rows
+                mnSubTotalFlags = SubtotalFlags::IgnoreHidden ;
+                break;
+            case 6 : // ignore error values
+                mnSubTotalFlags = SubtotalFlags::IgnoreErrVal ;
+                break;
+            case 7 : // ignore hidden rows and error values
+                mnSubTotalFlags = SubtotalFlags::IgnoreHidden | SubtotalFlags::IgnoreErrVal ;
+                break;
+            default :
+                nGlobalError = nErr;
+                PushIllegalArgument();
+                return;
+        }
+
+        if ((mnSubTotalFlags & SubtotalFlags::IgnoreErrVal) == SubtotalFlags::NONE)
+            nGlobalError = nErr;
+
+        cPar = nParamCount - 2;
+        switch ( nFunc )
+        {
+            case AGGREGATE_FUNC_AVE     : ScAverage(); break;
+            case AGGREGATE_FUNC_CNT     : ScCount();   break;
+            case AGGREGATE_FUNC_CNT2    : ScCount2();  break;
+            case AGGREGATE_FUNC_MAX     : ScMax();     break;
+            case AGGREGATE_FUNC_MIN     : ScMin();     break;
+            case AGGREGATE_FUNC_PROD    : ScProduct(); break;
+            case AGGREGATE_FUNC_STD     : ScStDev();   break;
+            case AGGREGATE_FUNC_STDP    : ScStDevP();  break;
+            case AGGREGATE_FUNC_SUM     : ScSum();     break;
+            case AGGREGATE_FUNC_VAR     : ScVar();     break;
+            case AGGREGATE_FUNC_VARP    : ScVarP();    break;
+            case AGGREGATE_FUNC_MEDIAN  : ScMedian();            break;
+            case AGGREGATE_FUNC_MODSNGL : ScModalValue();        break;
+            case AGGREGATE_FUNC_LARGE   : ScLarge();             break;
+            case AGGREGATE_FUNC_SMALL   : ScSmall();             break;
+            case AGGREGATE_FUNC_PERCINC : ScPercentile( true );  break;
+            case AGGREGATE_FUNC_QRTINC  : ScQuartile( true );    break;
+            case AGGREGATE_FUNC_PERCEXC : ScPercentile( false ); break;
+            case AGGREGATE_FUNC_QRTEXC  : ScQuartile( false );   break;
+            default:
+                nGlobalError = nErr;
+                PushIllegalArgument();
+            break;
+        }
+        mnSubTotalFlags = SubtotalFlags::NONE;
+    }
+    FormulaConstTokenRef xRef( PopToken());
+    // Get rid of the 1st and 2nd (fished) parameters.
+    Pop();
+    Pop();
+    PushTokenRef( xRef);
 }
 
 std::unique_ptr<ScDBQueryParamBase> ScInterpreter::GetDBParams( bool& rMissingField )
