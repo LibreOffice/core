@@ -28,6 +28,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
 	external/cppunit/windows-arm64.patch.1 \
 	external/cppunit/propagate-exceptions.patch.0 \
 	external/cppunit/sprintf.patch.0 \
+	external/cppunit/clang.patch.0 \
 ))
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
