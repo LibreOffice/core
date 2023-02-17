@@ -609,6 +609,22 @@ void TestLanguageTag::testAllTags()
     }
 #endif
 
+    // 'es-419' fallbacks
+    {
+        OUString s_es_419( "es-419" );
+        LanguageTag es_419( s_es_419 );
+        lang::Locale aLocale = es_419.getLocale();
+        CPPUNIT_ASSERT_EQUAL( s_es_419, es_419.getBcp47() );
+        CPPUNIT_ASSERT_EQUAL( OUString("qlt"), aLocale.Language );
+        CPPUNIT_ASSERT( aLocale.Country.isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( OUString("es-419"), aLocale.Variant );
+        CPPUNIT_ASSERT_EQUAL( LANGUAGE_SPANISH_LATIN_AMERICA, es_419.getLanguageType() );
+        ::std::vector< OUString > es_419_Fallbacks( es_419.getFallbackStrings( true));
+        CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(2), es_419_Fallbacks.size());
+        CPPUNIT_ASSERT_EQUAL( OUString("es-419"), es_419_Fallbacks[0]);
+        CPPUNIT_ASSERT_EQUAL( OUString("es"), es_419_Fallbacks[1]);
+    }
+
     // 'qtz' is a local use known pseudolocale for key ID resource
     {
         OUString s_qtz( "qtz" );
