@@ -235,6 +235,7 @@ private:
     inline bool MustHaveParamCount( short nAct, short nMust );
     inline bool MustHaveParamCount( short nAct, short nMust, short nMax );
     inline bool MustHaveParamCountMin( short nAct, short nMin );
+    inline bool MustHaveParamCountMinWithStackCheck( short nAct, short nMin );
     void PushParameterExpected();
     void PushIllegalParameter();
     void PushIllegalArgument();
@@ -1087,6 +1088,17 @@ inline bool ScInterpreter::MustHaveParamCountMin( short nAct, short nMin )
         return true;
     PushParameterExpected();
     return false;
+}
+
+inline bool ScInterpreter::MustHaveParamCountMinWithStackCheck( short nAct, short nMin )
+{
+    assert(sp >= nAct);
+    if (sp < nAct)
+    {
+        PushParameterExpected();
+        return false;
+    }
+    return MustHaveParamCountMin( nAct, nMin);
 }
 
 inline bool ScInterpreter::CheckStringPositionArgument( double & fVal )
