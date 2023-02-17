@@ -22,6 +22,8 @@
     <value xml:lang="en-US">en-US</value>
     <value xml:lang="es">es</value>
     <value xml:lang="pt-PT">pt-PT</value>
+    <value xml:lang="zh-CN">zh-CN</value>
+    <value xml:lang="zh-TW">zh-TW</value>
   </prop>
   <prop oor:name="noDefaultLang">
     <value xml:lang="en-US">en-US</value>

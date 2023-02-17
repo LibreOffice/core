@@ -334,6 +334,14 @@ void Test::testLocalizedProperty() {
         CPPUNIT_ASSERT_EQUAL(OUString("es"), v);
     }
     {
+        // See <https://git.libreoffice.org/core/+/dfc28be2487c13be36a90efd778b8d8f179c589d%5E%21>
+        // "configmgr: Use a proper LanguageTag-based locale fallback mechanism":
+        OUString v;
+        CPPUNIT_ASSERT(
+            access->getByHierarchicalName("/org.libreoffice.unittest/localized/*zh-Hant-TW") >>= v);
+        CPPUNIT_ASSERT_EQUAL(OUString("zh-TW"), v);
+    }
+    {
         // Make sure a degenerate passed-in "-" locale is handled gracefully:
         OUString v;
         CPPUNIT_ASSERT(
