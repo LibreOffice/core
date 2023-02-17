@@ -220,15 +220,16 @@ sal_Int16 lcl_matchQtTextBoundaryType(QAccessible::TextBoundaryType boundaryType
 
 QAccessible::Relation lcl_matchUnoRelation(short relationType)
 {
+    // Qt semantics is the other way around
     switch (relationType)
     {
-        case AccessibleRelationType::CONTROLLER_FOR:
-            return QAccessible::Controller;
         case AccessibleRelationType::CONTROLLED_BY:
+            return QAccessible::Controller;
+        case AccessibleRelationType::CONTROLLER_FOR:
             return QAccessible::Controlled;
-        case AccessibleRelationType::LABEL_FOR:
-            return QAccessible::Label;
         case AccessibleRelationType::LABELED_BY:
+            return QAccessible::Label;
+        case AccessibleRelationType::LABEL_FOR:
             return QAccessible::Labelled;
         case AccessibleRelationType::INVALID:
         case AccessibleRelationType::CONTENT_FLOWS_FROM:
@@ -245,15 +246,16 @@ QAccessible::Relation lcl_matchUnoRelation(short relationType)
 
 short lcl_matchQtRelation(QAccessible::Relation relationType)
 {
+    // Qt semantics is the other way around
     switch (relationType)
     {
-        case QAccessible::Controller:
-            return AccessibleRelationType::CONTROLLER_FOR;
         case QAccessible::Controlled:
+            return AccessibleRelationType::CONTROLLER_FOR;
+        case QAccessible::Controller:
             return AccessibleRelationType::CONTROLLED_BY;
-        case QAccessible::Label:
-            return AccessibleRelationType::LABEL_FOR;
         case QAccessible::Labelled:
+            return AccessibleRelationType::LABEL_FOR;
+        case QAccessible::Label:
             return AccessibleRelationType::LABELED_BY;
         default:
             SAL_WARN("vcl.qt", "Unmatched relation: " << relationType);
