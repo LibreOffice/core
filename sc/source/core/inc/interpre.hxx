@@ -1080,7 +1080,7 @@ inline bool ScInterpreter::MustHaveParamCountMinWithStackCheck( short nAct, shor
     assert(sp >= nAct);
     if (sp < nAct)
     {
-        PushParameterExpected();
+        PushError(FormulaError::UnknownStackVariable);
         return false;
     }
     return MustHaveParamCountMin( nAct, nMin);
