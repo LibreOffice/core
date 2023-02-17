@@ -21,7 +21,7 @@
 #define INCLUDED_COMPHELPER_WEAKEVENTLISTENER_HXX
 
 #include <config_options.h>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <comphelper/comphelperdllapi.h>
@@ -44,7 +44,7 @@ namespace comphelper
         holds it's listener hard. The adapter itself knows the real listener as weak reference,
         thus not affecting its life time.</p>
     */
-    class OWeakListenerAdapterBase : public cppu::BaseMutex
+    class OWeakListenerAdapterBase
     {
     private:
         css::uno::WeakReference< css::uno::XInterface >
@@ -98,7 +98,7 @@ namespace comphelper
         as this can't be done in a generic way</p>
     */
     class OWeakListenerAdapter
-            :public ::cppu::WeakComponentImplHelper< LISTENER >
+            :public ::comphelper::WeakComponentImplHelper< LISTENER >
             ,public OWeakListenerAdapterBase
     {
     protected:
@@ -123,7 +123,7 @@ namespace comphelper
     protected:
         // OComponentHelper overridables
         // to be overridden, again - the derived class should revoke the listener from the broadcaster
-        virtual void SAL_CALL disposing( ) override = 0;
+        virtual void disposing( std::unique_lock<std::mutex>& rGuard ) override = 0;
     };
 
 
@@ -147,7 +147,7 @@ namespace comphelper
 
     private:
         using OWeakEventListenerAdapter_Base::disposing;
-        virtual void SAL_CALL disposing( ) override;
+        virtual void disposing( std::unique_lock<std::mutex>& rGuard ) override;
     };
 
 
@@ -159,8 +159,7 @@ namespace comphelper
         const css::uno::Reference< css::uno::XWeak >& _rxListener,
         const css::uno::Reference< BROADCASTER >& _rxBroadcaster
     )
-        : ::cppu::WeakComponentImplHelper< LISTENER >( m_aMutex )
-        , OWeakListenerAdapterBase( _rxListener, _rxBroadcaster )
+        : OWeakListenerAdapterBase( _rxListener, _rxBroadcaster )
     {
     }
 

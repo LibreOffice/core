@@ -55,7 +55,7 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OWeakEventListenerAdapter::disposing( )
+    void OWeakEventListenerAdapter::disposing( std::unique_lock<std::mutex>& /*rGuard*/ )
     {
         Reference< XComponent > xBroadcaster( getBroadcaster( ), UNO_QUERY );
         OSL_ENSURE( xBroadcaster.is(), "OWeakEventListenerAdapter::disposing: broadcaster is invalid in the meantime! How this?" );
