@@ -451,7 +451,38 @@ namespace basegfx
 
         double getEllipticalGradientAlpha(const B2DPoint& rUV, const ODFGradientInfo& rGradInfo)
         {
-            return getRadialGradientAlpha(rUV, rGradInfo); // only matrix setup differs
+            const B2DPoint aCoor(rGradInfo.getBackTextureTransform() * rUV);
+
+            if(aCoor.getX() < -1.0 || aCoor.getX() > 1.0 || aCoor.getY() < -1.0 || aCoor.getY() > 1.0)
+            {
+                return 0.0;
+            }
+
+            double fAspectRatio(rGradInfo.getAspectRatio());
+            double t(1.0);
+
+            // MCGR: Similar to getRectangularGradientAlpha (please
+            // see there) we need to use aspect ratio here. Due to
+            // initEllipticalGradientInfo using M_SQRT2 to make this
+            // gradient look 'nicer' this correciton seems not 100%
+            // correct, but is close enough for now
+            if(fAspectRatio > 1.0)
+            {
+                t = 1.0 - std::hypot(aCoor.getX() / fAspectRatio, aCoor.getY());
+            }
+            else if(fAspectRatio > 0.0)
+            {
+                t = 1.0 - std::hypot(aCoor.getX(), aCoor.getY() * fAspectRatio);
+            }
+
+            const sal_uInt32 nSteps(rGradInfo.getRequestedSteps());
+
+            if(nSteps && t < 1.0)
+            {
+                return floor(t * nSteps) / double(nSteps - 1);
+            }
+
+            return t;
         }
 
         double getSquareGradientAlpha(const B2DPoint& rUV, const ODFGradientInfo& rGradInfo)
@@ -484,7 +515,74 @@ namespace basegfx
 
         double getRectangularGradientAlpha(const B2DPoint& rUV, const ODFGradientInfo& rGradInfo)
         {
-            return getSquareGradientAlpha(rUV, rGradInfo); // only matrix setup differs
+            const B2DPoint aCoor(rGradInfo.getBackTextureTransform() * rUV);
+            double fAbsX(fabs(aCoor.getX()));
+
+            if(fAbsX >= 1.0)
+            {
+                return 0.0;
+            }
+
+            double fAbsY(fabs(aCoor.getY()));
+
+            if(fAbsY >= 1.0)
+            {
+                return 0.0;
+            }
+
+            // MCGR: Visualiations using the texturing method for
+            // displaying gradients (getBackTextureTransform is
+            // involved) show wrong results for GradientElliptical
+            // and GradientRect, this can be best seen when using
+            // less steps, e.g. just four. This thus has influence
+            // on cppcanvas (slideshow) and 3D textures, so needs
+            // to be corrected.
+            // Missing is to use the aspect ratio of the object
+            // in this [-1, -1, 1, 1] unified coordinate space
+            // after getBackTextureTransform is applied. Optically
+            // in the larger direction of the texturing the color
+            // step distances are too big *because* we are in that
+            // unit range now.
+            // To correct that, a kind of 'limo stretching' needs to
+            // be applied, adding space around the center
+            // proportional to the aspect ratio, so the intuitive
+            // idea would be to do
+            //
+            // fAbsX' = ((fAspectRatio - 1) + fAbsX) / fAspectRatio
+            //
+            // which scales from the center. This does not work, and
+            // after some thoughts it's clear why: It's not the
+            // position that needs to be moved (this cannot be
+            // changed), but the position *before* that scale has
+            // to be determined to get the correct, shifted color
+            // for the already 'new' position. Thus, turn around
+            // the expression as
+            //
+            // fAbsX' * fAspectRatio = fAspectRatio - 1 + fAbsX
+            // fAbsX' * fAspectRatio - fAspectRatio + 1 = fAbsX
+            // fAbsX = (fAbsX' - 1) * fAspectRatio + 1
+            //
+            // This works and can even be simply adapted for
+            // fAspectRatio < 1.0 aka vertical is bigger.
+            double fAspectRatio(rGradInfo.getAspectRatio());
+            if(fAspectRatio > 1.0)
+            {
+                fAbsX = ((fAbsX - 1) * fAspectRatio) + 1;
+            }
+            else if(fAspectRatio > 0.0)
+            {
+                fAbsY = ((fAbsY - 1) / fAspectRatio) + 1;
+            }
+
+            const double t(1.0 - std::max(fAbsX, fAbsY));
+            const sal_uInt32 nSteps(rGradInfo.getRequestedSteps());
+
+            if(nSteps && t < 1.0)
+            {
+                return floor(t * nSteps) / double(nSteps - 1);
+            }
+
+            return t;
         }
     } // namespace utils
 } // namespace basegfx
