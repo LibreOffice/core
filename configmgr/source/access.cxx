@@ -1394,9 +1394,19 @@ rtl::Reference< ChildAccess > Access::getChild(OUString const & name) {
             if (directChild.is())
                 return directChild;
 
+            LanguageTag aLanguageTag(locale, true);
+            if (aLanguageTag.getBcp47() != locale)
+            {
+                // Original may be overridden by a known locale, for example
+                // "zh-Hant-TW" by "zh-TW".
+                rtl::Reference<ChildAccess> child(getChild(aLanguageTag.getBcp47()));
+                if (child.is())
+                    return child;
+            }
+
             // Find the best match using the LanguageTag fallback mechanism,
             // excluding the original tag.
-            std::vector<OUString> aFallbacks = LanguageTag(locale).getFallbackStrings(false);
+            std::vector<OUString> aFallbacks = aLanguageTag.getFallbackStrings(false);
             for (const OUString& rFallback : aFallbacks)
             {
                 rtl::Reference<ChildAccess> child(getChild(rFallback));
