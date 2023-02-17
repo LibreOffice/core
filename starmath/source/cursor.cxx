@@ -1315,8 +1315,8 @@ void SmCursor::EndEdit(){
 }
 
 void SmCursor::RequestRepaint(){
-    SmViewShell *pViewSh = SmGetActiveView();
-    if( pViewSh ) {
+    if (SmViewShell *pViewSh = SmGetActiveView())
+    {
         if ( SfxObjectCreateMode::EMBEDDED == mpDocShell->GetCreateMode() )
             mpDocShell->Repaint();
         else

@@ -159,7 +159,7 @@ void SmDocShell::SetText(const OUString& rBuffer)
     Parse();
 
     SmViewShell *pViewSh = SmGetActiveView();
-    if( pViewSh )
+    if (pViewSh)
     {
         pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_TEXT);
         if ( SfxObjectCreateMode::EMBEDDED == GetCreateMode() )
@@ -256,8 +256,7 @@ void SmDocShell::ArrangeFormula()
     // if necessary get another OutputDevice for which we format
     if (!pOutDev)
     {
-        SmViewShell *pView = SmGetActiveView();
-        if (pView)
+        if (SmViewShell *pView = SmGetActiveView())
             pOutDev = &pView->GetGraphicWidget().GetDrawingArea()->get_ref_device();
         else
         {
@@ -542,8 +541,7 @@ void SmDocShell::Repaint()
 
     Size aVisSize = GetSize();
     SetVisAreaSize(aVisSize);
-    SmViewShell* pViewSh = SmGetActiveView();
-    if (pViewSh)
+    if (SmViewShell* pViewSh = SmGetActiveView())
         pViewSh->GetGraphicWidget().Invalidate();
 
     if (bIsEnabled)
