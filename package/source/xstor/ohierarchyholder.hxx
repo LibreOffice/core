@@ -29,7 +29,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <rtl/ref.hxx>
-
+#include <mutex>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -44,7 +44,7 @@ typedef ::std::vector< css::uno::WeakReference< css::embed::XExtendedStorageStre
 
 class OHierarchyElement_Impl : public cppu::WeakImplHelper< css::embed::XTransactionListener >
 {
-    ::osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
 
     ::rtl::Reference< OHierarchyElement_Impl > m_rParent;
     css::uno::Reference< css::embed::XStorage > m_xOwnStorage;

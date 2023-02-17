@@ -80,7 +80,7 @@ std::vector<OUString> OHierarchyHolder_Impl::GetListPathFromString( std::u16stri
 
 uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStreamHierarchically( sal_Int32 nStorageMode, std::vector<OUString>& aListPath, sal_Int32 nStreamMode, const ::comphelper::SequenceAsHashMap& aEncryptionData )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( !( nStorageMode & embed::ElementModes::WRITE ) && ( nStreamMode & embed::ElementModes::WRITE ) )
         throw io::IOException("invalid storage/stream mode combo");
@@ -162,7 +162,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
 
 void OHierarchyElement_Impl::RemoveStreamHierarchically( std::vector<OUString>& aListPath )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( aListPath.empty() )
         throw uno::RuntimeException();
@@ -211,7 +211,7 @@ void OHierarchyElement_Impl::Commit()
     uno::Reference< embed::XStorage > xOwnStor;
 
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         aParent = m_rParent;
         xOwnStor = m_xOwnStorage;
     }
@@ -229,7 +229,7 @@ void OHierarchyElement_Impl::TestForClosing()
 {
     ::rtl::Reference< OHierarchyElement_Impl > xKeepAlive( this );
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         if ( m_aOpenStreams.empty() && m_aChildren.empty() )
         {
@@ -259,7 +259,7 @@ void SAL_CALL OHierarchyElement_Impl::disposing( const lang::EventObject& Source
     try
     {
         {
-            osl::MutexGuard aGuard(m_aMutex);
+            std::unique_lock aGuard(m_aMutex);
             uno::Reference< embed::XExtendedStorageStream > xStream(Source.Source, uno::UNO_QUERY);
 
             m_aOpenStreams.erase(std::remove_if(m_aOpenStreams.begin(), m_aOpenStreams.end(),
@@ -281,7 +281,7 @@ void SAL_CALL OHierarchyElement_Impl::disposing( const lang::EventObject& Source
 void OHierarchyElement_Impl::RemoveElement( const ::rtl::Reference< OHierarchyElement_Impl >& aRef )
 {
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         OHierarchyElementList_Impl::iterator aIter = m_aChildren.begin();
         while (aIter != m_aChildren.end())
         {
