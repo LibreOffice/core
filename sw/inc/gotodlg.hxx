@@ -28,7 +28,7 @@ class SwView;
 class SwGotoPageDlg final : public weld::GenericDialogController
 {
 public:
-    SwGotoPageDlg(weld::Window *parent, SfxBindings* _pBindings);
+    SwGotoPageDlg(weld::Window *parent, SfxBindings& rBindings);
 
     sal_uInt16 GetPageSelection() const
     {
@@ -37,7 +37,7 @@ public:
 
 private:
     SwView       *m_pCreateView;
-    SfxBindings  *m_rBindings;
+    SfxBindings& m_rBindings;
     sal_uInt16   mnMaxPageCnt;
 
     std::unique_ptr<weld::SpinButton> mxMtrPageCtrl;

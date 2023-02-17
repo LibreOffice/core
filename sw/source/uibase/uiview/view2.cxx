@@ -1195,7 +1195,7 @@ void SwView::Execute(SfxRequest &rReq)
         break;
         case FN_GOTO_PAGE:
         {
-            SwGotoPageDlg aDlg(GetViewFrame().GetFrameWeld(), &GetViewFrame().GetBindings());
+            SwGotoPageDlg aDlg(GetViewFrame().GetFrameWeld(), GetViewFrame().GetBindings());
             if (aDlg.run() == RET_OK)
                 GetWrtShell().GotoPage(aDlg.GetPageSelection(), true);
         }

@@ -26,10 +26,10 @@
 
 using namespace com::sun::star;
 
-SwGotoPageDlg::SwGotoPageDlg(weld::Window* pParent, SfxBindings* _pBindings)
+SwGotoPageDlg::SwGotoPageDlg(weld::Window* pParent, SfxBindings& rBindings)
     : GenericDialogController(pParent, "modules/swriter/ui/gotopagedialog.ui", "GotoPageDialog")
     , m_pCreateView(nullptr)
-    , m_rBindings(_pBindings)
+    , m_rBindings(rBindings)
     , mnMaxPageCnt(1)
     , mxMtrPageCtrl(m_xBuilder->weld_spin_button("page"))
     , mxPageNumberLbl(m_xBuilder->weld_label("page_count"))
@@ -71,7 +71,7 @@ SwView* SwGotoPageDlg::GetCreateView() const
         SwView* pView = SwModule::GetFirstView();
         while (pView)
         {
-            if (&pView->GetViewFrame().GetBindings() == m_rBindings)
+            if (&pView->GetViewFrame().GetBindings() == &m_rBindings)
             {
                 const_cast<SwGotoPageDlg*>(this)->m_pCreateView = pView;
                 break;
