@@ -9,7 +9,9 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <comphelper/configuration.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <officecfg/Office/Writer.hxx>
 
 #include <IDocumentLayoutAccess.hxx>
 #include <anchoredobject.hxx>
@@ -36,8 +38,16 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWithTable)
 {
     // Given a document with a multi-page floating table:
-    SwFormatFlySplit::SetForce(true);
-    comphelper::ScopeGuard g([] { SwFormatFlySplit::SetForce(false); });
+    std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(true,
+                                                                                        pChanges);
+    pChanges->commit();
+    comphelper::ScopeGuard g([pChanges] {
+        officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(
+            false, pChanges);
+        pChanges->commit();
+    });
     createSwDoc("floattable.docx");
 
     // When laying out that document:
@@ -86,8 +96,16 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWithTable)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyVertoffset)
 {
     // Given a document with a floattable, split on 2 pages and a positive vertical offset:
-    SwFormatFlySplit::SetForce(true);
-    comphelper::ScopeGuard g([] { SwFormatFlySplit::SetForce(false); });
+    std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(true,
+                                                                                        pChanges);
+    pChanges->commit();
+    comphelper::ScopeGuard g([pChanges] {
+        officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(
+            false, pChanges);
+        pChanges->commit();
+    });
     createSwDoc("floattable-vertoffset.docx");
 
     // When laying out that document:
@@ -128,7 +146,5 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyVertoffset)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(0), nPage2FlyTop - nPage2AnchorTop);
 }
 }
-
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

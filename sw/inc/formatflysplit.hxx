@@ -34,10 +34,6 @@ public:
     SwFormatFlySplit* Clone(SfxItemPool* pPool = nullptr) const override;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
-
-    // Force-enable for test purposes.
-    static void SetForce(bool bForce);
-    static bool GetForce();
 };
 
 inline const SwFormatFlySplit& SwAttrSet::GetFlySplit(bool bInP) const
