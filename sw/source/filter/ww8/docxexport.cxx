@@ -1236,7 +1236,7 @@ void DocxExport::WriteSettings()
 
     /* Compatibility Mode (tdf#131304)
      * 11:  .doc level    [Word 97-2003]
-     * 12:  .docx default [Word 2007]  [LO < 7.0]
+     * 12:  .docx default [Word 2007]  [LO < 7.0] [ECMA 376 1st ed.]
      * 14:                [Word 2010]
      * 15:                [Word 2013/2016/2019]  [LO >= 7.0]
      *
@@ -1249,7 +1249,9 @@ void DocxExport::WriteSettings()
      * 2.) Many years later, change the TargetCompatilityMode for new documents, when we no longer care
      *     about working with perfect compatibility with older versions of MS Word.
      */
-    sal_Int32 nTargetCompatibilityMode = 15; //older versions might not open our files well
+    sal_Int32 nTargetCompatibilityMode =
+        (GetFilter().getVersion() == oox::core::ECMA_376_1ST_EDITION)
+        ? 12 : 15; //older versions might not open our files well
     bool bHasCompatibilityMode = false;
     const OUString aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     if ( xPropSetInfo->hasPropertyByName( aGrabBagName ) )
