@@ -928,9 +928,9 @@ function writeBatFile(fdir, file)
         " )\n" +
         "\n" +
         "REM Set library path. \n" +
-        "set LIB=%OO_SDK_HOME%\\lib;%LIB%\n" +
+        "set \"LIB=%OO_SDK_HOME%\\lib;%LIB%\"\n" +
         "if defined CPP_WINDOWS_SDK (\n" +
-        "   set LIB=%LIB%;%CPP_WINDOWS_SDK%\\lib\n" +
+        "   set \"LIB=%LIB%;%CPP_WINDOWS_SDK%\\lib\"\n" +
         " )\n" +
         "\n" +
         "REM Set office program path.\n" +
