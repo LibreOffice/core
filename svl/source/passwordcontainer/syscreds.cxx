@@ -38,10 +38,10 @@ void SysCredentialsConfigItem::Notify(
     const uno::Sequence< OUString > & /*seqPropertyNames*/ )
 {
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         m_bInited = false;
         // rebuild m_seqURLs
-        getSystemCredentialsURLs();
+        getSystemCredentialsURLs(aGuard);
     }
     m_pOwner->persistentConfigChanged();
 }
@@ -54,7 +54,13 @@ void SysCredentialsConfigItem::ImplCommit()
 uno::Sequence< OUString >
 SysCredentialsConfigItem::getSystemCredentialsURLs()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard(m_aMutex);
+    return getSystemCredentialsURLs(aGuard);
+}
+
+uno::Sequence< OUString >
+SysCredentialsConfigItem::getSystemCredentialsURLs(std::unique_lock<std::mutex>& /*rGuard*/)
+{
     if ( !m_bInited )
     {
         // read config item
@@ -81,14 +87,14 @@ SysCredentialsConfigItem::getSystemCredentialsURLs()
 void SysCredentialsConfigItem::setSystemCredentialsURLs(
     const uno::Sequence< OUString > & seqURLList )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     // write config item.
     uno::Sequence< OUString > aPropNames{ "AuthenticateUsingSystemCredentials" };
     uno::Sequence< uno::Any > aPropValues{ uno::Any(seqURLList) };
 
     utl::ConfigItem::SetModified();
     utl::ConfigItem::PutProperties( aPropNames, aPropValues );
+
+    std::unique_lock aGuard( m_aMutex );
 
     m_seqURLs = seqURLList;
     m_bInited = true;
