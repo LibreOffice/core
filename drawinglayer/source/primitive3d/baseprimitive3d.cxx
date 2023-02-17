@@ -29,7 +29,6 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive3d
 {
         BasePrimitive3D::BasePrimitive3D()
-        :   BasePrimitive3DImplBase(m_aMutex)
         {
         }
 
@@ -76,7 +75,7 @@ namespace drawinglayer::primitive3d
 
         Primitive3DContainer BufferedDecompositionPrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
         {
-            ::osl::MutexGuard aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
 
             if(getBuffered3DDecomposition().empty())
             {

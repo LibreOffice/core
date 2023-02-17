@@ -29,6 +29,7 @@
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
+#include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <utility>
 

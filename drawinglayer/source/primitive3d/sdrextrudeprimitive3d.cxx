@@ -376,7 +376,7 @@ namespace drawinglayer::primitive3d
             // again when no longer geometry is needed for non-visible 3D objects as it is now for chart
             if(getPolyPolygon().count() && maSlices.empty())
             {
-                ::osl::MutexGuard aGuard( m_aMutex );
+                std::unique_lock aGuard( m_aMutex );
 
                 const_cast< SdrExtrudePrimitive3D& >(*this).impCreateSlices();
             }
@@ -481,7 +481,7 @@ namespace drawinglayer::primitive3d
                     (!getBuffered3DDecomposition().empty()
                         && *mpLastRLGViewInformation != rViewInformation))
                 {
-                    ::osl::MutexGuard aGuard( m_aMutex );
+                    std::unique_lock aGuard( m_aMutex );
 
                     // conditions of last local decomposition with reduced lines have changed. Remember
                     // new one and clear current decompositiopn

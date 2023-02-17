@@ -749,7 +749,7 @@ using namespace com::sun::star;
 
         Primitive3DContainer PolygonTubePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
         {
-            ::osl::MutexGuard aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
 
             if(getLast3DDecomposition().empty())
             {
