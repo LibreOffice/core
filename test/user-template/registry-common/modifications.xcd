@@ -20,6 +20,7 @@
   <prop oor:name="localized">
     <value>default</value>
     <value xml:lang="en-US">en-US</value>
+    <value xml:lang="es">es</value>
     <value xml:lang="pt-PT">pt-PT</value>
   </prop>
   <prop oor:name="noDefaultLang">

@@ -325,6 +325,15 @@ void Test::testLocalizedProperty() {
         CPPUNIT_ASSERT_EQUAL(OUString("pt-PT"), v);
     }
     {
+        // See <https://gerrit.libreoffice.org/c/core/+/147089> "configmgr: fix no longer found
+        // es-419 -> es fallback", which wants to retrieve the xml:lang="es" value for the passed-in
+        // "es-419" locale:
+        OUString v;
+        CPPUNIT_ASSERT(
+            access->getByHierarchicalName("/org.libreoffice.unittest/localized/*es-419") >>= v);
+        CPPUNIT_ASSERT_EQUAL(OUString("es"), v);
+    }
+    {
         // Make sure a degenerate passed-in "-" locale is handled gracefully:
         OUString v;
         CPPUNIT_ASSERT(
