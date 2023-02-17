@@ -205,6 +205,12 @@ static OUString GetCellRangeName( const SwFrameFormat &rTableFormat, SwUnoCursor
     SwUnoTableCursor* pUnoTableCursor = dynamic_cast<SwUnoTableCursor*>(&rTableCursor);
     if (!pUnoTableCursor)
         return OUString();
+
+    // tdf#132714 empty outdated selection cache to avoid crashing in ActualizeSelection()
+    size_t nCount = pUnoTableCursor->GetSelectedBoxesCount();
+    while (nCount--)
+        pUnoTableCursor->DeleteBox(nCount);
+
     pUnoTableCursor->MakeBoxSels();
 
     const SwStartNode*  pStart;
