@@ -23,11 +23,10 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <comphelper/componentguard.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/safeint.hxx>
+#include <osl/diagnose.h>
 
 #include <algorithm>
 #include <vector>
@@ -40,12 +39,11 @@ using namespace ::com::sun::star::lang;
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper    <   XMutableGridDataModel
+typedef ::comphelper::WeakComponentImplHelper    <   XMutableGridDataModel
                                             ,   XServiceInfo
                                             >   DefaultGridDataModel_Base;
 
-class DefaultGridDataModel  :public ::cppu::BaseMutex
-                            ,public DefaultGridDataModel_Base
+class DefaultGridDataModel: public DefaultGridDataModel_Base
 {
 public:
     DefaultGridDataModel();
@@ -75,7 +73,7 @@ public:
     virtual css::uno::Sequence< css::uno::Any > SAL_CALL getRowData( ::sal_Int32 RowIndex ) override;
 
     // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing( std::unique_lock<std::mutex>& ) override;
 
     // XCloneable
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
@@ -93,65 +91,60 @@ private:
     void broadcast(
         GridDataEvent const & i_event,
         void ( SAL_CALL css::awt::grid::XGridDataListener::*i_listenerMethod )( css::awt::grid::GridDataEvent const & ),
-        ::comphelper::ComponentGuard & i_instanceLock
+        std::unique_lock<std::mutex>& i_instanceLock
     );
 
-    void    impl_insertRow( sal_Int32 const i_position, Any const & i_heading, Sequence< Any > const & i_rowData, sal_Int32 const i_assumedColCount = -1 );
+    void    impl_insertRow( std::unique_lock<std::mutex>& rGuard, sal_Int32 const i_position, Any const & i_heading, Sequence< Any > const & i_rowData, sal_Int32 const i_assumedColCount = -1 );
 
-    ::sal_Int32 impl_getRowCount_nolck() const { return sal_Int32( m_aData.size() ); }
+    ::sal_Int32 impl_getRowCount(std::unique_lock<std::mutex>&) const { return sal_Int32( m_aData.size() ); }
 
-    CellData const &    impl_getCellData_throw( sal_Int32 const i_columnIndex, sal_Int32 const i_rowIndex ) const;
-    CellData&           impl_getCellDataAccess_throw( sal_Int32 const i_columnIndex, sal_Int32 const i_rowIndex );
-    RowData&            impl_getRowDataAccess_throw( sal_Int32 const i_rowIndex, size_t const i_requiredColumnCount );
+    CellData const &    impl_getCellData_throw( std::unique_lock<std::mutex>& rGuard, sal_Int32 const i_columnIndex, sal_Int32 const i_rowIndex ) const;
+    CellData&           impl_getCellDataAccess_throw( std::unique_lock<std::mutex>& rGuard, sal_Int32 const i_columnIndex, sal_Int32 const i_rowIndex );
+    RowData&            impl_getRowDataAccess_throw( std::unique_lock<std::mutex>& rGuard, sal_Int32 const i_rowIndex, size_t const i_requiredColumnCount );
 
     GridData m_aData;
     ::std::vector< css::uno::Any > m_aRowHeaders;
     sal_Int32 m_nColumnCount;
+    comphelper::OInterfaceContainerHelper4<XGridDataListener> maGridDataListeners;
 };
 
     DefaultGridDataModel::DefaultGridDataModel()
-        :DefaultGridDataModel_Base( m_aMutex )
-        ,m_nColumnCount(0)
+        :m_nColumnCount(0)
     {
     }
 
 
     DefaultGridDataModel::DefaultGridDataModel( DefaultGridDataModel const & i_copySource )
-        :cppu::BaseMutex()
-        ,DefaultGridDataModel_Base( m_aMutex )
-        ,m_aData( i_copySource.m_aData )
+        :m_aData( i_copySource.m_aData )
         ,m_aRowHeaders( i_copySource.m_aRowHeaders )
         ,m_nColumnCount( i_copySource.m_nColumnCount )
     {
     }
 
     void DefaultGridDataModel::broadcast( GridDataEvent const & i_event,
-        void ( SAL_CALL XGridDataListener::*i_listenerMethod )( GridDataEvent const & ), ::comphelper::ComponentGuard & i_instanceLock )
+        void ( SAL_CALL XGridDataListener::*i_listenerMethod )( GridDataEvent const & ), std::unique_lock<std::mutex>& i_instanceLock )
     {
-        ::cppu::OInterfaceContainerHelper* pListeners = rBHelper.getContainer( cppu::UnoType<XGridDataListener>::get() );
-        if ( !pListeners )
-            return;
-
-        i_instanceLock.clear();
-        pListeners->notifyEach( i_listenerMethod, i_event );
+        maGridDataListeners.notifyEach( i_instanceLock, i_listenerMethod, i_event );
     }
 
 
     ::sal_Int32 SAL_CALL DefaultGridDataModel::getRowCount()
     {
-        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
-        return impl_getRowCount_nolck();
+        std::unique_lock aGuard(m_aMutex);
+        throwIfDisposed(aGuard);
+        return impl_getRowCount(aGuard);
     }
 
 
     ::sal_Int32 SAL_CALL DefaultGridDataModel::getColumnCount()
     {
-        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfDisposed(aGuard);
         return m_nColumnCount;
     }
 
 
-    DefaultGridDataModel::CellData const & DefaultGridDataModel::impl_getCellData_throw( sal_Int32 const i_column, sal_Int32 const i_row ) const
+    DefaultGridDataModel::CellData const & DefaultGridDataModel::impl_getCellData_throw( std::unique_lock<std::mutex>& /*rGuard*/, sal_Int32 const i_column, sal_Int32 const i_row ) const
     {
         if  (   ( i_row < 0 ) || ( o3tl::make_unsigned( i_row ) > m_aData.size() )
             ||  ( i_column < 0 ) || ( i_column > m_nColumnCount )
@@ -167,7 +160,7 @@ private:
     }
 
 
-    DefaultGridDataModel::RowData& DefaultGridDataModel::impl_getRowDataAccess_throw( sal_Int32 const i_rowIndex, size_t const i_requiredColumnCount )
+    DefaultGridDataModel::RowData& DefaultGridDataModel::impl_getRowDataAccess_throw( std::unique_lock<std::mutex>& /*rGuard*/, sal_Int32 const i_rowIndex, size_t const i_requiredColumnCount )
     {
         OSL_ENSURE( i_requiredColumnCount <= o3tl::make_unsigned( m_nColumnCount ), "DefaultGridDataModel::impl_getRowDataAccess_throw: invalid column count!" );
         if  ( ( i_rowIndex < 0 ) || ( o3tl::make_unsigned( i_rowIndex ) >= m_aData.size() ) )
@@ -180,33 +173,36 @@ private:
     }
 
 
-    DefaultGridDataModel::CellData& DefaultGridDataModel::impl_getCellDataAccess_throw( sal_Int32 const i_columnIndex, sal_Int32 const i_rowIndex )
+    DefaultGridDataModel::CellData& DefaultGridDataModel::impl_getCellDataAccess_throw( std::unique_lock<std::mutex>& rGuard, sal_Int32 const i_columnIndex, sal_Int32 const i_rowIndex )
     {
         if  ( ( i_columnIndex < 0 ) || ( i_columnIndex >= m_nColumnCount ) )
             throw IndexOutOfBoundsException( OUString(), *this );
 
-        RowData& rRowData( impl_getRowDataAccess_throw( i_rowIndex, size_t( i_columnIndex + 1 ) ) );
+        RowData& rRowData( impl_getRowDataAccess_throw( rGuard, i_rowIndex, size_t( i_columnIndex + 1 ) ) );
         return rRowData[ i_columnIndex ];
     }
 
 
     Any SAL_CALL DefaultGridDataModel::getCellData( ::sal_Int32 i_column, ::sal_Int32 i_row )
     {
-        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
-        return impl_getCellData_throw( i_column, i_row ).first;
+        std::unique_lock aGuard(m_aMutex);
+        throwIfDisposed(aGuard);
+        return impl_getCellData_throw( aGuard, i_column, i_row ).first;
     }
 
 
     Any SAL_CALL DefaultGridDataModel::getCellToolTip( ::sal_Int32 i_column, ::sal_Int32 i_row )
     {
-        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
-        return impl_getCellData_throw( i_column, i_row ).second;
+        std::unique_lock aGuard(m_aMutex);
+        throwIfDisposed(aGuard);
+        return impl_getCellData_throw( aGuard, i_column, i_row ).second;
     }
 
 
     Any SAL_CALL DefaultGridDataModel::getRowHeading( ::sal_Int32 i_row )
     {
-        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfDisposed(aGuard);
 
         if ( ( i_row < 0 ) || ( o3tl::make_unsigned( i_row ) >= m_aRowHeaders.size() ) )
             throw IndexOutOfBoundsException( OUString(), *this );
@@ -217,10 +213,11 @@ private:
 
     Sequence< Any > SAL_CALL DefaultGridDataModel::getRowData( ::sal_Int32 i_rowIndex )
     {
-        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfDisposed(aGuard);
 
         Sequence< Any > resultData( m_nColumnCount );
-        RowData& rRowData = impl_getRowDataAccess_throw( i_rowIndex, m_nColumnCount );
+        RowData& rRowData = impl_getRowDataAccess_throw( aGuard, i_rowIndex, m_nColumnCount );
 
         ::std::transform( rRowData.begin(), rRowData.end(), resultData.getArray(),
                           [] ( const CellData& rCellData )
@@ -229,7 +226,7 @@ private:
     }
 
 
-    void DefaultGridDataModel::impl_insertRow( sal_Int32 const i_position, Any const & i_heading, Sequence< Any > const & i_rowData, sal_Int32 const i_assumedColCount )
+    void DefaultGridDataModel::impl_insertRow( std::unique_lock<std::mutex>& /*rGuard*/, sal_Int32 const i_position, Any const & i_heading, Sequence< Any > const & i_rowData, sal_Int32 const i_assumedColCount )
     {
         OSL_PRECOND( ( i_assumedColCount <= 0 ) || ( i_assumedColCount >= i_rowData.getLength() ),
             "DefaultGridDataModel::impl_insertRow: invalid column count!" );
@@ -265,13 +262,14 @@ private:
 
     void SAL_CALL DefaultGridDataModel::insertRow( ::sal_Int32 i_index, const Any& i_heading, const Sequence< Any >& i_data )
     {
-        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfDisposed(aGuard);
 
-        if ( ( i_index < 0 ) || ( i_index > impl_getRowCount_nolck() ) )
+        if ( ( i_index < 0 ) || ( i_index > impl_getRowCount(aGuard) ) )
             throw IndexOutOfBoundsException( OUString(), *this );
 
         // actually insert the row
-        impl_insertRow( i_index, i_heading, i_data );
+        impl_insertRow( aGuard, i_index, i_heading, i_data );
 
         // update column count
         sal_Int32 const columnCount = i_data.getLength();
@@ -291,9 +289,10 @@ private:
         if ( i_headings.getLength() != i_data.getLength() )
             throw IllegalArgumentException( OUString(), *this, -1 );
 
-        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfDisposed(aGuard);
 
-        if ( ( i_index < 0 ) || ( i_index > impl_getRowCount_nolck() ) )
+        if ( ( i_index < 0 ) || ( i_index > impl_getRowCount(aGuard) ) )
             throw IndexOutOfBoundsException( OUString(), *this );
 
         sal_Int32 const rowCount = i_headings.getLength();
@@ -310,7 +309,7 @@ private:
 
         for ( sal_Int32 row=0; row<rowCount;  ++row )
         {
-            impl_insertRow( i_index + row, i_headings[row], i_data[row], maxColCount );
+            impl_insertRow( aGuard, i_index + row, i_headings[row], i_data[row], maxColCount );
         }
 
         if ( maxColCount > m_nColumnCount )
@@ -326,7 +325,8 @@ private:
 
     void SAL_CALL DefaultGridDataModel::removeRow( ::sal_Int32 i_rowIndex )
     {
-        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfDisposed(aGuard);
 
         if ( ( i_rowIndex < 0 ) || ( o3tl::make_unsigned( i_rowIndex ) >= m_aData.size() ) )
             throw IndexOutOfBoundsException( OUString(), *this );
@@ -344,7 +344,8 @@ private:
 
     void SAL_CALL DefaultGridDataModel::removeAllRows(  )
     {
-        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfDisposed(aGuard);
 
         m_aRowHeaders.clear();
         m_aData.clear();
@@ -359,9 +360,10 @@ private:
 
     void SAL_CALL DefaultGridDataModel::updateCellData( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex, const Any& i_value )
     {
-        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfDisposed(aGuard);
 
-        impl_getCellDataAccess_throw( i_columnIndex, i_rowIndex ).first = i_value;
+        impl_getCellDataAccess_throw( aGuard, i_columnIndex, i_rowIndex ).first = i_value;
 
         broadcast(
             GridDataEvent( *this, i_columnIndex, i_columnIndex, i_rowIndex, i_rowIndex ),
@@ -373,7 +375,8 @@ private:
 
     void SAL_CALL DefaultGridDataModel::updateRowData( const Sequence< ::sal_Int32 >& i_columnIndexes, ::sal_Int32 i_rowIndex, const Sequence< Any >& i_values )
     {
-        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfDisposed(aGuard);
 
         if  ( ( i_rowIndex < 0 ) || ( o3tl::make_unsigned( i_rowIndex ) >= m_aData.size() ) )
             throw IndexOutOfBoundsException( OUString(), *this );
@@ -414,7 +417,8 @@ private:
 
     void SAL_CALL DefaultGridDataModel::updateRowHeading( ::sal_Int32 i_rowIndex, const Any& i_heading )
     {
-        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfDisposed(aGuard);
 
         if  ( ( i_rowIndex < 0 ) || ( o3tl::make_unsigned( i_rowIndex ) >= m_aRowHeaders.size() ) )
             throw IndexOutOfBoundsException( OUString(), *this );
@@ -431,16 +435,18 @@ private:
 
     void SAL_CALL DefaultGridDataModel::updateCellToolTip( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex, const Any& i_value )
     {
-        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
-        impl_getCellDataAccess_throw( i_columnIndex, i_rowIndex ).second = i_value;
+        std::unique_lock aGuard(m_aMutex);
+        throwIfDisposed(aGuard);
+        impl_getCellDataAccess_throw( aGuard, i_columnIndex, i_rowIndex ).second = i_value;
     }
 
 
     void SAL_CALL DefaultGridDataModel::updateRowToolTip( ::sal_Int32 i_rowIndex, const Any& i_value )
     {
-        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
+        std::unique_lock aGuard(m_aMutex);
+        throwIfDisposed(aGuard);
 
-        RowData& rRowData = impl_getRowDataAccess_throw( i_rowIndex, m_nColumnCount );
+        RowData& rRowData = impl_getRowDataAccess_throw( aGuard, i_rowIndex, m_nColumnCount );
         for ( auto& rCell : rRowData )
             rCell.second = i_value;
     }
@@ -448,23 +454,24 @@ private:
 
     void SAL_CALL DefaultGridDataModel::addGridDataListener( const Reference< grid::XGridDataListener >& i_listener )
     {
-        rBHelper.addListener( cppu::UnoType<XGridDataListener>::get(), i_listener );
+        std::unique_lock aGuard(m_aMutex);
+        maGridDataListeners.addInterface( aGuard, i_listener );
     }
 
 
     void SAL_CALL DefaultGridDataModel::removeGridDataListener( const Reference< grid::XGridDataListener >& i_listener )
     {
-        rBHelper.removeListener( cppu::UnoType<XGridDataListener>::get(), i_listener );
+        std::unique_lock aGuard(m_aMutex);
+        maGridDataListeners.removeInterface( aGuard, i_listener );
     }
 
 
-    void SAL_CALL DefaultGridDataModel::disposing()
+    void DefaultGridDataModel::disposing(std::unique_lock<std::mutex>& rGuard)
     {
         css::lang::EventObject aEvent;
         aEvent.Source.set( *this );
-        rBHelper.aLC.disposeAndClear( aEvent );
+        maGridDataListeners.disposeAndClear(rGuard, aEvent);
 
-        ::osl::MutexGuard aGuard( m_aMutex );
         GridData().swap(m_aData);
         std::vector<Any>().swap(m_aRowHeaders);
         m_nColumnCount = 0;
