@@ -21,8 +21,6 @@
 
 #include <libxml/xmlwriter.h>
 
-static std::optional<bool> g_oForce;
-
 SwFormatFlySplit::SwFormatFlySplit(bool bSplit)
     : SfxBoolItem(RES_FLY_SPLIT, bSplit)
 {
@@ -31,17 +29,19 @@ SwFormatFlySplit::SwFormatFlySplit(bool bSplit)
     //
     // The layout representation is the following:
     //
-    // - We assume that the anchor type is at-para for such fly frames, and SwFlyAtContentFrame
-    // derives from SwFlowFrame to be able to split in general.
+    // - We assume that the anchor type is at-para for such fly frames.
+    //
+    // - We also assume that AutoSize is true for such fly frames.
+    //
+    // - SwFlyAtContentFrame derives from SwFlowFrame to be able to split in general.
     //
     // - Both the master fly and the follow flys need an anchor. At the same time, we want all text
     // of the anchor frame to be wrapped around the last follow fly frame, for Word compatibility.
     // These are solved by splitting the anchor frame as many times as needed, always at
     // TextFrameIndex 0.
-    if (SwFormatFlySplit::GetForce())
-    {
-        SetValue(true);
-    }
+    //
+    // - The vertical offset is only considered on the master fly, all the follow flys ignore it, so
+    // they start at the top of a next page.
 }
 
 SwFormatFlySplit* SwFormatFlySplit::Clone(SfxItemPool*) const
@@ -57,18 +57,6 @@ void SwFormatFlySplit::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                       BAD_CAST(OString::boolean(GetValue()).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
-}
-
-void SwFormatFlySplit::SetForce(bool bForce) { g_oForce = bForce; }
-
-bool SwFormatFlySplit::GetForce()
-{
-    if (g_oForce.has_value())
-    {
-        return *g_oForce;
-    }
-
-    return getenv("SW_FORCE_FLY_SPLIT") != nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

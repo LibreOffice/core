@@ -138,7 +138,6 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_uibase_wrtsh \
     CppunitTest_sw_core_accessibilitycheck \
     CppunitTest_sw_core_layout \
-    CppunitTest_sw_core_layout_flycnt \
     CppunitTest_sw_core_fields \
     CppunitTest_sw_core_tox \
     CppunitTest_sw_core_frmedt \

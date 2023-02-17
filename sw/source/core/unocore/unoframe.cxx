@@ -134,6 +134,7 @@
 #include <svx/xfltrit.hxx>
 #include <swunohelper.hxx>
 #include <fefly.hxx>
+#include <formatflysplit.hxx>
 
 using namespace ::com::sun::star;
 
@@ -957,6 +958,15 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         SfxBoolItem item(RES_DECORATIVE);
         bRet &= item.PutValue(*pDecorative, 0);
         rToSet.Put(item);
+    }
+
+    const ::uno::Any* pFlySplit = nullptr;
+    GetProperty(RES_FLY_SPLIT, 0, pFlySplit);
+    if (pFlySplit)
+    {
+        SwFormatFlySplit aSplit(true);
+        bRet &= aSplit.PutValue(*pFlySplit, 0);
+        rToSet.Put(aSplit);
     }
 
     return bRet;

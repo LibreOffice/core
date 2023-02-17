@@ -51,6 +51,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <boost/lexical_cast.hpp>
+#include <officecfg/Office/Writer.hxx>
 
 #ifdef DBG_UTIL
 #include "PropertyMapHelper.hxx"
@@ -1562,6 +1563,16 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                 // Floating tables inside a table always stay inside the cell.
                 aFrameProperties.push_back(
                     comphelper::makePropertyValue("IsFollowingTextFlow", true));
+            }
+
+            bool bSplitAllowed = officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::get();
+            if (!bSplitAllowed)
+            {
+                bSplitAllowed = getenv("SW_FORCE_FLY_SPLIT") != nullptr;
+            }
+            if (bSplitAllowed)
+            {
+                aFrameProperties.push_back(comphelper::makePropertyValue("IsSplitAllowed", true));
             }
 
             // In case the document ends with a table, we're called after
