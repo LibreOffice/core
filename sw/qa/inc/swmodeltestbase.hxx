@@ -369,12 +369,12 @@ inline void assertBorderEqual(
     const css::table::BorderLine2& rExpected, const css::table::BorderLine2& rActual,
     const CppUnit::SourceLine& rSourceLine )
 {
-    CPPUNIT_NS::assertEquals<css::util::Color>( rExpected.Color, rActual.Color, rSourceLine, "different Color" );
-    CPPUNIT_NS::assertEquals<sal_Int16>( rExpected.InnerLineWidth, rActual.InnerLineWidth, rSourceLine, "different InnerLineWidth" );
-    CPPUNIT_NS::assertEquals<sal_Int16>( rExpected.OuterLineWidth, rActual.OuterLineWidth, rSourceLine, "different OuterLineWidth" );
-    CPPUNIT_NS::assertEquals<sal_Int16>( rExpected.LineDistance, rActual.LineDistance, rSourceLine, "different LineDistance" );
-    CPPUNIT_NS::assertEquals<sal_Int16>( rExpected.LineStyle, rActual.LineStyle, rSourceLine, "different LineStyle" );
-    CPPUNIT_NS::assertEquals<sal_Int32>( rExpected.LineWidth, rActual.LineWidth, rSourceLine, "different LineWidth" );
+    CPPUNIT_NS::assertEquals( rExpected.Color, rActual.Color, rSourceLine, "different Color" );
+    CPPUNIT_NS::assertEquals( rExpected.InnerLineWidth, rActual.InnerLineWidth, rSourceLine, "different InnerLineWidth" );
+    CPPUNIT_NS::assertEquals( rExpected.OuterLineWidth, rActual.OuterLineWidth, rSourceLine, "different OuterLineWidth" );
+    CPPUNIT_NS::assertEquals( rExpected.LineDistance, rActual.LineDistance, rSourceLine, "different LineDistance" );
+    CPPUNIT_NS::assertEquals( rExpected.LineStyle, rActual.LineStyle, rSourceLine, "different LineStyle" );
+    CPPUNIT_NS::assertEquals( rExpected.LineWidth, rActual.LineWidth, rSourceLine, "different LineWidth" );
 }
 
 #define CPPUNIT_ASSERT_BORDER_EQUAL(aExpected, aActual) \
