@@ -121,7 +121,7 @@ const std::tuple<TranslateId, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Writer can insert a blank page between two odd (even) pages that follow. Check “Print automatically inserted blank pages” in the print dialog’s %PRODUCTNAME Writer tab."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "You do not want to print all columns? Hide or group the ones you do not need."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To modify an AutoPlay presentation, open it and after it starts, right click and select Edit in the context menu."), "", "tipoftheday_i.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Need to precisely position? %MOD2+arrow Keys move objects (shapes, pictures, formulas) by one pixel."), "", "tipoftheday_d.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Need to position precisely? “%MOD2+arrow” keys move objects (shapes, pictures, formulas) by one pixel."), "", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Embedded help is available by pressing F1, if you have installed it. Otherwise check online at:"), "https://help.libreoffice.org", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Right-click in the status bar in %PRODUCTNAME Calc and select “Selection count” to display the number of selected cells."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to have two or more columns for just a part of a %PRODUCTNAME Writer page? Insert ▸ Section, set with Columns tab, and place text in that section."), "", "tipoftheday_w.png"},
