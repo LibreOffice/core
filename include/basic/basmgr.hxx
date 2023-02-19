@@ -135,9 +135,9 @@ public:
     const OUString& GetName() const                         { return aName; }
 
 
-    IF_MERGELIBS(BASIC_DLLPUBLIC) sal_uInt16 GetLibCount() const;
-    IF_MERGELIBS(BASIC_DLLPUBLIC) StarBASIC* GetLib( sal_uInt16 nLib ) const;
-    IF_MERGELIBS(BASIC_DLLPUBLIC) StarBASIC* GetLib( std::u16string_view rName ) const;
+    sal_uInt16 GetLibCount() const;
+    StarBASIC* GetLib( sal_uInt16 nLib ) const;
+    StarBASIC* GetLib( std::u16string_view rName ) const;
     sal_uInt16      GetLibId( std::u16string_view rName ) const;
 
     OUString        GetLibName( sal_uInt16 nLib );
@@ -155,7 +155,6 @@ public:
                     GetScriptLibraryContainer()  const;
 
     bool            LoadLib( sal_uInt16 nLib );
-    IF_MERGELIBS(BASIC_DLLPUBLIC)
     bool            RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage );
 
     // Modify-Flag will be reset only during save.
@@ -168,11 +167,9 @@ public:
         If a constant with this name already existed before, its value is changed, and the old constant is
         returned in pOldValue. If it does not yet exist, it is newly created, and inserted into the basic library.
     */
-    IF_MERGELIBS(BASIC_DLLPUBLIC)
     void            SetGlobalUNOConstant( const OUString& rName, const css::uno::Any& _rValue, css::uno::Any* pOldValue = nullptr );
 
     /** retrieves a global constant in the basic library, referring to some UNO object, returns true if a value is found ( value is in aOut ) false otherwise. */
-    IF_MERGELIBS(BASIC_DLLPUBLIC)
     bool            GetGlobalUNOConstant( const OUString& rName, css::uno::Any& aOut );
     /** determines whether there are password-protected modules whose size exceeds the
         legacy module size
@@ -182,7 +179,6 @@ public:
     bool            LegacyPsswdBinaryLimitExceeded( std::vector< OUString >& _out_rModuleNames );
     bool HasExeCode( std::u16string_view );
     /// determines whether the Basic Manager has a given macro, given by fully qualified name
-    IF_MERGELIBS(BASIC_DLLPUBLIC)
     bool            HasMacro( OUString const& i_fullyQualifiedName ) const;
     /// executes a given macro
     ErrCode         ExecuteMacro( OUString const& i_fullyQualifiedName, SbxArray* i_arguments, SbxValue* i_retValue );
