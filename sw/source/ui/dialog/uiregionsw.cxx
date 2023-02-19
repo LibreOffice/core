@@ -1048,57 +1048,59 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, weld::Button&, void)
     aSet.Put(SwFormatFrameSize(SwFrameSize::Variable, nWidth));
     aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
 
-    SwSectionPropertyTabDialog aTabDlg(m_xDialog.get(), aSet, m_rSh);
-    if (RET_OK != aTabDlg.run())
-        return;
+    auto pDlg = std::make_shared<SwSectionPropertyTabDialog>(m_xDialog.get(), aSet, m_rSh);
+    SfxTabDialogController::runAsync(pDlg, [pDlg, this](sal_Int32 nResult){
+        if (nResult == RET_OK) {
+            const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+            if( !(pOutSet && pOutSet->Count()) )
+                return;
 
-    const SfxItemSet* pOutSet = aTabDlg.GetOutputItemSet();
-    if( !(pOutSet && pOutSet->Count()) )
-        return;
+            const SwFormatCol* pColItem = pOutSet->GetItemIfSet(
+                                    RES_COL, false );
+            const SvxBrushItem* pBrushItem = pOutSet->GetItemIfSet(
+                                    RES_BACKGROUND, false );
+            const SwFormatFootnoteAtTextEnd* pFootnoteItem = pOutSet->GetItemIfSet(
+                                    RES_FTN_AT_TXTEND, false );
+            const SwFormatEndAtTextEnd* pEndItem = pOutSet->GetItemIfSet(
+                                    RES_END_AT_TXTEND, false );
+            const SwFormatNoBalancedColumns* pBalanceItem = pOutSet->GetItemIfSet(
+                                    RES_COLUMNBALANCE, false );
+            const SvxFrameDirectionItem* pFrameDirItem = pOutSet->GetItemIfSet(
+                                    RES_FRAMEDIR, false );
+            const SvxLRSpaceItem* pLRSpaceItem = pOutSet->GetItemIfSet(
+                                    RES_LR_SPACE, false );
 
-    const SwFormatCol* pColItem = pOutSet->GetItemIfSet(
-                            RES_COL, false );
-    const SvxBrushItem* pBrushItem = pOutSet->GetItemIfSet(
-                            RES_BACKGROUND, false );
-    const SwFormatFootnoteAtTextEnd* pFootnoteItem = pOutSet->GetItemIfSet(
-                            RES_FTN_AT_TXTEND, false );
-    const SwFormatEndAtTextEnd* pEndItem = pOutSet->GetItemIfSet(
-                            RES_END_AT_TXTEND, false );
-    const SwFormatNoBalancedColumns* pBalanceItem = pOutSet->GetItemIfSet(
-                            RES_COLUMNBALANCE, false );
-    const SvxFrameDirectionItem* pFrameDirItem = pOutSet->GetItemIfSet(
-                            RES_FRAMEDIR, false );
-    const SvxLRSpaceItem* pLRSpaceItem = pOutSet->GetItemIfSet(
-                            RES_LR_SPACE, false );
+            if( !(pColItem ||
+                  pBrushItem ||
+                  pFootnoteItem ||
+                  pEndItem ||
+                  pBalanceItem ||
+                  pFrameDirItem ||
+                  pLRSpaceItem) )
+                return;
 
-    if( !(pColItem ||
-          pBrushItem ||
-          pFootnoteItem ||
-          pEndItem ||
-          pBalanceItem ||
-          pFrameDirItem ||
-          pLRSpaceItem) )
-        return;
-
-    m_xTree->selected_foreach([&](weld::TreeIter& rEntry)
-    {
-        SectRepr* pRepr = weld::fromId<SectRepr*>(m_xTree->get_id(rEntry));
-        if (pColItem)
-            pRepr->GetCol() = *pColItem;
-        if (pBrushItem)
-            pRepr->GetBackground().reset(pBrushItem->Clone());
-        if (pFootnoteItem)
-            pRepr->GetFootnoteNtAtEnd() = *pFootnoteItem;
-        if (pEndItem)
-            pRepr->GetEndNtAtEnd() = *pEndItem;
-        if (pBalanceItem)
-            pRepr->GetBalance().SetValue(pBalanceItem->GetValue());
-        if (pFrameDirItem)
-            pRepr->GetFrameDir()->SetValue(pFrameDirItem->GetValue());
-        if (pLRSpaceItem)
-            pRepr->GetLRSpace().reset(pLRSpaceItem->Clone());
-        return false;
+            m_xTree->selected_foreach([&](weld::TreeIter& rEntry)
+            {
+                SectRepr* pRepr = weld::fromId<SectRepr*>(m_xTree->get_id(rEntry));
+                if (pColItem)
+                    pRepr->GetCol() = *pColItem;
+                if (pBrushItem)
+                    pRepr->GetBackground().reset(pBrushItem->Clone());
+                if (pFootnoteItem)
+                    pRepr->GetFootnoteNtAtEnd() = *pFootnoteItem;
+                if (pEndItem)
+                    pRepr->GetEndNtAtEnd() = *pEndItem;
+                if (pBalanceItem)
+                    pRepr->GetBalance().SetValue(pBalanceItem->GetValue());
+                if (pFrameDirItem)
+                    pRepr->GetFrameDir()->SetValue(pFrameDirItem->GetValue());
+                if (pLRSpaceItem)
+                    pRepr->GetLRSpace().reset(pLRSpaceItem->Clone());
+                return false;
+            });
+        }
     });
+
 }
 
 IMPL_LINK(SwEditRegionDlg, FileNameComboBoxHdl, weld::ComboBox&, rEdit, void)
