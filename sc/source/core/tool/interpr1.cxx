@@ -6497,25 +6497,29 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                     if (nRefArrayMainPos < vRefArrayConditions.size())
                         vConditions = vRefArrayConditions[nRefArrayMainPos];
 
-                    std::vector<sal_uInt8>::const_iterator itRes = vConditions.begin();
-                    for (SCCOL nCol = 0; nCol < nDimensionCols; ++nCol)
+                    SAL_WARN_IF(nDimensionCols && nDimensionRows && vConditions.empty(), "sc",  "ScInterpreter::IterateParametersIfs vConditions is empty");
+                    if (!vConditions.empty())
                     {
-                        for (SCROW nRow = 0; nRow < nDimensionRows; ++nRow, ++itRes)
+                        std::vector<sal_uInt8>::const_iterator itRes = vConditions.begin();
+                        for (SCCOL nCol = 0; nCol < nDimensionCols; ++nCol)
                         {
-                            if (*itRes == nQueryCount)
+                            for (SCROW nRow = 0; nRow < nDimensionRows; ++nRow, ++itRes)
                             {
-                                aAdr.SetCol( nCol + nMainCol1);
-                                aAdr.SetRow( nRow + nMainRow1);
-                                ScRefCellValue aCell(mrDoc, aAdr);
-                                if (aCell.hasNumeric())
+                                if (*itRes == nQueryCount)
                                 {
-                                    fVal = GetCellValue(aAdr, aCell);
-                                    ++aRes.mfCount;
-                                    aRes.mfSum += fVal;
-                                    if ( aRes.mfMin > fVal )
-                                        aRes.mfMin = fVal;
-                                    if ( aRes.mfMax < fVal )
-                                        aRes.mfMax = fVal;
+                                    aAdr.SetCol( nCol + nMainCol1);
+                                    aAdr.SetRow( nRow + nMainRow1);
+                                    ScRefCellValue aCell(mrDoc, aAdr);
+                                    if (aCell.hasNumeric())
+                                    {
+                                        fVal = GetCellValue(aAdr, aCell);
+                                        ++aRes.mfCount;
+                                        aRes.mfSum += fVal;
+                                        if ( aRes.mfMin > fVal )
+                                            aRes.mfMin = fVal;
+                                        if ( aRes.mfMax < fVal )
+                                            aRes.mfMax = fVal;
+                                    }
                                 }
                             }
                         }
