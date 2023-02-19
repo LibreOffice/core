@@ -1186,6 +1186,8 @@ bool RegionBand::CheckConsistency() const
 
 tools::Rectangle RegionBand::GetBoundRect() const
 {
+    if (!mpFirstBand)
+        return tools::Rectangle();
 
     // get the boundaries of the first band
     tools::Long nYTop(mpFirstBand->mnYTop);
