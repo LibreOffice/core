@@ -72,6 +72,7 @@
 #include <libxml/xmlwriter.h>
 #include <o3tl/enumrange.hxx>
 #include <o3tl/safeint.hxx>
+#include <sal/log.hxx>
 #include <vcl/GraphicLoader.hxx>
 #include <unotools/securityoptions.hxx>
 
@@ -465,7 +466,7 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 void SvxLRSpaceItem::SetLeft(const tools::Long nL, const sal_uInt16 nProp)
 {
     nLeftMargin = (nL * nProp) / 100;
-    assert(nFirstLineOffset == 0); // probably call SetTextLeft instead? looks inconsistent otherwise
+    SAL_WARN_IF(nFirstLineOffset != 0, "editeng", "probably call SetTextLeft instead? looks inconsistent otherwise");
     nPropLeftMargin = nProp;
 }
 
