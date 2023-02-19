@@ -176,7 +176,7 @@ void SAL_CALL OSeekableInputStreamWrapper::seek( sal_Int64 _nLocation )
     std::scoped_lock aGuard( m_aMutex );
     checkConnected();
 
-    m_pSvStream->Seek(static_cast<sal_uInt32>(_nLocation));
+    m_pSvStream->Seek(static_cast<sal_uInt64>(_nLocation));
     checkError();
 }
 

@@ -84,7 +84,7 @@ void ZipOutputStream::rawCloseEntry( bool bEncrypt )
 {
     assert(m_pCurrentEntry && "Forgot to call writeLOC()?");
     if ( m_pCurrentEntry->nMethod == DEFLATED && ( m_pCurrentEntry->nFlag & 8 ) )
-        writeEXT(*m_pCurrentEntry);
+        writeDataDescriptor(*m_pCurrentEntry);
 
     if (bEncrypt)
         m_pCurrentEntry->nMethod = STORED;
@@ -235,42 +235,54 @@ void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
     m_aChucker.WriteUInt32( rEntry.nCrc );
     m_aChucker.WriteUInt32( getTruncated( rEntry.nCompressedSize, &bWrite64Header ) );
     m_aChucker.WriteUInt32( getTruncated( rEntry.nSize, &bWrite64Header ) );
-    m_aChucker.WriteInt16( nNameLength );
-    m_aChucker.WriteInt16( 0 );
+    sal_uInt32 nOffset32bit = getTruncated( rEntry.nOffset, &bWrite64Header );
+    m_aChucker.WriteInt16(nNameLength);
+    m_aChucker.WriteInt16( bWrite64Header? 32 : 0 );    //in ZIP64 case extra field is 32byte
     m_aChucker.WriteInt16( 0 );
     m_aChucker.WriteInt16( 0 );
     m_aChucker.WriteInt16( 0 );
     m_aChucker.WriteInt32( 0 );
-    m_aChucker.WriteUInt32( getTruncated( rEntry.nOffset, &bWrite64Header ) );
-
-    if( bWrite64Header )
-    {
-        // FIXME64: need to append a ZIP64 header instead of throwing
-        // We're about to silently lose people's data - which they are
-        // unlikely to appreciate so fail instead:
-        throw IOException( "File contains streams that are too large." );
-    }
+    m_aChucker.WriteUInt32( nOffset32bit );
 
     Sequence < sal_Int8 > aSequence( reinterpret_cast<sal_Int8 const *>(sUTF8Name.getStr()), sUTF8Name.getLength() );
     m_aChucker.WriteBytes( aSequence );
+
+    if (bWrite64Header)
+    {
+        writeExtraFields( rEntry );
+    }
 }
 
-void ZipOutputStream::writeEXT( const ZipEntry &rEntry )
+void ZipOutputStream::writeDataDescriptor(const ZipEntry& rEntry)
 {
     bool bWrite64Header = false;
 
     m_aChucker.WriteInt32( EXTSIG );
     m_aChucker.WriteUInt32( rEntry.nCrc );
-    m_aChucker.WriteUInt32( getTruncated( rEntry.nCompressedSize, &bWrite64Header ) );
-    m_aChucker.WriteUInt32( getTruncated( rEntry.nSize, &bWrite64Header ) );
-
-    if( bWrite64Header )
+    // For ZIP64(tm) format archives, the compressed and uncompressed sizes are 8 bytes each.
+    // TODO: Not sure if this is the "when ZIP64(tm) format is used"
+    bWrite64Header = rEntry.nCompressedSize >= 0x100000000 || rEntry.nSize >= 0x100000000;
+    if (!bWrite64Header)
     {
-        // FIXME64: need to append a ZIP64 header instead of throwing
-        // We're about to silently lose people's data - which they are
-        // unlikely to appreciate so fail instead:
-        throw IOException( "File contains streams that are too large." );
+        m_aChucker.WriteUInt32( static_cast<sal_uInt32>(rEntry.nCompressedSize) );
+        m_aChucker.WriteUInt32( static_cast<sal_uInt32>(rEntry.nSize) );
     }
+    else
+    {
+        m_aChucker.WriteUInt64( rEntry.nCompressedSize );
+        m_aChucker.WriteUInt64( rEntry.nSize );
+    }
+}
+
+void ZipOutputStream::writeExtraFields(const ZipEntry& rEntry)
+{
+    //Could contain more fields, now we only save Zip64 extended information
+    m_aChucker.WriteInt16( 1 );  //id of Zip64 extended information extra field
+    m_aChucker.WriteInt16( 28 ); //data size of this field = 3*8+4 byte
+    m_aChucker.WriteUInt64( rEntry.nSize );
+    m_aChucker.WriteUInt64( rEntry.nCompressedSize );
+    m_aChucker.WriteUInt64( rEntry.nOffset );
+    m_aChucker.WriteInt32( 0 );  //Number of the disk on which this file starts
 }
 
 void ZipOutputStream::writeLOC( ZipEntry *pEntry, bool bEncrypt )
@@ -312,20 +324,17 @@ void ZipOutputStream::writeLOC( ZipEntry *pEntry, bool bEncrypt )
         m_aChucker.WriteUInt32( getTruncated( rEntry.nSize, &bWrite64Header ) );
     }
     m_aChucker.WriteInt16( nNameLength );
-    m_aChucker.WriteInt16( 0 );
-
-    if( bWrite64Header )
-    {
-        // FIXME64: need to append a ZIP64 header instead of throwing
-        // We're about to silently lose people's data - which they are
-        // unlikely to appreciate so fail instead:
-        throw IOException( "File contains streams that are too large." );
-    }
+    m_aChucker.WriteInt16( bWrite64Header ? 32 : 0 );
 
     Sequence < sal_Int8 > aSequence( reinterpret_cast<sal_Int8 const *>(sUTF8Name.getStr()), sUTF8Name.getLength() );
     m_aChucker.WriteBytes( aSequence );
 
     m_pCurrentEntry->nOffset = m_aChucker.GetPosition() - (LOCHDR + nNameLength);
+
+    if (bWrite64Header)
+    {
+        writeExtraFields(rEntry);
+    }
 }
 
 sal_uInt32 ZipOutputStream::getCurrentDosTime()

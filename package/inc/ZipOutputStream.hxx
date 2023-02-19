@@ -78,7 +78,8 @@ private:
     void writeCEN( const ZipEntry &rEntry );
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
-    void writeEXT( const ZipEntry &rEntry );
+    void writeDataDescriptor( const ZipEntry &rEntry );
+    void writeExtraFields( const ZipEntry& rEntry );
 
     // ScheduledThread handling helpers
     void consumeScheduledThreadTaskEntry(std::unique_ptr<ZipOutputEntryInThread> pCandidate);

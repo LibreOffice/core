@@ -1706,6 +1706,12 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf104502_hiddenColsCountedInPageCount)
     CPPUNIT_ASSERT_EQUAL(SCROW(55), nEndRow);
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf82984_zip64XLSXImport)
+{
+    // Without the fix in place, it would have crashed at import time
+    createScDoc("xlsx/tdf82984_zip64XLSXImport.xlsx");
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf108188_pagestyle)
 {
     createScDoc("ods/tdf108188_pagestyle.ods");

@@ -152,24 +152,29 @@ sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
 {
     // check if a truncated STREAM_SEEK_TO_END was passed
     assert(nPos != SAL_MAX_UINT32);
-    DWORD nNewPos = 0;
+    LARGE_INTEGER nNewPos, nActPos;
+    nNewPos.QuadPart = 0;
+    nActPos.QuadPart = nPos;
+    bool result = false;
     if( IsOpen() )
     {
         if( nPos != STREAM_SEEK_TO_END )
-            // 64-Bit files are not supported
-            nNewPos=SetFilePointer(mxFileHandle,nPos,nullptr,FILE_BEGIN);
-        else
-            nNewPos=SetFilePointer(mxFileHandle,0L,nullptr,FILE_END);
-
-        if( nNewPos == 0xFFFFFFFF )
         {
-            SetError(::GetSvError( GetLastError() ) );
-            nNewPos = 0;
+            result = SetFilePointerEx(mxFileHandle, nActPos, &nNewPos, FILE_BEGIN);
+        }
+        else
+        {
+            result = SetFilePointerEx(mxFileHandle, nNewPos, &nNewPos, FILE_END);
+        }
+        if (!result)
+        {
+            SetError(::GetSvError(GetLastError()));
+            return 0;
         }
     }
     else
         SetError( SVSTREAM_GENERALERROR );
-    return static_cast<sal_uInt64>(nNewPos);
+    return static_cast<sal_uInt64>(nNewPos.QuadPart);
 }
 
 void SvFileStream::FlushData()

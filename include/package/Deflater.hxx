@@ -36,6 +36,8 @@ class DLLPUBLIC_PACKAGE Deflater final
     bool                    bFinish;
     bool                    bFinished;
     sal_Int64               nOffset, nLength;
+    // zlib total_in / total_out may be stored in 32bit, so they can overflow in case of 4gb files
+    sal_uInt64              nTotalOut64, nTotalIn64; // save the overflowed value here.
     std::unique_ptr<z_stream> pStream;
 
     void init (sal_Int32 nLevel, bool bNowrap);
