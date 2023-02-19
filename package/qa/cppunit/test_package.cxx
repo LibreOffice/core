@@ -36,11 +36,13 @@ namespace
         void test();
         void testThreadedStreams();
         void testBufferedThreadedStreams();
+        void testZip64();
 
         CPPUNIT_TEST_SUITE(PackageTest);
         CPPUNIT_TEST(test);
         CPPUNIT_TEST(testThreadedStreams);
         CPPUNIT_TEST(testBufferedThreadedStreams);
+        CPPUNIT_TEST(testZip64);
         CPPUNIT_TEST_SUITE_END();
 
     private:
@@ -196,6 +198,53 @@ namespace
         }
 
         verifyStreams( aTestBuffers );
+    }
+
+    void PackageTest::testZip64()
+    {
+        // This small zip file have 2 files (content.xml, styles.xml) that have
+        // Zip64 Extended Information Extra Field in both
+        // "Local file header" and "Central directory file header",
+        // and have ZIP64 format "Data descriptor".
+        OUString aURL2 = m_directories.getURLFromSrc(u"/package/qa/cppunit/data/export64.zip");
+
+        uno::Sequence<beans::NamedValue> aNVs2{ { "URL", uno::Any(aURL2) } };
+        uno::Sequence<uno::Any> aArgs2{ uno::Any(aNVs2) };
+
+        uno::Reference<uno::XComponentContext> xCxt = comphelper::getProcessComponentContext();
+        uno::Reference<lang::XMultiComponentFactory> xSvcMgr = xCxt->getServiceManager();
+
+        // Without Zip64 support, it would crash here
+        uno::Reference<packages::zip::XZipFileAccess2> xZip2(
+            xSvcMgr->createInstanceWithArgumentsAndContext(
+                "com.sun.star.packages.zip.ZipFileAccess", aArgs2, xCxt),
+            uno::UNO_QUERY);
+
+        CPPUNIT_ASSERT(xZip2.is());
+
+        uno::Reference<container::XNameAccess> xNA;
+        xNA = xZip2;
+        CPPUNIT_ASSERT(xNA.is());
+
+        // Check if the styles.xml seems to be right
+        uno::Reference<io::XInputStream> xStrm;
+        xNA->getByName("styles.xml") >>= xStrm;
+        CPPUNIT_ASSERT(xStrm.is());
+        // Filesize check
+        sal_Int32 nSize = xStrm->available();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1112), nSize);
+
+        uno::Sequence<sal_Int8> aBytes;
+        sal_Int32 nBytesRead = xStrm->readBytes(aBytes, nSize);
+        const sal_Int8* p = aBytes.getArray();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1112), nBytesRead);
+
+        // Check the uncompressed styles.xml file content.
+        OString aFile(static_cast<const char*>(static_cast<const void*>(p)), nSize);
+        CPPUNIT_ASSERT(aFile.startsWith(
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<office:document-styles"));
+        CPPUNIT_ASSERT(aFile.endsWith(
+            "</number:time-style>\r\n </office:styles>\r\n</office:document-styles>\r\n"));
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION(PackageTest);

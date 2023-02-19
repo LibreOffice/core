@@ -62,6 +62,8 @@ Deflater::Deflater(sal_Int32 nSetLevel, bool bNowrap)
 , bFinished(false)
 , nOffset(0)
 , nLength(0)
+, nTotalOut64(0)
+, nTotalIn64(0)
 {
     init(nSetLevel, bNowrap);
 }
@@ -73,12 +75,24 @@ sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int
     pStream->next_out  = reinterpret_cast<unsigned char*>(rBuffer.getArray())+nNewOffset;
     pStream->avail_in  = nLength;
     pStream->avail_out = nNewLength;
+    auto nLastTotalIn = pStream->total_in;
+    auto nLastTotalOut = pStream->total_out;
 
 #if !defined Z_PREFIX
     nResult = deflate(pStream.get(), bFinish ? Z_FINISH : Z_NO_FLUSH);
 #else
     nResult = z_deflate(pStream.get(), bFinish ? Z_FINISH : Z_NO_FLUSH);
 #endif
+    // total_in / total_out may stored only in 32bit, and can owerflow during deflate
+    // 1 deflate call, uncompress only a few data, so only 1 overflow can happen at once.
+    if (pStream->total_in < nLastTotalIn)
+    {
+        nTotalIn64 += 0x100000000;
+    }
+    if (pStream->total_out < nLastTotalOut)
+    {
+        nTotalOut64 += 0x100000000;
+    }
     switch (nResult)
     {
         case Z_STREAM_END:
@@ -115,11 +129,11 @@ sal_Int32 Deflater::doDeflateSegment( uno::Sequence< sal_Int8 >& rBuffer, sal_In
 }
 sal_Int64 Deflater::getTotalIn() const
 {
-    return pStream->total_in; // FIXME64: zlib doesn't look 64bit clean here
+    return pStream->total_in + nTotalIn64;
 }
 sal_Int64 Deflater::getTotalOut() const
 {
-    return pStream->total_out; // FIXME64: zlib doesn't look 64bit clean here
+    return pStream->total_out + nTotalOut64;
 }
 void Deflater::reset(  )
 {

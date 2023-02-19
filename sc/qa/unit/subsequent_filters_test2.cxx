@@ -190,6 +190,7 @@ public:
     void testTdf83671_SmartArt_import();
     void testTdf83671_SmartArt_import2();
     void testTdf151818_SmartArtFontColor();
+    void testTdf82984_zip64XLSXImport();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest2);
 
@@ -310,6 +311,7 @@ public:
     CPPUNIT_TEST(testTdf83671_SmartArt_import);
     CPPUNIT_TEST(testTdf83671_SmartArt_import2);
     CPPUNIT_TEST(testTdf151818_SmartArtFontColor);
+    CPPUNIT_TEST(testTdf82984_zip64XLSXImport);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -3033,6 +3035,12 @@ void ScFiltersTest2::testTdf151818_SmartArtFontColor()
         officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(false, pChange);
         pChange->commit();
     }
+}
+
+void ScFiltersTest2::testTdf82984_zip64XLSXImport()
+{
+    // Without the fix in place, it would have crashed at import time
+    createScDoc("xlsx/tdf82984_zip64XLSXImport.xlsx");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScFiltersTest2);
