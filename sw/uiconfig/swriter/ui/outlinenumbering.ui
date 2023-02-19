@@ -13,7 +13,7 @@
         <property name="use_underline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="form1-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|form1">Select the predefined numbering scheme that you want to assign to the selected outline level.</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|form1">Select this predefined numbering format to be the numbering format for this document. It will overwrite the current settings.</property>
           </object>
         </child>
       </object>
@@ -24,6 +24,11 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="outlinenumbering|form2">Untitled 2</property>
         <property name="use_underline">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="form2-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|form2">Select this predefined numbering format to be the numbering format for this document. It will overwrite the current settings.</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -32,6 +37,11 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="outlinenumbering|form3">Untitled 3</property>
         <property name="use_underline">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="form3-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|form3">Select this predefined numbering format to be the numbering format for this document. It will overwrite the current settings.</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -40,6 +50,11 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="outlinenumbering|form4">Untitled 4</property>
         <property name="use_underline">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="form4-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|form4">Select this predefined numbering format to be the numbering format for this document. It will overwrite the current settings.</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -48,6 +63,11 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="outlinenumbering|form5">Untitled 5</property>
         <property name="use_underline">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="form5-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|form5">Select this predefined numbering format to be the numbering format for this document. It will overwrite the current settings.</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -56,6 +76,11 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="outlinenumbering|form6">Untitled 6</property>
         <property name="use_underline">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="form6-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|form6">Select this predefined numbering format to be the numbering format for this document. It will overwrite the current settings.</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -64,6 +89,11 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="outlinenumbering|form7">Untitled 7</property>
         <property name="use_underline">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="form7-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|form7">Select this predefined numbering format to be the numbering format for this document. It will overwrite the current settings.</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -72,6 +102,11 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="outlinenumbering|form8">Untitled 8</property>
         <property name="use_underline">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="form8-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|form8">Select this predefined numbering format to be the numbering format for this document. It will overwrite the current settings.</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -80,6 +115,11 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="outlinenumbering|form9">Untitled 9</property>
         <property name="use_underline">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="form9-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|form9">Select this predefined numbering format to be the numbering format for this document. It will overwrite the current settings.</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -96,21 +136,21 @@
         <property name="use_underline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="saveas-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|saveas">Opens a dialog where you can save the current settings for the selected chapter and outline level. You can then load these settings from another document.</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|saveas">Opens a dialog box where you enter a name to identify the current settings. The name you enter will appear in the dropdown list when the Load/Save button is clicked, both in the current and in other documents. Click on the name to load the saved settings into a document.</property>
           </object>
         </child>
       </object>
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="form-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|form">Click a numbering scheme in the list, and then enter a name for the scheme. The numbers correspond to the outline level that the styles are assigned to.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|form">Click a numbering scheme in the list, and then enter a name for the scheme. The numbers correspond to the outline level of the styles.</property>
       </object>
     </child>
   </object>
   <object class="GtkDialog" id="OutlineNumberingDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes" context="outlinenumbering|OutlineNumberingDialog">Chapter Numbering</property>
+    <property name="title" translatable="yes" context="outlinenumbering|OutlineNumberingDialog">Heading Numbering</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="default_width">0</property>
@@ -331,7 +371,7 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="OutlineNumberingDialog-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|OutlineNumberingDialog">Use this dialog to specify the numbering scheme for headings in the current document. For each outline level, you can assign a paragraph style and a numbering scheme. Use “1-10” to apply the same setting for all outline levels.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|OutlineNumberingDialog">Use this dialog to specify the numbering format for headings in the current document. For each outline level, you can assign a paragraph style and a numbering scheme. Use “1-10” to apply the same setting for all outline levels.</property>
       </object>
     </child>
   </object>
