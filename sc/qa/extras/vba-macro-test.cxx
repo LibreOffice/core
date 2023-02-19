@@ -55,6 +55,7 @@ public:
     void testTdf131562();
     void testTdf107902();
     void testTdf90278();
+    void testForEachInSelection();
 
     CPPUNIT_TEST_SUITE(VBAMacroTest);
     CPPUNIT_TEST(testSimpleCopyAndPaste);
@@ -72,6 +73,7 @@ public:
     CPPUNIT_TEST(testTdf131562);
     CPPUNIT_TEST(testTdf107902);
     CPPUNIT_TEST(testTdf90278);
+    CPPUNIT_TEST(testForEachInSelection);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -758,6 +760,43 @@ void VBAMacroTest::testTdf90278()
 
     css::uno::Reference<css::util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
     xCloseable->close(true);
+}
+
+void VBAMacroTest::testForEachInSelection()
+{
+    OUString aFileName;
+    createFileURL(u"ForEachInSelection.ods", aFileName);
+    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    uno::Any aRet;
+    uno::Sequence<sal_Int16> aOutParamIndex;
+    uno::Sequence<uno::Any> aOutParam;
+    uno::Sequence<uno::Any> aParams;
+
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"), rDoc.GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("bar"), rDoc.GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("baz"), rDoc.GetString(ScAddress(0, 2, 0)));
+
+    // tdf#153724: without the fix, this would fail with
+    // assertion failed
+    // - Expression: false
+    // - Unexpected dialog:  Error: BASIC runtime error.
+    // '13'
+    // Data type mismatch.
+    SfxObjectShell::CallXScript(mxComponent,
+                                "vnd.sun.Star.script:Standard.Module1.TestForEachInSelection?"
+                                "language=Basic&location=document",
+                                aParams, aRet, aOutParamIndex, aOutParam);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("oof"), rDoc.GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("rab"), rDoc.GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("zab"), rDoc.GetString(ScAddress(0, 2, 0)));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VBAMacroTest);
