@@ -512,8 +512,7 @@ void SwRootFrame::Init( SwFrameFormat* pFormat )
     //b6433357: Update page fields after loading
     if ( !mpCurrShell || !mpCurrShell->Imp()->IsUpdateExpFields() )
     {
-        SwDocPosUpdate aMsgHint( pPage->getFrameArea().Top() );
-        rFieldsAccess.UpdatePageFields( &aMsgHint );
+        rFieldsAccess.UpdatePageFields(pPage->getFrameArea().Top());
     }
 
     rTimerAccess.StartIdling();

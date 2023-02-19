@@ -48,7 +48,7 @@ public:
     virtual void UpdateTableFields(SfxPoolItem* pHt) override;
     virtual void UpdateExpFields(SwTextField* pField, bool bUpdateRefFields) override;
     virtual void UpdateUsrFields() override;
-    virtual void UpdatePageFields(SfxPoolItem*) override;
+    virtual void UpdatePageFields(const SwTwips) override;
     virtual void LockExpFields() override;
     virtual void UnlockExpFields() override;
     virtual bool IsExpFieldsLocked() const override;

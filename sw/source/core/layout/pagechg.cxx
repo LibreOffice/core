@@ -1278,8 +1278,7 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
 
     if ( bNotifyFields && (!pImp || !pImp->IsUpdateExpFields()) )
     {
-        SwDocPosUpdate aMsgHint( nDocPos );
-        pDoc->getIDocumentFieldsAccess().UpdatePageFields( &aMsgHint );
+        pDoc->getIDocumentFieldsAccess().UpdatePageFields(nDocPos);
     }
 
 #if OSL_DEBUG_LEVEL > 0
@@ -1443,8 +1442,7 @@ SwPageFrame *SwFrame::InsertPage( SwPageFrame *pPrevPage, bool bFootnote )
     SwViewShell *pSh = getRootFrame()->GetCurrShell();
     if ( !pSh || !pSh->Imp()->IsUpdateExpFields() )
     {
-        SwDocPosUpdate aMsgHint( pPrevPage->getFrameArea().Top() );
-        pDoc->getIDocumentFieldsAccess().UpdatePageFields( &aMsgHint );
+        pDoc->getIDocumentFieldsAccess().UpdatePageFields(pPrevPage->getFrameArea().Top());
     }
     return pPage;
 }
@@ -1548,8 +1546,7 @@ void SwRootFrame::RemoveSuperfluous()
     if ( nDocPos != LONG_MAX &&
          (!pSh || !pSh->Imp()->IsUpdateExpFields()) )
     {
-        SwDocPosUpdate aMsgHint( nDocPos );
-        GetFormat()->GetDoc()->getIDocumentFieldsAccess().UpdatePageFields( &aMsgHint );
+        GetFormat()->GetDoc()->getIDocumentFieldsAccess().UpdatePageFields(nDocPos);
     }
 }
 

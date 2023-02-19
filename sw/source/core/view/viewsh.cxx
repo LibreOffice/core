@@ -1106,8 +1106,7 @@ void SwViewShell::CalcLayout()
         aAction.SetStatBar( true );
         aAction.SetReschedule( true );
 
-        SwDocPosUpdate aMsgHint( 0 );
-        GetDoc()->getIDocumentFieldsAccess().UpdatePageFields( &aMsgHint );
+        GetDoc()->getIDocumentFieldsAccess().UpdatePageFields(0);
         GetDoc()->getIDocumentFieldsAccess().UpdateExpFields(nullptr, true);
 
         aAction.Action(GetOut());

@@ -3465,8 +3465,7 @@ void SwTabFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                         CheckPageDescs( pPage );
                     if (GetFormat()->GetPageDesc().GetNumOffset())
                         static_cast<SwRootFrame*>(pPage->GetUpper())->SetVirtPageNum( true );
-                    SwDocPosUpdate aMsgHint( pPage->getFrameArea().Top() );
-                    GetFormat()->GetDoc()->getIDocumentFieldsAccess().UpdatePageFields( &aMsgHint );
+                    GetFormat()->GetDoc()->getIDocumentFieldsAccess().UpdatePageFields(pPage->getFrameArea().Top());
                 }
             }
             break;

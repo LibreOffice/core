@@ -2452,8 +2452,7 @@ void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pN
                     CheckPageDescs( pPage );
                 if (GetPageDescItem().GetNumOffset())
                     static_cast<SwRootFrame*>(pPage->GetUpper())->SetVirtPageNum( true );
-                SwDocPosUpdate aMsgHint( pPage->getFrameArea().Top() );
-                pPage->GetFormat()->GetDoc()->getIDocumentFieldsAccess().UpdatePageFields( &aMsgHint );
+                pPage->GetFormat()->GetDoc()->getIDocumentFieldsAccess().UpdatePageFields(pPage->getFrameArea().Top());
             }
             break;
 

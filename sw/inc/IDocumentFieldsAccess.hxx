@@ -23,6 +23,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include "swtypes.hxx"
 #include "nodeoffset.hxx"
 
 class SwFieldTypes;
@@ -100,7 +101,7 @@ namespace com::sun::star::uno { class Any; }
 
     virtual void UpdateUsrFields() = 0;
 
-    virtual void UpdatePageFields(SfxPoolItem*) = 0;
+    virtual void UpdatePageFields(const SwTwips) = 0;
 
     virtual void LockExpFields() = 0;
 

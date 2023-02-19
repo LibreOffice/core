@@ -1335,18 +1335,20 @@ sal_Int32 DocumentFieldsManager::GetRecordsPerDocument() const
     return nRecords;
 }
 
-void DocumentFieldsManager::UpdatePageFields( SfxPoolItem* pMsgHint )
+void DocumentFieldsManager::UpdatePageFields(const SwTwips nDocPos)
 {
-    for( SwFieldTypes::size_type i = 0; i < INIT_FLDTYPES; ++i )
+    SwDocPosUpdate aDosPosUpdate(nDocPos);
+    sw::LegacyModifyHint aHint(nullptr, &aDosPosUpdate);
+    for(SwFieldTypes::size_type i = 0; i < INIT_FLDTYPES; ++i)
     {
-        SwFieldType* pFieldType = (*mpFieldTypes)[ i ].get();
-        switch( pFieldType->Which() )
+        SwFieldType* pFieldType = (*mpFieldTypes)[i].get();
+        switch(pFieldType->Which())
         {
         case SwFieldIds::PageNumber:
         case SwFieldIds::Chapter:
         case SwFieldIds::GetExp:
         case SwFieldIds::RefPageGet:
-            pFieldType->CallSwClientNotify(sw::LegacyModifyHint(nullptr, pMsgHint));
+            pFieldType->CallSwClientNotify(aHint);
             break;
         case SwFieldIds::DocStat:
             pFieldType->CallSwClientNotify(sw::LegacyModifyHint(nullptr, nullptr));
