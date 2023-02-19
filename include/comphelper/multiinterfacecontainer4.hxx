@@ -45,6 +45,7 @@ public:
      */
     inline std::vector<key> getContainedTypes(std::unique_lock<std::mutex>& rGuard) const
     {
+        assert(rGuard.owns_lock());
         std::vector<key> aInterfaceTypes;
         aInterfaceTypes.reserve(m_aMap.size());
         for (const auto& rPair : m_aMap)
@@ -56,6 +57,7 @@ public:
     }
     inline bool hasContainedTypes(std::unique_lock<std::mutex>& rGuard) const
     {
+        assert(rGuard.owns_lock());
         for (const auto& rPair : m_aMap)
             // are interfaces added to this container?
             if (rPair.second->getLength(rGuard))
@@ -133,15 +135,24 @@ public:
     inline void disposeAndClear(std::unique_lock<std::mutex>& rGuard,
                                 const css::lang::EventObject& rEvt)
     {
+        assert(rGuard.owns_lock());
         // create a copy, because do not fire event in a guarded section
         InterfaceMap tempMap;
         {
             tempMap = std::move(m_aMap);
         }
         rGuard.unlock();
+        // So... we don't want to hold the normal mutex while we fire
+        // the events, but the calling convention here wants a mutex, so
+        // just create a temporary/fake one. Since the listeners we
+        // are working with are now function-local, we don't really need
+        // a mutex at all, but it's easier to create a fake one than
+        // create a bunch of special-case code for this situation.
+        std::mutex tempMutex;
+        std::unique_lock tempGuard(tempMutex);
         for (auto& rPair : tempMap)
         {
-            OInterfaceIteratorHelper4<listener> aIt(rGuard, *rPair.second);
+            OInterfaceIteratorHelper4<listener> aIt(tempGuard, *rPair.second);
             while (aIt.hasMoreElements())
             {
                 try
@@ -155,12 +166,15 @@ public:
                 }
             }
         }
+        rGuard.lock(); // return with lock in same state as entry
     }
     /**
       Remove all elements of all containers. Does not delete the container.
      */
-    inline void clear(std::unique_lock<std::mutex>& /*rGuard*/)
+    inline void clear(std::unique_lock<std::mutex>& rGuard)
     {
+        assert(rGuard.owns_lock());
+        (void)rGuard;
         for (const auto& rPair : m_aMap)
             rPair.second->clear();
     }
@@ -170,9 +184,11 @@ private:
     typedef ::std::vector<std::pair<key, std::unique_ptr<OInterfaceContainerHelper4<listener>>>>
         InterfaceMap;
     InterfaceMap m_aMap;
-    typename InterfaceMap::const_iterator find(std::unique_lock<std::mutex>& /*rGuard*/,
+    typename InterfaceMap::const_iterator find(std::unique_lock<std::mutex>& rGuard,
                                                const key& rKey) const
     {
+        assert(rGuard.owns_lock());
+        (void)rGuard;
         auto iter = m_aMap.begin();
         auto end = m_aMap.end();
         while (iter != end)
