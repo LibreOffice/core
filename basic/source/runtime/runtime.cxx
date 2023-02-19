@@ -1146,7 +1146,15 @@ void SbiRuntime::PushForEach()
     pForStk = p;
 
     SbxVariableRef xObjVar = PopVar();
-    SbxBase* pObj = xObjVar && xObjVar->GetFullType() == SbxOBJECT ? xObjVar->GetObject() : nullptr;
+    SbxBase* pObj(nullptr);
+    if (xObjVar)
+    {
+        SbxValues v(SbxVARIANT);
+        // Here it may retrieve the value, and change the type from SbxEMPTY to SbxOBJECT
+        xObjVar->Get(v);
+        if (v.eType == SbxOBJECT)
+            pObj = v.pObj;
+    }
 
     if (SbxDimArray* pArray = dynamic_cast<SbxDimArray*>(pObj))
     {

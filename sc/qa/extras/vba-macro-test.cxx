@@ -68,6 +68,7 @@ public:
     void testTdf118247();
     void testTdf126457();
     void testVbaPDFExport();
+    void testForEachInSelection();
 
     CPPUNIT_TEST_SUITE(VBAMacroTest);
     CPPUNIT_TEST(testSimpleCopyAndPaste);
@@ -92,6 +93,7 @@ public:
     CPPUNIT_TEST(testTdf118247);
     CPPUNIT_TEST(testTdf126457);
     CPPUNIT_TEST(testVbaPDFExport);
+    CPPUNIT_TEST(testForEachInSelection);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -870,6 +872,34 @@ void VBAMacroTest::testVbaPDFExport()
     SvFileStream aStream(aTempPdfFile.GetURL(), StreamMode::READ);
     CPPUNIT_ASSERT_MESSAGE("Failed to get the pdf document", aDocument.Read(aStream));
 }
+
+void VBAMacroTest::testForEachInSelection()
+{
+    loadFromURL(u"ForEachInSelection.ods");
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"), rDoc.GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("bar"), rDoc.GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("baz"), rDoc.GetString(ScAddress(0, 2, 0)));
+
+    // tdf#153724: without the fix, this would fail with
+    // assertion failed
+    // - Expression: false
+    // - Unexpected dialog:  Error: BASIC runtime error.
+    // '13'
+    // Data type mismatch.
+    executeMacro("vnd.sun.Star.script:Standard.Module1.TestForEachInSelection?"
+                 "language=Basic&location=document");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("oof"), rDoc.GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("rab"), rDoc.GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("zab"), rDoc.GetString(ScAddress(0, 2, 0)));
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(VBAMacroTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
