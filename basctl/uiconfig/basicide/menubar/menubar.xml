@@ -69,6 +69,8 @@
             <menu:menuitem menu:id=".uno:ShowLines"/>
             <menu:menuitem menu:id=".uno:ShowPropBrowser"/>
             <menu:menuitem menu:id=".uno:ObjectCatalog"/>
+            <menu:menuitem menu:id=".uno:WatchWindow"/>
+            <menu:menuitem menu:id=".uno:StackWindow"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FullScreen"/>
         </menu:menupopup>

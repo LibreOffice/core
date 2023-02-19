@@ -1511,6 +1511,18 @@ void ModulWindowLayout::BasicRemoveWatch ()
     aWatchWindow->RemoveSelectedWatch();
 }
 
+void ModulWindowLayout::ShowWatchWindow(bool bVisible)
+{
+    aWatchWindow->Show(bVisible);
+    ArrangeWindows();
+}
+
+void ModulWindowLayout::ShowStackWindow(bool bVisible)
+{
+    aStackWindow->Show(bVisible);
+    ArrangeWindows();
+}
+
 void ModulWindowLayout::OnFirstSize (tools::Long const nWidth, tools::Long const nHeight)
 {
     AddToLeft(&rObjectCatalog, Size(nWidth * 0.20, nHeight * 0.75));

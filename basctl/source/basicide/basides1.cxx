@@ -430,6 +430,30 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                 pBindings->Invalidate(SID_BASICIDE_OBJCAT);
             break;
 
+        case SID_BASICIDE_WATCH:
+        {
+            // Toggling the watch window can only be done from a ModulWindow
+            if (!dynamic_cast<ModulWindowLayout*>(pLayout.get()))
+                return;
+
+            pModulLayout->ShowWatchWindow(!pModulLayout->IsWatchWindowVisible());
+            if (SfxBindings* pBindings = GetBindingsPtr())
+                pBindings->Invalidate(SID_BASICIDE_WATCH);
+        }
+        break;
+
+        case SID_BASICIDE_STACK:
+        {
+            // Toggling the stack window can only be done from a ModulWindow
+            if (!dynamic_cast<ModulWindowLayout*>(pLayout.get()))
+                return;
+
+            pModulLayout->ShowStackWindow(!pModulLayout->IsStackWindowVisible());
+            if (SfxBindings* pBindings = GetBindingsPtr())
+                pBindings->Invalidate(SID_BASICIDE_STACK);
+        }
+        break;
+
         case SID_BASICIDE_NAMECHANGEDONTAB:
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
@@ -875,12 +899,44 @@ void Shell::GetState(SfxItemSet &rSet)
                     rSet.DisableItem( nWh );
             }
             break;
+
             case SID_BASICIDE_OBJCAT:
+            {
                 if (pLayout)
                     rSet.Put(SfxBoolItem(nWh, aObjectCatalog->IsVisible()));
                 else
                     rSet.Put(SfxVisibilityItem(nWh, false));
-                break;
+            }
+            break;
+
+            case SID_BASICIDE_WATCH:
+            {
+                if (pLayout)
+                {
+                    rSet.Put(SfxBoolItem(nWh, pModulLayout->IsWatchWindowVisible()));
+                    // Disable command if the visible window is not a ModulWindow
+                    if (!dynamic_cast<ModulWindowLayout*>(pLayout.get()))
+                        rSet.DisableItem(nWh);
+                }
+                else
+                    rSet.Put(SfxVisibilityItem(nWh, false));
+            }
+            break;
+
+            case SID_BASICIDE_STACK:
+            {
+                if (pLayout)
+                {
+                    rSet.Put(SfxBoolItem(nWh, pModulLayout->IsStackWindowVisible()));
+                    // Disable command if the visible window is not a ModulWindow
+                    if (!dynamic_cast<ModulWindowLayout*>(pLayout.get()))
+                        rSet.DisableItem(nWh);
+                }
+                else
+                    rSet.Put(SfxVisibilityItem(nWh, false));
+            }
+            break;
+
             case SID_BASICIDE_SHOWSBX:
             case SID_BASICIDE_CREATEMACRO:
             case SID_BASICIDE_EDITMACRO:

@@ -2757,6 +2757,43 @@ SfxVoidItem ObjectCatalog SID_BASICIDE_OBJCAT
 ]
 
 
+SfxVoidItem WatchWindow SID_BASICIDE_WATCH
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Macro;
+]
+
+
+SfxVoidItem StackWindow SID_BASICIDE_STACK
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Macro;
+]
+
 SfxVoidItem ObjectMenue SID_OBJECT
 (SfxInt16Item VerbID SID_OBJECT)
 [

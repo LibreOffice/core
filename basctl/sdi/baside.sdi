@@ -248,6 +248,18 @@ shell basctl_Shell
         StateMethod = GetState;
     ]
 
+    SID_BASICIDE_WATCH
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_STACK
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
     SID_BASICIDE_CREATEMACRO
     [
         ExecMethod  = ExecuteGlobal;

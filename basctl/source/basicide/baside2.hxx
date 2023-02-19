@@ -409,6 +409,10 @@ public:
 public:
     void BasicAddWatch (OUString const&);
     void BasicRemoveWatch ();
+    void ShowWatchWindow(bool bVisible);
+    void ShowStackWindow(bool bVisible);
+    bool IsWatchWindowVisible() { return aWatchWindow->IsVisible(); }
+    bool IsStackWindowVisible() { return aStackWindow->IsVisible(); }
     Color const & GetSyntaxBackgroundColor () const { return aSyntaxColors.GetBackgroundColor(); }
     Color const & GetFontColor () const { return aSyntaxColors.GetFontColor(); }
     Color const & GetSyntaxColor (TokenType eType) const { return aSyntaxColors.GetColor(eType); }
