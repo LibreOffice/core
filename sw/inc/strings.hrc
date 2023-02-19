@@ -908,7 +908,7 @@
 #define STR_TIMEFLD                             NC_("STR_TIMEFLD", "Time")
 #define STR_FILENAMEFLD                         NC_("STR_FILENAMEFLD", "File name")
 #define STR_DBNAMEFLD                           NC_("STR_DBNAMEFLD", "Database Name")
-#define STR_CHAPTERFLD                          NC_("STR_CHAPTERFLD", "Chapter")
+#define STR_CHAPTERFLD                          NC_("STR_CHAPTERFLD", "~Heading")
 #define STR_PAGENUMBERFLD                       NC_("STR_PAGENUMBERFLD", "Page number")
 #define STR_DOCSTATFLD                          NC_("STR_DOCSTATFLD", "Statistics")
 #define STR_AUTHORFLD                           NC_("STR_AUTHORFLD", "Author")
@@ -1003,10 +1003,10 @@
 /*--------------------------------------------------------------------
     Description: format chapter
  --------------------------------------------------------------------*/
-#define FMT_CHAPTER_NAME                        NC_("FMT_CHAPTER_NAME", "Chapter name")
-#define FMT_CHAPTER_NO                          NC_("FMT_CHAPTER_NO", "Chapter number")
-#define FMT_CHAPTER_NO_NOSEPARATOR              NC_("FMT_CHAPTER_NO_NOSEPARATOR", "Chapter number without separator")
-#define FMT_CHAPTER_NAMENO                      NC_("FMT_CHAPTER_NAMENO", "Chapter number and name")
+#define FMT_CHAPTER_NAME                        NC_("FMT_CHAPTER_NAME", "Heading contents")
+#define FMT_CHAPTER_NO                          NC_("FMT_CHAPTER_NO", "Heading number")
+#define FMT_CHAPTER_NO_NOSEPARATOR              NC_("FMT_CHAPTER_NO_NOSEPARATOR", "Heading number without separator")
+#define FMT_CHAPTER_NAMENO                      NC_("FMT_CHAPTER_NAMENO", "Heading number and contents")
 /*--------------------------------------------------------------------
     Description: formats
  --------------------------------------------------------------------*/

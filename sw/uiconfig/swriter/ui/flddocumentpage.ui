@@ -345,7 +345,7 @@
               <object class="GtkLabel" id="levelft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="flddocumentpage|levelft">_Outline level</property>
+                <property name="label" translatable="yes" context="flddocumentpage|levelft">_Up to level:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">level</property>
                 <property name="xalign">0</property>
@@ -361,10 +361,10 @@
                 <property name="can_focus">True</property>
                 <property name="adjustment">adjustment1</property>
                 <property name="truncate-multiline">True</property>
-                <property name="tooltip_text" translatable="yes" context="flddocumentpage|level|tooltip_text">Specifies the maximum outline level of the immediately prior heading to be used.</property>
+                <property name="tooltip_text" translatable="yes" context="flddocumentpage|level|tooltip_text">Specifies the number of outline levels of the immediately prior heading number to display.</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="level-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="flddocumentpage|extended_tip|level">The first immediately prior heading with an outline level equal or less than the specified number is selected for display. If “Chapter number” is selected, then numbering must be applied in the Chapter Numbering dialog (see Tools menu).</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="flddocumentpage|extended_tip|level">Use this option in combination with “Heading number” to control how many levels of the immediately prior heading number are displayed. For example, selecting “2” will display the first two levels of the heading number. Heading numbers can be enabled in the “Heading Numbering“ dialog (see Tools menu).</property>
                   </object>
                 </child>
               </object>

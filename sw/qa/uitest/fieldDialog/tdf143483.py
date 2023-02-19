@@ -21,26 +21,26 @@ class Tdf143483(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:FieldDialog") as xDialog:
 
                 xDoc = xDialog.getChild("type-doc")
-                self.assertEqual("Chapter", get_state_as_dict(xDoc)['SelectEntryText'])
+                self.assertEqual("Heading", get_state_as_dict(xDoc)['SelectEntryText'])
 
                 xFormat = xDialog.getChild("format-doc")
-                self.assertEqual("Chapter name", get_state_as_dict(xFormat)['SelectEntryText'])
+                self.assertEqual("Heading contents", get_state_as_dict(xFormat)['SelectEntryText'])
 
                 xNext = xDialog.getChild("next")
                 xNext.executeAction("CLICK", tuple())
 
-                self.assertEqual("Chapter", get_state_as_dict(xDoc)['SelectEntryText'])
-                self.assertEqual("Chapter number", get_state_as_dict(xFormat)['SelectEntryText'])
+                self.assertEqual("Heading", get_state_as_dict(xDoc)['SelectEntryText'])
+                self.assertEqual("Heading number", get_state_as_dict(xFormat)['SelectEntryText'])
 
                 xNext.executeAction("CLICK", tuple())
 
-                self.assertEqual("Chapter", get_state_as_dict(xDoc)['SelectEntryText'])
-                self.assertEqual("Chapter number and name", get_state_as_dict(xFormat)['SelectEntryText'])
+                self.assertEqual("Heading", get_state_as_dict(xDoc)['SelectEntryText'])
+                self.assertEqual("Heading number and contents", get_state_as_dict(xFormat)['SelectEntryText'])
 
                 xNext.executeAction("CLICK", tuple())
 
-                self.assertEqual("Chapter", get_state_as_dict(xDoc)['SelectEntryText'])
-                self.assertEqual("Chapter number without separator", get_state_as_dict(xFormat)['SelectEntryText'])
+                self.assertEqual("Heading", get_state_as_dict(xDoc)['SelectEntryText'])
+                self.assertEqual("Heading number without separator", get_state_as_dict(xFormat)['SelectEntryText'])
 
             xEnumeration = document.Text.createEnumeration()
             self.assertEqual("Another title", xEnumeration.nextElement().String)
