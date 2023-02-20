@@ -219,7 +219,6 @@ excludelist:
     - class SfxStringItem
     - class SvXMLAttrContainerItem
     - class SwAttrSetChg
-    - class SwDocPosUpdate
     - class SwFormatChg
     - class SwFormatMeta
     - class SwMsgPoolItem

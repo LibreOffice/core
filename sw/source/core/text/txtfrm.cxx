@@ -2024,6 +2024,20 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
     {
         pDeleteChar = static_cast<const sw::DeleteChar*>(&rHint);
     }
+    else if (rHint.GetId() == SfxHintId::SwDocPosUpdateAtIndex)
+    {
+        auto pDocPosAt = static_cast<const sw::DocPosUpdateAtIndex*>(&rHint);
+        Broadcast(SfxHint()); // notify SwAccessibleParagraph
+        if(IsLocked())
+            return;
+        if(pDocPosAt->m_nDocPos > getFrameArea().Top())
+            return;
+        TextFrameIndex const nIndex(MapModelToView(
+            &pDocPosAt->m_rNode,
+            pDocPosAt->m_nIndex));
+        InvalidateRange(SwCharRange(nIndex, TextFrameIndex(1)));
+        return;
+    }
     else if (auto const pHt = dynamic_cast<sw::MoveText const*>(&rHint))
     {
         pMoveText = pHt;
@@ -2613,23 +2627,6 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
 #endif
         }
         break;
-
-        // Process SwDocPosUpdate
-        case RES_DOCPOS_UPDATE:
-        {
-            if( pOld && pNew )
-            {
-                const SwDocPosUpdate *pDocPos = static_cast<const SwDocPosUpdate*>(pOld);
-                if( pDocPos->nDocPos <= getFrameArea().Top() )
-                {
-                    const SwFormatField *pField = static_cast<const SwFormatField *>(pNew);
-                    TextFrameIndex const nIndex(MapModelToView(&rNode,
-                                pField->GetTextField()->GetStart()));
-                    InvalidateRange(SwCharRange(nIndex, TextFrameIndex(1)));
-                }
-            }
-            break;
-        }
         case RES_PARATR_SPLIT:
             if ( GetPrev() )
                 CheckKeep();

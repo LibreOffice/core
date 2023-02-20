@@ -5465,6 +5465,12 @@ void SwTextNode::HandleNonLegacyHint(const SfxHint& rHint)
     }
 }
 
+void SwTextNode::UpdateDocPos(const SwTwips nDocPos, const sal_uInt32 nIndex)
+{
+    const sw::DocPosUpdateAtIndex aHint(nDocPos, *this, nIndex);
+    CallSwClientNotify(aHint);
+}
+
 void SwTextNode::TriggerNodeUpdate(const sw::LegacyModifyHint& rHint)
 {
     const auto pOldValue = rHint.m_pOld;

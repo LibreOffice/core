@@ -21,6 +21,7 @@
 
 #include <i18nlangtag/lang.h>
 #include "swdllapi.h"
+#include "swtypes.hxx"
 #include "calbck.hxx"
 #include "nodeoffset.hxx"
 
@@ -283,6 +284,7 @@ public:
     void GatherRefFields(std::vector<SwGetRefField*>& rvRFields, const sal_uInt16 nTyp);
     void GatherFields(std::vector<SwFormatField*>& rvFormatFields, bool bCollectOnlyInDocNodes=true) const;
     void GatherDdeTables(std::vector<SwDDETable*>& rvTables) const;
+    void UpdateDocPos(const SwTwips nDocPos);
     virtual void UpdateFields();
 };
 

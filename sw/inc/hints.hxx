@@ -140,6 +140,30 @@ public:
     RedlineUnDelText(sal_Int32 nS, sal_Int32 nL);
 };
 
+/** DocPosUpdate is sent to signal that only the frames from or to a specified document-global position
+   have to be updated. At the moment this is only needed when updating pagenumber fields. */
+class DocPosUpdate final : public SfxHint
+{
+public:
+    const SwTwips m_nDocPos;
+    DocPosUpdate(const SwTwips nDocPos)
+        : SfxHint(SfxHintId::SwDocPosUpdate)
+        , m_nDocPos(nDocPos)
+    {};
+};
+class DocPosUpdateAtIndex final : public SfxHint
+{
+public:
+    const SwTwips m_nDocPos;
+    const SwTextNode& m_rNode;
+    const sal_uInt32 m_nIndex;
+    DocPosUpdateAtIndex(const SwTwips nDocPos, const SwTextNode& rNode, sal_uInt32 nIndex)
+        : SfxHint(SfxHintId::SwDocPosUpdateAtIndex)
+        , m_nDocPos(nDocPos)
+        , m_rNode(rNode)
+        , m_nIndex(nIndex)
+    {};
+};
 class CondCollCondChg final : public SfxHint
 {
 public:
@@ -265,15 +289,6 @@ public:
     {
         return m_aWhichFmtAttrs;
     }
-};
-
-/** SwDocPosUpdate is sent to signal that only the frames from or to a specified document-global position
-   have to be updated. At the moment this is only needed when updating pagenumber fields. */
-class SwDocPosUpdate final : public SwMsgPoolItem
-{
-public:
-    const SwTwips nDocPos;
-    SwDocPosUpdate( const SwTwips nDocPos );
 };
 
 /// SwTableFormulaUpdate is sent when the table has to be newly calculated or when a table itself is merged or split

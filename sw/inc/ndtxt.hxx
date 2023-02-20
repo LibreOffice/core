@@ -237,6 +237,7 @@ public:
 
 public:
     using SwContentNode::GetAttr;
+    void UpdateDocPos(const SwTwips nDocPos, const sal_uInt32 nIndex);
     /// for hanging TextFormatCollections somewhere else (Outline-Numbering!)
     void TriggerNodeUpdate(const sw::LegacyModifyHint&);
 

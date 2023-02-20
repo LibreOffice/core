@@ -435,7 +435,6 @@
 //     class SwPtrMsgPoolItem : public SwMsgPoolItem
 //     class SwFormatChg: public SwMsgPoolItem
 //     class SwUpdateAttr : public SwMsgPoolItem
-//     class SwDocPosUpdate : public SwMsgPoolItem
 //     class SwTableFormulaUpdate : public SwMsgPoolItem
 //     class SwAutoFormatGetDocNode: public SwMsgPoolItem
 //     class SwAttrSetChg: public SwMsgPoolItem

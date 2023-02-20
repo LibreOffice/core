@@ -81,11 +81,6 @@ SwUpdateAttr::SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW, std::vect
 {
 }
 
-SwDocPosUpdate::SwDocPosUpdate( const SwTwips nDcPos )
-    : SwMsgPoolItem( RES_DOCPOS_UPDATE ), nDocPos(nDcPos)
-{
-}
-
 SwTableFormulaUpdate::SwTableFormulaUpdate( const SwTable* pNewTable )
     : SwMsgPoolItem( RES_TABLEFML_UPDATE ),
     m_pTable( pNewTable ), m_pHistory( nullptr ), m_nSplitLine( USHRT_MAX ),

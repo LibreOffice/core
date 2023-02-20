@@ -302,6 +302,10 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
         }
         pGatherFieldsHint->m_rvFields.push_back(this);
     }
+    else if (rHint.GetId() == SfxHintId::SwDocPosUpdate)
+    {
+        UpdateDocPos(static_cast<const sw::DocPosUpdate*>(&rHint)->m_nDocPos);
+    }
 }
 
 namespace
@@ -383,6 +387,14 @@ void SwFormatField::ForceUpdateTextNode()
     bool bNeedForced = lcl_NeedsForcedUpdate(*mpTextField->GetFormatField().GetField());
     mpTextField->ExpandTextField(bNeedForced);
 }
+void SwFormatField::UpdateDocPos(const SwTwips nDocPos)
+{
+    if (!IsFieldInDoc())
+        return;
+    auto pTextNd = &mpTextField->GetTextNode();
+
+    pTextNd->UpdateDocPos(nDocPos, mpTextField->GetStart());
+}
 void SwFormatField::UpdateTextNode(const SfxPoolItem* pOld, const SfxPoolItem* pNew)
 {
     if (pOld == nullptr && pNew == nullptr)
@@ -408,25 +420,14 @@ void SwFormatField::UpdateTextNode(const SfxPoolItem* pOld, const SfxPoolItem* p
     SwTextNode* pTextNd = &mpTextField->GetTextNode();
     OSL_ENSURE(pTextNd, "Where is my Node?");
 
-    bool bTriggerNode = false;
+    bool bTriggerNode = pNew != nullptr;
     bool bExpand = false;
-    const SfxPoolItem* pNodeOld = nullptr;
-    const SfxPoolItem* pNodeNew = nullptr;
     if(pNew)
     {
         switch(pNew->Which())
         {
-        case RES_DOCPOS_UPDATE:
-            // handled in SwTextFrame::Modify()
-            bTriggerNode = true;
-            pNodeOld = pNew;
-            pNodeNew = this;
-            break;
         case RES_ATTRSET_CHG:
         case RES_FMT_CHG:
-            bTriggerNode = true;
-            pNodeOld = pOld;
-            pNodeNew = pNew;
             break;
         case RES_REFMARKFLD_UPDATE:
             // update GetRef fields
@@ -441,13 +442,13 @@ void SwFormatField::UpdateTextNode(const SfxPoolItem* pOld, const SfxPoolItem* p
                 auto pType = mpField->GetTyp();
                 lcl_EnsureUserFieldValid(*pType);
                 bTriggerNode = lcl_TriggerNode(pType->Which());
-                pNodeNew = pNew;
                 bExpand = lcl_ExpandField(pType->Which(), pOld && pOld->Which() == RES_HIDDENPARA_PRINT);
+                pOld = nullptr;
             }
         }
     }
     if(bTriggerNode)
-        pTextNd->TriggerNodeUpdate(sw::LegacyModifyHint(pNodeOld, pNodeNew));
+        pTextNd->TriggerNodeUpdate(sw::LegacyModifyHint(pOld, pNew));
     if(bExpand)
         mpTextField->ExpandTextField(false);
 }

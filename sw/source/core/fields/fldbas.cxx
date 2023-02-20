@@ -210,6 +210,10 @@ void SwFieldType::GatherDdeTables(std::vector<SwDDETable*>& rvTables) const
     CallSwClientNotify(sw::GatherDdeTablesHint(rvTables));
 }
 
+void SwFieldType::UpdateDocPos(const SwTwips nDocPos)
+{
+    CallSwClientNotify(sw::DocPosUpdate(nDocPos));
+}
 void SwFieldType::UpdateFields()
 {
     CallSwClientNotify(sw::LegacyModifyHint(nullptr, nullptr));

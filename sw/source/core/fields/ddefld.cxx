@@ -320,7 +320,7 @@ void SwDDEFieldType::UpdateDDE(const bool bNotifyShells)
     for(auto pFormatField: vFields)
     {
         if(pFormatField->GetTextField())
-            pFormatField->UpdateTextNode( nullptr, &aUpdateDDE );
+            pFormatField->UpdateTextNode(nullptr, &aUpdateDDE);
     }
     // a DDE tables in the text
     for(auto pTable: vTables)

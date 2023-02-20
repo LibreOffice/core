@@ -27,6 +27,7 @@
 #include <unotools/weakref.hxx>
 
 #include "swdllapi.h"
+#include "swtypes.hxx"
 #include "calbck.hxx"
 #include "reffld.hxx"
 #include "nodeoffset.hxx"
@@ -168,6 +169,7 @@ public:
 
     void ForceUpdateTextNode();
     void UpdateTextNode(const SfxPoolItem* pOld, const SfxPoolItem* pNew);
+    void UpdateDocPos(const SwTwips nDocPos);
 };
 
 enum class SwFormatFieldHintWhich

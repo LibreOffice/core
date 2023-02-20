@@ -1337,8 +1337,6 @@ sal_Int32 DocumentFieldsManager::GetRecordsPerDocument() const
 
 void DocumentFieldsManager::UpdatePageFields(const SwTwips nDocPos)
 {
-    SwDocPosUpdate aDosPosUpdate(nDocPos);
-    sw::LegacyModifyHint aHint(nullptr, &aDosPosUpdate);
     for(SwFieldTypes::size_type i = 0; i < INIT_FLDTYPES; ++i)
     {
         SwFieldType* pFieldType = (*mpFieldTypes)[i].get();
@@ -1348,7 +1346,7 @@ void DocumentFieldsManager::UpdatePageFields(const SwTwips nDocPos)
         case SwFieldIds::Chapter:
         case SwFieldIds::GetExp:
         case SwFieldIds::RefPageGet:
-            pFieldType->CallSwClientNotify(aHint);
+            pFieldType->UpdateDocPos(nDocPos);
             break;
         case SwFieldIds::DocStat:
             pFieldType->CallSwClientNotify(sw::LegacyModifyHint(nullptr, nullptr));

@@ -149,6 +149,8 @@ enum class SfxHintId {
     SwSectionHidden,
     SwTitleChanged,
     SwDescriptionChanged,
+    SwDocPosUpdate,
+    SwDocPosUpdateAtIndex,
 
     ThisIsAnSdrHint
 };
