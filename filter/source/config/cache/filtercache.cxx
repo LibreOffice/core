@@ -119,7 +119,7 @@ FilterCache::~FilterCache()
 std::unique_ptr<FilterCache> FilterCache::clone() const
 {
     // SAFE -> ----------------------------------
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     auto pClone = std::make_unique<FilterCache>();
 
@@ -151,7 +151,7 @@ std::unique_ptr<FilterCache> FilterCache::clone() const
 void FilterCache::takeOver(const FilterCache& rClone)
 {
     // SAFE -> ----------------------------------
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     // a)
     // Don't copy the configuration access points here!
@@ -192,14 +192,14 @@ void FilterCache::takeOver(const FilterCache& rClone)
     // Because we can't be sure, that changed filters on one clone
     // and changed types of another clone work together.
     // But here we can check against the later changes...
-    impl_validateAndOptimize();
+    impl_validateAndOptimize(aGuard);
     // <- SAFE ----------------------------------
 }
 
 void FilterCache::load(EFillState eRequired)
 {
     // SAFE -> ----------------------------------
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     // check if required fill state is already reached ...
     // There is nothing to do then.
@@ -217,28 +217,28 @@ void FilterCache::load(EFillState eRequired)
     //    office document with a minimal set of values.
     if (m_eFillState == E_CONTAINS_NOTHING)
     {
-        impl_getDirectCFGValue(CFGDIRECTKEY_OFFICELOCALE) >>= m_sActLocale;
+        impl_getDirectCFGValue(aGuard, CFGDIRECTKEY_OFFICELOCALE) >>= m_sActLocale;
         if (m_sActLocale.isEmpty())
         {
             m_sActLocale = DEFAULT_OFFICELOCALE;
         }
 
         // Support the old configuration support. Read it only one times during office runtime!
-        impl_readOldFormat();
+        impl_readOldFormat(aGuard);
     }
 
 
     // b) If the required fill state was not reached
     //    but std values was already loaded ...
     //    we must load some further missing items.
-    impl_load(eRequired);
+    impl_load(aGuard, eRequired);
     // <- SAFE
 }
 
 bool FilterCache::isFillState(FilterCache::EFillState eState) const
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
     return ((m_eFillState & eState) == eState);
     // <- SAFE
 }
@@ -249,12 +249,12 @@ std::vector<OUString> FilterCache::getMatchingItemsByProps(      EItemType  eTyp
                                                   o3tl::span< const css::beans::NamedValue > lEProps) const
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     // search for right list
     // An exception is thrown - "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
-    const CacheItemList& rList = impl_getItemList(eType);
+    const CacheItemList& rList = impl_getItemList(aGuard, eType);
 
     std::vector<OUString> lKeys;
     lKeys.reserve(rList.size());
@@ -280,12 +280,12 @@ std::vector<OUString> FilterCache::getMatchingItemsByProps(      EItemType  eTyp
 bool FilterCache::hasItems(EItemType eType) const
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     // search for right list
     // An exception is thrown - "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
-    const CacheItemList& rList = impl_getItemList(eType);
+    const CacheItemList& rList = impl_getItemList(aGuard, eType);
 
     return !rList.empty();
     // <- SAFE
@@ -295,12 +295,17 @@ bool FilterCache::hasItems(EItemType eType) const
 std::vector<OUString> FilterCache::getItemNames(EItemType eType) const
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
+    return getItemNames(aGuard, eType);
+    // <- SAFE
+}
 
+std::vector<OUString> FilterCache::getItemNames(std::unique_lock<std::mutex>& rGuard, EItemType eType) const
+{
     // search for right list
     // An exception is thrown - "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
-    const CacheItemList& rList = impl_getItemList(eType);
+    const CacheItemList& rList = impl_getItemList(rGuard, eType);
 
     std::vector<OUString> lKeys;
     for (auto const& elem : rList)
@@ -308,7 +313,6 @@ std::vector<OUString> FilterCache::getItemNames(EItemType eType) const
         lKeys.push_back(elem.first);
     }
     return lKeys;
-    // <- SAFE
 }
 
 
@@ -316,12 +320,12 @@ bool FilterCache::hasItem(      EItemType        eType,
                               const OUString& sItem)
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     // search for right list
     // An exception is thrown - "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
-    const CacheItemList& rList = impl_getItemList(eType);
+    const CacheItemList& rList = impl_getItemList(aGuard, eType);
 
     // if item could not be found - check if it can be loaded
     // from the underlying configuration layer. Might it was not already
@@ -332,7 +336,7 @@ bool FilterCache::hasItem(      EItemType        eType,
 
     try
     {
-        impl_loadItemOnDemand(eType, sItem);
+        impl_loadItemOnDemand(aGuard, eType, sItem);
         // no exception => item could be loaded!
         return true;
     }
@@ -348,21 +352,22 @@ CacheItem FilterCache::getItem(      EItemType        eType,
                                const OUString& sItem)
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
-    CacheItem aItem = impl_getItem(eType, sItem);
+    CacheItem aItem = impl_getItem(aGuard, eType, sItem);
     // <- SAFE
     return aItem;
 }
 
 
-CacheItem& FilterCache::impl_getItem(      EItemType        eType,
+CacheItem& FilterCache::impl_getItem( std::unique_lock<std::mutex>& rGuard,
+                            EItemType        eType,
                                const OUString& sItem)
 {
     // search for right list
     // An exception is thrown if "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
-    CacheItemList& rList = impl_getItemList(eType);
+    CacheItemList& rList = impl_getItemList(rGuard, eType);
 
     // check if item exists ...
     CacheItemList::iterator pIt = rList.find(sItem);
@@ -372,7 +377,7 @@ CacheItem& FilterCache::impl_getItem(      EItemType        eType,
         // underlying configuration layer.
         // Note: NoSuchElementException is thrown automatically here if
         // item could not be loaded!
-        pIt = impl_loadItemOnDemand(eType, sItem);
+        pIt = impl_loadItemOnDemand(rGuard, eType, sItem);
     }
 
     /* Workaround for #137955#
@@ -390,7 +395,7 @@ CacheItem& FilterCache::impl_getItem(      EItemType        eType,
         // but it is there to load help pages
         bool bIsHelpFilter = sItem == "writer_web_HTML_help";
 
-        if ( !bIsHelpFilter && !impl_isModuleInstalled(sDocService) )
+        if ( !bIsHelpFilter && !impl_isModuleInstalled(rGuard, sDocService) )
         {
             OUString sMsg("The requested filter '" + sItem +
                           "' exists ... but it should not; because the corresponding LibreOffice module was not installed.");
@@ -406,16 +411,16 @@ void FilterCache::removeItem(      EItemType        eType,
                              const OUString& sItem)
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     // search for right list
     // An exception is thrown - "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
-    CacheItemList& rList = impl_getItemList(eType);
+    CacheItemList& rList = impl_getItemList(aGuard, eType);
 
     CacheItemList::iterator pItem = rList.find(sItem);
     if (pItem == rList.end())
-        pItem = impl_loadItemOnDemand(eType, sItem); // throws NoSuchELementException!
+        pItem = impl_loadItemOnDemand(aGuard, eType, sItem); // throws NoSuchELementException!
     rList.erase(pItem);
 
     impl_addItem2FlushList(eType, sItem);
@@ -427,12 +432,12 @@ void FilterCache::setItem(      EItemType        eType ,
                           const CacheItem&       aValue)
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     // search for right list
     // An exception is thrown - "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
-    CacheItemList& rList = impl_getItemList(eType);
+    CacheItemList& rList = impl_getItemList(aGuard, eType);
 
     // name must be part of the property set too ... otherwise our
     // container query can't work correctly
@@ -454,8 +459,8 @@ void FilterCache::refreshItem(      EItemType        eType,
                               const OUString& sItem)
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
-    impl_loadItemOnDemand(eType, sItem);
+    std::unique_lock aGuard(m_aMutex);
+    impl_loadItemOnDemand(aGuard, eType, sItem);
 }
 
 
@@ -463,9 +468,9 @@ css::uno::Any FilterCache::getItemWithStateProps(      EItemType        eType,
                                       const OUString& sItem)
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
-    const CacheItem& rItem = impl_getItem(eType, sItem);
+    const CacheItem& rItem = impl_getItem(aGuard, eType, sItem);
 
     // Note: Opening of the configuration layer throws some exceptions
     // if it failed. So we mustn't check any reference here...
@@ -475,14 +480,14 @@ css::uno::Any FilterCache::getItemWithStateProps(      EItemType        eType,
     {
         case E_TYPE :
             {
-                xPackage.set(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
+                xPackage.set(impl_openConfig(aGuard, E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
                 xPackage->getByName(CFGSET_TYPES) >>= xSet;
             }
             break;
 
         case E_FILTER :
             {
-                xPackage.set(impl_openConfig(E_PROVIDER_FILTERS), css::uno::UNO_QUERY_THROW);
+                xPackage.set(impl_openConfig(aGuard, E_PROVIDER_FILTERS), css::uno::UNO_QUERY_THROW);
                 xPackage->getByName(CFGSET_FILTERS) >>= xSet;
             }
             break;
@@ -496,7 +501,7 @@ css::uno::Any FilterCache::getItemWithStateProps(      EItemType        eType,
                         about FINALIZED and MANDATORY very easy ... :-(
                         => set it to readonly/required everytimes :-)
                 */
-                css::uno::Any   aDirectValue       = impl_getDirectCFGValue(CFGDIRECTKEY_DEFAULTFRAMELOADER);
+                css::uno::Any   aDirectValue       = impl_getDirectCFGValue(aGuard, CFGDIRECTKEY_DEFAULTFRAMELOADER);
                 OUString sDefaultFrameLoader;
                 if (
                     (aDirectValue >>= sDefaultFrameLoader) &&
@@ -509,14 +514,14 @@ css::uno::Any FilterCache::getItemWithStateProps(      EItemType        eType,
                 }
                 /* <-- HACK */
 
-                xPackage.set(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
+                xPackage.set(impl_openConfig(aGuard, E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
                 xPackage->getByName(CFGSET_FRAMELOADERS) >>= xSet;
             }
             break;
 
         case E_CONTENTHANDLER :
             {
-                xPackage.set(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
+                xPackage.set(impl_openConfig(aGuard, E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
                 xPackage->getByName(CFGSET_CONTENTHANDLERS) >>= xSet;
             }
             break;
@@ -570,14 +575,14 @@ void FilterCache::removeStatePropsFromItem(CacheItem& rItem)
 void FilterCache::flush()
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     // renew all dependencies and optimizations
-    impl_validateAndOptimize();
+    impl_validateAndOptimize(aGuard);
 
     if (!m_lChangedTypes.empty())
     {
-        css::uno::Reference< css::container::XNameAccess > xConfig(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::container::XNameAccess > xConfig(impl_openConfig(aGuard, E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::container::XNameAccess > xSet   ;
 
         xConfig->getByName(CFGSET_TYPES) >>= xSet;
@@ -589,7 +594,7 @@ void FilterCache::flush()
 
     if (!m_lChangedFilters.empty())
     {
-        css::uno::Reference< css::container::XNameAccess > xConfig(impl_openConfig(E_PROVIDER_FILTERS), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::container::XNameAccess > xConfig(impl_openConfig(aGuard, E_PROVIDER_FILTERS), css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::container::XNameAccess > xSet   ;
 
         xConfig->getByName(CFGSET_FILTERS) >>= xSet;
@@ -672,7 +677,7 @@ void FilterCache::detectFlatForURL(const css::util::URL& aURL      ,
     sExtension = sExtension.toAsciiLowerCase();
 
     // SAFE -> ----------------------------------
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
 
     // i) Step over all well known URL pattern
@@ -718,11 +723,8 @@ void FilterCache::detectFlatForURL(const css::util::URL& aURL      ,
     // <- SAFE ----------------------------------
 }
 
-const CacheItemList& FilterCache::impl_getItemList(EItemType eType) const
+const CacheItemList& FilterCache::impl_getItemList(std::unique_lock<std::mutex>& /*rGuard*/, EItemType eType) const
 {
-    // SAFE -> ----------------------------------
-    osl::MutexGuard aLock(m_aMutex);
-
     switch(eType)
     {
         case E_TYPE           : return m_lTypes          ;
@@ -734,14 +736,10 @@ const CacheItemList& FilterCache::impl_getItemList(EItemType eType) const
 
     throw css::uno::RuntimeException("unknown sub container requested.",
                                             css::uno::Reference< css::uno::XInterface >());
-    // <- SAFE ----------------------------------
 }
 
-CacheItemList& FilterCache::impl_getItemList(EItemType eType)
+CacheItemList& FilterCache::impl_getItemList(std::unique_lock<std::mutex>& /*rGuard*/, EItemType eType)
 {
-    // SAFE -> ----------------------------------
-    osl::MutexGuard aLock(m_aMutex);
-
     switch(eType)
     {
         case E_TYPE           : return m_lTypes          ;
@@ -753,13 +751,10 @@ CacheItemList& FilterCache::impl_getItemList(EItemType eType)
 
     throw css::uno::RuntimeException("unknown sub container requested.",
                                             css::uno::Reference< css::uno::XInterface >());
-    // <- SAFE ----------------------------------
 }
 
-css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfigProvider eProvider)
+css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(std::unique_lock<std::mutex>& rGuard, EConfigProvider eProvider)
 {
-    osl::MutexGuard aLock(m_aMutex);
-
     OUString                              sPath      ;
     css::uno::Reference< css::uno::XInterface >* pConfig = nullptr;
     css::uno::Reference< css::uno::XInterface >  xOld       ;
@@ -812,7 +807,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
 
     {
         SAL_INFO( "filter.config", "" << sRtlLog);
-        *pConfig = impl_createConfigAccess(sPath    ,
+        *pConfig = impl_createConfigAccess(rGuard, sPath    ,
                                            false,   // bReadOnly
                                            true );  // bLocalesMode
     }
@@ -840,7 +835,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
     return *pConfig;
 }
 
-css::uno::Any FilterCache::impl_getDirectCFGValue(std::u16string_view sDirectKey)
+css::uno::Any FilterCache::impl_getDirectCFGValue(std::unique_lock<std::mutex>& rGuard, std::u16string_view sDirectKey)
 {
     OUString sRoot;
     OUString sKey ;
@@ -852,7 +847,7 @@ css::uno::Any FilterCache::impl_getDirectCFGValue(std::u16string_view sDirectKey
        )
         return css::uno::Any();
 
-    css::uno::Reference< css::uno::XInterface > xCfg = impl_createConfigAccess(sRoot    ,
+    css::uno::Reference< css::uno::XInterface > xCfg = impl_createConfigAccess(rGuard, sRoot    ,
                                                                                true ,  // bReadOnly
                                                                                false); // bLocalesMode
     if (!xCfg.is())
@@ -879,13 +874,11 @@ css::uno::Any FilterCache::impl_getDirectCFGValue(std::u16string_view sDirectKey
 }
 
 
-css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess(const OUString& sRoot       ,
+css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess(std::unique_lock<std::mutex>& /*rGuard*/,
+                                                                                       const OUString& sRoot       ,
                                                                                        bool         bReadOnly   ,
                                                                                        bool         bLocalesMode)
 {
-    // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
-
     css::uno::Reference< css::uno::XInterface > xCfg;
 
     if (!utl::ConfigManager::IsFuzzing())
@@ -937,15 +930,11 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
     }
 
     return xCfg;
-    // <- SAFE
 }
 
 
-void FilterCache::impl_validateAndOptimize()
+void FilterCache::impl_validateAndOptimize(std::unique_lock<std::mutex>& rGuard)
 {
-    // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
-
     // First check if any filter or type could be read
     // from the underlying configuration!
     bool bSomeTypesShouldExist   = ((m_eFillState & E_CONTAINS_STANDARD       ) == E_CONTAINS_STANDARD       );
@@ -1159,7 +1148,7 @@ void FilterCache::impl_validateAndOptimize()
     // create dependencies between the global default frame loader
     // and all types (and of course if registered filters), which
     // does not registered for any other loader.
-    css::uno::Any   aDirectValue       = impl_getDirectCFGValue(CFGDIRECTKEY_DEFAULTFRAMELOADER);
+    css::uno::Any   aDirectValue       = impl_getDirectCFGValue(rGuard, CFGDIRECTKEY_DEFAULTFRAMELOADER);
     OUString sDefaultFrameLoader;
 
     if (
@@ -1175,7 +1164,7 @@ void FilterCache::impl_validateAndOptimize()
     // b) step over all well known frame loader services
     //    and remove all types from list a), which already
     //    referenced by a loader b)
-    std::vector<OUString> lTypes = getItemNames(E_TYPE);
+    std::vector<OUString> lTypes = getItemNames(rGuard, E_TYPE);
     for (auto & frameLoader : m_lFrameLoaders)
     {
         // Note: of course the default loader must be ignored here.
@@ -1212,8 +1201,6 @@ void FilterCache::impl_validateAndOptimize()
 #if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE(!nWarnings, OUStringToOString(sLogOut,RTL_TEXTENCODING_UTF8).getStr());
 #endif
-
-    // <- SAFE
 }
 
 void FilterCache::impl_addItem2FlushList(      EItemType        eType,
@@ -1268,11 +1255,8 @@ FilterCache::EItemFlushState FilterCache::impl_specifyFlushOperation(const css::
     return eState;
 }
 
-void FilterCache::impl_load(EFillState eRequiredState)
+void FilterCache::impl_load(std::unique_lock<std::mutex>& rGuard, EFillState eRequiredState)
 {
-    // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
-
     // Attention: Detect services are part of the standard set!
     // So there is no need to handle it separately.
 
@@ -1286,10 +1270,10 @@ void FilterCache::impl_load(EFillState eRequiredState)
         // Attention! If config couldn't be opened successfully
         // and exception is thrown automatically and must be forwarded
         // to our caller...
-        css::uno::Reference< css::container::XNameAccess > xTypes(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::container::XNameAccess > xTypes(impl_openConfig(rGuard, E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
         {
             SAL_INFO( "filter.config", "FilterCache::load std");
-            impl_loadSet(xTypes, E_TYPE, E_READ_STANDARD, &m_lTypes);
+            impl_loadSet(rGuard, xTypes, E_TYPE, E_READ_STANDARD, &m_lTypes);
         }
     }
 
@@ -1303,10 +1287,10 @@ void FilterCache::impl_load(EFillState eRequiredState)
         // Attention! If config couldn't be opened successfully
         // and exception is thrown automatically and must be forwarded
         // to our call...
-        css::uno::Reference< css::container::XNameAccess > xTypes(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::container::XNameAccess > xTypes(impl_openConfig(rGuard, E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
         {
             SAL_INFO( "filter.config", "FilterCache::load all types");
-            impl_loadSet(xTypes, E_TYPE, E_READ_UPDATE, &m_lTypes);
+            impl_loadSet(rGuard, xTypes, E_TYPE, E_READ_UPDATE, &m_lTypes);
         }
     }
 
@@ -1320,10 +1304,10 @@ void FilterCache::impl_load(EFillState eRequiredState)
         // Attention! If config couldn't be opened successfully
         // and exception is thrown automatically and must be forwarded
         // to our call...
-        css::uno::Reference< css::container::XNameAccess > xFilters(impl_openConfig(E_PROVIDER_FILTERS), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::container::XNameAccess > xFilters(impl_openConfig(rGuard, E_PROVIDER_FILTERS), css::uno::UNO_QUERY_THROW);
         {
             SAL_INFO( "filter.config", "FilterCache::load all filters");
-            impl_loadSet(xFilters, E_FILTER, E_READ_ALL, &m_lFilters);
+            impl_loadSet(rGuard, xFilters, E_FILTER, E_READ_ALL, &m_lFilters);
         }
     }
 
@@ -1337,10 +1321,10 @@ void FilterCache::impl_load(EFillState eRequiredState)
         // Attention! If config couldn't be opened successfully
         // and exception is thrown automatically and must be forwarded
         // to our call...
-        css::uno::Reference< css::container::XNameAccess > xLoaders(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::container::XNameAccess > xLoaders(impl_openConfig(rGuard, E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
         {
             SAL_INFO( "filter.config", "FilterCache::load all frame loader");
-            impl_loadSet(xLoaders, E_FRAMELOADER, E_READ_ALL, &m_lFrameLoaders);
+            impl_loadSet(rGuard, xLoaders, E_FRAMELOADER, E_READ_ALL, &m_lFrameLoaders);
         }
     }
 
@@ -1354,10 +1338,10 @@ void FilterCache::impl_load(EFillState eRequiredState)
         // Attention! If config couldn't be opened successfully
         // and exception is thrown automatically and must be forwarded
         // to our call...
-        css::uno::Reference< css::container::XNameAccess > xHandlers(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::container::XNameAccess > xHandlers(impl_openConfig(rGuard, E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
         {
             SAL_INFO( "filter.config", "FilterCache::load all content handler");
-            impl_loadSet(xHandlers, E_CONTENTHANDLER, E_READ_ALL, &m_lContentHandlers);
+            impl_loadSet(rGuard, xHandlers, E_CONTENTHANDLER, E_READ_ALL, &m_lContentHandlers);
         }
     }
 
@@ -1366,12 +1350,11 @@ void FilterCache::impl_load(EFillState eRequiredState)
 
     // any data read?
     // yes! => validate it and update optimized structures.
-    impl_validateAndOptimize();
-
-    // <- SAFE
+    impl_validateAndOptimize(rGuard);
 }
 
-void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameAccess >& xConfig,
+void FilterCache::impl_loadSet(std::unique_lock<std::mutex>& rGuard,
+                               const css::uno::Reference< css::container::XNameAccess >& xConfig,
                                      EItemType                                           eType  ,
                                      EReadOption                                         eOption,
                                      CacheItemList*                                      pCache )
@@ -1438,7 +1421,7 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
             {
                 try
                 {
-                    (*pCache)[pItems[i]] = impl_loadItem(xSet, eType, pItems[i], eOption);
+                    (*pCache)[pItems[i]] = impl_loadItem(rGuard, xSet, eType, pItems[i], eOption);
                 }
                 catch(const css::uno::Exception& ex)
                 {
@@ -1462,7 +1445,7 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
                 }
                 try
                 {
-                    CacheItem aItem = impl_loadItem(xSet, eType, pItems[i], eOption);
+                    CacheItem aItem = impl_loadItem(rGuard, xSet, eType, pItems[i], eOption);
                     pItem->second.update(aItem);
                 }
                 catch(const css::uno::Exception& ex)
@@ -1479,15 +1462,12 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
     }
 }
 
-void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::container::XNameAccess >& xNode,
-                                              CacheItem&                                          rItem)
+void FilterCache::impl_readPatchUINames(std::unique_lock<std::mutex>& /*rGuard*/,
+                                        const css::uno::Reference< css::container::XNameAccess >& xNode,
+                                        CacheItem&                                          rItem)
 {
 
-    // SAFE -> ----------------------------------
-    osl::ClearableMutexGuard aLock(m_aMutex);
     OUString sActLocale     = m_sActLocale    ;
-    aLock.clear();
-    // <- SAFE ----------------------------------
 
     css::uno::Any aVal = xNode->getByName(PROPNAME_UINAME);
     css::uno::Reference< css::container::XNameAccess > xUIName;
@@ -1557,7 +1537,8 @@ void FilterCache::impl_savePatchUINames(const css::uno::Reference< css::containe
         will force a crash during destruction)
         can be solved ...
 -----------------------------------------------*/
-CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::XNameAccess >& xSet   ,
+CacheItem FilterCache::impl_loadItem(std::unique_lock<std::mutex>& rGuard,
+                                     const css::uno::Reference< css::container::XNameAccess >& xSet   ,
                                            EItemType                                           eType  ,
                                      const OUString&                                    sItem  ,
                                            EReadOption                                         eOption)
@@ -1601,7 +1582,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
             // read optional properties of a type
             // no else here! Is an additional switch ...
             if (eOption == E_READ_UPDATE || eOption == E_READ_ALL)
-                impl_readPatchUINames(xItem, aItem);
+                impl_readPatchUINames(rGuard, xItem, aItem);
         }
         break;
 
@@ -1638,7 +1619,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
 //       will be finished really
 #ifdef AS_ENABLE_FILTER_UINAMES
             if (eOption == E_READ_UPDATE || eOption == E_READ_ALL)
-                impl_readPatchUINames(xItem, aItem);
+                impl_readPatchUINames(rGuard, xItem, aItem);
 #endif // AS_ENABLE_FILTER_UINAMES
         }
         break;
@@ -1653,7 +1634,8 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
     return aItem;
 }
 
-CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType        eType,
+CacheItemList::iterator FilterCache::impl_loadItemOnDemand( std::unique_lock<std::mutex>& rGuard,
+                                                            EItemType        eType,
                                                            const OUString& sItem)
 {
     CacheItemList*                              pList   = nullptr;
@@ -1665,7 +1647,7 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
         case E_TYPE :
         {
             pList   = &m_lTypes;
-            xConfig = impl_openConfig(E_PROVIDER_TYPES);
+            xConfig = impl_openConfig(rGuard, E_PROVIDER_TYPES);
             sSet    = CFGSET_TYPES;
         }
         break;
@@ -1673,7 +1655,7 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
         case E_FILTER :
         {
             pList   = &m_lFilters;
-            xConfig = impl_openConfig(E_PROVIDER_FILTERS);
+            xConfig = impl_openConfig(rGuard, E_PROVIDER_FILTERS);
             sSet    = CFGSET_FILTERS;
         }
         break;
@@ -1681,7 +1663,7 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
         case E_FRAMELOADER :
         {
             pList   = &m_lFrameLoaders;
-            xConfig = impl_openConfig(E_PROVIDER_OTHERS);
+            xConfig = impl_openConfig(rGuard, E_PROVIDER_OTHERS);
             sSet    = CFGSET_FRAMELOADERS;
         }
         break;
@@ -1689,7 +1671,7 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
         case E_CONTENTHANDLER :
         {
             pList   = &m_lContentHandlers;
-            xConfig = impl_openConfig(E_PROVIDER_OTHERS);
+            xConfig = impl_openConfig(rGuard, E_PROVIDER_OTHERS);
             sSet    = CFGSET_CONTENTHANDLERS;
         }
         break;
@@ -1707,7 +1689,7 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
 
     if (bItemInConfig)
     {
-        (*pList)[sItem] = impl_loadItem(xSet, eType, sItem, E_READ_ALL);
+        (*pList)[sItem] = impl_loadItem(rGuard, xSet, eType, sItem, E_READ_ALL);
     }
     else
     {
@@ -2064,14 +2046,14 @@ void FilterCache::impl_interpretDataVal4Filter(const OUString& sValue,
     TODO work on a cache copy first, which can be flushed afterwards
          That would be useful to guarantee a consistent cache.
 -----------------------------------------------*/
-void FilterCache::impl_readOldFormat()
+void FilterCache::impl_readOldFormat(std::unique_lock<std::mutex>& rGuard)
 {
     // Attention: Opening/Reading of this old configuration format has to be handled gracefully.
     // It's optional and should not disturb our normal work!
     // E.g. we must check, if the package exists...
     try
     {
-        css::uno::Reference< css::uno::XInterface > xInt = impl_openConfig(E_PROVIDER_OLD);
+        css::uno::Reference< css::uno::XInterface > xInt = impl_openConfig(rGuard, E_PROVIDER_OLD);
         css::uno::Reference< css::container::XNameAccess > xCfg(xInt, css::uno::UNO_QUERY_THROW);
 
         OUString TYPES_SET("Types");
@@ -2083,7 +2065,7 @@ void FilterCache::impl_readOldFormat()
             xCfg->getByName(TYPES_SET) >>= xSet;
             const css::uno::Sequence< OUString > lItems = xSet->getElementNames();
             for (const OUString& rName : lItems)
-                m_lTypes[rName] = impl_readOldItem(xSet, E_TYPE, rName);
+                m_lTypes[rName] = impl_readOldItem(rGuard, xSet, E_TYPE, rName);
         }
 
         OUString FILTER_SET("Filters");
@@ -2094,7 +2076,7 @@ void FilterCache::impl_readOldFormat()
             xCfg->getByName(FILTER_SET) >>= xSet;
             const css::uno::Sequence< OUString > lItems = xSet->getElementNames();
             for (const OUString& rName : lItems)
-                m_lFilters[rName] = impl_readOldItem(xSet, E_FILTER, rName);
+                m_lFilters[rName] = impl_readOldItem(rGuard, xSet, E_FILTER, rName);
         }
     }
     /* corrupt filter addon? Because it's external (optional) code... we can ignore it. Addon won't work then...
@@ -2106,7 +2088,8 @@ void FilterCache::impl_readOldFormat()
     }
 }
 
-CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::container::XNameAccess >& xSet ,
+CacheItem FilterCache::impl_readOldItem(std::unique_lock<std::mutex>& rGuard,
+                                        const css::uno::Reference< css::container::XNameAccess >& xSet ,
                                               EItemType                                           eType,
                                         const OUString&                                    sItem)
 {
@@ -2122,7 +2105,7 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
     // Isn't used any longer!
 
     // UIName
-    impl_readPatchUINames(xItem, aItem);
+    impl_readPatchUINames(rGuard, xItem, aItem);
 
     // Data
     OUString sData;
@@ -2209,21 +2192,16 @@ OUString FilterCache::impl_searchContentHandlerForType(const OUString& sType) co
 #endif
 
 
-bool FilterCache::impl_isModuleInstalled(const OUString& sModule)
+bool FilterCache::impl_isModuleInstalled(std::unique_lock<std::mutex>& /*rGuard*/, const OUString& sModule)
 {
     css::uno::Reference< css::container::XNameAccess > xCfg;
 
-    // SAFE ->
+    if (!m_xModuleCfg.is())
     {
-        osl::MutexGuard aLock(m_aMutex);
-        if (!m_xModuleCfg.is())
-        {
-            m_xModuleCfg = officecfg::Setup::Office::Factories::get();
-        }
-
-        xCfg = m_xModuleCfg;
+        m_xModuleCfg = officecfg::Setup::Office::Factories::get();
     }
-    // <- SAFE
+
+    xCfg = m_xModuleCfg;
 
     if (xCfg.is())
         return xCfg->hasByName(sModule);
