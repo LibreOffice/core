@@ -14,8 +14,7 @@ from uitest.uihelper.common import get_url_for_data_file
 class tdf114992(UITestCase):
     def test_tdf114992_delete_sheet_crash(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf114992.ods")) as calc_doc:
-            with self.ui_test.execute_dialog_through_command(".uno:Remove", close_button="yes"):
-                pass
+            self.xUITest.executeCommand(".uno:Remove")
 
             self.assertEqual(calc_doc.Sheets.getCount(), 1)
             self.xUITest.executeCommand(".uno:Undo")

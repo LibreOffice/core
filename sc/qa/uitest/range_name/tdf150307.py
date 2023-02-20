@@ -57,8 +57,7 @@ class tdf150307(UITestCase):
 
             self.check_navigator(xGridWin, 2)
 
-            with self.ui_test.execute_dialog_through_command(".uno:Remove", close_button="yes"):
-                pass
+            self.xUITest.executeCommand(".uno:Remove")
 
             self.check_navigator(xGridWin, 1)
 

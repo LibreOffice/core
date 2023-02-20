@@ -28,8 +28,7 @@ class calcSheetDelete(UITestCase):
 
             self.assertEqual(document.Sheets.getCount(), nrSheets + 1)
 
-            with self.ui_test.execute_dialog_through_command(".uno:Remove", close_button="yes"):
-                pass
+            self.xUITest.executeCommand(".uno:Remove")
             xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
             xToolkit.processEventsToIdle()
 
@@ -85,8 +84,7 @@ class calcSheetDelete(UITestCase):
                 self.xUITest.executeCommand(".uno:JumpToNextTableSel")  #select next sheet
                 i = i + 1
 
-            with self.ui_test.execute_dialog_through_command(".uno:Remove", close_button="yes"):
-                pass
+            self.xUITest.executeCommand(".uno:Remove")
 
             xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
             xToolkit.processEventsToIdle()
@@ -115,8 +113,7 @@ class calcSheetDelete(UITestCase):
                 self.xUITest.executeCommand(".uno:JumpToNextTableSel")  #select next sheet
                 i = i + 1
 
-            with self.ui_test.execute_dialog_through_command(".uno:Remove", close_button="yes"):
-                pass
+            self.xUITest.executeCommand(".uno:Remove")
 
             self.assertEqual(document.Sheets.getCount(), nrSheets)
             self.xUITest.executeCommand(".uno:Undo")

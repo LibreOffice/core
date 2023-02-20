@@ -268,7 +268,9 @@
 #define STR_OPTIONAL                            NC_("STR_OPTIONAL", "(optional)")
 #define STR_REQUIRED                            NC_("STR_REQUIRED", "(required)")
 #define STR_NOTES                               NC_("STR_NOTES", "Comments")
-#define STR_QUERY_DELTAB                        NC_("STR_QUERY_DELTAB", "Are you sure you want to delete the selected sheet(s)?")
+/* %d will be replaced by the number of selected sheets
+     e.g. Are you sure you want to delete the 3 selected sheets? */
+#define STR_QUERY_DELTAB                        NNC_("STR_QUERY_DELTAB", "Are you sure you want to delete the selected sheet?", "Are you sure you want to delete the %d selected sheets?")
 #define STR_QUERY_DELSCENARIO                   NC_("STR_QUERY_DELSCENARIO", "Are you sure you want to delete the selected scenario?")
 #define STR_EXPORT_ASCII                        NC_("STR_EXPORT_ASCII", "Export Text File")
 #define STR_IMPORT_LOTUS                        NC_("STR_IMPORT_LOTUS", "Import Lotus files")
@@ -533,7 +535,9 @@
 #define STR_FRACTION                            NC_("STR_FRACTION", "Fraction")
 #define STR_BOOLEAN_VALUE                       NC_("STR_BOOLEAN_VALUE", "Boolean Value")
 #define STR_TEXT                                NC_("STR_TEXT", "Text")
-#define STR_QUERY_PIVOTTABLE_DELTAB             NC_("STR_QUERY_PIVOTTABLE_DELTAB", "The selected sheet(s) contain source data of related pivot tables that will be lost. Are you sure you want to delete the selected sheet(s)?")
+/* %d will be replaced by the number of selected sheets
+    e.g. The 3 selected sheets contain source data of related pivot tables that will be lost. */
+#define STR_QUERY_PIVOTTABLE_DELTAB             NNC_("STR_QUERY_PIVOTTABLE_DELTAB", "The selected sheet contains source data of related pivot tables that will be lost.", "The %d selected sheets contain source data of related pivot tables that will be lost.")
 #define STR_ERR_NAME_INVALID_CELL_REF           NC_("STR_ERR_NAME_INVALID_CELL_REF", "Invalid name. Reference to a cell, or a range of cells not allowed.")
 #define STR_ERR_LONG_LINK_FORMULA_NEEDING_CHECK NC_("STR_ERR_LONG_LINK_FORMULA_NEEDING_CHECK", "External content disabled.")
 #define STR_TEXTORIENTANGLE                     NC_("STR_TEXTORIENTANGLE", "Text orientation angle")
