@@ -198,119 +198,122 @@ struct GraphicBorderLine
 class GraphicImport_Impl
 {
 private:
-    sal_Int32 nXSize;
-    bool      bXSizeValid;
-    sal_Int32 nYSize;
-    bool      bYSizeValid;
+    sal_Int32 m_nXSize;
+    bool      m_bXSizeValid;
+    sal_Int32 m_nYSize;
+    bool      m_bYSizeValid;
 
 public:
     GraphicImportType & m_rGraphicImportType;
-    DomainMapper&   rDomainMapper;
+    DomainMapper&   m_rDomainMapper;
 
-    sal_Int32 nLeftPosition;
-    sal_Int32 nTopPosition;
+    sal_Int32 m_nLeftPosition;
+    sal_Int32 m_nTopPosition;
 
-    bool      bUseSimplePos;
-    sal_Int32 zOrder;
+    bool      m_bUseSimplePos;
+    sal_Int32 m_zOrder;
 
-    sal_Int16 nHoriOrient;
-    sal_Int16 nHoriRelation;
-    bool bPageToggle = false;
-    sal_Int16 nVertOrient;
-    sal_Int16 nVertRelation;
-    text::WrapTextMode nWrap;
-    bool      bLayoutInCell;
-    bool      bCompatForcedLayoutInCell;
-    bool bAllowOverlap = true;
-    bool      bOpaque;
-    bool      bBehindDoc;
-    bool      bContour;
-    bool      bContourOutside;
+    sal_Int16 m_nHoriOrient;
+    sal_Int16 m_nHoriRelation;
+    bool m_bPageToggle = false;
+    sal_Int16 m_nVertOrient;
+    sal_Int16 m_nVertRelation;
+    text::WrapTextMode m_nWrap;
+    bool      m_bLayoutInCell;
+    bool      m_bCompatForcedLayoutInCell;
+    bool m_bAllowOverlap = true;
+    bool      m_bOpaque;
+    bool      m_bBehindDoc;
+    bool      m_bContour;
+    bool      m_bContourOutside;
     WrapPolygon::Pointer_t mpWrapPolygon;
 
-    sal_Int32 nLeftMargin;
-    sal_Int32 nLeftMarginOrig = 0;
-    sal_Int32 nRightMargin;
-    sal_Int32 nTopMargin;
-    sal_Int32 nBottomMargin;
+    sal_Int32 m_nLeftMargin;
+    sal_Int32 m_nLeftMarginOrig = 0;
+    sal_Int32 m_nRightMargin;
+    sal_Int32 m_nTopMargin;
+    sal_Int32 m_nBottomMargin;
 
-    bool bShadow;
-    sal_Int32 nShadowXDistance;
-    sal_Int32 nShadowYDistance;
-    sal_Int32 nShadowColor;
-    sal_Int32 nShadowTransparence;
+    bool m_bShadow;
+    sal_Int32 m_nShadowXDistance;
+    sal_Int32 m_nShadowYDistance;
+    sal_Int32 m_nShadowColor;
+    sal_Int32 m_nShadowTransparence;
 
-    sal_Int32 nContrast;
-    sal_Int32 nBrightness;
+    sal_Int32 m_nContrast;
+    sal_Int32 m_nBrightness;
 
     static constexpr sal_Int32 nFillColor = 0xffffffff;
 
-    drawing::ColorMode eColorMode;
+    drawing::ColorMode m_eColorMode;
 
-    GraphicBorderLine   aBorders[4];
+    GraphicBorderLine   m_aBorders[4];
 
-    bool            bIsGraphic;
+    bool            m_bIsGraphic;
 
-    bool            bSizeProtected;
-    bool            bPositionProtected;
-    bool            bHidden;
-    bool            bDecorative = false;
+    bool            m_bSizeProtected;
+    bool            m_bPositionProtected;
+    bool            m_bHidden;
+    bool            m_bDecorative = false;
 
-    sal_Int32       nShapeOptionType;
+    sal_Int32       m_nShapeOptionType;
 
-    OUString sName;
-    OUString sAlternativeText;
-    OUString title;
-    OUString sHyperlinkURL;
+    OUString m_sName;
+    OUString m_sAlternativeText;
+    OUString m_title;
+    OUString m_sHyperlinkURL;
     std::pair<OUString, OUString>& m_rPositionOffsets;
     std::pair<OUString, OUString>& m_rAligns;
     std::queue<OUString>& m_rPositivePercentages;
-    OUString sAnchorId;
+    OUString m_sAnchorId;
     comphelper::SequenceAsHashMap m_aInteropGrabBag;
     std::optional<sal_Int32> m_oEffectExtentLeft;
     std::optional<sal_Int32> m_oEffectExtentTop;
     std::optional<sal_Int32> m_oEffectExtentRight;
     std::optional<sal_Int32> m_oEffectExtentBottom;
 
-    GraphicImport_Impl(GraphicImportType & rImportType, DomainMapper& rDMapper, std::pair<OUString, OUString>& rPositionOffsets, std::pair<OUString, OUString>& rAligns, std::queue<OUString>& rPositivePercentages)
-        : nXSize(0)
-        ,bXSizeValid(false)
-        ,nYSize(0)
-        ,bYSizeValid(false)
+    GraphicImport_Impl(GraphicImportType & rImportType, DomainMapper& rDMapper,
+            std::pair<OUString, OUString>& rPositionOffsets,
+            std::pair<OUString, OUString>& rAligns,
+            std::queue<OUString>& rPositivePercentages)
+        : m_nXSize(0)
+        ,m_bXSizeValid(false)
+        ,m_nYSize(0)
+        ,m_bYSizeValid(false)
         ,m_rGraphicImportType(rImportType)
-        ,rDomainMapper( rDMapper )
-        ,nLeftPosition(0)
-        ,nTopPosition(0)
-        ,bUseSimplePos(false)
-        ,zOrder(-1)
-        ,nHoriOrient(   text::HoriOrientation::NONE )
-        ,nHoriRelation( text::RelOrientation::FRAME )
-        ,nVertOrient(  text::VertOrientation::NONE )
-        ,nVertRelation( text::RelOrientation::FRAME )
-        ,nWrap(text::WrapTextMode_NONE)
-        ,bLayoutInCell(true)
-        ,bCompatForcedLayoutInCell(false)
-        ,bOpaque( !rDMapper.IsInHeaderFooter() )
-        ,bBehindDoc(false)
-        ,bContour(false)
-        ,bContourOutside(true)
-        ,nLeftMargin(319)
-        ,nRightMargin(319)
-        ,nTopMargin(0)
-        ,nBottomMargin(0)
-        ,bShadow(false)
-        ,nShadowXDistance(0)
-        ,nShadowYDistance(0)
-        ,nShadowColor(0)
-        ,nShadowTransparence(0)
-        ,nContrast(0)
-        ,nBrightness(0)
-        ,eColorMode( drawing::ColorMode_STANDARD )
-        ,bIsGraphic(false)
-        ,bSizeProtected(false)
-        ,bPositionProtected(false)
-        ,bHidden(false)
-        ,nShapeOptionType(0)
+        ,m_rDomainMapper( rDMapper )
+        ,m_nLeftPosition(0)
+        ,m_nTopPosition(0)
+        ,m_bUseSimplePos(false)
+        ,m_zOrder(-1)
+        ,m_nHoriOrient(   text::HoriOrientation::NONE )
+        ,m_nHoriRelation( text::RelOrientation::FRAME )
+        ,m_nVertOrient(  text::VertOrientation::NONE )
+        ,m_nVertRelation( text::RelOrientation::FRAME )
+        ,m_nWrap(text::WrapTextMode_NONE)
+        ,m_bLayoutInCell(true)
+        ,m_bCompatForcedLayoutInCell(false)
+        ,m_bOpaque( !rDMapper.IsInHeaderFooter() )
+        ,m_bBehindDoc(false)
+        ,m_bContour(false)
+        ,m_bContourOutside(true)
+        ,m_nLeftMargin(319)
+        ,m_nRightMargin(319)
+        ,m_nTopMargin(0)
+        ,m_nBottomMargin(0)
+        ,m_bShadow(false)
+        ,m_nShadowXDistance(0)
+        ,m_nShadowYDistance(0)
+        ,m_nShadowColor(0)
+        ,m_nShadowTransparence(0)
+        ,m_nContrast(0)
+        ,m_nBrightness(0)
+        ,m_eColorMode( drawing::ColorMode_STANDARD )
+        ,m_bIsGraphic(false)
+        ,m_bSizeProtected(false)
+        ,m_bPositionProtected(false)
+        ,m_bHidden(false)
+        ,m_nShapeOptionType(0)
         ,m_rPositionOffsets(rPositionOffsets)
         ,m_rAligns(rAligns)
         ,m_rPositivePercentages(rPositivePercentages)
@@ -319,82 +322,82 @@ public:
 
     void setXSize(sal_Int32 _nXSize)
     {
-        nXSize = _nXSize;
-        bXSizeValid = true;
+        m_nXSize = _nXSize;
+        m_bXSizeValid = true;
     }
 
     sal_uInt32 getXSize() const
     {
-        return nXSize;
+        return m_nXSize;
     }
 
     bool isXSizeValid() const
     {
-        return bXSizeValid;
+        return m_bXSizeValid;
     }
 
     void setYSize(sal_Int32 _nYSize)
     {
-        nYSize = _nYSize;
-        bYSizeValid = true;
+        m_nYSize = _nYSize;
+        m_bYSizeValid = true;
     }
 
     sal_uInt32 getYSize() const
     {
-        return nYSize;
+        return m_nYSize;
     }
 
     bool isYSizeValid() const
     {
-        return bYSizeValid;
+        return m_bYSizeValid;
     }
 
     void applyMargins(const uno::Reference< beans::XPropertySet >& xGraphicObjectProperties) const
     {
-        xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_LEFT_MARGIN ), uno::Any(nLeftMargin));
-        xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_RIGHT_MARGIN ), uno::Any(nRightMargin));
-        xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_TOP_MARGIN ), uno::Any(nTopMargin));
-        xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_BOTTOM_MARGIN ), uno::Any(nBottomMargin));
+        xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_LEFT_MARGIN ), uno::Any(m_nLeftMargin));
+        xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_RIGHT_MARGIN ), uno::Any(m_nRightMargin));
+        xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_TOP_MARGIN ), uno::Any(m_nTopMargin));
+        xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_BOTTOM_MARGIN ), uno::Any(m_nBottomMargin));
     }
 
     void applyPosition(const uno::Reference< beans::XPropertySet >& xGraphicObjectProperties) const
     {
         xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_HORI_ORIENT          ),
-                uno::Any(nHoriOrient));
+                uno::Any(m_nHoriOrient));
         xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_VERT_ORIENT          ),
-                uno::Any(nVertOrient));
+                uno::Any(m_nVertOrient));
     }
 
     void applyRelativePosition(const uno::Reference< beans::XPropertySet >& xGraphicObjectProperties, bool bRelativeOnly = false) const
     {
         if (!bRelativeOnly)
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_HORI_ORIENT_POSITION),
-                                                       uno::Any(nLeftPosition));
+                                                       uno::Any(m_nLeftPosition));
         xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_HORI_ORIENT_RELATION ),
-                uno::Any(nHoriRelation));
+                uno::Any(m_nHoriRelation));
         xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_PAGE_TOGGLE),
-                                                   uno::Any(bPageToggle));
+                                                   uno::Any(m_bPageToggle));
         if (!bRelativeOnly)
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_VERT_ORIENT_POSITION),
-                                                       uno::Any(nTopPosition));
+                                                       uno::Any(m_nTopPosition));
         xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_VERT_ORIENT_RELATION ),
-                uno::Any(nVertRelation));
+                uno::Any(m_nVertRelation));
     }
 
     void applyZOrder(uno::Reference<beans::XPropertySet> const & xGraphicObjectProperties) const
     {
-        sal_Int32 nZOrder = zOrder;
+        sal_Int32 nZOrder = m_zOrder;
         if (m_rGraphicImportType == GraphicImportType::IMPORT_AS_DETECTED_INLINE
-            && !rDomainMapper.IsInShape())
+            && !m_rDomainMapper.IsInShape())
         {
             nZOrder = 0;
         }
         if (nZOrder >= 0)
         {
             // tdf#120760 Send objects with behinddoc=true to the back.
-            if (bBehindDoc && rDomainMapper.IsInHeaderFooter())
+            if (m_bBehindDoc && m_rDomainMapper.IsInHeaderFooter())
                 nZOrder -= SAL_MAX_INT32;
-            GraphicZOrderHelper* pZOrderHelper = rDomainMapper.graphicZOrderHelper();
+            GraphicZOrderHelper* pZOrderHelper = m_rDomainMapper.graphicZOrderHelper();
             bool const bOldStyle(m_rGraphicImportType == GraphicImportType::IMPORT_AS_DETECTED_INLINE);
             xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_Z_ORDER),
                 uno::Any(pZOrderHelper->findZOrder(nZOrder, bOldStyle)));
@@ -406,17 +409,17 @@ public:
     {
         try
         {
-            if (!sName.isEmpty())
+            if (!m_sName.isEmpty())
             {
                 uno::Reference<container::XNamed> const xNamed(xGraphicObjectProperties, uno::UNO_QUERY_THROW);
-                xNamed->setName(sName);
+                xNamed->setName(m_sName);
             }
             // else: name is automatically generated by SwDoc::MakeFlySection_()
 
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_DESCRIPTION ),
-                uno::Any( sAlternativeText ));
+                uno::Any( m_sAlternativeText ));
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_TITLE ),
-                uno::Any( title ));
+                uno::Any( m_title ));
         }
         catch( const uno::Exception& )
         {
@@ -428,10 +431,10 @@ public:
     {
         // Graphic objects have a different hyperlink prop than shapes
         auto aHyperlinkProp = bIsShape ? PROP_HYPERLINK : PROP_HYPER_LINK_U_R_L;
-        if (!sHyperlinkURL.isEmpty())
+        if (!m_sHyperlinkURL.isEmpty())
         {
             xShapeProps->setPropertyValue(
-                getPropertyName(aHyperlinkProp), uno::Any(sHyperlinkURL));
+                getPropertyName(aHyperlinkProp), uno::Any(m_sHyperlinkURL));
         }
     }
 
@@ -475,12 +478,12 @@ GraphicImport::~GraphicImport()
 
 com::sun::star::awt::Point GraphicImport::GetGraphicObjectPosition() const
 {
-    return (com::sun::star::awt::Point(m_pImpl->nLeftPosition, m_pImpl->nTopPosition));
+    return (com::sun::star::awt::Point(m_pImpl->m_nLeftPosition, m_pImpl->m_nTopPosition));
 }
 
 bool GraphicImport::GetLayoutInCell() const
 {
-    return m_pImpl->bLayoutInCell;
+    return m_pImpl->m_bLayoutInCell;
 }
 
 void GraphicImport::handleWrapTextValue(sal_uInt32 nVal)
@@ -488,16 +491,16 @@ void GraphicImport::handleWrapTextValue(sal_uInt32 nVal)
     switch (nVal)
     {
     case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_bothSides: // 90920;
-        m_pImpl->nWrap = text::WrapTextMode_PARALLEL;
+        m_pImpl->m_nWrap = text::WrapTextMode_PARALLEL;
         break;
     case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_left: // 90921;
-        m_pImpl->nWrap = text::WrapTextMode_LEFT;
+        m_pImpl->m_nWrap = text::WrapTextMode_LEFT;
         break;
     case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_right: // 90922;
-        m_pImpl->nWrap = text::WrapTextMode_RIGHT;
+        m_pImpl->m_nWrap = text::WrapTextMode_RIGHT;
         break;
     case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_largest: // 90923;
-        m_pImpl->nWrap = text::WrapTextMode_DYNAMIC;
+        m_pImpl->m_nWrap = text::WrapTextMode_DYNAMIC;
         break;
     default:;
     }
@@ -629,10 +632,10 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
     switch( nName )
     {
         case NS_ooxml::LN_OfficeArtExtension_Decorative_val:
-            m_pImpl->bDecorative = true;
+            m_pImpl->m_bDecorative = true;
         break;
         case NS_ooxml::LN_CT_Hyperlink_URL://90682;
-            m_pImpl->sHyperlinkURL = rValue.getString();
+            m_pImpl->m_sHyperlinkURL = rValue.getString();
         break;
         case NS_ooxml::LN_blip: //the binary graphic data in a shape
             {
@@ -653,7 +656,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 
         //border properties
         case NS_ooxml::LN_CT_Border_sz:
-            m_pImpl->aBorders[BORDER_TOP].nLineWidth = nIntValue;
+            m_pImpl->m_aBorders[BORDER_TOP].nLineWidth = nIntValue;
         break;
         case NS_ooxml::LN_CT_Border_val:
             //graphic borders don't support different line types
@@ -661,7 +664,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
         case NS_ooxml::LN_CT_Border_space:
         break;
         case NS_ooxml::LN_CT_Border_shadow:
-            m_pImpl->aBorders[BORDER_TOP].bHasShadow = nIntValue != 0;
+            m_pImpl->m_aBorders[BORDER_TOP].bHasShadow = nIntValue != 0;
         break;
         case NS_ooxml::LN_CT_Border_frame:
             break;
@@ -698,63 +701,63 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
         break;
         case NS_ooxml::LN_CT_NonVisualDrawingProps_name:// 90651;
             //name of the object
-            m_pImpl->sName = rValue.getString();
+            m_pImpl->m_sName = rValue.getString();
         break;
         case NS_ooxml::LN_CT_NonVisualDrawingProps_descr:// 90652;
             //alternative text
-            m_pImpl->sAlternativeText = rValue.getString();
+            m_pImpl->m_sAlternativeText = rValue.getString();
         break;
         case NS_ooxml::LN_CT_NonVisualDrawingProps_title:
             //alternative text
-            m_pImpl->title = rValue.getString();
+            m_pImpl->m_title = rValue.getString();
         break;
         case NS_ooxml::LN_CT_NonVisualDrawingProps_hidden:
-            m_pImpl->bHidden = (nIntValue == 1);
+            m_pImpl->m_bHidden = (nIntValue == 1);
         break;
         case NS_ooxml::LN_CT_GraphicalObjectFrameLocking_noChangeAspect://90644;
             //disallow aspect ratio change - ignored
         break;
         case NS_ooxml::LN_CT_GraphicalObjectFrameLocking_noMove:// 90645;
-            m_pImpl->bPositionProtected = true;
+            m_pImpl->m_bPositionProtected = true;
         break;
         case NS_ooxml::LN_CT_GraphicalObjectFrameLocking_noResize: // 90646;
-            m_pImpl->bSizeProtected = true;
+            m_pImpl->m_bSizeProtected = true;
         break;
         case NS_ooxml::LN_CT_Anchor_distT: // 90983;
         case NS_ooxml::LN_CT_Anchor_distB: // 90984;
         case NS_ooxml::LN_CT_Anchor_distL: // 90985;
         case NS_ooxml::LN_CT_Anchor_distR: // 90986;
         {
-            m_pImpl->nShapeOptionType = nName;
+            m_pImpl->m_nShapeOptionType = nName;
             ProcessShapeOptions(rValue);
         }
         break;
         case NS_ooxml::LN_CT_Anchor_simplePos_attr: // 90987;
-            m_pImpl->bUseSimplePos = nIntValue > 0;
+            m_pImpl->m_bUseSimplePos = nIntValue > 0;
         break;
         case NS_ooxml::LN_CT_Anchor_relativeHeight: // 90988;
-            m_pImpl->zOrder = nIntValue;
+            m_pImpl->m_zOrder = nIntValue;
         break;
         case NS_ooxml::LN_CT_Anchor_behindDoc: // 90989; - in background
             if (nIntValue > 0)
             {
-                m_pImpl->bOpaque = false;
-                m_pImpl->bBehindDoc = true;
+                m_pImpl->m_bOpaque = false;
+                m_pImpl->m_bBehindDoc = true;
             }
         break;
         case NS_ooxml::LN_CT_Anchor_locked: // 90990; - ignored
         break;
         case NS_ooxml::LN_CT_Anchor_layoutInCell: // 90991; - ignored
             // Starting in MSO 2013, anchors are ALWAYS considered to be laid out in table cell.
-            m_pImpl->bCompatForcedLayoutInCell = !nIntValue
-                && m_pImpl->rDomainMapper.GetSettingsTable()->GetWordCompatibilityMode() > 14
-                && m_pImpl->rDomainMapper.IsInTable();
-            m_pImpl->bLayoutInCell = m_pImpl->bCompatForcedLayoutInCell || nIntValue;
+            m_pImpl->m_bCompatForcedLayoutInCell = !nIntValue
+                && m_pImpl->m_rDomainMapper.GetSettingsTable()->GetWordCompatibilityMode() > 14
+                && m_pImpl->m_rDomainMapper.IsInTable();
+            m_pImpl->m_bLayoutInCell = m_pImpl->m_bCompatForcedLayoutInCell || nIntValue;
         break;
         case NS_ooxml::LN_CT_Anchor_hidden: // 90992; - ignored
         break;
         case NS_ooxml::LN_CT_Anchor_allowOverlap:
-            m_pImpl->bAllowOverlap = nIntValue != 0;
+            m_pImpl->m_bAllowOverlap = nIntValue != 0;
             break;
         case NS_ooxml::LN_CT_Anchor_wp14_anchorId:
         case NS_ooxml::LN_CT_Inline_wp14_anchorId:
@@ -763,29 +766,29 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
             OUStringBuffer aString;
             comphelper::string::padToLength(aString, 8 - aBuffer.getLength(), '0');
             aString.append(aBuffer.getStr());
-            m_pImpl->sAnchorId = aString.makeStringAndClear().toAsciiUpperCase();
+            m_pImpl->m_sAnchorId = aString.makeStringAndClear().toAsciiUpperCase();
         }
         break;
         case NS_ooxml::LN_CT_Point2D_x: // 90405;
-            m_pImpl->nLeftPosition = ConversionHelper::convertTwipToMM100(nIntValue);
-            m_pImpl->nHoriRelation = text::RelOrientation::PAGE_FRAME;
-            m_pImpl->nHoriOrient = text::HoriOrientation::NONE;
+            m_pImpl->m_nLeftPosition = ConversionHelper::convertTwipToMM100(nIntValue);
+            m_pImpl->m_nHoriRelation = text::RelOrientation::PAGE_FRAME;
+            m_pImpl->m_nHoriOrient = text::HoriOrientation::NONE;
         break;
         case NS_ooxml::LN_CT_Point2D_y: // 90406;
-            m_pImpl->nTopPosition = ConversionHelper::convertTwipToMM100(nIntValue);
-            m_pImpl->nVertRelation = text::RelOrientation::PAGE_FRAME;
-            m_pImpl->nVertOrient = text::VertOrientation::NONE;
+            m_pImpl->m_nTopPosition = ConversionHelper::convertTwipToMM100(nIntValue);
+            m_pImpl->m_nVertRelation = text::RelOrientation::PAGE_FRAME;
+            m_pImpl->m_nVertOrient = text::VertOrientation::NONE;
         break;
         case NS_ooxml::LN_CT_WrapTight_wrapText: // 90934;
-            m_pImpl->bContour = true;
-            m_pImpl->bContourOutside = true;
+            m_pImpl->m_bContour = true;
+            m_pImpl->m_bContourOutside = true;
 
             handleWrapTextValue(rValue.getInt());
 
             break;
         case NS_ooxml::LN_CT_WrapThrough_wrapText:
-            m_pImpl->bContour = true;
-            m_pImpl->bContourOutside = false;
+            m_pImpl->m_bContour = true;
+            m_pImpl->m_bContourOutside = false;
 
             handleWrapTextValue(rValue.getInt());
 
@@ -822,18 +825,18 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                 || rProp.Name == "ArtisticEffectProperties";
                         });
 
-                        xShapeProps->getPropertyValue("Shadow") >>= m_pImpl->bShadow;
-                        if (m_pImpl->bShadow)
+                        xShapeProps->getPropertyValue("Shadow") >>= m_pImpl->m_bShadow;
+                        if (m_pImpl->m_bShadow)
                         {
-                            xShapeProps->getPropertyValue("ShadowXDistance") >>= m_pImpl->nShadowXDistance;
-                            xShapeProps->getPropertyValue("ShadowYDistance") >>= m_pImpl->nShadowYDistance;
-                            xShapeProps->getPropertyValue("ShadowColor") >>= m_pImpl->nShadowColor;
-                            xShapeProps->getPropertyValue("ShadowTransparence") >>= m_pImpl->nShadowTransparence;
+                            xShapeProps->getPropertyValue("ShadowXDistance") >>= m_pImpl->m_nShadowXDistance;
+                            xShapeProps->getPropertyValue("ShadowYDistance") >>= m_pImpl->m_nShadowYDistance;
+                            xShapeProps->getPropertyValue("ShadowColor") >>= m_pImpl->m_nShadowColor;
+                            xShapeProps->getPropertyValue("ShadowTransparence") >>= m_pImpl->m_nShadowTransparence;
                         }
 
-                        xShapeProps->getPropertyValue("GraphicColorMode") >>= m_pImpl->eColorMode;
-                        xShapeProps->getPropertyValue("AdjustLuminance") >>= m_pImpl->nBrightness;
-                        xShapeProps->getPropertyValue("AdjustContrast") >>= m_pImpl->nContrast;
+                        xShapeProps->getPropertyValue("GraphicColorMode") >>= m_pImpl->m_eColorMode;
+                        xShapeProps->getPropertyValue("AdjustLuminance") >>= m_pImpl->m_nBrightness;
+                        xShapeProps->getPropertyValue("AdjustContrast") >>= m_pImpl->m_nContrast;
 
                         // fdo#70457: transform XShape into a SwXTextGraphicObject only if there's no rotation
                         if ( nRotation == 0 && !bContainsEffects )
@@ -900,7 +903,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             xShapeProps->setPropertyValue
                                 (getPropertyName(PROP_TEXT_RANGE),
                                  uno::Any
-                                 (m_pImpl->rDomainMapper.GetCurrentTextRange()));
+                                 (m_pImpl->m_rDomainMapper.GetCurrentTextRange()));
                         }
 
                         awt::Size aSize(m_xShape->getSize());
@@ -959,11 +962,11 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             xShapeProps->setPropertyValue("RotateAngle", uno::Any(nRotation.get()));
                         }
 
-                        m_pImpl->bIsGraphic = true;
+                        m_pImpl->m_bIsGraphic = true;
 
-                        if (!m_pImpl->sAnchorId.isEmpty())
+                        if (!m_pImpl->m_sAnchorId.isEmpty())
                         {
-                            putPropertyToFrameGrabBag("AnchorId", uno::Any(m_pImpl->sAnchorId));
+                            putPropertyToFrameGrabBag("AnchorId", uno::Any(m_pImpl->m_sAnchorId));
                         }
 
                         // Calculate mso unrotated rectangle and its center, needed below
@@ -987,15 +990,15 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             if(pShape && pShape->IsGroupObject())
                             {
                                 tools::Rectangle aSnapRect = pShape->GetSnapRect(); // Twips
-                                m_pImpl->nLeftPosition = ConversionHelper::convertTwipToMM100(aSnapRect.Left());
-                                m_pImpl->nTopPosition = ConversionHelper::convertTwipToMM100(aSnapRect.Top());
+                                m_pImpl->m_nLeftPosition = ConversionHelper::convertTwipToMM100(aSnapRect.Left());
+                                m_pImpl->m_nTopPosition = ConversionHelper::convertTwipToMM100(aSnapRect.Top());
                                 aLOSize.Width = ConversionHelper::convertTwipToMM100(aSnapRect.getOpenWidth());
                                 aLOSize.Height = ConversionHelper::convertTwipToMM100(aSnapRect.getOpenHeight());
                             }
                             else
                             {
-                                m_pImpl->nLeftPosition = fCentrumX - aLOSize.Width / 2.0;
-                                m_pImpl->nTopPosition = fCentrumY - aLOSize.Height / 2.0;
+                                m_pImpl->m_nLeftPosition = fCentrumX - aLOSize.Width / 2.0;
+                                m_pImpl->m_nTopPosition = fCentrumY - aLOSize.Height / 2.0;
                             }
                             m_xShape->setPosition(GetGraphicObjectPosition());
                         }
@@ -1008,7 +1011,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         // tdf#143475: Word 2007 (vers 12) calculates effectExtent for rotated images
                         // based on the unrotated image without width-height-swap. We correct this to
                         // those values, which would be calculated if width-height-swap was used.
-                        if (m_pImpl->rDomainMapper.GetSettingsTable()->GetWordCompatibilityMode() < 14
+                        if (m_pImpl->m_rDomainMapper.GetSettingsTable()->GetWordCompatibilityMode() < 14
                             && xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape")
                             && nOOXAngle != 0)
                         {
@@ -1024,16 +1027,16 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                 sal_Int32 nEffectExtent = (m_pImpl->m_oEffectExtentLeft)
                                     ? oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentLeft)
                                     : 0;
-                                m_pImpl->nLeftMargin += nEffectExtent;
+                                m_pImpl->m_nLeftMargin += nEffectExtent;
                                 nEffectExtent = (m_pImpl->m_oEffectExtentRight)
                                     ? oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentRight) : 0;
-                                m_pImpl->nRightMargin += nEffectExtent;
+                                m_pImpl->m_nRightMargin += nEffectExtent;
                                 nEffectExtent = (m_pImpl->m_oEffectExtentTop)
                                     ? oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentTop) : 0;
-                                m_pImpl->nTopMargin += nEffectExtent;
+                                m_pImpl->m_nTopMargin += nEffectExtent;
                                 nEffectExtent = (m_pImpl->m_oEffectExtentBottom)
                                     ? oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentBottom) : 0;
-                                m_pImpl->nBottomMargin += nEffectExtent;
+                                m_pImpl->m_nBottomMargin += nEffectExtent;
                             }
                             else
                             {
@@ -1048,8 +1051,8 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                 // Get LO SnapRect from SdrObject if possible
                                 awt::Rectangle aLOSnapRect;
                                 // For case we have no SdrObject, initialize with values from m_pImpl
-                                aLOSnapRect.X = m_pImpl->nLeftPosition;
-                                aLOSnapRect.Y = m_pImpl->nTopPosition;
+                                aLOSnapRect.X = m_pImpl->m_nLeftPosition;
+                                aLOSnapRect.Y = m_pImpl->m_nTopPosition;
                                 aLOSnapRect.Width = aLOSize.Width;
                                 aLOSnapRect.Height = aLOSize.Height;
                                 if (pShape)
@@ -1061,21 +1064,21 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                     aLOSnapRect.Height = ConversionHelper::convertTwipToMM100(aSnapRect.getOpenHeight());
                                 }
 
-                                m_pImpl->nLeftMargin  += aLOSnapRect.X - aMSOBaseLeftTop.X;
-                                m_pImpl->nRightMargin += aMSOBaseLeftTop.X + aMSOBaseSize.Width
+                                m_pImpl->m_nLeftMargin  += aLOSnapRect.X - aMSOBaseLeftTop.X;
+                                m_pImpl->m_nRightMargin += aMSOBaseLeftTop.X + aMSOBaseSize.Width
                                                          - (aLOSnapRect.X + aLOSnapRect.Width);
-                                m_pImpl->nTopMargin  += aLOSnapRect.Y - aMSOBaseLeftTop.Y;
-                                m_pImpl->nBottomMargin += aMSOBaseLeftTop.Y + aMSOBaseSize.Height
+                                m_pImpl->m_nTopMargin  += aLOSnapRect.Y - aMSOBaseLeftTop.Y;
+                                m_pImpl->m_nBottomMargin += aMSOBaseLeftTop.Y + aMSOBaseSize.Height
                                                           - (aLOSnapRect.Y + aLOSnapRect.Height);
                                 // tdf#141880 LibreOffice cannot handle negative vertical margins.
                                 // Those cases are caught below at common place.
                             }
                         } // end IMPORT_AS_DETECTED_INLINE
-                        else if ((m_pImpl->nWrap == text::WrapTextMode_PARALLEL
-                                  || m_pImpl->nWrap == text::WrapTextMode_DYNAMIC
-                                  || m_pImpl->nWrap == text::WrapTextMode_LEFT
-                                  || m_pImpl->nWrap == text::WrapTextMode_RIGHT
-                                  || m_pImpl->nWrap == text::WrapTextMode_NONE)
+                        else if ((m_pImpl->m_nWrap == text::WrapTextMode_PARALLEL
+                                  || m_pImpl->m_nWrap == text::WrapTextMode_DYNAMIC
+                                  || m_pImpl->m_nWrap == text::WrapTextMode_LEFT
+                                  || m_pImpl->m_nWrap == text::WrapTextMode_RIGHT
+                                  || m_pImpl->m_nWrap == text::WrapTextMode_NONE)
                                   && !(m_pImpl->mpWrapPolygon) && !bIsDiagram)
                         {
                             // For wrap "Square" an area is defined around which the text wraps. MSO
@@ -1090,8 +1093,8 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             // Get LO bound rectangle from SdrObject if possible
                             awt::Rectangle aLOBoundRect;
                             // For case we have no SdrObject, initialize with values from m_pImpl
-                            aLOBoundRect.X = m_pImpl->nLeftPosition;
-                            aLOBoundRect.Y = m_pImpl->nTopPosition;
+                            aLOBoundRect.X = m_pImpl->m_nLeftPosition;
+                            aLOBoundRect.Y = m_pImpl->m_nTopPosition;
                             aLOBoundRect.Width = aLOSize.Width;
                             aLOBoundRect.Height = aLOSize.Height;
                             if (pShape)
@@ -1103,11 +1106,11 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                 aLOBoundRect.Height = ConversionHelper::convertTwipToMM100(aBoundRect.getOpenHeight());
                             }
 
-                            m_pImpl->nLeftMargin += aLOBoundRect.X - aMSOBaseLeftTop.X;
-                            m_pImpl->nRightMargin += aMSOBaseLeftTop.X + aMSOBaseSize.Width
+                            m_pImpl->m_nLeftMargin += aLOBoundRect.X - aMSOBaseLeftTop.X;
+                            m_pImpl->m_nRightMargin += aMSOBaseLeftTop.X + aMSOBaseSize.Width
                                                      - (aLOBoundRect.X + aLOBoundRect.Width);
-                            m_pImpl->nTopMargin += aLOBoundRect.Y - aMSOBaseLeftTop.Y;
-                            m_pImpl->nBottomMargin += aMSOBaseLeftTop.Y + aMSOBaseSize.Height
+                            m_pImpl->m_nTopMargin += aLOBoundRect.Y - aMSOBaseLeftTop.Y;
+                            m_pImpl->m_nBottomMargin += aMSOBaseLeftTop.Y + aMSOBaseSize.Height
                                                       - (aLOBoundRect.Y + aLOBoundRect.Height);
                         }
                         else if (m_pImpl->mpWrapPolygon && !bIsDiagram)
@@ -1172,22 +1175,22 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             comphelper::SequenceAsHashMap aAnchorDistDiff;
 
                             const double fTopDiff = aShapeRange.getMinY() - aB2DWrapRange.getMinY();
-                            m_pImpl->nTopMargin += basegfx::fround(fTopDiff);
+                            m_pImpl->m_nTopMargin += basegfx::fround(fTopDiff);
                             aAnchorDistDiff["distTDiff"] <<= basegfx::fround(
                                 o3tl::convert(fTopDiff, o3tl::Length::mm100, o3tl::Length::twip));
 
                             const double fBottomDiff = aB2DWrapRange.getMaxY() - aShapeRange.getMaxY();
-                            m_pImpl->nBottomMargin += basegfx::fround(fBottomDiff);
+                            m_pImpl->m_nBottomMargin += basegfx::fround(fBottomDiff);
                             aAnchorDistDiff["distBDiff"] <<= basegfx::fround(
                                 o3tl::convert(fBottomDiff, o3tl::Length::mm100, o3tl::Length::twip));
 
                             const double fLeftDiff = aShapeRange.getMinX() - aB2DWrapRange.getMinX();
-                            m_pImpl->nLeftMargin += basegfx::fround(fLeftDiff);
+                            m_pImpl->m_nLeftMargin += basegfx::fround(fLeftDiff);
                             aAnchorDistDiff["distLDiff"] <<= basegfx::fround(
                                 o3tl::convert(fLeftDiff, o3tl::Length::mm100, o3tl::Length::twip));
 
                             const double fRightDiff = aB2DWrapRange.getMaxX() - aShapeRange.getMaxX();
-                            m_pImpl->nRightMargin += basegfx::fround(fRightDiff);
+                            m_pImpl->m_nRightMargin += basegfx::fround(fRightDiff);
                             aAnchorDistDiff["distRDiff"] <<= basegfx::fround(
                                 o3tl::convert(fRightDiff, o3tl::Length::mm100, o3tl::Length::twip));
 
@@ -1195,10 +1198,10 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                 <<= aAnchorDistDiff.getAsConstPropertyValueList();
 
                             // FixMe: tdf#141880. LibreOffice cannot handle negative horizontal margin in contour wrap
-                            if (m_pImpl->nLeftMargin < 0)
-                                m_pImpl->nLeftMargin = 0;
-                            if (m_pImpl->nRightMargin < 0)
-                                m_pImpl->nRightMargin = 0;
+                            if (m_pImpl->m_nLeftMargin < 0)
+                                m_pImpl->m_nLeftMargin = 0;
+                            if (m_pImpl->m_nRightMargin < 0)
+                                m_pImpl->m_nRightMargin = 0;
                         }
                         else if (!bIsDiagram) // text::WrapTextMode_THROUGH
                         {
@@ -1207,32 +1210,32 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             // Word's rendering.
                             if (m_pImpl->m_oEffectExtentLeft)
                             {
-                                m_pImpl->nLeftMargin
+                                m_pImpl->m_nLeftMargin
                                     += oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentLeft);
                             }
                             if (m_pImpl->m_oEffectExtentTop)
                             {
-                                m_pImpl->nTopMargin
+                                m_pImpl->m_nTopMargin
                                     += oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentTop);
                             }
                             if (m_pImpl->m_oEffectExtentRight)
                             {
-                                m_pImpl->nRightMargin
+                                m_pImpl->m_nRightMargin
                                     += oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentRight);
                             }
                             if (m_pImpl->m_oEffectExtentBottom)
                             {
-                                m_pImpl->nBottomMargin
+                                m_pImpl->m_nBottomMargin
                                     += oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentBottom);
                             }
                         }
 
                         // FixMe: tdf#141880 LibreOffice cannot handle negative vertical margins
                         // although they are allowed in ODF.
-                        if (m_pImpl->nTopMargin < 0)
-                            m_pImpl->nTopMargin = 0;
-                        if (m_pImpl->nBottomMargin < 0)
-                            m_pImpl->nBottomMargin = 0;
+                        if (m_pImpl->m_nTopMargin < 0)
+                            m_pImpl->m_nTopMargin = 0;
+                        if (m_pImpl->m_nBottomMargin < 0)
+                            m_pImpl->m_nBottomMargin = 0;
                     }
 
                     if (bUseShape && m_pImpl->m_rGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
@@ -1241,17 +1244,17 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         // But they aren't Writer pictures, either (which are already handled above).
                         uno::Reference< beans::XPropertySet > xShapeProps(m_xShape, uno::UNO_QUERY_THROW);
 
-                        if (m_pImpl->nWrap == text::WrapTextMode_THROUGH && m_pImpl->nHoriRelation == text::RelOrientation::FRAME)
+                        if (m_pImpl->m_nWrap == text::WrapTextMode_THROUGH && m_pImpl->m_nHoriRelation == text::RelOrientation::FRAME)
                         {
                             // text::RelOrientation::FRAME is OOXML's "column", which behaves as if
                             // layout-in-cell would be always off.
-                            m_pImpl->bLayoutInCell = false;
+                            m_pImpl->m_bLayoutInCell = false;
                         }
 
                         // Anchored: Word only supports at-char in that case.
                         text::TextContentAnchorType eAnchorType = text::TextContentAnchorType_AT_CHARACTER;
 
-                        if (m_pImpl->bHidden)
+                        if (m_pImpl->m_bHidden)
                         {
                             xShapeProps->setPropertyValue("Visible", uno::Any(false));
                             xShapeProps->setPropertyValue("Printable", uno::Any(false));
@@ -1266,12 +1269,12 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         // positions the frame and not the text currently.
                         // tdf#135943: Instead of half-fixing and making a complete mess,
                         // just avoid until layout's repositioning is sync'd to the text frame.
-                        if (m_pImpl->bLayoutInCell && bTextBox)
-                            m_pImpl->bLayoutInCell = !m_pImpl->bCompatForcedLayoutInCell;
+                        if (m_pImpl->m_bLayoutInCell && bTextBox)
+                            m_pImpl->m_bLayoutInCell = !m_pImpl->m_bCompatForcedLayoutInCell;
 
                         xShapeProps->setPropertyValue("AnchorType", uno::Any(eAnchorType));
 
-                        if (m_pImpl->nVertRelation == text::RelOrientation::TEXT_LINE)
+                        if (m_pImpl->m_nVertRelation == text::RelOrientation::TEXT_LINE)
                         {
                             // Word's "line" is "below the bottom of the line", our TEXT_LINE is
                             // "towards top, from the bottom of the line", so invert the vertical
@@ -1281,12 +1284,12 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             xShape->setPosition(aPoint);
                         }
 
-                        if (m_pImpl->bLayoutInCell && bTextBox && m_pImpl->rDomainMapper.IsInTable()
-                            && m_pImpl->nHoriRelation == text::RelOrientation::PAGE_FRAME)
-                            m_pImpl->nHoriRelation = text::RelOrientation::FRAME;
-                        if(m_pImpl->rDomainMapper.IsInTable())
+                        if (m_pImpl->m_bLayoutInCell && bTextBox && m_pImpl->m_rDomainMapper.IsInTable()
+                            && m_pImpl->m_nHoriRelation == text::RelOrientation::PAGE_FRAME)
+                            m_pImpl->m_nHoriRelation = text::RelOrientation::FRAME;
+                        if(m_pImpl->m_rDomainMapper.IsInTable())
                             xShapeProps->setPropertyValue(getPropertyName(PROP_FOLLOW_TEXT_FLOW),
-                                uno::Any(m_pImpl->bLayoutInCell));
+                                uno::Any(m_pImpl->m_bLayoutInCell));
                         //only the position orientation is handled in applyPosition()
                         m_pImpl->applyPosition(xShapeProps);
 
@@ -1314,10 +1317,10 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             // absolute page position as a start.
                             // fdo#80555: also set position for graphic shapes here
                             if (!isTopGroupObj(m_xShape)
-                                || m_pImpl->nHoriRelation != text::RelOrientation::PAGE_FRAME
-                                || m_pImpl->nVertRelation != text::RelOrientation::PAGE_FRAME)
+                                || m_pImpl->m_nHoriRelation != text::RelOrientation::PAGE_FRAME
+                                || m_pImpl->m_nVertRelation != text::RelOrientation::PAGE_FRAME)
                                 m_xShape->setPosition(
-                                    awt::Point(m_pImpl->nLeftPosition, m_pImpl->nTopPosition));
+                                    awt::Point(m_pImpl->m_nLeftPosition, m_pImpl->m_nTopPosition));
 
                             if (nRotation)
                                 xShapeProps->setPropertyValue("RotateAngle", uno::Any(nRotation));
@@ -1326,16 +1329,16 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 
                         m_pImpl->applyRelativePosition(xShapeProps, /*bRelativeOnly=*/true);
 
-                        xShapeProps->setPropertyValue("SurroundContour", uno::Any(m_pImpl->bContour));
-                        xShapeProps->setPropertyValue("ContourOutside", uno::Any(m_pImpl->bContourOutside));
+                        xShapeProps->setPropertyValue("SurroundContour", uno::Any(m_pImpl->m_bContour));
+                        xShapeProps->setPropertyValue("ContourOutside", uno::Any(m_pImpl->m_bContourOutside));
                         m_pImpl->applyMargins(xShapeProps);
-                        xShapeProps->setPropertyValue("Opaque", uno::Any(m_pImpl->bOpaque));
-                        xShapeProps->setPropertyValue("Surround", uno::Any(static_cast<sal_Int32>(m_pImpl->nWrap)));
+                        xShapeProps->setPropertyValue("Opaque", uno::Any(m_pImpl->m_bOpaque));
+                        xShapeProps->setPropertyValue("Surround", uno::Any(static_cast<sal_Int32>(m_pImpl->m_nWrap)));
                         m_pImpl->applyZOrder(xShapeProps);
                         m_pImpl->applyName(xShapeProps);
                         m_pImpl->applyHyperlink(xShapeProps, bUseShape);
                         xShapeProps->setPropertyValue("AllowOverlap",
-                                                      uno::Any(m_pImpl->bAllowOverlap));
+                                                      uno::Any(m_pImpl->m_bAllowOverlap));
 
                         // Get the grab-bag set by oox, merge with our one and then put it back.
                         comphelper::SequenceAsHashMap aInteropGrabBag(xShapeProps->getPropertyValue("InteropGrabBag"));
@@ -1356,16 +1359,16 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
             }
         break;
         case NS_ooxml::LN_CT_Inline_distT:
-            m_pImpl->nTopMargin = 0;
+            m_pImpl->m_nTopMargin = 0;
         break;
         case NS_ooxml::LN_CT_Inline_distB:
-            m_pImpl->nBottomMargin = 0;
+            m_pImpl->m_nBottomMargin = 0;
         break;
         case NS_ooxml::LN_CT_Inline_distL:
-            m_pImpl->nLeftMargin = 0;
+            m_pImpl->m_nLeftMargin = 0;
         break;
         case NS_ooxml::LN_CT_Inline_distR:
-            m_pImpl->nRightMargin = 0;
+            m_pImpl->m_nRightMargin = 0;
         break;
         case NS_ooxml::LN_CT_GraphicalObjectData_uri:
             rValue.getString();
@@ -1479,23 +1482,23 @@ uno::Reference<text::XTextContent> GraphicImport::GetGraphicObject()
 void GraphicImport::ProcessShapeOptions(Value const & rValue)
 {
     sal_Int32 nIntValue = rValue.getInt();
-    switch( m_pImpl->nShapeOptionType )
+    switch( m_pImpl->m_nShapeOptionType )
     {
         case NS_ooxml::LN_CT_Anchor_distL:
-            m_pImpl->nLeftMargin = nIntValue / 360;
-            m_pImpl->nLeftMarginOrig = m_pImpl->nLeftMargin;
+            m_pImpl->m_nLeftMargin = nIntValue / 360;
+            m_pImpl->m_nLeftMarginOrig = m_pImpl->m_nLeftMargin;
         break;
         case NS_ooxml::LN_CT_Anchor_distT:
             //todo: changes have to be applied depending on the orientation, see SwWW8ImplReader::AdjustULWrapForWordMargins()
-            m_pImpl->nTopMargin = nIntValue / 360;
+            m_pImpl->m_nTopMargin = nIntValue / 360;
         break;
         case NS_ooxml::LN_CT_Anchor_distR:
             //todo: changes have to be applied depending on the orientation, see SwWW8ImplReader::AdjustLRWrapForWordMargins()
-            m_pImpl->nRightMargin = nIntValue / 360;
+            m_pImpl->m_nRightMargin = nIntValue / 360;
         break;
         case NS_ooxml::LN_CT_Anchor_distB:
             //todo: changes have to be applied depending on the orientation, see SwWW8ImplReader::AdjustULWrapForWordMargins()
-            m_pImpl->nBottomMargin = nIntValue / 360;
+            m_pImpl->m_nBottomMargin = nIntValue / 360;
         break;
         default:
             OSL_FAIL( "shape option unsupported?");
@@ -1557,8 +1560,8 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
                 case NS_ooxml::LN_EG_WrapType_wrapTight:
                 {
                     // tdf#137850: Word >= 2013 seems to ignore bBehindDoc except for wrapNone, but older versions honour it.
-                    if (m_pImpl->bBehindDoc && m_pImpl->rDomainMapper.GetSettingsTable()->GetWordCompatibilityMode() > 14)
-                        m_pImpl->bOpaque = true;
+                    if (m_pImpl->m_bBehindDoc && m_pImpl->m_rDomainMapper.GetSettingsTable()->GetWordCompatibilityMode() > 14)
+                        m_pImpl->m_bOpaque = true;
                 }
                 break;
             }
@@ -1586,20 +1589,20 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
             if( pProperties )
             {
                 pProperties->resolve( *pHandler );
-                if( !m_pImpl->bUseSimplePos )
+                if( !m_pImpl->m_bUseSimplePos )
                 {
-                    m_pImpl->nHoriRelation = pHandler->relation();
-                    m_pImpl->bPageToggle = pHandler->GetPageToggle();
-                    m_pImpl->nHoriOrient = pHandler->orientation();
-                    m_pImpl->nLeftPosition = pHandler->position();
+                    m_pImpl->m_nHoriRelation = pHandler->relation();
+                    m_pImpl->m_bPageToggle = pHandler->GetPageToggle();
+                    m_pImpl->m_nHoriOrient = pHandler->orientation();
+                    m_pImpl->m_nLeftPosition = pHandler->position();
 
                     // Left adjustments: if horizontally aligned to left of margin, then remove the
                     // left wrapping.
-                    if (m_pImpl->nHoriOrient == text::HoriOrientation::LEFT)
+                    if (m_pImpl->m_nHoriOrient == text::HoriOrientation::LEFT)
                     {
-                        if (m_pImpl->nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA)
+                        if (m_pImpl->m_nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA)
                         {
-                            m_pImpl->nLeftMargin = 0;
+                            m_pImpl->m_nLeftMargin = 0;
                         }
                     }
                 }
@@ -1614,11 +1617,11 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
             if( pProperties )
             {
                 pProperties->resolve( *pHandler );
-                if( !m_pImpl->bUseSimplePos )
+                if( !m_pImpl->m_bUseSimplePos )
                 {
-                    m_pImpl->nVertRelation = pHandler->relation();
-                    m_pImpl->nVertOrient = pHandler->orientation();
-                    m_pImpl->nTopPosition = pHandler->position();
+                    m_pImpl->m_nVertRelation = pHandler->relation();
+                    m_pImpl->m_nVertOrient = pHandler->orientation();
+                    m_pImpl->m_nTopPosition = pHandler->position();
                 }
             }
         }
@@ -1664,24 +1667,24 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
             break;
         case NS_ooxml::LN_EG_WrapType_wrapNone: // 90944; - doesn't contain attributes
             //depending on the behindDoc attribute text wraps through behind or in front of the object
-            m_pImpl->nWrap = text::WrapTextMode_THROUGH;
+            m_pImpl->m_nWrap = text::WrapTextMode_THROUGH;
 
             // Wrap though means the margins defined earlier should not be
             // respected.
-            m_pImpl->nLeftMargin = 0;
-            m_pImpl->nTopMargin = 0;
-            m_pImpl->nRightMargin = 0;
-            m_pImpl->nBottomMargin = 0;
+            m_pImpl->m_nLeftMargin = 0;
+            m_pImpl->m_nTopMargin = 0;
+            m_pImpl->m_nRightMargin = 0;
+            m_pImpl->m_nBottomMargin = 0;
         break;
         case NS_ooxml::LN_EG_WrapType_wrapTopAndBottom: // 90948;
             // tdf#137850: Word >= 2013 seems to ignore bBehindDoc except for wrapNone, but older versions honour it.
-            if (m_pImpl->bBehindDoc && m_pImpl->rDomainMapper.GetSettingsTable()->GetWordCompatibilityMode() > 14)
-                 m_pImpl->bOpaque = true;
-            m_pImpl->nWrap = text::WrapTextMode_NONE;
+            if (m_pImpl->m_bBehindDoc && m_pImpl->m_rDomainMapper.GetSettingsTable()->GetWordCompatibilityMode() > 14)
+                 m_pImpl->m_bOpaque = true;
+            m_pImpl->m_nWrap = text::WrapTextMode_NONE;
         break;
         case NS_ooxml::LN_CT_GraphicalObject_graphicData:// 90660;
             {
-                m_pImpl->bIsGraphic = true;
+                m_pImpl->m_bIsGraphic = true;
 
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties )
@@ -1725,7 +1728,7 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
 
             //shapes have only one border
             table::BorderLine2 aBorderLine;
-            GraphicBorderLine& rBorderLine = m_pImpl->aBorders[0];
+            GraphicBorderLine& rBorderLine = m_pImpl->m_aBorders[0];
             if (rBorderLine.isEmpty() && xShapeProps.is() && xShapeProps->getPropertyValue("LineStyle").get<drawing::LineStyle>() != drawing::LineStyle_NONE)
             {
                 // In case we got no border tokens and we have the
@@ -1753,29 +1756,29 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
                 xGraphicObjectProperties->setPropertyValue(getPropertyName(rBorderProp), uno::Any(aBorderLine));
 
             // setting graphic object shadow properties
-            if (m_pImpl->bShadow)
+            if (m_pImpl->m_bShadow)
             {
                 // Shadow width is approximated by average of X and Y
                 table::ShadowFormat aShadow;
-                sal_uInt32 nShadowColor = m_pImpl->nShadowColor & 0x00FFFFFF; // The shadow color we get is RGB only.
-                sal_Int32 nShadowWidth = (abs(m_pImpl->nShadowXDistance)
-                                          + abs(m_pImpl->nShadowYDistance)) / 2;
+                sal_uInt32 nShadowColor = m_pImpl->m_nShadowColor & 0x00FFFFFF; // The shadow color we get is RGB only.
+                sal_Int32 nShadowWidth = (abs(m_pImpl->m_nShadowXDistance)
+                                          + abs(m_pImpl->m_nShadowYDistance)) / 2;
 
                 aShadow.ShadowWidth = nShadowWidth;
-                sal_uInt8 nShadowTransparence = float(m_pImpl->nShadowTransparence) * 2.55;
+                sal_uInt8 nShadowTransparence = float(m_pImpl->m_nShadowTransparence) * 2.55;
                 nShadowColor |= (nShadowTransparence << 24); // Add transparence to the color.
                 aShadow.Color = nShadowColor;
                 // Distances -ve for top and right, +ve for bottom and left
-                if (m_pImpl->nShadowXDistance > 0)
+                if (m_pImpl->m_nShadowXDistance > 0)
                 {
-                    if (m_pImpl->nShadowYDistance > 0)
+                    if (m_pImpl->m_nShadowYDistance > 0)
                         aShadow.Location = table::ShadowLocation_BOTTOM_RIGHT;
                     else
                         aShadow.Location = table::ShadowLocation_TOP_RIGHT;
                 }
                 else
                 {
-                    if (m_pImpl->nShadowYDistance > 0)
+                    if (m_pImpl->m_nShadowYDistance > 0)
                         aShadow.Location = table::ShadowLocation_BOTTOM_LEFT;
                     else
                         aShadow.Location = table::ShadowLocation_TOP_LEFT;
@@ -1785,87 +1788,87 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
             }
 
             // setting properties for all types
-            if( m_pImpl->bPositionProtected )
+            if( m_pImpl->m_bPositionProtected )
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_POSITION_PROTECTED ),
                     uno::Any(true));
-            if( m_pImpl->bSizeProtected )
+            if( m_pImpl->m_bSizeProtected )
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_SIZE_PROTECTED ),
                     uno::Any(true));
 
-            xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_DECORATIVE), uno::Any(m_pImpl->bDecorative));
-            sal_Int32 nWidth = - m_pImpl->nLeftPosition;
+            xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_DECORATIVE), uno::Any(m_pImpl->m_bDecorative));
+            sal_Int32 nWidth = - m_pImpl->m_nLeftPosition;
             if (m_pImpl->m_rGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
             {
                 //adjust margins
-                if( (m_pImpl->nHoriOrient == text::HoriOrientation::LEFT &&
-                    (m_pImpl->nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ||
-                        m_pImpl->nHoriRelation == text::RelOrientation::FRAME) ) ||
-                    (m_pImpl->nHoriOrient == text::HoriOrientation::INSIDE &&
-                        m_pImpl->nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ))
-                    m_pImpl->nLeftMargin = 0;
-                if((m_pImpl->nHoriOrient == text::HoriOrientation::RIGHT &&
-                    (m_pImpl->nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ||
-                        m_pImpl->nHoriRelation == text::RelOrientation::FRAME) ) ||
-                    (m_pImpl->nHoriOrient == text::HoriOrientation::INSIDE &&
-                        m_pImpl->nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ))
-                    m_pImpl->nRightMargin = 0;
+                if( (m_pImpl->m_nHoriOrient == text::HoriOrientation::LEFT &&
+                    (m_pImpl->m_nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ||
+                        m_pImpl->m_nHoriRelation == text::RelOrientation::FRAME) ) ||
+                    (m_pImpl->m_nHoriOrient == text::HoriOrientation::INSIDE &&
+                        m_pImpl->m_nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ))
+                    m_pImpl->m_nLeftMargin = 0;
+                if((m_pImpl->m_nHoriOrient == text::HoriOrientation::RIGHT &&
+                    (m_pImpl->m_nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ||
+                        m_pImpl->m_nHoriRelation == text::RelOrientation::FRAME) ) ||
+                    (m_pImpl->m_nHoriOrient == text::HoriOrientation::INSIDE &&
+                        m_pImpl->m_nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ))
+                    m_pImpl->m_nRightMargin = 0;
                 // adjust top/bottom margins
-                if( m_pImpl->nVertOrient == text::VertOrientation::TOP &&
-                    ( m_pImpl->nVertRelation == text::RelOrientation::PAGE_PRINT_AREA ||
-                        m_pImpl->nVertRelation == text::RelOrientation::PAGE_FRAME))
-                    m_pImpl->nTopMargin = 0;
-                if( m_pImpl->nVertOrient == text::VertOrientation::BOTTOM &&
-                    ( m_pImpl->nVertRelation == text::RelOrientation::PAGE_PRINT_AREA ||
-                        m_pImpl->nVertRelation == text::RelOrientation::PAGE_FRAME))
-                    m_pImpl->nBottomMargin = 0;
-                if( m_pImpl->nVertOrient == text::VertOrientation::BOTTOM &&
-                    m_pImpl->nVertRelation == text::RelOrientation::PAGE_PRINT_AREA )
-                    m_pImpl->nBottomMargin = 0;
+                if( m_pImpl->m_nVertOrient == text::VertOrientation::TOP &&
+                    ( m_pImpl->m_nVertRelation == text::RelOrientation::PAGE_PRINT_AREA ||
+                        m_pImpl->m_nVertRelation == text::RelOrientation::PAGE_FRAME))
+                    m_pImpl->m_nTopMargin = 0;
+                if( m_pImpl->m_nVertOrient == text::VertOrientation::BOTTOM &&
+                    ( m_pImpl->m_nVertRelation == text::RelOrientation::PAGE_PRINT_AREA ||
+                        m_pImpl->m_nVertRelation == text::RelOrientation::PAGE_FRAME))
+                    m_pImpl->m_nBottomMargin = 0;
+                if( m_pImpl->m_nVertOrient == text::VertOrientation::BOTTOM &&
+                    m_pImpl->m_nVertRelation == text::RelOrientation::PAGE_PRINT_AREA )
+                    m_pImpl->m_nBottomMargin = 0;
                 //adjust alignment
-                if( m_pImpl->nHoriOrient == text::HoriOrientation::INSIDE &&
-                    m_pImpl->nHoriRelation == text::RelOrientation::PAGE_FRAME )
+                if( m_pImpl->m_nHoriOrient == text::HoriOrientation::INSIDE &&
+                    m_pImpl->m_nHoriRelation == text::RelOrientation::PAGE_FRAME )
                 {
                     // convert 'left to page' to 'from left -<width> to page text area'
-                    m_pImpl->nHoriOrient = text::HoriOrientation::NONE;
-                    m_pImpl->nHoriRelation = text::RelOrientation::PAGE_PRINT_AREA;
-                    m_pImpl->nLeftPosition = - nWidth;
+                    m_pImpl->m_nHoriOrient = text::HoriOrientation::NONE;
+                    m_pImpl->m_nHoriRelation = text::RelOrientation::PAGE_PRINT_AREA;
+                    m_pImpl->m_nLeftPosition = - nWidth;
                 }
-                else if( m_pImpl->nHoriOrient == text::HoriOrientation::OUTSIDE &&
-                    m_pImpl->nHoriRelation == text::RelOrientation::PAGE_FRAME )
+                else if( m_pImpl->m_nHoriOrient == text::HoriOrientation::OUTSIDE &&
+                    m_pImpl->m_nHoriRelation == text::RelOrientation::PAGE_FRAME )
                 {
                     // convert 'right to page' to 'from left 0 to right page border'
-                    m_pImpl->nHoriOrient = text::HoriOrientation::NONE;
-                    m_pImpl->nHoriRelation = text::RelOrientation::PAGE_RIGHT;
-                    m_pImpl->nLeftPosition = 0;
+                    m_pImpl->m_nHoriOrient = text::HoriOrientation::NONE;
+                    m_pImpl->m_nHoriRelation = text::RelOrientation::PAGE_RIGHT;
+                    m_pImpl->m_nLeftPosition = 0;
                 }
 
                 m_pImpl->applyPosition(xGraphicObjectProperties);
                 m_pImpl->applyRelativePosition(xGraphicObjectProperties);
-                if( !m_pImpl->bOpaque )
+                if( !m_pImpl->m_bOpaque )
                 {
-                    xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_OPAQUE ), uno::Any(m_pImpl->bOpaque));
+                    xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_OPAQUE ), uno::Any(m_pImpl->m_bOpaque));
                 }
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_SURROUND ),
-                    uno::Any(static_cast<sal_Int32>(m_pImpl->nWrap)));
-                if( m_pImpl->rDomainMapper.IsInTable())
+                    uno::Any(static_cast<sal_Int32>(m_pImpl->m_nWrap)));
+                if( m_pImpl->m_rDomainMapper.IsInTable())
                     xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_FOLLOW_TEXT_FLOW ),
-                        uno::Any(m_pImpl->bLayoutInCell));
+                        uno::Any(m_pImpl->m_bLayoutInCell));
 
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_SURROUND_CONTOUR ),
-                    uno::Any(m_pImpl->bContour));
+                    uno::Any(m_pImpl->m_bContour));
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_CONTOUR_OUTSIDE ),
-                    uno::Any(m_pImpl->bContourOutside));
+                    uno::Any(m_pImpl->m_bContourOutside));
                 m_pImpl->applyMargins(xGraphicObjectProperties);
             }
 
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_ADJUST_CONTRAST ),
-                uno::Any(static_cast<sal_Int16>(m_pImpl->nContrast)));
+                uno::Any(static_cast<sal_Int16>(m_pImpl->m_nContrast)));
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_ADJUST_LUMINANCE ),
-                uno::Any(static_cast<sal_Int16>(m_pImpl->nBrightness)));
-            if(m_pImpl->eColorMode != drawing::ColorMode_STANDARD)
+                uno::Any(static_cast<sal_Int16>(m_pImpl->m_nBrightness)));
+            if(m_pImpl->m_eColorMode != drawing::ColorMode_STANDARD)
             {
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_GRAPHIC_COLOR_MODE ),
-                    uno::Any(m_pImpl->eColorMode));
+                    uno::Any(m_pImpl->m_eColorMode));
             }
 
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_BACK_COLOR ),
@@ -2025,12 +2028,12 @@ void GraphicImport::lcl_endShape( )
 
 bool GraphicImport::IsGraphic() const
 {
-    return m_pImpl->bIsGraphic;
+    return m_pImpl->m_bIsGraphic;
 }
 
 sal_Int32 GraphicImport::GetLeftMarginOrig() const
 {
-    return m_pImpl->nLeftMarginOrig;
+    return m_pImpl->m_nLeftMarginOrig;
 }
 
 }

@@ -135,7 +135,7 @@ static void lcl_linenumberingHeaderFooter( const uno::Reference<container::XName
     const StyleSheetEntryPtr pEntry = dmapper->GetStyleSheetTable()->FindStyleSheetByISTD( rname );
     if (!pEntry)
         return;
-    const StyleSheetPropertyMap* pStyleSheetProperties = pEntry->pProperties.get();
+    const StyleSheetPropertyMap* pStyleSheetProperties = pEntry->m_pProperties.get();
     if ( !pStyleSheetProperties )
         return;
     sal_Int32 nListId = pStyleSheetProperties->props().GetListId();
@@ -201,13 +201,13 @@ static uno::Any lcl_GetPropertyFromParaStyleSheetNoNum(PropertyIds eId, StyleShe
 {
     while (pEntry)
     {
-        if (pEntry->pProperties)
+        if (pEntry->m_pProperties)
         {
             std::optional<PropertyMap::Property> aProperty =
-                pEntry->pProperties->getProperty(eId);
+                pEntry->m_pProperties->getProperty(eId);
             if (aProperty)
             {
-                if (pEntry->pProperties->props().GetListId())
+                if (pEntry->m_pProperties->props().GetListId())
                     // It is a paragraph style with list. Paragraph list styles are not taken into account
                     return uno::Any();
                 else
@@ -216,8 +216,8 @@ static uno::Any lcl_GetPropertyFromParaStyleSheetNoNum(PropertyIds eId, StyleShe
         }
         //search until the property is set or no parent is available
         StyleSheetEntryPtr pNewEntry;
-        if (!pEntry->sBaseStyleIdentifier.isEmpty())
-            pNewEntry = rStyleSheet->FindStyleSheetByISTD(pEntry->sBaseStyleIdentifier);
+        if (!pEntry->m_sBaseStyleIdentifier.isEmpty())
+            pNewEntry = rStyleSheet->FindStyleSheetByISTD(pEntry->m_sBaseStyleIdentifier);
 
         SAL_WARN_IF(pEntry == pNewEntry, "writerfilter.dmapper", "circular loop in style hierarchy?");
 
@@ -1143,7 +1143,7 @@ void    DomainMapper_Impl::PopProperties(ContextType eId)
         m_pLastCharacterContext = m_aPropertyStacks[eId].top();
         // Sadly an assert about deferredCharacterProperties being empty is not possible
         // here, because appendTextPortion() may not be called for every character section.
-        deferredCharacterProperties.clear();
+        m_deferredCharacterProperties.clear();
     }
 
     if (!IsInFootOrEndnote() && IsInCustomFootnote() && !m_aPropertyStacks[eId].empty())
@@ -1264,11 +1264,11 @@ OUString DomainMapper_Impl::GetDefaultParaStyleName()
     if ( m_sDefaultParaStyleName.isEmpty() )
     {
         const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindDefaultParaStyle();
-        if ( pEntry && !pEntry->sConvertedStyleName.isEmpty() )
+        if ( pEntry && !pEntry->m_sConvertedStyleName.isEmpty() )
         {
             if ( !m_bInStyleSheetImport )
-                m_sDefaultParaStyleName = pEntry->sConvertedStyleName;
-            return pEntry->sConvertedStyleName;
+                m_sDefaultParaStyleName = pEntry->m_sConvertedStyleName;
+            return pEntry->m_sConvertedStyleName;
         }
         else
             return "Standard";
@@ -1280,22 +1280,22 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, StyleShee
 {
     while(pEntry)
     {
-        if(pEntry->pProperties)
+        if(pEntry->m_pProperties)
         {
             std::optional<PropertyMap::Property> aProperty =
-                    pEntry->pProperties->getProperty(eId);
+                    pEntry->m_pProperties->getProperty(eId);
             if( aProperty )
             {
                 if (pIsDocDefault)
-                    *pIsDocDefault = pEntry->pProperties->isDocDefault(eId);
+                    *pIsDocDefault = pEntry->m_pProperties->isDocDefault(eId);
 
                 return aProperty->second;
             }
         }
         //search until the property is set or no parent is available
         StyleSheetEntryPtr pNewEntry;
-        if ( !pEntry->sBaseStyleIdentifier.isEmpty() )
-            pNewEntry = GetStyleSheetTable()->FindStyleSheetByISTD(pEntry->sBaseStyleIdentifier);
+        if ( !pEntry->m_sBaseStyleIdentifier.isEmpty() )
+            pNewEntry = GetStyleSheetTable()->FindStyleSheetByISTD(pEntry->m_sBaseStyleIdentifier);
 
         SAL_WARN_IF( pEntry == pNewEntry, "writerfilter.dmapper", "circular loop in style hierarchy?");
 
@@ -1591,7 +1591,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 
         if ( pParaStyle )
         {
-            const StyleSheetPropertyMap* pStyleProperties = pParaStyle->pProperties.get();
+            const StyleSheetPropertyMap* pStyleProperties = pParaStyle->m_pProperties.get();
             if (!pStyleProperties)
                 return;
             sal_Int32 nWidth =
@@ -1817,7 +1817,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 /// Check if the style or its parent has a list id, recursively.
 static sal_Int32 lcl_getListId(const StyleSheetEntryPtr& rEntry, const StyleSheetTablePtr& rStyleTable, bool & rNumberingFromBaseStyle)
 {
-    const StyleSheetPropertyMap* pEntryProperties = rEntry->pProperties.get();
+    const StyleSheetPropertyMap* pEntryProperties = rEntry->m_pProperties.get();
     if (!pEntryProperties)
         return -1;
 
@@ -1827,10 +1827,10 @@ static sal_Int32 lcl_getListId(const StyleSheetEntryPtr& rEntry, const StyleShee
         return nListId;
 
     // The style has no parent.
-    if (rEntry->sBaseStyleIdentifier.isEmpty())
+    if (rEntry->m_sBaseStyleIdentifier.isEmpty())
         return -1;
 
-    const StyleSheetEntryPtr pParent = rStyleTable->FindStyleSheetByISTD(rEntry->sBaseStyleIdentifier);
+    const StyleSheetEntryPtr pParent = rStyleTable->FindStyleSheetByISTD(rEntry->m_sBaseStyleIdentifier);
     // No such parent style or loop in the style hierarchy.
     if (!pParent || pParent == rEntry)
         return -1;
@@ -1862,7 +1862,7 @@ sal_Int16 DomainMapper_Impl::GetListLevel(const StyleSheetEntryPtr& pEntry,
     if (!pEntry)
         return -1;
 
-    const StyleSheetPropertyMap* pEntryProperties = pEntry->pProperties.get();
+    const StyleSheetPropertyMap* pEntryProperties = pEntry->m_pProperties.get();
     if (!pEntryProperties)
         return -1;
 
@@ -1872,10 +1872,10 @@ sal_Int16 DomainMapper_Impl::GetListLevel(const StyleSheetEntryPtr& pEntry,
         return nListLevel;
 
     // The style has no parent.
-    if (pEntry->sBaseStyleIdentifier.isEmpty())
+    if (pEntry->m_sBaseStyleIdentifier.isEmpty())
         return -1;
 
-    const StyleSheetEntryPtr pParent = GetStyleSheetTable()->FindStyleSheetByISTD(pEntry->sBaseStyleIdentifier);
+    const StyleSheetEntryPtr pParent = GetStyleSheetTable()->FindStyleSheetByISTD(pEntry->m_sBaseStyleIdentifier);
     // No such parent style or loop in the style hierarchy.
     if (!pParent || pParent == pEntry)
         return -1;
@@ -1917,7 +1917,7 @@ void DomainMapper_Impl::ValidateListLevel(const OUString& sStyleIdentifierD)
     {
         // This level is already used by another style, so prevent numbering via this style
         // by setting to body level (9).
-        pMyStyle->pProperties->SetListLevel(WW_OUTLINE_MAX);
+        pMyStyle->m_pProperties->SetListLevel(WW_OUTLINE_MAX);
         // WARNING: PROP_NUMBERING_LEVEL is now out of sync with GetListLevel()
     }
 }
@@ -1968,13 +1968,13 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
     const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( GetCurrentParaStyleName() );
     SAL_WARN_IF(!pEntry, "writerfilter.dmapper", "no style sheet found");
-    const StyleSheetPropertyMap* pStyleSheetProperties = pEntry ? pEntry->pProperties.get() : nullptr;
+    const StyleSheetPropertyMap* pStyleSheetProperties = pEntry ? pEntry->m_pProperties.get() : nullptr;
     sal_Int32 nListId = pParaContext ? pParaContext->props().GetListId() : -1;
     bool isNumberingViaStyle(false);
     bool isNumberingViaRule = nListId > -1;
     if ( !bRemove && pStyleSheetProperties && pParaContext )
     {
-        if (!pEntry || pEntry->nStyleTypeCode != StyleType::STYLE_TYPE_PARA) {
+        if (!pEntry || pEntry->m_nStyleTypeCode != StyleType::STYLE_TYPE_PARA) {
             // We could not resolve paragraph style or it is not a paragraph style
             // Remove this style reference, otherwise it will cause exceptions during further
             // processing and not all paragraph styles will be initialized.
@@ -2031,9 +2031,9 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             // the numbering indents now have the priority.
             // So now import must also copy the para-style indents directly onto the paragraph to compensate.
             std::optional<PropertyMap::Property> oProperty;
-            const StyleSheetEntryPtr pParent = (!pEntry->sBaseStyleIdentifier.isEmpty()) ? GetStyleSheetTable()->FindStyleSheetByISTD(pEntry->sBaseStyleIdentifier) : nullptr;
-            const StyleSheetPropertyMap* pParentProperties = pParent ? pParent->pProperties.get() : nullptr;
-            if (!pEntry->sBaseStyleIdentifier.isEmpty())
+            const StyleSheetEntryPtr pParent = (!pEntry->m_sBaseStyleIdentifier.isEmpty()) ? GetStyleSheetTable()->FindStyleSheetByISTD(pEntry->m_sBaseStyleIdentifier) : nullptr;
+            const StyleSheetPropertyMap* pParentProperties = pParent ? pParent->m_pProperties.get() : nullptr;
+            if (!pEntry->m_sBaseStyleIdentifier.isEmpty())
             {
                 oProperty = pStyleSheetProperties->getProperty(PROP_PARA_FIRST_LINE_INDENT);
                 if ( oProperty
@@ -2299,7 +2299,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 else
                 {
                     uno::Reference<text::XTextCursor> xCursor;
-                    if (m_bParaHadField && !m_bIsInComments && !xTOCMarkerCursor.is())
+                    if (m_bParaHadField && !m_bIsInComments && !m_xTOCMarkerCursor.is())
                     {
                         // Workaround to make sure char props of the field are not lost.
                         // Not relevant for editeng-based comments.
@@ -2723,7 +2723,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
         return;
     // Before placing call to processDeferredCharacterProperties(), TopContextType should be CONTEXT_CHARACTER
     // processDeferredCharacterProperties() invokes only if character inserted
-    if( pPropertyMap == m_pTopContext && !deferredCharacterProperties.empty() && (GetTopContextType() == CONTEXT_CHARACTER) )
+    if( pPropertyMap == m_pTopContext && !m_deferredCharacterProperties.empty() && (GetTopContextType() == CONTEXT_CHARACTER) )
         processDeferredCharacterProperties();
     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
     if (!xTextAppend.is() || !hasTableManager() || getTableManager().isIgnore())
@@ -6223,13 +6223,13 @@ OUString DomainMapper_Impl::ConvertTOCStyleName(OUString const& rTOCStyleName)
     assert(!rTOCStyleName.isEmpty());
     if (auto const pStyle = GetStyleSheetTable()->FindStyleSheetByISTD(rTOCStyleName))
     {   // theoretical case: what OOXML says
-        return pStyle->sStyleName;
+        return pStyle->m_sStyleName;
     }
     auto const pStyle = GetStyleSheetTable()->FindStyleSheetByISTD(FilterChars(rTOCStyleName));
     if (pStyle && m_bIsNewDoc)
     {   // practical case: Word wrote i18n name to TOC field, but it doesn't
         // exist in styles.xml; tdf#153083 clone it for best roundtrip
-        SAL_INFO("writerfilter.dmapper", "cloning TOC paragraph style (presumed built-in) " << rTOCStyleName << " from " << pStyle->sStyleName);
+        SAL_INFO("writerfilter.dmapper", "cloning TOC paragraph style (presumed built-in) " << rTOCStyleName << " from " << pStyle->m_sStyleName);
         return GetStyleSheetTable()->CloneTOCStyle(GetFontTable(), pStyle, rTOCStyleName);
     }
     else
@@ -6373,7 +6373,7 @@ void DomainMapper_Impl::handleToc
             const auto xTextCursor = xTextAppend->getText()->createTextCursor();
             if (xTextCursor)
                 xTextCursor->gotoEnd(false);
-            xTOCMarkerCursor = xTextCursor;
+            m_xTOCMarkerCursor = xTextCursor;
         }
         else
         {
@@ -6384,7 +6384,7 @@ void DomainMapper_Impl::handleToc
             // init [xTOCMarkerCursor]
             uno::Reference< text::XText > xText = xTextAppend->getText();
             uno::Reference< text::XTextCursor > xCrsr = xText->createTextCursor();
-            xTOCMarkerCursor = xCrsr;
+            m_xTOCMarkerCursor = xCrsr;
 
             // create header of the TOC with the TOC title inside
             createSectionForRange(m_xSdtEntryStart, xTextRangeEndOfTocHeader, "com.sun.star.text.IndexHeaderSection", true);
@@ -8816,16 +8816,16 @@ SectionPropertyMap * DomainMapper_Impl::GetSectionContext()
 
 void DomainMapper_Impl::deferCharacterProperty(sal_Int32 id, const css::uno::Any& value)
 {
-    deferredCharacterProperties[ id ] = value;
+    m_deferredCharacterProperties[ id ] = value;
 }
 
 void DomainMapper_Impl::processDeferredCharacterProperties()
 {
     // Actually process in DomainMapper, so that it's the same source file like normal processing.
-    if( !deferredCharacterProperties.empty())
+    if( !m_deferredCharacterProperties.empty())
     {
-        m_rDMapper.processDeferredCharacterProperties( deferredCharacterProperties );
-        deferredCharacterProperties.clear();
+        m_rDMapper.processDeferredCharacterProperties( m_deferredCharacterProperties );
+        m_deferredCharacterProperties.clear();
     }
 }
 

@@ -93,11 +93,11 @@ public:
 private:
     virtual void lcl_attribute( Id name, Value& val ) override;
     virtual void lcl_sprm( Sprm& rSprm ) override;
-    FontTable& fontTable;
-    OUString fontName;
-    const char* const style;
-    OUString fontKey;
-    css::uno::Reference<css::io::XInputStream> inputStream;
+    FontTable& m_fontTable;
+    OUString m_fontName;
+    const char* const m_style;
+    OUString m_fontKey;
+    css::uno::Reference<css::io::XInputStream> m_inputStream;
 };
 
 

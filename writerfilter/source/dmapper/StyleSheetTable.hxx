@@ -50,21 +50,21 @@ class StyleSheetEntry : public virtual SvRefBase
 {
     std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
 public:
-    OUString sStyleIdentifierD;   // WW8 name
-    bool            bIsDefaultStyle;
-    bool            bAssignedAsChapterNumbering;
-    bool            bInvalidHeight;
-    bool            bHasUPE; //universal property expansion
-    StyleType       nStyleTypeCode; //sgc
-    OUString sBaseStyleIdentifier;
-    OUString sNextStyleIdentifier;
-    OUString sLinkStyleIdentifier;
-    OUString sStyleName;
-    const tools::SvRef<StyleSheetPropertyMap> pProperties;
-    OUString sConvertedStyleName;
-    std::vector<css::beans::PropertyValue> aLatentStyles; ///< Attributes of latentStyles
-    std::vector<css::beans::PropertyValue> aLsdExceptions; ///< List of lsdException attribute lists
-    bool           bAutoRedefine; ///< Writer calls this auto-update.
+    OUString m_sStyleIdentifierD;   // WW8 name
+    bool            m_bIsDefaultStyle;
+    bool            m_bAssignedAsChapterNumbering;
+    bool            m_bInvalidHeight;
+    bool            m_bHasUPE; //universal property expansion
+    StyleType       m_nStyleTypeCode; //sgc
+    OUString m_sBaseStyleIdentifier;
+    OUString m_sNextStyleIdentifier;
+    OUString m_sLinkStyleIdentifier;
+    OUString m_sStyleName;
+    const tools::SvRef<StyleSheetPropertyMap> m_pProperties;
+    OUString m_sConvertedStyleName;
+    std::vector<css::beans::PropertyValue> m_aLatentStyles; ///< Attributes of latentStyles
+    std::vector<css::beans::PropertyValue> m_aLsdExceptions; ///< List of lsdException attribute lists
+    bool           m_bAutoRedefine; ///< Writer calls this auto-update.
 
     void AppendInteropGrabBag(const css::beans::PropertyValue& rValue);
     css::beans::PropertyValue GetInteropGrabBag(); ///< Used for table styles, has a name.

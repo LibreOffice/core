@@ -236,18 +236,18 @@ void FontTable::addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>
 
 EmbeddedFontHandler::EmbeddedFontHandler(FontTable& rFontTable, OUString _fontName, const char* _style )
 : LoggedProperties("EmbeddedFontHandler")
-, fontTable( rFontTable )
-, fontName(std::move( _fontName ))
-, style( _style )
+, m_fontTable( rFontTable )
+, m_fontName(std::move( _fontName ))
+, m_style( _style )
 {
 }
 
 EmbeddedFontHandler::~EmbeddedFontHandler()
 {
-    if( !inputStream.is())
+    if( !m_inputStream.is())
         return;
     std::vector< unsigned char > key( 32 );
-    if( !fontKey.isEmpty())
+    if( !m_fontKey.isEmpty())
     {   // key for unobfuscating
         //  1 3 5 7 10 2  5 7 20 2  5 7 9 1 3 5
         // {62E79491-959F-41E9-B76B-6B32631DEA5C}
@@ -256,8 +256,8 @@ EmbeddedFontHandler::~EmbeddedFontHandler()
              i < 16;
              ++i )
         {
-            int v1 = fontKey[ pos[ i ]];
-            int v2 = fontKey[ pos[ i ] + 1 ];
+            int v1 = m_fontKey[ pos[ i ]];
+            int v2 = m_fontKey[ pos[ i ] + 1 ];
             assert(( v1 >= '0' && v1 <= '9' ) || ( v1 >= 'A' && v1 <= 'F' ));
             assert(( v2 >= '0' && v2 <= '9' ) || ( v2 >= 'A' && v2 <= 'F' ));
             int val = ( v1 - ( v1 <= '9' ? '0' : 'A' - 10 )) * 16 + v2 - ( v2 <= '9' ? '0' : 'A' - 10 );
@@ -265,8 +265,8 @@ EmbeddedFontHandler::~EmbeddedFontHandler()
             key[ i + 16 ] = val;
         }
     }
-    fontTable.addEmbeddedFont( inputStream, fontName, style, key );
-    inputStream->closeInput();
+    m_fontTable.addEmbeddedFont( m_inputStream, m_fontName, m_style, key );
+    m_inputStream->closeInput();
 }
 
 void EmbeddedFontHandler::lcl_attribute( Id name, Value& val )
@@ -275,7 +275,7 @@ void EmbeddedFontHandler::lcl_attribute( Id name, Value& val )
     switch( name )
     {
         case NS_ooxml::LN_CT_FontRel_fontKey:
-            fontKey = sValue;
+            m_fontKey = sValue;
             break;
         case NS_ooxml::LN_CT_Rel_id:
             break;
@@ -283,7 +283,7 @@ void EmbeddedFontHandler::lcl_attribute( Id name, Value& val )
             break; // TODO? Let's just ignore this for now and hope
                    // it doesn't break anything.
         case NS_ooxml::LN_inputstream: // the actual font data as stream
-            val.getAny() >>= inputStream;
+            val.getAny() >>= m_inputStream;
             break;
         default:
             break;

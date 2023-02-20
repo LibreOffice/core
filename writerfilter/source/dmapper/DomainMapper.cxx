@@ -1788,7 +1788,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             if ( IsStyleSheetImport() )
             {
                 const StyleSheetEntryPtr pCurrStyle = GetStyleSheetTable()->GetCurrentEntry();
-                if ( pCurrStyle && pCurrStyle->nStyleTypeCode == STYLE_TYPE_CHAR )
+                if ( pCurrStyle && pCurrStyle->m_nStyleTypeCode == STYLE_TYPE_CHAR )
                     break;
             }
 
@@ -2512,7 +2512,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
 
             // First check if the style exists in the document.
             StyleSheetEntryPtr pEntry = m_pImpl->GetStyleSheetTable( )->FindStyleSheetByConvertedStyleName( sConvertedName );
-            bool bExists = pEntry && ( pEntry->nStyleTypeCode == STYLE_TYPE_CHAR );
+            bool bExists = pEntry && ( pEntry->m_nStyleTypeCode == STYLE_TYPE_CHAR );
             // Add the property if the style exists, but do not add it elements in TOC:
             // they will receive later another style references from TOC
             if ( bExists && m_pImpl->GetTopContext() && !m_pImpl->IsInTOC())
@@ -3206,9 +3206,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 if( !sStyleName.isEmpty() && GetStyleSheetTable() )
                     pStyle = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( sStyleName );
 
-                if( pStyle && pStyle->pProperties
-                    && pStyle->pProperties->isSet(PROP_BREAK_TYPE)
-                    && pStyle->pProperties->getProperty(PROP_BREAK_TYPE)->second == aBreakType )
+                if( pStyle && pStyle->m_pProperties
+                    && pStyle->m_pProperties->isSet(PROP_BREAK_TYPE)
+                    && pStyle->m_pProperties->getProperty(PROP_BREAK_TYPE)->second == aBreakType )
                 {
                     pParagraphProps->Insert(PROP_BREAK_TYPE, aBreakType);
                 }
