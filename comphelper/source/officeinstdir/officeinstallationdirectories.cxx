@@ -211,7 +211,7 @@ void OfficeInstallationDirectories::initDirs()
     if ( m_xOfficeBrandDir)
         return;
 
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     if ( m_xOfficeBrandDir )
         return;
 
