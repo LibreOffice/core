@@ -784,7 +784,6 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(weld::Container* pPage, weld::DialogContr
     , m_xParaStyleCB(m_xBuilder->weld_check_button("useparastyle"))
     , m_xParaStyleFT(m_xBuilder->weld_label("parastyleft"))
     , m_xParaStyleLB(m_xBuilder->weld_combo_box("parastyle"))
-    , m_xParaStyleFrame(m_xBuilder->weld_widget("parastyleframe"))
     , m_xTOXMarksCB(m_xBuilder->weld_check_button("indexmarks"))
     , m_xIdxOptionsFrame(m_xBuilder->weld_widget("optionsframe"))
     , m_xCollectSameCB(m_xBuilder->weld_check_button("combinesame"))
@@ -1328,7 +1327,6 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl, weld::ComboBox&, rBox, void)
     m_xParaStyleCB->set_visible(0 != (nType & (TO_ILLUSTRATION|TO_TABLE|TO_OBJECT)));
     m_xParaStyleFT->set_visible(0 != (nType & (TO_ILLUSTRATION|TO_TABLE|TO_OBJECT)));
     m_xParaStyleLB->set_visible(0 != (nType & (TO_ILLUSTRATION|TO_TABLE|TO_OBJECT)));
-    m_xParaStyleFrame->set_visible(0 != (nType & (TO_ILLUSTRATION|TO_TABLE|TO_OBJECT)));
 
     m_xAuthorityFrame->set_visible( 0 != (nType & TO_AUTHORITIES) );
 
