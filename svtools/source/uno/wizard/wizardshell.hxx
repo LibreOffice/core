@@ -106,6 +106,9 @@ namespace svt::uno
 
         PWizardPageController impl_getController(BuilderPage* i_pPage) const;
 
+        virtual OString getPageIdentForState(WizardState nState) const override;
+        virtual WizardState getStateFromPageIdent(const OString& rIdent) const override;
+
         // prevent outside access to some base class members
         using WizardShell_Base::skip;
         using WizardShell_Base::skipUntil;
