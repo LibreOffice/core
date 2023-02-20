@@ -663,8 +663,9 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     if(IsGlobalDoc())
     {
         SwView *pActView = GetCreateView();
-        m_xGlobalToolBox->set_item_active("save",
-                    pActView->GetWrtShellPtr()->IsGlblDocSaveLinks());
+        if (pActView && pActView->GetWrtShellPtr())
+            m_xGlobalToolBox->set_item_active("save",
+                        pActView->GetWrtShellPtr()->IsGlblDocSaveLinks());
         if (m_pConfig->IsGlobalActive())
             ToggleTree();
         if (bFloatingNavigator)

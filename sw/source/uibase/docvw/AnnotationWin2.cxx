@@ -349,7 +349,6 @@ void SwAnnotationWin::InitControls()
     mxVScrollbar->connect_vadjustment_changed(LINK(this, SwAnnotationWin, ScrollHdl));
     mxVScrollbar->connect_mouse_move(LINK(this, SwAnnotationWin, MouseMoveHdl));
 
-    const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
     EEControlBits nCntrl = mpOutliner->GetControlWord();
     // TODO: crash when AUTOCOMPLETE enabled
     nCntrl |= EEControlBits::MARKFIELDS | EEControlBits::PASTESPECIAL | EEControlBits::AUTOCORRECT | EEControlBits::USECHARATTRIBS; // | EEControlBits::AUTOCOMPLETE;
@@ -357,10 +356,15 @@ void SwAnnotationWin::InitControls()
         nCntrl |= EEControlBits::MARKFIELDS;
     else
         nCntrl &= ~EEControlBits::MARKFIELDS;
-    if (pVOpt->IsOnlineSpell())
-        nCntrl |= EEControlBits::ONLINESPELLING;
-    else
-        nCntrl &= ~EEControlBits::ONLINESPELLING;
+
+    if (SwWrtShell* pWrtShell = mrView.GetWrtShellPtr())
+    {
+        const SwViewOption* pVOpt = pWrtShell->GetViewOptions();
+        if (pVOpt->IsOnlineSpell())
+            nCntrl |= EEControlBits::ONLINESPELLING;
+        else
+            nCntrl &= ~EEControlBits::ONLINESPELLING;
+    }
     mpOutliner->SetControlWord(nCntrl);
 
     std::size_t aIndex = SW_MOD()->InsertRedlineAuthor(GetAuthor());
@@ -454,7 +458,10 @@ void SwAnnotationWin::SetMenuButtonColors()
 
     mxMenuButton->set_background(mColorDark);
 
-    const Fraction& rFraction = mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY();
+    SwWrtShell* pWrtShell = mrView.GetWrtShellPtr();
+    if (!pWrtShell)
+        return;
+    const Fraction& rFraction = pWrtShell->GetOut()->GetMapMode().GetScaleY();
 
     ScopedVclPtrInstance<VirtualDevice> xVirDev;
     Size aSize(tools::Long(METABUTTON_WIDTH * rFraction),
@@ -504,7 +511,11 @@ void SwAnnotationWin::Rescale()
     aMode.SetOrigin( Point() );
     SetMapMode( aMode );
     mxSidebarTextControl->SetMapMode( aMode );
-    const Fraction& rFraction = mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY();
+
+    SwWrtShell* pWrtShell = mrView.GetWrtShellPtr();
+    if (!pWrtShell)
+        return;
+    const Fraction& rFraction = pWrtShell->GetOut()->GetMapMode().GetScaleY();
 
     vcl::Font aFont = maLabelFont;
     sal_Int32 nHeight = tools::Long(aFont.GetFontHeight() * rFraction);
@@ -931,17 +942,20 @@ void SwAnnotationWin::SetLanguage(const SvxLanguageItem& rNewItem)
     GetOutlinerView()->SetSelection(aOld);
     mpOutliner->SetModifyHdl( aLink );
 
-    const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
     EEControlBits nCntrl = mpOutliner->GetControlWord();
     // turn off
     nCntrl &= ~EEControlBits::ONLINESPELLING;
     mpOutliner->SetControlWord(nCntrl);
 
-    //turn back on
-    if (pVOpt->IsOnlineSpell())
-        nCntrl |= EEControlBits::ONLINESPELLING;
-    else
-        nCntrl &= ~EEControlBits::ONLINESPELLING;
+    if (SwWrtShell* pWrtShell = mrView.GetWrtShellPtr())
+    {
+        const SwViewOption* pVOpt = pWrtShell->GetViewOptions();
+        //turn back on
+        if (pVOpt->IsOnlineSpell())
+            nCntrl |= EEControlBits::ONLINESPELLING;
+        else
+            nCntrl &= ~EEControlBits::ONLINESPELLING;
+    }
     mpOutliner->SetControlWord(nCntrl);
 
     mpOutliner->CompleteOnlineSpelling();
@@ -1010,7 +1024,8 @@ void SwAnnotationWin::ActivatePostIt()
     // when cursor out of visible area
     GetOutlinerView()->ShowCursor(false);
 
-    mpOutlinerView->GetEditView().SetInsertMode(mrView.GetWrtShellPtr()->IsInsMode());
+    if (SwWrtShell* pWrtShell = mrView.GetWrtShellPtr())
+        mpOutlinerView->GetEditView().SetInsertMode(pWrtShell->IsInsMode());
 
     if ( !Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
         GetOutlinerView()->SetBackgroundColor(mColorDark);
@@ -1236,8 +1251,13 @@ void SwAnnotationWin::ResetAttributes()
 
 int SwAnnotationWin::GetPrefScrollbarWidth() const
 {
-    const Fraction& f(mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY());
-    return tools::Long(Application::GetSettings().GetStyleSettings().GetScrollBarSize() * f);
+    if (SwWrtShell* pWrtShell = mrView.GetWrtShellPtr())
+    {
+        const Fraction& f(pWrtShell->GetOut()->GetMapMode().GetScaleY());
+        return tools::Long(Application::GetSettings().GetStyleSettings().GetScrollBarSize() * f);
+    }
+    else
+        return tools::Long(Application::GetSettings().GetStyleSettings().GetScrollBarSize());
 }
 
 sal_Int32 SwAnnotationWin::GetMetaHeight() const
@@ -1264,22 +1284,30 @@ sal_Int32 SwAnnotationWin::GetMinimumSizeWithMeta() const
 
 sal_Int32 SwAnnotationWin::GetMinimumSizeWithoutMeta() const
 {
-    const Fraction& f(mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY());
-    return tools::Long(POSTIT_MINIMUMSIZE_WITHOUT_META * f);
+    if (SwWrtShell* pWrtShell = mrView.GetWrtShellPtr())
+    {
+        const Fraction& f(pWrtShell->GetOut()->GetMapMode().GetScaleY());
+        return tools::Long(POSTIT_MINIMUMSIZE_WITHOUT_META * f);
+    }
+    else
+        return tools::Long(POSTIT_MINIMUMSIZE_WITHOUT_META);
 }
 
 void SwAnnotationWin::SetSpellChecking()
 {
-    const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
-    EEControlBits nCntrl = mpOutliner->GetControlWord();
-    if (pVOpt->IsOnlineSpell())
-        nCntrl |= EEControlBits::ONLINESPELLING;
-    else
-        nCntrl &= ~EEControlBits::ONLINESPELLING;
-    mpOutliner->SetControlWord(nCntrl);
+    if (SwWrtShell* pWrtShell = mrView.GetWrtShellPtr())
+    {
+        const SwViewOption* pVOpt = pWrtShell->GetViewOptions();
+        EEControlBits nCntrl = mpOutliner->GetControlWord();
+        if (pVOpt->IsOnlineSpell())
+            nCntrl |= EEControlBits::ONLINESPELLING;
+        else
+            nCntrl &= ~EEControlBits::ONLINESPELLING;
+        mpOutliner->SetControlWord(nCntrl);
 
-    mpOutliner->CompleteOnlineSpelling();
-    Invalidate();
+        mpOutliner->CompleteOnlineSpelling();
+        Invalidate();
+    }
 }
 
 void SwAnnotationWin::SetViewState(ViewState bViewState)

@@ -3756,13 +3756,17 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate, Timer *, void)
     // No update while drag and drop.
     // Query view because the Navigator is cleared too late.
     SwView* pView = GetParentWindow()->GetCreateView();
-    if(pView && pView->GetWrtShellPtr() && pView->GetWrtShellPtr()->GetWin() &&
-        (pView->GetWrtShellPtr()->GetWin()->HasFocus() || m_bDocHasChanged || m_bViewHasChanged) &&
-        !IsInDrag() && !pView->GetWrtShellPtr()->ActionPend())
+
+    if (!pView)
+        return;
+
+    SwWrtShell* pActShell = pView->GetWrtShellPtr();
+    if(pActShell && pActShell->GetWin() &&
+        (pActShell->GetWin()->HasFocus() || m_bDocHasChanged || m_bViewHasChanged) &&
+        !IsInDrag() && !pActShell->ActionPend())
     {
         if (m_bDocHasChanged || m_bViewHasChanged)
         {
-            SwWrtShell* pActShell = pView->GetWrtShellPtr();
             if (State::CONSTANT == m_eState && !lcl_FindShell(m_pActiveShell))
             {
                 SetActiveShell(pActShell);

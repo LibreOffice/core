@@ -438,12 +438,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
 void SwEditWin::PrePaint(vcl::RenderContext& /*rRenderContext*/)
 {
-    SwWrtShell* pWrtShell = GetView().GetWrtShellPtr();
-
-    if(pWrtShell)
-    {
+    if (SwWrtShell* pWrtShell = GetView().GetWrtShellPtr())
         pWrtShell->PrePaint();
-    }
 }
 
 void SwEditWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)

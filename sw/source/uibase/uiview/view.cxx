@@ -185,10 +185,10 @@ void SwView::GotFocus() const
             const_cast< SwView* >( this )->AttrChangedNotify(nullptr);
         }
     }
-    if( GetWrtShellPtr() )
+    if (SwWrtShell* pWrtShell = GetWrtShellPtr())
     {
         SwWrtShell& rWrtShell = GetWrtShell();
-        rWrtShell.GetDoc()->getIDocumentLayoutAccess().SetCurrentViewShell( GetWrtShellPtr() );
+        rWrtShell.GetDoc()->getIDocumentLayoutAccess().SetCurrentViewShell( pWrtShell );
         rWrtShell.GetDoc()->getIDocumentSettingAccess().set( DocumentSettingId::BROWSE_MODE,
                                  rWrtShell.GetViewOptions()->getBrowseMode() );
     }
@@ -1934,8 +1934,7 @@ void SwView::AddTransferable(SwTransferable& rTransferable)
 
 tools::Rectangle SwView::getLOKVisibleArea() const
 {
-    SwViewShell* pVwSh = GetWrtShellPtr();
-    if (pVwSh)
+    if (SwViewShell* pVwSh = GetWrtShellPtr())
         return pVwSh->getLOKVisibleArea();
     else
         return tools::Rectangle();
@@ -1943,16 +1942,16 @@ tools::Rectangle SwView::getLOKVisibleArea() const
 
 void SwView::flushPendingLOKInvalidateTiles()
 {
-    SwWrtShell* pSh = GetWrtShellPtr();
-    assert(pSh);
-    pSh->FlushPendingLOKInvalidateTiles();
+    if (SwWrtShell* pSh = GetWrtShellPtr())
+        pSh->FlushPendingLOKInvalidateTiles();
 }
 
 std::optional<OString> SwView::getLOKPayload(int nType, int nViewId) const
 {
-    SwWrtShell* pSh = GetWrtShellPtr();
-    assert(pSh);
-    return pSh->getLOKPayload(nType, nViewId);
+    if (SwWrtShell* pSh = GetWrtShellPtr())
+        return pSh->getLOKPayload(nType, nViewId);
+    else
+        return std::nullopt;
 }
 
 OUString SwView::GetDataSourceName() const

@@ -2651,14 +2651,6 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     if (0 > nRenderer)
         throw IllegalArgumentException();
 
-    // TODO/mba: we really need a generic way to get the SwViewShell!
-    SwViewShell* pVwSh = nullptr;
-    SwView* pSwView = dynamic_cast<SwView*>( pView );
-    if ( pSwView )
-        pVwSh = pSwView->GetWrtShellPtr();
-    else
-        pVwSh = static_cast<SwPagePreview*>(pView)->GetViewShell();
-
     sal_Int32 nMaxRenderer = 0;
     if (!bIsSwSrcView && m_pRenderData)
     {
@@ -2749,11 +2741,22 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         }
         else
         {
-            aTmpSize = pVwSh->GetPageSize( nPage, bIsSkipEmptyPages );
-            aPageSize = awt::Size ( convertTwipToMm100( aTmpSize.Width() ),
-                                    convertTwipToMm100( aTmpSize.Height() ));
-            Point aPoint = pVwSh->GetPagePos(nPage);
-            aPagePos = awt::Point(convertTwipToMm100(aPoint.X()), convertTwipToMm100(aPoint.Y()));
+            // TODO/mba: we really need a generic way to get the SwViewShell!
+            SwViewShell* pVwSh = nullptr;
+            SwView* pSwView = dynamic_cast<SwView*>( pView );
+            if ( pSwView )
+                pVwSh = pSwView->GetWrtShellPtr();
+            else
+                pVwSh = static_cast<SwPagePreview*>(pView)->GetViewShell();
+
+            if (pVwSh)
+            {
+                aTmpSize = pVwSh->GetPageSize( nPage, bIsSkipEmptyPages );
+                aPageSize = awt::Size ( convertTwipToMm100( aTmpSize.Width() ),
+                                        convertTwipToMm100( aTmpSize.Height() ));
+                Point aPoint = pVwSh->GetPagePos(nPage);
+                aPagePos = awt::Point(convertTwipToMm100(aPoint.X()), convertTwipToMm100(aPoint.Y()));
+            }
         }
 
         sal_Int32 nLen = 3;

@@ -591,7 +591,6 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     SwView *pView = pFrame ? dynamic_cast<SwView*>( pFrame->GetViewShell()  ) : nullptr;
     if (!pView)
         throw RuntimeException();
-    SwWrtShell &rSh = *pView->GetWrtShellPtr();
 
     // avoid assertion in 'Update' from Sfx by supplying a shell
     // and thus avoiding the SelectShell call in Writers GetState function
@@ -662,6 +661,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             throw IllegalArgumentException("Invalid value of property: OutputType", static_cast < cppu::OWeakObject * > ( this ), 0 );
     }
 
+    SwWrtShell &rSh = pView->GetWrtShell();
     SwDBManager* pMgr = rSh.GetDBManager();
     //force layout creation
     rSh.CalcLayout();

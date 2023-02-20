@@ -615,23 +615,24 @@ SfxObjectShellLock SwXTextView::BuildTmpSelectionDoc()
     SfxViewFrame* pDocFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, SFX_INTERFACE_NONE );
     SwView* pDocView = static_cast<SwView*>( pDocFrame->GetViewShell() );
     pDocView->AttrChangedNotify(nullptr);//So that SelectShell is called.
-    SwWrtShell* pSh = pDocView->GetWrtShellPtr();
-
-    IDocumentDeviceAccess& rIDDA = pSh->getIDocumentDeviceAccess();
-    SfxPrinter* pTempPrinter = rIDDA.getPrinter( true );
-
-    const SwPageDesc& rCurPageDesc = rOldSh.GetPageDesc(rOldSh.GetCurPageDesc());
-
-    IDocumentDeviceAccess& rIDDA_old = rOldSh.getIDocumentDeviceAccess();
-
-    if( rIDDA_old.getPrinter( false ) )
+    if (SwWrtShell* pSh = pDocView->GetWrtShellPtr())
     {
-        rIDDA.setJobsetup( *rIDDA_old.getJobsetup() );
-        //#69563# if it isn't the same printer then the pointer has been invalidated!
-        pTempPrinter = rIDDA.getPrinter( true );
-    }
+        IDocumentDeviceAccess& rIDDA = pSh->getIDocumentDeviceAccess();
+        SfxPrinter* pTempPrinter = rIDDA.getPrinter( true );
 
-    pTempPrinter->SetPaperBin(rCurPageDesc.GetMaster().GetPaperBin().GetValue());
+        const SwPageDesc& rCurPageDesc = rOldSh.GetPageDesc(rOldSh.GetCurPageDesc());
+
+        IDocumentDeviceAccess& rIDDA_old = rOldSh.getIDocumentDeviceAccess();
+
+        if( rIDDA_old.getPrinter( false ) )
+        {
+            rIDDA.setJobsetup( *rIDDA_old.getJobsetup() );
+            //#69563# if it isn't the same printer then the pointer has been invalidated!
+            pTempPrinter = rIDDA.getPrinter( true );
+        }
+
+        pTempPrinter->SetPaperBin(rCurPageDesc.GetMaster().GetPaperBin().GetValue());
+    }
 
     return xDocSh;
 }

@@ -207,6 +207,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
     SwWrtShell *pSh = pNewView->GetWrtShellPtr();
     OSL_ENSURE( pSh, "missing WrtShell" );
 
+    if (pSh)
     {   // block for locks the dispatcher!!
 
         SwWait aWait( static_cast<SwDocShell&>(*xDocSh), true );

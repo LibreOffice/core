@@ -208,8 +208,11 @@ void SwAnnotationWin::SetResolved(bool resolved)
 {
     bool oldState = IsResolved();
     static_cast<SwPostItField*>(mpFormatField->GetField())->SetResolved(resolved);
-    const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
-    mrSidebarItem.mbShow = !IsResolved() || (pVOpt->IsResolvedPostIts());
+    if (SwWrtShell* pWrtShell = mrView.GetWrtShellPtr())
+    {
+        const SwViewOption* pVOpt = pWrtShell->GetViewOptions();
+        mrSidebarItem.mbShow = !IsResolved() || (pVOpt->IsResolvedPostIts());
+    }
 
     mpTextRangeOverlay.reset();
 
@@ -336,7 +339,8 @@ void SwAnnotationWin::UpdateData()
 void SwAnnotationWin::Delete()
 {
     collectUIInformation("DELETE",get_id());
-    if (!mrView.GetWrtShellPtr()->GotoField(*mpFormatField))
+    SwWrtShell* pWrtShell = mrView.GetWrtShellPtr();
+    if (!(pWrtShell && pWrtShell->GotoField(*mpFormatField)))
         return;
 
     if ( mrMgr.GetActiveSidebarWin() == this)
@@ -351,8 +355,8 @@ void SwAnnotationWin::Delete()
     }
     // we delete the field directly, the Mgr cleans up the PostIt by listening
     GrabFocusToDocument();
-    mrView.GetWrtShellPtr()->ClearMark();
-    mrView.GetWrtShellPtr()->DelRight();
+    pWrtShell->ClearMark();
+    pWrtShell->DelRight();
 }
 
 void SwAnnotationWin::GotoPos()
