@@ -919,49 +919,52 @@ static SfxObjectShell* lcl_CreateWorkingDocument(
     }
 
     SwView* pWorkView = static_cast< SwView* >( pWorkFrame->GetViewShell() );
-    SwWrtShell* pWorkWrtShell = pWorkView->GetWrtShellPtr();
-    pWorkWrtShell->GetViewOptions()->SetIdle( false );
-    pWorkView->AttrChangedNotify(nullptr);// in order for SelectShell to be called
-    SwDoc* pWorkDoc = pWorkWrtShell->GetDoc();
-    pWorkDoc->GetIDocumentUndoRedo().DoUndo( false );
-    pWorkDoc->ReplaceDocumentProperties( *pSourceDoc );
 
-    // import print settings
-    const SwPrintData &rPrintData = pSourceDoc->getIDocumentDeviceAccess().getPrintData();
-    pWorkDoc->getIDocumentDeviceAccess().setPrintData(rPrintData);
-    const JobSetup *pJobSetup = pSourceDoc->getIDocumentDeviceAccess().getJobsetup();
-    if (pJobSetup)
-        pWorkDoc->getIDocumentDeviceAccess().setJobsetup(*pJobSetup);
-
-    if( aType == WorkingDocType::TARGET )
+    if (SwWrtShell* pWorkWrtShell = pWorkView->GetWrtShellPtr())
     {
-        assert( !ppDBManager );
-        pWorkDoc->SetInMailMerge( true );
-        pWorkWrtShell->SetLabelDoc( false );
-    }
-    else
-    {
-        // We have to swap the DBmanager of the new doc, so we also need input
-        assert(ppDBManager && *ppDBManager);
-        SwDBManager *pWorkDBManager = pWorkDoc->GetDBManager();
-        pWorkDoc->SetDBManager( *ppDBManager );
-        *ppDBManager = pWorkDBManager;
+        pWorkWrtShell->GetViewOptions()->SetIdle( false );
+        pWorkView->AttrChangedNotify(nullptr);// in order for SelectShell to be called
+        SwDoc* pWorkDoc = pWorkWrtShell->GetDoc();
+        pWorkDoc->GetIDocumentUndoRedo().DoUndo( false );
+        pWorkDoc->ReplaceDocumentProperties( *pSourceDoc );
 
-        if( aType == WorkingDocType::SOURCE )
+        // import print settings
+        const SwPrintData &rPrintData = pSourceDoc->getIDocumentDeviceAccess().getPrintData();
+        pWorkDoc->getIDocumentDeviceAccess().setPrintData(rPrintData);
+        const JobSetup *pJobSetup = pSourceDoc->getIDocumentDeviceAccess().getJobsetup();
+        if (pJobSetup)
+            pWorkDoc->getIDocumentDeviceAccess().setJobsetup(*pJobSetup);
+
+        if( aType == WorkingDocType::TARGET )
         {
-            // the GetDBData call constructs the data, if it's missing - kind of const...
-            pWorkWrtShell->ChgDBData( const_cast<SwDoc*>(pSourceDoc)->GetDBData() );
-            // some DocumentSettings are currently not copied by SwDoc::CreateCopy
-            pWorkWrtShell->SetLabelDoc( rSourceWrtShell.IsLabelDoc() );
-            pWorkDoc->getIDocumentState().ResetModified();
+            assert( !ppDBManager );
+            pWorkDoc->SetInMailMerge( true );
+            pWorkWrtShell->SetLabelDoc( false );
         }
         else
-            pWorkDoc->getIDocumentLinksAdministration().EmbedAllLinks();
-    }
+        {
+            // We have to swap the DBmanager of the new doc, so we also need input
+            assert(ppDBManager && *ppDBManager);
+            SwDBManager *pWorkDBManager = pWorkDoc->GetDBManager();
+            pWorkDoc->SetDBManager( *ppDBManager );
+            *ppDBManager = pWorkDBManager;
 
-    if( pView )     *pView     = pWorkView;
-    if( pWrtShell ) *pWrtShell = pWorkWrtShell;
-    if( pDoc )      *pDoc      = pWorkDoc;
+            if( aType == WorkingDocType::SOURCE )
+            {
+                // the GetDBData call constructs the data, if it's missing - kind of const...
+                pWorkWrtShell->ChgDBData( const_cast<SwDoc*>(pSourceDoc)->GetDBData() );
+                // some DocumentSettings are currently not copied by SwDoc::CreateCopy
+                pWorkWrtShell->SetLabelDoc( rSourceWrtShell.IsLabelDoc() );
+                pWorkDoc->getIDocumentState().ResetModified();
+            }
+            else
+                pWorkDoc->getIDocumentLinksAdministration().EmbedAllLinks();
+        }
+
+        if( pView )     *pView     = pWorkView;
+        if( pWrtShell ) *pWrtShell = pWorkWrtShell;
+        if( pDoc )      *pDoc      = pWorkDoc;
+    }
 
     return xWorkObjectShell.get();
 }
@@ -1223,8 +1226,11 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         else if( pTargetView )
         {
             pTargetShell = pTargetView->GetWrtShellPtr();
-            pTargetDoc = pTargetShell->GetDoc();
-            xTargetDocShell = pTargetView->GetDocShell();
+            if (pTargetShell)
+            {
+                pTargetDoc = pTargetShell->GetDoc();
+                xTargetDocShell = pTargetView->GetDocShell();
+            }
         }
 
         if( bCreateSingleFile )

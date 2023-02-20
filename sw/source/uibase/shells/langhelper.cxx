@@ -177,21 +177,24 @@ namespace SwLangHelper
                 // when setting a new language attribute
                 if (bForSelection)
                 {
-                    const SwViewOption* pVOpt = rView.GetWrtShellPtr()->GetViewOptions();
-                    EEControlBits nCntrl = pEditEngine->GetControlWord();
-                    // turn off
-                    nCntrl &= ~EEControlBits::ONLINESPELLING;
-                    pEditEngine->SetControlWord(nCntrl);
-
-                    //turn back on
-                    if (pVOpt->IsOnlineSpell())
-                        nCntrl |= EEControlBits::ONLINESPELLING;
-                    else
+                    if (SwWrtShell* pWrtShell = rView.GetWrtShellPtr())
+                    {
+                        const SwViewOption* pVOpt = pWrtShell->GetViewOptions();
+                        EEControlBits nCntrl = pEditEngine->GetControlWord();
+                        // turn off
                         nCntrl &= ~EEControlBits::ONLINESPELLING;
-                    pEditEngine->SetControlWord(nCntrl);
+                        pEditEngine->SetControlWord(nCntrl);
 
-                    pEditEngine->CompleteOnlineSpelling();
-                    rEditView.Invalidate();
+                        //turn back on
+                        if (pVOpt->IsOnlineSpell())
+                            nCntrl |= EEControlBits::ONLINESPELLING;
+                        else
+                            nCntrl &= ~EEControlBits::ONLINESPELLING;
+                        pEditEngine->SetControlWord(nCntrl);
+
+                        pEditEngine->CompleteOnlineSpelling();
+                        rEditView.Invalidate();
+                    }
                 }
 
                 if (!bForSelection)

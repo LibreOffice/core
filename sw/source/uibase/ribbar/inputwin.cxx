@@ -191,12 +191,11 @@ void SwInputWindow::ShowWin()
 {
     m_bIsTable = false;
     // stop rulers
-    if (m_pView)
+    if (m_pView && m_pWrtShell)
     {
         m_pView->GetHRuler().SetActive( false );
         m_pView->GetVRuler().SetActive( false );
 
-        OSL_ENSURE(m_pWrtShell, "no WrtShell!");
         // Cursor in table
         m_bIsTable = m_pWrtShell->IsCursorInTable();
 
@@ -332,7 +331,7 @@ void  SwInputWindow::ApplyFormula()
     // in case it was created while loading the document, the active view
     // wasn't initialised at that time, so ShowWin() didn't initialise anything
     // either - nothing to do
-    if (!m_pView)
+    if (!m_pView || !m_pWrtShell)
     {
         // presumably there must be an active view now since the event arrived
         SwView *const pActiveView = ::GetActiveView();
@@ -365,7 +364,7 @@ void  SwInputWindow::CancelFormula()
     // in case it was created while loading the document, the active view
     // wasn't initialised at that time, so ShowWin() didn't initialise anything
     // either - nothing to do
-    if (!m_pView)
+    if (!m_pView || !m_pWrtShell)
     {
         // presumably there must be an active view now since the event arrived
         SwView *const pActiveView = ::GetActiveView();
@@ -394,7 +393,7 @@ const sal_Unicode CH_PDF = 0x202c;
 
 IMPL_LINK( SwInputWindow, SelTableCellsNotify, SwWrtShell&, rCaller, void )
 {
-    if(m_bIsTable)
+    if(m_pWrtShell && m_bIsTable)
     {
         SwFrameFormat* pTableFormat = rCaller.GetTableFormat();
         OUString sBoxNms( rCaller.GetBoxNms() );
@@ -447,7 +446,7 @@ void SwInputWindow::SetFormula( const OUString& rFormula )
 
 IMPL_LINK_NOARG(SwInputWindow, ModifyHdl, weld::Entry&, void)
 {
-    if (m_bIsTable && m_bResetUndo)
+    if (m_pWrtShell && m_bIsTable && m_bResetUndo)
     {
         m_pWrtShell->StartAllAction();
         DelBoxContent();
@@ -461,7 +460,7 @@ IMPL_LINK_NOARG(SwInputWindow, ModifyHdl, weld::Entry&, void)
 
 void SwInputWindow::DelBoxContent()
 {
-    if( m_bIsTable )
+    if( m_pWrtShell && m_bIsTable )
     {
         m_pWrtShell->StartAllAction();
         m_pWrtShell->ClearMark();

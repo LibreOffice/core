@@ -93,8 +93,7 @@ SwTextGridPage::SwTextGridPage(weld::Container* pPage, weld::DialogController* p
     SwView *pView   = ::GetActiveView();
     if( pView )
     {
-        SwWrtShell* pSh = pView->GetWrtShellPtr();
-        if( pSh )
+        if (SwWrtShell* pSh = pView->GetWrtShellPtr())
         {
             m_bSquaredMode = pSh->GetDoc()->IsSquaredPageMode();
         }
