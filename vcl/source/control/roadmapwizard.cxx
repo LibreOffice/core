@@ -470,7 +470,7 @@ namespace vcl
                 GetOrCreatePage(nState);
             }
 
-            OString sIdent(OString::number(nState));
+            OString sIdent(getPageIdentForState(nState));
             m_xAssistant->set_page_index(sIdent, nItemIndex);
             m_xAssistant->set_page_title(sIdent, getStateDisplayName(nState));
 
@@ -639,9 +639,9 @@ namespace vcl
 
     IMPL_LINK(RoadmapWizardMachine, OnRoadmapItemSelected, const OString&, rCurItemId, bool)
     {
-        int nCurItemId = rCurItemId.toInt32();
+        WizardTypes::WizardState nSelectedState = getStateFromPageIdent(rCurItemId);
 
-        if ( nCurItemId == getCurrentState() )
+        if (nSelectedState == getCurrentState())
             // nothing to do
             return false;
 
@@ -651,7 +651,7 @@ namespace vcl
         WizardTravelSuspension aTravelGuard( *this );
 
         sal_Int32 nCurrentIndex = m_pImpl->getStateIndexInPath( getCurrentState(), m_pImpl->nActivePath );
-        sal_Int32 nNewIndex     = m_pImpl->getStateIndexInPath( nCurItemId, m_pImpl->nActivePath );
+        sal_Int32 nNewIndex     = m_pImpl->getStateIndexInPath( nSelectedState, m_pImpl->nActivePath );
 
         DBG_ASSERT( ( nCurrentIndex != -1 ) && ( nNewIndex != -1 ),
             "RoadmapWizard::OnRoadmapItemSelected: something's wrong here!" );
@@ -663,8 +663,8 @@ namespace vcl
         bool bResult = true;
         if ( nNewIndex > nCurrentIndex )
         {
-            bResult = skipUntil( static_cast<WizardTypes::WizardState>(nCurItemId) );
-            WizardTypes::WizardState nTemp = static_cast<WizardTypes::WizardState>(nCurItemId);
+            bResult = skipUntil(nSelectedState);
+            WizardTypes::WizardState nTemp = nSelectedState;
             while( nTemp )
             {
                 if( m_pImpl->aDisabledStates.find( --nTemp ) != m_pImpl->aDisabledStates.end() )
@@ -672,7 +672,7 @@ namespace vcl
             }
         }
         else
-            bResult = skipBackwardUntil( static_cast<WizardTypes::WizardState>(nCurItemId) );
+            bResult = skipBackwardUntil(nSelectedState);
 
         return bResult;
     }
@@ -746,7 +746,7 @@ namespace vcl
         }
 
         // if the state is currently in the roadmap, reflect it's new status
-        m_xAssistant->set_page_sensitive(OString::number(_nState), _bEnable);
+        m_xAssistant->set_page_sensitive(getPageIdentForState(_nState), _bEnable);
     }
 
     bool RoadmapWizardMachine::knowsState( WizardTypes::WizardState i_nState ) const

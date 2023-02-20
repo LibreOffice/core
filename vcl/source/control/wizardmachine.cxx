@@ -893,6 +893,16 @@ namespace vcl
         implUpdateTitle();
     }
 
+    OString WizardMachine::getPageIdentForState(WizardTypes::WizardState nState) const
+    {
+        return OString::number(nState);
+    }
+
+    WizardTypes::WizardState WizardMachine::getStateFromPageIdent(const OString& rIdent) const
+    {
+        return rIdent.toInt32();
+    }
+
     BuilderPage* WizardMachine::GetOrCreatePage( const WizardTypes::WizardState i_nState )
     {
         if ( nullptr == GetPage( i_nState ) )
@@ -1174,7 +1184,7 @@ namespace vcl
             if (pOldTabPage)
                 pOldTabPage->Deactivate();
 
-            m_xAssistant->set_current_page(OString::number(nState));
+            m_xAssistant->set_current_page(getPageIdentForState(nState));
 
             m_pCurTabPage = GetPage(m_nCurState);
             m_pCurTabPage->Activate();
