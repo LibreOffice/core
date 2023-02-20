@@ -650,8 +650,7 @@ DownloadThread::run()
         if( ! m_aDownload.start(m_aURL, aLocalFile, aDownloadDest ) )
         {
             // retry every 15s unless the dialog is not visible
-            TimeValue tv;
-            tv.Seconds = 15;
+            TimeValue tv(15, 0);
 
             if( ! UpdateCheck::get()->isDialogShowing() )
             {
