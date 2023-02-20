@@ -1082,7 +1082,8 @@ int CountTTCFonts(const char* fname)
     if (sscanf(fname, "/:FD:/%d%n", &nFD, &n) == 1 && fname[n] == '\0')
     {
         lseek(nFD, 0, SEEK_SET);
-        fd = fdopen(dup(nFD), "rb");
+        int nDupFd = dup(nFD);
+        fd = nDupFd != -1 ? fdopen(nDupFd, "rb") : nullptr;
     }
     else
 #endif
