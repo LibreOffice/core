@@ -613,7 +613,7 @@ private:
     /// This is a continuation of already finished paragraph - e.g., first in an index section
     bool                            m_bRemoveThisParagraph = false;
 
-    css::uno::Reference< css::text::XTextCursor > xTOCMarkerCursor;
+    css::uno::Reference< css::text::XTextCursor > m_xTOCMarkerCursor;
 
     //annotation import
     css::uno::Reference< css::beans::XPropertySet > m_xAnnotationField;
@@ -628,7 +628,7 @@ private:
     css::uno::Reference<css::beans::XPropertySet> FindOrCreateFieldMaster(const char* pFieldMasterService, const OUString& rFieldMasterName);
     css::uno::Reference<css::beans::XPropertySet> const & GetDocumentSettings();
 
-    std::map<sal_Int32, css::uno::Any> deferredCharacterProperties;
+    std::map<sal_Int32, css::uno::Any> m_deferredCharacterProperties;
     SmartTagHandler m_aSmartTagHandler;
 
     css::uno::Reference<css::text::XTextRange> m_xGlossaryEntryStart;

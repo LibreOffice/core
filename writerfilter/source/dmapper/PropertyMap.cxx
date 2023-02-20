@@ -1781,7 +1781,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         const StyleSheetEntryPtr pEntry = rDM_Impl.GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( u"Standard" );
         if ( pEntry )
         {
-            std::optional< PropertyMap::Property > pPropHeight = pEntry->pProperties->getProperty( PROP_CHAR_HEIGHT_ASIAN );
+            std::optional< PropertyMap::Property > pPropHeight = pEntry->m_pProperties->getProperty( PROP_CHAR_HEIGHT_ASIAN );
             if ( pPropHeight )
             {
                 double fHeight = 0;

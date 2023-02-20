@@ -287,7 +287,7 @@ void ListLevel::AddParaProperties( uno::Sequence< beans::PropertyValue >* props 
     if( hasFirstLineIndent && hasIndentAt )
         return; // has them all, nothing to add
 
-    const uno::Sequence< beans::PropertyValue > aParaProps = m_pParaStyle->pProperties->GetPropertyValues( );
+    const uno::Sequence< beans::PropertyValue > aParaProps = m_pParaStyle->m_pProperties->GetPropertyValues( );
 
     // ParaFirstLineIndent -> FirstLineIndent
     // ParaLeftMargin -> IndentAt
@@ -498,7 +498,7 @@ sal_uInt16 ListDef::GetChapterNumberingWeight() const
         const StyleSheetEntryPtr pParaStyle = pAbsLevel->GetParaStyle();
         if (!pParaStyle)
             continue;
-        const StyleSheetPropertyMap& rProps = *pParaStyle->pProperties;
+        const StyleSheetPropertyMap& rProps = *pParaStyle->m_pProperties;
         // In LO, the level's paraStyle outlineLevel always matches this listLevel.
         // An undefined listLevel is treated as the first level.
         sal_Int8 nListLevel = std::clamp<sal_Int8>(rProps.GetListLevel(), 0, 9);
@@ -510,7 +510,7 @@ sal_uInt16 ListDef::GetChapterNumberingWeight() const
             // Arbitrarily chosen weighting factors - trying to round-trip LO choices if possible.
             // LibreOffice always saves Outline rule (usually containing heading styles) as numId 1.
             sal_uInt16 nWeightingFactor = GetId() == 1 ? 8 : 1;
-            if (pParaStyle->sStyleIdentifierD.startsWith("Heading") )
+            if (pParaStyle->m_sStyleIdentifierD.startsWith("Heading") )
                 ++nWeightingFactor;
             nWeight += nWeightingFactor;
         }
@@ -605,8 +605,8 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                     xOutlines->getChapterNumberingRules( );
 
                 StyleSheetEntryPtr pParaStyle = pAbsLevel->GetParaStyle( );
-                pParaStyle->bAssignedAsChapterNumbering = true;
-                aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HEADING_STYLE_NAME), pParaStyle->sConvertedStyleName));
+                pParaStyle->m_bAssignedAsChapterNumbering = true;
+                aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HEADING_STYLE_NAME), pParaStyle->m_sConvertedStyleName));
 
                 xOutlineRules->replaceByIndex(nLevel, uno::Any(comphelper::containerToSequence(aLvlProps)));
             }
@@ -1130,7 +1130,7 @@ AbstractListDef::Pointer ListsManager::GetAbstractList( sal_Int32 nId )
                     pStylesTable->FindStyleSheetByISTD(listDef->GetNumStyleLink() );
 
                 const StyleSheetPropertyMap* pStyleSheetProperties =
-                    pStyleSheetEntry ? pStyleSheetEntry->pProperties.get() : nullptr;
+                    pStyleSheetEntry ? pStyleSheetEntry->m_pProperties.get() : nullptr;
 
                 if( pStyleSheetProperties && pStyleSheetProperties->props().GetListId() >= 0 )
                 {
