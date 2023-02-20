@@ -22,7 +22,6 @@
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/basemutex.hxx>
 
 #include <unordered_map>
 #include <utility>
@@ -37,7 +36,6 @@ namespace svt
 class FrameStatusListener : public css::frame::XStatusListener,
                             public css::frame::XFrameActionListener,
                             public css::lang::XComponent,
-                            public ::cppu::BaseMutex,
                             public ::cppu::OWeakObject
 {
     public:
