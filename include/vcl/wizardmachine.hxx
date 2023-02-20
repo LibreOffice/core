@@ -302,6 +302,9 @@ namespace vcl
         */
         void                    getStateHistory(std::vector<WizardTypes::WizardState>& out_rHistory);
 
+        virtual OString         getPageIdentForState(WizardTypes::WizardState nState) const;
+        virtual WizardTypes::WizardState getStateFromPageIdent(const OString& rIdent) const;
+
     public:
         class AccessGuard
         {
