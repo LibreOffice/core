@@ -2484,7 +2484,7 @@
         </draw:text-box>
       </draw:frame>
     </style:handout-master>
-    <style:master-page style:name="Cover" style:page-layout-name="PM1" draw:style-name="Mdp1">
+    <style:master-page style:name="Cover" style:display-name="Yellow Idea" style:page-layout-name="PM1" draw:style-name="Mdp1">
       <draw:frame presentation:style-name="Cover-title" draw:layer="backgroundobjects" svg:width="25.199cm" svg:height="2.629cm" svg:x="1.4cm" svg:y="0.628cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
