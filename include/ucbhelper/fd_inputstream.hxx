@@ -24,9 +24,8 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/basemutex.hxx>
-
 #include <ucbhelper/ucbhelperdllapi.h>
+#include <mutex>
 
 namespace ucbhelper
 {
@@ -37,9 +36,7 @@ namespace ucbhelper
     /** Implements a seekable InputStream
      *  working on a buffer.
      */
-    class UCBHELPER_DLLPUBLIC FdInputStream final
-        : protected cppu::BaseMutex,
-          public FdInputStream_Base
+    class UCBHELPER_DLLPUBLIC FdInputStream final : public FdInputStream_Base
     {
     public:
 
@@ -83,6 +80,7 @@ namespace ucbhelper
         getLength() override;
 
     private:
+        std::mutex m_aMutex;
         oslFileHandle m_tmpfl;
         sal_uInt64 m_nLength;
     };

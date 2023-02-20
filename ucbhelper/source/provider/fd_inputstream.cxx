@@ -57,7 +57,7 @@ namespace ucbhelper
     sal_Int32 SAL_CALL FdInputStream::readBytes(Sequence< sal_Int8 >& aData,
                                                  sal_Int32 nBytesToRead)
     {
-        osl::MutexGuard aGuard(m_aMutex);
+        std::unique_lock aGuard(m_aMutex);
 
         sal_uInt64 nBeforePos( 0 );
         sal_uInt64 nBytesRequested( nBytesToRead );
@@ -87,7 +87,7 @@ namespace ucbhelper
 
     void SAL_CALL FdInputStream::skipBytes(sal_Int32 nBytesToSkip)
     {
-        osl::MutexGuard aGuard(m_aMutex);
+        std::unique_lock aGuard(m_aMutex);
         if(!m_tmpfl)
             throw IOException();
 
@@ -104,7 +104,7 @@ namespace ucbhelper
 
     void SAL_CALL FdInputStream::closeInput()
     {
-        osl::MutexGuard aGuard(m_aMutex);
+        std::unique_lock aGuard(m_aMutex);
         if(m_tmpfl)
         {
             osl_closeFile(m_tmpfl);
@@ -115,7 +115,7 @@ namespace ucbhelper
 
     void SAL_CALL FdInputStream::seek(sal_Int64 location)
     {
-        osl::MutexGuard aGuard(m_aMutex);
+        std::unique_lock aGuard(m_aMutex);
         if(!m_tmpfl)
             throw IOException();
 
@@ -127,7 +127,7 @@ namespace ucbhelper
     sal_Int64 SAL_CALL
     FdInputStream::getPosition()
     {
-        osl::MutexGuard aGuard(m_aMutex);
+        std::unique_lock aGuard(m_aMutex);
         if(!m_tmpfl)
             throw IOException();
 
