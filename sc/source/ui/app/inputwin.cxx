@@ -937,7 +937,6 @@ void ScInputBarGroup::Resize()
 {
     mxTextWndGroup->SetScrollPolicy();
     InterimItemWindow::Resize();
-    TriggerToolboxLayout();
 }
 
 void ScInputBarGroup::StopEditEngine(bool bAll)
