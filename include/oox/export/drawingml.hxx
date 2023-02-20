@@ -281,6 +281,10 @@ public:
                            css::uno::Reference<css::graphic::XGraphic> const& rxGraphic,
                            css::awt::Size const& rSize);
 
+    void WriteXGraphicCustomPosition(css::uno::Reference<css::beans::XPropertySet> const& rXPropSet,
+                                     css::uno::Reference<css::graphic::XGraphic> const& rxGraphic,
+                                     css::awt::Size const& rSize);
+
     void WriteLinespacing(const css::style::LineSpacing& rLineSpacing, float fFirstCharHeight);
 
     OUString WriteXGraphicBlip(css::uno::Reference<css::beans::XPropertySet> const & rXPropSet,

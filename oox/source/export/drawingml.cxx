@@ -1584,6 +1584,9 @@ void DrawingML::WriteXGraphicBlipMode(uno::Reference<beans::XPropertySet> const 
     case BitmapMode_STRETCH:
         WriteXGraphicStretch(rXPropSet, rxGraphic);
         break;
+    case BitmapMode_NO_REPEAT:
+        WriteXGraphicCustomPosition(rXPropSet, rxGraphic, rSize);
+        break;
     default:
         break;
     }
@@ -1921,6 +1924,81 @@ void DrawingML::WriteXGraphicTile(uno::Reference<beans::XPropertySet> const& rXP
     mpFS->singleElementNS(XML_a, XML_tile, XML_tx, OUString::number(nOffsetX), XML_ty,
                           OUString::number(nOffsetY), XML_sx, OUString::number(nSizeX), XML_sy,
                           OUString::number(nSizeY), XML_algn, sRectanglePoint);
+}
+
+void DrawingML::WriteXGraphicCustomPosition(uno::Reference<beans::XPropertySet> const& rXPropSet,
+                                            uno::Reference<graphic::XGraphic> const& rxGraphic,
+                                            css::awt::Size const& rSize)
+{
+    Graphic aGraphic(rxGraphic);
+    Size aOriginalSize(aGraphic.GetPrefSize());
+    const MapMode& rMapMode = aGraphic.GetPrefMapMode();
+    // if the original size is in pixel, convert it to mm100
+    if (rMapMode.GetMapUnit() == MapUnit::MapPixel)
+        aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aOriginalSize,
+                                                                      MapMode(MapUnit::Map100thMM));
+    double nSizeX = 0;
+    if (GetProperty(rXPropSet, "FillBitmapSizeX"))
+    {
+        mAny >>= nSizeX;
+        if (nSizeX <= 0)
+        {
+            if (nSizeX == 0)
+                nSizeX = aOriginalSize.Width();
+            else
+                nSizeX /= 100; // percentage
+        }
+    }
+
+    double nSizeY = 0;
+    if (GetProperty(rXPropSet, "FillBitmapSizeY"))
+    {
+        mAny >>= nSizeY;
+        if (nSizeY <= 0)
+        {
+            if (nSizeY == 0)
+                nSizeY = aOriginalSize.Height();
+            else
+                nSizeY /= 100; // percentage
+        }
+    }
+
+    if (nSizeX < 0 && nSizeY < 0 && rSize.Width != 0 && rSize.Height != 0)
+    {
+        nSizeX = rSize.Width * std::abs(nSizeX);
+        nSizeY = rSize.Height * std::abs(nSizeY);
+    }
+
+    sal_Int32 nL = 0, nT = 0, nR = 0, nB = 0;
+    if (GetProperty(rXPropSet, "FillBitmapRectanglePoint"))
+    {
+        sal_Int32 nWidth = (1 - (nSizeX / rSize.Width)) * 100000;
+        sal_Int32 nHeight = (1 - (nSizeY / rSize.Height)) * 100000;
+
+        switch (*o3tl::doAccess<RectanglePoint>(mAny))
+        {
+            case RectanglePoint_LEFT_TOP:      nR = nWidth;          nB = nHeight;          break;
+            case RectanglePoint_RIGHT_TOP:     nL = nWidth;          nB = nHeight;          break;
+            case RectanglePoint_LEFT_BOTTOM:   nR = nWidth;          nT = nHeight;          break;
+            case RectanglePoint_RIGHT_BOTTOM:  nL = nWidth;          nT = nHeight;          break;
+            case RectanglePoint_LEFT_MIDDLE:   nR = nWidth;          nT = nB = nHeight / 2; break;
+            case RectanglePoint_RIGHT_MIDDLE:  nL = nWidth;          nT = nB = nHeight / 2; break;
+            case RectanglePoint_MIDDLE_TOP:    nB = nHeight;         nL = nR = nWidth / 2;  break;
+            case RectanglePoint_MIDDLE_BOTTOM: nT = nHeight;         nL = nR = nWidth / 2;  break;
+            case RectanglePoint_MIDDLE_MIDDLE: nL = nR = nWidth / 2; nT = nB = nHeight / 2; break;
+            default: break;
+        }
+    }
+
+    mpFS->startElementNS(XML_a, XML_stretch);
+
+    mpFS->singleElementNS(XML_a, XML_fillRect, XML_l,
+                          sax_fastparser::UseIf(OString::number(nL), nL != 0), XML_t,
+                          sax_fastparser::UseIf(OString::number(nT), nT != 0), XML_r,
+                          sax_fastparser::UseIf(OString::number(nR), nR != 0), XML_b,
+                          sax_fastparser::UseIf(OString::number(nB), nB != 0));
+
+    mpFS->endElementNS(XML_a, XML_stretch);
 }
 
 namespace

@@ -49,6 +49,22 @@ public:
     int testTdf115005_FallBack_Images(bool bAddReplacementImages);
 };
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf153105)
+{
+    createSdImpressDoc("odp/tdf153105.odp");
+    save("Impress Office Open XML");
+
+    xmlDocUniquePtr pXmlDoc1 = parseExport("ppt/slides/slide1.xml");
+    assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:stretch/a:fillRect", "l",
+                "20000");
+    assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:stretch/a:fillRect", "t",
+                "30000");
+    assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:stretch/a:fillRect", "r",
+                "20000");
+    assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:stretch/a:fillRect", "b",
+                "30000");
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf92222)
 {
     createSdImpressDoc("pptx/tdf92222.pptx");
