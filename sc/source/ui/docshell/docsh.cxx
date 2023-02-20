@@ -77,6 +77,7 @@
 
 #include <scabstdlg.hxx>
 #include <sot/formats.hxx>
+#include <svx/compatflags.hxx>
 #include <svx/dialogs.hrc>
 
 #include <formulacell.hxx>
@@ -584,13 +585,16 @@ bool ScDocShell::Load( SfxMedium& rMedium )
     InitOptions(true);
 
     // If this is an ODF file being loaded, then by default, use legacy processing
-    // for tdf#99729 (if required, it will be overridden in *::ReadUserDataSequence())
+    // (if required, it will be overridden in *::ReadUserDataSequence())
     if (IsOwnStorageFormat(rMedium))
     {
-        if (m_pDocument->GetDrawLayer())
-            m_pDocument->GetDrawLayer()->SetAnchoredTextOverflowLegacy(true);
-        if (m_pDocument->GetDrawLayer())
-            m_pDocument->GetDrawLayer()->SetLegacySingleLineFontwork(true); //for tdf#148000
+        if (ScDrawLayer* pDrawLayer = m_pDocument->GetDrawLayer())
+        {
+            pDrawLayer->SetCompatibilityFlag(SdrCompatibilityFlag::AnchoredTextOverflowLegacy,
+                                             true); // for tdf#99729
+            pDrawLayer->SetCompatibilityFlag(SdrCompatibilityFlag::LegacySingleLineFontwork,
+                                             true); // for tdf#148000
+        }
     }
 
     GetUndoManager()->Clear();

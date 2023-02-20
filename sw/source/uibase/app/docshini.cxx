@@ -35,6 +35,7 @@
 #include <editeng/autokernitem.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <svx/compatflags.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
@@ -479,8 +480,10 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
             SwDrawModel* pDrawModel = m_xDoc->getIDocumentDrawModelAccess().GetDrawModel();
             if (pDrawModel)
             {
-                pDrawModel->SetAnchoredTextOverflowLegacy(true); // legacy processing for tdf#99729
-                pDrawModel->SetLegacySingleLineFontwork(true); // legacy processing for tdf#148000
+                pDrawModel->SetCompatibilityFlag(SdrCompatibilityFlag::AnchoredTextOverflowLegacy,
+                                                 true); // legacy processing for tdf#99729
+                pDrawModel->SetCompatibilityFlag(SdrCompatibilityFlag::LegacySingleLineFontwork,
+                                                 true); // legacy processing for tdf#148000
             }
         }
 

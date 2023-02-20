@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <svx/compatflags.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdpage.hxx>
@@ -1021,7 +1021,8 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
             bool bAllowGrowHorizontal = bVerticalWriting;
 
             // Compatibility mode for tdf#99729
-            if (getSdrModelFromSdrObject().IsAnchoredTextOverflowLegacy())
+            if (getSdrModelFromSdrObject().GetCompatibilityFlag(
+                    SdrCompatibilityFlag::AnchoredTextOverflowLegacy))
             {
                 bAllowGrowVertical = bHorizontalIsBlock;
                 bAllowGrowHorizontal = bVerticalIsBlock;

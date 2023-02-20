@@ -29,6 +29,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svl/whiter.hxx>
 #include <svl/asiancfg.hxx>
+#include <svx/compatflags.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnedit.hxx>
@@ -1690,34 +1691,35 @@ void SdrModel::SetAddExtLeading( bool bEnabled )
     }
 }
 
-void SdrModel::SetAnchoredTextOverflowLegacy(bool bEnabled)
+void SdrModel::SetCompatibilityFlag(SdrCompatibilityFlag eFlag, bool bEnabled)
 {
-    mpImpl->mbAnchoredTextOverflowLegacy = bEnabled;
+    switch (eFlag)
+    {
+        case SdrCompatibilityFlag::AnchoredTextOverflowLegacy:
+            mpImpl->mbAnchoredTextOverflowLegacy = bEnabled;
+            break;
+        case SdrCompatibilityFlag::LegacySingleLineFontwork:
+            mpImpl->mbLegacySingleLineFontwork = bEnabled;
+            break;
+        case SdrCompatibilityFlag::ConnectorUseSnapRect:
+            mpImpl->mbConnectorUseSnapRect = bEnabled;
+            break;
+    }
 }
 
-bool SdrModel::IsAnchoredTextOverflowLegacy() const
+bool SdrModel::GetCompatibilityFlag(SdrCompatibilityFlag eFlag) const
 {
-    return mpImpl->mbAnchoredTextOverflowLegacy;
-}
-
-void SdrModel::SetLegacySingleLineFontwork(bool bEnabled)
-{
-    mpImpl->mbLegacySingleLineFontwork = bEnabled;
-}
-
-bool SdrModel::IsLegacySingleLineFontwork() const
-{
-    return mpImpl->mbLegacySingleLineFontwork;
-}
-
-void SdrModel::SetConnectorUseSnapRect(bool bEnabled)
-{
-    mpImpl->mbConnectorUseSnapRect = bEnabled;
-}
-
-bool SdrModel::IsConnectorUseSnapRect() const
-{
-    return mpImpl->mbConnectorUseSnapRect;
+    switch (eFlag)
+    {
+        case SdrCompatibilityFlag::AnchoredTextOverflowLegacy:
+            return mpImpl->mbAnchoredTextOverflowLegacy;
+        case SdrCompatibilityFlag::LegacySingleLineFontwork:
+            return mpImpl->mbLegacySingleLineFontwork;
+        case SdrCompatibilityFlag::ConnectorUseSnapRect:
+            return mpImpl->mbConnectorUseSnapRect;
+        default:
+            return false;
+    }
 }
 
 void SdrModel::ReformatAllTextObjects()
@@ -1808,9 +1810,12 @@ static void addPair(std::vector< std::pair< OUString, uno::Any > >& aUserData, c
 void SdrModel::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rValues)
 {
     std::vector< std::pair< OUString, uno::Any > > aUserData;
-    addPair(aUserData, "AnchoredTextOverflowLegacy", IsAnchoredTextOverflowLegacy());
-    addPair(aUserData, "LegacySingleLineFontwork", IsLegacySingleLineFontwork());
-    addPair(aUserData, "ConnectorUseSnapRect", IsConnectorUseSnapRect());
+    addPair(aUserData, "AnchoredTextOverflowLegacy",
+            GetCompatibilityFlag(SdrCompatibilityFlag::AnchoredTextOverflowLegacy));
+    addPair(aUserData, "LegacySingleLineFontwork",
+            GetCompatibilityFlag(SdrCompatibilityFlag::LegacySingleLineFontwork));
+    addPair(aUserData, "ConnectorUseSnapRect",
+            GetCompatibilityFlag(SdrCompatibilityFlag::ConnectorUseSnapRect));
 
     const sal_Int32 nOldLength = rValues.getLength();
     rValues.realloc(nOldLength + aUserData.size());

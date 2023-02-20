@@ -77,6 +77,7 @@ class SdrUndoFactory;
 class ImageMap;
 class TextChain;
 enum class CharCompressType;
+enum class SdrCompatibilityFlag;
 namespace comphelper
 {
     class IEmbeddedHelper;
@@ -566,17 +567,9 @@ public:
     void SetAddExtLeading( bool bEnabled );
     bool IsAddExtLeading() const { return mbAddExtLeading; }
 
-    // tdf#99729 compatibility flag
-    void SetAnchoredTextOverflowLegacy(bool bEnabled);
-    bool IsAnchoredTextOverflowLegacy() const;
-
-    // tdf#148000 compatibility flag
-    void SetLegacySingleLineFontwork(bool bEnabled);
-    bool IsLegacySingleLineFontwork() const;
-
-    // tdf#149756 compatibility flag
-    void SetConnectorUseSnapRect(bool bEnabled);
-    bool IsConnectorUseSnapRect() const;
+    void SetCompatibilityFlag(SdrCompatibilityFlag eFlag, bool bEnabled);
+    /// @returns state of the SdrCompatibilityFlag
+    bool GetCompatibilityFlag(SdrCompatibilityFlag eFlag) const;
 
     void ReformatAllTextObjects();
 
