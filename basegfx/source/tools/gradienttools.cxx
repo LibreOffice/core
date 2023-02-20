@@ -464,7 +464,7 @@ namespace basegfx
             // MCGR: Similar to getRectangularGradientAlpha (please
             // see there) we need to use aspect ratio here. Due to
             // initEllipticalGradientInfo using M_SQRT2 to make this
-            // gradient look 'nicer' this correciton seems not 100%
+            // gradient look 'nicer' this correction seems not 100%
             // correct, but is close enough for now
             if(fAspectRatio > 1.0)
             {
