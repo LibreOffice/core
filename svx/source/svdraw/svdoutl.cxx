@@ -17,9 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <optional>
 #include <svx/svdoutl.hxx>
 #include <editeng/outliner.hxx>
+#include <svx/svdmodel.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/svdpage.hxx>
 #include <editeng/editstat.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/editview.hxx>
@@ -102,6 +105,15 @@ bool SdrOutliner::hasEditViewCallbacks() const
     }
 
     return false;
+}
+
+std::optional<bool> SdrOutliner::GetCompatFlag(SdrCompatibilityFlag eFlag) const
+{
+    if( mpVisualizedPage )
+    {
+        return {mpVisualizedPage->getSdrModelFromSdrPage().GetCompatibilityFlag(eFlag)};
+    }
+    return {};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

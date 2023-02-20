@@ -77,6 +77,7 @@ class SvxFieldData;
 enum class PointerStyle;
 class SvxNumRule;
 enum class TextRotation;
+enum class SdrCompatibilityFlag;
 
 namespace com::sun::star::linguistic2 {
     class XSpellChecker1;
@@ -987,6 +988,9 @@ public:
 
     // convenient method to determine the bullets/numbering status for all paragraphs
     sal_Int32 GetBulletsNumberingStatus() const;
+
+    // overriden in SdrOutliner
+    virtual std::optional<bool> GetCompatFlag(SdrCompatibilityFlag /*eFlag*/) const { return {}; };
 };
 
 #endif

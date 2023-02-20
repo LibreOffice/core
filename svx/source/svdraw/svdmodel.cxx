@@ -86,6 +86,7 @@ struct SdrModelImpl
     bool mbAnchoredTextOverflowLegacy; // tdf#99729 compatibility flag
     bool mbLegacySingleLineFontwork;   // tdf#148000 compatibility flag
     bool mbConnectorUseSnapRect;       // tdf#149756 compatibility flag
+    bool mbIgnoreBreakAfterMultilineField; ///< tdf#148966 compatibility flag
     std::unique_ptr<model::Theme> mpTheme;
 
     SdrModelImpl()
@@ -94,6 +95,7 @@ struct SdrModelImpl
         , mbAnchoredTextOverflowLegacy(false)
         , mbLegacySingleLineFontwork(false)
         , mbConnectorUseSnapRect(false)
+        , mbIgnoreBreakAfterMultilineField(false)
     {}
 };
 
@@ -1704,6 +1706,9 @@ void SdrModel::SetCompatibilityFlag(SdrCompatibilityFlag eFlag, bool bEnabled)
         case SdrCompatibilityFlag::ConnectorUseSnapRect:
             mpImpl->mbConnectorUseSnapRect = bEnabled;
             break;
+        case SdrCompatibilityFlag::IgnoreBreakAfterMultilineField:
+            mpImpl->mbIgnoreBreakAfterMultilineField = bEnabled;
+            break;
     }
 }
 
@@ -1717,6 +1722,8 @@ bool SdrModel::GetCompatibilityFlag(SdrCompatibilityFlag eFlag) const
             return mpImpl->mbLegacySingleLineFontwork;
         case SdrCompatibilityFlag::ConnectorUseSnapRect:
             return mpImpl->mbConnectorUseSnapRect;
+        case SdrCompatibilityFlag::IgnoreBreakAfterMultilineField:
+            return mpImpl->mbIgnoreBreakAfterMultilineField;
         default:
             return false;
     }
@@ -1799,6 +1806,14 @@ void SdrModel::ReadUserDataSequenceValue(const beans::PropertyValue* pValue)
             }
         }
     }
+    else if (pValue->Name == "IgnoreBreakAfterMultilineField")
+    {
+        bool bBool = false;
+        if (pValue->Value >>= bBool)
+        {
+            mpImpl->mbIgnoreBreakAfterMultilineField = bBool;
+        }
+    }
 }
 
 template <typename T>
@@ -1816,6 +1831,8 @@ void SdrModel::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rValu
             GetCompatibilityFlag(SdrCompatibilityFlag::LegacySingleLineFontwork));
     addPair(aUserData, "ConnectorUseSnapRect",
             GetCompatibilityFlag(SdrCompatibilityFlag::ConnectorUseSnapRect));
+    addPair(aUserData, "IgnoreBreakAfterMultilineField",
+            GetCompatibilityFlag(SdrCompatibilityFlag::IgnoreBreakAfterMultilineField));
 
     const sal_Int32 nOldLength = rValues.getLength();
     rValues.realloc(nOldLength + aUserData.size());

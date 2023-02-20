@@ -314,6 +314,32 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testFitToFrameTextFitting)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf148966)
+{
+    // Test related to IgnoreBreakAfterMultilineField compatibility flag.
+    {
+        xmlDocUniquePtr pXmlDoc = load("pptx/tdf148966.pptx");
+        // Without the accompanying fix, would fail with:
+        // - Expected: 5952
+        // - Actual  : 7814
+        // i.e. Line break after multiline field should have been ignored.
+        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", "5952");
+    }
+    {
+        xmlDocUniquePtr pXmlDoc = load("odp/tdf148966-withflag.odp");
+        // Without the accompanying fix, would fail with:
+        // - Expected: 5952
+        // - Actual  : 7814
+        // i.e. When IgnoreBreakAfterMultilineField flag is set, line break
+        // after multiline field should have been ignored.
+        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", "5952");
+    }
+    {
+        xmlDocUniquePtr pXmlDoc = load("odp/tdf148966-withoutflag.odp");
+        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", "7814");
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

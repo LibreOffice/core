@@ -30,7 +30,7 @@
 #include <i18nlangtag/languagetag.hxx>
 
 #include <editeng/outliner.hxx>
-#include "outleeng.hxx"
+#include <outleeng.hxx>
 #include "paralist.hxx"
 #include "outlundo.hxx"
 #include <editeng/outlobj.hxx>

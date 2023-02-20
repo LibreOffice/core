@@ -3377,6 +3377,7 @@ editeng/inc/editattr.hxx
 editeng/inc/editdoc.hxx
 editeng/inc/edtspell.hxx
 editeng/inc/eerdll2.hxx
+editeng/inc/outleeng.hxx
 editeng/inc/unomodel.hxx
 editeng/qa/items/borderline_test.cxx
 editeng/qa/lookuptree/lookuptree_test.cxx
@@ -3455,7 +3456,6 @@ editeng/source/misc/swafopt.cxx
 editeng/source/misc/txtrange.cxx
 editeng/source/misc/unolingu.cxx
 editeng/source/outliner/outleeng.cxx
-editeng/source/outliner/outleeng.hxx
 editeng/source/outliner/outlin2.cxx
 editeng/source/outliner/outliner.cxx
 editeng/source/outliner/outlobj.cxx
