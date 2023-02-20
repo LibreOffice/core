@@ -278,7 +278,7 @@ public:
 class GtkSalData final : public GenericUnixSalData
 {
     GSource*        m_pUserEvent;
-    std::mutex      m_aDispatchMutex;
+    osl::Mutex      m_aDispatchMutex;
     osl::Condition  m_aDispatchCondition;
     std::exception_ptr m_aException;
 

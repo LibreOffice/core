@@ -358,7 +358,7 @@ GtkSalData::~GtkSalData()
     // up anyway before the condition they're waiting on gets destroyed.
     m_aDispatchCondition.set();
 
-    std::unique_lock g( m_aDispatchMutex );
+    osl::MutexGuard g( m_aDispatchMutex );
     if (m_pUserEvent)
     {
         g_source_destroy (m_pUserEvent);
@@ -389,7 +389,7 @@ bool GtkSalData::Yield( bool bWait, bool bHandleAllCurrentEvents )
     {
         // release YieldMutex (and re-acquire at block end)
         SolarMutexReleaser aReleaser;
-        if( m_aDispatchMutex.try_lock() )
+        if( m_aDispatchMutex.tryToAcquire() )
             bDispatchThread = true;
         else if( ! bWait )
         {
@@ -423,7 +423,7 @@ bool GtkSalData::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
     if( bDispatchThread )
     {
-        m_aDispatchMutex.unlock();
+        m_aDispatchMutex.release();
         if( bWasEvent )
             m_aDispatchCondition.set(); // trigger non dispatch thread yields
     }
