@@ -1075,7 +1075,7 @@
         </draw:text-box>
       </draw:frame>
     </style:handout-master>
-    <style:master-page style:name="Title" style:page-layout-name="PM1" draw:style-name="Mdp1">
+    <style:master-page style:name="Title" style:display-name="Portfolio" style:page-layout-name="PM1" draw:style-name="Mdp1">
       <draw:frame presentation:style-name="Title-title" draw:layer="backgroundobjects" svg:width="25cm" svg:height="1.829cm" svg:x="0.4cm" svg:y="10.8cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>

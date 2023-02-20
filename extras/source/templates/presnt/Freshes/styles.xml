@@ -2741,7 +2741,7 @@
       <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="9.294cm" svg:height="5.228cm" svg:x="11.295cm" svg:y="11.354cm"/>
       <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="9.294cm" svg:height="5.228cm" svg:x="11.295cm" svg:y="19.402cm"/>
     </style:handout-master>
-    <style:master-page style:name="Title" style:page-layout-name="PM1" draw:style-name="Mdp1">
+    <style:master-page style:name="Title" style:display-name="Freshes" style:page-layout-name="PM1" draw:style-name="Mdp1">
       <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
       <draw:frame presentation:style-name="Title-title" draw:layer="backgroundobjects" svg:width="25.191cm" svg:height="2.629cm" svg:x="1.399cm" svg:y="0.627cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
