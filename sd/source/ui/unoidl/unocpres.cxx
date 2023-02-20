@@ -43,14 +43,12 @@ uno::Reference< uno::XInterface > createUnoCustomShow( SdCustomShow* pShow )
 
 SdXCustomPresentation::SdXCustomPresentation() noexcept
 :   mpSdCustomShow(nullptr), mpModel(nullptr),
-    aDisposeListeners( aDisposeContainerMutex ),
     bDisposing( false )
 {
 }
 
 SdXCustomPresentation::SdXCustomPresentation( SdCustomShow* pShow) noexcept
 :   mpSdCustomShow(pShow), mpModel(nullptr),
-    aDisposeListeners( aDisposeContainerMutex ),
     bDisposing( false )
 {
 }
@@ -233,9 +231,10 @@ void SAL_CALL SdXCustomPresentation::dispose()
 
     uno::Reference< uno::XInterface > xSource( static_cast<cppu::OWeakObject*>(this) );
 
+    std::unique_lock aGuard2(aDisposeContainerMutex);
     lang::EventObject aEvt;
     aEvt.Source = xSource;
-    aDisposeListeners.disposeAndClear(aEvt);
+    aDisposeListeners.disposeAndClear(aGuard2, aEvt);
 
     mpSdCustomShow = nullptr;
 }
@@ -245,13 +244,17 @@ void SAL_CALL SdXCustomPresentation::addEventListener( const uno::Reference< lan
     if( bDisposing )
         throw lang::DisposedException();
 
-    aDisposeListeners.addInterface(xListener);
+    std::unique_lock aGuard(aDisposeContainerMutex);
+    aDisposeListeners.addInterface(aGuard, xListener);
 }
 
 void SAL_CALL SdXCustomPresentation::removeEventListener( const uno::Reference< lang::XEventListener >& aListener )
 {
     if( !bDisposing )
-        aDisposeListeners.removeInterface(aListener);
+    {
+        std::unique_lock aGuard(aDisposeContainerMutex);
+        aDisposeListeners.removeInterface(aGuard, aListener);
+    }
 }
 
 /*===========================================================================*

@@ -22,7 +22,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <osl/mutex.hxx>
 
 #include <cppuhelper/implbase.hxx>
@@ -46,8 +46,8 @@ private:
     SdXImpressDocument* mpModel;
 
     // for xComponent
-    ::osl::Mutex aDisposeContainerMutex;
-    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> aDisposeListeners;
+    std::mutex aDisposeContainerMutex;
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> aDisposeListeners;
     bool bDisposing;
 
 public:
