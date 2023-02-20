@@ -505,6 +505,8 @@ struct _LibreOfficeKitDocumentClass
                             unsigned char* pBuffer,
                             int x,
                             int y);
+    /// @see lok::Document::setAccessibilityState().
+    void (*setAccessibilityState) (LibreOfficeKitDocument* pThis, int nId, bool nEnabled);
 
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };

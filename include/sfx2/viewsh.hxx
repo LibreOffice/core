@@ -56,6 +56,7 @@ class SfxPrinter;
 class NotifyEvent;
 class SfxInPlaceClient;
 class SfxLokCallbackInterface;
+class LOKDocumentFocusListener;
 class SfxStoringHelper;
 namespace rtl { class OStringBuffer; }
 namespace vcl { class PrinterController; }
@@ -169,6 +170,8 @@ friend class SfxPrinterController;
     LanguageTag                 maLOKLanguageTag;
     LanguageTag                 maLOKLocale;
     LOKDeviceFormFactor         maLOKDeviceFormFactor;
+    bool                        mbLOKAccessibilityEnabled;
+    std::unique_ptr<LOKDocumentFocusListener>   mpLOKDocumentFocusListener;
     std::unordered_set<OUString>    mvLOKBlockedCommandList;
     OUString maLOKTimezone;
     bool maLOKIsTimezoneSet;
@@ -207,6 +210,8 @@ public:
 private:
     /// SfxInterface initializer.
     static void InitInterface_Impl();
+
+    LOKDocumentFocusListener& GetLOKDocumentFocusListener();
 
 public:
 
@@ -405,6 +410,8 @@ public:
     void SetLOKLanguageTag(const OUString& rBcp47LanguageTag);
     /// Get the LibreOfficeKit language of this view.
     const LanguageTag& GetLOKLanguageTag() const { return maLOKLanguageTag; }
+    /// Enable/Disable LibreOfficeKit AT support for this view.
+    void SetLOKAccessibilityState(bool bEnabled);
 
     /// Get the LibreOfficeKit timezone of this view. See @SetLOKTimezone.
     std::pair<bool, OUString> GetLOKTimezone() const
