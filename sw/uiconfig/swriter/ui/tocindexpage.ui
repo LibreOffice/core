@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -282,10 +282,10 @@
                       <object class="GtkSpinButton" id="level">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
+                        <property name="tooltip-text" translatable="yes" context="tocindexpage|level|tooltip_text">Enter the number of outline levels to include in the index.</property>
                         <property name="activates-default">True</property>
                         <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment1</property>
-                        <property name="tooltip_text" translatable="yes" context="tocindexpage|level|tooltip_text">Enter the number of outline levels to include in the index.</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="level-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|level">Enter the number of outline levels to include in the index. All headings are included that have an outline level less than or equal to the specified value.</property>
@@ -351,10 +351,10 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="no-show-all">True</property>
+                        <property name="tooltip-text" translatable="yes" context="tocindexpage|fromheadings|tooltip_text">Creates the index from all paragraphs that have an outline level equal to or greater than “1”.</property>
                         <property name="use-underline">True</property>
                         <property name="active">True</property>
                         <property name="draw-indicator">True</property>
-                        <property name="tooltip_text" translatable="yes" context="tocindexpage|fromheadings|tooltip_text">Creates the index from all paragraphs that have an outline level equal to or greater than “1”.</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="fromheadings-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|fromheadings">Creates the index from all paragraphs that have an outline level equal to or greater than “1”.</property>
@@ -501,9 +501,9 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">False</property>
+                                <property name="tooltip-text" translatable="yes" context="tocindexpage|addstylescb|tooltip_text">Include selected paragraph styles with outline level “Text Body” in the index.</property>
                                 <property name="use-underline">True</property>
                                 <property name="draw-indicator">True</property>
-                                <property name="tooltip_text" translatable="yes" context="tocindexpage|addstylescb|tooltip_text">Include selected paragraph styles with outline level “Text Body” in the index.</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="addstylescb-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|addstylescb">Includes the paragraph styles that you specify in the Assign Styles dialog as index entries. To select the paragraph styles that you want to include in the index, click the Assign Styles (...) button to the right of this box.</property>
@@ -827,8 +827,8 @@
               <object class="GtkGrid" id="grid14">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
                 <property name="margin-start">12</property>
+                <property name="hexpand">True</property>
                 <property name="row-spacing">6</property>
                 <property name="column-spacing">12</property>
                 <child>
