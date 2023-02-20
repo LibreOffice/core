@@ -24,10 +24,10 @@
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <memory>
+#include <mutex>
 #include <vector>
 
 namespace cppu { class IPropertyArrayHelper; }
@@ -37,8 +37,7 @@ namespace chart
 {
 
 class OOO_DLLPUBLIC_CHARTTOOLS WrappedPropertySet :
-                           public cppu::BaseMutex
-                         , public ::cppu::WeakImplHelper
+                         public ::cppu::WeakImplHelper
                          < css::beans::XPropertySet
                          , css::beans::XMultiPropertySet
                          , css::beans::XPropertyState
@@ -102,6 +101,8 @@ protected: //methods
 
     const WrappedProperty*          getWrappedProperty( const OUString& rOuterName );
     const WrappedProperty*          getWrappedProperty( sal_Int32 nHandle );
+
+    std::mutex m_aMutex;
 
 private:
     css::uno::Reference< css::beans::XPropertySetInfo >     m_xInfo;//outer PropertySetInfo

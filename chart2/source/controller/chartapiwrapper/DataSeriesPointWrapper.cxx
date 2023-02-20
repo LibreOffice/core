@@ -460,7 +460,6 @@ namespace chart::wrapper
 
 DataSeriesPointWrapper::DataSeriesPointWrapper( std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
     : m_spChart2ModelContact( std::move(spChart2ModelContact) )
-    , m_aEventListenerContainer( m_aMutex )
     , m_eType( DATA_SERIES )
     , m_nSeriesIndexInNewAPI( -1 )
     , m_nPointIndex( -1 )
@@ -503,7 +502,6 @@ DataSeriesPointWrapper::DataSeriesPointWrapper(eType _eType,
                                                sal_Int32 nPointIndex, //ignored for series
                                                std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
     : m_spChart2ModelContact( std::move(spChart2ModelContact) )
-    , m_aEventListenerContainer( m_aMutex )
     , m_eType( _eType )
     , m_nSeriesIndexInNewAPI( nSeriesIndexInNewAPI )
     , m_nPointIndex( (_eType == DATA_POINT) ? nPointIndex : -1 )
@@ -518,8 +516,9 @@ DataSeriesPointWrapper::~DataSeriesPointWrapper()
 // ____ XComponent ____
 void SAL_CALL DataSeriesPointWrapper::dispose()
 {
+    std::unique_lock g(m_aMutex);
     uno::Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
-    m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
+    m_aEventListenerContainer.disposeAndClear( g, lang::EventObject( xSource ) );
 
     m_xDataSeries.clear();
     clearWrappedPropertySet();
@@ -528,13 +527,15 @@ void SAL_CALL DataSeriesPointWrapper::dispose()
 void SAL_CALL DataSeriesPointWrapper::addEventListener(
     const uno::Reference< lang::XEventListener >& xListener )
 {
-    m_aEventListenerContainer.addInterface( xListener );
+    std::unique_lock g(m_aMutex);
+    m_aEventListenerContainer.addInterface( g, xListener );
 }
 
 void SAL_CALL DataSeriesPointWrapper::removeEventListener(
     const uno::Reference< lang::XEventListener >& aListener )
 {
-    m_aEventListenerContainer.removeInterface( aListener );
+    std::unique_lock g(m_aMutex);
+    m_aEventListenerContainer.removeInterface( g, aListener );
 }
 
 // ____ XEventListener ____

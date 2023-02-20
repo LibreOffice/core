@@ -263,7 +263,6 @@ namespace chart::wrapper
 
 LegendWrapper::LegendWrapper(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
     : m_spChart2ModelContact(std::move(spChart2ModelContact))
-    , m_aEventListenerContainer(m_aMutex)
 {
 }
 
@@ -322,23 +321,25 @@ OUString SAL_CALL LegendWrapper::getShapeType()
 // ____ XComponent ____
 void SAL_CALL LegendWrapper::dispose()
 {
+    std::unique_lock g(m_aMutex);
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
-    m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
+    m_aEventListenerContainer.disposeAndClear( g, lang::EventObject( xSource ) );
 
-    MutexGuard aGuard( m_aMutex);
     clearWrappedPropertySet();
 }
 
 void SAL_CALL LegendWrapper::addEventListener(
     const Reference< lang::XEventListener >& xListener )
 {
-    m_aEventListenerContainer.addInterface( xListener );
+    std::unique_lock g(m_aMutex);
+    m_aEventListenerContainer.addInterface( g, xListener );
 }
 
 void SAL_CALL LegendWrapper::removeEventListener(
     const Reference< lang::XEventListener >& aListener )
 {
-    m_aEventListenerContainer.removeInterface( aListener );
+    std::unique_lock g(m_aMutex);
+    m_aEventListenerContainer.removeInterface( g, aListener );
 }
 
 //ReferenceSizePropertyProvider

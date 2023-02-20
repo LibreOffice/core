@@ -560,7 +560,6 @@ namespace chart::wrapper
 
 DiagramWrapper::DiagramWrapper(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
     : m_spChart2ModelContact(std::move(spChart2ModelContact))
-    , m_aEventListenerContainer(m_aMutex)
 {
 }
 
@@ -1052,9 +1051,8 @@ void SAL_CALL DiagramWrapper::setDefaultIllumination()
 // ____ XComponent ____
 void SAL_CALL DiagramWrapper::dispose()
 {
-    m_aEventListenerContainer.disposeAndClear( lang::EventObject( static_cast< ::cppu::OWeakObject* >( this )));
-
-    MutexGuard aGuard( m_aMutex);
+    std::unique_lock g(m_aMutex);
+    m_aEventListenerContainer.disposeAndClear( g, lang::EventObject( static_cast< ::cppu::OWeakObject* >( this )));
 
     DisposeHelper::DisposeAndClear( m_xXAxis );
     DisposeHelper::DisposeAndClear( m_xYAxis );
@@ -1073,13 +1071,15 @@ void SAL_CALL DiagramWrapper::dispose()
 void SAL_CALL DiagramWrapper::addEventListener(
     const Reference< lang::XEventListener >& xListener )
 {
-    m_aEventListenerContainer.addInterface( xListener );
+    std::unique_lock g(m_aMutex);
+    m_aEventListenerContainer.addInterface( g, xListener );
 }
 
 void SAL_CALL DiagramWrapper::removeEventListener(
     const Reference< lang::XEventListener >& aListener )
 {
-    m_aEventListenerContainer.removeInterface( aListener );
+    std::unique_lock g(m_aMutex);
+    m_aEventListenerContainer.removeInterface( g, aListener );
 }
 
 namespace {
