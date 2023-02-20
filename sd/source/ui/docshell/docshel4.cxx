@@ -27,6 +27,7 @@
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <editeng/outlobj.hxx>
 #include <tools/urlobj.hxx>
+#include <svx/compatflags.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/editeng.hxx>
 #include <editeng/editstat.hxx>
@@ -265,11 +266,11 @@ bool DrawDocShell::InitNew( const css::uno::Reference< css::embed::XStorage >& x
 bool DrawDocShell::Load( SfxMedium& rMedium )
 {
     // If this is an ODF file being loaded, then by default, use legacy processing
-    // for tdf#99729 (if required, it will be overridden in *::ReadUserDataSequence())
+    // (if required, it will be overridden in *::ReadUserDataSequence())
     if (IsOwnStorageFormat(rMedium))
     {
-        mpDoc->SetAnchoredTextOverflowLegacy(true);
-        mpDoc->SetLegacySingleLineFontwork(true); //for tdf#148000
+        mpDoc->SetCompatibilityFlag(SdrCompatibilityFlag::AnchoredTextOverflowLegacy, true); // for tdf#99729
+        mpDoc->SetCompatibilityFlag(SdrCompatibilityFlag::LegacySingleLineFontwork, true); // for tdf#148000
     }
 
     bool       bRet = false;
@@ -407,7 +408,7 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
         // This is a "MS Compact" mode for connectors.
         // The Libreoffice uses bounding rectangle of connected shapes but
         // MSO uses snap rectangle when calculate the edge track.
-        mpDoc->SetConnectorUseSnapRect(true);
+        mpDoc->SetCompatibilityFlag(SdrCompatibilityFlag::ConnectorUseSnapRect, true);
     }
 
     if (aFilterName == "Impress MS PowerPoint 2007 XML" ||

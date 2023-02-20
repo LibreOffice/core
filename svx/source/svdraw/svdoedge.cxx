@@ -27,6 +27,7 @@
 
 #include <sdr/contact/viewcontactofsdredgeobj.hxx>
 #include <sdr/properties/connectorproperties.hxx>
+#include <svx/compatflags.hxx>
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svddrgmt.hxx>
@@ -753,7 +754,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
         }
         else
         {
-            if (getSdrModelFromSdrObject().IsConnectorUseSnapRect())
+            if (getSdrModelFromSdrObject().GetCompatibilityFlag(SdrCompatibilityFlag::ConnectorUseSnapRect))
                 aBoundRect1 = rCon1.pObj->GetSnapRect();
             else
                 aBoundRect1 = rCon1.pObj->GetCurrentBoundRect();
@@ -783,7 +784,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
         }
         else
         {
-            if (getSdrModelFromSdrObject().IsConnectorUseSnapRect())
+            if (getSdrModelFromSdrObject().GetCompatibilityFlag(SdrCompatibilityFlag::ConnectorUseSnapRect))
                 aBoundRect2 = rCon2.pObj->GetSnapRect();
             else
                 aBoundRect2 = rCon2.pObj->GetCurrentBoundRect();

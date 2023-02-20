@@ -19,6 +19,7 @@
 
 #include "EnhancedCustomShapeFontWork.hxx"
 #include <svl/itemset.hxx>
+#include <svx/compatflags.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svdopath.hxx>
 #include <vcl/kernarray.hxx>
@@ -133,7 +134,8 @@ static bool InitializeFontWorkData(
                 do
                 {
                     // search line break.
-                    if (!rSdrObjCustomShape.getSdrModelFromSdrObject().IsLegacySingleLineFontwork())
+                    if (!rSdrObjCustomShape.getSdrModelFromSdrObject().GetCompatibilityFlag(
+                            SdrCompatibilityFlag::LegacySingleLineFontwork))
                         nPos = aParaText[nPara].indexOf(sal_Unicode(u'\1'), nPrevPos);
                     else
                         nPos = -1; // tdf#148000: ignore line breaks in legacy fontworks
