@@ -977,14 +977,7 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
 
 void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
 {
-    std::unique_lock aGuard(maEventMutex);
-    AppendEvent(aGuard, rEvent);
-}
-
-void SwAccessibleMap::AppendEvent( std::unique_lock<std::mutex>& rGuard, const SwAccessibleEvent_Impl& rEvent )
-{
-    assert(rGuard.mutex() == &maEventMutex);
-    (void)rGuard;
+    osl::MutexGuard aGuard( maEventMutex );
 
     if( !mpEvents )
         mpEvents.reset(new SwAccessibleEventList_Impl);
@@ -1709,7 +1702,7 @@ SwAccessibleMap::~SwAccessibleMap()
     mpPreview.reset();
 
     {
-        std::unique_lock aGuard( maEventMutex );
+        osl::MutexGuard aGuard( maEventMutex );
         assert(!mpEvents);
         assert(!mpEventMap);
         mpEventMap.reset();
@@ -2254,7 +2247,7 @@ void SwAccessibleMap::A11yDispose( const SwFrame *pFrame,
 
     // remove events stored for the frame
     {
-        std::unique_lock aGuard( maEventMutex );
+        osl::MutexGuard aGuard( maEventMutex );
         if( mpEvents )
         {
             SwAccessibleEventMap_Impl::iterator aIter =
@@ -2263,7 +2256,7 @@ void SwAccessibleMap::A11yDispose( const SwFrame *pFrame,
             {
                 SwAccessibleEvent_Impl aEvent(
                         SwAccessibleEvent_Impl::DISPOSE, aFrameOrObj );
-                AppendEvent( aGuard, aEvent );
+                AppendEvent( aEvent );
             }
         }
     }
@@ -3005,7 +2998,7 @@ bool SwAccessibleMap::IsPageSelected( const SwPageFrame *pPageFrame ) const
 void SwAccessibleMap::FireEvents()
 {
     {
-        std::unique_lock aGuard( maEventMutex );
+        osl::MutexGuard aGuard( maEventMutex );
         if( mpEvents )
         {
             if (mpEvents->IsFiring())
