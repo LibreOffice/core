@@ -100,6 +100,8 @@ void SwModelessRedlineAcceptDlg::Activate()
     {   // doc-switch
         SwWait aWait( *pDocSh, false );
         SwWrtShell* pSh = pView->GetWrtShellPtr();
+        if (!pSh)
+            return;
 
         m_pChildWin->SetOldDocShell(pDocSh);  // avoid recursion (using modified-Hdl)
 
@@ -244,6 +246,8 @@ void SwRedlineAcceptDlg::InitAuthors()
 
     SwView *pView = ::GetActiveView();
     SwWrtShell* pSh = pView ? pView->GetWrtShellPtr() : nullptr;
+    if (!pSh)
+        return;
 
     SvxTPFilter *pFilterPage = m_xTabPagesCTRL->GetFilterPage();
 
@@ -389,6 +393,9 @@ void SwRedlineAcceptDlg::Activate()
 
     // did something change?
     SwWrtShell* pSh = pView->GetWrtShellPtr();
+    if (!pSh)
+        return;
+
     SwRedlineTable::size_type nCount = pSh->GetRedlineCount();
 
     // check the number of pointers
@@ -488,6 +495,9 @@ SwRedlineTable::size_type SwRedlineAcceptDlg::CalcDiff(SwRedlineTable::size_type
     rTreeView.freeze();
     SwView *pView   = ::GetActiveView();
     SwWrtShell* pSh = pView->GetWrtShellPtr();
+    if (!pSh)
+        return SwRedlineTable::npos;
+
     bool bHasRedlineAutoFormat = HasRedlineAutoFormat();
     SwRedlineDataParent *const pParent = m_RedlineParents[nStart].get();
     const SwRangeRedline& rRedln = pSh->GetRedline(nStart);
@@ -655,6 +665,9 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
 void SwRedlineAcceptDlg::RemoveParents(SwRedlineTable::size_type nStart, SwRedlineTable::size_type nEnd)
 {
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
+    if (!pSh)
+        return;
+
     SwRedlineTable::size_type nCount = pSh->GetRedlineCount();
 
     std::vector<const weld::TreeIter*> aLBoxArr;
@@ -735,6 +748,9 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
         return;
 
     SwWrtShell* pSh = pView->GetWrtShellPtr();
+    if (!pSh)
+        return;
+
     bool bHasRedlineAutoFormat = HasRedlineAutoFormat();
 
     SwRedlineTable::size_type nCount = pSh->GetRedlineCount();
@@ -913,6 +929,9 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
 void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
 {
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
+    if (!pSh)
+        return;
+
     int nPos = -1;
 
     typedef std::vector<std::unique_ptr<weld::TreeIter>> ListBoxEntries_t;
@@ -1053,10 +1072,14 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
 
 SwRedlineTable::size_type SwRedlineAcceptDlg::GetRedlinePos(const weld::TreeIter& rEntry)
 {
-    SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
-    weld::TreeView& rTreeView = m_pTable->GetWidget();
-    return pSh->FindRedlineOfData( *static_cast<SwRedlineDataParent*>(weld::fromId<RedlinData*>(
-                                    rTreeView.get_id(rEntry))->pData)->pData );
+    if (SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr())
+    {
+        weld::TreeView& rTreeView = m_pTable->GetWidget();
+        return pSh->FindRedlineOfData( *static_cast<SwRedlineDataParent*>(weld::fromId<RedlinData*>(
+                                        rTreeView.get_id(rEntry))->pData)->pData );
+    }
+    else
+        return SwRedlineTable::npos;
 }
 
 IMPL_LINK_NOARG(SwRedlineAcceptDlg, AcceptHdl, SvxTPView*, void)
@@ -1109,6 +1132,9 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, SelectHdl, weld::TreeView&, void)
 IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
 {
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
+    if (!pSh)
+        return;
+
     m_aSelectTimer.Stop();
 
     bool bIsNotFormated = false;
@@ -1205,6 +1231,9 @@ IMPL_LINK(SwRedlineAcceptDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
         return false;
 
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
+    if (!pSh)
+        return false;
+
     const SwRangeRedline *pRed = nullptr;
 
     weld::TreeView& rTreeView = m_pTable->GetWidget();
