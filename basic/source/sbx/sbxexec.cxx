@@ -17,19 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <basic/sbmod.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sberrors.hxx>
 #include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include <basiccharclass.hxx>
 
 static SbxVariableRef Element
     ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf,
-      SbxClassType );
+      SbxClassType, bool bCompatible );
 
 static const sal_Unicode* SkipWhitespace( const sal_Unicode* p )
 {
-    while( *p && ( *p == ' ' || *p == '\t' ) )
+    while( BasicCharClass::isWhitespace(*p) )
         p++;
     return p;
 }
@@ -37,7 +41,7 @@ static const sal_Unicode* SkipWhitespace( const sal_Unicode* p )
 // Scanning of a symbol. The symbol were inserted in rSym, the return value
 // is the new scan position. The symbol is at errors empty.
 
-static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym )
+static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym, bool bCompatible )
 {
     sal_uInt16 nLen = 0;
     // Did we have a nonstandard symbol?
@@ -54,7 +58,7 @@ static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym )
     else
     {
         // A symbol had to begin with an alphabetic character or an underline
-        if( !rtl::isAsciiAlpha( *p ) && *p != '_' )
+        if( !BasicCharClass::isAlpha( *p, bCompatible ) && *p != '_' )
         {
             SbxBase::SetError( ERRCODE_BASIC_SYNTAX );
         }
@@ -62,7 +66,7 @@ static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym )
         {
             rSym = p;
             // The it can contain alphabetic characters, numbers or underlines
-            while( *p && (rtl::isAsciiAlphanumeric( *p ) || *p == '_') )
+            while( *p && (BasicCharClass::isAlphaNumeric( *p, bCompatible ) || *p == '_') )
             {
                 p++;
                 nLen++;
@@ -81,15 +85,15 @@ static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym )
 // Qualified name. Element.Element...
 
 static SbxVariableRef QualifiedName
-    ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf, SbxClassType t )
+    ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf, SbxClassType t, bool bCompatible )
 {
 
     SbxVariableRef refVar;
     const sal_Unicode* p = SkipWhitespace( *ppBuf );
-    if( rtl::isAsciiAlpha( *p ) || *p == '_' || *p == '[' )
+    if( BasicCharClass::isAlpha( *p, bCompatible ) || *p == '_' || *p == '[' )
     {
         // Read in the element
-        refVar = Element( pObj, pGbl, &p, t );
+        refVar = Element( pObj, pGbl, &p, t, bCompatible );
         while( refVar.is() && (*p == '.' || *p == '!') )
         {
             // It follows still an objectelement. The current element
@@ -103,7 +107,7 @@ static SbxVariableRef QualifiedName
                 break;
             p++;
             // And the next element please
-            refVar = Element( pObj, pGbl, &p, t );
+            refVar = Element( pObj, pGbl, &p, t, bCompatible );
         }
     }
     else
@@ -116,7 +120,7 @@ static SbxVariableRef QualifiedName
 // a function (with optional parameters).
 
 static SbxVariableRef Operand
-    ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf, bool bVar )
+    ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf, bool bVar, bool bCompatible )
 {
     SbxVariableRef refVar( new SbxVariable );
     const sal_Unicode* p = SkipWhitespace( *ppBuf );
@@ -159,7 +163,7 @@ static SbxVariableRef Operand
     }
     else
     {
-        refVar = QualifiedName( pObj, pGbl, &p, SbxClassType::DontCare );
+        refVar = QualifiedName( pObj, pGbl, &p, SbxClassType::DontCare, bCompatible );
     }
     *ppBuf = p;
     return refVar;
@@ -168,15 +172,15 @@ static SbxVariableRef Operand
 // Read in of a simple term. The operands +, -, * and /
 // are supported.
 
-static SbxVariableRef MulDiv( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf )
+static SbxVariableRef MulDiv( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf, bool bCompatible )
 {
     const sal_Unicode* p = *ppBuf;
-    SbxVariableRef refVar( Operand( pObj, pGbl, &p, false ) );
+    SbxVariableRef refVar( Operand( pObj, pGbl, &p, false, bCompatible ) );
     p = SkipWhitespace( p );
     while( refVar.is() && ( *p == '*' || *p == '/' ) )
     {
         sal_Unicode cOp = *p++;
-        SbxVariableRef refVar2( Operand( pObj, pGbl, &p, false ) );
+        SbxVariableRef refVar2( Operand( pObj, pGbl, &p, false, bCompatible ) );
         if( refVar2.is() )
         {
             // temporary variable!
@@ -198,15 +202,15 @@ static SbxVariableRef MulDiv( SbxObject* pObj, SbxObject* pGbl, const sal_Unicod
     return refVar;
 }
 
-static SbxVariableRef PlusMinus( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf )
+static SbxVariableRef PlusMinus( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf, bool bCompatible )
 {
     const sal_Unicode* p = *ppBuf;
-    SbxVariableRef refVar( MulDiv( pObj, pGbl, &p ) );
+    SbxVariableRef refVar( MulDiv( pObj, pGbl, &p, bCompatible ) );
     p = SkipWhitespace( p );
     while( refVar.is() && ( *p == '+' || *p == '-' ) )
     {
         sal_Unicode cOp = *p++;
-        SbxVariableRef refVar2( MulDiv( pObj, pGbl, &p ) );
+        SbxVariableRef refVar2( MulDiv( pObj, pGbl, &p, bCompatible ) );
         if( refVar2.is() )
         {
             // temporary Variable!
@@ -228,10 +232,10 @@ static SbxVariableRef PlusMinus( SbxObject* pObj, SbxObject* pGbl, const sal_Uni
     return refVar;
 }
 
-static SbxVariableRef Assign( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf )
+static SbxVariableRef Assign( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf, bool bCompatible )
 {
     const sal_Unicode* p = *ppBuf;
-    SbxVariableRef refVar( Operand( pObj, pGbl, &p, true ) );
+    SbxVariableRef refVar( Operand( pObj, pGbl, &p, true, bCompatible ) );
     p = SkipWhitespace( p );
     if( refVar.is() )
     {
@@ -246,7 +250,7 @@ static SbxVariableRef Assign( SbxObject* pObj, SbxObject* pGbl, const sal_Unicod
             else
             {
                 p++;
-                SbxVariableRef refVar2( PlusMinus( pObj, pGbl, &p ) );
+                SbxVariableRef refVar2( PlusMinus( pObj, pGbl, &p, bCompatible ) );
                 if( refVar2.is() )
                 {
                     SbxVariable* pVar = refVar.get();
@@ -270,10 +274,10 @@ static SbxVariableRef Assign( SbxObject* pObj, SbxObject* pGbl, const sal_Unicod
 
 static SbxVariableRef Element
     ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf,
-      SbxClassType t )
+      SbxClassType t, bool bCompatible )
 {
     OUString aSym;
-    const sal_Unicode* p = Symbol( *ppBuf, aSym );
+    const sal_Unicode* p = Symbol( *ppBuf, aSym, bCompatible );
     SbxVariableRef refVar;
     if( !aSym.isEmpty() )
     {
@@ -299,7 +303,7 @@ static SbxVariableRef Element
                 // Search parameter always global!
                 while( *p && *p != ')' && *p != ']' )
                 {
-                    SbxVariableRef refArg = PlusMinus( pGbl, pGbl, &p );
+                    SbxVariableRef refArg = PlusMinus( pGbl, pGbl, &p, bCompatible );
                     if( !refArg.is() )
                     {
                         // Error during the parsing
@@ -346,7 +350,7 @@ SbxVariable* SbxObject::Execute( const OUString& rTxt )
         {
             SetError( ERRCODE_BASIC_SYNTAX ); break;
         }
-        pVar = Assign( this, this, &p );
+        pVar = Assign( this, this, &p, IsModuleCompatible() );
         if( !pVar.is() )
         {
             break;
@@ -369,13 +373,25 @@ SbxVariable* SbxObject::FindQualified( const OUString& rName, SbxClassType t )
     {
         return nullptr;
     }
-    pVar = QualifiedName( this, this, &p, t );
+    pVar = QualifiedName( this, this, &p, t, IsModuleCompatible() );
     p = SkipWhitespace( p );
     if( *p )
     {
         SetError( ERRCODE_BASIC_SYNTAX );
     }
     return pVar.get();
+}
+
+bool SbxObject::IsModuleCompatible() const
+{
+    const SbxObject* pObj = this;
+    while (pObj)
+    {
+        if (auto pMod = dynamic_cast<const SbModule*>(pObj))
+            return pMod->IsCompatible();
+        pObj = pObj->GetParent();
+    }
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

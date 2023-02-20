@@ -78,6 +78,9 @@ public:
     SbxArray* GetObjects()      { return pObjs.get(); }
     // Debugging
     void Dump( SvStream&, bool bDumpAll );
+
+private:
+    bool IsModuleCompatible() const; // Module's Option Compatible
 };
 
 #endif // INCLUDED_BASIC_SBXOBJ_HXX

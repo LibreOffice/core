@@ -744,7 +744,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
         }
     }
     SetModuleType( ModuleType::CLASS );
-    mbVBACompat = pClassModule->mbVBACompat;
+    mbVBASupport = pClassModule->mbVBASupport;
 }
 
 SbClassModuleObject::~SbClassModuleObject()
