@@ -724,14 +724,24 @@ SwTextFrame* SwAnchoredObject::FindAnchorCharFrame()
             if (pFlyFrame->IsFlySplitAllowed())
             {
                 auto pFlyAtContentFrame = static_cast<SwFlyAtContentFrame*>(pFlyFrame);
-                if (pFlyAtContentFrame->GetPrecede())
+                SwFlyAtContentFrame* pFly = pFlyAtContentFrame;
+                SwTextFrame* pAnchor = static_cast<SwTextFrame*>(AnchorFrame());
+                // If we have to jump back N frames to find the master fly, then we have to step N
+                // frames from the master anchor to reach the correct follow anchor.
+                while (pFly->GetPrecede())
                 {
-                    SwTextFrame* pFrame(static_cast<SwTextFrame*>(AnchorFrame()));
-                    const SwTextFrame* pFollow = pFrame->GetFollow();
-                    if (pFollow)
+                    pFly = pFly->GetPrecede();
+                    if (!pAnchor)
                     {
-                        pAnchorCharFrame = const_cast<SwTextFrame*>(pFollow);
+                        SAL_WARN("sw.layout", "SwAnchoredObject::FindAnchorCharFrame: fly chain "
+                                              "length is longer then anchor chain length");
+                        break;
                     }
+                    pAnchor = pAnchor->GetFollow();
+                }
+                if (pAnchor)
+                {
+                    pAnchorCharFrame = pAnchor;
                 }
             }
         }
