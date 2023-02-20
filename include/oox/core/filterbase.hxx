@@ -30,7 +30,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <oox/dllapi.h>
 #include <oox/helper/binarystreambase.hxx>
@@ -94,7 +93,7 @@ typedef ::cppu::WeakImplHelper<
         css::document::XFilter >
     FilterBase_BASE;
 
-class OOX_DLLPUBLIC FilterBase : public FilterBase_BASE, public ::cppu::BaseMutex
+class OOX_DLLPUBLIC FilterBase : public FilterBase_BASE
 {
 public:
     /// @throws css::uno::RuntimeException
