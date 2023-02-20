@@ -1600,19 +1600,22 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
     if( pLayLeaf )
     {
         SwFlyAtContentFrame* pNew = nullptr;
-        SwFrame* pFlyAnchor = const_cast<SwFrame*>(pFly->GetAnchorFrame());
-        if (pFlyAnchor && pFlyAnchor->IsTextFrame())
+        // Find the anchor frame to split.
+        SwTextFrame* pFlyAnchor = pFly->FindAnchorCharFrame();
+        if (pFlyAnchor)
         {
             // Split the anchor at char 0: all the content goes to the follow of the anchor.
-            auto pFlyAnchorTextFrame = static_cast<SwTextFrame*>(pFlyAnchor);
-            pFlyAnchorTextFrame->SplitFrame(TextFrameIndex(0));
+            pFlyAnchor->SplitFrame(TextFrameIndex(0));
             auto pNext = static_cast<SwTextFrame*>(pFlyAnchor->GetNext());
             pNext->MoveSubTree(pLayLeaf);
 
-            // Now create the follow of the fly and anchor it in the just created follow of the
-            // anchor.
+            // Now create the follow of the fly and anchor it in the master of the anchor.
             pNew = new SwFlyAtContentFrame(*pFly);
-            pFlyAnchorTextFrame->AppendFly(pNew);
+            while (pFlyAnchor->IsFollow())
+            {
+                pFlyAnchor = pFlyAnchor->FindMaster();
+            }
+            pFlyAnchor->AppendFly(pNew);
         }
         pLayLeaf = pNew;
     }

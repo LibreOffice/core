@@ -236,15 +236,26 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
             if (pFlyFrame->IsFlySplitAllowed())
             {
                 auto pFlyAtContentFrame = static_cast<SwFlyAtContentFrame*>(pFlyFrame);
-                if (pFlyAtContentFrame->GetPrecede())
+                // Decrement pFly to point to the master; increment pAnchor to point to the correct
+                // follow anchor.
+                SwFlyAtContentFrame* pFly = pFlyAtContentFrame;
+                SwTextFrame* pAnchor = const_cast<SwTextFrame*>(&rAnchorTextFrame);
+                while (pFly->GetPrecede())
                 {
-                    const SwTextFrame* pFollow = rAnchorTextFrame.GetFollow();
-                    if (pFollow)
+                    pFly = pFly->GetPrecede();
+                    if (!pAnchor)
                     {
-                        pOrientFrame = pFollow;
-                        // Anchored object has a precede, so it's a follow.
-                        bFollowSplitFly = true;
+                        SAL_WARN("sw.core", "SwToContentAnchoredObjectPosition::CalcPosition: fly "
+                                            "chain length is longer then anchor chain length");
+                        break;
                     }
+                    pAnchor = pAnchor->GetFollow();
+                }
+                if (pAnchor && pAnchor->GetPrecede())
+                {
+                    pOrientFrame = pAnchor;
+                    // Anchored object has a precede, so it's a follow.
+                    bFollowSplitFly = true;
                 }
             }
         }

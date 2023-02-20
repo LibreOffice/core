@@ -341,6 +341,14 @@ bool SwTextFrame::CalcFollow(TextFrameIndex const nTextOfst)
 void SwTextFrame::MakePos()
 {
     SwFrame::MakePos();
+
+    for (const auto& pFly : GetSplitFlyDrawObjs())
+    {
+        // Possibly this fly was positioned relative to us, invalidate its position now that our
+        // position is changed.
+        pFly->InvalidatePos();
+    }
+
     // Inform LOK clients about change in position of redlines (if any)
     if(!comphelper::LibreOfficeKit::isActive())
         return;

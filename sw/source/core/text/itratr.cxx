@@ -1495,8 +1495,21 @@ bool SwTextFrame::HasNonLastSplitFlyDrawObj() const
     // At this point we know what we're part of a chain that is an anchor for split fly frames, but
     // we're not the last one. See if we have a matching fly.
 
-    for (const auto& pFly : GetSplitFlyDrawObjs())
+    // Look up the master of the anchor.
+    const SwTextFrame* pAnchor = this;
+    while (pAnchor->IsFollow())
     {
+        pAnchor = pAnchor->FindMaster();
+    }
+    for (const auto& pFly : pAnchor->GetSplitFlyDrawObjs())
+    {
+        // Nominally all flys are anchored in the master; see if this fly is effectively anchored in
+        // us.
+        SwTextFrame* pFlyAnchor = pFly->FindAnchorCharFrame();
+        if (pFlyAnchor != pAnchor)
+        {
+            continue;
+        }
         if (pFly->GetFollow())
         {
             return true;
