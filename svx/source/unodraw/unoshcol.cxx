@@ -24,12 +24,11 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
+#include <osl/diagnose.h>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;
@@ -38,13 +37,14 @@ using namespace ::com::sun::star::uno;
 namespace {
 
 class SvxShapeCollection :
-    public cppu::BaseMutex,
     public cppu::WeakAggImplHelper3<drawing::XShapes, lang::XServiceInfo, lang::XComponent>
 {
 private:
-    comphelper::OInterfaceContainerHelper3<drawing::XShape> maShapeContainer;
-
-    cppu::OBroadcastHelper mrBHelper;
+    std::mutex m_aMutex;
+    std::vector<uno::Reference<drawing::XShape>> maShapeContainer;
+    comphelper::OInterfaceContainerHelper4<lang::XEventListener> maEventListeners;
+    bool bDisposed = false;
+    bool bInDispose = false;
 
 public:
     SvxShapeCollection() noexcept;
@@ -76,7 +76,6 @@ public:
 };
 
 SvxShapeCollection::SvxShapeCollection() noexcept
-: maShapeContainer( m_aMutex ), mrBHelper( m_aMutex )
 {
 }
 
@@ -88,7 +87,7 @@ void SvxShapeCollection::release() noexcept
     {
         if (osl_atomic_decrement( &m_refCount ) == 0)
         {
-            if (! mrBHelper.bDisposed)
+            if (! bDisposed)
             {
                 uno::Reference< uno::XInterface > xHoldAlive( static_cast<uno::XWeak*>(this) );
                 // First dispose
@@ -125,13 +124,13 @@ void SvxShapeCollection::dispose()
     // Remark: It is an error to call dispose more than once
     bool bDoDispose = false;
     {
-    osl::MutexGuard aGuard( mrBHelper.rMutex );
-    if( !mrBHelper.bDisposed && !mrBHelper.bInDispose )
-    {
-        // only one call go into this section
-        mrBHelper.bInDispose = true;
-        bDoDispose = true;
-    }
+        std::unique_lock aGuard( m_aMutex );
+        if( !bDisposed && !bInDispose )
+        {
+            // only one call go into this section
+            bInDispose = true;
+            bDoDispose = true;
+        }
     }
 
     // Do not hold the mutex because we are broadcasting
@@ -145,7 +144,8 @@ void SvxShapeCollection::dispose()
             aEvt.Source = xSource;
             // inform all listeners to release this object
             // The listener container are automatically cleared
-            mrBHelper.aLC.disposeAndClear( aEvt );
+            std::unique_lock g(m_aMutex);
+            maEventListeners.disposeAndClear( g, aEvt );
             maShapeContainer.clear();
         }
         catch(const css::uno::Exception&)
@@ -153,15 +153,15 @@ void SvxShapeCollection::dispose()
             // catch exception and throw again but signal that
             // the object was disposed. Dispose should be called
             // only once.
-            mrBHelper.bDisposed = true;
-            mrBHelper.bInDispose = false;
+            bDisposed = true;
+            bInDispose = false;
             throw;
         }
 
         // the values bDispose and bInDisposing must set in this order.
         // No multithread call overcome the "!rBHelper.bDisposed && !rBHelper.bInDispose" guard.
-        mrBHelper.bDisposed = true;
-        mrBHelper.bInDispose = false;
+        bDisposed = true;
+        bInDispose = false;
     }
     else
     {
@@ -174,32 +174,37 @@ void SvxShapeCollection::dispose()
 // XComponent
 void SAL_CALL SvxShapeCollection::addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
 {
-    mrBHelper.addListener( cppu::UnoType<decltype(aListener)>::get() , aListener );
+    std::unique_lock g(m_aMutex);
+    maEventListeners.addInterface( g, aListener );
 }
 
 // XComponent
 void SAL_CALL SvxShapeCollection::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
 {
-    mrBHelper.removeListener( cppu::UnoType<decltype(aListener)>::get() , aListener );
+    std::unique_lock g(m_aMutex);
+    maEventListeners.removeInterface( g, aListener );
 }
 
 // XShapes
 
 void SAL_CALL SvxShapeCollection::add( const Reference< drawing::XShape >& xShape )
 {
-    maShapeContainer.addInterface( xShape );
+    std::unique_lock g(m_aMutex);
+    maShapeContainer.push_back( xShape );
 }
 
 
 void SAL_CALL SvxShapeCollection::remove( const uno::Reference< drawing::XShape >& xShape )
 {
-    maShapeContainer.removeInterface( xShape );
+    std::unique_lock g(m_aMutex);
+    maShapeContainer.erase(std::remove(maShapeContainer.begin(), maShapeContainer.end(), xShape), maShapeContainer.end());
 }
 
 
 sal_Int32 SAL_CALL SvxShapeCollection::getCount()
 {
-    return maShapeContainer.getLength();
+    std::unique_lock g(m_aMutex);
+    return maShapeContainer.size();
 }
 
 
@@ -208,7 +213,8 @@ uno::Any SAL_CALL SvxShapeCollection::getByIndex( sal_Int32 Index )
     if( Index < 0 || Index >= getCount() )
         throw lang::IndexOutOfBoundsException();
 
-    Reference<drawing::XShape> xShape = maShapeContainer.getInterface(Index);
+    std::unique_lock g(m_aMutex);
+    Reference<drawing::XShape> xShape = maShapeContainer[Index];
     return uno::Any( xShape );
 }
 
