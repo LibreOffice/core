@@ -24,6 +24,9 @@
 class SwRect;
 class SwLineLayout;
 
+/// A glue portion is either a base class for other portions that want to have a certain width to
+/// push text out (e.g. tab portions) or used to align SwQuoVadisPortion instances on the right for
+/// footnotes.
 class SwGluePortion : public SwLinePortion
 {
 private:
