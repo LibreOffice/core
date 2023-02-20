@@ -408,9 +408,10 @@ void ChartAreaPanel::setFillStyleAndBitmap(const XFillStyleItem* pStyleItem,
     xPropSet->setPropertyValue("FillBitmapName", aBitmap);
 }
 
-void ChartAreaPanel::setFillUseBackground(const XFillStyleItem* /*pStyleItem*/,
+void ChartAreaPanel::setFillUseBackground(const XFillStyleItem* pStyleItem,
                                           const XFillUseSlideBackgroundItem& /*rItem*/)
 {
+    setFillStyle(*pStyleItem);
 }
 
 void ChartAreaPanel::updateData()
