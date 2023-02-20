@@ -597,7 +597,7 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
     pCode     =
     pStmnt    = pImg->GetCode() + nStart;
     refExprStk = new SbxArray;
-    SetVBAEnabled( pMod->IsVBACompat() );
+    SetVBAEnabled( pMod->IsVBASupport() );
     SetParameters( pe ? pe->GetParameters() : nullptr );
 }
 

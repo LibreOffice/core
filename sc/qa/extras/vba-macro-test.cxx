@@ -24,6 +24,8 @@
 #include <scitems.hxx>
 #include <sortparam.hxx>
 
+#include <com/sun/star/frame/DispatchResultEvent.hpp>
+#include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XPrintAreas.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
@@ -69,6 +71,7 @@ public:
     void testTdf126457();
     void testVbaPDFExport();
     void testForEachInSelection();
+    void testNonAsciiMacroIRI();
 
     CPPUNIT_TEST_SUITE(VBAMacroTest);
     CPPUNIT_TEST(testSimpleCopyAndPaste);
@@ -94,6 +97,7 @@ public:
     CPPUNIT_TEST(testTdf126457);
     CPPUNIT_TEST(testVbaPDFExport);
     CPPUNIT_TEST(testForEachInSelection);
+    CPPUNIT_TEST(testNonAsciiMacroIRI);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -896,6 +900,33 @@ void VBAMacroTest::testForEachInSelection()
     // Data type mismatch.
     executeMacro("vnd.sun.Star.script:Standard.Module1.TestForEachInSelection?"
                  "language=Basic&location=document");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("oof"), rDoc.GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("rab"), rDoc.GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("zab"), rDoc.GetString(ScAddress(0, 2, 0)));
+}
+
+void VBAMacroTest::testNonAsciiMacroIRI()
+{
+    loadFromURL(u"ForEachInSelection.ods");
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"), rDoc.GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("bar"), rDoc.GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("baz"), rDoc.GetString(ScAddress(0, 2, 0)));
+
+    auto ret = dispatchCommand(mxComponent, u"macro://./Standard.Module1.NonAsciiName_αβγ", {});
+    css::frame::DispatchResultEvent retEvent;
+    CPPUNIT_ASSERT(ret >>= retEvent);
+    // tdf#153752: without the fix, this would fail with
+    // equality assertion failed
+    // - Expected: 1
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(css::frame::DispatchResultState::SUCCESS, retEvent.State);
 
     CPPUNIT_ASSERT_EQUAL(OUString("oof"), rDoc.GetString(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("rab"), rDoc.GetString(ScAddress(0, 1, 0)));

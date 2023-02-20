@@ -416,9 +416,9 @@ static bool getDefaultVBAMode( StarBASIC* pb )
 // A Basic module has set EXTSEARCH, so that the elements, that the module contains,
 // could be found from other module.
 
-SbModule::SbModule( const OUString& rName, bool bVBACompat )
+SbModule::SbModule( const OUString& rName, bool bVBASupport )
          : SbxObject( "StarBASICModule" ),
-           pBreaks(nullptr), mbVBACompat( bVBACompat ), bIsProxyModule( false )
+           pBreaks(nullptr), mbVBASupport(bVBASupport), mbCompat(bVBASupport), bIsProxyModule(false)
 {
     SetName( rName );
     SetFlag( SbxFlagBits::ExtSearch | SbxFlagBits::GlobalSearch );
@@ -802,11 +802,11 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 void SbModule::SetSource32( const OUString& r )
 {
     // Default basic mode to library container mode, but... allow Option VBASupport 0/1 override
-    SetVBACompat( getDefaultVBAMode( static_cast< StarBASIC*>( GetParent() ) ) );
+    SetVBASupport( getDefaultVBAMode( static_cast< StarBASIC*>( GetParent() ) ) );
     aOUSource = r;
     StartDefinitions();
     SbiTokenizer aTok( r );
-    aTok.SetCompatible( IsVBACompat() );
+    aTok.SetCompatible( IsVBASupport() );
 
     while( !aTok.IsEof() )
     {
@@ -837,12 +837,13 @@ void SbModule::SetSource32( const OUString& r )
                     eCurTok = aTok.Next();
                     if( eCurTok == COMPATIBLE )
                     {
+                        mbCompat = true;
                         aTok.SetCompatible( true );
                     }
                     else if ( ( eCurTok == VBASUPPORT ) && ( aTok.Next() == NUMBER ) )
                     {
                         bool bIsVBA = ( aTok.GetDbl()== 1 );
-                        SetVBACompat( bIsVBA );
+                        SetVBASupport( bIsVBA );
                         aTok.SetCompatible( bIsVBA );
                     }
                 }
@@ -974,15 +975,16 @@ static void ClearUnoObjectsInRTL_Impl( StarBASIC* pBasic )
 }
 
 
-void SbModule::SetVBACompat( bool bCompat )
+void SbModule::SetVBASupport( bool bSupport )
 {
-    if( mbVBACompat == bCompat )
+    if( mbVBASupport == bSupport )
         return;
 
-    mbVBACompat = bCompat;
+    mbVBASupport = bSupport;
     // initialize VBA document API
-    if( mbVBACompat ) try
+    if( mbVBASupport ) try
     {
+        mbCompat = true;
         StarBASIC* pBasic = static_cast< StarBASIC* >( GetParent() );
         uno::Reference< lang::XMultiServiceFactory > xFactory( getDocumentModel( pBasic ), uno::UNO_QUERY_THROW );
         xFactory->createInstance( "ooo.vba.VBAGlobals" );
@@ -1067,7 +1069,7 @@ namespace
 // Run a Basic-subprogram
 void SbModule::Run( SbMethod* pMeth )
 {
-    SAL_INFO("basic","About to run " << pMeth->GetName() << ", vba compatmode is " << mbVBACompat );
+    SAL_INFO("basic","About to run " << pMeth->GetName() << ", vba compatmode is " << mbVBASupport );
 
     static sal_uInt16 nMaxCallLevel = 0;
 
@@ -1088,7 +1090,7 @@ void SbModule::Run( SbMethod* pMeth )
         /*  If a VBA script in a document is started, get the VBA compatibility
             interface from the document Basic library container, and notify all
             VBA script listeners about the started script. */
-        if( mbVBACompat )
+        if( mbVBASupport )
         {
             StarBASIC* pBasic = static_cast< StarBASIC* >( GetParent() );
             if( pBasic && pBasic->IsDocBasic() ) try
@@ -1169,7 +1171,7 @@ void SbModule::Run( SbMethod* pMeth )
             {
                 RunGuard xRuntimeGuard(this, pMeth, pMeth->nStart, pSbData, bDelInst);
 
-                if (mbVBACompat)
+                if (mbVBASupport)
                     pSbData->pInst->EnableCompatibility(true);
 
                 xRuntimeGuard.run();
@@ -2501,7 +2503,7 @@ void SbUserFormModule::triggerResizeEvent()
 
 SbUserFormModuleInstance* SbUserFormModule::CreateInstance()
 {
-    SbUserFormModuleInstance* pInstance = new SbUserFormModuleInstance( this, GetName(), m_mInfo, IsVBACompat() );
+    SbUserFormModuleInstance* pInstance = new SbUserFormModuleInstance( this, GetName(), m_mInfo, IsVBASupport() );
     return pInstance;
 }
 

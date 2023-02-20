@@ -66,7 +66,8 @@ protected:
     std::unique_ptr<SbiImage> pImage;        // the Image
     SbiBreakpoints*     pBreaks;       // Breakpoints
     std::unique_ptr<SbClassData> pClassData;
-    bool mbVBACompat;
+    bool mbVBASupport; // Option VBASupport
+    bool mbCompat; // Option Compatible
     sal_Int32 mnType;
     SbxObjectRef pDocObject; // an impl object ( used by Document Modules )
     bool    bIsProxyModule;
@@ -95,7 +96,7 @@ protected:
     virtual ~SbModule() override;
 public:
     SBX_DECL_PERSIST_NODATA(SBXID_BASICMOD,2);
-                    SbModule( const OUString&, bool bCompat = false );
+                    SbModule( const OUString&, bool bVBASupport = false );
     SAL_DLLPRIVATE virtual void SetParent( SbxObject* ) override;
     SAL_DLLPRIVATE virtual void Clear() override;
 
@@ -120,8 +121,9 @@ public:
     SAL_DLLPRIVATE bool ExceedsLegacyModuleSize();
     SAL_DLLPRIVATE void fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg = nullptr ) const;
     SAL_DLLPRIVATE bool HasExeCode();
-    bool     IsVBACompat() const { return mbVBACompat;}
-    SAL_DLLPRIVATE void SetVBACompat( bool bCompat );
+    bool     IsVBASupport() const { return mbVBASupport; }
+    SAL_DLLPRIVATE void SetVBASupport( bool bSupport );
+    bool     IsCompatible() const { return mbCompat; }
     sal_Int32 GetModuleType() const { return mnType; }
     void     SetModuleType( sal_Int32 nType ) { mnType = nType; }
     bool     isProxyModule() const { return bIsProxyModule; }

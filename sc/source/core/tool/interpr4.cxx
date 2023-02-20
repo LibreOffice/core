@@ -3259,7 +3259,7 @@ void ScInterpreter::ScMacro()
     bool bVolatileMacro = false;
 
     SbModule* pModule = pMethod->GetModule();
-    bool bUseVBAObjects = pModule->IsVBACompat();
+    bool bUseVBAObjects = pModule->IsVBASupport();
     SbxObject* pObject = pModule->GetParent();
     OSL_ENSURE(dynamic_cast<const StarBASIC *>(pObject) != nullptr, "No Basic found!");
     OUString aMacroStr = pObject->GetName() + "." + pModule->GetName() + "." + pMethod->GetName();

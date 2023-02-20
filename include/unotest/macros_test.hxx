@@ -20,6 +20,7 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/uno/Any.h>
 #include <utility>
 
 struct TestMacroInfo
@@ -86,7 +87,7 @@ public:
                     const css::uno::Sequence<css::beans::PropertyValue>& rExtra_args
                     = css::uno::Sequence<css::beans::PropertyValue>());
 
-    static void
+    static css::uno::Any
     dispatchCommand(const css::uno::Reference<css::lang::XComponent>& xComponent,
                     const OUString& rCommand,
                     const css::uno::Sequence<css::beans::PropertyValue>& rPropertyValues);
