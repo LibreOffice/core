@@ -993,7 +993,7 @@ SbxVariable* SbiStdObject::Find( const OUString& rName, SbxClassType t )
                         // No instance running => compiling a source on module level.
                         const SbModule* pModule = GetSbData()->pCompMod;
                         if (pModule)
-                            bCompatibility = pModule->IsVBACompat();
+                            bCompatibility = pModule->IsVBASupport();
                     }
                     if ((bCompatibility && (NORMONLY_ & p->nArgs)) || (!bCompatibility && (COMPATONLY_ & p->nArgs)))
                         bFound = false;

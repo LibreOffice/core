@@ -75,9 +75,10 @@ MacrosTest::loadFromDesktop(const OUString& rURL, const OUString& rDocService,
     return xComponent;
 }
 
-void MacrosTest::dispatchCommand(const uno::Reference<lang::XComponent>& xComponent,
-                                 const OUString& rCommand,
-                                 const uno::Sequence<beans::PropertyValue>& rPropertyValues)
+css::uno::Any
+MacrosTest::dispatchCommand(const uno::Reference<lang::XComponent>& xComponent,
+                            const OUString& rCommand,
+                            const uno::Sequence<beans::PropertyValue>& rPropertyValues)
 {
     uno::Reference<frame::XController> xController
         = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY_THROW)->getCurrentController();
@@ -89,7 +90,7 @@ void MacrosTest::dispatchCommand(const uno::Reference<lang::XComponent>& xCompon
     uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
     CPPUNIT_ASSERT(xDispatchHelper.is());
 
-    xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
+    return xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
 }
 
 std::unique_ptr<SvStream> MacrosTest::parseExportStream(const OUString& url,

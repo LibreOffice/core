@@ -624,7 +624,7 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
     nForLvl   = 0;
     nOps      = 0;
     refExprStk = new SbxArray;
-    SetVBAEnabled( pMod->IsVBACompat() );
+    SetVBAEnabled( pMod->IsVBASupport() );
     SetParameters( pe ? pe->GetParameters() : nullptr );
 }
 

@@ -145,7 +145,7 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
 
     rTypeArray = new SbxArray; // array for user defined types
     rEnumArray = new SbxArray; // array for Enum types
-    bVBASupportOn = pm->IsVBACompat();
+    bVBASupportOn = pm->IsVBASupport();
     if ( bVBASupportOn )
         EnableCompatibility();
 
@@ -818,9 +818,9 @@ void SbiParser::Option()
                     }
                     // if the module setting is different
                     // reset it to what the Option tells us
-                    if ( bVBASupportOn != aGen.GetModule().IsVBACompat() )
+                    if ( bVBASupportOn != aGen.GetModule().IsVBASupport() )
                     {
-                        aGen.GetModule().SetVBACompat( bVBASupportOn );
+                        aGen.GetModule().SetVBASupport( bVBASupportOn );
                     }
                     break;
                 }
