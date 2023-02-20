@@ -530,7 +530,7 @@ namespace basegfx
                 return 0.0;
             }
 
-            // MCGR: Visualiations using the texturing method for
+            // MCGR: Visualizations using the texturing method for
             // displaying gradients (getBackTextureTransform is
             // involved) show wrong results for GradientElliptical
             // and GradientRect, this can be best seen when using
