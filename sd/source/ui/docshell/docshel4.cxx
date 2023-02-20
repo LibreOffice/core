@@ -409,6 +409,9 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
         // The Libreoffice uses bounding rectangle of connected shapes but
         // MSO uses snap rectangle when calculate the edge track.
         mpDoc->SetCompatibilityFlag(SdrCompatibilityFlag::ConnectorUseSnapRect, true);
+
+        // compatibility flag for tdf#148966
+        mpDoc->SetCompatibilityFlag(SdrCompatibilityFlag::IgnoreBreakAfterMultilineField, true);
     }
 
     if (aFilterName == "Impress MS PowerPoint 2007 XML" ||

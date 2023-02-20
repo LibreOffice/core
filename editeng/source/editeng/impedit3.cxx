@@ -24,6 +24,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/window.hxx>
 
+#include <editeng/outliner.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/flditem.hxx>
@@ -44,10 +45,13 @@
 #include <editeng/scriptspaceitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/numitem.hxx>
+#include <outleeng.hxx>
 
 #include <svtools/colorcfg.hxx>
 #include <svl/ctloptions.hxx>
 #include <svl/asiancfg.hxx>
+
+#include <svx/compatflags.hxx>
 
 #include <editeng/hngpnctitem.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
@@ -3606,6 +3610,22 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                             nTextStart = *curIt;
                                             nTextLen = nTextLen - nTextStart;
                                             bParsingFields = false;
+
+                                            if (nLine + 1 < nLines)
+                                            {
+                                                // tdf#148966 don't paint the line break following a
+                                                // multiline field based on a compat flag
+                                                OutlinerEditEng* pOutlEditEng{ dynamic_cast<OutlinerEditEng*>(pEditEngine) };
+                                                if (pOutlEditEng
+                                                    && pOutlEditEng->GetCompatFlag(SdrCompatibilityFlag::IgnoreBreakAfterMultilineField)
+                                                           .value_or(false))
+                                                {
+                                                    int nStartNextLine = pPortion->GetLines()[nLine + 1].GetStartPortion();
+                                                    const TextPortion& rNextTextPortion = pPortion->GetTextPortions()[nStartNextLine];
+                                                    if (rNextTextPortion.GetKind() == PortionKind::LINEBREAK)
+                                                        ++nLine; //ignore the following linebreak
+                                                }
+                                            }
                                         }
                                     }
 

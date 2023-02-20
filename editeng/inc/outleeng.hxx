@@ -21,6 +21,8 @@
 #include <editeng/outliner.hxx>
 #include <editeng/editeng.hxx>
 
+enum class SdrCompatibilityFlag;
+
 typedef std::vector<EENotify> NotifyList;
 
 class OutlinerEditEng : public EditEngine
@@ -74,6 +76,9 @@ public:
     virtual OUString    CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rTxtColor, std::optional<Color>& rFldColor ) override;
 
     virtual tools::Rectangle   GetBulletArea( sal_Int32 nPara ) override;
+
+    /// @returns state of the SdrCompatibilityFlag
+    std::optional<bool> GetCompatFlag(SdrCompatibilityFlag eFlag) const;
 
        virtual void        SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet ) override;
 

@@ -30,7 +30,7 @@
 #include <editeng/outliner.hxx>
 #include "paralist.hxx"
 #include <editeng/outlobj.hxx>
-#include "outleeng.hxx"
+#include <outleeng.hxx>
 #include "outlundo.hxx"
 #include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
