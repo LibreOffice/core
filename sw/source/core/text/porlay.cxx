@@ -1272,7 +1272,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
         {
             const Range& rRange = aHiddenMulti.GetRange( i );
             const sal_Int32 nStart = rRange.Min();
-            const sal_Int32 nEnd = rRange.Max() + 1;
+            const sal_Int32 nEnd = rRange.Max() + (rText.isEmpty() ? 0 : 1);
 
             m_HiddenChg.push_back( TextFrameIndex(nStart) );
             m_HiddenChg.push_back( TextFrameIndex(nEnd) );
