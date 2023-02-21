@@ -3549,6 +3549,15 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(classOffset(9), offsetof(struct _LibreOfficeKitClass, getVersionInfo));
     CPPUNIT_ASSERT_EQUAL(classOffset(10), offsetof(struct _LibreOfficeKitClass, runMacro));
     CPPUNIT_ASSERT_EQUAL(classOffset(11), offsetof(struct _LibreOfficeKitClass, signDocument));
+    CPPUNIT_ASSERT_EQUAL(classOffset(12), offsetof(struct _LibreOfficeKitClass, runLoop));
+    CPPUNIT_ASSERT_EQUAL(classOffset(13), offsetof(struct _LibreOfficeKitClass, sendDialogEvent));
+    CPPUNIT_ASSERT_EQUAL(classOffset(14), offsetof(struct _LibreOfficeKitClass, setOption));
+    CPPUNIT_ASSERT_EQUAL(classOffset(15), offsetof(struct _LibreOfficeKitClass, dumpState));
+    CPPUNIT_ASSERT_EQUAL(classOffset(16), offsetof(struct _LibreOfficeKitClass, extractRequest));
+
+    // When extending LibreOfficeKit with a new function pointer,  add new assert for the offsetof the
+    // new function pointer and bump this assert for the size of the class.
+    CPPUNIT_ASSERT_EQUAL(classOffset(17), sizeof(struct _LibreOfficeKitClass));
 
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(0), offsetof(struct _LibreOfficeKitDocumentClass, destroy));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(1), offsetof(struct _LibreOfficeKitDocumentClass, saveAs));
@@ -3626,10 +3635,11 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(67), offsetof(struct _LibreOfficeKitDocumentClass, getEditMode));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(68),
                          offsetof(struct _LibreOfficeKitDocumentClass, setViewTimezone));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(69), offsetof(struct _LibreOfficeKitDocumentClass, paintThumbnail));
 
-    // Extending is fine, update this, and add new assert for the offsetof the
-    // new method
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(69), sizeof(struct _LibreOfficeKitDocumentClass));
+
+    // As above
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(70), sizeof(struct _LibreOfficeKitDocumentClass));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);

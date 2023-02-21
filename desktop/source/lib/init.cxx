@@ -67,6 +67,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/dispatchcommand.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -179,6 +180,7 @@
 // Needed for getUndoManager()
 #include <com/sun/star/document/XUndoManager.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
+#include <com/sun/star/document/XLinkTargetSupplier.hpp>
 #include <editeng/sizeitem.hxx>
 #include <svx/rulritem.hxx>
 #include <svx/pageitem.hxx>
@@ -397,6 +399,97 @@ std::vector<beans::PropertyValue> desktop::jsonToPropertyValuesVector(const char
         aArguments = comphelper::JsonToPropertyValues(pJSON);
     }
     return aArguments;
+}
+
+static bool extractLinks(const uno::Reference< container::XNameAccess >& xLinks, bool subcontent, OUStringBuffer& jsonText)
+{
+    const uno::Sequence< OUString > aNames( xLinks->getElementNames() );
+
+    const sal_uLong nLinks = aNames.getLength();
+    const OUString* pNames = aNames.getConstArray();
+    const OUString aProp_LinkDisplayName( "LinkDisplayName" );
+    const OUString aProp_LinkTarget( "com.sun.star.document.LinkTarget" );
+    bool bIsTarget = false;
+    for( sal_uLong i = 0; i < nLinks; i++ )
+    {
+        uno::Any aAny;
+        OUString aLink( *pNames++ );
+
+        bool bError = false;
+        try
+        {
+            aAny = xLinks->getByName( aLink );
+        }
+        catch(const uno::Exception&)
+        {
+            // if the name of the target was invalid (like empty headings)
+            // no object can be provided
+            bError = true;
+        }
+        if(bError)
+            continue;
+
+        uno::Reference< beans::XPropertySet > xTarget;
+        if( aAny >>= xTarget )
+        {
+            try
+            {
+                // get name to display
+                aAny = xTarget->getPropertyValue( aProp_LinkDisplayName );
+                OUString aDisplayName;
+                aAny >>= aDisplayName;
+                OUString aStrDisplayname ( aDisplayName );
+
+                if (subcontent)
+                {
+                    jsonText.append("\"");
+                    jsonText.append(aStrDisplayname);
+                    jsonText.append("\": \"");
+                    jsonText.append(aLink);
+                    jsonText.append("\"");
+                    if (i < nLinks-1)
+                    {
+                        jsonText.append(", ");
+                    }
+                }
+                else
+                {
+                    uno::Reference< lang::XServiceInfo > xSI( xTarget, uno::UNO_QUERY );
+                    bIsTarget = xSI->supportsService( aProp_LinkTarget );
+                    if (i != 0)
+                    {
+                        if (!bIsTarget)
+                            jsonText.append("}");
+                        if (i < nLinks)
+                        {
+                            jsonText.append(", ");
+                        }
+                    }
+                    jsonText.append("\"");
+                    jsonText.append(aStrDisplayname);
+                    jsonText.append("\": ");
+
+                    if (bIsTarget)
+                    {
+                        jsonText.append("true");
+                        continue;
+                    }
+                    jsonText.append("{");
+                }
+
+                uno::Reference< document::XLinkTargetSupplier > xLTS( xTarget, uno::UNO_QUERY );
+                if( xLTS.is() )
+                {
+                    extractLinks(xLTS->getLinks(), true, jsonText);
+                }
+            }
+            catch(...)
+            {
+                SAL_WARN("lok", "extractLinks: Exception");
+            }
+        }
+    }
+    return bIsTarget;
 }
 
 static void unoAnyToJson(tools::JsonWriter& rJson, const char * pNodeName, const uno::Any& anyItem)
@@ -1022,6 +1115,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
                           const int nCanvasWidth, const int nCanvasHeight,
                           const int nTilePosX, const int nTilePosY,
                           const int nTileWidth, const int nTileHeight);
+static void doc_paintThumbnail(LibreOfficeKitDocument* pThis, unsigned char* pBuffer, int x, int y);
 #ifdef IOS
 static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
                                      void* rCGContext,
@@ -1295,6 +1389,7 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
         m_pDocumentClass->setPartMode = doc_setPartMode;
         m_pDocumentClass->getEditMode = doc_getEditMode;
         m_pDocumentClass->paintTile = doc_paintTile;
+        m_pDocumentClass->paintThumbnail = doc_paintThumbnail;
 #ifdef IOS
         m_pDocumentClass->paintTileToCGContext = doc_paintTileToCGContext;
 #endif
@@ -2428,6 +2523,9 @@ static bool lo_signDocument(LibreOfficeKit* pThis,
                                    const unsigned char* pPrivateKeyBinary,
                                    const int nPrivateKeyBinarySize);
 
+static char* lo_extractRequest(LibreOfficeKit* pThis,
+                                   const char* pFilePath);
+
 static void lo_runLoop(LibreOfficeKit* pThis,
                        LibreOfficeKitPollCallback pPollCallback,
                        LibreOfficeKitWakeCallback pWakeCallback,
@@ -2468,6 +2566,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->sendDialogEvent = lo_sendDialogEvent;
         m_pOfficeClass->setOption = lo_setOption;
         m_pOfficeClass->dumpState = lo_dumpState;
+        m_pOfficeClass->extractRequest = lo_extractRequest;
 
         gOfficeClass = m_pOfficeClass;
     }
@@ -2981,6 +3080,69 @@ static bool lo_signDocument(LibreOfficeKit* /*pThis*/,
         return false;
 
     return true;
+}
+
+
+static char* lo_extractRequest(LibreOfficeKit* /*pThis*/, const char* pFilePath)
+{
+    uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
+    uno::Reference< css::lang::XComponent > xComp;
+    OUString aURL(getAbsoluteURL(pFilePath));
+    OUString result;
+    if (!aURL.isEmpty())
+    {
+        if (xComponentLoader.is())
+        {
+            try
+            {
+                uno::Sequence<css::beans::PropertyValue> aFilterOptions(comphelper::InitPropertySequence(
+                {
+                    {"Hidden", css::uno::Any(true)},
+                    {"ReadOnly", css::uno::Any(true)}
+                }));
+                xComp = xComponentLoader->loadComponentFromURL( aURL, "_blank", 0, aFilterOptions );
+            }
+            catch ( const lang::IllegalArgumentException& ex )
+            {
+                SAL_WARN("lok", "lo_extractRequest: IllegalArgumentException: " << ex.Message);
+                result = "{ }";
+                return convertOUString(result);
+            }
+            catch (...)
+            {
+                SAL_WARN("lok", "lo_extractRequest: Exception on loadComponentFromURL, url= " << aURL);
+                result = "{ }";
+                return convertOUString(result);
+            }
+
+            if (xComp.is())
+            {
+                uno::Reference< document::XLinkTargetSupplier > xLTS( xComp, uno::UNO_QUERY );
+
+                if( xLTS.is() )
+                {
+                    OUStringBuffer jsonText;
+                    jsonText.append("{ \"Targets\": { ");
+                    bool lastParentheses = extractLinks(xLTS->getLinks(), false, jsonText);
+                    jsonText.append("} }");
+                    if (!lastParentheses)
+                        jsonText.append(" }");
+
+                    OUString res(jsonText.makeStringAndClear());
+                    return convertOUString(res);
+                }
+                xComp->dispose();
+            }
+            else
+            {
+                result = "{ }";
+                return convertOUString(result);
+            }
+
+        }
+    }
+    result = "{ }";
+    return convertOUString(result);
 }
 
 static void lo_registerCallback (LibreOfficeKit* pThis,
@@ -3848,6 +4010,19 @@ static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
 }
 
 #endif
+
+static void doc_paintThumbnail(LibreOfficeKitDocument* pThis, unsigned char* pBuffer, int x, int y)
+{
+    constexpr float zoom = 0.5f;
+    constexpr int pixelWidth = 120;
+    constexpr int pixelHeight = 120;
+    constexpr int pixelWidthTwips = pixelWidth * 15 / zoom;
+    constexpr int pixelHeightTwips = pixelHeight * 15 / zoom;
+    constexpr int offsetXTwips = 15 * 15; // start 15 px/twips before the target to get a clearer thumbnail
+    constexpr int offsetYTwips = 15 * 15;
+
+    doc_paintTile(pThis, pBuffer, pixelWidth, pixelHeight, x-offsetXTwips, y-offsetYTwips, pixelWidthTwips, pixelHeightTwips);
+}
 
 static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               unsigned char* pBuffer,
