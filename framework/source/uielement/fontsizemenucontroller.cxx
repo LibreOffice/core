@@ -208,7 +208,7 @@ void SAL_CALL FontSizeMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(this);
 
-    osl::MutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xCurrentFontDispatch.clear();
@@ -225,14 +225,14 @@ void SAL_CALL FontSizeMenuController::statusChanged( const FeatureStateEvent& Ev
 
     if ( Event.State >>= aFontDescriptor )
     {
-        osl::MutexGuard aLock( m_aMutex );
+        std::unique_lock aLock( m_aMutex );
 
         if ( m_xPopupMenu.is() )
             fillPopupMenu( m_xPopupMenu );
     }
     else if ( Event.State >>= aFontHeight )
     {
-        osl::MutexGuard aLock( m_aMutex );
+        std::unique_lock aLock( m_aMutex );
         m_aFontHeight = aFontHeight;
 
         if ( m_xPopupMenu.is() )
@@ -256,15 +256,15 @@ void FontSizeMenuController::impl_setPopupMenu()
 
 void SAL_CALL FontSizeMenuController::updatePopupMenu()
 {
-    osl::ClearableMutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
 
-    throwIfDisposed();
+    throwIfDisposed(aLock);
 
     Reference< XDispatch > xDispatch( m_xCurrentFontDispatch );
     css::util::URL aTargetURL;
     aTargetURL.Complete = ".uno:CharFontName";
     m_xURLTransformer->parseStrict( aTargetURL );
-    aLock.clear();
+    aLock.unlock();
 
     if ( xDispatch.is() )
     {

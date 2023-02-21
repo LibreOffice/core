@@ -157,7 +157,7 @@ void SAL_CALL ToolbarModeMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(this);
 
-    osl::MutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
 
@@ -172,9 +172,9 @@ void SAL_CALL ToolbarModeMenuController::statusChanged( const FeatureStateEvent&
     OUString aFeatureURL( Event.FeatureURL.Complete );
 
     // All other status events will be processed here
-    osl::ClearableMutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
     Reference< css::awt::XPopupMenu > xPopupMenu( m_xPopupMenu );
-    aLock.clear();
+    aLock.unlock();
 
     if ( !xPopupMenu.is() )
         return;
@@ -268,9 +268,9 @@ void SAL_CALL ToolbarModeMenuController::itemActivated( const css::awt::MenuEven
 // XPopupMenuController
 void SAL_CALL ToolbarModeMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu )
 {
-    osl::MutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
 
-    throwIfDisposed();
+    throwIfDisposed(aLock);
 
     if ( m_xFrame.is() && !m_xPopupMenu.is() )
     {

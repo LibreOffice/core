@@ -48,9 +48,6 @@ namespace framework
             // XPopupMenuController
             virtual void SAL_CALL setPopupMenu( const css::uno::Reference< css::awt::XPopupMenu >& PopupMenu ) override;
 
-            // XInitialization
-            virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
-
             // XStatusListener
             virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
@@ -71,6 +68,9 @@ namespace framework
             DECL_STATIC_LINK( ToolbarsMenuController, ExecuteHdl_Impl, void*, void );
 
         private:
+            // XInitialization
+            virtual void initializeImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+
             void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
             css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > getLayoutManagerToolbars( const css::uno::Reference< css::frame::XLayoutManager >& rLayoutManager );
             css::uno::Reference< css::frame::XDispatch > getDispatchFromCommandURL( const OUString& rCommandURL );

@@ -331,7 +331,7 @@ void SAL_CALL RecentFilesMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(this);
 
-    osl::MutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
 
@@ -343,7 +343,7 @@ void SAL_CALL RecentFilesMenuController::disposing( const EventObject& )
 // XStatusListener
 void SAL_CALL RecentFilesMenuController::statusChanged( const FeatureStateEvent& Event )
 {
-    osl::MutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
     m_bDisabled = !Event.IsEnabled;
 }
 
@@ -352,7 +352,7 @@ void SAL_CALL RecentFilesMenuController::itemSelected( const css::awt::MenuEvent
     Reference< css::awt::XPopupMenu > xPopupMenu;
 
     {
-        osl::MutexGuard aLock(m_aMutex);
+        std::unique_lock aLock(m_aMutex);
         xPopupMenu = m_xPopupMenu;
     }
 
@@ -384,7 +384,7 @@ void SAL_CALL RecentFilesMenuController::itemSelected( const css::awt::MenuEvent
 
 void SAL_CALL RecentFilesMenuController::itemActivated( const css::awt::MenuEvent& )
 {
-    osl::MutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
     impl_setPopupMenu();
 }
 
@@ -401,9 +401,9 @@ Reference< XDispatch > SAL_CALL RecentFilesMenuController::queryDispatch(
     const OUString& /*sTarget*/,
     sal_Int32 /*nFlags*/ )
 {
-    osl::MutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
 
-    throwIfDisposed();
+    throwIfDisposed(aLock);
 
     if ( aURL.Complete.startsWith( m_aBaseURL ) )
         return Reference< XDispatch >( this );
@@ -416,9 +416,9 @@ void SAL_CALL RecentFilesMenuController::dispatch(
     const URL& aURL,
     const Sequence< PropertyValue >& /*seqProperties*/ )
 {
-    osl::MutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
 
-    throwIfDisposed();
+    throwIfDisposed(aLock);
 
     if ( !aURL.Complete.startsWith( m_aBaseURL ) )
         return;

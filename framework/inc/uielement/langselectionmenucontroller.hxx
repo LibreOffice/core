@@ -44,9 +44,6 @@ namespace framework
             // XPopupMenuController
             virtual void SAL_CALL updatePopupMenu() override;
 
-            // XInitialization
-            virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
-
             // XStatusListener
             virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
@@ -54,6 +51,9 @@ namespace framework
             virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         private:
+            // XInitialization
+            virtual void initializeImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+
             virtual void impl_setPopupMenu() override;
             enum Mode
             {

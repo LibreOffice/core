@@ -77,7 +77,7 @@ private:
     css::uno::Reference< css::container::XIndexAccess > m_xMenuContainer;
     css::uno::Reference< css::ui::XUIConfigurationManager > m_xConfigManager, m_xModuleConfigManager;
     void addVerbs( const css::uno::Sequence< css::embed::VerbDescriptor >& rVerbs );
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
 protected:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
@@ -325,7 +325,7 @@ void ResourceMenuController::disposing( const css::lang::EventObject& rEvent )
     }
 }
 
-void ResourceMenuController::disposing()
+void ResourceMenuController::disposing(std::unique_lock<std::mutex>& rGuard)
 {
     css::uno::Reference< css::ui::XUIConfiguration > xConfig( m_xConfigManager, css::uno::UNO_QUERY );
     if ( xConfig.is() )
@@ -348,7 +348,7 @@ void ResourceMenuController::disposing()
         m_xMenuBarManager.clear();
     }
 
-    svt::PopupMenuControllerBase::disposing();
+    svt::PopupMenuControllerBase::disposing(rGuard);
 }
 
 OUString ResourceMenuController::getImplementationName()

@@ -103,7 +103,7 @@ void SAL_CALL ObjectMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(this);
 
-    osl::MutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
 
@@ -118,7 +118,7 @@ void SAL_CALL ObjectMenuController::statusChanged( const FeatureStateEvent& Even
     Sequence < css::embed::VerbDescriptor > aVerbCommandSeq;
     if ( Event.State >>= aVerbCommandSeq )
     {
-        osl::MutexGuard aLock( m_aMutex );
+        std::unique_lock aLock( m_aMutex );
         if ( m_xPopupMenu.is() )
             fillPopupMenu( aVerbCommandSeq, m_xPopupMenu );
     }

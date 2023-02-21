@@ -111,7 +111,7 @@ void SAL_CALL FontMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(this);
 
-    osl::MutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xFontListDispatch.clear();
@@ -129,12 +129,12 @@ void SAL_CALL FontMenuController::statusChanged( const FeatureStateEvent& Event 
 
     if ( Event.State >>= aFontDescriptor )
     {
-        osl::MutexGuard aLock( m_aMutex );
+        std::unique_lock aLock( m_aMutex );
         m_aFontFamilyName = aFontDescriptor.Name;
     }
     else if ( Event.State >>= aFontNameSeq )
     {
-        osl::MutexGuard aLock( m_aMutex );
+        std::unique_lock aLock( m_aMutex );
         if ( m_xPopupMenu.is() )
             fillPopupMenu( aFontNameSeq, m_xPopupMenu );
     }
@@ -143,7 +143,7 @@ void SAL_CALL FontMenuController::statusChanged( const FeatureStateEvent& Event 
 // XMenuListener
 void SAL_CALL FontMenuController::itemActivated( const css::awt::MenuEvent& )
 {
-    osl::MutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
 
     if ( !m_xPopupMenu.is() )
         return;
@@ -193,12 +193,12 @@ void SAL_CALL FontMenuController::updatePopupMenu()
 {
     svt::PopupMenuControllerBase::updatePopupMenu();
 
-    osl::ClearableMutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
     Reference< XDispatch > xDispatch( m_xFontListDispatch );
     css::util::URL aTargetURL;
     aTargetURL.Complete = ".uno:FontNameList";
     m_xURLTransformer->parseStrict( aTargetURL );
-    aLock.clear();
+    aLock.unlock();
 
     if ( xDispatch.is() )
     {

@@ -185,7 +185,7 @@ void SAL_CALL HeaderMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(this);
 
-    osl::MutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
 
@@ -201,7 +201,7 @@ void SAL_CALL HeaderMenuController::statusChanged( const FeatureStateEvent& Even
 
     if ( Event.State >>= xModel )
     {
-        osl::MutexGuard aLock( m_aMutex );
+        std::unique_lock aLock( m_aMutex );
         m_xModel = xModel;
         if ( m_xPopupMenu.is() )
             fillPopupMenu( xModel, m_xPopupMenu );
@@ -211,17 +211,17 @@ void SAL_CALL HeaderMenuController::statusChanged( const FeatureStateEvent& Even
 // XMenuListener
 void SAL_CALL HeaderMenuController::updatePopupMenu()
 {
-    osl::ResettableMutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
 
-    throwIfDisposed();
+    throwIfDisposed(aLock);
 
     Reference< css::frame::XModel > xModel( m_xModel );
-    aLock.clear();
+    aLock.unlock();
 
     if ( !xModel.is() )
         svt::PopupMenuControllerBase::updatePopupMenu();
 
-    aLock.reset();
+    aLock.lock();
     if ( m_xPopupMenu.is() && m_xModel.is() )
         fillPopupMenu( m_xModel, m_xPopupMenu );
 }

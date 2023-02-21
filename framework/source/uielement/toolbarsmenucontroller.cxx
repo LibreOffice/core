@@ -451,7 +451,7 @@ void SAL_CALL ToolbarsMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(this);
 
-    osl::MutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xDocCfgMgr.clear();
@@ -469,9 +469,9 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
     OUString aFeatureURL( Event.FeatureURL.Complete );
 
     // All other status events will be processed here
-    osl::ClearableMutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
     Reference< css::awt::XPopupMenu > xPopupMenu( m_xPopupMenu );
-    aLock.clear();
+    aLock.unlock();
 
     if ( !xPopupMenu.is() )
         return;
@@ -519,7 +519,7 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
     Reference< XNameAccess >            xPersistentWindowState;
 
     {
-        osl::MutexGuard aLock(m_aMutex);
+        std::unique_lock aLock(m_aMutex);
         xPopupMenu = m_xPopupMenu;
         xContext = m_xContext;
         xURLTransformer = m_xURLTransformer;
@@ -669,7 +669,7 @@ void SAL_CALL ToolbarsMenuController::itemActivated( const css::awt::MenuEvent& 
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
     Reference< XURLTransformer >   xURLTransformer( m_xURLTransformer );
     {
-        osl::MutexGuard aLock( m_aMutex );
+        std::unique_lock aLock( m_aMutex );
         fillPopupMenu( m_xPopupMenu );
         aCmdVector = m_aCommandVector;
     }
@@ -706,9 +706,9 @@ void SAL_CALL ToolbarsMenuController::itemActivated( const css::awt::MenuEvent& 
 // XPopupMenuController
 void SAL_CALL ToolbarsMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu )
 {
-    osl::MutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
 
-    throwIfDisposed();
+    throwIfDisposed(aLock);
 
     if ( m_xFrame.is() && !m_xPopupMenu.is() )
     {
@@ -723,14 +723,13 @@ void SAL_CALL ToolbarsMenuController::setPopupMenu( const Reference< css::awt::X
 }
 
 // XInitialization
-void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArguments )
+void ToolbarsMenuController::initializeImpl( std::unique_lock<std::mutex>& rGuard, const Sequence< Any >& aArguments )
 {
-    osl::MutexGuard aLock( m_aMutex );
     bool bInitialized( m_bInitialized );
     if ( bInitialized )
         return;
 
-    svt::PopupMenuControllerBase::initialize(aArguments);
+    svt::PopupMenuControllerBase::initializeImpl(rGuard, aArguments);
 
     if ( !m_bInitialized )
         return;

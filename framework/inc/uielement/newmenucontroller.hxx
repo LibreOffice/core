@@ -40,9 +40,6 @@ namespace framework
             virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) override;
             virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-            // XInitialization
-            virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
-
             // XStatusListener
             virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
@@ -54,6 +51,9 @@ namespace framework
             virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         private:
+            // XInitialization
+            virtual void initializeImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+
             virtual void impl_setPopupMenu() override;
 
             void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );

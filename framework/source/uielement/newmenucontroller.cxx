@@ -336,7 +336,7 @@ void SAL_CALL NewMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(this);
 
-    osl::MutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xContext.clear();
@@ -359,7 +359,7 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
     Reference< XComponentContext >    xContext;
 
     {
-        osl::MutexGuard aLock(m_aMutex);
+        std::unique_lock aLock(m_aMutex);
         xPopupMenu = m_xPopupMenu;
         xContext = m_xContext;
     }
@@ -435,15 +435,13 @@ void NewMenuController::impl_setPopupMenu()
 }
 
 // XInitialization
-void SAL_CALL NewMenuController::initialize( const Sequence< Any >& aArguments )
+void NewMenuController::initializeImpl( std::unique_lock<std::mutex>& rGuard, const Sequence< Any >& aArguments )
 {
-    osl::MutexGuard aLock( m_aMutex );
-
     bool bInitialized( m_bInitialized );
     if ( bInitialized )
         return;
 
-    svt::PopupMenuControllerBase::initialize( aArguments );
+    svt::PopupMenuControllerBase::initializeImpl( rGuard, aArguments );
 
     if ( m_bInitialized )
     {

@@ -95,7 +95,7 @@ void SAL_CALL MacrosMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(this);
 
-    osl::MutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xContext.clear();
@@ -110,7 +110,7 @@ void SAL_CALL MacrosMenuController::disposing( const EventObject& )
 // XStatusListener
 void SAL_CALL MacrosMenuController::statusChanged( const FeatureStateEvent& )
 {
-    osl::MutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
     if ( m_xPopupMenu.is() )
     {
         fillPopupMenu( m_xPopupMenu );

@@ -30,8 +30,7 @@
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 
 #include <tools/link.hxx>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 
@@ -43,7 +42,7 @@ class VCLXPopupMenu;
 namespace svt
 {
 
-    typedef cppu::WeakComponentImplHelper<
+    typedef comphelper::WeakComponentImplHelper<
                         css::lang::XServiceInfo            ,
                         css::frame::XPopupMenuController ,
                         css::lang::XInitialization         ,
@@ -52,8 +51,7 @@ namespace svt
                         css::frame::XDispatchProvider      ,
                         css::frame::XDispatch > PopupMenuControllerBaseType;
 
-    class UNLESS_MERGELIBS(SVT_DLLPUBLIC) PopupMenuControllerBase : protected ::cppu::BaseMutex,   // Struct for right initialization of mutex member! Must be first of baseclasses.
-                                                  public PopupMenuControllerBaseType
+    class UNLESS_MERGELIBS(SVT_DLLPUBLIC) PopupMenuControllerBase : public PopupMenuControllerBaseType
     {
         public:
             PopupMenuControllerBase( const css::uno::Reference< css::uno::XComponentContext >& xContext );
@@ -69,7 +67,7 @@ namespace svt
             virtual void SAL_CALL updatePopupMenu() override;
 
             // XInitialization
-            virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+            virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override final;
 
             // XStatusListener
             virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override = 0;
@@ -95,15 +93,14 @@ namespace svt
             void dispatchCommand( const OUString& sCommandURL, const css::uno::Sequence< css::beans::PropertyValue >& rArgs, const OUString& sTarget = OUString() );
 
     protected:
-            /// @throws css::uno::RuntimeException
-            void throwIfDisposed();
+            virtual void initializeImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< css::uno::Any >& aArguments );
 
             /** helper method to cause statusChanged is called once for the given command url */
             void updateCommand( const OUString& rCommandURL );
 
             /** this function is called upon disposing the component
             */
-            virtual void SAL_CALL disposing() override;
+            virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
             static void resetPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
             virtual void impl_setPopupMenu();
@@ -120,6 +117,7 @@ namespace svt
             css::uno::Reference< css::frame::XFrame >              m_xFrame;
             css::uno::Reference< css::util::XURLTransformer >      m_xURLTransformer;
             rtl::Reference< VCLXPopupMenu >                        m_xPopupMenu;
+            comphelper::OInterfaceContainerHelper4<XStatusListener> maStatusListeners;
     };
 }
 

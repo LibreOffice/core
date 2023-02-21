@@ -88,7 +88,7 @@ void SAL_CALL LanguageSelectionMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(this);
 
-    osl::MutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xLanguageDispatch.clear();
@@ -103,7 +103,7 @@ void SAL_CALL LanguageSelectionMenuController::statusChanged( const FeatureState
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    if (m_bDisposed)
         return;
 
     m_bShowMenu = true;
@@ -233,12 +233,12 @@ void SAL_CALL LanguageSelectionMenuController::updatePopupMenu()
     svt::PopupMenuControllerBase::updatePopupMenu();
 
     // Force status update to get information about the current languages
-    osl::ClearableMutexGuard aLock( m_aMutex );
+    std::unique_lock aLock( m_aMutex );
     Reference< XDispatch > xDispatch( m_xLanguageDispatch );
     css::util::URL aTargetURL;
     aTargetURL.Complete = m_aLangStatusCommandURL;
     m_xURLTransformer->parseStrict( aTargetURL );
-    aLock.clear();
+    aLock.unlock();
 
     if ( xDispatch.is() )
     {
@@ -263,14 +263,12 @@ void SAL_CALL LanguageSelectionMenuController::updatePopupMenu()
 }
 
 // XInitialization
-void SAL_CALL LanguageSelectionMenuController::initialize( const Sequence< Any >& aArguments )
+void LanguageSelectionMenuController::initializeImpl( std::unique_lock<std::mutex>& rGuard, const Sequence< Any >& aArguments )
 {
-    osl::MutexGuard aLock( m_aMutex );
-
     bool bInitialized( m_bInitialized );
     if ( !bInitialized )
     {
-        svt::PopupMenuControllerBase::initialize(aArguments);
+        svt::PopupMenuControllerBase::initializeImpl(rGuard, aArguments);
 
         if ( m_bInitialized )
         {
