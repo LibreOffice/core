@@ -81,7 +81,7 @@ using namespace com::sun::star::beans;
 
 OUString Databases::expandURL( const OUString& aURL )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     OUString aRetURL = expandURL( aURL, m_xContext );
     return aRetURL;
 }
@@ -267,7 +267,7 @@ void Databases::replaceName( OUString& oustring ) const
 
 OUString Databases::getInstallPathAsURL()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     return m_aInstallDirectory;
 }
@@ -313,9 +313,9 @@ const std::vector< OUString >& Databases::getModuleList( const OUString& Languag
 StaticModuleInformation* Databases::getStaticInformationForModule( std::u16string_view Module,
                                                                    const OUString& Language )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
-    OUString key = processLang(Language) + "/" + Module;
+    OUString key = processLang(aGuard, Language) + "/" + Module;
 
     std::pair< ModInfoTable::iterator,bool > aPair =
         m_aModInfo.emplace(key,nullptr);
@@ -324,7 +324,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( std::u16strin
 
     if( aPair.second && ! it->second )
     {
-        osl::File cfgFile( getInstallPathAsURL() + key + ".cfg" );
+        osl::File cfgFile( m_aInstallDirectory + key + ".cfg" );
 
         if( osl::FileBase::E_None != cfgFile.open( osl_File_OpenFlag_Read ) )
             it->second = nullptr;
@@ -389,8 +389,12 @@ StaticModuleInformation* Databases::getStaticInformationForModule( std::u16strin
 
 OUString Databases::processLang( const OUString& Language )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
+    return processLang(aGuard, Language);
+}
 
+OUString Databases::processLang( std::unique_lock<std::mutex>& /*rGuard*/, const OUString& Language )
+{
     OUString ret;
     LangSetTable::iterator it = m_aLangSet.find( Language );
 
@@ -407,7 +411,7 @@ OUString Databases::processLang( const OUString& Language )
         std::vector<OUString> aFallbacks( LanguageTag( aBcp47).getFallbackStrings(true));
         for (auto const & rFB : aFallbacks)
         {
-            if (osl::FileBase::E_None == osl::DirectoryItem::get( getInstallPathAsURL() + rFB, aDirItem))
+            if (osl::FileBase::E_None == osl::DirectoryItem::get( m_aInstallDirectory + rFB, aDirItem))
             {
                 ret = rFB;
                 m_aLangSet[ Language ] = ret;
@@ -428,13 +432,13 @@ helpdatafileproxy::Hdf* Databases::getHelpDataFile( std::u16string_view Database
     if( Database.empty() || Language.isEmpty() )
         return nullptr;
 
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     OUString aFileExt( helpText ? OUString(".ht") : OUString(".db") );
     OUString dbFileName = OUString::Concat("/") + Database + aFileExt;
     OUString key;
     if( pExtensionPath == nullptr )
-        key = processLang( Language ) + dbFileName;
+        key = processLang( aGuard, Language ) + dbFileName;
     else
         key = *pExtensionPath + Language + dbFileName;      // make unique, don't change language
 
@@ -451,7 +455,7 @@ helpdatafileproxy::Hdf* Databases::getHelpDataFile( std::u16string_view Database
         if( pExtensionPath )
             fileURL = expandURL(*pExtensionPath) + Language + dbFileName;
         else
-            fileURL = getInstallPathAsURL() + key;
+            fileURL = m_aInstallDirectory + key;
 
         OUString fileNameHDFHelp( fileURL );
         //Extensions always use the new format
@@ -475,7 +479,7 @@ Databases::getCollator( const OUString& Language )
 {
     OUString key = Language;
 
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     CollatorTable::iterator it =
         m_aCollatorTable.emplace( key, Reference< XCollator >() ).first;
@@ -701,9 +705,9 @@ bool Databases::checkModuleMatchForExtension
 KeywordInfo* Databases::getKeyword( const OUString& Database,
                                     const OUString& Language )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
-    OUString key = processLang(Language) + "/" + Database;
+    OUString key = processLang(aGuard, Language) + "/" + Database;
 
     std::pair< KeywordInfoTable::iterator,bool > aPair =
         m_aKeywordInfo.emplace( key,nullptr );
@@ -784,9 +788,10 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( std::u16string_view jar
     {
         return Reference< XHierarchicalNameAccess >( nullptr );
     }
-    OUString key = processLang(Language) + "/" + jar;
 
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
+
+    OUString key = processLang(aGuard, Language) + "/" + jar;
 
     ZipFileTable::iterator it =
         m_aZipFileTable.emplace( key,Reference< XHierarchicalNameAccess >(nullptr) ).first;
@@ -808,7 +813,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( std::u16string_view jar
             }
             else
             {
-                zipFile = getInstallPathAsURL() + key;
+                zipFile = m_aInstallDirectory + key;
             }
 
             Sequence< Any > aArguments( 2 );
@@ -1088,7 +1093,7 @@ void Databases::setActiveText( const OUString& Module,
 
 void Databases::setInstallPath( const OUString& aInstDir )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     osl::FileBase::getFileURLFromSystemPath( aInstDir,m_aInstallDirectory );
         //TODO: check returned error code

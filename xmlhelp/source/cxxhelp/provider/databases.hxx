@@ -22,12 +22,12 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <mutex>
 #include <string_view>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
 #include <vector>
-#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <o3tl/string_view.hxx>
@@ -205,7 +205,6 @@ namespace chelp {
         /**
          *  Maps a given language-locale combination to language or locale.
          */
-
         OUString processLang( const OUString& Language );
 
         void replaceName( OUString& oustring ) const;
@@ -219,8 +218,9 @@ namespace chelp {
             const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     private:
+        OUString processLang( std::unique_lock<std::mutex>& rGuard, const OUString& Language );
 
-        osl::Mutex                                               m_aMutex;
+        std::mutex                                               m_aMutex;
         css::uno::Reference< css::uno::XComponentContext >       m_xContext;
         css::uno::Reference< css::lang::XMultiComponentFactory > m_xSMgr;
         css::uno::Reference< css::ucb::XSimpleFileAccess3 >      m_xSFA;
