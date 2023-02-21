@@ -21,7 +21,6 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
-#include <comphelper/dispatchcommand.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
@@ -73,6 +72,7 @@ public:
     void typeKey(SdXImpressDocument* rImpressDocument, const sal_uInt16 nKey);
     void insertStringToObject(sal_uInt16 nObj, const std::u16string_view& rStr, bool bUseEscape);
     sd::slidesorter::SlideSorterViewShell* getSlideSorterViewShell();
+    void lcl_search(const OUString& rKey, bool bFindAll = false, bool bBackwards = false);
 };
 
 void SdUiImpressTest::checkCurrentPageNumber(sal_uInt16 nNum)
@@ -150,7 +150,7 @@ sd::slidesorter::SlideSorterViewShell* SdUiImpressTest::getSlideSorterViewShell(
     return pSSVS;
 }
 
-static void lcl_search(const OUString& rKey, bool bFindAll = false, bool bBackwards = false)
+void SdUiImpressTest::lcl_search(const OUString& rKey, bool bFindAll, bool bBackwards)
 {
     Scheduler::ProcessEventsToIdle();
     SvxSearchCmd eSearch = bFindAll ? SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND;
@@ -161,7 +161,7 @@ static void lcl_search(const OUString& rKey, bool bFindAll = false, bool bBackwa
         { "SearchItem.Command", uno::Any(sal_uInt16(eSearch)) },
     }));
 
-    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:ExecuteSearch", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
 }
 

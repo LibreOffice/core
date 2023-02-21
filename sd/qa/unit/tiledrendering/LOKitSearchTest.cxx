@@ -12,7 +12,6 @@
 
 #include <test/helper/transferable.hxx>
 
-#include <comphelper/dispatchcommand.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/lok.hxx>
 #include <svl/srchitem.hxx>
@@ -80,6 +79,8 @@ private:
     SdXImpressDocument* createDoc(const char* pName,
                                   const uno::Sequence<beans::PropertyValue>& rArguments
                                   = uno::Sequence<beans::PropertyValue>());
+    void lcl_search(const OUString& rKey, bool bFindAll = false, bool bBackwards = false);
+    void lcl_replace(const OUString& rKey, const OUString& rReplace, bool bAll = false);
 
     std::unique_ptr<CallbackRecorder> mpCallbackRecorder;
 };
@@ -118,9 +119,7 @@ LOKitSearchTest::createDoc(const char* pName, const uno::Sequence<beans::Propert
     return pImpressDocument;
 }
 
-namespace
-{
-void lcl_search(const OUString& rKey, bool bFindAll = false, bool bBackwards = false)
+void LOKitSearchTest::lcl_search(const OUString& rKey, bool bFindAll, bool bBackwards)
 {
     Scheduler::ProcessEventsToIdle();
     SvxSearchCmd eSearch = bFindAll ? SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND;
@@ -131,11 +130,11 @@ void lcl_search(const OUString& rKey, bool bFindAll = false, bool bBackwards = f
         { "SearchItem.Command", uno::Any(sal_uInt16(eSearch)) },
     }));
 
-    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:ExecuteSearch", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
 }
 
-void lcl_replace(const OUString& rKey, const OUString& rReplace, bool bAll = false)
+void LOKitSearchTest::lcl_replace(const OUString& rKey, const OUString& rReplace, bool bAll)
 {
     Scheduler::ProcessEventsToIdle();
 
@@ -147,10 +146,12 @@ void lcl_replace(const OUString& rKey, const OUString& rReplace, bool bAll = fal
         { "SearchItem.Command", uno::Any(sal_uInt16(eSearch)) },
     }));
 
-    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:ExecuteSearch", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
 }
 
+namespace
+{
 SdrObject* lclGetSelectedObject(sd::ViewShell* pViewShell)
 {
     SdrView* pSdrView = pViewShell->GetView();
