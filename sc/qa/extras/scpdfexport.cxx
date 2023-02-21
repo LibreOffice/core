@@ -454,7 +454,6 @@ void ScPDFExportTest::testTdf120190()
     dispatchCommand(mxComponent, ".uno:GoToCell", aArgs);
 
     dispatchCommand(mxComponent, ".uno:ConvertFormulaToValue", {});
-    Scheduler::ProcessEventsToIdle();
 
     // A1
     ScRange range1(0, 0, 0, 0, 0, 0);

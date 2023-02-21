@@ -47,16 +47,13 @@ void Chart2UiChartTest::testCopyPasteToNewSheet(uno::Reference<chart::XChartDocu
         comphelper::makePropertyValue("ToObject", aObjectName),
     };
     dispatchCommand(mxComponent, ".uno:GoToObject", aPropertyValues);
-    Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
-    Scheduler::ProcessEventsToIdle();
 
     // create a new document
     load("private:factory/scalc");
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
-    Scheduler::ProcessEventsToIdle();
 
     uno::Reference<chart2::XChartDocument> xChartDoc2 = getChartDocFromSheet(0, mxComponent);
     CPPUNIT_ASSERT(xChartDoc2.is());
@@ -140,16 +137,13 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf151091)
         comphelper::makePropertyValue("ToObject", OUString("Object 1")),
     };
     dispatchCommand(mxComponent, ".uno:GoToObject", aPropertyValues);
-    Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
-    Scheduler::ProcessEventsToIdle();
 
     // create a new writer document
     load("private:factory/swriter");
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
-    Scheduler::ProcessEventsToIdle();
 
     aSeriesList = getWriterChartColumnDescriptions(mxComponent);
 
@@ -216,16 +210,13 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf98690)
         comphelper::makePropertyValue("ToObject", OUString("Chart 2")),
     };
     dispatchCommand(mxComponent, ".uno:GoToObject", aPropertyValues);
-    Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
-    Scheduler::ProcessEventsToIdle();
 
     // create a new document
     load("private:factory/scalc");
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
-    Scheduler::ProcessEventsToIdle();
 
     uno::Reference<chart::XChartDocument> xChartDoc2(getChartCompFromSheet(0, 0, mxComponent),
                                                      uno::UNO_QUERY_THROW);

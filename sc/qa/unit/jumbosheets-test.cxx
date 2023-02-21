@@ -273,12 +273,10 @@ void ScJumboSheetsTest::testTdf134553()
     pViewShell->SelectObject(u"Diagram 1");
 
     dispatchCommand(mxComponent, ".uno:Cut", {});
-    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
-    Scheduler::ProcessEventsToIdle();
 
     pOleObj = pPage->GetObj(0);
     CPPUNIT_ASSERT(pOleObj);
@@ -318,10 +316,8 @@ void ScJumboSheetsTest::testTdf147509()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ScDocShell::GetViewData()->GetCurY());
 
     dispatchCommand(mxComponent, ".uno:SelectColumn", {});
-    Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:InsertColumnsAfter", {});
-    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString("A"), pDoc->GetString(ScAddress(0, 0, 0)));
 

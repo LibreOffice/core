@@ -1488,7 +1488,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf137532)
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xCursor, "CharWeight"));
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
-    Scheduler::ProcessEventsToIdle();
 
     xCursor.set(xText->createTextCursorByRange(getRun(getParagraph(1), 1)));
     CPPUNIT_ASSERT(xCursor.is());
@@ -1500,7 +1499,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf137532)
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xCursor, "CharWeight"));
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
-    Scheduler::ProcessEventsToIdle();
 
     xCursor.set(xText->createTextCursorByRange(getRun(getParagraph(1), 1)));
     CPPUNIT_ASSERT(xCursor.is());
