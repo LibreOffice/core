@@ -40,7 +40,7 @@ namespace cairocanvas
                       const css::uno::Reference< css::rendering::XCanvas >&  rTarget   );
 
         /// Dispose all internal references
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     private:
         virtual ::sal_Int8 doRedraw( const css::rendering::ViewState&  rNewState,

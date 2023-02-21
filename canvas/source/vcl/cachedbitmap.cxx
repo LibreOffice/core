@@ -48,13 +48,11 @@ namespace vclcanvas
     {
     }
 
-    void SAL_CALL CachedBitmap::disposing()
+    void CachedBitmap::disposing(std::unique_lock<std::mutex>& rGuard)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         mpGraphicObject.reset();
 
-        CachedPrimitiveBase::disposing();
+        CachedPrimitiveBase::disposing(rGuard);
     }
 
     ::sal_Int8 CachedBitmap::doRedraw( const rendering::ViewState&                  rNewState,

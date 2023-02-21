@@ -23,8 +23,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/XCachedPrimitive.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 
 #include <canvas/canvastoolsdllapi.h>
 
@@ -34,14 +33,14 @@ namespace com::sun::star::rendering { class XCanvas; }
 
 namespace canvas
 {
-    typedef cppu::WeakComponentImplHelper< css::rendering::XCachedPrimitive,
+    typedef comphelper::WeakComponentImplHelper< css::rendering::XCachedPrimitive,
                                            css::lang::XServiceInfo > CachedPrimitiveBase_Base;
 
     /** Base class, providing common functionality for implementers of
         the XCachedPrimitive interface.
      */
     class CANVASTOOLS_DLLPUBLIC CachedPrimitiveBase:
-        public cppu::BaseMutex, public CachedPrimitiveBase_Base
+        public CachedPrimitiveBase_Base
     {
     public:
 
@@ -57,7 +56,7 @@ namespace canvas
                              css::uno::Reference< css::rendering::XCanvas > xTarget );
 
         /// Dispose all internal references
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // XCachedPrimitive
         virtual ::sal_Int8 SAL_CALL redraw( const css::rendering::ViewState& aState ) override;

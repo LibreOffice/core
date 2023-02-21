@@ -34,7 +34,6 @@ namespace canvas
 {
     CachedPrimitiveBase::CachedPrimitiveBase( rendering::ViewState                    aUsedViewState,
                                               uno::Reference< rendering::XCanvas >    xTarget ) :
-        CachedPrimitiveBase_Base( m_aMutex ),
         maUsedViewState(std::move( aUsedViewState )),
         mxTarget(std::move( xTarget ))
     {
@@ -44,10 +43,8 @@ namespace canvas
     {
     }
 
-    void SAL_CALL CachedPrimitiveBase::disposing()
+    void CachedPrimitiveBase::disposing(std::unique_lock<std::mutex>& /*rGuard*/)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         maUsedViewState.Clip.clear();
         mxTarget.clear();
     }
