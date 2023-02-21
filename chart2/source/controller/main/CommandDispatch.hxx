@@ -18,9 +18,8 @@
  */
 #pragma once
 
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/compbase.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 
@@ -35,7 +34,7 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakComponentImplHelper<
+typedef ::comphelper::WeakComponentImplHelper<
         css::frame::XDispatch,
         css::util::XModifyListener >
     CommandDispatch_Base;
@@ -43,9 +42,7 @@ typedef ::cppu::WeakComponentImplHelper<
 
 /** This is the base class for an XDispatch.
  */
-class CommandDispatch :
-        public cppu::BaseMutex,
-        public impl::CommandDispatch_Base
+class CommandDispatch : public impl::CommandDispatch_Base
 {
 public:
     explicit CommandDispatch( const css::uno::Reference< css::uno::XComponentContext > & xContext );
@@ -107,7 +104,7 @@ protected:
 
     // ____ WeakComponentImplHelperBase ____
     /// is called when this is disposed
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
@@ -121,7 +118,7 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::util::XURLTransformer >  m_xURLTransformer;
 
-    typedef std::map< OUString, ::comphelper::OInterfaceContainerHelper3<css::frame::XStatusListener> >
+    typedef std::map< OUString, ::comphelper::OInterfaceContainerHelper4<css::frame::XStatusListener> >
         tListenerMap;
 
     tListenerMap m_aListeners;

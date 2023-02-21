@@ -770,7 +770,7 @@ void SAL_CALL ControllerCommandDispatch::dispatch(
 
 // ____ WeakComponentImplHelperBase ____
 /// is called when this is disposed
-void SAL_CALL ControllerCommandDispatch::disposing()
+void ControllerCommandDispatch::disposing(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     m_xChartController.clear();
     m_xDispatch.clear();

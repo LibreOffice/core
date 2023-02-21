@@ -202,7 +202,7 @@ void DrawCommandDispatch::setLineEnds( SfxItemSet& rAttr )
 }
 
 // WeakComponentImplHelperBase
-void DrawCommandDispatch::disposing()
+void DrawCommandDispatch::disposing(std::unique_lock<std::mutex>& /*rGuard*/)
 {
 }
 

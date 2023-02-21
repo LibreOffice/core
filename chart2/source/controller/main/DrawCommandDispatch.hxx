@@ -45,7 +45,7 @@ public:
 
 protected:
     // WeakComponentImplHelperBase
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing( std::unique_lock<std::mutex>& rGuard ) override;
 
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;

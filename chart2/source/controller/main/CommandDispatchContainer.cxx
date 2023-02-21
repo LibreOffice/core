@@ -27,6 +27,7 @@
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 
 #include <o3tl/sorted_vector.hxx>

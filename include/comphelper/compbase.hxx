@@ -66,9 +66,9 @@ class SAL_DLLPUBLIC_TEMPLATE WeakComponentImplHelper : public WeakComponentImplH
                                                        public Ifc...
 {
 public:
-    virtual void SAL_CALL acquire() noexcept final override { OWeakObject::acquire(); }
+    virtual void SAL_CALL acquire() noexcept override { OWeakObject::acquire(); }
 
-    virtual void SAL_CALL release() noexcept final override { OWeakObject::release(); }
+    virtual void SAL_CALL release() noexcept override { OWeakObject::release(); }
 
     // css::lang::XComponent
     virtual void SAL_CALL dispose() noexcept final override

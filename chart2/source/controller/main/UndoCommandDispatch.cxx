@@ -121,7 +121,7 @@ void SAL_CALL UndoCommandDispatch::dispatch(
 
 // ____ WeakComponentImplHelperBase ____
 /// is called when this is disposed
-void SAL_CALL UndoCommandDispatch::disposing()
+void UndoCommandDispatch::disposing(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     Reference< util::XModifyBroadcaster > xBroadcaster( m_xUndoManager, uno::UNO_QUERY );
     OSL_ENSURE( xBroadcaster.is(), "UndoCommandDispatch::initialize: missing modification broadcaster interface!" );

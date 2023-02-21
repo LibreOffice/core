@@ -31,7 +31,6 @@ namespace chart
 
 CommandDispatch::CommandDispatch(
     const Reference< uno::XComponentContext > & xContext ) :
-        impl::CommandDispatch_Base( m_aMutex ),
         m_xContext( xContext )
 {
 }
@@ -44,11 +43,11 @@ void CommandDispatch::initialize()
 
 // ____ WeakComponentImplHelperBase ____
 /// is called when this is disposed
-void SAL_CALL CommandDispatch::disposing()
+void CommandDispatch::disposing(std::unique_lock<std::mutex>& rGuard)
 {
     Reference< uno::XInterface > xEventSource(static_cast< cppu::OWeakObject* >( this ));
     for( auto& rElement : m_aListeners )
-        rElement.second.disposeAndClear( xEventSource );
+        rElement.second.disposeAndClear( rGuard, xEventSource );
     m_aListeners.clear();
 }
 
@@ -58,25 +57,29 @@ void SAL_CALL CommandDispatch::dispatch( const util::URL& /* URL */, const Seque
 
 void SAL_CALL CommandDispatch::addStatusListener( const Reference< frame::XStatusListener >& Control, const util::URL& URL )
 {
-    tListenerMap::iterator aIt( m_aListeners.find( URL.Complete ));
-    if( aIt == m_aListeners.end())
     {
-        aIt = m_aListeners.emplace(
-                    std::piecewise_construct,
-                    std::forward_as_tuple(URL.Complete),
-                    std::forward_as_tuple( m_aMutex )).first;
-    }
-    assert( aIt != m_aListeners.end());
+        std::unique_lock g(m_aMutex);
+        tListenerMap::iterator aIt( m_aListeners.find( URL.Complete ));
+        if( aIt == m_aListeners.end())
+        {
+            aIt = m_aListeners.emplace(
+                        std::piecewise_construct,
+                        std::forward_as_tuple(URL.Complete),
+                        std::forward_as_tuple()).first;
+        }
+        assert( aIt != m_aListeners.end());
 
-    aIt->second.addInterface( Control );
+        aIt->second.addInterface( g, Control );
+    }
     fireStatusEvent( URL.Complete, Control );
 }
 
 void SAL_CALL CommandDispatch::removeStatusListener( const Reference< frame::XStatusListener >& Control, const util::URL& URL )
 {
+    std::unique_lock g(m_aMutex);
     tListenerMap::iterator aIt( m_aListeners.find( URL.Complete ));
     if( aIt != m_aListeners.end())
-        (*aIt).second.removeInterface( Control );
+        (*aIt).second.removeInterface( g, Control );
 }
 
 // ____ XModifyListener ____
@@ -127,19 +130,8 @@ void CommandDispatch::fireStatusEventForURL(
         tListenerMap::iterator aIt( m_aListeners.find( aURL.Complete ));
         if( aIt != m_aListeners.end())
         {
-            ::comphelper::OInterfaceIteratorHelper3 aIntfIt( aIt->second );
-
-            while( aIntfIt.hasMoreElements())
-            {
-                try
-                {
-                    aIntfIt.next()->statusChanged( aEventToSend );
-                }
-                catch( const uno::Exception & )
-                {
-                    DBG_UNHANDLED_EXCEPTION("chart2");
-                }
-            }
+            std::unique_lock g(m_aMutex);
+            aIt->second.notifyEach(g, &css::frame::XStatusListener::statusChanged, aEventToSend);
         }
     }
 }

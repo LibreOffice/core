@@ -49,7 +49,7 @@ protected:
 
     // ____ WeakComponentImplHelperBase ____
     /// is called when this is disposed
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // ____ XEventListener (base of XModifyListener) ____
     virtual void SAL_CALL disposing(

@@ -60,7 +60,7 @@ ShapeController::~ShapeController()
 }
 
 // WeakComponentImplHelperBase
-void ShapeController::disposing()
+void ShapeController::disposing(std::unique_lock<std::mutex>& /*rGuard*/)
 {
 }
 

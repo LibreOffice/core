@@ -90,7 +90,7 @@ void SAL_CALL StatusBarCommandDispatch::dispatch(
 
 // ____ WeakComponentImplHelperBase ____
 /// is called when this is disposed
-void SAL_CALL StatusBarCommandDispatch::disposing()
+void StatusBarCommandDispatch::disposing(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     m_xChartModel.clear();
     m_xSelectionSupplier.clear();
