@@ -2731,13 +2731,13 @@ OSQLParseNodesContainer::~OSQLParseNodesContainer()
 
 void OSQLParseNodesContainer::push_back(OSQLParseNode* _pNode)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
     m_aNodes.push_back(_pNode);
 }
 
 void OSQLParseNodesContainer::erase(OSQLParseNode* _pNode)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
     if ( !m_aNodes.empty() )
     {
         std::vector< OSQLParseNode* >::iterator aFind = std::find(m_aNodes.begin(), m_aNodes.end(),_pNode);
@@ -2748,13 +2748,13 @@ void OSQLParseNodesContainer::erase(OSQLParseNode* _pNode)
 
 void OSQLParseNodesContainer::clear()
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
     m_aNodes.clear();
 }
 
 void OSQLParseNodesContainer::clearAndDelete()
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
     // clear the garbage collector
     while ( !m_aNodes.empty() )
     {
@@ -2763,7 +2763,9 @@ void OSQLParseNodesContainer::clearAndDelete()
         {
             pNode = pNode->getParent();
         }
+        aGuard.unlock(); // can call back into this object during destruction
         delete pNode;
+        aGuard.lock();
     }
 }
 }   // namespace connectivity

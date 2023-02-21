@@ -19,11 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SQLPARSE_HXX
 #define INCLUDED_CONNECTIVITY_SQLPARSE_HXX
 
-#include <memory>
-#include <string_view>
-
 #include <com/sun/star/uno/Reference.h>
-#include <osl/mutex.hxx>
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/IParseContext.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
@@ -31,6 +27,9 @@
 #include <comphelper/singletonref.hxx>
 
 #include <map>
+#include <memory>
+#include <mutex>
+#include <string_view>
 
 namespace com::sun::star::i18n { class XCharacterClassification; }
 namespace com::sun::star::i18n { class XLocaleData4; }
@@ -82,7 +81,7 @@ namespace connectivity
 
     class OSQLParseNodesContainer
     {
-        ::osl::Mutex m_aMutex;
+        std::mutex m_aMutex;
         ::std::vector< OSQLParseNode* > m_aNodes;
     public:
         OSQLParseNodesContainer();
