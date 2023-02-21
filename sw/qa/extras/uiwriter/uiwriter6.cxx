@@ -31,7 +31,6 @@
 
 #include <svl/stritem.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <comphelper/dispatchcommand.hxx>
 #include <sfx2/dispatch.hxx>
 #include <cmdid.h>
 #include <tools/json_writer.hxx>
