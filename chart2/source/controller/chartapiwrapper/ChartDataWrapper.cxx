@@ -366,7 +366,6 @@ struct lcl_DateCategoriesOperator : public lcl_Operator
 
 ChartDataWrapper::ChartDataWrapper(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
     : m_spChart2ModelContact(std::move(spChart2ModelContact))
-    , m_aEventListenerContainer(m_aMutex)
 {
     osl_atomic_increment( &m_refCount );
     initDataAccess();
@@ -375,8 +374,7 @@ ChartDataWrapper::ChartDataWrapper(std::shared_ptr<Chart2ModelContact> spChart2M
 
 ChartDataWrapper::ChartDataWrapper( std::shared_ptr<Chart2ModelContact> spChart2ModelContact,
                                     const Reference< XChartData >& xNewData ) :
-        m_spChart2ModelContact(std::move( spChart2ModelContact )),
-        m_aEventListenerContainer( m_aMutex )
+        m_spChart2ModelContact(std::move( spChart2ModelContact ))
 {
     osl_atomic_increment( &m_refCount );
     lcl_AllOperator aOperator( xNewData );
@@ -513,13 +511,15 @@ void SAL_CALL ChartDataWrapper::setDateCategories( const Sequence< double >& rDa
 void SAL_CALL ChartDataWrapper::addChartDataChangeEventListener(
     const uno::Reference< css::chart::XChartDataChangeEventListener >& aListener )
 {
-    m_aEventListenerContainer.addInterface( aListener );
+    std::unique_lock g(m_aMutex);
+    m_aEventListenerContainer.addInterface( g, aListener );
 }
 
 void SAL_CALL ChartDataWrapper::removeChartDataChangeEventListener(
     const uno::Reference< css::chart::XChartDataChangeEventListener >& aListener )
 {
-    m_aEventListenerContainer.removeInterface( aListener );
+    std::unique_lock g(m_aMutex);
+    m_aEventListenerContainer.removeInterface( g, aListener );
 }
 
 double SAL_CALL ChartDataWrapper::getNotANumber()
@@ -537,20 +537,23 @@ sal_Bool SAL_CALL ChartDataWrapper::isNotANumber( double nNumber )
 // ____ XComponent ____
 void SAL_CALL ChartDataWrapper::dispose()
 {
-    m_aEventListenerContainer.disposeAndClear( lang::EventObject( static_cast< ::cppu::OWeakObject* >( this )));
+    std::unique_lock g(m_aMutex);
+    m_aEventListenerContainer.disposeAndClear( g, lang::EventObject( static_cast< ::cppu::OWeakObject* >( this )));
     m_xDataAccess=nullptr;
 }
 
 void SAL_CALL ChartDataWrapper::addEventListener(
     const uno::Reference< lang::XEventListener > & xListener )
 {
-    m_aEventListenerContainer.addInterface( xListener );
+    std::unique_lock g(m_aMutex);
+    m_aEventListenerContainer.addInterface( g, xListener );
 }
 
 void SAL_CALL ChartDataWrapper::removeEventListener(
     const uno::Reference< lang::XEventListener >& aListener )
 {
-    m_aEventListenerContainer.removeInterface( aListener );
+    std::unique_lock g(m_aMutex);
+    m_aEventListenerContainer.removeInterface( g, aListener );
 }
 
 // ____ XEventListener ____
@@ -560,7 +563,8 @@ void SAL_CALL ChartDataWrapper::disposing( const lang::EventObject& /* Source */
 
 void ChartDataWrapper::fireChartDataChangeEvent( css::chart::ChartDataChangeEvent& aEvent )
 {
-    if( ! m_aEventListenerContainer.getLength() )
+    std::unique_lock g(m_aMutex);
+    if( ! m_aEventListenerContainer.getLength(g) )
         return;
 
     uno::Reference< uno::XInterface > xSrc( static_cast< cppu::OWeakObject* >( this ));
@@ -568,7 +572,13 @@ void ChartDataWrapper::fireChartDataChangeEvent( css::chart::ChartDataChangeEven
     if( xSrc.is() )
         aEvent.Source = xSrc;
 
-    m_aEventListenerContainer.notifyEach( &css::chart::XChartDataChangeEventListener::chartDataChanged, aEvent );
+    m_aEventListenerContainer.forEach( g,
+        [&aEvent](const uno::Reference<css::lang::XEventListener>& l)
+        {
+            uno::Reference<css::chart::XChartDataChangeEventListener> cl(l, uno::UNO_QUERY);
+            if (cl)
+                cl->chartDataChanged(aEvent);
+        });
 }
 
 void ChartDataWrapper::switchToInternalDataProvider()

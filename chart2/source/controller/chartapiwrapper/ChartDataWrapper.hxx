@@ -18,9 +18,8 @@
  */
 #pragma once
 
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart/XDateCategories.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -35,7 +34,7 @@ namespace chart::wrapper
 class Chart2ModelContact;
 struct lcl_Operator;
 
-class ChartDataWrapper final : public cppu::BaseMutex, public
+class ChartDataWrapper final : public
     ::cppu::WeakImplHelper<
     css::chart2::XAnyDescriptionAccess,
     css::chart::XDateCategories,
@@ -107,10 +106,10 @@ private:
     void initDataAccess();
     void applyData( lcl_Operator& rDataOperator );
 
+    std::mutex m_aMutex;
     css::uno::Reference< css::chart2::XAnyDescriptionAccess > m_xDataAccess;
-
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
-    ::comphelper::OInterfaceContainerHelper2      m_aEventListenerContainer;
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aEventListenerContainer;
 };
 
 } //  namespace chart::wrapper
