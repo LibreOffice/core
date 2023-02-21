@@ -41,6 +41,8 @@ protected:
     virtual bool StoreData( SvStream& ) const override;
     virtual ~SbxObject() override;
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
+    virtual bool IsOptionCompatible() const; // Module's Option Compatible
+
 public:
     SBX_DECL_PERSIST_NODATA(SBXID_OBJECT,1);
     SbxObject( const OUString& rClassname );
@@ -78,9 +80,6 @@ public:
     SbxArray* GetObjects()      { return pObjs.get(); }
     // Debugging
     void Dump( SvStream&, bool bDumpAll );
-
-private:
-    bool IsModuleCompatible() const; // Module's Option Compatible
 };
 
 #endif // INCLUDED_BASIC_SBXOBJ_HXX

@@ -94,6 +94,8 @@ protected:
     SAL_DLLPRIVATE virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     SAL_DLLPRIVATE void handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rHint );
     virtual ~SbModule() override;
+    bool IsOptionCompatible() const override { return mbCompat; }
+
 public:
     SBX_DECL_PERSIST_NODATA(SBXID_BASICMOD,2);
                     SbModule( const OUString&, bool bVBASupport = false );
@@ -123,7 +125,6 @@ public:
     SAL_DLLPRIVATE bool HasExeCode();
     bool     IsVBASupport() const { return mbVBASupport; }
     SAL_DLLPRIVATE void SetVBASupport( bool bSupport );
-    bool     IsCompatible() const { return mbCompat; }
     sal_Int32 GetModuleType() const { return mnType; }
     void     SetModuleType( sal_Int32 nType ) { mnType = nType; }
     bool     isProxyModule() const { return bIsProxyModule; }
