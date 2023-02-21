@@ -24,135 +24,13 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QStyle>
 
+#include <i18nlangtag/languagetag.hxx>
 #include <sal/log.hxx>
+#include <tools/stream.hxx>
+#include <vcl/ImageTree.hxx>
 
-#include <unx/x11_cursors/ase_curs.h>
-#include <unx/x11_cursors/ase_mask.h>
-#include <unx/x11_cursors/asn_curs.h>
-#include <unx/x11_cursors/asn_mask.h>
-#include <unx/x11_cursors/asne_curs.h>
-#include <unx/x11_cursors/asne_mask.h>
-#include <unx/x11_cursors/asns_curs.h>
-#include <unx/x11_cursors/asns_mask.h>
-#include <unx/x11_cursors/asnswe_curs.h>
-#include <unx/x11_cursors/asnswe_mask.h>
-#include <unx/x11_cursors/asnw_curs.h>
-#include <unx/x11_cursors/asnw_mask.h>
-#include <unx/x11_cursors/ass_curs.h>
-#include <unx/x11_cursors/ass_mask.h>
-#include <unx/x11_cursors/asse_curs.h>
-#include <unx/x11_cursors/asse_mask.h>
-#include <unx/x11_cursors/assw_curs.h>
-#include <unx/x11_cursors/assw_mask.h>
-#include <unx/x11_cursors/asw_curs.h>
-#include <unx/x11_cursors/asw_mask.h>
-#include <unx/x11_cursors/aswe_curs.h>
-#include <unx/x11_cursors/aswe_mask.h>
-#include <unx/x11_cursors/chain_curs.h>
-#include <unx/x11_cursors/chain_mask.h>
-#include <unx/x11_cursors/chainnot_curs.h>
-#include <unx/x11_cursors/chainnot_mask.h>
-#include <unx/x11_cursors/chart_curs.h>
-#include <unx/x11_cursors/chart_mask.h>
-#include <unx/x11_cursors/copydata_curs.h>
-#include <unx/x11_cursors/copydata_mask.h>
-#include <unx/x11_cursors/copydlnk_curs.h>
-#include <unx/x11_cursors/copydlnk_mask.h>
-#include <unx/x11_cursors/copyfile_curs.h>
-#include <unx/x11_cursors/copyfile_mask.h>
-#include <unx/x11_cursors/copyfiles_curs.h>
-#include <unx/x11_cursors/copyfiles_mask.h>
-#include <unx/x11_cursors/copyflnk_curs.h>
-#include <unx/x11_cursors/copyflnk_mask.h>
-#include <unx/x11_cursors/crook_curs.h>
-#include <unx/x11_cursors/crook_mask.h>
-#include <unx/x11_cursors/crop_curs.h>
-#include <unx/x11_cursors/crop_mask.h>
-#include <unx/x11_cursors/detective_curs.h>
-#include <unx/x11_cursors/detective_mask.h>
-#include <unx/x11_cursors/drawarc_curs.h>
-#include <unx/x11_cursors/drawarc_mask.h>
-#include <unx/x11_cursors/drawbezier_curs.h>
-#include <unx/x11_cursors/drawbezier_mask.h>
-#include <unx/x11_cursors/drawcaption_curs.h>
-#include <unx/x11_cursors/drawcaption_mask.h>
-#include <unx/x11_cursors/drawcirclecut_curs.h>
-#include <unx/x11_cursors/drawcirclecut_mask.h>
-#include <unx/x11_cursors/drawconnect_curs.h>
-#include <unx/x11_cursors/drawconnect_mask.h>
-#include <unx/x11_cursors/drawellipse_curs.h>
-#include <unx/x11_cursors/drawellipse_mask.h>
-#include <unx/x11_cursors/drawfreehand_curs.h>
-#include <unx/x11_cursors/drawfreehand_mask.h>
-#include <unx/x11_cursors/drawline_curs.h>
-#include <unx/x11_cursors/drawline_mask.h>
-#include <unx/x11_cursors/drawpie_curs.h>
-#include <unx/x11_cursors/drawpie_mask.h>
-#include <unx/x11_cursors/drawpolygon_curs.h>
-#include <unx/x11_cursors/drawpolygon_mask.h>
-#include <unx/x11_cursors/drawrect_curs.h>
-#include <unx/x11_cursors/drawrect_mask.h>
-#include <unx/x11_cursors/drawtext_curs.h>
-#include <unx/x11_cursors/drawtext_mask.h>
-#include <unx/x11_cursors/fill_curs.h>
-#include <unx/x11_cursors/fill_mask.h>
-#include <unx/x11_cursors/hshear_curs.h>
-#include <unx/x11_cursors/hshear_mask.h>
-#include <unx/x11_cursors/linkdata_curs.h>
-#include <unx/x11_cursors/linkdata_mask.h>
-#include <unx/x11_cursors/linkfile_curs.h>
-#include <unx/x11_cursors/linkfile_mask.h>
-#include <unx/x11_cursors/magnify_curs.h>
-#include <unx/x11_cursors/magnify_mask.h>
-#include <unx/x11_cursors/mirror_curs.h>
-#include <unx/x11_cursors/mirror_mask.h>
-#include <unx/x11_cursors/movebezierweight_curs.h>
-#include <unx/x11_cursors/movebezierweight_mask.h>
-#include <unx/x11_cursors/movedata_curs.h>
-#include <unx/x11_cursors/movedata_mask.h>
-#include <unx/x11_cursors/movedlnk_curs.h>
-#include <unx/x11_cursors/movedlnk_mask.h>
-#include <unx/x11_cursors/movefile_curs.h>
-#include <unx/x11_cursors/movefile_mask.h>
-#include <unx/x11_cursors/movefiles_curs.h>
-#include <unx/x11_cursors/movefiles_mask.h>
-#include <unx/x11_cursors/moveflnk_curs.h>
-#include <unx/x11_cursors/moveflnk_mask.h>
-#include <unx/x11_cursors/movepoint_curs.h>
-#include <unx/x11_cursors/movepoint_mask.h>
-#include <unx/x11_cursors/nodrop_curs.h>
-#include <unx/x11_cursors/nodrop_mask.h>
-#include <unx/x11_cursors/pivotcol_curs.h>
-#include <unx/x11_cursors/pivotcol_mask.h>
-#include <unx/x11_cursors/pivotdel_curs.h>
-#include <unx/x11_cursors/pivotdel_mask.h>
-#include <unx/x11_cursors/pivotfld_curs.h>
-#include <unx/x11_cursors/pivotfld_mask.h>
-#include <unx/x11_cursors/pivotrow_curs.h>
-#include <unx/x11_cursors/pivotrow_mask.h>
-#include <unx/x11_cursors/rotate_curs.h>
-#include <unx/x11_cursors/rotate_mask.h>
-#include <unx/x11_cursors/tblsele_curs.h>
-#include <unx/x11_cursors/tblsele_mask.h>
-#include <unx/x11_cursors/tblsels_curs.h>
-#include <unx/x11_cursors/tblsels_mask.h>
-#include <unx/x11_cursors/tblselse_curs.h>
-#include <unx/x11_cursors/tblselse_mask.h>
-#include <unx/x11_cursors/tblselsw_curs.h>
-#include <unx/x11_cursors/tblselsw_mask.h>
-#include <unx/x11_cursors/tblselw_curs.h>
-#include <unx/x11_cursors/tblselw_mask.h>
-#include <unx/x11_cursors/vertcurs_curs.h>
-#include <unx/x11_cursors/vertcurs_mask.h>
-#include <unx/x11_cursors/vshear_curs.h>
-#include <unx/x11_cursors/vshear_mask.h>
-#include <unx/x11_cursors/wshide_curs.h>
-#include <unx/x11_cursors/wshide_mask.h>
-#include <unx/x11_cursors/wsshow_curs.h>
-#include <unx/x11_cursors/wsshow_mask.h>
-#include <unx/x11_cursors/fatcross_curs.h>
-#include <unx/x11_cursors/fatcross_mask.h>
-
+#include <bitmaps.hlst>
+#include <cursor_hotspots.hxx>
 #include <unx/glyphcache.hxx>
 
 QtData::QtData()
@@ -176,17 +54,29 @@ QtData::QtData()
 // outline dtor b/c of FreetypeManager incomplete type
 QtData::~QtData() {}
 
-static QCursor* getQCursorFromXBM(const unsigned char* pBitmap, const unsigned char* pMask,
-                                  int nWidth, int nHeight, int nXHot, int nYHot)
+static QCursor* getQCursorFromIconTheme(const OUString& rIconName, int nXHot, int nYHot)
 {
-    QBitmap aPixmap = QBitmap::fromData(QSize(nWidth, nHeight), pBitmap);
-    QBitmap aMask = QBitmap::fromData(QSize(nWidth, nHeight), pMask);
-    return new QCursor(aPixmap, aMask, nXHot, nYHot);
+    const OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
+    const OUString sUILang = Application::GetSettings().GetUILanguageTag().getBcp47();
+    auto xMemStream = ImageTree::get().getImageStream(rIconName, sIconTheme, sUILang);
+    if (!xMemStream)
+        return nullptr;
+    auto nLength = xMemStream->TellEnd();
+    if (!nLength)
+    {
+        SAL_WARN("vcl.qt", "Cannot load cursor pixmap from empty stream.");
+        return nullptr;
+    }
+
+    const unsigned char* pData = static_cast<const unsigned char*>(xMemStream->GetData());
+    QPixmap aPixmap;
+    aPixmap.loadFromData(pData, nLength);
+    return new QCursor(aPixmap, nXHot, nYHot);
 }
-#define MAKE_CURSOR(vcl_name, name)                                                                \
+
+#define MAKE_CURSOR(vcl_name, name, icon_name)                                                     \
     case vcl_name:                                                                                 \
-        pCursor = getQCursorFromXBM(name##curs##_bits, name##mask##_bits, name##curs_width,        \
-                                    name##curs_height, name##curs_x_hot, name##curs_y_hot);        \
+        pCursor = getQCursorFromIconTheme(icon_name, name##curs_x_hot, name##curs_y_hot);          \
         break
 
 #define MAP_BUILTIN(vcl_name, qt_enum)                                                             \
@@ -239,72 +129,73 @@ QCursor& QtData::getCursor(PointerStyle ePointerStyle)
             MAP_BUILTIN(PointerStyle::Move, Qt::SizeAllCursor);
 
             MAP_BUILTIN(PointerStyle::Null, Qt::BlankCursor);
-            MAKE_CURSOR(PointerStyle::Magnify, magnify_);
-            MAKE_CURSOR(PointerStyle::Fill, fill_);
-            MAKE_CURSOR(PointerStyle::MoveData, movedata_);
-            MAKE_CURSOR(PointerStyle::CopyData, copydata_);
-            MAKE_CURSOR(PointerStyle::MoveFile, movefile_);
-            MAKE_CURSOR(PointerStyle::CopyFile, copyfile_);
-            MAKE_CURSOR(PointerStyle::MoveFiles, movefiles_);
-            MAKE_CURSOR(PointerStyle::CopyFiles, copyfiles_);
-            MAKE_CURSOR(PointerStyle::NotAllowed, nodrop_);
-            MAKE_CURSOR(PointerStyle::Rotate, rotate_);
-            MAKE_CURSOR(PointerStyle::HShear, hshear_);
-            MAKE_CURSOR(PointerStyle::VShear, vshear_);
-            MAKE_CURSOR(PointerStyle::DrawLine, drawline_);
-            MAKE_CURSOR(PointerStyle::DrawRect, drawrect_);
-            MAKE_CURSOR(PointerStyle::DrawPolygon, drawpolygon_);
-            MAKE_CURSOR(PointerStyle::DrawBezier, drawbezier_);
-            MAKE_CURSOR(PointerStyle::DrawArc, drawarc_);
-            MAKE_CURSOR(PointerStyle::DrawPie, drawpie_);
-            MAKE_CURSOR(PointerStyle::DrawCircleCut, drawcirclecut_);
-            MAKE_CURSOR(PointerStyle::DrawEllipse, drawellipse_);
-            MAKE_CURSOR(PointerStyle::DrawConnect, drawconnect_);
-            MAKE_CURSOR(PointerStyle::DrawText, drawtext_);
-            MAKE_CURSOR(PointerStyle::Mirror, mirror_);
-            MAKE_CURSOR(PointerStyle::Crook, crook_);
-            MAKE_CURSOR(PointerStyle::Crop, crop_);
-            MAKE_CURSOR(PointerStyle::MovePoint, movepoint_);
-            MAKE_CURSOR(PointerStyle::MoveBezierWeight, movebezierweight_);
-            MAKE_CURSOR(PointerStyle::DrawFreehand, drawfreehand_);
-            MAKE_CURSOR(PointerStyle::DrawCaption, drawcaption_);
-            MAKE_CURSOR(PointerStyle::LinkData, linkdata_);
-            MAKE_CURSOR(PointerStyle::MoveDataLink, movedlnk_);
-            MAKE_CURSOR(PointerStyle::CopyDataLink, copydlnk_);
-            MAKE_CURSOR(PointerStyle::LinkFile, linkfile_);
-            MAKE_CURSOR(PointerStyle::MoveFileLink, moveflnk_);
-            MAKE_CURSOR(PointerStyle::CopyFileLink, copyflnk_);
-            MAKE_CURSOR(PointerStyle::Chart, chart_);
-            MAKE_CURSOR(PointerStyle::Detective, detective_);
-            MAKE_CURSOR(PointerStyle::PivotCol, pivotcol_);
-            MAKE_CURSOR(PointerStyle::PivotRow, pivotrow_);
-            MAKE_CURSOR(PointerStyle::PivotField, pivotfld_);
-            MAKE_CURSOR(PointerStyle::PivotDelete, pivotdel_);
-            MAKE_CURSOR(PointerStyle::Chain, chain_);
-            MAKE_CURSOR(PointerStyle::ChainNotAllowed, chainnot_);
-            MAKE_CURSOR(PointerStyle::AutoScrollN, asn_);
-            MAKE_CURSOR(PointerStyle::AutoScrollS, ass_);
-            MAKE_CURSOR(PointerStyle::AutoScrollW, asw_);
-            MAKE_CURSOR(PointerStyle::AutoScrollE, ase_);
-            MAKE_CURSOR(PointerStyle::AutoScrollNW, asnw_);
-            MAKE_CURSOR(PointerStyle::AutoScrollNE, asne_);
-            MAKE_CURSOR(PointerStyle::AutoScrollSW, assw_);
-            MAKE_CURSOR(PointerStyle::AutoScrollSE, asse_);
-            MAKE_CURSOR(PointerStyle::AutoScrollNS, asns_);
-            MAKE_CURSOR(PointerStyle::AutoScrollWE, aswe_);
-            MAKE_CURSOR(PointerStyle::AutoScrollNSWE, asnswe_);
-            MAKE_CURSOR(PointerStyle::TextVertical, vertcurs_);
+            MAKE_CURSOR(PointerStyle::Magnify, magnify_, RID_CURSOR_MAGNIFY);
+            MAKE_CURSOR(PointerStyle::Fill, fill_, RID_CURSOR_FILL);
+            MAKE_CURSOR(PointerStyle::MoveData, movedata_, RID_CURSOR_MOVE_DATA);
+            MAKE_CURSOR(PointerStyle::CopyData, copydata_, RID_CURSOR_COPY_DATA);
+            MAKE_CURSOR(PointerStyle::MoveFile, movefile_, RID_CURSOR_MOVE_FILE);
+            MAKE_CURSOR(PointerStyle::CopyFile, copyfile_, RID_CURSOR_COPY_FILE);
+            MAKE_CURSOR(PointerStyle::MoveFiles, movefiles_, RID_CURSOR_MOVE_FILES);
+            MAKE_CURSOR(PointerStyle::CopyFiles, copyfiles_, RID_CURSOR_COPY_FILES);
+            MAKE_CURSOR(PointerStyle::NotAllowed, nodrop_, RID_CURSOR_NOT_ALLOWED);
+            MAKE_CURSOR(PointerStyle::Rotate, rotate_, RID_CURSOR_ROTATE);
+            MAKE_CURSOR(PointerStyle::HShear, hshear_, RID_CURSOR_H_SHEAR);
+            MAKE_CURSOR(PointerStyle::VShear, vshear_, RID_CURSOR_V_SHEAR);
+            MAKE_CURSOR(PointerStyle::DrawLine, drawline_, RID_CURSOR_DRAW_LINE);
+            MAKE_CURSOR(PointerStyle::DrawRect, drawrect_, RID_CURSOR_DRAW_RECT);
+            MAKE_CURSOR(PointerStyle::DrawPolygon, drawpolygon_, RID_CURSOR_DRAW_POLYGON);
+            MAKE_CURSOR(PointerStyle::DrawBezier, drawbezier_, RID_CURSOR_DRAW_BEZIER);
+            MAKE_CURSOR(PointerStyle::DrawArc, drawarc_, RID_CURSOR_DRAW_ARC);
+            MAKE_CURSOR(PointerStyle::DrawPie, drawpie_, RID_CURSOR_DRAW_PIE);
+            MAKE_CURSOR(PointerStyle::DrawCircleCut, drawcirclecut_, RID_CURSOR_DRAW_CIRCLE_CUT);
+            MAKE_CURSOR(PointerStyle::DrawEllipse, drawellipse_, RID_CURSOR_DRAW_ELLIPSE);
+            MAKE_CURSOR(PointerStyle::DrawConnect, drawconnect_, RID_CURSOR_DRAW_CONNECT);
+            MAKE_CURSOR(PointerStyle::DrawText, drawtext_, RID_CURSOR_DRAW_TEXT);
+            MAKE_CURSOR(PointerStyle::Mirror, mirror_, RID_CURSOR_MIRROR);
+            MAKE_CURSOR(PointerStyle::Crook, crook_, RID_CURSOR_CROOK);
+            MAKE_CURSOR(PointerStyle::Crop, crop_, RID_CURSOR_CROP);
+            MAKE_CURSOR(PointerStyle::MovePoint, movepoint_, RID_CURSOR_MOVE_POINT);
+            MAKE_CURSOR(PointerStyle::MoveBezierWeight, movebezierweight_,
+                        RID_CURSOR_MOVE_BEZIER_WEIGHT);
+            MAKE_CURSOR(PointerStyle::DrawFreehand, drawfreehand_, RID_CURSOR_DRAW_FREEHAND);
+            MAKE_CURSOR(PointerStyle::DrawCaption, drawcaption_, RID_CURSOR_DRAW_CAPTION);
+            MAKE_CURSOR(PointerStyle::LinkData, linkdata_, RID_CURSOR_LINK_DATA);
+            MAKE_CURSOR(PointerStyle::MoveDataLink, movedlnk_, RID_CURSOR_MOVE_DATA_LINK);
+            MAKE_CURSOR(PointerStyle::CopyDataLink, copydlnk_, RID_CURSOR_COPY_DATA_LINK);
+            MAKE_CURSOR(PointerStyle::LinkFile, linkfile_, RID_CURSOR_LINK_FILE);
+            MAKE_CURSOR(PointerStyle::MoveFileLink, moveflnk_, RID_CURSOR_MOVE_FILE_LINK);
+            MAKE_CURSOR(PointerStyle::CopyFileLink, copyflnk_, RID_CURSOR_COPY_FILE_LINK);
+            MAKE_CURSOR(PointerStyle::Chart, chart_, RID_CURSOR_CHART);
+            MAKE_CURSOR(PointerStyle::Detective, detective_, RID_CURSOR_DETECTIVE);
+            MAKE_CURSOR(PointerStyle::PivotCol, pivotcol_, RID_CURSOR_PIVOT_COLUMN);
+            MAKE_CURSOR(PointerStyle::PivotRow, pivotrow_, RID_CURSOR_PIVOT_ROW);
+            MAKE_CURSOR(PointerStyle::PivotField, pivotfld_, RID_CURSOR_PIVOT_FIELD);
+            MAKE_CURSOR(PointerStyle::PivotDelete, pivotdel_, RID_CURSOR_PIVOT_DELETE);
+            MAKE_CURSOR(PointerStyle::Chain, chain_, RID_CURSOR_CHAIN);
+            MAKE_CURSOR(PointerStyle::ChainNotAllowed, chainnot_, RID_CURSOR_CHAIN_NOT_ALLOWED);
+            MAKE_CURSOR(PointerStyle::AutoScrollN, asn_, RID_CURSOR_AUTOSCROLL_N);
+            MAKE_CURSOR(PointerStyle::AutoScrollS, ass_, RID_CURSOR_AUTOSCROLL_S);
+            MAKE_CURSOR(PointerStyle::AutoScrollW, asw_, RID_CURSOR_AUTOSCROLL_W);
+            MAKE_CURSOR(PointerStyle::AutoScrollE, ase_, RID_CURSOR_AUTOSCROLL_E);
+            MAKE_CURSOR(PointerStyle::AutoScrollNW, asnw_, RID_CURSOR_AUTOSCROLL_NW);
+            MAKE_CURSOR(PointerStyle::AutoScrollNE, asne_, RID_CURSOR_AUTOSCROLL_NE);
+            MAKE_CURSOR(PointerStyle::AutoScrollSW, assw_, RID_CURSOR_AUTOSCROLL_SW);
+            MAKE_CURSOR(PointerStyle::AutoScrollSE, asse_, RID_CURSOR_AUTOSCROLL_SE);
+            MAKE_CURSOR(PointerStyle::AutoScrollNS, asns_, RID_CURSOR_AUTOSCROLL_NS);
+            MAKE_CURSOR(PointerStyle::AutoScrollWE, aswe_, RID_CURSOR_AUTOSCROLL_WE);
+            MAKE_CURSOR(PointerStyle::AutoScrollNSWE, asnswe_, RID_CURSOR_AUTOSCROLL_NSWE);
+            MAKE_CURSOR(PointerStyle::TextVertical, vertcurs_, RID_CURSOR_TEXT_VERTICAL);
 
-            MAKE_CURSOR(PointerStyle::TabSelectS, tblsels_);
-            MAKE_CURSOR(PointerStyle::TabSelectE, tblsele_);
-            MAKE_CURSOR(PointerStyle::TabSelectSE, tblselse_);
-            MAKE_CURSOR(PointerStyle::TabSelectW, tblselw_);
-            MAKE_CURSOR(PointerStyle::TabSelectSW, tblselsw_);
+            MAKE_CURSOR(PointerStyle::TabSelectS, tblsels_, RID_CURSOR_TAB_SELECT_S);
+            MAKE_CURSOR(PointerStyle::TabSelectE, tblsele_, RID_CURSOR_TAB_SELECT_E);
+            MAKE_CURSOR(PointerStyle::TabSelectSE, tblselse_, RID_CURSOR_TAB_SELECT_SE);
+            MAKE_CURSOR(PointerStyle::TabSelectW, tblselw_, RID_CURSOR_TAB_SELECT_W);
+            MAKE_CURSOR(PointerStyle::TabSelectSW, tblselsw_, RID_CURSOR_TAB_SELECT_SW);
 
-            MAKE_CURSOR(PointerStyle::HideWhitespace, hidewhitespace_);
-            MAKE_CURSOR(PointerStyle::ShowWhitespace, showwhitespace_);
+            MAKE_CURSOR(PointerStyle::HideWhitespace, hidewhitespace_, RID_CURSOR_HIDE_WHITESPACE);
+            MAKE_CURSOR(PointerStyle::ShowWhitespace, showwhitespace_, RID_CURSOR_SHOW_WHITESPACE);
 
-            MAKE_CURSOR(PointerStyle::FatCross, fatcross_);
+            MAKE_CURSOR(PointerStyle::FatCross, fatcross_, RID_CURSOR_FATCROSS);
             default:
                 break;
         }
