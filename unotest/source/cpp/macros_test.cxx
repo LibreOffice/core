@@ -30,6 +30,7 @@
 #include <tools/datetime.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <vcl/scheduler.hxx>
 
 using namespace css;
 
@@ -90,7 +91,10 @@ MacrosTest::dispatchCommand(const uno::Reference<lang::XComponent>& xComponent,
     uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
     CPPUNIT_ASSERT(xDispatchHelper.is());
 
-    return xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
+    auto ret = xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+
+    return ret;
 }
 
 std::unique_ptr<SvStream> MacrosTest::parseExportStream(const OUString& url,

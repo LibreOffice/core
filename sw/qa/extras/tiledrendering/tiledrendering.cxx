@@ -1210,7 +1210,6 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReordering)
     // When view 1 presses undo:
     SfxLokHelper::setView(nView1);
     dispatchCommand(mxComponent, ".uno:Undo", {});
-    Scheduler::ProcessEventsToIdle();
 
     // Then make sure view 1's last undo action is invoked, out of order:
     // Without the accompanying fix in place, this test would have failed with:
@@ -1260,11 +1259,9 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReorderingRedo)
     // When view 1 presses undo, twice:
     SfxLokHelper::setView(nView1);
     dispatchCommand(mxComponent, ".uno:Undo", {});
-    Scheduler::ProcessEventsToIdle();
     // First just s(econd) is erased:
     CPPUNIT_ASSERT_EQUAL(OUString("f"), pTextNode1->GetText());
     dispatchCommand(mxComponent, ".uno:Undo", {});
-    Scheduler::ProcessEventsToIdle();
 
     // Then make sure view 1's undo actions are invoked, out of order:
     // Without the accompanying fix in place, this test would have failed with:
@@ -1314,7 +1311,6 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReorderingMulti)
     // When view 1 presses undo:
     SfxLokHelper::setView(nView1);
     dispatchCommand(mxComponent, ".uno:Undo", {});
-    Scheduler::ProcessEventsToIdle();
 
     // Then make sure view 1's undo action is invoked, out of order:
     // Without the accompanying fix in place, this test would have failed with:

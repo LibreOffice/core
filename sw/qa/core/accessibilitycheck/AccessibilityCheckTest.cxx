@@ -334,7 +334,6 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testOnlineNodeSplitAppend)
 
     // Undo second change
     dispatchCommand(mxComponent, ".uno:Undo", {});
-    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(OUString("He heard quiet steps behind him. "),
                          getParagraph(1)->getString());
     CPPUNIT_ASSERT_EQUAL(OUString("That didn't bode well. Who could be following him this late at "
@@ -351,7 +350,6 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testOnlineNodeSplitAppend)
 
     // Undo first change
     dispatchCommand(mxComponent, ".uno:Undo", {});
-    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2),
                          pDoc->getOnlineAccessibilityCheck()->getNumberOfAccessibilityIssues());
     CPPUNIT_ASSERT_EQUAL(

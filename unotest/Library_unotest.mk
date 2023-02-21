@@ -24,6 +24,7 @@ $(eval $(call gb_Library_use_libraries,unotest,\
 	sb \
 	tl \
 	utl \
+	vcl \
 ))
 
 $(eval $(call gb_Library_use_externals,unotest,\
