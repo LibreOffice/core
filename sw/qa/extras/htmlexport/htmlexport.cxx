@@ -214,9 +214,7 @@ private:
 
     virtual std::unique_ptr<Resetter> preTest(const char* filename) override
     {
-        if (getTestName().indexOf("SkipImages") != -1)
-            setFilterOptions("SkipImages");
-        else if (getTestName().indexOf("EmbedImages") != -1)
+        if (getTestName().indexOf("EmbedImages") != -1)
             setFilterOptions("EmbedImages");
         else if (getTestName().indexOf("XHTML") != -1)
             setFilterOptions("XHTML");
@@ -453,8 +451,12 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testSkipImagesEmbedded)
     assertXPath(pDoc, "//span/table", 1);
 }
 
-DECLARE_HTMLEXPORT_TEST(testSkipImagesEmbeddedDocument, "skipimage-embedded-document.docx")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testSkipImagesEmbeddedDocument)
 {
+    createSwDoc("skipimage-embedded-document.docx");
+    setFilterOptions("SkipImages");
+    save(OUString::createFromAscii(mpFilter));
+
     // Similar to testSkipImagesEmbedded, but with an embedded Writer object,
     // not a Calc one, and this time OOXML, not WW8.
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
