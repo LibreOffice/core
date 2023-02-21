@@ -106,7 +106,7 @@ private:
 
     virtual ~Service() override {}
 
-    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override { flushModifications(rGuard); }
+    virtual void disposing(std::unique_lock<std::mutex>& /*rGuard*/) override { flushModifications(); }
 
     virtual OUString SAL_CALL getImplementationName() override
     {
@@ -157,7 +157,7 @@ private:
 
     virtual css::lang::Locale SAL_CALL getLocale() override;
 
-    void flushModifications(std::unique_lock<std::mutex>& rGuard) const;
+    void flushModifications() const;
 
     css::uno::Reference< css::uno::XComponentContext > context_;
     OUString locale_;
@@ -293,8 +293,8 @@ void Service::removeRefreshListener(
 }
 
 void Service::flush() {
+    flushModifications();
     std::unique_lock g(m_aMutex);
-    flushModifications(g);
     if (maFlushListeners.getLength(g)) {
         css::lang::EventObject ev(static_cast< cppu::OWeakObject * >(this));
         maFlushListeners.notifyEach(g, &css::util::XFlushListener::flushed, ev);
@@ -330,11 +330,13 @@ css::lang::Locale Service::getLocale() {
     return loc;
 }
 
-void Service::flushModifications(std::unique_lock<std::mutex>& rGuard) const {
-    Components * components = &Components::getSingleton(context_);
-    rGuard.unlock();
+void Service::flushModifications() const {
+    Components * components;
+    {
+        osl::MutexGuard guard(*lock_);
+        components = &Components::getSingleton(context_);
+    }
     components->flushModifications();
-    rGuard.lock();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
