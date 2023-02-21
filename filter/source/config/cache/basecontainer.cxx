@@ -33,7 +33,6 @@ namespace filter::config{
 
 BaseContainer::BaseContainer()
     : m_eType()
-    , m_lListener  (m_aMutex)
 {
     GetTheFilterCache().load(FilterCache::E_CONTAINS_STANDARD);
 }
@@ -49,7 +48,7 @@ void BaseContainer::init(const OUString&                                        
                                FilterCache::EItemType                                  eType              )
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aLock(m_aMutex);
 
     m_sImplementationName = sImplementationName;
     m_lServiceNames       = lServiceNames      ;
@@ -58,12 +57,9 @@ void BaseContainer::init(const OUString&                                        
 }
 
 
-void BaseContainer::impl_loadOnDemand()
+void BaseContainer::impl_loadOnDemand(std::unique_lock<std::mutex>& /*rGuard*/)
 {
 #ifdef LOAD_IMPLICIT
-    // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
-
     // A generic container needs all items of a set of our cache!
     // Of course it can block for a while, till the cache is really filled.
     // Note: don't load all sets supported by the cache here!
@@ -89,33 +85,26 @@ void BaseContainer::impl_loadOnDemand()
     }
 
     GetTheFilterCache().load(eRequiredState);
-    // <- SAFE
 #endif
 }
 
 
-void BaseContainer::impl_initFlushMode()
+void BaseContainer::impl_initFlushMode(std::unique_lock<std::mutex>& /*rGuard*/)
 {
-    // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
     if (!m_pFlushCache)
         m_pFlushCache = GetTheFilterCache().clone();
     if (!m_pFlushCache)
         throw css::uno::RuntimeException( "Can not create write copy of internal used cache on demand.",
                 static_cast< OWeakObject* >(this));
-    // <- SAFE
 }
 
 
-FilterCache* BaseContainer::impl_getWorkingCache() const
+FilterCache* BaseContainer::impl_getWorkingCache(std::unique_lock<std::mutex>& /*rGuard*/) const
 {
-    // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
     if (m_pFlushCache)
         return m_pFlushCache.get();
     else
         return &GetTheFilterCache();
-    // <- SAFE
 }
 
 
@@ -154,15 +143,15 @@ void SAL_CALL BaseContainer::insertByName(const OUString& sItem ,
         throw css::lang::IllegalArgumentException(ex.Message, static_cast< css::container::XNameContainer* >(this), 2);
     }
 
-    impl_loadOnDemand();
-
     // SAFE -> ----------------------------------
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aLock(m_aMutex);
+
+    impl_loadOnDemand(aLock);
 
     // create write copy of used cache on demand ...
-    impl_initFlushMode();
+    impl_initFlushMode(aLock);
 
-    FilterCache* pCache = impl_getWorkingCache();
+    FilterCache* pCache = impl_getWorkingCache(aLock);
     if (pCache->hasItem(m_eType, sItem))
         throw css::container::ElementExistException(OUString(), static_cast< css::container::XNameContainer* >(this));
     pCache->setItem(m_eType, sItem, aItem);
@@ -172,15 +161,15 @@ void SAL_CALL BaseContainer::insertByName(const OUString& sItem ,
 
 void SAL_CALL BaseContainer::removeByName(const OUString& sItem)
 {
-    impl_loadOnDemand();
-
     // SAFE -> ----------------------------------
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aLock(m_aMutex);
+
+    impl_loadOnDemand(aLock);
 
     // create write copy of used cache on demand ...
-    impl_initFlushMode();
+    impl_initFlushMode(aLock);
 
-    FilterCache* pCache = impl_getWorkingCache();
+    FilterCache* pCache = impl_getWorkingCache(aLock);
     pCache->removeItem(m_eType, sItem); // throw exceptions automatically
     // <- SAFE ----------------------------------
 }
@@ -204,15 +193,15 @@ void SAL_CALL BaseContainer::replaceByName(const OUString& sItem ,
         throw css::lang::IllegalArgumentException(ex.Message, static_cast< css::container::XNameContainer* >(this), 2);
     }
 
-    impl_loadOnDemand();
-
     // SAFE -> ----------------------------------
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aLock(m_aMutex);
+
+    impl_loadOnDemand(aLock);
 
     // create write copy of used cache on demand ...
-    impl_initFlushMode();
+    impl_initFlushMode(aLock);
 
-    FilterCache* pCache = impl_getWorkingCache();
+    FilterCache* pCache = impl_getWorkingCache(aLock);
     if (!pCache->hasItem(m_eType, sItem))
         throw css::container::NoSuchElementException(OUString(), static_cast< css::container::XNameContainer* >(this));
     pCache->setItem(m_eType, sItem, aItem);
@@ -228,14 +217,14 @@ css::uno::Any SAL_CALL BaseContainer::getByName(const OUString& sItem)
 
     css::uno::Any aValue;
 
-    impl_loadOnDemand();
-
     // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aLock(m_aMutex);
+
+    impl_loadOnDemand(aLock);
 
     try
     {
-        FilterCache* pCache = impl_getWorkingCache();
+        FilterCache* pCache = impl_getWorkingCache(aLock);
         aValue = pCache->getItemWithStateProps(m_eType, sItem);
     }
     catch(const css::container::NoSuchElementException&)
@@ -257,14 +246,14 @@ css::uno::Sequence< OUString > SAL_CALL BaseContainer::getElementNames()
 {
     css::uno::Sequence< OUString > lNames;
 
-    impl_loadOnDemand();
-
     // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aLock(m_aMutex);
+
+    impl_loadOnDemand(aLock);
 
     try
     {
-        FilterCache* pCache = impl_getWorkingCache();
+        FilterCache* pCache = impl_getWorkingCache(aLock);
         std::vector<OUString> lKeys  = pCache->getItemNames(m_eType);
         lNames = comphelper::containerToSequence(lKeys);
     }
@@ -284,14 +273,14 @@ sal_Bool SAL_CALL BaseContainer::hasByName(const OUString& sItem)
 {
     bool bHasOne = false;
 
-    impl_loadOnDemand();
-
     // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aLock(m_aMutex);
+
+    impl_loadOnDemand(aLock);
 
     try
     {
-        FilterCache* pCache = impl_getWorkingCache();
+        FilterCache* pCache = impl_getWorkingCache(aLock);
         bHasOne = pCache->hasItem(m_eType, sItem);
     }
     catch(const css::uno::Exception&)
@@ -318,14 +307,14 @@ sal_Bool SAL_CALL BaseContainer::hasElements()
 {
     bool bHasSome = false;
 
-    impl_loadOnDemand();
-
     // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aLock(m_aMutex);
+
+    impl_loadOnDemand(aLock);
 
     try
     {
-        FilterCache* pCache = impl_getWorkingCache();
+        FilterCache* pCache = impl_getWorkingCache(aLock);
         bHasSome = pCache->hasItems(m_eType);
     }
     catch(const css::uno::Exception&)
@@ -352,16 +341,16 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
 {
     std::vector<OUString>                               lKeys;
 
-    impl_loadOnDemand();
-
     // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aLock(m_aMutex);
+
+    impl_loadOnDemand(aLock);
 
     try
     {
         // search the key names of all items, where its properties match
         // the given ones in its minimum
-        FilterCache* pCache = impl_getWorkingCache();
+        FilterCache* pCache = impl_getWorkingCache(aLock);
         lKeys = pCache->getMatchingItemsByProps(m_eType, o3tl::span<const css::beans::NamedValue>( lProperties.getConstArray(), lProperties.getLength() ));
     }
     catch(const css::uno::Exception&)
@@ -390,7 +379,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
 void SAL_CALL BaseContainer::flush()
 {
     // SAFE ->
-    osl::ClearableMutexGuard aLock(m_aMutex);
+    std::unique_lock aLock(m_aMutex);
 
     if (!m_pFlushCache)
         throw css::lang::WrappedTargetRuntimeException(
@@ -423,52 +412,24 @@ void SAL_CALL BaseContainer::flush()
 
     m_pFlushCache.reset();
 
-    aLock.clear();
-    // <- SAFE
-
-    // notify listener outside the lock!
-    // The used listener helper lives if we live
-    // and is threadsafe by itself.
-    // Further it's not a good idea to hold the own lock
-    // if an outside object is called :-)
     css::lang::EventObject             aSource    (static_cast< css::util::XFlushable* >(this));
-    comphelper::OInterfaceContainerHelper2* pContainer = m_lListener.getContainer(cppu::UnoType<css::util::XFlushListener>::get());
-    if (!pContainer)
-        return;
+    m_lListener.notifyEach( aLock, &css::util::XFlushListener::flushed, aSource);
 
-    comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
-    while (pIterator.hasMoreElements())
-    {
-        try
-        {
-            // ... this pointer can be interesting to find out, where will be called as listener
-            // Don't optimize it to a direct iterator cast :-)
-            css::util::XFlushListener* pListener = static_cast<css::util::XFlushListener*>(pIterator.next());
-            pListener->flushed(aSource);
-        }
-        catch(const css::uno::Exception&)
-        {
-            // ignore any "damaged" flush listener!
-            // May its remote reference is broken ...
-            pIterator.remove();
-        }
-    }
+    // <- SAFE
 }
 
 
 void SAL_CALL BaseContainer::addFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener)
 {
-    // no locks necessary
-    // used helper lives if we live and is threadsafe by itself ...
-    m_lListener.addInterface(cppu::UnoType<css::util::XFlushListener>::get(), xListener);
+    std::unique_lock g(m_aMutex);
+    m_lListener.addInterface(g, xListener);
 }
 
 
 void SAL_CALL BaseContainer::removeFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener)
 {
-    // no locks necessary
-    // used helper lives if we live and is threadsafe by itself ...
-    m_lListener.removeInterface(cppu::UnoType<css::util::XFlushListener>::get(), xListener);
+    std::unique_lock g(m_aMutex);
+    m_lListener.removeInterface(g, xListener);
 }
 
 } // namespace filter::config

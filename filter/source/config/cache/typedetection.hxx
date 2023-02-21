@@ -70,18 +70,21 @@ public:
 
 private:
 
-    bool impl_getPreselectionForType(
+    static bool impl_getPreselectionForType(
+        std::unique_lock<std::mutex>& rGuard,
         const OUString& sPreSelType, const css::util::URL& aParsedURL, FlatDetection& rFlatTypes, bool bDocService);
 
-    void impl_getPreselectionForDocumentService(
+    static void impl_getPreselectionForDocumentService(
+        std::unique_lock<std::mutex>& rGuard,
         const OUString& sPreSelDocumentService, const css::util::URL& aParsedURL, FlatDetection& rFlatTypes);
 
-    OUString impl_getTypeFromFilter(const OUString& rFilterName);
+    static OUString impl_getTypeFromFilter(std::unique_lock<std::mutex>& rGuard, const OUString& rFilterName);
 
     /**
      * Get all format types that we handle.
      */
-    void impl_getAllFormatTypes(
+    static void impl_getAllFormatTypes(
+        std::unique_lock<std::mutex>& rGuard,
         const css::util::URL& aParsedURL, utl::MediaDescriptor const & rDescriptor,
         FlatDetection& rFlatTypes);
 
@@ -251,7 +254,8 @@ private:
         @return     TRUE the specified type and its registrations was valid(!) and
                     could be set on the descriptor.
      */
-    bool impl_validateAndSetFilterOnDescriptor(      utl::MediaDescriptor& rDescriptor,
+    static bool impl_validateAndSetFilterOnDescriptor( std::unique_lock<std::mutex>& rGuard,
+                                                utl::MediaDescriptor& rDescriptor,
                                                    const OUString&               sFilter    );
 
 

@@ -52,7 +52,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
     css::uno::Reference< css::uno::XInterface > xHandler;
 
     // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aLock(m_aMutex);
 
     auto & cache = GetTheFilterCache();
 

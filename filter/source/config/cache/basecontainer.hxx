@@ -27,7 +27,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
-#include <comphelper/multicontainer2.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ustring.hxx>
@@ -49,8 +49,7 @@ namespace filter::config {
                 present by this base class!) was full initialized inside our own
                 ctor as first!
  */
-class BaseContainer : public cppu::BaseMutex
-                    , public ::cppu::WeakImplHelper< css::lang::XServiceInfo         ,
+class BaseContainer : public ::cppu::WeakImplHelper< css::lang::XServiceInfo         ,
                                                       css::container::XNameContainer  , // => XNameReplace => XNameAccess => XElementAccess
                                                       css::container::XContainerQuery ,
                                                       css::util::XFlushable           >
@@ -59,6 +58,7 @@ class BaseContainer : public cppu::BaseMutex
     // member
 
     protected:
+        mutable std::mutex m_aMutex;
 
         /** @short  the implementation name of our derived class, which we provide
                     at the interface XServiceInfo of our class... */
@@ -90,7 +90,7 @@ class BaseContainer : public cppu::BaseMutex
         FilterCache::EItemType m_eType;
 
         /** @short  holds all listener, which are registered at this instance. */
-        comphelper::OMultiTypeInterfaceContainerHelper2 m_lListener;
+        comphelper::OInterfaceContainerHelper4<css::util::XFlushListener> m_lListener;
 
 
     // native interface
@@ -155,7 +155,7 @@ class BaseContainer : public cppu::BaseMutex
         /** @short  check if the underlying configuration data was already loaded
                     and do it if necessary automatically.
          */
-        void impl_loadOnDemand();
+        void impl_loadOnDemand(std::unique_lock<std::mutex>& rGuard);
 
 
         /** @short  it creates the global instance m_pFilterCache, which is a copy
@@ -167,7 +167,7 @@ class BaseContainer : public cppu::BaseMutex
 
             @throws css::uno::RuntimeException
          */
-        void impl_initFlushMode();
+        void impl_initFlushMode(std::unique_lock<std::mutex>& rGuard);
 
 
         /** @short  returns a pointer to the current used cache member.
@@ -188,7 +188,7 @@ class BaseContainer : public cppu::BaseMutex
                         aLock.clear();
                         // after this point p can't b e guaranteed any longer!
          */
-        FilterCache* impl_getWorkingCache() const;
+        FilterCache* impl_getWorkingCache(std::unique_lock<std::mutex>& rGuard) const;
 
 
     // uno interface

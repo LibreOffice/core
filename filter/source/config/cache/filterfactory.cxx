@@ -77,7 +77,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
                                                                                                 const css::uno::Sequence< css::uno::Any >& lArguments)
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aLock(m_aMutex);
 
     auto & cache = GetTheFilterCache();
 
@@ -166,10 +166,10 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
     {
         // SAFE -> ----------------------
         {
-            osl::MutexGuard aLock(m_aMutex);
+            std::unique_lock aLock(m_aMutex);
             // May be not all filters was loaded ...
             // But we need it now!
-            impl_loadOnDemand();
+            impl_loadOnDemand(aLock);
         }
         // <- SAFE ----------------------
 
@@ -251,10 +251,10 @@ std::vector<OUString> FilterFactory::impl_queryMatchByDocumentService(const Quer
         nEFlags = pIt->second.toInt32();
 
     // SAFE -> ----------------------
-    osl::ClearableMutexGuard aLock(m_aMutex);
+    std::unique_lock aLock(m_aMutex);
 
     // search suitable filters
-    FilterCache* pCache       = impl_getWorkingCache();
+    FilterCache* pCache       = impl_getWorkingCache(aLock);
     std::vector<OUString> lFilterNames = pCache->getItemNames(FilterCache::E_FILTER);
     std::vector<OUString> lResult      ;
 
@@ -312,7 +312,7 @@ std::vector<OUString> FilterFactory::impl_queryMatchByDocumentService(const Quer
             { continue; }
     }
 
-    aLock.clear();
+    aLock.unlock();
     // <- SAFE ----------------------
 
     return lResult;
@@ -421,10 +421,10 @@ std::vector<OUString> FilterFactory::impl_getSortedFilterListForModule(const OUS
     css::beans::NamedValue lIProps[] { { PROPNAME_DOCUMENTSERVICE, css::uno::Any(sModule) } };
 
     // SAFE -> ----------------------
-    osl::ClearableMutexGuard aLock(m_aMutex);
-    FilterCache* pCache        = impl_getWorkingCache();
+    std::unique_lock aLock(m_aMutex);
+    FilterCache* pCache        = impl_getWorkingCache(aLock);
     std::vector<OUString> lOtherFilters = pCache->getMatchingItemsByProps(FilterCache::E_FILTER, lIProps);
-    aLock.clear();
+    aLock.unlock();
     // <- SAFE ----------------------
 
     // bring "other" filters in an alphabetical order
