@@ -61,6 +61,7 @@ public:
     FT_FaceRec_*          GetFaceFT();
     void                  ReleaseFaceFT();
 
+    FreetypeFontFile*     GetFontFile() const       { return mpFontFile; }
     const OString&        GetFontFileName() const   { return mpFontFile->GetFileName(); }
     int                   GetFontFaceIndex() const  { return mnFaceNum; }
     int                   GetFontFaceVariation() const  { return mnFaceVariation; }
