@@ -37,7 +37,6 @@
 #include <sfx2/lokhelper.hxx>
 #include <test/unoapi_test.hxx>
 #include <comphelper/lok.hxx>
-#include <comphelper/dispatchcommand.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <osl/conditn.hxx>
 #include <svl/srchitem.hxx>
@@ -606,7 +605,7 @@ void DesktopLOKTest::testSearchCalc()
         {"SearchItem.Backward", uno::Any(false)},
         {"SearchItem.Command", uno::Any(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
     }));
-    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:ExecuteSearch", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
 
     std::vector<OString> aSelections;
@@ -637,7 +636,7 @@ void DesktopLOKTest::testSearchAllNotificationsCalc()
         {"SearchItem.Backward", uno::Any(false)},
         {"SearchItem.Command", uno::Any(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
     }));
-    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:ExecuteSearch", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
 
     // This was 1, make sure that we get no notifications about selection changes during search.
@@ -769,7 +768,7 @@ void DesktopLOKTest::testPasteWriterJPEG()
     {
         {"AnchorType", uno::Any(static_cast<sal_uInt16>(text::TextContentAnchorType_AT_CHARACTER))},
     }));
-    comphelper::dispatchCommand(".uno:Paste", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:Paste", aPropertyValues);
     xShape.set(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     // This was text::TextContentAnchorType_AS_CHARACTER, AnchorType argument was ignored.
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, xShape->getPropertyValue("AnchorType").get<text::TextContentAnchorType>());
