@@ -195,9 +195,6 @@ ErrCode SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
         uno::Reference< uno::XComponentContext > xContext =
             comphelper::getProcessComponentContext();
 
-        // get parser
-        uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
-
         // create descriptor and reference to it. Either
         // both or neither must be kept because of the
         // reference counting!
@@ -209,21 +206,37 @@ ErrCode SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
         OUString sFilterComponent = bOasis
             ? OUString("com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter")
             : OUString("com.sun.star.comp.Writer.XMLAutotextEventsImporter");
-        uno::Reference< xml::sax::XDocumentHandler > xFilter(
+        uno::Reference< XInterface > xFilterInt =
             xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                sFilterComponent, aFilterArguments, xContext),
-            UNO_QUERY );
-        OSL_ENSURE( xFilter.is(), "can't instantiate autotext-events filter");
-        if ( !xFilter.is() )
-            return ERR_SWG_READ_ERROR;
+                sFilterComponent, aFilterArguments, xContext);
 
-        // connect parser and filter
-        xParser->setDocumentHandler( xFilter );
 
         // parse the stream
         try
         {
-            xParser->parseStream( aParserInput );
+            Reference<css::xml::sax::XFastParser> xFastParser(xFilterInt, UNO_QUERY);
+            Reference<css::xml::sax::XFastDocumentHandler> xFastDocHandler(xFilterInt, UNO_QUERY);
+            if (xFastParser)
+            {
+                xFastParser->parseStream(aParserInput);
+            }
+            else if (xFastDocHandler)
+            {
+                Reference<css::xml::sax::XFastParser> xParser
+                    = css::xml::sax::FastParser::create(xContext);
+                xParser->setFastDocumentHandler(xFastDocHandler);
+                xParser->parseStream(aParserInput);
+            }
+            else
+            {
+                Reference<css::xml::sax::XDocumentHandler> xDocHandler(xFilterInt, UNO_QUERY);
+                OSL_ENSURE( xDocHandler.is(), "can't instantiate autotext-events filter");
+                if ( !xDocHandler.is() )
+                    return ERR_SWG_READ_ERROR;
+                Reference<css::xml::sax::XParser> xParser = css::xml::sax::Parser::create(xContext);
+                xParser->setDocumentHandler(xDocHandler);
+                xParser->parseStream(aParserInput);
+            }
         }
         catch( xml::sax::SAXParseException& )
         {
