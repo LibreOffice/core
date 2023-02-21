@@ -2446,18 +2446,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf136740)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf128106)
 {
     createSwDoc("cross_reference_demo_bmk.odt");
-    SwWrtShell* pWrtShell = getSwDoc()->GetDocShell()->GetWrtShell();
 
-    utl::TempFileNamed tempDir(nullptr, true);
-
-    const auto aPropertyValues = comphelper::InitPropertySequence(
-        { { "FileName", css::uno::Any(tempDir.GetURL() + "/test.odm") } });
+    const auto aPropertyValues
+        = comphelper::InitPropertySequence({ { "FileName", css::uno::Any(maTempFile.GetURL()) } });
     dispatchCommand(mxComponent, ".uno:NewGlobalDoc", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
 
-    // new document now!
-    mxComponent.set(pWrtShell->GetDoc()->GetDocShell()->GetModel());
-    CPPUNIT_ASSERT(mxComponent.is());
+    mxComponent = loadFromDesktop(maTempFile.GetURL());
 
+    SwWrtShell* pWrtShell = getSwDoc()->GetDocShell()->GetWrtShell();
     SwDoc* const pMasterDoc(pWrtShell->GetDoc());
     CPPUNIT_ASSERT_EQUAL(
         size_t(2),
@@ -2510,8 +2507,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf128106)
         static_cast<SwGetRefField const*>(fields[5]->GetField())->IsRefToHeadingCrossRefBookmark());
     CPPUNIT_ASSERT_EQUAL(OUString("Chapter 2"),
                          static_cast<SwGetRefField const*>(fields[5]->GetField())->GetPar2());
-
-    tempDir.EnableKillingFile();
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf103612)
