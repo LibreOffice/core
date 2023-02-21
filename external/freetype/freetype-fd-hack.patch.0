@@ -9,7 +9,7 @@
  
  #include <ft2build.h>
  #include FT_CONFIG_CONFIG_H
-@@ -237,6 +237,8 @@
+@@ -238,6 +239,8 @@
                    const char*  filepathname )
    {
      FT_FILE*  file;
@@ -18,7 +18,7 @@
  
  
      if ( !stream )
-@@ -257,7 +257,13 @@
+@@ -250,7 +253,13 @@
      stream->read               = NULL;
      stream->close              = NULL;
  
@@ -35,7 +35,7 @@
        FT_ERROR(( "FT_Stream_Open:"
 --- builds/unix/ftsystem.c
 +++ builds/unix/ftsystem.c
-@@ -249,6 +249,8 @@
+@@ -249,13 +249,21 @@
    {
      int          file;
      struct stat  stat_buf;
@@ -44,7 +44,6 @@
  
  
      if ( !stream )
-@@ -255,7 +255,13 @@
        return FT_THROW( Invalid_Stream_Handle );
  
      /* open the file */

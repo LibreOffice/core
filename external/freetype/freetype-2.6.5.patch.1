@@ -1,7 +1,7 @@
 diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
---- freetype/builds/unix/configure.dt	2017-02-01 22:14:45.206257952 +0100
-+++ freetype/builds/unix/configure	2017-02-01 22:16:31.076183707 +0100
-@@ -9386,7 +9386,7 @@
+--- freetype/builds/unix/configure.dt	2023-02-09 15:33:17.000000000 +0900
++++ freetype/builds/unix/configure	2023-02-22 16:53:49.547740397 +0900
+@@ -9523,7 +9523,7 @@ _LT_EOF
        case $host_cpu in
        powerpc)
              # see comment about AmigaOS4 .so support
@@ -10,7 +10,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
              archive_expsym_cmds=''
          ;;
        m68k)
-@@ -9402,7 +9402,7 @@
+@@ -9539,7 +9539,7 @@ _LT_EOF
  	allow_undefined_flag=unsupported
  	# Joseph Beckenbach <jrb3@best.com> says some releases of gcc
  	# support --undefined.  This deserves some investigation.  FIXME
@@ -19,7 +19,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
        else
  	ld_shlibs=no
        fi
-@@ -9436,7 +9436,7 @@
+@@ -9573,7 +9573,7 @@ _LT_EOF
        ;;
  
      haiku*)
@@ -28,7 +28,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
        link_all_deplibs=yes
        ;;
  
-@@ -9531,13 +9531,13 @@
+@@ -9669,13 +9669,13 @@ _LT_EOF
  	*Sun\ F*)			# Sun Fortran 8.3
  	  tmp_sharedflag='-G' ;;
  	esac
@@ -37,14 +37,14 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
  
          if test yes = "$supports_anon_versioning"; then
            archive_expsym_cmds='echo "{ global:" > $output_objdir/$libname.ver~
-             cat $export_symbols | sed -e "s/\(.*\)/\1;/" >> $output_objdir/$libname.ver~
+             cat $export_symbols | $SED -e "s/\(.*\)/\1;/" >> $output_objdir/$libname.ver~
              echo "local: *; };" >> $output_objdir/$libname.ver~
 -            $CC '"$tmp_sharedflag""$tmp_addflag"' $libobjs $deplibs $compiler_flags $wl-soname $wl$soname $wl-version-script $wl$output_objdir/$libname.ver -o $lib'
 +            $CC '"$tmp_sharedflag""$tmp_addflag"' $libobjs $deplibs $compiler_flags $wl-version-script $wl$output_objdir/$libname.ver -o $lib'
          fi
  
  	case $cc_basename in
-@@ -9567,8 +9567,8 @@
+@@ -9705,8 +9705,8 @@ _LT_EOF
  	archive_cmds='$LD -Bshareable $libobjs $deplibs $linker_flags -o $lib'
  	wlarc=
        else
@@ -55,7 +55,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
        fi
        ;;
  
-@@ -9586,8 +9586,8 @@
+@@ -9724,8 +9724,8 @@ _LT_EOF
  
  _LT_EOF
        elif $LD --help 2>&1 | $GREP ': supported targets:.* elf' > /dev/null; then
@@ -66,7 +66,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
        else
  	ld_shlibs=no
        fi
-@@ -9615,8 +9615,8 @@
+@@ -9753,8 +9753,8 @@ _LT_EOF
  	  # requires that you compile everything twice, which is a pain.
  	  if $LD --help 2>&1 | $GREP ': supported targets:.* elf' > /dev/null; then
  	    hardcode_libdir_flag_spec='$wl-rpath $wl$libdir'
@@ -77,7 +77,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
  	  else
  	    ld_shlibs=no
  	  fi
-@@ -9633,8 +9633,8 @@
+@@ -9771,8 +9771,8 @@ _LT_EOF
  
      *)
        if $LD --help 2>&1 | $GREP ': supported targets:.* elf' > /dev/null; then
@@ -88,7 +88,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
        else
  	ld_shlibs=no
        fi
-@@ -9937,7 +9937,7 @@
+@@ -10075,7 +10075,7 @@ fi
        case $host_cpu in
        powerpc)
              # see comment about AmigaOS4 .so support
@@ -97,7 +97,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
              archive_expsym_cmds=''
          ;;
        m68k)
-@@ -10207,7 +10207,7 @@
+@@ -10345,7 +10345,7 @@ fi
  
      irix5* | irix6* | nonstopux*)
        if test yes = "$GCC"; then
@@ -106,7 +106,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
  	# Try to use the -exported_symbol ld option, if it does not
  	# work, assume that -exports_file does not work either and
  	# implicitly export all symbols.
-@@ -10237,7 +10237,7 @@
+@@ -10375,7 +10375,7 @@ fi
  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $lt_cv_irix_exported_symbol" >&5
  printf "%s\n" "$lt_cv_irix_exported_symbol" >&6; }
  	if test yes = "$lt_cv_irix_exported_symbol"; then
@@ -115,7 +115,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
  	fi
        else
  	archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags -soname $soname `test -n "$verstring" && func_echo_all "-set_version $verstring"` -update_registry $output_objdir/so_locations -o $lib'
-@@ -10332,7 +10332,7 @@
+@@ -10471,7 +10471,7 @@ printf "%s\n" "$lt_cv_irix_exported_symb
      osf3*)
        if test yes = "$GCC"; then
  	allow_undefined_flag=' $wl-expect_unresolved $wl\*'
@@ -124,7 +124,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
        else
  	allow_undefined_flag=' -expect_unresolved \*'
  	archive_cmds='$CC -shared$allow_undefined_flag $libobjs $deplibs $compiler_flags -soname $soname `test -n "$verstring" && func_echo_all "-set_version $verstring"` -update_registry $output_objdir/so_locations -o $lib'
-@@ -10345,7 +10345,7 @@
+@@ -10484,7 +10484,7 @@ printf "%s\n" "$lt_cv_irix_exported_symb
      osf4* | osf5*)	# as osf3* with the addition of -msym flag
        if test yes = "$GCC"; then
  	allow_undefined_flag=' $wl-expect_unresolved $wl\*'
@@ -133,7 +133,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
  	hardcode_libdir_flag_spec='$wl-rpath $wl$libdir'
        else
  	allow_undefined_flag=' -expect_unresolved \*'
-@@ -13620,10 +13620,10 @@
+@@ -13755,10 +13755,10 @@ if test "x$GCC" = xyes; then
    XX_CFLAGS="-Wall"
    case "$host" in
    *-*-mingw*)
@@ -146,7 +146,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
      ;;
    *)
      XX_ANSIFLAGS=""
-@@ -13661,7 +13661,7 @@
+@@ -13796,7 +13796,7 @@ if ac_fn_c_try_compile "$LINENO"
  then :
    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ok, adding to XX_ANSIFLAGS" >&5
  printf "%s\n" "ok, adding to XX_ANSIFLAGS" >&6; }
