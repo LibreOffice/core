@@ -9,7 +9,7 @@ dnl in order to create a configure script.
 # several non-alphanumeric characters, those are split off and used only for the
 # ABOUTBOXPRODUCTVERSIONSUFFIX in openoffice.lst. Why that is necessary, no idea.
 
-AC_INIT([CIB Office],[6.1.7.40],[],[],[https://www.cib.de/office/])
+AC_INIT([CIB Office],[6.1.7.41],[],[],[https://www.cib.de/office/])
 
 AC_PREREQ([2.59])
 
