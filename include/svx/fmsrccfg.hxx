@@ -97,7 +97,7 @@ namespace svxform
                 // order matters!
     {
     private:
-        ::osl::Mutex    m_aMutex;
+        std::mutex      m_aMutex;
 
         // wrapper properties:
         // some of the members of FmSearchParams are must be translated to be stored in the configuration

@@ -23,6 +23,7 @@
 #include <unotools/unotoolsdllapi.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <memory>
+#include <mutex>
 
 
 namespace com::sun::star::uno { template <typename > class Reference; }
@@ -82,7 +83,7 @@ namespace utl
         */
         OConfigurationValueContainer(
             const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
-            ::osl::Mutex& _rAccessSafety,
+            std::mutex& _rAccessSafety,
             const char* _pConfigLocation,
             const sal_Int32 _nLevels
         );

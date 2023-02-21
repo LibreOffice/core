@@ -91,9 +91,9 @@ namespace utl
     }
 
     static
-    void lcl_copyData( const NodeValueAccessor& _rAccessor, const Any& _rData, ::osl::Mutex& _rMutex )
+    void lcl_copyData( const NodeValueAccessor& _rAccessor, const Any& _rData, std::mutex& _rMutex )
     {
-        ::osl::MutexGuard aGuard( _rMutex );
+        std::unique_lock aGuard( _rMutex );
 
         SAL_WARN_IF(!_rAccessor.isBound(), "unotools.config", "::utl::lcl_copyData: invalid accessor!");
         switch ( _rAccessor.getLocType() )
@@ -122,9 +122,9 @@ namespace utl
     }
 
     static
-    void lcl_copyData( Any& _rData, const NodeValueAccessor& _rAccessor, ::osl::Mutex& _rMutex )
+    void lcl_copyData( Any& _rData, const NodeValueAccessor& _rAccessor, std::mutex& _rMutex )
     {
-        ::osl::MutexGuard aGuard( _rMutex );
+        std::unique_lock aGuard( _rMutex );
 
         SAL_WARN_IF(!_rAccessor.isBound(), "unotools.config", "::utl::lcl_copyData: invalid accessor!" );
         switch ( _rAccessor.getLocType() )
@@ -148,10 +148,10 @@ namespace utl
     {
     protected:
         const OConfigurationNode&   m_rRootNode;
-        ::osl::Mutex&               m_rMutex;
+        std::mutex&                 m_rMutex;
 
     public:
-        SubNodeAccess( const OConfigurationNode& _rRootNode, ::osl::Mutex& _rMutex )
+        SubNodeAccess( const OConfigurationNode& _rRootNode, std::mutex& _rMutex )
             :m_rRootNode( _rRootNode )
             ,m_rMutex( _rMutex )
         {
@@ -161,7 +161,7 @@ namespace utl
     struct UpdateFromConfig : public SubNodeAccess
     {
     public:
-        UpdateFromConfig( const OConfigurationNode& _rRootNode, ::osl::Mutex& _rMutex ) : SubNodeAccess( _rRootNode, _rMutex ) { }
+        UpdateFromConfig( const OConfigurationNode& _rRootNode, std::mutex& _rMutex ) : SubNodeAccess( _rRootNode, _rMutex ) { }
 
         void operator() ( NodeValueAccessor const & _rAccessor )
         {
@@ -172,7 +172,7 @@ namespace utl
     struct UpdateToConfig : public SubNodeAccess
     {
     public:
-        UpdateToConfig( const OConfigurationNode& _rRootNode, ::osl::Mutex& _rMutex ) : SubNodeAccess( _rRootNode, _rMutex ) { }
+        UpdateToConfig( const OConfigurationNode& _rRootNode, std::mutex& _rMutex ) : SubNodeAccess( _rRootNode, _rMutex ) { }
 
         void operator() ( NodeValueAccessor const & _rAccessor )
         {
@@ -189,12 +189,12 @@ namespace utl
     struct OConfigurationValueContainerImpl
     {
         Reference< XComponentContext >          xORB;           // the service factory
-        ::osl::Mutex&                           rMutex;         // the mutex for accessing the data containers
+        std::mutex&                             rMutex;         // the mutex for accessing the data containers
         OConfigurationTreeRoot                  aConfigRoot;    // the configuration node we're accessing
 
         std::vector<NodeValueAccessor>          aAccessors;     // the accessors to the node values
 
-        OConfigurationValueContainerImpl( const Reference< XComponentContext >& _rxORB, ::osl::Mutex& _rMutex )
+        OConfigurationValueContainerImpl( const Reference< XComponentContext >& _rxORB, std::mutex& _rMutex )
             :xORB( _rxORB )
             ,rMutex( _rMutex )
         {
@@ -204,7 +204,7 @@ namespace utl
     //= OConfigurationValueContainer
 
     OConfigurationValueContainer::OConfigurationValueContainer(
-            const Reference< XComponentContext >& _rxORB, ::osl::Mutex& _rAccessSafety,
+            const Reference< XComponentContext >& _rxORB, std::mutex& _rAccessSafety,
             const char* _pConfigLocation, const sal_Int32 _nLevels )
         :m_pImpl( new OConfigurationValueContainerImpl( _rxORB, _rAccessSafety ) )
     {
