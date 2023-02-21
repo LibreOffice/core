@@ -151,6 +151,7 @@ protected:
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
+    virtual bool FocusWindowBelongsToControl(const vcl::Window* pFocusWin) const;
 public:
     SAL_DLLPRIVATE void ImplClearLayoutData() const;
     /** draws a frame around the give rectangle, onto the given device

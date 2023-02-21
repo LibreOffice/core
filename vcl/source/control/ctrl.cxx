@@ -223,6 +223,11 @@ OUString Control::GetDisplayText() const
     return mxLayoutData ? mxLayoutData->m_aDisplayText : GetText();
 }
 
+bool Control::FocusWindowBelongsToControl(const vcl::Window* pFocusWin) const
+{
+    return ImplIsWindowOrChild(pFocusWin);
+}
+
 bool Control::EventNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == NotifyEventType::GETFOCUS )
@@ -241,7 +246,7 @@ bool Control::EventNotify( NotifyEvent& rNEvt )
         if ( rNEvt.GetType() == NotifyEventType::LOSEFOCUS )
         {
             vcl::Window* pFocusWin = Application::GetFocusWindow();
-            if ( !pFocusWin || !ImplIsWindowOrChild( pFocusWin ) )
+            if ( !pFocusWin || !FocusWindowBelongsToControl(pFocusWin) )
             {
                 mbHasControlFocus = false;
                 CompatStateChanged( StateChangedType::ControlFocus );
