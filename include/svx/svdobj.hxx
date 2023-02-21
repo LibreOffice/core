@@ -396,6 +396,7 @@ public:
     // non-useful BoundRects sometimes) i rename that method from GetBoundRect() to
     // GetCurrentBoundRect().
     virtual const tools::Rectangle& GetCurrentBoundRect() const;
+    virtual const gfx::Range2DLWrap& getCurrentBoundRange() const;
 
     // To have a possibility to get the last calculated BoundRect e.g for producing
     // the first rectangle for repaints (old and new need to be used) without forcing
