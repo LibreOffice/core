@@ -21,6 +21,8 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+
+#include <algorithm>
 #include <cmath>
 
 namespace basegfx
@@ -261,6 +263,95 @@ namespace basegfx
 
     namespace utils
     {
+        BColor modifyBColor(
+            const ColorSteps& rColorSteps,
+            double fScaler,
+            sal_uInt32 nRequestedSteps)
+        {
+            // no color at all, done
+            if (rColorSteps.empty())
+                return BColor();
+
+            // outside range -> at start
+            if (fScaler <= 0.0)
+                return rColorSteps.front().getColor();
+
+            // outside range -> at end
+            if (fScaler >= 1.0)
+                return rColorSteps.back().getColor();
+
+            // special case for the 'classic' case with just two colors:
+            // we can optimize that and keep the speed/ressources low
+            // by avoiding some calculatins and an O(log(N)) array access
+            if (2 == rColorSteps.size())
+            {
+                const basegfx::BColor aCStart(rColorSteps.front().getColor());
+                const basegfx::BColor aCEnd(rColorSteps.back().getColor());
+                const sal_uInt32 nSteps(
+                    calculateNumberOfSteps(
+                        nRequestedSteps,
+                        aCStart,
+                        aCEnd));
+
+                return basegfx::interpolate(
+                    aCStart,
+                    aCEnd,
+                    nSteps > 1 ? floor(fScaler * nSteps) / double(nSteps - 1) : fScaler);
+            }
+
+            // access needed spot in sorted array using binary search
+            // NOTE: This *seems* slow(er) when developing compared to just
+            //       looping/accessing, but that's just due to the extensive
+            //       debug test code created by the stl. In a pro version,
+            //       all is good/fast as expected
+            const auto upperBound(
+                std::lower_bound(
+                    rColorSteps.begin(),
+                    rColorSteps.end(),
+                    ColorStep(fScaler),
+                    [](const ColorStep& x, const ColorStep& y) { return x.getOffset() < y.getOffset(); }));
+
+            // no upper bound, done
+            if (rColorSteps.end() == upperBound)
+                return rColorSteps.back().getColor();
+
+            // lower bound is one entry back
+            const auto lowerBound(upperBound - 1);
+
+            // no lower bound, done
+            if (rColorSteps.end() == lowerBound)
+                return rColorSteps.back().getColor();
+
+            // we have lower and upper bound, get colors
+            const BColor aCStart(lowerBound->getColor());
+            const BColor aCEnd(upperBound->getColor());
+
+            // when there are just two color steps this cannot happen, but when using
+            // a range of colors this *may* be used inside the range to represent
+            // single-colored regions inside a ColorRange. Use that color & done
+            if (aCStart == aCEnd)
+                return aCStart;
+
+            // calculate number of steps
+            const sal_uInt32 nSteps(
+                calculateNumberOfSteps(
+                    nRequestedSteps,
+                    aCStart,
+                    aCEnd));
+
+            // get offsets and scale to new [0.0 .. 1.0] relative range for
+            // partial outer range
+            const double fOffsetStart(lowerBound->getOffset());
+            const double fOffsetEnd(upperBound->getOffset());
+            const double fAdaptedScaler((fScaler - fOffsetStart) / (fOffsetEnd - fOffsetStart));
+
+            // interpolate & evtl. apply steps
+            return interpolate(
+                aCStart,
+                aCEnd,
+                nSteps > 1 ? floor(fAdaptedScaler * nSteps) / double(nSteps - 1) : fAdaptedScaler);
+        }
+
         sal_uInt32 calculateNumberOfSteps(
             sal_uInt32 nRequestedSteps,
             const BColor& rStart,
@@ -392,12 +483,12 @@ namespace basegfx
                 return 1.0; // end value for outside
             }
 
-            const sal_uInt32 nSteps(rGradInfo.getRequestedSteps());
+            // const sal_uInt32 nSteps(rGradInfo.getRequestedSteps());
 
-            if(nSteps)
-            {
-                return floor(aCoor.getY() * nSteps) / double(nSteps - 1);
-            }
+            // if(nSteps)
+            // {
+            //     return floor(aCoor.getY() * nSteps) / double(nSteps - 1);
+            // }
 
             return aCoor.getY();
         }

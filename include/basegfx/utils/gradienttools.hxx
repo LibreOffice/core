@@ -58,14 +58,18 @@ namespace basegfx
     class UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) ColorStep
     {
     private:
+        // offset in the range of [0.0 .. 1.0], checked & force by constructor
         double mfOffset;
+
+        // color of ColorStep entry
         BColor maColor;
 
     public:
         // constructor - defaults are needed to have a default constructor
         // e.g. for usage in std::vector::insert
+        // ensure [0.0 .. 1.0] range for mfOffset
         ColorStep(double fOffset = 0.0, const BColor& rColor = BColor())
-            : mfOffset(fOffset)
+            : mfOffset(std::max(0.0, std::min(fOffset, 1.0)))
             , maColor(rColor)
         {
         }
@@ -86,9 +90,10 @@ namespace basegfx
 
     /* MCGR: Provide ColorSteps definition to the FillGradientAttribute
 
-        This array is sorted ascending by offsets, from lowest to
-        highest. Since all this primitive data definition is read-only,
-        this can be guaranteed by forcing/checking this in the constructor.
+        This array should be sorted ascending by offsets, from lowest to
+        highest. Since all the primitive data definition where it is used
+        is read-only, this can/will be guaranteed by forcing/checking this
+        in the constructor, see ::FillGradientAttribute
     */
     typedef std::vector<ColorStep> ColorSteps;
 
@@ -179,6 +184,16 @@ namespace basegfx
 
     namespace utils
     {
+        /* Helper to grep the correct ColorStep out of
+           ColorSteps and interpolate as needed for given
+           relative value in fScaler in the range of [0.0 .. 1.0].
+           It also takes care of evtl. given RequestedSteps.
+        */
+        BASEGFX_DLLPUBLIC BColor modifyBColor(
+            const ColorSteps& rColorSteps,
+            double fScaler,
+            sal_uInt32 nRequestedSteps);
+
         /* Helper to calculate numberOfSteps needed to represent
            gradient for the given two colors:
            - to define only based on color distance, give 0 == nRequestedSteps
