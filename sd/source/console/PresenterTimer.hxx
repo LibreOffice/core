@@ -24,13 +24,13 @@
 #include <com/sun/star/awt/XRequestCallback.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <osl/mutex.hxx>
 #include <osl/time.h>
 #include <rtl/ref.hxx>
 #include <sal/types.h>
 
 #include <functional>
 #include <memory>
+#include <mutex>
 #include <vector>
 
 namespace com::sun::star::uno { class XComponentContext; }
@@ -99,7 +99,7 @@ public:
 private:
     static ::rtl::Reference<PresenterClockTimer> mpInstance;
 
-    ::osl::Mutex maMutex;
+    std::mutex maMutex;
     typedef ::std::vector<SharedListener> ListenerContainer;
     ListenerContainer maListeners;
     oslDateTime maDateTime;

@@ -468,7 +468,7 @@ PresenterClockTimer::~PresenterClockTimer()
 
 void PresenterClockTimer::AddListener (const SharedListener& rListener)
 {
-    osl::MutexGuard aGuard (maMutex);
+    std::unique_lock aGuard (maMutex);
 
     maListeners.push_back(rListener);
 
@@ -485,7 +485,7 @@ void PresenterClockTimer::AddListener (const SharedListener& rListener)
 
 void PresenterClockTimer::RemoveListener (const SharedListener& rListener)
 {
-    osl::MutexGuard aGuard (maMutex);
+    std::unique_lock aGuard (maMutex);
 
     ListenerContainer::iterator iListener (::std::find(
         maListeners.begin(),
@@ -519,7 +519,7 @@ void PresenterClockTimer::CheckCurrentTime (const TimeValue& rCurrentTime)
     css::uno::Reference<css::awt::XRequestCallback> xRequestCallback;
     css::uno::Reference<css::awt::XCallback> xCallback;
     {
-        osl::MutexGuard aGuard (maMutex);
+        std::unique_lock aGuard (maMutex);
 
         TimeValue aCurrentTime (rCurrentTime);
         oslDateTime aDateTime;
@@ -554,7 +554,7 @@ void SAL_CALL PresenterClockTimer::notify (const css::uno::Any&)
     ListenerContainer aListenerCopy;
 
     {
-        osl::MutexGuard aGuard (maMutex);
+        std::unique_lock aGuard (maMutex);
 
         mbIsCallbackPending = false;
 
