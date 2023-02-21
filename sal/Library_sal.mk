@@ -94,6 +94,7 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/all/log  \
 	sal/osl/all/mutexshared \
 	sal/osl/all/signalshared  \
+	sal/osl/all/threadshared \
 	sal/osl/all/utility \
 	sal/rtl/alloc_arena \
 	sal/rtl/alloc_cache \

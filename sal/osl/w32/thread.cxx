@@ -19,6 +19,7 @@
 
 #include "system.h"
 #include "thread.hxx"
+#include <thread_internal.hxx>
 
 #include <comphelper/windowserrorstring.hxx>
 #include <osl/diagnose.h>
@@ -520,22 +521,9 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
     return false;
 }
 
-namespace
+rtl_TextEncoding getThreadTextEncodingForInitialization()
 {
-rtl_TextEncoding& getThreadTextEncodingImpl()
-{
-    static thread_local rtl_TextEncoding s_enc = rtl_getTextEncodingFromWindowsCodePage(GetACP());
-    return s_enc;
-}
-}
-
-rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding(void) { return getThreadTextEncodingImpl(); }
-
-rtl_TextEncoding SAL_CALL osl_setThreadTextEncoding( rtl_TextEncoding Encoding )
-{
-    rtl_TextEncoding oldEncoding = getThreadTextEncodingImpl();
-    getThreadTextEncodingImpl() = Encoding;
-    return oldEncoding;
+    return rtl_getTextEncodingFromWindowsCodePage(GetACP());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,6 +27,8 @@
 
 #include "system.hxx"
 #include "unixerrnostring.hxx"
+#include <thread_internal.hxx>
+
 #include <string.h>
 #if defined(OPENBSD)
 #include <sched.h>
@@ -106,38 +108,19 @@ struct osl_thread_priority_st
     int m_Below_Normal;
     int m_Lowest;
 };
+#define OSL_THREAD_PRIORITY_INITIALIZER { 127, 96, 64, 32, 0 }
 #endif
 
 }
 
 #if !defined NO_PTHREAD_PRIORITY
-#define OSL_THREAD_PRIORITY_INITIALIZER { 127, 96, 64, 32, 0 }
-#endif
-
-static void osl_thread_priority_init_Impl();
-
-namespace {
-
-struct osl_thread_textencoding_st
-{
-    pthread_key_t    m_key;     /* key to store thread local text encoding */
-    rtl_TextEncoding m_default; /* the default text encoding */
-};
-
-}
-
-#define OSL_THREAD_TEXTENCODING_INITIALIZER { 0, RTL_TEXTENCODING_DONTKNOW }
-static void osl_thread_textencoding_init_Impl();
 
 namespace {
 
 struct osl_thread_global_st
 {
     pthread_once_t                    m_once;
-#if !defined NO_PTHREAD_PRIORITY
     struct osl_thread_priority_st     m_priority;
-#endif
-    struct osl_thread_textencoding_st m_textencoding;
 };
 
 }
@@ -145,13 +128,10 @@ struct osl_thread_global_st
 static struct osl_thread_global_st g_thread =
 {
     PTHREAD_ONCE_INIT,
-#if !defined NO_PTHREAD_PRIORITY
-    OSL_THREAD_PRIORITY_INITIALIZER,
-#endif
-    OSL_THREAD_TEXTENCODING_INITIALIZER
+    OSL_THREAD_PRIORITY_INITIALIZER
 };
 
-static void osl_thread_init_Impl();
+#endif // !defined NO_PTHREAD_PRIORITY
 
 static Thread_Impl* osl_thread_construct_Impl();
 static void         osl_thread_destruct_Impl (Thread_Impl ** ppImpl);
@@ -166,12 +146,6 @@ static oslThread osl_thread_create_Impl (
 static oslThreadIdentifier insertThreadId (pthread_t hThread);
 static oslThreadIdentifier lookupThreadId (pthread_t hThread);
 static void                removeThreadId (pthread_t hThread);
-
-static void osl_thread_init_Impl()
-{
-    osl_thread_priority_init_Impl();
-    osl_thread_textencoding_init_Impl();
-}
 
 Thread_Impl* osl_thread_construct_Impl()
 {
@@ -745,6 +719,7 @@ oslThreadIdentifier SAL_CALL osl_getThreadIdentifier(oslThread Thread)
     return Ident;
 }
 
+#ifndef NO_PTHREAD_PRIORITY
 /*****************************************************************************
     @@@ see TODO @@@
     osl_thread_priority_init_Impl
@@ -759,7 +734,6 @@ oslThreadIdentifier SAL_CALL osl_getThreadIdentifier(oslThread Thread)
 *****************************************************************************/
 static void osl_thread_priority_init_Impl()
 {
-#ifndef NO_PTHREAD_PRIORITY
     struct sched_param param;
     int policy=0;
     int nRet=0;
@@ -834,8 +808,8 @@ static void osl_thread_priority_init_Impl()
                 << ", Priority " << param.sched_priority);
     }
 
-#endif /* NO_PTHREAD_PRIORITY */
 }
+#endif /* NO_PTHREAD_PRIORITY */
 
 /**
     Impl-Notes: contrary to solaris-docu, which claims
@@ -879,7 +853,7 @@ void SAL_CALL osl_setThreadPriority (
     }
 #endif /* __sun */
 
-    pthread_once (&(g_thread.m_once), osl_thread_init_Impl);
+    pthread_once (&(g_thread.m_once), osl_thread_priority_init_Impl);
 
     switch(Priority)
     {
@@ -950,7 +924,7 @@ oslThreadPriority SAL_CALL osl_getThreadPriority(const oslThread Thread)
     if (pthread_getschedparam(pImpl->m_hThread, &Policy, &Param) != 0)
         return osl_Thread_PriorityUnknown; /* ESRCH */
 
-    pthread_once (&(g_thread.m_once), osl_thread_init_Impl);
+    pthread_once (&(g_thread.m_once), osl_thread_priority_init_Impl);
 
     /* map pthread priority to enum */
     if (Param.sched_priority==g_thread.m_priority.m_Highest)
@@ -1052,15 +1026,10 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
     return bRet;
 }
 
-static void osl_thread_textencoding_init_Impl()
+rtl_TextEncoding getThreadTextEncodingForInitialization()
 {
-    rtl_TextEncoding defaultEncoding;
-
-    /* create thread specific data key */
-    pthread_key_create (&(g_thread.m_textencoding.m_key), nullptr);
-
     /* determine default text encoding */
-    defaultEncoding = osl_getTextEncodingFromLocale(nullptr);
+    rtl_TextEncoding defaultEncoding = osl_getTextEncodingFromLocale(nullptr);
     // Tools string functions call abort() on an unknown encoding so ASCII is a
     // meaningful fallback:
     if ( RTL_TEXTENCODING_DONTKNOW == defaultEncoding )
@@ -1069,34 +1038,7 @@ static void osl_thread_textencoding_init_Impl()
         defaultEncoding = RTL_TEXTENCODING_ASCII_US;
     }
 
-    g_thread.m_textencoding.m_default = defaultEncoding;
-}
-
-rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding()
-{
-    rtl_TextEncoding threadEncoding;
-
-    pthread_once (&(g_thread.m_once), osl_thread_init_Impl);
-
-    /* check for thread specific encoding, use default if not set */
-    threadEncoding = static_cast<rtl_TextEncoding>(
-        reinterpret_cast<sal_uIntPtr>(pthread_getspecific(g_thread.m_textencoding.m_key)));
-    if (threadEncoding == 0)
-        threadEncoding = g_thread.m_textencoding.m_default;
-
-    return threadEncoding;
-}
-
-rtl_TextEncoding osl_setThreadTextEncoding(rtl_TextEncoding Encoding)
-{
-    rtl_TextEncoding oldThreadEncoding = osl_getThreadTextEncoding();
-
-    /* save encoding in thread local storage */
-    pthread_setspecific (
-        g_thread.m_textencoding.m_key,
-        reinterpret_cast<void*>(static_cast<sal_uIntPtr>(Encoding)));
-
-    return oldThreadEncoding;
+    return defaultEncoding;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
