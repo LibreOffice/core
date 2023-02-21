@@ -956,6 +956,13 @@ const tools::Rectangle& SdrObject::GetCurrentBoundRect() const
     return getOutRectangle();
 }
 
+const gfx::Range2DLWrap& SdrObject::getCurrentBoundRange() const
+{
+    if (m_aOutterRange.isEmpty())
+        const_cast<SdrObject*>(this)->RecalcBoundRect();
+    return m_aOutterRange;
+}
+
 // To have a possibility to get the last calculated BoundRect e.g for producing
 // the first rectangle for repaints (old and new need to be used) without forcing
 // a RecalcBoundRect (which may be problematical and expensive sometimes) I add here
@@ -1890,7 +1897,7 @@ std::unique_ptr<SdrObjGeoData> SdrObject::NewGeoData() const
 
 void SdrObject::SaveGeoData(SdrObjGeoData& rGeo) const
 {
-    rGeo.aBoundRect    =GetCurrentBoundRect();
+    rGeo.setBoundRange(getCurrentBoundRange());
     rGeo.aAnchor       =m_aAnchor       ;
     rGeo.bMovProt      =m_bMovProt      ;
     rGeo.bSizProt      =m_bSizProt      ;
@@ -1910,7 +1917,7 @@ void SdrObject::SaveGeoData(SdrObjGeoData& rGeo) const
 void SdrObject::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
     SetBoundAndSnapRectsDirty();
-    setOutRectangle(rGeo.aBoundRect);
+    m_aOutterRange = rGeo.getBoundRange();
     m_aAnchor       =rGeo.aAnchor       ;
     m_bMovProt      =rGeo.bMovProt      ;
     m_bSizProt      =rGeo.bSizProt      ;
