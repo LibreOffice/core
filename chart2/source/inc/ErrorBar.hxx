@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <cppuhelper/basemutex.hxx>
 #include "charttoolsdllapi.hxx"
 
 #include <cppuhelper/implbase.hxx>
@@ -57,9 +56,7 @@ typedef ::cppu::WeakImplHelper<
     ErrorBar_Base;
 }
 
-class ErrorBar final :
-        public cppu::BaseMutex,
-        public impl::ErrorBar_Base
+class ErrorBar final : public impl::ErrorBar_Base
 {
 private:
     OUString maDashName;
