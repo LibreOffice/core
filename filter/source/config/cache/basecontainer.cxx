@@ -27,8 +27,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 
-#define LOAD_IMPLICIT
-
 namespace filter::config{
 
 BaseContainer::BaseContainer()
@@ -59,7 +57,6 @@ void BaseContainer::init(const OUString&                                        
 
 void BaseContainer::impl_loadOnDemand(std::unique_lock<std::mutex>& /*rGuard*/)
 {
-#ifdef LOAD_IMPLICIT
     // A generic container needs all items of a set of our cache!
     // Of course it can block for a while, till the cache is really filled.
     // Note: don't load all sets supported by the cache here!
@@ -85,7 +82,6 @@ void BaseContainer::impl_loadOnDemand(std::unique_lock<std::mutex>& /*rGuard*/)
     }
 
     GetTheFilterCache().load(eRequiredState);
-#endif
 }
 
 
