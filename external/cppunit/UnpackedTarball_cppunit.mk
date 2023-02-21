@@ -17,7 +17,12 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,cppunit))
 #   "Run tests in deterministic order";
 # * external/cppunit/propagate-exceptions.patch.0 upstreamed at
 #   <https://gerrit.libreoffice.org/c/cppunit/+/144074> "Introduce CPPUNIT_PROPAGATE_EXCEPTIONS
-#   environment variable":
+#   environment variable";
+# * external/cppunit/sprintf.patch.0 upstreamed at
+#   <https://gerrit.libreoffice.org/c/cppunit/+/147383> "Use snprintf instead of sprintf";
+# * external/cppunit/clang.patch.0 upstreamed at
+#   <https://gerrit.libreoffice.org/c/cppunit/+/147384> "Don't mis-apply GCC < 4.6 workaround for
+#   Clang":
 $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
 	external/cppunit/windows.patch \
 	external/cppunit/unix.patch \
