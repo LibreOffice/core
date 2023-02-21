@@ -85,13 +85,8 @@ void SAL_CALL
 ResultSetBase::addEventListener(
     const uno::Reference< lang::XEventListener >& Listener )
 {
-    osl::MutexGuard aGuard( m_aMutex );
-
-    if ( ! m_pDisposeEventListeners )
-        m_pDisposeEventListeners.reset(
-            new comphelper::OInterfaceContainerHelper3<lang::XEventListener>( m_aMutex ));
-
-    m_pDisposeEventListeners->addInterface( Listener );
+    std::unique_lock aGuard( m_aMutex );
+    m_aDisposeEventListeners.addInterface( aGuard, Listener );
 }
 
 
@@ -99,32 +94,30 @@ void SAL_CALL
 ResultSetBase::removeEventListener(
     const uno::Reference< lang::XEventListener >& Listener )
 {
-    osl::MutexGuard aGuard( m_aMutex );
-
-    if ( m_pDisposeEventListeners )
-        m_pDisposeEventListeners->removeInterface( Listener );
+    std::unique_lock aGuard( m_aMutex );
+    m_aDisposeEventListeners.removeInterface( aGuard, Listener );
 }
 
 
 void SAL_CALL
 ResultSetBase::dispose()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     lang::EventObject aEvt;
     aEvt.Source = static_cast< lang::XComponent * >( this );
 
-    if ( m_pDisposeEventListeners && m_pDisposeEventListeners->getLength() )
+    if ( m_aDisposeEventListeners.getLength(aGuard) )
     {
-        m_pDisposeEventListeners->disposeAndClear( aEvt );
+        m_aDisposeEventListeners.disposeAndClear( aGuard, aEvt );
     }
-    if( m_pRowCountListeners && m_pRowCountListeners->getLength() )
+    if( m_aRowCountListeners.getLength(aGuard) )
     {
-        m_pRowCountListeners->disposeAndClear( aEvt );
+        m_aRowCountListeners.disposeAndClear( aGuard, aEvt );
     }
-    if( m_pIsFinalListeners && m_pIsFinalListeners->getLength() )
+    if( m_aIsFinalListeners.getLength(aGuard) )
     {
-        m_pIsFinalListeners->disposeAndClear( aEvt );
+        m_aIsFinalListeners.disposeAndClear( aGuard, aEvt );
     }
 }
 
@@ -438,20 +431,13 @@ void SAL_CALL ResultSetBase::addPropertyChangeListener(
 {
     if( aPropertyName == "IsRowCountFinal" )
     {
-        osl::MutexGuard aGuard( m_aMutex );
-        if ( ! m_pIsFinalListeners )
-            m_pIsFinalListeners.reset(
-                new comphelper::OInterfaceContainerHelper3<beans::XPropertyChangeListener>( m_aMutex ));
-
-        m_pIsFinalListeners->addInterface( xListener );
+        std::unique_lock aGuard( m_aMutex );
+        m_aIsFinalListeners.addInterface( aGuard, xListener );
     }
     else if ( aPropertyName == "RowCount" )
     {
-        osl::MutexGuard aGuard( m_aMutex );
-        if ( ! m_pRowCountListeners )
-            m_pRowCountListeners.reset(
-                new comphelper::OInterfaceContainerHelper3<beans::XPropertyChangeListener>( m_aMutex ));
-        m_pRowCountListeners->addInterface( xListener );
+        std::unique_lock aGuard( m_aMutex );
+        m_aRowCountListeners.addInterface( aGuard, xListener );
     }
     else
         throw beans::UnknownPropertyException(aPropertyName);
@@ -462,17 +448,15 @@ void SAL_CALL ResultSetBase::removePropertyChangeListener(
     const OUString& aPropertyName,
     const uno::Reference< beans::XPropertyChangeListener >& aListener )
 {
-    if( aPropertyName == "IsRowCountFinal" &&
-        m_pIsFinalListeners )
+    if( aPropertyName == "IsRowCountFinal" )
     {
-        osl::MutexGuard aGuard( m_aMutex );
-        m_pIsFinalListeners->removeInterface( aListener );
+        std::unique_lock aGuard( m_aMutex );
+        m_aIsFinalListeners.removeInterface( aGuard, aListener );
     }
-    else if ( aPropertyName == "RowCount" &&
-              m_pRowCountListeners )
+    else if ( aPropertyName == "RowCount" )
     {
-        osl::MutexGuard aGuard( m_aMutex );
-        m_pRowCountListeners->removeInterface( aListener );
+        std::unique_lock aGuard( m_aMutex );
+        m_aRowCountListeners.removeInterface( aGuard, aListener );
     }
     else
         throw beans::UnknownPropertyException(aPropertyName);
