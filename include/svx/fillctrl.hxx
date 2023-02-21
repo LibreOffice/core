@@ -95,6 +95,7 @@ private:
     void SetOptimalSize();
 
     virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
+    virtual void GetFocus() override;
 
     static void ReleaseFocus_Impl();
 

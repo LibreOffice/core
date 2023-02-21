@@ -1084,4 +1084,13 @@ void FillControl::DataChanged(const DataChangedEvent& rDCEvt)
     InterimItemWindow::DataChanged(rDCEvt);
 }
 
+void FillControl::GetFocus()
+{
+    // tdf#148047 if the dropdown is active then leave the focus
+    // there and don't grab back to a different widget
+    if (mxToolBoxColor->get_menu_item_active(".uno:FillColor"))
+        return;
+    InterimItemWindow::GetFocus();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
