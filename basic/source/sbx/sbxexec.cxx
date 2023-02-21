@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <basic/sbmod.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sberrors.hxx>
 #include <rtl/character.hxx>
@@ -350,7 +349,7 @@ SbxVariable* SbxObject::Execute( const OUString& rTxt )
         {
             SetError( ERRCODE_BASIC_SYNTAX ); break;
         }
-        pVar = Assign( this, this, &p, IsModuleCompatible() );
+        pVar = Assign( this, this, &p, IsOptionCompatible() );
         if( !pVar.is() )
         {
             break;
@@ -373,7 +372,7 @@ SbxVariable* SbxObject::FindQualified( const OUString& rName, SbxClassType t )
     {
         return nullptr;
     }
-    pVar = QualifiedName( this, this, &p, t, IsModuleCompatible() );
+    pVar = QualifiedName( this, this, &p, t, IsOptionCompatible() );
     p = SkipWhitespace( p );
     if( *p )
     {
@@ -382,15 +381,10 @@ SbxVariable* SbxObject::FindQualified( const OUString& rName, SbxClassType t )
     return pVar.get();
 }
 
-bool SbxObject::IsModuleCompatible() const
+bool SbxObject::IsOptionCompatible() const
 {
-    const SbxObject* pObj = this;
-    while (pObj)
-    {
-        if (auto pMod = dynamic_cast<const SbModule*>(pObj))
-            return pMod->IsCompatible();
-        pObj = pObj->GetParent();
-    }
+    if (const SbxObject* pObj = GetParent())
+        return pObj->IsOptionCompatible();
     return false;
 }
 
