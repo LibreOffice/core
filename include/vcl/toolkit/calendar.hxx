@@ -93,6 +93,7 @@ public:
 
 private:
     virtual void    StateChanged( StateChangedType nStateChange ) override;
+    virtual bool    FocusWindowBelongsToControl(const vcl::Window* pFocusWin) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

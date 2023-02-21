@@ -1724,4 +1724,11 @@ void CalendarField::StateChanged( StateChangedType nStateChange )
     }
 }
 
+// tdf#142783 consider the Edit and its DropDown as one compound control for the purpose of
+// notification of loss of focus from the control
+bool CalendarField::FocusWindowBelongsToControl(const vcl::Window* pFocusWin) const
+{
+    return DateField::FocusWindowBelongsToControl(pFocusWin) || (mpFloatWin && mpFloatWin->ImplIsWindowOrChild(pFocusWin));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
