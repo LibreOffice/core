@@ -23,14 +23,27 @@
 #include <svx/svdglue.hxx>
 #include <tools/gen.hxx>
 #include <optional>
+#include <basegfx/units/Range2DLWrap.hxx>
 
 /**
  * All geometrical data of an arbitrary object for use in undo/redo
  */
 class SVXCORE_DLLPUBLIC SdrObjGeoData
 {
+private:
+    gfx::Range2DLWrap maBoundRange;
+
 public:
-    tools::Rectangle aBoundRect;
+    gfx::Range2DLWrap const& getBoundRange() const
+    {
+        return maBoundRange;
+    }
+
+    void setBoundRange(gfx::Range2DLWrap const& rRange)
+    {
+        maBoundRange = rRange;
+    }
+
     Point aAnchor;
     std::optional<SdrGluePointList> moGluePoints;
     bool bMovProt;
