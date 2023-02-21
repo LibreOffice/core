@@ -429,7 +429,7 @@
                           <object class="GtkLabel" id="entryoutlinelevelft">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="label" translatable="yes" context="tocentriespage|entryoutlinelevelft">Evaluate up to level:</property>
+                            <property name="label" translatable="yes" context="tocentriespage|entryoutlinelevelft">Show up to level:</property>
                             <property name="use-underline">True</property>
                             <property name="mnemonic-widget">entryoutlinelevel</property>
                             <property name="xalign">0</property>
@@ -448,9 +448,10 @@
                             <property name="activates-default">True</property>
                             <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustment2</property>
+                            <property name="tooltip_text" translatable="yes" context="tocentriespage|entryoutlinelevel">Enter the number of levels of the heading number to show in the index. For example, select “2” to show the first two levels of the heading number.</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="entryoutlinelevel-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|entryoutlinelevel">Enter the maximum hierarchy level down to which objects are shown in the generated index.</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|entryoutlinelevel">Enter the number of levels of the heading number to show in the index. For example, select “2” to show the first two levels of the heading number. To enable heading numbers for headings, choose Tools - Heading Numbering.</property>
                               </object>
                             </child>
                           </object>
