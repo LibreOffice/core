@@ -1,17 +1,6 @@
---- src/truetype/ttgxvar.c
-+++ src/truetype/ttgxvar.c
-@@ -964,7 +964,7 @@
-     /* in the OpenType specification.                  */
- 
-     varData  = &itemStore->varData[outerIndex];
--    deltaSet = &varData->deltaSet[varData->regionIdxCount * innerIndex];
-+    deltaSet = varData->regionIdxCount * innerIndex == 0 ? varData->deltaSet : &varData->deltaSet[varData->regionIdxCount * innerIndex];
- 
-     /* outer loop steps through master designs to be blended */
-     for ( master = 0; master < varData->regionIdxCount; master++ )
---- src/psaux/psobjs.c.orig	2022-11-17 16:52:21.913211573 +0100
-+++ src/psaux/psobjs.c	2022-11-17 16:53:17.905127207 +0100
-@@ -201,7 +201,8 @@
+--- src/psaux/psobjs.c.orig	2023-02-04 23:00:05.000000000 +0900
++++ src/psaux/psobjs.c	2023-02-22 16:28:26.632283841 +0900
+@@ -200,7 +200,8 @@
      /* add the object to the base block and adjust offset */
      table->elements[idx] = FT_OFFSET( table->block, table->cursor );
      table->lengths [idx] = length;
