@@ -1987,7 +1987,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf151657)
 
     // accept all tracked changes
     dispatchCommand(mxComponent, ".uno:AcceptAllTrackedChanges", {});
-    Scheduler::ProcessEventsToIdle();
 
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
@@ -2009,10 +2008,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testSelectRowWithNestedTable)
 
     // select table row
     dispatchCommand(mxComponent, ".uno:EntireRow", {});
-    Scheduler::ProcessEventsToIdle();
     // convert selected text content to uppercase
     dispatchCommand(mxComponent, ".uno:ChangeCaseToUpper", {});
-    Scheduler::ProcessEventsToIdle();
 
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
@@ -2044,7 +2041,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf47979_row)
 
     // convert selected text content to uppercase
     dispatchCommand(mxComponent, ".uno:ChangeCaseToUpper", {});
-    Scheduler::ProcessEventsToIdle();
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPathContent(pXmlDoc, "//page[1]//body/tab/row[1]/cell[1]/txt[1]", "a1");
@@ -2081,7 +2077,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf47979_column)
 
     // convert selected text content to uppercase
     dispatchCommand(mxComponent, ".uno:ChangeCaseToUpper", {});
-    Scheduler::ProcessEventsToIdle();
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
@@ -3117,7 +3112,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf93747)
         { { "Rows", uno::Any(sal_Int32(2)) }, { "Columns", uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
-    Scheduler::ProcessEventsToIdle();
 
     pWrtSh->Insert("Col1");
 
@@ -3177,7 +3171,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf93747)
         getProperty<OUString>(getParagraphOfText(1, xCellB1->getText()), "ParaStyleName"));
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
-    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(
         OUString("Table Contents"),
@@ -3188,7 +3181,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf93747)
         getProperty<OUString>(getParagraphOfText(1, xCellB1->getText()), "ParaStyleName"));
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
-    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(
         OUString("Table Contents"),
@@ -3209,7 +3201,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145151)
         { { "Rows", uno::Any(sal_Int32(2)) }, { "Columns", uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
-    Scheduler::ProcessEventsToIdle();
 
     pWrtSh->Insert("Col1");
 
@@ -3239,7 +3230,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145151)
     pWrtSh->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
 
     dispatchCommand(mxComponent, ".uno:DefaultNumbering", {});
-    Scheduler::ProcessEventsToIdle();
 
     // B1 should now have a numbering style, but A1 should not be affected.
     OUString sNumStyleB1
@@ -3252,7 +3242,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145151)
 
     // Toggle it back off
     dispatchCommand(mxComponent, ".uno:DefaultNumbering", {});
-    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_MESSAGE(
         "Cell B1 must be able to toggle numbering on and off.",
@@ -3265,7 +3254,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145151)
 
     // Toggle on bullet numbering
     dispatchCommand(mxComponent, ".uno:DefaultBullet", {});
-    Scheduler::ProcessEventsToIdle();
 
     // sanity check - both cells have bullets turned on.
     OUString sNumStyleA1
@@ -3281,7 +3269,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145151)
 
     // Toggle off bullet numbering
     dispatchCommand(mxComponent, ".uno:DefaultBullet", {});
-    Scheduler::ProcessEventsToIdle();
 
     // B1 should now have removed all numbering, while A1 should still have the bullet.
     CPPUNIT_ASSERT(
@@ -3294,7 +3281,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145151)
 
     // Toggle it back on
     dispatchCommand(mxComponent, ".uno:DefaultBullet", {});
-    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT(
         !getProperty<OUString>(getParagraphOfText(1, xCellB1->getText()), "NumberingStyleName")

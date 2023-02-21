@@ -137,10 +137,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf146449)
     CPPUNIT_ASSERT(pShell->SelectObj(Point(), 0, pObject));
 
     dispatchCommand(mxComponent, ".uno:Cut", {});
-    Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
-    Scheduler::ProcessEventsToIdle();
 
     uno::Reference<beans::XPropertySet> xShapeProps(xTextBox, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrameProps(xShapeProps->getPropertyValue("TextBoxContent"),
@@ -1286,7 +1284,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineParam)
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         { { "NextTrackedChange", uno::Any(o3tl::narrowing<sal_uInt16>(rTable[0]->GetId())) } }));
     dispatchCommand(mxComponent, ".uno:NextTrackedChange", aPropertyValues);
-    Scheduler::ProcessEventsToIdle();
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     // This failed: the parameter wasn't handled so the next change (zzz) was
     // selected, not the first one (aaa).
@@ -1297,7 +1294,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineParam)
     aPropertyValues = comphelper::InitPropertySequence(
         { { "NextTrackedChange", uno::Any(o3tl::narrowing<sal_uInt16>(rTable[1]->GetId())) } });
     dispatchCommand(mxComponent, ".uno:NextTrackedChange", aPropertyValues);
-    Scheduler::ProcessEventsToIdle();
     pShellCursor = pWrtShell->getShellCursor(false);
     CPPUNIT_ASSERT_EQUAL(OUString("zzz"), pShellCursor->GetText());
 
@@ -1306,7 +1302,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineParam)
     aPropertyValues = comphelper::InitPropertySequence(
         { { "RejectTrackedChange", uno::Any(o3tl::narrowing<sal_uInt16>(rTable[1]->GetId())) } });
     dispatchCommand(mxComponent, ".uno:RejectTrackedChange", aPropertyValues);
-    Scheduler::ProcessEventsToIdle();
     pShellCursor = pWrtShell->getShellCursor(false);
 
     // This was 'middlezzz', the uno command rejected the redline under the
@@ -1460,7 +1455,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testLandscape)
     uno::Sequence<beans::PropertyValue> aPropertyValues(
         comphelper::InitPropertySequence({ { "AttributePage.Landscape", uno::Any(true) } }));
     dispatchCommand(mxComponent, ".uno:AttributePage", aPropertyValues);
-    Scheduler::ProcessEventsToIdle();
 
     // Assert that the document model was modified.
     SwDocShell* pDocShell = pDoc->GetDocShell();
@@ -1769,7 +1763,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableRemoveHasTextChangesOnly2)
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     Scheduler::ProcessEventsToIdle();
     dispatchCommand(mxComponent, ".uno:AcceptTrackedChange", {});
-    Scheduler::ProcessEventsToIdle();
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // Accepting tracked insertion results still 4 rows, but less redlines
@@ -1786,7 +1779,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableRemoveHasTextChangesOnly2)
     // To check Undo of HasTextChangesOnly reject the same row results 3 rows
     dispatchCommand(mxComponent, ".uno:Escape", {});
     dispatchCommand(mxComponent, ".uno:RejectTrackedChange", {});
-    Scheduler::ProcessEventsToIdle();
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // This was 4 (lost HasTextChangesOnly)
@@ -1820,7 +1812,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf147182_AcceptAllChangesInTableSelec
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:AcceptTrackedChange", {});
-    Scheduler::ProcessEventsToIdle();
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // Accepting tracked changes in the selected table results 3 rows
@@ -1840,7 +1831,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf147182_AcceptAllChangesInTableSelec
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:RejectTrackedChange", {});
-    Scheduler::ProcessEventsToIdle();
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     // This was 4 (only text changes of the first selected cell were rejected)
