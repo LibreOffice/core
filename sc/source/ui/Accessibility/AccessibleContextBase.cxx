@@ -95,29 +95,8 @@ void SAL_CALL ScAccessibleContextBase::disposing()
             xBroadcaster->removeAccessibleEventListener(this);
         mxParent = nullptr;
     }
-
-    ScAccessibleContextBaseWeakImpl::disposing();
 }
 
-//=====  XInterface  =====================================================
-
-uno::Any SAL_CALL ScAccessibleContextBase::queryInterface( uno::Type const & rType )
-{
-    uno::Any aAny (ScAccessibleContextBaseWeakImpl::queryInterface(rType));
-    return aAny.hasValue() ? aAny : ScAccessibleContextBaseImplEvent::queryInterface(rType);
-}
-
-void SAL_CALL ScAccessibleContextBase::acquire()
-    noexcept
-{
-    ScAccessibleContextBaseWeakImpl::acquire();
-}
-
-void SAL_CALL ScAccessibleContextBase::release()
-    noexcept
-{
-    ScAccessibleContextBaseWeakImpl::release();
-}
 
 //=====  SfxListener  =====================================================
 
@@ -430,19 +409,6 @@ uno::Sequence< OUString> SAL_CALL
 {
     return {"com.sun.star.accessibility.Accessible",
             "com.sun.star.accessibility.AccessibleContext"};
-}
-
-//=====  XTypeProvider  =======================================================
-
-uno::Sequence< uno::Type > SAL_CALL ScAccessibleContextBase::getTypes()
-{
-    return comphelper::concatSequences(ScAccessibleContextBaseWeakImpl::getTypes(), ScAccessibleContextBaseImplEvent::getTypes());
-}
-
-uno::Sequence<sal_Int8> SAL_CALL
-    ScAccessibleContextBase::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 //=====  internal  ============================================================

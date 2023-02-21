@@ -44,17 +44,13 @@ typedef cppu::WeakComponentImplHelper<
                 css::accessibility::XAccessibleComponent,
                 css::accessibility::XAccessibleContext,
                 css::accessibility::XAccessibleEventBroadcaster,
-                css::lang::XServiceInfo
-                > ScAccessibleContextBaseWeakImpl;
-
-typedef cppu::ImplHelper1<
+                css::lang::XServiceInfo,
                 css::accessibility::XAccessibleEventListener
-                > ScAccessibleContextBaseImplEvent;
+                > ScAccessibleContextBaseWeakImpl;
 
 class ScAccessibleContextBase
     :   public cppu::BaseMutex,
         public ScAccessibleContextBaseWeakImpl,
-        public ScAccessibleContextBaseImplEvent,
         public SfxListener
 {
 public:
@@ -78,15 +74,6 @@ public:
     ///=====  SfxListener  =====================================================
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-
-    ///=====  XInterface  =====================================================
-
-    virtual css::uno::Any SAL_CALL queryInterface(
-        css::uno::Type const & rType ) override;
-
-    virtual void SAL_CALL acquire() noexcept override;
-
-    virtual void SAL_CALL release() noexcept override;
 
     ///=====  XAccessible  =====================================================
 
@@ -199,17 +186,6 @@ public:
     */
     virtual css::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() override;
-
-    ///=====  XTypeProvider  ===================================================
-
-     /// returns the possible types
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-        getTypes() override;
-
-    /** Returns an implementation id.
-    */
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL
-        getImplementationId() override;
 
 protected:
     /// Return this object's description.
