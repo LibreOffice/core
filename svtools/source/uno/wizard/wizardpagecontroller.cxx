@@ -51,25 +51,13 @@ namespace svt::uno
         {
             // Plug a toplevel SalFrame into the native page which can host our awt widgetry
             css::uno::Reference<css::awt::XWindow> xChildFrame = pParent->CreateChildFrame();
-            com::sun::star::awt::Rectangle r0 = xChildFrame->getPosSize();
             m_xWizardPage.set(m_xController->createPage(xChildFrame, i_nPageId), UNO_SET_THROW);
 
             css::uno::Reference<css::awt::XWindow> xPageWindow(m_xWizardPage->getWindow(), UNO_SET_THROW);
 
-            // If size of page is changed by createPage, then the requested size of the container
-            // should also be set to this size, to avoid annoying resizings.
-            com::sun::star::awt::Rectangle r1 = xChildFrame->getPosSize();
-
-            if (r0.Width != r1.Width || r0.Height != r1.Height)
-                pParent->set_size_request(r1.Width, r1.Height);
-            else
-            {
-                // tdf#132110 If the parent size wasn't overridden, then use
-                // the size of the child if that was set
-                com::sun::star::awt::Rectangle aChildRect = xPageWindow->getPosSize();
-                if (aChildRect.Width && aChildRect.Height)
-                    pParent->set_size_request(aChildRect.Width, aChildRect.Height);
-            }
+            // tdf#132110 use the current size of the child as the size request
+            com::sun::star::awt::Rectangle aChildRect = xPageWindow->getPosSize();
+            pParent->set_size_request(aChildRect.Width, aChildRect.Height);
 
             xPageWindow->setVisible(true);
         }
