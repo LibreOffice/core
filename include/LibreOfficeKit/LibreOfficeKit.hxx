@@ -886,6 +886,11 @@ public:
         mpDoc->pClass->setViewTimezone(mpDoc, nId, timezone);
     }
 
+    void paintThumbnail(unsigned char* pBuffer, int x, int y)
+    {
+        return mpDoc->pClass->paintThumbnail(mpDoc, pBuffer, x, y);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
@@ -1140,6 +1145,11 @@ public:
     void dumpState(const char* pOption, char** pState)
     {
         mpThis->pClass->dumpState(mpThis, pOption, pState);
+    }
+
+    char* extractRequest(const char* pFilePath)
+    {
+        return mpThis->pClass->extractRequest(mpThis, pFilePath);
     }
 };
 
