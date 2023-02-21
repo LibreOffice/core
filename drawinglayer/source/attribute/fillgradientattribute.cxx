@@ -59,32 +59,45 @@ namespace drawinglayer::attribute
                 // if we have given ColorSteps, integrate these
                 if(nullptr != pColorSteps && !pColorSteps->empty())
                 {
-                    // append early & sort to local to prepare processing and correction(s)
+                    // append early to local & sort to prepare the following correction(s)
+                    // and later processing
                     maColorSteps.insert(maColorSteps.end(), pColorSteps->begin(), pColorSteps->end());
-                    std::sort(maColorSteps.begin(), maColorSteps.end());
+
+                    // no need to sort knowingly lowest entry StartColor, also guarantees that
+                    // entry to stay at begin
+                    std::sort(maColorSteps.begin() + 1, maColorSteps.end());
 
                     // use two r/w heads on the data band maColorSteps
                     size_t curr(0), next(1);
 
-                    // check if all colors are the same. We know the StartColor, so
-                    // to all be the same all have to be equal to StartColor, including
-                    // EndColor
+                    // during procesing, check if all colors are the same. We know the
+                    // StartColor, so to all be the same, all also have to be equal to
+                    // StartColor (including EndColor, use to initialize)
                     bool bAllTheSameColor(rStartColor == rEndColor);
 
-                    // remove entries < 0.0, > 1.0 and with equal offset. do
+                    // remove entries <= 0.0, >= 1.0 and with equal offset. do
                     // this inside the already sorted local vector by evtl.
-                    // moving entries towards begin to keep and adapting size
+                    // moving entries closer to begin to keep and adapting size
                     // at the end
                     for(; next < maColorSteps.size(); next++)
                     {
                         const double fNextOffset(maColorSteps[next].getOffset());
 
-                        if(basegfx::fTools::less(fNextOffset, 0.0))
+                        // check for < 0.0 (should not really happen, see ::ColorStep)
+                        // also check for == 0.0 which would mean than an implicit
+                        // StartColor was given in ColorSteps - ignore that, we want
+                        // the explicitely given StartColor to always win
+                        if(basegfx::fTools::lessOrEqual(fNextOffset, 0.0))
                             continue;
 
-                        if(basegfx::fTools::more(fNextOffset, 1.0))
+                        // check for > 1.0 (should not really happen, see ::ColorStep)
+                        // also check for == 1.0 which would mean than an implicit
+                        // EndColor was given in ColorSteps - ignore that, we want
+                        // the explicitely given EndColor to always win
+                        if(basegfx::fTools::moreOrEqual(fNextOffset, 1.0))
                             continue;
 
+                        // check for equal current offset
                         const double fCurrOffset(maColorSteps[curr].getOffset());
                         if(basegfx::fTools::equal(fNextOffset, fCurrOffset))
                             continue;
@@ -97,18 +110,18 @@ namespace drawinglayer::attribute
                             maColorSteps[curr] = maColorSteps[next];
                         }
 
-                        // new entry added, check it for all the same color
+                        // new valid entry detected, check it for all the same color
                         bAllTheSameColor = bAllTheSameColor && maColorSteps[curr].getColor() == rStartColor;
                     }
 
                     if(bAllTheSameColor)
                     {
-                        // if all the same, reset to StartColor only
+                        // if all are the same color, reset to StartColor only
                         maColorSteps.resize(1);
                     }
                     else
                     {
-                        // adapt size to useful entries
+                        // adapt size to detected useful entries
                         curr++;
                         if(curr != maColorSteps.size())
                         {
@@ -116,7 +129,8 @@ namespace drawinglayer::attribute
                         }
 
                         // add EndColor if in-between colors were added
-                        if(curr > 1)
+                        // or StartColor != EndColor
+                        if(curr > 1 || rStartColor != rEndColor)
                         {
                             maColorSteps.emplace_back(1.0, rEndColor);
                         }

@@ -498,13 +498,93 @@ namespace drawinglayer::primitive2d
 
                             basegfx::ColorSteps aColorSteps;
 
-                            // test code here, will be removed later
-                            // if(false)
-                            // {
-                            //     aStart = basegfx::BColor(1.0, 0.0, 0.0); // red
-                            //     aEnd = basegfx::BColor(0.0, 0.0, 1.0); // blue
-                            //     aColorSteps.emplace_back(0.25, basegfx::BColor(0.0, 1.0, 0.0)); // green@25%
-                            // }
+                            // test code here, can/will be removed later
+                            static sal_uInt32 nUseGradientSteps(0);
+                            switch(nUseGradientSteps)
+                            {
+                                case 1:
+                                {
+                                    // just test a nice valid gradient
+                                    aStart = basegfx::BColor(1.0, 0.0, 0.0); // red
+                                    aEnd = basegfx::BColor(0.0, 0.0, 1.0); // blue
+                                    aColorSteps.emplace_back(0.25, basegfx::BColor(0.0, 1.0, 0.0)); // green@25%
+                                    aColorSteps.emplace_back(0.50, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    aColorSteps.emplace_back(0.75, basegfx::BColor(1.0, 0.0, 1.0)); // pink@75%
+                                    break;
+                                }
+
+                                case 2:
+                                {
+                                    // single added in-between, no change of start/end
+                                    aColorSteps.emplace_back(0.5, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    break;
+                                }
+
+                                case 3:
+                                {
+                                    // check additional StartColor, the one given directly has to win
+                                    aColorSteps.emplace_back(0.0, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    break;
+                                }
+
+                                case 4:
+                                {
+                                    // check additional EndColor, the one given directly has to win
+                                    aColorSteps.emplace_back(1.0, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    break;
+                                }
+
+                                case 5:
+                                {
+                                    // check invalid color (too low index), has to be ignored
+                                    aColorSteps.emplace_back(-1.0, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    break;
+                                }
+
+                                case 6:
+                                {
+                                    // check invalid color (too high index), has to be ignored
+                                    aColorSteps.emplace_back(2.0, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    break;
+                                }
+
+                                case 7:
+                                {
+                                    // check in-between single-color part
+                                    aColorSteps.emplace_back(0.3, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    aColorSteps.emplace_back(0.7, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    break;
+                                }
+
+                                case 8:
+                                {
+                                    // check in-between single-color parts
+                                    aColorSteps.emplace_back(0.2, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    aColorSteps.emplace_back(0.4, aEnd);
+                                    aColorSteps.emplace_back(0.6, aStart);
+                                    aColorSteps.emplace_back(0.8, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    break;
+                                }
+
+                                case 9:
+                                {
+                                    // check single-color start area
+                                    aColorSteps.emplace_back(0.6, aStart);
+                                    break;
+                                }
+
+                                case 10:
+                                {
+                                    // check single-color end area
+                                    aColorSteps.emplace_back(0.6, aEnd);
+                                    break;
+                                }
+
+                                default:
+                                {
+                                    break;
+                                }
+                            }
 
                             aGradient = attribute::FillGradientAttribute(
                                 XGradientStyleToGradientStyle(aXGradient.GetGradientStyle()),
