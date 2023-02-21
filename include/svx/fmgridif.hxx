@@ -44,7 +44,7 @@
 #include <vcl/wintypes.hxx>
 #include <toolkit/controls/unocontrol.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -342,16 +342,16 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC FmXGridPeer:
 {
 protected:
     css::uno::Reference< css::uno::XComponentContext >    m_xContext;
-    ::osl::Mutex                                          m_aMutex;
+    std::mutex                                            m_aMutex;
 
 private:
     css::uno::Reference< css::container::XIndexContainer >    m_xColumns;
     css::uno::Reference< css::sdbc::XRowSet >                 m_xCursor;
-    ::comphelper::OInterfaceContainerHelper3<css::util::XModifyListener> m_aModifyListeners;
-    ::comphelper::OInterfaceContainerHelper3<css::form::XUpdateListener> m_aUpdateListeners;
-    ::comphelper::OInterfaceContainerHelper3<css::container::XContainerListener> m_aContainerListeners;
-    ::comphelper::OInterfaceContainerHelper3<css::view::XSelectionChangeListener> m_aSelectionListeners;
-    ::comphelper::OInterfaceContainerHelper3<css::form::XGridControlListener> m_aGridControlListeners;
+    ::comphelper::OInterfaceContainerHelper4<css::util::XModifyListener> m_aModifyListeners;
+    ::comphelper::OInterfaceContainerHelper4<css::form::XUpdateListener> m_aUpdateListeners;
+    ::comphelper::OInterfaceContainerHelper4<css::container::XContainerListener> m_aContainerListeners;
+    ::comphelper::OInterfaceContainerHelper4<css::view::XSelectionChangeListener> m_aSelectionListeners;
+    ::comphelper::OInterfaceContainerHelper4<css::form::XGridControlListener> m_aGridControlListeners;
 
     OUString                m_aMode;
     sal_Int32               m_nCursorListening;

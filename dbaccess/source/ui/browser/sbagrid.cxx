@@ -237,7 +237,6 @@ void SAL_CALL SbaXGridControl::dispose()
 // SbaXGridPeer
 SbaXGridPeer::SbaXGridPeer(const Reference< XComponentContext >& _rM)
 : FmXGridPeer(_rM)
-,m_aStatusListeners(m_aMutex)
 {
 }
 
@@ -247,10 +246,11 @@ SbaXGridPeer::~SbaXGridPeer()
 
 void SAL_CALL SbaXGridPeer::dispose()
 {
-    EventObject aEvt(*this);
-
-    m_aStatusListeners.disposeAndClear(aEvt);
-
+    {
+        std::unique_lock g(m_aMutex);
+        EventObject aEvt(*this);
+        m_aStatusListeners.disposeAndClear(g, aEvt);
+    }
     FmXGridPeer::dispose();
 }
 
@@ -275,12 +275,13 @@ void SbaXGridPeer::NotifyStatusChanged(const css::util::URL& _rUrl, const Refere
         xControl->statusChanged(aEvt);
     else
     {
-        ::comphelper::OInterfaceContainerHelper3<css::frame::XStatusListener> * pIter
-            = m_aStatusListeners.getContainer(_rUrl);
+        std::unique_lock g(m_aMutex);
+        ::comphelper::OInterfaceContainerHelper4<css::frame::XStatusListener> * pIter
+            = m_aStatusListeners.getContainer(g, _rUrl);
 
         if (pIter)
         {
-            pIter->notifyEach( &XStatusListener::statusChanged, aEvt );
+            pIter->notifyEach( g, &XStatusListener::statusChanged, aEvt );
         }
     }
 }
@@ -439,20 +440,24 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
 
 void SAL_CALL SbaXGridPeer::addStatusListener(const Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL)
 {
-    ::comphelper::OInterfaceContainerHelper3< css::frame::XStatusListener >* pCont
-        = m_aStatusListeners.getContainer(aURL);
-    if (!pCont)
-        m_aStatusListeners.addInterface(aURL,xControl);
-    else
-        pCont->addInterface(xControl);
+    {
+        std::unique_lock g(m_aMutex);
+        ::comphelper::OInterfaceContainerHelper4< css::frame::XStatusListener >* pCont
+            = m_aStatusListeners.getContainer(g, aURL);
+        if (!pCont)
+            m_aStatusListeners.addInterface(g, aURL,xControl);
+        else
+            pCont->addInterface(g, xControl);
+    }
     NotifyStatusChanged(aURL, xControl);
 }
 
 void SAL_CALL SbaXGridPeer::removeStatusListener(const Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL)
 {
-    ::comphelper::OInterfaceContainerHelper3< css::frame::XStatusListener >* pCont = m_aStatusListeners.getContainer(aURL);
+    std::unique_lock g(m_aMutex);
+    ::comphelper::OInterfaceContainerHelper4< css::frame::XStatusListener >* pCont = m_aStatusListeners.getContainer(g, aURL);
     if ( pCont )
-        pCont->removeInterface(xControl);
+        pCont->removeInterface(g, xControl);
 }
 
 Sequence< Type > SAL_CALL SbaXGridPeer::getTypes()
