@@ -2823,7 +2823,12 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
         }
     }
 
-    if( !HasPara() && PrepareHint::MustFit != ePrep )
+    // Split fly anchors are technically empty (have no SwParaPortion), but otherwise behave like
+    // other split text frames, which are non-empty.
+    bool bSplitFlyAnchor = GetOffset() == TextFrameIndex(0) && HasFollow()
+                           && GetFollow()->GetOffset() == TextFrameIndex(0);
+
+    if( !HasPara() && !bSplitFlyAnchor && PrepareHint::MustFit != ePrep )
     {
         SetInvalidVert( true ); // Test
         OSL_ENSURE( !IsLocked(), "SwTextFrame::Prepare: three of a perfect pair" );
