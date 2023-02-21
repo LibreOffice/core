@@ -24,11 +24,11 @@
 
 #include "nlsupport.hxx"
 
-#include <osl/mutex.h>
 #include <osl/nlsupport.h>
 #include <osl/diagnose.h>
 #include <osl/process.h>
 #include <rtl/tencinfo.h>
+#include <rtl/ustrbuf.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 /* XXX NOTE:
@@ -38,158 +38,62 @@
  * nine, including a terminating null character." NINE?!? In ISO 639 and ISO
  * 3166?
  */
-#define ELP_LANGUAGE_FIELD_LENGTH 4
-#define ELP_COUNTRY_FIELD_LENGTH  3
+constexpr int ELP_LANGUAGE_FIELD_LENGTH = 4;
+constexpr int ELP_COUNTRY_FIELD_LENGTH = 3;
 
-namespace {
-
-/** Struct used in EnumLocalesProcW() called via EnumSystemLocalesW() to obtain
-    available locales.
-*/
-struct EnumLocalesParams
+static int GetLocaleInfoN(LPCWSTR l, LCTYPE t, DWORD& n)
 {
-    WCHAR Language[ELP_LANGUAGE_FIELD_LENGTH];
-    WCHAR Country[ELP_COUNTRY_FIELD_LENGTH];
-    LCID  Locale;
-};
-
-}
-
-static DWORD g_dwTLSLocaleEncId = DWORD(-1);
-
-/*****************************************************************************
- * callback function test
- *****************************************************************************/
-
-static BOOL CALLBACK EnumLocalesProcW( LPWSTR lpLocaleStringW )
-{
-    /* check params received via TLS */
-    EnumLocalesParams * params = static_cast<EnumLocalesParams *>(TlsGetValue( g_dwTLSLocaleEncId ));
-    if( nullptr == params || '\0' == params->Language[0] )
-        return FALSE;
-
-    LPWSTR pszEnd;
-    WCHAR langCode[ELP_LANGUAGE_FIELD_LENGTH];
-
-    /* convert hex-string to LCID */
-    LCID localeId = wcstol(lpLocaleStringW, &pszEnd, 16);
-
-    /*
-        get the ISO language code for this locale
-    */
-    if( !GetLocaleInfoW( localeId, LOCALE_SISO639LANGNAME , langCode, ELP_LANGUAGE_FIELD_LENGTH ) )
-        /* retry by going on */
-        return TRUE;
-
-    WCHAR ctryCode[ELP_COUNTRY_FIELD_LENGTH];
-
-    /* continue if language code does not match */
-    if( 0 != wcscmp( langCode, params->Language ) )
-        return TRUE;
-
-    /* check if country code is set and equals the current locale */
-    if( '\0' != params->Country[0] && GetLocaleInfoW( localeId,
-                LOCALE_SISO3166CTRYNAME , ctryCode, ELP_COUNTRY_FIELD_LENGTH ) )
-    {
-        /* save return value in TLS and break if found desired locale */
-        if( 0 == wcscmp( ctryCode, params->Country ) )
-        {
-            params->Locale = localeId;
-            return FALSE;
-        }
-    }
-    else
-    {
-        /* fill with default values for that language */
-        LANGID langId = LANGIDFROMLCID( localeId );
-
-        /* exchange sublanguage with SUBLANG_NEUTRAL */
-        langId = MAKELANGID( PRIMARYLANGID( langId ), SUBLANG_NEUTRAL );
-
-        /* and use default sorting order */
-        params->Locale = MAKELCID( langId, SORT_DEFAULT );
-
-        return FALSE;
-    }
-
-    /* retry by going on */
-    return TRUE;
-}
-
-static rtl_TextEncoding GetTextEncodingFromLCID( LCID localeId )
-{
-    /* query ansi codepage for given locale */
-    WCHAR ansiCP[6];
-    if( !localeId || !GetLocaleInfoW( localeId, LOCALE_IDEFAULTANSICODEPAGE, ansiCP, 6 ) )
-        return RTL_TEXTENCODING_DONTKNOW;
-
-    /* if GetLocaleInfo returns "0", it is a UNICODE only locale */
-    if( 0 == wcscmp( ansiCP, L"0" ) )
-        return RTL_TEXTENCODING_UNICODE;
-
-    /* values returned from GetLocaleInfo are decimal based */
-    WCHAR *pwcEnd;
-    UINT codepage = wcstol( ansiCP, &pwcEnd, 10 );
-
-    /* find matching rtl encoding */
-    return rtl_getTextEncodingFromWindowsCodePage( codepage );
+    return GetLocaleInfoEx(l, t | LOCALE_RETURN_NUMBER, reinterpret_cast<LPWSTR>(&n),
+                           sizeof(n) / sizeof(WCHAR));
 }
 
 rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 {
-    struct EnumLocalesParams params = { L"", L"", 0 };
-
-    /* initialise global TLS id */
-    if( DWORD(-1) == g_dwTLSLocaleEncId )
-    {
-        oslMutex globalMutex = * osl_getGlobalMutex();
-
-        /* initializing must be thread save */
-        osl_acquireMutex( globalMutex );
-
-        if( DWORD(-1) == g_dwTLSLocaleEncId )
-            g_dwTLSLocaleEncId = TlsAlloc();
-
-        osl_releaseMutex( globalMutex );
-    }
-
     /* if pLocale is NULL, use process locale as default */
     if( nullptr == pLocale )
         osl_getProcessLocale( &pLocale );
 
-    /* copy in parameters to structure */
-    if( !pLocale || !pLocale->Language || pLocale->Language->length >= ELP_LANGUAGE_FIELD_LENGTH )
+    if (!pLocale || !pLocale->Language || !pLocale->Language->length)
         return RTL_TEXTENCODING_DONTKNOW;
 
-    wcscpy( params.Language, o3tl::toW(pLocale->Language->buffer) );
+    /* Build a BCP47 tag */
+    OUStringBuffer sLocale(OUString::unacquired(&pLocale->Language));
+    if (pLocale->Country && pLocale->Country->length > 0)
+        sLocale.append("-" + OUString::unacquired(&pLocale->Country));
+    sLocale.append('\0');
 
-    if( pLocale->Country && pLocale->Country->length < ELP_COUNTRY_FIELD_LENGTH )
-        wcscpy( params.Country, o3tl::toW(pLocale->Country->buffer) );
+    /* query ansi codepage for given locale */
+    DWORD codepage;
+    if (!GetLocaleInfoN(o3tl::toW(sLocale.getStr()), LOCALE_IDEFAULTANSICODEPAGE, codepage))
+    {
+        WCHAR resolved[LOCALE_NAME_MAX_LENGTH];
+        if (!ResolveLocaleName(o3tl::toW(sLocale.getStr()), resolved, std::size(resolved)))
+            return RTL_TEXTENCODING_DONTKNOW;
+        if (!GetLocaleInfoN(resolved, LOCALE_IDEFAULTANSICODEPAGE, codepage))
+            return RTL_TEXTENCODING_DONTKNOW;
+    }
 
-    /* save pointer to local structure in TLS */
-    TlsSetValue( g_dwTLSLocaleEncId, &params );
+    /* if GetLocaleInfo returns 0, it is a UNICODE only locale */
+    if (0 == codepage)
+        return RTL_TEXTENCODING_UNICODE;
 
-    /* enum all locales known to Windows */
-    EnumSystemLocalesW( EnumLocalesProcW, LCID_SUPPORTED );
-
-    /* use the LCID found in iteration */
-    return GetTextEncodingFromLCID( params.Locale );
+    /* find matching rtl encoding */
+    return rtl_getTextEncodingFromWindowsCodePage(codepage);
 }
 
 void imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
+    WCHAR locale[LOCALE_NAME_MAX_LENGTH];
     WCHAR langCode[ELP_LANGUAGE_FIELD_LENGTH];
     WCHAR ctryCode[ELP_COUNTRY_FIELD_LENGTH];
-    LCID  localeId;
 
     OSL_ASSERT( ppLocale );
 
-    /* get the LCID to retrieve information from */
-    localeId = GetUserDefaultLCID();
-
-    /* call GetLocaleInfo to retrieve the iso codes */
-    if( GetLocaleInfoW( localeId, LOCALE_SISO639LANGNAME , langCode, ELP_LANGUAGE_FIELD_LENGTH )  &&
-        GetLocaleInfoW( localeId, LOCALE_SISO3166CTRYNAME , ctryCode, ELP_COUNTRY_FIELD_LENGTH ) )
+    /* get the locale name to retrieve information from */
+    /* and call GetLocaleInfo to retrieve the iso codes */
+    if( GetUserDefaultLocaleName(locale, std::size(locale)) &&
+        GetLocaleInfoEx( locale, LOCALE_SISO639LANGNAME , langCode, std::size(langCode) )  &&
+        GetLocaleInfoEx( locale, LOCALE_SISO3166CTRYNAME , ctryCode, std::size(ctryCode) ) )
     {
         *ppLocale = rtl_locale_register( o3tl::toU(langCode), o3tl::toU(ctryCode), u"" );
     }
