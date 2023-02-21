@@ -122,6 +122,11 @@ struct _LibreOfficeKitClass
     /// @see lok::Document::dumpState
     /// @since LibreOffice 7.5
     void (*dumpState) (LibreOfficeKit* pThis, const char* pOptions, char** pState);
+
+    /** @see lok::Office::extractRequest.
+     */
+    char* (*extractRequest) (LibreOfficeKit* pThis,
+                           const char* pFilePath);
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)
@@ -495,6 +500,11 @@ struct _LibreOfficeKitDocumentClass
 
     /// @see lok::Document::setViewTimezone().
     void (*setViewTimezone) (LibreOfficeKitDocument* pThis, int nId, const char* timezone);
+
+    void (*paintThumbnail) (LibreOfficeKitDocument* pThis,
+                            unsigned char* pBuffer,
+                            int x,
+                            int y);
 
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
