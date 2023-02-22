@@ -34,7 +34,7 @@ const std::pair<TranslateId, SfxStyleSearchBits> RID_PARAGRAPHSTYLEFAMILY[] =
     { NC_("RID_PARAGRAPHSTYLEFAMILY", "Custom Styles")       , SfxStyleSearchBits::UserDefined   },
     { NC_("RID_PARAGRAPHSTYLEFAMILY", "Automatic")           , SfxStyleSearchBits::Auto      },
     { NC_("RID_PARAGRAPHSTYLEFAMILY", "Text Styles")         , SfxStyleSearchBits::SwText       },
-    { NC_("RID_PARAGRAPHSTYLEFAMILY", "Chapter Styles")      , SfxStyleSearchBits::SwChapter    },
+    { NC_("RID_PARAGRAPHSTYLEFAMILY", "Document Structure")  , SfxStyleSearchBits::SwChapter    },
     { NC_("RID_PARAGRAPHSTYLEFAMILY", "List Styles")         , SfxStyleSearchBits::SwList       },
     { NC_("RID_PARAGRAPHSTYLEFAMILY", "Index Styles")        , SfxStyleSearchBits::SwIndex        },
     { NC_("RID_PARAGRAPHSTYLEFAMILY", "Special Styles")      , SfxStyleSearchBits::SwExtra      },
