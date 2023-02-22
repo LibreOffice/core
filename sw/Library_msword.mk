@@ -82,6 +82,7 @@ $(eval $(call gb_Library_add_exception_objects,msword,\
     sw/source/filter/ww8/docxexport \
     sw/source/filter/ww8/docxexportfilter \
     sw/source/filter/ww8/docxsdrexport \
+    sw/source/filter/ww8/docxtableexport \
     sw/source/filter/ww8/docxtablestyleexport \
     sw/source/filter/ww8/rtfattributeoutput \
     sw/source/filter/ww8/rtfexport \
