@@ -72,133 +72,9 @@ public:
         : SdModelTestBase("/sd/qa/unit/data/")
     {
     }
-
-    void testBase();
-    void testChildren();
-    void testText();
-    void testCnt();
-    void testDir();
-    void testTdf148665();
-    void testTdf148921();
-    void testMaxDepth();
-    void testRotation();
-    void testTextAutoRotation();
-    void testPyramid();
-    void testPyramidOneChild();
-    void testChevron();
-    void testCycle();
-    void testvenndiagram();
-    void testmatrix();
-    void testHierarchy();
-    void testInvertedPyramid();
-    void testBasicProcess();
-    void testMultidirectional();
-    void testHorizontalBulletList();
-    void testBasicRadicals();
-    void testEquation();
-    void testSegmentedCycle();
-    void testBaseRtoL();
-    void testVerticalBoxList();
-    void testVerticalBracketList();
-    void testTableList();
-    void testAccentProcess();
-    void testContinuousBlockProcess();
-    void testOrgChart();
-    void testCycleMatrix();
-    void testPictureStrip();
-    void testInteropGrabBag();
-    void testBackground();
-    void testBackgroundDrawingmlFallback();
-    void testCenterCycle();
-    void testFontSize();
-    void testVerticalBlockList();
-    void testBulletList();
-    void testMissingBulletAndIndent();
-    void testRecursion();
-    void testDataFollow();
-    void testOrgChart2();
-    void testTdf131553();
-    void testFillColorList();
-    void testTdf134221();
-    void testLinearRule();
-    void testLinearRuleVert();
-    void testAutofitSync();
-    void testSnakeRows();
-    void testCompositeInferRight();
-    void testTdf149551Pie();
-    void testTdf149551Pyramid();
-    void testTdf149551Venn();
-    void testTdf149551Gear();
-    void testTdf145528Matrix();
-    void testTdf135953TextPosition();
-    void testTdf132302RightArrow();
-
-    CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
-
-    CPPUNIT_TEST(testBase);
-    CPPUNIT_TEST(testChildren);
-    CPPUNIT_TEST(testText);
-    CPPUNIT_TEST(testCnt);
-    CPPUNIT_TEST(testDir);
-    CPPUNIT_TEST(testTdf148665);
-    CPPUNIT_TEST(testTdf148921);
-    CPPUNIT_TEST(testMaxDepth);
-    CPPUNIT_TEST(testRotation);
-    CPPUNIT_TEST(testTextAutoRotation);
-    CPPUNIT_TEST(testPyramid);
-    CPPUNIT_TEST(testPyramidOneChild);
-    CPPUNIT_TEST(testChevron);
-    CPPUNIT_TEST(testCycle);
-    CPPUNIT_TEST(testHierarchy);
-    CPPUNIT_TEST(testmatrix);
-    CPPUNIT_TEST(testvenndiagram);
-    CPPUNIT_TEST(testInvertedPyramid);
-    CPPUNIT_TEST(testBasicProcess);
-    CPPUNIT_TEST(testMultidirectional);
-    CPPUNIT_TEST(testHorizontalBulletList);
-    CPPUNIT_TEST(testBasicRadicals);
-    CPPUNIT_TEST(testEquation);
-    CPPUNIT_TEST(testSegmentedCycle);
-    CPPUNIT_TEST(testBaseRtoL);
-    CPPUNIT_TEST(testVerticalBoxList);
-    CPPUNIT_TEST(testVerticalBracketList);
-    CPPUNIT_TEST(testTableList);
-    CPPUNIT_TEST(testAccentProcess);
-    CPPUNIT_TEST(testContinuousBlockProcess);
-    CPPUNIT_TEST(testOrgChart);
-    CPPUNIT_TEST(testCycleMatrix);
-    CPPUNIT_TEST(testPictureStrip);
-    CPPUNIT_TEST(testInteropGrabBag);
-    CPPUNIT_TEST(testBackground);
-    CPPUNIT_TEST(testBackgroundDrawingmlFallback);
-    CPPUNIT_TEST(testCenterCycle);
-    CPPUNIT_TEST(testFontSize);
-    CPPUNIT_TEST(testVerticalBlockList);
-    CPPUNIT_TEST(testBulletList);
-    CPPUNIT_TEST(testMissingBulletAndIndent);
-    CPPUNIT_TEST(testRecursion);
-    CPPUNIT_TEST(testDataFollow);
-    CPPUNIT_TEST(testOrgChart2);
-    CPPUNIT_TEST(testTdf131553);
-    CPPUNIT_TEST(testFillColorList);
-    CPPUNIT_TEST(testTdf134221);
-    CPPUNIT_TEST(testLinearRule);
-    CPPUNIT_TEST(testLinearRuleVert);
-    CPPUNIT_TEST(testAutofitSync);
-    CPPUNIT_TEST(testSnakeRows);
-    CPPUNIT_TEST(testCompositeInferRight);
-    CPPUNIT_TEST(testTdf149551Pie);
-    CPPUNIT_TEST(testTdf149551Pyramid);
-    CPPUNIT_TEST(testTdf149551Venn);
-    CPPUNIT_TEST(testTdf149551Gear);
-    CPPUNIT_TEST(testTdf145528Matrix);
-    CPPUNIT_TEST(testTdf135953TextPosition);
-    CPPUNIT_TEST(testTdf132302RightArrow);
-
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void SdImportTestSmartArt::testBase()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testBase)
 {
     createSdImpressDoc("pptx/smartart1.pptx");
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
@@ -264,7 +140,7 @@ void SdImportTestSmartArt::testBase()
     CPPUNIT_ASSERT((xShape3->getPosition().X > xShape4->getPosition().X));
 }
 
-void SdImportTestSmartArt::testChildren()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testChildren)
 {
     createSdImpressDoc("pptx/smartart-children.pptx");
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
@@ -299,7 +175,7 @@ void SdImportTestSmartArt::testChildren()
     CPPUNIT_ASSERT_EQUAL(OUString("z"), xTextZ->getString());
 }
 
-void SdImportTestSmartArt::testText()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testText)
 {
     createSdImpressDoc("pptx/smartart-text.pptx");
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
@@ -312,7 +188,7 @@ void SdImportTestSmartArt::testText()
     CPPUNIT_ASSERT_EQUAL(OUString("test"), xText1->getString());
 }
 
-void SdImportTestSmartArt::testCnt()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testCnt)
 {
     createSdImpressDoc("pptx/smartart-cnt.pptx");
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
@@ -327,7 +203,7 @@ void SdImportTestSmartArt::testCnt()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nCorrect);
 }
 
-void SdImportTestSmartArt::testDir()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testDir)
 {
     createSdImpressDoc("pptx/smartart-dir.pptx");
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
@@ -338,7 +214,7 @@ void SdImportTestSmartArt::testDir()
     CPPUNIT_ASSERT(xShape0->getPosition().X > xShape1->getPosition().X);
 }
 
-void SdImportTestSmartArt::testTdf148665()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf148665)
 {
     // Without the fix in place, this test would have crashed at import time
     createSdImpressDoc("pptx/tdf148665.pptx");
@@ -353,7 +229,7 @@ void SdImportTestSmartArt::testTdf148665()
     CPPUNIT_ASSERT_EQUAL(OUString("Sasa Haha"), xText2->getString());
 }
 
-void SdImportTestSmartArt::testTdf148921()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf148921)
 {
     createSdImpressDoc("pptx/tdf148921.pptx");
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
@@ -375,7 +251,7 @@ void SdImportTestSmartArt::testTdf148921()
     CPPUNIT_ASSERT(xShape0->getSize().Width > xShape1->getSize().Width);
 }
 
-void SdImportTestSmartArt::testMaxDepth()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testMaxDepth)
 {
     createSdImpressDoc("pptx/smartart-maxdepth.pptx");
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
@@ -392,7 +268,7 @@ void SdImportTestSmartArt::testMaxDepth()
                          xShape1->getPosition().Y); // Confirms shapes are in same Y axis-level.
 }
 
-void SdImportTestSmartArt::testRotation()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRotation)
 {
     createSdImpressDoc("pptx/smartart-rotation.pptx");
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
@@ -409,7 +285,7 @@ void SdImportTestSmartArt::testRotation()
                          xShape2->getPropertyValue("RotateAngle").get<sal_Int32>());
 }
 
-void SdImportTestSmartArt::testTextAutoRotation()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTextAutoRotation)
 {
     createSdImpressDoc("pptx/smartart-autoTxRot.pptx");
 
@@ -496,17 +372,17 @@ void SdImportTestSmartArt::testTextAutoRotation()
     testText(2, 15, "p", 2250, 0);
 }
 
-void SdImportTestSmartArt::testBasicProcess()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testBasicProcess)
 {
     //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
 }
 
-void SdImportTestSmartArt::testPyramid()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testPyramid)
 {
     //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
 }
 
-void SdImportTestSmartArt::testPyramidOneChild()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testPyramidOneChild)
 {
     // Load a document with a pyra algorithm in it.
     // Without the accompanying fix in place, this test would have crashed.
@@ -518,7 +394,7 @@ void SdImportTestSmartArt::testPyramidOneChild()
     CPPUNIT_ASSERT_EQUAL(OUString("A"), xText->getString());
 }
 
-void SdImportTestSmartArt::testChevron()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testChevron)
 {
     createSdImpressDoc("pptx/smartart-chevron.pptx");
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
@@ -541,7 +417,7 @@ void SdImportTestSmartArt::testChevron()
     CPPUNIT_ASSERT_EQUAL(xShape1->getPosition().Y, xShape2->getPosition().Y);
 }
 
-void SdImportTestSmartArt::testCycle()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testCycle)
 {
     createSdImpressDoc("pptx/smartart-cycle.pptx");
     uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
@@ -576,27 +452,27 @@ void SdImportTestSmartArt::testCycle()
     CPPUNIT_ASSERT_EQUAL(OUString("ooxml-rightArrow"), aType);
 }
 
-void SdImportTestSmartArt::testHierarchy()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testHierarchy)
 {
     //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
 }
 
-void SdImportTestSmartArt::testmatrix()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testmatrix)
 {
     //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
 }
 
-void SdImportTestSmartArt::testvenndiagram()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testvenndiagram)
 {
     //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
 }
 
-void SdImportTestSmartArt::testInvertedPyramid()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testInvertedPyramid)
 {
     //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
 }
 
-void SdImportTestSmartArt::testMultidirectional()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testMultidirectional)
 {
     // similar document as cycle, but arrows are pointing in both directions
     createSdImpressDoc("pptx/smartart-multidirectional.pptx");
@@ -615,27 +491,27 @@ void SdImportTestSmartArt::testMultidirectional()
     CPPUNIT_ASSERT_EQUAL(OUString("ooxml-leftRightArrow"), aType);
 }
 
-void SdImportTestSmartArt::testHorizontalBulletList()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testHorizontalBulletList)
 {
     //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
 }
 
-void SdImportTestSmartArt::testEquation()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testEquation)
 {
     //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
 }
 
-void SdImportTestSmartArt::testBasicRadicals()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testBasicRadicals)
 {
     //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
 }
 
-void SdImportTestSmartArt::testSegmentedCycle()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testSegmentedCycle)
 {
     //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
 }
 
-void SdImportTestSmartArt::testBaseRtoL()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testBaseRtoL)
 {
     createSdImpressDoc("pptx/smartart-rightoleftblockdiagram.pptx");
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
@@ -701,7 +577,7 @@ void SdImportTestSmartArt::testBaseRtoL()
     CPPUNIT_ASSERT((xShape3->getPosition().X < xShape4->getPosition().X));
 }
 
-void SdImportTestSmartArt::testVerticalBoxList()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testVerticalBoxList)
 {
     createSdImpressDoc("pptx/smartart-vertical-box-list.pptx");
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
@@ -733,7 +609,7 @@ void SdImportTestSmartArt::testVerticalBoxList()
                            xChildText->getPosition().X + xChildText->getSize().Width);
 }
 
-void SdImportTestSmartArt::testVerticalBracketList()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testVerticalBracketList)
 {
     createSdImpressDoc("pptx/vertical-bracket-list.pptx");
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
@@ -746,7 +622,7 @@ void SdImportTestSmartArt::testVerticalBracketList()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xFirstChild->getCount());
 }
 
-void SdImportTestSmartArt::testTableList()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTableList)
 {
     createSdImpressDoc("pptx/table-list.pptx");
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
@@ -775,7 +651,7 @@ void SdImportTestSmartArt::testTableList()
     CPPUNIT_ASSERT_LESS(100, abs(nChild2Right - nParentRight));
 }
 
-void SdImportTestSmartArt::testAccentProcess()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAccentProcess)
 {
     createSdImpressDoc("pptx/smartart-accent-process.pptx");
     uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
@@ -863,7 +739,7 @@ void SdImportTestSmartArt::testAccentProcess()
     CPPUNIT_ASSERT_LESS(nSecondParentLeft, nFirstChildRight);
 }
 
-void SdImportTestSmartArt::testContinuousBlockProcess()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testContinuousBlockProcess)
 {
     createSdImpressDoc("pptx/smartart-continuous-block-process.pptx");
     uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
@@ -888,7 +764,7 @@ void SdImportTestSmartArt::testContinuousBlockProcess()
     CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(5000), xAShape->getSize().Width);
 }
 
-void SdImportTestSmartArt::testOrgChart()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testOrgChart)
 {
     // Simple org chart with 1 manager and 1 employee only.
     createSdImpressDoc("pptx/smartart-org-chart.pptx");
@@ -1012,7 +888,7 @@ void SdImportTestSmartArt::testOrgChart()
     CPPUNIT_ASSERT_LESS(xGroup->getSize().Height / 3, aEmployeeSize.Height);
 }
 
-void SdImportTestSmartArt::testCycleMatrix()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testCycleMatrix)
 {
     createSdImpressDoc("pptx/smartart-cycle-matrix.pptx");
     uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
@@ -1100,7 +976,7 @@ void SdImportTestSmartArt::testCycleMatrix()
     CPPUNIT_ASSERT_EQUAL(xA1Shape->getSize().Height, xA1Shape->getSize().Width);
 }
 
-void SdImportTestSmartArt::testPictureStrip()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testPictureStrip)
 {
     createSdImpressDoc("pptx/smartart-picture-strip.pptx");
     uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
@@ -1178,7 +1054,7 @@ void SdImportTestSmartArt::testPictureStrip()
     CPPUNIT_ASSERT_LESSEQUAL(aFirstPairSize.Height * 3 + 1, aFirstPairSize.Width);
 }
 
-void SdImportTestSmartArt::testInteropGrabBag()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testInteropGrabBag)
 {
     createSdImpressDoc("pptx/smartart-interopgrabbag.pptx");
     uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
@@ -1195,7 +1071,7 @@ void SdImportTestSmartArt::testInteropGrabBag()
     CPPUNIT_ASSERT(aGrabBag.find("OOXDrawing") != aGrabBag.end());
 }
 
-void SdImportTestSmartArt::testBackground()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testBackground)
 {
     createSdImpressDoc("pptx/smartart-background.pptx");
     uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
@@ -1227,7 +1103,7 @@ void SdImportTestSmartArt::testBackground()
     CPPUNIT_ASSERT_EQUAL(true, bSizeProtect);
 }
 
-void SdImportTestSmartArt::testBackgroundDrawingmlFallback()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testBackgroundDrawingmlFallback)
 {
     // same as testBackground, but test file contains drawingML fallback
 
@@ -1261,7 +1137,7 @@ void SdImportTestSmartArt::testBackgroundDrawingmlFallback()
     CPPUNIT_ASSERT_EQUAL(true, bSizeProtect);
 }
 
-void SdImportTestSmartArt::testCenterCycle()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testCenterCycle)
 {
     createSdImpressDoc("pptx/smartart-center-cycle.pptx");
     uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
@@ -1286,7 +1162,7 @@ void SdImportTestSmartArt::testCenterCycle()
     CPPUNIT_ASSERT_GREATER(xShapeCenter->getPosition().Y, xShapeC->getPosition().Y);
 }
 
-void SdImportTestSmartArt::testFontSize()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFontSize)
 {
     createSdImpressDoc("pptx/smartart-font-size.pptx");
 
@@ -1313,7 +1189,7 @@ void SdImportTestSmartArt::testFontSize()
     CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_AUTOFIT, eTextFitToSize);
 }
 
-void SdImportTestSmartArt::testVerticalBlockList()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testVerticalBlockList)
 {
     createSdImpressDoc("pptx/smartart-vertical-block-list.pptx");
     uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
@@ -1355,7 +1231,7 @@ void SdImportTestSmartArt::testVerticalBlockList()
                          xShapeEmpty->getPosition().Y + xShapeEmpty->getSize().Height);
 }
 
-void SdImportTestSmartArt::testMissingBulletAndIndent()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testMissingBulletAndIndent)
 {
     createSdImpressDoc("pptx/smartart-missing-bullet.pptx");
     uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
@@ -1387,7 +1263,7 @@ void SdImportTestSmartArt::testMissingBulletAndIndent()
     }
 }
 
-void SdImportTestSmartArt::testBulletList()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testBulletList)
 {
     createSdImpressDoc("pptx/smartart-bullet-list.pptx");
     uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
@@ -1412,7 +1288,7 @@ void SdImportTestSmartArt::testBulletList()
     CPPUNIT_ASSERT_EQUAL(OUString(u"•"), aRule2["BulletChar"].get<OUString>());
 }
 
-void SdImportTestSmartArt::testRecursion()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRecursion)
 {
     createSdImpressDoc("pptx/smartart-recursion.pptx");
 
@@ -1453,7 +1329,7 @@ void SdImportTestSmartArt::testRecursion()
     CPPUNIT_ASSERT_EQUAL(OUString("C3"), xTextC3->getString());
 }
 
-void SdImportTestSmartArt::testDataFollow()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testDataFollow)
 {
     // checks if data nodes are followed correctly
     // different variables are set for two presentation points with the same name
@@ -1494,7 +1370,7 @@ void SdImportTestSmartArt::testDataFollow()
                                 xShapeC2->getPosition().Y);
 }
 
-void SdImportTestSmartArt::testOrgChart2()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testOrgChart2)
 {
     createSdImpressDoc("pptx/smartart-org-chart2.pptx");
     uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
@@ -1533,7 +1409,7 @@ void SdImportTestSmartArt::testOrgChart2()
                                 xShapeC4->getPosition().X);
 }
 
-void SdImportTestSmartArt::testTdf131553()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf131553)
 {
     createSdImpressDoc("pptx/tdf131553.pptx");
     uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
@@ -1546,7 +1422,7 @@ void SdImportTestSmartArt::testTdf131553()
     CPPUNIT_ASSERT_EQUAL(SdrObjKind::OLE2, pObj->GetObjIdentifier());
 }
 
-void SdImportTestSmartArt::testFillColorList()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFillColorList)
 {
     createSdImpressDoc("pptx/fill-color-list.pptx");
     uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
@@ -1578,7 +1454,7 @@ void SdImportTestSmartArt::testFillColorList()
     CPPUNIT_ASSERT_GREATER(nGroupTop, nShapeTop);
 }
 
-void SdImportTestSmartArt::testTdf134221()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf134221)
 {
     createSdImpressDoc("pptx/smartart-tdf134221.pptx");
     saveAndReload("Impress Office Open XML");
@@ -1591,7 +1467,7 @@ void SdImportTestSmartArt::testTdf134221()
                          xTxtProps->getPropertyValue("TextUpperDistance").get<sal_Int32>());
 }
 
-void SdImportTestSmartArt::testLinearRule()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testLinearRule)
 {
     createSdImpressDoc("pptx/smartart-linear-rule.pptx");
 
@@ -1626,7 +1502,7 @@ void SdImportTestSmartArt::testLinearRule()
     CPPUNIT_ASSERT_LESSEQUAL(static_cast<sal_Int32>(10092), xShape->getSize().Height);
 }
 
-void SdImportTestSmartArt::testLinearRuleVert()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testLinearRuleVert)
 {
     createSdImpressDoc("pptx/smartart-linear-rule-vert.pptx");
 
@@ -1644,7 +1520,7 @@ void SdImportTestSmartArt::testLinearRuleVert()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2020), xShape->getSize().Height);
 }
 
-void SdImportTestSmartArt::testAutofitSync()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAutofitSync)
 {
     createSdImpressDoc("pptx/smartart-autofit-sync.pptx");
 
@@ -1680,7 +1556,7 @@ void SdImportTestSmartArt::testAutofitSync()
     CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_NONE, eType);
 }
 
-void SdImportTestSmartArt::testSnakeRows()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testSnakeRows)
 {
     // Load a smartart which contains a snake algorithm.
     // The expected layout of the 6 children is a 3x2 grid.
@@ -1704,7 +1580,7 @@ void SdImportTestSmartArt::testSnakeRows()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aYPositions.size());
 }
 
-void SdImportTestSmartArt::testCompositeInferRight()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testCompositeInferRight)
 {
     // Load a smartart which contains a composite algorithm.
     // One constraint says that the left of the text should be the right of the image.
@@ -1724,7 +1600,7 @@ void SdImportTestSmartArt::testCompositeInferRight()
     CPPUNIT_ASSERT_GREATER(nRightOfImage, nLeftOfText);
 }
 
-void SdImportTestSmartArt::testTdf149551Pie()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf149551Pie)
 {
     // The file contains a diagram of type "Basic Pie".
     createSdImpressDoc("pptx/tdf149551_SmartArt_Pie.pptx");
@@ -1745,7 +1621,7 @@ void SdImportTestSmartArt::testTdf149551Pie()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(7990), sal_Int32(aTextRect.Bottom()), 4);
 }
 
-void SdImportTestSmartArt::testTdf149551Pyramid()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf149551Pyramid)
 {
     // The file contains a diagram of type "Basic Pyramid".
     createSdImpressDoc("pptx/tdf149551_SmartArt_Pyramid.pptx");
@@ -1766,7 +1642,7 @@ void SdImportTestSmartArt::testTdf149551Pyramid()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(7370), sal_Int32(aTextRect.Bottom()), 4);
 }
 
-void SdImportTestSmartArt::testTdf149551Venn()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf149551Venn)
 {
     // The file contains a diagram of type "Stacked Venn".
     createSdImpressDoc("pptx/tdf149551_SmartArt_Venn.pptx");
@@ -1787,7 +1663,7 @@ void SdImportTestSmartArt::testTdf149551Venn()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(6162), sal_Int32(aTextRect.Bottom()), 4);
 }
 
-void SdImportTestSmartArt::testTdf149551Gear()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf149551Gear)
 {
     // The file contains a diagram of type "Gear".
     createSdImpressDoc("pptx/tdf149551_SmartArt_Gear.pptx");
@@ -1808,7 +1684,7 @@ void SdImportTestSmartArt::testTdf149551Gear()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(9999), sal_Int32(aTextRect.Bottom()), 4);
 }
 
-void SdImportTestSmartArt::testTdf145528Matrix()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf145528Matrix)
 {
     // The file contains a diagram of type "Titled Matrix". Such is build from shapes of type
     // 'round1Rect'.
@@ -1839,7 +1715,7 @@ void SdImportTestSmartArt::testTdf145528Matrix()
     }
 }
 
-void SdImportTestSmartArt::testTdf135953TextPosition()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf135953TextPosition)
 {
     // The file contains a diagram of type "Detailed Process". There the text area rectangle
     // is at the left edge of the shape and rotated there.
@@ -1862,7 +1738,7 @@ void SdImportTestSmartArt::testTdf135953TextPosition()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(578), sal_Int32(aTextRect.Bottom()), 4);
 }
 
-void SdImportTestSmartArt::testTdf132302RightArrow()
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf132302RightArrow)
 {
     // The file contains a diagram of type "Process Arrows". It uses shapes of type "rightArrow".
     // The text starts not at the left edge but in the middle to have space for a circle. Error was
@@ -1884,8 +1760,6 @@ void SdImportTestSmartArt::testTdf132302RightArrow()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(11989), sal_Int32(aTextRect.Right()), 4);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(7940), sal_Int32(aTextRect.Bottom()), 4);
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTestSmartArt);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
