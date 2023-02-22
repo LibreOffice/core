@@ -111,9 +111,12 @@ void ScColumn::DeleteBeforeCopyFromClip(
 
         if (nDelFlag & InsertDeleteFlags::CONTENTS)
         {
-            sc::SingleColumnSpanSet aDeletedRows(GetDoc().GetSheetLimits());
-            DeleteCells(*pBlockPos, aRange.mnRow1, aRange.mnRow2, nDelFlag, aDeletedRows);
-            rBroadcastSpans.set(GetDoc(), nTab, nCol, aDeletedRows, true);
+            auto xResult = DeleteCells(*pBlockPos, aRange.mnRow1, aRange.mnRow2, nDelFlag);
+            rBroadcastSpans.set(GetDoc(), nTab, nCol, xResult->aDeletedRows, true);
+
+            for (const auto& rRange : xResult->aFormulaRanges)
+                rCxt.setListeningFormulaSpans(
+                    nTab, nCol, rRange.first, nCol, rRange.second);
         }
 
         if (nDelFlag & InsertDeleteFlags::NOTE)
@@ -202,9 +205,12 @@ void ScColumn::DeleteBeforeCopyFromClip(
 
         if (nDelFlag & InsertDeleteFlags::CONTENTS)
         {
-            sc::SingleColumnSpanSet aDeletedRows(GetDoc().GetSheetLimits());
-            DeleteCells(*pBlockPos, nRow1, nRow2, nDelFlag, aDeletedRows);
-            rBroadcastSpans.set(GetDoc(), nTab, nCol, aDeletedRows, true);
+            auto xResult = DeleteCells(*pBlockPos, nRow1, nRow2, nDelFlag);
+            rBroadcastSpans.set(GetDoc(), nTab, nCol, xResult->aDeletedRows, true);
+
+            for (const auto& rRange : xResult->aFormulaRanges)
+                rCxt.setListeningFormulaSpans(
+                    nTab, nCol, rRange.first, nCol, rRange.second);
         }
 
         if (nDelFlag & InsertDeleteFlags::NOTE)
