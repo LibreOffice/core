@@ -85,6 +85,7 @@ public:
     void testBulletStartNumber();
     void testLineStyle();
     void testCellLeftAndRightMargin();
+    void testTdf134862();
     void testRightToLeftParaghraph();
     void testTextboxWithHyperlink();
     void testMergedCells();
@@ -160,6 +161,7 @@ public:
     CPPUNIT_TEST(testBulletStartNumber);
     CPPUNIT_TEST(testLineStyle);
     CPPUNIT_TEST(testCellLeftAndRightMargin);
+    CPPUNIT_TEST(testTdf134862);
     CPPUNIT_TEST(testRightToLeftParaghraph);
     CPPUNIT_TEST(testTextboxWithHyperlink);
     CPPUNIT_TEST(testMergedCells);
@@ -997,6 +999,34 @@ void SdOOXMLExportTest1::testLineStyle()
     const XLineStyleItem& rStyleItem = pShape->GetMergedItem(XATTR_LINESTYLE);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong style", int(drawing::LineStyle_SOLID),
                                  static_cast<int>(rStyleItem.GetValue()));
+}
+
+void SdOOXMLExportTest1::testTdf134862()
+{
+    createSdImpressDoc("pptx/tdf134862.pptx");
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+
+    uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xShape));
+    uno::Reference<beans::XPropertySet> xPropSet(xParagraph, uno::UNO_QUERY_THROW);
+
+    sal_Int16 nWritingMode = 0;
+    xPropSet->getPropertyValue("WritingMode") >>= nWritingMode;
+
+    // Without the fix in place, this test would have failed here
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong paragraph WritingMode", text::WritingMode2::RL_TB,
+                                 nWritingMode);
+
+    saveAndReload("Impress Office Open XML");
+
+    xShape.set(getShapeFromPage(0, 0));
+
+    xParagraph.set(getParagraphFromShape(0, xShape));
+    xPropSet.set(xParagraph, uno::UNO_QUERY_THROW);
+
+    nWritingMode = 0;
+    xPropSet->getPropertyValue("WritingMode") >>= nWritingMode;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong paragraph WritingMode", text::WritingMode2::RL_TB,
+                                 nWritingMode);
 }
 
 void SdOOXMLExportTest1::testRightToLeftParaghraph()
