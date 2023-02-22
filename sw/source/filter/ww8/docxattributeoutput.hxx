@@ -1097,6 +1097,32 @@ public:
     void pushToTableExportContext(DocxTableExportContext& rContext);
     /// Restores from the remembered state.
     void popFromTableExportContext(DocxTableExportContext const & rContext);
+
+    static OString convertToOOXMLHoriOrient(sal_Int16 nOrient, bool bIsPosToggle);
+    static OString convertToOOXMLVertOrient(sal_Int16 nOrient);
+    static OString convertToOOXMLVertOrientRel(sal_Int16 nOrientRel);
+    static OString convertToOOXMLHoriOrientRel(sal_Int16 nOrientRel);
+    static void ImplCellMargins( sax_fastparser::FSHelperPtr const & pSerializer, const SvxBoxItem& rBox, sal_Int32 tag, bool bUseStartEnd, const SvxBoxItem* pDefaultMargins = nullptr);
+    static void AddToAttrList(rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrs, ...);
+    static void AddToAttrList(rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrName, const char* sAttrValue);
+
+    static const sal_Int32 Tag_StartParagraph_1 = 1;
+    static const sal_Int32 Tag_StartParagraph_2 = 2;
+    static const sal_Int32 Tag_WriteSdtBlock = 3;
+    static const sal_Int32 Tag_StartParagraphProperties = 4;
+    static const sal_Int32 Tag_InitCollectedParagraphProperties = 5;
+    static const sal_Int32 Tag_StartRun_1 = 6;
+    static const sal_Int32 Tag_StartRun_2 = 7;
+    static const sal_Int32 Tag_StartRun_3 = 8;
+    static const sal_Int32 Tag_EndRun_1 = 9;
+    static const sal_Int32 Tag_EndRun_2 = 10;
+    static const sal_Int32 Tag_StartRunProperties = 11;
+    static const sal_Int32 Tag_InitCollectedRunProperties = 12;
+    static const sal_Int32 Tag_Redline_1 = 13;
+    static const sal_Int32 Tag_Redline_2 = 14;
+    static const sal_Int32 Tag_TableDefinition = 15;
+    static const sal_Int32 Tag_OutputFlyFrame = 16;
+    static const sal_Int32 Tag_StartSection = 17;
 };
 
 /**
