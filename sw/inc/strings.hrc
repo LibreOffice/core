@@ -1337,7 +1337,7 @@
 #define STR_TOKEN_LINK_START                    NC_("STR_TOKEN_LINK_START", "LS")
 #define STR_TOKEN_LINK_END                      NC_("STR_TOKEN_LINK_END", "LE")
 #define STR_TOKEN_AUTHORITY                     NC_("STR_TOKEN_AUTHORITY", "A")
-#define STR_TOKEN_HELP_ENTRY_NO                 NC_("STR_TOKEN_HELP_ENTRY_NO", "Chapter number")
+#define STR_TOKEN_HELP_ENTRY_NO                 NC_("STR_TOKEN_HELP_ENTRY_NO", "Heading number")
 #define STR_TOKEN_HELP_ENTRY                    NC_("STR_TOKEN_HELP_ENTRY", "Entry")
 #define STR_TOKEN_HELP_TAB_STOP                 NC_("STR_TOKEN_HELP_TAB_STOP", "Tab stop")
 #define STR_TOKEN_HELP_TEXT                     NC_("STR_TOKEN_HELP_TEXT", "Text")
