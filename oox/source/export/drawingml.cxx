@@ -3589,7 +3589,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                         && ( sPresetWarp == "textArchDown" || sPresetWarp == "textArchUp"
                             || sPresetWarp == "textButton" || sPresetWarp == "textCircle");
 
-    // Fontwork shapes in LO ignore insets in rendering, Word interpets them.
+    // Fontwork shapes in LO ignore inserts in rendering, Word interprets them.
     if (GetDocumentType() == DOCUMENT_DOCX && bIsFontworkShape)
     {
         nLeft = 0;
