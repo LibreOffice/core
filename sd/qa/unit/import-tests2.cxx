@@ -68,168 +68,11 @@ public:
     {
     }
 
-    void testTdf152186();
-    void testTdf93868();
-    void testTdf95932();
-    void testTdf99030();
-    void testTdf49561();
-    void testTdf103473();
-    void testAoo124143();
-    void testTdf103567();
-    void testTdf103792();
-    void testTdf148685();
-    void testTdf103876();
-    void testTdf79007();
-    void testTdf119649();
-    void testTdf118776();
-    void testTdf129686();
-    void testTdf104015();
-    void testTdf104201();
-    void testTdf103477();
-    void testTdf104445();
-    void testTdf105150();
-    void testTdf105150PPT();
-    void testTdf123684();
-    void testTdf100926();
-    void testTdf89064();
-    void testTdf108925();
-    void testTdf109067();
-    void testTdf109187();
-    void testTdf108926();
-    void testTdf100065();
-    void testTdf90626();
-    void testTdf138148();
-    void testTdf114488();
-    void testTdf134174();
-    void testTdf134210();
-    void testTdf114913();
-    void testTdf114821();
-    void testTdf115394();
-    void testTdf115394PPT();
-    void testTdf51340();
-    void testTdf116899();
-    void testTdf77747();
-    void testTdf116266();
-    void testTdf128684();
-    void testShapeGlowEffectPPTXImpoer();
-    void testShapeBlurPPTXImport();
-    void testMirroredGraphic();
-    void testGreysScaleGraphic();
-    void testTdf134210CropPosition();
-
+protected:
     bool checkPattern(int nShapeNumber, std::vector<sal_uInt8>& rExpected);
-    void testPatternImport();
-    void testPptCrop();
-    void testTdf149206();
-    void testTdf149785();
-    void testTdf149985();
-    void testTdf150770();
-    void testTdf120028();
-    void testDescriptionImport();
-    void testTdf83247();
-    void testTdf47365();
-    void testTdf122899();
-    void testOOXTheme();
-    void testCropToShape();
-    void testTdf127964();
-    void testTdf106638();
-    void testTdf113198();
-    void testTdf49856();
-    void testTdf103347();
-    void testHyperlinksOnShapes();
-    void testTdf112209();
-    void testTdf128596();
-    void testDefaultTabStop();
-    void testCropToZero();
-    void testTdf144092TableHeight();
-    void testTdf89928BlackWhiteThreshold();
-    void testTdf151547TransparentWhiteText();
-    void testTdf149961AutofitIndentation();
-    void testTdf149588TransparentSolidFill();
-
-    CPPUNIT_TEST_SUITE(SdImportTest2);
-
-    CPPUNIT_TEST(testTdf152186);
-    CPPUNIT_TEST(testTdf93868);
-    CPPUNIT_TEST(testTdf95932);
-    CPPUNIT_TEST(testTdf99030);
-    CPPUNIT_TEST(testTdf49561);
-    CPPUNIT_TEST(testTdf103473);
-    CPPUNIT_TEST(testAoo124143);
-    CPPUNIT_TEST(testTdf103567);
-    CPPUNIT_TEST(testTdf103792);
-    CPPUNIT_TEST(testTdf148685);
-    CPPUNIT_TEST(testTdf103876);
-    CPPUNIT_TEST(testTdf79007);
-    CPPUNIT_TEST(testTdf119649);
-    CPPUNIT_TEST(testTdf118776);
-    CPPUNIT_TEST(testTdf129686);
-    CPPUNIT_TEST(testTdf104015);
-    CPPUNIT_TEST(testTdf104201);
-    CPPUNIT_TEST(testTdf103477);
-    CPPUNIT_TEST(testTdf104445);
-    CPPUNIT_TEST(testTdf105150);
-    CPPUNIT_TEST(testTdf105150PPT);
-    CPPUNIT_TEST(testTdf123684);
-    CPPUNIT_TEST(testTdf100926);
-    CPPUNIT_TEST(testPatternImport);
-    CPPUNIT_TEST(testTdf89064);
-    CPPUNIT_TEST(testTdf108925);
-    CPPUNIT_TEST(testTdf109067);
-    CPPUNIT_TEST(testTdf109187);
-    CPPUNIT_TEST(testTdf108926);
-    CPPUNIT_TEST(testTdf100065);
-    CPPUNIT_TEST(testTdf90626);
-    CPPUNIT_TEST(testTdf138148);
-    CPPUNIT_TEST(testTdf114488);
-    CPPUNIT_TEST(testTdf134174);
-    CPPUNIT_TEST(testTdf134210);
-    CPPUNIT_TEST(testTdf114913);
-    CPPUNIT_TEST(testTdf114821);
-    CPPUNIT_TEST(testTdf115394);
-    CPPUNIT_TEST(testTdf115394PPT);
-    CPPUNIT_TEST(testTdf51340);
-    CPPUNIT_TEST(testTdf116899);
-    CPPUNIT_TEST(testTdf77747);
-    CPPUNIT_TEST(testTdf116266);
-    CPPUNIT_TEST(testPptCrop);
-    CPPUNIT_TEST(testTdf149206);
-    CPPUNIT_TEST(testTdf149785);
-    CPPUNIT_TEST(testTdf149985);
-    CPPUNIT_TEST(testTdf150770);
-    CPPUNIT_TEST(testTdf120028);
-    CPPUNIT_TEST(testDescriptionImport);
-    CPPUNIT_TEST(testTdf83247);
-    CPPUNIT_TEST(testTdf47365);
-    CPPUNIT_TEST(testTdf122899);
-    CPPUNIT_TEST(testOOXTheme);
-    CPPUNIT_TEST(testCropToShape);
-    CPPUNIT_TEST(testTdf127964);
-    CPPUNIT_TEST(testTdf106638);
-    CPPUNIT_TEST(testTdf128684);
-    CPPUNIT_TEST(testTdf113198);
-    CPPUNIT_TEST(testTdf49856);
-    CPPUNIT_TEST(testShapeGlowEffectPPTXImpoer);
-    CPPUNIT_TEST(testShapeBlurPPTXImport);
-    CPPUNIT_TEST(testMirroredGraphic);
-    CPPUNIT_TEST(testGreysScaleGraphic);
-    CPPUNIT_TEST(testTdf134210CropPosition);
-    CPPUNIT_TEST(testTdf103347);
-    CPPUNIT_TEST(testHyperlinksOnShapes);
-    CPPUNIT_TEST(testTdf112209);
-    CPPUNIT_TEST(testTdf128596);
-    CPPUNIT_TEST(testDefaultTabStop);
-    CPPUNIT_TEST(testCropToZero);
-    CPPUNIT_TEST(testTdf144092TableHeight);
-    CPPUNIT_TEST(testTdf89928BlackWhiteThreshold);
-    CPPUNIT_TEST(testTdf151547TransparentWhiteText);
-    CPPUNIT_TEST(testTdf149961AutofitIndentation);
-    CPPUNIT_TEST(testTdf149588TransparentSolidFill);
-
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void SdImportTest2::testTdf152186()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf152186)
 {
     createSdImpressDoc("pptx/tdf152186.pptx");
     saveAndReload("Impress MS PowerPoint 2007 XML");
@@ -244,7 +87,7 @@ void SdImportTest2::testTdf152186()
     }
 }
 
-void SdImportTest2::testTdf93868()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf93868)
 {
     createSdImpressDoc("pptx/tdf93868.pptx");
 
@@ -259,7 +102,7 @@ void SdImportTest2::testTdf93868()
                          pPage->GetObj(1)->GetMergedItem(XATTR_FILLUSESLIDEBACKGROUND).GetValue());
 }
 
-void SdImportTest2::testTdf95932()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf95932)
 {
     createSdImpressDoc("pptx/tdf95932.pptx");
 
@@ -273,7 +116,7 @@ void SdImportTest2::testTdf95932()
     CPPUNIT_ASSERT_EQUAL(Color(0x76bf3d), rColorItem.GetColorValue());
 }
 
-void SdImportTest2::testTdf99030()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf99030)
 {
     createSdImpressDoc("pptx/tdf99030.pptx");
 
@@ -293,7 +136,7 @@ void SdImportTest2::testTdf99030()
     CPPUNIT_ASSERT_EQUAL(Color(0x676A55), nFillColor);
 }
 
-void SdImportTest2::testTdf49561()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf49561)
 {
     createSdImpressDoc("ppt/tdf49561.ppt");
 
@@ -316,7 +159,7 @@ void SdImportTest2::testTdf49561()
     CPPUNIT_ASSERT_EQUAL(OUString("Stencil"), aCharFontName);
 }
 
-void SdImportTest2::testTdf103473()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf103473)
 {
     createSdImpressDoc("pptx/tdf103473.pptx");
 
@@ -330,7 +173,7 @@ void SdImportTest2::testTdf103473()
     CPPUNIT_ASSERT_EQUAL(tools::Long(9155), aRect.Bottom());
 }
 
-void SdImportTest2::testAoo124143()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testAoo124143)
 {
     createSdDrawDoc("odg/ooo124143-1.odg");
 
@@ -383,7 +226,7 @@ void SdImportTest2::testAoo124143()
         xImage, xConn2->getPropertyValue("EndShape").get<uno::Reference<beans::XPropertySet>>());
 }
 
-void SdImportTest2::testTdf103567()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf103567)
 {
     createSdImpressDoc("odp/tdf103567.odp");
     for (int i = 0; i < 4; ++i)
@@ -427,7 +270,7 @@ void SdImportTest2::testTdf103567()
     }
 }
 
-void SdImportTest2::testTdf103792()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf103792)
 {
     // Title text shape on the actual slide contained no text neither a placeholder text.
 
@@ -444,7 +287,7 @@ void SdImportTest2::testTdf103792()
     CPPUNIT_ASSERT_EQUAL(OUString("Click to add Title"), aEdit.GetText(0));
 }
 
-void SdImportTest2::testTdf148685()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf148685)
 {
     createSdImpressDoc("pptx/tdf148685.pptx");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(1, 0));
@@ -482,7 +325,7 @@ void SdImportTest2::testTdf148685()
     CPPUNIT_ASSERT_EQUAL(COL_AUTO, nCharUnderlineColor);
 }
 
-void SdImportTest2::testTdf103876()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf103876)
 {
     // Title text shape's placeholder text did not inherit the corresponding text properties
 
@@ -501,7 +344,7 @@ void SdImportTest2::testTdf103876()
     CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), nCharColor);
 }
 
-void SdImportTest2::testTdf79007()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf79007)
 {
     createSdImpressDoc("pptx/tdf79007.pptx");
 
@@ -554,7 +397,7 @@ void SdImportTest2::testTdf79007()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), nLuminance3);
 }
 
-void SdImportTest2::testTdf119649()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf119649)
 {
     createSdImpressDoc("pptx/tdf119649.pptx");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(1, 0));
@@ -592,7 +435,7 @@ void SdImportTest2::testTdf119649()
     CPPUNIT_ASSERT_EQUAL(COL_AUTO, nCharColor);
 }
 
-void SdImportTest2::testTdf118776()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf118776)
 {
     createSdImpressDoc("pptx/tdf118776.pptx");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
@@ -610,7 +453,7 @@ void SdImportTest2::testTdf118776()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(99), nTransparency);
 }
 
-void SdImportTest2::testTdf129686()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf129686)
 {
     createSdImpressDoc("pptx/tdf129686.pptx");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
@@ -628,7 +471,7 @@ void SdImportTest2::testTdf129686()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), nTransparency);
 }
 
-void SdImportTest2::testTdf104015()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf104015)
 {
     // Shape fill, line and effect properties were not inherited from master slide shape
 
@@ -660,7 +503,7 @@ void SdImportTest2::testTdf104015()
     }
 }
 
-void SdImportTest2::testTdf104201()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf104201)
 {
     // Group shape properties did not overwrite the child shapes' fill
 
@@ -689,7 +532,7 @@ void SdImportTest2::testTdf104201()
     }
 }
 
-void SdImportTest2::testTdf103477()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf103477)
 {
     createSdImpressDoc("pptx/tdf103477.pptx");
 
@@ -705,7 +548,7 @@ void SdImportTest2::testTdf103477()
                                  pNumFmt->GetNumRule().GetLevel(1).GetBulletColor());
 }
 
-void SdImportTest2::testTdf105150()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf105150)
 {
     createSdImpressDoc("pptx/tdf105150.pptx");
     const SdrPage* pPage = GetPage(1);
@@ -718,7 +561,7 @@ void SdImportTest2::testTdf105150()
     CPPUNIT_ASSERT_EQUAL(true, rFillBackgroundItem.GetValue());
 }
 
-void SdImportTest2::testTdf123684()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf123684)
 {
     createSdImpressDoc("pptx/tdf123684.pptx");
     const SdrPage* pPage = GetPage(1);
@@ -729,7 +572,7 @@ void SdImportTest2::testTdf123684()
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rFillStyleItem.GetValue());
 }
 
-void SdImportTest2::testTdf105150PPT()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf105150PPT)
 {
     createSdImpressDoc("ppt/tdf105150.ppt");
     const SdrPage* pPage = GetPage(1);
@@ -740,7 +583,7 @@ void SdImportTest2::testTdf105150PPT()
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rFillStyleItem.GetValue());
 }
 
-void SdImportTest2::testTdf104445()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf104445)
 {
     // Extra bullets were added to the first shape
 
@@ -848,7 +691,7 @@ bool SdImportTest2::checkPattern(int nShapeNumber, std::vector<sal_uInt8>& rExpe
 /* Test checks that importing a PPT file with all supported fill patterns is
  * correctly imported as a tiled fill bitmap with the expected pattern.
  */
-void SdImportTest2::testPatternImport()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testPatternImport)
 {
     createSdImpressDoc("ppt/FillPatterns.ppt");
 
@@ -1010,7 +853,7 @@ void SdImportTest2::testPatternImport()
     // TODO: other patterns in the test document
 }
 
-void SdImportTest2::testTdf100926()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf100926)
 {
     createSdImpressDoc("pptx/tdf100926.pptx");
     const SdrPage* pPage = GetPage(1);
@@ -1035,7 +878,7 @@ void SdImportTest2::testTdf100926()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nRotation);
 }
 
-void SdImportTest2::testTdf89064()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf89064)
 {
     createSdImpressDoc("pptx/tdf89064.pptx");
     uno::Reference<presentation::XPresentationPage> xPage(getPage(0), uno::UNO_QUERY_THROW);
@@ -1043,7 +886,7 @@ void SdImportTest2::testTdf89064()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xNotesPage->getCount());
 }
 
-void SdImportTest2::testTdf108925()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf108925)
 {
     // Test document contains bulleting with too small bullet size (1%) which breaks the lower constraint
     // So it should be converted to the lowest allowed value (25%).
@@ -1059,7 +902,7 @@ void SdImportTest2::testTdf108925()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(25), pNumFmt->GetNumRule().GetLevel(0).GetBulletRelSize());
 }
 
-void SdImportTest2::testTdf109067()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf109067)
 {
     createSdImpressDoc("pptx/tdf109067.pptx");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0), uno::UNO_SET_THROW);
@@ -1068,7 +911,7 @@ void SdImportTest2::testTdf109067()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(450), gradient.Angle);
 }
 
-void SdImportTest2::testTdf109187()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf109187)
 {
     createSdImpressDoc("pptx/tdf109187.pptx");
     uno::Reference<beans::XPropertySet> xArrow1(getShapeFromPage(0, 0), uno::UNO_SET_THROW);
@@ -1081,7 +924,7 @@ void SdImportTest2::testTdf109187()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1350), aGradient2.Angle);
 }
 
-void SdImportTest2::testTdf108926()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf108926)
 {
     createSdImpressDoc("pptx/tdf108926.ppt");
     uno::Reference<presentation::XPresentationPage> xPage(getPage(0), uno::UNO_QUERY_THROW);
@@ -1097,7 +940,7 @@ void SdImportTest2::testTdf108926()
     CPPUNIT_ASSERT(bIsEmptyPresObject);
 }
 
-void SdImportTest2::testTdf100065()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf100065)
 {
     createSdImpressDoc("pptx/tdf100065.pptx");
 
@@ -1116,7 +959,7 @@ void SdImportTest2::testTdf100065()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(18000), nAngle2);
 }
 
-void SdImportTest2::testTdf90626()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf90626)
 {
     createSdImpressDoc("pptx/tdf90626.pptx");
     const SdrPage* pPage = GetPage(1);
@@ -1133,7 +976,7 @@ void SdImportTest2::testTdf90626()
     }
 }
 
-void SdImportTest2::testTdf138148()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf138148)
 {
     createSdImpressDoc("pptx/tdf138148.pptx");
     const SdrPage* pPage = GetPage(1);
@@ -1157,7 +1000,7 @@ void SdImportTest2::testTdf138148()
     }
 }
 
-void SdImportTest2::testTdf114488()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf114488)
 {
     // This doc has two images - one WMF and the other PNG (fallback image).
     // When loading this doc, the WMF image should be preferred over the PNG image.
@@ -1171,7 +1014,7 @@ void SdImportTest2::testTdf114488()
     CPPUNIT_ASSERT_EQUAL(OUString("image/x-wmf"), sMimeType);
 }
 
-void SdImportTest2::testTdf134174()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf134174)
 {
     createSdImpressDoc("pptx/tdf134174.pptx");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0), uno::UNO_SET_THROW);
@@ -1186,7 +1029,7 @@ void SdImportTest2::testTdf134174()
     CPPUNIT_ASSERT_EQUAL(Color(0x8b21db), aBitmap.GetPixelColor(0, 0));
 }
 
-void SdImportTest2::testTdf134210()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf134210)
 {
     createSdImpressDoc("pptx/tdf134210.pptx");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0), uno::UNO_SET_THROW);
@@ -1201,7 +1044,7 @@ void SdImportTest2::testTdf134210()
     CPPUNIT_ASSERT_EQUAL(Color(0x605741), aBitmap.GetPixelColor(0, 0));
 }
 
-void SdImportTest2::testTdf114913()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf114913)
 {
     createSdImpressDoc("pptx/tdf114913.pptx");
     SdrTextObj* pTxtObj = DynCastSdrTextObj(GetPage(1)->GetObj(1));
@@ -1214,7 +1057,7 @@ void SdImportTest2::testTdf114913()
                          pItem->GetNumRule().GetLevel(0).GetGraphicSize().getHeight());
 }
 
-void SdImportTest2::testTdf114821()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf114821)
 {
     css::uno::Any aAny;
 
@@ -1266,7 +1109,7 @@ void SdImportTest2::testTdf114821()
     CPPUNIT_ASSERT_EQUAL(css::chart::DataLabelPlacement::OUTSIDE, aPlacement);
 }
 
-void SdImportTest2::testTdf115394()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf115394)
 {
     createSdImpressDoc("pptx/tdf115394.pptx");
     double fTransitionDuration;
@@ -1300,7 +1143,7 @@ void SdImportTest2::testTdf115394()
     CPPUNIT_ASSERT_EQUAL(4.25, fTransitionDuration);
 }
 
-void SdImportTest2::testTdf115394PPT()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf115394PPT)
 {
     createSdImpressDoc("ppt/tdf115394.ppt");
     double fTransitionDuration;
@@ -1325,7 +1168,7 @@ void SdImportTest2::testTdf115394PPT()
     CPPUNIT_ASSERT_EQUAL(1.0, fTransitionDuration);
 }
 
-void SdImportTest2::testTdf51340()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf51340)
 {
     // Line spacing was not inherited from upper levels (slide layout, master slide)
 
@@ -1362,7 +1205,7 @@ void SdImportTest2::testTdf51340()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(190), aSpacing.Height);
 }
 
-void SdImportTest2::testTdf116899()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf116899)
 {
     // This is a PPT created in Impress and roundtripped in PP, the key times become [1, -1] in PP,
     //  a time of -1 (-1000) in PPT means key times have to be distributed evenly between 0 and 1
@@ -1388,7 +1231,7 @@ void SdImportTest2::testTdf116899()
         xNode->getKeyTimes()[1]);
 }
 
-void SdImportTest2::testTdf77747()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf77747)
 {
     createSdImpressDoc("ppt/tdf77747.ppt");
     SdrTextObj* pTxtObj = DynCastSdrTextObj(GetPage(1)->GetObj(0));
@@ -1403,7 +1246,7 @@ void SdImportTest2::testTdf77747()
                                  pNumFmt->GetNumRule().GetLevel(0).GetNumberingType());
 }
 
-void SdImportTest2::testTdf116266()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf116266)
 {
     createSdImpressDoc("odp/tdf116266.odp");
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
@@ -1414,7 +1257,7 @@ void SdImportTest2::testTdf116266()
     CPPUNIT_ASSERT_EQUAL(size_t(1), rLinkManager->GetLinks().size());
 }
 
-void SdImportTest2::testPptCrop()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testPptCrop)
 {
     createSdImpressDoc("ppt/crop.ppt");
 
@@ -1428,7 +1271,7 @@ void SdImportTest2::testPptCrop()
     CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(0), aCrop.Right);
 }
 
-void SdImportTest2::testTdf149206()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf149206)
 {
     // Check that the image is cropped
     createSdImpressDoc("pptx/tdf149206.pptx");
@@ -1448,7 +1291,7 @@ void SdImportTest2::testTdf149206()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aCrop.Right);
 }
 
-void SdImportTest2::testTdf149785()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf149785)
 {
     // Without the fix in place, this test would have failed to load the file
     createSdImpressDoc("pptx/tdf149785.pptx");
@@ -1458,7 +1301,7 @@ void SdImportTest2::testTdf149785()
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
 }
 
-void SdImportTest2::testTdf149985()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf149985)
 {
     // Without the fix in place, this test would have failed to load the file
     createSdImpressDoc("pptx/tdf149985.pptx");
@@ -1468,7 +1311,7 @@ void SdImportTest2::testTdf149985()
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
 }
 
-void SdImportTest2::testTdf150770()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf150770)
 {
     // Without the fix in place, this test would have failed to load the file
     createSdImpressDoc("pptx/tdf150770.pptx");
@@ -1476,7 +1319,7 @@ void SdImportTest2::testTdf150770()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xDoc->getDrawPages()->getCount());
 }
 
-void SdImportTest2::testTdf120028()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf120028)
 {
     // Check that the text shape has 4 columns.
     createSdImpressDoc("pptx/tdf120028.pptx");
@@ -1504,7 +1347,7 @@ void SdImportTest2::testTdf120028()
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(87)), xShape->getPropertyValue("TextFitToSizeScale"));
 }
 
-void SdImportTest2::testDescriptionImport()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testDescriptionImport)
 {
     createSdImpressDoc("pptx/altdescription.pptx");
 
@@ -1516,7 +1359,7 @@ void SdImportTest2::testDescriptionImport()
     CPPUNIT_ASSERT_EQUAL(OUString("We Can Do It!"), sDesc);
 }
 
-void SdImportTest2::testTdf83247()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf83247)
 {
     auto GetPause = [this](const OUString& sSrc) {
         loadFromURL(sSrc);
@@ -1539,7 +1382,7 @@ void SdImportTest2::testTdf83247()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), GetPause("ppt/loopNoPause.ppt"));
 }
 
-void SdImportTest2::testTdf47365()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf47365)
 {
     createSdImpressDoc("pptx/loopNoPause.pptx");
     uno::Reference<presentation::XPresentationSupplier> xPresentationSupplier(mxComponent,
@@ -1555,7 +1398,7 @@ void SdImportTest2::testTdf47365()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nPauseVal);
 }
 
-void SdImportTest2::testTdf122899()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf122899)
 {
     // tdf122899 FILEOPEN: ppt: old kind arc from MS Office 97 is broken
     // Error was, that the path coordinates of a mso_sptArc shape were read as sal_Int16
@@ -1578,7 +1421,7 @@ void SdImportTest2::testTdf122899()
     CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(9020), aFrameRect.Width);
 }
 
-void SdImportTest2::testOOXTheme()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testOOXTheme)
 {
     createSdImpressDoc("pptx/ooxtheme.pptx");
 
@@ -1600,7 +1443,7 @@ void SdImportTest2::testOOXTheme()
     CPPUNIT_ASSERT(bTheme); // Grab Bag has all the expected elements
 }
 
-void SdImportTest2::testCropToShape()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testCropToShape)
 {
     createSdImpressDoc("pptx/crop-to-shape.pptx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
@@ -1621,7 +1464,7 @@ void SdImportTest2::testCropToShape()
     CPPUNIT_ASSERT_EQUAL(css::drawing::BitmapMode_STRETCH, bitmapmode);
 }
 
-void SdImportTest2::testTdf127964()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf127964)
 {
     createSdImpressDoc("pptx/tdf127964.pptx");
     {
@@ -1645,7 +1488,7 @@ void SdImportTest2::testTdf127964()
     }
 }
 
-void SdImportTest2::testTdf106638()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf106638)
 {
     createSdImpressDoc("pptx/tdf106638.pptx");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
@@ -1666,7 +1509,7 @@ void SdImportTest2::testTdf106638()
     CPPUNIT_ASSERT(aCharFontName != "Wingdings");
 }
 
-void SdImportTest2::testTdf128684()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf128684)
 {
     createSdImpressDoc("pptx/tdf128684.pptx");
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
@@ -1687,7 +1530,7 @@ void SdImportTest2::testTdf128684()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(9000), nRotateAngle);
 }
 
-void SdImportTest2::testTdf113198()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf113198)
 {
     createSdImpressDoc("pptx/tdf113198.pptx");
 
@@ -1698,7 +1541,7 @@ void SdImportTest2::testTdf113198()
                          static_cast<style::ParagraphAdjust>(nParaAdjust));
 }
 
-void SdImportTest2::testTdf49856()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf49856)
 {
     createSdImpressDoc("ppt/tdf49856.ppt");
     const SdrPage* pPage = GetPage(1);
@@ -1712,7 +1555,7 @@ void SdImportTest2::testTdf49856()
     CPPUNIT_ASSERT_EQUAL(sal_UCS4(0x2022), aBullet);
 }
 
-void SdImportTest2::testShapeGlowEffectPPTXImpoer()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testShapeGlowEffectPPTXImpoer)
 {
     createSdImpressDoc("pptx/shape-glow-effect.pptx");
 
@@ -1728,7 +1571,7 @@ void SdImportTest2::testShapeGlowEffectPPTXImpoer()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(60), nTransparency);
 }
 
-void SdImportTest2::testShapeBlurPPTXImport()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testShapeBlurPPTXImport)
 {
     createSdImpressDoc("pptx/shape-blur-effect.pptx");
 
@@ -1742,7 +1585,7 @@ void SdImportTest2::testShapeBlurPPTXImport()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(388), nRadius); // 584200EMU=46pt - 139700EMU = 388Hmm = 11pt
 }
 
-void SdImportTest2::testMirroredGraphic()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testMirroredGraphic)
 {
     createSdImpressDoc("pptx/mirrored-graphic.pptx");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0), uno::UNO_SET_THROW);
@@ -1755,7 +1598,7 @@ void SdImportTest2::testMirroredGraphic()
     CPPUNIT_ASSERT_EQUAL(Color(0x4f4955), aBitmap.GetPixelColor(0, 0));
 }
 
-void SdImportTest2::testTdf134210CropPosition()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf134210CropPosition)
 {
     // We are testing crop position of bitmap in custom shapes. We should see only green with proper fix.
 
@@ -1770,7 +1613,7 @@ void SdImportTest2::testTdf134210CropPosition()
     CPPUNIT_ASSERT_EQUAL(Color(0x81d41a), aBitmap.GetPixelColor(0, 0));
 }
 
-void SdImportTest2::testGreysScaleGraphic()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testGreysScaleGraphic)
 {
     createSdImpressDoc("pptx/greysscale-graphic.pptx");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0), uno::UNO_SET_THROW);
@@ -1783,7 +1626,7 @@ void SdImportTest2::testGreysScaleGraphic()
     CPPUNIT_ASSERT_EQUAL(Color(0x3c3c3c), aBitmap.GetPixelColor(0, 0));
 }
 
-void SdImportTest2::testTdf103347()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf103347)
 {
     createSdImpressDoc("pptx/tdf103347.pptx");
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
@@ -1801,7 +1644,7 @@ void SdImportTest2::testTdf103347()
     CPPUNIT_ASSERT_EQUAL(OUString("Hello (3)"), xNamed3->getName());
 }
 
-void SdImportTest2::testHyperlinksOnShapes()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testHyperlinksOnShapes)
 {
     createSdImpressDoc("pptx/tdf144616.pptx");
 
@@ -1856,7 +1699,7 @@ void SdImportTest2::testHyperlinksOnShapes()
     }
 }
 
-void SdImportTest2::testTdf112209()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf112209)
 {
     createSdImpressDoc("pptx/tdf112209.pptx");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0), uno::UNO_SET_THROW);
@@ -1876,7 +1719,7 @@ void SdImportTest2::testTdf112209()
     CPPUNIT_ASSERT_EQUAL(Color(0x848484), aBitmap.GetPixelColor(0, 0));
 }
 
-void SdImportTest2::testTdf128596()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf128596)
 {
     createSdImpressDoc("pptx/tdf128596.pptx");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0), uno::UNO_SET_THROW);
@@ -1887,7 +1730,7 @@ void SdImportTest2::testTdf128596()
     CPPUNIT_ASSERT_EQUAL(css::drawing::BitmapMode_REPEAT, bitmapmode);
 }
 
-void SdImportTest2::testDefaultTabStop()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testDefaultTabStop)
 {
     createSdImpressDoc("pptx/deftabstop.pptx");
 
@@ -1900,14 +1743,14 @@ void SdImportTest2::testDefaultTabStop()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2540), nDefTab);
 }
 
-void SdImportTest2::testCropToZero()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testCropToZero)
 {
     // Must not crash because of division by zero
     // Also must not fail assertions because of passing negative value to CropQuotientsFromSrcRect
     createSdImpressDoc("pptx/croppedTo0.pptx");
 }
 
-void SdImportTest2::testTdf144092TableHeight()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf144092TableHeight)
 {
     createSdImpressDoc("pptx/tdf144092-tableHeight.pptx");
 
@@ -1920,7 +1763,7 @@ void SdImportTest2::testTdf144092TableHeight()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(7208), xTableShape->getSize().Height);
 }
 
-void SdImportTest2::testTdf89928BlackWhiteThreshold()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf89928BlackWhiteThreshold)
 {
     // A slide with two graphics, one with color HSV{0,0,74%} and one with HSV{0,0,76%}
     // where both have an applied 75% Black/White Color Effect.
@@ -1957,7 +1800,7 @@ void SdImportTest2::testTdf89928BlackWhiteThreshold()
     }
 }
 
-void SdImportTest2::testTdf151547TransparentWhiteText()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf151547TransparentWhiteText)
 {
     createSdImpressDoc("pptx/tdf151547-transparent-white-text.pptx");
 
@@ -1975,7 +1818,7 @@ void SdImportTest2::testTdf151547TransparentWhiteText()
     CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xFFFFFFFE), nCharColor);
 }
 
-void SdImportTest2::testTdf149961AutofitIndentation()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf149961AutofitIndentation)
 {
     createSdImpressDoc("pptx/tdf149961-autofitIndentation.pptx");
 
@@ -2011,7 +1854,7 @@ void SdImportTest2::testTdf149961AutofitIndentation()
     }
 }
 
-void SdImportTest2::testTdf149588TransparentSolidFill()
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf149588TransparentSolidFill)
 {
     createSdImpressDoc("pptx/tdf149588_transparentSolidFill.pptx");
     saveAndReload("Impress MS PowerPoint 2007 XML");
@@ -2028,8 +1871,6 @@ void SdImportTest2::testTdf149588TransparentSolidFill()
     // - Actual  : Color: R:99 G:99 B:99 A: 255  (T:  0)
     CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xCC636363), nCharColor);
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest2);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
