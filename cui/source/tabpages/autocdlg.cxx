@@ -375,7 +375,6 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage(weld::Container* pPage, weld::D
 {
     m_xCheckLB->connect_changed(LINK(this, OfaSwAutoFmtOptionsPage, SelectHdl));
     m_xCheckLB->connect_row_activated(LINK(this, OfaSwAutoFmtOptionsPage, DoubleClickEditHdl));
-    m_xCheckLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
     std::vector<int> aWidths
     {
@@ -1586,7 +1585,6 @@ OfaQuoteTabPage::OfaQuoteTabPage(weld::Container* pPage, weld::DialogController*
 
     if ( bShowSWOptions )
     {
-        m_xSwCheckLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
         std::vector<int> aWidths
         {
             o3tl::narrowing<int>(m_xSwCheckLB->get_pixel_size(m_xSwCheckLB->get_column_title(0)).Width() * 2),
