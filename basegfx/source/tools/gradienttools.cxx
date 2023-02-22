@@ -281,7 +281,7 @@ namespace basegfx
                 return rColorSteps.back().getColor();
 
             // special case for the 'classic' case with just two colors:
-            // we can optimize that and keep the speed/ressources low
+            // we can optimize that and keep the speed/resources low
             // by avoiding some calculatins and an O(log(N)) array access
             if (2 == rColorSteps.size())
             {
