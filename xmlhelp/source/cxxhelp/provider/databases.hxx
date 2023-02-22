@@ -218,6 +218,7 @@ namespace chelp {
             const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     private:
+        OUString expandURL( std::unique_lock<std::mutex>& rGuard, const OUString& aURL );
         OUString processLang( std::unique_lock<std::mutex>& rGuard, const OUString& Language );
 
         std::mutex                                               m_aMutex;

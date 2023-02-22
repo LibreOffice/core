@@ -81,7 +81,12 @@ using namespace com::sun::star::beans;
 
 OUString Databases::expandURL( const OUString& aURL )
 {
-    std::unique_lock aGuard( m_aMutex );
+    std::unique_lock aGuard(m_aMutex);
+    return expandURL(aGuard, aURL);
+}
+
+OUString Databases::expandURL( std::unique_lock<std::mutex>& /*rGuard*/, const OUString& aURL )
+{
     OUString aRetURL = expandURL( aURL, m_xContext );
     return aRetURL;
 }
@@ -453,7 +458,7 @@ helpdatafileproxy::Hdf* Databases::getHelpDataFile( std::u16string_view Database
 
         OUString fileURL;
         if( pExtensionPath )
-            fileURL = expandURL(*pExtensionPath) + Language + dbFileName;
+            fileURL = expandURL(aGuard, *pExtensionPath) + Language + dbFileName;
         else
             fileURL = m_aInstallDirectory + key;
 
@@ -809,7 +814,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( std::u16string_view jar
                 std::u16string_view aExtensionPath = jar.substr( nQuestionMark1 + 1, nQuestionMark2 - nQuestionMark1 - 1 );
                 std::u16string_view aPureJar = jar.substr( nQuestionMark2 + 1 );
 
-                zipFile = expandURL( OUString::Concat(aExtensionPath) + "/" + aPureJar );
+                zipFile = expandURL( aGuard, OUString::Concat(aExtensionPath) + "/" + aPureJar );
             }
             else
             {
