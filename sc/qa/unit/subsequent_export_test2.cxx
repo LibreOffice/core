@@ -58,268 +58,6 @@ protected:
 
 public:
     ScExportTest2();
-
-    void testGroupShape();
-    void testMatrixMultiplicationXLSX();
-    void testTdf121260();
-    void testTextDirectionXLSX();
-    void testTdf120168();
-    void testTdf117266();
-    void testTdf66668();
-    void testTdf130108();
-    void testTdf76949();
-    void testTdf107586();
-    void testTdf55417();
-    void testTdf129985();
-    void testTdf73063();
-
-    void testTdf95640_ods_to_xlsx();
-    void testTdf95640_ods_to_xlsx_with_standard_list();
-    void testTdf95640_xlsx_to_xlsx();
-    void testDateAutofilterXLSX();
-    void testDateAutofilterODS();
-    void testAutofilterColorsODF();
-    void testAutofilterColorsOOXML();
-    void testAutofilterTop10XLSX();
-
-    void testRefStringXLSX();
-    void testRefStringConfigXLSX();
-    void testRefStringUnspecified();
-    void testHeaderImageODS();
-    void testHeaderFooterContentODS();
-
-    void testTdf88657ODS();
-    void testTdf41722();
-    void testTdf113621();
-    void testEscapeCharInNumberFormatXLSX();
-    void testNatNumInNumberFormatXLSX();
-    void testExponentWithoutSignFormatXLSX();
-    void testExtendedLCIDXLSX();
-
-    void testHiddenRepeatedRowsODS();
-    void testHyperlinkTargetFrameODS();
-    void testOpenDocumentAsReadOnly();
-    void testKeepSettingsOfBlankRows();
-
-    void testTdf133595();
-    void testTdf134769();
-    void testTdf106181();
-    void testTdf145057();
-    void testTdf105272();
-    void testTdf118990();
-    void testTdf121612();
-    void testTdf112936();
-    void testPivotCacheAfterExportXLSX();
-    void testTdf114969XLSX();
-    void testTdf115192XLSX();
-    void testTdf142764();
-    void testTdf91634XLSX();
-    void testTdf115159();
-    void testTdf112567();
-    void testTdf75702();
-    void testTdf103829();
-    void testTdf122191();
-    void testTdf142881();
-    void testTdf112567b();
-    void testTdf123645XLSX();
-    void testTdf125173XLSX();
-    void testTdf79972XLSX();
-    void testTdf126024XLSX();
-    void testTdf126177XLSX();
-    void testCommentTextVAlignment();
-    void testCommentTextHAlignment();
-    void testValidationCopyPaste();
-
-    void testXltxExport();
-    void testRotatedImageODS();
-    void testTdf85553();
-    void testTdf128976();
-    void testTdf151484();
-    void testTdf143979();
-    void testTdf120502();
-    void testTdf131372();
-    void testTdf81470();
-    void testTdf122331();
-    void testTdf83779();
-    void testTdf121715_FirstPageHeaderFooterXLSX();
-    void testTdf121716_ExportEvenHeaderFooterXLSX();
-    void testTdf134459_HeaderFooterColorXLSX();
-    void testTdf134817_HeaderFooterTextWith2SectionXLSX();
-    void testTdf121718_UseFirstPageNumberXLSX();
-    void testHeaderFontStyleXLSX();
-    void testTdf135828_Shape_Rect();
-    void testTdf123139XLSX();
-    void testTdf123353();
-    void testTdf140098();
-    void testTdf133688_precedents();
-    void testTdf91251_missingOverflowRoundtrip();
-    void testTdf137000_handle_upright();
-    void testTdf126305_DataValidatyErrorAlert();
-    void testTdf76047_externalLink();
-    void testTdf87973_externalLinkSkipUnuseds();
-    void testTdf51022_lostPrintRange();
-    void testTdf138741_externalLinkSkipUnusedsCrash();
-    void testTdf138824_linkToParentDirectory();
-    void testTdf129969();
-    void testTdf147088();
-    void testTdf84874();
-    void testTdf136721_paper_size();
-    void testTdf139258_rotated_image();
-    void testTdf144642_RowHeightRounding();
-    void testTdf145129_DefaultRowHeightRounding();
-    void testTdf151755_stylesLostOnXLSXExport();
-    void testTdf152581_bordercolorNotExportedToXLSX();
-    void testTdf140431();
-    void testCheckboxFormControlXlsxExport();
-    void testButtonFormControlXlsxExport();
-    void testTdf142929_filterLessThanXLSX();
-    void testInvalidNamedRange();
-    void testExternalDefinedNameXLSX();
-    void testHyperlinkLocationXLSX();
-    void testTdf142264ManyChartsToXLSX();
-    void testTdf143929MultiColumnToODS();
-    void testTdf142578();
-    void testTdf145059();
-    void testTdf130104_XLSXIndent();
-    void testWholeRowBold();
-    void testXlsxRowsOrder();
-    void testTdf91286();
-    void testTdf148820();
-    void testEmbeddedTextInDecimal();
-    void testTotalsRowFunction();
-    void testAutofilterHiddenButton();
-
-    CPPUNIT_TEST_SUITE(ScExportTest2);
-
-    CPPUNIT_TEST(testGroupShape);
-    CPPUNIT_TEST(testMatrixMultiplicationXLSX);
-    CPPUNIT_TEST(testTdf121260);
-    CPPUNIT_TEST(testTextDirectionXLSX);
-    CPPUNIT_TEST(testTdf120168);
-    CPPUNIT_TEST(testTdf117266);
-    CPPUNIT_TEST(testTdf66668);
-    CPPUNIT_TEST(testTdf130108);
-    CPPUNIT_TEST(testTdf76949);
-    CPPUNIT_TEST(testTdf107586);
-    CPPUNIT_TEST(testTdf55417);
-    CPPUNIT_TEST(testTdf129985);
-    CPPUNIT_TEST(testTdf73063);
-    CPPUNIT_TEST(testTdf95640_ods_to_xlsx);
-    CPPUNIT_TEST(testTdf95640_ods_to_xlsx_with_standard_list);
-    CPPUNIT_TEST(testTdf95640_xlsx_to_xlsx);
-    CPPUNIT_TEST(testDateAutofilterXLSX);
-    CPPUNIT_TEST(testDateAutofilterODS);
-    CPPUNIT_TEST(testAutofilterColorsODF);
-    CPPUNIT_TEST(testAutofilterColorsOOXML);
-    CPPUNIT_TEST(testAutofilterTop10XLSX);
-
-    CPPUNIT_TEST(testRefStringXLSX);
-    CPPUNIT_TEST(testRefStringConfigXLSX);
-    CPPUNIT_TEST(testRefStringUnspecified);
-    CPPUNIT_TEST(testHeaderImageODS);
-    CPPUNIT_TEST(testHeaderFooterContentODS);
-
-    CPPUNIT_TEST(testTdf88657ODS);
-    CPPUNIT_TEST(testTdf41722);
-    CPPUNIT_TEST(testTdf113621);
-    CPPUNIT_TEST(testEscapeCharInNumberFormatXLSX);
-    CPPUNIT_TEST(testNatNumInNumberFormatXLSX);
-    CPPUNIT_TEST(testExponentWithoutSignFormatXLSX);
-    CPPUNIT_TEST(testExtendedLCIDXLSX);
-
-    CPPUNIT_TEST(testHiddenRepeatedRowsODS);
-    CPPUNIT_TEST(testHyperlinkTargetFrameODS);
-    CPPUNIT_TEST(testOpenDocumentAsReadOnly);
-    CPPUNIT_TEST(testKeepSettingsOfBlankRows);
-
-    CPPUNIT_TEST(testTdf133595);
-    CPPUNIT_TEST(testTdf134769);
-    CPPUNIT_TEST(testTdf106181);
-    CPPUNIT_TEST(testTdf145057);
-    CPPUNIT_TEST(testTdf105272);
-    CPPUNIT_TEST(testTdf118990);
-    CPPUNIT_TEST(testTdf121612);
-    CPPUNIT_TEST(testTdf112936);
-    CPPUNIT_TEST(testPivotCacheAfterExportXLSX);
-    CPPUNIT_TEST(testTdf114969XLSX);
-    CPPUNIT_TEST(testTdf115192XLSX);
-    CPPUNIT_TEST(testTdf142764);
-    CPPUNIT_TEST(testTdf91634XLSX);
-    CPPUNIT_TEST(testTdf115159);
-    CPPUNIT_TEST(testTdf112567);
-    CPPUNIT_TEST(testTdf75702);
-    CPPUNIT_TEST(testTdf103829);
-    CPPUNIT_TEST(testTdf122191);
-    CPPUNIT_TEST(testTdf142881);
-    CPPUNIT_TEST(testTdf112567b);
-    CPPUNIT_TEST(testTdf123645XLSX);
-    CPPUNIT_TEST(testTdf125173XLSX);
-    CPPUNIT_TEST(testTdf79972XLSX);
-    CPPUNIT_TEST(testTdf126024XLSX);
-    CPPUNIT_TEST(testTdf126177XLSX);
-    CPPUNIT_TEST(testCommentTextVAlignment);
-    CPPUNIT_TEST(testCommentTextHAlignment);
-    CPPUNIT_TEST(testValidationCopyPaste);
-    CPPUNIT_TEST(testXltxExport);
-    CPPUNIT_TEST(testRotatedImageODS);
-    CPPUNIT_TEST(testTdf85553);
-    CPPUNIT_TEST(testTdf128976);
-    CPPUNIT_TEST(testTdf151484);
-    CPPUNIT_TEST(testTdf143979);
-    CPPUNIT_TEST(testTdf120502);
-    CPPUNIT_TEST(testTdf131372);
-    CPPUNIT_TEST(testTdf81470);
-    CPPUNIT_TEST(testTdf122331);
-    CPPUNIT_TEST(testTdf83779);
-    CPPUNIT_TEST(testTdf121715_FirstPageHeaderFooterXLSX);
-    CPPUNIT_TEST(testTdf121716_ExportEvenHeaderFooterXLSX);
-    CPPUNIT_TEST(testTdf134459_HeaderFooterColorXLSX);
-    CPPUNIT_TEST(testTdf134817_HeaderFooterTextWith2SectionXLSX);
-    CPPUNIT_TEST(testTdf121718_UseFirstPageNumberXLSX);
-    CPPUNIT_TEST(testHeaderFontStyleXLSX);
-    CPPUNIT_TEST(testTdf135828_Shape_Rect);
-    CPPUNIT_TEST(testTdf123139XLSX);
-    CPPUNIT_TEST(testTdf123353);
-    CPPUNIT_TEST(testTdf140098);
-    CPPUNIT_TEST(testTdf133688_precedents);
-    CPPUNIT_TEST(testTdf91251_missingOverflowRoundtrip);
-    CPPUNIT_TEST(testTdf137000_handle_upright);
-    CPPUNIT_TEST(testTdf126305_DataValidatyErrorAlert);
-    CPPUNIT_TEST(testTdf76047_externalLink);
-    CPPUNIT_TEST(testTdf87973_externalLinkSkipUnuseds);
-    CPPUNIT_TEST(testTdf51022_lostPrintRange);
-    CPPUNIT_TEST(testTdf138741_externalLinkSkipUnusedsCrash);
-    CPPUNIT_TEST(testTdf138824_linkToParentDirectory);
-    CPPUNIT_TEST(testTdf129969);
-    CPPUNIT_TEST(testTdf147088);
-    CPPUNIT_TEST(testTdf84874);
-    CPPUNIT_TEST(testTdf136721_paper_size);
-    CPPUNIT_TEST(testTdf139258_rotated_image);
-    CPPUNIT_TEST(testTdf144642_RowHeightRounding);
-    CPPUNIT_TEST(testTdf145129_DefaultRowHeightRounding);
-    CPPUNIT_TEST(testTdf151755_stylesLostOnXLSXExport);
-    CPPUNIT_TEST(testTdf152581_bordercolorNotExportedToXLSX);
-    CPPUNIT_TEST(testTdf140431);
-    CPPUNIT_TEST(testCheckboxFormControlXlsxExport);
-    CPPUNIT_TEST(testButtonFormControlXlsxExport);
-    CPPUNIT_TEST(testTdf142929_filterLessThanXLSX);
-    CPPUNIT_TEST(testInvalidNamedRange);
-    CPPUNIT_TEST(testExternalDefinedNameXLSX);
-    CPPUNIT_TEST(testHyperlinkLocationXLSX);
-    CPPUNIT_TEST(testTdf142264ManyChartsToXLSX);
-    CPPUNIT_TEST(testTdf143929MultiColumnToODS);
-    CPPUNIT_TEST(testTdf142578);
-    CPPUNIT_TEST(testTdf145059);
-    CPPUNIT_TEST(testTdf130104_XLSXIndent);
-    CPPUNIT_TEST(testWholeRowBold);
-    CPPUNIT_TEST(testXlsxRowsOrder);
-    CPPUNIT_TEST(testTdf91286);
-    CPPUNIT_TEST(testTdf148820);
-    CPPUNIT_TEST(testEmbeddedTextInDecimal);
-    CPPUNIT_TEST(testTotalsRowFunction);
-    CPPUNIT_TEST(testAutofilterHiddenButton);
-
-    CPPUNIT_TEST_SUITE_END();
 };
 
 ScExportTest2::ScExportTest2()
@@ -333,7 +71,7 @@ void ScExportTest2::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
     XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
 }
 
-void ScExportTest2::testGroupShape()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testGroupShape)
 {
     createScDoc("xlsx/groupShape.xlsx");
     save("Calc Office Open XML");
@@ -343,7 +81,7 @@ void ScExportTest2::testGroupShape()
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:grpSp/xdr:grpSpPr");
 }
 
-void ScExportTest2::testMatrixMultiplicationXLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testMatrixMultiplicationXLSX)
 {
     createScDoc("xlsx/matrix-multiplication.xlsx");
 
@@ -363,7 +101,7 @@ void ScExportTest2::testMatrixMultiplicationXLSX()
     CPPUNIT_ASSERT_EQUAL(OUString("array"), CellFormulaType);
 }
 
-void ScExportTest2::testRefStringXLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testRefStringXLSX)
 {
     createScDoc("xlsx/ref_string.xlsx");
 
@@ -375,7 +113,7 @@ void ScExportTest2::testRefStringXLSX()
     CPPUNIT_ASSERT_EQUAL(formula::FormulaGrammar::CONV_XL_A1, aCalcConfig.meStringRefAddressSyntax);
 }
 
-void ScExportTest2::testRefStringConfigXLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testRefStringConfigXLSX)
 {
     // this doc is configured with CalcA1 ref syntax
     createScDoc("xlsx/empty.xlsx");
@@ -412,7 +150,7 @@ void ScExportTest2::testRefStringConfigXLSX()
                                  aConfig.meStringRefAddressSyntax);
 }
 
-void ScExportTest2::testRefStringUnspecified()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testRefStringUnspecified)
 {
     createScDoc();
 
@@ -435,7 +173,7 @@ void ScExportTest2::testRefStringUnspecified()
                                  aConfig.meStringRefAddressSyntax);
 }
 
-void ScExportTest2::testHeaderImageODS()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testHeaderImageODS)
 {
     // Graphic as header background was lost on export.
     createScDoc("ods/header-image.ods");
@@ -453,7 +191,7 @@ void ScExportTest2::testHeaderImageODS()
     CPPUNIT_ASSERT(xGraphic.is());
 }
 
-void ScExportTest2::testHeaderFooterContentODS()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testHeaderFooterContentODS)
 {
     createScDoc("ods/header-footer-content.ods");
     saveAndReload("calc8");
@@ -484,7 +222,7 @@ void ScExportTest2::testHeaderFooterContentODS()
     CPPUNIT_ASSERT_EQUAL(OUString("first page footer"), xContent->getCenterText()->getString());
 }
 
-void ScExportTest2::testTextDirectionXLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTextDirectionXLSX)
 {
     createScDoc("xlsx/writingMode.xlsx");
 
@@ -496,7 +234,7 @@ void ScExportTest2::testTextDirectionXLSX()
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment", "readingOrder", "2"); //RTL
 }
 
-void ScExportTest2::testTdf121260()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf121260)
 {
     createScDoc("ods/tdf121260.ods");
 
@@ -519,7 +257,7 @@ void ScExportTest2::testTdf121260()
                        "Sheet1!$B$1:$B$2");
 }
 
-void ScExportTest2::testTdf120168()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf120168)
 {
     createScDoc("xlsx/tdf120168.xlsx");
 
@@ -534,7 +272,7 @@ void ScExportTest2::testTdf120168()
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment", "horizontal", "right");
 }
 
-void ScExportTest2::testTdf117266()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf117266)
 {
     createScDoc("xlsm/tdf117266_macroButton.xlsm");
 
@@ -552,7 +290,7 @@ void ScExportTest2::testTdf117266()
     assertXPathContent(pVmlDrawing, "/xml/v:shape//xx:FmlaMacro", "Module1.Button1_Click");
 }
 
-void ScExportTest2::testTdf66668()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf66668)
 {
     // Would hang on exporting without the fix in place
     createScDoc("xlsx/tdf66668.xlsx");
@@ -562,7 +300,7 @@ void ScExportTest2::testTdf66668()
     CPPUNIT_ASSERT(pDoc);
 }
 
-void ScExportTest2::testTdf130108()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf130108)
 {
     createScDoc("ods/tdf130108.ods");
 
@@ -578,7 +316,7 @@ void ScExportTest2::testTdf130108()
                 "FFCC0000");
 }
 
-void ScExportTest2::testTdf76949()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf76949)
 {
     createScDoc("ods/tdf76949.ods");
 
@@ -589,7 +327,7 @@ void ScExportTest2::testTdf76949()
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row/x:c/x:f", "_xlfn.CHISQ.DIST(1,1,1)");
 }
 
-void ScExportTest2::testTdf107586()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf107586)
 {
     createScDoc("xlsx/tdf107586.xlsx");
 
@@ -602,7 +340,7 @@ void ScExportTest2::testTdf107586()
     assertXPath(pSheet, "/x:worksheet/x:sheetPr/x:tabColor", "rgb", "FF9BBB59");
 }
 
-void ScExportTest2::testTdf55417()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf55417)
 {
     createScDoc("xlsx/tdf55417.xlsx");
 
@@ -613,7 +351,7 @@ void ScExportTest2::testTdf55417()
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", 1);
 }
 
-void ScExportTest2::testTdf129985()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf129985)
 {
     createScDoc("xlsx/tdf129985.xlsx");
 
@@ -624,7 +362,7 @@ void ScExportTest2::testTdf129985()
     assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]", "formatCode", "m/d/yyyy");
 }
 
-void ScExportTest2::testTdf73063()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf73063)
 {
     createScDoc("xlsx/tdf73063.xlsx");
 
@@ -636,7 +374,7 @@ void ScExportTest2::testTdf73063()
                 "[$-1C1A]dddd\", \"d\". \"mmmm\\ yyyy;@");
 }
 
-void ScExportTest2::testTdf95640_ods_to_xlsx()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf95640_ods_to_xlsx)
 {
     // Roundtripping sort options with user defined list to XLSX
     createScDoc("ods/tdf95640.ods");
@@ -652,7 +390,7 @@ void ScExportTest2::testTdf95640_ods_to_xlsx()
                 "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec");
 }
 
-void ScExportTest2::testTdf95640_ods_to_xlsx_with_standard_list()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf95640_ods_to_xlsx_with_standard_list)
 {
     // Roundtripping sort options with user defined list to XLSX
     createScDoc("ods/tdf95640_standard_list.ods");
@@ -667,7 +405,7 @@ void ScExportTest2::testTdf95640_ods_to_xlsx_with_standard_list()
                 "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday");
 }
 
-void ScExportTest2::testTdf95640_xlsx_to_xlsx()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf95640_xlsx_to_xlsx)
 {
     // XLSX Roundtripping sort options with custom sort list - note
     // that compared to ODS source documents above, here we _actually_
@@ -686,7 +424,7 @@ void ScExportTest2::testTdf95640_xlsx_to_xlsx()
                 "Low,Medium,High");
 }
 
-void ScExportTest2::testDateAutofilterXLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testDateAutofilterXLSX)
 {
     // XLSX Roundtripping autofilter with date list
     createScDoc("xlsx/dateAutofilter.xlsx");
@@ -709,7 +447,7 @@ void ScExportTest2::testDateAutofilterXLSX()
                 "dateTimeGrouping", "day");
 }
 
-void ScExportTest2::testDateAutofilterODS()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testDateAutofilterODS)
 {
     createScDoc("ods/tdf142231.ods");
 
@@ -722,7 +460,7 @@ void ScExportTest2::testDateAutofilterODS()
                 "2021-05-04");
 }
 
-void ScExportTest2::testAutofilterColorsODF()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testAutofilterColorsODF)
 {
     createScDoc("ods/autofilter-colors.ods");
 
@@ -760,7 +498,7 @@ void ScExportTest2::testAutofilterColorsODF()
                 "value", "window-font-color");
 }
 
-void ScExportTest2::testAutofilterColorsOOXML()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testAutofilterColorsOOXML)
 {
     {
         createScDoc("xlsx/autofilter-colors.xlsx");
@@ -797,7 +535,7 @@ void ScExportTest2::testAutofilterColorsOOXML()
     }
 }
 
-void ScExportTest2::testAutofilterTop10XLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testAutofilterTop10XLSX)
 {
     createScDoc("xlsx/tdf143068_top10filter.xlsx");
 
@@ -808,7 +546,7 @@ void ScExportTest2::testAutofilterTop10XLSX()
     assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:top10", "val", "4");
 }
 
-void ScExportTest2::testTdf88657ODS()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf88657ODS)
 {
     createScDoc("ods/tdf88657.ods");
 
@@ -819,7 +557,7 @@ void ScExportTest2::testTdf88657ODS()
     assertXPath(pDoc, "//number:fraction", "min-denominator-digits", "3");
 }
 
-void ScExportTest2::testTdf41722()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf41722)
 {
     createScDoc("xlsx/tdf41722.xlsx");
 
@@ -832,7 +570,7 @@ void ScExportTest2::testTdf41722()
     assertXPath(pDoc, "//x:conditionalFormatting/x:cfRule[3]", "operator", "containsText");
 }
 
-void ScExportTest2::testTdf113621()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf113621)
 {
     createScDoc("xlsx/tdf113621.xlsx");
 
@@ -843,7 +581,7 @@ void ScExportTest2::testTdf113621()
     assertXPath(pDoc, "//x:conditionalFormatting", "sqref", "A1:A1048576");
 }
 
-void ScExportTest2::testEscapeCharInNumberFormatXLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testEscapeCharInNumberFormatXLSX)
 {
     createScDoc("xlsx/tdf81939.xlsx");
 
@@ -866,7 +604,7 @@ void ScExportTest2::testEscapeCharInNumberFormatXLSX()
                 "# ?/?;[RED]\\-# #/#####");
 }
 
-void ScExportTest2::testNatNumInNumberFormatXLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testNatNumInNumberFormatXLSX)
 {
     createScDoc("ods/tdf79398_NatNum5.ods");
 
@@ -878,7 +616,7 @@ void ScExportTest2::testNatNumInNumberFormatXLSX()
                 "[DBNum2][$-804]General;[RED][DBNum2][$-804]General");
 }
 
-void ScExportTest2::testExponentWithoutSignFormatXLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testExponentWithoutSignFormatXLSX)
 {
     createScDoc("ods/tdf102370_ExponentWithoutSign.ods");
     saveAndReload("Calc Office Open XML");
@@ -894,7 +632,7 @@ void ScExportTest2::testExponentWithoutSignFormatXLSX()
                                  OUString("0.00E0"), rFormatStr);
 }
 
-void ScExportTest2::testExtendedLCIDXLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testExtendedLCIDXLSX)
 {
     createScDoc("ods/tdf36038_ExtendedLCID.ods");
 
@@ -943,7 +681,7 @@ void ScExportTest2::testExtendedLCIDXLSX()
     }
 }
 
-void ScExportTest2::testHiddenRepeatedRowsODS()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testHiddenRepeatedRowsODS)
 {
     createScDoc();
 
@@ -962,7 +700,7 @@ void ScExportTest2::testHiddenRepeatedRowsODS()
     CPPUNIT_ASSERT_EQUAL(SCROW(20), nLastRow);
 }
 
-void ScExportTest2::testHyperlinkTargetFrameODS()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testHyperlinkTargetFrameODS)
 {
     createScDoc("ods/hyperlink_frame.ods");
 
@@ -990,7 +728,7 @@ void ScExportTest2::testHyperlinkTargetFrameODS()
     CPPUNIT_ASSERT_EQUAL(OUString("_blank"), aTargetFrameExport);
 }
 
-void ScExportTest2::testOpenDocumentAsReadOnly()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testOpenDocumentAsReadOnly)
 {
     createScDoc("xlsx/open-as-read-only.xlsx");
     ScDocShell* pDocSh = getScDocShell();
@@ -1000,7 +738,7 @@ void ScExportTest2::testOpenDocumentAsReadOnly()
     CPPUNIT_ASSERT(pDocSh->IsSecurityOptOpenReadOnly());
 }
 
-void ScExportTest2::testKeepSettingsOfBlankRows()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testKeepSettingsOfBlankRows)
 {
     createScDoc("xlsx/tdf41425.xlsx");
 
@@ -1012,7 +750,7 @@ void ScExportTest2::testKeepSettingsOfBlankRows()
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row", 2);
 }
 
-void ScExportTest2::testTdf133595()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf133595)
 {
     createScDoc("xlsx/tdf133595.xlsx");
 
@@ -1024,7 +762,7 @@ void ScExportTest2::testTdf133595()
     assertXPath(pSheet, "/x:worksheet/mc:AlternateContent", 0);
 }
 
-void ScExportTest2::testTdf134769()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf134769)
 {
     createScDoc("xlsx/tdf134769.xlsx");
 
@@ -1043,7 +781,7 @@ void ScExportTest2::testTdf134769()
                 "id", "rId4");
 }
 
-void ScExportTest2::testTdf106181()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf106181)
 {
     createScDoc("ods/tdf106181.ods");
 
@@ -1081,7 +819,7 @@ void ScExportTest2::testTdf106181()
     assertXPathContent(pVmlDrawing, "//xx:ClientData/xx:FmlaLink", "$D$9");
 }
 
-void ScExportTest2::testTdf145057()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf145057)
 {
     createScDoc("xlsx/tdf145057.xlsx");
 
@@ -1092,7 +830,7 @@ void ScExportTest2::testTdf145057()
     assertXPath(pDoc, "//x:colorFilter", "dxfId", "1");
 }
 
-void ScExportTest2::testTdf105272()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf105272)
 {
     createScDoc("xlsx/tdf105272.xlsx");
     saveAndReload("Calc Office Open XML");
@@ -1106,7 +844,7 @@ void ScExportTest2::testTdf105272()
         pDoc->GetFormula(7, 3, 0));
 }
 
-void ScExportTest2::testTdf118990()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf118990)
 {
     createScDoc("xlsx/tdf118990.xlsx");
     saveAndReload("Calc Office Open XML");
@@ -1128,7 +866,7 @@ void ScExportTest2::testTdf118990()
         pDoc->GetFormula(0, 2, 0));
 }
 
-void ScExportTest2::testTdf121612()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf121612)
 {
     createScDoc("ods/tdf121612.ods");
     saveAndReload("Calc Office Open XML");
@@ -1144,7 +882,7 @@ void ScExportTest2::testTdf121612()
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDPColl->GetCount());
 }
 
-void ScExportTest2::testTdf112936()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf112936)
 {
     createScDoc("xlsx/tdf112936.xlsx");
 
@@ -1156,7 +894,7 @@ void ScExportTest2::testTdf112936()
     assertXPath(pDoc, "//x:pivotCacheDefinition", "createdVersion", "3");
 }
 
-void ScExportTest2::testXltxExport()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testXltxExport)
 {
     // Create new document
     createScDoc();
@@ -1170,7 +908,7 @@ void ScExportTest2::testXltxExport()
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml");
 }
 
-void ScExportTest2::testPivotCacheAfterExportXLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testPivotCacheAfterExportXLSX)
 {
     createScDoc("ods/numgroup_example.ods");
 
@@ -1196,7 +934,7 @@ void ScExportTest2::testPivotCacheAfterExportXLSX()
     CPPUNIT_ASSERT_MESSAGE("No number group info :(", pInfo);
 }
 
-void ScExportTest2::testTdf114969XLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf114969XLSX)
 {
     createScDoc("ods/sheet_name_with_dots.ods");
 
@@ -1207,7 +945,7 @@ void ScExportTest2::testTdf114969XLSX()
     assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink[2]", "location", "'1.1.1.1'!C2");
 }
 
-void ScExportTest2::testTdf115192XLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf115192XLSX)
 {
     createScDoc("xlsx/test_115192.xlsx");
 
@@ -1221,7 +959,7 @@ void ScExportTest2::testTdf115192XLSX()
                 "External");
 }
 
-void ScExportTest2::testTdf142764()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf142764)
 {
     createScDoc("ods/tdf142764.ods");
 
@@ -1233,7 +971,7 @@ void ScExportTest2::testTdf142764()
     assertXPath(pSheet, "/x:worksheet/x:headerFooter", "differentFirst", "true");
 }
 
-void ScExportTest2::testTdf91634XLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf91634XLSX)
 {
     createScDoc("xlsx/image_hyperlink.xlsx");
     save("Calc Office Open XML");
@@ -1250,7 +988,7 @@ void ScExportTest2::testTdf91634XLSX()
                 "External");
 }
 
-void ScExportTest2::testValidationCopyPaste()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testValidationCopyPaste)
 {
     createScDoc("ods/validation-copypaste.ods");
     ScDocument* pDoc = getScDoc();
@@ -1281,7 +1019,7 @@ void ScExportTest2::testValidationCopyPaste()
                        "#REF!");
 }
 
-void ScExportTest2::testTdf115159()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf115159)
 {
     createScDoc("xlsx/tdf115159.xlsx");
 
@@ -1293,7 +1031,7 @@ void ScExportTest2::testTdf115159()
     assertXPath(pDoc, "/x:workbook/x:definedNames/x:definedName", 1);
 }
 
-void ScExportTest2::testTdf112567()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf112567)
 {
     // Set the system locale to Hungarian (a language with different range separator)
     SvtSysLocaleOptions aOptions;
@@ -1315,7 +1053,7 @@ void ScExportTest2::testTdf112567()
     assertXPath(pDoc, "/x:workbook/x:definedNames/x:definedName", 1);
 }
 
-void ScExportTest2::testTdf75702()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf75702)
 {
     // The problem was that line breaks were not imported.
     const OUString sA1("line1\nline2");
@@ -1333,7 +1071,7 @@ void ScExportTest2::testTdf75702()
     assertXPath(pContent, "//table:table-row[1]/table:table-cell/text:p", 2);
 }
 
-void ScExportTest2::testTdf103829()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf103829)
 {
     // The problem was that tabspaces were not imported or exported at all.
     // These strings match the current implementations of CELLTYPE_EDIT and CELLTYPE_STRING.
@@ -1351,7 +1089,7 @@ void ScExportTest2::testTdf103829()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("reload a2", sA2, pDoc->GetString(0, 1, 0));
 }
 
-void ScExportTest2::testTdf122191()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf122191)
 {
     // Set the system locale to Hungarian
     SvtSysLocaleOptions aOptions;
@@ -1377,7 +1115,7 @@ void ScExportTest2::testTdf122191()
     CPPUNIT_ASSERT_EQUAL(OUString("IGAZ"), pDoc->GetString(0, 0, 0));
 }
 
-void ScExportTest2::testTdf142881()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf142881)
 {
     createScDoc("xlsx/tdf142881.xlsx");
 
@@ -1407,7 +1145,7 @@ void ScExportTest2::testTdf142881()
     assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[4]/xdr:to/xdr:row", "19");
 }
 
-void ScExportTest2::testTdf112567b()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf112567b)
 {
     // Set the system locale to Hungarian (a language with different range separator)
     SvtSysLocaleOptions aOptions;
@@ -1433,7 +1171,7 @@ void ScExportTest2::testTdf112567b()
                        "Sheet1!$A:$A,Sheet1!$1:$1");
 }
 
-void ScExportTest2::testTdf123645XLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf123645XLSX)
 {
     createScDoc("xlsx/chart_hyperlink.xlsx");
     save("Calc Office Open XML");
@@ -1469,7 +1207,7 @@ void ScExportTest2::testTdf123645XLSX()
                 "https://bugs.documentfoundation.org/show_bug.cgi?id=123645");
 }
 
-void ScExportTest2::testTdf125173XLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf125173XLSX)
 {
     createScDoc("ods/text_box_hyperlink.ods");
     save("Calc Office Open XML");
@@ -1486,7 +1224,7 @@ void ScExportTest2::testTdf125173XLSX()
                 "External");
 }
 
-void ScExportTest2::testTdf79972XLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf79972XLSX)
 {
     createScDoc("xlsx/tdf79972.xlsx");
     save("Calc Office Open XML");
@@ -1502,7 +1240,7 @@ void ScExportTest2::testTdf79972XLSX()
     assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship", "TargetMode", "External");
 }
 
-void ScExportTest2::testTdf126024XLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf126024XLSX)
 {
     createScDoc("xlsx/hyperlink_formula.xlsx");
     save("Calc Office Open XML");
@@ -1518,7 +1256,7 @@ void ScExportTest2::testTdf126024XLSX()
     assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship", "TargetMode", "External");
 }
 
-void ScExportTest2::testTdf126177XLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf126177XLSX)
 {
     createScDoc("xlsx/hyperlink_export.xlsx");
     save("Calc Office Open XML");
@@ -1534,7 +1272,7 @@ void ScExportTest2::testTdf126177XLSX()
     assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship", "TargetMode", "External");
 }
 
-void ScExportTest2::testCommentTextVAlignment()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testCommentTextVAlignment)
 {
     // Testing comment text alignments.
     createScDoc("ods/CommentTextVAlign.ods");
@@ -1547,7 +1285,7 @@ void ScExportTest2::testCommentTextVAlignment()
     assertXPathContent(pVmlDrawing, "/xml/v:shape/xx:ClientData/xx:TextVAlign", "Center");
 }
 
-void ScExportTest2::testCommentTextHAlignment()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testCommentTextHAlignment)
 {
     // Testing comment text alignments.
     createScDoc("ods/CommentTextHAlign.ods");
@@ -1560,7 +1298,7 @@ void ScExportTest2::testCommentTextHAlignment()
     assertXPathContent(pVmlDrawing, "/xml/v:shape/xx:ClientData/xx:TextHAlign", "Center");
 }
 
-void ScExportTest2::testRotatedImageODS()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testRotatedImageODS)
 {
     // Error was, that the length values in shapes were not
     // written in the given unit into the file.
@@ -1588,7 +1326,7 @@ void ScExportTest2::testRotatedImageODS()
     CPPUNIT_ASSERT(sY.endsWith("mm"));
 }
 
-void ScExportTest2::testTdf85553()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf85553)
 {
     createScDoc("ods/tdf85553.ods");
 
@@ -1602,7 +1340,7 @@ void ScExportTest2::testTdf85553()
     CPPUNIT_ASSERT_EQUAL(OUString("4.5"), pDoc->GetString(ScAddress(2, 2, 0)));
 }
 
-void ScExportTest2::testTdf151484()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf151484)
 {
     std::vector<OUString> aFilterNames{ "calc8", "MS Excel 97", "Calc Office Open XML" };
 
@@ -1634,7 +1372,7 @@ void ScExportTest2::testTdf151484()
     }
 }
 
-void ScExportTest2::testTdf143979()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf143979)
 {
     createScDoc();
     {
@@ -1662,7 +1400,7 @@ void ScExportTest2::testTdf143979()
     CPPUNIT_ASSERT_EQUAL(OUString("2021-08Aug-30Mon"), pDoc->GetString(ScAddress(0, 0, 0)));
 }
 
-void ScExportTest2::testTdf128976()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf128976)
 {
     createScDoc("xls/tdf128976.xls");
 
@@ -1678,7 +1416,7 @@ void ScExportTest2::testTdf128976()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(45), nColumn0Width);
 }
 
-void ScExportTest2::testTdf120502()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf120502)
 {
     // Create an empty worksheet; resize last column on its first sheet; export to XLSX, and check
     // that the last exported column number is correct
@@ -1698,7 +1436,7 @@ void ScExportTest2::testTdf120502()
     assertXPath(pSheet1, "/x:worksheet/x:cols/x:col", "max", OUString::number(nMaxCol + 1));
 }
 
-void ScExportTest2::testTdf131372()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf131372)
 {
     createScDoc("ods/tdf131372.ods");
 
@@ -1710,7 +1448,7 @@ void ScExportTest2::testTdf131372()
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row/x:c[1]/x:f", "NA()");
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row/x:c[2]/x:f", "#N/A");
 }
-void ScExportTest2::testTdf81470()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf81470)
 {
     createScDoc("xls/tdf81470.xls");
 
@@ -1729,7 +1467,7 @@ void ScExportTest2::testTdf81470()
     assertXPath(pHeaders, "/x:headers/x:header[3]", "userName", "Kohei Yoshida");
 }
 
-void ScExportTest2::testTdf122331()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf122331)
 {
     createScDoc("ods/tdf122331.ods");
 
@@ -1743,7 +1481,7 @@ void ScExportTest2::testTdf122331()
     assertXPath(pSheet, "/x:worksheet/x:autoFilter/x:filterColumn", "colId", "1");
 }
 
-void ScExportTest2::testTdf83779()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf83779)
 {
     // Roundtripping TRUE/FALSE constants (not functions) must convert them to functions
     createScDoc("xlsx/tdf83779.xlsx");
@@ -1757,7 +1495,7 @@ void ScExportTest2::testTdf83779()
     assertXPathContent(pVmlDrawing, "/x:worksheet/x:sheetData/x:row[2]/x:c/x:f", "TRUE()");
 }
 
-void ScExportTest2::testTdf121715_FirstPageHeaderFooterXLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf121715_FirstPageHeaderFooterXLSX)
 {
     // Check if first page header and footer are exported properly
     createScDoc("xlsx/tdf121715.xlsx");
@@ -1771,7 +1509,7 @@ void ScExportTest2::testTdf121715_FirstPageHeaderFooterXLSX()
     assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:firstFooter", "&CFirst Page Footer");
 }
 
-void ScExportTest2::testTdf121716_ExportEvenHeaderFooterXLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf121716_ExportEvenHeaderFooterXLSX)
 {
     // Header and footer on even pages should be exported properly
     // If there are separate odd/even header, but only 1 footer for all pages (this is possible only in LibreOffice)
@@ -1801,7 +1539,7 @@ void ScExportTest2::testTdf121716_ExportEvenHeaderFooterXLSX()
     assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:evenFooter", "&Levenf");
 }
 
-void ScExportTest2::testTdf134459_HeaderFooterColorXLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf134459_HeaderFooterColorXLSX)
 {
     // Colors in header and footer should be exported, and imported properly
     createScDoc("xlsx/tdf134459_HeaderFooterColor.xlsx");
@@ -1816,7 +1554,7 @@ void ScExportTest2::testTdf134459_HeaderFooterColorXLSX()
                        "&Ll&C&K64cf5fc&R&Kcd15aar");
 }
 
-void ScExportTest2::testTdf134817_HeaderFooterTextWith2SectionXLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf134817_HeaderFooterTextWith2SectionXLSX)
 {
     // Header/footer text with multiple selection should be exported, and imported properly
     createScDoc("xlsx/tdf134817_HeaderFooterTextWith2Section.xlsx");
@@ -1831,7 +1569,7 @@ void ScExportTest2::testTdf134817_HeaderFooterTextWith2SectionXLSX()
                        "&R&\"Cambria,Regular\"&14camb&\"Dante,Regular\"&18dant");
 }
 
-void ScExportTest2::testTdf121718_UseFirstPageNumberXLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf121718_UseFirstPageNumberXLSX)
 {
     // If "First page number" is not checked then useFirstPageNumb, and firstPageNumber should not be exported.
     createScDoc("ods/tdf121718_UseFirstPageNumber.ods");
@@ -1850,7 +1588,7 @@ void ScExportTest2::testTdf121718_UseFirstPageNumberXLSX()
     assertXPathNoAttribute(pDoc, "/x:worksheet/x:pageSetup", "firstPageNumber");
 }
 
-void ScExportTest2::testHeaderFontStyleXLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testHeaderFontStyleXLSX)
 {
     createScDoc("xlsx/tdf134826.xlsx");
 
@@ -1880,7 +1618,7 @@ void ScExportTest2::testHeaderFontStyleXLSX()
     CPPUNIT_ASSERT_MESSAGE("Second line should be italic.", bHasItalic);
 }
 
-void ScExportTest2::testTdf135828_Shape_Rect()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf135828_Shape_Rect)
 {
     if (!IsDefaultDPI())
         return;
@@ -1913,7 +1651,7 @@ void ScExportTest2::testTdf135828_Shape_Rect()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1988280, nHeight, 10000);
 }
 
-void ScExportTest2::testTdf123139XLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf123139XLSX)
 {
     createScDoc("xlsx/tdf123139_applyAlignment.xlsx");
 
@@ -1968,7 +1706,7 @@ void ScExportTest2::testTdf123139XLSX()
     }
 }
 
-void ScExportTest2::testTdf123353()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf123353)
 {
     createScDoc("xlsx/tdf123353.xlsx");
 
@@ -1980,7 +1718,7 @@ void ScExportTest2::testTdf123353()
     assertXPath(pDoc, "/x:worksheet/x:autoFilter/x:filterColumn/x:filters", "blank", "1");
 }
 
-void ScExportTest2::testTdf140098()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf140098)
 {
     createScDoc("ods/tdf140098.ods");
 
@@ -1992,7 +1730,7 @@ void ScExportTest2::testTdf140098()
     assertXPath(pDoc, "/x:worksheet/x:autoFilter/x:filterColumn/x:filters", "blank", "1");
 }
 
-void ScExportTest2::testTdf133688_precedents()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf133688_precedents)
 {
     // tdf#133688 Check that we do not export detective shapes.
     createScDoc("ods/tdf133688_dont_save_precedents_to_xlsx.ods");
@@ -2005,7 +1743,7 @@ void ScExportTest2::testTdf133688_precedents()
     assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor[1]", 0);
 }
 
-void ScExportTest2::testTdf91251_missingOverflowRoundtrip()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf91251_missingOverflowRoundtrip)
 {
     // tdf#91251 check whether textBox overflow property (horzOverflow and vertOverflow) is
     // getting preserved after roundtrip
@@ -2022,7 +1760,7 @@ void ScExportTest2::testTdf91251_missingOverflowRoundtrip()
                 "clip");
 }
 
-void ScExportTest2::testTdf137000_handle_upright()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf137000_handle_upright)
 {
     // Upright is an xml attribute of xdr:txBody/a:bodyPr. It is set when in a textbox menu we
     // choose, 'do not rotate this element'. Implementations are in tdf#106197 with followup
@@ -2037,7 +1775,7 @@ void ScExportTest2::testTdf137000_handle_upright()
     assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:txBody/a:bodyPr", "upright", "1");
 }
 
-void ScExportTest2::testTdf126305_DataValidatyErrorAlert()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf126305_DataValidatyErrorAlert)
 {
     createScDoc("ods/tdf126305.ods");
 
@@ -2052,7 +1790,7 @@ void ScExportTest2::testTdf126305_DataValidatyErrorAlert()
                 "information");
 }
 
-void ScExportTest2::testTdf76047_externalLink()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf76047_externalLink)
 {
     createScDoc("xlsx/tdf76047_externalLink.xlsx");
 
@@ -2077,7 +1815,7 @@ void ScExportTest2::testTdf76047_externalLink()
     }
 }
 
-void ScExportTest2::testTdf87973_externalLinkSkipUnuseds()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf87973_externalLinkSkipUnuseds)
 {
     createScDoc("ods/tdf87973_externalLinkSkipUnuseds.ods");
 
@@ -2124,7 +1862,7 @@ void ScExportTest2::testTdf87973_externalLinkSkipUnuseds()
     CPPUNIT_ASSERT(aFormula2.indexOf("87973_externalSource.ods") >= 0);
 }
 
-void ScExportTest2::testTdf51022_lostPrintRange()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf51022_lostPrintRange)
 {
     createScDoc("ods/tdf87973_externalLinkSkipUnuseds.ods");
 
@@ -2148,7 +1886,7 @@ void ScExportTest2::testTdf51022_lostPrintRange()
     CPPUNIT_ASSERT_EQUAL(aRange2, *pDoc->GetPrintRange(0, 1));
 }
 
-void ScExportTest2::testTdf138741_externalLinkSkipUnusedsCrash()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf138741_externalLinkSkipUnusedsCrash)
 {
     createScDoc("xlsx/tdf138741_externalLinkSkipUnusedsCrash.xlsx");
 
@@ -2156,7 +1894,7 @@ void ScExportTest2::testTdf138741_externalLinkSkipUnusedsCrash()
     save("Calc Office Open XML");
 }
 
-void ScExportTest2::testTdf138824_linkToParentDirectory()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf138824_linkToParentDirectory)
 {
     createScDoc("ods/childDir/tdf138824_linkToParentDirectory.ods");
 
@@ -2186,7 +1924,7 @@ void ScExportTest2::testTdf138824_linkToParentDirectory()
                 "../tdf138824_externalSource.ods");
 }
 
-void ScExportTest2::testTdf129969()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf129969)
 {
     createScDoc("ods/external_hyperlink.ods");
 
@@ -2199,7 +1937,7 @@ void ScExportTest2::testTdf129969()
     CPPUNIT_ASSERT(pURLData->GetURL().endsWith("/%23folder/test.ods#Sheet2.B10"));
 }
 
-void ScExportTest2::testTdf147088()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf147088)
 {
     createScDoc("fods/tdf147088.fods");
 
@@ -2213,7 +1951,7 @@ void ScExportTest2::testTdf147088()
     CPPUNIT_ASSERT_EQUAL(OUString("_xffff_"), pDoc->GetString(0, 0, 0));
 }
 
-void ScExportTest2::testTdf84874()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf84874)
 {
     createScDoc("ods/tdf84874.ods");
 
@@ -2239,7 +1977,7 @@ void ScExportTest2::testTdf84874()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(255), nErrorTextLen);
 }
 
-void ScExportTest2::testTdf136721_paper_size()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf136721_paper_size)
 {
     createScDoc("xlsx/tdf136721_letter_sized_paper.xlsx");
 
@@ -2250,7 +1988,7 @@ void ScExportTest2::testTdf136721_paper_size()
     assertXPath(pDoc, "/x:worksheet/x:pageSetup", "paperSize", "70");
 }
 
-void ScExportTest2::testTdf139258_rotated_image()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf139258_rotated_image)
 {
     // Check that the topleft position of the image is correct.
     createScDoc("ods/tdf139258_rotated_image.ods");
@@ -2266,7 +2004,7 @@ void ScExportTest2::testTdf139258_rotated_image()
     assertXPathContent(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:to/xdr:row", "25");
 }
 
-void ScExportTest2::testTdf144642_RowHeightRounding()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf144642_RowHeightRounding)
 {
     // MS Excel round down row heights to 0.75pt
     // MS Excel can save a row height of 28.35pt, but will display it as a row height of 27.75pt.
@@ -2285,7 +2023,7 @@ void ScExportTest2::testTdf144642_RowHeightRounding()
     CPPUNIT_ASSERT_EQUAL(tools::Long(555 * 26), pDoc->GetRowHeight(0, 25, 0, true));
 }
 
-void ScExportTest2::testTdf145129_DefaultRowHeightRounding()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf145129_DefaultRowHeightRounding)
 {
     // MS Excel round down row heights to 0.75pt
     // Same as Tdf144642 but with default row height.
@@ -2297,7 +2035,7 @@ void ScExportTest2::testTdf145129_DefaultRowHeightRounding()
     CPPUNIT_ASSERT_EQUAL(tools::Long(555 * 52), pDoc->GetRowHeight(0, 51, 0, true));
 }
 
-void ScExportTest2::testTdf151755_stylesLostOnXLSXExport()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf151755_stylesLostOnXLSXExport)
 {
     // Check if empty cells with custom style are exported, even if
     // there is other empty cells with default style, left of it.
@@ -2316,7 +2054,7 @@ void ScExportTest2::testTdf151755_stylesLostOnXLSXExport()
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]/x:c[4]", "s", aCellStyleId);
 }
 
-void ScExportTest2::testTdf152581_bordercolorNotExportedToXLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf152581_bordercolorNotExportedToXLSX)
 {
     createScDoc("xlsx/tdf152581_bordercolorNotExportedToXLSX.xlsx");
 
@@ -2329,7 +2067,7 @@ void ScExportTest2::testTdf152581_bordercolorNotExportedToXLSX()
     assertXPath(pStyles, "/x:styleSheet/x:dxfs/x:dxf/x:border/x:left/x:color", "rgb", "FFED7D31");
 }
 
-void ScExportTest2::testTdf140431()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf140431)
 {
     createScDoc("xlsx/129969-min.xlsx");
 
@@ -2342,7 +2080,7 @@ void ScExportTest2::testTdf140431()
     CPPUNIT_ASSERT(pURLData->GetURL().startsWith("file://ndhlis"));
 }
 
-void ScExportTest2::testCheckboxFormControlXlsxExport()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testCheckboxFormControlXlsxExport)
 {
     if (!IsDefaultDPI())
         return;
@@ -2359,7 +2097,7 @@ void ScExportTest2::testCheckboxFormControlXlsxExport()
     assertXPathContent(pDoc, "/xml/v:shape/xx:ClientData/xx:Anchor", "1, 22, 3, 3, 3, 30, 6, 1");
 }
 
-void ScExportTest2::testButtonFormControlXlsxExport()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testButtonFormControlXlsxExport)
 {
     // Given a document that has a checkbox form control:
     createScDoc("xlsx/button-form-control.xlsx");
@@ -2385,7 +2123,7 @@ void ScExportTest2::testButtonFormControlXlsxExport()
     assertXPathNoAttribute(pDoc, "//x:controlPr", "macro");
 }
 
-void ScExportTest2::testTdf142929_filterLessThanXLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf142929_filterLessThanXLSX)
 {
     // Document contains a standard filter with '<' condition.
     createScDoc("xlsx/tdf142929.xlsx");
@@ -2397,7 +2135,7 @@ void ScExportTest2::testTdf142929_filterLessThanXLSX()
     assertXPath(pDoc, "//x:customFilters/x:customFilter", "operator", "lessThan");
 }
 
-void ScExportTest2::testInvalidNamedRange()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testInvalidNamedRange)
 {
     // Given a document which has a named range (myname) that refers to the "1" external link, but
     // the link's type is xlPathMissing, when importing that document:
@@ -2413,7 +2151,7 @@ void ScExportTest2::testInvalidNamedRange()
     CPPUNIT_ASSERT(!xNamedRanges->hasByName("myname"));
 }
 
-void ScExportTest2::testExternalDefinedNameXLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testExternalDefinedNameXLSX)
 {
     createScDoc("xlsx/tdf144397.xlsx");
     saveAndReload("Calc Office Open XML");
@@ -2472,7 +2210,7 @@ void ScExportTest2::testExternalDefinedNameXLSX()
         "February");
 }
 
-void ScExportTest2::testHyperlinkLocationXLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testHyperlinkLocationXLSX)
 {
     createScDoc("ods/tdf143220.ods");
 
@@ -2488,7 +2226,7 @@ void ScExportTest2::testHyperlinkLocationXLSX()
     assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink[@ref='A3']", "location", "db");
 }
 
-void ScExportTest2::testTdf142264ManyChartsToXLSX()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf142264ManyChartsToXLSX)
 {
     // The cache size for the test should be small enough, to make sure that some charts get
     // unloaded in the process, and then loaded on demand properly (default is currently 200)
@@ -2572,7 +2310,7 @@ void ScExportTest2::testTdf142264ManyChartsToXLSX()
     }
 }
 
-void ScExportTest2::testTdf143929MultiColumnToODS()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf143929MultiColumnToODS)
 {
     createScDoc("ods/two-col-shape.ods");
 
@@ -2637,7 +2375,7 @@ void ScExportTest2::testTdf143929MultiColumnToODS()
         "column-gap");
 }
 
-void ScExportTest2::testTdf142578()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf142578)
 {
     createScDoc("ods/tdf142578.ods");
 
@@ -2671,7 +2409,7 @@ void ScExportTest2::testTdf142578()
     assertXPath(pStyles, sDxfCondFormatXPath, "rgb", "FFFFCCCC");
 }
 
-void ScExportTest2::testTdf145059()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf145059)
 {
     createScDoc("ods/tdf145059.ods");
 
@@ -2695,7 +2433,7 @@ void ScExportTest2::testTdf145059()
     assertXPath(pStyle, sDxfIdPath, "rgb", "FF4472C4");
 }
 
-void ScExportTest2::testTdf130104_XLSXIndent()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf130104_XLSXIndent)
 {
     createScDoc("xlsx/tdf130104_indent.xlsx");
 
@@ -2779,7 +2517,7 @@ void ScExportTest2::testTdf130104_XLSXIndent()
     assertXPath(pStyle, sStyleA30XPath, "indent", "10");
 }
 
-void ScExportTest2::testWholeRowBold()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testWholeRowBold)
 {
     createScDoc();
 
@@ -2806,14 +2544,14 @@ void ScExportTest2::testWholeRowBold()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
 }
 
-void ScExportTest2::testXlsxRowsOrder()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testXlsxRowsOrder)
 {
     createScDoc("xlsx/tdf58243.xlsx");
     // Make sure code in SheetDataBuffer doesn't assert columns/rows sorting.
     save("Calc Office Open XML");
 }
 
-void ScExportTest2::testTdf91286()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf91286)
 {
     createScDoc("ods/tdf91286.ods");
     save("Calc Office Open XML");
@@ -2834,7 +2572,7 @@ void ScExportTest2::testTdf91286()
     CPPUNIT_ASSERT_EQUAL(1, nImageFiles);
 }
 
-void ScExportTest2::testTdf148820()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf148820)
 {
     createScDoc("xlsx/tdf148820.xlsx");
     save("Calc Office Open XML");
@@ -2873,7 +2611,7 @@ void lcl_TestEmbeddedTextInDecimal(ScDocument& rDoc)
 }
 }
 
-void ScExportTest2::testEmbeddedTextInDecimal()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testEmbeddedTextInDecimal)
 {
     createScDoc("xlsx/embedded-text-in-decimal.xlsx");
     lcl_TestEmbeddedTextInDecimal(*getScDoc());
@@ -2883,7 +2621,7 @@ void ScExportTest2::testEmbeddedTextInDecimal()
     lcl_TestEmbeddedTextInDecimal(*getScDoc());
 }
 
-void ScExportTest2::testTotalsRowFunction()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTotalsRowFunction)
 {
     createScDoc("xlsx/totalsRowFunction.xlsx");
     saveAndReload("Calc Office Open XML");
@@ -2906,7 +2644,7 @@ void ScExportTest2::testTotalsRowFunction()
     }
 }
 
-void ScExportTest2::testAutofilterHiddenButton()
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testAutofilterHiddenButton)
 {
     createScDoc("xlsx/hiddenButton.xlsx");
     saveAndReload("Calc Office Open XML");
@@ -2918,8 +2656,6 @@ void ScExportTest2::testAutofilterHiddenButton()
         assertXPath(pDocXml, sPath.c_str(), "hiddenButton", "1");
     }
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest2);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
