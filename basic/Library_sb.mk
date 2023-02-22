@@ -71,7 +71,6 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/classes/sb \
 	basic/source/classes/sbunoobj \
 	basic/source/classes/sbxmod \
-	basic/source/comp/basiccharclass \
 	basic/source/comp/buffer \
 	basic/source/comp/codegen \
 	basic/source/comp/dim \
@@ -107,6 +106,7 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/runtime/methods \
 	basic/source/runtime/methods1 \
 	basic/source/classes/sbintern \
+	basic/source/comp/basiccharclass \
 	basic/source/sbx/sbxarray \
 	basic/source/sbx/sbxbool \
 	basic/source/sbx/sbxbyte \
