@@ -76,159 +76,13 @@ public:
     {
     }
 
-    void testRepeatBitmapMode();
-    void testTdf153107();
-    void testTdf142291();
-    void testTdf151492();
-    void testTdf149697();
-    void testTdf149126();
-    void testTdf131905();
-    void testTdf93883();
-    void testTdf91378();
-    void testBnc822341();
-    void testMathObject();
-    void testMathObjectPPT2010();
-    void testTdf119015();
-    void testTdf123090();
-    void testTdf126324();
-    void testTdf119187();
-    void testTdf132472();
-    void testTdf80224();
-    void testExportTransitionsPPTX();
-    void testPresetShapesExport();
-    void testTdf92527();
-    void testDatetimeFieldNumberFormat();
-    void testDatetimeFieldNumberFormatPPTX();
-    void testSlideNumberField();
-    void testSlideNumberFieldPPTX();
-    void testSlideCountField();
-    void testSlideNameField();
-    void testExtFileField();
-    void testAuthorField();
-    void testTdf99224();
-    void testTdf92076();
-    void testTdf59046();
-    void testTdf133502();
-    void testTdf105739();
-    void testPageBitmapWithTransparency();
-    void testPptmContentType();
-    void testTdf111798();
-    void testPptmVBAStream();
-    void testTdf111863();
-    void testTdf111518();
-    void testTdf100387();
-    void testClosingShapesAndLineCaps();
-    void testRotateFlip();
-    void testTdf106867();
-    void testTdf112280();
-    void testTdf112088();
-    void testTdf112333();
-    void testTdf112552();
-    void testTdf112557();
-    void testTdf128049();
-    void testTdf106026();
-    void testTdf112334();
-    void testTdf112089();
-    void testTdf112086();
-    void testTdf112647();
-    void testGroupRotation();
-    void testTdf104788();
-    void testSmartartRotation2();
-    void testTdf91999_rotateShape();
-    void testTdf114845_rotateShape();
-    void testGroupsPosition();
-    void testGroupsRotatedPosition();
-    void testAccentColor();
-    void testThemeColors();
-    void testTdf111785();
-    void testTdf118825();
-    void testTextColumns_tdf140852();
-    void testTextColumns_3columns();
-    void testTdf59323_slideFooters();
-    void testTdf53970();
-
-    CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
-
-    CPPUNIT_TEST(testRepeatBitmapMode);
-    CPPUNIT_TEST(testTdf153107);
-    CPPUNIT_TEST(testTdf142291);
-    CPPUNIT_TEST(testTdf151492);
-    CPPUNIT_TEST(testTdf149697);
-    CPPUNIT_TEST(testTdf149126);
-    CPPUNIT_TEST(testTdf131905);
-    CPPUNIT_TEST(testTdf93883);
-    CPPUNIT_TEST(testTdf91378);
-    CPPUNIT_TEST(testBnc822341);
-    CPPUNIT_TEST(testMathObject);
-    CPPUNIT_TEST(testMathObjectPPT2010);
-    CPPUNIT_TEST(testTdf119015);
-    CPPUNIT_TEST(testTdf123090);
-    CPPUNIT_TEST(testTdf126324);
-    CPPUNIT_TEST(testTdf119187);
-    CPPUNIT_TEST(testTdf132472);
-    CPPUNIT_TEST(testTdf80224);
-    CPPUNIT_TEST(testExportTransitionsPPTX);
-    CPPUNIT_TEST(testPresetShapesExport);
-    CPPUNIT_TEST(testTdf92527);
-    CPPUNIT_TEST(testDatetimeFieldNumberFormat);
-    CPPUNIT_TEST(testDatetimeFieldNumberFormatPPTX);
-    CPPUNIT_TEST(testSlideNumberField);
-    CPPUNIT_TEST(testSlideNumberFieldPPTX);
-    CPPUNIT_TEST(testSlideCountField);
-    CPPUNIT_TEST(testSlideNameField);
-    CPPUNIT_TEST(testExtFileField);
-    CPPUNIT_TEST(testAuthorField);
-    CPPUNIT_TEST(testTdf99224);
-    CPPUNIT_TEST(testTdf92076);
-    CPPUNIT_TEST(testTdf59046);
-    CPPUNIT_TEST(testTdf133502);
-    CPPUNIT_TEST(testTdf105739);
-    CPPUNIT_TEST(testPageBitmapWithTransparency);
-    CPPUNIT_TEST(testPptmContentType);
-    CPPUNIT_TEST(testTdf111798);
-    CPPUNIT_TEST(testPptmVBAStream);
-    CPPUNIT_TEST(testTdf111863);
-    CPPUNIT_TEST(testTdf111518);
-    CPPUNIT_TEST(testTdf100387);
-    CPPUNIT_TEST(testClosingShapesAndLineCaps);
-    CPPUNIT_TEST(testRotateFlip);
-    CPPUNIT_TEST(testTdf106867);
-    CPPUNIT_TEST(testTdf112280);
-    CPPUNIT_TEST(testTdf112088);
-    CPPUNIT_TEST(testTdf112333);
-    CPPUNIT_TEST(testTdf112552);
-    CPPUNIT_TEST(testTdf112557);
-    CPPUNIT_TEST(testTdf128049);
-    CPPUNIT_TEST(testTdf106026);
-    CPPUNIT_TEST(testTdf112334);
-    CPPUNIT_TEST(testTdf112089);
-    CPPUNIT_TEST(testTdf112086);
-    CPPUNIT_TEST(testTdf112647);
-    CPPUNIT_TEST(testGroupRotation);
-    CPPUNIT_TEST(testTdf104788);
-    CPPUNIT_TEST(testSmartartRotation2);
-    CPPUNIT_TEST(testTdf91999_rotateShape);
-    CPPUNIT_TEST(testTdf114845_rotateShape);
-    CPPUNIT_TEST(testGroupsPosition);
-    CPPUNIT_TEST(testGroupsRotatedPosition);
-    CPPUNIT_TEST(testAccentColor);
-    CPPUNIT_TEST(testThemeColors);
-    CPPUNIT_TEST(testTdf111785);
-    CPPUNIT_TEST(testTdf118825);
-    CPPUNIT_TEST(testTextColumns_tdf140852);
-    CPPUNIT_TEST(testTextColumns_3columns);
-    CPPUNIT_TEST(testTdf59323_slideFooters);
-    CPPUNIT_TEST(testTdf53970);
-
-    CPPUNIT_TEST_SUITE_END();
-
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
     {
         XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
     }
 };
 
-void SdOOXMLExportTest2::testRepeatBitmapMode()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testRepeatBitmapMode)
 {
     createSdImpressDoc("odp/repeatBitmapMode.odp");
     save("Impress Office Open XML");
@@ -249,7 +103,7 @@ void SdOOXMLExportTest2::testRepeatBitmapMode()
     assertXPath(pXmlDocContent2, "/p:sld/p:cSld/p:bg/p:bgPr/a:blipFill/a:tile", "algn", "ctr");
 }
 
-void SdOOXMLExportTest2::testTdf153107()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf153107)
 {
     createSdImpressDoc("odp/tdf153107.odp");
     save("Impress Office Open XML");
@@ -307,7 +161,7 @@ void SdOOXMLExportTest2::testTdf153107()
                 "tl");
 }
 
-void SdOOXMLExportTest2::testTdf142291()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf142291)
 {
     createSdImpressDoc("pptx/tdt142291.pptx");
     save("Impress Office Open XML");
@@ -335,7 +189,7 @@ void SdOOXMLExportTest2::testTdf142291()
                 "val", "dashDot");
 }
 
-void SdOOXMLExportTest2::testTdf151492()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf151492)
 {
     createSdImpressDoc("odp/tdf151492.odp");
     save("Impress Office Open XML");
@@ -345,7 +199,7 @@ void SdOOXMLExportTest2::testTdf151492()
                 "idx", "0");
 }
 
-void SdOOXMLExportTest2::testTdf149697()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf149697)
 {
     createSdImpressDoc("pptx/tdf149697.pptx");
     save("Impress Office Open XML");
@@ -363,7 +217,7 @@ void SdOOXMLExportTest2::testTdf149697()
                 "/p:sld/p:cSld/p:spTree/p:cxnSp[2]/p:nvCxnSpPr/p:cNvCxnSpPr/a:endCxn", "idx", "1");
 }
 
-void SdOOXMLExportTest2::testTdf149126()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf149126)
 {
     createSdImpressDoc("odp/tdf149126.odp");
     save("Impress Office Open XML");
@@ -373,7 +227,7 @@ void SdOOXMLExportTest2::testTdf149126()
                 "triangle");
 }
 
-void SdOOXMLExportTest2::testTdf131905()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf131905)
 {
     createSdImpressDoc("pptx/tdf131905.pptx");
     save("Impress Office Open XML");
@@ -395,7 +249,7 @@ void SdOOXMLExportTest2::testTdf131905()
         "anchor", "b");
 }
 
-void SdOOXMLExportTest2::testTdf93883()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf93883)
 {
     createSdImpressDoc("odp/tdf93883.odp");
     saveAndReload("Impress Office Open XML");
@@ -405,7 +259,7 @@ void SdOOXMLExportTest2::testTdf93883()
     CPPUNIT_ASSERT(!xPropSet->getPropertyValue("NumberingLevel").hasValue());
 }
 
-void SdOOXMLExportTest2::testBnc822341()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testBnc822341)
 {
     // Check import / export of embedded text document
     createSdImpressDoc("odp/bnc822341.odp");
@@ -466,7 +320,7 @@ void SdOOXMLExportTest2::testBnc822341()
     }
 }
 
-void SdOOXMLExportTest2::testMathObject()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testMathObject)
 {
     // Check import / export of math object
     createSdImpressDoc("odp/math.odp");
@@ -507,7 +361,7 @@ void SdOOXMLExportTest2::testMathObject()
     }
 }
 
-void SdOOXMLExportTest2::testMathObjectPPT2010()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testMathObjectPPT2010)
 {
     // Check import / export of math object
     createSdImpressDoc("pptx/Math.pptx");
@@ -530,7 +384,7 @@ void SdOOXMLExportTest2::testMathObjectPPT2010()
     }
 }
 
-void SdOOXMLExportTest2::testTdf119015()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf119015)
 {
     createSdImpressDoc("pptx/tdf119015.pptx");
     saveAndReload("Impress Office Open XML");
@@ -550,7 +404,7 @@ void SdOOXMLExportTest2::testTdf119015()
     CPPUNIT_ASSERT_EQUAL(OUString("A3"), xTextRange->getString());
 }
 
-void SdOOXMLExportTest2::testTdf123090()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf123090)
 {
     createSdImpressDoc("pptx/tdf123090.pptx");
     saveAndReload("Impress Office Open XML");
@@ -574,7 +428,7 @@ void SdOOXMLExportTest2::testTdf123090()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(9136), nWidth);
 }
 
-void SdOOXMLExportTest2::testTdf126324()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf126324)
 {
     createSdImpressDoc("pptx/tdf126324.pptx");
     saveAndReload("Impress Office Open XML");
@@ -588,7 +442,7 @@ void SdOOXMLExportTest2::testTdf126324()
     CPPUNIT_ASSERT_EQUAL(OUString("17"), xText->getString());
 }
 
-void SdOOXMLExportTest2::testTdf119187()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf119187)
 {
     // load document
     createSdImpressDoc("pptx/tdf119187.pptx");
@@ -612,7 +466,7 @@ void SdOOXMLExportTest2::testTdf119187()
     }
 }
 
-void SdOOXMLExportTest2::testTdf132472()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf132472)
 {
     createSdImpressDoc("pptx/tdf132472.pptx");
     const SdrPage* pPage = GetPage(1);
@@ -639,7 +493,7 @@ void SdOOXMLExportTest2::testTdf132472()
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, nColor);
 }
 
-void SdOOXMLExportTest2::testTdf80224()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf80224)
 {
     createSdImpressDoc("odp/tdf80224.odp");
     saveAndReload("Impress Office Open XML");
@@ -653,7 +507,7 @@ void SdOOXMLExportTest2::testTdf80224()
     CPPUNIT_ASSERT_EQUAL(Color(0x6562ac), nCharColor);
 }
 
-void SdOOXMLExportTest2::testTdf91378()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf91378)
 {
     //Check For Import and Export Both
     createSdImpressDoc("pptx/tdf91378.pptx");
@@ -718,7 +572,7 @@ static bool checkTransitionOnPage(uno::Reference<drawing::XDrawPagesSupplier> co
     return true;
 }
 
-void SdOOXMLExportTest2::testExportTransitionsPPTX()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testExportTransitionsPPTX)
 {
     createSdImpressDoc("AllTransitions.odp");
     saveAndReload("Impress Office Open XML");
@@ -781,7 +635,7 @@ void SdOOXMLExportTest2::testExportTransitionsPPTX()
         checkTransitionOnPage(xDoc, 76, TransitionType::ELLIPSEWIPE, TransitionSubType::CIRCLE));
 }
 
-void SdOOXMLExportTest2::testPresetShapesExport()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testPresetShapesExport)
 {
     createSdImpressDoc("odp/preset-shapes-export.odp");
     const char* sShapeTypeAndValues[] = {
@@ -901,7 +755,7 @@ void SdOOXMLExportTest2::testPresetShapesExport()
     }
 }
 
-void SdOOXMLExportTest2::testTdf92527()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf92527)
 {
     // We draw a diamond in an empty document.
     // If custom shape has name and preset information in OOXML, should be export as preset shape.
@@ -995,7 +849,7 @@ void matchNumberFormat(int nPage, uno::Reference<text::XTextField> const& xField
 }
 }
 
-void SdOOXMLExportTest2::testDatetimeFieldNumberFormat()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testDatetimeFieldNumberFormat)
 {
     createSdImpressDoc("odp/numfmt.odp");
 
@@ -1007,7 +861,7 @@ void SdOOXMLExportTest2::testDatetimeFieldNumberFormat()
     }
 }
 
-void SdOOXMLExportTest2::testDatetimeFieldNumberFormatPPTX()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testDatetimeFieldNumberFormatPPTX)
 {
     createSdImpressDoc("pptx/numfmt.pptx");
 
@@ -1019,7 +873,7 @@ void SdOOXMLExportTest2::testDatetimeFieldNumberFormatPPTX()
     }
 }
 
-void SdOOXMLExportTest2::testSlideNumberField()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testSlideNumberField)
 {
     createSdImpressDoc("odp/slidenum_field.odp");
 
@@ -1029,7 +883,7 @@ void SdOOXMLExportTest2::testSlideNumberField()
     CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is());
 }
 
-void SdOOXMLExportTest2::testSlideNumberFieldPPTX()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testSlideNumberFieldPPTX)
 {
     createSdImpressDoc("pptx/slidenum_field.pptx");
 
@@ -1039,7 +893,7 @@ void SdOOXMLExportTest2::testSlideNumberFieldPPTX()
     CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is());
 }
 
-void SdOOXMLExportTest2::testSlideCountField()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testSlideCountField)
 {
     createSdImpressDoc("odp/slidecount_field.odp");
 
@@ -1049,7 +903,7 @@ void SdOOXMLExportTest2::testSlideCountField()
     CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is());
 }
 
-void SdOOXMLExportTest2::testSlideNameField()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testSlideNameField)
 {
     createSdImpressDoc("odp/slidename_field.odp");
 
@@ -1059,7 +913,7 @@ void SdOOXMLExportTest2::testSlideNameField()
     CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is());
 }
 
-void SdOOXMLExportTest2::testExtFileField()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testExtFileField)
 {
     createSdImpressDoc("odp/extfile_field.odp");
 
@@ -1090,7 +944,7 @@ void SdOOXMLExportTest2::testExtFileField()
     }
 }
 
-void SdOOXMLExportTest2::testAuthorField()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testAuthorField)
 {
     createSdImpressDoc("odp/author_field.odp");
 
@@ -1100,7 +954,7 @@ void SdOOXMLExportTest2::testAuthorField()
     CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is());
 }
 
-void SdOOXMLExportTest2::testTdf99224()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf99224)
 {
     createSdImpressDoc("odp/tdf99224.odp");
     saveAndReload("Impress Office Open XML");
@@ -1109,7 +963,7 @@ void SdOOXMLExportTest2::testTdf99224()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xPage->getCount());
 }
 
-void SdOOXMLExportTest2::testTdf92076()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf92076)
 {
     createSdImpressDoc("odp/tdf92076.odp");
     saveAndReload("Impress Office Open XML");
@@ -1117,7 +971,7 @@ void SdOOXMLExportTest2::testTdf92076()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xPage->getCount());
 }
 
-void SdOOXMLExportTest2::testTdf59046()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf59046)
 {
     createSdImpressDoc("odp/tdf59046.odp");
     save("Impress Office Open XML");
@@ -1125,7 +979,7 @@ void SdOOXMLExportTest2::testTdf59046()
     assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path", 1);
 }
 
-void SdOOXMLExportTest2::testTdf133502()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf133502)
 {
     createSdImpressDoc("odp/tdf133502.odp");
     save("Impress Office Open XML");
@@ -1138,7 +992,7 @@ void SdOOXMLExportTest2::testTdf133502()
     assertXPath(pXmlDocRels, "/p:cmLst/p:cm/p:pos", "y", "1029");
 }
 
-void SdOOXMLExportTest2::testTdf105739()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf105739)
 {
     // Gradient was lost during saving to ODP
     createSdImpressDoc("pptx/tdf105739.pptx");
@@ -1166,7 +1020,7 @@ void SdOOXMLExportTest2::testTdf105739()
     }
 }
 
-void SdOOXMLExportTest2::testPageBitmapWithTransparency()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testPageBitmapWithTransparency)
 {
     createSdImpressDoc("pptx/page_transparent_bitmap.pptx");
 
@@ -1190,7 +1044,7 @@ void SdOOXMLExportTest2::testPageBitmapWithTransparency()
                                  nTransparence);
 }
 
-void SdOOXMLExportTest2::testPptmContentType()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testPptmContentType)
 {
     createSdImpressDoc("pptm/macro.pptm");
     save("Impress MS PowerPoint 2007 XML VBA");
@@ -1202,7 +1056,7 @@ void SdOOXMLExportTest2::testPptmContentType()
                 "ContentType", "application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml");
 }
 
-void SdOOXMLExportTest2::testTdf111798()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf111798)
 {
     createSdImpressDoc("odp/tdf111798.odp");
     save("Impress Office Open XML");
@@ -1238,7 +1092,7 @@ void SdOOXMLExportTest2::testTdf111798()
     }
 }
 
-void SdOOXMLExportTest2::testPptmVBAStream()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testPptmVBAStream)
 {
     createSdImpressDoc("pptm/macro.pptm");
     save("Impress MS PowerPoint 2007 XML VBA");
@@ -1250,7 +1104,7 @@ void SdOOXMLExportTest2::testPptmVBAStream()
     CPPUNIT_ASSERT(xNameAccess->hasByName("ppt/vbaProject.bin"));
 }
 
-void SdOOXMLExportTest2::testTdf111863()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf111863)
 {
     createSdImpressDoc("pptx/tdf111863.pptx");
     save("Impress Office Open XML");
@@ -1263,7 +1117,7 @@ void SdOOXMLExportTest2::testTdf111863()
                 "transition", "out");
 }
 
-void SdOOXMLExportTest2::testTdf111518()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf111518)
 {
     createSdImpressDoc("pptx/tdf111518.pptx");
     save("Impress Office Open XML");
@@ -1277,7 +1131,7 @@ void SdOOXMLExportTest2::testTdf111518()
     CPPUNIT_ASSERT_MOTIONPATH(u"M -3.54167E-6 -4.81481E-6 L 0.39037 -0.00069 E", sActual);
 }
 
-void SdOOXMLExportTest2::testTdf100387()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf100387)
 {
     createSdImpressDoc("odp/tdf100387.odp");
     save("Impress Office Open XML");
@@ -1329,7 +1183,7 @@ void SdOOXMLExportTest2::testTdf100387()
 }
 
 // tdf#126746 Add support for Line Caps import and export
-void SdOOXMLExportTest2::testClosingShapesAndLineCaps()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testClosingShapesAndLineCaps)
 {
     createSdImpressDoc("odp/closed-shapes.odp");
     save("Impress Office Open XML");
@@ -1376,7 +1230,7 @@ void SdOOXMLExportTest2::testClosingShapesAndLineCaps()
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[6]/p:spPr/a:ln/a:round", 1);
 }
 
-void SdOOXMLExportTest2::testRotateFlip()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testRotateFlip)
 {
     createSdImpressDoc("odp/rotate_flip.odp");
     save("Impress Office Open XML");
@@ -1423,7 +1277,7 @@ void SdOOXMLExportTest2::testRotateFlip()
     }
 }
 
-void SdOOXMLExportTest2::testTdf106867()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf106867)
 {
     createSdImpressDoc("pptx/tdf106867.pptx");
     save("Impress Office Open XML");
@@ -1457,7 +1311,7 @@ void SdOOXMLExportTest2::testTdf106867()
                 "spid", "42");
 }
 
-void SdOOXMLExportTest2::testTdf112280()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf112280)
 {
     createSdImpressDoc("pptx/tdf112280.pptx");
     save("Impress Office Open XML");
@@ -1470,7 +1324,7 @@ void SdOOXMLExportTest2::testTdf112280()
                 "by", "21600000");
 }
 
-void SdOOXMLExportTest2::testTdf112088()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf112088)
 {
     createSdImpressDoc("pptx/tdf112088.pptx");
     save("Impress Office Open XML");
@@ -1481,7 +1335,7 @@ void SdOOXMLExportTest2::testTdf112088()
                         2);
 }
 
-void SdOOXMLExportTest2::testTdf112333()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf112333)
 {
     createSdImpressDoc("pptx/tdf112333.pptx");
     save("Impress Office Open XML");
@@ -1528,7 +1382,7 @@ void SdOOXMLExportTest2::testTdf112333()
     CPPUNIT_ASSERT_EQUAL(OUString("fillcolor"), sAttributeName);
 }
 
-void SdOOXMLExportTest2::testTdf112552()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf112552)
 {
     // Background fill was not displayed, but it was because of the wrong geometry
     createSdImpressDoc("odp/tdf112552.odp");
@@ -1547,7 +1401,7 @@ void SdOOXMLExportTest2::testTdf112552()
                 "y", "0");
 }
 
-void SdOOXMLExportTest2::testTdf112557()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf112557)
 {
     // Subtitle shape should be skipped by export.
     createSdImpressDoc("odp/tdf112557.odp");
@@ -1557,7 +1411,7 @@ void SdOOXMLExportTest2::testTdf112557()
     assertXPath(pXmlDocContent, "/p:sldMaster/p:cSld/p:spTree/p:sp", 2); // title and object
 }
 
-void SdOOXMLExportTest2::testTdf128049()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf128049)
 {
     createSdImpressDoc("odp/tdf128049.odp");
     save("Impress Office Open XML");
@@ -1572,7 +1426,7 @@ void SdOOXMLExportTest2::testTdf128049()
                 "fmla", "val 12500");
 }
 
-void SdOOXMLExportTest2::testTdf106026()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf106026)
 {
     createSdImpressDoc("odp/tdf106026.odp");
     save("Impress Office Open XML");
@@ -1612,7 +1466,7 @@ void SdOOXMLExportTest2::testTdf106026()
                 "11339");
 }
 
-void SdOOXMLExportTest2::testTdf112334()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf112334)
 {
     createSdImpressDoc("pptx/tdf112334.pptx");
     save("Impress Office Open XML");
@@ -1626,7 +1480,7 @@ void SdOOXMLExportTest2::testTdf112334()
     CPPUNIT_ASSERT_EQUAL(OUString("style.color"), sAttributeName);
 }
 
-void SdOOXMLExportTest2::testTdf112089()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf112089)
 {
     createSdImpressDoc("pptx/tdf112089.pptx");
     save("Impress Office Open XML");
@@ -1643,7 +1497,7 @@ void SdOOXMLExportTest2::testTdf112089()
     CPPUNIT_ASSERT_EQUAL(sID, sTarget);
 }
 
-void SdOOXMLExportTest2::testTdf112086()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf112086)
 {
     createSdImpressDoc("pptx/tdf112086.pptx");
     save("Impress Office Open XML");
@@ -1677,7 +1531,7 @@ void SdOOXMLExportTest2::testTdf112086()
     CPPUNIT_ASSERT_EQUAL(OUString("ppt_h"), sAttributeName);
 }
 
-void SdOOXMLExportTest2::testTdf112647()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf112647)
 {
     createSdImpressDoc("odp/tdf112647.odp");
     saveAndReload("Impress Office Open XML");
@@ -1691,7 +1545,7 @@ void SdOOXMLExportTest2::testTdf112647()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2117), aLineSpacing.Height);
 }
 
-void SdOOXMLExportTest2::testGroupRotation()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testGroupRotation)
 {
     createSdImpressDoc("odp/group_rotation.odp");
     save("Impress Office Open XML");
@@ -1705,7 +1559,7 @@ void SdOOXMLExportTest2::testGroupRotation()
                 "20400000");
 }
 
-void SdOOXMLExportTest2::testTdf104788()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf104788)
 {
     createSdImpressDoc("pptx/tdf104788.pptx");
     save("Impress Office Open XML");
@@ -1726,7 +1580,7 @@ void SdOOXMLExportTest2::testTdf104788()
     CPPUNIT_ASSERT_EQUAL(OUString("xshear"), sAttributeName);
 }
 
-void SdOOXMLExportTest2::testSmartartRotation2()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testSmartartRotation2)
 {
     createSdImpressDoc("pptx/smartart-rotation2.pptx");
 
@@ -1755,7 +1609,7 @@ void SdOOXMLExportTest2::testSmartartRotation2()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3158280.0, dY, dY * .001);
 }
 
-void SdOOXMLExportTest2::testTdf91999_rotateShape()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf91999_rotateShape)
 {
     createSdImpressDoc("pptx/tdf91999_rotateShape.pptx");
     save("Impress Office Open XML");
@@ -1772,7 +1626,7 @@ void SdOOXMLExportTest2::testTdf91999_rotateShape()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1449000.0, dY, dY * .001);
 }
 
-void SdOOXMLExportTest2::testTdf114845_rotateShape()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf114845_rotateShape)
 {
     createSdImpressDoc("pptx/tdf114845_rotateShape.pptx");
     save("Impress Office Open XML");
@@ -1791,7 +1645,7 @@ void SdOOXMLExportTest2::testTdf114845_rotateShape()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3287520.0, dY, dY * .001);
 }
 
-void SdOOXMLExportTest2::testGroupsPosition()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testGroupsPosition)
 {
     createSdImpressDoc("pptx/group.pptx");
     save("Impress Office Open XML");
@@ -1807,7 +1661,7 @@ void SdOOXMLExportTest2::testGroupsPosition()
                 "y", "3310560");
 }
 
-void SdOOXMLExportTest2::testGroupsRotatedPosition()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testGroupsRotatedPosition)
 {
     createSdImpressDoc("pptx/group-rot.pptx");
     save("Impress Office Open XML");
@@ -1819,7 +1673,7 @@ void SdOOXMLExportTest2::testGroupsRotatedPosition()
                 "4026960");
 }
 
-void SdOOXMLExportTest2::testAccentColor()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testAccentColor)
 {
     createSdImpressDoc("pptx/accent-color.pptx");
     save("Impress Office Open XML");
@@ -1845,7 +1699,7 @@ void SdOOXMLExportTest2::testAccentColor()
     assertXPath(pXmlDocTheme1, "/a:theme/a:themeElements/a:clrScheme", "name", "Pakiet Office");
 }
 
-void SdOOXMLExportTest2::testThemeColors()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testThemeColors)
 {
     createSdImpressDoc("pptx/tdf84205.pptx");
     save("Impress Office Open XML");
@@ -1857,7 +1711,7 @@ void SdOOXMLExportTest2::testThemeColors()
                 "a5a5a5");
 }
 
-void SdOOXMLExportTest2::testTdf111785()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf111785)
 {
     createSdImpressDoc("odp/tdf111785.odp");
     save("Impress Office Open XML");
@@ -1871,7 +1725,7 @@ void SdOOXMLExportTest2::testTdf111785()
                 "val", "ed1c24");
 }
 
-void SdOOXMLExportTest2::testTdf118825()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf118825)
 {
     createSdImpressDoc("odp/tdf118825-motionpath.odp");
     save("Impress Office Open XML");
@@ -1912,7 +1766,7 @@ void SdOOXMLExportTest2::testTdf118825()
                               getXPath(pXmlDocContent, "(//p:animMotion)[4]", "path"));
 }
 
-void SdOOXMLExportTest2::testTextColumns_tdf140852()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTextColumns_tdf140852)
 {
     // The document defines two columns in slideLayout12.xml, but explicitly redefines
     // in slide1.xml. Here we check that the redefinition in the slide takes precedence.
@@ -1959,7 +1813,7 @@ void SdOOXMLExportTest2::testTextColumns_tdf140852()
                 "360000");
 }
 
-void SdOOXMLExportTest2::testTextColumns_3columns()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTextColumns_3columns)
 {
     createSdImpressDoc("pptx/3columns.pptx");
     {
@@ -2006,7 +1860,7 @@ void SdOOXMLExportTest2::testTextColumns_3columns()
                 "108000");
 }
 
-void SdOOXMLExportTest2::testTdf59323_slideFooters()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf59323_slideFooters)
 {
     createSdImpressDoc("pptx/tdf59323.pptx");
 
@@ -2045,7 +1899,7 @@ void SdOOXMLExportTest2::testTdf59323_slideFooters()
     assertXPath(pXmlDocSlide1, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:fld/a:rPr");
 }
 
-void SdOOXMLExportTest2::testTdf53970()
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf53970)
 {
     // Embedded media file
     {
@@ -2076,8 +1930,6 @@ void SdOOXMLExportTest2::testTdf53970()
         CPPUNIT_ASSERT_MESSAGE("MediaURL is empty", !sVideoURL.isEmpty());
     }
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
