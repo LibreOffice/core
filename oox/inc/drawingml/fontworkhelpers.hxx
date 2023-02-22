@@ -82,7 +82,7 @@ void createCharInteropGrabBagUpdatesFromShapeProps(
 void applyUpdatesToCharInteropGrabBag(const std::vector<css::beans::PropertyValue>& rUpdatePropVec,
                                       css::uno::Reference<css::text::XText>& rXText);
 
-// ToDo: This is essentially the same as contained in methode DrawingML::WriteOutline. Change it
+// ToDo: This is essentially the same as contained in method DrawingML::WriteOutline. Change it
 // there to use this method too, perhaps move this method to a common location.
 /** Uses LineDash and LineCap to detect, whether the dashing comes from a prstDash in MS Office.
     If prstDash is detected, the method puts the corresponding string for markup into rsPrstDash
