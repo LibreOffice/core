@@ -169,6 +169,7 @@ enum class SwUndoId
     INSERT_PAGE_NUMBER,                // 137
     UPDATE_FORM_FIELD,                 // 138
     UPDATE_FORM_FIELDS,                // 139
+    DELETE_FORM_FIELDS,                // 140
 };
 
 OUString GetUndoComment(SwUndoId eId);

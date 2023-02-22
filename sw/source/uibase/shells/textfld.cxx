@@ -982,7 +982,7 @@ FIELD_INSERT:
         {
             aFieldCommandPrefix = pFieldCommandPrefix->GetValue();
         }
-        rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+        rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::DELETE_FORM_FIELDS, nullptr);
         rSh.StartAction();
 
         IDocumentMarkAccess* pMarkAccess = rSh.GetDoc()->getIDocumentMarkAccess();
@@ -1021,7 +1021,7 @@ FIELD_INSERT:
         }
 
         rSh.EndAction();
-        rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
+        rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::DELETE_FORM_FIELDS, nullptr);
     }
     break;
     case FN_PGNUMBER_WIZARD:
