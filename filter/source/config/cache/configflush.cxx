@@ -26,7 +26,6 @@
 namespace filter::config{
 
 ConfigFlush::ConfigFlush()
-    : m_lListener(m_aMutex)
 {
 }
 
@@ -57,46 +56,25 @@ void SAL_CALL ConfigFlush::refresh()
     // and is threadsafe by itself.
     // Further it's not a good idea to hold the own lock
     // if an outside object is called :-)
-    css::lang::EventObject             aSource    (static_cast< css::util::XRefreshable* >(this));
-    comphelper::OInterfaceContainerHelper2* pContainer = m_lListener.getContainer(cppu::UnoType<css::util::XRefreshListener>::get());
-    if (!pContainer)
+    std::unique_lock g(m_aMutex);
+    if (!m_aRefreshListeners.getLength(g))
         return;
-
-    comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
-    while (pIterator.hasMoreElements())
-    {
-        try
-        {
-            // ... this pointer can be interesting to find out, where will be called as listener
-            // Don't optimize it to a direct iterator cast :-)
-            css::util::XRefreshListener* pListener = static_cast<css::util::XRefreshListener*>(pIterator.next());
-            pListener->refreshed(aSource);
-        }
-        catch(const css::uno::Exception&)
-        {
-            // ignore any "damaged" flush listener!
-            // May its remote reference is broken ...
-            pIterator.remove();
-        }
-    }
+    css::lang::EventObject aSource(static_cast< css::util::XRefreshable* >(this));
+    m_aRefreshListeners.notifyEach(g, &css::util::XRefreshListener::refreshed, aSource);
 }
 
 
 void SAL_CALL ConfigFlush::addRefreshListener(const css::uno::Reference< css::util::XRefreshListener >& xListener)
 {
-    // no locks necessary
-    // used helper lives if we live and is threadsafe by itself ...
-    m_lListener.addInterface(cppu::UnoType<css::util::XRefreshListener>::get(),
-                             xListener);
+    std::unique_lock g(m_aMutex);
+    m_aRefreshListeners.addInterface(g, xListener);
 }
 
 
 void SAL_CALL ConfigFlush::removeRefreshListener(const css::uno::Reference< css::util::XRefreshListener >& xListener)
 {
-    // no locks necessary
-    // used helper lives if we live and is threadsafe by itself ...
-    m_lListener.removeInterface(cppu::UnoType<css::util::XRefreshListener>::get(),
-                                xListener);
+    std::unique_lock g(m_aMutex);
+    m_aRefreshListeners.removeInterface(g, xListener);
 }
 
 

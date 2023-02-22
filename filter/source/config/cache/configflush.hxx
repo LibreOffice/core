@@ -20,9 +20,8 @@
 
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <comphelper/multicontainer2.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/basemutex.hxx>
 
 
 namespace filter::config {
@@ -34,14 +33,14 @@ namespace filter::config {
     @descr      Such refresh listener will be called in case the
                 type/filter configuration will be changed at runtime.
  */
-class ConfigFlush final : public cppu::BaseMutex
-                  , public ::cppu::WeakImplHelper<
+class ConfigFlush final : public ::cppu::WeakImplHelper<
                                                     css::util::XRefreshable,
                                                     css::lang::XServiceInfo
                                                   >
 {
-        /** @short  holds all listener, which are registered at this instance. */
-        comphelper::OMultiTypeInterfaceContainerHelper2 m_lListener;
+    std::mutex m_aMutex;
+    /** @short  holds all listener, which are registered at this instance. */
+    comphelper::OInterfaceContainerHelper4<css::util::XRefreshListener> m_aRefreshListeners;
 
 
     // native interface
