@@ -64,7 +64,7 @@ namespace comphelper
         */
         void    disposeAdapter();
 
-        // pseudo-private. Making it private now could break compatibility
+    private:
         void    setAdapter( OPropertyChangeMultiplexer* _pAdapter );
     };
 
