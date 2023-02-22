@@ -421,6 +421,8 @@ css::uno::Reference<css::ui::XAcceleratorConfiguration> AcceleratorExecute::lok_
     }
     catch(const css::container::NoSuchElementException&)
     {}
+
+    return css::uno::Reference<css::ui::XAcceleratorConfiguration>();
 }
 
 void AcceleratorExecute::lok_setModuleConfig(css::uno::Reference<css::ui::XAcceleratorConfiguration> acceleratorConfig)
