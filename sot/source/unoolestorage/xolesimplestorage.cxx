@@ -46,7 +46,6 @@ OLESimpleStorage::OLESimpleStorage(
         css::uno::Reference<css::uno::XComponentContext> xContext,
         css::uno::Sequence<css::uno::Any> const &aArguments)
 : m_bDisposed( false )
-, m_pListenersContainer( nullptr )
 , m_xContext(std::move( xContext ))
 , m_bNoTemporaryCopy( false )
 {
@@ -145,12 +144,6 @@ OLESimpleStorage::~OLESimpleStorage()
         dispose();
     } catch( uno::Exception& )
     {}
-
-    if ( m_pListenersContainer )
-    {
-        delete m_pListenersContainer;
-        m_pListenersContainer = nullptr;
-    }
 }
 
 void OLESimpleStorage::UpdateOriginal_Impl()
@@ -263,7 +256,7 @@ void OLESimpleStorage::InsertNameAccessToStorage_Impl( BaseStorage* pStorage, co
 
 void SAL_CALL OLESimpleStorage::insertByName( const OUString& aName, const uno::Any& aElement )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -312,7 +305,7 @@ void SAL_CALL OLESimpleStorage::insertByName( const OUString& aName, const uno::
 
 void SAL_CALL OLESimpleStorage::removeByName( const OUString& aName )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -338,7 +331,7 @@ void SAL_CALL OLESimpleStorage::removeByName( const OUString& aName )
 
 void SAL_CALL OLESimpleStorage::replaceByName( const OUString& aName, const uno::Any& aElement )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -362,7 +355,7 @@ void SAL_CALL OLESimpleStorage::replaceByName( const OUString& aName, const uno:
 
 uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -463,7 +456,7 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
 
 uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getElementNames()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -491,7 +484,7 @@ uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getElementNames()
 
 sal_Bool SAL_CALL OLESimpleStorage::hasByName( const OUString& aName )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -513,7 +506,7 @@ sal_Bool SAL_CALL OLESimpleStorage::hasByName( const OUString& aName )
 
 uno::Type SAL_CALL OLESimpleStorage::getElementType()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -524,7 +517,7 @@ uno::Type SAL_CALL OLESimpleStorage::getElementType()
 
 sal_Bool SAL_CALL OLESimpleStorage::hasElements()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -550,15 +543,15 @@ sal_Bool SAL_CALL OLESimpleStorage::hasElements()
 
 void SAL_CALL OLESimpleStorage::dispose()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
 
-    if ( m_pListenersContainer )
+    if ( m_aListenersContainer.getLength(aGuard) )
     {
         lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
-        m_pListenersContainer->disposeAndClear( aSource );
+        m_aListenersContainer.disposeAndClear( aGuard, aSource );
     }
 
     m_pStorage.reset();
@@ -574,28 +567,24 @@ void SAL_CALL OLESimpleStorage::dispose()
 void SAL_CALL OLESimpleStorage::addEventListener(
             const uno::Reference< lang::XEventListener >& xListener )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
 
-    if ( !m_pListenersContainer )
-        m_pListenersContainer = new ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>( m_aMutex );
-
-    m_pListenersContainer->addInterface( xListener );
+    m_aListenersContainer.addInterface( aGuard, xListener );
 }
 
 
 void SAL_CALL OLESimpleStorage::removeEventListener(
             const uno::Reference< lang::XEventListener >& xListener )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
 
-    if ( m_pListenersContainer )
-        m_pListenersContainer->removeInterface( xListener );
+    m_aListenersContainer.removeInterface( aGuard, xListener );
 }
 
 
@@ -604,7 +593,7 @@ void SAL_CALL OLESimpleStorage::removeEventListener(
 
 void SAL_CALL OLESimpleStorage::commit()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -627,7 +616,7 @@ void SAL_CALL OLESimpleStorage::commit()
 
 void SAL_CALL OLESimpleStorage::revert()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -653,7 +642,7 @@ void SAL_CALL OLESimpleStorage::revert()
 
 uno::Sequence< sal_Int8 > SAL_CALL OLESimpleStorage::getClassID()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();

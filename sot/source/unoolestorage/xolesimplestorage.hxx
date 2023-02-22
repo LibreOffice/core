@@ -24,12 +24,12 @@
 
 #include <memory>
 
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <com/sun/star/embed/XOLESimpleStorage.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 
-#include <osl/mutex.hxx>
+#include <mutex>
 
 namespace com::sun::star::container { class XNameAccess; }
 namespace com::sun::star::io { class XInputStream; }
@@ -42,7 +42,7 @@ class SvStream;
 
 class OLESimpleStorage : public cppu::WeakImplHelper<css::embed::XOLESimpleStorage, css::lang::XServiceInfo>
 {
-    ::osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
 
     bool m_bDisposed;
 
@@ -51,7 +51,7 @@ class OLESimpleStorage : public cppu::WeakImplHelper<css::embed::XOLESimpleStora
     std::unique_ptr<SvStream> m_pStream;
     std::unique_ptr<BaseStorage> m_pStorage;
 
-    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>* m_pListenersContainer; // list of listeners
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aListenersContainer; // list of listeners
     css::uno::Reference<css::uno::XComponentContext> m_xContext;
 
     bool m_bNoTemporaryCopy;
