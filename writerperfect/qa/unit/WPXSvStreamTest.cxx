@@ -175,7 +175,7 @@ void WPXSvStreamTest::testRead()
     pData = pInput->read(0UL, nReadBytes);
     CPPUNIT_ASSERT_EQUAL(0UL, nReadBytes);
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
-    CPPUNIT_ASSERT_EQUAL(pData, static_cast<const unsigned char*>(nullptr));
+    CPPUNIT_ASSERT_EQUAL(static_cast<const unsigned char*>(nullptr), pData);
     CPPUNIT_ASSERT(!pInput->isEnd());
 }
 

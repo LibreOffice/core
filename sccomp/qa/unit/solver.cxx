@@ -108,7 +108,7 @@ void LpSolverTest::testSolver(OUString const & rName)
     CPPUNIT_ASSERT(xSolver->getSuccess());
     uno::Sequence<double> aSolution = xSolver->getSolution();
     CPPUNIT_ASSERT_EQUAL(aSolution.getLength(), aVariables.getLength());
-    CPPUNIT_ASSERT_EQUAL(aSolution[0], 5.0);
+    CPPUNIT_ASSERT_EQUAL(5.0, aSolution[0]);
 
     uno::Reference<sheet::XSolverDescription> xDesc(xSolver, uno::UNO_QUERY_THROW);
     const OString sMessage("Empty description for " + OUStringToOString(rName, RTL_TEXTENCODING_UTF8));

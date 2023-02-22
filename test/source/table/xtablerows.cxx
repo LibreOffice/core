@@ -32,7 +32,7 @@ void XTableRows::testInsertByIndex()
     xTableRows->removeByIndex(0, 1);
 
     xTableRows->insertByIndex(0, 1);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(xCellRange->getCellByPosition(0, 1)->getValue(), 15.0, 0.1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(15.0, xCellRange->getCellByPosition(0, 1)->getValue(), 0.1);
 
     CPPUNIT_ASSERT_THROW(xTableRows->insertByIndex(-1, 1), uno::RuntimeException);
 }
@@ -45,7 +45,7 @@ void XTableRows::testRemoveByIndex()
 
     uno::Reference<table::XTableRows> xTableRows(init(), uno::UNO_QUERY_THROW);
     xTableRows->removeByIndex(0, 1);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(xCellRange->getCellByPosition(0, 0)->getValue(), 15.0, 0.1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(15.0, xCellRange->getCellByPosition(0, 0)->getValue(), 0.1);
 
     CPPUNIT_ASSERT_THROW(xTableRows->removeByIndex(-1, 1), uno::RuntimeException);
 }

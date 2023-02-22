@@ -318,7 +318,7 @@ void ScExportTest::test()
 
     pDoc = getScDoc();
     double aVal = pDoc->GetValue(0, 0, 0);
-    ASSERT_DOUBLES_EQUAL(aVal, 1.0);
+    ASSERT_DOUBLES_EQUAL(1.0, aVal);
 }
 
 void ScExportTest::testDefaultFontHeight()
@@ -488,7 +488,7 @@ void ScExportTest::testPasswordExport()
 
         pDoc = getScDoc();
         double aVal = pDoc->GetValue(0, 0, 0);
-        ASSERT_DOUBLES_EQUAL(aVal, 1.0);
+        ASSERT_DOUBLES_EQUAL(1.0, aVal);
     }
 }
 

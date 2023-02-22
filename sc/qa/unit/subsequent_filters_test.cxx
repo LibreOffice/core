@@ -3112,10 +3112,10 @@ void ScFiltersTest::testFormulaDependency()
 
     // check if formula in A1 changes value
     double nVal = pDoc->GetValue(0, 0, 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(nVal, 1.0, 1e-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, nVal, 1e-10);
     pDoc->SetValue(0, 1, 0, 0.0);
     nVal = pDoc->GetValue(0, 0, 0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(nVal, 2.0, 1e-10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0, nVal, 1e-10);
 
     // check that the number format is implicitly inherited
     // CPPUNIT_ASSERT_EQUAL(pDoc->GetString(0,4,0), rDoc.GetString(0,5,0));

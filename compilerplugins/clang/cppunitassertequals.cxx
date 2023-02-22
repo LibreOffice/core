@@ -132,6 +132,19 @@ bool CppunitAssertEquals::VisitCallExpr(const CallExpr* callExpr)
                 callExpr->getExprLoc())
                 << callExpr->getSourceRange();
     }
+    if (loplugin::DeclCheck(decl).Function("assertDoubleEquals").
+             Namespace("CppUnit").GlobalNamespace())
+    {
+        // can happen in template test code that both params are compile time constants
+        if (isCompileTimeConstant(callExpr->getArg(0)))
+            return true;
+        if (isCompileTimeConstant(callExpr->getArg(1)))
+            report(
+                DiagnosticsEngine::Warning,
+                "CPPUNIT_ASSERT_DOUBLES_EQUALS parameters look switched, expected value should be first param",
+                callExpr->getExprLoc())
+                << callExpr->getSourceRange();
+    }
     return true;
 }
 
@@ -167,7 +180,7 @@ Expr const * stripConstructor(Expr const * expr) {
 
 bool CppunitAssertEquals::isCompileTimeConstant(Expr const * expr)
 {
-    if (expr->isIntegerConstantExpr(compiler.getASTContext()))
+    if (expr->isCXX11ConstantExpr(compiler.getASTContext()))
         return true;
     // is string literal ?
     expr = expr->IgnoreParenImpCasts();

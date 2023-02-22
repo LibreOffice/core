@@ -569,8 +569,8 @@ void Chart2ExportTest2::testCustomPositionofDataLabel()
         chart2::RelativePosition aCustomLabelPosition;
         CPPUNIT_ASSERT(xPropertySet->getPropertyValue("CustomLabelPosition")
                        >>= aCustomLabelPosition);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(aCustomLabelPosition.Primary, -0.0961935120945059, 1e-5);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(aCustomLabelPosition.Secondary, 0.209578842093566, 1e-5);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.0961935120945059, aCustomLabelPosition.Primary, 1e-5);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.209578842093566, aCustomLabelPosition.Secondary, 1e-5);
     }
 }
 

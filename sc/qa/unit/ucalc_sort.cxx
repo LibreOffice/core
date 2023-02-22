@@ -121,7 +121,7 @@ void TestSort::testSort()
     m_pDoc->Sort(0, aSortData, false, true, nullptr, nullptr);
 
     double nVal = m_pDoc->GetValue(1,0,0);
-    ASSERT_DOUBLES_EQUAL(nVal, 1.0);
+    ASSERT_DOUBLES_EQUAL(1.0, nVal);
 
     // check that note is also moved after sorting
     pNote = m_pDoc->GetNote(1, 0, 0);
@@ -1683,24 +1683,24 @@ void TestSort::testSortBroadcaster()
         // Enter new value and check that it is broadcasted. First in empty cell.
         m_pDoc->SetString(1,5,0, "16");
         double nVal = m_pDoc->GetValue(1,7,0);
-        ASSERT_DOUBLES_EQUAL(nVal, 16.0);
+        ASSERT_DOUBLES_EQUAL(16.0, nVal);
         nVal = m_pDoc->GetValue(1,8,0);
-        ASSERT_DOUBLES_EQUAL(nVal, 16.0);
+        ASSERT_DOUBLES_EQUAL(16.0, nVal);
         nVal = m_pDoc->GetValue(1,9,0);
-        ASSERT_DOUBLES_EQUAL(nVal, 17.0);
+        ASSERT_DOUBLES_EQUAL(17.0, nVal);
         nVal = m_pDoc->GetValue(1,10,0);
-        ASSERT_DOUBLES_EQUAL(nVal, 17.0);
+        ASSERT_DOUBLES_EQUAL(17.0, nVal);
 
         // Enter new value and check that it is broadcasted. Now overwriting data.
         m_pDoc->SetString(0,5,0, "32");
         nVal = m_pDoc->GetValue(0,7,0);
-        ASSERT_DOUBLES_EQUAL(nVal, 32.0);
+        ASSERT_DOUBLES_EQUAL(32.0, nVal);
         nVal = m_pDoc->GetValue(0,8,0);
-        ASSERT_DOUBLES_EQUAL(nVal, 32.0);
+        ASSERT_DOUBLES_EQUAL(32.0, nVal);
         nVal = m_pDoc->GetValue(0,9,0);
-        ASSERT_DOUBLES_EQUAL(nVal, 34.0);
+        ASSERT_DOUBLES_EQUAL(34.0, nVal);
         nVal = m_pDoc->GetValue(0,10,0);
-        ASSERT_DOUBLES_EQUAL(nVal, 34.0);
+        ASSERT_DOUBLES_EQUAL(34.0, nVal);
     }
 
     m_pDoc->DeleteTab(0);
@@ -1973,7 +1973,7 @@ void TestSort::testSortImages()
     m_pDoc->Sort(0, aSortData, false, true, nullptr, nullptr);
 
     double nVal = m_pDoc->GetValue(0,0,0);
-    ASSERT_DOUBLES_EQUAL(nVal, 1.0);
+    ASSERT_DOUBLES_EQUAL(1.0, nVal);
 
     // check that note is also moved after sorting
     aCellPos = ScAddress(1, 0, 0);

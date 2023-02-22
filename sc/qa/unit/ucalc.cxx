@@ -4207,42 +4207,42 @@ void Test::testUpdateReference()
 
     double aValue;
     aValue = m_pDoc->GetValue(2,0,2);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("formula does not return correct result", aValue, 3);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("formula does not return correct result", 3, aValue);
     aValue = m_pDoc->GetValue(2,1,2);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("formula does not return correct result", aValue, 5);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("formula does not return correct result", 5, aValue);
 
     //test deleting both sheets: one is not directly before the sheet, the other one is
     m_pDoc->DeleteTab(0);
     aValue = m_pDoc->GetValue(2,0,1);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting first sheet formula does not return correct result", aValue, 3);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting first sheet formula does not return correct result", 3, aValue);
     aValue = m_pDoc->GetValue(2,1,1);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting first sheet formula does not return correct result", aValue, 5);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting first sheet formula does not return correct result", 5, aValue);
 
     m_pDoc->DeleteTab(0);
     aValue = m_pDoc->GetValue(2,0,0);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting second sheet formula does not return correct result", aValue, 3);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting second sheet formula does not return correct result", 3, aValue);
     aValue = m_pDoc->GetValue(2,1,0);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting second sheet formula does not return correct result", aValue, 5);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting second sheet formula does not return correct result", 5, aValue);
 
     //test adding two sheets
     m_pDoc->InsertTab(0, "Sheet2");
     aValue = m_pDoc->GetValue(2,0,1);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting first sheet formula does not return correct result", aValue, 3);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting first sheet formula does not return correct result", 3, aValue);
     aValue = m_pDoc->GetValue(2,1,1);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting first sheet formula does not return correct result", aValue, 5);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting first sheet formula does not return correct result", 5, aValue);
 
     m_pDoc->InsertTab(0, "Sheet1");
     aValue = m_pDoc->GetValue(2,0,2);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting second sheet formula does not return correct result", aValue, 3);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting second sheet formula does not return correct result", 3, aValue);
     aValue = m_pDoc->GetValue(2,1,2);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting second sheet formula does not return correct result", aValue, 5);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting second sheet formula does not return correct result", 5, aValue);
 
     //test new DeleteTabs/InsertTabs methods
     m_pDoc->DeleteTabs(0, 2);
     aValue = m_pDoc->GetValue(2, 0, 0);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting sheets formula does not return correct result", aValue, 3);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting sheets formula does not return correct result", 3, aValue);
     aValue = m_pDoc->GetValue(2, 1, 0);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting sheets formula does not return correct result", aValue, 5);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting sheets formula does not return correct result", 5, aValue);
 
     std::vector<OUString> aSheets;
     aSheets.emplace_back("Sheet1");
@@ -4250,9 +4250,9 @@ void Test::testUpdateReference()
     m_pDoc->InsertTabs(0, aSheets, true);
     aValue = m_pDoc->GetValue(2, 0, 2);
 
-    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting sheets formula does not return correct result", aValue, 3);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting sheets formula does not return correct result", 3, aValue);
     aValue = m_pDoc->GetValue(2, 1, 2);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting sheets formula does not return correct result", aValue, 5);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting sheets formula does not return correct result", 5, aValue);
 
     m_pDoc->DeleteTab(3);
     m_pDoc->DeleteTab(2);

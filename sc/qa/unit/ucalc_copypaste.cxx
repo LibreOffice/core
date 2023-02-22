@@ -482,7 +482,7 @@ void TestCopyPaste::testCopyPaste()
     m_pDoc->SetString(1, 0, 0, aFormulaString);
 
     double fValue = m_pDoc->GetValue(ScAddress(1, 0, 0));
-    ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 11", fValue, 11);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 11", 11, fValue);
 
     // add notes to A1:C1
     setNote(0, 0, 0, "Hello world in A1"); // empty cell content
@@ -568,7 +568,7 @@ void TestCopyPaste::testCopyPaste()
     //check undo and redo
     pUndo->Undo();
     fValue = m_pDoc->GetValue(ScAddress(1, 1, 1));
-    ASSERT_DOUBLES_EQUAL_MESSAGE("after undo formula should return nothing", fValue, 0);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after undo formula should return nothing", 0, fValue);
     aString = m_pDoc->GetString(2, 1, 1);
     CPPUNIT_ASSERT_MESSAGE("after undo, string should be removed", aString.isEmpty());
     CPPUNIT_ASSERT_MESSAGE("after undo, note on A2 should be removed", !m_pDoc->HasNote(0, 1, 1));
@@ -9961,7 +9961,7 @@ void TestCopyPaste::testMoveBlock()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell C1 should contain an updated formula", OUString("=B1+1"),
                                  aString);
     double fValue = m_pDoc->GetValue(aAddrB1);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("Cell B1 should contain 1", fValue, 1);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("Cell B1 should contain 1", 1, fValue);
 
     // cell notes has been moved 1 cell right (event when overlapping)
     CPPUNIT_ASSERT_MESSAGE("There should be NO note on A1", !m_pDoc->HasNote(aAddrA1));
@@ -10219,16 +10219,16 @@ void TestCopyPaste::testCopyPasteFormulas()
     m_pDoc->SetString(0, 4, 0, "=$Sheet2.A$1");
 
     // to prevent ScEditableTester in ScDocFunc::MoveBlock
-    ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(0, 0, 0), 1.0);
-    ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(0, 1, 0), 1.0);
+    ASSERT_DOUBLES_EQUAL(1.0, m_pDoc->GetValue(0, 0, 0));
+    ASSERT_DOUBLES_EQUAL(1.0, m_pDoc->GetValue(0, 1, 0));
     ScDocFunc& rDocFunc = m_xDocShell->GetDocFunc();
     bool bMoveDone = rDocFunc.MoveBlock(ScRange(0, 0, 0, 0, 4, 0), ScAddress(10, 10, 0), false,
                                         false, false, true);
 
     // check that moving was successful, mainly for editable tester
     CPPUNIT_ASSERT(bMoveDone);
-    ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(10, 10, 0), 1.0);
-    ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(10, 11, 0), 1.0);
+    ASSERT_DOUBLES_EQUAL(1.0, m_pDoc->GetValue(10, 10, 0));
+    ASSERT_DOUBLES_EQUAL(1.0, m_pDoc->GetValue(10, 11, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("=COLUMN($A$1)"), m_pDoc->GetFormula(10, 10, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("=$A$1+L12"), m_pDoc->GetFormula(10, 11, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("=$Sheet2.K11"), m_pDoc->GetFormula(10, 12, 0));

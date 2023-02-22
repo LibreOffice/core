@@ -51,8 +51,8 @@ End Function
 
         )BAS");
         CPPUNIT_ASSERT(mod->Compile());
-        CPPUNIT_ASSERT_EQUAL(StarBASIC::GetErrBasic(), ERRCODE_NONE);
-        CPPUNIT_ASSERT_EQUAL(SbxBase::GetError(), ERRCODE_NONE);
+        CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, StarBASIC::GetErrBasic());
+        CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, SbxBase::GetError());
         CPPUNIT_ASSERT(mod->IsCompiled());
         return mod;
     }

@@ -162,31 +162,31 @@ public:
 void VclOutdevTest::testGetReadableFontColorPrinter()
 {
     ScopedVclPtrInstance<Printer> pPrinter;
-    CPPUNIT_ASSERT_EQUAL(pPrinter->GetReadableFontColor(COL_WHITE, COL_WHITE), COL_BLACK);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pPrinter->GetReadableFontColor(COL_WHITE, COL_WHITE));
 }
 
 void VclOutdevTest::testGetReadableFontColorWindow()
 {
     ScopedVclPtrInstance<vcl::Window> pWindow(nullptr, WB_APP | WB_STDWORK);
-    CPPUNIT_ASSERT_EQUAL(pWindow->GetOutDev()->GetReadableFontColor(COL_WHITE, COL_BLACK),
-                         COL_WHITE);
-    CPPUNIT_ASSERT_EQUAL(pWindow->GetOutDev()->GetReadableFontColor(COL_WHITE, COL_WHITE),
-                         COL_BLACK);
-    CPPUNIT_ASSERT_EQUAL(pWindow->GetOutDev()->GetReadableFontColor(COL_BLACK, COL_BLACK),
-                         COL_WHITE);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE,
+                         pWindow->GetOutDev()->GetReadableFontColor(COL_WHITE, COL_BLACK));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK,
+                         pWindow->GetOutDev()->GetReadableFontColor(COL_WHITE, COL_WHITE));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE,
+                         pWindow->GetOutDev()->GetReadableFontColor(COL_BLACK, COL_BLACK));
 }
 
 void VclOutdevTest::testPrinterBackgroundColor()
 {
     ScopedVclPtrInstance<Printer> pPrinter;
-    CPPUNIT_ASSERT_EQUAL(pPrinter->GetBackgroundColor(), COL_WHITE);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pPrinter->GetBackgroundColor());
 }
 
 void VclOutdevTest::testWindowBackgroundColor()
 {
     ScopedVclPtrInstance<vcl::Window> pWindow(nullptr, WB_APP | WB_STDWORK);
     pWindow->SetBackground(Wallpaper(COL_WHITE));
-    CPPUNIT_ASSERT_EQUAL(pWindow->GetBackgroundColor(), COL_WHITE);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pWindow->GetBackgroundColor());
 }
 
 void VclOutdevTest::testVirtualDevice()
@@ -197,7 +197,7 @@ void VclOutdevTest::testVirtualDevice()
     pVDev->SetOutputSizePixel(Size(32, 32));
     pVDev->SetBackground(Wallpaper(COL_WHITE));
 
-    CPPUNIT_ASSERT_EQUAL(pVDev->GetBackgroundColor(), COL_WHITE);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetBackgroundColor());
 
     pVDev->Erase();
     pVDev->DrawPixel(Point(1, 2), COL_BLUE);

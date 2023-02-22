@@ -1859,16 +1859,16 @@ void Test::testStandardColorIntegrity()
     CPPUNIT_ASSERT_EQUAL( size_t(NF_KEY_LASTCOLOR) - size_t(NF_KEY_FIRSTCOLOR) + 1, nMaxDefaultColors );
     CPPUNIT_ASSERT_EQUAL( nMaxDefaultColors, rStandardColors.size() );
     // Colors must follow same order as in sEnglishKeyword
-    CPPUNIT_ASSERT_EQUAL( rStandardColors[0], COL_BLACK );
-    CPPUNIT_ASSERT_EQUAL( rStandardColors[1], COL_LIGHTBLUE );
-    CPPUNIT_ASSERT_EQUAL( rStandardColors[2], COL_LIGHTGREEN );
-    CPPUNIT_ASSERT_EQUAL( rStandardColors[3], COL_LIGHTCYAN );
-    CPPUNIT_ASSERT_EQUAL( rStandardColors[4], COL_LIGHTRED );
-    CPPUNIT_ASSERT_EQUAL( rStandardColors[5], COL_LIGHTMAGENTA );
-    CPPUNIT_ASSERT_EQUAL( rStandardColors[6], COL_BROWN );
-    CPPUNIT_ASSERT_EQUAL( rStandardColors[7], COL_GRAY );
-    CPPUNIT_ASSERT_EQUAL( rStandardColors[8], COL_YELLOW );
-    CPPUNIT_ASSERT_EQUAL( rStandardColors[9], COL_WHITE );
+    CPPUNIT_ASSERT_EQUAL( COL_BLACK, rStandardColors[0] );
+    CPPUNIT_ASSERT_EQUAL( COL_LIGHTBLUE, rStandardColors[1] );
+    CPPUNIT_ASSERT_EQUAL( COL_LIGHTGREEN, rStandardColors[2] );
+    CPPUNIT_ASSERT_EQUAL( COL_LIGHTCYAN, rStandardColors[3] );
+    CPPUNIT_ASSERT_EQUAL( COL_LIGHTRED, rStandardColors[4] );
+    CPPUNIT_ASSERT_EQUAL( COL_LIGHTMAGENTA, rStandardColors[5] );
+    CPPUNIT_ASSERT_EQUAL( COL_BROWN, rStandardColors[6] );
+    CPPUNIT_ASSERT_EQUAL( COL_GRAY, rStandardColors[7] );
+    CPPUNIT_ASSERT_EQUAL( COL_YELLOW, rStandardColors[8] );
+    CPPUNIT_ASSERT_EQUAL( COL_WHITE, rStandardColors[9] );
 }
 
 void Test::testColorNamesConversion()

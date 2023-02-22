@@ -500,8 +500,8 @@ void Chart2ImportTest2::testDataPointLabelCustomPos()
 
     chart2::RelativePosition aCustomLabelPosition;
     xPropertySet->getPropertyValue("CustomLabelPosition") >>= aCustomLabelPosition;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(aCustomLabelPosition.Primary, -0.14621409921671025, 1e-7);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(aCustomLabelPosition.Secondary, -5.2887961029923464E-2, 1e-7);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.14621409921671025, aCustomLabelPosition.Primary, 1e-7);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-5.2887961029923464E-2, aCustomLabelPosition.Secondary, 1e-7);
 
     sal_Int32 aPlacement;
     xPropertySet->getPropertyValue("LabelPlacement") >>= aPlacement;
@@ -523,8 +523,8 @@ void Chart2ImportTest2::testTdf130032()
 
     chart2::RelativePosition aCustomLabelPosition;
     xPropertySet->getPropertyValue("CustomLabelPosition") >>= aCustomLabelPosition;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(aCustomLabelPosition.Primary, -0.0438333333333334, 1e-7);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(aCustomLabelPosition.Secondary, 0.086794050743657, 1e-7);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.0438333333333334, aCustomLabelPosition.Primary, 1e-7);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.086794050743657, aCustomLabelPosition.Secondary, 1e-7);
 
     sal_Int32 aPlacement;
     xPropertySet->getPropertyValue("LabelPlacement") >>= aPlacement;
