@@ -848,13 +848,13 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                                 = Application::GetSettings().GetUILocaleDataWrapper();
                             OUString aRowArg
                                 = ScResId(STR_SELCOUNT_ROWARG, nRowsSum)
-                                      .replaceAll("$1", rLocaleData.getNum(nRowsSum, 0));
+                                      .replaceAll("%d", rLocaleData.getNum(nRowsSum, 0));
                             OUString aColArg
                                 = ScResId(STR_SELCOUNT_COLARG, nColsSum)
-                                      .replaceAll("$1", rLocaleData.getNum(nColsSum, 0));
+                                      .replaceAll("%d", rLocaleData.getNum(nColsSum, 0));
                             OUString aStr = ScResId(STR_SELCOUNT);
-                            aStr = aStr.replaceAll("$1", aRowArg);
-                            aStr = aStr.replaceAll("$2", aColArg);
+                            aStr = aStr.replaceAll("%1", aRowArg);
+                            aStr = aStr.replaceAll("%2", aColArg);
                             rSet.Put(SfxStringItem(nWhich, aStr));
                         }
                     }
@@ -865,8 +865,8 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                         if( nTotal && nSelected != SCSIZE_MAX )
                         {
                             OUString aStr = ScResId( STR_FILTER_SELCOUNT );
-                            aStr = aStr.replaceAll( "$1", OUString::number( nSelected ) );
-                            aStr = aStr.replaceAll( "$2", OUString::number( nTotal ) );
+                            aStr = aStr.replaceAll( "%1", OUString::number( nSelected ) );
+                            aStr = aStr.replaceAll( "%2", OUString::number( nTotal ) );
                             rSet.Put( SfxStringItem( nWhich, aStr ) );
                         }
                     }

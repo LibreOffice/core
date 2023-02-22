@@ -262,7 +262,7 @@ void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG& randomGenerator, Transl
 {
     OUString aUndo = ScResId(STR_UNDO_DISTRIBUTION_TEMPLATE);
     OUString aDistributionName = ScResId(pDistributionStringId);
-    aUndo = aUndo.replaceAll("$(DISTRIBUTION)",  aDistributionName);
+    aUndo = aUndo.replaceAll("%1",  aDistributionName);
 
     ScDocShell* pDocShell = mrViewData.GetDocShell();
     SfxUndoManager* pUndoManager = pDocShell->GetUndoManager();

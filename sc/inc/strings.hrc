@@ -259,7 +259,7 @@
 #define STRID_CALC_FIRST_QUARTILE                   NC_("STRID_CALC_FIRST_QUARTILE", "First Quartile")
 #define STRID_CALC_THIRD_QUARTILE                   NC_("STRID_CALC_THIRD_QUARTILE", "Third Quartile")
 /* RandomNumberGeneratorDialog */
-#define STR_UNDO_DISTRIBUTION_TEMPLATE              NC_("STR_UNDO_DISTRIBUTION_TEMPLATE", "Random ($(DISTRIBUTION))")
+#define STR_UNDO_DISTRIBUTION_TEMPLATE              NC_("STR_UNDO_DISTRIBUTION_TEMPLATE", "Random (%1)")
 #define STR_DISTRIBUTION_UNIFORM_REAL               NC_("STR_DISTRIBUTION_UNIFORM_REAL", "Uniform")
 #define STR_DISTRIBUTION_UNIFORM_INTEGER            NC_("STR_DISTRIBUTION_UNIFORM_INTEGER", "Uniform Integer")
 #define STR_DISTRIBUTION_NORMAL                     NC_("STR_DISTRIBUTION_NORMAL", "Normal")
