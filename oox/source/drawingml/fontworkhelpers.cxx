@@ -1046,7 +1046,7 @@ OUString lcl_getWMarkupStringForThemeColor(const model::ThemeColor& rThemeColor)
     return WColorNames[nClrNameIndex];
 }
 
-// Puts the value of the first occurancy of rType in rThemeColor into rValue and returns true.
+// Puts the value of the first occurrence of rType in rThemeColor into rValue and returns true.
 // If such does not exist, rValue is unchanged and the method returns false.
 bool lcl_getThemeColorTransformationValue(const model::ThemeColor& rThemeColor,
                                           const model::TransformationType& rType, sal_Int16& rValue)
