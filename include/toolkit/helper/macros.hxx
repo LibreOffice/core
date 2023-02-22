@@ -87,7 +87,9 @@ void ClassName::disposing( const css::lang::EventObject& ) \
 #define IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( ClassName, InterfaceName, MethodName, ParamType1 ) \
 { \
     ParamType1 aMulti( evt ); \
-    ::comphelper::OInterfaceIteratorHelper3 aIt(*this); \
+    std::unique_lock g(m_aMutex); \
+    ::comphelper::OInterfaceIteratorHelper4 aIt(g, maListeners); \
+    g.unlock(); \
     while( aIt.hasMoreElements() ) \
     { \
         css::uno::Reference<InterfaceName> xListener(aIt.next()); \
@@ -99,7 +101,10 @@ void ClassName::disposing( const css::lang::EventObject& ) \
         { \
             OSL_ENSURE( e.Context.is(), "caught DisposedException with empty Context field" ); \
             if ( e.Context == xListener || !e.Context.is() ) \
-                aIt.remove(); \
+            { \
+                std::unique_lock g2(m_aMutex); \
+                aIt.remove(g2); \
+            } \
         } \
         catch(const css::uno::RuntimeException&) \
         { \
@@ -112,7 +117,9 @@ void ClassName::disposing( const css::lang::EventObject& ) \
 { \
     EventType aMulti( evt ); \
     aMulti.Source = &GetContext(); \
-    ::comphelper::OInterfaceIteratorHelper3 aIt(*this); \
+    std::unique_lock g(m_aMutex); \
+    ::comphelper::OInterfaceIteratorHelper4 aIt(g, maListeners); \
+    g.unlock(); \
     while( aIt.hasMoreElements() ) \
     { \
         css::uno::Reference<InterfaceName> xListener(aIt.next()); \
@@ -124,7 +131,10 @@ void ClassName::disposing( const css::lang::EventObject& ) \
         { \
             OSL_ENSURE( e.Context.is(), "caught DisposedException with empty Context field" ); \
             if ( e.Context == xListener || !e.Context.is() ) \
-                aIt.remove(); \
+            { \
+                std::unique_lock g2(m_aMutex); \
+                aIt.remove(g2); \
+            } \
         } \
         catch(const css::uno::RuntimeException&) \
         { \

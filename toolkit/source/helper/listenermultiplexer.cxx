@@ -147,7 +147,9 @@ IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, 
 void TabListenerMultiplexer::changed( sal_Int32 evt, const css::uno::Sequence< css::beans::NamedValue >& evt2 )
 {
     sal_Int32 aMulti( evt );
-    ::comphelper::OInterfaceIteratorHelper3 aIt(*this);
+    std::unique_lock g(m_aMutex);
+    ::comphelper::OInterfaceIteratorHelper4 aIt(g, maListeners);
+    g.unlock();
     while( aIt.hasMoreElements() )
     {
         css::uno::Reference<css::awt::XTabListener> xListener(aIt.next());
@@ -159,7 +161,10 @@ void TabListenerMultiplexer::changed( sal_Int32 evt, const css::uno::Sequence< c
         {
             OSL_ENSURE( e.Context.is(), "caught DisposedException with empty Context field" );
             if ( e.Context == xListener || !e.Context.is() )
-                aIt.remove();
+            {
+                std::unique_lock g2(m_aMutex);
+                aIt.remove(g2);
+            }
         }
         catch(const css::uno::RuntimeException&)
         {

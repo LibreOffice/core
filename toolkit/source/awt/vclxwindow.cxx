@@ -1345,12 +1345,12 @@ void VCLXWindow::GetPropertyIds( std::vector< sal_uInt16 >& _out_rIds )
     return ImplGetPropertyIds( _out_rIds, mpImpl->mbWithDefaultProps );
 }
 
-::comphelper::OInterfaceContainerHelper3<css::awt::XVclContainerListener>& VCLXWindow::GetContainerListeners()
+ListenerMultiplexerBase<css::awt::XVclContainerListener>& VCLXWindow::GetContainerListeners()
 {
     return mpImpl->getContainerListeners();
 }
 
-::comphelper::OInterfaceContainerHelper3<css::awt::XTopWindowListener>& VCLXWindow::GetTopWindowListeners()
+ListenerMultiplexerBase<css::awt::XTopWindowListener>& VCLXWindow::GetTopWindowListeners()
 {
     return mpImpl->getTopWindowListeners();
 }

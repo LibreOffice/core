@@ -42,7 +42,7 @@
 #include <vector>
 #include <functional>
 
-namespace comphelper { template <class ListenerT> class OInterfaceContainerHelper3; }
+template <class ListenerT> class ListenerMultiplexerBase;
 namespace com::sun::star::accessibility { class XAccessibleContext; }
 namespace com::sun::star::awt { class XTopWindowListener; }
 namespace com::sun::star::awt { class XVclContainerListener; }
@@ -99,8 +99,8 @@ protected:
                                         bool bWithDefaults = false );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds );
 
-    ::comphelper::OInterfaceContainerHelper3<css::awt::XVclContainerListener>& GetContainerListeners();
-    ::comphelper::OInterfaceContainerHelper3<css::awt::XTopWindowListener>& GetTopWindowListeners();
+    ListenerMultiplexerBase<css::awt::XVclContainerListener>& GetContainerListeners();
+    ListenerMultiplexerBase<css::awt::XTopWindowListener>& GetTopWindowListeners();
 
 public:
     typedef ::std::function<void ()>  Callback;

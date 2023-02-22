@@ -355,9 +355,7 @@ namespace frm
             m_aText = sText;
             TextEvent aEvt;
             aEvt.Source = *this;
-            ::comphelper::OInterfaceIteratorHelper3 aIt(m_aTextListeners);
-            while( aIt.hasMoreElements() )
-                aIt.next()->textChanged(aEvt);
+            m_aTextListeners.notifyEach(&css::awt::XTextListener::textChanged, aEvt);
         }
 #endif
     }
@@ -530,9 +528,7 @@ namespace frm
         setText(aNewText);
         TextEvent aEvt;
         aEvt.Source = *this;
-        ::comphelper::OInterfaceIteratorHelper3 aIt(m_aTextListeners);
-        while( aIt.hasMoreElements() )
-            aIt.next()->textChanged(aEvt);
+        m_aTextListeners.notifyEach(&css::awt::XTextListener::textChanged, aEvt);
 #endif
         return true;
     }

@@ -19,7 +19,7 @@
 
 #include <awt/vclxcontainer.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <comphelper/interfacecontainer3.hxx>
+#include <toolkit/helper/listenermultiplexer.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
