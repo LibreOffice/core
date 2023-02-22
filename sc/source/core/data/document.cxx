@@ -2621,6 +2621,17 @@ bool ScDocument::IsClipboardSource() const
             mxPoolHelper->GetDocPool() == pClipDoc->mxPoolHelper->GetDocPool();
 }
 
+void ScDocument::StartListeningFromClip(
+    sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt,
+    SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+{
+    ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return;
+
+    pTab->StartListeningFormulaCells(rStartCxt, rEndCxt, nCol1, nRow1, nCol2, nRow2);
+}
+
 void ScDocument::StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
                                         SCCOL nCol2, SCROW nRow2,
                                         const ScMarkData& rMark, InsertDeleteFlags nInsFlag )
@@ -2633,14 +2644,8 @@ void ScDocument::StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
     sc::StartListeningContext aStartCxt(*this, pSet);
     sc::EndListeningContext aEndCxt(*this, pSet, nullptr);
 
-    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
-    for (const auto& rTab : rMark)
-    {
-        if (rTab >= nMax)
-            break;
-        if (maTabs[rTab])
-            maTabs[rTab]->StartListeningFormulaCells(aStartCxt, aEndCxt, nCol1, nRow1, nCol2, nRow2);
-    }
+    for (SCTAB nTab : rMark)
+        StartListeningFromClip(aStartCxt, aEndCxt, nTab, nCol1, nRow1, nCol2, nRow2);
 }
 
 void ScDocument::SetDirtyFromClip(
@@ -2946,7 +2951,7 @@ void ScDocument::CopyFromClip(
         SCROW nRow2 = rRange.aEnd.Row();
 
         aCxt.setDestRange(nCol1, nRow1, nCol2, nRow2);
-        DeleteBeforeCopyFromClip(aCxt, rMark, aBroadcastSpans);
+        DeleteBeforeCopyFromClip(aCxt, rMark, aBroadcastSpans); // <- this removes existing formula listeners
 
         if (CopyOneCellFromClip(aCxt, nCol1, nRow1, nCol2, nRow2))
             continue;
@@ -3042,8 +3047,14 @@ void ScDocument::CopyFromClip(
 
     bInsertingFromOtherDoc = false;
 
+    if (nInsFlag & InsertDeleteFlags::CONTENTS)
+    {
+        for (SCTAB nTab : rMark)
+            aCxt.setListeningFormulaSpans(nTab, nAllCol1, nAllRow1, nAllCol2, nAllRow2);
+    }
+
     // Create Listener after everything has been inserted
-    StartListeningFromClip( nAllCol1, nAllRow1, nAllCol2, nAllRow2, rMark, nInsFlag );
+    aCxt.startListeningFormulas();
 
     {
         ScBulkBroadcast aBulkBroadcast( GetBASM(), SfxHintId::ScDataChanged);
