@@ -80,6 +80,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf147646, "tdf147646_mergedCellNumbering.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("2."),parseDump("/root/page/body/tab/row[4]/cell/txt/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']","expand"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf153526_commentInNumbering, "tdf153526_commentInNumbering.docx")
+{
+    // an exception was prematurely ending finishParagraph, losing numbering and CRs
+    // so before the patch, this was 6.
+    CPPUNIT_ASSERT_EQUAL(13, getParagraphs());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
 {
     // Given a docx document with a shape with vert="mongolianVert".
