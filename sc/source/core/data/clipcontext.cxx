@@ -21,6 +21,7 @@
 #include <svl/numformat.hxx>
 #include <formula/errorcodes.hxx>
 #include <refdata.hxx>
+#include <listenercontext.hxx>
 
 namespace sc {
 
@@ -111,6 +112,52 @@ void CopyFromClipContext::setDeleteFlag( InsertDeleteFlags nFlag )
 InsertDeleteFlags CopyFromClipContext::getDeleteFlag() const
 {
     return mnDeleteFlag;
+}
+
+void CopyFromClipContext::setListeningFormulaSpans(
+    SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+{
+    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        maListeningFormulaSpans.set(mrDestDoc, nTab, nCol, nRow1, nRow2, true);
+}
+
+namespace {
+
+class StartListeningAction : public sc::ColumnSpanSet::Action
+{
+    ScDocument& mrDestDoc;
+    sc::StartListeningContext& mrStartCxt;
+    sc::EndListeningContext& mrEndCxt;
+
+public:
+    StartListeningAction( ScDocument& rDestDoc, sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt ) :
+        mrDestDoc(rDestDoc), mrStartCxt(rStartCxt), mrEndCxt(rEndCxt)
+    {
+    }
+
+    virtual void execute( const ScAddress& rPos, SCROW nLength, bool bVal ) override
+    {
+        if (!bVal)
+            return;
+
+        SCROW nRow1 = rPos.Row();
+        SCROW nRow2 = nRow1 + nLength - 1;
+
+        mrDestDoc.StartListeningFromClip(
+            mrStartCxt, mrEndCxt, rPos.Tab(), rPos.Col(), nRow1, rPos.Col(), nRow2);
+    }
+};
+
+}
+
+void CopyFromClipContext::startListeningFormulas()
+{
+    auto pSet = std::make_shared<sc::ColumnBlockPositionSet>(mrDestDoc);
+    sc::StartListeningContext aStartCxt(mrDestDoc, pSet);
+    sc::EndListeningContext aEndCxt(mrDestDoc, pSet, nullptr);
+
+    StartListeningAction aAction(mrDestDoc, aStartCxt, aEndCxt);
+    maListeningFormulaSpans.executeAction(mrDestDoc, aAction);
 }
 
 void CopyFromClipContext::setSingleCellColumnSize( size_t nSize )
