@@ -1672,6 +1672,9 @@ public:
                                   SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark, SCCOL nDx,
                                   SCROW& rClipStartRow, SCROW nClipEndRow);
 
+    void StartListeningFromClip(
+        sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt,
+        SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     void StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
                                  SCCOL nCol2, SCROW nRow2,
                                  const ScMarkData& rMark, InsertDeleteFlags nInsFlag );

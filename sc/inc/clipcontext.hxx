@@ -12,6 +12,7 @@
 #include "address.hxx"
 #include "cellvalue.hxx"
 #include "celltextattr.hxx"
+#include "columnspanset.hxx"
 #include "Sparkline.hxx"
 
 #include <memory>
@@ -45,6 +46,9 @@ public:
 
 class SC_DLLPUBLIC CopyFromClipContext final : public ClipContextBase
 {
+    /** Tracks modified formula group spans. */
+    sc::ColumnSpanSet maListeningFormulaSpans;
+
     SCCOL mnDestCol1;
     SCCOL mnDestCol2;
     SCROW mnDestRow1;
@@ -100,6 +104,17 @@ public:
 
     void setDeleteFlag( InsertDeleteFlags nFlag );
     InsertDeleteFlags getDeleteFlag() const;
+
+    /**
+     * Record a range of formula cells that need to start listening after the
+     * copy-from-clip is complete.
+     */
+    void setListeningFormulaSpans( SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
+
+    /**
+     * Have the formula cells in the recorded ranges start listening.
+     */
+    void startListeningFormulas();
 
     /**
      * Set the column size of a "single cell" row, which is used when copying

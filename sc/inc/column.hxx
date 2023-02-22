@@ -22,6 +22,7 @@
 #include "global.hxx"
 #include "address.hxx"
 #include "cellvalue.hxx"
+#include "columnspanset.hxx"
 #include "rangelst.hxx"
 #include "types.hxx"
 #include "mtvelements.hxx"
@@ -48,8 +49,6 @@ class CopyFromClipContext;
 class CopyToClipContext;
 class CopyToDocContext;
 class MixDocContext;
-class ColumnSpanSet;
-class SingleColumnSpanSet;
 struct RefUpdateContext;
 struct RefUpdateInsertTabContext;
 struct RefUpdateDeleteTabContext;
@@ -837,9 +836,19 @@ private:
 
     void CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol) const;
 
-    void DeleteCells(
-        sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, InsertDeleteFlags nDelFlag,
-        sc::SingleColumnSpanSet& rDeleted );
+    struct DeleteCellsResult
+    {
+        /** cell ranges that have been deleted. */
+        sc::SingleColumnSpanSet aDeletedRows;
+        /** formula cell range that has stopped listening. */
+        std::vector<std::pair<SCROW, SCROW>> aFormulaRanges;
+
+        DeleteCellsResult( const ScDocument& rDoc );
+        DeleteCellsResult( const DeleteCellsResult& ) = delete;
+    };
+
+    std::unique_ptr<DeleteCellsResult> DeleteCells(
+        sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, InsertDeleteFlags nDelFlag );
 
     /**
      * Get all non-grouped formula cells and formula cell groups in the whole
