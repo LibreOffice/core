@@ -80,6 +80,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf147646, "tdf147646_mergedCellNumbering.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("2."),parseDump("/root/page/body/tab/row[4]/cell/txt/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']","expand"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf153526_commentInNumbering, "tdf153526_commentInNumbering.docx")
+{
+    // an exception was prematurely ending finishParagraph, losing numbering and CRs
+    // so before the patch, this was 6.
+    CPPUNIT_ASSERT_EQUAL(13, getParagraphs());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf153042_largeTab, "tdf153042_largeTab.docx")
 {
     // This is not the greatest test because it is slightly weird, and has a different layout

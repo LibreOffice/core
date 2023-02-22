@@ -2332,11 +2332,14 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             uno::Reference<container::XNamed> xCurrentNumberingRules(itNumberingRules->Value, uno::UNO_QUERY);
                             if (xCurrentNumberingRules.is())
                                 aCurrentNumberingName = xCurrentNumberingRules->getName();
-                            if (m_xPreviousParagraph.is())
+                            try
                             {
-                                uno::Reference<container::XNamed> xPreviousNumberingRules(m_xPreviousParagraph->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
-                                if (xPreviousNumberingRules.is())
-                                    aPreviousNumberingName = xPreviousNumberingRules->getName();
+                                uno::Reference<container::XNamed> xPreviousNumberingRules(m_xPreviousParagraph->getPropertyValue("NumberingRules"), uno::UNO_QUERY_THROW);
+                                aPreviousNumberingName = xPreviousNumberingRules->getName();
+                            }
+                            catch (const uno::Exception&)
+                            {
+                                TOOLS_WARN_EXCEPTION("writerfilter", "DomainMapper_Impl::finishParagraph NumberingRules");
                             }
                         }
                         else if ( m_xPreviousParagraph->getPropertySetInfo()->hasPropertyByName("NumberingStyleName") &&
