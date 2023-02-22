@@ -70,7 +70,7 @@ namespace drawinglayer::attribute
                     // use two r/w heads on the data band maColorSteps
                     size_t curr(0), next(1);
 
-                    // during procesing, check if all colors are the same. We know the
+                    // during processing, check if all colors are the same. We know the
                     // StartColor, so to all be the same, all also have to be equal to
                     // StartColor (including EndColor, use to initialize)
                     bool bAllTheSameColor(rStartColor == rEndColor);
@@ -86,14 +86,14 @@ namespace drawinglayer::attribute
                         // check for < 0.0 (should not really happen, see ::ColorStep)
                         // also check for == 0.0 which would mean than an implicit
                         // StartColor was given in ColorSteps - ignore that, we want
-                        // the explicitely given StartColor to always win
+                        // the explicitly given StartColor to always win
                         if(basegfx::fTools::lessOrEqual(fNextOffset, 0.0))
                             continue;
 
                         // check for > 1.0 (should not really happen, see ::ColorStep)
                         // also check for == 1.0 which would mean than an implicit
                         // EndColor was given in ColorSteps - ignore that, we want
-                        // the explicitely given EndColor to always win
+                        // the explicitly given EndColor to always win
                         if(basegfx::fTools::moreOrEqual(fNextOffset, 1.0))
                             continue;
 
