@@ -1102,7 +1102,7 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
     if (!xPropSetInfo.is())
         return;
 
-    // GrabBagStack is a special tool for handling the hierachy in a GrabBag
+    // GrabBagStack is a special tool for handling the hierarchy in a GrabBag
     std::unique_ptr<oox::GrabBagStack> pGrabBagStack;
 
     // CharTextFillTextEffect
