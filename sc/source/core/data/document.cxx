@@ -2529,14 +2529,6 @@ void ScDocument::DumpColumnStorage( SCTAB nTab, SCCOL nCol ) const
 }
 #endif
 
-#if DEBUG_AREA_BROADCASTER
-void ScDocument::DumpAreaBroadcasters() const
-{
-    if (pBASM)
-        pBASM->Dump();
-}
-#endif
-
 bool ScDocument::TableExists( SCTAB nTab ) const
 {
     return ValidTab(nTab) && o3tl::make_unsigned(nTab) < maTabs.size() && maTabs[nTab];

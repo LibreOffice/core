@@ -42,6 +42,7 @@ namespace formula { struct VectorRefArray; }
 
 namespace sc {
 
+struct BroadcasterState;
 struct FormulaGroupEntry;
 class StartListeningContext;
 class EndListeningContext;
@@ -864,6 +865,8 @@ private:
 
     void EndListeningGroup( sc::EndListeningContext& rCxt, SCROW nRow );
     void SetNeedsListeningGroup( SCROW nRow );
+
+    void CollectBroadcasterState(sc::BroadcasterState& rState) const;
 };
 
 inline bool ScColumn::IsEmptyAttr() const

@@ -29,11 +29,9 @@
 #include <refupdat.hxx>
 #include <bulkdatahint.hxx>
 #include <columnspanset.hxx>
-
-#if DEBUG_AREA_BROADCASTER
 #include <formulacell.hxx>
 #include <grouparealistener.hxx>
-#endif
+#include <broadcast.hxx>
 
 ScBroadcastArea::ScBroadcastArea( const ScRange& rRange ) :
     pUpdateChainNext(nullptr),
@@ -500,46 +498,32 @@ void ScBroadcastAreaSlot::GetAllListeners(
     }
 }
 
-#if DEBUG_AREA_BROADCASTER
-void ScBroadcastAreaSlot::Dump() const
+void ScBroadcastAreaSlot::CollectBroadcasterState(sc::BroadcasterState& rState) const
 {
     for (const ScBroadcastAreaEntry& rEntry : aBroadcastAreaTbl)
     {
-        const ScBroadcastArea* pArea = rEntry.mpArea;
-        const SvtBroadcaster& rBC = pArea->GetBroadcaster();
-        const SvtBroadcaster::ListenersType& rListeners = rBC.GetAllListeners();
-        size_t n = rListeners.size();
+        const ScRange& rRange = rEntry.mpArea->GetRange();
+        auto aRes = rState.aAreaListenerStore.try_emplace(rRange);
+        auto& rLisStore = aRes.first->second;
 
-        cout << "  * range: " << OUStringToOString(pArea->GetRange().Format(ScRefFlags::VALID|ScRefFlags::TAB_3D, pDoc), RTL_TEXTENCODING_UTF8).getStr()
-            << ", group: " << pArea->IsGroupListening()
-            << ", listener count: " << n << endl;
-
-        for (size_t i = 0; i < n; ++i)
+        for (const SvtListener* pLis : rEntry.mpArea->GetBroadcaster().GetAllListeners())
         {
-            const ScFormulaCell* pFC = dynamic_cast<const ScFormulaCell*>(rListeners[i]);
-            if (pFC)
+            if (auto pFC = dynamic_cast<const ScFormulaCell*>(pLis); pFC)
             {
-                cout << "    * listener: formula cell: "
-                     << OUStringToOString(pFC->aPos.Format(ScRefFlags::VALID|ScRefFlags::TAB_3D, pDoc), RTL_TEXTENCODING_UTF8).getStr()
-                     << endl;
+                rLisStore.emplace_back(pFC);
                 continue;
             }
 
-            const sc::FormulaGroupAreaListener* pFGListener = dynamic_cast<const sc::FormulaGroupAreaListener*>(rListeners[i]);
-            if (pFGListener)
+            if (auto pFGL = dynamic_cast<const sc::FormulaGroupAreaListener*>(pLis); pFGL)
             {
-                cout << "    * listener: formula group: (pos: "
-                     << OUStringToOString(pFGListener->getTopCellPos().Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, pDoc), RTL_TEXTENCODING_UTF8).getStr()
-                     << ", length: " << pFGListener->getGroupLength()
-                     << ")" << endl;
+                rLisStore.emplace_back(pFGL);
                 continue;
             }
 
-            cout << "    * listener: unknown" << endl;
+            rLisStore.emplace_back(pLis);
         }
     }
 }
-#endif
 
 void ScBroadcastAreaSlot::FinallyEraseAreas()
 {
@@ -1283,27 +1267,20 @@ std::vector<sc::AreaListener> ScBroadcastAreaSlotMachine::GetAllListeners(
     return aRet;
 }
 
-#if DEBUG_AREA_BROADCASTER
-void ScBroadcastAreaSlotMachine::Dump() const
+void ScBroadcastAreaSlotMachine::CollectBroadcasterState(sc::BroadcasterState& rState) const
 {
-    cout << "slot distribution count: " << nBcaSlots << endl;
-    for (const auto& [rIndex, pTabSlots] : aTableSlotsMap)
+    for (const auto& [rTab, rTabSlots] : aTableSlotsMap)
     {
-        cout << "-- sheet (index: " << rIndex << ")" << endl;
+        (void)rTab;
 
-        assert(pTabSlots);
-        ScBroadcastAreaSlot** ppSlots = pTabSlots->getSlots();
-        for (SCSIZE i = 0; i < nBcaSlots; ++i)
+        ScBroadcastAreaSlot** pp = rTabSlots.getSlots();
+        for (SCSIZE i = 0; i < mnBcaSlots; ++i)
         {
-            const ScBroadcastAreaSlot* pSlot = ppSlots[i];
+            const ScBroadcastAreaSlot* pSlot = pp[i];
             if (pSlot)
-            {
-                cout << "* slot " << i << endl;
-                pSlot->Dump();
-            }
+                pSlot->CollectBroadcasterState(rState);
         }
     }
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

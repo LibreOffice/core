@@ -77,6 +77,7 @@ namespace tools { class Guid; }
 
 namespace sc {
 
+struct BroadcasterState;
 struct FormulaGroupContext;
 class StartListeningContext;
 class EndListeningContext;
@@ -2368,6 +2369,8 @@ public:
 
     void EndListeningFormulaCells( std::vector<ScFormulaCell*>& rCells );
 
+    sc::BroadcasterState GetBroadcasterState() const;
+
     void                PutInFormulaTree( ScFormulaCell* pCell );
     void                RemoveFromFormulaTree( ScFormulaCell* pCell );
 
@@ -2609,10 +2612,6 @@ public:
 
 #if DUMP_COLUMN_STORAGE
     SC_DLLPUBLIC void DumpColumnStorage( SCTAB nTab, SCCOL nCol ) const;
-#endif
-
-#if DEBUG_AREA_BROADCASTER
-    SC_DLLPUBLIC void DumpAreaBroadcasters() const;
 #endif
 
     SC_DLLPUBLIC void   SetCalcConfig( const ScCalcConfig& rConfig );

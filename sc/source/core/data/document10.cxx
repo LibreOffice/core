@@ -26,6 +26,8 @@
 #include <scitems.hxx>
 #include <datamapper.hxx>
 #include <docsh.hxx>
+#include <bcaslot.hxx>
+#include <broadcast.hxx>
 
 // Add totally brand-new methods to this source file.
 
@@ -1099,6 +1101,19 @@ void ScDocument::CheckIntegrity( SCTAB nTab ) const
         return;
 
     pTab->CheckIntegrity();
+}
+
+sc::BroadcasterState ScDocument::GetBroadcasterState() const
+{
+    sc::BroadcasterState aState;
+
+    for (const auto& xTab : maTabs)
+        xTab->CollectBroadcasterState(aState);
+
+    if (pBASM)
+        pBASM->CollectBroadcasterState(aState);
+
+    return aState;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

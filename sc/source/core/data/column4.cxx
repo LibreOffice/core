@@ -31,6 +31,7 @@
 #include <recursionhelper.hxx>
 #include <docsh.hxx>
 #include <editutil.hxx>
+#include <broadcast.hxx>
 
 #include <SparklineGroup.hxx>
 
@@ -2230,6 +2231,36 @@ void ScColumn::CheckIntegrity() const
         os << "incorrect cached formula block count (expected=" << nCount << "; actual="
             << mnBlkCountFormula << ")";
         throw std::runtime_error(os.str());
+    }
+}
+
+void ScColumn::CollectBroadcasterState(sc::BroadcasterState& rState) const
+{
+    for (const auto& block : maBroadcasters)
+    {
+        if (block.type != sc::element_type_broadcaster)
+            continue;
+
+        auto itBeg = sc::broadcaster_block::begin(*block.data);
+        auto itEnd = sc::broadcaster_block::end(*block.data);
+
+        for (auto it = itBeg; it != itEnd; ++it)
+        {
+            ScAddress aBCPos(nCol, block.position + std::distance(itBeg, it), nTab);
+
+            auto aRes = rState.aCellListenerStore.try_emplace(aBCPos);
+            auto& rLisStore = aRes.first->second;
+
+            const SvtBroadcaster& rBC = **it;
+            for (const SvtListener* pLis : rBC.GetAllListeners())
+            {
+                const auto* pFC = dynamic_cast<const ScFormulaCell*>(pLis);
+                if (pFC)
+                    rLisStore.emplace_back(pFC);
+                else
+                    rLisStore.emplace_back(pLis);
+            }
+        }
     }
 }
 

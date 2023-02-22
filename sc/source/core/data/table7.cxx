@@ -649,4 +649,10 @@ void ScTable::CheckIntegrity() const
         pCol->CheckIntegrity();
 }
 
+void ScTable::CollectBroadcasterState(sc::BroadcasterState& rState) const
+{
+    for (const auto& pCol : aCol)
+        pCol->CollectBroadcasterState(rState);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,6 +25,7 @@
 #include <externalrefmgr.hxx>
 #include <scmod.hxx>
 #include <undomanager.hxx>
+#include <broadcast.hxx>
 
 #include <formula/vectortoken.hxx>
 #include <svl/broadcast.hxx>
@@ -6235,66 +6236,98 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaDepTracking)
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
 
+    const ScAddress aA5(0, 4, 0);
+    const ScAddress aB2(1, 1, 0);
+    const ScAddress aB5(1, 4, 0);
+    const ScAddress aC5(2, 4, 0);
+    const ScAddress aD2(3, 1, 0);
+    const ScAddress aD5(3, 4, 0);
+    const ScAddress aD6(3, 5, 0);
+    const ScAddress aE2(4, 1, 0);
+    const ScAddress aE3(4, 2, 0);
+    const ScAddress aE6(4, 5, 0);
+
     // B2 listens on D2.
-    m_pDoc->SetString(1, 1, 0, "=D2");
-    double val = m_pDoc->GetValue(1, 1, 0);
+    m_pDoc->SetString(aB2, "=D2");
+    double val = m_pDoc->GetValue(aB2);
     ASSERT_DOUBLES_EQUAL_MESSAGE("Referencing an empty cell should yield zero.", 0.0, val);
 
+    {
+        // Check the internal broadcaster state.
+        auto aState = m_pDoc->GetBroadcasterState();
+        aState.dump(std::cout, m_pDoc);
+        CPPUNIT_ASSERT(aState.hasFormulaCellListener(aD2, aB2));
+    }
+
     // Changing the value of D2 should trigger recalculation of B2.
-    m_pDoc->SetValue(3, 1, 0, 1.1);
-    val = m_pDoc->GetValue(1, 1, 0);
+    m_pDoc->SetValue(aD2, 1.1);
+    val = m_pDoc->GetValue(aB2);
     ASSERT_DOUBLES_EQUAL_MESSAGE("Failed to recalculate on value change.", 1.1, val);
 
     // And again.
-    m_pDoc->SetValue(3, 1, 0, 2.2);
-    val = m_pDoc->GetValue(1, 1, 0);
+    m_pDoc->SetValue(aD2, 2.2);
+    val = m_pDoc->GetValue(aB2);
     ASSERT_DOUBLES_EQUAL_MESSAGE("Failed to recalculate on value change.", 2.2, val);
 
     clearRange(m_pDoc, ScRange(0, 0, 0, 10, 10, 0));
 
+    {
+        // Make sure nobody is listening on anything.
+        auto aState = m_pDoc->GetBroadcasterState();
+        aState.dump(std::cout, m_pDoc);
+        CPPUNIT_ASSERT(aState.aCellListenerStore.empty());
+    }
+
     // Now, let's test the range dependency tracking.
 
     // B2 listens on D2:E6.
-    m_pDoc->SetString(1, 1, 0, "=SUM(D2:E6)");
-    val = m_pDoc->GetValue(1, 1, 0);
+    m_pDoc->SetString(aB2, "=SUM(D2:E6)");
+    val = m_pDoc->GetValue(aB2);
     ASSERT_DOUBLES_EQUAL_MESSAGE("Summing an empty range should yield zero.", 0.0, val);
 
+    {
+        // Check the internal state to make sure it matches.
+        auto aState = m_pDoc->GetBroadcasterState();
+        aState.dump(std::cout, m_pDoc);
+        CPPUNIT_ASSERT(aState.hasFormulaCellListener({aD2, aE6}, aB2));
+    }
+
     // Set value to E3. This should trigger recalc on B2.
-    m_pDoc->SetValue(4, 2, 0, 2.4);
-    val = m_pDoc->GetValue(1, 1, 0);
+    m_pDoc->SetValue(aE3, 2.4);
+    val = m_pDoc->GetValue(aB2);
     ASSERT_DOUBLES_EQUAL_MESSAGE("Failed to recalculate on single value change.", 2.4, val);
 
     // Set value to D5 to trigger recalc again.  Note that this causes an
     // addition of 1.2 + 2.4 which is subject to binary floating point
     // rounding error.  We need to use approxEqual to assess its value.
 
-    m_pDoc->SetValue(3, 4, 0, 1.2);
-    val = m_pDoc->GetValue(1, 1, 0);
+    m_pDoc->SetValue(aD5, 1.2);
+    val = m_pDoc->GetValue(aB2);
     CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 3.6));
 
     // Change the value of D2 (boundary case).
-    m_pDoc->SetValue(3, 1, 0, 1.0);
-    val = m_pDoc->GetValue(1, 1, 0);
+    m_pDoc->SetValue(aD2, 1.0);
+    val = m_pDoc->GetValue(aB2);
     CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 4.6));
 
     // Change the value of E6 (another boundary case).
-    m_pDoc->SetValue(4, 5, 0, 2.0);
-    val = m_pDoc->GetValue(1, 1, 0);
+    m_pDoc->SetValue(aE6, 2.0);
+    val = m_pDoc->GetValue(aB2);
     CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 6.6));
 
     // Change the value of D6 (another boundary case).
-    m_pDoc->SetValue(3, 5, 0, 3.0);
-    val = m_pDoc->GetValue(1, 1, 0);
+    m_pDoc->SetValue(aD6, 3.0);
+    val = m_pDoc->GetValue(aB2);
     CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 9.6));
 
     // Change the value of E2 (another boundary case).
-    m_pDoc->SetValue(4, 1, 0, 0.4);
-    val = m_pDoc->GetValue(1, 1, 0);
+    m_pDoc->SetValue(aE2, 0.4);
+    val = m_pDoc->GetValue(aB2);
     CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 10.0));
 
     // Change the existing non-empty value cell (E2).
-    m_pDoc->SetValue(4, 1, 0, 2.4);
-    val = m_pDoc->GetValue(1, 1, 0);
+    m_pDoc->SetValue(aE2, 2.4);
+    val = m_pDoc->GetValue(aB2);
     CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 12.0));
 
     clearRange(m_pDoc, ScRange(0, 0, 0, 10, 10, 0));
@@ -6328,10 +6361,10 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaDepTracking)
 
     // Intentionally insert a formula in column 1. This will break column 1's
     // uniformity of consisting only of static value cells.
-    m_pDoc->SetString(0, 4, 0, "=R2C3");
-    ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected formula value.", 2.0, m_pDoc->GetValue(0, 4, 0));
-    ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected formula value.", 2.0, m_pDoc->GetValue(1, 4, 0));
-    ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected formula value.", 4.0, m_pDoc->GetValue(2, 4, 0));
+    m_pDoc->SetString(aA5, "=R2C3");
+    ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected formula value.", 2.0, m_pDoc->GetValue(aA5));
+    ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected formula value.", 2.0, m_pDoc->GetValue(aB5));
+    ASSERT_DOUBLES_EQUAL_MESSAGE("Unexpected formula value.", 4.0, m_pDoc->GetValue(aC5));
 
     m_pDoc->DeleteTab(0);
 }
