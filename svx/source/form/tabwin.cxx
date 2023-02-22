@@ -112,7 +112,7 @@ IMPL_LINK(FmFieldWin, DragBeginHdl, bool&, rUnsetDragIcon, bool)
 FmFieldWin::FmFieldWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, weld::Window* _pParent)
     : SfxModelessDialogController(_pBindings, _pMgr, _pParent, "svx/ui/formfielddialog.ui", "FormFieldDialog")
     , SfxControllerItem(SID_FM_FIELDS_CONTROL, *_pBindings)
-    , comphelper::OPropertyChangeListener(m_aMutex)
+    , comphelper::OPropertyChangeListener2()
     , m_xListBox(m_xBuilder->weld_tree_view("treeview"))
     , m_nObjectType(0)
 {
@@ -133,10 +133,13 @@ FmFieldWin::FmFieldWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, weld::Win
 
 FmFieldWin::~FmFieldWin()
 {
-    if (m_xChangeListener.is())
     {
-        m_xChangeListener->dispose();
-        m_xChangeListener.clear();
+        std::unique_lock g(m_aMutex);
+        if (m_xChangeListener.is())
+        {
+            m_xChangeListener->dispose(g);
+            m_xChangeListener.clear();
+        }
     }
     ::SfxControllerItem::dispose();
 }
@@ -265,12 +268,13 @@ void FmFieldWin::UpdateContent(const css::uno::Reference< css::form::XForm > & x
         }
 
         // listen for changes at ControlSource in PropertySet
+        std::unique_lock g(m_aMutex);
         if (m_xChangeListener.is())
         {
-            m_xChangeListener->dispose();
+            m_xChangeListener->dispose(g);
             m_xChangeListener.clear();
         }
-        m_xChangeListener = new ::comphelper::OPropertyChangeMultiplexer(this, xSet);
+        m_xChangeListener = new ::comphelper::OPropertyChangeMultiplexer2(m_aMutex, g, this, xSet);
         m_xChangeListener->addProperty(FM_PROP_DATASOURCE);
         m_xChangeListener->addProperty(FM_PROP_COMMAND);
         m_xChangeListener->addProperty(FM_PROP_COMMANDTYPE);

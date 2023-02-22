@@ -25,7 +25,7 @@
 #include <svx/dbaexchange.hxx>
 #include <com/sun/star/form/XForm.hpp>
 
-#include <comphelper/propmultiplex.hxx>
+#include <comphelper/propmultiplex2.hxx>
 #include <connectivity/dbtools.hxx>
 
 class FmFormShell;
@@ -33,9 +33,9 @@ struct ColumnInfo;
 
 class FmFieldWin final : public SfxModelessDialogController
                  , public SfxControllerItem
-                 , public ::comphelper::OPropertyChangeListener
+                 , public ::comphelper::OPropertyChangeListener2
 {
-    ::osl::Mutex        m_aMutex;
+    std::mutex        m_aMutex;
     std::unique_ptr<weld::TreeView> m_xListBox;
     std::vector<std::unique_ptr<ColumnInfo>> m_aListBoxData;
     ::dbtools::SharedConnection
@@ -44,7 +44,7 @@ class FmFieldWin final : public SfxModelessDialogController
                        m_aObjectName;
     sal_Int32          m_nObjectType;
 
-    rtl::Reference<comphelper::OPropertyChangeMultiplexer>  m_xChangeListener;
+    rtl::Reference<comphelper::OPropertyChangeMultiplexer2>  m_xChangeListener;
     rtl::Reference<svx::OColumnTransferable> m_xHelper;
 
     void addToList(const css::uno::Reference<css::container::XNameAccess>& i_xColumns);
