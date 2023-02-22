@@ -15,6 +15,10 @@
 #include <docsh.hxx>
 #include <formatcontentcontrol.hxx>
 #include <wrtsh.hxx>
+#include <itabenum.hxx>
+#include <frmmgr.hxx>
+#include <frameformats.hxx>
+#include <formatflysplit.hxx>
 
 namespace
 {
@@ -188,6 +192,41 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxSymbolFontExport)
     assertXPath(pXmlDoc, "//w:p/w:r/w:sym", 1);
     assertXPath(pXmlDoc, "//w:p/w:r/w:sym[1]", "font", "Wingdings");
     assertXPath(pXmlDoc, "//w:p/w:r/w:sym[1]", "char", "f0e0");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDocxFloatingTableExport)
+{
+    // Given a document with a floating table:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    // Insert a table:
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, 1, 1);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+    // Select it:
+    pWrtShell->SelAll();
+    // Wrap in a fly:
+    SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
+    pWrtShell->StartAllAction();
+    aMgr.InsertFlyFrame(RndStdIds::FLY_AT_PARA, aMgr.GetPos(), aMgr.GetSize());
+    // Mark it as a floating table:
+    SwFrameFormats& rFlys = *pDoc->GetSpzFrameFormats();
+    SwFrameFormat* pFly = rFlys[0];
+    SwAttrSet aSet(pFly->GetAttrSet());
+    aSet.Put(SwFormatFlySplit(true));
+    pDoc->SetAttr(aSet, *pFly);
+    pWrtShell->EndAllAction();
+
+    // When saving to docx:
+    save("Office Open XML Text");
+
+    // Then make sure we write a floating table, not a textframe containing a table:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '//w:tbl/w:tblPr/w:tblpPr' number of nodes is incorrect
+    // i.e. no floating table was exported.
+    assertXPath(pXmlDoc, "//w:tbl/w:tblPr/w:tblpPr", 1);
 }
 }
 

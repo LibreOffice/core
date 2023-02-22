@@ -59,6 +59,22 @@
 #include <utility>
 #endif
 
+namespace
+{
+bool IsFlySplitAllowed()
+{
+    bool bRet
+        = officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::get();
+
+    if (!bRet)
+    {
+        bRet = getenv("SW_FORCE_FLY_SPLIT") != nullptr;
+    }
+
+    return bRet;
+}
+}
+
 namespace writerfilter::dmapper {
 
 using namespace ::com::sun::star;
@@ -375,7 +391,10 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
                 comphelper::makePropertyValue("vertAnchor", pTablePositions->getVertAnchor())
             };
 
-            aGrabBag["TablePosition"] <<= aGrabBagTS;
+            if (!IsFlySplitAllowed())
+            {
+                aGrabBag["TablePosition"] <<= aGrabBagTS;
+            }
         }
         else if (bConvertToFloatingInFootnote)
         {
@@ -1565,12 +1584,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                     comphelper::makePropertyValue("IsFollowingTextFlow", true));
             }
 
-            bool bSplitAllowed = officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::get();
-            if (!bSplitAllowed)
-            {
-                bSplitAllowed = getenv("SW_FORCE_FLY_SPLIT") != nullptr;
-            }
-            if (bSplitAllowed)
+            if (IsFlySplitAllowed())
             {
                 aFrameProperties.push_back(comphelper::makePropertyValue("IsSplitAllowed", true));
             }

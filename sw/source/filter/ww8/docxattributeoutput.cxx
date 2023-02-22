@@ -136,6 +136,7 @@
 #include <txtatr.hxx>
 #include <frameformats.hxx>
 #include <textcontentcontrol.hxx>
+#include <formatflysplit.hxx>
 
 #include <o3tl/string_view.hxx>
 #include <o3tl/unit_conversion.hxx>
@@ -408,7 +409,14 @@ static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutpu
         std::map<OUString, css::uno::Any> aTableGrabBag = pTableGrabBag->GetGrabBag();
         // no grabbag?
         if (aTableGrabBag.find("TablePosition") == aTableGrabBag.end())
+        {
+            if (pFrameFormat->GetFlySplit().GetValue())
+            {
+                ww8::Frame aFrame(*pFrameFormat, *rAnchor.GetContentAnchor());
+                rDocxAttributeOutput.WriteFloatingTable(&aFrame);
+            }
             continue;
+        }
 
         // write table to docx
         ww8::Frame aFrame(*pFrameFormat, *rAnchor.GetContentAnchor());
@@ -4559,6 +4567,84 @@ sal_Int32 lcl_getWordCompatibilityMode(const DocxExport& rDocExport)
     return nWordCompatibilityMode;
 }
 
+void CollectFloatingTableAttributes(DocxExport& rExport, const ww8::Frame& rFrame,
+                                    ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner,
+                                    rtl::Reference<FastAttributeList>& pAttributes)
+{
+    // we export the values of the surrounding Frame
+    OString sOrientation;
+    sal_Int32 nValue;
+
+    // If tblpXSpec or tblpYSpec are present, we do not write tblpX or tblpY!
+    OString sTblpXSpec
+        = convertToOOXMLHoriOrient(rFrame.GetFrameFormat().GetHoriOrient().GetHoriOrient(),
+                                   rFrame.GetFrameFormat().GetHoriOrient().IsPosToggle());
+    OString sTblpYSpec
+        = convertToOOXMLVertOrient(rFrame.GetFrameFormat().GetVertOrient().GetVertOrient());
+
+    sOrientation
+        = convertToOOXMLVertOrientRel(rFrame.GetFrameFormat().GetVertOrient().GetRelationOrient());
+    pAttributes->add(FSNS(XML_w, XML_vertAnchor), sOrientation);
+
+    if (!sTblpYSpec.isEmpty())
+        pAttributes->add(FSNS(XML_w, XML_tblpYSpec), sTblpYSpec);
+
+    sOrientation
+        = convertToOOXMLHoriOrientRel(rFrame.GetFrameFormat().GetHoriOrient().GetRelationOrient());
+    pAttributes->add(FSNS(XML_w, XML_horzAnchor), sOrientation);
+
+    if (!sTblpXSpec.isEmpty())
+        pAttributes->add(FSNS(XML_w, XML_tblpXSpec), sTblpXSpec);
+
+    nValue = rFrame.GetFrameFormat().GetULSpace().GetLower();
+    if (nValue != 0)
+        pAttributes->add(FSNS(XML_w, XML_bottomFromText), OString::number(nValue));
+
+    nValue = rFrame.GetFrameFormat().GetLRSpace().GetLeft();
+    if (nValue != 0)
+        pAttributes->add(FSNS(XML_w, XML_leftFromText), OString::number(nValue));
+
+    nValue = rFrame.GetFrameFormat().GetLRSpace().GetRight();
+    if (nValue != 0)
+        pAttributes->add(FSNS(XML_w, XML_rightFromText), OString::number(nValue));
+
+    nValue = rFrame.GetFrameFormat().GetULSpace().GetUpper();
+    if (nValue != 0)
+        pAttributes->add(FSNS(XML_w, XML_topFromText), OString::number(nValue));
+
+    if (sTblpXSpec.isEmpty()) // do not write tblpX if tblpXSpec is present
+    {
+        nValue = rFrame.GetFrameFormat().GetHoriOrient().GetPos();
+        // we need to revert the additional shift introduced by
+        // lcl_DecrementHoriOrientPosition() in writerfilter
+        // 1st: left distance of the table
+        const SwTableBox* pTabBox = pTableTextNodeInfoInner->getTableBox();
+        const SwFrameFormat* pFrameFormat = pTabBox->GetFrameFormat();
+        const SvxBoxItem& rBox = pFrameFormat->GetBox();
+        sal_Int32 nMode = lcl_getWordCompatibilityMode(rExport);
+        if (nMode < 15)
+        {
+            sal_uInt16 nLeftDistance = rBox.GetDistance(SvxBoxItemLine::LEFT);
+            nValue += nLeftDistance;
+        }
+
+        // 2nd: if a left border is given, revert the shift by half the width
+        // from lcl_DecrementHoriOrientPosition() in writerfilter
+        if (const editeng::SvxBorderLine* pLeftBorder = rBox.GetLeft())
+        {
+            tools::Long nWidth = pLeftBorder->GetWidth();
+            nValue += (nWidth / 2);
+        }
+
+        pAttributes->add(FSNS(XML_w, XML_tblpX), OString::number(nValue));
+    }
+
+    if (sTblpYSpec.isEmpty()) // do not write tblpY if tblpYSpec is present
+    {
+        nValue = rFrame.GetFrameFormat().GetVertOrient().GetPos();
+        pAttributes->add(FSNS(XML_w, XML_tblpY), OString::number(nValue));
+    }
+}
 }
 
 void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
@@ -4665,6 +4751,16 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     std::map<SvxBoxItemLine, css::table::BorderLine2>& rTableStyleConf = m_aTableStyleConfs.back();
     rTableStyleConf.clear();
 
+    bool bFloatingTableWritten = false;
+    if (pFloatingTableFrame && pFloatingTableFrame->GetFrameFormat().GetFlySplit().GetValue())
+    {
+        rtl::Reference<FastAttributeList> pAttributes = FastSerializerHelper::createAttrList();
+        CollectFloatingTableAttributes(m_rExport, *pFloatingTableFrame, pTableTextNodeInfoInner,
+                                       pAttributes);
+        m_pSerializer->singleElementNS(XML_w, XML_tblpPr, pAttributes);
+        bFloatingTableWritten = true;
+    }
+
     // Extract properties from grab bag
     for( const auto & rGrabBagElement : aGrabBag )
     {
@@ -4724,74 +4820,8 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             const ww8::Frame* pFrame = m_rExport.GetFloatingTableFrame();
             if( pFrame )
             {
-                // we export the values of the surrounding Frame
-                OString sOrientation;
-                sal_Int32 nValue;
-
-                // If tblpXSpec or tblpYSpec are present, we do not write tblpX or tblpY!
-                OString sTblpXSpec = convertToOOXMLHoriOrient( pFrame->GetFrameFormat().GetHoriOrient().GetHoriOrient(), pFrame->GetFrameFormat().GetHoriOrient().IsPosToggle() );
-                OString sTblpYSpec = convertToOOXMLVertOrient( pFrame->GetFrameFormat().GetVertOrient().GetVertOrient() );
-
-                sOrientation = convertToOOXMLVertOrientRel( pFrame->GetFrameFormat().GetVertOrient().GetRelationOrient() );
-                attrListTablePos->add(FSNS(XML_w, XML_vertAnchor), sOrientation);
-
-                if( !sTblpYSpec.isEmpty() )
-                    attrListTablePos->add(FSNS(XML_w, XML_tblpYSpec), sTblpYSpec);
-
-                sOrientation = convertToOOXMLHoriOrientRel( pFrame->GetFrameFormat().GetHoriOrient().GetRelationOrient() );
-                attrListTablePos->add(FSNS(XML_w, XML_horzAnchor), sOrientation);
-
-                if( !sTblpXSpec.isEmpty() )
-                    attrListTablePos->add(FSNS(XML_w, XML_tblpXSpec), sTblpXSpec);
-
-                nValue = pFrame->GetFrameFormat().GetULSpace().GetLower();
-                if( nValue != 0 )
-                    attrListTablePos->add( FSNS( XML_w, XML_bottomFromText ), OString::number( nValue ) );
-
-                nValue = pFrame->GetFrameFormat().GetLRSpace().GetLeft();
-                if( nValue != 0 )
-                    attrListTablePos->add( FSNS( XML_w, XML_leftFromText ), OString::number( nValue ) );
-
-                nValue = pFrame->GetFrameFormat().GetLRSpace().GetRight();
-                if( nValue != 0 )
-                    attrListTablePos->add( FSNS( XML_w, XML_rightFromText ), OString::number( nValue ) );
-
-                nValue = pFrame->GetFrameFormat().GetULSpace().GetUpper();
-                if( nValue != 0 )
-                    attrListTablePos->add( FSNS( XML_w, XML_topFromText ), OString::number( nValue ) );
-
-                if( sTblpXSpec.isEmpty() ) // do not write tblpX if tblpXSpec is present
-                {
-                    nValue = pFrame->GetFrameFormat().GetHoriOrient().GetPos();
-                    // we need to revert the additional shift introduced by
-                    // lcl_DecrementHoriOrientPosition() in writerfilter
-                    // 1st: left distance of the table
-                    const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
-                    const SwFrameFormat * pFrameFormat = pTabBox->GetFrameFormat();
-                    const SvxBoxItem& rBox = pFrameFormat->GetBox( );
-                    sal_Int32 nMode = lcl_getWordCompatibilityMode(m_rExport);
-                    if (nMode < 15)
-                    {
-                        sal_uInt16 nLeftDistance = rBox.GetDistance(SvxBoxItemLine::LEFT);
-                        nValue += nLeftDistance;
-                    }
-
-                    // 2nd: if a left border is given, revert the shift by half the width
-                    // from lcl_DecrementHoriOrientPosition() in writerfilter
-                    if (const editeng::SvxBorderLine* pLeftBorder = rBox.GetLeft())
-                    {
-                        tools::Long nWidth = pLeftBorder->GetWidth();
-                        nValue += (nWidth / 2);
-                    }
-
-                    attrListTablePos->add( FSNS( XML_w, XML_tblpX ), OString::number( nValue ) );
-                }
-
-                if( sTblpYSpec.isEmpty() ) // do not write tblpY if tblpYSpec is present
-                {
-                    nValue = pFrame->GetFrameFormat().GetVertOrient().GetPos();
-                    attrListTablePos->add( FSNS( XML_w, XML_tblpY ), OString::number( nValue ) );
-                }
+                CollectFloatingTableAttributes(m_rExport, *pFrame, pTableTextNodeInfoInner,
+                                               attrListTablePos);
             }
             else // ( pFrame = 0 )
             {
@@ -4851,7 +4881,10 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
                 }
             }
 
-            m_pSerializer->singleElementNS( XML_w, XML_tblpPr, attrListTablePos);
+            if (!bFloatingTableWritten)
+            {
+                m_pSerializer->singleElementNS(XML_w, XML_tblpPr, attrListTablePos);
+            }
             attrListTablePos = nullptr;
         }
         else
