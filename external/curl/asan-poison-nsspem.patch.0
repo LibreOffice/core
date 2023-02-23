@@ -1,6 +1,6 @@
 --- lib/vtls/nss.c
 +++ lib/vtls/nss.c
-@@ -1945,7 +1945,7 @@
+@@ -1926,7 +1926,7 @@
  
    PK11_SetPasswordFunc(nss_get_password);
  
