@@ -157,23 +157,6 @@ const char* sw::PortionTypeToString(PortionType nType)
     }
 }
 
-namespace {
-    xmlTextWriterPtr lcl_createDefaultWriter()
-    {
-        xmlTextWriterPtr writer = xmlNewTextWriterFilename( "layout.xml", 0 );
-        xmlTextWriterSetIndent(writer,1);
-        (void)xmlTextWriterSetIndentString(writer, BAD_CAST("  "));
-        (void)xmlTextWriterStartDocument( writer, nullptr, nullptr, nullptr );
-        return writer;
-    }
-
-    void lcl_freeWriter( xmlTextWriterPtr writer )
-    {
-        (void)xmlTextWriterEndDocument( writer );
-        xmlFreeTextWriter( writer );
-    }
-}
-
 void SwFrame::dumpTopMostAsXml(xmlTextWriterPtr writer) const
 {
     const SwFrame* pFrame = this;
@@ -187,17 +170,10 @@ void SwFrame::dumpTopMostAsXml(xmlTextWriterPtr writer) const
 
 void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
 {
-    bool bCreateWriter = ( nullptr == writer );
-    if ( bCreateWriter )
-        writer = lcl_createDefaultWriter();
-
     const char *name = nullptr;
 
     switch ( GetType(  ) )
     {
-    case SwFrameType::Root:
-        name = "root";
-        break;
     case SwFrameType::Page:
         name = "page";
         break;
@@ -248,20 +224,6 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
         (void)xmlTextWriterStartElement( writer, reinterpret_cast<const xmlChar *>(name) );
 
         dumpAsXmlAttributes( writer );
-
-        if (IsRootFrame())
-        {
-            const SwRootFrame* pRootFrame = static_cast<const SwRootFrame*>(this);
-            (void)xmlTextWriterStartElement(writer, BAD_CAST("sfxViewShells"));
-            SwView* pView = static_cast<SwView*>(SfxViewShell::GetFirst(true, checkSfxViewShell<SwView>));
-            while (pView)
-            {
-                if (pRootFrame->GetCurrShell()->GetSfxViewShell() && pView->GetObjectShell() == pRootFrame->GetCurrShell()->GetSfxViewShell()->GetObjectShell())
-                    pView->dumpAsXml(writer);
-                pView = static_cast<SwView*>(SfxViewShell::GetNext(*pView, true, checkSfxViewShell<SwView>));
-            }
-            (void)xmlTextWriterEndElement(writer);
-        }
 
         if (IsPageFrame())
         {
@@ -403,9 +365,6 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
         }
         (void)xmlTextWriterEndElement( writer );
     }
-
-    if ( bCreateWriter )
-        lcl_freeWriter( writer );
 }
 
 void SwFrame::dumpInfosAsXml( xmlTextWriterPtr writer ) const
@@ -494,10 +453,6 @@ void SwFrame::dumpChildrenAsXml( xmlTextWriterPtr writer ) const
 
 void SwAnchoredObject::dumpAsXml( xmlTextWriterPtr writer ) const
 {
-    bool bCreateWriter = ( nullptr == writer );
-    if ( bCreateWriter )
-        writer = lcl_createDefaultWriter();
-
     (void)xmlTextWriterStartElement( writer, BAD_CAST( getElementName() ) );
     (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ptr" ), "%p", this );
     (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("anchor-frame"), BAD_CAST(OString::number(mpAnchorFrame->GetFrameId()).getStr()));
@@ -516,9 +471,6 @@ void SwAnchoredObject::dumpAsXml( xmlTextWriterPtr writer ) const
         pObject->dumpAsXml(writer);
 
     (void)xmlTextWriterEndElement( writer );
-
-    if ( bCreateWriter )
-        lcl_freeWriter( writer );
 }
 
 void SwFont::dumpAsXml(xmlTextWriterPtr writer) const

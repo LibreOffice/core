@@ -426,6 +426,8 @@ public:
     void SetFieldmarkMode(sw::FieldmarkMode, sw::ParagraphBreakMode);
     sw::ParagraphBreakMode GetParagraphBreakMode() const { return m_ParagraphBreakMode; }
     bool HasMergedParas() const;
+
+    void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
 };
 
 inline tools::Long SwRootFrame::GetBrowseWidth() const

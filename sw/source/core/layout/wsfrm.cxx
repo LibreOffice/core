@@ -24,6 +24,7 @@
 #include <o3tl/safeint.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/brushitem.hxx>
+#include <sfx2/viewsh.hxx>
 #include <fmtornt.hxx>
 #include <pagefrm.hxx>
 #include <section.hxx>
@@ -63,6 +64,7 @@
 #include <layact.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
+#include <view.hxx>
 
 // RotateFlyFrame3
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -4752,6 +4754,52 @@ bool SwRootFrame::HasMergedParas() const
     return IsHideRedlines()
         || GetFieldmarkMode() != sw::FieldmarkMode::ShowBoth
         || GetParagraphBreakMode() == sw::ParagraphBreakMode::Hidden;
+}
+
+namespace {
+    xmlTextWriterPtr lcl_createDefaultWriter()
+    {
+        xmlTextWriterPtr writer = xmlNewTextWriterFilename( "layout.xml", 0 );
+        xmlTextWriterSetIndent(writer,1);
+        (void)xmlTextWriterSetIndentString(writer, BAD_CAST("  "));
+        (void)xmlTextWriterStartDocument( writer, nullptr, nullptr, nullptr );
+        return writer;
+    }
+
+    void lcl_freeWriter( xmlTextWriterPtr writer )
+    {
+        (void)xmlTextWriterEndDocument( writer );
+        xmlFreeTextWriter( writer );
+    }
+}
+
+void SwRootFrame::dumpAsXml(xmlTextWriterPtr writer) const
+{
+    bool bCreateWriter = (nullptr == writer);
+    if (bCreateWriter)
+        writer = lcl_createDefaultWriter();
+
+    (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("root"));
+    dumpAsXmlAttributes(writer);
+
+    (void)xmlTextWriterStartElement(writer, BAD_CAST("sfxViewShells"));
+    SwView* pView = static_cast<SwView*>(SfxViewShell::GetFirst(true, checkSfxViewShell<SwView>));
+    while (pView)
+    {
+        if (GetCurrShell()->GetSfxViewShell() && pView->GetObjectShell() == GetCurrShell()->GetSfxViewShell()->GetObjectShell())
+            pView->dumpAsXml(writer);
+        pView = static_cast<SwView*>(SfxViewShell::GetNext(*pView, true, checkSfxViewShell<SwView>));
+    }
+    (void)xmlTextWriterEndElement(writer);
+
+    (void)xmlTextWriterStartElement(writer, BAD_CAST("infos"));
+    dumpInfosAsXml(writer);
+    (void)xmlTextWriterEndElement(writer);
+    dumpChildrenAsXml(writer);
+    (void)xmlTextWriterEndElement(writer);
+
+    if (bCreateWriter)
+        lcl_freeWriter(writer);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
