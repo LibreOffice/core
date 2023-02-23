@@ -2138,7 +2138,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf152053)
     // Without the fix in place, this test would have failed with
     // - Expected: 1162
     // - Actual  : 715
-    CPPUNIT_ASSERT_EQUAL(1162, nWidth);
+    // tolerance is for windows machines with non-default DPI
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1162, nWidth, 10);
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testPreviewMissingObjLink)
