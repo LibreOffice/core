@@ -138,17 +138,12 @@ namespace drawinglayer::texture
             if (mnColorSteps.empty())
                 return;
 
-            // get start color and also cc to rOuterColor
-            basegfx::BColor aCStart(mnColorSteps[0].getColor());
-            rOuterColor = aCStart;
+            // fill in return parameter rOuterColor before returning
+            rOuterColor = mnColorSteps.front().getColor();
 
             // only one color, done
             if (mnColorSteps.size() < 2)
                 return;
-
-            // here we could check that fOffsetStart == mnColorSteps[0].getOffset(),
-            // but just assume/correct that StartColor is at 0.0
-            double fOffsetStart(0.0 /*mnColorSteps[0].getOffset()*/);
 
             // prepare unit range transform
             basegfx::B2DHomMatrix aPattern;
@@ -161,14 +156,19 @@ namespace drawinglayer::texture
             aPattern.scale(mfUnitWidth, 1.0);
             aPattern.translate(mfUnitMinX, 0.0);
 
-            for (size_t outerLoop(1); outerLoop < mnColorSteps.size(); outerLoop++)
+            // outer loop over ColorSteps, each is from cs_l to cs_r
+            for (auto cs_l(mnColorSteps.begin()), cs_r(cs_l + 1); cs_r != mnColorSteps.end(); cs_l++, cs_r++)
             {
-                const basegfx::BColor aCEnd(mnColorSteps[outerLoop].getColor());
+                // get colors & calculate steps
+                const basegfx::BColor aCStart(cs_l->getColor());
+                const basegfx::BColor aCEnd(cs_r->getColor());
                 const sal_uInt32 nSteps(basegfx::utils::calculateNumberOfSteps(
                     maGradientInfo.getRequestedSteps(), aCStart, aCEnd));
-                const double fOffsetEnd(mnColorSteps[outerLoop].getOffset());
 
+                // get offsets & calculate StripeWidth
                 // nSteps is >= 1, see getRequestedSteps, so no check needed here
+                const double fOffsetStart(cs_l->getOffset());
+                const double fOffsetEnd(cs_r->getOffset());
                 const double fStripeWidth((fOffsetEnd - fOffsetStart) / nSteps);
 
                 // for the 1st color range we do not need to create the 1st step
@@ -177,7 +177,7 @@ namespace drawinglayer::texture
                 // colored using rOuterColor.
                 // We *need* to create this though for all 'inner' color ranges
                 // to get a correct start
-                const sal_uInt32 nStartInnerLoop(1 == outerLoop ? 1 : 0);
+                const sal_uInt32 nStartInnerLoop(cs_l == mnColorSteps.begin() ? 1 : 0);
 
                 for (sal_uInt32 innerLoop(nStartInnerLoop); innerLoop < nSteps; innerLoop++)
                 {
@@ -205,9 +205,6 @@ namespace drawinglayer::texture
                     aB2DHomMatrixAndBColor.maBColor = interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1));
                     rEntries.push_back(aB2DHomMatrixAndBColor);
                 }
-
-                aCStart = aCEnd;
-                fOffsetStart = fOffsetEnd;
             }
         }
 
@@ -264,59 +261,85 @@ namespace drawinglayer::texture
             std::vector< B2DHomMatrixAndBColor >& rEntries,
             basegfx::BColor& rOuterColor)
         {
-            if(mnColorSteps.size() <= 1)
+            // no color at all, done
+            if (mnColorSteps.empty())
                 return;
 
-            const basegfx::BColor maStart(mnColorSteps.front().getColor());
-            const basegfx::BColor maEnd(mnColorSteps.back().getColor());
-            const sal_uInt32 nSteps(basegfx::utils::calculateNumberOfSteps(
-                maGradientInfo.getRequestedSteps(), maStart, maEnd));
+            // fill in return parameter rOuterColor before returning
+            // CAUTION: for GradientAxial the color range is inverted (!)
+            rOuterColor = mnColorSteps.back().getColor();
 
-            rOuterColor = maEnd;
-            const double fStripeWidth(1.0 / nSteps);
-            B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
+            // only one color, done
+            if (mnColorSteps.size() < 2)
+                return;
 
-            for(sal_uInt32 a(1); a < nSteps; a++)
+            // prepare unit range transform
+            basegfx::B2DHomMatrix aPattern;
+
+            // bring in X from unit circle [-1, -1, 1, 1] to unit range [0, 0, 1, 1]
+            aPattern.scale(0.5, 1.0);
+            aPattern.translate(0.5, 0.0);
+
+            // scale/translate in X
+            aPattern.scale(mfUnitWidth, 1.0);
+            aPattern.translate(mfUnitMinX, 0.0);
+
+            // outer loop over ColorSteps, each is from cs_l to cs_r
+            // CAUTION: for GradientAxial the color range is used inverted (!)
+            //          thus, to loop backward, use rbegin/rend
+            for (auto cs_r(mnColorSteps.rbegin()), cs_l(cs_r + 1); cs_l != mnColorSteps.rend(); cs_l++, cs_r++)
             {
-                const double fPos(fStripeWidth * a);
-                basegfx::B2DHomMatrix aNew;
+                // get colors & calculate steps
+                const basegfx::BColor aCStart(cs_l->getColor());
+                const basegfx::BColor aCEnd(cs_r->getColor());
+                const sal_uInt32 nSteps(basegfx::utils::calculateNumberOfSteps(
+                    maGradientInfo.getRequestedSteps(), aCStart, aCEnd));
 
-                // bring in X from unit circle [-1, -1, 1, 1] to unit range [0, 0, 1, 1]
-                aNew.scale(0.5, 1.0);
-                aNew.translate(0.5, 0.0);
+                // get offsets & calculate StripeWidth
+                // nSteps is >= 1, see getRequestedSteps, so no check needed here
+                const double fOffsetStart(cs_l->getOffset());
+                const double fOffsetEnd(cs_r->getOffset());
+                const double fStripeWidth((fOffsetEnd - fOffsetStart) / nSteps);
 
-                // scale/translate in X
-                aNew.scale(mfUnitWidth, 1.0);
-                aNew.translate(mfUnitMinX, 0.0);
+                // for the 1st color range we do not need to create the 1st step, see above
+                const sal_uInt32 nStartInnerLoop(cs_r == mnColorSteps.rbegin() ? 1 : 0);
 
-                // already centered in Y on X-Axis, just scale in Y
-                aNew.scale(1.0, 1.0 - fPos);
+                for (sal_uInt32 innerLoop(nStartInnerLoop); innerLoop < nSteps; innerLoop++)
+                {
+                    // calculate pos in Y
+                    const double fPos(fOffsetEnd - (fStripeWidth * innerLoop));
 
-                // set at target
-                aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * aNew;
+                    // already centered in Y on X-Axis, just scale in Y
+                    basegfx::B2DHomMatrix aNew(aPattern);
+                    aNew.scale(1.0, fPos);
 
-                // interpolate and set color
-                aB2DHomMatrixAndBColor.maBColor = interpolate(maEnd, maStart, double(a) / double(nSteps - 1));
+                    // set and add at target
+                    B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
 
-                rEntries.push_back(aB2DHomMatrixAndBColor);
+                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * aNew;
+                    aB2DHomMatrixAndBColor.maBColor = interpolate(aCEnd, aCStart, double(innerLoop) / double(nSteps - 1));
+                    rEntries.push_back(aB2DHomMatrixAndBColor);
+                }
             }
         }
 
         void GeoTexSvxGradientAxial::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
-            if(mnColorSteps.size() <= 1)
-            {
-                rBColor = mnColorSteps.front().getColor();
-            }
-            else
-            {
-                const double fScaler(basegfx::utils::getAxialGradientAlpha(rUV, maGradientInfo));
+            // no color at all, done
+            if (mnColorSteps.empty())
+                return;
 
-                const basegfx::BColor maStart(mnColorSteps.front().getColor());
-                const basegfx::BColor maEnd(mnColorSteps.back().getColor());
-
-                rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
+            // just single color, done
+            if (mnColorSteps.size() < 2)
+            {
+                // CAUTION: for GradientAxial the color range is used inverted (!)
+                rBColor = mnColorSteps.back().getColor();
+                return;
             }
+
+            // texture-back-transform X/Y -> t [0.0..1.0] and determine color
+            const double fScaler(basegfx::utils::getAxialGradientAlpha(rUV, maGradientInfo));
+            rBColor = basegfx::utils::modifyBColor(mnColorSteps, fScaler, mnRequestedSteps);
         }
 
 
