@@ -75,6 +75,8 @@ void RegressionCurveCalculator::setRegressionProperties(
     sal_Int32   aPeriod,
     sal_Int32   nMovingType )
 {
+    if( aPeriod < 0 )
+        throw lang::IllegalArgumentException("aPeriod may not be < 0", static_cast<cppu::OWeakObject*>(this), 3);
     mDegree = aDegree;
     mForceIntercept = aForceIntercept;
     mInterceptValue = aInterceptValue;
