@@ -1172,11 +1172,12 @@ void CondFormatBuffer::finalizeImport()
             minIndex = i;
             for (size_t j = i + 1; j < maCondFormats.size(); ++j)
             {
-                if (maCondFormats[j]->maRules.begin()->first
-                    < maCondFormats[minIndex]->maRules.begin()->first)
-                {
+                const CondFormat::CondFormatRuleMap& rNextRules = maCondFormats[j]->maRules;
+                const CondFormat::CondFormatRuleMap& rMinRules = maCondFormats[minIndex]->maRules;
+                if (rNextRules.empty() || rMinRules.empty())
+                    continue;
+                if (rNextRules.begin()->first < rMinRules.begin()->first)
                     minIndex = j;
-                }
             }
             if (i != minIndex)
                 std::swap(maCondFormats[i], maCondFormats[minIndex]);
