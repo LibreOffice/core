@@ -106,7 +106,7 @@ private:
 
     virtual ~Service() override {}
 
-    virtual void disposing(std::unique_lock<std::mutex>& /*rGuard*/) override { flushModifications(); }
+    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     virtual OUString SAL_CALL getImplementationName() override
     {
@@ -328,6 +328,12 @@ css::lang::Locale Service::getLocale() {
         loc = LanguageTag::convertToLocale( locale_, false);
     }
     return loc;
+}
+
+void Service::disposing(std::unique_lock<std::mutex>& rGuard) {
+    rGuard.unlock(); // just in case we call back into Service during dispose()
+    flushModifications();
+    rGuard.lock();
 }
 
 void Service::flushModifications() const {
