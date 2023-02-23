@@ -19,15 +19,14 @@
 
 #pragma once
 
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <map>
 #include <memory>
 
 namespace sd::tools {
 
-typedef ::cppu::WeakComponentImplHelper <
+typedef ::comphelper::WeakComponentImplHelper <
     css::beans::XPropertySet
 > PropertySetInterfaceBase;
 
@@ -38,15 +37,11 @@ typedef ::cppu::WeakComponentImplHelper <
     In order to use it you have to derive from this class and implement the
     GetPropertyValue() and SetPropertyValue() methods.
 */
-class PropertySet
-    : protected ::cppu::BaseMutex,
-      public PropertySetInterfaceBase
+class PropertySet : public PropertySetInterfaceBase
 {
 public:
     explicit PropertySet();
     virtual ~PropertySet() override;
-
-    virtual void SAL_CALL disposing() override;
 
     // XPropertySet
 

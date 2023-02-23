@@ -26,16 +26,11 @@ using namespace ::com::sun::star::uno;
 namespace sd::tools {
 
 PropertySet::PropertySet()
-    : PropertySetInterfaceBase(m_aMutex),
-      mpChangeListeners(new ChangeListenerContainer)
+    : mpChangeListeners(new ChangeListenerContainer)
 {
 }
 
 PropertySet::~PropertySet()
-{
-}
-
-void SAL_CALL PropertySet::disposing()
 {
 }
 
@@ -83,7 +78,7 @@ void SAL_CALL PropertySet::addPropertyChangeListener (
     if ( ! rxListener.is())
         throw lang::IllegalArgumentException();
 
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    if (m_bDisposed)
         return;
 
     mpChangeListeners->emplace(rsPropertyName, rxListener);
@@ -145,7 +140,7 @@ void PropertySet::CallListeners (
 
 void PropertySet::ThrowIfDisposed()
 {
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    if (m_bDisposed)
     {
         throw lang::DisposedException (
                 "PropertySet object has already been disposed",
