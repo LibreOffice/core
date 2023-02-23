@@ -159,6 +159,52 @@ public:
     }
 };
 
+class DOCMODEL_DLLPUBLIC GradientStop
+{
+public:
+    double mfPosition = 0.0; // 0.0 - 1.0
+    ColorDefinition maColor;
+};
+
+enum class GradientType
+{
+    Undefined,
+    Linear,
+    Circle,
+    Rectangle,
+    Shape,
+};
+
+struct DOCMODEL_DLLPUBLIC LinearGradientProperties
+{
+    sal_Int32 mnAngle = 0;
+    bool mbScaled = false;
+};
+
+struct DOCMODEL_DLLPUBLIC RelativeRectangle
+{
+    sal_Int32 mnLeft = 0;
+    sal_Int32 mnTop = 0;
+    sal_Int32 mnRight = 0;
+    sal_Int32 mnBottom = 0;
+};
+
+class DOCMODEL_DLLPUBLIC GradientFill : public Fill
+{
+public:
+    bool mbRotateWithShape = false;
+    GradientType meGradientType = GradientType::Undefined;
+    std::vector<GradientStop> maGradientStops;
+    LinearGradientProperties maLinearGradient;
+    RelativeRectangle maFillToRectangle;
+    RelativeRectangle maTileRectangle;
+
+    GradientFill()
+        : Fill(FillType::Gradient)
+    {
+    }
+};
+
 // Format Scheme
 
 class DOCMODEL_DLLPUBLIC FillStyle
