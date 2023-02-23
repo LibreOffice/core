@@ -441,7 +441,7 @@
       </node>
       <node oor:name=".uno:TextToColumns" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Te~xt to Columns...</value>
+          <value xml:lang="en-US">Text to Columns...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1946,7 +1946,7 @@
       </node>
       <node oor:name=".uno:ManageXMLSource" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~XML Source...</value>
+          <value xml:lang="en-US">XML Source...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
