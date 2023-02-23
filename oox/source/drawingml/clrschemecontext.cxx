@@ -57,21 +57,44 @@ clrMapContext::clrMapContext( ContextHandler2Helper const & rParent,
     setClrMap( rAttributes, rClrMap, XML_folHlink );
 }
 
-clrSchemeColorContext::clrSchemeColorContext( ContextHandler2Helper const & rParent, ClrScheme& rClrScheme, sal_Int32 nColorToken ) :
-    ColorContext( rParent, *this ),
-    mrClrScheme( rClrScheme ),
-    mnColorToken( nColorToken )
+clrSchemeColorContext::clrSchemeColorContext(ContextHandler2Helper const & rParent, ClrScheme& rClrScheme, model::ColorSet& rColorSet, sal_Int32 nColorToken)
+    : ColorContext(rParent, *this)
+    , mrClrScheme(rClrScheme)
+    , mrColorSet(rColorSet)
+    , mnColorToken(nColorToken)
 {
 }
 
 clrSchemeColorContext::~clrSchemeColorContext()
 {
-    mrClrScheme.setColor( mnColorToken, getColor( getFilter().getGraphicHelper() ) );
+    ::Color aColor = getColor(getFilter().getGraphicHelper());
+    mrClrScheme.setColor(mnColorToken, aColor);
+    switch (mnColorToken)
+    {
+        case XML_tx1:
+        case XML_dk1: mrColorSet.add(model::ThemeColorType::Dark1, aColor); break;
+        case XML_bg1:
+        case XML_lt1: mrColorSet.add(model::ThemeColorType::Light1, aColor); break;
+        case XML_tx2:
+        case XML_dk2: mrColorSet.add(model::ThemeColorType::Dark2, aColor); break;
+        case XML_bg2:
+        case XML_lt2: mrColorSet.add(model::ThemeColorType::Light2, aColor); break;
+        case XML_accent1: mrColorSet.add(model::ThemeColorType::Accent1, aColor); break;
+        case XML_accent2: mrColorSet.add(model::ThemeColorType::Accent2, aColor); break;
+        case XML_accent3: mrColorSet.add(model::ThemeColorType::Accent3, aColor); break;
+        case XML_accent4: mrColorSet.add(model::ThemeColorType::Accent4, aColor); break;
+        case XML_accent5: mrColorSet.add(model::ThemeColorType::Accent5, aColor); break;
+        case XML_accent6: mrColorSet.add(model::ThemeColorType::Accent6, aColor); break;
+        case XML_hlink: mrColorSet.add(model::ThemeColorType::Hyperlink, aColor); break;
+        case XML_folHlink: mrColorSet.add(model::ThemeColorType::FollowedHyperlink, aColor); break;
+        default: break;
+    }
 }
 
-clrSchemeContext::clrSchemeContext( ContextHandler2Helper const & rParent, ClrScheme& rClrScheme ) :
-    ContextHandler2( rParent ),
-    mrClrScheme( rClrScheme )
+clrSchemeContext::clrSchemeContext(ContextHandler2Helper const & rParent, ClrScheme& rClrScheme, model::ColorSet& rColorSet)
+    : ContextHandler2(rParent)
+    , mrClrScheme(rClrScheme)
+    , mrColorSet(rColorSet)
 {
 }
 
@@ -81,9 +104,13 @@ ContextHandlerRef clrSchemeContext::onCreateContext(
     switch( nElement )
     {
         case A_TOKEN( dk1 ):
+        case A_TOKEN( tx1 ):
         case A_TOKEN( lt1 ):
+        case A_TOKEN( bg1 ):
         case A_TOKEN( dk2 ):
+        case A_TOKEN( tx2 ):
         case A_TOKEN( lt2 ):
+        case A_TOKEN( bg2 ):
         case A_TOKEN( accent1 ):
         case A_TOKEN( accent2 ):
         case A_TOKEN( accent3 ):
@@ -92,7 +119,7 @@ ContextHandlerRef clrSchemeContext::onCreateContext(
         case A_TOKEN( accent6 ):
         case A_TOKEN( hlink ):
         case A_TOKEN( folHlink ):
-            return new clrSchemeColorContext( *this, mrClrScheme, getBaseToken( nElement ) );
+            return new clrSchemeColorContext(*this, mrClrScheme, mrColorSet, getBaseToken(nElement));
     }
     return nullptr;
 }

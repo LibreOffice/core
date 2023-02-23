@@ -46,7 +46,7 @@ void OOXMLFastContextHandlerTheme::lcl_startFastElement(
             getDocument()->setTheme(pThemePtr);
         }
         mpThemeFragmentHandler = new oox::drawingml::ThemeFragmentHandler(
-            *xThemeFilterBase, aThemeFragmentPath, *pThemePtr);
+            *xThemeFilterBase, aThemeFragmentPath, *pThemePtr, maTheme);
     }
 
     if (mpThemeFragmentHandler.is())

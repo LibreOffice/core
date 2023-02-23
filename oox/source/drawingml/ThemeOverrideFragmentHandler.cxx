@@ -8,17 +8,18 @@
  */
 
 #include <drawingml/ThemeOverrideFragmentHandler.hxx>
-#include <oox/drawingml/theme.hxx>
 #include <oox/token/namespaces.hxx>
 #include <drawingml/themeelementscontext.hxx>
 
 using namespace ::oox::core;
 
-namespace oox::drawingml {
+namespace oox::drawingml
+{
 
-ThemeOverrideFragmentHandler::ThemeOverrideFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath, Theme& rTheme ) :
-    FragmentHandler2( rFilter, rFragmentPath ),
-    mrTheme( rTheme )
+ThemeOverrideFragmentHandler::ThemeOverrideFragmentHandler(XmlFilterBase& rFilter, const OUString& rFragmentPath, Theme& rOoxTheme, model::Theme& rTheme)
+    : FragmentHandler2(rFilter, rFragmentPath)
+    , mrOoxTheme(rOoxTheme)
+    , mrTheme(rTheme)
 {
 }
 
@@ -26,16 +27,16 @@ ThemeOverrideFragmentHandler::~ThemeOverrideFragmentHandler()
 {
 }
 
-ContextHandlerRef ThemeOverrideFragmentHandler::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef ThemeOverrideFragmentHandler::onCreateContext(sal_Int32 nElement, const AttributeList& /*rAttribute*/)
 {
     // CT_OfficeStyleSheet
-    switch( getCurrentElement() )
+    switch (getCurrentElement())
     {
         case XML_ROOT_CONTEXT:
-            switch( nElement )
+            switch (nElement)
             {
                 case A_TOKEN( themeOverride ): // CT_BaseStylesOverride
-                    return new ThemeElementsContext( *this, mrTheme );
+                    return new ThemeElementsContext(*this, mrOoxTheme, mrTheme);
             }
         break;
     }

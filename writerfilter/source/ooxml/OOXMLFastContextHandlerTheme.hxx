@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include <set>
+#include <docmodel/theme/Theme.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
@@ -24,7 +24,9 @@ namespace writerfilter::ooxml
 {
 class OOXMLFastContextHandlerTheme : public OOXMLFastContextHandler
 {
+private:
     rtl::Reference<oox::drawingml::ThemeFragmentHandler> mpThemeFragmentHandler;
+    model::Theme maTheme;
 
 public:
     explicit OOXMLFastContextHandlerTheme(OOXMLFastContextHandler* pContext);

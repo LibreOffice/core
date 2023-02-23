@@ -11,24 +11,24 @@
 #define INCLUDED_OOX_DRAWINGML_THEMEOVERRICEFRAGMENTHANDLER_HXX
 
 #include <oox/core/fragmenthandler2.hxx>
+#include <oox/drawingml/theme.hxx>
 
-namespace oox::drawingml {
+namespace oox::drawingml
+{
 
 class Theme;
 
 class ThemeOverrideFragmentHandler final : public ::oox::core::FragmentHandler2
 {
 public:
-    explicit            ThemeOverrideFragmentHandler(
-                            ::oox::core::XmlFilterBase& rFilter,
-                            const OUString& rFragmentPath,
-                            Theme& rTheme );
-    virtual             ~ThemeOverrideFragmentHandler() override;
+    explicit ThemeOverrideFragmentHandler(::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, Theme& rOoxTheme, model::Theme& rTheme);
+    virtual ~ThemeOverrideFragmentHandler() override;
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual ::oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElement, const AttributeList& rAttribs) override;
 
 private:
-    Theme&              mrTheme;
+    Theme& mrOoxTheme;
+    model::Theme& mrTheme;
 };
 
 } // namespace oox::drawingml
