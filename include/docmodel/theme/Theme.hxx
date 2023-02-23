@@ -98,6 +98,12 @@ public:
     {
         return maMinorSupplementalFontList;
     }
+
+    void addMinorSupplementalFont(ThemeSupplementalFont const& rfont)
+    {
+        maMinorSupplementalFontList.push_back(rfont);
+    }
+
     void setMinorSupplementalFontList(std::vector<ThemeSupplementalFont> const& rSupplementalFont)
     {
         maMinorSupplementalFontList = rSupplementalFont;
@@ -116,6 +122,11 @@ public:
     std::vector<ThemeSupplementalFont> const& getMajorSupplementalFontList() const
     {
         return maMajorSupplementalFontList;
+    }
+
+    void addMajorSupplementalFont(ThemeSupplementalFont const& rfont)
+    {
+        maMajorSupplementalFontList.push_back(rfont);
     }
 
     void setMajorSupplementalFontList(std::vector<ThemeSupplementalFont> const& rSupplementalFont)

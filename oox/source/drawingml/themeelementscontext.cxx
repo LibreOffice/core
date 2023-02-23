@@ -140,13 +140,16 @@ ContextHandlerRef EffectStyleListContext::onCreateContext( sal_Int32 nElement, c
     return nullptr;
 }
 
-namespace {
+namespace
+{
 
 class FontSchemeContext : public ContextHandler2
 {
 public:
-    FontSchemeContext(ContextHandler2Helper const & rParent, FontScheme& rFontScheme,
-                      std::map<sal_Int32, std::vector<std::pair<OUString, OUString>>>& rSupplementalFontMap);
+    FontSchemeContext(ContextHandler2Helper const & rParent, const AttributeList& rAttribs, FontScheme& rFontScheme,
+                      std::map<sal_Int32, std::vector<std::pair<OUString, OUString>>>& rSupplementalFontMap,
+                      model::Theme& rTheme);
+    ~FontSchemeContext();
     virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void onEndElement() override;
 
@@ -155,17 +158,41 @@ private:
     TextCharacterPropertiesPtr mxCharProps;
     std::map<sal_Int32, std::vector<std::pair<OUString, OUString>>>& mrSupplementalFontMap;
     sal_Int32 maCurrentFont = 0;
+    model::Theme& mrTheme;
+    model::FontScheme maFontScheme;
 };
 
-}
+} // end anonymous ns
 
-FontSchemeContext::FontSchemeContext(ContextHandler2Helper const & rParent, FontScheme& rFontScheme,
-                                     std::map<sal_Int32, std::vector<std::pair<OUString, OUString>>>& rSupplementalFontMap)
+FontSchemeContext::FontSchemeContext(ContextHandler2Helper const & rParent, const AttributeList& rAttribs, FontScheme& rFontScheme,
+                                     std::map<sal_Int32, std::vector<std::pair<OUString, OUString>>>& rSupplementalFontMap,
+                                     model::Theme& rTheme)
     : ContextHandler2(rParent)
     , mrFontScheme(rFontScheme)
     , mrSupplementalFontMap(rSupplementalFontMap)
+    , mrTheme(rTheme)
+    , maFontScheme(rAttribs.getStringDefaulted(XML_name))
 {
 }
+
+FontSchemeContext::~FontSchemeContext()
+{
+    mrTheme.setFontScheme(maFontScheme);
+}
+
+namespace
+{
+
+void fillThemeFont(model::ThemeFont& rThemeFont, const AttributeList& rAttribs)
+{
+    rThemeFont.maTypeface = rAttribs.getStringDefaulted(XML_typeface);
+    rThemeFont.maPanose = rAttribs.getStringDefaulted(XML_panose);
+    rThemeFont.maCharset = rAttribs.getInteger(XML_charset, WINDOWS_CHARSET_DEFAULT);
+    sal_Int32 nPitchFamily = rAttribs.getInteger(XML_pitchFamily, 0);
+    TextFont::resolvePitch(nPitchFamily, rThemeFont.maPitch, rThemeFont.maFamily);
+}
+
+} // end anonymous ns
 
 ContextHandlerRef FontSchemeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -182,21 +209,52 @@ ContextHandlerRef FontSchemeContext::onCreateContext( sal_Int32 nElement, const 
             maCurrentFont = XML_minor;
             return this;
         case A_TOKEN( latin ):
-            if( mxCharProps )
-                mxCharProps->maLatinFont.setAttributes( rAttribs );
+        {
+            if (mxCharProps)
+                mxCharProps->maLatinFont.setAttributes(rAttribs);
+
+            model::ThemeFont aThemeFont;
+            fillThemeFont(aThemeFont, rAttribs);
+            if (maCurrentFont == XML_major)
+                maFontScheme.setMajorLatin(aThemeFont);
+            else if (maCurrentFont == XML_minor)
+                maFontScheme.setMinorLatin(aThemeFont);
+        }
         break;
         case A_TOKEN( ea ):
+        {
             if( mxCharProps )
                 mxCharProps->maAsianFont.setAttributes( rAttribs );
+            model::ThemeFont aThemeFont;
+            fillThemeFont(aThemeFont, rAttribs);
+            if (maCurrentFont == XML_major)
+                maFontScheme.setMajorAsian(aThemeFont);
+            else if (maCurrentFont == XML_minor)
+                maFontScheme.setMinorAsian(aThemeFont);
+        }
         break;
         case A_TOKEN( cs ):
+        {
             if( mxCharProps )
                 mxCharProps->maComplexFont.setAttributes( rAttribs );
+            model::ThemeFont aThemeFont;
+            fillThemeFont(aThemeFont, rAttribs);
+            if (maCurrentFont == XML_major)
+                maFontScheme.setMajorComplex(aThemeFont);
+            else if (maCurrentFont == XML_minor)
+                maFontScheme.setMinorComplex(aThemeFont);
+        }
         break;
         case A_TOKEN(font):
+        {
             OUString aScript = rAttribs.getStringDefaulted(XML_script);
             OUString aTypeface = rAttribs.getStringDefaulted(XML_typeface);
             mrSupplementalFontMap[maCurrentFont].emplace_back(std::pair<OUString, OUString>{aScript, aTypeface});
+            if (maCurrentFont == XML_major)
+                maFontScheme.addMajorSupplementalFont({aScript, aTypeface});
+            else if (maCurrentFont == XML_minor)
+                maFontScheme.addMinorSupplementalFont({aScript, aTypeface});
+        }
         break;
     }
     return nullptr;
@@ -238,7 +296,7 @@ ContextHandlerRef ThemeElementsContext::onCreateContext(sal_Int32 nElement, cons
             if (rAttribs.hasAttribute(XML_name))
                 mrOoxTheme.setFontSchemeName(rAttribs.getStringDefaulted(XML_name));
 
-            return new FontSchemeContext(*this, mrOoxTheme.getFontScheme(), mrOoxTheme.getSupplementalFontMap());
+            return new FontSchemeContext(*this, rAttribs, mrOoxTheme.getFontScheme(), mrOoxTheme.getSupplementalFontMap(), mrTheme);
         }
 
         case A_TOKEN( fmtScheme ):  // CT_StyleMatrix
