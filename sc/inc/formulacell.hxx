@@ -443,7 +443,8 @@ public:
         if (!IsDirtyOrInTableOpDirty())
             return false;
 
-        return (rDocument.GetAutoCalc() || (cMatrixFlag != ScMatrixMode::NONE));
+        return rDocument.GetAutoCalc() || (cMatrixFlag != ScMatrixMode::NONE)
+            || (pCode->IsRecalcModeMustAfterImport() && !pCode->IsRecalcModeAlways());
     }
 
     void MaybeInterpret()

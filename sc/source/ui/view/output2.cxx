@@ -1529,9 +1529,15 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                 mpDev->GetMapMode().GetMapUnit() == mpRefDevice->GetMapMode().GetMapUnit(),
                 "LayoutStrings: different MapUnits ?!?!" );
 
+    sc::IdleSwitch aIdleSwitch(*mpDoc, false);
+
+    // Try to limit interpreting to only visible cells. Calling e.g. IsValue()
+    // on a formula cell that needs interpreting would call Interpret()
+    // for the entire formula group, which could be large.
+    mpDoc->InterpretCellsIfNeeded( ScRange( nX1, nY1, nTab, nX2, nY2, nTab ));
+
     vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >(mpDev->GetExtOutDevData() );
 
-    sc::IdleSwitch aIdleSwitch(*mpDoc, false);
     ScDrawStringsVars aVars( this, bPixelToLogic );
 
     bool bProgress = false;
@@ -1558,11 +1564,6 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
     const ScPatternAttr* pOldPattern = nullptr;
     const SfxItemSet* pOldCondSet = nullptr;
     SvtScriptType nOldScript = SvtScriptType::NONE;
-
-    // Try to limit interpreting to only visible cells. Calling e.g. IsValue()
-    // on a formula cell that needs interpreting would call Interpret()
-    // for the entire formula group, which could be large.
-    mpDoc->InterpretCellsIfNeeded( ScRange( nX1, nY1, nTab, nX2, nY2, nTab ));
 
     // alternative pattern instances in case we need to modify the pattern
     // before processing the cell value.

@@ -1226,7 +1226,7 @@ public:
     SC_DLLPUBLIC sal_uInt32                   GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     sal_uInt32                                GetNumberFormat( const ScRange& rRange ) const;
     SC_DLLPUBLIC sal_uInt32                   GetNumberFormat( const ScInterpreterContext& rContext, const ScAddress& ) const;
-    void                                      SetNumberFormat( const ScAddress& rPos, sal_uInt32 nNumberFormat );
+    SC_DLLPUBLIC void                         SetNumberFormat( const ScAddress& rPos, sal_uInt32 nNumberFormat );
 
     void                                      GetNumberFormatInfo( const ScInterpreterContext& rContext, SvNumFormatType& nType, sal_uInt32& nIndex, const ScAddress& rPos ) const;
     SC_DLLPUBLIC const ScFormulaCell*         GetFormulaCell( const ScAddress& rPos ) const;
