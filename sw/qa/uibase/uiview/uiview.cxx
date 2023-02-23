@@ -261,14 +261,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testSwitchBetweenImages)
     pInterceptor->m_nDisabled = 0;
 
     // When selecting the first image:
-    uno::Reference<text::XTextGraphicObjectsSupplier> xGraphicObjectsSupplier(mxComponent,
-                                                                              uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xGraphicObjects(
-        xGraphicObjectsSupplier->getGraphicObjects(), uno::UNO_QUERY);
-    pInterceptor->m_xSelectionSupplier->select(xGraphicObjects->getByIndex(0));
-    Scheduler::ProcessEventsToIdle();
-    SwView* pView = pDoc->GetDocShell()->GetView();
-    pView->StopShellTimer();
+    selectShape(1);
 
     // Then make sure the UNO command is disabled:
     CPPUNIT_ASSERT_EQUAL(0, pInterceptor->m_nEnabled);
@@ -279,9 +272,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testSwitchBetweenImages)
     pInterceptor->m_nDisabled = 0;
 
     // When selecting the second image:
-    pInterceptor->m_xSelectionSupplier->select(xGraphicObjects->getByIndex(1));
-    Scheduler::ProcessEventsToIdle();
-    pView->StopShellTimer();
+    selectShape(2);
 
     // Then make sure the UNO command is enabled:
     CPPUNIT_ASSERT_GREATEREQUAL(1, pInterceptor->m_nEnabled);
@@ -292,9 +283,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testSwitchBetweenImages)
     pInterceptor->m_nDisabled = 0;
 
     // When selecting the first image, again (this time not changing the selection type):
-    pInterceptor->m_xSelectionSupplier->select(xGraphicObjects->getByIndex(0));
-    Scheduler::ProcessEventsToIdle();
-    pView->StopShellTimer();
+    selectShape(1);
 
     // Then make sure the UNO command is disabled:
     CPPUNIT_ASSERT_EQUAL(0, pInterceptor->m_nEnabled);
