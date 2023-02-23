@@ -18,6 +18,7 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <frameformats.hxx>
@@ -1883,8 +1884,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf133490)
     aPos[1] = xShape2->getPosition();
 
     //select shape 2 and move it to the right
-    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
-    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    uno::Reference<view::XSelectionSupplier> xSelectionSupplier(
+        pXTextDocument->getCurrentController(), uno::UNO_QUERY);
+    xSelectionSupplier->select(uno::Any(getShape(2)));
 
     for (sal_Int32 i = 0; i < 5; ++i)
     {
