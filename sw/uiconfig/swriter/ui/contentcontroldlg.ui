@@ -91,7 +91,7 @@
           </packing>
         </child>
         <child>
-          <!-- n-columns=2 n-rows=3 -->
+          <!-- n-columns=4 n-rows=3 -->
           <object class="GtkGrid">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -128,19 +128,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="taglabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="contentcontroldlg|taglabel">Tag:</property>
-                <property name="mnemonic-widget">tagentry</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkEntry" id="aliasentry">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -152,15 +139,99 @@
               </packing>
             </child>
             <child>
+              <object class="GtkLabel" id="idlabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="contentcontroldlg|idlabel">Id:</property>
+                <property name="xalign">0</property>
+                <accessibility>
+                  <relation type="label-for" target="idspinbutton"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="tabindexlabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="contentcontroldlg|tabindexlabel">Tab order:</property>
+                <accessibility>
+                  <relation type="label-for" target="tabindexspinbutton"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="idspinbutton">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="input-purpose">number</property>
+                <property name="input-hints">GTK_INPUT_HINT_NO_SPELLCHECK | GTK_INPUT_HINT_NO_EMOJI | GTK_INPUT_HINT_NONE</property>
+                <property name="snap-to-ticks">True</property>
+                <property name="numeric">True</property>
+                <property name="wrap">True</property>
+                <accessibility>
+                  <relation type="labelled-by" target="idlabel"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="taglabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="contentcontroldlg|taglabel">Tag:</property>
+                <property name="mnemonic-widget">tagentry</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkEntry" id="tagentry">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="truncate-multiline">True</property>
               </object>
               <packing>
-                <property name="left-attach">1</property>
+                <property name="left-attach">3</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="tabindexspinbutton">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="primary-icon-tooltip-text" translatable="yes" context="contentcontroldlg:tabindexspinbutton">Keyboard tab navigation order: -1 to exclude from tab stop</property>
+                <property name="input-purpose">number</property>
+                <property name="input-hints">GTK_INPUT_HINT_NO_SPELLCHECK | GTK_INPUT_HINT_NO_EMOJI | GTK_INPUT_HINT_NONE</property>
+                <property name="snap-to-ticks">True</property>
+                <property name="numeric">True</property>
+                <accessibility>
+                  <relation type="labelled-by" target="tabindexlabel"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="left-attach">3</property>
                 <property name="top-attach">2</property>
               </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
             </child>
           </object>
           <packing>
