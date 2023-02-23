@@ -1170,7 +1170,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testImageComment)
     pWrtShell->Delete();
 
     // Select the image.
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    selectShape(1);
 
     // Insert a comment while the image is selected.
     pView->GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT, SfxCallMode::SYNCHRON);
@@ -1194,7 +1194,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testImageComment)
     SfxStringItem aItem(FN_INSERT_STRING, "x");
     pView->GetViewFrame()->GetDispatcher()->ExecuteList(FN_INSERT_STRING, SfxCallMode::SYNCHRON,
                                                         { &aItem });
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    selectShape(1);
 
 #if !defined(MACOSX)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -1263,7 +1263,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testImageCommentAtChar)
     SwView* pView = pDoc->GetDocShell()->GetView();
 
     // Select the image.
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    selectShape(1);
 
     // Insert a comment while the image is selected.
     pView->GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT, SfxCallMode::SYNCHRON);
@@ -1287,7 +1287,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testImageCommentAtChar)
     SfxStringItem aItem(FN_INSERT_STRING, "x");
     pView->GetViewFrame()->GetDispatcher()->ExecuteList(FN_INSERT_STRING, SfxCallMode::SYNCHRON,
                                                         { &aItem });
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    selectShape(1);
     // Now delete the image.
     pView->GetViewFrame()->GetDispatcher()->Execute(SID_DELETE, SfxCallMode::SYNCHRON);
     // Without the accompanying fix in place, this test would have failed with 'Expected: 0; Actual:
@@ -1333,7 +1333,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTrackImageDeletion)
     SwView* pView = pDoc->GetDocShell()->GetView();
 
     // select the image
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    selectShape(1);
 
     // turn on red-lining and show changes
     IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
@@ -1467,10 +1467,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testShapePageMove)
     calcLayout();
 
     // Select the shape.
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
-    // Make sure SwTextShell is replaced with SwDrawShell right now, not after 120 ms, as set in the
-    // SwView ctor.
-    pView->StopShellTimer();
+    selectShape(1);
 
     // Move the shape down to the 2nd page.
     SfxInt32Item aXItem(SID_ATTR_TRANSFORM_POS_X, 4000);
@@ -1699,11 +1696,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testOleSaveWhileEdit)
     createSwDoc("ole-save-while-edit.odt");
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->GotoObj(/*bNext=*/true, GotoObjFlags::Any);
 
-    // Select the frame and switch to the frame shell.
-    SwView* pView = pDoc->GetDocShell()->GetView();
-    pView->StopShellTimer();
+    selectShape(1);
 
     // Start editing the OLE object.
     pWrtShell->LaunchOLEObj();
@@ -2412,10 +2406,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf128335)
 
     // Select the 3rd textbox.
     SwView* pView = pDoc->GetDocShell()->GetView();
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
-    // Make sure SwTextShell is replaced with SwDrawShell right now, not after 120 ms, as set in the
-    // SwView ctor.
-    pView->StopShellTimer();
+    selectShape(1);
     SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
@@ -2429,11 +2420,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf128335)
     // Paste it: this makes the 3rd textbox anchored in the 2nd one.
     pView->GetViewFrame()->GetDispatcher()->Execute(SID_PASTE, SfxCallMode::SYNCHRON);
 
-    // Select all shapes.
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<view::XSelectionSupplier> xSelectionSupplier(xModel->getCurrentController(),
-                                                                uno::UNO_QUERY);
-    xSelectionSupplier->select(pXTextDocument->getDrawPages()->getByIndex(0));
+    selectShape(1);
 
     // Cut them.
     // Without the accompanying fix in place, this test would have crashed as the textboxes were
@@ -2808,10 +2795,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf128603)
 
     // Select the 3rd textbox.
     SwView* pView = pDoc->GetDocShell()->GetView();
-    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
-    // Make sure SwTextShell is replaced with SwDrawShell right now, not after 120 ms, as set in the
-    // SwView ctor.
-    pView->StopShellTimer();
+    selectShape(1);
     SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
