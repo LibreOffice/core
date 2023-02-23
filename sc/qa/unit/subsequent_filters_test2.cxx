@@ -228,6 +228,19 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf118624)
                                != pDoc->GetString(ScAddress(0, 1, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf153767)
+{
+    createScDoc("xlsx/tdf153767.xlsx");
+
+    ScDocument* pDoc = getScDoc();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: TRUE
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(OUString("TRUE"), pDoc->GetString(ScAddress(7, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("FALSE"), pDoc->GetString(ScAddress(7, 2, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf124454)
 {
     createScDoc("ods/tdf124454.ods");
