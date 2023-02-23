@@ -624,6 +624,8 @@ void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )
 
     ScDocumentPool* pDocPool = GetDoc().GetPool();
 
+    std::unique_lock aGuard(pDocPool->maPoolMutex);
+
     const ScPatternAttr* pOldPattern = pAttrArray->GetPattern( nRow );
     ScPatternAttr aTemp(*pOldPattern);
     aTemp.GetItemSet().Put(rAttr);
