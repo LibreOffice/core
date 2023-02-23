@@ -19,9 +19,8 @@
 #pragma once
 
 #include <WrappedIgnoreProperty.hxx>
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
@@ -37,8 +36,7 @@ namespace chart::wrapper
 
 class Chart2ModelContact;
 
-class MinMaxLineWrapper : public cppu::BaseMutex
-                        , public ::cppu::WeakImplHelper
+class MinMaxLineWrapper : public ::cppu::WeakImplHelper
                         < css::lang::XComponent
                         , css::lang::XServiceInfo
                         , css::beans::XPropertySet
@@ -93,8 +91,9 @@ public:
     virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPropertyDefaults( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
 private: //member
+    std::mutex m_aMutex;
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
-    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_aEventListenerContainer;
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aEventListenerContainer;
 
     WrappedIgnoreProperty               m_aWrappedLineJointProperty;
 };
