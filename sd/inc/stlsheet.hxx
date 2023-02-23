@@ -29,13 +29,14 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
+#include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/basemutex.hxx>
 
 #include <svl/style.hxx>
 
 #include <memory>
+#include <mutex>
 
 #include "prlayout.hxx"
 
@@ -50,7 +51,7 @@ typedef cppu::ImplInheritanceHelper< SfxUnoStyleSheet,
                                     css::util::XModifyBroadcaster,
                                     css::lang::XComponent > SdStyleSheetBase ;
 
-class SdStyleSheet final : public SdStyleSheetBase, private ::cppu::BaseMutex
+class SdStyleSheet final : public SdStyleSheetBase
 {
 public:
     SdStyleSheet( const OUString& rDisplayName, SfxStyleSheetBasePool& rPool, SfxStyleFamily eFamily, SfxStyleSearchBits nMask );
@@ -152,11 +153,13 @@ private:
 
     void disposing();
 
+    mutable std::mutex m_aMutex;
+    bool m_bDisposed = false;
+    bool m_bInDispose = false;
+    comphelper::OInterfaceContainerHelper4<css::util::XModifyListener> maModifyListeners;
+    comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> maEventListeners;
     OUString   msApiName;
     rtl::Reference< SfxStyleSheetBasePool > mxPool;
-
-    /** broadcast helper for events */
-    ::cppu::OBroadcastHelper mrBHelper;
 
     std::unique_ptr< ModifyListenerForwarder > mpModifyListenerForwarder;
 

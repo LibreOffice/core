@@ -142,10 +142,8 @@ void ModifyListenerForwarder::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*r
 
 SdStyleSheet::SdStyleSheet(const OUString& rDisplayName, SfxStyleSheetBasePool& _rPool, SfxStyleFamily eFamily, SfxStyleSearchBits _nMask)
 : SdStyleSheetBase( rDisplayName, _rPool, eFamily, _nMask)
-, ::cppu::BaseMutex()
 , msApiName( rDisplayName )
 , mxPool( &_rPool )
-, mrBHelper( m_aMutex )
 {
 }
 
@@ -301,12 +299,11 @@ bool SdStyleSheet::IsUsed() const
 
     if( !bResult )
     {
-        MutexGuard aGuard( mrBHelper.rMutex );
+        std::unique_lock aGuard( m_aMutex );
 
-        cppu::OInterfaceContainerHelper * pContainer = mrBHelper.getContainer( cppu::UnoType<XModifyListener>::get() );
-        if( pContainer )
+        if( maModifyListeners.getLength(aGuard) )
         {
-            const Sequence< Reference< XInterface > > aModifyListeners( pContainer->getElements() );
+            std::vector<css::uno::Reference<XModifyListener>> aModifyListeners( maModifyListeners.getElements(aGuard) );
             bResult = std::any_of(aModifyListeners.begin(), aModifyListeners.end(),
                 [](const Reference<XInterface>& rListener) {
                     Reference< XStyle > xStyle( rListener, UNO_QUERY );
@@ -349,10 +346,8 @@ bool SdStyleSheet::IsEditable()
             return false;
     }
 
-    MutexGuard aGuard(mrBHelper.rMutex);
-
-    auto pContainer = mrBHelper.getContainer(cppu::UnoType<XModifyListener>::get());
-    return !pContainer || pContainer->getLength() <= 1;
+    std::unique_lock aGuard(m_aMutex);
+    return maModifyListeners.getLength(aGuard) <= 1;
 }
 
 /**
@@ -736,7 +731,7 @@ void SAL_CALL SdStyleSheet::release(  ) noexcept
 
     // restore reference count:
     osl_atomic_increment( &m_refCount );
-    if (! mrBHelper.bDisposed) try
+    if (! m_bDisposed) try
     {
         dispose();
     }
@@ -745,7 +740,7 @@ void SAL_CALL SdStyleSheet::release(  ) noexcept
         // don't break throw ()
         TOOLS_WARN_EXCEPTION( "sd", "" );
     }
-    OSL_ASSERT( mrBHelper.bDisposed );
+    OSL_ASSERT( m_bDisposed );
     SdStyleSheetBase::release();
 }
 
@@ -754,33 +749,33 @@ void SAL_CALL SdStyleSheet::release(  ) noexcept
 void SAL_CALL SdStyleSheet::dispose(  )
 {
     {
-        MutexGuard aGuard(mrBHelper.rMutex);
-        if (mrBHelper.bDisposed || mrBHelper.bInDispose)
+        std::unique_lock aGuard(m_aMutex);
+        if (m_bDisposed || m_bInDispose)
             return;
 
-        mrBHelper.bInDispose = true;
+        m_bInDispose = true;
     }
     try
     {
+        std::unique_lock aGuard(m_aMutex);
         // side effect: keeping a reference to this
         EventObject aEvt( static_cast< OWeakObject * >( this ) );
         try
         {
-            mrBHelper.aLC.disposeAndClear( aEvt );
+            maModifyListeners.disposeAndClear( aGuard, aEvt );
+            maEventListeners.disposeAndClear( aGuard, aEvt );
             disposing();
         }
         catch (...)
         {
-            MutexGuard aGuard2( mrBHelper.rMutex );
             // bDisposed and bInDispose must be set in this order:
-            mrBHelper.bDisposed = true;
-            mrBHelper.bInDispose = false;
+            m_bDisposed = true;
+            m_bInDispose = false;
             throw;
         }
-        MutexGuard aGuard2( mrBHelper.rMutex );
         // bDisposed and bInDispose must be set in this order:
-        mrBHelper.bDisposed = true;
-        mrBHelper.bInDispose = false;
+        m_bDisposed = true;
+        m_bInDispose = false;
     }
     catch (RuntimeException &)
     {
@@ -809,32 +804,33 @@ void SdStyleSheet::disposing()
 
 void SAL_CALL SdStyleSheet::addEventListener( const Reference< XEventListener >& xListener )
 {
-    ClearableMutexGuard aGuard( mrBHelper.rMutex );
-    if (mrBHelper.bDisposed || mrBHelper.bInDispose)
+    std::unique_lock aGuard( m_aMutex );
+    if (m_bDisposed || m_bInDispose)
     {
-        aGuard.clear();
+        aGuard.unlock();
         EventObject aEvt( static_cast< OWeakObject * >( this ) );
         xListener->disposing( aEvt );
     }
     else
     {
-        mrBHelper.addListener( cppu::UnoType<decltype(xListener)>::get(), xListener );
+        maEventListeners.addInterface( aGuard, xListener );
     }
 }
 
 void SAL_CALL SdStyleSheet::removeEventListener( const Reference< XEventListener >& xListener  )
 {
-    mrBHelper.removeListener( cppu::UnoType<decltype(xListener)>::get(), xListener );
+    std::unique_lock aGuard( m_aMutex );
+    maEventListeners.removeInterface( aGuard, xListener );
 }
 
 // XModifyBroadcaster
 
 void SAL_CALL SdStyleSheet::addModifyListener( const Reference< XModifyListener >& xListener )
 {
-    ClearableMutexGuard aGuard( mrBHelper.rMutex );
-    if (mrBHelper.bDisposed || mrBHelper.bInDispose)
+    std::unique_lock aGuard( m_aMutex );
+    if (m_bDisposed || m_bInDispose)
     {
-        aGuard.clear();
+        aGuard.unlock();
         EventObject aEvt( static_cast< OWeakObject * >( this ) );
         xListener->disposing( aEvt );
     }
@@ -842,27 +838,24 @@ void SAL_CALL SdStyleSheet::addModifyListener( const Reference< XModifyListener 
     {
         if (!mpModifyListenerForwarder)
             mpModifyListenerForwarder.reset( new ModifyListenerForwarder( this ) );
-        mrBHelper.addListener( cppu::UnoType<XModifyListener>::get(), xListener );
+        maModifyListeners.addInterface( aGuard, xListener );
     }
 }
 
 void SAL_CALL SdStyleSheet::removeModifyListener( const Reference< XModifyListener >& xListener )
 {
-    mrBHelper.removeListener( cppu::UnoType<XModifyListener>::get(), xListener );
+    std::unique_lock aGuard( m_aMutex );
+    maModifyListeners.removeInterface( aGuard, xListener );
 }
 
 void SdStyleSheet::notifyModifyListener()
 {
-    MutexGuard aGuard( mrBHelper.rMutex );
+    std::unique_lock aGuard( m_aMutex );
 
-    cppu::OInterfaceContainerHelper * pContainer = mrBHelper.getContainer( cppu::UnoType<XModifyListener>::get() );
-    if( pContainer )
+    if( maModifyListeners.getLength(aGuard) )
     {
         EventObject aEvt( static_cast< OWeakObject * >( this ) );
-        pContainer->forEach<XModifyListener>(
-            [&] (Reference<XModifyListener> const& xListener) {
-                return xListener->modified(aEvt);
-            } );
+        maModifyListeners.notifyEach(aGuard, &XModifyListener::modified, aEvt);
     }
 }
 
