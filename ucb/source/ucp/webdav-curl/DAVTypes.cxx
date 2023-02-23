@@ -164,6 +164,11 @@ void DAVOptionsCache::addDAVOptions( DAVOptions & rDAVOptions, const sal_uInt32 
     { // already in cache, check LifeTime
         if ( (*it).second.getRequestedTimeLife() == nLifeTime )
             return; // same lifetime, do nothing
+
+        // tdf#153642 keep cached Class1 bit at aDAVOptionsException to avoid of
+        // losing the ability to resave the document within the lifetime because
+        // of disabled DAV detection in getResourceType()
+        rDAVOptions.setClass1( (*it).second.isClass1() );
     }
     // not in cache, add it
     TimeValue t1;
