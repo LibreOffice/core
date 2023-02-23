@@ -53,119 +53,12 @@ public:
     {
     }
 
-    void testBackgroundImage();
-    void testMediaEmbedding();
-    void testFillBitmapUnused();
-    void testFdo84043();
-    void testTdf97630();
-    void testImpressPasswordExport();
-    void testDrawPasswordExport();
-    void testSwappedOutImageExport();
-    void testOOoXMLAnimations();
-    void testBnc480256();
-    void testUnknownAttributes();
-    void testTdf80020();
-    void testTdf128985();
-    void testLinkedGraphicRT();
-    void testTdf79082();
-    void testImageWithSpecialID();
-    void testTdf62176();
-    void testTransparentBackground();
-    void testTdf142716();
-    void testEmbeddedPdf();
-    void testEmbeddedText();
-    void testTransparenText();
-    void testDefaultSubscripts();
-    void testTdf98477();
-    void testAuthorField();
-    void testTdf50499();
-    void testTdf100926();
-    void testPageWithTransparentBackground();
-    void testTextRotation();
-    void testTdf115394PPT();
-    void testBulletsAsImage();
-    void testTdf113818();
-    void testTdf119629();
-    void testTdf141269();
-    void testTdf123557();
-    void testTdf113822();
-    void testTdf126761();
-    void testGlow();
-    void testSoftEdges();
-    void testShadowBlur();
-    void testRhbz1870501();
-    void testTdf152606();
-    void testTdf91060();
-    void testTdf128550();
-    void testTdf140714();
-    void testMasterPageBackgroundFullSize();
-    void testColumnsODG();
-    void testTdf112126();
-    void testCellProperties();
-    void testUserTableStyles();
-    void testTdf153179();
-
-    CPPUNIT_TEST_SUITE(SdExportTest);
-
-    CPPUNIT_TEST(testBackgroundImage);
-    CPPUNIT_TEST(testMediaEmbedding);
-    CPPUNIT_TEST(testFillBitmapUnused);
-    CPPUNIT_TEST(testFdo84043);
-    CPPUNIT_TEST(testTdf97630);
-    CPPUNIT_TEST(testImpressPasswordExport);
-    CPPUNIT_TEST(testDrawPasswordExport);
-    CPPUNIT_TEST(testSwappedOutImageExport);
-    CPPUNIT_TEST(testOOoXMLAnimations);
-    CPPUNIT_TEST(testBnc480256);
-    CPPUNIT_TEST(testUnknownAttributes);
-    CPPUNIT_TEST(testTdf80020);
-    CPPUNIT_TEST(testTdf128985);
-    CPPUNIT_TEST(testLinkedGraphicRT);
-    CPPUNIT_TEST(testTdf79082);
-    CPPUNIT_TEST(testImageWithSpecialID);
-    CPPUNIT_TEST(testTdf62176);
-    CPPUNIT_TEST(testTransparentBackground);
-    CPPUNIT_TEST(testTdf142716);
-    CPPUNIT_TEST(testEmbeddedPdf);
-    CPPUNIT_TEST(testEmbeddedText);
-    CPPUNIT_TEST(testTransparenText);
-    CPPUNIT_TEST(testDefaultSubscripts);
-    CPPUNIT_TEST(testTdf98477);
-    CPPUNIT_TEST(testAuthorField);
-    CPPUNIT_TEST(testTdf50499);
-    CPPUNIT_TEST(testTdf100926);
-    CPPUNIT_TEST(testPageWithTransparentBackground);
-    CPPUNIT_TEST(testTextRotation);
-    CPPUNIT_TEST(testTdf115394PPT);
-    CPPUNIT_TEST(testBulletsAsImage);
-    CPPUNIT_TEST(testTdf113818);
-    CPPUNIT_TEST(testTdf119629);
-    CPPUNIT_TEST(testTdf141269);
-    CPPUNIT_TEST(testTdf123557);
-    CPPUNIT_TEST(testTdf113822);
-    CPPUNIT_TEST(testTdf126761);
-    CPPUNIT_TEST(testGlow);
-    CPPUNIT_TEST(testSoftEdges);
-    CPPUNIT_TEST(testShadowBlur);
-    CPPUNIT_TEST(testRhbz1870501);
-    CPPUNIT_TEST(testTdf152606);
-    CPPUNIT_TEST(testTdf91060);
-    CPPUNIT_TEST(testTdf128550);
-    CPPUNIT_TEST(testTdf140714);
-    CPPUNIT_TEST(testMasterPageBackgroundFullSize);
-    CPPUNIT_TEST(testColumnsODG);
-    CPPUNIT_TEST(testTdf112126);
-    CPPUNIT_TEST(testCellProperties);
-    CPPUNIT_TEST(testUserTableStyles);
-    CPPUNIT_TEST(testTdf153179);
-    CPPUNIT_TEST_SUITE_END();
-
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
     {
         XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
     }
 
-private:
+protected:
     uno::Reference<awt::XBitmap> getBitmapFromTable(OUString const& rName);
 };
 
@@ -192,7 +85,7 @@ uno::Reference<awt::XBitmap> SdExportTest::getBitmapFromTable(OUString const& rN
     return xBitmap;
 }
 
-void SdExportTest::testBackgroundImage()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testBackgroundImage)
 {
     // Initial bug: N821567
 
@@ -297,7 +190,7 @@ void checkFontAttributes(const SdrTextObj* pObj, ItemValue nVal, sal_uInt32 nId)
 }
 }
 
-void SdExportTest::testTransparentBackground()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTransparentBackground)
 {
     createSdImpressDoc("odp/transparent_background.odp");
     saveAndReload("impress8");
@@ -311,7 +204,7 @@ void SdExportTest::testTransparentBackground()
     checkFontAttributes<Color, SvxColorItem>(pObj2, COL_YELLOW, EE_CHAR_BKGCOLOR);
 }
 
-void SdExportTest::testTdf142716()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf142716)
 {
     createSdImpressDoc("pptx/tdf142716.pptx");
     saveAndReload("Impress Office Open XML");
@@ -325,7 +218,7 @@ void SdExportTest::testTdf142716()
     CPPUNIT_ASSERT_EQUAL(OUString("xxx and yyy"), sText);
 }
 
-void SdExportTest::testMediaEmbedding()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testMediaEmbedding)
 {
     createSdImpressDoc("media_embedding.odp");
 
@@ -340,7 +233,7 @@ void SdExportTest::testMediaEmbedding()
                          pMediaObj->getMediaProperties().getMimeType());
 }
 
-void SdExportTest::testFillBitmapUnused()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testFillBitmapUnused)
 {
     createSdImpressDoc("odp/fillbitmap2.odp");
     save("impress8");
@@ -417,7 +310,7 @@ void SdExportTest::testFillBitmapUnused()
                 "nav_5f_up");
 }
 
-void SdExportTest::testFdo84043()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testFdo84043)
 {
     createSdImpressDoc("fdo84043.odp");
     saveAndReload("impress8");
@@ -428,7 +321,7 @@ void SdExportTest::testFdo84043()
     CPPUNIT_ASSERT_MESSAGE("no shape", pShape != nullptr);
 }
 
-void SdExportTest::testTdf97630()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf97630)
 {
     createSdImpressDoc("fit-to-size.fodp");
     {
@@ -517,7 +410,7 @@ void SdExportTest::testTdf97630()
                 1);
 }
 
-void SdExportTest::testImpressPasswordExport()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testImpressPasswordExport)
 {
     std::vector<OUString> vFormat{ "impress8", "Impress Office Open XML" };
 
@@ -529,14 +422,14 @@ void SdExportTest::testImpressPasswordExport()
     }
 }
 
-void SdExportTest::testDrawPasswordExport()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testDrawPasswordExport)
 {
     createSdDrawDoc();
 
     saveAndReload("draw8", /*pPassword*/ "test");
 }
 
-void SdExportTest::testSwappedOutImageExport()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testSwappedOutImageExport)
 {
     // Problem was with the swapped out images, which were not swapped in during export.
 
@@ -605,7 +498,7 @@ void SdExportTest::testSwappedOutImageExport()
     }
 }
 
-void SdExportTest::testOOoXMLAnimations()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testOOoXMLAnimations)
 {
     createSdImpressDoc("sxi/ooo41061-1.sxi");
 
@@ -622,7 +515,7 @@ void SdExportTest::testOOoXMLAnimations()
     assertXPath(pXmlDoc, "//anim:par", 223);
 }
 
-void SdExportTest::testBnc480256()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testBnc480256)
 {
     createSdImpressDoc("pptx/bnc480256.pptx");
     // In the document, there are two tables with table background properties.
@@ -675,7 +568,7 @@ void SdExportTest::testBnc480256()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), sal_Int32(aBorderLine.LineWidth));
 }
 
-void SdExportTest::testUnknownAttributes()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testUnknownAttributes)
 {
     createSdImpressDoc("unknown-attribute.fodp");
 
@@ -694,7 +587,7 @@ void SdExportTest::testUnknownAttributes()
     assertXPathNSDef(pXmlDoc, "/office:document-content", u"foo", u"http://example.com/");
 }
 
-void SdExportTest::testTdf80020()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf80020)
 {
     createSdImpressDoc("odp/tdf80020.odp");
     {
@@ -718,7 +611,7 @@ void SdExportTest::testTdf80020()
     CPPUNIT_ASSERT_EQUAL(OUString("text"), xStyle->getParentStyle());
 }
 
-void SdExportTest::testTdf128985()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf128985)
 {
     createSdImpressDoc("odp/tdf128985.odp");
     {
@@ -757,7 +650,7 @@ void SdExportTest::testTdf128985()
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nWritingMode);
 }
 
-void SdExportTest::testLinkedGraphicRT()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testLinkedGraphicRT)
 {
     // FIXME: PPTX fails
     std::vector<OUString> vFormat{ "impress8", "MS PowerPoint 97" };
@@ -814,7 +707,7 @@ void SdExportTest::testLinkedGraphicRT()
     }
 }
 
-void SdExportTest::testTdf79082()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf79082)
 {
     createSdImpressDoc("ppt/tdf79082.ppt");
     save("impress8");
@@ -849,7 +742,7 @@ void SdExportTest::testTdf79082()
                 "position", "25.4cm");
 }
 
-void SdExportTest::testImageWithSpecialID()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testImageWithSpecialID)
 {
     // Check how LO handles when the imported graphic's ID is different from that one
     // which is generated by LO.
@@ -916,7 +809,7 @@ void SdExportTest::testImageWithSpecialID()
     }
 }
 
-void SdExportTest::testTdf62176()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf62176)
 {
     createSdImpressDoc("odp/Tdf62176.odp");
     uno::Reference<drawing::XDrawPage> xPage(getPage(0));
@@ -959,7 +852,7 @@ void SdExportTest::testTdf62176()
     CPPUNIT_ASSERT_EQUAL(OUString("Hello World"), xParagraph2->getString());
 }
 
-void SdExportTest::testEmbeddedPdf()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testEmbeddedPdf)
 {
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
@@ -976,7 +869,7 @@ void SdExportTest::testEmbeddedPdf()
     CPPUNIT_ASSERT(xGraphic.is());
 }
 
-void SdExportTest::testEmbeddedText()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testEmbeddedText)
 {
     createSdDrawDoc("objectwithtext.fodg");
     saveAndReload("draw8");
@@ -1004,7 +897,7 @@ void SdExportTest::testEmbeddedText()
     CPPUNIT_ASSERT_EQUAL(OUString("foobar"), xRange->getString()); //tdf#112547
 }
 
-void SdExportTest::testTransparenText()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTransparenText)
 {
     createSdDrawDoc("transparent-text.fodg");
     saveAndReload("draw8");
@@ -1021,7 +914,7 @@ void SdExportTest::testTransparenText()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(75), nCharTransparence);
 }
 
-void SdExportTest::testDefaultSubscripts()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testDefaultSubscripts)
 {
     createSdDrawDoc("tdf80194_defaultSubscripts.fodg");
     saveAndReload("draw8");
@@ -1033,7 +926,7 @@ void SdExportTest::testDefaultSubscripts()
     CPPUNIT_ASSERT(17000 > xShape->getSize().Height);
 }
 
-void SdExportTest::testTdf98477()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf98477)
 {
     createSdImpressDoc("pptx/tdf98477grow.pptx");
     save("impress8");
@@ -1042,7 +935,7 @@ void SdExportTest::testTdf98477()
     assertXPath(pXmlDoc, "//anim:animateTransform", "by", "0.5,0.5");
 }
 
-void SdExportTest::testAuthorField()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testAuthorField)
 {
     createSdImpressDoc("odp/author_fixed.odp");
 
@@ -1057,7 +950,7 @@ void SdExportTest::testAuthorField()
     CPPUNIT_ASSERT_MESSAGE("Author field is not fixed", bFixed);
 }
 
-void SdExportTest::testTdf50499()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf50499)
 {
     createSdImpressDoc("pptx/tdf50499.pptx");
 
@@ -1069,7 +962,7 @@ void SdExportTest::testTdf50499()
     assertXPath(pXmlDoc, "//anim:animate[3]", "by", "(height/3+width*0.1)");
 }
 
-void SdExportTest::testTdf100926()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf100926)
 {
     createSdImpressDoc("pptx/tdf100926_ODP.pptx");
 
@@ -1097,7 +990,7 @@ void SdExportTest::testTdf100926()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nRotation);
 }
 
-void SdExportTest::testPageWithTransparentBackground()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testPageWithTransparentBackground)
 {
     createSdImpressDoc("odp/page_transparent_background.odp");
 
@@ -1121,7 +1014,7 @@ void SdExportTest::testPageWithTransparentBackground()
                                  nTransparence);
 }
 
-void SdExportTest::testTextRotation()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTextRotation)
 {
     // Save behavior depends on whether ODF strict or extended is used.
     Resetter _([]() {
@@ -1177,7 +1070,7 @@ void SdExportTest::testTextRotation()
     }
 }
 
-void SdExportTest::testTdf115394PPT()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf115394PPT)
 {
     createSdImpressDoc("ppt/tdf115394.ppt");
 
@@ -1205,7 +1098,7 @@ void SdExportTest::testTdf115394PPT()
     CPPUNIT_ASSERT_EQUAL(1.0, fTransitionDuration);
 }
 
-void SdExportTest::testBulletsAsImage()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testBulletsAsImage)
 {
     std::vector<OUString> vFormat{ "impress8", "Impress Office Open XML", "MS PowerPoint 97" };
     for (size_t i = 0; i < vFormat.size(); i++)
@@ -1290,7 +1183,7 @@ void SdExportTest::testBulletsAsImage()
     }
 }
 
-void SdExportTest::testTdf113822()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf113822)
 {
     createSdImpressDoc("pptx/tdf113822underline.pptx");
 
@@ -1310,7 +1203,7 @@ void SdExportTest::testTdf113822()
     assertXPath(pXmlDoc, "//anim:iterate/anim:set", "to", "solid");
 }
 
-void SdExportTest::testTdf113818()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf113818)
 {
     createSdImpressDoc("pptx/tdf113818-swivel.pptx");
     saveAndReload("MS PowerPoint 97");
@@ -1322,7 +1215,7 @@ void SdExportTest::testTdf113818()
     assertXPath(pXmlDoc, "//anim:animate[1]", "values", "0;1");
 }
 
-void SdExportTest::testTdf119629()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf119629)
 {
     createSdImpressDoc("ppt/tdf119629.ppt");
     saveAndReload("MS PowerPoint 97");
@@ -1343,7 +1236,7 @@ void SdExportTest::testTdf119629()
                 1);
 }
 
-void SdExportTest::testTdf141269()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf141269)
 {
     createSdImpressDoc("odp/tdf141269.odp");
     saveAndReload("MS PowerPoint 97");
@@ -1369,7 +1262,7 @@ void SdExportTest::testTdf141269()
     CPPUNIT_ASSERT_EQUAL(aExpectedColor, aBitmap.GetPixelColor(960, 540));
 }
 
-void SdExportTest::testTdf123557()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf123557)
 {
     createSdImpressDoc("pptx/trigger.pptx");
     saveAndReload("Impress Office Open XML");
@@ -1392,7 +1285,7 @@ void SdExportTest::testTdf123557()
                 3);
 }
 
-void SdExportTest::testTdf126761()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf126761)
 {
     createSdImpressDoc("ppt/tdf126761.ppt");
     saveAndReload("impress8");
@@ -1411,7 +1304,7 @@ void SdExportTest::testTdf126761()
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), nCharUnderline);
 }
 
-void SdExportTest::testGlow()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testGlow)
 {
     createSdDrawDoc("odg/glow.odg");
     saveAndReload("draw8");
@@ -1449,7 +1342,7 @@ void SdExportTest::testGlow()
         "glow-transparency", "60%");
 }
 
-void SdExportTest::testSoftEdges()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testSoftEdges)
 {
     createSdDrawDoc("odg/softedges.odg");
     saveAndReload("draw8");
@@ -1473,7 +1366,7 @@ void SdExportTest::testSoftEdges()
         "softedge-radius", "0.635cm");
 }
 
-void SdExportTest::testShadowBlur()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testShadowBlur)
 {
     createSdImpressDoc("odp/shadow-blur.odp");
     saveAndReload("draw8");
@@ -1493,14 +1386,14 @@ void SdExportTest::testShadowBlur()
         "shadow-blur", "0.388cm");
 }
 
-void SdExportTest::testRhbz1870501()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testRhbz1870501)
 {
     //Without the fix in place, it would crash at export time
     createSdDrawDoc("odg/rhbz1870501.odg");
     saveAndReload("draw8");
 }
 
-void SdExportTest::testTdf152606()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf152606)
 {
     //Without the fix in place, it would crash at import time
     createSdImpressDoc("pptx/tdf152606.pptx");
@@ -1512,14 +1405,14 @@ void SdExportTest::testTdf152606()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDrawPage->getCount());
 }
 
-void SdExportTest::testTdf91060()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf91060)
 {
     //Without the fix in place, it would crash at import time
     createSdImpressDoc("pptx/tdf91060.pptx");
     saveAndReload("Impress Office Open XML");
 }
 
-void SdExportTest::testTdf128550()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf128550)
 {
     createSdImpressDoc("pptx/tdf128550.pptx");
     save("impress8");
@@ -1528,7 +1421,7 @@ void SdExportTest::testTdf128550()
     assertXPath(pXmlDoc, "//anim:iterate[@anim:sub-item='text']", 4);
 }
 
-void SdExportTest::testTdf140714()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf140714)
 {
     //Without the fix in place, shape will be imported as GraphicObjectShape instead of CustomShape.
 
@@ -1539,7 +1432,7 @@ void SdExportTest::testTdf140714()
     CPPUNIT_ASSERT_EQUAL(OUString{ "com.sun.star.drawing.CustomShape" }, xShape->getShapeType());
 }
 
-void SdExportTest::testMasterPageBackgroundFullSize()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testMasterPageBackgroundFullSize)
 {
     createSdImpressDoc("odp/background.odp");
 
@@ -1726,7 +1619,7 @@ void SdExportTest::testMasterPageBackgroundFullSize()
                 "background-size", "full");
 }
 
-void SdExportTest::testColumnsODG()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testColumnsODG)
 {
     createSdDrawDoc("odg/two_columns.odg");
 
@@ -1787,7 +1680,7 @@ void SdExportTest::testColumnsODG()
                 "column-gap", "0.7cm");
 }
 
-void SdExportTest::testTdf112126()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf112126)
 {
     createSdDrawDoc("tdf112126.odg");
     saveAndReload("draw8");
@@ -1803,7 +1696,7 @@ void SdExportTest::testTdf112126()
     CPPUNIT_ASSERT_EQUAL(OUString("Page 1"), xPageName);
 }
 
-void SdExportTest::testCellProperties()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testCellProperties)
 {
     // Silence unrelated failure:
     // Error: element "table:table-template" is missing "first-row-start-column" attribute
@@ -1835,7 +1728,7 @@ void SdExportTest::testCellProperties()
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust::TextVerticalAdjust_CENTER, aTextAdjust);
 }
 
-void SdExportTest::testUserTableStyles()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testUserTableStyles)
 {
     // Silence unrelated failure:
     // Error: element "table:table-template" is missing "first-row-start-column" attribute
@@ -1863,7 +1756,7 @@ void SdExportTest::testUserTableStyles()
     CPPUNIT_ASSERT(xTableStyle->isUserDefined());
 }
 
-void SdExportTest::testTdf153179()
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf153179)
 {
     createSdImpressDoc("pptx/ole-emf_min.pptx");
     saveAndReload("impress8");
@@ -1871,8 +1764,6 @@ void SdExportTest::testTdf153179()
     // Check number of shapes after export.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getPage(0)->getCount());
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
