@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -36,8 +36,7 @@ namespace chart::wrapper
 
 class Chart2ModelContact;
 
-class UpDownBarWrapper : public cppu::BaseMutex
-                       , public ::cppu::WeakImplHelper
+class UpDownBarWrapper : public ::cppu::WeakImplHelper
                         < css::lang::XComponent
                         , css::lang::XServiceInfo
                         , css::beans::XPropertySet
@@ -94,8 +93,9 @@ public:
     virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPropertyDefaults( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
 private: //member
+    std::mutex m_aMutex;
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
-    ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> m_aEventListenerContainer;
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aEventListenerContainer;
 
     OUString       m_aPropertySetName;
 };

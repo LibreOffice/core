@@ -126,7 +126,6 @@ namespace chart::wrapper
 UpDownBarWrapper::UpDownBarWrapper(
     bool bUp, std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
         : m_spChart2ModelContact(std::move( spChart2ModelContact ))
-        , m_aEventListenerContainer( m_aMutex )
         , m_aPropertySetName( bUp ? OUString( "WhiteDay" ) : OUString( "BlackDay" ))
 {
 }
@@ -138,20 +137,23 @@ UpDownBarWrapper::~UpDownBarWrapper()
 // ____ XComponent ____
 void SAL_CALL UpDownBarWrapper::dispose()
 {
+    std::unique_lock g(m_aMutex);
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
-    m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
+    m_aEventListenerContainer.disposeAndClear( g, lang::EventObject( xSource ) );
 }
 
 void SAL_CALL UpDownBarWrapper::addEventListener(
     const Reference< lang::XEventListener >& xListener )
 {
-    m_aEventListenerContainer.addInterface( xListener );
+    std::unique_lock g(m_aMutex);
+    m_aEventListenerContainer.addInterface( g, xListener );
 }
 
 void SAL_CALL UpDownBarWrapper::removeEventListener(
     const Reference< lang::XEventListener >& aListener )
 {
-    m_aEventListenerContainer.removeInterface( aListener );
+    std::unique_lock g(m_aMutex);
+    m_aEventListenerContainer.removeInterface( g, aListener );
 }
 
 //XPropertySet
