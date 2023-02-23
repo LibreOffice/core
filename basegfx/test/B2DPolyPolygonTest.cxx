@@ -25,11 +25,10 @@
 #include <basegfx/polygon/b2dtrapezoid.hxx>
 
 #include "boxclipper.hxx"
+#include <random>
 
 namespace basegfx
 {
-using ::basegfx2d::getRandomOrdinal;
-
 class b2dpolypolygon : public CppUnit::TestFixture
 {
 public:
@@ -63,6 +62,15 @@ public:
         B2DTrapezoidVector aVector;
         basegfx::utils::trapezoidSubdivide(aVector, aPolyPolygon);
         CPPUNIT_ASSERT_MESSAGE("more than zero sub-divided trapezoids", !aVector.empty());
+    }
+
+    std::mt19937 rng; // Standard mersenne_twister_engine
+
+    /// Gets a random ordinal [0,n)
+    ::std::size_t getRandomOrdinal(const ::std::size_t n)
+    {
+        std::uniform_int_distribution<size_t> dist(0, n - 1);
+        return dist(rng);
     }
 
     // Change the following lines only, if you add, remove or rename
