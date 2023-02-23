@@ -349,8 +349,9 @@ void WorkbookFragment::finalizeImport()
 
     // read the theme substream
     OUString aThemeFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"theme" );
+    model::Theme aTheme;
     if( !aThemeFragmentPath.isEmpty() )
-        importOoxFragment( new ThemeFragmentHandler( getFilter(), aThemeFragmentPath, getTheme() ) );
+        importOoxFragment(new ThemeFragmentHandler(getFilter(), aThemeFragmentPath, getTheme(), aTheme));
     xGlobalSegment->setPosition( 0.25 );
 
     // read the styles substream (requires finalized theme buffer)

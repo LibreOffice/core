@@ -251,11 +251,11 @@ const std::shared_ptr< ::oox::drawingml::Theme >& AdvancedDiagramHelper::getOrCr
             // reset local Theme ModelData *always* to get rid of former data that would
             // else be added additionally
             const_cast<AdvancedDiagramHelper*>(this)->mpThemePtr = std::make_shared<oox::drawingml::Theme>();
+            model::Theme aTheme;
 
             // import Theme ModelData
             rxFilter->importFragment(
-                new ThemeFragmentHandler(
-                    *rxFilter, OUString(), *mpThemePtr ),
+                new ThemeFragmentHandler(*rxFilter, OUString(), *mpThemePtr, aTheme),
                 uno::Reference< css::xml::sax::XFastSAXSerializable >(
                     xThemeDocument,
                     uno::UNO_QUERY_THROW));

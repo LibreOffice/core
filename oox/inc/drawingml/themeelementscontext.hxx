@@ -21,6 +21,7 @@
 #define INCLUDED_OOX_DRAWINGML_THEMEELEMENTSCONTEXT_HXX
 
 #include <oox/core/contexthandler2.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 namespace oox::drawingml
 {
@@ -29,12 +30,14 @@ class Theme;
 class ThemeElementsContext final : public oox::core::ContextHandler2
 {
 public:
-    ThemeElementsContext(::oox::core::ContextHandler2Helper const& rParent, Theme& rTheme);
+    ThemeElementsContext(::oox::core::ContextHandler2Helper const& rParent, Theme& rOoxTheme,
+                         model::Theme& rTheme);
     virtual ::oox::core::ContextHandlerRef
     onCreateContext(sal_Int32 nElement, const ::oox::AttributeList& rAttribs) override;
 
 private:
-    Theme& mrTheme;
+    Theme& mrOoxTheme;
+    model::Theme& mrTheme;
 };
 
 } // namespace oox::drawingml

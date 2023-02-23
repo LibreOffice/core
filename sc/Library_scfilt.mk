@@ -44,6 +44,7 @@ $(eval $(call gb_Library_use_libraries,scfilt,\
 	cppu \
 	cppuhelper \
 	drawinglayer \
+	docmodel \
 	editeng \
 	for \
 	msfilter \

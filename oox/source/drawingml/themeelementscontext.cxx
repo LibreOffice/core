@@ -213,45 +213,49 @@ void FontSchemeContext::onEndElement()
     }
 }
 
-ThemeElementsContext::ThemeElementsContext( ContextHandler2Helper const & rParent, Theme& rTheme ) :
-    ContextHandler2( rParent ),
-    mrTheme( rTheme )
+ThemeElementsContext::ThemeElementsContext(ContextHandler2Helper const & rParent, Theme& rOoxTheme, model::Theme& rTheme)
+    : ContextHandler2(rParent)
+    , mrOoxTheme(rOoxTheme)
+    , mrTheme(rTheme)
 {
 }
 
-ContextHandlerRef ThemeElementsContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef ThemeElementsContext::onCreateContext(sal_Int32 nElement, const AttributeList& rAttribs)
 {
     // CT_BaseStyles
-    switch( nElement )
+    switch (nElement)
     {
         case A_TOKEN( clrScheme ):  // CT_ColorScheme
         {
+            OUString aColorSchemeName = rAttribs.getStringDefaulted(XML_name);
+            mrTheme.SetColorSet(std::make_unique<model::ColorSet>(aColorSchemeName));
             if (rAttribs.hasAttribute(XML_name))
-                mrTheme.getClrScheme().SetName(rAttribs.getStringDefaulted(XML_name));
-            return new clrSchemeContext(*this, mrTheme.getClrScheme());
+                mrOoxTheme.getClrScheme().SetName(rAttribs.getStringDefaulted(XML_name));
+            return new clrSchemeContext(*this, mrOoxTheme.getClrScheme(), *mrTheme.GetColorSet());
         }
         case A_TOKEN( fontScheme ): // CT_FontScheme
         {
             if (rAttribs.hasAttribute(XML_name))
-                mrTheme.setFontSchemeName(rAttribs.getStringDefaulted(XML_name));
-            return new FontSchemeContext(*this, mrTheme.getFontScheme(), mrTheme.getSupplementalFontMap());
+                mrOoxTheme.setFontSchemeName(rAttribs.getStringDefaulted(XML_name));
+
+            return new FontSchemeContext(*this, mrOoxTheme.getFontScheme(), mrOoxTheme.getSupplementalFontMap());
         }
 
         case A_TOKEN( fmtScheme ):  // CT_StyleMatrix
         {
             if (rAttribs.hasAttribute(XML_name))
-                mrTheme.setFormatSchemeName(rAttribs.getStringDefaulted(XML_name));
+                mrOoxTheme.setFormatSchemeName(rAttribs.getStringDefaulted(XML_name));
             return this;
         }
 
         case A_TOKEN( fillStyleLst ):   // CT_FillStyleList
-            return new FillStyleListContext( *this, mrTheme.getFillStyleList() );
+            return new FillStyleListContext( *this, mrOoxTheme.getFillStyleList() );
         case A_TOKEN( lnStyleLst ):    // CT_LineStyleList
-            return new LineStyleListContext( *this, mrTheme.getLineStyleList() );
+            return new LineStyleListContext( *this, mrOoxTheme.getLineStyleList() );
         case A_TOKEN( effectStyleLst ): // CT_EffectStyleList
-            return new EffectStyleListContext( *this, mrTheme.getEffectStyleList() );
+            return new EffectStyleListContext( *this, mrOoxTheme.getEffectStyleList() );
         case A_TOKEN( bgFillStyleLst ): // CT_BackgroundFillStyleList
-            return new FillStyleListContext( *this, mrTheme.getBgFillStyleList() );
+            return new FillStyleListContext( *this, mrOoxTheme.getBgFillStyleList() );
     }
     return nullptr;
 }

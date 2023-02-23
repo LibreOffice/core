@@ -280,8 +280,9 @@ void SAL_CALL ShapeContextHandler::startFastElement
 
             if(!aThemeFragmentPath.isEmpty())
             {
+                model::Theme aTheme;
                 uno::Reference<xml::sax::XFastSAXSerializable> xDoc(mxShapeFilterBase->importFragment(aThemeFragmentPath), uno::UNO_QUERY_THROW);
-                mxShapeFilterBase->importFragment(new ThemeFragmentHandler(*mxShapeFilterBase, aThemeFragmentPath, *mpThemePtr ), xDoc);
+                mxShapeFilterBase->importFragment(new ThemeFragmentHandler(*mxShapeFilterBase, aThemeFragmentPath, *mpThemePtr, aTheme), xDoc);
                 mxShapeFilterBase->setCurrentTheme(mpThemePtr);
             }
         }

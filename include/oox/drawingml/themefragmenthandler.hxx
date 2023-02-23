@@ -25,29 +25,28 @@
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <docmodel/theme/Theme.hxx>
 
 namespace oox { class AttributeList; }
 namespace oox::core { class XmlFilterBase; }
 
-namespace oox::drawingml {
+namespace oox::drawingml
+{
 
 class Theme;
-
 
 class OOX_DLLPUBLIC ThemeFragmentHandler final : public ::oox::core::FragmentHandler2
 {
 public:
-    explicit            ThemeFragmentHandler(
-                            ::oox::core::XmlFilterBase& rFilter,
-                            const OUString& rFragmentPath,
-                            Theme& rTheme );
-    virtual             ~ThemeFragmentHandler() override;
+    explicit ThemeFragmentHandler(::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, Theme& rOoxTheme, model::Theme& rTheme);
+    virtual ~ThemeFragmentHandler() override;
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual ::oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElement, const AttributeList& rAttribs) override;
     void onStartElement(const AttributeList& rAttribs) override;
 
 private:
-    Theme&              mrTheme;
+    Theme& mrOoxTheme;
+    model::Theme& mrTheme;
 };
 
 

@@ -37,22 +37,24 @@ public:
 class clrSchemeColorContext final : private Color, public ColorContext
 {
 public:
-    clrSchemeColorContext( ::oox::core::ContextHandler2Helper const & rParent, ClrScheme& rClrScheme, sal_Int32 nColorToken );
+    clrSchemeColorContext(::oox::core::ContextHandler2Helper const & rParent, ClrScheme& rClrScheme, model::ColorSet& mrColorSet, sal_Int32 nColorToken);
     virtual ~clrSchemeColorContext() override;
 
 private:
     ClrScheme&      mrClrScheme;
+    model::ColorSet& mrColorSet;
     sal_Int32       mnColorToken;
 };
 
 class clrSchemeContext final : public oox::core::ContextHandler2
 {
 public:
-    clrSchemeContext( ::oox::core::ContextHandler2Helper const & rParent, ClrScheme& rClrScheme );
+    clrSchemeContext(::oox::core::ContextHandler2Helper const & rParent, ClrScheme& rClrScheme, model::ColorSet& rColorSet);
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 private:
-    ClrScheme&      mrClrScheme;
+    ClrScheme& mrClrScheme;
+    model::ColorSet& mrColorSet;
 };
 
 }
