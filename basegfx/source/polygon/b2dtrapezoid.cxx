@@ -174,6 +174,9 @@ namespace basegfx::trapezoidhelper
             // method for cut support
             B2DPoint getCutPointForGivenY(double fGivenY) const
             {
+                // avoid div/0
+                if (getDeltaY() == 0)
+                    return B2DPoint(getStart().getX(), fGivenY);
                 // Calculate cut point locally (do not use interpolate) since it is numerically
                 // necessary to guarantee the new, equal Y-coordinate
                 const double fFactor((fGivenY - getStart().getY()) / getDeltaY());
