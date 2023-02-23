@@ -124,7 +124,7 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
         case A_TOKEN( gradFill ):
         case A_TOKEN( pattFill ):
         case A_TOKEN( blipFill ): // Fontwork uses blibFill.
-            return FillPropertiesContext::createFillContext( *this, aElementToken, rAttribs, mrTextCharacterProperties.maFillProperties );
+            return FillPropertiesContext::createFillContext(*this, aElementToken, rAttribs, mrTextCharacterProperties.maFillProperties, nullptr);
         // EG_EffectProperties
         case A_TOKEN( effectDag ):  // CT_EffectContainer 5.1.10.25
         case A_TOKEN( effectLst ):  // CT_EffectList 5.1.10.26

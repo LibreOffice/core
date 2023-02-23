@@ -91,8 +91,7 @@ TableCellContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeLis
     break;
 
     default:
-        return FillPropertiesContext::createFillContext( *this, aElementToken, rAttribs, mrTableCell.maFillProperties );
-
+        return FillPropertiesContext::createFillContext(*this, aElementToken, rAttribs, mrTableCell.maFillProperties, nullptr);
     }
 
     return this;

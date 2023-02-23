@@ -23,12 +23,52 @@
 #include <oox/drawingml/color.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <unordered_map>
 
 namespace oox::drawingml {
 
-ColorValueContext::ColorValueContext( ContextHandler2Helper const & rParent, Color& rColor ) :
-    ContextHandler2( rParent ),
-    mrColor( rColor )
+namespace
+{
+
+std::unordered_map<sal_Int32, model::SystemColorType> constSystemColorMap =
+{
+    { XML_scrollBar, model::SystemColorType::ScrollBar },
+    { XML_background, model::SystemColorType::Background },
+    { XML_activeCaption, model::SystemColorType::ActiveCaption },
+    { XML_inactiveCaption, model::SystemColorType::InactiveCaption },
+    { XML_menu, model::SystemColorType::Menu },
+    { XML_window, model::SystemColorType::Window },
+    { XML_windowFrame, model::SystemColorType::WindowFrame },
+    { XML_menuText, model::SystemColorType::MenuText },
+    { XML_windowText, model::SystemColorType::WindowText },
+    { XML_captionText, model::SystemColorType::CaptionText },
+    { XML_activeBorder, model::SystemColorType::ActiveBorder },
+    { XML_inactiveBorder, model::SystemColorType::InactiveBorder },
+    { XML_appWorkspace, model::SystemColorType::AppWorkspace },
+    { XML_highlight, model::SystemColorType::Highlight },
+    { XML_highlightText, model::SystemColorType::HighlightText },
+    { XML_btnFace, model::SystemColorType::ButtonFace },
+    { XML_btnShadow, model::SystemColorType::ButtonShadow },
+    { XML_grayText, model::SystemColorType::GrayText },
+    { XML_btnText, model::SystemColorType::ButtonText },
+    { XML_inactiveCaptionText, model::SystemColorType::InactiveCaptionText },
+    { XML_btnHighlight, model::SystemColorType::ButtonHighlight },
+    { XML_3dDkShadow, model::SystemColorType::DarkShadow3D },
+    { XML_3dLight, model::SystemColorType::Light3D },
+    { XML_infoText, model::SystemColorType::InfoText },
+    { XML_infoBk, model::SystemColorType::InfoBack },
+    { XML_hotLight, model::SystemColorType::HotLight },
+    { XML_gradientActiveCaption, model::SystemColorType::GradientActiveCaption },
+    { XML_gradientInactiveCaption, model::SystemColorType::GradientInactiveCaption },
+    { XML_menuHighlight, model::SystemColorType::MenuHighlight },
+    { XML_menuBar, model::SystemColorType::MenuBar }
+};
+}
+
+ColorValueContext::ColorValueContext(ContextHandler2Helper const & rParent, Color& rColor, model::ColorDefinition* pColorDefinition)
+    : ContextHandler2(rParent)
+    , mrColor(rColor)
+    , mpColorDefinition(pColorDefinition)
 {
 }
 
@@ -36,41 +76,105 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
-        case A_TOKEN( scrgbClr ):
+        case A_TOKEN(scrgbClr):
+        {
             mrColor.setScrgbClr(
                 rAttribs.getInteger( XML_r, 0 ),
                 rAttribs.getInteger( XML_g, 0 ),
                 rAttribs.getInteger( XML_b, 0 ) );
+            if (mpColorDefinition)
+            {
+                mpColorDefinition->setCRGB(
+                    rAttribs.getInteger(XML_r, 0),
+                    rAttribs.getInteger(XML_g, 0),
+                    rAttribs.getInteger(XML_b, 0));
+            }
+        }
         break;
 
-        case A_TOKEN( srgbClr ):
-            mrColor.setSrgbClr( rAttribs.getIntegerHex( XML_val, 0 ) );
+        case A_TOKEN(srgbClr):
+        {
+            mrColor.setSrgbClr(rAttribs.getIntegerHex(XML_val, 0));
+            if (mpColorDefinition)
+            {
+                mpColorDefinition->setRGB(rAttribs.getIntegerHex(XML_val, 0));
+            }
+        }
         break;
 
-        case A_TOKEN( hslClr ):
+        case A_TOKEN(hslClr):
+        {
             mrColor.setHslClr(
                 rAttribs.getInteger( XML_hue, 0 ),
                 rAttribs.getInteger( XML_sat, 0 ),
                 rAttribs.getInteger( XML_lum, 0 ) );
-        break;
 
-        case A_TOKEN( sysClr ):
-            mrColor.setSysClr(
-                rAttribs.getToken( XML_val, XML_TOKEN_INVALID ),
-                rAttribs.getIntegerHex( XML_lastClr, -1 ) );
-        break;
-
-        case A_TOKEN( schemeClr ):
-        {
-            mrColor.setSchemeClr( rAttribs.getToken( XML_val, XML_TOKEN_INVALID ) );
-            std::optional<OUString> sSchemeName = rAttribs.getString( XML_val );
-            if( sSchemeName.has_value() )
-                mrColor.setSchemeName( *sSchemeName );
+            if (mpColorDefinition)
+            {
+                mpColorDefinition->setHSL(
+                    rAttribs.getInteger(XML_hue, 0),
+                    rAttribs.getInteger(XML_sat, 0),
+                    rAttribs.getInteger(XML_lum, 0));
+            }
         }
         break;
 
-        case A_TOKEN( prstClr ):
-            mrColor.setPrstClr( rAttribs.getToken( XML_val, XML_TOKEN_INVALID ) );
+        case A_TOKEN(sysClr):
+        {
+            sal_Int32 nToken = rAttribs.getToken(XML_val, XML_TOKEN_INVALID);
+            sal_Int32 nLastColor = rAttribs.getIntegerHex(XML_lastClr, -1);
+
+            mrColor.setSysClr(nToken, nLastColor);
+
+            auto aIterator = constSystemColorMap.find(nToken);
+            if (aIterator != constSystemColorMap.end())
+            {
+                auto const& aPair = *aIterator;
+                model::SystemColorType eType = aPair.second;
+                if (mpColorDefinition)
+                    mpColorDefinition->setSystemColor(eType, nLastColor);
+            }
+        }
+        break;
+
+        case A_TOKEN(schemeClr):
+        {
+            auto nToken = rAttribs.getToken(XML_val, XML_TOKEN_INVALID);
+            mrColor.setSchemeClr(nToken);
+            std::optional<OUString> sSchemeName = rAttribs.getString(XML_val);
+            if (sSchemeName.has_value())
+            {
+                mrColor.setSchemeName(*sSchemeName);
+
+                if (mpColorDefinition)
+                {
+                    if (nToken == XML_phClr)
+                    {
+                        mpColorDefinition->setSchemePlaceholder();
+                    }
+                    else
+                    {
+                        model::ThemeColorType eType = schemeNameToThemeColorType(*sSchemeName);
+                        mpColorDefinition->setSchemeColor(eType);
+                    }
+                }
+            }
+        }
+        break;
+
+        case A_TOKEN(prstClr):
+        {
+            sal_Int32 nToken = rAttribs.getToken(XML_val, XML_TOKEN_INVALID);
+            mrColor.setPrstClr(nToken);
+            if (mpColorDefinition)
+            {
+                ::Color nRgbValue = Color::getDmlPresetColor(nToken, API_RGB_TRANSPARENT);
+                mpColorDefinition->mnComponent1 = nRgbValue.GetRed();
+                mpColorDefinition->mnComponent2 = nRgbValue.GetGreen();
+                mpColorDefinition->mnComponent3 = nRgbValue.GetBlue();
+                mpColorDefinition->meType = model::ColorType::RGB;
+            }
+        }
         break;
     }
 }
@@ -126,9 +230,10 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
     return nullptr;
 }
 
-ColorContext::ColorContext( ContextHandler2Helper const & rParent, Color& rColor ) :
-    ContextHandler2( rParent ),
-    mrColor( rColor )
+ColorContext::ColorContext(ContextHandler2Helper const & rParent, Color& rColor, model::ColorDefinition* pColorDefinition)
+    : ContextHandler2(rParent)
+    , mrColor(rColor)
+    , mpColorDefinition(pColorDefinition)
 {
 }
 
@@ -143,7 +248,7 @@ ColorContext::ColorContext( ContextHandler2Helper const & rParent, Color& rColor
         case A_TOKEN( sysClr ):
         case A_TOKEN( schemeClr ):
         case A_TOKEN( prstClr ):
-            return new ColorValueContext( *this, mrColor );
+            return new ColorValueContext(*this, mrColor, mpColorDefinition);
     }
     return nullptr;
 }
@@ -167,7 +272,7 @@ ColorsContext::ColorsContext(ContextHandler2Helper const& rParent, std::vector<C
         case A_TOKEN(prstClr):
         {
             mrColors.emplace_back();
-            return new ColorValueContext(*this, mrColors.back());
+            return new ColorValueContext(*this, mrColors.back(), nullptr);
         }
     }
     return nullptr;

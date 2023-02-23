@@ -36,11 +36,13 @@ using ::oox::core::ContextHandlerRef;
 
 namespace oox::drawingml {
 
-SolidFillContext::SolidFillContext( ContextHandler2Helper const & rParent,
-        FillProperties& rFillProps ) :
-    ColorContext( rParent, rFillProps.maFillColor )
+SolidFillContext::SolidFillContext(ContextHandler2Helper const & rParent, FillProperties& rFillProps, model::SolidFill* pSolidFill)
+    : ColorContext(rParent, rFillProps.maFillColor, pSolidFill ? &pSolidFill->maColorDefinition : nullptr)
 {
 }
+
+SolidFillContext::~SolidFillContext()
+{}
 
 GradientFillContext::GradientFillContext( ContextHandler2Helper const & rParent,
         const AttributeList& rAttribs, GradientFillProperties& rGradientProps ) :
@@ -272,21 +274,57 @@ FillPropertiesContext::FillPropertiesContext( ContextHandler2Helper const & rPar
 ContextHandlerRef FillPropertiesContext::onCreateContext(
         sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    return createFillContext( *this, nElement, rAttribs, mrFillProps );
+    return createFillContext(*this, nElement, rAttribs, mrFillProps, &maFillStyle);
 }
 
 ContextHandlerRef FillPropertiesContext::createFillContext(
         ContextHandler2Helper const & rParent, sal_Int32 nElement,
-        const AttributeList& rAttribs, FillProperties& rFillProps )
+        const AttributeList& rAttribs, FillProperties& rFillProps,
+        model::FillStyle* pFillStyle)
 {
     switch( nElement )
     {
-        case A_TOKEN( noFill ):     { rFillProps.moFillType = getBaseToken( nElement ); return nullptr; };
-        case A_TOKEN( solidFill ):  { rFillProps.moFillType = getBaseToken( nElement ); return new SolidFillContext( rParent, rFillProps ); };
-        case A_TOKEN( gradFill ):   { rFillProps.moFillType = getBaseToken( nElement ); return new GradientFillContext( rParent, rAttribs, rFillProps.maGradientProps ); };
-        case A_TOKEN( pattFill ):   { rFillProps.moFillType = getBaseToken( nElement ); return new PatternFillContext( rParent, rAttribs, rFillProps.maPatternProps ); };
-        case A_TOKEN( blipFill ):   { rFillProps.moFillType = getBaseToken( nElement ); return new BlipFillContext( rParent, rAttribs, rFillProps.maBlipProps ); };
-        case A_TOKEN( grpFill ):    { rFillProps.moFillType = getBaseToken( nElement ); return nullptr; };    // TODO
+        case A_TOKEN( noFill ):
+        {
+            rFillProps.moFillType = getBaseToken(nElement);
+            if (pFillStyle)
+            {
+                pFillStyle->mpFill = std::make_shared<model::NoFill>();
+            }
+            return nullptr;
+        }
+        case A_TOKEN( solidFill ):
+        {
+            rFillProps.moFillType = getBaseToken(nElement);
+            model::SolidFill* pSolidFill = nullptr;
+            if (pFillStyle)
+            {
+                pFillStyle->mpFill = std::make_shared<model::SolidFill>();
+                pSolidFill = static_cast<model::SolidFill*>(pFillStyle->mpFill.get());
+            }
+            return new SolidFillContext(rParent, rFillProps, pSolidFill);
+        }
+        case A_TOKEN( gradFill ):
+        {
+            rFillProps.moFillType = getBaseToken(nElement);
+            return new GradientFillContext(rParent, rAttribs, rFillProps.maGradientProps);
+        }
+        case A_TOKEN( pattFill ):
+        {
+            rFillProps.moFillType = getBaseToken( nElement );
+            return new PatternFillContext( rParent, rAttribs, rFillProps.maPatternProps );
+        }
+        case A_TOKEN( blipFill ):
+        {
+            rFillProps.moFillType = getBaseToken( nElement );
+            return new BlipFillContext( rParent, rAttribs, rFillProps.maBlipProps );
+        }
+        case A_TOKEN( grpFill ):
+        {
+            // TODO
+            rFillProps.moFillType = getBaseToken( nElement );
+            return nullptr;
+        };
     }
     return nullptr;
 }

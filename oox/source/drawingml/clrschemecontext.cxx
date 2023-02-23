@@ -58,7 +58,7 @@ clrMapContext::clrMapContext( ContextHandler2Helper const & rParent,
 }
 
 clrSchemeColorContext::clrSchemeColorContext(ContextHandler2Helper const & rParent, ClrScheme& rClrScheme, model::ColorSet& rColorSet, sal_Int32 nColorToken)
-    : ColorContext(rParent, *this)
+    : ColorContext(rParent, *this, nullptr)
     , mrClrScheme(rClrScheme)
     , mrColorSet(rColorSet)
     , mnColorToken(nColorToken)
