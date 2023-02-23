@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/test/XUIObject.hpp>
 
@@ -18,12 +17,11 @@
 
 #include <vcl/uitest/uiobject.hxx>
 
-typedef ::cppu::WeakComponentImplHelper <
+typedef ::comphelper::WeakComponentImplHelper <
     css::ui::test::XUIObject, css::lang::XServiceInfo
     > UIObjectBase;
 
-class UIObjectUnoObj : public cppu::BaseMutex,
-    public UIObjectBase
+class UIObjectUnoObj : public UIObjectBase
 {
 private:
     std::unique_ptr<UIObject> mpObj;

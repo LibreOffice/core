@@ -41,7 +41,6 @@ struct Notifier {
 }
 
 UIObjectUnoObj::UIObjectUnoObj(std::unique_ptr<UIObject> pObj):
-    UIObjectBase(m_aMutex),
     mpObj(std::move(pObj))
 {
 }
