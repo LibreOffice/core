@@ -4475,7 +4475,6 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                         aParam.mpOldCondSet = pOldCondSet;
                         aParam.mpOldPreviewFontSet = pOldPreviewFontSet;
                         aParam.mpThisRowInfo = pThisRowInfo;
-                        aParam.maString = aStr;
                         if (mpSpellCheckCxt)
                             aParam.mpMisspellRanges = mpSpellCheckCxt->getMisspellRanges(nCellX, nCellY);
 
