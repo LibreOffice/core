@@ -2725,8 +2725,7 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
     sal_Int32 nStart = 0;
     while ( nStart < aText.getLength() )
     {
-        sal_Int32 nEnd = !aStatus.IsSingleLine() ?
-            aText.indexOf( LINE_SEP, nStart ) : -1;
+        sal_Int32 nEnd = aText.indexOf( LINE_SEP, nStart );
         if ( nEnd == -1 )
             nEnd = aText.getLength(); // not dereference!
 

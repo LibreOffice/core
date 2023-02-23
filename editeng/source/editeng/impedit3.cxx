@@ -1340,8 +1340,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         else if ( !bEOL && !bContinueLastPortion )
         {
             DBG_ASSERT( pPortion && ((nPortionEnd-nPortionStart) == pPortion->GetLen()), "However, another portion?!" );
-            tools::Long nRemainingWidth = !aStatus.IsSingleLine() ?
-                nMaxLineWidth - nTmpWidth : pLine->GetCharPosArray()[pLine->GetCharPosArray().size() - 1] + 1;
+            tools::Long nRemainingWidth = nMaxLineWidth - nTmpWidth;
             bool bCanHyphenate = ( aTmpFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL );
             if ( bCompressedChars && pPortion && ( pPortion->GetLen() > 1 ) && pPortion->GetExtraInfos() && pPortion->GetExtraInfos()->bCompressed )
             {
@@ -1882,16 +1881,9 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
             aUserOptions.allowPunctuationOutsideMargin = bAllowPunctuationOutsideMargin;
             aUserOptions.allowHyphenateEnglish = false;
 
-            if (!aStatus.IsSingleLine())
-            {
-                i18n::LineBreakResults aLBR = _xBI->getLineBreak(
-                    pNode->GetString(), nMaxBreakPos, aLocale, nMinBreakPos, aHyphOptions, aUserOptions );
-                nBreakPos = aLBR.breakIndex;
-            }
-            else
-            {
-                nBreakPos = nMaxBreakPos;
-            }
+            i18n::LineBreakResults aLBR = _xBI->getLineBreak(
+                pNode->GetString(), nMaxBreakPos, aLocale, nMinBreakPos, aHyphOptions, aUserOptions );
+            nBreakPos = aLBR.breakIndex;
 
             // BUG in I18N - under special condition (break behind field, #87327#) breakIndex is < nMinBreakPos
             if ( nBreakPos < nMinBreakPos )
