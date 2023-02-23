@@ -22,6 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <svl/itempool.hxx>
 #include "scdllapi.h"
+#include <mutex>
 
 class ScStyleSheet;
 class ScDocument;
@@ -32,6 +33,9 @@ class SC_DLLPUBLIC ScDocumentPool final : public SfxItemPool
     sal_uInt64 mnCurrentMaxKey;
 
 public:
+    // used when doing loading in parallel to prevent concurrent mutation of the pool
+    std::mutex maPoolMutex;
+
             ScDocumentPool();
 private:
             virtual ~ScDocumentPool() override;
