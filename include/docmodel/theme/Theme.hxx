@@ -18,6 +18,7 @@
 #include <docmodel/theme/ThemeColorType.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <docmodel/theme/ColorSet.hxx>
+#include <docmodel/theme/FormatScheme.hxx>
 #include <tools/color.hxx>
 
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
@@ -143,6 +144,7 @@ private:
     std::unique_ptr<model::ColorSet> mpColorSet;
 
     FontScheme maFontScheme;
+    FormatScheme maFormatScheme;
 
 public:
     Theme();
@@ -151,8 +153,11 @@ public:
     Theme(Theme const& rTheme);
 
     void setFontScheme(FontScheme const& rFontScheme) { maFontScheme = rFontScheme; }
-
     FontScheme const& getFontScheme() const { return maFontScheme; }
+
+    void setFormatScheme(FormatScheme const& rFormatScheme) { maFormatScheme = rFormatScheme; }
+    FormatScheme const& getFormatScheme() const { return maFormatScheme; }
+    FormatScheme& getFormatScheme() { return maFormatScheme; }
 
     void SetColorSet(std::unique_ptr<ColorSet> pColorSet);
     const ColorSet* GetColorSet() const;

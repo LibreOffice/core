@@ -95,7 +95,7 @@ ContextHandlerRef ShapePropertiesContext::onCreateContext( sal_Int32 aElementTok
         return new Shape3DPropertiesContext( *this, rAttribs, mrShape.get3DProperties() );
     }
 
-    return FillPropertiesContext::createFillContext( *this, aElementToken, rAttribs, mrShape.getFillProperties() );
+    return FillPropertiesContext::createFillContext(*this, aElementToken, rAttribs, mrShape.getFillProperties(), nullptr);
 }
 
 }

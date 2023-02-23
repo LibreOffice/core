@@ -55,7 +55,7 @@ ContextHandlerRef LinePropertiesContext::onCreateContext( sal_Int32 nElement, co
         case A_TOKEN( solidFill ):
         case A_TOKEN( gradFill ):
         case A_TOKEN( pattFill ):
-            return FillPropertiesContext::createFillContext( *this, nElement, rAttribs, mrLineProperties.maLineFill );
+            return FillPropertiesContext::createFillContext(*this, nElement, rAttribs, mrLineProperties.maLineFill, nullptr);
         break;
 
         // LineDashPropertiesGroup

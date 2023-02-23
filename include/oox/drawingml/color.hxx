@@ -29,11 +29,14 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <tools/color.hxx>
+#include <docmodel/theme/ThemeColorType.hxx>
 
 namespace oox { class GraphicHelper; }
 
-namespace oox::drawingml {
+namespace oox::drawingml
+{
 
+model::ThemeColorType schemeNameToThemeColorType(OUString const& rSchemeName);
 
 class OOX_DLLPUBLIC Color
 {

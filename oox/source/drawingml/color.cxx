@@ -19,6 +19,7 @@
 
 #include <oox/drawingml/color.hxx>
 #include <algorithm>
+#include <unordered_map>
 #include <math.h>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
@@ -210,6 +211,44 @@ void lclOffValue( sal_Int32& ornValue, sal_Int32 nOff, sal_Int32 nMax = MAX_PERC
 }
 
 } // namespace
+
+model::ThemeColorType schemeNameToThemeColorType(OUString const& rSchemeName)
+{
+    static std::unordered_map<OUString, model::ThemeColorType> const aSchemeColorNameToIndex{
+        { u"dk1", model::ThemeColorType::Dark1 },
+        { u"lt1", model::ThemeColorType::Light1 },
+        { u"dk2", model::ThemeColorType::Dark2 },
+        { u"lt2", model::ThemeColorType::Light2 },
+        { u"accent1", model::ThemeColorType::Accent1 },
+        { u"accent2", model::ThemeColorType::Accent2 },
+        { u"accent3", model::ThemeColorType::Accent3 },
+        { u"accent4", model::ThemeColorType::Accent4 },
+        { u"accent5", model::ThemeColorType::Accent5 },
+        { u"accent6", model::ThemeColorType::Accent6 },
+        { u"hlink", model::ThemeColorType::Hyperlink },
+        { u"folHlink", model::ThemeColorType::FollowedHyperlink },
+        { u"tx1", model::ThemeColorType::Dark1 },
+        { u"bg1", model::ThemeColorType::Light1 },
+        { u"tx2", model::ThemeColorType::Dark2 },
+        { u"bg2", model::ThemeColorType::Light2 },
+        { u"dark1", model::ThemeColorType::Dark1},
+        { u"light1", model::ThemeColorType::Light1},
+        { u"dark2", model::ThemeColorType::Dark2 },
+        { u"light2", model::ThemeColorType::Light2 },
+        { u"text1", model::ThemeColorType::Dark1 },
+        { u"background1", model::ThemeColorType::Light1 },
+        { u"text2", model::ThemeColorType::Dark2 },
+        { u"background2", model::ThemeColorType::Light2 },
+        { u"hyperlink", model::ThemeColorType::Hyperlink },
+        { u"followedHyperlink", model::ThemeColorType::FollowedHyperlink}
+    };
+
+    auto aIterator = aSchemeColorNameToIndex.find(rSchemeName);
+    if (aIterator == aSchemeColorNameToIndex.end())
+        return model::ThemeColorType::Unknown;
+    else
+        return aIterator->second;
+}
 
 Color::Color() :
     meMode( COLOR_UNUSED ),
@@ -712,17 +751,8 @@ sal_Int16 Color::getTransparency() const
 
 sal_Int16 Color::getSchemeColorIndex() const
 {
-    static std::map<OUString, sal_Int32> const aSchemeColorNameToIndex{
-        { "dk1", 0 },     { "lt1", 1 },     { "dk2", 2 },     { "lt2", 3 },
-        { "accent1", 4 }, { "accent2", 5 }, { "accent3", 6 }, { "accent4", 7 },
-        { "accent5", 8 }, { "accent6", 9 }, { "hlink", 10 },  { "folHlink", 11 }
-    };
-
-    auto aIt = aSchemeColorNameToIndex.find(msSchemeName);
-    if( aIt == aSchemeColorNameToIndex.end() )
-        return -1;
-    else
-        return aIt->second;
+    auto eThemeType = schemeNameToThemeColorType(msSchemeName);
+    return sal_Int16(eThemeType);
 }
 
 // private --------------------------------------------------------------------

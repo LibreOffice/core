@@ -42,24 +42,26 @@ namespace {
 class FillStyleListContext : public ContextHandler2
 {
 public:
-    FillStyleListContext( ContextHandler2Helper const & rParent, FillStyleList& rFillStyleList );
+    FillStyleListContext(ContextHandler2Helper const & rParent, FillStyleList& rFillStyleList, model::FormatScheme& rFormatScheme);
     virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 
 private:
     FillStyleList& mrFillStyleList;
+    //model::FormatScheme& mrFormatScheme;
 };
 
 }
 
-FillStyleListContext::FillStyleListContext( ContextHandler2Helper const & rParent, FillStyleList& rFillStyleList ) :
-    ContextHandler2( rParent ),
-    mrFillStyleList( rFillStyleList )
+FillStyleListContext::FillStyleListContext(ContextHandler2Helper const & rParent, FillStyleList& rFillStyleList, model::FormatScheme& /*rFormatScheme*/)
+    : ContextHandler2(rParent)
+    , mrFillStyleList(rFillStyleList)
+    //, mrFormatScheme(rFormatScheme)
 {
 }
 
 ContextHandlerRef FillStyleListContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    switch( nElement )
+    switch (nElement)
     {
         case A_TOKEN( noFill ):
         case A_TOKEN( solidFill ):
@@ -67,11 +69,26 @@ ContextHandlerRef FillStyleListContext::onCreateContext( sal_Int32 nElement, con
         case A_TOKEN( blipFill ):
         case A_TOKEN( pattFill ):
         case A_TOKEN( grpFill ):
-            mrFillStyleList.push_back( std::make_shared<FillProperties>( ) );
-            return FillPropertiesContext::createFillContext( *this, nElement, rAttribs, *mrFillStyleList.back() );
+        {
+            mrFillStyleList.push_back(std::make_shared<FillProperties>());
+            return FillPropertiesContext::createFillContext(*this, nElement, rAttribs, *mrFillStyleList.back(), nullptr);
+        }
     }
     return nullptr;
 }
+
+namespace
+{
+
+class BackgroundFillStyleListContext : public FillStyleListContext
+{
+public:
+    BackgroundFillStyleListContext(ContextHandler2Helper const & rParent, FillStyleList& rFillStyleList, model::FormatScheme& rFormatScheme)
+        : FillStyleListContext(rParent, rFillStyleList, rFormatScheme)
+    {}
+};
+
+} // end anonymous ns
 
 namespace {
 
@@ -307,13 +324,13 @@ ContextHandlerRef ThemeElementsContext::onCreateContext(sal_Int32 nElement, cons
         }
 
         case A_TOKEN( fillStyleLst ):   // CT_FillStyleList
-            return new FillStyleListContext( *this, mrOoxTheme.getFillStyleList() );
+            return new FillStyleListContext( *this, mrOoxTheme.getFillStyleList(), mrTheme.getFormatScheme());
         case A_TOKEN( lnStyleLst ):    // CT_LineStyleList
             return new LineStyleListContext( *this, mrOoxTheme.getLineStyleList() );
         case A_TOKEN( effectStyleLst ): // CT_EffectStyleList
             return new EffectStyleListContext( *this, mrOoxTheme.getEffectStyleList() );
         case A_TOKEN( bgFillStyleLst ): // CT_BackgroundFillStyleList
-            return new FillStyleListContext( *this, mrOoxTheme.getBgFillStyleList() );
+            return new BackgroundFillStyleListContext( *this, mrOoxTheme.getBgFillStyleList(), mrTheme.getFormatScheme());
     }
     return nullptr;
 }

@@ -316,8 +316,7 @@ public:
             case A_TOKEN( pattFill ):
             case A_TOKEN( solidFill ):
                 // EG_FillProperties
-                return FillPropertiesContext::createFillContext(
-                    *this, aElementToken, rAttribs, *mpDataModel->getBackgroundShapeFillProperties() );
+                return FillPropertiesContext::createFillContext(*this, aElementToken, rAttribs, *mpDataModel->getBackgroundShapeFillProperties(), nullptr);
             case A_TOKEN( effectDag ):
             case A_TOKEN( effectLst ):
                 // TODO

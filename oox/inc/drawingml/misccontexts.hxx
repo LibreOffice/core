@@ -23,17 +23,18 @@
 #include <drawingml/colorchoicecontext.hxx>
 
 #include <drawingml/fillproperties.hxx>
+#include <docmodel/theme/FormatScheme.hxx>
 
-namespace oox::drawingml {
-
+namespace oox::drawingml
+{
 
 /** Context handler that imports the a:solidFill element. */
 class SolidFillContext final : public ColorContext
 {
 public:
-    explicit            SolidFillContext(
-                            ::oox::core::ContextHandler2Helper const & rParent,
-                            FillProperties& rFillProps );
+    explicit SolidFillContext(::oox::core::ContextHandler2Helper const & rParent,
+        FillProperties& rFillProps, model::SolidFill* pSolidFill);
+    ~SolidFillContext();
 };
 
 
@@ -212,10 +213,12 @@ public:
                             ::oox::core::ContextHandler2Helper const & rParent,
                             sal_Int32 nElement,
                             const ::oox::AttributeList& rAttribs,
-                            FillProperties& rFillProps );
+                            FillProperties& rFillProps,
+                            model::FillStyle* pFillStyle);
 
 private:
-    FillProperties&     mrFillProps;
+    FillProperties& mrFillProps;
+    model::FillStyle maFillStyle;
 };
 
 /** Context handler for elements that contain a fill property element

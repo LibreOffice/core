@@ -21,7 +21,7 @@
 #define INCLUDED_OOX_DRAWINGML_COLORCHOICECONTEXT_HXX
 
 #include <oox/core/contexthandler2.hxx>
-
+#include <docmodel/theme/FormatScheme.hxx>
 #include <vector>
 
 namespace oox::drawingml {
@@ -34,19 +34,16 @@ class Color;
 class ColorValueContext final : public ::oox::core::ContextHandler2
 {
 public:
-    explicit            ColorValueContext( ::oox::core::ContextHandler2Helper const & rParent, Color& rColor );
+    explicit ColorValueContext(::oox::core::ContextHandler2Helper const & rParent, Color& rColor, model::ColorDefinition* pColorDefinition = nullptr);
 
+    virtual void onStartElement(const ::oox::AttributeList& rAttribs) override;
 
-    virtual void onStartElement(
-                            const ::oox::AttributeList& rAttribs ) override;
-
-    virtual ::oox::core::ContextHandlerRef
-                        onCreateContext(
-                            sal_Int32 nElement,
-                            const ::oox::AttributeList& rAttribs ) override;
+    virtual ::oox::core::ContextHandlerRef onCreateContext(
+        sal_Int32 nElement, const ::oox::AttributeList& rAttribs) override;
 
 private:
-    Color&              mrColor;
+    Color& mrColor;
+    model::ColorDefinition* mpColorDefinition;
 };
 
 
@@ -55,15 +52,16 @@ private:
 class ColorContext : public ::oox::core::ContextHandler2
 {
 public:
-    explicit            ColorContext( ::oox::core::ContextHandler2Helper const & rParent, Color& rColor );
+    explicit ColorContext(::oox::core::ContextHandler2Helper const & rParent, Color& rColor, model::ColorDefinition* pColorDefinition = nullptr);
 
-    virtual ::oox::core::ContextHandlerRef
-                        onCreateContext(
-                            sal_Int32 nElement,
-                            const ::oox::AttributeList& rAttribs ) override;
+    virtual ::oox::core::ContextHandlerRef onCreateContext(
+        sal_Int32 nElement, const ::oox::AttributeList& rAttribs) override;
 
 private:
-    Color&              mrColor;
+    Color& mrColor;
+
+protected:
+    model::ColorDefinition* mpColorDefinition;
 };
 
 /// Same as ColorContext, but handles multiple colors.
