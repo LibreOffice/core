@@ -348,7 +348,13 @@ bool test::AccessibleTestBase::tabTo(
     return false;
 }
 
-/* Dialog handling */
+#if !defined(MACOSX)
+/* Dialog handling
+ *
+ * For now this doesn't actually work under macos, so the API is not available there not to create
+ * confusion.  The problem there is we don't get notified of new dialogs, so we can't manage them
+ * or interact with them.
+ */
 
 test::AccessibleTestBase::Dialog::Dialog(uno::Reference<awt::XDialog2>& xDialog2, bool bAutoClose)
     : mbAutoClose(bAutoClose)
@@ -570,5 +576,6 @@ test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
 
     return std::make_shared<ListenerHelper>(name, callback, bAutoClose);
 }
+#endif //defined(MACOSX)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

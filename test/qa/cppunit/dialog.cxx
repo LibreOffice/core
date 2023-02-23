@@ -9,8 +9,9 @@
 
 #include <test/a11y/accessibletestbase.hxx>
 
-// FIXME: dialog doesn't pop up on macos...
+// FIXME: dialog API doesn't work on macos yet
 #if !defined(MACOSX)
+
 /* Checks an unexpected dialog opening (instead of the expected one) is properly caught, as it would
  * otherwise block the test potentially indefinitely */
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, SelfTestIncorrectDialog)
@@ -27,10 +28,7 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, SelfTestIncorrectDialog)
      * by the activateMenuItem() call above */
     CPPUNIT_ASSERT_THROW(dialogWaiter->waitEndDialog(), css::uno::RuntimeException);
 }
-#endif
 
-// FIXME: dialog doesn't pop up on macos...
-#if !defined(MACOSX)
 /* Checks that an exception in the dialog callback code is properly handled and won't disturb
  * subsequent tests if caught -- especially that DialogWaiter::waitEndDialog() won't timeout. */
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, SelfTestThrowInDialogCallback)
@@ -46,7 +44,6 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, SelfTestThrowInDialogCallback)
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Hyperlink..."));
     CPPUNIT_ASSERT_THROW(dialogWaiter->waitEndDialog(), DummyException);
 }
-#endif
 
 // Checks timeout if dialog does not show up as expected
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, SelfTestNoDialog)
@@ -60,6 +57,8 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, SelfTestNoDialog)
     // as we don't actually call any dialog up, this should fail after a timeout
     CPPUNIT_ASSERT(!dialogWaiter->waitEndDialog());
 }
+
+#endif //defined(MACOSX)
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

@@ -181,6 +181,7 @@ protected:
                       const css::uno::Reference<css::accessibility::XAccessibleContext>& xChild,
                       const EventPosterHelperBase* pEventPosterHelper = nullptr);
 
+#if !defined(MACOSX)
     /* Dialog handling */
     class Dialog : public test::AccessibleEventPosterHelper
     {
@@ -286,6 +287,7 @@ protected:
     static std::shared_ptr<DialogWaiter> awaitDialog(const std::u16string_view name,
                                                      std::function<void(Dialog&)> callback,
                                                      bool bAutoClose = true);
+#endif //defined(MACOSX)
 
 public:
     virtual void setUp() override;

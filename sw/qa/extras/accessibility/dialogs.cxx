@@ -17,8 +17,9 @@
 
 using namespace css;
 
-// FIXME: dialog doesn't pop up on macos...
+// FIXME: dialog API doesn't work on macos yet
 #if !defined(MACOSX)
+
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestSpecialCharactersDialog)
 {
     load(u"private:factory/swriter");
@@ -62,10 +63,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestSpecialCharactersDialo
 
     CPPUNIT_ASSERT_EQUAL(rtl::OUString(u"<PARAGRAPH>©</PARAGRAPH>"), collectText());
 }
-#endif
 
-// FIXME: dialog doesn't pop up on macos...
-#if !defined(MACOSX)
 /* checks for the fix from https://gerrit.libreoffice.org/c/core/+/147660 */
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestSpecialCharactersDialogFocus)
 {
@@ -96,10 +94,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestSpecialCharactersDialogFocu
 
     CPPUNIT_ASSERT_EQUAL(rtl::OUString(u"<PARAGRAPH>0</PARAGRAPH>"), collectText());
 }
-#endif
 
-// FIXME: dialog doesn't pop up on macos...
-#if !defined(MACOSX)
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestHyperlinkDialog)
 {
     load(u"private:factory/swriter");
@@ -123,10 +118,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestHyperlinkDialog)
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("<PARAGRAPH>https://libreoffice.org/</PARAGRAPH>"),
                          collectText());
 }
-#endif
 
-// FIXME: dialog doesn't pop up on macos...
-#if !defined(MACOSX)
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestBookmarkDialog)
 {
     load(u"private:factory/swriter");
@@ -150,10 +142,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestBookmarkDialog)
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("<PARAGRAPH>#Test Bookmark 1 Bookmark </PARAGRAPH>"),
                          collectText());
 }
-#endif
 
-// FIXME: dialog doesn't pop up on macos...
-#if !defined(MACOSX)
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestSectionDialog)
 {
     load(u"private:factory/swriter");
@@ -171,10 +160,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestSectionDialog)
 
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("<PARAGRAPH/><PARAGRAPH/>"), collectText());
 }
-#endif
 
-// FIXME: dialog doesn't pop up on macos...
-#if !defined(MACOSX)
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestFontworkDialog)
 {
     load(u"private:factory/swriter");
@@ -195,10 +181,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestFontworkDialog)
                       "description=\"Paragraph: 0 Simple\">Simple</PARAGRAPH></SHAPE>"),
         collectText());
 }
-#endif
 
-// FIXME: dialog doesn't pop up on macos...
-#if !defined(MACOSX)
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestFrameDialog)
 {
     load(u"private:factory/swriter");
@@ -216,6 +199,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestFrameDialog)
         rtl::OUString("<PARAGRAPH/><TEXT_FRAME name=\"Frame1\"><PARAGRAPH/></TEXT_FRAME>"),
         collectText());
 }
-#endif
+
+#endif //defined(MACOSX)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
