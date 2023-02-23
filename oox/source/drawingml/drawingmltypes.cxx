@@ -400,6 +400,14 @@ IntegerRectangle2D GetRelativeRect( const Reference< XFastAttributeList >& xAttr
     return r;
 }
 
+void fillRelativeRectangle(model::RelativeRectangle& rRelativeRectangle, const Reference<XFastAttributeList>& xAttribs)
+{
+    rRelativeRectangle.mnLeft = GetST_Percentage(xAttribs->getOptionalValue(XML_l));
+    rRelativeRectangle.mnTop = GetST_Percentage(xAttribs->getOptionalValue(XML_t));
+    rRelativeRectangle.mnRight = GetST_Percentage(xAttribs->getOptionalValue(XML_r));
+    rRelativeRectangle.mnBottom = GetST_Percentage(xAttribs->getOptionalValue(XML_b));
+}
+
 /** converts the attributes from a CT_Size2D into an awt Size with 1/100thmm */
 awt::Size GetSize2D( const Reference< XFastAttributeList >& xAttribs )
 {

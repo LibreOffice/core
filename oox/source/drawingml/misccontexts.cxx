@@ -44,13 +44,17 @@ SolidFillContext::SolidFillContext(ContextHandler2Helper const & rParent, FillPr
 SolidFillContext::~SolidFillContext()
 {}
 
-GradientFillContext::GradientFillContext( ContextHandler2Helper const & rParent,
-        const AttributeList& rAttribs, GradientFillProperties& rGradientProps ) :
-    ContextHandler2( rParent ),
-    mrGradientProps( rGradientProps )
+GradientFillContext::GradientFillContext(ContextHandler2Helper const & rParent,
+        const AttributeList& rAttribs, GradientFillProperties& rGradientProps, model::GradientFill* pGradientFill)
+    : ContextHandler2(rParent)
+    , mpGradientFill(pGradientFill)
+    , mrGradientProps(rGradientProps)
 {
+    auto oRotateWithShape = rAttribs.getBool(XML_rotWithShape);
     mrGradientProps.moShadeFlip = rAttribs.getToken( XML_flip );
-    mrGradientProps.moRotateWithShape = rAttribs.getBool( XML_rotWithShape );
+    mrGradientProps.moRotateWithShape = oRotateWithShape;
+    if (mpGradientFill && oRotateWithShape)
+        mpGradientFill->mbRotateWithShape = *oRotateWithShape;
 }
 
 ContextHandlerRef GradientFillContext::onCreateContext(
@@ -62,30 +66,73 @@ ContextHandlerRef GradientFillContext::onCreateContext(
             return this;    // for gs elements
 
         case A_TOKEN( gs ):
-            if( rAttribs.hasAttribute( XML_pos ) )
+            if (rAttribs.hasAttribute(XML_pos))
             {
-                double fPosition = getLimitedValue< double >( rAttribs.getDouble( XML_pos, 0.0 ) / 100000.0, 0.0, 1.0 );
-                auto aElement = mrGradientProps.maGradientStops.emplace( fPosition, Color() );
-                return new ColorContext( *this, aElement->second );
+                double fPosition = getLimitedValue<double>(rAttribs.getDouble(XML_pos, 0.0) / 100000.0, 0.0, 1.0);
+                auto aElement = mrGradientProps.maGradientStops.emplace(fPosition, Color());
+
+                model::ColorDefinition* pColorDefinition = nullptr;
+                if (mpGradientFill)
+                {
+                    model::GradientStop& rStop = mpGradientFill->maGradientStops.emplace_back();
+                    rStop.mfPosition = fPosition;
+                    pColorDefinition = &rStop.maColor;
+                }
+
+                return new ColorContext(*this, aElement->second, pColorDefinition);
             }
         break;
 
         case A_TOKEN( lin ):
-            mrGradientProps.moShadeAngle = rAttribs.getInteger( XML_ang );
-            mrGradientProps.moShadeScaled = rAttribs.getBool( XML_scaled );
+        {
+            mrGradientProps.moShadeAngle = rAttribs.getInteger(XML_ang);
+            mrGradientProps.moShadeScaled = rAttribs.getBool(XML_scaled);
+
+            if (mpGradientFill)
+            {
+                mpGradientFill->meGradientType = model::GradientType::Linear;
+                mpGradientFill->maLinearGradient.mnAngle = rAttribs.getInteger(XML_ang, 0);
+                mpGradientFill->maLinearGradient.mbScaled = rAttribs.getBool(XML_scaled, false);
+            }
+        }
         break;
 
         case A_TOKEN( path ):
+        {
             // always set a path type, this disables linear gradient in conversion
-            mrGradientProps.moGradientPath = rAttribs.getToken( XML_path, XML_rect );
+            sal_Int32 nToken = rAttribs.getToken(XML_path, XML_rect);
+            mrGradientProps.moGradientPath = nToken;
+            if (mpGradientFill)
+            {
+                switch (nToken)
+                {
+                    case XML_rect:
+                        mpGradientFill->meGradientType = model::GradientType::Rectangle;
+                        break;
+                    case XML_circle:
+                        mpGradientFill->meGradientType = model::GradientType::Circle;
+                        break;
+                    case XML_shape:
+                        mpGradientFill->meGradientType = model::GradientType::Shape;
+                        break;
+                    default:
+                        break;
+                }
+            }
             return this;    // for fillToRect element
-
+        }
         case A_TOKEN( fillToRect ):
+        {
             mrGradientProps.moFillToRect = GetRelativeRect( rAttribs.getFastAttributeList() );
+            if (mpGradientFill)
+                fillRelativeRectangle(mpGradientFill->maFillToRectangle, rAttribs.getFastAttributeList());
+        }
         break;
 
         case A_TOKEN( tileRect ):
-            mrGradientProps.moTileRect = GetRelativeRect( rAttribs.getFastAttributeList() );
+            mrGradientProps.moTileRect = GetRelativeRect(rAttribs.getFastAttributeList());
+            if (mpGradientFill)
+                fillRelativeRectangle(mpGradientFill->maTileRectangle, rAttribs.getFastAttributeList());
         break;
     }
     return nullptr;
@@ -105,9 +152,9 @@ ContextHandlerRef PatternFillContext::onCreateContext(
     switch( nElement )
     {
         case A_TOKEN( bgClr ):
-            return new ColorContext( *this, mrPatternProps.maPattBgColor );
+            return new ColorContext(*this, mrPatternProps.maPattBgColor, nullptr);
         case A_TOKEN( fgClr ):
-            return new ColorContext( *this, mrPatternProps.maPattFgColor );
+            return new ColorContext(*this, mrPatternProps.maPattFgColor, nullptr);
     }
     return nullptr;
 }
@@ -134,9 +181,9 @@ ContextHandlerRef ColorChangeContext::onCreateContext(
     switch( nElement )
     {
         case A_TOKEN( clrFrom ):
-            return new ColorContext( *this, mrBlipProps.maColorChangeFrom );
+            return new ColorContext(*this, mrBlipProps.maColorChangeFrom, nullptr);
         case A_TOKEN( clrTo ):
-            return new ColorContext( *this, mrBlipProps.maColorChangeTo );
+            return new ColorContext(*this, mrBlipProps.maColorChangeTo, nullptr);
     }
     return nullptr;
 }
@@ -220,7 +267,7 @@ DuotoneContext::~DuotoneContext()
         sal_Int32 /*nElement*/, const AttributeList& /*rAttribs*/ )
 {
     if( mnColorIndex < 2 )
-        return new ColorValueContext( *this, mrBlipProps.maDuotoneColors[mnColorIndex++] );
+        return new ColorValueContext(*this, mrBlipProps.maDuotoneColors[mnColorIndex++], nullptr);
     return nullptr;
 }
 
@@ -307,7 +354,13 @@ ContextHandlerRef FillPropertiesContext::createFillContext(
         case A_TOKEN( gradFill ):
         {
             rFillProps.moFillType = getBaseToken(nElement);
-            return new GradientFillContext(rParent, rAttribs, rFillProps.maGradientProps);
+            model::GradientFill* pGradientFill = nullptr;
+            if (pFillStyle)
+            {
+                pFillStyle->mpFill = std::make_unique<model::GradientFill>();
+                pGradientFill = static_cast<model::GradientFill*>(pFillStyle->mpFill.get());
+            }
+            return new GradientFillContext(rParent, rAttribs, rFillProps.maGradientProps, pGradientFill);
         }
         case A_TOKEN( pattFill ):
         {

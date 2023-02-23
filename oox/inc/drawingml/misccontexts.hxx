@@ -42,10 +42,9 @@ public:
 class GradientFillContext final : public ::oox::core::ContextHandler2
 {
 public:
-    explicit            GradientFillContext(
-                            ::oox::core::ContextHandler2Helper const & rParent,
-                            const ::oox::AttributeList& rAttribs,
-                            GradientFillProperties& rGradientProps );
+    explicit GradientFillContext(::oox::core::ContextHandler2Helper const & rParent,
+        const ::oox::AttributeList& rAttribs, GradientFillProperties& rGradientProps,
+        model::GradientFill* pGradientFill);
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
@@ -53,6 +52,7 @@ public:
                             const ::oox::AttributeList& rAttribs ) override;
 
 private:
+    model::GradientFill* mpGradientFill;
     GradientFillProperties& mrGradientProps;
 };
 

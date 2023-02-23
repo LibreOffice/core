@@ -31,6 +31,7 @@
 #include <com/sun/star/style/TabAlign.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <docmodel/theme/FormatScheme.hxx>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -99,6 +100,9 @@ css::awt::Size GetSize2D( const css::uno::Reference< css::xml::sax::XFastAttribu
 
 /** converts the attributes from a CT_RelativeRect to an IntegerRectangle2D */
 css::geometry::IntegerRectangle2D GetRelativeRect( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes );
+
+void fillRelativeRectangle(model::RelativeRectangle& rRelativeRectangle,
+                           const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttributes);
 
 /** converts EMUs into 1/100th mmm */
 sal_Int32 GetCoordinate( sal_Int32 nValue );
