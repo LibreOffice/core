@@ -44,7 +44,7 @@
  /****************************************************************
  * Detect what (if any) proxy to use. Remember that this selects a host
  * name and is not limited to HTTP proxies only.
-@@ -4613,6 +4633,66 @@
+@@ -4613,6 +4633,67 @@
     * For compatibility, the all-uppercase versions of these variables are
     * checked if the lowercase versions don't exist.
     */
@@ -58,6 +58,7 @@
 +      char *ieProxy;
 +      char *ieNoProxy;
 +      char *pos;
++      bool spacesp;
 +
 +      ieProxy = wstrToCstr(ieProxyConfig->lpszProxy);
 +      ieNoProxy = wstrToCstr(ieProxyConfig->lpszProxyBypass);
@@ -72,7 +73,7 @@
 +        }
 +      }
 +
-+      if(!Curl_check_noproxy(conn->host.name, no_proxy)) {
++      if(!Curl_check_noproxy(conn->host.name, no_proxy, &spacesp)) {
 +        /* Look for the http proxy setting */
 +        char *tok;
 +        char *saveptr;
