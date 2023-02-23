@@ -142,8 +142,7 @@ typedef ::cppu::WeakImplHelper<
             css::accessibility::XAccessibleTableSelection >
             AccessibleTableHeaderShape_BASE;
 
-class AccessibleTableHeaderShape final : public cppu::BaseMutex,
-    public AccessibleTableHeaderShape_BASE
+class AccessibleTableHeaderShape final : public AccessibleTableHeaderShape_BASE
 {
 public:
     // bRow, true means rowheader, false means columnheader
