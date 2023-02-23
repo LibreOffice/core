@@ -161,9 +161,13 @@ const vEntryInfo[] =
 };
 
 // Maps the names of default color schemes to the corresponding TranslateId
-std::map<OUString, OUString> const vColorSchemes = {
-    {"COLOR_SCHEME_LIBREOFFICE_AUTOMATIC", CuiResId(RID_COLOR_SCHEME_LIBREOFFICE_AUTOMATIC)},
-    {"COLOR_SCHEME_LIBREOFFICE_DARK",      CuiResId(RID_COLOR_SCHEME_LIBREOFFICE_DARK)}
+const std::map<OUString, OUString> &getColorSchemes()
+{
+    static std::map<OUString, OUString> const vColorSchemes = {
+        {"COLOR_SCHEME_LIBREOFFICE_AUTOMATIC", CuiResId(RID_COLOR_SCHEME_LIBREOFFICE_AUTOMATIC)},
+        {"COLOR_SCHEME_LIBREOFFICE_DARK",      CuiResId(RID_COLOR_SCHEME_LIBREOFFICE_DARK)}
+    };
+    return vColorSchemes;
 };
 
 // If the color scheme name has a translated string, then return the translation
@@ -171,8 +175,8 @@ std::map<OUString, OUString> const vColorSchemes = {
 // For non-translatable color schemes, the ID and the name are the same
 OUString lcl_SchemeIdToTranslatedName(const OUString& sSchemeId)
 {
-    auto it = vColorSchemes.find(sSchemeId);
-    if (it != vColorSchemes.end())
+    auto it = getColorSchemes().find(sSchemeId);
+    if (it != getColorSchemes().end())
         return it->second;
     return sSchemeId;
 }
@@ -181,7 +185,7 @@ OUString lcl_SchemeIdToTranslatedName(const OUString& sSchemeId)
 // For non-translatable color schemes, the ID and the name are the same
 OUString lcl_TranslatedNameToSchemeId(const OUString& sName)
 {
-    for (auto it = vColorSchemes.begin(); it != vColorSchemes.end(); ++it)
+    for (auto it = getColorSchemes().begin(); it != getColorSchemes().end(); ++it)
         if (it->second == sName)
             return it->first;
     return sName;
