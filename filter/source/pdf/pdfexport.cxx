@@ -37,8 +37,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/configmgr.hxx>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 #include <officecfg/Office/Common.hxx>
 
 #include "pdfexport.hxx"
@@ -1090,10 +1089,9 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
 namespace
 {
 
-typedef cppu::WeakComponentImplHelper< task::XInteractionRequest > PDFErrorRequestBase;
+typedef comphelper::WeakComponentImplHelper< task::XInteractionRequest > PDFErrorRequestBase;
 
-class PDFErrorRequest : private cppu::BaseMutex,
-                        public PDFErrorRequestBase
+class PDFErrorRequest : public PDFErrorRequestBase
 {
     task::PDFExportException maExc;
 public:
@@ -1106,7 +1104,6 @@ public:
 
 
 PDFErrorRequest::PDFErrorRequest( task::PDFExportException aExc ) :
-    PDFErrorRequestBase( m_aMutex ),
     maExc(std::move( aExc ))
 {
 }
@@ -1114,7 +1111,7 @@ PDFErrorRequest::PDFErrorRequest( task::PDFExportException aExc ) :
 
 uno::Any SAL_CALL PDFErrorRequest::getRequest()
 {
-    osl::MutexGuard const guard( m_aMutex );
+    std::unique_lock guard( m_aMutex );
 
     uno::Any aRet;
     aRet <<= maExc;
