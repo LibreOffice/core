@@ -13,6 +13,7 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 
@@ -26,6 +27,7 @@
 #include <docsh.hxx>
 #include <rootfrm.hxx>
 #include <unotxdoc.hxx>
+#include <view.hxx>
 #include <viewsh.hxx>
 
 using namespace css;
@@ -405,6 +407,21 @@ uno::Reference<drawing::XShape> SwModelTestBase::getShape(int number)
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(number - 1), uno::UNO_QUERY);
     return xShape;
+}
+
+void SwModelTestBase::selectShape(int number)
+{
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    uno::Reference<view::XSelectionSupplier> xSelectionSupplier(
+        pXTextDocument->getCurrentController(), uno::UNO_QUERY);
+    xSelectionSupplier->select(uno::Any(getShape(number)));
+    CPPUNIT_ASSERT(xSelectionSupplier->getSelection().hasValue());
+
+    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    // Make sure SwTextShell is replaced with SwDrawShell right now, not after 120 ms, as set in the
+    // SwView ctor.
+    pView->StopShellTimer();
 }
 
 uno::Reference<drawing::XShape> SwModelTestBase::getShapeByName(std::u16string_view aName)

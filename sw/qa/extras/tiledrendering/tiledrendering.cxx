@@ -1818,11 +1818,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentInsert)
     SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
     SwView* pView = pDoc->GetDocShell()->GetView();
 
-    // Select the image.
-    pView->GetViewFrame().GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
-    // Make sure SwTextShell is replaced with SwDrawShell right now, not after 120 ms, as set in the
-    // SwView ctor.
-    pView->StopShellTimer();
+    selectShape(1);
 
     // Add a comment.
     uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
@@ -2988,9 +2984,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testClipText)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAnchorTypes)
 {
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
+    selectShape(1);
+
     SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
     SwView* pView = pXTextDocument->GetDocShell()->GetView();
-    pView->GetViewFrame().GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
     SfxItemSet aSet(pDoc->GetAttrPool(), svl::Items<FN_TOOL_ANCHOR_PAGE, FN_TOOL_ANCHOR_PAGE>);
     SfxBoolItem aItem(FN_TOOL_ANCHOR_PAGE);
     aSet.Put(aItem);

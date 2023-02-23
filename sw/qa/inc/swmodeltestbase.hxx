@@ -266,6 +266,9 @@ protected:
     /// Get shape (counted from 1)
     css::uno::Reference<css::drawing::XShape> getShape(int number);
 
+    /// Select shape (counted from 1)
+    void selectShape(int number);
+
     /// Get shape by name
     css::uno::Reference<css::drawing::XShape> getShapeByName(std::u16string_view aName);
 

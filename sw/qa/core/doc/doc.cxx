@@ -155,9 +155,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextBoxMakeFlyFrame)
     SwDoc* pDoc = getSwDoc();
 
     // When cutting the textbox and pasting it to a new document:
-    SwView* pView = pDoc->GetDocShell()->GetView();
-    pView->GetViewFrame().GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
-    pView->StopShellTimer();
+    selectShape(1);
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);

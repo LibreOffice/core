@@ -68,10 +68,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testTdf130179)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
 
     SwView* pView = pDoc->GetDocShell()->GetView();
-    pView->GetViewFrame().GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
-    // Make sure SwTextShell is replaced with SwDrawShell right now, not after 120 ms, as set in the
-    // SwView ctor.
-    pView->StopShellTimer();
+    selectShape(1);
 
     std::unique_ptr<SfxPoolItem> pItem;
     pView->GetViewFrame().GetBindings().QueryState(FN_POSTIT, pItem);
@@ -99,8 +96,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testShapeTextAlignment)
     // Start shape text edit.
     SwView* pView = pDoc->GetDocShell()->GetView();
     // Select the shape.
-    pView->GetViewFrame().GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
-    pView->StopShellTimer();
+    selectShape(1);
     // Start the actual text edit.
     SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());

@@ -18,7 +18,6 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <frameformats.hxx>
@@ -1710,7 +1709,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf138130)
     awt::Point aPos = xShape->getPosition();
 
     //select shape and change the anchor
-    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+    selectShape(1);
 
     // Without the fix in place, this test would have crashed here
     dispatchCommand(mxComponent, ".uno:SetAnchorToPage", {});
@@ -1735,7 +1734,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf136385)
     awt::Point aPos = xShape->getPosition();
 
     //select shape and change the anchor
-    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+    selectShape(1);
 
     dispatchCommand(mxComponent, ".uno:SetAnchorToPage", {});
 
@@ -1761,7 +1760,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf145207)
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
 
     //select one shape and use the TAB key to iterate over the different shapes
-    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+    selectShape(1);
 
     for (sal_Int32 i = 0; i < 10; ++i)
     {
@@ -1785,8 +1784,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf128782)
     aPos[1] = xShape2->getPosition();
 
     //select shape 2 and move it down
-    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
-    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+    selectShape(2);
 
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
@@ -1823,7 +1821,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf135623)
     aPos[1] = xShape2->getPosition();
 
     //select shape 1 and move it down
-    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+    selectShape(1);
 
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
@@ -1884,10 +1882,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf133490)
     aPos[1] = xShape2->getPosition();
 
     //select shape 2 and move it to the right
-    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    uno::Reference<view::XSelectionSupplier> xSelectionSupplier(
-        pXTextDocument->getCurrentController(), uno::UNO_QUERY);
-    xSelectionSupplier->select(uno::Any(getShape(2)));
+    selectShape(2);
 
     for (sal_Int32 i = 0; i < 5; ++i)
     {

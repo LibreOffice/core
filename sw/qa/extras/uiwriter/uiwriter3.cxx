@@ -1783,7 +1783,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140975)
     createSwDoc("tdf140975.docx");
 
     // Set the Anchor of the shape to As_Char
-    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+    selectShape(1);
     dispatchCommand(mxComponent, ".uno:SetAnchorToChar", {});
 
     // Get the layout of the textbox
@@ -1885,7 +1885,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140828)
     CPPUNIT_ASSERT(xShp);
 
     uno::Reference<beans::XPropertySet> ShpProps(xShp, uno::UNO_QUERY_THROW);
-    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+    selectShape(1);
 
     dispatchCommand(mxComponent, ".uno:SetAnchorAtChar", {});
 

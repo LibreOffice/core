@@ -38,7 +38,6 @@
 
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <o3tl/cppunittraitshelper.hxx>
 #include <swdtflvr.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -2264,16 +2263,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testCrashOnExit)
 
     // Get the textbox selected
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    selectShape(1);
     auto xShape = getShape(1);
-    CPPUNIT_ASSERT(xShape);
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xModel);
-    uno::Reference<frame::XController> xController = xModel->getCurrentController();
-    CPPUNIT_ASSERT(xController);
-    uno::Reference<view::XSelectionSupplier> xSelection(xController, uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xSelection);
-    CPPUNIT_ASSERT(xSelection->select(uno::Any(xShape)));
-    CPPUNIT_ASSERT(xSelection->getSelection().hasValue());
     uno::Reference<beans::XPropertySet> xProperties(xShape, uno::UNO_QUERY);
 
     // Check if the textbox is selected
