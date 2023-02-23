@@ -158,120 +158,7 @@ ScRange refreshGroups(ScDPCollection* pDPs, ScDPObject* pDPObj)
 
 class TestPivottable : public ScUcalcTestBase
 {
-public:
-    /**
-     * Basic test for pivot tables.
-     */
-    void testPivotTable();
-
-    /**
-     * Test against unwanted automatic format detection on field names and
-     * field members in pivot tables.
-     */
-    void testPivotTableLabels();
-
-    /**
-     * Make sure that we set cells displaying date values numeric cells,
-     * rather than text cells.  Grouping by date or number functionality
-     * depends on this.
-     */
-    void testPivotTableDateLabels();
-
-    /**
-     * Test for pivot table's filtering functionality by page fields.
-     */
-    void testPivotTableFilters();
-
-    /**
-     * Test for pivot table's named source range.
-     */
-    void testPivotTableNamedSource();
-
-    /**
-     * Test for pivot table cache.  Each dimension in the pivot cache stores
-     * only unique values that are sorted in ascending order.
-     */
-    void testPivotTableCache();
-
-    /**
-     * Test for pivot table containing data fields that reference the same
-     * source field but different functions.
-     */
-    void testPivotTableDuplicateDataFields();
-
-    void testPivotTableNormalGrouping();
-    void testPivotTableNumberGrouping();
-    void testPivotTableDateGrouping();
-    void testPivotTableEmptyRows();
-    void testPivotTableTextNumber();
-
-    /**
-     * Test for checking that pivot table treats strings in a case insensitive
-     * manner.
-     */
-    void testPivotTableCaseInsensitiveStrings();
-
-    /**
-     * Test for pivot table's handling of double-precision numbers that are
-     * very close together.
-     */
-    void testPivotTableNumStability();
-
-    /**
-     * Test for pivot table that include field with various non-default field
-     * references.
-     */
-    void testPivotTableFieldReference();
-
-    /**
-     * Test pivot table functionality performed via ScDBDocFunc.
-     */
-    void testPivotTableDocFunc();
-    void testFuncGETPIVOTDATA();
-    void testFuncGETPIVOTDATALeafAccess();
-
-    /**
-     * Test pivot table per-field repeat item labels functionality
-     */
-    void testPivotTableRepeatItemLabels();
-
-    /**
-     * Test DPCollection public methods
-     */
-    void testPivotTableDPCollection();
-
-    /**
-    * Test pivot table median function
-    */
-    void testPivotTableMedianFunc();
-
-    CPPUNIT_TEST_SUITE(TestPivottable);
-
-    CPPUNIT_TEST(testPivotTable);
-    CPPUNIT_TEST(testPivotTableLabels);
-    CPPUNIT_TEST(testPivotTableDateLabels);
-    CPPUNIT_TEST(testPivotTableFilters);
-    CPPUNIT_TEST(testPivotTableNamedSource);
-    CPPUNIT_TEST(testPivotTableCache);
-    CPPUNIT_TEST(testPivotTableDuplicateDataFields);
-    CPPUNIT_TEST(testPivotTableNormalGrouping);
-    CPPUNIT_TEST(testPivotTableNumberGrouping);
-    CPPUNIT_TEST(testPivotTableDateGrouping);
-    CPPUNIT_TEST(testPivotTableEmptyRows);
-    CPPUNIT_TEST(testPivotTableTextNumber);
-    CPPUNIT_TEST(testPivotTableCaseInsensitiveStrings);
-    CPPUNIT_TEST(testPivotTableNumStability);
-    CPPUNIT_TEST(testPivotTableFieldReference);
-    CPPUNIT_TEST(testPivotTableDocFunc);
-    CPPUNIT_TEST(testFuncGETPIVOTDATA);
-    CPPUNIT_TEST(testFuncGETPIVOTDATALeafAccess);
-    CPPUNIT_TEST(testPivotTableRepeatItemLabels);
-    CPPUNIT_TEST(testPivotTableDPCollection);
-    CPPUNIT_TEST(testPivotTableMedianFunc);
-
-    CPPUNIT_TEST_SUITE_END();
-
-private:
+protected:
     template<size_t Size>
     ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef const aFields[], size_t nFieldCount, const char* aData[][Size], size_t nDataCount);
 };
@@ -311,8 +198,11 @@ ScRange TestPivottable::insertDPSourceData(ScDocument* pDoc, DPFieldDef const aF
 }
 
 
-void TestPivottable::testPivotTable()
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTable)
 {
+    /**
+     * Basic test for pivot tables.
+     */
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
 
@@ -495,8 +385,12 @@ void TestPivottable::testPivotTable()
     m_pDoc->DeleteTab(0);
 }
 
-void TestPivottable::testPivotTableLabels()
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableLabels)
 {
+    /**
+     * Test against unwanted automatic format detection on field names and
+     * field members in pivot tables.
+     */
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
 
@@ -550,8 +444,13 @@ void TestPivottable::testPivotTableLabels()
     m_pDoc->DeleteTab(0);
 }
 
-void TestPivottable::testPivotTableDateLabels()
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDateLabels)
 {
+    /**
+     * Make sure that we set cells displaying date values numeric cells,
+     * rather than text cells.  Grouping by date or number functionality
+     * depends on this.
+     */
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
 
@@ -625,8 +524,11 @@ void TestPivottable::testPivotTableDateLabels()
     m_pDoc->DeleteTab(0);
 }
 
-void TestPivottable::testPivotTableFilters()
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableFilters)
 {
+    /**
+     * Test for pivot table's filtering functionality by page fields.
+     */
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
 
@@ -777,8 +679,11 @@ void TestPivottable::testPivotTableFilters()
     m_pDoc->DeleteTab(0);
 }
 
-void TestPivottable::testPivotTableNamedSource()
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNamedSource)
 {
+    /**
+     * Test for pivot table's named source range.
+     */
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
 
@@ -880,8 +785,12 @@ void TestPivottable::testPivotTableNamedSource()
     m_pDoc->DeleteTab(0);
 }
 
-void TestPivottable::testPivotTableCache()
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableCache)
 {
+    /**
+     * Test for pivot table cache.  Each dimension in the pivot cache stores
+     * only unique values that are sorted in ascending order.
+     */
     m_pDoc->InsertTab(0, "Data");
 
     // Raw data
@@ -1085,8 +994,12 @@ void TestPivottable::testPivotTableCache()
     m_pDoc->DeleteTab(0);
 }
 
-void TestPivottable::testPivotTableDuplicateDataFields()
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDuplicateDataFields)
 {
+    /**
+     * Test for pivot table containing data fields that reference the same
+     * source field but different functions.
+     */
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
 
@@ -1180,7 +1093,7 @@ void TestPivottable::testPivotTableDuplicateDataFields()
     m_pDoc->DeleteTab(0);
 }
 
-void TestPivottable::testPivotTableNormalGrouping()
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNormalGrouping)
 {
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
@@ -1329,7 +1242,7 @@ void TestPivottable::testPivotTableNormalGrouping()
     m_pDoc->DeleteTab(0);
 }
 
-void TestPivottable::testPivotTableNumberGrouping()
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNumberGrouping)
 {
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
@@ -1422,7 +1335,7 @@ void TestPivottable::testPivotTableNumberGrouping()
     m_pDoc->DeleteTab(0);
 }
 
-void TestPivottable::testPivotTableDateGrouping()
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDateGrouping)
 {
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
@@ -1594,7 +1507,7 @@ void TestPivottable::testPivotTableDateGrouping()
     m_pDoc->DeleteTab(0);
 }
 
-void TestPivottable::testPivotTableEmptyRows()
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableEmptyRows)
 {
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
@@ -1707,7 +1620,7 @@ void TestPivottable::testPivotTableEmptyRows()
     m_pDoc->DeleteTab(0);
 }
 
-void TestPivottable::testPivotTableTextNumber()
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableTextNumber)
 {
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
@@ -1808,8 +1721,12 @@ void TestPivottable::testPivotTableTextNumber()
     m_pDoc->DeleteTab(0);
 }
 
-void TestPivottable::testPivotTableCaseInsensitiveStrings()
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableCaseInsensitiveStrings)
 {
+    /**
+     * Test for checking that pivot table treats strings in a case insensitive
+     * manner.
+     */
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
 
@@ -1862,8 +1779,12 @@ void TestPivottable::testPivotTableCaseInsensitiveStrings()
     m_pDoc->DeleteTab(0);
 }
 
-void TestPivottable::testPivotTableNumStability()
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNumStability)
 {
+    /**
+     * Test for pivot table's handling of double-precision numbers that are
+     * very close together.
+     */
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
 
     // Raw Data
@@ -1964,8 +1885,12 @@ void TestPivottable::testPivotTableNumStability()
     m_pDoc->DeleteTab(0);
 }
 
-void TestPivottable::testPivotTableFieldReference()
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableFieldReference)
 {
+    /**
+     * Test for pivot table that include field with various non-default field
+     * references.
+     */
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
 
@@ -2130,8 +2055,11 @@ void TestPivottable::testPivotTableFieldReference()
     m_pDoc->DeleteTab(0);
 }
 
-void TestPivottable::testPivotTableDocFunc()
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDocFunc)
 {
+    /**
+     * Test pivot table functionality performed via ScDBDocFunc.
+     */
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
 
@@ -2198,7 +2126,7 @@ void TestPivottable::testPivotTableDocFunc()
     m_pDoc->DeleteTab(0);
 }
 
-void TestPivottable::testFuncGETPIVOTDATA()
+CPPUNIT_TEST_FIXTURE(TestPivottable, testFuncGETPIVOTDATA)
 {
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
@@ -2354,7 +2282,7 @@ void TestPivottable::testFuncGETPIVOTDATA()
     m_pDoc->DeleteTab(0);
 }
 
-void TestPivottable::testFuncGETPIVOTDATALeafAccess()
+CPPUNIT_TEST_FIXTURE(TestPivottable, testFuncGETPIVOTDATALeafAccess)
 {
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
@@ -2444,8 +2372,11 @@ void TestPivottable::testFuncGETPIVOTDATALeafAccess()
     m_pDoc->DeleteTab(0);
 }
 
-void TestPivottable::testPivotTableRepeatItemLabels()
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableRepeatItemLabels)
 {
+    /**
+     * Test pivot table per-field repeat item labels functionality
+     */
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
 
@@ -2521,8 +2452,11 @@ void TestPivottable::testPivotTableRepeatItemLabels()
     m_pDoc->DeleteTab(0);
 }
 
-void TestPivottable::testPivotTableDPCollection()
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDPCollection)
 {
+    /**
+     * Test DPCollection public methods
+     */
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
 
@@ -2607,8 +2541,11 @@ void TestPivottable::testPivotTableDPCollection()
     m_pDoc->DeleteTab(0);
 }
 
-void TestPivottable::testPivotTableMedianFunc()
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableMedianFunc)
 {
+    /**
+    * Test pivot table median function
+    */
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
 
@@ -2684,8 +2621,6 @@ void TestPivottable::testPivotTableMedianFunc()
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(TestPivottable);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

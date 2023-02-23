@@ -21,21 +21,9 @@
 
 class ScRangeTest : public ScUcalcTestBase
 {
-public:
-    CPPUNIT_TEST_SUITE(ScRangeTest);
-    CPPUNIT_TEST(testOverlap);
-    CPPUNIT_TEST(testRangeParsing);
-    CPPUNIT_TEST(testAddressParsing);
-    CPPUNIT_TEST(testTdf147451);
-    CPPUNIT_TEST_SUITE_END();
-
-    void testOverlap();
-    void testRangeParsing();
-    void testAddressParsing();
-    void testTdf147451();
 };
 
-void ScRangeTest::testOverlap()
+CPPUNIT_TEST_FIXTURE(ScRangeTest, testOverlap)
 {
     ScRange aRange1( ScAddress( 0, 0, 0 ), ScAddress( 1, 1, 1 ));
     CPPUNIT_ASSERT(aRange1.Contains( ScAddress( 0, 0, 0 )));
@@ -54,21 +42,21 @@ void ScRangeTest::testOverlap()
     CPPUNIT_ASSERT(!aRange1.Intersects( aRange3 ));
 }
 
-void ScRangeTest::testRangeParsing()
+CPPUNIT_TEST_FIXTURE(ScRangeTest, testRangeParsing)
 {
     ScRange aRange;
     ScRefFlags nRes = aRange.Parse(":1", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 }
 
-void ScRangeTest::testAddressParsing()
+CPPUNIT_TEST_FIXTURE(ScRangeTest, testAddressParsing)
 {
     ScAddress aAddr;
     ScRefFlags nRes = aAddr.Parse("1", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 }
 
-void ScRangeTest::testTdf147451()
+CPPUNIT_TEST_FIXTURE(ScRangeTest, testTdf147451)
 {
     ScAddress aAddr;
     // "Sheet1" is technically a valid address like "XF1", but it should overflow.
@@ -86,24 +74,9 @@ public:
         ScDLL::Init();
         ScGlobal::Init();
     }
-    void testUpdateInsertTabBeforePos();
-    void testUpdateInsertTabAtPos();
-    void testUpdateInsertTabAfterPos();
-    void testUpdateDeleteTabBeforePos();
-    void testUpdateDeleteTabAtPos();
-    void testUpdateDeleteTabAfterPos();
-
-    CPPUNIT_TEST_SUITE(ScRangeUpdaterTest);
-    CPPUNIT_TEST(testUpdateInsertTabBeforePos);
-    CPPUNIT_TEST(testUpdateInsertTabAtPos);
-    CPPUNIT_TEST(testUpdateInsertTabAfterPos);
-    CPPUNIT_TEST(testUpdateDeleteTabBeforePos);
-    CPPUNIT_TEST(testUpdateDeleteTabAtPos);
-    CPPUNIT_TEST(testUpdateDeleteTabAfterPos);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void ScRangeUpdaterTest::testUpdateInsertTabBeforePos()
+CPPUNIT_TEST_FIXTURE(ScRangeUpdaterTest, testUpdateInsertTabBeforePos)
 {
     ScDocument aDoc;
     ScAddress aAddr(1, 1, 1);
@@ -112,7 +85,7 @@ void ScRangeUpdaterTest::testUpdateInsertTabBeforePos()
     CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 2), aAddr);
 }
 
-void ScRangeUpdaterTest::testUpdateInsertTabAtPos()
+CPPUNIT_TEST_FIXTURE(ScRangeUpdaterTest, testUpdateInsertTabAtPos)
 {
     ScDocument aDoc;
     ScAddress aAddr(1, 1, 1);
@@ -121,7 +94,7 @@ void ScRangeUpdaterTest::testUpdateInsertTabAtPos()
     CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 2), aAddr);
 }
 
-void ScRangeUpdaterTest::testUpdateInsertTabAfterPos()
+CPPUNIT_TEST_FIXTURE(ScRangeUpdaterTest, testUpdateInsertTabAfterPos)
 {
     ScDocument aDoc;
     ScAddress aAddr(1, 1, 1);
@@ -130,7 +103,7 @@ void ScRangeUpdaterTest::testUpdateInsertTabAfterPos()
     CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 1), aAddr);
 }
 
-void ScRangeUpdaterTest::testUpdateDeleteTabBeforePos()
+CPPUNIT_TEST_FIXTURE(ScRangeUpdaterTest, testUpdateDeleteTabBeforePos)
 {
     ScDocument aDoc;
     ScAddress aAddr(1, 1, 1);
@@ -139,7 +112,7 @@ void ScRangeUpdaterTest::testUpdateDeleteTabBeforePos()
     CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 0), aAddr);
 }
 
-void ScRangeUpdaterTest::testUpdateDeleteTabAtPos()
+CPPUNIT_TEST_FIXTURE(ScRangeUpdaterTest, testUpdateDeleteTabAtPos)
 {
     ScDocument aDoc;
 
@@ -172,7 +145,7 @@ void ScRangeUpdaterTest::testUpdateDeleteTabAtPos()
     }
 }
 
-void ScRangeUpdaterTest::testUpdateDeleteTabAfterPos()
+CPPUNIT_TEST_FIXTURE(ScRangeUpdaterTest, testUpdateDeleteTabAfterPos)
 {
     ScDocument aDoc;
     ScAddress aAddr(1, 1, 1);
@@ -180,9 +153,6 @@ void ScRangeUpdaterTest::testUpdateDeleteTabAfterPos()
     ScRangeUpdater::UpdateDeleteTab(aAddr, aContext);
     CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 1), aAddr);
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(ScRangeTest);
-CPPUNIT_TEST_SUITE_REGISTRATION(ScRangeUpdaterTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

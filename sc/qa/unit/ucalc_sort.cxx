@@ -33,56 +33,11 @@
 
 class TestSort : public ScUcalcTestBase
 {
-public:
-    void testSort();
-    void testSortHorizontal();
-    void testSortHorizontalWholeColumn();
-    void testSortSingleRow();
-    void testSortWithFormulaRefs();
-    void testSortWithStrings();
-    void testSortInFormulaGroup();
-    void testSortWithCellFormats();
-    void testSortRefUpdate();
-    void testSortRefUpdate2();
-    void testSortRefUpdate3();
-    void testSortRefUpdate4();
-    void testSortRefUpdate4_Impl();
-    void testSortRefUpdate5();
-    void testSortRefUpdate6();
-    void testSortBroadcaster();
-    void testSortBroadcastBroadcaster();
-    void testSortOutOfPlaceResult();
-    void testSortPartialFormulaGroup();
-    void testSortImages();
-    void testQueryBinarySearch();
-
-    CPPUNIT_TEST_SUITE(TestSort);
-
-    CPPUNIT_TEST(testSort);
-    CPPUNIT_TEST(testSortHorizontal);
-    CPPUNIT_TEST(testSortHorizontalWholeColumn);
-    CPPUNIT_TEST(testSortSingleRow);
-    CPPUNIT_TEST(testSortWithFormulaRefs);
-    CPPUNIT_TEST(testSortWithStrings);
-    CPPUNIT_TEST(testSortInFormulaGroup);
-    CPPUNIT_TEST(testSortWithCellFormats);
-    CPPUNIT_TEST(testSortRefUpdate);
-    CPPUNIT_TEST(testSortRefUpdate2);
-    CPPUNIT_TEST(testSortRefUpdate3);
-    CPPUNIT_TEST(testSortRefUpdate4);
-    CPPUNIT_TEST(testSortRefUpdate5);
-    CPPUNIT_TEST(testSortRefUpdate6);
-    CPPUNIT_TEST(testSortBroadcaster);
-    CPPUNIT_TEST(testSortBroadcastBroadcaster);
-    CPPUNIT_TEST(testSortOutOfPlaceResult);
-    CPPUNIT_TEST(testSortPartialFormulaGroup);
-    CPPUNIT_TEST(testSortImages);
-    CPPUNIT_TEST(testQueryBinarySearch);
-
-    CPPUNIT_TEST_SUITE_END();
+protected:
+     void testSortRefUpdate4_Impl();
 };
 
-void TestSort::testSort()
+CPPUNIT_TEST_FIXTURE(TestSort, testSort)
 {
     m_pDoc->InsertTab(0, "test1");
 
@@ -174,7 +129,7 @@ void TestSort::testSort()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSort::testSortHorizontal()
+CPPUNIT_TEST_FIXTURE(TestSort, testSortHorizontal)
 {
     SortRefUpdateSetter aUpdateSet;
 
@@ -241,7 +196,7 @@ void TestSort::testSortHorizontal()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSort::testSortHorizontalWholeColumn()
+CPPUNIT_TEST_FIXTURE(TestSort, testSortHorizontalWholeColumn)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
     m_pDoc->InsertTab(0, "Sort");
@@ -318,7 +273,7 @@ void TestSort::testSortHorizontalWholeColumn()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSort::testSortSingleRow()
+CPPUNIT_TEST_FIXTURE(TestSort, testSortSingleRow)
 {
     // This test case is from fdo#80462.
 
@@ -411,7 +366,7 @@ void TestSort::testSortSingleRow()
 
 // regression test of fdo#53814, sorting doesn't work as expected
 // if cells in the sort are referenced by formulas
-void TestSort::testSortWithFormulaRefs()
+CPPUNIT_TEST_FIXTURE(TestSort, testSortWithFormulaRefs)
 {
     SortRefUpdateSetter aUpdateSet;
 
@@ -471,7 +426,7 @@ void TestSort::testSortWithFormulaRefs()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSort::testSortWithStrings()
+CPPUNIT_TEST_FIXTURE(TestSort, testSortWithStrings)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -512,7 +467,7 @@ void TestSort::testSortWithStrings()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSort::testSortInFormulaGroup()
+CPPUNIT_TEST_FIXTURE(TestSort, testSortInFormulaGroup)
 {
     SortRefUpdateSetter aUpdateSet;
 
@@ -573,7 +528,7 @@ void TestSort::testSortInFormulaGroup()
     m_pDoc->DeleteTab( 0 );
 }
 
-void TestSort::testSortWithCellFormats()
+CPPUNIT_TEST_FIXTURE(TestSort, testSortWithCellFormats)
 {
     struct
     {
@@ -738,7 +693,7 @@ void TestSort::testSortWithCellFormats()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSort::testSortRefUpdate()
+CPPUNIT_TEST_FIXTURE(TestSort, testSortRefUpdate)
 {
     SortTypeSetter aSortTypeSet(true);
 
@@ -887,7 +842,7 @@ void TestSort::testSortRefUpdate()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSort::testSortRefUpdate2()
+CPPUNIT_TEST_FIXTURE(TestSort, testSortRefUpdate2)
 {
     SortRefUpdateSetter aUpdateSet;
 
@@ -975,7 +930,7 @@ void TestSort::testSortRefUpdate2()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSort::testSortRefUpdate3()
+CPPUNIT_TEST_FIXTURE(TestSort, testSortRefUpdate3)
 {
     SortRefUpdateSetter aUpdateSet;
 
@@ -1062,7 +1017,7 @@ void TestSort::testSortRefUpdate3()
 
 // Derived from fdo#79441 https://bugs.freedesktop.org/attachment.cgi?id=100144
 // testRefInterne.ods
-void TestSort::testSortRefUpdate4()
+CPPUNIT_TEST_FIXTURE(TestSort, testSortRefUpdate4)
 {
     // This test has to work in both update reference modes.
     {
@@ -1268,7 +1223,7 @@ void TestSort::testSortRefUpdate4_Impl()
  * functions it's not that easy to come up with something reproducible staying
  * stable over sorts... ;-)  Check for time and don't run test a few seconds
  * before midnight, ermm... */
-void TestSort::testSortRefUpdate5()
+CPPUNIT_TEST_FIXTURE(TestSort, testSortRefUpdate5)
 {
     SortRefUpdateSetter aUpdateSet;
 
@@ -1371,7 +1326,7 @@ void TestSort::testSortRefUpdate5()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSort::testSortRefUpdate6()
+CPPUNIT_TEST_FIXTURE(TestSort, testSortRefUpdate6)
 {
     SortRefNoUpdateSetter aUpdateSet;
 
@@ -1509,7 +1464,7 @@ void TestSort::testSortRefUpdate6()
 
 // fdo#86762 check that broadcasters are sorted correctly and empty cell is
 // broadcasted.
-void TestSort::testSortBroadcaster()
+CPPUNIT_TEST_FIXTURE(TestSort, testSortBroadcaster)
 {
     SortRefNoUpdateSetter aUpdateSet;
 
@@ -1709,7 +1664,7 @@ void TestSort::testSortBroadcaster()
 // tdf#99417 check that formulas are tracked that *only* indirectly depend on
 // sorted data and no other broadcasting than BroadcastBroadcasters is
 // involved (for which this test can not be included in testSortBroadcaster()).
-void TestSort::testSortBroadcastBroadcaster()
+CPPUNIT_TEST_FIXTURE(TestSort, testSortBroadcastBroadcaster)
 {
     SortRefNoUpdateSetter aUpdateSet;
 
@@ -1778,7 +1733,7 @@ void TestSort::testSortBroadcastBroadcaster()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSort::testSortOutOfPlaceResult()
+CPPUNIT_TEST_FIXTURE(TestSort, testSortOutOfPlaceResult)
 {
     m_pDoc->InsertTab(0, "Sort");
     m_pDoc->InsertTab(1, "Result");
@@ -1847,7 +1802,7 @@ void TestSort::testSortOutOfPlaceResult()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSort::testSortPartialFormulaGroup()
+CPPUNIT_TEST_FIXTURE(TestSort, testSortPartialFormulaGroup)
 {
     SortRefUpdateSetter aUpdateSet;
 
@@ -1924,7 +1879,7 @@ void TestSort::testSortPartialFormulaGroup()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSort::testSortImages()
+CPPUNIT_TEST_FIXTURE(TestSort, testSortImages)
 {
     m_pDoc->InsertTab(0, "testSortImages");
 
@@ -2019,7 +1974,7 @@ ScQueryParam makeSearchParam( const ScRange& range, SCCOL col, ScQueryOp op, dou
 
 } // namespace
 
-void TestSort::testQueryBinarySearch()
+CPPUNIT_TEST_FIXTURE(TestSort, testQueryBinarySearch)
 {
     m_pDoc->InsertTab(0, "testQueryBinarySearch");
 
@@ -2247,8 +2202,6 @@ void TestSort::testQueryBinarySearch()
 
     m_pDoc->DeleteTab(0);
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(TestSort);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

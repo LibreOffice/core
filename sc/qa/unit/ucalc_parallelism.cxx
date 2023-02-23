@@ -27,46 +27,6 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    void testSUMIFS();
-    void testDivision();
-    void testVLOOKUP();
-    void testVLOOKUPSUM();
-    void testSingleRef();
-    void testTdf147905();
-    void testSUMIFImplicitRange();
-    void testFGCycleWithPlainFormulaCell1();
-    void testFGCycleWithPlainFormulaCell2();
-    void testMultipleFGColumn();
-    void testFormulaGroupSpanEval();
-    void testFormulaGroupSpanEvalNonGroup();
-    void testArrayFormulaGroup();
-    void testDependentFormulaGroupCollection();
-    void testFormulaGroupWithForwardSelfReference();
-    void testFormulaGroupsInCyclesAndWithSelfReference();
-    void testFormulaGroupsInCyclesAndWithSelfReference2();
-    void testFormulaGroupsInCyclesAndWithSelfReference3();
-
-    CPPUNIT_TEST_SUITE(ScParallelismTest);
-    CPPUNIT_TEST(testSUMIFS);
-    CPPUNIT_TEST(testDivision);
-    CPPUNIT_TEST(testVLOOKUP);
-    CPPUNIT_TEST(testVLOOKUPSUM);
-    CPPUNIT_TEST(testSingleRef);
-    CPPUNIT_TEST(testTdf147905);
-    CPPUNIT_TEST(testSUMIFImplicitRange);
-    CPPUNIT_TEST(testFGCycleWithPlainFormulaCell1);
-    CPPUNIT_TEST(testFGCycleWithPlainFormulaCell2);
-    CPPUNIT_TEST(testMultipleFGColumn);
-    CPPUNIT_TEST(testFormulaGroupSpanEval);
-    CPPUNIT_TEST(testFormulaGroupSpanEvalNonGroup);
-    CPPUNIT_TEST(testArrayFormulaGroup);
-    CPPUNIT_TEST(testDependentFormulaGroupCollection);
-    CPPUNIT_TEST(testFormulaGroupWithForwardSelfReference);
-    CPPUNIT_TEST(testFormulaGroupsInCyclesAndWithSelfReference);
-    CPPUNIT_TEST(testFormulaGroupsInCyclesAndWithSelfReference2);
-    CPPUNIT_TEST(testFormulaGroupsInCyclesAndWithSelfReference3);
-    CPPUNIT_TEST_SUITE_END();
-
 private:
 
     bool getThreadingFlag() const;
@@ -107,7 +67,7 @@ void ScParallelismTest::tearDown()
     ScUcalcTestBase::tearDown();
 }
 
-void ScParallelismTest::testSUMIFS()
+CPPUNIT_TEST_FIXTURE(ScParallelismTest, testSUMIFS)
 {
     m_pDoc->InsertTab(0, "1");
 
@@ -186,7 +146,7 @@ void ScParallelismTest::testSUMIFS()
     m_pDoc->DeleteTab(0);
 }
 
-void ScParallelismTest::testDivision()
+CPPUNIT_TEST_FIXTURE(ScParallelismTest, testDivision)
 {
     m_pDoc->InsertTab(0, "1");
 
@@ -213,7 +173,7 @@ void ScParallelismTest::testDivision()
     m_pDoc->DeleteTab(0);
 }
 
-void ScParallelismTest::testVLOOKUP()
+CPPUNIT_TEST_FIXTURE(ScParallelismTest, testVLOOKUP)
 {
     m_pDoc->InsertTab(0, "1");
 
@@ -286,7 +246,7 @@ void ScParallelismTest::testVLOOKUP()
     m_pDoc->DeleteTab(0);
 }
 
-void ScParallelismTest::testVLOOKUPSUM()
+CPPUNIT_TEST_FIXTURE(ScParallelismTest, testVLOOKUPSUM)
 {
     m_pDoc->InsertTab(0, "1");
 
@@ -316,7 +276,7 @@ void ScParallelismTest::testVLOOKUPSUM()
     m_pDoc->DeleteTab(0);
 }
 
-void ScParallelismTest::testSingleRef()
+CPPUNIT_TEST_FIXTURE(ScParallelismTest, testSingleRef)
 {
     m_pDoc->InsertTab(0, "1");
 
@@ -337,7 +297,7 @@ void ScParallelismTest::testSingleRef()
     m_pDoc->DeleteTab(0);
 }
 
-void ScParallelismTest::testTdf147905()
+CPPUNIT_TEST_FIXTURE(ScParallelismTest, testTdf147905)
 {
     m_pDoc->InsertTab(0, "1");
 
@@ -378,7 +338,7 @@ static void lcl_setupCommon(ScDocument* pDoc, size_t nNumRows, size_t nConstCell
     }
 }
 
-void ScParallelismTest::testSUMIFImplicitRange()
+CPPUNIT_TEST_FIXTURE(ScParallelismTest, testSUMIFImplicitRange)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
     m_pDoc->InsertTab(0, "1");
@@ -408,7 +368,7 @@ void ScParallelismTest::testSUMIFImplicitRange()
     m_pDoc->DeleteTab(0);
 }
 
-void ScParallelismTest::testFGCycleWithPlainFormulaCell1()
+CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFGCycleWithPlainFormulaCell1)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
     m_pDoc->InsertTab(0, "1");
@@ -446,7 +406,7 @@ void ScParallelismTest::testFGCycleWithPlainFormulaCell1()
     m_pDoc->DeleteTab(0);
 }
 
-void ScParallelismTest::testFGCycleWithPlainFormulaCell2()
+CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFGCycleWithPlainFormulaCell2)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
     m_pDoc->InsertTab(0, "1");
@@ -528,7 +488,7 @@ static void lcl_setupMultipleFGColumn(ScDocument* pDocument, size_t nNumRowsInBl
     }
 }
 
-void ScParallelismTest::testMultipleFGColumn()
+CPPUNIT_TEST_FIXTURE(ScParallelismTest, testMultipleFGColumn)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
     m_pDoc->InsertTab(0, "1");
@@ -558,7 +518,7 @@ void ScParallelismTest::testMultipleFGColumn()
     m_pDoc->DeleteTab(0);
 }
 
-void ScParallelismTest::testFormulaGroupSpanEval()
+CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFormulaGroupSpanEval)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
     m_pDoc->InsertTab(0, "1");
@@ -629,7 +589,7 @@ void ScParallelismTest::testFormulaGroupSpanEval()
     m_pDoc->DeleteTab(0);
 }
 
-void ScParallelismTest::testFormulaGroupSpanEvalNonGroup()
+CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFormulaGroupSpanEvalNonGroup)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
     m_pDoc->InsertTab(0, "1");
@@ -678,7 +638,7 @@ void ScParallelismTest::testFormulaGroupSpanEvalNonGroup()
     m_pDoc->DeleteTab(0);
 }
 
-void ScParallelismTest::testArrayFormulaGroup()
+CPPUNIT_TEST_FIXTURE(ScParallelismTest, testArrayFormulaGroup)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
     m_pDoc->InsertTab(0, "1");
@@ -715,7 +675,7 @@ void ScParallelismTest::testArrayFormulaGroup()
     m_pDoc->DeleteTab(0);
 }
 
-void ScParallelismTest::testDependentFormulaGroupCollection()
+CPPUNIT_TEST_FIXTURE(ScParallelismTest, testDependentFormulaGroupCollection)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
     m_pDoc->InsertTab(0, "1");
@@ -768,7 +728,7 @@ void ScParallelismTest::testDependentFormulaGroupCollection()
     m_pDoc->DeleteTab(0);
 }
 
-void ScParallelismTest::testFormulaGroupWithForwardSelfReference()
+CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFormulaGroupWithForwardSelfReference)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
     m_pDoc->InsertTab(0, "1");
@@ -806,7 +766,7 @@ void ScParallelismTest::testFormulaGroupWithForwardSelfReference()
     m_pDoc->DeleteTab(0);
 }
 
-void ScParallelismTest::testFormulaGroupsInCyclesAndWithSelfReference()
+CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFormulaGroupsInCyclesAndWithSelfReference)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
     m_pDoc->InsertTab(0, "1");
@@ -875,7 +835,7 @@ void ScParallelismTest::testFormulaGroupsInCyclesAndWithSelfReference()
     m_pDoc->DeleteTab(0);
 }
 
-void ScParallelismTest::testFormulaGroupsInCyclesAndWithSelfReference2()
+CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFormulaGroupsInCyclesAndWithSelfReference2)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
     m_pDoc->InsertTab(0, "1");
@@ -941,7 +901,7 @@ void ScParallelismTest::testFormulaGroupsInCyclesAndWithSelfReference2()
     m_pDoc->DeleteTab(0);
 }
 
-void ScParallelismTest::testFormulaGroupsInCyclesAndWithSelfReference3()
+CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFormulaGroupsInCyclesAndWithSelfReference3)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
     m_pDoc->InsertTab(0, "1");
@@ -992,8 +952,6 @@ void ScParallelismTest::testFormulaGroupsInCyclesAndWithSelfReference3()
 
     m_pDoc->DeleteTab(0);
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(ScParallelismTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

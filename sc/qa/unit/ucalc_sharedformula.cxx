@@ -28,69 +28,9 @@
 
 class TestSharedFormula : public ScUcalcTestBase
 {
-public:
-    void testSharedFormulas();
-    void testSharedFormulasRefUpdate();
-    void testSharedFormulasRefUpdateMove();
-    void testSharedFormulasRefUpdateMove2();
-    void testSharedFormulasRefUpdateRange();
-    void testSharedFormulasRefUpdateRangeDeleteRow();
-    void testSharedFormulasRefUpdateExternal();
-    void testSharedFormulasInsertRow();
-    void testSharedFormulasDeleteRows();
-    void testSharedFormulasDeleteColumns();
-    void testSharedFormulasRefUpdateMoveSheets();
-    void testSharedFormulasRefUpdateCopySheets();
-    void testSharedFormulasRefUpdateDeleteSheets();
-    void testSharedFormulasCopyPaste();
-    void testSharedFormulaInsertColumn();
-    void testSharedFormulaMoveBlock();
-    void testSharedFormulaUpdateOnNamedRangeChange();
-    void testSharedFormulaUpdateOnDBChange();
-    void testSharedFormulaAbsCellListener();
-    void testSharedFormulaUnshareAreaListeners();
-    void testSharedFormulaListenerDeleteArea();
-    void testSharedFormulaUpdateOnReplacement();
-    void testSharedFormulaDeleteTopCell();
-    void testSharedFormulaCutCopyMoveIntoRef();
-    void testSharedFormulaCutCopyMoveWithRef();
-    void testSharedFormulaCutCopyMoveWithinRun();
-    void testSharedFormulaInsertShift();
-
-    CPPUNIT_TEST_SUITE(TestSharedFormula);
-
-    CPPUNIT_TEST(testSharedFormulas);
-    CPPUNIT_TEST(testSharedFormulasRefUpdate);
-    CPPUNIT_TEST(testSharedFormulasRefUpdateMove);
-    CPPUNIT_TEST(testSharedFormulasRefUpdateMove2);
-    CPPUNIT_TEST(testSharedFormulasRefUpdateRange);
-    CPPUNIT_TEST(testSharedFormulasRefUpdateRangeDeleteRow);
-    CPPUNIT_TEST(testSharedFormulasRefUpdateExternal);
-    CPPUNIT_TEST(testSharedFormulasInsertRow);
-    CPPUNIT_TEST(testSharedFormulasDeleteRows);
-    CPPUNIT_TEST(testSharedFormulasDeleteColumns);
-    CPPUNIT_TEST(testSharedFormulasRefUpdateMoveSheets);
-    CPPUNIT_TEST(testSharedFormulasRefUpdateCopySheets);
-    CPPUNIT_TEST(testSharedFormulasRefUpdateDeleteSheets);
-    CPPUNIT_TEST(testSharedFormulasCopyPaste);
-    CPPUNIT_TEST(testSharedFormulaInsertColumn);
-    CPPUNIT_TEST(testSharedFormulaMoveBlock);
-    CPPUNIT_TEST(testSharedFormulaUpdateOnNamedRangeChange);
-    CPPUNIT_TEST(testSharedFormulaUpdateOnDBChange);
-    CPPUNIT_TEST(testSharedFormulaAbsCellListener);
-    CPPUNIT_TEST(testSharedFormulaUnshareAreaListeners);
-    CPPUNIT_TEST(testSharedFormulaListenerDeleteArea);
-    CPPUNIT_TEST(testSharedFormulaUpdateOnReplacement);
-    CPPUNIT_TEST(testSharedFormulaDeleteTopCell);
-    CPPUNIT_TEST(testSharedFormulaCutCopyMoveIntoRef);
-    CPPUNIT_TEST(testSharedFormulaCutCopyMoveWithRef);
-    CPPUNIT_TEST(testSharedFormulaCutCopyMoveWithinRun);
-    CPPUNIT_TEST(testSharedFormulaInsertShift);
-
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void TestSharedFormula::testSharedFormulas()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulas)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -360,7 +300,7 @@ void TestSharedFormula::testSharedFormulas()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSharedFormula::testSharedFormulasRefUpdate()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulasRefUpdate)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -497,7 +437,7 @@ void TestSharedFormula::testSharedFormulasRefUpdate()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSharedFormula::testSharedFormulasRefUpdateMove()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulasRefUpdateMove)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
@@ -558,7 +498,7 @@ void TestSharedFormula::testSharedFormulasRefUpdateMove()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSharedFormula::testSharedFormulasRefUpdateMove2()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulasRefUpdateMove2)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false); // turn auto calc off this time.
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
@@ -630,7 +570,7 @@ void TestSharedFormula::testSharedFormulasRefUpdateMove2()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSharedFormula::testSharedFormulasRefUpdateRange()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulasRefUpdateRange)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -716,7 +656,7 @@ struct SortByArea
 
 }
 
-void TestSharedFormula::testSharedFormulasRefUpdateRangeDeleteRow()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulasRefUpdateRangeDeleteRow)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
     m_pDoc->InsertTab(0, "Formula");
@@ -836,7 +776,7 @@ void TestSharedFormula::testSharedFormulasRefUpdateRangeDeleteRow()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSharedFormula::testSharedFormulasRefUpdateExternal()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulasRefUpdateExternal)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
     m_pDoc->InsertTab(0, "Formula");
@@ -912,7 +852,7 @@ void TestSharedFormula::testSharedFormulasRefUpdateExternal()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSharedFormula::testSharedFormulasInsertRow()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulasInsertRow)
 {
     struct
     {
@@ -1018,7 +958,7 @@ void TestSharedFormula::testSharedFormulasInsertRow()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSharedFormula::testSharedFormulasDeleteRows()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulasDeleteRows)
 {
     m_pDoc->InsertTab(0, "Test");
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
@@ -1114,7 +1054,7 @@ void TestSharedFormula::testSharedFormulasDeleteRows()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(8), pFC->GetSharedLength());
 }
 
-void TestSharedFormula::testSharedFormulasDeleteColumns()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulasDeleteColumns)
 {
     using namespace formula;
 
@@ -1204,7 +1144,7 @@ void TestSharedFormula::testSharedFormulasDeleteColumns()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSharedFormula::testSharedFormulasRefUpdateMoveSheets()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulasRefUpdateMoveSheets)
 {
     m_pDoc->InsertTab(0, "Sheet1");
     m_pDoc->InsertTab(1, "Sheet2");
@@ -1284,7 +1224,7 @@ void TestSharedFormula::testSharedFormulasRefUpdateMoveSheets()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSharedFormula::testSharedFormulasRefUpdateCopySheets()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulasRefUpdateCopySheets)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // make sure auto calc is on.
 
@@ -1320,7 +1260,7 @@ void TestSharedFormula::testSharedFormulasRefUpdateCopySheets()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSharedFormula::testSharedFormulasRefUpdateDeleteSheets()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulasRefUpdateDeleteSheets)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // make sure auto calc is on.
 
@@ -1370,7 +1310,7 @@ void TestSharedFormula::testSharedFormulasRefUpdateDeleteSheets()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSharedFormula::testSharedFormulasCopyPaste()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulasCopyPaste)
 {
     m_pDoc->InsertTab(0, "Test");
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
@@ -1449,7 +1389,7 @@ void TestSharedFormula::testSharedFormulasCopyPaste()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSharedFormula::testSharedFormulaInsertColumn()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulaInsertColumn)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -1466,7 +1406,7 @@ void TestSharedFormula::testSharedFormulaInsertColumn()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSharedFormula::testSharedFormulaMoveBlock()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulaMoveBlock)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
@@ -1571,7 +1511,7 @@ void TestSharedFormula::testSharedFormulaMoveBlock()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSharedFormula::testSharedFormulaUpdateOnNamedRangeChange()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulaUpdateOnNamedRangeChange)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -1677,7 +1617,7 @@ void TestSharedFormula::testSharedFormulaUpdateOnNamedRangeChange()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSharedFormula::testSharedFormulaUpdateOnDBChange()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulaUpdateOnDBChange)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -1744,7 +1684,7 @@ void TestSharedFormula::testSharedFormulaUpdateOnDBChange()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSharedFormula::testSharedFormulaAbsCellListener()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulaAbsCellListener)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -1795,7 +1735,7 @@ static double checkNewValuesNotification( ScDocument* pDoc, const ScAddress& rOr
     return fVal;
 }
 
-void TestSharedFormula::testSharedFormulaUnshareAreaListeners()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulaUnshareAreaListeners)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -2279,7 +2219,7 @@ void TestSharedFormula::testSharedFormulaUnshareAreaListeners()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSharedFormula::testSharedFormulaListenerDeleteArea()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulaListenerDeleteArea)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -2323,7 +2263,7 @@ void TestSharedFormula::testSharedFormulaListenerDeleteArea()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSharedFormula::testSharedFormulaUpdateOnReplacement()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulaUpdateOnReplacement)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -2478,7 +2418,7 @@ void TestSharedFormula::testSharedFormulaUpdateOnReplacement()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSharedFormula::testSharedFormulaDeleteTopCell()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulaDeleteTopCell)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -2520,7 +2460,7 @@ void TestSharedFormula::testSharedFormulaDeleteTopCell()
     m_pDoc->DeleteTab(0);
 }
 
-void TestSharedFormula::testSharedFormulaCutCopyMoveIntoRef()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulaCutCopyMoveIntoRef)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -2635,7 +2575,7 @@ void TestSharedFormula::testSharedFormulaCutCopyMoveIntoRef()
 }
 
 // tdf#121002
-void TestSharedFormula::testSharedFormulaCutCopyMoveWithRef()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulaCutCopyMoveWithRef)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -2706,7 +2646,7 @@ void TestSharedFormula::testSharedFormulaCutCopyMoveWithRef()
 }
 
 // tdf#120013
-void TestSharedFormula::testSharedFormulaCutCopyMoveWithinRun()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulaCutCopyMoveWithinRun)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -2782,7 +2722,7 @@ void TestSharedFormula::testSharedFormulaCutCopyMoveWithinRun()
 }
 
 // tdf#129396
-void TestSharedFormula::testSharedFormulaInsertShift()
+CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulaInsertShift)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -2846,8 +2786,6 @@ void TestSharedFormula::testSharedFormulaInsertShift()
 
     m_pDoc->DeleteTab(0);
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(TestSharedFormula);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

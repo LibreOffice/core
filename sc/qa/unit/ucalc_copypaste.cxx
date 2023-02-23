@@ -34,215 +34,7 @@
 
 class TestCopyPaste : public ScUcalcTestBase
 {
-public:
-    void testCopyPaste();
-    void testCopyPasteAsLink();
-    void testCopyPasteTranspose();
-    void testCopyPasteSpecialAsLinkTranspose();
-    void testCopyPasteSpecialAsLinkFilteredTranspose();
-    void testCopyPasteSpecialMultiRangeColAsLinkTranspose();
-    void testCopyPasteSpecialMultiRangeColAsLinkFilteredTranspose();
-    void testCopyPasteSpecialMultiRangeRowAsLinkTranspose();
-    void testCopyPasteSpecialMultiRangeRowAsLinkFilteredTranspose();
-    void testCopyPasteSpecialAllAsLinkTranspose();
-    void testCopyPasteSpecialAllAsLinkFilteredTranspose();
-    void testCopyPasteSpecial();
-    void testCopyPasteSpecialFiltered();
-    void testCopyPasteSpecialIncludeFiltered();
-    void testCopyPasteSpecialFilteredIncludeFiltered();
-    void testCopyPasteSpecialTranspose();
-    void testCopyPasteSpecialTransposeIncludeFiltered();
-    void testCopyPasteSpecialFilteredTranspose();
-    void testCopyPasteSpecialMergedCellsTranspose();
-    void testCopyPasteSpecialMergedCellsFilteredTranspose();
-    void testCopyPasteSpecialMultiRangeCol();
-    void testCopyPasteSpecialMultiRangeColFiltered();
-    void testCopyPasteSpecialMultiRangeColIncludeFiltered();
-    void testCopyPasteSpecialMultiRangeColFilteredIncludeFiltered();
-    void testCopyPasteSpecialMultiRangeColTranspose();
-    void testCopyPasteSpecialMultiRangeColFilteredTranspose();
-    void testCopyPasteSpecialMultiRangeColFilteredIncludeFilteredTranspose();
-    void testCopyPasteSpecialMultiRangeRow();
-    void testCopyPasteSpecialMultiRangeRowFiltered();
-    void testCopyPasteSpecialMultiRangeRowIncludeFiltered();
-    void testCopyPasteSpecialMultiRangeRowFilteredIncludeFiltered();
-    void testCopyPasteSpecialMultiRangeRowTranspose();
-    void testCopyPasteSpecialMultiRangeRowFilteredTranspose();
-    void testCopyPasteSpecialMultiRangeRowFilteredIncludeFilteredTranspose();
-    void testCopyPasteSpecialSkipEmpty();
-    void testCopyPasteSpecialSkipEmptyFiltered();
-    void testCopyPasteSpecialSkipEmptyIncludeFiltered();
-    void testCopyPasteSpecialSkipEmptyFilteredIncludeFiltered();
-    void testCopyPasteSpecialSkipEmptyTranspose();
-    void testCopyPasteSpecialSkipEmptyTransposeIncludeFiltered();
-    void testCopyPasteSpecialSkipEmptyFilteredTranspose();
-    void testCopyPasteSpecialSkipEmptyMultiRangeCol();
-    void testCopyPasteSpecialSkipEmptyMultiRangeColFiltered();
-    void testCopyPasteSpecialSkipEmptyMultiRangeColIncludeFiltered();
-    void testCopyPasteSpecialSkipEmptyMultiRangeColFilteredIncludeFiltered();
-    void testCopyPasteSpecialSkipEmptyMultiRangeColTranspose();
-    void testCopyPasteSpecialSkipEmptyMultiRangeColFilteredTranspose();
-    void testCopyPasteSpecialSkipEmptyMultiRangeColFilteredIncludeFilteredTranspose();
-    void testCopyPasteSpecialSkipEmptyMultiRangeRow();
-    void testCopyPasteSpecialSkipEmptyMultiRangeRowFiltered();
-    void testCopyPasteSpecialSkipEmptyMultiRangeRowIncludeFiltered();
-    void testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredIncludeFiltered();
-    void testCopyPasteSpecialSkipEmptyMultiRangeRowTranspose();
-    void testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredTranspose();
-    void testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredIncludeFilteredTranspose();
-    void testCopyPasteMultiRange();
-    void testCopyPasteSkipEmpty();
-    void testCopyPasteSkipEmpty2();
-    void testCutPasteRefUndo();
-    void testCutPasteGroupRefUndo();
-    void testMoveRefBetweenSheets();
-    void testUndoCut();
-    void testMoveBlock();
-    void testCopyPasteRelativeFormula();
-    void testCopyPasteRepeatOneFormula();
-    void testCopyPasteMixedReferenceFormula();
-    void testCopyPasteFormulas();
-    void testCopyPasteFormulasExternalDoc();
-    void testCopyPasteReferencesExternalDoc(); // tdf#106456
-    void testTdf68976();
-    void testTdf71058();
-    void testTdf149554();
-
-    void testCutPasteSpecial();
-    void testCutPasteSpecialTranspose();
-    void testCutPasteSpecialSkipEmpty();
-    void testCutPasteSpecialSkipEmptyTranspose();
-    void testTdf142201Row();
-    void testTdf142201ColRel();
-    void testTdf142201ColAbs();
-    void testTdf142065();
-    void testCutTransposedFormulas();
-    void testCutTransposedFormulasSquare();
-    void testReferencedCutRangesRow();
-    void testReferencedCutTransposedRangesRowTab0To0();
-    void testReferencedCutTransposedRangesRowTab0To1();
-    void testReferencedCutTransposedRangesRowTab1To3();
-    void testReferencedCutTransposedRangesRowTab3To1();
-    void testReferencedCutRangesCol();
-    void testReferencedCutTransposedRangesColTab0To0();
-    void testReferencedCutTransposedRangesColTab0To1();
-    void testReferencedCutTransposedRangesColTab1To3();
-    void testReferencedCutTransposedRangesColTab3To1();
-
-    void testMixData();
-    void testMixDataAsLinkTdf116413();
-    void testMixDataWithFormulaTdf116413();
-
-    // tdf#80137
-    void testCopyPasteMatrixFormula();
-
-    CPPUNIT_TEST_SUITE(TestCopyPaste);
-
-    CPPUNIT_TEST(testCopyPaste);
-    CPPUNIT_TEST(testCopyPasteAsLink);
-    CPPUNIT_TEST(testCopyPasteTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialAsLinkTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialAllAsLinkTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeColAsLinkTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeColAsLinkFilteredTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeRowAsLinkTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeRowAsLinkFilteredTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialAsLinkFilteredTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialAllAsLinkFilteredTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialMergedCellsTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialMergedCellsFilteredTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecial);
-    CPPUNIT_TEST(testCopyPasteSpecialFiltered);
-    CPPUNIT_TEST(testCopyPasteSpecialIncludeFiltered);
-    CPPUNIT_TEST(testCopyPasteSpecialFilteredIncludeFiltered);
-    CPPUNIT_TEST(testCopyPasteSpecialTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialTransposeIncludeFiltered);
-    CPPUNIT_TEST(testCopyPasteSpecialFilteredTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeCol);
-    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeColFiltered);
-    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeColIncludeFiltered);
-    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeColFilteredIncludeFiltered);
-    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeColTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeColFilteredTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeColFilteredIncludeFilteredTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeRow);
-    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeRowFiltered);
-    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeRowIncludeFiltered);
-    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeRowFilteredIncludeFiltered);
-    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeRowTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeRowFilteredTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialMultiRangeRowFilteredIncludeFilteredTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialSkipEmpty);
-    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyFiltered);
-    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyIncludeFiltered);
-    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyFilteredIncludeFiltered);
-    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyTransposeIncludeFiltered);
-    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyFilteredTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeCol);
-    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeColFiltered);
-    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeColIncludeFiltered);
-    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeColFilteredIncludeFiltered);
-    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeColTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeColFilteredTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeColFilteredIncludeFilteredTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeRow);
-    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeRowFiltered);
-    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeRowIncludeFiltered);
-    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredIncludeFiltered);
-    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeRowTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredTranspose);
-    CPPUNIT_TEST(testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredIncludeFilteredTranspose);
-    CPPUNIT_TEST(testCopyPasteMultiRange);
-    CPPUNIT_TEST(testCopyPasteSkipEmpty);
-    CPPUNIT_TEST(testCopyPasteSkipEmpty2);
-    CPPUNIT_TEST(testCutPasteRefUndo);
-    CPPUNIT_TEST(testCutPasteGroupRefUndo);
-    CPPUNIT_TEST(testMoveRefBetweenSheets);
-    CPPUNIT_TEST(testUndoCut);
-    CPPUNIT_TEST(testMoveBlock);
-    CPPUNIT_TEST(testCopyPasteRelativeFormula);
-    CPPUNIT_TEST(testCopyPasteRepeatOneFormula);
-    CPPUNIT_TEST(testCopyPasteMixedReferenceFormula);
-
-    CPPUNIT_TEST(testCopyPasteFormulas);
-    CPPUNIT_TEST(testCopyPasteFormulasExternalDoc);
-    CPPUNIT_TEST(testCopyPasteReferencesExternalDoc);
-
-    CPPUNIT_TEST(testTdf68976);
-    CPPUNIT_TEST(testTdf71058);
-    CPPUNIT_TEST(testTdf149554);
-
-    CPPUNIT_TEST(testCutPasteSpecial);
-    CPPUNIT_TEST(testCutPasteSpecialTranspose);
-    CPPUNIT_TEST(testCutPasteSpecialSkipEmpty);
-    CPPUNIT_TEST(testCutPasteSpecialSkipEmptyTranspose);
-    CPPUNIT_TEST(testTdf142201Row);
-    CPPUNIT_TEST(testTdf142201ColRel);
-    CPPUNIT_TEST(testTdf142201ColAbs);
-    CPPUNIT_TEST(testTdf142065);
-    CPPUNIT_TEST(testCutTransposedFormulas);
-    CPPUNIT_TEST(testCutTransposedFormulasSquare);
-    CPPUNIT_TEST(testReferencedCutRangesRow);
-    CPPUNIT_TEST(testReferencedCutTransposedRangesRowTab0To0);
-    CPPUNIT_TEST(testReferencedCutTransposedRangesRowTab0To1);
-    CPPUNIT_TEST(testReferencedCutTransposedRangesRowTab1To3);
-    CPPUNIT_TEST(testReferencedCutTransposedRangesRowTab3To1);
-    CPPUNIT_TEST(testReferencedCutRangesCol);
-    CPPUNIT_TEST(testReferencedCutTransposedRangesColTab0To0);
-    CPPUNIT_TEST(testReferencedCutTransposedRangesColTab0To1);
-    CPPUNIT_TEST(testReferencedCutTransposedRangesColTab1To3);
-    CPPUNIT_TEST(testReferencedCutTransposedRangesColTab3To1);
-
-    CPPUNIT_TEST(testMixData);
-    CPPUNIT_TEST(testMixDataAsLinkTdf116413);
-    CPPUNIT_TEST(testMixDataWithFormulaTdf116413);
-
-    CPPUNIT_TEST(testCopyPasteMatrixFormula);
-
-    CPPUNIT_TEST_SUITE_END();
-
-private:
+protected:
     enum CalcMode
     {
         NoCalc,
@@ -436,7 +228,7 @@ void TestCopyPaste::prepareUndoAfterPaste(ScDocumentUniquePtr& pPasteUndoDoc,
                                      &aOptions)); // false = Redo data not yet copied
 }
 
-void TestCopyPaste::testCopyPaste()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPaste)
 {
     m_pDoc->InsertTab(0, "Sheet1");
     m_pDoc->InsertTab(1, "Sheet2");
@@ -615,7 +407,7 @@ void TestCopyPaste::testCopyPaste()
     m_pDoc->DeleteTab(0);
 }
 
-void TestCopyPaste::testCopyPasteAsLink()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteAsLink)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // Turn on auto calc.
 
@@ -654,7 +446,7 @@ void TestCopyPaste::testCopyPasteAsLink()
     m_pDoc->DeleteTab(0);
 }
 
-void TestCopyPaste::testCopyPasteTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteTranspose)
 {
     m_pDoc->InsertTab(0, "Sheet1");
 
@@ -712,7 +504,7 @@ void TestCopyPaste::testCopyPasteTranspose()
     m_pDoc->DeleteTab(0);
 }
 
-void TestCopyPaste::testCopyPasteSpecialMergedCellsTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMergedCellsTranspose)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
@@ -781,7 +573,7 @@ void TestCopyPaste::testCopyPasteSpecialMergedCellsTranspose()
     m_pDoc->DeleteTab(srcSheet);
 }
 
-void TestCopyPaste::testCopyPasteSpecialMergedCellsFilteredTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMergedCellsFilteredTranspose)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
@@ -872,7 +664,7 @@ void TestCopyPaste::testCopyPasteSpecialMergedCellsFilteredTranspose()
 }
 
 // InsertDeleteFlags::CONTENTS
-void TestCopyPaste::testCopyPasteSpecialAsLinkTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialAsLinkTranspose)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
@@ -928,7 +720,7 @@ void TestCopyPaste::testCopyPasteSpecialAsLinkTranspose()
 }
 
 // InsertDeleteFlags::CONTENTS
-void TestCopyPaste::testCopyPasteSpecialAsLinkFilteredTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialAsLinkFilteredTranspose)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
@@ -1016,7 +808,7 @@ void TestCopyPaste::testCopyPasteSpecialAsLinkFilteredTranspose()
 
 // tdf#141683
 // InsertDeleteFlags::VALUE
-void TestCopyPaste::testCopyPasteSpecialMultiRangeRowAsLinkTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeRowAsLinkTranspose)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
@@ -1105,7 +897,7 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeRowAsLinkTranspose()
 
 // tdf#141683
 // InsertDeleteFlags::VALUE
-void TestCopyPaste::testCopyPasteSpecialMultiRangeRowAsLinkFilteredTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeRowAsLinkFilteredTranspose)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
@@ -1256,7 +1048,7 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeRowAsLinkFilteredTranspose()
 
 // tdf#141683
 // InsertDeleteFlags::VALUE
-void TestCopyPaste::testCopyPasteSpecialMultiRangeColAsLinkTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeColAsLinkTranspose)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
@@ -1345,7 +1137,7 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeColAsLinkTranspose()
 
 // tdf#141683
 // InsertDeleteFlags::VALUE
-void TestCopyPaste::testCopyPasteSpecialMultiRangeColAsLinkFilteredTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeColAsLinkFilteredTranspose)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
@@ -1445,7 +1237,7 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeColAsLinkFilteredTranspose()
 }
 
 // InsertDeleteFlags::ALL
-void TestCopyPaste::testCopyPasteSpecialAllAsLinkTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialAllAsLinkTranspose)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
@@ -1504,7 +1296,7 @@ void TestCopyPaste::testCopyPasteSpecialAllAsLinkTranspose()
 }
 
 // InsertDeleteFlags::ALL
-void TestCopyPaste::testCopyPasteSpecialAllAsLinkFilteredTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialAllAsLinkFilteredTranspose)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
@@ -2154,26 +1946,26 @@ void TestCopyPaste::executeCopyPasteSpecial(const SCTAB srcSheet, const SCTAB de
         m_pDoc->CalcAll();
 }
 
-void TestCopyPaste::testCopyPasteSpecial()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecial)
 {
     executeCopyPasteSpecial(false, false, false, false, false, false);
     checkCopyPasteSpecial(false);
 }
 
-void TestCopyPaste::testCopyPasteSpecialFiltered()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialFiltered)
 {
     executeCopyPasteSpecial(true, false, false, false, false, false);
     checkCopyPasteSpecialFiltered(false);
 }
 
-void TestCopyPaste::testCopyPasteSpecialIncludeFiltered()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialIncludeFiltered)
 {
     // For bIncludeFiltered=true, the non-filtered outcome is expected
     executeCopyPasteSpecial(false, true, false, false, false, false);
     checkCopyPasteSpecial(false);
 }
 
-void TestCopyPaste::testCopyPasteSpecialFilteredIncludeFiltered()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialFilteredIncludeFiltered)
 {
     // For bIncludeFiltered=true, the non-filtered outcome is expected
     executeCopyPasteSpecial(true, true, false, false, false, false);
@@ -2181,34 +1973,34 @@ void TestCopyPaste::testCopyPasteSpecialFilteredIncludeFiltered()
 }
 
 // similar to TestCopyPaste::testCopyPasteTranspose(), but this test is more complex
-void TestCopyPaste::testCopyPasteSpecialTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialTranspose)
 {
     executeCopyPasteSpecial(false, false, false, true, false, false);
     checkCopyPasteSpecialTranspose(false);
 }
 
 // tdf#107348
-void TestCopyPaste::testCopyPasteSpecialFilteredTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialFilteredTranspose)
 {
     executeCopyPasteSpecial(true, false, false, true, false, false);
     checkCopyPasteSpecialFilteredTranspose(false);
 }
 
 // tdf#107348
-void TestCopyPaste::testCopyPasteSpecialTransposeIncludeFiltered()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialTransposeIncludeFiltered)
 {
     // For bIncludeFiltered=true, the non-filtered outcome is expected
     executeCopyPasteSpecial(true, true, false, true, false, false);
     checkCopyPasteSpecialTranspose(false);
 }
 
-void TestCopyPaste::testCopyPasteSpecialMultiRangeCol()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeCol)
 {
     executeCopyPasteSpecial(false, false, false, false, true, false, false, ScClipParam::Column);
     checkCopyPasteSpecialMultiRangeCol(false);
 }
 
-void TestCopyPaste::testCopyPasteSpecialMultiRangeColIncludeFiltered()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeColIncludeFiltered)
 {
     // For bIncludeFiltered=true, the non-filtered outcome is expected
     executeCopyPasteSpecial(false, true, false, false, true, false, false, ScClipParam::Column);
@@ -2216,48 +2008,49 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeColIncludeFiltered()
 }
 
 // tdf#45958
-void TestCopyPaste::testCopyPasteSpecialMultiRangeColFiltered()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeColFiltered)
 {
     executeCopyPasteSpecial(true, false, false, false, true, false, false, ScClipParam::Column);
     checkCopyPasteSpecialMultiRangeColFiltered(false);
 }
 
 // tdf#45958
-void TestCopyPaste::testCopyPasteSpecialMultiRangeColFilteredIncludeFiltered()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeColFilteredIncludeFiltered)
 {
     // For bIncludeFiltered=true, the non-filtered outcome is expected
     executeCopyPasteSpecial(true, true, false, false, true, false, false, ScClipParam::Column);
     checkCopyPasteSpecialMultiRangeCol(false);
 }
 
-void TestCopyPaste::testCopyPasteSpecialMultiRangeColTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeColTranspose)
 {
     executeCopyPasteSpecial(false, false, false, true, true, false, false, ScClipParam::Column);
     checkCopyPasteSpecialMultiRangeColTranspose(false);
 }
 
 // tdf#45958, tdf#107348
-void TestCopyPaste::testCopyPasteSpecialMultiRangeColFilteredTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeColFilteredTranspose)
 {
     executeCopyPasteSpecial(true, false, false, true, true, false, false, ScClipParam::Column);
     checkCopyPasteSpecialMultiRangeColFilteredTranspose(false);
 }
 
 // tdf#45958, tdf#107348
-void TestCopyPaste::testCopyPasteSpecialMultiRangeColFilteredIncludeFilteredTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste,
+                     testCopyPasteSpecialMultiRangeColFilteredIncludeFilteredTranspose)
 {
     // For bIncludeFiltered=true, the non-filtered outcome is expected
     executeCopyPasteSpecial(true, true, false, true, true, false, false, ScClipParam::Column);
     checkCopyPasteSpecialMultiRangeColTranspose(false);
 }
 
-void TestCopyPaste::testCopyPasteSpecialMultiRangeRow()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeRow)
 {
     executeCopyPasteSpecial(false, false, false, false, true, false, false, ScClipParam::Row);
     checkCopyPasteSpecialMultiRangeRow(false);
 }
 
-void TestCopyPaste::testCopyPasteSpecialMultiRangeRowIncludeFiltered()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeRowIncludeFiltered)
 {
     // For bIncludeFiltered=true, the non-filtered outcome is expected
     executeCopyPasteSpecial(false, true, false, false, true, false, false, ScClipParam::Row);
@@ -2265,21 +2058,21 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeRowIncludeFiltered()
 }
 
 // tdf#45958
-void TestCopyPaste::testCopyPasteSpecialMultiRangeRowFiltered()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeRowFiltered)
 {
     executeCopyPasteSpecial(true, false, false, false, true, false, false, ScClipParam::Row);
     checkCopyPasteSpecialMultiRangeRowFiltered(false);
 }
 
 // tdf#45958
-void TestCopyPaste::testCopyPasteSpecialMultiRangeRowFilteredIncludeFiltered()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeRowFilteredIncludeFiltered)
 {
     // For bIncludeFiltered=true, the non-filtered outcome is expected
     executeCopyPasteSpecial(true, true, false, false, true, false, false, ScClipParam::Row);
     checkCopyPasteSpecialMultiRangeRow(false);
 }
 
-void TestCopyPaste::testCopyPasteSpecialMultiRangeRowTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeRowTranspose)
 {
     executeCopyPasteSpecial(false, false, false, true, true, false, false, ScClipParam::Row,
                             HardRecalcAtEnd);
@@ -2287,7 +2080,7 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeRowTranspose()
 }
 
 // tdf#45958, tdf#107348
-void TestCopyPaste::testCopyPasteSpecialMultiRangeRowFilteredTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialMultiRangeRowFilteredTranspose)
 {
     executeCopyPasteSpecial(true, false, false, true, true, false, false, ScClipParam::Row,
                             HardRecalcAtEnd);
@@ -2295,7 +2088,8 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeRowFilteredTranspose()
 }
 
 // tdf#45958, tdf#107348
-void TestCopyPaste::testCopyPasteSpecialMultiRangeRowFilteredIncludeFilteredTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste,
+                     testCopyPasteSpecialMultiRangeRowFilteredIncludeFilteredTranspose)
 {
     // For bIncludeFiltered=true, the non-filtered outcome is expected
     executeCopyPasteSpecial(true, true, false, true, true, false, false, ScClipParam::Row,
@@ -2303,26 +2097,26 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeRowFilteredIncludeFilteredTran
     checkCopyPasteSpecialMultiRangeRowTranspose(false);
 }
 
-void TestCopyPaste::testCopyPasteSpecialSkipEmpty()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialSkipEmpty)
 {
     executeCopyPasteSpecial(false, false, false, false, false, true);
     checkCopyPasteSpecial(true);
 }
 
-void TestCopyPaste::testCopyPasteSpecialSkipEmptyFiltered()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialSkipEmptyFiltered)
 {
     executeCopyPasteSpecial(true, false, false, false, false, true);
     checkCopyPasteSpecialFiltered(true);
 }
 
-void TestCopyPaste::testCopyPasteSpecialSkipEmptyIncludeFiltered()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialSkipEmptyIncludeFiltered)
 {
     // For bIncludeFiltered=true, the non-filtered outcome is expected
     executeCopyPasteSpecial(false, true, false, false, false, true);
     checkCopyPasteSpecial(true);
 }
 
-void TestCopyPaste::testCopyPasteSpecialSkipEmptyFilteredIncludeFiltered()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialSkipEmptyFilteredIncludeFiltered)
 {
     // For bIncludeFiltered=true, the non-filtered outcome is expected
     executeCopyPasteSpecial(true, true, false, false, false, true);
@@ -2330,34 +2124,34 @@ void TestCopyPaste::testCopyPasteSpecialSkipEmptyFilteredIncludeFiltered()
 }
 
 // similar to TestCopyPaste::testCopyPasteTranspose(), but this test is more complex
-void TestCopyPaste::testCopyPasteSpecialSkipEmptyTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialSkipEmptyTranspose)
 {
     executeCopyPasteSpecial(false, false, false, true, false, true);
     checkCopyPasteSpecialTranspose(true);
 }
 
 // tdf#107348
-void TestCopyPaste::testCopyPasteSpecialSkipEmptyFilteredTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialSkipEmptyFilteredTranspose)
 {
     executeCopyPasteSpecial(true, false, false, true, false, true);
     checkCopyPasteSpecialFilteredTranspose(true);
 }
 
 // tdf#107348
-void TestCopyPaste::testCopyPasteSpecialSkipEmptyTransposeIncludeFiltered()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialSkipEmptyTransposeIncludeFiltered)
 {
     // For bIncludeFiltered=true, the non-filtered outcome is expected
     executeCopyPasteSpecial(true, true, false, true, false, true);
     checkCopyPasteSpecialTranspose(true);
 }
 
-void TestCopyPaste::testCopyPasteSpecialSkipEmptyMultiRangeCol()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialSkipEmptyMultiRangeCol)
 {
     executeCopyPasteSpecial(false, false, false, false, true, true, false, ScClipParam::Column);
     checkCopyPasteSpecialMultiRangeCol(true);
 }
 
-void TestCopyPaste::testCopyPasteSpecialSkipEmptyMultiRangeColIncludeFiltered()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialSkipEmptyMultiRangeColIncludeFiltered)
 {
     // For bIncludeFiltered=true, the non-filtered outcome is expected
     executeCopyPasteSpecial(false, true, false, false, true, true, false, ScClipParam::Column);
@@ -2365,28 +2159,29 @@ void TestCopyPaste::testCopyPasteSpecialSkipEmptyMultiRangeColIncludeFiltered()
 }
 
 // tdf#45958
-void TestCopyPaste::testCopyPasteSpecialSkipEmptyMultiRangeColFiltered()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialSkipEmptyMultiRangeColFiltered)
 {
     executeCopyPasteSpecial(true, false, false, false, true, true, false, ScClipParam::Column);
     checkCopyPasteSpecialMultiRangeColFiltered(true);
 }
 
 // tdf#45958
-void TestCopyPaste::testCopyPasteSpecialSkipEmptyMultiRangeColFilteredIncludeFiltered()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste,
+                     testCopyPasteSpecialSkipEmptyMultiRangeColFilteredIncludeFiltered)
 {
     // For bIncludeFiltered=true, the non-filtered outcome is expected
     executeCopyPasteSpecial(true, true, false, false, true, true, false, ScClipParam::Column);
     checkCopyPasteSpecialMultiRangeCol(true);
 }
 
-void TestCopyPaste::testCopyPasteSpecialSkipEmptyMultiRangeColTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialSkipEmptyMultiRangeColTranspose)
 {
     executeCopyPasteSpecial(false, false, false, true, true, true, false, ScClipParam::Column);
     checkCopyPasteSpecialMultiRangeColTranspose(true);
 }
 
 // tdf#45958, tdf#107348
-void TestCopyPaste::testCopyPasteSpecialSkipEmptyMultiRangeColFilteredTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialSkipEmptyMultiRangeColFilteredTranspose)
 {
     // For bIncludeFiltered=true, the non-filtered outcome is expected
     executeCopyPasteSpecial(true, false, false, true, true, true, false, ScClipParam::Column);
@@ -2394,20 +2189,21 @@ void TestCopyPaste::testCopyPasteSpecialSkipEmptyMultiRangeColFilteredTranspose(
 }
 
 // tdf#45958, tdf#107348
-void TestCopyPaste::testCopyPasteSpecialSkipEmptyMultiRangeColFilteredIncludeFilteredTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste,
+                     testCopyPasteSpecialSkipEmptyMultiRangeColFilteredIncludeFilteredTranspose)
 {
     // For bIncludeFiltered=true, the non-filtered outcome is expected
     executeCopyPasteSpecial(true, true, false, true, true, true, false, ScClipParam::Column);
     checkCopyPasteSpecialMultiRangeColTranspose(true);
 }
 
-void TestCopyPaste::testCopyPasteSpecialSkipEmptyMultiRangeRow()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialSkipEmptyMultiRangeRow)
 {
     executeCopyPasteSpecial(false, false, false, false, true, true, false, ScClipParam::Row);
     checkCopyPasteSpecialMultiRangeRow(true);
 }
 
-void TestCopyPaste::testCopyPasteSpecialSkipEmptyMultiRangeRowIncludeFiltered()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialSkipEmptyMultiRangeRowIncludeFiltered)
 {
     // For bIncludeFiltered=true, the non-filtered outcome is expected
     executeCopyPasteSpecial(false, true, false, false, true, true, false, ScClipParam::Row);
@@ -2415,21 +2211,22 @@ void TestCopyPaste::testCopyPasteSpecialSkipEmptyMultiRangeRowIncludeFiltered()
 }
 
 // tdf#45958
-void TestCopyPaste::testCopyPasteSpecialSkipEmptyMultiRangeRowFiltered()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialSkipEmptyMultiRangeRowFiltered)
 {
     executeCopyPasteSpecial(true, false, false, false, true, true, false, ScClipParam::Row);
     checkCopyPasteSpecialMultiRangeRowFiltered(true);
 }
 
 // tdf#45958
-void TestCopyPaste::testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredIncludeFiltered()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste,
+                     testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredIncludeFiltered)
 {
     // For bIncludeFiltered=true, the non-filtered outcome is expected
     executeCopyPasteSpecial(true, true, false, false, true, true, false, ScClipParam::Row);
     checkCopyPasteSpecialMultiRangeRow(true);
 }
 
-void TestCopyPaste::testCopyPasteSpecialSkipEmptyMultiRangeRowTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialSkipEmptyMultiRangeRowTranspose)
 {
     executeCopyPasteSpecial(false, false, false, true, true, true, false, ScClipParam::Row,
                             HardRecalcAtEnd);
@@ -2437,7 +2234,7 @@ void TestCopyPaste::testCopyPasteSpecialSkipEmptyMultiRangeRowTranspose()
 }
 
 // tdf#45958, tdf#107348
-void TestCopyPaste::testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredTranspose)
 {
     executeCopyPasteSpecial(true, false, false, true, true, true, false, ScClipParam::Row,
                             HardRecalcAtEnd);
@@ -2445,7 +2242,8 @@ void TestCopyPaste::testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredTranspose(
 }
 
 // tdf#45958, tdf#107348
-void TestCopyPaste::testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredIncludeFilteredTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste,
+                     testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredIncludeFilteredTranspose)
 {
     // For bIncludeFiltered=true, the non-filtered outcome is expected
     executeCopyPasteSpecial(true, true, false, true, true, true, false, ScClipParam::Row,
@@ -2453,7 +2251,7 @@ void TestCopyPaste::testCopyPasteSpecialSkipEmptyMultiRangeRowFilteredIncludeFil
     checkCopyPasteSpecialMultiRangeRowTranspose(true);
 }
 
-void TestCopyPaste::testCutPasteSpecial()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCutPasteSpecial)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
@@ -2483,7 +2281,7 @@ void TestCopyPaste::testCutPasteSpecial()
         m_pDoc->DeleteTab(i - 1);
 }
 
-void TestCopyPaste::testCutPasteSpecialTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCutPasteSpecialTranspose)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
@@ -2513,7 +2311,7 @@ void TestCopyPaste::testCutPasteSpecialTranspose()
         m_pDoc->DeleteTab(i - 1);
 }
 
-void TestCopyPaste::testCutPasteSpecialSkipEmpty()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCutPasteSpecialSkipEmpty)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
@@ -2543,7 +2341,7 @@ void TestCopyPaste::testCutPasteSpecialSkipEmpty()
         m_pDoc->DeleteTab(i - 1);
 }
 
-void TestCopyPaste::testCutPasteSpecialSkipEmptyTranspose()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCutPasteSpecialSkipEmptyTranspose)
 {
     const SCTAB srcSheet = 0;
     const SCTAB destSheet = 1;
@@ -7066,7 +6864,7 @@ void TestCopyPaste::checkCopyPasteSpecialMultiRangeRowFilteredTranspose(bool bSk
     m_pDoc->DeleteTab(srcSheet);
 }
 
-void TestCopyPaste::testTdf142201Row()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf142201Row)
 {
     const SCTAB nTab = 0;
     m_pDoc->InsertTab(nTab, "Test");
@@ -7141,7 +6939,7 @@ void TestCopyPaste::testTdf142201Row()
     CPPUNIT_ASSERT_EQUAL(OUString("=B2"), m_pDoc->GetFormula(1, 4, nTab));
 }
 
-void TestCopyPaste::testTdf142201ColRel()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf142201ColRel)
 {
     const SCTAB nTab = 0;
     m_pDoc->InsertTab(nTab, "Test");
@@ -7216,7 +7014,7 @@ void TestCopyPaste::testTdf142201ColRel()
     CPPUNIT_ASSERT_EQUAL(OUString("=B2"), m_pDoc->GetFormula(1, 4, nTab));
 }
 
-void TestCopyPaste::testTdf142201ColAbs()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf142201ColAbs)
 {
     const SCTAB nTab = 0;
     m_pDoc->InsertTab(nTab, "Test");
@@ -8142,7 +7940,7 @@ void TestCopyPaste::checkReferencedCutTransposedRangesRow(const SCTAB nSrcTab, c
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(2, 101, nSrcTab)); // only 2nd row
 }
 
-void TestCopyPaste::testReferencedCutRangesRow()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testReferencedCutRangesRow)
 {
     const SCTAB nSrcTab = 0;
     const SCTAB nDestTab = 2;
@@ -8171,25 +7969,25 @@ void TestCopyPaste::testReferencedCutRangesRow()
 }
 
 // tdf#142201
-void TestCopyPaste::testReferencedCutTransposedRangesRowTab0To0()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testReferencedCutTransposedRangesRowTab0To0)
 {
     checkReferencedCutTransposedRangesRowUndo(0, 0);
 }
 
 // tdf#142201
-void TestCopyPaste::testReferencedCutTransposedRangesRowTab0To1()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testReferencedCutTransposedRangesRowTab0To1)
 {
     checkReferencedCutTransposedRangesRowUndo(0, 1);
 }
 
 // tdf#142201
-void TestCopyPaste::testReferencedCutTransposedRangesRowTab1To3()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testReferencedCutTransposedRangesRowTab1To3)
 {
     checkReferencedCutTransposedRangesRowUndo(1, 3);
 }
 
 // tdf#142201
-void TestCopyPaste::testReferencedCutTransposedRangesRowTab3To1()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testReferencedCutTransposedRangesRowTab3To1)
 {
     checkReferencedCutTransposedRangesRowUndo(3, 1);
 }
@@ -9121,7 +8919,7 @@ void TestCopyPaste::checkReferencedCutTransposedRangesCol(const SCTAB nSrcTab, c
     CPPUNIT_ASSERT_EQUAL(OUString(aFBase + "E14"), m_pDoc->GetFormula(2, 114, nSrcTab));
 }
 
-void TestCopyPaste::testReferencedCutRangesCol()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testReferencedCutRangesCol)
 {
     const SCTAB nSrcTab = 0;
     const SCTAB nDestTab = 2;
@@ -9150,25 +8948,25 @@ void TestCopyPaste::testReferencedCutRangesCol()
 }
 
 // tdf#142201
-void TestCopyPaste::testReferencedCutTransposedRangesColTab0To0()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testReferencedCutTransposedRangesColTab0To0)
 {
     checkReferencedCutTransposedRangesColUndo(0, 0);
 }
 
 // tdf#142201
-void TestCopyPaste::testReferencedCutTransposedRangesColTab0To1()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testReferencedCutTransposedRangesColTab0To1)
 {
     checkReferencedCutTransposedRangesColUndo(0, 1);
 }
 
 // tdf#142201
-void TestCopyPaste::testReferencedCutTransposedRangesColTab1To3()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testReferencedCutTransposedRangesColTab1To3)
 {
     checkReferencedCutTransposedRangesColUndo(1, 3);
 }
 
 // tdf#142201
-void TestCopyPaste::testReferencedCutTransposedRangesColTab3To1()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testReferencedCutTransposedRangesColTab3To1)
 {
     checkReferencedCutTransposedRangesColUndo(3, 1);
 }
@@ -9201,7 +8999,7 @@ void TestCopyPaste::checkReferencedCutTransposedRangesColUndo(const SCTAB nSrcTa
         m_pDoc->DeleteTab(i - 1);
 }
 
-void TestCopyPaste::testCutTransposedFormulas()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCutTransposedFormulas)
 {
     const SCTAB nTab = 0;
     m_pDoc->InsertTab(nTab, "Test");
@@ -9258,7 +9056,7 @@ void TestCopyPaste::testCutTransposedFormulas()
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(2, 7, nTab));
 }
 
-void TestCopyPaste::testCutTransposedFormulasSquare()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCutTransposedFormulasSquare)
 {
     const SCTAB nTab = 0;
     m_pDoc->InsertTab(nTab, "Test");
@@ -9328,7 +9126,7 @@ void TestCopyPaste::testCutTransposedFormulasSquare()
     CPPUNIT_ASSERT_EQUAL(OUString("=C2"), m_pDoc->GetFormula(2, 8, nTab));
 }
 
-void TestCopyPaste::testTdf142065()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf142065)
 {
     const SCTAB nTab = 0;
     m_pDoc->InsertTab(nTab, "Test");
@@ -9406,7 +9204,7 @@ void TestCopyPaste::testTdf142065()
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0, 7, nTab));
 }
 
-void TestCopyPaste::testCopyPasteMultiRange()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteMultiRange)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -9455,7 +9253,7 @@ void TestCopyPaste::testCopyPasteMultiRange()
     m_pDoc->DeleteTab(0);
 }
 
-void TestCopyPaste::testCopyPasteSkipEmpty()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSkipEmpty)
 {
     struct Check
     {
@@ -9647,7 +9445,7 @@ void TestCopyPaste::testCopyPasteSkipEmpty()
     m_pDoc->DeleteTab(0);
 }
 
-void TestCopyPaste::testCopyPasteSkipEmpty2()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSkipEmpty2)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -9674,7 +9472,7 @@ void TestCopyPaste::testCopyPasteSkipEmpty2()
     m_pDoc->DeleteTab(0);
 }
 
-void TestCopyPaste::testCutPasteRefUndo()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCutPasteRefUndo)
 {
     // Testing scenario: A2 references B2, and B2 gets cut and pasted onto C2,
     // which updates A2's formula to reference C2. Then the paste action gets
@@ -9724,7 +9522,7 @@ void TestCopyPaste::testCutPasteRefUndo()
     m_pDoc->DeleteTab(0);
 }
 
-void TestCopyPaste::testCutPasteGroupRefUndo()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCutPasteGroupRefUndo)
 {
     // Test that Cut&Paste part of a grouped formula adjusts references
     // correctly and Undo works.
@@ -9831,7 +9629,7 @@ void TestCopyPaste::testCutPasteGroupRefUndo()
     m_pDoc->DeleteTab(0);
 }
 
-void TestCopyPaste::testMoveRefBetweenSheets()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMoveRefBetweenSheets)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -9874,7 +9672,7 @@ void TestCopyPaste::testMoveRefBetweenSheets()
     m_pDoc->DeleteTab(0);
 }
 
-void TestCopyPaste::testUndoCut()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testUndoCut)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -9927,7 +9725,7 @@ void TestCopyPaste::testUndoCut()
     m_pDoc->DeleteTab(0);
 }
 
-void TestCopyPaste::testMoveBlock()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMoveBlock)
 {
     m_pDoc->InsertTab(0, "SheetNotes");
 
@@ -9981,7 +9779,7 @@ void TestCopyPaste::testMoveBlock()
     m_pDoc->DeleteTab(0);
 }
 
-void TestCopyPaste::testCopyPasteRelativeFormula()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteRelativeFormula)
 {
     m_pDoc->InsertTab(0, "Formula");
 
@@ -10046,7 +9844,7 @@ void TestCopyPaste::testCopyPasteRelativeFormula()
     m_pDoc->DeleteTab(0);
 }
 
-void TestCopyPaste::testCopyPasteRepeatOneFormula()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteRepeatOneFormula)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
 
@@ -10168,7 +9966,7 @@ void TestCopyPaste::testCopyPasteRepeatOneFormula()
     m_pDoc->DeleteTab(0);
 }
 
-void TestCopyPaste::testCopyPasteMixedReferenceFormula()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteMixedReferenceFormula)
 {
     sc::AutoCalcSwitch aAC(*m_pDoc, true); // turn on auto calc.
     m_pDoc->InsertTab(0, "Test");
@@ -10207,7 +10005,7 @@ void TestCopyPaste::testCopyPasteMixedReferenceFormula()
     m_pDoc->DeleteTab(0);
 }
 
-void TestCopyPaste::testCopyPasteFormulas()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteFormulas)
 {
     m_pDoc->InsertTab(0, "Sheet1");
     m_pDoc->InsertTab(1, "Sheet2");
@@ -10236,7 +10034,7 @@ void TestCopyPaste::testCopyPasteFormulas()
     CPPUNIT_ASSERT_EQUAL(OUString("=$Sheet2.K$1"), m_pDoc->GetFormula(10, 14, 0));
 }
 
-void TestCopyPaste::testCopyPasteFormulasExternalDoc()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteFormulasExternalDoc)
 {
     SfxMedium* pMedium = new SfxMedium("file:///source.fake", StreamMode::STD_READWRITE);
     m_xDocShell->DoLoad(pMedium);
@@ -10293,7 +10091,7 @@ void TestCopyPaste::testCopyPasteFormulasExternalDoc()
     xExtDocSh->DoClose();
 }
 
-void TestCopyPaste::testCopyPasteReferencesExternalDoc()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteReferencesExternalDoc)
 {
     SfxMedium* pMedium = new SfxMedium("file:///source.fake", StreamMode::STD_READWRITE);
     m_xDocShell->DoLoad(pMedium);
@@ -10331,7 +10129,7 @@ void TestCopyPaste::testCopyPasteReferencesExternalDoc()
     xExtDocSh->DoClose();
 }
 
-void TestCopyPaste::testTdf68976()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf68976)
 {
     const SCTAB nTab = 0;
     m_pDoc->InsertTab(nTab, "Test");
@@ -10374,7 +10172,7 @@ void TestCopyPaste::testTdf68976()
     CPPUNIT_ASSERT_EQUAL(1000.0, m_pDoc->GetValue(1, 3, nTab)); // B4
 }
 
-void TestCopyPaste::testTdf71058()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf71058)
 {
     const SCTAB nTab = 0;
     m_pDoc->InsertTab(nTab, "Test");
@@ -10428,7 +10226,7 @@ void TestCopyPaste::testTdf71058()
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(3, 2, nTab));
 }
 
-void TestCopyPaste::testTdf149554()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf149554)
 {
     const SCTAB nTab = 0;
     m_pDoc->InsertTab(nTab, "Test");
@@ -10456,7 +10254,7 @@ void TestCopyPaste::testTdf149554()
     m_pDoc->DeleteTab(0);
 }
 
-void TestCopyPaste::testMixData()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixData)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -10512,7 +10310,7 @@ void TestCopyPaste::testMixData()
     m_pDoc->DeleteTab(0);
 }
 
-void TestCopyPaste::testMixDataAsLinkTdf116413()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixDataAsLinkTdf116413)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
 
@@ -10662,7 +10460,7 @@ void TestCopyPaste::testMixDataAsLinkTdf116413()
     m_pDoc->DeleteTab(nTab);
 }
 
-void TestCopyPaste::testMixDataWithFormulaTdf116413()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testMixDataWithFormulaTdf116413)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
 
@@ -10838,8 +10636,9 @@ void TestCopyPaste::testMixDataWithFormulaTdf116413()
     m_pDoc->DeleteTab(nTab);
 }
 
-void TestCopyPaste::testCopyPasteMatrixFormula()
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteMatrixFormula)
 {
+    // tdf#80137
     m_pDoc->InsertTab(0, "hcv");
 
     // Set Values to B1, C1, D1
@@ -10904,8 +10703,6 @@ void TestCopyPaste::testCopyPasteMatrixFormula()
 
     m_pDoc->DeleteTab(0);
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(TestCopyPaste);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

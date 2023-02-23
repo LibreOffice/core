@@ -81,261 +81,12 @@ struct HoriIterCheck
 
 class Test : public ScUcalcTestBase
 {
-public:
+protected:
     void checkPrecisionAsShown(OUString& rCode, double fValue, double fExpectedRoundVal);
 
     /** Get a separate new ScDocShell with ScDocument that suits unit test needs. */
     void getNewDocShell(ScDocShellRef& rDocShellRef);
 
-    void testCollator();
-    void testSharedStringPool();
-    void testSharedStringPoolUndoDoc();
-    void testRangeList();
-    void testMarkData();
-    void testInput();
-    void testColumnIterator();
-    void testTdf90698();
-    void testTdf114406();
-    void testTdf93951();
-    void testTdf134490();
-    void testTdf135249();
-    void testDocStatistics();
-    void testRowForHeight();
-
-    /**
-     * The 'data entries' data is a list of strings used for suggestions as
-     * the user types in new cell value.
-     */
-    void testDataEntries();
-
-    /**
-     * Selection function is responsible for displaying quick calculation
-     * results in the status bar.
-     */
-    void testSelectionFunction();
-
-    void testMarkedCellIteration();
-
-    void testCopyToDocument();
-
-    void testHorizontalIterator();
-    void testValueIterator();
-    void testHorizontalAttrIterator();
-    void testIteratorsUnallocatedColumnsAttributes();
-    void testIteratorsDefPattern();
-    void testLastChangedColFlagsWidth();
-
-    /**
-     * More direct test for cell broadcaster management, used to track formula
-     * dependencies.
-     */
-    void testCellBroadcaster();
-
-    void testFuncParam();
-    void testNamedRange();
-    void testInsertNameList();
-    void testCSV();
-    void testMatrix();
-    void testMatrixComparisonWithErrors();
-    void testMatrixConditionalBooleanResult();
-    void testEnterMixedMatrix();
-    void testMatrixEditable();
-
-    void testCellCopy();
-    void testSheetCopy();
-    void testSheetMove();
-    void testDataArea();
-    void testAutofilter();
-    void testAutoFilterTimeValue();
-    void testAutofilterOptimizations();
-    void testTdf76836();
-    void testTdf76441();
-    void testTdf142186();
-    void testTdf137063();
-    void testTdf126342();
-    void testAdvancedFilter();
-    void testDateFilterContains();
-    void testTdf98642();
-    void testMergedCells();
-    void testUpdateReference();
-    void testSearchCells();
-    void testFormulaPosition();
-    void testFormulaWizardSubformula();
-    void testDiagonalBorders();
-    void testWholeDocBorders();
-
-    /**
-     * Make sure the sheet streams are invalidated properly.
-     */
-    void testStreamValid();
-
-    /**
-     * Test built-in cell functions to make sure their categories and order
-     * are correct.
-     */
-    void testFunctionLists();
-
-    void testGraphicsInGroup();
-    void testGraphicsOnSheetMove();
-
-    /**
-     * Test toggling relative/absolute flag of cell and cell range references.
-     * This corresponds with hitting Shift-F4 while the cursor is on a formula
-     * cell.
-     */
-    void testToggleRefFlag();
-
-    /**
-     * Test to make sure correct precedent / dependent cells are obtained when
-     * preparing to jump to them.
-     */
-    void testJumpToPrecedentsDependents();
-
-    void testSetBackgroundColor();
-    void testRenameTable();
-
-    void testTdf149665();
-    void testTdf64001();
-    void testAutoFill();
-    void testAutoFillSimple();
-
-    void testFindAreaPosVertical();
-    void testFindAreaPosColRight();
-    void testShiftCells();
-
-    void testNoteBasic();
-    void testNoteDeleteRow();
-    void testNoteDeleteCol();
-    void testNoteLifeCycle();
-    void testNoteCopyPaste();
-    void testNoteContainsNotesInRange();
-    void testAreasWithNotes();
-    void testAnchoredRotatedShape();
-    void testCellTextWidth();
-    void testEditTextIterator();
-
-    void testImportStream();
-    void testDeleteContents();
-    void testTransliterateText();
-
-    void testFormulaToValue();
-    void testFormulaToValue2();
-
-    void testColumnFindEditCells();
-    void testSetStringAndNote();
-
-    void testUndoDataAnchor();
-    void testSetFormula();
-    void testMultipleDataCellsInRange();
-
-    void testEmptyCalcDocDefaults();
-
-    void testPrecisionAsShown();
-    void testProtectedSheetEditByRow();
-    void testProtectedSheetEditByColumn();
-
-    void testInsertColumnsWithFormulaCells();
-
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(testCollator);
-    CPPUNIT_TEST(testSharedStringPool);
-    CPPUNIT_TEST(testSharedStringPoolUndoDoc);
-    CPPUNIT_TEST(testRangeList);
-    CPPUNIT_TEST(testMarkData);
-    CPPUNIT_TEST(testInput);
-    CPPUNIT_TEST(testColumnIterator);
-    CPPUNIT_TEST(testTdf90698);
-    CPPUNIT_TEST(testTdf114406);
-    CPPUNIT_TEST(testTdf93951);
-    CPPUNIT_TEST(testTdf134490);
-    CPPUNIT_TEST(testTdf135249);
-    CPPUNIT_TEST(testDocStatistics);
-    CPPUNIT_TEST(testRowForHeight);
-    CPPUNIT_TEST(testDataEntries);
-    CPPUNIT_TEST(testSelectionFunction);
-    CPPUNIT_TEST(testMarkedCellIteration);
-    CPPUNIT_TEST(testCopyToDocument);
-    CPPUNIT_TEST(testHorizontalIterator);
-    CPPUNIT_TEST(testValueIterator);
-    CPPUNIT_TEST(testHorizontalAttrIterator);
-    CPPUNIT_TEST(testIteratorsUnallocatedColumnsAttributes);
-    CPPUNIT_TEST(testIteratorsDefPattern);
-    CPPUNIT_TEST(testLastChangedColFlagsWidth);
-    CPPUNIT_TEST(testCellBroadcaster);
-    CPPUNIT_TEST(testFuncParam);
-    CPPUNIT_TEST(testNamedRange);
-    CPPUNIT_TEST(testInsertNameList);
-    CPPUNIT_TEST(testCSV);
-    CPPUNIT_TEST(testMatrix);
-    CPPUNIT_TEST(testMatrixComparisonWithErrors);
-    CPPUNIT_TEST(testMatrixConditionalBooleanResult);
-    CPPUNIT_TEST(testEnterMixedMatrix);
-    CPPUNIT_TEST(testMatrixEditable);
-    CPPUNIT_TEST(testCellCopy);
-    CPPUNIT_TEST(testSheetCopy);
-    CPPUNIT_TEST(testSheetMove);
-    CPPUNIT_TEST(testDataArea);
-    CPPUNIT_TEST(testGraphicsInGroup);
-    CPPUNIT_TEST(testGraphicsOnSheetMove);
-    CPPUNIT_TEST(testStreamValid);
-    CPPUNIT_TEST(testFunctionLists);
-    CPPUNIT_TEST(testToggleRefFlag);
-    CPPUNIT_TEST(testAutofilter);
-    CPPUNIT_TEST(testAutoFilterTimeValue);
-    CPPUNIT_TEST(testAutofilterOptimizations);
-    CPPUNIT_TEST(testTdf76836);
-    CPPUNIT_TEST(testTdf76441);
-    CPPUNIT_TEST(testTdf142186);
-    CPPUNIT_TEST(testTdf137063);
-    CPPUNIT_TEST(testTdf126342);
-    CPPUNIT_TEST(testAdvancedFilter);
-    CPPUNIT_TEST(testDateFilterContains);
-    CPPUNIT_TEST(testTdf98642);
-    CPPUNIT_TEST(testMergedCells);
-    CPPUNIT_TEST(testUpdateReference);
-    CPPUNIT_TEST(testSearchCells);
-    CPPUNIT_TEST(testFormulaPosition);
-    CPPUNIT_TEST(testFormulaWizardSubformula);
-    CPPUNIT_TEST(testDiagonalBorders);
-    CPPUNIT_TEST(testWholeDocBorders);
-    CPPUNIT_TEST(testJumpToPrecedentsDependents);
-    CPPUNIT_TEST(testSetBackgroundColor);
-    CPPUNIT_TEST(testRenameTable);
-    CPPUNIT_TEST(testTdf149665);
-    CPPUNIT_TEST(testTdf64001);
-    CPPUNIT_TEST(testAutoFill);
-    CPPUNIT_TEST(testAutoFillSimple);
-    CPPUNIT_TEST(testFindAreaPosVertical);
-    CPPUNIT_TEST(testFindAreaPosColRight);
-    CPPUNIT_TEST(testShiftCells);
-    CPPUNIT_TEST(testNoteBasic);
-    CPPUNIT_TEST(testNoteDeleteRow);
-    CPPUNIT_TEST(testNoteDeleteCol);
-    CPPUNIT_TEST(testNoteLifeCycle);
-    CPPUNIT_TEST(testNoteCopyPaste);
-    CPPUNIT_TEST(testNoteContainsNotesInRange);
-    CPPUNIT_TEST(testAreasWithNotes);
-    CPPUNIT_TEST(testAnchoredRotatedShape);
-    CPPUNIT_TEST(testCellTextWidth);
-    CPPUNIT_TEST(testEditTextIterator);
-    CPPUNIT_TEST(testImportStream);
-    CPPUNIT_TEST(testDeleteContents);
-    CPPUNIT_TEST(testTransliterateText);
-    CPPUNIT_TEST(testFormulaToValue);
-    CPPUNIT_TEST(testFormulaToValue2);
-    CPPUNIT_TEST(testColumnFindEditCells);
-    CPPUNIT_TEST(testSetStringAndNote);
-    CPPUNIT_TEST(testUndoDataAnchor);
-    CPPUNIT_TEST(testSetFormula);
-    CPPUNIT_TEST(testMultipleDataCellsInRange);
-    CPPUNIT_TEST(testEmptyCalcDocDefaults);
-    CPPUNIT_TEST(testPrecisionAsShown);
-    CPPUNIT_TEST(testProtectedSheetEditByRow);
-    CPPUNIT_TEST(testProtectedSheetEditByColumn);
-    CPPUNIT_TEST(testInsertColumnsWithFormulaCells);
-    CPPUNIT_TEST_SUITE_END();
-
-private:
     bool checkHorizontalIterator(ScDocument& rDoc, const std::vector<std::vector<const char*>>& rData,
             const HoriIterCheck* pChecks, size_t nCheckCount);
 };
@@ -350,13 +101,13 @@ void Test::getNewDocShell( ScDocShellRef& rDocShellRef )
     rDocShellRef->DoInitUnitTest();
 }
 
-void Test::testCollator()
+CPPUNIT_TEST_FIXTURE(Test, testCollator)
 {
     sal_Int32 nRes = ScGlobal::GetCollator().compareString("A", "B");
     CPPUNIT_ASSERT_MESSAGE("these strings are supposed to be different!", nRes != 0);
 }
 
-void Test::testSharedStringPool()
+CPPUNIT_TEST_FIXTURE(Test, testSharedStringPool)
 {
     m_pDoc->InsertTab(0, "foo");
 
@@ -472,7 +223,7 @@ void Test::testSharedStringPool()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSharedStringPoolUndoDoc()
+CPPUNIT_TEST_FIXTURE(Test, testSharedStringPoolUndoDoc)
 {
     struct
     {
@@ -527,7 +278,7 @@ void Test::testSharedStringPoolUndoDoc()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testRangeList()
+CPPUNIT_TEST_FIXTURE(Test, testRangeList)
 {
     m_pDoc->InsertTab(0, "foo");
 
@@ -544,7 +295,7 @@ void Test::testRangeList()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testMarkData()
+CPPUNIT_TEST_FIXTURE(Test, testMarkData)
 {
     ScMarkData aMarkData(m_pDoc->GetSheetLimits());
 
@@ -593,7 +344,7 @@ void Test::testMarkData()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOLROW>(5), aSpans[0].mnEnd);
 }
 
-void Test::testInput()
+CPPUNIT_TEST_FIXTURE(Test, testInput)
 {
 
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
@@ -619,7 +370,7 @@ void Test::testInput()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testColumnIterator() // tdf#118620
+CPPUNIT_TEST_FIXTURE(Test, testColumnIterator) // tdf#118620
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, "foo"));
@@ -636,7 +387,7 @@ void Test::testColumnIterator() // tdf#118620
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testTdf90698()
+CPPUNIT_TEST_FIXTURE(Test, testTdf90698)
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
     m_pDoc->SetString(ScAddress(0,0,0), "=(1;2)");
@@ -650,7 +401,7 @@ void Test::testTdf90698()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testTdf114406()
+CPPUNIT_TEST_FIXTURE(Test, testTdf114406)
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
     m_pDoc->SetString(ScAddress(0,0,0), "5");
@@ -667,7 +418,7 @@ void Test::testTdf114406()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testTdf93951()
+CPPUNIT_TEST_FIXTURE(Test, testTdf93951)
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
     m_pDoc->SetString(ScAddress(0,0,0), u"=2*§*2");
@@ -682,7 +433,7 @@ void Test::testTdf93951()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testTdf134490()
+CPPUNIT_TEST_FIXTURE(Test, testTdf134490)
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
 
@@ -702,7 +453,7 @@ void Test::testTdf134490()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testTdf135249()
+CPPUNIT_TEST_FIXTURE(Test, testTdf135249)
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
 
@@ -729,7 +480,7 @@ void Test::testTdf135249()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testDocStatistics()
+CPPUNIT_TEST_FIXTURE(Test, testDocStatistics)
 {
     SCTAB nStartTabs = m_pDoc->GetTableCount();
     m_pDoc->InsertTab(0, "Sheet1");
@@ -765,7 +516,7 @@ void Test::testDocStatistics()
     m_pDoc->DeleteTab(0); // This may fail in case there is only one sheet in the document.
 }
 
-void Test::testRowForHeight()
+CPPUNIT_TEST_FIXTURE(Test, testRowForHeight)
 {
     m_pDoc->InsertTab(0, "Sheet1");
     m_pDoc->SetRowHeightRange( 0,  9, 0, 100);
@@ -800,8 +551,12 @@ void Test::testRowForHeight()
     }
 }
 
-void Test::testDataEntries()
+CPPUNIT_TEST_FIXTURE(Test, testDataEntries)
 {
+    /**
+     * The 'data entries' data is a list of strings used for suggestions as
+     * the user types in new cell value.
+     */
     m_pDoc->InsertTab(0, "Test");
 
     m_pDoc->SetString(ScAddress(0,5,0), "Andy");
@@ -840,8 +595,12 @@ void Test::testDataEntries()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSelectionFunction()
+CPPUNIT_TEST_FIXTURE(Test, testSelectionFunction)
 {
+    /**
+     * Selection function is responsible for displaying quick calculation
+     * results in the status bar.
+     */
     m_pDoc->InsertTab(0, "Test");
 
     // Insert values into B2:B4.
@@ -1009,7 +768,7 @@ void Test::testSelectionFunction()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testMarkedCellIteration()
+CPPUNIT_TEST_FIXTURE(Test, testMarkedCellIteration)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -1061,7 +820,7 @@ void Test::testMarkedCellIteration()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testCopyToDocument()
+CPPUNIT_TEST_FIXTURE(Test, testCopyToDocument)
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "src"));
 
@@ -1151,7 +910,7 @@ bool Test::checkHorizontalIterator(ScDocument& rDoc, const std::vector<std::vect
     return true;
 }
 
-void Test::testHorizontalIterator()
+CPPUNIT_TEST_FIXTURE(Test, testHorizontalIterator)
 {
     m_pDoc->InsertTab(0, "test");
 
@@ -1297,7 +1056,7 @@ void Test::testHorizontalIterator()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testValueIterator()
+CPPUNIT_TEST_FIXTURE(Test, testValueIterator)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -1331,7 +1090,7 @@ void Test::testValueIterator()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testHorizontalAttrIterator()
+CPPUNIT_TEST_FIXTURE(Test, testHorizontalAttrIterator)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -1372,7 +1131,7 @@ void Test::testHorizontalAttrIterator()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testIteratorsUnallocatedColumnsAttributes()
+CPPUNIT_TEST_FIXTURE(Test, testIteratorsUnallocatedColumnsAttributes)
 {
     m_pDoc->InsertTab(0, "Tab1");
 
@@ -1431,7 +1190,7 @@ void Test::testIteratorsUnallocatedColumnsAttributes()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testIteratorsDefPattern()
+CPPUNIT_TEST_FIXTURE(Test, testIteratorsDefPattern)
 {
     m_pDoc->InsertTab(0, "Tab1");
 
@@ -1482,7 +1241,7 @@ void Test::testIteratorsDefPattern()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testLastChangedColFlagsWidth()
+CPPUNIT_TEST_FIXTURE(Test, testLastChangedColFlagsWidth)
 {
     m_pDoc->InsertTab(0, "Tab1");
 
@@ -1586,8 +1345,12 @@ bool checkDeletedRefToken(ScDocument& rDoc, const ScAddress& rPos)
 
 }
 
-void Test::testCellBroadcaster()
+CPPUNIT_TEST_FIXTURE(Test, testCellBroadcaster)
 {
+    /**
+     * More direct test for cell broadcaster management, used to track formula
+     * dependencies.
+     */
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "foo"));
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
@@ -1779,7 +1542,7 @@ void Test::testCellBroadcaster()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFuncParam()
+CPPUNIT_TEST_FIXTURE(Test, testFuncParam)
 {
 
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
@@ -1907,7 +1670,7 @@ void Test::testFuncParam()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testNamedRange()
+CPPUNIT_TEST_FIXTURE(Test, testNamedRange)
 {
     static const RangeNameDef aNames[] = {
         { "Divisor",  "$Sheet1.$A$1:$A$1048576", 1 },
@@ -1985,7 +1748,7 @@ void Test::testNamedRange()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testInsertNameList()
+CPPUNIT_TEST_FIXTURE(Test, testInsertNameList)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -2018,7 +1781,7 @@ void Test::testInsertNameList()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testCSV()
+CPPUNIT_TEST_FIXTURE(Test, testCSV)
 {
     const int English = 0, European = 1;
     struct {
@@ -2139,7 +1902,7 @@ struct PartiallyFilledEmptyMatrix
 
 }
 
-void Test::testMatrix()
+CPPUNIT_TEST_FIXTURE(Test, testMatrix)
 {
     svl::SharedStringPool& rPool = m_pDoc->GetSharedStringPool();
     ScMatrixRef pMat, pMat2;
@@ -2275,7 +2038,7 @@ void Test::testMatrix()
     }
 }
 
-void Test::testMatrixComparisonWithErrors()
+CPPUNIT_TEST_FIXTURE(Test, testMatrixComparisonWithErrors)
 {
     m_pDoc->InsertTab(0, "foo");
 
@@ -2297,7 +2060,7 @@ void Test::testMatrixComparisonWithErrors()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testMatrixConditionalBooleanResult()
+CPPUNIT_TEST_FIXTURE(Test, testMatrixConditionalBooleanResult)
 {
     m_pDoc->InsertTab(0, "foo");
 
@@ -2322,7 +2085,7 @@ void Test::testMatrixConditionalBooleanResult()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testEnterMixedMatrix()
+CPPUNIT_TEST_FIXTURE(Test, testEnterMixedMatrix)
 {
     m_pDoc->InsertTab(0, "foo");
 
@@ -2347,7 +2110,7 @@ void Test::testEnterMixedMatrix()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testMatrixEditable()
+CPPUNIT_TEST_FIXTURE(Test, testMatrixEditable)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
@@ -2390,7 +2153,7 @@ void Test::testMatrixEditable()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testCellCopy()
+CPPUNIT_TEST_FIXTURE(Test, testCellCopy)
 {
     m_pDoc->InsertTab(0, "TestTab");
     ScAddress aSrc(0,0,0);
@@ -2403,7 +2166,7 @@ void Test::testCellCopy()
     CPPUNIT_ASSERT_EQUAL(aStr, m_pDoc->GetString(aDest));
 }
 
-void Test::testSheetCopy()
+CPPUNIT_TEST_FIXTURE(Test, testSheetCopy)
 {
     m_pDoc->InsertTab(0, "TestTab");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("document should have one sheet to begin with.",
@@ -2494,7 +2257,7 @@ void Test::testSheetCopy()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSheetMove()
+CPPUNIT_TEST_FIXTURE(Test, testSheetMove)
 {
     m_pDoc->InsertTab(0, "TestTab1");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("document should have one sheet to begin with.", static_cast<SCTAB>(1), m_pDoc->GetTableCount());
@@ -2558,7 +2321,7 @@ void Test::testSheetMove()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testDataArea()
+CPPUNIT_TEST_FIXTURE(Test, testDataArea)
 {
     m_pDoc->InsertTab(0, "Data");
 
@@ -2592,8 +2355,11 @@ void Test::testDataArea()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testStreamValid()
+CPPUNIT_TEST_FIXTURE(Test, testStreamValid)
 {
+    /**
+     * Make sure the sheet streams are invalidated properly.
+     */
     m_pDoc->InsertTab(0, "Sheet1");
     m_pDoc->InsertTab(1, "Sheet2");
     m_pDoc->InsertTab(2, "Sheet3");
@@ -2665,8 +2431,12 @@ void Test::testStreamValid()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFunctionLists()
+CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
 {
+    /**
+     * Test built-in cell functions to make sure their categories and order
+     * are correct.
+     */
     const char* aDataBase[] = {
         "DAVERAGE",
         "DCOUNT",
@@ -3146,7 +2916,7 @@ void Test::testFunctionLists()
     }
 }
 
-void Test::testGraphicsInGroup()
+CPPUNIT_TEST_FIXTURE(Test, testGraphicsInGroup)
 {
     m_pDoc->InsertTab(0, "TestTab");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("document should have one sheet to begin with.",
@@ -3266,7 +3036,7 @@ void Test::testGraphicsInGroup()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testGraphicsOnSheetMove()
+CPPUNIT_TEST_FIXTURE(Test, testGraphicsOnSheetMove)
 {
     m_pDoc->InsertTab(0, "Tab1");
     m_pDoc->InsertTab(1, "Tab2");
@@ -3352,8 +3122,13 @@ void Test::testGraphicsOnSheetMove()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testToggleRefFlag()
+CPPUNIT_TEST_FIXTURE(Test, testToggleRefFlag)
 {
+    /**
+     * Test toggling relative/absolute flag of cell and cell range references.
+     * This corresponds with hitting Shift-F4 while the cursor is on a formula
+     * cell.
+     */
     // In this test, there is no need to insert formula string into a cell in
     // the document, as ScRefFinder does not depend on the content of the
     // document except for the sheet names.
@@ -3490,7 +3265,7 @@ void Test::testToggleRefFlag()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testAutofilter()
+CPPUNIT_TEST_FIXTURE(Test, testAutofilter)
 {
     m_pDoc->InsertTab( 0, "Test" );
 
@@ -3600,7 +3375,7 @@ void Test::testAutofilter()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testAutoFilterTimeValue()
+CPPUNIT_TEST_FIXTURE(Test, testAutoFilterTimeValue)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -3649,7 +3424,7 @@ void Test::testAutoFilterTimeValue()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testAutofilterOptimizations()
+CPPUNIT_TEST_FIXTURE(Test, testAutofilterOptimizations)
 {
     m_pDoc->InsertTab( 0, "Test" );
 
@@ -3753,7 +3528,7 @@ void Test::testAutofilterOptimizations()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testTdf76441()
+CPPUNIT_TEST_FIXTURE(Test, testTdf76441)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -3794,7 +3569,7 @@ void Test::testTdf76441()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testTdf76836()
+CPPUNIT_TEST_FIXTURE(Test, testTdf76836)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -3824,7 +3599,7 @@ void Test::testTdf76836()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testTdf142186()
+CPPUNIT_TEST_FIXTURE(Test, testTdf142186)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -3865,7 +3640,7 @@ void Test::testTdf142186()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testTdf137063()
+CPPUNIT_TEST_FIXTURE(Test, testTdf137063)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -3881,7 +3656,7 @@ void Test::testTdf137063()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testTdf126342()
+CPPUNIT_TEST_FIXTURE(Test, testTdf126342)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -3912,7 +3687,7 @@ void Test::testTdf126342()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testAdvancedFilter()
+CPPUNIT_TEST_FIXTURE(Test, testAdvancedFilter)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -4009,7 +3784,7 @@ void Test::testAdvancedFilter()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testDateFilterContains()
+CPPUNIT_TEST_FIXTURE(Test, testDateFilterContains)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -4063,7 +3838,7 @@ void Test::testDateFilterContains()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testTdf98642()
+CPPUNIT_TEST_FIXTURE(Test, testTdf98642)
 {
     m_pDoc->InsertTab(0, "Sheet1");
     m_pDoc->SetString(0, 0, 0, "test");
@@ -4094,7 +3869,7 @@ void Test::testTdf98642()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testMergedCells()
+CPPUNIT_TEST_FIXTURE(Test, testMergedCells)
 {
     //test merge and unmerge
     //TODO: an undo/redo test for this would be a good idea
@@ -4115,7 +3890,7 @@ void Test::testMergedCells()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testRenameTable()
+CPPUNIT_TEST_FIXTURE(Test, testRenameTable)
 {
     //test set rename table
     //TODO: set name1 and name2 and do an undo to check if name 1 is set now
@@ -4160,7 +3935,7 @@ void Test::testRenameTable()
     m_pDoc->DeleteTab(1);
 }
 
-void Test::testSetBackgroundColor()
+CPPUNIT_TEST_FIXTURE(Test, testSetBackgroundColor)
 {
     //test set background color
     //TODO: set color1 and set color2 and do an undo to check if color1 is set now.
@@ -4190,7 +3965,7 @@ void Test::testSetBackgroundColor()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testUpdateReference()
+CPPUNIT_TEST_FIXTURE(Test, testUpdateReference)
 {
     //test that formulas are correctly updated during sheet delete
     //TODO: add tests for relative references, updating of named ranges, ...
@@ -4277,7 +4052,7 @@ void Test::testUpdateReference()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSearchCells()
+CPPUNIT_TEST_FIXTURE(Test, testSearchCells)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -4314,7 +4089,7 @@ void Test::testSearchCells()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaPosition()
+CPPUNIT_TEST_FIXTURE(Test, testFormulaPosition)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -4380,8 +4155,12 @@ bool hasRange(const ScDocument* pDoc, const std::vector<ScTokenRef>& rRefTokens,
 
 }
 
-void Test::testJumpToPrecedentsDependents()
+CPPUNIT_TEST_FIXTURE(Test, testJumpToPrecedentsDependents)
 {
+    /**
+     * Test to make sure correct precedent / dependent cells are obtained when
+     * preparing to jump to them.
+     */
     // Precedent is another cell that the cell references, while dependent is
     // another cell that references it.
     m_pDoc->InsertTab(0, "Test");
@@ -4429,7 +4208,7 @@ void Test::testJumpToPrecedentsDependents()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testTdf149665()
+CPPUNIT_TEST_FIXTURE(Test, testTdf149665)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -4443,7 +4222,7 @@ void Test::testTdf149665()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testTdf64001()
+CPPUNIT_TEST_FIXTURE(Test, testTdf64001)
 {
     m_pDoc->InsertTab(0, "test");
 
@@ -4470,7 +4249,7 @@ void Test::testTdf64001()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testAutoFill()
+CPPUNIT_TEST_FIXTURE(Test, testAutoFill)
 {
     m_pDoc->InsertTab(0, "test");
 
@@ -4712,7 +4491,7 @@ void Test::testAutoFill()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testAutoFillSimple()
+CPPUNIT_TEST_FIXTURE(Test, testAutoFillSimple)
 {
     m_pDoc->InsertTab(0, "test");
 
@@ -4742,7 +4521,7 @@ void Test::testAutoFillSimple()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFindAreaPosVertical()
+CPPUNIT_TEST_FIXTURE(Test, testFindAreaPosVertical)
 {
     std::vector<std::vector<const char*>> aData = {
         {   nullptr, "1", "1" },
@@ -4813,7 +4592,7 @@ void Test::testFindAreaPosVertical()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFindAreaPosColRight()
+CPPUNIT_TEST_FIXTURE(Test, testFindAreaPosColRight)
 {
     std::vector<std::vector<const char*>> aData = {
         { "", "1", "1", "", "1", "1", "1" },
@@ -4873,7 +4652,7 @@ void Test::testFindAreaPosColRight()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testShiftCells()
+CPPUNIT_TEST_FIXTURE(Test, testShiftCells)
 {
     m_pDoc->InsertTab(0, "foo");
 
@@ -4913,7 +4692,7 @@ void Test::testShiftCells()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testNoteBasic()
+CPPUNIT_TEST_FIXTURE(Test, testNoteBasic)
 {
     m_pDoc->InsertTab(0, "PostIts");
 
@@ -4994,7 +4773,7 @@ void Test::testNoteBasic()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testNoteDeleteRow()
+CPPUNIT_TEST_FIXTURE(Test, testNoteDeleteRow)
 {
     m_pDoc->InsertTab(0, "Sheet1");
 
@@ -5078,7 +4857,7 @@ void Test::testNoteDeleteRow()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testNoteDeleteCol()
+CPPUNIT_TEST_FIXTURE(Test, testNoteDeleteCol)
 {
     m_pDoc->InsertTab(0, "Sheet1");
 
@@ -5099,7 +4878,7 @@ void Test::testNoteDeleteCol()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testNoteLifeCycle()
+CPPUNIT_TEST_FIXTURE(Test, testNoteLifeCycle)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -5244,7 +5023,7 @@ void Test::testNoteLifeCycle()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testNoteCopyPaste()
+CPPUNIT_TEST_FIXTURE(Test, testNoteCopyPaste)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -5306,7 +5085,8 @@ void Test::testNoteCopyPaste()
 }
 
 // tdf#112454
-void Test::testNoteContainsNotesInRange() {
+CPPUNIT_TEST_FIXTURE(Test, testNoteContainsNotesInRange)
+{
     m_pDoc->InsertTab(0, "PostIts");
 
     // We need a drawing layer in order to create caption objects.
@@ -5327,7 +5107,7 @@ void Test::testNoteContainsNotesInRange() {
                            m_pDoc->ContainsNotesInRange((ScRange(ScAddress(0, 0, 0), ScAddress(3, 3, 0)))));
 }
 
-void Test::testAreasWithNotes()
+CPPUNIT_TEST_FIXTURE(Test, testAreasWithNotes)
 {
     m_pDoc->InsertTab(0, "Sheet1");
 
@@ -5432,7 +5212,7 @@ void Test::testAreasWithNotes()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testAnchoredRotatedShape()
+CPPUNIT_TEST_FIXTURE(Test, testAnchoredRotatedShape)
 {
     m_pDoc->InsertTab(0, "TestTab");
     SCROW nRow1, nRow2;
@@ -5505,7 +5285,7 @@ void Test::testAnchoredRotatedShape()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testCellTextWidth()
+CPPUNIT_TEST_FIXTURE(Test, testCellTextWidth)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -5624,7 +5404,7 @@ static bool checkEditTextIterator(sc::EditTextIterator& rIter, const char** pChe
     return false;
 }
 
-void Test::testEditTextIterator()
+CPPUNIT_TEST_FIXTURE(Test, testEditTextIterator)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -5685,7 +5465,7 @@ void Test::testEditTextIterator()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testImportStream()
+CPPUNIT_TEST_FIXTURE(Test, testImportStream)
 {
     sc::AutoCalcSwitch aAC(*m_pDoc, true); // turn on auto calc.
     sc::UndoSwitch aUndo(*m_pDoc, true); // enable undo.
@@ -5738,7 +5518,7 @@ void Test::testImportStream()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testDeleteContents()
+CPPUNIT_TEST_FIXTURE(Test, testDeleteContents)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
     sc::UndoSwitch aUndoSwitch(*m_pDoc, true); // enable undo.
@@ -5780,7 +5560,7 @@ void Test::testDeleteContents()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testTransliterateText()
+CPPUNIT_TEST_FIXTURE(Test, testTransliterateText)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -5817,7 +5597,7 @@ void Test::testTransliterateText()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaToValue()
+CPPUNIT_TEST_FIXTURE(Test, testFormulaToValue)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
@@ -5977,7 +5757,7 @@ void Test::testFormulaToValue()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaToValue2()
+CPPUNIT_TEST_FIXTURE(Test, testFormulaToValue2)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
@@ -6052,7 +5832,7 @@ void Test::testFormulaToValue2()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testColumnFindEditCells()
+CPPUNIT_TEST_FIXTURE(Test, testColumnFindEditCells)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -6134,7 +5914,7 @@ void Test::testColumnFindEditCells()
 }
 
 
-void Test::testSetFormula()
+CPPUNIT_TEST_FIXTURE(Test, testSetFormula)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -6164,7 +5944,7 @@ void Test::testSetFormula()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testMultipleDataCellsInRange()
+CPPUNIT_TEST_FIXTURE(Test, testMultipleDataCellsInRange)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -6218,7 +5998,7 @@ void Test::testMultipleDataCellsInRange()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaWizardSubformula()
+CPPUNIT_TEST_FIXTURE(Test, testFormulaWizardSubformula)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -6242,7 +6022,7 @@ void Test::testFormulaWizardSubformula()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testDiagonalBorders()
+CPPUNIT_TEST_FIXTURE(Test, testDiagonalBorders)
 {
     m_pDoc->InsertTab(0, "Diagonal");
 
@@ -6313,7 +6093,7 @@ void Test::testDiagonalBorders()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testWholeDocBorders()
+CPPUNIT_TEST_FIXTURE(Test, testWholeDocBorders)
 {
     m_pDoc->InsertTab(0, "Borders");
 
@@ -6385,7 +6165,7 @@ void Test::testWholeDocBorders()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSetStringAndNote()
+CPPUNIT_TEST_FIXTURE(Test, testSetStringAndNote)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -6405,7 +6185,7 @@ void Test::testSetStringAndNote()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testUndoDataAnchor()
+CPPUNIT_TEST_FIXTURE(Test, testUndoDataAnchor)
 {
     m_pDoc->InsertTab(0, "Tab1");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be only 1 sheets to begin with",
@@ -6509,7 +6289,7 @@ void Test::testUndoDataAnchor()
 }
 
 
-void Test::testEmptyCalcDocDefaults()
+CPPUNIT_TEST_FIXTURE(Test, testEmptyCalcDocDefaults)
 {
     CPPUNIT_ASSERT_EQUAL( sal_uInt64(0), m_pDoc->GetCellCount() );
     CPPUNIT_ASSERT_EQUAL( sal_uInt64(0), m_pDoc->GetFormulaGroupCount() );
@@ -6601,7 +6381,7 @@ void Test::checkPrecisionAsShown( OUString& rCode, double fValue, double fExpect
     CPPUNIT_ASSERT_EQUAL_MESSAGE( aMessage.getStr(), fExpectedRoundVal, fRoundValue );
 }
 
-void Test::testPrecisionAsShown()
+CPPUNIT_TEST_FIXTURE(Test, testPrecisionAsShown)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -6742,7 +6522,7 @@ void Test::testPrecisionAsShown()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testProtectedSheetEditByRow()
+CPPUNIT_TEST_FIXTURE(Test, testProtectedSheetEditByRow)
 {
     ScDocFunc& rDocFunc = m_xDocShell->GetDocFunc();
     m_pDoc->InsertTab(0, "Protected");
@@ -6818,7 +6598,7 @@ void Test::testProtectedSheetEditByRow()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testProtectedSheetEditByColumn()
+CPPUNIT_TEST_FIXTURE(Test, testProtectedSheetEditByColumn)
 {
     ScDocFunc& rDocFunc = m_xDocShell->GetDocFunc();
     m_pDoc->InsertTab(0, "Protected");
@@ -6894,7 +6674,7 @@ void Test::testProtectedSheetEditByColumn()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testInsertColumnsWithFormulaCells()
+CPPUNIT_TEST_FIXTURE(Test, testInsertColumnsWithFormulaCells)
 {
     m_pDoc->InsertTab(0, "Tab1");
 
@@ -6937,7 +6717,6 @@ void Test::testInsertColumnsWithFormulaCells()
     m_pDoc->DeleteTab(0);
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

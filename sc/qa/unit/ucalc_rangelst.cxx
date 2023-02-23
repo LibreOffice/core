@@ -15,69 +15,9 @@
 
 class Test : public ScUcalcTestBase
 {
-public:
-    void testDeleteArea_4Ranges();
-    void testDeleteArea_3Ranges();
-    void testDeleteArea_3Ranges_Case2();
-    void testDeleteArea_3Ranges_Case3();
-    void testDeleteArea_3Ranges_Case4();
-    void testDeleteArea_3Ranges_Case5();
-    void testDeleteArea_2Ranges();
-    void testDeleteArea_2Ranges_Case2();
-    void testDeleteArea_2Ranges_Case3();
-    void testDeleteArea_2Ranges_Case4();
-    void testDeleteArea_2Ranges_Case5();
-    void testDeleteArea_2Ranges_Case6();
-    void testDeleteArea_2Ranges_Case7();
-    void testDeleteArea_2Ranges_Case8();
-    void testDeleteArea_1Range();
-    void testDeleteArea_0Ranges();
-    void testJoin_Case1();
-    void testJoin_Case2();
-    void testJoin_Case3();
-    void testJoin_Case4();
-    void testJoin_Case5();
-    void testGetIntersectedRange();
-
-    void testUpdateReference_DeleteRow();
-    void testUpdateReference_DeleteLastRow();
-    void testUpdateReference_DeleteCol();
-
-    void testInsertRow();
-    void testInsertCol();
-
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(testDeleteArea_4Ranges);
-    CPPUNIT_TEST(testDeleteArea_3Ranges);
-    CPPUNIT_TEST(testDeleteArea_3Ranges_Case2);
-    CPPUNIT_TEST(testDeleteArea_3Ranges_Case3);
-    CPPUNIT_TEST(testDeleteArea_3Ranges_Case4);
-    CPPUNIT_TEST(testDeleteArea_3Ranges_Case5);
-    CPPUNIT_TEST(testDeleteArea_2Ranges);
-    CPPUNIT_TEST(testDeleteArea_2Ranges_Case2);
-    CPPUNIT_TEST(testDeleteArea_2Ranges_Case3);
-    CPPUNIT_TEST(testDeleteArea_2Ranges_Case4);
-    CPPUNIT_TEST(testDeleteArea_2Ranges_Case5);
-    CPPUNIT_TEST(testDeleteArea_2Ranges_Case6);
-    CPPUNIT_TEST(testDeleteArea_2Ranges_Case7);
-    CPPUNIT_TEST(testDeleteArea_2Ranges_Case8);
-    CPPUNIT_TEST(testDeleteArea_1Range);
-    CPPUNIT_TEST(testDeleteArea_0Ranges);
-    CPPUNIT_TEST(testJoin_Case1);
-    CPPUNIT_TEST(testJoin_Case2);
-    CPPUNIT_TEST(testJoin_Case3);
-    CPPUNIT_TEST(testJoin_Case4);
-    CPPUNIT_TEST(testJoin_Case5);
-    CPPUNIT_TEST(testUpdateReference_DeleteRow);
-    CPPUNIT_TEST(testUpdateReference_DeleteLastRow);
-    CPPUNIT_TEST(testUpdateReference_DeleteCol);
-    CPPUNIT_TEST(testGetIntersectedRange);
-    CPPUNIT_TEST(testInsertRow);
-    CPPUNIT_TEST(testInsertCol);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void Test::testDeleteArea_4Ranges()
+CPPUNIT_TEST_FIXTURE(Test, testDeleteArea_4Ranges)
 {
     ScRangeList aList(ScRange(0,0,0,5,5,0));
     aList.DeleteArea(2,2,0,3,3,0);
@@ -95,7 +35,7 @@ void Test::testDeleteArea_4Ranges()
     }
 }
 
-void Test::testDeleteArea_3Ranges()
+CPPUNIT_TEST_FIXTURE(Test, testDeleteArea_3Ranges)
 {
     ScRangeList aList(ScRange(1,1,0,6,6,0));
     aList.DeleteArea(3,3,0,8,4,0);
@@ -115,7 +55,7 @@ void Test::testDeleteArea_3Ranges()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt64>(28), aList.GetCellCount());
 }
 
-void Test::testDeleteArea_3Ranges_Case2()
+CPPUNIT_TEST_FIXTURE(Test, testDeleteArea_3Ranges_Case2)
 {
     ScRangeList aList(ScRange(1,1,0,6,6,0));
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aList.size());
@@ -136,7 +76,7 @@ void Test::testDeleteArea_3Ranges_Case2()
     }
 }
 
-void Test::testDeleteArea_3Ranges_Case3()
+CPPUNIT_TEST_FIXTURE(Test, testDeleteArea_3Ranges_Case3)
 {
     ScRangeList aList(ScRange(1,5,0,6,11,0));
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aList.size());
@@ -156,7 +96,7 @@ void Test::testDeleteArea_3Ranges_Case3()
     }
 }
 
-void Test::testDeleteArea_3Ranges_Case4()
+CPPUNIT_TEST_FIXTURE(Test, testDeleteArea_3Ranges_Case4)
 {
     ScRangeList aList(ScRange(1,5,0,6,11,0));
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aList.size());
@@ -176,7 +116,7 @@ void Test::testDeleteArea_3Ranges_Case4()
     }
 }
 
-void Test::testDeleteArea_3Ranges_Case5()
+CPPUNIT_TEST_FIXTURE(Test, testDeleteArea_3Ranges_Case5)
 {
     ScRangeList aList(ScRange(1,5,0,6,11,0));
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aList.size());
@@ -196,7 +136,7 @@ void Test::testDeleteArea_3Ranges_Case5()
     }
 }
 
-void Test::testDeleteArea_2Ranges()
+CPPUNIT_TEST_FIXTURE(Test, testDeleteArea_2Ranges)
 {
     ScRangeList aList(ScRange(0,0,0,5,5,5));
     ScRangeList aList2(aList);
@@ -218,7 +158,7 @@ void Test::testDeleteArea_2Ranges()
     }
 }
 
-void Test::testDeleteArea_2Ranges_Case2()
+CPPUNIT_TEST_FIXTURE(Test, testDeleteArea_2Ranges_Case2)
 {
     ScRangeList aList(ScRange(1,1,0,1,5,0));
     aList.DeleteArea(0,3,0,ScSheetLimits::CreateDefault().MaxCol(),3,0);
@@ -233,7 +173,7 @@ void Test::testDeleteArea_2Ranges_Case2()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt64>(4), aList.GetCellCount());
 }
 
-void Test::testDeleteArea_2Ranges_Case3()
+CPPUNIT_TEST_FIXTURE(Test, testDeleteArea_2Ranges_Case3)
 {
     ScRangeList aList(ScRange(0,5,0,2,10,0));
     aList.DeleteArea(2,3,0,3,7,0);
@@ -252,7 +192,7 @@ void Test::testDeleteArea_2Ranges_Case3()
     }
 }
 
-void Test::testDeleteArea_2Ranges_Case4()
+CPPUNIT_TEST_FIXTURE(Test, testDeleteArea_2Ranges_Case4)
 {
     ScRangeList aList(ScRange(2,3,0,4,7,0));
     aList.DeleteArea(0,1,0,2,5,0);
@@ -271,7 +211,7 @@ void Test::testDeleteArea_2Ranges_Case4()
     }
 }
 
-void Test::testDeleteArea_2Ranges_Case5()
+CPPUNIT_TEST_FIXTURE(Test, testDeleteArea_2Ranges_Case5)
 {
     ScRangeList aList(ScRange(2,2,0,5,5,0));
     aList.DeleteArea(4,5,0,5,5,0);
@@ -290,7 +230,7 @@ void Test::testDeleteArea_2Ranges_Case5()
     }
 }
 
-void Test::testDeleteArea_2Ranges_Case6()
+CPPUNIT_TEST_FIXTURE(Test, testDeleteArea_2Ranges_Case6)
 {
     ScRangeList aList(ScRange(2,2,0,5,5,0));
     aList.DeleteArea(4,2,0,5,2,0);
@@ -309,7 +249,7 @@ void Test::testDeleteArea_2Ranges_Case6()
     }
 }
 
-void Test::testDeleteArea_2Ranges_Case7()
+CPPUNIT_TEST_FIXTURE(Test, testDeleteArea_2Ranges_Case7)
 {
     ScRangeList aList(ScRange(2,2,0,5,5,0));
     aList.DeleteArea(2,5,0,2,5,0);
@@ -328,7 +268,7 @@ void Test::testDeleteArea_2Ranges_Case7()
     }
 }
 
-void Test::testDeleteArea_2Ranges_Case8()
+CPPUNIT_TEST_FIXTURE(Test, testDeleteArea_2Ranges_Case8)
 {
     ScRangeList aList(ScRange(2,2,0,5,5,0));
     aList.DeleteArea(2,2,0,3,2,0);
@@ -347,7 +287,7 @@ void Test::testDeleteArea_2Ranges_Case8()
     }
 }
 
-void Test::testDeleteArea_1Range()
+CPPUNIT_TEST_FIXTURE(Test, testDeleteArea_1Range)
 {
     ScRangeList aList(ScRange(1,1,0,3,3,0));
     aList.DeleteArea(1,1,0,2,3,0);
@@ -361,7 +301,7 @@ void Test::testDeleteArea_1Range()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt64>(3), aList.GetCellCount());
 }
 
-void Test::testDeleteArea_0Ranges()
+CPPUNIT_TEST_FIXTURE(Test, testDeleteArea_0Ranges)
 {
     ScRangeList aList(ScRange(1,1,0,3,3,0));
     aList.DeleteArea(1,1,0,3,3,0);
@@ -374,7 +314,7 @@ void Test::testDeleteArea_0Ranges()
     CPPUNIT_ASSERT(aList.empty());
 }
 
-void Test::testJoin_Case1()
+CPPUNIT_TEST_FIXTURE(Test, testJoin_Case1)
 {
     ScRangeList aList;
     aList.push_back(ScRange(1,1,0,3,3,0));
@@ -384,7 +324,7 @@ void Test::testJoin_Case1()
     CPPUNIT_ASSERT_EQUAL( ScRange(1,1,0,6,3,0), aList[0]);
 }
 
-void Test::testJoin_Case2()
+CPPUNIT_TEST_FIXTURE(Test, testJoin_Case2)
 {
     ScRangeList aList;
     aList.push_back(ScRange(1,1,0,3,3,0));
@@ -397,7 +337,7 @@ void Test::testJoin_Case2()
     CPPUNIT_ASSERT_EQUAL(ScRange(1,1,0,9,3,0), aList[0]);
 }
 
-void Test::testJoin_Case3()
+CPPUNIT_TEST_FIXTURE(Test, testJoin_Case3)
 {
     ScRangeList aList;
     aList.Join(ScRange(1,1,0,6,6,0));
@@ -418,7 +358,7 @@ void Test::testJoin_Case3()
     CPPUNIT_ASSERT_EQUAL(ScRange(8,8,0,9,9,0), aList[1]);
 }
 
-void Test::testJoin_Case4()
+CPPUNIT_TEST_FIXTURE(Test, testJoin_Case4)
 {
     ScRangeList aList;
     aList.Join(ScRange(1,1,0,2,6,0));
@@ -450,7 +390,7 @@ void Test::testJoin_Case4()
     CPPUNIT_ASSERT_EQUAL(ScRange(1,1,0,8,8,0), aList2[0]);
 }
 
-void Test::testJoin_Case5()
+CPPUNIT_TEST_FIXTURE(Test, testJoin_Case5)
 {
     ScRangeList aList;
     aList.Join(ScRange(0,0,0,4,4,0));
@@ -468,7 +408,7 @@ void Test::testJoin_Case5()
     CPPUNIT_ASSERT_EQUAL(ScRange(0,0,0,10,4,0), aList[0]);
 }
 
-void Test::testUpdateReference_DeleteRow()
+CPPUNIT_TEST_FIXTURE(Test, testUpdateReference_DeleteRow)
 {
     ScRangeList aList(ScRange(1,1,0,4,4,0));
     bool bUpdated = aList.UpdateReference(URM_INSDEL, m_pDoc, ScRange(0,3,0,m_pDoc->MaxCol(),m_pDoc->MaxRow(),0), 0, -1, 0);
@@ -503,14 +443,14 @@ void Test::testUpdateReference_DeleteRow()
     CPPUNIT_ASSERT_EQUAL(aList4Copy, aList4);
 }
 
-void Test::testUpdateReference_DeleteLastRow()
+CPPUNIT_TEST_FIXTURE(Test, testUpdateReference_DeleteLastRow)
 {
     ScRangeList aList(ScRange(1,1,0,4,4,0));
     bool bUpdated = aList.UpdateReference(URM_INSDEL, m_pDoc, ScRange(0,4,0,m_pDoc->MaxCol(),4,0), 0, -1, 0);
     CPPUNIT_ASSERT(bUpdated);
 }
 
-void Test::testUpdateReference_DeleteCol()
+CPPUNIT_TEST_FIXTURE(Test, testUpdateReference_DeleteCol)
 {
     ScRangeList aList(ScRange(1,1,0,4,4,0));
     bool bUpdated = aList.UpdateReference(URM_INSDEL, m_pDoc, ScRange(3,0,0,m_pDoc->MaxCol(),m_pDoc->MaxRow(),0), -1, 0, 0);
@@ -527,28 +467,26 @@ void Test::testUpdateReference_DeleteCol()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt64>(12), aList.GetCellCount());
 }
 
-void Test::testGetIntersectedRange()
+CPPUNIT_TEST_FIXTURE(Test, testGetIntersectedRange)
 {
     ScRangeList aList(ScRange(2, 2, 0, 5, 5, 0));
     ScRangeList aIntersecting = aList.GetIntersectedRange(ScRange(0, 0, 0, 3, 3, 0));
     CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(2,2,0,3,3,0)), aIntersecting);
 }
 
-void Test::testInsertRow()
+CPPUNIT_TEST_FIXTURE(Test, testInsertRow)
 {
     ScRangeList aList(ScRange(1,1,0,4,4,0));
     aList.InsertRow(0, 0, m_pDoc->MaxCol(), 5, 2);
     CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(1,1,0,4,6,0)), aList);
 }
 
-void Test::testInsertCol()
+CPPUNIT_TEST_FIXTURE(Test, testInsertCol)
 {
     ScRangeList aList(ScRange(1,1,0,4,4,0));
     aList.InsertCol(0, 0, m_pDoc->MaxRow(), 5, 2);
     CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(1,1,0,6,4,0)), aList);
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

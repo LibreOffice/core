@@ -18,99 +18,10 @@
 class ScDataTransformationTest : public ScUcalcTestBase
 {
 public:
-
     virtual void setUp() override;
-
-    void testColumnRemove();
-    void testColumnSplit();
-    void testColumnMerge();
-    void testTextToLower();
-    void testTextToUpper();
-    void testTextCapitalize();
-    void testTextTrim();
-    void testAggregateSum();
-    void testAggregateAverage();
-    void testAggregateMin();
-    void testAggregateMax();
-    void testNumberRound();
-    void testNumberRoundUp();
-    void testNumberRoundDown();
-    void testNumberAbsolute();
-    void testNumberLogE();
-    void testNumberLog10();
-    void testNumberCube();
-    void testNumberSquare();
-    void testNumberSquareRoot();
-    void testNumberEven();
-    void testNumberOdd();
-    void testNumberSign();
-    void testReplaceNull();
-    void testGetDateString();
-    void testGetYear();
-    void testGetStartOfYear();
-    void testGetEndOfYear();
-    void testGetMonth();
-    void testGetMonthName();
-    void testGetStartOfMonth();
-    void testGetEndOfMonth();
-    void testGetDay();
-    void testGetDayOfWeek();
-    void testGetDayOfYear();
-    void testGetQuarter();
-    void testGetStartOfQuarter();
-    void testGetEndOfQuarter();
-    void testGetTime();
-    void testGetHour();
-    void testGetMinute();
-    void testGetSecond();
-
-    CPPUNIT_TEST_SUITE(ScDataTransformationTest);
-    CPPUNIT_TEST(testColumnRemove);
-    CPPUNIT_TEST(testColumnSplit);
-    CPPUNIT_TEST(testColumnMerge);
-    CPPUNIT_TEST(testTextToLower);
-    CPPUNIT_TEST(testTextToUpper);
-    CPPUNIT_TEST(testTextCapitalize);
-    CPPUNIT_TEST(testTextTrim);
-    CPPUNIT_TEST(testAggregateSum);
-    CPPUNIT_TEST(testAggregateAverage);
-    CPPUNIT_TEST(testAggregateMin);
-    CPPUNIT_TEST(testAggregateMax);
-    CPPUNIT_TEST(testNumberRound);
-    CPPUNIT_TEST(testNumberRoundUp);
-    CPPUNIT_TEST(testNumberRoundDown);
-    CPPUNIT_TEST(testNumberAbsolute);
-    CPPUNIT_TEST(testNumberLogE);
-    CPPUNIT_TEST(testNumberLog10);
-    CPPUNIT_TEST(testNumberCube);
-    CPPUNIT_TEST(testNumberSquare);
-    CPPUNIT_TEST(testNumberSquareRoot);
-    CPPUNIT_TEST(testNumberEven);
-    CPPUNIT_TEST(testNumberOdd);
-    CPPUNIT_TEST(testNumberSign);
-    CPPUNIT_TEST(testReplaceNull);
-    CPPUNIT_TEST(testGetDateString);
-    CPPUNIT_TEST(testGetYear);
-    CPPUNIT_TEST(testGetStartOfYear);
-    CPPUNIT_TEST(testGetEndOfYear);
-    CPPUNIT_TEST(testGetMonth);
-    CPPUNIT_TEST(testGetMonthName);
-    CPPUNIT_TEST(testGetStartOfMonth);
-    CPPUNIT_TEST(testGetEndOfMonth);
-    CPPUNIT_TEST(testGetDay);
-    CPPUNIT_TEST(testGetDayOfWeek);
-    CPPUNIT_TEST(testGetDayOfYear);
-    CPPUNIT_TEST(testGetQuarter);
-    CPPUNIT_TEST(testGetStartOfQuarter);
-    CPPUNIT_TEST(testGetEndOfQuarter);
-    CPPUNIT_TEST(testGetTime);
-    CPPUNIT_TEST(testGetHour);
-    CPPUNIT_TEST(testGetMinute);
-    CPPUNIT_TEST(testGetSecond);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void ScDataTransformationTest::testColumnRemove()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testColumnRemove)
 {
     for (SCROW nRow = 0; nRow < 10; ++nRow)
     {
@@ -140,7 +51,7 @@ void ScDataTransformationTest::testColumnRemove()
     }
 }
 
-void ScDataTransformationTest::testColumnSplit()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testColumnSplit)
 {
     m_pDoc->SetString(2, 0, 0, "Test1,Test2");
     m_pDoc->SetString(2, 1, 0, "Test1,");
@@ -164,7 +75,7 @@ void ScDataTransformationTest::testColumnSplit()
     CPPUNIT_ASSERT_EQUAL(OUString("Test2,Test3"), m_pDoc->GetString(3, 3, 0));
 }
 
-void ScDataTransformationTest::testColumnMerge()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testColumnMerge)
 {
     m_pDoc->SetString(2, 0, 0, "Berlin");
     m_pDoc->SetString(2, 1, 0, "Brussels");
@@ -190,7 +101,7 @@ void ScDataTransformationTest::testColumnMerge()
     }
 }
 
-void ScDataTransformationTest::testTextToLower()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testTextToLower)
 {
     m_pDoc->SetString(2, 0, 0, "Berlin");
     m_pDoc->SetString(2, 1, 0, "Brussels");
@@ -206,7 +117,7 @@ void ScDataTransformationTest::testTextToLower()
     CPPUNIT_ASSERT_EQUAL(OUString("peking"), m_pDoc->GetString(2, 3, 0));
 }
 
-void ScDataTransformationTest::testTextToUpper()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testTextToUpper)
 {
     m_pDoc->SetString(2, 0, 0, "Berlin");
     m_pDoc->SetString(2, 1, 0, "Brussels");
@@ -222,7 +133,7 @@ void ScDataTransformationTest::testTextToUpper()
     CPPUNIT_ASSERT_EQUAL(OUString("PEKING"), m_pDoc->GetString(2, 3, 0));
 }
 
-void ScDataTransformationTest::testTextCapitalize()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testTextCapitalize)
 {
     m_pDoc->SetString(2, 0, 0, "hello woRlD");
     m_pDoc->SetString(2, 1, 0, "qUe vA");
@@ -238,7 +149,7 @@ void ScDataTransformationTest::testTextCapitalize()
     CPPUNIT_ASSERT_EQUAL(OUString("Cuando Me Enamoro"), m_pDoc->GetString(2, 3, 0));
 }
 
-void ScDataTransformationTest::testTextTrim()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testTextTrim)
 {
     m_pDoc->SetString(2, 0, 0, " Berlin");
     m_pDoc->SetString(2, 1, 0, "Brussels ");
@@ -252,7 +163,7 @@ void ScDataTransformationTest::testTextTrim()
     CPPUNIT_ASSERT_EQUAL(OUString("Paris"), m_pDoc->GetString(2, 2, 0));
 }
 
-void ScDataTransformationTest::testAggregateSum()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testAggregateSum)
 {
     m_pDoc->SetValue(2, 0, 0, 2034);
     m_pDoc->SetValue(2, 1, 0, 2342);
@@ -270,7 +181,7 @@ void ScDataTransformationTest::testAggregateSum()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(68487.68, m_pDoc->GetValue(4, 4, 0), 1e-10);
 }
 
-void ScDataTransformationTest::testAggregateAverage()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testAggregateAverage)
 {
     m_pDoc->SetValue(2, 0, 0, 2034);
     m_pDoc->SetValue(2, 1, 0, 2342);
@@ -287,7 +198,7 @@ void ScDataTransformationTest::testAggregateAverage()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4, m_pDoc->GetValue(3, 3, 0), 1e-10);
 }
 
-void ScDataTransformationTest::testAggregateMin()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testAggregateMin)
 {
     m_pDoc->SetValue(2, 0, 0, 2034);
     m_pDoc->SetValue(2, 1, 0, 2342);
@@ -304,7 +215,7 @@ void ScDataTransformationTest::testAggregateMin()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-2342, m_pDoc->GetValue(3, 3, 0), 1e-10);
 }
 
-void ScDataTransformationTest::testAggregateMax()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testAggregateMax)
 {
     m_pDoc->SetValue(2, 0, 0, 2034);
     m_pDoc->SetValue(2, 1, 0, 2342);
@@ -323,7 +234,7 @@ void ScDataTransformationTest::testAggregateMax()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2034, m_pDoc->GetValue(3, 4, 0), 1e-10);
 }
 
-void ScDataTransformationTest::testNumberRound()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testNumberRound)
 {
     m_pDoc->SetValue(2, 0, 0, 2034.342453456);
     m_pDoc->SetValue(2, 1, 0, 2342.252678567542);
@@ -339,7 +250,7 @@ void ScDataTransformationTest::testNumberRound()
     CPPUNIT_ASSERT_EQUAL(-453.2223, m_pDoc->GetValue(2, 3, 0));
 }
 
-void ScDataTransformationTest::testNumberRoundUp()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testNumberRoundUp)
 {
     m_pDoc->SetValue(2, 0, 0, 2034.34);
     m_pDoc->SetValue(2, 1, 0, 2342.22);
@@ -355,7 +266,7 @@ void ScDataTransformationTest::testNumberRoundUp()
     CPPUNIT_ASSERT_EQUAL(-453.0, m_pDoc->GetValue(2, 3, 0));
 }
 
-void ScDataTransformationTest::testNumberRoundDown()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testNumberRoundDown)
 {
     m_pDoc->SetValue(2, 0, 0, 2034.34);
     m_pDoc->SetValue(2, 1, 0, 2342.22);
@@ -371,7 +282,7 @@ void ScDataTransformationTest::testNumberRoundDown()
     CPPUNIT_ASSERT_EQUAL(-454.0, m_pDoc->GetValue(2, 3, 0));
 }
 
-void ScDataTransformationTest::testNumberAbsolute()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testNumberAbsolute)
 {
     m_pDoc->SetValue(2, 0, 0, 2034.34);
     m_pDoc->SetValue(2, 1, 0, -2342.22);
@@ -387,7 +298,7 @@ void ScDataTransformationTest::testNumberAbsolute()
     CPPUNIT_ASSERT_EQUAL(453.22, m_pDoc->GetValue(2, 3, 0));
 }
 
-void ScDataTransformationTest::testNumberLogE()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testNumberLogE)
 {
     m_pDoc->SetValue(2, 0, 0, 1);
     m_pDoc->SetValue(2, 1, 0, 5);
@@ -403,7 +314,7 @@ void ScDataTransformationTest::testNumberLogE()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(6.21460809842, m_pDoc->GetValue(2, 3, 0), 1e-10);
 }
 
-void ScDataTransformationTest::testNumberLog10()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testNumberLog10)
 {
     m_pDoc->SetValue(2, 0, 0, 1);
     m_pDoc->SetValue(2, 1, 0, 10);
@@ -419,7 +330,7 @@ void ScDataTransformationTest::testNumberLog10()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2.69897000434, m_pDoc->GetValue(2, 3, 0), 1e-10);
 }
 
-void ScDataTransformationTest::testNumberCube()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testNumberCube)
 {
     m_pDoc->SetValue(2, 0, 0, 2);
     m_pDoc->SetValue(2, 1, 0, -2);
@@ -435,7 +346,7 @@ void ScDataTransformationTest::testNumberCube()
     CPPUNIT_ASSERT_EQUAL(-512.0, m_pDoc->GetValue(2, 3, 0));
 }
 
-void ScDataTransformationTest::testNumberSquare()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testNumberSquare)
 {
     m_pDoc->SetValue(2, 0, 0, 2);
     m_pDoc->SetValue(2, 1, 0, -2);
@@ -451,7 +362,7 @@ void ScDataTransformationTest::testNumberSquare()
     CPPUNIT_ASSERT_EQUAL(64.0, m_pDoc->GetValue(2, 3, 0));
 }
 
-void ScDataTransformationTest::testNumberSquareRoot()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testNumberSquareRoot)
 {
     m_pDoc->SetValue(2, 0, 0, 8);
     m_pDoc->SetValue(2, 1, 0, 4);
@@ -465,7 +376,7 @@ void ScDataTransformationTest::testNumberSquareRoot()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, m_pDoc->GetValue(2, 2, 0), 1e-10);
 }
 
-void ScDataTransformationTest::testNumberEven()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testNumberEven)
 {
     m_pDoc->SetValue(2, 0, 0, 2034);
     m_pDoc->SetValue(2, 1, 0, 2343);
@@ -481,7 +392,7 @@ void ScDataTransformationTest::testNumberEven()
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(2, 3, 0));
 }
 
-void ScDataTransformationTest::testNumberOdd()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testNumberOdd)
 {
     m_pDoc->SetValue(2, 0, 0, 2034);
     m_pDoc->SetValue(2, 1, 0, 2343);
@@ -497,7 +408,7 @@ void ScDataTransformationTest::testNumberOdd()
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(2, 3, 0));
 }
 
-void ScDataTransformationTest::testNumberSign()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testNumberSign)
 {
     m_pDoc->SetValue(2, 0, 0, 2034.34);
     m_pDoc->SetValue(2, 1, 0, -2342.22);
@@ -513,7 +424,7 @@ void ScDataTransformationTest::testNumberSign()
     CPPUNIT_ASSERT_EQUAL(-1.0, m_pDoc->GetValue(2, 3, 0));
 }
 
-void ScDataTransformationTest::testReplaceNull()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testReplaceNull)
 {
     m_pDoc->SetString(2, 0, 0, "Berlin");
     m_pDoc->SetString(2, 1, 0, "");
@@ -530,7 +441,7 @@ void ScDataTransformationTest::testReplaceNull()
 
 }
 
-void ScDataTransformationTest::testGetDateString()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetDateString)
 {
     SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
     css::util::Date aDate1(25,1,2011);
@@ -557,7 +468,7 @@ void ScDataTransformationTest::testGetDateString()
     CPPUNIT_ASSERT_EQUAL(OUString("08/15/47"), m_pDoc->GetString(2, 3, 0));
 }
 
-void ScDataTransformationTest::testGetYear()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetYear)
 {
     SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
     css::util::Date aDate1(25,1,2011);
@@ -584,7 +495,7 @@ void ScDataTransformationTest::testGetYear()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1947, m_pDoc->GetValue(2, 3, 0), 0);
 }
 
-void ScDataTransformationTest::testGetStartOfYear()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetStartOfYear)
 {
     SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
     css::util::Date aDate1(25,1,2011);
@@ -611,7 +522,7 @@ void ScDataTransformationTest::testGetStartOfYear()
     CPPUNIT_ASSERT_EQUAL(OUString("01/01/47"), m_pDoc->GetString(2, 3, 0));
 }
 
-void ScDataTransformationTest::testGetEndOfYear()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetEndOfYear)
 {
     SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
     css::util::Date aDate1(25,1,2011);
@@ -638,7 +549,7 @@ void ScDataTransformationTest::testGetEndOfYear()
     CPPUNIT_ASSERT_EQUAL(OUString("12/31/47"), m_pDoc->GetString(2, 3, 0));
 }
 
-void ScDataTransformationTest::testGetMonth()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetMonth)
 {
     SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
     css::util::Date aDate1(25,1,2011);
@@ -665,7 +576,7 @@ void ScDataTransformationTest::testGetMonth()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(8, m_pDoc->GetValue(2, 3, 0), 0);
 }
 
-void ScDataTransformationTest::testGetMonthName()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetMonthName)
 {
     SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
     css::util::Date aDate1(25,1,2011);
@@ -692,7 +603,7 @@ void ScDataTransformationTest::testGetMonthName()
     CPPUNIT_ASSERT_EQUAL(OUString("August"), m_pDoc->GetString(2, 3, 0));
 }
 
-void ScDataTransformationTest::testGetStartOfMonth()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetStartOfMonth)
 {
     SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
     css::util::Date aDate1(25,1,2011);
@@ -719,7 +630,7 @@ void ScDataTransformationTest::testGetStartOfMonth()
     CPPUNIT_ASSERT_EQUAL(OUString("08/01/47"), m_pDoc->GetString(2, 3, 0));
 }
 
-void ScDataTransformationTest::testGetEndOfMonth()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetEndOfMonth)
 {
     SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
     css::util::Date aDate1(25,1,2011);
@@ -746,7 +657,7 @@ void ScDataTransformationTest::testGetEndOfMonth()
     CPPUNIT_ASSERT_EQUAL(OUString("08/31/47"), m_pDoc->GetString(2, 3, 0));
 }
 
-void ScDataTransformationTest::testGetDay()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetDay)
 {
     SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
     css::util::Date aDate1(25,1,2011);
@@ -773,7 +684,7 @@ void ScDataTransformationTest::testGetDay()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(15, m_pDoc->GetValue(2, 3, 0), 0);
 }
 
-void ScDataTransformationTest::testGetDayOfWeek()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetDayOfWeek)
 {
     SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
     css::util::Date aDate1(25,1,2011);
@@ -800,7 +711,7 @@ void ScDataTransformationTest::testGetDayOfWeek()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4, m_pDoc->GetValue(2, 3, 0), 0);
 }
 
-void ScDataTransformationTest::testGetDayOfYear()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetDayOfYear)
 {
     SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
     css::util::Date aDate1(25,1,2011);
@@ -827,7 +738,7 @@ void ScDataTransformationTest::testGetDayOfYear()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(227, m_pDoc->GetValue(2, 3, 0), 0);
 }
 
-void ScDataTransformationTest::testGetQuarter()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetQuarter)
 {
     SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
     css::util::Date aDate1(25,1,2011);
@@ -854,7 +765,7 @@ void ScDataTransformationTest::testGetQuarter()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3, m_pDoc->GetValue(2, 3, 0), 0);
 }
 
-void ScDataTransformationTest::testGetStartOfQuarter()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetStartOfQuarter)
 {
     SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
     css::util::Date aDate1(25,1,2011);
@@ -881,7 +792,7 @@ void ScDataTransformationTest::testGetStartOfQuarter()
     CPPUNIT_ASSERT_EQUAL(OUString("07/01/47"), m_pDoc->GetString(2, 3, 0));
 }
 
-void ScDataTransformationTest::testGetEndOfQuarter()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetEndOfQuarter)
 {
     SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
     css::util::Date aDate1(25,1,2011);
@@ -908,7 +819,7 @@ void ScDataTransformationTest::testGetEndOfQuarter()
     CPPUNIT_ASSERT_EQUAL(OUString("09/30/47"), m_pDoc->GetString(2, 3, 0));
 }
 
-void ScDataTransformationTest::testGetTime()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetTime)
 {
     tools::Time aTime1(5,30,12);
     tools::Time aTime2(7,23,9);
@@ -929,7 +840,7 @@ void ScDataTransformationTest::testGetTime()
     CPPUNIT_ASSERT_EQUAL(OUString("10:09:49 PM"), m_pDoc->GetString(2, 3, 0));
 }
 
-void ScDataTransformationTest::testGetHour()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetHour)
 {
     tools::Time aTime1(5,30,12);
     tools::Time aTime2(7,23,9);
@@ -950,7 +861,7 @@ void ScDataTransformationTest::testGetHour()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(22, m_pDoc->GetValue(2, 3, 0), 0);
 }
 
-void ScDataTransformationTest::testGetMinute()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetMinute)
 {
     tools::Time aTime1(5,30,12);
     tools::Time aTime2(7,23,9);
@@ -971,7 +882,7 @@ void ScDataTransformationTest::testGetMinute()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(9, m_pDoc->GetValue(2, 3, 0), 0);
 }
 
-void ScDataTransformationTest::testGetSecond()
+CPPUNIT_TEST_FIXTURE(ScDataTransformationTest, testGetSecond)
 {
     tools::Time aTime1(5,30,53);
     tools::Time aTime2(7,23,10);
@@ -997,8 +908,6 @@ void ScDataTransformationTest::setUp()
     ScUcalcTestBase::setUp();
     m_pDoc->InsertTab(0, "Tab");
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(ScDataTransformationTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

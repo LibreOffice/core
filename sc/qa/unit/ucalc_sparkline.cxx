@@ -23,36 +23,6 @@ using namespace css;
 /** Test operation for sparklines, sparkline groups and attributes */
 class SparklineTest : public ScUcalcTestBase
 {
-public:
-    void testAddSparkline();
-    void testClearContentSprkline();
-    void testCopyPasteSparkline();
-    void testCutPasteSparkline();
-    void testUndoRedoInsertSparkline();
-    void testUndoRedoDeleteSparkline();
-    void testUndoRedoDeleteSparklineGroup();
-    void testUndoRedoClearContentForSparkline();
-    void testUndoRedoEditSparklineGroup();
-    void testUndoRedoUngroupSparklines();
-    void testUndoRedoGroupSparklines();
-    void testUndoRedoEditSparkline();
-    void testSparklineList();
-
-    CPPUNIT_TEST_SUITE(SparklineTest);
-    CPPUNIT_TEST(testAddSparkline);
-    CPPUNIT_TEST(testClearContentSprkline);
-    CPPUNIT_TEST(testCopyPasteSparkline);
-    CPPUNIT_TEST(testCutPasteSparkline);
-    CPPUNIT_TEST(testUndoRedoInsertSparkline);
-    CPPUNIT_TEST(testUndoRedoDeleteSparkline);
-    CPPUNIT_TEST(testUndoRedoDeleteSparklineGroup);
-    CPPUNIT_TEST(testUndoRedoClearContentForSparkline);
-    CPPUNIT_TEST(testUndoRedoEditSparklineGroup);
-    CPPUNIT_TEST(testUndoRedoUngroupSparklines);
-    CPPUNIT_TEST(testUndoRedoGroupSparklines);
-    CPPUNIT_TEST(testUndoRedoEditSparkline);
-    CPPUNIT_TEST(testSparklineList);
-    CPPUNIT_TEST_SUITE_END();
 };
 
 namespace
@@ -86,7 +56,7 @@ sc::Sparkline* createTestSparkline(ScDocument& rDoc)
 
 } // end anonymous namespace
 
-void SparklineTest::testAddSparkline()
+CPPUNIT_TEST_FIXTURE(SparklineTest, testAddSparkline)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -110,7 +80,7 @@ void SparklineTest::testAddSparkline()
     m_pDoc->DeleteTab(0);
 }
 
-void SparklineTest::testClearContentSprkline()
+CPPUNIT_TEST_FIXTURE(SparklineTest, testClearContentSprkline)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -125,7 +95,7 @@ void SparklineTest::testClearContentSprkline()
     m_pDoc->DeleteTab(0);
 }
 
-void SparklineTest::testCopyPasteSparkline()
+CPPUNIT_TEST_FIXTURE(SparklineTest, testCopyPasteSparkline)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -192,7 +162,7 @@ void SparklineTest::testCopyPasteSparkline()
     m_pDoc->DeleteTab(0);
 }
 
-void SparklineTest::testCutPasteSparkline()
+CPPUNIT_TEST_FIXTURE(SparklineTest, testCutPasteSparkline)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -224,7 +194,7 @@ void SparklineTest::testCutPasteSparkline()
     m_pDoc->DeleteTab(0);
 }
 
-void SparklineTest::testUndoRedoInsertSparkline()
+CPPUNIT_TEST_FIXTURE(SparklineTest, testUndoRedoInsertSparkline)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -268,7 +238,7 @@ void SparklineTest::testUndoRedoInsertSparkline()
     m_pDoc->DeleteTab(0);
 }
 
-void SparklineTest::testUndoRedoDeleteSparkline()
+CPPUNIT_TEST_FIXTURE(SparklineTest, testUndoRedoDeleteSparkline)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -324,7 +294,7 @@ void SparklineTest::testUndoRedoDeleteSparkline()
     m_pDoc->DeleteTab(0);
 }
 
-void SparklineTest::testUndoRedoDeleteSparklineGroup()
+CPPUNIT_TEST_FIXTURE(SparklineTest, testUndoRedoDeleteSparklineGroup)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -382,7 +352,7 @@ void SparklineTest::testUndoRedoDeleteSparklineGroup()
     m_pDoc->DeleteTab(0);
 }
 
-void SparklineTest::testUndoRedoClearContentForSparkline()
+CPPUNIT_TEST_FIXTURE(SparklineTest, testUndoRedoClearContentForSparkline)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -501,7 +471,7 @@ void SparklineTest::testUndoRedoClearContentForSparkline()
     m_pDoc->DeleteTab(0);
 }
 
-void SparklineTest::testUndoRedoEditSparklineGroup()
+CPPUNIT_TEST_FIXTURE(SparklineTest, testUndoRedoEditSparklineGroup)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -563,7 +533,7 @@ void SparklineTest::testUndoRedoEditSparklineGroup()
     m_pDoc->DeleteTab(0);
 }
 
-void SparklineTest::testUndoRedoUngroupSparklines()
+CPPUNIT_TEST_FIXTURE(SparklineTest, testUndoRedoUngroupSparklines)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -661,7 +631,7 @@ void SparklineTest::testUndoRedoUngroupSparklines()
     m_pDoc->DeleteTab(0);
 }
 
-void SparklineTest::testUndoRedoGroupSparklines()
+CPPUNIT_TEST_FIXTURE(SparklineTest, testUndoRedoGroupSparklines)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -786,7 +756,7 @@ void SparklineTest::testUndoRedoGroupSparklines()
     m_pDoc->DeleteTab(0);
 }
 
-void SparklineTest::testUndoRedoEditSparkline()
+CPPUNIT_TEST_FIXTURE(SparklineTest, testUndoRedoEditSparkline)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -843,7 +813,7 @@ void SparklineTest::testUndoRedoEditSparkline()
     m_pDoc->DeleteTab(0);
 }
 
-void SparklineTest::testSparklineList()
+CPPUNIT_TEST_FIXTURE(SparklineTest, testSparklineList)
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -896,8 +866,6 @@ void SparklineTest::testSparklineList()
         CPPUNIT_ASSERT_EQUAL(size_t(3), pSparklines.size());
     }
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(SparklineTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
