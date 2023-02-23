@@ -2331,6 +2331,8 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
         OSL_ENSURE( pCode->GetCodeError() != FormulaError::NONE, "no RPN code and no errors ?!?!" );
         ResetDirty();
     }
+
+    pCode->ClearRecalcModeMustAfterImport();
 }
 
 void ScFormulaCell::HandleStuffAfterParallelCalculation(ScInterpreter* pInterpreter)
@@ -2546,7 +2548,7 @@ void ScFormulaCell::SetDirty( bool bDirtyFlag )
         // the FormulaTree, once in there it would be assumed that its
         // dependents already had been tracked and it would be skipped on a
         // subsequent notify. Postpone tracking until all listeners are set.
-        if (!rDocument.IsImportingXML())
+        if (!rDocument.IsImportingXML() && !rDocument.IsInsertingFromOtherDoc())
             rDocument.TrackFormulas();
     }
 
@@ -2647,10 +2649,6 @@ void ScFormulaCell::AddRecalcMode( ScRecalcMode nBits )
 {
     if ( (nBits & ScRecalcMode::EMask) != ScRecalcMode::NORMAL )
         SetDirtyVar();
-    if ( nBits & ScRecalcMode::ONLOAD_ONCE )
-    {   // OnLoadOnce is used only to set Dirty after filter import.
-        nBits = (nBits & ~ScRecalcMode::EMask) | ScRecalcMode::NORMAL;
-    }
     pCode->AddRecalcMode( nBits );
 }
 
