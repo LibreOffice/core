@@ -91,9 +91,6 @@ public:
 
     bool    ULSpaceSummation() const
                 { return bool( nControlBits & EEControlBits::ULSPACESUMMATION ); }
-
-    bool    IsSingleLine() const
-                { return bool( nControlBits & EEControlBits::SINGLELINE ); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
