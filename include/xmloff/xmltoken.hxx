@@ -3510,6 +3510,8 @@ namespace xmloff::token {
 
         XML_FILL_USE_SLIDE_BACKGROUND,
 
+        XML_MAY_BREAK_BETWEEN_PAGES,
+
         XML_TOKEN_END
     };
 
