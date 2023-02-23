@@ -370,6 +370,7 @@ class XMLTextFrameContext_Impl : public SvXMLImportContext
     bool    bOwnBase64Stream : 1;
     bool    mbMultipleContent : 1; // This context is created based on a multiple content (image)
     bool    m_isDecorative = false;
+    bool    m_isSplitAllowed = false;
 
     void Create();
 
@@ -685,6 +686,11 @@ void XMLTextFrameContext_Impl::Create()
     if (m_isDecorative && xPropSetInfo->hasPropertyByName("Decorative"))
     {
         xPropSet->setPropertyValue("Decorative", uno::Any(true));
+    }
+
+    if (m_isSplitAllowed && xPropSetInfo->hasPropertyByName("IsSplitAllowed"))
+    {
+        xPropSet->setPropertyValue("IsSplitAllowed", uno::Any(true));
     }
 
     if( XML_TEXT_FRAME_OBJECT != nType  &&
@@ -1072,6 +1078,10 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
         case XML_ELEMENT(LO_EXT, XML_DECORATIVE):
         case XML_ELEMENT(DRAW, XML_DECORATIVE):
             ::sax::Converter::convertBool(m_isDecorative, aIter.toString());
+            break;
+        case XML_ELEMENT(LO_EXT, XML_MAY_BREAK_BETWEEN_PAGES):
+        case XML_ELEMENT(DRAW, XML_MAY_BREAK_BETWEEN_PAGES):
+            sax::Converter::convertBool(m_isSplitAllowed, aIter.toString());
             break;
         default:
             SAL_INFO("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << " value=" << aIter.toString());

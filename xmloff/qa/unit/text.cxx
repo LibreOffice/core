@@ -17,6 +17,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/text/XTextFramesSupplier.hpp>
 
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -954,6 +955,56 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testThemeExport)
                 "folHlink");
     assertXPath(pXmlDoc, "//office:styles/loext:theme/loext:color-table/loext:color[12]", "color",
                 "#c0c0c0");
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFloatingTableExport)
+{
+    // Given a document with a floating table:
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    // Insert a table:
+    uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("Rows", static_cast<sal_Int32>(1)),
+        comphelper::makePropertyValue("Columns", static_cast<sal_Int32>(1)),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
+    // Select it:
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    // Wrap in a fly:
+    aArgs = {
+        comphelper::makePropertyValue("AnchorType", static_cast<sal_uInt16>(0)),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertFrame", aArgs);
+    // Mark it as a floating table:
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(
+        xTextFramesSupplier->getTextFrames()->getByName("Frame1"), uno::UNO_QUERY);
+    xFrame->setPropertyValue("IsSplitAllowed", uno::Any(true));
+
+    // When saving to ODT:
+    save("writer8");
+
+    // Then make sure we write a floating table, not a textframe containing a table:
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '//draw:frame' no attribute 'may-break-between-pages' exist
+    // i.e. no floating table was exported.
+    assertXPath(pXmlDoc, "//draw:frame", "may-break-between-pages", "true");
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFloatingTableImport)
+{
+    // Given a document with a floating table (loext:may-break-between-pages="true"), when importing
+    // that document:
+    loadFromURL(u"floattable.fodt");
+
+    // Then make sure that the matching text frame property is set:
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(
+        xTextFramesSupplier->getTextFrames()->getByName("Frame1"), uno::UNO_QUERY);
+    bool bIsSplitAllowed = false;
+    // Without the accompanying fix in place, this test would have failed, the property was false.
+    xFrame->getPropertyValue("IsSplitAllowed") >>= bIsSplitAllowed;
+    CPPUNIT_ASSERT(bIsSplitAllowed);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

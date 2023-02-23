@@ -3514,6 +3514,8 @@ namespace xmloff::token {
 
         TOKEN("fill-use-slide-background", XML_FILL_USE_SLIDE_BACKGROUND),
 
+        TOKEN("may-break-between-pages", XML_MAY_BREAK_BETWEEN_PAGES),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, std::nullopt,               XML_TOKEN_END }
 #else

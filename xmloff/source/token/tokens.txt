@@ -3255,4 +3255,5 @@ plain-text
 alias
 tag
 fill-use-slide-background
+may-break-between-pages
 TOKEN_END_DUMMY

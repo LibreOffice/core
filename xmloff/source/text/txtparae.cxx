@@ -3015,6 +3015,12 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
         GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_DECORATIVE, XML_TRUE);
     }
 
+    if (xPropSetInfo->hasPropertyByName("IsSplitAllowed")
+        && rPropSet->getPropertyValue("IsSplitAllowed").get<bool>())
+    {
+        GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_MAY_BREAK_BETWEEN_PAGES, XML_TRUE);
+    }
+
     return nShapeFeatures;
 }
 
