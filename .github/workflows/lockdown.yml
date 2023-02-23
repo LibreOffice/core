@@ -12,7 +12,7 @@ jobs:
   point-to-upstream:
     runs-on: ubuntu-latest
     steps:
-      - uses: dessant/repo-lockdown@v2.2.0
+      - uses: dessant/repo-lockdown@v3
         with:
           issue-comment: >
             Thank you for your report. We use GitHub as a read-only mirror, so please submit your report into our own bug tracker: https://wiki.documentfoundation.org/QA/BugReport
