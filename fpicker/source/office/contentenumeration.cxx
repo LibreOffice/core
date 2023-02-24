@@ -92,7 +92,7 @@ namespace svt
 
     void FileViewContentEnumerator::cancel()
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         m_bCancelled = true;
         m_pResultHandler = nullptr;
         m_aFolder.aContent = ::ucbhelper::Content();
@@ -105,7 +105,7 @@ namespace svt
         const css::uno::Sequence< OUString >& rDenyList )
     {
         {
-            ::osl::MutexGuard aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
             m_aFolder = _rFolder;
             m_pResultHandler = nullptr;
             m_rDenyList = rDenyList;
@@ -117,7 +117,7 @@ namespace svt
     void FileViewContentEnumerator::enumerateFolderContent(
         const FolderDescriptor& _rFolder, IEnumerationResultHandler* _pResultHandler )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         m_aFolder = _rFolder;
         m_pResultHandler = _pResultHandler;
 
@@ -157,7 +157,7 @@ namespace svt
             {
                 FolderDescriptor aFolder;
                 {
-                    ::osl::MutexGuard aGuard( m_aMutex );
+                    std::unique_lock aGuard( m_aMutex );
                     aFolder = m_aFolder;
                     xEnvironment = m_xCommandEnv;
                 }
@@ -165,7 +165,7 @@ namespace svt
                 {
                     aFolder.aContent = ::ucbhelper::Content( aFolder.sURL, xEnvironment, comphelper::getProcessComponentContext() );
                     {
-                        ::osl::MutexGuard aGuard( m_aMutex );
+                        std::unique_lock aGuard( m_aMutex );
                         m_aFolder.aContent = aFolder.aContent;
                     }
                 }
@@ -215,7 +215,7 @@ namespace svt
 
                             // check for restrictions
                             {
-                                ::osl::MutexGuard aGuard( m_aMutex );
+                                std::unique_lock aGuard( m_aMutex );
                                 if ( /* m_rDenyList.hasElements() && */ URLOnDenyList ( sRealURL ) )
                                     continue;
                             }
@@ -268,7 +268,7 @@ namespace svt
                         }
 
                         {
-                            ::osl::MutexGuard aGuard( m_aMutex );
+                            std::unique_lock aGuard( m_aMutex );
                             bCancelled = m_bCancelled;
                         }
                     }
@@ -287,7 +287,7 @@ namespace svt
 
         IEnumerationResultHandler* pHandler = nullptr;
         {
-            ::osl::MutexGuard aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
             pHandler = m_pResultHandler;
             if ( m_bCancelled )
                 return EnumerationResult::ERROR;

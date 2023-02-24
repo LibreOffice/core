@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <mutex>
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <salhelper/thread.hxx>
@@ -163,7 +164,7 @@ namespace svt
         ContentData&                    m_rContent;
         ::osl::Mutex&                   m_rContentMutex;
 
-        mutable ::osl::Mutex            m_aMutex;
+        mutable std::mutex              m_aMutex;
 
         FolderDescriptor                m_aFolder;
         css::uno::Reference< css::ucb::XCommandEnvironment >
