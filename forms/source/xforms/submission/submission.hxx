@@ -21,7 +21,6 @@
 
 #include <tools/urlobj.hxx>
 #include <osl/conditn.hxx>
-#include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -39,6 +38,7 @@
 #include "serialization.hxx"
 
 #include <memory>
+#include <mutex>
 #include <utility>
 
 class CSubmissionPut;
@@ -72,7 +72,7 @@ class CProgressHandlerHelper final : public cppu::WeakImplHelper< css::ucb::XPro
     friend class CSubmissionPost;
     friend class CSubmissionGet;
     osl::Condition m_cFinished;
-    osl::Mutex m_mLock;
+    std::mutex m_mLock;
     sal_Int32 m_count;
 public:
     CProgressHandlerHelper()
@@ -80,20 +80,18 @@ public:
     {}
     virtual void SAL_CALL push( const css::uno::Any& /*aStatus*/) override
     {
-        m_mLock.acquire();
+        std::unique_lock g(m_mLock);
         m_count++;
-        m_mLock.release();
     }
     virtual void SAL_CALL update(const css::uno::Any& /*aStatus*/) override
     {
     }
     virtual void SAL_CALL pop() override
     {
-        m_mLock.acquire();
+        std::unique_lock g(m_mLock);
         m_count--;
         if (m_count == 0)
             m_cFinished.set();
-        m_mLock.release();
     }
 };
 
