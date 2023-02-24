@@ -101,11 +101,11 @@
                       <object class="GtkComboBoxText" id="level">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="tooltip-text" translatable="yes" context="captionoptions|tooltip_text|level">Select the number of outline levels of the immediately prior heading number to prepend to the caption number.</property>
+                        <property name="tooltip-text" translatable="yes" context="captionoptions|tooltip_text|level">Prepend the heading number of the first prior heading with the selected outline level. If [None] is selected, no heading number is prepended.</property>
                         <property name="hexpand">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="level-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="captionoptions|extended_tip|level">Specify the number of outline levels to display before  the caption number. For example, select “2” to display  two heading level numbers. If [None] is selected, then no heading number is displayed.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="captionoptions|extended_tip|level">Prepend the heading number of the first prior heading with the selected outline level. For example, select “2” to display the heading number of the first prior heading with outline level 2. If [None] is selected, no heading number is displayed.</property>
                           </object>
                         </child>
                       </object>
@@ -121,9 +121,10 @@
                         <property name="hexpand">True</property>
                         <property name="activates-default">True</property>
                         <property name="truncate-multiline">True</property>
+                        <property name="tooltip_text" translatable="yes" context="captionoptions|tooltip_text|separator">Enter the character to display between the heading number and the caption number.</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="separator-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="captionoptions|extended_tip|separator">Enter the character to separate the heading numbers from the caption number.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="captionoptions|extended_tip|separator">Enter the character to display between the heading number and the caption number.</property>
                           </object>
                         </child>
                       </object>
@@ -136,7 +137,7 @@
                       <object class="GtkLabel" id="label5">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="captionoptions|label5">_Up to level:</property>
+                        <property name="label" translatable="yes" context="captionoptions|label5">_Outline level:</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">level</property>
                         <property name="xalign">1</property>
@@ -166,7 +167,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="captionoptions|label1">Heading Number Prefix</property>
+                    <property name="label" translatable="yes" context="captionoptions|label1">Heading Number Before Caption Number</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

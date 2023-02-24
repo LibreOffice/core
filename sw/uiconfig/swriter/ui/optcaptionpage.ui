@@ -266,7 +266,7 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="optcaptionpage|label4">Up to level:</property>
+                        <property name="label" translatable="yes" context="optcaptionpage|label4">_Outline level:</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">level</property>
                         <property name="xalign">0</property>
@@ -294,14 +294,14 @@
                       <object class="GtkEntry" id="chapseparator">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
-                        <property name="tooltip-text" translatable="yes" context="captionoptions|tooltip_text|chapseparator">Defines the character to be displayed after the selected chapter number and before the caption number.</property>
+                        <property name="tooltip-text" translatable="yes" context="captionoptions|tooltip_text|chapseparator">Specify the character to display between the heading number and the caption number.</property>
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
                         <property name="activates-default">True</property>
                         <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="chapseparator-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="optcationpage|extended_tip|chapseparator">Defines the character to separate the selected heading numbers from the caption number.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="optcationpage|extended_tip|chapseparator">Specify the character to display between the heading number and the caption number.</property>
                           </object>
                         </child>
                       </object>
@@ -314,7 +314,7 @@
                       <object class="GtkComboBoxText" id="level">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="tooltip-text" translatable="yes" context="optcaptionpage|tooltip_text|level">Specify the number of outline levels of the immediately prior heading number to prepend to the caption number. If [None] is selected, then no heading number is prepended.</property>
+                        <property name="tooltip-text" translatable="yes" context="optcaptionpage|tooltip_text|level">Display the heading number of the first prior heading with the selected outline level. If [None] is selected, no heading number is displayed.</property>
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
                         <items>
@@ -322,7 +322,7 @@
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="level-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="optcaptionpage|extended_tip|level">Specify the number of outline levels to display before  the caption number. For example, select “2” to display  two heading level numbers. If [None] is selected, then no heading number is displayed.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="optcaptionpage|extended_tip|level">The heading number of the first prior heading with the selected outline level is displayed before the caption number. For example, select “2” to use the heading number of the first prior heading with outline level 2. If [None] is selected, no heading number is displayed. Heading numbers must be enabled to use this option. Use “Tools - Heading Numbering.”</property>
                           </object>
                         </child>
                       </object>
@@ -337,7 +337,7 @@
                   <object class="GtkLabel" id="label11">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="optcaptionpage|label11">Heading Number Prefix</property>
+                    <property name="label" translatable="yes" context="optcaptionpage|label11">Heading Number Before Caption Number</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
