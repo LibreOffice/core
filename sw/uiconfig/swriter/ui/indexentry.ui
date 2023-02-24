@@ -277,10 +277,10 @@
                         <property name="activates-default">True</property>
                         <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment1</property>
-                        <property name="tooltip_text" translatable="yes" context="indexentry|levelnf">Enter the index level for the entry.</property>
+                        <property name="tooltip_text" translatable="yes" context="indexentry|levelnf">Enter the index level for the entry, which determines the appearance of the entry in the generated index.</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="levelnf-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|levelnf">Entries using a “Heading X” paragraph style (X = [1–10]) can be automatically added to the Table of Contents. The level of the entry in the index corresponds to the outline level of the heading.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|levelnf">Enter the index level for the entry. The index level determines the appearance of the entry, according to the settings for that level in the “Entries” tab and the “Styles” tab in the “Table of Contents, Index, or Bibliography” dialog. With default settings, a higher index level results in a greater indent for the entry in the generated index.</property>
                           </object>
                         </child>
                       </object>
