@@ -2930,8 +2930,7 @@ sal_Bool SAL_CALL SfxLibraryContainer::supportsService( const OUString& _rServic
 // Ctor
 SfxLibrary::SfxLibrary( ModifiableHelper& _rModifiable, const Type& aType,
     const Reference< XSimpleFileAccess3 >& xSFI )
-        : WeakComponentImplHelper( m_aMutex )
-        , mxSFI( xSFI )
+        : mxSFI( xSFI )
         , mrModifiable( _rModifiable )
         , maNameContainer( new NameContainer(aType) )
         , mbLoaded( true )
@@ -2952,8 +2951,7 @@ SfxLibrary::SfxLibrary( ModifiableHelper& _rModifiable, const Type& aType,
 SfxLibrary::SfxLibrary( ModifiableHelper& _rModifiable, const Type& aType,
     const Reference< XSimpleFileAccess3 >& xSFI,
     OUString aLibInfoFileURL, OUString aStorageURL, bool ReadOnly )
-        : WeakComponentImplHelper( m_aMutex )
-        , mxSFI( xSFI )
+        : mxSFI( xSFI )
         , mrModifiable( _rModifiable )
         , maNameContainer( new NameContainer(aType) )
         , mbLoaded( false )

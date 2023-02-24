@@ -44,6 +44,7 @@
 
 #include <osl/mutex.hxx>
 #include <unotools/eventlisteneradapter.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -468,8 +469,7 @@ class SfxLibrary
     : public css::container::XNameContainer
     , public css::container::XContainer
     , public css::util::XChangesNotifier
-    , public ::cppu::BaseMutex
-    , public ::cppu::WeakComponentImplHelper<>
+    , public ::comphelper::WeakComponentImplHelper<>
 {
     friend class SfxLibraryContainer;
     friend class SfxDialogLibraryContainer;
