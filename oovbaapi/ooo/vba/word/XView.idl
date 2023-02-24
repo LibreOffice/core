@@ -28,6 +28,9 @@ interface XView
         set raises ( com::sun::star::script::BasicErrorException );
     };
 
+    //Show all nonprinting characters (such as hidden text, spaces, carriage returns, etc.).
+    [attribute] boolean ShowAll;
+
     [attribute] long SplitSpecial;
     [attribute] boolean TableGridLines;
     [attribute] long Type;

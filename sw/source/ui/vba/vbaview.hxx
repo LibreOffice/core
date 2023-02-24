@@ -44,6 +44,8 @@ public:
     virtual ~SwVbaView() override;
 
    // XView
+    sal_Bool SAL_CALL getShowAll() override;
+    void SAL_CALL setShowAll(sal_Bool bSet) override;
     virtual ::sal_Int32 SAL_CALL getSeekView() override;
     virtual void SAL_CALL setSeekView( ::sal_Int32 _seekview ) override;
     virtual ::sal_Int32 SAL_CALL getSplitSpecial() override;
