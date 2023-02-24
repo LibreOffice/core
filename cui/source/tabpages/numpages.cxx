@@ -43,6 +43,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/unitconv.hxx>
+#include <svtools/colorcfg.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -2161,10 +2162,10 @@ static tools::Long lcl_DrawBullet(VirtualDevice* pVDev,
     aFont.SetFontSize(aTmpSize);
     aFont.SetTransparent(true);
     Color aBulletColor = rFmt.GetBulletColor();
-    if(aBulletColor == COL_AUTO)
-        aBulletColor = pVDev->GetFillColor().IsDark() ? COL_WHITE : COL_BLACK;
-    else if(aBulletColor == pVDev->GetFillColor())
-        aBulletColor.Invert();
+    if (aBulletColor == COL_AUTO)
+        aBulletColor = pVDev->GetBackgroundColor().IsDark() ? COL_WHITE : COL_BLACK;
+    else if (pVDev->GetBackgroundColor().IsDark() == aBulletColor.IsDark())
+        aBulletColor = pVDev->GetBackgroundColor().IsDark() ? COL_WHITE : COL_BLACK;
     aFont.SetColor(aBulletColor);
     pVDev->SetFont( aFont );
     sal_UCS4 cChar = rFmt.GetBulletChar();
@@ -2190,9 +2191,9 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
 {
     Size aSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
 
-    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-    const Color aBackColor = rStyleSettings.GetFieldColor();
-    const Color aTextColor = rStyleSettings.GetFieldTextColor();
+    // Use default document and font colors to create preview
+    const Color aBackColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+    const Color aTextColor = svtools::ColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
 
     ScopedVclPtrInstance<VirtualDevice> pVDev(rRenderContext);
     pVDev->EnableRTL(rRenderContext.IsRTLEnabled());
@@ -2204,6 +2205,8 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
         aLineColor.Invert();
     pVDev->SetLineColor(aLineColor);
     pVDev->SetFillColor(aBackColor);
+    pVDev->SetBackground(Wallpaper(aBackColor));
+    pVDev->DrawWallpaper(pVDev->GetOutputRectPixel(), pVDev->GetBackground());
 
     if (pActNum)
     {
@@ -2231,6 +2234,9 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
 
         if (bPosition)
         {
+            // When bPosition == true, draw the preview used in the Writer's "Position" tab
+            // This is not used in Impress/Draw
+
             tools::Long nLineHeight = nFontHeight * 8 / 7;
             sal_uInt8 nStart = 0;
             while (!(nActLevel & (1<<nStart)))
@@ -2297,9 +2303,9 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                     vcl::Font aColorFont(aSaveFont);
                     Color aTmpBulletColor = rFmt.GetBulletColor();
                     if (aTmpBulletColor == COL_AUTO)
-                        aTmpBulletColor = aBackColor.IsDark() ? COL_WHITE : COL_BLACK;
-                    else if (aTmpBulletColor == aBackColor)
-                        aTmpBulletColor.Invert();
+                        aTmpBulletColor = pVDev->GetBackgroundColor().IsDark() ? COL_WHITE : COL_BLACK;
+                    else if (pVDev->GetBackgroundColor().IsDark() == aTmpBulletColor.IsDark())
+                        aTmpBulletColor = pVDev->GetBackgroundColor().IsDark() ? COL_WHITE : COL_BLACK;
                     aColorFont.SetColor(aTmpBulletColor);
                     pVDev->SetFont(aColorFont);
                     pVDev->DrawText(Point(nNumberXPos, nYStart), aText);
@@ -2361,14 +2367,15 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
         }
         else
         {
+            // When bPosition == false, draw the preview used in Writer's "Customize" tab
+            // and in Impress' "Bullets and Numbering" dialog
+
             //#i5153# painting gray or black rectangles as 'normal' numbering text
             tools::Long nWidth = pVDev->GetTextWidth("Preview");
             tools::Long nTextHeight = pVDev->GetTextHeight();
             tools::Long nRectHeight = nTextHeight * 2 / 3;
             tools::Long nTopOffset = nTextHeight - nRectHeight;
-            Color aBlackColor(COL_BLACK);
-            if (aBlackColor == aBackColor)
-                aBlackColor.Invert();
+            Color aSelRectColor = pVDev->GetBackgroundColor().IsDark() ? COL_WHITE : COL_BLACK;
 
             for (sal_uInt16 nLevel = 0; nLevel < pActNum->GetLevelCount(); ++nLevel, nYStart = nYStart + nYStep)
             {
@@ -2429,9 +2436,9 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                     aFont.SetFontSize(aTmpSize);
                     Color aTmpBulletColor = rFmt.GetBulletColor();
                     if (aTmpBulletColor == COL_AUTO)
-                        aTmpBulletColor = aBackColor.IsDark() ? COL_WHITE : COL_BLACK;
-                    else if (aTmpBulletColor == aBackColor)
-                        aTmpBulletColor.Invert();
+                        aTmpBulletColor = pVDev->GetBackgroundColor().IsDark() ? COL_WHITE : COL_BLACK;
+                    else if (pVDev->GetBackgroundColor().IsDark() == aTmpBulletColor.IsDark())
+                        aTmpBulletColor = pVDev->GetBackgroundColor().IsDark() ? COL_WHITE : COL_BLACK;
                     aFont.SetColor(aTmpBulletColor);
                     pVDev->SetFont(aFont);
                     aNum.SetLevel( nLevel );
@@ -2449,8 +2456,8 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                 //#i5153# the selected rectangle(s) should be black
                 if (0 != (nActLevel & (1<<nLevel)))
                 {
-                    pVDev->SetFillColor( aBlackColor );
-                    pVDev->SetLineColor( aBlackColor );
+                    pVDev->SetFillColor( aSelRectColor );
+                    pVDev->SetLineColor( aSelRectColor );
                 }
                 else
                 {
