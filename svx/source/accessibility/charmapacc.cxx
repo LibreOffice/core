@@ -483,7 +483,8 @@ sal_Int64 SAL_CALL SvxShowCharSetItemAcc::getAccessibleStateSet()
         if( mpParent->mrParent.GetSelectIndexId() == mpParent->mnId )
         {
             nStateSet |= css::accessibility::AccessibleStateType::SELECTED;
-            nStateSet |= css::accessibility::AccessibleStateType::FOCUSED;
+            if (mpParent->mrParent.HasChildFocus())
+                nStateSet |= css::accessibility::AccessibleStateType::FOCUSED;
         }
         if ( mpParent->mnId >= mpParent->mrParent.FirstInView() && mpParent->mnId <= mpParent->mrParent.LastInView() )
         {
