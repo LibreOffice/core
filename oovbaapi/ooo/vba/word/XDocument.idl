@@ -25,6 +25,7 @@ interface XDocument
     interface XConnectable;
 
     [attribute, readonly] XRange Content;
+    [attribute, readonly] XWindow ActiveWindow;
     [attribute] any AttachedTemplate;
     [attribute] long ProtectionType;
     [attribute] boolean UpdateStylesOnOpen;

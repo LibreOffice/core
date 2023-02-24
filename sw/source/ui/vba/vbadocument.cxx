@@ -30,6 +30,7 @@
 #include "vbabookmarks.hxx"
 #include "vbamailmerge.hxx"
 #include "vbavariables.hxx"
+#include "vbawindow.hxx"
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <cppu/unotype.hxx>
@@ -243,6 +244,13 @@ uno::Any SAL_CALL SwVbaDocument::SelectContentControlsByTitle(const uno::Any& in
     index >>= sTitle;
     return uno::Any(uno::Reference<XCollection>(
                         new SwVbaContentControls(this, mxContext, mxTextDocument, "", sTitle)));
+}
+
+uno::Reference<word::XWindow> SwVbaDocument::getActiveWindow()
+{
+    // copied from vbaappliction which has a #FIXME so far can't determine Parent
+    return new SwVbaWindow(uno::Reference< XHelperInterface >(), mxContext, mxModel,
+                           mxModel->getCurrentController());
 }
 
 uno::Any SAL_CALL
