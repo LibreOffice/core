@@ -5379,7 +5379,7 @@ SfxVoidItem ToolbarModeUI SID_TOOLBAR_MODE_UI
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
+    ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
