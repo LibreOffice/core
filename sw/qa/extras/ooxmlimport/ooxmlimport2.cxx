@@ -948,6 +948,80 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152200)
     // Should not crash/hang because of wrong placement of ending fldChar
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf153791)
+{
+    createSwDoc("tdf153791-shd_overrides_fontRef.docx");
+
+    // the first shape (a paragraph with no background)
+    auto xTextBox(getShape(1));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getProperty<Color>(xTextBox, "CharColor"));
+    uno::Reference<text::XTextRange> xRange(xTextBox, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum"), xRange->getString());
+
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xRange, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+
+    uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xPara, "ParaBackColor"));
+
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xPara, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+
+    uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum"), xRun->getString());
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xRun, "CharBackColor"));
+    // In the absence of paragraph/character background, the whole paragraph is red.
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getProperty<Color>(xRun, "CharColor"));
+
+    // the second shape: two paragraphs
+    xTextBox.set(getShape(2));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getProperty<Color>(xTextBox, "CharColor"));
+    xRange.set(xTextBox, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum" SAL_NEWLINE_STRING "Lorem ipsum"),
+                         xRange->getString());
+
+    xParaEnumAccess.set(xRange, uno::UNO_QUERY_THROW);
+    xParaEnum = xParaEnumAccess->createEnumeration();
+
+    // the first one has paragraph background
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(Color(0xF0F0F0), getProperty<Color>(xPara, "ParaBackColor"));
+
+    xRunEnumAccess.set(xPara, uno::UNO_QUERY_THROW);
+    xRunEnum = xRunEnumAccess->createEnumeration();
+
+    xRun.set(xRunEnum->nextElement(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum"), xRun->getString());
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xRun, "CharBackColor"));
+    // With paragraph background, the whole paragraph is auto.
+    // Without the fix, this would fail with:
+    // - Expected: rgba[ffffff00]
+    // - Actual  : rgba[ff0000ff]
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xRun, "CharColor"));
+
+    // the second paragraph has two runs, the last one with character background
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xPara, "ParaBackColor"));
+
+    xRunEnumAccess.set(xPara, uno::UNO_QUERY_THROW);
+    xRunEnum = xRunEnumAccess->createEnumeration();
+
+    xRun.set(xRunEnum->nextElement(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem "), xRun->getString());
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xRun, "CharBackColor"));
+    // In the absence of paragraph/character background, the run is red
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getProperty<Color>(xRun, "CharColor"));
+
+    xRun.set(xRunEnum->nextElement(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("ipsum"), xRun->getString());
+    CPPUNIT_ASSERT_EQUAL(Color(0xF0F0F0), getProperty<Color>(xRun, "CharBackColor"));
+    // With character background, the run is auto.
+    // Without the fix, this would fail with:
+    // - Expected: rgba[ffffff00]
+    // - Actual  : rgba[ff0000ff]
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xRun, "CharColor"));
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
