@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <mutex>
 #include <vector>
 
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -50,7 +51,7 @@ class OComponentEventThread
     typedef std::vector<std::unique_ptr<css::lang::EventObject>> ThreadEvents;
     typedef std::vector< css::uno::Reference< css::uno::XAdapter> > ThreadObjects;
 
-    ::osl::Mutex                    m_aMutex;
+    std::mutex                      m_aMutex;
     ::osl::Condition                m_aCond;            // Queue filled?
     ThreadEvents                    m_aEvents;          // EventQueue
     ThreadObjects                   m_aControls;        // Control for Submit

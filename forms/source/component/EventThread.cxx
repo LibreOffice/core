@@ -79,7 +79,7 @@ void OComponentEventThread::disposing( const EventObject& evt )
     if( evt.Source != static_cast<XWeak*>(m_xComp.get()) )
         return;
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // Remove EventListener
     Reference<XEventListener>  xEvtLstnr = static_cast<XEventListener*>(this);
@@ -107,7 +107,7 @@ void OComponentEventThread::addEvent( std::unique_ptr<EventObject> _pEvt,
                                    const Reference<XControl>& rControl,
                                    bool bFlag )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // Put data into the queue
     m_aEvents.push_back( std::move( _pEvt ) );
@@ -140,7 +140,7 @@ void OComponentEventThread::run()
 
     do
     {
-        ::osl::MutexGuard aGuard(m_aMutex);
+        std::unique_lock aGuard(m_aMutex);
 
         while( !m_aEvents.empty() )
         {
@@ -160,7 +160,7 @@ void OComponentEventThread::run()
             m_aFlags.erase( firstFlag );
 
             {
-                MutexRelease aReleaseOnce(m_aMutex);
+                aGuard.unlock();
                 // Because a queryHardRef can throw an Exception, it should not be called when
                 // the mutex is locked.
                 Reference<XControl>  xControl;
@@ -170,6 +170,7 @@ void OComponentEventThread::run()
 
                 if( xComp.is() )
                     processEvent( xComp.get(), pEvt.get(), xControl, bFlag );
+                aGuard.lock();
             }
         }
 
@@ -181,9 +182,10 @@ void OComponentEventThread::run()
         // Reset waiting condition
         m_aCond.reset();
         {
-            MutexRelease aReleaseOnce(m_aMutex);
+            aGuard.unlock();
             // And wait ... if, in the meantime, an Event came in after all
             m_aCond.wait();
+            aGuard.lock();
         }
     }
     while( true );
