@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 
 #include <com/sun/star/rendering/XCanvasFont.hpp>
 #include <com/sun/star/geometry/Matrix2D.hpp>
@@ -24,10 +23,9 @@ namespace oglcanvas
 {
     class SpriteCanvas;
 
-    typedef ::cppu::WeakComponentImplHelper< css::rendering::XCanvasFont > CanvasFontBaseT;
+    typedef ::comphelper::WeakComponentImplHelper< css::rendering::XCanvasFont > CanvasFontBaseT;
 
-    class CanvasFont : public ::cppu::BaseMutex,
-                       public CanvasFontBaseT
+    class CanvasFont : public CanvasFontBaseT
     {
     public:
         typedef rtl::Reference<CanvasFont> ImplRef;

@@ -23,7 +23,6 @@ namespace oglcanvas
     CanvasFont::CanvasFont( rendering::FontRequest                          aFontRequest,
                             const uno::Sequence< beans::PropertyValue >&    extraFontProperties,
                             const geometry::Matrix2D&                       fontMatrix ) :
-        CanvasFontBaseT( m_aMutex ),
         maFontRequest(std::move( aFontRequest )),
         mnEmphasisMark(0),
         maFontMatrix( fontMatrix )
@@ -35,7 +34,7 @@ namespace oglcanvas
                                                                                     sal_Int8                        nDirection,
                                                                                     sal_Int64                       nRandomSeed )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         return new TextLayout( aText, nDirection, nRandomSeed, ImplRef( this ) );
     }
@@ -54,7 +53,7 @@ namespace oglcanvas
 
     rendering::FontRequest SAL_CALL CanvasFont::getFontRequest(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         return maFontRequest;
     }
