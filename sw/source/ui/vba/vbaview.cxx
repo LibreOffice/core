@@ -61,6 +61,18 @@ SwVbaView::~SwVbaView()
 {
 }
 
+sal_Bool SwVbaView::getShowAll()
+{
+    bool bShowFormattingMarks = false;
+    mxViewSettings->getPropertyValue("ShowNonprintingCharacters") >>= bShowFormattingMarks;
+    return bShowFormattingMarks;
+}
+
+void SwVbaView::setShowAll(sal_Bool bSet)
+{
+    mxViewSettings->setPropertyValue("ShowNonprintingCharacters", uno::Any(bSet));
+}
+
 ::sal_Int32 SAL_CALL
 SwVbaView::getSeekView()
 {
