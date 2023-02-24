@@ -268,7 +268,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter StaticLibrary,$(TARGETTYPE)),-LIB) \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
-		$(if $(T_SYMBOLS),$(if $(filter Executable Library CppunitTest,$(TARGETTYPE)),$(gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO)),) \
+		$(if $(T_SYMBOLS),$(if $(filter Executable Library CppunitTest,$(TARGETTYPE)),$(call gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO,$(DEFS))),) \
 		$(if $(filter YES,$(TARGETGUI)), -SUBSYSTEM:WINDOWS$(gb_MSC_SUBSYSTEM_VERSION), -SUBSYSTEM:CONSOLE$(gb_MSC_SUBSYSTEM_VERSION)) \
 		$(if $(filter YES,$(LIBRARY_X64)), -MACHINE:X64) \
 		$(if $(filter YES,$(PE_X86)), -MACHINE:X86) \
@@ -332,9 +332,10 @@ gb_Windows_PE_TARGETTYPEFLAGS := \
 # link.exe in -LIB mode doesn't understand -debug, use it only for EXEs and DLLs
 ifeq ($(gb_ENABLE_DBGUTIL),$(true))
 # fastlink is faster but pdb files reference .obj files
-gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO := -debug:fastlink
+# but don't do that for setup_native DLLs: this produces make error 139 in some configurations
+gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO = $(if $(filter -U_DLL,$(1)),-debug,-debug:fastlink)
 else
-gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO := -debug
+gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO = -debug
 endif
 
 ifeq ($(ENABLE_LTO),TRUE)
