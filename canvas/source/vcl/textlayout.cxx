@@ -80,7 +80,6 @@ namespace vclcanvas
                             CanvasFont::Reference                      rFont,
                             uno::Reference<rendering::XGraphicDevice>  xDevice,
                             OutDevProviderSharedPtr                    xOutDev ) :
-        TextLayout_Base( m_aMutex ),
         maText(std::move( aText )),
         mpFont(std::move( rFont )),
         mxDevice(std::move( xDevice )),
@@ -88,13 +87,16 @@ namespace vclcanvas
         mnTextDirection( nDirection )
     {}
 
-    void SAL_CALL TextLayout::disposing()
+    void TextLayout::disposing(std::unique_lock<std::mutex>& rGuard)
     {
-        SolarMutexGuard aGuard;
-
-        mpOutDevProvider.reset();
-        mxDevice.clear();
-        mpFont.clear();
+        rGuard.unlock();
+        {
+            SolarMutexGuard aGuard;
+            mpOutDevProvider.reset();
+            mxDevice.clear();
+            mpFont.clear();
+        }
+        rGuard.lock();
     }
 
     // XTextLayout

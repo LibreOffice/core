@@ -19,8 +19,7 @@
 
 #pragma once
 
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/StringContext.hpp>
@@ -33,11 +32,10 @@
 
 namespace vclcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< css::rendering::XTextLayout,
+    typedef ::comphelper::WeakComponentImplHelper< css::rendering::XTextLayout,
                                              css::lang::XServiceInfo > TextLayout_Base;
 
-    class TextLayout : public ::cppu::BaseMutex,
-                       public TextLayout_Base
+    class TextLayout : public TextLayout_Base
     {
     public:
         /// make noncopyable
@@ -52,7 +50,7 @@ namespace vclcanvas
                     OutDevProviderSharedPtr                       xOutDev );
 
         /// Dispose all internal references
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // XTextLayout
         virtual css::uno::Sequence< css::uno::Reference< css::rendering::XPolyPolygon2D > > SAL_CALL queryTextShapes(  ) override;
