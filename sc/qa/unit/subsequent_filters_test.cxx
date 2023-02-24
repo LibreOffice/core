@@ -79,270 +79,7 @@ class ScFiltersTest : public ScModelTestBase
 public:
     ScFiltersTest();
 
-    //ods, xls, xlsx filter tests
-    void testTdf138601_CondFormatXLSX();
-    void testContentODS();
-    void testContentXLS();
-    void testContentXLSX();
-    void testContentXLSXStrict(); // strict OOXML
-    void testContentLotus123();
-    void testContentDIF();
-    void testContentXLSB();
-    void testContentXLS_XML();
-    void testContentGnumeric();
-    void testCondFormatOperatorsSameRangeXLSX();
-    void testTdf139934();
-    void testTdf150452();
-    void testTdf119292();
-    void testTdf48731();
-    void testCondFormatFormulaIsXLSX();
-    void testCondFormatBeginsAndEndsWithXLSX();
-    void testExtCondFormatXLSX();
-    void testUpdateCircleInMergedCellODS();
-    void testDeleteCircleInMergedCellODS();
-    void testBooleanFormatXLSX();
-    void testTdf143809();
-    void testTdf76310();
-    void testBasicCellContentODS();
-    void testRangeNameXLS();
-    void testRangeNameLocalXLS();
-    void testRangeNameXLSX();
-    void testRangeNameODS();
-    void testHyperlinksXLSX();
-    void testHardRecalcODS();
-    void testFunctionsODS();
-    void testFunctionsExcel2010();
-    void testCeilingFloorXLSX();
-    void testCachedFormulaResultsODS();
-    void testCachedMatrixFormulaResultsODS();
-    void testFormulaDepAcrossSheetsODS();
-    void testFormulaDepDeleteContentsODS();
-    void testDatabaseRangesODS();
-    void testDatabaseRangesXLS();
-    void testDatabaseRangesXLSX();
-    void testFormatsODS();
-    // void testFormatsXLS();
-    // void testFormatsXLSX();
-    void testMatrixODS();
-    void testMatrixXLS();
-    void testDoubleThinBorder();
-    void testBorderODS();
-    void testBordersOoo33();
-    void testBugFixesODS();
-    void testBugFixesXLS();
-    void testBugFixesXLSX();
-    void testBrokenQuotesCSV();
-    void testMergedCellsODS();
-    void testRepeatedColumnsODS();
-    void testDataValidityODS();
-    void testDataValidityXLSX();
-    void testDataTableMortgageXLS();
-    void testDataTableOneVarXLSX();
-    void testDataTableMultiTableXLSX();
-
-    void testDataBarODS();
-    void testDataBarXLSX();
-    void testColorScaleODS();
-    void testColorScaleXLSX();
-    void testNewCondFormatODS();
-    void testNewCondFormatXLSX();
-    void testCondFormatThemeColorXLSX();
-    void testCondFormatImportCellIs();
-    void testCondFormatThemeColor2XLSX(); // negative bar color and axis color
-    void testCondFormatThemeColor3XLSX(); // theme index 2 and 3 are switched
-    void testComplexIconSetsXLSX();
-    void testTdf101104();
-    void testTdf64401();
-    void testCondFormatParentXLSX();
-    void testColorScaleNumWithRefXLSX();
-
-    void testOrcusODSStyleInterface();
-
-    void testLiteralInFormulaXLS();
-
-    //change this test file only in excel and not in calc
-    void testCellValueXLSX();
-
-    /**
-     * Test importing of xlsx document that previously had its row index off
-     * by one. (fdo#76032)
-     */
-    void testRowIndex1BasedXLSX();
-
-    //misc tests unrelated to the import filters
-    void testPasswordNew();
-    void testPasswordOld();
-    void testPasswordWrongSHA();
-
-    //test shape import
-    void testControlImport();
-    void testActiveXOptionButtonGroup();
-    void testChartImportODS();
-#if HAVE_MORE_FONTS
-    void testChartImportXLS();
-#endif
-
-    void testNumberFormatHTML();
-    void testNumberFormatCSV();
-
-    void testCellAnchoredShapesODS();
-    void testCellAnchoredHiddenShapesXLSX();
-
-    void testFormulaDependency();
-    void testTdf153444();
-    void testTdf151046();
-
-    void testRowHeightODS();
-    void testRichTextContentODS();
-
-    void testImportCrashes();
-    void testTdf129681();
-    void testTdf149484();
-    void testTdf82254_csv_bom();
-    void testEscapedUnicodeXLSX();
-    void testTdf144758_DBDataDefaultOrientation();
-    void testSharedFormulaXLS();
-    void testSharedFormulaXLSX();
-    void testSharedFormulaRefUpdateXLSX();
-    void testSheetNamesXLSX();
-    void testTdf150599();
-    void testCommentSize();
-    void testEnhancedProtectionXLS();
-    void testEnhancedProtectionXLSX();
-    void testSortWithSharedFormulasODS();
-    void testSortWithSheetExternalReferencesODS();
-    void testSortWithFormattingXLS();
-    void testForcepoint107();
-
-    CPPUNIT_TEST_SUITE(ScFiltersTest);
-    CPPUNIT_TEST(testTdf138601_CondFormatXLSX);
-    CPPUNIT_TEST(testContentODS);
-    CPPUNIT_TEST(testContentXLS);
-    CPPUNIT_TEST(testContentXLSX);
-    CPPUNIT_TEST(testContentXLSXStrict);
-    CPPUNIT_TEST(testContentLotus123);
-    CPPUNIT_TEST(testContentDIF);
-    CPPUNIT_TEST(testContentXLSB);
-    CPPUNIT_TEST(testContentXLS_XML);
-    CPPUNIT_TEST(testContentGnumeric);
-    CPPUNIT_TEST(testCondFormatOperatorsSameRangeXLSX);
-    CPPUNIT_TEST(testTdf139934);
-    CPPUNIT_TEST(testTdf150452);
-    CPPUNIT_TEST(testTdf119292);
-    CPPUNIT_TEST(testTdf48731);
-    CPPUNIT_TEST(testCondFormatFormulaIsXLSX);
-    CPPUNIT_TEST(testCondFormatBeginsAndEndsWithXLSX);
-    CPPUNIT_TEST(testExtCondFormatXLSX);
-    CPPUNIT_TEST(testUpdateCircleInMergedCellODS);
-    CPPUNIT_TEST(testDeleteCircleInMergedCellODS);
-    CPPUNIT_TEST(testBooleanFormatXLSX);
-    CPPUNIT_TEST(testTdf143809);
-    CPPUNIT_TEST(testTdf76310);
-    CPPUNIT_TEST(testBasicCellContentODS);
-    CPPUNIT_TEST(testRangeNameXLS);
-    CPPUNIT_TEST(testRangeNameLocalXLS);
-    CPPUNIT_TEST(testRangeNameXLSX);
-    CPPUNIT_TEST(testRangeNameODS);
-    CPPUNIT_TEST(testHyperlinksXLSX);
-    CPPUNIT_TEST(testHardRecalcODS);
-    CPPUNIT_TEST(testFunctionsODS);
-    CPPUNIT_TEST(testFunctionsExcel2010);
-    CPPUNIT_TEST(testCeilingFloorXLSX);
-    CPPUNIT_TEST(testCachedFormulaResultsODS);
-    CPPUNIT_TEST(testFormulaDepAcrossSheetsODS);
-    CPPUNIT_TEST(testFormulaDepDeleteContentsODS);
-    CPPUNIT_TEST(testCachedMatrixFormulaResultsODS);
-    CPPUNIT_TEST(testDatabaseRangesODS);
-    CPPUNIT_TEST(testDatabaseRangesXLS);
-    CPPUNIT_TEST(testDatabaseRangesXLSX);
-    CPPUNIT_TEST(testFormatsODS);
-    //  CPPUNIT_TEST(testFormatsXLS); TODO: Fix this
-    //  CPPUNIT_TEST(testFormatsXLSX); TODO: Fix this
-    CPPUNIT_TEST(testMatrixODS);
-    CPPUNIT_TEST(testMatrixXLS);
-    CPPUNIT_TEST(testDoubleThinBorder);
-    CPPUNIT_TEST(testBorderODS);
-    CPPUNIT_TEST(testBordersOoo33);
-    CPPUNIT_TEST(testBugFixesODS);
-    CPPUNIT_TEST(testBugFixesXLS);
-    CPPUNIT_TEST(testBugFixesXLSX);
-    CPPUNIT_TEST(testMergedCellsODS);
-    CPPUNIT_TEST(testRepeatedColumnsODS);
-    CPPUNIT_TEST(testDataValidityODS);
-    CPPUNIT_TEST(testDataValidityXLSX);
-    CPPUNIT_TEST(testDataTableMortgageXLS);
-    CPPUNIT_TEST(testDataTableOneVarXLSX);
-    CPPUNIT_TEST(testDataTableMultiTableXLSX);
-    CPPUNIT_TEST(testBrokenQuotesCSV);
-    CPPUNIT_TEST(testCellValueXLSX);
-    CPPUNIT_TEST(testRowIndex1BasedXLSX);
-    CPPUNIT_TEST(testControlImport);
-    CPPUNIT_TEST(testActiveXOptionButtonGroup);
-    CPPUNIT_TEST(testChartImportODS);
-#if HAVE_MORE_FONTS
-    CPPUNIT_TEST(testChartImportXLS);
-#endif
-
-    CPPUNIT_TEST(testDataBarODS);
-    CPPUNIT_TEST(testDataBarXLSX);
-    CPPUNIT_TEST(testColorScaleODS);
-    CPPUNIT_TEST(testColorScaleXLSX);
-    CPPUNIT_TEST(testNewCondFormatODS);
-    CPPUNIT_TEST(testNewCondFormatXLSX);
-    CPPUNIT_TEST(testCondFormatThemeColorXLSX);
-    CPPUNIT_TEST(testCondFormatImportCellIs);
-    CPPUNIT_TEST(testCondFormatThemeColor2XLSX);
-    CPPUNIT_TEST(testCondFormatThemeColor3XLSX);
-    CPPUNIT_TEST(testComplexIconSetsXLSX);
-    CPPUNIT_TEST(testTdf101104);
-    CPPUNIT_TEST(testTdf64401);
-    CPPUNIT_TEST(testCondFormatParentXLSX);
-    CPPUNIT_TEST(testColorScaleNumWithRefXLSX);
-
-    CPPUNIT_TEST(testOrcusODSStyleInterface);
-
-    CPPUNIT_TEST(testLiteralInFormulaXLS);
-
-    CPPUNIT_TEST(testNumberFormatHTML);
-    CPPUNIT_TEST(testNumberFormatCSV);
-
-    CPPUNIT_TEST(testCellAnchoredShapesODS);
-    CPPUNIT_TEST(testCellAnchoredHiddenShapesXLSX);
-
-    CPPUNIT_TEST(testRowHeightODS);
-    CPPUNIT_TEST(testFormulaDependency);
-    CPPUNIT_TEST(testTdf153444);
-    CPPUNIT_TEST(testTdf151046);
-    CPPUNIT_TEST(testRichTextContentODS);
-
-    //disable testPassword on MacOSX due to problems with libsqlite3
-    //also crashes on DragonFly due to problems with nss/nspr headers
-    CPPUNIT_TEST(testPasswordWrongSHA);
-    CPPUNIT_TEST(testPasswordOld);
-    CPPUNIT_TEST(testPasswordNew);
-
-    CPPUNIT_TEST(testImportCrashes);
-    CPPUNIT_TEST(testTdf129681);
-    CPPUNIT_TEST(testTdf149484);
-    CPPUNIT_TEST(testTdf82254_csv_bom);
-    CPPUNIT_TEST(testEscapedUnicodeXLSX);
-    CPPUNIT_TEST(testTdf144758_DBDataDefaultOrientation);
-    CPPUNIT_TEST(testSharedFormulaXLS);
-    CPPUNIT_TEST(testSharedFormulaXLSX);
-    CPPUNIT_TEST(testSharedFormulaRefUpdateXLSX);
-    CPPUNIT_TEST(testSheetNamesXLSX);
-    CPPUNIT_TEST(testTdf150599);
-    CPPUNIT_TEST(testCommentSize);
-    CPPUNIT_TEST(testEnhancedProtectionXLS);
-    CPPUNIT_TEST(testEnhancedProtectionXLSX);
-    CPPUNIT_TEST(testSortWithSharedFormulasODS);
-    CPPUNIT_TEST(testSortWithSheetExternalReferencesODS);
-    CPPUNIT_TEST(testSortWithFormattingXLS);
-    CPPUNIT_TEST(testForcepoint107);
-
-    CPPUNIT_TEST_SUITE_END();
-
-private:
+protected:
     void testImportCrash(const char* rFileName);
 };
 
@@ -429,7 +166,7 @@ void testContentImpl(ScDocument& rDoc, bool bCheckMergedCells)
 }
 }
 
-void ScFiltersTest::testTdf138601_CondFormatXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf138601_CondFormatXLSX)
 {
     createScDoc("xlsx/tdf138601.xlsx");
 
@@ -453,7 +190,7 @@ void ScFiltersTest::testTdf138601_CondFormatXLSX()
     CPPUNIT_ASSERT_EQUAL(Color(255, 255, 201), pColorScaleEntry3->GetColor());
 }
 
-void ScFiltersTest::testContentODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testContentODS)
 {
     createScDoc("ods/universal-content.ods");
     ScDocShell* pDocSh = getScDocShell();
@@ -462,7 +199,7 @@ void ScFiltersTest::testContentODS()
     testContentImpl(*getScDoc(), true);
 }
 
-void ScFiltersTest::testContentXLS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testContentXLS)
 {
     createScDoc("xls/universal-content.xls");
     ScDocShell* pDocSh = getScDocShell();
@@ -471,7 +208,7 @@ void ScFiltersTest::testContentXLS()
     testContentImpl(*getScDoc(), true);
 }
 
-void ScFiltersTest::testContentXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testContentXLSX)
 {
     createScDoc("xlsx/universal-content.xlsx");
     ScDocShell* pDocSh = getScDocShell();
@@ -480,8 +217,9 @@ void ScFiltersTest::testContentXLSX()
     testContentImpl(*getScDoc(), true);
 }
 
-void ScFiltersTest::testContentXLSXStrict()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testContentXLSXStrict)
 {
+    // strict OOXML
     createScDoc("xlsx/universal-content-strict.xlsx");
     ScDocShell* pDocSh = getScDocShell();
     pDocSh->DoHardRecalc();
@@ -489,7 +227,7 @@ void ScFiltersTest::testContentXLSXStrict()
     testContentImpl(*getScDoc(), true);
 }
 
-void ScFiltersTest::testContentLotus123()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testContentLotus123)
 {
     createScDoc("123/universal-content.123");
     ScDocShell* pDocSh = getScDocShell();
@@ -498,7 +236,7 @@ void ScFiltersTest::testContentLotus123()
     testContentImpl(*getScDoc(), false);
 }
 
-void ScFiltersTest::testContentDIF()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testContentDIF)
 {
     createScDoc("dif/universal-content.dif");
     ScDocShell* pDocSh = getScDocShell();
@@ -507,7 +245,7 @@ void ScFiltersTest::testContentDIF()
     testContentImpl(*getScDoc(), false);
 }
 
-void ScFiltersTest::testContentXLSB()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testContentXLSB)
 {
     createScDoc("xlsb/universal-content.xlsb");
     ScDocShell* pDocSh = getScDocShell();
@@ -516,7 +254,7 @@ void ScFiltersTest::testContentXLSB()
     testContentImpl(*getScDoc(), true);
 }
 
-void ScFiltersTest::testContentXLS_XML()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testContentXLS_XML)
 {
     createScDoc("xml/universal-content.xml");
     ScDocShell* pDocSh = getScDocShell();
@@ -525,7 +263,7 @@ void ScFiltersTest::testContentXLS_XML()
     testContentImpl(*getScDoc(), false);
 }
 
-void ScFiltersTest::testContentGnumeric()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testContentGnumeric)
 {
     createScDoc("gnumeric/universal-content.gnumeric");
     ScDocShell* pDocSh = getScDocShell();
@@ -534,7 +272,7 @@ void ScFiltersTest::testContentGnumeric()
     testContentImpl(*getScDoc(), false);
 }
 
-void ScFiltersTest::testCondFormatOperatorsSameRangeXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCondFormatOperatorsSameRangeXLSX)
 {
     createScDoc("xlsx/tdf139928.xlsx");
 
@@ -565,7 +303,7 @@ void ScFiltersTest::testCondFormatOperatorsSameRangeXLSX()
     CPPUNIT_ASSERT_EQUAL(ScConditionMode::EndsWith, pCondition->GetOperation());
 }
 
-void ScFiltersTest::testTdf119292()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf119292)
 {
     createScDoc("xlsx/tdf119292.xlsx");
 
@@ -597,7 +335,7 @@ void ScFiltersTest::testTdf119292()
     CPPUNIT_ASSERT_EQUAL(Point(114, 54), aPoly270Pos3);
 }
 
-void ScFiltersTest::testTdf139934()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf139934)
 {
     createScDoc("xlsx/tdf139934.xlsx");
 
@@ -610,7 +348,7 @@ void ScFiltersTest::testTdf139934()
     CPPUNIT_ASSERT_EQUAL(OUString("11/25/2020"), pDoc->GetString(0, 61, 0));
 }
 
-void ScFiltersTest::testTdf150452()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf150452)
 {
     // Without the fix in place, this test would have crashed
     createScDoc("csv/tdf150452.csv");
@@ -621,7 +359,7 @@ void ScFiltersTest::testTdf150452()
     CPPUNIT_ASSERT_EQUAL(OUString("1-GE41L"), pDoc->GetString(0, 3998, 0));
 }
 
-void ScFiltersTest::testTdf48731()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf48731)
 {
     createScDoc("csv/tdf48731.csv");
 
@@ -646,7 +384,7 @@ void ScFiltersTest::testTdf48731()
     CPPUNIT_ASSERT_EQUAL(OUString("'mword"), pDoc->GetString(1, 14, 0));
 }
 
-void ScFiltersTest::testCondFormatFormulaIsXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCondFormatFormulaIsXLSX)
 {
     createScDoc("xlsx/tdf113013.xlsx");
 
@@ -667,7 +405,7 @@ void ScFiltersTest::testCondFormatFormulaIsXLSX()
     CPPUNIT_ASSERT(!aCellStyleA2.isEmpty());
 }
 
-void ScFiltersTest::testCondFormatBeginsAndEndsWithXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCondFormatBeginsAndEndsWithXLSX)
 {
     createScDoc("xlsx/tdf120749.xlsx");
 
@@ -700,7 +438,7 @@ void ScFiltersTest::testCondFormatBeginsAndEndsWithXLSX()
     CPPUNIT_ASSERT(!aCellStyleA4.isEmpty());
 }
 
-void ScFiltersTest::testExtCondFormatXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testExtCondFormatXLSX)
 {
     createScDoc("xlsx/tdf122102.xlsx");
 
@@ -733,7 +471,7 @@ void ScFiltersTest::testExtCondFormatXLSX()
     CPPUNIT_ASSERT(!aCellStyleA4.isEmpty());
 }
 
-void ScFiltersTest::testUpdateCircleInMergedCellODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testUpdateCircleInMergedCellODS)
 {
     createScDoc("ods/updateCircleInMergedCell.ods");
 
@@ -761,7 +499,7 @@ void ScFiltersTest::testUpdateCircleInMergedCellODS()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), pPage->GetObjCount());
 }
 
-void ScFiltersTest::testDeleteCircleInMergedCellODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDeleteCircleInMergedCellODS)
 {
     createScDoc("ods/deleteCircleInMergedCell.ods");
 
@@ -792,7 +530,7 @@ void ScFiltersTest::testDeleteCircleInMergedCellODS()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
 }
 
-void ScFiltersTest::testBasicCellContentODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testBasicCellContentODS)
 {
     createScDoc("ods/basic-cell-content.ods");
 
@@ -811,7 +549,7 @@ void ScFiltersTest::testBasicCellContentODS()
     CPPUNIT_ASSERT_EQUAL(0.0, aCell.getDouble());
 }
 
-void ScFiltersTest::testBooleanFormatXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testBooleanFormatXLSX)
 {
     createScDoc("xlsx/check-boolean.xlsx");
     ScDocument* pDoc = getScDoc();
@@ -828,7 +566,7 @@ void ScFiltersTest::testBooleanFormatXLSX()
     }
 }
 
-void ScFiltersTest::testTdf143809()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf143809)
 {
     createScDoc("ods/tdf143809.ods");
 
@@ -850,7 +588,7 @@ void ScFiltersTest::testTdf143809()
     CPPUNIT_ASSERT_EQUAL(OUString("51900"), pDoc->GetString(0, 1, 0));
 }
 
-void ScFiltersTest::testTdf76310()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf76310)
 {
     createScDoc("ods/tdf76310.ods");
 
@@ -866,7 +604,7 @@ void ScFiltersTest::testTdf76310()
     ASSERT_DOUBLES_EQUAL(3.0, pDoc->GetValue(0, 0, 0));
 }
 
-void ScFiltersTest::testRangeNameXLS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testRangeNameXLS)
 {
     createScDoc("xls/named-ranges-global.xls");
     ScDocShell* pDocSh = getScDocShell();
@@ -880,7 +618,7 @@ void ScFiltersTest::testRangeNameXLS()
     testFile(aCSVPath, *pDoc, 1);
 }
 
-void ScFiltersTest::testRangeNameLocalXLS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testRangeNameLocalXLS)
 {
     createScDoc("xls/named-ranges-local.xls");
     ScDocShell* pDocSh = getScDocShell();
@@ -899,7 +637,7 @@ void ScFiltersTest::testRangeNameLocalXLS()
     CPPUNIT_ASSERT_EQUAL(OUString("=local_name1"), aFormula);
 }
 
-void ScFiltersTest::testRangeNameXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testRangeNameXLSX)
 {
     createScDoc("xlsx/named-ranges-global.xlsx");
     ScDocShell* pDocSh = getScDocShell();
@@ -909,7 +647,7 @@ void ScFiltersTest::testRangeNameXLSX()
     testRangeNameImpl(*pDoc);
 }
 
-void ScFiltersTest::testRangeNameODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testRangeNameODS)
 {
     createScDoc("ods/named-ranges-global.ods");
 
@@ -923,7 +661,7 @@ void ScFiltersTest::testRangeNameODS()
     testFile(aCSVPath, *pDoc, 1);
 }
 
-void ScFiltersTest::testHyperlinksXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHyperlinksXLSX)
 {
     createScDoc("xlsx/hyperlinks.xlsx");
     ScDocument* pDoc = getScDoc();
@@ -933,7 +671,7 @@ void ScFiltersTest::testHyperlinksXLSX()
     CPPUNIT_ASSERT_EQUAL(OUString("10:ABC12"), pDoc->GetString(ScAddress(0, 3, 0)));
 }
 
-void ScFiltersTest::testHardRecalcODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHardRecalcODS)
 {
     createScDoc("ods/hard-recalc.ods");
     ScDocShell* pDocSh = getScDocShell();
@@ -947,7 +685,7 @@ void ScFiltersTest::testHardRecalcODS()
     testFile(aCSVPath, *pDoc, 0);
 }
 
-void ScFiltersTest::testFunctionsODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testFunctionsODS)
 {
     createScDoc("ods/functions.ods");
     ScDocShell* pDocSh = getScDocShell();
@@ -1000,7 +738,7 @@ void ScFiltersTest::testFunctionsODS()
     // testFile(aCSVFileName, rDocUserDef, 0);
 }
 
-void ScFiltersTest::testFunctionsExcel2010()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testFunctionsExcel2010)
 {
     createScDoc("xlsx/functions-excel-2010.xlsx");
     ScDocument* pDoc = getScDoc();
@@ -1009,7 +747,7 @@ void ScFiltersTest::testFunctionsExcel2010()
     testFunctionsExcel2010_Impl(*pDoc);
 }
 
-void ScFiltersTest::testCeilingFloorXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCeilingFloorXLSX)
 {
     createScDoc("xlsx/ceiling-floor.xlsx");
     ScDocument* pDoc = getScDoc();
@@ -1018,7 +756,7 @@ void ScFiltersTest::testCeilingFloorXLSX()
     testCeilingFloor_Impl(*pDoc);
 }
 
-void ScFiltersTest::testCachedFormulaResultsODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCachedFormulaResultsODS)
 {
     {
         createScDoc("ods/functions.ods");
@@ -1082,7 +820,7 @@ void ScFiltersTest::testCachedFormulaResultsODS()
     }
 }
 
-void ScFiltersTest::testCachedMatrixFormulaResultsODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCachedMatrixFormulaResultsODS)
 {
     createScDoc("ods/matrix.ods");
 
@@ -1112,7 +850,7 @@ void ScFiltersTest::testCachedMatrixFormulaResultsODS()
     CPPUNIT_ASSERT_EQUAL(1.0, nVal);
 }
 
-void ScFiltersTest::testFormulaDepAcrossSheetsODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testFormulaDepAcrossSheetsODS)
 {
     createScDoc("ods/formula-across-sheets.ods");
     ScDocument* pDoc = getScDoc();
@@ -1136,7 +874,7 @@ void ScFiltersTest::testFormulaDepAcrossSheetsODS()
                            fC4 != pDoc->GetValue(ScAddress(2, 3, 2)));
 }
 
-void ScFiltersTest::testFormulaDepDeleteContentsODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testFormulaDepDeleteContentsODS)
 {
     createScDoc("ods/formula-delete-contents.ods");
     ScDocument* pDoc = getScDoc();
@@ -1214,7 +952,7 @@ void testDBRanges_Impl(ScDocument& rDoc, bool bIsODS)
 }
 }
 
-void ScFiltersTest::testDatabaseRangesODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDatabaseRangesODS)
 {
     createScDoc("ods/database.ods");
     ScDocShell* pDocSh = getScDocShell();
@@ -1225,7 +963,7 @@ void ScFiltersTest::testDatabaseRangesODS()
     testDBRanges_Impl(*pDoc, true);
 }
 
-void ScFiltersTest::testDatabaseRangesXLS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDatabaseRangesXLS)
 {
     createScDoc("xls/database.xls");
     ScDocShell* pDocSh = getScDocShell();
@@ -1236,7 +974,7 @@ void ScFiltersTest::testDatabaseRangesXLS()
     testDBRanges_Impl(*pDoc, false);
 }
 
-void ScFiltersTest::testDatabaseRangesXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDatabaseRangesXLSX)
 {
     createScDoc("xlsx/database.xlsx");
     ScDocShell* pDocSh = getScDocShell();
@@ -1247,7 +985,7 @@ void ScFiltersTest::testDatabaseRangesXLSX()
     testDBRanges_Impl(*pDoc, false);
 }
 
-void ScFiltersTest::testFormatsODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testFormatsODS)
 {
     createScDoc("ods/formats.ods");
     ScDocShell* pDocSh = getScDocShell();
@@ -1278,7 +1016,7 @@ void ScFiltersTest::testFormatsODS()
 //     testFormats(rDoc, FORMAT_XLSX);
 // }
 
-void ScFiltersTest::testMatrixODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testMatrixODS)
 {
     createScDoc("ods/matrix.ods");
     ScDocShell* pDocSh = getScDocShell();
@@ -1290,7 +1028,7 @@ void ScFiltersTest::testMatrixODS()
     testFile(aCSVPath, *pDoc, 0);
 }
 
-void ScFiltersTest::testMatrixXLS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testMatrixXLS)
 {
     createScDoc("xls/matrix.xls");
     ScDocShell* pDocSh = getScDocShell();
@@ -1302,7 +1040,7 @@ void ScFiltersTest::testMatrixXLS()
     testFile(aCSVPath, *pDoc, 0);
 }
 
-void ScFiltersTest::testDoubleThinBorder()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDoubleThinBorder)
 {
     // double-thin borders created with size less than 1.15 where invisible (and subsequently lost) on round-trips.
     createScDoc("ods/tdf88827_borderDoubleThin.ods");
@@ -1320,7 +1058,7 @@ void ScFiltersTest::testDoubleThinBorder()
     CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::DOUBLE_THIN, pRight->GetBorderLineStyle());
 }
 
-void ScFiltersTest::testBorderODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testBorderODS)
 {
     createScDoc("ods/border.ods");
 
@@ -1415,7 +1153,7 @@ struct Border
 };
 }
 
-void ScFiltersTest::testBordersOoo33()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testBordersOoo33)
 {
     std::vector<Border> borders;
     borders.emplace_back(1, 1, 22, 22, 22, 22, 1, 1, 20, 1, 1, 20, 1, 1, 20, 1, 1, 20, 3, 3, 3, 3);
@@ -1494,7 +1232,7 @@ void ScFiltersTest::testBordersOoo33()
     }
 }
 
-void ScFiltersTest::testBugFixesODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testBugFixesODS)
 {
     createScDoc("ods/bug-fixes.ods");
 
@@ -1526,7 +1264,7 @@ void ScFiltersTest::testBugFixesODS()
     }
 }
 
-void ScFiltersTest::testBugFixesXLS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testBugFixesXLS)
 {
     createScDoc("xls/bug-fixes.xls");
 
@@ -1534,7 +1272,7 @@ void ScFiltersTest::testBugFixesXLS()
     pDocSh->DoHardRecalc();
 }
 
-void ScFiltersTest::testBugFixesXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testBugFixesXLSX)
 {
     createScDoc("xlsx/bug-fixes.xlsx");
 
@@ -1560,7 +1298,7 @@ void checkMergedCells(ScDocument& rDoc, const ScAddress& rStartAddress,
 }
 }
 
-void ScFiltersTest::testMergedCellsODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testMergedCellsODS)
 {
     createScDoc("ods/merged.ods");
     ScDocument* pDoc = getScDoc();
@@ -1582,7 +1320,7 @@ void ScFiltersTest::testMergedCellsODS()
     checkMergedCells(*pDoc, ScAddress(4, 3, 1), ScAddress(6, 15, 1));
 }
 
-void ScFiltersTest::testRepeatedColumnsODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testRepeatedColumnsODS)
 {
     createScDoc("ods/repeatedColumns.ods");
     ScDocument* pDoc = getScDoc();
@@ -1704,7 +1442,7 @@ void checkCellValidity(const ScAddress& rValBaseAddr, const ScRange& rRange, con
 }
 }
 
-void ScFiltersTest::testDataValidityODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDataValidityODS)
 {
     createScDoc("ods/dataValidity.ods");
     ScDocument* pDoc = getScDoc();
@@ -1753,7 +1491,7 @@ void ScFiltersTest::testDataValidityODS()
     testFile(aCSVPath, *pDoc, 2);
 }
 
-void ScFiltersTest::testDataValidityXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDataValidityXLSX)
 {
     createScDoc("xlsx/dataValidity.xlsx");
     ScDocument* pDoc = getScDoc();
@@ -1773,7 +1511,7 @@ void ScFiltersTest::testDataValidityXLSX()
     checkCellValidity(aValBaseAddr3, aRange3, *pDoc);
 }
 
-void ScFiltersTest::testDataTableMortgageXLS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDataTableMortgageXLS)
 {
     createScDoc("xls/data-table/mortgage.xls");
 
@@ -1814,7 +1552,7 @@ void ScFiltersTest::testDataTableMortgageXLS()
                                  pDoc->GetFormula(4, 10, 0));
 }
 
-void ScFiltersTest::testDataTableOneVarXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDataTableOneVarXLSX)
 {
     createScDoc("xlsx/data-table/one-variable.xlsx");
 
@@ -1852,7 +1590,7 @@ void ScFiltersTest::testDataTableOneVarXLSX()
     CPPUNIT_ASSERT_EQUAL(50.0, pDoc->GetValue(ScAddress(8, 4, 0)));
 }
 
-void ScFiltersTest::testDataTableMultiTableXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDataTableMultiTableXLSX)
 {
     createScDoc("xlsx/data-table/multi-table.xlsx");
 
@@ -1879,7 +1617,7 @@ void ScFiltersTest::testDataTableMultiTableXLSX()
     CPPUNIT_ASSERT_EQUAL(144.0, pDoc->GetValue(ScAddress(12, 14, 0)));
 }
 
-void ScFiltersTest::testBrokenQuotesCSV()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testBrokenQuotesCSV)
 {
     createScDoc("csv/fdo48621_broken_quotes.csv");
 
@@ -1890,8 +1628,9 @@ void ScFiltersTest::testBrokenQuotesCSV()
     testFile(aCSVPath, *pDoc, 0, StringType::PureString);
 }
 
-void ScFiltersTest::testCellValueXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCellValueXLSX)
 {
+    //change this test file only in excel and not in calc
     createScDoc("xlsx/cell-value.xlsx");
     ScDocument* pDoc = getScDoc();
 
@@ -1899,8 +1638,12 @@ void ScFiltersTest::testCellValueXLSX()
     testFile(aCSVPath, *pDoc, 0);
 }
 
-void ScFiltersTest::testRowIndex1BasedXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testRowIndex1BasedXLSX)
 {
+    /**
+     * Test importing of xlsx document that previously had its row index off
+     * by one. (fdo#76032)
+     */
     createScDoc("xlsx/row-index-1-based.xlsx");
     ScDocument* pDoc = getScDoc();
 
@@ -1936,26 +1679,26 @@ void ScFiltersTest::testImportCrash(const char* rFileName)
     pDoc->CalcAll(); // perform hard re-calculation.
 }
 
-void ScFiltersTest::testPasswordNew()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testPasswordNew)
 {
     //tests opening a file with new password algorithm
     createScDoc("ods/password.ods", /*pPassword*/ "test");
 }
 
-void ScFiltersTest::testPasswordOld()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testPasswordOld)
 {
     //tests opening a file with old password algorithm
     createScDoc("ods/passwordOld.ods", /*pPassword*/ "test");
 }
 
-void ScFiltersTest::testPasswordWrongSHA()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testPasswordWrongSHA)
 {
     //tests opening a file wrongly using the new password algorithm
     //in a sxc with the key algorithm missing
     createScDoc("ods/passwordWrongSHA.ods", /*pPassword*/ "test");
 }
 
-void ScFiltersTest::testControlImport()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testControlImport)
 {
     createScDoc("xlsx/singlecontrol.xlsx");
 
@@ -1969,7 +1712,7 @@ void ScFiltersTest::testControlImport()
                                                          UNO_QUERY_THROW);
 }
 
-void ScFiltersTest::testActiveXOptionButtonGroup()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testActiveXOptionButtonGroup)
 {
     createScDoc("xlsx/tdf111980_radioButtons.xlsx");
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
@@ -2044,7 +1787,7 @@ void ScFiltersTest::testActiveXOptionButtonGroup()
     CPPUNIT_ASSERT_EQUAL(sGroupName, sGroupName10);
 }
 
-void ScFiltersTest::testChartImportODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testChartImportODS)
 {
     createScDoc("ods/chart-import-basic.ods");
 
@@ -2078,7 +1821,7 @@ void ScFiltersTest::testChartImportODS()
 }
 
 #if HAVE_MORE_FONTS
-void ScFiltersTest::testChartImportXLS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testChartImportXLS)
 {
     createScDoc("xls/chartx.xls");
 
@@ -2093,7 +1836,7 @@ void ScFiltersTest::testChartImportXLS()
 }
 #endif
 
-void ScFiltersTest::testNumberFormatHTML()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testNumberFormatHTML)
 {
     setImportFilterName("calc_HTML_WebQuery");
     createScDoc("html/numberformat.html");
@@ -2114,7 +1857,7 @@ void ScFiltersTest::testNumberFormatHTML()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect value.", 199.98, pDoc->GetValue(1, 1, 0));
 }
 
-void ScFiltersTest::testNumberFormatCSV()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testNumberFormatCSV)
 {
     createScDoc("csv/numberformat.csv");
 
@@ -2134,7 +1877,7 @@ void ScFiltersTest::testNumberFormatCSV()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect value.", 199.98, pDoc->GetValue(1, 1, 0));
 }
 
-void ScFiltersTest::testCellAnchoredShapesODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCellAnchoredShapesODS)
 {
     createScDoc("ods/cell-anchored-shapes.ods");
 
@@ -2159,7 +1902,7 @@ void ScFiltersTest::testCellAnchoredShapesODS()
     }
 }
 
-void ScFiltersTest::testCellAnchoredHiddenShapesXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCellAnchoredHiddenShapesXLSX)
 {
     createScDoc("xlsx/cell-anchored-hidden-shapes.xlsx");
 
@@ -2181,7 +1924,7 @@ void ScFiltersTest::testCellAnchoredHiddenShapesXLSX()
         !pObj->IsVisible());
 }
 
-void ScFiltersTest::testRowHeightODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testRowHeightODS)
 {
     createScDoc("ods/row-height-import.ods");
 
@@ -2221,7 +1964,7 @@ void ScFiltersTest::testRowHeightODS()
     CPPUNIT_ASSERT_MESSAGE("Row should have an automatic height.", !bManual);
 }
 
-void ScFiltersTest::testRichTextContentODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testRichTextContentODS)
 {
     createScDoc("ods/rich-text-cells.ods");
     ScDocument* pDoc = getScDoc();
@@ -2476,7 +2219,7 @@ void ScFiltersTest::testRichTextContentODS()
     }
 }
 
-void ScFiltersTest::testDataBarODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDataBarODS)
 {
     createScDoc("ods/databar.ods");
 
@@ -2484,7 +2227,7 @@ void ScFiltersTest::testDataBarODS()
     testDataBar_Impl(*pDoc);
 }
 
-void ScFiltersTest::testDataBarXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDataBarXLSX)
 {
     createScDoc("xlsx/databar.xlsx");
 
@@ -2492,7 +2235,7 @@ void ScFiltersTest::testDataBarXLSX()
     testDataBar_Impl(*pDoc);
 }
 
-void ScFiltersTest::testColorScaleODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testColorScaleODS)
 {
     createScDoc("ods/colorscale.ods");
     ScDocument* pDoc = getScDoc();
@@ -2501,7 +2244,7 @@ void ScFiltersTest::testColorScaleODS()
     testColorScale3Entry_Impl(*pDoc);
 }
 
-void ScFiltersTest::testColorScaleXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testColorScaleXLSX)
 {
     createScDoc("xlsx/colorscale.xlsx");
     ScDocument* pDoc = getScDoc();
@@ -2510,7 +2253,7 @@ void ScFiltersTest::testColorScaleXLSX()
     testColorScale3Entry_Impl(*pDoc);
 }
 
-void ScFiltersTest::testNewCondFormatODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testNewCondFormatODS)
 {
     createScDoc("ods/new_cond_format_test.ods");
 
@@ -2520,7 +2263,7 @@ void ScFiltersTest::testNewCondFormatODS()
     testCondFile(aCSVPath, pDoc, 0);
 }
 
-void ScFiltersTest::testNewCondFormatXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testNewCondFormatXLSX)
 {
     createScDoc("xlsx/new_cond_format_test.xlsx");
 
@@ -2530,7 +2273,7 @@ void ScFiltersTest::testNewCondFormatXLSX()
     testCondFile(aCSVPath, pDoc, 0);
 }
 
-void ScFiltersTest::testCondFormatImportCellIs()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCondFormatImportCellIs)
 {
     createScDoc("xlsx/condFormat_cellis.xlsx");
 
@@ -2561,7 +2304,7 @@ void ScFiltersTest::testCondFormatImportCellIs()
     CPPUNIT_ASSERT_EQUAL(OUString("$Sheet2.$A$1"), aStr);
 }
 
-void ScFiltersTest::testCondFormatThemeColorXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCondFormatThemeColorXLSX)
 {
     createScDoc("xlsx/condformat_theme_color.xlsx");
 
@@ -2595,8 +2338,9 @@ void ScFiltersTest::testCondFormatThemeColorXLSX()
     CPPUNIT_ASSERT_EQUAL(Color(157, 195, 230), pColorScaleEntry->GetColor());
 }
 
-void ScFiltersTest::testCondFormatThemeColor2XLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCondFormatThemeColor2XLSX)
 {
+    // negative bar color and axis color
     createScDoc("xlsx/cond_format_theme_color2.xlsx");
 
     ScDocument* pDoc = getScDoc();
@@ -2629,8 +2373,9 @@ void checkDatabarPositiveColor(const ScConditionalFormat* pFormat, const Color& 
 }
 }
 
-void ScFiltersTest::testCondFormatThemeColor3XLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCondFormatThemeColor3XLSX)
 {
+    // theme index 2 and 3 are switched
     createScDoc("xlsx/cond_format_theme_color3.xlsx");
 
     ScDocument* pDoc = getScDoc();
@@ -2699,7 +2444,7 @@ void testCustomIconSetsXLSX_Impl(const ScDocument& rDoc, SCCOL nCol, SCROW nRow,
 }
 }
 
-void ScFiltersTest::testComplexIconSetsXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testComplexIconSetsXLSX)
 {
     createScDoc("xlsx/complex_icon_set.xlsx");
 
@@ -2721,7 +2466,7 @@ void ScFiltersTest::testComplexIconSetsXLSX()
     testCustomIconSetsXLSX_Impl(*pDoc, 3, 3, IconSet_3Arrows, 2);
 }
 
-void ScFiltersTest::testTdf101104()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf101104)
 {
     createScDoc("ods/tdf101104.ods");
 
@@ -2747,7 +2492,7 @@ void ScFiltersTest::testTdf101104()
     }
 }
 
-void ScFiltersTest::testTdf64401()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf64401)
 {
     createScDoc("ods/tdf64401.ods");
 
@@ -2795,7 +2540,7 @@ void ScFiltersTest::testTdf64401()
     }
 }
 
-void ScFiltersTest::testCondFormatParentXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCondFormatParentXLSX)
 {
     createScDoc("xlsx/cond_parent.xlsx");
 
@@ -2807,7 +2552,7 @@ void ScFiltersTest::testCondFormatParentXLSX()
     CPPUNIT_ASSERT_EQUAL(SvxCellVerJustify::Top, rVerJustify.GetValue());
 }
 
-void ScFiltersTest::testColorScaleNumWithRefXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testColorScaleNumWithRefXLSX)
 {
     createScDoc("xlsx/colorscale_num_with_ref.xlsx");
 
@@ -2834,7 +2579,7 @@ void ScFiltersTest::testColorScaleNumWithRefXLSX()
                          pColorScaleEntry->GetFormula(formula::FormulaGrammar::GRAM_NATIVE));
 }
 
-void ScFiltersTest::testOrcusODSStyleInterface()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testOrcusODSStyleInterface)
 {
     ScDocument aDoc;
     OUString aFullUrl = m_directories.getURLFromSrc(u"sc/qa/unit/data/xml/styles.xml");
@@ -3094,7 +2839,7 @@ void ScFiltersTest::testOrcusODSStyleInterface()
     checkFontWeight("Accent 3", WEIGHT_BOLD); // inherits from 'Accent'
 }
 
-void ScFiltersTest::testLiteralInFormulaXLS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testLiteralInFormulaXLS)
 {
     createScDoc("xls/shared-string/literal-in-formula.xls");
 
@@ -3104,7 +2849,7 @@ void ScFiltersTest::testLiteralInFormulaXLS()
     CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(0, 0, 0)));
 }
 
-void ScFiltersTest::testFormulaDependency()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testFormulaDependency)
 {
     createScDoc("ods/dependencyTree.ods");
 
@@ -3121,7 +2866,7 @@ void ScFiltersTest::testFormulaDependency()
     // CPPUNIT_ASSERT_EQUAL(pDoc->GetString(0,4,0), rDoc.GetString(0,5,0));
 }
 
-void ScFiltersTest::testTdf153444()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf153444)
 {
     createScDoc("xml/tdf153444.xml");
 
@@ -3139,7 +2884,7 @@ void ScFiltersTest::testTdf153444()
     CPPUNIT_ASSERT_EQUAL(OUString(u"ß, µm/m"), pDoc->GetString(5, 0, 0));
 }
 
-void ScFiltersTest::testTdf151046()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf151046)
 {
     createScDoc("ods/tdf151046.ods");
 
@@ -3154,7 +2899,7 @@ void ScFiltersTest::testTdf151046()
     CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(0, 2, 0));
 }
 
-void ScFiltersTest::testImportCrashes()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testImportCrashes)
 {
     testImportCrash("ods/tdf149752.ods");
     testImportCrash("ods/tdf122643.ods");
@@ -3171,7 +2916,7 @@ void ScFiltersTest::testImportCrashes()
     testImportCrash("ods/tdf149679.ods");
 }
 
-void ScFiltersTest::testTdf129681()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf129681)
 {
     createScDoc("ods/tdf129681.ods");
 
@@ -3196,7 +2941,7 @@ void ScFiltersTest::testTdf129681()
     CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), pDoc->GetString(ScAddress(6, 9, 0)));
 }
 
-void ScFiltersTest::testTdf149484()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf149484)
 {
     createScDoc("ods/tdf149484.ods");
     ScDocument* pDoc = getScDoc();
@@ -3207,7 +2952,7 @@ void ScFiltersTest::testTdf149484()
     CPPUNIT_ASSERT_EQUAL(OUString("-TRUE-"), pDoc->GetString(0, 2, 0));
 }
 
-void ScFiltersTest::testTdf82254_csv_bom()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf82254_csv_bom)
 {
     setImportFilterName(SC_TEXT_CSV_FILTER_NAME);
     createScDoc("csv/testTdf82254-csv-bom.csv");
@@ -3224,7 +2969,7 @@ void ScFiltersTest::testTdf82254_csv_bom()
     CPPUNIT_ASSERT_EQUAL(sal_uInt64(3), pStream->Tell());
 }
 
-void ScFiltersTest::testEscapedUnicodeXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testEscapedUnicodeXLSX)
 {
     createScDoc("xlsx/escape-unicode.xlsx");
     ScDocument* pDoc = getScDoc();
@@ -3233,7 +2978,7 @@ void ScFiltersTest::testEscapedUnicodeXLSX()
     CPPUNIT_ASSERT_EQUAL(OUString("Line 1\nLine 2\nLine 3\nLine 4"), pDoc->GetString(1, 1, 0));
 }
 
-void ScFiltersTest::testTdf144758_DBDataDefaultOrientation()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf144758_DBDataDefaultOrientation)
 {
     createScDoc("fods/tdf144758-dbdata-no-orientation.fods");
     ScDocument* pDoc = getScDoc();
@@ -3248,7 +2993,7 @@ void ScFiltersTest::testTdf144758_DBDataDefaultOrientation()
     CPPUNIT_ASSERT(aSortParam.bByRow);
 }
 
-void ScFiltersTest::testSharedFormulaXLS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testSharedFormulaXLS)
 {
     createScDoc("xls/shared-formula/basic.xls");
     ScDocument* pDoc = getScDoc();
@@ -3302,7 +3047,7 @@ void ScFiltersTest::testSharedFormulaXLS()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedLength());
 }
 
-void ScFiltersTest::testSharedFormulaXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testSharedFormulaXLSX)
 {
     createScDoc("xlsx/shared-formula/basic.xlsx");
     ScDocument* pDoc = getScDoc();
@@ -3325,7 +3070,7 @@ void ScFiltersTest::testSharedFormulaXLSX()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect group geometry.", SCROW(18), xGroup->mnLength);
 }
 
-void ScFiltersTest::testSharedFormulaRefUpdateXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testSharedFormulaRefUpdateXLSX)
 {
     createScDoc("xlsx/shared-formula/refupdate.xlsx");
     ScDocument* pDoc = getScDoc();
@@ -3357,7 +3102,7 @@ void ScFiltersTest::testSharedFormulaRefUpdateXLSX()
     }
 }
 
-void ScFiltersTest::testSheetNamesXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testSheetNamesXLSX)
 {
     createScDoc("xlsx/sheet-names.xlsx");
     ScDocument* pDoc = getScDoc();
@@ -3372,7 +3117,7 @@ void ScFiltersTest::testSheetNamesXLSX()
     CPPUNIT_ASSERT_EQUAL(OUString("C>D"), aTabNames[4]);
 }
 
-void ScFiltersTest::testTdf150599()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf150599)
 {
     createScDoc("dif/tdf150599.dif");
     ScDocument* pDoc = getScDoc();
@@ -3384,7 +3129,7 @@ void ScFiltersTest::testTdf150599()
     CPPUNIT_ASSERT_EQUAL(OUString("32"), pDoc->GetString(ScAddress(31, 0, 0)));
 }
 
-void ScFiltersTest::testCommentSize()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCommentSize)
 {
     createScDoc("ods/comment.ods");
     ScDocument* pDoc = getScDoc();
@@ -3437,7 +3182,7 @@ static void testEnhancedProtectionImpl(const ScDocument& rDoc)
         ScRange(0, 2, 0, 0, 3, 0))); // union of editable and password editable
 }
 
-void ScFiltersTest::testEnhancedProtectionXLS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testEnhancedProtectionXLS)
 {
     createScDoc("xls/enhanced-protection.xls");
     ScDocument* pDoc = getScDoc();
@@ -3445,7 +3190,7 @@ void ScFiltersTest::testEnhancedProtectionXLS()
     testEnhancedProtectionImpl(*pDoc);
 }
 
-void ScFiltersTest::testEnhancedProtectionXLSX()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testEnhancedProtectionXLSX)
 {
     createScDoc("xlsx/enhanced-protection.xlsx");
     ScDocument* pDoc = getScDoc();
@@ -3453,7 +3198,7 @@ void ScFiltersTest::testEnhancedProtectionXLSX()
     testEnhancedProtectionImpl(*pDoc);
 }
 
-void ScFiltersTest::testSortWithSharedFormulasODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testSortWithSharedFormulasODS)
 {
     createScDoc("ods/shared-formula/sort-crash.ods");
     ScDocument* pDoc = getScDoc();
@@ -3568,7 +3313,7 @@ void testSortWithSheetExternalReferencesODS_Impl(ScDocShell& rDocSh, SCROW nRow1
 // https://bugs.freedesktop.org/attachment.cgi?id=100089 from fdo#77018
 // mentioned also in fdo#79441
 // Document contains cached external references.
-void ScFiltersTest::testSortWithSheetExternalReferencesODS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testSortWithSheetExternalReferencesODS)
 {
     // We reset the SortRefUpdate value back to the original in tearDown().
     ScInputOptions aInputOption = SC_MOD()->GetInputOptions();
@@ -3634,7 +3379,7 @@ void ScFiltersTest::testSortWithSheetExternalReferencesODS()
     }
 }
 
-void ScFiltersTest::testSortWithFormattingXLS()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testSortWithFormattingXLS)
 {
     createScDoc("xls/tdf129127.xls");
     ScDocument* pDoc = getScDoc();
@@ -3665,7 +3410,7 @@ void ScFiltersTest::testSortWithFormattingXLS()
 }
 
 // just needs to not crash on recalc
-void ScFiltersTest::testForcepoint107()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testForcepoint107)
 {
     createScDoc("xlsx/forcepoint107.xlsx");
     ScDocShell* pDocSh = getScDocShell();
@@ -3676,8 +3421,6 @@ ScFiltersTest::ScFiltersTest()
     : ScModelTestBase("sc/qa/unit/data")
 {
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(ScFiltersTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
