@@ -392,7 +392,7 @@ namespace drawinglayer::texture
                 const double fOffsetEnd(cs_r->getOffset());
                 const double fStripeWidth((fOffsetEnd - fOffsetStart) / nSteps);
 
-                // get correct start for innner loop (see above)
+                // get correct start for inner loop (see above)
                 const sal_uInt32 nStartInnerLoop(cs_l == mnColorSteps.begin() ? 1 : 0);
 
                 for (sal_uInt32 innerLoop(nStartInnerLoop); innerLoop < nSteps; innerLoop++)
