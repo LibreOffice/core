@@ -18,11 +18,9 @@
  */
 
 
-#if !defined WIN32_LEAN_AND_MEAN
-# define WIN32_LEAN_AND_MEAN
-#endif
-#include <windows.h>
-#include <odbcinst.h>
+#include <sal/config.h>
+
+#include <systools/win32/odbccp32.hxx>
 
 // displays the error text for the last error (GetLastError), and returns this error value
 static int displayLastError()
@@ -102,7 +100,9 @@ extern "C" int APIENTRY wWinMain( HINSTANCE _hAppInstance, HINSTANCE, LPWSTR, in
     if ( !IsWindow( hAppWindow ) )
         return displayLastError();
 
-    if (!SQLManageDataSources(hAppWindow))
+    // Have a odbccp32 variable, to not call FreeLibrary before displayLastError
+    sal::systools::odbccp32 odbccp32;
+    if (!odbccp32.SQLManageDataSources(hAppWindow))
         return displayLastError();
 
     return 0;

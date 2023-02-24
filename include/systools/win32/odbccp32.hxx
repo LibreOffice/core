@@ -33,6 +33,12 @@ public:
         return Invoke<proc_t>("SQLGetInstalledDriversW", sBuf, nBufSize, nullptr);
     }
 
+    bool SQLManageDataSources(HWND hwndParent)
+    {
+        using proc_t = BOOL __stdcall(HWND);
+        return Invoke<proc_t>("SQLManageDataSources", hwndParent);
+    }
+
 private:
     template <typename proc_t, typename... Args> bool Invoke(const char* func, Args... args) const
     {
