@@ -30,6 +30,7 @@
 #include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
 #include <comphelper/uno3.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <mutex>
 
 namespace rptxml
 {
@@ -74,7 +75,7 @@ private:
 
     virtual ~ExportDocumentHandler() override;
 
-    ::osl::Mutex                                              m_aMutex;
+    std::mutex                                                m_aMutex;
     css::uno::Reference< css::uno::XComponentContext >        m_xContext;
     css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xDelegatee;
     css::uno::Reference< css::uno::XAggregation >             m_xProxy;
