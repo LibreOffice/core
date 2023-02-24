@@ -2059,6 +2059,30 @@ SwTwips SwFlyFrame::Grow_( SwTwips nDist, bool bTst )
                 ::Notify( this, FindPageFrame(), aOld );
             return aRectFnSet.GetHeight(aNew)-aRectFnSet.GetHeight(aOld);
         }
+        else
+        {
+            // We're in test mode. Don't promise infinite growth for split flys, rather limit the
+            // max size to the bottom of the upper.
+            const SwFrame* pAnchor = GetAnchorFrame();
+            if (SwFrame* pAnchorChar = FindAnchorCharFrame())
+            {
+                pAnchor = pAnchorChar;
+            }
+            const SwFrame* pAnchorUpper = pAnchor ? pAnchor->GetUpper() : nullptr;
+            if (pAnchorUpper && IsFlySplitAllowed())
+            {
+                SwTwips nDeadline = aRectFnSet.GetPrtBottom(*pAnchorUpper);
+                SwTwips nTop = aRectFnSet.GetTop(getFrameArea());
+                SwTwips nBottom = nTop + aRectFnSet.GetHeight(getFrameArea());
+                // Calculate max grow and compare to the requested growth, adding to nDist may
+                // overflow when it's LONG_MAX.
+                SwTwips nMaxGrow = nDeadline - nBottom;
+                if (nDist > nMaxGrow)
+                {
+                    nDist = nMaxGrow;
+                }
+            }
+        }
         return nDist;
     }
     return 0;
