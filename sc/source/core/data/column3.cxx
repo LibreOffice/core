@@ -867,6 +867,8 @@ bool ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, sc::CellSt
 
     SvNumberFormatter* pFormatter = rDocument.GetFormatTable();
 
+    // fetch the pattern again, it might have changed under us
+    pPattern = GetPattern(nRow);
     const Color* pColor;
     sal_uInt32 nFormat = pPattern->GetNumberFormat(pFormatter, pCondSet);
     OUString aStr = ScCellFormat::GetString(aCell, nFormat, &pColor, *pFormatter, rDocument);
