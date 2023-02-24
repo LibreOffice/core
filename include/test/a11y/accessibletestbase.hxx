@@ -167,7 +167,7 @@ protected:
          * @param nTimeoutMs Maximum delay to wait the dialog for
          * @returns @c true if the dialog closed, @c false if timeout was reached
          *
-         * @throws css::uno::RuntimeException if an unexpected dialog poped up instead of the
+         * @throws css::uno::RuntimeException if an unexpected dialog popped up instead of the
          *         expected one.
          * @throws Any exception that the user callback supplied to awaitDialog() might have thrown.
          */

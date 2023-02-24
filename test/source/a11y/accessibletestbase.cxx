@@ -333,7 +333,7 @@ test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
              * fails/throws */
             Dialog dialog(pWin, true);
 
-            /* The poping up dialog ought to be the right one, or something's fishy and
+            /* The popping up dialog ought to be the right one, or something's fishy and
              * we're bound to failure (e.g. waiting on a dialog that either will never come, or
              * that will not run after the current one -- deadlock style) */
             if (msName != pWin->GetText())

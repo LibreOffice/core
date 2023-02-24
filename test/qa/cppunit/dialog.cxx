@@ -22,7 +22,7 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, SelfTestIncorrectDialog)
     });
 
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Section..."));
-    /* Make sure an incorrect dialog poping up is caught and raises.  The exception is thrown in
+    /* Make sure an incorrect dialog popping up is caught and raises.  The exception is thrown in
      * waitEndDialog() for consistency even though the error itself is likely to have been triggered
      * by the activateMenuItem() call above */
     CPPUNIT_ASSERT_THROW(dialogWaiter->waitEndDialog(), css::uno::RuntimeException);
