@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_LINGUISTIC_SOURCE_CONVDICLIST_HXX
-#define INCLUDED_LINGUISTIC_SOURCE_CONVDICLIST_HXX
+#pragma once
 
 #include <com/sun/star/linguistic2/XConversionDictionaryList.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -84,7 +83,5 @@ public:
     // non UNO-specific
     void                    FlushDics();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
