@@ -1,0 +1,14 @@
+--- core/src/TextUtfEncoding.h	2023-02-24 11:30:34.505322162 +0000
++++ core/src/TextUtfEncoding.h	2023-02-24 11:30:40.425049296 +0000
+@@ -12,8 +12,8 @@
+ 
+ // The following functions are not required anymore after Result::text() now returns utf8 natively and the encoders accept utf8 as well.
+ 
+-[[deprecated]] std::string ToUtf8(std::wstring_view str);
+-[[deprecated]] std::string ToUtf8(std::wstring_view str, const bool angleEscape);
+-[[deprecated]] std::wstring FromUtf8(std::string_view utf8);
++std::string ToUtf8(std::wstring_view str);
++std::string ToUtf8(std::wstring_view str, const bool angleEscape);
++std::wstring FromUtf8(std::string_view utf8);
+ 
+ } // namespace ZXing::TextUtfEncoding

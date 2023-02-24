@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-11-03 15:03:28 using:
+ Generated on 2023-02-24 12:48:45 using:
  ./bin/update_pch external/zxing zxing --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -31,12 +31,10 @@
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
-#include <cwctype>
 #include <fstream>
 #include <functional>
 #include <initializer_list>
 #include <iomanip>
-#include <iostream>
 #include <iterator>
 #include <limits>
 #include <list>
@@ -48,7 +46,6 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include <type_traits>
 #include <unordered_set>
 #include <utility>
 #include <vector>
@@ -60,6 +57,7 @@
 #include <aztec/AZWriter.h>
 #include <datamatrix/DMReader.h>
 #include <datamatrix/DMWriter.h>
+#include <libzueci/zueci.h>
 #include <maxicode/MCReader.h>
 #include <oned/ODCodabarWriter.h>
 #include <oned/ODCode128Writer.h>
@@ -76,14 +74,6 @@
 #include <qrcode/QRErrorCorrectionLevel.h>
 #include <qrcode/QRReader.h>
 #include <qrcode/QRWriter.h>
-#include <textcodec/Big5TextDecoder.h>
-#include <textcodec/Big5TextEncoder.h>
-#include <textcodec/GBTextDecoder.h>
-#include <textcodec/GBTextEncoder.h>
-#include <textcodec/JPTextDecoder.h>
-#include <textcodec/JPTextEncoder.h>
-#include <textcodec/KRTextDecoder.h>
-#include <textcodec/KRTextEncoder.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #endif // PCH_LEVEL >= 4

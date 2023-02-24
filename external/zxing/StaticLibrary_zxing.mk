@@ -33,9 +33,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\
 	UnpackedTarball/zxing/core/src/aztec/AZToken \
 	UnpackedTarball/zxing/core/src/aztec/AZWriter \
 	UnpackedTarball/zxing/core/src/BarcodeFormat \
-	UnpackedTarball/zxing/core/src/textcodec/Big5MapTable \
-	UnpackedTarball/zxing/core/src/textcodec/Big5TextDecoder \
-	UnpackedTarball/zxing/core/src/textcodec/Big5TextEncoder \
 	UnpackedTarball/zxing/core/src/BinaryBitmap \
 	UnpackedTarball/zxing/core/src/BitArray \
 	UnpackedTarball/zxing/core/src/BitMatrix \
@@ -45,7 +42,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\
 	UnpackedTarball/zxing/core/src/ConcentricFinder \
 	UnpackedTarball/zxing/core/src/Content \
 	UnpackedTarball/zxing/core/src/DecodeHints \
-	UnpackedTarball/zxing/core/src/DecodeStatus \
 	UnpackedTarball/zxing/core/src/datamatrix/DMBitLayout \
 	UnpackedTarball/zxing/core/src/datamatrix/DMDataBlock \
 	UnpackedTarball/zxing/core/src/datamatrix/DMDecoder \
@@ -57,20 +53,12 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\
 	UnpackedTarball/zxing/core/src/datamatrix/DMVersion \
 	UnpackedTarball/zxing/core/src/datamatrix/DMWriter \
 	UnpackedTarball/zxing/core/src/ECI \
-	UnpackedTarball/zxing/core/src/textcodec/GBTextEncoder \
-	UnpackedTarball/zxing/core/src/textcodec/GBTextDecoder \
 	UnpackedTarball/zxing/core/src/GenericGF \
 	UnpackedTarball/zxing/core/src/GenericGFPoly \
 	UnpackedTarball/zxing/core/src/GlobalHistogramBinarizer \
 	UnpackedTarball/zxing/core/src/GridSampler \
-	UnpackedTarball/zxing/core/src/GS1 \
 	UnpackedTarball/zxing/core/src/GTIN \
 	UnpackedTarball/zxing/core/src/HybridBinarizer \
-	UnpackedTarball/zxing/core/src/textcodec/JPTextDecoder \
-	UnpackedTarball/zxing/core/src/textcodec/JPTextEncoder \
-	UnpackedTarball/zxing/core/src/textcodec/KRHangulMapping \
-	UnpackedTarball/zxing/core/src/textcodec/KRTextDecoder \
-	UnpackedTarball/zxing/core/src/textcodec/KRTextEncoder \
 	UnpackedTarball/zxing/core/src/maxicode/MCBitMatrixParser \
 	UnpackedTarball/zxing/core/src/maxicode/MCDecoder \
 	UnpackedTarball/zxing/core/src/maxicode/MCReader \
@@ -136,8 +124,13 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\
 	UnpackedTarball/zxing/core/src/TextDecoder \
 	UnpackedTarball/zxing/core/src/TextEncoder \
 	UnpackedTarball/zxing/core/src/TextUtfEncoding \
+	UnpackedTarball/zxing/core/src/Utf \
 	UnpackedTarball/zxing/core/src/WhiteRectDetector \
 	UnpackedTarball/zxing/core/src/ZXBigInteger \
+))
+
+$(eval $(call gb_StaticLibrary_add_generated_cobjects,zxing,\
+	UnpackedTarball/zxing/core/src/libzueci/zueci \
 ))
 
 # vim: set noet sw=4 ts=4:

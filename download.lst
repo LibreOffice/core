@@ -560,8 +560,8 @@ ZMF_TARBALL := libzmf-0.0.2.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-ZXING_SHA256SUM := 126767bb56f8a1f25ae84d233db2e9b9be50d71f5776092d0e170ca0f0ed1862
-ZXING_TARBALL := zxing-cpp-1.4.0.tar.gz
+ZXING_SHA256SUM := 12b76b7005c30d34265fc20356d340da179b0b4d43d2c1b35bcca86776069f76
+ZXING_TARBALL := zxing-cpp-2.0.0.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
