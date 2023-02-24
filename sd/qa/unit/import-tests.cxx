@@ -81,162 +81,6 @@ public:
         : SdModelTestBase("/sd/qa/unit/data/")
     {
     }
-
-    void testDocumentLayout();
-    void testTdf152434();
-    void testStandardConnectors();
-    void testConnectors();
-    void testTdf153036_resizedConnectorL();
-    void testTdf150719();
-    void testTdf149314();
-    void testTdf149124();
-    void testTdf148965();
-    void testTdf89449();
-    void testTdf147459();
-    void testTdf146223();
-    void testTdf144918();
-    void testTdf144917();
-    void testHyperlinkOnImage();
-    void testTdf142645();
-    void testTdf141704();
-    void testTdf142915();
-    void testTdf142913();
-    void testTdf142590();
-    void testCustomSlideShow();
-    void testInternalHyperlink();
-    void testHyperlinkColor();
-    void testSmoketest();
-    void testTdf131269();
-    void testN759180();
-    void testN778859();
-    void testMasterPageStyleParent();
-    void testGradientAngle();
-    void testTdf97808();
-    void testFillStyleNone();
-    void testFdo64512();
-    void testFdo71075();
-    void testN828390_2();
-    void testN828390_3();
-    void testFdo68594();
-    void testPlaceholderPriority();
-    void testFdo72998();
-    void testFdo77027();
-    void testStrictOOXML();
-    void testN862510_1();
-    void testN862510_2();
-    void testN862510_4();
-    void testBnc870237();
-    void testBnc887225();
-    void testPredefinedTableStyle();
-    void testBnc591147();
-    void testCreationDate();
-    void testMultiColTexts();
-    void testBnc584721_1();
-    void testBnc584721_2();
-    void testBnc584721_4();
-    void testBnc904423();
-    void testShapeLineStyle();
-    void testTableBorderLineStyle();
-    void testBnc862510_6();
-    void testBnc862510_7();
-#if ENABLE_PDFIMPORT
-    void testPDFImportShared();
-#if defined(IMPORT_PDF_ELEMENTS)
-    void testPDFImport();
-    void testPDFImportSkipImages();
-#endif
-#endif
-    void testBulletSuffix();
-    void testBnc910045();
-    void testRowHeight();
-    void testTdf93830();
-    void testTdf127129();
-    void testTdf93097();
-    void testTdf62255();
-    void testTdf89927();
-    void testTdf103800();
-    void testTdf151767();
-    void testTdf152070();
-
-    CPPUNIT_TEST_SUITE(SdImportTest);
-
-    CPPUNIT_TEST(testDocumentLayout);
-    CPPUNIT_TEST(testTdf152434);
-    CPPUNIT_TEST(testStandardConnectors);
-    CPPUNIT_TEST(testConnectors);
-    CPPUNIT_TEST(testTdf153036_resizedConnectorL);
-    CPPUNIT_TEST(testTdf150719);
-    CPPUNIT_TEST(testTdf149314);
-    CPPUNIT_TEST(testTdf149124);
-    CPPUNIT_TEST(testTdf148965);
-    CPPUNIT_TEST(testTdf89449);
-    CPPUNIT_TEST(testTdf147459);
-    CPPUNIT_TEST(testTdf146223);
-    CPPUNIT_TEST(testTdf144918);
-    CPPUNIT_TEST(testTdf144917);
-    CPPUNIT_TEST(testHyperlinkOnImage);
-    CPPUNIT_TEST(testTdf142645);
-    CPPUNIT_TEST(testTdf141704);
-    CPPUNIT_TEST(testTdf142915);
-    CPPUNIT_TEST(testTdf142913);
-    CPPUNIT_TEST(testTdf142590);
-    CPPUNIT_TEST(testCustomSlideShow);
-    CPPUNIT_TEST(testInternalHyperlink);
-    CPPUNIT_TEST(testHyperlinkColor);
-    CPPUNIT_TEST(testSmoketest);
-    CPPUNIT_TEST(testTdf131269);
-    CPPUNIT_TEST(testN759180);
-    CPPUNIT_TEST(testN778859);
-    CPPUNIT_TEST(testMasterPageStyleParent);
-    CPPUNIT_TEST(testGradientAngle);
-    CPPUNIT_TEST(testTdf97808);
-    CPPUNIT_TEST(testFillStyleNone);
-    CPPUNIT_TEST(testFdo64512);
-    CPPUNIT_TEST(testFdo71075);
-    CPPUNIT_TEST(testN828390_2);
-    CPPUNIT_TEST(testN828390_3);
-    CPPUNIT_TEST(testFdo68594);
-    CPPUNIT_TEST(testPlaceholderPriority);
-    CPPUNIT_TEST(testFdo72998);
-    CPPUNIT_TEST(testFdo77027);
-    CPPUNIT_TEST(testStrictOOXML);
-    CPPUNIT_TEST(testN862510_1);
-    CPPUNIT_TEST(testN862510_2);
-    CPPUNIT_TEST(testN862510_4);
-    CPPUNIT_TEST(testBnc870237);
-    CPPUNIT_TEST(testBnc887225);
-    CPPUNIT_TEST(testPredefinedTableStyle);
-    CPPUNIT_TEST(testBnc591147);
-    CPPUNIT_TEST(testCreationDate);
-    CPPUNIT_TEST(testMultiColTexts);
-    CPPUNIT_TEST(testBnc584721_1);
-    CPPUNIT_TEST(testBnc584721_2);
-    CPPUNIT_TEST(testBnc584721_4);
-    CPPUNIT_TEST(testBnc904423);
-    CPPUNIT_TEST(testShapeLineStyle);
-    CPPUNIT_TEST(testTableBorderLineStyle);
-    CPPUNIT_TEST(testBnc862510_6);
-    CPPUNIT_TEST(testBnc862510_7);
-#if ENABLE_PDFIMPORT
-    CPPUNIT_TEST(testPDFImportShared);
-#if defined(IMPORT_PDF_ELEMENTS)
-    CPPUNIT_TEST(testPDFImport);
-    CPPUNIT_TEST(testPDFImportSkipImages);
-#endif
-#endif
-    CPPUNIT_TEST(testBulletSuffix);
-    CPPUNIT_TEST(testBnc910045);
-    CPPUNIT_TEST(testRowHeight);
-    CPPUNIT_TEST(testTdf93830);
-    CPPUNIT_TEST(testTdf127129);
-    CPPUNIT_TEST(testTdf93097);
-    CPPUNIT_TEST(testTdf62255);
-    CPPUNIT_TEST(testTdf89927);
-    CPPUNIT_TEST(testTdf103800);
-    CPPUNIT_TEST(testTdf151767);
-    CPPUNIT_TEST(testTdf152070);
-
-    CPPUNIT_TEST_SUITE_END();
 };
 
 /** Test document against a reference XML dump of shapes.
@@ -269,7 +113,7 @@ NOTE: This approach is suitable only for tests of fixes that actually change
 the layout - best to check by reverting your fix locally after having added
 the test, and re-running; it should break.
 */
-void SdImportTest::testDocumentLayout()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testDocumentLayout)
 {
     static const struct
     {
@@ -346,7 +190,7 @@ void SdImportTest::testDocumentLayout()
     }
 }
 
-void SdImportTest::testTdf152434()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf152434)
 {
     createSdImpressDoc("pptx/tdf152434.pptx");
 
@@ -357,7 +201,7 @@ void SdImportTest::testTdf152434()
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
 }
 
-void SdImportTest::testStandardConnectors()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testStandardConnectors)
 {
     createSdImpressDoc("pptx/standardConnectors.pptx");
 
@@ -385,7 +229,7 @@ void SdImportTest::testStandardConnectors()
     }
 }
 
-void SdImportTest::testConnectors()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testConnectors)
 {
     createSdImpressDoc("pptx/connectors.pptx");
 
@@ -406,7 +250,7 @@ void SdImportTest::testConnectors()
     }
 }
 
-void SdImportTest::testTdf153036_resizedConnectorL()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf153036_resizedConnectorL)
 {
     createSdImpressDoc("pptx/tdf153036_resizedConnectorL.pptx");
 
@@ -420,7 +264,7 @@ void SdImportTest::testTdf153036_resizedConnectorL()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-3243), nEdgeLine);
 }
 
-void SdImportTest::testTdf150719()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf150719)
 {
     createSdImpressDoc("pptx/tdf150719.pptx");
 
@@ -433,7 +277,7 @@ void SdImportTest::testTdf150719()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The underline is missing!", sal_Int16(1), nUnderline);
 }
 
-void SdImportTest::testTdf149314()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf149314)
 {
     createSdImpressDoc("pptx/tdf149314.pptx");
 
@@ -459,7 +303,7 @@ void SdImportTest::testTdf149314()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("URLs don't match", OUString("#Slide 3"), aURL);
 }
 
-void SdImportTest::testTdf149124()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf149124)
 {
     createSdImpressDoc("pptx/tdf149124.pptx");
 
@@ -476,7 +320,7 @@ void SdImportTest::testTdf149124()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nEndGlueId);
 }
 
-void SdImportTest::testTdf148965()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf148965)
 {
     // Set the system user interface to Hungarian
     SvtSysLocaleOptions aOptions;
@@ -509,7 +353,7 @@ void SdImportTest::testTdf148965()
     CPPUNIT_ASSERT_EQUAL(OUString("page3"), iter2->second.get<OUString>());
 }
 
-void SdImportTest::testTdf89449()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf89449)
 {
     createSdImpressDoc("pptx/tdf89449.pptx");
 
@@ -542,7 +386,7 @@ void SdImportTest::testTdf89449()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), nEndGlueId);
 }
 
-void SdImportTest::testTdf147459()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf147459)
 {
     createSdImpressDoc("pptx/tdf147459.pptx");
     uno::Reference<beans::XPropertySet> xTriangleShape(getShapeFromPage(0, 0));
@@ -571,7 +415,7 @@ void SdImportTest::testTdf147459()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), nCountGluePoints);
 }
 
-void SdImportTest::testTdf146223()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf146223)
 {
     createSdImpressDoc("pptx/tdf146223.pptx");
 
@@ -585,7 +429,7 @@ void SdImportTest::testTdf146223()
     CPPUNIT_ASSERT_EQUAL(false, bBackgroundObjectsVisible);
 }
 
-void SdImportTest::testTdf144918()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf144918)
 {
     createSdImpressDoc("pptx/tdf144918.pptx");
 
@@ -608,7 +452,7 @@ void SdImportTest::testTdf144918()
     CPPUNIT_ASSERT_EQUAL(OUString("Third slide"), iter2->second.get<OUString>());
 }
 
-void SdImportTest::testTdf144917()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf144917)
 {
     createSdImpressDoc("pptx/tdf144917.pptx");
 
@@ -624,7 +468,7 @@ void SdImportTest::testTdf144917()
     CPPUNIT_ASSERT_EQUAL(OUString("http://www.example.com/"), iter->second.get<OUString>());
 }
 
-void SdImportTest::testHyperlinkOnImage()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testHyperlinkOnImage)
 {
     createSdImpressDoc("pptx/hyperlinkOnImage.pptx");
 
@@ -649,7 +493,7 @@ void SdImportTest::testHyperlinkOnImage()
                          iter2->second.get<css::presentation::ClickAction>());
 }
 
-void SdImportTest::testTdf142645()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf142645)
 {
     createSdImpressDoc("pptx/tdf142645.pptx");
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
@@ -659,7 +503,7 @@ void SdImportTest::testTdf142645()
     CPPUNIT_ASSERT_EQUAL(OUString("Hello"), xNamed1->getName());
 }
 
-void SdImportTest::testTdf141704()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf141704)
 {
     createSdImpressDoc("pptx/tdf141704.pptx");
 
@@ -714,7 +558,7 @@ void SdImportTest::testTdf141704()
     }
 }
 
-void SdImportTest::testTdf142915()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf142915)
 {
     createSdImpressDoc("pptx/tdf142915.pptx");
 
@@ -728,7 +572,7 @@ void SdImportTest::testTdf142915()
     CPPUNIT_ASSERT_EQUAL(true, bChangeManually);
 }
 
-void SdImportTest::testTdf142913()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf142913)
 {
     createSdImpressDoc("pptx/tdf142913.pptx");
 
@@ -742,7 +586,7 @@ void SdImportTest::testTdf142913()
     CPPUNIT_ASSERT_EQUAL(OUString("Second"), sFirstPage);
 }
 
-void SdImportTest::testTdf142590()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf142590)
 {
     createSdImpressDoc("pptx/tdf142590.pptx");
 
@@ -756,7 +600,7 @@ void SdImportTest::testTdf142590()
     CPPUNIT_ASSERT(!sCustomShowId.isEmpty());
 }
 
-void SdImportTest::testCustomSlideShow()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testCustomSlideShow)
 {
     createSdImpressDoc("pptx/tdf131390.pptx");
 
@@ -769,7 +613,7 @@ void SdImportTest::testCustomSlideShow()
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(2), aNameSeq.size());
 }
 
-void SdImportTest::testInternalHyperlink()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testInternalHyperlink)
 {
     createSdImpressDoc("pptx/tdf65724.pptx");
 
@@ -792,7 +636,7 @@ void SdImportTest::testInternalHyperlink()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("URLs don't match", OUString("#Slide2"), aURL);
 }
 
-void SdImportTest::testHyperlinkColor()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testHyperlinkColor)
 {
     createSdImpressDoc("pptx/tdf137367.pptx");
 
@@ -829,7 +673,7 @@ void SdImportTest::testHyperlinkColor()
     CPPUNIT_ASSERT_EQUAL(Color(0x548235), nCharColorGreen);
 }
 
-void SdImportTest::testSmoketest()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testSmoketest)
 {
     createSdImpressDoc("smoketest.pptx");
 
@@ -848,7 +692,7 @@ void SdImportTest::testSmoketest()
     CPPUNIT_ASSERT_MESSAGE("changed", !pDoc->IsChanged());
 }
 
-void SdImportTest::testTdf131269()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf131269)
 {
     createSdImpressDoc("tdf131269.ppt");
 
@@ -862,7 +706,7 @@ void SdImportTest::testTdf131269()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(115), pDoc->GetPageCount());
 }
 
-void SdImportTest::testN759180()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testN759180)
 {
     createSdImpressDoc("n759180.pptx");
 
@@ -892,7 +736,7 @@ void SdImportTest::testN759180()
     }
 }
 
-void SdImportTest::testN862510_1()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testN862510_1)
 {
     createSdImpressDoc("pptx/n862510_1.pptx");
 
@@ -916,7 +760,7 @@ void SdImportTest::testN862510_1()
     }
 }
 
-void SdImportTest::testN862510_2()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testN862510_2)
 {
     createSdImpressDoc("pptx/n862510_2.pptx");
 
@@ -933,7 +777,7 @@ void SdImportTest::testN862510_2()
     }
 }
 
-void SdImportTest::testN862510_4()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testN862510_4)
 {
     createSdImpressDoc("pptx/n862510_4.pptx");
 
@@ -955,7 +799,7 @@ void SdImportTest::testN862510_4()
     }
 }
 
-void SdImportTest::testN828390_2()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testN828390_2)
 {
     createSdImpressDoc("pptx/n828390_2.pptx");
     const SdrPage* pPage = GetPage(1);
@@ -968,7 +812,7 @@ void SdImportTest::testN828390_2()
     CPPUNIT_ASSERT_EQUAL(OUString("Standard Platform"), aEdit.GetText(1));
 }
 
-void SdImportTest::testN828390_3()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testN828390_3)
 {
     createSdImpressDoc("pptx/n828390_3.pptx");
     const SdrPage* pPage = GetPage(1);
@@ -987,7 +831,7 @@ void SdImportTest::testN828390_3()
     CPPUNIT_ASSERT_MESSAGE("CharEscapment not imported properly", bPassed);
 }
 
-void SdImportTest::testMasterPageStyleParent()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testMasterPageStyleParent)
 {
     createSdImpressDoc("odp/masterpage_style_parent.odp");
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
@@ -1020,7 +864,7 @@ void SdImportTest::testMasterPageStyleParent()
     CPPUNIT_ASSERT_EQUAL(16, parents);
 }
 
-void SdImportTest::testGradientAngle()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testGradientAngle)
 {
     createSdDrawDoc("odg/gradient-angle.fodg");
 
@@ -1073,7 +917,7 @@ void SdImportTest::testGradientAngle()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1800), gradient.Angle); // 1000grad
 }
 
-void SdImportTest::testN778859()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testN778859)
 {
     createSdImpressDoc("pptx/n778859.pptx");
 
@@ -1087,7 +931,7 @@ void SdImportTest::testN778859()
     }
 }
 
-void SdImportTest::testFdo68594()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testFdo68594)
 {
     createSdImpressDoc("ppt/fdo68594.ppt");
 
@@ -1101,7 +945,7 @@ void SdImportTest::testFdo68594()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Placeholder color mismatch", COL_BLACK, pC->GetValue());
 }
 
-void SdImportTest::testPlaceholderPriority()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testPlaceholderPriority)
 {
     createSdImpressDoc("ppt/placeholder-priority.pptx");
 
@@ -1122,7 +966,7 @@ void SdImportTest::testPlaceholderPriority()
     // If the placeholder positions are wrong, please check placeholder priority in Placeholders class.
 }
 
-void SdImportTest::testFdo72998()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testFdo72998)
 {
     createSdImpressDoc("pptx/cshapes.pptx");
 
@@ -1142,7 +986,7 @@ void SdImportTest::testFdo72998()
     }
 }
 
-void SdImportTest::testFdo77027()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testFdo77027)
 {
     createSdImpressDoc("odp/fdo77027.odp");
 
@@ -1159,7 +1003,7 @@ void SdImportTest::testFdo77027()
     }
 }
 
-void SdImportTest::testTdf97808()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf97808)
 {
     createSdImpressDoc("tdf97808.fodp");
 
@@ -1187,7 +1031,7 @@ void SdImportTest::testTdf97808()
     CPPUNIT_ASSERT(xLine->getPropertyValue("LineEndName") >>= lineend);
     CPPUNIT_ASSERT_EQUAL(OUString(), lineend);
 }
-void SdImportTest::testFillStyleNone()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testFillStyleNone)
 {
     createSdDrawDoc("tdf123841.odg");
 
@@ -1199,7 +1043,7 @@ void SdImportTest::testFillStyleNone()
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rFillStyleItem.GetValue());
 }
 
-void SdImportTest::testFdo64512()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testFdo64512)
 {
     createSdImpressDoc("fdo64512.odp");
 
@@ -1237,7 +1081,7 @@ void SdImportTest::testFdo64512()
 }
 
 // Unit test for importing charts
-void SdImportTest::testFdo71075()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testFdo71075)
 {
     double values[] = { 12.0, 13.0, 14.0 };
     css::uno::Any aAny;
@@ -1280,7 +1124,7 @@ void SdImportTest::testFdo71075()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Invalid Series count", values[i], aValues.getConstArray()[i]);
 }
 
-void SdImportTest::testStrictOOXML()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testStrictOOXML)
 {
     createSdImpressDoc("strict_ooxml.pptx");
 
@@ -1291,7 +1135,7 @@ void SdImportTest::testStrictOOXML()
     getShapeFromPage(0, 0);
 }
 
-void SdImportTest::testBnc870237()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testBnc870237)
 {
     createSdImpressDoc("pptx/bnc870237.pptx");
     const SdrPage* pPage = GetPage(1);
@@ -1306,7 +1150,7 @@ void SdImportTest::testBnc870237()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-158), pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST).GetValue());
 }
 
-void SdImportTest::testCreationDate()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testCreationDate)
 {
     createSdImpressDoc("fdo71434.pptx");
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(
@@ -1320,7 +1164,7 @@ void SdImportTest::testCreationDate()
     CPPUNIT_ASSERT_EQUAL(OUString("2013-11-09T10:37:56"), aBuffer.makeStringAndClear());
 }
 
-void SdImportTest::testMultiColTexts()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testMultiColTexts)
 {
     createSdImpressDoc("pptx/multicol.pptx");
     const SdrPage* pPage = GetPage(1);
@@ -1341,7 +1185,7 @@ void SdImportTest::testMultiColTexts()
     CPPUNIT_ASSERT_EQUAL(OUString("mastershape1\nmastershape2"), xText->getString());
 }
 
-void SdImportTest::testPredefinedTableStyle()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testPredefinedTableStyle)
 {
     // 073A0DAA-6AF3-43AB-8588-CEC1D06C72B9 (Medium Style 2)
     createSdImpressDoc("pptx/predefined-table-style.pptx");
@@ -1367,7 +1211,7 @@ void SdImportTest::testPredefinedTableStyle()
     CPPUNIT_ASSERT_EQUAL(Color(0xe7e7e7), nColor);
 }
 
-void SdImportTest::testBnc887225()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testBnc887225)
 {
     createSdImpressDoc("pptx/bnc887225.pptx");
     // In the document, lastRow and lastCol table properties are used.
@@ -1410,7 +1254,7 @@ void SdImportTest::testBnc887225()
     CPPUNIT_ASSERT_EQUAL(Color(0x5b9bd5), nColor);
 }
 
-void SdImportTest::testBnc584721_1()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testBnc584721_1)
 {
     // Title text shape on the master page contained wrong text.
 
@@ -1424,7 +1268,7 @@ void SdImportTest::testBnc584721_1()
     CPPUNIT_ASSERT_EQUAL(OUString("Click to edit Master title style"), aEdit.GetText(0));
 }
 
-void SdImportTest::testBnc584721_2()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testBnc584721_2)
 {
     // Import created an extra/unneeded outliner shape on the master slide next to the imported title shape.
 
@@ -1434,7 +1278,7 @@ void SdImportTest::testBnc584721_2()
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
 }
 
-void SdImportTest::testBnc591147()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testBnc591147)
 {
     createSdImpressDoc("pptx/bnc591147.pptx");
 
@@ -1467,7 +1311,7 @@ void SdImportTest::testBnc591147()
     CPPUNIT_ASSERT_MESSAGE("sAudioURL and sVideoURL should not be equal", sAudioURL != sVideoURL);
 }
 
-void SdImportTest::testBnc584721_4()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testBnc584721_4)
 {
     // Black text was imported as white because of wrong caching mechanism
 
@@ -1487,7 +1331,7 @@ void SdImportTest::testBnc584721_4()
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, nCharColor);
 }
 
-void SdImportTest::testBnc904423()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testBnc904423)
 {
     // Here the problem was that different fill properties were applied in wrong order on the shape
     // Right order: 1) master slide fill style, 2) theme, 3) direct formatting
@@ -1529,7 +1373,7 @@ void SdImportTest::testBnc904423()
     }
 }
 
-void SdImportTest::testShapeLineStyle()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testShapeLineStyle)
 {
     // Here the problem was that different line properties were applied in wrong order on the shape
     // Right order: 1) master slide line style, 2) theme, 3) direct formatting
@@ -1582,7 +1426,7 @@ void SdImportTest::testShapeLineStyle()
     }
 }
 
-void SdImportTest::testTableBorderLineStyle()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTableBorderLineStyle)
 {
     createSdImpressDoc("pptx/tableBorderLineStyle.pptx");
 
@@ -1619,7 +1463,7 @@ void SdImportTest::testTableBorderLineStyle()
     }
 }
 
-void SdImportTest::testBnc862510_6()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testBnc862510_6)
 {
     // Black text was imported instead of gray
 
@@ -1639,7 +1483,7 @@ void SdImportTest::testBnc862510_6()
     CPPUNIT_ASSERT_EQUAL(Color(0x8B8B8B), nCharColor);
 }
 
-void SdImportTest::testBnc862510_7()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testBnc862510_7)
 {
     // Title shape's text was aligned to left instead of center.
 
@@ -1675,7 +1519,7 @@ void SdImportTest::testBnc862510_7()
 // import+break and then check the results. But that isn't straight-forward and
 // currently await volunteering time to implement.
 
-void SdImportTest::testPDFImportShared()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testPDFImportShared)
 {
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
@@ -1751,7 +1595,7 @@ void SdImportTest::testPDFImportShared()
 
 #if defined(IMPORT_PDF_ELEMENTS)
 
-void SdImportTest::testPDFImport()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testPDFImport)
 {
     createSdDrawDoc("pdf/txtpic.pdf");
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
@@ -1766,7 +1610,7 @@ void SdImportTest::testPDFImport()
     CPPUNIT_ASSERT_MESSAGE("not a text shape", xText.is());
 }
 
-void SdImportTest::testPDFImportSkipImages()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testPDFImportSkipImages)
 {
     auto pParams = std::make_shared<SfxAllItemSet>(SfxGetpApp()->GetPool());
     pParams->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, "SkipImages"));
@@ -1787,7 +1631,7 @@ void SdImportTest::testPDFImportSkipImages()
 #endif
 #endif
 
-void SdImportTest::testBulletSuffix()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testBulletSuffix)
 {
     createSdImpressDoc("pptx/n83889.pptx");
 
@@ -1802,7 +1646,7 @@ void SdImportTest::testBulletSuffix()
                                  pNumFmt->GetNumRule().GetLevel(0).GetSuffix(), OUString());
 }
 
-void SdImportTest::testBnc910045()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testBnc910045)
 {
     // Problem with table style which defines cell color with fill style
 
@@ -1820,7 +1664,7 @@ void SdImportTest::testBnc910045()
     CPPUNIT_ASSERT_EQUAL(Color(0x4f81bd), nColor);
 }
 
-void SdImportTest::testRowHeight()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testRowHeight)
 {
     createSdImpressDoc("pptx/n80340.pptx");
     const SdrPage* pPage = GetPage(1);
@@ -1853,7 +1697,7 @@ void SdImportTest::testRowHeight()
     }
 }
 
-void SdImportTest::testTdf93830()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf93830)
 {
     // Text shape offset was ignored
 
@@ -1870,7 +1714,7 @@ void SdImportTest::testTdf93830()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4024), nTextLeftDistance);
 }
 
-void SdImportTest::testTdf127129()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf127129)
 {
     createSdImpressDoc("pptx/tdf127129.pptx");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
@@ -1887,7 +1731,7 @@ void SdImportTest::testTdf127129()
     xPropSet->getPropertyValue("CharBackColor") >>= nCharBackColor;
     CPPUNIT_ASSERT_EQUAL(Color(0xFF00), nCharBackColor);
 }
-void SdImportTest::testTdf93097()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf93097)
 {
     // Throwing metadata import aborted the filter, check that metadata is now imported.
 
@@ -1899,7 +1743,7 @@ void SdImportTest::testTdf93097()
     CPPUNIT_ASSERT_EQUAL(OUString("ss"), xDocumentProperties->getTitle());
 }
 
-void SdImportTest::testTdf62255()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf62255)
 {
     createSdImpressDoc("pptx/tdf62255.pptx");
     const SdrPage* pPage = GetPage(1);
@@ -1923,7 +1767,7 @@ void SdImportTest::testTdf62255()
     }
 }
 
-void SdImportTest::testTdf89927()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf89927)
 {
     createSdImpressDoc("pptx/tdf89927.pptx");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
@@ -1936,7 +1780,7 @@ void SdImportTest::testTdf89927()
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, nCharColor);
 }
 
-void SdImportTest::testTdf103800()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf103800)
 {
     createSdImpressDoc("pptx/tdf103800.pptx");
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
@@ -1949,7 +1793,7 @@ void SdImportTest::testTdf103800()
     CPPUNIT_ASSERT_EQUAL(Color(0xC00000), nCharColor);
 }
 
-void SdImportTest::testTdf151767()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf151767)
 {
     createSdImpressDoc("pptx/tdf151767.pptx");
 
@@ -1976,7 +1820,7 @@ void SdImportTest::testTdf151767()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The bottom border is missing!", true, aBottom.LineWidth > 0);
 }
 
-void SdImportTest::testTdf152070()
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf152070)
 {
     createSdImpressDoc("pptx/tdf152070.pptx");
 
@@ -1993,8 +1837,6 @@ void SdImportTest::testTdf152070()
         sal_Int32(83), // 83%
         xBackgroundProps->getPropertyValue("FillBitmapPositionOffsetY").get<sal_Int32>());
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
