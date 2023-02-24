@@ -544,13 +544,6 @@ namespace basegfx
                 t = 1.0 - std::hypot(aCoor.getX(), aCoor.getY() * fAspectRatio);
             }
 
-            const sal_uInt32 nSteps(rGradInfo.getRequestedSteps());
-
-            if(nSteps && t < 1.0)
-            {
-                return floor(t * nSteps) / double(nSteps - 1);
-            }
-
             return t;
         }
 
@@ -571,15 +564,7 @@ namespace basegfx
                 return 0.0;
             }
 
-            const double t(1.0 - std::max(fAbsX, fAbsY));
-            const sal_uInt32 nSteps(rGradInfo.getRequestedSteps());
-
-            if(nSteps && t < 1.0)
-            {
-                return floor(t * nSteps) / double(nSteps - 1);
-            }
-
-            return t;
+            return 1.0 - std::max(fAbsX, fAbsY);
         }
 
         double getRectangularGradientAlpha(const B2DPoint& rUV, const ODFGradientInfo& rGradInfo)
@@ -643,15 +628,7 @@ namespace basegfx
                 fAbsY = ((fAbsY - 1) / fAspectRatio) + 1;
             }
 
-            const double t(1.0 - std::max(fAbsX, fAbsY));
-            const sal_uInt32 nSteps(rGradInfo.getRequestedSteps());
-
-            if(nSteps && t < 1.0)
-            {
-                return floor(t * nSteps) / double(nSteps - 1);
-            }
-
-            return t;
+            return 1.0 - std::max(fAbsX, fAbsY);
         }
     } // namespace utils
 } // namespace basegfx
