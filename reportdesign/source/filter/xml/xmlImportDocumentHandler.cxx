@@ -330,7 +330,7 @@ void SAL_CALL ImportDocumentHandler::setDocumentLocator(const uno::Reference< xm
 }
 void SAL_CALL ImportDocumentHandler::initialize( const uno::Sequence< uno::Any >& _aArguments )
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
     comphelper::SequenceAsHashMap aArgs(_aArguments);
     m_xDocumentHandler = aArgs.getUnpackedValueOrDefault("DocumentHandler",m_xDocumentHandler);
     m_xModel = aArgs.getUnpackedValueOrDefault("Model",m_xModel);

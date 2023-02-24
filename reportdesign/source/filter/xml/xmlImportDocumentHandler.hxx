@@ -32,6 +32,7 @@
 #include <comphelper/uno3.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <memory>
+#include <mutex>
 
 class SvXMLTokenMap;
 namespace rptxml
@@ -73,7 +74,7 @@ private:
 
     virtual ~ImportDocumentHandler() override;
 
-    ::osl::Mutex                                                      m_aMutex;
+    std::mutex                                                        m_aMutex;
     bool                                                              m_bImportedChart;
     ::std::vector< OUString>                                          m_aMasterFields;
     ::std::vector< OUString>                                          m_aDetailFields;
