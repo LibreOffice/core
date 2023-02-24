@@ -220,7 +220,7 @@ SwVbaDocument::Bookmarks( const uno::Any& rIndex )
     return xBookmarksVba->Item( rIndex, uno::Any() );
 }
 
-uno::Any SAL_CALL SwVbaDocument::ContentControls(const uno::Any& index)
+uno::Any SwVbaDocument::ContentControls(const uno::Any& index)
 {
     uno::Reference<XCollection> xContentControls(
         new SwVbaContentControls(this, mxContext, mxTextDocument, "", ""));
@@ -230,7 +230,7 @@ uno::Any SAL_CALL SwVbaDocument::ContentControls(const uno::Any& index)
     return uno::Any(xContentControls);
 }
 
-uno::Any SAL_CALL SwVbaDocument::SelectContentControlsByTag(const uno::Any& index)
+uno::Any SwVbaDocument::SelectContentControlsByTag(const uno::Any& index)
 {
     OUString sTag;
     index >>= sTag;
@@ -238,7 +238,7 @@ uno::Any SAL_CALL SwVbaDocument::SelectContentControlsByTag(const uno::Any& inde
                         new SwVbaContentControls(this, mxContext, mxTextDocument, sTag, "")));
 }
 
-uno::Any SAL_CALL SwVbaDocument::SelectContentControlsByTitle(const uno::Any& index)
+uno::Any SwVbaDocument::SelectContentControlsByTitle(const uno::Any& index)
 {
     OUString sTitle;
     index >>= sTitle;
