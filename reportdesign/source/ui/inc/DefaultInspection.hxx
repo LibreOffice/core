@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/implbase3.hxx>
+#include <mutex>
 
 
 namespace rptui
@@ -40,7 +41,7 @@ namespace rptui
     class DefaultComponentInspectorModel final : public DefaultComponentInspectorModel_Base
     {
     private:
-        ::osl::Mutex                                                                            m_aMutex;
+        std::mutex                                                                              m_aMutex;
         css::uno::Reference< css::uno::XComponentContext >                                      m_xContext;
         css::uno::Reference< css::inspection::XObjectInspectorModel >                           m_xComponent; /// delegatee
         bool                                                                                    m_bConstructed;
