@@ -248,7 +248,7 @@ uno::Any SwVbaDocument::SelectContentControlsByTitle(const uno::Any& index)
 
 uno::Reference<word::XWindow> SwVbaDocument::getActiveWindow()
 {
-    // copied from vbaappliction which has a #FIXME so far can't determine Parent
+    // copied from vbaapplication which has a #FIXME so far can't determine Parent
     return new SwVbaWindow(uno::Reference< XHelperInterface >(), mxContext, mxModel,
                            mxModel->getCurrentController());
 }
