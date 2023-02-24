@@ -39,7 +39,6 @@ namespace cairocanvas
                             const uno::Sequence< beans::PropertyValue >&    /*rExtraFontProperties*/,
                             const geometry::Matrix2D&                       rFontMatrix,
                             SurfaceProviderRef                              rDevice ) :
-        CanvasFont_Base( m_aMutex ),
         maFont( vcl::Font( rFontRequest.FontDescription.FamilyName,
                       rFontRequest.FontDescription.StyleName,
                       Size( 0, ::basegfx::fround(rFontRequest.CellSize) ) ) ),
@@ -86,11 +85,14 @@ namespace cairocanvas
         pOutDev->EnableMapMode(bOldMapState);
     }
 
-    void SAL_CALL CanvasFont::disposing()
+    void CanvasFont::disposing(std::unique_lock<std::mutex>& rGuard)
     {
-        SolarMutexGuard aGuard;
-
-        mpRefDevice.clear();
+        rGuard.unlock();
+        {
+            SolarMutexGuard aGuard;
+            mpRefDevice.clear();
+        }
+        rGuard.lock();
     }
 
     uno::Reference< rendering::XTextLayout > SAL_CALL  CanvasFont::createTextLayout( const rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed )

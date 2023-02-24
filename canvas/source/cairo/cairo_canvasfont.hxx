@@ -19,8 +19,7 @@
 
 #pragma once
 
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/geometry/Matrix2D.hpp>
@@ -38,11 +37,10 @@
 
 namespace cairocanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< css::rendering::XCanvasFont,
+    typedef ::comphelper::WeakComponentImplHelper< css::rendering::XCanvasFont,
                                              css::lang::XServiceInfo > CanvasFont_Base;
 
-    class CanvasFont : public ::cppu::BaseMutex,
-                       public CanvasFont_Base
+    class CanvasFont : public CanvasFont_Base
     {
     public:
         typedef rtl::Reference<CanvasFont> Reference;
@@ -56,7 +54,7 @@ namespace cairocanvas
                     SurfaceProviderRef                                                  rDevice );
 
         /// Dispose all internal references
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // XCanvasFont
         virtual css::uno::Reference< css::rendering::XTextLayout > SAL_CALL createTextLayout( const css::rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed ) override;
