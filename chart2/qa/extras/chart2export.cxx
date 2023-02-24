@@ -49,7 +49,7 @@ public:
     void testUpDownBars();
     void testDoughnutChart();
     void testDisplayUnits();
-    // void testFdo74115WallGradientFill();
+    void testFdo74115WallGradientFill();
     void testFdo74115WallBitmapFill();
     void testPieChartWallLineStyle();
     void testBarChartRotation();
@@ -100,7 +100,7 @@ public:
     CPPUNIT_TEST(testUpDownBars);
     CPPUNIT_TEST(testDoughnutChart);
     CPPUNIT_TEST(testDisplayUnits);
-    // CPPUNIT_TEST(testFdo74115WallGradientFill);
+    CPPUNIT_TEST(testFdo74115WallGradientFill);
     CPPUNIT_TEST(testFdo74115WallBitmapFill);
     CPPUNIT_TEST(testPieChartWallLineStyle);
     CPPUNIT_TEST(testBarChartRotation);
@@ -630,14 +630,14 @@ void Chart2ExportTest::testDisplayUnits()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:dispUnits/c:builtInUnit", "val", "billions");
 }
 
-// void Chart2ExportTest::testFdo74115WallGradientFill()
-// {
-//     load("/chart2/qa/extras/data/docx/", "fdo74115_WallGradientFill.docx");
-//     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
-//     CPPUNIT_ASSERT(pXmlDoc);
-//
-//     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill");
-// }
+void Chart2ExportTest::testFdo74115WallGradientFill()
+{
+    loadFromURL(u"docx/fdo74115_WallGradientFill.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill");
+}
 
 void Chart2ExportTest::testFdo74115WallBitmapFill()
 {
