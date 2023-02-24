@@ -515,15 +515,7 @@ namespace basegfx
                 return 0.0;
             }
 
-            const double t(1.0 - std::hypot(aCoor.getX(), aCoor.getY()));
-            const sal_uInt32 nSteps(rGradInfo.getRequestedSteps());
-
-            if(nSteps && t < 1.0)
-            {
-                return floor(t * nSteps) / double(nSteps - 1);
-            }
-
-            return t;
+            return 1.0 - std::hypot(aCoor.getX(), aCoor.getY());
         }
 
         double getEllipticalGradientAlpha(const B2DPoint& rUV, const ODFGradientInfo& rGradInfo)
