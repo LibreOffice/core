@@ -286,7 +286,7 @@ struct SvxCSS1ItemIds
     sal_uInt16 nOrphans;
     sal_uInt16 nFormatSplit;
 
-    // this looks a bit superflous? TypedWhichId<SvxLRSpaceItem> nLRSpace{0};
+    // this looks a bit superfluous? TypedWhichId<SvxLRSpaceItem> nLRSpace{0};
     TypedWhichId<SvxULSpaceItem> nULSpace{0};
     sal_uInt16 nBox;
     sal_uInt16 nBrush;
