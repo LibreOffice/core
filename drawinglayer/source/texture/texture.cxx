@@ -367,42 +367,65 @@ namespace drawinglayer::texture
             std::vector< B2DHomMatrixAndBColor >& rEntries,
             basegfx::BColor& rOuterColor)
         {
-            if(mnColorSteps.size() <= 1)
+            // no color at all, done
+            if (mnColorSteps.empty())
                 return;
 
-            const basegfx::BColor maStart(mnColorSteps.front().getColor());
-            const basegfx::BColor maEnd(mnColorSteps.back().getColor());
-            const sal_uInt32 nSteps(basegfx::utils::calculateNumberOfSteps(
-                maGradientInfo.getRequestedSteps(), maStart, maEnd));
+            // fill in return parameter rOuterColor before returning
+            rOuterColor = mnColorSteps.front().getColor();
 
-            rOuterColor = maStart;
-            const double fStepSize(1.0 / nSteps);
-            B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
+            // only one color, done
+            if (mnColorSteps.size() < 2)
+                return;
 
-            for(sal_uInt32 a(1); a < nSteps; a++)
+            // outer loop over ColorSteps, each is from cs_l to cs_r
+            for (auto cs_l(mnColorSteps.begin()), cs_r(cs_l + 1); cs_r != mnColorSteps.end(); cs_l++, cs_r++)
             {
-                const double fSize(1.0 - (fStepSize * a));
-                aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * basegfx::utils::createScaleB2DHomMatrix(fSize, fSize);
-                aB2DHomMatrixAndBColor.maBColor = interpolate(maStart, maEnd, double(a) / double(nSteps - 1));
-                rEntries.push_back(aB2DHomMatrixAndBColor);
+                // get colors & calculate steps
+                const basegfx::BColor aCStart(cs_l->getColor());
+                const basegfx::BColor aCEnd(cs_r->getColor());
+                const sal_uInt32 nSteps(basegfx::utils::calculateNumberOfSteps(
+                    maGradientInfo.getRequestedSteps(), aCStart, aCEnd));
+
+                // get offsets & calculate StripeWidth
+                const double fOffsetStart(cs_l->getOffset());
+                const double fOffsetEnd(cs_r->getOffset());
+                const double fStripeWidth((fOffsetEnd - fOffsetStart) / nSteps);
+
+                // get correct start for innner loop (see above)
+                const sal_uInt32 nStartInnerLoop(cs_l == mnColorSteps.begin() ? 1 : 0);
+
+                for (sal_uInt32 innerLoop(nStartInnerLoop); innerLoop < nSteps; innerLoop++)
+                {
+                    // calculate size/radius
+                    const double fSize(1.0 - (fOffsetStart + (fStripeWidth * innerLoop)));
+
+                    // set and add at target
+                    B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
+
+                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * basegfx::utils::createScaleB2DHomMatrix(fSize, fSize);
+                    aB2DHomMatrixAndBColor.maBColor = interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1));
+                    rEntries.push_back(aB2DHomMatrixAndBColor);
+                }
             }
         }
 
         void GeoTexSvxGradientRadial::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
-            if(mnColorSteps.size() <= 1)
+            // no color at all, done
+            if (mnColorSteps.empty())
+                return;
+
+            // just single color, done
+            if (mnColorSteps.size() < 2)
             {
                 rBColor = mnColorSteps.front().getColor();
+                return;
             }
-            else
-            {
-                const double fScaler(basegfx::utils::getRadialGradientAlpha(rUV, maGradientInfo));
 
-                const basegfx::BColor maStart(mnColorSteps.front().getColor());
-                const basegfx::BColor maEnd(mnColorSteps.back().getColor());
-
-                rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
-            }
+            // texture-back-transform X/Y -> t [0.0..1.0] and determine color
+            const double fScaler(basegfx::utils::getRadialGradientAlpha(rUV, maGradientInfo));
+            rBColor = basegfx::utils::modifyBColor(mnColorSteps, fScaler, mnRequestedSteps);
         }
 
 
