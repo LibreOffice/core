@@ -3757,10 +3757,7 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate, Timer *, void)
     // Query view because the Navigator is cleared too late.
     SwView* pView = GetParentWindow()->GetCreateView();
 
-    if (!pView)
-        return;
-
-    SwWrtShell* pActShell = pView->GetWrtShellPtr();
+    SwWrtShell* pActShell = pView ? pView->GetWrtShellPtr() : nullptr;
     if(pActShell && pActShell->GetWin() &&
         (pActShell->GetWin()->HasFocus() || m_bDocHasChanged || m_bViewHasChanged) &&
         !IsInDrag() && !pActShell->ActionPend())

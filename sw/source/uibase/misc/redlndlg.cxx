@@ -246,8 +246,6 @@ void SwRedlineAcceptDlg::InitAuthors()
 
     SwView *pView = ::GetActiveView();
     SwWrtShell* pSh = pView ? pView->GetWrtShellPtr() : nullptr;
-    if (!pSh)
-        return;
 
     SvxTPFilter *pFilterPage = m_xTabPagesCTRL->GetFilterPage();
 
@@ -1131,11 +1129,11 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, SelectHdl, weld::TreeView&, void)
 
 IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
 {
+    m_aSelectTimer.Stop();
+
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
     if (!pSh)
         return;
-
-    m_aSelectTimer.Stop();
 
     bool bIsNotFormated = false;
     bool bSel = false;
