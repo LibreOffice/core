@@ -349,9 +349,17 @@ void WorkbookFragment::finalizeImport()
 
     // read the theme substream
     OUString aThemeFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"theme" );
-    model::Theme aTheme;
+    auto& rOoxTheme = getTheme();
+
+    auto pTheme = rOoxTheme.oox::drawingml::Theme::getTheme(); // needed full name here because a conflict with WorkbookHelper and Theme in ThemeBuffer
+    if (!pTheme)
+    {
+        pTheme = std::make_shared<model::Theme>();
+        rOoxTheme.setTheme(pTheme);
+    }
+
     if( !aThemeFragmentPath.isEmpty() )
-        importOoxFragment(new ThemeFragmentHandler(getFilter(), aThemeFragmentPath, getTheme(), aTheme));
+        importOoxFragment(new ThemeFragmentHandler(getFilter(), aThemeFragmentPath, rOoxTheme, *pTheme));
     xGlobalSegment->setPosition( 0.25 );
 
     // read the styles substream (requires finalized theme buffer)

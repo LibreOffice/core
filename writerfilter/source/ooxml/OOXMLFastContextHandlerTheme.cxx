@@ -43,10 +43,12 @@ void OOXMLFastContextHandlerTheme::lcl_startFastElement(
         if (!pThemePtr)
         {
             pThemePtr = std::make_shared<oox::drawingml::Theme>();
+            auto pTheme = std::make_shared<model::Theme>();
+            pThemePtr->setTheme(pTheme);
             getDocument()->setTheme(pThemePtr);
         }
         mpThemeFragmentHandler = new oox::drawingml::ThemeFragmentHandler(
-            *xThemeFilterBase, aThemeFragmentPath, *pThemePtr, maTheme);
+            *xThemeFilterBase, aThemeFragmentPath, *pThemePtr, *pThemePtr->getTheme());
     }
 
     if (mpThemeFragmentHandler.is())

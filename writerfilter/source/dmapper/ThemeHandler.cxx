@@ -408,8 +408,8 @@ OUString ThemeHandler::getStringForTheme(const Id id)
 
 OUString ThemeHandler::getFontNameForTheme(const Id id) const
 {
-    auto pSvxTheme = mpTheme->createSvxTheme();
-    model::FontScheme const& rFontScheme = pSvxTheme->getFontScheme();
+    auto pModelTheme = mpTheme->getTheme();
+    model::FontScheme const& rFontScheme = pModelTheme->getFontScheme();
     OUString aSupplementalTypeFace = resolveSupplementalFontList(
         rFontScheme, id, maThemeFontLangEastAsia, maThemeFontLangBidi);
     if (!aSupplementalTypeFace.isEmpty())
