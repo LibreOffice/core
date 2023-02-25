@@ -270,7 +270,6 @@ void SAL_CALL ShapeContextHandler::startFastElement
         // Parse the theme relation, if available; the diagram won't have colors without it.
         if (!mpThemePtr && !msRelationFragmentPath.isEmpty())
         {
-            mpThemePtr = std::make_shared<Theme>();
             // Get Target for Type = "officeDocument" from _rels/.rels file
             // aOfficeDocumentFragmentPath is pointing to "word/document.xml" for docx & to "ppt/presentation.xml" for pptx
             FragmentHandlerRef rFragmentHandlerRef(new ShapeFragmentHandler(*mxShapeFilterBase, "/"));
@@ -281,11 +280,13 @@ void SAL_CALL ShapeContextHandler::startFastElement
             FragmentHandlerRef rFragmentHandler(new ShapeFragmentHandler(*mxShapeFilterBase, aOfficeDocumentFragmentPath));
             OUString aThemeFragmentPath = rFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc( u"theme" );
 
-            if(!aThemeFragmentPath.isEmpty())
+            if (!aThemeFragmentPath.isEmpty())
             {
-                model::Theme aTheme;
+                mpThemePtr = std::make_shared<Theme>();
+                auto pTheme = std::make_shared<model::Theme>();
+                mpThemePtr->setTheme(pTheme);
                 uno::Reference<xml::sax::XFastSAXSerializable> xDoc(mxShapeFilterBase->importFragment(aThemeFragmentPath), uno::UNO_QUERY_THROW);
-                mxShapeFilterBase->importFragment(new ThemeFragmentHandler(*mxShapeFilterBase, aThemeFragmentPath, *mpThemePtr, aTheme), xDoc);
+                mxShapeFilterBase->importFragment(new ThemeFragmentHandler(*mxShapeFilterBase, aThemeFragmentPath, *mpThemePtr, *pTheme), xDoc);
                 mxShapeFilterBase->setCurrentTheme(mpThemePtr);
             }
         }

@@ -26,7 +26,6 @@ class OOXMLFastContextHandlerTheme : public OOXMLFastContextHandler
 {
 private:
     rtl::Reference<oox::drawingml::ThemeFragmentHandler> mpThemeFragmentHandler;
-    model::Theme maTheme;
 
 public:
     explicit OOXMLFastContextHandlerTheme(OOXMLFastContextHandler* pContext);

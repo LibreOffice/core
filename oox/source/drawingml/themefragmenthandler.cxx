@@ -71,7 +71,9 @@ void ThemeFragmentHandler::onStartElement(const AttributeList& rAttribs)
 {
     if (getCurrentElement() == A_TOKEN(theme))
     {
-        mrOoxTheme.setThemeName(rAttribs.getStringDefaulted(XML_name));
+        OUString aName = rAttribs.getStringDefaulted(XML_name);
+        mrOoxTheme.setThemeName(aName);
+        mrTheme.SetName(aName);
     }
 }
 

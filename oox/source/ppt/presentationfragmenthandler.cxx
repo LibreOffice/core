@@ -351,9 +351,11 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                                 Reference<xml::dom::XDocument> xDoc=
                                     rFilter.importFragment(aThemeFragmentPath);
 
-                                model::Theme aTheme;
+                                auto pTheme = std::make_shared<model::Theme>();
+                                pThemePtr->setTheme(pTheme);
+
                                 rFilter.importFragment(
-                                    new ThemeFragmentHandler(rFilter, aThemeFragmentPath, *pThemePtr, aTheme),
+                                    new ThemeFragmentHandler(rFilter, aThemeFragmentPath, *pThemePtr, *pTheme),
                                     Reference<xml::sax::XFastSAXSerializable>(
                                         xDoc,
                                         UNO_QUERY_THROW));

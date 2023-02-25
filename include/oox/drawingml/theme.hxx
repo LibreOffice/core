@@ -30,6 +30,7 @@
 #include <oox/helper/refvector.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <docmodel/theme/Theme.hxx>
 
 namespace com::sun::star {
     namespace drawing { class XDrawPage; }
@@ -107,9 +108,17 @@ public:
     const css::uno::Reference<css::xml::dom::XDocument>& getFragment() const { return mxFragment; }
     void                     setFragment( const css::uno::Reference< css::xml::dom::XDocument>& xRef ) { mxFragment=xRef; }
 
-    std::shared_ptr<model::Theme> createSvxTheme() const;
     void addTheme(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPage) const;
 
+    void setTheme(std::shared_ptr<model::Theme> const& pTheme)
+    {
+        mpTheme = pTheme;
+    }
+
+    std::shared_ptr<model::Theme> const& getTheme() const
+    {
+        return mpTheme;
+    }
 private:
     OUString            maThemeName;
     OUString            maFontSchemeName;
@@ -125,6 +134,8 @@ private:
     Shape               maLnDef;
     Shape               maTxDef;
     css::uno::Reference< css::xml::dom::XDocument> mxFragment;
+
+    std::shared_ptr<model::Theme> mpTheme;
 };
 
 

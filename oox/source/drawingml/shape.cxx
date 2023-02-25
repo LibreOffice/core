@@ -2311,9 +2311,8 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                             rFilter.importFragment(aThemeOverrideFragmentPath), uno::UNO_QUERY_THROW);
                     pTheme = pPowerPointImport->getActualSlidePersist()->getTheme();
                     auto pThemeOverride = std::make_shared<Theme>(*pTheme);
-                    model::Theme aTheme;
                     rFilter.importFragment(
-                        new ThemeOverrideFragmentHandler(rFilter, aThemeOverrideFragmentPath, *pThemeOverride, aTheme),
+                        new ThemeOverrideFragmentHandler(rFilter, aThemeOverrideFragmentPath, *pThemeOverride, *pThemeOverride->getTheme()),
                         xDoc);
                     pPowerPointImport->getActualSlidePersist()->setTheme(pThemeOverride);
                 }
