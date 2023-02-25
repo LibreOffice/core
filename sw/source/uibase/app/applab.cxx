@@ -377,7 +377,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
         pSh->DoUndo();
     }
 
-    if( rItem.m_aWriting.indexOf( '<' ) >= 0 )
+    if (pSh && rItem.m_aWriting.indexOf('<') >= 0)
     {
         // Open database browser on recently used database
         ShowDBObj( *pNewView, pSh->GetDBData() );
