@@ -31,6 +31,8 @@
 #include <sal/log.hxx>
 
 #include <memory>
+#include <mutex>
+#include <optional>
 #include <unordered_map>
 #include <vector>
 
@@ -75,13 +77,13 @@ class ExtendedAttributes;
 
 class MGuard
 {
-    Mutex * m_pMutex;
+    std::mutex * m_pMutex;
 public:
-    explicit MGuard( std::unique_ptr<Mutex> const & pMutex )
-        : m_pMutex( pMutex.get() )
-        { if (m_pMutex) m_pMutex->acquire(); }
+    explicit MGuard( std::optional<std::mutex> & oMutex )
+        : m_pMutex( oMutex ? &*oMutex : nullptr )
+        { if (m_pMutex) m_pMutex->lock(); }
     ~MGuard() noexcept
-        { if (m_pMutex) m_pMutex->release(); }
+        { if (m_pMutex) m_pMutex->unlock(); }
 };
 
 class DocumentHandlerImpl :
@@ -107,7 +109,7 @@ class DocumentHandlerImpl :
     std::vector< ElementEntry > m_elements;
     sal_Int32 m_nSkipElements;
 
-    std::unique_ptr<Mutex> m_pMutex;
+    mutable std::optional<std::mutex> m_oMutex;
 
     inline Reference< xml::input::XElement > getCurrentElement() const;
 
@@ -178,13 +180,13 @@ DocumentHandlerImpl::DocumentHandlerImpl(
     m_elements.reserve( 10 );
 
     if (! bSingleThreadedUse)
-        m_pMutex.reset(new Mutex);
+        m_oMutex.emplace();
 }
 
 inline Reference< xml::input::XElement >
 DocumentHandlerImpl::getCurrentElement() const
 {
-    MGuard aGuard( m_pMutex );
+    MGuard aGuard( m_oMutex );
     if (m_elements.empty())
         return Reference< xml::input::XElement >();
     else
@@ -193,7 +195,7 @@ DocumentHandlerImpl::getCurrentElement() const
 
 inline sal_Int32 DocumentHandlerImpl::getUidByURI( OUString const & rURI )
 {
-    MGuard guard( m_pMutex );
+    MGuard guard( m_oMutex );
     if (m_nLastURI_lookup == UID_UNKNOWN || m_aLastURI_lookup != rURI)
     {
         t_OUString2LongMap::const_iterator iFind( m_URI2Uid.find( rURI ) );
@@ -370,7 +372,7 @@ Sequence< OUString > DocumentHandlerImpl::getSupportedServiceNames()
 void DocumentHandlerImpl::initialize(
     Sequence< Any > const & arguments )
 {
-    MGuard guard( m_pMutex );
+    MGuard guard( m_oMutex );
     Reference< xml::input::XRoot > xRoot;
     if (arguments.getLength() != 1 ||
         !(arguments[ 0 ] >>= xRoot) ||
@@ -392,7 +394,7 @@ sal_Int32 DocumentHandlerImpl::getUidByUri( OUString const & Uri )
 
 OUString DocumentHandlerImpl::getUriByUid( sal_Int32 Uid )
 {
-    MGuard guard( m_pMutex );
+    MGuard guard( m_oMutex );
     for (const auto& rURIUid : m_URI2Uid)
     {
         if (rURIUid.second == Uid)
@@ -424,7 +426,7 @@ void DocumentHandlerImpl::startElement(
     ElementEntry elementEntry;
 
     { // guard start:
-    MGuard aGuard( m_pMutex );
+    MGuard aGuard( m_oMutex );
     // currently skipping elements and waiting for end tags?
     if (m_nSkipElements > 0)
     {
@@ -526,7 +528,7 @@ void DocumentHandlerImpl::startElement(
     }
 
     {
-    MGuard aGuard( m_pMutex );
+    MGuard aGuard( m_oMutex );
     if (elementEntry.m_xElement.is())
     {
         m_elements.push_back( std::move(elementEntry) );
@@ -549,7 +551,7 @@ void DocumentHandlerImpl::endElement(
 {
     Reference< xml::input::XElement > xCurrentElement;
     {
-        MGuard aGuard( m_pMutex );
+        MGuard aGuard( m_oMutex );
         if (m_nSkipElements)
         {
             --m_nSkipElements;
