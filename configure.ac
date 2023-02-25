@@ -11223,10 +11223,31 @@ else
         AC_MSG_RESULT([internal])
         SYSTEM_ZXING=
         BUILD_TYPE="$BUILD_TYPE ZXING"
+        ZXING_CFLAGS="-I${WORKDIR}/UnpackedTarball/zxing/core/src"
     fi
     if test "$ENABLE_ZXING" = TRUE; then
         AC_DEFINE(ENABLE_ZXING)
     fi
+    AC_MSG_CHECKING([whether zxing::tosvg function is available])
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11 $ZXING_CFLAGS"
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+            #include <BitMatrix.h>
+            #include <BitMatrixIO.h>
+            int main(){
+                ZXing::BitMatrix matrix(1, 1);
+                matrix.set(0, 0, true);
+                ZXing::ToSVG(matrix);
+                return 0;
+            }
+        ])], [
+            AC_DEFINE([HAVE_ZXING_TOSVG],[1])
+            AC_MSG_RESULT([yes])
+        ], [AC_MSG_RESULT([no])])
+    CXXFLAGS=$save_CXXFLAGS
+    AC_LANG_POP([C++])
+    AC_SUBST(HAVE_ZXING_TOSVG)
 fi
 AC_SUBST(SYSTEM_ZXING)
 AC_SUBST(ENABLE_ZXING)

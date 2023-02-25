@@ -35,6 +35,10 @@
 #pragma GCC diagnostic pop
 #endif
 
+#if HAVE_ZXING_TOSVG
+#include <BitMatrixIO.h>
+#endif
+
 #endif // ENABLE_ZXING
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -73,6 +77,7 @@ namespace
 {
 #if ENABLE_ZXING
 // Implementation adapted from the answer: https://stackoverflow.com/questions/10789059/create-qr-code-in-vector-image/60638350#60638350
+#if !HAVE_ZXING_TOSVG
 OString ConvertToSVGFormat(const ZXing::BitMatrix& bitmatrix)
 {
     OStringBuffer sb;
@@ -96,6 +101,7 @@ OString ConvertToSVGFormat(const ZXing::BitMatrix& bitmatrix)
     sb.append("\"/>\n</svg>");
     return sb.toString();
 }
+#endif
 
 std::string GetBarCodeType(int type)
 {
@@ -143,7 +149,11 @@ OString GenerateQRCode(std::u16string_view aQRText, tools::Long aQRECC, int aQRB
     auto writer = ZXing::MultiFormatWriter(format).setMargin(aQRBorder).setEccLevel(bqrEcc);
     writer.setEncoding(ZXing::CharacterSet::UTF8);
     ZXing::BitMatrix bitmatrix = writer.encode(ZXing::TextUtfEncoding::FromUtf8(QRText), 0, 0);
+#if HAVE_ZXING_TOSVG
+    return OString(ZXing::ToSVG(bitmatrix));
+#else
     return ConvertToSVGFormat(bitmatrix);
+#endif
 }
 #endif
 
