@@ -13,15 +13,16 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <o3tl/enumrange.hxx>
 #include <comphelper/sequence.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 using namespace css;
 
-OUString UnoTheme::getName() { return maTheme.GetName(); }
+OUString UnoTheme::getName() { return mpTheme->GetName(); }
 
 css::uno::Sequence<sal_Int32> UnoTheme::getColorSet()
 {
     std::vector<sal_Int32> aColorScheme(12);
-    auto* pColorSet = maTheme.GetColorSet();
+    auto* pColorSet = mpTheme->GetColorSet();
     if (pColorSet)
     {
         size_t i = 0;
@@ -40,9 +41,9 @@ css::uno::Sequence<sal_Int32> UnoTheme::getColorSet()
 
 namespace model::theme
 {
-uno::Reference<util::XTheme> createXTheme(model::Theme const& rTheme)
+uno::Reference<util::XTheme> createXTheme(std::shared_ptr<model::Theme> const& pTheme)
 {
-    return new UnoTheme(rTheme);
+    return new UnoTheme(pTheme);
 }
 
 } // end model::theme

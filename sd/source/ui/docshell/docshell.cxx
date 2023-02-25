@@ -61,6 +61,7 @@
 #include <comphelper/lok.hxx>
 #include <DrawViewShell.hxx>
 #include <sdpage.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 using namespace sd;
 #define ShellClass_DrawDocShell

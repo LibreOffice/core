@@ -32,6 +32,7 @@
 
 #include <docmodel/uno/UnoThemeColor.hxx>
 #include <docmodel/uno/UnoTheme.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
 
@@ -383,13 +384,13 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPptxTheme)
     CPPUNIT_ASSERT(xTheme.is());
     auto* pUnoTheme = dynamic_cast<UnoTheme*>(xTheme.get());
     CPPUNIT_ASSERT(pUnoTheme);
-    auto const& rTheme = pUnoTheme->getTheme();
+    auto pTheme = pUnoTheme->getTheme();
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Office Theme"), rTheme.GetName());
-    CPPUNIT_ASSERT_EQUAL(OUString("Office"), rTheme.GetColorSet()->getName());
+    CPPUNIT_ASSERT_EQUAL(OUString("Office Theme"), pTheme->GetName());
+    CPPUNIT_ASSERT_EQUAL(OUString("Office"), pTheme->GetColorSet()->getName());
 
     CPPUNIT_ASSERT_EQUAL(Color(0x954F72),
-                         rTheme.GetColorSet()->getColor(model::ThemeColorType::FollowedHyperlink));
+                         pTheme->GetColorSet()->getColor(model::ThemeColorType::FollowedHyperlink));
 
     // Check the reference to that theme:
     uno::Reference<drawing::XShapes> xDrawPageShapes(xDrawPage, uno::UNO_QUERY);

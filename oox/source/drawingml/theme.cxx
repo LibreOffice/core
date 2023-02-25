@@ -109,9 +109,10 @@ const TextFont* Theme::resolveFont( std::u16string_view rName ) const
     return nullptr;
 }
 
-std::unique_ptr<model::Theme> Theme::createSvxTheme() const
+std::shared_ptr<model::Theme> Theme::createSvxTheme() const
 {
-    auto pTheme = std::make_unique<model::Theme>(maThemeName);
+    auto pTheme = std::make_shared<model::Theme>(maThemeName);
+
     auto pColorSet = std::make_unique<model::ColorSet>(maClrScheme.GetName());
     maClrScheme.fill(*pColorSet);
     pTheme->SetColorSet(std::move(pColorSet));
@@ -184,9 +185,7 @@ void Theme::addTheme(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPa
     if (!pPage)
         return;
 
-    std::unique_ptr<model::Theme> pTheme = createSvxTheme();
-
-    pPage->getSdrPageProperties().SetTheme(std::move(pTheme));
+    pPage->getSdrPageProperties().SetTheme(createSvxTheme());
 }
 
 } // namespace oox::drawingml

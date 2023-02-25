@@ -54,6 +54,7 @@
 #include <svl/hint.hxx>
 #include <rtl/strbuf.hxx>
 #include <libxml/xmlwriter.h>
+#include <docmodel/theme/Theme.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -1300,9 +1301,9 @@ void SdrPageProperties::SetStyleSheet(SfxStyleSheet* pStyleSheet)
     ImpPageChange(*mpSdrPage);
 }
 
-void SdrPageProperties::SetTheme(std::unique_ptr<model::Theme> pTheme)
+void SdrPageProperties::SetTheme(std::shared_ptr<model::Theme> const& pTheme)
 {
-    mpTheme = std::move(pTheme);
+    mpTheme = pTheme;
 
     if (mpTheme && mpTheme->GetColorSet() && mpSdrPage->IsMasterPage())
     {
@@ -1322,7 +1323,7 @@ void SdrPageProperties::SetTheme(std::unique_ptr<model::Theme> pTheme)
     }
 }
 
-std::unique_ptr<model::Theme> const& SdrPageProperties::GetTheme() const
+std::shared_ptr<model::Theme> const& SdrPageProperties::GetTheme() const
 {
     return mpTheme;
 }

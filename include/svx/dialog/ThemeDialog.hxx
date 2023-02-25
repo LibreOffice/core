@@ -11,10 +11,14 @@
 
 #include <svx/svxdllapi.h>
 #include <vcl/weld.hxx>
-#include <docmodel/theme/Theme.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/theme/IThemeColorChanger.hxx>
 #include <svx/dialog/ThemeColorValueSet.hxx>
+
+namespace model
+{
+class Theme;
+}
 
 namespace svx
 {

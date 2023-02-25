@@ -26,6 +26,7 @@
 #include <comphelper/sequence.hxx>
 
 #include <docmodel/uno/UnoTheme.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 using namespace css;
 using namespace xmloff::token;
@@ -35,6 +36,7 @@ XMLThemeContext::XMLThemeContext(SvXMLImport& rImport,
                                  css::uno::Reference<css::drawing::XDrawPage> const& xPage)
     : SvXMLImportContext(rImport)
     , m_xPage(xPage)
+    , mpTheme(new model::Theme)
 {
     for (const auto& rAttribute : sax_fastparser::castToFastAttributeList(xAttrList))
     {
@@ -43,7 +45,7 @@ XMLThemeContext::XMLThemeContext(SvXMLImport& rImport,
             case XML_ELEMENT(LO_EXT, XML_NAME):
             {
                 OUString aName = rAttribute.toString();
-                maTheme.SetName(aName);
+                mpTheme->SetName(aName);
                 break;
             }
         }
@@ -53,7 +55,7 @@ XMLThemeContext::XMLThemeContext(SvXMLImport& rImport,
 XMLThemeContext::~XMLThemeContext()
 {
     uno::Reference<beans::XPropertySet> xPropertySet(m_xPage, uno::UNO_QUERY);
-    uno::Reference<util::XTheme> xTheme(new UnoTheme(maTheme));
+    auto xTheme = model::theme::createXTheme(mpTheme);
     xPropertySet->setPropertyValue("Theme", uno::Any(xTheme));
 }
 
@@ -62,7 +64,7 @@ uno::Reference<xml::sax::XFastContextHandler> SAL_CALL XMLThemeContext::createFa
 {
     if (nElement == XML_ELEMENT(LO_EXT, XML_COLOR_TABLE))
     {
-        return new XMLColorTableContext(GetImport(), xAttribs, maTheme);
+        return new XMLColorTableContext(GetImport(), xAttribs, *mpTheme);
     }
 
     return nullptr;
