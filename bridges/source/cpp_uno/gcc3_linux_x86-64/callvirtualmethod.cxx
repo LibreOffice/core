@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <cstring>
-
 #include <cppu/macros.hxx>
 #include <sal/types.h>
 #include <typelib/typeclass.h>
