@@ -2950,6 +2950,20 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                     pAttr = pPrev;
                     continue;
 
+                // tdf#94088 expand RES_BACKGROUND to the new fill attribute
+                // definitions in the range [XATTR_FILL_FIRST .. XATTR_FILL_LAST].
+                // This is the right place in the future if the adapted fill attributes
+                // may be handled more directly in HTML import to handle them.
+                case RES_BACKGROUND:
+                {
+                    const SvxBrushItem& rBrush = static_cast< SvxBrushItem& >(*pAttr->m_pItem);
+                    SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aNewSet(m_xDoc->GetAttrPool());
+
+                    setSvxBrushItemAsFillAttributesToTargetSet(rBrush, aNewSet);
+                    m_xDoc->getIDocumentContentOperations().InsertItemSet(aAttrPam, aNewSet, SetAttrMode::DONTREPLACE);
+                    break;
+                }
+
                 case RES_LR_SPACE:
                     assert(false);
                     break;
@@ -2967,20 +2981,6 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                     OSL_ENSURE( false,
                             "LRSpace set over multiple paragraphs!" );
                     [[fallthrough]]; // (shouldn't reach this point anyway)
-
-                // tdf#94088 expand RES_BACKGROUND to the new fill attribute
-                // definitions in the range [XATTR_FILL_FIRST .. XATTR_FILL_LAST].
-                // This is the right place in the future if the adapted fill attributes
-                // may be handled more directly in HTML import to handle them.
-                case RES_BACKGROUND:
-                {
-                    const SvxBrushItem& rBrush = static_cast< SvxBrushItem& >(*pAttr->m_pItem);
-                    SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aNewSet(m_xDoc->GetAttrPool());
-
-                    setSvxBrushItemAsFillAttributesToTargetSet(rBrush, aNewSet);
-                    m_xDoc->getIDocumentContentOperations().InsertItemSet(aAttrPam, aNewSet, SetAttrMode::DONTREPLACE);
-                    break;
-                }
                 default:
 
                     // maybe jump to a bookmark
