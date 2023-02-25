@@ -2952,18 +2952,6 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                     pAttr = pPrev;
                     continue;
 
-                case RES_LR_SPACE:
-                    if( aAttrPam.GetPoint()->GetNodeIndex() ==
-                        aAttrPam.GetMark()->GetNodeIndex())
-                    {
-                        // because of numbering set this attribute directly at node
-                        pCNd->SetAttr( *pAttr->m_pItem );
-                        break;
-                    }
-                    OSL_ENSURE( false,
-                            "LRSpace set over multiple paragraphs!" );
-                    [[fallthrough]]; // (shouldn't reach this point anyway)
-
                 // tdf#94088 expand RES_BACKGROUND to the new fill attribute
                 // definitions in the range [XATTR_FILL_FIRST .. XATTR_FILL_LAST].
                 // This is the right place in the future if the adapted fill attributes
@@ -2977,6 +2965,18 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                     m_xDoc->getIDocumentContentOperations().InsertItemSet(aAttrPam, aNewSet, SetAttrMode::DONTREPLACE);
                     break;
                 }
+
+                case RES_LR_SPACE:
+                    if( aAttrPam.GetPoint()->GetNodeIndex() ==
+                        aAttrPam.GetMark()->GetNodeIndex())
+                    {
+                        // because of numbering set this attribute directly at node
+                        pCNd->SetAttr( *pAttr->m_pItem );
+                        break;
+                    }
+                    OSL_ENSURE( false,
+                            "LRSpace set over multiple paragraphs!" );
+                    [[fallthrough]]; // (shouldn't reach this point anyway)
                 default:
 
                     // maybe jump to a bookmark
