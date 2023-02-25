@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_NOTEBOOKBAR_NOTEBOOKBARPOPUP_HXX
-#define INCLUDED_SFX2_NOTEBOOKBAR_NOTEBOOKBARPOPUP_HXX
+#pragma once
 
 #include <vcl/layout.hxx>
 #include <vcl/toolkit/floatwin.hxx>
@@ -51,7 +50,5 @@ public:
 
     void RemoveBackground(vcl::Window* pWindow);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
