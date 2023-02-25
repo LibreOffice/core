@@ -127,6 +127,11 @@ SwVbaGlobals::getSelection()
     return getApplication()->getSelection();
 }
 
+uno::Reference<word::XGlobals> SwVbaGlobals::getWord()
+{
+    return uno::Reference<word::XGlobals>(this);
+}
+
 uno::Reference<word::XWordBasic> SAL_CALL SwVbaGlobals::getWordBasic()
 {
     assert(dynamic_cast<SwVbaApplication*>(getApplication().get()));
