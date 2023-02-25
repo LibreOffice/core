@@ -17,6 +17,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <svx/svdpage.hxx>
 #include <docmodel/uno/UnoThemeColor.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 using namespace css;
 

@@ -25,6 +25,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/tempfile.hxx>
 #include <docmodel/uno/UnoTheme.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 using namespace ::com::sun::star;
 
@@ -919,7 +920,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testThemeExport)
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<beans::XPropertySet> xPageProps(xDrawPage, uno::UNO_QUERY);
 
-    model::Theme aTheme("My Theme");
+    auto pTheme = std::make_shared<model::Theme>("My Theme");
     std::unique_ptr<model::ColorSet> pColorSet(new model::ColorSet("My Color Scheme"));
     pColorSet->add(model::ThemeColorType::Dark1, 0x101010);
     pColorSet->add(model::ThemeColorType::Light1, 0x202020);
@@ -933,9 +934,9 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testThemeExport)
     pColorSet->add(model::ThemeColorType::Accent6, 0xa0a0a0);
     pColorSet->add(model::ThemeColorType::Hyperlink, 0xb0b0b0);
     pColorSet->add(model::ThemeColorType::FollowedHyperlink, 0xc0c0c0);
-    aTheme.SetColorSet(std::move(pColorSet));
+    pTheme->SetColorSet(std::move(pColorSet));
 
-    uno::Reference<util::XTheme> xTheme = model::theme::createXTheme(aTheme);
+    uno::Reference<util::XTheme> xTheme = model::theme::createXTheme(pTheme);
     xPageProps->setPropertyValue("Theme", uno::Any(xTheme));
 
     // Export to ODT:

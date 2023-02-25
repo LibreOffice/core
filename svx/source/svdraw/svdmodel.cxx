@@ -88,7 +88,7 @@ struct SdrModelImpl
     bool mbLegacySingleLineFontwork;   // tdf#148000 compatibility flag
     bool mbConnectorUseSnapRect;       // tdf#149756 compatibility flag
     bool mbIgnoreBreakAfterMultilineField; ///< tdf#148966 compatibility flag
-    std::unique_ptr<model::Theme> mpTheme;
+    std::shared_ptr<model::Theme> mpTheme;
 
     SdrModelImpl()
         : mpUndoManager(nullptr)
@@ -1589,12 +1589,12 @@ void SdrModel::SetStarDrawPreviewMode(bool bPreview)
     }
 }
 
-void SdrModel::setTheme(std::unique_ptr<model::Theme> pTheme)
+void SdrModel::setTheme(std::shared_ptr<model::Theme> const& pTheme)
 {
-    mpImpl->mpTheme = std::move(pTheme);
+    mpImpl->mpTheme = pTheme;
 }
 
-std::unique_ptr<model::Theme> const& SdrModel::getTheme() const
+std::shared_ptr<model::Theme> const& SdrModel::getTheme() const
 {
     return mpImpl->mpTheme;
 }

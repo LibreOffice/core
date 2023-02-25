@@ -74,6 +74,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <docmodel/uno/UnoTheme.hxx>
+#include <docmodel/theme/Theme.hxx>
 #include <o3tl/enumrange.hxx>
 
 using namespace ::com::sun::star;
@@ -2386,13 +2387,13 @@ void SdXMLExport::ExportThemeElement(const uno::Reference<drawing::XDrawPage>& x
     if (!pUnoTheme)
         return;
 
-    auto const& rTheme = pUnoTheme->getTheme();
+    auto pTheme = pUnoTheme->getTheme();
 
-    if (!rTheme.GetName().isEmpty())
-        AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, rTheme.GetName());
+    if (!pTheme->GetName().isEmpty())
+        AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, pTheme->GetName());
     SvXMLElementExport aTheme(*this, XML_NAMESPACE_LO_EXT, XML_THEME, true, true);
 
-    auto* pColorSet = rTheme.GetColorSet();
+    auto* pColorSet = pTheme->GetColorSet();
     if (!pColorSet->getName().isEmpty())
         AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, pColorSet->getName());
     SvXMLElementExport aColorTable(*this, XML_NAMESPACE_LO_EXT, XML_COLOR_TABLE, true, true);

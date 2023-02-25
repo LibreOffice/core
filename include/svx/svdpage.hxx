@@ -30,7 +30,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <svx/svdobj.hxx>
-#include <docmodel/theme/Theme.hxx>
 #include <unotools/weakref.hxx>
 #include <memory>
 #include <optional>
@@ -39,6 +38,7 @@
 
 
 // predefines
+namespace model { class Theme; }
 namespace reportdesign { class OSection; }
 namespace sdr::contact { class ViewContact; }
 class SdrPage;
@@ -317,7 +317,7 @@ private:
     // data
     SdrPage*                mpSdrPage;
     SfxStyleSheet*          mpStyleSheet;
-    std::unique_ptr<model::Theme> mpTheme;
+    std::shared_ptr<model::Theme> mpTheme;
     SfxItemSet              maProperties;
 
     // internal helpers
@@ -346,8 +346,8 @@ public:
     void SetStyleSheet(SfxStyleSheet* pStyleSheet);
     SfxStyleSheet* GetStyleSheet() const { return mpStyleSheet;}
 
-    void SetTheme(std::unique_ptr<model::Theme> pTheme);
-    std::unique_ptr<model::Theme> const& GetTheme() const;
+    void SetTheme(std::shared_ptr<model::Theme> const& pTheme);
+    std::shared_ptr<model::Theme> const& GetTheme() const;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };

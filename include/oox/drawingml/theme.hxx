@@ -107,7 +107,7 @@ public:
     const css::uno::Reference<css::xml::dom::XDocument>& getFragment() const { return mxFragment; }
     void                     setFragment( const css::uno::Reference< css::xml::dom::XDocument>& xRef ) { mxFragment=xRef; }
 
-    std::unique_ptr<model::Theme> createSvxTheme() const;
+    std::shared_ptr<model::Theme> createSvxTheme() const;
     void addTheme(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPage) const;
 
 private:

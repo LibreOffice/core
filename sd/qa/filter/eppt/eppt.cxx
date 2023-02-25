@@ -16,6 +16,7 @@
 
 #include <test/xmldocptr.hxx>
 #include <docmodel/uno/UnoTheme.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 using namespace ::com::sun::star;
 
@@ -67,7 +68,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
         xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
 
-    model::Theme aTheme("mytheme");
+    auto pTheme = std::make_shared<model::Theme>("mytheme");
     std::unique_ptr<model::ColorSet> pColorSet(new model::ColorSet("mycolorscheme"));
     pColorSet->add(model::ThemeColorType::Dark1, 0x1);
     pColorSet->add(model::ThemeColorType::Light1, 0x2);
@@ -81,9 +82,9 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
     pColorSet->add(model::ThemeColorType::Accent6, 0xa);
     pColorSet->add(model::ThemeColorType::Hyperlink, 0xb);
     pColorSet->add(model::ThemeColorType::FollowedHyperlink, 0xc);
-    aTheme.SetColorSet(std::move(pColorSet));
+    pTheme->SetColorSet(std::move(pColorSet));
 
-    xMasterPage->setPropertyValue("Theme", uno::Any(model::theme::createXTheme(aTheme)));
+    xMasterPage->setPropertyValue("Theme", uno::Any(model::theme::createXTheme(pTheme)));
 
     // When exporting to PPTX:
     save("Impress Office Open XML");

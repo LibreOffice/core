@@ -405,9 +405,8 @@ void SwFmDrawPage::setPropertyValue(const OUString& rPropertyName, const uno::An
             css::uno::Reference<css::util::XTheme> xTheme;
             if (aValue >>= xTheme)
             {
-                auto* pUnoTheme = dynamic_cast<UnoTheme*>(xTheme.get());
-                std::unique_ptr<model::Theme> pTheme(new model::Theme(pUnoTheme->getTheme()));
-                pPage->getSdrPageProperties().SetTheme(std::move(pTheme));
+                auto& rUnoTheme = dynamic_cast<UnoTheme&>(*xTheme);
+                pPage->getSdrPageProperties().SetTheme(rUnoTheme.getTheme());
             }
         }
         break;
@@ -443,9 +442,9 @@ uno::Any SwFmDrawPage::getPropertyValue(const OUString& rPropertyName)
         {
             css::uno::Reference<css::util::XTheme> xTheme;
 
-            auto const& pTheme = GetSdrPage()->getSdrPageProperties().GetTheme();
+            auto pTheme = GetSdrPage()->getSdrPageProperties().GetTheme();
             if (pTheme)
-                xTheme = new UnoTheme(*pTheme);
+                xTheme = model::theme::createXTheme(pTheme);
             aAny <<= xTheme;
         }
         break;

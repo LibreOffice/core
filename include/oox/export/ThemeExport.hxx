@@ -12,7 +12,12 @@
 #include <sal/config.h>
 #include <oox/dllapi.h>
 #include <oox/core/xmlfilterbase.hxx>
-#include <docmodel/theme/Theme.hxx>
+
+namespace model
+{
+class Theme;
+class FontScheme;
+}
 
 namespace oox
 {

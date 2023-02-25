@@ -109,6 +109,7 @@
 #include <sal/log.hxx>
 #include <svx/sdtaitm.hxx>
 #include <oox/drawingml/diagram/diagram.hxx>
+#include <docmodel/theme/Theme.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 

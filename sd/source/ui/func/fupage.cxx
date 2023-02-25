@@ -48,6 +48,7 @@
 #include <editeng/pbinitem.hxx>
 #include <sfx2/opengrf.hxx>
 #include <sal/log.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 #include <strings.hrc>
 #include <sdpage.hxx>
@@ -573,8 +574,8 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
             auto it = pGrabBag->GetGrabBag().find("Theme");
             if (it != pGrabBag->GetGrabBag().end())
             {
-                std::unique_ptr<model::Theme> pTheme = model::Theme::FromAny(it->second);
-                pMasterPage->getSdrPageProperties().SetTheme(std::move(pTheme));
+                std::shared_ptr<model::Theme> pTheme = model::Theme::FromAny(it->second);
+                pMasterPage->getSdrPageProperties().SetTheme(pTheme);
             }
             else
             {

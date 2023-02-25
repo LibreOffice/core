@@ -13,6 +13,7 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/export/utils.hxx>
+#include <docmodel/theme/Theme.hxx>
 #include <sax/fshelper.hxx>
 #include <sax/fastattribs.hxx>
 #include <unordered_map>

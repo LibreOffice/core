@@ -19,20 +19,24 @@
 
 #include <utility>
 #include <docmodel/dllapi.h>
-#include <docmodel/theme/Theme.hxx>
+
+namespace model
+{
+class Theme;
+}
 
 class DOCMODEL_DLLPUBLIC UnoTheme final : public cppu::WeakImplHelper<css::util::XTheme>
 {
 private:
-    model::Theme maTheme;
+    std::shared_ptr<model::Theme> mpTheme;
 
 public:
-    UnoTheme(model::Theme const& rTheme)
-        : maTheme(rTheme)
+    UnoTheme(std::shared_ptr<model::Theme> const& pTheme)
+        : mpTheme(pTheme)
     {
     }
 
-    model::Theme const& getTheme() const { return maTheme; }
+    std::shared_ptr<model::Theme> const& getTheme() const { return mpTheme; }
 
     // XTheme
     OUString SAL_CALL getName() override;
@@ -41,6 +45,7 @@ public:
 
 namespace model::theme
 {
-DOCMODEL_DLLPUBLIC css::uno::Reference<css::util::XTheme> createXTheme(model::Theme const& rTheme);
+DOCMODEL_DLLPUBLIC css::uno::Reference<css::util::XTheme>
+createXTheme(std::shared_ptr<model::Theme> const& pTheme);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

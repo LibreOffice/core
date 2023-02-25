@@ -56,6 +56,7 @@
 #include <comphelper/diagnose_ex.hxx>
 
 #include <oox/export/utils.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 #include "pptx-animations.hxx"
 #include "../ppt/pptanimations.hxx"

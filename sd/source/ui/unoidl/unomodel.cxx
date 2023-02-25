@@ -131,6 +131,7 @@
 #include <tools/json_writer.hxx>
 #include <tools/UnitConversion.hxx>
 #include <svx/ColorSets.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 #include <app.hrc>
 
@@ -1283,8 +1284,8 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
         case WID_MODEL_THEME:
             {
                 SdrModel& rModel = getSdrModelFromUnoModel();
-                std::unique_ptr<model::Theme> pTheme = model::Theme::FromAny(aValue);
-                rModel.setTheme(std::move(pTheme));
+                std::shared_ptr<model::Theme> pTheme = model::Theme::FromAny(aValue);
+                rModel.setTheme(pTheme);
             }
             break;
         default:

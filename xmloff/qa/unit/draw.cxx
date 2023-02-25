@@ -31,6 +31,7 @@
 #include <svx/svdomedia.hxx>
 #include <docmodel/uno/UnoThemeColor.hxx>
 #include <docmodel/uno/UnoTheme.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 using namespace ::com::sun::star;
 
@@ -132,7 +133,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
         xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
 
-    model::Theme aTheme("mytheme");
+    auto pTheme = std::make_shared<model::Theme>("mytheme");
     std::unique_ptr<model::ColorSet> pColorSet(new model::ColorSet("mycolorscheme"));
     pColorSet->add(model::ThemeColorType::Dark1, 0x0);
     pColorSet->add(model::ThemeColorType::Light1, 0x1);
@@ -146,9 +147,9 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
     pColorSet->add(model::ThemeColorType::Accent6, 0x9);
     pColorSet->add(model::ThemeColorType::Hyperlink, 0xa);
     pColorSet->add(model::ThemeColorType::FollowedHyperlink, 0xb);
-    aTheme.SetColorSet(std::move(pColorSet));
+    pTheme->SetColorSet(std::move(pColorSet));
 
-    uno::Reference<util::XTheme> xTheme = model::theme::createXTheme(aTheme);
+    uno::Reference<util::XTheme> xTheme = model::theme::createXTheme(pTheme);
     xMasterPage->setPropertyValue("Theme", uno::Any(xTheme));
 
     // Export to ODP:
@@ -225,13 +226,14 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeImport)
     CPPUNIT_ASSERT(xTheme.is());
     auto* pUnoTheme = dynamic_cast<UnoTheme*>(xTheme.get());
     CPPUNIT_ASSERT(pUnoTheme);
-    auto const& rTheme = pUnoTheme->getTheme();
+    auto pTheme = pUnoTheme->getTheme();
+    CPPUNIT_ASSERT(pTheme);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Office Theme"), rTheme.GetName());
-    CPPUNIT_ASSERT_EQUAL(OUString("Office"), rTheme.GetColorSet()->getName());
+    CPPUNIT_ASSERT_EQUAL(OUString("Office Theme"), pTheme->GetName());
+    CPPUNIT_ASSERT_EQUAL(OUString("Office"), pTheme->GetColorSet()->getName());
 
     CPPUNIT_ASSERT_EQUAL(Color(0x954F72),
-                         rTheme.GetColorSet()->getColor(model::ThemeColorType::FollowedHyperlink));
+                         pTheme->GetColorSet()->getColor(model::ThemeColorType::FollowedHyperlink));
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeColorExportImport)

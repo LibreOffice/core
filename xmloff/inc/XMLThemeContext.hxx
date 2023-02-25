@@ -14,14 +14,18 @@
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 
-#include <docmodel/theme/Theme.hxx>
 #include <docmodel/theme/ColorSet.hxx>
+
+namespace model
+{
+class Theme;
+}
 
 /// Imports the theme
 class XMLThemeContext : public SvXMLImportContext
 {
     css::uno::Reference<css::drawing::XDrawPage> m_xPage;
-    model::Theme maTheme;
+    std::shared_ptr<model::Theme> mpTheme;
 
 public:
     XMLThemeContext(SvXMLImport& rImport,

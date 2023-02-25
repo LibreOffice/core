@@ -76,6 +76,7 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <docmodel/uno/UnoTheme.hxx>
+#include <docmodel/theme/Theme.hxx>
 #include <o3tl/string_view.hxx>
 
 using ::com::sun::star::animations::XAnimationNode;
@@ -979,9 +980,8 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             uno::Reference<util::XTheme> xTheme;
             if (aValue >>= xTheme)
             {
-                auto* pUnoTheme = dynamic_cast<UnoTheme*>(xTheme.get());
-                std::unique_ptr<model::Theme> pTheme(new model::Theme(pUnoTheme->getTheme()));
-                pPage->getSdrPageProperties().SetTheme(std::move(pTheme));
+                auto& rUnoTheme = dynamic_cast<UnoTheme&>(*xTheme);
+                pPage->getSdrPageProperties().SetTheme(rUnoTheme.getTheme());
             }
             break;
         }
@@ -989,8 +989,8 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         case WID_PAGE_THEME_UNO_REPRESENTATION:
         {
             SdrPage* pPage = GetPage();
-            std::unique_ptr<model::Theme> pTheme = model::Theme::FromAny(aValue);
-            pPage->getSdrPageProperties().SetTheme(std::move(pTheme));
+            std::shared_ptr<model::Theme> pTheme = model::Theme::FromAny(aValue);
+            pPage->getSdrPageProperties().SetTheme(pTheme);
             break;
         }
 
@@ -1312,9 +1312,9 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     {
         SdrPage* pPage = GetPage();
         css::uno::Reference<css::util::XTheme> xTheme;
-        auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+        auto pTheme = pPage->getSdrPageProperties().GetTheme();
         if (pTheme)
-            xTheme = new UnoTheme(*pTheme);
+            xTheme = model::theme::createXTheme(pTheme);
         aAny <<= xTheme;
         break;
     }
@@ -1322,11 +1322,9 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     case WID_PAGE_THEME_UNO_REPRESENTATION:
     {
         SdrPage* pPage = GetPage();
-        auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+        auto pTheme = pPage->getSdrPageProperties().GetTheme();
         if (pTheme)
-        {
             pTheme->ToAny(aAny);
-        }
         else
         {
             beans::PropertyValues aValues;

@@ -29,6 +29,7 @@
 #include <svx/xflclit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>
