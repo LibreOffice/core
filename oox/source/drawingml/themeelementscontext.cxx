@@ -45,17 +45,21 @@ public:
     FillStyleListContext(ContextHandler2Helper const & rParent, FillStyleList& rFillStyleList, model::FormatScheme& rFormatScheme);
     virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 
-private:
+protected:
     FillStyleList& mrFillStyleList;
-    //model::FormatScheme& mrFormatScheme;
+    model::FormatScheme& mrFormatScheme;
+    virtual model::FillStyle* createAndAddFillStyle()
+    {
+        return mrFormatScheme.addFillStyle();
+    }
 };
 
 }
 
-FillStyleListContext::FillStyleListContext(ContextHandler2Helper const & rParent, FillStyleList& rFillStyleList, model::FormatScheme& /*rFormatScheme*/)
+FillStyleListContext::FillStyleListContext(ContextHandler2Helper const & rParent, FillStyleList& rFillStyleList, model::FormatScheme& rFormatScheme)
     : ContextHandler2(rParent)
     , mrFillStyleList(rFillStyleList)
-    //, mrFormatScheme(rFormatScheme)
+    , mrFormatScheme(rFormatScheme)
 {
 }
 
@@ -71,7 +75,8 @@ ContextHandlerRef FillStyleListContext::onCreateContext( sal_Int32 nElement, con
         case A_TOKEN( grpFill ):
         {
             mrFillStyleList.push_back(std::make_shared<FillProperties>());
-            return FillPropertiesContext::createFillContext(*this, nElement, rAttribs, *mrFillStyleList.back(), nullptr);
+            model::FillStyle* pFillStyle = createAndAddFillStyle();
+            return FillPropertiesContext::createFillContext(*this, nElement, rAttribs, *mrFillStyleList.back(), pFillStyle);
         }
     }
     return nullptr;
@@ -86,6 +91,12 @@ public:
     BackgroundFillStyleListContext(ContextHandler2Helper const & rParent, FillStyleList& rFillStyleList, model::FormatScheme& rFormatScheme)
         : FillStyleListContext(rParent, rFillStyleList, rFormatScheme)
     {}
+
+protected:
+    model::FillStyle* createAndAddFillStyle() override
+    {
+        return mrFormatScheme.addBackgroundFillStyle();
+    }
 };
 
 } // end anonymous ns
