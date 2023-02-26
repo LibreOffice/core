@@ -33,6 +33,7 @@
 #include <com/sun/star/deployment/XPackage.hpp>
 
 #include <memory>
+#include <optional>
 
 #include "dp_gui.h"
 
@@ -137,7 +138,7 @@ class ExtensionBox_Impl : public weld::CustomWidgetController
     std::vector< TEntry_Impl > m_vRemovedEntries;
 
     std::unique_ptr<css::lang::Locale> m_pLocale;
-    std::unique_ptr<CollatorWrapper>   m_pCollator;
+    std::optional<CollatorWrapper>   m_oCollator;
 
     //Holds weak references to extensions to which is we have added an XEventListener
     std::vector< css::uno::WeakReference<

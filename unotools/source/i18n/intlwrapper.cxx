@@ -42,17 +42,16 @@ void IntlWrapper::ImplNewLocaleData() const
 
 void IntlWrapper::ImplNewCollator( bool bCaseSensitive ) const
 {
-    CollatorWrapper* p = new CollatorWrapper( m_xContext );
     if ( bCaseSensitive )
     {
-        p->loadDefaultCollator( maLanguageTag.getLocale(), 0 );
-        const_cast<IntlWrapper*>(this)->pCaseCollator.reset(p);
+        const_cast<IntlWrapper*>(this)->moCaseCollator.emplace(m_xContext);
+        const_cast<IntlWrapper*>(this)->moCaseCollator->loadDefaultCollator( maLanguageTag.getLocale(), 0 );
     }
     else
     {
-        p->loadDefaultCollator( maLanguageTag.getLocale(),
+        const_cast<IntlWrapper*>(this)->moCollator.emplace(m_xContext);
+        const_cast<IntlWrapper*>(this)->moCollator->loadDefaultCollator( maLanguageTag.getLocale(),
                 css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE );
-        const_cast<IntlWrapper*>(this)->pCollator.reset(p);
     }
 }
 

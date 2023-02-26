@@ -696,8 +696,8 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage(weld::Container* pPage, weld::Dia
     bSWriter = pMod == SfxModule::GetActiveModule();
 
     LanguageTag aLanguageTag( eLastDialogLanguage );
-    pCompareClass.reset( new CollatorWrapper( comphelper::getProcessComponentContext() ) );
-    pCompareClass->loadDefaultCollator( aLanguageTag.getLocale(), 0 );
+    moCompareClass.emplace( comphelper::getProcessComponentContext() );
+    moCompareClass->loadDefaultCollator( aLanguageTag.getLocale(), 0 );
     pCharClass.reset( new CharClass( std::move(aLanguageTag) ) );
 
     auto nColWidth = m_xReplaceTLB->get_approximate_digit_width() * 32;
@@ -720,7 +720,7 @@ OfaAutocorrReplacePage::~OfaAutocorrReplacePage()
     aDoubleStringTable.clear();
     aChangesTable.clear();
 
-    pCompareClass.reset();
+    moCompareClass.reset();
     pCharClass.reset();
 }
 
@@ -902,8 +902,8 @@ void OfaAutocorrReplacePage::SetLanguage(LanguageType eSet)
         eLastDialogLanguage = eSet;
 
         LanguageTag aLanguageTag( eLastDialogLanguage );
-        pCompareClass.reset( new CollatorWrapper( comphelper::getProcessComponentContext() ) );
-        pCompareClass->loadDefaultCollator( aLanguageTag.getLocale(), 0 );
+        moCompareClass.emplace( comphelper::getProcessComponentContext() );
+        moCompareClass->loadDefaultCollator( aLanguageTag.getLocale(), 0 );
         pCharClass.reset( new CharClass( std::move(aLanguageTag) ) );
         ModifyHdl(*m_xShortED);
     }
@@ -917,7 +917,7 @@ IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, weld::TreeView&, rBox, void)
         OUString sTmpShort(rBox.get_text(nEntry, 0));
         // if the text is set via ModifyHdl, the cursor is always at the beginning
         // of a word, although you're editing here
-        bool bSameContent = 0 == pCompareClass->compareString(sTmpShort, m_xShortED->get_text());
+        bool bSameContent = 0 == moCompareClass->compareString(sTmpShort, m_xShortED->get_text());
         int nStartPos, nEndPos;
         m_xShortED->get_selection_bounds(nStartPos, nEndPos);
         if (m_xShortED->get_text() != sTmpShort)
@@ -1055,7 +1055,7 @@ bool OfaAutocorrReplacePage::NewDelHdl(const weld::Widget* pBtn)
                 int nCount = m_xReplaceTLB->n_children();
                 for (j = 0; j < nCount; ++j)
                 {
-                    if (0 >= pCompareClass->compareString(sEntry, m_xReplaceTLB->get_text(j, 0)))
+                    if (0 >= moCompareClass->compareString(sEntry, m_xReplaceTLB->get_text(j, 0)))
                         break;
                 }
                 nPos = j;
@@ -1108,7 +1108,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, weld::Entry&, rEdt, void)
                                         &bTmpSelEntry, &bFirstSelIterSet,
                                         &xFirstSel, &aWordStr](weld::TreeIter& rIter){
                 OUString aTestStr = m_xReplaceTLB->get_text(rIter, 0);
-                if( pCompareClass->compareString(rEntry, aTestStr ) == 0 )
+                if( moCompareClass->compareString(rEntry, aTestStr ) == 0 )
                 {
                     if (!rRepString.isEmpty())
                         bFirstSelect = true;
@@ -1208,8 +1208,8 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage(weld::Container* pPage, weld::Dialo
     m_xDoubleCapsLB->set_size_request(-1, m_xDoubleCapsLB->get_height_rows(6));
 
     css::lang::Locale aLcl( LanguageTag::convertToLocale(eLastDialogLanguage ));
-    pCompareClass.reset( new CollatorWrapper( comphelper::getProcessComponentContext() ) );
-    pCompareClass->loadDefaultCollator( aLcl, 0 );
+    moCompareClass.emplace( comphelper::getProcessComponentContext() );
+    moCompareClass->loadDefaultCollator( aLcl, 0 );
 
     m_xNewAbbrevPB->connect_clicked(LINK(this, OfaAutocorrExceptPage, NewDelButtonHdl));
     m_xDelAbbrevPB->connect_clicked(LINK(this, OfaAutocorrExceptPage, NewDelButtonHdl));
@@ -1228,7 +1228,7 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage(weld::Container* pPage, weld::Dialo
 OfaAutocorrExceptPage::~OfaAutocorrExceptPage()
 {
     aStringsTable.clear();
-    pCompareClass.reset();
+    moCompareClass.reset();
 }
 
 std::unique_ptr<SfxTabPage> OfaAutocorrExceptPage::Create(weld::Container* pPage, weld::DialogController* pController,
@@ -1363,8 +1363,8 @@ void OfaAutocorrExceptPage::SetLanguage(LanguageType eSet)
         // save old settings and fill anew
         RefillReplaceBoxes(false, eLang, eSet);
         eLastDialogLanguage = eSet;
-        pCompareClass.reset( new CollatorWrapper( comphelper::getProcessComponentContext() ) );
-        pCompareClass->loadDefaultCollator( LanguageTag::convertToLocale( eLastDialogLanguage ), 0 );
+        moCompareClass.emplace( comphelper::getProcessComponentContext() );
+        moCompareClass->loadDefaultCollator( LanguageTag::convertToLocale( eLastDialogLanguage ), 0 );
         ModifyHdl(*m_xAbbrevED);
         ModifyHdl(*m_xDoubleCapsED);
     }
@@ -1509,7 +1509,7 @@ IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, weld::Entry&, rEdt, void)
     bool bEntryLen = !sEntry.isEmpty();
     if (&rEdt == m_xAbbrevED.get())
     {
-        bool bSame = lcl_FindEntry(*m_xAbbrevLB, sEntry, *pCompareClass);
+        bool bSame = lcl_FindEntry(*m_xAbbrevLB, sEntry, *moCompareClass);
         if(bSame && sEntry != m_xAbbrevLB->get_selected_text())
             rEdt.set_text(m_xAbbrevLB->get_selected_text());
         m_xNewAbbrevPB->set_sensitive(!bSame && bEntryLen);
@@ -1517,7 +1517,7 @@ IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, weld::Entry&, rEdt, void)
     }
     else
     {
-        bool bSame = lcl_FindEntry(*m_xDoubleCapsLB, sEntry, *pCompareClass);
+        bool bSame = lcl_FindEntry(*m_xDoubleCapsLB, sEntry, *moCompareClass);
         if(bSame && sEntry != m_xDoubleCapsLB->get_selected_text())
             rEdt.set_text(m_xDoubleCapsLB->get_selected_text());
         m_xNewDoublePB->set_sensitive(!bSame && bEntryLen);

@@ -21,14 +21,15 @@
 #define INCLUDED_UNOTOOLS_INTLWRAPPER_HXX
 
 #include <unotools/unotoolsdllapi.h>
+#include <unotools/collatorwrapper.hxx>
 #include <com/sun/star/uno/Reference.h>
 
 #include <i18nlangtag/languagetag.hxx>
 #include <memory>
+#include <optional>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
-class CollatorWrapper;
 class LocaleDataWrapper;
 
 /**
@@ -54,8 +55,8 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     std::unique_ptr<LocaleDataWrapper>  pLocaleData;
-    std::unique_ptr<CollatorWrapper>    pCollator;
-    std::unique_ptr<CollatorWrapper>    pCaseCollator;
+    std::optional<CollatorWrapper>    moCollator;
+    std::optional<CollatorWrapper>    moCaseCollator;
 
     void                ImplNewLocaleData() const;
     void                ImplNewCollator( bool bCaseSensitive ) const;
@@ -73,16 +74,16 @@ public:
     /// case insensitive collator, simple IGNORE_CASE
     const CollatorWrapper*      getCollator() const
                                     {
-                                        if ( !pCollator )
+                                        if ( !moCollator )
                                             ImplNewCollator( false );
-                                        return pCollator.get();
+                                        return &*moCollator;
                                     }
     /// case sensitive collator
     const CollatorWrapper*      getCaseCollator() const
                                     {
-                                        if ( !pCaseCollator )
+                                        if ( !moCaseCollator )
                                             ImplNewCollator( true );
-                                        return pCaseCollator.get();
+                                        return &*moCaseCollator;
                                     }
 };
 

@@ -522,7 +522,7 @@ void ScTabPageSortOptions::Init()
     m_xColRes.reset(new CollatorResource);
 
     //! use CollatorWrapper from document?
-    m_xColWrap.reset(new CollatorWrapper(comphelper::getProcessComponentContext()));
+    m_oColWrap.emplace(comphelper::getProcessComponentContext());
 
     const ScSortItem& rSortItem = GetItemSet().Get( nWhichSort );
 
@@ -660,7 +660,7 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
     OUString sAlg;
     if ( eLang != LANGUAGE_SYSTEM )
     {
-        uno::Sequence<OUString> aAlgos = m_xColWrap->listCollatorAlgorithms(
+        uno::Sequence<OUString> aAlgos = m_oColWrap->listCollatorAlgorithms(
                 aNewSortData.aCollatorLocale );
         const int nSel = m_xLbAlgorithm->get_active();
         if ( nSel < aAlgos.getLength() )
@@ -830,7 +830,7 @@ void ScTabPageSortOptions::FillAlgor()
     else
     {
         lang::Locale aLocale( LanguageTag::convertToLocale( eLang ));
-        const uno::Sequence<OUString> aAlgos = m_xColWrap->listCollatorAlgorithms( aLocale );
+        const uno::Sequence<OUString> aAlgos = m_oColWrap->listCollatorAlgorithms( aLocale );
 
         nCount = aAlgos.getLength();
         for (const OUString& sAlg : aAlgos)

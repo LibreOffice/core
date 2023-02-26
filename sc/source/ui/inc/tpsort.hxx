@@ -121,7 +121,7 @@ private:
     ScAddress           theOutPos;
 
     std::unique_ptr<CollatorResource>  m_xColRes;
-    std::unique_ptr<CollatorWrapper>   m_xColWrap;
+    std::optional<CollatorWrapper>   m_oColWrap;
 
     std::unique_ptr<weld::CheckButton> m_xBtnCase;
     std::unique_ptr<weld::CheckButton> m_xBtnFormats;

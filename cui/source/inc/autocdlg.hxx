@@ -20,13 +20,13 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/langbox.hxx>
+#include <unotools/collatorwrapper.hxx>
 
 #include <map>
 #include <set>
 #include <utility>
 
 class CharClass;
-class CollatorWrapper;
 class SmartTagMgr;
 
 namespace editeng { class SortedAutoCompleteStrings; }
@@ -166,7 +166,7 @@ private:
     std::set<OUString>      aFormatText;
     std::map<LanguageType, DoubleStringArray>
                             aDoubleStringTable;
-    std::unique_ptr<CollatorWrapper>  pCompareClass;
+    std::optional<CollatorWrapper>  moCompareClass;
     std::unique_ptr<CharClass>        pCharClass;
     LanguageType            eLang;
 
@@ -227,7 +227,7 @@ class OfaAutocorrExceptPage : public SfxTabPage
 {
 private:
     StringsTable    aStringsTable;
-    std::unique_ptr<CollatorWrapper> pCompareClass;
+    std::optional<CollatorWrapper> moCompareClass;
     LanguageType    eLang;
 
     std::unique_ptr<weld::Entry> m_xAbbrevED;
