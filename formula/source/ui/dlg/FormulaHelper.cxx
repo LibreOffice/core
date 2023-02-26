@@ -61,15 +61,14 @@ namespace formula
 #define FUNC_NOTFOUND -1
 
 FormulaHelper::FormulaHelper(const IFunctionManager* _pFunctionManager)
-    :m_pSysLocale(new SvtSysLocale)
-    ,m_pFunctionManager(_pFunctionManager)
+    :m_pFunctionManager(_pFunctionManager)
     ,open(_pFunctionManager->getSingleToken(IFunctionManager::eOk))
     ,close(_pFunctionManager->getSingleToken(IFunctionManager::eClose))
     ,sep(_pFunctionManager->getSingleToken(IFunctionManager::eSep))
     ,arrayOpen(_pFunctionManager->getSingleToken(IFunctionManager::eArrayOpen))
     ,arrayClose(_pFunctionManager->getSingleToken(IFunctionManager::eArrayClose))
 {
-    m_pCharClass = &m_pSysLocale->GetCharClass();
+    m_pCharClass = &m_aSysLocale.GetCharClass();
 }
 
 sal_Int32 FormulaHelper::GetCategoryCount() const

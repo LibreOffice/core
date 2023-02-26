@@ -23,6 +23,7 @@
 #include <sfx2/app.hxx>
 #include <vcl/vclptr.hxx>
 #include <unotools/options.hxx>
+#include <optional>
 
 namespace svtools { class ColorConfig; }
 
@@ -65,7 +66,7 @@ class SmModule final : public SfxModule, public utl::ConfigurationListener
     std::unique_ptr<svtools::ColorConfig> mpColorConfig;
     std::unique_ptr<SmMathConfig> mpConfig;
     std::unique_ptr<SmLocalizedSymbolData> mpLocSymbolData;
-    std::unique_ptr<SvtSysLocale> mpSysLocale;
+    std::optional<SvtSysLocale> moSysLocale;
     VclPtr<VirtualDevice>    mpVirtualDev;
 
 public:

@@ -173,9 +173,9 @@ SmSymbolManager & SmModule::GetSymbolManager()
 
 const SvtSysLocale& SmModule::GetSysLocale()
 {
-    if( !mpSysLocale )
-        mpSysLocale.reset(new SvtSysLocale);
-    return *mpSysLocale;
+    if( !moSysLocale )
+        moSysLocale.emplace();
+    return *moSysLocale;
 }
 
 VirtualDevice &SmModule::GetDefaultVirtualDev()
