@@ -70,7 +70,7 @@ private:
     const OUString aStrEmpty;
     const OUString aStrNotEmpty;
     const OUString aStrColumn;
-    const OUString aStrTextColor;
+    const OUString aStrFontColor;
     const OUString aStrBackgroundColor;
 
     std::unique_ptr<ScFilterOptionsMgr> pOptionsMgr;

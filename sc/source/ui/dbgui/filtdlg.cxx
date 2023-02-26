@@ -59,7 +59,7 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
     , aStrEmpty(ScResId(SCSTR_FILTER_EMPTY))
     , aStrNotEmpty(ScResId(SCSTR_FILTER_NOTEMPTY))
     , aStrColumn(ScResId(SCSTR_COLUMN_LETTER))
-    , aStrTextColor(ScResId(SCSTR_FILTER_FONT_COLOR_COND))
+    , aStrFontColor(ScResId(SCSTR_FILTER_FONT_COLOR_COND))
     , aStrBackgroundColor(ScResId(SCSTR_FILTER_BACKGROUND_COLOR_COND))
     , nWhichQuery(rArgSet.GetPool()->GetWhich(SID_QUERY))
     , theQueryData(static_cast<const ScQueryItem&>(rArgSet.Get(nWhichQuery)).GetQueryData())
@@ -113,7 +113,7 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
     m_xEdCopyArea->SetReferences(this, m_xFtDbAreaLabel.get());
     m_xRbCopyArea->SetReferences(this, m_xEdCopyArea.get());
 
-    assert(m_xLbCond1->find_text(aStrTextColor) != -1);
+    assert(m_xLbCond1->find_text(aStrFontColor) != -1);
     assert(m_xLbCond1->find_text(aStrBackgroundColor) != -1);
 
     Init( rArgSet );
@@ -288,7 +288,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
             else if (rEntry.IsQueryByTextColor() || rEntry.IsQueryByBackgroundColor())
             {
                 nCondPos = maCondLbArr[i]->find_text(
-                    rEntry.IsQueryByTextColor() ? aStrTextColor : aStrBackgroundColor);
+                    rEntry.IsQueryByTextColor() ? aStrFontColor : aStrBackgroundColor);
                 maValueEdArr[i]->set_visible(false);
                 maColorLbArr[i]->set_visible(true);
                 maColorLbArr[i]->set_sensitive(true);
@@ -646,7 +646,7 @@ void ScFilterDlg::UpdateColorList(size_t nList)
 
     std::set<Color> aColors;
     OUString sSelectedCondition = maCondLbArr[nPos]->get_active_text();
-    if (sSelectedCondition == aStrTextColor)
+    if (sSelectedCondition == aStrFontColor)
         aColors = pList->maFilterEntries.getTextColors();
     else if (sSelectedCondition == aStrBackgroundColor)
         aColors = pList->maFilterEntries.getBackgroundColors();
@@ -659,7 +659,7 @@ void ScFilterDlg::UpdateColorList(size_t nList)
         OUString sId = rColor.AsRGBHexString();
         if (rColor == COL_AUTO)
         {
-            OUString sText = sSelectedCondition == aStrTextColor
+            OUString sText = sSelectedCondition == aStrFontColor
                                  ? ScResId(SCSTR_FILTER_AUTOMATIC_COLOR)
                                  : ScResId(SCSTR_FILTER_NO_FILL);
             maColorLbArr[nPos]->append(sId, sText);
@@ -672,7 +672,7 @@ void ScFilterDlg::UpdateColorList(size_t nList)
 
         auto aItem = rEntry.GetQueryItem();
         if (aItem.maColor == rColor
-            && ((sSelectedCondition == aStrTextColor && aItem.meType == ScQueryEntry::ByTextColor)
+            && ((sSelectedCondition == aStrFontColor && aItem.meType == ScQueryEntry::ByTextColor)
                 || (sSelectedCondition == aStrBackgroundColor
                     && aItem.meType == ScQueryEntry::ByBackgroundColor)))
         {
@@ -1117,7 +1117,7 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
         ScQueryOp op;
         sal_uInt16 nQ = 0;
         bool bEnableColorLb = false;
-        if (rLb.get_active_text() == aStrTextColor || rLb.get_active_text() == aStrBackgroundColor)
+        if (rLb.get_active_text() == aStrFontColor || rLb.get_active_text() == aStrBackgroundColor)
         {
             bEnableColorLb = true;
             op = SC_EQUAL;
@@ -1186,7 +1186,7 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
 
         ScQueryEntry& aEntry = theQueryData.GetEntry(nQ);
         Color aColor = Color::STRtoRGB(maColorLbArr[nQ]->get_active_id());
-        if (maCondLbArr[nQ]->get_active_text() == aStrTextColor)
+        if (maCondLbArr[nQ]->get_active_text() == aStrFontColor)
         {
             aEntry.SetQueryByTextColor(aColor);
         }
@@ -1452,7 +1452,7 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
             else if (rEntry.IsQueryByTextColor() || rEntry.IsQueryByBackgroundColor())
             {
                 nCondPos = maCondLbArr[i]->find_text(
-                    rEntry.IsQueryByTextColor() ? aStrTextColor : aStrBackgroundColor);
+                    rEntry.IsQueryByTextColor() ? aStrFontColor : aStrBackgroundColor);
 
                 maValueEdArr[i]->set_visible(false);
                 maColorLbArr[i]->set_visible(true);
