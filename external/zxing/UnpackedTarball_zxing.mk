@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,zxing,1))
 $(eval $(call gb_UnpackedTarball_add_patches,zxing, \
        external/zxing/undeprecate-warning.patch.0 \
        external/zxing/no_sanitize_ignored.patch.0 \
+       external/zxing/invalid_argument.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
