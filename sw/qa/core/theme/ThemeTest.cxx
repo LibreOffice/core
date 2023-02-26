@@ -82,6 +82,60 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
                          rFontScheme.findMajorSupplementalTypeface(u"Thai"));
     CPPUNIT_ASSERT_EQUAL(OUString(u"Cordia New"),
                          rFontScheme.findMinorSupplementalTypeface(u"Thai"));
+
+    model::FormatScheme const& rFormatScheme = pTheme->getFormatScheme();
+    CPPUNIT_ASSERT_EQUAL(size_t(3), rFormatScheme.getFillStyleList().size());
+    CPPUNIT_ASSERT_EQUAL(size_t(3), rFormatScheme.getBackgroundFillStyleList().size());
+
+    {
+        model::FillStyle const& rFillStyle = rFormatScheme.getFillStyleList().at(0);
+        CPPUNIT_ASSERT(rFillStyle.mpFill);
+        CPPUNIT_ASSERT_EQUAL(model::FillType::Solid, rFillStyle.mpFill->meType);
+        auto* pSolidFill = static_cast<model::SolidFill*>(rFillStyle.mpFill.get());
+        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, pSolidFill->maColorDefinition.meType);
+    }
+
+    {
+        model::FillStyle const& rFillStyle = rFormatScheme.getFillStyleList().at(1);
+        CPPUNIT_ASSERT(rFillStyle.mpFill);
+        CPPUNIT_ASSERT_EQUAL(model::FillType::Gradient, rFillStyle.mpFill->meType);
+        auto* pGradientFill = static_cast<model::GradientFill*>(rFillStyle.mpFill.get());
+        CPPUNIT_ASSERT_EQUAL(model::GradientType::Linear, pGradientFill->meGradientType);
+        CPPUNIT_ASSERT_EQUAL(size_t(3), pGradientFill->maGradientStops.size());
+
+        CPPUNIT_ASSERT_EQUAL(0.0, pGradientFill->maGradientStops[0].mfPosition);
+        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder,
+                             pGradientFill->maGradientStops[0].maColor.meType);
+
+        CPPUNIT_ASSERT_EQUAL(0.5, pGradientFill->maGradientStops[1].mfPosition);
+        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder,
+                             pGradientFill->maGradientStops[1].maColor.meType);
+
+        CPPUNIT_ASSERT_EQUAL(1.0, pGradientFill->maGradientStops[2].mfPosition);
+        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder,
+                             pGradientFill->maGradientStops[2].maColor.meType);
+    }
+
+    {
+        model::FillStyle const& rFillStyle = rFormatScheme.getFillStyleList().at(2);
+        CPPUNIT_ASSERT(rFillStyle.mpFill);
+        CPPUNIT_ASSERT_EQUAL(model::FillType::Gradient, rFillStyle.mpFill->meType);
+        auto* pGradientFill = static_cast<model::GradientFill*>(rFillStyle.mpFill.get());
+        CPPUNIT_ASSERT_EQUAL(model::GradientType::Linear, pGradientFill->meGradientType);
+        CPPUNIT_ASSERT_EQUAL(size_t(3), pGradientFill->maGradientStops.size());
+
+        CPPUNIT_ASSERT_EQUAL(0.0, pGradientFill->maGradientStops[0].mfPosition);
+        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder,
+                             pGradientFill->maGradientStops[0].maColor.meType);
+
+        CPPUNIT_ASSERT_EQUAL(0.5, pGradientFill->maGradientStops[1].mfPosition);
+        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder,
+                             pGradientFill->maGradientStops[1].maColor.meType);
+
+        CPPUNIT_ASSERT_EQUAL(1.0, pGradientFill->maGradientStops[2].mfPosition);
+        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder,
+                             pGradientFill->maGradientStops[2].maColor.meType);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsODT)

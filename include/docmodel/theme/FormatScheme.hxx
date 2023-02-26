@@ -213,18 +213,12 @@ public:
     std::shared_ptr<Fill> mpFill;
 };
 
-class DOCMODEL_DLLPUBLIC BackgroundFillStyle
-{
-public:
-    std::shared_ptr<Fill> mpFill;
-};
-
 class DOCMODEL_DLLPUBLIC FormatScheme
 {
 private:
     OUString maName;
     std::vector<FillStyle> maFillStyleList;
-    std::vector<BackgroundFillStyle> maBackgroundFillStyleList;
+    std::vector<FillStyle> maBackgroundFillStyleList;
 
 public:
     FormatScheme() = default;
@@ -235,6 +229,29 @@ public:
     }
 
     const OUString& getName() const { return maName; }
+
+    std::vector<FillStyle> const& getFillStyleList() const { return maFillStyleList; }
+
+    FillStyle* addFillStyle()
+    {
+        if (maFillStyleList.size() > 3)
+            return nullptr;
+        auto& rFillStyle = maFillStyleList.emplace_back();
+        return &rFillStyle;
+    }
+
+    std::vector<FillStyle> const& getBackgroundFillStyleList() const
+    {
+        return maBackgroundFillStyleList;
+    }
+
+    FillStyle* addBackgroundFillStyle()
+    {
+        if (maBackgroundFillStyleList.size() > 3)
+            return nullptr;
+        auto& rBackgroundFillStyle = maBackgroundFillStyleList.emplace_back();
+        return &rBackgroundFillStyle;
+    }
 };
 
 } // end of namespace svx
