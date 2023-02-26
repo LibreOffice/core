@@ -14,8 +14,24 @@ BLACK_LIST="python.exe"
 # occurence in the build tree. Files _not_ included here will generate
 # an error, if duplicates are found.
 #
-# Same format as for BLACK_LIST above above
-MOREPDBS_OKLIST="libcurl.dll"
+# Same format as for BLACK_LIST above
+MOREPDBS_OKLIST="libcurl.dll
+libcrypto-1_1.dll
+libssl-1_1.dll
+freebl3.dll
+libeay32.dll
+nspr4.dll
+nss3.dll
+nssckbi.dll
+nssdbm3.dll
+nssutil3.dll
+plc4.dll
+plds4.dll
+smime3.dll
+softokn3.dll
+sqlite3.dll
+ssl3.dll
+ssleay32.dll"
 
 
 add_pdb()
