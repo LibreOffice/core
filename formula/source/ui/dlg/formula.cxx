@@ -375,7 +375,7 @@ sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
     const sal_Unicode sep = m_pHelper->getFunctionManager()->getSingleToken(IFunctionManager::eSep);
 
     sal_Int32 nFuncPos = SAL_MAX_INT32;
-    OUString  aFormString = m_aFormulaHelper.GetCharClass()->uppercase(m_xMEdit->get_text());
+    OUString  aFormString = m_aFormulaHelper.GetCharClass().uppercase(m_xMEdit->get_text());
 
     const uno::Reference< sheet::XFormulaParser > xParser(m_pHelper->getFormulaParser());
     const table::CellAddress aRefPos(m_pHelper->getReferencePosition());
