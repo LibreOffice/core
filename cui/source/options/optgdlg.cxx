@@ -88,6 +88,7 @@
 #include <svtools/imgdef.hxx>
 
 #if defined(_WIN32)
+#include <systools/win32/winstoreutil.hxx>
 #include <vcl/fileregistration.hxx>
 #endif
 using namespace ::com::sun::star::uno;
@@ -192,6 +193,11 @@ OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* p
     m_xQuickStarterFrame->hide();
     //Hide frame label in case of no content
     m_xHelpImproveLabel->hide();
+#else
+    // Store-packaged apps (located under the protected Program Files\WindowsApps) can't use normal
+    // shell shortcuts to their exe; hide. TODO: show a button to open "Startup Apps" system applet?
+    if (sal::systools::IsStorePackagedApp())
+        m_xQuickStarterFrame->hide();
 #endif
 
 #if defined(_WIN32)
