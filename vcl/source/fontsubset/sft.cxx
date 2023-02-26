@@ -1073,8 +1073,6 @@ static void GetNames(AbstractTrueTypeFont *t)
 
 int CountTTCFonts(const char* fname)
 {
-    int nFonts = 0;
-    sal_uInt8 buffer[12];
     FILE* fd;
 #ifdef LINUX
     int nFD;
@@ -1088,13 +1086,39 @@ int CountTTCFonts(const char* fname)
     else
 #endif
         fd = fopen(fname, "rb");
-    if( fd ) {
-        if (fread(buffer, 1, 12, fd) == 12) {
-            if(GetUInt32(buffer, 0) == T_ttcf )
-                nFonts = GetUInt32(buffer, 8);
-        }
-        fclose(fd);
+
+    if (!fd)
+        return 0;
+
+    int nFonts = 0;
+    sal_uInt8 buffer[12];
+    if (fread(buffer, 1, 12, fd) == 12) {
+        if(GetUInt32(buffer, 0) == T_ttcf )
+            nFonts = GetUInt32(buffer, 8);
     }
+
+    if (nFonts > 0)
+    {
+        fseek(fd, 0, SEEK_END);
+        sal_uInt64 fileSize = ftell(fd);
+
+        //Feel free to calc the exact max possible number of fonts a file
+        //could contain given its physical size. But this will clamp it to
+        //a sane starting point
+        //http://processingjs.nihongoresources.com/the_smallest_font/
+        //https://github.com/grzegorzrolek/null-ttf
+        const int nMaxFontsPossible = fileSize / 528;
+        if (nFonts > nMaxFontsPossible)
+        {
+            SAL_WARN("vcl.fonts", "font file " << fname <<" claims to have "
+                     << nFonts << " fonts, but only "
+                     << nMaxFontsPossible << " are possible");
+            nFonts = nMaxFontsPossible;
+        }
+    }
+
+    fclose(fd);
+
     return nFonts;
 }
 
