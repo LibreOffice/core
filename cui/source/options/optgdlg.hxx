@@ -18,6 +18,7 @@
  */
 #pragma once
 #include <memory>
+#include <config_features.h>
 #include <sfx2/tabdlg.hxx>
 #include <svx/langbox.hxx>
 
@@ -42,11 +43,13 @@ private:
     std::unique_ptr<weld::Widget> m_xYearFrame;
     std::unique_ptr<weld::SpinButton> m_xYearValueField;
     std::unique_ptr<weld::Label> m_xToYearFT;
+#if HAVE_FEATURE_BREAKPAD
+    std::unique_ptr<weld::Widget> m_xPrivacyFrame;
     std::unique_ptr<weld::CheckButton> m_xCrashReport;
-    std::unique_ptr<weld::Widget> m_xQuickStarterFrame;
-    std::unique_ptr<weld::Label> m_xHelpImproveLabel;
-    std::unique_ptr<weld::CheckButton> m_xQuickLaunchCB;
+#endif
 #if defined(_WIN32)
+    std::unique_ptr<weld::Widget> m_xQuickStarterFrame;
+    std::unique_ptr<weld::CheckButton> m_xQuickLaunchCB;
     std::unique_ptr<weld::Widget> m_xFileAssocFrame;
     std::unique_ptr<weld::Button> m_xFileAssocBtn;
     std::unique_ptr<weld::CheckButton> m_xPerformFileExtCheck;

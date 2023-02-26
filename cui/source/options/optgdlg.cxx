@@ -164,15 +164,13 @@ OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xYearFrame(m_xBuilder->weld_widget("yearframe"))
     , m_xYearValueField(m_xBuilder->weld_spin_button("year"))
     , m_xToYearFT(m_xBuilder->weld_label("toyear"))
+#if HAVE_FEATURE_BREAKPAD
+    , m_xPrivacyFrame(m_xBuilder->weld_widget("privacyframe"))
     , m_xCrashReport(m_xBuilder->weld_check_button("crashreport"))
-    , m_xQuickStarterFrame(m_xBuilder->weld_widget("quickstarter"))
-    , m_xHelpImproveLabel(m_xBuilder->weld_label("label7")) //"Help Improve"
-#if defined(UNX)
-    , m_xQuickLaunchCB(m_xBuilder->weld_check_button("systray"))
-#else
-    , m_xQuickLaunchCB(m_xBuilder->weld_check_button("quicklaunch"))
 #endif
 #if defined(_WIN32)
+    , m_xQuickStarterFrame(m_xBuilder->weld_widget("quickstarter"))
+    , m_xQuickLaunchCB(m_xBuilder->weld_check_button("quicklaunch"))
     , m_xFileAssocFrame(m_xBuilder->weld_widget("fileassoc"))
     , m_xFileAssocBtn(m_xBuilder->weld_button("assocfiles"))
     , m_xPerformFileExtCheck(m_xBuilder->weld_check_button("cbPerformFileExtCheck"))
@@ -186,21 +184,16 @@ OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* p
         m_xFileDlgCB->set_sensitive(false);
     }
 
-    m_xQuickLaunchCB->show();
-
-    //Only available in Win or if building the gtk systray
-#if !defined(_WIN32)
-    m_xQuickStarterFrame->hide();
-    //Hide frame label in case of no content
-    m_xHelpImproveLabel->hide();
-#else
-    // Store-packaged apps (located under the protected Program Files\WindowsApps) can't use normal
-    // shell shortcuts to their exe; hide. TODO: show a button to open "Startup Apps" system applet?
-    if (sal::systools::IsStorePackagedApp())
-        m_xQuickStarterFrame->hide();
+#if HAVE_FEATURE_BREAKPAD
+    m_xPrivacyFrame->show();
 #endif
 
 #if defined(_WIN32)
+    // Store-packaged apps (located under the protected Program Files\WindowsApps) can't use normal
+    // shell shortcuts to their exe. TODO: show a button to open "Startup Apps" system applet?
+    if (!sal::systools::IsStorePackagedApp())
+        m_xQuickStarterFrame->show();
+
     m_xFileAssocFrame->show();
     m_xFileAssocBtn->connect_clicked(LINK(this, OfaMiscTabPage, FileAssocClick));
 #endif
@@ -272,15 +265,15 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
             m_xPerformFileExtCheck->get_active(), batch);
         bModified = true;
     }
-#endif
-
-    batch->commit();
 
     if( m_xQuickLaunchCB->get_state_changed_from_saved())
     {
         rSet->Put(SfxBoolItem(SID_ATTR_QUICKLAUNCHER, m_xQuickLaunchCB->get_active()));
         bModified = true;
     }
+#endif
+
+    batch->commit();
 
     return bModified;
 }
@@ -312,10 +305,9 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     m_xCrashReport->set_active(officecfg::Office::Common::Misc::CrashReport::get() && CrashReporter::IsDumpEnable());
     m_xCrashReport->set_sensitive(!officecfg::Office::Common::Misc::CrashReport::isReadOnly() && CrashReporter::IsDumpEnable());
     m_xCrashReport->save_state();
-#else
-    m_xCrashReport->hide();
 #endif
 
+#if defined(_WIN32)
     const SfxPoolItem* pItem = nullptr;
     SfxItemState eState = rSet->GetItemState( SID_ATTR_QUICKLAUNCHER, false, &pItem );
     if ( SfxItemState::SET == eState )
@@ -328,7 +320,6 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
 
     m_xQuickLaunchCB->save_state();
 
-#if defined(_WIN32)
     m_xPerformFileExtCheck->set_active(
         officecfg::Office::Common::Misc::PerformFileExtCheck::get());
     m_xPerformFileExtCheck->save_state();

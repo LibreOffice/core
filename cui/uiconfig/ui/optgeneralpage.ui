@@ -268,7 +268,7 @@
     </child>
     <child>
       <object class="GtkFrame" id="privacyframe">
-        <property name="visible">True</property>
+        <property name="visible">False</property>
         <property name="can-focus">False</property>
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
@@ -318,12 +318,12 @@
     </child>
     <child>
       <object class="GtkFrame" id="quickstarter">
-        <property name="visible">True</property>
+        <property name="visible">False</property>
         <property name="can-focus">False</property>
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
-          <!-- n-columns=1 n-rows=2 -->
+          <!-- n-columns=1 n-rows=1 -->
           <object class="GtkGrid" id="grid7">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -333,6 +333,7 @@
             <child>
               <object class="GtkCheckButton" id="quicklaunch">
                 <property name="label" translatable="yes" context="optgeneralpage|quicklaunch">Load %PRODUCTNAME during system start-up</property>
+                <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="no-show-all">True</property>
@@ -342,20 +343,6 @@
               <packing>
                 <property name="left-attach">0</property>
                 <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="systray">
-                <property name="label" translatable="yes" context="optgeneralpage|systray">Enable systray Quickstarter</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="no-show-all">True</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
               </packing>
             </child>
           </object>
