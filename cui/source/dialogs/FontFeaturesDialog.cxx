@@ -158,15 +158,7 @@ int FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFea
         else
         {
             if (nValue < 0)
-            {
-                // If feature is not set, we don’t know if it is enabled by
-                // default or not. But we know that stylistic sets and
-                // character variants are not enabled by default.
-                if (rFontFeature.isStylisticSet() || rFontFeature.isCharacterVariant())
-                    aCurrentItem.m_xCheck->set_state(TRISTATE_FALSE);
-                else
-                    aCurrentItem.m_xCheck->set_state(TRISTATE_INDET);
-            }
+                aCurrentItem.m_xCheck->set_state(TRISTATE_INDET);
             else
                 aCurrentItem.m_xCheck->set_state(nValue > 0 ? TRISTATE_TRUE : TRISTATE_FALSE);
             aCurrentItem.m_xCheck->set_label(aDefinition.getDescription());
