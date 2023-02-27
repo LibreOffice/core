@@ -79,6 +79,9 @@ public final class InputStreamToXInputStreamAdapter implements XInputStream {
     {
         try {
             long bytesRead;
+            if (b[0] == null || b[0].length < len) {
+                b[0] = new byte[len];
+            }
             if (len >iIn.available()) {
                 bytesRead = iIn.read(b[0], 0, iIn.available());
             }
@@ -89,6 +92,12 @@ public final class InputStreamToXInputStreamAdapter implements XInputStream {
             // Casting bytesRead to an int is okay, since the user can
             // only pass in an integer length to read, so the bytesRead
             // must <= len.
+            if (bytesRead < b[0].length) {
+                int outSize = bytesRead > 0 ? (int)bytesRead : 0;
+                byte[] out = new byte[outSize];
+                System.arraycopy(b[0], 0, out, 0, outSize);
+                b[0] = out;
+            }
             if (bytesRead <= 0) {
                 return 0;
             }
@@ -103,6 +112,9 @@ public final class InputStreamToXInputStreamAdapter implements XInputStream {
     {
         try {
             long bytesRead;
+            if (b[0] == null || b[0].length < len) {
+                b[0] = new byte[len];
+            }
             if (len >iIn.available()) {
                 bytesRead = iIn.read(b[0], 0, iIn.available());
             }
@@ -113,6 +125,12 @@ public final class InputStreamToXInputStreamAdapter implements XInputStream {
             // Casting bytesRead to an int is okay, since the user can
             // only pass in an integer length to read, so the bytesRead
             // must <= len.
+            if (bytesRead < b[0].length) {
+                int outSize = bytesRead > 0 ? (int)bytesRead : 0;
+                byte[] out = new byte[outSize];
+                System.arraycopy(b[0], 0, out, 0, outSize);
+                b[0] = out;
+            }
             if (bytesRead <= 0) {
                 return 0;
             }
