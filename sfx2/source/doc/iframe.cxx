@@ -45,6 +45,7 @@
 #include <vcl/window.hxx>
 #include <tools/debug.hxx>
 #include <macroloader.hxx>
+#include <eventsupplier.hxx>
 
 using namespace ::com::sun::star;
 
@@ -172,6 +173,9 @@ sal_Bool SAL_CALL IFrameObject::load(
             if (pDoc && !pDoc->AdjustMacroMode())
                 return false;
         }
+
+        if (!SfxEvents_Impl::isScriptURLAllowed(aTargetURL.Complete))
+            return false;
 
         DBG_ASSERT( !mxFrame.is(), "Frame already existing!" );
         VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
