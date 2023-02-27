@@ -657,6 +657,8 @@ public:
     // environment (not e.g. for repeating table headlines)
     bool IsFootnoteAllowed() const;
 
+    /// Calculates the frame area size and the print area, in case they are invalid.
+    /// The frame are position is not considered here.
     virtual void  Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr );
 
     virtual void CheckDirection( bool bVert );
