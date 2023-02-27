@@ -473,7 +473,7 @@ void SalInstanceWidget::set_margin_bottom(int nMargin) { m_xWidget->set_margin_b
 
 void SalInstanceWidget::set_margin_start(int nMargin) { m_xWidget->set_margin_start(nMargin); }
 
-void SalInstanceWidget::set_margin_end(int nMargin) { m_xWidget->set_margin_bottom(nMargin); }
+void SalInstanceWidget::set_margin_end(int nMargin) { m_xWidget->set_margin_end(nMargin); }
 
 int SalInstanceWidget::get_margin_top() const { return m_xWidget->get_margin_top(); }
 
@@ -481,7 +481,7 @@ int SalInstanceWidget::get_margin_bottom() const { return m_xWidget->get_margin_
 
 int SalInstanceWidget::get_margin_start() const { return m_xWidget->get_margin_start(); }
 
-int SalInstanceWidget::get_margin_end() const { return m_xWidget->get_margin_bottom(); }
+int SalInstanceWidget::get_margin_end() const { return m_xWidget->get_margin_end(); }
 
 void SalInstanceWidget::set_accessible_name(const OUString& rName)
 {
