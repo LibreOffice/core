@@ -931,11 +931,20 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     }
 
     Point aOffset(0,0);
+    Point aOffsetVert(0,0);
 
     if ( nEmphasisMark & FontEmphasisMark::PosBelow )
+    {
         aOffset.AdjustY(mpFontInstance->mxFontMetric->GetDescent() + aEmphasisMark.GetYOffset());
+        aOffsetVert = aOffset;
+    }
     else
+    {
         aOffset.AdjustY(-(mpFontInstance->mxFontMetric->GetAscent() + aEmphasisMark.GetYOffset()));
+        // Todo: use ideographic em-box or ideographic character face information.
+        aOffsetVert.AdjustY(-(mpFontInstance->mxFontMetric->GetAscent() +
+                    mpFontInstance->mxFontMetric->GetDescent() + aEmphasisMark.GetYOffset()));
+    }
 
     tools::Long nEmphasisWidth2  = aEmphasisMark.GetWidth() / 2;
     tools::Long nEmphasisHeight2 = nEmphasisHeight / 2;
@@ -953,8 +962,18 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
 
         if (!pGlyph->IsSpacing())
         {
-            Point aAdjPoint = aOffset;
-            aAdjPoint.AdjustX(aRectangle.Left() + (aRectangle.GetWidth() - aEmphasisMark.GetWidth()) / 2 );
+            Point aAdjPoint;
+            if (pGlyph->IsVertical())
+            {
+                aAdjPoint = aOffsetVert;
+                aAdjPoint.AdjustX((-pGlyph->origWidth() + aEmphasisMark.GetWidth()) / 2);
+            }
+            else
+            {
+                aAdjPoint = aOffset;
+                aAdjPoint.AdjustX(aRectangle.Left() + (aRectangle.GetWidth() - aEmphasisMark.GetWidth()) / 2 );
+            }
+
             if ( mpFontInstance->mnOrientation )
             {
                 Point aOriginPt(0, 0);
