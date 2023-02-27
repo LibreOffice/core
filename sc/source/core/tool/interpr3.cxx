@@ -3481,7 +3481,7 @@ void ScInterpreter::ScPercentile( bool bInclusive )
     GetNumberSequenceArray( 1, aArray, false );
     if ( aArray.empty() || nGlobalError != FormulaError::NONE )
     {
-        SetError( FormulaError::NoValue );
+        PushNoValue();
         return;
     }
     if ( bInclusive )
@@ -3504,7 +3504,7 @@ void ScInterpreter::ScQuartile( bool bInclusive )
     GetNumberSequenceArray( 1, aArray, false );
     if ( aArray.empty() || nGlobalError != FormulaError::NONE )
     {
-        SetError( FormulaError::NoValue );
+        PushNoValue();
         return;
     }
     if ( bInclusive )
