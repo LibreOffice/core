@@ -130,8 +130,7 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
         return SUCCESS;
 
     OUString aLinkStr;
-    if (!(rValue >>= aLinkStr))
-        ScByteSequenceToString::GetString( aLinkStr, rValue, osl_getThreadTextEncoding() );
+    ScByteSequenceToString::GetString( aLinkStr, rValue );
     aLinkStr = convertLineEnd(aLinkStr, LINEEND_LF);
 
     //  if string ends with line end, discard:

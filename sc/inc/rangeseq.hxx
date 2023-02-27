@@ -94,10 +94,9 @@ public:
 class ScByteSequenceToString
 {
 public:
-    //  rAny must contain Sequence<sal_Int8>,
+    //  rAny must contain either OUString or Sequence<sal_Int8> (thread encoding assumed),
     //  may or may not contain 0-bytes at the end
-    static bool GetString( OUString& rString, const css::uno::Any& rAny,
-                            sal_uInt16 nEncoding );
+    static bool GetString( OUString& rString, const css::uno::Any& rAny );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

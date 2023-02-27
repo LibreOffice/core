@@ -21,6 +21,7 @@
 #include <rtl/math.hxx>
 #include <o3tl/float_int_conversion.hxx>
 #include <osl/diagnose.h>
+#include <osl/thread.h>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -429,18 +430,22 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const css::uno::Any & rAny )
     return xMatrix;
 }
 
-bool ScByteSequenceToString::GetString( OUString& rString, const uno::Any& rAny,
-                                        sal_uInt16 nEncoding )
+bool ScByteSequenceToString::GetString( OUString& rString, const uno::Any& rAny )
 {
-    uno::Sequence<sal_Int8> aSeq;
-    if ( rAny >>= aSeq )
+    bool bResult = false;
+    if (rAny >>= rString)
+    {
+        bResult = true;
+    }
+    else if (uno::Sequence<sal_Int8> aSeq; rAny >>= aSeq)
     {
         rString = OUString( reinterpret_cast<const char*>(aSeq.getConstArray()),
-                            aSeq.getLength(), nEncoding );
-        rString = comphelper::string::stripEnd(rString, 0);
-        return true;
+                            aSeq.getLength(), osl_getThreadTextEncoding() );
+        bResult = true;
     }
-    return false;
+    if (bResult)
+        rString = comphelper::string::stripEnd(rString, 0);
+    return bResult;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

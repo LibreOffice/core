@@ -2453,7 +2453,7 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
     {
         if( rItem.equalsIgnoreAsciiCase( "Format" ) )
         {
-            if ( ScByteSequenceToString::GetString( m_aDdeTextFmt, rValue, osl_getThreadTextEncoding() ) )
+            if ( ScByteSequenceToString::GetString( m_aDdeTextFmt, rValue ) )
             {
                 m_aDdeTextFmt = m_aDdeTextFmt.toAsciiUpperCase();
                 return true;
@@ -2467,7 +2467,7 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
             m_aDdeTextFmt == "FSYLK" )
         {
             OUString aData;
-            if ( ScByteSequenceToString::GetString( aData, rValue, osl_getThreadTextEncoding() ) )
+            if ( ScByteSequenceToString::GetString( aData, rValue ) )
             {
                 return aObj.ImportString( aData, SotClipboardFormatId::SYLK );
             }
