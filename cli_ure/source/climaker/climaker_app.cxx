@@ -39,7 +39,6 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "unoidl/unoidl.hxx"
 
-using namespace ::std;
 using namespace ::System::Reflection;
 
 
@@ -285,10 +284,10 @@ SAL_IMPLEMENT_MAIN()
             get_option_info( "assembly-trademark" );
 
         OUString output;
-        vector< OUString > mandatory_registries;
-        vector< OUString > extra_registries;
-        vector< OUString > extra_assemblies;
-        vector< OUString > explicit_types;
+        std::vector< OUString > mandatory_registries;
+        std::vector< OUString > extra_registries;
+        std::vector< OUString > extra_assemblies;
+        std::vector< OUString > explicit_types;
         OUString version, product, description, company, copyright, trademark,
             keyfile, delaySign;
 
