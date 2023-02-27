@@ -26,6 +26,7 @@
 #include <tools/fract.hxx>
 #include <svx/svdobj.hxx>
 #include <svl/whichranges.hxx>
+#include <unotools/syslocale.hxx>
 #include <memory>
 
 
@@ -179,14 +180,14 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrGlobalData
 {
-    const SvtSysLocale*         pSysLocale;     // follows always locale settings
+    SvtSysLocale  maSysLocale;     // follows always locale settings
 public:
     std::vector<Link<SdrObjCreatorParams, rtl::Reference<SdrObject>>>
                         aUserMakeObjHdl;
     OLEObjCache         aOLEObjCache;
 
 
-    const SvtSysLocale*         GetSysLocale();     // follows always locale settings
+    const SvtSysLocale* GetSysLocale() { return &maSysLocale;  } // follows always locale settings
     const LocaleDataWrapper*    GetLocaleData();    // follows always SysLocale
 public:
     SdrGlobalData();
