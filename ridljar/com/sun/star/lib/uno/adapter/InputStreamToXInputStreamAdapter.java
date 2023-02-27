@@ -79,29 +79,24 @@ public final class InputStreamToXInputStreamAdapter implements XInputStream {
     {
         try {
             long bytesRead;
+            int totalBytesRead = 0;
             if (b[0] == null || b[0].length < len) {
                 b[0] = new byte[len];
-            }
-            if (len >iIn.available()) {
-                bytesRead = iIn.read(b[0], 0, iIn.available());
-            }
-            else{
-                bytesRead = iIn.read(b[0], 0, len);
             }
 
             // Casting bytesRead to an int is okay, since the user can
             // only pass in an integer length to read, so the bytesRead
             // must <= len.
-            if (bytesRead < b[0].length) {
-                int outSize = bytesRead > 0 ? (int)bytesRead : 0;
-                byte[] out = new byte[outSize];
-                System.arraycopy(b[0], 0, out, 0, outSize);
+            while ((len > 0) && ((bytesRead = iIn.read(b[0], totalBytesRead, len)) > 0)) {
+                totalBytesRead += (int)bytesRead;
+                len -= (int)bytesRead;
+            }
+            if (totalBytesRead < b[0].length) {
+                byte[] out = new byte[totalBytesRead];
+                System.arraycopy(b[0], 0, out, 0, totalBytesRead);
                 b[0] = out;
             }
-            if (bytesRead <= 0) {
-                return 0;
-            }
-            return ((int)bytesRead);
+            return totalBytesRead;
         } catch (IOException e) {
             throw new com.sun.star.io.IOException("reader error", e);
         }
