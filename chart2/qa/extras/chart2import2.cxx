@@ -26,95 +26,9 @@ public:
         : ChartTest("/chart2/qa/extras/data/")
     {
     }
-
-    void testTdf114179();
-    void testTdf124243();
-    void testTdf127393();
-    void testTdf128733();
-    void testTdf128432();
-    void testTdf128627();
-    void testTdf128634();
-    void testTdf130657();
-    void testDeletedDataLabel();
-    void testDataPointInheritedColorDOCX();
-    void testExternalStrRefsXLSX();
-    void testSourceNumberFormatComplexCategoriesXLS();
-    void testSimpleCategoryAxis();
-    void testMultilevelCategoryAxis();
-    void testXaxisValues();
-    void testTdf123504();
-    void testTdf122765();
-    void testTdf123206CustomLabelField();
-    void testTdf125444PercentageCustomLabel();
-    void testDataPointLabelCustomPos();
-    void testTdf130032();
-    void testTdf134978();
-    void testTdf119138MissingAutoTitleDeleted();
-    void testStockChartShiftedCategoryPosition();
-    void testTdf133376();
-    void testTdf134225();
-    void testTdf136105();
-    void testTdf91250();
-    void testTdf134111();
-    void testTdf136752();
-    void testTdf137505();
-    void testTdf137734();
-    void testTdf137874();
-    void testTdf146463();
-    void testTdfCustomShapePos();
-    void testTdf121281();
-    void testTdf139658();
-    void testTdf146066();
-    void testTdf150434();
-    void testChartDataTableWithMultipleLegendEntriesForOneDataSeries();
-
-    CPPUNIT_TEST_SUITE(Chart2ImportTest2);
-
-    CPPUNIT_TEST(testTdf114179);
-    CPPUNIT_TEST(testTdf124243);
-    CPPUNIT_TEST(testTdf127393);
-    CPPUNIT_TEST(testTdf128733);
-    CPPUNIT_TEST(testTdf128432);
-    CPPUNIT_TEST(testTdf128627);
-    CPPUNIT_TEST(testTdf128634);
-    CPPUNIT_TEST(testTdf130657);
-    CPPUNIT_TEST(testDeletedDataLabel);
-    CPPUNIT_TEST(testDataPointInheritedColorDOCX);
-    CPPUNIT_TEST(testExternalStrRefsXLSX);
-    CPPUNIT_TEST(testSourceNumberFormatComplexCategoriesXLS);
-    CPPUNIT_TEST(testSimpleCategoryAxis);
-    CPPUNIT_TEST(testMultilevelCategoryAxis);
-    CPPUNIT_TEST(testXaxisValues);
-    CPPUNIT_TEST(testTdf123504);
-    CPPUNIT_TEST(testTdf122765);
-    CPPUNIT_TEST(testTdf123206CustomLabelField);
-    CPPUNIT_TEST(testTdf125444PercentageCustomLabel);
-    CPPUNIT_TEST(testDataPointLabelCustomPos);
-    CPPUNIT_TEST(testTdf130032);
-    CPPUNIT_TEST(testTdf134978);
-    CPPUNIT_TEST(testTdf119138MissingAutoTitleDeleted);
-    CPPUNIT_TEST(testStockChartShiftedCategoryPosition);
-    CPPUNIT_TEST(testTdf133376);
-    CPPUNIT_TEST(testTdf134225);
-    CPPUNIT_TEST(testTdf136105);
-    CPPUNIT_TEST(testTdf91250);
-    CPPUNIT_TEST(testTdf134111);
-    CPPUNIT_TEST(testTdf136752);
-    CPPUNIT_TEST(testTdf137505);
-    CPPUNIT_TEST(testTdf137734);
-    CPPUNIT_TEST(testTdf137874);
-    CPPUNIT_TEST(testTdf146463);
-    CPPUNIT_TEST(testTdfCustomShapePos);
-    CPPUNIT_TEST(testTdf121281);
-    CPPUNIT_TEST(testTdf139658);
-    CPPUNIT_TEST(testTdf146066);
-    CPPUNIT_TEST(testTdf150434);
-    CPPUNIT_TEST(testChartDataTableWithMultipleLegendEntriesForOneDataSeries);
-
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void Chart2ImportTest2::testTdf114179()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf114179)
 {
     loadFromURL(u"docx/testTdf114179.docx");
     uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
@@ -128,7 +42,7 @@ void Chart2ImportTest2::testTdf114179()
     CPPUNIT_ASSERT(aSize.Height > 0);
 }
 
-void Chart2ImportTest2::testTdf124243()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf124243)
 {
     loadFromURL(u"docx/tdf124243.docx");
     uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
@@ -145,7 +59,7 @@ void Chart2ImportTest2::testTdf124243()
     CPPUNIT_ASSERT(!bShow);
 }
 
-void Chart2ImportTest2::testTdf127393()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf127393)
 {
     loadFromURL(u"pptx/tdf127393.pptx");
 
@@ -172,7 +86,7 @@ void Chart2ImportTest2::testTdf127393()
     CPPUNIT_ASSERT(!aScaleData2.ShiftedCategoryPosition);
 }
 
-void Chart2ImportTest2::testTdf128733()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf128733)
 {
     loadFromURL(u"odt/tdf128733.odt");
 
@@ -187,7 +101,7 @@ void Chart2ImportTest2::testTdf128733()
     CPPUNIT_ASSERT(aScaleData.ShiftedCategoryPosition);
 }
 
-void Chart2ImportTest2::testTdf128432()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf128432)
 {
     loadFromURL(u"ods/tdf128432.ods");
 
@@ -202,7 +116,7 @@ void Chart2ImportTest2::testTdf128432()
     CPPUNIT_ASSERT(aScaleData.ShiftedCategoryPosition);
 }
 
-void Chart2ImportTest2::testTdf128627()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf128627)
 {
     loadFromURL(u"xlsx/tdf128627.xlsx");
     // Test ShiftedCategoryPosition for Radar Chart
@@ -217,7 +131,7 @@ void Chart2ImportTest2::testTdf128627()
     CPPUNIT_ASSERT(!aScaleData.ShiftedCategoryPosition);
 }
 
-void Chart2ImportTest2::testTdf128634()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf128634)
 {
     loadFromURL(u"xlsx/tdf128634.xlsx");
     // Test ShiftedCategoryPosition for 3D Charts
@@ -232,7 +146,7 @@ void Chart2ImportTest2::testTdf128634()
     CPPUNIT_ASSERT(aScaleData.ShiftedCategoryPosition);
 }
 
-void Chart2ImportTest2::testTdf130657()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf130657)
 {
     loadFromURL(u"xlsx/tdf130657.xlsx");
     // Test ShiftedCategoryPosition for charts which is not contain a "crossbetween" OOXML tag.
@@ -261,7 +175,7 @@ void checkDataLabelProperties(const Reference<chart2::XDataSeries>& xDataSeries,
 }
 }
 
-void Chart2ImportTest2::testDeletedDataLabel()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testDeletedDataLabel)
 {
     loadFromURL(u"xlsx/deleted_data_labels.xlsx");
     uno::Reference<chart2::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
@@ -278,7 +192,7 @@ void Chart2ImportTest2::testDeletedDataLabel()
     checkDataLabelProperties(xDataSeries1, 2, false);
 }
 
-void Chart2ImportTest2::testDataPointInheritedColorDOCX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testDataPointInheritedColorDOCX)
 {
     loadFromURL(u"docx/data_point_inherited_color.docx");
     uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
@@ -293,7 +207,7 @@ void Chart2ImportTest2::testDataPointInheritedColorDOCX()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(16776960), nColor);
 }
 
-void Chart2ImportTest2::testExternalStrRefsXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testExternalStrRefsXLSX)
 {
     loadFromURL(u"xlsx/external_str_ref.xlsx");
     uno::Reference<chart2::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
@@ -307,7 +221,7 @@ void Chart2ImportTest2::testExternalStrRefsXLSX()
     CPPUNIT_ASSERT_EQUAL(OUString("test2"), aValues[1].get<OUString>());
 }
 
-void Chart2ImportTest2::testSourceNumberFormatComplexCategoriesXLS()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testSourceNumberFormatComplexCategoriesXLS)
 {
     loadFromURL(u"xls/source_number_format_axis.xls");
     uno::Reference<chart2::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
@@ -320,7 +234,7 @@ void Chart2ImportTest2::testSourceNumberFormatComplexCategoriesXLS()
     CPPUNIT_ASSERT(nNumberFormat != 0);
 }
 
-void Chart2ImportTest2::testSimpleCategoryAxis()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testSimpleCategoryAxis)
 {
     loadFromURL(u"docx/testSimpleCategoryAxis.docx");
     uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
@@ -348,7 +262,7 @@ void Chart2ImportTest2::testSimpleCategoryAxis()
     CPPUNIT_ASSERT(aCategories[3][0].endsWith("ria 4"));
 }
 
-void Chart2ImportTest2::testMultilevelCategoryAxis()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testMultilevelCategoryAxis)
 {
     loadFromURL(u"docx/testMultilevelCategoryAxis.docx");
     uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
@@ -377,7 +291,7 @@ void Chart2ImportTest2::testMultilevelCategoryAxis()
     CPPUNIT_ASSERT_EQUAL(OUString("Categoria 4"), aCategories[3][1]);
 }
 
-void Chart2ImportTest2::testXaxisValues()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testXaxisValues)
 {
     loadFromURL(u"docx/tdf124083.docx");
     uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
@@ -394,7 +308,7 @@ void Chart2ImportTest2::testXaxisValues()
     CPPUNIT_ASSERT(std::isnan(*static_cast<const double*>(xSequence[4].getValue())));
 }
 
-void Chart2ImportTest2::testTdf123504()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf123504)
 {
     loadFromURL(u"ods/pie_chart_100_and_0.ods");
     Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
@@ -425,7 +339,7 @@ void Chart2ImportTest2::testTdf123504()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(8300.0, aSliceSize.Width, 10);
 }
 
-void Chart2ImportTest2::testTdf122765()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf122765)
 {
     // The horizontal position of the slices was wrong.
     loadFromURL(u"pptx/tdf122765.pptx");
@@ -446,7 +360,7 @@ void Chart2ImportTest2::testTdf122765()
     CPPUNIT_ASSERT_GREATER(sal_Int32(7000), aSlicePosition.X);
 }
 
-void Chart2ImportTest2::testTdf123206CustomLabelField()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf123206CustomLabelField)
 {
     // File contains the deprecated "custom-label-field" attribute of the
     // "data-point" element. It should be interpreted and stored as a data point
@@ -465,7 +379,7 @@ void Chart2ImportTest2::testTdf123206CustomLabelField()
     CPPUNIT_ASSERT_EQUAL(OUString("Kiskacsa"), aLabelFields[0]->getString());
 }
 
-void Chart2ImportTest2::testTdf125444PercentageCustomLabel()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf125444PercentageCustomLabel)
 {
     loadFromURL(u"pptx/tdf125444.pptx");
 
@@ -485,7 +399,7 @@ void Chart2ImportTest2::testTdf125444PercentageCustomLabel()
                          aLabelFields[2]->getFieldType());
 }
 
-void Chart2ImportTest2::testDataPointLabelCustomPos()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testDataPointLabelCustomPos)
 {
     // test CustomLabelPosition on Bar chart
     loadFromURL(u"xlsx/testDataPointLabelCustomPos.xlsx");
@@ -508,7 +422,7 @@ void Chart2ImportTest2::testDataPointLabelCustomPos()
     CPPUNIT_ASSERT_EQUAL(chart::DataLabelPlacement::OUTSIDE, aPlacement);
 }
 
-void Chart2ImportTest2::testTdf130032()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf130032)
 {
     // test CustomLabelPosition on Line chart
     loadFromURL(u"xlsx/testTdf130032.xlsx");
@@ -531,7 +445,7 @@ void Chart2ImportTest2::testTdf130032()
     CPPUNIT_ASSERT_EQUAL(chart::DataLabelPlacement::RIGHT, aPlacement);
 }
 
-void Chart2ImportTest2::testTdf134978()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf134978)
 {
     // test CustomLabelPosition on Pie chart
     loadFromURL(u"xlsx/tdf134978.xlsx");
@@ -550,7 +464,7 @@ void Chart2ImportTest2::testTdf134978()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.25635352872557599, aCustomLabelPosition.Secondary, 1e-7);
 }
 
-void Chart2ImportTest2::testTdf119138MissingAutoTitleDeleted()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf119138MissingAutoTitleDeleted)
 {
     loadFromURL(u"xlsx/tdf119138-missing-autotitledeleted.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -562,7 +476,7 @@ void Chart2ImportTest2::testTdf119138MissingAutoTitleDeleted()
         "Missing autoTitleDeleted is implied to be True if title text is present", xTitle.is());
 }
 
-void Chart2ImportTest2::testStockChartShiftedCategoryPosition()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testStockChartShiftedCategoryPosition)
 {
     loadFromURL(u"odt/stock_chart_LO_6_2.odt");
 
@@ -577,7 +491,7 @@ void Chart2ImportTest2::testStockChartShiftedCategoryPosition()
     CPPUNIT_ASSERT(aScaleData.ShiftedCategoryPosition);
 }
 
-void Chart2ImportTest2::testTdf133376()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf133376)
 {
     // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
     // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
@@ -603,7 +517,7 @@ void Chart2ImportTest2::testTdf133376()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(5370, aLabelPosition.Y, 30);
 }
 
-void Chart2ImportTest2::testTdf134225()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf134225)
 {
     loadFromURL(u"xlsx/tdf134225.xlsx");
     Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
@@ -635,7 +549,7 @@ void Chart2ImportTest2::testTdf134225()
 #endif
 }
 
-void Chart2ImportTest2::testTdf136105()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf136105)
 {
     // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
     // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
@@ -683,7 +597,7 @@ void Chart2ImportTest2::testTdf136105()
     }
 }
 
-void Chart2ImportTest2::testTdf91250()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf91250)
 {
     loadFromURL(u"docx/tdf91250.docx");
     uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
@@ -704,7 +618,7 @@ void Chart2ImportTest2::testTdf91250()
     CPPUNIT_ASSERT_EQUAL(OUString("8.657"), aCategories[3]);
 }
 
-void Chart2ImportTest2::testTdf134111()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf134111)
 {
     // tdf134111 : To check TextBreak value is true
     loadFromURL(u"docx/tdf134111.docx");
@@ -721,7 +635,7 @@ void Chart2ImportTest2::testTdf134111()
     CPPUNIT_ASSERT(bTextBreak);
 }
 
-void Chart2ImportTest2::testTdf136752()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf136752)
 {
     loadFromURL(u"xlsx/tdf136752.xlsx");
     Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
@@ -742,7 +656,7 @@ void Chart2ImportTest2::testTdf136752()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1458, aLabelPosition.Y, 500);
 }
 
-void Chart2ImportTest2::testTdf137505()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf137505)
 {
     loadFromURL(u"xlsx/tdf137505.xlsx");
     Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
@@ -762,7 +676,7 @@ void Chart2ImportTest2::testTdf137505()
     CPPUNIT_ASSERT_EQUAL(float(12), nFontSize);
 }
 
-void Chart2ImportTest2::testTdf137734()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf137734)
 {
     loadFromURL(u"xlsx/tdf137734.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -789,7 +703,7 @@ void Chart2ImportTest2::testTdf137734()
     CPPUNIT_ASSERT_EQUAL(0.0, nRotation);
 }
 
-void Chart2ImportTest2::testTdf137874()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf137874)
 {
     loadFromURL(u"xlsx/piechart_legend.xlsx");
     Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
@@ -803,7 +717,7 @@ void Chart2ImportTest2::testTdf137874()
     CPPUNIT_ASSERT(xLegendEntry.is());
 }
 
-void Chart2ImportTest2::testTdf146463()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf146463)
 {
     loadFromURL(u"ods/tdf146463.ods");
     Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
@@ -826,7 +740,7 @@ void Chart2ImportTest2::testTdf146463()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4201, aPosition.Y, 30);
 }
 
-void Chart2ImportTest2::testTdfCustomShapePos()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdfCustomShapePos)
 {
     loadFromURL(u"docx/testcustomshapepos.docx");
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), UNO_QUERY_THROW);
@@ -854,7 +768,7 @@ void Chart2ImportTest2::testTdfCustomShapePos()
     }
 }
 
-void Chart2ImportTest2::testTdf121281()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf121281)
 {
     loadFromURL(u"xlsx/incorrect_label_position.xlsx");
     Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
@@ -873,7 +787,7 @@ void Chart2ImportTest2::testTdf121281()
     CPPUNIT_ASSERT_GREATEREQUAL(static_cast<sal_Int32>(0), aLabelPosition.Y);
 }
 
-void Chart2ImportTest2::testTdf139658()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf139658)
 {
     loadFromURL(u"docx/tdf139658.docx");
     uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
@@ -893,7 +807,7 @@ void Chart2ImportTest2::testTdf139658()
     CPPUNIT_ASSERT_EQUAL(OUString("category\"3"), aCategories[2]);
 }
 
-void Chart2ImportTest2::testTdf146066()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf146066)
 {
     loadFromURL(u"ods/tdf146066.ods");
     Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
@@ -939,7 +853,7 @@ void Chart2ImportTest2::testTdf146066()
     CPPUNIT_ASSERT_EQUAL(OUString("35"), xLabel7->getString());
 }
 
-void Chart2ImportTest2::testTdf150434()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf150434)
 {
     loadFromURL(u"xlsx/tdf150434.xlsx");
     Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
@@ -955,7 +869,7 @@ void Chart2ImportTest2::testTdf150434()
     CPPUNIT_ASSERT_GREATEREQUAL(static_cast<sal_Int32>(0), aPosition.Y);
 }
 
-void Chart2ImportTest2::testChartDataTableWithMultipleLegendEntriesForOneDataSeries()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testChartDataTableWithMultipleLegendEntriesForOneDataSeries)
 {
     loadFromURL(u"xlsx/DataTable-MultipleLegendEntriesForOneDataSeries.xlsx");
     // Loading this file caused a crash in the data table code
@@ -968,8 +882,6 @@ void Chart2ImportTest2::testChartDataTableWithMultipleLegendEntriesForOneDataSer
     Reference<drawing::XShape> xDataTableShape = getShapeByName(xShapes, "CID/D=0:DataTable=");
     CPPUNIT_ASSERT(xDataTableShape.is());
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest2);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
