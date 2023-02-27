@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <o3tl/any.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
@@ -33,12 +35,6 @@
 #include <cmdid.h>
 
 #include <unomid.h>
-
-#ifdef _WIN32
-constexpr OUStringLiteral NEXTLINE = u"\r\n";
-#else
-constexpr OUStringLiteral NEXTLINE = u"\n";
-#endif
 
 using namespace utl;
 using namespace ::com::sun::star::uno;
@@ -68,7 +64,7 @@ OUString MakeSender()
         else if (sToken == u"CR")
         {
             if(bLastLength)
-                sRet.append(NEXTLINE);
+                sRet.append(SAL_NEWLINE_STRING);
             bLastLength = true;
         }
         else if (sToken == u"FIRSTNAME")

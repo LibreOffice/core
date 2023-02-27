@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <i18nutil/unicode.hxx>
 #include <o3tl/safeint.hxx>
 #include <utility>
@@ -2113,12 +2115,7 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
 
     for (auto a : rows)
     {
-        sData.append(OUStringToOString(m_xLBEntries->get_text(a), nEncode));
-#if defined(_WIN32)
-        sData.append("\015\012");
-#else
-        sData.append("\012");
-#endif
+        sData.append(OUStringToOString(m_xLBEntries->get_text(a), nEncode) + SAL_NEWLINE_STRING);
     }
     pCntnr->CopyByteString( SotClipboardFormatId::STRING, sData.makeStringAndClear() );
     pCntnr->CopyToClipboard(m_xLBEntries->get_clipboard());

@@ -269,11 +269,7 @@ void SwEditShell::GetSelectedText( OUString &rBuf, ParaBreakType nHndlParaBrk )
         else if( IsSelFullPara() &&
             ParaBreakType::ToOnlyCR != nHndlParaBrk )
         {
-#ifdef _WIN32
-                rBuf += "\015\012";
-#else
-                rBuf += "\012";
-#endif
+            rBuf += SAL_NEWLINE_STRING;
         }
     }
     else if( IsSelection() )

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -33,11 +35,6 @@
 #include <rtl/character.hxx>
 
 /* @Man: change the hwp formula to LaTeX */
-#ifdef _WIN32
-# define ENDL  "\r\n"
-#else /* !_WIN32 */
-# define ENDL  "\n"
-#endif
 
 #define EQ_CASE 0x01    // case sensitive cmd
 #define EQ_ENV  0x02    // equiv to latex environment
@@ -740,11 +737,11 @@ static char eq2ltxconv(MzString& sstr, std::istream *strm, const char *sentinel)
       next_token(white, token, strm);
       if( token[0] != '{' )
         return 0;
-      sstr << "\\begin" << "{" << eq->key << "}" << ENDL ;
+      sstr << "\\begin" << "{" << eq->key << "}" << SAL_NEWLINE_STRING ;
       eq2ltxconv(sstr, strm, "}");
       if( sstr[sstr.length() - 1] != '\n' )
-        sstr << ENDL ;
-      sstr << "\\end" << "{" << eq->key << "}" << ENDL ;
+        sstr << SAL_NEWLINE_STRING ;
+      sstr << "\\end" << "{" << eq->key << "}" << SAL_NEWLINE_STRING ;
     }
     else if( eq && (eq->flag & EQ_ATOP) ) {
       if( sstr.length() == 0 )
@@ -788,11 +785,11 @@ void eq2latex(MzString& outs, char const *s)
   std::istringstream strm(tstr.c_str());
 
   if( eqnarray )
-    outs << "\\begin{array}{rllll}" << ENDL;
+    outs << "\\begin{array}{rllll}" << SAL_NEWLINE_STRING;
   eq2ltxconv(outs, &strm, nullptr);
-  outs << ENDL;
+  outs << SAL_NEWLINE_STRING;
   if( eqnarray )
-    outs << "\\end{array}" << ENDL;
+    outs << "\\end{array}" << SAL_NEWLINE_STRING;
   delete stk;
   stk = nullptr;
 }
