@@ -4007,9 +4007,20 @@ StackVar ScInterpreter::Interpret()
                 (*aTokenMatrixMapIter).second->GetType() != svJumpMatrix)
         {
             // Path already calculated, reuse result.
-            nStackBase = sp - pCur->GetParamCount();
-            if ( nStackBase > sp )
-                nStackBase = sp;        // underflow?!?
+            if (sp >= pCur->GetParamCount())
+                nStackBase = sp - pCur->GetParamCount();
+            else
+            {
+                SAL_WARN("sc.core", "Stack anomaly with calculated path at "
+                        << aPos.Tab() << "," << aPos.Col() << "," << aPos.Row()
+                        << "  " << aPos.Format(
+                            ScRefFlags::VALID | ScRefFlags::FORCE_DOC | ScRefFlags::TAB_3D, &mrDoc)
+                        << "  eOp: " << static_cast<int>(eOp)
+                        << "  params: " << static_cast<int>(pCur->GetParamCount())
+                        << "  nStackBase: " << nStackBase << "  sp: " << sp);
+                nStackBase = sp;
+                assert(!"underflow");
+            }
             sp = nStackBase;
             PushTokenRef( (*aTokenMatrixMapIter).second);
         }
