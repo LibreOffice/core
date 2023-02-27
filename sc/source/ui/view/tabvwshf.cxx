@@ -680,7 +680,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                             break;
                                     }
                                     // if both pivot table and data are selected
-                                    // no need to warn for source data loosing
+                                    // no need to warn for source data losing
                                     if (bTabWithPivotTable && bTabOutSel)
                                         bTabWithPivotTable = false;
                                     if (bTabWithPivotTable)
