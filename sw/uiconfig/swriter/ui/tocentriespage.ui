@@ -821,6 +821,7 @@
                       <object class="GtkComboBoxText" id="mainstyle">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="hexpand">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="mainstyle-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|mainstyle">Specify the character style for the main entries in the alphabetical index. To convert an index entry into a main entry, click in front of the index field in the document and then choose Edit - Index Entry.</property>
