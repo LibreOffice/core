@@ -8,6 +8,9 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_url_for_data_file
+from libreoffice.uno.propertyvalue import mkPropertyValues
+from com.sun.star.awt import MouseButton
+from com.sun.star.awt import MouseEvent
 
 class tdf132714(UITestCase):
     def test_tdf132714(self):
@@ -19,5 +22,48 @@ class tdf132714(UITestCase):
             self.xUITest.executeCommand(".uno:GoDown")
             # Without the fix in place, at this point crash occurs.
             self.xUITest.executeCommand(".uno:DeleteRows")
+
+    def test_delete_table(self):
+        with self.ui_test.load_file(get_url_for_data_file("tdf132714.odt")) as document:
+
+            # delete second row (first data row) in the associated text table of the chart
+            self.xUITest.executeCommand(".uno:GoDown")
+            self.xUITest.executeCommand(".uno:GoDown")
+            # Without the fix in place, at this point crash occurs.
+            self.xUITest.executeCommand(".uno:DeleteTable")
+
+            # select embedded chart
+            self.assertEqual(1, document.EmbeddedObjects.Count)
+            document.CurrentController.select(document.getEmbeddedObjects().getByIndex(0))
+            self.assertEqual("SwXTextEmbeddedObject", document.CurrentSelection.getImplementationName())
+
+            xChartMainTop = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xChartMainTop.getChild("writer_edit")
+            # edit object by pressing Enter
+            xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+
+            # create mouse event in the chart area
+            xFrame = document.getCurrentController().getFrame()
+            self.assertIsNotNone(xFrame)
+            xWindow = xFrame.getContainerWindow()
+            self.assertIsNotNone(xWindow)
+
+            xMouseEvent = MouseEvent()
+            xMouseEvent.Modifiers = 0
+            xMouseEvent.Buttons = MouseButton.LEFT
+            xMouseEvent.X = 1000
+            xMouseEvent.Y = 400
+            xMouseEvent.ClickCount = 1
+            xMouseEvent.PopupTrigger = False
+            xMouseEvent.Source = xWindow
+
+            # send mouse event
+            xToolkitRobot = xWindow.getToolkit()
+            self.assertIsNotNone(xToolkitRobot)
+
+            # Click in the chart area
+
+            # Without the fix in place, this test would have crashed here
+            xToolkitRobot.mouseMove(xMouseEvent)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -124,13 +124,15 @@ OUString lcl_getDataPointValueText( const rtl::Reference< DataSeries >& xSeries,
         uno::Reference<data::XDataSequence>  xDataSequence( aDataSequences[nN]->getValues());
         if( !xDataSequence.is() )
             continue;
-        Sequence< Any > aData( xDataSequence->getData() );
-        if( nPointIndex >= aData.getLength() )
-            continue;
-        uno::Reference<beans::XPropertySet> xProp(xDataSequence, uno::UNO_QUERY );
-        if( xProp.is())
+
+        try
         {
-            try
+            Sequence< Any > aData( xDataSequence->getData() );
+
+            if( nPointIndex >= aData.getLength() )
+                continue;
+            uno::Reference<beans::XPropertySet> xProp(xDataSequence, uno::UNO_QUERY );
+            if( xProp.is())
             {
                 uno::Any aARole = xProp->getPropertyValue( "Role" );
                 OUString aRole;
@@ -179,10 +181,14 @@ OUString lcl_getDataPointValueText( const rtl::Reference< DataSeries >& xSeries,
                     a_Size = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
                 }
             }
-            catch( const uno::Exception& )
-            {
-                TOOLS_WARN_EXCEPTION("chart2", "" );
-            }
+        }
+        catch (const lang::DisposedException&)
+        {
+            TOOLS_WARN_EXCEPTION( "chart2", "unexpected exception caught" );
+        }
+        catch( const uno::Exception& )
+        {
+            TOOLS_WARN_EXCEPTION("chart2", "" );
         }
     }
 
