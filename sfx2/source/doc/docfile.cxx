@@ -633,11 +633,19 @@ Reference < XContent > SfxMedium::GetContent() const
 
 OUString SfxMedium::GetBaseURL( bool bForSaving )
 {
+    if (bForSaving)
+    {
+        bool bIsRemote = IsRemote();
+        if ((bIsRemote && !officecfg::Office::Common::Save::URL::Internet::get())
+            || (!bIsRemote && !officecfg::Office::Common::Save::URL::FileSystem::get()))
+            return OUString();
+    }
+
+    if (const SfxStringItem* pBaseURLItem = GetItemSet()->GetItem<SfxStringItem>(SID_DOC_BASEURL))
+        return pBaseURLItem->GetValue();
+
     OUString aBaseURL;
-    const SfxStringItem* pBaseURLItem = GetItemSet()->GetItem<SfxStringItem>(SID_DOC_BASEURL);
-    if ( pBaseURLItem )
-        aBaseURL = pBaseURLItem->GetValue();
-    else if (!utl::ConfigManager::IsFuzzing() && GetContent().is())
+    if (!utl::ConfigManager::IsFuzzing() && GetContent().is())
     {
         try
         {
@@ -651,15 +659,6 @@ OUString SfxMedium::GetBaseURL( bool bForSaving )
         if ( aBaseURL.isEmpty() )
             aBaseURL = GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
-
-    if ( bForSaving )
-    {
-        bool bIsRemote = IsRemote();
-        if( (bIsRemote && !officecfg::Office::Common::Save::URL::Internet::get())
-            || (!pImpl->m_bRemote && !officecfg::Office::Common::Save::URL::FileSystem::get()) )
-            return OUString();
-    }
-
     return aBaseURL;
 }
 
