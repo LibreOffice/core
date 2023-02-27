@@ -45,7 +45,7 @@
  {
 +#if defined(__EMSCRIPTEN__)
 +
-+    return X86_SSE | X86_SSE2 | X86_SSSE3;
++    return X86_MMX | X86_MMX_EXTENSIONS | X86_SSE | X86_SSE2 | X86_SSSE3;
 +
 +#else
      uint32_t a, b, c, d;
