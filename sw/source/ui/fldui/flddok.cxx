@@ -540,7 +540,7 @@ bool SwFieldDokPage::FillItemSet(SfxItemSet* )
     }
 
     OUString aVal(m_xValueED->get_text());
-    sal_uLong nFormat = 0;
+    sal_uInt32 nFormat = 0;
     sal_uInt16 nSubType = 0;
 
     if (m_xFormatLB->get_sensitive())

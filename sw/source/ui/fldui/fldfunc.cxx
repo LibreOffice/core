@@ -518,7 +518,7 @@ bool SwFieldFuncPage::FillItemSet(SfxItemSet* )
     sal_uInt16 nSubType = 0;
 
     const sal_Int32 nEntryPos = m_xFormatLB->get_selected_index();
-    const sal_uLong nFormat = (nEntryPos == -1)
+    const sal_uInt32 nFormat = (nEntryPos == -1)
         ? 0 : m_xFormatLB->get_id(nEntryPos).toUInt32();
 
     OUString aVal(m_xValueED->get_text());

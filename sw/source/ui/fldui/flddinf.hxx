@@ -31,7 +31,7 @@ class SwFieldDokInfPage : public SwFieldPage
     css::uno::Reference < css::beans::XPropertySet > m_xCustomPropertySet;
 
     sal_Int32               m_nOldSel;
-    sal_uLong               m_nOldFormat;
+    sal_uInt32               m_nOldFormat;
     OUString                m_sOldCustomFieldName;
 
     std::unique_ptr<weld::TreeView> m_xTypeList;

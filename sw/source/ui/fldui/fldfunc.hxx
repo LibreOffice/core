@@ -29,7 +29,7 @@ class SwFieldFuncPage : public SwFieldPage
     OUString        m_sOldValueFT;
     OUString        m_sOldNameFT;
 
-    sal_uLong           m_nOldFormat;
+    sal_uInt32           m_nOldFormat;
     bool            m_bDropDownLBChanged;
 
     std::unique_ptr<weld::TreeView> m_xTypeLB;

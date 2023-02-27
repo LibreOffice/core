@@ -30,7 +30,7 @@ class SwFieldDBPage : public SwFieldPage
     OUString            m_sOldDBName;
     OUString            m_sOldTableName;
     OUString            m_sOldColumnName;
-    sal_uLong           m_nOldFormat;
+    sal_uInt32           m_nOldFormat;
     sal_uInt16          m_nOldSubType;
 
     std::unique_ptr<weld::TreeView> m_xTypeLB;

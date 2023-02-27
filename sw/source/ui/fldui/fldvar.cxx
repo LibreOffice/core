@@ -1006,7 +1006,7 @@ IMPL_LINK(SwFieldVarPage, TBClickHdl, weld::Button&, rBox, void)
                 {
                     if (nNumFormatPos != -1)
                     {
-                        sal_uLong nNumberFormat = nNumFormatPos == 0 ? 0 : m_xNumFormatLB->GetFormat();
+                        sal_uInt32 nNumberFormat = nNumFormatPos == 0 ? 0 : m_xNumFormatLB->GetFormat();
                         if (nNumberFormat)
                         {   // Switch language to office-language because Kalkulator expects
                             // String in office format and it should be fed into dialog like

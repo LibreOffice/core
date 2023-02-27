@@ -210,7 +210,7 @@ bool SwFieldDBPage::FillItemSet(SfxItemSet* )
     if(!aData.sDataSource.isEmpty())       // without database no new field command
     {
         const SwFieldTypesEnum nTypeId = static_cast<SwFieldTypesEnum>(m_xTypeLB->get_id(GetTypeSel()).toUInt32());
-        sal_uLong nFormat = 0;
+        sal_uInt32 nFormat = 0;
         sal_uInt16 nSubType = 0;
 
         OUString sDBName = aData.sDataSource
