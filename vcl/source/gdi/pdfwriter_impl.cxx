@@ -7001,7 +7001,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     nIndex = 0;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nIndex))
     {
-        if (pGlyph->IsSpacing())
+        if (!pGlyph->IsSpacing())
         {
             DevicePoint aAdjOffset(aOffset.X(), aOffset.Y());
             aAdjOffset.adjustX((pGlyph->newWidth() - aEmphasisMark.GetWidth()) / 2);
