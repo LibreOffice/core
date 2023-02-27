@@ -230,6 +230,19 @@ void SvxSearchCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1
                 aPointTxTy.AdjustX(nXHDelta - 1 );
         }
 
+        // tdf#109214 - highlight the favorite characters
+        if (isFavChar(aCharStr, mxVirDev->GetFont().GetFamilyName()))
+        {
+            const Color aLineCol = rRenderContext.GetLineColor();
+            rRenderContext.SetLineColor(aHighlightColor);
+            rRenderContext.SetFillColor(COL_TRANSPARENT);
+            // Outer border
+            rRenderContext.DrawRect(tools::Rectangle(Point(x - 1, y - 1), Size(nX + 3, nY + 3)));
+            // Inner border
+            rRenderContext.DrawRect(tools::Rectangle(Point(x, y), Size(nX + 1, nY + 1)));
+            rRenderContext.SetLineColor(aLineCol);
+        }
+
         Color aTextCol = rRenderContext.GetTextColor();
         if (i != nSelectedIndex)
         {
