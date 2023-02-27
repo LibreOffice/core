@@ -631,13 +631,20 @@ void DialogModel::setCategories( const Reference< chart2::data::XLabeledDataSequ
 
 OUString DialogModel::getCategoriesRange() const
 {
-    uno::Reference< chart2::data::XLabeledDataSequence > xLSeq( getCategories());
     OUString aRange;
-    if( xLSeq.is())
+    try
     {
-        Reference< data::XDataSequence > xSeq( xLSeq->getValues());
-        if( xSeq.is())
-            aRange = xSeq->getSourceRangeRepresentation();
+        uno::Reference< chart2::data::XLabeledDataSequence > xLSeq( getCategories());
+        if( xLSeq.is())
+        {
+            Reference< data::XDataSequence > xSeq( xLSeq->getValues());
+            if( xSeq.is())
+                aRange = xSeq->getSourceRangeRepresentation();
+        }
+    }
+    catch (const lang::DisposedException&)
+    {
+        TOOLS_WARN_EXCEPTION( "chart2", "unexpected exception caught" );
     }
     return aRange;
 }
