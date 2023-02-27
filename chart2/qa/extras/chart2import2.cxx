@@ -720,24 +720,28 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf137874)
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf146463)
 {
     loadFromURL(u"ods/tdf146463.ods");
-    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
-                                               UNO_QUERY_THROW);
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent));
     Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
     Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
     Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
-    uno::Reference<drawing::XShape> xLegend = getShapeByName(xShapes, "CID/D=0:Legend=");
-    CPPUNIT_ASSERT(xLegend.is());
+    Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc, 0);
+    std::vector<std::vector<double>> aDataSeriesYValues
+        = getDataSeriesYValuesFromChartType(xChartType);
+    size_t nLegendEntryCount = aDataSeriesYValues.size();
+    CPPUNIT_ASSERT_EQUAL(size_t(14), nLegendEntryCount);
 
-    awt::Size aSize = xLegend->getSize();
-
-    // Without the fix in place, this test would have failed with
-    // - Expected: 598
-    // - Actual  : 7072
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(598, aSize.Height, 30);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(4256, aSize.Width, 30);
-    awt::Point aPosition = xLegend->getPosition();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(11534, aPosition.X, 30);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(4201, aPosition.Y, 30);
+    for (size_t nSeriesIndex = 0; nSeriesIndex < nLegendEntryCount; ++nSeriesIndex)
+    {
+        uno::Reference<drawing::XShape> xLegendEntry
+            = getShapeByName(xShapes, "CID/MultiClick/D=0:CS=0:CT=0:Series="
+                                          + OUString::number(nSeriesIndex) + ":LegendEntry=0");
+        if (nSeriesIndex == 0)
+            CPPUNIT_ASSERT_MESSAGE("Legend 0 is not visible", xLegendEntry.is());
+        else
+            CPPUNIT_ASSERT_MESSAGE(
+                OString("Legend " + OString::number(nSeriesIndex) + " is visible").getStr(),
+                !xLegendEntry.is());
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdfCustomShapePos)
