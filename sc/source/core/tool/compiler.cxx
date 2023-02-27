@@ -3093,17 +3093,16 @@ bool ScCompiler::ParseOpCode( const OUString& rName, bool bInArray )
 
 bool ScCompiler::ParseOpCode2( std::u16string_view rName )
 {
-    bool bFound = false;
-    sal_uInt16 i;
-
-    for( i = ocInternalBegin; i <= ocInternalEnd && !bFound; i++ )
-        bFound = o3tl::equalsAscii( rName, pInternal[ i-ocInternalBegin ] );
-
-    if (bFound)
+    for (sal_uInt16 i = ocInternalBegin; i <= ocInternalEnd; i++)
     {
-        maRawToken.SetOpCode( static_cast<OpCode>(--i) );
+        if (o3tl::equalsAscii(rName, pInternal[i - ocInternalBegin]))
+        {
+            maRawToken.SetOpCode(static_cast<OpCode>(i));
+            return true;
+        }
     }
-    return bFound;
+
+    return false;
 }
 
 static bool lcl_ParenthesisFollows( const sal_Unicode* p )
