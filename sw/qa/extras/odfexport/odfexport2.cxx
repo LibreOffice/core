@@ -950,7 +950,8 @@ DECLARE_ODFEXPORT_TEST(testTdf78510, "WordTest_edit.odt")
     // now check the positions where text is actually painted -
     // wonder how fragile this is...
     // FIXME some platform difference, 1st one is 2306 on Linux, 3087 on WNT ?
-#ifndef WNT
+    // some Mac has 3110
+#if !defined(WNT) && !defined(MACOSX)
     {
         SwDocShell *const pShell(dynamic_cast<SwXTextDocument&>(*mxComponent).GetDocShell());
         std::shared_ptr<GDIMetaFile> pMetaFile = pShell->GetPreviewMetaFile();
