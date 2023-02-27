@@ -87,54 +87,175 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
     CPPUNIT_ASSERT_EQUAL(size_t(3), rFormatScheme.getFillStyleList().size());
     CPPUNIT_ASSERT_EQUAL(size_t(3), rFormatScheme.getBackgroundFillStyleList().size());
 
+    // Fill style 1
     {
         model::FillStyle const& rFillStyle = rFormatScheme.getFillStyleList().at(0);
         CPPUNIT_ASSERT(rFillStyle.mpFill);
         CPPUNIT_ASSERT_EQUAL(model::FillType::Solid, rFillStyle.mpFill->meType);
         auto* pSolidFill = static_cast<model::SolidFill*>(rFillStyle.mpFill.get());
         CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, pSolidFill->maColorDefinition.meType);
+        CPPUNIT_ASSERT_EQUAL(size_t(0), pSolidFill->maColorDefinition.maTransformations.size());
     }
 
+    // Fill style 2
     {
         model::FillStyle const& rFillStyle = rFormatScheme.getFillStyleList().at(1);
         CPPUNIT_ASSERT(rFillStyle.mpFill);
         CPPUNIT_ASSERT_EQUAL(model::FillType::Gradient, rFillStyle.mpFill->meType);
         auto* pGradientFill = static_cast<model::GradientFill*>(rFillStyle.mpFill.get());
+
+        // Gradient Properties
         CPPUNIT_ASSERT_EQUAL(model::GradientType::Linear, pGradientFill->meGradientType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5400000), pGradientFill->maLinearGradient.mnAngle);
+        CPPUNIT_ASSERT_EQUAL(false, pGradientFill->maLinearGradient.mbScaled);
+
+        // Gradient stops
         CPPUNIT_ASSERT_EQUAL(size_t(3), pGradientFill->maGradientStops.size());
+        {
+            auto const& rGradientStop = pGradientFill->maGradientStops[0];
+            CPPUNIT_ASSERT_EQUAL(0.0, rGradientStop.mfPosition);
+            CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, rGradientStop.maColor.meType);
+            CPPUNIT_ASSERT_EQUAL(size_t(3), rGradientStop.maColor.maTransformations.size());
 
-        CPPUNIT_ASSERT_EQUAL(0.0, pGradientFill->maGradientStops[0].mfPosition);
-        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder,
-                             pGradientFill->maGradientStops[0].maColor.meType);
+            {
+                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[0];
+                CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrasnsformation.meType);
+                CPPUNIT_ASSERT_EQUAL(sal_Int16(11000), rTrasnsformation.mnValue);
+            }
+            {
+                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[1];
+                CPPUNIT_ASSERT_EQUAL(model::TransformationType::SatMod, rTrasnsformation.meType);
+                CPPUNIT_ASSERT_EQUAL(sal_Int16(10500), rTrasnsformation.mnValue);
+            }
+            {
+                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[2];
+                CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTrasnsformation.meType);
+                CPPUNIT_ASSERT_EQUAL(sal_Int16(6700), rTrasnsformation.mnValue);
+            }
+        }
+        {
+            auto const& rGradientStop = pGradientFill->maGradientStops[1];
+            CPPUNIT_ASSERT_EQUAL(0.5, rGradientStop.mfPosition);
+            CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, rGradientStop.maColor.meType);
+            CPPUNIT_ASSERT_EQUAL(size_t(3), rGradientStop.maColor.maTransformations.size());
 
-        CPPUNIT_ASSERT_EQUAL(0.5, pGradientFill->maGradientStops[1].mfPosition);
-        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder,
-                             pGradientFill->maGradientStops[1].maColor.meType);
+            {
+                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[0];
+                CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrasnsformation.meType);
+                CPPUNIT_ASSERT_EQUAL(sal_Int16(10500), rTrasnsformation.mnValue);
+            }
+            {
+                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[1];
+                CPPUNIT_ASSERT_EQUAL(model::TransformationType::SatMod, rTrasnsformation.meType);
+                CPPUNIT_ASSERT_EQUAL(sal_Int16(10300), rTrasnsformation.mnValue);
+            }
+            {
+                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[2];
+                CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTrasnsformation.meType);
+                CPPUNIT_ASSERT_EQUAL(sal_Int16(7300), rTrasnsformation.mnValue);
+            }
+        }
+        {
+            auto const& rGradientStop = pGradientFill->maGradientStops[2];
+            CPPUNIT_ASSERT_EQUAL(1.0, rGradientStop.mfPosition);
+            CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, rGradientStop.maColor.meType);
+            CPPUNIT_ASSERT_EQUAL(size_t(3), rGradientStop.maColor.maTransformations.size());
 
-        CPPUNIT_ASSERT_EQUAL(1.0, pGradientFill->maGradientStops[2].mfPosition);
-        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder,
-                             pGradientFill->maGradientStops[2].maColor.meType);
+            {
+                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[0];
+                CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrasnsformation.meType);
+                CPPUNIT_ASSERT_EQUAL(sal_Int16(10500), rTrasnsformation.mnValue);
+            }
+            {
+                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[1];
+                CPPUNIT_ASSERT_EQUAL(model::TransformationType::SatMod, rTrasnsformation.meType);
+                CPPUNIT_ASSERT_EQUAL(sal_Int16(10900), rTrasnsformation.mnValue);
+            }
+            {
+                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[2];
+                CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTrasnsformation.meType);
+                CPPUNIT_ASSERT_EQUAL(sal_Int16(8100), rTrasnsformation.mnValue);
+            }
+        }
     }
 
+    // Fill style 3
     {
         model::FillStyle const& rFillStyle = rFormatScheme.getFillStyleList().at(2);
         CPPUNIT_ASSERT(rFillStyle.mpFill);
         CPPUNIT_ASSERT_EQUAL(model::FillType::Gradient, rFillStyle.mpFill->meType);
         auto* pGradientFill = static_cast<model::GradientFill*>(rFillStyle.mpFill.get());
+
+        // Gradient Properties
         CPPUNIT_ASSERT_EQUAL(model::GradientType::Linear, pGradientFill->meGradientType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5400000), pGradientFill->maLinearGradient.mnAngle);
+        CPPUNIT_ASSERT_EQUAL(false, pGradientFill->maLinearGradient.mbScaled);
+
+        // Gradient Stops
         CPPUNIT_ASSERT_EQUAL(size_t(3), pGradientFill->maGradientStops.size());
-
-        CPPUNIT_ASSERT_EQUAL(0.0, pGradientFill->maGradientStops[0].mfPosition);
-        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder,
-                             pGradientFill->maGradientStops[0].maColor.meType);
-
-        CPPUNIT_ASSERT_EQUAL(0.5, pGradientFill->maGradientStops[1].mfPosition);
-        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder,
-                             pGradientFill->maGradientStops[1].maColor.meType);
-
-        CPPUNIT_ASSERT_EQUAL(1.0, pGradientFill->maGradientStops[2].mfPosition);
-        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder,
-                             pGradientFill->maGradientStops[2].maColor.meType);
+        {
+            auto const& rGradientStop = pGradientFill->maGradientStops[0];
+            CPPUNIT_ASSERT_EQUAL(0.0, rGradientStop.mfPosition);
+            CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, rGradientStop.maColor.meType);
+            CPPUNIT_ASSERT_EQUAL(size_t(3), rGradientStop.maColor.maTransformations.size());
+            {
+                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[0];
+                CPPUNIT_ASSERT_EQUAL(model::TransformationType::SatMod, rTrasnsformation.meType);
+                CPPUNIT_ASSERT_EQUAL(sal_Int16(10300), rTrasnsformation.mnValue);
+            }
+            {
+                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[1];
+                CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrasnsformation.meType);
+                CPPUNIT_ASSERT_EQUAL(sal_Int16(10200), rTrasnsformation.mnValue);
+            }
+            {
+                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[2];
+                CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTrasnsformation.meType);
+                CPPUNIT_ASSERT_EQUAL(sal_Int16(9400), rTrasnsformation.mnValue);
+            }
+        }
+        {
+            auto const& rGradientStop = pGradientFill->maGradientStops[1];
+            CPPUNIT_ASSERT_EQUAL(0.5, rGradientStop.mfPosition);
+            CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, rGradientStop.maColor.meType);
+            CPPUNIT_ASSERT_EQUAL(size_t(3), rGradientStop.maColor.maTransformations.size());
+            {
+                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[0];
+                CPPUNIT_ASSERT_EQUAL(model::TransformationType::SatMod, rTrasnsformation.meType);
+                CPPUNIT_ASSERT_EQUAL(sal_Int16(11000), rTrasnsformation.mnValue);
+            }
+            {
+                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[1];
+                CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrasnsformation.meType);
+                CPPUNIT_ASSERT_EQUAL(sal_Int16(10000), rTrasnsformation.mnValue);
+            }
+            {
+                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[2];
+                CPPUNIT_ASSERT_EQUAL(model::TransformationType::Shade, rTrasnsformation.meType);
+                CPPUNIT_ASSERT_EQUAL(sal_Int16(10000), rTrasnsformation.mnValue);
+            }
+        }
+        {
+            auto const& rGradientStop = pGradientFill->maGradientStops[2];
+            CPPUNIT_ASSERT_EQUAL(1.0, rGradientStop.mfPosition);
+            CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, rGradientStop.maColor.meType);
+            CPPUNIT_ASSERT_EQUAL(size_t(3), rGradientStop.maColor.maTransformations.size());
+            {
+                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[0];
+                CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrasnsformation.meType);
+                CPPUNIT_ASSERT_EQUAL(sal_Int16(9900), rTrasnsformation.mnValue);
+            }
+            {
+                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[1];
+                CPPUNIT_ASSERT_EQUAL(model::TransformationType::SatMod, rTrasnsformation.meType);
+                CPPUNIT_ASSERT_EQUAL(sal_Int16(12000), rTrasnsformation.mnValue);
+            }
+            {
+                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[2];
+                CPPUNIT_ASSERT_EQUAL(model::TransformationType::Shade, rTrasnsformation.meType);
+                CPPUNIT_ASSERT_EQUAL(sal_Int16(7800), rTrasnsformation.mnValue);
+            }
+        }
     }
 }
 
