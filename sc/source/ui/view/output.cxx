@@ -2454,6 +2454,78 @@ void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
     }
 }
 
+void ScOutputData::DrawFormulaMarks(vcl::RenderContext& rRenderContext)
+{
+    bool bFirst = true;
+
+    tools::Long nInitPosX = nScrX;
+    if ( bLayoutRTL )
+        nInitPosX += nMirrorW - 1;              // always in pixels
+    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+
+    tools::Long nPosY = nScrY;
+    for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
+    {
+        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+        if ( pThisRowInfo->bChanged )
+        {
+            tools::Long nPosX = nInitPosX;
+            for (SCCOL nX=nX1; nX<=nX2; nX++)
+            {
+                ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
+                if (!mpDoc->ColHidden(nX, nTab) && !mpDoc->GetFormula(nX, pRowInfo[nArrY].nRowNo, nTab).isEmpty()
+                    && (!pInfo->bHOverlapped && !pInfo->bVOverlapped))
+                {
+                    if (bFirst)
+                    {
+                        rRenderContext.SetLineColor(COL_WHITE);
+
+                        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+                        if ( mbUseStyleColor && rStyleSettings.GetHighContrastMode() )
+                            rRenderContext.SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+                        else
+                            rRenderContext.SetFillColor(COL_LIGHTBLUE);
+
+                        bFirst = false;
+                    }
+
+                    tools::Long nMarkX = nPosX;
+                    tools::Long nMarkY = nPosY + pThisRowInfo->nHeight - 2;
+                    if ( pInfo->bMerged )
+                    {
+                        for (SCSIZE nNextY=nArrY+1; nNextY+1<nArrCount; nNextY++)
+                        {
+                            bool bVOver;
+                            if (pRowInfo[nNextY + 1].nRowNo == (pRowInfo[nNextY].nRowNo + 1)) {
+                                bVOver = pRowInfo[nNextY].cellInfo(nX).bVOverlapped;
+                            } else {
+                                bVOver = mpDoc->GetAttr(nX,nNextY,nTab,ATTR_MERGE_FLAG)->IsVerOverlapped();
+                            }
+                            if (!bVOver) break;
+                            nMarkY += pRowInfo[nNextY].nHeight;
+                        }
+                    }
+                    // DPI/ZOOM 100/100 => 10, 100/50 => 7, 100/150 => 13
+                    // DPI/ZOOM 150/100 => 13, 150/50 => 8.5, 150/150 => 17.5
+                    const double nSize( rRenderContext.GetDPIScaleFactor() * aZoomX * 6 + 4);
+                    Point aPoints[3];
+                    aPoints[0] = Point(nMarkX, nMarkY);
+                    aPoints[0].setX( bLayoutRTL ? aPoints[0].X() - nSize : aPoints[0].X() + nSize );
+                    aPoints[1] = Point(nMarkX, nMarkY);
+                    aPoints[2] = Point(nMarkX, nMarkY - nSize);
+                    tools::Polygon aPoly(3, aPoints);
+
+                    if ( bLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < nScrX+nScrW ) )
+                        rRenderContext.DrawPolygon(aPoly);
+                }
+
+                nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
+            }
+        }
+        nPosY += pThisRowInfo->nHeight;
+    }
+}
+
 void ScOutputData::AddPDFNotes()
 {
     vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >( mpDev->GetExtOutDevData() );

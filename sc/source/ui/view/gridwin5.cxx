@@ -204,6 +204,8 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
 void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
 {
     bool bDone = false;
+    OUString aFormulaText;
+    tools::Rectangle aFormulaPixRect;
     bool bHelpEnabled = bool(rHEvt.GetMode() & ( HelpEventMode::BALLOON | HelpEventMode::QUICK ));
     SdrView* pDrView = mrViewData.GetScDrawView();
     bool bDrawTextEdit = false;
@@ -215,12 +217,24 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
         Point       aPosPixel = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
         SCCOL nPosX;
         SCROW nPosY;
+        ScDocument& rDoc = mrViewData.GetDocument();
+        SCTAB       nTab = mrViewData.GetTabNo();
+        const ScViewOptions& rOpts = mrViewData.GetOptions();
         mrViewData.GetPosFromPixel( aPosPixel.X(), aPosPixel.Y(), eWhich, nPosX, nPosY );
 
         if ( ShowNoteMarker( nPosX, nPosY, false ) )
         {
             Window::RequestHelp( rHEvt );   // turn off old Tip/Balloon
             bDone = true;
+        }
+
+        if ( rOpts.GetOption( VOPT_FORMULAS_MARKS ) )
+        {
+            aFormulaText = rDoc.GetFormula( nPosX, nPosY, nTab );
+            if ( !aFormulaText.isEmpty() ) {
+                const ScPatternAttr* pPattern = rDoc.GetPattern( nPosX, nPosY, nTab );
+                aFormulaPixRect = mrViewData.GetEditArea( eWhich, nPosX, nPosY, this, pPattern, true );
+            }
         }
     }
 
@@ -234,6 +248,17 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
         {
             mpNoteMarker.reset();
         }
+    }
+
+    if ( !aFormulaText.isEmpty() )
+    {
+        tools::Rectangle aScreenRect(OutputToScreenPixel(aFormulaPixRect.TopLeft()),
+                                     OutputToScreenPixel(aFormulaPixRect.BottomRight()));
+        if ( rHEvt.GetMode() & HelpEventMode::BALLOON )
+            Help::ShowBalloon(this, rHEvt.GetMousePosPixel(), aScreenRect, aFormulaText);
+        else if ( rHEvt.GetMode() & HelpEventMode::QUICK )
+            Help::ShowQuickHelp(this, aScreenRect, aFormulaText);
+        bDone = true;
     }
 
     //  Image-Map / Text-URL

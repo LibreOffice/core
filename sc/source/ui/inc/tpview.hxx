@@ -37,6 +37,7 @@ class ScTpContentOptions : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xFormulaCB;
     std::unique_ptr<weld::CheckButton> m_xNilCB;
     std::unique_ptr<weld::CheckButton> m_xAnnotCB;
+    std::unique_ptr<weld::CheckButton> m_xFormulaMarkCB;
     std::unique_ptr<weld::CheckButton> m_xValueCB;
     std::unique_ptr<weld::CheckButton> m_xAnchorCB;
     std::unique_ptr<weld::CheckButton> m_xClipMarkCB;

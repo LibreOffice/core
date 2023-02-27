@@ -550,6 +550,7 @@ inline constexpr OUStringLiteral SC_UNO_SHOWFORM             = u"ShowFormulas";
 inline constexpr OUStringLiteral SC_UNO_SHOWGRID             = u"ShowGrid";
 inline constexpr OUStringLiteral SC_UNO_SHOWHELP             = u"ShowHelpLines";
 inline constexpr OUStringLiteral SC_UNO_SHOWNOTES            = u"ShowNotes";
+inline constexpr OUStringLiteral SC_UNO_SHOWFORMULASMARKS    = u"ShowFormulasMarks";
 inline constexpr OUStringLiteral SC_UNO_SHOWOBJ              = u"ShowObjects";
 inline constexpr OUStringLiteral SC_UNO_SHOWPAGEBR           = u"ShowPageBreaks";
 inline constexpr OUStringLiteral SC_UNO_SHOWZERO             = u"ShowZeroValues";

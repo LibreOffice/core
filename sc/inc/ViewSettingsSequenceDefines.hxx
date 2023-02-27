@@ -36,21 +36,22 @@
 #define SC_PAGE_BREAK_PREVIEW               7
 #define SC_SHOWZERO                         8
 #define SC_SHOWNOTES                        9
-#define SC_SHOWGRID                         10
-#define SC_GRIDCOLOR                        11
-#define SC_SHOWPAGEBR                       12
-#define SC_COLROWHDR                        13
-#define SC_SHEETTABS                        14
-#define SC_OUTLSYMB                         15
-#define SC_VALUE_HIGHLIGHTING               16
-#define SC_SNAPTORASTER                     17
-#define SC_RASTERVIS                        18
-#define SC_RASTERRESX                       19
-#define SC_RASTERRESY                       20
-#define SC_RASTERSUBX                       21
-#define SC_RASTERSUBY                       22
-#define SC_RASTERSYNC                       23
-#define SC_FORMULA_BAR_HEIGHT               24
+#define SC_SHOWFORMULASMARKS                10
+#define SC_SHOWGRID                         11
+#define SC_GRIDCOLOR                        12
+#define SC_SHOWPAGEBR                       13
+#define SC_COLROWHDR                        14
+#define SC_SHEETTABS                        15
+#define SC_OUTLSYMB                         16
+#define SC_VALUE_HIGHLIGHTING               17
+#define SC_SNAPTORASTER                     18
+#define SC_RASTERVIS                        19
+#define SC_RASTERRESX                       20
+#define SC_RASTERRESY                       21
+#define SC_RASTERSUBX                       22
+#define SC_RASTERSUBY                       23
+#define SC_RASTERSYNC                       24
+#define SC_FORMULA_BAR_HEIGHT               25
 
 // this are the defines for the position of the settings in the
 // TableViewSettingsSequence

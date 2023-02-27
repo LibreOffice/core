@@ -927,6 +927,9 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     if ( rOpts.GetOption( VOPT_NOTES ) )
         aOutputData.DrawNoteMarks(*pContentDev);
 
+    if ( rOpts.GetOption( VOPT_FORMULAS_MARKS ) )
+        aOutputData.DrawFormulaMarks(*pContentDev);
+
     if ( !bLogicText )
         aOutputData.DrawStrings();     // in pixel MapMode
 
