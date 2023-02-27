@@ -30,7 +30,7 @@ namespace oox::drawingml {
 namespace
 {
 
-std::unordered_map<sal_Int32, model::SystemColorType> constSystemColorMap =
+const std::unordered_map<sal_Int32, model::SystemColorType> constSystemColorMap =
 {
     { XML_scrollBar, model::SystemColorType::ScrollBar },
     { XML_background, model::SystemColorType::Background },
@@ -63,6 +63,39 @@ std::unordered_map<sal_Int32, model::SystemColorType> constSystemColorMap =
     { XML_menuHighlight, model::SystemColorType::MenuHighlight },
     { XML_menuBar, model::SystemColorType::MenuBar }
 };
+
+const std::unordered_map<sal_Int32, model::TransformationType> constTransformTypeMap =
+{
+    { XML_alpha, model::TransformationType::Alpha },
+    { XML_alphaMod, model::TransformationType::AlphaMod },
+    { XML_alphaOff, model::TransformationType::AlphaOff },
+    { XML_blue, model::TransformationType::Blue },
+    { XML_blueMod, model::TransformationType::BlueMod },
+    { XML_blueOff, model::TransformationType::BlueOff },
+    { XML_hue, model::TransformationType::Hue },
+    { XML_hueMod, model::TransformationType::HueMod},
+    { XML_hueOff, model::TransformationType::HueOff },
+    { XML_lum, model::TransformationType::Lum },
+    { XML_lumMod, model::TransformationType::LumMod },
+    { XML_lumOff, model::TransformationType::LumOff },
+    { XML_green, model::TransformationType::Green },
+    { XML_greenMod, model::TransformationType::GreenMod },
+    { XML_greenOff, model::TransformationType::GreenOff },
+    { XML_red, model::TransformationType::Red },
+    { XML_redMod, model::TransformationType::RedMod },
+    { XML_redOff, model::TransformationType::RedOff },
+    { XML_sat, model::TransformationType::Sat },
+    { XML_satMod, model::TransformationType::SatMod },
+    { XML_satOff, model::TransformationType::SatMod },
+    { XML_shade, model::TransformationType::Shade },
+    { XML_tint, model::TransformationType::Tint },
+    { XML_comp, model::TransformationType::Comp },
+    { XML_gamma, model::TransformationType::Gamma },
+    { XML_gray, model::TransformationType::Gray },
+    { XML_inv, model::TransformationType::Inv },
+    { XML_invGamma, model::TransformationType::InvGamma }
+};
+
 }
 
 ColorValueContext::ColorValueContext(ContextHandler2Helper const & rParent, Color& rColor, model::ColorDefinition* pColorDefinition)
@@ -168,6 +201,7 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
             mrColor.setPrstClr(nToken);
             if (mpColorDefinition)
             {
+                // TODO - just converted to RGB for now
                 ::Color nRgbValue = Color::getDmlPresetColor(nToken, API_RGB_TRANSPARENT);
                 mpColorDefinition->mnComponent1 = nRgbValue.GetRed();
                 mpColorDefinition->mnComponent2 = nRgbValue.GetGreen();
@@ -227,6 +261,26 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
             mrColor.addTransformation( nElement );
         break;
     }
+
+    if (mpColorDefinition)
+    {
+        auto aIterator = constTransformTypeMap.find(getBaseToken(nElement));
+        if (aIterator != constTransformTypeMap.end())
+        {
+            auto const& aPair = *aIterator;
+            model::TransformationType eType = aPair.second;
+
+            OUString aValueString = rAttribs.getStringDefaulted(XML_val);
+            sal_Int32 nValue = 0;
+            if (aValueString.endsWith("%"))
+                nValue = aValueString.toDouble() * PER_PERCENT;
+            else
+                nValue = rAttribs.getInteger(XML_val, 0);
+
+            mpColorDefinition->maTransformations.push_back({eType, sal_Int16(nValue / 10.0)});
+        }
+    }
+
     return nullptr;
 }
 
