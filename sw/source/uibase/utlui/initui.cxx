@@ -236,6 +236,8 @@ namespace
         STR_AUTH_FIELD_CUSTOM5,
         STR_AUTH_FIELD_ISBN,
         STR_AUTH_FIELD_LOCAL_URL,
+        STR_AUTH_FIELD_TARGET_URL,
+        STR_AUTH_FIELD_USE_TARGET_URL,
     };
 }
 

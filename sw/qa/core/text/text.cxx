@@ -12,7 +12,9 @@
 #include <memory>
 
 #include <com/sun/star/text/BibliographyDataType.hpp>
+#include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/XDocumentIndex.hpp>
 
 #include <vcl/gdimtf.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
@@ -132,6 +134,158 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport)
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     // Without the accompanying fix in place, this test would have failed, the field was not
     // clickable (while it was clickable on the UI).
+    CPPUNIT_ASSERT(pPdfPage->hasLinks());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport2)
+{
+    // Given a document with a bibliography entry field:
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xField(
+        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aFields = {
+        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue("Identifier", OUString("AT")),
+        comphelper::makePropertyValue("Author", OUString("Author")),
+        comphelper::makePropertyValue("Title", OUString("Title")),
+        comphelper::makePropertyValue("URL", OUString("#page=1")),
+    };
+    xField->setPropertyValue("Fields", uno::Any(aFields));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
+
+    // When exporting to PDF:
+    save("writer_pdf_Export");
+
+    // Then make sure the field links when the Target URL is set
+    //  (this test is important, isn't the same as the one above)
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage->hasLinks());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport3)
+{
+    // Given a document with a bibliography entry field:
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xField(
+        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aFields = {
+        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue("Identifier", OUString("AT")),
+        comphelper::makePropertyValue("Author", OUString("Author")),
+        comphelper::makePropertyValue("Title", OUString("Title")),
+        comphelper::makePropertyValue("TargetURL", OUString("#page=1")),
+    };
+    xField->setPropertyValue("Fields", uno::Any(aFields));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
+
+    // When exporting to PDF:
+    save("writer_pdf_Export");
+
+    // Then make sure there are no links since UseTargetURL is not set
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(!pPdfPage->hasLinks());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport4)
+{
+    // Given a document with a bibliography entry field:
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xField(
+        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aFields = {
+        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue("Identifier", OUString("AT")),
+        comphelper::makePropertyValue("Author", OUString("Author")),
+        comphelper::makePropertyValue("Title", OUString("Title")),
+        comphelper::makePropertyValue("TargetURL", OUString("#page=1")),
+        comphelper::makePropertyValue("UseTargetURL", OUString("true")),
+    };
+    xField->setPropertyValue("Fields", uno::Any(aFields));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
+
+    // When exporting to PDF:
+    save("writer_pdf_Export");
+
+    // Then make sure the field links when the Target URL is set
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage->hasLinks());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport5)
+{
+    // Given a document with a bibliography entry field:
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xField(
+        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aFields = {
+        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue("Identifier", OUString("AT")),
+        comphelper::makePropertyValue("Author", OUString("Author")),
+        comphelper::makePropertyValue("Title", OUString("Title")),
+        comphelper::makePropertyValue("UseTargetURL", OUString("true")),
+    };
+    xField->setPropertyValue("Fields", uno::Any(aFields));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
+    // Create a bibliography table.
+    uno::Reference<text::XTextContent> xTable(
+        xFactory->createInstance("com.sun.star.text.Bibliography"), uno::UNO_QUERY);
+    xCursor->gotoEnd(/*bExpand=*/false);
+    xText->insertControlCharacter(xCursor, text::ControlCharacter::APPEND_PARAGRAPH,
+                                  /*bAbsorb=*/false);
+    xText->insertTextContent(xCursor, xTable, /*bAbsorb=*/false);
+    // Update the table
+    uno::Reference<text::XDocumentIndex> xTableIndex(xTable, uno::UNO_QUERY);
+    xTableIndex->update();
+
+    // When exporting to PDF:
+    save("writer_pdf_Export");
+
+    // Then make sure the mark links to the table when table is present
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage->hasLinks());
 }
 

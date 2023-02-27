@@ -3631,7 +3631,12 @@ we check in the following sequence:
                 }
                 else
                 {
-                    INetURLObject aNewURL(rtl::Uri::convertRelToAbs(m_aContext.BaseURL, url));
+                    INetURLObject aNewURL(rtl::Uri::convertRelToAbs(
+                                                (m_aContext.BaseURL.getLength() > 0 ?
+                                                    m_aContext.BaseURL :
+                                                    //use dummy location if empty
+                                                    u"http://ahost.ax"),
+                                                url));
                     aTargetURL = aNewURL; //reassign the new target URL
 
                     //recompute the target protocol, with the new URL

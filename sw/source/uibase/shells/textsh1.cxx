@@ -1821,11 +1821,18 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if (pField && pField->GetTyp()->Which() == SwFieldIds::TableOfAuthorities)
             {
                 const auto& rAuthorityField = *static_cast<const SwAuthorityField*>(pField);
-                if (rAuthorityField.HasURL())
+                if (!rAuthorityField.UseTargetURL() && rAuthorityField.HasURL())
                 {
                     // Bibliography entry with URL also provides a hyperlink.
                     const OUString& rURL
                         = rAuthorityField.GetAuthEntry()->GetAuthorField(AUTH_FIELD_URL);
+                    ::LoadURL(rWrtSh, rURL, LoadUrlFlags::NewView, /*rTargetFrameName=*/OUString());
+                }
+                else if (rAuthorityField.UseTargetURL() && rAuthorityField.HasTargetURL())
+                {
+                    // Bibliography entry with URL also provides a hyperlink.
+                    const OUString& rURL
+                        = rAuthorityField.GetAuthEntry()->GetAuthorField(AUTH_FIELD_TARGET_URL);
                     ::LoadURL(rWrtSh, rURL, LoadUrlFlags::NewView, /*rTargetFrameName=*/OUString());
                 }
             }
@@ -2552,7 +2559,10 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 {
                     // Bibliography entry with URL also provides a hyperlink.
                     const auto& rAuthorityField = *static_cast<const SwAuthorityField*>(pField);
-                    bAuthorityFieldURL = rAuthorityField.HasURL();
+                    if (!rAuthorityField.UseTargetURL())
+                        bAuthorityFieldURL = rAuthorityField.HasURL();
+                    else
+                        bAuthorityFieldURL = rAuthorityField.HasTargetURL();
                 }
                 if (SfxItemState::SET > aSet.GetItemState(RES_TXTATR_INETFMT, false)
                     && !bAuthorityFieldURL)

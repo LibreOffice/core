@@ -3216,6 +3216,8 @@ page-content-top
 page-content-bottom
 margin-gutter
 local-url
+target-url
+use-target-url
 dir
 displaystyle
 infinity

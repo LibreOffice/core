@@ -1091,6 +1091,7 @@ class SwCreateAuthEntryDlg_Impl : public weld::GenericDialogController
     std::unique_ptr<weld::Button> m_xLocalBrowseButton;
     std::unique_ptr<weld::CheckButton> m_xLocalPageCB;
     std::unique_ptr<weld::SpinButton> m_xLocalPageSB;
+    std::unique_ptr<weld::CheckButton> m_xUseTargetURLCB;
 
     DECL_LINK(IdentifierHdl, weld::ComboBox&, void);
     DECL_LINK(ShortNameHdl, weld::Entry&, void);
@@ -1147,6 +1148,8 @@ const TextInfo aTextInfoArr[] =
     {AUTH_FIELD_ANNOTE,          HID_AUTH_FIELD_ANNOTE          },
     {AUTH_FIELD_NOTE,            HID_AUTH_FIELD_NOTE            },
     {AUTH_FIELD_URL,             HID_AUTH_FIELD_URL             },
+    {AUTH_FIELD_USE_TARGET_URL,  HID_AUTH_FIELD_USE_TARGET_URL  },
+    {AUTH_FIELD_TARGET_URL,      HID_AUTH_FIELD_TARGET_URL      },
     {AUTH_FIELD_LOCAL_URL,       HID_AUTH_FIELD_LOCAL_URL       },
     {AUTH_FIELD_CUSTOM1,         HID_AUTH_FIELD_CUSTOM1         },
     {AUTH_FIELD_CUSTOM2,         HID_AUTH_FIELD_CUSTOM2         },
@@ -1567,6 +1570,8 @@ namespace
         STR_AUTH_FIELD_CUSTOM5,
         STR_AUTH_FIELD_ISBN,
         STR_AUTH_FIELD_LOCAL_URL,
+        STR_AUTH_FIELD_TARGET_URL,
+        STR_AUTH_FIELD_USE_TARGET_URL,
     };
 }
 
@@ -1654,6 +1659,29 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
             m_xIdentifierBox->show();
             m_xIdentifierBox->set_help_id(aCurInfo.pHelpId);
             m_aFixedTexts.back()->set_mnemonic_widget(m_xIdentifierBox.get());
+        }
+        else if (AUTH_FIELD_USE_TARGET_URL == aCurInfo.nToxField)
+        {
+            m_pBoxes[nIndex] = m_aBuilders.back()->weld_box("togglebox");
+
+            if (bLeft)
+                m_aOrigContainers.back()->move(m_pBoxes[nIndex].get(), m_xLeft.get());
+            else
+                m_aOrigContainers.back()->move(m_pBoxes[nIndex].get(), m_xRight.get());
+
+            m_pBoxes[nIndex]->set_grid_left_attach(1);
+            m_pBoxes[nIndex]->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
+            m_pBoxes[nIndex]->set_hexpand(true);
+
+            m_xUseTargetURLCB = m_aBuilders.back()->weld_check_button("usetargeturlcb");
+            m_xUseTargetURLCB->set_active(m_bNewEntryMode
+                                          || pFields[aCurInfo.nToxField].toAsciiLowerCase() == "true");
+            m_xUseTargetURLCB->set_grid_left_attach(1);
+            m_xUseTargetURLCB->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
+            m_xUseTargetURLCB->set_hexpand(true);
+            m_xUseTargetURLCB->show();
+            m_xUseTargetURLCB->set_help_id(aCurInfo.pHelpId);
+            m_aFixedTexts.back()->set_mnemonic_widget(m_xUseTargetURLCB.get());
         }
         else
         {
@@ -1745,6 +1773,12 @@ OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) cons
     {
         assert(m_xIdentifierBox && "No ComboBox");
         return m_xIdentifierBox->get_active_text();
+    }
+
+    if (AUTH_FIELD_USE_TARGET_URL == eField)
+    {
+        assert(m_xUseTargetURLCB && "No UseTargetURL");
+        return (m_xUseTargetURLCB->get_active() ? OUString("true") : OUString("false"));
     }
 
     for(int nIndex = 0; nIndex < AUTH_FIELD_END; nIndex++)

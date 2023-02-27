@@ -199,8 +199,13 @@ public:
     OUString GetAuthority(const SwRootFrame *pLayout,
                           const SwForm *pTOX = nullptr) const;
 
+    bool UseTargetURL() const;
+
     bool HasURL() const;
     OUString GetAbsoluteURL() const;
+
+    bool HasTargetURL() const;
+    OUString GetAbsoluteTargetURL() const;
     /**
      * Returns full URI for the URL, relative if specified
      * \param   bRelative   whether the path should be relative (when dealing with local files)

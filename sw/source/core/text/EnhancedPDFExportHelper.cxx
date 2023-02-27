@@ -803,6 +803,13 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 bLanguage = true;
                 break;
 
+            case vcl::PDFWriter::BibEntry :
+                bTextDecorationType =
+                bBaselineShift =
+                bLinkAttribute =
+                bLanguage = true;
+                break;
+
             default:
                 break;
         }
@@ -2246,6 +2253,50 @@ void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()
         return;
     }
 
+    // Create PDF destinations for bibliography table entries
+    std::vector<std::tuple<const SwTOXBase*, const OUString*, sal_Int32>> vDestinations;
+    //  string is the row node text, sal_Int32 is number of the destination
+    // Note: This way of iterating doesn't seem to take into account TOXes
+    //          that are in a frame, probably in some other cases too
+    {
+        mrSh.GotoPage(1);
+        while (mrSh.GotoNextTOXBase())
+        {
+            const SwTOXBase* pIteratedTOX = nullptr;
+            while ((pIteratedTOX = mrSh.GetCurTOX()) != nullptr
+                   && pIteratedTOX->GetType() == TOX_AUTHORITIES)
+            {
+                if (const SwNode& rCurrentNode = mrSh.GetCursor()->GetPoint()->GetNode();
+                    rCurrentNode.GetNodeType() == SwNodeType::Text)
+                {
+                    if (mrSh.GetCursor()->GetPoint()->GetNode().FindSectionNode()->GetSection().GetType()
+                        == SectionType::ToxContent) // this checks it's not a heading
+                    {
+                        // Destination Rectangle
+                        const SwRect& rDestRect = mrSh.GetCharRect();
+
+                        const SwPageFrame* pCurrPage =
+                            static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
+
+                        // Destination PageNum
+                        const sal_Int32 nDestPageNum = CalcOutputPageNum( rDestRect );
+
+                        // Destination Export
+                        if ( -1 != nDestPageNum )
+                        {
+                            tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
+                            const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
+                            const OUString* vNodeText = &static_cast<const SwTextNode*>(&rCurrentNode)->GetText();
+                            vDestinations.emplace_back(pIteratedTOX, vNodeText, nDestId);
+                        }
+                    }
+                }
+                mrSh.MovePara(GoNextPara, fnParaStart);
+            }
+        }
+    }
+
+    // Generate links to matching entries in the bibliography tables
     std::vector<SwFormatField*> aFields;
     SwFieldType* pType = mrSh.GetFieldType(SwFieldIds::TableOfAuthorities, OUString());
     if (!pType)
@@ -2264,38 +2315,90 @@ void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()
 
         const auto& rAuthorityField
             = *static_cast<const SwAuthorityField*>(pFormatField->GetField());
-        if (!rAuthorityField.HasURL())
+
+        if ((!rAuthorityField.UseTargetURL() && rAuthorityField.HasURL())
+            || (rAuthorityField.UseTargetURL() && rAuthorityField.HasTargetURL()))
         {
-            continue;
-        }
+            // Since the conditions indicate usage of a URL link to it
+            const OUString& rURL = rAuthorityField.GetAuthEntry()->GetAuthorField(
+                rAuthorityField.UseTargetURL() ? AUTH_FIELD_TARGET_URL : AUTH_FIELD_URL);
 
-        const OUString& rURL = rAuthorityField.GetAuthEntry()->GetAuthorField(AUTH_FIELD_URL);
-        const SwTextNode& rTextNode = pFormatField->GetTextField()->GetTextNode();
-        if (!lcl_TryMoveToNonHiddenField(mrSh, rTextNode, *pFormatField))
-        {
-            continue;
-        }
-
-        OUString const content(rAuthorityField.ExpandField(true, mrSh.GetLayout()));
-
-        // Select the field.
-        mrSh.SwCursorShell::SetMark();
-        mrSh.SwCursorShell::Right(1, SwCursorSkipMode::Chars);
-
-        // Create the links.
-        for (const auto& rLinkRect : *mrSh.SwCursorShell::GetCursor_())
-        {
-            for (const auto& rLinkPageNum : CalcOutputPageNums(rLinkRect))
+            const SwTextNode& rTextNode = pFormatField->GetTextField()->GetTextNode();
+            if (!lcl_TryMoveToNonHiddenField(mrSh, rTextNode, *pFormatField))
             {
-                tools::Rectangle aRect(SwRectToPDFRect(pPageFrame, rLinkRect.SVRect()));
-                sal_Int32 nLinkId = pPDFExtOutDevData->CreateLink(aRect, content, rLinkPageNum);
-                IdMapEntry aLinkEntry(rLinkRect, nLinkId);
-                s_aLinkIdMap.push_back(aLinkEntry);
-                pPDFExtOutDevData->SetLinkURL(nLinkId, rURL);
+                continue;
             }
-        }
 
-        mrSh.SwCursorShell::ClearMark();
+            OUString const content(rAuthorityField.ExpandField(true, mrSh.GetLayout()));
+
+            // Select the field.
+            mrSh.SwCursorShell::SetMark();
+            mrSh.SwCursorShell::Right(1, SwCursorSkipMode::Chars);
+
+            // Create the links.
+            for (const auto& rLinkRect : *mrSh.SwCursorShell::GetCursor_())
+            {
+                for (const auto& rLinkPageNum : CalcOutputPageNums(rLinkRect))
+                {
+                    tools::Rectangle aRect(SwRectToPDFRect(pPageFrame, rLinkRect.SVRect()));
+                    sal_Int32 nLinkId = pPDFExtOutDevData->CreateLink(aRect, content, rLinkPageNum);
+                    IdMapEntry aLinkEntry(rLinkRect, nLinkId);
+                    s_aLinkIdMap.push_back(aLinkEntry);
+                    pPDFExtOutDevData->SetLinkURL(nLinkId, rURL);
+                }
+            }
+            mrSh.SwCursorShell::ClearMark();
+        }
+        else if (rAuthorityField.UseTargetURL())
+        {
+            // Since the bibliography mark doesn't have target URL, try linking to a bibliography table
+            sal_Int32 nDestId = -1;
+
+            std::unordered_map<const SwTOXBase*, OUString> vFormattedFieldStrings;
+            for (const auto& rDestinationTuple : vDestinations)
+            {
+                if (vFormattedFieldStrings.find(std::get<0>(rDestinationTuple))
+                    == vFormattedFieldStrings.end())
+                    vFormattedFieldStrings.emplace(std::get<0>(rDestinationTuple),
+                                                  rAuthorityField.GetAuthority(mrSh.GetLayout(),
+                                                                               &std::get<0>(rDestinationTuple)->GetTOXForm()));
+
+                if (vFormattedFieldStrings.at(std::get<0>(rDestinationTuple)) == *std::get<1>(rDestinationTuple))
+                {
+                    nDestId = std::get<2>(rDestinationTuple);
+                    break;
+                }
+            }
+
+            if (nDestId == -1)
+                continue;
+
+            const SwTextNode& rTextNode = pFormatField->GetTextField()->GetTextNode();
+            if (!lcl_TryMoveToNonHiddenField(mrSh, rTextNode, *pFormatField))
+            {
+                continue;
+            }
+
+            OUString const content(rAuthorityField.ExpandField(true, mrSh.GetLayout()));
+
+            // Select the field.
+            mrSh.SwCursorShell::SetMark();
+            mrSh.SwCursorShell::Right(1, SwCursorSkipMode::Chars);
+
+            // Create the links.
+            for (const auto& rLinkRect : *mrSh.SwCursorShell::GetCursor_())
+            {
+                for (const auto& rLinkPageNum : CalcOutputPageNums(rLinkRect))
+                {
+                    tools::Rectangle aRect(SwRectToPDFRect(pPageFrame, rLinkRect.SVRect()));
+                    sal_Int32 nLinkId = pPDFExtOutDevData->CreateLink(aRect, content, rLinkPageNum);
+                    IdMapEntry aLinkEntry(rLinkRect, nLinkId);
+                    s_aLinkIdMap.push_back(aLinkEntry);
+                    pPDFExtOutDevData->SetLinkDest(nLinkId, nDestId);
+                }
+            }
+            mrSh.SwCursorShell::ClearMark();
+        }
     }
 }
 

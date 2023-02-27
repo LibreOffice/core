@@ -2969,7 +2969,7 @@ void XMLBibliographyFieldImportContext::startFastElement(
             else
             {
                 OUString aStringValue = aIter.toString();
-                if (nToken == XML_URL || nToken == XML_LOCAL_URL)
+                if (nToken == XML_URL || nToken == XML_LOCAL_URL || nToken == XML_TARGET_URL)
                 {
                     aStringValue = GetImport().GetAbsoluteReference(aStringValue);
                 }
@@ -3112,6 +3112,12 @@ const char* XMLBibliographyFieldImportContext::MapBibliographyFieldName(
             break;
         case XML_LOCAL_URL:
             pName = "LocalURL";
+            break;
+        case XML_TARGET_URL:
+            pName = "TargetURL";
+            break;
+        case XML_USE_TARGET_URL:
+            pName = "UseTargetURL";
             break;
         default:
             assert(false && "Unknown bibliography info data");

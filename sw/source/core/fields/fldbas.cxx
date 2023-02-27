@@ -423,20 +423,14 @@ bool SwField::HasClickHdl() const
     case SwFieldIds::GetRef:
     case SwFieldIds::Macro:
     case SwFieldIds::Input:
-    case SwFieldIds::Dropdown :
+    case SwFieldIds::Dropdown:
+    case SwFieldIds::TableOfAuthorities:
         bRet = true;
         break;
 
     case SwFieldIds::SetExp:
         bRet = static_cast<const SwSetExpField*>(this)->GetInputFlag();
         break;
-
-    case SwFieldIds::TableOfAuthorities:
-    {
-        const auto pAuthorityField = static_cast<const SwAuthorityField*>(this);
-        bRet = pAuthorityField->HasURL();
-        break;
-    }
 
     default: break;
     }

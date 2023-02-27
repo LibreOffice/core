@@ -2708,7 +2708,7 @@ void XMLTextFieldExport::ProcessBibliographyData(
             if (!sStr.isEmpty())
             {
                 XMLTokenEnum eElement = MapBibliographyFieldName(rProp.Name);
-                if (eElement == XML_URL || eElement == XML_LOCAL_URL)
+                if (eElement == XML_URL || eElement == XML_LOCAL_URL || eElement == XML_TARGET_URL)
                 {
                     sStr = GetExport().GetRelativeReference(sStr);
                 }
@@ -3413,6 +3413,14 @@ enum XMLTokenEnum XMLTextFieldExport::MapBibliographyFieldName(std::u16string_vi
     else if (sName == u"LocalURL")
     {
         eName = XML_LOCAL_URL;
+    }
+    else if (sName == u"TargetURL")
+    {
+        eName = XML_TARGET_URL;
+    }
+    else if (sName == u"UseTargetURL")
+    {
+        eName = XML_USE_TARGET_URL;
     }
     else
     {

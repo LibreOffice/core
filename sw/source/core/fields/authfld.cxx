@@ -634,6 +634,12 @@ OUString SwAuthorityField::GetAuthority(const SwRootFrame* pLayout, const SwForm
     return aText;
 }
 
+bool SwAuthorityField::UseTargetURL() const
+{
+    const OUString& rValue = GetAuthEntry()->GetAuthorField(AUTH_FIELD_USE_TARGET_URL);
+    return rValue.toAsciiLowerCase() == "true";
+}
+
 bool SwAuthorityField::HasURL() const
 {
     const OUString& rURL = GetAuthEntry()->GetAuthorField(AUTH_FIELD_URL);
@@ -643,6 +649,22 @@ bool SwAuthorityField::HasURL() const
 OUString SwAuthorityField::GetAbsoluteURL() const
 {
     const OUString& rURL = GetAuthEntry()->GetAuthorField(AUTH_FIELD_URL);
+    SwDoc* pDoc = static_cast<SwAuthorityFieldType*>(GetTyp())->GetDoc();
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    OUString aBasePath = pDocShell->getDocumentBaseURL();
+    return INetURLObject::GetAbsURL(aBasePath, rURL, INetURLObject::EncodeMechanism::WasEncoded,
+                                    INetURLObject::DecodeMechanism::WithCharset);
+}
+
+bool SwAuthorityField::HasTargetURL() const
+{
+    const OUString& rURL = GetAuthEntry()->GetAuthorField(AUTH_FIELD_TARGET_URL);
+    return !rURL.isEmpty();
+}
+
+OUString SwAuthorityField::GetAbsoluteTargetURL() const
+{
+    const OUString& rURL = GetAuthEntry()->GetAuthorField(AUTH_FIELD_TARGET_URL);
     SwDoc* pDoc = static_cast<SwAuthorityFieldType*>(GetTyp())->GetDoc();
     SwDocShell* pDocShell = pDoc->GetDocShell();
     OUString aBasePath = pDocShell->getDocumentBaseURL();
@@ -751,7 +773,9 @@ const char* const aFieldNames[] =
     "Custom4",
     "Custom5",
     "ISBN",
-    "LocalURL"
+    "LocalURL",
+    "TargetURL",
+    "UseTargetURL"
 };
 
 void SwAuthEntry::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -808,8 +832,8 @@ bool    SwAuthorityField::PutValue( const Any& rAny, sal_uInt16 /*nWhichId*/ )
     if(!(rAny >>= aParam))
         return false;
 
-    OUStringBuffer sBuf(+AUTH_FIELD_LOCAL_URL);
-    comphelper::string::padToLength(sBuf, AUTH_FIELD_LOCAL_URL, TOX_STYLE_DELIMITER);
+    OUStringBuffer sBuf(+(AUTH_FIELD_END - 1));
+    comphelper::string::padToLength(sBuf, (AUTH_FIELD_END - 1), TOX_STYLE_DELIMITER);
     OUString sToSet(sBuf.makeStringAndClear());
     for(const PropertyValue& rParam : std::as_const(aParam))
     {

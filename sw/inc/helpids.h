@@ -76,6 +76,8 @@ inline constexpr OStringLiteral HID_EDIT_FORMULA = "SW_HID_EDIT_FORMULA";
 #define HID_AUTH_FIELD_CUSTOM5                                  "SW_HID_AUTH_FIELD_CUSTOM5"
 #define HID_AUTH_FIELD_ISBN                                     "SW_HID_AUTH_FIELD_ISBN"
 #define HID_AUTH_FIELD_LOCAL_URL                                "SW_HID_AUTH_FIELD_LOCAL_URL"
+#define HID_AUTH_FIELD_TARGET_URL                               "SW_HID_AUTH_FIELD_TARGET_URL"
+#define HID_AUTH_FIELD_USE_TARGET_URL                           "SW_HID_AUTH_FIELD_USE_TARGET_URL"
 
 inline constexpr OStringLiteral HID_BUSINESS_FMT_PAGE = "SW_HID_BUSINESS_FMT_PAGE";
 inline constexpr OStringLiteral HID_BUSINESS_FMT_PAGE_CONT = "SW_HID_BUSINESS_FMT_PAGE_CONT";
