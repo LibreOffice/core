@@ -68,9 +68,9 @@ SdrGlobalData::SdrGlobalData()
     }
 }
 
-const LocaleDataWrapper*    SdrGlobalData::GetLocaleData()
+const LocaleDataWrapper& SdrGlobalData::GetLocaleData()
 {
-    return &GetSysLocale()->GetLocaleData();
+    return GetSysLocale().GetLocaleData();
 }
 
 namespace {

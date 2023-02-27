@@ -1418,12 +1418,12 @@ private:
         // Collect some frequently used data.
         if (mpOptions->IsDate())
         {
-            aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData()->getDate( Date( Date::SYSTEM ) );
+            aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData().getDate( Date( Date::SYSTEM ) );
             aInfo.msTimeDate += " ";
         }
 
         if (mpOptions->IsTime())
-            aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData()->getTime( ::tools::Time( ::tools::Time::SYSTEM ), false );
+            aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData().getTime( ::tools::Time( ::tools::Time::SYSTEM ), false );
 
         // Draw and Notes should usually use specified paper size when printing
         if (!mpOptions->IsPrinterPreferred(mrBase.GetDocShell()->GetDocumentType()))
