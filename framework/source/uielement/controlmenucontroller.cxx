@@ -302,8 +302,10 @@ void SAL_CALL ControlMenuController::updatePopupMenu()
         Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
         if ( xDispatch.is() )
         {
+            aLock.unlock(); // the addStatusListener will call back into ::statusChanged
             xDispatch->addStatusListener( static_cast< XStatusListener* >(this), aTargetURL );
             xDispatch->removeStatusListener( static_cast< XStatusListener* >(this), aTargetURL );
+            aLock.lock();
             m_aURLToDispatchMap.emplace( aTargetURL.Complete, xDispatch );
         }
     }
