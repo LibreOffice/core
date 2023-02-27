@@ -2085,6 +2085,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107975)
         TransferableDataHelper aHelper(xTransfer);
         SwTransferable::Paste(*pWrtShell, aHelper);
     }
+    // the following line makes the test more reliable, no idea why
+    Scheduler::ProcessEventsToIdle();
 
     // without the fix, it crashes
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
