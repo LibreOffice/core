@@ -91,7 +91,7 @@ public:
     void testChartAreaStyleBackgroundXLSX();
     void testChartHatchFillXLSX();
     void testAxisTextRotationXLSX();
-    // void testTextCanOverlapXLSX(); // TODO : temporarily disabled.
+    void testTextCanOverlapXLSX();
     void testTextBreakXLSX();
     void testNumberFormatsXLSX();
     void testNumberFormatsDOCX();
@@ -187,7 +187,7 @@ public:
     CPPUNIT_TEST(testChartAreaStyleBackgroundXLSX);
     CPPUNIT_TEST(testChartHatchFillXLSX);
     CPPUNIT_TEST(testAxisTextRotationXLSX);
-    // CPPUNIT_TEST(testTextCanOverlapXLSX); // TODO : temporarily disabled.
+    CPPUNIT_TEST(testTextCanOverlapXLSX);
     CPPUNIT_TEST(testTextBreakXLSX);
     CPPUNIT_TEST(testNumberFormatsXLSX);
     CPPUNIT_TEST(testNumberFormatsDOCX);
@@ -1204,11 +1204,10 @@ void Chart2ImportTest::testAxisTextRotationXLSX()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(90, nRotation, 1e-10);
 }
 
-/* TODO : temporarily disabled.
 void Chart2ImportTest::testTextCanOverlapXLSX()
 {
     // fdo#84647 : To check textoverlap value is imported correctly.
-    load("/chart2/qa/extras/data/xlsx/", "chart-text-can-overlap.xlsx");
+    loadFromURL(u"xlsx/chart-text-can-overlap.xlsx");
     uno::Reference< chart::XDiagram > mxDiagram;
     uno::Reference< beans::XPropertySet > xAxisProp;
     bool bTextCanOverlap = false;
@@ -1219,10 +1218,8 @@ void Chart2ImportTest::testTextCanOverlapXLSX()
     CPPUNIT_ASSERT(xAxisXSupp.is());
     xAxisProp = xAxisXSupp->getXAxis();
     xAxisProp->getPropertyValue("TextCanOverlap") >>= bTextCanOverlap;
-    // Expected value of 'TextCanOverlap' is true
-    CPPUNIT_ASSERT(bTextCanOverlap);
+    CPPUNIT_ASSERT(!bTextCanOverlap);
 }
-*/
 
 void Chart2ImportTest::testTextBreakXLSX()
 {
