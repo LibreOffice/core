@@ -435,7 +435,16 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
     // TODO remove this fallback for RTF
     bool isDOC = pIDSA->get(DocumentSettingId::ADD_FLY_OFFSETS);
     bool isDOCX = pIDSA->get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS);
-    if (!isDOC && !isDOCX && !pSet)
+    // tdf#146168 this hack should now only apply to RTF. Any other format (i.e. ODT) should only
+    // follow this fallback hack if it was created from RTF after its current implementation in 7.2.
+    // This can be approximated by 128197's new 6.4.7 compat for RTF MsWordCompMinLineHeightByFly
+    // Anything older than this which has APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING
+    // did not experience this hack, so it shouldn't apply to ODTs created from older RTFs either.
+    // In short: we don't want this hack to apply unless absolutely necessary for RTF.
+    const bool isOnlyRTF
+        = !isDOC && !isDOCX && pIDSA->get(DocumentSettingId::MS_WORD_COMP_MIN_LINE_HEIGHT_BY_FLY);
+
+    if (isOnlyRTF && !pSet)
     {
         TextFrameIndex const nTextLen(rInf.GetTextFrame()->GetText().getLength());
         SwTextNode const* pNode(nullptr);
