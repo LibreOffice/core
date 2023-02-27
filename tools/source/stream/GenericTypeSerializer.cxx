@@ -130,6 +130,18 @@ void GenericTypeSerializer::readSize(Size& rSize)
 
     rSize.setWidth(nWidth);
     rSize.setHeight(nHeight);
+
+    // sanitize negative size dimensions
+    if (rSize.Width() < 0)
+    {
+        SAL_WARN("tools", "negative width");
+        rSize.setWidth(0);
+    }
+    if (rSize.Height() < 0)
+    {
+        SAL_WARN("tools", "negative height");
+        rSize.setHeight(0);
+    }
 }
 
 void GenericTypeSerializer::writeSize(const Size& rSize)
