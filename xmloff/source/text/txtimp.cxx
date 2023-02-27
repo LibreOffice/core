@@ -1084,12 +1084,21 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         OUString sListId;
         sal_Int16 nStartValue(-1);
         bool bNumberingIsNumber(true);
+        // Assure that list style of automatic paragraph style is applied at paragraph. (#i101349#)
+        bool bApplyNumRules(pStyle && pStyle->IsListStyleSet());
 
         if (pListBlock) {
+            // the xNumRules is always created, even without a list-style-name
+            if (pListBlock->HasListStyleName()
+                || (pListItem != nullptr && pListItem->HasNumRulesOverride()))
+            {
+                bApplyNumRules = true; // tdf#114287
+            }
 
             if (!pListItem) {
                 bNumberingIsNumber = false; // list-header
             }
+
             // consider text:style-override property of <text:list-item>
             xNewNumRules.set(
                 (pListItem != nullptr && pListItem->HasNumRulesOverride())
@@ -1116,8 +1125,6 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
 
         if (pListBlock || pNumberedParagraph)
         {
-            // Assure that list style of automatic paragraph style is applied at paragraph. (#i101349#)
-            bool bApplyNumRules = pStyle && pStyle->IsListStyleSet();
             if ( !bApplyNumRules )
             {
                 bool bSameNumRules = xNewNumRules == xNumRules;

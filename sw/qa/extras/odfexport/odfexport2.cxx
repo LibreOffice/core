@@ -818,6 +818,51 @@ CPPUNIT_TEST_FIXTURE(Test, tdf120972)
         "char", cDecimal);
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf114287, "tdf114287.odt")
+{
+    uno::Reference<container::XIndexAccess> const xLevels1(
+        getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(2), "NumberingRules"));
+    uno::Reference<container::XNamed> const xNum1(xLevels1, uno::UNO_QUERY);
+    ::comphelper::SequenceAsHashMap props1(xLevels1->getByIndex(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-700), props1["FirstLineIndent"].get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1330), props1["IndentAt"].get<sal_Int32>());
+
+    // 1: automatic style applies list-style-name and margin-left
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1000), getProperty<sal_Int32>(getParagraph(2), "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5001), getProperty<sal_Int32>(getParagraph(2), "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(2), "ParaRightMargin"));
+
+    // list is continued
+    uno::Reference<container::XNamed> const xNum2(
+        getProperty<uno::Reference<container::XNamed>>(getParagraph(9), "NumberingRules"));
+    CPPUNIT_ASSERT_EQUAL(xNum1->getName(), xNum2->getName());
+
+    // 2: style applies list-style-name and margin-left, list applies list-style-name
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1000), getProperty<sal_Int32>(getParagraph(9), "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5001), getProperty<sal_Int32>(getParagraph(9), "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(9), "ParaRightMargin"));
+
+    // list is continued
+    uno::Reference<container::XNamed> const xNum3(
+        getProperty<uno::Reference<container::XNamed>>(getParagraph(16), "NumberingRules"));
+    CPPUNIT_ASSERT_EQUAL(xNum1->getName(), xNum3->getName());
+
+    // 3: style applies margin-left, automatic style applies list-style-name
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1000), getProperty<sal_Int32>(getParagraph(16), "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5001), getProperty<sal_Int32>(getParagraph(16), "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(16), "ParaRightMargin"));
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/prtBounds", "left", "2268");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/prtBounds", "right", "11339");
+    // the problem was that the list style name of the list must override the
+    // paragraph style even though it's the same list style
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds", "left", "357");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds", "right", "11339");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/infos/prtBounds", "left", "357");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/infos/prtBounds", "right", "11339");
+}
+
 DECLARE_ODFEXPORT_TEST(testSectionColumnSeparator, "section-columns-separator.fodt")
 {
     // tdf#150235: due to wrong types used in column export, 'style:height' and 'style:style'
