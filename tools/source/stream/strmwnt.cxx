@@ -36,16 +36,6 @@
 #include <osl/file.hxx>
 using namespace osl;
 
-class StreamData
-{
-public:
-    HANDLE      hFile;
-
-                StreamData() : hFile(nullptr)
-                {
-                }
-};
-
 static ErrCode GetSvError( DWORD nWntError )
 {
     static struct { DWORD wnt; ErrCode sv; } errArr[] =
@@ -107,7 +97,6 @@ SvFileStream::SvFileStream( const OUString& rFileName, StreamMode nMode )
     bIsOpen             = false;
     nLockCounter        = 0;
     m_isWritable        = false;
-    pInstanceData.reset( new StreamData );
 
     SetBufferSize( 8192 );
     // convert URL to SystemPath, if necessary
@@ -123,7 +112,6 @@ SvFileStream::SvFileStream()
     bIsOpen             = false;
     nLockCounter        = 0;
     m_isWritable        = false;
-    pInstanceData.reset( new StreamData );
 
     SetBufferSize( 8192 );
 }
@@ -139,7 +127,7 @@ std::size_t SvFileStream::GetData( void* pData, std::size_t nSize )
     DWORD nCount = 0;
     if( IsOpen() )
     {
-        bool bResult = ReadFile(pInstanceData->hFile,pData,nSize,&nCount,nullptr);
+        bool bResult = ReadFile(mxFileHandle,pData,nSize,&nCount,nullptr);
         if( !bResult )
         {
             std::size_t nTestError = GetLastError();
@@ -154,7 +142,7 @@ std::size_t SvFileStream::PutData( const void* pData, std::size_t nSize )
     DWORD nCount = 0;
     if( IsOpen() )
     {
-        if(!WriteFile(pInstanceData->hFile,pData,nSize,&nCount,nullptr))
+        if(!WriteFile(mxFileHandle,pData,nSize,&nCount,nullptr))
             SetError(::GetSvError( GetLastError() ) );
     }
     return nCount;
@@ -169,9 +157,9 @@ sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
     {
         if( nPos != STREAM_SEEK_TO_END )
             // 64-Bit files are not supported
-            nNewPos=SetFilePointer(pInstanceData->hFile,nPos,nullptr,FILE_BEGIN);
+            nNewPos=SetFilePointer(mxFileHandle,nPos,nullptr,FILE_BEGIN);
         else
-            nNewPos=SetFilePointer(pInstanceData->hFile,0L,nullptr,FILE_END);
+            nNewPos=SetFilePointer(mxFileHandle,0L,nullptr,FILE_END);
 
         if( nNewPos == 0xFFFFFFFF )
         {
@@ -188,7 +176,7 @@ void SvFileStream::FlushData()
 {
     if( IsOpen() )
     {
-        if( !FlushFileBuffers(pInstanceData->hFile) )
+        if( !FlushFileBuffers(mxFileHandle) )
             SetError(::GetSvError(GetLastError()));
     }
 }
@@ -200,7 +188,7 @@ bool SvFileStream::LockFile()
     {
         if( IsOpen() )
         {
-            bRetVal = ::LockFile(pInstanceData->hFile,0L,0L,LONG_MAX,0L );
+            bRetVal = ::LockFile(mxFileHandle,0L,0L,LONG_MAX,0L );
             if( bRetVal )
             {
                 nLockCounter = 1;
@@ -225,7 +213,7 @@ void SvFileStream::UnlockFile()
         {
             if( IsOpen() )
             {
-                if( ::UnlockFile(pInstanceData->hFile,0L,0L,LONG_MAX,0L ) )
+                if( ::UnlockFile(mxFileHandle,0L,0L,LONG_MAX,0L ) )
                 {
                     nLockCounter = 0;
                 }
@@ -307,7 +295,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
     if ( nMode & StreamMode::DELETE_ON_CLOSE )
         nAttributes |= FILE_FLAG_DELETE_ON_CLOSE;
 
-    pInstanceData->hFile = CreateFileW(
+    mxFileHandle = CreateFileW(
         o3tl::toW(aFilename.getStr()),
         nAccessMode,
         nShareMode,
@@ -317,7 +305,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
         nullptr
     );
 
-    if(  pInstanceData->hFile!=INVALID_HANDLE_VALUE && (
+    if(  mxFileHandle!=INVALID_HANDLE_VALUE && (
         // Did Create Always overwrite a file?
         GetLastError() == ERROR_ALREADY_EXISTS ||
         // Did Create Always open a new file?
@@ -329,7 +317,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
     }
 
     // Otherwise, determine if we're allowed to read
-    if( (pInstanceData->hFile==INVALID_HANDLE_VALUE) &&
+    if( (mxFileHandle==INVALID_HANDLE_VALUE) &&
          (nAccessMode & GENERIC_WRITE))
     {
         ErrCode nErr = ::GetSvError( GetLastError() );
@@ -341,7 +329,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
             // if Openaction is CREATE_ALWAYS
             nOpenAction = OPEN_EXISTING;
             SetLastError( ERROR_SUCCESS );
-            pInstanceData->hFile = CreateFileW(
+            mxFileHandle = CreateFileW(
                 o3tl::toW(aFilename.getStr()),
                 GENERIC_READ,
                 nShareMode,
@@ -380,7 +368,7 @@ void SvFileStream::Close()
             UnlockFile();
         }
         FlushBuffer();
-        CloseHandle( pInstanceData->hFile );
+        CloseHandle( mxFileHandle );
     }
     bIsOpen     = false;
     nLockCounter= 0;
@@ -401,7 +389,7 @@ void SvFileStream::SetSize(sal_uInt64 const nSize)
     if( IsOpen() )
     {
         bool bError = false;
-        HANDLE hFile = pInstanceData->hFile;
+        HANDLE hFile = mxFileHandle;
         DWORD const nOld = SetFilePointer( hFile, 0L, nullptr, FILE_CURRENT );
         if( nOld != 0xffffffff )
         {

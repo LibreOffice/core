@@ -92,16 +92,6 @@ void unlockFile( SvFileStream const * pStream )
 
 }
 
-// StreamData ------------------------------------------------------------------
-
-class StreamData
-{
-public:
-    oslFileHandle rHandle;
-
-    StreamData() : rHandle( nullptr ) { }
-};
-
 static ErrCode GetSvError( int nErrno )
 {
     static struct { int nErr; ErrCode sv; } const errArr[] =
@@ -198,7 +188,6 @@ SvFileStream::SvFileStream( const OUString& rFileName, StreamMode nOpenMode )
 {
     bIsOpen             = false;
     m_isWritable        = false;
-    pInstanceData.reset(new StreamData);
 
     SetBufferSize( 1024 );
     // convert URL to SystemPath, if necessary
@@ -215,7 +204,6 @@ SvFileStream::SvFileStream()
 {
     bIsOpen             = false;
     m_isWritable        = false;
-    pInstanceData.reset(new StreamData);
     SetBufferSize( 1024 );
 }
 
@@ -231,7 +219,7 @@ std::size_t SvFileStream::GetData( void* pData, std::size_t nSize )
     sal_uInt64 nRead = 0;
     if ( IsOpen() )
     {
-        oslFileError rc = osl_readFile(pInstanceData->rHandle,pData,static_cast<sal_uInt64>(nSize),&nRead);
+        oslFileError rc = osl_readFile(mxFileHandle,pData,static_cast<sal_uInt64>(nSize),&nRead);
         if ( rc != osl_File_E_None )
         {
             SetError( ::GetSvError( rc ));
@@ -248,7 +236,7 @@ std::size_t SvFileStream::PutData( const void* pData, std::size_t nSize )
     sal_uInt64 nWrite = 0;
     if ( IsOpen() )
     {
-        oslFileError rc = osl_writeFile(pInstanceData->rHandle,pData,static_cast<sal_uInt64>(nSize),&nWrite);
+        oslFileError rc = osl_writeFile(mxFileHandle,pData,static_cast<sal_uInt64>(nSize),&nWrite);
         if ( rc != osl_File_E_None )
         {
             SetError( ::GetSvError( rc ) );
@@ -269,9 +257,9 @@ sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
         oslFileError rc;
         sal_uInt64 nNewPos;
         if ( nPos != STREAM_SEEK_TO_END )
-            rc = osl_setFilePos( pInstanceData->rHandle, osl_Pos_Absolut, nPos );
+            rc = osl_setFilePos( mxFileHandle, osl_Pos_Absolut, nPos );
         else
-            rc = osl_setFilePos( pInstanceData->rHandle, osl_Pos_End, 0 );
+            rc = osl_setFilePos( mxFileHandle, osl_Pos_End, 0 );
 
         if ( rc != osl_File_E_None )
         {
@@ -280,7 +268,7 @@ sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
         }
         if ( nPos != STREAM_SEEK_TO_END )
             return nPos;
-        osl_getFilePos( pInstanceData->rHandle, &nNewPos );
+        osl_getFilePos( mxFileHandle, &nNewPos );
         return nNewPos;
     }
     SetError( SVSTREAM_GENERALERROR );
@@ -289,7 +277,7 @@ sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
 
 void SvFileStream::FlushData()
 {
-    auto rc = osl_syncFile(pInstanceData->rHandle);
+    auto rc = osl_syncFile(mxFileHandle);
     if (rc != osl_File_E_None)
         SetError( ::GetSvError( rc ));
  }
@@ -440,7 +428,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nOpenMode )
     }
     if ( rc == osl_File_E_None )
     {
-        pInstanceData->rHandle = nHandleTmp;
+        mxFileHandle = nHandleTmp;
         bIsOpen = true;
         if ( uFlags & osl_File_OpenFlag_Write )
             m_isWritable = true;
@@ -450,7 +438,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nOpenMode )
             osl_closeFile( nHandleTmp );
             bIsOpen = false;
             m_isWritable = false;
-            pInstanceData->rHandle = nullptr;
+            mxFileHandle = nullptr;
         }
     }
     else
@@ -465,8 +453,8 @@ void SvFileStream::Close()
     {
         SAL_INFO("tools", "Closing " << aFilename);
         FlushBuffer();
-        osl_closeFile( pInstanceData->rHandle );
-        pInstanceData->rHandle = nullptr;
+        osl_closeFile( mxFileHandle );
+        mxFileHandle = nullptr;
     }
 
     bIsOpen     = false;
@@ -485,7 +473,7 @@ void SvFileStream::SetSize (sal_uInt64 const nSize)
 {
     if (IsOpen())
     {
-        oslFileError rc = osl_setFileSize( pInstanceData->rHandle, nSize );
+        oslFileError rc = osl_setFileSize( mxFileHandle, nSize );
         if (rc != osl_File_E_None )
         {
             SetError ( ::GetSvError( rc ));

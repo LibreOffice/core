@@ -587,12 +587,11 @@ TOOLS_DLLPUBLIC bool isEmptyFileUrl(const OUString& rUrl);
 class TOOLS_DLLPUBLIC SvFileStream final : public SvStream
 {
 private:
-    std::unique_ptr<StreamData>
-                    pInstanceData;
-    OUString        aFilename;
+    void*           mxFileHandle = nullptr; // on windows, it is a a HANDLE, otherwise, it is a oslFileHandle
 #if defined(_WIN32)
     sal_uInt16      nLockCounter;
 #endif
+    OUString        aFilename;
     bool            bIsOpen;
 
     SvFileStream (const SvFileStream&) = delete;
