@@ -587,7 +587,7 @@ TOOLS_DLLPUBLIC bool isEmptyFileUrl(const OUString& rUrl);
 class TOOLS_DLLPUBLIC SvFileStream final : public SvStream
 {
 private:
-    void*           mxFileHandle = nullptr; // on windows, it is a a HANDLE, otherwise, it is a oslFileHandle
+    void*           mxFileHandle = nullptr; // on windows, it is a HANDLE, otherwise, it is a oslFileHandle
 #if defined(_WIN32)
     sal_uInt16      nLockCounter;
 #endif
