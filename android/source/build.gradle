@@ -5,6 +5,9 @@ apply from: 'liboSettings.gradle'
 allprojects {
     repositories {
         mavenCentral()
+        maven {
+            url "https://ipv6.repo1.maven.org/maven2"
+        }
         google()
     }
 }
@@ -12,6 +15,9 @@ allprojects {
 buildscript {
     repositories {
         mavenCentral()
+        maven {
+            url "https://ipv6.repo1.maven.org/maven2"
+        }
         google()
     }
     dependencies {
