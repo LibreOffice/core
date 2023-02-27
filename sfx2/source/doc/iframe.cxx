@@ -46,6 +46,11 @@
 #include <vcl/window.hxx>
 #include <tools/debug.hxx>
 #include <macroloader.hxx>
+#include <officecfg/Office/Common.hxx>
+
+#include <unicode/errorcode.h>
+#include <unicode/regex.h>
+#include <unicode/unistr.h>
 
 using namespace ::com::sun::star;
 
@@ -155,6 +160,31 @@ IFrameObject::IFrameObject(const uno::Reference < uno::XComponentContext >& rxCo
         aArguments[0] >>= mxObj;
 }
 
+bool lcl_isScriptURLAllowed(const OUString& aScriptURL)
+{
+    boost::optional<css::uno::Sequence<OUString>> allowedEvents(
+        officecfg::Office::Common::Security::Scripting::AllowedDocumentEventURLs::get());
+    // When AllowedDocumentEventURLs is empty, all event URLs are allowed
+    if (!allowedEvents)
+        return true;
+
+    icu::ErrorCode status;
+    const uint32_t rMatcherFlags = UREGEX_CASE_INSENSITIVE;
+    icu::UnicodeString usInput(aScriptURL.getStr());
+    const css::uno::Sequence<OUString>& rAllowedEvents = *allowedEvents;
+    for (auto const& allowedEvent : rAllowedEvents)
+    {
+        icu::UnicodeString usRegex(allowedEvent.getStr());
+        icu::RegexMatcher rmatch1(usRegex, usInput, rMatcherFlags, status);
+        if (aScriptURL.startsWith(allowedEvent) || rmatch1.matches(status))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 sal_Bool SAL_CALL IFrameObject::load(
     const uno::Sequence < css::beans::PropertyValue >& /*lDescriptor*/,
     const uno::Reference < frame::XFrame >& xFrame )
@@ -173,6 +203,9 @@ sal_Bool SAL_CALL IFrameObject::load(
             if (pDoc && !pDoc->AdjustMacroMode())
                 return false;
         }
+
+        if (!lcl_isScriptURLAllowed(aTargetURL.Complete))
+            return false;
 
         DBG_ASSERT( !mxFrame.is(), "Frame already existing!" );
         VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
