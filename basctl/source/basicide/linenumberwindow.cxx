@@ -79,7 +79,13 @@ void LineNumberWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Re
     sal_Int64 y = (nStartLine - 1) * static_cast<sal_Int64>(nLineHeight);
     rRenderContext.SetTextColor(m_FontColor);
     for (sal_uInt32 n = nStartLine; n <= nEndLine; ++n, y += nLineHeight)
-        rRenderContext.DrawText(Point(0, y - m_nCurYOffset), OUString::number(n));
+    {
+        const OUString aLineNumber = OUString::number(n);
+        // tdf#153798 - align line numbers to the right
+        rRenderContext.DrawText(
+            Point(m_nWidth - GetTextWidth(aLineNumber) - m_nBaseWidth / 2, y - m_nCurYOffset),
+            aLineNumber);
+    }
 
     // Resize the parent after calculating the new width and height values
     GetParent()->Resize();
