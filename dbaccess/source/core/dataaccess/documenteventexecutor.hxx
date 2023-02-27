@@ -23,15 +23,13 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 
 #include <cppuhelper/implbase.hxx>
-
-#include <memory>
+#include <cppuhelper/weakref.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::util { class XURLTransformer; }
 
 namespace dbaccess
 {
-
-    struct DocumentEventExecutor_Data;
     // DocumentEventExecutor
     typedef ::cppu::WeakImplHelper <   css::document::XDocumentEventListener
                                     >   DocumentEventExecutor_Base;
@@ -51,7 +49,8 @@ namespace dbaccess
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     private:
-        std::unique_ptr< DocumentEventExecutor_Data >   m_pData;
+        css::uno::WeakReference< css::document::XEventsSupplier > mxDocument;
+        css::uno::Reference< css::util::XURLTransformer > mxURLTransformer;
     };
 
 } // namespace dbaccess

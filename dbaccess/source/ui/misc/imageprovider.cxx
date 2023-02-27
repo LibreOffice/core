@@ -43,26 +43,16 @@ namespace dbaui
     namespace GraphicColorMode = css::graphic::GraphicColorMode;
     namespace DatabaseObject = css::sdb::application::DatabaseObject;
 
-    // ImageProvider_Data
-    struct ImageProvider_Data
-    {
-        /// the connection we work with
-        Reference< XConnection >        xConnection;
-        /// the views of the connection, if the DB supports views
-        Reference< XNameAccess >        xViews;
-        /// interface for providing table's UI
-        Reference< XTableUIProvider >   xTableUI;
-    };
-
     namespace
     {
-        void lcl_getConnectionProvidedTableIcon_nothrow(  const ImageProvider_Data& _rData,
+        void lcl_getConnectionProvidedTableIcon_nothrow(
+            const css::uno::Reference< css::sdb::application::XTableUIProvider >& _xTableUI,
             const OUString& _rName, Reference< XGraphic >& _out_rxGraphic )
         {
             try
             {
-                if ( _rData.xTableUI.is() )
-                    _out_rxGraphic = _rData.xTableUI->getTableIcon( _rName, GraphicColorMode::NORMAL );
+                if ( _xTableUI.is() )
+                    _out_rxGraphic = _xTableUI->getTableIcon( _rName, GraphicColorMode::NORMAL );
             }
             catch( const Exception& )
             {
@@ -70,13 +60,15 @@ namespace dbaui
             }
         }
 
-        void lcl_getTableImageResourceID_nothrow( const ImageProvider_Data& _rData, const OUString& _rName,
+        void lcl_getTableImageResourceID_nothrow(
+            const css::uno::Reference< css::container::XNameAccess >& _xViews,
+            const OUString& _rName,
             OUString& _out_rResourceID)
         {
             _out_rResourceID = OUString();
             try
             {
-                bool bIsView = _rData.xViews.is() && _rData.xViews->hasByName( _rName );
+                bool bIsView = _xViews.is() && _xViews->hasByName( _rName );
                 if ( bIsView )
                 {
                     _out_rResourceID = VIEW_TREE_ICON;
@@ -94,21 +86,19 @@ namespace dbaui
     }
     // ImageProvider
     ImageProvider::ImageProvider()
-        :m_pData( std::make_shared<ImageProvider_Data>() )
     {
     }
 
     ImageProvider::ImageProvider( const Reference< XConnection >& _rxConnection )
-        :m_pData( std::make_shared<ImageProvider_Data>() )
+        : mxConnection(_rxConnection)
     {
-        m_pData->xConnection = _rxConnection;
         try
         {
-            Reference< XViewsSupplier > xSuppViews( m_pData->xConnection, UNO_QUERY );
+            Reference< XViewsSupplier > xSuppViews( mxConnection, UNO_QUERY );
             if ( xSuppViews.is() )
-                m_pData->xViews.set( xSuppViews->getViews(), UNO_SET_THROW );
+                mxViews.set( xSuppViews->getViews(), UNO_SET_THROW );
 
-            m_pData->xTableUI.set( _rxConnection, UNO_QUERY );
+            mxTableUI.set( _rxConnection, UNO_QUERY );
         }
         catch( const Exception& )
         {
@@ -127,7 +117,7 @@ namespace dbaui
         {
             // no -> determine by type
             OUString sImageResourceID;
-            lcl_getTableImageResourceID_nothrow( *m_pData, _rName, sImageResourceID );
+            lcl_getTableImageResourceID_nothrow( mxViews, _rName, sImageResourceID );
             return sImageResourceID;
         }
     }
@@ -138,7 +128,7 @@ namespace dbaui
         if (_nDatabaseObjectType == DatabaseObject::TABLE)
         {
             // check whether the connection can give us an icon
-            lcl_getConnectionProvidedTableIcon_nothrow( *m_pData, _rName, xGraphic );
+            lcl_getConnectionProvidedTableIcon_nothrow( mxTableUI, _rName, xGraphic );
         }
         return xGraphic;
     }

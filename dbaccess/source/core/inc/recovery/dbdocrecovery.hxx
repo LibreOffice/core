@@ -24,13 +24,11 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <vector>
-#include <memory>
 
 namespace dbaccess
 {
 
     // DatabaseDocumentRecovery
-    struct DatabaseDocumentRecovery_Data;
     class DatabaseDocumentRecovery
     {
     public:
@@ -63,7 +61,7 @@ namespace dbaccess
             );
 
     private:
-        const std::unique_ptr< DatabaseDocumentRecovery_Data >  m_pData;
+        css::uno::Reference<css::uno::XComponentContext> mxContext;
     };
 
 } // namespace dbaccess

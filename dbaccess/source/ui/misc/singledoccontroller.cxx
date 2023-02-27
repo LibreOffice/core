@@ -35,22 +35,10 @@ namespace dbaui
     using ::com::sun::star::document::XUndoManager;
     using ::com::sun::star::beans::PropertyValue;
 
-    // OSingleDocumentController_Data
-    struct OSingleDocumentController_Data
-    {
-        // no Reference! see UndoManager::acquire
-        std::unique_ptr<UndoManager> m_pUndoManager;
-
-        OSingleDocumentController_Data( ::cppu::OWeakObject& i_parent, ::osl::Mutex& i_mutex )
-            : m_pUndoManager(new UndoManager(i_parent, i_mutex))
-        {
-        }
-    };
-
     // OSingleDocumentController
     OSingleDocumentController::OSingleDocumentController( const Reference< XComponentContext >& _rxORB )
         :OSingleDocumentController_Base( _rxORB )
-        ,m_pData( new OSingleDocumentController_Data( *this, getMutex() ) )
+        ,m_pUndoManager(new UndoManager(*this, getMutex()))
     {
     }
 
@@ -62,7 +50,7 @@ namespace dbaui
     {
         OSingleDocumentController_Base::disposing();
         ClearUndoManager();
-        m_pData->m_pUndoManager->disposing();
+        m_pUndoManager->disposing();
     }
 
     void OSingleDocumentController::ClearUndoManager()
@@ -72,7 +60,7 @@ namespace dbaui
 
     SfxUndoManager& OSingleDocumentController::GetUndoManager() const
     {
-        return m_pData->m_pUndoManager->GetSfxUndoManager();
+        return m_pUndoManager->GetSfxUndoManager();
     }
 
     void OSingleDocumentController::addUndoActionAndInvalidate(std::unique_ptr<SfxUndoAction> _pAction)
@@ -91,7 +79,7 @@ namespace dbaui
     Reference< XUndoManager > SAL_CALL OSingleDocumentController::getUndoManager(  )
     {
         // see UndoManager::acquire
-        return m_pData->m_pUndoManager.get();
+        return m_pUndoManager.get();
     }
 
     FeatureState OSingleDocumentController::GetState(sal_uInt16 _nId) const

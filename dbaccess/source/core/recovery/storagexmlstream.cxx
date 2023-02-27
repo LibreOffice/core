@@ -25,10 +25,7 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 
 #include <rtl/ref.hxx>
-#include <comphelper/attributelist.hxx>
 #include <comphelper/diagnose_ex.hxx>
-
-#include <stack>
 
 namespace dbaccess
 {
@@ -43,28 +40,19 @@ namespace dbaccess
     using ::com::sun::star::xml::sax::Parser;
     using ::com::sun::star::xml::sax::InputSource;
 
-    // StorageXMLOutputStream_Data
-    struct StorageXMLOutputStream_Data
-    {
-        Reference< XDocumentHandler >           xHandler;
-        std::stack< OUString >         aElements;
-        ::rtl::Reference<comphelper::AttributeList>  xAttributes;
-    };
-
     // StorageXMLOutputStream
     StorageXMLOutputStream::StorageXMLOutputStream( const Reference<XComponentContext>& i_rContext,
                                                     const Reference< XStorage >& i_rParentStorage,
                                                     const OUString& i_rStreamName )
         :StorageOutputStream( i_rParentStorage, i_rStreamName )
-        ,m_pData( new StorageXMLOutputStream_Data )
     {
         const Reference< XWriter > xSaxWriter = Writer::create( i_rContext );
         xSaxWriter->setOutputStream( getOutputStream() );
 
-        m_pData->xHandler.set( xSaxWriter, UNO_QUERY_THROW );
-        m_pData->xHandler->startDocument();
+        mxHandler.set( xSaxWriter, UNO_QUERY_THROW );
+        mxHandler->startDocument();
 
-        m_pData->xAttributes = new comphelper::AttributeList;
+        mxAttributes = new comphelper::AttributeList;
     }
 
     StorageXMLOutputStream::~StorageXMLOutputStream()
@@ -73,48 +61,48 @@ namespace dbaccess
 
     void StorageXMLOutputStream::close()
     {
-        ENSURE_OR_RETURN_VOID( m_pData->xHandler.is(), "illegal document handler" );
-        m_pData->xHandler->endDocument();
+        ENSURE_OR_RETURN_VOID( mxHandler.is(), "illegal document handler" );
+        mxHandler->endDocument();
         // do not call the base class, it would call closeOutput on the output stream, which is already done by
         // endDocument
     }
 
     void StorageXMLOutputStream::addAttribute( const OUString& i_rName, const OUString& i_rValue ) const
     {
-        m_pData->xAttributes->AddAttribute( i_rName, i_rValue );
+        mxAttributes->AddAttribute( i_rName, i_rValue );
     }
 
-    void StorageXMLOutputStream::startElement( const OUString& i_rElementName ) const
+    void StorageXMLOutputStream::startElement( const OUString& i_rElementName )
     {
-        ENSURE_OR_RETURN_VOID( m_pData->xHandler.is(), "no document handler" );
+        ENSURE_OR_RETURN_VOID( mxHandler.is(), "no document handler" );
 
-        m_pData->xHandler->startElement( i_rElementName, m_pData->xAttributes );
-        m_pData->xAttributes = new comphelper::AttributeList;
-        m_pData->aElements.push( i_rElementName );
+        mxHandler->startElement( i_rElementName, mxAttributes );
+        mxAttributes = new comphelper::AttributeList;
+        maElements.push( i_rElementName );
     }
 
-    void StorageXMLOutputStream::endElement() const
+    void StorageXMLOutputStream::endElement()
     {
-        ENSURE_OR_RETURN_VOID( m_pData->xHandler.is(), "no document handler" );
-        ENSURE_OR_RETURN_VOID( !m_pData->aElements.empty(), "no element on the stack" );
+        ENSURE_OR_RETURN_VOID( mxHandler.is(), "no document handler" );
+        ENSURE_OR_RETURN_VOID( !maElements.empty(), "no element on the stack" );
 
-        const OUString sElementName( m_pData->aElements.top() );
-        m_pData->xHandler->endElement( sElementName );
-        m_pData->aElements.pop();
+        const OUString sElementName( maElements.top() );
+        mxHandler->endElement( sElementName );
+        maElements.pop();
     }
 
     void StorageXMLOutputStream::ignorableWhitespace( const OUString& i_rWhitespace ) const
     {
-        ENSURE_OR_RETURN_VOID( m_pData->xHandler.is(), "no document handler" );
+        ENSURE_OR_RETURN_VOID( mxHandler.is(), "no document handler" );
 
-        m_pData->xHandler->ignorableWhitespace( i_rWhitespace );
+        mxHandler->ignorableWhitespace( i_rWhitespace );
     }
 
     void StorageXMLOutputStream::characters( const OUString& i_rCharacters ) const
     {
-        ENSURE_OR_RETURN_VOID( m_pData->xHandler.is(), "no document handler" );
+        ENSURE_OR_RETURN_VOID( mxHandler.is(), "no document handler" );
 
-        m_pData->xHandler->characters( i_rCharacters );
+        mxHandler->characters( i_rCharacters );
     }
 
     // StorageXMLInputStream

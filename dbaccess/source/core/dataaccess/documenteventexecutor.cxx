@@ -57,24 +57,14 @@ namespace dbaccess
 
     using namespace ::com::sun::star;
 
-    // DocumentEventExecutor_Data
-    struct DocumentEventExecutor_Data
-    {
-        WeakReference< XEventsSupplier >    xDocument;
-        Reference< XURLTransformer >        xURLTransformer;
-
-        explicit DocumentEventExecutor_Data( const Reference< XEventsSupplier >& _rxDocument )
-            :xDocument( _rxDocument )
-        {
-        }
-    };
-
     namespace
     {
-        void lcl_dispatchScriptURL_throw( DocumentEventExecutor_Data const & _rDocExecData,
+        void lcl_dispatchScriptURL_throw(
+            css::uno::WeakReference< css::document::XEventsSupplier > const & xWeakDocument,
+            css::uno::Reference< css::util::XURLTransformer > const & xURLTransformer,
             const OUString& _rScriptURL, const DocumentEvent& _rTrigger )
         {
-            Reference< XModel > xDocument( _rDocExecData.xDocument.get(), UNO_QUERY_THROW );
+            Reference< XModel > xDocument( xWeakDocument.get(), UNO_QUERY_THROW );
 
             Reference< XController > xController( xDocument->getCurrentController() );
             Reference< XDispatchProvider > xDispProv;
@@ -88,8 +78,8 @@ namespace dbaccess
 
             URL aScriptURL;
             aScriptURL.Complete = _rScriptURL;
-            if ( _rDocExecData.xURLTransformer.is() )
-                _rDocExecData.xURLTransformer->parseStrict( aScriptURL );
+            if ( xURLTransformer.is() )
+                xURLTransformer->parseStrict( aScriptURL );
 
             // unfortunately, executing a script can trigger all kind of complex stuff, and unfortunately, not
             // every component involved into this properly cares for thread safety. To be on the safe side,
@@ -113,7 +103,7 @@ namespace dbaccess
     // DocumentEventExecutor
     DocumentEventExecutor::DocumentEventExecutor( const Reference<XComponentContext> & _rContext,
             const Reference< XEventsSupplier >& _rxDocument )
-        :m_pData( new DocumentEventExecutor_Data( _rxDocument ) )
+        :mxDocument( _rxDocument )
     {
         Reference< XDocumentEventBroadcaster > xBroadcaster( _rxDocument, UNO_QUERY_THROW );
 
@@ -125,7 +115,7 @@ namespace dbaccess
 
         try
         {
-            m_pData->xURLTransformer = URLTransformer::create(_rContext);
+            mxURLTransformer = URLTransformer::create(_rContext);
         }
         catch( const Exception& )
         {
@@ -139,8 +129,8 @@ namespace dbaccess
 
     void SAL_CALL DocumentEventExecutor::documentEventOccured( const DocumentEvent& Event )
     {
-        Reference< XEventsSupplier > xEventsSupplier( m_pData->xDocument.get(), UNO_QUERY );
-        if ( !xEventsSupplier.is() )
+        Reference< XEventsSupplier > xEventsSupplier( mxDocument.get(), UNO_QUERY );
+        if ( !xEventsSupplier )
         {
             OSL_FAIL( "DocumentEventExecutor::documentEventOccurred: no document anymore, but still being notified?" );
             return;
@@ -179,7 +169,7 @@ namespace dbaccess
 
             if ( bDispatchScriptURL && bNonEmptyScript )
             {
-                lcl_dispatchScriptURL_throw( *m_pData, sScript, Event );
+                lcl_dispatchScriptURL_throw( mxDocument, mxURLTransformer, sScript, Event );
             }
         }
         catch( const RuntimeException& ) { throw; }

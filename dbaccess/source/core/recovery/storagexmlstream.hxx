@@ -25,14 +25,13 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-
-#include <memory>
+#include <comphelper/attributelist.hxx>
+#include <rtl/ref.hxx>
+#include <stack>
 
 namespace dbaccess
 {
 
-    // StorageXMLOutputStream
-    struct StorageXMLOutputStream_Data;
     class StorageXMLOutputStream : public StorageOutputStream
     {
     public:
@@ -47,8 +46,8 @@ namespace dbaccess
 
         void    addAttribute( const OUString& i_rName, const OUString& i_rValue ) const;
 
-        void    startElement( const OUString& i_rElementName ) const;
-        void    endElement() const;
+        void    startElement( const OUString& i_rElementName );
+        void    endElement();
 
         void    ignorableWhitespace( const OUString& i_rWhitespace ) const;
         void    characters( const OUString& i_rCharacters ) const;
@@ -58,7 +57,9 @@ namespace dbaccess
         StorageXMLOutputStream& operator=( const StorageXMLOutputStream& ) = delete;
 
     private:
-        std::unique_ptr< StorageXMLOutputStream_Data >   m_pData;
+        css::uno::Reference< css::xml::sax::XDocumentHandler > mxHandler;
+        std::stack< OUString > maElements;
+        ::rtl::Reference<comphelper::AttributeList> mxAttributes;
     };
 
     class StorageXMLInputStream

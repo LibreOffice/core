@@ -23,13 +23,12 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <memory>
+namespace com::sun::star::io { class XTextOutputStream2; }
 
 namespace dbaccess
 {
 
     // StorageTextStream
-    struct StorageTextOutputStream_Data;
     class StorageTextOutputStream : public StorageOutputStream
     {
     public:
@@ -44,8 +43,8 @@ namespace dbaccess
         void    writeLine();
 
     private:
-        std::unique_ptr< StorageTextOutputStream_Data > m_pData;
-    };
+         css::uno::Reference< css::io::XTextOutputStream2 >  mxTextOutput;
+   };
 
 } // namespace dbaccess
 

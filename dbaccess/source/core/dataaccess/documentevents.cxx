@@ -36,23 +36,6 @@ namespace dbaccess
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
 
-    // DocumentEvents_Data
-    struct DocumentEvents_Data
-    {
-        ::cppu::OWeakObject&    rParent;
-        ::osl::Mutex&           rMutex;
-        DocumentEventsData&     rEventsData;
-
-        DocumentEvents_Data( ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex, DocumentEventsData& _rEventsData )
-            :rParent( _rParent )
-            ,rMutex( _rMutex )
-            ,rEventsData( _rEventsData )
-        {
-        }
-        DocumentEvents_Data(const DocumentEvents_Data&) = delete;
-        const DocumentEvents_Data& operator=(const DocumentEvents_Data&) = delete;
-    };
-
     namespace {
 
         // helper
@@ -97,15 +80,15 @@ namespace dbaccess
 
     // DocumentEvents
     DocumentEvents::DocumentEvents( ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex, DocumentEventsData& _rEventsData )
-        :m_pData( new DocumentEvents_Data( _rParent, _rMutex, _rEventsData ) )
+        :mrParent(_rParent), mrMutex(_rMutex), mrEventsData(_rEventsData)
     {
         const DocumentEventData* pEventData = lcl_getDocumentEventData();
         while ( pEventData->pAsciiEventName )
         {
             OUString sEventName = OUString::createFromAscii( pEventData->pAsciiEventName );
-            DocumentEventsData::const_iterator existingPos = m_pData->rEventsData.find( sEventName );
-            if ( existingPos == m_pData->rEventsData.end() )
-                m_pData->rEventsData[ sEventName ] = Sequence< PropertyValue >();
+            DocumentEventsData::const_iterator existingPos = mrEventsData.find( sEventName );
+            if ( existingPos == mrEventsData.end() )
+                mrEventsData[ sEventName ] = Sequence< PropertyValue >();
             ++pEventData;
         }
     }
@@ -116,12 +99,12 @@ namespace dbaccess
 
     void SAL_CALL DocumentEvents::acquire() noexcept
     {
-        m_pData->rParent.acquire();
+        mrParent.acquire();
     }
 
     void SAL_CALL DocumentEvents::release() noexcept
     {
-        m_pData->rParent.release();
+        mrParent.release();
     }
 
     bool DocumentEvents::needsSynchronousNotification( std::u16string_view _rEventName )
@@ -140,10 +123,10 @@ namespace dbaccess
 
     void SAL_CALL DocumentEvents::replaceByName( const OUString& Name, const Any& Element )
     {
-        ::osl::MutexGuard aGuard( m_pData->rMutex );
+        ::osl::MutexGuard aGuard( mrMutex );
 
-        DocumentEventsData::iterator elementPos = m_pData->rEventsData.find( Name );
-        if ( elementPos == m_pData->rEventsData.end() )
+        DocumentEventsData::iterator elementPos = mrEventsData.find( Name );
+        if ( elementPos == mrEventsData.end() )
             throw NoSuchElementException( Name, *this );
 
         Sequence< PropertyValue > aEventDescriptor;
@@ -173,10 +156,10 @@ namespace dbaccess
 
     Any SAL_CALL DocumentEvents::getByName( const OUString& Name )
     {
-        ::osl::MutexGuard aGuard( m_pData->rMutex );
+        ::osl::MutexGuard aGuard( mrMutex );
 
-        DocumentEventsData::const_iterator elementPos = m_pData->rEventsData.find( Name );
-        if ( elementPos == m_pData->rEventsData.end() )
+        DocumentEventsData::const_iterator elementPos = mrEventsData.find( Name );
+        if ( elementPos == mrEventsData.end() )
             throw NoSuchElementException( Name, *this );
 
         Any aReturn;
@@ -188,16 +171,16 @@ namespace dbaccess
 
     Sequence< OUString > SAL_CALL DocumentEvents::getElementNames(  )
     {
-        ::osl::MutexGuard aGuard( m_pData->rMutex );
+        ::osl::MutexGuard aGuard( mrMutex );
 
-        return comphelper::mapKeysToSequence( m_pData->rEventsData );
+        return comphelper::mapKeysToSequence( mrEventsData );
     }
 
     sal_Bool SAL_CALL DocumentEvents::hasByName( const OUString& Name )
     {
-        ::osl::MutexGuard aGuard( m_pData->rMutex );
+        ::osl::MutexGuard aGuard( mrMutex );
 
-        return m_pData->rEventsData.find( Name ) != m_pData->rEventsData.end();
+        return mrEventsData.find( Name ) != mrEventsData.end();
     }
 
     Type SAL_CALL DocumentEvents::getElementType(  )
@@ -207,8 +190,8 @@ namespace dbaccess
 
     sal_Bool SAL_CALL DocumentEvents::hasElements(  )
     {
-        ::osl::MutexGuard aGuard( m_pData->rMutex );
-        return !m_pData->rEventsData.empty();
+        ::osl::MutexGuard aGuard( mrMutex );
+        return !mrEventsData.empty();
     }
 
 } // namespace dbaccess

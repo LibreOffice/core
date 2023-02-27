@@ -24,7 +24,6 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <memory>
 #include <map>
 
 namespace dbaccess
@@ -32,9 +31,6 @@ namespace dbaccess
 
     typedef std::map< OUString, css::uno::Sequence< css::beans::PropertyValue > >
             DocumentEventsData;
-
-    // DocumentEvents
-    struct DocumentEvents_Data;
 
     typedef ::cppu::WeakImplHelper<   css::container::XNameReplace
                                   >   DocumentEvents_Base;
@@ -67,7 +63,9 @@ namespace dbaccess
         virtual sal_Bool SAL_CALL hasElements(  ) override;
 
     private:
-        std::unique_ptr< DocumentEvents_Data >  m_pData;
+        ::cppu::OWeakObject&    mrParent;
+        ::osl::Mutex&           mrMutex;
+        DocumentEventsData&     mrEventsData;
     };
 
 } // namespace dbaccess

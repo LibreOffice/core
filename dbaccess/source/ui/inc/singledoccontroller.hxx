@@ -31,9 +31,8 @@ class SfxUndoManager;
 
 namespace dbaui
 {
+class UndoManager;
 
-    // OSingleDocumentController
-    struct OSingleDocumentController_Data;
     typedef ::cppu::ImplInheritanceHelper<   DBSubComponentController
                                          ,   css::document::XUndoManagerSupplier
                                          >   OSingleDocumentController_Base;
@@ -70,7 +69,8 @@ namespace dbaui
         using OSingleDocumentController_Base::disposing;
 
     private:
-        std::unique_ptr< OSingleDocumentController_Data >   m_pData;
+        // no Reference! see UndoManager::acquire
+        std::unique_ptr<UndoManager> m_pUndoManager;
     };
 
 } // namespace dbaui

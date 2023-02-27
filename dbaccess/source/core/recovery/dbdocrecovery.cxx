@@ -195,20 +195,9 @@ namespace dbaccess
         }
     }
 
-    // DatabaseDocumentRecovery_Data
-    struct DatabaseDocumentRecovery_Data
-    {
-        const Reference<XComponentContext> aContext;
-
-        explicit DatabaseDocumentRecovery_Data( const Reference<XComponentContext> & i_rContext )
-            :aContext( i_rContext )
-        {
-        }
-    };
-
     // DatabaseDocumentRecovery
     DatabaseDocumentRecovery::DatabaseDocumentRecovery( const Reference<XComponentContext> & i_rContext )
-        :m_pData( new DatabaseDocumentRecovery_Data( i_rContext ) )
+        : mxContext( i_rContext )
     {
     }
 
@@ -244,7 +233,7 @@ namespace dbaccess
 
                 for ( auto const & component : aComponents )
                 {
-                    SubComponentRecovery aComponentRecovery( m_pData->aContext, xDatabaseUI, component );
+                    SubComponentRecovery aComponentRecovery( mxContext, xDatabaseUI, component );
                     aComponentRecovery.saveToRecoveryStorage( xRecoveryStorage, aMapCompDescs );
                 }
             }
@@ -253,7 +242,7 @@ namespace dbaccess
             {
                 Reference< XStorage > xComponentsStor( xRecoveryStorage->openStorageElement(
                     SubComponentRecovery::getComponentsStorageName( elem.first ), ElementModes::WRITE | ElementModes::NOCREATE ) );
-                lcl_writeObjectMap_throw( m_pData->aContext, xComponentsStor, elem.second );
+                lcl_writeObjectMap_throw( mxContext, xComponentsStor, elem.second );
                 tools::stor::commitStorageIfWriteable( xComponentsStor );
             }
         }
@@ -285,7 +274,7 @@ namespace dbaccess
 
             Reference< XStorage > xComponentsStor( xRecoveryStorage->openStorageElement(
                 SubComponentRecovery::getComponentsStorageName( aKnownType ), ElementModes::READ ) );
-            lcl_readObjectMap_throw( m_pData->aContext, xComponentsStor, aMapCompDescs[ aKnownType ] );
+            lcl_readObjectMap_throw( mxContext, xComponentsStor, aMapCompDescs[ aKnownType ] );
             xComponentsStor->dispose();
         }
 
@@ -319,7 +308,7 @@ namespace dbaccess
 
                 // recover the single component
                 Reference< XStorage > xCompStor( xComponentsStor->openStorageElement( elem.first, ElementModes::READ ) );
-                SubComponentRecovery aComponentRecovery( m_pData->aContext, xDocumentUI, eComponentType );
+                SubComponentRecovery aComponentRecovery( mxContext, xDocumentUI, eComponentType );
                 Reference< XComponent > xSubComponent( aComponentRecovery.recoverFromStorage( xCompStor, sComponentName, elem.second.bForEditing ) );
 
                 // at the moment, we only store, during session save, sub components which are modified. So, set this

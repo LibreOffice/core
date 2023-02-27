@@ -170,7 +170,7 @@ namespace dbaccess
     class SettingsExportContext : public ::xmloff::XMLSettingsExportContext
     {
     public:
-        SettingsExportContext( const Reference<XComponentContext>& i_rContext, const StorageXMLOutputStream& i_rDelegator )
+        SettingsExportContext( const Reference<XComponentContext>& i_rContext, StorageXMLOutputStream& i_rDelegator )
             :m_rContext( i_rContext )
             ,m_rDelegator( i_rDelegator )
             ,m_aNamespace( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_NP_CONFIG ) )
@@ -199,7 +199,7 @@ namespace dbaccess
 
     private:
         const Reference<XComponentContext>&   m_rContext;
-        const StorageXMLOutputStream&           m_rDelegator;
+        StorageXMLOutputStream& m_rDelegator;
         const OUString m_aNamespace;
     };
 

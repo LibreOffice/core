@@ -22,12 +22,10 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 
-#include <memory>
+namespace com::sun::star::sdb::application { class XTableUIProvider; }
 
 namespace dbaui
 {
-    // ImageProvider
-    struct ImageProvider_Data;
     /** provides images for database objects such as tables, queries, forms, reports ...
 
         At the moment, this class cares for small icons only, that is, icons which can be used
@@ -36,9 +34,6 @@ namespace dbaui
     */
     class ImageProvider
     {
-    private:
-        std::shared_ptr< ImageProvider_Data >   m_pData;
-
     public:
         /** creates a semi-functional ImageProvider instance
 
@@ -98,6 +93,13 @@ namespace dbaui
                 the image to be used for folders of this type
         */
         static OUString getDatabaseImage();
+    private:
+        /// the connection we work with
+        css::uno::Reference< css::sdbc::XConnection > mxConnection;
+        /// the views of the connection, if the DB supports views
+        css::uno::Reference< css::container::XNameAccess > mxViews;
+        /// interface for providing table's UI
+        css::uno::Reference< css::sdb::application::XTableUIProvider > mxTableUI;
     };
 
 } // namespace dbaui
