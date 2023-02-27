@@ -19,20 +19,18 @@ namespace com::sun::star::uno { template <typename > class Sequence; }
 
 class UIObject;
 
-class UITest
+namespace UITest
 {
-public:
+    bool executeCommand(const OUString& rCommand);
 
-    static bool executeCommand(const OUString& rCommand);
-
-    static bool executeCommandWithParameters(const OUString& rCommand,
+    bool executeCommandWithParameters(const OUString& rCommand,
         const css::uno::Sequence< css::beans::PropertyValue >& rArgs);
 
-    static bool executeDialog(const OUString& rCommand);
+    bool executeDialog(const OUString& rCommand);
 
-    static std::unique_ptr<UIObject> getFocusTopWindow();
+    std::unique_ptr<UIObject> getFocusTopWindow();
 
-    static std::unique_ptr<UIObject> getFloatWindow();
+    std::unique_ptr<UIObject> getFloatWindow();
 };
 
 #endif

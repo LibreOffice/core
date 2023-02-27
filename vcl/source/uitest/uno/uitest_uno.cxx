@@ -29,9 +29,6 @@ namespace
 
 class UITestUnoObj : public UITestBase
 {
-private:
-    std::unique_ptr<UITest> mpUITest;
-
 public:
 
     UITestUnoObj();
@@ -56,8 +53,7 @@ public:
 
 }
 
-UITestUnoObj::UITestUnoObj():
-    mpUITest(new UITest)
+UITestUnoObj::UITestUnoObj()
 {
 }
 
