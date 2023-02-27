@@ -166,7 +166,7 @@ private:
     std::set<OUString>      aFormatText;
     std::map<LanguageType, DoubleStringArray>
                             aDoubleStringTable;
-    std::optional<CollatorWrapper>  moCompareClass;
+    CollatorWrapper         maCompareClass;
     std::unique_ptr<CharClass>        pCharClass;
     LanguageType            eLang;
 
@@ -227,7 +227,7 @@ class OfaAutocorrExceptPage : public SfxTabPage
 {
 private:
     StringsTable    aStringsTable;
-    std::optional<CollatorWrapper> moCompareClass;
+    CollatorWrapper maCompareClass;
     LanguageType    eLang;
 
     std::unique_ptr<weld::Entry> m_xAbbrevED;
