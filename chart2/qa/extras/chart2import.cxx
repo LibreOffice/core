@@ -40,200 +40,13 @@ class Chart2ImportTest : public ChartTest
 public:
     Chart2ImportTest() : ChartTest("/chart2/qa/extras/data/") {}
 
-    void Fdo60083();
-    void testSteppedLines();
-    void testErrorBarRange();
-    void testErrorBarFormatting();
-    void testODSChartSeries();
-    void testXLSXChartSeries();
-    void testXLSChartSeries();
-    void testODTChartSeries();
-    void testDOCChartSeries();
-    void testDOCXChartSeries();
-    void testDOCXChartEmptySeries();
-    void testTdf81396();
-    void testPPTXChartErrorBars();
-    void testDOCXChartValuesSize();
-    void testPPTXChartSeries();
-    void testPPTXSparseChartSeries();
-    /**
-     * Original data contains 3 series but 2 of them are hidden. For now, we
-     * detect and skip those hidden series on import (since we don't support
-     * hidden columns for internal data table yet).
-     */
-    void testPPTXHiddenDataSeries();
-    void testPPTXPercentageNumberFormats();
-    void testPieChartLabelsNumFormat();
-    void testPPTXStackedNonStackedYAxis();
-    void testPPTChartSeries();
-    void testODPChartSeries();
-    void testBnc864396();
-    void testBnc882383();
-    void testTransparencyGradientValue();
-    void testBnc889755();
-    void testSimpleStrictXLSX();
-    void testDelayedCellImport(); // chart range referencing content on later sheets
-    void testFlatODSStackedColumnChart();
-    void testFdo78080();
-    void testFdo54361();
-    void testFdo54361_1();
-    void testTdf127811();
-    void testTdf86624(); // manually placed legends
-    void testTdf105517();
-    void testTdf106217();
-    void testTdf108021();
-    void testTdf100084();
-    void testTdf124817();
-    void testTdf126033();
-    void testAutoBackgroundXLSX();
-    void testAutoChartAreaBorderPropXLSX();
-    void testAutoChartAreaBorderPropPPTX();
-    void testChartAreaStyleBackgroundXLSX();
-    void testChartHatchFillXLSX();
-    void testAxisTextRotationXLSX();
-    void testTextCanOverlapXLSX();
-    void testTextBreakXLSX();
-    void testNumberFormatsXLSX();
-    void testNumberFormatsDOCX();
-    void testPercentageNumberFormatsDOCX();
-
+protected:
     void testTransparentBackground(std::u16string_view filename);
-
-    // below are OOXML default value tests for cases
-    // where we fixed the handling of MSO 2007 vs OOXML
-    void testAutoTitleDelDefaultValue2007XLSX();
-    void testAutoTitleDelDefaultValue2013XLSX();
-    void testDispBlanksAsDefaultValue2007XLSX();
-    void testDispBlanksAsDefaultValue2013XLSX();
-
-    void testSmoothDefaultValue2007XLSX();
-    void testSmoothDefaultValue2013XLSX();
-    void testTrendlineDefaultValue2007XLSX();
-    void testTrendlineDefaultValue2013XLSX();
-    void testVaryColorDefaultValues2007XLSX();
-    void testVaryColorDefaultValues2013XLSX();
-    void testPlotVisOnlyDefaultValue2013XLSX();
-    void testRAngAxDefaultValue2013XLSX();
-    void testMajorTickMarksDefaultValue2013XLSX();
-    void testMinorTickMarksDefaultValue2013XLSX();
-
-    void testAxisTitleDefaultRotationXLSX();
-    void testSecondaryAxisTitleDefaultRotationXLSX();
-    void testAxisTitleRotationXLSX();
-    void testAxisTitlePositionDOCX();
-    void testCombinedChartAttachedAxisXLSX();
-    void testTdf140489MultiSeriesChartAxisXLSX();
-
-    void testTdf90510(); // Pie chart label placement settings(XLS)
-    void testTdf109858(); // Pie chart label placement settings(XLSX)
-    void testTdf130105();
-    void testTdf111173();
-    void testTdf122226();
-    void testInternalDataProvider();
-    void testTdf115107(); // import complex data point labels
-    void testTdf115107_2(); // import complex data point labels in cobo charts with multiple data series
-    void testTdf116163();
-    void testTdf48041();
-    void testTdf121205();
-    void testFixedSizeBarChartVeryLongLabel();
-    void testAutomaticSizeBarChartVeryLongLabel();
-    void testTotalsRowIgnored();
-    void testPieChartPlotAreaMarginWithAutomaticLayout();
-
-    CPPUNIT_TEST_SUITE(Chart2ImportTest);
-    CPPUNIT_TEST(Fdo60083);
-    CPPUNIT_TEST(testSteppedLines);
-    CPPUNIT_TEST(testErrorBarRange);
-    CPPUNIT_TEST(testErrorBarFormatting);
-    CPPUNIT_TEST(testODSChartSeries);
-    CPPUNIT_TEST(testXLSXChartSeries);
-    CPPUNIT_TEST(testXLSChartSeries);
-    CPPUNIT_TEST(testODTChartSeries);
-    CPPUNIT_TEST(testDOCChartSeries);
-    CPPUNIT_TEST(testDOCXChartSeries);
-    CPPUNIT_TEST(testDOCXChartEmptySeries);
-    CPPUNIT_TEST(testTdf81396);
-    CPPUNIT_TEST(testPPTXChartErrorBars);
-    CPPUNIT_TEST(testDOCXChartValuesSize);
-    CPPUNIT_TEST(testPPTChartSeries);
-    CPPUNIT_TEST(testPPTXChartSeries);
-    CPPUNIT_TEST(testPPTXSparseChartSeries);
-    CPPUNIT_TEST(testPPTXHiddenDataSeries);
-    CPPUNIT_TEST(testPPTXPercentageNumberFormats);
-    CPPUNIT_TEST(testPieChartLabelsNumFormat);
-    CPPUNIT_TEST(testPPTXStackedNonStackedYAxis);
-    CPPUNIT_TEST(testODPChartSeries);
-    CPPUNIT_TEST(testBnc864396);
-    CPPUNIT_TEST(testBnc882383);
-    CPPUNIT_TEST(testTransparencyGradientValue);
-    CPPUNIT_TEST(testBnc889755);
-    CPPUNIT_TEST(testSimpleStrictXLSX);
-    CPPUNIT_TEST(testDelayedCellImport);
-    CPPUNIT_TEST(testFlatODSStackedColumnChart);
-    CPPUNIT_TEST(testFdo78080);
-    CPPUNIT_TEST(testFdo54361);
-    CPPUNIT_TEST(testFdo54361_1);
-    CPPUNIT_TEST(testTdf127811);
-    CPPUNIT_TEST(testTdf86624);
-    CPPUNIT_TEST(testTdf105517);
-    CPPUNIT_TEST(testTdf106217);
-    CPPUNIT_TEST(testTdf108021);
-    CPPUNIT_TEST(testTdf100084);
-    CPPUNIT_TEST(testTdf124817);
-    CPPUNIT_TEST(testTdf126033);
-    CPPUNIT_TEST(testAutoBackgroundXLSX);
-    CPPUNIT_TEST(testAutoChartAreaBorderPropXLSX);
-    CPPUNIT_TEST(testAutoChartAreaBorderPropPPTX);
-    CPPUNIT_TEST(testChartAreaStyleBackgroundXLSX);
-    CPPUNIT_TEST(testChartHatchFillXLSX);
-    CPPUNIT_TEST(testAxisTextRotationXLSX);
-    CPPUNIT_TEST(testTextCanOverlapXLSX);
-    CPPUNIT_TEST(testTextBreakXLSX);
-    CPPUNIT_TEST(testNumberFormatsXLSX);
-    CPPUNIT_TEST(testNumberFormatsDOCX);
-    CPPUNIT_TEST(testPercentageNumberFormatsDOCX);
-    CPPUNIT_TEST(testAutoTitleDelDefaultValue2007XLSX);
-    CPPUNIT_TEST(testAutoTitleDelDefaultValue2013XLSX);
-    CPPUNIT_TEST(testDispBlanksAsDefaultValue2007XLSX);
-    CPPUNIT_TEST(testDispBlanksAsDefaultValue2013XLSX);
-    CPPUNIT_TEST(testSmoothDefaultValue2007XLSX);
-    CPPUNIT_TEST(testSmoothDefaultValue2013XLSX);
-    CPPUNIT_TEST(testTrendlineDefaultValue2007XLSX);
-    CPPUNIT_TEST(testTrendlineDefaultValue2013XLSX);
-    CPPUNIT_TEST(testVaryColorDefaultValues2007XLSX);
-    CPPUNIT_TEST(testVaryColorDefaultValues2013XLSX);
-    CPPUNIT_TEST(testPlotVisOnlyDefaultValue2013XLSX);
-    CPPUNIT_TEST(testRAngAxDefaultValue2013XLSX);
-    CPPUNIT_TEST(testMajorTickMarksDefaultValue2013XLSX);
-    CPPUNIT_TEST(testMinorTickMarksDefaultValue2013XLSX);
-    CPPUNIT_TEST(testAxisTitleDefaultRotationXLSX);
-    CPPUNIT_TEST(testSecondaryAxisTitleDefaultRotationXLSX);
-    CPPUNIT_TEST(testAxisTitleRotationXLSX);
-    CPPUNIT_TEST(testAxisTitlePositionDOCX);
-    CPPUNIT_TEST(testCombinedChartAttachedAxisXLSX);
-    CPPUNIT_TEST(testTdf140489MultiSeriesChartAxisXLSX);
-    CPPUNIT_TEST(testTdf90510);
-    CPPUNIT_TEST(testTdf109858);
-    CPPUNIT_TEST(testTdf130105);
-    CPPUNIT_TEST(testTdf111173);
-    CPPUNIT_TEST(testTdf122226);
-    CPPUNIT_TEST(testInternalDataProvider);
-    CPPUNIT_TEST(testTdf115107);
-    CPPUNIT_TEST(testTdf115107_2);
-    CPPUNIT_TEST(testTdf116163);
-    CPPUNIT_TEST(testTdf48041);
-    CPPUNIT_TEST(testTdf121205);
-    CPPUNIT_TEST(testFixedSizeBarChartVeryLongLabel);
-    CPPUNIT_TEST(testAutomaticSizeBarChartVeryLongLabel);
-    CPPUNIT_TEST(testTotalsRowIgnored);
-    CPPUNIT_TEST(testPieChartPlotAreaMarginWithAutomaticLayout);
-
-    CPPUNIT_TEST_SUITE_END();
 };
 
 // error bar import
 // split method up into smaller chunks for more detailed tests
-void Chart2ImportTest::Fdo60083()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testFdo60083)
 {
     loadFromURL(u"ods/fdo60083.ods");
     uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
@@ -282,7 +95,7 @@ void Chart2ImportTest::Fdo60083()
     CPPUNIT_ASSERT(!xErrorBarXProps.is());
 }
 
-void Chart2ImportTest::testErrorBarRange()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testErrorBarRange)
 {
     loadFromURL(u"ods/error_bar_range.ods");
     uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
@@ -311,7 +124,7 @@ void Chart2ImportTest::testErrorBarRange()
     CPPUNIT_ASSERT_EQUAL(OUString("$Sheet1.$C$2:$C$4"), aRangePos);
 }
 
-void Chart2ImportTest::testErrorBarFormatting()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testErrorBarFormatting)
 {
     loadFromURL(u"ods/error_bar_properties.ods");
     uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
@@ -334,7 +147,7 @@ void Chart2ImportTest::testErrorBarFormatting()
 }
 
 // stepped line interpolation
-void Chart2ImportTest::testSteppedLines()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testSteppedLines)
 {
     const sal_Int32 MAXSHEET = 14;
     chart2::CurveStyle const curveStyle[] = {
@@ -380,7 +193,7 @@ static uno::Sequence < OUString > getChartColumnDescriptions( uno::Reference< ch
     return seriesList;
 }
 
-void Chart2ImportTest::testODSChartSeries()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testODSChartSeries)
 {
     loadFromURL(u"ods/chart.ods");
     uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW);
@@ -391,7 +204,7 @@ void Chart2ImportTest::testODSChartSeries()
 
 }
 
-void Chart2ImportTest::testXLSXChartSeries()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testXLSXChartSeries)
 {
     loadFromURL(u"xlsx/chart.xlsx");
     uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW);
@@ -402,7 +215,7 @@ void Chart2ImportTest::testXLSXChartSeries()
 
 }
 
-void Chart2ImportTest::testXLSChartSeries()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testXLSChartSeries)
 {
     loadFromURL(u"xls/chart.xls");
     uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW);
@@ -413,7 +226,7 @@ void Chart2ImportTest::testXLSChartSeries()
 
 }
 
-void Chart2ImportTest::testODTChartSeries()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testODTChartSeries)
 {
     loadFromURL(u"odt/chart.odt");
     uno::Sequence< OUString > seriesList = getWriterChartColumnDescriptions(mxComponent);
@@ -423,7 +236,7 @@ void Chart2ImportTest::testODTChartSeries()
 
 }
 
-void Chart2ImportTest::testDOCChartSeries()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDOCChartSeries)
 {
     loadFromURL(u"doc/chart.doc");
     uno::Sequence< OUString > seriesList = getWriterChartColumnDescriptions(mxComponent);
@@ -432,7 +245,7 @@ void Chart2ImportTest::testDOCChartSeries()
     CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), seriesList[2]);
 }
 
-void Chart2ImportTest::testDOCXChartSeries()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDOCXChartSeries)
 {
     loadFromURL(u"docx/chart.docx");
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
@@ -448,7 +261,7 @@ void Chart2ImportTest::testDOCXChartSeries()
     CPPUNIT_ASSERT_EQUAL(OUString("Series 3"), aLabels[2][0].get<OUString>());
 }
 
-void Chart2ImportTest::testDOCXChartEmptySeries()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDOCXChartEmptySeries)
 {
     loadFromURL(u"docx/tdf125337.docx");
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
@@ -474,7 +287,7 @@ void Chart2ImportTest::testDOCXChartEmptySeries()
     CPPUNIT_ASSERT(std::isnan(aValues[2][1]));
 }
 
-void Chart2ImportTest::testTdf81396()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf81396)
 {
     loadFromURL(u"xlsx/tdf81396.xlsx");
     Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
@@ -491,7 +304,7 @@ void Chart2ImportTest::testTdf81396()
     CPPUNIT_ASSERT_EQUAL(105.210801910481, aDataSeriesYValues[0][0]);
 }
 
-void Chart2ImportTest::testPPTXChartErrorBars()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXChartErrorBars)
 {
     loadFromURL(u"pptx/tdf127720.pptx");
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
@@ -504,7 +317,7 @@ void Chart2ImportTest::testPPTXChartErrorBars()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There must be 4 columns and descriptions", static_cast<sal_Int32>(4), aColumnDesc.getLength());
 }
 
-void Chart2ImportTest::testDOCXChartValuesSize()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDOCXChartValuesSize)
 {
     loadFromURL(u"docx/bubblechart.docx" );
     Reference<chart2::XChartDocument> xChartDoc( getChartDocFromWriter(0), uno::UNO_QUERY );
@@ -525,7 +338,7 @@ void Chart2ImportTest::testDOCXChartValuesSize()
             CPPUNIT_ASSERT_DOUBLES_EQUAL( aExpected[nRowIdx][nColIdx], aData[nRowIdx][nColIdx], 1e-1 );
 }
 
-void Chart2ImportTest::testPPTChartSeries()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTChartSeries)
 {
     //test chart series names for ppt
     uno::Sequence < OUString > seriesList = getImpressChartColumnDescriptions(u"/chart2/qa/extras/data/ppt/", "chart.ppt");
@@ -536,7 +349,7 @@ void Chart2ImportTest::testPPTChartSeries()
 
 }
 
-void Chart2ImportTest::testPPTXChartSeries()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXChartSeries)
 {
     //test chart series names for pptx
     loadFromURL(u"pptx/chart.pptx");
@@ -553,7 +366,7 @@ void Chart2ImportTest::testPPTXChartSeries()
     CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), aLabels[2][0].get<OUString>());
 }
 
-void Chart2ImportTest::testPPTXSparseChartSeries()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXSparseChartSeries)
 {
     //test chart series sparse data for pptx
     loadFromURL(u"pptx/sparse-chart.pptx");
@@ -575,8 +388,13 @@ void Chart2ImportTest::testPPTXSparseChartSeries()
     CPPUNIT_ASSERT_EQUAL(-2.8, aValues[1][3]);
 }
 
-void Chart2ImportTest::testPPTXHiddenDataSeries()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXHiddenDataSeries)
 {
+    /**
+     * Original data contains 3 series but 2 of them are hidden. For now, we
+     * detect and skip those hidden series on import (since we don't support
+     * hidden columns for internal data table yet).
+     */
     loadFromURL(u"pptx/stacked-bar-chart-hidden-series.pptx");
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
@@ -614,7 +432,7 @@ void Chart2ImportTest::testPPTXHiddenDataSeries()
     CPPUNIT_ASSERT_EQUAL(OUString("Category 4"), aCategories[3][0]);
 }
 
-void Chart2ImportTest::testPPTXPercentageNumberFormats()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXPercentageNumberFormats)
 {
     loadFromURL(u"pptx/percentage-number-formats.pptx");
 
@@ -680,7 +498,7 @@ void Chart2ImportTest::testPPTXPercentageNumberFormats()
     CPPUNIT_ASSERT_MESSAGE("Y axis should be a percent format.", (nType & util::NumberFormat::PERCENT));
 }
 
-void Chart2ImportTest::testPieChartLabelsNumFormat()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPieChartLabelsNumFormat)
 {
     loadFromURL(u"xlsx/tdfPieNumFormat.xlsx");
     uno::Reference< chart::XChartDocument > xChartDoc(getChartCompFromSheet(0, 0, mxComponent), UNO_QUERY_THROW);
@@ -692,7 +510,7 @@ void Chart2ImportTest::testPieChartLabelsNumFormat()
     CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
 }
 
-void Chart2ImportTest::testPPTXStackedNonStackedYAxis()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXStackedNonStackedYAxis)
 {
     loadFromURL(u"pptx/stacked-non-stacked-mix-y-axis.pptx");
 
@@ -751,7 +569,7 @@ void Chart2ImportTest::testPPTXStackedNonStackedYAxis()
     CPPUNIT_ASSERT_MESSAGE("Y axis should NOT be a percent format.", !(nType & util::NumberFormat::PERCENT));
 }
 
-void Chart2ImportTest::testODPChartSeries()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testODPChartSeries)
 {
     //test chart series names for odp
     uno::Sequence < OUString > seriesList = getImpressChartColumnDescriptions(u"/chart2/qa/extras/data/odp/", "chart.odp");
@@ -761,7 +579,7 @@ void Chart2ImportTest::testODPChartSeries()
 
 }
 
-void Chart2ImportTest::testBnc864396()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testBnc864396)
 {
     uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromImpress(u"/chart2/qa/extras/data/pptx/", "bnc864396.pptx"), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xChartDoc->hasInternalDataProvider());
@@ -776,7 +594,7 @@ void Chart2ImportTest::testBnc864396()
     }
 }
 
-void Chart2ImportTest::testBnc889755()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testBnc889755)
 {
     loadFromURL(u"pptx/bnc889755.pptx");
     uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 5), uno::UNO_QUERY_THROW);
@@ -808,7 +626,7 @@ void Chart2ImportTest::testBnc889755()
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(ColorTransparency, aTransparence.StartColor));
 }
 
-void Chart2ImportTest::testBnc882383()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testBnc882383)
 {
     loadFromURL(u"pptx/bnc882383.pptx");
     uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY_THROW);
@@ -821,7 +639,7 @@ void Chart2ImportTest::testBnc882383()
     CPPUNIT_ASSERT(!sGradientName.isEmpty());
 }
 
-void Chart2ImportTest::testTransparencyGradientValue()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTransparencyGradientValue)
 {
     loadFromURL(u"xlsx/tdf128732.xlsx");
     uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -844,7 +662,7 @@ void Chart2ImportTest::testTransparencyGradientValue()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5000268), aTransparenceGradient.StartColor);
 }
 
-void Chart2ImportTest::testSimpleStrictXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testSimpleStrictXLSX)
 {
     loadFromURL(u"xlsx/strict_chart.xlsx");
     uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
@@ -855,8 +673,9 @@ void Chart2ImportTest::testSimpleStrictXLSX()
 
 }
 
-void Chart2ImportTest::testDelayedCellImport()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDelayedCellImport)
 {
+    // chart range referencing content on later sheets
     loadFromURL(u"xlsx/fdo70609.xlsx");
     uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
     Reference< chart2::data::XDataSequence > xDataSeq =
@@ -866,7 +685,7 @@ void Chart2ImportTest::testDelayedCellImport()
     CPPUNIT_ASSERT_EQUAL(OUString("$Sheet2.$C$5:$C$9"), aRange);
 }
 
-void Chart2ImportTest::testFlatODSStackedColumnChart()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testFlatODSStackedColumnChart)
 {
     loadFromURL(u"fods/stacked-column-chart.fods");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -883,7 +702,7 @@ void Chart2ImportTest::testFlatODSStackedColumnChart()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aSeriesSeq.getLength());
 }
 
-void Chart2ImportTest::testFdo78080()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testFdo78080)
 {
     loadFromURL(u"xlsx/fdo78080.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -894,7 +713,7 @@ void Chart2ImportTest::testFdo78080()
     CPPUNIT_ASSERT(!xTitle.is());
 }
 
-void Chart2ImportTest::testTdf127811()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf127811)
 {
     loadFromURL(u"pptx/tdf127811.pptx");
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
@@ -913,8 +732,9 @@ void Chart2ImportTest::testTdf127811()
     CPPUNIT_ASSERT_EQUAL(OUString("2. second"), aLabels[1][0].get<OUString>());
 }
 
-void Chart2ImportTest::testTdf86624()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf86624)
 {
+    // manually placed legends
     loadFromURL(u"ods/tdf86624.ods");
     uno::Reference< chart2::XChartDocument > xChart2Doc = getChartDocFromSheet(0, mxComponent);
     uno::Reference< chart::XChartDocument > xChartDoc (xChart2Doc, uno::UNO_QUERY);
@@ -924,7 +744,7 @@ void Chart2ImportTest::testTdf86624()
     CPPUNIT_ASSERT(aPos.Y > 4000); // real value for ms is above 7000
 }
 
-void Chart2ImportTest::testTdf105517()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf105517)
 {
     loadFromURL(u"pptx/tdf105517.pptx");
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
@@ -952,7 +772,7 @@ void Chart2ImportTest::testTdf105517()
     CPPUNIT_ASSERT_EQUAL(tools::Long(0x1e69a8), lineColor);
 }
 
-void Chart2ImportTest::testTdf106217()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf106217)
 {
     loadFromURL(u"pptx/tdf106217.pptx");
     uno::Reference< chart::XChartDocument > xChartDoc = getChartDocFromDrawImpress(0, 0);
@@ -974,7 +794,7 @@ void Chart2ImportTest::testTdf106217()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2700), aSize.Height);
 }
 
-void Chart2ImportTest::testTdf108021()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf108021)
 {
     // Tdf108021 : To check TextBreak value is true.
     loadFromURL(u"ods/tdf108021.ods");
@@ -992,7 +812,7 @@ void Chart2ImportTest::testTdf108021()
     CPPUNIT_ASSERT(bTextBreak);
 }
 
-void Chart2ImportTest::testTdf100084()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf100084)
 {
     // The test file was created with IBM Cognos, make sure there is a diagram.
     loadFromURL(u"xlsx/tdf100084.xlsx");
@@ -1002,7 +822,7 @@ void Chart2ImportTest::testTdf100084()
     CPPUNIT_ASSERT_MESSAGE("There should be a Diagram.", xDiagram.is());
 }
 
-void Chart2ImportTest::testTdf124817()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf124817)
 {
     loadFromURL(u"xlsx/tdf124817.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1033,7 +853,7 @@ void Chart2ImportTest::testTdf124817()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xFF0000), aSymblProp.BorderColor);
 }
 
-void Chart2ImportTest::testTdf126033()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf126033)
 {
     loadFromURL(u"xlsx/tdf126033.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1067,17 +887,18 @@ void Chart2ImportTest::testTransparentBackground(std::u16string_view filename)
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Background needs to be with solid fill style", css::drawing::FillStyle_SOLID, aStyle);
 }
+
 // 2 test methods here so that tearDown() can dispose the document
-void Chart2ImportTest::testFdo54361()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testFdo54361)
 {
     testTransparentBackground(u"xlsx/fdo54361.xlsx");
 }
-void Chart2ImportTest::testFdo54361_1()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testFdo54361_1)
 {
     testTransparentBackground(u"xlsx/fdo54361-1.xlsx");
 }
 
-void Chart2ImportTest::testAutoBackgroundXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAutoBackgroundXLSX)
 {
     loadFromURL(u"xlsx/chart-auto-background.xlsx");
     uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1094,7 +915,7 @@ void Chart2ImportTest::testAutoBackgroundXLSX()
         sal_Int32(0x00FFFFFF), sal_Int32(nColor & 0x00FFFFFF)); // highest 2 bytes are transparency which we ignore here.
 }
 
-void Chart2ImportTest::testAutoChartAreaBorderPropXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAutoChartAreaBorderPropXLSX)
 {
     loadFromURL(u"xlsx/chart-area-style-border.xlsx");
     uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1114,7 +935,7 @@ void Chart2ImportTest::testAutoChartAreaBorderPropXLSX()
         sal_Int32(26), nWidth);
 }
 
-void Chart2ImportTest::testAutoChartAreaBorderPropPPTX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAutoChartAreaBorderPropPPTX)
 {
     loadFromURL(u"pptx/tdf150176.pptx");
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
@@ -1128,7 +949,7 @@ void Chart2ImportTest::testAutoChartAreaBorderPropPPTX()
         drawing::LineStyle_NONE, eStyle);
 }
 
-void Chart2ImportTest::testChartAreaStyleBackgroundXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testChartAreaStyleBackgroundXLSX)
 {
     loadFromURL(u"xlsx/chart-area-style-background.xlsx");
     uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1145,7 +966,7 @@ void Chart2ImportTest::testChartAreaStyleBackgroundXLSX()
         sal_Int32(0), nColor);
 }
 
-void Chart2ImportTest::testChartHatchFillXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testChartHatchFillXLSX)
 {
     loadFromURL(u"xlsx/chart-hatch-fill.xlsx");
     uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1187,7 +1008,7 @@ void Chart2ImportTest::testChartHatchFillXLSX()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x00B050), nBackgroundColorofDatapoint);
 }
 
-void Chart2ImportTest::testAxisTextRotationXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAxisTextRotationXLSX)
 {
     loadFromURL(u"xlsx/axis-label-rotation.xlsx");
     uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1204,7 +1025,7 @@ void Chart2ImportTest::testAxisTextRotationXLSX()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(90, nRotation, 1e-10);
 }
 
-void Chart2ImportTest::testTextCanOverlapXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTextCanOverlapXLSX)
 {
     // fdo#84647 : To check textoverlap value is imported correctly.
     loadFromURL(u"xlsx/chart-text-can-overlap.xlsx");
@@ -1221,7 +1042,7 @@ void Chart2ImportTest::testTextCanOverlapXLSX()
     CPPUNIT_ASSERT(!bTextCanOverlap);
 }
 
-void Chart2ImportTest::testTextBreakXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTextBreakXLSX)
 {
     // tdf#122091: To check textbreak value is true in case of 0° degree of Axis label rotation.
     loadFromURL(u"xlsx/chart_label_text_break.xlsx");
@@ -1240,7 +1061,7 @@ void Chart2ImportTest::testTextBreakXLSX()
     CPPUNIT_ASSERT(textBreak);
 }
 
-void Chart2ImportTest::testNumberFormatsXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testNumberFormatsXLSX)
 {
     loadFromURL(u"xlsx/number-formats.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1292,7 +1113,7 @@ void Chart2ImportTest::testNumberFormatsXLSX()
     CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bLinkNumberFormatToSource);
 }
 
-void Chart2ImportTest::testNumberFormatsDOCX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testNumberFormatsDOCX)
 {
     loadFromURL(u"docx/tdf132174.docx");
     {
@@ -1337,7 +1158,7 @@ void Chart2ImportTest::testNumberFormatsDOCX()
     }
 }
 
-void Chart2ImportTest::testPercentageNumberFormatsDOCX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPercentageNumberFormatsDOCX)
 {
     loadFromURL(u"docx/tdf133632.docx");
     uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
@@ -1358,8 +1179,10 @@ void Chart2ImportTest::testPercentageNumberFormatsDOCX()
     CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bLinkNumberFormatToSource);
 }
 
-void Chart2ImportTest::testAutoTitleDelDefaultValue2007XLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAutoTitleDelDefaultValue2007XLSX)
 {
+    // below are OOXML default value tests for cases
+    // where we fixed the handling of MSO 2007 vs OOXML
     loadFromURL(u"xlsx/autotitledel_2007.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
     CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
@@ -1370,7 +1193,7 @@ void Chart2ImportTest::testAutoTitleDelDefaultValue2007XLSX()
             !aTitle.isEmpty());
 }
 
-void Chart2ImportTest::testAutoTitleDelDefaultValue2013XLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAutoTitleDelDefaultValue2013XLSX)
 {
     loadFromURL(u"xlsx/autotitledel_2013.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1382,7 +1205,7 @@ void Chart2ImportTest::testAutoTitleDelDefaultValue2013XLSX()
             !xTitle.is());
 }
 
-void Chart2ImportTest::testDispBlanksAsDefaultValue2007XLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDispBlanksAsDefaultValue2007XLSX)
 {
     loadFromURL(u"xlsx/dispBlanksAs_2007.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1396,7 +1219,7 @@ void Chart2ImportTest::testDispBlanksAsDefaultValue2007XLSX()
     CPPUNIT_ASSERT_EQUAL(chart::MissingValueTreatment::LEAVE_GAP, nMissingValueTreatment);
 }
 
-void Chart2ImportTest::testDispBlanksAsDefaultValue2013XLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDispBlanksAsDefaultValue2013XLSX)
 {
     loadFromURL(u"xlsx/dispBlanksAs_2013.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1410,7 +1233,7 @@ void Chart2ImportTest::testDispBlanksAsDefaultValue2013XLSX()
     CPPUNIT_ASSERT_EQUAL(chart::MissingValueTreatment::USE_ZERO, nMissingValueTreatment);
 }
 
-void Chart2ImportTest::testSmoothDefaultValue2007XLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testSmoothDefaultValue2007XLSX)
 {
     loadFromURL(u"xlsx/smoothed_series2007.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1428,7 +1251,7 @@ void Chart2ImportTest::testSmoothDefaultValue2007XLSX()
     CPPUNIT_ASSERT_EQUAL(chart2::CurveStyle_LINES, eCurveStyle);
 }
 
-void Chart2ImportTest::testSmoothDefaultValue2013XLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testSmoothDefaultValue2013XLSX)
 {
     loadFromURL(u"xlsx/smoothed_series.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1446,7 +1269,7 @@ void Chart2ImportTest::testSmoothDefaultValue2013XLSX()
     CPPUNIT_ASSERT(eCurveStyle != chart2::CurveStyle_LINES);
 }
 
-void Chart2ImportTest::testTrendlineDefaultValue2007XLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTrendlineDefaultValue2007XLSX)
 {
     loadFromURL(u"xlsx/trendline2007.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1472,7 +1295,7 @@ void Chart2ImportTest::testTrendlineDefaultValue2007XLSX()
     CPPUNIT_ASSERT(!bShowCorrelation);
 }
 
-void Chart2ImportTest::testTrendlineDefaultValue2013XLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTrendlineDefaultValue2013XLSX)
 {
     loadFromURL(u"xlsx/trendline.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1498,7 +1321,7 @@ void Chart2ImportTest::testTrendlineDefaultValue2013XLSX()
     CPPUNIT_ASSERT(bShowCorrelation);
 }
 
-void Chart2ImportTest::testVaryColorDefaultValues2007XLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testVaryColorDefaultValues2007XLSX)
 {
     loadFromURL(u"xlsx/vary_color2007.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1513,7 +1336,7 @@ void Chart2ImportTest::testVaryColorDefaultValues2007XLSX()
     CPPUNIT_ASSERT(!bVaryColor);
 }
 
-void Chart2ImportTest::testVaryColorDefaultValues2013XLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testVaryColorDefaultValues2013XLSX)
 {
     loadFromURL(u"xlsx/vary_color.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1528,7 +1351,7 @@ void Chart2ImportTest::testVaryColorDefaultValues2013XLSX()
     CPPUNIT_ASSERT(!bVaryColor);
 }
 
-void Chart2ImportTest::testPlotVisOnlyDefaultValue2013XLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPlotVisOnlyDefaultValue2013XLSX)
 {
     loadFromURL(u"xlsx/plotVisOnly.xlsx");
     uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW);
@@ -1540,7 +1363,7 @@ void Chart2ImportTest::testPlotVisOnlyDefaultValue2013XLSX()
     CPPUNIT_ASSERT(!bShowHiddenValues);
 }
 
-void Chart2ImportTest::testRAngAxDefaultValue2013XLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testRAngAxDefaultValue2013XLSX)
 {
     loadFromURL(u"xlsx/rAngAx.xlsx");
     uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW);
@@ -1552,7 +1375,7 @@ void Chart2ImportTest::testRAngAxDefaultValue2013XLSX()
     CPPUNIT_ASSERT(bRightAngleAxes);
 }
 
-void Chart2ImportTest::testMajorTickMarksDefaultValue2013XLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testMajorTickMarksDefaultValue2013XLSX)
 {
     loadFromURL(u"xlsx/majorTickMark.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1567,7 +1390,7 @@ void Chart2ImportTest::testMajorTickMarksDefaultValue2013XLSX()
     CPPUNIT_ASSERT_EQUAL(chart2::TickmarkStyle::INNER | chart2::TickmarkStyle::OUTER, nMajorTickmarks);
 }
 
-void Chart2ImportTest::testMinorTickMarksDefaultValue2013XLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testMinorTickMarksDefaultValue2013XLSX)
 {
     loadFromURL(u"xlsx/minorTickMark.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1582,7 +1405,7 @@ void Chart2ImportTest::testMinorTickMarksDefaultValue2013XLSX()
     CPPUNIT_ASSERT_EQUAL(chart2::TickmarkStyle::INNER | chart2::TickmarkStyle::OUTER, nMajorTickmarks);
 }
 
-void Chart2ImportTest::testAxisTitleDefaultRotationXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAxisTitleDefaultRotationXLSX)
 {
     loadFromURL(u"xlsx/axis_title_default_rotation.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1599,7 +1422,7 @@ void Chart2ImportTest::testAxisTitleDefaultRotationXLSX()
     CPPUNIT_ASSERT_EQUAL(90.0, nRotation);
 }
 
-void Chart2ImportTest::testSecondaryAxisTitleDefaultRotationXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testSecondaryAxisTitleDefaultRotationXLSX)
 {
     loadFromURL(u"xlsx/secondary_axis_title_default_rotation.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1616,7 +1439,7 @@ void Chart2ImportTest::testSecondaryAxisTitleDefaultRotationXLSX()
     CPPUNIT_ASSERT_EQUAL(90.0, nRotation);
 }
 
-void Chart2ImportTest::testAxisTitleRotationXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAxisTitleRotationXLSX)
 {
     loadFromURL(u"xlsx/axis_title_rotated.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1648,7 +1471,7 @@ void Chart2ImportTest::testAxisTitleRotationXLSX()
 
 }
 
-void Chart2ImportTest::testAxisTitlePositionDOCX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAxisTitlePositionDOCX)
 {
     loadFromURL(u"docx/testAxisTitlePosition.docx");
     uno::Reference< chart::XDiagram > mxDiagram;
@@ -1680,7 +1503,7 @@ void Chart2ImportTest::testAxisTitlePositionDOCX()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(6378, aPos.Y, 300);
 }
 
-void Chart2ImportTest::testCombinedChartAttachedAxisXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testCombinedChartAttachedAxisXLSX)
 {
     loadFromURL(u"xlsx/testCombinedChartAxis.xlsx");
     Reference< chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1706,7 +1529,7 @@ void Chart2ImportTest::testCombinedChartAttachedAxisXLSX()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nAxisIndex);
 }
 
-void Chart2ImportTest::testTdf140489MultiSeriesChartAxisXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf140489MultiSeriesChartAxisXLSX)
 {
     loadFromURL(u"xlsx/tdf140489.xlsx");
     Reference< chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1739,7 +1562,8 @@ void Chart2ImportTest::testTdf140489MultiSeriesChartAxisXLSX()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nAxisIndex);
 }
 
-void Chart2ImportTest::testInternalDataProvider() {
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testInternalDataProvider)
+{
     uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromImpress(u"/chart2/qa/extras/data/odp/", "chart.odp"), uno::UNO_QUERY_THROW);
     const uno::Reference< chart2::data::XDataProvider >& rxDataProvider = xChartDoc->getDataProvider();
 
@@ -1784,8 +1608,9 @@ void Chart2ImportTest::testInternalDataProvider() {
     CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Row 4 world")), xSequence[3]);
 }
 
-void Chart2ImportTest::testTdf90510()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf90510)
 {
+    // Pie chart label placement settings(XLS)
     loadFromURL(u"xls/piechart_outside.xls");
     uno::Reference< chart::XChartDocument > xChart1Doc( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW );
     Reference<beans::XPropertySet> xPropSet( xChart1Doc->getDiagram()->getDataPointProperties( 0, 0 ), uno::UNO_SET_THROW );
@@ -1796,8 +1621,9 @@ void Chart2ImportTest::testTdf90510()
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Data labels should be placed outside", chart::DataLabelPlacement::OUTSIDE, nLabelPlacement );
 }
 
-void Chart2ImportTest::testTdf109858()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf109858)
 {
+    // Pie chart label placement settings(XLSX)
     loadFromURL(u"xlsx/piechart_outside.xlsx");
     uno::Reference< chart::XChartDocument > xChart1Doc( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW );
 
@@ -1816,7 +1642,7 @@ void Chart2ImportTest::testTdf109858()
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Data series labels should be placed outside", chart::DataLabelPlacement::OUTSIDE, nLabelPlacement );
 }
 
-void Chart2ImportTest::testTdf130105()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf130105)
 {
     loadFromURL(u"xlsx/barchart_outend.xlsx");
     uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -1832,13 +1658,13 @@ void Chart2ImportTest::testTdf130105()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Data label should be placed outend", chart::DataLabelPlacement::OUTSIDE, nLabelPlacement);
 }
 
-void Chart2ImportTest::testTdf111173()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf111173)
 {
     loadFromURL(u"xlsx/tdf111173.xlsx");
     uno::Reference< chart::XChartDocument > xChart1Doc( getChartCompFromSheet( 0, 0, mxComponent ), UNO_QUERY_THROW );
 }
 
-void Chart2ImportTest::testTdf122226()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf122226)
 {
     loadFromURL(u"docx/testTdf122226.docx" );
     uno::Reference< chart2::XChartDocument > xChartDoc ( getChartDocFromWriter(0), uno::UNO_QUERY);
@@ -1856,8 +1682,9 @@ void Chart2ImportTest::testTdf122226()
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Data labels should be separated into new lines", OUString("\n"), nLabelSeparator );
 }
 
-void Chart2ImportTest::testTdf115107()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf115107)
 {
+    // import complex data point labels
     loadFromURL(u"pptx/tdf115107.pptx");
 
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
@@ -1947,8 +1774,9 @@ void Chart2ImportTest::testTdf115107()
     CPPUNIT_ASSERT_EQUAL(OUString(" <CELLREF"), aFields[1]->getString());
 }
 
-void Chart2ImportTest::testTdf115107_2()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf115107_2)
 {
+    // import complex data point labels in cobo charts with multiple data series
     loadFromURL(u"pptx/tdf115107-2.pptx");
 
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
@@ -2002,7 +1830,7 @@ void Chart2ImportTest::testTdf115107_2()
 
 }
 
-void Chart2ImportTest::testTdf116163()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf116163)
 {
     loadFromURL(u"pptx/tdf116163.pptx");
 
@@ -2067,7 +1895,7 @@ void Chart2ImportTest::testTdf116163()
     CPPUNIT_ASSERT_EQUAL(OUString("Dddd..."), xLabel3->getString());
 }
 
-void Chart2ImportTest::testTdf48041()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf48041)
 {
     loadFromURL(u"pptx/tdf48041.pptx");
 
@@ -2117,7 +1945,7 @@ void Chart2ImportTest::testTdf48041()
     CPPUNIT_ASSERT_EQUAL(OUString("5"), xLabel5->getString());
 }
 
-void Chart2ImportTest::testTdf121205()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf121205)
 {
     loadFromURL(u"pptx/tdf121205.pptx");
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
@@ -2130,7 +1958,7 @@ void Chart2ImportTest::testTdf121205()
     CPPUNIT_ASSERT_EQUAL(OUString("Firstline\nSecondline\nThirdline"), aTitle);
 }
 
-void Chart2ImportTest::testFixedSizeBarChartVeryLongLabel()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testFixedSizeBarChartVeryLongLabel)
 {
     // Bar chart area size is fixed (not automatic) so we can't resize
     // the chart area to let the label break into multiple lines. In this
@@ -2203,7 +2031,7 @@ void Chart2ImportTest::testFixedSizeBarChartVeryLongLabel()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(398, xXAxis->getSize().Height, 100);
 }
 
-void Chart2ImportTest::testAutomaticSizeBarChartVeryLongLabel()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testAutomaticSizeBarChartVeryLongLabel)
 {
     // Bar chart area size is automatic so we expect the label to be broken
     // into multiple lines.
@@ -2271,7 +2099,7 @@ void Chart2ImportTest::testAutomaticSizeBarChartVeryLongLabel()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1192, xXAxis->getSize().Height, 100);
 }
 
-void Chart2ImportTest::testTotalsRowIgnored()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTotalsRowIgnored)
 {
     loadFromURL(u"xlsx/barchart_totalsrow.xlsx");
     {
@@ -2298,7 +2126,7 @@ void Chart2ImportTest::testTotalsRowIgnored()
     }
 }
 
-void Chart2ImportTest::testPieChartPlotAreaMarginWithAutomaticLayout()
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPieChartPlotAreaMarginWithAutomaticLayout)
 {
     // tdf#91265
     // Checks the margin and calculation of the plot area for the pie chart inside the chart area.
@@ -2387,8 +2215,6 @@ void Chart2ImportTest::testPieChartPlotAreaMarginWithAutomaticLayout()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(350, xChartDiagramShape->getPosition().Y, 5); // margin
     }
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
