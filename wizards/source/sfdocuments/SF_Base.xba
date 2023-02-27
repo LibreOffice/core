@@ -948,6 +948,11 @@ Public Function SaveCopyAs(Optional ByVal FileName As Variant _
 	SaveCopyAs = [_Super].SaveCopyAs(FileName, Overwrite, Password, FilterName, FilterOptions)
 End Function   &apos;   SFDocuments.SF_Base.SaveCopyAs
 
+REM -----------------------------------------------------------------------------
+Public Function Toolbars(Optional ByVal ToolbarName As Variant) As Variant
+	Toolbars = [_Super].Toolbars(ToolbarName)
+End Function	&apos;	SFDocuments.SF_Base.Toolbars
+
 REM =========================================================== PRIVATE FUNCTIONS
 
 REM -----------------------------------------------------------------------------

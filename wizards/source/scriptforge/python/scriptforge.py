@@ -1806,6 +1806,9 @@ class SFDatabases:
         def RemoveMenu(self, menuheader):
             return self.ExecMethod(self.vbMethod, 'RemoveMenu', menuheader)
 
+        def Toolbars(self, toolbarname = ''):
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Toolbars', toolbarname)
+
 
 # #####################################################################################################################
 #                       SFDialogs CLASS    (alias of SFDialogs Basic library)                                       ###
@@ -2021,6 +2024,9 @@ class SFDocuments:
 
         def SetPrinter(self, printer = '', orientation = '', paperformat = ''):
             return self.ExecMethod(self.vbMethod, 'SetPrinter', printer, orientation, paperformat)
+
+        def Toolbars(self, toolbarname = ''):
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Toolbars', toolbarname)
 
     # #########################################################################
     # SF_Base CLASS
@@ -2589,6 +2595,46 @@ class SFWidgets:
 
         def Execute(self, returnid = True):
             return self.ExecMethod(self.vbMethod, 'Execute', returnid)
+
+    # #########################################################################
+    # SF_Toolbar CLASS
+    # #########################################################################
+    class SF_Toolbar(SFServices):
+        """
+            Each component has its own set of toolbars, depending on the component type
+            (Calc, Writer, Basic IDE, ...).
+            In the context of the actual class, a toolbar is presumed defined statically:
+                - either by the application
+                - or by a customization done by the user.
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'SFWidgets.Toolbar'
+        servicesynonyms = ('toolbar', 'sfwidgets.toolbar')
+        serviceproperties = dict(BuiltIn = False, Docked = False, HasGlobalScope = False, Name = False,
+                                 ResourceURL = False, Visible = True, XUIElement = False)
+
+        def ToolbarButtons(self, buttonname = ''):
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'ToolbarButtons', buttonname)
+
+    # #########################################################################
+    # SF_ToolbarButton CLASS
+    # #########################################################################
+    class SF_ToolbarButton(SFServices):
+        """
+            A toolbar consists in a series of graphical controls to trigger actions.
+            The "Toolbar" service gives access to the "ToolbarButton" service to manage
+            the individual buttons belonging to the toolbar.
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'SFWidgets.ToolbarButton'
+        servicesynonyms = ('toolbarbutton', 'sfwidgets.toolbarbutton')
+        serviceproperties = dict(Caption = False, Height = False, Index = False, OnClick = True, Parent = False,
+                                 TipText = True, Visible = True, Width = False, X = False, Y = False)
+
+        def Execute(self):
+            return self.ExecMethod(self.vbMethod, 'Execute')
 
 
 # ##############################################False##################################################################

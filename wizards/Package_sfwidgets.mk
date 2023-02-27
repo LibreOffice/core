@@ -24,6 +24,8 @@ $(eval $(call gb_Package_add_files,wizards_basicsrvsfwidgets,$(LIBO_SHARE_FOLDER
 	SF_MenuListener.xba \
 	SF_PopupMenu.xba \
 	SF_Register.xba \
+	SF_Toolbar.xba \
+	SF_ToolbarButton.xba \
 	__License.xba \
 	dialog.xlb \
 	script.xlb \

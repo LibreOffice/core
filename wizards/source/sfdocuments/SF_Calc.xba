@@ -3780,6 +3780,11 @@ Public Function SetPrinter(Optional ByVal Printer As Variant _
 	SetPrinter = [_Super].SetPrinter(Printer, Orientation, PaperFormat)
 End Function	&apos;   SFDocuments.SF_Calc.SetPrinter
 
+REM -----------------------------------------------------------------------------
+Public Function Toolbars(Optional ByVal ToolbarName As Variant) As Variant
+	Toolbars = [_Super].Toolbars(ToolbarName)
+End Function	&apos;	SFDocuments.SF_Calc.Toolbars
+
 REM =========================================================== PRIVATE FUNCTIONS
 
 REM -----------------------------------------------------------------------------

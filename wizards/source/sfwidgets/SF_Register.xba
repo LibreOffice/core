@@ -52,6 +52,8 @@ Public Sub RegisterScriptServices() As Variant
 	With GlobalScope.ScriptForge.SF_Services
 		.RegisterService(&quot;Menu&quot;,				&quot;SFWidgets.SF_Register._NewMenu&quot;)			&apos;	Reference to the function initializing the service
 		.RegisterService(&quot;PopupMenu&quot;,			&quot;SFWidgets.SF_Register._NewPopupMenu&quot;)		&apos;	id.
+		.RegisterService(&quot;Toolbar&quot;,				&quot;SFWidgets.SF_Register._NewToolbar&quot;)		&apos;	id.
+		.RegisterService(&quot;ToolbarButton&quot;,		&quot;SFWidgets.SF_Register._NewToolbarButton&quot;)		&apos;	id.
 	End With
 
 End Sub			&apos;	SFWidgets.SF_Register.RegisterScriptServices
@@ -131,6 +133,7 @@ Dim oSession As Object				:	Set oSession = ScriptForge.SF_Services.CreateScriptS
 Dim oUi As Object					:	Set oUi = ScriptForge.SF_Services.CreateScriptService(&quot;ScriptForge.UI&quot;)
 
 	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set oMenu = Nothing
 
 Check:
 	&apos;	Check and get arguments, their number may vary
@@ -145,7 +148,6 @@ Check:
 	If Not ScriptForge.SF_Utils._Validate(X, &quot;X&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
 	If Not ScriptForge.SF_Utils._Validate(Y, &quot;Y&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
 	If Not ScriptForge.SF_Utils._Validate(SubmenuChar, &quot;SubmenuChar&quot;, V_STRING) Then GoTo Finally
-	Set oMenu = Nothing
 
 Try:
 	&apos;	Find and identify the control that triggered the popup menu
@@ -186,5 +188,70 @@ Catch:
 	GoTo Finally
 End Function	&apos;	SFWidgets.SF_Register._NewPopupMenu
 
-REM ============================================== END OF SFWidgets.SF_REGISTER
+REM -----------------------------------------------------------------------------
+Public Function _NewToolbar(Optional ByVal pvArgs As Variant) As Object
+&apos;&apos;&apos;	Create a new instance of the SF_Toolbar class
+&apos;&apos;&apos;	The &quot;Toolbar&quot; service must not be invoked directly in a user script
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		ToolbarDesc: a proto-toolbar object type. See ScriptForge.SF_UI for a detailed description
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		the instance or Nothing
+
+Dim oToolbar As Object			&apos;	Return value
+Dim oToolbarDesc As Object		&apos;	A proto-toolbar description
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set oToolbar = Nothing
+
+Check:
+	Set oToolbarDesc = pvArgs(0)
+
+Try:
+	Set oToolbar = New SF_Toolbar
+	With oToolbar
+		Set .[Me] = oToolbar
+		._Initialize(oToolbarDesc)
+	End With
+
+Finally:
+	Set _NewToolbar = oToolbar
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFWidgets.SF_Register._NewToolbar
+
+REM -----------------------------------------------------------------------------
+Public Function _NewToolbarButton(Optional ByVal pvArgs As Variant) As Object
+&apos;&apos;&apos;	Create a new instance of the SF_ToolbarButton class
+&apos;&apos;&apos;	The &quot;ToolbarButton&quot; service must not be invoked directly in a user script
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		ToolbarButtonDesc: a proto-toolbarButton object type. See SFWidgets.SF_Toolbar for a detailed description
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		the instance or Nothing
+
+Dim oToolbarButton As Object		&apos;	Return value
+Dim oToolbarButtonDesc As Object	&apos;	A proto-toolbarbutton description
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set oToolbarButton = Nothing
+
+Check:
+	Set oToolbarButtonDesc = pvArgs(0)
+
+Try:
+	Set oToolbarButton = New SF_ToolbarButton
+	With oToolbarButton
+		Set .[Me] = oToolbarButton
+		._Initialize(oToolbarButtonDesc)
+	End With
+
+Finally:
+	Set _NewToolbarButton = oToolbarButton
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFWidgets.SF_Register._NewToolbarButton
+
+
+REM ============================================== END OF SFWIDGETS.SF_REGISTER
 </script:module>

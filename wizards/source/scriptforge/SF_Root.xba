@@ -80,6 +80,8 @@ Private PackageProvider		As Object	&apos; com.sun.star.comp.deployment.PackageIn
 Private MailService			As Object	&apos; com.sun.star.system.SimpleCommandMail or com.sun.star.system.SimpleSystemMail
 Private GraphicExportFilter	As Object	&apos; com.sun.star.drawing.GraphicExportFilter
 Private Toolkit				As Object	&apos; com.sun.star.awt.Toolkit
+Private ModuleUIConfigurationManagerSupplier	As Object
+										&apos; com.sun.star.ui.ModuleUIConfigurationManagerSupplier
 
 &apos;	Specific persistent services objects or properties
 Private FileSystemNaming	As String	&apos; If &quot;SYS&quot;, file and folder naming is based on operating system notation
@@ -149,6 +151,7 @@ Private Sub Class_Initialize()
 	Set MailService = Nothing
 	Set GraphicExportFilter = Nothing
 	Set Toolkit = Nothing
+	Set ModuleUIConfigurationManagerSupplier = Nothing
 	OSName = &quot;&quot;
 	SFDialogs = Empty
 	SFForms = Empty
