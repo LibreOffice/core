@@ -4035,7 +4035,8 @@ StackVar ScInterpreter::Interpret()
                     nStackBase = sp - pCur->GetParamCount();
                 else
                 {
-                    SAL_WARN("sc.core", "Stack anomaly at " << aPos.Format(
+                    SAL_WARN("sc.core", "Stack anomaly at " << aPos.Tab() << "," << aPos.Col() << "," << aPos.Row()
+                            << "  " << aPos.Format(
                                 ScRefFlags::VALID | ScRefFlags::FORCE_DOC | ScRefFlags::TAB_3D, &mrDoc)
                             << "  eOp: " << static_cast<int>(eOp)
                             << "  params: " << static_cast<int>(pCur->GetParamCount())
