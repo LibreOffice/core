@@ -205,6 +205,78 @@ public:
     }
 };
 
+enum class PatternPreset
+{
+    Unused,
+    Percent_5,
+    Percent_10,
+    Percent_20,
+    Percent_25,
+    Percent_30,
+    Percent_40,
+    Percent_50,
+    Percent_60,
+    Percent_70,
+    Percent_75,
+    Percent_80,
+    Percent_90,
+    Horizontal,
+    Vertical,
+    LightHorizontal,
+    LightVertical,
+    DarkHorizontal,
+    DarkVertical,
+    NarrowHorizontal,
+    NarrowVertical,
+    DashedHorizontal,
+    DashedVertical,
+    Cross,
+    DownwardDiagonal,
+    UpwardDiagonal,
+    LightDownwardDiagonal,
+    LightUpwardDiagonal,
+    DarkDownwardDiagonal,
+    DarkUpwardDiagonal,
+    WideDownwardDiagonal,
+    WideUpwardDiagonal,
+    DashedDownwardDiagonal,
+    DashedUpwardDiagonal,
+    DiagonalCross,
+    SmallCheckerBoard,
+    LargeCheckerBoard,
+    SmallGrid,
+    LargeGrid,
+    DottedGrid,
+    SmallConfetti,
+    LargeConfetti,
+    HorizontalBrick,
+    DiagonalBrick,
+    SolidDiamond,
+    OpenDiamond,
+    DottedDiamond,
+    Plaid,
+    Sphere,
+    Weave,
+    Divot,
+    Shingle,
+    Wave,
+    Trellis,
+    ZigZag
+};
+
+class DOCMODEL_DLLPUBLIC PatternFill : public Fill
+{
+public:
+    PatternPreset mePatternPreset = PatternPreset::Unused;
+    ColorDefinition maForegroundColor;
+    ColorDefinition maBackgroundColor;
+
+    PatternFill()
+        : Fill(FillType::Pattern)
+    {
+    }
+};
+
 // Format Scheme
 
 class DOCMODEL_DLLPUBLIC FillStyle

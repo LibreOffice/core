@@ -60,10 +60,9 @@ private:
 class PatternFillContext final : public ::oox::core::ContextHandler2
 {
 public:
-    explicit            PatternFillContext(
-                            ::oox::core::ContextHandler2Helper const & rParent,
-                            const ::oox::AttributeList& rAttribs,
-                            PatternFillProperties& rPatternProps );
+    explicit PatternFillContext(::oox::core::ContextHandler2Helper const& rParent,
+                            const ::oox::AttributeList& rAttribs, PatternFillProperties& rPatternProps,
+                            model::PatternFill* pPatternFill);
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
@@ -71,6 +70,7 @@ public:
                             const ::oox::AttributeList& rAttribs ) override;
 
 private:
+    model::PatternFill* mpPatternFill;
     PatternFillProperties& mrPatternProps;
 };
 
