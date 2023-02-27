@@ -50,11 +50,11 @@ class OOXMLParserState final : public virtual SvRefBase
     std::stack<OOXMLPropertySet::Pointer_t> mCellProps;
     std::stack<OOXMLPropertySet::Pointer_t> mRowProps;
     std::stack<OOXMLPropertySet::Pointer_t> mTableProps;
-    bool inTxbxContent;
+    bool m_inTxbxContent;
     // these 4 save when inTxbxContent
-    bool savedInParagraphGroup;
-    bool savedInCharacterGroup;
-    bool savedLastParagraphInSection;
+    bool m_savedInParagraphGroup;
+    bool m_savedInCharacterGroup;
+    bool m_savedLastParagraphInSection;
     std::vector<SavedAlternateState> maSavedAlternateStates;
     std::vector<OOXMLPropertySet::Pointer_t> mvPostponedBreaks;
     bool mbStartFootnote;

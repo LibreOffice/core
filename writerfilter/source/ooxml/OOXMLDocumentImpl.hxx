@@ -54,7 +54,7 @@ class OOXMLDocumentImpl : public OOXMLDocument
     css::uno::Reference<css::xml::dom::XDocument> mxCustomXmlProsDom;
     css::uno::Reference<css::io::XInputStream> mxEmbeddings;
     css::uno::Sequence < css::beans::PropertyValue > mxEmbeddingsList;
-    std::vector<css::beans::PropertyValue> aEmbeddings;
+    std::vector<css::beans::PropertyValue> m_aEmbeddings;
     bool mbIsSubstream;
     bool mbSkipImages;
     /// How many paragraphs equal to 1 percent?

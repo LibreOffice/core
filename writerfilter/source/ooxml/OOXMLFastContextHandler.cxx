@@ -73,7 +73,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   mbIsMathPara(false),
   mpStream(nullptr),
   mnTableDepth(0),
-  inPositionV(false),
+  m_inPositionV(false),
   mbAllowInCell(true),
   mbIsVMLfound(false),
   m_xContext(context),
@@ -96,7 +96,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler(OOXMLFastContextHandler * pCont
   mpStream(pContext->mpStream),
   mpParserState(pContext->mpParserState),
   mnTableDepth(pContext->mnTableDepth),
-  inPositionV(pContext->inPositionV),
+  m_inPositionV(pContext->m_inPositionV),
   mbAllowInCell(pContext->mbAllowInCell),
   mbIsVMLfound(pContext->mbIsVMLfound),
   m_xContext(pContext->m_xContext),
@@ -229,9 +229,9 @@ void OOXMLFastContextHandler::lcl_startFastElement
 {
     OOXMLFactory::startAction(this);
     if( Element == (NMSP_dmlWordDr|XML_positionV) )
-        inPositionV = true;
+        m_inPositionV = true;
     else if( Element == (NMSP_dmlWordDr|XML_positionH) )
-        inPositionV = false;
+        m_inPositionV = false;
 }
 
 void OOXMLFastContextHandler::lcl_endFastElement
@@ -715,7 +715,7 @@ void OOXMLFastContextHandler::text(const OUString & sText)
 void OOXMLFastContextHandler::positionOffset(const OUString& rText)
 {
     if (isForwardEvents())
-        mpStream->positionOffset(rText, inPositionV);
+        mpStream->positionOffset(rText, m_inPositionV);
 }
 
 void OOXMLFastContextHandler::ignore()
@@ -2227,21 +2227,21 @@ Token_t OOXMLFastContextHandlerWrapper::getToken() const
 
 OOXMLFastContextHandlerLinear::OOXMLFastContextHandlerLinear(OOXMLFastContextHandler* pContext)
     : OOXMLFastContextHandlerProperties(pContext)
-    , depthCount( 0 )
+    , m_depthCount( 0 )
 {
 }
 
 void OOXMLFastContextHandlerLinear::lcl_startFastElement(Token_t Element,
     const uno::Reference< xml::sax::XFastAttributeList >& Attribs)
 {
-    buffer.appendOpeningTag( Element, Attribs );
-    ++depthCount;
+    m_buffer.appendOpeningTag( Element, Attribs );
+    ++m_depthCount;
 }
 
 void OOXMLFastContextHandlerLinear::lcl_endFastElement(Token_t Element)
 {
-    buffer.appendClosingTag( Element );
-    if( --depthCount == 0 )
+    m_buffer.appendClosingTag( Element );
+    if( --m_depthCount == 0 )
         process();
 }
 
@@ -2256,7 +2256,7 @@ OOXMLFastContextHandlerLinear::lcl_createFastChildContext(Token_t,
 
 void OOXMLFastContextHandlerLinear::lcl_characters(const OUString& aChars)
 {
-    buffer.appendCharacters( aChars );
+    m_buffer.appendCharacters( aChars );
 }
 
 /*
@@ -2283,7 +2283,7 @@ void OOXMLFastContextHandlerMath::process()
     uno::Reference< uno::XInterface > component(ref->getComponent(), uno::UNO_QUERY_THROW);
     if( oox::FormulaImExportBase* import
         = dynamic_cast< oox::FormulaImExportBase* >( component.get()))
-        import->readFormulaOoxml( buffer );
+        import->readFormulaOoxml( m_buffer );
     if (!isForwardEvents())
         return;
 

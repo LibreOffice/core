@@ -37,10 +37,10 @@ OOXMLParserState::OOXMLParserState() :
     mnContexts(0),
     mnHandle(0),
     mpDocument(nullptr),
-    inTxbxContent(false),
-    savedInParagraphGroup(false),
-    savedInCharacterGroup(false),
-    savedLastParagraphInSection(false),
+    m_inTxbxContent(false),
+    m_savedInParagraphGroup(false),
+    m_savedInCharacterGroup(false),
+    m_savedLastParagraphInSection(false),
     mbStartFootnote(false)
 {
 }
@@ -248,14 +248,14 @@ void OOXMLParserState::incContextCount()
 
 void OOXMLParserState::startTxbxContent()
 {
-    SAL_WARN_IF(inTxbxContent, "writerfilter", "Nested w:txbxContent");
+    SAL_WARN_IF(m_inTxbxContent, "writerfilter", "Nested w:txbxContent");
 
-    inTxbxContent = true;
+    m_inTxbxContent = true;
     // Do not save and reset section group state, it'd cause a new page.
 //    savedInSectionGroup = mbInSectionGroup;
-    savedInParagraphGroup = mbInParagraphGroup;
-    savedInCharacterGroup = mbInCharacterGroup;
-    savedLastParagraphInSection = mbLastParagraphInSection;
+    m_savedInParagraphGroup = mbInParagraphGroup;
+    m_savedInCharacterGroup = mbInCharacterGroup;
+    m_savedLastParagraphInSection = mbLastParagraphInSection;
 //    mbInSectionGroup = false;
     mbInParagraphGroup = false;
     mbInCharacterGroup = false;
@@ -264,16 +264,16 @@ void OOXMLParserState::startTxbxContent()
 
 void OOXMLParserState::endTxbxContent()
 {
-    if( !inTxbxContent )
+    if( !m_inTxbxContent )
     {
         SAL_WARN( "writerfilter", "Non-matching closing w:txbxContent" );
         return;
     }
 //    mbInSectionGroup = savedInSectionGroup;
-    mbInParagraphGroup = savedInParagraphGroup;
-    mbInCharacterGroup = savedInCharacterGroup;
-    mbLastParagraphInSection = savedLastParagraphInSection;
-    inTxbxContent = false;
+    mbInParagraphGroup = m_savedInParagraphGroup;
+    mbInCharacterGroup = m_savedInCharacterGroup;
+    mbLastParagraphInSection = m_savedLastParagraphInSection;
+    m_inTxbxContent = false;
 }
 
 void OOXMLParserState::setStartFootnote(bool bStartFootnote)

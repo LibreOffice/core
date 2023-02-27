@@ -232,7 +232,7 @@ protected:
     void startAction();
     void endAction();
 
-    bool inPositionV;
+    bool m_inPositionV;
     bool mbAllowInCell; // o:allowincell
     bool mbIsVMLfound;
     OOXMLValue::Pointer_t mpGridAfter;
@@ -584,10 +584,10 @@ protected:
     virtual void lcl_characters(const OUString & aChars) override;
 
     // should be private, but not much point in making deep copies of it
-    oox::formulaimport::XmlStreamBuilder buffer;
+    oox::formulaimport::XmlStreamBuilder m_buffer;
 
 private:
-    int depthCount;
+    int m_depthCount;
 };
 
 class OOXMLFastContextHandlerMath: public OOXMLFastContextHandlerLinear

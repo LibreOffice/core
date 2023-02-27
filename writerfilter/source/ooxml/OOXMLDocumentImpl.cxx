@@ -786,7 +786,7 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pS
                 {
                     embeddingsTemp.Name = embeddingsTarget;
                     embeddingsTemp.Value <<= mxEmbeddings;
-                    aEmbeddings.push_back(embeddingsTemp);
+                    m_aEmbeddings.push_back(embeddingsTemp);
                     mxEmbeddings.clear();
                 }
                 bFound = false;
@@ -794,8 +794,8 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pS
             }
         }
     }
-    if (!aEmbeddings.empty())
-        mxEmbeddingsList = comphelper::containerToSequence(aEmbeddings);
+    if (!m_aEmbeddings.empty())
+        mxEmbeddingsList = comphelper::containerToSequence(m_aEmbeddings);
 }
 
 uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::getGlossaryDocDom( )
