@@ -21,6 +21,7 @@
 
 #include <interpre.hxx>
 
+#include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <rtl/math.hxx>
 #include <sfx2/app.hxx>
@@ -1456,14 +1457,16 @@ void ScInterpreter::ConvertMatrixJumpConditionToMatrix()
 bool ScInterpreter::ConvertMatrixParameters()
 {
     sal_uInt16 nParams = pCur->GetParamCount();
-    OSL_ENSURE( nParams <= sp, "ConvertMatrixParameters: stack/param count mismatch");
+    SAL_WARN_IF( nParams > sp, "sc.core", "ConvertMatrixParameters: stack/param count mismatch:  eOp: "
+            << static_cast<int>(pCur->GetOpCode()) << "  sp: " << sp << "  nParams: " << nParams);
+    assert(nParams <= sp);
     SCSIZE nJumpCols = 0, nJumpRows = 0;
     for ( sal_uInt16 i=1; i <= nParams && i <= sp; ++i )
     {
         const FormulaToken* p = pStack[ sp - i ];
         if ( p->GetOpCode() != ocPush && p->GetOpCode() != ocMissing)
         {
-            OSL_FAIL( "ConvertMatrixParameters: not a push");
+            assert(!"ConvertMatrixParameters: not a push");
         }
         else
         {
@@ -1588,7 +1591,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                 }
                 break;
                 default:
-                    OSL_FAIL( "ConvertMatrixParameters: unknown parameter type");
+                    assert(!"ConvertMatrixParameters: unknown parameter type");
             }
         }
     }
