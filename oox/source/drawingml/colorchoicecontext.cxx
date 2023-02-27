@@ -159,13 +159,15 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
 
             mrColor.setSysClr(nToken, nLastColor);
 
-            auto aIterator = constSystemColorMap.find(nToken);
-            if (aIterator != constSystemColorMap.end())
+            if (mpColorDefinition)
             {
-                auto const& aPair = *aIterator;
-                model::SystemColorType eType = aPair.second;
-                if (mpColorDefinition)
+                auto aIterator = constSystemColorMap.find(nToken);
+                if (aIterator != constSystemColorMap.end())
+                {
+                    auto const& aPair = *aIterator;
+                    model::SystemColorType eType = aPair.second;
                     mpColorDefinition->setSystemColor(eType, nLastColor);
+                }
             }
         }
         break;

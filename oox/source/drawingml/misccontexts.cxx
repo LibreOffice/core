@@ -27,6 +27,7 @@
 #include <oox/token/tokens.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/graph.hxx>
+#include <unordered_map>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -138,23 +139,105 @@ ContextHandlerRef GradientFillContext::onCreateContext(
     return nullptr;
 }
 
-PatternFillContext::PatternFillContext( ContextHandler2Helper const & rParent,
-        const AttributeList& rAttribs, PatternFillProperties& rPatternProps ) :
-    ContextHandler2( rParent ),
-    mrPatternProps( rPatternProps )
+
+namespace
 {
-    mrPatternProps.moPattPreset = rAttribs.getToken( XML_prst );
+
+std::unordered_map<sal_Int32, model::PatternPreset> constPatternPresetMap =
+{
+    { XML_pct5, model::PatternPreset::Percent_5 },
+    { XML_pct10, model::PatternPreset::Percent_10 },
+    { XML_pct20, model::PatternPreset::Percent_20 },
+    { XML_pct25, model::PatternPreset::Percent_25 },
+    { XML_pct30, model::PatternPreset::Percent_30 },
+    { XML_pct40, model::PatternPreset::Percent_40 },
+    { XML_pct50, model::PatternPreset::Percent_50 },
+    { XML_pct60, model::PatternPreset::Percent_60 },
+    { XML_pct70, model::PatternPreset::Percent_70 },
+    { XML_pct75, model::PatternPreset::Percent_75 },
+    { XML_pct80, model::PatternPreset::Percent_80 },
+    { XML_pct90, model::PatternPreset::Percent_90 },
+    { XML_horz, model::PatternPreset::Horizontal },
+    { XML_vert, model::PatternPreset::Vertical },
+    { XML_ltHorz, model::PatternPreset::LightHorizontal },
+    { XML_ltVert, model::PatternPreset::LightVertical },
+    { XML_dkHorz, model::PatternPreset::DarkHorizontal },
+    { XML_dkVert, model::PatternPreset::DarkVertical },
+    { XML_narHorz, model::PatternPreset::NarrowHorizontal },
+    { XML_narVert, model::PatternPreset::NarrowVertical },
+    { XML_dashHorz, model::PatternPreset::DashedHorizontal },
+    { XML_dashVert, model::PatternPreset::DashedVertical },
+    { XML_cross, model::PatternPreset::Cross },
+    { XML_dnDiag, model::PatternPreset::DownwardDiagonal },
+    { XML_upDiag, model::PatternPreset::UpwardDiagonal },
+    { XML_ltDnDiag, model::PatternPreset::LightDownwardDiagonal },
+    { XML_ltUpDiag, model::PatternPreset::LightUpwardDiagonal },
+    { XML_dkDnDiag, model::PatternPreset::DarkDownwardDiagonal },
+    { XML_dkUpDiag, model::PatternPreset::DarkUpwardDiagonal },
+    { XML_wdDnDiag, model::PatternPreset::WideDownwardDiagonal },
+    { XML_wdUpDiag, model::PatternPreset::WideUpwardDiagonal },
+    { XML_dashDnDiag, model::PatternPreset::DashedDownwardDiagonal },
+    { XML_dashUpDiag, model::PatternPreset::DashedUpwardDiagonal },
+    { XML_diagCross, model::PatternPreset::DiagonalCross },
+    { XML_smCheck, model::PatternPreset::SmallCheckerBoard },
+    { XML_lgCheck, model::PatternPreset::LargeCheckerBoard },
+    { XML_smGrid, model::PatternPreset::SmallGrid },
+    { XML_lgGrid, model::PatternPreset::LargeGrid },
+    { XML_dotGrid, model::PatternPreset::DottedGrid },
+    { XML_smConfetti, model::PatternPreset::SmallConfetti },
+    { XML_lgConfetti, model::PatternPreset::LargeConfetti },
+    { XML_horzBrick, model::PatternPreset::HorizontalBrick },
+    { XML_diagBrick, model::PatternPreset::DiagonalBrick },
+    { XML_solidDmnd, model::PatternPreset::SolidDiamond },
+    { XML_openDmnd, model::PatternPreset::OpenDiamond },
+    { XML_dotDmnd, model::PatternPreset::DottedDiamond },
+    { XML_plaid, model::PatternPreset::Plaid },
+    { XML_sphere, model::PatternPreset::Sphere },
+    { XML_weave, model::PatternPreset::Weave },
+    { XML_divot, model::PatternPreset::Divot },
+    { XML_shingle, model::PatternPreset::Shingle },
+    { XML_wave, model::PatternPreset::Wave },
+    { XML_trellis, model::PatternPreset::Trellis },
+    { XML_zigZag, model::PatternPreset::ZigZag }
+};
+
+} // end anonymous namespace
+PatternFillContext::PatternFillContext(ContextHandler2Helper const & rParent,
+        const AttributeList& rAttribs, PatternFillProperties& rPatternProps, model::PatternFill* pPatternFill)
+    : ContextHandler2(rParent)
+    , mpPatternFill(pPatternFill)
+    , mrPatternProps(rPatternProps)
+{
+    mrPatternProps.moPattPreset = rAttribs.getToken(XML_prst);
+
+    if (mpPatternFill)
+    {
+        sal_Int32 nToken = rAttribs.getToken(XML_prst, XML_TOKEN_INVALID);
+
+        auto aIterator = constPatternPresetMap.find(nToken);
+        if (aIterator != constPatternPresetMap.end())
+        {
+            auto const& aPair = *aIterator;
+            model::PatternPreset ePatternPreset = aPair.second;
+            mpPatternFill->mePatternPreset = ePatternPreset;
+        }
+    }
 }
 
 ContextHandlerRef PatternFillContext::onCreateContext(
         sal_Int32 nElement, const AttributeList& )
 {
+    model::ColorDefinition* pColorDefinition = nullptr;
     switch( nElement )
     {
         case A_TOKEN( bgClr ):
-            return new ColorContext(*this, mrPatternProps.maPattBgColor, nullptr);
+            if (mpPatternFill)
+                pColorDefinition = &mpPatternFill->maBackgroundColor;
+            return new ColorContext(*this, mrPatternProps.maPattBgColor, pColorDefinition);
         case A_TOKEN( fgClr ):
-            return new ColorContext(*this, mrPatternProps.maPattFgColor, nullptr);
+            if (mpPatternFill)
+                pColorDefinition = &mpPatternFill->maForegroundColor;
+            return new ColorContext(*this, mrPatternProps.maPattFgColor, pColorDefinition);
     }
     return nullptr;
 }
@@ -357,7 +440,7 @@ ContextHandlerRef FillPropertiesContext::createFillContext(
             model::GradientFill* pGradientFill = nullptr;
             if (pFillStyle)
             {
-                pFillStyle->mpFill = std::make_unique<model::GradientFill>();
+                pFillStyle->mpFill = std::make_shared<model::GradientFill>();
                 pGradientFill = static_cast<model::GradientFill*>(pFillStyle->mpFill.get());
             }
             return new GradientFillContext(rParent, rAttribs, rFillProps.maGradientProps, pGradientFill);
@@ -365,7 +448,14 @@ ContextHandlerRef FillPropertiesContext::createFillContext(
         case A_TOKEN( pattFill ):
         {
             rFillProps.moFillType = getBaseToken( nElement );
-            return new PatternFillContext( rParent, rAttribs, rFillProps.maPatternProps );
+            model::PatternFill* pPatternFill = nullptr;
+            if (pFillStyle)
+            {
+                auto pFill = std::make_shared<model::PatternFill>();
+                pPatternFill = pFill.get();
+                pFillStyle->mpFill = pFill;
+            }
+            return new PatternFillContext(rParent, rAttribs, rFillProps.maPatternProps, pPatternFill);
         }
         case A_TOKEN( blipFill ):
         {
