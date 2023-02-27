@@ -368,16 +368,17 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="indexmarks">
-                        <property name="label" translatable="yes" context="tocindexpage|indexmarks">Inde_x marks</property>
+                        <property name="label" translatable="yes" context="tocindexpage|indexmarks">Inde_x entries</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
                         <property name="active">True</property>
                         <property name="draw-indicator">True</property>
+                        <property name="tooltip_text" translatable="yes" context="tocindexpage|tooltip_text|indexmarks">Choose this option to include any index entries inserted in the document for the selected index “Type”.</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="indexmarks-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|indexmarks">Includes the index entries that you inserted by choosing Insert - Table of Contents and Index - Index Entry in the index.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|indexmarks">Choose this option to include any index entries inserted in the document for the selected index “Type”. Use “Insert - Table of Contents and Index - Index Entry” to insert index entries in the document.</property>
                           </object>
                         </child>
                       </object>
