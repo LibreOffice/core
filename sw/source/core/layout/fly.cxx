@@ -2054,7 +2054,37 @@ SwTwips SwFlyFrame::Grow_( SwTwips nDist, bool bTst )
             InvalidatePos();
             if ( bOldLock )
                 Lock();
-            const SwRect aNew( GetObjRectWithSpaces() );
+            SwRect aNew(GetObjRectWithSpaces());
+            if (IsFlySplitAllowed() && aNew.Height() - aOld.Height() < nDist)
+            {
+                // We are allowed to split and the actual growth is less than the requested growth.
+                const SwFrame* pAnchor = GetAnchorFrame();
+                if (SwFrame* pAnchorChar = FindAnchorCharFrame())
+                {
+                    pAnchor = pAnchorChar;
+                }
+                const SwFrame* pAnchorUpper = pAnchor ? pAnchor->GetUpper() : nullptr;
+                if (pAnchorUpper)
+                {
+                    SwTwips nDeadline = aRectFnSet.GetPrtBottom(*pAnchorUpper);
+                    SwTwips nTop = aRectFnSet.GetTop(getFrameArea());
+                    SwTwips nBottom = nTop + aRectFnSet.GetHeight(getFrameArea());
+                    SwTwips nMaxGrow = nDeadline - nBottom;
+                    if (nDist > nMaxGrow)
+                    {
+                        // The requested growth is more than what we can provide, limit it.
+                        nDist = nMaxGrow;
+                    }
+                    // Grow & invalidate the size.
+                    SwTwips nRemaining = nDist - (aNew.Height() - aOld.Height());
+                    {
+                        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+                        aRectFnSet.AddBottom(aFrm, nRemaining);
+                    }
+                    InvalidateObjRectWithSpaces();
+                    aNew = GetObjRectWithSpaces();
+                }
+            }
             if ( aOld != aNew )
                 ::Notify( this, FindPageFrame(), aOld );
             return aRectFnSet.GetHeight(aNew)-aRectFnSet.GetHeight(aOld);
