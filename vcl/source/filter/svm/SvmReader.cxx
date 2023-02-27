@@ -55,6 +55,21 @@ public:
         m_rData.meActualCharSet = m_eOrigCharSet;
     }
 };
+
+void sanitizeNegativeSizeDimensions(Size& rSize)
+{
+    if (rSize.Width() < 0)
+    {
+        SAL_WARN("vcl.gdi", "sanitizeNegativeSizeDimensions: negative width");
+        rSize.setWidth(0);
+    }
+
+    if (rSize.Height() < 0)
+    {
+        SAL_WARN("vcl.gdi", "sanitizeNegativeSizeDimensions: negative height");
+        rSize.setHeight(0);
+    }
+}
 }
 
 SvmReader::SvmReader(SvStream& rIStm)
@@ -95,6 +110,7 @@ SvStream& SvmReader::Read(GDIMetaFile& rMetaFile, ImplMetaReadData* pData)
             rMetaFile.SetPrefMapMode(aMapMode);
             Size aSize;
             aSerializer.readSize(aSize);
+            sanitizeNegativeSizeDimensions(aSize);
             rMetaFile.SetPrefSize(aSize);
             mrStream.ReadUInt32(nCount);
 
@@ -853,24 +869,6 @@ rtl::Reference<MetaAction> SvmReader::BmpHandler()
     pAction->SetPoint(aPoint);
 
     return pAction;
-}
-
-namespace
-{
-void sanitizeNegativeSizeDimensions(Size& rSize)
-{
-    if (rSize.Width() < 0)
-    {
-        SAL_WARN("vcl.gdi", "sanitizeNegativeSizeDimensions: negative width");
-        rSize.setWidth(0);
-    }
-
-    if (rSize.Height() < 0)
-    {
-        SAL_WARN("vcl.gdi", "sanitizeNegativeSizeDimensions: negative height");
-        rSize.setHeight(0);
-    }
-}
 }
 
 rtl::Reference<MetaAction> SvmReader::BmpScaleHandler()
