@@ -208,10 +208,17 @@ uno::Reference< chart2::data::XLabeledDataSequence >
     if( ! xSource.is())
         return aNoResult;
     const Sequence< Reference< chart2::data::XLabeledDataSequence > > aLabeledSeq( xSource->getDataSequences());
-    for (auto const & i : aLabeledSeq)
+    try
     {
-        if (lcl_MatchesRole(aRole, bMatchPrefix)(i))
-            return i;
+        for (auto const & i : aLabeledSeq)
+        {
+            if (lcl_MatchesRole(aRole, bMatchPrefix)(i))
+                return i;
+        }
+    }
+    catch (const lang::DisposedException&)
+    {
+        TOOLS_WARN_EXCEPTION( "chart2", "unexpected exception caught" );
     }
 
     return aNoResult;

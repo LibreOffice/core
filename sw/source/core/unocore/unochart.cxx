@@ -24,6 +24,7 @@
 #include <com/sun/star/chart2/data/LabelOrigin.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <comphelper/diagnose_ex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/string_view.hxx>
@@ -2023,14 +2024,22 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getTextualData()
 uno::Sequence< uno::Any > SAL_CALL SwChartDataSequence::getData()
 {
     SolarMutexGuard aGuard;
-    auto vCells(GetCells());
-    uno::Sequence< uno::Any > vAnyData(vCells.size());
-    std::transform(vCells.begin(),
-        vCells.end(),
-        vAnyData.getArray(),
-        [] (decltype(vCells)::value_type& xCell)
-            { return static_cast<SwXCell*>(xCell.get())->GetAny(); });
-    return vAnyData;
+    try
+    {
+        auto vCells(GetCells());
+        uno::Sequence< uno::Any > vAnyData(vCells.size());
+        std::transform(vCells.begin(),
+            vCells.end(),
+            vAnyData.getArray(),
+            [] (decltype(vCells)::value_type& xCell)
+                { return static_cast<SwXCell*>(xCell.get())->GetAny(); });
+        return vAnyData;
+    }
+    catch (const lang::DisposedException&)
+    {
+        TOOLS_WARN_EXCEPTION( "sw", "unexpected exception caught" );
+    }
+    return uno::Sequence< uno::Any >{};
 }
 
 uno::Sequence< double > SAL_CALL SwChartDataSequence::getNumericalData()
