@@ -1076,10 +1076,6 @@ void RtfAttributeOutput::EndTableRow()
 {
     SAL_INFO("sw.rtf", __func__ << ", (depth is " << m_nTableDepth << ")");
 
-    // Trying to end the row without writing the required number of cells? Fill with empty ones.
-    for (sal_uInt32 i = 0; i < m_aCells[m_nTableDepth]; i++)
-        m_aAfterRuns.append(OOO_STRING_SVTOOLS_RTF_CELL);
-
     if (m_nTableDepth > 1)
     {
         m_aAfterRuns.append(

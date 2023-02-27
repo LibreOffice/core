@@ -1461,6 +1461,22 @@ DECLARE_RTFEXPORT_TEST(testTdf104390, "tdf104390.rtf")
     CPPUNIT_ASSERT_MESSAGE("Extra elements in paragraph", !xRunEnum->hasMoreElements());
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf153681, "tdf153681.odt")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY_THROW);
+
+    // This is outside table
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(1), uno::UNO_QUERY_THROW);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 3
+    // Generates extra cell
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getColumns()->getCount());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
