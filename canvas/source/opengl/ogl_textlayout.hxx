@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 
 #include <com/sun/star/rendering/XTextLayout.hpp>
 
@@ -21,10 +20,9 @@
 
 namespace oglcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< css::rendering::XTextLayout > TextLayoutBaseT;
+    typedef ::comphelper::WeakComponentImplHelper< css::rendering::XTextLayout > TextLayoutBaseT;
 
-    class TextLayout : public ::cppu::BaseMutex,
-                       public TextLayoutBaseT
+    class TextLayout : public TextLayoutBaseT
     {
     public:
         TextLayout( css::rendering::StringContext               aText,
@@ -37,7 +35,7 @@ namespace oglcanvas
         const TextLayout& operator=(const TextLayout&) = delete;
 
         /// Dispose all internal references
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // XTextLayout
         virtual css::uno::Sequence< css::uno::Reference< css::rendering::XPolyPolygon2D > > SAL_CALL queryTextShapes(  ) override;

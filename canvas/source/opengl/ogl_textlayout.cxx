@@ -23,14 +23,13 @@ namespace oglcanvas
                             sal_Int8                      nDirection,
                             sal_Int64                     /*nRandomSeed*/,
                             CanvasFont::ImplRef           rFont ) :
-        TextLayoutBaseT( m_aMutex ),
         maText(std::move( aText )),
         mpFont(std::move( rFont )),
         mnTextDirection( nDirection )
     {
     }
 
-    void SAL_CALL TextLayout::disposing()
+    void TextLayout::disposing(std::unique_lock<std::mutex>& /*rGuard*/)
     {
         mpFont.clear();
     }
@@ -56,14 +55,14 @@ namespace oglcanvas
 
     uno::Sequence< double > SAL_CALL TextLayout::queryLogicalAdvancements(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         return maLogicalAdvancements;
     }
 
     void SAL_CALL TextLayout::applyLogicalAdvancements( const uno::Sequence< double >& aAdvancements )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         if( aAdvancements.getLength() != maText.Length )
         {
@@ -76,7 +75,7 @@ namespace oglcanvas
 
     geometry::RealRectangle2D SAL_CALL TextLayout::queryTextBounds(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         ENSURE_OR_THROW( mpFont,
                          "TextLayout::queryTextBounds(): invalid font" );
@@ -156,21 +155,21 @@ namespace oglcanvas
 
     sal_Int8 SAL_CALL TextLayout::getMainTextDirection(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         return mnTextDirection;
     }
 
     uno::Reference< rendering::XCanvasFont > SAL_CALL TextLayout::getFont(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         return mpFont;
     }
 
     rendering::StringContext SAL_CALL TextLayout::getText(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         return maText;
     }
