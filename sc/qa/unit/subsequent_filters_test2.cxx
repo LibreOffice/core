@@ -1580,6 +1580,39 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testNamedTableRef)
     }
 }
 
+namespace
+{
+void testCells(ScDocument* pDoc)
+{
+    {
+        const EditTextObject* pObj = pDoc->GetEditText(ScAddress(0, 0, 0));
+        CPPUNIT_ASSERT(pObj);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pObj->GetParagraphCount());
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pObj->GetSharedStrings().size());
+    }
+
+    {
+        const EditTextObject* pObj = pDoc->GetEditText(ScAddress(0, 1, 0));
+        CPPUNIT_ASSERT(pObj);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pObj->GetParagraphCount());
+        CPPUNIT_ASSERT_EQUAL(size_t(3), pObj->GetSharedStrings().size());
+    }
+}
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testSingleLine)
+{
+    createScDoc("xls/cell-multi-line.xls");
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+    testCells(pDoc);
+
+    createScDoc("xlsx/cell-multi-line.xlsx");
+    pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+    testCells(pDoc);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
