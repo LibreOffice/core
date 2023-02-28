@@ -404,6 +404,8 @@ public:
     bool            IsFlatMode() const;
     void            SetFlatMode( bool bFlat );
 
+    void            SetSingleLine( bool bValue );
+
     void            SetControlWord( EEControlBits nWord );
     EEControlBits   GetControlWord() const;
 
