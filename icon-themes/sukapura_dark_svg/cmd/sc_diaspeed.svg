@@ -1,0 +1,6 @@
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><filter id="a" color-interpolation-filters="sRGB" height="1.094553" width="1.097492" x="-.048746" y="-.047277"><feGaussianBlur stdDeviation=".36559322"/></filter><linearGradient id="b" gradientUnits="userSpaceOnUse" x1="11" x2="11" y1="15.5" y2="7"><stop offset="0" stop-color="#31de4b"/><stop offset="1" stop-color="#28d74b"/></linearGradient>
+
+
+
+
+/&amp;amp;amp;amp;amp;amp;gt;<path d="m2 11.940678h12v2.559322h-12z" filter="url(#a)" opacity=".15" stroke-width="1.015418"/><path d="m2 3v10h6 2.767578 3.232422v-1.847656-1.304688-6.847656z" fill="#2d2d2d"/><path d="m1 2v12h1 6 3.017578 2.982422 1v-2.984375-.03125-4.3984375-3.5859375-1zm1 1h12v4.5859375 2.2617185 1.304688 1.847656h-3.232422-2.767578-6z" fill="#f2f2f7"/><path d="m0 0h16v2h-16z" fill="#f2f2f7"/><path d="m3 4h10v2h-10z" fill="#ff9f0a"/><path d="m16 11a5 5 0 0 1 -5 5 5 5 0 0 1 -5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5z" fill="url(#b)"/><g fill="#2d2d2d"><path d="m11 8v6l4-3z"/><path d="m8 8v6l4-3z"/></g></svg>

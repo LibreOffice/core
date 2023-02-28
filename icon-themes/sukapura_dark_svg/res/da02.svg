@@ -1,0 +1,2 @@
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><filter id="a" color-interpolation-filters="sRGB" height="1.094553" width="1.097492" x="-.048746" y="-.047277"><feGaussianBlur stdDeviation=".36559322"/></filter>
+/&amp;gt;<path d="m1 11.940678h14v2.559322h-14z" filter="url(#a)" opacity=".15" stroke-width="1.015418"/><path d="m1 3h14v10h-14z" fill="#2d2d2d"/><path d="m1 2c-.554 0-1 .446-1 1v10c0 .554.446 1 1 1h14c.554 0 1-.446 1-1v-10c0-.554-.446-1-1-1zm0 1h14v10h-14z" fill="#f2f2f7"/></svg>

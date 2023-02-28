@@ -1,0 +1,13 @@
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="8.5" x2="8.5" xlink:href="#f" y1="15" y2="10"/><linearGradient id="b" gradientUnits="userSpaceOnUse" x1="2" x2="2" xlink:href="#f" y1="15" y2="10"/><linearGradient id="c" gradientUnits="userSpaceOnUse" x1="16" x2="16" xlink:href="#f" y1="15" y2="10"/><filter id="d" color-interpolation-filters="sRGB" height="1.094553" width="1.097492" x="-.048746" y="-.047277"><feGaussianBlur stdDeviation=".36559322"/></filter><linearGradient id="e" gradientTransform="matrix(.54166666 0 0 .6779661 .375 -.033898)" gradientUnits="userSpaceOnUse" x1="13" x2="13" y1="3" y2="7"><stop offset="0" stop-color="#5b5b5b"/><stop offset="1" stop-color="#f2f2f7"/></linearGradient><linearGradient id="f" gradientUnits="userSpaceOnUse" x1="14.000204" x2="6.863535" y1="7.003366" y2="6.658522"><stop offset="0" stop-color="#409cff"/><stop offset="1" stop-color="#0a84ff"/></linearGradient>
+
+
+
+
+
+
+
+
+
+
+     /&amp;amp;amp;amp;amp;gt;
+ <path d="m2 12.940678h13v2.559322h-13z" filter="url(#d)" opacity=".15" stroke-width="1.015418"/><path d="m2 14v-8h13v8z" fill="#2d2d2d"/><path d="m2 1c-.554 0-1 .446-1 1v12c0 .554.446 1 1 1h13c.554 0 1-.446 1-1v-12c0-.554-.446-1-1-1zm8.505859.9921875c.01495 0 .02993.0074.04492.00781h4.449221v5.3144531c.0044.036122.01383.070143.01563.1074219.0036.074185-.0061.1507026-.01563.2265625v6.351565h-13v-12h8.460938c.01499-.0004127.02998-.00781.04492-.00781z" fill="#f2f2f7"/><path d="m2 2h13v3h-13z" fill="url(#e)" stroke-width=".605996"/><path d="m5-15h1v13h-1z" fill="#f2f2f7" transform="rotate(90)"/><g fill="url(#a)"><path d="m2.0351562 11v1.378906l1.3789063-1.378906zm2.7929688 0-2.7929688 2.792969v1.207031h.2070313l3.7929687-3.792969v-.0078l.1992188-.199231zm2.8203125 0-2.6484375 2.648438v.0078l-1.34375 1.343762h1.4140625l.9648437-.964844v-.0078l2.9648438-2.964856.0625-.0625zm2.8281245 0-1.476562 1.476563-2.5234375 2.523437h1.4140625l1.109375-1.109375 2.890625-2.890625zm2.828126 0-.304688.304688-3.6953125 3.695312h1.4140625l2.28125-2.28125 1.71875-1.71875zm1.695312 1.132813-2 2-.867188.867187h1.414063l1.453125-1.453125zm0 2.828125-.039062.039062h.039062z"/><g stroke-width="1.274755"><path d="m15 10v1h-13v-1z"/><path d="m15 14v1h-13v-1z"/></g></g><path d="m1 10h1v5h-1z" fill="url(#b)"/><path d="m15 10h1v5h-1z" fill="url(#c)"/></svg>

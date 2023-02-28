@@ -1,0 +1,13 @@
+<svg height="32" viewBox="0 0 32 32" width="32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a"><stop offset="0" stop-color="#f2f2f7"/><stop offset="1" stop-color="#f2f2f7"/></linearGradient><linearGradient id="b" gradientUnits="userSpaceOnUse" x1="22" x2="22" y1="23" y2="8"><stop offset="0" stop-color="#31de4b"/><stop offset="1" stop-color="#28d74b"/></linearGradient><linearGradient id="c" gradientUnits="userSpaceOnUse" x1="14.49995" x2="14.49995" xlink:href="#a" y1="5" y2="-5.5"/><linearGradient id="d" gradientUnits="userSpaceOnUse" x1="14.99995" x2="14.99995" xlink:href="#a" y1="5.5" y2="-5.5"/>
+
+
+
+
+
+
+
+
+
+
+     /&amp;amp;amp;amp;amp;amp;amp;gt;
+ <g transform="translate(1.00005 13)"><path d="m.99995-7v19h1 27v-1-18zm1 1h26v17h-26z" fill="url(#c)"/><path d="m6-6v17h17.99995v-17z" fill="#2d2d2d"/><path d="m5-7v19h1 18.99995v-1-18zm1 1h17.99995v17h-17.99995z" fill="url(#d)"/><path d="m10.5 8a2.5 2.5 0 0 0 -2.5 2.5 2.5 2.5 0 0 0 2.5 2.5 2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0 -2.5-2.5zm9.5 4-5 6.5-3-3-4 4.78125v2.71875h16v-9z" fill="url(#b)" transform="translate(-1.00005 -13)"/><g fill="#f2f2f7"><path d="m1.99995-6h3v17h-3z"/><path d="m24.99995-6h3v17h-3z"/></g></g></svg>
