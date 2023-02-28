@@ -1343,8 +1343,8 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf120028)
     double fCharHeight = 0;
     xPropSet->getPropertyValue("CharHeight") >>= fCharHeight;
     CPPUNIT_ASSERT_DOUBLES_EQUAL(13.5, fCharHeight, 1E-12);
-    // 13.5 * 87% is approx. 11.7 (the correct scaled font size)
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(87)), xShape->getPropertyValue("TextFitToSizeScale"));
+    // 13.5 * 90% is approx. 12.1 (the correct scaled font size)
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(90)), xShape->getPropertyValue("TextFitToSizeScale"));
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testDescriptionImport)

@@ -93,10 +93,14 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
     // TODO see to do the same with RubyAdjust
 
     // ST_Coordinate32
-//  sValue = rAttribs.getString( XML_defTabSz ).get();    SJ: we need to be able to set the default tab size for each text object,
-//                                                          this is possible at the moment only for the whole document.
-//  sal_Int32 nDefTabSize = ( sValue.getLength() == 0 ? 0 : GetCoordinate(  sValue ) );
-    // TODO
+    if ( rAttribs.hasAttribute(XML_defTabSz))
+    {
+        sValue = rAttribs.getStringDefaulted(XML_defTabSz);
+        if(!sValue.isEmpty())
+        {
+            mrTextParagraphProperties.getDefaultTabSize() = GetCoordinate(sValue);
+        }
+    }
 
 //  bool bEaLineBrk = rAttribs.getBool( XML_eaLnBrk, true );
     if ( rAttribs.hasAttribute( XML_latinLnBrk ) )

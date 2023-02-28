@@ -385,6 +385,7 @@ ParaLeftMargin
 ParaLineSpacing
 ParaRightMargin
 ParaTabStops
+ParaTabStopDefaultDistance
 ParaTopMargin
 Path
 PercentageNumberFormat
