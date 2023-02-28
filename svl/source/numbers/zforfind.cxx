@@ -81,7 +81,7 @@ ImpSvNumberInputScan::ImpSvNumberInputScan( SvNumberFormatter* pFormatterP )
         eSetType( SvNumFormatType::UNDEFINED )
 {
     pFormatter = pFormatterP;
-    pNullDate.reset( new Date(30,12,1899) );
+    moNullDate.emplace( 30,12,1899 );
     nYear2000 = SvNumberFormatter::GetYear2000Default();
     Reset();
     ChangeIntl();
@@ -2262,7 +2262,7 @@ input for the following reasons:
 
         if ( res && pCal->isValid() )
         {
-            double fDiff = DateTime(*pNullDate) - pCal->getEpochStart();
+            double fDiff = DateTime(*moNullDate) - pCal->getEpochStart();
             fDays = ::rtl::math::approxFloor( pCal->getLocalDateTime() );
             fDays -= fDiff;
             nTryOrder = nFormatOrder; // break for
@@ -3831,14 +3831,7 @@ void ImpSvNumberInputScan::ChangeNullDate( const sal_uInt16 Day,
                                            const sal_uInt16 Month,
                                            const sal_Int16 Year )
 {
-    if ( pNullDate )
-    {
-        *pNullDate = Date(Day, Month, Year);
-    }
-    else
-    {
-        pNullDate.reset(new Date(Day, Month, Year));
-    }
+    moNullDate = Date(Day, Month, Year);
 }
 
 

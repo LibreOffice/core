@@ -23,9 +23,10 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <svl/zforlist.hxx>
+#include <tools/date.hxx>
 #include <memory>
+#include <optional>
 
-class Date;
 class SvNumberformat;
 class SvNumberFormatter;
 enum class SvNumFormatType : sal_Int16;
@@ -89,7 +90,7 @@ private:
     bool    bTextInitialized;                   //* Whether days and months are initialized
     bool    bScanGenitiveMonths;                //* Whether to scan an input for genitive months
     bool    bScanPartitiveMonths;               //* Whether to scan an input for partitive months
-    std::unique_ptr<Date> pNullDate;                 //* 30Dec1899
+    std::optional<Date> moNullDate;                 //* 30Dec1899
     // Variables for provisional results:
     OUString   sStrArray[SV_MAX_COUNT_INPUT_STRINGS];//* Array of scanned substrings
     bool       IsNum[SV_MAX_COUNT_INPUT_STRINGS];    //* Whether a substring is numeric
