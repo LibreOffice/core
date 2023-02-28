@@ -387,6 +387,7 @@ public:
     /** Reads an XF record. */
     void                ReadXF( XclImpStream& rStrm );
 
+    bool         GetLineBreak() const { return maAlignment.mbLineBreak; }
     sal_uInt8    GetHorAlign() const { return maAlignment.mnHorAlign; }
     sal_uInt16   GetFontIndex() const { return mnXclFont; }
 
