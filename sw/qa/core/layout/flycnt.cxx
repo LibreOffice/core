@@ -210,6 +210,59 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFly3Pages)
     // No vert offset on the 3rd page:
     CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(0), nPage3FlyTop - nPage3AnchorTop);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyRow)
+{
+    // Given a document with a floattable, single row split on 2 pages:
+    std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(true,
+                                                                                        pChanges);
+    pChanges->commit();
+    comphelper::ScopeGuard g([pChanges] {
+        officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(
+            false, pChanges);
+        pChanges->commit();
+    });
+    createSwDoc("floattable-rowsplit.docx");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure that the single row is split to 2 pages, and the fly frames have the correct
+    // coordinates:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    auto pPage1Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage1Objs[0]);
+    CPPUNIT_ASSERT(pPage1Fly);
+    auto pPage1Anchor = dynamic_cast<SwTextFrame*>(pPage1->FindLastBodyContent());
+    CPPUNIT_ASSERT(pPage1Anchor);
+    // ~No offset between the fly and its anchor:
+    SwTwips nPage1AnchorTop = pPage1Anchor->getFrameArea().Top();
+    SwTwips nPage1FlyTop = pPage1Fly->getFrameArea().Top();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(1), nPage1FlyTop - nPage1AnchorTop);
+    // Second page:
+    auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
+    CPPUNIT_ASSERT(pPage2);
+    const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
+    auto pPage2Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage2Objs[0]);
+    CPPUNIT_ASSERT(pPage2Fly);
+    auto pPage2Anchor = dynamic_cast<SwTextFrame*>(pPage2->FindLastBodyContent());
+    CPPUNIT_ASSERT(pPage2Anchor);
+    // No offset between the fly and its anchor:
+    SwTwips nPage2AnchorTop = pPage2Anchor->getFrameArea().Top();
+    SwTwips nPage2FlyTop = pPage2Fly->getFrameArea().Top();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : -1440
+    // i.e. the 2nd page's fly had a wrong position.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(0), nPage2FlyTop - nPage2AnchorTop);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
