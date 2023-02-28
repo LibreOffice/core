@@ -33,15 +33,11 @@ namespace sdbtools
     // TableName
     typedef ::cppu::WeakImplHelper<   css::sdb::tools::XTableName
                                   >   TableName_Base;
-    struct TableName_Impl;
     /** default implementation for XTableName
     */
     class TableName :public TableName_Base
                     ,public ConnectionDependentComponent
     {
-    private:
-        std::unique_ptr< TableName_Impl >   m_pImpl;
-
     public:
         /** constructs the instance
 
@@ -77,6 +73,10 @@ namespace sdbtools
     private:
         TableName( const TableName& ) = delete;
         TableName& operator=( const TableName& ) = delete;
+
+        OUString msCatalog;
+        OUString msSchema;
+        OUString msName;
     };
 
 } // namespace sdbtools

@@ -51,17 +51,8 @@ namespace sdbtools
     using namespace ::dbtools;
 
     // TableName
-    struct TableName_Impl
-    {
-        OUString sCatalog;
-        OUString sSchema;
-        OUString sName;
-    };
-
-    // TableName
     TableName::TableName( const Reference<XComponentContext>& _rContext, const Reference< XConnection >& _rxConnection )
         :ConnectionDependentComponent( _rContext )
-        ,m_pImpl( new TableName_Impl )
     {
         setWeakConnection( _rxConnection );
     }
@@ -73,43 +64,43 @@ namespace sdbtools
     OUString SAL_CALL TableName::getCatalogName()
     {
         EntryGuard aGuard( *this );
-        return m_pImpl->sCatalog;
+        return msCatalog;
     }
 
     void SAL_CALL TableName::setCatalogName( const OUString& _catalogName )
     {
         EntryGuard aGuard( *this );
-        m_pImpl->sCatalog = _catalogName;
+        msCatalog = _catalogName;
     }
 
     OUString SAL_CALL TableName::getSchemaName()
     {
         EntryGuard aGuard( *this );
-        return m_pImpl->sSchema;
+        return msSchema;
     }
 
     void SAL_CALL TableName::setSchemaName( const OUString& _schemaName )
     {
         EntryGuard aGuard( *this );
-        m_pImpl->sSchema = _schemaName;
+        msSchema = _schemaName;
     }
 
     OUString SAL_CALL TableName::getTableName()
     {
         EntryGuard aGuard( *this );
-        return m_pImpl->sName;
+        return msName;
     }
 
     void SAL_CALL TableName::setTableName( const OUString& _tableName )
     {
         EntryGuard aGuard( *this );
-        m_pImpl->sName = _tableName;
+        msName = _tableName;
     }
 
     OUString SAL_CALL TableName::getNameForSelect()
     {
         EntryGuard aGuard( *this );
-        return composeTableNameForSelect( getConnection(), m_pImpl->sCatalog, m_pImpl->sSchema, m_pImpl->sName );
+        return composeTableNameForSelect( getConnection(), msCatalog, msSchema, msName );
     }
 
     Reference< XPropertySet > SAL_CALL TableName::getTable()
@@ -157,9 +148,9 @@ namespace sdbtools
 
         try
         {
-            OSL_VERIFY( _table->getPropertyValue( PROPERTY_CATALOGNAME ) >>= m_pImpl->sCatalog );
-            OSL_VERIFY( _table->getPropertyValue( PROPERTY_SCHEMANAME ) >>= m_pImpl->sSchema );
-            OSL_VERIFY( _table->getPropertyValue( PROPERTY_NAME ) >>= m_pImpl->sName );
+            OSL_VERIFY( _table->getPropertyValue( PROPERTY_CATALOGNAME ) >>= msCatalog );
+            OSL_VERIFY( _table->getPropertyValue( PROPERTY_SCHEMANAME ) >>= msSchema );
+            OSL_VERIFY( _table->getPropertyValue( PROPERTY_NAME ) >>= msName );
         }
         catch( const RuntimeException& ) { throw; }
         catch( const Exception& e )
@@ -209,7 +200,7 @@ namespace sdbtools
 
         return composeTableName(
             getConnection()->getMetaData(),
-            m_pImpl->sCatalog, m_pImpl->sSchema, m_pImpl->sName, Quote,
+            msCatalog, msSchema, msName, Quote,
             lcl_translateCompositionType_throw( Type ) );
     }
 
@@ -220,7 +211,7 @@ namespace sdbtools
         qualifiedNameComponents(
             getConnection()->getMetaData(),
             ComposedName,
-            m_pImpl->sCatalog, m_pImpl->sSchema, m_pImpl->sName,
+            msCatalog, msSchema, msName,
             lcl_translateCompositionType_throw( Type ) );
     }
 
