@@ -9,15 +9,19 @@
 
 #include "sal/config.h"
 
+#include <cstddef>
+
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include "cppunitassertequals.hxx"
+#include "rtl/ustring.hxx"
 
 #define TEST1 CPPUNIT_ASSERT(b1 == b2)
 #define TEST2(x) x
+
+struct T { bool operator ==(T); };
 
 void test(
     bool b1, bool b2, OUString const & s1, OUString const & s2, T t, void * p, std::nullptr_t n,
