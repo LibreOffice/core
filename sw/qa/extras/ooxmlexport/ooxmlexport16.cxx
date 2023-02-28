@@ -823,6 +823,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133473_shadowSize, "tdf133473.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(200000), nSize1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf153874, "image_through_shape.docx")
+{
+    uno::Reference<beans::XPropertySet> const xShape1(getShapeByName(u"Test1"),  uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> const xShape2(getShapeByName(u"Rectangle 1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, xShape1->getPropertyValue("AnchorType").get<text::TextContentAnchorType>());
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, xShape2->getPropertyValue("AnchorType").get<text::TextContentAnchorType>());
+    CPPUNIT_ASSERT_LESS(xShape2->getPropertyValue("ZOrder").get<sal_uInt64>(), xShape1->getPropertyValue("ZOrder").get<sal_uInt64>());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTextBoxZOrder, "testTextBoxZOrder.docx")
 {
     // Is load successful?

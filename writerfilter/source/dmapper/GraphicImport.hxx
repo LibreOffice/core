@@ -84,7 +84,7 @@ public:
     explicit GraphicImport( css::uno::Reference<css::uno::XComponentContext>  xComponentContext,
                             css::uno::Reference<css::lang::XMultiServiceFactory> xTextFactory,
                             DomainMapper& rDomainMapper,
-                            GraphicImportType eGraphicImportType,
+                            GraphicImportType & rGraphicImportType,
                             std::pair<OUString, OUString>& rPositionOffsets,
                             std::pair<OUString, OUString>& rAligns,
                             std::queue<OUString>& rPositivePercentages);
