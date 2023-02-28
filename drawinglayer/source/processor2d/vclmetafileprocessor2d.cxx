@@ -2049,6 +2049,15 @@ void VclMetafileProcessor2D::processPolyPolygonGradientPrimitive2D(
         return;
     }
 
+    if (!rGradientCandidate.getFillGradient().getColorSteps().empty())
+    {
+        // MCGR: if we have COlorSteps, do not try to fallbacl to old VCL-Gradient,
+        // that will *not* be capable of representing this properly. Use the
+        // correct decomposition instead
+        process(rGradientCandidate);
+        return;
+    }
+
     // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
     // per polygon. Split polygon until there are less than that
     fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon);
