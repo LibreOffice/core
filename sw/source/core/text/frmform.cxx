@@ -342,8 +342,20 @@ void SwTextFrame::MakePos()
 {
     SwFrame::MakePos();
 
-    for (const auto& pFly : GetSplitFlyDrawObjs())
+    // Find the master frame.
+    const SwTextFrame* pMaster = this;
+    while (pMaster->IsFollow())
     {
+        pMaster = pMaster->FindMaster();
+    }
+    // Find which flys are effectively anchored to this frame.
+    for (const auto& pFly : pMaster->GetSplitFlyDrawObjs())
+    {
+        SwTextFrame* pFlyAnchor = pFly->FindAnchorCharFrame();
+        if (pFlyAnchor != this)
+        {
+            continue;
+        }
         // Possibly this fly was positioned relative to us, invalidate its position now that our
         // position is changed.
         pFly->InvalidatePos();
