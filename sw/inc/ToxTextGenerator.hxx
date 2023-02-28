@@ -143,7 +143,7 @@ private:
      */
     static OUString
     GetNumStringOfFirstNode(const SwTOXSortTabBase& rBase, bool bUsePrefix,
-            sal_uInt8 nLevel, SwRootFrame const* pLayout);
+            sal_uInt8 nLevel, SwRootFrame const* pLayout, bool bAddSpace = true);
 
     /** Handle a chapter token.
      */
