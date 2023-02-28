@@ -48,7 +48,7 @@ published interface XComponent: com::sun::star::uno::XInterface
         <p>
         The object must notify all registered listeners using the method
         XEventListener::disposing(). All notified objects
-        should release there references to this object without
+        should release their references to this object without
         calling XComponent::removeEventListener()
         (the disposed object will release the listeners eitherway).
         </p>
