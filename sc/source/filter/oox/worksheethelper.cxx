@@ -1591,12 +1591,16 @@ void WorksheetHelper::setCellFormulaValue(
     getFormulaBuffer().setCellFormulaValue(rAddress, rValueStr, nCellType);
 }
 
-void WorksheetHelper::putRichString( const ScAddress& rAddress, RichString& rString, const oox::xls::Font* pFirstPortionFont )
+void WorksheetHelper::putRichString( const ScAddress& rAddress, RichString& rString, const oox::xls::Font* pFirstPortionFont, bool bSingleLine )
 {
     ScEditEngineDefaulter& rEE = getEditEngine();
 
+    rEE.SetSingleLine(bSingleLine);
+
     // The cell will own the text object instance returned from convert().
     getDocImport().setEditCell(rAddress, rString.convert(rEE, pFirstPortionFont));
+
+    rEE.SetSingleLine(false);
 }
 
 void WorksheetHelper::putFormulaTokens( const ScAddress& rAddress, const ApiTokenSequence& rTokens )

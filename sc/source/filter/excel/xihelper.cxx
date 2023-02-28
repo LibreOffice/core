@@ -238,10 +238,16 @@ void XclImpStringHelper::SetToDocument(
         const OUString& aStr = rString.GetText();
         if (aStr.indexOf('\n') != -1 || aStr.indexOf('\r') != -1)
         {
+            const XclImpXFBuffer& rXFBuffer = rRoot.GetXFBuffer();
+            const XclImpXF* pXF = rXFBuffer.GetXF( nXFIndex );
+            bool bSingleLine = pXF ? !pXF->GetLineBreak() : false;
+
             // Multiline content.
             ScFieldEditEngine& rEngine = rDoc.getDoc().GetEditEngine();
+            rEngine.SetSingleLine(bSingleLine);
             rEngine.SetTextCurrentDefaults(aStr);
             rDoc.setEditCell(rPos, rEngine.CreateTextObject());
+            rEngine.SetSingleLine(false);
         }
         else
         {
