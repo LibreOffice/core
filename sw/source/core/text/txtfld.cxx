@@ -432,46 +432,6 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
     SwFormatAutoFormat const& rListAutoFormat(rInf.GetTextFrame()->GetTextNodeForParaProps()->GetAttr(RES_PARATR_LIST_AUTOFMT));
     std::shared_ptr<SfxItemSet> pSet(rListAutoFormat.GetStyleHandle());
 
-    // TODO remove this fallback for RTF
-    bool isDOC = pIDSA->get(DocumentSettingId::ADD_FLY_OFFSETS);
-    bool isDOCX = pIDSA->get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS);
-    // tdf#146168 this hack should now only apply to RTF. Any other format (i.e. ODT) should only
-    // follow this fallback hack if it was created from RTF after its current implementation in 7.2.
-    // This can be approximated by 128197's new 6.4.7 compat for RTF MsWordCompMinLineHeightByFly
-    // Anything older than this which has APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING
-    // did not experience this hack, so it shouldn't apply to ODTs created from older RTFs either.
-    // In short: we don't want this hack to apply unless absolutely necessary for RTF.
-    const bool isOnlyRTF
-        = !isDOC && !isDOCX && pIDSA->get(DocumentSettingId::MS_WORD_COMP_MIN_LINE_HEIGHT_BY_FLY);
-
-    if (isOnlyRTF && !pSet)
-    {
-        TextFrameIndex const nTextLen(rInf.GetTextFrame()->GetText().getLength());
-        SwTextNode const* pNode(nullptr);
-        sw::MergedAttrIterReverse iter(*rInf.GetTextFrame());
-        for (SwTextAttr const* pHint = iter.PrevAttr(&pNode); pHint;
-             pHint = iter.PrevAttr(&pNode))
-        {
-            TextFrameIndex const nHintEnd(
-                rInf.GetTextFrame()->MapModelToView(pNode, pHint->GetAnyEnd()));
-            if (nHintEnd < nTextLen)
-            {
-                break; // only those at para end are interesting
-            }
-            // Formatting for the paragraph mark is usually set to apply only to the
-            // (non-existent) extra character at end of the text node, but there can be
-            // other hints too (ending at nTextLen), so look for all matching hints.
-            // Still the (non-existent) extra character at the end is preferred if it exists.
-            if (pHint->Which() == RES_TXTATR_AUTOFMT)
-            {
-                pSet = pHint->GetAutoFormat().GetStyleHandle();
-                // When we find an empty hint (start == end) we got what we are looking for.
-                if (pHint->GetStart() == *pHint->End())
-                    break;
-            }
-        }
-    }
-
     // Check each item and in case it should be ignored, then clear it.
     if (!pSet)
         return;
