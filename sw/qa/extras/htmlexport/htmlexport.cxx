@@ -618,8 +618,12 @@ DECLARE_HTMLEXPORT_TEST(testNormalImageExport, "textAndImage.docx")
     CPPUNIT_ASSERT(imgSrc.endsWith(".png"));
 }
 
-DECLARE_HTMLEXPORT_TEST(testEmbedImagesEnabled, "textAndImage.docx")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testEmbedImagesEnabled)
 {
+    createSwDoc("textAndImage.docx");
+    setFilterOptions("EmbedImages");
+    save(OUString::createFromAscii(mpFilter));
+
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
