@@ -395,6 +395,8 @@ void TextParagraphProperties::apply( const TextParagraphProperties& rSourceProps
         moParaLeftMargin = rSourceProps.moParaLeftMargin;
     if ( rSourceProps.moFirstLineIndentation )
         moFirstLineIndentation = rSourceProps.moFirstLineIndentation;
+    if ( rSourceProps.moDefaultTabSize )
+        moDefaultTabSize = rSourceProps.moDefaultTabSize;
     if( rSourceProps.mnLevel )
         mnLevel = rSourceProps.mnLevel;
     if( rSourceProps.moParaAdjust )
@@ -499,6 +501,11 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
             Sequence< TabStop > aSeq { aTabStop };
             aPropSet.setProperty( PROP_ParaTabStops, aSeq );
         }
+    }
+
+    if ( moDefaultTabSize )
+    {
+        aPropSet.setProperty( PROP_ParaTabStopDefaultDistance, *moDefaultTabSize );
     }
 
     if ( moParaAdjust )

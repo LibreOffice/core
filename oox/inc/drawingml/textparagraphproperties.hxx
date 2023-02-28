@@ -89,6 +89,7 @@ public:
     TextSpacing&                        getParaBottomMargin() { return maParaBottomMargin; }
     std::optional< sal_Int32 >&       getParaLeftMargin(){ return moParaLeftMargin; }
     std::optional< sal_Int32 >&       getFirstLineIndentation(){ return moFirstLineIndentation; }
+    std::optional<sal_Int32>&         getDefaultTabSize() { return moDefaultTabSize; }
 
     std::optional< css::style::ParagraphAdjust >&       getParaAdjust() { return moParaAdjust; }
     void                                setParaAdjust( css::style::ParagraphAdjust nParaAdjust ) { moParaAdjust = nParaAdjust; }
@@ -125,6 +126,7 @@ private:
     std::optional< sal_Int32 >    moParaLeftMargin;
     std::optional< sal_Int32 >    moFirstLineIndentation;
     std::optional< css::style::ParagraphAdjust >    moParaAdjust;
+    std::optional< sal_Int32 >      moDefaultTabSize;
     sal_Int16                       mnLevel;
     TextSpacing                     maLineSpacing;
 };
