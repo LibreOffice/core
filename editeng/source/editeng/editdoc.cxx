@@ -857,6 +857,13 @@ void ConvertItem( std::unique_ptr<SfxPoolItem>& rPoolItem, MapUnit eSourceUnit, 
             assert(dynamic_cast<const SvxTabStopItem *>(rPoolItem.get()) != nullptr);
             SvxTabStopItem& rItem = static_cast<SvxTabStopItem&>(*rPoolItem);
             SvxTabStopItem* pNewItem(new SvxTabStopItem(EE_PARA_TABS));
+
+            if (sal_Int32 nDefTabDistance = rItem.GetDefaultDistance())
+            {
+                pNewItem->SetDefaultDistance(
+                    OutputDevice::LogicToLogic(nDefTabDistance, eSourceUnit, eDestUnit));
+            }
+
             for ( sal_uInt16 i = 0; i < rItem.Count(); i++ )
             {
                 const SvxTabStop& rTab = rItem[i];
@@ -1820,6 +1827,10 @@ SvxTabStop ContentAttribs::FindTabStop( sal_Int32 nCurPos, sal_uInt16 nDefTab )
         if ( rTab.GetTabPos() > nCurPos  )
             return rTab;
     }
+
+    // if there's a default tab size defined for this item use that instead
+    if (rTabs.GetDefaultDistance())
+        nDefTab = rTabs.GetDefaultDistance();
 
     // Determine DefTab ...
     SvxTabStop aTabStop;

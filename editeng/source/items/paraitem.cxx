@@ -821,6 +821,15 @@ sal_uInt16 SvxTabStopItem::GetPos( const sal_Int32 nPos ) const
     return it != maTabStops.end() ? it - maTabStops.begin() : SVX_TAB_NOTFOUND;
 }
 
+void SvxTabStopItem::SetDefaultDistance(sal_Int32 nDefaultDistance)
+{
+    mnDefaultDistance = nDefaultDistance;
+}
+
+sal_Int32 SvxTabStopItem::GetDefaultDistance() const
+{
+    return mnDefaultDistance;
+}
 
 bool SvxTabStopItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
@@ -857,6 +866,11 @@ bool SvxTabStopItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         {
             const SvxTabStop &rTab = maTabStops.front();
             rVal <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(rTab.GetTabPos()) : rTab.GetTabPos());
+            break;
+        }
+        case MID_TABSTOP_DEFAULT_DISTANCE:
+        {
+            rVal <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(mnDefaultDistance) : mnDefaultDistance);
             break;
         }
     }
@@ -956,6 +970,18 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             Insert( aNewTab );
             break;
         }
+        case MID_TABSTOP_DEFAULT_DISTANCE:
+        {
+            sal_Int32 nNewDefaultDistance = 0;
+            if (!(rVal >>= nNewDefaultDistance))
+                return false;
+            if (bConvert)
+                nNewDefaultDistance = o3tl::toTwips(nNewDefaultDistance, o3tl::Length::mm100);
+            if (nNewDefaultDistance <= 0)
+                return false;
+            mnDefaultDistance = nNewDefaultDistance;
+            break;
+        }
     }
     return true;
 }
@@ -966,6 +992,9 @@ bool SvxTabStopItem::operator==( const SfxPoolItem& rAttr ) const
     assert(SfxPoolItem::operator==(rAttr));
 
     const SvxTabStopItem& rTSI = static_cast<const SvxTabStopItem&>(rAttr);
+
+    if ( mnDefaultDistance != rTSI.GetDefaultDistance() )
+        return false;
 
     if ( Count() != rTSI.Count() )
         return false;
@@ -990,6 +1019,7 @@ bool SvxTabStopItem::GetPresentation
 )   const
 {
     rText.clear();
+    // TODO also consider mnDefaultTabDistance here
 
     bool bComma = false;
 
@@ -1038,6 +1068,8 @@ void SvxTabStopItem::Insert( const SvxTabStopItem* pTabs )
 void SvxTabStopItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxTabStopItem"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("mnDefaultDistance"),
+                                      BAD_CAST(OString::number(mnDefaultDistance).getStr()));
     for (const auto& rTabStop : maTabStops)
         rTabStop.dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);

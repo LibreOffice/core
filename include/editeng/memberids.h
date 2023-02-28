@@ -40,6 +40,7 @@
 // SvxTabStop
 #define MID_TABSTOPS            0
 #define MID_STD_TAB             1
+#define MID_TABSTOP_DEFAULT_DISTANCE 2
 
 //SvxHyphenZoneItem
 #define MID_IS_HYPHEN           0

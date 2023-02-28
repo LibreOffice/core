@@ -92,6 +92,7 @@ typedef o3tl::sorted_vector<SvxTabStop> SvxTabStopArr;
 class EDITENG_DLLPUBLIC SvxTabStopItem final : public SfxPoolItem
 {
     SvxTabStopArr maTabStops;
+    sal_Int32 mnDefaultDistance = 0;
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -107,6 +108,8 @@ public:
 
     // Returns index of the tab at nPos, or TAB_NOTFOUND
     sal_uInt16          GetPos( const sal_Int32 nPos ) const;
+    void SetDefaultDistance(sal_Int32 nDefaultDistancenDefTabSize);
+    sal_Int32 GetDefaultDistance() const;
 
     // unprivatized:
     sal_uInt16          Count() const { return maTabStops.size(); }
