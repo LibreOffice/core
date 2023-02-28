@@ -2087,18 +2087,18 @@ void SAL_CALL OStorage::release() noexcept
 //  XTypeProvider
 uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
 {
-    if (! m_pTypeCollection)
+    if (! m_oTypeCollection)
     {
         ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
-        if (! m_pTypeCollection)
+        if (! m_oTypeCollection)
         {
             if ( m_pImpl->m_nStorageType == embed::StorageFormats::PACKAGE )
             {
                 if ( m_pImpl->m_bIsRoot )
                 {
-                    m_pTypeCollection.reset(new ::cppu::OTypeCollection
-                                    (   cppu::UnoType<lang::XTypeProvider>::get()
+                    m_oTypeCollection.emplace(
+                                        cppu::UnoType<lang::XTypeProvider>::get()
                                     ,   cppu::UnoType<embed::XStorage>::get()
                                     ,   cppu::UnoType<embed::XStorage2>::get()
                                     ,   cppu::UnoType<embed::XStorageRawAccess>::get()
@@ -2108,46 +2108,46 @@ uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
                                     ,   cppu::UnoType<embed::XEncryptionProtectedStorage>::get()
                                     ,   cppu::UnoType<embed::XEncryptionProtectedSource2>::get()
                                     ,   cppu::UnoType<embed::XEncryptionProtectedSource>::get()
-                                    ,   cppu::UnoType<beans::XPropertySet>::get()));
+                                    ,   cppu::UnoType<beans::XPropertySet>::get());
                 }
                 else
                 {
-                    m_pTypeCollection.reset(new ::cppu::OTypeCollection
-                                    (   cppu::UnoType<lang::XTypeProvider>::get()
+                    m_oTypeCollection.emplace(
+                                        cppu::UnoType<lang::XTypeProvider>::get()
                                     ,   cppu::UnoType<embed::XStorage>::get()
                                     ,   cppu::UnoType<embed::XStorage2>::get()
                                     ,   cppu::UnoType<embed::XStorageRawAccess>::get()
                                     ,   cppu::UnoType<embed::XTransactedObject>::get()
                                     ,   cppu::UnoType<embed::XTransactionBroadcaster>::get()
                                     ,   cppu::UnoType<util::XModifiable>::get()
-                                    ,   cppu::UnoType<beans::XPropertySet>::get()));
+                                    ,   cppu::UnoType<beans::XPropertySet>::get());
                 }
             }
             else if ( m_pImpl->m_nStorageType == embed::StorageFormats::OFOPXML )
             {
-                m_pTypeCollection.reset(new ::cppu::OTypeCollection
-                                (   cppu::UnoType<lang::XTypeProvider>::get()
+                m_oTypeCollection.emplace(
+                                    cppu::UnoType<lang::XTypeProvider>::get()
                                 ,   cppu::UnoType<embed::XStorage>::get()
                                 ,   cppu::UnoType<embed::XTransactedObject>::get()
                                 ,   cppu::UnoType<embed::XTransactionBroadcaster>::get()
                                 ,   cppu::UnoType<util::XModifiable>::get()
                                 ,   cppu::UnoType<embed::XRelationshipAccess>::get()
-                                ,   cppu::UnoType<beans::XPropertySet>::get()));
+                                ,   cppu::UnoType<beans::XPropertySet>::get());
             }
             else
             {
-                m_pTypeCollection.reset(new ::cppu::OTypeCollection
-                                (   cppu::UnoType<lang::XTypeProvider>::get()
+                m_oTypeCollection.emplace(
+                                    cppu::UnoType<lang::XTypeProvider>::get()
                                 ,   cppu::UnoType<embed::XStorage>::get()
                                 ,   cppu::UnoType<embed::XTransactedObject>::get()
                                 ,   cppu::UnoType<embed::XTransactionBroadcaster>::get()
                                 ,   cppu::UnoType<util::XModifiable>::get()
-                                ,   cppu::UnoType<beans::XPropertySet>::get()));
+                                ,   cppu::UnoType<beans::XPropertySet>::get());
             }
         }
     }
 
-    return m_pTypeCollection->getTypes() ;
+    return m_oTypeCollection->getTypes() ;
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL OStorage::getImplementationId()

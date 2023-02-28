@@ -53,6 +53,7 @@
 
 #include <vector>
 #include <memory>
+#include <optional>
 #include <string_view>
 
 namespace com::sun::star::uno {
@@ -280,7 +281,7 @@ class OStorage final : public css::lang::XTypeProvider
     OStorage_Impl*  m_pImpl;
     rtl::Reference<comphelper::RefCountedMutex> m_xSharedMutex;
     comphelper::OMultiTypeInterfaceContainerHelper2 m_aListenersContainer; // list of listeners
-    ::std::unique_ptr< ::cppu::OTypeCollection> m_pTypeCollection;
+    ::std::optional< ::cppu::OTypeCollection> m_oTypeCollection;
     bool m_bReadOnlyWrap;
     ::rtl::Reference<OChildDispListener_Impl> m_pSubElDispListener;
     ::std::vector< css::uno::WeakReference< css::lang::XComponent > > m_aOpenSubComponentsVector;
