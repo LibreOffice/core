@@ -141,11 +141,9 @@ private:
 class ColorChangeContext final : public ::oox::core::ContextHandler2
 {
 public:
-    explicit            ColorChangeContext(
-                            ::oox::core::ContextHandler2Helper const & rParent,
-                            const ::oox::AttributeList& rAttribs,
-                            BlipFillProperties& rBlipProps );
-    virtual             ~ColorChangeContext() override;
+    explicit ColorChangeContext(::oox::core::ContextHandler2Helper const & rParent, const ::oox::AttributeList& rAttribs,
+                            BlipFillProperties& rBlipProps, model::BlipFill* pBlipFill);
+    virtual ~ColorChangeContext() override;
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
@@ -153,8 +151,9 @@ public:
                             const ::oox::AttributeList& rAttribs ) override;
 
 private:
+    model::BlipFill* mpBlipFill;
     BlipFillProperties& mrBlipProps;
-    bool                mbUseAlpha;
+    bool mbUseAlpha;
 };
 
 /** Context handler that imports the a:blip element containing the fill bitmap
@@ -162,10 +161,8 @@ private:
 class BlipContext final : public ::oox::core::ContextHandler2
 {
 public:
-    explicit            BlipContext(
-                            ::oox::core::ContextHandler2Helper const & rParent,
-                            const ::oox::AttributeList& rAttribs,
-                            BlipFillProperties& rBlipProps );
+    explicit BlipContext(::oox::core::ContextHandler2Helper const & rParent, const ::oox::AttributeList& rAttribs,
+                        BlipFillProperties& rBlipProps, model::BlipFill* pBlipFill);
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
@@ -173,6 +170,7 @@ public:
                             const ::oox::AttributeList& rAttribs ) override;
 
 private:
+    model::BlipFill* mpBlipFill;
     BlipFillProperties& mrBlipProps;
 };
 
@@ -180,10 +178,8 @@ private:
 class BlipFillContext final : public ::oox::core::ContextHandler2
 {
 public:
-    explicit            BlipFillContext(
-                            ::oox::core::ContextHandler2Helper const & rParent,
-                            const ::oox::AttributeList& rAttribs,
-                            BlipFillProperties& rBlipProps );
+    explicit BlipFillContext(::oox::core::ContextHandler2Helper const & rParent, const ::oox::AttributeList& rAttribs,
+                            BlipFillProperties& rBlipProps, model::BlipFill* pBlipFill);
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
@@ -191,6 +187,7 @@ public:
                             const ::oox::AttributeList& rAttribs ) override;
 
 private:
+    model::BlipFill* mpBlipFill;
     BlipFillProperties& mrBlipProps;
 };
 

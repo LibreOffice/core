@@ -80,7 +80,7 @@ ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken,
     case XML_xfrm:
         return new Transform2DContext( *this, rAttribs, *mpShapePtr );
     case XML_blipFill:
-        return new BlipFillContext( *this, rAttribs, mpShapePtr->getGraphicProperties().maBlipProps );
+        return new BlipFillContext(*this, rAttribs, mpShapePtr->getGraphicProperties().maBlipProps, nullptr);
     case XML_wavAudioFile:
         {
             OUString const path(getEmbeddedWAVAudioFile(getRelations(), rAttribs));

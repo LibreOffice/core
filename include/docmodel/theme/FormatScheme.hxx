@@ -13,6 +13,7 @@
 #include <docmodel/dllapi.h>
 #include <tools/color.hxx>
 #include <docmodel/theme/ThemeColor.hxx>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 namespace model
 {
@@ -273,6 +274,72 @@ public:
 
     PatternFill()
         : Fill(FillType::Pattern)
+    {
+    }
+};
+
+enum class BitmapMode
+{
+    Unused,
+    Tile,
+    Stretch,
+};
+
+enum class FlipMode
+{
+    None,
+    X,
+    Y,
+    XY
+};
+
+enum class RectangleAlignment
+{
+    TopLeft,
+    Top,
+    TopRight,
+    Left,
+    Center,
+    Right,
+    BottomLeft,
+    Bottom,
+    BottomRight
+};
+
+enum class ColorEffectType
+{
+    None,
+    BiLevel,
+    Grayscale,
+    ColorChange
+};
+
+class DOCMODEL_DLLPUBLIC BlipFill : public Fill
+{
+public:
+    bool mbRotateWithShape = false;
+    RelativeRectangle maClipRectangle;
+    RelativeRectangle maFillRectangle;
+    BitmapMode meMode = BitmapMode::Unused;
+
+    sal_Int32 mnTileOffsetX = 0;
+    sal_Int32 mnTileOffsetY = 0;
+    sal_Int32 mnTileScaleX = 0;
+    sal_Int32 mnTileScaleY = 0;
+    FlipMode meTileFlipMode = FlipMode::None;
+    RectangleAlignment meTileAlignment = RectangleAlignment::TopLeft;
+
+    css::uno::Reference<css::graphic::XGraphic> mxGraphic;
+
+    ColorEffectType meColorEffectType = ColorEffectType::None;
+
+    sal_Int32 mnBiLevelThreshold = 0;
+    ColorDefinition maColorFrom;
+    ColorDefinition maColorTo;
+    bool mbUseAlpha = false;
+
+    BlipFill()
+        : Fill(FillType::Blip)
     {
     }
 };
