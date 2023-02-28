@@ -35,57 +35,9 @@ class ScFiltersTest : public ScModelTestBase
 {
 public:
     ScFiltersTest();
-
-    void testTdf137576_Measureline();
-    void testTdf137216_HideCol();
-    void testTdf137044_CoverHiddenRows();
-    void testTdf137020_FlipVertical();
-    void testTdf64229();
-    void testTdf36933();
-    void testTdf43700();
-    void testTdf43534();
-    void testTdf91979();
-    void testTdf98657();
-    void testTdf88821();
-    void testTdf88821_2();
-    void testTdf103960();
-    void testRhbz1390776();
-    void testTdf104310();
-    void testTdf31231();
-    void testTdf141914();
-    void testTdf128951();
-    void testTdf129789();
-    void testTdf130725();
-    void testTdf104502_hiddenColsCountedInPageCount();
-    void testTdf108188_pagestyle();
-
-    CPPUNIT_TEST_SUITE(ScFiltersTest);
-    CPPUNIT_TEST(testTdf137576_Measureline);
-    CPPUNIT_TEST(testTdf137216_HideCol);
-    CPPUNIT_TEST(testTdf137044_CoverHiddenRows);
-    CPPUNIT_TEST(testTdf137020_FlipVertical);
-    CPPUNIT_TEST(testTdf64229);
-    CPPUNIT_TEST(testTdf36933);
-    CPPUNIT_TEST(testTdf43700);
-    CPPUNIT_TEST(testTdf43534);
-    CPPUNIT_TEST(testTdf91979);
-    CPPUNIT_TEST(testTdf98657);
-    CPPUNIT_TEST(testTdf88821);
-    CPPUNIT_TEST(testTdf88821_2);
-    CPPUNIT_TEST(testTdf103960);
-    CPPUNIT_TEST(testRhbz1390776);
-    CPPUNIT_TEST(testTdf104310);
-    CPPUNIT_TEST(testTdf31231);
-    CPPUNIT_TEST(testTdf141914);
-    CPPUNIT_TEST(testTdf128951);
-    CPPUNIT_TEST(testTdf129789);
-    CPPUNIT_TEST(testTdf130725);
-    CPPUNIT_TEST(testTdf104502_hiddenColsCountedInPageCount);
-    CPPUNIT_TEST(testTdf108188_pagestyle);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void ScFiltersTest::testTdf137576_Measureline()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf137576_Measureline)
 {
     // The document contains a vertical measure line, anchored "To Cell (resize with cell)" with
     // length 37mm. Save and reload had resulted in a line of 0mm length.
@@ -127,7 +79,7 @@ void ScFiltersTest::testTdf137576_Measureline()
     CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(4800, 5200), aEnd2, 1);
 }
 
-void ScFiltersTest::testTdf137216_HideCol()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf137216_HideCol)
 {
     // The document contains a shape anchored "To Cell (resize with cell)" with start in C3.
     // Error was, that hiding column C did not make the shape invisible.
@@ -150,7 +102,7 @@ void ScFiltersTest::testTdf137216_HideCol()
     CPPUNIT_ASSERT_MESSAGE("after column hide: Object should be invisible", !pObj->IsVisible());
 }
 
-void ScFiltersTest::testTdf137044_CoverHiddenRows()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf137044_CoverHiddenRows)
 {
     // The document contains a shape anchored "To Cell (resize with cell)" with start in cell A4 and
     // end in cell A7. Row height is 30mm. Hiding rows 5 and 6, then saving and reload had resulted
@@ -198,7 +150,7 @@ void ScFiltersTest::testTdf137044_CoverHiddenRows()
     CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(2000, 2499), aReloadEndOffset, 1);
 }
 
-void ScFiltersTest::testTdf137020_FlipVertical()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf137020_FlipVertical)
 {
     // Get document
     createScDoc("ods/tdf137020_FlipVertical.ods");
@@ -236,7 +188,7 @@ void ScFiltersTest::testTdf137020_FlipVertical()
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRectOrig, aSnapRectReload, 1);
 }
 
-void ScFiltersTest::testTdf64229()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf64229)
 {
     createScDoc("ods/fdo64229b.ods");
 
@@ -251,7 +203,7 @@ void ScFiltersTest::testTdf64229()
     testFile(aCSVFileName, *pDoc, 0);
 }
 
-void ScFiltersTest::testTdf36933()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf36933)
 {
     createScDoc("ods/fdo36933test.ods");
 
@@ -266,7 +218,7 @@ void ScFiltersTest::testTdf36933()
     testFile(aCSVFileName, *pDoc, 0);
 }
 
-void ScFiltersTest::testTdf43700()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf43700)
 {
     createScDoc("ods/fdo43700test.ods");
 
@@ -281,7 +233,7 @@ void ScFiltersTest::testTdf43700()
     testFile(aCSVFileName, *pDoc, 0);
 }
 
-void ScFiltersTest::testTdf43534()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf43534)
 {
     createScDoc("ods/fdo43534test.ods");
 
@@ -294,7 +246,7 @@ void ScFiltersTest::testTdf43534()
     // testFile(aCSVFileName, rDoc, 0);
 }
 
-void ScFiltersTest::testTdf91979()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf91979)
 {
     createScDoc();
 
@@ -310,7 +262,7 @@ void ScFiltersTest::testTdf91979()
     CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(10000 * nRowHeight), aPos.getY());
 }
 
-void ScFiltersTest::testTdf98657()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf98657)
 {
     createScDoc("ods/tdf98657.ods");
     ScDocument* pDoc = getScDoc();
@@ -322,7 +274,7 @@ void ScFiltersTest::testTdf98657()
     CPPUNIT_ASSERT_EQUAL(285.0, pDoc->GetValue(ScAddress(1, 1, 0)));
 }
 
-void ScFiltersTest::testTdf88821()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf88821)
 {
     setImportFilterName("calc_HTML_WebQuery");
     createScDoc("html/tdf88821.html");
@@ -333,7 +285,7 @@ void ScFiltersTest::testTdf88821()
                          pDoc->GetString(1, 1, 0));
 }
 
-void ScFiltersTest::testTdf88821_2()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf88821_2)
 {
     setImportFilterName("calc_HTML_WebQuery");
     createScDoc("html/tdf88821-2.html");
@@ -345,7 +297,7 @@ void ScFiltersTest::testTdf88821_2()
                          pDoc->GetString(0, 1, 0));
 }
 
-void ScFiltersTest::testTdf103960()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf103960)
 {
     setImportFilterName("calc_HTML_WebQuery");
     createScDoc("html/tdf103960.html");
@@ -356,7 +308,7 @@ void ScFiltersTest::testTdf103960()
                          pDoc->GetString(0, 0, 0));
 }
 
-void ScFiltersTest::testRhbz1390776()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testRhbz1390776)
 {
     createScDoc("xml/rhbz1390776.xml");
     ScDocument* pDoc = getScDoc();
@@ -365,7 +317,7 @@ void ScFiltersTest::testRhbz1390776()
                                  pDoc->GetFormula(0, 27, 0));
 }
 
-void ScFiltersTest::testTdf104310()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf104310)
 {
     // 1. Test x14 extension
     {
@@ -401,7 +353,7 @@ void ScFiltersTest::testTdf104310()
     }
 }
 
-void ScFiltersTest::testTdf31231()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf31231)
 {
     // We must open it read-write to allow setting modified flag
     createScDoc("ods/tdf31231.ods");
@@ -418,7 +370,7 @@ void ScFiltersTest::testTdf31231()
     CPPUNIT_ASSERT_MESSAGE("The spreadsheet must not be modified on open", pDocSh->IsModified());
 }
 
-void ScFiltersTest::testTdf141914()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf141914)
 {
     // We must open it read-write to allow setting modified flag
     createScDoc("ods/tdf141914.ods");
@@ -435,7 +387,7 @@ void ScFiltersTest::testTdf141914()
     CPPUNIT_ASSERT_MESSAGE("The spreadsheet must not be modified on open", pDocSh->IsModified());
 }
 
-void ScFiltersTest::testTdf128951()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf128951)
 {
     createScDoc();
 
@@ -469,7 +421,7 @@ SdrCaptionObj* checkCaption(ScDocument& rDoc, const ScAddress& rAddress, bool bI
 }
 }
 
-void ScFiltersTest::testTdf129789()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf129789)
 {
     createScDoc("ods/tdf129789.ods");
     ScDocument* pDoc = getScDoc();
@@ -566,7 +518,7 @@ void ScFiltersTest::testTdf129789()
     }
 }
 
-void ScFiltersTest::testTdf130725()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf130725)
 {
     createScDoc();
 
@@ -584,7 +536,7 @@ void ScFiltersTest::testTdf130725()
                                  0.0042, xCell->getValue()); // strict equality
 }
 
-void ScFiltersTest::testTdf104502_hiddenColsCountedInPageCount()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf104502_hiddenColsCountedInPageCount)
 {
     createScDoc("ods/tdf104502_hiddenColsCountedInPageCount.ods");
 
@@ -597,7 +549,7 @@ void ScFiltersTest::testTdf104502_hiddenColsCountedInPageCount()
     CPPUNIT_ASSERT_EQUAL(SCCOL(0), nEndCol);
     CPPUNIT_ASSERT_EQUAL(SCROW(55), nEndRow);
 }
-void ScFiltersTest::testTdf108188_pagestyle()
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testTdf108188_pagestyle)
 {
     createScDoc("ods/tdf108188_pagestyle.ods");
 
@@ -616,8 +568,6 @@ ScFiltersTest::ScFiltersTest()
     : ScModelTestBase("sc/qa/unit/data")
 {
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(ScFiltersTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
