@@ -784,6 +784,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             const SwWriteTableCol *pColumn = m_aCols[nCol].get();
 
             HtmlWriter html(rWrt.Strm(), rWrt.maNamespace);
+            html.prettyPrint(false); // We add newlines ourself
             html.start(OOO_STRING_SVTOOLS_HTML_col);
 
             sal_uInt32 nWidth;
