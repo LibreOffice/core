@@ -1872,6 +1872,17 @@ bool EditEngine::IsFlatMode() const
     return !( pImpEditEngine->aStatus.UseCharAttribs() );
 }
 
+void EditEngine::SetSingleLine(bool bValue)
+{
+    if (bValue == pImpEditEngine->aStatus.IsSingleLine())
+        return;
+
+    if (bValue)
+        pImpEditEngine->aStatus.TurnOnFlags(EEControlBits::SINGLELINE);
+    else
+        pImpEditEngine->aStatus.TurnOffFlags(EEControlBits::SINGLELINE);
+}
+
 void EditEngine::SetControlWord( EEControlBits nWord )
 {
 
