@@ -8216,10 +8216,12 @@ void DomainMapper_Impl::AddAnnotationPosition(
     m_aAnnotationPositions[ nAnnotationId ] = aAnnotationPosition;
 }
 
-GraphicImportPtr const & DomainMapper_Impl::GetGraphicImport(GraphicImportType eGraphicImportType)
+GraphicImportPtr const & DomainMapper_Impl::GetGraphicImport()
 {
     if(!m_pGraphicImport)
-        m_pGraphicImport = new GraphicImport( m_xComponentContext, m_xTextFactory, m_rDMapper, eGraphicImportType, m_aPositionOffsets, m_aAligns, m_aPositivePercentages );
+    {
+        m_pGraphicImport = new GraphicImport(m_xComponentContext, m_xTextFactory, m_rDMapper, m_eGraphicImportType, m_aPositionOffsets, m_aAligns, m_aPositivePercentages);
+    }
     return m_pGraphicImport;
 }
 /*-------------------------------------------------------------------------
@@ -8231,11 +8233,11 @@ void DomainMapper_Impl::ResetGraphicImport()
 }
 
 
-void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference< Properties >::Pointer_t& ref, GraphicImportType eGraphicImportType)
+void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>::Pointer_t& ref)
 {
-    GetGraphicImport(eGraphicImportType);
-    if( eGraphicImportType != IMPORT_AS_DETECTED_INLINE && eGraphicImportType != IMPORT_AS_DETECTED_ANCHOR )
-    {
+    GetGraphicImport();
+    if (m_eGraphicImportType != IMPORT_AS_DETECTED_INLINE && m_eGraphicImportType != IMPORT_AS_DETECTED_ANCHOR)
+    {   // this appears impossible?
         //create the graphic
         ref->resolve( *m_pGraphicImport );
     }
@@ -8286,7 +8288,7 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference< Properties
 
         uno::Reference<drawing::XShape> xShape = m_pGraphicImport->GetXShapeObject();
         UpdateEmbeddedShapeProps(xShape);
-        if (eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
+        if (m_eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
         {
             uno::Reference<beans::XPropertySet> xEmbeddedProps(m_xEmbedded, uno::UNO_QUERY);
             xEmbeddedProps->setPropertyValue("AnchorType", uno::Any(text::TextContentAnchorType_AT_CHARACTER));
@@ -8311,7 +8313,7 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference< Properties
     {
         bool bAppend = true;
         // workaround for images anchored to characters: add ZWSPs around the anchoring point
-        if ( eGraphicImportType != IMPORT_AS_DETECTED_INLINE && !m_aRedlines.top().empty() )
+        if (m_eGraphicImportType != IMPORT_AS_DETECTED_INLINE && !m_aRedlines.top().empty())
         {
             uno::Reference< text::XTextAppend > xTextAppend = m_aTextAppendStack.top().xTextAppend;
             if(xTextAppend.is())
@@ -8340,7 +8342,7 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference< Properties
         if ( bAppend )
             appendTextContent( xTextContent, uno::Sequence< beans::PropertyValue >() );
 
-        if (eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR && !m_aTextAppendStack.empty())
+        if (m_eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR && !m_aTextAppendStack.empty())
         {
             // Remember this object is anchored to the current paragraph.
             AnchoredObjectInfo aInfo;
@@ -8353,7 +8355,7 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference< Properties
             }
             m_aTextAppendStack.top().m_aAnchoredObjects.push_back(aInfo);
         }
-        else if (eGraphicImportType == IMPORT_AS_DETECTED_INLINE)
+        else if (m_eGraphicImportType == IMPORT_AS_DETECTED_INLINE)
         {
             m_bParaWithInlineObject = true;
 
