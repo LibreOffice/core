@@ -989,7 +989,7 @@ public:
     // convenient method to determine the bullets/numbering status for all paragraphs
     sal_Int32 GetBulletsNumberingStatus() const;
 
-    // overriden in SdrOutliner
+    // overridden in SdrOutliner
     virtual std::optional<bool> GetCompatFlag(SdrCompatibilityFlag /*eFlag*/) const { return {}; };
 };
 
