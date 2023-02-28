@@ -1,3 +1,3 @@
-<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="-12.677966" x2="-13.016949" y1="1.491297" y2="-13.76294"><stop offset="0" stop-color="#e5eefc"/><stop offset="1" stop-color="#fcfdff"/></linearGradient>
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="-12.677966" x2="-13.016949" y1="1.491297" y2="-13.76294"><stop offset="0" stop-color="#e5e5ea"/><stop offset="1" stop-color="#f2f2f7"/></linearGradient>
 
-/&amp;amp;gt;<path d="m8 .5c-4.1421356 0-7.5 2.5183881-7.5 5.625 0 2.0759552 1.7690972 3.8687004 4 4.843375v4.53125l3.5-3.999625c4.142135 0 7.5-2.2683881 7.5-5.375s-3.357865-5.625-7.5-5.625z" fill="url(#a)" stroke="#0a84ff" stroke-linejoin="round"/></svg>
+/&amp;amp;gt;<path d="m8 .5c-4.1421356 0-7.5 2.5183881-7.5 5.625 0 2.0759552 1.7690972 3.8687004 4 4.843375v4.53125l3.5-3.999625c4.142135 0 7.5-2.2683881 7.5-5.375s-3.357865-5.625-7.5-5.625z" fill="url(#a)" stroke="#007aff" stroke-linejoin="round"/></svg>
