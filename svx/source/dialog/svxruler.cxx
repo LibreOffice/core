@@ -1027,7 +1027,10 @@ void SvxRuler::UpdateTabs()
         const tools::Long lPosPixel = ConvertHPosPixel(lParaIndent) + lLastTab;
         const tools::Long lRightIndent = ConvertHPosPixel(nRightFrameMargin - mxParaItem->GetRight());
 
-        tools::Long nDefTabDist = ConvertHPosPixel(lDefTabDist);
+        tools::Long lCurrentDefTabDist = lDefTabDist;
+        if(mxTabStopItem->GetDefaultDistance())
+            lCurrentDefTabDist = mxTabStopItem->GetDefaultDistance();
+        tools::Long nDefTabDist = ConvertHPosPixel(lCurrentDefTabDist);
 
         const sal_uInt16 nDefTabBuf = lPosPixel > lRightIndent || lLastTab > lRightIndent
                     ? 0
@@ -1063,13 +1066,13 @@ void SvxRuler::UpdateTabs()
         }
 
         // Adjust to previous-to-first default tab stop
-        lLastTabOffsetLogic -= lLastTabOffsetLogic % lDefTabDist;
+        lLastTabOffsetLogic -= lLastTabOffsetLogic % lCurrentDefTabDist;
 
         // fill the rest with default Tabs
         for (j = 0; j < nDefTabBuf; ++j)
         {
             //simply add the default distance to the last position
-            lLastTabOffsetLogic += lDefTabDist;
+            lLastTabOffsetLogic += lCurrentDefTabDist;
             if (bRTL)
             {
                 mpTabs[nTabCount + TAB_GAP].nPos =
