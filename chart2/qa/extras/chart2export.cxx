@@ -29,109 +29,6 @@ protected:
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;
 public:
     Chart2ExportTest() : ChartTest("/chart2/qa/extras/data/") {}
-
-    void testErrorBarXLSX();
-    void testErrorBarPropXLSX();
-    void testTrendline();
-    void testTrendlineOOXML();
-    void testTrendlineXLS();
-    void testMovingAverage();
-    void testStockChart();
-    void testBarChart();
-    void testCrosses();
-    void testScatterChartTextXValues();
-    void testScatterXAxisValues();
-    void testScatterXAxisCategories();
-    void testChartDataTable();
-    void testChartExternalData();
-    void testEmbeddingsGrabBag();
-    void testAreaChartLoad();
-    void testUpDownBars();
-    void testDoughnutChart();
-    void testDisplayUnits();
-    void testFdo74115WallGradientFill();
-    void testFdo74115WallBitmapFill();
-    void testPieChartWallLineStyle();
-    void testBarChartRotation();
-    void testShapeFollowedByChart();
-    void testPieChartDataLabels();
-    void testSeriesIdxOrder();
-    void testScatterPlotLabels();
-    void testErrorBarDataRangeODS();
-    void testChartCrash();
-    void testPieChartRotation();
-    void testEmbeddingsOleObjectGrabBag();
-    void testGapWidthXLSX();
-    void testSmoothedLines();
-    void testLabelStringODS();
-    void testFdo78290LineChartMarkerX();
-    void testFdo78290ScatterChartMarkerX();
-    void testFdo78290CombinationChartMarkerX();
-    void testTdf126115IndividualMarker();
-    void testAxisNumberFormatODS();
-    void testAxisNumberFormatXLS();
-    void testDataLabelBordersDOCX();
-    void testDataLabel3DChartDOCX();
-    void testDataLabelBarChartDOCX();
-    void testDataLabelClusteredBarChartDOCX();
-    void testDataLabelRadarChartDOCX();
-    void testDataLabelDoughnutChartDOCX();
-    void testDataLabelAreaChartDOCX();
-    void testDataLabelDefaultLineChartDOCX();
-    void testIndividualDataLabelProps();
-
-    CPPUNIT_TEST_SUITE(Chart2ExportTest);
-    CPPUNIT_TEST(testErrorBarXLSX);
-    CPPUNIT_TEST(testErrorBarPropXLSX);
-    CPPUNIT_TEST(testTrendline);
-    CPPUNIT_TEST(testTrendlineOOXML);
-    CPPUNIT_TEST(testTrendlineXLS);
-    CPPUNIT_TEST(testMovingAverage);
-    CPPUNIT_TEST(testStockChart);
-    CPPUNIT_TEST(testBarChart);
-    CPPUNIT_TEST(testCrosses);
-    CPPUNIT_TEST(testScatterChartTextXValues);
-    CPPUNIT_TEST(testScatterXAxisValues);
-    CPPUNIT_TEST(testScatterXAxisCategories);
-    CPPUNIT_TEST(testChartDataTable);
-    CPPUNIT_TEST(testChartExternalData);
-    CPPUNIT_TEST(testEmbeddingsGrabBag);
-    CPPUNIT_TEST(testAreaChartLoad);
-    CPPUNIT_TEST(testUpDownBars);
-    CPPUNIT_TEST(testDoughnutChart);
-    CPPUNIT_TEST(testDisplayUnits);
-    CPPUNIT_TEST(testFdo74115WallGradientFill);
-    CPPUNIT_TEST(testFdo74115WallBitmapFill);
-    CPPUNIT_TEST(testPieChartWallLineStyle);
-    CPPUNIT_TEST(testBarChartRotation);
-    CPPUNIT_TEST(testShapeFollowedByChart);
-    CPPUNIT_TEST(testPieChartDataLabels);
-    CPPUNIT_TEST(testSeriesIdxOrder);
-    CPPUNIT_TEST(testScatterPlotLabels);
-    CPPUNIT_TEST(testErrorBarDataRangeODS);
-    CPPUNIT_TEST(testChartCrash);
-    CPPUNIT_TEST(testPieChartRotation);
-    CPPUNIT_TEST(testEmbeddingsOleObjectGrabBag);
-    CPPUNIT_TEST(testGapWidthXLSX);
-    CPPUNIT_TEST(testSmoothedLines);
-    CPPUNIT_TEST(testLabelStringODS);
-    CPPUNIT_TEST(testFdo78290LineChartMarkerX);
-    CPPUNIT_TEST(testFdo78290ScatterChartMarkerX);
-    CPPUNIT_TEST(testFdo78290CombinationChartMarkerX);
-    CPPUNIT_TEST(testTdf126115IndividualMarker);
-    CPPUNIT_TEST(testAxisNumberFormatODS);
-    CPPUNIT_TEST(testAxisNumberFormatXLS);
-    CPPUNIT_TEST(testDataLabelBordersDOCX);
-    CPPUNIT_TEST(testDataLabel3DChartDOCX);
-    CPPUNIT_TEST(testDataLabelBarChartDOCX);
-    CPPUNIT_TEST(testDataLabelClusteredBarChartDOCX);
-    CPPUNIT_TEST(testDataLabelRadarChartDOCX);
-    CPPUNIT_TEST(testDataLabelDoughnutChartDOCX);
-    CPPUNIT_TEST(testDataLabelAreaChartDOCX);
-    CPPUNIT_TEST(testDataLabelDefaultLineChartDOCX);
-    CPPUNIT_TEST(testIndividualDataLabelProps);
-
-    CPPUNIT_TEST_SUITE_END();
 };
 
 void Chart2ExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
@@ -295,7 +192,7 @@ void checkTrendlinesInChart(uno::Reference< chart2::XChartDocument > const & xCh
 }
 
 // improve the test
-void Chart2ExportTest::testErrorBarXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testErrorBarXLSX)
 {
     loadFromURL(u"ods/error_bar.ods");
     {
@@ -331,7 +228,7 @@ void Chart2ExportTest::testErrorBarXLSX()
     }
 }
 
-void Chart2ExportTest::testErrorBarPropXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testErrorBarPropXLSX)
 {
     loadFromURL(u"xlsx/testErrorBarProp.xlsx");
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart","Calc Office Open XML");
@@ -350,7 +247,7 @@ void Chart2ExportTest::testErrorBarPropXLSX()
 
 // This method tests the preservation of properties for trendlines / regression curves
 // in an export -> import cycle using different file formats - ODS, XLS and XLSX.
-void Chart2ExportTest::testTrendline()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testTrendline)
 {
     // Validation fails with
     // Error: tag name "chart:symbol-image" is not allowed. Possible tag names are: <label-separator>
@@ -361,7 +258,7 @@ void Chart2ExportTest::testTrendline()
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
 }
 
-void Chart2ExportTest::testTrendlineOOXML()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testTrendlineOOXML)
 {
     loadFromURL(u"ods/trendline.ods");
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
@@ -369,7 +266,7 @@ void Chart2ExportTest::testTrendlineOOXML()
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
 }
 
-void Chart2ExportTest::testTrendlineXLS()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testTrendlineXLS)
 {
     loadFromURL(u"ods/trendline.ods");
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
@@ -377,7 +274,7 @@ void Chart2ExportTest::testTrendlineXLS()
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
 }
 
-void Chart2ExportTest::testMovingAverage()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testMovingAverage)
 {
     loadFromURL(u"ods/moving-type.ods");
     saveAndReload("calc8");
@@ -405,7 +302,7 @@ void Chart2ExportTest::testMovingAverage()
     CPPUNIT_ASSERT_EQUAL(chart2::MovingAverageType::Central, nMovingAverageType);
 }
 
-void Chart2ExportTest::testStockChart()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testStockChart)
 {
     /*  For attached file Stock_Chart.docx, in chart1.xml,
      * <c:stockChart>, there are four types of series as
@@ -427,7 +324,7 @@ void Chart2ExportTest::testStockChart()
         "Open");
 }
 
-void Chart2ExportTest::testBarChart()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testBarChart)
 {
     loadFromURL(u"docx/testBarChart.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
@@ -436,7 +333,7 @@ void Chart2ExportTest::testBarChart()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:barDir", "val", "col");
 }
 
-void Chart2ExportTest::testCrosses()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testCrosses)
 {
     // test crosses val="autoZero" with DOCX
     {
@@ -455,7 +352,7 @@ void Chart2ExportTest::testCrosses()
     }
 }
 
-void Chart2ExportTest::testScatterChartTextXValues()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testScatterChartTextXValues)
 {
     loadFromURL(u"docx/scatter-chart-text-x-values.docx");
 
@@ -503,7 +400,7 @@ void Chart2ExportTest::testScatterChartTextXValues()
     assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser[1]/c:xVal[1]/c:numRef[1]/c:numCache[1]/c:pt[1]/c:v[1]", "1");
 }
 
-void Chart2ExportTest::testScatterXAxisValues()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testScatterXAxisValues)
 {
     loadFromURL(u"odt/tdf114657.odt");
 
@@ -517,7 +414,7 @@ void Chart2ExportTest::testScatterXAxisValues()
     assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser/c:xVal/c:numRef/c:numCache/c:pt[4]/c:v", "16");
 }
 
-void Chart2ExportTest::testScatterXAxisCategories()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testScatterXAxisCategories)
 {
     loadFromURL(u"odt/tdf131143.odt");
 
@@ -528,7 +425,7 @@ void Chart2ExportTest::testScatterXAxisCategories()
     assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser[1]/c:xVal/c:strRef/c:strCache/c:pt[2]/c:v", "Row 2");
 }
 
-void Chart2ExportTest::testChartDataTable()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testChartDataTable)
 {
     loadFromURL(u"docx/testChartDataTable.docx");
 
@@ -539,7 +436,7 @@ void Chart2ExportTest::testChartDataTable()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showOutline", "val", "1");
 }
 
-void Chart2ExportTest::testChartExternalData()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testChartExternalData)
 {
     loadFromURL(u"docx/testMultipleChart.docx");
 
@@ -550,7 +447,7 @@ void Chart2ExportTest::testChartExternalData()
     CPPUNIT_ASSERT(pXmlNodes);
 }
 
-void Chart2ExportTest::testEmbeddingsGrabBag()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testEmbeddingsGrabBag)
 {
    // The problem was that .xlsx files were missing from docx file from embeddings folder
    // after saving file.
@@ -589,7 +486,7 @@ void Chart2ExportTest::testEmbeddingsGrabBag()
    CPPUNIT_ASSERT(bEmbeddings); // Grab Bag has all the expected elements
 }
 
-void Chart2ExportTest::testAreaChartLoad()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testAreaChartLoad)
 {
     loadFromURL(u"docx/testAreaChartLoad.docx");
 
@@ -602,7 +499,7 @@ void Chart2ExportTest::testAreaChartLoad()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart/c:ser/c:dLbls/c:dLbl", 0);
 }
 
-void Chart2ExportTest::testUpDownBars()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testUpDownBars)
 {
     /*
     load("/chart2/qa/extras/data/docx/", "UpDownBars.docx");
@@ -612,7 +509,7 @@ void Chart2ExportTest::testUpDownBars()
     */
 }
 
-void Chart2ExportTest::testDoughnutChart()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDoughnutChart)
 {
     loadFromURL(u"docx/doughnutChart.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
@@ -621,7 +518,7 @@ void Chart2ExportTest::testDoughnutChart()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart");
 }
 
-void Chart2ExportTest::testDisplayUnits()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDisplayUnits)
 {
     loadFromURL(u"docx/DisplayUnits.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
@@ -630,7 +527,7 @@ void Chart2ExportTest::testDisplayUnits()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:dispUnits/c:builtInUnit", "val", "billions");
 }
 
-void Chart2ExportTest::testFdo74115WallGradientFill()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo74115WallGradientFill)
 {
     loadFromURL(u"docx/fdo74115_WallGradientFill.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
@@ -639,7 +536,7 @@ void Chart2ExportTest::testFdo74115WallGradientFill()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill");
 }
 
-void Chart2ExportTest::testFdo74115WallBitmapFill()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo74115WallBitmapFill)
 {
     loadFromURL(u"docx/fdo74115_WallBitmapFill.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
@@ -647,7 +544,7 @@ void Chart2ExportTest::testFdo74115WallBitmapFill()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:blipFill");
 }
 
-void Chart2ExportTest::testPieChartWallLineStyle()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPieChartWallLineStyle)
 {
     loadFromURL(u"odt/testPieChartWallLineStyle.odt");
 
@@ -661,7 +558,7 @@ void Chart2ExportTest::testPieChartWallLineStyle()
 
 //The below test case tests the built in marker 'x' for Office 2010 in Line charts
 
-void Chart2ExportTest::testFdo78290LineChartMarkerX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo78290LineChartMarkerX)
 {
     loadFromURL(u"docx/fdo78290_Line_Chart_Marker_x.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
@@ -672,7 +569,7 @@ void Chart2ExportTest::testFdo78290LineChartMarkerX()
 
 // We can also use the built in marker 'x' in scatter chart, hence writing the test case for the same.
 
-void Chart2ExportTest::testFdo78290ScatterChartMarkerX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo78290ScatterChartMarkerX)
 {
     loadFromURL(u"docx/fdo78290_Scatter_Chart_Marker_x.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
@@ -684,7 +581,7 @@ void Chart2ExportTest::testFdo78290ScatterChartMarkerX()
 // Also in a combination of charts like a column chart and line chart, we can use the built in marker 'x'
 // for the line chart too. hence put a test case for the combination chart also.
 
-void Chart2ExportTest::testFdo78290CombinationChartMarkerX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo78290CombinationChartMarkerX)
 {
     loadFromURL(u"docx/fdo78290_Combination_Chart_Marker_x.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
@@ -693,7 +590,7 @@ void Chart2ExportTest::testFdo78290CombinationChartMarkerX()
     assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:marker[1]/c:size[1]","val","7");
 }
 
-void Chart2ExportTest::testTdf126115IndividualMarker()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testTdf126115IndividualMarker)
 {
     // Check individual marker properties.
     loadFromURL(u"xlsx/tdf126115.xlsx");
@@ -709,7 +606,7 @@ void Chart2ExportTest::testTdf126115IndividualMarker()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[2]/c:dPt/c:marker/c:spPr/a:solidFill/a:srgbClr", "val", "7030a0");
 }
 
-void Chart2ExportTest::testAxisNumberFormatODS()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testAxisNumberFormatODS)
 {
     struct
     {
@@ -757,7 +654,7 @@ void Chart2ExportTest::testAxisNumberFormatODS()
     aTest.check(xChartDoc);
 }
 
-void Chart2ExportTest::testAxisNumberFormatXLS()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testAxisNumberFormatXLS)
 {
     struct
     {
@@ -814,7 +711,7 @@ void Chart2ExportTest::testAxisNumberFormatXLS()
     aTest.check( xChartDoc, false, util::NumberFormat::NUMBER );
 }
 
-void Chart2ExportTest::testDataLabelBordersDOCX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelBordersDOCX)
 {
     struct Check
     {
@@ -930,7 +827,7 @@ void Chart2ExportTest::testDataLabelBordersDOCX()
     aTest.checkObject2(xChartDoc);
 }
 
-void Chart2ExportTest::testDataLabel3DChartDOCX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabel3DChartDOCX)
 {
     loadFromURL(u"docx/3d-bar-label.docx");
 
@@ -949,7 +846,7 @@ void Chart2ExportTest::testDataLabel3DChartDOCX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:bar3DChart/c:ser/c:dLbls/c:dLbl/c:dLblPos", 0);
 }
 
-void Chart2ExportTest::testDataLabelBarChartDOCX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelBarChartDOCX)
 {
     loadFromURL(u"docx/bar-chart-labels.docx");
 
@@ -964,7 +861,7 @@ void Chart2ExportTest::testDataLabelBarChartDOCX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[3]/c:dLbls/c:dLblPos", "val", "inBase");
 }
 
-void Chart2ExportTest::testDataLabelClusteredBarChartDOCX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelClusteredBarChartDOCX)
 {
     loadFromURL(u"docx/clustered-bar-chart-labels.docx");
 
@@ -981,7 +878,7 @@ void Chart2ExportTest::testDataLabelClusteredBarChartDOCX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:dLbls/c:dLbl[2]/c:dLblPos", "val", "outEnd");
 }
 
-void Chart2ExportTest::testDataLabelRadarChartDOCX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelRadarChartDOCX)
 {
     loadFromURL(u"docx/radar-chart-labels.docx");
 
@@ -996,7 +893,7 @@ void Chart2ExportTest::testDataLabelRadarChartDOCX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:radarChart/c:ser/c:dLbls/c:dLbl/c:dLblPos", 0);
 }
 
-void Chart2ExportTest::testDataLabelDoughnutChartDOCX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelDoughnutChartDOCX)
 {
     loadFromURL(u"docx/doughnut-chart-labels.docx");
 
@@ -1014,7 +911,7 @@ void Chart2ExportTest::testDataLabelDoughnutChartDOCX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart/c:ser/c:dLbls/c:dLbl/c:dLblPos", 0);
 }
 
-void Chart2ExportTest::testDataLabelAreaChartDOCX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelAreaChartDOCX)
 {
     loadFromURL(u"docx/area-chart-labels.docx");
 
@@ -1032,7 +929,7 @@ void Chart2ExportTest::testDataLabelAreaChartDOCX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart/c:ser/c:dLbls/c:dLbl/c:dLblPos", 0);
 }
 
-void Chart2ExportTest::testDataLabelDefaultLineChartDOCX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelDefaultLineChartDOCX)
 {
     // This file was created by Word 2007, which doesn't provide default data
     // label position (2010 does).  Make sure its default data label position
@@ -1055,7 +952,7 @@ void Chart2ExportTest::testDataLabelDefaultLineChartDOCX()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Line chart's default label placement should be 'right'.", chart::DataLabelPlacement::RIGHT, nLabelPlacement );
 }
 
-void Chart2ExportTest::testIndividualDataLabelProps()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testIndividualDataLabelProps)
 {
     loadFromURL(u"xlsx/tdf122915.xlsx");
 
@@ -1070,7 +967,7 @@ void Chart2ExportTest::testIndividualDataLabelProps()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[3]/c:dLbls/c:dLbl/c:txPr/a:p/a:pPr/a:defRPr/a:latin", "typeface", "Times New Roman");
 }
 
-void Chart2ExportTest::testBarChartRotation()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testBarChartRotation)
 {
     loadFromURL(u"docx/barChartRotation.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
@@ -1080,7 +977,7 @@ void Chart2ExportTest::testBarChartRotation()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:view3D/c:rotY", "val", "50");
 }
 
-void Chart2ExportTest::testShapeFollowedByChart()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testShapeFollowedByChart)
 {
     /* If there is a scenario where a chart is followed by a shape
        which is being exported as an alternate content then, the
@@ -1101,7 +998,7 @@ void Chart2ExportTest::testShapeFollowedByChart()
     CPPUNIT_ASSERT( aValueOfFirstDocPR != aValueOfSecondDocPR );
 }
 
-void Chart2ExportTest::testPieChartDataLabels()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPieChartDataLabels)
 {
     loadFromURL(u"docx/PieChartDataLabels.docx");
 
@@ -1113,7 +1010,7 @@ void Chart2ExportTest::testPieChartDataLabels()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pie3DChart/c:ser[1]/c:dLbls/c:dLbl[1]/c:dLblPos", "val", "outEnd");
 }
 
-void Chart2ExportTest::testSeriesIdxOrder()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testSeriesIdxOrder)
 {
     loadFromURL(u"docx/testSeriesIdxOrder.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
@@ -1122,7 +1019,7 @@ void Chart2ExportTest::testSeriesIdxOrder()
     assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:order[1]", "val", "1");
 }
 
-void Chart2ExportTest::testScatterPlotLabels()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testScatterPlotLabels)
 {
     loadFromURL(u"odt/scatter-plot-labels.odt");
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
@@ -1154,7 +1051,7 @@ void Chart2ExportTest::testScatterPlotLabels()
     CPPUNIT_ASSERT_EQUAL(OUString("c"), aLabels[2][0].get<OUString>());
 }
 
-void Chart2ExportTest::testErrorBarDataRangeODS()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testErrorBarDataRangeODS)
 {
     loadFromURL(u"ods/ErrorBarRange.ods");
     saveAndReload("calc8");
@@ -1183,14 +1080,14 @@ void Chart2ExportTest::testErrorBarDataRangeODS()
     CPPUNIT_ASSERT_EQUAL(OUString("$Sheet1.$C$1:$C$3"), aNegRange);
 }
 
-void Chart2ExportTest::testChartCrash()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testChartCrash)
 {
     loadFromURL(u"docx/FDO75975.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
 }
 
-void Chart2ExportTest::testPieChartRotation()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPieChartRotation)
 {
     loadFromURL(u"docx/pieChartRotation.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
@@ -1199,7 +1096,7 @@ void Chart2ExportTest::testPieChartRotation()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:view3D/c:rotY", "val", "30");
 }
 
-void Chart2ExportTest::testEmbeddingsOleObjectGrabBag()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testEmbeddingsOleObjectGrabBag)
 {
    // The problem was that .bin files were missing from docx file from embeddings folder
    // after saving file.
@@ -1274,7 +1171,7 @@ void checkSheetForGapWidthAndOverlap(uno::Reference< chart2::XChartDocument > co
 
 }
 
-void Chart2ExportTest::testGapWidthXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testGapWidthXLSX)
 {
     loadFromURL(u"xlsx/gapWidth.xlsx");
 
@@ -1293,7 +1190,7 @@ void Chart2ExportTest::testGapWidthXLSX()
     checkSheetForGapWidthAndOverlap(xChartDoc, 50, 30);
 }
 
-void Chart2ExportTest::testSmoothedLines()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testSmoothedLines)
 {
     loadFromURL(u"ods/smoothedLines.ods");
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
@@ -1301,7 +1198,7 @@ void Chart2ExportTest::testSmoothedLines()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[1]/c:smooth", "val", "0");
 }
 
-void Chart2ExportTest::testLabelStringODS()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testLabelStringODS)
 {
     loadFromURL(u"ods/labelString.ods");
 
@@ -1322,8 +1219,6 @@ void Chart2ExportTest::testLabelStringODS()
     aLabelString = xLabelSeq->getSourceRangeRepresentation();
     CPPUNIT_ASSERT_EQUAL(OUString("\"LabelName\""), aLabelString);
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
