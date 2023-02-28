@@ -776,8 +776,9 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         {
             //looks a bit like a hack - and it is. The graphic import is split into the inline_inline part and
             //afterwards the adding of the binary data.
-            m_pImpl->GetGraphicImport( IMPORT_AS_DETECTED_INLINE )->attribute(nName, val);
-            m_pImpl->ImportGraphic( val.getProperties(), IMPORT_AS_DETECTED_INLINE );
+            m_pImpl->m_eGraphicImportType = IMPORT_AS_DETECTED_INLINE; // really ???
+            m_pImpl->GetGraphicImport()->attribute(nName, val);
+            m_pImpl->ImportGraphic(val.getProperties());
         }
         break;
         case NS_ooxml::LN_Value_math_ST_Jc_centerGroup:
@@ -1337,7 +1338,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             }
             break;
         case NS_ooxml::LN_OfficeArtExtension_Decorative_val:
-            m_pImpl->GetGraphicImport(IMPORT_AS_DETECTED_ANCHOR)->attribute(nName, val);
+            m_pImpl->GetGraphicImport()->attribute(nName, val);
             break;
         default:
             SAL_WARN("writerfilter", "DomainMapper::lcl_attribute: unhandled token: " << nName);
@@ -2539,15 +2540,14 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if( pProperties )
         {
-            GraphicImportType eGraphicType =
+            m_pImpl->m_eGraphicImportType =
                 (NS_ooxml::LN_anchor_anchor ==
                  sal::static_int_cast<Id>(nSprmId)) ?
                 IMPORT_AS_DETECTED_ANCHOR :
                 IMPORT_AS_DETECTED_INLINE;
-            GraphicImportPtr pGraphicImport =
-                m_pImpl->GetGraphicImport(eGraphicType);
+            GraphicImportPtr pGraphicImport = m_pImpl->GetGraphicImport();
             pProperties->resolve(*pGraphicImport);
-            m_pImpl->ImportGraphic(pProperties, eGraphicType);
+            m_pImpl->ImportGraphic(pProperties);
             if( !pGraphicImport->IsGraphic() )
             {
                 m_pImpl->ResetGraphicImport();

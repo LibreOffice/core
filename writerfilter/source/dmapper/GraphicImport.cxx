@@ -204,7 +204,7 @@ private:
     bool      m_bYSizeValid;
 
 public:
-    GraphicImportType m_eGraphicImportType;
+    GraphicImportType & m_rGraphicImportType;
     DomainMapper&   m_rDomainMapper;
 
     sal_Int32 m_nLeftPosition;
@@ -272,12 +272,15 @@ public:
     std::optional<sal_Int32> m_oEffectExtentRight;
     std::optional<sal_Int32> m_oEffectExtentBottom;
 
-    GraphicImport_Impl(GraphicImportType eImportType, DomainMapper& rDMapper, std::pair<OUString, OUString>& rPositionOffsets, std::pair<OUString, OUString>& rAligns, std::queue<OUString>& rPositivePercentages) :
-        m_nXSize(0)
+    GraphicImport_Impl(GraphicImportType & rImportType, DomainMapper& rDMapper,
+            std::pair<OUString, OUString>& rPositionOffsets,
+            std::pair<OUString, OUString>& rAligns,
+            std::queue<OUString>& rPositivePercentages)
+        : m_nXSize(0)
         ,m_bXSizeValid(false)
         ,m_nYSize(0)
         ,m_bYSizeValid(false)
-        ,m_eGraphicImportType( eImportType )
+        ,m_rGraphicImportType(rImportType)
         ,m_rDomainMapper( rDMapper )
         ,m_nLeftPosition(0)
         ,m_nTopPosition(0)
@@ -315,11 +318,6 @@ public:
         ,m_rAligns(rAligns)
         ,m_rPositivePercentages(rPositivePercentages)
     {
-        if (m_eGraphicImportType == GraphicImportType::IMPORT_AS_DETECTED_INLINE
-            && !rDMapper.IsInShape())
-        {
-            m_zOrder = 0;
-        }
     }
 
     void setXSize(sal_Int32 _nXSize)
@@ -388,14 +386,19 @@ public:
 
     void applyZOrder(uno::Reference<beans::XPropertySet> const & xGraphicObjectProperties) const
     {
-        if (m_zOrder >= 0)
+        sal_Int32 nZOrder = m_zOrder;
+        if (m_rGraphicImportType == GraphicImportType::IMPORT_AS_DETECTED_INLINE
+            && !m_rDomainMapper.IsInShape())
+        {
+            nZOrder = 0;
+        }
+        if (nZOrder >= 0)
         {
             // tdf#120760 Send objects with behinddoc=true to the back.
-            sal_Int32 nZOrder = m_zOrder;
             if (m_bBehindDoc && m_rDomainMapper.IsInHeaderFooter())
                 nZOrder -= SAL_MAX_INT32;
             GraphicZOrderHelper* pZOrderHelper = m_rDomainMapper.graphicZOrderHelper();
-            bool bOldStyle = m_eGraphicImportType == GraphicImportType::IMPORT_AS_DETECTED_INLINE;
+            bool const bOldStyle(m_rGraphicImportType == GraphicImportType::IMPORT_AS_DETECTED_INLINE);
             xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_Z_ORDER),
                 uno::Any(pZOrderHelper->findZOrder(nZOrder, bOldStyle)));
             pZOrderHelper->addItem(xGraphicObjectProperties, nZOrder);
@@ -456,14 +459,14 @@ public:
 GraphicImport::GraphicImport(uno::Reference<uno::XComponentContext> xComponentContext,
                              uno::Reference<lang::XMultiServiceFactory> xTextFactory,
                              DomainMapper& rDMapper,
-                             GraphicImportType eImportType,
+                             GraphicImportType & rImportType,
                              std::pair<OUString, OUString>& rPositionOffsets,
                              std::pair<OUString, OUString>& rAligns,
                              std::queue<OUString>& rPositivePercentages)
 : LoggedProperties("GraphicImport")
 , LoggedTable("GraphicImport")
 , LoggedStream("GraphicImport")
-, m_pImpl(new GraphicImport_Impl(eImportType, rDMapper, rPositionOffsets, rAligns, rPositivePercentages))
+, m_pImpl(new GraphicImport_Impl(rImportType, rDMapper, rPositionOffsets, rAligns, rPositivePercentages))
 , m_xComponentContext(std::move(xComponentContext))
 , m_xTextFactory(std::move(xTextFactory))
 {
@@ -1015,7 +1018,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             lcl_correctWord2007EffectExtent(nOOXAngle);
                         }
 
-                        if (m_pImpl->m_eGraphicImportType == IMPORT_AS_DETECTED_INLINE)
+                        if (m_pImpl->m_rGraphicImportType == IMPORT_AS_DETECTED_INLINE)
                         {
                             if (nOOXAngle == 0)
                             {
@@ -1235,7 +1238,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             m_pImpl->m_nBottomMargin = 0;
                     }
 
-                    if (bUseShape && m_pImpl->m_eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
+                    if (bUseShape && m_pImpl->m_rGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
                     {
                         // If we are here, this is a drawingML shape. For those, only dmapper (and not oox) knows the anchoring infos (just like for Writer pictures).
                         // But they aren't Writer pictures, either (which are already handled above).
@@ -1342,7 +1345,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         aInteropGrabBag.update(m_pImpl->getInteropGrabBag());
                         xShapeProps->setPropertyValue("InteropGrabBag", uno::Any(aInteropGrabBag.getAsConstPropertyValueList()));
                     }
-                    else if (bUseShape && m_pImpl->m_eGraphicImportType == IMPORT_AS_DETECTED_INLINE)
+                    else if (bUseShape && m_pImpl->m_rGraphicImportType == IMPORT_AS_DETECTED_INLINE)
                     {
                         uno::Reference< beans::XPropertySet > xShapeProps(m_xShape, uno::UNO_QUERY_THROW);
                         m_pImpl->applyMargins(xShapeProps);
@@ -1718,7 +1721,7 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
                 uno::UNO_QUERY_THROW);
             xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_GRAPHIC), uno::Any(rxGraphic));
             xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE),
-                uno::Any( m_pImpl->m_eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR ?
+                uno::Any( m_pImpl->m_rGraphicImportType == IMPORT_AS_DETECTED_ANCHOR ?
                                     text::TextContentAnchorType_AT_CHARACTER :
                                     text::TextContentAnchorType_AS_CHARACTER ));
             xGraphicObject.set( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
@@ -1793,7 +1796,7 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
                     uno::Any(true));
 
             sal_Int32 nWidth = - m_pImpl->m_nLeftPosition;
-            if (m_pImpl->m_eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
+            if (m_pImpl->m_rGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
             {
                 xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_DECORATIVE), uno::Any(m_pImpl->m_bDecorative));
                 //adjust margins
@@ -1917,7 +1920,8 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
             }
 
 
-            if(m_pImpl->m_eGraphicImportType == IMPORT_AS_DETECTED_INLINE || m_pImpl->m_eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
+            if (m_pImpl->m_rGraphicImportType == IMPORT_AS_DETECTED_INLINE
+                || m_pImpl->m_rGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
             {
                 if( m_pImpl->getXSize() && m_pImpl->getYSize() )
                     xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_SIZE),

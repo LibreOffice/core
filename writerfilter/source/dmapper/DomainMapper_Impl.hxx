@@ -827,10 +827,10 @@ public:
         return m_pSettingsTable;
     }
 
-    GraphicImportPtr const & GetGraphicImport( GraphicImportType eGraphicImportType );
+    GraphicImportPtr const & GetGraphicImport();
     void            ResetGraphicImport();
     // this method deletes the current m_pGraphicImport after import
-    void    ImportGraphic(const writerfilter::Reference< Properties>::Pointer_t&, GraphicImportType eGraphicImportType );
+    void    ImportGraphic(const writerfilter::Reference<Properties>::Pointer_t&);
 
     void InitTabStopFromStyle(const css::uno::Sequence<css::style::TabStop>& rInitTabStops);
     void    IncorporateTabStop( const DeletableTabStop &aTabStop );
@@ -1161,6 +1161,7 @@ public:
     std::pair<OUString, OUString> m_aAligns;
     /// ST_PositivePercentage values we received
     std::queue<OUString> m_aPositivePercentages;
+    enum GraphicImportType m_eGraphicImportType = {};
     bool isInIndexContext() const { return m_bStartIndex;}
     bool isInBibliographyContext() const { return m_bStartBibliography;}
     SmartTagHandler& getSmartTagHandler() { return m_aSmartTagHandler; }
