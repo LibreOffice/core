@@ -136,10 +136,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLTabStopImportCon
             new SvxXMLTabStopContext_Impl( GetImport(), nElement, xAttrList )};
 
         // add new tabstop to array of tabstops
-        if( !mpTabStops )
-            mpTabStops = std::make_unique<SvxXMLTabStopArray_Impl>();
-
-        mpTabStops->push_back( xTabStopContext );
+        maTabStops.push_back( xTabStopContext );
 
         return xTabStopContext;
     }
@@ -151,17 +148,17 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLTabStopImportCon
 
 void SvxXMLTabStopImportContext::endFastElement(sal_Int32 nElement)
 {
-    sal_uInt16 nCount = mpTabStops ? mpTabStops->size() : 0;
+    sal_uInt16 nCount = maTabStops.size();
     uno::Sequence< style::TabStop> aSeq( nCount );
 
-    if( mpTabStops )
+    if( nCount )
     {
         sal_uInt16 nNewCount = 0;
 
         style::TabStop* pTabStops = aSeq.getArray();
         for( sal_uInt16 i=0; i < nCount; i++ )
         {
-            SvxXMLTabStopContext_Impl *pTabStopContext = (*mpTabStops)[i].get();
+            SvxXMLTabStopContext_Impl *pTabStopContext = maTabStops[i].get();
             const style::TabStop& rTabStop = pTabStopContext->getTabStop();
             bool bDflt = style::TabAlign_DEFAULT == rTabStop.Alignment;
             if( !bDflt || 0==i )

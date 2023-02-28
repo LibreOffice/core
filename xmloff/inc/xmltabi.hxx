@@ -26,12 +26,10 @@
 class SvXMLImport;
 class SvxXMLTabStopContext_Impl;
 
-typedef std::vector<rtl::Reference<SvxXMLTabStopContext_Impl>> SvxXMLTabStopArray_Impl;
-
 class SvxXMLTabStopImportContext final : public XMLElementPropertyContext
 {
 private:
-    std::unique_ptr<SvxXMLTabStopArray_Impl> mpTabStops;
+    std::vector<rtl::Reference<SvxXMLTabStopContext_Impl>> maTabStops;
 
 public:
     SvxXMLTabStopImportContext(SvXMLImport& rImport, sal_Int32 nElement,
