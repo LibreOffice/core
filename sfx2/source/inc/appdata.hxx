@@ -56,8 +56,6 @@ namespace sfx2::sidebar { class Theme; }
 
 
 
-typedef std::vector<SfxDdeDocTopic_Impl*> SfxDdeDocTopics_Impl;
-
 class SfxAppData_Impl
 {
 public:
@@ -66,7 +64,7 @@ public:
 
     // DDE stuff
     std::unique_ptr<DdeService>              pDdeService;
-    std::unique_ptr<SfxDdeDocTopics_Impl>    pDocTopics;
+    std::vector<SfxDdeDocTopic_Impl*>        maDocTopics;
     std::unique_ptr<SfxDdeTriggerTopic_Impl> pTriggerTopic;
     std::unique_ptr<DdeService>              pDdeService2;
 
