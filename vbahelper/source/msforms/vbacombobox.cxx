@@ -37,8 +37,8 @@ using namespace ooo::vba;
 
 ScVbaComboBox::ScVbaComboBox( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper )
     : ComboBoxImpl_BASE( xParent, xContext, xControl, xModel, std::move(pGeomHelper) )
+    , maListHelper( m_xProps )
 {
-    mpListHelper.reset( new ListControlHelper( m_xProps ) );
     try
     {
        // grab the default value property name
@@ -149,38 +149,38 @@ ScVbaComboBox::setText( const OUString& _text )
 void SAL_CALL
 ScVbaComboBox::AddItem( const uno::Any& pvargItem, const uno::Any& pvargIndex )
 {
-    mpListHelper->AddItem( pvargItem, pvargIndex );
+    maListHelper.AddItem( pvargItem, pvargIndex );
 }
 
 void SAL_CALL
 ScVbaComboBox::removeItem( const uno::Any& index )
 {
-    mpListHelper->removeItem( index );
+    maListHelper.removeItem( index );
 }
 
 void SAL_CALL
 ScVbaComboBox::Clear(  )
 {
-    mpListHelper->Clear();
+    maListHelper.Clear();
 }
 
 void SAL_CALL
 ScVbaComboBox::setRowSource( const OUString& _rowsource )
 {
     ScVbaControl::setRowSource( _rowsource );
-    mpListHelper->setRowSource( _rowsource );
+    maListHelper.setRowSource( _rowsource );
 }
 
 sal_Int32 SAL_CALL
 ScVbaComboBox::getListCount()
 {
-    return mpListHelper->getListCount();
+    return maListHelper.getListCount();
 }
 
 uno::Any SAL_CALL
 ScVbaComboBox::List( const ::uno::Any& pvargIndex, const uno::Any& pvarColumn )
 {
-    return mpListHelper->List( pvargIndex, pvarColumn );
+    return maListHelper.List( pvargIndex, pvarColumn );
 }
 
 sal_Int32 SAL_CALL ScVbaComboBox::getStyle()

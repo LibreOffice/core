@@ -60,7 +60,7 @@ typedef InheritedHelperInterfaceImpl< ListeningShape > ScVbaShape_BASE;
 class VBAHELPER_DLLPUBLIC ScVbaShape : public ScVbaShape_BASE
 {
 protected:
-    std::unique_ptr< ov::ShapeHelper > m_pShapeHelper;
+    ov::ShapeHelper m_aShapeHelper;
     css::uno::Reference< css::drawing::XShape > m_xShape;
     css::uno::Reference< css::drawing::XShapes > m_xShapes;
     css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;

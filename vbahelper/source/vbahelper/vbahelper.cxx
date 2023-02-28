@@ -625,8 +625,8 @@ double PixelsToPoints( const css::uno::Reference< css::awt::XDevice >& xDevice, 
 }
 
 ConcreteXShapeGeometryAttributes::ConcreteXShapeGeometryAttributes( const css::uno::Reference< css::drawing::XShape >& xShape )
+  : m_aShapeHelper( xShape )
 {
-    m_pShapeHelper.reset( new ShapeHelper( xShape ) );
 }
 ConcreteXShapeGeometryAttributes::~ConcreteXShapeGeometryAttributes()
 {
@@ -935,36 +935,36 @@ void UserFormGeometryHelper::implSetSize( double fSize, bool bHeight, bool bOute
 
 double ConcreteXShapeGeometryAttributes::getLeft() const
 {
-    return m_pShapeHelper->getLeft();
+    return m_aShapeHelper.getLeft();
 }
 void ConcreteXShapeGeometryAttributes::setLeft( double nLeft )
 {
-    m_pShapeHelper->setLeft( nLeft );
+    m_aShapeHelper.setLeft( nLeft );
 }
 double ConcreteXShapeGeometryAttributes::getTop() const
 {
-    return m_pShapeHelper->getTop();
+    return m_aShapeHelper.getTop();
 }
 void ConcreteXShapeGeometryAttributes::setTop( double nTop )
 {
-    m_pShapeHelper->setTop( nTop );
+    m_aShapeHelper.setTop( nTop );
 }
 
 double ConcreteXShapeGeometryAttributes::getHeight() const
 {
-    return m_pShapeHelper->getHeight();
+    return m_aShapeHelper.getHeight();
 }
 void ConcreteXShapeGeometryAttributes::setHeight( double nHeight )
 {
-    m_pShapeHelper->setHeight( nHeight );
+    m_aShapeHelper.setHeight( nHeight );
 }
 double ConcreteXShapeGeometryAttributes::getWidth() const
 {
-    return m_pShapeHelper->getWidth();
+    return m_aShapeHelper.getWidth();
 }
 void ConcreteXShapeGeometryAttributes::setWidth( double nWidth)
 {
-    m_pShapeHelper->setWidth( nWidth );
+    m_aShapeHelper.setWidth( nWidth );
 }
 
 

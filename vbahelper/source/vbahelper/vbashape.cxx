@@ -50,10 +50,14 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 ScVbaShape::ScVbaShape( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< drawing::XShape > xShape, uno::Reference< drawing::XShapes > xShapes, uno::Reference< frame::XModel > xModel, sal_Int32 nType )
-    : ScVbaShape_BASE( xParent, xContext ), m_xShape(std::move( xShape )), m_xShapes(std::move( xShapes )), m_nType( nType ), m_xModel(std::move( xModel ))
+    : ScVbaShape_BASE( xParent, xContext )
+    , m_aShapeHelper( xShape )
+    , m_xShape(std::move( xShape ))
+    , m_xShapes(std::move( xShapes ))
+    , m_nType( nType )
+    , m_xModel(std::move( xModel ))
 {
     m_xPropertySet.set( m_xShape, uno::UNO_QUERY_THROW );
-    m_pShapeHelper.reset( new ShapeHelper( m_xShape ) );
     addListeners();
 }
 
@@ -232,25 +236,25 @@ ScVbaShape::setAlternativeText( const OUString& sAltText )
 double SAL_CALL
 ScVbaShape::getHeight()
 {
-    return m_pShapeHelper->getHeight();
+    return m_aShapeHelper.getHeight();
 }
 
 void SAL_CALL
 ScVbaShape::setHeight(double _height)
 {
-    m_pShapeHelper->setHeight( _height );
+    m_aShapeHelper.setHeight( _height );
 }
 
 double SAL_CALL
 ScVbaShape::getWidth()
 {
-    return m_pShapeHelper->getWidth();
+    return m_aShapeHelper.getWidth();
 }
 
 void SAL_CALL
 ScVbaShape::setWidth(double _width)
 {
-    m_pShapeHelper->setWidth( _width );
+    m_aShapeHelper.setWidth( _width );
 }
 
 double SAL_CALL
@@ -259,7 +263,7 @@ ScVbaShape::getLeft()
     double left = 0;
     try
     {
-        left = m_pShapeHelper->getLeft();
+        left = m_aShapeHelper.getLeft();
     }
     catch( uno::Exception& )
     {
@@ -276,7 +280,7 @@ ScVbaShape::setLeft( double _left )
 {
     try
     {
-        m_pShapeHelper->setLeft( _left );
+        m_aShapeHelper.setLeft( _left );
     }
     catch( uno::Exception& )
     {
@@ -291,7 +295,7 @@ ScVbaShape::getTop()
     double top = 0;
     try
     {
-        top = m_pShapeHelper->getTop();
+        top = m_aShapeHelper.getTop();
     }
     catch( uno::Exception& )
     {
@@ -307,7 +311,7 @@ ScVbaShape::setTop( double _top )
 {
     try
     {
-        m_pShapeHelper->setTop( _top );
+        m_aShapeHelper.setTop( _top );
     }
     catch( uno::Exception& )
     {

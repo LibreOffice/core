@@ -19,6 +19,7 @@
 #ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBALISTBOX_HXX
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBALISTBOX_HXX
 #include <memory>
+#include <optional>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/script/XDefaultProperty.hpp>
@@ -34,7 +35,7 @@ typedef cppu::ImplInheritanceHelper<ScVbaControl, ov::msforms::XListBox, css::sc
 class ScVbaListBox : public ListBoxImpl_BASE
     ,public PropListener
 {
-    std::unique_ptr< ListControlHelper > mpListHelper;
+    ListControlHelper maListHelper;
 
     sal_Int16 m_nIndex;
 

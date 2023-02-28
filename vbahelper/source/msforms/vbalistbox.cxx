@@ -27,9 +27,9 @@ using namespace ooo::vba;
 
 ScVbaListBox::ScVbaListBox( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< css::uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper )
     : ListBoxImpl_BASE(xParent, xContext, xControl, xModel, std::move(pGeomHelper))
+    , maListHelper( m_xProps )
     , m_nIndex(0)
 {
-    mpListHelper.reset( new ListControlHelper( m_xProps ) );
 }
 
 // Attributes
@@ -152,19 +152,19 @@ ScVbaListBox::Selected( sal_Int32 index )
 void SAL_CALL
 ScVbaListBox::AddItem( const uno::Any& pvargItem, const uno::Any& pvargIndex )
 {
-    mpListHelper->AddItem( pvargItem, pvargIndex );
+    maListHelper.AddItem( pvargItem, pvargIndex );
 }
 
 void SAL_CALL
 ScVbaListBox::removeItem( const uno::Any& index )
 {
-    mpListHelper->removeItem( index );
+    maListHelper.removeItem( index );
 }
 
 void SAL_CALL
 ScVbaListBox::Clear(  )
 {
-    mpListHelper->Clear();
+    maListHelper.Clear();
 }
 
 // this is called when something like the following vba code is used
@@ -236,19 +236,19 @@ void SAL_CALL
 ScVbaListBox::setRowSource( const OUString& _rowsource )
 {
     ScVbaControl::setRowSource( _rowsource );
-    mpListHelper->setRowSource( _rowsource );
+    maListHelper.setRowSource( _rowsource );
 }
 
 sal_Int32 SAL_CALL
 ScVbaListBox::getListCount()
 {
-    return mpListHelper->getListCount();
+    return maListHelper.getListCount();
 }
 
 uno::Any SAL_CALL
 ScVbaListBox::List( const ::uno::Any& pvargIndex, const uno::Any& pvarColumn )
 {
-    return mpListHelper->List( pvargIndex, pvarColumn );
+    return maListHelper.List( pvargIndex, pvarColumn );
 }
 
 uno::Reference< msforms::XNewFont > SAL_CALL ScVbaListBox::getFont()
