@@ -402,9 +402,9 @@ namespace svgio::svgreader
 
         const SvgUnits* SvgPatternNode::getPatternUnits() const
         {
-            if(mpPatternUnits)
+            if(moPatternUnits)
             {
-                return mpPatternUnits.get();
+                return &*moPatternUnits;
             }
 
             const_cast< SvgPatternNode* >(this)->tryToFindLink();
@@ -422,9 +422,9 @@ namespace svgio::svgreader
 
         const SvgUnits* SvgPatternNode::getPatternContentUnits() const
         {
-            if(mpPatternContentUnits)
+            if(moPatternContentUnits)
             {
-                return mpPatternContentUnits.get();
+                return &*moPatternContentUnits;
             }
 
             const_cast< SvgPatternNode* >(this)->tryToFindLink();
