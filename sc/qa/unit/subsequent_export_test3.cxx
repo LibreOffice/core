@@ -21,12 +21,14 @@
 
 #include <svx/svdpage.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/svdomeas.hxx>
 #include <svl/zformat.hxx>
 #include <svl/numformat.hxx>
 #include <tabprotection.hxx>
 #include <editeng/borderline.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/useroptions.hxx>
+#include <sfx2/docfile.hxx>
 #include <tools/datetime.hxx>
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -1933,6 +1935,151 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testNumberFormatODS)
     OUString aCSVPath = createFilePath(u"contentCSV/testNumberFormats.csv");
     testCondFile(aCSVPath, &*pDoc, 0,
                  false); // comma is thousand separator and cannot be used as delimiter
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf137576_Measureline)
+{
+    // The document contains a vertical measure line, anchored "To Cell (resize with cell)" with
+    // length 37mm. Save and reload had resulted in a line of 0mm length.
+
+    // Get document
+    createScDoc("ods/tdf137576_Measureline.ods");
+    ScDocument* pDoc = getScDoc();
+
+    // Get shape
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Load: No ScDrawLayer", pDrawLayer);
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("Load: No draw page", pPage);
+    SdrMeasureObj* pObj = static_cast<SdrMeasureObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT_MESSAGE("Load: No measure object", pObj);
+
+    // Check start and end point of measureline
+    const Point aStart = pObj->GetPoint(0);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(4800, 1500), aStart, 1);
+    const Point aEnd = pObj->GetPoint(1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(4800, 5200), aEnd, 1);
+
+    // Save and reload
+    saveAndReload("calc8");
+    pDoc = getScDoc();
+
+    // Get shape
+    pDrawLayer = pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Reload: No ScDrawLayer", pDrawLayer);
+    pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("Reload: No draw page", pPage);
+    pObj = static_cast<SdrMeasureObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT_MESSAGE("Reload: No measure object", pObj);
+
+    // Check start and end point of measureline, should be unchanged
+    const Point aStart2 = pObj->GetPoint(0);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(4800, 1500), aStart2, 1);
+    const Point aEnd2 = pObj->GetPoint(1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(4800, 5200), aEnd2, 1);
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf137044_CoverHiddenRows)
+{
+    // The document contains a shape anchored "To Cell (resize with cell)" with start in cell A4 and
+    // end in cell A7. Row height is 30mm. Hiding rows 5 and 6, then saving and reload had resulted
+    // in a wrong end cell offset and thus a wrong height of the shape.
+
+    // Get document
+    createScDoc("ods/tdf137044_CoverHiddenRows.ods");
+    ScDocument* pDoc = getScDoc();
+
+    // Get shape
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Load: No ScDrawLayer", pDrawLayer);
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("Load: No draw page", pPage);
+    SdrObject* pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Load: No object", pObj);
+
+    // Get original object values
+    tools::Rectangle aSnapRectOrig = pObj->GetSnapRect();
+    Point aOriginalEndOffset = ScDrawLayer::GetObjData(pObj)->maEndOffset;
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(
+        tools::Rectangle(Point(500, 3500), Size(1501, 11001)), aSnapRectOrig, 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(2000, 2499), aOriginalEndOffset, 1);
+
+    // Hide rows 5 and 6 in UI = row index 4 to 5.
+    pDoc->SetRowHidden(4, 5, 0, true);
+
+    // Save and reload
+    saveAndReload("calc8");
+    pDoc = getScDoc();
+
+    // Get shape
+    pDrawLayer = pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Reload: No ScDrawLayer", pDrawLayer);
+    pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("Reload: No draw page", pPage);
+    pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Reload: No object", pObj);
+
+    // Get new values and compare. End offset should be the same, height should be 6000 smaller.
+    tools::Rectangle aSnapRectReload = pObj->GetSnapRect();
+    Point aReloadEndOffset = ScDrawLayer::GetObjData(pObj)->maEndOffset;
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(
+        tools::Rectangle(Point(500, 3500), Size(1501, 5001)), aSnapRectReload, 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(2000, 2499), aReloadEndOffset, 1);
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf137020_FlipVertical)
+{
+    // Get document
+    createScDoc("ods/tdf137020_FlipVertical.ods");
+    ScDocument* pDoc = getScDoc();
+
+    // Get shape
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Load: No ScDrawLayer", pDrawLayer);
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("Load: No draw page", pPage);
+    SdrObject* pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Load: No object", pObj);
+
+    const tools::Rectangle aSnapRectOrig = pObj->GetSnapRect();
+
+    // Vertical mirror on center should not change the snap rect.
+    pObj->Mirror(aSnapRectOrig.LeftCenter(), aSnapRectOrig.RightCenter());
+    const tools::Rectangle aSnapRectFlip = pObj->GetSnapRect();
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRectOrig, aSnapRectFlip, 1);
+
+    // Save and reload
+    saveAndReload("calc8");
+    pDoc = getScDoc();
+
+    // Get shape
+    pDrawLayer = pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Reload: No ScDrawLayer", pDrawLayer);
+    pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("Reload: No draw page", pPage);
+    pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Reload: No object", pObj);
+
+    // Check pos and size of shape again, should be unchanged
+    const tools::Rectangle aSnapRectReload = pObj->GetSnapRect();
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRectOrig, aSnapRectReload, 1);
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf82254_csv_bom)
+{
+    setImportFilterName(SC_TEXT_CSV_FILTER_NAME);
+    createScDoc("csv/testTdf82254-csv-bom.csv");
+    saveAndReload(SC_TEXT_CSV_FILTER_NAME);
+    ScDocShell* pDocSh = getScDocShell();
+    SvStream* pStream = pDocSh->GetMedium()->GetInStream();
+
+    pStream->Seek(0);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), pStream->Tell());
+    pStream->StartReadingUnicodeText(RTL_TEXTENCODING_UTF8);
+    // Without the fix in place, this test would have failed with
+    // - Expected: 3
+    // - Actual  : 0 (no byte order mark was read)
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(3), pStream->Tell());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
