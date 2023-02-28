@@ -459,7 +459,7 @@ public:
     OUString                    m_aURL;         // the full path name to create the content
     OUString                    m_aContentType;
     OUString                    m_aOriginalContentType;
-    std::unique_ptr<::ucbhelper::Content> m_pContent;     // the content that provides the storage elements
+    std::optional<::ucbhelper::Content> m_oContent;     // the content that provides the storage elements
     std::unique_ptr<::utl::TempFileNamed> m_pTempFile;    // temporary file, only for storages on stream
     SvStream*                   m_pSource;      // original stream, only for storages on a stream
     ErrCode                     m_nError;
@@ -498,9 +498,9 @@ public:
     void                        CreateContent();
     ::ucbhelper::Content*       GetContent()
                                 {
-                                    if ( !m_pContent )
+                                    if ( !m_oContent )
                                         CreateContent();
-                                    return m_pContent.get();
+                                    return m_oContent ? &*m_oContent : nullptr;
                                 }
     UCBStorageElementList_Impl& GetChildrenList()
                                 {
@@ -1432,7 +1432,7 @@ UCBStorage::~UCBStorage()
 
 UCBStorage_Impl::UCBStorage_Impl( const ::ucbhelper::Content& rContent, const OUString& rName, StreamMode nMode, UCBStorage* pStorage, bool bDirect, bool bIsRoot, bool bIsRepair, Reference< XProgressHandler > const & xProgressHandler  )
     : m_pAntiImpl( pStorage )
-    , m_pContent( new ::ucbhelper::Content( rContent ) )
+    , m_oContent( rContent )
     , m_pSource( nullptr )
     //, m_pStream( NULL )
     , m_nError( ERRCODE_NONE )
@@ -1556,10 +1556,10 @@ void UCBStorage_Impl::Init()
         // if the name was not already set to a temp name
         m_aName = aObj.GetLastName();
 
-    if ( !m_pContent )
+    if ( !m_oContent )
         CreateContent();
 
-    if ( m_pContent )
+    if ( m_oContent )
     {
         if ( m_bIsLinked )
         {
@@ -1602,7 +1602,7 @@ void UCBStorage_Impl::Init()
         {
             // get the manifest information from the package
             try {
-                Any aAny = m_pContent->getPropertyValue("MediaType");
+                Any aAny = m_oContent->getPropertyValue("MediaType");
                 OUString aTmp;
                 if ( ( aAny >>= aTmp ) && !aTmp.isEmpty() )
                     m_aContentType = m_aOriginalContentType = aTmp;
@@ -1630,7 +1630,7 @@ void UCBStorage_Impl::Init()
     SotExchange::GetFormatDataFlavor( m_nFormat, aDataFlavor );
     m_aUserTypeName = aDataFlavor.HumanPresentableName;
 
-    if( m_pContent && !m_bIsLinked && m_aClassId != SvGlobalName() )
+    if( m_oContent && !m_bIsLinked && m_aClassId != SvGlobalName() )
         ReadContent();
 }
 
@@ -1650,7 +1650,7 @@ void UCBStorage_Impl::CreateContent()
             aTemp += "?repairpackage";
         }
 
-        m_pContent.reset(new ::ucbhelper::Content( aTemp, xComEnv, comphelper::getProcessComponentContext() ));
+        m_oContent.emplace( aTemp, xComEnv, comphelper::getProcessComponentContext() );
     }
     catch (const ContentCreationException&)
     {
@@ -1674,11 +1674,11 @@ void UCBStorage_Impl::ReadContent()
     try
     {
         GetContent();
-        if ( !m_pContent )
+        if ( !m_oContent )
             return;
 
         // create cursor for access to children
-        Reference< XResultSet > xResultSet = m_pContent->createCursor( { "Title", "IsFolder", "MediaType", "Size" }, ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS );
+        Reference< XResultSet > xResultSet = m_oContent->createCursor( { "Title", "IsFolder", "MediaType", "Size" }, ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS );
         Reference< XRow > xRow( xResultSet, UNO_QUERY );
         if ( xResultSet.is() )
         {
@@ -1907,7 +1907,7 @@ UCBStorage_Impl::~UCBStorage_Impl()
 {
     m_aChildrenList.clear();
 
-    m_pContent.reset();
+    m_oContent.reset();
     m_pTempFile.reset();
 }
 
@@ -1941,7 +1941,7 @@ bool UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
                     continue;
 
                 // remove old content, create an "empty" new one and initialize it with the new inserted
-                m_pContent.reset(new ::ucbhelper::Content( aNewFolder ));
+                m_oContent.emplace( aNewFolder );
                 bRet = true;
             }
         }
@@ -2016,7 +2016,8 @@ sal_Int16 UCBStorage_Impl::Commit()
                         //  - if storage is already inserted, and changed
                         //  - storage is not in a package
                         //  - it's a new storage, try to insert and commit if successful inserted
-                        if ( !pElement->m_bIsInserted || m_bIsLinked || pElement->m_xStorage->Insert( m_pContent.get() ) )
+                        if ( !pElement->m_bIsInserted || m_bIsLinked
+                             || pElement->m_xStorage->Insert( m_oContent ? &*m_oContent : nullptr ) )
                         {
                             nLocalRet = pElement->m_xStorage->Commit();
                             pContent = pElement->GetContent();
@@ -2085,7 +2086,7 @@ sal_Int16 UCBStorage_Impl::Commit()
             return COMMIT_RESULT_FAILURE;
         }
 
-        if ( m_bIsRoot && m_pContent )
+        if ( m_bIsRoot && m_oContent )
         {
             // the root storage must flush the root package content
             if ( nRet == COMMIT_RESULT_SUCCESS )
@@ -2096,14 +2097,14 @@ sal_Int16 UCBStorage_Impl::Commit()
                     // clipboard format and ClassId will be retrieved from the media type when the file is loaded again
                     Any aType;
                     aType <<= m_aContentType;
-                    m_pContent->setPropertyValue("MediaType", aType );
+                    m_oContent->setPropertyValue("MediaType", aType );
 
                     if (  m_bIsLinked )
                     {
                         // write a manifest file
                         // first create a subfolder "META-inf"
                         Content aNewSubFolder;
-                        bool bRet = ::utl::UCBContentHelper::MakeFolder( *m_pContent, "META-INF", aNewSubFolder );
+                        bool bRet = ::utl::UCBContentHelper::MakeFolder( *m_oContent, "META-INF", aNewSubFolder );
                         if ( bRet )
                         {
                             // create a stream to write the manifest file - use a temp file
@@ -2140,7 +2141,7 @@ sal_Int16 UCBStorage_Impl::Commit()
 #endif
                         // force writing
                         Any aAny;
-                        m_pContent->executeCommand( "flush", aAny );
+                        m_oContent->executeCommand( "flush", aAny );
                         if ( m_pSource != nullptr )
                         {
                             std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), StreamMode::STD_READ ));
@@ -2682,8 +2683,8 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
             aFolderObj.removeSegment();
 
             Content aFolder( aFolderObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-            pImp->m_pContent.reset(new Content);
-            bool bRet = ::utl::UCBContentHelper::MakeFolder( aFolder, pImp->m_aName, *pImp->m_pContent );
+            pImp->m_oContent.emplace();
+            bool bRet = ::utl::UCBContentHelper::MakeFolder( aFolder, pImp->m_aName, *pImp->m_oContent );
             if ( !bRet )
             {
                 SetError( SVSTREAM_CANNOT_MAKE );
@@ -2714,7 +2715,7 @@ UCBStorage_Impl* UCBStorage_Impl::OpenStorage( UCBStorageElement_Impl* pElement,
     if ( m_bIsLinked && !::utl::UCBContentHelper::Exists( aName ) )
     {
         Content aNewFolder;
-        bool bRet = ::utl::UCBContentHelper::MakeFolder( *m_pContent, pElement->m_aOriginalName, aNewFolder );
+        bool bRet = ::utl::UCBContentHelper::MakeFolder( *m_oContent, pElement->m_aOriginalName, aNewFolder );
         if ( bRet )
             pRet = new UCBStorage_Impl( aNewFolder, aName, nMode, nullptr, bDirect, false, m_bRepairPackage, m_xProgressHandler );
     }
