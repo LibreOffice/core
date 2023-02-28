@@ -1,7 +1,7 @@
 #include <sal/types.h>
 
 /* libjpeg-turbo build number */
-#define BUILD  "20221122"
+#define BUILD  "20230228"
 
 /* Compiler's inline keyword */
 #undef inline
@@ -19,10 +19,13 @@
 #define PACKAGE_NAME  "libjpeg-turbo"
 
 /* Version number of package */
-#define VERSION  "2.1.4"
+#define VERSION  "2.1.5"
 
 /* The size of `size_t', as computed by sizeof. */
 /* #undef SIZEOF_SIZE_T */
+
+/* How to obtain thread-local storage */
+#define THREAD_LOCAL
 
 #if defined(__GNUC__) && SAL_TYPES_SIZEOFLONG == SIZEOF_SIZE_T
 /* Define if your compiler has __builtin_ctzl() and sizeof(unsigned long) == sizeof(size_t). */
