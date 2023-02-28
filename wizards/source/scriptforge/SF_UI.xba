@@ -1425,7 +1425,7 @@ Try:
 				.UIName = sUIName
 				Set .UIConfigurationManager = oUIConfigMgr
 				.ElementsInfoIndex = i
-				&apos;	Distinguish builtin and custom toolbars stored in the applcation
+				&apos;	Distinguish builtin and custom toolbars stored in the application
 				If SF_String.StartsWith(sBarName, cstCUSTOM, CaseSensitive := True) Then
 					.Storage = cstCUSTOMTOOLBAR
 					sBarName = Mid(sBarName, Len(cstCUSTOM) + 1)
