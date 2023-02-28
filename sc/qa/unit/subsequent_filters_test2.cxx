@@ -191,6 +191,7 @@ public:
     void testTdf83671_SmartArt_import2();
     void testTdf151818_SmartArtFontColor();
     void testTdf82984_zip64XLSXImport();
+    void testSingleLine();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest2);
 
@@ -312,6 +313,7 @@ public:
     CPPUNIT_TEST(testTdf83671_SmartArt_import2);
     CPPUNIT_TEST(testTdf151818_SmartArtFontColor);
     CPPUNIT_TEST(testTdf82984_zip64XLSXImport);
+    CPPUNIT_TEST(testSingleLine);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -3041,6 +3043,39 @@ void ScFiltersTest2::testTdf82984_zip64XLSXImport()
 {
     // Without the fix in place, it would have crashed at import time
     createScDoc("xlsx/tdf82984_zip64XLSXImport.xlsx");
+}
+
+namespace
+{
+void testCells(ScDocument* pDoc)
+{
+    {
+        const EditTextObject* pObj = pDoc->GetEditText(ScAddress(0, 0, 0));
+        CPPUNIT_ASSERT(pObj);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pObj->GetParagraphCount());
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pObj->GetSharedStrings().size());
+    }
+
+    {
+        const EditTextObject* pObj = pDoc->GetEditText(ScAddress(0, 1, 0));
+        CPPUNIT_ASSERT(pObj);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pObj->GetParagraphCount());
+        CPPUNIT_ASSERT_EQUAL(size_t(3), pObj->GetSharedStrings().size());
+    }
+}
+}
+
+void ScFiltersTest2::testSingleLine()
+{
+    createScDoc("xls/cell-multi-line.xls");
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+    testCells(pDoc);
+
+    createScDoc("xlsx/cell-multi-line.xlsx");
+    pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+    testCells(pDoc);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScFiltersTest2);
