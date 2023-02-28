@@ -1,0 +1,10 @@
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="-27.508474" x2="-28.016949" y1="11.364407" y2="3.09322"><stop offset="0" stop-color="#409cff"/><stop offset="1" stop-color="#0a84ff"/></linearGradient>
+
+
+
+
+
+
+
+     /&amp;amp;gt;
+ <circle cx="11" cy="5" fill="#ffd60a" r="5"/><circle cx="11" cy="5" fill="#2d2d2d" r="4"/><rect fill="url(#a)" height="9" ry="3" width="10" x="3" y="3"/><rect fill="#2d2d2d" height="7" ry="2" width="8" x="4" y="4"/><path d="m1 8h8v7h-8z" fill="#2d2d2d"/><path d="m1 7c-.554 0-1 .446-1 1v7c0 .554.446 1 1 1h8c.554 0 1-.446 1-1v-7c0-.554-.446-1-1-1zm0 1h8v7h-8z" fill="#f2f2f7"/></svg>
