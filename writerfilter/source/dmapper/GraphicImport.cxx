@@ -1792,10 +1792,10 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_SIZE_PROTECTED ),
                     uno::Any(true));
 
+            xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_DECORATIVE), uno::Any(m_pImpl->bDecorative));
             sal_Int32 nWidth = - m_pImpl->nLeftPosition;
             if (m_pImpl->m_rGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
             {
-                xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_DECORATIVE), uno::Any(m_pImpl->bDecorative));
                 //adjust margins
                 if( (m_pImpl->nHoriOrient == text::HoriOrientation::LEFT &&
                     (m_pImpl->nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ||
