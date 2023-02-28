@@ -212,7 +212,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="halign">center</property>
-                <property name="valign">start</property>
+                <property name="valign">center</property>
                 <property name="image">image1</property>
                 <property name="tooltip_text" translatable="yes" context="tocstylespage|assign">Assign</property>
                 <property name="always-show-image">True</property>
