@@ -31,7 +31,7 @@
   <LC_CTYPE unoid="generic">
     <Separators>
       <DateSeparator>.</DateSeparator>
-      <ThousandSeparator>&#160;</ThousandSeparator><!-- a non-breaking space (U+00A0) as a thousand separator; alternatively, there could be no separator at all -->
+      <ThousandSeparator>.</ThousandSeparator>
       <DecimalSeparator>,</DecimalSeparator>
       <TimeSeparator>:</TimeSeparator>
       <Time100SecSeparator>,</Time100SecSeparator>
@@ -63,13 +63,13 @@
       <FormatCode>0,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey4" default="false" type="short" usage="FIXED_NUMBER" formatindex="3">
-      <FormatCode># ##0</FormatCode><!-- a non-breaking space (U+00A0) as a thousand separator -->
+      <FormatCode>#.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey5" default="false" type="medium" usage="FIXED_NUMBER" formatindex="4">
-      <FormatCode># ##0,00</FormatCode><!-- a non-breaking space (U+00A0) as a thousand separator -->
+      <FormatCode>#.##0,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey6" default="false" type="medium" usage="FIXED_NUMBER" formatindex="5">
-      <FormatCode># ###,00</FormatCode><!-- a non-breaking space (U+00A0) as a thousand separator -->
+      <FormatCode>#.###,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="ScientificFormatskey1" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="6">
       <FormatCode>0,00E+000</FormatCode>
@@ -87,22 +87,22 @@
       <FormatCode>0,00" "%</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
-      <FormatCode># ##0 [CURRENCY];-# ##0 [CURRENCY]</FormatCode><!-- a non-breaking space (U+00A0) as a thousand separator -->
+      <FormatCode>#.##0 [CURRENCY];-#.##0 [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-      <FormatCode># ##0,00 [CURRENCY];-# ##0,00 [CURRENCY]</FormatCode><!-- a non-breaking space (U+00A0) as a thousand separator -->
+      <FormatCode>#.##0,00 [CURRENCY];-#.##0,00 [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
-      <FormatCode># ##0 [CURRENCY];[RED]-# ##0 [CURRENCY]</FormatCode><!-- a non-breaking space (U+00A0) as a thousand separator -->
+      <FormatCode>#.##0 [CURRENCY];[RED]-#.##0 [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY" formatindex="15">
-      <FormatCode># ##0,00 [CURRENCY];[RED]-# ##0,00 [CURRENCY]</FormatCode><!-- a non-breaking space (U+00A0) as a thousand separator -->
+      <FormatCode>#.##0,00 [CURRENCY];[RED]-#.##0,00 [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
-      <FormatCode>CCC# ##0,00</FormatCode><!-- a non-breaking space (U+00A0) as a thousand separator -->
+      <FormatCode>#.##0,00 CCC</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
-      <FormatCode># ##0,-- [CURRENCY];[RED]-# ##0,-- [CURRENCY]</FormatCode><!-- a non-breaking space (U+00A0) as a thousand separator -->
+      <FormatCode>#.##0,-- [CURRENCY];[RED]-#.##0,-- [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey11" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>D.MM.YY</FormatCode>
