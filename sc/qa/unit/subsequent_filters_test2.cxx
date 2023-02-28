@@ -209,6 +209,7 @@ public:
     void testAutofilterNamedRangesXLSX();
     void testInvalidBareBiff5();
     void testTooManyColsRows();
+    void testSingleLine();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest2);
 
@@ -318,6 +319,7 @@ public:
     CPPUNIT_TEST(testAutofilterNamedRangesXLSX);
     CPPUNIT_TEST(testInvalidBareBiff5);
     CPPUNIT_TEST(testTooManyColsRows);
+    CPPUNIT_TEST(testSingleLine);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3066,6 +3068,40 @@ void ScFiltersTest2::testTooManyColsRows()
     CPPUNIT_ASSERT(xDocSh.is());
     CPPUNIT_ASSERT(xDocSh->GetErrorCode() == SCWARN_IMPORT_ROW_OVERFLOW
                    || xDocSh->GetErrorCode() == SCWARN_IMPORT_COLUMN_OVERFLOW);
+    xDocSh->DoClose();
+}
+
+namespace
+{
+void testCells(ScDocShellRef xDocSh)
+{
+    ScDocument& rDoc = xDocSh->GetDocument();
+    {
+        const EditTextObject* pObj = rDoc.GetEditText(ScAddress(0, 0, 0));
+        CPPUNIT_ASSERT(pObj);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pObj->GetParagraphCount());
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pObj->GetSharedStrings().size());
+    }
+
+    {
+        const EditTextObject* pObj = rDoc.GetEditText(ScAddress(0, 1, 0));
+        CPPUNIT_ASSERT(pObj);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pObj->GetParagraphCount());
+        CPPUNIT_ASSERT_EQUAL(size_t(3), pObj->GetSharedStrings().size());
+    }
+}
+}
+
+void ScFiltersTest2::testSingleLine()
+{
+    ScDocShellRef xDocSh = loadDoc(u"cell-multi-line.", FORMAT_XLS);
+    CPPUNIT_ASSERT(xDocSh.is());
+    testCells(xDocSh);
+    xDocSh->DoClose();
+
+    xDocSh = loadDoc(u"cell-multi-line.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    testCells(xDocSh);
     xDocSh->DoClose();
 }
 
