@@ -1,6 +1,7 @@
-<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="8" x2="8" y1="15" y2="1"><stop offset="0" stop-color="#e9e9e9"/><stop offset=".2857143" stop-color="#f2f2f2"/><stop offset="1" stop-color="#fbfbfb"/></linearGradient><linearGradient id="b" gradientUnits="userSpaceOnUse" x1="8" x2="8" y1="1" y2="15"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="8" x2="8" y1="15" y2="1"><stop offset="0" stop-color="#d1d1d6"/><stop offset=".2857143" stop-color="#e5e5ea"/><stop offset="1" stop-color="#f2f2f7"/></linearGradient><linearGradient id="b" gradientUnits="userSpaceOnUse" x1="8" x2="8" y1="1" y2="15"><stop offset="0" stop-color="#f2f2f7"/><stop offset="1" stop-color="#f2f2f7" stop-opacity="0"/></linearGradient>
 
 
 
-     /&amp;gt;
- <rect fill="#98989d" height="16" rx="1.5" ry="1.4144" width="16"/><rect fill="url(#a)" height="14" rx="1.5" ry="1.414397" width="14" x="1" y="1"/><g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="m2.8233545 9.3984514 3.4516449 2.7872186 6.9032906-8.3616516" stroke="#4b4b4f" stroke-width="1.629"/><rect height="13" rx="1.5" ry="1.414397" stroke="url(#b)" width="13" x="1.5" y="1.5"/></g></svg>
+
+     /&amp;amp;gt;
+ <rect fill="#8e8e93" height="16" rx="1.5" ry="1.4144" width="16"/><rect fill="url(#a)" height="14" rx="1.5" ry="1.414397" width="14" x="1" y="1"/><rect fill="none" height="13" rx="1.5" ry="1.414397" stroke="url(#b)" stroke-linecap="round" stroke-linejoin="round" width="13" x="1.5" y="1.5"/><path d="m12.838307 3.030799c-.319555-.014586-.625742.1293728-.81836.3847661l-5.5897056 6.9530919-2.3894257-2.0271411c-.9826513-.8528085-2.2551492.6324288-1.2617187 1.472656l3.1609104 2.6892511c.4202766.360404 1.0565016.296337 1.396484-.140625l6.2147056-7.7577802c.494941-.6188999.07875-1.5379495-.71289-1.5742188z" fill="#636366" fill-rule="evenodd"/></svg>
