@@ -238,10 +238,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextColumnsContext:
             new XMLTextColumnContext_Impl( GetImport(), nElement, xAttrList )};
 
         // add new tabstop to array of tabstops
-        if( !pColumns )
-            pColumns = std::make_unique<XMLTextColumnsArray_Impl>();
-
-        pColumns->push_back( xColumn );
+        maColumns.push_back( xColumn );
 
         return xColumn;
     }
@@ -272,8 +269,8 @@ void XMLTextColumnsContext::endFastElement(sal_Int32 nElement )
         // zero columns = no columns -> 1 column
         xColumns->setColumnCount( 1 );
     }
-    else if( !bAutomatic && pColumns &&
-             pColumns->size() == static_cast<sal_uInt16>(nCount) )
+    else if( !bAutomatic &&
+             maColumns.size() == static_cast<sal_uInt16>(nCount) )
     {
         // if we have column descriptions, one per column, and we don't use
         // automatic width, then set the column widths
@@ -285,7 +282,7 @@ void XMLTextColumnsContext::endFastElement(sal_Int32 nElement )
         for( i = 0; i < nCount; i++ )
         {
             const TextColumn& rColumn =
-                (*pColumns)[static_cast<sal_uInt16>(i)]->getTextColumn();
+                maColumns[static_cast<sal_uInt16>(i)]->getTextColumn();
             if( rColumn.Width > 0 )
             {
                 nRelWidth += rColumn.Width;
@@ -301,7 +298,7 @@ void XMLTextColumnsContext::endFastElement(sal_Int32 nElement )
             for( i=0; i < nCount; i++ )
             {
                 TextColumn& rColumn =
-                    (*pColumns)[static_cast<sal_uInt16>(i)]->getTextColumn();
+                    maColumns[static_cast<sal_uInt16>(i)]->getTextColumn();
                 if( rColumn.Width == 0 )
                 {
                     rColumn.Width = nColWidth;
@@ -315,7 +312,7 @@ void XMLTextColumnsContext::endFastElement(sal_Int32 nElement )
         Sequence< TextColumn > aColumns( static_cast<sal_Int32>(nCount) );
         TextColumn *pTextColumns = aColumns.getArray();
         for( i=0; i < nCount; i++ )
-            *pTextColumns++ = (*pColumns)[static_cast<sal_uInt16>(i)]->getTextColumn();
+            *pTextColumns++ = maColumns[static_cast<sal_uInt16>(i)]->getTextColumn();
 
         xColumns->setColumns( aColumns );
     }

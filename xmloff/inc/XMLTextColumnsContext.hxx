@@ -29,11 +29,9 @@ class XMLTextColumnContext_Impl;
 class XMLTextColumnSepContext_Impl;
 class SvXMLTokenMap;
 
-typedef std::vector<rtl::Reference<XMLTextColumnContext_Impl>> XMLTextColumnsArray_Impl;
-
 class XMLTextColumnsContext final :public XMLElementPropertyContext
 {
-    std::unique_ptr<XMLTextColumnsArray_Impl> pColumns;
+    std::vector<rtl::Reference<XMLTextColumnContext_Impl>> maColumns;
     rtl::Reference<XMLTextColumnSepContext_Impl> mxColumnSep;
     sal_Int16                nCount;
     bool                 bAutomatic;
