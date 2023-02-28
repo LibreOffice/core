@@ -350,7 +350,7 @@ Private Sub _CollectAllButtons()
 
 Dim oElement As Object				&apos;	com.sun.star.ui.XUIElement
 Dim oSettings As Object				&apos;	com.sun.star.container.XIndexAccess
-Dim vProperties() As Variant		&apos;	Array of property alues
+Dim vProperties() As Variant		&apos;	Array of property values
 Dim iType As Integer				&apos;	Separators have type = 1, others have Type = 0
 Dim oAccessible As Object			&apos;	com.sun.star.accessibility.XAccessible
 Dim sLabel As String				&apos;	Label in static description
