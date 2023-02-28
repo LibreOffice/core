@@ -1,8 +1,8 @@
-<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="-20.830508" x2="-20.661016" y1="2.576272" y2="-11.18644"><stop offset="0" stop-color="#e5eefc"/><stop offset="1" stop-color="#fcfdff"/></linearGradient>
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="-20.830508" x2="-20.661016" y1="2.576272" y2="-11.18644"><stop offset="0" stop-color="#e5e5ea"/><stop offset="1" stop-color="#f2f2f7"/></linearGradient>
 
 
 
 
 
      /&amp;amp;amp;gt;
- <path d="m3 0c-1.6533367 0-3 1.3466633-3 3v10c0 1.653337 1.3466632 3 3 3h10c1.653337 0 3-1.346663 3-3v-10c0-1.6533368-1.346663-3-3-3zm0 1h10c1.116611 0 2 .8833886 2 2v10c0 1.116611-.883389 2-2 2h-10c-1.1166114 0-2-.883389-2-2v-10c0-1.1166115.8833885-2 2-2z" fill="#0a84ff"/><path d="m3 1h10c1.116611 0 2 .8833886 2 2v10c0 1.116611-.883389 2-2 2h-10c-1.1166114 0-2-.883389-2-2v-10c0-1.1166115.8833885-2 2-2z" fill="url(#a)"/></svg>
+ <path d="m3 0c-1.6533367 0-3 1.3466633-3 3v10c0 1.653337 1.3466632 3 3 3h10c1.653337 0 3-1.346663 3-3v-10c0-1.6533368-1.346663-3-3-3zm0 1h10c1.116611 0 2 .8833886 2 2v10c0 1.116611-.883389 2-2 2h-10c-1.1166114 0-2-.883389-2-2v-10c0-1.1166115.8833885-2 2-2z" fill="#007aff"/><path d="m3 1h10c1.116611 0 2 .8833886 2 2v10c0 1.116611-.883389 2-2 2h-10c-1.1166114 0-2-.883389-2-2v-10c0-1.1166115.8833885-2 2-2z" fill="url(#a)"/></svg>

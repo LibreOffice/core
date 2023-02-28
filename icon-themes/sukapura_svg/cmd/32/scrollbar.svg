@@ -1,8 +1,1 @@
-<svg height="32" viewBox="0 0 32 32" width="32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="7" x2="16" y1="10" y2="10"><stop offset="0" stop-color="#d9d9d9"/><stop offset=".33333334" stop-color="#ececec"/><stop offset=".75" stop-color="#fefefe"/><stop offset="1" stop-color="#f5f5f5"/></linearGradient>
-
-
-
-
-
-     /&amp;amp;gt;
- <g transform="matrix(1.33333 0 0 1.33333 .666705 .00004)"><path d="m6.2499869 2.2499756h10.5000261v19.5000484h-10.5000261z" fill="#bababa"/><path d="m7 3v18h9v-18z" fill="url(#a)" stroke-width="1.133893"/><rect fill="#4b4b4f" height="4.500011" rx="2.5" ry="2" transform="rotate(90)" width="15.000037" x="4.499981" y="-13.750006"/></g></svg>
+<svg height="32" viewBox="0 0 32 32" width="32" xmlns="http://www.w3.org/2000/svg"><path d="m9 3h14v25.999999h-14z" fill="#f2f2f7" stroke-width="1.33333"/><path d="m10.000015 4.00003v23.99994h11.99997v-23.99994z" fill="none" stroke-width="1.51185"/><path d="m9.3333244-19h13.3333506c1.846662 0 3.333325 1.18933 3.333325 2.66666v.666679c0 1.47733-1.486663 2.666661-3.333325 2.666661h-13.3333506c-1.846662 0-3.3333249-1.189331-3.3333249-2.666661v-.666679c0-1.47733 1.4866629-2.66666 3.3333249-2.66666z" fill="#636366" stroke-width="1.33333" transform="rotate(90)"/><path d="m8 3v26h1v-26zm15 0v26h1v-26z" fill="#8e8e93" stroke-opacity=".501961"/></svg>

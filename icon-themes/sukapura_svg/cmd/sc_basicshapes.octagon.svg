@@ -1,7 +1,7 @@
-<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1=".875" x2=".67161" y1="15.90678" y2=".161017"><stop offset="0" stop-color="#e5eefc"/><stop offset="1" stop-color="#fcfdff"/></linearGradient>
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1=".875" x2=".67161" y1="15.90678" y2=".161017"><stop offset="0" stop-color="#e5e5ea"/><stop offset="1" stop-color="#f2f2f7"/></linearGradient>
 
 
 
 
      /&amp;amp;amp;gt;
- <path d="m4.875.5-4.375 4.375v6.25l4.375 4.375h6.25l4.375-4.375v-6.25l-4.375-4.375z" fill="url(#a)" stroke="#0a84ff" stroke-linejoin="round"/></svg>
+ <path d="m4.875.5-4.375 4.375v6.25l4.375 4.375h6.25l4.375-4.375v-6.25l-4.375-4.375z" fill="url(#a)" stroke="#007aff" stroke-linejoin="round"/></svg>
