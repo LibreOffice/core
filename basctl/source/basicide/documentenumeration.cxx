@@ -48,22 +48,10 @@ namespace basctl::docs {
 
     namespace FrameSearchFlag = ::com::sun::star::frame::FrameSearchFlag;
 
-    // DocumentEnumeration_Data
-    struct DocumentEnumeration_Data
-    {
-        Reference< css::uno::XComponentContext > aContext;
-        const IDocumentDescriptorFilter*    pFilter;
-
-        DocumentEnumeration_Data( Reference< css::uno::XComponentContext > const & _rContext, const IDocumentDescriptorFilter* _pFilter )
-            :aContext( _rContext )
-            ,pFilter( _pFilter )
-        {
-        }
-    };
-
     // DocumentEnumeration
     DocumentEnumeration::DocumentEnumeration( Reference< css::uno::XComponentContext > const & _rContext, const IDocumentDescriptorFilter* _pFilter )
-        :m_pData( new DocumentEnumeration_Data( _rContext, _pFilter ) )
+        : m_xContext( _rContext )
+        , m_pFilter( _pFilter )
     {
     }
 
@@ -152,11 +140,11 @@ namespace basctl::docs {
 
         try
         {
-            const Reference< XDesktop2 > xDesktop = Desktop::create( m_pData->aContext );
+            const Reference< XDesktop2 > xDesktop = Desktop::create( m_xContext );
             const Reference< XFrames > xFrames( xDesktop->getFrames(), UNO_SET_THROW );
             const Sequence< Reference< XFrame > > aFrames( xFrames->queryFrames( FrameSearchFlag::ALL ) );
 
-            lcl_getDocuments_nothrow( aFrames, _out_rDocuments, m_pData->pFilter );
+            lcl_getDocuments_nothrow( aFrames, _out_rDocuments, m_pFilter );
         }
         catch( const Exception& )
         {

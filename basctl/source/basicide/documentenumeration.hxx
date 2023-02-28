@@ -51,7 +51,6 @@ namespace basctl::docs {
     };
 
 
-    struct DocumentEnumeration_Data;
     /** is a helper class for enumerating documents in OOo
 
         If you need a list of all open documents in OOo, this is little bit of
@@ -81,7 +80,8 @@ namespace basctl::docs {
         ) const;
 
     private:
-        std::unique_ptr< DocumentEnumeration_Data > m_pData;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        const IDocumentDescriptorFilter* m_pFilter;
     };
 
 
