@@ -1114,7 +1114,12 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
                           const int nCanvasWidth, const int nCanvasHeight,
                           const int nTilePosX, const int nTilePosY,
                           const int nTileWidth, const int nTileHeight);
-static void doc_paintThumbnail(LibreOfficeKitDocument* pThis, unsigned char* pBuffer, int x, int y);
+static void doc_paintThumbnail(LibreOfficeKitDocument* pThis,
+                               unsigned char* pBuffer,
+                               int bufferWidth,
+                               int bufferHeight,
+                               int width,
+                               const char* pURL);
 #ifdef IOS
 static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
                                      void* rCGContext,
@@ -4010,8 +4015,14 @@ static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
 
 #endif
 
-static void doc_paintThumbnail(LibreOfficeKitDocument* pThis, unsigned char* pBuffer, int x, int y)
+static void doc_paintThumbnail(LibreOfficeKitDocument* pThis,
+                               unsigned char* pBuffer,
+                               int bufferWidth,
+                               int bufferHeight,
+                               int width,
+                               const char* pURL)
 {
+#if 0
     constexpr float zoom = 0.5f;
     constexpr int pixelWidth = 120;
     constexpr int pixelHeight = 120;
@@ -4021,6 +4032,14 @@ static void doc_paintThumbnail(LibreOfficeKitDocument* pThis, unsigned char* pBu
     constexpr int offsetYTwips = 15 * 15;
 
     doc_paintTile(pThis, pBuffer, pixelWidth, pixelHeight, x-offsetXTwips, y-offsetYTwips, pixelWidthTwips, pixelHeightTwips);
+#else
+    (void) pThis;
+    (void) pBuffer;
+    (void) bufferWidth;
+    (void) bufferHeight;
+    (void) width;
+    (void) pURL;
+#endif
 }
 
 static void doc_paintPartTile(LibreOfficeKitDocument* pThis,

@@ -886,9 +886,29 @@ public:
         mpDoc->pClass->setViewTimezone(mpDoc, nId, timezone);
     }
 
-    void paintThumbnail(unsigned char* pBuffer, int x, int y)
+    /**
+     * Create a thumbnail of a location in the document.
+     *
+     * @param pBuffer Where the thumbnail is painted. Same format as a tile painted
+     * by paintTile().
+     * @param bufferWidth number of pixels in a row of pBuffer.
+     * @param bufferHeight number of pixels in a column of pBuffer.
+     * @param width logical width of the rendered rectangle, in TWIPs.
+     * @param pURL Just the fragment part of a URL, indicating the location in the document
+     * to render as a thumbnail. As returned by extractRequest(), or null, meaning the start
+     * of the document.
+     *
+     * Note that there is no parameter for the logical height of the
+     * rendered rectangle. The aspect ratio of the rendered rectangle
+     * is determined by the bufferWidth and bufferHeight parameters.
+     */
+    void paintThumbnail(unsigned char* pBuffer,
+                        int bufferWidth,
+                        int bufferHeight,
+                        int width,
+                        const char* pURL)
     {
-        return mpDoc->pClass->paintThumbnail(mpDoc, pBuffer, x, y);
+        return mpDoc->pClass->paintThumbnail(mpDoc, pBuffer, bufferWidth, bufferHeight, width, pURL);
     }
 
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
