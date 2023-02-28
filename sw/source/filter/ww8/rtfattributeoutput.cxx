@@ -2994,7 +2994,11 @@ void RtfAttributeOutput::ParaTabStop(const SvxTabStopItem& rTabStop)
     if (m_rExport.m_rDoc.getIDocumentSettingAccess().get(
             DocumentSettingId::TABS_RELATIVE_TO_INDENT))
     {
-        nOffset = m_rExport.GetItem(RES_MARGIN_TEXTLEFT).GetTextLeft();
+        // don't do it for editengine text, it doesn't implement this anyway
+        if (!GetExport().m_pISet || GetExport().m_pISet->GetRanges()[0].first < RES_WHICHHINT_END)
+        {
+            nOffset = m_rExport.GetItem(RES_MARGIN_TEXTLEFT).GetTextLeft();
+        }
     }
 
     for (sal_uInt16 n = 0; n < rTabStop.Count(); n++)
