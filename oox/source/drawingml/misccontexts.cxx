@@ -243,13 +243,19 @@ ContextHandlerRef PatternFillContext::onCreateContext(
 }
 
 ColorChangeContext::ColorChangeContext( ContextHandler2Helper const & rParent,
-        const AttributeList& rAttribs, BlipFillProperties& rBlipProps ) :
-    ContextHandler2( rParent ),
-    mrBlipProps( rBlipProps )
+        const AttributeList& rAttribs, BlipFillProperties& rBlipProps, model::BlipFill* pBlipFill)
+    : ContextHandler2(rParent)
+    , mpBlipFill(pBlipFill)
+    , mrBlipProps(rBlipProps)
 {
     mrBlipProps.maColorChangeFrom.setUnused();
     mrBlipProps.maColorChangeTo.setUnused();
     mbUseAlpha = rAttribs.getBool( XML_useA, true );
+    if (mpBlipFill)
+    {
+        mpBlipFill->meColorEffectType = model::ColorEffectType::ColorChange;
+        mpBlipFill->mbUseAlpha = mbUseAlpha;
+    }
 }
 
 ColorChangeContext::~ColorChangeContext()
@@ -261,27 +267,38 @@ ColorChangeContext::~ColorChangeContext()
 ContextHandlerRef ColorChangeContext::onCreateContext(
         sal_Int32 nElement, const AttributeList& )
 {
-    switch( nElement )
+    model::ColorDefinition* pColorDefinition = nullptr;
+    switch (nElement)
     {
-        case A_TOKEN( clrFrom ):
-            return new ColorContext(*this, mrBlipProps.maColorChangeFrom, nullptr);
-        case A_TOKEN( clrTo ):
-            return new ColorContext(*this, mrBlipProps.maColorChangeTo, nullptr);
+        case A_TOKEN(clrFrom):
+            if (mpBlipFill)
+                pColorDefinition = &mpBlipFill->maColorFrom;
+            return new ColorContext(*this, mrBlipProps.maColorChangeFrom, pColorDefinition);
+        case A_TOKEN(clrTo):
+            if (mpBlipFill)
+                pColorDefinition = &mpBlipFill->maColorTo;
+            return new ColorContext(*this, mrBlipProps.maColorChangeTo, pColorDefinition);
     }
     return nullptr;
 }
 
-BlipContext::BlipContext( ContextHandler2Helper const & rParent,
-        const AttributeList& rAttribs, BlipFillProperties& rBlipProps ) :
-    ContextHandler2( rParent ),
-    mrBlipProps( rBlipProps )
+BlipContext::BlipContext(ContextHandler2Helper const & rParent, const AttributeList& rAttribs,
+        BlipFillProperties& rBlipProps, model::BlipFill* pBlipFill)
+    : ContextHandler2(rParent)
+    , mpBlipFill(pBlipFill)
+    , mrBlipProps(rBlipProps)
 {
     if( rAttribs.hasAttribute( R_TOKEN( embed ) ) )
     {
         // internal picture URL
         OUString aFragmentPath = getFragmentPathFromRelId( rAttribs.getStringDefaulted( R_TOKEN( embed )) );
         if (!aFragmentPath.isEmpty())
-            mrBlipProps.mxFillGraphic = getFilter().getGraphicHelper().importEmbeddedGraphic( aFragmentPath );
+        {
+            auto xGraphic = getFilter().getGraphicHelper().importEmbeddedGraphic(aFragmentPath);
+            mrBlipProps.mxFillGraphic = xGraphic;
+            if (mpBlipFill)
+                mpBlipFill->mxGraphic = xGraphic;
+        }
     }
     else if( rAttribs.hasAttribute( R_TOKEN( link ) ) )
     {
@@ -294,7 +311,10 @@ BlipContext::BlipContext( ContextHandler2Helper const & rParent,
         OUString aTargetLink = getFilter().getAbsoluteUrl( getRelations().getExternalTargetFromRelId( aRelId ) );
         GraphicExternalLink aLink(aTargetLink);
         Graphic aGraphic(aLink);
-        mrBlipProps.mxFillGraphic = aGraphic.GetXGraphic();
+        auto xGraphic = aGraphic.GetXGraphic();
+        mrBlipProps.mxFillGraphic = xGraphic;
+        if (mpBlipFill)
+            mpBlipFill->mxGraphic = xGraphic;
     }
 }
 
@@ -304,17 +324,32 @@ ContextHandlerRef BlipContext::onCreateContext(
     switch( nElement )
     {
         case A_TOKEN( biLevel ):
+        {
             mrBlipProps.moBiLevelThreshold = rAttribs.getInteger( XML_thresh );
             mrBlipProps.moColorEffect = getBaseToken(nElement);
-            break;
+            if (mpBlipFill)
+            {
+                mpBlipFill->meColorEffectType = model::ColorEffectType::BiLevel;
+                mpBlipFill->mnBiLevelThreshold = rAttribs.getInteger(XML_thresh, 0);
+            }
+        }
+        break;
 
         case A_TOKEN( grayscl ):
+        {
             mrBlipProps.moColorEffect = getBaseToken( nElement );
+            if (mpBlipFill)
+            {
+                mpBlipFill->meColorEffectType = model::ColorEffectType::Grayscale;
+            }
+        }
         break;
 
         case A_TOKEN( clrChange ):
-            return new ColorChangeContext( *this, rAttribs, mrBlipProps );
-
+        {
+            return new ColorChangeContext(*this, rAttribs, mrBlipProps, mpBlipFill);
+        }
+        break;
         case A_TOKEN( duotone ):
             return new DuotoneContext( *this, mrBlipProps );
 
@@ -322,11 +357,15 @@ ContextHandlerRef BlipContext::onCreateContext(
             return new BlipExtensionContext( *this, mrBlipProps );
 
         case A_TOKEN( lum ):
+        {
             mrBlipProps.moBrightness = rAttribs.getInteger( XML_bright );
             mrBlipProps.moContrast = rAttribs.getInteger( XML_contrast );
+        }
         break;
         case A_TOKEN( alphaModFix ):
+        {
             mrBlipProps.moAlphaModFix = rAttribs.getInteger(XML_amt);
+        }
         break;
     }
     return nullptr;
@@ -354,12 +393,15 @@ DuotoneContext::~DuotoneContext()
     return nullptr;
 }
 
-BlipFillContext::BlipFillContext( ContextHandler2Helper const & rParent,
-        const AttributeList& rAttribs, BlipFillProperties& rBlipProps ) :
-    ContextHandler2( rParent ),
-    mrBlipProps( rBlipProps )
+BlipFillContext::BlipFillContext(ContextHandler2Helper const & rParent, const AttributeList& rAttribs,
+        BlipFillProperties& rBlipProps, model::BlipFill* pBlipFill)
+    : ContextHandler2( rParent )
+    , mpBlipFill(pBlipFill)
+    , mrBlipProps(rBlipProps)
 {
     mrBlipProps.moRotateWithShape = rAttribs.getBool( XML_rotWithShape );
+    if (mpBlipFill)
+        mpBlipFill->mbRotateWithShape = rAttribs.getBool(XML_rotWithShape, false);
 }
 
 ContextHandlerRef BlipFillContext::onCreateContext(
@@ -368,13 +410,19 @@ ContextHandlerRef BlipFillContext::onCreateContext(
     switch( nElement )
     {
         case A_TOKEN( blip ):
-            return new BlipContext( *this, rAttribs, mrBlipProps );
+            return new BlipContext(*this, rAttribs, mrBlipProps, mpBlipFill);
 
         case A_TOKEN( srcRect ):
+        {
             mrBlipProps.moClipRect = GetRelativeRect( rAttribs.getFastAttributeList() );
+
+            if (mpBlipFill)
+                fillRelativeRectangle(mpBlipFill->maClipRectangle, rAttribs.getFastAttributeList());
+        }
         break;
 
         case A_TOKEN( tile ):
+        {
             mrBlipProps.moBitmapMode = getBaseToken( nElement );
             mrBlipProps.moTileOffsetX = rAttribs.getInteger( XML_tx );
             mrBlipProps.moTileOffsetY = rAttribs.getInteger( XML_ty );
@@ -382,14 +430,58 @@ ContextHandlerRef BlipFillContext::onCreateContext(
             mrBlipProps.moTileScaleY = rAttribs.getInteger( XML_sy );
             mrBlipProps.moTileAlign = rAttribs.getToken( XML_algn );
             mrBlipProps.moTileFlip = rAttribs.getToken( XML_flip );
+
+            if (mpBlipFill)
+            {
+                mpBlipFill->meMode = model::BitmapMode::Tile;
+                mpBlipFill->mnTileOffsetX = rAttribs.getInteger(XML_tx, 0);
+                mpBlipFill->mnTileOffsetY = rAttribs.getInteger(XML_ty, 0);
+                mpBlipFill->mnTileScaleX = rAttribs.getInteger(XML_sx, 0);
+                mpBlipFill->mnTileScaleY = rAttribs.getInteger(XML_sy, 0);
+
+                switch (rAttribs.getToken(XML_flip, XML_none))
+                {
+                    case XML_x: mpBlipFill->meTileFlipMode = model::FlipMode::X; break;
+                    case XML_y: mpBlipFill->meTileFlipMode = model::FlipMode::Y; break;
+                    case XML_xy: mpBlipFill->meTileFlipMode = model::FlipMode::XY; break;
+                    default:
+                    case XML_none: mpBlipFill->meTileFlipMode = model::FlipMode::None; break;
+                }
+                switch (rAttribs.getToken(XML_algn, XML_tl))
+                {
+                    default:
+                    case XML_tl: mpBlipFill->meTileAlignment = model::RectangleAlignment::TopLeft; break;
+                    case XML_t: mpBlipFill->meTileAlignment = model::RectangleAlignment::Top; break;
+                    case XML_tr: mpBlipFill->meTileAlignment = model::RectangleAlignment::TopRight; break;
+                    case XML_l: mpBlipFill->meTileAlignment = model::RectangleAlignment::Left; break;
+                    case XML_ctr: mpBlipFill->meTileAlignment = model::RectangleAlignment::Center; break;
+                    case XML_r: mpBlipFill->meTileAlignment = model::RectangleAlignment::Right; break;
+                    case XML_bl: mpBlipFill->meTileAlignment = model::RectangleAlignment::BottomLeft; break;
+                    case XML_b: mpBlipFill->meTileAlignment = model::RectangleAlignment::Bottom; break;
+                    case XML_br: mpBlipFill->meTileAlignment = model::RectangleAlignment::BottomRight; break;
+                }
+            }
+        }
         break;
 
         case A_TOKEN( stretch ):
+        {
             mrBlipProps.moBitmapMode = getBaseToken( nElement );
+            if (mpBlipFill)
+            {
+                mpBlipFill->meMode = model::BitmapMode::Stretch;
+            }
             return this;    // for fillRect element
+        }
+        break;
 
         case A_TOKEN( fillRect ):
+        {
             mrBlipProps.moFillRect = GetRelativeRect( rAttribs.getFastAttributeList() );
+
+            if (mpBlipFill)
+                fillRelativeRectangle(mpBlipFill->maFillRectangle, rAttribs.getFastAttributeList());
+        }
         break;
     }
     return nullptr;
@@ -460,7 +552,13 @@ ContextHandlerRef FillPropertiesContext::createFillContext(
         case A_TOKEN( blipFill ):
         {
             rFillProps.moFillType = getBaseToken( nElement );
-            return new BlipFillContext( rParent, rAttribs, rFillProps.maBlipProps );
+            model::BlipFill* pBlipFill = nullptr;
+            if (pFillStyle)
+            {
+                pFillStyle->mpFill = std::make_unique<model::BlipFill>();
+                pBlipFill = static_cast<model::BlipFill*>(pFillStyle->mpFill.get());
+            }
+            return new BlipFillContext( rParent, rAttribs, rFillProps.maBlipProps, pBlipFill);
         }
         case A_TOKEN( grpFill ):
         {
