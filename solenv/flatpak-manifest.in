@@ -607,6 +607,13 @@
                     "dest-filename": "@LIBATOMIC_OPS_TARBALL@"
                 },
                 {
+                    "url": "https://dev-www.libreoffice.org/src/@SKIA_TARBALL@",
+                    "sha256": "@SKIA_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@SKIA_TARBALL@"
+                },
+                {
                     "url": "https://dev-www.libreoffice.org/src/@DRAGONBOX_TARBALL@",
                     "sha256": "@DRAGONBOX_SHA256SUM@",
                     "type": "file",
