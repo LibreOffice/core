@@ -55,12 +55,14 @@
     <xsl:template name="create-header">
         <xsl:param name="globalData" />
 
+        <xsl:text>&#xa;</xsl:text>
         <xsl:element name="head">
         <xsl:attribute name="profile">http://dublincore.org/documents/dcmi-terms/</xsl:attribute>
             <xsl:if test="$debugEnabled"><xsl:message>CSS helper variable will be created...</xsl:message></xsl:if>
             <xsl:call-template name='xhtml-header-properties'>
                 <xsl:with-param name="globalData" select="$globalData" />
             </xsl:call-template>
+            <xsl:text>&#xa;</xsl:text>
 
             <xsl:if test="$debugEnabled"><xsl:message>CSS variable ready, header will be created...</xsl:message></xsl:if>
             <!-- constructing the css header simulating inheritance of style-families by style order -->
@@ -68,6 +70,7 @@
                 <xsl:with-param name="globalData" select="$globalData" />
             </xsl:call-template>
             <xsl:if test="$debugEnabled"><xsl:message>CSS header creation finished!</xsl:message></xsl:if>
+            <xsl:text>&#xa;</xsl:text>
         </xsl:element>
 
     </xsl:template>
@@ -246,11 +249,13 @@
         <xsl:for-each select="$globalData/meta-file/*/office:meta/meta:user-defined">
         <xsl:if test="./@meta:name='ODF.base'">
         <xsl:value-of select="." />
+        <xsl:text>&#xa;</xsl:text>
         </xsl:if>
         </xsl:for-each>
         <xsl:for-each select="$globalData/meta-file/*/office:meta/meta:user-defined">
         <xsl:if test="./@meta:name='ODF.filename'">
         <xsl:value-of select="." />
+        <xsl:text>&#xa;</xsl:text>
         </xsl:if>
         </xsl:for-each>
         </xsl:variable>
@@ -262,6 +267,7 @@
                  </xsl:when>
                  <xsl:otherwise>en-US</xsl:otherwise>
              </xsl:choose>
+             <xsl:text>&#xa;</xsl:text>
         </xsl:variable>
 
         <xsl:variable name="prov">
@@ -271,6 +277,7 @@
                  </xsl:when>
                  <xsl:otherwise />
              </xsl:choose>
+             <xsl:text>&#xa;</xsl:text>
         </xsl:variable>
 
         <xsl:variable name="keywords">
@@ -280,13 +287,16 @@
                         <xsl:text>, </xsl:text>
                     </xsl:if>
             </xsl:for-each>
+            <xsl:text>&#xa;</xsl:text>
         </xsl:variable>
 
+        <xsl:text>&#xa;</xsl:text>
         <!-- explicit output content-type for low-tech browser (e.g. IE6) -->
         <xsl:element name="meta">
             <xsl:attribute name="http-equiv">Content-Type</xsl:attribute>
             <xsl:attribute name="content">application/xhtml+xml; charset=utf-8</xsl:attribute>
         </xsl:element>
+        <xsl:text>&#xa;</xsl:text>
 
         <!-- title of document for browser frame title -->
         <xsl:element name="title">
@@ -304,6 +314,7 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:element>
+        <xsl:text>&#xa;</xsl:text>
 
         <!-- title, in DC syntax -->
         <xsl:element name="meta">
@@ -315,6 +326,7 @@
                <xsl:value-of select="$lang" />
             </xsl:attribute>
         </xsl:element>
+        <xsl:text>&#xa;</xsl:text>
 
         <!-- the identifier for source  (identifier) -->
         <xsl:call-template name="add-meta-tag">
@@ -322,6 +334,7 @@
             <xsl:with-param name="meta-data" select="translate($netloc, ' ','')" />
             <xsl:with-param name="meta-enc" select="'DCTERMS.URI'" />
         </xsl:call-template>
+        <xsl:text>&#xa;</xsl:text>
 
         <!-- the language for source  (language) -->
         <xsl:call-template name="add-meta-tag">
@@ -329,18 +342,21 @@
             <xsl:with-param name="meta-data" select="$lang" />
             <xsl:with-param name="meta-enc" select="'DCTERMS.RFC4646'" />
         </xsl:call-template>
+        <xsl:text>&#xa;</xsl:text>
 
         <!-- a bit commercial (generator) -->
         <xsl:element name="meta">
             <xsl:attribute name="name">DCTERMS.source</xsl:attribute>
             <xsl:attribute name="content">http://xml.openoffice.org/odf2xhtml</xsl:attribute>
         </xsl:element>
+        <xsl:text>&#xa;</xsl:text>
 
         <!-- the author of the input source (author) -->
         <xsl:call-template name="add-meta-tag">
             <xsl:with-param name="meta-name" select="'DCTERMS.creator'" />
             <xsl:with-param name="meta-data" select="$globalData/meta-file/*/office:meta/meta:initial-creator" />
         </xsl:call-template>
+        <xsl:text>&#xa;</xsl:text>
 
         <!-- creation-date of the input source (issued) -->
         <xsl:call-template name="add-meta-tag">
@@ -348,12 +364,14 @@
             <xsl:with-param name="meta-data" select="$globalData/meta-file/*/office:meta/meta:creation-date" />
             <xsl:with-param name="meta-enc" select="'DCTERMS.W3CDTF'" />
         </xsl:call-template>
+        <xsl:text>&#xa;</xsl:text>
 
         <!-- name of last changing person of the input source (changedby) -->
         <xsl:call-template name="add-meta-tag">
             <xsl:with-param name="meta-name" select="'DCTERMS.contributor'" />
             <xsl:with-param name="meta-data" select="$globalData/meta-file/*/office:meta/dc:creator" />
         </xsl:call-template>
+        <xsl:text>&#xa;</xsl:text>
 
         <!-- last changing date of the input source (changed) -->
         <xsl:call-template name="add-meta-tag">
@@ -361,6 +379,7 @@
             <xsl:with-param name="meta-data" select="$globalData/meta-file/*/office:meta/dc:date" />
             <xsl:with-param name="meta-enc" select="'DCTERMS.W3CDTF'" />
         </xsl:call-template>
+        <xsl:text>&#xa;</xsl:text>
 
         <!-- Last print, as provenance -->
         <xsl:if test="$prov">
@@ -369,6 +388,7 @@
             <xsl:with-param name="meta-data" select="$prov" />
             <xsl:with-param name="meta-lang" select="$lang" />
         </xsl:call-template>
+        <xsl:text>&#xa;</xsl:text>
         </xsl:if>
 
         <!-- keywords about the input source (keywords) -->
@@ -380,6 +400,7 @@
                         <xsl:with-param name="meta-data" select="normalize-space(concat($globalData/meta-file/*/office:meta/dc:subject,', ',$keywords))" />
                         <xsl:with-param name="meta-lang" select="$lang" />
                     </xsl:call-template>
+                    <xsl:text>&#xa;</xsl:text>
                 </xsl:when>
                 <xsl:when test="($globalData/meta-file/*/office:meta/dc:subject != '')">
                     <xsl:call-template name="add-meta-tag">
@@ -387,6 +408,7 @@
                         <xsl:with-param name="meta-data" select="normalize-space($globalData/meta-file/*/office:meta/dc:subject)" />
                         <xsl:with-param name="meta-lang" select="$lang" />
                     </xsl:call-template>
+                    <xsl:text>&#xa;</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:call-template name="add-meta-tag">
@@ -394,6 +416,7 @@
                         <xsl:with-param name="meta-data" select="normalize-space($keywords)" />
                         <xsl:with-param name="meta-lang" select="$lang" />
                     </xsl:call-template>
+                    <xsl:text>&#xa;</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:if>
@@ -404,6 +427,7 @@
             <xsl:with-param name="meta-data" select="$globalData/meta-file/*/office:meta/dc:description" />
             <xsl:with-param name="meta-lang" select="$lang" />
         </xsl:call-template>
+        <xsl:text>&#xa;</xsl:text>
 
 
         <!-- user defined use of DCTERM tags -->
@@ -413,6 +437,7 @@
             <xsl:with-param name="meta-data" select="." />
             <!-- <xsl:with-param name="meta-lang" select="$lang" /> -->
         </xsl:call-template>
+        <xsl:text>&#xa;</xsl:text>
         </xsl:for-each>
         <!-- user defined use of DC tags (legacy) -->
         <xsl:for-each select="$globalData/meta-file/*/office:meta/meta:user-defined[starts-with(@meta:name,'DC.')][not(.='')]">
@@ -421,16 +446,22 @@
             <xsl:with-param name="meta-data" select="." />
             <!-- <xsl:with-param name="meta-lang" select="$lang" /> -->
         </xsl:call-template>
+        <xsl:text>&#xa;</xsl:text>
         </xsl:for-each>
         <xsl:call-template name="add-meta-tag">
             <xsl:with-param name="meta-name" select="'xsl:vendor'" />
             <xsl:with-param name="meta-data" select="system-property('xsl:vendor')" />
         </xsl:call-template>
+        <xsl:text>&#xa;</xsl:text>
 
         <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" hreflang="en" />
+        <xsl:text>&#xa;</xsl:text>
         <link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" hreflang="en" />
+        <xsl:text>&#xa;</xsl:text>
         <link rel="schema.DCTYPE" href="http://purl.org/dc/dcmitype/" hreflang="en" />
+        <xsl:text>&#xa;</xsl:text>
         <link rel="schema.DCAM" href="http://purl.org/dc/dcam/" hreflang="en" />
+        <xsl:text>&#xa;</xsl:text>
         <!-- W3C GRDDL Profile -->
         <!--
         <link rel="transformation" href="http://xml.openoffice.org/odf2xhtml/rdf-extract.xsl" />
