@@ -65,8 +65,6 @@ public:
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf131684)
 {
     createSwDoc("tdf131684.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -78,16 +76,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf131684)
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Cut();
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
-    TransferableDataHelper aHelper(xTransfer);
-    SwTransferable::Paste(*pWrtShell, aHelper);
+    dispatchCommand(mxComponent, ".uno:Paste", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
     // without the fix, it crashes
@@ -125,7 +120,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf132744)
 {
     createSwDoc("tdf132744.odt");
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     // disable change tracking to cut the table
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::ShowDelete
@@ -138,15 +132,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf132744)
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Cut();
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    TransferableDataHelper aHelper(xTransfer);
-    SwTransferable::Paste(*pWrtShell, aHelper);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     //Without the fix in place, the image wouldn't be pasted
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
@@ -1238,10 +1228,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf134626)
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Copy();
-    Scheduler::ProcessEventsToIdle();
-    TransferableDataHelper aHelper(xTransfer);
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
     // Create a new document
     createSwDoc();
@@ -1252,13 +1239,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf134626)
     // Without the fix in place, this test would have crashed here
     for (sal_Int32 i = 0; i < 5; ++i)
     {
-        SwTransferable::Paste(*pWrtShell, aHelper);
-        Scheduler::ProcessEventsToIdle();
+        dispatchCommand(mxComponent, ".uno:Paste", {});
 
         CPPUNIT_ASSERT_EQUAL(OUString("Apple"), getParagraph(1)->getString());
 
-        SwTransferable::Paste(*pWrtShell, aHelper);
-        Scheduler::ProcessEventsToIdle();
+        dispatchCommand(mxComponent, ".uno:Paste", {});
 
         CPPUNIT_ASSERT_EQUAL(OUString("AppleApple"), getParagraph(1)->getString());
 
@@ -1849,28 +1834,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf135623)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf133490)
 {
     createSwDoc("tdf133490.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Cut();
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    TransferableDataHelper aHelper(xTransfer);
-    SwTransferable::Paste(*pWrtShell, aHelper);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    SwTransferable::Paste(*pWrtShell, aHelper);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 

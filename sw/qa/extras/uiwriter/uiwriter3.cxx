@@ -532,22 +532,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf148868)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129382)
 {
     createSwDoc("tdf129382.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Cut();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    TransferableDataHelper aHelper(xTransfer);
-    SwTransferable::Paste(*pWrtShell, aHelper);
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -563,20 +559,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129382)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135662)
 {
     createSwDoc("tdf135662.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Cut();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    TransferableDataHelper aHelper(xTransfer);
-    SwTransferable::Paste(*pWrtShell, aHelper);
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     // Without the fix in place, this test would have failed with
     // - Expected: 2
@@ -587,8 +579,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135662)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134227)
 {
     createSwDoc("tdf134227.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
@@ -596,13 +586,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134227)
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
     // Without the fix in place, it would have crashed here
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Cut();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    TransferableDataHelper aHelper(xTransfer);
-    SwTransferable::Paste(*pWrtShell, aHelper);
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
@@ -629,8 +617,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139638)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135412)
 {
     createSwDoc("tdf135412.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
@@ -638,13 +624,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135412)
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Cut();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    TransferableDataHelper aHelper(xTransfer);
-    SwTransferable::Paste(*pWrtShell, aHelper);
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
@@ -756,8 +740,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135061)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132911)
 {
     createSwDoc("tdf132911.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -767,23 +749,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132911)
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Cut();
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    TransferableDataHelper aHelper(xTransfer);
-    SwTransferable::Paste(*pWrtShell, aHelper);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
     // Without the fix in place, it would have crashed here
-    SwTransferable::Paste(*pWrtShell, aHelper);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
 
@@ -795,13 +772,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132911)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    SwTransferable::Paste(*pWrtShell, aHelper);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
-    SwTransferable::Paste(*pWrtShell, aHelper);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
 
@@ -978,16 +953,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135056)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132597)
 {
     createSwDoc("tdf132597.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Copy();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
     // Paste special as RTF
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
@@ -1005,15 +977,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132597)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139737)
 {
     createSwDoc("tdf139737.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Copy();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
     // Paste special as RTF
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
@@ -1133,8 +1102,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147206)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf144840)
 {
     createSwDoc("tdf144840.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -1144,8 +1111,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf144840)
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Cut();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
 
@@ -1173,15 +1139,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf144840)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf131963)
 {
     createSwDoc("tdf131963.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(11, getPages());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Copy();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
     // Paste special as RTF
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
@@ -1198,15 +1161,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf131963)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132596)
 {
     createSwDoc("tdf132596.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Copy();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
     // Paste special as RTF
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
@@ -1223,30 +1183,26 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132596)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126626)
 {
     createSwDoc("tdf126626.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Copy();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
-    TransferableDataHelper aHelper(xTransfer);
-    SwTransferable::Paste(*pWrtShell, aHelper);
+    dispatchCommand(mxComponent, ".uno:Paste", {});
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
-    SwTransferable::Paste(*pWrtShell, aHelper);
+    dispatchCommand(mxComponent, ".uno:Paste", {});
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     // without the fix, it crashes
-    SwTransferable::Paste(*pWrtShell, aHelper);
+    dispatchCommand(mxComponent, ".uno:Paste", {});
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 }
 
@@ -1276,23 +1232,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133967)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132187)
 {
     createSwDoc("tdf132187.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Copy();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
     dispatchCommand(mxComponent, ".uno:GoToEndOfDoc", {});
 
-    TransferableDataHelper aHelper(xTransfer);
     for (sal_Int32 i = 0; i < 10; ++i)
     {
-        SwTransferable::Paste(*pWrtShell, aHelper);
-        Scheduler::ProcessEventsToIdle();
+        dispatchCommand(mxComponent, ".uno:Paste", {});
     }
 
     //without the fix in place, this test would fail with:
@@ -1365,13 +1316,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135733)
     pWrtShell->Down(/*bSelect=*/true);
     pWrtShell->Down(/*bSelect=*/true);
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Cut();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     pWrtShell->SttPg(/*bSelect=*/false);
 
-    TransferableDataHelper aHelper(xTransfer);
-    SwTransferable::Paste(*pWrtShell, aHelper);
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -1394,20 +1343,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135733)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128739)
 {
     createSwDoc("tdf128739.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(OUString("Fehler: Verweis nicht gefunden"), getParagraph(1)->getString());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Cut();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
 
-    TransferableDataHelper aHelper(xTransfer);
-    SwTransferable::Paste(*pWrtShell, aHelper);
+    dispatchCommand(mxComponent, ".uno:Paste", {});
     CPPUNIT_ASSERT_EQUAL(OUString("Fehler: Verweis nicht gefunden"), getParagraph(1)->getString());
 
     // without the fix, it crashes
@@ -1418,20 +1363,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128739)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf124722)
 {
     createSwDoc("tdf124722.rtf");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(22, getPages());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Copy();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
     CPPUNIT_ASSERT_EQUAL(22, getPages());
 
-    TransferableDataHelper aHelper(xTransfer);
-    SwTransferable::Paste(*pWrtShell, aHelper);
+    dispatchCommand(mxComponent, ".uno:Paste", {});
     CPPUNIT_ASSERT_EQUAL(43, getPages());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
@@ -1629,8 +1570,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133990)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126504)
 {
     createSwDoc("tdf126504.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -1642,14 +1581,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126504)
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Copy();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
     dispatchCommand(mxComponent, ".uno:GoToEndOfPage", {});
 
-    TransferableDataHelper aHelper(xTransfer);
-    SwTransferable::Paste(*pWrtShell, aHelper);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -1674,8 +1610,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126504)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133982)
 {
     createSwDoc("tdf133982.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -1687,21 +1621,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133982)
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     //Without the fix in place, it would have crashed here
-    xTransfer->Cut();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
 
-    TransferableDataHelper aHelper(xTransfer);
-    SwTransferable::Paste(*pWrtShell, aHelper);
+    dispatchCommand(mxComponent, ".uno:Paste", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134253)
 {
     createSwDoc("tdf134253.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -1714,10 +1644,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134253)
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Copy();
-    TransferableDataHelper aHelper(xTransfer);
-    SwTransferable::Paste(*pWrtShell, aHelper);
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     //Without the fix in place, it would have crashed here
     dispatchCommand(mxComponent, ".uno:Undo", {});
@@ -1973,8 +1901,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf124397)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf108124)
 {
     createSwDoc("tdf108124.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextGraphicObjectsSupplier> xTextGraphicObjectsSupplier(mxComponent,
                                                                                   uno::UNO_QUERY);
@@ -1985,11 +1911,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf108124)
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Copy();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
-    TransferableDataHelper aHelper(xTransfer);
-    SwTransferable::Paste(*pWrtShell, aHelper);
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 
@@ -2021,8 +1945,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107975)
     // This test also covers tdf#117185 tdf#110442
 
     createSwDoc("tdf107975.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     uno::Reference<text::XTextGraphicObjectsSupplier> xTextGraphicObjectsSupplier(mxComponent,
@@ -2039,15 +1961,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107975)
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Copy();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
     //Position the mouse cursor (caret) after "ABC" below the blue image
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-    {
-        TransferableDataHelper aHelper(xTransfer);
-        SwTransferable::Paste(*pWrtShell, aHelper);
-    }
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     // without the fix, it crashes
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
@@ -2076,17 +1994,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107975)
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    xTransfer.set(new SwTransferable(*pWrtShell));
-    xTransfer->Copy();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
     //Position the mouse cursor (caret) after "ABC" below the blue image
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-    {
-        TransferableDataHelper aHelper(xTransfer);
-        SwTransferable::Paste(*pWrtShell, aHelper);
-    }
-    // the following line makes the test more reliable, no idea why
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     // without the fix, it crashes
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
@@ -2209,15 +2121,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130746)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129805)
 {
     createSwDoc("tdf129805.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(OUString("x"), getParagraph(1)->getString());
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     // without the fix in place, it would crash here
-    xTransfer->Cut();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
     CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
@@ -2227,26 +2136,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129805)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130685)
 {
     createSwDoc("tdf130685.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Cut();
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    TransferableDataHelper aHelper(xTransfer);
-    SwTransferable::Paste(*pWrtShell, aHelper);
-    SwTransferable::Paste(*pWrtShell, aHelper);
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     // Without fix in place, this test would have failed with:
     //- Expected: 2
     //- Actual  : 4
-    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
@@ -2292,8 +2195,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf104649)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134931)
 {
     createSwDoc("tdf134931.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -2303,17 +2204,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134931)
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Copy();
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
     dispatchCommand(mxComponent, ".uno:GoDown", {});
 
-    TransferableDataHelper aHelper(xTransfer);
     for (sal_Int32 i = 0; i < 10; ++i)
     {
-        SwTransferable::Paste(*pWrtShell, aHelper);
-        Scheduler::ProcessEventsToIdle();
+        dispatchCommand(mxComponent, ".uno:Paste", {});
     }
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11), xIndexAccess->getCount());
@@ -2329,8 +2226,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134931)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130680)
 {
     createSwDoc("tdf130680.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -2342,14 +2237,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130680)
     rtl::Reference<SwDoc> xClpDoc(new SwDoc());
     xClpDoc->SetClipBoard(true);
 
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     // without the fix, it crashes
-    xTransfer->Cut();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
 
-    TransferableDataHelper aHelper(xTransfer);
-    SwTransferable::Paste(*pWrtShell, aHelper);
+    dispatchCommand(mxComponent, ".uno:Paste", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     xClpDoc.clear();
 

@@ -1063,8 +1063,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf125310)
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->EndPara(/*bSelect=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
-    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
-    pTransfer->Cut();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     // copied paragraph style
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),

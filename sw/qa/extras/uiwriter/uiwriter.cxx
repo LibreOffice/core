@@ -225,8 +225,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf149595)
     {
         pWrtShell->Down(false);
         pWrtShell->EndPara(/*bSelect=*/true);
-        rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
-        pTransfer->Cut();
+        dispatchCommand(mxComponent, ".uno:Cut", {});
 
         // one shape is anchored in the middle, others at the start/end/at-para
         CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs() == nullptr);
@@ -234,8 +233,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf149595)
         CPPUNIT_ASSERT_EQUAL(size_t(3), pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetNext()->GetDrawObjs()->size());
 
         pWrtShell->Up(false);
-        TransferableDataHelper aHelper(pTransfer);
-        SwTransferable::Paste(*pWrtShell, aHelper);
+        dispatchCommand(mxComponent, ".uno:Paste", {});
 
         CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs() != nullptr);
         CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs()->size());
@@ -257,8 +255,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf149595)
         pWrtShell->Down(false);
         pWrtShell->SttPara(/*bSelect=*/false);
         pWrtShell->EndPara(/*bSelect=*/true);
-        rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
-        pTransfer->Cut();
+        dispatchCommand(mxComponent, ".uno:Cut", {});
 
         CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs() == nullptr);
         CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetNext()->GetDrawObjs() != nullptr);
@@ -266,8 +263,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf149595)
         CPPUNIT_ASSERT_EQUAL(size_t(3), pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetNext()->GetDrawObjs()->size());
 
         pWrtShell->Up(false);
-        TransferableDataHelper aHelper(pTransfer);
-        SwTransferable::Paste(*pWrtShell, aHelper);
+        dispatchCommand(mxComponent, ".uno:Paste", {});
 
         CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs() != nullptr);
         CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs()->size());
@@ -314,16 +310,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf149548)
         }
     }
 
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
-    pTransfer->Copy();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
-    TransferableDataHelper aHelper(pTransfer);
     // this was a use-after-free on nodes deleted by Copy
-    SwTransferable::Paste(*pWrtShell, aHelper);
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testBookmarkCopy)

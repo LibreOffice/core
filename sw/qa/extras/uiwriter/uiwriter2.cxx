@@ -146,8 +146,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101534)
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->EndPara(/*bSelect=*/true);
-    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
-    pTransfer->Copy();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
     // Go to the second paragraph, assert that we have margins as direct
     // formatting.
@@ -161,8 +160,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101534)
 
     // Make sure that direct formatting is preserved during paste.
     pWrtShell->EndPara(/*bSelect=*/false);
-    TransferableDataHelper aHelper(pTransfer);
-    SwTransferable::Paste(*pWrtShell, aHelper);
+    dispatchCommand(mxComponent, ".uno:Paste", {});
     aSet.ClearItem();
     pWrtShell->GetCurAttr(aSet);
     // This failed, direct formatting was lost.
@@ -413,7 +411,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136704)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134250)
 {
     createSwDoc("tdf134250.fodt");
-    SwDoc* pDoc = getSwDoc();
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
@@ -435,16 +432,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134250)
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    // .uno:Copy without touching shared clipboard
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
-    xTransfer->Copy();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
-    // .uno:Paste without touching shared clipboard
-    TransferableDataHelper aHelper(xTransfer);
-    SwTransferable::Paste(*pWrtShell, aHelper);
-
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
@@ -1341,8 +1331,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf54819)
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->EndPara(/*bSelect=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
-    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
-    pTransfer->Cut();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     // remaining paragraph keeps its original style
     CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
@@ -1388,8 +1377,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf54819_keep_numbering_with_Undo)
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara(/*bSelect=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
-    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
-    pTransfer->Cut();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     // solved problem: changing paragraph style after deletion
     CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
@@ -1483,8 +1471,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571_keep_numbering_with_Undo)
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
     pWrtShell->EndPara(/*bSelect=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
-    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
-    pTransfer->Cut();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     // solved problem: changing paragraph style after deletion
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
@@ -1586,8 +1573,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571_keep_numbering_with_Reject)
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
     pWrtShell->EndPara(/*bSelect=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
-    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
-    pTransfer->Cut();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     // solved problem: changing paragraph style after deletion
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
@@ -2016,8 +2002,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571)
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->EndPara(/*bSelect=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
-    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
-    pTransfer->Cut();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     // second paragraph changes its style in "Show changes" mode
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
@@ -2050,8 +2035,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf144058)
     pWrtShell->Down(/*bSelect=*/true);
     pWrtShell->Down(/*bSelect=*/true);
     pWrtShell->Down(/*bSelect=*/true);
-    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
-    pTransfer->Cut();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     // accept all: tables are deleted
     dispatchCommand(mxComponent, ".uno:AcceptAllTrackedChanges", {});
@@ -2103,8 +2087,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119019)
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara(/*bSelect=*/false);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 7, /*bBasicCall=*/false);
-    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
-    pTransfer->Cut();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     // check tracked text deletion
     CPPUNIT_ASSERT_EQUAL(OUString("tellus."), getRun(getParagraph(2), 3)->getString());
@@ -2144,8 +2127,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119824)
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara(/*bSelect=*/false);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 5, /*bBasicCall=*/false);
-    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
-    pTransfer->Cut();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     // check tracking of the new text deletion
     CPPUNIT_ASSERT_EQUAL(OUString("orci."), getRun(getParagraph(3), 7)->getString());
