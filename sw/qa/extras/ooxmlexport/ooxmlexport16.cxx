@@ -830,6 +830,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153874, "image_through_shape.docx")
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, xShape1->getPropertyValue("AnchorType").get<text::TextContentAnchorType>());
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, xShape2->getPropertyValue("AnchorType").get<text::TextContentAnchorType>());
     CPPUNIT_ASSERT_LESS(xShape2->getPropertyValue("ZOrder").get<sal_uInt64>(), xShape1->getPropertyValue("ZOrder").get<sal_uInt64>());
+    CPPUNIT_ASSERT(xShape1->getPropertyValue("Decorative").get<bool>());
+    // not implemented on shape yet
+    //CPPUNIT_ASSERT(xShape2->getPropertyValue("Decorative").get<bool>());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTextBoxZOrder, "testTextBoxZOrder.docx")
