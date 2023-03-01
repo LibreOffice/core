@@ -1445,7 +1445,9 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                             if (bApply)
                             {
                                 bool bEndOfApply = (xTextRangeCompare->compareRegionEnds(rEndPara, aIt->m_rEndParagraph) == 0);
-                                ApplyParagraphPropertiesFromTableStyle(*aIt, aAllTableParaProperties, aCellProperties[nRow][nCell]);
+                                // tdf#153891 handle missing cell properties (exception in style handling?)
+                                if ( nCell < sal::static_int_cast<std::size_t>(aCellProperties[nRow].getLength()) )
+                                    ApplyParagraphPropertiesFromTableStyle(*aIt, aAllTableParaProperties, aCellProperties[nRow][nCell]);
                                 // erase processed paragraph from list of pending paragraphs
                                 aIt = pTableParagraphs->erase(aIt);
                                 if (bEndOfApply)
