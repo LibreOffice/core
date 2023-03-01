@@ -51,8 +51,7 @@ namespace sd {
 SdUnoDrawView::SdUnoDrawView(
     DrawViewShell& rViewShell,
     View& rView) noexcept
-    :   DrawSubControllerInterfaceBase(m_aMutex),
-        mrDrawViewShell(rViewShell),
+    :   mrDrawViewShell(rViewShell),
         mrView(rView)
 {
 }

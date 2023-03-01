@@ -20,7 +20,6 @@
 #pragma once
 
 #include "DrawSubController.hxx"
-#include <cppuhelper/basemutex.hxx>
 
 namespace sd::slidesorter { class SlideSorter; }
 namespace com::sun::star::drawing { class XDrawPage; }
@@ -31,8 +30,7 @@ namespace sd {
     controller.
  */
 class SdUnoSlideView final
-    : private cppu::BaseMutex,
-      public DrawSubControllerInterfaceBase
+    : public DrawSubControllerInterfaceBase
 {
 public:
     SdUnoSlideView (

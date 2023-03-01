@@ -21,20 +21,15 @@
 
 #include <com/sun/star/drawing/XDrawSubController.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 
 namespace sd {
 
-    class DrawSubControllerInterfaceBase : public ::cppu::WeakComponentImplHelper<
+    class DrawSubControllerInterfaceBase : public ::comphelper::WeakComponentImplHelper<
                     css::drawing::XDrawSubController,
                     css::lang::XServiceInfo >
     {
     public:
-        DrawSubControllerInterfaceBase( ::osl::Mutex& aMutex )
-            :  ::cppu::WeakComponentImplHelper<
-                    css::drawing::XDrawSubController,
-                    css::lang::XServiceInfo >( aMutex ) {}
-
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override = 0;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override = 0;

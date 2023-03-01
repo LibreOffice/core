@@ -34,16 +34,11 @@ namespace sd {
 
 SdUnoOutlineView::SdUnoOutlineView(
     OutlineViewShell& rViewShell) noexcept
-    :   DrawSubControllerInterfaceBase(m_aMutex),
-        mrOutlineViewShell(rViewShell)
+    :   mrOutlineViewShell(rViewShell)
 {
 }
 
 SdUnoOutlineView::~SdUnoOutlineView() noexcept
-{
-}
-
-void SAL_CALL SdUnoOutlineView::disposing()
 {
 }
 

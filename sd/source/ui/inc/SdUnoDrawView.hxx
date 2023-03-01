@@ -20,7 +20,6 @@
 #pragma once
 
 #include "DrawSubController.hxx"
-#include <cppuhelper/basemutex.hxx>
 
 class SdXImpressDocument;
 namespace com::sun::star::drawing { class XLayer; }
@@ -32,9 +31,7 @@ class View;
 
 /** This class implements the DrawViewShell specific part of the controller.
 */
-class SdUnoDrawView final
-    : private cppu::BaseMutex,
-      public DrawSubControllerInterfaceBase
+class SdUnoDrawView final : public DrawSubControllerInterfaceBase
 {
 public:
     SdUnoDrawView (

@@ -38,8 +38,7 @@ namespace sd {
 
 SdUnoSlideView::SdUnoSlideView (
     slidesorter::SlideSorter& rSlideSorter) noexcept
-    : DrawSubControllerInterfaceBase(m_aMutex),
-      mrSlideSorter(rSlideSorter)
+    : mrSlideSorter(rSlideSorter)
 {
 }
 

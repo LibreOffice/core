@@ -20,7 +20,6 @@
 #pragma once
 
 #include "DrawSubController.hxx"
-#include <cppuhelper/basemutex.hxx>
 
 namespace sd {
 
@@ -29,15 +28,11 @@ class OutlineViewShell;
 /** This class implements the OutlineViewShell specific part of the controller.
 */
 class SdUnoOutlineView final
-    : private cppu::BaseMutex,
-      public DrawSubControllerInterfaceBase
+    : public DrawSubControllerInterfaceBase
 {
 public:
-    SdUnoOutlineView (
-        OutlineViewShell& rViewShell) noexcept;
+    SdUnoOutlineView (OutlineViewShell& rViewShell) noexcept;
     virtual ~SdUnoOutlineView() noexcept override;
-
-    virtual void SAL_CALL disposing() override;
 
     // XSelectionSupplier
 
