@@ -524,7 +524,7 @@
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
-          <!-- n-columns=6 n-rows=4 -->
+          <!-- n-columns=6 n-rows=5 -->
           <object class="GtkGrid" id="grid10">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -753,6 +753,22 @@
               <packing>
                 <property name="left-attach">0</property>
                 <property name="top-attach">3</property>
+                <property name="width">6</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="flysplit">
+                <property name="label" translatable="yes" context="frmtypepage|flysplit">Allow frame to split across pages</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="margin-start">12</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">4</property>
                 <property name="width">6</property>
               </packing>
             </child>
