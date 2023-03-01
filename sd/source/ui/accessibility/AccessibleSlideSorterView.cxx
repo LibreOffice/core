@@ -113,8 +113,7 @@ private:
 AccessibleSlideSorterView::AccessibleSlideSorterView(
     ::sd::slidesorter::SlideSorter& rSlideSorter,
     vcl::Window* pContentWindow)
-    : AccessibleSlideSorterViewBase(m_aMutex),
-      mrSlideSorter(rSlideSorter),
+    : mrSlideSorter(rSlideSorter),
       mnClientId(0),
       mpContentWindow(pContentWindow)
 {
@@ -148,7 +147,7 @@ void AccessibleSlideSorterView::FireAccessibleEvent (
     }
 }
 
-void SAL_CALL AccessibleSlideSorterView::disposing()
+void AccessibleSlideSorterView::disposing(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     if (mnClientId != 0)
     {
@@ -162,7 +161,7 @@ AccessibleSlideSorterObject* AccessibleSlideSorterView::GetAccessibleChildImplem
     sal_Int32 nIndex)
 {
     AccessibleSlideSorterObject* pResult = nullptr;
-    ::osl::MutexGuard aGuard (m_aMutex);
+    std::unique_lock aGuard (m_aMutex);
 
     if (nIndex>=0 && nIndex<mpImpl->GetVisibleChildCount())
         pResult = mpImpl->GetVisibleChild(nIndex);
@@ -172,7 +171,7 @@ AccessibleSlideSorterObject* AccessibleSlideSorterView::GetAccessibleChildImplem
 
 void AccessibleSlideSorterView::Destroyed()
 {
-    ::osl::MutexGuard aGuard (m_aMutex);
+    std::unique_lock aGuard (m_aMutex);
 
     // Send a disposing to all listeners.
     if (mnClientId != 0)
@@ -196,7 +195,7 @@ Reference<XAccessibleContext > SAL_CALL
 sal_Int64 SAL_CALL AccessibleSlideSorterView::getAccessibleChildCount()
 {
     ThrowIfDisposed();
-    ::osl::MutexGuard aGuard (m_aMutex);
+    std::unique_lock aGuard (m_aMutex);
     return mpImpl->GetVisibleChildCount();
 }
 
@@ -204,7 +203,7 @@ Reference<XAccessible > SAL_CALL
     AccessibleSlideSorterView::getAccessibleChild (sal_Int64 nIndex)
 {
     ThrowIfDisposed();
-    ::osl::MutexGuard aGuard (m_aMutex);
+    std::unique_lock aGuard (m_aMutex);
 
     if (nIndex<0 || nIndex>=mpImpl->GetVisibleChildCount())
         throw lang::IndexOutOfBoundsException();
@@ -323,9 +322,9 @@ void SAL_CALL AccessibleSlideSorterView::addAccessibleEventListener(
     if (!rxListener.is())
         return;
 
-    const osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    if (m_bDisposed)
     {
         uno::Reference<uno::XInterface> x (static_cast<lang::XComponent *>(this), uno::UNO_QUERY);
         rxListener->disposing (lang::EventObject (x));
@@ -345,7 +344,7 @@ void SAL_CALL AccessibleSlideSorterView::removeAccessibleEventListener(
     if (!rxListener.is())
         return;
 
-    const osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     if (mnClientId == 0)
         return;
@@ -623,7 +622,7 @@ uno::Sequence< OUString> SAL_CALL
 
 void AccessibleSlideSorterView::ThrowIfDisposed()
 {
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    if (m_bDisposed)
     {
         SAL_WARN("sd", "Calling disposed object. Throwing exception:");
         throw lang::DisposedException ("object has been already disposed",
