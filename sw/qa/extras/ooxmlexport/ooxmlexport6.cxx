@@ -518,6 +518,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132514)
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[2]/w:p[2]/w:pPr/w:spacing", "after", "0");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf153891, "tdf153891.docx")
+{
+    // This document simply crashed the importer.
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFdo69636)
 {
     loadAndSave("fdo69636.docx");
