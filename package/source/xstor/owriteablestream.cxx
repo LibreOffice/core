@@ -1237,6 +1237,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
         }
 
         rtl::Reference<OWriteStream> tmp;
+        assert(m_xMutex.is() && "No mutex!");
         if ( !xStream.is() )
             tmp = new OWriteStream( *this, bHierarchyAccess );
         else
@@ -1535,10 +1536,6 @@ OWriteStream::OWriteStream( OWriteStream_Impl& rImpl, bool bTransacted )
 , m_nInitPosition( 0 )
 , m_bTransacted( bTransacted )
 {
-    OSL_ENSURE( m_pImpl->m_xMutex.is(), "No mutex!" );
-
-    if ( !m_pImpl->m_xMutex.is() )
-        throw uno::RuntimeException(); // just a disaster
 }
 
 OWriteStream::OWriteStream( OWriteStream_Impl& rImpl, uno::Reference< io::XStream > const & xStream, bool bTransacted )
@@ -1551,11 +1548,6 @@ OWriteStream::OWriteStream( OWriteStream_Impl& rImpl, uno::Reference< io::XStrea
 , m_nInitPosition( 0 )
 , m_bTransacted( bTransacted )
 {
-    OSL_ENSURE( m_pImpl->m_xMutex.is(), "No mutex!" );
-
-    if ( !m_pImpl->m_xMutex.is() )
-        throw uno::RuntimeException(); // just a disaster
-
     if ( xStream.is() )
     {
         m_xInStream = xStream->getInputStream();
