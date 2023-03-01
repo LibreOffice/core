@@ -3,10 +3,10 @@
    height="18"
    width="18"
    version="1.1"
-   id="svg260"
-   sodipodi:docname="doc_modified_feedback.svg"
+   id="svg135"
+   sodipodi:docname="doc_modified_no.svg"
    inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
-   inkscape:export-filename="doc_modified_feedback.png"
+   inkscape:export-filename="doc_modified_no.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -14,9 +14,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <defs
-     id="defs264" />
+     id="defs139" />
   <sodipodi:namedview
-     id="namedview262"
+     id="namedview137"
      pagecolor="#505050"
      bordercolor="#ffffff"
      borderopacity="1"
@@ -26,17 +26,18 @@
      inkscape:deskcolor="#505050"
      showgrid="false"
      inkscape:zoom="21.454545"
-     inkscape:cx="7.1779661"
-     inkscape:cy="9.4152542"
-     inkscape:window-width="1434"
-     inkscape:window-height="670"
-     inkscape:window-x="191"
+     inkscape:cx="6.9682203"
+     inkscape:cy="16.220339"
+     inkscape:window-width="1353"
+     inkscape:window-height="458"
+     inkscape:window-x="1886"
      inkscape:window-y="38"
      inkscape:window-maximized="0"
-     inkscape:current-layer="svg260" />
+     inkscape:current-layer="svg135" />
   <path
      d="M 0.61839883,0 C 0.45709218,0 0.3978305,0.22526362 0.3978305,0.46153859 V 15.969232 l 2.3821396,2.030767 h 0.088227 1.4116383 9.1315356 3.176184 0.794047 c 0.161309,0 0.220567,-0.225262 0.220567,-0.461536 V 0.46153859 C 17.60217,0.22526456 17.542918,0 17.381602,0 H 15.837623 15.440599 2.3388331 2.1182644 Z M 2.7946342,1.0713669 15.088667,1.0346842 15.076883,9.0923091 c -3.1e-4,0.2468754 -0.147433,0.4610313 -0.308745,0.461538 L 3.0917427,9.5905304 C 2.9304367,9.591037 2.7825888,9.3758677 2.7829469,9.1289918 Z M 4.5004043,11.492309 h 8.5580567 c 0.161312,0 0.35291,0.168508 0.35291,0.415384 v 5.399999 H 4.2798353 v -5.399999 c 0,-0.246876 0.059262,-0.415384 0.220569,-0.415384 z m 1.2792969,0.415384 v 4.938462 h 2.2497982 v -4.938462 z"
      fill="#bebebe"
-     id="path258"
+     fill-opacity="0.738971"
+     id="path133"
      style="stroke-width:1" />
 </svg>

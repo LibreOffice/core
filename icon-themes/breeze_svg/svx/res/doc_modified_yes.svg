@@ -2,12 +2,12 @@
 <svg
    viewBox="0 0 18 18"
    version="1.1"
-   id="svg260"
-   sodipodi:docname="doc_modified_feedback.svg"
+   id="svg4"
+   sodipodi:docname="doc_modified_yes.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    width="18"
    height="18"
-   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
-   inkscape:export-filename="doc_modified_feedback.png"
+   inkscape:export-filename="doc_modified_yes.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -15,9 +15,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <defs
-     id="defs264" />
+     id="defs8" />
   <sodipodi:namedview
-     id="namedview262"
+     id="namedview6"
      pagecolor="#505050"
      bordercolor="#ffffff"
      borderopacity="1"
@@ -27,17 +27,17 @@
      inkscape:deskcolor="#505050"
      showgrid="false"
      inkscape:zoom="23.6"
-     inkscape:cx="6.970339"
-     inkscape:cy="5.0423729"
+     inkscape:cx="7.2245763"
+     inkscape:cy="5.1271186"
      inkscape:window-width="1353"
-     inkscape:window-height="458"
-     inkscape:window-x="1133"
-     inkscape:window-y="732"
+     inkscape:window-height="594"
+     inkscape:window-x="463"
+     inkscape:window-y="130"
      inkscape:window-maximized="0"
-     inkscape:current-layer="svg260" />
+     inkscape:current-layer="svg4" />
   <path
      d="M 0,0 V 1.8 16.2 18 H 18 V 16.2 5.4 4.10625 L 13.89375,0 H 13.8375 12.6 1.8 Z M 1.8,1.8 H 3.6 V 5.4 7.2 H 9 12.6 V 1.8 h 0.50625 L 16.2,4.89375 V 5.4 16.2 H 14.4 V 12.6 10.8 H 3.6 v 1.8 3.6 H 1.8 Z m 3.6,0 H 9 V 5.4 H 5.4 Z m 0,10.8 h 7.2 v 1.8 1.8 H 5.4 Z"
-     fill="#232629"
-     id="path258"
+     fill="#da4453"
+     id="path2"
      style="stroke-width:1" />
 </svg>

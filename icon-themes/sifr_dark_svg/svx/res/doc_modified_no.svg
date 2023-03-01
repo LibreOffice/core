@@ -4,10 +4,10 @@
    viewBox="0 0 18 18"
    width="18"
    version="1.1"
-   id="svg4"
-   sodipodi:docname="doc_modified_feedback.svg"
+   id="svg262"
+   sodipodi:docname="doc_modified_no.svg"
    inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
-   inkscape:export-filename="doc_modified_feedback.png"
+   inkscape:export-filename="doc_modified_no.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -15,9 +15,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <defs
-     id="defs8" />
+     id="defs266" />
   <sodipodi:namedview
-     id="namedview6"
+     id="namedview264"
      pagecolor="#505050"
      bordercolor="#ffffff"
      borderopacity="1"
@@ -26,18 +26,19 @@
      inkscape:pagecheckerboard="1"
      inkscape:deskcolor="#505050"
      showgrid="false"
-     inkscape:zoom="14.523773"
-     inkscape:cx="0.034426316"
-     inkscape:cy="9.914779"
+     inkscape:zoom="15.848131"
+     inkscape:cx="1.9876161"
+     inkscape:cy="5.5527052"
      inkscape:window-width="1353"
-     inkscape:window-height="652"
-     inkscape:window-x="865"
-     inkscape:window-y="425"
+     inkscape:window-height="674"
+     inkscape:window-x="330"
+     inkscape:window-y="53"
      inkscape:window-maximized="0"
-     inkscape:current-layer="svg4" />
+     inkscape:current-layer="svg262" />
   <path
      d="M 4.1106393,1.3845 C 4.1106393,1.3845 0,1.3845125 0,5.4951393 v 6.9664517 c 0,0 1.3846364e-6,0.692318 0.43269888,0.995208 L 2.7692728,15.793373 V 5.5384092 c 0,-1.3846322 1.3846364,-1.3846364 1.3846364,-1.3846364 v 2.7692728 c 0,0.7670858 0.6175506,1.3846364 1.3846364,1.3846364 h 4.1539092 c 0.7670842,0 1.3846362,-0.6175506 1.3846362,-1.3846364 V 4.1537728 c 0,0 1.384637,4.2e-6 1.384637,1.3846364 v 6.9231818 3.913221 C 13.670101,15.997795 15.231,15.02583 15.231,12.504861 V 5.4951393 c 0,0 -1.2e-5,-4.1106393 -4.110639,-4.1106393 z M 5.5385456,4.1537728 H 9.6924548 V 6.9230456 H 5.5385456 Z m 0,6.9231822 c -0.7680384,0 -1.3846364,0.616598 -1.3846364,1.384636 v 2.769273 c 0,0.768037 0.616598,1.384636 1.3846364,1.384636 h 4.1539092 c 0.7680382,0 1.3846362,-0.616599 1.3846362,-1.384636 v -2.769273 c 0,-0.768038 -0.616598,-1.384636 -1.3846362,-1.384636 z m 0,1.384636 H 6.923182 v 2.769273 H 5.5385456 Z"
      fill="#efefef"
-     id="path2"
+     opacity="0.35"
+     id="path260"
      style="stroke-width:1" />
 </svg>

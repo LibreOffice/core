@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   height="18"
+   viewBox="0 0 18 18"
+   width="18"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="doc_modified_no.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   inkscape:export-filename="doc_modified_no.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050"
+     showgrid="false"
+     inkscape:zoom="21.454545"
+     inkscape:cx="7.0847458"
+     inkscape:cy="5.6631356"
+     inkscape:window-width="1488"
+     inkscape:window-height="819"
+     inkscape:window-x="1488"
+     inkscape:window-y="580"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg4" />
+  <path
+     d="M 4.1106391,1.3845 C 4.1106391,1.3845 0,1.3845125 0,5.4951391 v 6.9664519 c 0,0 1.3846363e-6,0.692318 0.43269885,0.995207 L 2.7692727,15.793372 V 5.538409 c 0,-1.3846322 1.3846363,-1.3846363 1.3846363,-1.3846363 v 2.7692727 c 0,0.7670857 0.6175506,1.3846363 1.3846364,1.3846363 h 4.1539088 c 0.7670848,0 1.3846368,-0.6175506 1.3846368,-1.3846363 V 4.1537727 c 0,0 1.384636,4.1e-6 1.384636,1.3846363 v 6.923182 3.91322 C 13.670101,15.997794 15.231,15.02583 15.231,12.50486 V 5.4951391 c 0,0 -1.3e-5,-4.1106391 -4.11064,-4.1106391 z M 5.5385454,4.1537727 H 9.6924542 V 6.9230454 H 5.5385454 Z m 0,6.9231813 c -0.7680385,0 -1.3846364,0.616598 -1.3846364,1.384637 v 2.769272 c 0,0.768037 0.6165979,1.384637 1.3846364,1.384637 h 4.1539088 c 0.7680388,0 1.3846368,-0.6166 1.3846368,-1.384637 v -2.769272 c 0,-0.768039 -0.616598,-1.384637 -1.3846368,-1.384637 z m 0,1.384637 h 1.3846363 v 2.769272 H 5.5385454 Z"
+     fill="#2e3436"
+     opacity="0.35"
+     id="path2"
+     style="stroke-width:1" />
+</svg>
