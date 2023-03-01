@@ -3132,8 +3132,7 @@ void PresentationSettingsEx::SetPropertyValue( std::u16string_view rProperty, co
 // XAnimationListener
 
 SlideShowListenerProxy::SlideShowListenerProxy( rtl::Reference< SlideshowImpl > xController, css::uno::Reference< css::presentation::XSlideShow > xSlideShow )
-: maListeners( m_aMutex )
-, mxController(std::move( xController ))
+: mxController(std::move( xController ))
 , mxSlideShow(std::move( xSlideShow ))
 {
 }
@@ -3180,21 +3179,23 @@ void SlideShowListenerProxy::removeShapeEventListener( const css::uno::Reference
 
 void SlideShowListenerProxy::addSlideShowListener( const css::uno::Reference< css::presentation::XSlideShowListener >& xListener )
 {
-    maListeners.addInterface(xListener);
+    std::unique_lock g(m_aMutex);
+    maListeners.addInterface(g, xListener);
 }
 
 void SlideShowListenerProxy::removeSlideShowListener( const css::uno::Reference< css::presentation::XSlideShowListener >& xListener )
 {
-    maListeners.removeInterface(xListener);
+    std::unique_lock g(m_aMutex);
+    maListeners.removeInterface(g, xListener);
 }
 
 void SAL_CALL SlideShowListenerProxy::beginEvent( const Reference< XAnimationNode >& xNode )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
-    if( maListeners.getLength() >= 0 )
+    if( maListeners.getLength(aGuard) >= 0 )
     {
-        maListeners.forEach(
+        maListeners.forEach(aGuard,
             [&] (Reference<XAnimationListener> const& xListener) {
                 return xListener->beginEvent(xNode);
             } );
@@ -3203,11 +3204,11 @@ void SAL_CALL SlideShowListenerProxy::beginEvent( const Reference< XAnimationNod
 
 void SAL_CALL SlideShowListenerProxy::endEvent( const Reference< XAnimationNode >& xNode )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
-    if( maListeners.getLength() >= 0 )
+    if( maListeners.getLength(aGuard) >= 0 )
     {
-        maListeners.forEach(
+        maListeners.forEach(aGuard,
             [&] (Reference<XAnimationListener> const& xListener) {
                 return xListener->endEvent(xNode);
             } );
@@ -3216,11 +3217,11 @@ void SAL_CALL SlideShowListenerProxy::endEvent( const Reference< XAnimationNode 
 
 void SAL_CALL SlideShowListenerProxy::repeat( const Reference< XAnimationNode >& xNode, ::sal_Int32 nRepeat )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
-    if( maListeners.getLength() >= 0 )
+    if( maListeners.getLength(aGuard) >= 0 )
     {
-        maListeners.forEach(
+        maListeners.forEach(aGuard,
             [&] (Reference<XAnimationListener> const& xListener) {
                 return xListener->repeat(xNode, nRepeat);
             } );
@@ -3231,9 +3232,9 @@ void SAL_CALL SlideShowListenerProxy::repeat( const Reference< XAnimationNode >&
 
 void SAL_CALL SlideShowListenerProxy::paused(  )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
-    maListeners.forEach(
+    maListeners.forEach(aGuard,
         [](uno::Reference<presentation::XSlideShowListener> const& xListener)
         {
             xListener->paused();
@@ -3242,9 +3243,9 @@ void SAL_CALL SlideShowListenerProxy::paused(  )
 
 void SAL_CALL SlideShowListenerProxy::resumed(  )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
-    maListeners.forEach(
+    maListeners.forEach(aGuard,
         [](uno::Reference<presentation::XSlideShowListener> const& xListener)
         {
             xListener->resumed();
@@ -3253,9 +3254,9 @@ void SAL_CALL SlideShowListenerProxy::resumed(  )
 
 void SAL_CALL SlideShowListenerProxy::slideTransitionStarted( )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
-    maListeners.forEach(
+    maListeners.forEach(aGuard,
         [](uno::Reference<presentation::XSlideShowListener> const& xListener)
         {
             xListener->slideTransitionStarted();
@@ -3264,9 +3265,9 @@ void SAL_CALL SlideShowListenerProxy::slideTransitionStarted( )
 
 void SAL_CALL SlideShowListenerProxy::slideTransitionEnded( )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
-    maListeners.forEach(
+    maListeners.forEach(aGuard,
         [](uno::Reference<presentation::XSlideShowListener> const& xListener)
         {
             xListener->slideTransitionEnded ();
@@ -3275,9 +3276,9 @@ void SAL_CALL SlideShowListenerProxy::slideTransitionEnded( )
 
 void SAL_CALL SlideShowListenerProxy::slideAnimationsEnded(  )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
-    maListeners.forEach(
+    maListeners.forEach(aGuard,
         [](uno::Reference<presentation::XSlideShowListener> const& xListener)
         {
             xListener->slideAnimationsEnded ();
@@ -3287,11 +3288,11 @@ void SAL_CALL SlideShowListenerProxy::slideAnimationsEnded(  )
 void SlideShowListenerProxy::slideEnded(sal_Bool bReverse)
 {
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
-        if( maListeners.getLength() >= 0 )
+        if( maListeners.getLength(aGuard) >= 0 )
         {
-            maListeners.forEach(
+            maListeners.forEach(aGuard,
                 [&] (Reference<XSlideShowListener> const& xListener) {
                     return xListener->slideEnded(bReverse);
                 } );
@@ -3308,11 +3309,11 @@ void SlideShowListenerProxy::slideEnded(sal_Bool bReverse)
 void SlideShowListenerProxy::hyperLinkClicked( OUString const& aHyperLink )
 {
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
-        if( maListeners.getLength() >= 0 )
+        if( maListeners.getLength(aGuard) >= 0 )
         {
-            maListeners.forEach(
+            maListeners.forEach(aGuard,
                 [&] (Reference<XSlideShowListener> const& xListener) {
                     return xListener->hyperLinkClicked(aHyperLink);
                 } );
@@ -3330,7 +3331,8 @@ void SlideShowListenerProxy::hyperLinkClicked( OUString const& aHyperLink )
 
 void SAL_CALL SlideShowListenerProxy::disposing( const css::lang::EventObject& aDisposeEvent )
 {
-    maListeners.disposeAndClear( aDisposeEvent );
+    std::unique_lock g(m_aMutex);
+    maListeners.disposeAndClear( g, aDisposeEvent );
     mxController.clear();
     mxSlideShow.clear();
 }

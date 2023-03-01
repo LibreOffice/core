@@ -23,8 +23,7 @@
 #include <sal/config.h>
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/XSlideShowListener.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
@@ -80,7 +79,7 @@ struct WrappedShapeEventImpl
 
 typedef std::shared_ptr< WrappedShapeEventImpl > WrappedShapeEventImplPtr;
 
-class SlideShowListenerProxy : private ::cppu::BaseMutex,
+class SlideShowListenerProxy :
         public ::cppu::WeakImplHelper< css::presentation::XSlideShowListener, css::presentation::XShapeEventListener >
 {
 public:
@@ -117,7 +116,8 @@ public:
     virtual void SAL_CALL click(const css::uno::Reference< css::drawing::XShape > & xShape, const css::awt::MouseEvent & aOriginalEvent) override;
 
 private:
-    ::comphelper::OInterfaceContainerHelper3<css::presentation::XSlideShowListener> maListeners;
+    std::mutex m_aMutex;
+    ::comphelper::OInterfaceContainerHelper4<css::presentation::XSlideShowListener> maListeners;
     rtl::Reference< SlideshowImpl > mxController;
     css::uno::Reference< css::presentation::XSlideShow > mxSlideShow;
 };
