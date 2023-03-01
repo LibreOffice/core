@@ -1238,9 +1238,9 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
 
         rtl::Reference<OWriteStream> tmp;
         if ( !xStream.is() )
-            tmp = new OWriteStream( this, bHierarchyAccess );
+            tmp = new OWriteStream( *this, bHierarchyAccess );
         else
-            tmp = new OWriteStream( this, xStream, bHierarchyAccess );
+            tmp = new OWriteStream( *this, xStream, bHierarchyAccess );
 
         m_pAntiImpl = tmp.get();
         return tmp;
@@ -1525,37 +1525,35 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
 
 // OWriteStream implementation
 
-OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, bool bTransacted )
-: m_pImpl( pImpl )
-, m_xSharedMutex( pImpl->m_xMutex )
-, m_aListenersContainer( pImpl->m_xMutex->GetMutex() )
+OWriteStream::OWriteStream( OWriteStream_Impl& rImpl, bool bTransacted )
+: m_pImpl( &rImpl )
+, m_xSharedMutex( rImpl.m_xMutex )
+, m_aListenersContainer( rImpl.m_xMutex->GetMutex() )
 , m_nStorageType( m_pImpl->m_nStorageType )
 , m_bInStreamDisconnected( false )
 , m_bInitOnDemand( true )
 , m_nInitPosition( 0 )
 , m_bTransacted( bTransacted )
 {
-    OSL_ENSURE( pImpl, "No base implementation!" );
     OSL_ENSURE( m_pImpl->m_xMutex.is(), "No mutex!" );
 
-    if ( !m_pImpl || !m_pImpl->m_xMutex.is() )
+    if ( !m_pImpl->m_xMutex.is() )
         throw uno::RuntimeException(); // just a disaster
 }
 
-OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, uno::Reference< io::XStream > const & xStream, bool bTransacted )
-: m_pImpl( pImpl )
-, m_xSharedMutex( pImpl->m_xMutex )
-, m_aListenersContainer( pImpl->m_xMutex->GetMutex() )
+OWriteStream::OWriteStream( OWriteStream_Impl& rImpl, uno::Reference< io::XStream > const & xStream, bool bTransacted )
+: m_pImpl( &rImpl )
+, m_xSharedMutex( rImpl.m_xMutex )
+, m_aListenersContainer( rImpl.m_xMutex->GetMutex() )
 , m_nStorageType( m_pImpl->m_nStorageType )
 , m_bInStreamDisconnected( false )
 , m_bInitOnDemand( false )
 , m_nInitPosition( 0 )
 , m_bTransacted( bTransacted )
 {
-    OSL_ENSURE( pImpl && xStream.is(), "No base implementation!" );
     OSL_ENSURE( m_pImpl->m_xMutex.is(), "No mutex!" );
 
-    if ( !m_pImpl || !m_pImpl->m_xMutex.is() )
+    if ( !m_pImpl->m_xMutex.is() )
         throw uno::RuntimeException(); // just a disaster
 
     if ( xStream.is() )

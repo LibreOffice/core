@@ -253,8 +253,8 @@ protected:
 
     bool m_bTransacted;
 
-    OWriteStream( OWriteStream_Impl* pImpl, bool bTransacted );
-    OWriteStream( OWriteStream_Impl* pImpl, css::uno::Reference< css::io::XStream > const & xStream, bool bTransacted );
+    OWriteStream( OWriteStream_Impl& rImpl, bool bTransacted );
+    OWriteStream( OWriteStream_Impl& rImpl, css::uno::Reference< css::io::XStream > const & xStream, bool bTransacted );
 
     void CloseOutput_Impl();
 
