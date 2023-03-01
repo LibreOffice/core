@@ -26,6 +26,7 @@
 #include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/jsdialog/executor.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <wizdlg.hxx>
 
 static std::map<std::string, vcl::Window*>& GetLOKPopupsMap()
 {
@@ -843,6 +844,34 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id)
     return pRet;
 }
 
+std::unique_ptr<weld::Assistant> JSInstanceBuilder::weld_assistant(const OString& id)
+{
+    vcl::RoadmapWizard* pDialog = m_xBuilder->get<vcl::RoadmapWizard>(id);
+    std::unique_ptr<JSAssistant> pRet(pDialog ? new JSAssistant(this, pDialog, this, false)
+                                              : nullptr);
+    if (pDialog)
+    {
+        m_nWindowId = pDialog->GetLOKWindowId();
+        pDialog->SetLOKTunnelingState(false);
+
+        InsertWindowToMap(getMapIdFromWindowId());
+
+        assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
+        m_aOwnedToplevel.set(pDialog);
+        m_xBuilder->drop_ownership(pDialog);
+        m_bHasTopLevelDialog = true;
+
+        pRet.reset(new JSAssistant(this, pDialog, this, false));
+
+        RememberWidget("__DIALOG__", pRet.get());
+
+        initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
+        sendFullUpdate();
+    }
+
+    return pRet;
+}
+
 std::unique_ptr<weld::MessageDialog> JSInstanceBuilder::weld_message_dialog(const OString& id)
 {
     std::unique_ptr<weld::MessageDialog> pRet;
@@ -1228,6 +1257,36 @@ void JSDialog::response(int response)
 
     sendClose();
     SalInstanceDialog::response(response);
+}
+
+void JSAssistant::response(int response)
+{
+    if (response == RET_HELP)
+    {
+        response_help(m_xWidget.get());
+        return;
+    }
+
+    sendClose();
+    SalInstanceAssistant::response(response);
+}
+
+JSAssistant::JSAssistant(JSDialogSender* pSender, vcl::RoadmapWizard* pDialog,
+                         SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceAssistant, vcl::RoadmapWizard>(pSender, pDialog, pBuilder, bTakeOwnership)
+{
+}
+
+void JSAssistant::set_current_page(int nPage)
+{
+    SalInstanceAssistant::set_current_page(nPage);
+    sendFullUpdate();
+}
+
+void JSAssistant::set_current_page(const OString& rIdent)
+{
+    SalInstanceAssistant::set_current_page(rIdent);
+    sendFullUpdate();
 }
 
 JSContainer::JSContainer(JSDialogSender* pSender, vcl::Window* pContainer,

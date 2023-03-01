@@ -278,6 +278,7 @@ public:
     virtual ~JSInstanceBuilder() override;
     virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OString& id) override;
     virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString& id) override;
+    virtual std::unique_ptr<weld::Assistant> weld_assistant(const OString& id) override;
     virtual std::unique_ptr<weld::Container> weld_container(const OString& id) override;
     virtual std::unique_ptr<weld::Label> weld_label(const OString& id) override;
     virtual std::unique_ptr<weld::Button> weld_button(const OString& id) override;
@@ -479,6 +480,17 @@ public:
 
     virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) override;
     virtual void undo_collapse() override;
+    virtual void response(int response) override;
+};
+
+class JSAssistant final : public JSWidget<SalInstanceAssistant, vcl::RoadmapWizard>
+{
+public:
+    JSAssistant(JSDialogSender* pSender, vcl::RoadmapWizard* pDialog, SalInstanceBuilder* pBuilder,
+                bool bTakeOwnership);
+
+    virtual void set_current_page(int nPage) override;
+    virtual void set_current_page(const OString& rIdent) override;
     virtual void response(int response) override;
 };
 
