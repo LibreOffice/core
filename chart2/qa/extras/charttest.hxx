@@ -26,7 +26,6 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <o3tl/string_view.hxx>
 #include <unotools/tempfile.hxx>
@@ -65,8 +64,6 @@
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 
-#include <unotools/ucbstreamhelper.hxx>
-
 using namespace css;
 using namespace css::uno;
 
@@ -74,40 +71,6 @@ namespace com::sun::star::chart2 { class XDataSeries; }
 namespace com::sun::star::chart2 { class XDiagram; }
 namespace com::sun::star::table { class XTableCharts; }
 namespace com::sun::star::table { class XTablePivotCharts; }
-
-namespace {
-
-struct CheckForChartName
-{
-private:
-    OUString aDir;
-
-public:
-    explicit CheckForChartName( const OUString& rDir ):
-        aDir(rDir) {}
-
-    bool operator()(std::u16string_view rName)
-    {
-        if(!o3tl::starts_with(rName, aDir))
-            return false;
-
-        if(!o3tl::ends_with(rName, u".xml"))
-            return false;
-
-        return true;
-    }
-};
-
-OUString findChartFile(const OUString& rDir, uno::Reference< container::XNameAccess > const & xNames )
-{
-    const uno::Sequence<OUString> aNames = xNames->getElementNames();
-    const OUString* pElement = std::find_if(aNames.begin(), aNames.end(), CheckForChartName(rDir));
-
-    CPPUNIT_ASSERT(pElement != aNames.end());
-    return *pElement;
-}
-
-}
 
 class ChartTest : public UnoApiXmlTest
 {
@@ -129,16 +92,6 @@ public:
     Sequence< OUString > getFormattedDateCategories( const Reference<chart2::XChartDocument>& xChartDoc );
     awt::Size getPageSize( const Reference< chart2::XChartDocument > & xChartDoc );
     awt::Size getSize(css::uno::Reference<chart2::XDiagram> xDiagram, const awt::Size& rPageSize);
-
-protected:
-
-    /**
-     * Given that some problem doesn't affect the result in the importer, we
-     * test the resulting file directly, by opening the zip file, parsing an
-     * xml stream, and asserting an XPath expression. This method returns the
-     * xml stream, so that you can do the asserting.
-     */
-    xmlDocUniquePtr parseExport(const OUString& rDir, const OUString& rFilterFormat);
 };
 
 Reference< lang::XComponent > getChartCompFromSheet( sal_Int32 nSheet, sal_Int32 nChart, uno::Reference< lang::XComponent > const & xComponent )
@@ -666,19 +619,6 @@ getShapeByName(const uno::Reference<drawing::XShapes>& rShapes, const OUString& 
         }
     }
     return uno::Reference<drawing::XShape>();
-}
-
-xmlDocUniquePtr ChartTest::parseExport(const OUString& rDir, const OUString& rFilterFormat)
-{
-    save(rFilterFormat);
-
-    // Read the XML stream we're interested in.
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
-    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(findChartFile(rDir, xNameAccess)), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xInputStream.is());
-    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
-
-    return parseXmlStream(pStream.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
