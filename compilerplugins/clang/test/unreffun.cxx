@@ -36,4 +36,20 @@ void l() // expected-error {{Unreferenced externally visible function definition
 {
 }
 
+void m()
+{
+//TODO: The below would produce a false "Unreferenced externally invisible function definition" for
+// Local::f due to the Clang bug addressed at <https://reviews.llvm.org/D145123> "Call
+// MarkVirtualMembersReferenced on an actual class definition":
+#if 0
+    struct Local;
+#endif
+    struct Local
+    {
+        virtual void f() {}
+    };
+    Local x;
+    (void)x;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
