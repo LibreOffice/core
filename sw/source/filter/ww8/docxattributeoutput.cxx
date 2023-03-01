@@ -3654,7 +3654,7 @@ bool DocxAttributeOutput::AnalyzeURL( const OUString& rUrl, const OUString& rTar
 {
     bool bBookMarkOnly = AttributeOutputBase::AnalyzeURL( rUrl, rTarget, pLinkURL, pMark );
 
-    if ( !pMark->isEmpty() )
+    if (!pMark->isEmpty() && (bBookMarkOnly || rTarget.isEmpty()))
     {
         OUString sURL = *pLinkURL;
 
@@ -3689,7 +3689,7 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
 
     m_hyperLinkAnchor = sMark;
 
-    if ( !sMark.isEmpty() && !bBookmarkOnly )
+    if (!sMark.isEmpty() && !bBookmarkOnly && rTarget.isEmpty())
     {
         m_rExport.OutputField( nullptr, ww::eHYPERLINK, sUrl );
     }
@@ -3705,6 +3705,12 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
                         sUrl, true ), RTL_TEXTENCODING_UTF8 );
 
             m_pHyperlinkAttrList->add(FSNS(XML_r, XML_id), sId);
+            if (!sMark.isEmpty())
+            {
+                sMark = sMark.replace(' ', '_');
+                m_pHyperlinkAttrList->add(FSNS(XML_w, XML_anchor),
+                                          OUStringToOString(sMark, RTL_TEXTENCODING_UTF8));
+            }
         }
         else
         {

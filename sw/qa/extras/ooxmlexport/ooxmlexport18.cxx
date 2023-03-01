@@ -579,6 +579,18 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingUnknownStyleInRedline)
                 "/w:document/w:body/w:p/w:pPr/w:pPrChange/w:pPr/w:pStyle[@w:val='UnknownStyle']");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf148026)
+{
+    loadAndReload("tdf148026.fodt");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - In <>, XPath '//w:hyperlink' number of nodes is incorrect
+    // i.e. a HYPERLINK field was exported instead of the hyperlink XML element.
+    assertXPath(pXmlDoc, "//w:hyperlink", "tgtFrame", "_self");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
