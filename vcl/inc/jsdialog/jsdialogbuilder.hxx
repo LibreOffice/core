@@ -278,6 +278,7 @@ public:
     virtual ~JSInstanceBuilder() override;
     virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OString& id) override;
     virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString& id) override;
+    virtual std::unique_ptr<weld::Assistant> weld_assistant(const OString& id) override;
     virtual std::unique_ptr<weld::Container> weld_container(const OString& id) override;
     virtual std::unique_ptr<weld::Label> weld_label(const OString& id) override;
     virtual std::unique_ptr<weld::Button> weld_button(const OString& id) override;
@@ -303,11 +304,10 @@ public:
     virtual std::unique_ptr<weld::Widget> weld_widget(const OString& id) override;
     virtual std::unique_ptr<weld::Image> weld_image(const OString& id) override;
 
-    static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent,
-                                                    VclMessageType eMessageType,
-                                                    VclButtonsType eButtonType,
-                                                    const OUString& rPrimaryMessage,
-                                                    const vcl::ILibreOfficeKitNotifier* pNotifier = nullptr);
+    static weld::MessageDialog*
+    CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
+                        VclButtonsType eButtonType, const OUString& rPrimaryMessage,
+                        const vcl::ILibreOfficeKitNotifier* pNotifier = nullptr);
 
     static void AddChildWidget(const std::string& nWindowId, const OString& id,
                                weld::Widget* pWidget);
@@ -479,6 +479,17 @@ public:
 
     virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) override;
     virtual void undo_collapse() override;
+    virtual void response(int response) override;
+};
+
+class JSAssistant final : public JSWidget<SalInstanceAssistant, vcl::RoadmapWizard>
+{
+public:
+    JSAssistant(JSDialogSender* pSender, vcl::RoadmapWizard* pDialog, SalInstanceBuilder* pBuilder,
+                bool bTakeOwnership);
+
+    virtual void set_current_page(int nPage) override;
+    virtual void set_current_page(const OString& rIdent) override;
     virtual void response(int response) override;
 };
 
