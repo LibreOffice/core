@@ -5369,16 +5369,16 @@ void SwHTMLParser::InsertHorzRule()
                 switch( eAdjust )
                 {
                 case SvxAdjust::Right:
-                    oLeft.emplace(o3tl::narrowing<sal_uInt16>(nDist), RES_MARGIN_RIGHT);
+                    oLeft.emplace(o3tl::narrowing<sal_uInt16>(nDist), RES_MARGIN_TEXTLEFT);
                     break;
                 case SvxAdjust::Left:
-                    oRight.emplace(o3tl::narrowing<sal_uInt16>(nDist));
+                    oRight.emplace(o3tl::narrowing<sal_uInt16>(nDist), RES_MARGIN_RIGHT);
                     break;
                 case SvxAdjust::Center:
                 default:
                     nDist /= 2;
-                    oLeft.emplace(o3tl::narrowing<sal_uInt16>(nDist));
-                    oRight.emplace(o3tl::narrowing<sal_uInt16>(nDist));
+                    oLeft.emplace(o3tl::narrowing<sal_uInt16>(nDist), RES_MARGIN_TEXTLEFT);
+                    oRight.emplace(o3tl::narrowing<sal_uInt16>(nDist), RES_MARGIN_RIGHT);
                     break;
                 }
 
