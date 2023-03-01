@@ -2008,7 +2008,7 @@ void VclMetafileProcessor2D::processPolyPolygonGradientPrimitive2D(
 
     if (!rGradientCandidate.getFillGradient().getColorSteps().empty())
     {
-        // MCGR: if we have COlorSteps, do not try to fallbacl to old VCL-Gradient,
+        // MCGR: if we have COlorSteps, do not try to fallback to old VCL-Gradient,
         // that will *not* be capable of representing this properly. Use the
         // correct decomposition instead
         process(rGradientCandidate);
