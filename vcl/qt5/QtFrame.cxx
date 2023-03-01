@@ -768,7 +768,11 @@ void QtFrame::ToTop(SalFrameToTop nFlags)
     if (isWindow() && !(nFlags & SalFrameToTop::GrabFocusOnly))
         pWidget->raise();
     if ((nFlags & SalFrameToTop::RestoreWhenMin) || (nFlags & SalFrameToTop::ForegroundTask))
+    {
+        if (nFlags & SalFrameToTop::RestoreWhenMin)
+            pWidget->setWindowState(pWidget->windowState() & ~Qt::WindowMinimized);
         pWidget->activateWindow();
+    }
     else if ((nFlags & SalFrameToTop::GrabFocus) || (nFlags & SalFrameToTop::GrabFocusOnly))
     {
         if (!(nFlags & SalFrameToTop::GrabFocusOnly))
