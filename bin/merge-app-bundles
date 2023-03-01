@@ -76,6 +76,8 @@ OUT=$(cd "$3" && /bin/pwd)
         elif test -f "$fname"; then
             case "$fname" in
                 *.so | \
+                *.jnilib | \
+                *.jnilib.* | \
                 *.dylib | \
                 *.dylib.* | \
                 */Frameworks/LibreOfficePython.framework/Versions/*/LibreOfficePython | \
