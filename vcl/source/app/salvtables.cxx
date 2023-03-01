@@ -1982,203 +1982,183 @@ weld::Container* SalInstanceMessageDialog::weld_message_area()
     return new SalInstanceContainer(m_xMessageDialog->get_message_area(), m_pBuilder, false);
 }
 
-namespace
+int SalInstanceAssistant::find_page(std::string_view rIdent) const
 {
-class SalInstanceAssistant : public SalInstanceDialog, public virtual weld::Assistant
+    for (size_t i = 0; i < m_aAddedPages.size(); ++i)
+    {
+        if (m_aAddedPages[i]->get_id().toUtf8() == rIdent)
+            return i;
+    }
+    return -1;
+}
+
+int SalInstanceAssistant::find_id(int nId) const
 {
-private:
-    VclPtr<vcl::RoadmapWizard> m_xWizard;
-    std::vector<std::unique_ptr<SalInstanceContainer>> m_aPages;
-    std::vector<VclPtr<TabPage>> m_aAddedPages;
-    std::vector<int> m_aIds;
-    std::vector<VclPtr<VclGrid>> m_aAddedGrids;
-    Idle m_aUpdateRoadmapIdle;
-
-    int find_page(std::string_view rIdent) const
+    for (size_t i = 0; i < m_aIds.size(); ++i)
     {
-        for (size_t i = 0; i < m_aAddedPages.size(); ++i)
+        if (nId == m_aIds[i])
+            return i;
+    }
+    return -1;
+}
+
+SalInstanceAssistant::SalInstanceAssistant(vcl::RoadmapWizard* pDialog,
+                                           SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : SalInstanceDialog(pDialog, pBuilder, bTakeOwnership)
+    , m_xWizard(pDialog)
+    , m_aUpdateRoadmapIdle("SalInstanceAssistant m_aUpdateRoadmapIdle")
+{
+    m_xWizard->SetItemSelectHdl(LINK(this, SalInstanceAssistant, OnRoadmapItemSelected));
+
+    m_aUpdateRoadmapIdle.SetInvokeHandler(LINK(this, SalInstanceAssistant, UpdateRoadmap_Hdl));
+    m_aUpdateRoadmapIdle.SetPriority(TaskPriority::HIGHEST);
+}
+
+int SalInstanceAssistant::get_current_page() const { return find_id(m_xWizard->GetCurLevel()); }
+
+int SalInstanceAssistant::get_n_pages() const { return m_aAddedPages.size(); }
+
+OString SalInstanceAssistant::get_page_ident(int nPage) const
+{
+    return m_aAddedPages[nPage]->get_id().toUtf8();
+}
+
+OString SalInstanceAssistant::get_current_page_ident() const
+{
+    return get_page_ident(get_current_page());
+}
+
+void SalInstanceAssistant::set_current_page(int nPage)
+{
+    disable_notify_events();
+
+    // take the first shown page as the size for all pages
+    if (m_xWizard->GetPageSizePixel().Width() == 0)
+    {
+        Size aFinalSize;
+        for (int i = 0, nPages = get_n_pages(); i < nPages; ++i)
         {
-            if (m_aAddedPages[i]->get_id().toUtf8() == rIdent)
-                return i;
+            TabPage* pPage = m_xWizard->GetPage(m_aIds[i]);
+            assert(pPage);
+            Size aPageSize(pPage->get_preferred_size());
+            if (aPageSize.Width() > aFinalSize.Width())
+                aFinalSize.setWidth(aPageSize.Width());
+            if (aPageSize.Height() > aFinalSize.Height())
+                aFinalSize.setHeight(aPageSize.Height());
         }
-        return -1;
+        m_xWizard->SetPageSizePixel(aFinalSize);
     }
 
-    int find_id(int nId) const
-    {
-        for (size_t i = 0; i < m_aIds.size(); ++i)
-        {
-            if (nId == m_aIds[i])
-                return i;
-        }
-        return -1;
-    }
+    (void)m_xWizard->ShowPage(m_aIds[nPage]);
+    enable_notify_events();
+}
 
-    DECL_LINK(OnRoadmapItemSelected, LinkParamNone*, void);
-    DECL_LINK(UpdateRoadmap_Hdl, Timer*, void);
+void SalInstanceAssistant::set_current_page(const OString& rIdent)
+{
+    int nIndex = find_page(rIdent);
+    if (nIndex == -1)
+        return;
+    set_current_page(nIndex);
+}
 
-public:
-    SalInstanceAssistant(vcl::RoadmapWizard* pDialog, SalInstanceBuilder* pBuilder,
-                         bool bTakeOwnership)
-        : SalInstanceDialog(pDialog, pBuilder, bTakeOwnership)
-        , m_xWizard(pDialog)
-        , m_aUpdateRoadmapIdle("SalInstanceAssistant m_aUpdateRoadmapIdle")
-    {
-        m_xWizard->SetItemSelectHdl(LINK(this, SalInstanceAssistant, OnRoadmapItemSelected));
+void SalInstanceAssistant::set_page_index(const OString& rIdent, int nNewIndex)
+{
+    int nOldIndex = find_page(rIdent);
 
-        m_aUpdateRoadmapIdle.SetInvokeHandler(LINK(this, SalInstanceAssistant, UpdateRoadmap_Hdl));
-        m_aUpdateRoadmapIdle.SetPriority(TaskPriority::HIGHEST);
-    }
+    if (nOldIndex == -1)
+        return;
 
-    virtual int get_current_page() const override { return find_id(m_xWizard->GetCurLevel()); }
+    if (nOldIndex == nNewIndex)
+        return;
 
-    virtual int get_n_pages() const override { return m_aAddedPages.size(); }
+    disable_notify_events();
 
-    virtual OString get_page_ident(int nPage) const override
-    {
-        return m_aAddedPages[nPage]->get_id().toUtf8();
-    }
+    auto entry = std::move(m_aAddedPages[nOldIndex]);
+    m_aAddedPages.erase(m_aAddedPages.begin() + nOldIndex);
+    m_aAddedPages.insert(m_aAddedPages.begin() + nNewIndex, std::move(entry));
 
-    virtual OString get_current_page_ident() const override
-    {
-        return get_page_ident(get_current_page());
-    }
+    int nId = m_aIds[nOldIndex];
+    m_aIds.erase(m_aIds.begin() + nOldIndex);
+    m_aIds.insert(m_aIds.begin() + nNewIndex, nId);
 
-    virtual void set_current_page(int nPage) override
+    m_aUpdateRoadmapIdle.Start();
+
+    enable_notify_events();
+}
+
+weld::Container* SalInstanceAssistant::append_page(const OString& rIdent)
+{
+    VclPtrInstance<TabPage> xPage(m_xWizard);
+    VclPtrInstance<VclGrid> xGrid(xPage);
+    xPage->set_id(OUString::fromUtf8(rIdent));
+    xPage->Show();
+    xGrid->set_hexpand(true);
+    xGrid->set_vexpand(true);
+    xGrid->Show();
+    m_xWizard->AddPage(xPage);
+    m_aIds.push_back(m_aAddedPages.size());
+    m_xWizard->SetPage(m_aIds.back(), xPage);
+    m_aAddedPages.push_back(xPage);
+    m_aAddedGrids.push_back(xGrid);
+
+    m_aUpdateRoadmapIdle.Start();
+
+    m_aPages.emplace_back(new SalInstanceContainer(xGrid, m_pBuilder, false));
+    return m_aPages.back().get();
+}
+
+OUString SalInstanceAssistant::get_page_title(const OString& rIdent) const
+{
+    int nIndex = find_page(rIdent);
+    if (nIndex == -1)
+        return OUString();
+    return m_aAddedPages[nIndex]->GetText();
+}
+
+void SalInstanceAssistant::set_page_title(const OString& rIdent, const OUString& rTitle)
+{
+    int nIndex = find_page(rIdent);
+    if (nIndex == -1)
+        return;
+    if (m_aAddedPages[nIndex]->GetText() != rTitle)
     {
         disable_notify_events();
-
-        // take the first shown page as the size for all pages
-        if (m_xWizard->GetPageSizePixel().Width() == 0)
-        {
-            Size aFinalSize;
-            for (int i = 0, nPages = get_n_pages(); i < nPages; ++i)
-            {
-                TabPage* pPage = m_xWizard->GetPage(m_aIds[i]);
-                assert(pPage);
-                Size aPageSize(pPage->get_preferred_size());
-                if (aPageSize.Width() > aFinalSize.Width())
-                    aFinalSize.setWidth(aPageSize.Width());
-                if (aPageSize.Height() > aFinalSize.Height())
-                    aFinalSize.setHeight(aPageSize.Height());
-            }
-            m_xWizard->SetPageSizePixel(aFinalSize);
-        }
-
-        (void)m_xWizard->ShowPage(m_aIds[nPage]);
+        m_aAddedPages[nIndex]->SetText(rTitle);
+        m_aUpdateRoadmapIdle.Start();
         enable_notify_events();
     }
+}
 
-    virtual void set_current_page(const OString& rIdent) override
+void SalInstanceAssistant::set_page_sensitive(const OString& rIdent, bool bSensitive)
+{
+    int nIndex = find_page(rIdent);
+    if (nIndex == -1)
+        return;
+    if (m_aAddedPages[nIndex]->IsEnabled() != bSensitive)
     {
-        int nIndex = find_page(rIdent);
-        if (nIndex == -1)
-            return;
-        set_current_page(nIndex);
-    }
-
-    virtual void set_page_index(const OString& rIdent, int nNewIndex) override
-    {
-        int nOldIndex = find_page(rIdent);
-
-        if (nOldIndex == -1)
-            return;
-
-        if (nOldIndex == nNewIndex)
-            return;
-
         disable_notify_events();
-
-        auto entry = std::move(m_aAddedPages[nOldIndex]);
-        m_aAddedPages.erase(m_aAddedPages.begin() + nOldIndex);
-        m_aAddedPages.insert(m_aAddedPages.begin() + nNewIndex, std::move(entry));
-
-        int nId = m_aIds[nOldIndex];
-        m_aIds.erase(m_aIds.begin() + nOldIndex);
-        m_aIds.insert(m_aIds.begin() + nNewIndex, nId);
-
+        m_aAddedPages[nIndex]->Enable(bSensitive);
         m_aUpdateRoadmapIdle.Start();
-
         enable_notify_events();
     }
+}
 
-    virtual weld::Container* append_page(const OString& rIdent) override
-    {
-        VclPtrInstance<TabPage> xPage(m_xWizard);
-        VclPtrInstance<VclGrid> xGrid(xPage);
-        xPage->set_id(OUString::fromUtf8(rIdent));
-        xPage->Show();
-        xGrid->set_hexpand(true);
-        xGrid->set_vexpand(true);
-        xGrid->Show();
-        m_xWizard->AddPage(xPage);
-        m_aIds.push_back(m_aAddedPages.size());
-        m_xWizard->SetPage(m_aIds.back(), xPage);
-        m_aAddedPages.push_back(xPage);
-        m_aAddedGrids.push_back(xGrid);
+void SalInstanceAssistant::set_page_side_help_id(const OString& rHelpId)
+{
+    m_xWizard->SetRoadmapHelpId(rHelpId);
+}
 
-        m_aUpdateRoadmapIdle.Start();
+void SalInstanceAssistant::set_page_side_image(const OUString& rImage)
+{
+    m_xWizard->SetRoadmapBitmap(createImage(rImage).GetBitmapEx());
+}
 
-        m_aPages.emplace_back(new SalInstanceContainer(xGrid, m_pBuilder, false));
-        return m_aPages.back().get();
-    }
-
-    virtual OUString get_page_title(const OString& rIdent) const override
-    {
-        int nIndex = find_page(rIdent);
-        if (nIndex == -1)
-            return OUString();
-        return m_aAddedPages[nIndex]->GetText();
-    }
-
-    virtual void set_page_title(const OString& rIdent, const OUString& rTitle) override
-    {
-        int nIndex = find_page(rIdent);
-        if (nIndex == -1)
-            return;
-        if (m_aAddedPages[nIndex]->GetText() != rTitle)
-        {
-            disable_notify_events();
-            m_aAddedPages[nIndex]->SetText(rTitle);
-            m_aUpdateRoadmapIdle.Start();
-            enable_notify_events();
-        }
-    }
-
-    virtual void set_page_sensitive(const OString& rIdent, bool bSensitive) override
-    {
-        int nIndex = find_page(rIdent);
-        if (nIndex == -1)
-            return;
-        if (m_aAddedPages[nIndex]->IsEnabled() != bSensitive)
-        {
-            disable_notify_events();
-            m_aAddedPages[nIndex]->Enable(bSensitive);
-            m_aUpdateRoadmapIdle.Start();
-            enable_notify_events();
-        }
-    }
-
-    virtual void set_page_side_help_id(const OString& rHelpId) override
-    {
-        m_xWizard->SetRoadmapHelpId(rHelpId);
-    }
-
-    virtual void set_page_side_image(const OUString& rImage) override
-    {
-        m_xWizard->SetRoadmapBitmap(createImage(rImage).GetBitmapEx());
-    }
-
-    weld::Button* weld_widget_for_response(int nResponse) override;
-
-    virtual ~SalInstanceAssistant() override
-    {
-        for (auto& rGrid : m_aAddedGrids)
-            rGrid.disposeAndClear();
-        for (auto& rPage : m_aAddedPages)
-            rPage.disposeAndClear();
-    }
-};
+SalInstanceAssistant::~SalInstanceAssistant()
+{
+    for (auto& rGrid : m_aAddedGrids)
+        rGrid.disposeAndClear();
+    for (auto& rPage : m_aAddedPages)
+        rPage.disposeAndClear();
 }
 
 IMPL_LINK_NOARG(SalInstanceAssistant, OnRoadmapItemSelected, LinkParamNone*, void)

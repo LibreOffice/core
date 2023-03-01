@@ -30,6 +30,11 @@
 #include "listbox.hxx"
 #include "messagedialog.hxx"
 
+namespace vcl
+{
+class RoadmapWizard;
+};
+
 class SalInstanceBuilder : public weld::Builder
 {
 protected:
@@ -539,6 +544,43 @@ public:
     virtual void set_default_response(int nResponse) override;
 
     virtual weld::Container* weld_content_area() override;
+};
+
+class SalInstanceAssistant : public SalInstanceDialog, public virtual weld::Assistant
+{
+private:
+    VclPtr<vcl::RoadmapWizard> m_xWizard;
+    std::vector<std::unique_ptr<SalInstanceContainer>> m_aPages;
+    std::vector<VclPtr<TabPage>> m_aAddedPages;
+    std::vector<int> m_aIds;
+    std::vector<VclPtr<VclGrid>> m_aAddedGrids;
+    Idle m_aUpdateRoadmapIdle;
+
+    int find_page(std::string_view rIdent) const;
+    int find_id(int nId) const;
+
+    DECL_LINK(OnRoadmapItemSelected, LinkParamNone*, void);
+    DECL_LINK(UpdateRoadmap_Hdl, Timer*, void);
+
+public:
+    SalInstanceAssistant(vcl::RoadmapWizard* pDialog, SalInstanceBuilder* pBuilder,
+                         bool bTakeOwnership);
+    virtual int get_current_page() const override;
+    virtual int get_n_pages() const override;
+    virtual OString get_page_ident(int nPage) const override;
+    virtual OString get_current_page_ident() const override;
+    virtual void set_current_page(int nPage) override;
+    virtual void set_current_page(const OString& rIdent) override;
+    virtual void set_page_index(const OString& rIdent, int nNewIndex) override;
+    virtual weld::Container* append_page(const OString& rIdent) override;
+    virtual OUString get_page_title(const OString& rIdent) const override;
+    virtual void set_page_title(const OString& rIdent, const OUString& rTitle) override;
+    virtual void set_page_sensitive(const OString& rIdent, bool bSensitive) override;
+    virtual void set_page_side_help_id(const OString& rHelpId) override;
+    virtual void set_page_side_image(const OUString& rImage) override;
+    weld::Button* weld_widget_for_response(int nResponse) override;
+
+    virtual ~SalInstanceAssistant() override;
 };
 
 class WeldTextFilter final : public TextFilter
