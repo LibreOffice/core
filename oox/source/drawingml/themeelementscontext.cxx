@@ -106,28 +106,33 @@ namespace {
 class LineStyleListContext : public ContextHandler2
 {
 public:
-    LineStyleListContext( ContextHandler2Helper const & rParent, LineStyleList& rLineStyleList );
+    LineStyleListContext(ContextHandler2Helper const & rParent, LineStyleList& rLineStyleList, model::FormatScheme& rFormatScheme);
     virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 
 private:
+    model::FormatScheme& mrFormatScheme;
     LineStyleList& mrLineStyleList;
 };
 
 }
 
-LineStyleListContext::LineStyleListContext( ContextHandler2Helper const & rParent, LineStyleList& rLineStyleList ) :
-    ContextHandler2( rParent ),
-    mrLineStyleList( rLineStyleList )
+LineStyleListContext::LineStyleListContext( ContextHandler2Helper const & rParent, LineStyleList& rLineStyleList, model::FormatScheme& rFormatScheme)
+    : ContextHandler2(rParent)
+    , mrFormatScheme(rFormatScheme)
+    , mrLineStyleList(rLineStyleList)
 {
 }
 
 ContextHandlerRef LineStyleListContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    switch( nElement )
+    switch (nElement)
     {
-        case A_TOKEN( ln ):
+        case A_TOKEN(ln):
+        {
             mrLineStyleList.push_back( std::make_shared<LineProperties>( ) );
-            return new LinePropertiesContext( *this, rAttribs, *mrLineStyleList.back() );
+            model::LineStyle* pLineStyle = mrFormatScheme.addLineStyle();
+            return new LinePropertiesContext(*this, rAttribs, *mrLineStyleList.back(), pLineStyle);
+        }
     }
     return nullptr;
 }
@@ -335,9 +340,9 @@ ContextHandlerRef ThemeElementsContext::onCreateContext(sal_Int32 nElement, cons
         }
 
         case A_TOKEN( fillStyleLst ):   // CT_FillStyleList
-            return new FillStyleListContext( *this, mrOoxTheme.getFillStyleList(), mrTheme.getFormatScheme());
+            return new FillStyleListContext(*this, mrOoxTheme.getFillStyleList(), mrTheme.getFormatScheme());
         case A_TOKEN( lnStyleLst ):    // CT_LineStyleList
-            return new LineStyleListContext( *this, mrOoxTheme.getLineStyleList() );
+            return new LineStyleListContext(*this, mrOoxTheme.getLineStyleList(), mrTheme.getFormatScheme());
         case A_TOKEN( effectStyleLst ): // CT_EffectStyleList
             return new EffectStyleListContext( *this, mrOoxTheme.getEffectStyleList() );
         case A_TOKEN( bgFillStyleLst ): // CT_BackgroundFillStyleList

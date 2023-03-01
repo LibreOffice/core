@@ -344,12 +344,125 @@ public:
     }
 };
 
-// Format Scheme
-
 class DOCMODEL_DLLPUBLIC FillStyle
 {
 public:
     std::shared_ptr<Fill> mpFill;
+};
+
+enum class CapType
+{
+    Unset,
+    Flat,
+    Round,
+    Square
+};
+
+enum class PenAlignmentType
+{
+    Unset,
+    Center,
+    Inset
+};
+
+enum class CompoundLineType
+{
+    Unset,
+    Single,
+    Double,
+    ThickThin_Double,
+    ThinThick_Double,
+    Triple,
+};
+
+enum class PresetDashType
+{
+    Unset,
+    Dash,
+    DashDot,
+    Dot,
+    LargeDash,
+    LargeDashDot,
+    LargeDashDotDot,
+    Solid,
+    SystemDash,
+    SystemDashDot,
+    SystemDashDotDot,
+    SystemDot,
+};
+
+enum class LineJoinType
+{
+    Unset,
+    Round,
+    Bevel,
+    Miter,
+};
+
+struct DOCMODEL_DLLPUBLIC LineJoin
+{
+    LineJoinType meType = LineJoinType::Unset;
+    sal_Int32 mnMiterLimit = 0; // Percentage
+};
+
+enum class LineEndType
+{
+    None,
+    Triangle,
+    Stealth,
+    Diamond,
+    Oval,
+    Arrow
+};
+
+enum class LineEndWidth
+{
+    Unset,
+    Small,
+    Medium,
+    Large
+};
+
+enum class LineEndLength
+{
+    Unset,
+    Small,
+    Medium,
+    Large
+};
+
+struct DOCMODEL_DLLPUBLIC LineEnd
+{
+    LineEndType meType;
+    LineEndWidth meWidth;
+    LineEndLength meLength;
+};
+
+struct DOCMODEL_DLLPUBLIC DashStop
+{
+    sal_Int32 mnDashLength = 0;
+    sal_Int32 mnStopLength = 0;
+};
+
+struct DOCMODEL_DLLPUBLIC LineDash
+{
+    PresetDashType mePresetType = PresetDashType::Unset;
+    std::vector<DashStop> maCustomList;
+};
+
+class DOCMODEL_DLLPUBLIC LineStyle
+{
+public:
+    sal_Int32 mnWidth;
+    CapType meCapType;
+    PenAlignmentType mePenAlignment;
+    CompoundLineType meCompoundLineType;
+    LineDash maLineDash;
+    LineJoin maLineJoin;
+    LineEnd maHeadEnd;
+    LineEnd maTailEnd;
+
+    FillStyle maLineFillStyle;
 };
 
 class DOCMODEL_DLLPUBLIC FormatScheme
@@ -357,6 +470,7 @@ class DOCMODEL_DLLPUBLIC FormatScheme
 private:
     OUString maName;
     std::vector<FillStyle> maFillStyleList;
+    std::vector<LineStyle> maLineStyleList;
     std::vector<FillStyle> maBackgroundFillStyleList;
 
 public:
@@ -368,6 +482,16 @@ public:
     }
 
     const OUString& getName() const { return maName; }
+
+    std::vector<LineStyle> const& getLineStyleList() const { return maLineStyleList; }
+
+    LineStyle* addLineStyle()
+    {
+        if (maLineStyleList.size() > 3)
+            return nullptr;
+        auto& rLineStyle = maLineStyleList.emplace_back();
+        return &rLineStyle;
+    }
 
     std::vector<FillStyle> const& getFillStyleList() const { return maFillStyleList; }
 
