@@ -102,10 +102,12 @@ SwHistorySetFormat::SwHistorySetFormat( const SfxPoolItem* pFormatHt, SwNodeOffs
                     const SwTableNode* pTableNode = pNd->FindTableNode();
                     if (pTableNode)
                     {
-                        SwTableFormulaUpdate aMsgHint( &pTableNode->GetTable() );
-                        aMsgHint.m_eFlags = TBL_BOXNAME;
-                        rNew.ChgDefinedIn( rOld.GetDefinedIn() );
-                        rNew.ChangeState( &aMsgHint );
+                        auto pCpyTable = const_cast<SwTable*>(&pTableNode->GetTable());
+                        pCpyTable->SwitchFormulasToExternalRepresentation();
+                        rNew.ChgDefinedIn(rOld.GetDefinedIn());
+                        SwTableFormulaUpdate aMsgHint(pCpyTable);
+                        aMsgHint.m_eFlags = TBL_RELBOXNAME;
+                        rNew.ChangeState(&aMsgHint);
                     }
                 }
             }
@@ -876,13 +878,14 @@ SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
                             {
                                 const SwTableNode* pTableNode
                                     = pNd->FindTableNode();
-                                if (pTableNode)
+                                if(pTableNode)
                                 {
-                                    SwTableFormulaUpdate aMsgHint(
-                                        &pTableNode->GetTable() );
+                                    auto pCpyTable = const_cast<SwTable*>(&pTableNode->GetTable());
+                                    pCpyTable->SwitchFormulasToExternalRepresentation();
+                                    rNew.ChgDefinedIn(rOld.GetDefinedIn());
+                                    SwTableFormulaUpdate aMsgHint(pCpyTable);
                                     aMsgHint.m_eFlags = TBL_BOXNAME;
-                                    rNew.ChgDefinedIn( rOld.GetDefinedIn() );
-                                    rNew.ChangeState( &aMsgHint );
+                                    rNew.ChangeState(&aMsgHint);
                                 }
                             }
                         }

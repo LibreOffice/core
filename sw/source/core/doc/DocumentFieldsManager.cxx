@@ -632,23 +632,15 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                     else
                         pField->ChgValid( false );
                     break;
-                case TBL_BOXNAME:
-                    // is this the wanted table?
-                    if( &pTableNd->GetTable() == pUpdateField->m_pTable )
-                        // to the external representation
-                        pField->PtrToBoxNm( pUpdateField->m_pTable );
-                    break;
                 case TBL_BOXPTR:
                     // to the internal representation
                     // JP 17.06.96: internal representation on all formulas
                     //              (reference to other table!!!)
                     pField->BoxNmToPtr( &pTableNd->GetTable() );
                     break;
+                case TBL_BOXNAME:
                 case TBL_RELBOXNAME:
-                    // is this the wanted table?
-                    if( &pTableNd->GetTable() == pUpdateField->m_pTable )
-                        // to the relative representation
-                        pField->ToRelBoxNm( pUpdateField->m_pTable );
+                    assert(false); // use SwTable::SwitchTo...
                     break;
                 default:
                     break;

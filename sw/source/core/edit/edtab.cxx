@@ -327,10 +327,7 @@ bool SwEditShell::GetTableBoxFormulaAttrs( SfxItemSet& rSet ) const
             // Convert formulae into external presentation
             const SwTable& rTable = pSelBox->GetSttNd()->FindTableNode()->GetTable();
 
-            SwTableFormulaUpdate aTableUpdate( &rTable );
-            aTableUpdate.m_eFlags = TBL_BOXNAME;
-            GetDoc()->getIDocumentFieldsAccess().UpdateTableFields( &aTableUpdate );
-
+            const_cast<SwTable*>(&rTable)->SwitchFormulasToExternalRepresentation();
             rSet.Put( pTableFormat->GetAttrSet() );
         }
         else

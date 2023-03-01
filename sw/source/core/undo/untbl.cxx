@@ -916,12 +916,13 @@ sal_uInt16 SaveTable::AddFormat( SwFrameFormat* pFormat, bool bIsLine )
             pSet->ClearItem( RES_BOXATR_VALUE );
             if (m_pSwTable && m_bSaveFormula)
             {
-                SwTableFormulaUpdate aMsgHint(m_pSwTable);
-                aMsgHint.m_eFlags = TBL_BOXNAME;
+                const_cast<SwTable*>(m_pSwTable)->SwitchFormulasToExternalRepresentation();
                 SwTableBoxFormula* pFormulaItem = const_cast<SwTableBoxFormula*>(pItem);
-                pFormulaItem->ChgDefinedIn( pFormat );
-                pFormulaItem->ChangeState( &aMsgHint );
-                pFormulaItem->ChgDefinedIn( nullptr );
+                pFormulaItem->ChgDefinedIn(pFormat);
+                SwTableFormulaUpdate aMsgHint(m_pSwTable);
+                aMsgHint.m_eFlags = TBL_RELBOXNAME;
+                pFormulaItem->ChangeState(&aMsgHint);
+                pFormulaItem->ChgDefinedIn(nullptr);
             }
         }
         nRet = m_aSets.size();

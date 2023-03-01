@@ -2029,12 +2029,7 @@ void SwTable::CopyHeadlineIntoTable( SwTableNode& rTableNd )
     if( aFndBox.GetLines().empty() )
         return;
 
-    {
-        // Convert Table formulas to their relative representation
-        SwTableFormulaUpdate aMsgHint( this );
-        aMsgHint.m_eFlags = TBL_RELBOXNAME;
-        GetFrameFormat()->GetDoc()->getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
-    }
+    SwitchFormulasToRelativeRepresentation();
 
     CpyTabFrames aCpyFormat;
     CpyPara aPara( &rTableNd, 1, aCpyFormat );
@@ -2117,12 +2112,7 @@ bool SwTable::MakeCopy( SwDoc& rInsDoc, const SwPosition& rPos,
     // Destroy the already created Frames
     pTableNd->DelFrames();
 
-    {
-        // Convert the Table formulas to their relative representation
-        SwTableFormulaUpdate aMsgHint( this );
-        aMsgHint.m_eFlags = TBL_RELBOXNAME;
-        pSrcDoc->getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
-    }
+    const_cast<SwTable*>(this)->SwitchFormulasToRelativeRepresentation();
 
     SwTableNumFormatMerge aTNFM(*pSrcDoc, rInsDoc);
 

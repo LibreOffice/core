@@ -1450,9 +1450,7 @@ bool SwDoc::TableToText( const SwTableNode* pTableNd, sal_Unicode cCh )
         pUndo.reset(new SwUndoTableToText( pTableNd->GetTable(), cCh ));
     }
 
-    SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
-    aMsgHint.m_eFlags = TBL_BOXNAME;
-    getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
+    const_cast<SwTable*>(&pTableNd->GetTable())->SwitchFormulasToExternalRepresentation();
 
     bool bRet = GetNodes().TableToText( aRg, cCh, pUndo.get() );
     if( pUndoRg )

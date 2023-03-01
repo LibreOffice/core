@@ -174,6 +174,8 @@ private:
     void NewSetTabCols( Parm &rP, const SwTabCols &rNew, const SwTabCols &rOld,
                         const SwTableBox *pStart, bool bCurRowOnly );
     void ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox);
+    // Only used for TBL_BOXNAME and TBL_RELBOXNAME for now
+    void UpdateFields(TableFormulaUpdateFlags eFlags);
 
 public:
 
@@ -357,6 +359,11 @@ public:
     // it doesn't contain box content (except single empty nested tables of the boxes
     // which could remain after deletion of text content of the selected table)
     bool IsEmpty() const;
+    void SwitchFormulasToExternalRepresentation()
+        { UpdateFields(TBL_BOXNAME); };
+    void SwitchFormulasToRelativeRepresentation()
+        { UpdateFields(TBL_RELBOXNAME); };
+
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };

@@ -61,6 +61,7 @@
 #include <calbck.hxx>
 #include <o3tl/string_view.hxx>
 #include <svl/numformat.hxx>
+#include <txtfld.hxx>
 
 #ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();
@@ -1610,6 +1611,52 @@ bool SwTable::IsDeleted() const
             return false;
     }
     return true;
+}
+
+void SwTable::UpdateFields(TableFormulaUpdateFlags eFlags)
+{
+    auto pDoc = GetFrameFormat()->GetDoc();
+    auto pFieldType = pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Table, OUString(), false);
+    if(!pFieldType)
+        return;
+    std::vector<SwFormatField*> vFields;
+    pFieldType->GatherFields(vFields);
+    for(auto pFormatField : vFields)
+    {
+        SwTableField* pField = static_cast<SwTableField*>(pFormatField->GetField());
+        // table where this field is located
+        const SwTableNode* pTableNd;
+        const SwTextNode& rTextNd = pFormatField->GetTextField()->GetTextNode();
+        pTableNd = rTextNd.FindTableNode();
+        if(pTableNd == nullptr || &pTableNd->GetTable() != this)
+            continue;
+
+        switch(eFlags)
+        {
+            case TBL_BOXNAME:
+                // to the external representation
+                pField->PtrToBoxNm(this);
+                break;
+            case TBL_RELBOXNAME:
+                // to the relative representation
+                pField->ToRelBoxNm(this);
+                break;
+            default:
+                assert(false); // Only TBL_BOXNAME and TBL_RELBOXNAME supported
+                break;
+        }
+    }
+    // process all table box formulas
+    SwTableFormulaUpdate aHint(this);
+    aHint.m_eFlags = eFlags;
+    for(const SfxPoolItem* pItem : pDoc->GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA))
+    {
+        auto pBoxFormula = dynamic_cast<const SwTableBoxFormula*>(pItem);
+        if(pBoxFormula && pBoxFormula->GetDefinedIn())
+        {
+            const_cast<SwTableBoxFormula*>(pBoxFormula)->ChangeState(&aHint);
+        }
+    }
 }
 
 void SwTable::dumpAsXml(xmlTextWriterPtr pWriter) const

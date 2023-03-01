@@ -506,10 +506,7 @@ bool SwDoc::SortTable(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
             nStart = 0;
     }
 
-    // Switch to relative Formulas
-    SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
-    aMsgHint.m_eFlags = TBL_RELBOXNAME;
-    getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
+    pTableNd->GetTable().SwitchFormulasToRelativeRepresentation();
 
     // Table as a flat array structure
     FlatFndBox aFlatBox(this, aFndBox);
