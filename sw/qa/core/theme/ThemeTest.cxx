@@ -85,6 +85,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
 
     model::FormatScheme const& rFormatScheme = pTheme->getFormatScheme();
     CPPUNIT_ASSERT_EQUAL(size_t(3), rFormatScheme.getFillStyleList().size());
+    CPPUNIT_ASSERT_EQUAL(size_t(3), rFormatScheme.getLineStyleList().size());
     CPPUNIT_ASSERT_EQUAL(size_t(3), rFormatScheme.getBackgroundFillStyleList().size());
 
     // Fill style 1
@@ -256,6 +257,63 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(7800), rTrasnsformation.mnValue);
             }
         }
+    }
+
+    // Line style 1
+    {
+        model::LineStyle const& rLineStyle = rFormatScheme.getLineStyleList().at(0);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6350), rLineStyle.mnWidth);
+        CPPUNIT_ASSERT_EQUAL(model::CapType::Flat, rLineStyle.meCapType);
+        CPPUNIT_ASSERT_EQUAL(model::PenAlignmentType::Center, rLineStyle.mePenAlignment);
+        CPPUNIT_ASSERT_EQUAL(model::CompoundLineType::Single, rLineStyle.meCompoundLineType);
+        CPPUNIT_ASSERT_EQUAL(model::PresetDashType::Solid, rLineStyle.maLineDash.mePresetType);
+        CPPUNIT_ASSERT_EQUAL(model::LineJoinType::Miter, rLineStyle.maLineJoin.meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(800000), rLineStyle.maLineJoin.mnMiterLimit);
+
+        model::FillStyle const& rFillStyle = rLineStyle.maLineFillStyle;
+        CPPUNIT_ASSERT(rFillStyle.mpFill);
+        CPPUNIT_ASSERT_EQUAL(model::FillType::Solid, rFillStyle.mpFill->meType);
+        auto* pSolidFill = static_cast<model::SolidFill*>(rFillStyle.mpFill.get());
+        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, pSolidFill->maColorDefinition.meType);
+        CPPUNIT_ASSERT_EQUAL(size_t(0), pSolidFill->maColorDefinition.maTransformations.size());
+    }
+
+    // Line style 2
+    {
+        model::LineStyle const& rLineStyle = rFormatScheme.getLineStyleList().at(1);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(12700), rLineStyle.mnWidth);
+        CPPUNIT_ASSERT_EQUAL(model::CapType::Flat, rLineStyle.meCapType);
+        CPPUNIT_ASSERT_EQUAL(model::PenAlignmentType::Center, rLineStyle.mePenAlignment);
+        CPPUNIT_ASSERT_EQUAL(model::CompoundLineType::Single, rLineStyle.meCompoundLineType);
+        CPPUNIT_ASSERT_EQUAL(model::PresetDashType::Solid, rLineStyle.maLineDash.mePresetType);
+        CPPUNIT_ASSERT_EQUAL(model::LineJoinType::Miter, rLineStyle.maLineJoin.meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(800000), rLineStyle.maLineJoin.mnMiterLimit);
+
+        model::FillStyle const& rFillStyle = rLineStyle.maLineFillStyle;
+        CPPUNIT_ASSERT(rFillStyle.mpFill);
+        CPPUNIT_ASSERT_EQUAL(model::FillType::Solid, rFillStyle.mpFill->meType);
+        auto* pSolidFill = static_cast<model::SolidFill*>(rFillStyle.mpFill.get());
+        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, pSolidFill->maColorDefinition.meType);
+        CPPUNIT_ASSERT_EQUAL(size_t(0), pSolidFill->maColorDefinition.maTransformations.size());
+    }
+
+    // Line style 3
+    {
+        model::LineStyle const& rLineStyle = rFormatScheme.getLineStyleList().at(2);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(19050), rLineStyle.mnWidth);
+        CPPUNIT_ASSERT_EQUAL(model::CapType::Flat, rLineStyle.meCapType);
+        CPPUNIT_ASSERT_EQUAL(model::PenAlignmentType::Center, rLineStyle.mePenAlignment);
+        CPPUNIT_ASSERT_EQUAL(model::CompoundLineType::Single, rLineStyle.meCompoundLineType);
+        CPPUNIT_ASSERT_EQUAL(model::PresetDashType::Solid, rLineStyle.maLineDash.mePresetType);
+        CPPUNIT_ASSERT_EQUAL(model::LineJoinType::Miter, rLineStyle.maLineJoin.meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(800000), rLineStyle.maLineJoin.mnMiterLimit);
+
+        model::FillStyle const& rFillStyle = rLineStyle.maLineFillStyle;
+        CPPUNIT_ASSERT(rFillStyle.mpFill);
+        CPPUNIT_ASSERT_EQUAL(model::FillType::Solid, rFillStyle.mpFill->meType);
+        auto* pSolidFill = static_cast<model::SolidFill*>(rFillStyle.mpFill.get());
+        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, pSolidFill->maColorDefinition.meType);
+        CPPUNIT_ASSERT_EQUAL(size_t(0), pSolidFill->maColorDefinition.maTransformations.size());
     }
 }
 

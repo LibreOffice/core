@@ -22,23 +22,25 @@
 
 #include <oox/core/contexthandler2.hxx>
 
-namespace oox::drawingml {
+namespace model { class LineStyle; }
 
+namespace oox::drawingml
+{
 
 struct LineProperties;
 
 class LinePropertiesContext final : public ::oox::core::ContextHandler2
 {
 public:
-    LinePropertiesContext( ::oox::core::ContextHandler2Helper const & rParent,
-            const ::oox::AttributeList& rAttributes,
-            LineProperties& rLineProperties ) noexcept;
+    LinePropertiesContext(::oox::core::ContextHandler2Helper const & rParent, const ::oox::AttributeList& rAttributes,
+            LineProperties& rLineProperties, model::LineStyle* pLineStyle = nullptr) noexcept;
     virtual ~LinePropertiesContext() override;
 
     virtual ::oox::core::ContextHandlerRef
         onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 private:
+    model::LineStyle* mpLineStyle;
     LineProperties& mrLineProperties;
 };
 
