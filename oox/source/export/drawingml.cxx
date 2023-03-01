@@ -1970,7 +1970,7 @@ void DrawingML::WriteXGraphicCustomPosition(uno::Reference<beans::XPropertySet> 
     }
 
     sal_Int32 nL = 0, nT = 0, nR = 0, nB = 0;
-    if (GetProperty(rXPropSet, "FillBitmapRectanglePoint"))
+    if (GetProperty(rXPropSet, "FillBitmapRectanglePoint") && rSize.Width != 0 && rSize.Height != 0)
     {
         sal_Int32 nWidth = (1 - (nSizeX / rSize.Width)) * 100000;
         sal_Int32 nHeight = (1 - (nSizeY / rSize.Height)) * 100000;
