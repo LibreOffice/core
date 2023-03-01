@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# Exit on errors
+set -e
+
+# Use of unset variable is an error
+set -u
+
+# If any part of a pipeline of commands fails, the whole pipeline fails
+set -o pipefail
+
+if [ `uname` != Darwin ]; then
+    echo This is for macOS only >&2
+    exit 1
+fi
+
+if [ $# != 1 ]; then
+    echo Usage: $0 signed-app-bundle
+    exit 1
+fi
+
+if [ ! -d "$1" ]; then
+    echo No such directory: $1 >&2
+    exit 1
+fi
+
+if [[ "$1" != *.app ]]; then
+    echo "signed-app-bundle argument $1 does not end with .app" >&2
+    exit 1
+fi
+
+IN=$(cd "$1" && /bin/pwd)
+INAPP=$(basename "$IN")
+INDIR=$(dirname "$IN")
+OUTVOLUME=$(basename "$IN" .app)
+OUTTMPDIR=$(dirname "$IN")/"$OUTVOLUME"
+OUTFILE="$OUTTMPDIR".dmg
+SRCDIR=$(cd `dirname "$0"`/.. && /bin/pwd)
+
+# Create $OUTTMPDIR directory in the same directory as the output .dmg and
+# assemble assets
+
+if [ -f "$OUTFILE" ]; then
+    echo The file $OUTFILE exists already >&2
+    exit 1
+fi
+
+if [ -d "$OUTFILE" ]; then
+    echo $OUTFILE exists and is a directory >&2
+    exit 1
+fi
+
+if [ -d "$OUTTMPDIR" ]; then
+    echo The directory $OUTTMPDIR exists already >&2
+    exit 1
+fi
+
+if [ -f "$OUTTMPDIR" ]; then
+    echo $OUTTMPDIR exists and is a file >&2
+    exit 1
+fi
+
+mkdir "$OUTTMPDIR"
+mkdir "$OUTTMPDIR"/.background
+tar cf - "$INAPP" -C "$INDIR" | tar xvpf - -C "$OUTTMPDIR"
+ln -s /Applications "$OUTTMPDIR"/Applications
+cp "$SRCDIR"/setup_native/source/packinfo/DS_Store "$OUTTMPDIR"/.DS_Store
+cp "$SRCDIR"/setup_native/source/packinfo/VolumeIcon.icns "$OUTTMPDIR"/.VolumeIcon.icns
+cp "$SRCDIR"/setup_native/source/packinfo/osxdndinstall.png "$OUTTMPDIR"/.background/background.png
+
+# Create and mount empty .dmg
+
+# Copied and adapted to bash from solenv/bin/modules/installer/simplepackage.pm
+# tdf#151341 Use lzfse compression instead of bzip2
+hdiutil create -srcfolder "$OUTTMPDIR" "$OUTFILE" -ov -fs HFS+ -volname "$OUTVOLUME" -format ULFO
