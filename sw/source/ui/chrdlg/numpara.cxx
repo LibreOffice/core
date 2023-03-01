@@ -29,6 +29,7 @@
 #include <fmtline.hxx>
 #include <numpara.hxx>
 
+#include <officecfg/Office/Common.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/viewsh.hxx>
@@ -84,6 +85,11 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(weld::Container* pPage, weld::Dialo
     m_xRestartParaCountCB->connect_toggled(LINK(this, SwParagraphNumTabPage, LineCountHdl_Impl));
     m_xNumberStyleLB->connect_changed(LINK(this, SwParagraphNumTabPage, EditNumStyleSelectHdl_Impl));
     m_xEditNumStyleBtn->connect_clicked(LINK(this, SwParagraphNumTabPage, EditNumStyleHdl_Impl));
+
+    if (officecfg::Office::Common::Misc::ExperimentalMode::get())
+        m_xListLvBX->show();
+    else
+        m_xListLvBX->hide();
 }
 
 SwParagraphNumTabPage::~SwParagraphNumTabPage()
