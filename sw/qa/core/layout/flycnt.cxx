@@ -22,6 +22,12 @@
 #include <sortedobjs.hxx>
 #include <tabfrm.hxx>
 #include <txtfrm.hxx>
+#include <fmtfsize.hxx>
+#include <docsh.hxx>
+#include <wrtsh.hxx>
+#include <itabenum.hxx>
+#include <frmmgr.hxx>
+#include <frameformats.hxx>
 
 namespace
 {
@@ -262,6 +268,49 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyRow)
     // - Actual  : -1440
     // i.e. the 2nd page's fly had a wrong position.
     CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(0), nPage2FlyTop - nPage2AnchorTop);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyEnable)
+{
+    // Given a document with a table in a textframe:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = getSwDoc();
+    SwPageDesc aStandard(pDoc->GetPageDesc(0));
+    SwFormatFrameSize aPageSize(aStandard.GetMaster().GetFrameSize());
+    // 5cm for the page height, 2cm are the top and bottom margins, so 1cm remains for the body
+    // frame:
+    aPageSize.SetHeight(2834);
+    aStandard.GetMaster().SetFormatAttr(aPageSize);
+    pDoc->ChgPageDesc(0, aStandard);
+    // Insert a table:
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/1);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+    pWrtShell->SelAll();
+    // Wrap it in a text frame:
+    SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
+    pWrtShell->StartAllAction();
+    aMgr.InsertFlyFrame(RndStdIds::FLY_AT_PARA, aMgr.GetPos(), aMgr.GetSize());
+    pWrtShell->EndAllAction();
+
+    // When allowing the text frame to split:
+    pWrtShell->StartAllAction();
+    SwFrameFormats& rFlys = *pDoc->GetSpzFrameFormats();
+    SwFrameFormat* pFly = rFlys[0];
+    SwAttrSet aSet(pFly->GetAttrSet());
+    aSet.Put(SwFormatFlySplit(true));
+    pDoc->SetAttr(aSet, *pFly);
+    pWrtShell->EndAllAction();
+
+    // Then make sure that the layout is updated and we have 2 pages:
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
+    // Without the accompanying fix in place, this test would have failed, there was no 2nd page.
+    CPPUNIT_ASSERT(pPage2);
 }
 }
 
