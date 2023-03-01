@@ -82,6 +82,7 @@ const tools::Long LEFT_OFFSET = 5;              // Left offset of input line
 const tools::Long INPUTWIN_MULTILINES = 6;      // Initial number of lines within multiline dropdown
 const tools::Long TOOLBOX_WINDOW_HEIGHT = 22;   // Height of toolbox window in pixels - TODO: The same on all systems?
 const tools::Long POSITION_COMBOBOX_WIDTH = 18; // Width of position combobox in characters
+const int RESIZE_HOTSPOT_HEIGHT = 4;
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;
@@ -165,6 +166,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
         pInputHdl       ( nullptr ),
         mpViewShell     ( nullptr ),
         mnMaxY          (0),
+        mnStandardItemHeight(0),
         bIsOkCancelMode ( false ),
         bInResize       ( false )
 {
@@ -238,6 +240,8 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
 
         HideItem( SID_INPUT_CANCEL );
         HideItem( SID_INPUT_OK );
+
+        mnStandardItemHeight = GetItemRect(SID_INPUT_SUM).GetHeight();
     }
 
     SetHelpId( HID_SC_INPUTWIN ); // For the whole input row
@@ -477,28 +481,30 @@ void ScInputWindow::Resize()
     Size aStartSize = GetSizePixel();
     Size aSize = aStartSize;
 
+    auto nLines = mxTextWindow->GetNumLines();
     //(-10) to allow margin between sidebar and formulabar
     tools::Long margin = (comphelper::LibreOfficeKit::isActive()) ? 10 : 0;
     Size aTextWindowSize(aSize.Width() - mxTextWindow->GetPosPixel().X() - LEFT_OFFSET - margin,
-                         mxTextWindow->GetPixelHeightForLines());
+                         mxTextWindow->GetPixelHeightForLines(nLines));
     mxTextWindow->SetSizePixel(aTextWindowSize);
 
-    aSize.setHeight(CalcWindowSizePixel().Height() + 1);
-    ScInputBarGroup* pGroupBar = mxTextWindow.get();
-    if (pGroupBar)
+    int nTopOffset = 0;
+    if (nLines > 1)
     {
-        // To ensure smooth display and prevent the items in the toolbar being
-        // repositioned (vertically) we lock the vertical positioning of the toolbox
-        // items when we are displaying > 1 line.
-        // So, we need to adjust the height of the toolbox accordingly. If we don't
-        // then the largest item (e.g. the GroupBar window) will actually be
-        // positioned such that the toolbar will cut off the bottom of that item
-        if (pGroupBar->GetNumLines() > 1)
-        {
-            Size aGroupBarSize = pGroupBar->GetSizePixel();
-            aSize.setHeight(aGroupBarSize.Height());
-        }
+        // Initially there is 1 line and the edit is vertically centered in the toolbar
+        // Later, if expanded then the vertical position of the edit will remain at
+        // that initial position, so when calculating the overall size of the expanded
+        // toolbar we have to include that initial offset in order to not make
+        // the edit overlap the RESIZE_HOTSPOT_HEIGHT area so that dragging to resize
+        // is still possible.
+        int nNormalHeight = mxTextWindow->GetPixelHeightForLines(1);
+        int nInitialTopMargin = (mnStandardItemHeight - nNormalHeight) / 2;
+        if (nInitialTopMargin > 0)
+            nTopOffset = nInitialTopMargin;
     }
+
+    // add empty space of RESIZE_HOTSPOT_HEIGHT so resize is possible when hovering there
+    aSize.setHeight(CalcWindowSizePixel().Height() + RESIZE_HOTSPOT_HEIGHT + nTopOffset);
 
     if (aStartSize != aSize)
         SetSizePixel(aSize);
@@ -724,7 +730,7 @@ void ScInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 bool ScInputWindow::IsPointerAtResizePos()
 {
-    return GetOutputSizePixel().Height() - GetPointerPosPixel().Y() <= 4;
+    return GetOutputSizePixel().Height() - GetPointerPosPixel().Y() <= RESIZE_HOTSPOT_HEIGHT;
 }
 
 void ScInputWindow::MouseMove( const MouseEvent& rMEvt )
@@ -1333,7 +1339,6 @@ const OutputDevice& ScTextWnd::GetEditViewDevice() const
 
 int ScTextWnd::GetPixelHeightForLines(tools::Long nLines)
 {
-    // add padding (for the borders of the window)
     OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
     return rDevice.LogicToPixel(Size(0, nLines * rDevice.GetTextHeight())).Height() + 1;
 }
