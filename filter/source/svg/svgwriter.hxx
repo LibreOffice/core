@@ -164,7 +164,7 @@ struct SVGShapeDescriptor
     Color                               maShapeLineColor;
     sal_Int32                           mnStrokeWidth;
     SvtGraphicStroke::DashArray         maDashArray;
-    ::std::unique_ptr< Gradient >       mapShapeGradient;
+    ::std::optional< Gradient >         moShapeGradient;
     OUString                            maId;
     basegfx::B2DLineJoin        maLineJoin;
     css::drawing::LineCap       maLineCap;

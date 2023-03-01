@@ -2409,7 +2409,7 @@ namespace cppcanvas::internal
 
                         // TODO(P2): Use native canvas gradients here (saves a lot of UNO calls)
                         internal::GradientAutoPtr pGradient(
-                            new Gradient( pAct->GetGradient() ) );
+                            pAct->GetGradient() );
 
                         DBG_TESTSOLARMUTEX();
 

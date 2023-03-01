@@ -2119,10 +2119,11 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape )
     ImplMap( rShape.maShapePolyPoly, aPolyPoly );
 
     const bool bLineOnly
-        = (rShape.maShapeFillColor == COL_TRANSPARENT) && (!rShape.mapShapeGradient);
+        = (rShape.maShapeFillColor == COL_TRANSPARENT) && (!rShape.moShapeGradient);
     tools::Rectangle   aBoundRect( aPolyPoly.GetBoundRect() );
 
-    maAttributeWriter.AddPaintAttr( rShape.maShapeLineColor, rShape.maShapeFillColor, &aBoundRect, rShape.mapShapeGradient.get() );
+    maAttributeWriter.AddPaintAttr( rShape.maShapeLineColor, rShape.maShapeFillColor, &aBoundRect,
+                                   rShape.moShapeGradient ? &*rShape.moShapeGradient : nullptr );
 
     if( !rShape.maId.isEmpty() )
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, rShape.maId );
@@ -3440,7 +3441,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                             if( bGradient )
                             {
                                 // step through following actions until the first Gradient/GradientEx action is found
-                                while (!mapCurShape->mapShapeGradient && bSkip
+                                while (!mapCurShape->moShapeGradient && bSkip
                                        && (++nCurAction < nCount))
                                 {
                                     pAction = rMtf.GetAction( nCurAction );
@@ -3453,13 +3454,13 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                                     }
                                     else if( pAction->GetType() == MetaActionType::GRADIENTEX )
                                     {
-                                        mapCurShape->mapShapeGradient.reset( new Gradient(
-                                            static_cast< const MetaGradientExAction* >( pAction )->GetGradient() ) );
+                                        mapCurShape->moShapeGradient.emplace(
+                                            static_cast< const MetaGradientExAction* >( pAction )->GetGradient() );
                                     }
                                     else if( pAction->GetType() == MetaActionType::GRADIENT )
                                     {
-                                        mapCurShape->mapShapeGradient.reset( new Gradient(
-                                            static_cast< const MetaGradientAction* >( pAction )->GetGradient() ) );
+                                        mapCurShape->moShapeGradient.emplace(
+                                            static_cast< const MetaGradientAction* >( pAction )->GetGradient() );
                                     }
                                 }
                             }
