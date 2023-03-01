@@ -655,6 +655,9 @@ OUString GetUndoComment(SwUndoId eId)
         case SwUndoId::DELETE_FORM_FIELDS:
             pId = STR_UNDO_DELETE_FORM_FIELDS;
             break;
+        case SwUndoId::UPDATE_BOOKMARK:
+            pId = STR_UPDATE_BOOKMARK;
+            break;
     }
 
     assert(pId);

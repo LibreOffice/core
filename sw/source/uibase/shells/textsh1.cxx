@@ -610,13 +610,15 @@ void UpdateBookmark(SfxRequest& rReq, SwWrtShell& rWrtSh)
         return;
     }
 
-    rWrtSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSBOOKMARK, nullptr);
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UndoArg1, pBookmark->GetName());
+    rWrtSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::UPDATE_BOOKMARK, &aRewriter);
     rWrtSh.StartAction();
     comphelper::ScopeGuard g(
-        [&rWrtSh]
+        [&rWrtSh, &aRewriter]
         {
             rWrtSh.EndAction();
-            rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSBOOKMARK, nullptr);
+            rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::UPDATE_BOOKMARK, &aRewriter);
         });
 
 

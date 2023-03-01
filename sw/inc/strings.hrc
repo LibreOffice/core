@@ -438,6 +438,7 @@
 #define STR_INSERT_GLOSSARY                     NC_("STR_INSERT_GLOSSARY", "Insert AutoText")
 #define STR_DELBOOKMARK                         NC_("STR_DELBOOKMARK", "Delete bookmark: $1")
 #define STR_INSBOOKMARK                         NC_("STR_INSBOOKMARK", "Insert bookmark: $1")
+#define STR_UPDATE_BOOKMARK                     NC_("STR_UPDATE_BOOKMARK", "Update bookmark: $1")
 #define STR_SORT_TBL                            NC_("STR_SORT_TBL", "Sort table")
 #define STR_SORT_TXT                            NC_("STR_SORT_TXT", "Sort text")
 #define STR_INSTABLE_UNDO                       NC_("STR_INSTABLE_UNDO", "Insert table: $1$2$3")
