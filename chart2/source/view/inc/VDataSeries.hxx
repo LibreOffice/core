@@ -20,7 +20,9 @@
 
 #include "PropertyMapper.hxx"
 
+#include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
+#include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
@@ -34,8 +36,6 @@ namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::chart2 { class XChartType; }
 namespace com::sun::star::chart2 { class XDataSeries; }
 namespace com::sun::star::chart2::data { class XDataSequence; }
-namespace com::sun::star::chart2 { struct DataPointLabel; }
-namespace com::sun::star::chart2 { struct Symbol; }
 namespace com::sun::star::drawing { class XShapes; }
 
 namespace chart
@@ -238,20 +238,19 @@ private: //member
     sal_Int32               m_nGlobalSeriesIndex;
 
     //some cached values for data labels as they are very expensive
-    mutable std::unique_ptr<css::chart2::DataPointLabel>
-                                                    m_apLabel_Series;
-    mutable std::unique_ptr<tNameSequence>        m_apLabelPropNames_Series;
-    mutable std::unique_ptr<tAnySequence>         m_apLabelPropValues_Series;
-    mutable std::unique_ptr<css::chart2::Symbol>  m_apSymbolProperties_Series;
+    mutable std::optional<css::chart2::DataPointLabel>
+                                                  m_oLabel_Series;
+    mutable std::optional<tNameSequence>          m_oLabelPropNames_Series;
+    mutable std::optional<tAnySequence>           m_oLabelPropValues_Series;
+    mutable std::optional<css::chart2::Symbol>    m_oSymbolProperties_Series;
 
-    mutable std::unique_ptr<css::chart2::DataPointLabel>
-                                                    m_apLabel_AttributedPoint;
+    mutable std::optional<css::chart2::DataPointLabel>
+                                                  m_oLabel_AttributedPoint;
     mutable std::unique_ptr<tNameSequence>        m_apLabelPropNames_AttributedPoint;
     mutable std::unique_ptr<tAnySequence>         m_apLabelPropValues_AttributedPoint;
-    mutable std::unique_ptr<css::chart2::Symbol>  m_apSymbolProperties_AttributedPoint;
-    mutable std::unique_ptr<css::chart2::Symbol>
-                                                    m_apSymbolProperties_InvisibleSymbolForSelection;
-    mutable sal_Int32                               m_nCurrentAttributedPoint;
+    mutable std::optional<css::chart2::Symbol>    m_oSymbolProperties_AttributedPoint;
+    mutable std::optional<css::chart2::Symbol>    m_oSymbolProperties_InvisibleSymbolForSelection;
+    mutable sal_Int32                             m_nCurrentAttributedPoint;
     css::awt::Size                     m_aReferenceSize;
 
     sal_Int32   m_nMissingValueTreatment;
