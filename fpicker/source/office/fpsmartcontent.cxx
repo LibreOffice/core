@@ -129,7 +129,7 @@ namespace svt
             // nothing to do, regardless of the state
             return;
 
-        m_pContent.reset();
+        m_oContent.reset();
         m_eState = INVALID; // default to INVALID
         m_sURL = _rURL;
 
@@ -137,7 +137,7 @@ namespace svt
         {
             try
             {
-                m_pContent.reset( new ::ucbhelper::Content( _rURL, m_xCmdEnv, comphelper::getProcessComponentContext() ) );
+                m_oContent.emplace( _rURL, m_xCmdEnv, comphelper::getProcessComponentContext() );
                 m_eState = UNKNOWN;
                     // from now on, the state is unknown -> we cannot know for sure if the content
                     // is really valid (some UCP's only tell this when asking for properties, not upon
@@ -177,7 +177,7 @@ namespace svt
         if ( isInvalid() || !isBound() )
             return false;
 
-        assert( m_pContent && "SmartContent::implIs: inconsistence!" );
+        assert( m_oContent && "SmartContent::implIs: inconsistence!" );
             // if, after a bindTo, we don't have a content, then we should be INVALID, or at least
             // NOT_BOUND (the latter happens, for example, if somebody tries to ask for an empty URL)
 
@@ -185,9 +185,9 @@ namespace svt
         try
         {
             if ( Folder == _eType )
-                bIs = m_pContent->isFolder();
+                bIs = m_oContent->isFolder();
             else
-                bIs = m_pContent->isDocument();
+                bIs = m_oContent->isDocument();
 
             // from here on, we definitely know that the content is valid
             m_eState = VALID;
@@ -209,7 +209,7 @@ namespace svt
         try
         {
             OUString sTitle;
-            m_pContent->getPropertyValue("Title") >>= sTitle;
+            m_oContent->getPropertyValue("Title") >>= sTitle;
             _rTitle =  sTitle;
 
             // from here on, we definitely know that the content is valid
@@ -231,14 +231,14 @@ namespace svt
         bool bRet = false;
         try
         {
-            Reference< XChild > xChild( m_pContent->get(), UNO_QUERY );
+            Reference< XChild > xChild( m_oContent->get(), UNO_QUERY );
             if ( xChild.is() )
             {
                 Reference< XContent > xParent( xChild->getParent(), UNO_QUERY );
                 if ( xParent.is() )
                 {
                     const OUString aParentURL( xParent->getIdentifier()->getContentIdentifier() );
-                    bRet = ( !aParentURL.isEmpty() && aParentURL != m_pContent->getURL() );
+                    bRet = ( !aParentURL.isEmpty() && aParentURL != m_oContent->getURL() );
 
                     // now we're definitely valid
                     m_eState = VALID;
@@ -262,7 +262,7 @@ namespace svt
         bool bRet = false;
         try
         {
-            const css::uno::Sequence<css::ucb::ContentInfo> aContentsInfo = m_pContent->queryCreatableContentsInfo();
+            const css::uno::Sequence<css::ucb::ContentInfo> aContentsInfo = m_oContent->queryCreatableContentsInfo();
             for ( auto const& rInfo : aContentsInfo )
             {
                 // Simply look for the first KIND_FOLDER...
@@ -291,7 +291,7 @@ namespace svt
         {
             OUString sFolderType;
 
-            const css::uno::Sequence<css::ucb::ContentInfo> aContentsInfo = m_pContent->queryCreatableContentsInfo();
+            const css::uno::Sequence<css::ucb::ContentInfo> aContentsInfo = m_oContent->queryCreatableContentsInfo();
             for ( auto const& rInfo : aContentsInfo )
             {
                 // Simply look for the first KIND_FOLDER...
@@ -307,7 +307,7 @@ namespace svt
                 ucbhelper::Content aCreated;
                 Sequence< OUString > aNames { "Title" };
                 Sequence< Any > aValues { Any(_rTitle) };
-                m_pContent->insertNewContent( sFolderType, aNames, aValues, aCreated );
+                m_oContent->insertNewContent( sFolderType, aNames, aValues, aCreated );
 
                 aCreatedUrl = aCreated.getURL();
             }

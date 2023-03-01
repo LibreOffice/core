@@ -25,6 +25,7 @@
 #include <ucbhelper/content.hxx>
 #include <rtl/ref.hxx>
 #include <memory>
+#include <optional>
 
 
 namespace svt
@@ -49,7 +50,7 @@ namespace svt
 
     private:
         OUString                                               m_sURL;
-        std::unique_ptr<::ucbhelper::Content>                  m_pContent;
+        std::optional<::ucbhelper::Content>                    m_oContent;
         State                                                  m_eState;
         css::uno::Reference < css::ucb::XCommandEnvironment >  m_xCmdEnv;
         rtl::Reference<::svt::OFilePickerInteractionHandler>   m_xOwnInteraction;
@@ -129,7 +130,7 @@ namespace svt
 
         /** returns the URL of the content
         */
-        OUString const & getURL() const { return m_pContent ? m_pContent->getURL() : m_sURL; }
+        OUString const & getURL() const { return m_oContent ? m_oContent->getURL() : m_sURL; }
 
         /** (re)creates the content for the given URL
 
