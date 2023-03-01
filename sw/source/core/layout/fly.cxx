@@ -841,6 +841,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
 
         case RES_FRM_SIZE:
         case RES_FMT_CHG:
+        case RES_FLY_SPLIT:
         {
             const SwFormatFrameSize &rNew = GetFormat()->GetFrameSize();
             if ( FrameSizeChg( rNew ) )
