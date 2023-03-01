@@ -96,9 +96,9 @@ namespace tools_urlobj
                 CPPUNIT_ASSERT_EQUAL(OUString("/"), url.GetURLPath());
             }
             {
-                // This is an invalid http URL per RFC 2616:
+                // This is a valid http URL per RFC 7230:
                 INetURLObject url(u"http://example.com?query");
-                CPPUNIT_ASSERT(url.HasError());
+                CPPUNIT_ASSERT(!url.HasError());
             }
             {
                 INetURLObject url(u"http://example.com#fragment");

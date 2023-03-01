@@ -2985,7 +2985,8 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
         case INetProtocol::Https:
         case INetProtocol::Smb:
         case INetProtocol::Cmis:
-            if (pPos < pEnd && *pPos != '/' && *pPos != nFragmentDelimiter)
+            if (pPos < pEnd && *pPos != '/' && *pPos != nQueryDelimiter
+                && *pPos != nFragmentDelimiter)
                 goto failed;
             while (pPos < pEnd && *pPos != nQueryDelimiter
                    && *pPos != nFragmentDelimiter)
