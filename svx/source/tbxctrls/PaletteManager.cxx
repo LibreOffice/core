@@ -44,7 +44,6 @@
 #include <docmodel/theme/ThemeColor.hxx>
 #include <docmodel/theme/ThemeColorJSON.hxx>
 #include <editeng/colritem.hxx>
-#include <svx/svxids.hrc>
 #include <editeng/memberids.h>
 
 #include <palettes.hxx>
