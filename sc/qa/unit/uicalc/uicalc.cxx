@@ -990,6 +990,52 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144244)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xPage->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf153669)
+{
+    createScDoc("tdf153669.ods");
+    ScDocument* pDoc = getScDoc();
+
+    // Disable replace cell warning
+    ScModule* pMod = SC_MOD();
+    ScInputOptions aInputOption = pMod->GetInputOptions();
+    bool bOldStatus = aInputOption.GetReplaceCellsWarn();
+    aInputOption.SetReplaceCellsWarn(false);
+    pMod->SetInputOptions(aInputOption);
+
+    insertStringToCell("E2", u"100");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("110.00"), pDoc->GetString(ScAddress(5, 1, 0)));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString("15.00"), pDoc->GetString(ScAddress(5, 1, 0)));
+
+    goToCell("E7");
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    goToCell("F7");
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString("text"), pDoc->GetString(ScAddress(5, 6, 0)));
+
+    insertStringToCell("E2", u"100");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 110.00
+    // - Actual  : 15.00
+    CPPUNIT_ASSERT_EQUAL(OUString("110.00"), pDoc->GetString(ScAddress(5, 1, 0)));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString("15.00"), pDoc->GetString(ScAddress(5, 1, 0)));
+
+    // Restore previous status
+    aInputOption.SetReplaceCellsWarn(bOldStatus);
+    pMod->SetInputOptions(aInputOption);
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100582)
 {
     createScDoc("tdf100582.xls");
