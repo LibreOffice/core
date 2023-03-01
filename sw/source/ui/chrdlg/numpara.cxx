@@ -45,6 +45,8 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(weld::Container* pPage, weld::Dialo
     , m_xNumberStyleBX(m_xBuilder->weld_widget("boxNUMBER_STYLE"))
     , m_xNumberStyleLB(m_xBuilder->weld_combo_box("comboLB_NUMBER_STYLE"))
     , m_xEditNumStyleBtn(m_xBuilder->weld_button("editnumstyle"))
+    , m_xListLvBX(m_xBuilder->weld_widget("boxLIST_LEVEL"))
+    , m_xListLvLB(m_xBuilder->weld_combo_box("comboLB_LIST_LEVEL"))
     , m_xNewStartCB(m_xBuilder->weld_check_button("checkCB_NEW_START"))
     , m_xNewStartBX(m_xBuilder->weld_widget("boxNEW_START"))
     , m_xNewStartNumberCB(m_xBuilder->weld_check_button("checkCB_NUMBER_NEW_START"))
@@ -105,6 +107,32 @@ bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
             pOutlineLv->SetValue( aOutlineLv );
             rSet->Put(std::move(pOutlineLv));
             m_bModified = true;
+
+            // Does List Level need to be set to be the same as Outline Level?
+            if (!m_xListLvLB->get_active() && m_xListLvBX->get_visible()
+                && !m_xListLvLB->get_value_changed_from_saved())
+            {
+                sal_Int16 nListLevel = std::max<sal_Int16>(1, aOutlineLv);
+                --nListLevel; // Outline Level is 1 based. List Level is zero based.
+                rSet->Put(SfxInt16Item(RES_PARATR_LIST_LEVEL, nListLevel));
+            }
+        }
+    }
+
+    if (m_xListLvLB->get_value_changed_from_saved())
+    {
+        if (m_xListLvBX->get_visible() && GetOldItem(*rSet, RES_PARATR_LIST_LEVEL))
+        {
+            sal_Int16 nListLevel = m_xListLvLB->get_active();
+            // Does List Level need to be set to be the same as Outline Level?
+            if (!nListLevel)
+            {
+                nListLevel = std::max<sal_Int16>(1, m_xOutlineLvLB->get_active());
+            }
+            --nListLevel; // List Level is zero based, but both listboxes are 1-based.
+
+            rSet->Put(SfxInt16Item(RES_PARATR_LIST_LEVEL, nListLevel));
+            m_bModified = true;
         }
     }
 
@@ -152,6 +180,7 @@ void SwParagraphNumTabPage::ChangesApplied()
 {
     m_xOutlineLvLB->save_value();
     m_xNumberStyleLB->save_value();
+    m_xListLvLB->save_value();
     m_xNewStartCB->save_state();
     m_xNewStartNumberCB->save_state();
     m_xCountParaCB->save_state();
@@ -165,9 +194,10 @@ void SwParagraphNumTabPage::Reset(const SfxItemSet* rSet)
 
     SfxItemState eItemState = rSet->GetItemState( GetWhich(SID_ATTR_PARA_OUTLINE_LEVEL) );
 
+    sal_Int16 nOutlineLv = 1; // 0 is Text Body, 1 is level 1
     if( eItemState >= SfxItemState::DEFAULT )
     {
-        sal_Int16 nOutlineLv = rSet->Get( GetWhich(SID_ATTR_PARA_OUTLINE_LEVEL) ).GetValue();
+        nOutlineLv = rSet->Get( GetWhich(SID_ATTR_PARA_OUTLINE_LEVEL) ).GetValue();
         m_xOutlineLvLB->set_active(nOutlineLv) ;
     }
     else
@@ -175,6 +205,26 @@ void SwParagraphNumTabPage::Reset(const SfxItemSet* rSet)
         m_xOutlineLvLB->set_active(-1);
     }
     m_xOutlineLvLB->save_value();
+
+    eItemState = rSet->GetItemState(RES_PARATR_LIST_LEVEL);
+    if (eItemState >= SfxItemState::DEFAULT)
+    {
+        sal_Int16 nListLevel = rSet->Get(RES_PARATR_LIST_LEVEL).GetValue(); // 0 is level 1
+        // Although listLevel doesn't have outline's "Text Body" level, treat it the same as level 1
+        // so that if the outline level is either 0 or 1, it is considered equal to list level 1.
+        // This is a rather crucial discrepancy - otherwise the user will rarely see
+        // list level using the special "Same as outline level,
+        // and the highly desirable state of keeping the two in sync will rarely be achieved.
+        if ((!nOutlineLv && !nListLevel) || nListLevel == nOutlineLv - 1)
+            m_xListLvLB->set_active(0); // highly encourage using "Same as outline level"
+        else
+            m_xListLvLB->set_active(nListLevel + 1);
+    }
+    else
+    {
+        m_xListLvBX->hide();
+    }
+    m_xListLvLB->save_value();
 
     eItemState = rSet->GetItemState( GetWhich(SID_ATTR_PARA_NUMRULE) );
 
@@ -268,6 +318,7 @@ void SwParagraphNumTabPage::DisableNumbering()
 {
     m_xNumberStyleBX->set_sensitive(false);
     m_xNumberStyleBX->set_tooltip_text( SwResId(STR_OUTLINENUMBERING_DISABLED) );
+    m_xListLvBX->set_sensitive(false);
 }
 
 void SwParagraphNumTabPage::EnableNewStart()
@@ -297,9 +348,15 @@ IMPL_LINK_NOARG(SwParagraphNumTabPage, EditNumStyleSelectHdl_Impl, weld::ComboBo
     int numSelectPos = m_xNumberStyleLB->get_active();
     // 0 is "None" and -1 is unselected state and a "pseudo" is uneditable "Chapter Numbering"
     if (numSelectPos == 0 || numSelectPos == -1 || m_xNumberStyleLB->get_active_id() == "pseudo")
+    {
         m_xEditNumStyleBtn->set_sensitive(false);
+        m_xListLvBX->set_sensitive(false);
+    }
     else
+    {
         m_xEditNumStyleBtn->set_sensitive(true);
+        m_xListLvBX->set_sensitive(true);
+    }
 }
 
 IMPL_LINK_NOARG(SwParagraphNumTabPage, EditNumStyleHdl_Impl, weld::Button&, void)

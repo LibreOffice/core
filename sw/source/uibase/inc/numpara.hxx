@@ -38,6 +38,9 @@ class SwParagraphNumTabPage final : public SfxTabPage
     std::unique_ptr<weld::ComboBox> m_xNumberStyleLB;
     std::unique_ptr<weld::Button> m_xEditNumStyleBtn;
 
+    std::unique_ptr<weld::Widget> m_xListLvBX;
+    std::unique_ptr<weld::ComboBox> m_xListLvLB;
+
     std::unique_ptr<weld::CheckButton> m_xNewStartCB;
     std::unique_ptr<weld::Widget> m_xNewStartBX;
     std::unique_ptr<weld::CheckButton> m_xNewStartNumberCB;

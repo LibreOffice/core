@@ -193,6 +193,68 @@
               </packing>
             </child>
             <child>
+              <object class="GtkBox" id="boxLIST_LEVEL">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <child>
+                  <object class="GtkLabel" id="labelFT_LIST_LEVEL">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="numparapagedlg|labelFT_LIST_LEVEL">List level:</property>
+                    <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="comboLB_LIST_LEVEL"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="comboLB_LIST_LEVEL">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="tooltip-text" translatable="yes" context="numparapage|comboLB_LIST_LEVEL">Assigned List Level</property>
+                    <items>
+                      <item translatable="yes" context="numparapage|comboLB_LIST_LEVEL">Same as outline level</item>
+                      <item translatable="yes" context="numparapage|comboLB_LIST_LEVEL">Level 1</item>
+                      <item translatable="yes" context="numparapage|comboLB_LIST_LEVEL">Level 2</item>
+                      <item translatable="yes" context="numparapage|comboLB_LIST_LEVEL">Level 3</item>
+                      <item translatable="yes" context="numparapage|comboLB_LIST_LEVEL">Level 4</item>
+                      <item translatable="yes" context="numparapage|comboLB_LIST_LEVEL">Level 5</item>
+                      <item translatable="yes" context="numparapage|comboLB_LIST_LEVEL">Level 6</item>
+                      <item translatable="yes" context="numparapage|comboLB_LIST_LEVEL">Level 7</item>
+                      <item translatable="yes" context="numparapage|comboLB_LIST_LEVEL">Level 8</item>
+                      <item translatable="yes" context="numparapage|comboLB_LIST_LEVEL">Level 9</item>
+                      <item translatable="yes" context="numparapage|comboLB_LIST_LEVEL">Level 10</item>
+                    </items>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelFT_LIST_LEVEL"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="comboLB_LIST_LEVEL-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numparapage|extended_tip|comboLB_LIST_LEVEL">Assigns a list level from 1 to 10 to the selected paragraphs or Paragraph Style.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="padding">6</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkCheckButton" id="checkCB_NEW_START">
                 <property name="label" translatable="yes" context="numparapage|checkCB_NEW_START">R_estart numbering at this paragraph</property>
                 <property name="can-focus">True</property>
@@ -212,7 +274,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">1</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>
@@ -281,7 +343,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">4</property>
               </packing>
             </child>
           </object>
@@ -452,6 +514,7 @@
     <widgets>
       <widget name="labelFT_OUTLINE_LEVEL"/>
       <widget name="labelFT_NUMBER_STYLE"/>
+      <widget name="labelFT_LIST_LEVEL"/>
       <widget name="box4"/>
       <widget name="box3"/>
     </widgets>
@@ -460,6 +523,7 @@
     <widgets>
       <widget name="comboLB_OUTLINE_LEVEL"/>
       <widget name="boxSubNumber_Style"/>
+      <widget name="comboLB_LIST_LEVEL"/>
     </widgets>
   </object>
 </interface>
