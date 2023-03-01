@@ -116,6 +116,7 @@ class SwFramePage final : public SfxTabPage
     std::unique_ptr<weld::ComboBox> m_xVertRelationLB;
     // #i18732# - check box for new option 'FollowTextFlow'
     std::unique_ptr<weld::CheckButton> m_xFollowTextFlowCB;
+    std::unique_ptr<weld::CheckButton> m_xFlySplitCB;
 
     // example
     std::unique_ptr<weld::CustomWeld> m_xExampleWN;

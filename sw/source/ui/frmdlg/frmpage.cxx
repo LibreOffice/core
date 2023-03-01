@@ -61,6 +61,8 @@
 #include <osl/diagnose.h>
 
 #include <strings.hrc>
+#include <formatflysplit.hxx>
+#include <fmtcntnt.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/graphichelper.hxx>
@@ -673,6 +675,7 @@ SwFramePage::SwFramePage(weld::Container* pPage, weld::DialogController* pContro
     , m_xVertRelationFT(m_xBuilder->weld_label("verttoft"))
     , m_xVertRelationLB(m_xBuilder->weld_combo_box("vertanchor"))
     , m_xFollowTextFlowCB(m_xBuilder->weld_check_button("followtextflow"))
+    , m_xFlySplitCB(m_xBuilder->weld_check_button("flysplit"))
     , m_xExampleWN(new weld::CustomWeld(*m_xBuilder, "preview", m_aExampleWN))
     , m_xWidthED(new SwPercentField(m_xBuilder->weld_metric_spin_button("width", FieldUnit::CM)))
     , m_xHeightED(new SwPercentField(m_xBuilder->weld_metric_spin_button("height", FieldUnit::CM)))
@@ -793,6 +796,40 @@ namespace
         RelationMap const * pMap;
         size_t nCount;
     };
+
+/// Checks if the current fly frame contains exactly one table.
+bool ContainsSingleTable(SwWrtShell* pWrtShell)
+{
+    const SwFrameFormat* pFlyFormat = pWrtShell->GetFlyFrameFormat();
+    if (!pFlyFormat)
+    {
+        return false;
+    }
+
+    const SwNodeIndex* pStartNode = pFlyFormat->GetContent().GetContentIdx();
+    if (!pStartNode)
+    {
+        return false;
+    }
+
+    // Check if the frame content starts with a table.
+    SwNodeIndex aNodeIndex(*pStartNode);
+    ++aNodeIndex;
+    if (!aNodeIndex.GetNode().IsTableNode())
+    {
+        return false;
+    }
+
+    // Check if the frame content ends with the same table.
+    SwNodeIndex aEndIndex(*aNodeIndex.GetNode().EndOfSectionNode());
+    ++aEndIndex;
+    if (&aEndIndex.GetNode() != pStartNode->GetNode().EndOfSectionNode())
+    {
+        return false;
+    }
+
+    return true;
+}
 }
 
 void SwFramePage::setOptimalRelWidth()
@@ -981,6 +1018,10 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
             rSet->Get(RES_FOLLOW_TEXT_FLOW).GetValue();
         m_xFollowTextFlowCB->set_active(bFollowTextFlow);
     }
+    {
+        const bool bFlySplit = rSet->Get(RES_FLY_SPLIT).GetValue();
+        m_xFlySplitCB->set_active(bFlySplit);
+    }
 
     if(m_bHtmlMode)
     {
@@ -1003,12 +1044,21 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
         m_xFollowTextFlowCB->set_sensitive(m_xAnchorAtParaRB->get_active() ||
                                            m_xAnchorAtCharRB->get_active() ||
                                            m_xAnchorAtFrameRB->get_active());
+        m_xFlySplitCB->set_sensitive(m_xAnchorAtParaRB->get_active());
+    }
+
+    if (!ContainsSingleTable(pSh))
+    {
+        // Only allow fly split if the frame contains a single table, otherwise it would be hard the
+        // resulting model to Word formats.
+        m_xFlySplitCB->hide();
     }
 
     Init(*rSet);
     m_xAtVertPosED->save_value();
     m_xAtHorzPosED->save_value();
     m_xFollowTextFlowCB->save_state();
+    m_xFlySplitCB->save_state();
 
     m_xWidthED->save_value();
     m_xHeightED->save_value();
@@ -1226,6 +1276,10 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
     if (m_xFollowTextFlowCB->get_state_changed_from_saved())
     {
         bRet |= nullptr != rSet->Put(SwFormatFollowTextFlow(m_xFollowTextFlowCB->get_active()));
+    }
+    if (m_xFlySplitCB->get_state_changed_from_saved())
+    {
+        bRet |= rSet->Put(SwFormatFlySplit(m_xFlySplitCB->get_active())) != nullptr;
     }
     return bRet;
 }
@@ -1695,6 +1749,7 @@ void SwFramePage::ActivatePage(const SfxItemSet& rSet)
     m_xHeightED->LockAutoCalculation(false);
     m_xWidthED->LockAutoCalculation(false);
     m_xFollowTextFlowCB->save_state();
+    m_xFlySplitCB->save_state();
 }
 
 DeactivateRC SwFramePage::DeactivatePage(SfxItemSet * _pSet)
@@ -1893,6 +1948,7 @@ IMPL_LINK_NOARG(SwFramePage, AnchorTypeHdl, weld::Toggleable&, void)
     m_xFollowTextFlowCB->set_sensitive(m_xAnchorAtParaRB->get_active() ||
                                        m_xAnchorAtCharRB->get_active() ||
                                        m_xAnchorAtFrameRB->get_active());
+    m_xFlySplitCB->set_sensitive(m_xAnchorAtParaRB->get_active());
 
     RndStdIds eId = GetAnchor();
 
