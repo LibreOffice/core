@@ -252,7 +252,9 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
     pCodeCompleteWnd(VclPtr<CodeCompleteWindow>::Create(this))
 {
     set_id("EditorWindow");
-    SetBackground(Wallpaper(rModulWindow.GetLayout().GetSyntaxBackgroundColor()));
+    const Wallpaper aBackground(rModulWindow.GetLayout().GetSyntaxBackgroundColor());
+    SetBackground(aBackground);
+    GetWindow(GetWindowType::Border)->SetBackground(aBackground);
     SetPointer( PointerStyle::Text );
     SetHelpId( HID_BASICIDE_EDITORWINDOW );
 
