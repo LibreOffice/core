@@ -389,7 +389,7 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                 if (bChangeMapMode)
                 {
                     mpOutputDevice->Push(vcl::PushFlags::MAPMODE);
-                    mpOutputDevice->SetMapMode(aMapMode);
+                    mpOutputDevice->SetRelativeMapMode(aMapMode);
                 }
             }
             else
