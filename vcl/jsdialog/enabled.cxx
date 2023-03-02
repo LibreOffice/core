@@ -71,6 +71,11 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/scalc/ui/ttestdialog.ui"
         || rUIFile == u"modules/scalc/ui/ungroupdialog.ui"
         || rUIFile == u"modules/scalc/ui/ztestdialog.ui"
+        // schart
+        || rUIFile == u"modules/schart/ui/tp_ChartType.ui"
+        || rUIFile == u"modules/schart/ui/tp_RangeChooser.ui"
+        || rUIFile == u"modules/schart/ui/tp_DataSource.ui"
+        || rUIFile == u"modules/schart/ui/wizelementspage.ui"
         // swriter
         || rUIFile == u"modules/swriter/ui/captionoptions.ui"
         || rUIFile == u"modules/swriter/ui/contentcontroldlg.ui"
@@ -97,6 +102,8 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"svx/ui/fontworkgallerydialog.ui"
         // uui
         || rUIFile == u"uui/ui/macrowarnmedium.ui"
+        // vcl
+        || rUIFile == u"vcl/ui/wizard.ui"
         // xmlsec
         || rUIFile == u"xmlsec/ui/certgeneral.ui"
         || rUIFile == u"xmlsec/ui/certpage.ui"

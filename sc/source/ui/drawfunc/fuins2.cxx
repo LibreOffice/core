@@ -42,6 +42,7 @@
 #include <scmod.hxx>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <vcl/weldutils.hxx>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -631,9 +632,11 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
                 uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
                 if( xChartModel.is() && xInit.is() )
                 {
+                    css::uno::Reference< css::awt::XWindow > xParent
+                        = new weld::TransportAsXWindow(pWin->GetFrameWeld());
                     uno::Sequence<uno::Any> aSeq(comphelper::InitAnyPropertySequence(
                     {
-                        {"ParentWindow", uno::Any(uno::Reference< awt::XWindow >())},
+                        {"ParentWindow", uno::Any(xParent)},
                         {"ChartModel", uno::Any(xChartModel)}
                     }));
                     xInit->initialize( aSeq );
