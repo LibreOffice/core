@@ -945,6 +945,18 @@ std::unique_ptr<weld::LinkButton> JSInstanceBuilder::weld_link_button(const OStr
     return pWeldWidget;
 }
 
+std::unique_ptr<weld::ToggleButton> JSInstanceBuilder::weld_toggle_button(const OString& id)
+{
+    ::PushButton* pButton = m_xBuilder->get<::PushButton>(id);
+    auto pWeldWidget
+        = pButton ? std::make_unique<JSToggleButton>(this, pButton, this, false) : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 std::unique_ptr<weld::Entry> JSInstanceBuilder::weld_entry(const OString& id)
 {
     Edit* pEntry = m_xBuilder->get<Edit>(id);
@@ -1363,6 +1375,12 @@ JSButton::JSButton(JSDialogSender* pSender, ::Button* pButton, SalInstanceBuilde
 JSLinkButton::JSLinkButton(JSDialogSender* pSender, ::FixedHyperlink* pButton,
                            SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstanceLinkButton, ::FixedHyperlink>(pSender, pButton, pBuilder, bTakeOwnership)
+{
+}
+
+JSToggleButton::JSToggleButton(JSDialogSender* pSender, ::PushButton* pButton,
+                               SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceToggleButton, ::PushButton>(pSender, pButton, pBuilder, bTakeOwnership)
 {
 }
 

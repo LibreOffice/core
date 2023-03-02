@@ -1098,6 +1098,57 @@ public:
     virtual ~SalInstanceButton() override;
 };
 
+class SalInstanceToggleButton : public SalInstanceButton, public virtual weld::ToggleButton
+{
+private:
+    VclPtr<PushButton> m_xToggleButton;
+
+    DECL_LINK(ToggleListener, VclWindowEvent&, void);
+
+public:
+    SalInstanceToggleButton(PushButton* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : SalInstanceButton(pButton, pBuilder, bTakeOwnership)
+        , m_xToggleButton(pButton)
+    {
+        m_xToggleButton->setToggleButton(true);
+    }
+
+    virtual void connect_toggled(const Link<Toggleable&, void>& rLink) override
+    {
+        assert(!m_aToggleHdl.IsSet());
+        m_xToggleButton->AddEventListener(LINK(this, SalInstanceToggleButton, ToggleListener));
+        weld::ToggleButton::connect_toggled(rLink);
+    }
+
+    virtual void set_active(bool active) override
+    {
+        disable_notify_events();
+        m_xToggleButton->Check(active);
+        enable_notify_events();
+    }
+
+    virtual bool get_active() const override { return m_xToggleButton->IsChecked(); }
+
+    virtual void set_inconsistent(bool inconsistent) override
+    {
+        disable_notify_events();
+        m_xToggleButton->SetState(inconsistent ? TRISTATE_INDET : TRISTATE_FALSE);
+        enable_notify_events();
+    }
+
+    virtual bool get_inconsistent() const override
+    {
+        return m_xToggleButton->GetState() == TRISTATE_INDET;
+    }
+
+    virtual ~SalInstanceToggleButton() override
+    {
+        if (m_aToggleHdl.IsSet())
+            m_xToggleButton->RemoveEventListener(
+                LINK(this, SalInstanceToggleButton, ToggleListener));
+    }
+};
+
 class SalInstanceNotebook : public SalInstanceWidget, public virtual weld::Notebook
 {
 private:
