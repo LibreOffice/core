@@ -504,9 +504,10 @@ public:
 
 class SalInstanceDialog : public SalInstanceWindow, public virtual weld::Dialog
 {
-private:
+protected:
     VclPtr<::Dialog> m_xDialog;
 
+private:
     // for calc ref dialog that shrink to range selection widgets and resize back
     VclPtr<vcl::Window> m_xRefEdit;
     std::vector<VclPtr<vcl::Window>> m_aHiddenWidgets; // vector of hidden Controls
@@ -551,8 +552,10 @@ public:
 
 class SalInstanceAssistant : public SalInstanceDialog, public virtual weld::Assistant
 {
-private:
+protected:
     VclPtr<vcl::RoadmapWizard> m_xWizard;
+
+private:
     std::vector<std::unique_ptr<SalInstanceContainer>> m_aPages;
     std::vector<VclPtr<TabPage>> m_aAddedPages;
     std::vector<int> m_aIds;

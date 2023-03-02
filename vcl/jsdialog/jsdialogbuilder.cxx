@@ -1271,6 +1271,53 @@ void JSAssistant::response(int response)
     SalInstanceAssistant::response(response);
 }
 
+weld::Button* JSDialog::weld_widget_for_response(int nResponse)
+{
+    PushButton* pButton
+        = dynamic_cast<::PushButton*>(m_xDialog->get_widget_for_response(nResponse));
+    auto pWeldWidget = pButton ? new JSButton(m_pSender, pButton, nullptr, false) : nullptr;
+
+    if (pWeldWidget)
+    {
+        auto pParentDialog = m_xDialog->GetParentWithLOKNotifier();
+        if (pParentDialog)
+            JSInstanceBuilder::RememberWidget(
+                std::to_string(pParentDialog->GetLOKWindowId()),
+                OUStringToOString(pButton->get_id(), RTL_TEXTENCODING_UTF8), pWeldWidget);
+    }
+
+    return pWeldWidget;
+}
+
+weld::Button* JSAssistant::weld_widget_for_response(int nResponse)
+{
+    ::PushButton* pButton = nullptr;
+    JSButton* pWeldWidget = nullptr;
+    if (nResponse == RET_YES)
+        pButton = m_xWizard->m_pNextPage;
+    else if (nResponse == RET_NO)
+        pButton = m_xWizard->m_pPrevPage;
+    else if (nResponse == RET_OK)
+        pButton = m_xWizard->m_pFinish;
+    else if (nResponse == RET_CANCEL)
+        pButton = m_xWizard->m_pCancel;
+    else if (nResponse == RET_HELP)
+        pButton = m_xWizard->m_pHelp;
+    if (pButton)
+        pWeldWidget = new JSButton(m_pSender, pButton, nullptr, false);
+
+    if (pWeldWidget)
+    {
+        auto pParentDialog = m_xWizard->GetParentWithLOKNotifier();
+        if (pParentDialog)
+            JSInstanceBuilder::RememberWidget(
+                std::to_string(pParentDialog->GetLOKWindowId()),
+                OUStringToOString(pButton->get_id(), RTL_TEXTENCODING_UTF8), pWeldWidget);
+    }
+
+    return pWeldWidget;
+}
+
 JSAssistant::JSAssistant(JSDialogSender* pSender, vcl::RoadmapWizard* pDialog,
                          SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstanceAssistant, vcl::RoadmapWizard>(pSender, pDialog, pBuilder, bTakeOwnership)
