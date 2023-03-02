@@ -1669,6 +1669,36 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineUpdateCallback)
     CPPUNIT_ASSERT_EQUAL(3, m_nRedlineTableEntryModified);
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)
+{
+    SwXTextDocument* pXTextDocument = createDoc();
+    int nFirstViewId = SfxLokHelper::getView();
+    ViewCallback aView1;
+    {
+        SwViewOption aViewOptions;
+        aViewOptions.SetViewMetaChars(true);
+        aViewOptions.SetOnlineSpell(true);
+        pXTextDocument->GetDocShell()->GetWrtShell()->ApplyViewOptions(aViewOptions);
+    }
+    CPPUNIT_ASSERT_EQUAL(OString("PS"), pXTextDocument->getViewRenderState());
+
+    // Create a second view
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+    {
+        // Give the second view different options
+        SwViewOption aViewOptions;
+        aViewOptions.SetViewMetaChars(false);
+        aViewOptions.SetOnlineSpell(true);
+        pXTextDocument->GetDocShell()->GetWrtShell()->ApplyViewOptions(aViewOptions);
+    }
+    CPPUNIT_ASSERT_EQUAL(OString("S"), pXTextDocument->getViewRenderState());
+
+    // Switch back to the first view, and check that the options string is the same
+    SfxLokHelper::setView(nFirstViewId);
+    CPPUNIT_ASSERT_EQUAL(OString("PS"), pXTextDocument->getViewRenderState());
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSetViewGraphicSelection)
 {
     // Load a document.

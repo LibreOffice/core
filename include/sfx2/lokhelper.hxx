@@ -140,6 +140,9 @@ public:
     /// Notify about the editing context change.
     static void notifyContextChange(const css::ui::ContextChangeEventObject& rEvent);
 
+    /// Emits an LOK_CALLBACK_VIEW_RENDER_STATE
+    static void notifyViewRenderState(SfxViewShell const* pViewShell, vcl::ITiledRenderable* pDoc);
+
     // Notify about the given type needing an update.
     static void notifyUpdate(SfxViewShell const* pViewShell, int nType);
     // Notify about the given type needing a per-viewid update.
