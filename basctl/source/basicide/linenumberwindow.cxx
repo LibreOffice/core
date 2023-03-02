@@ -21,7 +21,9 @@ LineNumberWindow::LineNumberWindow(vcl::Window* pParent, ModulWindow* pModulWind
     , m_pModulWindow(pModulWindow)
     , m_nCurYOffset(0)
 {
-    SetBackground(Wallpaper(GetSettings().GetStyleSettings().GetWindowColor()));
+    const Wallpaper aBackground(GetSettings().GetStyleSettings().GetWindowColor());
+    SetBackground(aBackground);
+    GetWindow(GetWindowType::Border)->SetBackground(aBackground);
     m_FontColor = GetSettings().GetStyleSettings().GetWindowTextColor();
     m_nBaseWidth = GetTextWidth("8");
     m_nWidth = m_nBaseWidth * 3 + m_nBaseWidth / 2;
