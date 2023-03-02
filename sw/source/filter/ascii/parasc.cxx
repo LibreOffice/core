@@ -474,6 +474,17 @@ ErrCode SwASCIIParser::ReadChars()
 
         if( bIns )
         {
+            if( ( nLineLen >= MAX_ASCII_PARA - 100 ) &&
+                ( ( *pStt == ' ' ) || ( nLineLen >= MAX_ASCII_PARA - 1 ) ) )
+            {
+                sal_Unicode c = *pStt;
+                *pStt = 0;
+                InsertText( OUString( pLastStt ));
+                m_rDoc.getIDocumentContentOperations().SplitNode(*m_oPam->GetPoint(), false);
+                pLastStt = pStt;
+                nLineLen = 0;
+                *pStt = c;
+            }
             ++pStt;
             ++nLineLen;
         }

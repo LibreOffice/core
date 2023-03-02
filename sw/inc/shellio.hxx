@@ -51,6 +51,14 @@ struct Writer_Impl;
 namespace sw::mark { class IMark; }
 namespace com::sun::star::embed { class XStorage; }
 
+// Defines the count of chars at which a paragraph read via ASCII/W4W-Reader
+// is forced to wrap. It has to be always greater than 200!!!
+// Note: since version 4.3, maximum character count changed to 4 GiB from 64 KiB
+// in a paragraph, but because of the other limitations, we set a lower wrap value
+// to get a working text editor e.g. without freezing and crash during loading of
+// a 50 MB text line, or unusably slow editing of a 5 MB text line.
+#define MAX_ASCII_PARA 250000
+
 class SW_DLLPUBLIC SwAsciiOptions
 {
     OUString m_sFont;
