@@ -448,10 +448,10 @@
                             <property name="activates-default">True</property>
                             <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustment2</property>
-                            <property name="tooltip_text" translatable="yes" context="tocentriespage|entryoutlinelevel">Enter the number of levels of the heading number to show in the index. For example, select “2” to show the first two levels of the heading number.</property>
+                            <property name="tooltip_text" translatable="yes" context="tocentriespage|entryoutlinelevel">Enter the number of levels of the heading number or list number to show in the index. For example, select “2” to show the first two levels of the number.</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="entryoutlinelevel-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|entryoutlinelevel">Enter the number of levels of the heading number to show in the index. For example, select “2” to show the first two levels of the heading number. To enable heading numbers for headings, choose Tools - Heading Numbering.</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|entryoutlinelevel">Enter the number of levels of the heading number or list number to show in the index. For example, select “2” to show the first two levels of the number. To enable numbers for headings, choose “Tools - Heading Numbering”.</property>
                               </object>
                             </child>
                           </object>
@@ -486,7 +486,7 @@
                             </items>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="numberformat-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|numberformat">Only visible when you click the E# button in the Structure line. Select to show the chapter number with or without separator.</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|numberformat">Select to show number with or without separator.</property>
                               </object>
                             </child>
                           </object>
@@ -582,15 +582,15 @@
                             </child>
                             <child>
                               <object class="GtkButton" id="chapterno">
-                                <property name="label" translatable="yes" context="tocentriespage|chapterno">Heading No.</property>
+                                <property name="label" translatable="yes" context="tocentriespage|chapterno">Numbering</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">True</property>
                                 <property name="no-show-all">True</property>
                                 <property name="use-underline">True</property>
-                                <property name="tooltip-text" translatable="yes" context="tocentriespage|chapterno|tooltip_text">Insert in the entry structure to include heading numbers for the selected level in the generated index.</property>
+                                <property name="tooltip-text" translatable="yes" context="tocentriespage|chapterno|tooltip_text">Insert in the “Structure” to include the heading number or list number of the entry text in the generated index.</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="chapterno-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|chapterno">Insert in the entry structure to include heading numbers for the selected level in the generated index. To enable numbers for headings, choose Tools - Heading Numbering.</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|chapterno">Insert in the “Structure” to include the heading number or list number of the entry text in the generated index. To enable numbers for headings, choose “Tools - Heading Numbering“.</property>
                                   </object>
                                 </child>
                               </object>
@@ -606,9 +606,10 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">True</property>
+                                <property name="tooltip-text" translatable="yes" context="tocentriespage|entrytext|tooltip_text">Insert to include the text of the index entries generated from the settings in the “Type“ tab.</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="entrytext-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|entrytext">Inserts the text of the chapter heading.</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|entrytext">Insert in the “Structure” to include the text of the index entries generated from the settings in the “Type“ tab.</property>
                                   </object>
                                 </child>
                               </object>
