@@ -135,10 +135,10 @@ inline constexpr OUStringLiteral BMP_RADIAL = u"svx/res/symphony/radial.png";
 inline constexpr OUStringLiteral BMP_SQUARE = u"svx/res/symphony/Square.png";
 inline constexpr OUStringLiteral BMP_LINEAR = u"svx/res/symphony/linear.png";
 
-inline constexpr OUStringLiteral RID_SVXBMP_STANDARD_SELECTION = u"svx/res/standard-selection_10x22.png";
-inline constexpr OUStringLiteral RID_SVXBMP_EXTENDING_SELECTION = u"svx/res/extending-selection_10x22.png";
-inline constexpr OUStringLiteral RID_SVXBMP_ADDING_SELECTION = u"svx/res/adding-selection_10x22.png";
-inline constexpr OUStringLiteral RID_SVXBMP_BLOCK_SELECTION = u"svx/res/block-selection_10x22.png";
+inline constexpr OUStringLiteral RID_SVXBMP_STANDARD_SELECTION = u"svx/res/standard-selection.png";
+inline constexpr OUStringLiteral RID_SVXBMP_EXTENDING_SELECTION = u"svx/res/extending-selection.png";
+inline constexpr OUStringLiteral RID_SVXBMP_ADDING_SELECTION = u"svx/res/adding-selection.png";
+inline constexpr OUStringLiteral RID_SVXBMP_BLOCK_SELECTION = u"svx/res/block-selection.png";
 inline constexpr OUStringLiteral RID_SVXBMP_POSITION = u"res/sc10223.png";
 inline constexpr OUStringLiteral RID_SVXBMP_SIZE = u"res/sc10224.png";
 inline constexpr OUStringLiteral RID_SVXBMP_SIGNET = u"svx/res/signet_11x16.png";
