@@ -312,6 +312,35 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyEnable)
     // Without the accompanying fix in place, this test would have failed, there was no 2nd page.
     CPPUNIT_ASSERT(pPage2);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyFooter)
+{
+    // Given a document with a floattable, table split on 2 pages with headers/footers:
+    std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(true,
+                                                                                        pChanges);
+    pChanges->commit();
+    comphelper::ScopeGuard g([pChanges] {
+        officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(
+            false, pChanges);
+        pChanges->commit();
+    });
+    createSwDoc("floattable-footer.docx");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure that the table is split to 2 pages:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    // Second page:
+    auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
+    // Without the accompanying fix in place, this test would have failed, there was no 2nd page.
+    CPPUNIT_ASSERT(pPage2);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1551,7 +1551,10 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
 {
     auto pFly = dynamic_cast<SwFlyAtContentFrame*>(FindFlyFrame());
     assert(pFly && "GetNextFlyLeaf: missing fly frame");
+    assert(pFly->IsFlySplitAllowed() && "GetNextFlyLeaf: fly split not allowed");
 
+    SwTextFrame* pFlyAnchor = pFly->FindAnchorCharFrame();
+    bool bBody = pFlyAnchor && pFlyAnchor->IsInDocBody();
     SwLayoutFrame *pLayLeaf = nullptr;
     // Look up the first candidate.
     if (IsTabFrame())
@@ -1570,16 +1573,16 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
     {
         if (pLayLeaf)
         {
-            // If we have a candidate, make sure that it's a child of our follow.
-            if (pFly->IsFlySplitAllowed())
+            // If we're anchored in a body frame, the candidate has to be in a body frame as well.
+            bool bLeftBody = bBody && !pLayLeaf->IsInDocBody();
+            // If the candiate is in a fly, make sure that the candidate is a child of our follow.
+            bool bLeftFly = pLayLeaf->IsInFly() && pLayLeaf->FindFlyFrame() != pFly->GetFollow();
+            if (bLeftBody || bLeftFly)
             {
-                if (pFly->GetFollow() != pLayLeaf->FindFlyFrame())
-                {
-                    // It's not in our follow, reject.
-                    pOldLayLeaf = pLayLeaf;
-                    pLayLeaf = pLayLeaf->GetNextLayoutLeaf();
-                    continue;
-                }
+                // The above conditions are not held, reject.
+                pOldLayLeaf = pLayLeaf;
+                pLayLeaf = pLayLeaf->GetNextLayoutLeaf();
+                continue;
             }
         }
         else
@@ -1601,7 +1604,6 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
     {
         SwFlyAtContentFrame* pNew = nullptr;
         // Find the anchor frame to split.
-        SwTextFrame* pFlyAnchor = pFly->FindAnchorCharFrame();
         if (pFlyAnchor)
         {
             // Split the anchor at char 0: all the content goes to the follow of the anchor.
