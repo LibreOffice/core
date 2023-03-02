@@ -45,6 +45,7 @@ private:
     std::vector<std::unique_ptr<AccessibilityCheckEntry>> m_aAccessibilityCheckEntries;
 
     // Controls
+    std::unique_ptr<weld::ScrolledWindow> m_xScrolledWindow;
     std::unique_ptr<weld::Box> m_xAccessibilityCheckBox;
     std::unique_ptr<weld::Button> m_xRescanBtn;
 
