@@ -25,9 +25,10 @@ AccessibilityCheckEntry::AccessibilityCheckEntry(
     , m_pAccessibilityIssue(rAccessibilityIssue)
 {
     m_xLabel->set_label(m_pAccessibilityIssue->m_aIssueText);
+    // lock in the height as including the button so all rows are the same height
+    m_xContainer->set_size_request(-1, m_xContainer->get_preferred_size().Height());
     m_xGotoButton->set_visible(m_pAccessibilityIssue->canGotoIssue());
     m_xGotoButton->connect_clicked(LINK(this, AccessibilityCheckEntry, GotoButtonClicked));
-    m_xContainer->show();
 }
 
 IMPL_LINK_NOARG(AccessibilityCheckEntry, GotoButtonClicked, weld::Button&, void)
@@ -42,6 +43,7 @@ AccessibilityCheckDialog::AccessibilityCheckDialog(
                               "AccessibilityCheckDialog")
     , m_aIssueCollection(std::move(aIssueCollection))
     , m_getIssueCollection(getIssueCollection)
+    , m_xScrolledWindow(m_xBuilder->weld_scrolled_window("scrolledwindow"))
     , m_xAccessibilityCheckBox(m_xBuilder->weld_box("accessibilityCheckBox"))
     , m_xRescanBtn(m_xBuilder->weld_button("rescan"))
 {
@@ -61,6 +63,14 @@ void AccessibilityCheckDialog::populateIssues()
             = std::make_unique<AccessibilityCheckEntry>(m_xAccessibilityCheckBox.get(), pIssue);
         m_xAccessibilityCheckBox->reorder_child(xEntry->get_widget(), i++);
         m_aAccessibilityCheckEntries.push_back(std::move(xEntry));
+    }
+
+    if (!m_aAccessibilityCheckEntries.empty())
+    {
+        auto nRowHeight
+            = m_aAccessibilityCheckEntries.back()->get_widget()->get_preferred_size().Height();
+        // 6 is the spacing set in the .ui
+        m_xScrolledWindow->vadjustment_set_step_increment(nRowHeight + 6);
     }
 }
 
