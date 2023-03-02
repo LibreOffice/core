@@ -24,7 +24,7 @@
 // this are the defines for the position of the settings in the
 // ViewSettingsSequence
 
-#define SC_VIEWSETTINGS_COUNT               24
+#define SC_VIEWSETTINGS_COUNT               25
 
 #define SC_VIEW_ID                          0
 #define SC_TABLE_VIEWSETTINGS               1
