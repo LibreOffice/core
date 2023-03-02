@@ -107,22 +107,13 @@ NumberingPopup::NumberingPopup(NumberingToolBoxControl& rController,
     mxValueSet->SetOutputSizePixel(aSize);
     mxValueSet->SetColor(Application::GetSettings().GetStyleSettings().GetFieldColor());
 
-    OUString aMoreItemText;
+    OUString aMoreItemText = SvxResId( RID_SVXSTR_CUSTOMIZE );
     if ( mePageType == NumberingPageType::BULLET )
-    {
-        aMoreItemText = SvxResId( RID_SVXSTR_MOREBULLETS );
         AddStatusListener( ".uno:CurrentBulletListType" );
-    }
     else if ( mePageType == NumberingPageType::SINGLENUM )
-    {
-        aMoreItemText = SvxResId( RID_SVXSTR_MORENUMBERING );
         AddStatusListener( ".uno:CurrentNumListType" );
-    }
     else
-    {
-        aMoreItemText = SvxResId( RID_SVXSTR_MORE );
         AddStatusListener( ".uno:CurrentOutlineType" );
-    }
 
     auto xImage = vcl::CommandInfoProvider::GetXGraphicForCommand(".uno:OutlineBullet", mrController.getFrameInterface());
     mxMoreButton->set_image(xImage);
