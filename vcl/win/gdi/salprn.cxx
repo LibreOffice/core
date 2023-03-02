@@ -207,8 +207,8 @@ void WinSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
                     pInfo->maComment = o3tl::toU(pWinInfo2->pComment);
                 pInfo->mnStatus      = ImplWinQueueStatusToSal( pWinInfo2->Status );
                 pInfo->mnJobs        = pWinInfo2->cJobs;
-                if( ! pInfo->mpPortName )
-                    pInfo->mpPortName.reset(new OUString(aPortName));
+                if( ! pInfo->moPortName )
+                    pInfo->moPortName = aPortName;
             }
             std::free(pWinInfo2);
         }
@@ -1029,11 +1029,11 @@ SalInfoPrinter* WinSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
                                                    ImplJobSetup* pSetupData )
 {
     WinSalInfoPrinter* pPrinter = new WinSalInfoPrinter;
-    if( ! pQueueInfo->mpPortName )
+    if( ! pQueueInfo->moPortName )
         GetPrinterQueueState( pQueueInfo );
     pPrinter->maDriverName  = pQueueInfo->maDriver;
     pPrinter->maDeviceName  = pQueueInfo->maPrinterName;
-    pPrinter->maPortName    = pQueueInfo->mpPortName ? *pQueueInfo->mpPortName : OUString();
+    pPrinter->maPortName    = pQueueInfo->moPortName ? *pQueueInfo->moPortName : OUString();
 
     // check if the provided setup data match the actual printer
     ImplTestSalJobSetup( pPrinter, pSetupData, true );

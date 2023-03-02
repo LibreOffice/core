@@ -42,7 +42,7 @@ struct VCL_PLUGIN_PUBLIC SalPrinterQueueInfo
     OUString               maComment;
     PrintQueueFlags        mnStatus;
     sal_uInt32             mnJobs;
-    std::unique_ptr<OUString> mpPortName; // only used by Windows backend
+    std::optional<OUString> moPortName; // only used by Windows backend
 
                             SalPrinterQueueInfo();
                             ~SalPrinterQueueInfo();
