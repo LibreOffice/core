@@ -1515,6 +1515,9 @@ void ValueSet::ImplDrawItemText(vcl::RenderContext& rRenderContext, const OUStri
         nTxtOffset += NAME_LINE_HEIGHT+NAME_LINE_OFF_Y;
 
     rRenderContext.SetTextColor(Application::GetSettings().GetStyleSettings().GetButtonTextColor());
+    // tdf#153787 highlighted entry text is drawn in the same Paint as the selected text, so can
+    // overwrite already rendered text
+    rRenderContext.Erase(tools::Rectangle(Point(0, nTxtOffset), Point(aWinSize.Width(), aWinSize.Height())));
     rRenderContext.DrawText(Point((aWinSize.Width() - nTxtWidth) / 2, nTxtOffset + (NAME_OFFSET / 2)), rText);
 
     rRenderContext.Pop();
