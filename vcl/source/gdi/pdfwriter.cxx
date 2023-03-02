@@ -132,7 +132,7 @@ void PDFWriter::DrawRect( const tools::Rectangle& rRect )
     xImplementation->drawRectangle( rRect );
 }
 
-void PDFWriter::DrawRect( const tools::Rectangle& rRect, sal_uLong nHorzRound, sal_uLong nVertRound )
+void PDFWriter::DrawRect( const tools::Rectangle& rRect, sal_uInt32 nHorzRound, sal_uInt32 nVertRound )
 {
     xImplementation->drawRectangle( rRect, nHorzRound, nVertRound );
 }
