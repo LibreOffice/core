@@ -2464,6 +2464,20 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf114769)
                          getXPath(pHtmlDoc, "/html/body/p[5]/a", "href"));
 }
 
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf153923)
+{
+    createSwDoc("TableWithIndent.fodt");
+    save("HTML (StarWriter)");
+
+    // Parse it as XML (strict!)
+    xmlDocUniquePtr pDoc = parseXml(maTempFile);
+    // Without the fix in place, this would fail
+    CPPUNIT_ASSERT(pDoc);
+
+    // The 'dd' tag was not closed
+    assertXPath(pDoc, "/html/body//dd");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
