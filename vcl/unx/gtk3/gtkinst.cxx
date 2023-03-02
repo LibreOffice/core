@@ -11728,8 +11728,8 @@ public:
     }
 
     // tdf#153885 for wayland if the popover window is the application
-    // window, contrain it within the application window so it won't
-    // be cut off off screen. Leave dialog hosted ones alone, like
+    // window, constrain it within the application window so it won't
+    // be cut off screen. Leave dialog hosted ones alone, like
     // format, watermark, which are likely presented in the middle
     // of the screen and are too small to constrain the popover inside.
     void ConstrainApplicationWindowPopovers(GtkToggleButton* pItem)
