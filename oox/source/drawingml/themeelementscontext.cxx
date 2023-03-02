@@ -142,18 +142,22 @@ namespace {
 class EffectStyleListContext : public ContextHandler2
 {
 public:
-    EffectStyleListContext( ContextHandler2Helper const & rParent, EffectStyleList& rEffectStyleList );
+    EffectStyleListContext(ContextHandler2Helper const & rParent, EffectStyleList& rEffectStyleList, model::FormatScheme& rFormatScheme);
     virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 
 private:
+    model::FormatScheme& mrFormatScheme;
+    model::EffectStyle* mpEffectStyle;
     EffectStyleList& mrEffectStyleList;
 };
 
 }
 
-EffectStyleListContext::EffectStyleListContext( ContextHandler2Helper const & rParent, EffectStyleList& rEffectStyleList ) :
-    ContextHandler2( rParent ),
-    mrEffectStyleList( rEffectStyleList )
+EffectStyleListContext::EffectStyleListContext( ContextHandler2Helper const & rParent, EffectStyleList& rEffectStyleList, model::FormatScheme& rFormatScheme)
+    : ContextHandler2(rParent)
+    , mrFormatScheme(rFormatScheme)
+    , mpEffectStyle(nullptr)
+    , mrEffectStyleList(rEffectStyleList)
 {
 }
 
@@ -162,13 +166,17 @@ ContextHandlerRef EffectStyleListContext::onCreateContext( sal_Int32 nElement, c
     switch( nElement )
     {
         case A_TOKEN( effectStyle ):
+        {
+            mpEffectStyle = mrFormatScheme.addEffectStyle();
             mrEffectStyleList.push_back( std::make_shared<EffectProperties>( ) );
             return this;
-
+        }
         case A_TOKEN( effectLst ):  // CT_EffectList
+        {
             if( mrEffectStyleList.back() )
-                return new EffectPropertiesContext( *this, *mrEffectStyleList.back() );
-            break;
+                return new EffectPropertiesContext(*this, *mrEffectStyleList.back(), mpEffectStyle);
+        }
+        break;
     }
     return nullptr;
 }
@@ -344,7 +352,7 @@ ContextHandlerRef ThemeElementsContext::onCreateContext(sal_Int32 nElement, cons
         case A_TOKEN( lnStyleLst ):    // CT_LineStyleList
             return new LineStyleListContext(*this, mrOoxTheme.getLineStyleList(), mrTheme.getFormatScheme());
         case A_TOKEN( effectStyleLst ): // CT_EffectStyleList
-            return new EffectStyleListContext( *this, mrOoxTheme.getEffectStyleList() );
+            return new EffectStyleListContext(*this, mrOoxTheme.getEffectStyleList(), mrTheme.getFormatScheme());
         case A_TOKEN( bgFillStyleLst ): // CT_BackgroundFillStyleList
             return new BackgroundFillStyleListContext( *this, mrOoxTheme.getBgFillStyleList(), mrTheme.getFormatScheme());
     }

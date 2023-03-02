@@ -422,6 +422,26 @@ IndexRange GetIndexRange( const Reference< XFastAttributeList >& xAttributes )
     return range;
 }
 
+
+model::RectangleAlignment convertToRectangleAlignment(sal_Int32 nToken)
+{
+    switch (nToken)
+    {
+        case XML_tl: return model::RectangleAlignment::TopLeft;
+        case XML_t: return model::RectangleAlignment::Top;
+        case XML_tr: return model::RectangleAlignment::TopRight;
+        case XML_l: return model::RectangleAlignment::Left;
+        case XML_ctr: return model::RectangleAlignment::Center;
+        case XML_r: return model::RectangleAlignment::Right;
+        case XML_bl: return model::RectangleAlignment::BottomLeft;
+        case XML_b: return model::RectangleAlignment::Bottom;
+        case XML_br: return model::RectangleAlignment::BottomRight;
+        default:
+            break;
+    }
+    return model::RectangleAlignment::Unset;
+}
+
 } // namespace oox::drawingml
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

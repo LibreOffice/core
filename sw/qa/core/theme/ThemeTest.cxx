@@ -21,6 +21,8 @@
 
 using namespace css;
 
+namespace
+{
 class SwCoreThemeTest : public SwModelTestBase
 {
 public:
@@ -41,6 +43,43 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeColorInHeading)
     model::ThemeColor aThemeColor;
     model::theme::setFromXThemeColor(aThemeColor, xThemeColor);
     CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
+}
+
+void checkEffects(std::vector<model::EffectStyle> const& rEffectStyleList)
+{
+    CPPUNIT_ASSERT_EQUAL(size_t(3), rEffectStyleList.size());
+    {
+        model::EffectStyle rEffectStyle = rEffectStyleList[0];
+        CPPUNIT_ASSERT_EQUAL(size_t(0), rEffectStyle.maEffectList.size());
+    }
+
+    {
+        model::EffectStyle rEffectStyle = rEffectStyleList[1];
+        CPPUNIT_ASSERT_EQUAL(size_t(0), rEffectStyle.maEffectList.size());
+    }
+
+    {
+        model::EffectStyle rEffectStyle = rEffectStyleList[2];
+        CPPUNIT_ASSERT_EQUAL(size_t(1), rEffectStyle.maEffectList.size());
+        model::Effect const& rEffect = rEffectStyle.maEffectList[0];
+
+        CPPUNIT_ASSERT_EQUAL(model::EffectType::OuterShadow, rEffect.meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(57150), rEffect.mnBlurRadius);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(19050), rEffect.mnDistance);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5400000), rEffect.mnDirection);
+        CPPUNIT_ASSERT_EQUAL(model::RectangleAlignment::Center, rEffect.meAlignment);
+        CPPUNIT_ASSERT_EQUAL(false, rEffect.mbRotateWithShape);
+
+        CPPUNIT_ASSERT_EQUAL(model::ColorType::RGB, rEffect.maColor.meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rEffect.maColor.mnComponent1);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rEffect.maColor.mnComponent2);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rEffect.maColor.mnComponent3);
+
+        CPPUNIT_ASSERT_EQUAL(size_t(1), rEffect.maColor.maTransformations.size());
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::Alpha,
+                             rEffect.maColor.maTransformations[0].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(6300), rEffect.maColor.maTransformations[0].mnValue);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
@@ -87,6 +126,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
     CPPUNIT_ASSERT_EQUAL(size_t(3), rFormatScheme.getFillStyleList().size());
     CPPUNIT_ASSERT_EQUAL(size_t(3), rFormatScheme.getLineStyleList().size());
     CPPUNIT_ASSERT_EQUAL(size_t(3), rFormatScheme.getBackgroundFillStyleList().size());
+
+    checkEffects(rFormatScheme.getEffectStyleList());
 
     // Fill style 1
     {
@@ -343,6 +384,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsODT)
     CPPUNIT_ASSERT_EQUAL(Color(0xFFFFFF), pTheme->GetColor(model::ThemeColorType::Light1));
     CPPUNIT_ASSERT_EQUAL(Color(0xCCDDEA), pTheme->GetColor(model::ThemeColorType::Light2));
 }
+
+} // end anonymous namnespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
