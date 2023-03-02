@@ -30,138 +30,6 @@ public:
         : ChartTest("/chart2/qa/extras/data/")
     {
     }
-
-    void testSetSeriesToSecondaryAxisXLSX();
-    void testCombinedChartSecondaryAxisXLSX();
-    void testCombinedChartSecondaryAxisODS();
-    void testCrossBetweenXLSX();
-    void testCrossBetweenWithDeletedAxis();
-    void testCrossBetweenODS();
-    void testAxisTitleRotationXLSX();
-    void testAxisTitlePositionDOCX();
-    void testAxisCrossBetweenDOCX();
-    void testPieChartDataPointExplosionXLSX();
-    void testCustomDataLabel();
-    void testDataSeriesName();
-    void testCustomPositionofDataLabel();
-    void testCustomDataLabelMultipleSeries();
-    void testLeaderLines();
-    void testNumberFormatExportPPTX();
-    void testLabelSeparatorExportDOCX();
-    void testChartTitlePropertiesColorFillPPTX();
-    void testChartTitlePropertiesGradientFillPPTX();
-    void testChartTitlePropertiesBitmapFillPPTX();
-    void testxAxisLabelsRotation();
-    void testMultipleCategoryAxisLablesXLSX();
-    void testMultipleCategoryAxisLablesDOCX();
-    void testTdf116163();
-    void testTdf111824();
-    void test3DAreaChartZAxis();
-    void testTdf119029();
-    void testTdf108022();
-    void testTdf121744();
-    void testTdf121189();
-    void testTdf122031();
-    void testTdf115012();
-    void testTdf134118();
-    void testTdf123206_customLabelText();
-    void testCustomLabelText();
-    void testDeletedLegendEntries();
-    void testTdf60316();
-    void testTdf130225();
-    void testTdf59857();
-    void testTdf126076();
-    void testTdf75330();
-    void testTdf127792();
-    void testTdf131979();
-    void testTdf132076();
-    void testTdf125812();
-    void testTdf133190();
-    void testTdf133191();
-    void testTdf132594();
-    void testTdf134255();
-    void testTdf134977();
-    void testTdf123647();
-    void testTdf136267();
-    void testDataLabelPlacementPieChart();
-    void testTdf137917();
-    void testTdf138204();
-    void testTdf138181();
-    void testCustomShapeText();
-    void testuserShapesXLSX();
-    void testuserShapesDOCX();
-    void testGraphicBlipXLSX();
-    void testNameRangeXLSX();
-    void testTdf143942();
-    void testDateCategoriesPPTX();
-    void testDataTableImportExport();
-
-    CPPUNIT_TEST_SUITE(Chart2ExportTest2);
-    CPPUNIT_TEST(testSetSeriesToSecondaryAxisXLSX);
-    CPPUNIT_TEST(testCombinedChartSecondaryAxisXLSX);
-    CPPUNIT_TEST(testCombinedChartSecondaryAxisODS);
-    CPPUNIT_TEST(testCrossBetweenXLSX);
-    CPPUNIT_TEST(testCrossBetweenWithDeletedAxis);
-    CPPUNIT_TEST(testCrossBetweenODS);
-    CPPUNIT_TEST(testAxisTitleRotationXLSX);
-    CPPUNIT_TEST(testAxisTitlePositionDOCX);
-    CPPUNIT_TEST(testAxisCrossBetweenDOCX);
-    CPPUNIT_TEST(testPieChartDataPointExplosionXLSX);
-    CPPUNIT_TEST(testCustomDataLabel);
-    CPPUNIT_TEST(testDataSeriesName);
-    CPPUNIT_TEST(testCustomPositionofDataLabel);
-    CPPUNIT_TEST(testCustomDataLabelMultipleSeries);
-    CPPUNIT_TEST(testLeaderLines);
-    CPPUNIT_TEST(testNumberFormatExportPPTX);
-    CPPUNIT_TEST(testLabelSeparatorExportDOCX);
-    CPPUNIT_TEST(testChartTitlePropertiesColorFillPPTX);
-    CPPUNIT_TEST(testChartTitlePropertiesGradientFillPPTX);
-    CPPUNIT_TEST(testChartTitlePropertiesBitmapFillPPTX);
-    CPPUNIT_TEST(testxAxisLabelsRotation);
-    CPPUNIT_TEST(testMultipleCategoryAxisLablesXLSX);
-    CPPUNIT_TEST(testMultipleCategoryAxisLablesDOCX);
-    CPPUNIT_TEST(testTdf116163);
-    CPPUNIT_TEST(testTdf111824);
-    CPPUNIT_TEST(test3DAreaChartZAxis);
-    CPPUNIT_TEST(testTdf119029);
-    CPPUNIT_TEST(testTdf108022);
-    CPPUNIT_TEST(testTdf121744);
-    CPPUNIT_TEST(testTdf121189);
-    CPPUNIT_TEST(testTdf122031);
-    CPPUNIT_TEST(testTdf115012);
-    CPPUNIT_TEST(testTdf134118);
-    CPPUNIT_TEST(testTdf123206_customLabelText);
-    CPPUNIT_TEST(testCustomLabelText);
-    CPPUNIT_TEST(testDeletedLegendEntries);
-    CPPUNIT_TEST(testTdf60316);
-    CPPUNIT_TEST(testTdf130225);
-    CPPUNIT_TEST(testTdf59857);
-    CPPUNIT_TEST(testTdf126076);
-    CPPUNIT_TEST(testTdf75330);
-    CPPUNIT_TEST(testTdf127792);
-    CPPUNIT_TEST(testTdf131979);
-    CPPUNIT_TEST(testTdf132076);
-    CPPUNIT_TEST(testTdf125812);
-    CPPUNIT_TEST(testTdf133190);
-    CPPUNIT_TEST(testTdf133191);
-    CPPUNIT_TEST(testTdf132594);
-    CPPUNIT_TEST(testTdf134255);
-    CPPUNIT_TEST(testTdf134977);
-    CPPUNIT_TEST(testTdf123647);
-    CPPUNIT_TEST(testTdf136267);
-    CPPUNIT_TEST(testDataLabelPlacementPieChart);
-    CPPUNIT_TEST(testTdf137917);
-    CPPUNIT_TEST(testTdf138204);
-    CPPUNIT_TEST(testTdf138181);
-    CPPUNIT_TEST(testCustomShapeText);
-    CPPUNIT_TEST(testuserShapesXLSX);
-    CPPUNIT_TEST(testuserShapesDOCX);
-    CPPUNIT_TEST(testGraphicBlipXLSX);
-    CPPUNIT_TEST(testNameRangeXLSX);
-    CPPUNIT_TEST(testTdf143942);
-    CPPUNIT_TEST(testDateCategoriesPPTX);
-    CPPUNIT_TEST(testDataTableImportExport);
-    CPPUNIT_TEST_SUITE_END();
 };
 
 void Chart2ExportTest2::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
@@ -169,7 +37,7 @@ void Chart2ExportTest2::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
     XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
 }
 
-void Chart2ExportTest2::testSetSeriesToSecondaryAxisXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testSetSeriesToSecondaryAxisXLSX)
 {
     loadFromURL(u"xlsx/add_series_secondary_axis.xlsx");
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
@@ -189,7 +57,7 @@ void Chart2ExportTest2::testSetSeriesToSecondaryAxisXLSX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart", 2);
 }
 
-void Chart2ExportTest2::testCombinedChartSecondaryAxisXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCombinedChartSecondaryAxisXLSX)
 {
     // Original file was created with MS Office
     loadFromURL(u"xlsx/combined_chart_secondary_axis.xlsx");
@@ -217,7 +85,7 @@ void Chart2ExportTest2::testCombinedChartSecondaryAxisXLSX()
                 YValueIdOfBarchart);
 }
 
-void Chart2ExportTest2::testCombinedChartSecondaryAxisODS()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCombinedChartSecondaryAxisODS)
 {
     // Original file was created with LibreOffice
     loadFromURL(u"ods/combined_chart_secondary_axis.ods");
@@ -247,7 +115,7 @@ void Chart2ExportTest2::testCombinedChartSecondaryAxisODS()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx[2]/c:crosses", 0);
 }
 
-void Chart2ExportTest2::testCrossBetweenXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCrossBetweenXLSX)
 {
     // FIXME: validation error in OOXML export: Errors: 1
     skipValidation();
@@ -271,7 +139,7 @@ void Chart2ExportTest2::testCrossBetweenXLSX()
     }
 }
 
-void Chart2ExportTest2::testCrossBetweenWithDeletedAxis()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCrossBetweenWithDeletedAxis)
 {
     // Original file was created with MS Office (the category axis is deleted in the file)
     loadFromURL(u"xlsx/tdf128633.xlsx");
@@ -282,7 +150,7 @@ void Chart2ExportTest2::testCrossBetweenWithDeletedAxis()
                 "between");
 }
 
-void Chart2ExportTest2::testCrossBetweenODS()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCrossBetweenODS)
 {
     // Original file was created with LibreOffice
     loadFromURL(u"ods/test_CrossBetween.ods");
@@ -293,7 +161,7 @@ void Chart2ExportTest2::testCrossBetweenODS()
                 "between");
 }
 
-void Chart2ExportTest2::testAxisTitleRotationXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testAxisTitleRotationXLSX)
 {
     loadFromURL(u"xlsx/axis_title_rotation.xlsx");
     save("Calc Office Open XML");
@@ -304,7 +172,7 @@ void Chart2ExportTest2::testAxisTitleRotationXLSX()
                 "rot", "0");
 }
 
-void Chart2ExportTest2::testAxisTitlePositionDOCX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testAxisTitlePositionDOCX)
 {
     loadFromURL(u"docx/testAxisTitlePosition.docx");
     save("Office Open XML Text");
@@ -337,7 +205,7 @@ void Chart2ExportTest2::testAxisTitlePositionDOCX()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.384070199122511, nY, 1e-2);
 }
 
-void Chart2ExportTest2::testAxisCrossBetweenDOCX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testAxisCrossBetweenDOCX)
 {
     loadFromURL(u"odt/axis-position.odt");
 
@@ -349,7 +217,7 @@ void Chart2ExportTest2::testAxisCrossBetweenDOCX()
     assertXPath(pXmlDoc, "(//c:crossBetween)[1]", "val", "midCat");
 }
 
-void Chart2ExportTest2::testPieChartDataPointExplosionXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testPieChartDataPointExplosionXLSX)
 {
     loadFromURL(u"xlsx/pie_chart_datapoint_explosion.xlsx");
     save("Calc Office Open XML");
@@ -360,7 +228,7 @@ void Chart2ExportTest2::testPieChartDataPointExplosionXLSX()
                 "val", "28");
 }
 
-void Chart2ExportTest2::testCustomDataLabel()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomDataLabel)
 {
     loadFromURL(u"pptx/tdf115107.pptx");
 
@@ -482,7 +350,7 @@ void Chart2ExportTest2::testCustomDataLabel()
 }
 
 /// Test for tdf#94235
-void Chart2ExportTest2::testDataSeriesName()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDataSeriesName)
 {
     // ODF
     {
@@ -513,7 +381,7 @@ void Chart2ExportTest2::testDataSeriesName()
     }
 }
 
-void Chart2ExportTest2::testCustomPositionofDataLabel()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomPositionofDataLabel)
 {
     // FIXME: validation error in OOXML export: Errors: 1
     skipValidation();
@@ -588,7 +456,7 @@ void Chart2ExportTest2::testCustomPositionofDataLabel()
     }
 }
 
-void Chart2ExportTest2::testCustomDataLabelMultipleSeries()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomDataLabelMultipleSeries)
 {
     loadFromURL(u"pptx/tdf115107-2.pptx");
 
@@ -650,7 +518,7 @@ void Chart2ExportTest2::testCustomDataLabelMultipleSeries()
     CPPUNIT_ASSERT_EQUAL(OUString("Line"), aFields[2]->getString());
 }
 
-void Chart2ExportTest2::testLeaderLines()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testLeaderLines)
 {
     // FIXME: validation error in OOXML export: Errors: 2
     skipValidation();
@@ -682,7 +550,7 @@ void Chart2ExportTest2::testLeaderLines()
     }
 }
 
-void Chart2ExportTest2::testNumberFormatExportPPTX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testNumberFormatExportPPTX)
 {
     loadFromURL(u"pptx/tdf115859.pptx");
     save("Impress MS PowerPoint 2007 XML");
@@ -695,7 +563,7 @@ void Chart2ExportTest2::testNumberFormatExportPPTX()
                 "sourceLinked", "0");
 }
 
-void Chart2ExportTest2::testLabelSeparatorExportDOCX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testLabelSeparatorExportDOCX)
 {
     loadFromURL(u"docx/testLabelSeparator.docx");
 
@@ -717,7 +585,7 @@ void Chart2ExportTest2::testLabelSeparatorExportDOCX()
         pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[3]/c:dLbls/c:separator", "; ");
 }
 
-void Chart2ExportTest2::testChartTitlePropertiesColorFillPPTX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartTitlePropertiesColorFillPPTX)
 {
     loadFromURL(u"pptx/testChartTitlePropertiesColorFill.pptx");
     save("Impress MS PowerPoint 2007 XML");
@@ -728,7 +596,7 @@ void Chart2ExportTest2::testChartTitlePropertiesColorFillPPTX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:ln/a:noFill", 1);
 }
 
-void Chart2ExportTest2::testChartTitlePropertiesGradientFillPPTX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartTitlePropertiesGradientFillPPTX)
 {
     loadFromURL(u"pptx/testChartTitlePropertiesGradientFill.pptx");
     save("Impress MS PowerPoint 2007 XML");
@@ -743,7 +611,7 @@ void Chart2ExportTest2::testChartTitlePropertiesGradientFillPPTX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:ln/a:noFill", 1);
 }
 
-void Chart2ExportTest2::testChartTitlePropertiesBitmapFillPPTX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartTitlePropertiesBitmapFillPPTX)
 {
     loadFromURL(u"pptx/testChartTitlePropertiesBitmapFill.pptx");
     save("Impress MS PowerPoint 2007 XML");
@@ -753,7 +621,7 @@ void Chart2ExportTest2::testChartTitlePropertiesBitmapFillPPTX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:ln/a:noFill", 1);
 }
 
-void Chart2ExportTest2::testxAxisLabelsRotation()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testxAxisLabelsRotation)
 {
     loadFromURL(u"xlsx/xAxisLabelsRotation.xlsx");
     save("Calc Office Open XML");
@@ -765,7 +633,7 @@ void Chart2ExportTest2::testxAxisLabelsRotation()
                 "2700000");
 }
 
-void Chart2ExportTest2::testMultipleCategoryAxisLablesXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testMultipleCategoryAxisLablesXLSX)
 {
     loadFromURL(u"ods/multilevelcat.ods");
     save("Calc Office Open XML");
@@ -798,7 +666,7 @@ void Chart2ExportTest2::testMultipleCategoryAxisLablesXLSX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:noMultiLvlLbl", "val", "0");
 }
 
-void Chart2ExportTest2::testMultipleCategoryAxisLablesDOCX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testMultipleCategoryAxisLablesDOCX)
 {
     loadFromURL(u"odt/multilevelcat.odt");
     save("Office Open XML Text");
@@ -831,7 +699,7 @@ void Chart2ExportTest2::testMultipleCategoryAxisLablesDOCX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:noMultiLvlLbl", "val", "0");
 }
 
-void Chart2ExportTest2::testTdf116163()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf116163)
 {
     loadFromURL(u"pptx/tdf116163.pptx");
     save("Impress MS PowerPoint 2007 XML");
@@ -842,7 +710,7 @@ void Chart2ExportTest2::testTdf116163()
                 "-5400000");
 }
 
-void Chart2ExportTest2::testTdf111824()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf111824)
 {
     loadFromURL(u"xlsx/tdf111824.xlsx");
     save("Calc Office Open XML");
@@ -857,7 +725,7 @@ void Chart2ExportTest2::testTdf111824()
                 zAxisIdOf3DBarchart);
 }
 
-void Chart2ExportTest2::test3DAreaChartZAxis()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, test3DAreaChartZAxis)
 {
     loadFromURL(u"xlsx/test3DAreaChartZAxis.xlsx");
     save("Calc Office Open XML");
@@ -872,7 +740,7 @@ void Chart2ExportTest2::test3DAreaChartZAxis()
                 zAxisIdOf3DAreachart);
 }
 
-void Chart2ExportTest2::testTdf119029()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf119029)
 {
     loadFromURL(u"odp/tdf119029.odp");
     // Only use "chart", without number, because the number depends on the previous tests
@@ -885,7 +753,7 @@ void Chart2ExportTest2::testTdf119029()
                 "-5400000");
 }
 
-void Chart2ExportTest2::testTdf108022()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf108022)
 {
     loadFromURL(u"odt/tdf108022.odt");
     saveAndReload("Office Open XML Text");
@@ -897,7 +765,7 @@ void Chart2ExportTest2::testTdf108022()
     CPPUNIT_ASSERT(xChartDoc2.is());
 }
 
-void Chart2ExportTest2::testTdf121744()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf121744)
 {
     loadFromURL(u"docx/tdf121744.docx");
     save("Office Open XML Text");
@@ -913,7 +781,7 @@ void Chart2ExportTest2::testTdf121744()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:axId[2]", "val", YValueId);
 }
 
-void Chart2ExportTest2::testTdf121189()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf121189)
 {
     loadFromURL(u"odp/tdf121189.odp");
     saveAndReload("Impress Office Open XML");
@@ -926,7 +794,7 @@ void Chart2ExportTest2::testTdf121189()
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.OLE2Shape"), xShape->getShapeType());
 }
 
-void Chart2ExportTest2::testTdf122031()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf122031)
 {
     //Checks pie chart data label format.
     loadFromURL(u"xlsx/tdf122031.xlsx");
@@ -951,7 +819,7 @@ void Chart2ExportTest2::testTdf122031()
                 "formatCode", "0.000%");
 }
 
-void Chart2ExportTest2::testTdf115012()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf115012)
 {
     loadFromURL(u"xlsx/tdf115012.xlsx");
     save("Calc Office Open XML");
@@ -961,7 +829,7 @@ void Chart2ExportTest2::testTdf115012()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:dispBlanksAs", "val", "zero");
 }
 
-void Chart2ExportTest2::testTdf134118()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf134118)
 {
     loadFromURL(u"xlsx/tdf134118.xlsx");
 
@@ -975,7 +843,7 @@ void Chart2ExportTest2::testTdf134118()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:dispBlanksAs", "val", "gap");
 }
 
-void Chart2ExportTest2::testTdf123206_customLabelText()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf123206_customLabelText)
 {
     loadFromURL(u"docx/tdf123206.docx");
 
@@ -995,7 +863,7 @@ void Chart2ExportTest2::testTdf123206_customLabelText()
                        "kiscica");
 }
 
-void Chart2ExportTest2::testCustomLabelText()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomLabelText)
 {
     loadFromURL(u"docx/testCustomlabeltext.docx");
 
@@ -1034,7 +902,7 @@ void Chart2ExportTest2::testCustomLabelText()
                        "CustomLabel 2");
 }
 
-void Chart2ExportTest2::testDeletedLegendEntries()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDeletedLegendEntries)
 {
     loadFromURL(u"xlsx/deleted_legend_entry.xlsx");
     {
@@ -1073,7 +941,7 @@ void Chart2ExportTest2::testDeletedLegendEntries()
     }
 }
 
-void Chart2ExportTest2::testTdf60316()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf60316)
 {
     loadFromURL(u"pptx/tdf60316.pptx");
     save("Impress MS PowerPoint 2007 XML");
@@ -1085,7 +953,7 @@ void Chart2ExportTest2::testTdf60316()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:solidFill", 0);
 }
 
-void Chart2ExportTest2::testTdf130225()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf130225)
 {
     loadFromURL(u"docx/piechart_deleted_legend_entry.docx");
     saveAndReload("Office Open XML Text");
@@ -1100,7 +968,7 @@ void Chart2ExportTest2::testTdf130225()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), deletedLegendEntriesSeq[0]);
 }
 
-void Chart2ExportTest2::testTdf59857()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf59857)
 {
     loadFromURL(u"ods/tdf59857.ods");
     save("Calc Office Open XML");
@@ -1115,7 +983,7 @@ void Chart2ExportTest2::testTdf59857()
                 "val", "b3b3b3");
 }
 
-void Chart2ExportTest2::testTdf126076()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf126076)
 {
     loadFromURL(u"xlsx/auto_marker_excel10.xlsx");
     save("Calc Office Open XML");
@@ -1130,7 +998,7 @@ void Chart2ExportTest2::testTdf126076()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:marker", 0);
 }
 
-void Chart2ExportTest2::testTdf75330()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf75330)
 {
     loadFromURL(u"ods/legend_overlay.ods");
     saveAndReload("calc8");
@@ -1155,7 +1023,7 @@ void Chart2ExportTest2::testTdf75330()
     }
 }
 
-void Chart2ExportTest2::testTdf127792()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf127792)
 {
     {
         loadFromURL(u"docx/MSO_axis_position.docx");
@@ -1176,7 +1044,7 @@ void Chart2ExportTest2::testTdf127792()
     }
 }
 
-void Chart2ExportTest2::testTdf131979()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf131979)
 {
     loadFromURL(u"ods/tdf131115.ods");
     {
@@ -1211,7 +1079,7 @@ void Chart2ExportTest2::testTdf131979()
     }
 }
 
-void Chart2ExportTest2::testTdf132076()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf132076)
 {
     // FIXME: validation error in OOXML export: Errors: 1
     skipValidation();
@@ -1238,7 +1106,7 @@ void Chart2ExportTest2::testTdf132076()
     }
 }
 
-void Chart2ExportTest2::testTdf125812()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf125812)
 {
     loadFromURL(u"odp/ellipticalGradientFill.odp");
     save("Impress MS PowerPoint 2007 XML");
@@ -1256,7 +1124,7 @@ void Chart2ExportTest2::testTdf125812()
                 "b", "51000");
 }
 
-void Chart2ExportTest2::testTdf133190()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf133190)
 {
     loadFromURL(u"xlsx/tdf133190_tdf133191.xlsx");
 
@@ -1278,7 +1146,7 @@ void Chart2ExportTest2::testTdf133190()
         "wrap", "square");
 }
 
-void Chart2ExportTest2::testTdf133191()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf133191)
 {
     loadFromURL(u"xlsx/tdf133190_tdf133191.xlsx");
 
@@ -1296,7 +1164,7 @@ void Chart2ExportTest2::testTdf133191()
         "rot", "-4500000");
 }
 
-void Chart2ExportTest2::testTdf132594()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf132594)
 {
     loadFromURL(u"xlsx/chart_pie2007.xlsx");
     save("Calc Office Open XML");
@@ -1306,7 +1174,7 @@ void Chart2ExportTest2::testTdf132594()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:cat", 1);
 }
 
-void Chart2ExportTest2::testTdf134255()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf134255)
 {
     loadFromURL(u"docx/tdf134255.docx");
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
@@ -1333,7 +1201,7 @@ void Chart2ExportTest2::testTdf134255()
                 "square");
 }
 
-void Chart2ExportTest2::testTdf134977()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf134977)
 {
     loadFromURL(u"xlsx/custom_data_label.xlsx");
 
@@ -1363,7 +1231,7 @@ void Chart2ExportTest2::testTdf134977()
                 "sz", "900");
 }
 
-void Chart2ExportTest2::testTdf123647()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf123647)
 {
     loadFromURL(u"xlsx/empty_chart.xlsx");
     save("Calc Office Open XML");
@@ -1373,7 +1241,7 @@ void Chart2ExportTest2::testTdf123647()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart", 1);
 }
 
-void Chart2ExportTest2::testTdf136267()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf136267)
 {
     loadFromURL(u"xlsx/tdf136267.xlsx");
 
@@ -1390,7 +1258,7 @@ void Chart2ExportTest2::testTdf136267()
         "John");
 }
 
-void Chart2ExportTest2::testDataLabelPlacementPieChart()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDataLabelPlacementPieChart)
 {
     loadFromURL(u"xlsx/tdf134978.xlsx");
     saveAndReload("calc8");
@@ -1406,7 +1274,7 @@ void Chart2ExportTest2::testDataLabelPlacementPieChart()
     CPPUNIT_ASSERT_EQUAL(chart::DataLabelPlacement::OUTSIDE, nLabelPlacement);
 }
 
-void Chart2ExportTest2::testTdf137917()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf137917)
 {
     loadFromURL(u"xlsx/tdf137917.xlsx");
 
@@ -1426,7 +1294,7 @@ void Chart2ExportTest2::testTdf137917()
                 "days");
 }
 
-void Chart2ExportTest2::testTdf138204()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf138204)
 {
     loadFromURL(u"xlsx/tdf138204.xlsx");
 
@@ -1499,7 +1367,7 @@ void Chart2ExportTest2::testTdf138204()
         "type", "CELLRANGE");
 }
 
-void Chart2ExportTest2::testTdf138181()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf138181)
 {
     loadFromURL(u"xlsx/piechart_deleted_legendentry.xlsx");
     Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
@@ -1525,7 +1393,7 @@ void Chart2ExportTest2::testTdf138181()
     CPPUNIT_ASSERT(xLegendEntry3.is());
 }
 
-void Chart2ExportTest2::testCustomShapeText()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomShapeText)
 {
     loadFromURL(u"ods/tdf72776.ods");
     saveAndReload("calc8");
@@ -1541,7 +1409,7 @@ void Chart2ExportTest2::testCustomShapeText()
     CPPUNIT_ASSERT(!xRange->getString().isEmpty());
 }
 
-void Chart2ExportTest2::testuserShapesXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testuserShapesXLSX)
 {
     loadFromURL(u"xlsx/tdf128621.xlsx");
     saveAndReload("Calc Office Open XML");
@@ -1569,7 +1437,7 @@ void Chart2ExportTest2::testuserShapesXLSX()
     CPPUNIT_ASSERT(!xRange->getString().isEmpty());
 }
 
-void Chart2ExportTest2::testuserShapesDOCX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testuserShapesDOCX)
 {
     loadFromURL(u"docx/tdf143130.docx");
     saveAndReload("Office Open XML Text");
@@ -1597,7 +1465,7 @@ void Chart2ExportTest2::testuserShapesDOCX()
     CPPUNIT_ASSERT(!xRange->getString().isEmpty());
 }
 
-void Chart2ExportTest2::testGraphicBlipXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testGraphicBlipXLSX)
 {
     loadFromURL(u"xlsx/tdf143127.xlsx");
     saveAndReload("Calc Office Open XML");
@@ -1625,7 +1493,7 @@ void Chart2ExportTest2::testGraphicBlipXLSX()
     CPPUNIT_ASSERT_GREATER(size_t(0), nDataSize);
 }
 
-void Chart2ExportTest2::testNameRangeXLSX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testNameRangeXLSX)
 {
     loadFromURL(u"xlsx/chart_with_name_range.xlsx");
     save("Calc Office Open XML");
@@ -1641,7 +1509,7 @@ void Chart2ExportTest2::testNameRangeXLSX()
                        "[0]!series1");
 }
 
-void Chart2ExportTest2::testTdf143942()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf143942)
 {
     loadFromURL(u"xlsx/tdf143942.xlsx");
 
@@ -1710,7 +1578,7 @@ void Chart2ExportTest2::testTdf143942()
     }
 }
 
-void Chart2ExportTest2::testDateCategoriesPPTX()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDateCategoriesPPTX)
 {
     loadFromURL(u"pptx/bnc889755.pptx");
 
@@ -1752,7 +1620,7 @@ void Chart2ExportTest2::testDateCategoriesPPTX()
     }
 }
 
-void Chart2ExportTest2::testDataTableImportExport()
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDataTableImportExport)
 {
     loadFromURL(u"xlsx/ChartDataTable.xlsx");
     {
@@ -1801,8 +1669,6 @@ void Chart2ExportTest2::testDataTableImportExport()
         CPPUNIT_ASSERT_EQUAL(false, bKeys);
     }
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest2);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
