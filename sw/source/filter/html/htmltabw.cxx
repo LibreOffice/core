@@ -1059,6 +1059,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
         if( rHTMLWrt.m_bLFPossible )
             rHTMLWrt.OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_dd );
+        rHTMLWrt.IncIndentLevel();
     }
 
     // eFlyHoriOri and eTabHoriOri now only contain the values of
@@ -1184,6 +1185,15 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
 
     // move Pam behind the table
     rHTMLWrt.m_pCurrentPam->GetPoint()->nNode = *rNode.EndOfSectionNode();
+
+    if (nNewDefListLvl)
+    {
+        rHTMLWrt.DecIndentLevel();
+        if (rHTMLWrt.m_bLFPossible)
+            rHTMLWrt.OutNewLine();
+        // close the dd element
+        HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_dd, false);
+    }
 
     if( bPreserveForm )
     {
