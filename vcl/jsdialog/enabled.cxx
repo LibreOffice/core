@@ -38,8 +38,8 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"cui/ui/macroselectordialog.ui"
         || rUIFile == u"cui/ui/numberingformatpage.ui"
         || rUIFile == u"cui/ui/password.ui"
-        || rUIFile == u"cui/ui/splitcellsdialog.ui"
         || rUIFile == u"cui/ui/similaritysearchdialog.ui"
+        || rUIFile == u"cui/ui/splitcellsdialog.ui"
         || rUIFile == u"cui/ui/widgettestdialog.ui"
         // scalc
         || rUIFile == u"modules/scalc/ui/analysisofvariancedialog.ui"
@@ -80,12 +80,12 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/swriter/ui/captionoptions.ui"
         || rUIFile == u"modules/swriter/ui/contentcontroldlg.ui"
         || rUIFile == u"modules/swriter/ui/contentcontrollistitemdlg.ui"
+        || rUIFile == u"modules/swriter/ui/dropdownfielddialog.ui"
         || rUIFile == u"modules/swriter/ui/insertcaption.ui"
         || rUIFile == u"modules/swriter/ui/linenumbering.ui"
+        || rUIFile == u"modules/swriter/ui/pagenumberdlg.ui"
         || rUIFile == u"modules/swriter/ui/splittable.ui"
         || rUIFile == u"modules/swriter/ui/translationdialog.ui"
-        || rUIFile == u"modules/swriter/ui/pagenumberdlg.ui"
-        || rUIFile == u"modules/swriter/ui/dropdownfielddialog.ui"
         // sfx
         || rUIFile == u"sfx/ui/cmisinfopage.ui"
         || rUIFile == u"sfx/ui/custominfopage.ui"
@@ -105,19 +105,19 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         // vcl
         || rUIFile == u"vcl/ui/wizard.ui"
         // xmlsec
+        || rUIFile == u"filter/ui/pdfgeneralpage.ui"
+        || rUIFile == u"filter/ui/pdflinkspage.ui"
+        || rUIFile == u"filter/ui/pdfoptionsdialog.ui"
+        || rUIFile == u"filter/ui/pdfsecuritypage.ui"
+        || rUIFile == u"filter/ui/pdfsignpage.ui"
+        || rUIFile == u"filter/ui/pdfuserinterfacepage.ui"
+        || rUIFile == u"filter/ui/pdfviewpage.ui"
+        || rUIFile == u"filter/ui/warnpdfdialog.ui"
+        || rUIFile == u"writerperfect/ui/exportepub.ui"
         || rUIFile == u"xmlsec/ui/certgeneral.ui"
         || rUIFile == u"xmlsec/ui/certpage.ui"
         || rUIFile == u"xmlsec/ui/digitalsignaturesdialog.ui"
         || rUIFile == u"xmlsec/ui/viewcertdialog.ui"
-        || rUIFile == u"filter/ui/pdfoptionsdialog.ui"
-        || rUIFile == u"filter/ui/pdfgeneralpage.ui"
-        || rUIFile == u"filter/ui/pdfviewpage.ui"
-        || rUIFile == u"filter/ui/pdfuserinterfacepage.ui"
-        || rUIFile == u"filter/ui/pdfsecuritypage.ui"
-        || rUIFile == u"filter/ui/pdflinkspage.ui"
-        || rUIFile == u"filter/ui/warnpdfdialog.ui"
-        || rUIFile == u"filter/ui/pdfsignpage.ui"
-        || rUIFile == u"writerperfect/ui/exportepub.ui"
         )
     {
         return true;
@@ -196,8 +196,8 @@ bool isBuilderEnabledForSidebar(std::u16string_view rUIFile)
         // swriter
         || rUIFile == u"modules/swriter/ui/managechangessidebar.ui"
         //|| rUIFile == u"modules/swriter/ui/navigatorpanel.ui"
-        || rUIFile == u"modules/swriter/ui/pageformatpanel.ui"
         || rUIFile == u"modules/swriter/ui/pagefooterpanel.ui"
+        || rUIFile == u"modules/swriter/ui/pageformatpanel.ui"
         || rUIFile == u"modules/swriter/ui/pageheaderpanel.ui"
         || rUIFile == u"modules/swriter/ui/pagestylespanel.ui"
         || rUIFile == u"modules/swriter/ui/sidebarstylepresets.ui"
