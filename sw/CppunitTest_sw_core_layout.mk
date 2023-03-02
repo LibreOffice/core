@@ -70,6 +70,7 @@ $(eval $(call gb_CppunitTest_use_configuration,sw_core_layout))
 
 $(eval $(call gb_CppunitTest_use_uiconfigs,sw_core_layout, \
     modules/swriter \
+    sfx \
     svt \
     svx \
 ))
