@@ -139,10 +139,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFootnotes)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // show: nothing is merged
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//merged");
-    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-    CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-    xmlXPathFreeObject(pXmlObj);
+    assertXPath(pXmlDoc, "//merged", 0);
+
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
                 "type", "PortionType::Footnote");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
@@ -374,12 +372,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
-        { // show: nothing is merged
-            xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//merged");
-            xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-            CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-            xmlXPathFreeObject(pXmlObj);
-        }
+        // show: nothing is merged
+        assertXPath(pXmlDoc, "//merged", 0);
 
         assertXPath(pXmlDoc,
                     "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]", "type",
@@ -483,24 +477,16 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
                     "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion[1]",
                     "portion", "foaz");
 
-        { // hide: no anchored object shown
-            xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//anchored");
-            xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-            CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-            xmlXPathFreeObject(pXmlObj);
-        }
+        // hide: no anchored object shown
+        assertXPath(pXmlDoc, "//anchored", 0);
 
         dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
-        { // show: nothing is merged
-            xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//merged");
-            xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-            CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-            xmlXPathFreeObject(pXmlObj);
-        }
+        // show: nothing is merged
+        assertXPath(pXmlDoc, "//merged", 0);
 
         assertXPath(pXmlDoc,
                     "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]", "type",
@@ -618,12 +604,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
-        { // show: nothing is merged
-            xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//merged");
-            xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-            CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-            xmlXPathFreeObject(pXmlObj);
-        }
+        // show: nothing is merged
+        assertXPath(pXmlDoc, "//merged", 0);
 
         assertXPath(pXmlDoc,
                     "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]", "type",
@@ -851,12 +833,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
-        { // show: nothing is merged
-            xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//merged");
-            xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-            CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-            xmlXPathFreeObject(pXmlObj);
-        }
+        // show: nothing is merged
+        assertXPath(pXmlDoc, "//merged", 0);
 
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "type",
                     "PortionType::Para");
@@ -967,24 +945,16 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
                     "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion[1]",
                     "portion", "foaz");
 
-        { // hide: no anchored object shown
-            xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//anchored");
-            xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-            CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-            xmlXPathFreeObject(pXmlObj);
-        }
+        // hide: no anchored object shown
+        assertXPath(pXmlDoc, "//anchored", 0);
 
         dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
-        { // show: nothing is merged
-            xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//merged");
-            xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-            CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-            xmlXPathFreeObject(pXmlObj);
-        }
+        // show: nothing is merged
+        assertXPath(pXmlDoc, "//merged", 0);
 
         assertXPath(pXmlDoc,
                     "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion[1]", "type",
@@ -1114,12 +1084,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
-        { // show: nothing is merged
-            xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//merged");
-            xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-            CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-            xmlXPathFreeObject(pXmlObj);
-        }
+        // show: nothing is merged
+        assertXPath(pXmlDoc, "//merged", 0);
 
         assertXPath(pXmlDoc,
                     "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion[1]", "type",
@@ -1394,12 +1360,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
-        { // show: nothing is merged
-            xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//merged");
-            xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-            CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-            xmlXPathFreeObject(pXmlObj);
-        }
+        // show: nothing is merged
+        assertXPath(pXmlDoc, "//merged", 0);
 
         assertXPath(pXmlDoc,
                     "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
@@ -1562,24 +1524,16 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
             "/root/page[1]/ftncont/ftn[1]/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
             "expand", "1");
 
-        { // hide: no anchored object shown
-            xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//anchored");
-            xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-            CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-            xmlXPathFreeObject(pXmlObj);
-        }
+        // hide: no anchored object shown
+        assertXPath(pXmlDoc, "//anchored", 0);
 
         dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
-        { // show: nothing is merged
-            xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//merged");
-            xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-            CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-            xmlXPathFreeObject(pXmlObj);
-        }
+        // show: nothing is merged
+        assertXPath(pXmlDoc, "//merged", 0);
 
         assertXPath(pXmlDoc,
                     "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
@@ -1757,12 +1711,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
-        { // show: nothing is merged
-            xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//merged");
-            xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-            CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-            xmlXPathFreeObject(pXmlObj);
-        }
+        // show: nothing is merged
+        assertXPath(pXmlDoc, "//merged", 0);
 
         assertXPath(pXmlDoc,
                     "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/"
@@ -1988,10 +1938,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134277)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "/metafile/push/push/push/layoutmode[2]");
-    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Bad position of shape in page break!", 0,
-                                 xmlXPathNodeSetGetLength(pXmlNodes));
+    assertXPath(pXmlDoc, "/metafile/push/push/push/layoutmode[2]", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116486)
@@ -2227,12 +2174,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
-        { // show: nothing is merged
-            xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//merged");
-            xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-            CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-            xmlXPathFreeObject(pXmlObj);
-        }
+        // show: nothing is merged
+        assertXPath(pXmlDoc, "//merged", 0);
 
         assertXPath(pXmlDoc,
                     "/root/page[1]/body/txt[1]/anchored/fly[1]/txt[1]/anchored[1]/fly[1]/txt[1]/"
@@ -2391,24 +2334,16 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
                     "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion[1]",
                     "portion", "foaz");
 
-        { // hide: no anchored object shown
-            xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//anchored");
-            xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-            CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-            xmlXPathFreeObject(pXmlObj);
-        }
+        // hide: no anchored object shown
+        assertXPath(pXmlDoc, "//anchored", 0);
 
         dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
-        { // show: nothing is merged
-            xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//merged");
-            xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-            CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-            xmlXPathFreeObject(pXmlObj);
-        }
+        // show: nothing is merged
+        assertXPath(pXmlDoc, "//merged", 0);
 
         assertXPath(pXmlDoc,
                     "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]", "type",
@@ -2597,12 +2532,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
         discardDumpedLayout();
         pXmlDoc = parseLayoutDump();
 
-        { // show: nothing is merged
-            xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//merged");
-            xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-            CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-            xmlXPathFreeObject(pXmlObj);
-        }
+        // show: nothing is merged
+        assertXPath(pXmlDoc, "//merged", 0);
 
         assertXPath(pXmlDoc,
                     "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]", "type",
@@ -2828,12 +2759,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysAtFlys)
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
-    { // show: nothing is merged
-        xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//merged");
-        xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-        CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-        xmlXPathFreeObject(pXmlObj);
-    }
+    // show: nothing is merged
+    assertXPath(pXmlDoc, "//merged", 0);
 
     assertXPath(pXmlDoc,
                 "/root/page[1]/body/txt[1]/anchored/fly[1]/anchored[1]/fly[1]/txt[1]/SwParaPortion/"
@@ -2958,24 +2885,16 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysAtFlys)
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion[1]",
                 "portion", "foaz");
 
-    { // hide: no anchored object shown
-        xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//anchored");
-        xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-        CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-        xmlXPathFreeObject(pXmlObj);
-    }
+    // hide: no anchored object shown
+    assertXPath(pXmlDoc, "//anchored", 0);
 
     dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
 
-    { // show: nothing is merged
-        xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//merged");
-        xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-        CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-        xmlXPathFreeObject(pXmlObj);
-    }
+    // show: nothing is merged
+    assertXPath(pXmlDoc, "//merged", 0);
 
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
                 "type", "PortionType::Text");
@@ -3104,10 +3023,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineSections)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // show: nothing is merged
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//merged");
-    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-    CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-    xmlXPathFreeObject(pXmlObj);
+    assertXPath(pXmlDoc, "//merged", 0);
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/child::*[1]", "type",
                 "PortionType::Text");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/child::*[1]",
@@ -3227,10 +3143,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineTables)
     pXmlDoc = parseLayoutDump();
 
     // show: nothing is merged
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//merged");
-    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-    CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-    xmlXPathFreeObject(pXmlObj);
+    assertXPath(pXmlDoc, "//merged", 0);
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
                 "type", "PortionType::Text");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]",

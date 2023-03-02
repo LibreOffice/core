@@ -1011,9 +1011,8 @@ CPPUNIT_TEST_FIXTURE(Test, TestTdf143028)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     auto pExportXml = parseExport("word/document.xml");
 
-    CPPUNIT_ASSERT_EQUAL(1, getXPathNode(
-        pExportXml, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/"
-                    "a:graphic/a:graphicData/wps:wsp/wps:spPr/a:xfrm")->nodesetval->nodeNr);
+    assertXPath(pExportXml, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/"
+                    "a:graphic/a:graphicData/wps:wsp/wps:spPr/a:xfrm");
 
 }
 

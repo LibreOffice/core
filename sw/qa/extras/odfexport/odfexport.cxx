@@ -1869,18 +1869,12 @@ DECLARE_ODFEXPORT_TEST(testTdf118393, "tdf118393.odt")
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
         // check first page
-        xmlXPathObjectPtr pXmlPage1Header = getXPathNode(pXmlDoc, "/root/page[1]/header");
-        CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlPage1Header->nodesetval));
-
-        xmlXPathObjectPtr pXmlPage1Footer = getXPathNode(pXmlDoc, "/root/page[1]/footer");
-        CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlPage1Footer->nodesetval));
+        assertXPath(pXmlDoc, "/root/page[1]/header", 0);
+        assertXPath(pXmlDoc, "/root/page[1]/footer", 0);
 
         // check second page in the same way
-        xmlXPathObjectPtr pXmlPage2Header = getXPathNode(pXmlDoc, "/root/page[2]/header");
-        CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlPage2Header->nodesetval));
-
-        xmlXPathObjectPtr pXmlPage2Footer = getXPathNode(pXmlDoc, "/root/page[2]/footer");
-        CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlPage2Footer->nodesetval));
+        assertXPath(pXmlDoc, "/root/page[2]/header");
+        assertXPath(pXmlDoc, "/root/page[2]/footer");
    }
 
     // All other pages should have header/footer

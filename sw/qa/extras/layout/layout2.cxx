@@ -164,10 +164,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineCharAttributes)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // show: nothing is merged
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//merged");
-    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-    CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-    xmlXPathFreeObject(pXmlObj);
+    assertXPath(pXmlDoc, "//merged", 0);
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
                 "type", "PortionType::Text");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
@@ -2026,10 +2023,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf117028)
 
     // The only polypolygon in the rendering result was the white background we
     // want to avoid.
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//polypolygon");
-    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-    CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
-    xmlXPathFreeObject(pXmlObj);
+    assertXPath(pXmlDoc, "//polypolygon", 0);
 
     // Make sure the text is still rendered.
     assertXPathContent(pXmlDoc, "//textarray/text", "Hello");

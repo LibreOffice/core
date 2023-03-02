@@ -940,10 +940,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf81507, "tdf81507.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:sdt/w:sdtPr/w:text");
 
     // Ensure that we have no <w:text/> (not quite correct case, but to ensure import/export are okay)
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "/w:document/w:body/w:p[4]/w:sdt/w:sdtPr/w:text");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
-                           static_cast<sal_Int32>(xmlXPathNodeSetGetLength(pXmlObj->nodesetval)));
-    xmlXPathFreeObject(pXmlObj);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:sdt/w:sdtPr/w:text", 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf139948, "tdf139948.docx")

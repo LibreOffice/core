@@ -1602,13 +1602,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf104440)
 {
     createSwDoc("tdf104440.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//page[2]/body/txt/anchored");
-    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     // This was 0: both Text Frames in the document were anchored to a
     // paragraph on page 1, while we expect that the second Text Frame is
     // anchored to a paragraph on page 2.
-    CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
-    xmlXPathFreeObject(pXmlObj);
+    assertXPath(pXmlDoc, "//page[2]/body/txt/anchored");
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf104425)

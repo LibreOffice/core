@@ -565,21 +565,8 @@ DECLARE_RTFEXPORT_TEST(testTdf116358, "tdf116358.rtf")
 
     // Entire table should go to page 2, no remains on first page
     xmlDocUniquePtr pDump = parseLayoutDump();
-    {
-        xmlXPathObjectPtr pXmlObj = getXPathNode(pDump, "/root/page[1]/body/tab");
-        xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-        sal_Int32 tablesOnPage = xmlXPathNodeSetGetLength(pXmlNodes);
-        xmlXPathFreeObject(pXmlObj);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), tablesOnPage);
-    }
-
-    {
-        xmlXPathObjectPtr pXmlObj = getXPathNode(pDump, "/root/page[2]/body/tab");
-        xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-        sal_Int32 tablesOnPage = xmlXPathNodeSetGetLength(pXmlNodes);
-        xmlXPathFreeObject(pXmlObj);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), tablesOnPage);
-    }
+    assertXPath(pDump, "/root/page[1]/body/tab", 0);
+    assertXPath(pDump, "/root/page[2]/body/tab", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testGutterLeft)

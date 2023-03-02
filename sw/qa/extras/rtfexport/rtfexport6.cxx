@@ -553,32 +553,13 @@ DECLARE_RTFEXPORT_TEST(testTdf133437, "tdf133437.rtf")
 
     xmlDocUniquePtr pDump = parseLayoutDump();
     // Count shapes on first page
-    {
-        xmlXPathObjectPtr pXmlObj
-            = getXPathNode(pDump, "/root/page[1]/body/txt[1]/anchored/SwAnchoredDrawObject");
-        xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-        sal_Int32 shapesOnPage = xmlXPathNodeSetGetLength(pXmlNodes);
-        xmlXPathFreeObject(pXmlObj);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(79), shapesOnPage);
-    }
+    assertXPath(pDump, "/root/page[1]/body/txt[1]/anchored/SwAnchoredDrawObject", 79);
+
     // Second page
-    {
-        xmlXPathObjectPtr pXmlObj
-            = getXPathNode(pDump, "/root/page[2]/body/txt[2]/anchored/SwAnchoredDrawObject");
-        xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-        sal_Int32 shapesOnPage = xmlXPathNodeSetGetLength(pXmlNodes);
-        xmlXPathFreeObject(pXmlObj);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(118), shapesOnPage);
-    }
+    assertXPath(pDump, "/root/page[2]/body/txt[2]/anchored/SwAnchoredDrawObject", 118);
+
     // Third page
-    {
-        xmlXPathObjectPtr pXmlObj
-            = getXPathNode(pDump, "/root/page[3]/body/txt[2]/anchored/SwAnchoredDrawObject");
-        xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-        sal_Int32 shapesOnPage = xmlXPathNodeSetGetLength(pXmlNodes);
-        xmlXPathFreeObject(pXmlObj);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(84), shapesOnPage);
-    }
+    assertXPath(pDump, "/root/page[3]/body/txt[2]/anchored/SwAnchoredDrawObject", 84);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128320)

@@ -541,18 +541,9 @@ void SdMiscTest::testTdf101242_ODF_no_settings()
                               "config:config-item-set[@config:name='ooo:view-settings']/"
                               "config:config-item-map-indexed[@config:name='Views']/"
                               "config:config-item-map-entry");
-    xmlXPathObjectPtr pXmlObj
-        = getXPathNode(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='VisibleLayers']");
-    CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlObj->nodesetval));
-    xmlXPathFreeObject(pXmlObj);
-    pXmlObj = getXPathNode(pXmlDoc2,
-                           sPathStart2 + "/config:config-item[@config:name='PrintableLayers']");
-    CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlObj->nodesetval));
-    xmlXPathFreeObject(pXmlObj);
-    pXmlObj
-        = getXPathNode(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='LockedLayers']");
-    CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlObj->nodesetval));
-    xmlXPathFreeObject(pXmlObj);
+    assertXPath(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='VisibleLayers']", 0);
+    assertXPath(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='PrintableLayers']", 0);
+    assertXPath(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='LockedLayers']", 0);
 }
 
 void SdMiscTest::testTdf101242_settings_keep()
@@ -642,18 +633,9 @@ void SdMiscTest::testTdf101242_settings_remove()
                               "config:config-item-set[@config:name='ooo:view-settings']/"
                               "config:config-item-map-indexed[@config:name='Views']/"
                               "config:config-item-map-entry");
-    xmlXPathObjectPtr pXmlObj
-        = getXPathNode(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='VisibleLayers']");
-    CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlObj->nodesetval));
-    xmlXPathFreeObject(pXmlObj);
-    pXmlObj = getXPathNode(pXmlDoc2,
-                           sPathStart2 + "/config:config-item[@config:name='PrintableLayers']");
-    CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlObj->nodesetval));
-    xmlXPathFreeObject(pXmlObj);
-    pXmlObj
-        = getXPathNode(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='LockedLayers']");
-    CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlObj->nodesetval));
-    xmlXPathFreeObject(pXmlObj);
+    assertXPath(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='VisibleLayers']", 0);
+    assertXPath(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='PrintableLayers']", 0);
+    assertXPath(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='LockedLayers']", 0);
 }
 
 void SdMiscTest::testTdf119392()

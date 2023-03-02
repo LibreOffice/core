@@ -1586,13 +1586,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCp1000115)
 {
     createSwDoc("cp1000115.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "/root/page[2]/body/tab/row/cell[2]/txt");
-    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     // This was 1: the long paragraph in the B1 cell did flow over to the
     // second page, so there was only one paragraph in the second cell of the
     // second page.
-    CPPUNIT_ASSERT_EQUAL(2, xmlXPathNodeSetGetLength(pXmlNodes));
-    xmlXPathFreeObject(pXmlObj);
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell[2]/txt", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf63214)
