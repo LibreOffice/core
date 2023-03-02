@@ -727,13 +727,20 @@ void ScEditShell::GetState( SfxItemSet& rSet )
     // When deactivating the view, edit mode is stopped, but the EditShell is left active
     // (a shell can't be removed from within Deactivate). In that state, the EditView isn't inserted
     // into the EditEngine, so it can have an invalid selection and must not be used.
+    ScInputHandler* pHdl = GetMyInputHdl();
     if ( !rViewData.HasEditView( rViewData.GetActivePart() ) )
     {
         lcl_DisableAll( rSet );
+
+        // Some items are actually useful and still applicable when in formula building mode: enable
+        if (pHdl && pHdl->IsFormulaMode())
+        {
+            rSet.ClearItem(SID_TOGGLE_REL); //  F4 Cycle Cell Reference Types
+            rSet.ClearItem(SID_CHARMAP); // Insert Special Characters
+        }
         return;
     }
 
-    ScInputHandler* pHdl = GetMyInputHdl();
     EditView* pActiveView = pHdl ? pHdl->GetActiveView() : pEditView;
 
     SfxWhichIter aIter( rSet );
