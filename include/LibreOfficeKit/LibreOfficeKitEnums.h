@@ -907,6 +907,16 @@ typedef enum
      * "file:///tmp/hello-world.pdf"
      */
     LOK_CALLBACK_EXPORT_FILE = 59,
+
+    /**
+     * Some attribute of this view has changed, that will cause it
+     * to completely re-render, eg. non-printing characters or
+     * or dark mode was toggled, and then distinct from other views.
+     *
+     * Payload is an opaque string that matches this set of states.
+     * this will be emitted after creating a new view.
+     */
+    LOK_CALLBACK_VIEW_RENDER_STATE = 60
 }
 LibreOfficeKitCallbackType;
 
@@ -1055,6 +1065,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_MEDIA_SHAPE";
     case LOK_CALLBACK_EXPORT_FILE:
         return "LOK_CALLBACK_EXPORT_FILE";
+    case LOK_CALLBACK_VIEW_RENDER_STATE:
+        return "LOK_CALLBACK_VIEW_RENDER_STATE";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");

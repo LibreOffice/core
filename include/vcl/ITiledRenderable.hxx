@@ -376,6 +376,12 @@ public:
     virtual void getCommandValues(tools::JsonWriter& /*rJsonWriter*/, std::string_view /*rCommand*/)
     {
     }
+
+    /**
+     * Returns an opaque string reflecting the render state of a component
+     * eg. 'PD' - P for non-printing-characters, D for dark-mode.
+     */
+    virtual OString getViewRenderState() { return rtl::OString(); }
 };
 } // namespace vcl
 

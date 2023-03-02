@@ -2409,6 +2409,9 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         InvalidateLayout( true );
     }
 
+    SwXTextDocument* pModel = comphelper::getFromUnoTunnel<SwXTextDocument>(GetSfxViewShell()->GetCurrentDocument());
+    SfxLokHelper::notifyViewRenderState(GetSfxViewShell(), pModel);
+
     pMyWin->Invalidate();
     if ( bReformat )
     {

@@ -557,6 +557,11 @@ void SfxLokHelper::sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* 
     }
 }
 
+void SfxLokHelper::notifyViewRenderState(const SfxViewShell* pShell, vcl::ITiledRenderable* pDoc)
+{
+    pShell->libreOfficeKitViewCallback(LOK_CALLBACK_VIEW_RENDER_STATE, pDoc->getViewRenderState().getStr());
+}
+
 void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
                                 vcl::LOKWindowId nLOKWindowId,
                                 std::u16string_view rAction,

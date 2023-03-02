@@ -3402,6 +3402,24 @@ SwXTextDocument::getSearchResultRectangles(const char* pPayload)
     return std::vector<basegfx::B2DRange>();
 }
 
+OString SwXTextDocument::getViewRenderState()
+{
+    OStringBuffer aState;
+    SwView* pView = m_pDocShell->GetView();
+    if (pView && pView->GetWrtShellPtr())
+    {
+        const SwViewOption* pVOpt = pView->GetWrtShell().GetViewOptions();
+        if (pVOpt)
+        {
+            if (pVOpt->IsViewMetaChars())
+                aState.append('P');
+            if (pVOpt->IsOnlineSpell())
+                aState.append('S');
+        }
+    }
+    return aState.makeStringAndClear();
+}
+
 namespace
 {
 inline constexpr OUStringLiteral SELECTED_DATE_FORMAT = u"YYYY-MM-DD";
