@@ -531,6 +531,7 @@ namespace vcl
             mpFirstPage = pNewPageData;
         else
         {
+            pPage->Hide();
             ImplWizPageData* pPageData = mpFirstPage;
             while ( pPageData->mpNext )
                 pPageData = pPageData->mpNext;
