@@ -1015,7 +1015,7 @@ private:
         OString fontKey;
     };
 
-    std::unique_ptr<TableReference> m_tableReference;
+    TableReference m_tableReference;
 
     std::map< OUString, EmbeddedFontRef > m_FontFilesMap; // font file url to data
 

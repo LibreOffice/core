@@ -26,6 +26,7 @@
 #include <tools/gen.hxx>
 #include <editeng/editdata.hxx>
 #include <filter/msfilter/ww8fields.hxx>
+#include <filter/msfilter/msoleexp.hxx>
 
 #include <shellio.hxx>
 
@@ -48,6 +49,7 @@
 #include <cstddef>
 #include <memory>
 #include <map>
+#include <optional>
 #include <string_view>
 #include <vector>
 
@@ -121,7 +123,6 @@ class WW8_WrPlcTextBoxes;
 class WW8_WrPct;            // administration
 class WW8_WrtBookmarks;
 class WW8_WrtRedlineAuthor;
-class SvxMSExportOLEObjects;
 class SwMSConvertControls;
 class WW8_WrPc;
 struct WW8_PdAttrDesc;
@@ -472,7 +473,7 @@ public:
     std::unique_ptr<WW8_WrtBookmarks> m_pBkmks;
     std::unique_ptr<WW8_WrtRedlineAuthor> m_pRedlAuthors;
     std::shared_ptr<NfKeywordTable> m_pKeyMap;
-    std::unique_ptr<SvxMSExportOLEObjects> m_pOLEExp;
+    std::optional<SvxMSExportOLEObjects> m_oOLEExp;
     std::unique_ptr<SwMSConvertControls> m_pOCXExp;
     WW8OleMap m_aOleMap;    // To remember all already exported ole objects
     ww8::WW8TableInfo::Pointer_t m_pTableInfo;

@@ -3341,7 +3341,7 @@ ErrCode MSWordExportBase::ExportDocument( bool bWriteAll )
     m_pRedlAuthors = nullptr;
     m_aTOXArr.clear();
 
-    if ( !m_pOLEExp )
+    if ( !m_oOLEExp )
     {
         sal_uInt32 nSvxMSDffOLEConvFlags = 0;
         const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
@@ -3354,7 +3354,7 @@ ErrCode MSWordExportBase::ExportDocument( bool bWriteAll )
         if ( rOpt.IsImpress2PowerPoint() )
             nSvxMSDffOLEConvFlags |= OLE_STARIMPRESS_2_POWERPOINT;
 
-        m_pOLEExp.reset(new SvxMSExportOLEObjects( nSvxMSDffOLEConvFlags ));
+        m_oOLEExp.emplace( nSvxMSDffOLEConvFlags );
     }
 
     if ( !m_pOCXExp && m_rDoc.GetDocShell() )
@@ -3912,7 +3912,7 @@ MSWordExportBase::~MSWordExportBase()
         m_pUsedNumTable->erase(m_pUsedNumTable->begin(), m_pUsedNumTable->begin() + m_pUsedNumTable->size() - m_nUniqueList);
         m_pUsedNumTable.reset();
     }
-    m_pOLEExp.reset();
+    m_oOLEExp.reset();
     m_pOCXExp.reset();
 }
 

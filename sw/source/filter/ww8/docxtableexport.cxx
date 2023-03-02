@@ -463,7 +463,7 @@ void DocxAttributeOutput::TableDefinition(
 
             const SwFrameFormat* pFrameFormat
                 = pTableTextNodeInfoInner->getTableBox()->GetFrameFormat();
-            if ((0 < nMode && nMode <= 14) && m_tableReference->m_nTableDepth == 0)
+            if ((0 < nMode && nMode <= 14) && m_tableReference.m_nTableDepth == 0)
                 nIndent += pFrameFormat->GetBox().GetDistance(SvxBoxItemLine::LEFT);
             else
             {

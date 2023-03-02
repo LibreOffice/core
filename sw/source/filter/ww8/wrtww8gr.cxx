@@ -239,7 +239,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
     {
         sal_Int64 nAspect = rOLENode.GetAspect();
         svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
-        m_pOLEExp->ExportOLEObject( aObjRef, *xOleStg );
+        m_oOLEExp->ExportOLEObject( aObjRef, *xOleStg );
         if ( nAspect == embed::Aspects::MSOLE_ICON )
         {
             OUString aObjInfo( "\3ObjInfo" );

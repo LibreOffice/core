@@ -426,9 +426,9 @@ sal_Int32 DocxAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t p
     if ( pTextNodeInfo )
     {
         // New cell/row?
-        if ( m_tableReference->m_nTableDepth > 0 && !m_tableReference->m_bTableCellOpen )
+        if ( m_tableReference.m_nTableDepth > 0 && !m_tableReference.m_bTableCellOpen )
         {
-            ww8::WW8TableNodeInfoInner::Pointer_t pDeepInner( pTextNodeInfo->getInnerForDepth( m_tableReference->m_nTableDepth ) );
+            ww8::WW8TableNodeInfoInner::Pointer_t pDeepInner( pTextNodeInfo->getInnerForDepth( m_tableReference.m_nTableDepth ) );
             if ( pDeepInner->getCell() == 0 )
                 StartTableRow( pDeepInner );
 
@@ -448,10 +448,10 @@ sal_Int32 DocxAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t p
             // continue the table cell]
             sal_uInt32 nCurrentDepth = pTextNodeInfo->getDepth();
 
-            if ( nCurrentDepth > m_tableReference->m_nTableDepth )
+            if ( nCurrentDepth > m_tableReference.m_nTableDepth )
             {
                 // Start all the tables that begin here
-                for ( sal_uInt32 nDepth = m_tableReference->m_nTableDepth + 1; nDepth <= nCurrentDepth; ++nDepth )
+                for ( sal_uInt32 nDepth = m_tableReference.m_nTableDepth + 1; nDepth <= nCurrentDepth; ++nDepth )
                 {
                     ww8::WW8TableNodeInfoInner::Pointer_t pInner( pTextNodeInfo->getInnerForDepth( nDepth ) );
 
@@ -461,7 +461,7 @@ sal_Int32 DocxAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t p
                     StartTableCell(pInner, 0, nDepth == nCurrentDepth ? nRow : 0);
                 }
 
-                m_tableReference->m_nTableDepth = nCurrentDepth;
+                m_tableReference.m_nTableDepth = nCurrentDepth;
             }
         }
     }
@@ -1111,8 +1111,8 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
         if (m_aParagraphSdt.m_bStartedSdt)
         {
-            if (m_tableReference->m_bTableCellOpen)
-                m_tableReference->m_bTableCellParaSdtOpen = true;
+            if (m_tableReference.m_bTableCellOpen)
+                m_tableReference.m_bTableCellParaSdtOpen = true;
             if (m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen())
                 m_rExport.SdrExporter().setParagraphSdtOpen(true);
         }
@@ -1201,7 +1201,7 @@ void DocxAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointe
 
     if (bEndCell)
     {
-        while (pInner->getDepth() < m_tableReference->m_nTableDepth)
+        while (pInner->getDepth() < m_tableReference.m_nTableDepth)
         {
             //we expect that the higher depth row was closed, and
             //we are just missing the table close
@@ -1270,7 +1270,7 @@ void DocxAttributeOutput::SectionBreaks(const SwNode& rNode)
         if (aNextIndex.GetNode().IsTextNode())
         {
             const SwTextNode* pTextNode = static_cast<SwTextNode*>(&aNextIndex.GetNode());
-            m_rExport.OutputSectionBreaks(pTextNode->GetpSwAttrSet(), *pTextNode, m_tableReference->m_bTableCellOpen);
+            m_rExport.OutputSectionBreaks(pTextNode->GetpSwAttrSet(), *pTextNode, m_tableReference.m_bTableCellOpen);
         }
         else if (aNextIndex.GetNode().IsTableNode())
         {
@@ -1287,7 +1287,7 @@ void DocxAttributeOutput::SectionBreaks(const SwNode& rNode)
             // Also handle section endings
             const SwTextNode* pTextNode = aNextIndex.GetNode().GetTextNode();
             if (rNode.StartOfSectionNode()->IsTableNode() || rNode.StartOfSectionNode()->IsSectionNode())
-                m_rExport.OutputSectionBreaks(pTextNode->GetpSwAttrSet(), *pTextNode, m_tableReference->m_bTableCellOpen);
+                m_rExport.OutputSectionBreaks(pTextNode->GetpSwAttrSet(), *pTextNode, m_tableReference.m_bTableCellOpen);
         }
         else if (aNextIndex.GetNode().IsTableNode())
         {
@@ -4424,8 +4424,8 @@ void DocxAttributeOutput::EndTable()
 {
     m_pSerializer->endElementNS( XML_w, XML_tbl );
 
-    if ( m_tableReference->m_nTableDepth > 0 )
-        --m_tableReference->m_nTableDepth;
+    if ( m_tableReference.m_nTableDepth > 0 )
+        --m_tableReference.m_nTableDepth;
 
     m_LastClosedCell.pop_back();
     m_LastOpenCell.pop_back();
@@ -4435,7 +4435,7 @@ void DocxAttributeOutput::EndTable()
     // still continues
     // set to true only if we were in a nested table, not otherwise.
     if( !m_TableFirstCells.empty() )
-        m_tableReference->m_bTableCellOpen = true;
+        m_tableReference.m_bTableCellOpen = true;
 
     // Cleans the table helper
     m_xTableWrt.reset();
@@ -4494,7 +4494,7 @@ void DocxAttributeOutput::StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t 
     // Write the cell properties here
     TableCellProperties( pTableTextNodeInfoInner, nCell, nRow );
 
-    m_tableReference->m_bTableCellOpen = true;
+    m_tableReference.m_bTableCellOpen = true;
 }
 
 void DocxAttributeOutput::EndTableCell(sal_uInt32 nCell)
@@ -4502,13 +4502,13 @@ void DocxAttributeOutput::EndTableCell(sal_uInt32 nCell)
     m_LastClosedCell.back() = nCell;
     m_LastOpenCell.back() = -1;
 
-    if (m_tableReference->m_bTableCellParaSdtOpen)
+    if (m_tableReference.m_bTableCellParaSdtOpen)
         EndParaSdtBlock();
 
     m_pSerializer->endElementNS( XML_w, XML_tc );
 
-    m_tableReference->m_bTableCellOpen = false;
-    m_tableReference->m_bTableCellParaSdtOpen = false;
+    m_tableReference.m_bTableCellOpen = false;
+    m_tableReference.m_bTableCellParaSdtOpen = false;
 }
 
 void DocxAttributeOutput::StartStyles()
@@ -6254,11 +6254,11 @@ void DocxAttributeOutput::pushToTableExportContext(DocxTableExportContext& rCont
     rContext.m_pTableInfo = m_rExport.m_pTableInfo;
     m_rExport.m_pTableInfo = std::make_shared<ww8::WW8TableInfo>();
 
-    rContext.m_bTableCellOpen = m_tableReference->m_bTableCellOpen;
-    m_tableReference->m_bTableCellOpen = false;
+    rContext.m_bTableCellOpen = m_tableReference.m_bTableCellOpen;
+    m_tableReference.m_bTableCellOpen = false;
 
-    rContext.m_nTableDepth = m_tableReference->m_nTableDepth;
-    m_tableReference->m_nTableDepth = 0;
+    rContext.m_nTableDepth = m_tableReference.m_nTableDepth;
+    m_tableReference.m_nTableDepth = 0;
 
     rContext.m_bStartedParaSdt = m_aParagraphSdt.m_bStartedSdt;
     m_aParagraphSdt.m_bStartedSdt = false;
@@ -6272,8 +6272,8 @@ void DocxAttributeOutput::pushToTableExportContext(DocxTableExportContext& rCont
 void DocxAttributeOutput::popFromTableExportContext(DocxTableExportContext const & rContext)
 {
     m_rExport.m_pTableInfo = rContext.m_pTableInfo;
-    m_tableReference->m_bTableCellOpen = rContext.m_bTableCellOpen;
-    m_tableReference->m_nTableDepth = rContext.m_nTableDepth;
+    m_tableReference.m_bTableCellOpen = rContext.m_bTableCellOpen;
+    m_tableReference.m_nTableDepth = rContext.m_nTableDepth;
     m_aParagraphSdt.m_bStartedSdt = rContext.m_bStartedParaSdt;
     m_aRunSdt.m_bStartedSdt = rContext.m_bStartedRunSdt;
     m_nHyperLinkCount = rContext.m_nHyperLinkCount;
@@ -9959,7 +9959,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_postitFieldsMaxId( 0 ),
       m_anchorId( 1 ),
       m_nextFontId( 1 ),
-      m_tableReference(new TableReference()),
       m_bIgnoreNextFill(false),
       m_pTableStyleExport(std::make_shared<DocxTableStyleExport>(rExport.m_rDoc, pSerializer)),
       m_bParaBeforeAutoSpacing(false),

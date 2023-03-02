@@ -703,11 +703,11 @@ SwNavigationPI::~SwNavigationPI()
 
     EndListening(*SfxGetpApp());
 
-    if (m_pxObjectShell)
+    if (m_oObjectShell)
     {
-        if (m_pxObjectShell->Is())
-            (*m_pxObjectShell)->DoClose();
-        m_pxObjectShell.reset();
+        if (m_oObjectShell->Is())
+            (*m_oObjectShell)->DoClose();
+        m_oObjectShell.reset();
     }
 
     m_xDocListBox.reset();
@@ -927,7 +927,7 @@ IMPL_LINK(SwNavigationPI, DoneLink, SfxPoolItem const *, pItem, void)
             m_pContentWrtShell = m_pContentView->GetWrtShellPtr();
         else
             m_pContentWrtShell = nullptr;
-        m_pxObjectShell.reset( new SfxObjectShellLock(pFrame->GetObjectShell()) );
+        m_oObjectShell.emplace( pFrame->GetObjectShell() );
         FillBox();
     }
 }
@@ -1004,11 +1004,11 @@ sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
         nRet = rEvt.mnAction;
         sFileName = comphelper::string::stripEnd(sFileName, 0);
         m_sContentFileName = sFileName;
-        if(m_pxObjectShell)
+        if(m_oObjectShell)
         {
             m_xContentTree->SetHiddenShell( nullptr );
-            (*m_pxObjectShell)->DoClose();
-            m_pxObjectShell.reset();
+            (*m_oObjectShell)->DoClose();
+            m_oObjectShell.reset();
         }
         SfxStringItem aFileItem(SID_FILE_NAME, sFileName );
         SfxStringItem aOptionsItem( SID_OPTIONS, "HRC" );

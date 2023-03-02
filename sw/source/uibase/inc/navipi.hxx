@@ -23,6 +23,7 @@
 #include <svl/lstner.hxx>
 #include <vcl/transfer.hxx>
 #include <sfx2/childwin.hxx>
+#include <sfx2/objsh.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/navigat.hxx>
 #include <sfx2/weldutils.hxx>
@@ -30,12 +31,12 @@
 #include "conttree.hxx"
 #include <ndarr.hxx>
 #include <memory>
+#include <optional>
 
 class SwWrtShell;
 class SfxBindings;
 class SwNavigationConfig;
 class SwView;
-class SfxObjectShellLock;
 enum class RegionMode;
 class SpinField;
 
@@ -75,7 +76,7 @@ class SwNavigationPI final : public PanelLayout
 
     VclPtr<SfxNavigator> m_xNavigatorDlg;
 
-    std::unique_ptr<SfxObjectShellLock>  m_pxObjectShell;
+    std::optional<SfxObjectShellLock>  m_oObjectShell;
     SwView              *m_pContentView;
     SwWrtShell          *m_pContentWrtShell;
     SwView              *m_pActContView;
