@@ -440,8 +440,6 @@ static bool UselessScaleForMapMode(const Fraction& rScale)
 {
     if (!rScale.IsValid())
         return true;
-    if (TooLargeScaleForMapMode(rScale, 96))
-        return true;
     if (static_cast<double>(rScale) < 0.0)
         return true;
     return false;
