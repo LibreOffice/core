@@ -397,7 +397,7 @@ ScXMLImport::~ScXMLImport() noexcept
     //call SvXMLImport dtor contents before deleting pSolarMutexGuard
     cleanup();
 
-    pSolarMutexGuard.reset();
+    moSolarMutexGuard.reset();
 }
 
 void ScXMLImport::initialize( const css::uno::Sequence<css::uno::Any>& aArguments )
@@ -1529,8 +1529,8 @@ void ScXMLImport::LockSolarMutex()
 
     if (nSolarMutexLocked == 0)
     {
-        OSL_ENSURE(!pSolarMutexGuard, "Solar Mutex is locked");
-        pSolarMutexGuard.reset(new SolarMutexGuard());
+        OSL_ENSURE(!moSolarMutexGuard, "Solar Mutex is locked");
+        moSolarMutexGuard.emplace();
     }
     ++nSolarMutexLocked;
 }
@@ -1542,8 +1542,8 @@ void ScXMLImport::UnlockSolarMutex()
         nSolarMutexLocked--;
         if (nSolarMutexLocked == 0)
         {
-            OSL_ENSURE(pSolarMutexGuard, "Solar Mutex is always unlocked");
-            pSolarMutexGuard.reset();
+            OSL_ENSURE(moSolarMutexGuard, "Solar Mutex is always unlocked");
+            moSolarMutexGuard.reset();
         }
     }
 }

@@ -23,6 +23,7 @@
 #include <xmloff/xmlprmap.hxx>
 #include "xmlsubti.hxx"
 #include <formula/grammar.hxx>
+#include <vcl/svapp.hxx>
 #include <dociter.hxx>
 
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
@@ -60,7 +61,6 @@ class ScDrawObjData;
 class SvXMLTokenMap;
 class XMLShapeImportHelper;
 class ScXMLChangeTrackingImportHelper;
-class SolarMutexGuard;
 
 struct ScMyNamedExpression
 {
@@ -146,7 +146,7 @@ class ScXMLImport: public SvXMLImport
     ScMyLabelRanges            maMyLabelRanges;
     ScMyImportValidations      maValidations;
     std::unique_ptr<ScMyImpDetectiveOpArray>    pDetectiveOpArray;
-    std::unique_ptr<SolarMutexGuard>        pSolarMutexGuard;
+    std::optional<SolarMutexGuard> moSolarMutexGuard;
 
     std::unique_ptr<XMLNumberFormatAttributesExportHelper> pNumberFormatAttributesExportHelper;
     std::unique_ptr<ScMyStyleNumberFormats> pStyleNumberFormats;

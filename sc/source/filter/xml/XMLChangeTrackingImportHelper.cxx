@@ -285,7 +285,7 @@ void ScXMLChangeTrackingImportHelper::SetInsertionCutOff(const sal_uInt32 nID, c
     if ((pCurrentAction->nActionType == SC_CAT_DELETE_COLS) ||
         (pCurrentAction->nActionType == SC_CAT_DELETE_ROWS))
     {
-        static_cast<ScMyDelAction*>(pCurrentAction.get())->pInsCutOff.reset( new ScMyInsertionCutOff(nID, nPosition) );
+        static_cast<ScMyDelAction*>(pCurrentAction.get())->moInsCutOff.emplace( nID, nPosition );
     }
     else
     {
@@ -505,17 +505,17 @@ void ScXMLChangeTrackingImportHelper::SetDeletionDependencies(ScMyDelAction* pAc
             pAction->aGeneratedList.clear();
         }
     }
-    if (pAction->pInsCutOff)
+    if (pAction->moInsCutOff)
     {
         OSL_ENSURE(((pAction->nActionType == SC_CAT_DELETE_COLS) ||
             (pAction->nActionType == SC_CAT_DELETE_ROWS) ||
             (pAction->nActionType == SC_CAT_DELETE_TABS)), "wrong action type");
-        ScChangeAction* pChangeAction = pTrack->GetAction(pAction->pInsCutOff->nID);
+        ScChangeAction* pChangeAction = pTrack->GetAction(pAction->moInsCutOff->nID);
         if (pChangeAction && pChangeAction->IsInsertType())
         {
             ScChangeActionIns* pInsAction = static_cast<ScChangeActionIns*>(pChangeAction);
             if (pDelAct)
-                pDelAct->SetCutOffInsert(pInsAction, static_cast<sal_Int16>(pAction->pInsCutOff->nPosition));
+                pDelAct->SetCutOffInsert(pInsAction, static_cast<sal_Int16>(pAction->moInsCutOff->nPosition));
         }
         else
         {

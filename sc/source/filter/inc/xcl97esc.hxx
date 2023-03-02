@@ -20,6 +20,7 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 #include <stack>
 #include <filter/msfilter/escherex.hxx>
 #include "xeroot.hxx"
@@ -37,7 +38,7 @@ private:
     virtual SvStream*   ImplQueryPictureStream() override;
 
 private:
-    ::std::unique_ptr< ::utl::TempFileFast > mxPicTempFile;
+    ::std::optional< ::utl::TempFileFast > moPicTempFile;
     SvStream* mpPicStrm;
 };
 

@@ -129,7 +129,7 @@ struct ScMyInsAction : public ScMyBaseAction
 struct ScMyDelAction : public ScMyBaseAction
 {
     std::vector<ScMyGenerated> aGeneratedList;
-    std::unique_ptr<ScMyInsertionCutOff> pInsCutOff;
+    std::optional<ScMyInsertionCutOff> moInsCutOff;
     std::vector<ScMyMoveCutOff> aMoveCutOffs;
     sal_Int32 nD;
 

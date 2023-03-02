@@ -75,8 +75,8 @@ XclEscherExGlobal::XclEscherExGlobal( const XclExpRoot& rRoot )
 
 SvStream* XclEscherExGlobal::ImplQueryPictureStream()
 {
-    mxPicTempFile.reset( new ::utl::TempFileFast );
-    mpPicStrm = mxPicTempFile->GetStream( StreamMode::READWRITE );
+    moPicTempFile.emplace();
+    mpPicStrm = moPicTempFile->GetStream( StreamMode::READWRITE );
     mpPicStrm->SetEndian( SvStreamEndian::LITTLE );
     return mpPicStrm;
 }
