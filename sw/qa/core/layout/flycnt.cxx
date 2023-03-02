@@ -336,10 +336,29 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyFooter)
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
     CPPUNIT_ASSERT(pPage1);
+    SwTwips nPage1Top = pPage1->getFrameArea().Top();
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    auto pPage1Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage1Objs[0]);
+    CPPUNIT_ASSERT(pPage1Fly);
+    SwTwips nPage1FlyTop = pPage1Fly->getFrameArea().Top();
+    // <w:tblpPr w:tblpY="3286"> from the bugdoc.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(3286), nPage1FlyTop - nPage1Top);
     // Second page:
     auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
     // Without the accompanying fix in place, this test would have failed, there was no 2nd page.
     CPPUNIT_ASSERT(pPage2);
+    SwTwips nPage2Top = pPage2->getFrameArea().Top();
+    const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
+    auto pPage2Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage2Objs[0]);
+    CPPUNIT_ASSERT(pPage2Fly);
+    SwTwips nPage2FlyTop = pPage2Fly->getFrameArea().Top();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1440
+    // - Actual  : 0
+    // i.e. <w:pgMar w:top="1440"> from the bugdoc was lost, the follow fly had no vertical offset.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(1440), nPage2FlyTop - nPage2Top);
 }
 }
 

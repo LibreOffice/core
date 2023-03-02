@@ -609,6 +609,21 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                     // This is a follow of a split fly: shift it up to match the anchor position,
                     // because the vertical offset is meant to be handled only on the first page.
                     nRelPosY -= aVert.GetPos();
+
+                    if (aVert.GetRelationOrient() == text::RelOrientation::PAGE_FRAME
+                        && rPageAlignLayFrame.IsPageFrame())
+                    {
+                        // Master is positioned relative to the edge of the page, with an offset.
+                        // Follow will have no offset, but is relative to the bottom of the header.
+                        auto& rPageFrame = static_cast<const SwPageFrame&>(rPageAlignLayFrame);
+                        const SwLayoutFrame* pBodyFrame = rPageFrame.FindBodyCont();
+                        if (pBodyFrame)
+                        {
+                            SwTwips nDiff = pBodyFrame->getFrameArea().Top()
+                                            - rPageFrame.getFrameArea().Top();
+                            nRelPosY += nDiff;
+                        }
+                    }
                 }
             }
 
