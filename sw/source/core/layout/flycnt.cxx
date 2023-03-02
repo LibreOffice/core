@@ -1575,7 +1575,7 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
         {
             // If we're anchored in a body frame, the candidate has to be in a body frame as well.
             bool bLeftBody = bBody && !pLayLeaf->IsInDocBody();
-            // If the candiate is in a fly, make sure that the candidate is a child of our follow.
+            // If the candidate is in a fly, make sure that the candidate is a child of our follow.
             bool bLeftFly = pLayLeaf->IsInFly() && pLayLeaf->FindFlyFrame() != pFly->GetFollow();
             if (bLeftBody || bLeftFly)
             {
