@@ -1237,9 +1237,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143311)
     // check DOCX filters
     saveAndReload("Office Open XML Text");
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), "Decorative"));
+    {
+        // tdf#153925 not imported - check default and set it to test ODF filters
+        uno::Reference<beans::XPropertySet> const xStyle(getStyles("FrameStyles")->getByName("Formula"), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xStyle, "Decorative"));
+        xStyle->setPropertyValue("Decorative", uno::Any(true));
+    }
     // check ODF filters
     saveAndReload("writer8");
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), "Decorative"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getStyles("FrameStyles")->getByName("Formula"), "Decorative"));
 
     // check PDF export
     utl::MediaDescriptor aMediaDescriptor;
