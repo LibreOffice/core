@@ -3010,6 +3010,7 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
         }
     }
 
+    // TODO remove
     if (xPropSetInfo->hasPropertyByName("Decorative")
         && rPropSet->getPropertyValue("Decorative").get<bool>())
     {

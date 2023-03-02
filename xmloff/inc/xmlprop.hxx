@@ -165,6 +165,7 @@ inline constexpr OUStringLiteral PROP_DataRowSource = u"DataRowSource";
 inline constexpr OUStringLiteral PROP_DataTableHBorder = u"DataTableHBorder";
 inline constexpr OUStringLiteral PROP_DataTableOutline = u"DataTableOutline";
 inline constexpr OUStringLiteral PROP_DataTableVBorder = u"DataTableVBorder";
+inline constexpr OUStringLiteral PROP_Decorative = u"Decorative";
 inline constexpr OUStringLiteral PROP_Deep = u"Deep";
 inline constexpr OUStringLiteral PROP_DefaultOutlineLevel = u"DefaultOutlineLevel";
 inline constexpr OUStringLiteral PROP_Dim3D = u"Dim3D";
