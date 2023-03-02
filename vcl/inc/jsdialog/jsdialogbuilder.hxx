@@ -225,6 +225,8 @@ class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
     VclPtr<vcl::Window> m_aWindowToRelease;
 
     friend class JSMessageDialog; // static message boxes have to be registered outside
+    friend class JSDialog;
+    friend class JSAssistant;
 
     friend VCL_DLLPUBLIC bool jsdialog::ExecuteAction(const std::string& nWindowId,
                                                       const OString& rWidget, StringMap& rData);
@@ -480,6 +482,7 @@ public:
     virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) override;
     virtual void undo_collapse() override;
     virtual void response(int response) override;
+    virtual weld::Button* weld_widget_for_response(int response) override;
 };
 
 class JSAssistant final : public JSWidget<SalInstanceAssistant, vcl::RoadmapWizard>
@@ -491,6 +494,7 @@ public:
     virtual void set_current_page(int nPage) override;
     virtual void set_current_page(const OString& rIdent) override;
     virtual void response(int response) override;
+    virtual weld::Button* weld_widget_for_response(int response) override;
 };
 
 class JSContainer final : public JSWidget<SalInstanceContainer, vcl::Window>
