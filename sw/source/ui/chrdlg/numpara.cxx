@@ -127,7 +127,7 @@ bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
 
     if (m_xListLvLB->get_value_changed_from_saved())
     {
-        if (m_xListLvBX->get_visible() && GetOldItem(*rSet, RES_PARATR_LIST_LEVEL))
+        if (m_xListLvBX->get_visible())
         {
             sal_Int16 nListLevel = m_xListLvLB->get_active();
             // Does List Level need to be set to be the same as Outline Level?
