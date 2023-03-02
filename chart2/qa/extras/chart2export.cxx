@@ -442,9 +442,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testChartExternalData)
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
-    xmlXPathObjectPtr pXmlPathObj = getXPathNode(pXmlDoc, "/c:chartSpace/c:externalData");
-    xmlNodeSetPtr pXmlNodes = pXmlPathObj->nodesetval;
-    CPPUNIT_ASSERT(pXmlNodes);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:externalData");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testEmbeddingsGrabBag)
