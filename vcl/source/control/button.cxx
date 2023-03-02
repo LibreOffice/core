@@ -643,6 +643,8 @@ void PushButton::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     Button::DumpAsPropertyTree(rJsonWriter);
     if (GetSymbol() != SymbolType::DONTKNOW)
         rJsonWriter.put("symbol", symbolTypeName(GetSymbol()));
+    if (isToggleButton())
+        rJsonWriter.put("isToggle", true);
 }
 
 IMPL_STATIC_LINK( Button, dispatchCommandHandler, Button*, pButton, void )

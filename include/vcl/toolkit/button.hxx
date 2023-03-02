@@ -181,6 +181,9 @@ public:
 
     void DumpAsPropertyTree(tools::JsonWriter&) override;
 
+    bool isToggleButton() { return mbIsToggleButton; }
+    void setToggleButton(bool bIsToggleButton) { mbIsToggleButton = bIsToggleButton; }
+
 protected:
     PushButtonDropdownStyle mnDDStyle;
     bool            mbIsActive;
@@ -218,6 +221,7 @@ private:
     TriState        meState;
     bool            mbPressed;
     bool            mbIsAction;
+    bool            mbIsToggleButton = false;
 };
 
 inline void PushButton::Check( bool bCheck )

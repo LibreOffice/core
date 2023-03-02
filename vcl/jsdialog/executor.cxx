@@ -141,6 +141,11 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                     pButton->clicked();
                     return true;
                 }
+                else if (sAction == "toggle")
+                {
+                    LOKTrigger::trigger_toggled(*dynamic_cast<weld::Toggleable*>(pWidget));
+                    return true;
+                }
             }
         }
         else if (sControlType == "menubutton")
