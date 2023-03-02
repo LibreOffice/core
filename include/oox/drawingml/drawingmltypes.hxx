@@ -231,6 +231,7 @@ struct EmuRectangle : public EmuPoint, public EmuSize
     void         setSize( const EmuSize& rSize ) { static_cast< EmuSize& >( *this ) = rSize; }
 };
 
+model::RectangleAlignment convertToRectangleAlignment(sal_Int32 nToken);
 
 } // namespace oox::drawingml
 

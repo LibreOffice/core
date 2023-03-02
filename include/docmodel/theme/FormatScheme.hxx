@@ -295,6 +295,7 @@ enum class FlipMode
 
 enum class RectangleAlignment
 {
+    Unset,
     TopLeft,
     Top,
     TopRight,
@@ -465,12 +466,53 @@ public:
     FillStyle maLineFillStyle;
 };
 
+enum class EffectType
+{
+    Unset,
+    OuterShadow,
+    InnerShadow,
+    Glow,
+    SoftEdge,
+    Reflection,
+    Blur
+};
+
+class DOCMODEL_DLLPUBLIC Effect
+{
+public:
+    EffectType meType = EffectType::Unset;
+    sal_Int32 mnBlurRadius = 0;
+    sal_Int32 mnRadius = 0;
+    sal_Int32 mnDistance = 0;
+    sal_Int32 mnDirection = 0;
+    sal_Int32 mnScaleX = 100;
+    sal_Int32 mnScaley = 100;
+    sal_Int32 mnScewX = 0;
+    sal_Int32 mnScewY = 0;
+    RectangleAlignment meAlignment = RectangleAlignment::Bottom;
+    bool mbRotateWithShape = true;
+    ColorDefinition maColor;
+    double mnEndAlpha = 100.0;
+    double mnEndPosition = 0.0;
+    double mnStartAlpha = 0.0;
+    double mnStartPosition = 100.0;
+    sal_Int32 mnFadeDirection = 0;
+    bool mbGrow = false;
+};
+
+class DOCMODEL_DLLPUBLIC EffectStyle
+{
+public:
+    std::vector<Effect> maEffectList;
+};
+
 class DOCMODEL_DLLPUBLIC FormatScheme
 {
 private:
     OUString maName;
     std::vector<FillStyle> maFillStyleList;
     std::vector<LineStyle> maLineStyleList;
+    std::vector<EffectStyle> maEffectStyleList;
     std::vector<FillStyle> maBackgroundFillStyleList;
 
 public:
@@ -491,6 +533,16 @@ public:
             return nullptr;
         auto& rLineStyle = maLineStyleList.emplace_back();
         return &rLineStyle;
+    }
+
+    std::vector<EffectStyle> const& getEffectStyleList() const { return maEffectStyleList; }
+
+    EffectStyle* addEffectStyle()
+    {
+        if (maEffectStyleList.size() > 3)
+            return nullptr;
+        auto& rEffectStyle = maEffectStyleList.emplace_back();
+        return &rEffectStyle;
     }
 
     std::vector<FillStyle> const& getFillStyleList() const { return maFillStyleList; }

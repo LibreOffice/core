@@ -447,19 +447,7 @@ ContextHandlerRef BlipFillContext::onCreateContext(
                     default:
                     case XML_none: mpBlipFill->meTileFlipMode = model::FlipMode::None; break;
                 }
-                switch (rAttribs.getToken(XML_algn, XML_tl))
-                {
-                    default:
-                    case XML_tl: mpBlipFill->meTileAlignment = model::RectangleAlignment::TopLeft; break;
-                    case XML_t: mpBlipFill->meTileAlignment = model::RectangleAlignment::Top; break;
-                    case XML_tr: mpBlipFill->meTileAlignment = model::RectangleAlignment::TopRight; break;
-                    case XML_l: mpBlipFill->meTileAlignment = model::RectangleAlignment::Left; break;
-                    case XML_ctr: mpBlipFill->meTileAlignment = model::RectangleAlignment::Center; break;
-                    case XML_r: mpBlipFill->meTileAlignment = model::RectangleAlignment::Right; break;
-                    case XML_bl: mpBlipFill->meTileAlignment = model::RectangleAlignment::BottomLeft; break;
-                    case XML_b: mpBlipFill->meTileAlignment = model::RectangleAlignment::Bottom; break;
-                    case XML_br: mpBlipFill->meTileAlignment = model::RectangleAlignment::BottomRight; break;
-                }
+                mpBlipFill->meTileAlignment = convertToRectangleAlignment(rAttribs.getToken(XML_algn, XML_TOKEN_INVALID));
             }
         }
         break;

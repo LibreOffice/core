@@ -11,6 +11,8 @@
 
 #include <oox/core/contexthandler2.hxx>
 
+namespace model { class EffectStyle; }
+
 namespace oox::drawingml {
 
 struct EffectProperties;
@@ -19,8 +21,8 @@ struct Effect;
 class EffectPropertiesContext final : public ::oox::core::ContextHandler2
 {
 public:
-    EffectPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent,
-            EffectProperties& rEffectProperties ) noexcept;
+    EffectPropertiesContext(::oox::core::ContextHandler2Helper const & rParent, EffectProperties& rEffectProperties,
+        model::EffectStyle* pEffectStyle = nullptr) noexcept;
     virtual ~EffectPropertiesContext() override;
 
     virtual ::oox::core::ContextHandlerRef
@@ -29,6 +31,7 @@ public:
 private:
     static void saveUnsupportedAttribs( Effect& rEffect, const AttributeList& rAttribs );
 
+    model::EffectStyle* mpEffectStyle;
     EffectProperties& mrEffectProperties;
 };
 
