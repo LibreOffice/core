@@ -510,13 +510,11 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testAreaChartLoad)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testUpDownBars)
 {
-    /*
-    load("/chart2/qa/extras/data/docx/", "UpDownBars.docx");
+    loadFromURL(u"docx/UpDownBars.docx");
     save("Office Open XML Text");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart");
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:upDownBars");
-    */
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:upDownBars", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDoughnutChart)
