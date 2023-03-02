@@ -312,7 +312,7 @@ public:
 
     std::unique_ptr< xmloff::RDFaImportHelper > mpRDFaHelper;
 
-    std::unique_ptr< DocumentInfo > mpDocumentInfo;
+    std::optional< DocumentInfo > moDocumentInfo;
 
     SvXMLImport_Impl( uno::Reference< uno::XComponentContext > xContext,
                       OUString theImplementationName,
@@ -337,12 +337,12 @@ public:
 
     sal_uInt16 getGeneratorVersion( const SvXMLImport& rImport )
     {
-        if (!mpDocumentInfo)
+        if (!moDocumentInfo)
         {
-            mpDocumentInfo.reset( new DocumentInfo( rImport ) );
+            moDocumentInfo.emplace( rImport );
         }
 
-        return mpDocumentInfo->getGeneratorVersion();
+        return moDocumentInfo->getGeneratorVersion();
     }
 
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper maInterfaceToIdentifierMapper;
