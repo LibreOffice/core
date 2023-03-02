@@ -34,12 +34,22 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
     }
 
     if (// cui
-        rUIFile == u"cui/ui/formatnumberdialog.ui"
+        rUIFile == u"cui/ui/areatabpage.ui"
+        || rUIFile == u"cui/ui/borderpage.ui"
+        || rUIFile == u"cui/ui/charnamepage.ui"
+        || rUIFile == u"cui/ui/colorpage.ui"
+        || rUIFile == u"cui/ui/effectspage.ui"
+        || rUIFile == u"cui/ui/eventassigndialog.ui"
+        || rUIFile == u"cui/ui/fontfeaturesdialog.ui"
+        || rUIFile == u"cui/ui/formatnumberdialog.ui"
         || rUIFile == u"cui/ui/macroselectordialog.ui"
         || rUIFile == u"cui/ui/numberingformatpage.ui"
         || rUIFile == u"cui/ui/password.ui"
+        || rUIFile == u"cui/ui/positionpage.ui"
+        || rUIFile == u"cui/ui/queryduplicatedialog.ui"
         || rUIFile == u"cui/ui/similaritysearchdialog.ui"
         || rUIFile == u"cui/ui/splitcellsdialog.ui"
+        || rUIFile == u"cui/ui/twolinespage.ui"
         || rUIFile == u"cui/ui/widgettestdialog.ui"
         // scalc
         || rUIFile == u"modules/scalc/ui/analysisofvariancedialog.ui"
@@ -78,6 +88,8 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/schart/ui/wizelementspage.ui"
         // swriter
         || rUIFile == u"modules/swriter/ui/captionoptions.ui"
+        || rUIFile == u"modules/swriter/ui/characterproperties.ui"
+        || rUIFile == u"modules/swriter/ui/charurlpage.ui"
         || rUIFile == u"modules/swriter/ui/contentcontroldlg.ui"
         || rUIFile == u"modules/swriter/ui/contentcontrollistitemdlg.ui"
         || rUIFile == u"modules/swriter/ui/dropdownfielddialog.ui"

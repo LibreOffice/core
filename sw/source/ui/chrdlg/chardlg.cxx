@@ -47,6 +47,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/frame.hxx>
+#include <comphelper/lok.hxx>
 
 #include <svx/svxdlg.hxx>
 #include <svx/flagsdef.hxx>
@@ -167,7 +168,10 @@ SwCharURLPage::SwCharURLPage(weld::Container* pPage, weld::DialogController* pCo
             m_xCharStyleContainer->hide();
     }
 
-    m_xURLPB->connect_clicked(LINK( this, SwCharURLPage, InsertFileHdl));
+    if(comphelper::LibreOfficeKit::isActive())
+        m_xURLPB->hide(); // Hide browse button in online (not supported yet)
+    else
+        m_xURLPB->connect_clicked(LINK( this, SwCharURLPage, InsertFileHdl));
     m_xEventPB->connect_clicked(LINK( this, SwCharURLPage, EventHdl));
 
     SwView *pView = ::GetActiveView();
