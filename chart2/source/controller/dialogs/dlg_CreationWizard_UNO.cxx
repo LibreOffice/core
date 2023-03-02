@@ -24,6 +24,7 @@
 #include <TimerTriggeredControllerLock.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
+#include <vcl/weldutils.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -31,6 +32,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <sfx2/viewsh.hxx>
+
 
 namespace chart
 {
@@ -167,10 +169,18 @@ void CreationWizardUnoDlg::createDialogOnDemand()
                 m_xParentWindow = xFrame->getContainerWindow();
         }
     }
+
+    weld::Window* pParent(Application::GetFrameWeld(m_xParentWindow));
+    if (!pParent)
+    {
+        if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(m_xParentWindow.get()))
+            pParent = dynamic_cast<weld::Window*>(pTunnel->getWidget());
+    }
+
     uno::Reference< XComponent > xKeepAlive( this );
     if( m_xChartModel.is() )
     {
-        m_xDialog = std::make_shared<CreationWizard>(Application::GetFrameWeld(m_xParentWindow), m_xChartModel, m_xCC);
+        m_xDialog = std::make_shared<CreationWizard>(pParent, m_xChartModel, m_xCC);
     }
 }
 
