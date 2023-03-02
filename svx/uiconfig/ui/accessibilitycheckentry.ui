@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkBox" id="accessibilityCheckEntryBox">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="border_width">3</property>
+    <property name="can-focus">False</property>
+    <property name="margin-start">3</property>
+    <property name="margin-end">3</property>
+    <property name="spacing">6</property>
     <child>
       <object class="GtkLabel" id="accessibilityCheckEntryLabel">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <property name="selectable">True</property>
         <property name="xalign">0</property>
         <child internal-child="accessible">
-          <object class="AtkObject">
+          <object class="AtkObject" id="accessibilityCheckEntryLabel-atkobject">
             <property name="AtkObject::accessible-role">static</property>
           </object>
         </child>
@@ -29,8 +31,8 @@
       <object class="GtkButton" id="accessibilityCheckEntryGotoButton">
         <property name="label" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryGotoButton">Go to Issue</property>
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">True</property>
       </object>
       <packing>
         <property name="expand">False</property>
