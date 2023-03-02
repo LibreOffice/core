@@ -53,9 +53,16 @@ ScVbaAxis::isValueAxis()
     return true;
 }
 
-ScVbaAxis::ScVbaAxis( const uno::Reference< XHelperInterface >& xParent,const uno::Reference< uno::XComponentContext > & xContext, uno::Reference< beans::XPropertySet >  _xPropertySet, sal_Int32 _nType, sal_Int32 _nGroup  ) : ScVbaAxis_BASE( xParent, xContext ), mxPropertySet(std::move( _xPropertySet )), mnType( _nType ), mnGroup( _nGroup ), bCrossesAreCustomized( false )
+ScVbaAxis::ScVbaAxis( const uno::Reference< XHelperInterface >& xParent,
+                      const uno::Reference< uno::XComponentContext > & xContext,
+                      uno::Reference< beans::XPropertySet >  _xPropertySet,
+                      sal_Int32 _nType, sal_Int32 _nGroup )
+  : ScVbaAxis_BASE( xParent, xContext ),
+    mxPropertySet(std::move( _xPropertySet )),
+    mnType( _nType ), mnGroup( _nGroup ),
+    maShapeHelper( uno::Reference< drawing::XShape >( mxPropertySet, uno::UNO_QUERY ) ),
+    bCrossesAreCustomized( false )
 {
-    oShapeHelper.reset( new ShapeHelper( uno::Reference< drawing::XShape >( mxPropertySet, uno::UNO_QUERY ) ) );
     moChartParent.set( xParent, uno::UNO_QUERY_THROW  );
     setType(_nType);
     setCrosses(xlAxisCrossesAutomatic);
@@ -606,36 +613,36 @@ ScVbaAxis::getScaleType(  )
 double SAL_CALL
 ScVbaAxis::getHeight(  )
 {
-    return oShapeHelper->getHeight();
+    return maShapeHelper.getHeight();
 }
 
 void SAL_CALL ScVbaAxis::setHeight( double height )
 {
-    oShapeHelper->setHeight( height );
+    maShapeHelper.setHeight( height );
 }
 double SAL_CALL ScVbaAxis::getWidth(  )
 {
-    return oShapeHelper->getWidth( );
+    return maShapeHelper.getWidth( );
 }
 void SAL_CALL ScVbaAxis::setWidth( double width )
 {
-    oShapeHelper->setWidth( width );
+    maShapeHelper.setWidth( width );
 }
 double SAL_CALL ScVbaAxis::getTop(  )
 {
-    return oShapeHelper->getTop( );
+    return maShapeHelper.getTop( );
 }
 void SAL_CALL ScVbaAxis::setTop( double top )
 {
-    oShapeHelper->setTop( top );
+    maShapeHelper.setTop( top );
 }
 double SAL_CALL ScVbaAxis::getLeft(  )
 {
-    return oShapeHelper->getLeft( );
+    return maShapeHelper.getLeft( );
 }
 void SAL_CALL ScVbaAxis::setLeft( double left )
 {
-    oShapeHelper->setLeft( left );
+    maShapeHelper.setLeft( left );
 }
 
 OUString

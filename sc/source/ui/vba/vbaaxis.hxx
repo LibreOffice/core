@@ -30,12 +30,13 @@ class ScVbaAxis : public ScVbaAxis_BASE
     css::uno::Reference< css::beans::XPropertySet > mxPropertySet;
     sal_Int32 mnType;
     sal_Int32 mnGroup;
+    ov::ShapeHelper maShapeHelper;
+
     bool bCrossesAreCustomized;
     /// @throws css::uno::RuntimeException
     ScVbaChart* getChartPtr();
     /// @throws css::script::BasicErrorException
     bool isValueAxis();
-    std::unique_ptr<ov::ShapeHelper> oShapeHelper;
 
 public:
     ScVbaAxis( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, css::uno::Reference< css::beans::XPropertySet >  _xPropertySet, sal_Int32 _nType, sal_Int32 _nGroup );

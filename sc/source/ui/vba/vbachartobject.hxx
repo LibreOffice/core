@@ -26,7 +26,7 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <ooo/vba/excel/XChartObject.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
-#include <memory>
+#include <optional>
 
 typedef InheritedHelperInterfaceWeakImpl<ov::excel::XChartObject > ChartObjectImpl_BASE;
 
@@ -40,7 +40,7 @@ class ScVbaChartObject : public ChartObjectImpl_BASE
     css::uno::Reference< css::drawing::XShape > xShape;
     css::uno::Reference< css::container::XNamed > xNamed;
     OUString sPersistName;
-    std::unique_ptr<ov::ShapeHelper> oShapeHelper;
+    std::optional<ov::ShapeHelper> oShapeHelper;
     css::uno::Reference< css::container::XNamed > xNamedShape;
     OUString const & getPersistName();
     /// @throws css::script::BasicErrorException

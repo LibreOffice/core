@@ -36,16 +36,18 @@ typedef InheritedHelperInterfaceImpl< Ifc... > BaseClass;
 
     css::uno::Reference< css::drawing::XShape > xTitleShape;
     css::uno::Reference< css::beans::XPropertySet > xShapePropertySet;
-    std::unique_ptr<ov::ShapeHelper> oShapeHelper;
+    ov::ShapeHelper maShapeHelper;
     ScVbaPalette m_Palette;
 public:
     TitleImpl(  const css::uno::Reference< ov::XHelperInterface >& xParent,
                 const css::uno::Reference< css::uno::XComponentContext >& xContext,
                 css::uno::Reference< css::drawing::XShape >  _xTitleShape )
-        : BaseClass( xParent, xContext ), xTitleShape(std::move( _xTitleShape )), m_Palette(nullptr)
+        : BaseClass( xParent, xContext ),
+        xTitleShape(std::move( _xTitleShape )),
+        xShapePropertySet( xTitleShape, css::uno::UNO_QUERY_THROW ),
+        maShapeHelper( xTitleShape ),
+        m_Palette(nullptr)
     {
-        xShapePropertySet.set( xTitleShape, css::uno::UNO_QUERY_THROW );
-        oShapeHelper.reset( new ov::ShapeHelper(xTitleShape) );
     }
     css::uno::Reference< ov::excel::XInterior > SAL_CALL Interior(  ) override
     {
@@ -89,19 +91,19 @@ public:
 
     void SAL_CALL setTop( double Top ) override
     {
-        oShapeHelper->setTop( Top );
+        maShapeHelper.setTop( Top );
     }
     double SAL_CALL getTop(  ) override
     {
-        return oShapeHelper->getTop();
+        return maShapeHelper.getTop();
     }
     void SAL_CALL setLeft( double Left ) override
     {
-        oShapeHelper->setLeft( Left );
+        maShapeHelper.setLeft( Left );
     }
     double SAL_CALL getLeft(  ) override
     {
-        return oShapeHelper->getLeft();
+        return maShapeHelper.getLeft();
     }
     void SAL_CALL setOrientation( ::sal_Int32 _nOrientation ) override
     {
