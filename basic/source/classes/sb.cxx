@@ -901,18 +901,18 @@ StarBASIC::StarBASIC( StarBASIC* p, bool bIsDocBasic  )
 
     if( !GetSbData()->nInst++ )
     {
-        GetSbData()->pSbFac.reset( new SbiFactory );
-        AddFactory( GetSbData()->pSbFac.get() );
-        GetSbData()->pTypeFac.reset(new SbTypeFactory);
-        AddFactory( GetSbData()->pTypeFac.get() );
+        GetSbData()->pSbFac.emplace();
+        AddFactory( &*GetSbData()->pSbFac );
+        GetSbData()->pTypeFac.emplace();
+        AddFactory( &*GetSbData()->pTypeFac );
         GetSbData()->pClassFac.reset(new SbClassFactory);
         AddFactory( GetSbData()->pClassFac.get() );
-        GetSbData()->pOLEFac.reset(new SbOLEFactory);
-        AddFactory( GetSbData()->pOLEFac.get() );
-        GetSbData()->pFormFac.reset(new SbFormFactory);
-        AddFactory( GetSbData()->pFormFac.get() );
-        GetSbData()->pUnoFac.reset( new SbUnoFactory );
-        AddFactory( GetSbData()->pUnoFac.get() );
+        GetSbData()->pOLEFac.emplace();
+        AddFactory( &*GetSbData()->pOLEFac );
+        GetSbData()->pFormFac.emplace();
+        AddFactory( &*GetSbData()->pFormFac );
+        GetSbData()->pUnoFac.emplace();
+        AddFactory( &*GetSbData()->pUnoFac );
     }
     pRtl = new SbiStdObject(SB_RTLNAME, this );
     // Search via StarBasic is always global
@@ -940,17 +940,17 @@ StarBASIC::~StarBASIC()
 
     if( !--GetSbData()->nInst )
     {
-        RemoveFactory( GetSbData()->pSbFac.get() );
+        RemoveFactory( &*GetSbData()->pSbFac );
         GetSbData()->pSbFac.reset();
-        RemoveFactory( GetSbData()->pUnoFac.get() );
+        RemoveFactory( &*GetSbData()->pUnoFac );
         GetSbData()->pUnoFac.reset();
-        RemoveFactory( GetSbData()->pTypeFac.get() );
+        RemoveFactory( &*GetSbData()->pTypeFac );
         GetSbData()->pTypeFac.reset();
         RemoveFactory( GetSbData()->pClassFac.get() );
         GetSbData()->pClassFac.reset();
-        RemoveFactory( GetSbData()->pOLEFac.get() );
+        RemoveFactory( &*GetSbData()->pOLEFac );
         GetSbData()->pOLEFac.reset();
-        RemoveFactory( GetSbData()->pFormFac.get() );
+        RemoveFactory( &*GetSbData()->pFormFac );
         GetSbData()->pFormFac.reset();
 
         if( SbiGlobals::pGlobals )

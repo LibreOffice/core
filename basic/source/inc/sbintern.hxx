@@ -21,9 +21,11 @@
 
 #include <basic/sbstar.hxx>
 #include <sbxfac.hxx>
+#include "sbunoobj.hxx"
 #include <unotools/transliterationwrapper.hxx>
 #include <comphelper/errcode.hxx>
 #include <config_features.h>
+#include <optional>
 
 namespace utl
 {
@@ -105,15 +107,15 @@ struct SbiGlobals
     static SbiGlobals* pGlobals;
     SbiInstance*    pInst;          // all active runtime instances
 #if HAVE_FEATURE_SCRIPTING
-    std::unique_ptr<SbiFactory>   pSbFac;    // StarBASIC-Factory
-    std::unique_ptr<SbUnoFactory> pUnoFac;   // Factory for Uno-Structs at DIM AS NEW
-    std::unique_ptr<SbTypeFactory>
+    std::optional<SbiFactory>   pSbFac;    // StarBASIC-Factory
+    std::optional<SbUnoFactory> pUnoFac;   // Factory for Uno-Structs at DIM AS NEW
+    std::optional<SbTypeFactory>
                     pTypeFac;       // Factory for user defined types
     std::unique_ptr<SbClassFactory>
                     pClassFac;      // Factory for user defined classes (based on class modules)
-    std::unique_ptr<SbOLEFactory>
+    std::optional<SbOLEFactory>
                     pOLEFac;        // Factory for OLE types
-    std::unique_ptr<SbFormFactory>
+    std::optional<SbFormFactory>
                     pFormFac;       // Factory for user forms
     std::unique_ptr<BasicManager> pAppBasMgr;
 #endif

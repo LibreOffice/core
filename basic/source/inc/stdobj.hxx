@@ -20,13 +20,14 @@
 #pragma once
 
 #include <basic/sbxobj.hxx>
+#include <sbstdobj.hxx>
+#include <optional>
 
 class StarBASIC;
-class SbStdFactory;
 
 class SbiStdObject final : public SbxObject
 {
-    std::unique_ptr<SbStdFactory> pStdFactory;
+    std::optional<SbStdFactory> pStdFactory;
 
     virtual ~SbiStdObject() override;
     using SbxVariable::GetInfo;

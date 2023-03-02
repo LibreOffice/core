@@ -934,15 +934,15 @@ SbiStdObject::SbiStdObject( const OUString& r, StarBASIC* pb ) : SbxObject( r )
 
     SetParent( pb );
 
-    pStdFactory.reset( new SbStdFactory );
-    SbxBase::AddFactory( pStdFactory.get() );
+    pStdFactory.emplace();
+    SbxBase::AddFactory( &*pStdFactory );
 
     Insert( new SbStdClipboard );
 }
 
 SbiStdObject::~SbiStdObject()
 {
-    SbxBase::RemoveFactory( pStdFactory.get() );
+    SbxBase::RemoveFactory( &*pStdFactory );
     pStdFactory.reset();
 }
 
