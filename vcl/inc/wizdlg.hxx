@@ -256,6 +256,8 @@ namespace vcl
         DECL_LINK(OnFinish, Button*, void);
 
         void     implConstruct( const WizardButtonFlags _nButtonFlags );
+
+        virtual void     DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
     };
 
     /// helper class to temporarily suspend any traveling in the wizard

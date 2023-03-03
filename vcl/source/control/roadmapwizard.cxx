@@ -20,6 +20,7 @@
 
 #include <vcl/toolkit/roadmap.hxx>
 #include <tools/debug.hxx>
+#include <tools/json_writer.hxx>
 #include <osl/diagnose.h>
 
 #include <strings.hrc>
@@ -796,6 +797,77 @@ namespace vcl
     FactoryFunction RoadmapWizard::GetUITestFactory() const
     {
         return RoadmapWizardUIObject::create;
+    }
+
+    namespace
+    {
+        bool isButton(WindowType eType)
+        {
+            return eType == WindowType::PUSHBUTTON || eType == WindowType::OKBUTTON
+                || eType == WindowType::CANCELBUTTON || eType == WindowType::HELPBUTTON;
+        }
+    }
+
+    void RoadmapWizard::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+    {
+        rJsonWriter.put("id", get_id());
+        rJsonWriter.put("type", "dialog");
+        rJsonWriter.put("title", GetText());
+
+        OUString sDialogId = OStringToOUString(GetHelpId(), RTL_TEXTENCODING_ASCII_US);
+        sal_Int32 nStartPos = sDialogId.lastIndexOf('/');
+        nStartPos = nStartPos >= 0 ? nStartPos + 1 : 0;
+        rJsonWriter.put("dialogid", sDialogId.copy(nStartPos));
+
+        vcl::Window* pFocusControl = GetFirstControlForFocus();
+        if (pFocusControl)
+            rJsonWriter.put("init_focus_id", pFocusControl->get_id());
+
+        {
+            auto childrenNode = rJsonWriter.startArray("children");
+
+            auto containerNode = rJsonWriter.startStruct();
+            rJsonWriter.put("id", "container");
+            rJsonWriter.put("type", "container");
+            rJsonWriter.put("vertical", true);
+
+            {
+                auto containerChildrenNode = rJsonWriter.startArray("children");
+
+                // tabpages
+                for (int i = 0; i < GetChildCount(); i++)
+                {
+                    vcl::Window* pChild = GetChild(i);
+
+                    if (!isButton(pChild->GetType()) && pChild != mpViewWindow)
+                    {
+                        auto childNode = rJsonWriter.startStruct();
+                        pChild->DumpAsPropertyTree(rJsonWriter);
+                    }
+                }
+
+                // buttons
+                {
+                    auto buttonsNode = rJsonWriter.startStruct();
+                    rJsonWriter.put("id", "buttons");
+                    rJsonWriter.put("type", "buttonbox");
+                    rJsonWriter.put("layoutstyle", "end");
+                    {
+                        auto buttonsChildrenNode = rJsonWriter.startArray("children");
+                        for (int i = 0; i < GetChildCount(); i++)
+                        {
+                            vcl::Window* pChild = GetChild(i);
+
+                            if (isButton(pChild->GetType()))
+                            {
+                                auto childNode = rJsonWriter.startStruct();
+                                pChild->DumpAsPropertyTree(rJsonWriter);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }   // namespace vcl
