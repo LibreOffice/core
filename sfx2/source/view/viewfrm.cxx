@@ -955,6 +955,9 @@ void SfxViewFrame::ExecHistory_Impl( SfxRequest &rReq )
 {
     // Is there an Undo-Manager on the top Shell?
     SfxShell *pSh = GetDispatcher()->GetShell(0);
+    if (!pSh)
+        return;
+
     SfxUndoManager* pShUndoMgr = pSh->GetUndoManager();
     bool bOK = false;
     if ( pShUndoMgr )

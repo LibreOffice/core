@@ -846,9 +846,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         // TODO/LATER: what about the FormShell? Does it use any metric data?! Perhaps it should use the Pool of the document!
         if ( pSlotServ && pDispatcher )
         {
-            SfxShell* pShell = pDispatcher->GetShell( pSlotServ->GetShellLevel() );
-            DBG_ASSERT( pShell, "Can't get core metric without shell!" );
-            if ( pShell )
+            if (SfxShell* pShell = pDispatcher->GetShell( pSlotServ->GetShellLevel() ))
                 eMapUnit = GetCoreMetric( pShell->GetPool(), nSID );
         }
 

@@ -712,6 +712,9 @@ bool ScTabViewShell::IsSignatureLineSigned()
 void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
 {
     SfxShell* pSh = GetViewData().GetDispatcher().GetShell(0);
+    if (!pSh)
+        return;
+
     ScUndoManager* pUndoManager = static_cast<ScUndoManager*>(pSh->GetUndoManager());
 
     const SfxItemSet* pReqArgs = rReq.GetArgs();
@@ -812,6 +815,9 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
 void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
 {
     SfxShell* pSh = GetViewData().GetDispatcher().GetShell(0);
+    if (!pSh)
+        return;
+
     SfxUndoManager* pUndoManager = pSh->GetUndoManager();
     ScUndoManager* pScUndoManager = dynamic_cast<ScUndoManager*>(pUndoManager);
 
