@@ -3221,6 +3221,18 @@ size_t PDFObjectParser::parse(PDFElement* pParsingElement, size_t nStartIndex, i
         }
         else if (auto pReference = dynamic_cast<PDFReferenceElement*>(pCurrentElement))
         {
+            // Handle previously stored number
+            if (aNumbers.size() > 2)
+            {
+                aNumbers.resize(aNumbers.size() - 2);
+                if (pParsingArray)
+                {
+                    for (auto& pNumber : aNumbers)
+                        pParsingArray->PushBack(pNumber);
+                }
+                aNumbers.clear();
+            }
+
             if (pParsingArray)
             {
                 pParsingArray->PushBack(pReference);
@@ -3241,6 +3253,17 @@ size_t PDFObjectParser::parse(PDFElement* pParsingElement, size_t nStartIndex, i
         }
         else if (auto pLiteralString = dynamic_cast<PDFLiteralStringElement*>(pCurrentElement))
         {
+            // Handle previously stored number
+            if (!aNumbers.empty())
+            {
+                if (pParsingArray)
+                {
+                    for (auto& pNumber : aNumbers)
+                        pParsingArray->PushBack(pNumber);
+                }
+                aNumbers.clear();
+            }
+
             if (pParsingArray)
             {
                 pParsingArray->PushBack(pLiteralString);
@@ -3258,6 +3281,17 @@ size_t PDFObjectParser::parse(PDFElement* pParsingElement, size_t nStartIndex, i
         }
         else if (auto pBoolean = dynamic_cast<PDFBooleanElement*>(pCurrentElement))
         {
+            // Handle previously stored number
+            if (!aNumbers.empty())
+            {
+                if (pParsingArray)
+                {
+                    for (auto& pNumber : aNumbers)
+                        pParsingArray->PushBack(pNumber);
+                }
+                aNumbers.clear();
+            }
+
             if (pParsingArray)
             {
                 pParsingArray->PushBack(pBoolean);
@@ -3275,6 +3309,17 @@ size_t PDFObjectParser::parse(PDFElement* pParsingElement, size_t nStartIndex, i
         }
         else if (auto pHexString = dynamic_cast<PDFHexStringElement*>(pCurrentElement))
         {
+            // Handle previously stored number
+            if (!aNumbers.empty())
+            {
+                if (pParsingArray)
+                {
+                    for (auto& pNumber : aNumbers)
+                        pParsingArray->PushBack(pNumber);
+                }
+                aNumbers.clear();
+            }
+
             if (pParsingArray)
             {
                 pParsingArray->PushBack(pHexString);

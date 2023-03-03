@@ -197,6 +197,31 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testCommentEnd)
     CPPUNIT_ASSERT(aDocument.Read(aFile));
 }
 
+CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testMixedArrayWithNumbers)
+{
+    // Load a file that has markup like this:
+    // 3 0 obj <<
+    //  /Test [1 4 0 R 3 false 5 (Lieral) 7 <90>]
+    // >>
+    OUString aSourceURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "array-mixed-numbers-and-elements.pdf";
+    SvFileStream aFile(aSourceURL, StreamMode::READ);
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(aFile));
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT(!aPages.empty());
+    vcl::filter::PDFObjectElement* pPage = aPages[0];
+    auto pTest = dynamic_cast<vcl::filter::PDFArrayElement*>(pPage->Lookup("Test"));
+    std::vector<vcl::filter::PDFElement*> aElements = pTest->GetElements();
+
+    // Without the accompanying fix in place, this test would have failed with
+    // the array containing the wrong number of elements and in the incorrect order
+    CPPUNIT_ASSERT_EQUAL(8, static_cast<int>(aElements.size()));
+    CPPUNIT_ASSERT(dynamic_cast<vcl::filter::PDFNumberElement*>(aElements[0]));
+    CPPUNIT_ASSERT(dynamic_cast<vcl::filter::PDFNumberElement*>(aElements[2]));
+    CPPUNIT_ASSERT(dynamic_cast<vcl::filter::PDFNumberElement*>(aElements[4]));
+    CPPUNIT_ASSERT(dynamic_cast<vcl::filter::PDFNumberElement*>(aElements[6]));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
