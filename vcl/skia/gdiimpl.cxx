@@ -41,6 +41,8 @@
 #include <SkRSXform.h>
 
 #include <numeric>
+#include <sstream>
+
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
@@ -214,6 +216,17 @@ bool checkInvalidSourceOrDestination(SalTwoRect const& rPosAry)
 {
     return rPosAry.mnSrcWidth <= 0 || rPosAry.mnSrcHeight <= 0 || rPosAry.mnDestWidth <= 0
            || rPosAry.mnDestHeight <= 0;
+}
+
+std::string dumpOptionalColor(const std::optional<Color>& c)
+{
+    std::ostringstream oss;
+    if (c)
+        oss << *c;
+    else
+        oss << "no color";
+
+    return std::move(oss).str(); // optimized in C++20
 }
 
 } // end anonymous namespace
@@ -738,8 +751,8 @@ void SkiaSalGraphicsImpl::privateDrawAlphaRect(tools::Long nX, tools::Long nY, t
     preDraw();
     SAL_INFO("vcl.skia.trace", "privatedrawrect("
                                    << this << "): " << SkIRect::MakeXYWH(nX, nY, nWidth, nHeight)
-                                   << ":" << *moLineColor << ":" << *moFillColor << ":"
-                                   << fTransparency);
+                                   << ":" << dumpOptionalColor(moLineColor) << ":"
+                                   << dumpOptionalColor(moFillColor) << ":" << fTransparency);
     addUpdateRegion(SkRect::MakeXYWH(nX, nY, nWidth, nHeight));
     SkCanvas* canvas = getDrawCanvas();
     if (moFillColor)
@@ -840,7 +853,8 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
     aPolyPolygon.transform(rObjectToDevice);
 
     SAL_INFO("vcl.skia.trace", "drawpolypolygon(" << this << "): " << aPolyPolygon << ":"
-                                                  << *moLineColor << ":" << *moFillColor);
+                                                  << dumpOptionalColor(moLineColor) << ":"
+                                                  << dumpOptionalColor(moFillColor));
 
     if (delayDrawPolyPolygon(aPolyPolygon, fTransparency))
     {
