@@ -21,18 +21,18 @@
 #define INCLUDED_FRAMEWORK_DOCUMENTUNDOGUARD_HXX
 
 #include <framework/fwkdllapi.h>
-
 #include <com/sun/star/uno/Reference.hxx>
-
-#include <memory>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::uno { class XInterface; }
+namespace com::sun::star::document { class XUndoManager; }
 
 namespace framework
 {
+    class UndoManagerContextListener;
+
     //= DocumentUndoGuard
 
-    struct DocumentUndoGuard_Data;
     /** a helper class guarding the Undo manager of a document
 
         This class guards, within a given scope, the Undo Manager of a document (or another component supporting
@@ -49,7 +49,8 @@ namespace framework
         ~DocumentUndoGuard();
 
     private:
-        std::unique_ptr< DocumentUndoGuard_Data >   m_xData;
+        css::uno::Reference< css::document::XUndoManager > mxUndoManager;
+        ::rtl::Reference< UndoManagerContextListener >  mxContextListener;
     };
 
 
