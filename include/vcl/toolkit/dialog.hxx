@@ -101,6 +101,7 @@ protected:
     friend class SalInstanceBuilder;
     void set_action_area(VclButtonBox* pBox);
     void set_content_area(VclBox* pBox);
+    vcl::Window*    GetFirstControlForFocus();
 
 public:
     explicit        Dialog( vcl::Window* pParent, WinBits nStyle = WB_STDDIALOG, InitFlag eFlag = InitFlag::Default );
@@ -132,7 +133,6 @@ private:
     static void     ImplEndExecuteModal();
     void            ImplSetModalInputMode(bool bModal);
 
-    vcl::Window*    GetFirstControlForFocus();
 public:
 
     /// Commence execution of a modal dialog, disposes owner on failure
