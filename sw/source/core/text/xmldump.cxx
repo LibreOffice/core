@@ -174,9 +174,6 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
 
     switch ( GetType(  ) )
     {
-    case SwFrameType::Page:
-        name = "page";
-        break;
     case SwFrameType::Column:
         name = "column";
         break;
@@ -224,44 +221,6 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
         (void)xmlTextWriterStartElement( writer, reinterpret_cast<const xmlChar *>(name) );
 
         dumpAsXmlAttributes( writer );
-
-        if (IsPageFrame())
-        {
-            const SwPageFrame* pPageFrame = static_cast<const SwPageFrame*>(this);
-            (void)xmlTextWriterStartElement(writer, BAD_CAST("page_status"));
-            (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidFlyLayout"), BAD_CAST(OString::boolean(!pPageFrame->IsInvalidFlyLayout()).getStr()));
-            (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidFlyContent"), BAD_CAST(OString::boolean(!pPageFrame->IsInvalidFlyContent()).getStr()));
-            (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidFlyInCnt"), BAD_CAST(OString::boolean(!pPageFrame->IsInvalidFlyInCnt()).getStr()));
-            (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidLayout"), BAD_CAST(OString::boolean(!pPageFrame->IsInvalidLayout()).getStr()));
-            (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidContent"), BAD_CAST(OString::boolean(!pPageFrame->IsInvalidContent()).getStr()));
-            (void)xmlTextWriterEndElement(writer);
-            (void)xmlTextWriterStartElement(writer, BAD_CAST("page_info"));
-            (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("phyNum"), "%d", pPageFrame->GetPhyPageNum());
-            (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("virtNum"), "%d", pPageFrame->GetVirtPageNum());
-            OUString aFormatName = pPageFrame->GetPageDesc()->GetName();
-            (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("pageDesc"), "%s", BAD_CAST(OUStringToOString(aFormatName, RTL_TEXTENCODING_UTF8).getStr()));
-            (void)xmlTextWriterEndElement(writer);
-            if (auto const* pObjs = pPageFrame->GetSortedObjs())
-            {
-                (void)xmlTextWriterStartElement(writer, BAD_CAST("sorted_objs"));
-                for (SwAnchoredObject const*const pObj : *pObjs)
-                {   // just print pointer, full details will be printed on its anchor frame
-                    // this nonsense is needed because of multiple inheritance
-                    if (SwFlyFrame const* pFly = pObj->DynCastFlyFrame())
-                    {
-                        (void)xmlTextWriterStartElement(writer, BAD_CAST("fly"));
-                        (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", pFly);
-                    }
-                    else
-                    {
-                        (void)xmlTextWriterStartElement(writer, BAD_CAST(pObj->getElementName()));
-                        (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", pObj);
-                    }
-                    (void)xmlTextWriterEndElement(writer);
-                }
-                (void)xmlTextWriterEndElement(writer);
-            }
-        }
 
         if (IsTextFrame())
         {

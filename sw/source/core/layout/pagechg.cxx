@@ -2589,6 +2589,64 @@ const SwFooterFrame* SwPageFrame::GetFooterFrame() const
     return nullptr;
 }
 
+void SwPageFrame::dumpAsXml(xmlTextWriterPtr writer) const
+{
+    (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("page"));
+    dumpAsXmlAttributes(writer);
+
+    (void)xmlTextWriterStartElement(writer, BAD_CAST("page_status"));
+    (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidFlyLayout"), BAD_CAST(OString::boolean(!IsInvalidFlyLayout()).getStr()));
+    (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidFlyContent"), BAD_CAST(OString::boolean(!IsInvalidFlyContent()).getStr()));
+    (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidFlyInCnt"), BAD_CAST(OString::boolean(!IsInvalidFlyInCnt()).getStr()));
+    (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidLayout"), BAD_CAST(OString::boolean(!IsInvalidLayout()).getStr()));
+    (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidContent"), BAD_CAST(OString::boolean(!IsInvalidContent()).getStr()));
+    (void)xmlTextWriterEndElement(writer);
+    (void)xmlTextWriterStartElement(writer, BAD_CAST("page_info"));
+    (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("phyNum"), "%d", GetPhyPageNum());
+    (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("virtNum"), "%d", GetVirtPageNum());
+    OUString aFormatName = GetPageDesc()->GetName();
+    (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("pageDesc"), "%s", BAD_CAST(OUStringToOString(aFormatName, RTL_TEXTENCODING_UTF8).getStr()));
+    (void)xmlTextWriterEndElement(writer);
+    if (auto const* pObjs = GetSortedObjs())
+    {
+        (void)xmlTextWriterStartElement(writer, BAD_CAST("sorted_objs"));
+        for (SwAnchoredObject const*const pObj : *pObjs)
+        {   // just print pointer, full details will be printed on its anchor frame
+            // this nonsense is needed because of multiple inheritance
+            if (SwFlyFrame const* pFly = pObj->DynCastFlyFrame())
+            {
+                (void)xmlTextWriterStartElement(writer, BAD_CAST("fly"));
+                (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", pFly);
+            }
+            else
+            {
+                (void)xmlTextWriterStartElement(writer, BAD_CAST(pObj->getElementName()));
+                (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", pObj);
+            }
+            (void)xmlTextWriterEndElement(writer);
+        }
+        (void)xmlTextWriterEndElement(writer);
+    }
+
+    (void)xmlTextWriterStartElement(writer, BAD_CAST("infos"));
+    dumpInfosAsXml(writer);
+    (void)xmlTextWriterEndElement(writer);
+    const SwSortedObjs* pAnchored = GetDrawObjs();
+    if ( pAnchored && pAnchored->size() > 0 )
+    {
+        (void)xmlTextWriterStartElement( writer, BAD_CAST( "anchored" ) );
+
+        for (SwAnchoredObject* pObject : *pAnchored)
+        {
+            pObject->dumpAsXml( writer );
+        }
+
+        (void)xmlTextWriterEndElement( writer );
+    }
+    dumpChildrenAsXml(writer);
+    (void)xmlTextWriterEndElement(writer);
+}
+
 SwTextGridItem const* GetGridItem(SwPageFrame const*const pPage)
 {
     if (pPage && pPage->HasGrid())

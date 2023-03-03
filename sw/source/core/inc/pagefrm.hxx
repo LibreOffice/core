@@ -346,6 +346,8 @@ public:
 
     const SwHeaderFrame* GetHeaderFrame() const;
     const SwFooterFrame* GetFooterFrame() const;
+
+    void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
 };
 
 inline SwContentFrame *SwPageFrame::FindFirstBodyContent()
