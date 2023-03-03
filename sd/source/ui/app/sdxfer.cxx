@@ -729,14 +729,7 @@ const css::uno::Sequence< sal_Int8 >& SdTransferable::getUnoTunnelId()
 
 SdTransferable* SdTransferable::getImplementation( const Reference< XInterface >& rxData ) noexcept
 {
-    try
-    {
-        return comphelper::getFromUnoTunnel<SdTransferable>(rxData);
-    }
-    catch( const css::uno::Exception& )
-    {
-    }
-    return nullptr;
+    return dynamic_cast<SdTransferable*>(rxData.get());
 }
 
 void SdTransferable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )

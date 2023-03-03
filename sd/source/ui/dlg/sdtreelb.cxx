@@ -118,14 +118,7 @@ void SdPageObjsTLV::SdPageObjsTransferable::DragFinished( sal_Int8 nDropAction )
 SdPageObjsTLV::SdPageObjsTransferable* SdPageObjsTLV::SdPageObjsTransferable::getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData )
     noexcept
 {
-    try
-    {
-        return comphelper::getFromUnoTunnel<SdPageObjsTLV::SdPageObjsTransferable>(rxData);
-    }
-    catch( const css::uno::Exception& )
-    {
-    }
-    return nullptr;
+    return dynamic_cast<SdPageObjsTLV::SdPageObjsTransferable*>(rxData.get());
 }
 
 SotClipboardFormatId SdPageObjsTLV::SdPageObjsTransferable::GetListBoxDropFormatId()
