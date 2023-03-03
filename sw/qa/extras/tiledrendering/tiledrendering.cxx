@@ -3868,7 +3868,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAuthorField)
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Special[1]", "rText", sAuthor);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion[1]/SwLineLayout[1]/SwFieldPortion[1]", "expand", sAuthor);
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSavedAuthorField)
@@ -3884,7 +3884,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSavedAuthorField)
     Scheduler::ProcessEventsToIdle();
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Special[1]", "rText", sAuthor);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion[1]/SwLineLayout[1]/SwFieldPortion[1]", "expand", sAuthor);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
