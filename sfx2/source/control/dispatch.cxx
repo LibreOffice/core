@@ -774,11 +774,13 @@ const SfxSlot* SfxDispatcher::GetSlot( const OUString& rCommand )
 
     for ( sal_uInt16 i = 0; i < nTotCount; ++i )
     {
-        SfxShell *pObjShell = GetShell(i);
-        SfxInterface *pIFace = pObjShell->GetInterface();
-        const SfxSlot *pSlot = pIFace->GetSlot( rCommand );
-        if ( pSlot )
-            return pSlot;
+        if (SfxShell *pObjShell = GetShell(i))
+        {
+            SfxInterface *pIFace = pObjShell->GetInterface();
+            const SfxSlot *pSlot = pIFace->GetSlot( rCommand );
+            if ( pSlot )
+                return pSlot;
+        }
     }
 
     return nullptr;
@@ -1152,6 +1154,9 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
     for ( sal_uInt16 nShell = nTotCount; nShell > 0; --nShell )
     {
         SfxShell *pShell = GetShell( nShell-1 );
+        if (!pShell)
+            continue;
+
         SfxInterface *pIFace = pShell->GetInterface();
 
         // don't consider shells if "Hidden" or "Quiet"
@@ -1567,6 +1572,9 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
     for ( sal_uInt16 i = nFirstShell; i < nTotCount; ++i )
     {
         SfxShell *pObjShell = GetShell(i);
+        if (!pObjShell)
+            continue;
+
         SfxInterface *pIFace = pObjShell->GetInterface();
         const SfxSlot *pSlot = pIFace->GetSlot(nSlot);
 
@@ -1646,7 +1654,8 @@ bool SfxDispatcher::FillState_(const SfxSlotServer& rSvr, SfxItemSet& rState,
 
         // Determine the object and call the Message of this object
         SfxShell *pSh = GetShell(rSvr.GetShellLevel());
-        DBG_ASSERT(pSh, "ObjectShell not found");
+        if (!pSh)
+            return false;
 
         SfxStateFunc pFunc;
 
