@@ -18,7 +18,7 @@ class tdf131936(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:SaveAs", close_button="cancel") as xDialog:
                 xFileTypeCombo = xDialog.getChild("file_type")
                 state = get_state_as_dict(xFileTypeCombo)
-                self.assertEqual(state["SelectEntryText"], "Word 2010-365 Document (.docx)")
+                self.assertEqual(state["SelectEntryText"], "Word 2010–365 Document (.docx)")
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

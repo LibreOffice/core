@@ -30,7 +30,7 @@ class save_readonly_with_password(UITestCase):
                     xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
                     xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
                     xFileTypeCombo = xSaveDialog.getChild("file_type")
-                    select_by_text(xFileTypeCombo, "Word 2010-365 Document (.docx)")
+                    select_by_text(xFileTypeCombo, "Word 2010–365 Document (.docx)")
                     xPasswordCheckButton = xSaveDialog.getChild("password")
                     xPasswordCheckButton.executeAction("CLICK", tuple())
                     xOpen = xSaveDialog.getChild("open")
