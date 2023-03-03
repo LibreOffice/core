@@ -47,7 +47,7 @@ class LanguageToolGrammarChecker
                                   css::lang::XServiceInfo, css::lang::XServiceDisplayName>
 {
     css::uno::Sequence<css::lang::Locale> m_aSuppLocales;
-    o3tl::lru_map<OUString, css::uno::Sequence<css::linguistic2::SingleProofreadingError>>
+    o3tl::lru_map<OString, css::uno::Sequence<css::linguistic2::SingleProofreadingError>>
         mCachedResults;
     LanguageToolGrammarChecker(const LanguageToolGrammarChecker&) = delete;
     LanguageToolGrammarChecker& operator=(const LanguageToolGrammarChecker&) = delete;

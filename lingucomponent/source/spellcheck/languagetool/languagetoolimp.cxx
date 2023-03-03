@@ -215,18 +215,18 @@ ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
     xRes.nBehindEndOfSentencePosition
         = std::min(xRes.nStartOfNextSentencePosition, aText.getLength());
 
-    auto cachedResult = mCachedResults.find(aText);
-    if (cachedResult != mCachedResults.end())
+    OUString langTag(aLocale.Language + "-" + aLocale.Country);
+    OString postData = OUStringToOString(Concat2View("text=" + aText + "&language=" + langTag),
+                                         RTL_TEXTENCODING_UTF8);
+
+    if (auto cachedResult = mCachedResults.find(postData); cachedResult != mCachedResults.end())
     {
         xRes.aErrors = cachedResult->second;
         return xRes;
     }
 
     tools::Long http_code = 0;
-    OUString langTag(aLocale.Language + "-" + aLocale.Country);
-    OString postData(OUStringToOString(Concat2View("text=" + aText + "&language=" + langTag),
-                                       RTL_TEXTENCODING_UTF8));
-    const std::string response_body
+    std::string response_body
         = makeHttpRequest(checkerURL, HTTP_METHOD::HTTP_POST, postData, http_code);
 
     if (http_code != 200)
@@ -241,8 +241,7 @@ ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
 
     parseProofreadingJSONResponse(xRes, response_body);
     // cache the result
-    mCachedResults.insert(
-        std::pair<OUString, Sequence<SingleProofreadingError>>(aText, xRes.aErrors));
+    mCachedResults.insert(std::make_pair(postData, xRes.aErrors));
     return xRes;
 }
 
