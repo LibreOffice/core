@@ -22,6 +22,7 @@
 #include <address.hxx>
 #include "anyrefdg.hxx"
 #include "docsh.hxx"
+#include <SolverSettings.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <string_view>
@@ -42,49 +43,6 @@ public:
 
 protected:
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
-};
-
-/// The dialog's content for a row, not yet parsed
-struct ScOptConditionRow
-{
-    OUString    aLeftStr;
-    sal_uInt16  nOperator;
-    OUString    aRightStr;
-
-    ScOptConditionRow() : nOperator(0) {}
-    bool IsDefault() const { return aLeftStr.isEmpty() && aRightStr.isEmpty() && nOperator == 0; }
-};
-
-/// All settings from the dialog, saved with the DocShell for the next call
-class ScOptSolverSave
-{
-    OUString    maObjective;
-    bool        mbMax;
-    bool        mbMin;
-    bool        mbValue;
-    OUString    maTarget;
-    OUString    maVariable;
-    std::vector<ScOptConditionRow> maConditions;
-    OUString    maEngine;
-    css::uno::Sequence<css::beans::PropertyValue> maProperties;
-
-public:
-            ScOptSolverSave( OUString aObjective, bool bMax, bool bMin, bool bValue,
-                             OUString aTarget, OUString aVariable,
-                             std::vector<ScOptConditionRow>&& rConditions,
-                             OUString aEngine,
-                             const css::uno::Sequence<css::beans::PropertyValue>& rProperties );
-
-    const OUString&   GetObjective() const    { return maObjective; }
-    bool              GetMax() const          { return mbMax; }
-    bool              GetMin() const          { return mbMin; }
-    bool              GetValue() const        { return mbValue; }
-    const OUString&   GetTarget() const       { return maTarget; }
-    const OUString&   GetVariable() const     { return maVariable; }
-    const std::vector<ScOptConditionRow>& GetConditions() const { return maConditions; }
-    const OUString&   GetEngine() const       { return maEngine; }
-    const css::uno::Sequence<css::beans::PropertyValue>& GetProperties() const
-                                            { return maProperties; }
 };
 
 class ScSolverOptionsDialog;
@@ -110,7 +68,7 @@ private:
     const SCTAB     mnCurTab;
     bool            mbDlgLostFocus;
 
-    std::vector<ScOptConditionRow> maConditions;
+    std::vector<sc::ModelConstraint> m_aConditions;
     tools::Long            nScrollPos;
 
     css::uno::Sequence<OUString> maImplNames;
@@ -183,6 +141,7 @@ private:
     std::unique_ptr<weld::Widget> m_xContents;
 
     std::shared_ptr<ScSolverOptionsDialog> m_xOptDlg;
+    std::shared_ptr<sc::SolverSettings> m_pSolverSettings;
 
     void    Init(const ScAddress& rCursorPos);
     bool    CallSolver();
@@ -192,6 +151,11 @@ private:
     bool    ParseRef( ScRange& rRange, const OUString& rInput, bool bAllowRange );
     bool    FindTimeout( sal_Int32& rTimeout );
     void    ShowError( bool bCondition, formula::RefEdit* pFocus );
+    void    LoadSolverSettings();
+    void    SaveSolverSettings();
+    bool    IsEngineAvailable(std::u16string_view sEngineName);
+
+    static sc::ConstraintOperator OperatorIndexToConstraintOperator(sal_Int32 nIndex);
 
     DECL_LINK( BtnHdl, weld::Button&, void );
     DECL_LINK( DelBtnHdl, weld::Button&, void );

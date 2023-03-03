@@ -655,4 +655,12 @@ void ScTable::CollectBroadcasterState(sc::BroadcasterState& rState) const
         pCol->CollectBroadcasterState(rState);
 }
 
+std::shared_ptr<sc::SolverSettings> ScTable::GetSolverSettings()
+{
+    if (!m_pSolverSettings)
+        m_pSolverSettings = std::make_shared<sc::SolverSettings>(*this);
+
+    return m_pSolverSettings;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

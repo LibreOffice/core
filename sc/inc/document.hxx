@@ -2691,7 +2691,7 @@ private:
     bool    HasPartOfMerged( const ScRange& rRange );
 
 public:
-    ScTable* FetchTable( SCTAB nTab );
+    SC_DLLPUBLIC ScTable* FetchTable( SCTAB nTab );
     const ScTable* FetchTable( SCTAB nTab ) const;
 
     ScRefCellValue GetRefCellValue( const ScAddress& rPos );

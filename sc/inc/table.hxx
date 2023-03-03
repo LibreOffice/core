@@ -33,6 +33,7 @@
 #include "document.hxx"
 #include "drwlayer.hxx"
 #include "SparklineList.hxx"
+#include "SolverSettings.hxx"
 
 #include <algorithm>
 #include <atomic>
@@ -257,6 +258,9 @@ private:
     /** this is touched from formula group threading context */
     std::atomic<bool> bStreamValid;
 
+    // Solver settings in current tab
+    std::shared_ptr<sc::SolverSettings> m_pSolverSettings;
+
     // Default attributes for the unallocated columns.
     ScColumnData    aDefaultColData;
 
@@ -441,6 +445,8 @@ public:
         SCCOL nCol, SCROW nRow, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram );
     void SetFormula(
         SCCOL nCol, SCROW nRow, const OUString& rFormula, formula::FormulaGrammar::Grammar eGram );
+
+    SC_DLLPUBLIC std::shared_ptr<sc::SolverSettings> GetSolverSettings();
 
     /**
      * Takes ownership of pCell

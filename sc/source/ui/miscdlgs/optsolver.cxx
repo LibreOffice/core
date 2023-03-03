@@ -35,8 +35,9 @@
 #include <solverutil.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
-
+#include <comphelper/sequence.hxx>
 #include <optsolver.hxx>
+#include <table.hxx>
 
 #include <com/sun/star/sheet/SolverConstraint.hpp>
 #include <com/sun/star/sheet/SolverConstraintOperator.hpp>
@@ -132,23 +133,6 @@ IMPL_LINK(ScCursorRefEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     return formula::RefEdit::KeyInput(rKEvt);
 }
 
-ScOptSolverSave::ScOptSolverSave( OUString aObjective, bool bMax, bool bMin, bool bValue,
-                             OUString aTarget, OUString aVariable,
-                             std::vector<ScOptConditionRow>&& rConditions,
-                             OUString aEngine,
-                             const uno::Sequence<beans::PropertyValue>& rProperties ) :
-    maObjective( std::move(aObjective) ),
-    mbMax( bMax ),
-    mbMin( bMin ),
-    mbValue( bValue ),
-    maTarget( std::move(aTarget) ),
-    maVariable( std::move(aVariable) ),
-    maConditions( std::move(rConditions) ),
-    maEngine( std::move(aEngine) ),
-    maProperties( rProperties )
-{
-}
-
 ScOptSolverDlg::ScOptSolverDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
                                ScDocShell* pDocSh, const ScAddress& aCursorPos)
     : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/solverdlg.ui", "SolverDialog")
@@ -205,6 +189,7 @@ ScOptSolverDlg::ScOptSolverDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Windo
     , m_xBtnResetAll(m_xBuilder->weld_button("resetall"))
     , m_xResultFT(m_xBuilder->weld_label("result"))
     , m_xContents(m_xBuilder->weld_widget("grid"))
+    , m_pSolverSettings(mrDoc.FetchTable(mnCurTab)->GetSolverSettings())
 {
     m_xEdObjectiveCell->SetReferences(this, m_xFtObjectiveCell.get());
     m_xRBObjectiveCell->SetReferences(this, m_xEdObjectiveCell.get());
@@ -336,32 +321,19 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
     // get available solver implementations
     //! sort by descriptions?
     ScSolverUtil::GetImplementations( maImplNames, maDescriptions );
-    bool bImplHasElements = maImplNames.hasElements();
 
-    const ScOptSolverSave* pOldData = mpDocShell->GetSolverSaveData();
-    if ( pOldData )
-    {
-        m_xEdObjectiveCell->SetRefString( pOldData->GetObjective() );
-        m_xRbMax->set_active( pOldData->GetMax() );
-        m_xRbMin->set_active( pOldData->GetMin() );
-        m_xRbValue->set_active( pOldData->GetValue() );
-        m_xEdTargetValue->SetRefString( pOldData->GetTarget() );
-        m_xEdVariableCells->SetRefString( pOldData->GetVariable() );
-        maConditions = pOldData->GetConditions();
-        maEngine = pOldData->GetEngine();
-        maProperties = pOldData->GetProperties();
-    }
-    else
-    {
-        m_xRbMax->set_active(true);
-        OUString aCursorStr;
-        if ( !mrDoc.GetRangeAtBlock( ScRange(rCursorPos), aCursorStr ) )
-            aCursorStr = rCursorPos.Format(ScRefFlags::ADDR_ABS, nullptr, mrDoc.GetAddressConvention());
-        m_xEdObjectiveCell->SetRefString( aCursorStr );
-        if ( bImplHasElements )
-            maEngine = maImplNames[0];  // use first implementation
-    }
+    // Load existing settings stored in the tab
+    LoadSolverSettings();
     ShowConditions();
+
+    // If no objective cell has been loaded, then use the selected cell
+    if (m_xEdObjectiveCell->GetText().isEmpty())
+    {
+        OUString aCursorStr;
+        if (!mrDoc.GetRangeAtBlock(ScRange(rCursorPos), aCursorStr))
+            aCursorStr = rCursorPos.Format(ScRefFlags::ADDR_ABS, nullptr, mrDoc.GetAddressConvention());
+        m_xEdObjectiveCell->SetRefString(aCursorStr);
+    }
 
     m_xEdObjectiveCell->GrabFocus();
     mpEdActive = m_xEdObjectiveCell.get();
@@ -371,23 +343,23 @@ void ScOptSolverDlg::ReadConditions()
 {
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
     {
-        ScOptConditionRow aRowEntry;
+        sc::ModelConstraint aRowEntry;
         aRowEntry.aLeftStr = mpLeftEdit[nRow]->GetText();
         aRowEntry.aRightStr = mpRightEdit[nRow]->GetText();
-        aRowEntry.nOperator = mpOperator[nRow]->get_active();
+        aRowEntry.nOperator = OperatorIndexToConstraintOperator(mpOperator[nRow]->get_active());
 
         tools::Long nVecPos = nScrollPos + nRow;
-        if ( nVecPos >= static_cast<tools::Long>(maConditions.size()) && !aRowEntry.IsDefault() )
-            maConditions.resize( nVecPos + 1 );
+        if ( nVecPos >= static_cast<tools::Long>(m_aConditions.size()) && !aRowEntry.IsDefault() )
+            m_aConditions.resize( nVecPos + 1 );
 
-        if ( nVecPos < static_cast<tools::Long>(maConditions.size()) )
-            maConditions[nVecPos] = aRowEntry;
+        if ( nVecPos < static_cast<tools::Long>(m_aConditions.size()) )
+            m_aConditions[nVecPos] = aRowEntry;
 
         // remove default entries at the end
-        size_t nSize = maConditions.size();
-        while ( nSize > 0 && maConditions[ nSize-1 ].IsDefault() )
+        size_t nSize = m_aConditions.size();
+        while ( nSize > 0 && m_aConditions[ nSize-1 ].IsDefault() )
             --nSize;
-        maConditions.resize( nSize );
+        m_aConditions.resize( nSize );
     }
 }
 
@@ -395,20 +367,20 @@ void ScOptSolverDlg::ShowConditions()
 {
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
     {
-        ScOptConditionRow aRowEntry;
+        sc::ModelConstraint aRowEntry;
 
         tools::Long nVecPos = nScrollPos + nRow;
-        if ( nVecPos < static_cast<tools::Long>(maConditions.size()) )
-            aRowEntry = maConditions[nVecPos];
+        if ( nVecPos < static_cast<tools::Long>(m_aConditions.size()) )
+            aRowEntry = m_aConditions[nVecPos];
 
         mpLeftEdit[nRow]->SetRefString( aRowEntry.aLeftStr );
         mpRightEdit[nRow]->SetRefString( aRowEntry.aRightStr );
-        mpOperator[nRow]->set_active( aRowEntry.nOperator );
+        mpOperator[nRow]->set_active( aRowEntry.nOperator - 1);
     }
 
     // allow to scroll one page behind the visible or stored rows
     tools::Long nVisible = nScrollPos + EDIT_ROW_COUNT;
-    tools::Long nMax = std::max( nVisible, static_cast<tools::Long>(maConditions.size()) );
+    tools::Long nMax = std::max( nVisible, static_cast<tools::Long>(m_aConditions.size()) );
     m_xScrollBar->vadjustment_configure(nScrollPos, 0, nMax + EDIT_ROW_COUNT, 1,
                                         EDIT_ROW_COUNT - 1, EDIT_ROW_COUNT);
 
@@ -420,7 +392,7 @@ void ScOptSolverDlg::EnableButtons()
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
     {
         tools::Long nVecPos = nScrollPos + nRow;
-        mpDelButton[nRow]->set_sensitive(nVecPos < static_cast<tools::Long>(maConditions.size()));
+        mpDelButton[nRow]->set_sensitive(nVecPos < static_cast<tools::Long>(m_aConditions.size()));
     }
 }
 
@@ -503,6 +475,74 @@ bool ScOptSolverDlg::IsRefInputMode() const
     return mpEdActive != nullptr;
 }
 
+// Loads solver settings into the dialog
+void ScOptSolverDlg::LoadSolverSettings()
+{
+    m_xEdObjectiveCell->SetRefString(m_pSolverSettings->GetParameter(sc::SP_OBJ_CELL));
+    m_xEdTargetValue->SetRefString(m_pSolverSettings->GetParameter(sc::SP_OBJ_VAL));
+    m_xEdVariableCells->SetRefString(m_pSolverSettings->GetParameter(sc::SP_VAR_CELLS));
+
+    // Objective type
+    sc::ObjectiveType eType = m_pSolverSettings->GetObjectiveType();
+    switch (eType)
+    {
+        case sc::OT_MAXIMIZE : m_xRbMax->set_active(true); break;
+        case sc::OT_MINIMIZE : m_xRbMin->set_active(true); break;
+        case sc::OT_VALUE    : m_xRbValue->set_active(true); break;
+    }
+
+    // Model constraints
+    m_aConditions = m_pSolverSettings->GetConstraints();
+
+    // Loads solver engine name
+    // If the solver engine in the current settings are not supported, use the first available
+    maEngine = m_pSolverSettings->GetParameter(sc::SP_LO_ENGINE);
+    if (!IsEngineAvailable(maEngine))
+    {
+        maEngine = maImplNames[0];
+        m_pSolverSettings->SetParameter(sc::SP_LO_ENGINE, maEngine);
+    }
+
+    // Query current engine options
+    maProperties = ScSolverUtil::GetDefaults(maEngine);
+    m_pSolverSettings->GetEngineOptions(maProperties);
+}
+
+// Set solver settings and save them
+void ScOptSolverDlg::SaveSolverSettings()
+{
+    m_pSolverSettings->SetParameter(sc::SP_OBJ_CELL, m_xEdObjectiveCell->GetText());
+    m_pSolverSettings->SetParameter(sc::SP_OBJ_VAL, m_xEdTargetValue->GetText());
+    m_pSolverSettings->SetParameter(sc::SP_VAR_CELLS, m_xEdVariableCells->GetText());
+
+    // Objective type
+    if (m_xRbMax->get_active())
+        m_pSolverSettings->SetObjectiveType(sc::OT_MAXIMIZE);
+    else if (m_xRbMin->get_active())
+        m_pSolverSettings->SetObjectiveType(sc::OT_MINIMIZE);
+    else if (m_xRbValue->get_active())
+        m_pSolverSettings->SetObjectiveType(sc::OT_VALUE);
+
+    // Model constraints
+    m_pSolverSettings->SetConstraints(m_aConditions);
+
+    // Solver engine name
+    m_pSolverSettings->SetParameter(sc::SP_LO_ENGINE, maEngine);
+
+    // Solver engine options
+    m_pSolverSettings->SetEngineOptions(maProperties);
+
+    // Effectively save settings to file
+    m_pSolverSettings->SaveSolverSettings();
+}
+
+// Test if a LO engine implementation exists
+bool ScOptSolverDlg::IsEngineAvailable(std::u16string_view sEngineName)
+{
+    auto nIndex = comphelper::findValue(maImplNames, sEngineName);
+    return nIndex != -1;
+}
+
 // Handler:
 
 IMPL_LINK(ScOptSolverDlg, BtnHdl, weld::Button&, rBtn, void)
@@ -523,10 +563,7 @@ IMPL_LINK(ScOptSolverDlg, BtnHdl, weld::Button&, rBtn, void)
         {
             // Close: write dialog settings to DocShell for subsequent calls
             ReadConditions();
-            std::unique_ptr<ScOptSolverSave> pSave( new ScOptSolverSave(
-                m_xEdObjectiveCell->GetText(), m_xRbMax->get_active(), m_xRbMin->get_active(), m_xRbValue->get_active(),
-                m_xEdTargetValue->GetText(), m_xEdVariableCells->GetText(), std::vector(maConditions), maEngine, maProperties ) );
-            mpDocShell->SetSolverSaveData( std::move(pSave) );
+            SaveSolverSettings();
             response(RET_CLOSE);
         }
         else
@@ -560,11 +597,7 @@ IMPL_LINK(ScOptSolverDlg, BtnHdl, weld::Button&, rBtn, void)
         maProperties = ScSolverUtil::GetDefaults( maEngine );
 
         // Clear all conditions (Constraints)
-        maConditions.clear();
-        std::unique_ptr<ScOptSolverSave> pEmpty( new ScOptSolverSave(
-                        sEmpty, true, false, false,
-                        sEmpty, sEmpty, std::vector(maConditions), maEngine, maProperties ) );
-        mpDocShell->SetSolverSaveData( std::move(pEmpty) );
+        m_aConditions.clear();
         ShowConditions();
 
         m_xRbMax->set_active(true);
@@ -653,9 +686,9 @@ IMPL_LINK(ScOptSolverDlg, DelBtnHdl, weld::Button&, rBtn, void)
 
             ReadConditions();
             tools::Long nVecPos = nScrollPos + nRow;
-            if ( nVecPos < static_cast<tools::Long>(maConditions.size()) )
+            if ( nVecPos < static_cast<tools::Long>(m_aConditions.size()) )
             {
-                maConditions.erase( maConditions.begin() + nVecPos );
+                m_aConditions.erase( m_aConditions.begin() + nVecPos );
                 ShowConditions();
 
                 if ( bHadFocus && !rBtn.get_sensitive() )
@@ -758,6 +791,20 @@ IMPL_LINK( ScOptSolverDlg, CursorDownHdl, ScCursorRefEdit&, rEdit, void )
             mpEdActive = pFocus;
             pFocus->GrabFocus();
         }
+    }
+}
+
+// Converts the position of the operator in the dropdown menu to a ConstraintOperator type
+sc::ConstraintOperator ScOptSolverDlg::OperatorIndexToConstraintOperator(sal_Int32 nIndex)
+{
+    switch(nIndex)
+    {
+        case 0  : return sc::CO_LESS_EQUAL; break;
+        case 1  : return sc::CO_EQUAL; break;
+        case 2  : return sc::CO_GREATER_EQUAL; break;
+        case 3  : return sc::CO_INTEGER; break;
+        case 4  : return sc::CO_BINARY; break;
+        default : return sc::CO_LESS_EQUAL; break;
     }
 }
 
@@ -870,13 +917,15 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
 
     uno::Sequence<sheet::SolverConstraint> aConstraints;
     sal_Int32 nConstrPos = 0;
-    for ( const auto& rConstr : maConditions )
+    for ( const auto& rConstr : m_aConditions )
     {
         if ( !rConstr.aLeftStr.isEmpty() )
         {
             sheet::SolverConstraint aConstraint;
-            // order of list box entries must match enum values
-            aConstraint.Operator = static_cast<sheet::SolverConstraintOperator>(rConstr.nOperator);
+            // Order of list box entries must match enum values.
+            // The enum SolverConstraintOperator starts at zero, whereas ConstraintOperator starts at 1
+            // hence we need to subtract -1 here
+            aConstraint.Operator = static_cast<sheet::SolverConstraintOperator>(rConstr.nOperator - 1);
 
             ScRange aLeftRange;
             if ( !ParseRef( aLeftRange, rConstr.aLeftStr, true ) )

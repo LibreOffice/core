@@ -186,6 +186,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/data/segmenttree \
     sc/source/core/data/sheetevents \
     sc/source/core/data/simpleformulacalc \
+    sc/source/core/data/SolverSettings \
     sc/source/core/data/sortparam \
     sc/source/core/data/stlpool \
     sc/source/core/data/stlsheet \

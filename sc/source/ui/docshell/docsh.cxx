@@ -115,7 +115,6 @@
 #include <scextopt.hxx>
 #include <compiler.hxx>
 #include <warnpassword.hxx>
-#include <optsolver.hxx>
 #include <sheetdata.hxx>
 #include <table.hxx>
 #include <tabprotection.hxx>
@@ -2948,7 +2947,6 @@ ScDocShell::~ScDocShell()
 
     m_pPaintLockData.reset();
 
-    m_pSolverSaveData.reset();
     m_pSheetSaveData.reset();
     m_pFormatSaveData.reset();
     m_pOldAutoDBRange.reset();
@@ -3110,11 +3108,6 @@ weld::Window* ScDocShell::GetActiveDialogParent()
     if ( pViewSh )
         return pViewSh->GetDialogParent();
     return Application::GetDefDialogParent();
-}
-
-void ScDocShell::SetSolverSaveData( std::unique_ptr<ScOptSolverSave> pData )
-{
-    m_pSolverSaveData = std::move(pData);
 }
 
 ScSheetSaveData* ScDocShell::GetSheetSaveData()
