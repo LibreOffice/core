@@ -360,6 +360,36 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyFooter)
     // i.e. <w:pgMar w:top="1440"> from the bugdoc was lost, the follow fly had no vertical offset.
     CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(1440), nPage2FlyTop - nPage2Top);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyFooter2Rows)
+{
+    // Given a document with a 2nd page that contains the second half of a split row + a last row:
+    std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(true,
+                                                                                        pChanges);
+    pChanges->commit();
+    comphelper::ScopeGuard g([pChanges] {
+        officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(
+            false, pChanges);
+        pChanges->commit();
+    });
+    createSwDoc("floattable-footer-2rows.docx");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure that the table is split to 2 pages:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
+    CPPUNIT_ASSERT(pPage2);
+    // Without the accompanying fix in place, this test would have failed. The 2nd page only had the
+    // 2nd half of the split row and the last row went to a 3rd page.
+    CPPUNIT_ASSERT(!pPage2->GetNext());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

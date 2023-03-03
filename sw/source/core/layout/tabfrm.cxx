@@ -2469,7 +2469,14 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             if ( pFirstNonHeadlineRow->GetNext() || bTryToSplit )
             {
                 SwTwips nDeadLine = aRectFnSet.GetPrtBottom(*GetUpper());
-                if( IsInSct() || GetUpper()->IsInTab() ) // TABLE IN TABLE)
+                bool bFlySplit = false;
+                if (GetUpper()->IsFlyFrame())
+                {
+                    // See if this is a split fly that can also grow.
+                    auto pUpperFly = static_cast<SwFlyFrame*>(GetUpper());
+                    bFlySplit = pUpperFly->IsFlySplitAllowed();
+                }
+                if( IsInSct() || GetUpper()->IsInTab() || bFlySplit )
                     nDeadLine = aRectFnSet.YInc( nDeadLine,
                                         GetUpper()->Grow( LONG_MAX, true ) );
 
@@ -2736,13 +2743,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             // allowed to split.
             SwTwips nDistToUpperPrtBottom =
                 aRectFnSet.BottomDist( getFrameArea(), aRectFnSet.GetPrtBottom(*GetUpper()));
-            bool bFlySplit = false;
-            if (GetUpper()->IsFlyFrame())
-            {
-                auto pUpperFly = static_cast<SwFlyFrame*>(GetUpper());
-                bFlySplit = pUpperFly->IsFlySplitAllowed();
-            }
-            if ( nDistToUpperPrtBottom >= 0 || bTryToSplit || bFlySplit )
+            if ( nDistToUpperPrtBottom >= 0 || bTryToSplit )
             {
                 lcl_RecalcTable( *this, nullptr, aNotify );
                 m_bLowersFormatted = true;
