@@ -3290,6 +3290,10 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
             return false;
     }
 
+    sal_Int32 nParaDefaultTabSize = 0;
+    if (GetProperty(rXPropSet, "ParaTabStopDefaultDistance"))
+        mAny >>= nParaDefaultTabSize;
+
     // for autofitted textboxes, scale the indents
     if (GetProperty(rXShapePropSet, "TextFitToSize") && mAny.get<TextFitToSizeType>() == TextFitToSizeType_AUTOFIT)
     {
@@ -3314,6 +3318,7 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
                            XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaLeftMargin)), nParaLeftMargin > 0),
                            XML_indent, sax_fastparser::UseIf(OString::number(!bForceZeroIndent ? oox::drawingml::convertHmmToEmu(nParaFirstLineIndent) : 0), (bForceZeroIndent || (nParaFirstLineIndent != 0))),
                            XML_algn, GetAlignment( nAlignment ),
+                           XML_defTabSz, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaDefaultTabSize)), nParaDefaultTabSize > 0),
                            XML_rtl, sax_fastparser::UseIf(ToPsz10(bRtl), bRtl));
     else
         mpFS->startElementNS( XML_a, nElement,
@@ -3321,6 +3326,7 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
                            XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeftMargin)), nLeftMargin > 0),
                            XML_indent, sax_fastparser::UseIf(OString::number(!bForceZeroIndent ? oox::drawingml::convertHmmToEmu(nLineIndentation) : 0), (bForceZeroIndent || ( nLineIndentation != 0))),
                            XML_algn, GetAlignment( nAlignment ),
+                           XML_defTabSz, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaDefaultTabSize)), nParaDefaultTabSize > 0),
                            XML_rtl, sax_fastparser::UseIf(ToPsz10(bRtl), bRtl));
 
 

@@ -1965,6 +1965,28 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testLinkedOLE)
     assertXPath(pXml, "//p:oleObj", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf102261_testParaTabStopDefaultDistance)
+{
+    createSdImpressDoc("pptx/tdf102261_testParaTabStopDefaultDistance.pptx");
+    saveAndReload("Impress Office Open XML");
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+    {
+        uno::Reference<beans::XPropertySet> xPropSet(getParagraphFromShape(0, xShape),
+                                                     uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(
+            sal_Int32{ 1270 },
+            xPropSet->getPropertyValue("ParaTabStopDefaultDistance").get<sal_Int32>());
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPropSet(getParagraphFromShape(1, xShape),
+                                                     uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(
+            sal_Int32{ 2540 },
+            xPropSet->getPropertyValue("ParaTabStopDefaultDistance").get<sal_Int32>());
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
