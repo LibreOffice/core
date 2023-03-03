@@ -276,6 +276,7 @@ public:
     virtual std::unique_ptr<weld::Container> weld_container(const OString& id) override;
     virtual std::unique_ptr<weld::Label> weld_label(const OString& id) override;
     virtual std::unique_ptr<weld::Button> weld_button(const OString& id) override;
+    virtual std::unique_ptr<weld::LinkButton> weld_link_button(const OString& id) override;
     virtual std::unique_ptr<weld::Entry> weld_entry(const OString& id) override;
     virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OString& id) override;
     virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString& id) override;
@@ -496,6 +497,13 @@ class JSButton final : public JSWidget<SalInstanceButton, ::Button>
 public:
     JSButton(JSDialogSender* pSender, ::Button* pButton, SalInstanceBuilder* pBuilder,
              bool bTakeOwnership);
+};
+
+class JSLinkButton final : public JSWidget<SalInstanceLinkButton, ::FixedHyperlink>
+{
+public:
+    JSLinkButton(JSDialogSender* pSender, ::FixedHyperlink* pButton, SalInstanceBuilder* pBuilder,
+                 bool bTakeOwnership);
 };
 
 class JSEntry final : public JSWidget<SalInstanceEntry, ::Edit>

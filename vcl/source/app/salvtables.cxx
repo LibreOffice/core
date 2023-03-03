@@ -53,7 +53,6 @@
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/fixed.hxx>
-#include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/toolkit/fmtfield.hxx>
 #include <vcl/headbar.hxx>
 #include <vcl/toolkit/ivctrl.hxx>
@@ -3084,38 +3083,6 @@ public:
     }
 
     virtual bool get_active() const override { return m_xMenuToggleButton->GetActive(); }
-};
-}
-
-namespace
-{
-class SalInstanceLinkButton : public SalInstanceWidget, public virtual weld::LinkButton
-{
-private:
-    VclPtr<FixedHyperlink> m_xButton;
-    Link<FixedHyperlink&, void> m_aOrigClickHdl;
-
-    DECL_LINK(ClickHdl, FixedHyperlink&, void);
-
-public:
-    SalInstanceLinkButton(FixedHyperlink* pButton, SalInstanceBuilder* pBuilder,
-                          bool bTakeOwnership)
-        : SalInstanceWidget(pButton, pBuilder, bTakeOwnership)
-        , m_xButton(pButton)
-    {
-        m_aOrigClickHdl = m_xButton->GetClickHdl();
-        m_xButton->SetClickHdl(LINK(this, SalInstanceLinkButton, ClickHdl));
-    }
-
-    virtual void set_label(const OUString& rText) override { m_xButton->SetText(rText); }
-
-    virtual OUString get_label() const override { return m_xButton->GetText(); }
-
-    virtual void set_uri(const OUString& rUri) override { m_xButton->SetURL(rUri); }
-
-    virtual OUString get_uri() const override { return m_xButton->GetURL(); }
-
-    virtual ~SalInstanceLinkButton() override { m_xButton->SetClickHdl(m_aOrigClickHdl); }
 };
 }
 

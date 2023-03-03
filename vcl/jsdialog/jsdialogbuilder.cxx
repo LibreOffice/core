@@ -904,6 +904,18 @@ std::unique_ptr<weld::Button> JSInstanceBuilder::weld_button(const OString& id)
     return pWeldWidget;
 }
 
+std::unique_ptr<weld::LinkButton> JSInstanceBuilder::weld_link_button(const OString& id)
+{
+    ::FixedHyperlink* pButton = m_xBuilder->get<::FixedHyperlink>(id);
+    auto pWeldWidget
+        = pButton ? std::make_unique<JSLinkButton>(this, pButton, this, false) : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 std::unique_ptr<weld::Entry> JSInstanceBuilder::weld_entry(const OString& id)
 {
     Edit* pEntry = m_xBuilder->get<Edit>(id);
@@ -1236,6 +1248,12 @@ void JSLabel::set_label(const OUString& rText)
 JSButton::JSButton(JSDialogSender* pSender, ::Button* pButton, SalInstanceBuilder* pBuilder,
                    bool bTakeOwnership)
     : JSWidget<SalInstanceButton, ::Button>(pSender, pButton, pBuilder, bTakeOwnership)
+{
+}
+
+JSLinkButton::JSLinkButton(JSDialogSender* pSender, ::FixedHyperlink* pButton,
+                           SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceLinkButton, ::FixedHyperlink>(pSender, pButton, pBuilder, bTakeOwnership)
 {
 }
 
