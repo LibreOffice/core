@@ -37,7 +37,6 @@
 #include <com/sun/star/util/XCloseable.hpp>
 
 #include <com/sun/star/ui/XSidebarProvider.hpp>
-#include <sfx2/userinputinterception.hxx>
 
 #include <datasourceconnector.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -73,32 +72,11 @@ typedef std::unordered_map< sal_Int16, sal_Int16 > CommandHashMap;
 namespace dbaui
 {
 
-namespace {
-
-// UserDefinedFeatures
-class UserDefinedFeatures
-{
-public:
-    explicit UserDefinedFeatures( const Reference< XController >& _rxController );
-
-    void            execute( const URL& _rFeatureURL, const Sequence< PropertyValue>& _rArgs );
-
-private:
-    css::uno::WeakReference< XController > m_aController;
-};
-
-}
-
-UserDefinedFeatures::UserDefinedFeatures( const Reference< XController >& _rxController )
-    :m_aController( _rxController )
-{
-}
-
-void UserDefinedFeatures::execute( const URL& _rFeatureURL, const Sequence< PropertyValue>& _rArgs )
+void OGenericUnoController::executeUserDefinedFeatures( const URL& _rFeatureURL, const Sequence< PropertyValue>& _rArgs )
 {
     try
     {
-        Reference< XController > xController( Reference< XController >(m_aController), UNO_SET_THROW );
+        Reference< XController > xController( getXController(), UNO_SET_THROW );
         Reference< XDispatchProvider > xDispatchProvider( xController->getFrame(), UNO_QUERY_THROW );
         Reference< XDispatch > xDispatch( xDispatchProvider->queryDispatch(
             _rFeatureURL,
@@ -121,22 +99,10 @@ void UserDefinedFeatures::execute( const URL& _rFeatureURL, const Sequence< Prop
     }
 }
 
-// OGenericUnoController_Data
-struct OGenericUnoController_Data
-{
-    ::sfx2::UserInputInterception   m_aUserInputInterception;
-    UserDefinedFeatures             m_aUserDefinedFeatures;
-
-    OGenericUnoController_Data( OGenericUnoController& _rController, ::osl::Mutex& _rMutex )
-        :m_aUserInputInterception( _rController, _rMutex )
-        ,m_aUserDefinedFeatures( _rController.getXController() )
-    {
-    }
-};
-
 // OGenericUnoController
 OGenericUnoController::OGenericUnoController(const Reference< XComponentContext >& _rM)
     :OGenericUnoController_Base( getMutex() )
+    ,m_aUserInputInterception(*this, getMutex())
     ,m_pView(nullptr)
 #ifdef DBG_UTIL
     ,m_bDescribingSupportedFeatures( false )
@@ -150,12 +116,6 @@ OGenericUnoController::OGenericUnoController(const Reference< XComponentContext 
     ,m_bCurrentlyModified(false)
     ,m_bExternalTitle(false)
 {
-    osl_atomic_increment( &m_refCount );
-    {
-        m_pData.reset( new OGenericUnoController_Data( *this, getMutex() ) );
-    }
-    osl_atomic_decrement( &m_refCount );
-
 
     try
     {
@@ -815,7 +775,7 @@ void OGenericUnoController::Execute( sal_uInt16 _nId, const Sequence< PropertyVa
 
     // user defined features can be handled by dispatch interceptors resp. protocol handlers only.
     // So, we need to do a queryDispatch, and dispatch the URL
-    m_pData->m_aUserDefinedFeatures.execute( getURLForId( _nId ), _rArgs );
+    executeUserDefinedFeatures( getURLForId( _nId ), _rArgs );
 }
 
 URL OGenericUnoController::getURLForId(sal_Int32 _nId) const
@@ -1102,23 +1062,23 @@ void SAL_CALL OGenericUnoController::removeTitleChangeListener(const Reference< 
 void SAL_CALL OGenericUnoController::addKeyHandler( const Reference< XKeyHandler >& _rxHandler )
 {
     if ( _rxHandler.is() )
-        m_pData->m_aUserInputInterception.addKeyHandler( _rxHandler );
+        m_aUserInputInterception.addKeyHandler( _rxHandler );
 }
 
 void SAL_CALL OGenericUnoController::removeKeyHandler( const Reference< XKeyHandler >& _rxHandler )
 {
-    m_pData->m_aUserInputInterception.removeKeyHandler( _rxHandler );
+    m_aUserInputInterception.removeKeyHandler( _rxHandler );
 }
 
 void SAL_CALL OGenericUnoController::addMouseClickHandler( const Reference< XMouseClickHandler >& _rxHandler )
 {
     if ( _rxHandler.is() )
-        m_pData->m_aUserInputInterception.addMouseClickHandler( _rxHandler );
+        m_aUserInputInterception.addMouseClickHandler( _rxHandler );
 }
 
 void SAL_CALL OGenericUnoController::removeMouseClickHandler( const Reference< XMouseClickHandler >& _rxHandler )
 {
-    m_pData->m_aUserInputInterception.removeMouseClickHandler( _rxHandler );
+    m_aUserInputInterception.removeMouseClickHandler( _rxHandler );
 }
 
 void OGenericUnoController::executeChecked(sal_uInt16 _nCommandId, const Sequence< PropertyValue >& aArgs)
@@ -1144,7 +1104,7 @@ Reference< XController > OGenericUnoController::getXController()
 
 bool OGenericUnoController::interceptUserInput( const NotifyEvent& _rEvent )
 {
-    return m_pData->m_aUserInputInterception.handleNotifyEvent( _rEvent );
+    return m_aUserInputInterception.handleNotifyEvent( _rEvent );
 }
 
 bool OGenericUnoController::isCommandChecked(sal_uInt16 _nCommandId) const
