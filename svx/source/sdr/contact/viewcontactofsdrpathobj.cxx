@@ -19,12 +19,9 @@
 
 
 #include <sdr/contact/viewcontactofsdrpathobj.hxx>
-#include <svtools/optionsdrawinglayer.hxx>
 #include <svx/svdopath.hxx>
-#include <svx/svdpage.hxx>
 #include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <sdr/primitive2d/sdrpathprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -84,51 +81,13 @@ namespace sdr::contact
             // prepare object transformation and unit polygon (direct model data)
             basegfx::B2DHomMatrix aObjectMatrix;
             basegfx::B2DPolyPolygon aUnitDefinitionPolyPolygon;
-            bool bIsLine(
+            const bool bIsLine(
                 !aUnitPolyPolygon.areControlPointsUsed()
                 && bPolyCountIsOne
                 && 2 == aUnitPolyPolygon.getB2DPolygon(0).count());
 
             if(bIsLine)
             {
-                //tdf#63955 if we have an extremely long line then clip it to a
-                //very generous range of -1 page width/height vs +1 page
-                //width/height to avoid oom and massive churn generating a huge
-                //polygon chain to cover the length in applyLineDashing if this
-                //line is dashed
-                const SdrPage* pPage(GetPathObj().getSdrPageFromSdrObject());
-                sal_Int32 nPageWidth = pPage ? pPage->GetWidth() : 0;
-                sal_Int32 nPageHeight = pPage ? pPage->GetHeight() : 0;
-
-                //But, see tdf#101187, only do this if our generous clip region
-                //would not over flow into a tiny clip region
-                if (nPageWidth < SAL_MAX_INT32/2 && nPageHeight < SAL_MAX_INT32/2 && !utl::ConfigManager::IsFuzzing())
-                {
-                    //But, see tdf#97276, tdf#126184 and tdf#98366. Don't clip too much if the
-                    //underlying page dimension is unknown or a paste document
-                    //where the page sizes use the odd default of 10x10
-                    const sal_Int32 nMaxPaperWidth = SvtOptionsDrawinglayer::GetMaximumPaperWidth() * 1000;
-                    const sal_Int32 nMaxPaperHeight = SvtOptionsDrawinglayer::GetMaximumPaperHeight() * 1000;
-                    nPageWidth = std::max<sal_Int32>(nPageWidth, nMaxPaperWidth);
-                    nPageHeight = std::max<sal_Int32>(nPageHeight, nMaxPaperHeight);
-                    basegfx::B2DRange aClipRange(-nPageWidth, -nPageHeight,
-                                                 nPageWidth*2, nPageHeight*2);
-
-                    aUnitPolyPolygon = basegfx::utils::clipPolyPolygonOnRange(aUnitPolyPolygon,
-                                                                       aClipRange, true, true);
-                    bPolyCountIsOne = ensureGeometry(aUnitPolyPolygon);
-
-                    // re-check that we have't been clipped out to oblivion
-                    bIsLine =
-                        !aUnitPolyPolygon.areControlPointsUsed()
-                        && bPolyCountIsOne
-                        && 2 == aUnitPolyPolygon.getB2DPolygon(0).count();
-                }
-            }
-
-            if(bIsLine)
-            {
-
                 // special handling for single line mode (2 points)
                 const basegfx::B2DPolygon aSubPolygon(aUnitPolyPolygon.getB2DPolygon(0));
                 const basegfx::B2DPoint aStart(aSubPolygon.getB2DPoint(0));
