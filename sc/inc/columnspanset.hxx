@@ -58,6 +58,7 @@ private:
         ColumnSpansType::const_iterator miPos;
 
         ColumnType(SCROW nStart, SCROW nEnd, bool bInit);
+        ColumnType(const ColumnType& rOther);
     };
 
     typedef std::vector<std::optional<ColumnType>> TableType;
