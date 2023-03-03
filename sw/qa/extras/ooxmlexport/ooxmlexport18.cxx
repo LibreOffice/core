@@ -63,6 +63,11 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineSdtHeader)
     loadAndSave("inline-sdt-header.docx");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf153613_sdtAfterPgBreak, "tdf153613_sdtAfterPgBreak.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf152636_lostPageBreak2)
 {
     loadAndReload("tdf152636_lostPageBreak2.docx");
