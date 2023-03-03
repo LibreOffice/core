@@ -2075,7 +2075,7 @@ SwUndoTableNumFormat::SwUndoTableNumFormat( const SwTableBox& rBox,
 
         m_pHistory.reset(new SwHistory);
         SwRegHistory aRHst( *rBox.GetSttNd(), m_pHistory.get() );
-        // always save all text atttibutes because of possibly overlapping
+        // always save all text attributes because of possibly overlapping
         // areas of on/off
         m_pHistory->CopyAttr( pTNd->GetpSwpHints(), m_nNodePos, 0,
                             pTNd->GetText().getLength(), true );
