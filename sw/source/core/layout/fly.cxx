@@ -888,7 +888,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             SwFormatChg *pOldFormatChg = nullptr;
             if (nWhich == RES_FRM_SIZE)
                 pNewFormatFrameSize = const_cast<SwFormatFrameSize*>(static_cast<const SwFormatFrameSize*>(pNew));
-            else
+            else if (nWhich == RES_FMT_CHG)
                 pOldFormatChg = const_cast<SwFormatChg*>(static_cast<const SwFormatChg*>(pOld));
 
             if (aURL.GetMap() && (pNewFormatFrameSize || pOldFormatChg))
