@@ -224,17 +224,8 @@ ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
     xRes.nBehindEndOfSentencePosition
         = std::min(xRes.nStartOfNextSentencePosition, aText.getLength());
 
-    auto cachedResult = mCachedResults.find(aText);
-    if (cachedResult != mCachedResults.end())
-    {
-        xRes.aErrors = cachedResult->second;
-        return xRes;
-    }
-
-    tools::Long http_code = 0;
-    std::string response_body;
     OUString langTag(aLocale.Language + "-" + aLocale.Country);
-
+    OString postData;
     if (rLanguageOpts.getRestProtocol() == sDuden)
     {
         std::stringstream aStream;
@@ -245,15 +236,27 @@ ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
         aTree.put("spellchecking-level", 3);
         aTree.put("correction-proposals", true);
         boost::property_tree::write_json(aStream, aTree);
-        response_body = makeDudenHttpRequest(checkerURL, HTTP_METHOD::HTTP_POST,
-                                             aStream.str().c_str(), http_code);
+        postData = OString(aStream.str());
     }
     else
     {
-        OString postData(OUStringToOString(Concat2View("text=" + aText + "&language=" + langTag),
-                                           RTL_TEXTENCODING_UTF8));
-        response_body = makeHttpRequest(checkerURL, HTTP_METHOD::HTTP_POST, postData, http_code);
+        postData = OUStringToOString(Concat2View("text=" + aText + "&language=" + langTag),
+                                     RTL_TEXTENCODING_UTF8);
     }
+
+    if (auto cachedResult = mCachedResults.find(postData); cachedResult != mCachedResults.end())
+    {
+        xRes.aErrors = cachedResult->second;
+        return xRes;
+    }
+
+    tools::Long http_code = 0;
+    std::string response_body;
+    if (rLanguageOpts.getRestProtocol() == sDuden)
+        response_body
+            = makeDudenHttpRequest(checkerURL, HTTP_METHOD::HTTP_POST, postData, http_code);
+    else
+        response_body = makeHttpRequest(checkerURL, HTTP_METHOD::HTTP_POST, postData, http_code);
 
     if (http_code != 200)
     {
@@ -274,8 +277,7 @@ ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
         parseProofreadingJSONResponse(xRes, response_body);
     }
     // cache the result
-    mCachedResults.insert(
-        std::pair<OUString, Sequence<SingleProofreadingError>>(aText, xRes.aErrors));
+    mCachedResults.insert(std::make_pair(postData, xRes.aErrors));
     return xRes;
 }
 
