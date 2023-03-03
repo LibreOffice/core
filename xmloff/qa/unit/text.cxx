@@ -17,6 +17,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 
 #include <comphelper/propertysequence.hxx>
@@ -1045,6 +1046,46 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFloatingTableImport)
     // Without the accompanying fix in place, this test would have failed, the property was false.
     xFrame->getPropertyValue("IsSplitAllowed") >>= bIsSplitAllowed;
     CPPUNIT_ASSERT(bIsSplitAllowed);
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testParagraphScopedTabDistance)
+{
+    // Given a document with paragraph scoped default tab stop distance (loext:tab-stop-distance="0.5cm")
+    loadFromURL(u"paragraph-tab-stop-distance.fodp");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText
+        = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
+
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> paraEnum(paraEnumAccess->createEnumeration());
+    uno::Reference<text::XTextRange> xParagraph(paraEnum->nextElement(), uno::UNO_QUERY_THROW);
+
+    uno::Reference<container::XEnumerationAccess> runEnumAccess(xParagraph, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> runEnum = runEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xRun(runEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY_THROW);
+
+    // Make sure the tab stop default distance is imported correctly
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 10000
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10000),
+                         xPropSet->getPropertyValue("ParaTabStopDefaultDistance").get<sal_Int32>());
+
+    // Save the imported file to test the export too
+    save("impress8");
+
+    // Then make sure we write the tab-stop-distance
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    assertXPath(pXmlDoc, "//style:style[@style:name='P1']/style:paragraph-properties",
+                "tab-stop-distance", "10cm");
+
+    assertXPath(pXmlDoc, "//text:p[@text:style-name='P1']");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

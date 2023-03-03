@@ -513,6 +513,7 @@ inline constexpr OUStringLiteral PROP_ParaRightMarginRelative = u"ParaRightMargi
 inline constexpr OUStringLiteral PROP_ParaShadowFormat = u"ParaShadowFormat";
 inline constexpr OUStringLiteral PROP_ParaSplit = u"ParaSplit";
 inline constexpr OUStringLiteral PROP_ParaTabStops = u"ParaTabStops";
+inline constexpr OUStringLiteral PROP_ParaTabStopDefaultDistance = u"ParaTabStopDefaultDistance";
 inline constexpr OUStringLiteral PROP_ParaTopMargin = u"ParaTopMargin";
 inline constexpr OUStringLiteral PROP_ParaTopMarginRelative = u"ParaTopMarginRelative";
 inline constexpr OUStringLiteral PROP_ParaUserDefinedAttributes = u"ParaUserDefinedAttributes";

@@ -2615,6 +2615,12 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       <rng:ref name="common-text-justify"/>
       <rng:ref name="style-vertical-justify"/>
     </rng:optional>
+    <!-- TODO no proposal to allow tab-stop-distance in arbitrary paragraph style properties -->
+    <rng:optional>
+      <rng:attribute name="loext:tab-stop-distance">
+        <rng:ref name="nonNegativeLength"/>
+      </rng:attribute>
+    </rng:optional>
   </rng:define>
   <rng:define name="style-table-cell-properties-attlist" combine="interleave">
     <rng:optional>
