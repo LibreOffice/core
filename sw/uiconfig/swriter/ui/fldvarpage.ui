@@ -283,7 +283,7 @@
                             </child>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="numformat-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|numformat">Click the format that you want to apply to the selected field, or click "Additional formats" to define a custom format.</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|numformat">Click the format to apply to the selected field, or click "Additional formats" to define a custom format.</property>
                               </object>
                             </child>
                           </object>
@@ -328,7 +328,7 @@
                             </child>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="format-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|format">In the Format list, define if the value is inserted as text or a number.</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|format">In the Format list, define if the value is inserted as text or as number.</property>
                               </object>
                             </child>
                           </object>
@@ -435,7 +435,7 @@
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="level-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|level">Choose the maximum outline level of the heading number to prepend to the displayed field. The selected heading number comes from the first immediately prior heading with the specified outline level or less. No heading number is displayed if “None” is selected.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|level">Specify the number of outline levels to show before the displayed field.  The heading numbers are taken from the heading  immediately before with the specified outline level or less. If [None] is selected, then no heading number is displayed.</property>
                           </object>
                         </child>
                       </object>
@@ -454,7 +454,7 @@
                         <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="separator-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|separator">Type the character that you want to use as a separator between the heading or chapter levels.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|separator">Type the character to use as a separator between the heading or chapter levels and the field.</property>
                           </object>
                         </child>
                       </object>
@@ -528,7 +528,7 @@
             <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="name-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|name">Type the name of the user-defined field that you want to create.</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|name">Type the name of the user-defined field  to create.</property>
               </object>
             </child>
           </object>
@@ -561,7 +561,7 @@
             <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="value-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|value">Enter the contents that you want to add to a user-defined field.</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="fldvarpage|extended_tip|value">Enter the contents to add to a user-defined field.</property>
               </object>
             </child>
           </object>
