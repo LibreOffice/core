@@ -1075,7 +1075,9 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         break;
         case NS_ooxml::LN_CT_SdtBlock_sdtContent:
         case NS_ooxml::LN_CT_SdtRun_sdtContent:
+        {
             m_pImpl->m_pSdtHelper->SetSdtType(nName);
+
             if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::unknown)
             {
                 // Still not determined content type? and it is even not unsupported? Then it is plain text field
@@ -1093,11 +1095,40 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     }
                 }
 
+                PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
+                if (pContext && m_pImpl->isBreakDeferred(PAGE_BREAK))
+                {
+                    if (!m_pImpl->GetFootnoteContext() && !m_pImpl->IsInShape()
+                        && !m_pImpl->IsInComments())
+                    {
+                        if (m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun())
+                        {
+                            m_pImpl->m_bIsSplitPara = true;
+                            finishParagraph();
+                            lcl_startParagraphGroup();
+                        }
+                        pContext->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_PAGE_BEFORE));
+                        m_pImpl->clearDeferredBreaks();
+                    }
+                }
+                else if (pContext && m_pImpl->isBreakDeferred(COLUMN_BREAK))
+                {
+                    if (m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun())
+                    {
+                        mbIsSplitPara = true;
+                        finishParagraph();
+                        lcl_startParagraphGroup();
+                    }
+                    pContext->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_COLUMN_BEFORE));
+                    m_pImpl->clearDeferredBreaks();
+                }
+
                 m_pImpl->m_pSdtHelper->setControlType(SdtControlType::richText);
                 m_pImpl->PushSdt();
                 break;
             }
             m_pImpl->SetSdt(true);
+        }
         break;
         case NS_ooxml::LN_CT_SdtBlock_sdtEndContent:
         case NS_ooxml::LN_CT_SdtRun_sdtEndContent:
