@@ -270,12 +270,8 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
     tools::Long nInitScrPos = 0;
     if ( bLayoutRTL )
     {
-        tools::Long nTemp = nPStart;       // swap nPStart / nPEnd
-        nPStart = nPEnd;
-        nPEnd = nTemp;
-        nTemp = nTransStart;        // swap nTransStart / nTransEnd
-        nTransStart = nTransEnd;
-        nTransEnd = nTemp;
+        std::swap(nPStart, nPEnd);
+        std::swap(nTransStart, nTransEnd);
         if ( bVertical )            // start loops from the end
             nInitScrPos = GetSizePixel().Height() - 1;
         else
