@@ -53,6 +53,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"cui/ui/widgettestdialog.ui"
         // scalc
         || rUIFile == u"modules/scalc/ui/analysisofvariancedialog.ui"
+        || rUIFile == u"modules/scalc/ui/chardialog.ui"
         || rUIFile == u"modules/scalc/ui/chisquaretestdialog.ui"
         || rUIFile == u"modules/scalc/ui/colwidthdialog.ui"
         || rUIFile == u"modules/scalc/ui/correlationdialog.ui"
