@@ -177,10 +177,10 @@
                       </object>
                     </child>
                     <child type="tab">
-                      <object class="GtkLabel" id="function">
+                      <object class="GtkLabel" id="functiontab">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="formuladialog|function">Functions</property>
+                        <property name="label" translatable="yes" context="formuladialog|functiontab">Functions</property>
                       </object>
                       <packing>
                         <property name="tab_fill">False</property>
@@ -224,10 +224,10 @@
                       </packing>
                     </child>
                     <child type="tab">
-                      <object class="GtkLabel" id="struct">
+                      <object class="GtkLabel" id="structtab">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="formuladialog|struct">Structure</property>
+                        <property name="label" translatable="yes" context="formuladialog|structtab">Structure</property>
                       </object>
                       <packing>
                         <property name="position">1</property>

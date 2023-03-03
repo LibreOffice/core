@@ -60,6 +60,11 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"cui/ui/transparencytabpage.ui"
         || rUIFile == u"cui/ui/twolinespage.ui"
         || rUIFile == u"cui/ui/widgettestdialog.ui"
+        // formula
+        || rUIFile == u"formula/ui/formuladialog.ui"
+        || rUIFile == u"formula/ui/functionpage.ui"
+        || rUIFile == u"formula/ui/parameter.ui"
+        || rUIFile == u"formula/ui/structpage.ui"
         // scalc
         || rUIFile == u"modules/scalc/ui/advancedfilterdialog.ui"
         || rUIFile == u"modules/scalc/ui/analysisofvariancedialog.ui"

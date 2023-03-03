@@ -281,9 +281,9 @@ FormulaDlg_Impl::FormulaDlg_Impl(weld::Dialog& rDialog,
     m_xParaWin->SetArgModifiedHdl( LINK( this, FormulaDlg_Impl, ModifyHdl ) );
     m_xParaWin->SetFxHdl( LINK( this, FormulaDlg_Impl, FxHdl ) );
 
-    m_xFuncPage.reset(new FuncPage(m_xTabCtrl->get_page("function"), _pFunctionMgr));
-    m_xStructPage.reset(new StructPage(m_xTabCtrl->get_page("struct")));
-    m_xTabCtrl->set_current_page("function");
+    m_xFuncPage.reset(new FuncPage(m_xTabCtrl->get_page("functiontab"), _pFunctionMgr));
+    m_xStructPage.reset(new StructPage(m_xTabCtrl->get_page("structtab")));
+    m_xTabCtrl->set_current_page("functiontab");
 
     m_aOldHelp = m_rDialog.get_help_id();                // HelpId from resource always for "Page 1"
 
@@ -318,8 +318,8 @@ FormulaDlg_Impl::FormulaDlg_Impl(weld::Dialog& rDialog,
 
 FormulaDlg_Impl::~FormulaDlg_Impl()
 {
-    m_xTabCtrl->remove_page("function");
-    m_xTabCtrl->remove_page("struct");
+    m_xTabCtrl->remove_page("functiontab");
+    m_xTabCtrl->remove_page("structtab");
 
     DeleteArgs();
 }
@@ -337,7 +337,7 @@ void FormulaDlg_Impl::StoreFormEditData(FormEditData* pData)
     pData->SetFStart(nStartPos);
     pData->SetSelection(Selection(nStartPos, nEndPos));
 
-    if (m_xTabCtrl->get_current_page_ident() == "function")
+    if (m_xTabCtrl->get_current_page_ident() == "functiontab")
         pData->SetMode( FormulaDlgMode::Formula );
     else
         pData->SetMode( FormulaDlgMode::Edit );
@@ -1254,7 +1254,7 @@ IMPL_LINK( FormulaDlg_Impl, FxHdl, ParaWin&, rPtr, void )
         return;
 
     m_xBtnForward->set_sensitive(true); //@ In order to be able to input another function.
-    m_xTabCtrl->set_current_page("function");
+    m_xTabCtrl->set_current_page("functiontab");
 
     OUString aUndoStr = m_pHelper->getCurrentFormula();       // it will be added before a ";"
     FormEditData* pData = m_pHelper->getFormEditData();
@@ -1580,9 +1580,9 @@ void FormulaDlg_Impl::Update()
     FormulaCursor();
     CalcStruct(sExpression);
     if (pData->GetMode() == FormulaDlgMode::Formula)
-        m_xTabCtrl->set_current_page("function");
+        m_xTabCtrl->set_current_page("functiontab");
     else
-        m_xTabCtrl->set_current_page("struct");
+        m_xTabCtrl->set_current_page("structtab");
     m_xBtnMatrix->set_active(pData->GetMatrixFlag());
 }
 
@@ -1640,7 +1640,7 @@ bool FormulaDlg_Impl::CheckMatrix(OUString& aFormula)
         m_xBtnMatrix->set_sensitive(false);
     } // if ( bMatrix )
 
-    m_xTabCtrl->set_current_page("struct");
+    m_xTabCtrl->set_current_page("structtab");
     return bMatrix;
 }
 
