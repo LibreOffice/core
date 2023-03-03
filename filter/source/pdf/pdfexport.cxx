@@ -699,6 +699,9 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             case 16:
                 aContext.Version = vcl::PDFWriter::PDFVersion::PDF_1_6;
                 break;
+            case 17:
+                aContext.Version = vcl::PDFWriter::PDFVersion::PDF_1_7;
+                break;
             }
 
             // PDF/UA support

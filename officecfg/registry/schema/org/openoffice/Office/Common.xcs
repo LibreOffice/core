@@ -5459,6 +5459,11 @@
                   <desc>PDF 1.6</desc>
                 </info>
               </enumeration>
+              <enumeration oor:value="17">
+                <info>
+                  <desc>PDF 1.7</desc>
+                </info>
+              </enumeration>
               <enumeration oor:value="1">
                 <info>
                   <desc>PDF/A-1 (ISO 19005-1:2005)</desc>

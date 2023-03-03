@@ -627,11 +627,15 @@ PDFPage::PDFPage( PDFWriterImpl* pWriter, double nPageWidth, double nPageHeight,
 
     switch (m_pWriter->m_aContext.Version)
     {
-        case PDFWriter::PDFVersion::PDF_1_6:
+        // 1.6 or later
+        default:
             m_nUserUnit = std::ceil(std::max(nPageWidth, nPageHeight) / 14400.0);
             break;
-        default:
-            // 1.2 -> 1.5
+        case PDFWriter::PDFVersion::PDF_1_2:
+        case PDFWriter::PDFVersion::PDF_1_3:
+        case PDFWriter::PDFVersion::PDF_1_4:
+        case PDFWriter::PDFVersion::PDF_1_5:
+        case PDFWriter::PDFVersion::PDF_A_1:
             break;
     }
 }
@@ -1298,6 +1302,9 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
         case PDFWriter::PDFVersion::PDF_1_5: aBuffer.append( "1.5" );break;
         default:
         case PDFWriter::PDFVersion::PDF_1_6: aBuffer.append( "1.6" );break;
+        case PDFWriter::PDFVersion::PDF_A_2:
+        case PDFWriter::PDFVersion::PDF_A_3:
+        case PDFWriter::PDFVersion::PDF_1_7: aBuffer.append( "1.7" );break;
     }
     // append something binary as comment (suggested in PDF Reference)
     aBuffer.append( "\n%\303\244\303\274\303\266\303\237\n" );
@@ -1317,11 +1324,11 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
 
     m_bIsPDF_A2 = (m_aContext.Version == PDFWriter::PDFVersion::PDF_A_2);
     if( m_bIsPDF_A2 )
-        m_aContext.Version = PDFWriter::PDFVersion::PDF_1_6; //we could even use 1.7 features
+        m_aContext.Version = PDFWriter::PDFVersion::PDF_1_7;
 
     m_bIsPDF_A3 = (m_aContext.Version == PDFWriter::PDFVersion::PDF_A_3);
     if( m_bIsPDF_A3 )
-        m_aContext.Version = PDFWriter::PDFVersion::PDF_1_6; //we could even use 1.7 features
+        m_aContext.Version = PDFWriter::PDFVersion::PDF_1_7;
 
     if (m_aContext.UniversalAccessibilityCompliance)
     {
