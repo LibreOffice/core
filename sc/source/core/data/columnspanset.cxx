@@ -53,6 +53,9 @@ ColRowSpan::ColRowSpan(SCCOLROW nStart, SCCOLROW nEnd) : mnStart(nStart), mnEnd(
 ColumnSpanSet::ColumnType::ColumnType(SCROW nStart, SCROW nEnd, bool bInit) :
     maSpans(nStart, nEnd+1, bInit), miPos(maSpans.begin()) {}
 
+ColumnSpanSet::ColumnType::ColumnType(const ColumnType& rOther) :
+    maSpans(rOther.maSpans), miPos(maSpans.begin()) {} // NB: copying maSpans invalidates miPos - reset it
+
 ColumnSpanSet::Action::~Action() {}
 void ColumnSpanSet::Action::startColumn(SCTAB /*nTab*/, SCCOL /*nCol*/) {}
 
@@ -142,6 +145,7 @@ void ColumnSpanSet::scan(
 
         ColumnNonEmptyRangesScanner aScanner(rCol.maSpans, bVal);
         ParseBlock(rSrcCells.begin(), rSrcCells, aScanner, nRow1, nRow2);
+        rCol.miPos = rCol.maSpans.begin();
     }
 }
 
