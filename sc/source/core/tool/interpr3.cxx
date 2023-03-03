@@ -3638,8 +3638,8 @@ void ScInterpreter::CalculateSmallLarge(bool bSmall)
         return;
 
     SCSIZE nCol = 0, nRow = 0;
-    auto aArray = GetTopNumberArray(nCol, nRow);
-    const auto nRankArraySize = aArray.size();
+    const auto aArray = GetTopNumberArray(nCol, nRow);
+    const size_t nRankArraySize = aArray.size();
     if (nRankArraySize == 0 || nGlobalError != FormulaError::NONE)
     {
         PushNoValue();
@@ -3667,7 +3667,12 @@ void ScInterpreter::CalculateSmallLarge(bool bSmall)
     {
         const SCSIZE k = aRankArray[0];
         if (k < 1 || nSize < k)
-            PushNoValue();
+        {
+            if (!std::isfinite(aArray[0]))
+                PushDouble(aArray[0]);  // propagates error
+            else
+                PushNoValue();
+        }
         else
         {
             vector<double>::iterator iPos = aSortArray.begin() + (bSmall ? k-1 : nSize-k);
@@ -3699,15 +3704,19 @@ void ScInterpreter::CalculateSmallLarge(bool bSmall)
         else
             std::sort(aSortArray.begin(), aSortArray.end());
 
-        aArray.clear();
-        for (SCSIZE n : aRankArray)
+        std::vector<double> aResultArray;
+        aResultArray.reserve(nRankArraySize);
+        for (size_t i = 0; i < nRankArraySize; ++i)
         {
+            const SCSIZE n = aRankArray[i];
             if (1 <= n && n <= nSize)
-                aArray.push_back( aSortArray[bSmall ? n-1 : nSize-n]);
+                aResultArray.push_back( aSortArray[bSmall ? n-1 : nSize-n]);
+            else if (!std::isfinite( aArray[i]))
+                aResultArray.push_back( aArray[i]);  // propagate error
             else
-                aArray.push_back( CreateDoubleError( FormulaError::NoValue));
+                aResultArray.push_back( CreateDoubleError( FormulaError::IllegalArgument));
         }
-        ScMatrixRef pResult = GetNewMat(nCol, nRow, aArray);
+        ScMatrixRef pResult = GetNewMat(nCol, nRow, aResultArray);
         PushMatrix(pResult);
     }
 }
@@ -3912,19 +3921,30 @@ std::vector<double> ScInterpreter::GetTopNumberArray( SCSIZE& rCol, SCSIZE& rRow
             if (!pMat)
                 break;
 
+            const SCSIZE nCount = pMat->GetElementCount();
+            aArray.reserve(nCount);
+            // Do not propagate errors from matrix elements as global error.
+            pMat->SetErrorInterpreter(nullptr);
             if (pMat->IsNumeric())
             {
-                SCSIZE nCount = pMat->GetElementCount();
-                aArray.reserve(nCount);
                 for (SCSIZE i = 0; i < nCount; ++i)
                     aArray.push_back(pMat->GetDouble(i));
-                pMat->GetDimensions(rCol, rRow);
             }
             else
-                SetError(FormulaError::IllegalParameter);
+            {
+                for (SCSIZE i = 0; i < nCount; ++i)
+                {
+                    if (pMat->IsValue(i))
+                        aArray.push_back( pMat->GetDouble(i));
+                    else
+                        aArray.push_back( CreateDoubleError( FormulaError::NoValue));
+                }
+            }
+            pMat->GetDimensions(rCol, rRow);
         }
         break;
         default:
+            PopError();
             SetError(FormulaError::IllegalParameter);
         break;
     }
