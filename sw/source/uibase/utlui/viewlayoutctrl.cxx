@@ -102,12 +102,13 @@ void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
         const bool bSingleColumn    = 0 == mpImpl->mnState;
         const bool bAutomatic       = 1 == mpImpl->mnState;
         const bool bBookMode        = 2 == mpImpl->mnState;
+        const int nDistance = 6;
 
         const tools::Long nImageWidthSum = mpImpl->maImageSingleColumn.GetSizePixel().Width() +
                                     mpImpl->maImageAutomatic.GetSizePixel().Width() +
                                     mpImpl->maImageBookMode.GetSizePixel().Width();
 
-        const tools::Long nXOffset = (aRect.GetWidth() - nImageWidthSum) / 2;
+        const tools::Long nXOffset = (aRect.GetWidth() - nImageWidthSum - (2* nDistance)) / 2;
         const tools::Long nYOffset = (aControlRect.GetHeight() - mpImpl->maImageSingleColumn.GetSizePixel().Height()) / 2;
 
         aRect.AdjustLeft( nXOffset );
@@ -117,11 +118,11 @@ void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
         pDev->DrawImage( aRect.TopLeft(), bSingleColumn ? mpImpl->maImageSingleColumn_Active : mpImpl->maImageSingleColumn );
 
         // draw automatic image:
-        aRect.AdjustLeft(mpImpl->maImageSingleColumn.GetSizePixel().Width() );
+        aRect.AdjustLeft(mpImpl->maImageSingleColumn.GetSizePixel().Width() + nDistance);
         pDev->DrawImage( aRect.TopLeft(), bAutomatic ? mpImpl->maImageAutomatic_Active       : mpImpl->maImageAutomatic );
 
         // draw bookmode image:
-        aRect.AdjustLeft(mpImpl->maImageAutomatic.GetSizePixel().Width() );
+        aRect.AdjustLeft(mpImpl->maImageAutomatic.GetSizePixel().Width() + nDistance);
         pDev->DrawImage( aRect.TopLeft(), bBookMode ? mpImpl->maImageBookMode_Active         : mpImpl->maImageBookMode );
     }
     else
