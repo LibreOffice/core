@@ -131,7 +131,7 @@
                         <property name="hexpand">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="position-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|position">Determines the position of the caption with respect to the object.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="optcaptionpage|extended_tip|position">Determines the position of the caption with respect to the object.</property>
                           </object>
                         </child>
                       </object>
@@ -151,7 +151,7 @@
                         <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="separator-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|separator">Enter optional text characters to appear after the caption category and number.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="optcaptionpage|extended_tip|separator">Enter optional characters to appear after the caption category and number, and before the caption contents.</property>
                           </object>
                         </child>
                       </object>
@@ -169,6 +169,11 @@
                         <property name="activates-default">True</property>
                         <property name="text" translatable="yes" context="optcaptionpage|numseparator">. </property>
                         <property name="truncate-multiline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="numseparator-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="optcaptionpage|extended_tip|numseparator">For Numbering first option, defines the characters to be displayed between the caption number and the caption category.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -183,7 +188,7 @@
                         <property name="hexpand">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="numbering-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|numbering">Specifies the type of numbering required.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="optcaptionpage|extended_tip|numbering">Specifies the type of numbering required.</property>
                           </object>
                         </child>
                       </object>
@@ -204,6 +209,11 @@
                             <property name="can-focus">True</property>
                             <property name="activates-default">True</property>
                             <property name="truncate-multiline">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="comboboxtext-entry-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="optcaptionpage|extended_tip|comboboxtext-entry">Choose the name for the caption of the object.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                         <child internal-child="accessible">
@@ -291,7 +301,7 @@
                         <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="chapseparator-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|chapseparator">Defines the character to be displayed after the selected chapter number and before the caption number.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="optcationpage|extended_tip|chapseparator">Defines the character to separate the selected heading numbers from the caption number.</property>
                           </object>
                         </child>
                       </object>
@@ -312,7 +322,7 @@
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="level-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|level">Specify the number of outline levels of the immediately prior heading number to prepend to the caption number. For example, select “2” to use the first two numbers in the heading. If [None] is selected, then no heading numbered is prepended.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="optcaptionpage|extended_tip|level">Specify the number of outline levels to display before  the caption number. For example, select “2” to display  two heading level numbers. If [None] is selected, then no heading number is displayed.</property>
                           </object>
                         </child>
                       </object>
@@ -380,7 +390,7 @@
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="charstyle-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|charstyle">Specifies the character style of the caption paragraph.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="optcaptionpage|extended_tip|charstyle">Specifies the character style of the caption paragraph.</property>
                           </object>
                         </child>
                       </object>
@@ -399,7 +409,7 @@
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="applyborder-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|applyborder">Applies the border and shadow of the object to the caption frame.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="optcaptionpage|extended_tip|applyborder">Applies the border and shadow of the object to the caption frame.</property>
                           </object>
                         </child>
                       </object>
@@ -573,6 +583,11 @@ when inserting:</property>
                       <item translatable="yes" context="optcaptionpage|captionorder">Category first</item>
                       <item translatable="yes" context="optcaptionpage|captionorder">Numbering first</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="captionorder-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="optcaptionpage|extended_tip|captionorder">Place the caption number before or after the caption category.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
                 <child type="label">
