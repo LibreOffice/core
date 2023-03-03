@@ -338,6 +338,8 @@ const SwLayoutFrame *SwFrame::ImplGetNextLayoutLeaf( bool bFwd ) const
     const SwLayoutFrame *pLayoutFrame = nullptr;
     const SwFrame       *p = nullptr;
     bool bGoingUp = !bFwd;          // false for forward, true for backward
+    // The anchor is this frame, unless we traverse the anchor of a split fly.
+    const SwFrame* pAnchor = this;
     do {
 
          bool bGoingFwdOrBwd = false;
@@ -366,7 +368,12 @@ const SwLayoutFrame *SwFrame::ImplGetNextLayoutLeaf( bool bFwd ) const
                      const SwFlyFrame* pFlyFrame = pFrame->FindFlyFrame();
                      if (pFlyFrame->IsFlySplitAllowed())
                      {
-                         p = pFlyFrame->GetAnchorFrame();
+                         p = const_cast<SwFlyFrame*>(pFlyFrame)->FindAnchorCharFrame();
+                         // Remember the anchor frame, so if we look for the leaf of a frame in a
+                         // split fly (anchored in the master of a text frame, but rendered on the
+                         // next page), we won't return a frame on the next page, rather return
+                         // nullptr.
+                         pAnchor = p;
                      }
                  }
 
@@ -388,7 +395,7 @@ const SwLayoutFrame *SwFrame::ImplGetNextLayoutLeaf( bool bFwd ) const
     } while( ( p && !p->IsFlowFrame() ) ||
              pFrame == this ||
              nullptr == ( pLayoutFrame = pFrame->IsLayoutFrame() ? static_cast<const SwLayoutFrame*>(pFrame) : nullptr ) ||
-             pLayoutFrame->IsAnLower( this ) );
+             pLayoutFrame->IsAnLower( pAnchor ) );
 
     return pLayoutFrame;
 }
