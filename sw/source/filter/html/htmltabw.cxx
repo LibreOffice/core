@@ -912,15 +912,14 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     rWrt.m_nDirection = nOldDirection;
 }
 
-Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
+SwHTMLWriter& OutHTML_SwTableNode( SwHTMLWriter& rWrt, SwTableNode & rNode,
                            const SwFrameFormat *pFlyFrameFormat,
                            const OUString *pCaption, bool bTopCaption )
 {
 
     SwTable& rTable = rNode.GetTable();
 
-    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-    rHTMLWrt.m_bOutTable = true;
+    rWrt.m_bOutTable = true;
 
     // The horizontal alignment of the frame (if exists) has priority.
     // NONE means that no horizontal alignment was outputted.
@@ -950,11 +949,11 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
 
     // maybe open a FORM
     bool bPreserveForm = false;
-    if( !rHTMLWrt.m_bPreserveForm )
+    if( !rWrt.m_bPreserveForm )
     {
-        rHTMLWrt.OutForm( true, &rNode );
-        bPreserveForm = rHTMLWrt.mxFormComps.is();
-        rHTMLWrt.m_bPreserveForm = bPreserveForm;
+        rWrt.OutForm( true, &rNode );
+        bPreserveForm = rWrt.mxFormComps.is();
+        rWrt.m_bPreserveForm = bPreserveForm;
     }
 
     SwFrameFormat *pFormat = rTable.GetFrameFormat();
@@ -1029,36 +1028,36 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
 
     if( bCheckDefList )
     {
-        OSL_ENSURE( !rHTMLWrt.GetNumInfo().GetNumRule() ||
-                rHTMLWrt.GetNextNumInfo(),
+        OSL_ENSURE( !rWrt.GetNumInfo().GetNumRule() ||
+                rWrt.GetNextNumInfo(),
                 "NumInfo for next paragraph is missing!" );
         const SvxLRSpaceItem& aLRItem = pFormat->GetLRSpace();
-        if( aLRItem.GetLeft() > 0 && rHTMLWrt.m_nDefListMargin > 0 &&
-            ( !rHTMLWrt.GetNumInfo().GetNumRule() ||
-              ( rHTMLWrt.GetNextNumInfo() &&
-                (rHTMLWrt.GetNextNumInfo()->IsRestart() ||
-                 rHTMLWrt.GetNumInfo().GetNumRule() !=
-                    rHTMLWrt.GetNextNumInfo()->GetNumRule()) ) ) )
+        if( aLRItem.GetLeft() > 0 && rWrt.m_nDefListMargin > 0 &&
+            ( !rWrt.GetNumInfo().GetNumRule() ||
+              ( rWrt.GetNextNumInfo() &&
+                (rWrt.GetNextNumInfo()->IsRestart() ||
+                 rWrt.GetNumInfo().GetNumRule() !=
+                    rWrt.GetNextNumInfo()->GetNumRule()) ) ) )
         {
             // If the paragraph before the table is not numbered or the
             // paragraph after the table starts with a new numbering or with
             // a different rule, we can maintain the indentation with a DL.
             // Otherwise we keep the indentation of the numbering.
             nNewDefListLvl = static_cast< sal_uInt16 >(
-                (aLRItem.GetLeft() + (rHTMLWrt.m_nDefListMargin/2)) /
-                rHTMLWrt.m_nDefListMargin );
+                (aLRItem.GetLeft() + (rWrt.m_nDefListMargin/2)) /
+                rWrt.m_nDefListMargin );
         }
     }
 
-    if( !pFlyFrameFormat && nNewDefListLvl != rHTMLWrt.m_nDefListLvl )
-        rHTMLWrt.OutAndSetDefList( nNewDefListLvl );
+    if( !pFlyFrameFormat && nNewDefListLvl != rWrt.m_nDefListLvl )
+        rWrt.OutAndSetDefList( nNewDefListLvl );
 
     if( nNewDefListLvl )
     {
-        if( rHTMLWrt.m_bLFPossible )
-            rHTMLWrt.OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_dd) );
-        rHTMLWrt.IncIndentLevel();
+        if( rWrt.m_bLFPossible )
+            rWrt.OutNewLine();
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_dd) );
+        rWrt.IncIndentLevel();
     }
 
     // eFlyHoriOri and eTabHoriOri now only contain the values of
@@ -1108,18 +1107,18 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
         nFlyHSpace = nFlyVSpace = 0;
 
     if( !pFormat->GetName().isEmpty() )
-        rHTMLWrt.OutImplicitMark( pFormat->GetName(), "table" );
+        rWrt.OutImplicitMark( pFormat->GetName(), "table" );
 
     if( text::HoriOrientation::NONE!=eDivHoriOri )
     {
-        if( rHTMLWrt.m_bLFPossible )
-            rHTMLWrt.OutNewLine();  // <CENTER> in new line
+        if( rWrt.m_bLFPossible )
+            rWrt.OutNewLine();  // <CENTER> in new line
         if( text::HoriOrientation::CENTER==eDivHoriOri )
         {
-            if (!rHTMLWrt.mbXHTML)
+            if (!rWrt.mbXHTML)
             {
                 // Not XHTML's css center: start <center>.
-                HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_center) );
+                HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_center) );
             }
         }
         else
@@ -1127,15 +1126,15 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
             OStringLiteral sOut = OOO_STRING_SVTOOLS_HTML_division
                 " " OOO_STRING_SVTOOLS_HTML_O_align "=\""
                 OOO_STRING_SVTOOLS_HTML_AL_right "\"";
-            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + sOut) );
+            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + sOut) );
         }
-        rHTMLWrt.IncIndentLevel();  // indent content of <CENTER>
-        rHTMLWrt.m_bLFPossible = true;
+        rWrt.IncIndentLevel();  // indent content of <CENTER>
+        rWrt.m_bLFPossible = true;
     }
 
     // If the table isn't in a frame, then you always can output a LF.
     if( text::HoriOrientation::NONE==eTabHoriOri )
-        rHTMLWrt.m_bLFPossible = true;
+        rWrt.m_bLFPossible = true;
 
     const SwHTMLTableLayout *pLayout = rTable.GetHTMLTableLayout();
 
@@ -1150,7 +1149,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     if( pLayout && pLayout->IsExportable() )
     {
         SwHTMLWrtTable aTableWrt( pLayout );
-        aTableWrt.Write( rHTMLWrt, eTabHoriOri, rTable.GetRowsToRepeat() > 0,
+        aTableWrt.Write( rWrt, eTabHoriOri, rTable.GetRowsToRepeat() > 0,
                          pFormat, pCaption, bTopCaption,
                          nFlyHSpace, nFlyVSpace );
     }
@@ -1158,62 +1157,62 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     {
         SwHTMLWrtTable aTableWrt( rTable.GetTabLines(), nWidth,
                                   nBaseWidth, bRelWidths, 0, 0, rTable.GetRowsToRepeat() );
-        aTableWrt.Write( rHTMLWrt, eTabHoriOri, rTable.GetRowsToRepeat() > 0,
+        aTableWrt.Write( rWrt, eTabHoriOri, rTable.GetRowsToRepeat() > 0,
                          pFormat, pCaption, bTopCaption,
                          nFlyHSpace, nFlyVSpace );
     }
 
     // If the table wasn't in a frame, then you always can output a LF.
     if( text::HoriOrientation::NONE==eTabHoriOri )
-        rHTMLWrt.m_bLFPossible = true;
+        rWrt.m_bLFPossible = true;
 
     if( text::HoriOrientation::NONE!=eDivHoriOri )
     {
-        rHTMLWrt.DecIndentLevel();  // indent content of <CENTER>
-        rHTMLWrt.OutNewLine();      // </CENTER> in new line
+        rWrt.DecIndentLevel();  // indent content of <CENTER>
+        rWrt.OutNewLine();      // </CENTER> in new line
         OString aTag = text::HoriOrientation::CENTER == eDivHoriOri
                            ? OOO_STRING_SVTOOLS_HTML_center
                            : OOO_STRING_SVTOOLS_HTML_division;
-        if (!rHTMLWrt.mbXHTML || eDivHoriOri != text::HoriOrientation::CENTER)
+        if (!rWrt.mbXHTML || eDivHoriOri != text::HoriOrientation::CENTER)
         {
             // Not XHTML's css center: end <center>.
-            HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + aTag), false);
+            HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aTag), false);
         }
-        rHTMLWrt.m_bLFPossible = true;
+        rWrt.m_bLFPossible = true;
     }
 
     // move Pam behind the table
-    rHTMLWrt.m_pCurrentPam->GetPoint()->Assign( *rNode.EndOfSectionNode() );
+    rWrt.m_pCurrentPam->GetPoint()->Assign( *rNode.EndOfSectionNode() );
 
     if (nNewDefListLvl)
     {
-        rHTMLWrt.DecIndentLevel();
-        if (rHTMLWrt.m_bLFPossible)
-            rHTMLWrt.OutNewLine();
+        rWrt.DecIndentLevel();
+        if (rWrt.m_bLFPossible)
+            rWrt.OutNewLine();
         // close the dd element
-        HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_dd), false);
+        HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_dd), false);
     }
 
     if( bPreserveForm )
     {
-        rHTMLWrt.m_bPreserveForm = false;
-        rHTMLWrt.OutForm( false );
+        rWrt.m_bPreserveForm = false;
+        rWrt.OutForm( false );
     }
 
-    rHTMLWrt.m_bOutTable = false;
+    rWrt.m_bOutTable = false;
 
-    if( rHTMLWrt.GetNextNumInfo() &&
-        !rHTMLWrt.GetNextNumInfo()->IsRestart() &&
-        rHTMLWrt.GetNextNumInfo()->GetNumRule() ==
-            rHTMLWrt.GetNumInfo().GetNumRule() )
+    if( rWrt.GetNextNumInfo() &&
+        !rWrt.GetNextNumInfo()->IsRestart() &&
+        rWrt.GetNextNumInfo()->GetNumRule() ==
+            rWrt.GetNumInfo().GetNumRule() )
     {
         // If the paragraph after the table is numbered with the same rule as the
         // one before, then the NumInfo of the next paragraph holds the level of
         // paragraph before the table. Therefore NumInfo must be fetched again
         // to maybe close the Num list.
-        rHTMLWrt.ClearNextNumInfo();
-        rHTMLWrt.FillNextNumInfo();
-        OutHTML_NumberBulletListEnd( rHTMLWrt, *rHTMLWrt.GetNextNumInfo() );
+        rWrt.ClearNextNumInfo();
+        rWrt.FillNextNumInfo();
+        OutHTML_NumberBulletListEnd( rWrt, *rWrt.GetNextNumInfo() );
     }
     return rWrt;
 }

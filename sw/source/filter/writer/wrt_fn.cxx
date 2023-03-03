@@ -28,7 +28,7 @@
 #include <wrt_fn.hxx>
 #include <node.hxx>
 
-Writer& Out( const SwAttrFnTab pTab, const SfxPoolItem& rHt, Writer & rWrt )
+SwHTMLWriter& Out( const SwAttrFnTab pTab, const SfxPoolItem& rHt, SwHTMLWriter & rWrt )
 {
     sal_uInt16 nId = rHt.Which();
     OSL_ENSURE(  nId < POOLATTR_END && nId >= POOLATTR_BEGIN, "SwAttrFnTab::Out()" );
@@ -39,7 +39,7 @@ Writer& Out( const SwAttrFnTab pTab, const SfxPoolItem& rHt, Writer & rWrt )
 
 }
 
-Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
+SwHTMLWriter& Out_SfxItemSet( const SwAttrFnTab pTab, SwHTMLWriter& rWrt,
                         const SfxItemSet& rSet, bool bDeep )
 {
     // at first give the own attributes out

@@ -245,12 +245,11 @@ SwNodeIndex *SwHTMLParser::GetFootEndNoteSection( const OUString& rName )
     return pStartNodeIdx;
 }
 
-Writer& OutHTML_SwFormatLineBreak(Writer& rWrt, const SfxPoolItem& rHt)
+SwHTMLWriter& OutHTML_SwFormatLineBreak(SwHTMLWriter& rWrt, const SfxPoolItem& rHt)
 {
-    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     const auto& rLineBreak = static_cast<const SwFormatLineBreak&>(rHt);
 
-    HtmlWriter aWriter(rHTMLWrt.Strm(), rHTMLWrt.maNamespace);
+    HtmlWriter aWriter(rWrt.Strm(), rWrt.maNamespace);
     aWriter.start(OOO_STRING_SVTOOLS_HTML_linebreak);
     switch (rLineBreak.GetValue())
     {
@@ -271,10 +270,8 @@ Writer& OutHTML_SwFormatLineBreak(Writer& rWrt, const SfxPoolItem& rHt)
     return rWrt;
 }
 
-Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt )
+SwHTMLWriter& OutHTML_SwFormatFootnote( SwHTMLWriter& rWrt, const SfxPoolItem& rHt )
 {
-    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-
     SwFormatFootnote& rFormatFootnote = const_cast<SwFormatFootnote&>(static_cast<const SwFormatFootnote&>(rHt));
     SwTextFootnote *pTextFootnote = rFormatFootnote.GetTextFootnote();
     if( !pTextFootnote )
@@ -284,25 +281,25 @@ Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt )
     size_t nPos;
     if( rFormatFootnote.IsEndNote() )
     {
-        nPos = rHTMLWrt.m_xFootEndNotes ? rHTMLWrt.m_xFootEndNotes->size() : 0;
-        OSL_ENSURE( nPos == static_cast<size_t>(rHTMLWrt.m_nFootNote + rHTMLWrt.m_nEndNote),
+        nPos = rWrt.m_xFootEndNotes ? rWrt.m_xFootEndNotes->size() : 0;
+        OSL_ENSURE( nPos == static_cast<size_t>(rWrt.m_nFootNote + rWrt.m_nEndNote),
                 "OutHTML_SwFormatFootnote: wrong position" );
         sClass = OOO_STRING_SVTOOLS_HTML_sdendnote_anc;
-        sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdendnote + OUString::number( static_cast<sal_Int32>(++rHTMLWrt.m_nEndNote) );
+        sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdendnote + OUString::number( static_cast<sal_Int32>(++rWrt.m_nEndNote) );
     }
     else
     {
-        nPos = rHTMLWrt.m_nFootNote;
+        nPos = rWrt.m_nFootNote;
         sClass = OOO_STRING_SVTOOLS_HTML_sdfootnote_anc;
-        sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdfootnote + OUString::number( static_cast<sal_Int32>(++rHTMLWrt.m_nFootNote));
+        sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdfootnote + OUString::number( static_cast<sal_Int32>(++rWrt.m_nFootNote));
     }
 
-    if( !rHTMLWrt.m_xFootEndNotes )
-        rHTMLWrt.m_xFootEndNotes.emplace();
-    rHTMLWrt.m_xFootEndNotes->insert( rHTMLWrt.m_xFootEndNotes->begin() + nPos, pTextFootnote );
+    if( !rWrt.m_xFootEndNotes )
+        rWrt.m_xFootEndNotes.emplace();
+    rWrt.m_xFootEndNotes->insert( rWrt.m_xFootEndNotes->begin() + nPos, pTextFootnote );
 
     OStringBuffer sOut;
-    OString aTag = rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor;
+    OString aTag = rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor;
     sOut.append("<" + aTag + " " OOO_STRING_SVTOOLS_HTML_O_class "=\"");
     rWrt.Strm().WriteOString( sOut );
     sOut.setLength(0);
@@ -322,11 +319,11 @@ Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt )
     sOut.append(">");
     rWrt.Strm().WriteOString( sOut );
     sOut.setLength(0);
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_superscript ));
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_superscript ));
 
     HTMLOutFuncs::Out_String( rWrt.Strm(), rFormatFootnote.GetViewNumStr(*rWrt.m_pDoc, nullptr) );
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_superscript), false );
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor), false );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_superscript), false );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor), false );
 
     return rWrt;
 }
@@ -524,11 +521,9 @@ static int lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
     return nParts;
 }
 
-static void lcl_html_outFootEndNoteInfo( Writer& rWrt, OUString const *pParts,
+static void lcl_html_outFootEndNoteInfo( SwHTMLWriter& rWrt, OUString const *pParts,
                                   int nParts, const char *pName )
 {
-    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-
     OUStringBuffer aContent;
     for( int i=0; i<nParts; ++i )
     {
@@ -540,9 +535,9 @@ static void lcl_html_outFootEndNoteInfo( Writer& rWrt, OUString const *pParts,
         aContent.append(aTmp);
     }
 
-    rHTMLWrt.OutNewLine();
+    rWrt.OutNewLine();
     OString sOut =
-        "<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_meta " "
+        "<" + rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_meta " "
         OOO_STRING_SVTOOLS_HTML_O_name "=\"" + pName +
         "\" " OOO_STRING_SVTOOLS_HTML_O_content "=\"";
     rWrt.Strm().WriteOString( sOut );

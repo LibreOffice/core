@@ -1218,14 +1218,12 @@ sal_uInt16 SwHTMLWriter::GuessOLENodeFrameType( const SwNode& rNode )
     return static_cast< sal_uInt16 >(eType);
 }
 
-Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFormat,
+SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameFormat& rFrameFormat,
                                bool bInCntnr )
 {
-    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
     SwNodeOffset nStt = rFlyContent.GetContentIdx()->GetIndex()+1;
-    SwOLENode *pOLENd = rHTMLWrt.m_pDoc->GetNodes()[ nStt ]->GetOLENode();
+    SwOLENode *pOLENd = rWrt.m_pDoc->GetNodes()[ nStt ]->GetOLENode();
 
     OSL_ENSURE( pOLENd, "OLE-Node expected" );
     if( !pOLENd )
@@ -1249,11 +1247,11 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
     HtmlFrmOpts nFrameOpts;
 
     // if possible output a line break before the "object"
-    if( rHTMLWrt.m_bLFPossible )
-        rHTMLWrt.OutNewLine( true );
+    if( rWrt.m_bLFPossible )
+        rWrt.OutNewLine( true );
 
     if( !rFrameFormat.GetName().isEmpty() )
-        rHTMLWrt.OutImplicitMark( rFrameFormat.GetName(),
+        rWrt.OutImplicitMark( rFrameFormat.GetName(),
                                   "ole" );
     uno::Any aAny;
     SvGlobalName aGlobName( xObj->getClassID() );
@@ -1262,7 +1260,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
     if( aGlobName == SvGlobalName( SO3_PLUGIN_CLASSID ) )
     {
         // first the plug-in specifics
-        sOut.append(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_embed);
+        sOut.append(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_embed);
 
         OUString aStr;
         OUString aURL;
@@ -1311,7 +1309,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
     {
         // or the applet specifics
 
-        sOut.append(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_applet);
+        sOut.append(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_applet);
 
         // CODEBASE
         OUString aCd;
@@ -1365,7 +1363,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
     {
         // or the Floating-Frame specifics
 
-        sOut.append(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_iframe);
+        sOut.append(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_iframe);
         rWrt.Strm().WriteOString( sOut );
         sOut.setLength(0);
 
@@ -1380,11 +1378,11 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
     sOut.setLength(0);
 
     // ALT, WIDTH, HEIGHT, HSPACE, VSPACE, ALIGN
-    if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bHiddenEmbed )
+    if( rWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bHiddenEmbed )
         nFrameOpts |= HTML_FRMOPTS_OLE_CSS1;
-    OString aEndTags = rHTMLWrt.OutFrameFormatOptions( rFrameFormat, pOLENd->GetTitle(), nFrameOpts );
-    if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bHiddenEmbed )
-        rHTMLWrt.OutCSS1_FrameFormatOptions( rFrameFormat, nFrameOpts );
+    OString aEndTags = rWrt.OutFrameFormatOptions( rFrameFormat, pOLENd->GetTitle(), nFrameOpts );
+    if( rWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bHiddenEmbed )
+        rWrt.OutCSS1_FrameFormatOptions( rFrameFormat, nFrameOpts );
 
     if( aGlobName == SvGlobalName( SO3_APPLET_CLASSID ) )
     {
@@ -1418,9 +1416,9 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
             }
         }
 
-        rHTMLWrt.Strm().WriteChar( '>' );
+        rWrt.Strm().WriteChar( '>' );
 
-        rHTMLWrt.IncIndentLevel(); // indent the applet content
+        rWrt.IncIndentLevel(); // indent the applet content
 
         size_t ii = aParams.size();
         while( ii > 0  )
@@ -1428,9 +1426,9 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
             const SvCommand& rCommand = aCommands[ aParams[--ii] ];
             const OUString& rName = rCommand.GetCommand();
             const OUString& rValue = rCommand.GetArgument();
-            rHTMLWrt.OutNewLine();
+            rWrt.OutNewLine();
             OStringBuffer sBuf;
-            sBuf.append("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_param
+            sBuf.append("<" + rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_param
                     " " OOO_STRING_SVTOOLS_HTML_O_name
                     "=\"");
             rWrt.Strm().WriteOString( sBuf );
@@ -1441,10 +1439,10 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
             HTMLOutFuncs::Out_String( rWrt.Strm(), rValue ).WriteCharPtr( "\">" );
         }
 
-        rHTMLWrt.DecIndentLevel(); // indent the applet content
+        rWrt.DecIndentLevel(); // indent the applet content
         if( aCommands.size() )
-            rHTMLWrt.OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_applet), false );
+            rWrt.OutNewLine();
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_applet), false );
     }
     else if( aGlobName == SvGlobalName( SO3_PLUGIN_CLASSID ) )
     {
@@ -1470,14 +1468,14 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
                 HTMLOutFuncs::Out_String( rWrt.Strm(), rValue ).WriteChar( '\"' );
             }
         }
-        rHTMLWrt.Strm().WriteChar( '>' );
+        rWrt.Strm().WriteChar( '>' );
     }
     else
     {
         // and for Floating-Frames just output another </IFRAME>
 
-        rHTMLWrt.Strm().WriteChar( '>' );
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_iframe), false );
+        rWrt.Strm().WriteChar( '>' );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_iframe), false );
     }
 
     if( !aEndTags.isEmpty() )
@@ -1486,24 +1484,22 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
     return rWrt;
 }
 
-Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrameFormat,
+SwHTMLWriter& OutHTML_FrameFormatOLENodeGrf( SwHTMLWriter& rWrt, const SwFrameFormat& rFrameFormat,
                                   bool bInCntnr )
 {
-    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
     SwNodeOffset nStt = rFlyContent.GetContentIdx()->GetIndex()+1;
-    SwOLENode *pOLENd = rHTMLWrt.m_pDoc->GetNodes()[ nStt ]->GetOLENode();
+    SwOLENode *pOLENd = rWrt.m_pDoc->GetNodes()[ nStt ]->GetOLENode();
 
     OSL_ENSURE( pOLENd, "OLE-Node expected" );
     if( !pOLENd )
         return rWrt;
 
-    if (rHTMLWrt.mbSkipImages)
+    if (rWrt.mbSkipImages)
     {
         // If we skip images, embedded objects would be completely lost.
         // Instead, try to use the HTML export of the embedded object.
-        uno::Reference<text::XTextContent> xTextContent = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(*rHTMLWrt.m_pDoc, const_cast<SwFrameFormat*>(&rFrameFormat));
+        uno::Reference<text::XTextContent> xTextContent = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(*rWrt.m_pDoc, const_cast<SwFrameFormat*>(&rFrameFormat));
         uno::Reference<document::XEmbeddedObjectSupplier2> xEmbeddedObjectSupplier(xTextContent, uno::UNO_QUERY);
         uno::Reference<frame::XStorable> xStorable(xEmbeddedObjectSupplier->getEmbeddedObject(), uno::UNO_QUERY);
         SAL_WARN_IF(!xStorable.is(), "sw.html", "OutHTML_FrameFormatOLENodeGrf: no embedded object");
@@ -1534,9 +1530,9 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
                 SAL_WARN_IF(aStream.GetSize()>=o3tl::make_unsigned(SAL_MAX_INT32), "sw.html", "Stream can't fit in OString");
                 OString aData(static_cast<const char*>(aStream.GetData()), static_cast<sal_Int32>(aStream.GetSize()));
                 // Wrap output in a <span> tag to avoid 'HTML parser error: Unexpected end tag: p'
-                HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span));
+                HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span));
                 rWrt.Strm().WriteOString(aData);
-                HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span), false);
+                HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span), false);
             }
             catch ( uno::Exception& )
             {
@@ -1554,21 +1550,21 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
 
     Graphic aGraphic( *pOLENd->GetGraphic() );
 
-    SwDocShell* pDocSh = rHTMLWrt.m_pDoc->GetDocShell();
+    SwDocShell* pDocSh = rWrt.m_pDoc->GetDocShell();
     bool bObjectOpened = false;
     OUString aRTFType = "text/rtf";
-    if (!rHTMLWrt.m_aRTFOLEMimeType.isEmpty())
+    if (!rWrt.m_aRTFOLEMimeType.isEmpty())
     {
-        aRTFType = rHTMLWrt.m_aRTFOLEMimeType;
+        aRTFType = rWrt.m_aRTFOLEMimeType;
     }
 
-    if (rHTMLWrt.mbXHTML && pDocSh)
+    if (rWrt.mbXHTML && pDocSh)
     {
         // Map native data to an outer <object> element.
 
         // Calculate the file name, which is meant to be the same as the
         // replacement image, just with a .ole extension.
-        OUString aFileName = lcl_CalculateFileName(rHTMLWrt.GetOrigFileName(), aGraphic, u"ole");
+        OUString aFileName = lcl_CalculateFileName(rWrt.GetOrigFileName(), aGraphic, u"ole");
 
         // Write the data.
         SwOLEObj& rOLEObj = pOLENd->GetOLEObj();
@@ -1646,22 +1642,22 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
         aFileName = URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aFileName);
 
         // Refer to this data.
-        if (rHTMLWrt.m_bLFPossible)
-            rHTMLWrt.OutNewLine();
-        rWrt.Strm().WriteOString(Concat2View("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object));
+        if (rWrt.m_bLFPossible)
+            rWrt.OutNewLine();
+        rWrt.Strm().WriteOString(Concat2View("<" + rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object));
         rWrt.Strm().WriteOString(Concat2View(" data=\"" + aFileName.toUtf8() + "\""));
         if (!aFileType.isEmpty())
             rWrt.Strm().WriteOString(Concat2View(" type=\"" + aFileType.toUtf8() + "\""));
         rWrt.Strm().WriteOString(">");
         bObjectOpened = true;
-        rHTMLWrt.m_bLFPossible = true;
+        rWrt.m_bLFPossible = true;
     }
 
     OUString aGraphicURL;
     OUString aMimeType;
-    if(!rHTMLWrt.mbEmbedImages)
+    if(!rWrt.mbEmbedImages)
     {
-        const OUString* pTempFileName = rHTMLWrt.GetOrigFileName();
+        const OUString* pTempFileName = rWrt.GetOrigFileName();
         if(pTempFileName)
             aGraphicURL = *pTempFileName;
 
@@ -1677,7 +1673,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
             if (aGraphic.GetType() == GraphicType::NONE)
             {
                 // The OLE Object has no replacement image, write a stub.
-                aGraphicURL = lcl_CalculateFileName(rHTMLWrt.GetOrigFileName(), aGraphic, u"png");
+                aGraphicURL = lcl_CalculateFileName(rWrt.GetOrigFileName(), aGraphic, u"png");
                 osl::File aFile(aGraphicURL);
                 aFile.open(osl_File_OpenFlag_Create);
                 aFile.close();
@@ -1689,9 +1685,9 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
                                     nFlags );
         if( nErr )              // error, don't write anything
         {
-            rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD;
+            rWrt.m_nWarn = WARN_SWG_POOR_LOAD;
             if (bObjectOpened) // Still at least close the tag.
-                rWrt.Strm().WriteOString(Concat2View("</" + rHTMLWrt.GetNamespace()
+                rWrt.Strm().WriteOString(Concat2View("</" + rWrt.GetNamespace()
                     + OOO_STRING_SVTOOLS_HTML_object ">"));
             return rWrt;
         }
@@ -1704,7 +1700,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
         : HtmlFrmOpts::GenImgMask;
     if (bObjectOpened)
         nFlags |= HtmlFrmOpts::Replacement;
-    HtmlWriter aHtml(rWrt.Strm(), rHTMLWrt.maNamespace);
+    HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
     OutHTML_ImageStart( aHtml, rWrt, rFrameFormat, aGraphicURL, aGraphic,
             pOLENd->GetTitle(), pOLENd->GetTwipSize(),
             nFlags, "ole", nullptr, aMimeType );
@@ -1712,7 +1708,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
 
     if (bObjectOpened)
         // Close native data.
-        rWrt.Strm().WriteOString(Concat2View("</" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object
+        rWrt.Strm().WriteOString(Concat2View("</" + rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object
                                  ">"));
 
     return rWrt;

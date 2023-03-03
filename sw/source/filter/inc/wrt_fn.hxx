@@ -26,13 +26,14 @@ class SwContentNode;
 class Writer;
 class SfxPoolItem;
 class SfxItemSet;
+class SwHTMLWriter;
 
 /* function pointers to the attribute-write functions */
-typedef Writer& (*FnAttrOut)( Writer&, const SfxPoolItem& );
+typedef SwHTMLWriter& (*FnAttrOut)( SwHTMLWriter&, const SfxPoolItem& );
 typedef FnAttrOut SwAttrFnTab[ POOLATTR_END - POOLATTR_BEGIN ];
 
-Writer& Out( const SwAttrFnTab, const SfxPoolItem&, Writer& );
-Writer& Out_SfxItemSet( const SwAttrFnTab, Writer&, const SfxItemSet&,
+SwHTMLWriter& Out( const SwAttrFnTab, const SfxPoolItem&, SwHTMLWriter& );
+SwHTMLWriter& Out_SfxItemSet( const SwAttrFnTab, SwHTMLWriter&, const SfxItemSet&,
                          bool bDeep );
 
 /* function pointers to the node-write functions */

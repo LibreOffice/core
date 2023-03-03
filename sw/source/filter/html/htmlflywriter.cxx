@@ -129,18 +129,18 @@ const HtmlFrmOpts HTML_FRMOPTS_CNTNR          =
     HtmlFrmOpts::AbsSize |
     HtmlFrmOpts::SPixSize;
 
-static Writer& OutHTML_FrameFormatTableNode( Writer& rWrt, const SwFrameFormat& rFrameFormat );
-static Writer& OutHTML_FrameFormatAsMulticol( Writer& rWrt, const SwFrameFormat& rFormat,
+static SwHTMLWriter& OutHTML_FrameFormatTableNode( SwHTMLWriter& rWrt, const SwFrameFormat& rFrameFormat );
+static SwHTMLWriter& OutHTML_FrameFormatAsMulticol( SwHTMLWriter& rWrt, const SwFrameFormat& rFormat,
                                          bool bInCntnr );
-static Writer& OutHTML_FrameFormatAsSpacer( Writer& rWrt, const SwFrameFormat& rFormat );
-static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
+static SwHTMLWriter& OutHTML_FrameFormatAsSpacer( SwHTMLWriter& rWrt, const SwFrameFormat& rFormat );
+static SwHTMLWriter& OutHTML_FrameFormatAsDivOrSpan( SwHTMLWriter& rWrt,
                                           const SwFrameFormat& rFrameFormat, bool bSpan );
-static Writer& OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& rFormat, bool bPNGFallback );
+static SwHTMLWriter& OutHTML_FrameFormatAsImage( SwHTMLWriter& rWrt, const SwFrameFormat& rFormat, bool bPNGFallback );
 
-static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rFormat,
+static SwHTMLWriter& OutHTML_FrameFormatGrfNode( SwHTMLWriter& rWrt, const SwFrameFormat& rFormat,
                                       bool bInCntnr, bool bPNGFallback );
 
-static Writer& OutHTML_FrameFormatAsMarquee( Writer& rWrt, const SwFrameFormat& rFrameFormat,
+static SwHTMLWriter& OutHTML_FrameFormatAsMarquee( SwHTMLWriter& rWrt, const SwFrameFormat& rFrameFormat,
                                         const SdrObject& rSdrObj    );
 
 HTMLOutEvent const aImageEventTable[] =
@@ -1106,7 +1106,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
 namespace
 {
 
-OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, const SwFrameFormat& rFrameFormat,
+OUString lclWriteOutImap(SwHTMLWriter& rWrt, const SfxItemSet& rItemSet, const SwFrameFormat& rFrameFormat,
                          const Size& rRealSize, const ImageMap* pAltImgMap, const SwFormatURL*& pURLItem)
 {
     OUString aIMapName;
@@ -1133,13 +1133,13 @@ OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, con
             aNameBase = OOO_STRING_SVTOOLS_HTML_map;
 
         if (aIMapName.isEmpty())
-            aIMapName = aNameBase + OUString::number(rHTMLWrt.m_nImgMapCnt);
+            aIMapName = aNameBase + OUString::number(rWrt.m_nImgMapCnt);
 
         bool bFound;
         do
         {
             bFound = false;
-            for (const OUString & rImgMapName : rHTMLWrt.m_aImgMapNames)
+            for (const OUString & rImgMapName : rWrt.m_aImgMapNames)
             {
                 // TODO: Unicode: Comparison is case insensitive for ASCII
                 // characters only now!
@@ -1151,8 +1151,8 @@ OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, con
             }
             if (bFound)
             {
-                rHTMLWrt.m_nImgMapCnt++;
-                aIMapName = aNameBase + OUString::number( rHTMLWrt.m_nImgMapCnt );
+                rWrt.m_nImgMapCnt++;
+                aIMapName = aNameBase + OUString::number( rWrt.m_nImgMapCnt );
             }
         } while (bFound);
 
@@ -1196,16 +1196,16 @@ OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, con
             }
         }
 
-        rHTMLWrt.m_aImgMapNames.push_back(aIMapName);
+        rWrt.m_aImgMapNames.push_back(aIMapName);
 
         OString aIndMap, aIndArea;
         const char *pIndArea = nullptr, *pIndMap = nullptr;
 
-        if (rHTMLWrt.m_bLFPossible)
+        if (rWrt.m_bLFPossible)
         {
-            rHTMLWrt.OutNewLine( true );
-            aIndMap = rHTMLWrt.GetIndentString();
-            aIndArea = rHTMLWrt.GetIndentString(1);
+            rWrt.OutNewLine( true );
+            aIndMap = rWrt.GetIndentString();
+            aIndArea = rWrt.GetIndentString(1);
             pIndArea = aIndArea.getStr();
             pIndMap = aIndMap.getStr();
         }
@@ -1214,16 +1214,16 @@ OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, con
         {
             ImageMap aScaledIMap(*pIMap);
             aScaledIMap.Scale(aScaleX, aScaleY);
-            HTMLOutFuncs::Out_ImageMap( rHTMLWrt.Strm(), rHTMLWrt.GetBaseURL(), aScaledIMap, aIMapName,
+            HTMLOutFuncs::Out_ImageMap( rWrt.Strm(), rWrt.GetBaseURL(), aScaledIMap, aIMapName,
                                         aIMapEventTable,
-                                        rHTMLWrt.m_bCfgStarBasic,
+                                        rWrt.m_bCfgStarBasic,
                                         SAL_NEWLINE_STRING, pIndArea, pIndMap );
         }
         else
         {
-            HTMLOutFuncs::Out_ImageMap( rHTMLWrt.Strm(), rHTMLWrt.GetBaseURL(), *pIMap, aIMapName,
+            HTMLOutFuncs::Out_ImageMap( rWrt.Strm(), rWrt.GetBaseURL(), *pIMap, aIMapName,
                                         aIMapEventTable,
-                                        rHTMLWrt.m_bCfgStarBasic,
+                                        rWrt.m_bCfgStarBasic,
                                         SAL_NEWLINE_STRING, pIndArea, pIndMap );
         }
     }
@@ -1232,7 +1232,7 @@ OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, con
 
 }
 
-Writer& OutHTML_ImageStart( HtmlWriter& rHtml, Writer& rWrt, const SwFrameFormat &rFrameFormat,
+SwHTMLWriter& OutHTML_ImageStart( HtmlWriter& rHtml, SwHTMLWriter& rWrt, const SwFrameFormat &rFrameFormat,
                        const OUString& rGraphicURL,
                        Graphic const & rGraphic, const OUString& rAlternateText,
                        const Size &rRealSize, HtmlFrmOpts nFrameOpts,
@@ -1240,37 +1240,36 @@ Writer& OutHTML_ImageStart( HtmlWriter& rHtml, Writer& rWrt, const SwFrameFormat
                        const ImageMap *pAltImgMap,
                        const OUString& rMimeType )
 {
-    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     // <object data="..."> instead of <img src="...">
-    bool bReplacement = (nFrameOpts & HtmlFrmOpts::Replacement) || rHTMLWrt.mbReqIF;
+    bool bReplacement = (nFrameOpts & HtmlFrmOpts::Replacement) || rWrt.mbReqIF;
 
-    if (rHTMLWrt.mbSkipImages)
-        return rHTMLWrt;
+    if (rWrt.mbSkipImages)
+        return rWrt;
 
     // if necessary, temporarily close an open attribute
-    if( !rHTMLWrt.m_aINetFormats.empty() )
+    if( !rWrt.m_aINetFormats.empty() )
     {
-        SwFormatINetFormat* pINetFormat = rHTMLWrt.m_aINetFormats.back();
+        SwFormatINetFormat* pINetFormat = rWrt.m_aINetFormats.back();
         OutHTML_INetFormat( rWrt, *pINetFormat, false );
     }
 
     OUString aGraphicURL( rGraphicURL );
-    if( !rHTMLWrt.mbEmbedImages && !HTMLOutFuncs::PrivateURLToInternalImg(aGraphicURL) && !rHTMLWrt.mpTempBaseURL )
+    if( !rWrt.mbEmbedImages && !HTMLOutFuncs::PrivateURLToInternalImg(aGraphicURL) && !rWrt.mpTempBaseURL )
         aGraphicURL = URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(), aGraphicURL);
 
     const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
 
     const SwFormatURL* pURLItem = nullptr;
-    OUString aIMapName = lclWriteOutImap(rHTMLWrt, rItemSet, rFrameFormat, rRealSize, pAltImgMap, pURLItem);
+    OUString aIMapName = lclWriteOutImap(rWrt, rItemSet, rFrameFormat, rRealSize, pAltImgMap, pURLItem);
 
     // put img into new line
-    if( rHTMLWrt.m_bLFPossible )
-        rHTMLWrt.OutNewLine( true );
+    if( rWrt.m_bLFPossible )
+        rWrt.OutNewLine( true );
 
     // <a name=...></a>...<img ...>
     if( pMarkType && !rFrameFormat.GetName().isEmpty() )
     {
-        rHTMLWrt.OutImplicitMark( rFrameFormat.GetName(), pMarkType );
+        rWrt.OutImplicitMark( rFrameFormat.GetName(), pMarkType );
     }
 
     // URL -> <a>...<img ... >...</a>
@@ -1298,7 +1297,7 @@ Writer& OutHTML_ImageStart( HtmlWriter& rHtml, Writer& rWrt, const SwFrameFormat
             // Output "href" element if a link or macro exists
             if( !aMapURL.isEmpty() || bEvents )
             {
-                rHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_href, OUStringToOString(rHTMLWrt.convertHyperlinkHRefValue(aMapURL), RTL_TEXTENCODING_UTF8));
+                rHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_href, OUStringToOString(rWrt.convertHyperlinkHRefValue(aMapURL), RTL_TEXTENCODING_UTF8));
             }
 
             if( !aName.isEmpty() )
@@ -1316,7 +1315,7 @@ Writer& OutHTML_ImageStart( HtmlWriter& rHtml, Writer& rWrt, const SwFrameFormat
                 const SvxMacroTableDtor& rMacTable = pMacItem->GetMacroTable();
                 if (!rMacTable.empty())
                 {
-                    HtmlWriterHelper::applyEvents(rHtml, rMacTable, aAnchorEventTable, rHTMLWrt.m_bCfgStarBasic);
+                    HtmlWriterHelper::applyEvents(rHtml, rMacTable, aAnchorEventTable, rWrt.m_bCfgStarBasic);
                 }
             }
         }
@@ -1393,7 +1392,7 @@ Writer& OutHTML_ImageStart( HtmlWriter& rHtml, Writer& rWrt, const SwFrameFormat
     rHtml.start(aTag);
 
     OStringBuffer sBuffer;
-    if(rHTMLWrt.mbEmbedImages)
+    if(rWrt.mbEmbedImages)
     {
         OUString aGraphicInBase64;
         if (XOutBitmap::GraphicToBase64(rGraphic, aGraphicInBase64))
@@ -1404,7 +1403,7 @@ Writer& OutHTML_ImageStart( HtmlWriter& rHtml, Writer& rWrt, const SwFrameFormat
             rHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_src, sBuffer.makeStringAndClear().getStr());
         }
         else
-            rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD;
+            rWrt.m_nWarn = WARN_SWG_POOR_LOAD;
     }
     else
     {
@@ -1428,14 +1427,14 @@ Writer& OutHTML_ImageStart( HtmlWriter& rHtml, Writer& rWrt, const SwFrameFormat
         const SvxMacroTableDtor& rMacTable = pMacroItem->GetMacroTable();
         if (!rMacTable.empty())
         {
-            HtmlWriterHelper::applyEvents(rHtml, rMacTable, aImageEventTable, rHTMLWrt.m_bCfgStarBasic);
+            HtmlWriterHelper::applyEvents(rHtml, rMacTable, aImageEventTable, rWrt.m_bCfgStarBasic);
         }
     }
 
     // alt, align, width, height, hspace, vspace
-    rHTMLWrt.writeFrameFormatOptions(rHtml, rFrameFormat, rAlternateText, nFrameOpts);
-    if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) )
-        rHTMLWrt.OutCSS1_FrameFormatOptions( rFrameFormat, nFrameOpts );
+    rWrt.writeFrameFormatOptions(rHtml, rFrameFormat, rAlternateText, nFrameOpts);
+    if( rWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) )
+        rWrt.OutCSS1_FrameFormatOptions( rFrameFormat, nFrameOpts );
 
     if ((nFrameOpts & HtmlFrmOpts::Border) && !bReplacement)
     {
@@ -1463,57 +1462,54 @@ Writer& OutHTML_ImageStart( HtmlWriter& rHtml, Writer& rWrt, const SwFrameFormat
             rHtml.characters(rAlternateText.toUtf8());
     }
 
-    return rHTMLWrt;
+    return rWrt;
 }
 
-Writer& OutHTML_ImageEnd( HtmlWriter& rHtml, Writer& rWrt )
+SwHTMLWriter& OutHTML_ImageEnd( HtmlWriter& rHtml, SwHTMLWriter& rWrt )
 {
-    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     rHtml.flushStack();
 
-    if( !rHTMLWrt.m_aINetFormats.empty() )
+    if( !rWrt.m_aINetFormats.empty() )
     {
         // There is still an attribute on the stack that has to be reopened
-        SwFormatINetFormat *pINetFormat = rHTMLWrt.m_aINetFormats.back();
+        SwFormatINetFormat *pINetFormat = rWrt.m_aINetFormats.back();
         OutHTML_INetFormat( rWrt, *pINetFormat, true );
     }
 
-    return rHTMLWrt;
+    return rWrt;
 }
 
-Writer& OutHTML_BulletImage( Writer& rWrt,
+SwHTMLWriter& OutHTML_BulletImage( SwHTMLWriter& rWrt,
                              const char *pTag,
                              const SvxBrushItem* pBrush,
                              const OUString &rGraphicURL)
 {
-    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-
     OUString aGraphicInBase64;
     OUString aLink;
     if( pBrush )
     {
         aLink = pBrush->GetGraphicLink();
-        if(rHTMLWrt.mbEmbedImages || aLink.isEmpty())
+        if(rWrt.mbEmbedImages || aLink.isEmpty())
         {
             const Graphic* pGrf = pBrush->GetGraphic();
             if( pGrf )
             {
                 if( !XOutBitmap::GraphicToBase64(*pGrf, aGraphicInBase64) )
                 {
-                    rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD;
+                    rWrt.m_nWarn = WARN_SWG_POOR_LOAD;
                 }
             }
         }
         else if(!aLink.isEmpty())
         {
-            if( rHTMLWrt.m_bCfgCpyLinkedGrfs )
+            if( rWrt.m_bCfgCpyLinkedGrfs )
             {
-                rHTMLWrt.CopyLocalFileToINet( aLink );
+                rWrt.CopyLocalFileToINet( aLink );
             }
 
         }
     }
-    else if(!rHTMLWrt.mbEmbedImages)
+    else if(!rWrt.mbEmbedImages)
     {
         aLink = rGraphicURL;
     }
@@ -1554,26 +1550,24 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
     return rWrt;
 }
 
-static Writer& OutHTML_FrameFormatTableNode( Writer& rWrt, const SwFrameFormat& rFrameFormat )
+static SwHTMLWriter& OutHTML_FrameFormatTableNode( SwHTMLWriter& rWrt, const SwFrameFormat& rFrameFormat )
 {
-    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
     SwNodeOffset nStt = rFlyContent.GetContentIdx()->GetIndex()+1;
-    SwNodeOffset nEnd = rHTMLWrt.m_pDoc->GetNodes()[nStt-1]->EndOfSectionIndex();
+    SwNodeOffset nEnd = rWrt.m_pDoc->GetNodes()[nStt-1]->EndOfSectionIndex();
 
     OUString aCaption;
     bool bTopCaption = false;
 
     // Not const, because GetTable won't be const sometime later
-    SwNode *pNd = rHTMLWrt.m_pDoc->GetNodes()[ nStt ];
+    SwNode *pNd = rWrt.m_pDoc->GetNodes()[ nStt ];
     SwTableNode *pTableNd = pNd->GetTableNode();
     const SwTextNode *pTextNd = pNd->GetTextNode();
     if( !pTableNd && pTextNd )
     {
         // Table with heading
         bTopCaption = true;
-        pTableNd = rHTMLWrt.m_pDoc->GetNodes()[nStt+1]->GetTableNode();
+        pTableNd = rWrt.m_pDoc->GetNodes()[nStt+1]->GetTableNode();
     }
     OSL_ENSURE( pTableNd, "Frame does not contain a table" );
     if( pTableNd )
@@ -1584,41 +1578,39 @@ static Writer& OutHTML_FrameFormatTableNode( Writer& rWrt, const SwFrameFormat& 
                 "Invalid frame content for a table" );
 
         if( nTableEnd == nEnd - 2 )
-            pTextNd = rHTMLWrt.m_pDoc->GetNodes()[nTableEnd+1]->GetTextNode();
+            pTextNd = rWrt.m_pDoc->GetNodes()[nTableEnd+1]->GetTextNode();
     }
     if( pTextNd )
         aCaption = pTextNd->GetText();
 
     if( pTableNd )
     {
-        HTMLSaveData aSaveData( rHTMLWrt, pTableNd->GetIndex()+1,
+        HTMLSaveData aSaveData( rWrt, pTableNd->GetIndex()+1,
                                 pTableNd->EndOfSectionIndex(),
                                    true, &rFrameFormat );
-        rHTMLWrt.m_bOutFlyFrame = true;
-        OutHTML_SwTableNode( rHTMLWrt, *pTableNd, &rFrameFormat, &aCaption,
+        rWrt.m_bOutFlyFrame = true;
+        OutHTML_SwTableNode( rWrt, *pTableNd, &rFrameFormat, &aCaption,
                            bTopCaption );
     }
 
     return rWrt;
 }
 
-static Writer & OutHTML_FrameFormatAsMulticol( Writer& rWrt,
+static SwHTMLWriter & OutHTML_FrameFormatAsMulticol( SwHTMLWriter& rWrt,
                                           const SwFrameFormat& rFrameFormat,
                                           bool bInCntnr )
 {
-    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-
-    rHTMLWrt.ChangeParaToken( HtmlTokenId::NONE );
+    rWrt.ChangeParaToken( HtmlTokenId::NONE );
 
     // Close the current <DL>!
-    rHTMLWrt.OutAndSetDefList( 0 );
+    rWrt.OutAndSetDefList( 0 );
 
     // output as Multicol
-    if( rHTMLWrt.m_bLFPossible )
-        rHTMLWrt.OutNewLine();
+    if( rWrt.m_bLFPossible )
+        rWrt.OutNewLine();
 
     OStringBuffer sOut;
-    sOut.append('<').append(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_multicol);
+    sOut.append('<').append(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_multicol);
 
     const SwFormatCol& rFormatCol = rFrameFormat.GetCol();
 
@@ -1649,16 +1641,16 @@ static Writer & OutHTML_FrameFormatAsMulticol( Writer& rWrt,
 
     // WIDTH
     HtmlFrmOpts nFrameFlags = HTML_FRMOPTS_MULTICOL;
-    if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bInCntnr )
+    if( rWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bInCntnr )
         nFrameFlags |= HTML_FRMOPTS_MULTICOL_CSS1;
-    rHTMLWrt.OutFrameFormatOptions(rFrameFormat, OUString(), nFrameFlags);
-    if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bInCntnr )
-        rHTMLWrt.OutCSS1_FrameFormatOptions( rFrameFormat, nFrameFlags );
+    rWrt.OutFrameFormatOptions(rFrameFormat, OUString(), nFrameFlags);
+    if( rWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bInCntnr )
+        rWrt.OutCSS1_FrameFormatOptions( rFrameFormat, nFrameFlags );
 
     rWrt.Strm().WriteChar( '>' );
 
-    rHTMLWrt.m_bLFPossible = true;
-    rHTMLWrt.IncIndentLevel();  // indent the content of Multicol
+    rWrt.m_bLFPossible = true;
+    rWrt.IncIndentLevel();  // indent the content of Multicol
 
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
     SwNodeOffset nStt = rFlyContent.GetContentIdx()->GetIndex();
@@ -1668,38 +1660,36 @@ static Writer & OutHTML_FrameFormatAsMulticol( Writer& rWrt,
     {
         // in a block, so that the old state can be restored in time
         // before the end
-        HTMLSaveData aSaveData( rHTMLWrt, nStt+1,
+        HTMLSaveData aSaveData( rWrt, nStt+1,
                                 pSttNd->EndOfSectionIndex(),
                                    true, &rFrameFormat );
-        rHTMLWrt.m_bOutFlyFrame = true;
-        rHTMLWrt.Out_SwDoc( rWrt.m_pCurrentPam.get() );
+        rWrt.m_bOutFlyFrame = true;
+        rWrt.Out_SwDoc( rWrt.m_pCurrentPam.get() );
     }
 
-    rHTMLWrt.DecIndentLevel();  // indent the content of Multicol;
-    if( rHTMLWrt.m_bLFPossible )
-        rHTMLWrt.OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_multicol), false );
-    rHTMLWrt.m_bLFPossible = true;
+    rWrt.DecIndentLevel();  // indent the content of Multicol;
+    if( rWrt.m_bLFPossible )
+        rWrt.OutNewLine();
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_multicol), false );
+    rWrt.m_bLFPossible = true;
 
     return rWrt;
 }
 
-static Writer& OutHTML_FrameFormatAsSpacer( Writer& rWrt, const SwFrameFormat& rFrameFormat )
+static SwHTMLWriter& OutHTML_FrameFormatAsSpacer( SwHTMLWriter& rWrt, const SwFrameFormat& rFrameFormat )
 {
-    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-
     // if possible, output a line break before the graphic
-    if( rHTMLWrt.m_bLFPossible )
-        rHTMLWrt.OutNewLine( true );
+    if( rWrt.m_bLFPossible )
+        rWrt.OutNewLine( true );
 
     OString sOut =
-        "<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_spacer " "
+        "<" + rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_spacer " "
         OOO_STRING_SVTOOLS_HTML_O_type "=\""
         OOO_STRING_SVTOOLS_HTML_SPTYPE_block "\"";
     rWrt.Strm().WriteOString( sOut );
 
     // ALIGN, WIDTH, HEIGHT
-    OString aEndTags = rHTMLWrt.OutFrameFormatOptions(rFrameFormat, OUString(), HTML_FRMOPTS_SPACER);
+    OString aEndTags = rWrt.OutFrameFormatOptions(rFrameFormat, OUString(), HTML_FRMOPTS_SPACER);
 
     rWrt.Strm().WriteChar( '>' );
     if( !aEndTags.isEmpty() )
@@ -1708,47 +1698,45 @@ static Writer& OutHTML_FrameFormatAsSpacer( Writer& rWrt, const SwFrameFormat& r
     return rWrt;
 }
 
-static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
+static SwHTMLWriter& OutHTML_FrameFormatAsDivOrSpan( SwHTMLWriter& rWrt,
                                           const SwFrameFormat& rFrameFormat, bool bSpan)
 {
-    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-
     OString aTag;
     if( !bSpan )
     {
-        rHTMLWrt.ChangeParaToken( HtmlTokenId::NONE );
+        rWrt.ChangeParaToken( HtmlTokenId::NONE );
 
         // Close the current <DL>!
-        rHTMLWrt.OutAndSetDefList( 0 );
+        rWrt.OutAndSetDefList( 0 );
         aTag = OOO_STRING_SVTOOLS_HTML_division;
     }
     else
         aTag = OOO_STRING_SVTOOLS_HTML_span;
 
     // output as DIV
-    if( rHTMLWrt.m_bLFPossible )
-        rHTMLWrt.OutNewLine();
+    if( rWrt.m_bLFPossible )
+        rWrt.OutNewLine();
 
     OStringBuffer sOut;
-    sOut.append('<').append(rHTMLWrt.GetNamespace() + aTag);
+    sOut.append('<').append(rWrt.GetNamespace() + aTag);
 
     rWrt.Strm().WriteOString( sOut );
     sOut.setLength(0);
     HtmlFrmOpts nFrameFlags = HTML_FRMOPTS_DIV;
-    if( rHTMLWrt.IsHTMLMode( HTMLMODE_BORDER_NONE ) )
+    if( rWrt.IsHTMLMode( HTMLMODE_BORDER_NONE ) )
        nFrameFlags |= HtmlFrmOpts::SNoBorder;
-    OString aEndTags = rHTMLWrt.OutFrameFormatOptions(rFrameFormat, OUString(), nFrameFlags);
-    rHTMLWrt.OutCSS1_FrameFormatOptions( rFrameFormat, nFrameFlags );
+    OString aEndTags = rWrt.OutFrameFormatOptions(rFrameFormat, OUString(), nFrameFlags);
+    rWrt.OutCSS1_FrameFormatOptions( rFrameFormat, nFrameFlags );
     rWrt.Strm().WriteChar( '>' );
 
-    rHTMLWrt.IncIndentLevel();  // indent the content
-    rHTMLWrt.m_bLFPossible = true;
+    rWrt.IncIndentLevel();  // indent the content
+    rWrt.m_bLFPossible = true;
 
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
     SwNodeOffset nStt = rFlyContent.GetContentIdx()->GetIndex();
 
     // Output frame-anchored frames that are anchored to the start node
-    rHTMLWrt.OutFlyFrame( nStt, 0, HtmlPosition::Any );
+    rWrt.OutFlyFrame( nStt, 0, HtmlPosition::Any );
 
     const SwStartNode* pSttNd = rWrt.m_pDoc->GetNodes()[nStt]->GetStartNode();
     OSL_ENSURE( pSttNd, "Where is the start node" );
@@ -1756,17 +1744,17 @@ static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
     {
         // in a block, so that the old state can be restored in time
         // before the end
-        HTMLSaveData aSaveData( rHTMLWrt, nStt+1,
+        HTMLSaveData aSaveData( rWrt, nStt+1,
                                 pSttNd->EndOfSectionIndex(),
                                    true, &rFrameFormat );
-        rHTMLWrt.m_bOutFlyFrame = true;
-        rHTMLWrt.Out_SwDoc( rWrt.m_pCurrentPam.get() );
+        rWrt.m_bOutFlyFrame = true;
+        rWrt.Out_SwDoc( rWrt.m_pCurrentPam.get() );
     }
 
-    rHTMLWrt.DecIndentLevel();  // indent the content of Multicol;
-    if( rHTMLWrt.m_bLFPossible )
-        rHTMLWrt.OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + aTag), false );
+    rWrt.DecIndentLevel();  // indent the content of Multicol;
+    if( rWrt.m_bLFPossible )
+        rWrt.OutNewLine();
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aTag), false );
 
     if( !aEndTags.isEmpty() )
         rWrt.Strm().WriteOString( aEndTags );
@@ -1775,16 +1763,16 @@ static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
 }
 
 /// Starts the OLE version of an image in the ReqIF + OLE case.
-static void OutHTML_ImageOLEStart(SwHTMLWriter& rHTMLWrt, const Graphic& rGraphic,
+static void OutHTML_ImageOLEStart(SwHTMLWriter& rWrt, const Graphic& rGraphic,
                                   const SwFrameFormat& rFrameFormat)
 {
-    if (!rHTMLWrt.mbReqIF || !rHTMLWrt.m_bExportImagesAsOLE)
+    if (!rWrt.mbReqIF || !rWrt.m_bExportImagesAsOLE)
         return;
 
     // Write the original image as an RTF fragment.
     OUString aFileName;
-    if (rHTMLWrt.GetOrigFileName())
-        aFileName = *rHTMLWrt.GetOrigFileName();
+    if (rWrt.GetOrigFileName())
+        aFileName = *rWrt.GetOrigFileName();
     INetURLObject aURL(aFileName);
     OUString aName = aURL.getBase() + "_" + aURL.getExtension() + "_"
                      + OUString::number(rGraphic.GetChecksum(), 16);
@@ -1797,42 +1785,41 @@ static void OutHTML_ImageOLEStart(SwHTMLWriter& rHTMLWrt, const Graphic& rGraphi
         SAL_WARN("sw.html", "SwReqIfReader::WrapGraphicInRtf() failed");
 
     // Refer to this data.
-    aFileName = URIHelper::simpleNormalizedMakeRelative(rHTMLWrt.GetBaseURL(), aFileName);
-    rHTMLWrt.Strm().WriteOString(
-        Concat2View("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object));
-    rHTMLWrt.Strm().WriteOString(Concat2View(" data=\"" + aFileName.toUtf8() + "\""));
-    rHTMLWrt.Strm().WriteOString(" type=\"text/rtf\"");
-    rHTMLWrt.Strm().WriteOString(">");
-    rHTMLWrt.OutNewLine();
+    aFileName = URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aFileName);
+    rWrt.Strm().WriteOString(
+        Concat2View("<" + rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object));
+    rWrt.Strm().WriteOString(Concat2View(" data=\"" + aFileName.toUtf8() + "\""));
+    rWrt.Strm().WriteOString(" type=\"text/rtf\"");
+    rWrt.Strm().WriteOString(">");
+    rWrt.OutNewLine();
 }
 
 /// Ends the OLE version of an image in the ReqIF + OLE case.
-static void OutHTML_ImageOLEEnd(SwHTMLWriter& rHTMLWrt)
+static void OutHTML_ImageOLEEnd(SwHTMLWriter& rWrt)
 {
-    if (rHTMLWrt.mbReqIF && rHTMLWrt.m_bExportImagesAsOLE)
+    if (rWrt.mbReqIF && rWrt.m_bExportImagesAsOLE)
     {
-        rHTMLWrt.Strm().WriteOString(
-            Concat2View("</" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object ">"));
+        rWrt.Strm().WriteOString(
+            Concat2View("</" + rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object ">"));
     }
 }
 
-static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& rFrameFormat, bool bPNGFallback)
+static SwHTMLWriter & OutHTML_FrameFormatAsImage( SwHTMLWriter& rWrt, const SwFrameFormat& rFrameFormat, bool bPNGFallback)
 {
-    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-    bool bWritePNGFallback = rHTMLWrt.mbReqIF && !rHTMLWrt.m_bExportImagesAsOLE && bPNGFallback;
+    bool bWritePNGFallback = rWrt.mbReqIF && !rWrt.m_bExportImagesAsOLE && bPNGFallback;
 
-    if (rHTMLWrt.mbSkipImages)
+    if (rWrt.mbSkipImages)
         return rWrt;
 
     ImageMap aIMap;
     std::optional<Size> aDPI;
-    if (rHTMLWrt.m_nShapeDPI.has_value())
+    if (rWrt.m_nShapeDPI.has_value())
     {
-        aDPI.emplace(*rHTMLWrt.m_nShapeDPI, *rHTMLWrt.m_nShapeDPI);
+        aDPI.emplace(*rWrt.m_nShapeDPI, *rWrt.m_nShapeDPI);
     }
     Graphic aGraphic( const_cast<SwFrameFormat &>(rFrameFormat).MakeGraphic( &aIMap, /*nMaximumQuadraticPixels=*/2100000, aDPI ) );
 
-    if (rHTMLWrt.mbReqIF)
+    if (rWrt.mbReqIF)
     {
         // ImageMap doesn't seem to be allowed in reqif.
         if (auto pGrafObj = dynamic_cast<const SdrGrafObj*>(rFrameFormat.FindSdrObject()))
@@ -1849,22 +1836,22 @@ static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& r
     Size aSz( 0, 0 );
     OUString GraphicURL;
     OUString aMimeType("image/jpeg");
-    if(!rHTMLWrt.mbEmbedImages)
+    if(!rWrt.mbEmbedImages)
     {
-        if( rHTMLWrt.GetOrigFileName() )
-            GraphicURL = *rHTMLWrt.GetOrigFileName();
+        if( rWrt.GetOrigFileName() )
+            GraphicURL = *rWrt.GetOrigFileName();
 
         OUString aFilterName("JPG");
         XOutFlags nFlags = XOutFlags::UseGifIfPossible | XOutFlags::UseNativeIfPossible;
 
-        if (rHTMLWrt.mbReqIF && !bWritePNGFallback)
+        if (rWrt.mbReqIF && !bWritePNGFallback)
         {
             // Writing image without fallback PNG in ReqIF mode: force PNG output.
             aFilterName = "PNG";
             nFlags = XOutFlags::NONE;
             aMimeType = "image/png";
         }
-        else if (rHTMLWrt.mbReqIF)
+        else if (rWrt.mbReqIF)
         {
             // Original format is wanted, don't force JPG.
             aFilterName.clear();
@@ -1877,7 +1864,7 @@ static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& r
                                       nFlags ) != ERRCODE_NONE )
         {
             // empty or incorrect, because there is nothing to output
-            rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD;
+            rWrt.m_nWarn = WARN_SWG_POOR_LOAD;
             return rWrt;
         }
 
@@ -1890,9 +1877,9 @@ static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& r
     if (xGraphic.is() && aMimeType.isEmpty())
         xGraphic->getPropertyValue("MimeType") >>= aMimeType;
 
-    OutHTML_ImageOLEStart(rHTMLWrt, aGraphic, rFrameFormat);
+    OutHTML_ImageOLEStart(rWrt, aGraphic, rFrameFormat);
 
-    HtmlWriter aHtml(rWrt.Strm(), rHTMLWrt.maNamespace);
+    HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
     OutHTML_ImageStart( aHtml, rWrt, rFrameFormat, GraphicURL, aGraphic, rFrameFormat.GetName(), aSz,
                     HtmlFrmOpts::GenImgMask, "frame",
                     aIMap.GetIMapObjectCount() ? &aIMap : nullptr, aMimeType );
@@ -1905,29 +1892,28 @@ static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& r
 
     OutHTML_ImageEnd(aHtml, rWrt);
 
-    OutHTML_ImageOLEEnd(rHTMLWrt);
+    OutHTML_ImageOLEEnd(rWrt);
 
     return rWrt;
 }
 
-static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rFrameFormat,
+static SwHTMLWriter& OutHTML_FrameFormatGrfNode( SwHTMLWriter& rWrt, const SwFrameFormat& rFrameFormat,
                                       bool bInCntnr, bool bPNGFallback )
 {
-    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-    bool bWritePNGFallback = rHTMLWrt.mbReqIF && !rHTMLWrt.m_bExportImagesAsOLE && bPNGFallback;
+    bool bWritePNGFallback = rWrt.mbReqIF && !rWrt.m_bExportImagesAsOLE && bPNGFallback;
 
-    if (rHTMLWrt.mbSkipImages)
+    if (rWrt.mbSkipImages)
         return rWrt;
 
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
     SwNodeOffset nStt = rFlyContent.GetContentIdx()->GetIndex()+1;
-    SwGrfNode *pGrfNd = rHTMLWrt.m_pDoc->GetNodes()[ nStt ]->GetGrfNode();
+    SwGrfNode *pGrfNd = rWrt.m_pDoc->GetNodes()[ nStt ]->GetGrfNode();
     OSL_ENSURE( pGrfNd, "Grf node expected" );
     if( !pGrfNd )
         return rWrt;
 
     HtmlFrmOpts nFrameFlags = bInCntnr ? HTML_FRMOPTS_IMG_CNTNR : HTML_FRMOPTS_IMG;
-    if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bInCntnr )
+    if( rWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bInCntnr )
          nFrameFlags |= HTML_FRMOPTS_IMG_CSS1;
 
     Graphic aGraphic = pGrfNd->GetGraphic();
@@ -1940,17 +1926,17 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
 
     OUString aGraphicURL;
     OUString aMimeType;
-    if(!rHTMLWrt.mbEmbedImages)
+    if(!rWrt.mbEmbedImages)
     {
         const SwMirrorGrf& rMirror = pGrfNd->GetSwAttrSet().GetMirrorGrf();
 
         if( !pGrfNd->IsLinkedFile() || MirrorGraph::Dont != rMirror.GetValue() )
         {
             // create a (mirrored) jpeg file
-            if( rHTMLWrt.GetOrigFileName() )
-                aGraphicURL = *rHTMLWrt.GetOrigFileName();
+            if( rWrt.GetOrigFileName() )
+                aGraphicURL = *rWrt.GetOrigFileName();
             else
-                aGraphicURL = rHTMLWrt.GetBaseURL();
+                aGraphicURL = rWrt.GetBaseURL();
             pGrfNd->GetGrf( true );
 
             XOutFlags nFlags = XOutFlags::UseGifIfSensible |
@@ -1971,7 +1957,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
 
             OUString aFilterName("");
 
-            if (rHTMLWrt.mbReqIF && !bWritePNGFallback)
+            if (rWrt.mbReqIF && !bWritePNGFallback)
             {
                 // Writing image without fallback PNG in ReqIF mode: force PNG
                 // output.
@@ -1989,7 +1975,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
             if (!rGraphic.isAvailable())
                 const_cast<Graphic&>(rGraphic).makeAvailable();
 
-            if (rHTMLWrt.mbReqIF && bWritePNGFallback)
+            if (rWrt.mbReqIF && bWritePNGFallback)
             {
                 // ReqIF: force native data if possible.
                 const std::shared_ptr<VectorGraphicData>& pVectorGraphicData = rGraphic.getVectorGraphicData();
@@ -2017,7 +2003,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
                     aFilterName, nFlags, &aMM100Size );
             if( nErr )
             {
-                rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD;
+                rWrt.m_nWarn = WARN_SWG_POOR_LOAD;
                 return rWrt;
             }
             aGraphicURL = URIHelper::SmartRel2Abs(
@@ -2027,7 +2013,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
         else
         {
             pGrfNd->GetFileFilterNms( &aGraphicURL, nullptr );
-            if( rHTMLWrt.m_bCfgCpyLinkedGrfs )
+            if( rWrt.m_bCfgCpyLinkedGrfs )
                 rWrt.CopyLocalFileToINet( aGraphicURL );
         }
 
@@ -2036,9 +2022,9 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
     if (xGraphic.is() && aMimeType.isEmpty())
         xGraphic->getPropertyValue("MimeType") >>= aMimeType;
 
-    OutHTML_ImageOLEStart(rHTMLWrt, aGraphic, rFrameFormat);
+    OutHTML_ImageOLEStart(rWrt, aGraphic, rFrameFormat);
 
-    HtmlWriter aHtml(rWrt.Strm(), rHTMLWrt.maNamespace);
+    HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
     OutHTML_ImageStart( aHtml, rWrt, rFrameFormat, aGraphicURL, aGraphic, pGrfNd->GetTitle(),
                   pGrfNd->GetTwipSize(), nFrameFlags, "graphic", nullptr, aMimeType );
 
@@ -2052,64 +2038,60 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
 
     OutHTML_ImageEnd(aHtml, rWrt);
 
-    OutHTML_ImageOLEEnd(rHTMLWrt);
+    OutHTML_ImageOLEEnd(rWrt);
 
     return rWrt;
 }
 
-static Writer& OutHTML_FrameFormatAsMarquee( Writer& rWrt, const SwFrameFormat& rFrameFormat,
+static SwHTMLWriter& OutHTML_FrameFormatAsMarquee( SwHTMLWriter& rWrt, const SwFrameFormat& rFrameFormat,
                                   const SdrObject& rSdrObj  )
 {
-    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-
     // get the edit engine attributes of the object as SW attributes and
     // sort them as Hints
     const SfxItemSet& rFormatItemSet = rFrameFormat.GetAttrSet();
     SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aItemSet( *rFormatItemSet.GetPool() );
     SwHTMLWriter::GetEEAttrsFromDrwObj( aItemSet, &rSdrObj );
-    bool bCfgOutStylesOld = rHTMLWrt.m_bCfgOutStyles;
-    rHTMLWrt.m_bCfgOutStyles = false;
-    rHTMLWrt.m_bTextAttr = true;
-    rHTMLWrt.m_bTagOn = true;
+    bool bCfgOutStylesOld = rWrt.m_bCfgOutStyles;
+    rWrt.m_bCfgOutStyles = false;
+    rWrt.m_bTextAttr = true;
+    rWrt.m_bTagOn = true;
     Out_SfxItemSet( aHTMLAttrFnTab, rWrt, aItemSet, false );
-    rHTMLWrt.m_bTextAttr = false;
+    rWrt.m_bTextAttr = false;
 
-    OutHTML_DrawFrameFormatAsMarquee( rHTMLWrt,
+    OutHTML_DrawFrameFormatAsMarquee( rWrt,
                                  static_cast<const SwDrawFrameFormat &>(rFrameFormat),
                                  rSdrObj );
-    rHTMLWrt.m_bTextAttr = true;
-    rHTMLWrt.m_bTagOn = false;
+    rWrt.m_bTextAttr = true;
+    rWrt.m_bTagOn = false;
     Out_SfxItemSet( aHTMLAttrFnTab, rWrt, aItemSet, false );
-    rHTMLWrt.m_bTextAttr = false;
-    rHTMLWrt.m_bCfgOutStyles = bCfgOutStylesOld;
+    rWrt.m_bTextAttr = false;
+    rWrt.m_bCfgOutStyles = bCfgOutStylesOld;
 
     return rWrt;
 }
 
-Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
+SwHTMLWriter& OutHTML_HeaderFooter( SwHTMLWriter& rWrt, const SwFrameFormat& rFrameFormat,
                               bool bHeader )
 {
-    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-
     // output as Multicol
-    rHTMLWrt.OutNewLine();
+    rWrt.OutNewLine();
     OStringBuffer sOut;
     sOut.append(OOO_STRING_SVTOOLS_HTML_division " "
             OOO_STRING_SVTOOLS_HTML_O_title "=\"")
         .append( bHeader ? "header" : "footer" ).append("\"");
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + sOut) );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + sOut) );
 
-    rHTMLWrt.IncIndentLevel();  // indent the content of Multicol;
+    rWrt.IncIndentLevel();  // indent the content of Multicol;
 
     // Piece a spacer for the spacing together. Because the
     // <DL> or </DL> always produces a space between paragraphs, it is
     // subtracted if necessary.
     const SvxULSpaceItem& rULSpace = rFrameFormat.GetULSpace();
     sal_uInt16 nSize = bHeader ? rULSpace.GetLower() : rULSpace.GetUpper();
-    rHTMLWrt.m_nHeaderFooterSpace = nSize;
+    rWrt.m_nHeaderFooterSpace = nSize;
 
     OString aSpacer;
-    if( rHTMLWrt.IsHTMLMode(HTMLMODE_VERT_SPACER) &&
+    if( rWrt.IsHTMLMode(HTMLMODE_VERT_SPACER) &&
         nSize > HTML_PARSPACE && Application::GetDefaultDevice() )
     {
         nSize -= HTML_PARSPACE;
@@ -2130,36 +2112,36 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
 
     if( !bHeader && !aSpacer.isEmpty() )
     {
-        rHTMLWrt.OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + aSpacer) );
+        rWrt.OutNewLine();
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aSpacer) );
     }
 
     {
         // in a block, so that the old state can be restored in time
         // before the end. pFlyFormat doesn't need to be set here, because
         // PageDesc attributes cannot occur here
-        HTMLSaveData aSaveData( rHTMLWrt, nStt+1,
+        HTMLSaveData aSaveData( rWrt, nStt+1,
                                 pSttNd->EndOfSectionIndex() );
 
         if( bHeader )
-            rHTMLWrt.m_bOutHeader = true;
+            rWrt.m_bOutHeader = true;
         else
-            rHTMLWrt.m_bOutFooter = true;
+            rWrt.m_bOutFooter = true;
 
-        rHTMLWrt.Out_SwDoc( rWrt.m_pCurrentPam.get() );
+        rWrt.Out_SwDoc( rWrt.m_pCurrentPam.get() );
     }
 
     if( bHeader && !aSpacer.isEmpty() )
     {
-        rHTMLWrt.OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + aSpacer) );
+        rWrt.OutNewLine();
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aSpacer) );
     }
 
-    rHTMLWrt.DecIndentLevel();  // indent the content of Multicol;
-    rHTMLWrt.OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_division), false );
+    rWrt.DecIndentLevel();  // indent the content of Multicol;
+    rWrt.OutNewLine();
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_division), false );
 
-    rHTMLWrt.m_nHeaderFooterSpace = 0;
+    rWrt.m_nHeaderFooterSpace = 0;
 
     return rWrt;
 }

@@ -110,12 +110,10 @@ void SwHTMLWriter::GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
     }
 }
 
-Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
+SwHTMLWriter& OutHTML_DrawFrameFormatAsMarquee( SwHTMLWriter& rWrt,
                                      const SwDrawFrameFormat& rFormat,
                                      const SdrObject& rSdrObject )
 {
-    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-
     OSL_ENSURE( rWrt.m_pDoc->getIDocumentDrawModelAccess().GetDrawModel(),
             "There is a Draw-Obj with no Draw-Model?" );
     const SdrTextObj *pTextObj = static_cast<const SdrTextObj *>(&rSdrObject);
@@ -262,11 +260,11 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
 
     // and now ALIGN, HSPACE and VSPACE
     HtmlFrmOpts nFrameFlags = HTML_FRMOPTS_MARQUEE;
-    if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) )
+    if( rWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) )
         nFrameFlags |= HTML_FRMOPTS_MARQUEE_CSS1;
-    OString aEndTags = rHTMLWrt.OutFrameFormatOptions(rFormat, OUString(), nFrameFlags);
-    if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) )
-        rHTMLWrt.OutCSS1_FrameFormatOptions( rFormat, nFrameFlags, &rSdrObject );
+    OString aEndTags = rWrt.OutFrameFormatOptions(rFormat, OUString(), nFrameFlags);
+    if( rWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) )
+        rWrt.OutCSS1_FrameFormatOptions( rFormat, nFrameFlags, &rSdrObject );
 
     rWrt.Strm().WriteChar( '>' );
 
@@ -278,7 +276,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
                                      aOutliner.GetParagraphCount() ) );
     HTMLOutFuncs::Out_String( rWrt.Strm(), aText );
 
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_marquee), false );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_marquee), false );
 
     if( !aEndTags.isEmpty() )
         rWrt.Strm().WriteOString( aEndTags );

@@ -63,11 +63,9 @@ const char *SwHTMLWriter::GetNumFormat( sal_uInt16 nFormat )
     return pFormatStr;
 }
 
-static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
+static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
                                  const SwTextNode& rTextNd, sal_Int32 nFieldPos )
 {
-    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-
     const SwFieldType* pFieldTyp = pField->GetTyp();
     SwFieldIds nField = pFieldTyp->Which();
     sal_uLong nFormat = pField->GetFormat();
@@ -259,7 +257,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
     }
 
     // ReqIF-XHTML doesn't allow <sdfield>.
-    if (rHTMLWrt.mbReqIF && pTypeStr)
+    if (rWrt.mbReqIF && pTypeStr)
     {
         pTypeStr = nullptr;
     }
@@ -269,7 +267,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
     {
         OStringBuffer sOut;
         sOut.append('<');
-        sOut.append(rHTMLWrt.GetNamespace());
+        sOut.append(rWrt.GetNamespace());
         sOut.append(OOO_STRING_SVTOOLS_HTML_sdfield).append(' ').
             append(OOO_STRING_SVTOOLS_HTML_O_type).append('=').
             append(pTypeStr);
@@ -304,7 +302,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
             OSL_ENSURE( nFormat, "number format is 0" );
             sOut.append(HTMLOutFuncs::CreateTableDataOptionsValNum(
                 bNumValue, dNumValue, nFormat,
-                *rHTMLWrt.m_pDoc->GetNumberFormatter()));
+                *rWrt.m_pDoc->GetNumberFormatter()));
         }
         if( bFixed )
         {
@@ -326,7 +324,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
 
         sal_uInt16 nScript =
             SwHTMLWriter::GetCSS1ScriptForScriptType( nScriptType );
-        if( (nPos < sExpand.getLength() && nPos >= 0) || nScript != rHTMLWrt.m_nCSS1Script )
+        if( (nPos < sExpand.getLength() && nPos >= 0) || nScript != rWrt.m_nCSS1Script )
         {
             bNeedsCJKProcessing = true;
         }
@@ -354,7 +352,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
               RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT };
 
         sal_uInt16 *pRefWhichIds = nullptr;
-        switch( rHTMLWrt.m_nCSS1Script )
+        switch( rWrt.m_nCSS1Script )
         {
         case CSS1_OUTMODE_WESTERN:
             pRefWhichIds = aWesternWhichIds;
@@ -377,7 +375,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
                                     sExpand, nPos, nScriptType );
             sal_Int32 nChunkLen = nEndPos - nPos;
             if( nScript != CSS1_OUTMODE_ANY_SCRIPT &&
-                /* #108791# */ nScript != rHTMLWrt.m_nCSS1Script )
+                /* #108791# */ nScript != rWrt.m_nCSS1Script )
             {
                 sal_uInt16 *pWhichIds = nullptr;
                 switch( nScript )
@@ -387,7 +385,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
                 case CSS1_OUTMODE_CTL:      pWhichIds = aCTLWhichIds; break;
                 }
 
-                rHTMLWrt.m_bTagOn = true;
+                rWrt.m_bTagOn = true;
 
                 const SfxPoolItem *aItems[5];
                 int nItems = 0;
@@ -405,7 +403,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
                             !(0==i ? swhtml_css1atr_equalFontItems( *pRefItem, *pItem )
                                    : *pRefItem == *pItem) )
                         {
-                            Out( aHTMLAttrFnTab, *pItem, rHTMLWrt );
+                            Out( aHTMLAttrFnTab, *pItem, rWrt );
                             aItems[nItems++] = pItem;
                         }
                     }
@@ -413,9 +411,9 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
 
                 HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand.copy( nPos, nChunkLen ) );
 
-                rHTMLWrt.m_bTagOn = false;
+                rWrt.m_bTagOn = false;
                 while( nItems )
-                    Out( aHTMLAttrFnTab, *aItems[--nItems], rHTMLWrt );
+                    Out( aHTMLAttrFnTab, *aItems[--nItems], rWrt );
 
             }
             else
@@ -433,14 +431,13 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
 
     // Output the closing tag.
     if( pTypeStr )
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_sdfield), false );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_sdfield), false );
 
     return rWrt;
 }
 
-Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
+SwHTMLWriter& OutHTML_SwFormatField( SwHTMLWriter& rWrt, const SfxPoolItem& rHt )
 {
-    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     const SwFormatField & rField = static_cast<const SwFormatField&>(rHt);
     const SwField* pField = rField.GetField();
     const SwFieldType* pFieldTyp = pField->GetTyp();
@@ -517,8 +514,8 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else if( SwFieldIds::Script == pFieldTyp->Which() )
     {
-        if( rHTMLWrt.m_bLFPossible )
-            rHTMLWrt.OutNewLine( true );
+        if( rWrt.m_bLFPossible )
+            rWrt.OutNewLine( true );
 
         bool bURL = static_cast<const SwScriptField *>(pField)->IsCodeURL();
         const OUString& rType = pField->GetPar1();
@@ -533,8 +530,8 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
         HTMLOutFuncs::OutScript( rWrt.Strm(), rWrt.GetBaseURL(), aContents, rType, JAVASCRIPT,
                                  aURL, nullptr, nullptr );
 
-        if( rHTMLWrt.m_bLFPossible )
-            rHTMLWrt.OutNewLine( true );
+        if( rWrt.m_bLFPossible )
+            rWrt.OutNewLine( true );
     }
     else
     {
@@ -543,19 +540,19 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
         if( pTextField )
         {
             // ReqIF-XHTML doesn't allow specifying a background color.
-            bool bFieldShadings = SwViewOption::IsFieldShadings() && !rHTMLWrt.mbReqIF;
+            bool bFieldShadings = SwViewOption::IsFieldShadings() && !rWrt.mbReqIF;
             if (bFieldShadings)
             {
                 // If there is a text portion background started already, that should have priority.
-                auto it = rHTMLWrt.maStartedAttributes.find(RES_CHRATR_BACKGROUND);
-                if (it != rHTMLWrt.maStartedAttributes.end())
+                auto it = rWrt.maStartedAttributes.find(RES_CHRATR_BACKGROUND);
+                if (it != rWrt.maStartedAttributes.end())
                     bFieldShadings = it->second <= 0;
             }
 
             if (bFieldShadings)
             {
                 OStringBuffer sOut;
-                sOut.append("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span);
+                sOut.append("<" + rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span);
                 sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_style "=\"");
                 sOut.append(sCSS1_P_background);
                 sOut.append(": ");
@@ -572,7 +569,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
 
             if (bFieldShadings)
                 HTMLOutFuncs::Out_AsciiTag(
-                    rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span), false);
+                    rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span), false);
         }
     }
     return rWrt;

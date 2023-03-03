@@ -83,7 +83,7 @@ void SwHTMLWriter::SetNextNumInfo( std::unique_ptr<SwHTMLNumRuleInfo> pNxt )
     m_pNextNumRuleInfo = std::move(pNxt);
 }
 
-Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
+SwHTMLWriter& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
                                  const SwHTMLNumRuleInfo& rInfo,
                                  bool& rAtLeastOneNumbered )
 {
@@ -316,7 +316,7 @@ Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
     return rWrt;
 }
 
-Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
+SwHTMLWriter& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
                                const SwHTMLNumRuleInfo& rNextInfo )
 {
     SwHTMLNumRuleInfo& rInfo = rWrt.GetNumInfo();

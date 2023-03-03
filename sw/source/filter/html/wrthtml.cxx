@@ -805,14 +805,12 @@ static void lcl_html_OutSectionEndTag( SwHTMLWriter& rHTMLWrt )
     rHTMLWrt.m_bLFPossible = true;
 }
 
-static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
+static SwHTMLWriter& OutHTML_Section( SwHTMLWriter& rWrt, const SwSectionNode& rSectNd )
 {
-    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-
     // End <PRE> and any <DL>, because a definition list's level may
     // change inside the section.
-    rHTMLWrt.ChangeParaToken( HtmlTokenId::NONE );
-    rHTMLWrt.OutAndSetDefList( 0 );
+    rWrt.ChangeParaToken( HtmlTokenId::NONE );
+    rWrt.OutAndSetDefList( 0 );
 
     const SwSection& rSection = rSectNd.GetSection();
     const SwSectionFormat *pFormat = rSection.GetFormat();
@@ -832,11 +830,11 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
     {
         // If the next node is a columned section node, too, don't export
         // an empty section.
-        if( lcl_html_IsMultiColStart( rHTMLWrt, nSectSttIdx+1 ) )
+        if( lcl_html_IsMultiColStart( rWrt, nSectSttIdx+1 ) )
             bStartTag = false;
 
         // The same applies if the section end with another columned section.
-        if( lcl_html_IsMultiColEnd( rHTMLWrt, nSectEndIdx-1 ) )
+        if( lcl_html_IsMultiColEnd( rWrt, nSectEndIdx-1 ) )
             bEndTag = false;
 
         // is there a columned section around this one?
@@ -864,31 +862,31 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
     // opened, except that it start immediately before the current one or
     // another end immediately before the current one
     if( pSurrCol && nSectSttIdx - pSurrSectNd->GetIndex() > SwNodeOffset(1) &&
-        !lcl_html_IsMultiColEnd( rHTMLWrt, nSectSttIdx-1 ) )
-        lcl_html_OutSectionEndTag( rHTMLWrt );
+        !lcl_html_IsMultiColEnd( rWrt, nSectSttIdx-1 ) )
+        lcl_html_OutSectionEndTag( rWrt );
 
     if( bStartTag )
-        lcl_html_OutSectionStartTag( rHTMLWrt, rSection, *pFormat, pCol );
+        lcl_html_OutSectionStartTag( rWrt, rSection, *pFormat, pCol );
 
     {
-        HTMLSaveData aSaveData( rHTMLWrt,
-            rHTMLWrt.m_pCurrentPam->GetPoint()->GetNodeIndex()+1,
+        HTMLSaveData aSaveData( rWrt,
+            rWrt.m_pCurrentPam->GetPoint()->GetNodeIndex()+1,
             rSectNd.EndOfSectionIndex(),
             false, pFormat );
-        rHTMLWrt.Out_SwDoc( rHTMLWrt.m_pCurrentPam.get() );
+        rWrt.Out_SwDoc( rWrt.m_pCurrentPam.get() );
     }
 
-    rHTMLWrt.m_pCurrentPam->GetPoint()->Assign(*rSectNd.EndOfSectionNode());
+    rWrt.m_pCurrentPam->GetPoint()->Assign(*rSectNd.EndOfSectionNode());
 
     if( bEndTag )
-        lcl_html_OutSectionEndTag( rHTMLWrt );
+        lcl_html_OutSectionEndTag( rWrt );
 
     // The surrounding section must be started again, except that it ends
     // immediately behind the current one.
     if( pSurrCol &&
         pSurrSectNd->EndOfSectionIndex() - nSectEndIdx > SwNodeOffset(1) &&
-        !lcl_html_IsMultiColStart( rHTMLWrt, nSectEndIdx+1 ) )
-        lcl_html_OutSectionStartTag( rHTMLWrt, *pSurrSection, *pSurrFormat,
+        !lcl_html_IsMultiColStart( rWrt, nSectEndIdx+1 ) )
+        lcl_html_OutSectionStartTag( rWrt, *pSurrSection, *pSurrFormat,
                                      pSurrCol, true );
 
     return rWrt;

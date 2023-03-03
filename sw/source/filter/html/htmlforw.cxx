@@ -670,7 +670,7 @@ static void GetControlSize(const SdrUnoObj& rFormObj, Size& rSz, SwDoc *pDoc)
     rSz.setHeight( nLines );
 }
 
-Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
+SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
                                      const SwDrawFrameFormat& rFormat,
                                      const SdrUnoObj& rFormObj,
                                      bool bInCntnr )
@@ -686,8 +686,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
 
-    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-    rHTMLWrt.m_nFormCntrlCnt++;
+    rWrt.m_nFormCntrlCnt++;
 
     enum Tag { TAG_INPUT, TAG_SELECT, TAG_TEXTAREA, TAG_NONE };
     static char const * const TagNames[] = {
@@ -770,8 +769,8 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
         break;
 
     case form::FormComponentType::LISTBOX:
-        if( rHTMLWrt.m_bLFPossible )
-            rHTMLWrt.OutNewLine( true );
+        if( rWrt.m_bLFPossible )
+            rWrt.OutNewLine( true );
         eTag = TAG_SELECT;
         aTmp = xPropSet->getPropertyValue( "Dropdown" );
         if( auto b1 = o3tl::tryAccess<bool>(aTmp) )
@@ -816,8 +815,8 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
 
             if( bMultiLine )
             {
-                if( rHTMLWrt.m_bLFPossible )
-                    rHTMLWrt.OutNewLine( true );
+                if( rWrt.m_bLFPossible )
+                    rWrt.OutNewLine( true );
                 eTag = TAG_TEXTAREA;
 
                 if( aSz.Height() )
@@ -1018,7 +1017,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
         rWrt.Strm().WriteOString( sOut );
 
     OSL_ENSURE( !bInCntnr, "Container is not supported for Controls" );
-    if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) && !bInCntnr )
+    if( rWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) && !bInCntnr )
     {
         // If Character-Objects can't be positioned absolutely,
         // then delete the corresponding flag.
@@ -1028,14 +1027,14 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
     }
     OString aEndTags;
     if( nFrameOpts != HtmlFrmOpts::NONE )
-        aEndTags = rHTMLWrt.OutFrameFormatOptions(rFormat, OUString(), nFrameOpts);
+        aEndTags = rWrt.OutFrameFormatOptions(rFormat, OUString(), nFrameOpts);
 
-    if( rHTMLWrt.m_bCfgOutStyles )
+    if( rWrt.m_bCfgOutStyles )
     {
         bool bEdit = TAG_TEXTAREA == eTag || TYPE_FILE == eType ||
                      TYPE_TEXT == eType;
 
-        SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aItemSet( rHTMLWrt.m_pDoc->GetAttrPool() );
+        SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aItemSet( rWrt.m_pDoc->GetAttrPool() );
         if( xPropSetInfo->hasPropertyByName( "BackgroundColor" ) )
         {
             aTmp = xPropSet->getPropertyValue( "BackgroundColor" );
@@ -1133,12 +1132,12 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
             }
         }
 
-        rHTMLWrt.OutCSS1_FrameFormatOptions( rFormat, nFrameOpts, &rFormObj,
+        rWrt.OutCSS1_FrameFormatOptions( rFormat, nFrameOpts, &rFormObj,
                                         &aItemSet );
     }
 
     uno::Reference< form::XFormComponent >  xFormComp( xControlModel, uno::UNO_QUERY );
-    lcl_html_outEvents( rWrt.Strm(), xFormComp, rHTMLWrt.m_bCfgStarBasic );
+    lcl_html_outEvents( rWrt.Strm(), xFormComp, rWrt.m_bCfgStarBasic );
 
     rWrt.Strm().WriteChar( '>' );
 
@@ -1147,7 +1146,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
         aTmp = xPropSet->getPropertyValue( "StringItemList" );
         if( auto aList = o3tl::tryAccess<uno::Sequence<OUString>>(aTmp) )
         {
-            rHTMLWrt.IncIndentLevel(); // the content of Select can be indented
+            rWrt.IncIndentLevel(); // the content of Select can be indented
             sal_Int32 nCnt = aList->getLength();
             const OUString *pStrings = aList->getConstArray();
 
@@ -1191,8 +1190,8 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                 if( bSelected )
                     nSel++;
 
-                rHTMLWrt.OutNewLine(); // every Option gets its own line
-                sOut = "<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_option;
+                rWrt.OutNewLine(); // every Option gets its own line
+                sOut = "<" + rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_option;
                 if( !sVal.isEmpty() || bEmptyVal )
                 {
                     sOut += " " OOO_STRING_SVTOOLS_HTML_O_value "=\"";
@@ -1208,12 +1207,12 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
 
                 HTMLOutFuncs::Out_String( rWrt.Strm(), pStrings[i] );
             }
-            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_option), false );
+            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_option), false );
 
-            rHTMLWrt.DecIndentLevel();
-            rHTMLWrt.OutNewLine();// the </SELECT> gets its own line
+            rWrt.DecIndentLevel();
+            rWrt.OutNewLine();// the </SELECT> gets its own line
         }
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_select), false );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_select), false );
     }
     else if( TAG_TEXTAREA == eTag )
     {
@@ -1239,7 +1238,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                 HTMLOutFuncs::Out_String( rWrt.Strm(), aLine );
             }
         }
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_textarea), false );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_textarea), false );
     }
     else if( TYPE_CHECKBOX == eType || TYPE_RADIO == eType )
     {
@@ -1257,10 +1256,10 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
         rWrt.Strm().WriteOString( aEndTags );
 
     // Controls aren't bound to a paragraph, therefore don't output LF anymore!
-    rHTMLWrt.m_bLFPossible = false;
+    rWrt.m_bLFPossible = false;
 
-    if( rHTMLWrt.mxFormComps.is() )
-        rHTMLWrt.OutHiddenControls( rHTMLWrt.mxFormComps, xPropSet );
+    if( rWrt.mxFormComps.is() )
+        rWrt.OutHiddenControls( rWrt.mxFormComps, xPropSet );
     return rWrt;
 }
 

@@ -675,60 +675,60 @@ struct HTMLSaveData
 };
 
 // some function prototypes
-Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFormat,
+SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameFormat& rFormat,
                                bool bInCntnr );
-Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFormat,
+SwHTMLWriter& OutHTML_FrameFormatOLENodeGrf( SwHTMLWriter& rWrt, const SwFrameFormat& rFormat,
                                   bool bInCntnr );
 
-Writer& OutHTML_SwTextNode( Writer&, const SwContentNode& );
-Writer& OutHTML_SwTableNode( Writer& , SwTableNode &, const SwFrameFormat *,
+SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter&, const SwContentNode& );
+SwHTMLWriter& OutHTML_SwTableNode( SwHTMLWriter& , SwTableNode &, const SwFrameFormat *,
                            const OUString* pCaption=nullptr, bool bTopCaption=false );
 
-Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt, const SwDrawFrameFormat& rFormat,
+SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt, const SwDrawFrameFormat& rFormat,
                                      const SdrUnoObj& rSdrObj, bool bInCntnr );
-Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt, const SwDrawFrameFormat& rFormat,
+SwHTMLWriter& OutHTML_DrawFrameFormatAsMarquee( SwHTMLWriter& rWrt, const SwDrawFrameFormat& rFormat,
                                      const SdrObject& rSdrObj );
 
-Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
+SwHTMLWriter& OutHTML_HeaderFooter( SwHTMLWriter& rWrt, const SwFrameFormat& rFrameFormat,
                               bool bHeader );
 
-Writer& OutHTML_ImageStart( HtmlWriter& rHtml, Writer&, const SwFrameFormat& rFormat,
+SwHTMLWriter& OutHTML_ImageStart( HtmlWriter& rHtml, SwHTMLWriter&, const SwFrameFormat& rFormat,
                        const OUString& rGraphicURL,
                        Graphic const & rGraphic, const OUString& rAlternateText,
                        const Size& rRealSize, HtmlFrmOpts nFrameOpts,
                        const char *pMarkType,
                        const ImageMap *pGenImgMap,
                        const OUString& rMimeType = OUString() );
-Writer& OutHTML_ImageEnd( HtmlWriter& rHtml, Writer& );
+SwHTMLWriter& OutHTML_ImageEnd( HtmlWriter& rHtml, SwHTMLWriter& );
 
-Writer& OutHTML_BulletImage( Writer& rWrt, const char *pTag,
+SwHTMLWriter& OutHTML_BulletImage( SwHTMLWriter& rWrt, const char *pTag,
                              const SvxBrushItem* pBrush,
                              const OUString& rGraphicURL);
 
-Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt );
-Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt );
-Writer& OutHTML_SwFormatLineBreak(Writer& rWrt, const SfxPoolItem& rHt);
-Writer& OutHTML_INetFormat( Writer&, const SwFormatINetFormat& rINetFormat, bool bOn );
+SwHTMLWriter& OutHTML_SwFormatField( SwHTMLWriter& rWrt, const SfxPoolItem& rHt );
+SwHTMLWriter& OutHTML_SwFormatFootnote( SwHTMLWriter& rWrt, const SfxPoolItem& rHt );
+SwHTMLWriter& OutHTML_SwFormatLineBreak(SwHTMLWriter& rWrt, const SfxPoolItem& rHt);
+SwHTMLWriter& OutHTML_INetFormat( SwHTMLWriter&, const SwFormatINetFormat& rINetFormat, bool bOn );
 
-Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet );
-Writer& OutCSS1_ParaTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet );
+SwHTMLWriter& OutCSS1_BodyTagStyleOpt( SwHTMLWriter& rWrt, const SfxItemSet& rItemSet );
+SwHTMLWriter& OutCSS1_ParaTagStyleOpt( SwHTMLWriter& rWrt, const SfxItemSet& rItemSet );
 
-Writer& OutCSS1_HintSpanTag( Writer& rWrt, const SfxPoolItem& rHt );
-Writer& OutCSS1_HintStyleOpt( Writer& rWrt, const SfxPoolItem& rHt );
+SwHTMLWriter& OutCSS1_HintSpanTag( SwHTMLWriter& rWrt, const SfxPoolItem& rHt );
+SwHTMLWriter& OutCSS1_HintStyleOpt( SwHTMLWriter& rWrt, const SfxPoolItem& rHt );
 
 /// Writes the background of table rows.
-Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt );
+SwHTMLWriter& OutCSS1_TableBGStyleOpt( SwHTMLWriter& rWrt, const SfxPoolItem& rHt );
 
-Writer& OutCSS1_NumberBulletListStyleOpt( Writer& rWrt, const SwNumRule& rNumRule,
+SwHTMLWriter& OutCSS1_NumberBulletListStyleOpt( SwHTMLWriter& rWrt, const SwNumRule& rNumRule,
                                     sal_uInt8 nLevel );
 
-Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
+SwHTMLWriter& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
                                  const SwHTMLNumRuleInfo& rInfo,
                                  bool& rAtLeastOneNumbered );
-Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
+SwHTMLWriter& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
                                const SwHTMLNumRuleInfo& rNextInfo );
 
-Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt );
+SwHTMLWriter& OutCSS1_SvxBox( SwHTMLWriter& rWrt, const SfxPoolItem& rHt );
 
 OString GetCSS1_Color(const Color& rColor);
 
