@@ -19,7 +19,8 @@
 
 #pragma once
 
-#include <comphelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
@@ -37,7 +38,7 @@ namespace accessibility {
 
 class AccessibleSlideSorterObject;
 
-typedef ::comphelper::WeakComponentImplHelper<
+typedef ::cppu::WeakComponentImplHelper<
     css::accessibility::XAccessible,
     css::accessibility::XAccessibleEventBroadcaster,
     css::accessibility::XAccessibleContext,
@@ -51,7 +52,8 @@ typedef ::comphelper::WeakComponentImplHelper<
     accessible.
 */
 class AccessibleSlideSorterView
-    : public AccessibleSlideSorterViewBase
+    : public cppu::BaseMutex,
+      public AccessibleSlideSorterViewBase
 {
 public:
     AccessibleSlideSorterView(
@@ -72,7 +74,7 @@ public:
         const css::uno::Any& rOldValue,
         const css::uno::Any& rNewValue);
 
-    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
+    virtual void SAL_CALL disposing() override;
 
     /** Return the implementation object of the specified child.
         @param nIndex
