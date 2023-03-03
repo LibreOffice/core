@@ -111,7 +111,7 @@ void SAL_CALL PopupMenuControllerBase::itemSelected( const awt::MenuEvent& rEven
     if( m_xPopupMenu.is() )
     {
         Sequence<PropertyValue> aArgs;
-        dispatchCommand( m_xPopupMenu->getCommand( rEvent.MenuId ), aArgs );
+        dispatchCommandImpl( aLock, m_xPopupMenu->getCommand( rEvent.MenuId ), aArgs, OUString() );
     }
 }
 
@@ -120,8 +120,15 @@ void PopupMenuControllerBase::dispatchCommand( const OUString& sCommandURL,
                                                const OUString& sTarget )
 {
     std::unique_lock aLock( m_aMutex );
-
     throwIfDisposed(aLock);
+    dispatchCommandImpl(aLock, sCommandURL, rArgs, sTarget);
+}
+
+void PopupMenuControllerBase::dispatchCommandImpl( std::unique_lock<std::mutex>& /*rGuard*/,
+                                               const OUString& sCommandURL,
+                                               const css::uno::Sequence< css::beans::PropertyValue >& rArgs,
+                                               const OUString& sTarget )
+{
 
     try
     {

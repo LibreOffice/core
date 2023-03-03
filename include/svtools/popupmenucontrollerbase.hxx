@@ -95,6 +95,8 @@ namespace svt
     protected:
             virtual void initializeImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< css::uno::Any >& aArguments );
 
+            void dispatchCommandImpl( std::unique_lock<std::mutex>& rGuard, const OUString& sCommandURL, const css::uno::Sequence< css::beans::PropertyValue >& rArgs, const OUString& sTarget );
+
             /** helper method to cause statusChanged is called once for the given command url */
             void updateCommand( const OUString& rCommandURL );
 
