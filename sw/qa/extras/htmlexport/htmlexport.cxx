@@ -2328,22 +2328,22 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testSectionDir)
     assertXPath(pXmlDoc, "//reqif-xhtml:div[@id='mysect']", "style", "dir: ltr");
 }
 
-CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf153923)
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTdf153923)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "TableWithIndent.fodt";
     mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", {});
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)"))
-    };
-    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
 
-    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
+    // When exporting to (reqif-)xhtml:
+    ExportToReqif();
+
+    SvMemoryStream aStream;
+    WrapReqifFromTempFile(aStream);
+    xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
     // Without the fix in place, this would fail
     CPPUNIT_ASSERT(pDoc);
 
     // The 'dd' tag was not closed
-    assertXPath(pDoc, "/html/body//dd");
+    assertXPath(pDoc, "//reqif-xhtml:dd");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
