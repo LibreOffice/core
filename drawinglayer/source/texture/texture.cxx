@@ -466,11 +466,9 @@ namespace drawinglayer::texture
             if (mnColorSteps.size() < 2)
                 return;
 
-            // need to start with the offsets *outside* of all loops, these will
-            // get modified non-linear below, now in more than one gradient section,
-            // but *constantly* over the whole range
-            double fAllWidth(0.0);
-            double fAllHeight(0.0);
+            // prepare vars dependent on aspect ratio
+            const double fAR(maGradientInfo.getAspectRatio());
+            const bool bMTO(fAR > 1.0);
 
             // outer loop over ColorSteps, each is from cs_l to cs_r
             for (auto cs_l(mnColorSteps.begin()), cs_r(cs_l + 1); cs_r != mnColorSteps.end(); cs_l++, cs_r++)
@@ -486,26 +484,21 @@ namespace drawinglayer::texture
                 const double fOffsetEnd(cs_r->getOffset());
                 const double fStripeWidth((fOffsetEnd - fOffsetStart) / nSteps);
 
-                // prepare individual increments for X/Y dependent on aspect ratio
-                const double fAR(maGradientInfo.getAspectRatio());
-                const bool bMTO(fAR > 1.0);
-                const double fIncrementX(bMTO ? fStripeWidth / fAR : fStripeWidth);
-                const double fIncrementY(bMTO ? fStripeWidth : fStripeWidth * fAR);
-
                 // get correct start for inner loop (see above)
                 const sal_uInt32 nStartInnerLoop(cs_l == mnColorSteps.begin() ? 1 : 0);
 
                 for (sal_uInt32 innerLoop(nStartInnerLoop); innerLoop < nSteps; innerLoop++)
                 {
-                    // next step, actively adapt outer-loop w/h values
-                    fAllWidth += fIncrementX;
-                    fAllHeight += fIncrementY;
+                    // calculate offset position for entry
+                    const double fSize(fOffsetStart + (fStripeWidth * innerLoop));
 
                     // set and add at target
                     B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
 
                     aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform()
-                        * basegfx::utils::createScaleB2DHomMatrix(1.0 - fAllWidth, 1.0 - fAllHeight);
+                        * basegfx::utils::createScaleB2DHomMatrix(
+                            1.0 - (bMTO ? fSize / fAR : fSize),
+                            1.0 - (bMTO ? fSize : fSize * fAR));
                     aB2DHomMatrixAndBColor.maBColor = interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1));
                     rEntries.push_back(aB2DHomMatrixAndBColor);
                 }
@@ -656,11 +649,9 @@ namespace drawinglayer::texture
             if (mnColorSteps.size() < 2)
                 return;
 
-            // need to start with the offsets *outside* of all loops, these will
-            // get modified non-linear below, now in more than one gradient section,
-            // but *constantly* over the whole range
-            double fAllWidth(0.0);
-            double fAllHeight(0.0);
+            // prepare vars dependent on aspect ratio
+            const double fAR(maGradientInfo.getAspectRatio());
+            const bool bMTO(fAR > 1.0);
 
             // outer loop over ColorSteps, each is from cs_l to cs_r
             for (auto cs_l(mnColorSteps.begin()), cs_r(cs_l + 1); cs_r != mnColorSteps.end(); cs_l++, cs_r++)
@@ -676,26 +667,21 @@ namespace drawinglayer::texture
                 const double fOffsetEnd(cs_r->getOffset());
                 const double fStripeWidth((fOffsetEnd - fOffsetStart) / nSteps);
 
-                // prepare individual increments for X/Y dependent on aspect ratio
-                const double fAR(maGradientInfo.getAspectRatio());
-                const bool bMTO(fAR > 1.0);
-                const double fIncrementX(bMTO ? fStripeWidth / fAR : fStripeWidth);
-                const double fIncrementY(bMTO ? fStripeWidth : fStripeWidth * fAR);
-
                 // get correct start for inner loop (see above)
                 const sal_uInt32 nStartInnerLoop(cs_l == mnColorSteps.begin() ? 1 : 0);
 
                 for (sal_uInt32 innerLoop(nStartInnerLoop); innerLoop < nSteps; innerLoop++)
                 {
-                    // next step, actively adapt outer-loop w/h values
-                    fAllWidth += fIncrementX;
-                    fAllHeight += fIncrementY;
+                    // calculate offset position for entry
+                    const double fSize(fOffsetStart + (fStripeWidth * innerLoop));
 
                     // set and add at target
                     B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
 
                     aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform()
-                        * basegfx::utils::createScaleB2DHomMatrix(1.0 - fAllWidth, 1.0 - fAllHeight);
+                        * basegfx::utils::createScaleB2DHomMatrix(
+                            1.0 - (bMTO ? fSize / fAR : fSize),
+                            1.0 - (bMTO ? fSize : fSize * fAR));
                     aB2DHomMatrixAndBColor.maBColor = interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1));
                     rEntries.push_back(aB2DHomMatrixAndBColor);
                 }

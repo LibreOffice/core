@@ -55,15 +55,15 @@ private:
 public:
     /* MCGR: Adaptions for MultiColorGradients
 
-       To force providing start/end colors these are still part of the
-       constructor (see rStartColor/rEndColor). To also provide
-       GradientSteps these need to be handed over by ColorSteps data
-       if wanted/needed.
+       Direct Start/EndCOlor is no longer required, instead the
+       full color gradient is handed over as ColorSteps vector.
+       To add the former Start/EndColor in a compatible way, just
+       prepare an instance of basegfx::ColorSteps with the
+       StartColor at 0.0 and the EndColor at 1.0.
 
-       Start/EndColor will be added to the internal ColorSteps with
-       the according default offsets. A rigid correction/input data
-       testing is done by the constructor, including to sort the
-       ColorSteps by offset.
+       A rigid correction/input data will be done by the constructor,
+       including to sort the ColorSteps by offset and removing invalid
+       entries (see sortAndCorrectColorSteps)
 
        To access e.g. the StartColor, use getColorSteps().front(), and
        getColorSteps().back(), accordingly, for EndColor. The existence
@@ -74,9 +74,8 @@ public:
     */
     /// constructors/assignmentoperator/destructor
     FillGradientAttribute(GradientStyle eStyle, double fBorder, double fOffsetX, double fOffsetY,
-                          double fAngle, const basegfx::BColor& rStartColor,
-                          const basegfx::BColor& rEndColor,
-                          const basegfx::ColorSteps* pColorSteps = nullptr, sal_uInt16 nSteps = 0);
+                          double fAngle, const basegfx::ColorSteps& rColorSteps,
+                          sal_uInt16 nSteps = 0);
     FillGradientAttribute();
     FillGradientAttribute(const FillGradientAttribute&);
     FillGradientAttribute(FillGradientAttribute&&);
