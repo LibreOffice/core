@@ -111,6 +111,11 @@ Sequence<Locale> SAL_CALL LanguageToolGrammarChecker::getLocales()
     if (m_aSuppLocales.hasElements())
         return m_aSuppLocales;
     SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
+    if (!rLanguageOpts.getEnabled())
+    {
+        return m_aSuppLocales;
+    }
+
     OString localeUrl = OUStringToOString(rLanguageOpts.getLocaleListURL(), RTL_TEXTENCODING_UTF8);
     if (localeUrl.isEmpty())
     {
