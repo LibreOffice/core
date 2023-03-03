@@ -370,6 +370,28 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                     LOKTrigger::trigger_changed(*pTextView);
                     return true;
                 }
+                else if (sAction == "textselection")
+                {
+                    // start;end
+                    OUString sTextData = rData["data"];
+                    int nSeparatorPos = sTextData.indexOf(';');
+                    if (nSeparatorPos <= 0)
+                        return true;
+
+                    std::u16string_view aStartPos = sTextData.subView(0, nSeparatorPos);
+                    std::u16string_view aEndPos = sTextData.subView(nSeparatorPos + 1);
+
+                    if (aStartPos.empty() || aEndPos.empty())
+                        return true;
+
+                    sal_Int32 nStart = o3tl::toInt32(aStartPos);
+                    sal_Int32 nEnd = o3tl::toInt32(aEndPos);
+
+                    pTextView->select_region(nStart, nEnd);
+                    LOKTrigger::trigger_changed(*pTextView);
+
+                    return true;
+                }
             }
         }
         else if (sControlType == "treeview")

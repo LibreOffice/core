@@ -688,6 +688,7 @@ public:
     JSTextView(JSDialogSender* pSender, ::VclMultiLineEdit* pTextView, SalInstanceBuilder* pBuilder,
                bool bTakeOwnership);
     virtual void set_text(const OUString& rText) override;
+    virtual void replace_selection(const OUString& rText) override;
 };
 
 class JSTreeView final : public JSWidget<SalInstanceTreeView, ::SvTabListBox>

@@ -1792,6 +1792,12 @@ void JSTextView::set_text(const OUString& rText)
     sendUpdate();
 }
 
+void JSTextView::replace_selection(const OUString& rText)
+{
+    SalInstanceTextView::replace_selection(rText);
+    sendUpdate();
+}
+
 JSTreeView::JSTreeView(JSDialogSender* pSender, ::SvTabListBox* pTreeView,
                        SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstanceTreeView, ::SvTabListBox>(pSender, pTreeView, pBuilder, bTakeOwnership)
