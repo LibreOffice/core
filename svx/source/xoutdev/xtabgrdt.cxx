@@ -35,6 +35,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/utils/gradienttools.hxx>
 #include <memory>
 
 using namespace com::sun::star;
@@ -152,14 +153,17 @@ BitmapEx XGradientList::CreateBitmap( tools::Long nIndex, const Size& rSize ) co
             }
         }
 
+        const basegfx::ColorSteps aColorSteps {
+            basegfx::ColorStep(0.0, aStart),
+            basegfx::ColorStep(1.0, aEnd) };
+
         drawinglayer::attribute::FillGradientAttribute aFillGradient(
             aGradientStyle,
             static_cast<double>(rGradient.GetBorder()) * 0.01,
             static_cast<double>(rGradient.GetXOffset()) * 0.01,
             static_cast<double>(rGradient.GetYOffset()) * 0.01,
             toRadians(rGradient.GetAngle()),
-            aStart,
-            aEnd);
+            aColorSteps);
 
         const drawinglayer::primitive2d::Primitive2DReference aGradientPrimitive(
             new drawinglayer::primitive2d::PolyPolygonGradientPrimitive2D(

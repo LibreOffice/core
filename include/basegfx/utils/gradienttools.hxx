@@ -69,9 +69,18 @@ namespace basegfx
         // e.g. for usage in std::vector::insert
         // ensure [0.0 .. 1.0] range for mfOffset
         ColorStep(double fOffset = 0.0, const BColor& rColor = BColor())
-            : mfOffset(std::max(0.0, std::min(fOffset, 1.0)))
+            : mfOffset(fOffset)
             , maColor(rColor)
         {
+            // NOTE: I originally *corrected* mfOffset here by using
+            //   mfOffset(std::max(0.0, std::min(fOffset, 1.0)))
+            // While that is formally correct, it moves an invalid
+            // entry to 0.0 or 1.0, thus creating additional wrong
+            // Start/EndColor entries. That may then 'overlay' the
+            // cortrect entry when corrections are applied to the
+            // vector of entries (see sortAndCorrectColorSteps)
+            // which leads to getting the wanted Start/EndColor
+            // to be factically deleted, what is an error.
         }
 
         double getOffset() const { return mfOffset; }
@@ -184,6 +193,26 @@ namespace basegfx
 
     namespace utils
     {
+        /* Helper to sort and correct ColorSteps. This will
+           sort and then correct the given ColorSteps. The
+           corrected version will
+           - be sorted
+           - have no double values
+           - have no values with offset < 0.0
+           - have no values with offset > 1.0
+           thus be ready to be used in multi-color gradients.
+
+           NOTE: The returned version may be empty (!) if no
+                 valid entries were contained
+           NOTE: It does not necessarily contain values for
+                 offset == 0.0 and 1.0 if there were none
+                 given (so no Start/EndColor)
+           NOTE: If it contains only one entry that entry is
+                 set to StartColor and the Color is preserved.
+                 This is also done when all Colors are the same
+        */
+        BASEGFX_DLLPUBLIC void sortAndCorrectColorSteps(ColorSteps& rColorSteps);
+
         /* Helper to grep the correct ColorStep out of
            ColorSteps and interpolate as needed for given
            relative value in fScaler in the range of [0.0 .. 1.0].

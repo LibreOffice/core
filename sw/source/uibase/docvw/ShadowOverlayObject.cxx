@@ -27,6 +27,7 @@
 #include <sw_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
+#include <basegfx/utils/gradienttools.hxx>
 
 namespace sw::sidebarwindows {
 
@@ -82,14 +83,17 @@ void ShadowPrimitive::create2DDecomposition(
         case SS_NORMAL:
         {
             aRange.expand(basegfx::B2DTuple(getSecondPosition().getX(), getSecondPosition().getY() + (2.0 * getDiscreteUnit())));
+
+            const basegfx::ColorSteps aColorSteps {
+                basegfx::ColorStep(0.0, basegfx::BColor(230.0/255.0,230.0/255.0,230.0/255.0)),
+                basegfx::ColorStep(1.0, basegfx::BColor(180.0/255.0,180.0/255.0,180.0/255.0)) };
             ::drawinglayer::attribute::FillGradientAttribute aFillGradientAttribute(
                 drawinglayer::attribute::GradientStyle::Linear,
                 0.0,
                 0.5,
                 0.5,
                 M_PI,
-                basegfx::BColor(230.0/255.0,230.0/255.0,230.0/255.0),
-                basegfx::BColor(180.0/255.0,180.0/255.0,180.0/255.0));
+                aColorSteps);
 
             rContainer.push_back(
                 new drawinglayer::primitive2d::FillGradientPrimitive2D(
@@ -100,14 +104,16 @@ void ShadowPrimitive::create2DDecomposition(
         case SS_VIEW:
         {
             aRange.expand(basegfx::B2DTuple(getSecondPosition().getX(), getSecondPosition().getY() + (4.0 * getDiscreteUnit())));
+            const basegfx::ColorSteps aColorSteps {
+                basegfx::ColorStep(0.0, basegfx::BColor(230.0/255.0,230.0/255.0,230.0/255.0)),
+                basegfx::ColorStep(1.0, basegfx::BColor(180.0/255.0,180.0/255.0,180.0/255.0)) };
             drawinglayer::attribute::FillGradientAttribute aFillGradientAttribute(
                 drawinglayer::attribute::GradientStyle::Linear,
                 0.0,
                 0.5,
                 0.5,
                 M_PI,
-                basegfx::BColor(230.0/255.0,230.0/255.0,230.0/255.0),
-                basegfx::BColor(180.0/255.0,180.0/255.0,180.0/255.0));
+                aColorSteps);
 
             rContainer.push_back(
                 new drawinglayer::primitive2d::FillGradientPrimitive2D(
@@ -118,14 +124,16 @@ void ShadowPrimitive::create2DDecomposition(
         case SS_EDIT:
         {
             aRange.expand(basegfx::B2DTuple(getSecondPosition().getX(), getSecondPosition().getY() + (4.0 * getDiscreteUnit())));
+            const basegfx::ColorSteps aColorSteps {
+                basegfx::ColorStep(0.0, basegfx::BColor(230.0/255.0,230.0/255.0,230.0/255.0)),
+                basegfx::ColorStep(1.0, basegfx::BColor(83.0/255.0,83.0/255.0,83.0/255.0)) };
             drawinglayer::attribute::FillGradientAttribute aFillGradientAttribute(
                 drawinglayer::attribute::GradientStyle::Linear,
                 0.0,
                 0.5,
                 0.5,
                 M_PI,
-                basegfx::BColor(230.0/255.0,230.0/255.0,230.0/255.0),
-                basegfx::BColor(83.0/255.0,83.0/255.0,83.0/255.0));
+                aColorSteps);
 
             rContainer.push_back(
                 new drawinglayer::primitive2d::FillGradientPrimitive2D(

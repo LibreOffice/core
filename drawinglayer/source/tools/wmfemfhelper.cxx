@@ -711,15 +711,17 @@ namespace wmfemfhelper
             }
         }
 
+        const basegfx::ColorSteps aColorSteps {
+            basegfx::ColorStep(0.0, aStart),
+            basegfx::ColorStep(1.0, aEnd) };
+
         return drawinglayer::attribute::FillGradientAttribute(
             aGradientStyle,
             static_cast<double>(rGradient.GetBorder()) * 0.01,
             static_cast<double>(rGradient.GetOfsX()) * 0.01,
             static_cast<double>(rGradient.GetOfsY()) * 0.01,
             toRadians(rGradient.GetAngle()),
-            aStart,
-            aEnd,
-            nullptr,
+            aColorSteps,
             rGradient.GetSteps());
     }
 

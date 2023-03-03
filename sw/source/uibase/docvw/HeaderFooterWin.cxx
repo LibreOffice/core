@@ -29,6 +29,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/vector/b2dsize.hxx>
+#include <basegfx/utils/gradienttools.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
@@ -150,7 +151,11 @@ void SwFrameButtonPainter::PaintButton(drawinglayer::primitive2d::Primitive2DCon
         double nAngle = M_PI;
         if (bOnTop)
             nAngle = 0;
-        FillGradientAttribute aFillAttrs(drawinglayer::attribute::GradientStyle::Linear, 0.0, 0.0, 0.0, nAngle, aLighterColor, aFillColor);
+
+        const basegfx::ColorSteps aColorSteps {
+            basegfx::ColorStep(0.0, aLighterColor),
+            basegfx::ColorStep(1.0, aFillColor) };
+        FillGradientAttribute aFillAttrs(drawinglayer::attribute::GradientStyle::Linear, 0.0, 0.0, 0.0, nAngle, aColorSteps );
         rSeq.push_back(drawinglayer::primitive2d::Primitive2DReference(
                             new drawinglayer::primitive2d::FillGradientPrimitive2D(aGradientRect, std::move(aFillAttrs))));
     }

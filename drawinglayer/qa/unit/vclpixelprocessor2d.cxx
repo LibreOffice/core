@@ -18,6 +18,7 @@
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <basegfx/utils/gradienttools.hxx>
 
 using namespace drawinglayer;
 
@@ -58,8 +59,10 @@ public:
 
         basegfx::B2DRange definitionRange(0, 0, 100, 200);
         basegfx::B2DRange outputRange(0, 100, 100, 200); // Paint only lower half of the gradient.
+        const basegfx::ColorSteps aColorSteps{ basegfx::ColorStep(0.0, COL_WHITE.getBColor()),
+                                               basegfx::ColorStep(1.0, COL_BLACK.getBColor()) };
         attribute::FillGradientAttribute attributes(attribute::GradientStyle::Linear, 0, 0, 0, 0,
-                                                    COL_WHITE.getBColor(), COL_BLACK.getBColor());
+                                                    aColorSteps);
         rtl::Reference<primitive2d::FillGradientPrimitive2D> gradientPrimitive(
             new primitive2d::FillGradientPrimitive2D(outputRange, definitionRange, attributes));
         primitive2d::Primitive2DContainer primitives;

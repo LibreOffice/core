@@ -263,6 +263,121 @@ namespace basegfx
 
     namespace utils
     {
+        /* Tooling method to guarantee sort and correctness for
+           the given ColorSteps vector.
+           At return, the following conditions are guaranteed:
+           - contains no ColorSteps with offset < 0.0 (will
+             be removed)
+           - contains no ColorSteps with offset > 0.0 (will
+             be removed)
+           - contains no ColorSteps with identical offset
+             (will be removed, 1st one wins)
+           - will be sorted from lowest offset to highest
+           - if all colors are the same, the content will
+             be reducved to a single entry with offset 0.0
+             (StartColor)
+
+           Some more notes:
+           - It can happen that the result is empty
+           - It is allowed to have consecutive entries with
+             the same color, this represents single-color
+             regions inside the gradient
+           - A entry with 0.0 is not required or forced, so
+             no 'StartColor' is required on this level
+           - A entry with 1.0 is not required or forced, so
+             no 'EndColor' is required on this level
+
+           All this is done in one run (sort + O(N)) without
+           creating a copy of the data in any form
+        */
+        void sortAndCorrectColorSteps(ColorSteps& rColorSteps)
+        {
+            // no content, we are done
+            if (rColorSteps.empty())
+                return;
+
+            if (1 == rColorSteps.size())
+            {
+                // no gradient at all, but preserve given color
+                // and force it to be the StartColor
+                rColorSteps[0] = ColorStep(0.0, rColorSteps[0].getColor());
+            }
+
+            // start with sorting the input data. Remember that
+            // this preserves the order of equal entries, where
+            // equal is defined here by offset (see use operator==)
+            std::sort(rColorSteps.begin(), rColorSteps.end());
+
+            // preapare status values
+            bool bSameColorInit(false);
+            bool bAllTheSameColor(true);
+            basegfx::BColor aFirstColor;
+            size_t write(0);
+
+            // use the paradigm of a band machine with two heads, read
+            // and write with write <= read all the time. Step over the
+            // data using read and check for valid entry. If valid, decide
+            // how to keep it
+            for (size_t read(0); read < rColorSteps.size(); read++)
+            {
+                // get offset of entry at read position
+                const double rOff(rColorSteps[read].getOffset());
+
+                // step over < 0 values
+                if (basegfx::fTools::less(rOff, 0.0))
+                    continue;
+
+                // step over > 1 values; even break, since all following
+                // entries will also be bigger due to being sorted, so done
+                if (basegfx::fTools::more(rOff, 1.0))
+                    break;
+
+                // entry is valid value at read position
+
+                // check/init for all-the-same color
+                if(bSameColorInit)
+                {
+                    // already initialized, compare
+                    bAllTheSameColor = bAllTheSameColor && aFirstColor == rColorSteps[read].getColor();
+                }
+                else
+                {
+                    // do initialize, remember 1st valid color
+                    bSameColorInit = true;
+                    aFirstColor = rColorSteps[read].getColor();
+                }
+
+                // copy if write target is empty (write at start) or when
+                // write target is different to read
+                if (0 == write || rOff != rColorSteps[write-1].getOffset())
+                {
+                    if (write != read)
+                    {
+                        // copy read to write backwards to close gaps
+                        rColorSteps[write] = rColorSteps[read];
+                    }
+
+                    // always forward write position
+                    write++;
+                }
+            }
+
+            // correct size when length is reduced. write is always at
+            // last used position + 1
+            if (rColorSteps.size() > write)
+            {
+                rColorSteps.resize(write);
+            }
+
+            if (bSameColorInit && bAllTheSameColor && rColorSteps.size() > 1)
+            {
+                // id all-the-same color is detected, reset to single
+                // entry, but also force to StartColor and preserve the color
+                rColorSteps.resize(1);
+                rColorSteps[0] = ColorStep(0.0, aFirstColor);
+            }
+        }
+
         BColor modifyBColor(
             const ColorSteps& rColorSteps,
             double fScaler,

@@ -20,6 +20,7 @@
 #include <primitive3d/textureprimitive3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #include <basegfx/color/bcolor.hxx>
+#include <basegfx/utils/gradienttools.hxx>
 #include <utility>
 
 
@@ -92,7 +93,13 @@ namespace drawinglayer::primitive3d
             {
                 // create TransparenceTexturePrimitive3D with fixed transparence as replacement
                 const basegfx::BColor aGray(getTransparence(), getTransparence(), getTransparence());
-                const attribute::FillGradientAttribute aFillGradient(attribute::GradientStyle::Linear, 0.0, 0.0, 0.0, 0.0, aGray, aGray);
+
+                // create ColorSteps with StartColor == EndCoOlor == aGray
+                const basegfx::ColorSteps aColorSteps {
+                    basegfx::ColorStep(0.0, aGray),
+                    basegfx::ColorStep(1.0, aGray) };
+
+                const attribute::FillGradientAttribute aFillGradient(attribute::GradientStyle::Linear, 0.0, 0.0, 0.0, 0.0, aColorSteps);
                 const Primitive3DReference xRef(new TransparenceTexturePrimitive3D(aFillGradient, getChildren(), getTextureSize()));
                 return { xRef };
             }
