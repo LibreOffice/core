@@ -308,7 +308,7 @@ namespace basegfx
             // equal is defined here by offset (see use operator==)
             std::sort(rColorSteps.begin(), rColorSteps.end());
 
-            // preapare status values
+            // prepare status values
             bool bSameColorInit(false);
             bool bAllTheSameColor(true);
             basegfx::BColor aFirstColor;
