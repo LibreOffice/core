@@ -636,6 +636,39 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObjectRotate)
         pPage->RemoveObject(0);
     }
 }
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testRotatePoint)
+{
+    {
+        auto angle = 18000_deg100;
+        double angleRadians = toRadians(angle);
+        Point aPoint(2000, 1000);
+        Point aReference(1000, 1000);
+        RotatePoint(aPoint, aReference, std::sin(angleRadians), std::cos(angleRadians));
+
+        CPPUNIT_ASSERT_EQUAL(Point(0, 1000), aPoint);
+    }
+
+    {
+        auto angle = 9000_deg100;
+        double angleRadians = toRadians(angle);
+        Point aPoint(2000, 1000);
+        Point aReference(1000, 1000);
+        RotatePoint(aPoint, aReference, std::sin(angleRadians), std::cos(angleRadians));
+
+        CPPUNIT_ASSERT_EQUAL(Point(1000, 0), aPoint);
+    }
+
+    {
+        auto angle = 18000_deg100;
+        double angleRadians = toRadians(angle);
+        Point aPoint(100, 100);
+        Point aReference(200, 200);
+        RotatePoint(aPoint, aReference, std::sin(angleRadians), std::cos(angleRadians));
+
+        CPPUNIT_ASSERT_EQUAL(Point(300, 300), aPoint);
+    }
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
