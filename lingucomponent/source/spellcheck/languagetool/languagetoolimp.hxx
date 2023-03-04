@@ -36,12 +36,6 @@
 #define PROOFREADING_ERROR 2
 #define CURL_TIMEOUT 10L
 
-enum class HTTP_METHOD
-{
-    HTTP_GET,
-    HTTP_POST
-};
-
 class LanguageToolGrammarChecker
     : public cppu::WeakImplHelper<css::linguistic2::XProofreader, css::lang::XInitialization,
                                   css::lang::XServiceInfo, css::lang::XServiceDisplayName>
@@ -55,10 +49,6 @@ class LanguageToolGrammarChecker
                                    std::string_view aJSONBody);
     static void parseProofreadingJSONResponse(css::linguistic2::ProofreadingResult& rResult,
                                               std::string_view aJSONBody);
-    static std::string makeDudenHttpRequest(std::string_view aURL, HTTP_METHOD method,
-                                            const OString& aPostData, tools::Long& nStatusCode);
-    static std::string makeHttpRequest(std::string_view aURL, HTTP_METHOD method,
-                                       const OString& aPostData, tools::Long& nStatusCode);
 
 public:
     LanguageToolGrammarChecker();

@@ -92,6 +92,102 @@ OString encodeTextForLanguageTool(const OUString& text)
         rtl::Uri::encode(text, myCharClass.data(), rtl_UriEncodeStrict, RTL_TEXTENCODING_UTF8),
         RTL_TEXTENCODING_ASCII_US);
 }
+
+// Callback to get the response data from server.
+size_t WriteCallback(void* ptr, size_t size, size_t nmemb, void* userp)
+{
+    if (!userp)
+        return 0;
+
+    std::string* response = static_cast<std::string*>(userp);
+    size_t real_size = size * nmemb;
+    response->append(static_cast<char*>(ptr), real_size);
+    return real_size;
+}
+
+enum class HTTP_METHOD
+{
+    HTTP_GET,
+    HTTP_POST
+};
+
+std::string makeHttpRequest_impl(std::string_view aURL, HTTP_METHOD method,
+                                 const OString& aPostData, curl_slist* pHttpHeader,
+                                 tools::Long& nStatusCode)
+{
+    std::unique_ptr<CURL, std::function<void(CURL*)>> curl(curl_easy_init(),
+                                                           [](CURL* p) { curl_easy_cleanup(p); });
+    if (!curl)
+        return {}; // empty string
+
+    (void)curl_easy_setopt(curl.get(), CURLOPT_HTTPHEADER, pHttpHeader);
+    (void)curl_easy_setopt(curl.get(), CURLOPT_FAILONERROR, 1L);
+    (void)curl_easy_setopt(curl.get(), CURLOPT_URL, aURL.data());
+    (void)curl_easy_setopt(curl.get(), CURLOPT_TIMEOUT, CURL_TIMEOUT);
+    // (void)curl_easy_setopt(curl.get(), CURLOPT_VERBOSE, 1L);
+
+    std::string response_body;
+    (void)curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, WriteCallback);
+    (void)curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, &response_body);
+
+    SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
+    // allow unknown or self-signed certificates
+    if (rLanguageOpts.getSSLVerification() == false)
+    {
+        (void)curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYPEER, false);
+        (void)curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYHOST, false);
+    }
+
+    if (method == HTTP_METHOD::HTTP_POST)
+    {
+        (void)curl_easy_setopt(curl.get(), CURLOPT_POST, 1L);
+        (void)curl_easy_setopt(curl.get(), CURLOPT_POSTFIELDS, aPostData.getStr());
+    }
+
+    CURLcode cc = curl_easy_perform(curl.get());
+    if (cc != CURLE_OK)
+    {
+        SAL_WARN("languagetool",
+                 "CURL request returned with error: " << static_cast<sal_Int32>(cc));
+    }
+
+    curl_easy_getinfo(curl.get(), CURLINFO_RESPONSE_CODE, &nStatusCode);
+    return response_body;
+}
+
+std::string makeDudenHttpRequest(std::string_view aURL, const OString& aPostData,
+                                 tools::Long& nStatusCode)
+{
+    struct curl_slist* pList = nullptr;
+    SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
+    OString sAccessToken = OUStringToOString(rLanguageOpts.getApiKey(), RTL_TEXTENCODING_UTF8);
+
+    pList = curl_slist_append(pList, "Cache-Control: no-cache");
+    pList = curl_slist_append(pList, "Content-Type: application/json");
+    if (!sAccessToken.isEmpty())
+    {
+        sAccessToken = "access_token: " + sAccessToken;
+        pList = curl_slist_append(pList, sAccessToken.getStr());
+    }
+
+    return makeHttpRequest_impl(aURL, HTTP_METHOD::HTTP_POST, aPostData, pList, nStatusCode);
+}
+
+std::string makeHttpRequest(std::string_view aURL, HTTP_METHOD method, const OString& aPostData,
+                            tools::Long& nStatusCode)
+{
+    OString realPostData(aPostData);
+    if (method == HTTP_METHOD::HTTP_POST)
+    {
+        SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
+        OString apiKey = OUStringToOString(rLanguageOpts.getApiKey(), RTL_TEXTENCODING_UTF8);
+        OString username = OUStringToOString(rLanguageOpts.getUsername(), RTL_TEXTENCODING_UTF8);
+        if (!apiKey.isEmpty() && !username.isEmpty())
+            realPostData += "&username=" + username + "&apiKey=" + apiKey;
+    }
+
+    return makeHttpRequest_impl(aURL, method, realPostData, nullptr, nStatusCode);
+}
 }
 
 LanguageToolGrammarChecker::LanguageToolGrammarChecker()
@@ -163,18 +259,6 @@ Sequence<Locale> SAL_CALL LanguageToolGrammarChecker::getLocales()
         pArray[i] = aLocale;
     }
     return m_aSuppLocales;
-}
-
-// Callback to get the response data from server.
-static size_t WriteCallback(void* ptr, size_t size, size_t nmemb, void* userp)
-{
-    if (!userp)
-        return 0;
-
-    std::string* response = static_cast<std::string*>(userp);
-    size_t real_size = size * nmemb;
-    response->append(static_cast<char*>(ptr), real_size);
-    return real_size;
 }
 
 ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
@@ -267,8 +351,7 @@ ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
     tools::Long http_code = 0;
     std::string response_body;
     if (rLanguageOpts.getRestProtocol() == sDuden)
-        response_body
-            = makeDudenHttpRequest(checkerURL, HTTP_METHOD::HTTP_POST, postData, http_code);
+        response_body = makeDudenHttpRequest(checkerURL, postData, http_code);
     else
         response_body = makeHttpRequest(checkerURL, HTTP_METHOD::HTTP_POST, postData, http_code);
 
@@ -419,117 +502,6 @@ void LanguageToolGrammarChecker::parseProofreadingJSONResponse(ProofreadingResul
         }
     }
     rResult.aErrors = aErrors;
-}
-
-std::string LanguageToolGrammarChecker::makeDudenHttpRequest(std::string_view aURL,
-                                                             HTTP_METHOD method,
-                                                             const OString& aData,
-                                                             tools::Long& nCode)
-{
-    std::unique_ptr<CURL, std::function<void(CURL*)>> curl(curl_easy_init(),
-                                                           [](CURL* p) { curl_easy_cleanup(p); });
-    if (!curl)
-        return {}; // empty string
-
-    std::string sResponseBody;
-    struct curl_slist* pList = nullptr;
-    SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
-    OString sAccessToken = OString::Concat("access_token: ")
-                           + OUStringToOString(rLanguageOpts.getApiKey(), RTL_TEXTENCODING_UTF8);
-
-    pList = curl_slist_append(pList, "Cache-Control: no-cache");
-    pList = curl_slist_append(pList, "Content-Type: application/json");
-    if (!sAccessToken.isEmpty())
-        pList = curl_slist_append(pList, sAccessToken.getStr());
-
-    (void)curl_easy_setopt(curl.get(), CURLOPT_HTTPHEADER, pList);
-    (void)curl_easy_setopt(curl.get(), CURLOPT_FAILONERROR, 1L);
-    (void)curl_easy_setopt(curl.get(), CURLOPT_URL, aURL.data());
-    (void)curl_easy_setopt(curl.get(), CURLOPT_TIMEOUT, CURL_TIMEOUT);
-    (void)curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, WriteCallback);
-    (void)curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, static_cast<void*>(&sResponseBody));
-
-    // allow unknown or self-signed certificates
-    if (rLanguageOpts.getSSLVerification() == false)
-    {
-        (void)curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYPEER, false);
-        (void)curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYHOST, false);
-    }
-
-    if (method == HTTP_METHOD::HTTP_POST)
-    {
-        (void)curl_easy_setopt(curl.get(), CURLOPT_POST, 1L);
-        (void)curl_easy_setopt(curl.get(), CURLOPT_POSTFIELDS, aData.getStr());
-    }
-
-    CURLcode cc = curl_easy_perform(curl.get());
-    if (cc != CURLE_OK)
-    {
-        SAL_WARN("languagetool",
-                 "CURL request returned with error: " << static_cast<sal_Int32>(cc));
-    }
-
-    curl_easy_getinfo(curl.get(), CURLINFO_RESPONSE_CODE, &nCode);
-    return sResponseBody;
-}
-
-std::string LanguageToolGrammarChecker::makeHttpRequest(std::string_view aURL, HTTP_METHOD method,
-                                                        const OString& aPostData,
-                                                        tools::Long& nStatusCode)
-{
-    std::unique_ptr<CURL, std::function<void(CURL*)>> curl(curl_easy_init(),
-                                                           [](CURL* p) { curl_easy_cleanup(p); });
-    if (!curl)
-        return {}; // empty string
-
-    bool isPremium = false;
-    SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
-    OString apiKey = OUStringToOString(rLanguageOpts.getApiKey(), RTL_TEXTENCODING_UTF8);
-    OString username = OUStringToOString(rLanguageOpts.getUsername(), RTL_TEXTENCODING_UTF8);
-    OString premiumPostData;
-    if (!apiKey.isEmpty() && !username.isEmpty())
-    {
-        isPremium = true;
-    }
-
-    std::string response_body;
-    (void)curl_easy_setopt(curl.get(), CURLOPT_URL, aURL.data());
-
-    (void)curl_easy_setopt(curl.get(), CURLOPT_FAILONERROR, 1L);
-    // (void)curl_easy_setopt(curl.get(), CURLOPT_VERBOSE, 1L);
-
-    (void)curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, WriteCallback);
-    (void)curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, static_cast<void*>(&response_body));
-    // allow unknown or self-signed certificates
-    if (rLanguageOpts.getSSLVerification() == false)
-    {
-        (void)curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYPEER, false);
-        (void)curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYHOST, false);
-    }
-    (void)curl_easy_setopt(curl.get(), CURLOPT_TIMEOUT, CURL_TIMEOUT);
-
-    if (method == HTTP_METHOD::HTTP_POST)
-    {
-        (void)curl_easy_setopt(curl.get(), CURLOPT_POST, 1L);
-        if (isPremium == false)
-        {
-            (void)curl_easy_setopt(curl.get(), CURLOPT_POSTFIELDS, aPostData.getStr());
-        }
-        else
-        {
-            premiumPostData = aPostData + "&username=" + username + "&apiKey=" + apiKey;
-            (void)curl_easy_setopt(curl.get(), CURLOPT_POSTFIELDS, premiumPostData.getStr());
-        }
-    }
-
-    CURLcode cc = curl_easy_perform(curl.get());
-    if (cc != CURLE_OK)
-    {
-        SAL_WARN("languagetool",
-                 "CURL request returned with error: " << static_cast<sal_Int32>(cc));
-    }
-    curl_easy_getinfo(curl.get(), CURLINFO_RESPONSE_CODE, &nStatusCode);
-    return response_body;
 }
 
 void SAL_CALL LanguageToolGrammarChecker::ignoreRule(const OUString& /*aRuleIdentifier*/,
