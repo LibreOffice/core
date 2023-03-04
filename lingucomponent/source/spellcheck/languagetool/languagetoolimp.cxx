@@ -115,12 +115,16 @@ enum class HTTP_METHOD
     HTTP_POST
 };
 
+struct curl_cleanup_t
+{
+    void operator()(CURL* p) const { curl_easy_cleanup(p); }
+};
+
 std::string makeHttpRequest_impl(std::string_view aURL, HTTP_METHOD method,
                                  const OString& aPostData, curl_slist* pHttpHeader,
                                  tools::Long& nStatusCode)
 {
-    std::unique_ptr<CURL, std::function<void(CURL*)>> curl(curl_easy_init(),
-                                                           [](CURL* p) { curl_easy_cleanup(p); });
+    std::unique_ptr<CURL, curl_cleanup_t> curl(curl_easy_init());
     if (!curl)
         return {}; // empty string
 
@@ -129,8 +133,7 @@ std::string makeHttpRequest_impl(std::string_view aURL, HTTP_METHOD method,
     assert(pVersion);
     OString const useragent(
         OString::Concat("LibreOffice " LIBO_VERSION_DOTTED " denylistedbackend/")
-        + ::std::string_view(pVersion->version, strlen(pVersion->version)) + " "
-        + pVersion->ssl_version);
+        + pVersion->version + " " + pVersion->ssl_version);
     (void)curl_easy_setopt(curl.get(), CURLOPT_USERAGENT, useragent.getStr());
 
     (void)curl_easy_setopt(curl.get(), CURLOPT_HTTPHEADER, pHttpHeader);
@@ -200,6 +203,130 @@ std::string makeHttpRequest(std::string_view aURL, HTTP_METHOD method, const OSt
     }
 
     return makeHttpRequest_impl(aURL, method, realPostData, nullptr, nStatusCode);
+}
+
+void parseDudenResponse(ProofreadingResult& rResult, std::string_view aJSONBody)
+{
+    size_t nSize;
+    int nProposalSize;
+    boost::property_tree::ptree aRoot;
+    std::stringstream aStream(aJSONBody.data());
+    boost::property_tree::read_json(aStream, aRoot);
+
+    const boost::optional<boost::property_tree::ptree&> aPositions
+        = aRoot.get_child_optional("check-positions");
+    if (!aPositions || !(nSize = aPositions.get().size()))
+    {
+        return;
+    }
+
+    Sequence<SingleProofreadingError> aChecks(nSize);
+    auto pChecks = aChecks.getArray();
+    size_t nIndex1 = 0, nIndex2 = 0;
+    auto itPos = aPositions.get().begin();
+    while (itPos != aPositions.get().end())
+    {
+        const boost::property_tree::ptree& rTree = itPos->second;
+        const std::string sType = rTree.get<std::string>("type", "");
+        const int nOffset = rTree.get<int>("offset", 0);
+        const int nLength = rTree.get<int>("length", 0);
+
+        pChecks[nIndex1].nErrorStart = nOffset;
+        pChecks[nIndex1].nErrorLength = nLength;
+        pChecks[nIndex1].nErrorType = PROOFREADING_ERROR;
+        //pChecks[nIndex1].aShortComment = ??
+        //pChecks[nIndex1].aFullComment = ??
+        pChecks[nIndex1].aProperties = lcl_GetLineColorPropertyFromErrorId(sType);
+
+        const boost::optional<const boost::property_tree::ptree&> aProposals
+            = rTree.get_child_optional("proposals");
+        if (aProposals && (nProposalSize = aProposals.get().size()))
+        {
+            pChecks[nIndex1].aSuggestions.realloc(std::min(nProposalSize, MAX_SUGGESTIONS_SIZE));
+
+            nIndex2 = 0;
+            auto itProp = aProposals.get().begin();
+            auto pSuggestions = pChecks[nIndex1].aSuggestions.getArray();
+            while (itProp != aProposals.get().end() && nIndex2 < MAX_SUGGESTIONS_SIZE)
+            {
+                pSuggestions[nIndex2++]
+                    = OStringToOUString(itProp->second.data(), RTL_TEXTENCODING_UTF8);
+                itProp++;
+            }
+        }
+
+        nIndex1++;
+        itPos++;
+    }
+
+    rResult.aErrors = aChecks;
+}
+
+/*
+    rResult is both input and output
+    aJSONBody is the response body from the HTTP Request to LanguageTool API
+*/
+void parseProofreadingJSONResponse(ProofreadingResult& rResult, std::string_view aJSONBody)
+{
+    boost::property_tree::ptree root;
+    std::stringstream aStream(aJSONBody.data());
+    boost::property_tree::read_json(aStream, root);
+    boost::property_tree::ptree& matches = root.get_child("matches");
+    size_t matchSize = matches.size();
+
+    if (matchSize <= 0)
+    {
+        return;
+    }
+    Sequence<SingleProofreadingError> aErrors(matchSize);
+    auto pErrors = aErrors.getArray();
+    size_t i = 0;
+    for (auto it1 = matches.begin(); it1 != matches.end(); it1++, i++)
+    {
+        const boost::property_tree::ptree& match = it1->second;
+        int offset = match.get<int>("offset");
+        int length = match.get<int>("length");
+        const std::string shortMessage = match.get<std::string>("message");
+        const std::string message = match.get<std::string>("shortMessage");
+
+        // Parse the error category for Line Color
+        const boost::property_tree::ptree& rule = match.get_child("rule");
+        const boost::property_tree::ptree& ruleCategory = rule.get_child("category");
+        const std::string errorCategoryId = ruleCategory.get<std::string>("id");
+
+        OUString aShortComment(shortMessage.c_str(), shortMessage.length(), RTL_TEXTENCODING_UTF8);
+        OUString aFullComment(message.c_str(), message.length(), RTL_TEXTENCODING_UTF8);
+
+        pErrors[i].nErrorStart = offset;
+        pErrors[i].nErrorLength = length;
+        pErrors[i].nErrorType = PROOFREADING_ERROR;
+        pErrors[i].aShortComment = aShortComment;
+        pErrors[i].aFullComment = aFullComment;
+        pErrors[i].aProperties = lcl_GetLineColorPropertyFromErrorId(errorCategoryId);
+
+        const boost::property_tree::ptree& replacements = match.get_child("replacements");
+        int suggestionSize = replacements.size();
+
+        if (suggestionSize <= 0)
+        {
+            continue;
+        }
+        pErrors[i].aSuggestions.realloc(std::min(suggestionSize, MAX_SUGGESTIONS_SIZE));
+        auto pSuggestions = pErrors[i].aSuggestions.getArray();
+        // Limit suggestions to avoid crash on context menu popup:
+        // (soffice:17251): Gdk-CRITICAL **: 17:00:21.277: ../../../../../gdk/wayland/gdkdisplay-wayland.c:1399: Unable to create Cairo image
+        // surface: invalid value (typically too big) for the size of the input (surface, pattern, etc.)
+        int j = 0;
+        for (auto it2 = replacements.begin(); it2 != replacements.end() && j < MAX_SUGGESTIONS_SIZE;
+             it2++, j++)
+        {
+            const boost::property_tree::ptree& replacement = it2->second;
+            std::string replacementStr = replacement.get<std::string>("value");
+            pSuggestions[j]
+                = OUString(replacementStr.c_str(), replacementStr.length(), RTL_TEXTENCODING_UTF8);
+        }
+    }
+    rResult.aErrors = aErrors;
 }
 }
 
@@ -389,132 +516,6 @@ ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
     // cache the result
     mCachedResults.insert(std::make_pair(postData, xRes.aErrors));
     return xRes;
-}
-
-void LanguageToolGrammarChecker::parseDudenResponse(ProofreadingResult& rResult,
-                                                    std::string_view aJSONBody)
-{
-    size_t nSize;
-    int nProposalSize;
-    boost::property_tree::ptree aRoot;
-    std::stringstream aStream(aJSONBody.data());
-    boost::property_tree::read_json(aStream, aRoot);
-
-    const boost::optional<boost::property_tree::ptree&> aPositions
-        = aRoot.get_child_optional("check-positions");
-    if (!aPositions || !(nSize = aPositions.get().size()))
-    {
-        return;
-    }
-
-    Sequence<SingleProofreadingError> aChecks(nSize);
-    auto pChecks = aChecks.getArray();
-    size_t nIndex1 = 0, nIndex2 = 0;
-    auto itPos = aPositions.get().begin();
-    while (itPos != aPositions.get().end())
-    {
-        const boost::property_tree::ptree& rTree = itPos->second;
-        const std::string sType = rTree.get<std::string>("type", "");
-        const int nOffset = rTree.get<int>("offset", 0);
-        const int nLength = rTree.get<int>("length", 0);
-
-        pChecks[nIndex1].nErrorStart = nOffset;
-        pChecks[nIndex1].nErrorLength = nLength;
-        pChecks[nIndex1].nErrorType = PROOFREADING_ERROR;
-        //pChecks[nIndex1].aShortComment = ??
-        //pChecks[nIndex1].aFullComment = ??
-        pChecks[nIndex1].aProperties = lcl_GetLineColorPropertyFromErrorId(sType);
-
-        const boost::optional<const boost::property_tree::ptree&> aProposals
-            = rTree.get_child_optional("proposals");
-        if (aProposals && (nProposalSize = aProposals.get().size()))
-        {
-            pChecks[nIndex1].aSuggestions.realloc(std::min(nProposalSize, MAX_SUGGESTIONS_SIZE));
-
-            nIndex2 = 0;
-            auto itProp = aProposals.get().begin();
-            auto pSuggestions = pChecks[nIndex1].aSuggestions.getArray();
-            while (itProp != aProposals.get().end() && nIndex2 < MAX_SUGGESTIONS_SIZE)
-            {
-                pSuggestions[nIndex2++]
-                    = OStringToOUString(itProp->second.data(), RTL_TEXTENCODING_UTF8);
-                itProp++;
-            }
-        }
-
-        nIndex1++;
-        itPos++;
-    }
-
-    rResult.aErrors = aChecks;
-}
-
-/*
-    rResult is both input and output
-    aJSONBody is the response body from the HTTP Request to LanguageTool API
-*/
-void LanguageToolGrammarChecker::parseProofreadingJSONResponse(ProofreadingResult& rResult,
-                                                               std::string_view aJSONBody)
-{
-    boost::property_tree::ptree root;
-    std::stringstream aStream(aJSONBody.data());
-    boost::property_tree::read_json(aStream, root);
-    boost::property_tree::ptree& matches = root.get_child("matches");
-    size_t matchSize = matches.size();
-
-    if (matchSize <= 0)
-    {
-        return;
-    }
-    Sequence<SingleProofreadingError> aErrors(matchSize);
-    auto pErrors = aErrors.getArray();
-    size_t i = 0;
-    for (auto it1 = matches.begin(); it1 != matches.end(); it1++, i++)
-    {
-        const boost::property_tree::ptree& match = it1->second;
-        int offset = match.get<int>("offset");
-        int length = match.get<int>("length");
-        const std::string shortMessage = match.get<std::string>("message");
-        const std::string message = match.get<std::string>("shortMessage");
-
-        // Parse the error category for Line Color
-        const boost::property_tree::ptree& rule = match.get_child("rule");
-        const boost::property_tree::ptree& ruleCategory = rule.get_child("category");
-        const std::string errorCategoryId = ruleCategory.get<std::string>("id");
-
-        OUString aShortComment(shortMessage.c_str(), shortMessage.length(), RTL_TEXTENCODING_UTF8);
-        OUString aFullComment(message.c_str(), message.length(), RTL_TEXTENCODING_UTF8);
-
-        pErrors[i].nErrorStart = offset;
-        pErrors[i].nErrorLength = length;
-        pErrors[i].nErrorType = PROOFREADING_ERROR;
-        pErrors[i].aShortComment = aShortComment;
-        pErrors[i].aFullComment = aFullComment;
-        pErrors[i].aProperties = lcl_GetLineColorPropertyFromErrorId(errorCategoryId);
-        ;
-        const boost::property_tree::ptree& replacements = match.get_child("replacements");
-        int suggestionSize = replacements.size();
-
-        if (suggestionSize <= 0)
-        {
-            continue;
-        }
-        pErrors[i].aSuggestions.realloc(std::min(suggestionSize, MAX_SUGGESTIONS_SIZE));
-        auto pSuggestions = pErrors[i].aSuggestions.getArray();
-        // Limit suggestions to avoid crash on context menu popup:
-        // (soffice:17251): Gdk-CRITICAL **: 17:00:21.277: ../../../../../gdk/wayland/gdkdisplay-wayland.c:1399: Unable to create Cairo image
-        // surface: invalid value (typically too big) for the size of the input (surface, pattern, etc.)
-        int j = 0;
-        for (auto it2 = replacements.begin(); it2 != replacements.end() && j < MAX_SUGGESTIONS_SIZE;
-             it2++, j++)
-        {
-            const boost::property_tree::ptree& replacement = it2->second;
-            std::string replacementStr = replacement.get<std::string>("value");
-            pSuggestions[j]
-                = OUString(replacementStr.c_str(), replacementStr.length(), RTL_TEXTENCODING_UTF8);
-        }
-    }
-    rResult.aErrors = aErrors;
 }
 
 void SAL_CALL LanguageToolGrammarChecker::ignoreRule(const OUString& /*aRuleIdentifier*/,
