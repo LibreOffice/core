@@ -46,13 +46,15 @@ SVXCORE_DLLPUBLIC void ResizeRect(tools::Rectangle& rRect, const Point& rRef, co
 namespace svx
 {
 SVXCORE_DLLPUBLIC void resizeRange(gfx::Range2DLWrap& rRange, gfx::Tuple2DL const& rReference, double fFactorX, double fFactorY);
+SVXCORE_DLLPUBLIC gfx::Tuple2DL rotatePoint(gfx::Tuple2DL const& rPoint, gfx::Tuple2DL const& rReference, double sinAngle, double cosAngle);
 }
 
 inline void ResizePoint(Point& rPnt, const Point& rRef, const Fraction& xFract, const Fraction& yFract);
 void ResizePoly(tools::Polygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
 void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
 
-inline void RotatePoint(Point& rPnt, const Point& rRef, double sn, double cs);
+SVXCORE_DLLPUBLIC void RotatePoint(Point& rPnt, const Point& rRef, double sn, double cs);
+
 SVXCORE_DLLPUBLIC void RotatePoly(tools::Polygon& rPoly, const Point& rRef, double sn, double cs);
 void RotateXPoly(XPolygon& rPoly, const Point& rRef, double sn, double cs);
 void RotateXPoly(XPolyPolygon& rPoly, const Point& rRef, double sn, double cs);
@@ -105,14 +107,6 @@ inline void ResizePoint(Point& rPnt, const Point& rRef, const Fraction& xFract, 
     double nyFract = yFract.IsValid() ? static_cast<double>(yFract) : 1.0;
     rPnt.setX(rRef.X() + basegfx::fround<tools::Long>((rPnt.X() - rRef.X()) * nxFract));
     rPnt.setY(rRef.Y() + basegfx::fround<tools::Long>((rPnt.Y() - rRef.Y()) * nyFract));
-}
-
-inline void RotatePoint(Point& rPnt, const Point& rRef, double sn, double cs)
-{
-    tools::Long dx=rPnt.X()-rRef.X();
-    tools::Long dy=rPnt.Y()-rRef.Y();
-    rPnt.setX(basegfx::fround<tools::Long>(rRef.X() + dx * cs + dy * sn));
-    rPnt.setY(basegfx::fround<tools::Long>(rRef.Y() + dy * cs - dx * sn));
 }
 
 inline void ShearPoint(Point& rPnt, const Point& rRef, double tn, bool bVShear)
