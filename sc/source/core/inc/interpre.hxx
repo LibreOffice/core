@@ -930,7 +930,7 @@ private:
     void ScMedian();
     double GetMedian( ::std::vector<double> & rArray );
     double GetPercentileExclusive( ::std::vector<double> & rArray, double fPercentile );
-    std::vector<double> GetTopNumberArray( SCSIZE& rCol, SCSIZE& rRow );
+    std::vector<double> GetRankNumberArray( SCSIZE& rCol, SCSIZE& rRow );
     void GetNumberSequenceArray( sal_uInt8 nParamCount, ::std::vector<double>& rArray, bool bConvertTextInArray );
     void GetSortArray( sal_uInt8 nParamCount, ::std::vector<double>& rSortArray, ::std::vector<tools::Long>* pIndexOrder, bool bConvertTextInArray, bool bAllowEmptyArray );
     static void QuickSort(::std::vector<double>& rSortArray, ::std::vector<tools::Long>* pIndexOrder);

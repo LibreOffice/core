@@ -3638,7 +3638,7 @@ void ScInterpreter::CalculateSmallLarge(bool bSmall)
         return;
 
     SCSIZE nCol = 0, nRow = 0;
-    const auto aArray = GetTopNumberArray(nCol, nRow);
+    const auto aArray = GetRankNumberArray(nCol, nRow);
     const size_t nRankArraySize = aArray.size();
     if (nRankArraySize == 0 || nGlobalError != FormulaError::NONE)
     {
@@ -3855,7 +3855,7 @@ void ScInterpreter::ScTrimMean()
     }
 }
 
-std::vector<double> ScInterpreter::GetTopNumberArray( SCSIZE& rCol, SCSIZE& rRow )
+std::vector<double> ScInterpreter::GetRankNumberArray( SCSIZE& rCol, SCSIZE& rRow )
 {
     std::vector<double> aArray;
     switch (GetStackType())
