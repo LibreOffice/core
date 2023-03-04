@@ -77,7 +77,7 @@ namespace basegfx
             // While that is formally correct, it moves an invalid
             // entry to 0.0 or 1.0, thus creating additional wrong
             // Start/EndColor entries. That may then 'overlay' the
-            // cortrect entry when corrections are applied to the
+            // correct entry when corrections are applied to the
             // vector of entries (see sortAndCorrectColorSteps)
             // which leads to getting the wanted Start/EndColor
             // to be factically deleted, what is an error.
