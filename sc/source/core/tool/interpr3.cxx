@@ -3906,6 +3906,12 @@ std::vector<double> ScInterpreter::GetTopNumberArray( SCSIZE& rCol, SCSIZE& rRow
                     aArray.push_back(fCellVal);
                 while (aValIter.GetNext(fCellVal, nErr) && nErr == FormulaError::NONE);
             }
+            // Note that SMALL() and LARGE() rank parameters (2nd) have
+            // ParamClass::Value, so in array mode this is never hit and
+            // argument was converted to matrix instead, but for normal
+            // evaluation any non-numeric value including empty cell will
+            // result in error anyway, so just clear and propagate an existing
+            // error here already.
             if (aArray.size() != rCol * rRow)
             {
                 aArray.clear();
