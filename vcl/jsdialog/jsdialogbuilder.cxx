@@ -509,6 +509,7 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
     , m_sTypeOfJSON("dialog")
     , m_bHasTopLevelDialog(false)
     , m_bIsNotebookbar(false)
+    , m_bSentInitialUpdate(false)
     , m_aWindowToRelease(nullptr)
 {
     // when it is a popup we initialize sender in weld_popover
@@ -541,6 +542,7 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
     , m_sTypeOfJSON("sidebar")
     , m_bHasTopLevelDialog(false)
     , m_bIsNotebookbar(false)
+    , m_bSentInitialUpdate(false)
     , m_aWindowToRelease(nullptr)
 {
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
@@ -583,6 +585,7 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
     , m_sTypeOfJSON("notebookbar")
     , m_bHasTopLevelDialog(false)
     , m_bIsNotebookbar(false)
+    , m_bSentInitialUpdate(false)
     , m_aWindowToRelease(nullptr)
 {
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
@@ -612,6 +615,7 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
     , m_sTypeOfJSON("formulabar")
     , m_bHasTopLevelDialog(false)
     , m_bIsNotebookbar(false)
+    , m_bSentInitialUpdate(false)
     , m_aWindowToRelease(nullptr)
 {
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
@@ -839,6 +843,7 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id)
 
         initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
         sendFullUpdate();
+        m_bSentInitialUpdate = true;
     }
 
     return pRet;
@@ -867,6 +872,7 @@ std::unique_ptr<weld::Assistant> JSInstanceBuilder::weld_assistant(const OString
 
         initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
         sendFullUpdate();
+        m_bSentInitialUpdate = true;
     }
 
     return pRet;
@@ -907,6 +913,12 @@ std::unique_ptr<weld::Container> JSInstanceBuilder::weld_container(const OString
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
+
+    if (!m_bSentInitialUpdate)
+    {
+        m_bSentInitialUpdate = true;
+        sendFullUpdate();
+    }
 
     return pWeldWidget;
 }
