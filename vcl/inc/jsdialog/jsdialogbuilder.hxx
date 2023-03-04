@@ -221,6 +221,8 @@ class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
     std::string m_sTypeOfJSON;
     bool m_bHasTopLevelDialog;
     bool m_bIsNotebookbar;
+    /// used to detect when we have to send Full Update in container handler
+    bool m_bSentInitialUpdate;
     /// When LOKNotifier is set by jsdialogs code we need to release it
     VclPtr<vcl::Window> m_aWindowToRelease;
 
