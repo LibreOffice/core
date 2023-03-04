@@ -186,28 +186,50 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     SetBoundAndSnapRectsDirty();
 }
 
+namespace
+{
+
+gfx::Tuple2DL createTupleFromPoint(Point const& rPoint, gfx::LengthUnit eUnit = gfx::LengthUnit::hmm)
+{
+    auto x = gfx::Length::from(eUnit, rPoint.X());
+    auto y = gfx::Length::from(eUnit, rPoint.Y());
+    return gfx::Tuple2DL(x, y);
+}
+
+} // end anonymous
+
+
 void SdrTextObj::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
     SetGlueReallyAbsolute(true);
-    tools::Rectangle aRectangle = getRectangle();
-    tools::Long dx = aRectangle.Right() - aRectangle.Left();
-    tools::Long dy = aRectangle.Bottom() - aRectangle.Top();
-    Point aPoint1(aRectangle.TopLeft());
-    RotatePoint(aPoint1, rRef, sn, cs);
-    Point aPoint2(aPoint1.X() + dx, aPoint1.Y() + dy);
-    aRectangle = tools::Rectangle(aPoint1, aPoint2);
-    setRectangle(aRectangle);
+    gfx::Tuple2DL aReference = createTupleFromPoint(rRef, getSdrModelFromSdrObject().getUnit());
 
-    if (maGeo.m_nRotationAngle==0_deg100) {
-        maGeo.m_nRotationAngle=NormAngle36000(nAngle);
-        maGeo.mfSinRotationAngle=sn;
-        maGeo.mfCosRotationAngle=cs;
-    } else {
-        maGeo.m_nRotationAngle=NormAngle36000(maGeo.m_nRotationAngle+nAngle);
+    gfx::Length aWidth = maRectangleRange.getWidth();
+    gfx::Length aHeight = maRectangleRange.getHeight();
+
+    gfx::Tuple2DL aPoint(maRectangleRange.getMinX(), maRectangleRange.getMinY());
+    gfx::Tuple2DL aRotated = svx::rotatePoint(aPoint, aReference, sn, cs);
+
+    maRectangleRange = gfx::Range2DLWrap(
+        aRotated.getX(),
+        aRotated.getY(),
+        aRotated.getX() + aWidth,
+        aRotated.getY() + aHeight);
+
+    if (maGeo.m_nRotationAngle == 0_deg100)
+    {
+        maGeo.m_nRotationAngle = NormAngle36000(nAngle);
+        maGeo.mfSinRotationAngle = sn;
+        maGeo.mfCosRotationAngle = cs;
+    }
+    else
+    {
+        maGeo.m_nRotationAngle = NormAngle36000(maGeo.m_nRotationAngle + nAngle);
         maGeo.RecalcSinCos();
     }
+
     SetBoundAndSnapRectsDirty();
-    NbcRotateGluePoints(rRef,nAngle,sn,cs);
+    NbcRotateGluePoints(rRef, nAngle, sn, cs);
     SetGlueReallyAbsolute(false);
 }
 
