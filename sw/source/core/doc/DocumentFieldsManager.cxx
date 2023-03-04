@@ -600,51 +600,28 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
 {
     OSL_ENSURE( !pHt || RES_TABLEFML_UPDATE  == pHt->Which(),
             "What MessageItem is this?" );
-
     SwTableFormulaUpdate* pUpdateField = nullptr;
-    if( pHt && RES_TABLEFML_UPDATE == pHt->Which() )
+    if(pHt && RES_TABLEFML_UPDATE == pHt->Which())
         pUpdateField = static_cast<SwTableFormulaUpdate*>(pHt);
     assert(!pUpdateField || pUpdateField->m_eFlags != TBL_BOXPTR); // use SwTable::SwitchFormulasToInternalRepresentation
     auto pFieldType = GetFieldType( SwFieldIds::Table, OUString(), false );
-    if(pFieldType)
+    if(pFieldType && (!pUpdateField || pUpdateField->m_eFlags == TBL_CALC))
     {
         std::vector<SwFormatField*> vFields;
         pFieldType->GatherFields(vFields);
         for(auto pFormatField : vFields)
         {
+            if(!pFormatField->GetTextField()->GetTextNode().FindTableNode())
+                continue;
             SwTableField* pField = static_cast<SwTableField*>(pFormatField->GetField());
-            if( pUpdateField )
-            {
-                // table where this field is located
-                const SwTableNode* pTableNd;
-                const SwTextNode& rTextNd = pFormatField->GetTextField()->GetTextNode();
-                pTableNd = rTextNd.FindTableNode();
-                if (pTableNd == nullptr)
-                    continue;
-
-                switch( pUpdateField->m_eFlags )
-                {
-                case TBL_CALC:
-                    // re-set the value flag
-                    // JP 17.06.96: internal representation of all formulas
-                    //              (reference to other table!!!)
-                    if( nsSwExtendedSubType::SUB_CMD & pField->GetSubType() )
-                        pField->PtrToBoxNm( pUpdateField->m_pTable );
-                    else
-                        pField->ChgValid( false );
-                    break;
-                case TBL_BOXPTR:
-                case TBL_BOXNAME:
-                case TBL_RELBOXNAME:
-                    assert(false); // use SwTable::SwitchTo...
-                    break;
-                default:
-                    break;
-                }
-            }
+            // re-set the value flag
+            // JP 17.06.96: internal representation of all formulas
+            //              (reference to other table!!!)
+            if(pUpdateField && nsSwExtendedSubType::SUB_CMD & pField->GetSubType())
+                pField->PtrToBoxNm(pUpdateField->m_pTable);
             else
                 // reset the value flag for all
-                pField->ChgValid( false );
+                pField->ChgValid(false);
         }
     }
     // process all table box formulas
@@ -663,9 +640,8 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
     }
 
     // all fields/boxes are now invalid, so we can start to calculate
-    if( pHt && ( RES_TABLEFML_UPDATE != pHt->Which() ||
-                TBL_CALC != static_cast<SwTableFormulaUpdate*>(pHt)->m_eFlags ))
-        return ;
+    if(pHt && ( RES_TABLEFML_UPDATE != pHt->Which() || TBL_CALC != static_cast<SwTableFormulaUpdate*>(pHt)->m_eFlags))
+        return;
 
     std::optional<SwCalc> oCalc;
 
@@ -675,80 +651,79 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
         pFieldType->GatherFields(vFields);
         for(SwFormatField* pFormatField: vFields)
         {
-                // start calculation at the end
-                // new fields are inserted at the beginning of the modify chain
-                // that gives faster calculation on import
-                // mba: do we really need this "optimization"? Is it still valid?
-                SwTableField *const pField(static_cast<SwTableField*>(pFormatField->GetField()));
-                if (nsSwExtendedSubType::SUB_CMD & pField->GetSubType())
+            // start calculation at the end
+            // new fields are inserted at the beginning of the modify chain
+            // that gives faster calculation on import
+            // mba: do we really need this "optimization"? Is it still valid?
+            SwTableField *const pField(static_cast<SwTableField*>(pFormatField->GetField()));
+            if (nsSwExtendedSubType::SUB_CMD & pField->GetSubType())
+                continue;
+
+            // needs to be recalculated
+            if( !pField->IsValid() )
+            {
+                // table where this field is located
+                const SwTextNode& rTextNd = pFormatField->GetTextField()->GetTextNode();
+                const SwTableNode* pTableNd = rTextNd.FindTableNode();
+                if( !pTableNd )
                     continue;
 
-                // needs to be recalculated
-                if( !pField->IsValid() )
+                // if this field is not in the to-be-updated table, skip it
+                if( pHt && &pTableNd->GetTable() != pUpdateField->m_pTable )
+                    continue;
+
+                if( !oCalc )
+                    oCalc.emplace( m_rDoc );
+
+                // get the values of all SetExpression fields that are valid
+                // until the table
+                SwFrame* pFrame = nullptr;
+                if( pTableNd->GetIndex() < m_rDoc.GetNodes().GetEndOfExtras().GetIndex() )
                 {
-                    // table where this field is located
-                    const SwTextNode& rTextNd = pFormatField->GetTextField()->GetTextNode();
-                    const SwTableNode* pTableNd = rTextNd.FindTableNode();
-                    if( !pTableNd )
-                        continue;
-
-                    // if this field is not in the to-be-updated table, skip it
-                    if( pHt && &pTableNd->GetTable() !=
-                                            static_cast<SwTableFormulaUpdate*>(pHt)->m_pTable )
-                        continue;
-
-                    if( !oCalc )
-                        oCalc.emplace( m_rDoc );
-
-                    // get the values of all SetExpression fields that are valid
-                    // until the table
-                    SwFrame* pFrame = nullptr;
-                    if( pTableNd->GetIndex() < m_rDoc.GetNodes().GetEndOfExtras().GetIndex() )
+                    // is in the special section, that's expensive!
+                    Point aPt;      // return the first frame of the layout - Tab.Headline!!
+                    std::pair<Point, bool> const tmp(aPt, true);
+                    pFrame = rTextNd.getLayoutFrame(pLayout, nullptr, &tmp);
+                    if( pFrame )
                     {
-                        // is in the special section, that's expensive!
-                        Point aPt;      // return the first frame of the layout - Tab.Headline!!
-                        std::pair<Point, bool> const tmp(aPt, true);
-                        pFrame = rTextNd.getLayoutFrame(pLayout, nullptr, &tmp);
-                        if( pFrame )
+                        SwPosition aPos( *pTableNd );
+                        if( GetBodyTextNode( m_rDoc, aPos, *pFrame ) )
                         {
-                            SwPosition aPos( *pTableNd );
-                            if( GetBodyTextNode( m_rDoc, aPos, *pFrame ) )
-                            {
-                                FieldsToCalc( *oCalc, SetGetExpField(
-                                        aPos.GetNode(), pFormatField->GetTextField(),
-                                        aPos.GetContentIndex(), pFrame->GetPhyPageNum()),
-                                    pLayout);
-                            }
-                            else
-                                pFrame = nullptr;
+                            FieldsToCalc( *oCalc, SetGetExpField(
+                                    aPos.GetNode(), pFormatField->GetTextField(),
+                                    aPos.GetContentIndex(), pFrame->GetPhyPageNum()),
+                                pLayout);
                         }
+                        else
+                            pFrame = nullptr;
                     }
-                    if( !pFrame )
-                    {
-                        // create index to determine the TextNode
-                        SwFrame const*const pFrame2 = ::sw::FindNeighbourFrameForNode(rTextNd);
-                        FieldsToCalc( *oCalc,
-                            SetGetExpField(rTextNd, pFormatField->GetTextField(),
-                                std::nullopt,
-                                pFrame2 ? pFrame2->GetPhyPageNum() : 0),
-                            pLayout);
-                    }
-
-                    SwTableCalcPara aPara(*oCalc, pTableNd->GetTable(), pLayout);
-                    pField->CalcField( aPara );
-                    if( aPara.IsStackOverflow() )
-                    {
-                        bool const bResult = aPara.CalcWithStackOverflow();
-                        if (bResult)
-                        {
-                            pField->CalcField( aPara );
-                        }
-                        OSL_ENSURE(bResult,
-                                "the chained formula could no be calculated");
-                    }
-                    oCalc->SetCalcError( SwCalcError::NONE );
                 }
-                pFormatField->UpdateTextNode(nullptr, pHt);
+                if( !pFrame )
+                {
+                    // create index to determine the TextNode
+                    SwFrame const*const pFrame2 = ::sw::FindNeighbourFrameForNode(rTextNd);
+                    FieldsToCalc( *oCalc,
+                        SetGetExpField(rTextNd, pFormatField->GetTextField(),
+                            std::nullopt,
+                            pFrame2 ? pFrame2->GetPhyPageNum() : 0),
+                        pLayout);
+                }
+
+                SwTableCalcPara aPara(*oCalc, pTableNd->GetTable(), pLayout);
+                pField->CalcField( aPara );
+                if( aPara.IsStackOverflow() )
+                {
+                    bool const bResult = aPara.CalcWithStackOverflow();
+                    if (bResult)
+                    {
+                        pField->CalcField( aPara );
+                    }
+                    OSL_ENSURE(bResult,
+                            "the chained formula could no be calculated");
+                }
+                oCalc->SetCalcError( SwCalcError::NONE );
+            }
+            pFormatField->UpdateTextNode(nullptr, pHt);
         }
     }
 
@@ -756,87 +731,82 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
     for (const SfxPoolItem* pItem : m_rDoc.GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA))
     {
         auto pFormula = const_cast<SwTableBoxFormula*>(dynamic_cast<const SwTableBoxFormula*>(pItem));
-        if( pFormula && pFormula->GetDefinedIn() && !pFormula->IsValid() )
+        if(!pFormula || !pFormula->GetDefinedIn() || pFormula->IsValid())
+            continue;
+        SwTableBox* pBox = pFormula->GetTableBox();
+        if(!pBox || !pBox->GetSttNd() || !pBox->GetSttNd()->GetNodes().IsDocNodes())
+            continue;
+        const SwTableNode* pTableNd = pBox->GetSttNd()->FindTableNode();
+        if(pHt && &pTableNd->GetTable() != pUpdateField->m_pTable)
+            continue;
+        double nValue;
+        if( !oCalc )
+            oCalc.emplace( m_rDoc );
+
+        // get the values of all SetExpression fields that are valid
+        // until the table
+        SwFrame* pFrame = nullptr;
+        if( pTableNd->GetIndex() < m_rDoc.GetNodes().GetEndOfExtras().GetIndex() )
         {
-            SwTableBox* pBox = pFormula->GetTableBox();
-            if( pBox && pBox->GetSttNd() &&
-                pBox->GetSttNd()->GetNodes().IsDocNodes() )
+            // is in the special section, that's expensive!
+            SwNodeIndex aCNdIdx( *pTableNd, +2 );
+            SwContentNode* pCNd = aCNdIdx.GetNode().GetContentNode();
+            if( !pCNd )
+                pCNd = m_rDoc.GetNodes().GoNext( &aCNdIdx );
+
+            if (pCNd)
             {
-                const SwTableNode* pTableNd = pBox->GetSttNd()->FindTableNode();
-                if( !pHt || &pTableNd->GetTable() ==
-                                            static_cast<SwTableFormulaUpdate*>(pHt)->m_pTable )
+                Point aPt;      // return the first frame of the layout - Tab.Headline!!
+                std::pair<Point, bool> const tmp(aPt, true);
+                pFrame = pCNd->getLayoutFrame(pLayout, nullptr, &tmp);
+                if( pFrame )
                 {
-                    double nValue;
-                    if( !oCalc )
-                        oCalc.emplace( m_rDoc );
-
-                    // get the values of all SetExpression fields that are valid
-                    // until the table
-                    SwFrame* pFrame = nullptr;
-                    if( pTableNd->GetIndex() < m_rDoc.GetNodes().GetEndOfExtras().GetIndex() )
+                    SwPosition aPos( *pCNd );
+                    if( GetBodyTextNode( m_rDoc, aPos, *pFrame ) )
                     {
-                        // is in the special section, that's expensive!
-                        SwNodeIndex aCNdIdx( *pTableNd, +2 );
-                        SwContentNode* pCNd = aCNdIdx.GetNode().GetContentNode();
-                        if( !pCNd )
-                            pCNd = m_rDoc.GetNodes().GoNext( &aCNdIdx );
-
-                        if (pCNd)
-                        {
-                            Point aPt;      // return the first frame of the layout - Tab.Headline!!
-                            std::pair<Point, bool> const tmp(aPt, true);
-                            pFrame = pCNd->getLayoutFrame(pLayout, nullptr, &tmp);
-                            if( pFrame )
-                            {
-                                SwPosition aPos( *pCNd );
-                                if( GetBodyTextNode( m_rDoc, aPos, *pFrame ) )
-                                {
-                                    FieldsToCalc(*oCalc, SetGetExpField(aPos.GetNode(),
-                                            nullptr, std::nullopt, pFrame->GetPhyPageNum()),
-                                        pLayout);
-                                }
-                                else
-                                    pFrame = nullptr;
-                            }
-                        }
-                    }
-                    if( !pFrame )
-                    {
-                        // create index to determine the TextNode
-                        SwFrame const*const pFrame2 = ::sw::FindNeighbourFrameForNode(*pTableNd);
-                        FieldsToCalc(*oCalc, SetGetExpField(*pTableNd, nullptr, std::nullopt,
-                                pFrame2 ? pFrame2->GetPhyPageNum() : 0),
+                        FieldsToCalc(*oCalc, SetGetExpField(aPos.GetNode(),
+                                nullptr, std::nullopt, pFrame->GetPhyPageNum()),
                             pLayout);
                     }
-
-                    SwTableCalcPara aPara(*oCalc, pTableNd->GetTable(), pLayout);
-                    pFormula->Calc( aPara, nValue );
-
-                    if( aPara.IsStackOverflow() )
-                    {
-                        bool const bResult = aPara.CalcWithStackOverflow();
-                        if (bResult)
-                        {
-                            pFormula->Calc( aPara, nValue );
-                        }
-                        OSL_ENSURE(bResult,
-                                "the chained formula could no be calculated");
-                    }
-
-                    SwFrameFormat* pFormat = pBox->ClaimFrameFormat();
-                    SfxItemSetFixed<RES_BOXATR_BEGIN,RES_BOXATR_END-1> aTmp( m_rDoc.GetAttrPool() );
-
-                    if( oCalc->IsCalcError() )
-                        nValue = DBL_MAX;
-                    aTmp.Put( SwTableBoxValue( nValue ));
-                    if( SfxItemState::SET != pFormat->GetItemState( RES_BOXATR_FORMAT ))
-                        aTmp.Put( SwTableBoxNumFormat( 0 ));
-                    pFormat->SetFormatAttr( aTmp );
-
-                    oCalc->SetCalcError( SwCalcError::NONE );
+                    else
+                        pFrame = nullptr;
                 }
             }
         }
+        if( !pFrame )
+        {
+            // create index to determine the TextNode
+            SwFrame const*const pFrame2 = ::sw::FindNeighbourFrameForNode(*pTableNd);
+            FieldsToCalc(*oCalc, SetGetExpField(*pTableNd, nullptr, std::nullopt,
+                    pFrame2 ? pFrame2->GetPhyPageNum() : 0),
+                pLayout);
+        }
+
+        SwTableCalcPara aPara(*oCalc, pTableNd->GetTable(), pLayout);
+        pFormula->Calc( aPara, nValue );
+
+        if( aPara.IsStackOverflow() )
+        {
+            bool const bResult = aPara.CalcWithStackOverflow();
+            if (bResult)
+            {
+                pFormula->Calc( aPara, nValue );
+            }
+            OSL_ENSURE(bResult,
+                    "the chained formula could no be calculated");
+        }
+
+        SwFrameFormat* pFormat = pBox->ClaimFrameFormat();
+        SfxItemSetFixed<RES_BOXATR_BEGIN,RES_BOXATR_END-1> aTmp( m_rDoc.GetAttrPool() );
+
+        if( oCalc->IsCalcError() )
+            nValue = DBL_MAX;
+        aTmp.Put( SwTableBoxValue( nValue ));
+        if( SfxItemState::SET != pFormat->GetItemState( RES_BOXATR_FORMAT ))
+            aTmp.Put( SwTableBoxNumFormat( 0 ));
+        pFormat->SetFormatAttr( aTmp );
+
+        oCalc->SetCalcError( SwCalcError::NONE );
     }
 }
 
