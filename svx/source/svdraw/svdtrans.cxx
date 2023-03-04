@@ -75,8 +75,24 @@ void resizeRange(gfx::Range2DLWrap& rRange, gfx::Tuple2DL const& rReference, dou
     rRange = gfx::Range2DLWrap(left, top, right, bottom, rRange.getUnit());
 }
 
+gfx::Tuple2DL rotatePoint(gfx::Tuple2DL const& rPoint, gfx::Tuple2DL const& rReference, double sinAngle, double cosAngle)
+{
+    gfx::Length dx = rPoint.getX() - rReference.getX();
+    gfx::Length dy = rPoint.getY() - rReference.getY();
+    gfx::Length x = rReference.getX() + dx * cosAngle + dy * sinAngle;
+    gfx::Length y = rReference.getY() + dy * cosAngle - dx * sinAngle;
+    return {x, y};
+}
+
 } // end svx namespace
 
+void RotatePoint(Point& rPnt, const Point& rRef, double sn, double cs)
+{
+    tools::Long dx=rPnt.X()-rRef.X();
+    tools::Long dy=rPnt.Y()-rRef.Y();
+    rPnt.setX(FRound(rRef.X()+dx*cs+dy*sn));
+    rPnt.setY(FRound(rRef.Y()+dy*cs-dx*sn));
+}
 
 void ResizePoly(tools::Polygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {

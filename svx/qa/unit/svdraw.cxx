@@ -600,7 +600,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObjectMove)
     pModel->GetItemPool().FreezeIdRanges();
 
     rtl::Reference<SdrPage> pPage(new SdrPage(*pModel, false));
-    pPage->setSize({50_cm, 50_cm});
+    pPage->setSize({ 50_cm, 50_cm });
     pModel->InsertPage(pPage.get(), 0);
 
     tools::Rectangle aRect(Point(), Size(100, 100));
@@ -622,7 +622,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObjectRotate)
     pModel->GetItemPool().FreezeIdRanges();
 
     rtl::Reference<SdrPage> pPage(new SdrPage(*pModel, false));
-    pPage->setSize({50_cm, 50_cm});
+    pPage->setSize({ 50_cm, 50_cm });
     pModel->InsertPage(pPage.get(), 0);
 
     {
@@ -820,6 +820,46 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testResizeRect)
         CPPUNIT_ASSERT_EQUAL(tools::Rectangle(6, 6, 10, 10), aRectangle);
     }
 }
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testRotatePoint2D)
+{
+    {
+        auto angle = 18000_deg100;
+        double angleRadians = toRadians(angle);
+        gfx::Tuple2DL aPoint(2_cm, 1_cm);
+        gfx::Tuple2DL aReference(1_cm, 1_cm);
+        aPoint
+            = svx::rotatePoint(aPoint, aReference, std::sin(angleRadians), std::cos(angleRadians));
+
+        CPPUNIT_ASSERT_EQUAL(0_cm, aPoint.getX());
+        CPPUNIT_ASSERT_EQUAL(1_cm, aPoint.getY());
+    }
+
+    {
+        auto angle = 9000_deg100;
+        double angleRadians = toRadians(angle);
+        gfx::Tuple2DL aPoint(2_cm, 1_cm);
+        gfx::Tuple2DL aReference(1_cm, 1_cm);
+        aPoint
+            = svx::rotatePoint(aPoint, aReference, std::sin(angleRadians), std::cos(angleRadians));
+
+        CPPUNIT_ASSERT_EQUAL(1_cm, aPoint.getX());
+        CPPUNIT_ASSERT_EQUAL(0_cm, aPoint.getY());
+    }
+
+    {
+        auto angle = 18000_deg100;
+        double angleRadians = toRadians(angle);
+        gfx::Tuple2DL aPoint(1_cm, 1_cm);
+        gfx::Tuple2DL aReference(2_cm, 2_cm);
+        aPoint
+            = svx::rotatePoint(aPoint, aReference, std::sin(angleRadians), std::cos(angleRadians));
+
+        CPPUNIT_ASSERT_EQUAL(3_cm, aPoint.getX());
+        CPPUNIT_ASSERT_EQUAL(3_cm, aPoint.getY());
+    }
+}
+
 } // end anonymous namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
