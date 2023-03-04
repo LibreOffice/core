@@ -919,9 +919,7 @@ sal_uInt16 SaveTable::AddFormat( SwFrameFormat* pFormat, bool bIsLine )
                 const_cast<SwTable*>(m_pSwTable)->SwitchFormulasToExternalRepresentation();
                 SwTableBoxFormula* pFormulaItem = const_cast<SwTableBoxFormula*>(pItem);
                 pFormulaItem->ChgDefinedIn(pFormat);
-                SwTableFormulaUpdate aMsgHint(m_pSwTable);
-                aMsgHint.m_eFlags = TBL_RELBOXNAME;
-                pFormulaItem->ChangeState(&aMsgHint);
+                pFormulaItem->ToRelBoxNm(m_pSwTable);
                 pFormulaItem->ChgDefinedIn(nullptr);
             }
         }

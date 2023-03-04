@@ -105,9 +105,7 @@ SwHistorySetFormat::SwHistorySetFormat( const SfxPoolItem* pFormatHt, SwNodeOffs
                         auto pCpyTable = const_cast<SwTable*>(&pTableNode->GetTable());
                         pCpyTable->SwitchFormulasToExternalRepresentation();
                         rNew.ChgDefinedIn(rOld.GetDefinedIn());
-                        SwTableFormulaUpdate aMsgHint(pCpyTable);
-                        aMsgHint.m_eFlags = TBL_RELBOXNAME;
-                        rNew.ChangeState(&aMsgHint);
+                        rNew.ToRelBoxNm(pCpyTable);
                     }
                 }
             }
@@ -883,9 +881,7 @@ SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
                                     auto pCpyTable = const_cast<SwTable*>(&pTableNode->GetTable());
                                     pCpyTable->SwitchFormulasToExternalRepresentation();
                                     rNew.ChgDefinedIn(rOld.GetDefinedIn());
-                                    SwTableFormulaUpdate aMsgHint(pCpyTable);
-                                    aMsgHint.m_eFlags = TBL_BOXNAME;
-                                    rNew.ChangeState(&aMsgHint);
+                                    rNew.PtrToBoxNm(pCpyTable);
                                 }
                             }
                         }

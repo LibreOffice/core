@@ -124,19 +124,13 @@ void SwTableBoxFormula::ChangeState( const SfxPoolItem* pItem )
         // reset value flag
         ChgValid( false );
         break;
+    case TBL_RELBOXNAME:
     case TBL_BOXNAME:
-        if( &pTableNd->GetTable() == pUpdateField->m_pTable )
-            // use external rendering
-            PtrToBoxNm( pUpdateField->m_pTable );
+        assert(false); // PtrToBoxNm and ToRelBoxNm are both public -- use just them directly
         break;
     case TBL_BOXPTR:
         // internal rendering
         BoxNmToPtr( &pTableNd->GetTable() );
-        break;
-    case TBL_RELBOXNAME:
-        if( &pTableNd->GetTable() == pUpdateField->m_pTable )
-            // relative rendering
-            ToRelBoxNm( pUpdateField->m_pTable );
         break;
 
     case TBL_SPLITTBL:
