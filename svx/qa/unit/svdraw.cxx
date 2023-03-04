@@ -24,6 +24,7 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
+#include <svx/svdtrans.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/unopage.hxx>
 #include <svx/svdview.hxx>
@@ -548,6 +549,92 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testPageViewDrawLayerClip)
     // - Actual  : 3
     // i.e. the 2nd page had a line shape from the first page's footer.
     CPPUNIT_ASSERT_EQUAL(2, pPage2->getObjectCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObjectMove)
+{
+    std::unique_ptr<SdrModel> pModel(new SdrModel(nullptr, nullptr, true));
+    pModel->GetItemPool().FreezeIdRanges();
+
+    rtl::Reference<SdrPage> pPage(new SdrPage(*pModel, false));
+    pPage->SetSize(Size(50000, 50000));
+    pModel->InsertPage(pPage.get(), 0);
+
+    tools::Rectangle aRect(Point(), Size(100, 100));
+    rtl::Reference<SdrRectObj> pRectangleObject = new SdrRectObj(*pModel, aRect);
+    pPage->NbcInsertObject(pRectangleObject.get());
+
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(), Size(100, 100)),
+                         pRectangleObject->GetLogicRect());
+    pRectangleObject->NbcMove({ 100, 100 });
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(100, 100), Size(100, 100)),
+                         pRectangleObject->GetLogicRect());
+
+    pPage->RemoveObject(0);
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObjectRotate)
+{
+    std::unique_ptr<SdrModel> pModel(new SdrModel(nullptr, nullptr, true));
+    pModel->GetItemPool().FreezeIdRanges();
+
+    rtl::Reference<SdrPage> pPage(new SdrPage(*pModel, false));
+    pPage->SetSize(Size(50000, 50000));
+    pModel->InsertPage(pPage.get(), 0);
+
+    {
+        tools::Rectangle aObjectSize(Point(), Size(100, 100));
+        rtl::Reference<SdrRectObj> pRectangleObject = new SdrRectObj(*pModel, aObjectSize);
+        pPage->NbcInsertObject(pRectangleObject.get());
+
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, 0), Size(100, 100)),
+                             pRectangleObject->GetLogicRect());
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, 0), Size(100, 100)),
+                             pRectangleObject->GetSnapRect());
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(-1, -1), Size(102, 102)),
+                             pRectangleObject->GetCurrentBoundRect());
+
+        auto angle = 9000_deg100;
+        double angleRadians = toRadians(angle);
+        pRectangleObject->NbcRotate(aObjectSize.Center(), angle, std::sin(angleRadians),
+                                    std::cos(angleRadians));
+
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, 98), Size(100, 100)),
+                             pRectangleObject->GetLogicRect());
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, -1), Size(100, 100)),
+                             pRectangleObject->GetSnapRect());
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(-1, -2), Size(102, 102)),
+                             pRectangleObject->GetCurrentBoundRect());
+
+        pPage->RemoveObject(0);
+    }
+
+    {
+        tools::Rectangle aObjectSize(Point(), Size(100, 100));
+        rtl::Reference<SdrRectObj> pRectangleObject = new SdrRectObj(*pModel, aObjectSize);
+        pPage->NbcInsertObject(pRectangleObject.get());
+
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, 0), Size(100, 100)),
+                             pRectangleObject->GetLogicRect());
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, 0), Size(100, 100)),
+                             pRectangleObject->GetSnapRect());
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(-1, -1), Size(102, 102)),
+                             pRectangleObject->GetCurrentBoundRect());
+
+        auto angle = -4500_deg100;
+        double angleRadians = toRadians(angle);
+        pRectangleObject->NbcRotate(aObjectSize.Center(), angle, std::sin(angleRadians),
+                                    std::cos(angleRadians));
+
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(49, -20), Size(100, 100)),
+                             pRectangleObject->GetLogicRect());
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(-21, -20), Size(141, 141)),
+                             pRectangleObject->GetSnapRect());
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(-22, -21), Size(143, 143)),
+                             pRectangleObject->GetCurrentBoundRect());
+
+        pPage->RemoveObject(0);
+    }
 }
 }
 
