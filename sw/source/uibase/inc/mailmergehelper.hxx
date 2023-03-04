@@ -26,9 +26,8 @@
 #include <com/sun/star/mail/XMailMessage.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <utility>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
@@ -171,15 +170,11 @@ public:
 };
 
 class SW_DLLPUBLIC SwConnectionListener final :
-        public cppu::BaseMutex,
-        public cppu::WeakComponentImplHelper<css::mail::XConnectionListener>
+        public comphelper::WeakComponentImplHelper<css::mail::XConnectionListener>
 {
-    using cppu::WeakComponentImplHelperBase::disposing;
+    using comphelper::WeakComponentImplHelperBase::disposing;
 
 public:
-    SwConnectionListener() :
-        cppu::WeakComponentImplHelper<css::mail::XConnectionListener>(m_aMutex)
-    {}
     virtual ~SwConnectionListener() override;
 
     virtual void SAL_CALL connected(const css::lang::EventObject& aEvent) override;
@@ -190,8 +185,7 @@ public:
 };
 
 class SW_DLLPUBLIC SwMailTransferable final :
-        public cppu::BaseMutex,
-        public cppu::WeakComponentImplHelper<css::datatransfer::XTransferable, css::beans::XPropertySet>
+        public comphelper::WeakComponentImplHelper<css::datatransfer::XTransferable, css::beans::XPropertySet>
 {
     OUString  m_aMimeType;
     OUString  m_sBody;
@@ -225,8 +219,7 @@ class SW_DLLPUBLIC SwMailTransferable final :
 };
 
 class SW_DLLPUBLIC SwMailMessage final :
-        public cppu::BaseMutex,
-        public cppu::WeakComponentImplHelper<css::mail::XMailMessage>
+        public comphelper::WeakComponentImplHelper<css::mail::XMailMessage>
 {
     OUString m_sSenderName;
     OUString m_sSenderAddress;

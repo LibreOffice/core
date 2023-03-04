@@ -24,6 +24,7 @@
 #include <bitmaps.hlst>
 #include <swtypes.hxx>
 
+#include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <com/sun/star/mail/XSmtpService.hpp>
 #include <vcl/idle.hxx>

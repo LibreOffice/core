@@ -102,7 +102,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
             mail::MailServiceProvider::create( xContext ) );
         xSmtpServer.set(xMailServiceProvider->create(mail::MailServiceType_SMTP), uno::UNO_QUERY);
 
-        uno::Reference< mail::XConnectionListener> xConnectionListener(new SwConnectionListener());
+        uno::Reference< mail::XConnectionListener> xConnectionListener(new SwConnectionListener);
 
         if(rConfigItem.IsAuthentication() && rConfigItem.IsSMTPAfterPOP())
         {
@@ -632,7 +632,6 @@ void SwConnectionListener::disposing(const lang::EventObject& /*aEvent*/)
 }
 
 SwMailTransferable::SwMailTransferable(OUString aBody, OUString aMimeType) :
-    cppu::WeakComponentImplHelper< datatransfer::XTransferable, beans::XPropertySet >(m_aMutex),
     m_aMimeType(std::move( aMimeType )),
     m_sBody(std::move( aBody )),
     m_bIsBody( true )
@@ -641,7 +640,6 @@ SwMailTransferable::SwMailTransferable(OUString aBody, OUString aMimeType) :
 
 SwMailTransferable::SwMailTransferable(OUString aURL,
                 OUString aName, OUString aMimeType) :
-    cppu::WeakComponentImplHelper< datatransfer::XTransferable, beans::XPropertySet >(m_aMutex),
     m_aMimeType(std::move( aMimeType )),
     m_aURL(std::move(aURL)),
     m_aName(std::move( aName )),
@@ -737,8 +735,7 @@ void SwMailTransferable::removeVetoableChangeListener(
 {
 }
 
-SwMailMessage::SwMailMessage() :
-        cppu::WeakComponentImplHelper< mail::XMailMessage>(m_aMutex)
+SwMailMessage::SwMailMessage()
 {
 }
 

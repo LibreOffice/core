@@ -265,7 +265,7 @@ void SwTestAccountSettingsDialog::Test()
                 mail::MailServiceType_SMTP);
         if(m_bStop)
             return;
-        uno::Reference<XConnectionListener> xConnectionListener(new SwConnectionListener());
+        uno::Reference<XConnectionListener> xConnectionListener(new SwConnectionListener);
 
         if(m_pParent->m_pConfigItem->IsAuthentication() &&
                 m_pParent->m_pConfigItem->IsSMTPAfterPOP())
