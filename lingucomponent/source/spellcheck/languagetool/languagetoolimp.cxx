@@ -43,6 +43,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <unotools/lingucfg.hxx>
 #include <osl/mutex.hxx>
+#include <rtl/uri.hxx>
 
 using namespace osl;
 using namespace com::sun::star;
@@ -76,6 +77,20 @@ Sequence<PropertyValue> lcl_GetLineColorPropertyFromErrorId(const std::string& r
     }
     Sequence<PropertyValue> aProperties{ comphelper::makePropertyValue("LineColor", aColor) };
     return aProperties;
+}
+
+OString encodeTextForLanguageTool(const OUString& text)
+{
+    // Let's be a bit conservative. I don't find a good description what needs encoding (and in
+    // which way) at https://languagetool.org/http-api/; the "Try it out!" function shows that
+    // different cases are handled differently by the demo; some percent-encode the UTF-8
+    // representation, like %D0%90 (for cyrillic А); some turn into entities like &#33; (for
+    // exclamation mark !); some other to things like \u0027 (for apostrophe ').
+    static constexpr auto myCharClass
+        = rtl::createUriCharClass("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+    return OUStringToOString(
+        rtl::Uri::encode(text, myCharClass.data(), rtl_UriEncodeStrict, RTL_TEXTENCODING_UTF8),
+        RTL_TEXTENCODING_ASCII_US);
 }
 }
 
@@ -224,14 +239,14 @@ ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
     xRes.nBehindEndOfSentencePosition
         = std::min(xRes.nStartOfNextSentencePosition, aText.getLength());
 
-    OUString langTag(aLocale.Language + "-" + aLocale.Country);
-    OString postData;
+    OString langTag(LanguageTag::convertToBcp47(aLocale, false).toUtf8());
+    OString postData = encodeTextForLanguageTool(aText);
     if (rLanguageOpts.getRestProtocol() == sDuden)
     {
         std::stringstream aStream;
         boost::property_tree::ptree aTree;
-        aTree.put("text-language", langTag.toUtf8().getStr());
-        aTree.put("text", aText.toUtf8().getStr());
+        aTree.put("text-language", langTag.getStr());
+        aTree.put("text", postData.getStr());
         aTree.put("hyphenation", false);
         aTree.put("spellchecking-level", 3);
         aTree.put("correction-proposals", true);
@@ -240,8 +255,7 @@ ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
     }
     else
     {
-        postData = OUStringToOString(Concat2View("text=" + aText + "&language=" + langTag),
-                                     RTL_TEXTENCODING_UTF8);
+        postData = "text=" + postData + "&language=" + langTag;
     }
 
     if (auto cachedResult = mCachedResults.find(postData); cachedResult != mCachedResults.end())
