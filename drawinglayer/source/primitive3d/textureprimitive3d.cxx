@@ -94,7 +94,7 @@ namespace drawinglayer::primitive3d
                 // create TransparenceTexturePrimitive3D with fixed transparence as replacement
                 const basegfx::BColor aGray(getTransparence(), getTransparence(), getTransparence());
 
-                // create ColorSteps with StartColor == EndCoOlor == aGray
+                // create ColorSteps with StartColor == EndColor == aGray
                 const basegfx::ColorSteps aColorSteps {
                     basegfx::ColorStep(0.0, aGray),
                     basegfx::ColorStep(1.0, aGray) };
