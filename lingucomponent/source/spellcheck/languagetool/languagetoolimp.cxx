@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <config_version.h>
+
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
@@ -119,6 +123,15 @@ std::string makeHttpRequest_impl(std::string_view aURL, HTTP_METHOD method,
                                                            [](CURL* p) { curl_easy_cleanup(p); });
     if (!curl)
         return {}; // empty string
+
+    // Same useragent string as in CurlSession (ucp/webdav-curl/CurlSession.cxx)
+    curl_version_info_data const* const pVersion(curl_version_info(CURLVERSION_NOW));
+    assert(pVersion);
+    OString const useragent(
+        OString::Concat("LibreOffice " LIBO_VERSION_DOTTED " denylistedbackend/")
+        + ::std::string_view(pVersion->version, strlen(pVersion->version)) + " "
+        + pVersion->ssl_version);
+    (void)curl_easy_setopt(curl.get(), CURLOPT_USERAGENT, useragent.getStr());
 
     (void)curl_easy_setopt(curl.get(), CURLOPT_HTTPHEADER, pHttpHeader);
     (void)curl_easy_setopt(curl.get(), CURLOPT_FAILONERROR, 1L);
