@@ -30,7 +30,7 @@ namespace svx
     class DbRegistrationOptionsPage : public SfxTabPage
     {
     private:
-        sal_uLong               m_nOldCount;
+        size_t              m_nOldCount;
         bool                m_bModified;
 
         std::unique_ptr<weld::Button> m_xNew;

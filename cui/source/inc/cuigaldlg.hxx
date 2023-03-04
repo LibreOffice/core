@@ -39,7 +39,7 @@ class SearchProgress;
 class TakeProgress;
 class TPGalleryThemeProperties;
 
-typedef std::vector< sal_uLong > TokenList_impl;
+typedef std::vector< sal_Int32 > TokenList_impl;
 
 struct FilterEntry
 {
