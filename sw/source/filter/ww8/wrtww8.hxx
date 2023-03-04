@@ -822,6 +822,8 @@ public:
     /// Returns the index of a picture bullet, used in numberings.
     int GetGrfIndex(const SvxBrushItem& rBrush);
 
+    tools::Long GetParaTabStopOffset() const;
+
     enum ExportFormat { DOC = 0, RTF = 1, DOCX = 2};
     virtual ExportFormat GetExportFormat() const = 0;
 

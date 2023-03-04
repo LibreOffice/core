@@ -8696,9 +8696,7 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
     // Get offset for tabs
     // In DOCX, w:pos specifies the position of the current custom tab stop with respect to the current page margins.
     // But in ODT, zero position could be page margins or paragraph indent according to used settings.
-    tools::Long tabsOffset = 0;
-    if (m_rExport.m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::TABS_RELATIVE_TO_INDENT))
-        tabsOffset = m_rExport.GetItem(RES_MARGIN_TEXTLEFT).GetTextLeft();
+    tools::Long tabsOffset = m_rExport.GetParaTabStopOffset();
 
     // clear unused inherited tabs - otherwise the style will add them back in
     sal_Int32 nCurrTab = 0;

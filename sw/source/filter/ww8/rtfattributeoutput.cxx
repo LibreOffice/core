@@ -2989,17 +2989,7 @@ void RtfAttributeOutput::ParaWidows(const SvxWidowsItem& rWidows)
 
 void RtfAttributeOutput::ParaTabStop(const SvxTabStopItem& rTabStop)
 {
-    tools::Long nOffset = 0;
-    // Tabs are absolute by default.
-    if (m_rExport.m_rDoc.getIDocumentSettingAccess().get(
-            DocumentSettingId::TABS_RELATIVE_TO_INDENT))
-    {
-        // don't do it for editengine text, it doesn't implement this anyway
-        if (!GetExport().m_pISet || GetExport().m_pISet->GetRanges()[0].first < RES_WHICHHINT_END)
-        {
-            nOffset = m_rExport.GetItem(RES_MARGIN_TEXTLEFT).GetTextLeft();
-        }
-    }
+    tools::Long nOffset = m_rExport.GetParaTabStopOffset();
 
     for (sal_uInt16 n = 0; n < rTabStop.Count(); n++)
     {

@@ -749,6 +749,21 @@ void MSWordExportBase::CorrectTabStopInSet( SfxItemSet& rSet, sal_Int32 nAbsLeft
     rSet.Put( aTStop );
 }
 
+tools::Long MSWordExportBase::GetParaTabStopOffset() const
+{
+    tools::Long nOffset = 0;
+    // Tabs are absolute by default.
+    if (m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::TABS_RELATIVE_TO_INDENT))
+    {
+        // don't do it for editengine text, it doesn't implement this anyway
+        if (!m_pISet || m_pISet->GetRanges()[0].first < RES_WHICHHINT_END)
+        {
+            nOffset = GetItem(RES_MARGIN_TEXTLEFT).GetTextLeft();
+        }
+    }
+    return nOffset;
+}
+
 sal_uInt8 WW8Export::GetNumId( sal_uInt16 eNumType )
 {
     sal_uInt8 nRet = 0;
