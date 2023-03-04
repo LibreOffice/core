@@ -274,7 +274,7 @@ namespace basegfx
              (will be removed, 1st one wins)
            - will be sorted from lowest offset to highest
            - if all colors are the same, the content will
-             be reducved to a single entry with offset 0.0
+             be reduced to a single entry with offset 0.0
              (StartColor)
 
            Some more notes:
