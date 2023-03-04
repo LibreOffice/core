@@ -1656,10 +1656,7 @@ void SwUndoTableNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
 
     SwTableNode *const pTableNd = aIdx.GetNode().GetTableNode();
     OSL_ENSURE( pTableNd, "no TableNode" );
-
-    SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
-    aMsgHint.m_eFlags = TBL_BOXPTR;
-    rDoc.getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
+    pTableNd->GetTable().SwitchFormulasToInternalRepresentation();
 
     CHECK_TABLE( pTableNd->GetTable() )
 
@@ -1823,10 +1820,8 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
     case SwUndoId::ROW_DELETE:
     case SwUndoId::COL_DELETE:
         {
-            SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
-            aMsgHint.m_eFlags = TBL_BOXPTR;
-            rDoc.getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
             SwTable &rTable = pTableNd->GetTable();
+            rTable.SwitchFormulasToInternalRepresentation();
             if( m_nMax > m_nMin && rTable.IsNewModel() )
                 rTable.PrepareDeleteCol( m_nMin, m_nMax );
             rTable.DeleteSel( &rDoc, aSelBoxes, nullptr, this, true, true );
@@ -1864,9 +1859,7 @@ void SwUndoTableMerge::UndoImpl(::sw::UndoRedoContext & rContext)
     SwTableNode *const pTableNd = aIdx.GetNode().GetTableNode();
     OSL_ENSURE( pTableNd, "no TableNode" );
 
-    SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
-    aMsgHint.m_eFlags = TBL_BOXPTR;
-    rDoc.getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
+    pTableNd->GetTable().SwitchFormulasToInternalRepresentation();
 
     // ? TL_CHART2: notification or locking of controller required ?
 
@@ -2856,10 +2849,7 @@ void SwUndoSplitTable::UndoImpl(::sw::UndoRedoContext & rContext)
     rPtPos.Assign( m_nTableNode + m_nOffset );
     SwTableNode* pTableNd = rPtPos.GetNode().GetTableNode();
     SwTable& rTable = pTableNd->GetTable();
-
-    SwTableFormulaUpdate aMsgHint( &rTable );
-    aMsgHint.m_eFlags = TBL_BOXPTR;
-    pDoc->getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
+    rTable.SwitchFormulasToInternalRepresentation();
 
     switch( m_nMode )
     {
@@ -2973,10 +2963,7 @@ void SwUndoMergeTable::UndoImpl(::sw::UndoRedoContext & rContext)
 
     SwTableNode* pTableNd = rPtPos.GetNode().FindTableNode();
     SwTable* pTable = &pTableNd->GetTable();
-
-    SwTableFormulaUpdate aMsgHint( pTable );
-    aMsgHint.m_eFlags = TBL_BOXPTR;
-    pDoc->getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
+    pTable->SwitchFormulasToInternalRepresentation();
 
     // get lines for layout update
     FndBox_ aFndBox( nullptr, nullptr );

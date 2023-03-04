@@ -601,14 +601,15 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
     OSL_ENSURE( !pHt || RES_TABLEFML_UPDATE  == pHt->Which(),
             "What MessageItem is this?" );
 
+    SwTableFormulaUpdate* pUpdateField = nullptr;
+    if( pHt && RES_TABLEFML_UPDATE == pHt->Which() )
+        pUpdateField = static_cast<SwTableFormulaUpdate*>(pHt);
+    assert(!pUpdateField || pUpdateField->m_eFlags != TBL_BOXPTR); // use SwTable::SwitchFormulasToInternalRepresentation
     auto pFieldType = GetFieldType( SwFieldIds::Table, OUString(), false );
     if(pFieldType)
     {
         std::vector<SwFormatField*> vFields;
         pFieldType->GatherFields(vFields);
-        SwTableFormulaUpdate* pUpdateField = nullptr;
-        if( pHt && RES_TABLEFML_UPDATE == pHt->Which() )
-            pUpdateField = static_cast<SwTableFormulaUpdate*>(pHt);
         for(auto pFormatField : vFields)
         {
             SwTableField* pField = static_cast<SwTableField*>(pFormatField->GetField());
@@ -633,11 +634,6 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                         pField->ChgValid( false );
                     break;
                 case TBL_BOXPTR:
-                    // to the internal representation
-                    // JP 17.06.96: internal representation on all formulas
-                    //              (reference to other table!!!)
-                    pField->BoxNmToPtr( &pTableNd->GetTable() );
-                    break;
                 case TBL_BOXNAME:
                 case TBL_RELBOXNAME:
                     assert(false); // use SwTable::SwitchTo...
@@ -654,11 +650,9 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
     // process all table box formulas
     for (const SfxPoolItem* pItem : m_rDoc.GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA))
     {
-        auto pBoxFormula = dynamic_cast<const SwTableBoxFormula*>(pItem);
-        if( pBoxFormula && pBoxFormula->GetDefinedIn() )
-        {
-            const_cast<SwTableBoxFormula*>(pBoxFormula)->ChangeState( pHt );
-        }
+        auto pBoxFormula = const_cast<SwTableBoxFormula*>(pItem->DynamicWhichCast(RES_BOXATR_FORMULA));
+        if(pBoxFormula && pBoxFormula->GetDefinedIn())
+            pBoxFormula->ChangeState(pHt);
     }
 
     SwRootFrame const* pLayout(nullptr);

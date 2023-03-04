@@ -363,7 +363,8 @@ public:
         { UpdateFields(TBL_BOXNAME); };
     void SwitchFormulasToRelativeRepresentation()
         { UpdateFields(TBL_RELBOXNAME); };
-
+    void SwitchFormulasToInternalRepresentation()
+        { UpdateFields(TBL_BOXPTR); }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };

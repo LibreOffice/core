@@ -1718,10 +1718,7 @@ bool SwDoc::InsertCol( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
     {
         ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
-        SwTableFormulaUpdate aMsgHint( &rTable );
-        aMsgHint.m_eFlags = TBL_BOXPTR;
-        getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
-
+        rTable.SwitchFormulasToInternalRepresentation();
         bRet = rTable.InsertCol(*this, rBoxes, nCnt, bBehind);
         if (bRet)
         {
@@ -1772,10 +1769,7 @@ bool SwDoc::InsertRow( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
     bool bRet(false);
     {
         ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
-
-        SwTableFormulaUpdate aMsgHint( &rTable );
-        aMsgHint.m_eFlags = TBL_BOXPTR;
-        getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
+        rTable.SwitchFormulasToInternalRepresentation();
 
         bRet = rTable.InsertRow( this, rBoxes, nCnt, bBehind );
         if (bRet)
@@ -2098,10 +2092,7 @@ bool SwDoc::DeleteRowCol(const SwSelBoxes& rBoxes, RowColMode const eMode)
     bool bRet(false);
     {
         ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
-
-        SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
-        aMsgHint.m_eFlags = TBL_BOXPTR;
-        getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
+        rTable.SwitchFormulasToInternalRepresentation();
 
         if (rTable.IsNewModel())
         {
@@ -2168,10 +2159,7 @@ bool SwDoc::SplitTable( const SwSelBoxes& rBoxes, bool bVert, sal_uInt16 nCnt,
     bool bRet(false);
     {
         ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
-
-        SwTableFormulaUpdate aMsgHint( &rTable );
-        aMsgHint.m_eFlags = TBL_BOXPTR;
-        getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
+        rTable.SwitchFormulasToInternalRepresentation();
 
         if (bVert)
             bRet = rTable.SplitCol(*this, rBoxes, nCnt);
@@ -2286,9 +2274,7 @@ TableMergeErr SwDoc::MergeTable( SwPaM& rPam )
         }
 
         // Merge them
-        SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
-        aMsgHint.m_eFlags = TBL_BOXPTR;
-        getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
+        pTableNd->GetTable().SwitchFormulasToInternalRepresentation();
 
         if( pTableNd->GetTable().Merge( this, aBoxes, aMerged, pMergeBox, pUndo.get() ))
         {
@@ -3963,10 +3949,7 @@ void SwDoc::SetColRowWidthHeight( SwTableBox& rCurrentBox, TableChgWidthHeightTy
     SwTableNode* pTableNd = const_cast<SwTableNode*>(rCurrentBox.GetSttNd()->FindTableNode());
     std::unique_ptr<SwUndo> pUndo;
 
-    SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
-    aMsgHint.m_eFlags = TBL_BOXPTR;
-    getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
-
+    pTableNd->GetTable().SwitchFormulasToInternalRepresentation();
     bool const bUndo(GetIDocumentUndoRedo().DoesUndo());
     bool bRet = false;
     switch( extractPosition(eType) )

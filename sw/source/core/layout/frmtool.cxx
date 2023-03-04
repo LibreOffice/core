@@ -1691,9 +1691,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
             // #108116# loading may produce table structures that GCLines
             // needs to clean up. To keep table formulas correct, change
             // all table formulas to internal (BOXPTR) representation.
-            SwTableFormulaUpdate aMsgHint( &pTableNode->GetTable() );
-            aMsgHint.m_eFlags = TBL_BOXPTR;
-            pDoc->getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
+            pTableNode->GetTable().SwitchFormulasToInternalRepresentation();
             pTableNode->GetTable().GCLines();
 
             if( pPageMaker )

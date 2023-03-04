@@ -1641,8 +1641,14 @@ void SwTable::UpdateFields(TableFormulaUpdateFlags eFlags)
                 // to the relative representation
                 pField->ToRelBoxNm(this);
                 break;
+            case TBL_BOXPTR:
+                // to the internal representation
+                // JP 17.06.96: internal representation on all formulas
+                //              (reference to other table!!!)
+                pField->BoxNmToPtr( &pTableNd->GetTable() );
+                break;
             default:
-                assert(false); // Only TBL_BOXNAME and TBL_RELBOXNAME supported
+                assert(false); // Only TBL_BOXNAME, TBL_RELBOXNAME and TBL_BOXPTR are supported
                 break;
         }
     }
@@ -1651,10 +1657,13 @@ void SwTable::UpdateFields(TableFormulaUpdateFlags eFlags)
     aHint.m_eFlags = eFlags;
     for(const SfxPoolItem* pItem : pDoc->GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA))
     {
-        auto pBoxFormula = dynamic_cast<const SwTableBoxFormula*>(pItem);
+        auto pBoxFormula = const_cast<SwTableBoxFormula*>(pItem->DynamicWhichCast(RES_BOXATR_FORMULA));
         if(pBoxFormula && pBoxFormula->GetDefinedIn())
         {
-            const_cast<SwTableBoxFormula*>(pBoxFormula)->ChangeState(&aHint);
+            if(eFlags == TBL_BOXPTR)
+                pBoxFormula->TryBoxNmToPtr();
+            else
+                pBoxFormula->ChangeState(&aHint);
         }
     }
 }

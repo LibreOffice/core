@@ -94,6 +94,16 @@ SwTableBox* SwTableBoxFormula::GetTableBox()
     return m_pDefinedIn ? static_cast<SwTableBoxFormat*>(m_pDefinedIn)->GetTableBox() : nullptr;
 }
 
+void SwTableBoxFormula::TryBoxNmToPtr()
+{
+    const SwNode* pNd = GetNodeOfFormula();
+    if (!pNd || &pNd->GetNodes() != &pNd->GetDoc().GetNodes())
+        return;
+    if(const SwTableNode* pTableNd = pNd->FindTableNode())
+    {
+        BoxNmToPtr(&pTableNd->GetTable());
+    }
+}
 void SwTableBoxFormula::ChangeState( const SfxPoolItem* pItem )
 {
     if( !m_pDefinedIn )
@@ -124,13 +134,10 @@ void SwTableBoxFormula::ChangeState( const SfxPoolItem* pItem )
         // reset value flag
         ChgValid( false );
         break;
+    case TBL_BOXPTR:
     case TBL_RELBOXNAME:
     case TBL_BOXNAME:
-        assert(false); // PtrToBoxNm and ToRelBoxNm are both public -- use just them directly
-        break;
-    case TBL_BOXPTR:
-        // internal rendering
-        BoxNmToPtr( &pTableNd->GetTable() );
+        assert(false); // PtrToBoxNm, ToRelBoxNm and BoxNmToPtr are all public -- use just them directly
         break;
 
     case TBL_SPLITTBL:
