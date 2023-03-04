@@ -1166,91 +1166,91 @@ do_action:  /* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>Begin[%s]\n",yytext+1); return EQBEGIN; }
+{ yylval.str = yytext+1; token_debug("  ==>Begin[%s]\n",yytext+1); return Grammar::EQBEGIN; }
     //YY_BREAK
 case 2:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>End[%s]\n",yytext+1); return EQEND; }
+{ yylval.str = yytext+1; token_debug("  ==>End[%s]\n",yytext+1); return Grammar::EQEND; }
     //YY_BREAK
 case 3:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>Left[%s]\n",yytext+1); return EQLEFT; }
+{ yylval.str = yytext+1; token_debug("  ==>Left[%s]\n",yytext+1); return Grammar::EQLEFT; }
     //YY_BREAK
 case 4:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>LeftDelim[%s]\n",yytext+1); return LEFT_DELIM; }
+{ yylval.str = yytext+1; token_debug("  ==>LeftDelim[%s]\n",yytext+1); return Grammar::LEFT_DELIM; }
     //YY_BREAK
 case 5:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>RightDelim[%s]\n",yytext+1); return RIGHT_DELIM; }
+{ yylval.str = yytext+1; token_debug("  ==>RightDelim[%s]\n",yytext+1); return Grammar::RIGHT_DELIM; }
     //YY_BREAK
 case 6:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>Right[%s]\n",yytext+1); return EQRIGHT; }
+{ yylval.str = yytext+1; token_debug("  ==>Right[%s]\n",yytext+1); return Grammar::EQRIGHT; }
     //YY_BREAK
 case 7:
 YY_RULE_SETUP
-{ yylval.str = yytext;   token_debug("  ==>NewLine[%s]\n",yytext); return NEWLINE; }
+{ yylval.str = yytext;   token_debug("  ==>NewLine[%s]\n",yytext); return Grammar::NEWLINE; }
     //YY_BREAK
 case 8:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>Accent[%s]\n",yytext+1); return ACCENT; }
+{ yylval.str = yytext+1; token_debug("  ==>Accent[%s]\n",yytext+1); return Grammar::ACCENT; }
     //YY_BREAK
 case 9:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>Small_Greek[%s]\n",yytext+1); return SMALL_GREEK; }
+{ yylval.str = yytext+1; token_debug("  ==>Small_Greek[%s]\n",yytext+1); return Grammar::SMALL_GREEK; }
     //YY_BREAK
 case 10:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>Capital_Greek[%s]\n",yytext+1); return CAPITAL_GREEK; }
+{ yylval.str = yytext+1; token_debug("  ==>Capital_Greek[%s]\n",yytext+1); return Grammar::CAPITAL_GREEK; }
     //YY_BREAK
 case 11:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>Binary_Operator[%s]\n",yytext+1); return BINARY_OPERATOR; }
+{ yylval.str = yytext+1; token_debug("  ==>Binary_Operator[%s]\n",yytext+1); return Grammar::BINARY_OPERATOR; }
     //YY_BREAK
 case 12:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>Relation_Symbol[%s]\n",yytext+1); return RELATION_OPERATOR; }
+{ yylval.str = yytext+1; token_debug("  ==>Relation_Symbol[%s]\n",yytext+1); return Grammar::RELATION_OPERATOR; }
     //YY_BREAK
 case 13:
 YY_RULE_SETUP
-{ yylval.str = "neq"; token_debug(" ==>Relation_Symbol[neq]\n"); return RELATION_OPERATOR; }
+{ yylval.str = "neq"; token_debug(" ==>Relation_Symbol[neq]\n"); return Grammar::RELATION_OPERATOR; }
     //YY_BREAK
 case 14:
 YY_RULE_SETUP
-{ yylval.str = "vmlt"; token_debug(" ==>Relation_Symbol[neq]\n"); return RELATION_OPERATOR; }
+{ yylval.str = "vmlt"; token_debug(" ==>Relation_Symbol[neq]\n"); return Grammar::RELATION_OPERATOR; }
     //YY_BREAK
 case 15:
 YY_RULE_SETUP
-{ yylval.str = "vmgt"; token_debug(" ==>Relation_Symbol[neq]\n"); return RELATION_OPERATOR; }
+{ yylval.str = "vmgt"; token_debug(" ==>Relation_Symbol[neq]\n"); return Grammar::RELATION_OPERATOR; }
     //YY_BREAK
 case 16:
 YY_RULE_SETUP
-{ yylval.str = "mlt"; token_debug(" ==>Relation_Symbol[neq]\n"); return RELATION_OPERATOR; }
+{ yylval.str = "mlt"; token_debug(" ==>Relation_Symbol[neq]\n"); return Grammar::RELATION_OPERATOR; }
     //YY_BREAK
 case 17:
 YY_RULE_SETUP
-{ yylval.str = "mgt"; token_debug(" ==>Relation_Symbol[neq]\n"); return RELATION_OPERATOR; }
+{ yylval.str = "mgt"; token_debug(" ==>Relation_Symbol[neq]\n"); return Grammar::RELATION_OPERATOR; }
     //YY_BREAK
 case 18:
 YY_RULE_SETUP
-{ yylval.str = yytext; token_debug(" ==>Relation_Symbol[neq]\n"); return RELATION_OPERATOR; }
+{ yylval.str = yytext; token_debug(" ==>Relation_Symbol[neq]\n"); return Grammar::RELATION_OPERATOR; }
     //YY_BREAK
 case 19:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>Arrow[%s]\n",yytext+1); return ARROW; }
+{ yylval.str = yytext+1; token_debug("  ==>Arrow[%s]\n",yytext+1); return Grammar::ARROW; }
     //YY_BREAK
 case 20:
 YY_RULE_SETUP
-{ yylval.str = "leftrightarrow"; token_debug("  ==>Arrow[leftrightarrow]\n"); return ARROW; }
+{ yylval.str = "leftrightarrow"; token_debug("  ==>Arrow[leftrightarrow]\n"); return Grammar::ARROW; }
     //YY_BREAK
 case 21:
 YY_RULE_SETUP
-{ yylval.str = "rightarrow"; token_debug("  ==>Arrow[rightarrow]\n"); return ARROW; }
+{ yylval.str = "rightarrow"; token_debug("  ==>Arrow[rightarrow]\n"); return Grammar::ARROW; }
     //YY_BREAK
 case 22:
 YY_RULE_SETUP
-{ yylval.str = "leftarrow"; token_debug("   ==>Arrow[leftarrow]\n"); return ARROW; }
+{ yylval.str = "leftarrow"; token_debug("   ==>Arrow[leftarrow]\n"); return Grammar::ARROW; }
     //YY_BREAK
 
 case 23:
@@ -1260,61 +1260,61 @@ YY_RULE_SETUP
 [[fallthrough]];
 case 24:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>General_Iden[%s]\n",yytext+1); return GENERAL_IDEN; }
+{ yylval.str = yytext+1; token_debug("  ==>General_Iden[%s]\n",yytext+1); return Grammar::GENERAL_IDEN; }
     //YY_BREAK
 case 25:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>General_Oper[%s]\n",yytext+1); return GENERAL_OPER; }
+{ yylval.str = yytext+1; token_debug("  ==>General_Oper[%s]\n",yytext+1); return Grammar::GENERAL_OPER; }
     //YY_BREAK
 case 26:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>Big_Symbol[%s]\n",yytext+1); return BIG_SYMBOL; }
+{ yylval.str = yytext+1; token_debug("  ==>Big_Symbol[%s]\n",yytext+1); return Grammar::BIG_SYMBOL; }
     //YY_BREAK
 case 27:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>Function[%s]\n",yytext+1); return FUNCTION; }
+{ yylval.str = yytext+1; token_debug("  ==>Function[%s]\n",yytext+1); return Grammar::FUNCTION; }
     //YY_BREAK
 case 28:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>Root[%s]\n",yytext+1); return ROOT; }
+{ yylval.str = yytext+1; token_debug("  ==>Root[%s]\n",yytext+1); return Grammar::ROOT; }
     //YY_BREAK
 case 29:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>Fraction[%s]\n",yytext+1); return FRACTION; }
+{ yylval.str = yytext+1; token_debug("  ==>Fraction[%s]\n",yytext+1); return Grammar::FRACTION; }
     //YY_BREAK
 case 30:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>Over[%s]\n",yytext+1); return EQOVER; }
+{ yylval.str = yytext+1; token_debug("  ==>Over[%s]\n",yytext+1); return Grammar::EQOVER; }
     //YY_BREAK
 case 31:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>Delimeter[%s]\n",yytext+1); return DELIMETER; }
+{ yylval.str = yytext+1; token_debug("  ==>Delimeter[%s]\n",yytext+1); return Grammar::DELIMETER; }
     //YY_BREAK
 case 32:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>Large_Delim[%s]\n",yytext+1); return LARGE_DELIM; }
+{ yylval.str = yytext+1; token_debug("  ==>Large_Delim[%s]\n",yytext+1); return Grammar::LARGE_DELIM; }
     //YY_BREAK
 case 33:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>Decoration[%s]\n",yytext+1); return DECORATION; }
+{ yylval.str = yytext+1; token_debug("  ==>Decoration[%s]\n",yytext+1); return Grammar::DECORATION; }
     //YY_BREAK
 case 34:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>Space_Symbol[%s]\n",yytext+1); /*return SPACE_SYMBOL;*/ }
+{ yylval.str = yytext+1; token_debug("  ==>Space_Symbol[%s]\n",yytext+1); /*return Grammar::SPACE_SYMBOL;*/ }
     //YY_BREAK
 [[fallthrough]];
 case 35:
 YY_RULE_SETUP
-{ yylval.str = "quad"; token_debug("    ==>Space_Symbol[quad]\n"); /* return SPACE_SYMBOL;*/ }
+{ yylval.str = "quad"; token_debug("    ==>Space_Symbol[quad]\n"); /* return Grammar::SPACE_SYMBOL;*/ }
     //YY_BREAK
 [[fallthrough]];
 case 36:
 YY_RULE_SETUP
-{ yylval.dval = yytext;  token_debug("  ==>Digit[%s]\n",yytext); return DIGIT; }
+{ yylval.dval = yytext;  token_debug("  ==>Digit[%s]\n",yytext); return Grammar::DIGIT; }
     //YY_BREAK
 case 37:
 YY_RULE_SETUP
-{ yylval.str = yytext;   token_debug("  ==>Operator[%s]\n",yytext); return OPERATOR; }
+{ yylval.str = yytext;   token_debug("  ==>Operator[%s]\n",yytext); return Grammar::OPERATOR; }
     //YY_BREAK
 case 38:
 YY_RULE_SETUP
@@ -1338,11 +1338,11 @@ YY_RULE_SETUP
     YY_BREAK
 case 43:
 YY_RULE_SETUP
-{ yylval.str = yytext;  token_debug("   ==>String[%s]\n",yytext); return STRING; }
+{ yylval.str = yytext;  token_debug("   ==>String[%s]\n",yytext); return Grammar::STRING; }
     //YY_BREAK
 case 44:
 YY_RULE_SETUP
-{ yylval.str = yytext;  token_debug("   ==>Else[%s]\n",yytext); return CHARACTER; }
+{ yylval.str = yytext;  token_debug("   ==>Else[%s]\n",yytext); return Grammar::CHARACTER; }
     //YY_BREAK
 case 45:
 YY_RULE_SETUP

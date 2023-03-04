@@ -22,35 +22,39 @@ typedef union {
     const char *str;
     Node *ptr;
 } YYSTYPE;
-#define ACCENT  257
-#define SMALL_GREEK 258
-#define CAPITAL_GREEK   259
-#define BINARY_OPERATOR 260
-#define RELATION_OPERATOR   261
-#define ARROW   262
-#define GENERAL_IDEN    263
-#define GENERAL_OPER    264
-#define BIG_SYMBOL  265
-#define FUNCTION    266
-#define ROOT    267
-#define FRACTION    268
-#define SUBSUP  269
-#define EQOVER  270
-#define DELIMETER   271
-#define LARGE_DELIM 272
-#define DECORATION  273
-#define SPACE_SYMBOL    274
-#define CHARACTER   275
-#define STRING  276
-#define OPERATOR    277
-#define EQBEGIN 278
-#define EQEND   279
-#define EQLEFT  280
-#define EQRIGHT 281
-#define NEWLINE 282
-#define LEFT_DELIM  283
-#define RIGHT_DELIM 284
-#define DIGIT   285
+
+enum Grammar
+{
+    ACCENT              = 257,
+    SMALL_GREEK         = 258,
+    CAPITAL_GREEK       = 259,
+    BINARY_OPERATOR     = 260,
+    RELATION_OPERATOR   = 261,
+    ARROW               = 262,
+    GENERAL_IDEN        = 263,
+    GENERAL_OPER        = 264,
+    BIG_SYMBOL          = 265,
+    FUNCTION            = 266,
+    ROOT                = 267,
+    FRACTION            = 268,
+    SUBSUP              = 269,
+    EQOVER              = 270,
+    DELIMETER           = 271,
+    LARGE_DELIM         = 272,
+    DECORATION          = 273,
+    SPACE_SYMBOL        = 274,
+    CHARACTER           = 275,
+    STRING              = 276,
+    OPERATOR            = 277,
+    EQBEGIN             = 278,
+    EQEND               = 279,
+    EQLEFT              = 280,
+    EQRIGHT             = 281,
+    NEWLINE             = 282,
+    LEFT_DELIM          = 283,
+    RIGHT_DELIM         = 284,
+    DIGIT               = 285,
+};
 
 extern YYSTYPE yylval;
 
