@@ -54,7 +54,7 @@ public:
     virtual bool IsTextBox() const override { return mbIsTextBox; }
     void SetTextBox(bool bIsTextBox) { mbIsTextBox = bIsTextBox; }
 
-    virtual void NbcRotate(const Point& rRef, Degree100 nAngle, double sinAnle, double cosAngle) override;
+    virtual void NbcRotate(const Point& rRef, Degree100 nAngle, double sinAngle, double cosAngle) override;
 };
 
 // virtual objects for Flys
