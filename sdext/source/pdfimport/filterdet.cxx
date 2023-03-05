@@ -184,7 +184,6 @@ unsigned int FileEmitContext::readOrigBytes( unsigned int nOrigOffset, unsigned 
 
 
 PDFDetector::PDFDetector( uno::Reference< uno::XComponentContext > xContext) :
-    PDFDetectorBase( m_aMutex ),
     m_xContext(std::move( xContext ))
 {}
 
@@ -287,7 +286,7 @@ bool copyToTemp(uno::Reference<io::XInputStream> const& xInput, oslFileHandle& r
 // XExtendedFilterDetection
 OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rFilterData )
 {
-    osl::MutexGuard const guard( m_aMutex );
+    std::unique_lock guard( m_aMutex );
     bool bSuccess = false;
 
     // get the InputStream carrying the PDF content

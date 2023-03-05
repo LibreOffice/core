@@ -24,18 +24,17 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/io/XStream.hpp>
 
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 
 namespace pdfi
 {
 
-typedef ::cppu::WeakComponentImplHelper<
+typedef ::comphelper::WeakComponentImplHelper<
     css::document::XExtendedFilterDetection, css::lang::XServiceInfo> PDFDetectorBase;
 
-class PDFDetector : private cppu::BaseMutex,
-                    public PDFDetectorBase
+class PDFDetector : public PDFDetectorBase
 {
 private:
     css::uno::Reference<
