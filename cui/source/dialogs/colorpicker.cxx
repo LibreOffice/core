@@ -26,9 +26,8 @@
 #include <com/sun/star/awt/XWindow.hpp>
 
 #include <comphelper/propertyvalue.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -1222,12 +1221,11 @@ void ColorPickerDialog::setColorComponent( ColorComponent nComp, double dValue )
     }
 }
 
-typedef ::cppu::WeakComponentImplHelper< XServiceInfo, XExecutableDialog, XAsynchronousExecutableDialog, XInitialization, XPropertyAccess > ColorPickerBase;
+typedef ::comphelper::WeakComponentImplHelper< XServiceInfo, XExecutableDialog, XAsynchronousExecutableDialog, XInitialization, XPropertyAccess > ColorPickerBase;
 
 namespace {
 
-class ColorPicker : protected ::cppu::BaseMutex,    // Struct for right initialization of mutex member! Must be first of baseclasses.
-                    public ColorPickerBase
+class ColorPicker : public ColorPickerBase
 {
 public:
     explicit ColorPicker();
@@ -1272,8 +1270,7 @@ constexpr OUStringLiteral gsColorKey( u"Color" );
 constexpr OUStringLiteral gsModeKey( u"Mode" );
 
 ColorPicker::ColorPicker()
-    : ColorPickerBase( m_aMutex )
-    , mnColor( 0 )
+    : mnColor( 0 )
     , mnMode( 0 )
 {
 }
