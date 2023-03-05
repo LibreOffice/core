@@ -25,7 +25,6 @@ using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
 
 DNDListenerContainer::DNDListenerContainer( sal_Int8 nDefaultActions )
-    : WeakComponentImplHelper< XDragGestureRecognizer, XDropTargetDragContext, XDropTargetDropContext, XDropTarget >(m_aMutex)
 {
     m_bActive = true;
     m_nDefaultActions = nDefaultActions;
@@ -37,12 +36,14 @@ DNDListenerContainer::~DNDListenerContainer()
 
 void SAL_CALL DNDListenerContainer::addDragGestureListener( const Reference< XDragGestureListener >& dgl )
 {
-    rBHelper.addListener( cppu::UnoType<XDragGestureListener>::get(), dgl );
+    std::unique_lock g(m_aMutex);
+    maDragGestureListeners.addInterface( g, dgl );
 }
 
 void SAL_CALL DNDListenerContainer::removeDragGestureListener( const Reference< XDragGestureListener >& dgl )
 {
-    rBHelper.removeListener( cppu::UnoType<XDragGestureListener>::get(), dgl );
+    std::unique_lock g(m_aMutex);
+    maDragGestureListeners.removeInterface( g, dgl );
 }
 
 void SAL_CALL DNDListenerContainer::resetRecognizer(  )
@@ -51,12 +52,14 @@ void SAL_CALL DNDListenerContainer::resetRecognizer(  )
 
 void SAL_CALL DNDListenerContainer::addDropTargetListener( const Reference< XDropTargetListener >& dtl )
 {
-    rBHelper.addListener( cppu::UnoType<XDropTargetListener>::get(), dtl );
+    std::unique_lock g(m_aMutex);
+    maDropTargetListeners.addInterface( g, dtl );
 }
 
 void SAL_CALL DNDListenerContainer::removeDropTargetListener( const Reference< XDropTargetListener >& dtl )
 {
-    rBHelper.removeListener( cppu::UnoType<XDropTargetListener>::get(), dtl );
+    std::unique_lock g(m_aMutex);
+    maDropTargetListeners.removeInterface( g, dtl );
 }
 
 sal_Bool SAL_CALL DNDListenerContainer::isActive(  )
@@ -83,65 +86,57 @@ sal_uInt32 DNDListenerContainer::fireDropEvent( const Reference< XDropTargetDrop
     sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions,
     const Reference< XTransferable >& transferable )
 {
+    std::unique_lock g(m_aMutex);
+    if (!m_bActive || maDropTargetListeners.getLength(g) == 0)
+        return 0;
+
     sal_uInt32 nRet = 0;
 
-    // fire DropTargetDropEvent on all XDropTargetListeners
-    OInterfaceContainerHelper *pContainer = rBHelper.getContainer( cppu::UnoType<XDropTargetListener>::get());
+    comphelper::OInterfaceIteratorHelper4 aIterator( g, maDropTargetListeners );
 
-    if( pContainer && m_bActive )
+    // remember context to use in own context methods
+    m_xDropTargetDropContext = context;
+
+    // do not construct the event before you are sure at least one listener is registered
+    DropTargetDropEvent aEvent( static_cast < XDropTarget * > (this), 0,
+        static_cast < XDropTargetDropContext * > (this), dropAction,
+        locationX, locationY, sourceActions, transferable );
+
+    while (aIterator.hasMoreElements())
     {
-        OInterfaceIteratorHelper aIterator( *pContainer );
-
-        // remember context to use in own context methods
-        m_xDropTargetDropContext = context;
-
-        // do not construct the event before you are sure at least one listener is registered
-        DropTargetDropEvent aEvent( static_cast < XDropTarget * > (this), 0,
-            static_cast < XDropTargetDropContext * > (this), dropAction,
-            locationX, locationY, sourceActions, transferable );
-
-        while (aIterator.hasMoreElements())
+        Reference< XDropTargetListener > xListener( aIterator.next() );
+        try
         {
-            // FIXME: this can be simplified as soon as the Iterator has a remove method
-            Reference< XInterface > xElement( aIterator.next() );
-
-            try
+            g.unlock();
+            // fire drop until the first one has accepted
+            if( m_xDropTargetDropContext.is() )
+                xListener->drop( aEvent );
+            else
             {
-                // this may result in a runtime exception
-                Reference < XDropTargetListener > xListener( xElement, UNO_QUERY );
-
-                if( xListener.is() )
-                {
-                    // fire drop until the first one has accepted
-                    if( m_xDropTargetDropContext.is() )
-                        xListener->drop( aEvent );
-                    else
-                    {
-                        DropTargetEvent aDTEvent( static_cast < XDropTarget * > (this), 0 );
-                        xListener->dragExit( aDTEvent );
-                    }
-
-                    nRet++;
-                }
+                DropTargetEvent aDTEvent( static_cast < XDropTarget * > (this), 0 );
+                xListener->dragExit( aDTEvent );
             }
-            catch (const RuntimeException&)
-            {
-                pContainer->removeInterface( xElement );
-            }
+
+            g.lock();
+            nRet++;
         }
-
-        // if context still valid, then reject drop
-        if( m_xDropTargetDropContext.is() )
+        catch (const RuntimeException&)
         {
-            m_xDropTargetDropContext.clear();
+            aIterator.remove( g );
+        }
+    }
 
-            try
-            {
-                context->rejectDrop();
-            }
-            catch (const RuntimeException&)
-            {
-            }
+    // if context still valid, then reject drop
+    if( m_xDropTargetDropContext.is() )
+    {
+        m_xDropTargetDropContext.clear();
+
+        try
+        {
+            context->rejectDrop();
+        }
+        catch (const RuntimeException&)
+        {
         }
     }
 
@@ -150,38 +145,30 @@ sal_uInt32 DNDListenerContainer::fireDropEvent( const Reference< XDropTargetDrop
 
 sal_uInt32 DNDListenerContainer::fireDragExitEvent()
 {
+    std::unique_lock g(m_aMutex);
+    if (!m_bActive || maDropTargetListeners.getLength(g) == 0)
+        return 0;
+
     sal_uInt32 nRet = 0;
 
-    // fire DropTargetDropEvent on all XDropTargetListeners
-    OInterfaceContainerHelper *pContainer = rBHelper.getContainer( cppu::UnoType<XDropTargetListener>::get());
+    comphelper::OInterfaceIteratorHelper4 aIterator( g, maDropTargetListeners );
 
-    if( pContainer && m_bActive )
+    // do not construct the event before you are sure at least one listener is registered
+    DropTargetEvent aEvent( static_cast < XDropTarget * > (this), 0 );
+
+    while (aIterator.hasMoreElements())
     {
-        OInterfaceIteratorHelper aIterator( *pContainer );
-
-        // do not construct the event before you are sure at least one listener is registered
-        DropTargetEvent aEvent( static_cast < XDropTarget * > (this), 0 );
-
-        while (aIterator.hasMoreElements())
+        Reference< XDropTargetListener > xListener( aIterator.next() );
+        try
         {
-            // FIXME: this can be simplified as soon as the Iterator has a remove method
-            Reference< XInterface > xElement( aIterator.next() );
-
-            try
-            {
-                // this may result in a runtime exception
-                Reference < XDropTargetListener > xListener( xElement, UNO_QUERY );
-
-                if( xListener.is() )
-                {
-                    xListener->dragExit( aEvent );
-                    nRet++;
-                }
-            }
-            catch (const RuntimeException&)
-            {
-                pContainer->removeInterface( xElement );
-            }
+            g.unlock();
+            xListener->dragExit( aEvent );
+            nRet++;
+            g.lock();
+        }
+        catch (const RuntimeException&)
+        {
+            aIterator.remove( g );
         }
     }
 
@@ -191,58 +178,54 @@ sal_uInt32 DNDListenerContainer::fireDragExitEvent()
 sal_uInt32 DNDListenerContainer::fireDragOverEvent( const Reference< XDropTargetDragContext >& context,
     sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions )
 {
+    std::unique_lock g(m_aMutex);
+    if (!m_bActive || maDropTargetListeners.getLength(g) == 0)
+        return 0;
+
     sal_uInt32 nRet = 0;
 
     // fire DropTargetDropEvent on all XDropTargetListeners
-    OInterfaceContainerHelper *pContainer = rBHelper.getContainer( cppu::UnoType<XDropTargetListener>::get());
 
-    if( pContainer && m_bActive )
+    comphelper::OInterfaceIteratorHelper4 aIterator( g, maDropTargetListeners );
+
+    // remember context to use in own context methods
+    m_xDropTargetDragContext = context;
+
+    // do not construct the event before you are sure at least one listener is registered
+    DropTargetDragEvent aEvent( static_cast < XDropTarget * > (this), 0,
+        static_cast < XDropTargetDragContext * > (this),
+        dropAction, locationX, locationY, sourceActions );
+
+    while (aIterator.hasMoreElements())
     {
-        OInterfaceIteratorHelper aIterator( *pContainer );
-
-        // remember context to use in own context methods
-        m_xDropTargetDragContext = context;
-
-        // do not construct the event before you are sure at least one listener is registered
-        DropTargetDragEvent aEvent( static_cast < XDropTarget * > (this), 0,
-            static_cast < XDropTargetDragContext * > (this),
-            dropAction, locationX, locationY, sourceActions );
-
-        while (aIterator.hasMoreElements())
+        Reference< XDropTargetListener > xListener( aIterator.next() );
+        try
         {
-            // FIXME: this can be simplified as soon as the Iterator has a remove method
-            Reference< XInterface > xElement( aIterator.next() );
-
-            try
+            if( m_xDropTargetDragContext.is() )
             {
-                // this may result in a runtime exception
-                Reference < XDropTargetListener > xListener( xElement, UNO_QUERY );
-
-                if( xListener.is() )
-                {
-                    if( m_xDropTargetDragContext.is() )
-                        xListener->dragOver( aEvent );
-                    nRet++;
-                }
+                g.unlock();
+                xListener->dragOver( aEvent );
+                g.lock();
             }
-            catch (const RuntimeException&)
-            {
-                pContainer->removeInterface( xElement );
-            }
+            nRet++;
         }
-
-        // if context still valid, then reject drag
-        if( m_xDropTargetDragContext.is() )
+        catch (const RuntimeException&)
         {
-            m_xDropTargetDragContext.clear();
+            aIterator.remove(g);
+        }
+    }
 
-            try
-            {
-                context->rejectDrag();
-            }
-            catch (const RuntimeException&)
-            {
-            }
+    // if context still valid, then reject drag
+    if( m_xDropTargetDragContext.is() )
+    {
+        m_xDropTargetDragContext.clear();
+
+        try
+        {
+            context->rejectDrag();
+        }
+        catch (const RuntimeException&)
+        {
         }
     }
 
@@ -253,58 +236,52 @@ sal_uInt32 DNDListenerContainer::fireDragEnterEvent( const Reference< XDropTarge
     sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions,
     const Sequence< DataFlavor >& dataFlavors )
 {
+    std::unique_lock g(m_aMutex);
+    if (!m_bActive || maDropTargetListeners.getLength(g) == 0)
+        return 0;
+
     sal_uInt32 nRet = 0;
 
-    // fire DropTargetDropEvent on all XDropTargetListeners
-    OInterfaceContainerHelper *pContainer = rBHelper.getContainer( cppu::UnoType<XDropTargetListener>::get());
+    comphelper::OInterfaceIteratorHelper4 aIterator( g, maDropTargetListeners );
 
-    if( pContainer && m_bActive )
+    // remember context to use in own context methods
+    m_xDropTargetDragContext = context;
+
+    // do not construct the event before you are sure at least one listener is registered
+    DropTargetDragEnterEvent aEvent( static_cast < XDropTarget * > (this), 0,
+        static_cast < XDropTargetDragContext * > (this),
+        dropAction, locationX, locationY, sourceActions, dataFlavors );
+
+    while (aIterator.hasMoreElements())
     {
-        OInterfaceIteratorHelper aIterator( *pContainer );
-
-        // remember context to use in own context methods
-        m_xDropTargetDragContext = context;
-
-        // do not construct the event before you are sure at least one listener is registered
-        DropTargetDragEnterEvent aEvent( static_cast < XDropTarget * > (this), 0,
-            static_cast < XDropTargetDragContext * > (this),
-            dropAction, locationX, locationY, sourceActions, dataFlavors );
-
-        while (aIterator.hasMoreElements())
+        Reference< XDropTargetListener > xListener( aIterator.next() );
+        try
         {
-            // FIXME: this can be simplified as soon as the Iterator has a remove method
-            Reference< XInterface > xElement( aIterator.next() );
-
-            try
+            if( m_xDropTargetDragContext.is() )
             {
-                // this may result in a runtime exception
-                Reference < XDropTargetListener > xListener( xElement, UNO_QUERY );
-
-                if( xListener.is() )
-                {
-                    if( m_xDropTargetDragContext.is() )
-                        xListener->dragEnter( aEvent );
-                    nRet++;
-                }
+                g.unlock();
+                xListener->dragEnter( aEvent );
+                g.lock();
             }
-            catch (const RuntimeException&)
-            {
-                pContainer->removeInterface( xElement );
-            }
+            nRet++;
         }
-
-        // if context still valid, then reject drag
-        if( m_xDropTargetDragContext.is() )
+        catch (const RuntimeException&)
         {
-            m_xDropTargetDragContext.clear();
+            aIterator.remove( g );
+        }
+    }
 
-            try
-            {
-                context->rejectDrag();
-            }
-            catch (const RuntimeException&)
-            {
-            }
+    // if context still valid, then reject drag
+    if( m_xDropTargetDragContext.is() )
+    {
+        m_xDropTargetDragContext.clear();
+
+        try
+        {
+            context->rejectDrag();
+        }
+        catch (const RuntimeException&)
+        {
         }
     }
 
@@ -314,58 +291,54 @@ sal_uInt32 DNDListenerContainer::fireDragEnterEvent( const Reference< XDropTarge
 sal_uInt32 DNDListenerContainer::fireDropActionChangedEvent( const Reference< XDropTargetDragContext >& context,
     sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions )
 {
+    std::unique_lock g(m_aMutex);
+    if (!m_bActive || maDropTargetListeners.getLength(g) == 0)
+        return 0;
+
     sal_uInt32 nRet = 0;
 
     // fire DropTargetDropEvent on all XDropTargetListeners
-    OInterfaceContainerHelper *pContainer = rBHelper.getContainer( cppu::UnoType<XDropTargetListener>::get());
 
-    if( pContainer && m_bActive )
+    comphelper::OInterfaceIteratorHelper4 aIterator( g, maDropTargetListeners );
+
+    // remember context to use in own context methods
+    m_xDropTargetDragContext = context;
+
+    // do not construct the event before you are sure at least one listener is registered
+    DropTargetDragEvent aEvent( static_cast < XDropTarget * > (this), 0,
+        static_cast < XDropTargetDragContext * > (this),
+        dropAction, locationX, locationY, sourceActions );
+
+    while (aIterator.hasMoreElements())
     {
-        OInterfaceIteratorHelper aIterator( *pContainer );
-
-        // remember context to use in own context methods
-        m_xDropTargetDragContext = context;
-
-        // do not construct the event before you are sure at least one listener is registered
-        DropTargetDragEvent aEvent( static_cast < XDropTarget * > (this), 0,
-            static_cast < XDropTargetDragContext * > (this),
-            dropAction, locationX, locationY, sourceActions );
-
-        while (aIterator.hasMoreElements())
+        Reference< XDropTargetListener > xListener( aIterator.next() );
+        try
         {
-            // FIXME: this can be simplified as soon as the Iterator has a remove method
-            Reference< XInterface > xElement( aIterator.next() );
-
-            try
+            if( m_xDropTargetDragContext.is() )
             {
-                // this may result in a runtime exception
-                Reference < XDropTargetListener > xListener( xElement, UNO_QUERY );
-
-                if( xListener.is() )
-                {
-                    if( m_xDropTargetDragContext.is() )
-                        xListener->dropActionChanged( aEvent );
-                    nRet++;
-                }
+                g.unlock();
+                xListener->dropActionChanged( aEvent );
+                g.lock();
             }
-            catch (const RuntimeException&)
-            {
-                pContainer->removeInterface( xElement );
-            }
+            nRet++;
         }
-
-        // if context still valid, then reject drag
-        if( m_xDropTargetDragContext.is() )
+        catch (const RuntimeException&)
         {
-            m_xDropTargetDragContext.clear();
+            aIterator.remove( g );
+        }
+    }
 
-            try
-            {
-                context->rejectDrag();
-            }
-            catch (const RuntimeException&)
-            {
-            }
+    // if context still valid, then reject drag
+    if( m_xDropTargetDragContext.is() )
+    {
+        m_xDropTargetDragContext.clear();
+
+        try
+        {
+            context->rejectDrag();
+        }
+        catch (const RuntimeException&)
+        {
         }
     }
 
@@ -375,39 +348,31 @@ sal_uInt32 DNDListenerContainer::fireDropActionChangedEvent( const Reference< XD
 sal_uInt32 DNDListenerContainer::fireDragGestureEvent( sal_Int8 dragAction, sal_Int32 dragOriginX,
     sal_Int32 dragOriginY, const Reference< XDragSource >& dragSource, const Any& triggerEvent )
 {
+    std::unique_lock g(m_aMutex);
+    if (maDragGestureListeners.getLength(g) == 0)
+        return 0;
+
     sal_uInt32 nRet = 0;
 
-    // fire DropTargetDropEvent on all XDropTargetListeners
-    OInterfaceContainerHelper *pContainer = rBHelper.getContainer( cppu::UnoType<XDragGestureListener>::get());
+    comphelper::OInterfaceIteratorHelper4 aIterator( g, maDragGestureListeners );
 
-    if( pContainer )
+    // do not construct the event before you are sure at least one listener is registered
+    DragGestureEvent aEvent( static_cast < XDragGestureRecognizer * > (this), dragAction,
+        dragOriginX, dragOriginY, dragSource, triggerEvent );
+
+    while( aIterator.hasMoreElements() )
     {
-        OInterfaceIteratorHelper aIterator( *pContainer );
-
-        // do not construct the event before you are sure at least one listener is registered
-        DragGestureEvent aEvent( static_cast < XDragGestureRecognizer * > (this), dragAction,
-            dragOriginX, dragOriginY, dragSource, triggerEvent );
-
-        while( aIterator.hasMoreElements() )
+        Reference< XDragGestureListener > xListener( aIterator.next() );
+        try
         {
-            // FIXME: this can be simplified as soon as the Iterator has a remove method
-            Reference< XInterface > xElement( aIterator.next() );
-
-            try
-            {
-                // this may result in a runtime exception
-                Reference < XDragGestureListener > xListener( xElement, UNO_QUERY );
-
-                if( xListener.is() )
-                {
-                    xListener->dragGestureRecognized( aEvent );
-                    nRet++;
-                }
-            }
-            catch (const RuntimeException&)
-            {
-                pContainer->removeInterface( xElement );
-            }
+            g.unlock();
+            xListener->dragGestureRecognized( aEvent );
+            g.lock();
+            nRet++;
+        }
+        catch (const RuntimeException&)
+        {
+            aIterator.remove( g );
         }
     }
 
