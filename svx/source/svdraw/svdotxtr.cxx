@@ -122,81 +122,102 @@ void SdrTextObj::NbcMove(const Size& rSize)
 
 void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    bool bNotSheared=maGeo.m_nShearAngle==0_deg100;
-    bool bRotate90=bNotSheared && maGeo.m_nRotationAngle.get() % 9000 ==0;
-    bool bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
-    bool bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
-    if (bXMirr || bYMirr) {
+    bool bNotSheared = maGeo.m_nShearAngle == 0_deg100;
+    bool bRotate90 = bNotSheared && maGeo.m_nRotationAngle.get() % 9000 == 0;
+
+    bool bXMirrored = (xFact.GetNumerator() < 0) != (xFact.GetDenominator() < 0);
+    bool bYMirrored = (yFact.GetNumerator() < 0) != (yFact.GetDenominator() < 0);
+
+    double fFactorX = xFact.IsValid() ? double(xFact) : 1.0;
+    double fFactorY = yFact.IsValid() ? double(yFact) : 1.0;
+
+    if (bXMirrored || bYMirrored)
+    {
         Point aRef1(GetSnapRect().Center());
-        if (bXMirr) {
+        if (bXMirrored)
+        {
             Point aRef2(aRef1);
             aRef2.AdjustY( 1 );
             NbcMirrorGluePoints(aRef1,aRef2);
         }
-        if (bYMirr) {
+        if (bYMirrored)
+        {
             Point aRef2(aRef1);
             aRef2.AdjustX( 1 );
             NbcMirrorGluePoints(aRef1,aRef2);
         }
     }
 
-    if (maGeo.m_nRotationAngle==0_deg100 && maGeo.m_nShearAngle==0_deg100) {
-        auto aRectangle = getRectangle();
-        ResizeRect(aRectangle, rRef, xFact, yFact);
-        setRectangle(aRectangle);
-        if (bYMirr)
+    if (maGeo.m_nRotationAngle == 0_deg100 && maGeo.m_nShearAngle == 0_deg100)
+    {
+        auto eUnit = getSdrModelFromSdrObject().getUnit();
+        gfx::Tuple2DL aReference = createTupleFromPoint(rRef, eUnit);
+        svx::resizeRange(maRectangleRange, aReference, fFactorX, fFactorY);
+
+        if (bYMirrored)
         {
-            //maRectangle.Normalize();
-            moveRectangle(aRectangle.Right() - aRectangle.Left(), aRectangle.Bottom() - aRectangle.Top());
-            maGeo.m_nRotationAngle=18000_deg100;
+            maRectangleRange.shift(maRectangleRange.getWidth(), maRectangleRange.getHeight());
+            maGeo.m_nRotationAngle = 18000_deg100;
             maGeo.RecalcSinCos();
         }
     }
     else
     {
-        tools::Polygon aPol(Rect2Poly(getRectangle(), maGeo));
+        tools::Polygon aPolygon(Rect2Poly(getRectangle(), maGeo));
 
-        for(sal_uInt16 a(0); a < aPol.GetSize(); a++)
+        for (sal_uInt16 a(0); a < aPolygon.GetSize(); a++)
         {
-             ResizePoint(aPol[a], rRef, xFact, yFact);
+             ResizePoint(aPolygon[a], rRef, xFact, yFact);
         }
 
-        if(bXMirr != bYMirr)
+        if (bXMirrored != bYMirrored)
         {
             // turn polygon and move it a little
-            tools::Polygon aPol0(aPol);
+            tools::Polygon aPol0(aPolygon);
 
-            aPol[0] = aPol0[1];
-            aPol[1] = aPol0[0];
-            aPol[2] = aPol0[3];
-            aPol[3] = aPol0[2];
-            aPol[4] = aPol0[1];
+            aPolygon[0] = aPol0[1];
+            aPolygon[1] = aPol0[0];
+            aPolygon[2] = aPol0[3];
+            aPolygon[3] = aPol0[2];
+            aPolygon[4] = aPol0[1];
         }
-        tools::Rectangle aRectangle = svx::polygonToRectangle(aPol, maGeo);
+        tools::Rectangle aRectangle = svx::polygonToRectangle(aPolygon, maGeo);
         setRectangle(aRectangle);
     }
 
-    if (bRotate90) {
-        bool bRota90=maGeo.m_nRotationAngle.get() % 9000 ==0;
-        if (!bRota90) { // there's seems to be a rounding error occurring: correct it
-            Degree100 a=NormAngle36000(maGeo.m_nRotationAngle);
-            if (a<4500_deg100) a=0_deg100;
-            else if (a<13500_deg100) a=9000_deg100;
-            else if (a<22500_deg100) a=18000_deg100;
-            else if (a<31500_deg100) a=27000_deg100;
-            else a=0_deg100;
-            maGeo.m_nRotationAngle=a;
+    if (bRotate90)
+    {
+        bool bRota90 = maGeo.m_nRotationAngle.get() % 9000 == 0;
+        if (!bRota90)
+        {
+            // there's seems to be a rounding error occurring: correct it
+
+            Degree100 angle = NormAngle36000(maGeo.m_nRotationAngle);
+            if (angle < 4500_deg100)
+                angle = 0_deg100;
+            else if (angle < 13500_deg100)
+                angle = 9000_deg100;
+            else if (angle < 22500_deg100)
+                angle = 18000_deg100;
+            else if (angle < 31500_deg100)
+                angle = 27000_deg100;
+            else
+                angle = 0_deg100;
+
+            maGeo.m_nRotationAngle = angle;
             maGeo.RecalcSinCos();
         }
-        if (bNotSheared!=(maGeo.m_nShearAngle==0_deg100)) { // correct a rounding error occurring with Shear
-            maGeo.m_nShearAngle=0_deg100;
+        if (bNotSheared != (maGeo.m_nShearAngle == 0_deg100))
+        {
+            // correct a rounding error occurring with Shear
+            maGeo.m_nShearAngle = 0_deg100;
             maGeo.RecalcTan();
         }
     }
 
     AdaptTextMinSize();
 
-    if(mbTextFrame && !getSdrModelFromSdrObject().IsPasteResize())
+    if (mbTextFrame && !getSdrModelFromSdrObject().IsPasteResize())
     {
         NbcAdjustTextFrameWidthAndHeight();
     }
