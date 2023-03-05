@@ -90,8 +90,8 @@ OString encodeTextForLanguageTool(const OUString& text)
     // different cases are handled differently by the demo; some percent-encode the UTF-8
     // representation, like %D0%90 (for cyrillic А); some turn into entities like &#33; (for
     // exclamation mark !); some other to things like \u0027 (for apostrophe ').
-    static constexpr auto myCharClass
-        = rtl::createUriCharClass("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+    static constexpr auto myCharClass = rtl::createUriCharClass(
+        u8"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
     return OUStringToOString(
         rtl::Uri::encode(text, myCharClass.data(), rtl_UriEncodeStrict, RTL_TEXTENCODING_UTF8),
         RTL_TEXTENCODING_ASCII_US);
