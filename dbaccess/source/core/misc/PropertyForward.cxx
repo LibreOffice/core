@@ -69,7 +69,7 @@ namespace dbaccess
 
     void SAL_CALL OPropertyForward::propertyChange( const PropertyChangeEvent& evt )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         if ( !m_xDestContainer.is() )
             throw DisposedException( OUString(), *this );
@@ -111,7 +111,7 @@ namespace dbaccess
 
     void SAL_CALL OPropertyForward::disposing( const css::lang::EventObject& /*_rSource*/ )
     {
-        ::osl::MutexGuard aGuard(m_aMutex);
+        std::unique_lock aGuard(m_aMutex);
 
         if ( !m_xSource.is() )
             throw DisposedException( OUString(), *this );
@@ -125,7 +125,7 @@ namespace dbaccess
 
     void OPropertyForward::setDefinition( const css::uno::Reference< css::beans::XPropertySet>& _xDest )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         if ( m_bInInsert )
             return;
 
