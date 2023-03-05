@@ -3650,8 +3650,8 @@ void ScInterpreter::CalculateSmallLarge(bool bSmall)
     std::vector<SCSIZE> aRankArray;
     aRankArray.reserve(nRankArraySize);
     std::transform(aArray.begin(), aArray.end(), std::back_inserter(aRankArray),
-            [](double f) {
-                f = rtl::math::approxFloor(f);
+            [bSmall](double f) {
+                f = (bSmall ? rtl::math::approxFloor(f) : rtl::math::approxCeil(f));
                 // Valid ranks are >= 1.
                 if (f < 1.0 || !o3tl::convertsToAtMost(f, std::numeric_limits<SCSIZE>::max()))
                     return static_cast<SCSIZE>(0);
