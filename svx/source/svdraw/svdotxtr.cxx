@@ -40,6 +40,18 @@
 
 using namespace com::sun::star;
 
+namespace
+{
+
+gfx::Tuple2DL createTupleFromPoint(Point const& rPoint, gfx::LengthUnit eUnit = gfx::LengthUnit::hmm)
+{
+    auto x = gfx::Length::from(eUnit, rPoint.X());
+    auto y = gfx::Length::from(eUnit, rPoint.Y());
+    return gfx::Tuple2DL(x, y);
+}
+
+} // end anonymous
+
 void SdrTextObj::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
     if (maGeo.m_nRotationAngle || maGeo.m_nShearAngle)
@@ -96,8 +108,15 @@ Degree100 SdrTextObj::GetShearAngle(bool /*bVertical*/) const
 
 void SdrTextObj::NbcMove(const Size& rSize)
 {
-    moveRectangle(rSize.Width(), rSize.Height());
-    moveOutRectangle(rSize.Width(), rSize.Height());
+    gfx::Tuple2DL aDelta = createTupleFromPoint(Point(rSize.Width(), rSize.Height()), getSdrModelFromSdrObject().getUnit());
+    gfx::Length xDelta = aDelta.getX();
+    gfx::Length yDelta = aDelta.getY();
+
+    if (xDelta == 0_emu && yDelta == 0_emu)
+        return;
+
+    maRectangleRange.shift(xDelta, yDelta);
+    m_aOutterRange.shift(xDelta, yDelta);
     maSnapRect.Move(rSize);
     SetBoundAndSnapRectsDirty(true);
 }
@@ -185,19 +204,6 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     ImpCheckShear();
     SetBoundAndSnapRectsDirty();
 }
-
-namespace
-{
-
-gfx::Tuple2DL createTupleFromPoint(Point const& rPoint, gfx::LengthUnit eUnit = gfx::LengthUnit::hmm)
-{
-    auto x = gfx::Length::from(eUnit, rPoint.X());
-    auto y = gfx::Length::from(eUnit, rPoint.Y());
-    return gfx::Tuple2DL(x, y);
-}
-
-} // end anonymous
-
 
 void SdrTextObj::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
