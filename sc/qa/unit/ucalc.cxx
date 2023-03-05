@@ -387,6 +387,69 @@ CPPUNIT_TEST_FIXTURE(Test, testColumnIterator) // tdf#118620
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf66613)
+{
+    // Create different print ranges and col/row repetitions for two tabs
+    const SCTAB nFirstTab = 0;
+    CPPUNIT_ASSERT(m_pDoc->InsertTab(nFirstTab, "FirstPrintRange"));
+    ScRange aFirstPrintRange(0, 0, nFirstTab, 2, 2, nFirstTab);
+    m_pDoc->AddPrintRange(nFirstTab, aFirstPrintRange);
+    ScRange aFirstRepeatColRange(0, 0, nFirstTab, 0, 0, nFirstTab);
+    m_pDoc->SetRepeatColRange(nFirstTab, aFirstRepeatColRange);
+    ScRange aFirstRepeatRowRange(1, 1, nFirstTab, 1, 1, nFirstTab);
+    m_pDoc->SetRepeatRowRange(nFirstTab, aFirstRepeatRowRange);
+
+    const SCTAB nSecondTab = 1;
+    CPPUNIT_ASSERT(m_pDoc->InsertTab(nSecondTab, "SecondPrintRange"));
+    ScRange aSecondPrintRange(0, 0, nSecondTab, 3, 3, nSecondTab);
+    m_pDoc->AddPrintRange(nSecondTab, aSecondPrintRange);
+    ScRange aSecondRepeatColRange(1, 1, nSecondTab, 1, 1, nSecondTab);
+    m_pDoc->SetRepeatColRange(nSecondTab, aSecondRepeatColRange);
+    ScRange aSecondRepeatRowRange(2, 2, nSecondTab, 2, 2, nSecondTab);
+    m_pDoc->SetRepeatRowRange(nSecondTab, aSecondRepeatRowRange);
+
+    // Transfer generated tabs to a new document with different order
+    ScDocument aScDocument;
+    aScDocument.TransferTab(*m_pDoc, nSecondTab, nFirstTab);
+    aScDocument.TransferTab(*m_pDoc, nFirstTab, nSecondTab);
+
+    // Check the number of print ranges in both documents
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), m_pDoc->GetPrintRangeCount(nFirstTab));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), m_pDoc->GetPrintRangeCount(nSecondTab));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), aScDocument.GetPrintRangeCount(nFirstTab));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), aScDocument.GetPrintRangeCount(nSecondTab));
+
+    // Check the print ranges and col/row repetitions in both documents
+    CPPUNIT_ASSERT_EQUAL(aFirstPrintRange, *m_pDoc->GetPrintRange(nFirstTab, 0));
+    CPPUNIT_ASSERT_EQUAL(aFirstRepeatColRange, *m_pDoc->GetRepeatColRange(nFirstTab));
+    CPPUNIT_ASSERT_EQUAL(aFirstRepeatRowRange, *m_pDoc->GetRepeatRowRange(nFirstTab));
+    CPPUNIT_ASSERT_EQUAL(aSecondPrintRange, *m_pDoc->GetPrintRange(nSecondTab, 0));
+    CPPUNIT_ASSERT_EQUAL(aSecondRepeatColRange, *m_pDoc->GetRepeatColRange(nSecondTab));
+    CPPUNIT_ASSERT_EQUAL(aSecondRepeatRowRange, *m_pDoc->GetRepeatRowRange(nSecondTab));
+
+    // Tabs have to be adjusted since the order of the tabs is inverted in the new document
+    std::vector<ScRange*> aScRanges
+        = { &aFirstPrintRange,  &aFirstRepeatColRange,  &aFirstRepeatRowRange,
+            &aSecondPrintRange, &aSecondRepeatColRange, &aSecondRepeatRowRange };
+    for (size_t i = 0; i < aScRanges.size(); i++)
+    {
+        const SCTAB nTab = i >= 3 ? nFirstTab : nSecondTab;
+        aScRanges[i]->aStart.SetTab(nTab);
+        aScRanges[i]->aEnd.SetTab(nTab);
+    }
+
+    // Without the fix in place, no print ranges and col/row repetitions would be present
+    CPPUNIT_ASSERT_EQUAL(aFirstPrintRange, *aScDocument.GetPrintRange(nSecondTab, 0));
+    CPPUNIT_ASSERT_EQUAL(aFirstRepeatColRange, *aScDocument.GetRepeatColRange(nSecondTab));
+    CPPUNIT_ASSERT_EQUAL(aFirstRepeatRowRange, *aScDocument.GetRepeatRowRange(nSecondTab));
+    CPPUNIT_ASSERT_EQUAL(aSecondPrintRange, *aScDocument.GetPrintRange(nFirstTab, 0));
+    CPPUNIT_ASSERT_EQUAL(aSecondRepeatColRange, *aScDocument.GetRepeatColRange(nFirstTab));
+    CPPUNIT_ASSERT_EQUAL(aSecondRepeatRowRange, *aScDocument.GetRepeatRowRange(nFirstTab));
+
+    m_pDoc->DeleteTab(nFirstTab);
+    m_pDoc->DeleteTab(nSecondTab);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf90698)
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));

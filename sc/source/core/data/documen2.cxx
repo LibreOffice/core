@@ -1023,6 +1023,36 @@ sal_uLong ScDocument::TransferTab( ScDocument& rSrcDoc, SCTAB nSrcPos,
         maTabs[nDestPos]->SetTabNo(nDestPos);
         maTabs[nDestPos]->SetTabBgColor(rSrcDoc.maTabs[nSrcPos]->GetTabBgColor());
 
+        // tdf#66613 - copy existing print ranges and col/row repetitions
+        if (auto aRepeatColRange = rSrcDoc.maTabs[nSrcPos]->GetRepeatColRange())
+        {
+            aRepeatColRange->aStart.SetTab(nDestPos);
+            aRepeatColRange->aEnd.SetTab(nDestPos);
+            maTabs[nDestPos]->SetRepeatColRange(aRepeatColRange);
+        }
+
+        if (auto aRepeatRowRange = rSrcDoc.maTabs[nSrcPos]->GetRepeatRowRange())
+        {
+            aRepeatRowRange->aStart.SetTab(nDestPos);
+            aRepeatRowRange->aEnd.SetTab(nDestPos);
+            maTabs[nDestPos]->SetRepeatRowRange(aRepeatRowRange);
+        }
+
+        if (rSrcDoc.IsPrintEntireSheet(nSrcPos))
+            maTabs[nDestPos]->SetPrintEntireSheet();
+        else
+        {
+            const auto nPrintRangeCount = rSrcDoc.maTabs[nSrcPos]->GetPrintRangeCount();
+            for (auto nPos = 0; nPos < nPrintRangeCount; nPos++)
+            {
+                // Adjust the tab for the print range at the new position
+                ScRange aSrcPrintRange(*rSrcDoc.maTabs[nSrcPos]->GetPrintRange(nPos));
+                aSrcPrintRange.aStart.SetTab(nDestPos);
+                aSrcPrintRange.aEnd.SetTab(nDestPos);
+                maTabs[nDestPos]->AddPrintRange(aSrcPrintRange);
+            }
+        }
+
         if ( !bResultsOnly )
         {
             sc::RefUpdateContext aRefCxt(*this);
