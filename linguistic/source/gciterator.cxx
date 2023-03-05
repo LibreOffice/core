@@ -1106,7 +1106,7 @@ void GrammarCheckingIterator::GetConfiguredGCSvcs_Impl()
     {
         // ---- THREAD SAFE START ----
         ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
-        m_aGCImplNamesByLang     = aTmpGCImplNamesByLang;
+        m_aGCImplNamesByLang.swap(aTmpGCImplNamesByLang);
         // ---- THREAD SAFE END ----
     }
 }
