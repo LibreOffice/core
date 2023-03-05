@@ -39,6 +39,8 @@
 #include <i18nlangtag/lang.h>
 
 #include <map>
+#include <optional>
+#include <utility>
 #include <deque>
 
 #include "defs.hxx"
@@ -96,8 +98,8 @@ class GrammarCheckingIterator:
     DocMap_t        m_aDocIdMap;
 
 
-    // language -> implname mapping
-    typedef std::map< LanguageType, OUString > GCImplNames_t;
+    // BCP-47 language tag -> implname mapping
+    typedef std::map< OUString, OUString > GCImplNames_t;
     GCImplNames_t   m_aGCImplNamesByLang;
 
     // implname -> UNO reference mapping
@@ -135,12 +137,18 @@ class GrammarCheckingIterator:
     sal_Int32 GetSuggestedEndOfSentence( const OUString &rText, sal_Int32 nSentenceStartPos, const css::lang::Locale &rLocale );
 
     void GetConfiguredGCSvcs_Impl();
-    css::uno::Reference< css::linguistic2::XProofreader > GetGrammarChecker( const css::lang::Locale & rLocale );
+    css::uno::Reference< css::linguistic2::XProofreader > GetGrammarChecker( css::lang::Locale & rLocale );
 
     css::uno::Reference< css::util::XChangesBatch > const & GetUpdateAccess() const;
 
     GrammarCheckingIterator( const GrammarCheckingIterator & ) = delete;
     GrammarCheckingIterator & operator = ( const GrammarCheckingIterator & ) = delete;
+
+    // Gets the grammar checker service, using fallback locales if necessary,
+    // and the BCP-47 tag for the updated locale, if the fallback was used.
+    // Precondition: MyMutex() is locked.
+    std::pair<OUString, std::optional<OUString>>
+    getServiceForLocale(const css::lang::Locale& rLocale) const;
 
 public:
 

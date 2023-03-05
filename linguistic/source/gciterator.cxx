@@ -488,8 +488,30 @@ void GrammarCheckingIterator::ProcessResult(
 }
 
 
+std::pair<OUString, std::optional<OUString>>
+GrammarCheckingIterator::getServiceForLocale(const lang::Locale& rLocale) const
+{
+    if (!rLocale.Language.isEmpty())
+    {
+        const OUString sBcp47 = LanguageTag::convertToBcp47(rLocale, false);
+        GCImplNames_t::const_iterator aLangIt(m_aGCImplNamesByLang.find(sBcp47));
+        if (aLangIt != m_aGCImplNamesByLang.end())
+            return { aLangIt->second, {} };
+
+        for (const auto& sFallbackBcp47 : LanguageTag(rLocale).getFallbackStrings(false))
+        {
+            aLangIt = m_aGCImplNamesByLang.find(sFallbackBcp47);
+            if (aLangIt != m_aGCImplNamesByLang.end())
+                return { aLangIt->second, sFallbackBcp47 };
+        }
+    }
+
+    return {};
+}
+
+
 uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarChecker(
-    const lang::Locale &rLocale )
+    lang::Locale &rLocale )
 {
     uno::Reference< linguistic2::XProofreader > xRes;
 
@@ -503,11 +525,11 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
         m_bGCServicesChecked = true;
     }
 
-    const LanguageType nLang = LanguageTag::convertToLanguageType( rLocale, false);
-    GCImplNames_t::const_iterator aLangIt( m_aGCImplNamesByLang.find( nLang ) );
-    if (aLangIt != m_aGCImplNamesByLang.end())  // matching configured language found?
+    if (const auto& [aSvcImplName, oFallbackBcp47] = getServiceForLocale(rLocale);
+        !aSvcImplName.isEmpty()) // matching configured language found?
     {
-        OUString aSvcImplName( aLangIt->second );
+        if (oFallbackBcp47)
+            rLocale = LanguageTag::convertToLocale(*oFallbackBcp47, false);
         GCReferences_t::const_iterator aImplNameIt( m_aGCReferencesByService.find( aSvcImplName ) );
         if (aImplNameIt != m_aGCReferencesByService.end())  // matching impl name found?
         {
@@ -1088,8 +1110,7 @@ void GrammarCheckingIterator::GetConfiguredGCSvcs_Impl()
                 {
                     // only the first entry is used, there should be only one grammar checker per language
                     const OUString aImplName( aImplNames[0] );
-                    const LanguageType nLang = LanguageTag::convertToLanguageType( rElementName );
-                    aTmpGCImplNamesByLang[ nLang ] = aImplName;
+                    aTmpGCImplNamesByLang[rElementName] = aImplName;
                 }
             }
             else
@@ -1137,17 +1158,17 @@ void GrammarCheckingIterator::SetServiceList(
 {
     ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
 
-    LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
+    OUString sBcp47 = LanguageTag::convertToBcp47(rLocale, false);
     OUString aImplName;
     if (rSvcImplNames.hasElements())
         aImplName = rSvcImplNames[0];   // there is only one grammar checker per language
 
-    if (!LinguIsUnspecified(nLanguage) && nLanguage != LANGUAGE_DONTKNOW)
+    if (!LinguIsUnspecified(sBcp47) && !sBcp47.isEmpty())
     {
         if (!aImplName.isEmpty())
-            m_aGCImplNamesByLang[ nLanguage ] = aImplName;
+            m_aGCImplNamesByLang[sBcp47] = aImplName;
         else
-            m_aGCImplNamesByLang.erase( nLanguage );
+            m_aGCImplNamesByLang.erase(sBcp47);
     }
 }
 
@@ -1157,11 +1178,7 @@ uno::Sequence< OUString > GrammarCheckingIterator::GetServiceList(
 {
     ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
 
-    OUString aImplName;     // there is only one grammar checker per language
-    LanguageType nLang  = LinguLocaleToLanguage( rLocale );
-    GCImplNames_t::const_iterator aIt( m_aGCImplNamesByLang.find( nLang ) );
-    if (aIt != m_aGCImplNamesByLang.end())
-        aImplName = aIt->second;
+    const OUString aImplName = getServiceForLocale(rLocale).first;     // there is only one grammar checker per language
 
     if (!aImplName.isEmpty())
         return { aImplName };
