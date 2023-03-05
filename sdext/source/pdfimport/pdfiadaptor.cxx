@@ -44,7 +44,6 @@ namespace pdfi
 {
 
 PDFIHybridAdaptor::PDFIHybridAdaptor( const uno::Reference< uno::XComponentContext >& xContext ) :
-    PDFIHybridAdaptorBase( m_aMutex ),
     m_xContext( xContext )
 {
 }
@@ -203,7 +202,6 @@ css::uno::Sequence<OUString> PDFIHybridAdaptor::getSupportedServiceNames()
 }
 
 PDFIRawAdaptor::PDFIRawAdaptor( OUString const & implementationName, const uno::Reference< uno::XComponentContext >& xContext ) :
-    PDFIAdaptorBase( m_aMutex ),
     m_implementationName(implementationName),
     m_xContext( xContext )
 {

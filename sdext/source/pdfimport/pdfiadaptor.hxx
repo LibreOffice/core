@@ -34,19 +34,17 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/compbase.hxx>
 
 
 namespace pdfi
 {
-    typedef ::cppu::WeakComponentImplHelper<
+    typedef ::comphelper::WeakComponentImplHelper<
         css::document::XFilter,
         css::document::XImporter,
         css::lang::XServiceInfo> PDFIHybridAdaptorBase;
 
-    class PDFIHybridAdaptor : private cppu::BaseMutex,
-                              public PDFIHybridAdaptorBase
+    class PDFIHybridAdaptor : public PDFIHybridAdaptorBase
     {
     private:
         css::uno::Reference<
@@ -72,15 +70,14 @@ namespace pdfi
         css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
     };
 
-    typedef ::cppu::WeakComponentImplHelper<
+    typedef ::comphelper::WeakComponentImplHelper<
         css::xml::XImportFilter,
         css::document::XImporter,
         css::lang::XServiceInfo> PDFIAdaptorBase;
 
     /** Adapts raw pdf import to XImportFilter interface
      */
-    class PDFIRawAdaptor : private cppu::BaseMutex,
-                           public PDFIAdaptorBase
+    class PDFIRawAdaptor : public PDFIAdaptorBase
     {
     private:
         OUString const m_implementationName;
