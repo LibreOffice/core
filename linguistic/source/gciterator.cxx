@@ -768,7 +768,7 @@ linguistic2::ProofreadingResult SAL_CALL GrammarCheckingIterator::checkSentenceA
 
             // ---- THREAD SAFE START ----
             {
-                ::osl::ClearableGuard< ::osl::Mutex > aGuard( MyMutex() );
+                ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
                 aDocId = GetOrCreateDocId( xComponent );
                 nSuggestedEndOfSentencePos = GetSuggestedEndOfSentence( rText, nStartPos, aCurLocale );
                 DBG_ASSERT( nSuggestedEndOfSentencePos > nStartPos, "nSuggestedEndOfSentencePos calculation failed?" );
