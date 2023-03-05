@@ -122,7 +122,7 @@ void ScQueryCellIteratorBase< accessType, queryType >::PerformQuery()
         bAdvanceQuery = true;
     }
 
-    ScColumn* pCol = &(rDoc.maTabs[nTab])->aCol[nCol];
+    const ScColumn* pCol = &(rDoc.maTabs[nTab])->aCol[nCol];
     while (true)
     {
         bool bNextColumn = maCurPos.first == pCol->maCells.end();
@@ -347,7 +347,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch( SCCOL col, 
     if (nCol >= rDoc.maTabs[nTab]->GetAllocatedColumnsCount())
         return false;
 
-    ScColumn* pCol = &(rDoc.maTabs[nTab])->aCol[nCol];
+    const ScColumn* pCol = &(rDoc.maTabs[nTab])->aCol[nCol];
     if (pCol->IsEmptyData())
         return false;
 
