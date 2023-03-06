@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include "featuredispatcher.hxx"
+#include "controlfeatureinterception.hxx"
 #include <vector>
 #include <map>
 #include <memory>
@@ -34,7 +35,6 @@ namespace frm
 
 
     class UrlTransformer;
-    class ControlFeatureInterception;
 
 
     //= OFormNavigationHelper
@@ -62,8 +62,8 @@ namespace frm
     private:
         css::uno::Reference< css::uno::XComponentContext >
                             m_xORB;
-        ::std::unique_ptr< ControlFeatureInterception >
-                            m_pFeatureInterception;
+        ControlFeatureInterception
+                            m_aFeatureInterception;
 
         // all supported features
         FeatureMap          m_aSupportedFeatures;

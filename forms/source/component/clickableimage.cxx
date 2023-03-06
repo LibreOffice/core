@@ -85,10 +85,10 @@ namespace frm
     OClickableImageBaseControl::OClickableImageBaseControl(const Reference<XComponentContext>& _rxFactory, const OUString& _aService)
         :OControl(_rxFactory, _aService)
         ,m_aSubmissionVetoListeners( m_aMutex )
+        ,m_aFeatureInterception( _rxFactory )
         ,m_aApproveActionListeners( m_aMutex )
         ,m_aActionListeners( m_aMutex )
     {
-        m_pFeatureInterception.reset( new ControlFeatureInterception( _rxFactory ) );
     }
 
 
@@ -129,13 +129,13 @@ namespace frm
 
     void SAL_CALL OClickableImageBaseControl::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
     {
-        m_pFeatureInterception->registerDispatchProviderInterceptor( _rxInterceptor  );
+        m_aFeatureInterception.registerDispatchProviderInterceptor( _rxInterceptor  );
     }
 
 
     void SAL_CALL OClickableImageBaseControl::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
     {
-        m_pFeatureInterception->releaseDispatchProviderInterceptor( _rxInterceptor  );
+        m_aFeatureInterception.releaseDispatchProviderInterceptor( _rxInterceptor  );
     }
 
     // OComponentHelper
@@ -146,7 +146,7 @@ namespace frm
         m_aApproveActionListeners.disposeAndClear( aEvent );
         m_aActionListeners.disposeAndClear( aEvent );
         m_aSubmissionVetoListeners.disposeAndClear( aEvent );
-        m_pFeatureInterception->dispose();
+        m_aFeatureInterception.dispose();
 
         {
             ::osl::MutexGuard aGuard( m_aMutex );
@@ -234,7 +234,7 @@ namespace frm
             case FormButtonType_SUBMIT:
             {
                 // if some outer component can provide an interaction handler, use it
-                Reference< XInteractionHandler > xHandler( m_pFeatureInterception->queryDispatch( "private:/InteractionHandler" ), UNO_QUERY );
+                Reference< XInteractionHandler > xHandler( m_aFeatureInterception.queryDispatch( "private:/InteractionHandler" ), UNO_QUERY );
                 try
                 {
                     implSubmit( rEvt, xHandler );
@@ -292,7 +292,7 @@ namespace frm
                 xSet->getPropertyValue(PROPERTY_DISPATCHURLINTERNAL) >>= bDispatchUrlInternal;
                 if ( bDispatchUrlInternal )
                 {
-                    m_pFeatureInterception->getTransformer().parseSmartWithProtocol( aURL, INET_FILE_SCHEME );
+                    m_aFeatureInterception.getTransformer().parseSmartWithProtocol( aURL, INET_FILE_SCHEME );
 
                     OUString aTargetFrame;
                     xSet->getPropertyValue(PROPERTY_TARGET_FRAME) >>= aTargetFrame;
@@ -308,7 +308,7 @@ namespace frm
                 }
                 else
                 {
-                    URL aHyperLink = m_pFeatureInterception->getTransformer().getStrictURL( ".uno:OpenHyperlink" );
+                    URL aHyperLink = m_aFeatureInterception.getTransformer().getStrictURL( ".uno:OpenHyperlink" );
 
                     Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY_THROW)->queryDispatch(aHyperLink, OUString() , 0);
 

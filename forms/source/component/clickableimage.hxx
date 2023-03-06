@@ -23,6 +23,7 @@
 #include <FormComponent.hxx>
 #include "EventThread.hxx"
 #include "imgprod.hxx"
+#include <controlfeatureinterception.hxx>
 #include <tools/link.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/propmultiplex.hxx>
@@ -45,7 +46,6 @@ namespace frm
 
 
     class OImageProducerThread_Impl;
-    class ControlFeatureInterception;
 
     // OClickableImageBaseModel
 
@@ -190,8 +190,7 @@ namespace frm
         rtl::Reference<OImageProducerThread_Impl>  m_pThread;
         ::comphelper::OInterfaceContainerHelper3<css::form::submission::XSubmissionVetoListener>
                                                    m_aSubmissionVetoListeners;
-        ::std::unique_ptr< ControlFeatureInterception >
-                                                   m_pFeatureInterception;
+        ControlFeatureInterception                 m_aFeatureInterception;
 
     protected:
         ::comphelper::OInterfaceContainerHelper3<css::form::XApproveActionListener> m_aApproveActionListeners;

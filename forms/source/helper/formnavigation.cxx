@@ -43,9 +43,9 @@ namespace frm
 
     OFormNavigationHelper::OFormNavigationHelper( const Reference< XComponentContext >& _rxORB )
         :m_xORB( _rxORB )
+        ,m_aFeatureInterception( m_xORB )
         ,m_nConnectedFeatures( 0 )
     {
-        m_pFeatureInterception.reset( new ControlFeatureInterception( m_xORB ) );
     }
 
 
@@ -56,7 +56,7 @@ namespace frm
 
     void OFormNavigationHelper::dispose( )
     {
-        m_pFeatureInterception->dispose();
+        m_aFeatureInterception.dispose();
         disconnectDispatchers();
     }
 
@@ -81,14 +81,14 @@ namespace frm
 
     void SAL_CALL OFormNavigationHelper::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
     {
-        m_pFeatureInterception->registerDispatchProviderInterceptor( _rxInterceptor );
+        m_aFeatureInterception.registerDispatchProviderInterceptor( _rxInterceptor );
         interceptorsChanged();
     }
 
 
     void SAL_CALL OFormNavigationHelper::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
     {
-        m_pFeatureInterception->releaseDispatchProviderInterceptor( _rxInterceptor );
+        m_aFeatureInterception.releaseDispatchProviderInterceptor( _rxInterceptor );
         interceptorsChanged();
     }
 
@@ -262,7 +262,7 @@ namespace frm
 
     Reference< XDispatch > OFormNavigationHelper::queryDispatch( const URL& _rURL )
     {
-        return m_pFeatureInterception->queryDispatch( _rURL );
+        return m_aFeatureInterception.queryDispatch( _rURL );
     }
 
 
