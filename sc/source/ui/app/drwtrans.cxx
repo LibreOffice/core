@@ -167,7 +167,7 @@ ScDrawTransferObj::ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDo
                                             aLabel = sTmp;
                                         }
                                     }
-                                    m_pBookmark.reset( new INetBookmark( aAbs, aLabel ) );
+                                    m_oBookmark.emplace( aAbs, aLabel );
                                 }
                             }
                         }
@@ -225,7 +225,7 @@ ScDrawTransferObj::~ScDrawTransferObj()
     m_pModel.reset();
     m_aDrawPersistRef.clear();                    // after the model
 
-    m_pBookmark.reset();
+    m_oBookmark.reset();
     m_pDragSourceView.reset();
 }
 
@@ -285,7 +285,7 @@ void ScDrawTransferObj::AddSupportedFormats()
         AddFormat( SotClipboardFormatId::PNG );
         AddFormat( SotClipboardFormatId::BITMAP );
     }
-    else if ( m_pBookmark )       // url button
+    else if ( m_oBookmark )       // url button
     {
 //      AddFormat( SotClipboardFormatId::EMBED_SOURCE );
         AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
@@ -410,9 +410,9 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
                 bOK = SetObject( pEmbObj, SCDRAWTRANS_TYPE_DOCUMENT, rFlavor );
             }
         }
-        else if( m_pBookmark )
+        else if( m_oBookmark )
         {
-            bOK = SetINetBookmark( *m_pBookmark, rFlavor );
+            bOK = SetINetBookmark( *m_oBookmark, rFlavor );
         }
     }
     return bOK;

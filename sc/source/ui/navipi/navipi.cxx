@@ -464,7 +464,7 @@ ScNavigatorDlg::~ScNavigatorDlg()
 
     for (auto & p : mvBoundItems)
         p.reset();
-    pMarkArea.reset();
+    moMarkArea.reset();
 
     EndListening( *(SfxGetpApp()) );
     EndListening( rBindings );
@@ -811,7 +811,7 @@ void ScNavigatorDlg::SetListMode(NavListMode eMode)
         }
     }
 
-    if (pMarkArea)
+    if (moMarkArea)
         UnmarkDataArea();
 }
 
@@ -894,16 +894,16 @@ void ScNavigatorDlg::MarkDataArea()
     if ( !pViewSh )
         return;
 
-    if ( !pMarkArea )
-        pMarkArea.reset( new ScArea );
+    if ( !moMarkArea )
+        moMarkArea.emplace();
 
     pViewSh->MarkDataArea();
     const ScRange& aMarkRange = pViewSh->GetViewData().GetMarkData().GetMarkArea();
-    pMarkArea->nColStart = aMarkRange.aStart.Col();
-    pMarkArea->nRowStart = aMarkRange.aStart.Row();
-    pMarkArea->nColEnd = aMarkRange.aEnd.Col();
-    pMarkArea->nRowEnd = aMarkRange.aEnd.Row();
-    pMarkArea->nTab = aMarkRange.aStart.Tab();
+    moMarkArea->nColStart = aMarkRange.aStart.Col();
+    moMarkArea->nRowStart = aMarkRange.aStart.Row();
+    moMarkArea->nColEnd = aMarkRange.aEnd.Col();
+    moMarkArea->nRowEnd = aMarkRange.aEnd.Row();
+    moMarkArea->nTab = aMarkRange.aStart.Tab();
 }
 
 void ScNavigatorDlg::UnmarkDataArea()
@@ -913,7 +913,7 @@ void ScNavigatorDlg::UnmarkDataArea()
     if ( pViewSh )
     {
         pViewSh->Unmark();
-        pMarkArea.reset();
+        moMarkArea.reset();
     }
 }
 

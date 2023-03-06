@@ -25,12 +25,12 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/navigat.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
+#include <rangeutl.hxx>
 #include "content.hxx"
 
 class SfxPoolItem;
 class ScTabViewShell;
 class ScViewData;
-class ScArea;
 class ScScenarioWindow;
 class ScNavigatorControllerItem;
 class ScNavigatorDlg;
@@ -114,7 +114,7 @@ private:
     OUString        aStrHidden;
     OUString        aStrActiveWin;
 
-    std::unique_ptr<ScArea> pMarkArea;
+    std::optional<ScArea> moMarkArea;
     ScViewData*     pViewData;
 
     NavListMode     eListMode;

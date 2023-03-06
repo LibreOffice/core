@@ -23,11 +23,11 @@
 #include <vcl/transfer.hxx>
 
 #include <sfx2/objsh.hxx>
+#include <svl/urlbmk.hxx>
 #include <charthelper.hxx>
 
 class SdrModel;
 class ScDocShell;
-class INetBookmark;
 class SdrObject;
 class SdrView;
 class ScDrawView;
@@ -45,7 +45,7 @@ private:
 
                                     // extracted from model in ctor:
     Size                            m_aSrcSize;
-    std::unique_ptr<INetBookmark>   m_pBookmark;
+    std::optional<INetBookmark>     m_oBookmark;
     bool                            m_bGraphic;
     bool                            m_bGrIsBit;
     bool                            m_bOleObj;
