@@ -223,21 +223,28 @@ QAccessible::Relation lcl_matchUnoRelation(short relationType)
     // Qt semantics is the other way around
     switch (relationType)
     {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+        case AccessibleRelationType::CONTENT_FLOWS_FROM:
+            return QAccessible::FlowsTo;
+        case AccessibleRelationType::CONTENT_FLOWS_TO:
+            return QAccessible::FlowsFrom;
+#endif
         case AccessibleRelationType::CONTROLLED_BY:
             return QAccessible::Controller;
         case AccessibleRelationType::CONTROLLER_FOR:
             return QAccessible::Controlled;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+        case AccessibleRelationType::DESCRIBED_BY:
+            return QAccessible::DescriptionFor;
+#endif
         case AccessibleRelationType::LABELED_BY:
             return QAccessible::Label;
         case AccessibleRelationType::LABEL_FOR:
             return QAccessible::Labelled;
         case AccessibleRelationType::INVALID:
-        case AccessibleRelationType::CONTENT_FLOWS_FROM:
-        case AccessibleRelationType::CONTENT_FLOWS_TO:
         case AccessibleRelationType::MEMBER_OF:
         case AccessibleRelationType::SUB_WINDOW_OF:
         case AccessibleRelationType::NODE_CHILD_OF:
-        case AccessibleRelationType::DESCRIBED_BY:
         default:
             SAL_WARN("vcl.qt", "Unmatched relation: " << relationType);
             return {};
@@ -253,10 +260,21 @@ short lcl_matchQtRelation(QAccessible::Relation relationType)
             return AccessibleRelationType::CONTROLLER_FOR;
         case QAccessible::Controller:
             return AccessibleRelationType::CONTROLLED_BY;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+        case QAccessible::DescriptionFor:
+            return AccessibleRelationType::DESCRIBED_BY;
+        case QAccessible::FlowsFrom:
+            return AccessibleRelationType::CONTENT_FLOWS_TO;
+        case QAccessible::FlowsTo:
+            return AccessibleRelationType::CONTENT_FLOWS_FROM;
+#endif
         case QAccessible::Labelled:
             return AccessibleRelationType::LABEL_FOR;
         case QAccessible::Label:
             return AccessibleRelationType::LABELED_BY;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+        case QAccessible::Described:
+#endif
         default:
             SAL_WARN("vcl.qt", "Unmatched relation: " << relationType);
     }
