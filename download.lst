@@ -320,6 +320,11 @@ FONT_OPENDYSLEXIC_TARBALL := opendyslexic-0.910.12-rc2-2019.10.17.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+FONT_OPEN_SANS_TARBALL := Open_Sans.zip
+FONT_OPEN_SANS_SHA256SUM := 85d79a39d26acb207ba13fb1007189d55355a0faf2cf7ccfe6a2edf2abac06d9
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
 FONT_AGDASIMA_TARBALL := Agdasima-2.002.zip
 FONT_AGDASIMA_SHA256SUM := b4c17499f8bc183320ffdcf1f8491c778dd68a237adc056dc08e1fcb2da488f3
 # three static lines

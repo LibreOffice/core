@@ -39,6 +39,7 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	ExternalPackage_reem \
 	ExternalPackage_scheherazade \
 	ExternalPackage_opendyslexic \
+	ExternalPackage_opensans \
 	$(if $(WITH_DOCREPAIR_FONTS),ExternalPackage_agdasima,) \
 	$(if $(WITH_DOCREPAIR_FONTS),ExternalPackage_bacasime_antique,) \
 	$(if $(WITH_DOCREPAIR_FONTS),ExternalPackage_belanosima,) \
@@ -75,6 +76,7 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	UnpackedTarball_reem \
 	UnpackedTarball_scheherazade \
 	UnpackedTarball_opendyslexic \
+	UnpackedTarball_opensans \
 	$(if $(WITH_DOCREPAIR_FONTS),UnpackedTarball_agdasima,) \
 	$(if $(WITH_DOCREPAIR_FONTS),UnpackedTarball_bacasime_antique,) \
 	$(if $(WITH_DOCREPAIR_FONTS),UnpackedTarball_belanosima,) \
