@@ -1487,6 +1487,23 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testSharedFormulaRefUpdateXLSX)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf153924)
+{
+    createScDoc("ods/tdf153924.ods");
+    ScDocument* pDoc = getScDoc();
+
+    double aCheck[6][2] = { { 148.0, 195.0 }, { 144.0, 200.0 }, { 151.0, 192.0 },
+                            { 154.0, 189.0 }, { 165.0, 183.0 }, { 0.0, 0.0 } };
+    for (size_t i = 0; i < 6; ++i)
+    {
+        for (size_t j = 0; j < 2; ++j)
+        {
+            // Without the fix in place, the output from LARGE()/SMALL() would have been 0
+            CPPUNIT_ASSERT_EQUAL(aCheck[i][j], pDoc->GetValue(ScAddress(j, i + 8, 0)));
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testSheetNamesXLSX)
 {
     createScDoc("xlsx/sheet-names.xlsx");
