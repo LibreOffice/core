@@ -270,7 +270,7 @@ void LwpFribPtr::XFConvert()
             if (pLayout.is() && pLayout->GetTag() == VO_DROPCAPLAYOUT)
             {
                 LwpFoundry* pFoundry = m_pPara->GetFoundry();
-                LwpDropcapMgr* pMgr = pFoundry ? pFoundry->GetDropcapMgr() : nullptr;
+                LwpDropcapMgr* pMgr = pFoundry ? &pFoundry->GetDropcapMgr() : nullptr;
                 if (pMgr)
                     pMgr->SetXFPara(m_pXFPara.get());
             }

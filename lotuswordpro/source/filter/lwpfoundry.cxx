@@ -79,7 +79,6 @@ LwpFoundry::LwpFoundry(LwpObjectStream *pStrm, LwpDocument* pDoc)
     , m_bRegisteredAll(false)
 {
     Read(pStrm);
-    m_xDropcapMgr.reset(new LwpDropcapMgr);
     m_xBulletStyleMgr.reset(new LwpBulletStyleMgr);
     m_xBulletStyleMgr->SetFoundry(this);
 }

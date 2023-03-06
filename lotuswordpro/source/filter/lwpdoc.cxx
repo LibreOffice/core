@@ -101,7 +101,7 @@ void LwpDocument::Read()
         LwpUIDocument aUIDoc(m_pObjStrm.get());
     }
 
-    m_xLnOpts.reset(new LwpLineNumberOptions(m_pObjStrm.get()));
+    m_oLnOpts.emplace(m_pObjStrm.get());
 
     //Skip LwpUserDictFiles
     {
@@ -350,9 +350,9 @@ void LwpDocument::RegisterGraphicsStyles()
  */
 void LwpDocument::RegisterLinenumberStyles()
 {
-    if (!m_xLnOpts)
+    if (!m_oLnOpts)
         return;
-    m_xLnOpts->RegisterStyle();
+    m_oLnOpts->RegisterStyle();
 }
 
 /**

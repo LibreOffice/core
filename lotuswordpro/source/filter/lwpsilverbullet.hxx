@@ -130,7 +130,7 @@ private:
     LwpObjectID m_aStory;
     sal_uInt8 m_pResetPositionFlags[MAXNUMBERPOSITIONS];
     sal_uInt32 m_nUseCount;
-    std::unique_ptr<LwpAtomHolder> m_pAtomHolder;
+    LwpAtomHolder m_aAtomHolder;
 
     rtl::Reference<LwpPara> m_xBulletPara;
     OUString m_strStyleName;

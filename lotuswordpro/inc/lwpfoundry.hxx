@@ -70,7 +70,6 @@
 #include <unordered_map>
 #include <memory>
 
-
 class LwpDocument;
 class LwpBookMark;
 
@@ -257,12 +256,12 @@ public:
     LwpObjectID * GetDefaultTextStyle() ;
 private:
     std::unique_ptr<LwpStyleManager> m_xStyleMgr;
-    std::unique_ptr<LwpDropcapMgr> m_xDropcapMgr;
+    LwpDropcapMgr m_aDropcapMgr;
     std::unique_ptr<LwpBulletStyleMgr> m_xBulletStyleMgr;
 public:
     LwpStyleManager* GetStyleManager() { return m_xStyleMgr.get(); }
     LwpBookMark* GetBookMark(LwpObjectID objMarker);
-    LwpDropcapMgr* GetDropcapMgr() { return m_xDropcapMgr.get(); }
+    LwpDropcapMgr& GetDropcapMgr() { return m_aDropcapMgr; }
     LwpContent* EnumContents(LwpContent* pContent);
     LwpSection* EnumSections(LwpSection* pSection);
     LwpBulletStyleMgr* GetBulletStyleMgr() { return m_xBulletStyleMgr.get(); }

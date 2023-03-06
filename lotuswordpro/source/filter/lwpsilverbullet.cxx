@@ -74,7 +74,6 @@ LwpSilverBullet::LwpSilverBullet(LwpObjectHeader const & objHdr, LwpSvStream* pS
     : LwpDLNFVList(objHdr, pStrm)
     , m_nFlags(0)
     , m_nUseCount(0)
-    , m_pAtomHolder(new LwpAtomHolder)
 {
     memset(m_pHideLevels, 0, sizeof(m_pHideLevels));
 }
@@ -103,7 +102,7 @@ void LwpSilverBullet::Read()
 
     m_nUseCount = m_pObjStrm->QuickReaduInt32();
 
-    m_pAtomHolder->Read(m_pObjStrm.get());
+    m_aAtomHolder.Read(m_pObjStrm.get());
 }
 
 /**

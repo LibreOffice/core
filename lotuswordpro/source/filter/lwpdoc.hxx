@@ -65,6 +65,7 @@
 #include "lwplnopts.hxx"
 #include "lwpdlvlist.hxx"
 #include <lwpfoundry.hxx>
+#include <optional>
 
 class IXFStream;
 class LwpVirtualLayout;
@@ -93,7 +94,7 @@ private:
         DOC_CHILDDOC = 0x00000800UL
     };
 
-    std::unique_ptr<LwpLineNumberOptions> m_xLnOpts;
+    std::optional<LwpLineNumberOptions> m_oLnOpts;
 
     LwpObjectID m_DivOpts;
     LwpObjectID m_FootnoteOpts;

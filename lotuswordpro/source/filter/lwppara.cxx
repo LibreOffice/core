@@ -744,7 +744,7 @@ void LwpPara::ParseDropcapContent()
 {
     if (!GetFoundry())
         return;
-    XFParagraph* pDropcap = GetFoundry()->GetDropcapMgr()->GetXFPara();
+    XFParagraph* pDropcap = GetFoundry()->GetDropcapMgr().GetXFPara();
     if (pDropcap)
     {
         m_Fribs.SetXFPara(pDropcap);

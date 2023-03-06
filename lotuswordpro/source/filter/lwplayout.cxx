@@ -530,7 +530,6 @@ rtl::Reference<LwpVirtualLayout> LwpHeadLayout::FindEnSuperTableLayout()
 
 LwpLayoutStyle::LwpLayoutStyle()
     : m_nStyleDefinition(0)
-    , m_pDescription(new LwpAtomHolder)
     , m_nKey(0)
 {
 }
@@ -540,7 +539,7 @@ LwpLayoutStyle::~LwpLayoutStyle() {}
 void LwpLayoutStyle::Read(LwpObjectStream* pStrm)
 {
     m_nStyleDefinition = pStrm->QuickReaduInt32();
-    m_pDescription->Read(pStrm);
+    m_aDescription.Read(pStrm);
     if (pStrm->CheckExtra())
     {
         m_nKey = pStrm->QuickReaduInt16();
