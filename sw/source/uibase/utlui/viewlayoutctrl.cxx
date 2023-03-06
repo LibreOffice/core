@@ -66,7 +66,7 @@ void SwViewLayoutControl::StateChangedAtStatusBarControl( sal_uInt16 /*nSID*/, S
     if ( SfxItemState::DEFAULT != eState || pState->IsVoidItem() )
     {
         GetStatusBar().SetItemText( GetId(), OUString() );
-        mpImpl->mnState = 4; //tdf#148441 switch off is disabled
+        mpImpl->mnState = 4; //tdf#148441 switch off, if disabled
     }
     else
     {
