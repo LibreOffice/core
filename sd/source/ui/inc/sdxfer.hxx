@@ -24,11 +24,11 @@
 #include <vcl/vclptr.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/lstner.hxx>
+#include <svl/urlbmk.hxx>
 
 // SdTransferable
 class SdDrawDocument;
 class SdrObject;
-class INetBookmark;
 class ImageMap;
 class VirtualDevice;
 
@@ -122,7 +122,7 @@ private:
     SdDrawDocument*                 mpSdDrawDocumentIntern;
     SdDrawDocument*                 mpSourceDoc;
     VclPtr<VirtualDevice>           mpVDev;
-    std::unique_ptr<INetBookmark>   mpBookmark;
+    std::optional<INetBookmark>     moBookmark;
     std::optional<Graphic>          moGraphic;
     std::unique_ptr<ImageMap>       mpImageMap;
     ::tools::Rectangle                       maVisArea;

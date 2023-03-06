@@ -130,7 +130,7 @@ SdTransferable::~SdTransferable()
         delete mpSdDrawDocumentIntern;
 
     moGraphic.reset();
-    mpBookmark.reset();
+    moBookmark.reset();
     mpImageMap.reset();
 
     mpVDev.disposeAndClear();
@@ -147,7 +147,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
 
     mpOLEDataHelper.reset();
     moGraphic.reset();
-    mpBookmark.reset();
+    moBookmark.reset();
     mpImageMap.reset();
 
     if( auto pOleObj = dynamic_cast< SdrOle2Obj* >( pObj ) )
@@ -200,7 +200,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
                 xPropSet->getPropertyValue( "Label" ) >>= aLabel;
                 xPropSet->getPropertyValue( "TargetURL" ) >>= aURL;
 
-                mpBookmark.reset( new INetBookmark( aURL, aLabel ) );
+                moBookmark.emplace( aURL, aLabel );
             }
         }
     }
@@ -226,7 +226,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
                     // when both are unused
                     if(!pObj->HasFillStyle() && !pObj->HasLineStyle())
                     {
-                        mpBookmark.reset( new INetBookmark( pURL->GetURL(), pURL->GetRepresentation() ) );
+                        moBookmark.emplace( pURL->GetURL(), pURL->GetRepresentation() );
                     }
                 }
             }
@@ -413,7 +413,7 @@ void SdTransferable::AddSupportedFormats()
             AddFormat( SotClipboardFormatId::BITMAP );
         }
     }
-    else if( mpBookmark )
+    else if( moBookmark )
     {
         AddFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK );
         AddFormat( SotClipboardFormatId::STRING );
@@ -518,9 +518,9 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
                     mpSdDrawDocumentIntern->SetOnlineSpell(true);
             }
         }
-        else if( ( nFormat == SotClipboardFormatId::STRING ) && mpBookmark )
+        else if( ( nFormat == SotClipboardFormatId::STRING ) && moBookmark )
         {
-            bOK = SetString( mpBookmark->GetURL() );
+            bOK = SetString( moBookmark->GetURL() );
         }
         else if( ( nFormat == SotClipboardFormatId::SVXB ) && moGraphic )
         {
@@ -530,9 +530,9 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         {
             bOK = SetImageMap( *mpImageMap );
         }
-        else if( mpBookmark )
+        else if( moBookmark )
         {
-            bOK = SetINetBookmark( *mpBookmark, rFlavor );
+            bOK = SetINetBookmark( *moBookmark, rFlavor );
         }
         else if( nFormat == SotClipboardFormatId::EMBED_SOURCE )
         {
