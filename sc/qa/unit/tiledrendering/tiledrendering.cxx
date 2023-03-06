@@ -252,35 +252,6 @@ void ScTiledRenderingTest::callback(int nType, const char* pPayload, void* pData
     static_cast<ScTiledRenderingTest*>(pData)->callbackImpl(nType, pPayload);
 }
 
-/* TODO when needed...
-static std::vector<OUString> lcl_convertSeparated(const OUString& rString, sal_Unicode nSeparator)
-{
-    std::vector<OUString> aRet;
-
-    sal_Int32 nIndex = 0;
-    do
-    {
-        OUString aToken = rString.getToken(0, nSeparator, nIndex);
-        aToken = aToken.trim();
-        if (!aToken.isEmpty())
-            aRet.push_back(aToken);
-    }
-    while (nIndex >= 0);
-
-    return aRet;
-}
-
-static void lcl_convertRectangle(const OUString& rString, Rectangle& rRectangle)
-{
-    uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(rString);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
-    rRectangle.SetLeft(aSeq[0].toInt32());
-    rRectangle.SetTop(aSeq[1].toInt32());
-    rRectangle.setWidth(aSeq[2].toInt32());
-    rRectangle.setHeight(aSeq[3].toInt32());
-}
-*/
-
 void ScTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
 {
     switch (nType)
