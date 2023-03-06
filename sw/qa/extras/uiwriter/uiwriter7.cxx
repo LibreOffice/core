@@ -147,6 +147,24 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77340)
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(3)), xPropSet->getPropertyValue("PageNumberOffset"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf153819)
+{
+    // copy a table before a deleted table in Hide Changes mode
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf153819.fodt");
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    // hide changes
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+    dispatchCommand(mxComponent, ".uno:SelectTable", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    // FIXME: Show Changes, otherwise ~SwTableNode() would have crashed
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf79236)
 {
     SwDoc* pDoc = createSwDoc();
