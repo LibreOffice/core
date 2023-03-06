@@ -457,6 +457,8 @@ protected:
     SwPageFrame *InsertPage( SwPageFrame *pSibling, bool bFootnote );
     void PrepareMake(vcl::RenderContext* pRenderContext);
     void OptPrepareMake();
+    /// Calculates the frame area position, in case it's invalid.  The frame area size and the print
+    /// area is not considered here.
     virtual void MakePos();
     // Format next frame of table frame to assure keeping attributes.
     // In case of nested tables method <SwFrame::MakeAll()> is called to
@@ -658,7 +660,7 @@ public:
     bool IsFootnoteAllowed() const;
 
     /// Calculates the frame area size and the print area, in case they are invalid.
-    /// The frame are position is not considered here.
+    /// The frame area position is not considered here.
     virtual void  Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr );
 
     virtual void CheckDirection( bool bVert );
