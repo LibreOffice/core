@@ -144,7 +144,7 @@ If you want to run only a single test to allow quick development iteration,
 then use `CPPUNIT_TEST_NAME` to specify the name of the single test:
 
 ----
-CPPUNIT_TEST_NAME="testTdf91074" make -sr CppunitTest_sw_rtfimport
+CPPUNIT_TEST_NAME="testTdf91074" make -sr CppunitTest_sw_rtfexport6
 ----
 
 == UNO, in more details, various tips:
