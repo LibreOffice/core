@@ -262,7 +262,7 @@ void AxisPositionsTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )
 
     if( const SfxUInt32Item* pNumFormatItem = GetItemSet().GetItemIfSet(SCHATTR_AXIS_CROSSING_MAIN_AXIS_NUMBERFORMAT) )
     {
-        sal_uLong nFmt = pNumFormatItem->GetValue();
+        sal_uInt32 nFmt = pNumFormatItem->GetValue();
         rCrossFormatter.SetFormatKey(nFmt);
     }
 }

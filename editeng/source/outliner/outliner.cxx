@@ -359,7 +359,7 @@ sal_Int32 Outliner::GetBulletsNumberingStatus() const
 
 std::optional<OutlinerParaObject> Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 nCount ) const
 {
-    if ( static_cast<sal_uLong>(nStartPara) + nCount >
+    if ( static_cast<sal_uInt64>(nStartPara) + nCount >
             o3tl::make_unsigned(pParaList->GetParagraphCount()) )
         nCount = pParaList->GetParagraphCount() - nStartPara;
 

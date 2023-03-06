@@ -1025,7 +1025,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         {
                             if ( pIter->Name == "FormatStringId" )
                             {
-                                sal_uLong nTmp;
+                                sal_uInt32 nTmp;
                                 if ( pIter->Value >>= nTmp )
                                     pasteFormat(static_cast<SotClipboardFormatId>(nTmp));
                                 break;
