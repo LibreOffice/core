@@ -506,7 +506,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
             OUString sDesc;
             if( m_pWrtShell->GetURLFromButton( sURL, sDesc ) )
             {
-                m_pBookmark.reset(new INetBookmark( sURL, sDesc ));
+                m_oBookmark.emplace( sURL, sDesc );
                 m_eBufferType = TransferBufferType::InetField;
             }
         }
@@ -534,9 +534,9 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
                             !m_pWrtShell->GetView().GetDocShell()->IsReadOnly();
             if( m_pWrtShell->GetContentAtPos( aPos, aContentAtPos, bSelect ) )
             {
-                m_pBookmark.reset(new INetBookmark(
+                m_oBookmark.emplace(
                         static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr)->GetValue(),
-                        aContentAtPos.sStr ));
+                        aContentAtPos.sStr );
                 m_eBufferType = TransferBufferType::InetField;
                 if( bSelect )
                     m_pWrtShell->SelectTextAttr( RES_TXTATR_INETFMT );
@@ -661,8 +661,8 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         case SotClipboardFormatId::FILECONTENT:
         case SotClipboardFormatId::UNIFORMRESOURCELOCATOR:
         case SotClipboardFormatId::SIMPLE_FILE:
-            if( (TransferBufferType::InetField & m_eBufferType) && m_pBookmark )
-                bOK = SetINetBookmark( *m_pBookmark, rFlavor );
+            if( (TransferBufferType::InetField & m_eBufferType) && m_oBookmark )
+                bOK = SetINetBookmark( *m_oBookmark, rFlavor );
             break;
 
         case SotClipboardFormatId::EMBED_SOURCE:
@@ -3904,8 +3904,8 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         if( rSh.GetFormatFromObj( rDragPt ) )
         {
             INetBookmark aTmp;
-            if( (TransferBufferType::InetField & m_eBufferType) && m_pBookmark )
-                aTmp = *m_pBookmark;
+            if( (TransferBufferType::InetField & m_eBufferType) && m_oBookmark )
+                aTmp = *m_oBookmark;
 
             // select target graphic
             if( rSh.SelectObj( rDragPt ) )

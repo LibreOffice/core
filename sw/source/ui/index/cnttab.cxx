@@ -230,7 +230,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(weld::Widget* pParent, const SfxItemSet
     }
     for(int i = m_vTypeData.size() - 1; i > -1; i--)
     {
-        m_vTypeData[i].m_pxIndexSections.reset(new SwIndexSections_Impl);
+        m_vTypeData[i].m_oIndexSections.emplace();
         if(pCurTOX)
         {
             m_eCurrentTOXType.eType = pCurTOX->GetType();

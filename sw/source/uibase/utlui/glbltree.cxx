@@ -577,9 +577,9 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
     // If a RequestHelp is called during the dialogue,
     // then the content gets lost. Because of that a copy
     // is created in which only the DocPos is set correctly.
-    std::unique_ptr<SwGlblDocContent> pContCopy;
+    std::optional<SwGlblDocContent> oContCopy;
     if(pCont)
-        pContCopy.reset(new SwGlblDocContent(pCont->GetDocPos()));
+        oContCopy.emplace(pCont->GetDocPos());
     SfxDispatcher& rDispatch = *m_pActiveShell->GetView().GetViewFrame().GetDispatcher();
     sal_uInt16 nSlot = 0;
     if (rSelectedPopupEntry == "updatesel")
@@ -659,7 +659,7 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
     }
     else if (rSelectedPopupEntry == "insertindex")
     {
-        if(pContCopy)
+        if(oContCopy)
         {
             SfxItemSetFixed<
                     RES_FRM_SIZE, RES_FRM_SIZE,
@@ -683,15 +683,15 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
                 SwTOXMgr aMgr(m_pActiveShell);
                 SwTOXBase* pToInsert = nullptr;
                 if(aMgr.UpdateOrInsertTOX(rDesc, &pToInsert, pDlg->GetOutputItemSet()))
-                    m_pActiveShell->InsertGlobalDocContent( *pContCopy, *pToInsert );
+                    m_pActiveShell->InsertGlobalDocContent( *oContCopy, *pToInsert );
             }
             pCont = nullptr;
         }
     }
     else if (rSelectedPopupEntry == "insertfile")
     {
-        m_pDocContent = std::move(pContCopy);
-        InsertRegion( m_pDocContent.get() );
+        m_oDocContent = std::move(oContCopy);
+        InsertRegion( &*m_oDocContent );
         pCont = nullptr;
     }
     else if (rSelectedPopupEntry == "insertnewfile")
@@ -1116,8 +1116,8 @@ IMPL_LINK( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, vo
             + OUStringChar(sfx2::cTokenSeparator);
         pFileNames[nPos++] = sFileName;
     }
-    InsertRegion( m_pDocContent.get(), aFileNames );
-    m_pDocContent.reset();
+    InsertRegion( &*m_oDocContent, aFileNames );
+    m_oDocContent.reset();
 }
 
 void SwGlobalTree::Notify(SfxBroadcaster& rBC, SfxHint const& rHint)

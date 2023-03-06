@@ -29,6 +29,7 @@
 #include <o3tl/deleter.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <svx/swframetypes.hxx>
+#include <svl/urlbmk.hxx>
 #include <memory>
 #include <optional>
 
@@ -36,7 +37,6 @@
 
 class Graphic;
 class ImageMap;
-class INetBookmark;
 class INetImage;
 class SfxAbstractPasteDialog;
 class SwDoc;
@@ -88,7 +88,7 @@ class SW_DLLPUBLIC SwTransferable final : public TransferableHelper
     std::optional<Graphic>        m_oClpGraphic;
     std::optional<Graphic>        m_oClpBitmap;
     Graphic                         *m_pOrigGraphic;
-    std::unique_ptr<INetBookmark>   m_pBookmark;     // URL and description!
+    std::optional<INetBookmark>     m_oBookmark;     // URL and description!
     std::unique_ptr<ImageMap>       m_pImageMap;
     std::unique_ptr<INetImage>      m_pTargetURL;
 

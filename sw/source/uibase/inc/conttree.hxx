@@ -34,6 +34,7 @@
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <editsh.hxx>
+#include <edglbldc.hxx>
 
 class SwWrtShell;
 class SwContentType;
@@ -42,7 +43,6 @@ class SwNavigationConfig;
 class Menu;
 class ToolBox;
 class SwGlblDocContents;
-class SwGlblDocContent;
 class SfxObjectShell;
 class SdrObject;
 
@@ -326,7 +326,7 @@ private:
     SwWrtShell*             m_pActiveShell;
     std::unique_ptr<SwGlblDocContents> m_pSwGlblDocContents; // array with sorted content
 
-    std::unique_ptr<SwGlblDocContent>       m_pDocContent;
+    std::optional<SwGlblDocContent>       m_oDocContent;
     std::unique_ptr<sfx2::DocumentInserter> m_pDocInserter;
 
     static const SfxObjectShell* s_pShowShell;

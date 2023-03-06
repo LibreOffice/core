@@ -14,6 +14,7 @@
 #include <rtl/ustring.hxx>
 
 #include <memory>
+#include <optional>
 #include <utility>
 #include <vector>
 
@@ -83,7 +84,7 @@ private:
 
     std::vector<std::unique_ptr<ClosedLink>> m_ClosedLinks;
 
-    std::unique_ptr<StartedLink> m_pStartedLink;
+    std::optional<StartedLink> m_oStartedLink;
 
     friend class ::ToxLinkProcessorTest;
 };

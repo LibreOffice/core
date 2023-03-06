@@ -61,7 +61,7 @@ class SwMultiTOXTabDialog final : public SfxTabDialogController
     {
         std::unique_ptr<SwForm> m_pForm;
         std::unique_ptr<SwTOXDescription> m_pDescription;
-        std::unique_ptr<SwIndexSections_Impl> m_pxIndexSections;
+        std::optional<SwIndexSections_Impl> m_oIndexSections;
     };
     std::vector<TypeData>   m_vTypeData;
 

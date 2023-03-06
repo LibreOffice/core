@@ -42,8 +42,8 @@ private:
 
     SfxBindings* m_pBindings;
 
-    std::unique_ptr<SvxRelativeField> m_xRowHeightEdit;
-    std::unique_ptr<SvxRelativeField> m_xColumnWidthEdit;
+    SvxRelativeField m_aRowHeightEdit;
+    SvxRelativeField m_aColumnWidthEdit;
     std::unique_ptr<weld::Toolbar> m_xInsert;
     std::unique_ptr<ToolbarUnoDispatcher> m_xInsertDispatch;
     std::unique_ptr<weld::Toolbar> m_xSelect;

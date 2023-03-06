@@ -300,7 +300,7 @@ public:
     const TOXTypes m_eTOXType;
     bool m_bIsDescriptor;
     SwDoc* m_pDoc;
-    std::unique_ptr<SwDocIndexDescriptorProperties_Impl> m_pProps;
+    std::optional<SwDocIndexDescriptorProperties_Impl> m_oProps;
     uno::WeakReference<container::XIndexReplace> m_wStyleAccess;
     uno::WeakReference<container::XIndexReplace> m_wTokenAccess;
 
@@ -310,9 +310,9 @@ public:
         , m_eTOXType(eType)
         , m_bIsDescriptor(nullptr == pBaseSection)
         , m_pDoc(&rDoc)
-        , m_pProps(m_bIsDescriptor
-            ? new SwDocIndexDescriptorProperties_Impl(rDoc.GetTOXType(eType, 0))
-            : nullptr)
+        , m_oProps(m_bIsDescriptor
+            ? std::optional<SwDocIndexDescriptorProperties_Impl>(rDoc.GetTOXType(eType, 0))
+            : std::nullopt)
     {
         if(m_pFormat)
             StartListening(m_pFormat->GetNotifier());
@@ -333,7 +333,7 @@ public:
     {
         SwSectionFormat *const pSectionFormat(GetSectionFormat());
         SwTOXBase *const pTOXSection( m_bIsDescriptor
-            ?  &m_pProps->GetTOXBase()
+            ?  &const_cast<SwDocIndexDescriptorProperties_Impl&>(*m_oProps).GetTOXBase()
             : (pSectionFormat
                 ? static_cast<SwTOXBaseSection*>(pSectionFormat->GetSection())
                 : nullptr));
@@ -584,7 +584,7 @@ SwXDocumentIndex::setPropertyValue(
             }
             else
             {
-                m_pImpl->m_pProps->SetTypeName(sNewName);
+                m_pImpl->m_oProps->SetTypeName(sNewName);
             }
         }
         break;
@@ -889,7 +889,7 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
     }
     else if (m_pImpl->m_bIsDescriptor)
     {
-        pTOXBase = &m_pImpl->m_pProps->GetTOXBase();
+        pTOXBase = &m_pImpl->m_oProps->GetTOXBase();
     }
     if(pTOXBase)
     {
@@ -940,7 +940,7 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
             {
                 OUString sTmp((!m_pImpl->m_bIsDescriptor)
                     ? pTOXBase->GetTOXType()->GetTypeName()
-                    : m_pImpl->m_pProps->GetTypeName());
+                    : m_pImpl->m_oProps->GetTypeName());
                 //I18N
                 lcl_ConvertTOUNameToProgrammaticName(sTmp);
                 aRet <<= sTmp;
@@ -1337,26 +1337,26 @@ SwXDocumentIndex::attach(const uno::Reference< text::XTextRange > & xTextRange)
 
     UnoActionContext aAction(pDoc);
 
-    SwTOXBase & rTOXBase = m_pImpl->m_pProps->GetTOXBase();
+    SwTOXBase & rTOXBase = m_pImpl->m_oProps->GetTOXBase();
     SwTOXType const*const pTOXType = rTOXBase.GetTOXType();
     if ((TOX_USER == pTOXType->GetType()) &&
-        m_pImpl->m_pProps->GetTypeName() != pTOXType->GetTypeName())
+        m_pImpl->m_oProps->GetTypeName() != pTOXType->GetTypeName())
     {
-        lcl_ReAssignTOXType(*pDoc, rTOXBase, m_pImpl->m_pProps->GetTypeName());
+        lcl_ReAssignTOXType(*pDoc, rTOXBase, m_pImpl->m_oProps->GetTypeName());
     }
     //TODO: apply Section attributes (columns and background)
     SwTOXBaseSection *const pTOX =
         pDoc->InsertTableOf( aPam, rTOXBase, nullptr, false,
                 m_pImpl->m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
 
-    pDoc->SetTOXBaseName(*pTOX, m_pImpl->m_pProps->GetTOXBase().GetTOXName());
+    pDoc->SetTOXBaseName(*pTOX, m_pImpl->m_oProps->GetTOXBase().GetTOXName());
 
     // update page numbers
     m_pImpl->SetSectionFormat(*pTOX->GetFormat());
     pTOX->GetFormat()->SetXObject(static_cast< ::cppu::OWeakObject*>(this));
     pTOX->UpdatePageNum();
 
-    m_pImpl->m_pProps.reset();
+    m_pImpl->m_oProps.reset();
     m_pImpl->m_pDoc = pDoc;
     m_pImpl->m_bIsDescriptor = false;
 }
@@ -1425,7 +1425,7 @@ OUString SAL_CALL SwXDocumentIndex::getName()
     SwSectionFormat *const pSectionFormat( m_pImpl->GetSectionFormat() );
     if (m_pImpl->m_bIsDescriptor)
     {
-        return m_pImpl->m_pProps->GetTOXBase().GetTOXName();
+        return m_pImpl->m_oProps->GetTOXBase().GetTOXName();
     }
 
     if(!pSectionFormat)
@@ -1449,7 +1449,7 @@ SwXDocumentIndex::setName(const OUString& rName)
     SwSectionFormat *const pSectionFormat( m_pImpl->GetSectionFormat() );
     if (m_pImpl->m_bIsDescriptor)
     {
-        m_pImpl->m_pProps->GetTOXBase().SetTOXName(rName);
+        m_pImpl->m_oProps->GetTOXBase().SetTOXName(rName);
     }
     else if (pSectionFormat)
     {

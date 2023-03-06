@@ -20,14 +20,13 @@ namespace sw {
 void
 ToxLinkProcessor::StartNewLink(sal_Int32 startPosition, const OUString& characterStyle)
 {
-    SAL_INFO_IF(m_pStartedLink, "sw.core", "ToxLinkProcessor: LS without LE");
-    m_pStartedLink = std::make_unique<StartedLink>(
-                startPosition, characterStyle);
+    SAL_INFO_IF(m_oStartedLink, "sw.core", "ToxLinkProcessor: LS without LE");
+    m_oStartedLink.emplace(startPosition, characterStyle);
 }
 
 void ToxLinkProcessor::CloseLink(sal_Int32 endPosition, const OUString& url, bool bRelative)
 {
-    if (m_pStartedLink == nullptr)
+    if (!m_oStartedLink)
     {
         SAL_INFO("sw.core", "ToxLinkProcessor: LE without LS");
         return;
@@ -53,15 +52,15 @@ void ToxLinkProcessor::CloseLink(sal_Int32 endPosition, const OUString& url, boo
     }
 
     std::unique_ptr<ClosedLink> pClosedLink(
-            new ClosedLink(uri, m_pStartedLink->mStartPosition, endPosition));
+            new ClosedLink(uri, m_oStartedLink->mStartPosition, endPosition));
 
-    const OUString& characterStyle = m_pStartedLink->mCharacterStyle;
+    const OUString& characterStyle = m_oStartedLink->mCharacterStyle;
     sal_uInt16 poolId = ObtainPoolId(characterStyle);
     pClosedLink->mINetFormat.SetVisitedFormatAndId(characterStyle, poolId);
     pClosedLink->mINetFormat.SetINetFormatAndId(characterStyle, poolId);
 
     m_ClosedLinks.push_back(std::move(pClosedLink));
-    m_pStartedLink.reset();
+    m_oStartedLink.reset();
 }
 
 sal_uInt16

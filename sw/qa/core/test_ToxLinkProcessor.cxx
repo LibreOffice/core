@@ -63,7 +63,7 @@ ToxLinkProcessorTest::NoExceptionIsThrownIfTooManyLinksAreClosed()
     sut.CloseLink(2, URL_1, /*bRelative=*/true);
     CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned>(sut.m_ClosedLinks.size()));
     CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned>(sut.m_ClosedLinks.at(0)->mEndTextPos));
-    CPPUNIT_ASSERT_MESSAGE("no links are open", !sut.m_pStartedLink);
+    CPPUNIT_ASSERT_MESSAGE("no links are open", !sut.m_oStartedLink);
 }
 
 void
@@ -77,7 +77,7 @@ ToxLinkProcessorTest::AddingAndClosingTwoOverlappingLinksResultsInOneClosedLink(
     // (for backward compatibility)
     sut.CloseLink(1, URL_2, /*bRelative=*/true);
     CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned>(sut.m_ClosedLinks.size()));
-    CPPUNIT_ASSERT_MESSAGE("no links are open", !sut.m_pStartedLink);
+    CPPUNIT_ASSERT_MESSAGE("no links are open", !sut.m_oStartedLink);
     // backward compatibility: the last start is closed by the first end
     CPPUNIT_ASSERT_EQUAL(OUString(STYLE_NAME_2), sut.m_ClosedLinks[0]->mINetFormat.GetINetFormat());
     CPPUNIT_ASSERT_EQUAL(OUString(URL_1), sut.m_ClosedLinks[0]->mINetFormat.GetValue());

@@ -5151,7 +5151,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
 
     RedlineFlags eMode = RedlineFlags::ShowInsert | RedlineFlags::ShowDelete;
 
-    m_xSprmParser.reset(new wwSprmParser(*m_xWwFib));
+    m_oSprmParser.emplace(*m_xWwFib);
 
     // Set handy helper variables
     m_bVer6  = (6 == m_xWwFib->m_nVersion);
@@ -5454,7 +5454,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     m_xWDop.reset();
     m_xFonts.reset();
     m_xAtnNames.reset();
-    m_xSprmParser.reset();
+    m_oSprmParser.reset();
     m_xProgress.reset();
 
     m_pDataStream = nullptr;

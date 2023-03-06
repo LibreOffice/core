@@ -21,6 +21,7 @@
 #define INCLUDED_SW_INC_BREAKIT_HXX
 
 #include <memory>
+#include <optional>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <i18nlangtag/languagetag.hxx>
@@ -36,7 +37,7 @@ class SW_DLLPUBLIC SwBreakIt
     css::uno::Reference<css::i18n::XBreakIterator> m_xBreak;
 
     std::unique_ptr<LanguageTag> m_xLanguageTag;   ///< language tag of the current locale
-    std::unique_ptr<css::i18n::ForbiddenCharacters> m_xForbidden;
+    std::optional<css::i18n::ForbiddenCharacters> m_oForbidden;
 
     LanguageType m_aForbiddenLang; ///< language of the current forbiddenChar struct
 
@@ -102,9 +103,9 @@ public:
 
     const css::i18n::ForbiddenCharacters& GetForbidden( const LanguageType aLang )
     {
-        if (!m_xForbidden || m_aForbiddenLang != aLang)
+        if (!m_oForbidden || m_aForbiddenLang != aLang)
             GetForbidden_( aLang );
-        return *m_xForbidden;
+        return *m_oForbidden;
     }
 
     sal_uInt16 GetRealScriptOfText( const OUString& rText, sal_Int32 nPos ) const;
