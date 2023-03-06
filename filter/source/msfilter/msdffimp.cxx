@@ -188,8 +188,8 @@ enum class OfficeArtBlipRecInstance : sal_uInt32
 
 struct SvxMSDffBLIPInfo
 {
-    sal_uLong  nFilePos;    ///< offset of the BLIP in data stream
-    explicit SvxMSDffBLIPInfo(sal_uLong nFPos)
+    sal_uInt32  nFilePos;    ///< offset of the BLIP in data stream
+    explicit SvxMSDffBLIPInfo(sal_uInt32 nFPos)
         : nFilePos(nFPos)
     {
     }
