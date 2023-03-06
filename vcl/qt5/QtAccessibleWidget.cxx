@@ -251,42 +251,12 @@ QAccessible::Relation lcl_matchUnoRelation(short relationType)
     }
 }
 
-short lcl_matchQtRelation(QAccessible::Relation relationType)
-{
-    // Qt semantics is the other way around
-    switch (relationType)
-    {
-        case QAccessible::Controlled:
-            return AccessibleRelationType::CONTROLLER_FOR;
-        case QAccessible::Controller:
-            return AccessibleRelationType::CONTROLLED_BY;
-#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
-        case QAccessible::DescriptionFor:
-            return AccessibleRelationType::DESCRIBED_BY;
-        case QAccessible::FlowsFrom:
-            return AccessibleRelationType::CONTENT_FLOWS_TO;
-        case QAccessible::FlowsTo:
-            return AccessibleRelationType::CONTENT_FLOWS_FROM;
-#endif
-        case QAccessible::Labelled:
-            return AccessibleRelationType::LABEL_FOR;
-        case QAccessible::Label:
-            return AccessibleRelationType::LABELED_BY;
-#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
-        case QAccessible::Described:
-#endif
-        default:
-            SAL_WARN("vcl.qt", "Unmatched relation: " << relationType);
-    }
-    return 0;
-}
-
 void lcl_appendRelation(QVector<QPair<QAccessibleInterface*, QAccessible::Relation>>* relations,
-                        AccessibleRelation aRelation)
+                        AccessibleRelation aRelation, QAccessible::Relation match)
 {
     QAccessible::Relation aQRelation = lcl_matchUnoRelation(aRelation.RelationType);
-    // skip in case there's no matching Qt relation
-    if (!(aQRelation & QAccessible::AllRelations))
+    // skip in case there's no Qt relation matching the filter
+    if (!(aQRelation & match))
         return;
 
     sal_uInt32 nTargetCount = aRelation.TargetSet.getLength();
@@ -313,19 +283,11 @@ QtAccessibleWidget::relations(QAccessible::Relation match) const
     Reference<XAccessibleRelationSet> xRelationSet = xAc->getAccessibleRelationSet();
     if (xRelationSet.is())
     {
-        if (match == QAccessible::AllRelations)
+        int count = xRelationSet->getRelationCount();
+        for (int i = 0; i < count; i++)
         {
-            int count = xRelationSet->getRelationCount();
-            for (int i = 0; i < count; i++)
-            {
-                AccessibleRelation aRelation = xRelationSet->getRelation(i);
-                lcl_appendRelation(&relations, aRelation);
-            }
-        }
-        else
-        {
-            AccessibleRelation aRelation = xRelationSet->getRelation(lcl_matchQtRelation(match));
-            lcl_appendRelation(&relations, aRelation);
+            AccessibleRelation aRelation = xRelationSet->getRelation(i);
+            lcl_appendRelation(&relations, aRelation, match);
         }
     }
 
