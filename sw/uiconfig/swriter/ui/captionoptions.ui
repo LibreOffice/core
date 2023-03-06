@@ -308,7 +308,7 @@
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="caption_order-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="captionoptions|extented_tip|caption_order">Place the caption number before or after the caption category.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="captionoptions|extended_tip|caption_order">Place the caption number before or after the caption category.</property>
                           </object>
                         </child>
                       </object>
