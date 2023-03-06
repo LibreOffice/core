@@ -486,8 +486,8 @@ void DeInitVCL()
     pSVData->mpWinData->maMsgBoxImgList.clear();
     pSVData->maCtrlData.maCheckImgList.clear();
     pSVData->maCtrlData.maRadioImgList.clear();
-    pSVData->maCtrlData.mpDisclosurePlus.reset();
-    pSVData->maCtrlData.mpDisclosureMinus.reset();
+    pSVData->maCtrlData.moDisclosurePlus.reset();
+    pSVData->maCtrlData.moDisclosureMinus.reset();
     pSVData->mpDefaultWin.disposeAndClear();
 
 #if defined _WIN32

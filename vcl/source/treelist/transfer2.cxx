@@ -318,7 +318,7 @@ struct TransferDataContainer_Impl
 {
     std::vector< TDataCntnrEntry_Impl > aFmtList;
     Link<sal_Int8,void> aFinishedLnk;
-    std::unique_ptr<INetBookmark> pBookmk;
+    std::optional<INetBookmark> moBookmk;
 
     TransferDataContainer_Impl()
     {
@@ -368,8 +368,8 @@ bool TransferDataContainer::GetData(
          case SotClipboardFormatId::FILECONTENT:
          case SotClipboardFormatId::FILEGRPDESCRIPTOR:
          case SotClipboardFormatId::UNIFORMRESOURCELOCATOR:
-            if( pImpl->pBookmk )
-                bFnd = SetINetBookmark( *pImpl->pBookmk, rFlavor );
+            if( pImpl->moBookmk )
+                bFnd = SetINetBookmark( *pImpl->moBookmk, rFlavor );
             break;
 
         default: break;
@@ -381,10 +381,7 @@ bool TransferDataContainer::GetData(
 
 void TransferDataContainer::CopyINetBookmark( const INetBookmark& rBkmk )
 {
-    if( !pImpl->pBookmk )
-        pImpl->pBookmk.reset( new INetBookmark( rBkmk ) );
-    else
-        *pImpl->pBookmk = rBkmk;
+    pImpl->moBookmk = rBkmk;
 
     AddFormat( SotClipboardFormatId::STRING );
     AddFormat( SotClipboardFormatId::SOLK );
@@ -441,7 +438,7 @@ void TransferDataContainer::CopyString( const OUString& rStr )
 bool TransferDataContainer::HasAnyData() const
 {
     return !pImpl->aFmtList.empty() ||
-            nullptr != pImpl->pBookmk;
+            pImpl->moBookmk.has_value();
 }
 
 

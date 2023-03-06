@@ -27,6 +27,7 @@
 #include <tools/fldunit.hxx>
 #include <unotools/options.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
@@ -42,6 +43,7 @@
 #include "displayconnectiondispatch.hxx"
 
 #include <mutex>
+#include <optional>
 #include <vector>
 #include <unordered_map>
 #include "ControlCacheKey.hxx"
@@ -72,7 +74,6 @@ class Timer;
 class AutoTimer;
 class Idle;
 class Help;
-class Image;
 class PopupMenu;
 class Application;
 class OutputDevice;
@@ -278,8 +279,8 @@ struct ImplSVCtrlData
 {
     std::vector<Image>      maCheckImgList;                 // ImageList for CheckBoxes
     std::vector<Image>      maRadioImgList;                 // ImageList for RadioButtons
-    std::unique_ptr<Image>  mpDisclosurePlus;
-    std::unique_ptr<Image>  mpDisclosureMinus;
+    std::optional<Image>    moDisclosurePlus;
+    std::optional<Image>    moDisclosureMinus;
     ImplTBDragMgr*          mpTBDragMgr = nullptr;          // DragMgr for ToolBox
     sal_uInt16              mnCheckStyle = 0;               // CheckBox-Style for ImageList-Update
     sal_uInt16              mnRadioStyle = 0;               // Radio-Style for ImageList-Update

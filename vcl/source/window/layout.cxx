@@ -1594,13 +1594,13 @@ class DisclosureButton final : public CheckBox
             return;
 
         ImplSVCtrlData& rCtrlData(ImplGetSVData()->maCtrlData);
-        if (!rCtrlData.mpDisclosurePlus)
-            rCtrlData.mpDisclosurePlus.reset(new Image(StockImage::Yes, SV_DISCLOSURE_PLUS));
-        if (!rCtrlData.mpDisclosureMinus)
-            rCtrlData.mpDisclosureMinus.reset(new Image(StockImage::Yes, SV_DISCLOSURE_MINUS));
+        if (!rCtrlData.moDisclosurePlus)
+            rCtrlData.moDisclosurePlus.emplace(StockImage::Yes, SV_DISCLOSURE_PLUS);
+        if (!rCtrlData.moDisclosureMinus)
+            rCtrlData.moDisclosureMinus.emplace(StockImage::Yes, SV_DISCLOSURE_MINUS);
 
         Image* pImg
-            = IsChecked() ? rCtrlData.mpDisclosureMinus.get() : rCtrlData.mpDisclosurePlus.get();
+            = IsChecked() ? &*rCtrlData.moDisclosureMinus : &*rCtrlData.moDisclosurePlus;
 
         DrawImageFlags nStyle = DrawImageFlags::NONE;
         if (!IsEnabled())
