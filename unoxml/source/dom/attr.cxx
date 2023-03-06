@@ -46,14 +46,14 @@ namespace DOM
 
     xmlNsPtr CAttr::GetNamespace(xmlNodePtr const pNode)
     {
-        if (!m_pNamespace)
+        if (!m_oNamespace)
         {
             return nullptr;
         }
         xmlChar const*const pUri(reinterpret_cast<xmlChar const*>(
-                m_pNamespace->first.getStr()));
+                m_oNamespace->first.getStr()));
         xmlChar const*const pPrefix(reinterpret_cast<xmlChar const*>(
-                m_pNamespace->second.getStr()));
+                m_oNamespace->second.getStr()));
         xmlNsPtr pNs = xmlSearchNs(pNode->doc, pNode, pPrefix);
         if (pNs && (0 != xmlStrcmp(pNs->href, pUri))) {
             return pNs;
@@ -214,10 +214,10 @@ namespace DOM
 
         if (!m_aNodePtr) { return; }
 
-        if (m_pNamespace)
+        if (m_oNamespace)
         {
             OSL_ASSERT(!m_aNodePtr->parent);
-            m_pNamespace->second =
+            m_oNamespace->second =
                 OUStringToOString(prefix, RTL_TEXTENCODING_UTF8);
         }
         else
@@ -232,11 +232,11 @@ namespace DOM
 
         if (!m_aNodePtr) { return OUString(); }
 
-        if (m_pNamespace)
+        if (m_oNamespace)
         {
             OSL_ASSERT(!m_aNodePtr->parent);
             OUString const ret(OStringToOUString(
-                        m_pNamespace->second, RTL_TEXTENCODING_UTF8));
+                        m_oNamespace->second, RTL_TEXTENCODING_UTF8));
             return ret;
         }
         else
@@ -251,11 +251,11 @@ namespace DOM
 
         if (!m_aNodePtr) { return OUString(); }
 
-        if (m_pNamespace)
+        if (m_oNamespace)
         {
             OSL_ASSERT(!m_aNodePtr->parent);
             OUString const ret(OStringToOUString(
-                        m_pNamespace->first, RTL_TEXTENCODING_UTF8));
+                        m_oNamespace->first, RTL_TEXTENCODING_UTF8));
             return ret;
         }
         else

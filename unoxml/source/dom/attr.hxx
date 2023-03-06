@@ -20,6 +20,7 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 
 #include <libxml/tree.h>
 
@@ -43,7 +44,7 @@ namespace DOM
         friend class CDocument;
 
         xmlAttrPtr m_aAttrPtr;
-        ::std::unique_ptr< stringpair_t > m_pNamespace;
+        ::std::optional< stringpair_t > m_oNamespace;
 
         CAttr(CDocument const& rDocument, ::osl::Mutex const& rMutex,
                 xmlAttrPtr const pAttr);

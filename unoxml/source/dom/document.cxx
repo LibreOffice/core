@@ -456,7 +456,7 @@ namespace DOM
                     reinterpret_cast<xmlNodePtr>(pAttr)).get()));
         if (!pCAttr.is()) { throw RuntimeException(); }
         // store the namespace data!
-        pCAttr->m_pNamespace.reset( new stringpair_t(oUri, oPrefix) );
+        pCAttr->m_oNamespace.emplace( oUri, oPrefix );
         pCAttr->m_bUnlinked = true;
 
         return pCAttr;
