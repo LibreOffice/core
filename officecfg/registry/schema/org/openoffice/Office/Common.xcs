@@ -2827,7 +2827,7 @@
           </info>
           <prop oor:name="ZoneLocal" oor:type="xs:int" oor:nillable="false">
             <info>
-              <desc>Action needed for opening document with macro with Windows zone 
+              <desc>Action needed for opening document with macro with Windows zone
               identifier URLZONE_LOCAL_MACHINE (0, local machine).</desc>
             </info>
             <constraints>
@@ -2851,7 +2851,7 @@
           </prop>
           <prop oor:name="ZoneIntranet" oor:type="xs:int" oor:nillable="false">
             <info>
-              <desc>Action needed for opening document with macro with Windows zone 
+              <desc>Action needed for opening document with macro with Windows zone
               identifier URLZONE_INTRANET (1, local machine).</desc>
             </info>
             <constraints>
@@ -2875,7 +2875,7 @@
           </prop>
           <prop oor:name="ZoneTrusted" oor:type="xs:int" oor:nillable="false">
             <info>
-              <desc>Action needed for opening document with macro with Windows zone 
+              <desc>Action needed for opening document with macro with Windows zone
               identifier URLZONE_TRUSTED (2, trusted).</desc>
             </info>
             <constraints>
@@ -2899,7 +2899,7 @@
           </prop>
           <prop oor:name="ZoneInternet" oor:type="xs:int" oor:nillable="false">
             <info>
-              <desc>Action needed for opening document with macro with Windows zone 
+              <desc>Action needed for opening document with macro with Windows zone
               identifier URLZONE_INTERNET (3, internet).</desc>
             </info>
             <constraints>
@@ -2923,7 +2923,7 @@
           </prop>
           <prop oor:name="ZoneUntrusted" oor:type="xs:int" oor:nillable="false">
             <info>
-              <desc>Action needed for opening document with macro with Windows zone 
+              <desc>Action needed for opening document with macro with Windows zone
               identifier URLZONE_UNTRUSTED (3, untrusted source).</desc>
             </info>
             <constraints>
