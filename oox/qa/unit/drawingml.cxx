@@ -159,13 +159,13 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartDataLabelCharColor)
     xDataPoint->getPropertyValue("CustomLabelFields") >>= aLabels;
     uno::Reference<beans::XPropertySet> xLabel = aLabels[0];
 
-    sal_Int32 nCharColor = 0;
+    Color nCharColor;
     xLabel->getPropertyValue("CharColor") >>= nCharColor;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 16777215
     // - Actual  : -1
     // i.e. the data label had no explicit (white) color.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffff), nCharColor);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, nCharColor);
 }
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGradientMultiStepTransparency)
@@ -285,9 +285,9 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTableShadow)
         CPPUNIT_ASSERT(xShape->getPropertyValue("Shadow") >>= bShadow);
 
         CPPUNIT_ASSERT(bShadow);
-        sal_Int32 nColor = 0;
+        Color nColor;
         CPPUNIT_ASSERT(xShape->getPropertyValue("ShadowColor") >>= nColor);
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xff0000), nColor);
+        CPPUNIT_ASSERT_EQUAL(Color(0xff0000), nColor);
     };
     loadFromURL(u"table-shadow.pptx");
     // Without the accompanying fix in place, this test would have failed, because shadow on a table
