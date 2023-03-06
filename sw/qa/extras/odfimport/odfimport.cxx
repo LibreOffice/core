@@ -26,6 +26,7 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <vcl/scheduler.hxx>
 
 #include <IDocumentSettingAccess.hxx>
 #include <wrtsh.hxx>
@@ -463,6 +464,17 @@ DECLARE_ODFIMPORT_TEST(testFdo56272, "fdo56272.odt")
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // Vertical position was incorrect.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(422), xShape->getPosition().Y); // Was -2371
+}
+
+DECLARE_ODFIMPORT_TEST(testIncorrectSum, "incorrectsum.odt")
+{
+    Scheduler::ProcessEventsToIdle();
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTextTable->getCellByName("C3"), uno::UNO_QUERY);
+    // Use indexOf instead of exact match since the result contains an Euro sign which OUString doesn't like
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xCell->getString().indexOf("1,278"));
 }
 
 DECLARE_ODFIMPORT_TEST(testCalcFootnoteContent, "ooo32780-1.odt")

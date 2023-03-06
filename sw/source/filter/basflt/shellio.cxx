@@ -378,7 +378,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
         // not insert: set the redline mode read from settings.xml
         eOld = ePostReadRedlineFlags & ~RedlineFlags::Ignore;
 
-        mxDoc->getIDocumentFieldsAccess().SetFieldsDirty(false, nullptr, 0);
+        mxDoc->getIDocumentFieldsAccess().SetFieldsDirty(true, nullptr, 0);
     }
 
     mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
