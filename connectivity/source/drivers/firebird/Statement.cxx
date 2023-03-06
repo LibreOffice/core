@@ -125,11 +125,6 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
     if (isDDLStatement())
     {
         m_pConnection->commit();
-        m_pConnection->notifyDatabaseModified();
-    }
-    else if (getStatementChangeCount() > 0)
-    {
-        m_pConnection->notifyDatabaseModified();
     }
 
     return m_xResultSet;

@@ -171,15 +171,6 @@ namespace connectivity::firebird
             /// @throws css::sdbc::SQLException
             isc_tr_handle&  getTransaction();
 
-            /**
-              * Must be called anytime the underlying database is likely to have
-              * changed.
-              *
-              * This is used to notify the database document of any changes, so
-              * that the user is informed of any pending changes needing to be
-              * saved.
-              */
-            void notifyDatabaseModified();
 
             /**
              * Create a new Blob tied to this connection. Blobs are tied to a
@@ -202,6 +193,11 @@ namespace connectivity::firebird
              */
             css::uno::Reference< css::sdbcx::XTablesSupplier >
                 createCatalog();
+
+            /**
+            * Backup and store embedded extracted database to the .odb file
+            */
+            void storeDatabase();
 
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
