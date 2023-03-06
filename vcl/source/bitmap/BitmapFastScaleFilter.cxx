@@ -38,7 +38,7 @@ BitmapEx BitmapFastScaleFilter::execute(BitmapEx const& rBitmapEx) const
 
     SAL_INFO("vcl.gdi", "New width: " << nNewWidth << "\nNew height: " << nNewHeight);
 
-    if (nNewWidth && nNewHeight)
+    if (nNewWidth > 0 && nNewHeight > 0)
     {
         Bitmap::ScopedReadAccess pReadAcc(aBitmap);
 
