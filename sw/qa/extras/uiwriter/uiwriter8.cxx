@@ -302,6 +302,29 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf147347)
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf153819)
+{
+    // copy a table before a deleted table in Hide Changes mode
+    createSwDoc("tdf153819.fodt");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // hide changes
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+
+    dispatchCommand(mxComponent, ".uno:SelectTable", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    // FIXME: Show Changes, otherwise ~SwTableNode() would have crashed
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148345)
 {
     // load a 2-row table, set Hide Changes mode and delete the first row with change tracking

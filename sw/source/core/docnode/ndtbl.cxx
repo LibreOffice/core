@@ -2352,8 +2352,11 @@ void SwTableNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
 
     while( nullptr != (pFrame = aNode2Layout.NextFrame()) )
     {
-        if (pFrame->getRootFrame()->HasMergedParas()
-            && !pNode->IsCreateFrameWhenHidingRedlines())
+        if ( ( pFrame->getRootFrame()->HasMergedParas() &&
+                                !pNode->IsCreateFrameWhenHidingRedlines() ) ||
+              // tdf#153819 table deletion with change tracking:
+              // table node without frames in Hide Changes mode
+              !pFrame->GetUpper() )
         {
             continue;
         }
