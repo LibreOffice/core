@@ -64,7 +64,8 @@ public:
     }
 
     void saveAsPDF(std::u16string_view rFile);
-    void load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument);
+    void load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument,
+              bool bUseTaggedPDF = true);
 };
 
 void PdfExportTest::saveAsPDF(std::u16string_view rFile)
@@ -75,9 +76,13 @@ void PdfExportTest::saveAsPDF(std::u16string_view rFile)
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 }
 
-void PdfExportTest::load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument)
+void PdfExportTest::load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument,
+                         bool bUseTaggedPDF)
 {
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "UseTaggedPDF", uno::Any(bUseTaggedPDF) } }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
     saveAsPDF(rFile);
 
     // Parse the export result.
@@ -855,7 +860,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testAlternativeText)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105972)
 {
     vcl::filter::PDFDocument aDocument;
-    load(u"tdf105972.fodt", aDocument);
+    // Loading fails with tagged PDF enabled
+    load(u"tdf105972.fodt", aDocument, false);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -920,7 +926,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105972)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf148442)
 {
     vcl::filter::PDFDocument aDocument;
-    load(u"tdf148442.odt", aDocument);
+    // Loading fails with tagged PDF enabled
+    load(u"tdf148442.odt", aDocument, false);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -987,7 +994,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf148442)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf118244_radioButtonGroup)
 {
     vcl::filter::PDFDocument aDocument;
-    load(u"tdf118244_radioButtonGroup.odt", aDocument);
+    // Loading fails with tagged PDF enabled
+    load(u"tdf118244_radioButtonGroup.odt", aDocument, false);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -2551,7 +2559,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testMultiPagePDF)
     { // embedded PDF page 1
         vcl::filter::PDFObjectElement* pXObject1 = pXObjects->LookupObject(rIDs[0]);
         CPPUNIT_ASSERT(pXObject1);
-        CPPUNIT_ASSERT_EQUAL(OString("Im19"), rIDs[0]);
+        CPPUNIT_ASSERT_EQUAL(OString("Im21"), rIDs[0]);
 
         auto pSubtype1 = dynamic_cast<vcl::filter::PDFNameElement*>(pXObject1->Lookup("Subtype"));
         CPPUNIT_ASSERT(pSubtype1);
@@ -2579,7 +2587,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testMultiPagePDF)
     { // embedded PDF page 2
         vcl::filter::PDFObjectElement* pXObject2 = pXObjects->LookupObject(rIDs[1]);
         CPPUNIT_ASSERT(pXObject2);
-        CPPUNIT_ASSERT_EQUAL(OString("Im24"), rIDs[1]);
+        CPPUNIT_ASSERT_EQUAL(OString("Im27"), rIDs[1]);
 
         auto pSubtype2 = dynamic_cast<vcl::filter::PDFNameElement*>(pXObject2->Lookup("Subtype"));
         CPPUNIT_ASSERT(pSubtype2);
@@ -2607,7 +2615,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testMultiPagePDF)
     { // embedded PDF page 3
         vcl::filter::PDFObjectElement* pXObject3 = pXObjects->LookupObject(rIDs[2]);
         CPPUNIT_ASSERT(pXObject3);
-        CPPUNIT_ASSERT_EQUAL(OString("Im4"), rIDs[2]);
+        CPPUNIT_ASSERT_EQUAL(OString("Im5"), rIDs[2]);
 
         auto pSubtype3 = dynamic_cast<vcl::filter::PDFNameElement*>(pXObject3->Lookup("Subtype"));
         CPPUNIT_ASSERT(pSubtype3);
@@ -2714,7 +2722,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReexportPDF)
         {
             // FORM object 1
             OString aID = rIDs[0];
-            CPPUNIT_ASSERT_EQUAL(OString("Im12"), aID);
+            CPPUNIT_ASSERT_EQUAL(OString("Im14"), aID);
             vcl::filter::PDFObjectElement* pXObject = pXObjects->LookupObject(aID);
             CPPUNIT_ASSERT(pXObject);
 
@@ -2730,7 +2738,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReexportPDF)
             CPPUNIT_ASSERT(pInnerXObjects);
             CPPUNIT_ASSERT_EQUAL(size_t(1), pInnerXObjects->GetItems().size());
             OString aInnerObjectID = pInnerXObjects->GetItems().begin()->first;
-            CPPUNIT_ASSERT_EQUAL(OString("Im13"), aInnerObjectID);
+            CPPUNIT_ASSERT_EQUAL(OString("Im15"), aInnerObjectID);
 
             vcl::filter::PDFObjectElement* pInnerXObject
                 = pInnerXObjects->LookupObject(aInnerObjectID);
@@ -2790,7 +2798,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReexportPDF)
         {
             // FORM object 2
             OString aID = rIDs[1];
-            CPPUNIT_ASSERT_EQUAL(OString("Im4"), aID);
+            CPPUNIT_ASSERT_EQUAL(OString("Im5"), aID);
             vcl::filter::PDFObjectElement* pXObject = pXObjects->LookupObject(aID);
             CPPUNIT_ASSERT(pXObject);
 
@@ -2806,7 +2814,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReexportPDF)
             CPPUNIT_ASSERT(pInnerXObjects);
             CPPUNIT_ASSERT_EQUAL(size_t(1), pInnerXObjects->GetItems().size());
             OString aInnerObjectID = pInnerXObjects->GetItems().begin()->first;
-            CPPUNIT_ASSERT_EQUAL(OString("Im5"), aInnerObjectID);
+            CPPUNIT_ASSERT_EQUAL(OString("Im6"), aInnerObjectID);
 
             vcl::filter::PDFObjectElement* pInnerXObject
                 = pInnerXObjects->LookupObject(aInnerObjectID);
@@ -2897,7 +2905,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReexportDocumentWithComplexResources)
     CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     // Go directly to the Font object (24 0) (number could change if we change how PDF export works)
-    auto pFont = aDocument.LookupObject(23);
+    auto pFont = aDocument.LookupObject(24);
     CPPUNIT_ASSERT(pFont);
 
     // Check it is the Font object (Type = Font)
@@ -4172,7 +4180,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportFilterSingletonArray)
 
     // Load the PDF and save as PDF
     vcl::filter::PDFDocument aDocument;
-    load(u"ref-to-kids.pdf", aDocument);
+    // Loading fails with tagged PDF enabled
+    load(u"ref-to-kids.pdf", aDocument, false);
 
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
     CPPUNIT_ASSERT_EQUAL(size_t(5), aPages.size());
@@ -4227,8 +4236,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportMediaBoxOrigin)
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
     CPPUNIT_ASSERT_EQUAL(size_t(5), aPages.size());
 
-    // Directly go to the inner XObject Im10 that contains the rectangle drawings in page 2.
-    auto pInnerIm = aDocument.LookupObject(10);
+    // Directly go to the inner XObject Im12 that contains the rectangle drawings in page 2.
+    auto pInnerIm = aDocument.LookupObject(12);
     CPPUNIT_ASSERT(pInnerIm);
 
     constexpr sal_Int32 aOrigin[2] = { -800, -600 };
@@ -4288,8 +4297,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testRexportResourceItemReference)
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
     CPPUNIT_ASSERT_EQUAL(size_t(5), aPages.size());
 
-    // Directly go to the inner XObject Im10 that has reference to Font in page 2.
-    auto pInnerIm = aDocument.LookupObject(10);
+    // Directly go to the inner XObject Im12 that has reference to Font in page 2.
+    auto pInnerIm = aDocument.LookupObject(12);
     CPPUNIT_ASSERT(pInnerIm);
 
     auto pResources

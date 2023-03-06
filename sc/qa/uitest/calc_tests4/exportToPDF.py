@@ -34,14 +34,15 @@ class exportToPDF(UITestCase):
                 # Export as PDF
                 with self.ui_test.execute_dialog_through_command('.uno:ExportToPDF', close_button="") as xDialog:
 
-                    selectedChildren = ['bookmarks', 'display', 'effects', 'enablea11y', 'enablecopy', 'exporturl', 'forms', 'reduceresolution']
+                    selectedChildren = ['bookmarks', 'display', 'effects', 'enablea11y',
+                                        'enablecopy', 'exporturl', 'forms', 'reduceresolution', 'tagged']
 
                     for child in selectedChildren:
                         self.assertEqual("true", get_state_as_dict(xDialog.getChild(child))['Selected'])
 
                     nonSelectedChildren = ['allowdups', 'center', 'comments', 'convert', 'embed', 'emptypages', 'export', 'exportplaceholders',
                             'firstonleft', 'hiddenpages', 'menubar', 'notes', 'onlynotes', 'open', 'pdfa', 'pdfua', 'resize', 'singlepagesheets',
-                            'tagged', 'toolbar', 'usereferencexobject', 'viewpdf', 'watermark', 'window']
+                            'toolbar', 'usereferencexobject', 'viewpdf', 'watermark', 'window']
 
                     for child in nonSelectedChildren:
                         self.assertEqual("false", get_state_as_dict(xDialog.getChild(child))['Selected'])

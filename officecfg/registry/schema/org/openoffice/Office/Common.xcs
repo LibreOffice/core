@@ -5063,7 +5063,7 @@
               <desc>Determines if PDF are created by using special tags also
               known as Tagged PDF.</desc>
             </info>
-            <value>false</value>
+            <value>true</value>
           </prop>
           <prop oor:name="ExportNotes" oor:type="xs:boolean" oor:nillable="false">
             <info>
