@@ -219,7 +219,6 @@ namespace basegfx::utils
                 // to enlarge these as needed
                 const double fFactor(fCandidateLength / fAllowedLength);
                 std::for_each(aDotDashArray.begin(), aDotDashArray.end(), [&fFactor](double &f){ f *= fFactor; });
-                fDotDashLength *= fFactor;
             }
 
             // prepare current edge's start

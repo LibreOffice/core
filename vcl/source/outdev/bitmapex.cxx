@@ -522,8 +522,6 @@ void OutputDevice::DrawTransformedBitmapEx(
             aAlpha.BlendWith( bitmapEx.GetAlphaMask());
         bitmapEx = BitmapEx( bitmapEx.GetBitmap(), aAlpha );
     }
-    if(rtl::math::approxEqual( fAlpha, 1.0 ))
-        fAlpha = 1.0; // avoid the need for approxEqual in backends
 
     // If the backend's implementation is known to not need any optimizations here, pass to it directly.
     // With most backends it's more performant to try to simplify to DrawBitmapEx() first.

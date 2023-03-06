@@ -783,7 +783,7 @@ sal_uInt64 PictReader::ReadPixMapEtc( BitmapEx &rBitmap, bool bBaseAddr, bool bC
     else
     {
         nRowBytes &= 0x3fff;
-        nPixelSize = nCmpCount = nCmpSize = 1;
+        nPixelSize = nCmpCount = 1;
         nDataSize += 10;
         aPalette.resize(2);
         aPalette[0] = Color(0xff, 0xff, 0xff);

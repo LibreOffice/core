@@ -1677,7 +1677,7 @@ void SalGtkFilePicker::impl_initialize(GtkWidget* pParentWidget, sal_Int16 templ
     GtkFileChooserAction eAction = GTK_FILE_CHOOSER_ACTION_OPEN;
     OString sOpen = getOpenText();
     OString sSave = getSaveText();
-    const gchar *first_button_text = sOpen.getStr();
+    const gchar *first_button_text;
 
     SolarMutexGuard g;
 

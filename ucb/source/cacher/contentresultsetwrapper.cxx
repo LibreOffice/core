@@ -275,10 +275,7 @@ void SAL_CALL ContentResultSetWrapper::dispose()
     }
 
     if (isCleared)
-    {
         aGuard.lock();
-        isCleared = false;
-    }
     if( m_aDisposeEventListeners.getLength(aGuard) )
     {
         EventObject aEvt;

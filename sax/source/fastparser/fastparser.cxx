@@ -1565,7 +1565,7 @@ static void NormalizeURI( OUString& rName )
     // try OASIS + W3 URI normalization
     bool bSuccess = NormalizeOasisURN( rName );
     if( ! bSuccess )
-        bSuccess = NormalizeW3URI( rName );
+        NormalizeW3URI( rName );
 }
 
 constexpr OUStringLiteral XML_URI_W3_PREFIX(u"http://www.w3.org/");
