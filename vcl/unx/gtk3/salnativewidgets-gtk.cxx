@@ -782,7 +782,6 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
     tools::Rectangle buttonRect = NWGetSpinButtonRect( nPart, aAreaRect );
 
     gtk_style_context_set_state(context, stateFlags);
-    stateFlags = gtk_style_context_get_state(context);
 
     style_context_get_padding(context, &padding);
     style_context_get_border(context, &border);

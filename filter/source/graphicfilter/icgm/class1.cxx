@@ -151,9 +151,6 @@ void CGM::ImplDoClass1()
         }
         break;
         case 0x0a : /*Color Value Extent*/
-        {
-            nI1 = 6;
-        }
         break;
         case 0x0b : /*MetaFile Element List */break;
         case 0x0c : /*MetaFile Default Replacement*/
