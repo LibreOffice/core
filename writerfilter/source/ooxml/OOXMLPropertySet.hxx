@@ -351,7 +351,7 @@ public:
 
 class OOXMLStarMathValue final : public OOXMLValue
 {
-    css::uno::Reference<css::embed::XEmbeddedObject> component;
+    css::uno::Reference<css::embed::XEmbeddedObject> m_component;
 
 public:
     explicit OOXMLStarMathValue(css::uno::Reference<css::embed::XEmbeddedObject> component);

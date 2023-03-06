@@ -721,7 +721,7 @@ OOXMLValue * OOXMLShapeValue::clone() const
 
 
 OOXMLStarMathValue::OOXMLStarMathValue( uno::Reference< embed::XEmbeddedObject > c )
-: component(std::move(c))
+: m_component(std::move(c))
 {
 }
 
@@ -731,7 +731,7 @@ OOXMLStarMathValue::~OOXMLStarMathValue()
 
 uno::Any OOXMLStarMathValue::getAny() const
 {
-    return uno::Any(component);
+    return uno::Any(m_component);
 }
 
 #ifdef DBG_UTIL
@@ -743,7 +743,7 @@ std::string OOXMLStarMathValue::toString() const
 
 OOXMLValue * OOXMLStarMathValue::clone() const
 {
-    return new OOXMLStarMathValue( component );
+    return new OOXMLStarMathValue( m_component );
 }
 
 /*
