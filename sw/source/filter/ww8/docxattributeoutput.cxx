@@ -517,6 +517,7 @@ sal_Int32 DocxAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t p
 
     m_bParagraphOpened = true;
     m_bIsFirstParagraph = false;
+    m_nHyperLinkCount.push(0);
 
     return nParaId;
 }
@@ -1084,12 +1085,12 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     /* If m_nHyperLinkCount > 0 that means hyperlink tag is not yet closed.
      * This is due to nested hyperlink tags. So close it before end of paragraph.
      */
-    if(m_nHyperLinkCount > 0)
+    if(m_nHyperLinkCount.top() > 0)
     {
-        for(sal_Int32 nHyperLinkToClose = 0; nHyperLinkToClose < m_nHyperLinkCount; ++nHyperLinkToClose)
+        for(sal_Int32 nHyperLinkToClose = 0; nHyperLinkToClose < m_nHyperLinkCount.top(); ++nHyperLinkToClose)
             m_pSerializer->endElementNS( XML_w, XML_hyperlink );
-        m_nHyperLinkCount = 0;
     }
+    m_nHyperLinkCount.pop();
 
     if (m_aRunSdt.m_bStartedSdt)
     {
@@ -1682,7 +1683,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
             m_pSerializer->endElementNS( XML_w, XML_hyperlink );
             m_startedHyperlink = false;
             m_endPageRef = false;
-            m_nHyperLinkCount--;
+            m_nHyperLinkCount.top()--;
         }
         m_closeHyperlinkInPreviousRun = false;
     }
@@ -1762,7 +1763,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
 
         m_pSerializer->startElementNS( XML_w, XML_hyperlink, xAttrList );
         m_startedHyperlink = true;
-        m_nHyperLinkCount++;
+        m_nHyperLinkCount.top()++;
     }
 
     // if there is some redlining in the document, output it
@@ -1924,7 +1925,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
 
             m_pSerializer->endElementNS( XML_w, XML_hyperlink );
             m_startedHyperlink = false;
-            m_nHyperLinkCount--;
+            m_nHyperLinkCount.top()--;
         }
         m_closeHyperlinkInThisRun = false;
     }
@@ -6253,8 +6254,8 @@ void DocxAttributeOutput::pushToTableExportContext(DocxTableExportContext& rCont
     rContext.m_bStartedRunSdt = m_aRunSdt.m_bStartedSdt;
     m_aRunSdt.m_bStartedSdt = false;
 
-    rContext.m_nHyperLinkCount = m_nHyperLinkCount;
-    m_nHyperLinkCount = 0;
+    rContext.m_nHyperLinkCount = m_nHyperLinkCount.top();
+    m_nHyperLinkCount.top() = 0;
 }
 
 void DocxAttributeOutput::popFromTableExportContext(DocxTableExportContext const & rContext)
@@ -6264,7 +6265,7 @@ void DocxAttributeOutput::popFromTableExportContext(DocxTableExportContext const
     m_tableReference->m_nTableDepth = rContext.m_nTableDepth;
     m_aParagraphSdt.m_bStartedSdt = rContext.m_bStartedParaSdt;
     m_aRunSdt.m_bStartedSdt = rContext.m_bStartedRunSdt;
-    m_nHyperLinkCount = rContext.m_nHyperLinkCount;
+    m_nHyperLinkCount.top() = rContext.m_nHyperLinkCount;
 }
 
 void DocxAttributeOutput::WriteTextBox(uno::Reference<drawing::XShape> xShape)
@@ -9923,7 +9924,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_closeHyperlinkInThisRun( false ),
       m_closeHyperlinkInPreviousRun( false ),
       m_startedHyperlink( false ),
-      m_nHyperLinkCount(0),
       m_nFieldsInHyperlink( 0 ),
       m_bExportingOutline(false),
       m_nChartCount(0),
@@ -9940,6 +9940,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_nParaAfterSpacing(0)
     , m_nStateOfFlyFrame( FLY_NOT_PROCESSED )
 {
+    m_nHyperLinkCount.push(0);
 }
 
 DocxAttributeOutput::~DocxAttributeOutput()

@@ -872,6 +872,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf152310, "ColorOverwritten.docx")
                          getProperty<Color>(getParagraphOfText(2, xShape), "CharColor"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf149996, "lorem_hyperlink.fodt")
+{
+    // Without the accompanying fix in place, this test would have crashed,
+    // because the exported file was corrupted.
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
