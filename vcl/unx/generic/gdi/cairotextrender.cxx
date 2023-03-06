@@ -301,7 +301,10 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
             if (bResolutionIndependentLayoutEnabled)
             {
                 cairo_font_options_merge(pOptions, mpRoundGlyphPosOffOptions);
-                cairo_font_options_set_hint_metrics(pOptions, CAIRO_HINT_METRICS_OFF);
+                // tdf#153699 skip this with cairo 1.17.8 as it has a problem
+                // See: https://gitlab.freedesktop.org/cairo/cairo/-/issues/643
+                if (cairo_version() != CAIRO_VERSION_ENCODE(1,17,8))
+                    cairo_font_options_set_hint_metrics(pOptions, CAIRO_HINT_METRICS_OFF);
             }
             cairo_set_font_options(cr, pOptions);
             cairo_font_options_destroy(pOptions);
