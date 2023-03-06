@@ -1793,6 +1793,33 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf88899)
     CPPUNIT_ASSERT_EQUAL(OUString("11/10/14 03:03 AM"), xTextField->getPresentation(false));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf151605)
+{
+    createSwDoc("tdf151605.odt");
+
+    // disable IncludeHiddenText
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::FilterFlags::ASCII::IncludeHiddenText::set(false, batch);
+    batch->commit();
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::STRING)) } });
+
+    // Paste as Unformatted text
+    dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Before"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("After"), getParagraph(2)->getString());
+
+    // re-enable it
+    officecfg::Office::Writer::FilterFlags::ASCII::IncludeHiddenText::set(true, batch);
+    batch->commit();
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf90362)
 {
     createSwDoc("tdf90362.fodt");
