@@ -1015,6 +1015,288 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkDistance)
                      "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:bodyPr",
                      { { "lIns", "0" }, { "rIns", "0" }, { "tIns", "0" }, { "bIns", "0" } });
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFontworkLinGradientRGBColor)
+{
+    // The document has a Fontwork shape with UI settings: linear gradient fill with angle 330deg,
+    // start color #ffff00 (Yellow) with 'Brightness' 80%, end color #4682B4 (Steel Blue), Transition
+    // Start 25% and solid transparency 30%.
+    // Without fix the gradient was not exported at all.
+    loadFromURL(u"tdf51195_Fontwork_linearGradient.odt");
+
+    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
+    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
+    skipValidation();
+
+    // Save to DOCX:
+    save("Office Open XML Text");
+
+    // Examine the saved markup.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    // path to shape text run properties
+    OString sElement = "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+                       "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/"
+                       "w:rPr/";
+
+    // Make sure w14:textFill and w14:gradFill elements exist with child elements
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst", 1);
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst/w14:gs", 3);
+    // 330deg gradient rotation = 120deg color transition direction
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:lin", "ang", "7200000");
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:lin", "scaled", "0");
+
+    // Make sure the color stops have correct position and color
+    sElement += "w14:textFill/w14:gradFill/w14:gsLst/";
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]", "pos", "0");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:srgbClr", "val", "ffff00");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:srgbClr/w14:lumMod", "val", "80000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:srgbClr/w14:alpha", "val", "30000");
+
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]", "pos", "25000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:srgbClr", "val", "ffff00");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:srgbClr/w14:lumMod", "val", "80000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:srgbClr/w14:alpha", "val", "30000");
+
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]", "pos", "100000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:srgbClr", "val", "4682b4");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:srgbClr/w14:alpha", "val", "30000");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontworkAxialGradientTransparency)
+{
+    // The document has a Fontwork shape with UI settings: solid fill theme color Accen3 25% darker,
+    // Transparency gradient Type Axial with Angle 160deg, Transition start 40%,
+    // Start value 5%, End value 90%
+    // Without fix the gradient was not exported at all.
+    loadFromURL(u"tdf51195_Fontwork_axialGradient.odt");
+
+    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
+    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
+    skipValidation();
+
+    // Save to DOCX:
+    save("Office Open XML Text");
+
+    // Examine the saved markup.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    // path to shape text run properties
+    OString sElement = "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+                       "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/"
+                       "w:rPr/";
+
+    // Make sure w14:textFill and w14:gradFill elements exist with child elements
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst", 1);
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst/w14:gs", 6);
+    // 160deg gradient rotation = 290deg (360deg-160deg+90deg) color transition direction
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:lin", "ang", "17400000");
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:lin", "scaled", "0");
+
+    // Make sure the color stops have correct position and color
+    sElement += "w14:textFill/w14:gradFill/w14:gsLst/";
+    // gradient is in transparency, color is always the same.
+    for (char ch = '1'; ch <= '6'; ++ch)
+    {
+        assertXPath(pXmlDoc, sElement + "w14:gs[" + OStringChar(ch) + "]/w14:schemeClr", "val",
+                    "accent3");
+        assertXPath(pXmlDoc, sElement + "w14:gs[" + OStringChar(ch) + "]/w14:schemeClr/w14:lumMod",
+                    "val", "75000");
+    }
+    // outer transparency
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]", "pos", "0");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:schemeClr/w14:alpha", "val", "90000");
+    // border, same transparency
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]", "pos", "20000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:schemeClr/w14:alpha", "val", "90000");
+    // gradient to inner transparency at center
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]", "pos", "50000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:schemeClr/w14:alpha", "val", "5000");
+    // from inner transparency at center
+    assertXPath(pXmlDoc, sElement + "w14:gs[4]", "pos", "50000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[4]/w14:schemeClr/w14:alpha", "val", "5000");
+    // mirrored gradient to outer transparency
+    assertXPath(pXmlDoc, sElement + "w14:gs[5]", "pos", "80000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[5]/w14:schemeClr/w14:alpha", "val", "90000");
+    // mirrored border
+    assertXPath(pXmlDoc, sElement + "w14:gs[6]", "pos", "100000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[6]/w14:schemeClr/w14:alpha", "val", "90000");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontworkRadialGradient)
+{
+    // The document has a Fontwork shape with UI settings: gradient fill, Type radial,
+    // From Color #40E0D0, To Color #FF0000, Center x|y 75%|20%, no transparency
+    // Transition start 10%
+    // Without fix the gradient was not exported at all.
+    loadFromURL(u"tdf51195_Fontwork_radialGradient.odt");
+
+    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
+    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
+    skipValidation();
+
+    // Save to DOCX:
+    save("Office Open XML Text");
+
+    // Examine the saved markup.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    // path to shape text run properties
+    OString sElement = "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+                       "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/"
+                       "w:rPr/";
+
+    // Make sure w14:textFill and w14:gradFill elements exist with child elements
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst", 1);
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst/w14:gs", 3);
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:path", "path", "circle");
+    assertXPathAttrs(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:path/w14:fillToRect",
+                     { { "l", "75000" }, { "t", "20000" }, { "r", "25000" }, { "b", "80000" } });
+
+    // Make sure the color stops have correct position and color
+    sElement += "w14:textFill/w14:gradFill/w14:gsLst/";
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]", "pos", "0");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:srgbClr", "val", "ff0000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]", "pos", "90000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:srgbClr", "val", "40e0d0");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]", "pos", "100000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:srgbClr", "val", "40e0d0");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontworkEllipticalGradient)
+{
+    // The document has a Fontwork shape with UI settings: solid fill, Color #00008B (deep blue),
+    // transparency gradient type Ellipsoid, Center x|y 50%|50%, Transition Start 50%,
+    // Start 70%, End 0%.
+    // Without fix the gradient was not exported at all.
+    loadFromURL(u"tdf51195_Fontwork_ellipticalGradient.odt");
+
+    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
+    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
+    skipValidation();
+
+    // Save to DOCX:
+    save("Office Open XML Text");
+
+    // Examine the saved markup.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    // path to shape text run properties
+    OString sElement = "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+                       "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/"
+                       "w:rPr/";
+
+    // Make sure w14:textFill and w14:gradFill elements exist with child elements
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst", 1);
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst/w14:gs", 3);
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:path", "path", "circle");
+    assertXPathAttrs(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:path/w14:fillToRect",
+                     { { "l", "50000" }, { "t", "50000" }, { "r", "50000" }, { "b", "50000" } });
+
+    // Make sure the color stops have correct position and color
+    sElement += "w14:textFill/w14:gradFill/w14:gsLst/";
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]", "pos", "0");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:srgbClr", "val", "00008b");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:srgbClr/w14:alpha", 0);
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]", "pos", "50000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:srgbClr", "val", "00008b");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:srgbClr/w14:alpha", "val", "70000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]", "pos", "100000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:srgbClr", "val", "00008b");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:srgbClr/w14:alpha", "val", "70000");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontworkSquareGradient)
+{
+    // The document has a Fontwork shape with UI settings: gradient fill Type "Quadratic" (which is
+    // "square" in ODF and API), From Color #4963ef 40%, To Color #ffff6e 90%, Center x|y 100%|50%,
+    // no transparency
+    // Without fix the gradient was not exported at all.
+    loadFromURL(u"tdf51195_Fontwork_squareGradient.odt");
+
+    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
+    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
+    skipValidation();
+
+    // Save to DOCX:
+    save("Office Open XML Text");
+
+    // Examine the saved markup.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    // path to shape text run properties
+    OString sElement = "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+                       "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/"
+                       "w:rPr/";
+
+    // Make sure w14:textFill and w14:gradFill elements exist with child elements
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst", 1);
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst/w14:gs", 3);
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:path", "path", "rect");
+    assertXPathAttrs(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:path/w14:fillToRect",
+                     { { "l", "100000" }, { "t", "50000" }, { "r", "0" }, { "b", "50000" } });
+
+    // Make sure the color stops have correct position and color
+    sElement += "w14:textFill/w14:gradFill/w14:gsLst/";
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]", "pos", "0");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:srgbClr", "val", "ffff6e");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:srgbClr/w14:lumMod", "val", "90000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]", "pos", "0");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:srgbClr", "val", "ffff6e");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:srgbClr/w14:lumMod", "val", "90000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]", "pos", "100000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:srgbClr", "val", "49b3ef");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:srgbClr/w14:lumMod", "val", "40000");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontworkRectGradient)
+{
+    // The document has a Fontwork shape with UI settings: solid color theme Accent 4 60% lighter,
+    // transparency gradient Type "Square" (which is "rectangle" in ODF and API, tdf#154071),
+    // Center x|y 50%|50%, Transition start 10%, Start value 70%, End value 5%.
+    // Without fix the gradient was not exported at all.
+    loadFromURL(u"tdf51195_Fontwork_rectGradient.odt");
+
+    // FIXME: tdf#153183 validation error in OOXML export: Errors: 1
+    // Attribute 'ID' is not allowed to appear in element 'v:shape'.
+    skipValidation();
+
+    // Save to DOCX:
+    save("Office Open XML Text");
+
+    // Examine the saved markup.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    // path to shape text run properties
+    OString sElement = "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+                       "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/"
+                       "w:rPr/";
+
+    // Make sure w14:textFill and w14:gradFill elements exist with child elements
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst", 1);
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:gsLst/w14:gs", 3);
+    assertXPath(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:path", "path", "rect");
+    assertXPathAttrs(pXmlDoc, sElement + "w14:textFill/w14:gradFill/w14:path/w14:fillToRect",
+                     { { "l", "50000" }, { "t", "50000" }, { "r", "50000" }, { "b", "50000" } });
+
+    // Make sure the color stops have correct position and color
+    sElement += "w14:textFill/w14:gradFill/w14:gsLst/";
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]", "pos", "0");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:schemeClr", "val", "accent4");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:schemeClr/w14:lumMod", "val", "40000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:schemeClr/w14:lumOff", "val", "60000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[1]/w14:schemeClr/w14:alpha", "val", "5000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]", "pos", "90000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:schemeClr", "val", "accent4");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:schemeClr/w14:lumMod", "val", "40000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:schemeClr/w14:lumOff", "val", "60000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[2]/w14:schemeClr/w14:alpha", "val", "70000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]", "pos", "100000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:schemeClr", "val", "accent4");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:schemeClr/w14:lumMod", "val", "40000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:schemeClr/w14:lumOff", "val", "60000");
+    assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:schemeClr/w14:alpha", "val", "70000");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
