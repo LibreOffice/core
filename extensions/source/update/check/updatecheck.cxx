@@ -542,7 +542,7 @@ UpdateCheckThread::run()
                 // Increase next by 15, 60, .. minutes
                 static const sal_Int32 nRetryInterval[] = { 900, 3600, 14400, 86400 };
 
-                if( n < SAL_N_ELEMENTS(nRetryInterval) )
+                if( n < std::size(nRetryInterval) )
                     ++n;
 
                 tv.Seconds = nRetryInterval[n-1];
@@ -657,7 +657,7 @@ DownloadThread::run()
                 // Increase next by 1, 5, 15, 60, .. minutes
                 static const sal_Int16 nRetryInterval[] = { 60, 300, 900, 3600 };
 
-                if( n < SAL_N_ELEMENTS(nRetryInterval) )
+                if( n < std::size(nRetryInterval) )
                     ++n;
 
                 tv.Seconds = nRetryInterval[n-1];
