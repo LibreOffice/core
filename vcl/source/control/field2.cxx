@@ -1618,7 +1618,7 @@ bool DateFormatter::ImplAllowMalformedInput() const
     return !IsEnforceValidValue();
 }
 
-int DateFormatter::GetDateArea(ExtDateFieldFormat eFormat, std::u16string_view rText, int nCursor, const LocaleDataWrapper& rLocaleDataWrapper)
+int DateFormatter::GetDateArea(ExtDateFieldFormat& eFormat, std::u16string_view rText, int nCursor, const LocaleDataWrapper& rLocaleDataWrapper)
 {
     sal_Int8 nDateArea = 0;
 

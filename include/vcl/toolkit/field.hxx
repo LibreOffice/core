@@ -423,7 +423,7 @@ protected:
 public:
     static OUString         FormatDate(const Date& rNewDate, ExtDateFieldFormat eFormat, const LocaleDataWrapper& rLocaleData, const Formatter::StaticFormatter& rStaticFormatter);
     static bool             TextToDate(const OUString& rStr, Date& rTime, ExtDateFieldFormat eFormat, const LocaleDataWrapper& rLocaleDataWrapper, const CalendarWrapper& rCalendarWrapper);
-    static int              GetDateArea(ExtDateFieldFormat eFormat, std::u16string_view rText, int nCursor, const LocaleDataWrapper& rLocaleDataWrapper);
+    static int              GetDateArea(ExtDateFieldFormat& eFormat, std::u16string_view rText, int nCursor, const LocaleDataWrapper& rLocaleDataWrapper);
 
     virtual                 ~DateFormatter() override;
 
