@@ -492,7 +492,7 @@ void T602ImportFilter::inschrdef(unsigned char ch)
 void T602ImportFilter::wrtfnt()
 {
     Reference < XAttributeList > xAttrList ( mpAttrList );
-    const char *style = "P1";
+    const char *style;
 
     switch(fst.nowfnt) {
         case standard : style = fst.uline ? "T7" : "T1"; break;

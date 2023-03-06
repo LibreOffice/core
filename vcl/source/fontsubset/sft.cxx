@@ -2460,7 +2460,6 @@ void GetTTNameRecords(AbstractTrueTypeFont const *ttf, std::vector<NameRecord>& 
         {
             SAL_WARN( "vcl.fonts", "Font " << OUString::createFromAscii(ttf->fileName()) << " claimed to have "
                 << n << " name records, but only space for " << i);
-            n = i;
             break;
         }
 

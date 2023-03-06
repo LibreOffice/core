@@ -266,7 +266,6 @@ void TemplateDlgLocalView::syncCursor()
         {
             if ((*it)->mbSelected)
             {
-                nIndex = -1;
                 nIndex = ListView::get_index((*it)->mnId);
                 if (nIndex >= 0)
                 {

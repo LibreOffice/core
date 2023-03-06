@@ -6321,7 +6321,6 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
                             // complex Prop found:
                             // Length is always 6. The length of the appended extra data
                             // after the actual prop table is of different size.
-                            nPropVal = 6;
                         }
                     }
                     break;

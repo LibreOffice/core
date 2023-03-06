@@ -1079,8 +1079,6 @@ void StyleList::UpdateStyles(StyleFlags nFlags)
     if (!m_pStyleSheetPool)
         return;
 
-    pItem = GetFamilyItem();
-
     m_aUpdateStyles.Call(nFlags);
 
     SfxStyleSheetBase* pStyle = m_pStyleSheetPool->First(eFam, nFilter);
