@@ -320,6 +320,11 @@ FONT_OPENDYSLEXIC_TARBALL := opendyslexic-0.910.12-rc2-2019.10.17.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+FONT_OPEN_SANS_TARBALL := Open_Sans.zip
+FONT_OPEN_SANS_SHA256SUM := 85d79a39d26acb207ba13fb1007189d55355a0faf2cf7ccfe6a2edf2abac06d9
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
 FREEHAND_SHA256SUM := 0e422d1564a6dbf22a9af598535425271e583514c0f7ba7d9091676420de34ac
 FREEHAND_TARBALL := libfreehand-0.1.2.tar.xz
 # three static lines
