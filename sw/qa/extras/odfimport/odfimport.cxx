@@ -46,6 +46,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <editeng/boxitem.hxx>
+#include <vcl/scheduler.hxx>
 
 #include <IDocumentSettingAccess.hxx>
 #include <wrtsh.hxx>
@@ -594,6 +595,18 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo56272)
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // Vertical position was incorrect.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(422), xShape->getPosition().Y); // Was -2371
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testIncorrectSum)
+{
+    createSwDoc("incorrectsum.odt");
+    Scheduler::ProcessEventsToIdle();
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTextTable->getCellByName("C3"), uno::UNO_QUERY);
+    // Use indexOf instead of exact match since the result contains an Euro sign which OUString doesn't like
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xCell->getString().indexOf("1,278"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128737)
