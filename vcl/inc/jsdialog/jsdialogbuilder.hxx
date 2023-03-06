@@ -223,6 +223,8 @@ class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
     bool m_bIsNotebookbar;
     /// used to detect when we have to send Full Update in container handler
     bool m_bSentInitialUpdate;
+    /// is true for tabpages, prevents from closing parent window on destroy
+    bool m_bIsNestedBuilder;
     /// When LOKNotifier is set by jsdialogs code we need to release it
     VclPtr<vcl::Window> m_aWindowToRelease;
 

@@ -1607,6 +1607,9 @@ Color SvxStyleBox_Base::TestColorsVisible(const Color &FontCol, const Color &Bac
 
 IMPL_LINK(SvxStyleBox_Base, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonWriter, void)
 {
+    if (!m_xWidget)
+        return;
+
     {
         auto entriesNode = rJsonWriter.startNode("entries");
         for (int i = 0, nEntryCount = m_xWidget->get_count(); i < nEntryCount; ++i)

@@ -510,6 +510,7 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
     , m_bHasTopLevelDialog(false)
     , m_bIsNotebookbar(false)
     , m_bSentInitialUpdate(false)
+    , m_bIsNestedBuilder(false)
     , m_aWindowToRelease(nullptr)
 {
     // when it is a popup we initialize sender in weld_popover
@@ -543,6 +544,7 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
     , m_bHasTopLevelDialog(false)
     , m_bIsNotebookbar(false)
     , m_bSentInitialUpdate(false)
+    , m_bIsNestedBuilder(false)
     , m_aWindowToRelease(nullptr)
 {
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
@@ -586,6 +588,7 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
     , m_bHasTopLevelDialog(false)
     , m_bIsNotebookbar(false)
     , m_bSentInitialUpdate(false)
+    , m_bIsNestedBuilder(false)
     , m_aWindowToRelease(nullptr)
 {
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
@@ -616,6 +619,7 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
     , m_bHasTopLevelDialog(false)
     , m_bIsNotebookbar(false)
     , m_bSentInitialUpdate(false)
+    , m_bIsNestedBuilder(false)
     , m_aWindowToRelease(nullptr)
 {
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
@@ -667,6 +671,13 @@ JSInstanceBuilder::CreateFormulabarBuilder(vcl::Window* pParent, const OUString&
 
 JSInstanceBuilder::~JSInstanceBuilder()
 {
+    // tab page closed -> refresh parent window
+    if (m_bIsNestedBuilder && m_sTypeOfJSON == "dialog")
+    {
+        sendFullUpdate(true);
+        flush();
+    }
+
     if (m_sTypeOfJSON == "popup")
         sendClosePopup(m_nWindowId);
 
@@ -909,15 +920,31 @@ std::unique_ptr<weld::MessageDialog> JSInstanceBuilder::weld_message_dialog(cons
 std::unique_ptr<weld::Container> JSInstanceBuilder::weld_container(const OString& id)
 {
     vcl::Window* pContainer = m_xBuilder->get<vcl::Window>(id);
-    auto pWeldWidget = std::make_unique<JSContainer>(this, pContainer, this, false);
+    auto pWeldWidget
+        = pContainer ? std::make_unique<JSContainer>(this, pContainer, this, false) : nullptr;
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
 
-    if (!m_bSentInitialUpdate)
+    if (!m_bSentInitialUpdate && pContainer)
     {
         m_bSentInitialUpdate = true;
-        sendFullUpdate();
+
+        // use parent builder to send update - avoid multiple calls from many builders
+        vcl::Window* pParent = pContainer->GetParent();
+        std::string sId = std::to_string(m_nWindowId);
+        while (pParent
+               && !FindWeldWidgetsMap(
+                      sId, OUStringToOString(pParent->get_id(), RTL_TEXTENCODING_ASCII_US)))
+            pParent = pParent->GetParent();
+
+        if (pParent)
+            jsdialog::SendFullUpdate(
+                sId, OUStringToOString(pParent->get_id(), RTL_TEXTENCODING_ASCII_US));
+
+        // this is nested builder, don't close parent dialog on destroy (eg. single tab page is closed)
+        m_bCanClose = false;
+        m_bIsNestedBuilder = true;
     }
 
     return pWeldWidget;
