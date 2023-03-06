@@ -273,12 +273,7 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testOnlineNodeSplitAppend)
 
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
-                         pDoc->getOnlineAccessibilityCheck()->getNumberOfAccessibilityIssues());
-    // Trigger a11y checker
-    pWrtShell->Down(/*bSelect*/ false, /*nCount*/ 0);
-
-    // Check we have 1 a11y issue
+    // Check we have 2 a11y issue
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2),
                          pDoc->getOnlineAccessibilityCheck()->getNumberOfAccessibilityIssues());
     auto aIssues = scanAccessibilityIssuesOnNodes(pDoc);
