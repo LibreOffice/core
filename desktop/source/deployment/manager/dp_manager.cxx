@@ -791,7 +791,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
             {
                 OUString const id = dp_misc::getIdentifier( xPackage );
 
-                ::osl::MutexGuard g(m_addMutex);
+                std::unique_lock g(m_addMutex);
                 if (isInstalled(xPackage))
                 {
                     //Do not guard the complete function with the getMutex

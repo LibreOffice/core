@@ -27,6 +27,7 @@
 #include <com/sun/star/deployment/XPackageRegistry.hpp>
 #include <com/sun/star/deployment/XPackageManager.hpp>
 #include <memory>
+#include <mutex>
 #include <string_view>
 #include <utility>
 
@@ -49,7 +50,7 @@ class PackageManagerImpl final : private cppu::BaseMutex, public t_pm_helper
     OUString m_activePackages_expanded;
     std::unique_ptr< ActivePackages > m_activePackagesDB;
     //This mutex is only used for synchronization in addPackage
-    ::osl::Mutex m_addMutex;
+    std::mutex m_addMutex;
     css::uno::Reference<css::ucb::XProgressHandler> m_xLogFile;
     inline void logIntern( css::uno::Any const & status );
     void fireModified();
