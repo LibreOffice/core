@@ -30,14 +30,13 @@ namespace chart
 SchLegendPosTabPage::SchLegendPosTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, "modules/schart/ui/tp_LegendPosition.ui", "tp_LegendPosition", &rInAttrs)
     , m_aLegendPositionResources(*m_xBuilder)
-    , m_xLbTextDirection(new TextDirectionListBox(m_xBuilder->weld_combo_box("LB_LEGEND_TEXTDIR")))
+    , m_aLbTextDirection(m_xBuilder->weld_combo_box("LB_LEGEND_TEXTDIR"))
     , m_xCBLegendNoOverlay(m_xBuilder->weld_check_button("CB_NO_OVERLAY"))
 {
 }
 
 SchLegendPosTabPage::~SchLegendPosTabPage()
 {
-    m_xLbTextDirection.reset();
 }
 
 std::unique_ptr<SfxTabPage> SchLegendPosTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rOutAttrs)
@@ -49,8 +48,8 @@ bool SchLegendPosTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 {
     m_aLegendPositionResources.writeToItemSet(*rOutAttrs);
 
-    if (m_xLbTextDirection->get_active() != -1)
-        rOutAttrs->Put(SvxFrameDirectionItem(m_xLbTextDirection->get_active_id(), EE_PARA_WRITINGDIR));
+    if (m_aLbTextDirection.get_active() != -1)
+        rOutAttrs->Put(SvxFrameDirectionItem(m_aLbTextDirection.get_active_id(), EE_PARA_WRITINGDIR));
 
     if (m_xCBLegendNoOverlay->get_visible())
         rOutAttrs->Put(SfxBoolItem(SCHATTR_LEGEND_NO_OVERLAY, m_xCBLegendNoOverlay->get_active()));
@@ -63,7 +62,7 @@ void SchLegendPosTabPage::Reset(const SfxItemSet* rInAttrs)
     m_aLegendPositionResources.initFromItemSet(*rInAttrs);
 
     if( const SvxFrameDirectionItem* pDirectionItem = rInAttrs->GetItemIfSet( EE_PARA_WRITINGDIR ) )
-        m_xLbTextDirection->set_active_id( pDirectionItem->GetValue() );
+        m_aLbTextDirection.set_active_id( pDirectionItem->GetValue() );
 
     if (const SfxBoolItem* pNoOverlayItem = rInAttrs->GetItemIfSet(SCHATTR_LEGEND_NO_OVERLAY))
     {

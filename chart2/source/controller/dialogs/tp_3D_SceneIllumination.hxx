@@ -22,6 +22,7 @@
 #include <TimerTriggeredControllerLock.hxx>
 #include <vcl/weld.hxx>
 #include <svx/dlgctl3d.hxx>
+#include <svx/float3d.hxx>
 
 namespace com::sun::star::beans
 {
@@ -29,7 +30,6 @@ class XPropertySet;
 }
 
 class ColorListBox;
-class LightButton;
 
 namespace chart
 {
@@ -73,14 +73,14 @@ private:
     weld::Window* m_pTopLevel;
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xContainer;
-    std::unique_ptr<LightButton> m_xBtn_Light1;
-    std::unique_ptr<LightButton> m_xBtn_Light2;
-    std::unique_ptr<LightButton> m_xBtn_Light3;
-    std::unique_ptr<LightButton> m_xBtn_Light4;
-    std::unique_ptr<LightButton> m_xBtn_Light5;
-    std::unique_ptr<LightButton> m_xBtn_Light6;
-    std::unique_ptr<LightButton> m_xBtn_Light7;
-    std::unique_ptr<LightButton> m_xBtn_Light8;
+    LightButton m_aBtn_Light1;
+    LightButton m_aBtn_Light2;
+    LightButton m_aBtn_Light3;
+    LightButton m_aBtn_Light4;
+    LightButton m_aBtn_Light5;
+    LightButton m_aBtn_Light6;
+    LightButton m_aBtn_Light7;
+    LightButton m_aBtn_Light8;
     std::unique_ptr<ColorListBox> m_xLB_LightSource;
     std::unique_ptr<weld::Button> m_xBtn_LightSource_Color;
     std::unique_ptr<ColorListBox> m_xLB_AmbientLight;

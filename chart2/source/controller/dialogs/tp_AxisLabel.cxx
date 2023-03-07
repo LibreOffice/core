@@ -52,7 +52,7 @@ SchAxisLabelTabPage::SchAxisLabelTabPage(weld::Container* pPage, weld::DialogCon
     , m_xNfRotate(m_xBuilder->weld_metric_spin_button("OrientDegree", FieldUnit::DEGREE))
     , m_xCbStacked(m_xBuilder->weld_check_button("stackedCB"))
     , m_xFtTextDirection(m_xBuilder->weld_label("textdirL"))
-    , m_xLbTextDirection(new TextDirectionListBox(m_xBuilder->weld_combo_box("textdirLB")))
+    , m_aLbTextDirection(m_xBuilder->weld_combo_box("textdirLB"))
     , m_xCtrlDial(new svx::DialControl)
     , m_xCtrlDialWin(new weld::CustomWeld(*m_xBuilder, "dialCtrl", *m_xCtrlDial))
 {
@@ -71,7 +71,6 @@ SchAxisLabelTabPage::~SchAxisLabelTabPage()
 {
     m_xCtrlDialWin.reset();
     m_xCtrlDial.reset();
-    m_xLbTextDirection.reset();
 }
 
 std::unique_ptr<SfxTabPage> SchAxisLabelTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrs)
@@ -123,8 +122,8 @@ bool SchAxisLabelTabPage::FillItemSet( SfxItemSet* rOutAttrs )
     if( m_xCbShowDescription->get_state() != TRISTATE_INDET )
         rOutAttrs->Put( SfxBoolItem( SCHATTR_AXIS_SHOWDESCR, m_xCbShowDescription->get_active() ) );
 
-    if (m_xLbTextDirection->get_active() != -1)
-        rOutAttrs->Put( SvxFrameDirectionItem( m_xLbTextDirection->get_active_id(), EE_PARA_WRITINGDIR ) );
+    if (m_aLbTextDirection.get_active() != -1)
+        rOutAttrs->Put( SvxFrameDirectionItem( m_aLbTextDirection.get_active_id(), EE_PARA_WRITINGDIR ) );
 
     return true;
 }
@@ -178,7 +177,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
     StackedToggleHdl(*m_xCbStacked);
 
     if( const SvxFrameDirectionItem* pDirectionItem = rInAttrs->GetItemIfSet( EE_PARA_WRITINGDIR ) )
-        m_xLbTextDirection->set_active_id( pDirectionItem->GetValue() );
+        m_aLbTextDirection.set_active_id( pDirectionItem->GetValue() );
 
     // Text overlap ----------
     aState = rInAttrs->GetItemState( SCHATTR_AXIS_LABEL_OVERLAP, false, &pPoolItem );
@@ -294,7 +293,7 @@ IMPL_LINK_NOARG(SchAxisLabelTabPage, ToggleShowLabel, weld::Toggleable&, void)
     m_xCbTextBreak->set_sensitive( bEnable );
 
     m_xFtTextDirection->set_sensitive( bEnable );
-    m_xLbTextDirection->set_sensitive( bEnable );
+    m_aLbTextDirection.set_sensitive( bEnable );
 }
 } //namespace chart
 

@@ -107,7 +107,7 @@ DataLabelResources::DataLabelResources(weld::Builder* pBuilder, weld::Window* pP
     , m_xFT_Dial(pBuilder->weld_label("CT_LABEL_DIAL"))
     , m_xNF_Degrees(pBuilder->weld_metric_spin_button("NF_LABEL_DEGREES", FieldUnit::DEGREE))
     , m_xBxTextDirection(pBuilder->weld_widget("boxTXT_DIRECTION"))
-    , m_xLB_TextDirection(new TextDirectionListBox(pBuilder->weld_combo_box("LB_LABEL_TEXTDIR")))
+    , m_aLB_TextDirection(pBuilder->weld_combo_box("LB_LABEL_TEXTDIR"))
     , m_xDC_Dial(new svx::DialControl)
     , m_xDC_DialWin(new weld::CustomWeld(*pBuilder, "CT_DIAL", *m_xDC_Dial))
     , m_xCBCustomLeaderLines(pBuilder->weld_check_button("CB_CUSTOM_LEADER_LINES"))
@@ -319,8 +319,8 @@ void DataLabelResources::FillItemSet( SfxItemSet* rOutAttrs ) const
         rOutAttrs->Put( SfxInt32Item( SCHATTR_DATADESCR_PLACEMENT, nValue ) );
     }
 
-    if (m_xLB_TextDirection->get_active() != -1)
-        rOutAttrs->Put( SvxFrameDirectionItem( m_xLB_TextDirection->get_active_id(), EE_PARA_WRITINGDIR ) );
+    if (m_aLB_TextDirection.get_active() != -1)
+        rOutAttrs->Put( SvxFrameDirectionItem( m_aLB_TextDirection.get_active_id(), EE_PARA_WRITINGDIR ) );
 
     if( m_xDC_Dial->IsVisible() )
     {
@@ -370,7 +370,7 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
         m_xLB_LabelPlacement->set_active(-1);
 
     if( const SvxFrameDirectionItem* pDirectionItem = rInAttrs.GetItemIfSet(EE_PARA_WRITINGDIR) )
-        m_xLB_TextDirection->set_active_id( pDirectionItem->GetValue() );
+        m_aLB_TextDirection.set_active_id( pDirectionItem->GetValue() );
 
     if( const SdrAngleItem* pAngleItem = rInAttrs.GetItemIfSet( SCHATTR_TEXT_DEGREES ) )
     {

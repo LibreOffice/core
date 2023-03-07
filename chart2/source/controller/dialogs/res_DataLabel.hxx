@@ -20,11 +20,11 @@
 
 #include <svl/itemset.hxx>
 #include <svx/dialcontrol.hxx>
+#include <TextDirectionListBox.hxx>
 
 #include <map>
 
 class SvNumberFormatter;
-namespace chart { class TextDirectionListBox; }
 
 namespace chart
 {
@@ -85,7 +85,7 @@ private:
 
     std::unique_ptr<weld::Widget> m_xBxTextDirection;
 
-    std::unique_ptr<TextDirectionListBox> m_xLB_TextDirection;
+    TextDirectionListBox m_aLB_TextDirection;
     std::unique_ptr<svx::DialControl> m_xDC_Dial;
     std::unique_ptr<weld::CustomWeld> m_xDC_DialWin;
 

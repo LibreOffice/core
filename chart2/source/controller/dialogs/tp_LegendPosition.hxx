@@ -21,8 +21,8 @@
 #include <sfx2/tabdlg.hxx>
 
 #include <res_LegendPosition.hxx>
-
-namespace chart { class TextDirectionListBox; }
+#include <TextDirectionListBox.hxx>
+#include <optional>
 
 namespace chart
 {
@@ -32,7 +32,7 @@ class SchLegendPosTabPage : public SfxTabPage
 private:
 
     LegendPositionResources  m_aLegendPositionResources;
-    std::unique_ptr<TextDirectionListBox> m_xLbTextDirection;
+    TextDirectionListBox m_aLbTextDirection;
     std::unique_ptr<weld::CheckButton> m_xCBLegendNoOverlay;
 
 public:

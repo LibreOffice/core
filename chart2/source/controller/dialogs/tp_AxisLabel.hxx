@@ -21,8 +21,8 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/dialcontrol.hxx>
 #include <tools/degree.hxx>
+#include <TextDirectionListBox.hxx>
 
-namespace chart { class TextDirectionListBox; }
 namespace weld {
     class CheckButton;
     class CustomWeld;
@@ -60,7 +60,7 @@ private:
     std::unique_ptr<weld::MetricSpinButton> m_xNfRotate;
     std::unique_ptr<weld::CheckButton> m_xCbStacked;
     std::unique_ptr<weld::Label> m_xFtTextDirection;
-    std::unique_ptr<TextDirectionListBox> m_xLbTextDirection;
+    TextDirectionListBox m_aLbTextDirection;
     std::unique_ptr<svx::DialControl> m_xCtrlDial;
     std::unique_ptr<weld::CustomWeld> m_xCtrlDialWin;
 

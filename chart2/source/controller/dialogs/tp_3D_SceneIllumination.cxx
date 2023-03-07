@@ -195,14 +195,14 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage(weld::Contain
     , m_pTopLevel(pTopLevel)
     , m_xBuilder(Application::CreateBuilder(pParent, "modules/schart/ui/tp_3D_SceneIllumination.ui"))
     , m_xContainer(m_xBuilder->weld_container("tp_3D_SceneIllumination"))
-    , m_xBtn_Light1(new LightButton(m_xBuilder->weld_toggle_button("BTN_LIGHT_1")))
-    , m_xBtn_Light2(new LightButton(m_xBuilder->weld_toggle_button("BTN_LIGHT_2")))
-    , m_xBtn_Light3(new LightButton(m_xBuilder->weld_toggle_button("BTN_LIGHT_3")))
-    , m_xBtn_Light4(new LightButton(m_xBuilder->weld_toggle_button("BTN_LIGHT_4")))
-    , m_xBtn_Light5(new LightButton(m_xBuilder->weld_toggle_button("BTN_LIGHT_5")))
-    , m_xBtn_Light6(new LightButton(m_xBuilder->weld_toggle_button("BTN_LIGHT_6")))
-    , m_xBtn_Light7(new LightButton(m_xBuilder->weld_toggle_button("BTN_LIGHT_7")))
-    , m_xBtn_Light8(new LightButton(m_xBuilder->weld_toggle_button("BTN_LIGHT_8")))
+    , m_aBtn_Light1(m_xBuilder->weld_toggle_button("BTN_LIGHT_1"))
+    , m_aBtn_Light2(m_xBuilder->weld_toggle_button("BTN_LIGHT_2"))
+    , m_aBtn_Light3(m_xBuilder->weld_toggle_button("BTN_LIGHT_3"))
+    , m_aBtn_Light4(m_xBuilder->weld_toggle_button("BTN_LIGHT_4"))
+    , m_aBtn_Light5(m_xBuilder->weld_toggle_button("BTN_LIGHT_5"))
+    , m_aBtn_Light6(m_xBuilder->weld_toggle_button("BTN_LIGHT_6"))
+    , m_aBtn_Light7(m_xBuilder->weld_toggle_button("BTN_LIGHT_7"))
+    , m_aBtn_Light8(m_xBuilder->weld_toggle_button("BTN_LIGHT_8"))
     , m_xLB_LightSource(new ColorListBox(m_xBuilder->weld_menu_button("LB_LIGHTSOURCE"), [this]{ return m_pTopLevel; }))
     , m_xBtn_LightSource_Color(m_xBuilder->weld_button("BTN_LIGHTSOURCE_COLOR"))
     , m_xLB_AmbientLight(new ColorListBox(m_xBuilder->weld_menu_button("LB_AMBIENTLIGHT"), [this]{ return m_pTopLevel; }))
@@ -215,25 +215,25 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage(weld::Contain
     , m_xCtl_Preview(new SvxLightCtl3D(*m_xPreview, *m_xHoriScale, *m_xVertScale, *m_xBtn_Corner))
 {
     m_pLightSourceInfoList.reset(new LightSourceInfo[8]);
-    m_pLightSourceInfoList[0].pButton = m_xBtn_Light1.get();
-    m_pLightSourceInfoList[1].pButton = m_xBtn_Light2.get();
-    m_pLightSourceInfoList[2].pButton = m_xBtn_Light3.get();
-    m_pLightSourceInfoList[3].pButton = m_xBtn_Light4.get();
-    m_pLightSourceInfoList[4].pButton = m_xBtn_Light5.get();
-    m_pLightSourceInfoList[5].pButton = m_xBtn_Light6.get();
-    m_pLightSourceInfoList[6].pButton = m_xBtn_Light7.get();
-    m_pLightSourceInfoList[7].pButton = m_xBtn_Light8.get();
+    m_pLightSourceInfoList[0].pButton = &m_aBtn_Light1;
+    m_pLightSourceInfoList[1].pButton = &m_aBtn_Light2;
+    m_pLightSourceInfoList[2].pButton = &m_aBtn_Light3;
+    m_pLightSourceInfoList[3].pButton = &m_aBtn_Light4;
+    m_pLightSourceInfoList[4].pButton = &m_aBtn_Light5;
+    m_pLightSourceInfoList[5].pButton = &m_aBtn_Light6;
+    m_pLightSourceInfoList[6].pButton = &m_aBtn_Light7;
+    m_pLightSourceInfoList[7].pButton = &m_aBtn_Light8;
 
     fillControlsFromModel(nullptr);
 
-    m_xBtn_Light1->connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
-    m_xBtn_Light2->connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
-    m_xBtn_Light3->connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
-    m_xBtn_Light4->connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
-    m_xBtn_Light5->connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
-    m_xBtn_Light6->connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
-    m_xBtn_Light7->connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
-    m_xBtn_Light8->connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
+    m_aBtn_Light1.connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
+    m_aBtn_Light2.connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
+    m_aBtn_Light3.connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
+    m_aBtn_Light4.connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
+    m_aBtn_Light5.connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
+    m_aBtn_Light6.connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
+    m_aBtn_Light7.connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
+    m_aBtn_Light8.connect_clicked( LINK( this, ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl ) );
 
     m_xLB_AmbientLight->SetSelectHdl( LINK( this, ThreeD_SceneIllumination_TabPage, SelectColorHdl ) );
     m_xLB_LightSource->SetSelectHdl( LINK( this, ThreeD_SceneIllumination_TabPage, SelectColorHdl ) );
@@ -244,7 +244,7 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage(weld::Contain
     m_xCtl_Preview->SetUserInteractiveChangeCallback( LINK( this, ThreeD_SceneIllumination_TabPage, PreviewChangeHdl ) );
     m_xCtl_Preview->SetUserSelectionChangeCallback( LINK( this, ThreeD_SceneIllumination_TabPage, PreviewSelectHdl ) );
 
-    ClickLightSourceButtonHdl(*m_xBtn_Light2->get_widget());
+    ClickLightSourceButtonHdl(*m_aBtn_Light2.get_widget());
 
     m_aModelChangeListener.startListening( uno::Reference< util::XModifyBroadcaster >(m_xSceneProperties, uno::UNO_QUERY) );
 }
