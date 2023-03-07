@@ -43,6 +43,8 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <editeng/swafopt.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
 #include <config_fonts.h>
@@ -1651,6 +1653,29 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf108423)
     emulateTyping(*pTextDoc, u" i'");
     OUString sText(sIApostrophe + u" " + sIApostrophe);
     CPPUNIT_ASSERT_EQUAL(sText, getParagraph(1)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf153423)
+{
+    createSwDoc();
+    SvxSwAutoFormatFlags flags(*SwEditShell::GetAutoFormatFlags());
+    comphelper::ScopeGuard const g([=]() { SwEditShell::SetAutoFormatFlags(&flags); });
+    flags.bSetNumRule = true;
+    SwEditShell::SetAutoFormatFlags(&flags);
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    emulateTyping(*pTextDoc, u"1. Item 1");
+
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1.
+    // - Actual  : 10.
+    CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(getParagraph(1), "ListLabelString"));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf106164)
