@@ -3471,11 +3471,7 @@ bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev )
     }
 
     // Adapt all "TableFormulas"
-    SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
-    aMsgHint.m_aData.pDelTable = &pDelTableNd->GetTable();
-    aMsgHint.m_eFlags = TBL_MERGETBL;
-    aMsgHint.m_pHistory = pHistory.get();
-    getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
+    pTableNd->GetTable().Merge(pDelTableNd->GetTable(), pHistory.get());
 
     // The actual merge
     bool bRet = rNds.MergeTable( bWithPrev ? *pTableNd : *pDelTableNd, !bWithPrev );

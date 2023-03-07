@@ -365,6 +365,7 @@ public:
         { UpdateFields(TBL_RELBOXNAME); };
     void SwitchFormulasToInternalRepresentation()
         { UpdateFields(TBL_BOXPTR); }
+    void Merge(SwTable& rTable, SwHistory* pHistory);
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };

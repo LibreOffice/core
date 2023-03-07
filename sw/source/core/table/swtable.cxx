@@ -62,6 +62,7 @@
 #include <o3tl/string_view.hxx>
 #include <svl/numformat.hxx>
 #include <txtfld.hxx>
+#include <rolbck.hxx>
 
 #ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();
@@ -1611,6 +1612,40 @@ bool SwTable::IsDeleted() const
             return false;
     }
     return true;
+}
+
+void SwTable::Merge(SwTable& rTable, SwHistory* pHistory)
+{
+    SwTableFormulaUpdate aHint(this);
+    aHint.m_aData.pDelTable = &rTable;
+    aHint.m_eFlags = TBL_MERGETBL;
+    aHint.m_pHistory = pHistory;
+    // process all table box formulas
+    for(SfxPoolItem* pItem : GetFrameFormat()->GetDoc()->GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA))
+    {
+        auto pBoxFormula = pItem->DynamicWhichCast(RES_BOXATR_FORMULA);
+        assert(pBoxFormula);
+        if(pBoxFormula->GetDefinedIn())
+        {
+            const SwNode* pNd = pBoxFormula->GetNodeOfFormula();
+            // for a history record the unchanged formula is needed
+            SwTableBoxFormula aCopy(*pBoxFormula);
+            aHint.m_bModified = false;
+            pBoxFormula->ToSplitMergeBoxNm(aHint);
+
+            if(aHint.m_bModified)
+            {
+                // external rendering
+                aCopy.PtrToBoxNm(this);
+                aHint.m_pHistory->Add(
+                    &aCopy,
+                    &aCopy,
+                    pNd->FindTableBoxStartNode()->GetIndex());
+            }
+        }
+        else
+            pBoxFormula->ToSplitMergeBoxNm(aHint);
+    }
 }
 
 void SwTable::UpdateFields(TableFormulaUpdateFlags eFlags)
