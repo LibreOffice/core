@@ -848,6 +848,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accSelection(VARIANT *pvarCh
                 return S_FALSE;
             pvarChildren->vt = VT_DISPATCH;
             pvarChildren->pdispVal = varTmp[0].pdispVal;
+            pvarChildren->pdispVal->AddRef();
             VariantClear(&varTmp[0]);
             m_pEnumVar->Reset();
             break;
