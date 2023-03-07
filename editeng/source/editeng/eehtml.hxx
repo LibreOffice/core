@@ -20,6 +20,7 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 #include <editdoc.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svtools/parhtml.hxx>
@@ -40,8 +41,7 @@ private:
     EditSelection           aCurSel;
     OUString                aBaseURL;
     EditEngine*             mpEditEngine;
-    std::unique_ptr<AnchorInfo>
-                            pCurAnchor;
+    std::optional<AnchorInfo> moCurAnchor;
 
     bool                    bInPara:1;
     bool                    bWasInPara:1; // Remember bInPara before HeadingStart, because afterwards it will be gone.

@@ -233,8 +233,8 @@ void ImpEditEngine::UndoActionStart( sal_uInt16 nId, const ESelection& aSel )
     if ( IsUndoEnabled() && !IsInUndo() )
     {
         GetUndoManager().EnterListAction( GetEditEnginePtr()->GetUndoComment( nId ), OUString(), nId, CreateViewShellId() );
-        DBG_ASSERT( !pUndoMarkSelection, "UndoAction SelectionMarker?" );
-        pUndoMarkSelection.reset(new ESelection( aSel ));
+        DBG_ASSERT( !moUndoMarkSelection, "UndoAction SelectionMarker?" );
+        moUndoMarkSelection = aSel;
     }
 }
 
@@ -243,7 +243,7 @@ void ImpEditEngine::UndoActionStart( sal_uInt16 nId )
     if ( IsUndoEnabled() && !IsInUndo() )
     {
         GetUndoManager().EnterListAction( GetEditEnginePtr()->GetUndoComment( nId ), OUString(), nId, CreateViewShellId() );
-        DBG_ASSERT( !pUndoMarkSelection, "UndoAction SelectionMarker?" );
+        DBG_ASSERT( !moUndoMarkSelection, "UndoAction SelectionMarker?" );
     }
 }
 
@@ -252,17 +252,17 @@ void ImpEditEngine::UndoActionEnd()
     if ( IsUndoEnabled() && !IsInUndo() )
     {
         GetUndoManager().LeaveListAction();
-        pUndoMarkSelection.reset();
+        moUndoMarkSelection.reset();
     }
 }
 
 void ImpEditEngine::InsertUndo( std::unique_ptr<EditUndo> pUndo, bool bTryMerge )
 {
     DBG_ASSERT( !IsInUndo(), "InsertUndo in Undo mode!" );
-    if ( pUndoMarkSelection )
+    if ( moUndoMarkSelection )
     {
-        GetUndoManager().AddUndoAction( std::make_unique<EditUndoMarkSelection>(pEditEngine, *pUndoMarkSelection) );
-        pUndoMarkSelection.reset();
+        GetUndoManager().AddUndoAction( std::make_unique<EditUndoMarkSelection>(pEditEngine, *moUndoMarkSelection) );
+        moUndoMarkSelection.reset();
     }
     GetUndoManager().AddUndoAction( std::move(pUndo), bTryMerge );
 

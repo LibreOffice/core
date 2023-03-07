@@ -184,9 +184,9 @@ void EditHTMLParser::NextToken( HtmlTokenId nToken )
             if ( aText.startsWith(" ") && ThrowAwayBlank() && !IsReadPRE() )
                 aText = aText.copy( 1 );
 
-            if ( pCurAnchor )
+            if ( moCurAnchor )
             {
-                pCurAnchor->aText += aText;
+                moCurAnchor->aText += aText;
             }
             else
             {
@@ -739,7 +739,7 @@ bool EditHTMLParser::HasTextInCurrentPara()
 void EditHTMLParser::AnchorStart()
 {
     // ignore anchor in anchor
-    if ( pCurAnchor )
+    if ( moCurAnchor )
         return;
 
     const HTMLOptions& aOptions = GetOptions();
@@ -762,20 +762,20 @@ void EditHTMLParser::AnchorStart()
         aRootURL.GetNewAbsURL( aRef, &aTargetURL );
         aURL = aTargetURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
     }
-    pCurAnchor.reset( new AnchorInfo );
-    pCurAnchor->aHRef = aURL;
+    moCurAnchor.emplace();
+    moCurAnchor->aHRef = aURL;
 }
 
 void EditHTMLParser::AnchorEnd()
 {
-    if ( !pCurAnchor )
+    if ( !moCurAnchor )
         return;
 
     // Insert as URL-Field...
-    SvxFieldItem aFld( SvxURLField( pCurAnchor->aHRef, pCurAnchor->aText, SvxURLFormat::Repr ), EE_FEATURE_FIELD  );
+    SvxFieldItem aFld( SvxURLField( moCurAnchor->aHRef, moCurAnchor->aText, SvxURLFormat::Repr ), EE_FEATURE_FIELD  );
     aCurSel = mpEditEngine->InsertField(aCurSel, aFld);
     bFieldsInserted = true;
-    pCurAnchor.reset();
+    moCurAnchor.reset();
 
     if (mpEditEngine->IsHtmlImportHandlerSet())
     {
