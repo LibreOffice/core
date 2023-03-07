@@ -25,6 +25,7 @@
 #include <svtools/colorcfg.hxx>
 #include <svx/weldeditview.hxx>
 #include <vcl/timer.hxx>
+#include <mutex>
 
 namespace com::sun::star::beans { class XMultiPropertySet; }
 
@@ -45,7 +46,7 @@ namespace dbaui
         rtl::Reference<SfxItemPool> m_pItemPool;
 
         rtl::Reference<ChangesListener> m_listener;
-        osl::Mutex m_mutex;
+        std::mutex m_mutex;
         css::uno::Reference<css::beans::XMultiPropertySet> m_notifier;
 
         bool m_bInUpdate;
