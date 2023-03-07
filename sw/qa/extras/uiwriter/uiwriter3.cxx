@@ -614,6 +614,34 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139638)
     xTOCIndex->update();
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf114773)
+{
+    createSwDoc("tdf114773.odt");
+
+    uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes = xIndexSupplier->getDocumentIndexes();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexes->getCount());
+    uno::Reference<text::XDocumentIndex> xTOCIndex(xIndexes->getByIndex(0), uno::UNO_QUERY);
+
+    xTOCIndex->update();
+    uno::Reference<text::XTextRange> xTextRange = xTOCIndex->getAnchor();
+    uno::Reference<text::XText> xText = xTextRange->getText();
+    uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
+    xTextCursor->gotoRange(xTextRange->getStart(), false);
+    xTextCursor->gotoRange(xTextRange->getEnd(), true);
+    OUString aIndexString(convertLineEnd(xTextCursor->getString(), LineEnd::LINEEND_LF));
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 2  Heading Level 1   2-1
+    // - Actual  : 2   Heading Level 1  2 -1
+    CPPUNIT_ASSERT_EQUAL(OUString("Full ToC\n"
+                                  "2  Heading Level 1\t2-1\n"
+                                  "2.1  Heading Level 2\t2-2\n"
+                                  "2.1.1  Heading Level 3\t2-2\n"
+                                  "2.1.1.1  Heading Level 4\t2-2"),
+                         aIndexString);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135412)
 {
     createSwDoc("tdf135412.docx");
