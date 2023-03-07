@@ -29,6 +29,7 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <cppuhelper/implbase.hxx>
 #include <utility>
 #include <vcl/event.hxx>

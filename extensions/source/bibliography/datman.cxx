@@ -530,9 +530,7 @@ void SAL_CALL BibInterceptorHelper::setMasterDispatchProvider( const css::uno::R
 constexpr OUStringLiteral gGridName(u"theGrid");
 
 BibDataManager::BibDataManager()
-    :BibDataManager_Base( GetMutex() )
-    ,m_aLoadListeners(m_aMutex)
-    ,pBibView( nullptr )
+    :pBibView( nullptr )
     ,pToolbar(nullptr)
 {
 }
@@ -1014,8 +1012,9 @@ void SAL_CALL BibDataManager::load(  )
     {
         xFormAsLoadable->load();
 
+        std::unique_lock g(m_aMutex);
         EventObject aEvt( static_cast< XWeak* >( this ) );
-        m_aLoadListeners.notifyEach( &XLoadListener::loaded, aEvt );
+        m_aLoadListeners.notifyEach( g, &XLoadListener::loaded, aEvt );
     }
 }
 
@@ -1034,13 +1033,15 @@ void SAL_CALL BibDataManager::unload(  )
     EventObject aEvt( static_cast< XWeak* >( this ) );
 
     {
-        m_aLoadListeners.notifyEach( &XLoadListener::unloading, aEvt );
+        std::unique_lock g(m_aMutex);
+        m_aLoadListeners.notifyEach( g, &XLoadListener::unloading, aEvt );
     }
 
     xFormAsLoadable->unload();
 
     {
-        m_aLoadListeners.notifyEach( &XLoadListener::unloaded, aEvt );
+        std::unique_lock g(m_aMutex);
+        m_aLoadListeners.notifyEach( g, &XLoadListener::unloaded, aEvt );
     }
 }
 
@@ -1059,13 +1060,15 @@ void SAL_CALL BibDataManager::reload(  )
     EventObject aEvt( static_cast< XWeak* >( this ) );
 
     {
-        m_aLoadListeners.notifyEach( &XLoadListener::reloading, aEvt );
+        std::unique_lock g(m_aMutex);
+        m_aLoadListeners.notifyEach( g, &XLoadListener::reloading, aEvt );
     }
 
     xFormAsLoadable->reload();
 
     {
-        m_aLoadListeners.notifyEach( &XLoadListener::reloaded, aEvt );
+        std::unique_lock g(m_aMutex);
+        m_aLoadListeners.notifyEach( g, &XLoadListener::reloaded, aEvt );
     }
 }
 
@@ -1084,13 +1087,15 @@ sal_Bool SAL_CALL BibDataManager::isLoaded(  )
 
 void SAL_CALL BibDataManager::addLoadListener( const Reference< XLoadListener >& aListener )
 {
-    m_aLoadListeners.addInterface( aListener );
+    std::unique_lock g(m_aMutex);
+    m_aLoadListeners.addInterface( g, aListener );
 }
 
 
 void SAL_CALL BibDataManager::removeLoadListener( const Reference< XLoadListener >& aListener )
 {
-    m_aLoadListeners.removeInterface( aListener );
+    std::unique_lock g(m_aMutex);
+    m_aLoadListeners.removeInterface( g, aListener );
 }
 
 

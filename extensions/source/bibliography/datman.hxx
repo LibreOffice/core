@@ -25,10 +25,9 @@
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
-#include <cppuhelper/compbase.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/compbase.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <com/sun/star/form/XLoadable.hpp>
-#include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -72,11 +71,9 @@ public:
     virtual void SAL_CALL setMasterDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewMasterDispatchProvider ) override;
 };
 
-typedef cppu::WeakComponentImplHelper  <   css::form::XLoadable
+typedef comphelper::WeakComponentImplHelper  <   css::form::XLoadable
                                         >   BibDataManager_Base;
-class BibDataManager final
-            :public ::comphelper::OMutexAndBroadcastHelper
-            ,public BibDataManager_Base
+class BibDataManager final : public BibDataManager_Base
 {
 private:
         css::uno::Reference< css::form::XForm >                       m_xForm;
@@ -90,7 +87,7 @@ private:
         OUString                     aDataSourceURL;
         OUString                     aQuoteChar;
 
-        ::comphelper::OInterfaceContainerHelper2   m_aLoadListeners;
+        ::comphelper::OInterfaceContainerHelper4<css::form::XLoadListener>   m_aLoadListeners;
 
         VclPtr< ::bib::BibView>      pBibView;
         VclPtr<BibToolBar>           pToolbar;
