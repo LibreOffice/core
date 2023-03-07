@@ -93,11 +93,11 @@ private:
     std::unique_ptr<ToolbarUnoDispatcher> mxIndentDispatch;
 
     //Paragraph spacing
-    std::unique_ptr<SvxRelativeField> mxTopDist;
-    std::unique_ptr<SvxRelativeField> mxBottomDist;
-    std::unique_ptr<SvxRelativeField> mxLeftIndent;
-    std::unique_ptr<SvxRelativeField> mxRightIndent;
-    std::unique_ptr<SvxRelativeField> mxFLineIndent;
+    std::optional<SvxRelativeField> mxTopDist;
+    std::optional<SvxRelativeField> mxBottomDist;
+    std::optional<SvxRelativeField> mxLeftIndent;
+    std::optional<SvxRelativeField> mxRightIndent;
+    std::optional<SvxRelativeField> mxFLineIndent;
 
     // Data Member
     tools::Long                maTxtLeft;

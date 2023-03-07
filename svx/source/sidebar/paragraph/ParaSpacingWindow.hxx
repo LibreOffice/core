@@ -39,8 +39,8 @@ public:
 protected:
     ParaULSpacingWindow(vcl::Window* pParent);
 
-    std::unique_ptr<SvxRelativeField> m_xAboveSpacing;
-    std::unique_ptr<SvxRelativeField> m_xBelowSpacing;
+    std::optional<SvxRelativeField> m_xAboveSpacing;
+    std::optional<SvxRelativeField> m_xBelowSpacing;
     std::unique_ptr<weld::Container> m_xAboveContainer;
     std::unique_ptr<weld::Container> m_xBelowContainer;
 
@@ -74,9 +74,9 @@ public:
 protected:
     ParaLRSpacingWindow(vcl::Window* pParent);
 
-    std::unique_ptr<SvxRelativeField> m_xBeforeSpacing;
-    std::unique_ptr<SvxRelativeField> m_xAfterSpacing;
-    std::unique_ptr<SvxRelativeField> m_xFLSpacing;
+    std::optional<SvxRelativeField> m_xBeforeSpacing;
+    std::optional<SvxRelativeField> m_xAfterSpacing;
+    std::optional<SvxRelativeField> m_xFLSpacing;
     std::unique_ptr<weld::Container> m_xBeforeContainer;
     std::unique_ptr<weld::Container> m_xAfterContainer;
     std::unique_ptr<weld::Container> m_xFirstLineContainer;

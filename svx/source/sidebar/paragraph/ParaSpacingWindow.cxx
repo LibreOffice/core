@@ -39,8 +39,8 @@ ParaULSpacingWindow::ParaULSpacingWindow(vcl::Window* pParent)
     : InterimItemWindow(pParent, "svx/ui/paraulspacing.ui", "ParaULSpacingWindow")
     , m_eUnit(MapUnit::MapTwip)
 {
-    m_xAboveSpacing = std::make_unique<SvxRelativeField>(m_xBuilder->weld_metric_spin_button("aboveparaspacing", FieldUnit::CM));
-    m_xBelowSpacing = std::make_unique<SvxRelativeField>(m_xBuilder->weld_metric_spin_button("belowparaspacing", FieldUnit::CM));
+    m_xAboveSpacing.emplace(m_xBuilder->weld_metric_spin_button("aboveparaspacing", FieldUnit::CM));
+    m_xBelowSpacing.emplace(m_xBuilder->weld_metric_spin_button("belowparaspacing", FieldUnit::CM));
     m_xAboveContainer = m_xBuilder->weld_container("above");
     m_xBelowContainer = m_xBuilder->weld_container("below");
 
@@ -135,9 +135,9 @@ ParaLRSpacingWindow::ParaLRSpacingWindow(vcl::Window* pParent)
     : InterimItemWindow(pParent, "svx/ui/paralrspacing.ui", "ParaLRSpacingWindow")
     , m_eUnit(MapUnit::MapTwip)
 {
-    m_xBeforeSpacing = std::make_unique<SvxRelativeField>(m_xBuilder->weld_metric_spin_button("beforetextindent", FieldUnit::CM));
-    m_xAfterSpacing = std::make_unique<SvxRelativeField>(m_xBuilder->weld_metric_spin_button("aftertextindent", FieldUnit::CM));
-    m_xFLSpacing = std::make_unique<SvxRelativeField>(m_xBuilder->weld_metric_spin_button("firstlineindent", FieldUnit::CM));
+    m_xBeforeSpacing.emplace(m_xBuilder->weld_metric_spin_button("beforetextindent", FieldUnit::CM));
+    m_xAfterSpacing.emplace(m_xBuilder->weld_metric_spin_button("aftertextindent", FieldUnit::CM));
+    m_xFLSpacing.emplace(m_xBuilder->weld_metric_spin_button("firstlineindent", FieldUnit::CM));
     m_xBeforeContainer = m_xBuilder->weld_container("before");
     m_xAfterContainer = m_xBuilder->weld_container("after");
     m_xFirstLineContainer = m_xBuilder->weld_container("firstline");
