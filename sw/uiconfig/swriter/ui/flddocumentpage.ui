@@ -361,11 +361,11 @@
                 <property name="can_focus">True</property>
                 <property name="adjustment">adjustment1</property>
                 <property name="truncate-multiline">True</property>
-                <property name="tooltip_text" translatable="yes" context="flddocumentpage|level|tooltip_text">Specifies the number of outline levels of the immediately prior heading number to display.</property>
+                <property name="tooltip_text" translatable="yes" context="flddocumentpage|level|tooltip_text">Select the first prior heading for display whose outline level is less than or equal to the specified value.</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="level-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="flddocumentpage|extended_tip|level">Use this option in combination with “Heading number” to control how many levels of the immediately prior heading number are displayed. For example, selecting “2” will display the first two levels of the heading number. Heading numbers can be enabled in the “Heading Numbering“ dialog (see Tools menu).</property>
-                  </object>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="flddocumentpage|extended_tip|level">Use this option to specify which heading before the field to display. The selected heading is the first one whose outline level is less than or equal to the specified value. For example, specifying “2” will display the first heading before the field with outline level 1 or outline level 2. Heading numbers can be enabled by using “Tools - Heading Numbering“.</property>
+                </object>
                 </child>
               </object>
               <packing>
