@@ -402,12 +402,14 @@ OUString PrintFontManager::convertSfntName( const NameRecord& rNameRecord )
                 eEncoding = RTL_TEXTENCODING_UTF8;
                 break;
             default:
-                if (o3tl::starts_with(aName, "Khmer OS") ||
-                    o3tl::starts_with(aName, "YoavKtav Black")) // tdf#152278
+                if (o3tl::starts_with(aName, "Khmer OS") || // encoding '20' (Khmer) isn't implemented
+                    o3tl::starts_with(aName, "YoavKtav")) // tdf#152278
                 {
                     eEncoding = RTL_TEXTENCODING_UTF8;
                 }
-                SAL_WARN_IF(eEncoding == RTL_TEXTENCODING_DONTKNOW, "vcl.fonts", "Unimplemented mac encoding " << rNameRecord.encodingID << " to unicode conversion for fontname " << aName);
+                SAL_WARN_IF(eEncoding == RTL_TEXTENCODING_DONTKNOW, "vcl.fonts", "mac encoding " <<
+                            rNameRecord.encodingID << " in font '" << aName << "'" <<
+                            (rNameRecord.encodingID > 32 ? " is invalid" : " has unimplemented conversion"));
                 break;
         }
         if (eEncoding != RTL_TEXTENCODING_DONTKNOW)
