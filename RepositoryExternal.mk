@@ -1293,7 +1293,11 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 endif
 
 define gb_LinkTarget__use_fontconfig
+ifeq ($(OS),LINUX)
+$(call gb_LinkTarget_use_package,$(1),fontconfig)
+else
 $(call gb_LinkTarget_use_external_project,$(1),fontconfig)
+endif
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,fontconfig) \
 	$$(INCLUDE) \
