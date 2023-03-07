@@ -45,93 +45,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeColorInHeading)
     CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aThemeColor.getType());
 }
 
-void checkEffects(std::vector<model::EffectStyle> const& rEffectStyleList)
+void checkFillStyles(std::vector<model::FillStyle> const& rStyleList)
 {
-    CPPUNIT_ASSERT_EQUAL(size_t(3), rEffectStyleList.size());
-    {
-        model::EffectStyle rEffectStyle = rEffectStyleList[0];
-        CPPUNIT_ASSERT_EQUAL(size_t(0), rEffectStyle.maEffectList.size());
-    }
-
-    {
-        model::EffectStyle rEffectStyle = rEffectStyleList[1];
-        CPPUNIT_ASSERT_EQUAL(size_t(0), rEffectStyle.maEffectList.size());
-    }
-
-    {
-        model::EffectStyle rEffectStyle = rEffectStyleList[2];
-        CPPUNIT_ASSERT_EQUAL(size_t(1), rEffectStyle.maEffectList.size());
-        model::Effect const& rEffect = rEffectStyle.maEffectList[0];
-
-        CPPUNIT_ASSERT_EQUAL(model::EffectType::OuterShadow, rEffect.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(57150), rEffect.mnBlurRadius);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(19050), rEffect.mnDistance);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(5400000), rEffect.mnDirection);
-        CPPUNIT_ASSERT_EQUAL(model::RectangleAlignment::Center, rEffect.meAlignment);
-        CPPUNIT_ASSERT_EQUAL(false, rEffect.mbRotateWithShape);
-
-        CPPUNIT_ASSERT_EQUAL(model::ColorType::RGB, rEffect.maColor.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rEffect.maColor.mnComponent1);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rEffect.maColor.mnComponent2);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rEffect.maColor.mnComponent3);
-
-        CPPUNIT_ASSERT_EQUAL(size_t(1), rEffect.maColor.maTransformations.size());
-        CPPUNIT_ASSERT_EQUAL(model::TransformationType::Alpha,
-                             rEffect.maColor.maTransformations[0].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(6300), rEffect.maColor.maTransformations[0].mnValue);
-    }
-}
-
-CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
-{
-    createSwDoc("ThemeColorInHeading.docx");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
-
-    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-    auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
-    CPPUNIT_ASSERT(pTheme);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"Office Theme"), pTheme->GetName());
-
-    model::ColorSet* pColorSet = pTheme->GetColorSet();
-    CPPUNIT_ASSERT(pColorSet);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"Orange"), pColorSet->getName());
-
-    CPPUNIT_ASSERT_EQUAL(Color(0xE48312), pTheme->GetColor(model::ThemeColorType::Accent1));
-    CPPUNIT_ASSERT_EQUAL(Color(0xBD582C), pTheme->GetColor(model::ThemeColorType::Accent2));
-    CPPUNIT_ASSERT_EQUAL(Color(0x865640), pTheme->GetColor(model::ThemeColorType::Accent3));
-    CPPUNIT_ASSERT_EQUAL(Color(0x9B8357), pTheme->GetColor(model::ThemeColorType::Accent4));
-    CPPUNIT_ASSERT_EQUAL(Color(0xC2BC80), pTheme->GetColor(model::ThemeColorType::Accent5));
-    CPPUNIT_ASSERT_EQUAL(Color(0x94A088), pTheme->GetColor(model::ThemeColorType::Accent6));
-    CPPUNIT_ASSERT_EQUAL(Color(0x000000), pTheme->GetColor(model::ThemeColorType::Dark1));
-    CPPUNIT_ASSERT_EQUAL(Color(0x637052), pTheme->GetColor(model::ThemeColorType::Dark2));
-    CPPUNIT_ASSERT_EQUAL(Color(0xFFFFFF), pTheme->GetColor(model::ThemeColorType::Light1));
-    CPPUNIT_ASSERT_EQUAL(Color(0xCCDDEA), pTheme->GetColor(model::ThemeColorType::Light2));
-
-    model::FontScheme const& rFontScheme = pTheme->getFontScheme();
-    CPPUNIT_ASSERT_EQUAL(OUString(u"Calibri Light"), rFontScheme.getMajorLatin().maTypeface);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"Calibri"), rFontScheme.getMinorLatin().maTypeface);
-    CPPUNIT_ASSERT_EQUAL(true, rFontScheme.getMajorAsian().maTypeface.isEmpty());
-    CPPUNIT_ASSERT_EQUAL(true, rFontScheme.getMinorAsian().maTypeface.isEmpty());
-    CPPUNIT_ASSERT_EQUAL(true, rFontScheme.getMajorComplex().maTypeface.isEmpty());
-    CPPUNIT_ASSERT_EQUAL(true, rFontScheme.getMinorComplex().maTypeface.isEmpty());
-    CPPUNIT_ASSERT_EQUAL(size_t(47), rFontScheme.getMajorSupplementalFontList().size());
-    CPPUNIT_ASSERT_EQUAL(size_t(47), rFontScheme.getMinorSupplementalFontList().size());
-    CPPUNIT_ASSERT_EQUAL(OUString(u"Angsana New"),
-                         rFontScheme.findMajorSupplementalTypeface(u"Thai"));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"Cordia New"),
-                         rFontScheme.findMinorSupplementalTypeface(u"Thai"));
-
-    model::FormatScheme const& rFormatScheme = pTheme->getFormatScheme();
-    CPPUNIT_ASSERT_EQUAL(size_t(3), rFormatScheme.getFillStyleList().size());
-    CPPUNIT_ASSERT_EQUAL(size_t(3), rFormatScheme.getLineStyleList().size());
-    CPPUNIT_ASSERT_EQUAL(size_t(3), rFormatScheme.getBackgroundFillStyleList().size());
-
-    checkEffects(rFormatScheme.getEffectStyleList());
-
+    CPPUNIT_ASSERT_EQUAL(size_t(3), rStyleList.size());
     // Fill style 1
     {
-        model::FillStyle const& rFillStyle = rFormatScheme.getFillStyleList().at(0);
+        model::FillStyle const& rFillStyle = rStyleList.at(0);
         CPPUNIT_ASSERT(rFillStyle.mpFill);
         CPPUNIT_ASSERT_EQUAL(model::FillType::Solid, rFillStyle.mpFill->meType);
         auto* pSolidFill = static_cast<model::SolidFill*>(rFillStyle.mpFill.get());
@@ -141,7 +60,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
 
     // Fill style 2
     {
-        model::FillStyle const& rFillStyle = rFormatScheme.getFillStyleList().at(1);
+        model::FillStyle const& rFillStyle = rStyleList.at(1);
         CPPUNIT_ASSERT(rFillStyle.mpFill);
         CPPUNIT_ASSERT_EQUAL(model::FillType::Gradient, rFillStyle.mpFill->meType);
         auto* pGradientFill = static_cast<model::GradientFill*>(rFillStyle.mpFill.get());
@@ -223,7 +142,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
 
     // Fill style 3
     {
-        model::FillStyle const& rFillStyle = rFormatScheme.getFillStyleList().at(2);
+        model::FillStyle const& rFillStyle = rStyleList.at(2);
         CPPUNIT_ASSERT(rFillStyle.mpFill);
         CPPUNIT_ASSERT_EQUAL(model::FillType::Gradient, rFillStyle.mpFill->meType);
         auto* pGradientFill = static_cast<model::GradientFill*>(rFillStyle.mpFill.get());
@@ -299,10 +218,14 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
             }
         }
     }
+}
 
+void checkLineStyles(std::vector<model::LineStyle> const& rStyleList)
+{
+    CPPUNIT_ASSERT_EQUAL(size_t(3), rStyleList.size());
     // Line style 1
     {
-        model::LineStyle const& rLineStyle = rFormatScheme.getLineStyleList().at(0);
+        model::LineStyle const& rLineStyle = rStyleList.at(0);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(6350), rLineStyle.mnWidth);
         CPPUNIT_ASSERT_EQUAL(model::CapType::Flat, rLineStyle.meCapType);
         CPPUNIT_ASSERT_EQUAL(model::PenAlignmentType::Center, rLineStyle.mePenAlignment);
@@ -321,7 +244,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
 
     // Line style 2
     {
-        model::LineStyle const& rLineStyle = rFormatScheme.getLineStyleList().at(1);
+        model::LineStyle const& rLineStyle = rStyleList.at(1);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(12700), rLineStyle.mnWidth);
         CPPUNIT_ASSERT_EQUAL(model::CapType::Flat, rLineStyle.meCapType);
         CPPUNIT_ASSERT_EQUAL(model::PenAlignmentType::Center, rLineStyle.mePenAlignment);
@@ -340,7 +263,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
 
     // Line style 3
     {
-        model::LineStyle const& rLineStyle = rFormatScheme.getLineStyleList().at(2);
+        model::LineStyle const& rLineStyle = rStyleList.at(2);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(19050), rLineStyle.mnWidth);
         CPPUNIT_ASSERT_EQUAL(model::CapType::Flat, rLineStyle.meCapType);
         CPPUNIT_ASSERT_EQUAL(model::PenAlignmentType::Center, rLineStyle.mePenAlignment);
@@ -356,6 +279,90 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
         CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, pSolidFill->maColorDefinition.meType);
         CPPUNIT_ASSERT_EQUAL(size_t(0), pSolidFill->maColorDefinition.maTransformations.size());
     }
+}
+
+void checkEffects(std::vector<model::EffectStyle> const& rEffectStyleList)
+{
+    CPPUNIT_ASSERT_EQUAL(size_t(3), rEffectStyleList.size());
+    {
+        model::EffectStyle rEffectStyle = rEffectStyleList[0];
+        CPPUNIT_ASSERT_EQUAL(size_t(0), rEffectStyle.maEffectList.size());
+    }
+
+    {
+        model::EffectStyle rEffectStyle = rEffectStyleList[1];
+        CPPUNIT_ASSERT_EQUAL(size_t(0), rEffectStyle.maEffectList.size());
+    }
+
+    {
+        model::EffectStyle rEffectStyle = rEffectStyleList[2];
+        CPPUNIT_ASSERT_EQUAL(size_t(1), rEffectStyle.maEffectList.size());
+        model::Effect const& rEffect = rEffectStyle.maEffectList[0];
+
+        CPPUNIT_ASSERT_EQUAL(model::EffectType::OuterShadow, rEffect.meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(57150), rEffect.mnBlurRadius);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(19050), rEffect.mnDistance);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5400000), rEffect.mnDirection);
+        CPPUNIT_ASSERT_EQUAL(model::RectangleAlignment::Center, rEffect.meAlignment);
+        CPPUNIT_ASSERT_EQUAL(false, rEffect.mbRotateWithShape);
+
+        CPPUNIT_ASSERT_EQUAL(model::ColorType::RGB, rEffect.maColor.meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rEffect.maColor.mnComponent1);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rEffect.maColor.mnComponent2);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rEffect.maColor.mnComponent3);
+
+        CPPUNIT_ASSERT_EQUAL(size_t(1), rEffect.maColor.maTransformations.size());
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::Alpha,
+                             rEffect.maColor.maTransformations[0].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(6300), rEffect.maColor.maTransformations[0].mnValue);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
+{
+    createSwDoc("ThemeColorInHeading.docx");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+    CPPUNIT_ASSERT(pTheme);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Office Theme"), pTheme->GetName());
+
+    model::ColorSet* pColorSet = pTheme->GetColorSet();
+    CPPUNIT_ASSERT(pColorSet);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Orange"), pColorSet->getName());
+
+    CPPUNIT_ASSERT_EQUAL(Color(0xE48312), pTheme->GetColor(model::ThemeColorType::Accent1));
+    CPPUNIT_ASSERT_EQUAL(Color(0xBD582C), pTheme->GetColor(model::ThemeColorType::Accent2));
+    CPPUNIT_ASSERT_EQUAL(Color(0x865640), pTheme->GetColor(model::ThemeColorType::Accent3));
+    CPPUNIT_ASSERT_EQUAL(Color(0x9B8357), pTheme->GetColor(model::ThemeColorType::Accent4));
+    CPPUNIT_ASSERT_EQUAL(Color(0xC2BC80), pTheme->GetColor(model::ThemeColorType::Accent5));
+    CPPUNIT_ASSERT_EQUAL(Color(0x94A088), pTheme->GetColor(model::ThemeColorType::Accent6));
+    CPPUNIT_ASSERT_EQUAL(Color(0x000000), pTheme->GetColor(model::ThemeColorType::Dark1));
+    CPPUNIT_ASSERT_EQUAL(Color(0x637052), pTheme->GetColor(model::ThemeColorType::Dark2));
+    CPPUNIT_ASSERT_EQUAL(Color(0xFFFFFF), pTheme->GetColor(model::ThemeColorType::Light1));
+    CPPUNIT_ASSERT_EQUAL(Color(0xCCDDEA), pTheme->GetColor(model::ThemeColorType::Light2));
+
+    model::FontScheme const& rFontScheme = pTheme->getFontScheme();
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Calibri Light"), rFontScheme.getMajorLatin().maTypeface);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Calibri"), rFontScheme.getMinorLatin().maTypeface);
+    CPPUNIT_ASSERT_EQUAL(true, rFontScheme.getMajorAsian().maTypeface.isEmpty());
+    CPPUNIT_ASSERT_EQUAL(true, rFontScheme.getMinorAsian().maTypeface.isEmpty());
+    CPPUNIT_ASSERT_EQUAL(true, rFontScheme.getMajorComplex().maTypeface.isEmpty());
+    CPPUNIT_ASSERT_EQUAL(true, rFontScheme.getMinorComplex().maTypeface.isEmpty());
+    CPPUNIT_ASSERT_EQUAL(size_t(47), rFontScheme.getMajorSupplementalFontList().size());
+    CPPUNIT_ASSERT_EQUAL(size_t(47), rFontScheme.getMinorSupplementalFontList().size());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Angsana New"),
+                         rFontScheme.findMajorSupplementalTypeface(u"Thai"));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Cordia New"),
+                         rFontScheme.findMinorSupplementalTypeface(u"Thai"));
+
+    model::FormatScheme const& rFormatScheme = pTheme->getFormatScheme();
+    checkFillStyles(rFormatScheme.getFillStyleList());
+    checkLineStyles(rFormatScheme.getLineStyleList());
+    checkEffects(rFormatScheme.getEffectStyleList());
+    CPPUNIT_ASSERT_EQUAL(size_t(3), rFormatScheme.getBackgroundFillStyleList().size());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsODT)
