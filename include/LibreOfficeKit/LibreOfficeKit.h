@@ -119,7 +119,7 @@ struct _LibreOfficeKitClass
     /// @see lok::Office::setOption
     void (*setOption) (LibreOfficeKit* pThis, const char* pOption, const char* pValue);
 
-    /// @see lok::Document::dumpState
+    /// @see lok::Office::dumpState
     /// @since LibreOffice 7.5
     void (*dumpState) (LibreOfficeKit* pThis, const char* pOptions, char** pState);
 
