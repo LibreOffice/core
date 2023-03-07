@@ -28,9 +28,9 @@ using namespace dbaui;
 
 OTableFieldDescWin::OTableFieldDescWin(weld::Container* pParent, OTableDesignView* pView)
     : OChildWindow(pParent, "dbaccess/ui/fielddescpanel.ui", "FieldDescPanel")
-    , m_xHelpBar(new OTableDesignHelpBar(m_xBuilder->weld_text_view("textview")))
+    , m_aHelpBar(m_xBuilder->weld_text_view("textview"))
     , m_xBox(m_xBuilder->weld_container("box"))
-    , m_xFieldControl(new OTableFieldControl(m_xBox.get(), m_xHelpBar.get(), pView))
+    , m_xFieldControl(new OTableFieldControl(m_xBox.get(), &m_aHelpBar, pView))
     , m_xHeader(m_xBuilder->weld_label("header"))
     , m_eChildFocus(NONE)
 {
@@ -39,13 +39,13 @@ OTableFieldDescWin::OTableFieldDescWin(weld::Container* pParent, OTableDesignVie
 
     m_xFieldControl->SetHelpId(HID_TAB_DESIGN_FIELDCONTROL);
 
-    m_xHelpBar->connect_focus_in(LINK(this, OTableFieldDescWin, HelpFocusIn));
+    m_aHelpBar.connect_focus_in(LINK(this, OTableFieldDescWin, HelpFocusIn));
     m_xFieldControl->connect_focus_in(LINK(this, OTableFieldDescWin, FieldFocusIn));
 }
 
 bool OTableFieldDescWin::HasChildPathFocus() const
 {
-    return m_xFieldControl->HasChildPathFocus() || m_xHelpBar->HasFocus();
+    return m_xFieldControl->HasChildPathFocus() || m_aHelpBar.HasFocus();
 }
 
 OTableFieldDescWin::~OTableFieldDescWin()
@@ -81,7 +81,7 @@ IClipboardTest* OTableFieldDescWin::getActiveChild() const
             pTest = m_xFieldControl.get();
             break;
         default:
-            pTest = m_xHelpBar.get();
+            pTest = const_cast<OTableDesignHelpBar*>(&m_aHelpBar);
             break;
     }
     return pTest;

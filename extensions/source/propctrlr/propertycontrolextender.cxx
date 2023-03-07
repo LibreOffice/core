@@ -42,26 +42,16 @@ namespace pcr
     namespace KeyFunction = ::com::sun::star::awt::KeyFunction;
 
 
-    //= PropertyControlExtender_Data
-
-    struct PropertyControlExtender_Data
-    {
-        Reference< XPropertyControl >   xControl;
-        Reference< XWindow >            xControlWindow;
-    };
-
-
     //= PropertyControlExtender
 
 
     PropertyControlExtender::PropertyControlExtender( const Reference< XPropertyControl >& _rxObservedControl )
-        :m_pData( new PropertyControlExtender_Data )
     {
         try
         {
-            m_pData->xControl.set( _rxObservedControl, UNO_SET_THROW );
-            m_pData->xControlWindow.set( m_pData->xControl->getControlWindow(), UNO_SET_THROW );
-            m_pData->xControlWindow->addKeyListener( this );
+            mxControl.set( _rxObservedControl, UNO_SET_THROW );
+            mxControlWindow.set( mxControl->getControlWindow(), UNO_SET_THROW );
+            mxControlWindow->addKeyListener( this );
         }
         catch( const Exception& )
         {
@@ -77,7 +67,7 @@ namespace pcr
 
     void SAL_CALL PropertyControlExtender::keyPressed( const KeyEvent& _event )
     {
-        OSL_ENSURE( _event.Source == m_pData->xControlWindow, "PropertyControlExtender::keyPressed: where does this come from?" );
+        OSL_ENSURE( _event.Source == mxControlWindow, "PropertyControlExtender::keyPressed: where does this come from?" );
         if  ( ( _event.KeyFunc != KeyFunction::DELETE )
             ||  ( _event.Modifiers != 0 )
             )
@@ -85,7 +75,7 @@ namespace pcr
 
         try
         {
-            Reference< XPropertyControl > xControl( m_pData->xControl, UNO_SET_THROW );
+            Reference< XPropertyControl > xControl( mxControl, UNO_SET_THROW );
 
             // reset the value
             xControl->setValue( Any() );
@@ -112,10 +102,10 @@ namespace pcr
 
     void SAL_CALL PropertyControlExtender::disposing( const EventObject& Source )
     {
-        OSL_ENSURE( Source.Source == m_pData->xControlWindow, "PropertyControlExtender::disposing: where does this come from?" );
+        OSL_ENSURE( Source.Source == mxControlWindow, "PropertyControlExtender::disposing: where does this come from?" );
         (void)Source.Source;
-        m_pData->xControlWindow.clear();
-        m_pData->xControl.clear();
+        mxControlWindow.clear();
+        mxControl.clear();
     }
 
 

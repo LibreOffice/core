@@ -40,7 +40,7 @@ namespace {
 
 class ProgressLogImpl : public cppu::BaseMutex, public t_log_helper
 {
-    std::unique_ptr<comphelper::EventLogger> m_logger;
+    comphelper::EventLogger m_logger;
 
 protected:
     virtual void SAL_CALL disposing() override;
@@ -77,9 +77,9 @@ ProgressLogImpl::ProgressLogImpl(
     Sequence<Any> const & /* args */,
     Reference<XComponentContext> const & xContext )
     : t_log_helper( m_aMutex )
-{
     // Use the logger created by unopkg app
-    m_logger.reset(new comphelper::EventLogger(xContext, "unopkg"));
+    , m_logger(xContext, "unopkg")
+{
 }
 
 // XServiceInfo
@@ -122,7 +122,7 @@ void ProgressLogImpl::update( Any const & Status )
         logLevel = LogLevel::SEVERE;
         buf.append( ::comphelper::anyToString(Status) );
     }
-    m_logger->log(logLevel, buf.makeStringAndClear());
+    m_logger.log(logLevel, buf.makeStringAndClear());
 }
 
 

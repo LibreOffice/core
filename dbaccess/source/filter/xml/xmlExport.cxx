@@ -417,7 +417,7 @@ void ODBExport::exportDataSource()
             aSettingsMap.emplace(eToken,sValue);
         }
         if ( bAutoIncrementEnabled && !(aAutoIncrement.first.isEmpty() && aAutoIncrement.second.isEmpty()) )
-            m_aAutoIncrement.reset( new TStringPair(aAutoIncrement));
+            m_oAutoIncrement = aAutoIncrement;
         if ( aDelimiter.bUsed )
             m_aDelimiter.reset( new TDelimiter( aDelimiter ) );
 
@@ -699,10 +699,10 @@ void ODBExport::exportDelimiter()
 
 void ODBExport::exportAutoIncrement()
 {
-    if (m_aAutoIncrement)
+    if (m_oAutoIncrement)
     {
-        AddAttribute(XML_NAMESPACE_DB, XML_ADDITIONAL_COLUMN_STATEMENT,m_aAutoIncrement->second);
-        AddAttribute(XML_NAMESPACE_DB, XML_ROW_RETRIEVING_STATEMENT,m_aAutoIncrement->first);
+        AddAttribute(XML_NAMESPACE_DB, XML_ADDITIONAL_COLUMN_STATEMENT,m_oAutoIncrement->second);
+        AddAttribute(XML_NAMESPACE_DB, XML_ROW_RETRIEVING_STATEMENT,m_oAutoIncrement->first);
         SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_AUTO_INCREMENT, true, true);
     }
 }

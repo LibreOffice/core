@@ -83,7 +83,7 @@ class ODBExport : public SvXMLExport
         }
     };
 
-    std::unique_ptr< TStringPair >                  m_aAutoIncrement;
+    std::optional< TStringPair >                  m_oAutoIncrement;
     std::unique_ptr< TDelimiter >                   m_aDelimiter;
     std::vector< TypedPropertyValue >             m_aDataSourceSettings;
     std::vector< XMLPropertyState >               m_aCurrentPropertyStates;

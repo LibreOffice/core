@@ -52,17 +52,17 @@ private:
 
     // indentation
     bool m_bSplitLRSpace = false; ///< which items to use?
-    std::unique_ptr<SvxRelativeField> m_xLeftIndent;
+    SvxRelativeField m_aLeftIndent;
 
-    std::unique_ptr<SvxRelativeField> m_xRightIndent;
+    SvxRelativeField m_aRightIndent;
 
     std::unique_ptr<weld::Label> m_xFLineLabel;
-    std::unique_ptr<SvxRelativeField> m_xFLineIndent;
+    SvxRelativeField m_aFLineIndent;
     std::unique_ptr<weld::CheckButton> m_xAutoCB;
 
     // distance
-    std::unique_ptr<SvxRelativeField> m_xTopDist;
-    std::unique_ptr<SvxRelativeField> m_xBottomDist;
+    SvxRelativeField m_aTopDist;
+    SvxRelativeField m_aBottomDist;
     std::unique_ptr<weld::CheckButton> m_xContextualCB;
 
     // line spacing
@@ -240,7 +240,7 @@ private:
     std::unique_ptr<weld::Label> m_xMinWordLabel;
     std::unique_ptr<weld::SpinButton> m_xMinWordLength;
     std::unique_ptr<weld::Label> m_xHyphenZoneLabel;
-    std::unique_ptr<SvxRelativeField> m_xHyphenZone;
+    SvxRelativeField m_aHyphenZone;
 
     // pagebreak
     std::unique_ptr<weld::CheckButton> m_xPageBreakBox;

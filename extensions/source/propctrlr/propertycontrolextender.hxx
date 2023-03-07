@@ -53,7 +53,8 @@ namespace pcr
         virtual ~PropertyControlExtender() override;
 
     private:
-        std::unique_ptr< PropertyControlExtender_Data > m_pData;
+        css::uno::Reference< css::inspection::XPropertyControl > mxControl;
+        css::uno::Reference< css::awt::XWindow > mxControlWindow;
     };
 
 

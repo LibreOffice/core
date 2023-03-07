@@ -32,12 +32,14 @@
 #include <cmath>
 #include <vector>
 #include <memory>
+#include <optional>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <tools/wldcrd.hxx>
 
 class SbiInstance;                  // active StarBASIC process
 class SbiRuntime;                   // active StarBASIC procedure instance
@@ -99,8 +101,6 @@ namespace o3tl
     template<> struct typed_flags<SbAttributes> : is_typed_flags<SbAttributes, 0x13> {};
 }
 
-class WildCard;
-
 class SbiRTLData
 {
 public:
@@ -110,7 +110,7 @@ public:
     short   nCurDirPos;
 
     OUString sFullNameToBeChecked;
-    std::unique_ptr<WildCard> pWildCard;
+    std::optional<WildCard> moWildCard;
 
     css::uno::Sequence< OUString > aDirSeq;
 

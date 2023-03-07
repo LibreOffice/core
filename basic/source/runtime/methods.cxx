@@ -2490,7 +2490,7 @@ static OUString implSetupWildcard(const OUString& rFileParam, SbiRTLData& rRTLDa
     static const char cWild1 = '*';
     static const char cWild2 = '?';
 
-    rRTLData.pWildCard.reset();
+    rRTLData.moWildCard.reset();
     rRTLData.sFullNameToBeChecked.clear();
 
     OUString aFileParam = rFileParam;
@@ -2544,7 +2544,7 @@ static OUString implSetupWildcard(const OUString& rFileParam, SbiRTLData& rRTLDa
     // invalid anyway because it was not accepted by OSL before
     if (aPureFileName != "*")
     {
-        rRTLData.pWildCard = std::make_unique<WildCard>(aPureFileName);
+        rRTLData.moWildCard.emplace(aPureFileName);
     }
     return aPathStr;
 }
@@ -2553,9 +2553,9 @@ static bool implCheckWildcard(std::u16string_view rName, SbiRTLData const& rRTLD
 {
     bool bMatch = true;
 
-    if (rRTLData.pWildCard)
+    if (rRTLData.moWildCard)
     {
-        bMatch = rRTLData.pWildCard->Matches(rName);
+        bMatch = rRTLData.moWildCard->Matches(rName);
     }
     return bMatch;
 }

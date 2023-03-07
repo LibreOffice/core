@@ -21,10 +21,10 @@
 #include <IClipBoardTest.hxx>
 #include <ChildWindow.hxx>
 #include "TableFieldControl.hxx"
+#include <TableDesignHelpBar.hxx>
 
 namespace dbaui
 {
-    class OTableDesignHelpBar;
     class OTableDesignView;
     class OFieldDescription;
 
@@ -38,7 +38,7 @@ namespace dbaui
             NONE
         };
     private:
-        std::unique_ptr<OTableDesignHelpBar> m_xHelpBar;
+        OTableDesignHelpBar m_aHelpBar;
         std::unique_ptr<weld::Container> m_xBox;
         std::unique_ptr<OTableFieldControl> m_xFieldControl;
         std::unique_ptr<weld::Label>   m_xHeader;
