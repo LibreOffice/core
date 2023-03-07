@@ -2083,6 +2083,12 @@ SwTwips SwFlyFrame::Grow_( SwTwips nDist, bool bTst )
                         aRectFnSet.AddBottom(aFrm, nRemaining);
                     }
                     InvalidateObjRectWithSpaces();
+                    {
+                        // Margins are unchanged, so increase the print height similar to the frame
+                        // height.
+                        SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
+                        aRectFnSet.AddBottom(aPrt, nRemaining );
+                    }
                     aNew = GetObjRectWithSpaces();
                 }
             }
