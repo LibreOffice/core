@@ -52,7 +52,6 @@
 #define VT_CY               6
 #define VT_DATE             7
 #define VT_BSTR             8
-#define VT_UI4              9
 #define VT_ERROR            10
 #define VT_BOOL             11
 #define VT_VARIANT          12
@@ -60,6 +59,7 @@
 #define VT_I1               16
 #define VT_UI1              17
 #define VT_UI2              18
+#define VT_UI4              19
 #define VT_I8               20
 #define VT_UI8              21
 #define VT_INT              22
