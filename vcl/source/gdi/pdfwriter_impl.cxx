@@ -1300,8 +1300,8 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
         case PDFWriter::PDFVersion::PDF_A_1:
         case PDFWriter::PDFVersion::PDF_1_4: aBuffer.append( "1.4" );break;
         case PDFWriter::PDFVersion::PDF_1_5: aBuffer.append( "1.5" );break;
-        default:
         case PDFWriter::PDFVersion::PDF_1_6: aBuffer.append( "1.6" );break;
+        default:
         case PDFWriter::PDFVersion::PDF_A_2:
         case PDFWriter::PDFVersion::PDF_A_3:
         case PDFWriter::PDFVersion::PDF_1_7: aBuffer.append( "1.7" );break;

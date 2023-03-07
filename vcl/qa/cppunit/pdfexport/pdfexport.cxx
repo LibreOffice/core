@@ -2478,7 +2478,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testDefaultVersion)
     // Parse the export result.
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     int nFileVersion = pPdfDocument->getFileVersion();
-    CPPUNIT_ASSERT_EQUAL(16, nFileVersion);
+    CPPUNIT_ASSERT_EQUAL(17, nFileVersion);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testVersion15)
