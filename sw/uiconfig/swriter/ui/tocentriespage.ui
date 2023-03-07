@@ -393,7 +393,7 @@
                           <object class="GtkLabel" id="chapterentryft">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="label" translatable="yes" context="tocentriespage|chapterentryft">Chapter entry:</property>
+                            <property name="label" translatable="yes" context="tocentriespage|chapterentryft">Heading _info:</property>
                             <property name="use-underline">True</property>
                             <property name="mnemonic-widget">chapterentry</property>
                             <property name="xalign">0</property>
@@ -409,14 +409,15 @@
                             <property name="can-focus">False</property>
                             <property name="valign">center</property>
                             <property name="hexpand">True</property>
+                            <property name="tooltip_text" translatable="yes" context="tocentriespage|tooltip_text|chapterentry">Select the heading information to include in the index entry.</property>
                             <items>
-                              <item translatable="yes" context="tocentriespage|chapterentry">Number range only</item>
-                              <item translatable="yes" context="tocentriespage|chapterentry">Description only</item>
-                              <item translatable="yes" context="tocentriespage|chapterentry">Number range and description</item>
+                              <item translatable="yes" context="tocentriespage|chapterentry">Number</item>
+                              <item translatable="yes" context="tocentriespage|chapterentry">Contents</item>
+                              <item translatable="yes" context="tocentriespage|chapterentry">Number and contents</item>
                             </items>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="chapterentry-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|chapterentry">Select the chapter information that you want to include in the index entry.</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|chapterentry">Select the heading information to include in the index entry.</property>
                               </object>
                             </child>
                           </object>
@@ -640,14 +641,15 @@
                             </child>
                             <child>
                               <object class="GtkButton" id="chapterinfo">
-                                <property name="label" translatable="yes" context="tocentriespage|chapterinfo">_Chapter Info</property>
+                                <property name="label" translatable="yes" context="tocentriespage|chapterinfo">_Heading Info</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">True</property>
                                 <property name="use-underline">True</property>
+                                <property name="tooltip-text" translatable="yes" context="tocentriespage|extended_tip|chapterinfo">Insert to include heading number or contents. Select inserted icon to choose what information to display.</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="chapterinfo-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|chapterinfo">Inserts chapter information, such as the chapter heading and number. Select the information that you want to display in the Chapter entry box.</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|chapterinfo">Insert to include heading number or contents. The heading information comes from the heading immediately prior to the entry. Select the inserted icon to choose what information to display.</property>
                                   </object>
                                 </child>
                               </object>
