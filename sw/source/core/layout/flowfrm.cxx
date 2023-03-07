@@ -1749,6 +1749,11 @@ SwTwips SwFlowFrame::GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid() cons
 {
     SwTwips nUpperSpaceAmountConsideredForPrevFrameAndPageGrid = 0;
 
+    if (!m_rThis.GetUpper() || !m_rThis.GetUpper()->GetFormat())
+    {
+        return nUpperSpaceAmountConsideredForPrevFrameAndPageGrid;
+    }
+
     if ( !m_rThis.GetUpper()->GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::USE_FORMER_OBJECT_POS) )
     {
         nUpperSpaceAmountConsideredForPrevFrameAndPageGrid =
