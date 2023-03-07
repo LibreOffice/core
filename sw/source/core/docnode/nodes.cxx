@@ -2320,28 +2320,25 @@ SwNode* SwNodes::FindPrvNxtFrameNode( const SwNode& rFrameNd,
             // should have ended up in the first text node in the table and
             // then checked it's in a table?
             {
-                    aIdx = pEnd->GetIndex() + 1;
+                aIdx = pEnd->GetIndex() + 1;
 
+                pFrameNd = nullptr;
+
+                // is there some sectionnodes before a tablenode?
+                while( aIdx.GetNode().IsSectionNode() )
+                {
+                    const SwSection& rSect = aIdx.GetNode().
+                        GetSectionNode()->GetSection();
+                    if( rSect.IsHiddenFlag() )
+                        aIdx = aIdx.GetNode().EndOfSectionIndex()+1;
+                    else
+                        ++aIdx;
+                }
+                if( aIdx.GetNode().IsTableNode() )
+                {
                     pFrameNd = &aIdx.GetNode();
-                    {
-                        pFrameNd = nullptr;
-
-                        // is there some sectionnodes before a tablenode?
-                        while( aIdx.GetNode().IsSectionNode() )
-                        {
-                            const SwSection& rSect = aIdx.GetNode().
-                                GetSectionNode()->GetSection();
-                            if( rSect.IsHiddenFlag() )
-                                aIdx = aIdx.GetNode().EndOfSectionIndex()+1;
-                            else
-                                ++aIdx;
-                        }
-                        if( aIdx.GetNode().IsTableNode() )
-                        {
-                            pFrameNd = &aIdx.GetNode();
-                            assert(!"this isn't dead code?");
-                        }
-                    }
+                    assert(!"this isn't dead code?");
+                }
             }
         }
     }
