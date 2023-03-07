@@ -3535,8 +3535,8 @@ void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren
         // reselect entries
         const SwOutlineNodes::size_type nCurrPos = pShell->GetOutlinePos(MAXLEVEL);
         std::unique_ptr<weld::TreeIter> xListEntry(m_xTreeView->make_iterator());
-        bool bListEntry = m_xTreeView->get_iter_first(*xListEntry);
-        while ((bListEntry = m_xTreeView->iter_next(*xListEntry)) && lcl_IsContent(*xListEntry, *m_xTreeView))
+        m_xTreeView->get_iter_first(*xListEntry);
+        while (m_xTreeView->iter_next(*xListEntry) && lcl_IsContent(*xListEntry, *m_xTreeView))
         {
             assert(dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xListEntry))));
             if (weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xListEntry))->GetOutlinePos() == nCurrPos)

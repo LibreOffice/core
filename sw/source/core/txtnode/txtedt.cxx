@@ -832,7 +832,6 @@ bool SwScanner::NextWord()
     m_nBegin = m_nBegin + m_nLength;
     Boundary aBound;
 
-    const CharClass* pCC = &GetAppCharClass();
     std::optional<CharClass> xLocalCharClass;
 
     while ( true )
@@ -853,8 +852,7 @@ bool SwScanner::NextWord()
                 if ( m_nWordType != i18n::WordType::WORD_COUNT )
                 {
                     xLocalCharClass.emplace(LanguageTag( g_pBreakIt->GetLocale( m_aCurrentLang ) ));
-                    pCC = &*xLocalCharClass;
-                    if ( pCC->isLetterNumeric(OUString(m_aText[m_nBegin])) )
+                    if ( xLocalCharClass->isLetterNumeric(OUString(m_aText[m_nBegin])) )
                         break;
                 }
                 else

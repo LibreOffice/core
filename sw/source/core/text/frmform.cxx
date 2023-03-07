@@ -1829,7 +1829,6 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
     {
         // If MustFit is set, we shrink to the Upper's bottom edge if needed.
         SwTextLineAccess aAccess( this );
-        tools::Long nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
 
         if( aAccess.GetPara()->IsPrepMustFit() )
         {
@@ -1839,7 +1838,7 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
                 Shrink( nDiff );
         }
 
-        nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
+        tools::Long nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
         const tools::Long nTop = aRectFnSet.GetTopMargin(*this);
 
         if( nTop > nFrameHeight )

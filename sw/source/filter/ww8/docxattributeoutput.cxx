@@ -9169,7 +9169,7 @@ void DocxAttributeOutput::FormatSurround( const SwFormatSurround& rSurround )
     }
     else if ( m_rExport.m_bOutFlyFrameAttrs )
     {
-        const char* sWrap( "auto" );
+        const char* sWrap;
         switch ( rSurround.GetSurround( ) )
         {
             case css::text::WrapTextMode_NONE:
