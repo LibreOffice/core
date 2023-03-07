@@ -846,7 +846,7 @@ rtl::Reference<SdrObject> SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData
                 aTextObj.SetVertical( bVerticalText );
                 if ( pRet )
                 {
-                    bool bDeleteSource = aTextObj.GetOEPlaceHolderAtom() != nullptr;
+                    bool bDeleteSource = aTextObj.GetOEPlaceHolderAtom().has_value();
                     if ( bDeleteSource  && dynamic_cast<const SdrGrafObj* >(pRet.get()) ==  nullptr     // we are not allowed to get
                             && dynamic_cast<const SdrObjGroup* >(pRet.get()) ==  nullptr                // grouped placeholder objects
                                 && dynamic_cast<const SdrOle2Obj* >(pRet.get()) ==  nullptr )
@@ -6481,8 +6481,8 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
         DffRecordHeader aPlaceHolderAtomHd;
         if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_OEPlaceholderAtom, aClientDataContainerHd.GetRecEndFilePos(), &aPlaceHolderAtomHd ) )
         {
-            mxImplTextObj->mpPlaceHolderAtom.reset( new PptOEPlaceholderAtom );
-            ReadPptOEPlaceholderAtom( rIn, *( mxImplTextObj->mpPlaceHolderAtom ) );
+            mxImplTextObj->moPlaceHolderAtom.emplace();
+            ReadPptOEPlaceholderAtom( rIn, *( mxImplTextObj->moPlaceHolderAtom ) );
         }
         rIn.Seek( nOldPos );
         DffRecordHeader aProgTagHd;

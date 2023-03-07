@@ -2201,7 +2201,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
     ppStyleSheetAry = nullptr;
 
     PresObjKind ePresKind = PresObjKind::NONE;
-    PptOEPlaceholderAtom* pPlaceHolder = pTextObj->GetOEPlaceHolderAtom();
+    const std::optional<PptOEPlaceholderAtom>& pPlaceHolder = pTextObj->GetOEPlaceHolderAtom();
     OUString aPresentationText;
     if ( pPlaceHolder )
     {

@@ -1202,7 +1202,7 @@ struct ImplPPTTextObj final : public salhelper::SimpleReferenceObject
 {
     sal_uInt32                  mnShapeId;
     sal_uInt32                  mnShapeMaster;
-    std::unique_ptr<PptOEPlaceholderAtom> mpPlaceHolderAtom;
+    std::optional<PptOEPlaceholderAtom> moPlaceHolderAtom;
     TSS_Type                    mnInstance;
     TSS_Type                    mnDestinationInstance;
     MSO_SPT                     meShapeType;
@@ -1256,7 +1256,7 @@ public:
     void                    SetDestinationInstance( TSS_Type nInstance )
                             { mxImplTextObj->mnDestinationInstance = nInstance; }
 
-    PptOEPlaceholderAtom*   GetOEPlaceHolderAtom() const { return mxImplTextObj->mpPlaceHolderAtom.get(); }
+    const std::optional<PptOEPlaceholderAtom> & GetOEPlaceHolderAtom() const { return mxImplTextObj->moPlaceHolderAtom; }
     sal_uInt32              GetTextFlags() const { return mxImplTextObj->mnTextFlags; }
     void                    SetVertical( bool bVertical )
                             {
