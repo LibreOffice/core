@@ -319,13 +319,12 @@ VectorGraphicData::VectorGraphicData(
     const sal_uInt32 nStmLen(rIStm.remainingSize());
     if (nStmLen)
     {
-        VectorGraphicDataArray aVectorGraphicDataArray(nStmLen);
-        auto pData = aVectorGraphicDataArray.getArray();
-        rIStm.ReadBytes(pData, nStmLen);
+        auto pData = std::make_unique<std::vector<sal_uInt8>>(nStmLen);
+        rIStm.ReadBytes(pData->data(), pData->size());
 
         if (!rIStm.GetError())
         {
-            maDataContainer = BinaryDataContainer(reinterpret_cast<const sal_uInt8*>(pData), nStmLen);
+            maDataContainer = BinaryDataContainer(std::move(pData));
         }
     }
 }
