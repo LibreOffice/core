@@ -879,6 +879,11 @@ ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
     const SfxViewShell* pViewShell = SfxViewShell::Current();
     if (!comphelper::LibreOfficeKit::isActive() || !(pViewShell && pViewShell->isLOKMobilePhone()))
         mxButtonDown->show();
+
+    // tdf#154042 Use an initial height of one row so the Toolbar positions
+    // this in the same place regardless of how many rows it eventually shows
+    Size aSize(GetSizePixel().Width(), nHeight);
+    SetSizePixel(aSize);
 }
 
 void ScInputBarGroup::SetBackgrounds()
