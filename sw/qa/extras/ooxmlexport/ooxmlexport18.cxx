@@ -87,12 +87,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153526_commentInNumbering, "tdf153526_commentInN
     CPPUNIT_ASSERT_EQUAL(13, getParagraphs());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf153613_sdtAfterPgBreak, "tdf153613_sdtAfterPgBreak.docx")
-{
-    // the page break was missing. Before the fix this was 1 page
-    CPPUNIT_ASSERT_EQUAL(2, getPages());
-}
-
 CPPUNIT_TEST_FIXTURE(Test, testTdf153592_columnBreaks)
 {
     loadAndSave("tdf153592_columnBreaks.docx");
@@ -157,6 +151,101 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153613_textboxAfterPgBreak2, "tdf153613_textboxA
 
     const auto& pLayout = parseLayoutDump();
     assertXPathContent(pLayout, "//page[2]/body/txt", "There should be no prior carriage return.");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf153613_sdtAfterPgBreak, "tdf153613_sdtAfterPgBreak.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf153964_topMarginAfterBreak14, "tdf153964_topMarginAfterBreak14.docx")
+{
+    //The top margin should only apply once in a split paragraph.
+    //In this compat14 (Windows 2010) version, it applies after the break if no prior visible run.
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(2, "a w:br at the start of the document. Does it use 60 point top margin?"), uno::UNO_QUERY);
+    //CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+
+    xPara.set(getParagraph(3, u"60 pt spacing before"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xfbe4d5), getProperty<Color>(xPara, "ParaBackColor"));
+
+    // The top margin was applied to paragraph 3, so it shouldn't apply here
+    xPara.set(getParagraph(4, u"column break1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+    //CPPUNIT_ASSERT_EQUAL(Color(0xfbe4d5), getProperty<Color>(xPara, "ParaBackColor"));
+
+    xPara.set(getParagraph(5, u"60 pt followed by page break"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xdeeaf6), getProperty<Color>(xPara, "ParaBackColor"));
+
+    // The top margin was applied to paragraph 5, so it shouldn't apply here
+    xPara.set(getParagraph(6, u"page break1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xdeeaf6), getProperty<Color>(xPara, "ParaBackColor"));
+
+    // The top margin was not applied yet, so with compat14 it should apply here.
+    xPara.set(getParagraph(7, u"column break2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xe2efd9), getProperty<Color>(xPara, "ParaBackColor"));
+
+    // In an odd twist, the w:br was actually at the end of the previous w:p, so in that case
+    // we ignore the top margin definition this time.
+    xPara.set(getParagraph(9, u"page break2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+
+    // The top margin was not applied before the column break, so with compat14 it should apply here
+    xPara.set(getParagraph(10, u""), uno::UNO_QUERY); // after column break
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+    //CPPUNIT_ASSERT_EQUAL(Color(0xfff2cc), getProperty<Color>(xPara, "ParaBackColor"));
+
+    // In an odd twist, the w:br was actually at the end of the previous w:p, so in that case
+    // we ignore the top margin definition this time.
+    xPara.set(getParagraph(12, u""), uno::UNO_QUERY); // after page break
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf153964_topMarginAfterBreak15, "tdf153964_topMarginAfterBreak15.docx")
+{
+    //The top margin should only apply once (at most) in a split paragraph.
+    //In this compat15 (Windows 2013) version, it never applies after the break.
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(2, "a w:br at the start of the document. Does it use 60 point top margin?"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+
+    xPara.set(getParagraph(3, u"60 pt spacing before"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xfbe4d5), getProperty<Color>(xPara, "ParaBackColor"));
+
+    // The top margin was applied to paragraph 3, so it shouldn't apply here
+    xPara.set(getParagraph(4, u"column break1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+    //CPPUNIT_ASSERT_EQUAL(Color(0xfbe4d5), getProperty<Color>(xPara, "ParaBackColor"));
+
+    xPara.set(getParagraph(5, u"60 pt followed by page break"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xdeeaf6), getProperty<Color>(xPara, "ParaBackColor"));
+
+    // The top margin was applied to paragraph 5, so it shouldn't apply here
+    xPara.set(getParagraph(6, u"page break1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xdeeaf6), getProperty<Color>(xPara, "ParaBackColor"));
+
+    // The top margin was not applied to paragraph 6, and with compat15 it shouldn't apply here.
+    xPara.set(getParagraph(7, u"column break2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xe2efd9), getProperty<Color>(xPara, "ParaBackColor"));
+
+    // The top margin not was applied to paragraph 8, and with compat15 it shouldn't apply here.
+    xPara.set(getParagraph(9, u"page break2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+
+    // The top margin was not applied to paragraph 9, and with compat15 it shouldn't apply here.
+    xPara.set(getParagraph(10, u""), uno::UNO_QUERY); // after column break
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+    //CPPUNIT_ASSERT_EQUAL(Color(0xfff2cc), getProperty<Color>(xPara, "ParaBackColor"));
+
+    // The top margin was not applied to paragraph 11, and with compat15 it shouldn't apply here.
+    xPara.set(getParagraph(12, u""), uno::UNO_QUERY); // after page break
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
