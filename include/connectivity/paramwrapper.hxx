@@ -31,7 +31,7 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 
 #include <memory>
 #include <vector>
@@ -123,7 +123,7 @@ namespace dbtools::param
 
     //= ParameterWrapperContainer
 
-    typedef ::cppu::WeakComponentImplHelper    <   css::container::XIndexAccess
+    typedef ::comphelper::WeakComponentImplHelper    <   css::container::XIndexAccess
                                                ,   css::container::XEnumerationAccess
                                                >   ParameterWrapperContainer_Base;
 
@@ -132,7 +132,6 @@ namespace dbtools::param
         public ParameterWrapperContainer_Base
     {
     private:
-        ::osl::Mutex    m_aMutex;
         Parameters      m_aParameters;
 
         virtual ~ParameterWrapperContainer() override;
@@ -177,7 +176,7 @@ namespace dbtools::param
 
     private:
         // XComponent
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         void    impl_checkDisposed_throw();
     };

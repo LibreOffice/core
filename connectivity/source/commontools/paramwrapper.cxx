@@ -258,13 +258,11 @@ namespace dbtools::param
     }
 
     ParameterWrapperContainer::ParameterWrapperContainer()
-        :ParameterWrapperContainer_Base( m_aMutex )
     {
     }
 
 
     ParameterWrapperContainer::ParameterWrapperContainer( const Reference< XSingleSelectQueryAnalyzer >& _rxComposer )
-        :ParameterWrapperContainer_Base( m_aMutex )
     {
         Reference< XParametersSupplier > xSuppParams( _rxComposer, UNO_QUERY_THROW );
         Reference< XIndexAccess > xParameters( xSuppParams->getParameters(), css::uno::UNO_SET_THROW );
@@ -284,7 +282,7 @@ namespace dbtools::param
 
     Type SAL_CALL ParameterWrapperContainer::getElementType()
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         impl_checkDisposed_throw();
         return cppu::UnoType<XPropertySet>::get();
     }
@@ -292,7 +290,7 @@ namespace dbtools::param
 
     sal_Bool SAL_CALL ParameterWrapperContainer::hasElements()
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         impl_checkDisposed_throw();
         return !m_aParameters.empty();
     }
@@ -300,7 +298,7 @@ namespace dbtools::param
 
     sal_Int32 SAL_CALL ParameterWrapperContainer::getCount()
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         impl_checkDisposed_throw();
         return m_aParameters.size();
     }
@@ -308,7 +306,7 @@ namespace dbtools::param
 
     Any SAL_CALL ParameterWrapperContainer::getByIndex( sal_Int32 _nIndex )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         impl_checkDisposed_throw();
 
         if ( ( _nIndex < 0 ) || ( o3tl::make_unsigned(_nIndex) >= m_aParameters.size() ) )
@@ -320,7 +318,7 @@ namespace dbtools::param
 
     Reference< XEnumeration > ParameterWrapperContainer::createEnumeration()
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         impl_checkDisposed_throw();
 
         return new ::comphelper::OEnumerationByIndex( static_cast< XIndexAccess* >( this ) );
@@ -329,16 +327,13 @@ namespace dbtools::param
 
     void ParameterWrapperContainer::impl_checkDisposed_throw()
     {
-        if ( rBHelper.bDisposed )
+        if ( m_bDisposed )
             throw DisposedException( OUString(), *this );
     }
 
 
-    void SAL_CALL ParameterWrapperContainer::disposing()
+    void ParameterWrapperContainer::disposing(std::unique_lock<std::mutex>& /*rGuard*/)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        impl_checkDisposed_throw();
-
         for (const auto& rxParam : m_aParameters)
         {
             rxParam->dispose();
