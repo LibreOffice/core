@@ -1090,6 +1090,14 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                             finishParagraph();
                             lcl_startParagraphGroup();
                         }
+                        else // IsFirstRun
+                        {
+                            if (GetSettingsTable()->GetWordCompatibilityMode() > 14)
+                            {
+                                pContext->Insert(PROP_PARA_TOP_MARGIN, uno::Any(sal_uInt32(0)));
+                            }
+                        }
+
                         pContext->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_PAGE_BEFORE));
                         m_pImpl->clearDeferredBreaks();
                     }
@@ -1102,6 +1110,14 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                         finishParagraph();
                         lcl_startParagraphGroup();
                     }
+                    else // IsFirstRun
+                    {
+                        if (GetSettingsTable()->GetWordCompatibilityMode() > 14)
+                        {
+                            pContext->Insert(PROP_PARA_TOP_MARGIN, uno::Any(sal_uInt32(0)));
+                        }
+                    }
+
                     pContext->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_COLUMN_BEFORE));
                     m_pImpl->clearDeferredBreaks();
                 }
@@ -3490,13 +3506,29 @@ void DomainMapper::lcl_startParagraphGroup()
         if (!m_pImpl->IsInShape())
         {
             const OUString& sDefaultParaStyle = m_pImpl->GetDefaultParaStyleName();
-            m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, uno::makeAny( sDefaultParaStyle ) );
+            auto pContext = static_cast<ParagraphPropertyMap*>(m_pImpl->GetTopContext().get());
+            m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, uno::Any( sDefaultParaStyle ) );
             m_pImpl->SetCurrentParaStyleName( sDefaultParaStyle );
 
             if (m_pImpl->isBreakDeferred(PAGE_BREAK))
-                m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
+            {
+                m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_PAGE_BEFORE));
+
+                // With a w:br at the start of a paragraph, compat14 apparently doesn't apply.
+                // It works to insert a zero margin before importing paragraph properties because
+                // TopMargin typically imports without overwrite any existing value. Very handy.
+                pContext->Insert(PROP_PARA_TOP_MARGIN, uno::Any(sal_uInt32(0)));
+            }
             else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
-                m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_COLUMN_BEFORE));
+            {
+                m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_COLUMN_BEFORE));
+
+                if (GetSettingsTable()->GetWordCompatibilityMode() > 14)
+                {
+                    pContext->Insert(PROP_PARA_TOP_MARGIN, uno::Any(sal_uInt32(0)));
+                }
+            }
+
             mbWasShapeInPara = false;
         }
 
@@ -4046,7 +4078,13 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                             finishParagraph();
                             lcl_startParagraphGroup();
                         }
-
+                        else // IsFirstRun
+                        {
+                            if (GetSettingsTable()->GetWordCompatibilityMode() > 14)
+                            {
+                                pContext->Insert(PROP_PARA_TOP_MARGIN, uno::Any(sal_uInt32(0)));
+                            }
+                        }
 
                         pContext->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
                         m_pImpl->clearDeferredBreaks();
@@ -4059,6 +4097,13 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                         mbIsSplitPara = true;
                         finishParagraph();
                         lcl_startParagraphGroup();
+                    }
+                    else // IsFirstRun
+                    {
+                        if (GetSettingsTable()->GetWordCompatibilityMode() > 14)
+                        {
+                            pContext->Insert(PROP_PARA_TOP_MARGIN, uno::Any(sal_uInt32(0)));
+                        }
                     }
 
                     pContext->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_COLUMN_BEFORE));
@@ -4102,6 +4147,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             PropertyMapPtr pContext = m_pImpl->GetTopContext();
             if (!m_pImpl->GetFootnoteContext())
             {
+                auto pPara = static_cast<ParagraphPropertyMap*>(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH).get());
                 if (m_pImpl->isBreakDeferred(PAGE_BREAK))
                 {
                     /* If PAGEBREAK appears in first paragraph of the section or
@@ -4114,7 +4160,14 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                         finishParagraph();
                         lcl_startParagraphGroup();
                     }
-                    m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
+                    else // IsFirstRun
+                    {
+                        if (GetSettingsTable()->GetWordCompatibilityMode() > 14)
+                        {
+                            pPara->Insert(PROP_PARA_TOP_MARGIN, uno::Any(sal_uInt32(0)), true);
+                        }
+                    }
+                    m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_PAGE_BEFORE));
                 }
                 else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
                 {
@@ -4125,7 +4178,14 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                         finishParagraph();
                         lcl_startParagraphGroup();
                     }
-                    m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_COLUMN_BEFORE));
+                    else // IsFirstRun
+                    {
+                        if (GetSettingsTable()->GetWordCompatibilityMode() > 14)
+                        {
+                            pPara->Insert(PROP_PARA_TOP_MARGIN, uno::Any(sal_uInt32(0)));
+                        }
+                    }
+                    m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_COLUMN_BEFORE));
                 }
                 m_pImpl->clearDeferredBreaks();
             }
