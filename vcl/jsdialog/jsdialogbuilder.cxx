@@ -1502,50 +1502,10 @@ void JSComboBox::set_active(int pos)
 
 bool JSComboBox::changed_by_direct_pick() const { return true; }
 
-IMPL_LINK(JSNotebook, LeaveHdl, const OString&, rPage, bool)
-{
-    m_aLeavePageOverridenHdl.Call(rPage);
-    sendFullUpdate();
-    return true;
-}
-
-IMPL_LINK(JSNotebook, EnterHdl, const OString&, rPage, bool)
-{
-    m_aEnterPageOverridenHdl.Call(rPage);
-    sendFullUpdate();
-    return true;
-}
-
 JSNotebook::JSNotebook(JSDialogSender* pSender, ::TabControl* pControl,
                        SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstanceNotebook, ::TabControl>(pSender, pControl, pBuilder, bTakeOwnership)
 {
-}
-
-void JSNotebook::set_current_page(int nPage)
-{
-    bool bForce = false;
-    int nCurrent = get_current_page();
-    if (nCurrent == nPage)
-        bForce = true;
-
-    SalInstanceNotebook::set_current_page(nPage);
-    sendFullUpdate(bForce);
-
-    m_aEnterPageHdl.Call(get_current_page_ident());
-}
-
-void JSNotebook::set_current_page(const OString& rIdent)
-{
-    bool bForce = false;
-    OString sCurrent = get_current_page_ident();
-    if (sCurrent == rIdent)
-        bForce = true;
-
-    SalInstanceNotebook::set_current_page(rIdent);
-    sendFullUpdate(bForce);
-
-    m_aEnterPageHdl.Call(get_current_page_ident());
 }
 
 void JSNotebook::remove_page(const OString& rIdent)
