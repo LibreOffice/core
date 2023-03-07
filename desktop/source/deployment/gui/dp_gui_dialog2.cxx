@@ -777,7 +777,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleCloseBtn, weld::Button&, void)
 
 IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface, void )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     bool bLockInterface = static_cast<bool>(_bLockInterface);
 
     if ( m_bStartProgress && !m_bHasProgress )
@@ -816,7 +816,7 @@ IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface, void )
 
 void ExtMgrDialog::showProgress( bool _bStart )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     bool bStart = _bStart;
 
@@ -842,7 +842,7 @@ void ExtMgrDialog::updateProgress( const tools::Long nProgress )
 {
     if ( m_nProgress != nProgress )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         m_nProgress = nProgress;
         m_aIdle.Start();
     }
@@ -852,7 +852,7 @@ void ExtMgrDialog::updateProgress( const tools::Long nProgress )
 void ExtMgrDialog::updateProgress( const OUString &rText,
                                    const uno::Reference< task::XAbortChannel > &xAbortChannel)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     m_xAbortChannel = xAbortChannel;
     m_sProgressText = rText;
