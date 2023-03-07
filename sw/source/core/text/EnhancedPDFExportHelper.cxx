@@ -148,6 +148,10 @@ constexpr OUStringLiteral aH3String = u"H3";
 constexpr OUStringLiteral aH4String = u"H4";
 constexpr OUStringLiteral aH5String = u"H5";
 constexpr OUStringLiteral aH6String = u"H6";
+constexpr OUStringLiteral aH7String = u"H7";
+constexpr OUStringLiteral aH8String = u"H8";
+constexpr OUStringLiteral aH9String = u"H9";
+constexpr OUStringLiteral aH10String = u"H10";
 constexpr OUStringLiteral aListString = u"L";
 constexpr OUStringLiteral aListItemString = u"LI";
 constexpr OUStringLiteral aListBodyString = u"LBody";
@@ -1179,9 +1183,6 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     && sw::IsParaPropsNode(*pFrame->getRootFrame(), *pTextNd))
                 {
                     int nRealLevel = pTextNd->GetAttrOutlineLevel()-1;
-                    nRealLevel = std::min(nRealLevel, 5);
-
-                    nPDFType =  o3tl::narrowing<sal_uInt16>(vcl::PDFWriter::H1 + nRealLevel);
                     switch(nRealLevel)
                     {
                         case 0 :
@@ -1199,10 +1200,31 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                         case 4 :
                             aPDFType = aH5String;
                             break;
-                        default:
+                        case 5:
                             aPDFType = aH6String;
                             break;
+                        case 6:
+                            aPDFType = aH7String;
+                            break;
+                        case 7:
+                            aPDFType = aH8String;
+                            break;
+                        case 8:
+                            aPDFType = aH9String;
+                            break;
+                        case 9:
+                            aPDFType = aH10String;
+                            break;
+                        default:
+                            assert(false);
+                            break;
                     }
+
+                    // PDF/UA allows unlimited headings, but PDF only up to H6
+                    // ... and apparently the extra H7.. must be declared in
+                    // RoleMap, or veraPDF complains.
+                    nRealLevel = std::min(nRealLevel, 5);
+                    nPDFType =  o3tl::narrowing<sal_uInt16>(vcl::PDFWriter::H1 + nRealLevel);
                 }
 
                 // Section: TOCI
