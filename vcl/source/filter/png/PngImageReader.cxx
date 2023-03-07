@@ -421,12 +421,10 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx,
     return true;
 }
 
-std::unique_ptr<sal_uInt8[]> getMsGifChunk(SvStream& rStream, sal_Int32* chunkSize)
+BinaryDataContainer getMsGifChunk(SvStream& rStream)
 {
-    if (chunkSize)
-        *chunkSize = 0;
     if (!isPng(rStream))
-        return nullptr;
+        return {};
     // It's easier to read manually the contents and find the chunk than
     // try to get it using libpng.
     // https://en.wikipedia.org/wiki/Portable_Network_Graphics#File_format
@@ -438,7 +436,7 @@ std::unique_ptr<sal_uInt8[]> getMsGifChunk(SvStream& rStream, sal_Int32* chunkSi
         rStream.ReadUInt32(length);
         rStream.ReadUInt32(type);
         if (!rStream.good())
-            return nullptr;
+            return {};
         constexpr sal_uInt32 PNGCHUNK_msOG = 0x6d734f47; // Microsoft Office Animated GIF
         constexpr sal_uInt64 MSGifHeaderSize = 11; // "MSOFFICE9.0"
         if (type == PNGCHUNK_msOG && length > MSGifHeaderSize)
@@ -451,32 +449,30 @@ std::unique_ptr<sal_uInt8[]> getMsGifChunk(SvStream& rStream, sal_Int32* chunkSi
             sal_uInt32 computedCrc = rtl_crc32(0, &typeForCrc, 4);
             const sal_uInt64 pos = rStream.Tell();
             if (pos + length >= rStream.TellEnd())
-                return nullptr; // broken PNG
+                return {}; // broken PNG
 
             char msHeader[MSGifHeaderSize];
             if (rStream.ReadBytes(msHeader, MSGifHeaderSize) != MSGifHeaderSize)
-                return nullptr;
+                return {};
             computedCrc = rtl_crc32(computedCrc, msHeader, MSGifHeaderSize);
             length -= MSGifHeaderSize;
 
-            std::unique_ptr<sal_uInt8[]> chunk(new sal_uInt8[length]);
-            if (rStream.ReadBytes(chunk.get(), length) != length)
-                return nullptr;
-            computedCrc = rtl_crc32(computedCrc, chunk.get(), length);
+            BinaryDataContainer chunk(rStream, length);
+            if (chunk.isEmpty())
+                return {};
+            computedCrc = rtl_crc32(computedCrc, chunk.getData(), chunk.getSize());
             rStream.ReadUInt32(crc);
             if (!ignoreCrc && crc != computedCrc)
                 continue; // invalid chunk, ignore
-            if (chunkSize)
-                *chunkSize = length;
             return chunk;
         }
         if (rStream.remainingSize() < length)
-            return nullptr;
+            return {};
         rStream.SeekRel(length);
         rStream.ReadUInt32(crc);
         constexpr sal_uInt32 PNGCHUNK_IEND = 0x49454e44;
         if (type == PNGCHUNK_IEND)
-            return nullptr;
+            return {};
     }
 }
 #if defined __GNUC__ && __GNUC__ == 8 && !defined __clang__
@@ -501,13 +497,12 @@ BitmapEx PngImageReader::read()
     return bitmap;
 }
 
-std::unique_ptr<sal_uInt8[]> PngImageReader::getMicrosoftGifChunk(SvStream& rStream,
-                                                                  sal_Int32* chunkSize)
+BinaryDataContainer PngImageReader::getMicrosoftGifChunk(SvStream& rStream)
 {
     sal_uInt64 originalPosition = rStream.Tell();
     SvStreamEndian originalEndian = rStream.GetEndian();
     rStream.SetEndian(SvStreamEndian::BIG);
-    std::unique_ptr<sal_uInt8[]> chunk = getMsGifChunk(rStream, chunkSize);
+    auto chunk = getMsGifChunk(rStream);
     rStream.SetEndian(originalEndian);
     rStream.Seek(originalPosition);
     return chunk;

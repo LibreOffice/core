@@ -11,17 +11,11 @@
 #include <vcl/BinaryDataContainer.hxx>
 #include <o3tl/hash_combine.hxx>
 
-BinaryDataContainer::BinaryDataContainer() = default;
-
-BinaryDataContainer::BinaryDataContainer(const sal_uInt8* pData, size_t nSize)
-    : mpData(std::make_shared<std::vector<sal_uInt8>>(nSize))
+BinaryDataContainer::BinaryDataContainer(SvStream& stream, size_t size)
 {
-    std::copy(pData, pData + nSize, mpData->data());
-}
-
-BinaryDataContainer::BinaryDataContainer(std::unique_ptr<std::vector<sal_uInt8>> aData)
-    : mpData(std::shared_ptr<std::vector<sal_uInt8>>(aData.release(), aData.get_deleter()))
-{
+    auto pBuffer = std::make_shared<std::vector<sal_uInt8>>(size);
+    if (stream.ReadBytes(pBuffer->data(), pBuffer->size()) == size)
+        mpData = std::move(pBuffer);
 }
 
 size_t BinaryDataContainer::calculateHash() const
@@ -31,6 +25,11 @@ size_t BinaryDataContainer::calculateHash() const
     for (sal_uInt8 const& rByte : *mpData)
         o3tl::hash_combine(nSeed, rByte);
     return nSeed;
+}
+
+SvMemoryStream BinaryDataContainer::getMemoryStream()
+{
+    return SvMemoryStream(mpData ? mpData->data() : nullptr, getSize(), StreamMode::READ);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

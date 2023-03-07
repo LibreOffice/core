@@ -14,8 +14,10 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <vector>
 
 #include <vcl/dllapi.h>
+#include <vcl/BinaryDataContainer.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -45,8 +47,7 @@ public:
 
     // Returns the contents of the msOG chunk (containing a Gif image), if it exists.
     // Does not change position in the stream.
-    static std::unique_ptr<sal_uInt8[]> getMicrosoftGifChunk(SvStream& rStream,
-                                                             sal_Int32* chunkSize = nullptr);
+    static BinaryDataContainer getMicrosoftGifChunk(SvStream& rStream);
 };
 
 } // namespace vcl

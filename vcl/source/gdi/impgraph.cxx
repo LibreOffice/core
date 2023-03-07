@@ -1619,9 +1619,7 @@ bool ImpGraphic::swapInGraphic(SvStream& rStream)
 
                     if (nVectorGraphicDataSize)
                     {
-                        auto rData = std::make_unique<std::vector<sal_uInt8>>(nVectorGraphicDataSize);
-                        rStream.ReadBytes(rData->data(), nVectorGraphicDataSize);
-                        BinaryDataContainer aDataContainer(std::move(rData));
+                        BinaryDataContainer aDataContainer(rStream, nVectorGraphicDataSize);
 
                         if (rStream.GetError())
                             return false;

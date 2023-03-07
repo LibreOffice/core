@@ -10,7 +10,11 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <tools/stream.hxx>
 #include <vcl/dllapi.h>
+
 #include <vector>
 #include <memory>
 
@@ -26,35 +30,22 @@ private:
     std::shared_ptr<std::vector<sal_uInt8>> mpData;
 
 public:
-    BinaryDataContainer();
-    BinaryDataContainer(const sal_uInt8* pData, size_t nSize);
-    BinaryDataContainer(std::unique_ptr<std::vector<sal_uInt8>> rData);
+    BinaryDataContainer() = default;
+    BinaryDataContainer(SvStream& stream, size_t size);
 
-    BinaryDataContainer(const BinaryDataContainer& rBinaryDataContainer)
-        : mpData(rBinaryDataContainer.mpData)
-    {
-    }
+    BinaryDataContainer(const BinaryDataContainer& rBinaryDataContainer) = default;
 
-    BinaryDataContainer(BinaryDataContainer&& rBinaryDataContainer) noexcept
-        : mpData(std::move(rBinaryDataContainer.mpData))
-    {
-    }
+    BinaryDataContainer(BinaryDataContainer&& rBinaryDataContainer) noexcept = default;
 
-    BinaryDataContainer& operator=(const BinaryDataContainer& rBinaryDataContainer)
-    {
-        mpData = rBinaryDataContainer.mpData;
-        return *this;
-    }
+    BinaryDataContainer& operator=(const BinaryDataContainer& rBinaryDataContainer) = default;
 
-    BinaryDataContainer& operator=(BinaryDataContainer&& rBinaryDataContainer) noexcept
-    {
-        mpData = std::move(rBinaryDataContainer.mpData);
-        return *this;
-    }
+    BinaryDataContainer& operator=(BinaryDataContainer&& rBinaryDataContainer) noexcept = default;
 
     size_t getSize() const { return mpData ? mpData->size() : 0; }
     bool isEmpty() const { return !mpData || mpData->empty(); }
     const sal_uInt8* getData() const { return mpData ? mpData->data() : nullptr; }
+    // Returns the data as a stream open for reading
+    SvMemoryStream getMemoryStream();
 
     size_t calculateHash() const;
 

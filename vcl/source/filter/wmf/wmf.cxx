@@ -42,9 +42,7 @@ bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF )
 
     // Read binary data to mem array
     const sal_uInt32 nStreamLength(nStreamEnd - nStreamStart);
-    auto rData = std::make_unique<std::vector<sal_uInt8>>(nStreamLength);
-    rStream.ReadBytes(rData->data(), rData->size());
-    BinaryDataContainer aDataContainer(std::move(rData));
+    BinaryDataContainer aDataContainer(rStream, nStreamLength);
     rStream.Seek(nStreamStart);
 
     if (rStream.good())

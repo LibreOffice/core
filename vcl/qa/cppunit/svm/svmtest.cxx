@@ -2190,11 +2190,9 @@ void SvmTest::testEPS()
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
     setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
-    sal_uInt32 nDataSize = 3;
-    std::unique_ptr<sal_uInt8[]> pBuffer (new sal_uInt8[nDataSize]);
-    pBuffer[0] = 'a';
-    pBuffer[1] = 'b';
-    pBuffer[2] = 'c';
+    sal_uInt8 aBuffer[] = { 'a','b','c' };
+    SvMemoryStream stream(aBuffer, std::size(aBuffer), StreamMode::READ);
+    BinaryDataContainer aContainer(stream, std::size(aBuffer));
 
     MapMode aMapMode1(MapUnit::Map100thInch);
     aMapMode1.SetOrigin(Point(0, 1));
@@ -2208,7 +2206,7 @@ void SvmTest::testEPS()
     pVirtualDev1->DrawPixel(Point(1, 8));
     pVirtualDev1->DrawPixel(Point(2, 7));
 
-    GfxLink aGfxLink(std::move(pBuffer), nDataSize, GfxLinkType::EpsBuffer);
+    GfxLink aGfxLink(aContainer, GfxLinkType::EpsBuffer);
     aGfxLink.SetPrefMapMode(aMapMode1);
     aGfxLink.SetUserId(12345);
     aGfxLink.SetPrefSize(Size(3, 6));

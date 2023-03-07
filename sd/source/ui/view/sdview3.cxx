@@ -691,13 +691,10 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             Graphic aGraphic;
             if (vcl::ImportPDF(*xStm, aGraphic))
             {
-                std::unique_ptr<sal_uInt8[]> pGraphicContent;
-
                 const sal_Int32 nGraphicContentSize(xStm->Tell());
-                pGraphicContent.reset(new sal_uInt8[nGraphicContentSize]);
                 xStm->Seek(0);
-                xStm->ReadBytes(pGraphicContent.get(), nGraphicContentSize);
-                aGraphic.SetGfxLink(std::make_shared<GfxLink>(std::move(pGraphicContent), nGraphicContentSize, GfxLinkType::NativePdf));
+                BinaryDataContainer aGraphicContent(*xStm, nGraphicContentSize);
+                aGraphic.SetGfxLink(std::make_shared<GfxLink>(aGraphicContent, GfxLinkType::NativePdf));
 
                 InsertGraphic(aGraphic, mnAction, aInsertPos, nullptr, nullptr);
                 bReturn = true;

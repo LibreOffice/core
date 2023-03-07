@@ -124,10 +124,7 @@ void TypeSerializer::readGfxLink(GfxLink& rGfxLink)
         nDataSize = nRemainingData;
     }
 
-    std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[nDataSize]);
-    mrStream.ReadBytes(pBuffer.get(), nDataSize);
-
-    rGfxLink = GfxLink(std::move(pBuffer), nDataSize, static_cast<GfxLinkType>(nType));
+    rGfxLink = GfxLink(BinaryDataContainer(mrStream, nDataSize), static_cast<GfxLinkType>(nType));
     rGfxLink.SetUserId(nUserId);
 
     if (bMapAndSizeValid)
@@ -282,9 +279,7 @@ void TypeSerializer::readGraphic(Graphic& rGraphic)
 
                     if (nLength)
                     {
-                        auto rData = std::make_unique<std::vector<sal_uInt8>>(nLength);
-                        mrStream.ReadBytes(rData->data(), rData->size());
-                        BinaryDataContainer aDataContainer(std::move(rData));
+                        BinaryDataContainer aDataContainer(mrStream, nLength);
 
                         if (!mrStream.GetError())
                         {

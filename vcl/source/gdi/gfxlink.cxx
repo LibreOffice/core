@@ -36,16 +36,6 @@ GfxLink::GfxLink()
 {
 }
 
-GfxLink::GfxLink(std::unique_ptr<sal_uInt8[]> pBuf, sal_uInt32 nSize, GfxLinkType nType)
-    : meType(nType)
-    , mnUserId(0)
-    , maDataContainer(pBuf.get(), nSize)
-    , maHash(0)
-    , mbPrefMapModeValid(false)
-    , mbPrefSizeValid(false)
-{
-}
-
 GfxLink::GfxLink(BinaryDataContainer aDataConainer, GfxLinkType nType)
     : meType(nType)
     , mnUserId(0)

@@ -30,44 +30,33 @@ void BinaryDataContainerTest::testConstruct()
 {
     {
         BinaryDataContainer aContainer;
-        CPPUNIT_ASSERT_EQUAL(true, aContainer.isEmpty());
+        CPPUNIT_ASSERT(aContainer.isEmpty());
         CPPUNIT_ASSERT_EQUAL(size_t(0), aContainer.getSize());
     }
     {
-        std::vector<sal_uInt8> aTestByteArray = { 1, 2, 3, 4 };
-        BinaryDataContainer aContainer(aTestByteArray.data(), aTestByteArray.size());
-        CPPUNIT_ASSERT_EQUAL(false, aContainer.isEmpty());
+        // construct a data array
+        sal_uInt8 aTestByteArray[] = { 1, 2, 3, 4 };
+        SvMemoryStream stream(aTestByteArray, std::size(aTestByteArray), StreamMode::READ);
+
+        BinaryDataContainer aContainer(stream, std::size(aTestByteArray));
+
+        CPPUNIT_ASSERT(!aContainer.isEmpty());
         CPPUNIT_ASSERT_EQUAL(size_t(4), aContainer.getSize());
 
         // Test Copy
         BinaryDataContainer aCopyOfContainer = aContainer;
-        CPPUNIT_ASSERT_EQUAL(false, aCopyOfContainer.isEmpty());
+        CPPUNIT_ASSERT(!aCopyOfContainer.isEmpty());
         CPPUNIT_ASSERT_EQUAL(size_t(4), aCopyOfContainer.getSize());
         CPPUNIT_ASSERT_EQUAL(aCopyOfContainer.getData(), aContainer.getData());
 
         // Test Move
         BinaryDataContainer aMovedInContainer = std::move(aCopyOfContainer);
-        CPPUNIT_ASSERT_EQUAL(false, aMovedInContainer.isEmpty());
+        CPPUNIT_ASSERT(!aMovedInContainer.isEmpty());
         CPPUNIT_ASSERT_EQUAL(size_t(4), aMovedInContainer.getSize());
         CPPUNIT_ASSERT_EQUAL(aMovedInContainer.getData(), aContainer.getData());
 
-        CPPUNIT_ASSERT_EQUAL(true, aCopyOfContainer.isEmpty());
+        CPPUNIT_ASSERT(aCopyOfContainer.isEmpty());
         CPPUNIT_ASSERT_EQUAL(size_t(0), aCopyOfContainer.getSize());
-    }
-    {
-        // construct a unique_ptr data array
-        std::vector<sal_uInt8> aTestByteArray = { 1, 2, 3, 4 };
-        auto aConstructionByteArray = std::make_unique<std::vector<sal_uInt8>>(aTestByteArray);
-
-        // remember for later to compare
-        const sal_uInt8* pInternal = aConstructionByteArray->data();
-
-        BinaryDataContainer aContainer(std::move(aConstructionByteArray));
-
-        // make sure the unique_ptr was moved into BinaryDataContainer
-        CPPUNIT_ASSERT_EQUAL(false, bool(aConstructionByteArray));
-        // make sure we didn't copy data into BinaryDataContainer (pointers match)
-        CPPUNIT_ASSERT_EQUAL(pInternal, aContainer.getData());
     }
 }
 
