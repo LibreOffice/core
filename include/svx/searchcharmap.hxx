@@ -54,8 +54,6 @@ public:
     virtual sal_Int32                   getMaxCharCount() const override;
 
 private:
-    sal_Int32     nCount;
-
     //index to char code mapping for the search
     //to uniquely identify each appended element
     std::unordered_map<sal_Int32, sal_UCS4> m_aItemList;

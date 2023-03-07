@@ -40,7 +40,6 @@ using namespace ::com::sun::star;
 
 SvxSearchCharSet::SvxSearchCharSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow, const VclPtr<VirtualDevice>& rVirDev)
     : SvxShowCharSet(std::move(pScrolledWindow), rVirDev)
-    , nCount(0)
 {
 }
 
@@ -48,10 +47,7 @@ int SvxSearchCharSet::LastInView() const
 {
     int nIndex = FirstInView();
     nIndex += ROW_COUNT * COLUMN_COUNT - 1;
-    int nCompare = nCount - 1;
-    if (nIndex > nCompare)
-        nIndex = nCompare;
-    return nIndex;
+    return std::min<int>(nIndex, getMaxCharCount() -1);
 }
 
 bool SvxSearchCharSet::KeyInput(const KeyEvent& rKEvt)
@@ -92,7 +88,7 @@ bool SvxSearchCharSet::KeyInput(const KeyEvent& rKEvt)
             tmpSelected = 0;
             break;
         case KEY_END:
-            tmpSelected = nCount - 1;
+            tmpSelected = getMaxCharCount() - 1;
             break;
         case KEY_TAB:   // some fonts have a character at these unicode control codes
         case KEY_ESCAPE:
@@ -333,7 +329,7 @@ void SvxSearchCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
     nY = aSize.Height() / ROW_COUNT;
 
     //scrollbar settings -- error
-    int nLastRow = (nCount - 1 + COLUMN_COUNT) / COLUMN_COUNT;
+    int nLastRow = (getMaxCharCount() - 1 + COLUMN_COUNT) / COLUMN_COUNT;
     mxScrollArea->vadjustment_configure(mxScrollArea->vadjustment_get_value(), 0, nLastRow, 1, ROW_COUNT - 1, ROW_COUNT);
 
     // rearrange CharSet element in sync with nX- and nY-multiples
@@ -371,7 +367,7 @@ void SvxSearchCharSet::SelectIndex(int nNewIndex, bool bFocus)
         int nDelta = (nNewIndex - LastInView() + COLUMN_COUNT) / COLUMN_COUNT;
         mxScrollArea->vadjustment_set_value(nOldPos + nDelta);
 
-        if( nNewIndex < nCount )
+        if (nNewIndex < getMaxCharCount())
         {
             nSelectedIndex = nNewIndex;
             Invalidate();
@@ -443,19 +439,18 @@ svx::SvxShowCharSetItem* SvxSearchCharSet::ImplGetItem( int _nPos )
 
 sal_Int32 SvxSearchCharSet::getMaxCharCount() const
 {
-    return nCount;
+    return m_aItemList.size();
 }
 
 void SvxSearchCharSet::ClearPreviousData()
 {
     m_aItemList.clear();
-    nCount = 0;
     Invalidate();
 }
 
 void SvxSearchCharSet::AppendCharToList(sal_UCS4 sChar)
 {
-    m_aItemList.insert(std::make_pair(nCount++, sChar));
+    m_aItemList.insert(std::make_pair(m_aItemList.size(), sChar));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
