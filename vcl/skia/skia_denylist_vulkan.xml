@@ -45,6 +45,9 @@
         <entry os="windows" vendor="nvidia"> <!-- tdf#151627 + tdf#152559 -->
             <device id="0x1402"/>
         </entry>
+        <entry os="windows" vendor="nvidia"> <!-- tdf#153538: GeForce GTX 1070 Ti -->
+            <device id="0x1b82"/>
+        </entry>
         <entry os="7" vendor="all">
             <device id="all"/>
         </entry>
