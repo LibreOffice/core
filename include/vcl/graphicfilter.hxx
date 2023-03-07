@@ -25,6 +25,7 @@
 #include <vcl/graph.hxx>
 #include <comphelper/errcode.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <vcl/BinaryDataContainer.hxx>
 #include <vcl/graphic/GraphicMetadata.hxx>
 
 #include <memory>
@@ -306,11 +307,11 @@ public:
 
     static ErrCode readGIF(SvStream& rStream, Graphic& rGraphic, GfxLinkType& rLinkType);
     static ErrCode readPNG(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType,
-                    std::unique_ptr<sal_uInt8[]> & rpGraphicContent, sal_Int32& rGraphicContentSize);
+                    BinaryDataContainer & rpGraphicContent);
     static ErrCode readJPEG(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType,
                     GraphicFilterImportFlags nImportFlags);
     static ErrCode readSVG(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType,
-                    std::unique_ptr<sal_uInt8[]> & rpGraphicContent, sal_Int32& rGraphicContentSize);
+                    BinaryDataContainer & rpGraphicContent);
     static ErrCode readXBM(SvStream & rStream, Graphic & rGraphic);
     static ErrCode readXPM(SvStream & rStream, Graphic & rGraphic);
 

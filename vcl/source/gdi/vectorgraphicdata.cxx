@@ -319,12 +319,11 @@ VectorGraphicData::VectorGraphicData(
     const sal_uInt32 nStmLen(rIStm.remainingSize());
     if (nStmLen)
     {
-        auto pData = std::make_unique<std::vector<sal_uInt8>>(nStmLen);
-        rIStm.ReadBytes(pData->data(), pData->size());
+        BinaryDataContainer aData(rIStm, nStmLen);
 
         if (!rIStm.GetError())
         {
-            maDataContainer = BinaryDataContainer(std::move(pData));
+            maDataContainer = aData;
         }
     }
 }

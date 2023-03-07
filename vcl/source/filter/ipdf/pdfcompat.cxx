@@ -99,14 +99,12 @@ BinaryDataContainer createBinaryDataContainer(SvStream& rStream)
 
     const sal_uInt32 nStreamLength = aMemoryStream.TellEnd();
 
-    auto aPdfData = std::make_unique<std::vector<sal_uInt8>>(nStreamLength);
-
     aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
-    aMemoryStream.ReadBytes(aPdfData->data(), aPdfData->size());
+    BinaryDataContainer aPdfData(aMemoryStream, nStreamLength);
     if (aMemoryStream.GetError())
         return {};
 
-    return { std::move(aPdfData) };
+    return aPdfData;
 }
 
 } // end vcl::filter::ipdf namespace
