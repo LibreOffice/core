@@ -449,8 +449,12 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
             rRect.Left() + rRect.GetWidth() / 2 + PAINT_OFFSET;
         // draw position
         Point aPnt = rRect.TopLeft();
-        aPnt.setY( aItemPos.Y() );
         aPnt.AdjustX(PAINT_OFFSET );
+        // vertically centered
+        const tools::Long nSizePosY =
+            (rRect.GetHeight() - pImpl->aPosImage.GetSizePixel().Height()) / 2;
+        aPnt.AdjustY( nSizePosY );
+
         pDev->DrawImage( aPnt, pImpl->aPosImage );
         aPnt.AdjustX(pImpl->aPosImage.GetSizePixel().Width() );
         aPnt.AdjustX(PAINT_OFFSET );
