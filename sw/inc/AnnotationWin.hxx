@@ -82,7 +82,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         sal_uInt32 CalcParent();
         void       InitAnswer(OutlinerParaObject const & rText);
 
-        bool IsProtected() const;
+        bool IsReadOnlyOrProtected() const;
 
         void SetSize( const Size& rNewSize );
         void SetPosSizePixelRect( tools::Long nX,

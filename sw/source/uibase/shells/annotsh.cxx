@@ -1247,7 +1247,7 @@ void SwAnnotationShell::GetNoteState(SfxItemSet &rSet)
 
         if (pPostItMgr && pPostItMgr->HasActiveSidebarWin())
         {
-            if ( (pPostItMgr->GetActiveSidebarWin()->IsProtected()) &&
+            if ( (pPostItMgr->GetActiveSidebarWin()->IsReadOnlyOrProtected()) &&
                     ( (nSlotId==FN_DELETE_COMMENT) || (nSlotId==FN_REPLY) ) )
                 rSet.DisableItem( nWhich );
         }

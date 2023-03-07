@@ -325,7 +325,7 @@ bool SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
         /// HACK: need to switch off processing of Undo/Redo in Outliner
         if ( !( (nKey == KEY_Z || nKey == KEY_Y) && rKeyCode.IsMod1()) )
         {
-            bool bIsProtected = mrSidebarWin.IsProtected();
+            bool bIsProtected = mrSidebarWin.IsReadOnlyOrProtected();
             if ( !bIsProtected || !EditEngine::DoesKeyChangeText(rKeyEvt) )
             {
                 EditView* pEditView = GetEditView();
@@ -416,7 +416,7 @@ bool SidebarTextControl::Command( const CommandEvent& rCEvt )
     {
         if (IsMouseCaptured())
             ReleaseMouse();
-        if ( !mrSidebarWin.IsProtected() &&
+        if ( !mrSidebarWin.IsReadOnlyOrProtected() &&
              pEditView &&
              pEditView->IsWrongSpelledWordAtPos( rCEvt.GetMousePosPixel(), true ))
         {

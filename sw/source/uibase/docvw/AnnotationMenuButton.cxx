@@ -66,13 +66,9 @@ IMPL_LINK_NOARG(SwAnnotationWin, ToggleHdl, weld::Toggleable&, void)
     if (!mxMenuButton->get_active())
         return;
 
-    bool bReplyVis = true;
-
     bool bReadOnly = IsReadOnly();
     if (bReadOnly)
     {
-        mxMenuButton->set_item_visible("reply", false);
-        bReplyVis = false;
         mxMenuButton->set_item_visible("resolve", false);
         mxMenuButton->set_item_visible("unresolve", false);
         mxMenuButton->set_item_visible("resolvethread", false);
@@ -85,7 +81,7 @@ IMPL_LINK_NOARG(SwAnnotationWin, ToggleHdl, weld::Toggleable&, void)
         mxMenuButton->set_item_visible("unresolve", IsResolved());
         mxMenuButton->set_item_visible("resolvethread", !IsThreadResolved());
         mxMenuButton->set_item_visible("unresolvethread", IsThreadResolved());
-        mxMenuButton->set_item_visible("delete", !IsProtected());
+        mxMenuButton->set_item_visible("delete", !IsReadOnlyOrProtected());
     }
 
     mxMenuButton->set_item_visible("deletethread", !bReadOnly);
@@ -93,7 +89,10 @@ IMPL_LINK_NOARG(SwAnnotationWin, ToggleHdl, weld::Toggleable&, void)
     mxMenuButton->set_item_visible("deleteall", !bReadOnly);
     mxMenuButton->set_item_visible("formatall", !bReadOnly);
 
-    if (IsProtected())
+    bool bReplyVis = true;
+
+    // No answer possible if this note is in a protected section.
+    if (IsReadOnlyOrProtected())
     {
         mxMenuButton->set_item_visible("reply", false);
         bReplyVis = false;
@@ -109,10 +108,10 @@ IMPL_LINK_NOARG(SwAnnotationWin, ToggleHdl, weld::Toggleable&, void)
                 sAuthor = SwResId(STR_REDLINE_UNKNOWN_AUTHOR);
             }
         }
-        // do not allow to reply to ourself and no answer possible if this note is in a protected section
+        // do not allow to reply to ourself
         bReplyVis = sAuthor != GetAuthor();
-        mxMenuButton->set_item_visible("reply", bReplyVis);
     }
+    mxMenuButton->set_item_visible("reply", bReplyVis);
     mxMenuButton->set_item_visible("sep1", bReplyVis);
 }
 

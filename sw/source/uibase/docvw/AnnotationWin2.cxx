@@ -1067,7 +1067,7 @@ void SwAnnotationWin::DeactivatePostIt()
     if ( !Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
         GetOutlinerView()->SetBackgroundColor(COL_TRANSPARENT);
 
-    if (!mnDeleteEventId && !IsProtected() && mpOutliner->GetEditEngine().GetText().isEmpty())
+    if (!mnDeleteEventId && !IsReadOnlyOrProtected() && mpOutliner->GetEditEngine().GetText().isEmpty())
     {
         mnDeleteEventId = Application::PostUserEvent( LINK( this, SwAnnotationWin, DeleteHdl), nullptr, true );
     }

@@ -503,7 +503,7 @@ SvxLanguageItem SwAnnotationWin::GetLanguage() const
     return SvxLanguageItem(mpField->GetLanguage(),nLangWhichId);
 }
 
-bool SwAnnotationWin::IsProtected() const
+bool SwAnnotationWin::IsReadOnlyOrProtected() const
 {
     return mbReadonly ||
            GetLayoutStatus() == SwPostItHelper::DELETED ||
