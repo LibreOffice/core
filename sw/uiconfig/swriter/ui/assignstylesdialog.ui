@@ -194,7 +194,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="receives-default">True</property>
-                            <property name="tooltip-text" translatable="yes" context="assignstylesdialog|left|tooltip_text">Promote outline level</property>
+                            <property name="tooltip-text" translatable="yes" context="assignstylesdialog|left|tooltip_text">Promote index level</property>
                             <property name="image">image1</property>
                             <property name="always-show-image">True</property>
                             <child internal-child="accessible">
@@ -215,7 +215,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="receives-default">True</property>
-                            <property name="tooltip-text" translatable="yes" context="assignstylesdialog|right|tooltip_text">Demote outline level</property>
+                            <property name="tooltip-text" translatable="yes" context="assignstylesdialog|right|tooltip_text">Demote index level</property>
                             <property name="image">image2</property>
                             <property name="always-show-image">True</property>
                             <child internal-child="accessible">
