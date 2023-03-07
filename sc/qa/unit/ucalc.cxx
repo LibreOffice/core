@@ -5913,6 +5913,22 @@ CPPUNIT_TEST_FIXTURE(Test, testColumnFindEditCells)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf94079)
+{
+    CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
+
+    m_pDoc->SetString(ScAddress(0,0,0), "=NOW()");                                // A1
+    m_pDoc->SetString(ScAddress(0,1,0), "=NETWORKDAYS(NOW();NOW()+6;A1)");        // A2
+    double aValue = m_pDoc->GetValue(0,1,0);
+    CPPUNIT_ASSERT_EQUAL(4.0, aValue);
+
+    clearRange(m_pDoc, ScAddress(0,0,0));          // A1
+    m_pDoc->SetString(ScAddress(0,1,0), "=NETWORKDAYS(NOW();NOW()+6;A1)");        // A2
+    aValue = m_pDoc->GetValue(0,1,0);
+    CPPUNIT_ASSERT_EQUAL(5.0, aValue);
+
+    m_pDoc->DeleteTab(0);
+}
 
 CPPUNIT_TEST_FIXTURE(Test, testSetFormula)
 {
