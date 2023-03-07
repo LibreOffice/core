@@ -6110,7 +6110,6 @@ include/toolkit/helper/accessiblefactory.hxx
 include/toolkit/helper/convert.hxx
 include/toolkit/helper/listenermultiplexer.hxx
 include/toolkit/helper/macros.hxx
-include/toolkit/helper/mutexandbroadcasthelper.hxx
 include/toolkit/helper/property.hxx
 include/toolkit/helper/vclunohelper.hxx
 include/tools/b3dtrans.hxx

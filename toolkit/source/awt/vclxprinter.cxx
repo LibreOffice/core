@@ -47,7 +47,7 @@ IMPLEMENT_FORWARD_XINTERFACE2( VCLXPrinterPropertySet, VCLXPrinterPropertySet_Ba
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXPrinterPropertySet, VCLXPrinterPropertySet_Base, ::cppu::OPropertySetHelper )
 
 VCLXPrinterPropertySet::VCLXPrinterPropertySet( const OUString& rPrinterName )
-    : OPropertySetHelper( BrdcstHelper )
+    : OPropertySetHelper( m_aBHelper )
     , mxPrinter(VclPtrInstance< Printer >(rPrinterName))
 {
     SolarMutexGuard aSolarGuard;
@@ -92,7 +92,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > VCLXPrinterPropertySet::getP
 
 sal_Bool VCLXPrinterPropertySet::convertFastPropertyValue( css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue )
 {
-    ::osl::MutexGuard aGuard( Mutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     bool bDifferent = false;
     switch ( nHandle )
@@ -129,7 +129,7 @@ sal_Bool VCLXPrinterPropertySet::convertFastPropertyValue( css::uno::Any & rConv
 
 void VCLXPrinterPropertySet::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue )
 {
-    ::osl::MutexGuard aGuard( Mutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     switch( nHandle )
     {
@@ -152,7 +152,7 @@ void VCLXPrinterPropertySet::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle
 
 void VCLXPrinterPropertySet::getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const
 {
-    ::osl::MutexGuard aGuard( const_cast<VCLXPrinterPropertySet*>(this)->Mutex );
+    ::osl::MutexGuard aGuard( const_cast<VCLXPrinterPropertySet*>(this)->m_aMutex );
 
     switch( nHandle )
     {
@@ -172,7 +172,7 @@ void VCLXPrinterPropertySet::getFastPropertyValue( css::uno::Any& rValue, sal_In
 // css::awt::XPrinterPropertySet
 void VCLXPrinterPropertySet::setHorizontal( sal_Bool bHorizontal )
 {
-    ::osl::MutexGuard aGuard( Mutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     css::uno::Any aValue;
     aValue <<= bHorizontal;
@@ -181,7 +181,7 @@ void VCLXPrinterPropertySet::setHorizontal( sal_Bool bHorizontal )
 
 css::uno::Sequence< OUString > VCLXPrinterPropertySet::getFormDescriptions(  )
 {
-    ::osl::MutexGuard aGuard( Mutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     const sal_uInt16 nPaperBinCount = GetPrinter()->GetPaperBinCount();
     css::uno::Sequence< OUString > aDescriptions( nPaperBinCount );
@@ -198,7 +198,7 @@ css::uno::Sequence< OUString > VCLXPrinterPropertySet::getFormDescriptions(  )
 
 void VCLXPrinterPropertySet::selectForm( const OUString& rFormDescription )
 {
-    ::osl::MutexGuard aGuard( Mutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     sal_uInt16 nPaperBin = sal::static_int_cast< sal_uInt16 >(
         o3tl::toInt32(o3tl::getToken(rFormDescription, 3, ';' )));
@@ -207,7 +207,7 @@ void VCLXPrinterPropertySet::selectForm( const OUString& rFormDescription )
 
 css::uno::Sequence< sal_Int8 > VCLXPrinterPropertySet::getBinarySetup(  )
 {
-    ::osl::MutexGuard aGuard( Mutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     SvMemoryStream aMem;
     aMem.WriteUInt32( BINARYSETUPMARKER );
@@ -217,7 +217,7 @@ css::uno::Sequence< sal_Int8 > VCLXPrinterPropertySet::getBinarySetup(  )
 
 void VCLXPrinterPropertySet::setBinarySetup( const css::uno::Sequence< sal_Int8 >& data )
 {
-    ::osl::MutexGuard aGuard( Mutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     SvMemoryStream aMem( const_cast<signed char*>(data.getConstArray()), data.getLength(), StreamMode::READ );
     sal_uInt32 nMarker;
@@ -246,7 +246,7 @@ VCLXPrinter::~VCLXPrinter()
 
 sal_Bool VCLXPrinter::start( const OUString& /*rJobName*/, sal_Int16 /*nCopies*/, sal_Bool /*bCollate*/ )
 {
-    ::osl::MutexGuard aGuard( Mutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     if (mxPrinter)
     {
@@ -259,7 +259,7 @@ sal_Bool VCLXPrinter::start( const OUString& /*rJobName*/, sal_Int16 /*nCopies*/
 
 void VCLXPrinter::end(  )
 {
-    ::osl::MutexGuard aGuard( Mutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     if (mxListener)
     {
@@ -270,14 +270,14 @@ void VCLXPrinter::end(  )
 
 void VCLXPrinter::terminate(  )
 {
-    ::osl::MutexGuard aGuard( Mutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     mxListener.reset();
 }
 
 css::uno::Reference< css::awt::XDevice > VCLXPrinter::startPage(  )
 {
-    ::osl::MutexGuard aGuard( Mutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     if (mxListener)
     {
@@ -288,7 +288,7 @@ css::uno::Reference< css::awt::XDevice > VCLXPrinter::startPage(  )
 
 void VCLXPrinter::endPage(  )
 {
-    ::osl::MutexGuard aGuard( Mutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     if (mxListener)
     {
@@ -313,7 +313,7 @@ VCLXInfoPrinter::~VCLXInfoPrinter()
 // css::awt::XInfoPrinter
 css::uno::Reference< css::awt::XDevice > VCLXInfoPrinter::createDevice(  )
 {
-    ::osl::MutexGuard aGuard( Mutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     return GetDevice();
 }

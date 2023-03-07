@@ -110,7 +110,7 @@ static void lcl_ImplMergeFontProperty( FontDescriptor& rFD, sal_uInt16 nPropId, 
 
 UnoControlModel::UnoControlModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel_Base()
-    ,OPropertySetHelper( BrdcstHelper )
+    ,OPropertySetHelper( m_aBHelper )
     ,maDisposeListeners( *this )
     ,m_xContext( rxContext )
 {
@@ -120,7 +120,7 @@ UnoControlModel::UnoControlModel( const Reference< XComponentContext >& rxContex
 
 UnoControlModel::UnoControlModel( const UnoControlModel& rModel )
     : UnoControlModel_Base()
-    , OPropertySetHelper( BrdcstHelper )
+    , OPropertySetHelper( m_aBHelper )
     , maData( rModel.maData )
     , maDisposeListeners( *this )
     , m_xContext( rModel.m_xContext )
@@ -442,7 +442,7 @@ void UnoControlModel::dispose(  )
     aEvt.Source = static_cast<css::uno::XAggregation*>(static_cast<cppu::OWeakAggObject*>(this));
     maDisposeListeners.disposeAndClear( aEvt );
 
-    BrdcstHelper.aLC.disposeAndClear( aEvt );
+    m_aBHelper.aLC.disposeAndClear( aEvt );
 
     // let the property set helper notify our property listeners
     OPropertySetHelper::disposing();

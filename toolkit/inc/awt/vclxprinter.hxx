@@ -25,7 +25,7 @@
 #include <com/sun/star/awt/XInfoPrinter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <toolkit/helper/mutexandbroadcasthelper.hxx>
+#include <comphelper/broadcasthelper.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
@@ -53,7 +53,7 @@ class Printer;
 typedef ::cppu::WeakImplHelper <   css::awt::XPrinterPropertySet
                                 >   VCLXPrinterPropertySet_Base;
 class VCLXPrinterPropertySet    :public VCLXPrinterPropertySet_Base
-                                ,public MutexAndBroadcastHelper
+                                ,public comphelper::OMutexAndBroadcastHelper
                                 ,public ::cppu::OPropertySetHelper
 {
 protected:

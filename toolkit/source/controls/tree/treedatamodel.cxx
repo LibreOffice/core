@@ -26,7 +26,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/safeint.hxx>
 #include <rtl/ref.hxx>
-#include <toolkit/helper/mutexandbroadcasthelper.hxx>
+#include <comphelper/broadcasthelper.hxx>
 #include <mutex>
 #include <utility>
 
@@ -46,7 +46,7 @@ class MutableTreeDataModel;
 typedef std::vector< rtl::Reference< MutableTreeNode > > TreeNodeVector;
 
 class MutableTreeDataModel : public ::cppu::WeakAggImplHelper2< XMutableTreeDataModel, XServiceInfo >,
-                             public MutexAndBroadcastHelper
+                             public comphelper::OMutexAndBroadcastHelper
 {
 public:
     MutableTreeDataModel();
@@ -139,7 +139,7 @@ MutableTreeDataModel::MutableTreeDataModel()
 
 void MutableTreeDataModel::broadcast( broadcast_type eType, const Reference< XTreeNode >& xParentNode, const Reference< XTreeNode >& rNode )
 {
-    ::cppu::OInterfaceContainerHelper* pIter = BrdcstHelper.getContainer( cppu::UnoType<XTreeDataModelListener>::get() );
+    ::cppu::OInterfaceContainerHelper* pIter = m_aBHelper.getContainer( cppu::UnoType<XTreeDataModelListener>::get() );
     if( !pIter )
         return;
 
@@ -201,12 +201,12 @@ Reference< XTreeNode > SAL_CALL MutableTreeDataModel::getRoot(  )
 
 void SAL_CALL MutableTreeDataModel::addTreeDataModelListener( const Reference< XTreeDataModelListener >& xListener )
 {
-    BrdcstHelper.addListener( cppu::UnoType<XTreeDataModelListener>::get(), xListener );
+    m_aBHelper.addListener( cppu::UnoType<XTreeDataModelListener>::get(), xListener );
 }
 
 void SAL_CALL MutableTreeDataModel::removeTreeDataModelListener( const Reference< XTreeDataModelListener >& xListener )
 {
-    BrdcstHelper.removeListener( cppu::UnoType<XTreeDataModelListener>::get(), xListener );
+    m_aBHelper.removeListener( cppu::UnoType<XTreeDataModelListener>::get(), xListener );
 }
 
 void SAL_CALL MutableTreeDataModel::dispose()
@@ -218,18 +218,18 @@ void SAL_CALL MutableTreeDataModel::dispose()
         mbDisposed = true;
         css::lang::EventObject aEvent;
         aEvent.Source.set( static_cast< ::cppu::OWeakObject* >( this ) );
-        BrdcstHelper.aLC.disposeAndClear( aEvent );
+        m_aBHelper.aLC.disposeAndClear( aEvent );
     }
 }
 
 void SAL_CALL MutableTreeDataModel::addEventListener( const Reference< XEventListener >& xListener )
 {
-    BrdcstHelper.addListener( cppu::UnoType<XEventListener>::get(), xListener );
+    m_aBHelper.addListener( cppu::UnoType<XEventListener>::get(), xListener );
 }
 
 void SAL_CALL MutableTreeDataModel::removeEventListener( const Reference< XEventListener >& xListener )
 {
-    BrdcstHelper.removeListener( cppu::UnoType<XEventListener>::get(), xListener );
+    m_aBHelper.removeListener( cppu::UnoType<XEventListener>::get(), xListener );
 }
 
 OUString SAL_CALL MutableTreeDataModel::getImplementationName(  )

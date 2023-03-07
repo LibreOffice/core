@@ -419,7 +419,7 @@ namespace toolkit {
         maImageSets.insert( maImageSets.begin() + i_index, i_imageURLs );
 
         // listener notification
-        lcl_notify( aGuard, BrdcstHelper, &XContainerListener::elementInserted, i_index, i_imageURLs, *this );
+        lcl_notify( aGuard, m_aBHelper, &XContainerListener::elementInserted, i_index, i_imageURLs, *this );
     }
 
 
@@ -436,7 +436,7 @@ namespace toolkit {
         maImageSets[ i_index ] = i_imageURLs;
 
         // listener notification
-        lcl_notify( aGuard, BrdcstHelper, &XContainerListener::elementReplaced, i_index, i_imageURLs, *this );
+        lcl_notify( aGuard, m_aBHelper, &XContainerListener::elementReplaced, i_index, i_imageURLs, *this );
     }
 
 
@@ -455,19 +455,19 @@ namespace toolkit {
         maImageSets.erase( removalPos );
 
         // listener notification
-        lcl_notify( aGuard, BrdcstHelper, &XContainerListener::elementRemoved, i_index, aRemovedElement, *this );
+        lcl_notify( aGuard, m_aBHelper, &XContainerListener::elementRemoved, i_index, aRemovedElement, *this );
     }
 
 
     void SAL_CALL AnimatedImagesControlModel::addContainerListener( const Reference< XContainerListener >& i_listener )
     {
-        BrdcstHelper.addListener( cppu::UnoType<XContainerListener>::get(), i_listener );
+        m_aBHelper.addListener( cppu::UnoType<XContainerListener>::get(), i_listener );
     }
 
 
     void SAL_CALL AnimatedImagesControlModel::removeContainerListener( const Reference< XContainerListener >& i_listener )
     {
-        BrdcstHelper.removeListener( cppu::UnoType<XContainerListener>::get(), i_listener );
+        m_aBHelper.removeListener( cppu::UnoType<XContainerListener>::get(), i_listener );
     }
 
 }

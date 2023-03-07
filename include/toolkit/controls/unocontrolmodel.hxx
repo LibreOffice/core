@@ -28,7 +28,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <cppuhelper/weakagg.hxx>
 
-#include <toolkit/helper/mutexandbroadcasthelper.hxx>
+#include <comphelper/broadcasthelper.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 
 #include <cppuhelper/propshlp.hxx>
@@ -55,7 +55,7 @@ typedef ::cppu::WeakAggImplHelper6  <   css::awt::XControlModel
                                     >   UnoControlModel_Base;
 
 class UnoControlModel :public UnoControlModel_Base
-                                        ,public MutexAndBroadcastHelper
+                                        ,public comphelper::OMutexAndBroadcastHelper
                                         ,public ::cppu::OPropertySetHelper
 {
 private:
@@ -105,8 +105,7 @@ protected:
 #ifdef _MSC_VER
     UnoControlModel() //do not use! needed by MSVC at compile time to satisfy WeakAggImplHelper7
         : UnoControlModel_Base()
-        , MutexAndBroadcastHelper()
-        , OPropertySetHelper( BrdcstHelper )
+        , OPropertySetHelper( m_aBHelper )
         , maDisposeListeners( *this )
         , m_xContext( css::uno::Reference< css::uno::XComponentContext >() )
     {
