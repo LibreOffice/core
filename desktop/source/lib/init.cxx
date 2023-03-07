@@ -1114,12 +1114,6 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
                           const int nCanvasWidth, const int nCanvasHeight,
                           const int nTilePosX, const int nTilePosY,
                           const int nTileWidth, const int nTileHeight);
-static void doc_paintThumbnail(LibreOfficeKitDocument* pThis,
-                               unsigned char* pBuffer,
-                               int bufferWidth,
-                               int bufferHeight,
-                               int width,
-                               const char* pURL);
 #ifdef IOS
 static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
                                      void* rCGContext,
@@ -1393,7 +1387,6 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
         m_pDocumentClass->setPartMode = doc_setPartMode;
         m_pDocumentClass->getEditMode = doc_getEditMode;
         m_pDocumentClass->paintTile = doc_paintTile;
-        m_pDocumentClass->paintThumbnail = doc_paintThumbnail;
 #ifdef IOS
         m_pDocumentClass->paintTileToCGContext = doc_paintTileToCGContext;
 #endif
@@ -4014,33 +4007,6 @@ static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
 }
 
 #endif
-
-static void doc_paintThumbnail(LibreOfficeKitDocument* pThis,
-                               unsigned char* pBuffer,
-                               int bufferWidth,
-                               int bufferHeight,
-                               int width,
-                               const char* pURL)
-{
-#if 0
-    constexpr float zoom = 0.5f;
-    constexpr int pixelWidth = 120;
-    constexpr int pixelHeight = 120;
-    constexpr int pixelWidthTwips = pixelWidth * 15 / zoom;
-    constexpr int pixelHeightTwips = pixelHeight * 15 / zoom;
-    constexpr int offsetXTwips = 15 * 15; // start 15 px/twips before the target to get a clearer thumbnail
-    constexpr int offsetYTwips = 15 * 15;
-
-    doc_paintTile(pThis, pBuffer, pixelWidth, pixelHeight, x-offsetXTwips, y-offsetYTwips, pixelWidthTwips, pixelHeightTwips);
-#else
-    (void) pThis;
-    (void) pBuffer;
-    (void) bufferWidth;
-    (void) bufferHeight;
-    (void) width;
-    (void) pURL;
-#endif
-}
 
 static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               unsigned char* pBuffer,

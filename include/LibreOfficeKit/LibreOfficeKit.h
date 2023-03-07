@@ -501,14 +501,6 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::setViewTimezone().
     void (*setViewTimezone) (LibreOfficeKitDocument* pThis, int nId, const char* timezone);
 
-    /// @see lok::Document::paintThumbnail().
-    void (*paintThumbnail) (LibreOfficeKitDocument* pThis,
-                            unsigned char* pBuffer,
-                            int bufferWidth,
-                            int bufferHeight,
-                            int width,
-                            const char* pURL);
-
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

@@ -3635,11 +3635,9 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(67), offsetof(struct _LibreOfficeKitDocumentClass, getEditMode));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(68),
                          offsetof(struct _LibreOfficeKitDocumentClass, setViewTimezone));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(69), offsetof(struct _LibreOfficeKitDocumentClass, paintThumbnail));
-
 
     // As above
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(70), sizeof(struct _LibreOfficeKitDocumentClass));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(69), sizeof(struct _LibreOfficeKitDocumentClass));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
