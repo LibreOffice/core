@@ -602,6 +602,18 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 }
                 break;
 
+            case vcl::PDFWriter::NonStructElement:
+                if (pFrame->IsHeaderFrame() || pFrame->IsFooterFrame())
+                {
+                    // ISO 14289-1:2014, Clause: 7.8
+                    mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Type, vcl::PDFWriter::Pagination);
+                    mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Subtype,
+                        pFrame->IsHeaderFrame()
+                           ? vcl::PDFWriter::Header
+                           : vcl::PDFWriter::Footer);
+                }
+            break;
+
             default :
                 break;
         }
