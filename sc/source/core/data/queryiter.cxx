@@ -702,11 +702,28 @@ bool ScQueryCellIterator< accessType >::FindEqualOrSortedLastInRange( SCCOL& nFo
         // First equal entry or last smaller than (greater than) entry.
         PositionType aPosSave;
         bool bNext = false;
+        SCSIZE nEntries = maParam.GetEntryCount();
+        std::vector<SCCOL> aFoundFieldPositions(nEntries);
         do
         {
             nFoundCol = GetCol();
             nFoundRow = GetRow();
             aPosSave = maCurPos;
+            // If we might need to rewind below, save the position to rewind to
+            // rather than calculate it as a diff between nCol and nFoundCol as
+            // PerformQuery can return early if nCol is greater than
+            // maParam.nCol2 or AllocatedColumns
+            if (maParam.mbRangeLookup && bAdvanceQuery)
+            {
+                for (SCSIZE j=0; j < nEntries; ++j)
+                {
+                    ScQueryEntry& rEntry = maParam.GetEntry( j );
+                    if (rEntry.bDoQuery)
+                        aFoundFieldPositions[j] = maParam.GetEntry(j).nField;
+                    else
+                        break;  // for
+                }
+            }
             if (IsEqualConditionFulfilled())
                 break;
             bNext = GetNext();
@@ -719,7 +736,7 @@ bool ScQueryCellIterator< accessType >::FindEqualOrSortedLastInRange( SCCOL& nFo
         {
             // Step back to last in range and adjust position markers for
             // GetNumberFormat() or similar.
-            SCCOL nColDiff = nCol - nFoundCol;
+            bool bColDiff = nCol != nFoundCol;
             nCol = nFoundCol;
             nRow = nFoundRow;
             maCurPos = aPosSave;
@@ -730,20 +747,15 @@ bool ScQueryCellIterator< accessType >::FindEqualOrSortedLastInRange( SCCOL& nFo
                 // if query is ByString and vice versa.
                 maParam.mbRangeLookup = false;
                 // Step back the last field advance if GetNext() did one.
-                if (bAdvanceQuery && nColDiff)
+                if (bAdvanceQuery && bColDiff)
                 {
-                    SCSIZE nEntries = maParam.GetEntryCount();
                     for (SCSIZE j=0; j < nEntries; ++j)
                     {
                         ScQueryEntry& rEntry = maParam.GetEntry( j );
                         if (rEntry.bDoQuery)
                         {
-                            if (rEntry.nField - nColDiff >= 0)
-                                rEntry.nField -= nColDiff;
-                            else
-                            {
-                                assert(!"FindEqualOrSortedLastInRange: rEntry.nField -= nColDiff < 0");
-                            }
+                            rEntry.nField = aFoundFieldPositions[j];
+                            assert(rEntry.nField >= 0);
                         }
                         else
                             break;  // for
