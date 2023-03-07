@@ -906,6 +906,7 @@ inline bool ImpSvNumberInputScan::GetTime100SecSep( std::u16string_view rString,
  * Read a sign including brackets
  * '+'   =>  1
  * '-'   => -1
+ * u'−'   => -1
  *  '('   => -1, bNegCheck = 1
  * else =>  0
  */
@@ -921,6 +922,8 @@ int ImpSvNumberInputScan::GetSign( std::u16string_view rString, sal_Int32& nPos 
             bNegCheck = true;
             [[fallthrough]];
         case '-':
+        // tdf#117037 - unicode minus (0x2212)
+        case u'−':
             nPos++;
             return -1;
         default:
