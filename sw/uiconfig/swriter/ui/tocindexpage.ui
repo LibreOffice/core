@@ -465,16 +465,17 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="uselevel">
-                        <property name="label" translatable="yes" context="tocindexpage|uselevel">Use level from source chapter</property>
+                        <property name="label" translatable="yes" context="tocindexpage|uselevel">Use outline level</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="margin-start">12</property>
                         <property name="use-underline">True</property>
                         <property name="draw-indicator">True</property>
+                        <property name="tooltip-text" translatable="yes" context="tocindexpage|uselevel|tooltip_text">Assign index level according to the outline level of the heading immediately prior to the object.</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="uselevel-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|uselevel">Indents table, graphic, frame, and OLE object index entries according their place in the chapter heading hierarchy.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|uselevel">Assign index level to table, graphic, frame, and OLE objects according to the outline level of the heading immediately prior to the object. For example, if “Tables” is selected, then each table in the document is assigned an index level that corresponds to the outline level of the first heading before the table (i.e., a table is assigned index level 3 if it follows a heading with outline level 3). With default settings, larger index levels are indented more in the Table of Contents. Use the “Entries” tab to customize the formatting and indentation for each index level.</property>
                           </object>
                         </child>
                       </object>
