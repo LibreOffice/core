@@ -642,6 +642,32 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf114773)
                          aIndexString);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf104315)
+{
+    createSwDoc("tdf104315.odt");
+
+    uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes = xIndexSupplier->getDocumentIndexes();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexes->getCount());
+    uno::Reference<text::XDocumentIndex> xTOCIndex(xIndexes->getByIndex(0), uno::UNO_QUERY);
+
+    xTOCIndex->update();
+    uno::Reference<text::XTextRange> xTextRange = xTOCIndex->getAnchor();
+    uno::Reference<text::XText> xText = xTextRange->getText();
+    uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
+    xTextCursor->gotoRange(xTextRange->getStart(), false);
+    xTextCursor->gotoRange(xTextRange->getEnd(), true);
+    OUString aIndexString(convertLineEnd(xTextCursor->getString(), LineEnd::LINEEND_LF));
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: This is a headlinex  1
+    // - Actual  : This is a headlinx   1
+    CPPUNIT_ASSERT_EQUAL(OUString("Table of contents\n"
+                                  "This is a headlinex\t1\n"
+                                  "This is another headlinex\t1"),
+                         aIndexString);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135412)
 {
     createSwDoc("tdf135412.docx");
