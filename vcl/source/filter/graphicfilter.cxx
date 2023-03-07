@@ -1054,18 +1054,18 @@ ErrCode GraphicFilter::readSVG(SvStream & rStream, Graphic & rGraphic, GfxLinkTy
 
             if (!rStream.GetError() && nMemoryLength >= 0)
             {
-                VectorGraphicDataArray aNewData(nMemoryLength);
+                auto aNewData = std::make_unique<std::vector<sal_uInt8>>(nMemoryLength);
                 aMemStream.Seek(STREAM_SEEK_TO_BEGIN);
-                aMemStream.ReadBytes(aNewData.getArray(), nMemoryLength);
+                aMemStream.ReadBytes(aNewData->data(), aNewData->size());
 
                 // Make a uncompressed copy for GfxLink
                 rGraphicContentSize = nMemoryLength;
                 rpGraphicContent.reset(new sal_uInt8[rGraphicContentSize]);
-                std::copy(std::cbegin(aNewData), std::cend(aNewData), rpGraphicContent.get());
+                std::copy(std::cbegin(*aNewData), std::cend(*aNewData), rpGraphicContent.get());
 
                 if (!aMemStream.GetError())
                 {
-                    BinaryDataContainer aDataContainer(reinterpret_cast<const sal_uInt8*>(aNewData.getConstArray()), aNewData.getLength());
+                    BinaryDataContainer aDataContainer(std::move(aNewData));
                     auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aDataContainer, VectorGraphicDataType::Svg);
                     rGraphic = Graphic(aVectorGraphicDataPtr);
                     bOkay = true;
@@ -1074,12 +1074,12 @@ ErrCode GraphicFilter::readSVG(SvStream & rStream, Graphic & rGraphic, GfxLinkTy
         }
         else
         {
-            VectorGraphicDataArray aNewData(nStreamLength);
-            rStream.ReadBytes(aNewData.getArray(), nStreamLength);
+            auto aNewData = std::make_unique<std::vector<sal_uInt8>>(nStreamLength);
+            rStream.ReadBytes(aNewData->data(), aNewData->size());
 
             if (!rStream.GetError())
             {
-                BinaryDataContainer aDataContainer(reinterpret_cast<const sal_uInt8*>(aNewData.getConstArray()), aNewData.getLength());
+                BinaryDataContainer aDataContainer(std::move(aNewData));
                 auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aDataContainer, VectorGraphicDataType::Svg);
                 rGraphic = Graphic(aVectorGraphicDataPtr);
                 bOkay = true;
@@ -1137,12 +1137,12 @@ ErrCode GraphicFilter::readWMF_EMF(SvStream & rStream, Graphic & rGraphic, GfxLi
             aNewStream = &aMemStream;
         }
     }
-    VectorGraphicDataArray aNewData(nStreamLength);
-    aNewStream->ReadBytes(aNewData.getArray(), nStreamLength);
+    auto aNewData = std::make_unique<std::vector<sal_uInt8>>(nStreamLength);
+    aNewStream->ReadBytes(aNewData->data(), aNewData->size());
     if (!aNewStream->GetError())
     {
         const VectorGraphicDataType aDataType(eType);
-        BinaryDataContainer aDataContainer(reinterpret_cast<const sal_uInt8*>(aNewData.getConstArray()), aNewData.getLength());
+        BinaryDataContainer aDataContainer(std::move(aNewData));
 
         auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aDataContainer, aDataType);
 

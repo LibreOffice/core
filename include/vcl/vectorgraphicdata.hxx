@@ -32,8 +32,6 @@
 
 namespace com::sun::star::graphic { class XPrimitive2D; }
 
-typedef css::uno::Sequence<sal_Int8> VectorGraphicDataArray;
-
 
 // helper to convert any Primitive2DSequence to a good quality BitmapEx,
 // using default parameters and graphic::XPrimitive2DRenderer
