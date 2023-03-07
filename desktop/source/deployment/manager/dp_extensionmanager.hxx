@@ -28,7 +28,7 @@
 #include <com/sun/star/deployment/XPackageManagerFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <vector>
 #include <unordered_map>
 
@@ -146,7 +146,7 @@ private:
     css::uno::Reference<css::deployment::XPackageManagerFactory> m_xPackageManagerFactory;
 
     //only to be used within addExtension
-    ::osl::Mutex m_addMutex;
+    std::mutex m_addMutex;
     /* contains the names of all repositories (except tmp) in order of there
        priority. That is, the first element is "user" followed by "shared" and
        then "bundled"
