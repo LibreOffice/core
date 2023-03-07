@@ -303,7 +303,7 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
        however we need a slightly different coding scheme than the normal
        name encoding for field names
     */
-    const OUString& rName = (m_aContext.Version > PDFWriter::PDFVersion::PDF_1_2) ? i_rControl.Name : i_rControl.Text;
+    const OUString& rName = i_rControl.Name;
     OString aStr( OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ) );
     int nLen = aStr.getLength();
 
@@ -631,8 +631,6 @@ PDFPage::PDFPage( PDFWriterImpl* pWriter, double nPageWidth, double nPageHeight,
         default:
             m_nUserUnit = std::ceil(std::max(nPageWidth, nPageHeight) / 14400.0);
             break;
-        case PDFWriter::PDFVersion::PDF_1_2:
-        case PDFWriter::PDFVersion::PDF_1_3:
         case PDFWriter::PDFVersion::PDF_1_4:
         case PDFWriter::PDFVersion::PDF_1_5:
         case PDFWriter::PDFVersion::PDF_A_1:
@@ -1295,8 +1293,6 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
     aBuffer.append( "%PDF-" );
     switch( m_aContext.Version )
     {
-        case PDFWriter::PDFVersion::PDF_1_2: aBuffer.append( "1.2" );break;
-        case PDFWriter::PDFVersion::PDF_1_3: aBuffer.append( "1.3" );break;
         case PDFWriter::PDFVersion::PDF_A_1:
         case PDFWriter::PDFVersion::PDF_1_4: aBuffer.append( "1.4" );break;
         case PDFWriter::PDFVersion::PDF_1_5: aBuffer.append( "1.5" );break;
@@ -4687,7 +4683,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
             appendLiteralStringEncrypt( rWidget.m_aName, rWidget.m_nObject, aLine );
             aLine.append( "\n" );
         }
-        if( m_aContext.Version > PDFWriter::PDFVersion::PDF_1_2 && !rWidget.m_aDescription.isEmpty() )
+        if (!rWidget.m_aDescription.isEmpty())
         {
             // the alternate field name should be unicode able since it is
             // supposed to be used in UI
@@ -4838,12 +4834,10 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                         nFlags |= 4;
                         break;
                     case PDFWriter::XML:
-                        if( m_aContext.Version > PDFWriter::PDFVersion::PDF_1_3 )
-                            nFlags |= 32;
+                        nFlags |= 32;
                         break;
                     case PDFWriter::PDF:
-                        if( m_aContext.Version > PDFWriter::PDFVersion::PDF_1_3 )
-                            nFlags |= 256;
+                        nFlags |= 256;
                         break;
                     case PDFWriter::FDF:
                     default:
@@ -5270,7 +5264,7 @@ bool PDFWriterImpl::emitCatalog()
 
     // viewer preferences, if we had some, then emit
     if( m_aContext.HideViewerToolbar ||
-        ( m_aContext.Version > PDFWriter::PDFVersion::PDF_1_3 && !m_aContext.DocumentInfo.Title.isEmpty() && m_aContext.DisplayPDFDocumentTitle ) ||
+        (!m_aContext.DocumentInfo.Title.isEmpty() && m_aContext.DisplayPDFDocumentTitle) ||
         m_aContext.HideViewerMenubar ||
         m_aContext.HideViewerWindowControls || m_aContext.FitWindow ||
         m_aContext.CenterWindow || (m_aContext.FirstPageLeft  &&  m_aContext.PageLayout == PDFWriter::ContinuousFacing ) ||
@@ -5287,7 +5281,7 @@ bool PDFWriterImpl::emitCatalog()
             aLine.append( "/FitWindow true\n" );
         if( m_aContext.CenterWindow )
             aLine.append( "/CenterWindow true\n" );
-        if( m_aContext.Version > PDFWriter::PDFVersion::PDF_1_3 && !m_aContext.DocumentInfo.Title.isEmpty() && m_aContext.DisplayPDFDocumentTitle )
+        if (!m_aContext.DocumentInfo.Title.isEmpty() && m_aContext.DisplayPDFDocumentTitle)
             aLine.append( "/DisplayDocTitle true\n" );
         if( m_aContext.FirstPageLeft &&  m_aContext.PageLayout == PDFWriter::ContinuousFacing )
             aLine.append( "/Direction/R2L\n" );
@@ -5340,7 +5334,7 @@ bool PDFWriterImpl::emitCatalog()
             aLine.append( "\n" );
         }
     }
-    if( m_aContext.Tagged && m_aContext.Version > PDFWriter::PDFVersion::PDF_1_3 )
+    if (m_aContext.Tagged)
     {
         aLine.append( "/MarkInfo<</Marked true>>\n" );
     }
@@ -9424,12 +9418,12 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
                       "/Decode [ 1 0 ]\n" );
     }
 
-    if( ! bMask && m_aContext.Version > PDFWriter::PDFVersion::PDF_1_2 && !m_bIsPDF_A1 )
+    if (!bMask && !m_bIsPDF_A1)
     {
         if( bWriteMask )
         {
             nMaskObject = createObject();
-            if( rObject.m_aBitmap.IsAlpha() && m_aContext.Version > PDFWriter::PDFVersion::PDF_1_3 )
+            if (rObject.m_aBitmap.IsAlpha())
                 aLine.append( "/SMask " );
             else
                 aLine.append( "/Mask " );
@@ -9755,12 +9749,6 @@ sal_Int32 PDFWriterImpl::createGradient( const Gradient& rGradient, const Size& 
 void PDFWriterImpl::drawGradient( const tools::Rectangle& rRect, const Gradient& rGradient )
 {
     MARK( "drawGradient (Rectangle)" );
-
-    if( m_aContext.Version == PDFWriter::PDFVersion::PDF_1_2 )
-    {
-        drawRectangle( rRect );
-        return;
-    }
 
     sal_Int32 nGradient = createGradient( rGradient, rRect.GetSize() );
 
@@ -11507,7 +11495,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         rNewWidget.m_aValue           = rLstBox.Text;
         if( rLstBox.DropDown )
             rNewWidget.m_nFlags |= 0x00020000;
-        if( rLstBox.MultiSelect && !rLstBox.DropDown && m_aContext.Version > PDFWriter::PDFVersion::PDF_1_3 )
+        if (rLstBox.MultiSelect && !rLstBox.DropDown)
             rNewWidget.m_nFlags |= 0x00200000;
 
         createDefaultListBoxAppearance( rNewWidget, rLstBox );
@@ -11553,7 +11541,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         }
         if( rEdit.Password )
             rNewWidget.m_nFlags |= 0x00002000;
-        if( rEdit.FileSelect && m_aContext.Version > PDFWriter::PDFVersion::PDF_1_3 )
+        if (rEdit.FileSelect)
             rNewWidget.m_nFlags |= 0x00100000;
         rNewWidget.m_nMaxLen = rEdit.MaxLen;
         rNewWidget.m_nFormat = rEdit.Format;
