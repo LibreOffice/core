@@ -214,9 +214,7 @@ private:
 
     virtual std::unique_ptr<Resetter> preTest(const char* filename) override
     {
-        if (getTestName().indexOf("EmbedImages") != -1)
-            setFilterOptions("EmbedImages");
-        else if (getTestName().indexOf("XHTML") != -1)
+        if (getTestName().indexOf("XHTML") != -1)
             setFilterOptions("XHTML");
         else if (getTestName().indexOf("ReqIf") != -1)
         {
@@ -637,8 +635,12 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testEmbedImagesEnabled)
     CPPUNIT_ASSERT(imgSrc.startsWith("data:image/png;base64,"));
 }
 
-DECLARE_HTMLEXPORT_TEST(testXHTML, "hello.html")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testXHTML)
 {
+    createSwWebDoc("hello.html");
+    setFilterOptions("XHTML");
+    save(OUString::createFromAscii(mpFilter));
+
     OString aExpected("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML");
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
