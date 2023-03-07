@@ -3050,7 +3050,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf139736)
 
     // Enable PDF/UA
     uno::Sequence<beans::PropertyValue> aFilterData(
-        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) },
+                                           { "SelectPdfVersion", uno::Any(sal_Int32(17)) } }));
     aMediaDescriptor["FilterData"] <<= aFilterData;
     saveAsPDF(u"tdf139736-1.odt");
 
@@ -3081,6 +3082,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf139736)
     {
         Default,
         Artifact,
+        ArtifactProps1,
+        ArtifactProps2,
         Tagged
     } state
         = Default;
@@ -3106,6 +3109,23 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf139736)
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("unexpected nesting", Default, state);
                 state = Artifact;
                 ++nArtifacts;
+            }
+            else if (o3tl::starts_with(line, "/Artifact <<"))
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("unexpected nesting", Default, state);
+                // check header/footer properties
+                CPPUNIT_ASSERT_EQUAL(std::string_view("/Type/Pagination"), line.substr(12));
+                state = ArtifactProps1;
+                ++nArtifacts;
+            }
+            else if (state == ArtifactProps1)
+            {
+                CPPUNIT_ASSERT_EQUAL(std::string_view("/Subtype/Header"), line);
+                state = ArtifactProps2;
+            }
+            else if (state == ArtifactProps2 && line == ">> BDC")
+            {
+                state = Artifact;
             }
             else if (line == "/Standard<</MCID 0>>BDC")
             {

@@ -1830,6 +1830,8 @@ const char* PDFWriterImpl::getAttributeTag( PDFWriter::StructAttribute eAttr )
         aAttributeStrings[ PDFWriter::RowSpan ]             = "RowSpan";
         aAttributeStrings[ PDFWriter::ColSpan ]             = "ColSpan";
         aAttributeStrings[ PDFWriter::Scope ]               = "Scope";
+        aAttributeStrings[ PDFWriter::Type ]                = "Type";
+        aAttributeStrings[ PDFWriter::Subtype ]             = "Subtype";
         aAttributeStrings[ PDFWriter::LinkAnnotation ]      = "LinkAnnotation";
     }
 
@@ -1869,6 +1871,13 @@ const char* PDFWriterImpl::getAttributeValueTag( PDFWriter::StructAttributeValue
         aValueStrings[ PDFWriter::Row ]                     = "Row";
         aValueStrings[ PDFWriter::Column ]                  = "Column";
         aValueStrings[ PDFWriter::Both ]                    = "Both";
+        aValueStrings[ PDFWriter::Pagination ]              = "Pagination";
+        aValueStrings[ PDFWriter::Layout ]                  = "Layout";
+        aValueStrings[ PDFWriter::Page ]                    = "Page";
+        aValueStrings[ PDFWriter::Background ]              = "Background";
+        aValueStrings[ PDFWriter::Header ]                  = "Header";
+        aValueStrings[ PDFWriter::Footer ]                  = "Footer";
+        aValueStrings[ PDFWriter::Watermark ]               = "Watermark";
         aValueStrings[ PDFWriter::Disc ]                    = "Disc";
         aValueStrings[ PDFWriter::Circle ]                  = "Circle";
         aValueStrings[ PDFWriter::Square ]                  = "Square";
@@ -10541,8 +10550,24 @@ void PDFWriterImpl::beginStructureElementMCSeq()
              ! m_aStructure[ m_nCurrentStructElement ].m_bOpenMCSeq // already opened sequence
              )
     {
-        OString aLine = "/Artifact BMC\n";
+        OString aLine = "/Artifact ";
         writeBuffer( aLine.getStr(), aLine.getLength() );
+        // emit property list if requested
+        OStringBuffer buf;
+        for (auto const& rAttr : m_aStructure[m_nCurrentStructElement].m_aAttributes)
+        {
+            appendStructureAttributeLine(rAttr.first, rAttr.second, buf, false);
+        }
+        if (buf.isEmpty())
+        {
+            writeBuffer("BMC\n", 4);
+        }
+        else
+        {
+            writeBuffer("<<", 2);
+            writeBuffer(buf.getStr(), buf.getLength());
+            writeBuffer(">> BDC\n", 7);
+        }
         // mark element MC sequence as open
         m_aStructure[ m_nCurrentStructElement ].m_bOpenMCSeq = true;
     }
@@ -10841,7 +10866,12 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
         return false;
 
     bool bInsert = false;
-    if( m_nCurrentStructElement > 0 && m_bEmitStructure )
+    if (m_nCurrentStructElement > 0
+        && (m_bEmitStructure
+            // allow it for topmost non-structured element
+            || (m_aContext.Tagged
+                && 0 < m_aStructure[m_nCurrentStructElement].m_nParentElement
+                && m_aStructure[m_aStructure[m_nCurrentStructElement].m_nParentElement].m_eType != PDFWriter::NonStructElement)))
     {
         PDFWriter::StructElement eType = m_aStructure[ m_nCurrentStructElement ].m_eType;
         switch( eAttr )
@@ -11003,6 +11033,27 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
                     if (eType == PDFWriter::TableHeader
                         && m_aContext.Version != PDFWriter::PDFVersion::PDF_A_1
                         && PDFWriter::PDFVersion::PDF_1_5 <= m_aContext.Version)
+                    {
+                        bInsert = true;
+                    }
+                }
+                break;
+            case PDFWriter::Type:
+                if (eVal == PDFWriter::Pagination || eVal == PDFWriter::Layout || eVal == PDFWriter::Page)
+                    // + Background for PDF >= 1.7
+                {
+                    if (eType == PDFWriter::NonStructElement)
+                    {
+                        bInsert = true;
+                    }
+                }
+                break;
+            case PDFWriter::Subtype:
+                if (eVal == PDFWriter::Header || eVal == PDFWriter::Footer || eVal == PDFWriter::Watermark)
+                {
+                    if (eType == PDFWriter::NonStructElement
+                        && m_aContext.Version != PDFWriter::PDFVersion::PDF_A_1
+                        && PDFWriter::PDFVersion::PDF_1_7 <= m_aContext.Version)
                     {
                         bInsert = true;
                     }

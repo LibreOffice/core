@@ -135,6 +135,9 @@ public:
 
     enum StructAttribute
     {
+        // Artifacts
+        Type, Subtype,
+
         Placement, WritingMode, SpaceBefore, SpaceAfter, StartIndent, EndIndent,
         TextIndent, TextAlign, Width, Height, BlockAlign, InlineAlign,
         LineHeight, BaselineShift, TextDecorationType, ListNumbering,
@@ -158,6 +161,9 @@ public:
     {
         Invalid,
         NONE,
+        // Artifacts
+        Pagination, Layout, Page, Background,
+        Header, Footer, Watermark,
         // Placement
         Block, Inline, Before, After, Start, End,
         // WritingMode
