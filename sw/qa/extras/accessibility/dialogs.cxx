@@ -74,13 +74,14 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestSpecialCharactersDialogFocu
 
         /* as there is a bug that focusing the character table doesn't enable the Insert button
          * (https://bugs.documentfoundation.org/show_bug.cgi?id=153806), we move to another cell
-         * so it works -- and we actually don't care which one it is */
-        dialog.postKeyEventAsync(0, awt::Key::DOWN);
-        Scheduler::ProcessEventsToIdle();
+         * so it works. */
 
+        // tdf#153918: Check that '!' char has correct accessible name and insert it
+        dialog.postKeyEventAsync(0, awt::Key::RIGHT);
+        Scheduler::ProcessEventsToIdle();
         CPPUNIT_ASSERT_EQUAL(
             AccessibilityTools::getAccessibleObjectForName(
-                dialog.getAccessible(), accessibility::AccessibleRole::TABLE_CELL, u"0"),
+                dialog.getAccessible(), accessibility::AccessibleRole::TABLE_CELL, u"!"),
             getFocusedObject(dialog.getAccessible()));
 
         CPPUNIT_ASSERT(dialog.tabTo(accessibility::AccessibleRole::PUSH_BUTTON, u"Insert"));
@@ -92,7 +93,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestSpecialCharactersDialogFocu
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Special Character..."));
     CPPUNIT_ASSERT(dialogWaiter->waitEndDialog());
 
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString(u"<PARAGRAPH>0</PARAGRAPH>"), collectText());
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString(u"<PARAGRAPH>!</PARAGRAPH>"), collectText());
 }
 
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestHyperlinkDialog)
