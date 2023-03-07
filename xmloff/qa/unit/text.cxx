@@ -127,6 +127,52 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBibliographyLocalUrl)
     CPPUNIT_ASSERT_EQUAL(OUString("file:///home/me/test.pdf"), aActual);
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBibliographyTargetURL1)
+{
+    // Given a document with a biblio field, with non-empty LocalURL:
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xField(
+        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aFields = {
+        comphelper::makePropertyValue("Identifier", OUString("AT")),
+        comphelper::makePropertyValue("URL", OUString("https://display.url/test1.pdf#page=1")),
+        comphelper::makePropertyValue("TargetURL", OUString("https://target.url/test2.pdf#page=2")),
+        comphelper::makePropertyValue("UseTargetURL", OUString("true")),
+    };
+    xField->setPropertyValue("Fields", uno::Any(aFields));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
+
+    // When invoking ODT export + import on it:
+    saveAndReload("writer8");
+
+    // Then make sure that URL, TargetURL and UseTargetURL are preserved and independent:
+    xTextDocument.set(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortionEnum = xPara->createEnumeration();
+    uno::Reference<beans::XPropertySet> xPortion(xPortionEnum->nextElement(), uno::UNO_QUERY);
+    xField.set(xPortion->getPropertyValue("TextField"), uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aMap(xField->getPropertyValue("Fields"));
+
+    CPPUNIT_ASSERT(aMap.find("URL") != aMap.end());
+    CPPUNIT_ASSERT_EQUAL(OUString("https://display.url/test1.pdf#page=1"),
+                         aMap["URL"].get<OUString>());
+
+    CPPUNIT_ASSERT(aMap.find("TargetURL") != aMap.end());
+    CPPUNIT_ASSERT_EQUAL(OUString("https://target.url/test2.pdf#page=2"),
+                         aMap["TargetURL"].get<OUString>());
+
+    CPPUNIT_ASSERT(aMap.find("UseTargetURL") != aMap.end());
+    CPPUNIT_ASSERT_EQUAL(OUString("true"), aMap["UseTargetURL"].get<OUString>());
+}
+
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentTableBorder)
 {
     // Without the accompanying fix in place, this failed to load, as a comment that started in a

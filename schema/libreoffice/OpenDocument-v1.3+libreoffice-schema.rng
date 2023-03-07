@@ -3211,6 +3211,9 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
             <rng:name>text:isbn</rng:name>
             <rng:name>text:issn</rng:name>
             <rng:name>loext:local-url</rng:name>
+            <!-- TODO no proposal -->
+            <rng:name>text:target-url</rng:name>
+            <rng:name>text:use-target-url</rng:name>
           </rng:choice>
           <rng:ref name="string"/>
         </rng:attribute>
