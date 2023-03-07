@@ -25,7 +25,7 @@
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 
-#include <osl/mutex.hxx>
+#include <mutex>
 
 #include <rtl/ustring.hxx>
 
@@ -184,7 +184,7 @@ class UpdateRequiredDialog : public weld::GenericDialogController
 {
     const OUString       m_sCloseText;
     OUString             m_sProgressText;
-    ::osl::Mutex         m_aMutex;
+    std::mutex           m_aMutex;
     bool                 m_bHasProgress;
     bool                 m_bProgressChanged;
     bool                 m_bStartProgress;
