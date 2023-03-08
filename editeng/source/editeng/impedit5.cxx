@@ -484,31 +484,6 @@ SfxItemSet ImpEditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int
     return aAttribs;
 }
 
-void ImpEditEngine::SetSingleLineCharAttribs(const EditTextObject* pTxtObj)
-{
-    assert(pTxtObj);
-
-    int nCharOff = 0;
-    std::vector<EECharAttrib> aAttribs;
-    std::unique_ptr<SfxPoolItem> pPoolItem;
-    SfxItemSet aItemSet(GetEmptyItemSet());
-    auto nParaCount = pTxtObj->GetParagraphCount();
-    for (auto nPara = 0; nPara < nParaCount; nPara++)
-    {
-        pTxtObj->GetCharAttribs(nPara, aAttribs);
-        for (const auto& aAttrib : aAttribs)
-        {
-            pPoolItem.reset(aAttrib.pAttr->Clone());
-            aItemSet.Put(std::move(pPoolItem));
-
-            SetAttribs(EditSelection(ConvertSelection(0, aAttrib.nStart + nCharOff, 0, aAttrib.nEnd + nCharOff)),
-                       aItemSet);
-            aItemSet.ClearItem(aAttrib.pAttr->Which());
-        }
-        nCharOff += pTxtObj->GetText(nPara).getLength() + 1;
-        aAttribs.clear();
-    }
-}
 
 void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, SetAttribsMode nSpecial, bool bSetSelection )
 {
