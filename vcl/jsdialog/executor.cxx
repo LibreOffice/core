@@ -143,7 +143,7 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                 }
                 else if (sAction == "toggle")
                 {
-                    LOKTrigger::trigger_toggled(*dynamic_cast<weld::Toggleable*>(pWidget));
+                    LOKTrigger::trigger_toggled(dynamic_cast<weld::Toggleable&>(*pWidget));
                     return true;
                 }
             }
