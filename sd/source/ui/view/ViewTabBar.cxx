@@ -66,6 +66,9 @@ ViewTabBar::ViewTabBar (
       mpViewShellBase(nullptr),
       mnNoteBookWidthPadding(0)
 {
+    // Do this manually instead of via uno::Reference, so we don't delete ourselves.
+    osl_atomic_increment(&m_refCount);
+
     // Tunnel through the controller and use the ViewShellBase to obtain the
     // view frame.
     try
@@ -100,6 +103,8 @@ ViewTabBar::ViewTabBar (
     {
         mpViewShellBase->SetViewTabBar(this);
     }
+
+    osl_atomic_decrement(&m_refCount);
 }
 
 ViewTabBar::~ViewTabBar()
