@@ -144,7 +144,7 @@ void Chart2GeometryTest::testTdf135184RoundLineCap3()
     // It tests chart area, data series line and regression-curve line.
     loadFromURL(u"xlsx/tdf135184RoundLineCap.xlsx");
     save("Calc Office Open XML");
-    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart");
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
     const OString sDash("/c:spPr/a:ln/a:prstDash");
@@ -162,7 +162,7 @@ void Chart2GeometryTest::testTdf135184RoundLineCap4()
     // It tests legend, data series sector and title.
     loadFromURL(u"xlsx/tdf135184RoundLineCap2.xlsx");
     save("Calc Office Open XML");
-    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart");
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
     const OString sChartStart("/c:chartSpace/c:chart");
@@ -181,7 +181,7 @@ void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_export()
 
     // Make sure the chart area has a transparency in gradient stops in saved pptx file.
     save("Impress MS PowerPoint 2007 XML");
-    xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
     OString sPathStart("//c:chartSpace/c:spPr/a:gradFill");
@@ -236,7 +236,7 @@ void Chart2GeometryTest::testTdf128345ChartWall_CS_TG_export()
 
     // Make sure the chart has a gradient with transparency in gradient stops in saved pptx file.
     save("Impress MS PowerPoint 2007 XML");
-    xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
     OString sPathStart("//c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill");
@@ -288,7 +288,7 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_export()
 
     // Make sure the chart has a gradient with transparency in gradient stops in saved pptx file.
     save("Impress MS PowerPoint 2007 XML");
-    xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
     OString sPathStart("//c:chartSpace/c:chart/c:legend/c:spPr/a:gradFill");
