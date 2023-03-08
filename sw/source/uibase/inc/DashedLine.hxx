@@ -10,15 +10,16 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DASHEDLINE_HXX
 
 #include <vcl/ctrl.hxx>
+#include <viewopt.hxx>
 
 /** Class for displaying a dashed line in the Writer GUI.
   */
 class SwDashedLine : public Control
 {
-    Color& (*m_pColorFn)();
+    const Color& (SwViewOption::*m_pColorFn)() const;
 
 public:
-    SwDashedLine(vcl::Window* pParent, Color& (*pColorFn)());
+    SwDashedLine(vcl::Window* pParent, const Color& (SwViewOption::*pColorFn)() const);
     virtual ~SwDashedLine() override;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;

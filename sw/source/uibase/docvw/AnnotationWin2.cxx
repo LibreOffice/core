@@ -352,14 +352,14 @@ void SwAnnotationWin::InitControls()
     EEControlBits nCntrl = mpOutliner->GetControlWord();
     // TODO: crash when AUTOCOMPLETE enabled
     nCntrl |= EEControlBits::MARKFIELDS | EEControlBits::PASTESPECIAL | EEControlBits::AUTOCORRECT | EEControlBits::USECHARATTRIBS; // | EEControlBits::AUTOCOMPLETE;
-    if (SwViewOption::IsFieldShadings())
-        nCntrl |= EEControlBits::MARKFIELDS;
-    else
-        nCntrl &= ~EEControlBits::MARKFIELDS;
 
     if (SwWrtShell* pWrtShell = mrView.GetWrtShellPtr())
     {
         const SwViewOption* pVOpt = pWrtShell->GetViewOptions();
+        if (pVOpt->IsFieldShadings())
+            nCntrl |= EEControlBits::MARKFIELDS;
+        else
+            nCntrl &= ~EEControlBits::MARKFIELDS;
         if (pVOpt->IsOnlineSpell())
             nCntrl |= EEControlBits::ONLINESPELLING;
         else

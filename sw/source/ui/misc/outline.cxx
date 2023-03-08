@@ -872,9 +872,13 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
     pVDev->SetMapMode(rRenderContext.GetMapMode());
     pVDev->SetOutputSize(aSize);
 
+    const SwViewOption& pOpt = SwViewOption::GetCurrentViewOptions();
+    const Color& rDocColor = pOpt.GetDocColor();
+    const Color& rDocBoundariesColor = pOpt.GetDocBoundariesColor();
+    const Color& rFontColor = pOpt.GetFontColor();
     // #101524# OJ
-    pVDev->SetFillColor(SwViewOption::GetDocColor());
-    pVDev->SetLineColor(SwViewOption::GetDocBoundariesColor());
+    pVDev->SetFillColor(rDocColor);
+    pVDev->SetLineColor(rDocBoundariesColor);
     pVDev->DrawRect(tools::Rectangle(Point(0,0), aSize));
 
     if (m_pActNum)
@@ -897,9 +901,9 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
                                                 GetDefaultFontFlags::OnlyOne, &rRenderContext);
 
         if (svtools::ColorConfig().GetColorValue(svtools::FONTCOLOR, false).nColor == COL_AUTO)
-            m_aStdFont.SetColor( SwViewOption::GetDocColor().IsDark() ? COL_WHITE : COL_BLACK );
+            m_aStdFont.SetColor( rDocColor.IsDark() ? COL_WHITE : COL_BLACK );
         else
-            m_aStdFont.SetColor( SwViewOption::GetFontColor() );
+            m_aStdFont.SetColor( rFontColor );
 
         const tools::Long nFontHeight = nYStep * ( m_bPosition ? 15 : 6 ) / 10;
         m_aStdFont.SetFontSize(Size( 0, nFontHeight ));

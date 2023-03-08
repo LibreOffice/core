@@ -340,7 +340,7 @@ void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const tools:
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     const Color& rFieldColor = rStyleSettings.GetFieldColor();
     const Color& rDlgColor = rStyleSettings.GetDialogColor();
-    const Color& rFieldTextColor = SwViewOption::GetFontColor();
+    const Color& rFieldTextColor = SwViewOption::GetCurrentViewOptions().GetFontColor();
     Color aGrayColor(COL_LIGHTGRAY);
     if (rFieldColor == aGrayColor)
         aGrayColor.Invert();

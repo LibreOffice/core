@@ -102,7 +102,8 @@ void SwContentControlAliasButton::PaintButton()
     SwFrameButtonPainter::PaintButton(aSeq, aRect, /*bOnTop=*/false);
 
     // Create the text primitive
-    basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
+    const SwViewOption* pVOpt = GetEditWin()->GetView().GetWrtShell().GetViewOptions();
+    basegfx::BColor aLineColor = pVOpt->GetHeaderFooterMarkColor().getBColor();
     basegfx::B2DVector aFontSize;
     drawinglayer::attribute::FontAttribute aFontAttr
         = drawinglayer::primitive2d::getFontAttributeFromVclFont(aFontSize, m_xVirDev->GetFont(),

@@ -300,7 +300,7 @@ Color SwViewShellImp::GetRetoucheColor() const
                     !officecfg::Office::Common::Accessibility::IsForPagePreviews::get())
             aRet = COL_WHITE;
         else
-            aRet = SwViewOption::GetDocColor();
+            aRet = rSh.GetViewOptions()->GetDocColor();
     }
     return aRet;
 }

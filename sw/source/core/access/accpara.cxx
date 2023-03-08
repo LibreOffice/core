@@ -1918,7 +1918,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         if (rValue.Name == UNO_NAME_CHAR_COLOR)
         {
             if( GetPortionData().IsInGrayPortion( nIndex ) )
-                 rValue.Value <<= SwViewOption::GetFieldShadingsColor();
+                rValue.Value <<= GetCursorShell()->GetViewOptions()->GetFieldShadingsColor();
             uno::Any &anyChar = rValue.Value;
             sal_uInt32 crChar = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved));
 

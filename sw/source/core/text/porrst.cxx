@@ -604,7 +604,7 @@ void SwHiddenTextPortion::Paint( const SwTextPaintInfo & rInf) const
 {
 #ifdef DBG_UTIL
     OutputDevice* pOut = const_cast<OutputDevice*>(rInf.GetOut());
-    Color aCol( SwViewOption::GetFieldShadingsColor() );
+    Color aCol( rInf.GetOpt().GetFieldShadingsColor() );
     Color aOldColor( pOut->GetFillColor() );
     pOut->SetFillColor( aCol );
     Point aPos( rInf.GetPos() );
@@ -626,10 +626,10 @@ bool SwHiddenTextPortion::Format( SwTextFormatInfo &rInf )
     return false;
 };
 
-bool SwControlCharPortion::DoPaint(SwTextPaintInfo const&,
+bool SwControlCharPortion::DoPaint(SwTextPaintInfo const& rTextPaintInfo,
         OUString & rOutString, SwFont & rTmpFont, int &) const
 {
-    if (mcChar == CHAR_WJ || !SwViewOption::IsFieldShadings())
+    if (mcChar == CHAR_WJ || !rTextPaintInfo.GetOpt().IsFieldShadings())
     {
         return false;
     }
@@ -676,7 +676,7 @@ bool SwBookmarkPortion::DoPaint(SwTextPaintInfo const& rTextPaintInfo,
     auto const nFactor = aSize.Height() > 0 ? (Height() * 95) / aSize.Height() : Height();
     rFont.SetProportion(nFactor);
     rFont.SetWeight(WEIGHT_THIN, rFont.GetActual());
-    rFont.SetColor(SwViewOption::GetFieldShadingsColor());
+    rFont.SetColor(rTextPaintInfo.GetOpt().GetFieldShadingsColor());
     // reset these to default...
     rFont.SetAlign(ALIGN_BASELINE);
     rFont.SetUnderline(LINESTYLE_NONE);
@@ -813,7 +813,7 @@ void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
         // set bold for custom colored bookmark symbol
         // and draw multiple symbols showing all custom colors
         aTmpFont.SetWeight( COL_TRANSPARENT == std::get<1>(it) ? WEIGHT_THIN : WEIGHT_BOLD, aTmpFont.GetActual() );
-        aTmpFont.SetColor( COL_TRANSPARENT == std::get<1>(it) ? SwViewOption::GetFieldShadingsColor() : std::get<1>(it) );
+        aTmpFont.SetColor( COL_TRANSPARENT == std::get<1>(it) ? rInf.GetOpt().GetFieldShadingsColor() : std::get<1>(it) );
         aOutString = OUString(std::get<0>(it) == SwScriptInfo::MarkKind::Start ? '[' : ']');
 
         // MarkKind::Point: drawn I-beam (e.g. U+2336) as overlapping ][

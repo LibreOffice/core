@@ -121,7 +121,7 @@ sal_uInt16 SwFieldPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
     // even though this is const, nViewWidth should be computed at the very end:
     SwFieldPortion* pThis = const_cast<SwFieldPortion*>(this);
     if( !Width() && rInf.OnWin() && !rInf.GetOpt().IsPagePreview() &&
-            !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings() )
+            !rInf.GetOpt().IsReadonly() && rInf.GetOpt().IsFieldShadings() )
     {
         if( !m_nViewWidth )
             pThis->m_nViewWidth = rInf.GetTextSize(OUString(' ')).Width();
@@ -459,7 +459,7 @@ bool SwFieldPortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) c
     rText = m_aExpand;
     if( rText.isEmpty() && rInf.OnWin() &&
         !rInf.GetOpt().IsPagePreview() && !rInf.GetOpt().IsReadonly() &&
-            SwViewOption::IsFieldShadings() &&
+            rInf.GetOpt().IsFieldShadings() &&
             !HasFollow() )
         rText = " ";
     return true;

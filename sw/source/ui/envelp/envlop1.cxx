@@ -71,12 +71,12 @@ void SwEnvPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
         double(aSize.Height()) / double(nPageH));
 
     Color aBack = rSettings.GetWindowColor();
-    Color aFront = SwViewOption::GetFontColor();
-    Color aMedium((aBack.GetRed() + aFront.GetRed()) / 2,
-                  (aBack.GetGreen() + aFront.GetGreen()) / 2,
-                  (aBack.GetBlue() + aFront.GetBlue()) / 2);
+    const Color& rFront = SwViewOption::GetCurrentViewOptions().GetFontColor();
+    Color aMedium((aBack.GetRed() + rFront.GetRed()) / 2,
+                  (aBack.GetGreen() + rFront.GetGreen()) / 2,
+                  (aBack.GetBlue() + rFront.GetBlue()) / 2);
 
-    rRenderContext.SetLineColor(aFront);
+    rRenderContext.SetLineColor(rFront);
 
     // Envelope
     const tools::Long nW = static_cast<tools::Long>(f * nPageW);

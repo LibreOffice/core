@@ -330,7 +330,7 @@ static bool isSubsidiaryLinesFlysEnabled()
     return !gProp.pSGlobalShell->GetViewOptions()->IsPagePreview() &&
            !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() &&
            !gProp.pSGlobalShell->GetViewOptions()->IsFormView() &&
-           SwViewOption::IsObjectBoundaries();
+           gProp.pSGlobalShell->GetViewOptions()->IsObjectBoundaries();
 }
 //other subsidiary lines enabled?
 static bool isSubsidiaryLinesEnabled()
@@ -339,7 +339,7 @@ static bool isSubsidiaryLinesEnabled()
            !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() &&
            !gProp.pSGlobalShell->GetViewOptions()->IsFormView() &&
            !gProp.pSGlobalShell->GetViewOptions()->IsWhitespaceHidden() &&
-           SwViewOption::IsDocBoundaries();
+           gProp.pSGlobalShell->GetViewOptions()->IsDocBoundaries();
 }
 //subsidiary lines for sections
 static bool isSubsidiaryLinesForSectionsEnabled()
@@ -347,7 +347,7 @@ static bool isSubsidiaryLinesForSectionsEnabled()
     return !gProp.pSGlobalShell->GetViewOptions()->IsPagePreview() &&
            !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() &&
            !gProp.pSGlobalShell->GetViewOptions()->IsFormView() &&
-           SwViewOption::IsSectionBoundaries();
+           gProp.pSGlobalShell->GetViewOptions()->IsSectionBoundaries();
 }
 
 
@@ -367,7 +367,7 @@ bool isTableBoundariesEnabled()
     if (gProp.pSGlobalShell->GetViewOptions()->IsFormView())
         return false;
 
-    return SwViewOption::IsTableBoundaries();
+    return gProp.pSGlobalShell->GetViewOptions()->IsTableBoundaries();
 }
 
 }
@@ -1093,12 +1093,14 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
              !rLRect.IsLocked() )
         {
             const Color *pCol = nullptr;
+            SwViewShell *pShell = properties.pSGlobalShell;
+            const SwViewOption *pOpt = pShell->GetViewOptions();
             switch ( rLRect.GetSubColor() )
             {
-                case SubColFlags::Page: pCol = &SwViewOption::GetDocBoundariesColor(); break;
-                case SubColFlags::Fly: pCol = &SwViewOption::GetObjectBoundariesColor(); break;
-                case SubColFlags::Tab: pCol = &SwViewOption::GetTableBoundariesColor(); break;
-                case SubColFlags::Sect: pCol = &SwViewOption::GetSectionBoundColor(); break;
+                case SubColFlags::Page: pCol = &pOpt->GetDocBoundariesColor(); break;
+                case SubColFlags::Fly: pCol = &pOpt->GetObjectBoundariesColor(); break;
+                case SubColFlags::Tab: pCol = &pOpt->GetTableBoundariesColor(); break;
+                case SubColFlags::Sect: pCol = &pOpt->GetSectionBoundColor(); break;
             }
 
             if (pCol && pOut->GetFillColor() != *pCol)
@@ -2448,7 +2450,7 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
     bool bHori = true;
 
     // color for subsidiary lines:
-    const Color& rCol( SwViewOption::GetTableBoundariesColor() );
+    const Color& rCol( gProp.pSGlobalShell->GetViewOptions()->GetTableBoundariesColor() );
 
     // high contrast mode:
     // overrides the color of non-subsidiary lines.
@@ -2457,7 +2459,7 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
     if( gProp.pSGlobalShell->GetWin() &&
         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
-        pHCColor = &SwViewOption::GetFontColor();
+        pHCColor = &gProp.pSGlobalShell->GetViewOptions()->GetFontColor();
         rDev.SetDrawMode( DrawModeFlags::Default );
     }
 
@@ -3339,7 +3341,7 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
                 {
                     SdrPaintView* pPaintView = pSh->Imp()->GetDrawView();
                     SdrPageView* pPageView = pPaintView->GetSdrPageView();
-                    pPageView->DrawPageViewGrid(*pSh->GetOut(), aPaintRect.SVRect(), SwViewOption::GetTextGridColor() );
+                    pPageView->DrawPageViewGrid(*pSh->GetOut(), aPaintRect.SVRect(), pSh->GetViewOptions()->GetTextGridColor() );
                 }
 
                 // #i68597#
@@ -3750,7 +3752,7 @@ void SwColumnFrame::PaintBreak( ) const
         nWidth = aRect.Height();
     }
 
-    basegfx::BColor aLineColor = SwViewOption::GetPageBreakColor().getBColor();
+    basegfx::BColor aLineColor = gProp.pSGlobalShell->GetViewOptions()->GetPageBreakColor().getBColor();
 
     drawinglayer::primitive2d::Primitive2DContainer aSeq =
         lcl_CreateDashedIndicatorPrimitive( aStart, aEnd, aLineColor );
@@ -4568,7 +4570,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
         // to ignore the setting of a new color. Therefore we have to reset
         // the drawing mode
         pOut->SetDrawMode( DrawModeFlags::Default );
-        aShadowColor = SwViewOption::GetFontColor();
+        aShadowColor = properties.pSGlobalShell->GetViewOptions()->GetFontColor();
     }
 
     if ( pOut->GetFillColor() != aShadowColor )
@@ -4656,7 +4658,9 @@ void SwFrame::PaintBorderLine( const SwRect& rRect,
     if( pColor && gProp.pSGlobalShell->GetWin() &&
         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
-        pColor = &SwViewOption::GetFontColor();
+        SwViewShell *pSh = getRootFrame()->GetCurrShell();
+        const SwViewOption *pOpt = pSh->GetViewOptions();
+        pColor = &pOpt->GetFontColor();
     }
 
     if (pPage->GetSortedObjs() &&
@@ -5977,7 +5981,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
             }
         }
 
-        pOut->SetFillColor(SwViewOption::GetAppBackgroundColor());
+        pOut->SetFillColor(SwViewOption::GetCurrentViewOptions().GetAppBackgroundColor());
         pOut->SetLineColor();
         pOut->DrawRect(pOut->PixelToLogic(aRect));
     }
@@ -6015,7 +6019,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
                                                  bool bRightSidebar )
 {
     // No shadow in prefs
-    if (!SwViewOption::IsShadow())
+    if (!_pViewShell->GetViewOptions()->IsShadow())
         return;
 
     // #i16816# tagged pdf support
@@ -6048,9 +6052,9 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     ::SwAlignRect( aAlignedPageRect, _pViewShell, _pViewShell->GetOut() );
     SwRect aPagePxRect(_pViewShell->GetOut()->LogicToPixel( aAlignedPageRect.SVRect() ));
 
-    if (aShadowColor != SwViewOption::GetShadowColor())
+    if (aShadowColor != _pViewShell->GetViewOptions()->GetShadowColor())
     {
-        aShadowColor = SwViewOption::GetShadowColor();
+        aShadowColor = _pViewShell->GetViewOptions()->GetShadowColor();
 
         AlphaMask aMask( shadowMask.getBottomRight().GetBitmap() );
         Bitmap aFilledSquare(aMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
@@ -6185,23 +6189,23 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     _pViewShell->GetOut()->SetLineColor();
     if (!bRight)
     {
-        _pViewShell->GetOut()->SetFillColor(SwViewOption::GetObjectBoundariesColor());
+        _pViewShell->GetOut()->SetFillColor(_pViewShell->GetViewOptions()->GetObjectBoundariesColor());
         _pViewShell->GetOut()->DrawRect(tools::Rectangle(Point(aPageRect.Left()-pMgr->GetSidebarBorderWidth(),aPageRect.Top()),Size(pMgr->GetSidebarBorderWidth(),aPageRect.Height())))    ;
         if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
             _pViewShell->GetOut()->SetFillColor(COL_BLACK);
         else
-            _pViewShell->GetOut()->SetFillColor(SwViewOption::GetSectionBoundColor());
+            _pViewShell->GetOut()->SetFillColor(_pViewShell->GetViewOptions()->GetSectionBoundColor());
         _pViewShell->GetOut()->DrawRect(tools::Rectangle(Point(aPageRect.Left()-pMgr->GetSidebarWidth()-pMgr->GetSidebarBorderWidth(),aPageRect.Top()),Size(pMgr->GetSidebarWidth(),aPageRect.Height())))  ;
     }
     else
     {
-        _pViewShell->GetOut()->SetFillColor(SwViewOption::GetObjectBoundariesColor());
+        _pViewShell->GetOut()->SetFillColor(_pViewShell->GetViewOptions()->GetObjectBoundariesColor());
         SwRect aSidebarBorder(aPageRect.TopRight(),Size(pMgr->GetSidebarBorderWidth(),aPageRect.Height()));
         _pViewShell->GetOut()->DrawRect(aSidebarBorder.SVRect());
         if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
             _pViewShell->GetOut()->SetFillColor(COL_BLACK);
         else
-            _pViewShell->GetOut()->SetFillColor(SwViewOption::GetSectionBoundColor());
+            _pViewShell->GetOut()->SetFillColor(_pViewShell->GetViewOptions()->GetSectionBoundColor());
         SwRect aSidebar(Point(aPageRect.Right()+pMgr->GetSidebarBorderWidth(),aPageRect.Top()),Size(pMgr->GetSidebarWidth(),aPageRect.Height()));
         _pViewShell->GetOut()->DrawRect(aSidebar.SVRect());
     }
@@ -6400,8 +6404,9 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
                              const bool bOnlyTextBackground ) const
 {
     // #i1837# - no paint of table background, if corresponding option is *not* set.
+    SwViewShell *pSh = gProp.pSGlobalShell;
     if( IsTabFrame() &&
-        !gProp.pSGlobalShell->GetViewOptions()->IsTable() )
+        !pSh->GetViewOptions()->IsTable() )
     {
         return;
     }
@@ -6409,8 +6414,6 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
     // nothing to do for covered table cells:
     if( IsCellFrame() && IsCoveredCell() )
         return;
-
-    SwViewShell *pSh = gProp.pSGlobalShell;
 
     // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *pSh->GetOut() );
@@ -6842,7 +6845,7 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreatePageAreaDelimit
 {
     drawinglayer::primitive2d::Primitive2DContainer aSeq( 4 );
 
-    basegfx::BColor aLineColor = SwViewOption::GetDocBoundariesColor().getBColor();
+    basegfx::BColor aLineColor = SwViewOption::GetCurrentViewOptions().GetDocBoundariesColor().getBColor();
     double nLineLength = 200.0; // in Twips
 
     Point aPoints[] = { rRect.TopLeft(), rRect.TopRight(), rRect.BottomRight(), rRect.BottomLeft() };
@@ -6873,7 +6876,7 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateRectangleDelimi
         const SwRect& rRect )
 {
     drawinglayer::primitive2d::Primitive2DContainer aSeq( 1 );
-    basegfx::BColor aLineColor = SwViewOption::GetDocBoundariesColor().getBColor();
+    basegfx::BColor aLineColor = SwViewOption::GetCurrentViewOptions().GetDocBoundariesColor().getBColor();
 
     basegfx::B2DPolygon aPolygon;
     aPolygon.append( basegfx::B2DPoint( rRect.Left(), rRect.Top() ) );
@@ -6893,7 +6896,7 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateColumnAreaDelim
 {
     drawinglayer::primitive2d::Primitive2DContainer aSeq( 4 );
 
-    basegfx::BColor aLineColor = SwViewOption::GetDocBoundariesColor().getBColor();
+    basegfx::BColor aLineColor = SwViewOption::GetCurrentViewOptions().GetDocBoundariesColor().getBColor();
     double nLineLength = 100.0; // in Twips
 
     Point aPoints[] = { rRect.TopLeft(), rRect.TopRight(), rRect.BottomRight(), rRect.BottomLeft() };
@@ -6923,7 +6926,7 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateColumnAreaDelim
 void SwPageFrame::PaintSubsidiaryLines( const SwPageFrame *,
                                         const SwRect & ) const
 {
-    if (!SwViewOption::IsDocBoundaries())
+    if (!gProp.pSGlobalShell->GetViewOptions()->IsDocBoundaries())
         return;
 
     if ( gProp.pSGlobalShell->IsHeaderFooterEdit() )
@@ -6997,7 +7000,7 @@ void SwColumnFrame::PaintSubsidiaryLines( const SwPageFrame *,
 void SwSectionFrame::PaintSubsidiaryLines( const SwPageFrame * pPage,
                                         const SwRect & rRect ) const
 {
-    if (!SwViewOption::IsSectionBoundaries())
+    if (!gProp.pSGlobalShell->GetViewOptions()->IsSectionBoundaries())
         return;
 
     const bool bNoLowerColumn = !Lower() || !Lower()->IsColumnFrame();
@@ -7018,7 +7021,7 @@ void SwBodyFrame::PaintSubsidiaryLines( const SwPageFrame *,
 
 void SwHeadFootFrame::PaintSubsidiaryLines( const SwPageFrame *, const SwRect & ) const
 {
-    if (!SwViewOption::IsDocBoundaries())
+    if (!gProp.pSGlobalShell->GetViewOptions()->IsDocBoundaries())
         return;
 
     if ( gProp.pSGlobalShell->IsHeaderFooterEdit() )
@@ -7490,11 +7493,11 @@ bool SwFrame::GetBackgroundBrush(
                 !pOpt->IsReadonly() &&
                 // #114856# Form view
                 !pOpt->IsFormView() &&
-                SwViewOption::IsIndexShadings() &&
+                pOpt->IsIndexShadings() &&
                 !pOpt->IsPDFExport() &&
                 pSh->GetOut()->GetOutDevType() != OUTDEV_PRINTER )
             {
-                rxCol = SwViewOption::GetIndexShadingsColor();
+                rxCol = pOpt->GetIndexShadingsColor();
             }
         }
 

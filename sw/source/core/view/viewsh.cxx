@@ -1690,7 +1690,7 @@ void SwViewShell::PaintDesktop_(const SwRegionRects &rRegion)
 
         // #i75172# needed to move line/Fill color setters into loop since DLPrePaint2
         // may exchange GetOut(), that's it's purpose. This happens e.g. at print preview.
-        GetOut()->SetFillColor( SwViewOption::GetAppBackgroundColor());
+        GetOut()->SetFillColor( GetViewOptions()->GetAppBackgroundColor());
         GetOut()->SetLineColor();
         GetOut()->DrawRect(aRectangle);
 
@@ -2214,6 +2214,7 @@ void SwViewShell::ApplyViewOptions( const SwViewOption &rOpt )
         if(&rSh == this)
             continue;
         SwViewOption aOpt( *rSh.GetViewOptions() );
+        aOpt.SetColorConfig( rOpt.GetColorConfig() );
         aOpt.SetFieldName( rOpt.IsFieldName() );
         aOpt.SetShowHiddenField( rOpt.IsShowHiddenField() );
         aOpt.SetShowHiddenPara( rOpt.IsShowHiddenPara() );

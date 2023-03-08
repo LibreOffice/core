@@ -3598,7 +3598,7 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     aViewOption.SetHardBlank(false);
 
     // Disable field shadings: the result would depend on the cursor position.
-    SwViewOption::SetAppearanceFlag(ViewOptFlags::FieldShadings, false);
+    aViewOption.SetAppearanceFlag(ViewOptFlags::FieldShadings, false);
 
     OUString sOrigAuthor = SW_MOD()->GetRedlineAuthor(SW_MOD()->GetRedlineAuthor());
     OUString sAuthor;
@@ -3608,7 +3608,7 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
         if (rValue.Name == ".uno:HideWhitespace" && rValue.Value.has<bool>())
             aViewOption.SetHideWhitespaceMode(rValue.Value.get<bool>());
         else if (rValue.Name == ".uno:ShowBorderShadow" && rValue.Value.has<bool>())
-            SwViewOption::SetAppearanceFlag(ViewOptFlags::Shadow , rValue.Value.get<bool>());
+            aViewOption.SetAppearanceFlag(ViewOptFlags::Shadow , rValue.Value.get<bool>());
         else if (rValue.Name == ".uno:Author" && rValue.Value.has<OUString>())
         {
             sAuthor = rValue.Value.get<OUString>();

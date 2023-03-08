@@ -2212,7 +2212,7 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
                     nNewColor = COL_BLACK;
                 else
                     // we take the font color from the appearance page
-                    nNewColor = SwViewOption::GetFontColor();
+                    nNewColor = pViewOption->GetFontColor();
             }
 
             // change painting color depending of dark/bright background

@@ -524,7 +524,7 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
 
         const SwViewOption *pOpt = pSh->GetViewOptions();
 
-        if (SwViewOption::IsFieldShadings())
+        if (pOpt->IsFieldShadings())
             nCntrl |= EEControlBits::MARKFIELDS;
         else
             nCntrl &= ~EEControlBits::MARKFIELDS;

@@ -1084,7 +1084,7 @@ void SwTextPaintInfo::DrawPostIts( bool bScript ) const
     if ( GetTextFrame()->IsVertical() )
         GetTextFrame()->SwitchHorizontalToVertical( aTmpRect );
 
-    SwViewOption::PaintPostIts( const_cast<OutputDevice*>(GetOut()), aTmpRect, bScript );
+    GetOpt().PaintPostIts( const_cast<OutputDevice*>(GetOut()), aTmpRect, bScript );
 
 }
 
@@ -1095,12 +1095,12 @@ void SwTextPaintInfo::DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool 
     if ( !aIntersect.HasArea() )
         return;
 
-    if (OnWin() && SwViewOption::IsFieldShadings() &&
+    if (OnWin() && GetOpt().IsFieldShadings() &&
             !GetOpt().IsPagePreview())
     {
         OutputDevice* pOut = const_cast<OutputDevice*>(GetOut());
         pOut->Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
-        pOut->SetFillColor( SwViewOption::GetFieldShadingsColor() );
+        pOut->SetFillColor( GetOpt().GetFieldShadingsColor() );
         pOut->SetLineColor();
         pOut->DrawRect( aIntersect.SVRect() );
         pOut->Pop();
@@ -1135,7 +1135,7 @@ void SwTextPaintInfo::DrawBackground( const SwLinePortion &rPor, const Color *pC
     if ( pColor )
         pOut->SetFillColor( *pColor );
     else
-        pOut->SetFillColor( SwViewOption::GetFieldShadingsColor() );
+        pOut->SetFillColor( GetOpt().GetFieldShadingsColor() );
 
     pOut->SetLineColor();
 
@@ -1161,12 +1161,12 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
             if(bIsStartMark)
                 SAL_INFO("sw.core", "Found StartMark");
             if (OnWin() && (pFieldmark!=nullptr || bIsStartMark) &&
-                    SwViewOption::IsFieldShadings() &&
+                    GetOpt().IsFieldShadings() &&
                     !GetOpt().IsPagePreview())
             {
                 OutputDevice* pOutDev = const_cast<OutputDevice*>(GetOut());
                 pOutDev->Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
-                pOutDev->SetFillColor( SwViewOption::GetFieldShadingsColor() );
+                pOutDev->SetFillColor( GetOpt().GetFieldShadingsColor() );
                 pOutDev->SetLineColor( );
                 pOutDev->DrawRect( aIntersect.SVRect() );
                 pOutDev->Pop();
@@ -1326,7 +1326,7 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
     case PortionType::ControlChar:
         if ( !GetOpt().IsPagePreview()
              && !GetOpt().IsReadonly()
-             && SwViewOption::IsFieldShadings()
+             && GetOpt().IsFieldShadings()
              && ( PortionType::Number != nWhich
                   || m_pFrame->GetTextNodeForParaProps()->HasMarkedLabel())) // #i27615#
         {
@@ -1339,7 +1339,7 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
     case PortionType::InputField:
         // input field shading also in read-only mode
         if ( !GetOpt().IsPagePreview()
-             && SwViewOption::IsFieldShadings() )
+             && GetOpt().IsFieldShadings() )
         {
             bDraw = true;
         }

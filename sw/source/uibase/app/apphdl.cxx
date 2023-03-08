@@ -969,19 +969,20 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, Con
     }
     else if ( pBrdCst == m_pColorConfig.get() )
     {
-        if( pBrdCst == m_pColorConfig.get() )
-            SwViewOption::ApplyColorConfigValues(*m_pColorConfig);
-
         //invalidate all edit windows
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();
         while(pViewShell)
         {
             if(pViewShell->GetWindow())
             {
-                if(dynamic_cast< const SwView *>( pViewShell ) !=  nullptr ||
+                auto pSwView = dynamic_cast<SwView *>( pViewShell );
+                if(pSwView !=  nullptr ||
                    dynamic_cast< const SwPagePreview *>( pViewShell ) !=  nullptr ||
                    dynamic_cast< const SwSrcView *>( pViewShell ) !=  nullptr)
                 {
+                    SwViewOption aNewOptions = *pSwView->GetWrtShell().GetViewOptions();
+                    aNewOptions.SetColorConfig(*m_pColorConfig);
+                    pSwView->GetWrtShell().ApplyViewOptions(aNewOptions);
                     pViewShell->GetWindow()->Invalidate();
                 }
             }
@@ -1044,7 +1045,7 @@ svtools::ColorConfig& SwModule::GetColorConfig()
     if(!m_pColorConfig)
     {
         m_pColorConfig.reset(new svtools::ColorConfig);
-        SwViewOption::ApplyColorConfigValues(*m_pColorConfig);
+        SwViewOption::SetInitialColorConfig(*m_pColorConfig);
         m_pColorConfig->AddListener(this);
     }
     return *m_pColorConfig;

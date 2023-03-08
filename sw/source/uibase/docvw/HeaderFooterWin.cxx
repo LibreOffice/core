@@ -132,7 +132,7 @@ void SwFrameButtonPainter::PaintButton(drawinglayer::primitive2d::Primitive2DCon
     B2DPolygon aPolygon = lcl_GetPolygon(rRect, bOnTop);
 
     // Colors
-    basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
+    basegfx::BColor aLineColor = SwViewOption::GetCurrentViewOptions().GetHeaderFooterMarkColor().getBColor();
     basegfx::BColor aFillColor = lcl_GetFillColor(aLineColor);
     basegfx::BColor aLighterColor = lcl_GetLighterGradientColor(aFillColor);
 
@@ -362,7 +362,7 @@ void SwHeaderFooterWin::PaintButton()
     SwFrameButtonPainter::PaintButton(aSeq, aRect, m_bIsHeader);
 
     // Create the text primitive
-    basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
+    basegfx::BColor aLineColor = SwViewOption::GetCurrentViewOptions().GetHeaderFooterMarkColor().getBColor();
     B2DVector aFontSize;
     FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(aFontSize, m_xVirDev->GetFont(), false, false);
 

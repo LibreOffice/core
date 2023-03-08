@@ -25,6 +25,9 @@
 #include <o3tl/string_view.hxx>
 #include <fmtfld.hxx>
 #include <doc.hxx>
+#include <docsh.hxx>
+#include <view.hxx>
+#include <wrtsh.hxx>
 #include <breakit.hxx>
 #include <ndtxt.hxx>
 #include <txtfld.hxx>
@@ -540,7 +543,8 @@ SwHTMLWriter& OutHTML_SwFormatField( SwHTMLWriter& rWrt, const SfxPoolItem& rHt 
         if( pTextField )
         {
             // ReqIF-XHTML doesn't allow specifying a background color.
-            bool bFieldShadings = SwViewOption::IsFieldShadings() && !rWrt.mbReqIF;
+            const SwViewOption* pViewOptions = rWrt.m_pDoc->GetDocShell()->GetView()->GetWrtShell().GetViewOptions();
+            bool bFieldShadings = pViewOptions->IsFieldShadings() && !rWrt.mbReqIF;
             if (bFieldShadings)
             {
                 // If there is a text portion background started already, that should have priority.
@@ -557,7 +561,7 @@ SwHTMLWriter& OutHTML_SwFormatField( SwHTMLWriter& rWrt, const SfxPoolItem& rHt 
                 sOut.append(sCSS1_P_background);
                 sOut.append(": ");
 
-                Color& rColor = SwViewOption::GetFieldShadingsColor();
+                const Color& rColor = pViewOptions->GetFieldShadingsColor();
                 sOut.append(GetCSS1_Color(rColor));
                 sOut.append("\">");
                 rWrt.Strm().WriteOString(sOut);

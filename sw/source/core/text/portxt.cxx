@@ -705,12 +705,12 @@ void SwTextInputFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
 
         if (aIntersect.HasArea()
             && rInf.OnWin()
-            && SwViewOption::IsFieldShadings()
+            && rInf.GetOpt().IsFieldShadings()
             && !rInf.GetOpt().IsPagePreview())
         {
             OutputDevice* pOut = const_cast<OutputDevice*>(rInf.GetOut());
             pOut->Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
-            pOut->SetFillColor(SwViewOption::GetFieldShadingsColor());
+            pOut->SetFillColor(rInf.GetOpt().GetFieldShadingsColor());
             pOut->SetLineColor();
             pOut->DrawRect(aIntersect.SVRect());
             pOut->Pop();

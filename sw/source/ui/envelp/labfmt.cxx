@@ -74,7 +74,7 @@ void DrawArrow(vcl::RenderContext& rRenderContext, const Point &rP1, const Point
             aArr[2].setY( rP2.Y() );
         }
 
-        const Color& rFieldTextColor = SwViewOption::GetFontColor();
+        const Color& rFieldTextColor = SwViewOption::GetCurrentViewOptions().GetFontColor();
         rRenderContext.SetFillColor(rFieldTextColor);
         rRenderContext.DrawPolygon( tools::Polygon(3, aArr));
     }
@@ -150,7 +150,7 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     const Color& rWinColor = rStyleSettings.GetWindowColor();
-    const Color& rFieldTextColor = SwViewOption::GetFontColor();
+    const Color& rFieldTextColor = SwViewOption::GetCurrentViewOptions().GetFontColor();
 
     vcl::Font aFont = rRenderContext.GetFont();
     aFont.SetFillColor(rWinColor);

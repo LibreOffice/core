@@ -142,13 +142,13 @@ static bool lcl_IsViewMarks( const SwViewOption& rVOpt )
 {
     return  rVOpt.IsHardBlank() &&
             rVOpt.IsSoftHyph() &&
-            SwViewOption::IsFieldShadings();
+            rVOpt.IsFieldShadings();
 }
 static void lcl_SetViewMarks(SwViewOption& rVOpt, bool bOn )
 {
     rVOpt.SetHardBlank(bOn);
     rVOpt.SetSoftHyph(bOn);
-    SwViewOption::SetAppearanceFlag(
+    rVOpt.SetAppearanceFlag(
             ViewOptFlags::FieldShadings, bOn, true);
 }
 
@@ -253,13 +253,13 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             }
             break;
             case FN_VIEW_BOUNDS:
-                aBool.SetValue( SwViewOption::IsDocBoundaries()); break;
+                aBool.SetValue( pOpt->IsDocBoundaries()); break;
             case FN_VIEW_SECTION_BOUNDARIES:
-                aBool.SetValue(SwViewOption::IsSectionBoundaries()); break;
+                aBool.SetValue(pOpt->IsSectionBoundaries()); break;
             case FN_VIEW_GRAPHIC:
                 aBool.SetValue( pOpt->IsGraphic() ); break;
             case FN_VIEW_FIELDS:
-                aBool.SetValue( SwViewOption::IsFieldShadings() ); break;
+                aBool.SetValue( pOpt->IsFieldShadings() ); break;
             case FN_VIEW_FIELDNAME:
                 aBool.SetValue( pOpt->IsFieldName() ); break;
             case FN_VIEW_MARKS:
@@ -267,7 +267,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             case FN_VIEW_META_CHARS:
                 aBool.SetValue( pOpt->IsViewMetaChars() ); break;
             case FN_VIEW_TABLEGRID:
-                aBool.SetValue( SwViewOption::IsTableBoundaries() ); break;
+                aBool.SetValue( pOpt->IsTableBoundaries() ); break;
             case SID_TOGGLE_NOTES:
             {
                 if (!GetPostItMgr()->HasNotes())
@@ -404,20 +404,20 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
     case FN_VIEW_FIELDS:
         if( STATE_TOGGLE == eState )
-            bFlag = !SwViewOption::IsFieldShadings() ;
-        SwViewOption::SetAppearanceFlag(ViewOptFlags::FieldShadings, bFlag, true );
+            bFlag = !pOpt->IsFieldShadings() ;
+        pOpt->SetAppearanceFlag(ViewOptFlags::FieldShadings, bFlag, true );
         break;
 
     case FN_VIEW_BOUNDS:
         if( STATE_TOGGLE == eState )
-            bFlag = !SwViewOption::IsDocBoundaries();
-        SwViewOption::SetAppearanceFlag(ViewOptFlags::DocBoundaries, bFlag, true );
+            bFlag = !pOpt->IsDocBoundaries();
+        pOpt->SetAppearanceFlag(ViewOptFlags::DocBoundaries, bFlag, true );
         break;
 
     case FN_VIEW_SECTION_BOUNDARIES:
         if( STATE_TOGGLE == eState )
-            bFlag = !SwViewOption::IsSectionBoundaries();
-        SwViewOption::SetAppearanceFlag(ViewOptFlags::SectionBoundaries, bFlag, true );
+            bFlag = !pOpt->IsSectionBoundaries();
+        pOpt->SetAppearanceFlag(ViewOptFlags::SectionBoundaries, bFlag, true );
         break;
 
     case SID_GRID_VISIBLE:
@@ -531,8 +531,8 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
     case FN_VIEW_TABLEGRID:
         if( STATE_TOGGLE == eState )
-            bFlag = !SwViewOption::IsTableBoundaries();
-        SwViewOption::SetAppearanceFlag(ViewOptFlags::TableBoundaries, bFlag, true );
+            bFlag = !pOpt->IsTableBoundaries();
+        pOpt->SetAppearanceFlag(ViewOptFlags::TableBoundaries, bFlag, true );
         break;
 
     case FN_VIEW_FIELDNAME:
