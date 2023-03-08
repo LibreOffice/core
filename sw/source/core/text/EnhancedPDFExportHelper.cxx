@@ -154,6 +154,7 @@ constexpr OUStringLiteral aH9String = u"H9";
 constexpr OUStringLiteral aH10String = u"H10";
 constexpr OUStringLiteral aListString = u"L";
 constexpr OUStringLiteral aListItemString = u"LI";
+constexpr OUStringLiteral aListLabelString = u"Lbl";
 constexpr OUStringLiteral aListBodyString = u"LBody";
 constexpr OUStringLiteral aBlockQuoteString = u"BlockQuote";
 constexpr OUStringLiteral aCaptionString = u"Caption";
@@ -475,6 +476,15 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUS
     else if ( mpFrameInfo )
     {
         const SwFrame& rFrame = mpFrameInfo->mrFrame;
+
+        if (vcl::PDFWriter::LIBody == eType && rFrame.IsTextFrame())
+        {
+            SwTextFrame const& rTextFrame(static_cast<const SwTextFrame&>(rFrame));
+            SwTextNode const*const pTextNd(rTextFrame.GetTextNodeForParaProps());
+            SwNodeNum const*const pNodeNum(pTextNd->GetNum(rTextFrame.getRootFrame()));
+            NumListBodyIdMap& rNumListBodyIdMap = SwEnhancedPDFExportHelper::GetNumListBodyIdMap();
+            rNumListBodyIdMap[ pNodeNum ] = nId;
+        }
 
         if ( ( rFrame.IsPageFrame() && !static_cast<const SwPageFrame&>(rFrame).GetPrev() ) ||
              ( rFrame.IsFlowFrame() && !SwFlowFrame::CastFlowFrame(&rFrame)->IsFollow() && SwFlowFrame::CastFlowFrame(&rFrame)->HasFollow() ) ||
@@ -1026,7 +1036,12 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
     if ( bNewItemTag )
     {
         BeginTag( vcl::PDFWriter::ListItem, aListItemString );
-        BeginTag( vcl::PDFWriter::LIBody, aListBodyString );
+        assert(rTextFrame.GetPara());
+        // check whether to open LIBody now or delay until after Lbl
+        if (!rTextFrame.GetPara()->HasNumberingPortion())
+        {
+            BeginTag(vcl::PDFWriter::LIBody, aListBodyString);
+        }
     }
 }
 
@@ -1125,8 +1140,15 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
         case SwFrameType::Txt :
             {
-                const SwTextNode* pTextNd =
-                    static_cast<const SwTextFrame*>(pFrame)->GetTextNodeForParaProps();
+                SwTextFrame const& rTextFrame(*static_cast<const SwTextFrame*>(pFrame));
+                // lazy open LIBody after Lbl
+                if (rTextFrame.GetPara()->HasNumberingPortion())
+                {
+                    assert(!rTextFrame.IsFollow());
+                    BeginTag(vcl::PDFWriter::LIBody, aListBodyString);
+                }
+
+                const SwTextNode *const pTextNd(rTextFrame.GetTextNodeForParaProps());
 
                 const SwFormat* pTextFormat = pTextNd->GetFormatColl();
                 const SwFormat* pParentTextFormat = pTextFormat ? pTextFormat->DerivedFrom() : nullptr;
@@ -1516,6 +1538,16 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                         aPDFType = aBibEntryString;
                     }
                 }
+            }
+            break;
+
+        case PortionType::Number:
+        case PortionType::Bullet:
+        case PortionType::GrfNum:
+            if (mpPorInfo->m_isNumberingLabel)
+            {   // only works for multiple lines via wrapper from PaintSwFrame
+                nPDFType = vcl::PDFWriter::LILabel;
+                aPDFType = aListLabelString;
             }
             break;
 

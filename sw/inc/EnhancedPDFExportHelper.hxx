@@ -110,8 +110,10 @@ struct Por_Info
 {
     const SwLinePortion& mrPor;
     const SwTextPainter& mrTextPainter;
-    Por_Info( const SwLinePortion& rPor, const SwTextPainter& rTextPainer )
-            : mrPor( rPor ), mrTextPainter( rTextPainer ) {};
+    bool const m_isNumberingLabel;
+
+    Por_Info(const SwLinePortion& rPor, const SwTextPainter& rTextPainer, bool const isNumberingLabel)
+        : mrPor(rPor), mrTextPainter(rTextPainer), m_isNumberingLabel(isNumberingLabel) {};
 };
 
 struct lt_TableColumn

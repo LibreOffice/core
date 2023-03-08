@@ -319,6 +319,7 @@ public:
     bool IsFootnoteNum() const { return m_bFootnoteNum; }
     void SetMargin( const bool bNew = true ) { m_bMargin = bNew; }
     bool IsMargin() const { return m_bMargin; }
+    bool HasNumberingPortion() const;
 
     // Set nErgo in the QuoVadisPortion
     void SetErgoSumNum( const OUString &rErgo );

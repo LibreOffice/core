@@ -32,6 +32,7 @@
 #include <txtfrm.hxx>
 #include <swfont.hxx>
 #include "txtpaint.hxx"
+#include "porfld.hxx"
 #include "portab.hxx"
 #include <txatbase.hxx>
 #include <charfmt.hxx>
@@ -118,7 +119,9 @@ SwLinePortion *SwTextPainter::CalcPaintOfst( const SwRect &rPaint )
 //    (objectively slow, subjectively fast)
 // Since the user usually judges subjectively the second method is set as default.
 void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
-                                 const bool bUnderSized )
+    const bool bUnderSized,
+    ::std::optional<SwTaggedPDFHelper> & roTaggedLabel,
+    ::std::optional<SwTaggedPDFHelper> & roTaggedParagraph)
 {
 #if OSL_DEBUG_LEVEL > 1
 //    sal_uInt16 nFntHeight = GetInfo().GetFont()->GetHeight( GetInfo().GetVsh(), GetInfo().GetOut() );
@@ -386,15 +389,38 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             GetInfo().SetUnderFnt( nullptr );
         }
 
+        // multiple numbering portions are possible :(
+        if (pPor->InNumberGrp() && !pPor->IsFootnoteNumPortion()
+            && !static_cast<SwNumberPortion const*>(pPor)->IsFollow())
+        {
+            assert(!roTaggedLabel);
+            assert(!m_pFrame->IsFollow());
+            Por_Info aPorInfo(*pPor, *this, true); // open Lbl
+            roTaggedLabel.emplace(nullptr, nullptr, &aPorInfo, *pOut);
+        }
+
         {
             // #i16816# tagged pdf support
-            Por_Info aPorInfo( *pPor, *this );
+            Por_Info aPorInfo(*pPor, *this, false);
             SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, &aPorInfo, *pOut );
 
             if( pPor->IsMultiPortion() )
                 PaintMultiPortion( rPaint, static_cast<SwMultiPortion&>(*pPor) );
             else
                 pPor->Paint( GetInfo() );
+        }
+
+        // lazy open LIBody and paragraph tag after num portions have been painted to Lbl
+        if (pPor->InNumberGrp() && !pPor->IsFootnoteNumPortion()
+            // note: numbering portion may be split if it has multiple scripts
+            && !static_cast<SwNumberPortion const*>(pPor)->HasFollow()) // so wait for the last one
+        {
+            assert(roTaggedLabel);
+            roTaggedLabel.reset(); // close Lbl
+            assert(!roTaggedParagraph);
+            assert(!m_pFrame->IsFollow());
+            Frame_Info aFrameInfo(*m_pFrame); // open LIBody
+            roTaggedParagraph.emplace(nullptr, &aFrameInfo, nullptr, *pOut);
         }
 
         // reset underline font

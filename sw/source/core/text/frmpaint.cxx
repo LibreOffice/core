@@ -647,12 +647,6 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
     // #i16816# tagged pdf support
     SwViewShell *pSh = getRootFrame()->GetCurrShell();
 
-    Num_Info aNumInfo( *this );
-    SwTaggedPDFHelper aTaggedPDFHelperNumbering( &aNumInfo, nullptr, nullptr, rRenderContext );
-
-    Frame_Info aFrameInfo( *this );
-    SwTaggedPDFHelper aTaggedPDFHelperParagraph( nullptr, &aFrameInfo, nullptr, rRenderContext );
-
     if( IsEmpty() && PaintEmpty( rRect, true ) )
         return;
 
@@ -677,6 +671,22 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
             OSL_ENSURE( false, "+SwTextFrame::PaintSwFrame: missing format information" );
             return;
         }
+    }
+
+    Num_Info aNumInfo( *this );
+    SwTaggedPDFHelper aTaggedPDFHelperNumbering( &aNumInfo, nullptr, nullptr, rRenderContext );
+
+    // Lbl unfortunately must be able to contain multiple numbering portions
+    // that may be on multiple lines of text (but apparently always in the
+    // master frame), so it gets complicated.
+    ::std::optional<SwTaggedPDFHelper> oTaggedLabel;
+    // Paragraph tag - if there is a list label, opening should be delayed.
+    ::std::optional<SwTaggedPDFHelper> oTaggedParagraph;
+
+    if (IsFollow() || !GetPara()->HasNumberingPortion())
+    {   // no Lbl needed => open paragraph tag now
+        Frame_Info aFrameInfo(*this);
+        oTaggedParagraph.emplace(nullptr, &aFrameInfo, nullptr, rRenderContext);
     }
 
     // We don't want to be interrupted while painting.
@@ -763,7 +773,7 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
         {
             do
             {
-                aLine.DrawTextLine( rRect, aClip, IsUndersized() );
+                aLine.DrawTextLine(rRect, aClip, IsUndersized(), oTaggedLabel, oTaggedParagraph);
 
             } while( aLine.Next() && aLine.Y() <= nBottom );
         }
@@ -780,6 +790,8 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
 
     OSL_ENSURE( ! IsSwapped(), "A frame is swapped after Paint" );
 
+    assert(!oTaggedLabel); // must have been closed if opened
+    assert(oTaggedParagraph || rRect.GetIntersection(getFrameArea()) != getFrameArea()); // must have been created during complete paint (PDF export is always complete paint)
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

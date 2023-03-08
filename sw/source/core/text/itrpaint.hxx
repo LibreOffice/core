@@ -21,8 +21,11 @@
 
 #include "itrtxt.hxx"
 
+#include <optional>
+
 class SwSaveClip;          // SwTextPainter
 class SwMultiPortion;
+class SwTaggedPDFHelper;
 
 class SwTextPainter : public SwTextCursor
 {
@@ -46,7 +49,9 @@ public:
         CtorInitTextPainter( pTextFrame, pTextPaintInf );
     }
     void DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
-                       const bool bUnderSz );
+        const bool bUnderSz,
+        ::std::optional<SwTaggedPDFHelper> & roTaggedLabel,
+        ::std::optional<SwTaggedPDFHelper> & roTaggedParagraph);
     void PaintDropPortion();
     // if PaintMultiPortion is called recursively, we have to pass the
     // surrounding SwBidiPortion

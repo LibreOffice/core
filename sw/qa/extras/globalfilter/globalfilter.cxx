@@ -12,6 +12,7 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
+#include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <o3tl/safeint.hxx>
@@ -1228,6 +1229,428 @@ void Test::testBulletAsImage()
             }
         }
     }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
+{
+    createSwDoc();
+
+    uno::Reference<text::XTextDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText(xDoc->getText());
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexReplace> xNumRule(
+        xFactory->createInstance("com.sun.star.text.NumberingRules"),
+        uno::UNO_QUERY_THROW);
+    OUString listFormat;
+    for (sal_Int32 i = 0; i < xNumRule->getCount(); ++i)
+    {
+        uno::Sequence<beans::PropertyValue> format;
+        format.getArray();
+        xNumRule->getByIndex(i) >>= format;
+        {
+            auto it(::std::find_if(format.begin(), format.end(),
+                    [](auto const& r) { return r.Name == "NumberingType"; }));
+            // need something RTL
+            const_cast<uno::Any&>(it->Value) <<= style::NumberingType::CHARS_ARABIC;
+        }
+        {
+#if 0
+            // this doesn't work any more
+            auto it(::std::find_if(format.begin(), format.end(),
+                    [](auto const& r) { return r.Name == "ParentNumbering"; }));
+            const_cast<uno::Any&>(it->Value) <<= sal_Int16(i + 1);
+#endif
+            listFormat += "%" + OUString::number(i+1) + "%.";
+            auto it(::std::find_if(format.begin(), format.end(),
+                    [](auto const& r) { return r.Name == "ListFormat"; }));
+            const_cast<uno::Any&>(it->Value) <<= listFormat;
+        }
+        xNumRule->replaceByIndex(i, uno::Any(format));
+    }
+    uno::Reference<beans::XPropertySet>(getParagraph(1), uno::UNO_QUERY_THROW)->setPropertyValue("NumberingRules", uno::Any(xNumRule));
+    xText->insertControlCharacter(xText->getEnd(), text::ControlCharacter::PARAGRAPH_BREAK, false);
+    uno::Reference<beans::XPropertySet>(getParagraph(2), uno::UNO_QUERY_THROW)->setPropertyValue("NumberingLevel", uno::Any(sal_Int16(1)));
+    xText->insertControlCharacter(xText->getEnd(), text::ControlCharacter::PARAGRAPH_BREAK, false);
+    uno::Reference<beans::XPropertySet>(getParagraph(3), uno::UNO_QUERY_THROW)->setPropertyValue("NumberingLevel", uno::Any(sal_Int16(2)));
+
+    // check PDF export of the list items (label in particular)
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    // Enable PDF/UA
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents");
+    CPPUNIT_ASSERT(pContents);
+    vcl::filter::PDFStreamElement* pStream = pContents->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream& rObjectStream = pStream->GetMemory();
+    // Uncompress it.
+    SvMemoryStream aUncompressed;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    rObjectStream.Seek(0);
+    aZCodec.Decompress(rObjectStream, aUncompressed);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+
+    auto pStart = static_cast<const char*>(aUncompressed.GetData());
+    const char* const pEnd = pStart + aUncompressed.GetSize();
+
+    enum
+    {
+        Default,
+        Lbl,
+        LblFoundText
+    } state
+        = Default;
+
+    auto nLine(0);
+    auto nLbl(0);
+    auto nLblTj(0);
+    auto nLblTJ(0);
+    std::vector<int> mcids;
+    while (true)
+    {
+        ++nLine;
+        auto const pLine = ::std::find(pStart, pEnd, '\n');
+        if (pLine == pEnd)
+        {
+            break;
+        }
+        std::string_view const line(pStart, pLine - pStart);
+        pStart = pLine + 1;
+        if (!line.empty() && line[0] != '%')
+        {
+            ::std::cerr << nLine << ": " << line << "\n";
+            if (o3tl::starts_with(line, "/Lbl<</MCID") && o3tl::ends_with(line, ">>BDC"))
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("unexpected nesting", Default, state);
+                mcids.push_back(o3tl::toInt32(line.substr(12)));
+                state = Lbl;
+                ++nLbl;
+            }
+            else if (state == Lbl)
+            {
+                auto const endj(line.find(">Tj"));
+                if (endj != ::std::string_view::npos)
+                {
+                    auto const start(line.rfind("<", endj) + 1);
+                    // for these, expected length is 1 glyphs, each 2 digits
+                    // would be better to check the content but it depends on CMap
+                    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(endj - start)>(1 * 2), endj - start);
+                    state = LblFoundText;
+                    ++nLblTj;
+                }
+                else
+                {
+                    auto const endJ(line.find("]TJ"));
+                    if (endJ != ::std::string_view::npos)
+                    {
+                        auto const start(line.rfind("[", endJ) + 1);
+                        auto i(line.find("<", start));
+                        auto digits(0);
+                        while (i != ::std::string_view::npos && i < endJ)
+                        {
+                            auto const j(line.find(">", i));
+                            digits += j - (i+1);
+                            i = line.find("<", j);
+                        }
+                        // these have list-level numbers + one less ".", each 2 digits
+                        CPPUNIT_ASSERT_EQUAL(static_cast<decltype(digits)>((((nLbl/2 + 1) * 2) - 1) * 2), digits);
+                        state = LblFoundText;
+                        ++nLblTJ;
+                    }
+                }
+            }
+            else if (state != Default && line == "EMC")
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("missing text", LblFoundText, state);
+                state = Default;
+            }
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("unclosed MCS", Default, state);
+    // ideally there should be 3 but apparently every text portion gets its own
+    // tag - this should not be a problem if these are grouped in the structure
+    // tree into 3 Lbl.
+    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nLbl)>(6), nLbl);
+    // these are quite arbitrary?
+    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nLbl)>(2), nLblTJ);
+    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nLbl)>(4), nLblTj);
+
+    auto nL(0);
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject0 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject0)
+            continue;
+        auto pType0 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject0->Lookup("Type"));
+        if (!pType0 || pType0->GetValue() != "StructElem")
+        {
+            continue;
+        }
+        auto pS0 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject0->Lookup("S"));
+        if (!pS0 || pS0->GetValue() != "Document")
+        {
+            continue;
+        }
+        auto pKids0 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject0->Lookup("K"));
+        CPPUNIT_ASSERT(pKids0);
+
+        for (const auto& pKid0 : pKids0->GetElements())
+        {
+            auto pRefKid0 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKid0);
+            CPPUNIT_ASSERT(pRefKid0);
+            auto pObject1 = pRefKid0->LookupObject();
+            CPPUNIT_ASSERT(pObject1);
+            auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("Type"));
+            CPPUNIT_ASSERT(pType1);
+
+            if (pType1 && pType1->GetValue() == "StructElem")
+            {
+                auto pS1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("S"));
+                if (pS1 && pS1->GetValue() == "L")
+                {
+                    ++nL;
+                    auto pKids1 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject1->Lookup("K"));
+                    CPPUNIT_ASSERT(pKids1);
+                    // this is purely structural so there should be 1 child
+                    CPPUNIT_ASSERT_EQUAL(size_t(1), pKids1->GetElements().size());
+
+                    auto pRefKid11 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids1->GetElements()[0]);
+                    CPPUNIT_ASSERT(pRefKid11);
+                    auto pObject11 = pRefKid11->LookupObject();
+                    CPPUNIT_ASSERT(pObject11);
+                    auto pType11 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject11->Lookup("Type"));
+                    CPPUNIT_ASSERT(pType11);
+                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType11->GetValue());
+                    auto pS11 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject11->Lookup("S"));
+                    CPPUNIT_ASSERT(pS11);
+                    CPPUNIT_ASSERT_EQUAL(OString("LI"), pS11->GetValue());
+                    // LI has 2 children: Lbl and LBody
+                    auto pKids11 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject11->Lookup("K"));
+                    CPPUNIT_ASSERT(pKids11);
+                    CPPUNIT_ASSERT_EQUAL(size_t(2), pKids11->GetElements().size());
+
+                    auto pRefKid111 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids11->GetElements()[0]);
+                    CPPUNIT_ASSERT(pRefKid111);
+                    auto pObject111 = pRefKid111->LookupObject();
+                    CPPUNIT_ASSERT(pObject111);
+                    auto pType111 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject111->Lookup("Type"));
+                    CPPUNIT_ASSERT(pType111);
+                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType111->GetValue());
+                    auto pS111 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject111->Lookup("S"));
+                    CPPUNIT_ASSERT(pS111);
+                    CPPUNIT_ASSERT_EQUAL(OString("Lbl"), pS111->GetValue());
+                    // Lbl has 2 children: the first 2 mcids (in order)
+                    auto pKids111 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject111->Lookup("K"));
+                    CPPUNIT_ASSERT(pKids111);
+                    CPPUNIT_ASSERT_EQUAL(size_t(2), pKids111->GetElements().size());
+
+                    auto pRefKid1111 = dynamic_cast<vcl::filter::PDFNumberElement*>(pKids111->GetElements()[0]);
+                    CPPUNIT_ASSERT(pRefKid1111);
+                    CPPUNIT_ASSERT_EQUAL(mcids[0], int(pRefKid1111->GetValue()));
+                    auto pRefKid1112 = dynamic_cast<vcl::filter::PDFNumberElement*>(pKids111->GetElements()[1]);
+                    CPPUNIT_ASSERT(pRefKid1112);
+                    CPPUNIT_ASSERT_EQUAL(mcids[1], int(pRefKid1112->GetValue()));
+
+                    auto pRefKid112 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids11->GetElements()[1]);
+                    CPPUNIT_ASSERT(pRefKid112);
+                    auto pObject112 = pRefKid112->LookupObject();
+                    CPPUNIT_ASSERT(pObject112);
+                    auto pType112 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112->Lookup("Type"));
+                    CPPUNIT_ASSERT(pType112);
+                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType112->GetValue());
+                    auto pS112 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112->Lookup("S"));
+                    CPPUNIT_ASSERT(pS112);
+                    CPPUNIT_ASSERT_EQUAL(OString("LBody"), pS112->GetValue());
+                    // LBody has 2 children: paragraph and nested L (in order)
+                    auto pKids112 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject112->Lookup("K"));
+                    CPPUNIT_ASSERT(pKids112);
+                    CPPUNIT_ASSERT_EQUAL(size_t(2), pKids112->GetElements().size());
+
+                    auto pRefKid1121 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids112->GetElements()[0]);
+                    CPPUNIT_ASSERT(pRefKid1121);
+                    auto pObject1121 = pRefKid1121->LookupObject();
+                    CPPUNIT_ASSERT(pObject1121);
+                    auto pType1121 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1121->Lookup("Type"));
+                    CPPUNIT_ASSERT(pType1121);
+                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType1121->GetValue());
+                    auto pS1121 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1121->Lookup("S"));
+                    CPPUNIT_ASSERT(pS1121);
+                    CPPUNIT_ASSERT_EQUAL(OString("Standard"), pS1121->GetValue());
+
+                    auto pRefKid1122 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids112->GetElements()[1]);
+                    CPPUNIT_ASSERT(pRefKid1122);
+                    auto pObject1122 = pRefKid1122->LookupObject();
+                    CPPUNIT_ASSERT(pObject1122);
+                    auto pType1122 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122->Lookup("Type"));
+                    CPPUNIT_ASSERT(pType1122);
+                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType1122->GetValue());
+                    auto pS1122 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122->Lookup("S"));
+                    CPPUNIT_ASSERT(pS1122);
+                    CPPUNIT_ASSERT_EQUAL(OString("L"), pS1122->GetValue());
+                    auto pKids1122 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject1122->Lookup("K"));
+                    CPPUNIT_ASSERT(pKids1122);
+                    // this is purely structural so there should be 1 child
+                    CPPUNIT_ASSERT_EQUAL(size_t(1), pKids1122->GetElements().size());
+
+                    auto pRefKid11221 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids1122->GetElements()[0]);
+                    CPPUNIT_ASSERT(pRefKid11221);
+                    auto pObject11221 = pRefKid11221->LookupObject();
+                    CPPUNIT_ASSERT(pObject11221);
+                    auto pType11221 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject11221->Lookup("Type"));
+                    CPPUNIT_ASSERT(pType11221);
+                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType11221->GetValue());
+                    auto pS11221 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject11221->Lookup("S"));
+                    CPPUNIT_ASSERT(pS11221);
+                    CPPUNIT_ASSERT_EQUAL(OString("LI"), pS11221->GetValue());
+                    // LI has 2 children: Lbl and LBody
+                    auto pKids11221 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject11221->Lookup("K"));
+                    CPPUNIT_ASSERT(pKids11221);
+                    CPPUNIT_ASSERT_EQUAL(size_t(2), pKids11221->GetElements().size());
+
+                    auto pRefKid112211 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids11221->GetElements()[0]);
+                    CPPUNIT_ASSERT(pRefKid112211);
+                    auto pObject112211 = pRefKid112211->LookupObject();
+                    CPPUNIT_ASSERT(pObject112211);
+                    auto pType112211 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112211->Lookup("Type"));
+                    CPPUNIT_ASSERT(pType112211);
+                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType112211->GetValue());
+                    auto pS112211 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112211->Lookup("S"));
+                    CPPUNIT_ASSERT(pS112211);
+                    CPPUNIT_ASSERT_EQUAL(OString("Lbl"), pS112211->GetValue());
+                    // Lbl has 2 children: the first 2 mcids (in order)
+                    auto pKids112211 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject112211->Lookup("K"));
+                    CPPUNIT_ASSERT(pKids112211);
+                    CPPUNIT_ASSERT_EQUAL(size_t(2), pKids112211->GetElements().size());
+
+                    auto pRefKid1122111 = dynamic_cast<vcl::filter::PDFNumberElement*>(pKids112211->GetElements()[0]);
+                    CPPUNIT_ASSERT(pRefKid1122111);
+                    CPPUNIT_ASSERT_EQUAL(mcids[2], int(pRefKid1122111->GetValue()));
+                    auto pRefKid1122112 = dynamic_cast<vcl::filter::PDFNumberElement*>(pKids112211->GetElements()[1]);
+                    CPPUNIT_ASSERT(pRefKid1122112);
+                    CPPUNIT_ASSERT_EQUAL(mcids[3], int(pRefKid1122112->GetValue()));
+
+                    auto pRefKid112212 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids11221->GetElements()[1]);
+                    CPPUNIT_ASSERT(pRefKid112212);
+                    auto pObject112212 = pRefKid112212->LookupObject();
+                    CPPUNIT_ASSERT(pObject112212);
+                    auto pType112212 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112212->Lookup("Type"));
+                    CPPUNIT_ASSERT(pType112212);
+                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType112212->GetValue());
+                    auto pS112212 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112212->Lookup("S"));
+                    CPPUNIT_ASSERT(pS112212);
+                    CPPUNIT_ASSERT_EQUAL(OString("LBody"), pS112212->GetValue());
+                    // LBody has 2 children: paragraph and nested L (in order)
+                    auto pKids112212 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject112212->Lookup("K"));
+                    CPPUNIT_ASSERT(pKids112212);
+                    CPPUNIT_ASSERT_EQUAL(size_t(2), pKids112212->GetElements().size());
+
+                    auto pRefKid1122121 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids112212->GetElements()[0]);
+                    CPPUNIT_ASSERT(pRefKid1122121);
+                    auto pObject1122121 = pRefKid1122121->LookupObject();
+                    CPPUNIT_ASSERT(pObject1122121);
+                    auto pType1122121 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122121->Lookup("Type"));
+                    CPPUNIT_ASSERT(pType1122121);
+                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType1122121->GetValue());
+                    auto pS1122121 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122121->Lookup("S"));
+                    CPPUNIT_ASSERT(pS1122121);
+                    CPPUNIT_ASSERT_EQUAL(OString("Standard"), pS1122121->GetValue());
+
+                    auto pRefKid1122122 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids112212->GetElements()[1]);
+                    CPPUNIT_ASSERT(pRefKid1122122);
+                    auto pObject1122122 = pRefKid1122122->LookupObject();
+                    CPPUNIT_ASSERT(pObject1122122);
+                    auto pType1122122 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122122->Lookup("Type"));
+                    CPPUNIT_ASSERT(pType1122122);
+                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType1122122->GetValue());
+                    auto pS1122122 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122122->Lookup("S"));
+                    CPPUNIT_ASSERT(pS1122122);
+                    CPPUNIT_ASSERT_EQUAL(OString("L"), pS1122122->GetValue());
+                    auto pKids1122122 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject1122122->Lookup("K"));
+                    CPPUNIT_ASSERT(pKids1122122);
+                    // this is purely structural so there should be 1 child
+                    CPPUNIT_ASSERT_EQUAL(size_t(1), pKids1122122->GetElements().size());
+
+                    auto pRefKid11221221 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids1122122->GetElements()[0]);
+                    CPPUNIT_ASSERT(pRefKid11221221);
+                    auto pObject11221221 = pRefKid11221221->LookupObject();
+                    CPPUNIT_ASSERT(pObject11221221);
+                    auto pType11221221 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject11221221->Lookup("Type"));
+                    CPPUNIT_ASSERT(pType11221221);
+                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType11221221->GetValue());
+                    auto pS11221221 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject11221221->Lookup("S"));
+                    CPPUNIT_ASSERT(pS11221221);
+                    CPPUNIT_ASSERT_EQUAL(OString("LI"), pS11221221->GetValue());
+                    // LI has 2 children: Lbl and LBody
+                    auto pKids11221221 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject11221221->Lookup("K"));
+                    CPPUNIT_ASSERT(pKids11221221);
+                    CPPUNIT_ASSERT_EQUAL(size_t(2), pKids11221221->GetElements().size());
+
+                    auto pRefKid112212211 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids11221221->GetElements()[0]);
+                    CPPUNIT_ASSERT(pRefKid112212211);
+                    auto pObject112212211 = pRefKid112212211->LookupObject();
+                    CPPUNIT_ASSERT(pObject112212211);
+                    auto pType112212211 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112212211->Lookup("Type"));
+                    CPPUNIT_ASSERT(pType112212211);
+                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType112212211->GetValue());
+                    auto pS112212211 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112212211->Lookup("S"));
+                    CPPUNIT_ASSERT(pS112212211);
+                    CPPUNIT_ASSERT_EQUAL(OString("Lbl"), pS112212211->GetValue());
+                    // Lbl has 2 children: the first 2 mcids (in order)
+                    auto pKids112212211 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject112212211->Lookup("K"));
+                    CPPUNIT_ASSERT(pKids112212211);
+                    CPPUNIT_ASSERT_EQUAL(size_t(2), pKids112212211->GetElements().size());
+
+                    auto pRefKid1122122111 = dynamic_cast<vcl::filter::PDFNumberElement*>(pKids112212211->GetElements()[0]);
+                    CPPUNIT_ASSERT(pRefKid1122122111);
+                    CPPUNIT_ASSERT_EQUAL(mcids[4], int(pRefKid1122122111->GetValue()));
+                    auto pRefKid1122122112 = dynamic_cast<vcl::filter::PDFNumberElement*>(pKids112212211->GetElements()[1]);
+                    CPPUNIT_ASSERT(pRefKid1122122112);
+                    CPPUNIT_ASSERT_EQUAL(mcids[5], int(pRefKid1122122112->GetValue()));
+
+                    auto pRefKid112212212 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids11221221->GetElements()[1]);
+                    CPPUNIT_ASSERT(pRefKid112212212);
+                    auto pObject112212212 = pRefKid112212212->LookupObject();
+                    CPPUNIT_ASSERT(pObject112212212);
+                    auto pType112212212 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112212212->Lookup("Type"));
+                    CPPUNIT_ASSERT(pType112212212);
+                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType112212212->GetValue());
+                    auto pS112212212 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject112212212->Lookup("S"));
+                    CPPUNIT_ASSERT(pS112212212);
+                    CPPUNIT_ASSERT_EQUAL(OString("LBody"), pS112212212->GetValue());
+                    // inner LBody has 1 children: paragraph
+                    auto pKids112212212 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject112212212->Lookup("K"));
+                    CPPUNIT_ASSERT(pKids112212212);
+                    CPPUNIT_ASSERT_EQUAL(size_t(1), pKids112212212->GetElements().size());
+
+                    auto pRefKid1122122121 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids112212212->GetElements()[0]);
+                    CPPUNIT_ASSERT(pRefKid1122122121);
+                    auto pObject1122122121 = pRefKid1122122121->LookupObject();
+                    CPPUNIT_ASSERT(pObject1122122121);
+                    auto pType1122122121 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122122121->Lookup("Type"));
+                    CPPUNIT_ASSERT(pType1122122121);
+                    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType1122122121->GetValue());
+                    auto pS1122122121 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1122122121->Lookup("S"));
+                    CPPUNIT_ASSERT(pS1122122121);
+                    CPPUNIT_ASSERT_EQUAL(OString("Standard"), pS1122122121->GetValue());
+                }
+            }
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nL)>(1), nL);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf143311)

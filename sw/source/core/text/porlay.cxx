@@ -2683,6 +2683,21 @@ TextFrameIndex SwParaPortion::GetParLen() const
     return nLen;
 }
 
+bool SwParaPortion::HasNumberingPortion() const
+{
+    SwLinePortion const* pPortion(nullptr);
+    // the first line may contain only fly portion...
+    for (SwLineLayout const* pLine = this; pLine && !pPortion; pLine = pLine->GetNext())
+    {
+        pPortion = pLine->GetFirstPortion();
+        while (pPortion && (pPortion->InGlueGrp() || pPortion->IsFlyPortion()))
+        {   // skip margins and fly spacers - numbering should be first then
+            pPortion = pPortion->GetNextPortion();
+        }
+    }
+    return pPortion && pPortion->InNumberGrp() && !pPortion->IsFootnoteNumPortion();
+}
+
 const SwDropPortion *SwParaPortion::FindDropPortion() const
 {
     const SwLineLayout *pLay = this;
