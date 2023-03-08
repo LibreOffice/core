@@ -25,6 +25,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
+
+#include <optional>
 #include <utility>
 #include <xmloff/maptype.hxx>
 #include <xmloff/txtprmap.hxx>
