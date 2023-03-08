@@ -2146,6 +2146,9 @@ Reference< XNameContainer > SAL_CALL SfxLibraryContainer::createLibrary( const O
     pNewLib->maLibElementFileExtension = maLibElementFileExtension;
 
     createVariableURL( pNewLib->maUnexpandedStorageURL, Name, maInfoFileName, true );
+    // tdf#151741 - fill various storage URLs for the newly created library
+    checkStorageURL(pNewLib->maUnexpandedStorageURL, pNewLib->maLibInfoFileURL,
+                    pNewLib->maStorageURL, pNewLib->maUnexpandedStorageURL);
 
     Reference< XNameAccess > xNameAccess( pNewLib );
     Any aElement;
@@ -2491,10 +2494,6 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
     }
     loadLibrary( Name );
 
-    // Remove from container
-    maNameContainer->removeByName( Name );
-    maModifiable.setModified( true );
-
     // Rename library folder, but not for linked libraries
     bool bMovedSuccessful = true;
 
@@ -2505,6 +2504,14 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
         bMovedSuccessful = false;
 
         OUString aLibDirPath = pImplLib->maStorageURL;
+        // tdf#151741 - fill various storage URLs for the library
+        // These URLs should not be empty for newly created libraries after
+        // the change in SfxLibraryContainer::createLibrary.
+        if (aLibDirPath.isEmpty())
+        {
+            checkStorageURL(pImplLib->maUnexpandedStorageURL, pImplLib->maLibInfoFileURL,
+                            pImplLib->maStorageURL, pImplLib->maUnexpandedStorageURL);
+        }
 
         INetURLObject aDestInetObj( o3tl::getToken(maLibraryPath, 1, ';'));
         aDestInetObj.insertName( NewName, true, INetURLObject::LAST_SEGMENT,
@@ -2581,12 +2588,13 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
 
                 bMovedSuccessful = true;
                 pImplLib->implSetModified( true );
+                // Remove old library from container
+                maNameContainer->removeByName( Name );
+                maModifiable.setModified( true );
             }
         }
         catch(const Exception& )
         {
-            // Restore old library
-            maNameContainer->insertByName( Name, aLibAny ) ;
         }
     }
 
