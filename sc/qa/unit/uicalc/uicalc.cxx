@@ -2221,6 +2221,21 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf142010)
     CPPUNIT_ASSERT_EQUAL(5.0, pDoc->GetValue(ScAddress(5, 71, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf154061)
+{
+    createScDoc("simpleTable.xlsx");
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(OUString("Column2"), pDoc->GetString(ScAddress(1, 0, 0)));
+
+    goToCell("B1");
+
+    // Without the fix in place, it would crash here due to an out of bounds array access
+    dispatchCommand(mxComponent, ".uno:InsertColumnsBefore", {});
+    CPPUNIT_ASSERT_EQUAL(OUString("Column2"), pDoc->GetString(ScAddress(2, 0, 0)));
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(OUString("Column2"), pDoc->GetString(ScAddress(1, 0, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf132431)
 {
     createScDoc("tdf132431.ods");
