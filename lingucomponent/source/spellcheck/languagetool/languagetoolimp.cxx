@@ -126,7 +126,10 @@ std::string makeHttpRequest_impl(std::string_view aURL, HTTP_METHOD method,
 {
     std::unique_ptr<CURL, curl_cleanup_t> curl(curl_easy_init());
     if (!curl)
+    {
+        SAL_WARN("languagetool", "CURL initialization failed");
         return {}; // empty string
+    }
 
     // Same useragent string as in CurlSession (ucp/webdav-curl/CurlSession.cxx)
     curl_version_info_data const* const pVersion(curl_version_info(CURLVERSION_NOW));
@@ -341,20 +344,15 @@ sal_Bool SAL_CALL LanguageToolGrammarChecker::isSpellChecker() { return false; }
 
 sal_Bool SAL_CALL LanguageToolGrammarChecker::hasLocale(const Locale& rLocale)
 {
-    bool bRes = false;
     if (!m_aSuppLocales.hasElements())
         getLocales();
 
     for (auto const& suppLocale : std::as_const(m_aSuppLocales))
-    {
         if (rLocale == suppLocale)
-        {
-            bRes = true;
-            break;
-        }
-    }
+            return true;
 
-    return bRes;
+    SAL_INFO("languagetool", "No locale \"" << LanguageTag::convertToBcp47(rLocale, false) << "\"");
+    return false;
 }
 
 Sequence<Locale> SAL_CALL LanguageToolGrammarChecker::getLocales()

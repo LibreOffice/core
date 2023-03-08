@@ -565,6 +565,11 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
             }
         }
     }
+    else // not found - quite normal
+    {
+        SAL_INFO("linguistic", "No grammar checker found for \""
+                                   << LanguageTag::convertToBcp47(rLocale, false) << "\"");
+    }
     // ---- THREAD SAFE END ----
 
     return xRes;
