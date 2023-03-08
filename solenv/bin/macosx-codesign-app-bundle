@@ -76,7 +76,7 @@ find "$APP_BUNDLE"/Contents -name '*.app' -type d |
 while read app; do
     # Assume the app has a XML (and not binary) Info.plist
     id=`grep -A 1 '<key>CFBundleIdentifier</key>' "$app/Contents/Info.plist" | tail -1 | sed -e 's,.*<string>,,' -e 's,</string>.*,,'`
-    codesign --options=runtime --force --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$app" || exit 1
+    codesign --timestamp --options=runtime --force --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$app" || exit 1
 done
 
 # Then .framework ones. Again, be generic just for kicks.
@@ -90,7 +90,7 @@ while read framework; do
 	    if test -d $version/bin; then
 		# files in bin are not covered by signing the framework...
 		for scriptorexecutable in $(find $version/bin/ -type f); do
-		    codesign --options=runtime --force --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$scriptorexecutable" || exit 1
+		    codesign --timestamp --options=runtime --force --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$scriptorexecutable" || exit 1
 		done
 	    fi
             codesign --force --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$version" || exit 1
@@ -114,7 +114,7 @@ while read file; do
 	    ;;
 	*)
 	    id=`echo ${file#${APP_BUNDLE}/Contents/} | sed -e 's,/,.,g'`
-	    codesign --force --options=runtime --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$file" || exit 1
+	    codesign --force --timestamp --options=runtime --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$file" || exit 1
 	    ;;
     esac
 done
@@ -130,6 +130,6 @@ if test -n "$ENABLE_MACOSX_SANDBOX" && test -n "$application_identifier"; then
     # testflight/beta-testing won't work if that key is used when signing the other executables
     /usr/libexec/PlistBuddy -c "add com.apple.application-identifier string $application_identifier"  $BUILDDIR/lo.xcent
 fi
-codesign --force --options=runtime --identifier="${MACOSX_BUNDLE_IDENTIFIER}" --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$APP_BUNDLE" || exit 1
+codesign --force --timestamp --options=runtime --identifier="${MACOSX_BUNDLE_IDENTIFIER}" --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$APP_BUNDLE" || exit 1
 
 exit 0
