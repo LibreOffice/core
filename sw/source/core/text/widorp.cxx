@@ -519,6 +519,30 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
         }
         if( nLines <= nNeed )
             return false;
+
+        if (pFrame->IsInTab())
+        {
+            const SwFrame* pRow = pFrame;
+            while (pRow && !pRow->IsRowFrame())
+            {
+                pRow = pRow->GetUpper();
+            }
+
+            if (pRow->HasFixSize())
+            {
+                // This is a follow frame and our side is fixed.
+                const SwAttrSet& rSet = pFrame->GetTextNodeForParaProps()->GetSwAttrSet();
+                const SvxOrphansItem& rOrph = rSet.GetOrphans();
+                if (nLines <= rOrph.GetValue())
+                {
+                    // If the master gives us a line as part of widow control, then its orphan
+                    // control will move everything to the follow, which is worse than having no
+                    // widow / orphan control at all.  Don't send a Widows prepare hint, in this
+                    // case.
+                    return true;
+                }
+            }
+        }
     }
 
     pMaster->Prepare( PrepareHint::Widows, static_cast<void*>(&nNeed) );
