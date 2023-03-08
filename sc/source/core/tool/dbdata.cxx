@@ -116,6 +116,7 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     bAutoFilter         (rData.bAutoFilter),
     bModified           (rData.bModified),
     maTableColumnNames  (rData.maTableColumnNames),
+    maTableColumnAttributes(rData.maTableColumnAttributes),
     mbTableColumnNamesDirty(rData.mbTableColumnNamesDirty),
     nFilteredRowCount   (rData.nFilteredRowCount)
 {
@@ -150,6 +151,7 @@ ScDBData::ScDBData( const OUString& rName, const ScDBData& rData ) :
     bAutoFilter         (rData.bAutoFilter),
     bModified           (rData.bModified),
     maTableColumnNames  (rData.maTableColumnNames),
+    maTableColumnAttributes(rData.maTableColumnAttributes),
     mbTableColumnNamesDirty (rData.mbTableColumnNamesDirty),
     nFilteredRowCount   (rData.nFilteredRowCount)
 {
@@ -199,6 +201,7 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
         else
         {
             maTableColumnNames  = rData.maTableColumnNames;
+            maTableColumnAttributes = rData.maTableColumnAttributes;
             mbTableColumnNamesDirty = rData.mbTableColumnNamesDirty;
         }
 
@@ -577,6 +580,7 @@ void ScDBData::UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos)
                 aRange.aEnd.Row());
         // Do not use SetTableColumnNames() because that resets mbTableColumnNamesDirty.
         maTableColumnNames = aNames;
+        maTableColumnAttributes.resize(aNames.size());
         mbTableColumnNamesDirty = bTableColumnNamesDirty;
     }
 
@@ -620,6 +624,7 @@ bool ScDBData::UpdateReference(const ScDocument* pDoc, UpdateRefMode eUpdateRefM
             MoveTo( theTab1, theCol1, theRow1, theCol2, theRow2 );
         // Do not use SetTableColumnNames() because that resets mbTableColumnNamesDirty.
         maTableColumnNames = aNames;
+        maTableColumnAttributes.resize(aNames.size());
         mbTableColumnNamesDirty = bTableColumnNamesDirty;
     }
 
@@ -721,7 +726,6 @@ void ScDBData::AdjustTableColumnAttributes( UpdateRefMode eUpdateRefMode, SCCOL 
                 n += nDx;
             aNewNames.resize(n);
             aNewAttributes.resize(n);
-            maTableColumnAttributes.resize(n);
             // Copy head.
             for (size_t i = 0; i < nHead; ++i)
             {
@@ -876,6 +880,7 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
     }
 
     aNewNames.swap( maTableColumnNames);
+    maTableColumnAttributes.resize(maTableColumnNames.size());
     mbTableColumnNamesDirty = false;
 }
 
