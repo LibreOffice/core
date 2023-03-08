@@ -205,7 +205,7 @@ bool Unique2Optional::doDecl(const DeclaratorDecl* fieldDecl)
     auto paramRecordDecl = firstTemplateParamType->getAsCXXRecordDecl();
     if (paramRecordDecl)
     {
-        // if the pointed-to type has a virtual destructor, then we dont know for sure
+        // if the pointed-to type has a virtual destructor, then we don't know for sure
         // what size type will be stored there
         if (!paramRecordDecl->isEffectivelyFinal())
             if (CXXDestructorDecl* dd = paramRecordDecl->getDestructor())
