@@ -142,546 +142,507 @@
           </packing>
         </child>
         <child>
-          <object class="GtkFrame" id="frame">
+          <!-- n-columns=5 n-rows=9 -->
+          <object class="GtkGrid" id="grid101">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label-xalign">0</property>
-            <property name="shadow-type">none</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">6</property>
             <child>
-              <!-- n-columns=1 n-rows=2 -->
-              <object class="GtkGrid" id="grid101">
+              <object class="GtkLabel" id="typeft">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="margin-start">12</property>
-                <property name="margin-top">6</property>
-                <child>
-                  <!-- n-columns=5 n-rows=5 -->
-                  <object class="GtkGrid" id="grid1">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="row-spacing">6</property>
-                    <property name="column-spacing">6</property>
-                    <child>
-                      <object class="GtkLabel" id="typeft">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="margin-end">6</property>
-                        <property name="label" translatable="yes" context="indexentry|typeft">Index:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">typecb</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="typecb">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="hexpand">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="typecb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|typecb">Select the index that you want to add the entry to.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="new">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="tooltip-text" translatable="yes" context="indexentry|new|tooltip_text">New User-defined Index</property>
-                        <property name="image">image1</property>
-                        <property name="always-show-image">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">2</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label3">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="margin-end">6</property>
-                        <property name="label" translatable="yes" context="indexentry|label3">Entry:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">entryed</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="key1ft">
-                        <property name="visible">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="can-focus">False</property>
-                        <property name="margin-end">6</property>
-                        <property name="label" translatable="yes" context="indexentry|key1ft">1st key:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">key1cb</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="key2ft">
-                        <property name="visible">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="can-focus">False</property>
-                        <property name="margin-end">6</property>
-                        <property name="label" translatable="yes" context="indexentry|key2ft">2nd key:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">key2cb</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="levelft">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="margin-end">6</property>
-                        <property name="label" translatable="yes" context="indexentry|levelft">Index level:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">levelnf</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="levelnf">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="halign">start</property>
-                        <property name="activates-default">True</property>
-                        <property name="truncate-multiline">True</property>
-                        <property name="adjustment">adjustment1</property>
-                        <property name="tooltip_text" translatable="yes" context="indexentry|levelnf">Enter the index level for the entry, which determines the appearance of the entry in the generated index.</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="levelnf-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|levelnf">Enter the index level for the entry. The index level determines the appearance of the entry, according to the settings for that level in the “Entries” tab and the “Styles” tab in the “Table of Contents, Index, or Bibliography” dialog. With default settings, a higher index level results in a greater indent for the entry in the generated index.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">4</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="phonetic0ft">
-                        <property name="can-focus">False</property>
-                        <property name="no-show-all">True</property>
-                        <property name="margin-start">12</property>
-                        <property name="margin-end">6</property>
-                        <property name="label" translatable="yes" context="indexentry|phonetic0ft">Phonetic reading</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">phonetic0ed</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">3</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="phonetic1ft">
-                        <property name="can-focus">False</property>
-                        <property name="no-show-all">True</property>
-                        <property name="margin-start">12</property>
-                        <property name="margin-end">6</property>
-                        <property name="label" translatable="yes" context="indexentry|phonetic1ft">Phonetic reading</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">phonetic1ed</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">3</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="phonetic2ft">
-                        <property name="can-focus">False</property>
-                        <property name="no-show-all">True</property>
-                        <property name="margin-start">12</property>
-                        <property name="margin-end">6</property>
-                        <property name="label" translatable="yes" context="indexentry|phonetic2ft">Phonetic reading</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">phonetic2ed</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">3</property>
-                        <property name="top-attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="phonetic0ed">
-                        <property name="can-focus">True</property>
-                        <property name="no-show-all">True</property>
-                        <property name="activates-default">True</property>
-                        <property name="truncate-multiline">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="phonetic0ed-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|phonetic0ed">Enter the phonetic reading for the corresponding entry. For example, if a Japanese Kanji word has more than one pronunciation, enter the correct pronunciation as a Katakana word. The Kanji word is then sorted according to the phonetic reading entry.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">4</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="phonetic1ed">
-                        <property name="can-focus">True</property>
-                        <property name="no-show-all">True</property>
-                        <property name="activates-default">True</property>
-                        <property name="truncate-multiline">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="phonetic1ed-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|phonetic1ed">Enter the phonetic reading for the corresponding entry.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">4</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="phonetic2ed">
-                        <property name="can-focus">True</property>
-                        <property name="no-show-all">True</property>
-                        <property name="activates-default">True</property>
-                        <property name="truncate-multiline">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="phonetic2ed-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|phonetic2ed">Enter the phonetic reading for the corresponding entry.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">4</property>
-                        <property name="top-attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="key1cb">
-                        <property name="visible">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="can-focus">False</property>
-                        <property name="has-entry">True</property>
-                        <child internal-child="entry">
-                          <object class="GtkEntry" id="comboboxtext-entry">
-                            <property name="can-focus">True</property>
-                            <property name="activates-default">True</property>
-                            <property name="truncate-multiline">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="comboboxtext-entry-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|comboboxtext-entry">Makes the current selection a subentry of the word that you enter here. For example, if you select "cold", and enter "weather" as the 1st key, the index entry is "weather, cold".</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">2</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="key2cb">
-                        <property name="visible">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="can-focus">False</property>
-                        <property name="has-entry">True</property>
-                        <child internal-child="entry">
-                          <object class="GtkEntry" id="comboboxtext-entry2">
-                            <property name="can-focus">True</property>
-                            <property name="activates-default">True</property>
-                            <property name="truncate-multiline">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="comboboxtext-entry2-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|comboboxtext-entry2">Makes the current selection a sub-subentry of the 1st key. For example, if you select "cold", and enter "weather" as the 1st key and "winter" as the 2nd key, the index entry is "weather, winter, cold".</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">3</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="sync">
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="tooltip-text" translatable="yes" context="indexentry|sync|tooltip_text">Update entry from selection</property>
-                        <property name="image">image6</property>
-                        <property name="always-show-image">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">2</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="entryed">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="activates-default">True</property>
-                        <property name="truncate-multiline">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="entryed-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|entryed">Displays the text that is selected in the document. If you want, you can enter a different word for the index entry. The selected text in the document is not changed.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <!-- n-columns=2 n-rows=4 -->
-                  <object class="GtkGrid">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="row-spacing">6</property>
-                    <property name="column-spacing">6</property>
-                    <child>
-                      <object class="GtkCheckButton" id="mainentrycb">
-                        <property name="label" translatable="yes" context="indexentry|mainentrycb">Main entry</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="mainentrycb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|mainentrycb">Makes the selected text the main entry in an alphabetical index.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="applytoallcb">
-                        <property name="label" translatable="yes" context="indexentry|applytoallcb">Apply to all similar texts</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="no-show-all">True</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="searchcasesensitivecb">
-                        <property name="label" translatable="yes" context="indexentry|searchcasesensitivecb">Match case</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="no-show-all">True</property>
-                        <property name="margin-start">12</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="searchcasewordonlycb">
-                        <property name="label" translatable="yes" context="indexentry|searchcasewordonlycb">Whole words only</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="no-show-all">True</property>
-                        <property name="margin-start">12</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <!-- n-columns=2 n-rows=2 -->
-                      <object class="GtkGrid" id="grid2">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="valign">end</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="row-spacing">6</property>
-                        <property name="row-homogeneous">True</property>
-                        <property name="column-homogeneous">True</property>
-                        <child>
-                          <object class="GtkButton" id="previous">
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="no-show-all">True</property>
-                            <property name="tooltip-text" translatable="yes" context="indexentry|previous|tooltip_text">Previous entry</property>
-                            <property name="halign">center</property>
-                            <property name="valign">center</property>
-                            <property name="image">image2</property>
-                            <property name="always-show-image">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="previous-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|previous">Jumps to the previous index entry of the same type in the document.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="next">
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="no-show-all">True</property>
-                            <property name="tooltip-text" translatable="yes" context="indexentry|next|tooltip_text">Next entry</property>
-                            <property name="halign">center</property>
-                            <property name="valign">center</property>
-                            <property name="image">image3</property>
-                            <property name="always-show-image">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="next-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|next">Jumps to the next index entry of the same type in the document.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="first">
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="no-show-all">True</property>
-                            <property name="tooltip-text" translatable="yes" context="indexentry|first|tooltip_text">Previous entry (same name)</property>
-                            <property name="halign">center</property>
-                            <property name="valign">center</property>
-                            <property name="image">image4</property>
-                            <property name="always-show-image">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="first-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|first">Jumps to the previous index entry of the same type and with the same name in the document.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="last">
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="no-show-all">True</property>
-                            <property name="tooltip-text" translatable="yes" context="indexentry|last|tooltip_text">Next entry (same name)</property>
-                            <property name="halign">center</property>
-                            <property name="valign">center</property>
-                            <property name="image">image5</property>
-                            <property name="always-show-image">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="last-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|last">Jumps to the next index entry of the same type and with the same name in the document.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">0</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                        <property name="height">4</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
+                <property name="margin-end">6</property>
+                <property name="label" translatable="yes" context="indexentry|typeft">Index:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">typecb</property>
+                <property name="xalign">0</property>
               </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
             </child>
-            <child type="label">
-              <object class="GtkLabel" id="label1">
+            <child>
+              <object class="GtkComboBoxText" id="typecb">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="indexentry|label1">Selection</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
+                <property name="hexpand">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="typecb-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|typecb">Select the index that you want to add the entry to.</property>
+                  </object>
+                </child>
               </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="new">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="indexentry|new|tooltip_text">New User-defined Index</property>
+                <property name="image">image1</property>
+                <property name="always-show-image">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label3">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-end">6</property>
+                <property name="label" translatable="yes" context="indexentry|label3">Entry:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">entryed</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="entryed">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="entryed-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|entryed">Displays the text that is selected in the document. If you want, you can enter a different word for the index entry. The selected text in the document is not changed.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="sync">
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="indexentry|sync|tooltip_text">Update entry from selection</property>
+                <property name="image">image6</property>
+                <property name="always-show-image">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="phonetic0ft">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">6</property>
+                <property name="label" translatable="yes" context="indexentry|phonetic0ft">Phonetic reading</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">phonetic0ed</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">3</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="phonetic0ed">
+                <property name="can-focus">True</property>
+                <property name="no-show-all">True</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="phonetic0ed-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|phonetic0ed">Enter the phonetic reading for the corresponding entry. For example, if a Japanese Kanji word has more than one pronunciation, enter the correct pronunciation as a Katakana word. The Kanji word is then sorted according to the phonetic reading entry.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">4</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="phonetic1ft">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">6</property>
+                <property name="label" translatable="yes" context="indexentry|phonetic1ft">Phonetic reading</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">phonetic1ed</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">3</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="phonetic1ed">
+                <property name="can-focus">True</property>
+                <property name="no-show-all">True</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="phonetic1ed-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|phonetic1ed">Enter the phonetic reading for the corresponding entry.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">4</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="phonetic2ft">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">6</property>
+                <property name="label" translatable="yes" context="indexentry|phonetic2ft">Phonetic reading</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">phonetic2ed</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">3</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="phonetic2ed">
+                <property name="can-focus">True</property>
+                <property name="no-show-all">True</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="phonetic2ed-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|phonetic2ed">Enter the phonetic reading for the corresponding entry.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">4</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="key1ft">
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="can-focus">False</property>
+                <property name="margin-end">6</property>
+                <property name="label" translatable="yes" context="indexentry|key1ft">1st key:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">key1cb</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="key1cb">
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="can-focus">False</property>
+                <property name="has-entry">True</property>
+                <child internal-child="entry">
+                  <object class="GtkEntry" id="comboboxtext-entry">
+                    <property name="can-focus">True</property>
+                    <property name="activates-default">True</property>
+                    <property name="truncate-multiline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="comboboxtext-entry-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|comboboxtext-entry">Makes the current selection a subentry of the word that you enter here. For example, if you select "cold", and enter "weather" as the 1st key, the index entry is "weather, cold".</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="key2ft">
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="can-focus">False</property>
+                <property name="margin-end">6</property>
+                <property name="label" translatable="yes" context="indexentry|key2ft">2nd key:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">key2cb</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="key2cb">
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="can-focus">False</property>
+                <property name="has-entry">True</property>
+                <child internal-child="entry">
+                  <object class="GtkEntry" id="comboboxtext-entry2">
+                    <property name="can-focus">True</property>
+                    <property name="activates-default">True</property>
+                    <property name="truncate-multiline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="comboboxtext-entry2-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|comboboxtext-entry2">Makes the current selection a sub-subentry of the 1st key. For example, if you select "cold", and enter "weather" as the 1st key and "winter" as the 2nd key, the index entry is "weather, winter, cold".</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">3</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="levelft">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-end">6</property>
+                <property name="label" translatable="yes" context="indexentry|levelft">Index level:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">levelnf</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="levelnf">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="tooltip-text" translatable="yes" context="indexentry|levelnf">Enter the index level for the entry, which determines the appearance of the entry in the generated index.</property>
+                <property name="halign">start</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
+                <property name="adjustment">adjustment1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="levelnf-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|levelnf">Enter the index level for the entry. The index level determines the appearance of the entry, according to the settings for that level in the “Entries” tab and the “Styles” tab in the “Table of Contents, Index, or Bibliography” dialog. With default settings, a higher index level results in a greater indent for the entry in the generated index.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">4</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="mainentrycb">
+                <property name="label" translatable="yes" context="indexentry|mainentrycb">Main entry</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="halign">start</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="mainentrycb-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|mainentrycb">Makes the selected text the main entry in an alphabetical index.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">5</property>
+                <property name="width">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="applytoallcb">
+                <property name="label" translatable="yes" context="indexentry|applytoallcb">Apply to all similar texts</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">start</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">6</property>
+                <property name="width">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="searchcasesensitivecb">
+                <property name="label" translatable="yes" context="indexentry|searchcasesensitivecb">Match case</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">start</property>
+                <property name="margin-start">12</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">7</property>
+                <property name="width">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="searchcasewordonlycb">
+                <property name="label" translatable="yes" context="indexentry|searchcasewordonlycb">Whole words only</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">start</property>
+                <property name="margin-start">12</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">8</property>
+                <property name="width">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="last">
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="no-show-all">True</property>
+                <property name="tooltip-text" translatable="yes" context="indexentry|last|tooltip_text">Next entry (same name)</property>
+                <property name="halign">start</property>
+                <property name="valign">center</property>
+                <property name="hexpand">True</property>
+                <property name="image">image5</property>
+                <property name="always-show-image">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="last-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|last">Jumps to the next index entry of the same type and with the same name in the document.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">4</property>
+                <property name="top-attach">7</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="first">
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="no-show-all">True</property>
+                <property name="tooltip-text" translatable="yes" context="indexentry|first|tooltip_text">Previous entry (same name)</property>
+                <property name="halign">end</property>
+                <property name="valign">center</property>
+                <property name="hexpand">True</property>
+                <property name="image">image4</property>
+                <property name="always-show-image">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="first-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|first">Jumps to the previous index entry of the same type and with the same name in the document.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">3</property>
+                <property name="top-attach">7</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="previous">
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="no-show-all">True</property>
+                <property name="tooltip-text" translatable="yes" context="indexentry|previous|tooltip_text">Previous entry</property>
+                <property name="halign">end</property>
+                <property name="valign">center</property>
+                <property name="hexpand">True</property>
+                <property name="image">image2</property>
+                <property name="always-show-image">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="previous-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|previous">Jumps to the previous index entry of the same type in the document.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">3</property>
+                <property name="top-attach">8</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="next">
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="no-show-all">True</property>
+                <property name="tooltip-text" translatable="yes" context="indexentry|next|tooltip_text">Next entry</property>
+                <property name="halign">start</property>
+                <property name="valign">center</property>
+                <property name="hexpand">True</property>
+                <property name="image">image3</property>
+                <property name="always-show-image">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="next-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|next">Jumps to the next index entry of the same type in the document.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">4</property>
+                <property name="top-attach">8</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
