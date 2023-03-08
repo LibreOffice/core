@@ -515,7 +515,7 @@ void UpdateBookmarks(SfxRequest& rReq, SwWrtShell& rWrtSh)
         pBookmarks->GetValue() >>= aBookmarks;
     }
 
-    rWrtSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSBOOKMARK, nullptr);
+    rWrtSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::UPDATE_BOOKMARKS, nullptr);
     rWrtSh.StartAction();
 
     IDocumentMarkAccess& rIDMA = *rWrtSh.GetDoc()->getIDocumentMarkAccess();
@@ -578,7 +578,7 @@ void UpdateBookmarks(SfxRequest& rReq, SwWrtShell& rWrtSh)
     }
 
     rWrtSh.EndAction();
-    rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSBOOKMARK, nullptr);
+    rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::UPDATE_BOOKMARKS, nullptr);
 }
 
 void UpdateBookmark(SfxRequest& rReq, SwWrtShell& rWrtSh)
