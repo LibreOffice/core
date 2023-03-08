@@ -3213,7 +3213,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
             }
             else
             {
-                SetLastExceptionMsg("input filename without a suffix");
+                SetLastExceptionMsg("input URL '" + aURL + "' lacks a suffix");
                 return false;
             }
         }
