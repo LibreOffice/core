@@ -1840,7 +1840,11 @@ void JSTreeView::select(int pos)
         }
     }
     enable_notify_events();
-    sendUpdate();
+
+    std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
+    (*pMap)[ACTION_TYPE] = "select";
+    (*pMap)["position"] = OUString::number(pos);
+    sendAction(std::move(pMap));
 }
 
 weld::TreeView* JSTreeView::get_drag_source() const { return g_DragSource; }
