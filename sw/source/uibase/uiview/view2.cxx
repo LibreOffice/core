@@ -1243,8 +1243,8 @@ void SwView::Execute(SfxRequest &rReq)
                 const SwTOXBase* pBase = m_pWrtShell->GetCurTOX();
                 if( !pBase )
                 {
-                    m_pWrtShell->GotoNextTOXBase();
-                    pBase = m_pWrtShell->GetCurTOX();
+                    if (m_pWrtShell->GotoNextTOXBase())
+                        pBase = m_pWrtShell->GetCurTOX();
                 }
 
                 bool bAutoMarkApplied = false;
