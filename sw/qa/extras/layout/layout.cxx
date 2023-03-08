@@ -42,6 +42,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdotext.hxx>
 #include <dcontact.hxx>
+#include <frameformats.hxx>
 
 /// Test to assert layout / rendering result of Writer.
 class SwLayoutWriter : public SwModelTestBase
@@ -4644,6 +4645,21 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128959)
     assertXPath(pXmlDoc,
                 "/root/page[2]/body/tab[1]/row[1]/cell[1]/txt[1]/SwParaPortion/SwLineLayout[1]",
                 "portion", "amet commodo magna eros quis urna.");
+
+    // Also check that the widow control for the paragraph is not turned off:
+    SwFrameFormats& rTableFormats = *pDocument->GetTableFrameFormats();
+    SwFrameFormat* pTableFormat = rTableFormats[0];
+    SwTable* pTable = SwTable::FindTable(pTableFormat);
+    const SwTableBox* pCell = pTable->GetTableBox("A1");
+    const SwStartNode* pStartNode = pCell->GetSttNd();
+    SwNodeIndex aNodeIndex(*pStartNode);
+    ++aNodeIndex;
+    const SwTextNode* pTextNode = aNodeIndex.GetNode().GetTextNode();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 0
+    // i.e. the original fix only worked as the entire widow / orphan control was switched off.
+    CPPUNIT_ASSERT_EQUAL(2, static_cast<int>(pTextNode->GetSwAttrSet().GetWidows().GetValue()));
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf121658)

@@ -2642,15 +2642,6 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         }
                     }
                 }
-
-                // fix table paragraph properties
-                if (xTextRange.is() && xParaProps && m_nTableDepth > 0 && !m_bIsInComments)
-                {
-                    // tdf#128959 table paragraphs haven't got window and orphan controls
-                    uno::Any aAny(static_cast<sal_Int8>(0));
-                    xParaProps->setPropertyValue("ParaOrphans", aAny);
-                    xParaProps->setPropertyValue("ParaWidows", aAny);
-                }
             }
             if( !bKeepLastParagraphProperties )
                 rAppendContext.pLastParagraphProperties = pToBeSavedProperties;
