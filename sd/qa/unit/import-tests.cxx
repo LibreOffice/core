@@ -88,6 +88,7 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
+#include <com/sun/star/drawing/RectanglePoint.hpp>
 
 #include <stlpool.hxx>
 #include <comphelper/processfactory.hxx>
@@ -124,6 +125,7 @@ public:
     virtual void setUp() override;
 
     void testDocumentLayout();
+    void testTdf153466();
     void testTdf146223();
     void testTdf144918();
     void testTdf144917();
@@ -194,6 +196,7 @@ public:
     CPPUNIT_TEST_SUITE(SdImportTest);
 
     CPPUNIT_TEST(testDocumentLayout);
+    CPPUNIT_TEST(testTdf153466);
     CPPUNIT_TEST(testTdf146223);
     CPPUNIT_TEST(testTdf144918);
     CPPUNIT_TEST(testTdf144917);
@@ -340,6 +343,26 @@ void SdImportTest::testDocumentLayout()
                 OUStringConcatenation(m_directories.getPathFromSrc( u"/sd/qa/unit/data/" ) + aFilesToCompare[i].sDump),
                 i == nUpdateMe );
     }
+}
+
+void SdImportTest::testTdf153466()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf153466.pptx"), PPTX);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
+                                                     uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageSet(xPage, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xBackground(
+        xPageSet->getPropertyValue("Background").get<uno::Reference<beans::XPropertySet>>());
+
+    com::sun::star::drawing::RectanglePoint aRectanglePoint;
+    xBackground->getPropertyValue("FillBitmapRectanglePoint") >>= aRectanglePoint;
+    CPPUNIT_ASSERT_EQUAL(drawing::RectanglePoint::RectanglePoint_RIGHT_BOTTOM, aRectanglePoint);
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+    xShape->getPropertyValue("FillBitmapRectanglePoint") >>= aRectanglePoint;
+    CPPUNIT_ASSERT_EQUAL(drawing::RectanglePoint::RectanglePoint_LEFT_MIDDLE, aRectanglePoint);
 }
 
 void SdImportTest::testTdf146223()
