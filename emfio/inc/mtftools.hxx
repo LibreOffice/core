@@ -387,7 +387,7 @@ namespace emfio
         GDIObj & operator =(GDIObj const &) = default;
     };
 
-    struct UNLESS_MERGELIBS(EMFIO_DLLPUBLIC) WinMtfFontStyle final : GDIObj
+    struct EMFIO_DLLPUBLIC WinMtfFontStyle final : GDIObj
     {
         vcl::Font    aFont;
 
