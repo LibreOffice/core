@@ -1604,8 +1604,7 @@ void XclExpChartObj::SaveXml( XclExpXmlStream& rStrm )
         ChartExport aChartExport(XML_xdr, pDrawing, GetChartDoc(), &rStrm, drawingml::DOCUMENT_XLSX);
         auto pURLTransformer = std::make_shared<ScURLTransformer>(*mpDoc);
         aChartExport.SetURLTranslator(pURLTransformer);
-        static sal_Int32 nChartCount = 0;
-        nChartCount++;
+        sal_Int32 nChartCount = oox::drawingml::DrawingML::getNewChartUniqueId();
         sal_Int32 nID = rStrm.GetUniqueId();
         aChartExport.WriteChartObj( mxShape, nID, nChartCount );
         // TODO: get the correcto chart number

@@ -365,6 +365,7 @@ public:
 
     static sal_Int32 getNewDrawingUniqueId() { return ++mnDrawingMLCount; }
     static sal_Int32 getNewVMLUniqueId() { return ++mnVmlCount; }
+    static sal_Int32 getNewChartUniqueId() { return ++mnChartCount; }
 
     // A Helper to decide the script type for given text in order to call WriteRunProperties.
     static sal_Int16 GetScriptType(const OUString& rStr);
