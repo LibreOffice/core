@@ -48,7 +48,7 @@ sal_uInt16 SwIsoToxPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
     // nViewWidth need to be calculated
     if( !Width() && rInf.OnWin() &&
         !rInf.GetOpt().IsPagePreview() &&
-            !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings()   )
+            !rInf.GetOpt().IsReadonly() && rInf.GetOpt().IsFieldShadings()   )
     {
         if( !m_nViewWidth )
             pThis->m_nViewWidth = rInf.GetTextSize(OUString(' ')).Width();

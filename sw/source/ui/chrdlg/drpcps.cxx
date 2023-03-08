@@ -242,9 +242,11 @@ void SwDropCapsPict::UpdatePaintSettings()
     maCJKFont.SetTransparent(true);
     maCTLFont.SetTransparent(true);
 
-    aFont.SetColor( SwViewOption::GetFontColor() );
-    maCJKFont.SetColor( SwViewOption::GetFontColor() );
-    maCTLFont.SetColor( SwViewOption::GetFontColor() );
+    const Color& rFontColor = mpPage->m_rSh.GetViewOptions()->GetFontColor();
+
+    aFont.SetColor( rFontColor );
+    maCJKFont.SetColor( rFontColor );
+    maCTLFont.SetColor( rFontColor );
 
     aFont.SetFillColor(Application::GetSettings().GetStyleSettings().GetWindowColor());
     maCJKFont.SetFillColor(Application::GetSettings().GetStyleSettings().GetWindowColor());

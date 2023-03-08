@@ -193,30 +193,62 @@ namespace o3tl {
     template<> struct typed_flags<ViewOptFlags> : is_typed_flags<ViewOptFlags, 0x01ff> {};
 }
 
+struct SwViewColors
+{
+    SwViewColors();
+    SwViewColors(const svtools::ColorConfig& rConfig);
+    bool operator==(const SwViewColors& rOther) const
+    {
+        return m_aDocColor == rOther.m_aDocColor
+            && m_aDocBoundColor == rOther.m_aDocBoundColor
+            && m_aObjectBoundColor == rOther.m_aObjectBoundColor
+            && m_aAppBackgroundColor == rOther.m_aAppBackgroundColor
+            && m_aTableBoundColor == rOther.m_aTableBoundColor
+            && m_aFontColor == rOther.m_aFontColor
+            && m_aIndexShadingsColor == rOther.m_aIndexShadingsColor
+            && m_aLinksColor == rOther.m_aLinksColor
+            && m_aVisitedLinksColor == rOther.m_aVisitedLinksColor
+            && m_aDirectCursorColor == rOther.m_aDirectCursorColor
+            && m_aTextGridColor == rOther.m_aTextGridColor
+            && m_aSpellColor == rOther.m_aSpellColor
+            && m_aGrammarColor == rOther.m_aGrammarColor
+            && m_aSmarttagColor == rOther.m_aSmarttagColor
+            && m_aFieldShadingsColor == rOther.m_aFieldShadingsColor
+            && m_aSectionBoundColor == rOther.m_aSectionBoundColor
+            && m_aPageBreakColor == rOther.m_aPageBreakColor
+            && m_aScriptIndicatorColor == rOther.m_aScriptIndicatorColor
+            && m_aShadowColor == rOther.m_aShadowColor
+            && m_aHeaderFooterMarkColor == rOther.m_aHeaderFooterMarkColor
+            && m_nAppearanceFlags == rOther.m_nAppearanceFlags;
+    }
+    Color m_aDocColor;  // color of document boundaries
+    Color m_aDocBoundColor;  // color of document boundaries
+    Color m_aObjectBoundColor; // color of object boundaries
+    Color m_aAppBackgroundColor; // application background
+    Color m_aTableBoundColor; // color of table boundaries
+    Color m_aFontColor;
+    Color m_aIndexShadingsColor; // background color of indexes
+    Color m_aLinksColor;
+    Color m_aVisitedLinksColor;
+    Color m_aDirectCursorColor;
+    Color m_aTextGridColor;
+    Color m_aSpellColor;     // mark color of online spell checking
+    Color m_aGrammarColor;
+    Color m_aSmarttagColor;
+    Color m_aFieldShadingsColor;
+    Color m_aSectionBoundColor;
+    Color m_aPageBreakColor;
+    Color m_aScriptIndicatorColor;
+    Color m_aShadowColor;
+    Color m_aHeaderFooterMarkColor;
+    ViewOptFlags m_nAppearanceFlags;
+};
+
 class SW_DLLPUBLIC SwViewOption
 {
-    static Color    s_aDocColor;  // color of document boundaries
-    static Color    s_aDocBoundColor;  // color of document boundaries
-    static Color    s_aObjectBoundColor; // color of object boundaries
-    static Color    s_aAppBackgroundColor; // application background
-    static Color    s_aTableBoundColor; // color of table boundaries
-    static Color    s_aFontColor;
-    static Color    s_aIndexShadingsColor; // background color of indexes
-    static Color    s_aLinksColor;
-    static Color    s_aVisitedLinksColor;
-    static Color    s_aDirectCursorColor;
-    static Color    s_aTextGridColor;
-    static Color    s_aSpellColor;     // mark color of online spell checking
-    static Color    s_aGrammarColor;
-    static Color    s_aSmarttagColor;
-    static Color    s_aFieldShadingsColor;
-    static Color    s_aSectionBoundColor;
-    static Color    s_aPageBreakColor;
-    static Color    s_aScriptIndicatorColor;
-    static Color    s_aShadowColor;
-    static Color    s_aHeaderFooterMarkColor;
+    SwViewColors m_aColorConfig;
+    static SwViewColors s_aInitialColorConfig;
 
-    static ViewOptFlags s_nAppearanceFlags;
     static sal_uInt16   s_nPixelTwips;// 1 Pixel == ? Twips
 
     OUString        m_sSymbolFont;        // Symbolfont.
@@ -271,6 +303,21 @@ public:
     static void Init(const OutputDevice* pWin);        // Initializing of static data.
 
     inline void     SetUIOptions( const SwViewOption& );
+
+    void SetColorConfig(const SwViewColors& rColorConfig)
+    {
+        m_aColorConfig = rColorConfig;
+    }
+
+    const SwViewColors& GetColorConfig() const
+    {
+        return m_aColorConfig;
+    }
+
+    static void SetInitialColorConfig(const SwViewColors& rColorConfig)
+    {
+        s_aInitialColorConfig = rColorConfig;
+    }
 
     // Options from nCoreOptions
     bool IsIdle() const
@@ -382,8 +429,8 @@ public:
     void SetResolvedPostIts( bool b )
     { SetUIOption(b, ViewOptFlags2::ResolvedPostits); }
 
-    static void PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
-                              bool bIsScript );
+    void PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
+                              bool bIsScript ) const;
     static sal_uInt16 GetPostItsWidth( const OutputDevice *pOut );
 
     //show/hide tooltips on tracked changes
@@ -749,43 +796,41 @@ public:
     bool        IsShowPlaceHolderFields() const { return m_bShowPlaceHolderFields; }
     void            SetShowPlaceHolderFields(bool bSet) { m_bShowPlaceHolderFields = bSet; }
 
-    static Color&   GetDocColor();
-    static Color&   GetDocBoundariesColor();
-    static Color&   GetAppBackgroundColor();
-    static Color&   GetObjectBoundariesColor();
-    static Color&   GetTableBoundariesColor();
-    static Color&   GetIndexShadingsColor();
-    static Color&   GetLinksColor();
-    static Color&   GetVisitedLinksColor();
-    static Color&   GetDirectCursorColor();
-    static Color&   GetTextGridColor();
-    static Color&   GetSpellColor();
-    static Color&   GetGrammarColor();
-    static Color&   GetSmarttagColor();
-    static Color&   GetShadowColor();
-    static Color&   GetFontColor();
-    static Color&   GetFieldShadingsColor();
-    static Color&   GetSectionBoundColor();
-    static Color&   GetPageBreakColor();
-    static Color&   GetHeaderFooterMarkColor();
+    const Color& GetDocColor() const;
+    const Color& GetDocBoundariesColor() const;
+    const Color& GetAppBackgroundColor() const;
+    const Color& GetObjectBoundariesColor() const;
+    const Color& GetTableBoundariesColor() const;
+    const Color& GetIndexShadingsColor() const;
+    const Color& GetLinksColor() const;
+    const Color& GetVisitedLinksColor() const;
+    const Color& GetDirectCursorColor() const;
+    const Color& GetTextGridColor() const;
+    const Color& GetSpellColor() const;
+    const Color& GetGrammarColor() const;
+    const Color& GetSmarttagColor() const;
+    const Color& GetShadowColor() const;
+    const Color& GetFontColor() const;
+    const Color& GetFieldShadingsColor() const;
+    const Color& GetSectionBoundColor() const;
+    const Color& GetPageBreakColor() const;
+    const Color& GetHeaderFooterMarkColor() const;
 
-    static bool     IsAppearanceFlag(ViewOptFlags nFlag);
+    bool IsAppearanceFlag(ViewOptFlags nFlag) const;
 
-    static bool     IsDocBoundaries()     {return IsAppearanceFlag(ViewOptFlags::DocBoundaries);}
-    static bool     IsObjectBoundaries()  {return IsAppearanceFlag(ViewOptFlags::ObjectBoundaries);}
-    static bool     IsTableBoundaries()   {return IsAppearanceFlag(ViewOptFlags::TableBoundaries );}
-    static bool     IsIndexShadings()     {return IsAppearanceFlag(ViewOptFlags::IndexShadings   );}
-    static bool     IsLinks()             {return IsAppearanceFlag(ViewOptFlags::Links            );}
-    static bool     IsVisitedLinks()      {return IsAppearanceFlag(ViewOptFlags::VisitedLinks    );}
-    static bool     IsFieldShadings()     {return IsAppearanceFlag(ViewOptFlags::FieldShadings);}
-    static bool     IsSectionBoundaries() {return IsAppearanceFlag(ViewOptFlags::SectionBoundaries);}
-    static bool     IsShadow()            {return IsAppearanceFlag(ViewOptFlags::Shadow           );}
+    bool IsDocBoundaries() const {return IsAppearanceFlag(ViewOptFlags::DocBoundaries);}
+    bool IsObjectBoundaries() const {return IsAppearanceFlag(ViewOptFlags::ObjectBoundaries);}
+    bool IsTableBoundaries() const {return IsAppearanceFlag(ViewOptFlags::TableBoundaries);}
+    bool IsIndexShadings() const {return IsAppearanceFlag(ViewOptFlags::IndexShadings);}
+    bool IsLinks() const {return IsAppearanceFlag(ViewOptFlags::Links);}
+    bool IsVisitedLinks() const {return IsAppearanceFlag(ViewOptFlags::VisitedLinks);}
+    bool IsFieldShadings() const {return IsAppearanceFlag(ViewOptFlags::FieldShadings);}
+    bool IsSectionBoundaries() const {return IsAppearanceFlag(ViewOptFlags::SectionBoundaries);}
+    bool IsShadow() const {return IsAppearanceFlag(ViewOptFlags::Shadow);}
 
-    static void     SetAppearanceFlag(ViewOptFlags nFlag, bool bSet, bool bSaveInConfig = false);
+    void     SetAppearanceFlag(ViewOptFlags nFlag, bool bSet, bool bSaveInConfig = false);
 
-    static void     SetDocBoundaries(bool bSet)   {SetAppearanceFlag(ViewOptFlags::DocBoundaries, bSet);}
-
-    static void     ApplyColorConfigValues(const svtools::ColorConfig& rConfig);
+    void     SetDocBoundaries(bool bSet)   {SetAppearanceFlag(ViewOptFlags::DocBoundaries, bSet);}
 
     // get/set default anchor (0..2); use GetDefaultAnchorType() to convert into RndStdIds::FLY_*
     sal_Int32 GetDefaultAnchor() const
@@ -794,11 +839,14 @@ public:
         { m_nDefaultAnchor = aFlag; }
 
     RndStdIds GetDefaultAnchorType() const;
+
+    // Useful for when getting the current view SwViewOption is not possible otherwise
+    static const SwViewOption& GetCurrentViewOptions();
 };
 
 inline bool SwViewOption::operator==( const SwViewOption &rOpt ) const
 {
-    return IsEqualFlags( rOpt ) && m_nZoom == rOpt.GetZoom();
+    return IsEqualFlags( rOpt ) && m_nZoom == rOpt.GetZoom() && m_aColorConfig == rOpt.m_aColorConfig;
 }
 
 inline void SwViewOption::SetUIOptions( const SwViewOption& rVOpt )

@@ -109,7 +109,7 @@ private:
         {
         }
 
-        return SwViewOption::GetGrammarColor();
+        return SwViewOption::GetCurrentViewOptions().GetGrammarColor();
     }
 
     static WrongAreaLineType getGrammarLineType( css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag )
@@ -175,7 +175,7 @@ private:
         {
         }
 
-        return SwViewOption::GetSmarttagColor( );
+        return SwViewOption::GetCurrentViewOptions().GetSmarttagColor();
     }
 
     static WrongAreaLineType getSmartLineType( css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag )
@@ -224,7 +224,7 @@ private:
     {
         if (WRONGLIST_SPELL == listType)
         {
-            return SwViewOption::GetSpellColor();
+            return SwViewOption::GetCurrentViewOptions().GetSpellColor();
         }
         else if (WRONGLIST_GRAMMAR == listType)
         {
@@ -235,7 +235,7 @@ private:
             return  getSmartColor(xPropertyBag);
         }
 
-        return SwViewOption::GetSpellColor();
+        return SwViewOption::GetCurrentViewOptions().GetSpellColor();
     }
 
     static WrongAreaLineType getWrongAreaLineType(WrongListType listType,

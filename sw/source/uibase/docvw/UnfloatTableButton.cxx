@@ -207,7 +207,8 @@ void UnfloatTableButton::PaintButton()
     SwFrameButtonPainter::PaintButton(aSeq, aRect, true);
 
     // Create the text primitive
-    basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
+    basegfx::BColor aLineColor
+        = SwViewOption::GetCurrentViewOptions().GetHeaderFooterMarkColor().getBColor();
     basegfx::B2DVector aFontSize;
     drawinglayer::attribute::FontAttribute aFontAttr
         = drawinglayer::primitive2d::getFontAttributeFromVclFont(aFontSize, m_xVirDev->GetFont(),

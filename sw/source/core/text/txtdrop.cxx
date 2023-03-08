@@ -325,7 +325,7 @@ void SwDropPortion::PaintText( const SwTextPaintInfo &rInf ) const
         const_cast<SwDropPortion*>(this)->SetJoinBorderWithPrev(pCurrPart->GetJoinBorderWithPrev());
 
         if ( rInf.OnWin() &&
-            !rInf.GetOpt().IsPagePreview() && !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings() &&
+            !rInf.GetOpt().IsPagePreview() && !rInf.GetOpt().IsReadonly() && rInf.GetOpt().IsFieldShadings() &&
             (!pCurrPart->GetFont().GetBackColor() || *pCurrPart->GetFont().GetBackColor() == COL_TRANSPARENT) )
         {
             rInf.DrawBackground( *this );
@@ -398,7 +398,7 @@ void SwDropPortion::Paint( const SwTextPaintInfo &rInf ) const
         return;
 
     if ( rInf.OnWin() &&
-        !rInf.GetOpt().IsPagePreview() && !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings()       )
+        !rInf.GetOpt().IsPagePreview() && !rInf.GetOpt().IsReadonly() && rInf.GetOpt().IsFieldShadings()       )
         rInf.DrawBackground( *this );
 
     // make sure that font is not rotated

@@ -237,8 +237,8 @@ static bool lcl_ChgHyperLinkColor( const SwTextAttr& rAttr,
 
     if ( pShell->GetWin() &&
         (
-          (rINetAttr.IsVisited() && SwViewOption::IsVisitedLinks()) ||
-          (!rINetAttr.IsVisited() && SwViewOption::IsLinks())
+          (rINetAttr.IsVisited() && pShell->GetViewOptions()->IsVisitedLinks()) ||
+          (!rINetAttr.IsVisited() && pShell->GetViewOptions()->IsLinks())
         )
        )
     {
@@ -247,12 +247,12 @@ static bool lcl_ChgHyperLinkColor( const SwTextAttr& rAttr,
             if (rINetAttr.IsVisited())
             {
                 // take color from view option 'visited link color'
-                *pColor = SwViewOption::GetVisitedLinksColor();
+                *pColor = pShell->GetViewOptions()->GetVisitedLinksColor();
             }
             else
             {
                 // take color from view option 'unvisited link color'
-                *pColor = SwViewOption::GetLinksColor();
+                *pColor = pShell->GetViewOptions()->GetLinksColor();
             }
         }
         return true;

@@ -1390,9 +1390,10 @@ void SwMarkPreview::InitColors()
     m_aBgCol = rSettings.GetWindowColor();
 
     bool bHC = rSettings.GetHighContrastMode();
-    m_aLineCol = bHC? SwViewOption::GetFontColor() : COL_BLACK;
+    const Color& rFontColor = SwViewOption::GetCurrentViewOptions().GetFontColor();
+    m_aLineCol = bHC? rFontColor : COL_BLACK;
     m_aShadowCol = bHC? m_aBgCol : rSettings.GetShadowColor();
-    m_aTextCol = bHC? SwViewOption::GetFontColor() : COL_GRAY;
+    m_aTextCol = bHC? rFontColor : COL_GRAY;
     m_aPrintAreaCol = m_aTextCol;
 }
 

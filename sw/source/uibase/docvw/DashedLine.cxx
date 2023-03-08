@@ -19,7 +19,7 @@
 #include <vcl/settings.hxx>
 #include <memory>
 
-SwDashedLine::SwDashedLine( vcl::Window* pParent, Color& ( *pColorFn )() )
+SwDashedLine::SwDashedLine( vcl::Window* pParent, const Color& ( SwViewOption::* pColorFn )() const )
     : Control( pParent, WB_DIALOGCONTROL | WB_HORZ )
     , m_pColorFn( pColorFn )
 {
@@ -51,7 +51,7 @@ void SwDashedLine::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
     std::vector<double> aStrokePattern;
-    basegfx::BColor aColor = m_pColorFn().getBColor();
+    basegfx::BColor aColor = (SwViewOption::GetCurrentViewOptions().*m_pColorFn)().getBColor();
     if (rSettings.GetHighContrastMode())
     {
         // Only a solid line in high contrast mode
@@ -82,7 +82,7 @@ void SwDashedLine::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     aSeq[aSeq.size() - 1] =
             new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
                 basegfx::B2DPolyPolygon(aPolygon),
-                drawinglayer::attribute::LineAttribute(m_pColorFn().getBColor()),
+                drawinglayer::attribute::LineAttribute((SwViewOption::GetCurrentViewOptions().*m_pColorFn)().getBColor()),
                 drawinglayer::attribute::StrokeAttribute(std::move(aStrokePattern)));
 
     pProcessor->process(aSeq);
