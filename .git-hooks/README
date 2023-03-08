@@ -7,7 +7,8 @@ To install manually, run:
 When you using GIT for Windows, you need Windows links
 Open a Dos-Box with admin rights then
   cd .git/hooks
-  FOR /F " usebackq " %i IN (`dir /b ..\..\.git-hooks`) DO del /as /f %i & mklink %i ..\..\.git-hooks\%i
+  FOR /F " usebackq " %i IN (`dir /b ..\..\.git-hooks`) DO del /as /f %i & del %i & mklink %i ..\..\.git-hooks\%i
+the error 'Could Not Find ...' can be ignore
 
 There are two groups of these hooks: client side and server side.
 

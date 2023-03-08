@@ -90,41 +90,65 @@ refresh_all_hooks()
     local hook_name
     local hook
     local winlnk
+    local wingit
+    local gitbash
     local lnkfile=".git/hooks/pre-commit"
 
     pushd "${COREDIR?}" > /dev/null
 
-    if [ $WINGIT -eq 1 ]; then
-        winlnk=0
-        if [ -e "${lnkfile}" ] && [ -L "${lnkfile}" ] ; then
-            # if linux-links or windows-links?
-            # dos dir output windows link:
-            # 04.09.2020  10:54    <SYMLINK>      pre-commit [..\..\.git-hooks\pre-commit]
-            # dos dir output linux link:
-            # file not found
-            winlnk=$(cmd /C "DIR ${lnkfile//'/'/'\'}" 2>&1)
-            winlnk=$(echo "$winlnk" | grep -icE "<SYMLINK>.*${lnkfile##*/} \[")
-        fi
+    # it is 'GIT for Windows'
+    wingit=$(git --version | grep -ic windows)
+    gitbash=$(echo $OSTYPE | grep -ic msys)
 
-        if [ $winlnk -eq 0 ]; then
-            echo "You using GIT for Windows, but the hook-links not right, change with mklink"
-            cat .git-hooks/README
+    # In the win-git-bash, do not make links, it make only copies
+    if [ $gitbash -eq 1 ]; then
+        if [ -d ".git" ]; then
+            if [ ! -e "${lnkfile}" ] || [ ! -L "${lnkfile}" ] ; then
+                # here when wrong link then the file not exist
+                echo "Your hooks not right, solve this in cygwin with"
+                echo "   ./g -z"
+            fi
         fi
     else
-        # There's no ".git" e.g. in a secondary worktree
-        if [ -d ".git" ]; then
-            for hook_name in "${COREDIR?}/.git-hooks"/* ; do
-                hook=".git/hooks/${hook_name##*/}"
-                if [ ! -e "${hook?}" ] || [ ! -L "${hook?}" ] ; then
-                    rm -f "${hook?}"
-                    ln -sf "${hook_name}" "${hook?}"
+        if [ $wingit -eq 1 ]; then
+            # There's no ".git" e.g. in a secondary worktree
+            if [ -d ".git" ]; then
+                winlnk=0
+                if [ -e "${lnkfile}" ] && [ -L "${lnkfile}" ] ; then
+                    # if linux-links or windows-links?
+                    # dos dir output windows link:
+                    #   04.09.2020  10:54    <SYMLINK>      pre-commit [..\..\.git-hooks\pre-commit]
+                    # dos dir output linux link:
+                    #   file not found
+                    winlnk=$(cmd /C "DIR ${lnkfile//'/'/'\'}" 2>&1)
+                    winlnk=$(echo "$winlnk" | grep -icE "<SYMLINK>.*${lnkfile##*/} \[")
                 fi
+
+                if [ $winlnk -eq 0 ]; then
+                    echo "You using GIT for Windows, but the hook-links not right, change with mklink"
+                    cat .git-hooks/README
+                fi
+            fi
+        else
+            # There's no ".git" e.g. in a secondary worktree
+            if [ -d ".git" ]; then
+                for hook_name in "${COREDIR?}/.git-hooks"/* ; do
+                    hook=".git/hooks/${hook_name##*/}"
+                    if [ ! -e "${hook?}" ] || [ ! -L "${hook?}" ] ; then
+                        rm -f "${hook?}"
+                        ln -sf "${hook_name}" "${hook?}"
+                    fi
+                done
+            fi
+
+            for repo in ${SUBMODULES_ALL?} ; do
+                refresh_submodule_hooks "$repo"
             done
         fi
+    fi
 
-        for repo in ${SUBMODULES_ALL?} ; do
-            refresh_submodule_hooks "$repo"
-        done
+    if [ $wingit -eq 0 ] && [ "$OSTYPE" == "cygwin" ] ; then
+        echo "When you using GIT for Windows, and get git-error look to .git-hooks/README"
     fi
 
     popd > /dev/null
@@ -316,9 +340,8 @@ if [ "$#" -eq "0" ] ; then
     usage
 fi
 
-gitfile="$(type -p git)"
 
-if [ ! "${gitfile}" ]; then
+if [ ! "$(type -p git)" ]; then
     echo "Cannot find the git binary! Is git installed and is in PATH?"
     exit 1
 fi
@@ -347,14 +370,7 @@ REPORT_REPOS=1
 REPORT_COMMANDS=0
 REPORT_COMPACT=0
 DO_HOOK_REFRESH=false
-WINGIT=
 
-# it is 'GIT for Windows'
-WINGIT=$(echo $gitfile | grep -c cygdrive)
-if [ $WINGIT -eq 1 ]; then
-    gitfile=$(git --version)
-    WINGIT=$(echo $gitfile | grep -ic windows)
-fi
 
 while [ "${COMMAND:0:1}" = "-" ] ; do
     case "$COMMAND" in
