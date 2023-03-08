@@ -400,9 +400,10 @@ Color FillProperties::getBestSolidColor() const
     return aSolidColor;
 }
 
-void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
-        const GraphicHelper& rGraphicHelper, sal_Int32 nShapeRotation, ::Color nPhClr, sal_Int16 nPhClrTheme,
-        bool bFlipH, bool bFlipV, bool bIsCustomShape) const
+void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelper& rGraphicHelper,
+                                   sal_Int32 nShapeRotation, ::Color nPhClr,
+                                   const css::awt::Size& rSize, sal_Int16 nPhClrTheme, bool bFlipH,
+                                   bool bFlipV, bool bIsCustomShape) const
 {
     if( !moFillType.has_value() )
         return;
@@ -588,7 +589,6 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 {
                     // bitmap mode (single, repeat, stretch)
                     BitmapMode eBitmapMode = lclGetBitmapMode( maBlipProps.moBitmapMode.value_or( XML_TOKEN_INVALID ) );
-                    rPropMap.setProperty( ShapeProperty::FillBitmapMode, eBitmapMode );
 
                     // additional settings for repeated bitmap
                     if( eBitmapMode == BitmapMode_REPEAT )
@@ -636,21 +636,82 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                             // Negative GraphicCrop values means "crop" here.
                             bool bNeedCrop = aGraphCrop.Left <= 0 && aGraphCrop.Right <= 0 && aGraphCrop.Top <= 0 && aGraphCrop.Bottom <= 0;
 
-                            if(bIsCustomShape && bHasCropValues && bNeedCrop)
+                            if (bHasCropValues)
                             {
-                                // Physically crop the image
-                                // In this case, don't set the PROP_GraphicCrop because that
-                                // would lead to applying the crop twice after roundtrip
-                                xGraphic = lclCropGraphic(xGraphic, CropQuotientsFromFillRect(aFillRect));
-                                if (rPropMap.supportsProperty(ShapeProperty::FillBitmapName))
-                                    rPropMap.setProperty(ShapeProperty::FillBitmapName, xGraphic);
+                                if (bIsCustomShape && bNeedCrop)
+                                {
+                                    // Physically crop the image
+                                    // In this case, don't set the PROP_GraphicCrop because that
+                                    // would lead to applying the crop twice after roundtrip
+                                    xGraphic = lclCropGraphic(xGraphic, CropQuotientsFromFillRect(aFillRect));
+                                    if (rPropMap.supportsProperty(ShapeProperty::FillBitmapName))
+                                        rPropMap.setProperty(ShapeProperty::FillBitmapName, xGraphic);
+                                    else
+                                        rPropMap.setProperty(ShapeProperty::FillBitmap, xGraphic);
+                                }
+                                else if ((aFillRect.X1 != 0 && aFillRect.X2 != 0
+                                          && aFillRect.X1 != aFillRect.X2)
+                                         || (aFillRect.Y1 != 0 && aFillRect.Y2 != 0
+                                             && aFillRect.Y1 != aFillRect.Y2))
+                                {
+                                    rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
+                                }
                                 else
-                                    rPropMap.setProperty(ShapeProperty::FillBitmap, xGraphic);
+                                {
+                                    double nL = aFillRect.X1 / static_cast<double>(MAX_PERCENT);
+                                    double nT = aFillRect.Y1 / static_cast<double>(MAX_PERCENT);
+                                    double nR = aFillRect.X2 / static_cast<double>(MAX_PERCENT);
+                                    double nB = aFillRect.Y2 / static_cast<double>(MAX_PERCENT);
+
+                                    sal_Int32 nSizeX;
+                                    if (nL || nR)
+                                        nSizeX = rSize.Width * (1 - (nL + nR));
+                                    else
+                                        nSizeX = rSize.Width;
+                                    rPropMap.setProperty(ShapeProperty::FillBitmapSizeX, nSizeX);
+
+                                    sal_Int32 nSizeY;
+                                    if (nT || nB)
+                                        nSizeY = rSize.Height * (1 - (nT + nB));
+                                    else
+                                        nSizeY = rSize.Height;
+                                    rPropMap.setProperty(ShapeProperty::FillBitmapSizeY, nSizeY);
+
+                                    RectanglePoint eRectPoint;
+                                    if (!aFillRect.X1 && aFillRect.X2)
+                                    {
+                                        if (!aFillRect.Y1 && aFillRect.Y2)
+                                            eRectPoint = lclGetRectanglePoint(XML_tl);
+                                        else if (aFillRect.Y1 && !aFillRect.Y2)
+                                            eRectPoint = lclGetRectanglePoint(XML_bl);
+                                        else
+                                            eRectPoint = lclGetRectanglePoint(XML_l);
+                                    }
+                                    else if (aFillRect.X1 && !aFillRect.X2)
+                                    {
+                                        if (!aFillRect.Y1 && aFillRect.Y2)
+                                            eRectPoint = lclGetRectanglePoint(XML_tr);
+                                        else if (aFillRect.Y1 && !aFillRect.Y2)
+                                            eRectPoint = lclGetRectanglePoint(XML_br);
+                                        else
+                                            eRectPoint = lclGetRectanglePoint(XML_r);
+                                    }
+                                    else
+                                    {
+                                        if (!aFillRect.Y1 && aFillRect.Y2)
+                                            eRectPoint = lclGetRectanglePoint(XML_t);
+                                        else if (aFillRect.Y1 && !aFillRect.Y2)
+                                            eRectPoint = lclGetRectanglePoint(XML_b);
+                                        else
+                                            eRectPoint = lclGetRectanglePoint(XML_ctr);
+                                    }
+                                    rPropMap.setProperty(ShapeProperty::FillBitmapRectanglePoint, eRectPoint);
+                                    eBitmapMode = BitmapMode_NO_REPEAT;
+                                }
                             }
-                            else
-                                rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
                         }
                     }
+                    rPropMap.setProperty(ShapeProperty::FillBitmapMode, eBitmapMode);
                 }
 
                 if (maBlipProps.moAlphaModFix.has_value())

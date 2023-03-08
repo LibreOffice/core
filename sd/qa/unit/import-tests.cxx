@@ -52,6 +52,7 @@
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/ConnectorType.hpp>
+#include <com/sun/star/drawing/RectanglePoint.hpp>
 
 #include <stlpool.hxx>
 #include <unotools/syslocaleoptions.hxx>
@@ -84,6 +85,7 @@ public:
 
     void testDocumentLayout();
     void testTdf154363();
+    void testTdf153466();
     void testTdf152434();
     void testStandardConnectors();
     void testConnectors();
@@ -163,6 +165,7 @@ public:
 
     CPPUNIT_TEST(testDocumentLayout);
     CPPUNIT_TEST(testTdf154363);
+    CPPUNIT_TEST(testTdf153466);
     CPPUNIT_TEST(testTdf152434);
     CPPUNIT_TEST(testStandardConnectors);
     CPPUNIT_TEST(testConnectors);
@@ -381,6 +384,25 @@ void SdImportTest::testTdf154363()
         nGlueId = xConnector2->getPropertyValue("EndGluePointIndex").get<sal_Int32>();
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nGlueId);
     }
+}
+
+void SdImportTest::testTdf153466()
+{
+    createSdImpressDoc("pptx/tdf153466.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageSet(xPage, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xBackground(
+        xPageSet->getPropertyValue("Background").get<uno::Reference<beans::XPropertySet>>());
+
+    com::sun::star::drawing::RectanglePoint aRectanglePoint;
+    xBackground->getPropertyValue("FillBitmapRectanglePoint") >>= aRectanglePoint;
+    CPPUNIT_ASSERT_EQUAL(drawing::RectanglePoint::RectanglePoint_RIGHT_BOTTOM, aRectanglePoint);
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0), uno::UNO_SET_THROW);
+    xShape->getPropertyValue("FillBitmapRectanglePoint") >>= aRectanglePoint;
+    CPPUNIT_ASSERT_EQUAL(drawing::RectanglePoint::RectanglePoint_LEFT_MIDDLE, aRectanglePoint);
 }
 
 void SdImportTest::testTdf152434()

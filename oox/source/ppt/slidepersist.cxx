@@ -193,11 +193,16 @@ void SlidePersist::createBackground( const XmlFilterBase& rFilterBase )
         ::Color nPhClr = maBackgroundColor.isUsed() ?
             maBackgroundColor.getColor( rFilterBase.getGraphicHelper() ) : API_RGB_TRANSPARENT;
 
+        css::awt::Size aSize;
+        Reference< css::beans::XPropertySet > xSet(mxPage, UNO_QUERY);
+        xSet->getPropertyValue("Width") >>= aSize.Width;
+        xSet->getPropertyValue("Height") >>= aSize.Height;
+
         oox::drawingml::ShapePropertyIds aPropertyIds = oox::drawingml::ShapePropertyInfo::DEFAULT.mrPropertyIds;
         aPropertyIds[oox::drawingml::ShapeProperty::FillGradient] = PROP_FillGradientName;
         oox::drawingml::ShapePropertyInfo aPropInfo( aPropertyIds, true, false, true, false, false );
         oox::drawingml::ShapePropertyMap aPropMap( rFilterBase.getModelObjectHelper(), aPropInfo );
-        mpBackgroundPropertiesPtr->pushToPropMap( aPropMap, rFilterBase.getGraphicHelper(), 0, nPhClr );
+        mpBackgroundPropertiesPtr->pushToPropMap( aPropMap, rFilterBase.getGraphicHelper(), 0, nPhClr, aSize);
         PropertySet( mxPage ).setProperty( PROP_Background, aPropMap.makePropertySet() );
     }
 }
