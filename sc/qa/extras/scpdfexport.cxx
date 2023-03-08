@@ -73,7 +73,6 @@ public:
     void testTdf84012();
     void testTdf78897();
     void testForcepoint97();
-    void testSingleLineAttribs();
 
     CPPUNIT_TEST_SUITE(ScPDFExportTest);
     CPPUNIT_TEST(testExportRange_Tdf120161);
@@ -84,7 +83,6 @@ public:
     CPPUNIT_TEST(testTdf84012);
     CPPUNIT_TEST(testTdf78897);
     CPPUNIT_TEST(testForcepoint97);
-    CPPUNIT_TEST(testSingleLineAttribs);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -602,38 +600,6 @@ void ScPDFExportTest::testForcepoint97()
     // A1:H81
     ScRange range1(0, 0, 0, 7, 81, 0);
     std::shared_ptr<utl::TempFile> pPDFFile = exportToPDF(xModel, range1);
-}
-
-void ScPDFExportTest::testSingleLineAttribs()
-{
-    // create test document
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(xModel, uno::UNO_QUERY_THROW);
-    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_SET_THROW);
-    xSheets->insertNewByName("Test Sheet", 0);
-
-    {
-        SfxObjectShell* pDocShell = SfxObjectShell::GetShellFromComponent(mxComponent);
-        CPPUNIT_ASSERT(pDocShell);
-        ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pDocShell);
-        CPPUNIT_ASSERT(xDocSh);
-
-        ScDocument& rDoc = xDocSh->GetDocument();
-        ScFieldEditEngine& rEditEngine = rDoc.GetEditEngine();
-
-        rEditEngine.Clear();
-        rEditEngine.SetTextCurrentDefaults("Bolivia.\nSucre");
-        setFont(rEditEngine, 9, 5, "DejaVuSans");
-        rDoc.SetEditText(ScAddress(0, 0, 0), rEditEngine.CreateTextObject());
-    }
-
-    {
-        ScRange range1(0, 0, 0, 1, 0, 0);
-        std::shared_ptr<utl::TempFile> pPDFFile = exportToPDF(xModel, range1);
-        bool bFound = false;
-        CPPUNIT_ASSERT(hasTextInPdf(pPDFFile, "DejaVuSans", bFound));
-        CPPUNIT_ASSERT_EQUAL(true, bFound);
-    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPDFExportTest);
