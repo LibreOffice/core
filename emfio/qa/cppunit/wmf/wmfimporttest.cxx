@@ -55,8 +55,10 @@ public:
     void testBigPPI();
     void testTdf93750();
     void testTdf99402();
-    void testTdf39894();
-    void testETO_PDY();
+    void testTdf39894Wmf();
+    void testTdf39894Emf();
+    void testETO_PDYWmf();
+    void testETO_PDYEmf();
     void testStockObject();
 
     CPPUNIT_TEST_SUITE(WmfTest);
@@ -70,8 +72,10 @@ public:
     CPPUNIT_TEST(testBigPPI);
     CPPUNIT_TEST(testTdf93750);
     CPPUNIT_TEST(testTdf99402);
-    CPPUNIT_TEST(testTdf39894);
-    CPPUNIT_TEST(testETO_PDY);
+    CPPUNIT_TEST(testTdf39894Wmf);
+    CPPUNIT_TEST(testTdf39894Emf);
+    CPPUNIT_TEST(testETO_PDYWmf);
+    CPPUNIT_TEST(testETO_PDYEmf);
     CPPUNIT_TEST(testStockObject);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -369,49 +373,78 @@ void WmfTest::testTdf99402()
     CPPUNIT_ASSERT_EQUAL(RTL_TEXTENCODING_SYMBOL, fontStyle.aFont.GetCharSet());
 }
 
-void WmfTest::testTdf39894()
+void WmfTest::testTdf39894Wmf()
 {
-    OUString files[] = { "tdf39894.wmf", "tdf39894.emf" };
-    for (const auto& file : files)
-    {
-        SvFileStream aFileStream(getFullUrl(file), StreamMode::READ);
-        GDIMetaFile aGDIMetaFile;
-        ReadWindowMetafile(aFileStream, aGDIMetaFile);
+    SvFileStream aFileStream(getFullUrl(u"tdf39894.wmf"), StreamMode::READ);
+    GDIMetaFile aGDIMetaFile;
+    ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
-        MetafileXmlDump dumper;
-        xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
 
-        CPPUNIT_ASSERT(pDoc);
+    CPPUNIT_ASSERT(pDoc);
 
-        // The x position of the second text must take into account
-        // the previous text's last Dx (previously was ~300)
-        auto x = getXPath(pDoc, "/metafile/push[2]/textarray[2]", "x");
-        CPPUNIT_ASSERT_GREATER(sal_Int32(2700), x.toInt32());
-    }
+    // The x position of the second text must take into account
+    // the previous text's last Dx (previously was ~300)
+    auto x = getXPath(pDoc, "/metafile/push[2]/textarray[2]", "x");
+    CPPUNIT_ASSERT_GREATER(sal_Int32(2700), x.toInt32());
 }
 
-void WmfTest::testETO_PDY()
+void WmfTest::testTdf39894Emf()
 {
-    OUString files[] = { "ETO_PDY.wmf", "ETO_PDY.emf" };
-    for (const auto& file : files)
-    {
-        SvFileStream aFileStream(getFullUrl(file), StreamMode::READ);
-        GDIMetaFile aGDIMetaFile;
-        ReadWindowMetafile(aFileStream, aGDIMetaFile);
+    SvFileStream aFileStream(getFullUrl(u"tdf39894.emf"), StreamMode::READ);
+    GDIMetaFile aGDIMetaFile;
+    ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
-        MetafileXmlDump dumper;
-        xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
 
-        CPPUNIT_ASSERT(pDoc);
+    CPPUNIT_ASSERT(pDoc);
 
-        // The y position of following text
-        // must be smaller than that of previous
-        auto y1 = getXPath(pDoc, "/metafile/push[2]/textarray[1]", "y");
-        auto y2 = getXPath(pDoc, "/metafile/push[2]/textarray[2]", "y");
-        auto y3 = getXPath(pDoc, "/metafile/push[2]/textarray[3]", "y");
-        CPPUNIT_ASSERT_MESSAGE(file.toUtf8().getStr(), y2.toInt32() < y1.toInt32());
-        CPPUNIT_ASSERT_MESSAGE(file.toUtf8().getStr(), y3.toInt32() < y2.toInt32());
-    }
+    // The x position of the second text must take into account
+    // the previous text's last Dx (previously was ~300)
+    auto x = getXPath(pDoc, "/metafile/push[2]/textarray[2]", "x");
+    CPPUNIT_ASSERT_GREATER(sal_Int32(2700), x.toInt32());
+}
+
+void WmfTest::testETO_PDYWmf()
+{
+    SvFileStream aFileStream(getFullUrl(u"ETO_PDY.wmf"), StreamMode::READ);
+    GDIMetaFile aGDIMetaFile;
+    ReadWindowMetafile(aFileStream, aGDIMetaFile);
+
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
+
+    CPPUNIT_ASSERT(pDoc);
+
+    // The y position of following text
+    // must be smaller than that of previous
+    auto y1 = getXPath(pDoc, "/metafile/push[2]/textarray[1]", "y");
+    auto y2 = getXPath(pDoc, "/metafile/push[2]/textarray[2]", "y");
+    auto y3 = getXPath(pDoc, "/metafile/push[2]/textarray[3]", "y");
+    CPPUNIT_ASSERT(y2.toInt32() < y1.toInt32());
+    CPPUNIT_ASSERT(y3.toInt32() < y2.toInt32());
+}
+
+void WmfTest::testETO_PDYEmf()
+{
+    SvFileStream aFileStream(getFullUrl(u"ETO_PDY.emf"), StreamMode::READ);
+    GDIMetaFile aGDIMetaFile;
+    ReadWindowMetafile(aFileStream, aGDIMetaFile);
+
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
+
+    CPPUNIT_ASSERT(pDoc);
+
+    // The y position of following text
+    // must be smaller than that of previous
+    auto y1 = getXPath(pDoc, "/metafile/push[2]/textarray[1]", "y");
+    auto y2 = getXPath(pDoc, "/metafile/push[2]/textarray[2]", "y");
+    auto y3 = getXPath(pDoc, "/metafile/push[2]/textarray[3]", "y");
+    CPPUNIT_ASSERT(y2.toInt32() < y1.toInt32());
+    CPPUNIT_ASSERT(y3.toInt32() < y2.toInt32());
 }
 
 void WmfTest::testStockObject()
