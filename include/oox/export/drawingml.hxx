@@ -163,6 +163,7 @@ protected:
     /// If set, this is the parent of the currently handled shape.
     css::uno::Reference<css::drawing::XShape> m_xParent;
     bool                                      mbIsBackgroundDark;
+    static sal_Int32 mnChartCount;
 
     /// True when exporting presentation placeholder shape.
     bool mbPlaceholder;

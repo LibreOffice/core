@@ -243,6 +243,7 @@ std::stack<sal_Int32> DrawingML::mnWdpImageCounter;
 std::stack<std::map<OUString, OUString>> DrawingML::maWdpCache;
 sal_Int32 DrawingML::mnDrawingMLCount = 0;
 sal_Int32 DrawingML::mnVmlCount = 0;
+sal_Int32 DrawingML::mnChartCount = 0;
 std::stack<std::unordered_map<BitmapChecksum, OUString>> DrawingML::maExportGraphics;
 
 sal_Int16 DrawingML::GetScriptType(const OUString& rStr)
@@ -273,6 +274,7 @@ void DrawingML::ResetMlCounters()
 {
     mnDrawingMLCount = 0;
     mnVmlCount = 0;
+    mnChartCount = 0;
 }
 
 void DrawingML::PushExportGraphics()
