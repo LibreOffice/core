@@ -26,7 +26,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/safeint.hxx>
 #include <rtl/ref.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <mutex>
 #include <utility>
 
@@ -45,8 +45,7 @@ class MutableTreeDataModel;
 
 typedef std::vector< rtl::Reference< MutableTreeNode > > TreeNodeVector;
 
-class MutableTreeDataModel : public ::cppu::WeakAggImplHelper2< XMutableTreeDataModel, XServiceInfo >,
-                             public comphelper::OMutexAndBroadcastHelper
+class MutableTreeDataModel : public ::cppu::WeakAggImplHelper2< XMutableTreeDataModel, XServiceInfo >
 {
 public:
     MutableTreeDataModel();
@@ -73,6 +72,11 @@ public:
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 private:
+    void broadcastImpl( std::unique_lock<std::mutex>& rGuard, broadcast_type eType, const Reference< XTreeNode >& xParentNode, const Reference< XTreeNode >& rNode );
+
+    std::mutex m_aMutex;
+    comphelper::OInterfaceContainerHelper4<XTreeDataModelListener> maTreeDataModelListeners;
+    comphelper::OInterfaceContainerHelper4<XEventListener> maEventListeners;
     bool mbDisposed;
     Reference< XTreeNode > mxRootNode;
 };
@@ -139,18 +143,24 @@ MutableTreeDataModel::MutableTreeDataModel()
 
 void MutableTreeDataModel::broadcast( broadcast_type eType, const Reference< XTreeNode >& xParentNode, const Reference< XTreeNode >& rNode )
 {
-    ::cppu::OInterfaceContainerHelper* pIter = m_aBHelper.getContainer( cppu::UnoType<XTreeDataModelListener>::get() );
-    if( !pIter )
+    std::unique_lock aGuard(m_aMutex);
+    broadcastImpl(aGuard, eType, xParentNode, rNode);
+}
+
+void MutableTreeDataModel::broadcastImpl( std::unique_lock<std::mutex>& rGuard, broadcast_type eType, const Reference< XTreeNode >& xParentNode, const Reference< XTreeNode >& rNode )
+{
+    if( !maTreeDataModelListeners.getLength(rGuard) )
         return;
 
     Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     const Sequence< Reference< XTreeNode > > aNodes { rNode };
     TreeDataModelEvent aEvent( xSource, aNodes, xParentNode );
 
-    ::cppu::OInterfaceIteratorHelper aListIter(*pIter);
+    comphelper::OInterfaceIteratorHelper4 aListIter(rGuard, maTreeDataModelListeners);
     while(aListIter.hasMoreElements())
     {
-        XTreeDataModelListener* pListener = static_cast<XTreeDataModelListener*>(aListIter.next());
+        rGuard.unlock();
+        XTreeDataModelListener* pListener = aListIter.next().get();
         switch( eType )
         {
         case nodes_changed:     pListener->treeNodesChanged(aEvent); break;
@@ -158,6 +168,7 @@ void MutableTreeDataModel::broadcast( broadcast_type eType, const Reference< XTr
         case nodes_removed:     pListener->treeNodesRemoved(aEvent); break;
         case structure_changed: pListener->treeStructureChanged(aEvent); break;
         }
+        rGuard.lock();
     }
 }
 
@@ -171,7 +182,7 @@ void SAL_CALL MutableTreeDataModel::setRoot( const Reference< XMutableTreeNode >
     if( !xNode.is() )
         throw IllegalArgumentException();
 
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
     if( xNode == mxRootNode )
         return;
 
@@ -190,46 +201,51 @@ void SAL_CALL MutableTreeDataModel::setRoot( const Reference< XMutableTreeNode >
     mxRootNode = xImpl;
 
     Reference< XTreeNode > xParentNode;
-    broadcast( structure_changed, xParentNode, mxRootNode );
+    broadcastImpl( aGuard, structure_changed, xParentNode, mxRootNode );
 }
 
 Reference< XTreeNode > SAL_CALL MutableTreeDataModel::getRoot(  )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
     return mxRootNode;
 }
 
 void SAL_CALL MutableTreeDataModel::addTreeDataModelListener( const Reference< XTreeDataModelListener >& xListener )
 {
-    m_aBHelper.addListener( cppu::UnoType<XTreeDataModelListener>::get(), xListener );
+    std::unique_lock aGuard( m_aMutex );
+    maTreeDataModelListeners.addInterface( aGuard, xListener );
 }
 
 void SAL_CALL MutableTreeDataModel::removeTreeDataModelListener( const Reference< XTreeDataModelListener >& xListener )
 {
-    m_aBHelper.removeListener( cppu::UnoType<XTreeDataModelListener>::get(), xListener );
+    std::unique_lock aGuard( m_aMutex );
+    maTreeDataModelListeners.removeInterface( aGuard, xListener );
 }
 
 void SAL_CALL MutableTreeDataModel::dispose()
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
 
     if( !mbDisposed )
     {
         mbDisposed = true;
         css::lang::EventObject aEvent;
         aEvent.Source.set( static_cast< ::cppu::OWeakObject* >( this ) );
-        m_aBHelper.aLC.disposeAndClear( aEvent );
+        maTreeDataModelListeners.disposeAndClear( aGuard, aEvent );
+        maEventListeners.disposeAndClear( aGuard, aEvent );
     }
 }
 
 void SAL_CALL MutableTreeDataModel::addEventListener( const Reference< XEventListener >& xListener )
 {
-    m_aBHelper.addListener( cppu::UnoType<XEventListener>::get(), xListener );
+    std::unique_lock aGuard( m_aMutex );
+    maEventListeners.addInterface( aGuard, xListener );
 }
 
 void SAL_CALL MutableTreeDataModel::removeEventListener( const Reference< XEventListener >& xListener )
 {
-    m_aBHelper.removeListener( cppu::UnoType<XEventListener>::get(), xListener );
+    std::unique_lock aGuard( m_aMutex );
+    maEventListeners.removeInterface( aGuard, xListener );
 }
 
 OUString SAL_CALL MutableTreeDataModel::getImplementationName(  )
