@@ -7513,7 +7513,7 @@ if test -z "${CXXFLAGS_CXX11+x}"; then
         else
             CXXFLAGS_CXX11=-std:c++17
         fi
-        CXXFLAGS_CXX11="$CXXFLAGS_CXX11 -permissive- -Zc:__cplusplus"
+        CXXFLAGS_CXX11="$CXXFLAGS_CXX11 -permissive- -Zc:__cplusplus,preprocessor"
     elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         my_flags='-std=c++17 -std=c++1z'
         if test "$with_latest_c__" = yes; then
