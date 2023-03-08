@@ -83,7 +83,7 @@ sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int
 #else
     nResult = z_deflate(pStream.get(), bFinish ? Z_FINISH : Z_NO_FLUSH);
 #endif
-    // total_in / total_out may stored only in 32bit, and can owerflow during deflate
+    // total_in / total_out may stored only in 32bit, and can overflow during deflate
     // 1 deflate call, uncompress only a few data, so only 1 overflow can happen at once.
     if (pStream->total_in < nLastTotalIn)
     {
