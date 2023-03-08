@@ -593,6 +593,11 @@ OUString SwAuthorityField::GetAuthority(const SwRootFrame* pLayout, const SwForm
     {
         switch (rToken.eTokenType)
         {
+            case TOKEN_TAB_STOP:
+            {
+                aText += "\t";
+                break;
+            }
             case TOKEN_TEXT:
             {
                 aText += rToken.sText;
