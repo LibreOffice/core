@@ -377,9 +377,23 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                 const Point aOrigin(
                     basegfx::fround(aCurrentTranslate.getX() / aCurrentScaling.getX()),
                     basegfx::fround(aCurrentTranslate.getY() / aCurrentScaling.getY()));
-                MapMode aMapMode(mpOutputDevice->GetMapMode().GetMapUnit(), aOrigin,
-                                 Fraction(aCurrentScaling.getX()),
-                                 Fraction(aCurrentScaling.getY()));
+
+                Fraction aScaleX(aCurrentScaling.getX());
+                if (!aScaleX.IsValid())
+                {
+                    SAL_WARN("drawinglayer", "invalid X Scale");
+                    return;
+                }
+
+                Fraction aScaleY(aCurrentScaling.getY());
+                if (!aScaleY.IsValid())
+                {
+                    SAL_WARN("drawinglayer", "invalid Y Scale");
+                    return;
+                }
+
+                MapMode aMapMode(mpOutputDevice->GetMapMode().GetMapUnit(), aOrigin, aScaleX,
+                                 aScaleY);
 
                 if (fCurrentRotate)
                     aTextTranslate *= basegfx::utils::createRotateB2DHomMatrix(fCurrentRotate);
