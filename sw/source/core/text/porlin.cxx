@@ -202,6 +202,9 @@ SwLinePortion *SwLinePortion::Cut( SwLinePortion *pVictim )
 {
     SwLinePortion *pPrev = pVictim->FindPrevPortion( this );
     OSL_ENSURE( pPrev, "SwLinePortion::Cut(): can't cut" );
+    // note: if pVictim is a follow then clearing pPrev's m_bHasFollow here is
+    // tricky because it could be that the HookChar inserted a tab portion
+    // between 2 field portions
     pPrev->SetNextPortion( pVictim->GetNextPortion() );
     pVictim->SetNextPortion(nullptr);
     return pVictim;

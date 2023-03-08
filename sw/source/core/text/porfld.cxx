@@ -420,7 +420,11 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
                 pField->SetFont( std::make_unique<SwFont>( *rInf.GetFont() ) );
             }
             pField->SetFollow( true );
-            SetHasFollow( true );
+            if (pField->Compress())
+            {   // empty pField will be deleted in SwLineLayout::CalcLine()
+                // anyway so make sure this one doesn't have a stale flag
+                SetHasFollow( true );
+            }
 
             // For a newly created field, nNextOffset contains the Offset
             // of its start of the original string
