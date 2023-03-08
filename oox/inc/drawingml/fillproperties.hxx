@@ -24,6 +24,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/drawingml/color.hxx>
@@ -147,6 +148,7 @@ struct FillProperties
                             const GraphicHelper& rGraphicHelper,
                             sal_Int32 nShapeRotation = 0,
                             ::Color nPhClr = API_RGB_TRANSPARENT,
+                            const css::awt::Size& rSize = {},
                             sal_Int16 nPhClrTheme = -1,
                             bool bFlipH = false,
                             bool bFlipV = false,

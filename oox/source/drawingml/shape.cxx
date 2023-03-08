@@ -719,6 +719,7 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
             rCharProps.maFillProperties.pushToPropMap(aFillShapeProps, rFilter.getGraphicHelper(),
                                                       /*nShapeRotation*/ 0,
                                                       /*nPhClr*/ API_RGB_TRANSPARENT,
+                                                      /*aShapeSize*/ css::awt::Size(0, 0),
                                                       /*nPhClrTheme*/ -1,
                                                       /*bFlipH*/ false, /*bFlipV*/ false,
                                                       /*bIsCustomShape*/ true);
@@ -1286,7 +1287,10 @@ Reference< XShape > const & Shape::createAndInsert(
         if (getFillProperties().moFillType.has_value() && getFillProperties().moFillType.value() == XML_grpFill)
             getFillProperties().assignUsed(aFillProperties);
         if(!bIsCroppedGraphic)
-            aFillProperties.pushToPropMap( aShapeProps, rGraphicHelper, mnRotation, nFillPhClr, nFillPhClrTheme, mbFlipH, mbFlipV, bIsCustomShape );
+            aFillProperties.pushToPropMap(aShapeProps, rGraphicHelper, mnRotation, nFillPhClr,
+                                          css::awt::Size(aShapeRectHmm.Width, aShapeRectHmm.Height),
+                                          nFillPhClrTheme, mbFlipH, mbFlipV, bIsCustomShape);
+
         LineProperties aLineProperties = getActualLineProperties(pTheme);
         aLineProperties.pushToPropMap( aShapeProps, rGraphicHelper, nLinePhClr, nLinePhClrTheme);
         EffectProperties aEffectProperties = getActualEffectProperties(pTheme);

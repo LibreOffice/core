@@ -931,7 +931,8 @@ void WpsContext::onEndElement()
         = lcl_generateFillPropertiesFromTextProps(aTextPropMap);
     aCreatedFillProperties.pushToPropMap(aFillShapeProps, getFilter().getGraphicHelper(),
                                          /*nShapeRotation*/ 0,
-                                         /*nPhClr*/ API_RGB_TRANSPARENT, /*nPhClrTheme*/ -1,
+                                         /*nPhClr*/ API_RGB_TRANSPARENT,
+                                         /*aShapeSize*/ css::awt::Size(0, 0), /*nPhClrTheme*/ -1,
                                          pCustomShape->IsMirroredX(), pCustomShape->IsMirroredY(),
                                          /*bIsCustomShape*/ true);
     lcl_applyShapePropsToShape(xShapePropertySet, aFillShapeProps);
