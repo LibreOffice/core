@@ -30,10 +30,14 @@ class UnoTreeModel : public UnoControlModel
 {
 protected:
     css::uno::Any ImplGetDefaultValue(sal_uInt16 nPropId) const override;
-    ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
     explicit UnoTreeModel(const css::uno::Reference<css::uno::XComponentContext>& i_factory);
+    UnoTreeModel(const UnoTreeModel& rOther)
+        : UnoControlModel(rOther)
+    {
+    }
 
     rtl::Reference<UnoControlModel> Clone() const override;
 

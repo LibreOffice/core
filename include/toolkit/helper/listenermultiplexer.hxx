@@ -100,6 +100,11 @@ public:
         maListeners.disposeAndClear(g, rDisposeEvent);
     }
 
+    void disposeAndClear(std::unique_lock<std::mutex>& rGuard, const css::lang::EventObject& rDisposeEvent)
+    {
+        maListeners.disposeAndClear(rGuard, rDisposeEvent);
+    }
+
     sal_Int32 getLength() const
     {
         std::unique_lock g(m_aMutex);

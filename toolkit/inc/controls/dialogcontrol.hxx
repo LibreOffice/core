@@ -160,12 +160,8 @@ class UnoMultiPageModel final : public ControlModelContainerBase
 {
 public:
     UnoMultiPageModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    UnoMultiPageModel(const UnoMultiPageModel& rOther) : ControlModelContainerBase(rOther) {}
     virtual ~UnoMultiPageModel() override;
-
-    UnoMultiPageModel(UnoMultiPageModel const &) = default;
-    UnoMultiPageModel(UnoMultiPageModel &&) = default;
-    UnoMultiPageModel & operator =(UnoMultiPageModel const &) = delete; // due to ControlModelContainerBase
-    UnoMultiPageModel & operator =(UnoMultiPageModel &&) = delete; // due to ControlModelContainerBase
 
     rtl::Reference<UnoControlModel> Clone() const override;
 
@@ -180,7 +176,7 @@ public:
     virtual sal_Bool SAL_CALL getGroupControl(  ) override;
 private:
     virtual css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 };
 
@@ -239,12 +235,8 @@ class UnoPageModel final : public ControlModelContainerBase
 {
 public:
     UnoPageModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    UnoPageModel(const UnoPageModel& rOther) : ControlModelContainerBase(rOther) {}
     virtual ~UnoPageModel() override;
-
-    UnoPageModel(UnoPageModel const &) = default;
-    UnoPageModel(UnoPageModel &&) = default;
-    UnoPageModel & operator =(UnoPageModel const &) = delete; // due to ControlModelContainerBase
-    UnoPageModel & operator =(UnoPageModel &&) = delete; // due to ControlModelContainerBase
 
     rtl::Reference<UnoControlModel> Clone() const override;
 
@@ -257,7 +249,7 @@ public:
     virtual sal_Bool SAL_CALL getGroupControl(  ) override;
 private:
     virtual css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 };
 
@@ -277,12 +269,8 @@ class UnoFrameModel final : public ControlModelContainerBase
 {
 public:
     UnoFrameModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    UnoFrameModel(const UnoFrameModel& rOther) : ControlModelContainerBase(rOther) {}
     virtual ~UnoFrameModel() override;
-
-    UnoFrameModel(UnoFrameModel const &) = default;
-    UnoFrameModel(UnoFrameModel &&) = default;
-    UnoFrameModel & operator =(UnoFrameModel const &) = delete; // due to ControlModelContainerBase
-    UnoFrameModel & operator =(UnoFrameModel &&) = delete; // due to ControlModelContainerBase
 
     rtl::Reference<UnoControlModel> Clone() const override;
 
@@ -293,7 +281,7 @@ public:
 
 private:
     virtual css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 };
 
 class UnoFrameControl final : public ControlContainerBase

@@ -155,6 +155,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/property/propertystatecontainer \
     comphelper/source/property/propmultiplex \
     comphelper/source/property/propmultiplex2 \
+    comphelper/source/property/propshlp \
     comphelper/source/property/propstate \
     comphelper/source/streaming/basicio \
     comphelper/source/streaming/memorystream \

@@ -72,10 +72,13 @@ namespace toolkit
                                         virtual ~AnimatedImagesControlModel() override;
 
         css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-        ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
-        void SAL_CALL                   setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+        ::cppu::IPropertyArrayHelper& getInfoHelper() override;
+        void setFastPropertyValue_NoBroadcast(
+                    std::unique_lock<std::mutex>& rGuard,
+                    sal_Int32 nHandle, const css::uno::Any& rValue ) override;
 
     private:
+        comphelper::OInterfaceContainerHelper4<css::container::XContainerListener> maContainerListeners;
         std::vector< css::uno::Sequence< OUString > >    maImageSets;
     };
 

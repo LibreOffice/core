@@ -13,6 +13,7 @@
 
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/interfacecontainer4.hxx>
+#include <comphelper/unoimplbase.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -28,7 +29,8 @@ namespace comphelper
     (2) helps to handle the custom where we have conflicting interfaces
         e.g. multiple UNO interfaces that extend css::lang::XComponent
 */
-class COMPHELPER_DLLPUBLIC WeakComponentImplHelperBase : public cppu::OWeakObject,
+class COMPHELPER_DLLPUBLIC WeakComponentImplHelperBase : public virtual comphelper::UnoImplBase,
+                                                         public cppu::OWeakObject,
                                                          public css::lang::XComponent
 {
 public:
@@ -56,8 +58,6 @@ protected:
             throw css::lang::DisposedException(OUString(), static_cast<cppu::OWeakObject*>(this));
     }
     comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> maEventListeners;
-    mutable std::mutex m_aMutex;
-    bool m_bDisposed = false;
 };
 
 template <typename... Ifc>

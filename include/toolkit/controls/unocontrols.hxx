@@ -49,7 +49,7 @@
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/uno3.hxx>
 #include <tools/gen.hxx>
 
@@ -79,7 +79,7 @@ public:
 class UnoControlEditModel final : public UnoControlModel
 {
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
                         UnoControlEditModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -182,7 +182,7 @@ public:
 class UnoControlFileControlModel final : public UnoControlModel
 {
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
                         UnoControlFileControlModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -233,8 +233,8 @@ protected:
     }
     GraphicControlModel( const GraphicControlModel& _rSource ) : UnoControlModel( _rSource ), mbAdjustingImagePosition( false ), mbAdjustingGraphic( false ) { }
 
-    // ::cppu::OPropertySetHelper
-    void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    // ::comphelper::OPropertySetHelper
+    void setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
 
     // UnoControlModel
     css::uno::Any ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
@@ -248,7 +248,7 @@ private:
 class UnoControlButtonModel final : public GraphicControlModel
 {
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
                         UnoControlButtonModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -327,7 +327,7 @@ private:
     bool    mbAdjustingImageScaleMode;
 
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
                                     UnoControlImageControlModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -347,7 +347,7 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // ::cppu::OPropertySetHelper
-    void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    void setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
 };
 
 
@@ -386,7 +386,7 @@ public:
 class UnoControlRadioButtonModel final : public GraphicControlModel
 {
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
                         UnoControlRadioButtonModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -464,7 +464,7 @@ public:
 class UnoControlCheckBoxModel final : public GraphicControlModel
 {
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
                         UnoControlCheckBoxModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -544,7 +544,7 @@ public:
 class UnoControlFixedHyperlinkModel final : public UnoControlModel
 {
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
     UnoControlFixedHyperlinkModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -615,7 +615,7 @@ public:
 class UnoControlFixedTextModel final : public UnoControlModel
 {
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
                         UnoControlFixedTextModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -679,7 +679,7 @@ public:
 class UnoControlGroupBoxModel final : public UnoControlModel
 {
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
                         UnoControlGroupBoxModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -777,14 +777,15 @@ public:
     virtual void SAL_CALL removeItemListListener( const css::uno::Reference< css::awt::XItemListListener >& Listener ) override;
 
     // OPropertySetHelper
-    void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    void setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
 
 protected:
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 private:
-    void    impl_notifyItemListEvent_nolck(
+    void    impl_notifyItemListEvent(
+                std::unique_lock<std::mutex>& rGuard,
                 const sal_Int32 i_nItemPosition,
                 const ::std::optional< OUString >& i_rItemText,
                 const ::std::optional< OUString >& i_rItemImageURL,
@@ -792,30 +793,30 @@ private:
             );
 
     void    impl_handleInsert(
+                std::unique_lock<std::mutex>& rGuard,
                 const sal_Int32 i_nItemPosition,
                 const ::std::optional< OUString >& i_rItemText,
-                const ::std::optional< OUString >& i_rItemImageURL,
-                ::osl::ClearableMutexGuard& i_rClearBeforeNotify
+                const ::std::optional< OUString >& i_rItemImageURL
             );
 
     void    impl_handleRemove(
                 const sal_Int32 i_nItemPosition,
-                ::osl::ClearableMutexGuard& i_rClearBeforeNotify
+                std::unique_lock<std::mutex>& i_rClearBeforeNotify
             );
 
     void    impl_handleModify(
                 const sal_Int32 i_nItemPosition,
                 const ::std::optional< OUString >& i_rItemText,
                 const ::std::optional< OUString >& i_rItemImageURL,
-                ::osl::ClearableMutexGuard& i_rClearBeforeNotify
+                std::unique_lock<std::mutex>& i_rClearBeforeNotify
             );
 
-    void    impl_getStringItemList( ::std::vector< OUString >& o_rStringItems ) const;
-    void    impl_setStringItemList_nolck( const ::std::vector< OUString >& i_rStringItems );
+    void    impl_getStringItemList( std::unique_lock<std::mutex>& rGuard, ::std::vector< OUString >& o_rStringItems ) const;
+    void    impl_setStringItemList( std::unique_lock<std::mutex>& rGuard, const ::std::vector< OUString >& i_rStringItems );
 
 protected:
     std::unique_ptr<UnoControlListBoxModel_Data>  m_xData;
-    ::comphelper::OInterfaceContainerHelper3<css::awt::XItemListListener> m_aItemListListeners;
+    ::comphelper::OInterfaceContainerHelper4<css::awt::XItemListListener> m_aItemListListeners;
 };
 
 
@@ -901,7 +902,7 @@ private:
 class UnoControlComboBoxModel final : public UnoControlListBoxModel
 {
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
                         UnoControlComboBoxModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -915,7 +916,7 @@ public:
     // css::beans::XMultiPropertySet
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     // OPropertySetHelper
-    void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    void setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName(  ) override;
@@ -1031,7 +1032,7 @@ public:
 class UnoControlDateFieldModel final : public UnoControlModel
 {
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
                 UnoControlDateFieldModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -1107,7 +1108,7 @@ public:
 class UnoControlTimeFieldModel final : public UnoControlModel
 {
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
                         UnoControlTimeFieldModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -1181,7 +1182,7 @@ public:
 class UnoControlNumericFieldModel final : public UnoControlModel
 {
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
                 UnoControlNumericFieldModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -1257,7 +1258,7 @@ public:
 class UnoControlCurrencyFieldModel final : public UnoControlModel
 {
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
                         UnoControlCurrencyFieldModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -1333,7 +1334,7 @@ public:
 class UnoControlPatternFieldModel final : public UnoControlModel
 {
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
                         UnoControlPatternFieldModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -1392,7 +1393,7 @@ public:
 class UnoControlProgressBarModel final : public UnoControlModel
 {
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
                         UnoControlProgressBarModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -1448,7 +1449,7 @@ public:
 class UnoControlFixedLineModel final : public UnoControlModel
 {
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
                         UnoControlFixedLineModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );

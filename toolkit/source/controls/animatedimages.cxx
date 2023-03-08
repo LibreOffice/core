@@ -211,12 +211,11 @@ namespace toolkit {
                 throw IndexOutOfBoundsException( OUString(), i_context );
         }
 
-        void lcl_notify( ::osl::ClearableMutexGuard& i_guard, ::cppu::OBroadcastHelper const & i_broadcaseHelper,
+        void lcl_notify( std::unique_lock<std::mutex>& i_guard, comphelper::OInterfaceContainerHelper4<XContainerListener>& rContainer,
             void ( SAL_CALL XContainerListener::*i_notificationMethod )( const ContainerEvent& ),
             const sal_Int32 i_accessor, const Sequence< OUString >& i_imageURLs, const Reference< XInterface >& i_context )
         {
-            ::cppu::OInterfaceContainerHelper* pContainerListeners = i_broadcaseHelper.getContainer( cppu::UnoType<XContainerListener>::get() );
-            if ( pContainerListeners == nullptr )
+            if ( !rContainer.getLength(i_guard) )
                 return;
 
             ContainerEvent aEvent;
@@ -224,8 +223,7 @@ namespace toolkit {
             aEvent.Accessor <<= i_accessor;
             aEvent.Element <<= i_imageURLs;
 
-            i_guard.clear();
-            pContainerListeners->notifyEach( i_notificationMethod, aEvent );
+            rContainer.notifyEach( i_guard, i_notificationMethod, aEvent );
         }
     }
 
@@ -289,7 +287,7 @@ namespace toolkit {
     }
 
 
-    void SAL_CALL AnimatedImagesControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 i_handle, const Any& i_value )
+    void AnimatedImagesControlModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 i_handle, const Any& i_value )
     {
         switch ( i_handle )
         {
@@ -306,7 +304,7 @@ namespace toolkit {
         break;
         }
 
-        AnimatedImagesControlModel_Base::setFastPropertyValue_NoBroadcast( i_handle, i_value );
+        AnimatedImagesControlModel_Base::setFastPropertyValue_NoBroadcast( rGuard, i_handle, i_value );
     }
 
 
@@ -335,7 +333,7 @@ namespace toolkit {
     }
 
 
-    ::cppu::IPropertyArrayHelper& SAL_CALL AnimatedImagesControlModel::getInfoHelper()
+    ::cppu::IPropertyArrayHelper& AnimatedImagesControlModel::getInfoHelper()
     {
         static UnoPropertyArrayHelper aHelper( ImplGetPropertyIds() );
         return aHelper;
@@ -386,8 +384,8 @@ namespace toolkit {
 
     ::sal_Int32 SAL_CALL AnimatedImagesControlModel::getImageSetCount(  )
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-        if ( GetBroadcastHelper().bDisposed || GetBroadcastHelper().bInDispose )
+        std::unique_lock aGuard( m_aMutex );
+        if ( m_bDisposed )
             throw DisposedException();
 
         return maImageSets.size();
@@ -396,8 +394,8 @@ namespace toolkit {
 
     Sequence< OUString > SAL_CALL AnimatedImagesControlModel::getImageSet( ::sal_Int32 i_index )
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-        if ( GetBroadcastHelper().bDisposed || GetBroadcastHelper().bInDispose )
+        std::unique_lock aGuard( m_aMutex );
+        if ( m_bDisposed )
             throw DisposedException();
 
         lcl_checkIndex( maImageSets, i_index, *this );
@@ -408,9 +406,9 @@ namespace toolkit {
 
     void SAL_CALL AnimatedImagesControlModel::insertImageSet( ::sal_Int32 i_index, const Sequence< OUString >& i_imageURLs )
     {
-        ::osl::ClearableMutexGuard aGuard( GetMutex() );
+        std::unique_lock aGuard( m_aMutex );
         // sanity checks
-        if ( GetBroadcastHelper().bDisposed || GetBroadcastHelper().bInDispose )
+        if ( m_bDisposed )
             throw DisposedException();
 
         lcl_checkIndex( maImageSets, i_index, *this, true );
@@ -419,15 +417,15 @@ namespace toolkit {
         maImageSets.insert( maImageSets.begin() + i_index, i_imageURLs );
 
         // listener notification
-        lcl_notify( aGuard, m_aBHelper, &XContainerListener::elementInserted, i_index, i_imageURLs, *this );
+        lcl_notify( aGuard, maContainerListeners, &XContainerListener::elementInserted, i_index, i_imageURLs, *this );
     }
 
 
     void SAL_CALL AnimatedImagesControlModel::replaceImageSet( ::sal_Int32 i_index, const Sequence< OUString >& i_imageURLs )
     {
-        ::osl::ClearableMutexGuard aGuard( GetMutex() );
+        std::unique_lock aGuard( m_aMutex );
         // sanity checks
-        if ( GetBroadcastHelper().bDisposed || GetBroadcastHelper().bInDispose )
+        if ( m_bDisposed )
             throw DisposedException();
 
         lcl_checkIndex( maImageSets, i_index, *this );
@@ -436,15 +434,15 @@ namespace toolkit {
         maImageSets[ i_index ] = i_imageURLs;
 
         // listener notification
-        lcl_notify( aGuard, m_aBHelper, &XContainerListener::elementReplaced, i_index, i_imageURLs, *this );
+        lcl_notify( aGuard, maContainerListeners, &XContainerListener::elementReplaced, i_index, i_imageURLs, *this );
     }
 
 
     void SAL_CALL AnimatedImagesControlModel::removeImageSet( ::sal_Int32 i_index )
     {
-        ::osl::ClearableMutexGuard aGuard( GetMutex() );
+        std::unique_lock aGuard( m_aMutex );
         // sanity checks
-        if ( GetBroadcastHelper().bDisposed || GetBroadcastHelper().bInDispose )
+        if ( m_bDisposed )
             throw DisposedException();
 
         lcl_checkIndex( maImageSets, i_index, *this );
@@ -455,19 +453,21 @@ namespace toolkit {
         maImageSets.erase( removalPos );
 
         // listener notification
-        lcl_notify( aGuard, m_aBHelper, &XContainerListener::elementRemoved, i_index, aRemovedElement, *this );
+        lcl_notify( aGuard, maContainerListeners, &XContainerListener::elementRemoved, i_index, aRemovedElement, *this );
     }
 
 
     void SAL_CALL AnimatedImagesControlModel::addContainerListener( const Reference< XContainerListener >& i_listener )
     {
-        m_aBHelper.addListener( cppu::UnoType<XContainerListener>::get(), i_listener );
+        std::unique_lock aGuard( m_aMutex );
+        maContainerListeners.addInterface( aGuard, i_listener );
     }
 
 
     void SAL_CALL AnimatedImagesControlModel::removeContainerListener( const Reference< XContainerListener >& i_listener )
     {
-        m_aBHelper.removeListener( cppu::UnoType<XContainerListener>::get(), i_listener );
+        std::unique_lock aGuard( m_aMutex );
+        maContainerListeners.removeInterface( aGuard, i_listener );
     }
 
 }

@@ -36,7 +36,7 @@
 #include <cppuhelper/propshlp.hxx>
 #include <com/sun/star/awt/tab/XTabPageModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <mutex>
 #include <vector>
 
@@ -78,7 +78,7 @@ public:
 
 protected:
     ContainerListenerMultiplexer        maContainerListeners;
-    ::comphelper::OInterfaceContainerHelper3<css::util::XChangesListener>   maChangeListeners;
+    ::comphelper::OInterfaceContainerHelper4<css::util::XChangesListener>   maChangeListeners;
     UnoControlModelHolderVector           maModels;
 
     AllGroups                           maGroups;
@@ -91,7 +91,7 @@ protected:
     void    Clone_Impl(ControlModelContainerBase& _rClone) const;
 protected:
     css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     UnoControlModelHolderVector::iterator         ImplFindElement( std::u16string_view rName );
 
@@ -152,7 +152,7 @@ public:
     virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
 
     // XEventListener
-    using cppu::OPropertySetHelper::disposing;
+    using comphelper::OPropertySetHelper::disposing;
     virtual void SAL_CALL disposing( const css::lang::EventObject& evt ) override;
 
     // XServiceInfo

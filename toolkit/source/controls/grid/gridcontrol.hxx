@@ -42,7 +42,7 @@ class UnoGridModel : public UnoControlModel
 {
 protected:
     css::uno::Any ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
     explicit UnoGridModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
@@ -60,7 +60,7 @@ public:
     OUString SAL_CALL getServiceName() override;
 
     // OPropertySetHelper
-    void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    void setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override

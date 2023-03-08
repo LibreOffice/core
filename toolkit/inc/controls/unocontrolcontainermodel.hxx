@@ -27,7 +27,7 @@
 class UnoControlContainerModel final : public UnoControlModel
 {
     css::uno::Any                                                      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-    ::cppu::IPropertyArrayHelper&                                                   SAL_CALL getInfoHelper() override;
+    ::cppu::IPropertyArrayHelper&                                      getInfoHelper() override;
 
 public:
                         UnoControlContainerModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );

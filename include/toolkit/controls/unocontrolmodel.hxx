@@ -31,7 +31,7 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 
-#include <cppuhelper/propshlp.hxx>
+#include <comphelper/propshlp.hxx>
 #include <cppuhelper/implbase6.hxx>
 #include <comphelper/uno3.hxx>
 #include <rtl/ref.hxx>
@@ -43,9 +43,6 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 typedef std::map<sal_uInt16, css::uno::Any> ImplPropertyTable;
 
-
-
-
 typedef ::cppu::WeakAggImplHelper6  <   css::awt::XControlModel
                                     ,   css::beans::XPropertyState
                                     ,   css::io::XPersistObject
@@ -54,9 +51,8 @@ typedef ::cppu::WeakAggImplHelper6  <   css::awt::XControlModel
                                     ,   css::util::XCloneable
                                     >   UnoControlModel_Base;
 
-class UnoControlModel :public UnoControlModel_Base
-                                        ,public comphelper::OMutexAndBroadcastHelper
-                                        ,public ::cppu::OPropertySetHelper
+class UnoControlModel : public UnoControlModel_Base
+                       ,public ::comphelper::OPropertySetHelper
 {
 private:
     ImplPropertyTable                       maData;
@@ -105,7 +101,7 @@ protected:
 #ifdef _MSC_VER
     UnoControlModel() //do not use! needed by MSVC at compile time to satisfy WeakAggImplHelper7
         : UnoControlModel_Base()
-        , OPropertySetHelper( m_aBHelper )
+        , OPropertySetHelper()
         , maDisposeListeners( *this )
         , m_xContext( css::uno::Reference< css::uno::XComponentContext >() )
     {
@@ -155,20 +151,25 @@ public:
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // ::cppu::OPropertySetHelper
-    ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override = 0;
-    sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
-    void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
-    using cppu::OPropertySetHelper::getFastPropertyValue;
-    void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    ::cppu::IPropertyArrayHelper& getInfoHelper() override = 0;
+    bool convertFastPropertyValue( std::unique_lock<std::mutex>& rGuard, css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    void setFastPropertyValue_NoBroadcast(
+                std::unique_lock<std::mutex>& rGuard,
+                sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    using comphelper::OPropertySetHelper::getFastPropertyValue;
+    void getFastPropertyValue( std::unique_lock<std::mutex>& rGuard, css::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
-    // override setValue methods to handle properties of FontDescriptor
-    // css::beans::XPropertySet
-    void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-    // css::beans::XFastPropertySet
-    void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const css::uno::Any& aValue ) override;
     // css::beans::XMultiPropertySet
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< css::uno::Any >& Values ) override;
+protected:
+    // override setValue methods to handle properties of FontDescriptor
+    // css::beans::XPropertySet
+    virtual void setPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, const OUString& aPropertyName, const css::uno::Any& aValue ) override;
+    // css::beans::XFastPropertySet
+    void setFastPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const css::uno::Any& aValue ) override;
+    css::beans::PropertyState getPropertyStateImpl( std::unique_lock<std::mutex>& rGuard, const OUString& PropertyName );
+    void setPropertyValuesImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< css::uno::Any >& Values );
 };
 
 #endif // INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLMODEL_HXX

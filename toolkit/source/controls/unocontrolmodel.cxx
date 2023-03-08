@@ -110,7 +110,6 @@ static void lcl_ImplMergeFontProperty( FontDescriptor& rFD, sal_uInt16 nPropId, 
 
 UnoControlModel::UnoControlModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel_Base()
-    ,OPropertySetHelper( m_aBHelper )
     ,maDisposeListeners( *this )
     ,m_xContext( rxContext )
 {
@@ -119,8 +118,7 @@ UnoControlModel::UnoControlModel( const Reference< XComponentContext >& rxContex
 }
 
 UnoControlModel::UnoControlModel( const UnoControlModel& rModel )
-    : UnoControlModel_Base()
-    , OPropertySetHelper( m_aBHelper )
+    : UnoControlModel_Base(), OPropertySetHelper()
     , maData( rModel.maData )
     , maDisposeListeners( *this )
     , m_xContext( rModel.m_xContext )
@@ -416,7 +414,7 @@ css::uno::Any UnoControlModel::queryAggregation( const css::uno::Type & rType )
 {
     Any aRet = UnoControlModel_Base::queryAggregation( rType );
     if ( !aRet.hasValue() )
-        aRet = ::cppu::OPropertySetHelper::queryInterface( rType );
+        aRet = ::comphelper::OPropertySetHelper::queryInterface( rType );
     return aRet;
 }
 
@@ -424,7 +422,7 @@ css::uno::Any UnoControlModel::queryAggregation( const css::uno::Type & rType )
 IMPLEMENT_FORWARD_REFCOUNT( UnoControlModel, UnoControlModel_Base )
 
 // css::lang::XTypeProvider
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoControlModel, UnoControlModel_Base, ::cppu::OPropertySetHelper )
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoControlModel, UnoControlModel_Base, ::comphelper::OPropertySetHelper )
 
 
 uno::Reference< util::XCloneable > UnoControlModel::createClone()
@@ -436,28 +434,26 @@ uno::Reference< util::XCloneable > UnoControlModel::createClone()
 // css::lang::XComponent
 void UnoControlModel::dispose(  )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
 
     css::lang::EventObject aEvt;
     aEvt.Source = static_cast<css::uno::XAggregation*>(static_cast<cppu::OWeakAggObject*>(this));
-    maDisposeListeners.disposeAndClear( aEvt );
-
-    m_aBHelper.aLC.disposeAndClear( aEvt );
+    maDisposeListeners.disposeAndClear( aGuard, aEvt );
 
     // let the property set helper notify our property listeners
-    OPropertySetHelper::disposing();
+    OPropertySetHelper::disposing(aGuard);
 }
 
 void UnoControlModel::addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
 
     maDisposeListeners.addInterface( rxListener );
 }
 
 void UnoControlModel::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
 
     maDisposeListeners.removeInterface( rxListener );
 }
@@ -466,11 +462,15 @@ void UnoControlModel::removeEventListener( const css::uno::Reference< css::lang:
 // css::beans::XPropertyState
 css::beans::PropertyState UnoControlModel::getPropertyState( const OUString& PropertyName )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
+    return getPropertyStateImpl(aGuard, PropertyName);
+}
 
+css::beans::PropertyState UnoControlModel::getPropertyStateImpl( std::unique_lock<std::mutex>& rGuard, const OUString& PropertyName )
+{
     sal_uInt16 nPropId = GetPropertyId( PropertyName );
 
-    css::uno::Any aValue = getPropertyValue( PropertyName );
+    css::uno::Any aValue = getPropertyValueImpl( rGuard, PropertyName );
     css::uno::Any aDefault = ImplGetDefaultValue( nPropId );
 
     return CompareProperties( aValue, aDefault ) ? css::beans::PropertyState_DEFAULT_VALUE : css::beans::PropertyState_DIRECT_VALUE;
@@ -478,14 +478,15 @@ css::beans::PropertyState UnoControlModel::getPropertyState( const OUString& Pro
 
 css::uno::Sequence< css::beans::PropertyState > UnoControlModel::getPropertyStates( const css::uno::Sequence< OUString >& PropertyNames )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
 
     sal_Int32 nNames = PropertyNames.getLength();
 
     css::uno::Sequence< css::beans::PropertyState > aStates( nNames );
 
     std::transform(PropertyNames.begin(), PropertyNames.end(), aStates.getArray(),
-        [this](const OUString& rName) -> css::beans::PropertyState { return getPropertyState(rName); });
+        [this, &aGuard](const OUString& rName) -> css::beans::PropertyState
+        { return getPropertyStateImpl(aGuard, rName); });
 
     return aStates;
 }
@@ -494,7 +495,7 @@ void UnoControlModel::setPropertyToDefault( const OUString& PropertyName )
 {
     Any aDefaultValue;
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+        std::unique_lock aGuard( m_aMutex );
         aDefaultValue = ImplGetDefaultValue( GetPropertyId( PropertyName ) );
     }
     setPropertyValue( PropertyName, aDefaultValue );
@@ -502,7 +503,7 @@ void UnoControlModel::setPropertyToDefault( const OUString& PropertyName )
 
 css::uno::Any UnoControlModel::getPropertyDefault( const OUString& rPropertyName )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
 
     return ImplGetDefaultValue( GetPropertyId( rPropertyName ) );
 }
@@ -517,7 +518,7 @@ OUString UnoControlModel::getServiceName(  )
 
 void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputStream >& OutStream )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
 
     css::uno::Reference< css::io::XMarkableStream > xMark( OutStream, css::uno::UNO_QUERY );
     DBG_ASSERT( xMark.is(), "write: no css::io::XMarkableStream!" );
@@ -529,7 +530,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
     for (const auto& rData : maData)
     {
         if ( ( ( GetPropertyAttribs( rData.first ) & css::beans::PropertyAttribute::TRANSIENT ) == 0 )
-            && ( getPropertyState( GetPropertyName( rData.first ) ) != css::beans::PropertyState_DEFAULT_VALUE ) )
+            && ( getPropertyStateImpl( aGuard, GetPropertyName( rData.first ) ) != css::beans::PropertyState_DEFAULT_VALUE ) )
         {
             aProps.insert( rData.first );
         }
@@ -747,7 +748,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
 
 void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStream >& InStream )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
 
     css::uno::Reference< css::io::XMarkableStream > xMark( InStream, css::uno::UNO_QUERY );
     DBG_ASSERT( xMark.is(), "read: no css::io::XMarkableStream!" );
@@ -990,7 +991,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
 
     try
     {
-        setPropertyValues( aProps, aValues );
+        setPropertyValuesImpl( aGuard, aProps, aValues );
     }
     catch ( const Exception& )
     {
@@ -1001,7 +1002,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
     {
         css::uno::Any aValue;
         aValue <<= *pFD;
-        setPropertyValue( GetPropertyName( BASEPROPERTY_FONTDESCRIPTOR ), aValue );
+        setPropertyValueImpl( aGuard, GetPropertyName( BASEPROPERTY_FONTDESCRIPTOR ), aValue );
     }
 }
 
@@ -1024,10 +1025,8 @@ css::uno::Sequence< OUString > UnoControlModel::getSupportedServiceNames(  )
     return { "com.sun.star.awt.UnoControlModel" };
 }
 
-sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nPropId, const Any& rValue )
+bool UnoControlModel::convertFastPropertyValue( std::unique_lock<std::mutex>& rGuard, Any & rConvertedValue, Any & rOldValue, sal_Int32 nPropId, const Any& rValue )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
     bool bVoid = rValue.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
     if ( bVoid )
     {
@@ -1140,11 +1139,11 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
     }
 
     // the current value
-    getFastPropertyValue( rOldValue, nPropId );
+    getFastPropertyValue( rGuard, rOldValue, nPropId );
     return !CompareProperties( rConvertedValue, rOldValue );
 }
 
-void UnoControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nPropId, const css::uno::Any& rValue )
+void UnoControlModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& /*rGuard*/, sal_Int32 nPropId, const css::uno::Any& rValue )
 {
     // Missing: the fake solo properties of the FontDescriptor
 
@@ -1156,10 +1155,8 @@ void UnoControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nPropId, const
     maData[ nPropId ] = rValue;
 }
 
-void UnoControlModel::getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nPropId ) const
+void UnoControlModel::getFastPropertyValue( std::unique_lock<std::mutex>& /*rGuard*/, css::uno::Any& rValue, sal_Int32 nPropId ) const
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( const_cast<UnoControlModel*>(this)->GetMutex() );
-
     ImplPropertyTable::const_iterator it = maData.find( nPropId );
     const css::uno::Any* pProp = it == maData.end() ? nullptr : &(it->second);
 
@@ -1214,25 +1211,23 @@ void UnoControlModel::getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nPr
 }
 
 // css::beans::XPropertySet
-void UnoControlModel::setPropertyValue( const OUString& rPropertyName, const css::uno::Any& rValue )
+void UnoControlModel::setPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, const OUString& rPropertyName, const css::uno::Any& rValue )
 {
     sal_Int32 nPropId = static_cast<sal_Int32>(GetPropertyId( rPropertyName ));
     DBG_ASSERT( nPropId, "Invalid ID in UnoControlModel::setPropertyValue" );
     if( !nPropId )
         throw css::beans::UnknownPropertyException(rPropertyName);
 
-    setFastPropertyValue( nPropId, rValue );
+    setFastPropertyValueImpl( rGuard, nPropId, rValue );
 }
 
 // css::beans::XFastPropertySet
-void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const css::uno::Any& rValue )
+void UnoControlModel::setFastPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, sal_Int32 nPropId, const css::uno::Any& rValue )
 {
     if ( ( nPropId >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( nPropId <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )
     {
-        ::osl::ClearableMutexGuard aGuard( GetMutex() );
-
         Any aOldSingleValue;
-        getFastPropertyValue( aOldSingleValue, BASEPROPERTY_FONTDESCRIPTORPART_START );
+        getFastPropertyValue( rGuard, aOldSingleValue, BASEPROPERTY_FONTDESCRIPTORPART_START );
 
         css::uno::Any* pProp = &maData[ BASEPROPERTY_FONTDESCRIPTOR ];
         FontDescriptor aOldFontDescriptor;
@@ -1248,14 +1243,13 @@ void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const css::uno::A
         // also, we need  fire a propertyChange event for the single property, since with
         // the above line, only an event for the FontDescriptor property will be fired
         Any aNewSingleValue;
-        getFastPropertyValue( aNewSingleValue, BASEPROPERTY_FONTDESCRIPTORPART_START );
+        getFastPropertyValue( rGuard, aNewSingleValue, BASEPROPERTY_FONTDESCRIPTORPART_START );
 
-        aGuard.clear();
-        setFastPropertyValues( 1, &nDescriptorId, &aNewValue, 1 );
-        fire( &nPropId, &aNewSingleValue, &aOldSingleValue, 1, false );
+        setFastPropertyValues( rGuard, 1, &nDescriptorId, &aNewValue, 1 );
+        fire( rGuard, &nPropId, &aNewSingleValue, &aOldSingleValue, 1, false );
     }
     else
-        setFastPropertyValues( 1, &nPropId, &rValue, 1 );
+        setFastPropertyValues( rGuard, 1, &nPropId, &rValue, 1 );
 }
 
 // css::beans::XMultiPropertySet
@@ -1267,8 +1261,12 @@ css::uno::Reference< css::beans::XPropertySetInfo > UnoControlModel::getProperty
 
 void UnoControlModel::setPropertyValues( const css::uno::Sequence< OUString >& rPropertyNames, const css::uno::Sequence< css::uno::Any >& Values )
 {
-    ::osl::ClearableMutexGuard aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
+    setPropertyValuesImpl(aGuard, rPropertyNames, Values);
+}
 
+void UnoControlModel::setPropertyValuesImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< OUString >& rPropertyNames, const css::uno::Sequence< css::uno::Any >& Values )
+{
     sal_Int32 nProps = rPropertyNames.getLength();
     if (nProps != Values.getLength())
         throw css::lang::IllegalArgumentException("lengths do not match",
@@ -1310,16 +1308,8 @@ void UnoControlModel::setPropertyValues( const css::uno::Sequence< OUString >& r
     if ( nValidHandles )
     {
         ImplNormalizePropertySequence( nProps, pHandles, pValues, &nValidHandles );
-        aGuard.clear();
-            // clear our guard before calling into setFastPropertyValues - this method
-            // will implicitly call property listeners, and this should not happen with
-            // our mutex locked
-            // #i23451#
-        setFastPropertyValues( nProps, pHandles, pValues, nValidHandles );
+        setFastPropertyValues( rGuard, nProps, pHandles, pValues, nValidHandles );
     }
-    else
-        aGuard.clear();
-        // same as a few lines above
 
     // Don't merge FD property into array, as it is sorted
     if (pFD)
@@ -1327,7 +1317,7 @@ void UnoControlModel::setPropertyValues( const css::uno::Sequence< OUString >& r
         css::uno::Any aValue;
         aValue <<= *pFD;
         sal_Int32 nHandle = BASEPROPERTY_FONTDESCRIPTOR;
-        setFastPropertyValues( 1, &nHandle, &aValue, 1 );
+        setFastPropertyValues( rGuard, 1, &nHandle, &aValue, 1 );
     }
 }
 

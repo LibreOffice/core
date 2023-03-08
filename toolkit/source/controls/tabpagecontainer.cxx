@@ -170,13 +170,13 @@ void SAL_CALL UnoControlTabPageContainerModel::replaceByIndex( ::sal_Int32 /*Ind
 // XIndexAccess
 ::sal_Int32 SAL_CALL UnoControlTabPageContainerModel::getCount(  )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
     return sal_Int32( m_aTabPageVector.size());
 }
 
 uno::Any SAL_CALL UnoControlTabPageContainerModel::getByIndex( ::sal_Int32 nIndex )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
     if ( nIndex < 0 || o3tl::make_unsigned(nIndex) > m_aTabPageVector.size() )
         throw lang::IndexOutOfBoundsException();
     return uno::Any(m_aTabPageVector[nIndex]);
@@ -190,7 +190,7 @@ uno::Type SAL_CALL UnoControlTabPageContainerModel::getElementType(  )
 
 sal_Bool SAL_CALL UnoControlTabPageContainerModel::hasElements(  )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
     return !m_aTabPageVector.empty();
 }
 // XContainer

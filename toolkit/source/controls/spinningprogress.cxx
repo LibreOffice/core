@@ -32,11 +32,7 @@ class SpinningProgressControlModel : public SpinningProgressControlModel_Base
 {
 public:
     explicit SpinningProgressControlModel( css::uno::Reference< css::uno::XComponentContext > const & i_factory );
-
-    SpinningProgressControlModel(SpinningProgressControlModel const &) = default;
-    SpinningProgressControlModel(SpinningProgressControlModel &&) = default;
-    SpinningProgressControlModel & operator =(SpinningProgressControlModel const &) = delete; // due to SpinningProgressControlModel_Base
-    SpinningProgressControlModel & operator =(SpinningProgressControlModel &&) = delete; // due to SpinningProgressControlModel_Base
+    SpinningProgressControlModel(const SpinningProgressControlModel& rOther) : SpinningProgressControlModel_Base(rOther) {}
 
     virtual rtl::Reference<UnoControlModel> Clone() const override;
 

@@ -72,20 +72,22 @@ namespace toolkit
                         css::uno::Any*     _pValues,       /// the values of the properties to set
                         sal_Int32*                      _pValidHandles  /// pointer to the valid handles, allowed to be adjusted
                     )   const override;
-        void    impl_updateTextFromValue_nothrow();
-        void    impl_updateCachedFormatter_nothrow();
-        void    impl_updateCachedFormatKey_nothrow();
+        void    impl_updateTextFromValue_nothrow(std::unique_lock<std::mutex>& rGuard);
+        void    impl_updateCachedFormatter_nothrow(std::unique_lock<std::mutex>& rGuard);
+        void    impl_updateCachedFormatKey_nothrow(std::unique_lock<std::mutex>& rGuard);
 
         css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
-        ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
-        sal_Bool SAL_CALL convertFastPropertyValue(
+        ::cppu::IPropertyArrayHelper& getInfoHelper() override;
+        bool convertFastPropertyValue(
+                    std::unique_lock<std::mutex>& rGuard,
                     css::uno::Any& rConvertedValue,
                     css::uno::Any& rOldValue,
                     sal_Int32 nPropId,
                     const css::uno::Any& rValue
                 ) override;
 
-        void SAL_CALL setFastPropertyValue_NoBroadcast(
+        void setFastPropertyValue_NoBroadcast(
+                    std::unique_lock<std::mutex>& rGuard,
                     sal_Int32 nHandle,
                     const css::uno::Any& rValue
                 ) override;

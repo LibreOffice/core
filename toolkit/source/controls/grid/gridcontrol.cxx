@@ -130,7 +130,8 @@ UnoGridModel::UnoGridModel( const UnoGridModel& rModel )
         }
         if ( !xDataModel.is() )
             xDataModel = lcl_getDefaultDataModel_throw( m_xContext );
-        UnoControlModel::setFastPropertyValue_NoBroadcast( BASEPROPERTY_GRID_DATAMODEL, Any( xDataModel ) );
+        std::unique_lock aGuard(m_aMutex);
+        UnoControlModel::setFastPropertyValue_NoBroadcast( aGuard, BASEPROPERTY_GRID_DATAMODEL, Any( xDataModel ) );
             // do *not* use setFastPropertyValue here: The UnoControlModel ctor made a simple copy of all property values,
             // so before this call here, we share our data model with the own of the clone source. setFastPropertyValue,
             // then, disposes the old data model - which means the data model which in fact belongs to the clone source.
@@ -149,7 +150,7 @@ UnoGridModel::UnoGridModel( const UnoGridModel& rModel )
         }
         if ( !xColumnModel.is() )
             xColumnModel = lcl_getDefaultColumnModel_throw( m_xContext );
-        UnoControlModel::setFastPropertyValue_NoBroadcast( BASEPROPERTY_GRID_COLUMNMODEL, Any( xColumnModel ) );
+        UnoControlModel::setFastPropertyValue_NoBroadcast( aGuard, BASEPROPERTY_GRID_COLUMNMODEL, Any( xColumnModel ) );
             // same comment as above: do not use our own setPropertyValue here.
     }
     osl_atomic_decrement( &m_refCount );
@@ -188,12 +189,12 @@ void SAL_CALL UnoGridModel::dispose(  )
 }
 
 
-void SAL_CALL UnoGridModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
+void UnoGridModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const Any& rValue )
 {
     Any aOldSubModel;
     if ( ( nHandle == BASEPROPERTY_GRID_COLUMNMODEL ) || ( nHandle == BASEPROPERTY_GRID_DATAMODEL ) )
     {
-        aOldSubModel = getFastPropertyValue( nHandle );
+        getFastPropertyValue( rGuard, aOldSubModel, nHandle );
         if ( aOldSubModel == rValue )
         {
             OSL_ENSURE( false, "UnoGridModel::setFastPropertyValue_NoBroadcast: setting the same value, again!" );
@@ -202,7 +203,7 @@ void SAL_CALL UnoGridModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,
         }
     }
 
-    UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+    UnoControlModel::setFastPropertyValue_NoBroadcast( rGuard, nHandle, rValue );
 
     if ( aOldSubModel.hasValue() )
         lcl_dispose_nothrow( aOldSubModel );

@@ -168,7 +168,6 @@ static OUString getStepPropertyName( )
 ControlModelContainerBase::ControlModelContainerBase( const Reference< XComponentContext >& rxContext )
     :ControlModelContainer_IBase( rxContext )
     ,maContainerListeners( *this )
-    ,maChangeListeners ( GetMutex() )
     ,mbGroupsUpToDate( false )
     ,m_nTabPageId(0)
 {
@@ -178,7 +177,6 @@ ControlModelContainerBase::ControlModelContainerBase( const Reference< XComponen
 ControlModelContainerBase::ControlModelContainerBase( const ControlModelContainerBase& rModel )
     : ControlModelContainer_IBase( rModel )
     , maContainerListeners( *this )
-    , maChangeListeners ( GetMutex() )
     , mbGroupsUpToDate( false )
     , m_nTabPageId( rModel.m_nTabPageId )
 {
@@ -217,13 +215,13 @@ void SAL_CALL ControlModelContainerBase::dispose(  )
 
     // tell our listeners
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+        std::unique_lock aGuard( m_aMutex );
 
         EventObject aDisposeEvent;
         aDisposeEvent.Source = static_cast< XAggregation* >( static_cast< ::cppu::OWeakAggObject* >( this ) );
 
-        maContainerListeners.disposeAndClear( aDisposeEvent );
-        maChangeListeners.disposeAndClear( aDisposeEvent );
+        maContainerListeners.disposeAndClear( aGuard, aDisposeEvent );
+        maChangeListeners.disposeAndClear( aGuard, aDisposeEvent );
     }
 
 
@@ -848,13 +846,15 @@ void SAL_CALL ControlModelContainerBase::getGroupByName( const OUString& _rName,
 
 void SAL_CALL ControlModelContainerBase::addChangesListener( const Reference< XChangesListener >& _rxListener )
 {
-    maChangeListeners.addInterface( _rxListener );
+    std::unique_lock g(m_aMutex);
+    maChangeListeners.addInterface( g, _rxListener );
 }
 
 
 void SAL_CALL ControlModelContainerBase::removeChangesListener( const Reference< XChangesListener >& _rxListener )
 {
-    maChangeListeners.removeInterface( _rxListener );
+    std::unique_lock g(m_aMutex);
+    maChangeListeners.removeInterface( g, _rxListener );
 }
 
 
@@ -869,7 +869,9 @@ void ControlModelContainerBase::implNotifyTabModelChange( const OUString& _rAcce
     aEvent.Changes.getArray()[ 0 ].Accessor <<= _rAccessor;
 
 
-    std::vector< Reference< css::util::XChangesListener > > aChangeListeners( maChangeListeners.getElements() );
+    std::unique_lock g(m_aMutex);
+    std::vector< Reference< css::util::XChangesListener > > aChangeListeners( maChangeListeners.getElements(g) );
+    g.unlock();
     for ( const auto& rListener : aChangeListeners )
         rListener->changesOccurred( aEvent );
 }

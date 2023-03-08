@@ -589,9 +589,9 @@ uno::Any GraphicControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
 
-void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue )
+void GraphicControlModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const css::uno::Any& rValue )
 {
-    UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+    UnoControlModel::setFastPropertyValue_NoBroadcast( rGuard, nHandle, rValue );
 
     // - ImageAlign and ImagePosition need to correspond to each other
     // - Graphic and ImageURL need to correspond to each other
@@ -605,7 +605,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
                 mbAdjustingGraphic = true;
                 OUString sImageURL;
                 OSL_VERIFY( rValue >>= sImageURL );
-                setDependentFastPropertyValue( BASEPROPERTY_GRAPHIC, uno::Any( ImageHelper::getGraphicFromURL_nothrow( sImageURL ) ) );
+                setDependentFastPropertyValue( rGuard, BASEPROPERTY_GRAPHIC, uno::Any( ImageHelper::getGraphicFromURL_nothrow( sImageURL ) ) );
                 mbAdjustingGraphic = false;
             }
             break;
@@ -614,7 +614,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
             if ( !mbAdjustingGraphic && ImplHasProperty( BASEPROPERTY_IMAGEURL ) )
             {
                 mbAdjustingGraphic = true;
-                setDependentFastPropertyValue( BASEPROPERTY_IMAGEURL, uno::Any( OUString() ) );
+                setDependentFastPropertyValue( rGuard, BASEPROPERTY_IMAGEURL, uno::Any( OUString() ) );
                 mbAdjustingGraphic = false;
             }
             break;
@@ -625,7 +625,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
                 mbAdjustingImagePosition = true;
                 sal_Int16 nUNOValue = 0;
                 OSL_VERIFY( rValue >>= nUNOValue );
-                setDependentFastPropertyValue( BASEPROPERTY_IMAGEPOSITION, uno::Any( getExtendedImagePosition( nUNOValue ) ) );
+                setDependentFastPropertyValue( rGuard, BASEPROPERTY_IMAGEPOSITION, uno::Any( getExtendedImagePosition( nUNOValue ) ) );
                 mbAdjustingImagePosition = false;
             }
             break;
@@ -635,7 +635,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
                 mbAdjustingImagePosition = true;
                 sal_Int16 nUNOValue = 0;
                 OSL_VERIFY( rValue >>= nUNOValue );
-                setDependentFastPropertyValue( BASEPROPERTY_IMAGEALIGN, uno::Any( getCompatibleImageAlign( translateImagePosition( nUNOValue ) ) ) );
+                setDependentFastPropertyValue( rGuard, BASEPROPERTY_IMAGEALIGN, uno::Any( getCompatibleImageAlign( translateImagePosition( nUNOValue ) ) ) );
                 mbAdjustingImagePosition = false;
             }
             break;
@@ -658,7 +658,8 @@ UnoControlButtonModel::UnoControlButtonModel( const Reference< XComponentContext
 
     osl_atomic_increment( &m_refCount );
     {
-        setFastPropertyValue_NoBroadcast( BASEPROPERTY_IMAGEPOSITION, ImplGetDefaultValue( BASEPROPERTY_IMAGEPOSITION ) );
+        std::unique_lock aGuard(m_aMutex);
+        setFastPropertyValue_NoBroadcast( aGuard, BASEPROPERTY_IMAGEPOSITION, ImplGetDefaultValue( BASEPROPERTY_IMAGEPOSITION ) );
         // this ensures that our ImagePosition is consistent with our ImageAlign property (since both
         // defaults are not per se consistent), since both are coupled in setFastPropertyValue_NoBroadcast
     }
@@ -941,9 +942,9 @@ uno::Reference< beans::XPropertySetInfo > UnoControlImageControlModel::getProper
     return xInfo;
 }
 
-void SAL_CALL UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const css::uno::Any& _rValue )
+void UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 _nHandle, const css::uno::Any& _rValue )
 {
-    GraphicControlModel::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
+    GraphicControlModel::setFastPropertyValue_NoBroadcast( rGuard, _nHandle, _rValue );
 
     // ScaleImage is an older (and less powerful) version of ScaleMode, but keep both in sync as far as possible
     try
@@ -956,7 +957,7 @@ void SAL_CALL UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( sal
                 mbAdjustingImageScaleMode = true;
                 sal_Int16 nScaleMode( awt::ImageScaleMode::ANISOTROPIC );
                 OSL_VERIFY( _rValue >>= nScaleMode );
-                setDependentFastPropertyValue( BASEPROPERTY_SCALEIMAGE, uno::Any( nScaleMode != awt::ImageScaleMode::NONE ) );
+                setDependentFastPropertyValue( rGuard, BASEPROPERTY_SCALEIMAGE, uno::Any( nScaleMode != awt::ImageScaleMode::NONE ) );
                 mbAdjustingImageScaleMode = false;
             }
             break;
@@ -966,7 +967,7 @@ void SAL_CALL UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( sal
                 mbAdjustingImageScaleMode = true;
                 bool bScale = true;
                 OSL_VERIFY( _rValue >>= bScale );
-                setDependentFastPropertyValue( BASEPROPERTY_IMAGE_SCALE_MODE, uno::Any( bScale ? awt::ImageScaleMode::ANISOTROPIC : awt::ImageScaleMode::NONE ) );
+                setDependentFastPropertyValue( rGuard, BASEPROPERTY_IMAGE_SCALE_MODE, uno::Any( bScale ? awt::ImageScaleMode::ANISOTROPIC : awt::ImageScaleMode::NONE ) );
                 mbAdjustingImageScaleMode = false;
             }
             break;
@@ -2053,7 +2054,6 @@ private:
 UnoControlListBoxModel::UnoControlListBoxModel( const Reference< XComponentContext >& rxContext, ConstructorMode const i_mode )
     :UnoControlListBoxModel_Base( rxContext )
     ,m_xData( new UnoControlListBoxModel_Data( *this ) )
-    ,m_aItemListListeners( GetMutex() )
 {
     if ( i_mode == ConstructDefault )
     {
@@ -2064,7 +2064,6 @@ UnoControlListBoxModel::UnoControlListBoxModel( const Reference< XComponentConte
 UnoControlListBoxModel::UnoControlListBoxModel( const UnoControlListBoxModel& i_rSource )
     :UnoControlListBoxModel_Base( i_rSource )
     ,m_xData( new UnoControlListBoxModel_Data( *this ) )
-    ,m_aItemListListeners( GetMutex() )
 {
     m_xData->copyItems( *i_rSource.m_xData );
 }
@@ -2126,16 +2125,16 @@ namespace
 }
 
 
-void SAL_CALL UnoControlListBoxModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const uno::Any& rValue )
+void UnoControlListBoxModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const uno::Any& rValue )
 {
-    UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+    UnoControlModel::setFastPropertyValue_NoBroadcast( rGuard, nHandle, rValue );
 
     if ( nHandle != BASEPROPERTY_STRINGITEMLIST )
         return;
 
     // reset selection
     uno::Sequence<sal_Int16> aSeq;
-    setDependentFastPropertyValue( BASEPROPERTY_SELECTEDITEMS, uno::Any(aSeq) );
+    setDependentFastPropertyValue( rGuard, BASEPROPERTY_SELECTEDITEMS, uno::Any(aSeq) );
 
     if ( m_xData->m_bSettingLegacyProperty )
         return;
@@ -2143,7 +2142,7 @@ void SAL_CALL UnoControlListBoxModel::setFastPropertyValue_NoBroadcast( sal_Int3
     // synchronize the legacy StringItemList property with our list items
     Sequence< OUString > aStringItemList;
     Any aPropValue;
-    getFastPropertyValue( aPropValue, BASEPROPERTY_STRINGITEMLIST );
+    getFastPropertyValue( rGuard, aPropValue, BASEPROPERTY_STRINGITEMLIST );
     OSL_VERIFY( aPropValue >>= aStringItemList );
 
     ::std::vector< ListItem > aItems( aStringItemList.getLength() );
@@ -2160,7 +2159,7 @@ void SAL_CALL UnoControlListBoxModel::setFastPropertyValue_NoBroadcast( sal_Int3
     // items
     lang::EventObject aEvent;
     aEvent.Source = *this;
-    m_aItemListListeners.notifyEach( &XItemListListener::itemListChanged, aEvent );
+    m_aItemListListeners.notifyEach( rGuard, &XItemListListener::itemListChanged, aEvent );
     // TODO: OPropertySetHelper calls into this method with the mutex locked ...
     // which is wrong for the above notifications ...
 }
@@ -2181,51 +2180,51 @@ void UnoControlListBoxModel::ImplNormalizePropertySequence( const sal_Int32 _nCo
 
 ::sal_Int32 SAL_CALL UnoControlListBoxModel::getItemCount()
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
     return m_xData->getItemCount();
 }
 
 
 void SAL_CALL UnoControlListBoxModel::insertItem( ::sal_Int32 i_nPosition, const OUString& i_rItemText, const OUString& i_rItemImageURL )
 {
-    ::osl::ClearableMutexGuard aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
     // SYNCHRONIZED ----->
     ListItem& rItem( m_xData->insertItem( i_nPosition ) );
     rItem.ItemText = i_rItemText;
     rItem.ItemImageURL = i_rItemImageURL;
 
-    impl_handleInsert( i_nPosition, i_rItemText, i_rItemImageURL, aGuard );
+    impl_handleInsert( aGuard, i_nPosition, i_rItemText, i_rItemImageURL );
     // <----- SYNCHRONIZED
 }
 
 
 void SAL_CALL UnoControlListBoxModel::insertItemText( ::sal_Int32 i_nPosition, const OUString& i_rItemText )
 {
-    ::osl::ClearableMutexGuard aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
     // SYNCHRONIZED ----->
     ListItem& rItem( m_xData->insertItem( i_nPosition ) );
     rItem.ItemText = i_rItemText;
 
-    impl_handleInsert( i_nPosition, i_rItemText, ::std::optional< OUString >(), aGuard );
+    impl_handleInsert( aGuard, i_nPosition, i_rItemText, ::std::optional< OUString >() );
     // <----- SYNCHRONIZED
 }
 
 
 void SAL_CALL UnoControlListBoxModel::insertItemImage( ::sal_Int32 i_nPosition, const OUString& i_rItemImageURL )
 {
-    ::osl::ClearableMutexGuard aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
     // SYNCHRONIZED ----->
     ListItem& rItem( m_xData->insertItem( i_nPosition ) );
     rItem.ItemImageURL = i_rItemImageURL;
 
-    impl_handleInsert( i_nPosition, ::std::optional< OUString >(), i_rItemImageURL, aGuard );
+    impl_handleInsert( aGuard, i_nPosition, ::std::optional< OUString >(), i_rItemImageURL );
     // <----- SYNCHRONIZED
 }
 
 
 void SAL_CALL UnoControlListBoxModel::removeItem( ::sal_Int32 i_nPosition )
 {
-    ::osl::ClearableMutexGuard aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
     // SYNCHRONIZED ----->
     m_xData->removeItem( i_nPosition );
 
@@ -2236,7 +2235,7 @@ void SAL_CALL UnoControlListBoxModel::removeItem( ::sal_Int32 i_nPosition )
 
 void SAL_CALL UnoControlListBoxModel::removeAllItems(  )
 {
-    ::osl::ClearableMutexGuard aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
     // SYNCHRONIZED ----->
     m_xData->removeAllItems();
 
@@ -2247,7 +2246,7 @@ void SAL_CALL UnoControlListBoxModel::removeAllItems(  )
 
 void SAL_CALL UnoControlListBoxModel::setItemText( ::sal_Int32 i_nPosition, const OUString& i_rItemText )
 {
-    ::osl::ClearableMutexGuard aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
     // SYNCHRONIZED ----->
     ListItem& rItem( m_xData->getItem( i_nPosition ) );
     rItem.ItemText = i_rItemText;
@@ -2259,7 +2258,7 @@ void SAL_CALL UnoControlListBoxModel::setItemText( ::sal_Int32 i_nPosition, cons
 
 void SAL_CALL UnoControlListBoxModel::setItemImage( ::sal_Int32 i_nPosition, const OUString& i_rItemImageURL )
 {
-    ::osl::ClearableMutexGuard aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
     // SYNCHRONIZED ----->
     ListItem& rItem( m_xData->getItem( i_nPosition ) );
     rItem.ItemImageURL = i_rItemImageURL;
@@ -2271,7 +2270,7 @@ void SAL_CALL UnoControlListBoxModel::setItemImage( ::sal_Int32 i_nPosition, con
 
 void SAL_CALL UnoControlListBoxModel::setItemTextAndImage( ::sal_Int32 i_nPosition, const OUString& i_rItemText, const OUString& i_rItemImageURL )
 {
-    ::osl::ClearableMutexGuard aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
     // SYNCHRONIZED ----->
     ListItem& rItem( m_xData->getItem( i_nPosition ) );
     rItem.ItemText = i_rItemText;
@@ -2284,7 +2283,7 @@ void SAL_CALL UnoControlListBoxModel::setItemTextAndImage( ::sal_Int32 i_nPositi
 
 void SAL_CALL UnoControlListBoxModel::setItemData( ::sal_Int32 i_nPosition, const Any& i_rDataValue )
 {
-    osl::MutexGuard aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
     ListItem& rItem( m_xData->getItem( i_nPosition ) );
     rItem.ItemData = i_rDataValue;
 }
@@ -2292,7 +2291,7 @@ void SAL_CALL UnoControlListBoxModel::setItemData( ::sal_Int32 i_nPosition, cons
 
 OUString SAL_CALL UnoControlListBoxModel::getItemText( ::sal_Int32 i_nPosition )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
     const ListItem& rItem( m_xData->getItem( i_nPosition ) );
     return rItem.ItemText;
 }
@@ -2300,7 +2299,7 @@ OUString SAL_CALL UnoControlListBoxModel::getItemText( ::sal_Int32 i_nPosition )
 
 OUString SAL_CALL UnoControlListBoxModel::getItemImage( ::sal_Int32 i_nPosition )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
     const ListItem& rItem( m_xData->getItem( i_nPosition ) );
     return rItem.ItemImageURL;
 }
@@ -2308,7 +2307,7 @@ OUString SAL_CALL UnoControlListBoxModel::getItemImage( ::sal_Int32 i_nPosition 
 
 beans::Pair< OUString, OUString > SAL_CALL UnoControlListBoxModel::getItemTextAndImage( ::sal_Int32 i_nPosition )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
     const ListItem& rItem( m_xData->getItem( i_nPosition ) );
     return beans::Pair< OUString, OUString >( rItem.ItemText, rItem.ItemImageURL );
 }
@@ -2316,7 +2315,7 @@ beans::Pair< OUString, OUString > SAL_CALL UnoControlListBoxModel::getItemTextAn
 
 Any SAL_CALL UnoControlListBoxModel::getItemData( ::sal_Int32 i_nPosition )
 {
-    osl::MutexGuard aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
     const ListItem& rItem( m_xData->getItem( i_nPosition ) );
     return rItem.ItemData;
 }
@@ -2324,43 +2323,45 @@ Any SAL_CALL UnoControlListBoxModel::getItemData( ::sal_Int32 i_nPosition )
 
 Sequence< beans::Pair< OUString, OUString > > SAL_CALL UnoControlListBoxModel::getAllItems(  )
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    std::unique_lock aGuard( m_aMutex );
     return m_xData->getAllItems();
 }
 
 
 void SAL_CALL UnoControlListBoxModel::addItemListListener( const uno::Reference< awt::XItemListListener >& i_Listener )
 {
+    std::unique_lock aGuard( m_aMutex );
     if ( i_Listener.is() )
-        m_aItemListListeners.addInterface( i_Listener );
+        m_aItemListListeners.addInterface( aGuard, i_Listener );
 }
 
 
 void SAL_CALL UnoControlListBoxModel::removeItemListListener( const uno::Reference< awt::XItemListListener >& i_Listener )
 {
+    std::unique_lock aGuard( m_aMutex );
     if ( i_Listener.is() )
-        m_aItemListListeners.removeInterface( i_Listener );
+        m_aItemListListeners.removeInterface( aGuard, i_Listener );
 }
 
 
-void UnoControlListBoxModel::impl_getStringItemList( ::std::vector< OUString >& o_rStringItems ) const
+void UnoControlListBoxModel::impl_getStringItemList( std::unique_lock<std::mutex>& rGuard, ::std::vector< OUString >& o_rStringItems ) const
 {
     Sequence< OUString > aStringItemList;
     Any aPropValue;
-    getFastPropertyValue( aPropValue, BASEPROPERTY_STRINGITEMLIST );
+    getFastPropertyValue( rGuard, aPropValue, BASEPROPERTY_STRINGITEMLIST );
     OSL_VERIFY( aPropValue >>= aStringItemList );
 
     comphelper::sequenceToContainer(o_rStringItems, aStringItemList);
 }
 
 
-void UnoControlListBoxModel::impl_setStringItemList_nolck( const ::std::vector< OUString >& i_rStringItems )
+void UnoControlListBoxModel::impl_setStringItemList( std::unique_lock<std::mutex>& rGuard, const ::std::vector< OUString >& i_rStringItems )
 {
     Sequence< OUString > aStringItems( comphelper::containerToSequence(i_rStringItems) );
     m_xData->m_bSettingLegacyProperty = true;
     try
     {
-        setFastPropertyValue( BASEPROPERTY_STRINGITEMLIST, uno::Any( aStringItems ) );
+        setFastPropertyValueImpl( rGuard, BASEPROPERTY_STRINGITEMLIST, uno::Any( aStringItems ) );
     }
     catch( const Exception& )
     {
@@ -2371,13 +2372,15 @@ void UnoControlListBoxModel::impl_setStringItemList_nolck( const ::std::vector< 
 }
 
 
-void UnoControlListBoxModel::impl_handleInsert( const sal_Int32 i_nItemPosition, const ::std::optional< OUString >& i_rItemText,
-        const ::std::optional< OUString >& i_rItemImageURL, ::osl::ClearableMutexGuard& i_rClearBeforeNotify )
+void UnoControlListBoxModel::impl_handleInsert( std::unique_lock<std::mutex>& rGuard,
+        const sal_Int32 i_nItemPosition,
+        const ::std::optional< OUString >& i_rItemText,
+        const ::std::optional< OUString >& i_rItemImageURL )
 {
     // SYNCHRONIZED ----->
     // sync with legacy StringItemList property
     ::std::vector< OUString > aStringItems;
-    impl_getStringItemList( aStringItems );
+    impl_getStringItemList( rGuard, aStringItems );
     OSL_ENSURE( o3tl::make_unsigned( i_nItemPosition ) <= aStringItems.size(), "UnoControlListBoxModel::impl_handleInsert" );
     if ( o3tl::make_unsigned( i_nItemPosition ) <= aStringItems.size() )
     {
@@ -2385,22 +2388,22 @@ void UnoControlListBoxModel::impl_handleInsert( const sal_Int32 i_nItemPosition,
         aStringItems.insert( aStringItems.begin() + i_nItemPosition, sItemText );
     }
 
-    i_rClearBeforeNotify.clear();
-    // <----- SYNCHRONIZED
-    impl_setStringItemList_nolck( aStringItems );
+    impl_setStringItemList( rGuard, aStringItems );
 
     // notify ItemListListeners
-    impl_notifyItemListEvent_nolck( i_nItemPosition, i_rItemText, i_rItemImageURL, &XItemListListener::listItemInserted );
+    impl_notifyItemListEvent( rGuard, i_nItemPosition, i_rItemText, i_rItemImageURL, &XItemListListener::listItemInserted );
 }
 
 
-void UnoControlListBoxModel::impl_handleRemove( const sal_Int32 i_nItemPosition, ::osl::ClearableMutexGuard& i_rClearBeforeNotify )
+void UnoControlListBoxModel::impl_handleRemove(
+            const sal_Int32 i_nItemPosition,
+            std::unique_lock<std::mutex>& i_rClearBeforeNotify )
 {
     // SYNCHRONIZED ----->
     const bool bAllItems = ( i_nItemPosition < 0 );
     // sync with legacy StringItemList property
     ::std::vector< OUString > aStringItems;
-    impl_getStringItemList( aStringItems );
+    impl_getStringItemList( i_rClearBeforeNotify, aStringItems );
     if ( !bAllItems )
     {
         OSL_ENSURE( o3tl::make_unsigned( i_nItemPosition ) < aStringItems.size(), "UnoControlListBoxModel::impl_handleRemove" );
@@ -2414,55 +2417,50 @@ void UnoControlListBoxModel::impl_handleRemove( const sal_Int32 i_nItemPosition,
         aStringItems.resize(0);
     }
 
-    i_rClearBeforeNotify.clear();
-    // <----- SYNCHRONIZED
-    impl_setStringItemList_nolck( aStringItems );
+    impl_setStringItemList( i_rClearBeforeNotify, aStringItems );
 
     // notify ItemListListeners
     if ( bAllItems )
     {
         EventObject aEvent( *this );
-        m_aItemListListeners.notifyEach( &XItemListListener::allItemsRemoved, aEvent );
+        m_aItemListListeners.notifyEach( i_rClearBeforeNotify, &XItemListListener::allItemsRemoved, aEvent );
     }
     else
     {
-        impl_notifyItemListEvent_nolck( i_nItemPosition, ::std::optional< OUString >(), ::std::optional< OUString >(),
+        impl_notifyItemListEvent( i_rClearBeforeNotify, i_nItemPosition, ::std::optional< OUString >(), ::std::optional< OUString >(),
             &XItemListListener::listItemRemoved );
     }
 }
 
 
-void UnoControlListBoxModel::impl_handleModify( const sal_Int32 i_nItemPosition, const ::std::optional< OUString >& i_rItemText,
-        const ::std::optional< OUString >& i_rItemImageURL, ::osl::ClearableMutexGuard& i_rClearBeforeNotify )
+void UnoControlListBoxModel::impl_handleModify(
+        const sal_Int32 i_nItemPosition, const ::std::optional< OUString >& i_rItemText,
+        const ::std::optional< OUString >& i_rItemImageURL,
+        std::unique_lock<std::mutex>& i_rClearBeforeNotify )
 {
     // SYNCHRONIZED ----->
     if ( !!i_rItemText )
     {
         // sync with legacy StringItemList property
         ::std::vector< OUString > aStringItems;
-        impl_getStringItemList( aStringItems );
+        impl_getStringItemList( i_rClearBeforeNotify, aStringItems );
         OSL_ENSURE( o3tl::make_unsigned( i_nItemPosition ) < aStringItems.size(), "UnoControlListBoxModel::impl_handleModify" );
         if ( o3tl::make_unsigned( i_nItemPosition ) < aStringItems.size() )
         {
             aStringItems[ i_nItemPosition] = *i_rItemText;
         }
 
-        i_rClearBeforeNotify.clear();
-        // <----- SYNCHRONIZED
-        impl_setStringItemList_nolck( aStringItems );
-    }
-    else
-    {
-        i_rClearBeforeNotify.clear();
-        // <----- SYNCHRONIZED
+        impl_setStringItemList( i_rClearBeforeNotify, aStringItems );
     }
 
     // notify ItemListListeners
-    impl_notifyItemListEvent_nolck( i_nItemPosition, i_rItemText, i_rItemImageURL, &XItemListListener::listItemModified );
+    impl_notifyItemListEvent( i_rClearBeforeNotify, i_nItemPosition, i_rItemText, i_rItemImageURL, &XItemListListener::listItemModified );
 }
 
 
-void UnoControlListBoxModel::impl_notifyItemListEvent_nolck( const sal_Int32 i_nItemPosition, const ::std::optional< OUString >& i_rItemText,
+void UnoControlListBoxModel::impl_notifyItemListEvent(
+    std::unique_lock<std::mutex>& rGuard,
+    const sal_Int32 i_nItemPosition, const ::std::optional< OUString >& i_rItemText,
     const ::std::optional< OUString >& i_rItemImageURL,
     void ( SAL_CALL XItemListListener::*NotificationMethod )( const ItemListEvent& ) )
 {
@@ -2480,7 +2478,7 @@ void UnoControlListBoxModel::impl_notifyItemListEvent_nolck( const sal_Int32 i_n
         aEvent.ItemImageURL.Value = *i_rItemImageURL;
     }
 
-    m_aItemListListeners.notifyEach( NotificationMethod, aEvent );
+    m_aItemListListeners.notifyEach( rGuard, NotificationMethod, aEvent );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -2940,9 +2938,9 @@ OUString UnoControlComboBoxModel::getServiceName()
     return "stardiv.vcl.controlmodel.ComboBox";
 }
 
-void SAL_CALL UnoControlComboBoxModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const uno::Any& rValue )
+void UnoControlComboBoxModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const uno::Any& rValue )
 {
-    UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+    UnoControlModel::setFastPropertyValue_NoBroadcast( rGuard, nHandle, rValue );
 
     if (nHandle != BASEPROPERTY_STRINGITEMLIST || m_xData->m_bSettingLegacyProperty)
         return;
@@ -2950,7 +2948,7 @@ void SAL_CALL UnoControlComboBoxModel::setFastPropertyValue_NoBroadcast( sal_Int
     // synchronize the legacy StringItemList property with our list items
     Sequence< OUString > aStringItemList;
     Any aPropValue;
-    getFastPropertyValue( aPropValue, BASEPROPERTY_STRINGITEMLIST );
+    getFastPropertyValue( rGuard, aPropValue, BASEPROPERTY_STRINGITEMLIST );
     OSL_VERIFY( aPropValue >>= aStringItemList );
 
     ::std::vector< ListItem > aItems( aStringItemList.getLength() );
@@ -2967,9 +2965,7 @@ void SAL_CALL UnoControlComboBoxModel::setFastPropertyValue_NoBroadcast( sal_Int
     // items
     lang::EventObject aEvent;
     aEvent.Source = *this;
-    m_aItemListListeners.notifyEach( &XItemListListener::itemListChanged, aEvent );
-    // TODO: OPropertySetHelper calls into this method with the mutex locked ...
-    // which is wrong for the above notifications ...
+    m_aItemListListeners.notifyEach( rGuard, &XItemListListener::itemListChanged, aEvent );
 }
 
 uno::Any UnoControlComboBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const

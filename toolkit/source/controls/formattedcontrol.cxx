@@ -154,39 +154,39 @@ namespace toolkit
     }
 
 
-    void SAL_CALL UnoControlFormattedFieldModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
+    void UnoControlFormattedFieldModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const Any& rValue )
     {
-        UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+        UnoControlModel::setFastPropertyValue_NoBroadcast( rGuard, nHandle, rValue );
 
         switch ( nHandle )
         {
         case BASEPROPERTY_EFFECTIVE_VALUE:
             if ( !m_bSettingValueAndText )
-                impl_updateTextFromValue_nothrow();
+                impl_updateTextFromValue_nothrow(rGuard);
             break;
         case BASEPROPERTY_FORMATSSUPPLIER:
-            impl_updateCachedFormatter_nothrow();
-            impl_updateTextFromValue_nothrow();
+            impl_updateCachedFormatter_nothrow(rGuard);
+            impl_updateTextFromValue_nothrow(rGuard);
             break;
         case BASEPROPERTY_FORMATKEY:
-            impl_updateCachedFormatKey_nothrow();
-            impl_updateTextFromValue_nothrow();
+            impl_updateCachedFormatKey_nothrow(rGuard);
+            impl_updateTextFromValue_nothrow(rGuard);
             break;
         }
     }
 
 
-    void UnoControlFormattedFieldModel::impl_updateTextFromValue_nothrow()
+    void UnoControlFormattedFieldModel::impl_updateTextFromValue_nothrow( std::unique_lock<std::mutex>& rGuard)
     {
         if ( !m_xCachedFormatter.is() )
-            impl_updateCachedFormatter_nothrow();
+            impl_updateCachedFormatter_nothrow(rGuard);
         if ( !m_xCachedFormatter.is() )
             return;
 
         try
         {
             Any aEffectiveValue;
-            getFastPropertyValue( aEffectiveValue, BASEPROPERTY_EFFECTIVE_VALUE );
+            getFastPropertyValue( rGuard, aEffectiveValue, BASEPROPERTY_EFFECTIVE_VALUE );
 
             OUString sStringValue;
             if ( !( aEffectiveValue >>= sStringValue ) )
@@ -201,7 +201,7 @@ namespace toolkit
                 }
             }
 
-            setPropertyValue( GetPropertyName( BASEPROPERTY_TEXT ), Any( sStringValue ) );
+            setPropertyValueImpl( rGuard, GetPropertyName( BASEPROPERTY_TEXT ), Any( sStringValue ) );
         }
         catch( const Exception& )
         {
@@ -210,10 +210,10 @@ namespace toolkit
     }
 
 
-    void UnoControlFormattedFieldModel::impl_updateCachedFormatter_nothrow()
+    void UnoControlFormattedFieldModel::impl_updateCachedFormatter_nothrow(std::unique_lock<std::mutex>& rGuard)
     {
         Any aFormatsSupplier;
-        getFastPropertyValue( aFormatsSupplier, BASEPROPERTY_FORMATSSUPPLIER );
+        getFastPropertyValue( rGuard, aFormatsSupplier, BASEPROPERTY_FORMATSSUPPLIER );
         try
         {
             Reference< XNumberFormatsSupplier > xSupplier( aFormatsSupplier, UNO_QUERY );
@@ -236,10 +236,10 @@ namespace toolkit
     }
 
 
-    void UnoControlFormattedFieldModel::impl_updateCachedFormatKey_nothrow()
+    void UnoControlFormattedFieldModel::impl_updateCachedFormatKey_nothrow(std::unique_lock<std::mutex>& rGuard)
     {
         Any aFormatKey;
-        getFastPropertyValue( aFormatKey, BASEPROPERTY_FORMATKEY );
+        getFastPropertyValue( rGuard, aFormatKey, BASEPROPERTY_FORMATKEY );
         m_aCachedFormat = aFormatKey;
     }
 
@@ -248,7 +248,7 @@ namespace toolkit
     {
         UnoControlModel::dispose();
 
-        ::osl::MutexGuard aGuard( GetMutex() );
+        std::unique_lock aGuard( m_aMutex );
         if ( !m_bRevokedAsClient )
         {
             lcl_revokeDefaultFormatsClient();
@@ -305,7 +305,8 @@ namespace toolkit
     }
 
 
-    sal_Bool UnoControlFormattedFieldModel::convertFastPropertyValue(
+    bool UnoControlFormattedFieldModel::convertFastPropertyValue(
+                std::unique_lock<std::mutex>& rGuard,
                 Any& rConvertedValue, Any& rOldValue, sal_Int32 nPropId,
                 const Any& rValue )
     {
@@ -338,7 +339,7 @@ namespace toolkit
 
             if ( bStreamed )
             {
-                getFastPropertyValue( rOldValue, nPropId );
+                getFastPropertyValue( rGuard, rOldValue, nPropId );
                 return !CompareProperties( rConvertedValue, rOldValue );
             }
 
@@ -350,7 +351,7 @@ namespace toolkit
                 1);
         }
 
-        return UnoControlModel::convertFastPropertyValue( rConvertedValue, rOldValue, nPropId, rValue );
+        return UnoControlModel::convertFastPropertyValue( rGuard, rConvertedValue, rOldValue, nPropId, rValue );
     }
 
 
