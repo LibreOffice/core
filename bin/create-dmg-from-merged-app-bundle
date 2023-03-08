@@ -20,8 +20,9 @@ if [ `uname` != Darwin ]; then
     exit 1
 fi
 
-if [ $# != 1 ]; then
-    echo Usage: $0 signed-app-bundle
+if [ $# != 2 ]; then
+    echo Usage: $0 signed-app-bundle type
+    echo "  where type is 'release', 'dev', or 'collabora'"
     exit 1
 fi
 
@@ -35,12 +36,29 @@ if [[ "$1" != *.app ]]; then
     exit 1
 fi
 
+DSSTOREFILE=
+VOLUMEICON=
+if [ "$2" = "release" ];then
+    DSSTOREFILE=DS_Store
+elif [ "$2" = "dev" ];then
+    DSSTOREFILE=DS_Store_Dev
+elif [ "$2" = "collabora" ];then
+    DSSTOREFILE=DS_Store
+    # Collabora is not currently using a volume icon
+    #VOLUMEICON=main.icns
+else
+    echo "type argument $2 is not equal to 'release', 'dev', or 'collabora'" >&2
+    exit 1
+fi
+
 IN=$(cd "$1" && /bin/pwd)
 INAPP=$(basename "$IN")
 INDIR=$(dirname "$IN")
 OUTVOLUME=$(basename "$IN" .app)
+OUTVOLUMEMOUNT=/Volumes/"$OUTVOLUME"
 OUTTMPDIR=$(dirname "$IN")/"$OUTVOLUME"
 OUTFILE="$OUTTMPDIR".dmg
+OUTFILETMP="$OUTTMPDIR".tmp.dmg
 SRCDIR=$(cd `dirname "$0"`/.. && /bin/pwd)
 
 # Create $OUTTMPDIR directory in the same directory as the output .dmg and
@@ -56,6 +74,16 @@ if [ -d "$OUTFILE" ]; then
     exit 1
 fi
 
+if [ -f "$OUTFILETMP" ]; then
+    echo The file $OUTFILETMP exists already >&2
+    exit 1
+fi
+
+if [ -d "$OUTFILETMP" ]; then
+    echo $OUTFILETMP exists and is a directory >&2
+    exit 1
+fi
+
 if [ -d "$OUTTMPDIR" ]; then
     echo The directory $OUTTMPDIR exists already >&2
     exit 1
@@ -66,16 +94,59 @@ if [ -f "$OUTTMPDIR" ]; then
     exit 1
 fi
 
+if [ -d "$OUTVOLUMEMOUNT" ]; then
+    echo The directory $OUTVOLUMEMOUNT exists already >&2
+    exit 1
+fi
+
+if [ -f "$OUTVOLUMEMOUNT" ]; then
+    echo $OUTVOLUMEMOUNT exists and is a file >&2
+    exit 1
+fi
+
 mkdir "$OUTTMPDIR"
 mkdir "$OUTTMPDIR"/.background
 tar cf - "$INAPP" -C "$INDIR" | tar xvpf - -C "$OUTTMPDIR"
 ln -s /Applications "$OUTTMPDIR"/Applications
 cp "$SRCDIR"/setup_native/source/packinfo/DS_Store "$OUTTMPDIR"/.DS_Store
-cp "$SRCDIR"/setup_native/source/packinfo/VolumeIcon.icns "$OUTTMPDIR"/.VolumeIcon.icns
+if [ ! -z "$VOLUMEICON" ]; then
+    cp "$SRCDIR"/sysui/desktop/icons/"$VOLUMEICON" "$OUTTMPDIR"/.VolumeIcon.icns
+fi
 cp "$SRCDIR"/setup_native/source/packinfo/osxdndinstall.png "$OUTTMPDIR"/.background/background.png
 
 # Create and mount empty .dmg
 
+sync
+
+if [ -z "$VOLUMEICON" ]; then
 # Copied and adapted to bash from solenv/bin/modules/installer/simplepackage.pm
 # tdf#151341 Use lzfse compression instead of bzip2
 hdiutil create -srcfolder "$OUTTMPDIR" "$OUTFILE" -ov -fs HFS+ -volname "$OUTVOLUME" -format ULFO
+else
+# To set a volume icon, we need to create a writable .dmg, mount it, set the
+# volume icon, unmount it, and then convert it to a read-only .dmg
+hdiutil create -srcfolder "$OUTTMPDIR" "$OUTFILETMP" -ov -fs HFS+ -volname "$OUTVOLUME" -format UDRW
+sync
+hdiutil attach "$OUTFILETMP"
+if [ -f "$OUTVOLUMEMOUNT"/.VolumeIcon.icns ]; then
+    # TODO: SetFile is deprecated so we will eventually need to find another
+    # way to set the volume icon or stop trying to set the volume icon
+    SetFile -a C "$OUTVOLUMEMOUNT"
+fi
+hdiutil detach "$OUTVOLUMEMOUNT"
+sync
+hdiutil convert "$OUTFILETMP" -format ULFO -o "$OUTFILE"
+fi
+
+sync
+
+# Print warning about notarization
+echo "Successfully created '$OUTFILE'"
+echo
+echo "Warning: the .dmg is NOT notarized!"
+echo
+echo "You can manually notarize the .dmg using the following commands:"
+echo "  xcrun notarytool submit '$OUTFILE' ... [--wait]"
+echo "  xcrun stapler staple '$OUTFILE'"
+echo "  xcrun stapler validate '$OUTFILE'"
+exit 0
