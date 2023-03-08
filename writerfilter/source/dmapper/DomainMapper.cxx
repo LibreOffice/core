@@ -1124,6 +1124,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     if (m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun())
                     {
                         mbIsSplitPara = true;
+                        m_pImpl->m_bIsSplitPara = true;
                         finishParagraph();
                         lcl_startParagraphGroup();
                     }
@@ -4164,6 +4165,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                     if ( m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun() )
                     {
                         mbIsSplitPara = true;
+                        m_pImpl->m_bIsSplitPara = true;
                         finishParagraph();
                         lcl_startParagraphGroup();
                     }
@@ -4263,6 +4265,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                     if (m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun() || mbWasShapeInPara)
                     {
                         mbIsSplitPara = true;
+                        m_pImpl->m_bIsSplitPara = true;
                         finishParagraph();
                         lcl_startParagraphGroup();
                     }

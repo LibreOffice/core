@@ -216,7 +216,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153964_topMarginAfterBreak14, "tdf153964_topMarg
     // The top margin was applied to paragraph 3, so it shouldn't apply here
     xPara.set(getParagraph(4, u"column break1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
-    //CPPUNIT_ASSERT_EQUAL(Color(0xfbe4d5), getProperty<Color>(xPara, "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xfbe4d5), getProperty<Color>(xPara, "ParaBackColor"));
 
     xPara.set(getParagraph(5, u"60 pt followed by page break"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
@@ -240,7 +240,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153964_topMarginAfterBreak14, "tdf153964_topMarg
     // The top margin was not applied before the column break, so with compat14 it should apply here
     xPara.set(getParagraph(10, u""), uno::UNO_QUERY); // after column break
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
-    //CPPUNIT_ASSERT_EQUAL(Color(0xfff2cc), getProperty<Color>(xPara, "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xfff2cc), getProperty<Color>(xPara, "ParaBackColor"));
 
     // In an odd twist, the w:br was actually at the end of the previous w:p, so in that case
     // we ignore the top margin definition this time.
@@ -262,7 +262,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153964_topMarginAfterBreak15, "tdf153964_topMarg
     // The top margin was applied to paragraph 3, so it shouldn't apply here
     xPara.set(getParagraph(4, u"column break1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
-    //CPPUNIT_ASSERT_EQUAL(Color(0xfbe4d5), getProperty<Color>(xPara, "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xfbe4d5), getProperty<Color>(xPara, "ParaBackColor"));
 
     xPara.set(getParagraph(5, u"60 pt followed by page break"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2117), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
@@ -285,11 +285,45 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153964_topMarginAfterBreak15, "tdf153964_topMarg
     // The top margin was not applied to paragraph 9, and with compat15 it shouldn't apply here.
     xPara.set(getParagraph(10, u""), uno::UNO_QUERY); // after column break
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
-    //CPPUNIT_ASSERT_EQUAL(Color(0xfff2cc), getProperty<Color>(xPara, "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xfff2cc), getProperty<Color>(xPara, "ParaBackColor"));
 
     // The top margin was not applied to paragraph 11, and with compat15 it shouldn't apply here.
     xPara.set(getParagraph(12, u""), uno::UNO_QUERY); // after page break
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf153964_numberingAfterBreak14, "tdf153964_numberingAfterBreak14.docx")
+{
+    //Numbering should only apply once in a split paragraph.
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(2, "How numbering affected by a column break?"), uno::UNO_QUERY);
+    //CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(xPara, "ListLabelString"));
+    xPara.set(getParagraph(3, "How is numbering affected by a page break?"), uno::UNO_QUERY);
+    //CPPUNIT_ASSERT_EQUAL(OUString("2."), getProperty<OUString>(xPara, "ListLabelString"));
+    xPara.set(getParagraph(4, "x"), uno::UNO_QUERY);
+    //CPPUNIT_ASSERT_EQUAL(OUString("3."), getProperty<OUString>(xPara, "ListLabelString"));
+    xPara.set(getParagraph(5, "column break"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+    xPara.set(getParagraph(6, "y"), uno::UNO_QUERY);
+    //CPPUNIT_ASSERT_EQUAL(OUString("3."), getProperty<OUString>(xPara, "ListLabelString"));
+    xPara.set(getParagraph(7, "page break"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf153964_firstIndentAfterBreak14, "tdf153964_firstIndentAfterBreak14.docx")
+{
+    //First line indents should only apply once in a split paragraph.
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(2, "How is first line indent affected by a column break?"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xPara, "ParaFirstLineIndent"));
+    xPara.set(getParagraph(3, "How is first line indent affected by a page break?"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xPara, "ParaFirstLineIndent"));
+    xPara.set(getParagraph(4, "x"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xPara, "ParaFirstLineIndent"));
+    xPara.set(getParagraph(5, "column break"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaFirstLineIndent"));
+    xPara.set(getParagraph(6, "y"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xPara, "ParaFirstLineIndent"));
+    xPara.set(getParagraph(7, "page break"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaFirstLineIndent"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
