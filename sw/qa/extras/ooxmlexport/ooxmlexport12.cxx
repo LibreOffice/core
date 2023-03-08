@@ -1959,8 +1959,28 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116084, "tdf116084.docx")
     // tracked line is not a single text portion: w:del is recognized within w:ins
     CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(1), 1)->getString());
     CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(1), 1), "RedlineType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("There should be a better start to this. "),
-                         getRun(getParagraph(1), 2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("There "), getRun(getParagraph(1), 2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(1), 4)->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(1), 4), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("must"), getRun(getParagraph(1), 5)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf116084_anonymized)
+{
+    loadAndSave("tdf116084.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // w:del in w:ins is exported correctly
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del/w:r/w:delText", "must");
+
+    // no date (anonymized changes)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins[@date]", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del[@w:date]", 0);
+
+    // w:ins and w:del have w:author attributes, and the same
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del[@w:author]", 1);
+    OUString sAuthor = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins[2]", "author");
+    OUString sAuthor2 = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del", "author");
+    CPPUNIT_ASSERT_EQUAL(sAuthor, sAuthor2);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf121176, "tdf121176.docx")
@@ -1969,6 +1989,24 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121176, "tdf121176.docx")
     CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(1), 1)->getString());
     CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(1), 1), "RedlineType"));
     CPPUNIT_ASSERT_EQUAL(OUString("must"), getRun(getParagraph(1), 2)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf121176_anonymized)
+{
+    loadAndSave("tdf121176.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // w:del in w:ins is exported correctly
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del/w:r/w:delText", "must");
+
+    // no date (anonymized changes)
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p/w:ins", "date");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del[@w:date]", 0);
+
+    // w:ins and w:del have w:author attributes, and the same
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del[@w:author]", 1);
+    OUString sAuthor = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins", "author");
+    OUString sAuthor2 = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del", "author");
+    CPPUNIT_ASSERT_EQUAL(sAuthor, sAuthor2);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128913)

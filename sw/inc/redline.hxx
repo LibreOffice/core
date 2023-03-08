@@ -128,6 +128,12 @@ public:
     std::size_t GetAuthor() const                { return m_nAuthor; }
     const OUString& GetComment() const        { return m_sComment; }
     const DateTime& GetTimeStamp() const    { return m_aStamp; }
+    bool IsAnonymized() const
+        {
+            return m_aStamp.GetYear() == 1970 &&
+                    m_aStamp.GetMonth() == 1 && m_aStamp.GetDay() == 1;
+        }
+
     const SwRedlineData* Next() const{ return m_pNext; }
 
     void SetComment( const OUString& rS )     { m_sComment = rS; }

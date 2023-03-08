@@ -1738,7 +1738,10 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                 // even if they are not allowed to be combined
                 RedlineFlags eOld = meRedlineFlags;
                 if( !( eOld & RedlineFlags::DontCombineRedlines ) &&
-                    pRedl->IsOwnRedline( *pNewRedl ) )
+                    pRedl->IsOwnRedline( *pNewRedl ) &&
+                    // tdf#116084 tdf#121176 don't combine anonymized deletion
+                    // and anonymized insertion, i.e. with the same dummy timestamp
+                    !pRedl->GetRedlineData(0).IsAnonymized() )
                 {
 
                     // Set to NONE, so that the Delete::Redo merges the Redline data correctly!
@@ -1772,18 +1775,8 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
 
                             bCompress = true;
                         }
-                        if( !bCallDelete && !bDec && *pEnd == *pREnd )
-                        {
-                            m_rDoc.getIDocumentContentOperations().DeleteAndJoin( *pNewRedl );
-                            bCompress = true;
-                        }
-                        else if ( bCallDelete || !bDec )
-                        {
-                            // delete new redline, except in some cases of fallthrough from previous
-                            // case ::Equal (eg. same portion w:del in w:ins in OOXML import)
-                            delete pNewRedl;
-                            pNewRedl = nullptr;
-                        }
+                        delete pNewRedl;
+                        pNewRedl = nullptr;
                         break;
 
                     case SwComparePosition::Outside:
