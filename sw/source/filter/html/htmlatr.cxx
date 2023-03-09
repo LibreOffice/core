@@ -1208,7 +1208,7 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
         break;
 
     case RES_CHRATR_CROSSEDOUT:
-        switch( static_cast<const SvxCrossedOutItem&>(rItem).GetStrikeout() )
+        switch( rItem.StaticWhichCast(RES_CHRATR_CROSSEDOUT).GetStrikeout() )
         {
         case STRIKEOUT_SINGLE:
         case STRIKEOUT_DOUBLE:
@@ -1223,7 +1223,7 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
         break;
 
     case RES_CHRATR_ESCAPEMENT:
-        switch( static_cast<SvxEscapement>(static_cast<const SvxEscapementItem&>(rItem).GetEnumValue()) )
+        switch( static_cast<SvxEscapement>(rItem.StaticWhichCast(RES_CHRATR_ESCAPEMENT).GetEnumValue()) )
         {
         case SvxEscapement::Superscript:
         case SvxEscapement::Subscript:
@@ -1238,7 +1238,7 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
         break;
 
     case RES_CHRATR_UNDERLINE:
-        switch( static_cast<const SvxUnderlineItem&>(rItem).GetLineStyle() )
+        switch( rItem.StaticWhichCast(RES_CHRATR_UNDERLINE).GetLineStyle() )
         {
         case LINESTYLE_SINGLE:
             eState = HTML_ON_VALUE;
@@ -1278,7 +1278,7 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
         break;
 
     case RES_CHRATR_BLINK:
-        eState = static_cast<const SvxBlinkItem&>(rItem).GetValue() ? HTML_ON_VALUE
+        eState = rItem.StaticWhichCast(RES_CHRATR_BLINK).GetValue() ? HTML_ON_VALUE
                                                          : HTML_OFF_VALUE;
         break;
 
@@ -1644,7 +1644,7 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
         {
             OSL_ENSURE( RES_TXTATR_CHARFMT == rItem.Which(),
                     "Not a character style after all" );
-            const SwFormatCharFormat& rChrFormat = static_cast<const SwFormatCharFormat&>(rItem);
+            const SwFormatCharFormat& rChrFormat = rItem.StaticWhichCast(RES_TXTATR_CHARFMT);
             const SwCharFormat* pFormat = rChrFormat.GetCharFormat();
 
             const SwHTMLFormatInfo *pFormatInfo = GetFormatInfo( *pFormat, rFormatInfos );
@@ -1664,7 +1664,9 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
 
     case HTML_AUTOFMT_VALUE:
         {
-            const SwFormatAutoFormat& rAutoFormat = static_cast<const SwFormatAutoFormat&>(rItem);
+            OSL_ENSURE( RES_TXTATR_AUTOFMT == rItem.Which(),
+                    "Not an automatic style, after all" );
+            const SwFormatAutoFormat& rAutoFormat = rItem.StaticWhichCast(RES_TXTATR_AUTOFMT);
             const std::shared_ptr<SfxItemSet>& pSet = rAutoFormat.GetStyleHandle();
             if( pSet )
                 Insert( *pSet, nStart, nEnd, rFormatInfos, true, bParaAttrs );
@@ -1677,7 +1679,7 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
         {
             OSL_ENSURE( RES_CHRATR_COLOR == rItem.Which(),
                     "Not a foreground color, after all" );
-            Color aColor( static_cast<const SvxColorItem&>(rItem).GetValue() );
+            Color aColor( rItem.StaticWhichCast(RES_CHRATR_COLOR).GetValue() );
             if( COL_AUTO == aColor )
                 aColor = COL_BLACK;
             bSet = !bParaAttrs || !m_xDefaultColor || !m_xDefaultColor->IsRGBEqual(aColor);
@@ -1688,7 +1690,7 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
         {
             OSL_ENSURE( RES_PARATR_DROP == rItem.Which(),
                     "Not a drop cap, after all" );
-            const SwFormatDrop& rDrop = static_cast<const SwFormatDrop&>(rItem);
+            const SwFormatDrop& rDrop = rItem.StaticWhichCast(RES_PARATR_DROP);
             nEnd = nStart + rDrop.GetChars();
             if (!m_bOutStyles)
             {
@@ -1752,7 +1754,7 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
         break;
     case RES_TXTATR_CHARFMT:
         {
-            const SwFormatCharFormat& rChrFormat = static_cast<const SwFormatCharFormat&>(rItem);
+            const SwFormatCharFormat& rChrFormat = rItem.StaticWhichCast(RES_TXTATR_CHARFMT);
             const SwCharFormat* pFormat = rChrFormat.GetCharFormat();
             const SwHTMLFormatInfo *pFormatInfo = GetFormatInfo( *pFormat, rFormatInfos );
             if( pFormatInfo->bScriptDependent )
@@ -2406,7 +2408,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
             if( pTextHt && RES_TXTATR_FLYCNT == pTextHt->Which() )
             {
                 const SwFrameFormat* pFrameFormat =
-                    static_cast<const SwFormatFlyCnt &>(pTextHt->GetAttr()).GetFrameFormat();
+                    pTextHt->GetAttr().StaticWhichCast(RES_TXTATR_FLYCNT).GetFrameFormat();
 
                 if( RES_DRAWFRMFMT == pFrameFormat->Which() )
                     aEndPosLst.Insert( *static_cast<const SwDrawFrameFormat *>(pFrameFormat),
