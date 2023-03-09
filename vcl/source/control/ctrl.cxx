@@ -497,16 +497,17 @@ Control::GetUnzoomedControlPointFont() const
 
 void Control::LogicInvalidate(const tools::Rectangle* pRectangle)
 {
+    VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier();
+    if (!pParent || !dynamic_cast<vcl::DocWindow*>(GetParent()))
+    {
+        // if control doesn't belong to a DocWindow, the overriden base class
+        // method has to be invoked
+        Window::LogicInvalidate(pRectangle);
+        return;
+    }
+
     // avoid endless paint/invalidate loop in Impress
     if (comphelper::LibreOfficeKit::isTiledPainting())
-        return;
-
-    VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier();
-    if (!pParent)
-        return;
-
-    // invalidate only controls that belong to a DocWindow
-    if (!dynamic_cast<vcl::DocWindow*>(GetParent()))
         return;
 
     tools::Rectangle aResultRectangle;
