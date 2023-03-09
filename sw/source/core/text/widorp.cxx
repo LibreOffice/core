@@ -539,7 +539,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
                 pRow = pRow->GetUpper();
             }
 
-            if (pRow->HasFixSize())
+            if (pRow && pRow->HasFixSize())
             {
                 // This is a follow frame and our side is fixed.
                 const SwAttrSet& rSet = pFrame->GetTextNodeForParaProps()->GetSwAttrSet();
