@@ -1268,8 +1268,6 @@ void SlideShowImpl::rewindEffectToPreviousSlide()
 sal_Bool SlideShowImpl::startShapeActivity(
     uno::Reference<drawing::XShape> const& /*xShape*/ )
 {
-    osl::MutexGuard const guard( m_aMutex );
-
     // precondition: must only be called from the main thread!
     DBG_TESTSOLARMUTEX();
 
@@ -1281,8 +1279,6 @@ sal_Bool SlideShowImpl::startShapeActivity(
 sal_Bool SlideShowImpl::stopShapeActivity(
     uno::Reference<drawing::XShape> const& /*xShape*/ )
 {
-    osl::MutexGuard const guard( m_aMutex );
-
     // precondition: must only be called from the main thread!
     DBG_TESTSOLARMUTEX();
 

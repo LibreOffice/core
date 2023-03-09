@@ -235,8 +235,6 @@ void ShutdownIcon::FromTemplate()
 
 OUString ShutdownIcon::GetUrlDescription( std::u16string_view aUrl )
 {
-    ::SolarMutexGuard aGuard;
-
     return SvFileInformationManager::GetDescription( INetURLObject( aUrl ) );
 }
 

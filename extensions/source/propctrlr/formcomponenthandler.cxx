@@ -881,7 +881,6 @@ namespace pcr
 
     Sequence< OUString > SAL_CALL FormComponentPropertyHandler::getActuatingProperties( )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
         return
         {
             PROPERTY_DATASOURCE,

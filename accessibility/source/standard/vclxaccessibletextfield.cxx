@@ -74,8 +74,6 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleTextField::getAccessibleChild (sal
 
 sal_Int16 SAL_CALL VCLXAccessibleTextField::getAccessibleRole()
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
     return AccessibleRole::TEXT;
 }
 

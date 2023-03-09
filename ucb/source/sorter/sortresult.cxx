@@ -732,8 +732,6 @@ void SAL_CALL SortedResultSet::setPropertyValue(
                         const OUString& PropertyName,
                         const Any& )
 {
-    std::unique_lock aGuard( maMutex );
-
     if ( PropertyName == "RowCount" || PropertyName == "IsRowCountFinal" )
         throw IllegalArgumentException();
     else

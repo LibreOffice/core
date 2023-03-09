@@ -808,8 +808,6 @@ namespace accessibility
 
     Reference< XAccessibleKeyBinding > AccessibleListBoxEntry::getAccessibleActionKeyBinding( sal_Int32 nIndex )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         Reference< XAccessibleKeyBinding > xRet;
         checkActionIndex_Impl( nIndex );
         // ... which key?

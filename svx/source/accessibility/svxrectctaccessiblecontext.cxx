@@ -129,8 +129,6 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleAtPo
 // XAccessibleContext
 sal_Int64 SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChildCount()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     return SvxRectCtl::NO_CHILDREN;
 }
 

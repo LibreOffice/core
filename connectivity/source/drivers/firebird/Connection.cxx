@@ -440,7 +440,6 @@ Reference< XPreparedStatement > SAL_CALL Connection::prepareCall(
 
 OUString SAL_CALL Connection::nativeSQL( const OUString& _sSql )
 {
-    MutexGuard aGuard( m_aMutex );
     // We do not need to adapt the SQL for Firebird atm.
     return _sSql;
 }

@@ -934,8 +934,6 @@ cppcanvas::CustomSpriteSharedPtr SlideView::createSprite(
 
 void SlideView::setPriority( const basegfx::B1DRange& /*rRange*/ )
 {
-    osl::MutexGuard aGuard( m_aMutex );
-
     OSL_FAIL( "SlideView::setPriority() is a NOOP for slide view - "
                 "content will always be shown in the background" );
 }
@@ -976,8 +974,6 @@ void SlideView::setClip( const basegfx::B2DPolyPolygon& rClip )
 
 bool SlideView::resize( const ::basegfx::B2DRange& /*rArea*/ )
 {
-    osl::MutexGuard aGuard( m_aMutex );
-
     OSL_FAIL( "SlideView::resize(): ignored for the View, can't change size "
                 "effectively, anyway" );
 

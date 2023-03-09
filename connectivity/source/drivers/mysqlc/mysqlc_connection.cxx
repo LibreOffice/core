@@ -257,8 +257,6 @@ Reference<XPreparedStatement> SAL_CALL OConnection::prepareCall(const OUString& 
 
 OUString SAL_CALL OConnection::nativeSQL(const OUString& /*_sSql*/)
 {
-    MutexGuard aGuard(m_aMutex);
-
     // const OUString sSqlStatement = transFormPreparedStatement( _sSql );
     // TODO
     return OUString();

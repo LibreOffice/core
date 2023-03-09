@@ -626,8 +626,6 @@ namespace accessibility
 
     sal_Int32 SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleActionCount(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         // three actions supported
         return ACCESSIBLE_ACTION_COUNT;
     }
@@ -665,8 +663,6 @@ namespace accessibility
 
     Reference< XAccessibleKeyBinding > AccessibleIconChoiceCtrlEntry::getAccessibleActionKeyBinding( sal_Int32 nIndex )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         Reference< XAccessibleKeyBinding > xRet;
         checkActionIndex_Impl( nIndex );
         // ... which key?

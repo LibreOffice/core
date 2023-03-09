@@ -47,8 +47,6 @@ OFlatDatabaseMetaData::~OFlatDatabaseMetaData()
 
 Reference< XResultSet > OFlatDatabaseMetaData::impl_getTypeInfo_throw(  )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     rtl::Reference<::connectivity::ODatabaseMetaDataResultSet> pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
 
     static ODatabaseMetaDataResultSet::ORows aRows = []()

@@ -3605,7 +3605,6 @@ sal_uInt32 SvNumberFormatter::GetFormatIndex( NfIndexTableOffset nTabOff,
 
 NfIndexTableOffset SvNumberFormatter::GetIndexTableOffset( sal_uInt32 nFormat ) const
 {
-    ::osl::MutexGuard aGuard( GetInstanceMutex() );
     sal_uInt32 nOffset = nFormat % SV_COUNTRY_LANGUAGE_OFFSET;      // relative index
     if ( nOffset > SV_MAX_COUNT_STANDARD_FORMATS )
     {

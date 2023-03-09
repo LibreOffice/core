@@ -224,7 +224,6 @@ void SAL_CALL RandomAnimationNode::initialize( const Sequence< Any >& aArguments
 // XAnimationNode
 sal_Int16 SAL_CALL RandomAnimationNode::getType()
 {
-    std::unique_lock aGuard( maMutex );
     return css::animations::AnimationNodeType::PAR;
 }
 

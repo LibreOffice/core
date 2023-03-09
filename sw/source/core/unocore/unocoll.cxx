@@ -475,7 +475,6 @@ const SvEventDescription* sw_GetSupportedMacroItems()
 
 OUString SwXServiceProvider::GetProviderName(SwServiceType nObjectType)
 {
-    SolarMutexGuard aGuard;
     OUString sRet;
     const sal_uInt16 nEntries = SAL_N_ELEMENTS(aProvNamesId);
     if(static_cast<sal_uInt16>(nObjectType) < nEntries)

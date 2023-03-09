@@ -511,8 +511,6 @@ css::uno::Any UnoControlModel::getPropertyDefault( const OUString& rPropertyName
 // css::io::XPersistObjec
 OUString UnoControlModel::getServiceName(  )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
     OSL_FAIL( "ServiceName of UnoControlModel ?!" );
     return OUString();
 }
@@ -1218,17 +1216,12 @@ void UnoControlModel::getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nPr
 // css::beans::XPropertySet
 void UnoControlModel::setPropertyValue( const OUString& rPropertyName, const css::uno::Any& rValue )
 {
-    sal_Int32 nPropId = 0;
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-        nPropId = static_cast<sal_Int32>(GetPropertyId( rPropertyName ));
-        DBG_ASSERT( nPropId, "Invalid ID in UnoControlModel::setPropertyValue" );
-    }
+    sal_Int32 nPropId = static_cast<sal_Int32>(GetPropertyId( rPropertyName ));
+    DBG_ASSERT( nPropId, "Invalid ID in UnoControlModel::setPropertyValue" );
     if( !nPropId )
         throw css::beans::UnknownPropertyException(rPropertyName);
 
     setFastPropertyValue( nPropId, rValue );
-
 }
 
 // css::beans::XFastPropertySet

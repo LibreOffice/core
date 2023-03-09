@@ -56,7 +56,6 @@ uno::Reference< XAccessibleContext > SvxPixelCtlAccessible::getAccessibleContext
 
 sal_Int64 SvxPixelCtlAccessible::getAccessibleChildCount(  )
 {
-    ::osl::MutexGuard   aGuard( m_aMutex );
     return SvxPixelCtl::GetSquares();
 }
 uno::Reference< XAccessible > SvxPixelCtlAccessible::getAccessibleChild( sal_Int64 i )
