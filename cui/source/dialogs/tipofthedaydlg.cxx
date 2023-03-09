@@ -26,6 +26,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>
 #include <vcl/window.hxx>
+#include <vcl/ImageTree.hxx>
 
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -42,6 +43,7 @@
 #include <unotools/resmgr.hxx>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <bitmaps.hlst>
 
 //size of preview
 const Size ThumbSize(150, 150);
@@ -135,7 +137,7 @@ void TipOfTheDayDialog::UpdateTip()
                              .replaceFirst("%CURRENT", OUString::number(m_nCurrentTip + 1))
                              .replaceFirst("%TOTAL", OUString::number(nNumberOfTips)));
 
-    auto[sTip, sLink, sImage] = TIPOFTHEDAY_STRINGARRAY[m_nCurrentTip];
+    auto[sTip, sLink, sImage, nType] = TIPOFTHEDAY_STRINGARRAY[m_nCurrentTip];
 
     // text
 //replace MOD1 & MOD2 shortcuts depending on platform
@@ -214,11 +216,22 @@ void TipOfTheDayDialog::UpdateTip()
     OUString aURL("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/tipoftheday/");
     rtl::Bootstrap::expandMacros(aURL);
     OUString aImageName = sImage;
-    // use default image if none is available with the number
-    if (aImageName.isEmpty() || !file_exists(aURL + aImageName))
-        aImageName = "tipoftheday.png";
     Graphic aGraphic;
-    GraphicFilter::LoadGraphic(aURL + aImageName, OUString(), aGraphic);
+
+    if (!aImageName.isEmpty() && file_exists(aURL + aImageName))
+        GraphicFilter::LoadGraphic(aURL + aImageName, OUString(), aGraphic);
+    else
+    {
+        const OUString sModuleImage[5]
+            = { RID_SVXBMP_TOTD_WRITER, RID_SVXBMP_TOTD_CALC, RID_SVXBMP_TOTD_DRAW,
+                RID_SVXBMP_TOTD_IMPRESS, RID_SVXBMP_TOTD_SOFFICE };
+        const OUString aIconTheme
+            = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
+        BitmapEx aBmpEx;
+        ImageTree::get().loadImage(sModuleImage[nType], aIconTheme, aBmpEx, true,
+                                   ImageLoadFlags::IgnoreDarkTheme);
+        aGraphic = aBmpEx;
+    }
 
     if (!aGraphic.IsAnimated())
     {

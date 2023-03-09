@@ -10,11 +10,6 @@
 $(eval $(call gb_Package_Package,tipoftheday_images,$(SRCDIR)/extras/source/tipoftheday))
 
 $(eval $(call gb_Package_add_files_with_dir,tipoftheday_images,$(LIBO_SHARE_FOLDER)/tipoftheday,\
-	tipoftheday.png \
-	tipoftheday_w.png \
-	tipoftheday_c.png \
-	tipoftheday_i.png \
-	tipoftheday_d.png \
 	toolbarmode.png \
 	marchingants.gif \
 	printnote.png \

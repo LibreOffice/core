@@ -74,4 +74,10 @@ inline constexpr OUStringLiteral RID_SVXBMP_MACRO = u"svx/res/id018.png";
 
 inline constexpr OUStringLiteral RID_SVXBMP_STARS_FULL = u"cmd/sc_stars-full.png";
 
+inline constexpr OUStringLiteral RID_SVXBMP_TOTD_WRITER = u"res/tipoftheday_w.png";
+inline constexpr OUStringLiteral RID_SVXBMP_TOTD_CALC = u"res/tipoftheday_c.png";
+inline constexpr OUStringLiteral RID_SVXBMP_TOTD_DRAW = u"res/tipoftheday_d.png";
+inline constexpr OUStringLiteral RID_SVXBMP_TOTD_IMPRESS = u"res/tipoftheday_i.png";
+inline constexpr OUStringLiteral RID_SVXBMP_TOTD_SOFFICE = u"res/tipoftheday.png";
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
