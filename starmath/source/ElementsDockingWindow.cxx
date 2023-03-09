@@ -574,8 +574,8 @@ void SmElementsControl::setElementSetIndex(int nSetIndex)
 
 void SmElementsControl::addElements(int nCategory)
 {
-    mpIconView->clear(); // tdf#152411 clear before freeze to let gtk a11y drop reference
     mpIconView->freeze();
+    mpIconView->clear();
     mpIconView->set_item_width(0);
     maItemDatas.clear();
 
