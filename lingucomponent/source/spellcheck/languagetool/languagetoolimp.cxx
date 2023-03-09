@@ -34,13 +34,14 @@
 #include <set>
 #include <string.h>
 
+#include <officecfg/Office/Linguistic.hxx>
+
 #include <curl/curl.h>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <algorithm>
 #include <string_view>
 #include <sal/log.hxx>
-#include <svtools/languagetoolcfg.hxx>
 #include <tools/color.hxx>
 #include <tools/long.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>
@@ -58,6 +59,7 @@ using namespace com::sun::star::linguistic2;
 namespace
 {
 constexpr size_t MAX_SUGGESTIONS_SIZE = 10;
+using LanguageToolCfg = officecfg::Office::Linguistic::GrammarChecking::LanguageTool;
 
 PropertyValue lcl_GetLineColorPropertyFromErrorId(const std::string& rErrorId)
 {
@@ -145,9 +147,8 @@ std::string makeHttpRequest_impl(std::u16string_view aURL, HTTP_METHOD method,
     (void)curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, WriteCallback);
     (void)curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, &response_body);
 
-    SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
     // allow unknown or self-signed certificates
-    if (rLanguageOpts.getSSLVerification() == false)
+    if (!LanguageToolCfg::SSLCertVerify::get())
     {
         (void)curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYPEER, false);
         (void)curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYHOST, false);
@@ -174,8 +175,8 @@ std::string makeDudenHttpRequest(std::u16string_view aURL, const OString& aPostD
                                  tools::Long& nStatusCode)
 {
     struct curl_slist* pList = nullptr;
-    SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
-    OString sAccessToken = OUStringToOString(rLanguageOpts.getApiKey(), RTL_TEXTENCODING_UTF8);
+    OString sAccessToken
+        = OUStringToOString(LanguageToolCfg::ApiKey::get().value_or(""), RTL_TEXTENCODING_UTF8);
 
     pList = curl_slist_append(pList, "Cache-Control: no-cache");
     pList = curl_slist_append(pList, "Content-Type: application/json");
@@ -194,9 +195,10 @@ std::string makeHttpRequest(std::u16string_view aURL, HTTP_METHOD method, const 
     OString realPostData(aPostData);
     if (method == HTTP_METHOD::HTTP_POST)
     {
-        SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
-        OString apiKey = OUStringToOString(rLanguageOpts.getApiKey(), RTL_TEXTENCODING_UTF8);
-        OString username = OUStringToOString(rLanguageOpts.getUsername(), RTL_TEXTENCODING_UTF8);
+        OString apiKey
+            = OUStringToOString(LanguageToolCfg::ApiKey::get().value_or(""), RTL_TEXTENCODING_UTF8);
+        OString username = OUStringToOString(LanguageToolCfg::Username::get().value_or(""),
+                                             RTL_TEXTENCODING_UTF8);
         if (!apiKey.isEmpty() && !username.isEmpty())
             realPostData += "&username=" + username + "&apiKey=" + apiKey;
     }
@@ -205,7 +207,7 @@ std::string makeHttpRequest(std::u16string_view aURL, HTTP_METHOD method, const 
 }
 
 template <typename Func>
-Sequence<SingleProofreadingError> parseJson(std::string&& json, std::string path, Func f)
+uno::Sequence<SingleProofreadingError> parseJson(std::string&& json, std::string path, Func f)
 {
     std::stringstream aStream(std::move(json)); // Optimized in C++20
     boost::property_tree::ptree aRoot;
@@ -213,7 +215,7 @@ Sequence<SingleProofreadingError> parseJson(std::string&& json, std::string path
 
     if (auto tree = aRoot.get_child_optional(path))
     {
-        Sequence<SingleProofreadingError> aErrors(tree->size());
+        uno::Sequence<SingleProofreadingError> aErrors(tree->size());
         auto it = tree->begin();
         for (auto& rError : asNonConstRange(aErrors))
         {
@@ -292,6 +294,22 @@ void parseProofreadingJSONResponse(ProofreadingResult& rResult, std::string&& aJ
             }
         });
 }
+
+OUString getLocaleListURL()
+{
+    if (auto oURL = LanguageToolCfg::BaseURL::get())
+        if (!oURL->isEmpty())
+            return *oURL + "/languages";
+    return {};
+}
+
+OUString getCheckerURL()
+{
+    if (auto oURL = LanguageToolCfg::BaseURL::get())
+        if (!oURL->isEmpty())
+            return *oURL + "/check";
+    return {};
+}
 }
 
 LanguageToolGrammarChecker::LanguageToolGrammarChecker()
@@ -316,17 +334,16 @@ sal_Bool SAL_CALL LanguageToolGrammarChecker::hasLocale(const Locale& rLocale)
     return false;
 }
 
-Sequence<Locale> SAL_CALL LanguageToolGrammarChecker::getLocales()
+uno::Sequence<Locale> SAL_CALL LanguageToolGrammarChecker::getLocales()
 {
     if (m_aSuppLocales.hasElements())
         return m_aSuppLocales;
-    SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
-    if (!rLanguageOpts.getEnabled())
+    if (!LanguageToolCfg::IsEnabled::get())
     {
         return m_aSuppLocales;
     }
 
-    OUString localeUrl = rLanguageOpts.getLocaleListURL();
+    OUString localeUrl = getLocaleListURL();
     if (localeUrl.isEmpty())
     {
         return m_aSuppLocales;
@@ -363,7 +380,7 @@ Sequence<Locale> SAL_CALL LanguageToolGrammarChecker::getLocales()
 ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
     const OUString& aDocumentIdentifier, const OUString& aText, const Locale& aLocale,
     sal_Int32 nStartOfSentencePosition, sal_Int32 nSuggestedBehindEndOfSentencePosition,
-    const Sequence<PropertyValue>& aProperties)
+    const uno::Sequence<PropertyValue>& aProperties)
 {
     // ProofreadingResult declared here instead of parseHttpJSONResponse because of the early exists.
     ProofreadingResult xRes;
@@ -372,9 +389,9 @@ ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
     xRes.aLocale = aLocale;
     xRes.nStartOfSentencePosition = nStartOfSentencePosition;
     xRes.nBehindEndOfSentencePosition = nSuggestedBehindEndOfSentencePosition;
-    xRes.aProperties = Sequence<PropertyValue>();
+    xRes.aProperties = {};
     xRes.xProofreader = this;
-    xRes.aErrors = Sequence<SingleProofreadingError>();
+    xRes.aErrors = {};
 
     if (aText.isEmpty())
     {
@@ -388,13 +405,12 @@ ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
 
     xRes.nStartOfNextSentencePosition = aText.getLength();
 
-    SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
-    if (rLanguageOpts.getEnabled() == false)
+    if (!LanguageToolCfg::IsEnabled::get())
     {
         return xRes;
     }
 
-    OUString checkerURL = rLanguageOpts.getCheckerURL();
+    OUString checkerURL = getCheckerURL();
     if (checkerURL.isEmpty())
     {
         return xRes;
@@ -424,7 +440,7 @@ ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
 
     OString langTag(LanguageTag::convertToBcp47(aLocale, false).toUtf8());
     OString postData = encodeTextForLanguageTool(aText);
-    const bool bDudenProtocol = rLanguageOpts.getRestProtocol() == "duden";
+    const bool bDudenProtocol = LanguageToolCfg::RestProtocol::get().value_or("") == "duden";
     if (bDudenProtocol)
     {
         std::stringstream aStream;
@@ -501,12 +517,12 @@ sal_Bool SAL_CALL LanguageToolGrammarChecker::supportsService(const OUString& Se
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence<OUString> SAL_CALL LanguageToolGrammarChecker::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL LanguageToolGrammarChecker::getSupportedServiceNames()
 {
     return { SN_GRAMMARCHECKER };
 }
 
-void SAL_CALL LanguageToolGrammarChecker::initialize(const Sequence<Any>& /*rArguments*/) {}
+void SAL_CALL LanguageToolGrammarChecker::initialize(const uno::Sequence<uno::Any>&) {}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 lingucomponent_LanguageToolGrammarChecker_get_implementation(

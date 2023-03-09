@@ -41,6 +41,10 @@ $(eval $(call gb_Library_use_externals,LanguageTool,\
 	curl \
 ))
 
+$(eval $(call gb_Library_use_custom_headers,LanguageTool,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_add_exception_objects,LanguageTool,\
 	lingucomponent/source/spellcheck/languagetool/languagetoolimp \
 ))

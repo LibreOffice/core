@@ -18,10 +18,13 @@
  */
 
 #include "optlanguagetool.hxx"
-#include <svtools/languagetoolcfg.hxx>
+#include <officecfg/Office/Linguistic.hxx>
 #include <sal/log.hxx>
 #include <dialmgr.hxx>
 #include <strings.hrc>
+
+using LanguageToolCfg = officecfg::Office::Linguistic::GrammarChecking::LanguageTool;
+constexpr OUStringLiteral LANGUAGETOOL_DEFAULT_URL = u"https://api.languagetool.org/v2";
 
 OptLanguageToolTabPage::OptLanguageToolTabPage(weld::Container* pPage,
                                                weld::DialogController* pController,
@@ -36,8 +39,7 @@ OptLanguageToolTabPage::OptLanguageToolTabPage(weld::Container* pPage,
     , m_xApiSettingsFrame(m_xBuilder->weld_frame("apisettings"))
 {
     m_xActivateBox->connect_toggled(LINK(this, OptLanguageToolTabPage, CheckHdl));
-    SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
-    EnableControls(rLanguageOpts.getEnabled());
+    EnableControls(LanguageToolCfg::IsEnabled::get());
 
     // tdf#150494 Set default values as placeholder text
     m_xBaseURLED->set_placeholder_text(CuiResId(RID_LANGUAGETOOL_LEAVE_EMPTY));
@@ -49,11 +51,15 @@ OptLanguageToolTabPage::~OptLanguageToolTabPage() {}
 
 void OptLanguageToolTabPage::EnableControls(bool bEnable)
 {
-    SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
-    rLanguageOpts.setEnabled(bEnable);
+    if (bEnable != LanguageToolCfg::IsEnabled::get())
+    {
+        auto batch(comphelper::ConfigurationChanges::create());
+        LanguageToolCfg::IsEnabled::set(bEnable, batch);
+        batch->commit();
+    }
     m_xApiSettingsFrame->set_visible(bEnable);
     m_xActivateBox->set_active(bEnable);
-    m_xSSLDisableVerificationBox->set_active(rLanguageOpts.getSSLVerification() != true);
+    m_xSSLDisableVerificationBox->set_active(!LanguageToolCfg::SSLCertVerify::get());
 }
 
 IMPL_LINK_NOARG(OptLanguageToolTabPage, CheckHdl, weld::Toggleable&, void)
@@ -63,36 +69,35 @@ IMPL_LINK_NOARG(OptLanguageToolTabPage, CheckHdl, weld::Toggleable&, void)
 
 void OptLanguageToolTabPage::Reset(const SfxItemSet*)
 {
-    SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
-
     // tdf#150494 If no URL has been set, use the default URL
-    OUString aBaseURL = rLanguageOpts.getBaseURL();
+    OUString aBaseURL = LanguageToolCfg::BaseURL::get().value_or("");
     if (aBaseURL.isEmpty())
         m_xBaseURLED->set_text(LANGUAGETOOL_DEFAULT_URL);
     else
-        m_xBaseURLED->set_text(rLanguageOpts.getBaseURL());
+        m_xBaseURLED->set_text(aBaseURL);
 
-    m_xUsernameED->set_text(rLanguageOpts.getUsername());
-    m_xApiKeyED->set_text(rLanguageOpts.getApiKey());
-    m_xRestProtocol->set_text(rLanguageOpts.getRestProtocol());
-    m_xSSLDisableVerificationBox->set_active(rLanguageOpts.getSSLVerification() != true);
+    m_xUsernameED->set_text(LanguageToolCfg::Username::get().value_or(""));
+    m_xApiKeyED->set_text(LanguageToolCfg::ApiKey::get().value_or(""));
+    m_xRestProtocol->set_text(LanguageToolCfg::RestProtocol::get().value_or(""));
+    m_xSSLDisableVerificationBox->set_active(!LanguageToolCfg::SSLCertVerify::get());
 }
 
 bool OptLanguageToolTabPage::FillItemSet(SfxItemSet*)
 {
-    SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
+    auto batch(comphelper::ConfigurationChanges::create());
 
     // tdf#150494 If no URL has been set, then save the default URL
     OUString aBaseURL = m_xBaseURLED->get_text();
     if (aBaseURL.isEmpty())
-        rLanguageOpts.setBaseURL(LANGUAGETOOL_DEFAULT_URL);
+        LanguageToolCfg::BaseURL::set(LANGUAGETOOL_DEFAULT_URL, batch);
     else
-        rLanguageOpts.setBaseURL(aBaseURL);
+        LanguageToolCfg::BaseURL::set(aBaseURL, batch);
 
-    rLanguageOpts.setUsername(m_xUsernameED->get_text());
-    rLanguageOpts.setApiKey(m_xApiKeyED->get_text());
-    rLanguageOpts.setRestProtocol(m_xRestProtocol->get_text());
-    rLanguageOpts.setSSLVerification(m_xSSLDisableVerificationBox->get_active() != true);
+    LanguageToolCfg::Username::set(m_xUsernameED->get_text(), batch);
+    LanguageToolCfg::ApiKey::set(m_xApiKeyED->get_text(), batch);
+    LanguageToolCfg::RestProtocol::set(m_xRestProtocol->get_text(), batch);
+    LanguageToolCfg::SSLCertVerify::set(!m_xSSLDisableVerificationBox->get_active(), batch);
+    batch->commit();
     return false;
 }
 

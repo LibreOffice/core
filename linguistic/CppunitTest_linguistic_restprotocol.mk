@@ -36,4 +36,8 @@ $(eval $(call gb_CppunitTest_use_ure,linguistic_restprotocol))
 
 $(eval $(call gb_CppunitTest_use_rdb,linguistic_restprotocol,services))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,linguistic_restprotocol,\
+    officecfg/registry \
+))
+
 # vim: set noet sw=4 ts=4:

@@ -84,7 +84,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/config/extcolorcfg \
     svtools/source/config/fontsubstconfig \
     svtools/source/config/htmlcfg \
-    svtools/source/config/languagetoolcfg \
     svtools/source/config/deeplcfg \
     svtools/source/config/itemholder2 \
     svtools/source/config/miscopt \

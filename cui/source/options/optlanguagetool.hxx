@@ -20,8 +20,6 @@
 #include <sfx2/tabdlg.hxx>
 #include <rtl/ustring.hxx>
 
-inline constexpr OUStringLiteral LANGUAGETOOL_DEFAULT_URL = u"https://api.languagetool.org/v2";
-
 class OptLanguageToolTabPage : public SfxTabPage
 {
 public:

@@ -144,7 +144,6 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
 #include <svtools/deeplcfg.hxx>
-#include <svtools/languagetoolcfg.hxx>
 #include <vcl/fontcharmap.hxx>
 #ifdef IOS
 #include <vcl/sysdata.hxx>
@@ -196,6 +195,7 @@
 #include "lokclipboard.hxx"
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Impress.hxx>
+#include <officecfg/Office/Linguistic.hxx>
 #include <unotools/optionsdlg.hxx>
 #include <svl/ctloptions.hxx>
 #include <svtools/accessibilityoptions.hxx>
@@ -7372,26 +7372,29 @@ void setLanguageToolConfig()
         OUString aBaseUrl = OStringToOUString(pBaseUrlString, RTL_TEXTENCODING_UTF8);
         try
         {
-            SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
-            rLanguageOpts.setBaseURL(aBaseUrl);
-            rLanguageOpts.setEnabled(true);
+            using LanguageToolCfg = officecfg::Office::Linguistic::GrammarChecking::LanguageTool;
+            auto batch(comphelper::ConfigurationChanges::create());
+
+            LanguageToolCfg::BaseURL::set(aBaseUrl, batch);
+            LanguageToolCfg::IsEnabled::set(true, batch);
             if (pSSLVerification)
             {
                 OUString aSSLVerification = OStringToOUString(pSSLVerification, RTL_TEXTENCODING_UTF8);
-                rLanguageOpts.setSSLVerification(aSSLVerification == "true");
+                LanguageToolCfg::SSLCertVerify::set(aSSLVerification == "true", batch);
             }
             if (pRestProtocol)
             {
                 OUString aRestProtocol = OStringToOUString(pRestProtocol, RTL_TEXTENCODING_UTF8);
-                rLanguageOpts.setRestProtocol(aRestProtocol);
+                LanguageToolCfg::RestProtocol::set(aRestProtocol, batch);
             }
             if (pUsername && pApikey)
             {
                 OUString aUsername = OStringToOUString(pUsername, RTL_TEXTENCODING_UTF8);
                 OUString aApiKey = OStringToOUString(pApikey, RTL_TEXTENCODING_UTF8);
-                rLanguageOpts.setUsername(aUsername);
-                rLanguageOpts.setApiKey(aApiKey);
+                LanguageToolCfg::Username::set(aUsername, batch);
+                LanguageToolCfg::ApiKey::set(aApiKey, batch);
             }
+            batch->commit();
 
             css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv =
                 css::linguistic2::LinguServiceManager::create(xContext);
