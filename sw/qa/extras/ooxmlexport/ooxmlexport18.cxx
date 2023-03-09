@@ -658,6 +658,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153664)
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableofFigures']/w:name", "val", "Table of Figures");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf124472_hyperlink, "tdf124472.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(OUString("https://www.libreoffice.org/"),
+                         getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
+    CPPUNIT_ASSERT_EQUAL(OUString("mailto:info@libreoffice.org"),
+                         getProperty<OUString>(getRun(getParagraph(2), 1), "HyperLinkURL"));
+    CPPUNIT_ASSERT_EQUAL(OUString(""),
+                         getProperty<OUString>(getRun(getParagraph(3), 1), "HyperLinkURL"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf135786, "tdf135786.docx")
 {
     // Empty first line remain, if the section's initial dummy paragraph is not deleted:
@@ -666,6 +676,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135786, "tdf135786.docx")
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
 }
 
-    CPPUNIT_PLUGIN_IMPLEMENT();
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

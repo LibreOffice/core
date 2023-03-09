@@ -349,6 +349,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bStartBibliography(false),
         m_nStartGenericField(0),
         m_bTextInserted(false),
+        m_bTextDeleted(false),
         m_sCurrentPermId(0),
         m_bFrameDirectionSet(false),
         m_bInDocDefaultsImport(false),
@@ -5350,6 +5351,7 @@ FieldContext::FieldContext(uno::Reference< text::XTextRange > xStart)
     : m_bFieldCommandCompleted(false)
     , m_xStartRange(std::move( xStart ))
     , m_bFieldLocked( false )
+    , m_bCommandType(false)
 {
     m_pProperties = new PropertyMap();
 }
@@ -5381,7 +5383,7 @@ void FieldContext::CacheVariableValue(const uno::Any& rAny)
 
 void FieldContext::AppendCommand(std::u16string_view rPart)
 {
-    m_sCommand += rPart;
+    m_sCommand[m_bCommandType] += rPart;
 }
 
 ::std::vector<OUString> FieldContext::GetCommandParts() const
@@ -5450,6 +5452,8 @@ void DomainMapper_Impl::AppendFieldCommand(OUString const & rPartOfCommand)
     OSL_ENSURE( pContext, "no field context available");
     if( pContext )
     {
+        // Set command line type: normal or deleted
+        pContext->SetCommandType(m_bTextDeleted);
         pContext->AppendCommand( rPartOfCommand );
     }
 }
@@ -6730,6 +6734,11 @@ void DomainMapper_Impl::CloseFieldCommand()
     m_bSetUserFieldContent = false;
     m_bSetCitation = false;
     m_bSetDateValue = false;
+    // tdf#124472: If the normal command line is not empty, use it,
+    // otherwise, the last active row is evaluated.
+    if (!pContext->GetCommandIsEmpty(false))
+        pContext->SetCommandType(false);
+
     const FieldConversionMap_t& aFieldConversionMap = lcl_GetFieldConversion();
 
     try

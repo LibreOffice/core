@@ -75,7 +75,6 @@ DECLARE_WW8EXPORT_TEST(testTdf141649_conditionalText, "tdf141649_conditionalText
     getParagraph(1, "trueResult");
 }
 
-
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

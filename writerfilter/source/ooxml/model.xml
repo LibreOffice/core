@@ -13405,6 +13405,24 @@
           <ref name="ST_ShortHexNumber"/>
         </attribute>
       </define>
+      <define name="CT_instrText">
+        <ref name="ST_String"/>
+        <attribute name="xml:space">
+          <data type="string"/>
+        </attribute>
+      </define>
+      <define name="CT_delText">
+        <ref name="ST_String"/>
+        <attribute name="xml:space">
+          <data type="string"/>
+        </attribute>
+      </define>
+      <define name="CT_delInstrText">
+        <ref name="ST_String"/>
+        <attribute name="xml:space">
+          <data type="string"/>
+        </attribute>
+      </define>
       <define name="CT_ProofErr">
         <attribute name="type">
           <data type="string"/>
@@ -13437,13 +13455,13 @@
             <ref name="CT_Text"/>
           </element>
           <element name="delText">
-            <ref name="CT_Text"/>
+            <ref name="CT_delText"/>
           </element>
           <element name="instrText">
-            <ref name="CT_Text"/>
+            <ref name="CT_instrText"/>
           </element>
           <element name="delInstrText">
-            <ref name="CT_Text"/>
+            <ref name="CT_delInstrText"/>
           </element>
           <element name="noBreakHyphen">
             <ref name="CT_Empty"/>
@@ -18080,6 +18098,21 @@
     </resource>
     <resource name="CT_Text" resource="Stream">
       <attribute name="xml:space" tokenid="ooxml:CT_Text_space"/>
+      <action name="characters" action="text"/>
+    </resource>
+    <resource name="CT_instrText" resource="Stream">
+      <attribute name="xml:space" tokenid="ooxml:CT_Text_space"/>
+      <action name="start" action="sendPropertiesWithId" tokenid="ooxml:EG_RunInnerContent_instrText" sendtokenid="ooxml:EG_RunInnerContent_instrText"/>
+      <action name="characters" action="text"/>
+    </resource>
+    <resource name="CT_delText" resource="Stream">
+      <attribute name="xml:space" tokenid="ooxml:CT_Text_space"/>
+      <action name="start" action="sendPropertiesWithId" tokenid="ooxml:EG_RunInnerContent_delText" sendtokenid="ooxml:EG_RunInnerContent_delText"/>
+      <action name="characters" action="text"/>
+    </resource>
+    <resource name="CT_delInstrText" resource="Stream">
+      <attribute name="xml:space" tokenid="ooxml:CT_Text_space"/>
+      <action name="start" action="sendPropertiesWithId" tokenid="ooxml:EG_RunInnerContent_delInstrText" sendtokenid="ooxml:EG_RunInnerContent_delInstrText"/>
       <action name="characters" action="text"/>
     </resource>
     <resource name="CT_FtnEdnRefChar" resource="Stream">

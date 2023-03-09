@@ -177,11 +177,16 @@ class FieldContext : public virtual SvRefBase
     bool m_bFieldCommandCompleted;
     css::uno::Reference<css::text::XTextRange> m_xStartRange;
 
-    OUString m_sCommand;
+    // Two command string:
+    // 0: Normal, inserted command line
+    // 1: Deleted command line
+    OUString m_sCommand[2];
     OUString m_sResult;
     OUString m_sVariableValue;
     std::optional<FieldId> m_eFieldId;
     bool m_bFieldLocked;
+    // Current command line type: normal or deleted
+    bool m_bCommandType;
 
     css::uno::Reference<css::text::XTextField> m_xTextField;
     css::uno::Reference<css::text::XFormField> m_xFormField;
@@ -207,7 +212,9 @@ public:
     const css::uno::Reference<css::text::XTextRange>& GetStartRange() const { return m_xStartRange; }
 
     void                    AppendCommand(std::u16string_view rPart);
-    const OUString&  GetCommand() const {return m_sCommand; }
+    const OUString&  GetCommand() const {return m_sCommand[m_bCommandType]; }
+    bool GetCommandIsEmpty(bool bType) const { return m_sCommand[bType].isEmpty(); }
+    void SetCommandType(bool cType) { m_bCommandType = cType; }
 
     void SetFieldId(FieldId eFieldId ) { m_eFieldId = eFieldId; }
     std::optional<FieldId> const & GetFieldId() const { return m_eFieldId; }
@@ -500,6 +507,7 @@ private:
     bool                                                                            m_bStartBibliography;
     unsigned int                                                                    m_nStartGenericField;
     bool                                                                            m_bTextInserted;
+    bool                                                                            m_bTextDeleted;
     LineNumberSettings                                                              m_aLineNumberSettings;
 
     BookmarkMap_t                                                                   m_aBookmarkMap;
@@ -728,6 +736,7 @@ public:
     /// Track if a textframe has been inserted into this section
     void SetIsTextFrameInserted( bool bIsInserted );
     bool GetIsTextFrameInserted() const { return m_bTextFrameInserted;}
+    void SetIsTextDeleted(bool bIsTextDeleted) { m_bTextDeleted = bIsTextDeleted; }
 
     void SetIsPreviousParagraphFramed( bool bIsFramed ) { m_bIsPreviousParagraphFramed = bIsFramed; }
     bool GetIsPreviousParagraphFramed() const { return m_bIsPreviousParagraphFramed; }

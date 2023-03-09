@@ -3428,6 +3428,17 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             pProperties->resolve(*this);
     }
     break;
+    case NS_ooxml::LN_EG_RunInnerContent_instrText:
+    {
+        m_pImpl->SetIsTextDeleted(false);
+    }
+    break;
+    case NS_ooxml::LN_EG_RunInnerContent_delText:
+    case NS_ooxml::LN_EG_RunInnerContent_delInstrText:
+    {
+        m_pImpl->SetIsTextDeleted(true);
+    }
+    break;
     default:
         {
 #ifdef DBG_UTIL
