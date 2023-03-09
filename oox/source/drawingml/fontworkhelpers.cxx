@@ -1425,7 +1425,7 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
         rXPropSet->getPropertyValue(u"FillStyle") >>= eFillStyle;
 
     // We might have a solid fill but a transparency gradient. That needs to be exported as gradFill
-    // too, because Word has transparency not separat but in the color stops in a color gradient.
+    // too, because Word has transparency not separated but in the color stops in a color gradient.
     // A gradient exists, if the GradientName is not empty.
     OUString sTransparenceGradientName;
     if (eFillStyle == drawing::FillStyle_SOLID
