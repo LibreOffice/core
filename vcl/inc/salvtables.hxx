@@ -2108,4 +2108,58 @@ public:
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override;
 };
 
+class SalInstanceScrolledWindow : public SalInstanceContainer, public virtual weld::ScrolledWindow
+{
+private:
+    VclPtr<VclScrolledWindow> m_xScrolledWindow;
+    Link<ScrollBar*, void> m_aOrigVScrollHdl;
+    Link<ScrollBar*, void> m_aOrigHScrollHdl;
+    bool m_bUserManagedScrolling;
+
+    DECL_LINK(VscrollHdl, ScrollBar*, void);
+    DECL_LINK(HscrollHdl, ScrollBar*, void);
+
+    static void customize_scrollbars(ScrollBar& rScrollBar, const Color& rButtonTextColor,
+                                     const Color& rBackgroundColor, const Color& rShadowColor,
+                                     const Color& rFaceColor);
+
+public:
+    SalInstanceScrolledWindow(VclScrolledWindow* pScrolledWindow, SalInstanceBuilder* pBuilder,
+                              bool bTakeOwnership, bool bUserManagedScrolling);
+
+    virtual void hadjustment_configure(int value, int lower, int upper, int step_increment,
+                                       int page_increment, int page_size) override;
+    virtual int hadjustment_get_value() const override;
+    virtual void hadjustment_set_value(int value) override;
+    virtual int hadjustment_get_upper() const override;
+    virtual void hadjustment_set_upper(int upper) override;
+    virtual int hadjustment_get_page_size() const override;
+    virtual void hadjustment_set_page_size(int size) override;
+    virtual void hadjustment_set_page_increment(int size) override;
+    virtual void hadjustment_set_step_increment(int size) override;
+    virtual void set_hpolicy(VclPolicyType eHPolicy) override;
+    virtual VclPolicyType get_hpolicy() const override;
+
+    virtual void vadjustment_configure(int value, int lower, int upper, int step_increment,
+                                       int page_increment, int page_size) override;
+    virtual int vadjustment_get_value() const override;
+    virtual void vadjustment_set_value(int value) override;
+    virtual int vadjustment_get_upper() const override;
+    virtual void vadjustment_set_upper(int upper) override;
+    virtual int vadjustment_get_lower() const override;
+    virtual void vadjustment_set_lower(int lower) override;
+    virtual int vadjustment_get_page_size() const override;
+    virtual void vadjustment_set_page_size(int size) override;
+    virtual void vadjustment_set_page_increment(int size) override;
+    virtual void vadjustment_set_step_increment(int size) override;
+
+    virtual void set_vpolicy(VclPolicyType eVPolicy) override;
+    virtual VclPolicyType get_vpolicy() const override;
+    virtual int get_scroll_thickness() const override;
+    virtual void set_scroll_thickness(int nThickness) override;
+    virtual void customize_scrollbars(const Color& rBackgroundColor, const Color& rShadowColor,
+                                      const Color& rFaceColor) override;
+    virtual ~SalInstanceScrolledWindow() override;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
