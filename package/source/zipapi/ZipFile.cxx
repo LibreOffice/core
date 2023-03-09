@@ -1108,22 +1108,19 @@ void ZipFile::recover()
                                 // read 64bit header
                                 if (aEntry.nExtraLen > 0)
                                 {
-                                    Sequence<sal_Int8>* aExtraBuffer;
+                                    Sequence<sal_Int8> aExtraBuffer;
                                     if (nPos + 30 + aEntry.nPathLen + aEntry.nExtraLen <= nBufSize)
                                     {
-                                        Sequence<sal_Int8> aTmpBuffer2(
+                                        aExtraBuffer = Sequence<sal_Int8>(
                                             &(pBuffer[nPos + 30 + aEntry.nPathLen]),
                                             aEntry.nExtraLen);
-                                        aExtraBuffer = &aTmpBuffer2;
                                     }
                                     else
                                     {
-                                        Sequence<sal_Int8> aExtraFields;
                                         aGrabber.seek(nGenPos + nPos + 30 + aEntry.nExtraLen);
-                                        aGrabber.readBytes(aExtraFields, aEntry.nExtraLen);
-                                        aExtraBuffer = &aExtraFields;
+                                        aGrabber.readBytes(aExtraBuffer, aEntry.nExtraLen);
                                     }
-                                    MemoryByteGrabber aMemGrabberExtra(*aExtraBuffer);
+                                    MemoryByteGrabber aMemGrabberExtra(aExtraBuffer);
                                     if (aEntry.nExtraLen > 0)
                                     {
                                         readExtraFields(aMemGrabberExtra, aEntry.nExtraLen, nSize,
