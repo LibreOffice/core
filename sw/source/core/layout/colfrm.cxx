@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <libxml/xmlwriter.h>
+
 #include <editeng/ulspitem.hxx>
 #include <osl/diagnose.h>
 #include <fmtclds.hxx>
@@ -64,6 +66,19 @@ void SwColumnFrame::DestroyImpl()
 
 SwColumnFrame::~SwColumnFrame()
 {
+}
+
+void SwColumnFrame::dumpAsXml(xmlTextWriterPtr writer) const
+{
+    (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("column"));
+    dumpAsXmlAttributes(writer);
+
+    (void)xmlTextWriterStartElement(writer, BAD_CAST("infos"));
+    dumpInfosAsXml(writer);
+    (void)xmlTextWriterEndElement(writer);
+    dumpChildrenAsXml(writer);
+
+    (void)xmlTextWriterEndElement(writer);
 }
 
 static void lcl_RemoveColumns( SwLayoutFrame *pCont, sal_uInt16 nCnt )

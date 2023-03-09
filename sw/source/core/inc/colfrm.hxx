@@ -33,6 +33,8 @@ public:
 
     virtual void PaintBreak() const override;
     virtual void PaintSubsidiaryLines(const SwPageFrame*, const SwRect&) const override;
+
+    void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_COLFRM_HXX
