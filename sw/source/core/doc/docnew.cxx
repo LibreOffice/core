@@ -389,6 +389,8 @@ SwDoc::SwDoc()
     }
 
     getIDocumentState().ResetModified();
+
+    s_pLast = this;
 }
 
 /**
@@ -398,6 +400,8 @@ SwDoc::SwDoc()
  */
 SwDoc::~SwDoc()
 {
+    s_pLast = nullptr;
+
     mxVbaFind.clear();
 
     // nothing here should create Undo actions!

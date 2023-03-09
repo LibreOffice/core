@@ -337,6 +337,8 @@ private:
     bool mbContainsAtPageObjWithContentAnchor : 1;
 
     static SwAutoCompleteWord *s_pAutoCompleteWords;  //< List of all words for AutoComplete
+    /// The last, still alive SwDoc instance, for debugging.
+    static SwDoc* s_pLast;
 
     // private methods
     SwFlyFrameFormat* MakeFlySection_( const SwPosition& rAnchPos,

@@ -440,6 +440,7 @@ SfxItemInfo aSlotTab[] =
 std::vector<SvGlobalName> *pGlobalOLEExcludeList = nullptr;
 
 SwAutoCompleteWord* SwDoc::s_pAutoCompleteWords = nullptr;
+SwDoc* SwDoc::s_pLast = nullptr;
 
 SwCheckIt* pCheckIt = nullptr;
 static CharClass* pAppCharClass = nullptr;
