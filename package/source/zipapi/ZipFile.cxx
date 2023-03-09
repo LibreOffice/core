@@ -1002,12 +1002,12 @@ void ZipFile::readExtraFields(MemoryByteGrabber& aMemGrabber, sal_Int16 nExtraLe
     while (nExtraLen > 0) // Extensible data fields
     {
         sal_Int16 nheaderID = aMemGrabber.ReadInt16();
-        sal_Int16 dataSize = aMemGrabber.ReadInt16();
+        sal_uInt16 dataSize = aMemGrabber.ReadUInt16();
         if (nheaderID == 1) // Load Zip64 Extended Information Extra Field
         {
             // Datasize should be 28byte but some files have less (maybe non standard?)
             nSize = aMemGrabber.ReadUInt64();
-            sal_Int16 nReadSize = 8;
+            sal_uInt16 nReadSize = 8;
             if (dataSize >= 16)
             {
                 nCompressedSize = aMemGrabber.ReadUInt64();
