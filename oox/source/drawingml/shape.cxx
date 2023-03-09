@@ -406,6 +406,18 @@ void Shape::addShape(
                                      ? *getTextBody()->getTextProperties().moInsets[3]
                                      : 0));
                 }
+
+                // tdf#145147 Set the Hyperlink property to the child wps shape.
+                if (getShapeProperties().hasProperty(PROP_URL)) try
+                {
+                    uno::Any aAny = getShapeProperties().getProperty(PROP_URL);
+                    OUString sUrl = aAny.get<OUString>();
+                    if (!sUrl.isEmpty())
+                        xChildWPSProperties->setPropertyValue(UNO_NAME_HYPERLINK, aAny);
+                }
+                catch (const Exception&)
+                {
+                }
             }
 
             if( meFrameType == FRAMETYPE_DIAGRAM )
