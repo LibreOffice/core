@@ -420,6 +420,56 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFly2Cols)
     // 2nd half of the split row and the very last row went to a 3rd page.
     CPPUNIT_ASSERT(!pPage2->GetNext());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWidow)
+{
+    // Given a document with a 2nd page that contains 2 lines, due to widow control:
+    std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(true,
+                                                                                        pChanges);
+    pChanges->commit();
+    comphelper::ScopeGuard g([pChanges] {
+        officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(
+            false, pChanges);
+        pChanges->commit();
+    });
+    createSwDoc("floattable-widow.docx");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure that widow control works:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    auto pPage1Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage1Objs[0]);
+    CPPUNIT_ASSERT(pPage1Fly);
+    SwFrame* pTab1 = pPage1Fly->GetLower();
+    SwFrame* pRow1 = pTab1->GetLower();
+    SwFrame* pCell1 = pRow1->GetLower();
+    auto pText1 = dynamic_cast<SwTextFrame*>(pCell1->GetLower());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 6
+    // - Actual  : 7
+    // i.e. widow control was disabled, layout didn't match Word.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(6), pText1->GetThisLines());
+    auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
+    CPPUNIT_ASSERT(pPage2);
+    const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
+    auto pPage2Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage2Objs[0]);
+    CPPUNIT_ASSERT(pPage2Fly);
+    SwFrame* pTab2 = pPage2Fly->GetLower();
+    SwFrame* pRow2 = pTab2->GetLower();
+    SwFrame* pCell2 = pRow2->GetLower();
+    auto pText2 = dynamic_cast<SwTextFrame*>(pCell2->GetLower());
+    // And then similarly this was 1, not 2.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(2), pText2->GetThisLines());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

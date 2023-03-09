@@ -36,6 +36,7 @@
 #include <sectfrm.hxx>
 #include <ftnfrm.hxx>
 #include <pagefrm.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 #undef WIDOWTWIPS
 
@@ -309,7 +310,17 @@ WidowsAndOrphans::WidowsAndOrphans( SwTextFrame *pNewFrame, const SwTwips nRst,
 
     bool bResetFlags = false;
 
-    if ( m_pFrame->IsInTab() )
+    bool bWordTableCell = false;
+    if (m_pFrame->IsInFly())
+    {
+        // Enable widow / orphan control in Word-style table cells in split rows, at least inside
+        // flys.
+        const SwDoc& rDoc = m_pFrame->GetTextNodeForParaProps()->GetDoc();
+        const IDocumentSettingAccess& rIDSA = rDoc.getIDocumentSettingAccess();
+        bWordTableCell = rIDSA.get(DocumentSettingId::TABLE_ROW_KEEP);
+    }
+
+    if ( m_pFrame->IsInTab() && !bWordTableCell )
     {
         // For compatibility reasons, we disable Keep/Widows/Orphans
         // inside splittable row frames:
