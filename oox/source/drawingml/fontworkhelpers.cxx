@@ -1215,7 +1215,7 @@ sal_Int16 lcl_getAlphaFromTransparenceGradient(const awt::Gradient& rTransparenc
         / (100.0 - nBorder) * 100 / 255.0);
 }
 
-// GradientStopColor has components ::Color RGBColor and modul::ThemeColor TTColor
+// GradientStopColor has components ::Color RGBColor and model::ThemeColor TTColor
 GradientStopColor
 lcl_createGradientStopColor(const uno::Reference<beans::XPropertySet>& rXPropSet,
                             const uno::Reference<beans::XPropertySetInfo>& rXPropSetInfo,
