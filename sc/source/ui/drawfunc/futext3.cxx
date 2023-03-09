@@ -92,6 +92,11 @@ void FuText::StopEditMode()
     if( pNote )
         rDoc.LockStreamValid(true);     // only the affected sheet is invalidated below
 
+    /*  Unset the outliner undo manager before the call to SdrEndTextEdit.
+        SdrObjEditView::SdrEndTextEdit destroys it, but then ScDrawView::SdrEndTextEdit
+        initiates some UI update which might try to access the now invalid pointer. */
+    rViewShell.SetDrawTextUndo( nullptr );
+
     /*  SdrObjEditView::SdrEndTextEdit() may try to delete the entire drawing
         object, if it does not contain text and has invisible border and fill.
         This must not happen for note caption objects. They will be removed
@@ -101,9 +106,6 @@ void FuText::StopEditMode()
         from SdrEndTextEditKind::Deleted to SdrEndTextEditKind::ShouldBeDeleted in this
         case. */
     /*SdrEndTextEditKind eResult =*/ pView->SdrEndTextEdit( pNote != nullptr );
-
-    // or ScEndTextEdit (with drawview.hxx)
-    rViewShell.SetDrawTextUndo( nullptr );
 
     vcl::Cursor* pCur = pWindow->GetCursor();
     if( pCur && pCur->IsVisible() )
