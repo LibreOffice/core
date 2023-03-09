@@ -901,6 +901,51 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
             }
         }
     }
+    else if (mpNumInfo && eType == vcl::PDFWriter::List)
+    {
+        SwTextFrame const& rFrame(static_cast<SwTextFrame const&>(mpNumInfo->mrFrame));
+        SwTextNode const& rNode(*rFrame.GetTextNodeForParaProps());
+        SwNumRule const*const pNumRule = rNode.GetNumRule();
+        assert(pNumRule); // was required for List
+
+        auto ToPDFListNumbering = [](SvxNumberFormat const& rFormat) {
+            switch (rFormat.GetNumberingType())
+            {
+                case css::style::NumberingType::CHARS_UPPER_LETTER:
+                    return vcl::PDFWriter::UpperAlpha;
+                case css::style::NumberingType::CHARS_LOWER_LETTER:
+                    return vcl::PDFWriter::LowerAlpha;
+                case css::style::NumberingType::ROMAN_UPPER:
+                    return vcl::PDFWriter::UpperRoman;
+                case css::style::NumberingType::ROMAN_LOWER:
+                    return vcl::PDFWriter::LowerRoman;
+                case css::style::NumberingType::ARABIC:
+                    return vcl::PDFWriter::Decimal;
+                case css::style::NumberingType::CHAR_SPECIAL:
+                    switch (rFormat.GetBulletChar())
+                    {
+                        case u'\u2022': case u'\uE12C': case u'\uE01E': case u'\uE437':
+                            return vcl::PDFWriter::Disc;
+                        case u'\u2218': case u'\u25CB': case u'\u25E6':
+                            return vcl::PDFWriter::Circle;
+                        case u'\u25A0': case u'\u25AA': case u'\uE00A':
+                            return vcl::PDFWriter::Square;
+                        default:
+                            return vcl::PDFWriter::NONE;
+                    }
+                default: // the other 50 types
+                    return vcl::PDFWriter::NONE;
+            }
+        };
+
+        // Note: for every level, BeginNumberedListStructureElements() produces
+        // a separate List element, so even though in PDF this is limited to
+        // the whole List we can just export the current level here.
+        vcl::PDFWriter::StructAttributeValue const value(
+                ToPDFListNumbering(pNumRule->Get(rNode.GetActualListLevel())));
+        // ISO 14289-1:2014, Clause: 7.6
+        mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::ListNumbering, value);
+    }
 }
 
 void SwTaggedPDFHelper::BeginNumberedListStructureElements()
@@ -910,7 +955,7 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
         return;
 
     const SwFrame& rFrame = mpNumInfo->mrFrame;
-    OSL_ENSURE( rFrame.IsTextFrame(), "numbered only for text frames" );
+    assert(rFrame.IsTextFrame());
     const SwTextFrame& rTextFrame = static_cast<const SwTextFrame&>(rFrame);
 
     // Lowers of NonStructureElements should not be considered:
