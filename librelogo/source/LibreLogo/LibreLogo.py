@@ -194,7 +194,7 @@ class __Doc__:
         self.fontstyle = 0
         self.points = []
 
-from math import pi, sin, cos, asin, sqrt, log10
+from math import pi, sin, cos, asin, log10, hypot
 
 from com.sun.star.awt import Point as __Point__
 from com.sun.star.awt import Gradient as __Gradient__
@@ -956,7 +956,7 @@ def heading(deg = -1, go = False):
             px, py = pos.X + turtle.BoundRect.Width / 2.0, pos.Y + turtle.BoundRect.Height / 2.0
             dx = px * __MM10_TO_TWIP__ - deg[0] * __PT_TO_TWIP__
             dy = deg[1] * __PT_TO_TWIP__ - py * __MM10_TO_TWIP__
-            n = sqrt(dx**2 + dy**2)
+            n = hypot(dx, dy)
             if dy > 0 and n > 0:
                 turtle.RotateAngle = a = -(180 + asin(dx / n) / (pi/180)) * 100 + 72000 # +720 for max(angle, preciseAngle) of __go__()
             elif n > 0:
