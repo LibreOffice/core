@@ -66,6 +66,7 @@ FontWorkGalleryDialog::FontWorkGalleryDialog(weld::Window* pParent, SdrView& rSd
     maCtlFavorites->set_size_request(aSize.Width(), aSize.Height());
 
     maCtlFavorites->connect_item_activated( LINK( this, FontWorkGalleryDialog, DoubleClickFavoriteHdl ) );
+    maCtlFavorites->connect_query_tooltip(LINK(this, FontWorkGalleryDialog, QueryTooltipHandler));
     mxOKButton->connect_clicked(LINK(this, FontWorkGalleryDialog, ClickOKHdl));
 
     initFavorites( GALLERY_THEME_FONTWORK );
@@ -125,10 +126,16 @@ void FontWorkGalleryDialog::fillFavorites(sal_uInt16 nThemeId)
     auto nFavCount = maFavoritesHorizontal.size();
 
     maCtlFavorites->clear();
+    maIdToTitleMap.clear();
+
+    std::vector<OUString> aTitles;
+    GalleryExplorer::FillObjListTitle(nThemeId, aTitles);
+    assert(aTitles.size() == nFavCount);
 
     for( size_t nFavorite = 1; nFavorite <= nFavCount; nFavorite++ )
     {
         OUString sId = OUString::number(static_cast<sal_uInt16>(nFavorite));
+        maIdToTitleMap.emplace(sId, aTitles.at(nFavorite - 1));
         maCtlFavorites->insert(-1, nullptr, &sId, maFavoritesHorizontal[nFavorite - 1], nullptr);
     }
 
@@ -260,6 +267,13 @@ IMPL_LINK_NOARG(FontWorkGalleryDialog, DoubleClickFavoriteHdl, weld::IconView&, 
     insertSelectedFontwork();
     m_xDialog->response(RET_OK);
     return true;
+}
+
+IMPL_LINK(FontWorkGalleryDialog, QueryTooltipHandler, const weld::TreeIter&, iter, OUString)
+{
+    const OUString id = maCtlFavorites->get_id(iter);
+    auto it = maIdToTitleMap.find(id);
+    return it != maIdToTitleMap.end() ? it->second : OUString();
 }
 
 namespace {
