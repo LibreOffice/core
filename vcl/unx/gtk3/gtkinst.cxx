@@ -16837,16 +16837,8 @@ private:
         assert(gtk_tree_path_get_depth(pPath) == 1);
         int* indices = gtk_tree_path_get_indices(pPath);
         const int nIndex = indices[0];
-        const int nChildCount = atk_object_get_n_accessible_children(pAtkObject);
-        if (nIndex >= nChildCount)
-        {
-            SAL_WARN("vcl.gtk",
-                     "item index "
-                         << nIndex << " greater than ItemView's accessible child count "
-                         << nChildCount
-                         << ". Is the IconView frozen, preventing creation of a11y children?");
-            return;
-        }
+        assert(nIndex < atk_object_get_n_accessible_children(pAtkObject)
+               && "item index too high for ItemView's accessible child count");
 
         const OUString sTooltipText = signal_query_tooltip(GtkInstanceTreeIter(iter));
         AtkObject* pChild = atk_object_ref_accessible_child(pAtkObject, nIndex);
@@ -17013,11 +17005,7 @@ public:
         bool bIsFirstFreeze = IsFirstFreeze();
         GtkInstanceWidget::freeze();
         if (bIsFirstFreeze)
-        {
-            g_object_ref(m_pTreeStore);
-            gtk_icon_view_set_model(m_pIconView, nullptr);
             g_object_freeze_notify(G_OBJECT(m_pTreeStore));
-        }
         enable_notify_events();
     }
 
@@ -17025,11 +17013,7 @@ public:
     {
         disable_notify_events();
         if (IsLastThaw())
-        {
             g_object_thaw_notify(G_OBJECT(m_pTreeStore));
-            gtk_icon_view_set_model(m_pIconView, GTK_TREE_MODEL(m_pTreeStore));
-            g_object_unref(m_pTreeStore);
-        }
         GtkInstanceWidget::thaw();
         enable_notify_events();
     }
