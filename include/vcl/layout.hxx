@@ -498,6 +498,7 @@ public:
     //to override it
     void setUserManagedScrolling(bool bUserManagedScrolling) { m_bUserManagedScrolling = bUserManagedScrolling;}
     void doSetAllocation(const Size &rAllocation, bool bRetryOnFailure);
+    virtual void DumpAsPropertyTree(::tools::JsonWriter& rJsonWriter) override;
 private:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;

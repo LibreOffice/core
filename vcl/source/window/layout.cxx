@@ -2167,6 +2167,53 @@ void VclScrolledWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
                 nBorderWidth << " is larger than expected " << m_nBorderWidth);
 }
 
+namespace {
+void lcl_dumpScrollbar(::tools::JsonWriter& rJsonWriter, ScrollBar& rScrollBar)
+{
+    rJsonWriter.put("lower", rScrollBar.GetRangeMin());
+    rJsonWriter.put("upper", rScrollBar.GetRangeMax());
+    rJsonWriter.put("step_increment", rScrollBar.GetLineSize());
+    rJsonWriter.put("page_increment", rScrollBar.GetPageSize());
+    rJsonWriter.put("value", rScrollBar.GetThumbPos());
+    rJsonWriter.put("page_size", rScrollBar.GetVisibleSize());
+}
+};
+
+void VclScrolledWindow::DumpAsPropertyTree(::tools::JsonWriter& rJsonWriter)
+{
+    VclBin::DumpAsPropertyTree(rJsonWriter);
+
+    {
+        auto aVertical = rJsonWriter.startNode("vertical");
+
+        ScrollBar& rScrollBar = getVertScrollBar();
+        lcl_dumpScrollbar(rJsonWriter, rScrollBar);
+
+        WinBits nWinBits = GetStyle();
+        if (nWinBits & WB_VSCROLL)
+            rJsonWriter.put("policy", "always");
+        else if (nWinBits & WB_AUTOVSCROLL)
+            rJsonWriter.put("policy", "auto");
+        else
+            rJsonWriter.put("policy", "never");
+    }
+
+    {
+        auto aHorizontal = rJsonWriter.startNode("horizontal");
+
+        ScrollBar& rScrollBar = getHorzScrollBar();
+        lcl_dumpScrollbar(rJsonWriter, rScrollBar);
+
+        WinBits nWinBits = GetStyle();
+        if (nWinBits & WB_HSCROLL)
+            rJsonWriter.put("policy", "always");
+        else if (nWinBits & WB_AUTOHSCROLL)
+            rJsonWriter.put("policy", "auto");
+        else
+            rJsonWriter.put("policy", "never");
+    }
+}
+
 void VclViewport::setAllocation(const Size &rAllocation)
 {
     vcl::Window *pChild = get_child();
