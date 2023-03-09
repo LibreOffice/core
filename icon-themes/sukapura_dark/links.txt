@@ -2346,6 +2346,7 @@ sfx2/res/styfam3.png cmd/sc_linestyle.png
 sfx2/res/styfam4.png cmd/sc_showsinglepage.png
 sfx2/res/symphony/sidebar-animation-large.png cmd/lc_diaeffect.png
 sfx2/res/symphony/sidebar-colors-small.png cmd/sc_colorsettings.png
+sfx2/res/symphony/sidebar-elements-large.png cmd/lc_insertmath.png
 sfx2/res/symphony/sidebar-functions-large.png cmd/lc_dbviewfunctions.png
 sfx2/res/symphony/sidebar-gallery-large.png cmd/lc_gallery.png
 sfx2/res/symphony/sidebar-navigator-large.png cmd/lc_navigator.png

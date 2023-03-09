@@ -303,7 +303,7 @@
           <value>ElementsDeck</value>
         </prop>
         <prop oor:name="IconURL" oor:type="xs:string">
-          <value>private:graphicrepository/sfx2/res/symphony/sidebar-gallery-large.png</value>
+          <value>private:graphicrepository/sfx2/res/symphony/sidebar-elements-large.png</value>
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
