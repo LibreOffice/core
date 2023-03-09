@@ -95,19 +95,12 @@ public:
  * class SvxPropertySetInfoPool
  */
 
-const sal_Int32 SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS = 0;
-const sal_Int32 SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER = 1;
-const sal_Int32 SVXUNO_SERVICEID_LASTID = 1;
-
 namespace comphelper { class PropertySetInfo; }
 
-class SvxPropertySetInfoPool
+namespace SvxPropertySetInfoPool
 {
-public:
-    UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) static rtl::Reference<comphelper::PropertySetInfo> const & getOrCreate( sal_Int32 nServiceId ) noexcept;
-
-private:
-    static rtl::Reference<comphelper::PropertySetInfo> mxInfos[SVXUNO_SERVICEID_LASTID+1];
+    UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) rtl::Reference<comphelper::PropertySetInfo> const & getDrawingDefaults() noexcept;
+    UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) rtl::Reference<comphelper::PropertySetInfo> const & getWriterDrawingDefaults() noexcept;
 };
 
 #endif

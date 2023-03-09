@@ -30,6 +30,10 @@
 class SdrModel;
 class SfxItemPool;
 
+enum class SvxUnoDrawPoolDefaults {
+    Drawing, Writer
+};
+
 /** This class implements the service com.sun.star.drawing.Defaults.
     It works on the SfxItemPool from the given model and the global
     draw object item pool.
@@ -42,7 +46,7 @@ class SVX_DLLPUBLIC SvxUnoDrawPool :    public ::cppu::OWeakAggObject,
                         public comphelper::PropertySetHelper
 {
 public:
-    SvxUnoDrawPool(SdrModel* pModel, sal_Int32 nServiceId);
+    SvxUnoDrawPool(SdrModel* pModel, SvxUnoDrawPoolDefaults nServiceId);
 
     /** deprecated */
     SvxUnoDrawPool(SdrModel* pModel);

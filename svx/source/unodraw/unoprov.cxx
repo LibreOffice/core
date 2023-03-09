@@ -2045,36 +2045,31 @@ OUString SvxUnogetInternalNameForItem(const sal_uInt16 nWhich, const OUString& r
 }
 
 
-rtl::Reference<comphelper::PropertySetInfo> const & SvxPropertySetInfoPool::getOrCreate( sal_Int32 nServiceId ) noexcept
+rtl::Reference<comphelper::PropertySetInfo> const & SvxPropertySetInfoPool::getDrawingDefaults() noexcept
 {
-    SolarMutexGuard aGuard;
-
-    assert( nServiceId <= SVXUNO_SERVICEID_LASTID );
-
-    if( !mxInfos[ nServiceId ].is() )
+    static rtl::Reference<comphelper::PropertySetInfo> xDrawingDefaults = []()
     {
-        mxInfos[nServiceId] = new comphelper::PropertySetInfo();
+        rtl::Reference<comphelper::PropertySetInfo> xTmp = new comphelper::PropertySetInfo();
+        xTmp->add( ImplGetSvxDrawingDefaultsPropertyMap() );
+        return xTmp;
+    }();
 
-        switch( nServiceId )
-        {
-        case SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS:
-            mxInfos[SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS]->add( ImplGetSvxDrawingDefaultsPropertyMap() );
-            break;
-        case SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER:
-            mxInfos[SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER]->add( ImplGetSvxDrawingDefaultsPropertyMap() );
-            mxInfos[SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER]->remove( UNO_NAME_EDIT_PARA_IS_HANGING_PUNCTUATION );
-            // OD 13.10.2003 #i18732# - add property map for writer item 'IsFollowingTextFlow'
-            mxInfos[SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER]->add( ImplGetAdditionalWriterDrawingDefaultsPropertyMap() );
-            break;
-
-        default:
-            OSL_FAIL( "unknown service id!" );
-        }
-    }
-
-    return mxInfos[ nServiceId ];
+    return xDrawingDefaults;
 }
 
-rtl::Reference<comphelper::PropertySetInfo> SvxPropertySetInfoPool::mxInfos[SVXUNO_SERVICEID_LASTID+1] = { nullptr };
+rtl::Reference<comphelper::PropertySetInfo> const & SvxPropertySetInfoPool::getWriterDrawingDefaults() noexcept
+{
+    static rtl::Reference<comphelper::PropertySetInfo> xDrawingDefaults = []()
+    {
+        rtl::Reference<comphelper::PropertySetInfo> xTmp = new comphelper::PropertySetInfo();
+        xTmp->add( ImplGetSvxDrawingDefaultsPropertyMap() );
+        xTmp->remove( UNO_NAME_EDIT_PARA_IS_HANGING_PUNCTUATION );
+        // OD 13.10.2003 #i18732# - add property map for writer item 'IsFollowingTextFlow'
+        xTmp->add( ImplGetAdditionalWriterDrawingDefaultsPropertyMap() );
+        return xTmp;
+    }();
+
+    return xDrawingDefaults;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
