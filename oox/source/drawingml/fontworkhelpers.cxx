@@ -1223,7 +1223,7 @@ lcl_createGradientStopColor(const uno::Reference<beans::XPropertySet>& rXPropSet
                             const awt::Gradient& rTransparenceGradient,
                             const bool& rbHasTransparenceGradient, const sal_Int32& rnPos)
 {
-    // Component mnValue of Tranformation struct is in 1/100th percent (e.g 80% = 8000) in range
+    // Component mnValue of Transformation struct is in 1/100th percent (e.g 80% = 8000) in range
     // -10000 to +10000. Constants are used in converting from API values below.
     constexpr sal_Int16 nFactorToHthPerc = 100;
     constexpr sal_Int16 nMaxHthPerc = 10000;
