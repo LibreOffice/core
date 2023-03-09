@@ -1024,7 +1024,8 @@ bool FontworkHelpers::getThemeColorFromShape(
 
 namespace
 {
-struct gradientStopColor
+// Contains information about one gradient stop. Each gradient has at least 2 of these.
+struct GradientStopColor
 {
     // RGBColor contains no transformations. In case TTColor has other type than
     // ThemeColorType::Unknown, it has precedence. The color transformations in TTColor are used
@@ -1037,7 +1038,7 @@ struct gradientStopColor
 // 'first' contains the position in the range 0 (=0%) to 100000 (=100%) in the gradient as needed for
 // the 'pos' attribute in <w14:gs> element in oox, 'second' contains color and color transformations
 // at this position. The map contains all information needed for a <w14:gsLst> element in oox.
-typedef std::multimap<sal_Int32, gradientStopColor> ColorMapType;
+typedef std::multimap<sal_Int32, GradientStopColor> ColorMapType;
 
 namespace
 {
@@ -1214,8 +1215,8 @@ sal_Int16 lcl_getAlphaFromTransparenceGradient(const awt::Gradient& rTransparenc
         / (100.0 - nBorder) * 100 / 255.0);
 }
 
-// gradientStopColor has components ::Color RGBColor and modul::ThemeColor TTColor
-gradientStopColor
+// GradientStopColor has components ::Color RGBColor and modul::ThemeColor TTColor
+GradientStopColor
 lcl_createGradientStopColor(const uno::Reference<beans::XPropertySet>& rXPropSet,
                             const uno::Reference<beans::XPropertySetInfo>& rXPropSetInfo,
                             const awt::Gradient& rColorGradient, const bool& rbHasColorGradient,
@@ -1226,7 +1227,7 @@ lcl_createGradientStopColor(const uno::Reference<beans::XPropertySet>& rXPropSet
     // -10000 to +10000. Constants are used in converting from API values below.
     constexpr sal_Int16 nFactorToHthPerc = 100;
     constexpr sal_Int16 nMaxHthPerc = 10000;
-    gradientStopColor aStopColor;
+    GradientStopColor aStopColor;
     if (rbHasTransparenceGradient)
     {
         // Color
@@ -1339,18 +1340,18 @@ ColorMapType lcl_createColorMapFromShapeProps(
                              aTransparenceGradient.EndIntensity);
     }
 
-    // A gradientStopColor includes color and transparency.
+    // A GradientStopColor includes color and transparency.
     // The key of aColorMap has same unit as the w14:pos attribute of <w14:gs> element in oox.
-    gradientStopColor aStartStopColor
+    GradientStopColor aStartStopColor
         = lcl_createGradientStopColor(rXPropSet, rXPropSetInfo, aColorGradient, rbHasColorGradient,
                                       aTransparenceGradient, rbHasTransparenceGradient, 0);
     aColorMap.insert(std::pair{ 0, aStartStopColor });
-    gradientStopColor aEndStopColor
+    GradientStopColor aEndStopColor
         = lcl_createGradientStopColor(rXPropSet, rXPropSetInfo, aColorGradient, rbHasColorGradient,
                                       aTransparenceGradient, rbHasTransparenceGradient, 100);
     aColorMap.insert(std::pair{ 100000, aEndStopColor });
 
-    // We add additional gradientStopColor in case of borders.
+    // We add additional GradientStopColor in case of borders.
     if (rbHasColorGradient)
     {
         // We only use the color border for now. If the transparency gradient has a total different
