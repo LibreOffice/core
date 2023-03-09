@@ -16,7 +16,6 @@
 
 #include <cppunit/TestAssert.h>
 
-#include <o3tl/safeint.hxx>
 #include <rtl/ustring.hxx>
 
 using namespace css;
@@ -175,10 +174,10 @@ void XDataPilotDescriptor::testGetHiddenFields()
     checkName( xIndex, 3 );
 }
 
-void XDataPilotDescriptor::checkName( uno::Reference< container::XIndexAccess > const & xIndex, sal_Int32 nIndex )
+void XDataPilotDescriptor::checkName( uno::Reference< container::XIndexAccess > const & xIndex, std::size_t nIndex )
 {
     CPPUNIT_ASSERT(xIndex.is());
-    CPPUNIT_ASSERT(maFieldNames.size() >= o3tl::make_unsigned(nIndex));
+    CPPUNIT_ASSERT(maFieldNames.size() >= nIndex);
 
     for (sal_Int32 i = 0; i < xIndex->getCount(); ++i)
     {

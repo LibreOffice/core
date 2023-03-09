@@ -16,6 +16,7 @@
 
 #include <test/testdllapi.hxx>
 
+#include <cstddef>
 #include <vector>
 
 namespace apitest {
@@ -41,7 +42,7 @@ protected:
 private:
     static void testGetDataPilotFields_Impl( css::uno::Reference< css::sheet::XDataPilotDescriptor > const & xDescr );
 
-    static void checkName( css::uno::Reference< css::container::XIndexAccess > const & xIndex, sal_Int32 nIndex );
+    static void checkName( css::uno::Reference< css::container::XIndexAccess > const & xIndex, std::size_t nIndex );
     static std::vector<OUString> maFieldNames;
 };
 
