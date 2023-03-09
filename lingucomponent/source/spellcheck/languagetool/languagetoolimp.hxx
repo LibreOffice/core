@@ -30,12 +30,6 @@
 #include <o3tl/lru_map.hxx>
 #include <tools/long.hxx>
 
-// Magical numbers
-#define MAX_CACHE_SIZE 10
-#define MAX_SUGGESTIONS_SIZE 10
-#define PROOFREADING_ERROR 2
-#define CURL_TIMEOUT 10L
-
 class LanguageToolGrammarChecker
     : public cppu::WeakImplHelper<css::linguistic2::XProofreader, css::lang::XInitialization,
                                   css::lang::XServiceInfo, css::lang::XServiceDisplayName>
