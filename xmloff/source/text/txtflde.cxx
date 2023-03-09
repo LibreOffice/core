@@ -2713,7 +2713,8 @@ void XMLTextFieldExport::ProcessBibliographyData(
                     sStr = GetExport().GetRelativeReference(sStr);
                 }
                 sal_uInt16 nPrefix = XML_NAMESPACE_TEXT;
-                if (eElement == XML_LOCAL_URL)
+                if (eElement == XML_LOCAL_URL || eElement == XML_TARGET_URL
+                    || eElement == XML_USE_TARGET_URL)
                 {
                     nPrefix = XML_NAMESPACE_LO_EXT;
                 }
