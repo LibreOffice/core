@@ -41,7 +41,7 @@
        offset="0"
        stop-color="e5e5ea"
        id="stop2"
-       style="stop-color:#1c1c1e;stop-opacity:1" />
+       style="stop-color:#2d2d2d;stop-opacity:1" />
     <stop
        offset="1"
        stop-color="#2d2d2d"

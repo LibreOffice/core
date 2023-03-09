@@ -25,8 +25,8 @@
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
      inkscape:zoom="2.0522669"
-     inkscape:cx="10.232587"
-     inkscape:cy="169.56858"
+     inkscape:cx="-63.831852"
+     inkscape:cy="199.77908"
      inkscape:window-width="1920"
      inkscape:window-height="1022"
      inkscape:window-x="0"
@@ -42,7 +42,7 @@
      y2="295.94165">
     <stop
        offset="0"
-       stop-color="#1c1c1e"
+       stop-color="#2d2d2d"
        id="stop2" />
     <stop
        offset=".33333334"
@@ -207,7 +207,7 @@
        id="stop42" />
     <stop
        offset=".2857143"
-       stop-color="#1c1c1e"
+       stop-color="#2d2d2d"
        id="stop44" />
     <stop
        offset="1"
@@ -236,7 +236,7 @@
        offset="0"
        stop-color="e5e5ea"
        id="stop54"
-       style="stop-color:#1c1c1e;stop-opacity:1" />
+       style="stop-color:#2d2d2d;stop-opacity:1" />
     <stop
        offset="1"
        stop-color="#2d2d2d"
@@ -259,7 +259,7 @@
      r="10">
     <stop
        offset="0"
-       stop-color="#1c1c1e"
+       stop-color="#2d2d2d"
        id="stop60" />
     <stop
        offset=".29999998"
@@ -291,9 +291,9 @@
        id="stop71" />
   </linearGradient>
   <path
-     id="rect489"
-     style="fill:#2d2d2d;stroke:#7f6545;stroke-width:0.264583;stroke-opacity:0.501961;fill-opacity:1"
-     d="M 0.13229166,0 H 47.228125 c 0.07329,0 0.132291,0.05900208 0.132291,0.13229166 V 67.601038 c 0,0.07329 -0.059,0.132292 -0.132291,0.132292 H 0.13229166 C 0.05900208,67.73333 0,67.674328 0,67.601038 V 0.13229166 C 0,0.05900208 0.05900208,0 0.13229166,0 Z" />
+     id="rect814"
+     style="fill:#2d2d2d;stroke-width:0.264583;stroke-opacity:0.501961;fill-opacity:1"
+     d="M 0,0 H 47.360416 V 67.73333 H 0 Z" />
   <g
      transform="translate(5.291667 -268.160397)"
      id="g86">
