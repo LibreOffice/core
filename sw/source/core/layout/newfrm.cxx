@@ -46,6 +46,7 @@
 SwLayVout     *SwRootFrame::s_pVout = nullptr;
 bool           SwRootFrame::s_isInPaint = false;
 bool           SwRootFrame::s_isNoVirDev = false;
+SwRootFrame* SwRootFrame::s_pLast = nullptr;
 
 SwCache *SwFrame::spCache = nullptr;
 
@@ -432,6 +433,8 @@ SwRootFrame::SwRootFrame( SwFrameFormat *pFormat, SwViewShell * pSh ) :
 {
     mnFrameType = SwFrameType::Root;
     setRootFrame( this );
+
+    s_pLast = this;
 }
 
 void SwRootFrame::Init( SwFrameFormat* pFormat )
@@ -565,6 +568,7 @@ void SwRootFrame::DestroyImpl()
 
 SwRootFrame::~SwRootFrame()
 {
+    s_pLast = nullptr;
 }
 
 void SwRootFrame::RemoveMasterObjs( SdrPage *pPg )

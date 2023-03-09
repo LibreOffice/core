@@ -105,6 +105,8 @@ class SW_DLLPUBLIC SwRootFrame final : public SwLayoutFrame
     static SwLayVout     *s_pVout;
     static bool           s_isInPaint; // Protection against double Paints
     static bool           s_isNoVirDev;// No virt. Device for SystemPaints
+    /// The last, still alive SwRootFrame instance, for debugging.
+    static SwRootFrame* s_pLast;
 
     /// Width of the HTML / Web document if not defined otherwise: 20cm.
     static constexpr sal_Int64 MIN_BROWSE_WIDTH = o3tl::toTwips(20000, o3tl::Length::mm100);
