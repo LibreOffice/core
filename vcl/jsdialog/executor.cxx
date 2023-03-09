@@ -361,12 +361,15 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                 }
             }
 
-            auto pTextView = dynamic_cast<weld::TextView*>(pWidget);
+            auto pTextView = dynamic_cast<JSTextView*>(pWidget);
             if (pTextView)
             {
                 if (sAction == "change")
                 {
-                    pTextView->set_text(rData["data"]);
+                    int rStartPos, rEndPos;
+                    pTextView->get_selection_bounds(rStartPos, rEndPos);
+                    pTextView->set_text_without_notify(rData["data"]);
+                    pTextView->select_region(rStartPos, rEndPos);
                     LOKTrigger::trigger_changed(*pTextView);
                     return true;
                 }
