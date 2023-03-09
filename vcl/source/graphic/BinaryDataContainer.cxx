@@ -21,9 +21,12 @@ BinaryDataContainer::BinaryDataContainer(SvStream& stream, size_t size)
 size_t BinaryDataContainer::calculateHash() const
 {
     size_t nSeed = 0;
-    o3tl::hash_combine(nSeed, getSize());
-    for (sal_uInt8 const& rByte : *mpData)
-        o3tl::hash_combine(nSeed, rByte);
+    if (mpData)
+    {
+        o3tl::hash_combine(nSeed, getSize());
+        for (sal_uInt8 const& rByte : *mpData)
+            o3tl::hash_combine(nSeed, rByte);
+    }
     return nSeed;
 }
 
