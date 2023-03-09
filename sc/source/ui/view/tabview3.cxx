@@ -2169,6 +2169,9 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
 
 void ScTabView::UpdateEditView()
 {
+    if (aViewData.GetTabNo() != aViewData.GetRefTabNo() && SC_MOD()->IsFormulaMode())
+        return;
+
     ScSplitPos eActive = aViewData.GetActivePart();
     for (sal_uInt16 i = 0; i < 4; i++)
     {
