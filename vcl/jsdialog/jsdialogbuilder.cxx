@@ -1752,6 +1752,11 @@ void JSTextView::set_text(const OUString& rText)
     sendUpdate();
 }
 
+void JSTextView::set_text_without_notify(const OUString& rText)
+{
+    SalInstanceTextView::set_text(rText);
+}
+
 void JSTextView::replace_selection(const OUString& rText)
 {
     SalInstanceTextView::replace_selection(rText);
