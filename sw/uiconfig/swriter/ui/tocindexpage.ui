@@ -503,7 +503,7 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">False</property>
-                                <property name="tooltip-text" translatable="yes" context="tocindexpage|addstylescb|tooltip_text">Include selected paragraph styles with outline level “Text Body” in the index.</property>
+                                <property name="tooltip-text" translatable="yes" context="tocindexpage|addstylescb|tooltip_text">Include selected paragraph styles in the index. Click the “Assign Styles” button.</property>
                                 <property name="use-underline">True</property>
                                 <property name="draw-indicator">True</property>
                                 <child internal-child="accessible">
