@@ -1065,7 +1065,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkLinGradientRGBColor)
 
 CPPUNIT_TEST_FIXTURE(Test, testFontworkAxialGradientTransparency)
 {
-    // The document has a Fontwork shape with UI settings: solid fill theme color Accen3 25% darker,
+    // The document has a Fontwork shape with UI settings: solid fill theme color Accent3 25% darker,
     // Transparency gradient Type Axial with Angle 160deg, Transition start 40%,
     // Start value 5%, End value 90%
     // Without fix the gradient was not exported at all.
