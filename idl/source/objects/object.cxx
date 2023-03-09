@@ -106,9 +106,8 @@ bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
         SAL_WARN( "idl", "new slot : " << rAttr.GetSlotId().getString() );
     }
 
-    for( size_t n = 0; n < aAttrList.size(); n++ )
+    for( const auto &pS : aAttrList )
     {
-        SvMetaAttribute * pS = aAttrList[n];
         if( pS->GetName() == rAttr.GetName() )
         {
             // values have to match
