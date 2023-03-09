@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustmentNF_RESTART_PARA">
@@ -56,7 +56,7 @@
                 <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="numparapage|comboLB_OUTLINE_LEVEL">Assigned Outline Level</property>
                 <items>
-                  <item translatable="yes" context="numparapage|comboLB_OUTLINE_LEVEL">Text Body</item>
+                  <item translatable="yes" context="numparapage|comboLB_OUTLINE_LEVEL">[None]</item>
                   <item translatable="yes" context="numparapage|comboLB_OUTLINE_LEVEL">Level 1</item>
                   <item translatable="yes" context="numparapage|comboLB_OUTLINE_LEVEL">Level 2</item>
                   <item translatable="yes" context="numparapage|comboLB_OUTLINE_LEVEL">Level 3</item>
