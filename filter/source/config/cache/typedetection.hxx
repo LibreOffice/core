@@ -176,7 +176,7 @@ private:
         @return     [string]
                     a valid type name or an empty string if user canceled interaction.
      */
-    OUString impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescriptor& rDescriptor);
+    static OUString impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescriptor& rDescriptor);
 
 
     /** @short      check if an input stream is already part of the
@@ -233,8 +233,8 @@ private:
         @return     TRUE the specified type and its registrations was valid(!) and
                     could be set on the descriptor.
      */
-    bool impl_validateAndSetTypeOnDescriptor(      utl::MediaDescriptor& rDescriptor,
-                                                 const OUString&               sType      );
+    static bool impl_validateAndSetTypeOnDescriptor( utl::MediaDescriptor& rDescriptor,
+                                                     const OUString&               sType      );
 
 
     /** @short      validate the specified filter and its relationships
@@ -254,7 +254,7 @@ private:
         @return     TRUE the specified type and its registrations was valid(!) and
                     could be set on the descriptor.
      */
-    static bool impl_validateAndSetFilterOnDescriptor( std::unique_lock<std::mutex>& rGuard,
+    static bool impl_validateAndSetFilterOnDescriptor(
                                                 utl::MediaDescriptor& rDescriptor,
                                                    const OUString&               sFilter    );
 

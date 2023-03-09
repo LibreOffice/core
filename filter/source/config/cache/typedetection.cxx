@@ -400,7 +400,7 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
         {
             // Caller specified the filter type.  Honor it.  Just get the default
             // type for that filter, and bail out.
-            if (impl_validateAndSetFilterOnDescriptor(aLock, stlDescriptor, aSelectedFilter))
+            if (impl_validateAndSetFilterOnDescriptor(stlDescriptor, aSelectedFilter))
                 return stlDescriptor[utl::MediaDescriptor::PROP_TYPENAME].get<OUString>();
         }
 
@@ -546,15 +546,9 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDes
     sFilter.clear();
     try
     {
-        // SAFE ->
-        std::unique_lock aLock(m_aMutex);
-
         CacheItem aType = cache.getItem(FilterCache::E_TYPE, sType);
         aType[PROPNAME_PREFERREDFILTER] >>= sFilter;
         cache.getItem(FilterCache::E_FILTER, sFilter);
-
-        aLock.unlock();
-        // <- SAFE
 
         // no exception => found valid type and filter => set it on the given descriptor
         rDescriptor[utl::MediaDescriptor::PROP_TYPENAME  ] <<= sType  ;
@@ -569,9 +563,6 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDes
     sFilter.clear();
     try
     {
-        // SAFE ->
-        std::unique_lock aLock(m_aMutex);
-
         // Attention: For executing next lines of code, We must be sure that
         // all filters already loaded :-(
         // That can disturb our "load on demand feature". But we have no other chance!
@@ -581,15 +572,10 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDes
             { PROPNAME_TYPE, uno::Any(sType) } };
         std::vector<OUString> lFilters = cache.getMatchingItemsByProps(FilterCache::E_FILTER, lIProps);
 
-        aLock.unlock();
-        // <- SAFE
-
         for (auto const& filter : lFilters)
         {
             sFilter = filter;
 
-            // SAFE ->
-            aLock.lock();
             try
             {
                 CacheItem aFilter = cache.getItem(FilterCache::E_FILTER, sFilter);
@@ -601,8 +587,6 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDes
             }
             catch(const css::uno::Exception&)
                 { continue; }
-            aLock.unlock();
-            // <- SAFE
 
             sFilter.clear();
         }
@@ -1084,11 +1068,8 @@ OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescript
         // too and no ambiguous filter registration disturb us .-)
 
         OUString sFilter = aRequest.getFilter();
-        {
-            std::unique_lock aLock(m_aMutex);
-            if (!impl_validateAndSetFilterOnDescriptor(aLock, rDescriptor, sFilter))
-                return OUString();
-        }
+        if (!impl_validateAndSetFilterOnDescriptor(rDescriptor, sFilter))
+            return OUString();
         OUString sType;
         rDescriptor[utl::MediaDescriptor::PROP_TYPENAME] >>= sType;
         return sType;
@@ -1143,16 +1124,11 @@ void TypeDetection::impl_removeTypeFilterFromDescriptor(utl::MediaDescriptor& rD
 bool TypeDetection::impl_validateAndSetTypeOnDescriptor(      utl::MediaDescriptor& rDescriptor,
                                                             const OUString&               sType      )
 {
-    // SAFE ->
+    if (GetTheFilterCache().hasItem(FilterCache::E_TYPE, sType))
     {
-        std::unique_lock aLock(m_aMutex);
-        if (GetTheFilterCache().hasItem(FilterCache::E_TYPE, sType))
-        {
-            rDescriptor[utl::MediaDescriptor::PROP_TYPENAME] <<= sType;
-            return true;
-        }
+        rDescriptor[utl::MediaDescriptor::PROP_TYPENAME] <<= sType;
+        return true;
     }
-    // <- SAFE
 
     // remove all related information from the descriptor
     impl_removeTypeFilterFromDescriptor(rDescriptor);
@@ -1160,9 +1136,8 @@ bool TypeDetection::impl_validateAndSetTypeOnDescriptor(      utl::MediaDescript
 }
 
 
-bool TypeDetection::impl_validateAndSetFilterOnDescriptor(  std::unique_lock<std::mutex>& /*rGuard*/,
-                                                              utl::MediaDescriptor& rDescriptor,
-                                                              const OUString&               sFilter    )
+bool TypeDetection::impl_validateAndSetFilterOnDescriptor( utl::MediaDescriptor& rDescriptor,
+                                                           const OUString&               sFilter    )
 {
     try
     {
