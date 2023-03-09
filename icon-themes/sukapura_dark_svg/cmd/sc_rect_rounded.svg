@@ -1,4 +1,4 @@
-<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientTransform="translate(-28 -11.932203)" gradientUnits="userSpaceOnUse" x1="12" x2="12" y1="21.5" y2="2.5"><stop offset="0" stop-color="#1c1c1e"/><stop offset="1" stop-color="#2d2d2d"/></linearGradient><linearGradient id="b" gradientUnits="userSpaceOnUse" x1="0" x2="16" xlink:href="#a" y1="8.25" y2="8.25"/><linearGradient id="c" gradientUnits="userSpaceOnUse" x1="8.135593" x2="8.20339" xlink:href="#a" y1="14.351695" y2="2.012712"/>
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientTransform="translate(-28 -11.932203)" gradientUnits="userSpaceOnUse" x1="12" x2="12" y1="21.5" y2="2.5"><stop offset="0" stop-color="#2d2d2d"/><stop offset="1" stop-color="#2d2d2d"/></linearGradient><linearGradient id="b" gradientUnits="userSpaceOnUse" x1="0" x2="16" xlink:href="#a" y1="8.25" y2="8.25"/><linearGradient id="c" gradientUnits="userSpaceOnUse" x1="8.135593" x2="8.20339" xlink:href="#a" y1="14.351695" y2="2.012712"/>
 
 
 
