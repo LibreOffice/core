@@ -58,6 +58,16 @@ public:
         nInt16 |= ( mpBuffer[mnCurrent++] & 0xFF ) << 8;
         return nInt16;
     }
+
+    sal_Int16 ReadUInt16()
+    {
+        if (mnCurrent + 2 > mnEnd )
+            return 0;
+        sal_uInt16 nInt16  =  mpBuffer[mnCurrent++] & 0xFF;
+        nInt16 |= ( mpBuffer[mnCurrent++] & 0xFF ) << 8;
+        return nInt16;
+    }
+
     sal_Int32 ReadInt32()
     {
         if (mnCurrent + 4 > mnEnd )
