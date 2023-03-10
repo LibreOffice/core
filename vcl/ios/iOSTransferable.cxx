@@ -109,6 +109,16 @@ Any SAL_CALL iOSTransferable::getTransferData(const DataFlavor& aFlavor)
     DataProviderPtr_t dp;
 
     NSData* sysData = [[UIPasteboard generalPasteboard] dataForPasteboardType:sysFormat];
+    if (!sysData)
+    {
+        // Related: gh#5908 throw an exception if the data flavor is nil
+        // If nil is returned, it can mean that the user has selected the
+        // "disallow" option and so we can't access the current clipboard
+        // contents. Also, by throwing an exception, the "allow or disallow"
+        // dialog will display again the next time the user tries to paste.
+        throw UnsupportedFlavorException("Data flavor is nil", static_cast<XTransferable*>(this));
+    }
+
     dp = DataFlavorMapper::getDataProvider(sysFormat, sysData);
 
     if (dp.get() == nullptr)
