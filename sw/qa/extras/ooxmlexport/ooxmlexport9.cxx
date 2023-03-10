@@ -1281,7 +1281,7 @@ DECLARE_OOXMLEXPORT_TEST( testActiveXCheckbox, "activex_checkbox.docx" )
     CPPUNIT_ASSERT_EQUAL( OUString( "Custom Caption" ), getProperty<OUString>(xPropertySet, "Label") );
 
     // Check background color (highlight system color)
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0x316AC5 ), getProperty<sal_Int32>(xPropertySet, "BackgroundColor") );
+    CPPUNIT_ASSERT_EQUAL( Color( 0x316AC5 ), getProperty<Color>(xPropertySet, "BackgroundColor") );
 
     // Check Text color (active border system color)
     CPPUNIT_ASSERT_EQUAL(Color(0xD4D0C8), getProperty<Color>(xPropertySet, "TextColor"));
