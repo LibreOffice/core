@@ -183,6 +183,42 @@ SwContentControl::SwContentControl(SwFormatContentControl* pFormat)
     , m_pFormat(pFormat)
     , m_pTextNode(nullptr)
 {
+    if (!pFormat)
+    {
+        return;
+    }
+
+    const std::shared_ptr<SwContentControl>& pOther = pFormat->GetContentControl();
+    if (!pOther)
+    {
+        return;
+    }
+
+    SetShowingPlaceHolder(pOther->m_bShowingPlaceHolder);
+    SetCheckbox(pOther->m_bCheckbox);
+    SetChecked(pOther->m_bChecked);
+    SetCheckedState(pOther->m_aCheckedState);
+    SetUncheckedState(pOther->m_aUncheckedState);
+    SetListItems(pOther->m_aListItems);
+    SetPicture(pOther->m_bPicture);
+    SetDate(pOther->m_bDate);
+    SetDateFormat(pOther->m_aDateFormat);
+    SetDateLanguage(pOther->m_aDateLanguage);
+    SetCurrentDate(pOther->m_aCurrentDate);
+    SetPlainText(pOther->m_bPlainText);
+    SetComboBox(pOther->m_bComboBox);
+    SetDropDown(pOther->m_bDropDown);
+    SetPlaceholderDocPart(pOther->m_aPlaceholderDocPart);
+    SetDataBindingPrefixMappings(pOther->m_aDataBindingPrefixMappings);
+    SetDataBindingXpath(pOther->m_aDataBindingXpath);
+    SetDataBindingStoreItemID(pOther->m_aDataBindingStoreItemID);
+    SetColor(pOther->m_aColor);
+    SetAppearance(pOther->m_aAppearance);
+    SetAlias(pOther->m_aAlias);
+    SetTag(pOther->m_aTag);
+    SetId(pOther->m_nId);
+    SetTabIndex(pOther->m_nTabIndex);
+    SetLock(pOther->m_aLock);
 }
 
 SwContentControl::~SwContentControl() {}
