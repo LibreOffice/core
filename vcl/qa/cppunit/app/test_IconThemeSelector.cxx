@@ -148,7 +148,7 @@ IconThemeSelectorTest::FallbackThemeIsReturnedForEmptyInput()
     vcl::IconThemeSelector s;
     OUString selected = s.SelectIconTheme(std::vector<vcl::IconThemeInfo>(), "colibre");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("fallback is returned for empty input",
-            OUString(vcl::IconThemeSelector::FALLBACK_ICON_THEME_ID), selected);
+            OUString(vcl::IconThemeSelector::FALLBACK_LIGHT_ICON_THEME_ID), selected);
 }
 
 void

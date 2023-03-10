@@ -51,30 +51,50 @@ IconThemeSelector::IconThemeSelector()
 }
 
 /*static*/ OUString
-IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvironment)
+IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvironment, bool bPreferDarkIconTheme)
 {
     if (comphelper::LibreOfficeKit::isActive())
-        return "colibre";
+    {
+        if (!bPreferDarkIconTheme)
+            return "colibre";
+        else
+            return "colibre_dark";
+    }
 
 #ifdef _WIN32
     (void)desktopEnvironment;
-    return "colibre";
+    if (!bPreferDarkIconTheme)
+        return "colibre";
+    else
+        return "colibre_dark";
 #else
     OUString r;
     if ( desktopEnvironment.equalsIgnoreAsciiCase("plasma5") ||
          desktopEnvironment.equalsIgnoreAsciiCase("lxqt") ) {
-        r = "breeze";
+        if (!bPreferDarkIconTheme)
+            r = "breeze";
+        else
+            r = "breeze_dark";
     }
     else if ( desktopEnvironment.equalsIgnoreAsciiCase("macosx") ) {
-        r = "sukapura";
+        if (!bPreferDarkIconTheme)
+            r = "sukapura";
+        else
+            r = "sukapura_dark";
     }
     else if ( desktopEnvironment.equalsIgnoreAsciiCase("gnome") ||
          desktopEnvironment.equalsIgnoreAsciiCase("mate") ||
          desktopEnvironment.equalsIgnoreAsciiCase("unity") ) {
-        r = "elementary";
+        if (!bPreferDarkIconTheme)
+            r = "elementary";
+        else
+            r = "breeze_dark";
     } else
     {
-        r = FALLBACK_ICON_THEME_ID;
+        if (!bPreferDarkIconTheme)
+            r = FALLBACK_LIGHT_ICON_THEME_ID;
+        else
+            r = FALLBACK_DARK_ICON_THEME_ID;
     }
     return r;
 #endif // _WIN32
@@ -89,13 +109,9 @@ IconThemeSelector::SelectIconThemeForDesktopEnvironment(
         if (icon_theme_is_in_installed_themes(mPreferredIconTheme, installedThemes)) {
             return mPreferredIconTheme;
         }
-        //if a dark variant is preferred, and we didn't have an exact match, then try our one and only dark theme
-        if (mPreferDarkIconTheme && icon_theme_is_in_installed_themes("breeze_dark", installedThemes)) {
-            return "breeze_dark";
-        }
     }
 
-    OUString themeForDesktop = GetIconThemeForDesktopEnvironment(desktopEnvironment);
+    OUString themeForDesktop = GetIconThemeForDesktopEnvironment(desktopEnvironment, mPreferDarkIconTheme);
     if (icon_theme_is_in_installed_themes(themeForDesktop, installedThemes)) {
         return themeForDesktop;
     }
@@ -177,7 +193,7 @@ IconThemeSelector::ReturnFallback(const std::vector<IconThemeInfo>& installedThe
         return installedThemes.front().GetThemeId();
     }
     else {
-        return FALLBACK_ICON_THEME_ID;
+        return FALLBACK_LIGHT_ICON_THEME_ID;
     }
 }
 
