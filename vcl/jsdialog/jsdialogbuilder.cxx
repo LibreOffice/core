@@ -950,6 +950,21 @@ std::unique_ptr<weld::Container> JSInstanceBuilder::weld_container(const OString
     return pWeldWidget;
 }
 
+std::unique_ptr<weld::ScrolledWindow>
+JSInstanceBuilder::weld_scrolled_window(const OString& id, bool bUserManagedScrolling)
+{
+    VclScrolledWindow* pScrolledWindow = m_xBuilder->get<VclScrolledWindow>(id);
+    auto pWeldWidget = pScrolledWindow
+                           ? std::make_unique<JSScrolledWindow>(this, pScrolledWindow, this, false,
+                                                                bUserManagedScrolling)
+                           : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 std::unique_ptr<weld::Label> JSInstanceBuilder::weld_label(const OString& id)
 {
     Control* pLabel = m_xBuilder->get<Control>(id);
@@ -1391,6 +1406,42 @@ JSContainer::JSContainer(JSDialogSender* pSender, vcl::Window* pContainer,
                          SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstanceContainer, vcl::Window>(pSender, pContainer, pBuilder, bTakeOwnership)
 {
+}
+
+JSScrolledWindow::JSScrolledWindow(JSDialogSender* pSender, ::VclScrolledWindow* pContainer,
+                                   SalInstanceBuilder* pBuilder, bool bTakeOwnership,
+                                   bool bUserManagedScrolling)
+    : JSWidget<SalInstanceScrolledWindow, ::VclScrolledWindow>(
+          pSender, pContainer, pBuilder, bTakeOwnership, bUserManagedScrolling)
+{
+}
+
+void JSScrolledWindow::vadjustment_configure(int value, int lower, int upper, int step_increment,
+                                             int page_increment, int page_size)
+{
+    SalInstanceScrolledWindow::vadjustment_configure(value, lower, upper, step_increment,
+                                                     page_increment, page_size);
+    sendUpdate();
+}
+
+void JSScrolledWindow::set_vpolicy(VclPolicyType eVPolicy)
+{
+    SalInstanceScrolledWindow::set_vpolicy(eVPolicy);
+    sendUpdate();
+}
+
+void JSScrolledWindow::hadjustment_configure(int value, int lower, int upper, int step_increment,
+                                             int page_increment, int page_size)
+{
+    SalInstanceScrolledWindow::hadjustment_configure(value, lower, upper, step_increment,
+                                                     page_increment, page_size);
+    sendUpdate();
+}
+
+void JSScrolledWindow::set_hpolicy(VclPolicyType eVPolicy)
+{
+    SalInstanceScrolledWindow::set_hpolicy(eVPolicy);
+    sendUpdate();
 }
 
 JSLabel::JSLabel(JSDialogSender* pSender, Control* pLabel, SalInstanceBuilder* pBuilder,

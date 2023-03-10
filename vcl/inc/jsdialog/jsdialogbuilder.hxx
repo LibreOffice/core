@@ -40,6 +40,7 @@ class ComboBox;
 class VclMultiLineEdit;
 class SvTabListBox;
 class IconView;
+class VclScrolledWindow;
 
 namespace vcl
 {
@@ -304,6 +305,8 @@ public:
     virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OString& id) override;
     virtual std::unique_ptr<weld::Expander> weld_expander(const OString& id) override;
     virtual std::unique_ptr<weld::IconView> weld_icon_view(const OString& id) override;
+    virtual std::unique_ptr<weld::ScrolledWindow>
+    weld_scrolled_window(const OString& id, bool bUserManagedScrolling = false) override;
     virtual std::unique_ptr<weld::RadioButton> weld_radio_button(const OString& id) override;
     virtual std::unique_ptr<weld::Frame> weld_frame(const OString& id) override;
     virtual std::unique_ptr<weld::MenuButton> weld_menu_button(const OString& id) override;
@@ -363,6 +366,14 @@ public:
     JSWidget(JSDialogSender* pSender, VclClass* pObject, SalInstanceBuilder* pBuilder,
              bool bTakeOwnership)
         : BaseInstanceClass(pObject, pBuilder, bTakeOwnership)
+        , m_bIsFreezed(false)
+        , m_pSender(pSender)
+    {
+    }
+
+    JSWidget(JSDialogSender* pSender, VclClass* pObject, SalInstanceBuilder* pBuilder,
+             bool bTakeOwnership, bool bUserManagedScrolling)
+        : BaseInstanceClass(pObject, pBuilder, bTakeOwnership, bUserManagedScrolling)
         , m_bIsFreezed(false)
         , m_pSender(pSender)
     {
@@ -508,6 +519,21 @@ class JSContainer final : public JSWidget<SalInstanceContainer, vcl::Window>
 public:
     JSContainer(JSDialogSender* pSender, vcl::Window* pContainer, SalInstanceBuilder* pBuilder,
                 bool bTakeOwnership);
+};
+
+class JSScrolledWindow final : public JSWidget<SalInstanceScrolledWindow, ::VclScrolledWindow>
+{
+public:
+    JSScrolledWindow(JSDialogSender* pSender, ::VclScrolledWindow* pWindow,
+                     SalInstanceBuilder* pBuilder, bool bTakeOwnership, bool bUserManagedScrolling);
+
+    virtual void vadjustment_configure(int value, int lower, int upper, int step_increment,
+                                       int page_increment, int page_size) override;
+    virtual void set_vpolicy(VclPolicyType eVPolicy) override;
+
+    virtual void hadjustment_configure(int value, int lower, int upper, int step_increment,
+                                       int page_increment, int page_size) override;
+    virtual void set_hpolicy(VclPolicyType eVPolicy) override;
 };
 
 class JSLabel final : public JSWidget<SalInstanceLabel, Control>
