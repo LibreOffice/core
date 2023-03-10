@@ -1488,6 +1488,12 @@ void JSEntry::set_text(const OUString& rText)
 
 void JSEntry::set_text_without_notify(const OUString& rText) { SalInstanceEntry::set_text(rText); }
 
+void JSEntry::replace_selection(const OUString& rText)
+{
+    SalInstanceEntry::replace_selection(rText);
+    sendUpdate();
+}
+
 JSListBox::JSListBox(JSDialogSender* pSender, ::ListBox* pListBox, SalInstanceBuilder* pBuilder,
                      bool bTakeOwnership)
     : JSWidget<SalInstanceComboBoxWithoutEdit, ::ListBox>(pSender, pListBox, pBuilder,

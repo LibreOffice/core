@@ -572,6 +572,7 @@ public:
             bool bTakeOwnership);
     virtual void set_text(const OUString& rText) override;
     void set_text_without_notify(const OUString& rText);
+    virtual void replace_selection(const OUString& rText) override;
 };
 
 class JSListBox final : public JSWidget<SalInstanceComboBoxWithoutEdit, ::ListBox>
