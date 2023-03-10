@@ -1315,8 +1315,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
                                   NSAppearanceNameAqua, NSAppearanceNameDarkAqua]];
         bUseDarkMode = [match isEqualToString: NSAppearanceNameDarkAqua];
     }
-    // there is no sukapura_dark, at the time of writing at least, so whatever
-    // is considered the default dark icon set will be used
     OUString sThemeName(!bUseDarkMode ? u"sukapura" : u"sukapura_dark");
     aStyleSettings.SetPreferredIconTheme(sThemeName, bUseDarkMode);
 
