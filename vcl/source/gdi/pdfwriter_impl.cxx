@@ -111,6 +111,18 @@ constexpr sal_Int32 pointToPixel(double pt)
     return sal_Int32(pt * fDivisor);
 }
 
+void appendObjectID(sal_Int32 nObjectID, OStringBuffer & aLine)
+{
+    aLine.append(nObjectID);
+    aLine.append(" 0 obj\n");
+}
+
+void appendObjectReference(sal_Int32 nObjectID, OStringBuffer & aLine)
+{
+    aLine.append(nObjectID);
+    aLine.append(" 0 R ");
+}
+
 void appendHex(sal_Int8 nInt, OStringBuffer& rBuffer)
 {
     static const char pHexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7',
@@ -1801,6 +1813,43 @@ sal_Int32 PDFWriterImpl::emitStructParentTree( sal_Int32 nObject )
     return nObject;
 }
 
+// every structure element already has a unique object id - just use it for ID
+static OString GenerateID(sal_Int32 const nObjectId)
+{
+    return "id" + OString::number(nObjectId);
+}
+
+sal_Int32 PDFWriterImpl::emitStructIDTree(sal_Int32 const nObject)
+{
+    // loosely following PDF 1.7, 10.6.5 Example of Logical Structure, Example 10.15
+    if (nObject < 0)
+    {
+        return nObject;
+    }
+    // the name tree entries must be sorted lexicographically.
+    std::map<OString, sal_Int32> ids;
+    for (auto n : m_StructElemObjsWithID)
+    {
+        ids.emplace(GenerateID(n), n);
+    }
+    OStringBuffer buf;
+    appendObjectID(nObject, buf);
+    buf.append("<</Names [\n");
+    for (auto const& it : ids)
+    {
+        appendLiteralStringEncrypt(it.first, nObject, buf);
+        buf.append(" ");
+        appendObjectReference(it.second, buf);
+        buf.append("\n");
+    }
+    buf.append("] >>\nendobj\n\n");
+
+    CHECK_RETURN( updateObject(nObject) );
+    CHECK_RETURN( writeBuffer(buf.getStr(), buf.getLength()) );
+
+    return nObject;
+}
+
 const char* PDFWriterImpl::getAttributeTag( PDFWriter::StructAttribute eAttr )
 {
     static std::map< PDFWriter::StructAttribute, const char* > aAttributeStrings;
@@ -2084,6 +2133,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
     aLine.append( " 0 obj\n"
                   "<</Type" );
     sal_Int32 nParentTree = -1;
+    sal_Int32 nIDTree = -1;
     if( rEle.m_nOwnElement == rEle.m_nParentElement )
     {
         nParentTree = createObject();
@@ -2105,6 +2155,13 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
             }
             aLine.append( ">>\n" );
         }
+        if (!m_StructElemObjsWithID.empty())
+        {
+            nIDTree = createObject();
+            aLine.append("/IDTree ");
+            appendObjectReference(nIDTree, aLine);
+            aLine.append("\n");
+        }
     }
     else
     {
@@ -2114,6 +2171,11 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
             aLine.append( rEle.m_aAlias );
         else
             aLine.append( getStructureTag( rEle.m_eType ) );
+        if (m_StructElemObjsWithID.find(rEle.m_nObject) != m_StructElemObjsWithID.end())
+        {
+            aLine.append("\n/ID ");
+            appendLiteralStringEncrypt(GenerateID(rEle.m_nObject), rEle.m_nObject, aLine);
+        }
         aLine.append( "\n"
                       "/P " );
         aLine.append( m_aStructure[ rEle.m_nParentElement ].m_nObject );
@@ -2207,6 +2269,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
     CHECK_RETURN( emitStructParentTree( nParentTree ) );
+    CHECK_RETURN( emitStructIDTree(nIDTree) );
 
     return rEle.m_nObject;
 }
@@ -3809,18 +3872,6 @@ void appendAnnotationRect(tools::Rectangle const & rRectangle, OStringBuffer & a
     aLine.append(' ');
     appendFixedInt(rRectangle.Bottom(), aLine);
     aLine.append("] ");
-}
-
-void appendObjectID(sal_Int32 nObjectID, OStringBuffer & aLine)
-{
-    aLine.append(nObjectID);
-    aLine.append(" 0 obj\n");
-}
-
-void appendObjectReference(sal_Int32 nObjectID, OStringBuffer & aLine)
-{
-    aLine.append(nObjectID);
-    aLine.append(" 0 R ");
 }
 
 } // end anonymous namespace
@@ -10672,6 +10723,11 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
         rEle.m_nObject      = createObject();
         // update parent's kids list
         m_aStructure[ rEle.m_nParentElement ].m_aKids.emplace_back(rEle.m_nObject);
+        // ISO 14289-1:2014, Clause: 7.9
+        if (rEle.m_eType == PDFWriter::Note)
+        {
+            m_StructElemObjsWithID.insert(rEle.m_nObject);
+        }
     }
     return nNewId;
 }

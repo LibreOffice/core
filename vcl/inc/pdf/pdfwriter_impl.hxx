@@ -24,6 +24,7 @@
 #include <map>
 #include <list>
 #include <unordered_map>
+#include <unordered_set>
 #include <memory>
 #include <string_view>
 #include <vector>
@@ -760,6 +761,8 @@ private:
     /* role map of struct tree root */
     std::unordered_map< OString, OString >
                                         m_aRoleMap;
+    /* structure elements (object ids) that should have ID */
+    std::unordered_set<sal_Int32> m_StructElemObjsWithID;
 
     /* contains all widgets used in the PDF
      */
@@ -993,6 +996,8 @@ i12626
     sal_Int32 emitStructure( PDFStructureElement& rEle );
     // writes structure parent tree
     sal_Int32 emitStructParentTree( sal_Int32 nTreeObject );
+    // writes structure IDTree
+    sal_Int32 emitStructIDTree(sal_Int32 nTreeObject);
     // writes page tree and catalog
     bool emitCatalog();
     // writes signature dictionary object
