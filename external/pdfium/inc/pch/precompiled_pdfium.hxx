@@ -310,6 +310,8 @@
 #include <core/fxcrt/fileaccess_iface.h>
 #include <core/fxcrt/fixed_try_alloc_zeroed_data_vector.h>
 #include <core/fxcrt/fixed_uninit_data_vector.h>
+#include <core/fxcrt/fixed_zeroed_data_vector.h>
+#include <core/fxcrt/fx_2d_size.h>
 #include <core/fxcrt/fx_bidi.h>
 #include <core/fxcrt/fx_codepage.h>
 #include <core/fxcrt/fx_coordinates.h>
