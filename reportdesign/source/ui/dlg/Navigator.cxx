@@ -571,7 +571,7 @@ void NavigatorTree::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
         xParent.reset();
     if ( _rEvent.PropertyName == PROPERTY_REPORTHEADERON )
     {
-        sal_uLong nPos = xReport->getReportHeaderOn() ? 2 : 1;
+        int nPos = xReport->getReportHeaderOn() ? 2 : 1;
         traverseSection(xReport->getReportHeader(),xParent.get(),RID_SVXBMP_REPORTHEADERFOOTER,nPos);
     }
     else if ( _rEvent.PropertyName == PROPERTY_PAGEHEADERON )
