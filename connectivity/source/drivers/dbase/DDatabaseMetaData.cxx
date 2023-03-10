@@ -54,14 +54,12 @@ ODbaseDatabaseMetaData::~ODbaseDatabaseMetaData()
 
 Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     rtl::Reference<::connectivity::ODatabaseMetaDataResultSet> pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
 
-    static ODatabaseMetaDataResultSet::ORows aRows;
-    if(aRows.empty())
+    static ODatabaseMetaDataResultSet::ORows aRows = []()
     {
-        aRows.reserve(10);
+        ODatabaseMetaDataResultSet::ORows aTmp;
+        aTmp.reserve(10);
         ODatabaseMetaDataResultSet::ORow aRow
         {
             ODatabaseMetaDataResultSet::getEmptyValue(),
@@ -85,20 +83,20 @@ Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
             new ORowSetValueDecorator(sal_Int32(10))
         };
 
-        aRows.push_back(aRow);
+        aTmp.push_back(aRow);
 
         aRow[1] = new ORowSetValueDecorator(OUString("LONGVARCHAR"));
         aRow[2] = new ORowSetValueDecorator(DataType::LONGVARCHAR);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(2147483647));
         aRow[6] = new ORowSetValueDecorator();
         aRow[13] = new ORowSetValueDecorator(OUString("M"));
-        aRows.push_back(aRow);
+        aTmp.push_back(aRow);
 
         aRow[1] = new ORowSetValueDecorator(OUString("DATE"));
         aRow[2] = new ORowSetValueDecorator(DataType::DATE);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(10));
         aRow[13] = new ORowSetValueDecorator(OUString("D"));
-        aRows.push_back(aRow);
+        aTmp.push_back(aRow);
 
         aRow[1] = new ORowSetValueDecorator(OUString("BOOLEAN"));
         aRow[2] = new ORowSetValueDecorator(DataType::BIT);
@@ -108,44 +106,46 @@ Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
         aRow[6] = new ORowSetValueDecorator(OUString());
         aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
         aRow[13] = new ORowSetValueDecorator(OUString("L"));
-        aRows.push_back(aRow);
+        aTmp.push_back(aRow);
 
         aRow[1] = new ORowSetValueDecorator(OUString("DOUBLE"));
         aRow[2] = new ORowSetValueDecorator(DataType::DOUBLE);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(8));
         aRow[13] = new ORowSetValueDecorator(OUString("B"));
-        aRows.push_back(aRow);
+        aTmp.push_back(aRow);
 
         aRow[11] = new ORowSetValueDecorator(ORowSetValue(true));
         aRow[13] = new ORowSetValueDecorator(OUString("Y"));
-        aRows.push_back(aRow);
+        aTmp.push_back(aRow);
 
         aRow[1] = new ORowSetValueDecorator(OUString("TIMESTAMP"));
         aRow[2] = new ORowSetValueDecorator(DataType::TIMESTAMP);
         aRow[11] = new ORowSetValueDecorator(ORowSetValue(false));
         aRow[13] = new ORowSetValueDecorator(OUString("T"));
-        aRows.push_back(aRow);
+        aTmp.push_back(aRow);
 
         aRow[1] = new ORowSetValueDecorator(OUString("INTEGER"));
         aRow[2] = new ORowSetValueDecorator(DataType::INTEGER);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(10));
         aRow[13] = new ORowSetValueDecorator(OUString("I"));
-        aRows.push_back(aRow);
+        aTmp.push_back(aRow);
 
         aRow[1] = new ORowSetValueDecorator(OUString("DECIMAL"));
         aRow[2] = new ORowSetValueDecorator(DataType::DECIMAL);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(20));
         aRow[6] = new ORowSetValueDecorator(OUString("length,scale"));
         aRow[13] = new ORowSetValueDecorator(OUString("F"));
-        aRows.push_back(aRow);
+        aTmp.push_back(aRow);
 
         aRow[1] = new ORowSetValueDecorator(OUString("NUMERIC"));
         aRow[2] = new ORowSetValueDecorator(DataType::DECIMAL);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(16));
         aRow[13] = new ORowSetValueDecorator(OUString("N"));
         aRow[15] = new ORowSetValueDecorator(sal_Int32(16));
-        aRows.push_back(aRow);
-    }
+        aTmp.push_back(aRow);
+
+        return aTmp;
+    }();
 
     pResult->setRows(std::move(aRows));
     return pResult;

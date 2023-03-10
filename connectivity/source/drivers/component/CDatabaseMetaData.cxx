@@ -46,14 +46,12 @@ OComponentDatabaseMetaData::~OComponentDatabaseMetaData()
 
 Reference< XResultSet > OComponentDatabaseMetaData::impl_getTypeInfo_throw(  )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
 
-    static ODatabaseMetaDataResultSet::ORows aRows;
-    if(aRows.empty())
+    static ODatabaseMetaDataResultSet::ORows aRows = []()
     {
-        aRows.reserve(6);
+        ODatabaseMetaDataResultSet::ORows aTmp;
+        aTmp.reserve(6);
         ODatabaseMetaDataResultSet::ORow aRow
         {
             ODatabaseMetaDataResultSet::getEmptyValue(),
@@ -77,43 +75,45 @@ Reference< XResultSet > OComponentDatabaseMetaData::impl_getTypeInfo_throw(  )
             new ORowSetValueDecorator(sal_Int32(10))
         };
 
-        aRows.push_back(aRow);
+        aTmp.push_back(aRow);
 
         aRow[1] = new ORowSetValueDecorator(OUString("DECIMAL"));
         aRow[2] = new ORowSetValueDecorator(DataType::DECIMAL);
         aRow[3] = ODatabaseMetaDataResultSet::get0Value();
         aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
         aRow[15] = ODatabaseMetaDataResultSet::get0Value();
-        aRows.push_back(aRow);
+        aTmp.push_back(aRow);
 
         aRow[1] = new ORowSetValueDecorator(OUString("BOOL"));
         aRow[2] = new ORowSetValueDecorator(DataType::BIT);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(20));
         aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
         aRow[15] = new ORowSetValueDecorator(sal_Int32(15));
-        aRows.push_back(aRow);
+        aTmp.push_back(aRow);
 
         aRow[1] = new ORowSetValueDecorator(OUString("DATE"));
         aRow[2] = new ORowSetValueDecorator(DataType::DATE);
         aRow[3] = ODatabaseMetaDataResultSet::get0Value();
         aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
         aRow[15] = ODatabaseMetaDataResultSet::get0Value();
-        aRows.push_back(aRow);
+        aTmp.push_back(aRow);
 
         aRow[1] = new ORowSetValueDecorator(OUString("TIME"));
         aRow[2] = new ORowSetValueDecorator(DataType::TIME);
         aRow[3] = ODatabaseMetaDataResultSet::get0Value();
         aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
         aRow[15] = ODatabaseMetaDataResultSet::get0Value();
-        aRows.push_back(aRow);
+        aTmp.push_back(aRow);
 
         aRow[1] = new ORowSetValueDecorator(OUString("TIMESTAMP"));
         aRow[2] = new ORowSetValueDecorator(DataType::TIMESTAMP);
         aRow[3] = ODatabaseMetaDataResultSet::get0Value();
         aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
         aRow[15] = ODatabaseMetaDataResultSet::get0Value();
-        aRows.push_back(aRow);
-    }
+        aTmp.push_back(aRow);
+
+        return aTmp;
+    }();
 
     pResult->setRows(std::move(aRows));
     return pResult;

@@ -618,14 +618,13 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsOuterJoins(  )
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTableTypes );
-    static ODatabaseMetaDataResultSet::ORows aRows;
-    if(aRows.empty())
+    static ODatabaseMetaDataResultSet::ORows aRows = []()
     {
-        aRows.push_back( { ODatabaseMetaDataResultSet::getEmptyValue(), new ORowSetValueDecorator(OUString("TABLE")) } );
-    }
+        ODatabaseMetaDataResultSet::ORows aTmp;
+        aTmp.push_back( { ODatabaseMetaDataResultSet::getEmptyValue(), new ORowSetValueDecorator(OUString("TABLE")) } );
+        return aTmp;
+    }();
     pResult->setRows(std::move(aRows));
     return pResult;
 }
