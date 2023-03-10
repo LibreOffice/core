@@ -402,10 +402,10 @@ void SvImpLBox::PageDown( sal_uInt16 nDelta )
         m_pView->PaintImmediately();
         m_pView->Scroll( 0, nScroll, aArea, ScrollFlags::NoChildren );
         m_pView->PaintImmediately();
-        m_pView->NotifyScrolled();
     }
 
     ShowCursor( true );
+    m_pView->NotifyScrolled();
 }
 
 void SvImpLBox::PageUp( sal_uInt16 nDelta )
@@ -437,10 +437,10 @@ void SvImpLBox::PageUp( sal_uInt16 nDelta )
         m_pView->PaintImmediately();
         m_pView->Scroll( 0, nEntryHeight*nRealDelta, aArea, ScrollFlags::NoChildren );
         m_pView->PaintImmediately();
-        m_pView->NotifyScrolled();
     }
 
     ShowCursor( true );
+    m_pView->NotifyScrolled();
 }
 
 void SvImpLBox::KeyUp( bool bPageUp )
