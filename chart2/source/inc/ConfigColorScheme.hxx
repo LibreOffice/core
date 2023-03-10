@@ -54,7 +54,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // ____ ConfigItemListener ____
-    void notify( std::u16string_view rPropertyName );
+    void notify();
 
 protected:
     // ____ XColorScheme ____

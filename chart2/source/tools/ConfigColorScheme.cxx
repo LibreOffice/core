@@ -53,7 +53,6 @@ class ChartConfigItem : public ::utl::ConfigItem
 public:
     explicit ChartConfigItem( ConfigColorScheme & rListener );
 
-    void addPropertyNotification( const OUString & rPropertyName );
     uno::Any getProperty( const OUString & aPropertyName );
 
 protected:
@@ -63,31 +62,26 @@ protected:
 
 private:
     ConfigColorScheme &      m_rListener;
-    std::set< OUString >   m_aPropertiesToNotify;
 };
 
 ChartConfigItem::ChartConfigItem( ConfigColorScheme & rListener ) :
         ::utl::ConfigItem( "Office.Chart/DefaultColor" ),
     m_rListener( rListener )
-{}
+{
+    EnableNotification( { aSeriesPropName } );
+}
 
 void ChartConfigItem::Notify( const Sequence< OUString > & aPropertyNames )
 {
     for( OUString const & s : aPropertyNames )
     {
-        if( m_aPropertiesToNotify.find( s ) != m_aPropertiesToNotify.end())
-            m_rListener.notify( s );
+        if( s == aSeriesPropName )
+            m_rListener.notify();
     }
 }
 
 void ChartConfigItem::ImplCommit()
 {}
-
-void ChartConfigItem::addPropertyNotification( const OUString & rPropertyName )
-{
-    m_aPropertiesToNotify.insert( rPropertyName );
-    EnableNotification( comphelper::containerToSequence( m_aPropertiesToNotify ));
-}
 
 uno::Any ChartConfigItem::getProperty( const OUString & aPropertyName )
 {
@@ -122,7 +116,6 @@ void ConfigColorScheme::retrieveConfigColors()
     {
         m_apChartConfigItem.reset(
             new impl::ChartConfigItem( *this ));
-        m_apChartConfigItem->addPropertyNotification( aSeriesPropName );
     }
     assert(m_apChartConfigItem && "this can only be set at this point");
 
@@ -155,10 +148,9 @@ void ConfigColorScheme::retrieveConfigColors()
     return nDefaultColors[ nIndex % nMaxDefaultColors ];
 }
 
-void ConfigColorScheme::notify( std::u16string_view rPropertyName )
+void ConfigColorScheme::notify()
 {
-    if( rPropertyName == aSeriesPropName )
-        m_bNeedsUpdate = true;
+    m_bNeedsUpdate = true;
 }
 
 OUString SAL_CALL ConfigColorScheme::getImplementationName()
