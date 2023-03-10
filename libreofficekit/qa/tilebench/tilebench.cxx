@@ -32,7 +32,7 @@ static int help( const char *error = nullptr )
 {
     if (error)
         fprintf (stderr, "Error: %s\n\n", error);
-    fprintf( stderr, "Usage: tilebench <absolute-path-to-libreoffice-install> [path to document] [--preinit] <options>\n");
+    fprintf( stderr, "Usage: tilebench <absolute-path-to-libreoffice-install> [path to document] [--preinit] [--save <path>] <options>\n");
     fprintf( stderr, "\trenders a selection of small tiles from the document, checksums them and times the process based on options:\n" );
     fprintf( stderr, "\t--tile\t[max parts|-1] [max tiles|-1]\n" );
     fprintf( stderr, "\t--dialog\t<.uno:Command>\n" );
@@ -579,6 +579,14 @@ int main( int argc, char* argv[] )
         mode = argv[arg++];
     }
 
+    const char *saveToPath = nullptr;
+    if (!strcmp (mode, "--save"))
+    {
+        pre_init = true;
+        saveToPath = argv[arg++];
+        mode = argv[arg++];
+    }
+
     std::string user_url("file:///");
     user_url.append(argv[1]);
     user_url.append("../user");
@@ -598,6 +606,7 @@ int main( int argc, char* argv[] )
     const char *user_profile = nullptr;
     const char *doc_url = strdup([[[[[NSBundle mainBundle] bundleURL] absoluteString] stringByAppendingString:@"/test.odt"] UTF8String]);
     const char *mode = "--tile";
+    const char *saveToPath = nullptr;
 #endif
 
     aTimes.emplace_back("initialization");
@@ -655,9 +664,19 @@ int main( int argc, char* argv[] )
                 }
             }
             testDialog (pDocument.get(), uno_cmd);
-        } else
+        }
+        else
             return help ("unknown parameter");
-    }
+
+        if (saveToPath != nullptr)
+        {
+            aTimes.emplace_back("save");
+            pDocument->saveAs(saveToPath);
+            aTimes.emplace_back();
+        }
+    } else
+        fprintf(stderr, "Failed to load document '%s'\n",
+                (doc_url ? doc_url : "<null>"));
 
 #ifdef IOS
     Application::Quit();
