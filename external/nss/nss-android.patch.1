@@ -1,7 +1,7 @@
 diff -ur nss.org/nspr/build/autoconf/config.sub nss/nspr/build/autoconf/config.sub
 --- nss.org/nspr/build/autoconf/config.sub	2017-09-07 15:29:45.031246453 +0200
 +++ nss/nspr/build/autoconf/config.sub	2017-09-07 15:32:13.087235423 +0200
-@@ -111,6 +111,11 @@
+@@ -110,6 +110,11 @@
      exit 1;;
  esac
  
@@ -16,7 +16,7 @@ diff -ur nss.org/nspr/build/autoconf/config.sub nss/nspr/build/autoconf/config.s
 diff -ur nss.org/nspr/configure nss/nspr/configure
 --- nss.org/nspr/configure	2017-09-07 15:29:45.018246359 +0200
 +++ nss/nspr/configure	2017-09-07 15:31:47.604075663 +0200
-@@ -2737,18 +2739,15 @@
+@@ -2728,18 +2728,15 @@
      esac
  
          AS="$android_toolchain"/bin/"$android_tool_prefix"-as
@@ -41,7 +41,7 @@ diff -ur nss.org/nspr/configure nss/nspr/configure
 diff -ur nss.org/nss/Makefile nss/nss/Makefile
 --- nss.org/nss/Makefile	2017-09-07 15:29:44.933245745 +0200
 +++ nss/nss/Makefile	2017-09-07 15:32:04.347181076 +0200
-@@ -62,7 +62,7 @@
+@@ -65,7 +65,7 @@
  
  ifeq ($(OS_TARGET),Android)
  NSPR_CONFIGURE_OPTS += --with-android-ndk=$(ANDROID_NDK) \
@@ -74,7 +74,7 @@ diff -ur nss.org/nss/Makefile nss/nss/Makefile
 diff -ur nss/nss/coreconf/arch.mk nss/nss/coreconf/arch.mk
 --- nss/nss/coreconf/arch.mk	2019-11-01 10:29:44.933245745 +0100
 +++ nss/nss/coreconf/arch.mk	2019-11-01 10:32:04.347181076 +0100
-@@ -234,7 +234,15 @@
+@@ -213,7 +213,15 @@
  #
  # this should be  configurable from the user
  #

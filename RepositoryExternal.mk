@@ -397,6 +397,10 @@ endif # SYSTEM_ZLIB
 ifneq ($(SYSTEM_LIBJPEG),)
 
 define gb_LinkTarget__use_libjpeg
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(LIBJPEG_CFLAGS) \
+)
 $(call gb_LinkTarget_add_libs,$(1),$(LIBJPEG_LIBS))
 $(call gb_LinkTarget_set_ldflags,$(1),\
 	$$(filter-out -L/usr/lib/jvm%,$$(T_LDFLAGS)) \
@@ -410,16 +414,15 @@ else
 
 define gb_LinkTarget__use_libjpeg
 $(call gb_LinkTarget_set_include,$(1),\
-	$(LIBJPEG_CFLAGS) \
+	-I$(call gb_UnpackedTarball_get_dir,libjpeg-turbo) \
 	$$(INCLUDE) \
 )
-$(call gb_LinkTarget_add_libs,$(1),$(LIBJPEG_LIBS))
-$(call gb_LinkTarget_use_external_project,$(1),libjpeg-turbo,full)
+$(call gb_LinkTarget_use_static_libraries,$(1),libjpeg-turbo)
 
 endef
 
 define gb_ExternalProject__use_libjpeg
-$(call gb_ExternalProject_use_external_project,$(1),libjpeg-turbo)
+$(call gb_ExternalProject_use_static_libraries,$(1),libjpeg-turbo)
 
 endef
 
@@ -2819,7 +2822,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 
 ifeq ($(COM),MSC)
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,curl)/builds/libcurl-vc12-$(gb_MSBUILD_PLATFORM)-$(gb_MSBUILD_CONFIG)-dll-ipv6-sspi-schannel/lib/libcurl$(if $(MSVC_USE_DEBUG_RUNTIME),_debug).lib \
+	$(call gb_UnpackedTarball_get_dir,curl)/builds/libcurl-vc12-$(gb_MSBUILD_PLATFORM)-$(gb_MSBUILD_CONFIG)-dll-zlib-static-ipv6-sspi-schannel/lib/libcurl$(if $(MSVC_USE_DEBUG_RUNTIME),_debug).lib \
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\

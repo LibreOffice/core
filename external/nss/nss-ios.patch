@@ -1,6 +1,6 @@
 --- a/a/nss/Makefile
 +++ a/a/nss/Makefile
-@@ -96,13 +96,11 @@
+@@ -91,13 +91,11 @@
  ifdef NS_USE_GCC
  NSPR_CONFIGURE_ENV = CC=gcc CXX=g++
  endif
@@ -16,7 +16,7 @@
  endif
  
  #
-@@ -140,7 +140,6 @@
+@@ -140,7 +138,6 @@
  
  build_nspr: $(NSPR_CONFIG_STATUS)
  	$(MAKE) -C $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME)
@@ -37,7 +37,7 @@
  
 --- a/a/nss/lib/nss/nssinit.c
 +++ a/a/nss/lib/nss/nssinit.c
-@@ -278,6 +278,7 @@
+@@ -275,6 +275,7 @@
                            const char *secmodprefix,
                            char **retoldpath, char **retnewpath)
  {
@@ -45,7 +45,7 @@
      char *path, *oldpath = NULL, *lastsep;
      int len, path_len, secmod_len, dll_len;
  
-@@ -309,6 +309,10 @@
+@@ -309,6 +310,10 @@
      }
      *retoldpath = oldpath;
      *retnewpath = path;
@@ -58,7 +58,7 @@
  
 --- a/a/nss/lib/pk11wrap/pk11load.c
 +++ a/a/nss/lib/pk11wrap/pk11load.c
-@@ -389,6 +389,8 @@
+@@ -390,6 +390,8 @@
  /*
   * load a new module into our address space and initialize it.
   */
@@ -67,15 +67,15 @@
  SECStatus
  secmod_LoadPKCS11Module(SECMODModule *mod, SECMODModule **oldModule)
  {
-@@ -465,6 +465,7 @@
-         /* load the library. If this succeeds, then we have to remember to
+@@ -468,6 +470,7 @@
+ /* load the library. If this succeeds, then we have to remember to
           * unload the library if anything goes wrong from here on out...
           */
 +#ifndef NSS_STATIC_PKCS11 // With NSS_STATIC_PKCS11, the only module wodule we load here is nssckbi
-         library = PR_LoadLibrary(mod->dllName);
-         mod->library = (void *)library;
- 
-@@ -487,6 +487,11 @@
+ #if defined(_WIN32)
+         if (nssUTF8_Length(mod->dllName, NULL)) {
+             wchar_t *dllNameWide = _NSSUTIL_UTF8ToWide(mod->dllName);
+@@ -507,6 +510,11 @@
              mod->moduleDBFunc = (void *)
                  PR_FindSymbol(library, "NSS_ReturnModuleSpecData");
          }
@@ -87,7 +87,7 @@
          if (mod->moduleDBFunc == NULL)
              mod->isModuleDB = PR_FALSE;
          if ((ientry == NULL) && (fentry == NULL)) {
-@@ -624,10 +624,12 @@
+@@ -643,10 +651,12 @@
      }
  fail:
      mod->functionList = NULL;
@@ -124,7 +124,7 @@
      PRLibrary *handle;
      const char *name = getLibName();
  
-@@ -47,32 +47,42 @@
+@@ -47,32 +48,42 @@
      if (handle) {
          PRFuncPtr address = PR_FindFunctionSymbol(handle, "FREEBL_GetVector");
          if (address) {
@@ -168,7 +168,7 @@
  }
  
  static const PRCallOnceType pristineCallOnce;
-@@ -837,6 +837,7 @@
+@@ -860,6 +871,7 @@
  void
  BL_Unload(void)
  {
@@ -176,7 +176,7 @@
      /* This function is not thread-safe, but doesn't need to be, because it is
       * only called from functions that are also defined as not thread-safe,
       * namely C_Finalize in softoken, and the SSL bypass shutdown callback called
-@@ -852,6 +852,7 @@
+@@ -872,6 +884,7 @@
          PR_UnloadLibrary(blLib);
  #endif
      }
@@ -186,7 +186,7 @@
  }
 --- a/a/nspr/build/autoconf/config.sub	2017-09-07 15:29:45.031246453 +0200
 +++ a/a/nspr/build/autoconf/config.sub	2017-09-07 15:32:13.087235423 +0200
-@@ -111,6 +111,9 @@
+@@ -110,6 +110,9 @@
      exit 1;;
  esac
  
@@ -198,7 +198,7 @@
  IFS="-" read field1 field2 field3 field4 <<EOF
 --- a/a/nspr/config/autoconf.mk.in
 +++ a/a/nspr/config/autoconf.mk.in
-@@ -67,7 +67,7 @@
+@@ -69,7 +69,7 @@
  MSC_VER		= @MSC_VER@
  AR		= @AR@
  AR_FLAGS	= @AR_FLAGS@
@@ -209,7 +209,7 @@
  RC		= @RC@
 --- a/a/nspr/configure
 +++ a/a/nspr/configure
-@@ -755,7 +755,7 @@
+@@ -2507,7 +2507,7 @@
  OBJDIR='$(OBJDIR_NAME)'
  OBJDIR_NAME=.
  OBJDIR_SUFFIX=OBJ
@@ -218,7 +218,7 @@
  NOSUCHFILE=/no-such-file
  LIBNSPR='-L$(dist_libdir) -lnspr$(MOD_MAJOR_VERSION)'
  LIBPLC='-L$(dist_libdir) -lplc$(MOD_MAJOR_VERSION)'
-@@ -3060,7 +3060,7 @@
+@@ -5571,7 +5571,7 @@
  LIB_SUFFIX=a
  DLL_SUFFIX=so
  ASM_SUFFIX=s
@@ -227,7 +227,7 @@
  PR_MD_ASFILES=
  PR_MD_CSRCS=
  PR_MD_ARCH_DIR=unix
-@@ -3904,7 +3904,7 @@
+@@ -6485,7 +6485,7 @@
      DSO_CFLAGS=-fPIC
      DSO_LDOPTS='-dynamiclib -compatibility_version 1 -current_version 1 -all_load -install_name @__________________________________________________OOO/$@ -headerpad_max_install_names'
      _OPTIMIZE_FLAGS=-O2
@@ -238,7 +238,7 @@
      USE_PTHREADS=1
 --- a/a/nss/coreconf/ruleset.mk
 +++ a/a/nss/coreconf/ruleset.mk
-@@ -68,7 +68,7 @@
+@@ -45,7 +45,7 @@
  endif
  
  ifeq ($(MKPROG),)
@@ -249,7 +249,7 @@
  #
 --- a/a/nss/coreconf/Darwin.mk
 +++ a/a/nss/coreconf/Darwin.mk
-@@ -124,7 +124,7 @@
+@@ -116,7 +116,7 @@
     DSO_LDOPTS += --coverage
  endif
  

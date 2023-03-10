@@ -17,7 +17,7 @@
  # [no-]zlib     [don't] compile support for zlib compression.
  # zlib-dynamic  Like "zlib", but the zlib library is expected to be a shared
  #               library and will be loaded in run-time by the OpenSSL library.
-@@ -383,6 +384,7 @@
+@@ -393,6 +394,7 @@
      "mdc2",
      "msan",
      "multiblock",
@@ -25,7 +25,7 @@
      "nextprotoneg",
      "pinshared",
      "ocb",
-@@ -1754,6 +1756,10 @@
+@@ -1770,6 +1772,10 @@
              if (-f catfile($srcdir, "test", $_, "build.info"));
      }
  
