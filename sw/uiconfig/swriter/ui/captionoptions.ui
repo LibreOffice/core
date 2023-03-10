@@ -101,11 +101,11 @@
                       <object class="GtkComboBoxText" id="level">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="tooltip-text" translatable="yes" context="captionoptions|tooltip_text|level">Prepend the heading number of the first prior heading with the selected outline level. If [None] is selected, no heading number is prepended.</property>
+                        <property name="tooltip-text" translatable="yes" context="captionoptions|tooltip_text|level">Prepend the heading number of the first prior heading whose outline level is equal to or less than the selected outline level. If [None] is selected, no heading number is prepended.</property>
                         <property name="hexpand">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="level-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="captionoptions|extended_tip|level">Prepend the heading number of the first prior heading with the selected outline level. For example, select “2” to display the heading number of the first prior heading with outline level 2. If [None] is selected, no heading number is displayed.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="captionoptions|extended_tip|level">Prepend the heading number of the first prior heading whose outline level is equal to or less than the selected outline level. For example, select “2” to display the heading number of the first prior heading with outline level 1 or outline level 2. If [None] is selected, no heading number is displayed.</property>
                           </object>
                         </child>
                       </object>
@@ -137,7 +137,7 @@
                       <object class="GtkLabel" id="label5">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="captionoptions|label5">_Outline level:</property>
+                        <property name="label" translatable="yes" context="captionoptions|label5">_Up to level:</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">level</property>
                         <property name="xalign">1</property>

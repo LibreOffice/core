@@ -266,7 +266,7 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="optcaptionpage|label4">_Outline level:</property>
+                        <property name="label" translatable="yes" context="optcaptionpage|label4">_Up to level:</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">level</property>
                         <property name="xalign">0</property>
@@ -314,7 +314,7 @@
                       <object class="GtkComboBoxText" id="level">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="tooltip-text" translatable="yes" context="optcaptionpage|tooltip_text|level">Display the heading number of the first prior heading with the selected outline level. If [None] is selected, no heading number is displayed.</property>
+                        <property name="tooltip-text" translatable="yes" context="optcaptionpage|tooltip_text|level">Display the heading number of the first prior heading whose outline level is equal to or less than the selected outline level. If [None] is selected, no heading number is displayed.</property>
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
                         <items>
@@ -322,7 +322,7 @@
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="level-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="optcaptionpage|extended_tip|level">The heading number of the first prior heading with the selected outline level is displayed before the caption number. For example, select “2” to use the heading number of the first prior heading with outline level 2. If [None] is selected, no heading number is displayed. Heading numbers must be enabled to use this option. Use “Tools - Heading Numbering.”</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="optcaptionpage|extended_tip|level">The heading number of the first prior heading whose outline level is equal to or less than the selected outline level is displayed before the caption number. For example, select “2” to use the heading number of the first prior heading with outline level 1 or outline level 2. If [None] is selected, no heading number is displayed. Heading numbers must be enabled to use this option. Use “Tools - Heading Numbering.”</property>
                           </object>
                         </child>
                       </object>
