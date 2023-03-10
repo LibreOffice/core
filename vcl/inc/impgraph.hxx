@@ -47,6 +47,7 @@ class GfxLink;
 class ImpSwapFile;
 class GraphicConversionParameters;
 class ImpGraphic;
+namespace rtl { class OStringBuffer; }
 
 enum class GraphicContentType : sal_Int32
 {
@@ -219,6 +220,7 @@ public:
     SvStream* getSwapFileStream() const;
     // public only because of use in GraphicFilter
     void updateFromLoadedGraphic(const ImpGraphic* graphic);
+    void dumpState(rtl::OStringBuffer &rState);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

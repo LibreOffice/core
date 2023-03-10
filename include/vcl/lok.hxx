@@ -26,6 +26,10 @@ void VCL_DLLPUBLIC unregisterPollCallbacks();
 // can adjust e.g. sizes of bitmap caches to scale well with larger number of users.
 void VCL_DLLPUBLIC numberOfViewsChanged(int count);
 
+// Trim memory use by wiping various internal caches
+void VCL_DLLPUBLIC trimMemory(int nTarget);
+
+// Dump internal state of VCL windows etc. for debugging
 void VCL_DLLPUBLIC dumpState(rtl::OStringBuffer& rState);
 }
 

@@ -54,6 +54,7 @@
 #include <vcl/skia/SkiaHelper.hxx>
 
 #include <salinst.hxx>
+#include <graphic/Manager.hxx>
 #include <salframe.hxx>
 #include <salsys.hxx>
 #include <svdata.hxx>
@@ -69,6 +70,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <comphelper/lok.hxx>
+#include <comphelper/threadpool.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <osl/process.h>
 
@@ -1870,6 +1872,25 @@ void dumpState(rtl::OStringBuffer &rState)
 
         pWin = Application::GetNextTopLevelWindow( pWin );
     }
+
+    vcl::graphic::Manager::get().dumpState(rState);
+
+    pSVData->dumpState(rState);
+}
+
+void trimMemory(int nTarget)
+{
+    if (nTarget >= 1000)
+    {
+        ImplSVData* pSVData = ImplGetSVData();
+        if (!pSVData) // shutting down
+            return;
+        pSVData->dropCaches();
+        vcl::graphic::Manager::get().dropCache();
+        // TODO: ideally - free up any deeper dirtied thread stacks.
+        // comphelper::ThreadPool::getSharedOptimalPool().shutdown();
+    }
+    // else for now caches re-fill themselves as/when used.
 }
 
 } // namespace lok, namespace vcl

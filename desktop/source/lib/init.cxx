@@ -2523,6 +2523,8 @@ static bool lo_signDocument(LibreOfficeKit* pThis,
 static char* lo_extractRequest(LibreOfficeKit* pThis,
                                    const char* pFilePath);
 
+static void lo_trimMemory(LibreOfficeKit* pThis, int nTarget);
+
 static void lo_runLoop(LibreOfficeKit* pThis,
                        LibreOfficeKitPollCallback pPollCallback,
                        LibreOfficeKitWakeCallback pWakeCallback,
@@ -2564,6 +2566,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->setOption = lo_setOption;
         m_pOfficeClass->dumpState = lo_dumpState;
         m_pOfficeClass->extractRequest = lo_extractRequest;
+        m_pOfficeClass->trimMemory = lo_trimMemory;
 
         gOfficeClass = m_pOfficeClass;
     }
@@ -3140,6 +3143,11 @@ static char* lo_extractRequest(LibreOfficeKit* /*pThis*/, const char* pFilePath)
     }
     result = "{ }";
     return convertOUString(result);
+}
+
+static void lo_trimMemory(LibreOfficeKit* /* pThis */, int nTarget)
+{
+    vcl::lok::trimMemory(nTarget);
 }
 
 static void lo_registerCallback (LibreOfficeKit* pThis,

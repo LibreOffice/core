@@ -127,6 +127,10 @@ struct _LibreOfficeKitClass
      */
     char* (*extractRequest) (LibreOfficeKit* pThis,
                            const char* pFilePath);
+
+    /// @see lok::Office::trimMemory
+    /// @since LibreOffice 7.6
+    void (*trimMemory) (LibreOfficeKit* pThis, int nTarget);
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)

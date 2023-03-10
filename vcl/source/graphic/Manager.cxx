@@ -75,7 +75,7 @@ Manager::Manager()
     }
 }
 
-void Manager::loopGraphicsAndSwapOut(std::unique_lock<std::mutex>& rGuard)
+void Manager::loopGraphicsAndSwapOut(std::unique_lock<std::mutex>& rGuard, bool bDropAll)
 {
     // make a copy of m_pImpGraphicList because if we swap out a svg, the svg
     // filter may create more temp Graphics which are auto-added to
@@ -85,14 +85,14 @@ void Manager::loopGraphicsAndSwapOut(std::unique_lock<std::mutex>& rGuard)
 
     for (ImpGraphic* pEachImpGraphic : aImpGraphicList)
     {
-        if (mnUsedSize < sal_Int64(mnMemoryLimit * 0.7))
+        if (mnUsedSize < sal_Int64(mnMemoryLimit * 0.7) && !bDropAll)
             return;
 
         if (pEachImpGraphic->isSwappedOut())
             continue;
 
         sal_Int64 nCurrentGraphicSize = getGraphicSizeBytes(pEachImpGraphic);
-        if (nCurrentGraphicSize > 100000)
+        if (nCurrentGraphicSize > 100000 || bDropAll)
         {
             if (!pEachImpGraphic->mpContext)
             {
@@ -112,22 +112,23 @@ void Manager::loopGraphicsAndSwapOut(std::unique_lock<std::mutex>& rGuard)
     }
 }
 
-void Manager::reduceGraphicMemory(std::unique_lock<std::mutex>& rGuard)
+void Manager::reduceGraphicMemory(std::unique_lock<std::mutex>& rGuard, bool bDropAll)
 {
     // maMutex is locked in callers
 
     if (!mbSwapEnabled)
         return;
 
-    if (mnUsedSize < mnMemoryLimit)
+    if (mnUsedSize < mnMemoryLimit && !bDropAll)
         return;
 
     // avoid recursive reduceGraphicMemory on reexport of tdf118346-1.odg to odg
     if (mbReducingGraphicMemory)
         return;
+
     mbReducingGraphicMemory = true;
 
-    loopGraphicsAndSwapOut(rGuard);
+    loopGraphicsAndSwapOut(rGuard, bDropAll);
 
     sal_Int64 calculatedSize = 0;
     for (ImpGraphic* pEachImpGraphic : m_pImpGraphicList)
@@ -146,6 +147,29 @@ void Manager::reduceGraphicMemory(std::unique_lock<std::mutex>& rGuard)
     }
 
     mbReducingGraphicMemory = false;
+}
+
+void Manager::dropCache()
+{
+    std::unique_lock aGuard(maMutex);
+
+    reduceGraphicMemory(aGuard, true);
+}
+
+void Manager::dumpState(rtl::OStringBuffer& rState)
+{
+    std::unique_lock aGuard(maMutex);
+
+    rState.append("\nImage Manager items:\t");
+    rState.append(static_cast<sal_Int32>(m_pImpGraphicList.size()));
+    rState.append("\tsize:\t");
+    rState.append(static_cast<sal_Int64>(mnUsedSize / 1024));
+    rState.append("\tkb");
+
+    for (ImpGraphic* pEachImpGraphic : m_pImpGraphicList)
+    {
+        pEachImpGraphic->dumpState(rState);
+    }
 }
 
 sal_Int64 Manager::getGraphicSizeBytes(const ImpGraphic* pImpGraphic)

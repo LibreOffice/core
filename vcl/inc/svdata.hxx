@@ -54,6 +54,10 @@ struct ImplPostEventData;
 struct ImplTimerData;
 struct ImplIdleData;
 struct ImplConfigData;
+namespace rtl
+{
+    class OStringBuffer;
+}
 namespace vcl::font
 {
     class DirectFontSubstitution;
@@ -431,6 +435,9 @@ struct ImplSVData
     LibreOfficeKitPollCallback mpPollCallback = nullptr;
     LibreOfficeKitWakeCallback mpWakeCallback = nullptr;
     void *mpPollClosure = nullptr;
+
+    void dropCaches();
+    void dumpState(rtl::OStringBuffer &rState);
 };
 
 css::uno::Reference<css::i18n::XCharacterClassification> const& ImplGetCharClass();
