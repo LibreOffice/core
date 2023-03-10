@@ -1146,6 +1146,23 @@ public:
     {
         return mpThis->pClass->extractRequest(mpThis, pFilePath);
     }
+
+    /**
+     * Trim memory usage.
+     *
+     * LibreOfficeKit caches lots of information from large pixmaps
+     * to view and calculation results. When a view has not been
+     * used for some time, depending on the load on memory it can
+     * be useful to free up memory.
+     *
+     * @param nTarget - a negative number means the app is back
+     * in active use, and to re-fill caches, a large positive
+     * number (>=1000) encourages immediate maximum memory saving.
+     */
+    void trimMemory (int nTarget)
+    {
+        mpThis->pClass->trimMemory(mpThis, nTarget);
+    }
 };
 
 /// Factory method to create a lok::Office instance.

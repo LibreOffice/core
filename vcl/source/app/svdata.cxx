@@ -417,6 +417,29 @@ ImplSVData::ImplSVData()
     mpWinData = &private_aImplSVWinData::get();
 }
 
+void ImplSVData::dropCaches()
+{
+    maGDIData.maScaleCache.clear();
+    maGDIData.maThemeImageCache.clear();
+    maGDIData.maThemeDrawCommandsCache.clear();
+}
+
+void ImplSVData::dumpState(rtl::OStringBuffer &rState)
+{
+    rState.append("\nScaleCache:\t");
+    rState.append(static_cast<sal_Int32>(maGDIData.maScaleCache.size()));
+    rState.append("\t items:");
+
+    for (auto it = maGDIData.maScaleCache.begin();
+         it != maGDIData.maScaleCache.begin(); ++it)
+    {
+        rState.append("\n\t");
+        rState.append(static_cast<sal_Int32>(it->first.maDestSize.Width()));
+        rState.append("x");
+        rState.append(static_cast<sal_Int32>(it->first.maDestSize.Height()));
+    }
+}
+
 ImplSVHelpData* CreateSVHelpData()
 {
     if (!comphelper::LibreOfficeKit::isActive())

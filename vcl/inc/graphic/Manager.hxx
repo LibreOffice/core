@@ -11,6 +11,7 @@
 #define INCLUDED_VCL_INC_GRAPHIC_MANAGER_HXX
 
 #include <sal/types.h>
+#include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/animate/Animation.hxx>
@@ -43,15 +44,18 @@ private:
     Manager();
 
     void registerGraphic(const std::shared_ptr<ImpGraphic>& rImpGraphic);
-    void loopGraphicsAndSwapOut(std::unique_lock<std::mutex>& rGuard);
+    void loopGraphicsAndSwapOut(std::unique_lock<std::mutex>& rGuard, bool bDropAll);
 
     DECL_LINK(SwapOutTimerHandler, Timer*, void);
 
     static sal_Int64 getGraphicSizeBytes(const ImpGraphic* pImpGraphic);
-    void reduceGraphicMemory(std::unique_lock<std::mutex>& rGuard);
+    void reduceGraphicMemory(std::unique_lock<std::mutex>& rGuard, bool bDropAll = false);
 
 public:
     static Manager& get();
+
+    void dropCache();
+    void dumpState(rtl::OStringBuffer &rState);
 
     void swappedIn(const ImpGraphic* pImpGraphic, sal_Int64 nSizeBytes);
     void swappedOut(const ImpGraphic* pImpGraphic, sal_Int64 nSizeBytes);
