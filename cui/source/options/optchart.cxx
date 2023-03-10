@@ -109,8 +109,6 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage(weld::Container* pPage, weld::Dia
     m_xValSetColorBox->SetStyle( m_xValSetColorBox->GetStyle()
                                     | WB_ITEMBORDER | WB_NAMEFIELD | WB_VSCROLL );
 
-    m_SvxChartOptionsUniquePtr.reset(new SvxChartOptions);
-
     if ( const SvxChartColorTableItem* pEditOptionsItem = rInAttrs.GetItemIfSet( SID_SCH_EDITOPTIONS, false ) )
     {
         m_SvxChartColorTableUniquePtr = std::make_unique<SvxChartColorTable>(
@@ -120,7 +118,7 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage(weld::Container* pPage, weld::Dia
     {
         m_SvxChartColorTableUniquePtr = std::make_unique<SvxChartColorTable>();
         m_SvxChartColorTableUniquePtr->useDefault();
-        m_SvxChartOptionsUniquePtr->SetDefaultColors(*m_SvxChartColorTableUniquePtr);
+        SvxChartOptions::SetDefaultColors(*m_SvxChartColorTableUniquePtr);
     }
 
     Construct();
@@ -175,11 +173,8 @@ void SvxDefaultColorOptPage::FillPaletteLB()
 
 void SvxDefaultColorOptPage::SaveChartOptions()
 {
-    if (m_SvxChartOptionsUniquePtr && m_SvxChartColorTableUniquePtr)
-    {
-        m_SvxChartOptionsUniquePtr->SetDefaultColors(*m_SvxChartColorTableUniquePtr);
-        m_SvxChartOptionsUniquePtr->Commit();
-    }
+    if (m_SvxChartColorTableUniquePtr)
+        SvxChartOptions::SetDefaultColors(*m_SvxChartColorTableUniquePtr);
 }
 
 // event handlers

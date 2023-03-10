@@ -32,7 +32,6 @@ typedef std::vector<Color> ImpColorList;
 class SvxDefaultColorOptPage : public SfxTabPage
 {
 private:
-    std::unique_ptr<SvxChartOptions>        m_SvxChartOptionsUniquePtr;
     // no reason to use a cloned SfxItem here (SvxChartColorTableItem)
     // that just leads to non-const SfxItem and potential trouble
     std::unique_ptr<SvxChartColorTable>     m_SvxChartColorTableUniquePtr;

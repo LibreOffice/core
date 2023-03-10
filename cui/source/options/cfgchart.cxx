@@ -24,6 +24,7 @@
 #include <dialmgr.hxx>
 #include <strings.hrc>
 #include <utility>
+#include <officecfg/Office/Chart.hxx>
 
 #define ROW_COLOR_COUNT 12
 
@@ -159,45 +160,10 @@ bool SvxChartColorTable::operator==( const SvxChartColorTable & _rOther ) const
 
 
 
-SvxChartOptions::SvxChartOptions() :
-    ::utl::ConfigItem( "Office.Chart" ),
-    mbIsInitialized( false ),
-    maPropertyNames{ "DefaultColor/Series" }
+SvxChartColorTable SvxChartOptions::GetDefaultColors()
 {
-}
-
-SvxChartOptions::~SvxChartOptions()
-{
-}
-
-const SvxChartColorTable& SvxChartOptions::GetDefaultColors()
-{
-    if ( !mbIsInitialized )
-        mbIsInitialized = RetrieveOptions();
-    return maDefColors;
-}
-
-void SvxChartOptions::SetDefaultColors( const SvxChartColorTable& aCol )
-{
-    maDefColors = aCol;
-    SetModified();
-}
-
-bool SvxChartOptions::RetrieveOptions()
-{
-    // get sequence containing all properties
-
-    uno::Sequence< OUString > aNames = GetPropertyNames();
-    uno::Sequence< uno::Any > aProperties( aNames.getLength());
-    aProperties = GetProperties( aNames );
-
-    if( aProperties.getLength() != aNames.getLength())
-        return false;
-
     // 1. default colors for series
-    maDefColors.clear();
-    uno::Sequence< sal_Int64 > aColorSeq;
-    aProperties[ 0 ] >>= aColorSeq;
+    uno::Sequence< sal_Int64 > aColorSeq = officecfg::Office::Chart::DefaultColor::Series::get();
 
     sal_Int32 nCount = aColorSeq.getLength();
     Color aCol;
@@ -217,46 +183,35 @@ bool SvxChartOptions::RetrieveOptions()
         aPrefix = aResName;
 
     // set color values
+    SvxChartColorTable  aDefColors;
     for( sal_Int32 i=0; i < nCount; i++ )
     {
         aCol = Color(ColorTransparency, aColorSeq[ i ]);
 
         aName = aPrefix + OUString::number(i + 1) + aPostfix;
 
-        maDefColors.append( XColorEntry( aCol, aName ));
+        aDefColors.append( XColorEntry( aCol, aName ));
     }
-    return true;
+
+    return aDefColors;
 }
 
-void SvxChartOptions::ImplCommit()
+void SvxChartOptions::SetDefaultColors( const SvxChartColorTable& rDefColors )
 {
-    uno::Sequence< OUString > aNames = GetPropertyNames();
-    uno::Sequence< uno::Any > aValues( aNames.getLength());
-
-    if( aValues.hasElements() )
+    // 1. default colors for series
+    // convert list to sequence
+    const size_t nCount = rDefColors.size();
+    uno::Sequence< sal_Int64 > aColors( nCount );
+    auto aColorsRange = asNonConstRange(aColors);
+    for( size_t i=0; i < nCount; i++ )
     {
-        // 1. default colors for series
-        // convert list to sequence
-        const size_t nCount = maDefColors.size();
-        uno::Sequence< sal_Int64 > aColors( nCount );
-        auto aColorsRange = asNonConstRange(aColors);
-        for( size_t i=0; i < nCount; i++ )
-        {
-            Color aData = maDefColors.getColor( i );
-            aColorsRange[ i ] = sal_uInt32(aData);
-        }
-
-        aValues.getArray()[0] <<= aColors;
+        Color aData = rDefColors.getColor( i );
+        aColorsRange[ i ] = sal_uInt32(aData);
     }
-
-    PutProperties( aNames, aValues );
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Chart::DefaultColor::Series::set(aColors, batch);
+    batch->commit();
 }
-
-void SvxChartOptions::Notify( const css::uno::Sequence< OUString >& )
-{
-}
-
-
 
 
 SvxChartColorTableItem::SvxChartColorTableItem( sal_uInt16 nWhich_, SvxChartColorTable aTable ) :

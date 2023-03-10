@@ -19,10 +19,8 @@
 
 #pragma once
 
-#include <unotools/configitem.hxx>
 #include <svl/poolitem.hxx>
 #include <svx/xtable.hxx>
-
 #include <vector>
 
 class SvxChartColorTable
@@ -51,29 +49,10 @@ public:
 
 // all options
 
-class SvxChartOptions : public ::utl::ConfigItem
+namespace SvxChartOptions
 {
-private:
-    SvxChartColorTable          maDefColors;
-    bool                        mbIsInitialized;
-
-    css::uno::Sequence< OUString >
-                                maPropertyNames;
-
-    const css::uno::Sequence< OUString >& GetPropertyNames() const
-        { return maPropertyNames; }
-    bool RetrieveOptions();
-
-    virtual void                ImplCommit() override;
-
-public:
-    SvxChartOptions();
-    virtual ~SvxChartOptions() override;
-
-    const SvxChartColorTable&   GetDefaultColors();
-    void                        SetDefaultColors( const SvxChartColorTable& aCol );
-
-    virtual void Notify( const css::uno::Sequence< OUString >& _rPropertyNames) override;
+    SvxChartColorTable GetDefaultColors();
+    void SetDefaultColors( const SvxChartColorTable& aCol );
 };
 
 

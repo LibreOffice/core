@@ -1134,9 +1134,8 @@ std::optional<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
 
         case SID_SCH_EDITOPTIONS:
         {
-            SvxChartOptions aChartOpt;
             pRet.emplace( SfxGetpApp()->GetPool(), svl::Items<SID_SCH_EDITOPTIONS, SID_SCH_EDITOPTIONS> );
-            pRet->Put( SvxChartColorTableItem( SID_SCH_EDITOPTIONS, aChartOpt.GetDefaultColors() ) );
+            pRet->Put( SvxChartColorTableItem( SID_SCH_EDITOPTIONS, SvxChartOptions::GetDefaultColors() ) );
             break;
         }
     }
