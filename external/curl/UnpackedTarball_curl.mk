@@ -21,9 +21,10 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,curl,\
 
 $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/curl-msvc.patch.1 \
+	external/curl/curl-msvc-zlib.patch.1 \
 	external/curl/curl-msvc-disable-protocols.patch.1 \
-	external/curl/curl-7.26.0_win-proxy.patch \
 	external/curl/zlib.patch.0 \
+	external/curl/configurable-z-option.patch.0 \
 ))
 
 ifeq ($(SYSTEM_NSS),)
@@ -35,6 +36,12 @@ endif
 ifeq ($(OS)-$(COM_IS_CLANG),WNT-TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,curl, \
     external/curl/clang-cl.patch.0 \
+))
+endif
+
+ifneq ($(filter -fsanitize=%,$(CC)),)
+$(eval $(call gb_UnpackedTarball_add_patches,curl, \
+    external/curl/asan-poison-nsspem.patch.0 \
 ))
 endif
 

@@ -1,0 +1,55 @@
+From 7b69af66227309e9c258beca3bc3934be454a221 Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Wed, 19 May 2021 21:11:40 +0200
+Subject: [PATCH] fix build with MSVC
+
+C:/PROGRA~2/MIB055~1/2019/COMMUN~1/VC/Tools/MSVC/1428~1.299/Include\xutility(138): error C2668: 'libetonyek::IWORKStyle::IWORKStyle': ambiguous call to overloaded function
+C:\cygwin\home\tdf\lode\jenkins\workspace\gerrit_windows\workdir\UnpackedTarball\libetonyek\src\lib\IWORKStyle.h(32): note: could be 'libetonyek::IWORKStyle::IWORKStyle(const libetonyek::IWORKPropertyMap &,const boost::optional<std::string> &,const libetonyek::IWORKStylePtr_t &)'
+C:\cygwin\home\tdf\lode\jenkins\workspace\gerrit_windows\workdir\UnpackedTarball\libetonyek\src\lib\IWORKStyle.h(31): note: or       'libetonyek::IWORKStyle::IWORKStyle(const libetonyek::IWORKPropertyMap &,const boost::optional<std::string> &,const boost::optional<std::string> &)'
+C:/PROGRA~2/MIB055~1/2019/COMMUN~1/VC/Tools/MSVC/1428~1.299/Include\xutility(137): note: while trying to match the argument list '(libetonyek::IWORKPropertyMap, const boost::none_t, _Ty)'
+        with
+        [
+            _Ty=nullptr
+        ]
+C:/PROGRA~2/MIB055~1/2019/COMMUN~1/VC/Tools/MSVC/1428~1.299/Include\memory(2186): note: see reference to function template instantiation 'void std::_Construct_in_place<_Ty,libetonyek::IWORKPropertyMap&,const boost::none_t&,nullptr>(_Ty &,libetonyek::IWORKPropertyMap &,const boost::none_t &,nullptr &&) noexcept(false)' being compiled
+        with
+        [
+            _Ty=libetonyek::IWORKStyle
+        ]
+C:/PROGRA~2/MIB055~1/2019/COMMUN~1/VC/Tools/MSVC/1428~1.299/Include\memory(2906): note: see reference to function template instantiation 'std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<libetonyek::IWORKPropertyMap&,const boost::none_t&,nullptr>(libetonyek::IWORKPropertyMap &,const boost::none_t &,nullptr &&)' being compiled
+        with
+        [
+            _Ty=libetonyek::IWORKStyle
+        ]
+C:/PROGRA~2/MIB055~1/2019/COMMUN~1/VC/Tools/MSVC/1428~1.299/Include\memory(2907): note: see reference to function template instantiation 'std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<libetonyek::IWORKPropertyMap&,const boost::none_t&,nullptr>(libetonyek::IWORKPropertyMap &,const boost::none_t &,nullptr &&)' being compiled
+        with
+        [
+            _Ty=libetonyek::IWORKStyle
+        ]
+C:/cygwin/home/tdf/lode/jenkins/workspace/gerrit_windows/workdir/UnpackedTarball/libetonyek/src/lib/IWAParser.cpp(2358): note: see reference to function template instantiation 'std::shared_ptr<libetonyek::IWORKStyle> std::make_shared<libetonyek::IWORKStyle,libetonyek::IWORKPropertyMap&,const boost::none_t&,nullptr>(libetonyek::IWORKPropertyMap &,const boost::none_t &,nullptr &&)' being compiled
+
+Change-Id: Idf871474b2a20f252073846388d018cccc15bc11
+---
+ src/lib/IWAParser.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/lib/IWAParser.cpp b/src/lib/IWAParser.cpp
+index a2bd292..1fdeae7 100644
+--- a/src/lib/IWAParser.cpp
++++ b/src/lib/IWAParser.cpp
+@@ -2355,10 +2355,10 @@ void IWAParser::parseAuthorInComment(unsigned id)
+     IWORKPropertyMap props;
+     // normally yellow, but blue may be better in LO
+     props.put<property::FontColor>(IWORKColor(0,0,1,1));
+-    spans[0]=std::make_shared<IWORKStyle>(props, boost::none, nullptr);
++    spans[0]=std::make_shared<IWORKStyle>(props, boost::none, IWORKStylePtr_t());
+     // reset color to default, if not, comment will be blue colored
+     props.put<property::FontColor>(IWORKColor(0,0,0,1));
+-    spans[unsigned(len)]=std::make_shared<IWORKStyle>(props, boost::none, nullptr);
++    spans[unsigned(len)]=std::make_shared<IWORKStyle>(props, boost::none, IWORKStylePtr_t());
+     text.setSpans(spans);
+     text.parse(*m_currentText);
+   }
+-- 
+2.31.1
+

@@ -1,7 +1,7 @@
 diff -ru a/nspr/configure b/nspr/configure
 --- a/a/nspr/configure	2014-09-29 16:50:33.907375937 +0100
 +++ b/b/nspr/configure	2014-09-29 16:51:59.213931947 +0100
-@@ -6453,6 +6453,9 @@
+@@ -6448,6 +6448,9 @@
      AS='$(CC) -x assembler-with-cpp'
      CFLAGS="$CFLAGS -Wall -fno-common"
      case "${target_cpu}" in
@@ -11,7 +11,7 @@ diff -ru a/nspr/configure b/nspr/configure
          arm*)
              CPU_ARCH=arm
              ;;
-@@ -6578,7 +6579,7 @@
+@@ -6483,7 +6486,7 @@
  
  
      DSO_CFLAGS=-fPIC
@@ -23,7 +23,7 @@ diff -ru a/nspr/configure b/nspr/configure
 diff -ru a/nss/coreconf/Darwin.mk b/nss/coreconf/Darwin.mk
 --- a/a/nss/coreconf/Darwin.mk	2014-09-29 16:50:22.992304799 +0100
 +++ b/b/nss/coreconf/Darwin.mk	2014-09-29 16:51:59.214931953 +0100
-@@ -20,13 +24,17 @@
+@@ -20,13 +20,17 @@
  
  ifeq (,$(filter-out i%86,$(CPU_ARCH)))
  ifdef USE_64
@@ -41,7 +41,7 @@ diff -ru a/nss/coreconf/Darwin.mk b/nss/coreconf/Darwin.mk
  override CPU_ARCH	= x86
  endif
  else
-@@ -40,19 +48,20 @@
+@@ -33,19 +37,20 @@
  ifeq (arm,$(CPU_ARCH))
  # Nothing set for arm currently.
  else
@@ -66,7 +66,7 @@ diff -ru a/nss/coreconf/Darwin.mk b/nss/coreconf/Darwin.mk
          # GCC <= 3
          DARWIN_SDK_FRAMEWORKS = -F$(MACOS_SDK_DIR)/System/Library/Frameworks
          ifneq (,$(shell find $(MACOS_SDK_DIR)/Library/Frameworks -maxdepth 0))
-@@ -108,7 +120,7 @@
+@@ -108,7 +113,7 @@
  # May override this with different compatibility and current version numbers.
  DARWIN_DYLIB_VERSIONS = -compatibility_version 1 -current_version 1
  # May override this with -bundle to create a loadable module.
@@ -78,7 +78,7 @@ diff -ru a/nss/coreconf/Darwin.mk b/nss/coreconf/Darwin.mk
 diff -ru a/nss/Makefile b/nss/Makefile
 --- a/a/nss/Makefile	2014-09-29 16:50:22.990304789 +0100
 +++ b/b/nss/Makefile	2014-09-29 16:51:59.207931908 +0100
-@@ -72,6 +72,9 @@
+@@ -82,6 +82,9 @@
  ifeq ($(OS_TARGET),WIN95)
  NSPR_CONFIGURE_OPTS += --enable-win32-target=WIN95
  endif

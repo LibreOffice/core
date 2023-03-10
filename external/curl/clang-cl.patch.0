@@ -1,6 +1,6 @@
 --- winbuild/MakefileBuild.vc
 +++ winbuild/MakefileBuild.vc
-@@ -60,7 +60,7 @@
+@@ -52,7 +52,7 @@
  !ELSE
  CC_NODEBUG  = $(CC) /O2 /DNDEBUG
  CC_DEBUG    = $(CC) /Od /D_DEBUG /RTC1 /Z7 /LDd
