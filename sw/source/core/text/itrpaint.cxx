@@ -390,7 +390,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         }
 
         // multiple numbering portions are possible :(
-        if (pPor->InNumberGrp() && !pPor->IsFootnoteNumPortion()
+        if (pPor->InNumberGrp() // also footnote label
             && !static_cast<SwNumberPortion const*>(pPor)->IsFollow())
         {
             assert(!roTaggedLabel);
@@ -411,7 +411,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         }
 
         // lazy open LIBody and paragraph tag after num portions have been painted to Lbl
-        if (pPor->InNumberGrp() && !pPor->IsFootnoteNumPortion()
+        if (pPor->InNumberGrp() // also footnote label
             // note: numbering portion may be split if it has multiple scripts
             && !static_cast<SwNumberPortion const*>(pPor)->HasFollow()) // so wait for the last one
         {

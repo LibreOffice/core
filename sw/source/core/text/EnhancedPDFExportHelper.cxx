@@ -1557,7 +1557,6 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
             }
             break;
 
-        case PortionType::FootnoteNum: // tdf#152218 link both directions
         case PortionType::Footnote :
             nPDFType = vcl::PDFWriter::Link;
             aPDFType = aLinkString;
@@ -1587,6 +1586,15 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
             }
             break;
 
+        // for FootnoteNum, is called twice: outer generates Lbl, inner Link
+        case PortionType::FootnoteNum:
+            if (!mpPorInfo->m_isNumberingLabel)
+            {   // tdf#152218 link both directions
+                nPDFType = vcl::PDFWriter::Link;
+                aPDFType = aLinkString;
+                break;
+            }
+            [[fallthrough]];
         case PortionType::Number:
         case PortionType::Bullet:
         case PortionType::GrfNum:
