@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <map>
+#include <mutex>
 #include <vector>
 
 #include <com/sun/star/sdbc/XPooledConnection.hpp>
@@ -105,7 +106,7 @@ namespace connectivity
         TConnectionMap          m_aPool;                // the pooled connections
         TActiveConnectionMap    m_aActiveConnections;   // the currently active connections
 
-        ::osl::Mutex            m_aMutex;
+        std::mutex              m_aMutex;
         ::rtl::Reference<OPoolTimer>    m_xInvalidator;         // invalidates the conntection pool when shot
 
         css::uno::Reference< css::sdbc::XDriver >             m_xDriver;      // the one and only driver for this connectionpool

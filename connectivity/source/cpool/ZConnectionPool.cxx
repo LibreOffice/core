@@ -129,7 +129,7 @@ struct TConnectionPoolFunctor
 
 void OConnectionPool::clear(bool _bDispose)
 {
-    MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     if(m_xInvalidator->isTicking())
         m_xInvalidator->stop();
@@ -153,7 +153,7 @@ void OConnectionPool::clear(bool _bDispose)
 
 Reference< XConnection > OConnectionPool::getConnectionWithInfo( const OUString& _rURL, const Sequence< PropertyValue >& _rInfo )
 {
-    MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     Reference<XConnection> xConnection;
 
@@ -177,7 +177,7 @@ void SAL_CALL OConnectionPool::disposing( const css::lang::EventObject& Source )
     Reference<XConnection> xConnection(Source.Source,UNO_QUERY);
     if(xConnection.is())
     {
-        MutexGuard aGuard(m_aMutex);
+        std::unique_lock aGuard(m_aMutex);
         TActiveConnectionMap::iterator aIter = m_aActiveConnections.find(xConnection);
         OSL_ENSURE(aIter != m_aActiveConnections.end(),"OConnectionPool::disposing: Connection wasn't in pool");
         if(aIter != m_aActiveConnections.end())
@@ -228,7 +228,7 @@ Reference< XConnection> OConnectionPool::createNewConnection(const OUString& _rU
 
 void OConnectionPool::invalidatePooledConnections()
 {
-    MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
     TConnectionMap::iterator aIter = m_aPool.begin();
     for (; aIter != m_aPool.end(); )
     {
