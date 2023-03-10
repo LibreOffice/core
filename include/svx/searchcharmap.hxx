@@ -50,6 +50,7 @@ public:
     virtual void                        SelectIndex( int index, bool bFocus = false ) override;
     void                                AppendCharToList(sal_UCS4 cChar);
     void                                ClearPreviousData();
+    void                                UpdateScrollRange();
 
     virtual sal_Int32                   getMaxCharCount() const override;
 
