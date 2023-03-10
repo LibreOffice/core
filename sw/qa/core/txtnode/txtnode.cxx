@@ -30,6 +30,7 @@
 #include <txatbase.hxx>
 #include <ndtxt.hxx>
 #include <textcontentcontrol.hxx>
+#include <swdtflvr.hxx>
 
 /// Covers sw/source/core/txtnode/ fixes.
 class SwCoreTxtnodeTest : public SwModelTestBase
@@ -326,6 +327,36 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testDateContentControlKeyboard)
     // Without the accompanying fix in place, this test would have failed, the date popup was
     // mouse-only.
     CPPUNIT_ASSERT(bShouldOpen);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testContentControlCopy)
+{
+    // Given a document with a content control:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::CHECKBOX);
+
+    // When copying that content control:
+    pWrtShell->SelAll();
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    xTransfer->Copy();
+    // Kill the selection, go to the end of the document:
+    pWrtShell->EndOfSection();
+    TransferableDataHelper aHelper(xTransfer);
+    SwTransferable::Paste(*pWrtShell, aHelper);
+
+    // Then make sure that the copy is also a checkbox:
+    SwContentControlManager& rManager = pDoc->GetContentControlManager();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rManager.GetCount());
+    const SwFormatContentControl& rFormat1 = rManager.Get(0)->GetContentControl();
+    CPPUNIT_ASSERT_EQUAL(SwContentControlType::CHECKBOX, rFormat1.GetContentControl()->GetType());
+    const SwFormatContentControl& rFormat2 = rManager.Get(1)->GetContentControl();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1 (CHECKBOX)
+    // - Actual  : 0 (RICH_TEXT)
+    // i.e. properties were not copied from the source to the destination content control.
+    CPPUNIT_ASSERT_EQUAL(SwContentControlType::CHECKBOX, rFormat2.GetContentControl()->GetType());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
