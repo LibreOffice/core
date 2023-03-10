@@ -885,6 +885,8 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchUpdateHdl, weld::Entry&, void)
             if(!sName.isEmpty() && sName.toAsciiLowerCase().indexOf(aKeyword.toAsciiLowerCase()) >= 0)
                 m_xSearchSet->AppendCharToList(sChar);
         }
+
+        m_xSearchSet->UpdateScrollRange();
     }
     else
     {
