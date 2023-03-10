@@ -3173,7 +3173,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
          */
         if(m_pImpl->m_nTableDepth == 0 && m_pImpl->GetIsFirstParagraphInSection()
                 && !m_pImpl->GetIsDummyParaAddedForTableInSection() && !m_pImpl->GetIsTextFrameInserted()
-                && !IsInHeaderFooter())
+                && !m_pImpl->GetIsPreviousParagraphFramed() && !IsInHeaderFooter())
         {
             m_pImpl->AddDummyParaForTableInSection();
         }

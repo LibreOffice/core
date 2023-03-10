@@ -128,6 +128,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153592_columnBreaks)
     assertXPath(pXmlDoc, "//w:br", 2);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf104394_lostTextbox, "tdf104394_lostTextbox.docx")
+{
+    // This was only one page b/c the textbox was missing.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak, "tdf153613_anchoredAfterPgBreak.docx")
 {
     const auto& pLayout = parseLayoutDump();
