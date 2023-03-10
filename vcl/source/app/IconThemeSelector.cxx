@@ -88,7 +88,7 @@ IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvi
         if (!bPreferDarkIconTheme)
             r = "elementary";
         else
-            r = "breeze_dark";
+            r = "sifr_dark";
     } else
     {
         if (!bPreferDarkIconTheme)
