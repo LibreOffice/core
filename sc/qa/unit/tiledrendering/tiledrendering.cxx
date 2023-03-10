@@ -61,9 +61,6 @@ static std::ostream& operator<<(std::ostream& os, ViewShellId const & id)
     os << static_cast<sal_Int32>(id); return os;
 }
 
-namespace
-{
-
 class ScTiledRenderingTest : public UnoApiXmlTest
 {
 public:
@@ -71,127 +68,7 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    void testRowColumnHeaders();
-    void testRowColumnSelections();
-    void testPartHash();
-    void testDocumentSize();
-    void testEmptyColumnSelection();
-    void testViewCursors();
-    void testTextViewSelection();
-    void testDocumentSizeChanged();
-    void testViewLock();
-    void testColRowResize();
-    void testUndoShells();
-    void testCreateViewGraphicSelection();
-    void testTextEditViews();
-    void testTextEditViewInvalidations();
-    void testGraphicInvalidate();
-    void testAutoSum();
-    void testHideColRow();
-    void testInvalidateOnCopyPasteCells();
-    void testInvalidateOnInserRowCol();
-    void testCommentCallback();
-    void testUndoLimiting();
-    void testUndoRepairDispatch();
-    void testInsertGraphicInvalidations();
-    void testDocumentSizeWithTwoViews();
-    void testDisableUndoRepair();
-    void testDocumentRepair();
-    void testLanguageStatus();
-    void testMultiViewCopyPaste();
-    void testIMESupport();
-    void testFilterDlg();
-    void testVbaRangeCopyPaste();
-    void testInvalidationLoop();
-    void testPageDownInvalidation();
-    void testSheetChangeInvalidation();
-    void testInsertDeletePageInvalidation();
-    void testGetRowColumnHeadersInvalidation();
-    void testJumpHorizontallyInvalidation();
-    void testJumpToLastRowInvalidation();
-    void testSheetGeometryDataInvariance();
-    void testSheetGeometryDataCorrectness();
-    void testDeleteCellMultilineContent();
-    void testFunctionDlg();
-    void testSpellOnlineParameter();
-    void testSpellOnlineRenderParameter();
-    void testPasteIntoWrapTextCell();
-    void testSortAscendingDescending();
-    void testAutoInputStringBlock();
-    void testAutoInputExactMatch();
-    void testMoveShapeHandle();
-    void testEditCursorBounds();
-    void testTextSelectionBounds();
-    void testSheetViewDataCrash();
-    void testTextBoxInsert();
-    void testCommentCellCopyPaste();
-    void testInvalidEntrySave();
-    void testUndoReordering();
-    void testUndoReorderingRedo();
-    void testUndoReorderingMulti();
-
-    CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
-    CPPUNIT_TEST(testRowColumnHeaders);
-    CPPUNIT_TEST(testRowColumnSelections);
-    CPPUNIT_TEST(testPartHash);
-    CPPUNIT_TEST(testDocumentSize);
-    CPPUNIT_TEST(testEmptyColumnSelection);
-    CPPUNIT_TEST(testViewCursors);
-    CPPUNIT_TEST(testTextViewSelection);
-    CPPUNIT_TEST(testDocumentSizeChanged);
-    CPPUNIT_TEST(testViewLock);
-    CPPUNIT_TEST(testColRowResize);
-    CPPUNIT_TEST(testUndoShells);
-    CPPUNIT_TEST(testCreateViewGraphicSelection);
-    CPPUNIT_TEST(testTextEditViews);
-    CPPUNIT_TEST(testTextEditViewInvalidations);
-    CPPUNIT_TEST(testGraphicInvalidate);
-    CPPUNIT_TEST(testAutoSum);
-    CPPUNIT_TEST(testHideColRow);
-    CPPUNIT_TEST(testInvalidateOnCopyPasteCells);
-    CPPUNIT_TEST(testInvalidateOnInserRowCol);
-    CPPUNIT_TEST(testCommentCallback);
-    CPPUNIT_TEST(testUndoLimiting);
-    CPPUNIT_TEST(testUndoRepairDispatch);
-    CPPUNIT_TEST(testInsertGraphicInvalidations);
-    CPPUNIT_TEST(testDocumentSizeWithTwoViews);
-    CPPUNIT_TEST(testDisableUndoRepair);
-    CPPUNIT_TEST(testDocumentRepair);
-    CPPUNIT_TEST(testLanguageStatus);
-    CPPUNIT_TEST(testMultiViewCopyPaste);
-    CPPUNIT_TEST(testIMESupport);
-    CPPUNIT_TEST(testFilterDlg);
-    CPPUNIT_TEST(testVbaRangeCopyPaste);
-    CPPUNIT_TEST(testInvalidationLoop);
-    CPPUNIT_TEST(testPageDownInvalidation);
-    CPPUNIT_TEST(testSheetChangeInvalidation);
-    CPPUNIT_TEST(testInsertDeletePageInvalidation);
-    CPPUNIT_TEST(testGetRowColumnHeadersInvalidation);
-    CPPUNIT_TEST(testJumpHorizontallyInvalidation);
-    CPPUNIT_TEST(testJumpToLastRowInvalidation);
-    CPPUNIT_TEST(testSheetGeometryDataInvariance);
-    CPPUNIT_TEST(testSheetGeometryDataCorrectness);
-    CPPUNIT_TEST(testDeleteCellMultilineContent);
-    CPPUNIT_TEST(testFunctionDlg);
-    CPPUNIT_TEST(testSpellOnlineParameter);
-    CPPUNIT_TEST(testSpellOnlineRenderParameter);
-    CPPUNIT_TEST(testPasteIntoWrapTextCell);
-    CPPUNIT_TEST(testSortAscendingDescending);
-    CPPUNIT_TEST(testAutoInputStringBlock);
-    CPPUNIT_TEST(testAutoInputExactMatch);
-    CPPUNIT_TEST(testMoveShapeHandle);
-    CPPUNIT_TEST(testEditCursorBounds);
-    CPPUNIT_TEST(testTextSelectionBounds);
-    CPPUNIT_TEST(testSheetViewDataCrash);
-    CPPUNIT_TEST(testTextBoxInsert);
-    CPPUNIT_TEST(testCommentCellCopyPaste);
-    CPPUNIT_TEST(testInvalidEntrySave);
-    CPPUNIT_TEST(testUndoReordering);
-    CPPUNIT_TEST(testUndoReorderingRedo);
-    CPPUNIT_TEST(testUndoReorderingMulti);
-    CPPUNIT_TEST_SUITE_END();
-
-private:
+protected:
     ScModelObj* createDoc(const char* pName);
     void setupLibreOfficeKitViewCallback(SfxViewShell* pViewShell);
     static void callback(int nType, const char* pPayload, void* pData);
@@ -274,7 +151,7 @@ void ScTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
     }
 }
 
-void ScTiledRenderingTest::testRowColumnSelections()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
 {
     ScModelObj* pModelObj = createDoc("select-row-cols.ods");
 
@@ -346,7 +223,7 @@ void ScTiledRenderingTest::testRowColumnSelections()
     CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
 }
 
-void ScTiledRenderingTest::testPartHash()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPartHash)
 {
     ScModelObj* pModelObj = createDoc("sort-range.ods");
 
@@ -360,7 +237,7 @@ void ScTiledRenderingTest::testPartHash()
     CPPUNIT_ASSERT(pModelObj->getPartHash(100).isEmpty());
 }
 
-void ScTiledRenderingTest::testDocumentSize()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDocumentSize)
 {
     ScModelObj* pModelObj = createDoc("sort-range.ods");
     ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( pModelObj->GetEmbeddedObject() );
@@ -389,7 +266,7 @@ void ScTiledRenderingTest::testDocumentSize()
     CPPUNIT_ASSERT_EQUAL(osl::Condition::result_ok, aResult);
 }
 
-void ScTiledRenderingTest::testEmptyColumnSelection()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEmptyColumnSelection)
 {
     ScModelObj* pModelObj = createDoc("select-row-cols.ods");
 
@@ -404,6 +281,8 @@ void ScTiledRenderingTest::testEmptyColumnSelection()
     CPPUNIT_ASSERT_EQUAL(OString(), apitest::helper::transferable::getTextSelection(pModelObj->getSelection(), "text/plain;charset=utf-8"));
 }
 
+namespace
+{
 struct EditCursorMessage final {
     tools::Rectangle m_aRelRect;
     Point m_aRefPoint;
@@ -700,9 +579,9 @@ public:
         }
     }
 };
+} //namespace
 
-
-void ScTiledRenderingTest::testViewCursors()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testViewCursors)
 {
     ScModelObj* pModelObj = createDoc("select-row-cols.ods");
     ViewCallback aView1;
@@ -719,7 +598,7 @@ void ScTiledRenderingTest::testViewCursors()
     CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated);
 }
 
-void ScTiledRenderingTest::testSpellOnlineRenderParameter()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSpellOnlineRenderParameter)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScDocument* pDoc = pModelObj->GetDocument();
@@ -734,7 +613,7 @@ void ScTiledRenderingTest::testSpellOnlineRenderParameter()
     CPPUNIT_ASSERT_EQUAL(!bSet, pDoc->GetDocOptions().IsAutoSpell());
 }
 
-void ScTiledRenderingTest::testTextViewSelection()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextViewSelection)
 {
     // Create two views, and leave the second one current.
     ScModelObj* pModelObj = createDoc("select-row-cols.ods");
@@ -750,7 +629,7 @@ void ScTiledRenderingTest::testTextViewSelection()
     CPPUNIT_ASSERT(aView1.m_bTextViewSelectionInvalidated);
 }
 
-void ScTiledRenderingTest::testDocumentSizeChanged()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDocumentSizeChanged)
 {
     // Load a document that doesn't have much content.
     createDoc("small.ods");
@@ -767,7 +646,7 @@ void ScTiledRenderingTest::testDocumentSizeChanged()
     CPPUNIT_ASSERT(m_aDocumentSize.getHeight() > 0);
 }
 
-void ScTiledRenderingTest::testViewLock()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testViewLock)
 {
     // Load a document that has a shape and create two views.
     ScModelObj* pModelObj = createDoc("shape.ods");
@@ -795,6 +674,8 @@ void ScTiledRenderingTest::testViewLock()
     CPPUNIT_ASSERT(!aView1.m_bViewLock);
 }
 
+namespace
+{
 void lcl_extractHandleParameters(std::string_view selection, sal_uInt32& id, sal_uInt32& x, sal_uInt32& y)
 {
     OString extraInfo( selection.substr(selection.find("{")) );
@@ -812,8 +693,9 @@ void lcl_extractHandleParameters(std::string_view selection, sal_uInt32& id, sal
     x = handle0.get_child("point").get_child("x").get_value<int>();
     y = handle0.get_child("point").get_child("y").get_value<int>();
 }
+} //namespace
 
-void ScTiledRenderingTest::testMoveShapeHandle()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMoveShapeHandle)
 {
     ScModelObj* pModelObj = createDoc("shape.ods");
     ViewCallback aView1;
@@ -841,7 +723,7 @@ void ScTiledRenderingTest::testMoveShapeHandle()
     }
 }
 
-void ScTiledRenderingTest::testColRowResize()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testColRowResize)
 {
     ScModelObj* pModelObj = createDoc("sort-range.ods");
     ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( pModelObj->GetEmbeddedObject() );
@@ -875,7 +757,7 @@ void ScTiledRenderingTest::testColRowResize()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(2000), nHeight);
 }
 
-void ScTiledRenderingTest::testUndoShells()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoShells)
 {
     ScModelObj* pModelObj = createDoc("small.ods");
     // Clear the currently selected cell.
@@ -892,6 +774,8 @@ void ScTiledRenderingTest::testUndoShells()
     CPPUNIT_ASSERT_EQUAL(ViewShellId(nView1), pUndoManager->GetUndoAction()->GetViewShellId());
 }
 
+namespace
+{
 bool lcl_hasEditView(const ScViewData& rViewData)
 {
     bool bResult = false;
@@ -902,8 +786,9 @@ bool lcl_hasEditView(const ScViewData& rViewData)
     }
     return bResult;
 }
+} // namespace
 
-void ScTiledRenderingTest::testTextEditViews()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextEditViews)
 {
     ScModelObj* pModelObj = createDoc("small.ods");
     CPPUNIT_ASSERT(pModelObj);
@@ -934,7 +819,7 @@ void ScTiledRenderingTest::testTextEditViews()
     CPPUNIT_ASSERT(lcl_hasEditView(*pViewData));
 }
 
-void ScTiledRenderingTest::testTextEditViewInvalidations()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextEditViewInvalidations)
 {
     ScModelObj* pModelObj = createDoc("small.ods");
     CPPUNIT_ASSERT(pModelObj);
@@ -991,7 +876,7 @@ void ScTiledRenderingTest::testTextEditViewInvalidations()
     CPPUNIT_ASSERT(aView3.m_bInvalidateTiles);
 }
 
-void ScTiledRenderingTest::testCreateViewGraphicSelection()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCreateViewGraphicSelection)
 {
     // Load a document that has a shape and create two views.
     ScModelObj* pModelObj = createDoc("shape.ods");
@@ -1022,7 +907,7 @@ void ScTiledRenderingTest::testCreateViewGraphicSelection()
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
 }
 
-void ScTiledRenderingTest::testGraphicInvalidate()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGraphicInvalidate)
 {
     // Load a document that has a shape and create two views.
     ScModelObj* pModelObj = createDoc("shape.ods");
@@ -1048,7 +933,7 @@ void ScTiledRenderingTest::testGraphicInvalidate()
     CPPUNIT_ASSERT(!aView.m_bFullInvalidateTiles);
 }
 
-void ScTiledRenderingTest::testAutoSum()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testAutoSum)
 {
     createDoc("small.ods");
 
@@ -1059,7 +944,7 @@ void ScTiledRenderingTest::testAutoSum()
     CPPUNIT_ASSERT(aView.m_sCellFormula.startsWith("=SUM("));
 }
 
-void ScTiledRenderingTest::testHideColRow()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHideColRow)
 {
     createDoc("small.ods");
     {
@@ -1114,7 +999,7 @@ void ScTiledRenderingTest::testHideColRow()
     CPPUNIT_ASSERT_EQUAL(nOldCurX, nNewCurX);
 }
 
-void ScTiledRenderingTest::testInvalidateOnCopyPasteCells()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateOnCopyPasteCells)
 {
     ScModelObj* pModelObj = createDoc("small.ods");
     CPPUNIT_ASSERT(pModelObj);
@@ -1148,7 +1033,7 @@ void ScTiledRenderingTest::testInvalidateOnCopyPasteCells()
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
 }
 
-void ScTiledRenderingTest::testInvalidateOnInserRowCol()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateOnInserRowCol)
 {
     ScModelObj* pModelObj = createDoc("small.ods");
     CPPUNIT_ASSERT(pModelObj);
@@ -1190,7 +1075,7 @@ void ScTiledRenderingTest::testInvalidateOnInserRowCol()
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(254925, -15, 32212230, 63990), aView.m_aInvalidations[0]);
 }
 
-void ScTiledRenderingTest::testCommentCallback()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
 {
     // Comments callback are emitted only if tiled annotations are off
     comphelper::LibreOfficeKit::setTiledAnnotations(false);
@@ -1275,7 +1160,7 @@ void ScTiledRenderingTest::testCommentCallback()
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
 }
 
-void ScTiledRenderingTest::testUndoLimiting()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoLimiting)
 {
     ScModelObj* pModelObj = createDoc("small.ods");
     CPPUNIT_ASSERT(pModelObj);
@@ -1333,7 +1218,7 @@ void ScTiledRenderingTest::testUndoLimiting()
     CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetRedoActionCount());
 }
 
-void ScTiledRenderingTest::testUndoRepairDispatch()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoRepairDispatch)
 {
     ScModelObj* pModelObj = createDoc("small.ods");
     CPPUNIT_ASSERT(pModelObj);
@@ -1380,7 +1265,7 @@ void ScTiledRenderingTest::testUndoRepairDispatch()
     CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetUndoActionCount());
 }
 
-void ScTiledRenderingTest::testInsertGraphicInvalidations()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertGraphicInvalidations)
 {
     ScModelObj* pModelObj = createDoc("small.ods");
     CPPUNIT_ASSERT(pModelObj);
@@ -1414,7 +1299,7 @@ void ScTiledRenderingTest::testInsertGraphicInvalidations()
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
 }
 
-void ScTiledRenderingTest::testDocumentSizeWithTwoViews()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDocumentSizeWithTwoViews)
 {
     // Open a document that has the cursor far away & paint a tile
     ScModelObj* pModelObj = createDoc("cursor-away.ods");
@@ -1452,7 +1337,7 @@ void ScTiledRenderingTest::testDocumentSizeWithTwoViews()
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
 }
 
-void ScTiledRenderingTest::testDisableUndoRepair()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDisableUndoRepair)
 {
     ScModelObj* pModelObj = createDoc("cursor-away.ods");
     CPPUNIT_ASSERT(pModelObj);
@@ -1524,7 +1409,7 @@ void ScTiledRenderingTest::testDisableUndoRepair()
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
 }
 
-void ScTiledRenderingTest::testDocumentRepair()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDocumentRepair)
 {
     // Create two views.
     ScModelObj* pModelObj = createDoc("cursor-away.ods");
@@ -1574,7 +1459,7 @@ void ScTiledRenderingTest::testDocumentRepair()
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
 }
 
-void ScTiledRenderingTest::testLanguageStatus()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLanguageStatus)
 {
     ScModelObj* pModelObj = createDoc("small.ods");
     CPPUNIT_ASSERT(pModelObj);
@@ -1627,7 +1512,7 @@ void ScTiledRenderingTest::testLanguageStatus()
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
 }
 
-void ScTiledRenderingTest::testMultiViewCopyPaste()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMultiViewCopyPaste)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScDocument* pDoc = pModelObj->GetDocument();
@@ -1676,7 +1561,7 @@ void ScTiledRenderingTest::testMultiViewCopyPaste()
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
 }
 
-void ScTiledRenderingTest::testIMESupport()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testIMESupport)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
     VclPtr<vcl::Window> pDocWindow = pModelObj->getDocWindow();
@@ -1707,7 +1592,7 @@ void ScTiledRenderingTest::testIMESupport()
     CPPUNIT_ASSERT_EQUAL(aInputs[aInputs.size() - 1], pDoc->GetString(ScAddress(0, 0, 0)));
 }
 
-void ScTiledRenderingTest::testFilterDlg()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFilterDlg)
 {
     createDoc("empty.ods");
 
@@ -1743,7 +1628,7 @@ void ScTiledRenderingTest::testFilterDlg()
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
 }
 
-void ScTiledRenderingTest::testFunctionDlg()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFunctionDlg)
 {
     createDoc("empty.ods");
 
@@ -1778,7 +1663,7 @@ void ScTiledRenderingTest::testFunctionDlg()
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
 }
 
-void ScTiledRenderingTest::testSpellOnlineParameter()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSpellOnlineParameter)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScDocument* pDoc = pModelObj->GetDocument();
@@ -1800,7 +1685,7 @@ void ScTiledRenderingTest::testSpellOnlineParameter()
     CPPUNIT_ASSERT_EQUAL(!bSet, pDoc->GetDocOptions().IsAutoSpell());
 }
 
-void ScTiledRenderingTest::testVbaRangeCopyPaste()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVbaRangeCopyPaste)
 {
     ScModelObj* pModelObj = createDoc("RangeCopyPaste.ods");
     ScDocShell* pDocShell = dynamic_cast< ScDocShell* >( pModelObj->GetEmbeddedObject() );
@@ -1819,7 +1704,7 @@ void ScTiledRenderingTest::testVbaRangeCopyPaste()
     CPPUNIT_ASSERT(!pDocShell->GetClipData().is());
 }
 
-void ScTiledRenderingTest::testInvalidationLoop()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidationLoop)
 {
     // Load the document with a form control.
     createDoc("invalidation-loop.fods");
@@ -1828,7 +1713,7 @@ void ScTiledRenderingTest::testInvalidationLoop()
     Scheduler::ProcessEventsToIdle();
 }
 
-void ScTiledRenderingTest::testPageDownInvalidation()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPageDownInvalidation)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScViewData* pViewData = ScDocShell::GetViewData();
@@ -1849,7 +1734,7 @@ void ScTiledRenderingTest::testPageDownInvalidation()
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(15, 15, 1230, 225), aView1.m_aInvalidations[0]);
 }
 
-void ScTiledRenderingTest::testSheetChangeInvalidation()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetChangeInvalidation)
 {
     const bool oldPartInInvalidation = comphelper::LibreOfficeKit::isPartInInvalidation();
     comphelper::LibreOfficeKit::setPartInInvalidation(true);
@@ -1887,7 +1772,7 @@ void ScTiledRenderingTest::testSheetChangeInvalidation()
     comphelper::LibreOfficeKit::setPartInInvalidation(oldPartInInvalidation);
 }
 
-void ScTiledRenderingTest::testInsertDeletePageInvalidation()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertDeletePageInvalidation)
 {
     ScModelObj* pModelObj = createDoc("insert_delete_sheet.ods");
     // the document has 1 sheet
@@ -1926,7 +1811,7 @@ void ScTiledRenderingTest::testInsertDeletePageInvalidation()
     CPPUNIT_ASSERT_EQUAL(1, pModelObj->getParts());
 }
 
-void ScTiledRenderingTest::testGetRowColumnHeadersInvalidation()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetRowColumnHeadersInvalidation)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScViewData* pViewData = ScDocShell::GetViewData();
@@ -1970,7 +1855,7 @@ void ScTiledRenderingTest::testGetRowColumnHeadersInvalidation()
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(49725, 0, 75225, 19380), aView1.m_aInvalidations[0]);
 }
 
-void ScTiledRenderingTest::testJumpHorizontallyInvalidation()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testJumpHorizontallyInvalidation)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScViewData* pViewData = ScDocShell::GetViewData();
@@ -1994,7 +1879,7 @@ void ScTiledRenderingTest::testJumpHorizontallyInvalidation()
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(26775, 0, 39525, 13005), aView1.m_aInvalidations[0]);
 }
 
-void ScTiledRenderingTest::testJumpToLastRowInvalidation()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testJumpToLastRowInvalidation)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScViewData* pViewData = ScDocShell::GetViewData();
@@ -2016,7 +1901,7 @@ void ScTiledRenderingTest::testJumpToLastRowInvalidation()
 }
 
 // We need to ensure that views are not perterbed by rendering (!?) hmm ...
-void ScTiledRenderingTest::testRowColumnHeaders()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnHeaders)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScViewData* pViewData = ScDocShell::GetViewData();
@@ -2067,6 +1952,8 @@ void ScTiledRenderingTest::testRowColumnHeaders()
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
 }
 
+namespace
+{
 // Helper structs for setup and testing of ScModelObj::getSheetGeometryData()
 struct SpanEntry
 {
@@ -2198,11 +2085,12 @@ public:
         aRows.testPropertyTree(aTree.get_child("rows"), false);
     }
 };
+} //namespace
 
 // getSheetGeometryData() should return the exact same message
 // irrespective of client zoom and view-area. Switching views
 // should also not alter it.
-void ScTiledRenderingTest::testSheetGeometryDataInvariance()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetGeometryDataInvariance)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScDocument* pDoc = pModelObj->GetDocument();
@@ -2305,7 +2193,7 @@ void ScTiledRenderingTest::testSheetGeometryDataInvariance()
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
 }
 
-void ScTiledRenderingTest::testSheetGeometryDataCorrectness()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetGeometryDataCorrectness)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScDocument* pDoc = pModelObj->GetDocument();
@@ -2401,7 +2289,7 @@ void ScTiledRenderingTest::testSheetGeometryDataCorrectness()
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
 }
 
-void ScTiledRenderingTest::testDeleteCellMultilineContent()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDeleteCellMultilineContent)
 {
     ScModelObj* pModelObj = createDoc("multiline.ods");
     CPPUNIT_ASSERT(pModelObj);
@@ -2432,7 +2320,7 @@ void ScTiledRenderingTest::testDeleteCellMultilineContent()
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
 }
 
-void ScTiledRenderingTest::testPasteIntoWrapTextCell()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPasteIntoWrapTextCell)
 {
     comphelper::LibreOfficeKit::setCompatFlag(
         comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
@@ -2519,7 +2407,7 @@ void ScTiledRenderingTest::testPasteIntoWrapTextCell()
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
 }
 
-void ScTiledRenderingTest::testSortAscendingDescending()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSortAscendingDescending)
 {
     comphelper::LibreOfficeKit::setCompatFlag(
         comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
@@ -2567,6 +2455,8 @@ void ScTiledRenderingTest::testSortAscendingDescending()
     CPPUNIT_ASSERT_EQUAL(OString("rows"), aView.m_sInvalidateSheetGeometry);
 }
 
+namespace
+{
 void lcl_typeCharsInCell(const std::string& aStr, SCCOL nCol, SCROW nRow, ScTabViewShell* pView,
     ScModelObj* pModelObj, bool bInEdit = false, bool bCommit = true)
 {
@@ -2587,8 +2477,9 @@ void lcl_typeCharsInCell(const std::string& aStr, SCCOL nCol, SCROW nRow, ScTabV
         Scheduler::ProcessEventsToIdle();
     }
 }
+} //namespace
 
-void ScTiledRenderingTest::testAutoInputStringBlock()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testAutoInputStringBlock)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
     CPPUNIT_ASSERT(pModelObj);
@@ -2621,7 +2512,7 @@ void ScTiledRenderingTest::testAutoInputStringBlock()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("A11 should autocomplete", OUString("XYZ"), pDoc->GetString(aA11));
 }
 
-void ScTiledRenderingTest::testAutoInputExactMatch()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testAutoInputExactMatch)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
     CPPUNIT_ASSERT(pModelObj);
@@ -2668,7 +2559,7 @@ void ScTiledRenderingTest::testAutoInputExactMatch()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("7: A8 should autocomplete", OUString("Time"), pDoc->GetString(aA8));
 }
 
-void ScTiledRenderingTest::testEditCursorBounds()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEditCursorBounds)
 {
     comphelper::LibreOfficeKit::setCompatFlag(
         comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
@@ -2711,7 +2602,7 @@ void ScTiledRenderingTest::testEditCursorBounds()
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
 }
 
-void ScTiledRenderingTest::testTextSelectionBounds()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextSelectionBounds)
 {
     comphelper::LibreOfficeKit::setCompatFlag(
         comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
@@ -2759,7 +2650,7 @@ void ScTiledRenderingTest::testTextSelectionBounds()
     SfxViewShell::Current()->setLibreOfficeKitViewCallback(nullptr);
 }
 
-void ScTiledRenderingTest::testSheetViewDataCrash()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetViewDataCrash)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
 
@@ -2797,7 +2688,7 @@ void ScTiledRenderingTest::testSheetViewDataCrash()
     Scheduler::ProcessEventsToIdle();
 }
 
-void ScTiledRenderingTest::testTextBoxInsert()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextBoxInsert)
 {
     createDoc("empty.ods");
     ViewCallback aView1;
@@ -2816,7 +2707,7 @@ void ScTiledRenderingTest::testTextBoxInsert()
     Scheduler::ProcessEventsToIdle();
 }
 
-void ScTiledRenderingTest::testCommentCellCopyPaste()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
 {
     // Comments callback are emitted only if tiled annotations are off
     comphelper::LibreOfficeKit::setTiledAnnotations(false);
@@ -2908,7 +2799,7 @@ void ScTiledRenderingTest::testCommentCellCopyPaste()
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
 }
 
-void ScTiledRenderingTest::testInvalidEntrySave()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidEntrySave)
 {
     loadFromURL(u"validity.xlsx");
 
@@ -2948,7 +2839,7 @@ void ScTiledRenderingTest::testInvalidEntrySave()
     CPPUNIT_ASSERT_EQUAL(double(41463), pDoc->GetValue(ScAddress(0, 7, 0)));
 }
 
-void ScTiledRenderingTest::testUndoReordering()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReordering)
 {
     ScModelObj* pModelObj = createDoc("small.ods");
     CPPUNIT_ASSERT(pModelObj);
@@ -3007,7 +2898,7 @@ void ScTiledRenderingTest::testUndoReordering()
     CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetUndoActionCount());
 }
 
-void ScTiledRenderingTest::testUndoReorderingRedo()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingRedo)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
     CPPUNIT_ASSERT(pModelObj);
@@ -3097,7 +2988,7 @@ void ScTiledRenderingTest::testUndoReorderingRedo()
     CPPUNIT_ASSERT_EQUAL(OUString("CC"), pDoc->GetString(ScAddress(0, 2, 0)));
 }
 
-void ScTiledRenderingTest::testUndoReorderingMulti()
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingMulti)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
     CPPUNIT_ASSERT(pModelObj);
@@ -3165,10 +3056,6 @@ void ScTiledRenderingTest::testUndoReorderingMulti()
     CPPUNIT_ASSERT_EQUAL(OUString("CC"), pDoc->GetString(ScAddress(0, 2, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("DD"), pDoc->GetString(ScAddress(0, 3, 0)));
 }
-
-}
-
-CPPUNIT_TEST_SUITE_REGISTRATION(ScTiledRenderingTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
