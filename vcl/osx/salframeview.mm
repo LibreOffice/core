@@ -277,6 +277,12 @@ static AquaSalFrame* getMouseContainerFrame()
                                             SalFrameStyleFlags::SIZEABLE|
                                             SalFrameStyleFlags::CLOSEABLE;
 
+        // Reset dark mode colors in HITheme controls after printing
+        // In dark mode, after an NSPrintOperation has completed, macOS draws
+        // HITheme controls with light mode colors so reset all dark mode
+        // colors when an NSWindow gains focus.
+        mpFrame->UpdateDarkMode();
+
         if( mpFrame->mpMenu )
             mpFrame->mpMenu->setMainMenu();
         else if( ! mpFrame->mpParent &&
