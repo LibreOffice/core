@@ -37,13 +37,12 @@ using namespace osl;
 
 using ::dtrans::ClipboardManager;
 
-static osl::Mutex g_InstanceGuard;
+static std::mutex g_InstanceGuard;
 static rtl::Reference<ClipboardManager> g_Instance;
 static bool g_Disposed = false;
 
 
 ClipboardManager::ClipboardManager():
-    WeakComponentImplHelper< XClipboardManager, XEventListener, XServiceInfo > (m_aMutex),
     m_aDefaultName(OUString("default"))
 {
 }
@@ -69,10 +68,10 @@ Sequence< OUString > SAL_CALL ClipboardManager::getSupportedServiceNames(  )
 
 Reference< XClipboard > SAL_CALL ClipboardManager::getClipboard( const OUString& aName )
 {
-    MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     // object is disposed already
-    if (rBHelper.bDisposed)
+    if (m_bDisposed)
         throw DisposedException("object is disposed.",
                                 static_cast < XClipboardManager * > (this));
 
@@ -101,15 +100,15 @@ void SAL_CALL ClipboardManager::addClipboard( const Reference< XClipboard >& xCl
                                        static_cast < XClipboardManager * > (this), 1);
 
     // try to add new clipboard to the list
-    ClearableMutexGuard aGuard(m_aMutex);
-    if (!rBHelper.bDisposed && !rBHelper.bInDispose)
+    std::unique_lock aGuard(m_aMutex);
+    if (!m_bDisposed)
     {
         std::pair< const OUString, Reference< XClipboard > > value (
             aName.getLength() ? aName : m_aDefaultName,
             xClipboard );
 
         std::pair< ClipboardMap::iterator, bool > p = m_aClipboardMap.insert(value);
-        aGuard.clear();
+        aGuard.unlock();
 
         // insert failed, element must exist already
         if (!p.second)
@@ -124,70 +123,54 @@ void SAL_CALL ClipboardManager::addClipboard( const Reference< XClipboard >& xCl
 
 void SAL_CALL ClipboardManager::removeClipboard( const OUString& aName )
 {
-    MutexGuard aGuard(m_aMutex);
-    if (!rBHelper.bDisposed)
+    std::unique_lock aGuard(m_aMutex);
+    if (!m_bDisposed)
         m_aClipboardMap.erase(aName.getLength() ? aName : m_aDefaultName );
 }
 
 Sequence< OUString > SAL_CALL ClipboardManager::listClipboardNames()
 {
-    MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
-    if (rBHelper.bDisposed)
+    if (m_bDisposed)
         throw DisposedException("object is disposed.",
                                 static_cast < XClipboardManager * > (this));
-
-    if (rBHelper.bInDispose)
-        return Sequence< OUString > ();
 
     return comphelper::mapKeysToSequence(m_aClipboardMap);
 }
 
-void SAL_CALL ClipboardManager::dispose()
+void ClipboardManager::disposing(std::unique_lock<std::mutex>& rGuard)
 {
+    rGuard.unlock();
+
     {
-        osl::MutexGuard aGuard(g_InstanceGuard);
+        std::unique_lock aGuard(g_InstanceGuard);
         g_Instance.clear();
         g_Disposed = true;
     }
+
+    // removeClipboard is still allowed here,  so make a copy of the
+    // list (to ensure integrity) and clear the original.
+    rGuard.lock();
+    ClipboardMap aCopy;
+    std::swap(aCopy, m_aClipboardMap);
+    rGuard.unlock();
+
+    // dispose all clipboards still in list
+    for (auto const& elem : aCopy)
     {
-        ClearableMutexGuard aGuard( rBHelper.rMutex );
-        if (!rBHelper.bDisposed && !rBHelper.bInDispose)
+        Reference< XComponent > xComponent(elem.second, UNO_QUERY);
+        if (xComponent.is())
         {
-            rBHelper.bInDispose = true;
-            aGuard.clear();
-
-            // give everyone a chance to save his clipboard instance
-            EventObject aEvt(static_cast < XClipboardManager * > (this));
-            rBHelper.aLC.disposeAndClear( aEvt );
-
-            // removeClipboard is still allowed here,  so make a copy of the
-            // list (to ensure integrity) and clear the original.
-            ClearableMutexGuard aGuard2( rBHelper.rMutex );
-            ClipboardMap aCopy(m_aClipboardMap);
-            m_aClipboardMap.clear();
-            aGuard2.clear();
-
-            // dispose all clipboards still in list
-            for (auto const& elem : aCopy)
+            try
             {
-                Reference< XComponent > xComponent(elem.second, UNO_QUERY);
-                if (xComponent.is())
-                {
-                    try
-                    {
-                        xComponent->removeEventListener(static_cast < XEventListener * > (this));
-                        xComponent->dispose();
-                    }
-                    catch (const Exception&)
-                    {
-                        // exceptions can be safely ignored here.
-                    }
-                }
+                xComponent->removeEventListener(static_cast < XEventListener * > (this));
+                xComponent->dispose();
             }
-
-            rBHelper.bDisposed = true;
-            rBHelper.bInDispose = false;
+            catch (const Exception&)
+            {
+                // exceptions can be safely ignored here.
+            }
         }
     }
 }
@@ -204,7 +187,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 dtrans_ClipboardManager_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    osl::MutexGuard aGuard(g_InstanceGuard);
+    std::unique_lock aGuard(g_InstanceGuard);
     if (g_Disposed)
         return nullptr;
     if (!g_Instance)

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 
 #include <com/sun/star/datatransfer/clipboard/XClipboardManager.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -32,13 +32,12 @@ typedef std::map< OUString, css::uno::Reference< css::datatransfer::clipboard::X
 namespace dtrans
 {
 
-    class ClipboardManager : public ::cppu::WeakComponentImplHelper <
+    class ClipboardManager : public ::comphelper::WeakComponentImplHelper <
       css::datatransfer::clipboard::XClipboardManager,
       css::lang::XEventListener,
       css::lang::XServiceInfo >
     {
         ClipboardMap m_aClipboardMap;
-        ::osl::Mutex m_aMutex;
 
         const OUString m_aDefaultName;
 
@@ -63,7 +62,7 @@ namespace dtrans
          * XComponent
          */
 
-        virtual void SAL_CALL dispose() override;
+        virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         /*
          * XEventListener
