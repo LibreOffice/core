@@ -1557,6 +1557,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
             }
             break;
 
+        case PortionType::FootnoteNum: // tdf#152218 link both directions
         case PortionType::Footnote :
             nPDFType = vcl::PDFWriter::Link;
             aPDFType = aLinkString;
