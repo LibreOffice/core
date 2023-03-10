@@ -22,6 +22,7 @@
 #include <com/sun/star/datatransfer/clipboard/RenderingCapabilities.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <osl/diagnose.h>
 
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::clipboard;
@@ -33,7 +34,6 @@ using namespace osl;
 using ::dtrans::GenericClipboard;
 
 GenericClipboard::GenericClipboard() :
-    WeakComponentImplHelper< XClipboardEx, XClipboardNotifier, XServiceInfo, XInitialization > (m_aMutex),
     m_bInitialized(false)
 {
 }
@@ -72,7 +72,7 @@ Sequence< OUString > SAL_CALL GenericClipboard::getSupportedServiceNames(    )
 
 Reference< XTransferable > SAL_CALL GenericClipboard::getContents()
 {
-    MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
     return m_aContents;
 }
 
@@ -80,7 +80,7 @@ void SAL_CALL GenericClipboard::setContents(const Reference< XTransferable >& xT
                                       const Reference< XClipboardOwner >& xClipboardOwner )
 {
     // remember old values for callbacks before setting the new ones.
-    ClearableMutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     Reference< XClipboardOwner > oldOwner(m_aOwner);
     m_aOwner = xClipboardOwner;
@@ -88,25 +88,16 @@ void SAL_CALL GenericClipboard::setContents(const Reference< XTransferable >& xT
     Reference< XTransferable > oldContents(m_aContents);
     m_aContents = xTrans;
 
-    aGuard.clear();
+    aGuard.unlock();
 
     // notify old owner on loss of ownership
     if( oldOwner.is() )
         oldOwner->lostOwnership(static_cast < XClipboard * > (this), oldContents);
 
     // notify all listeners on content changes
-    OInterfaceContainerHelper *pContainer =
-        rBHelper.aLC.getContainer(cppu::UnoType<XClipboardListener>::get());
-    if (pContainer)
-    {
-        ClipboardEvent aEvent(static_cast < XClipboard * > (this), m_aContents);
-        OInterfaceIteratorHelper aIterator(*pContainer);
-
-        while (aIterator.hasMoreElements())
-        {
-            static_cast<XClipboardListener*>(aIterator.next())->changedContents(aEvent);
-        }
-    }
+    aGuard.lock();
+    ClipboardEvent aEvent(static_cast < XClipboard * > (this), m_aContents);
+    maClipboardListeners.notifyEach(aGuard, &XClipboardListener::changedContents, aEvent);
 }
 
 OUString SAL_CALL GenericClipboard::getName()
@@ -121,19 +112,18 @@ sal_Int8 SAL_CALL GenericClipboard::getRenderingCapabilities()
 
 void SAL_CALL GenericClipboard::addClipboardListener( const Reference< XClipboardListener >& listener )
 {
-    MutexGuard aGuard( rBHelper.rMutex );
-    OSL_ENSURE( !rBHelper.bInDispose, "do not add listeners in the dispose call" );
-    OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );
-    if (!rBHelper.bInDispose && !rBHelper.bDisposed)
-        rBHelper.aLC.addInterface( cppu::UnoType<XClipboardListener>::get(), listener );
+    std::unique_lock aGuard( m_aMutex );
+    OSL_ENSURE( !m_bDisposed, "object is disposed" );
+    if (!m_bDisposed)
+        maClipboardListeners.addInterface( aGuard, listener );
 }
 
 void SAL_CALL GenericClipboard::removeClipboardListener( const Reference< XClipboardListener >& listener )
 {
-    MutexGuard aGuard( rBHelper.rMutex );
-    OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );
-    if (!rBHelper.bInDispose && !rBHelper.bDisposed)
-        rBHelper.aLC.removeInterface( cppu::UnoType<XClipboardListener>::get(), listener );
+    std::unique_lock aGuard( m_aMutex );
+    OSL_ENSURE( !m_bDisposed, "object is disposed" );
+    if (!m_bDisposed)
+        maClipboardListeners.removeInterface( aGuard, listener );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

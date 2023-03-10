@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
 
@@ -31,17 +31,17 @@
 namespace dtrans
 {
 
-    class GenericClipboard : public ::cppu::WeakComponentImplHelper <
+    class GenericClipboard : public ::comphelper::WeakComponentImplHelper <
         css::datatransfer::clipboard::XClipboardEx,
         css::datatransfer::clipboard::XClipboardNotifier,
         css::lang::XServiceInfo,
         css::lang::XInitialization >
     {
-        ::osl::Mutex m_aMutex;
         OUString     m_aName;
 
         css::uno::Reference< css::datatransfer::XTransferable > m_aContents;
         css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner > m_aOwner;
+        comphelper::OInterfaceContainerHelper4<css::datatransfer::clipboard::XClipboardListener> maClipboardListeners;
 
         bool m_bInitialized;
         virtual ~GenericClipboard() override;
