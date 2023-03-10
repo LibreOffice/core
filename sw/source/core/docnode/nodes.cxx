@@ -2181,9 +2181,9 @@ SwContentNode* SwNodes::GoPrevSection( SwPosition * pIdx,
  * Search is started backward with the one before rFrameNd and
  * forward after pEnd.
  *
- * @param rFrameNd in: node with frames to search in; out: found node
+ * @param rFrameNd node with frames to search in
  * @param pEnd last node after rFrameNd that should be excluded from search
- * @return result node; 0 if not found
+ * @return result node; nullptr if not found
  */
 SwNode* SwNodes::FindPrvNxtFrameNode( const SwNode& rFrameNd,
         SwNode const*const pEnd,
@@ -2191,155 +2191,153 @@ SwNode* SwNodes::FindPrvNxtFrameNode( const SwNode& rFrameNd,
 {
     assert(pEnd != nullptr); // every caller currently
 
-    SwNode* pFrameNd = nullptr;
-
     // no layout -> skip
-    if( GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell() )
+    if (!GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell())
+        return nullptr;
+
+    const SwNode *const pSttNd = &rFrameNd;
+
+    // inside a hidden section?
+    const SwSectionNode *const pSectNd = pSttNd->IsSectionNode()
+                ? pSttNd->StartOfSectionNode()->FindSectionNode()
+                : pSttNd->FindSectionNode();
+    if (pSectNd && pSectNd->GetSection().CalcHiddenFlag())
+        return nullptr;
+
+    // in a table in table situation we have to assure that we don't leave the
+    // outer table cell when the inner table is looking for a PrvNxt...
+    const SwTableNode *const pTableNd = pSttNd->IsTableNode()
+            ? pSttNd->StartOfSectionNode()->FindTableNode()
+            : pSttNd->FindTableNode();
+    SwNodeIndex aIdx( rFrameNd );
+
+    // search backward for a content or table node
+
+    --aIdx;
+    SwNode* pFrameNd = &aIdx.GetNode();
+
+    do
     {
-        const SwNode *const pSttNd = &rFrameNd;
-
-        // inside a hidden section?
-        const SwSectionNode *const pSectNd = pSttNd->IsSectionNode()
-                    ? pSttNd->StartOfSectionNode()->FindSectionNode()
-                    : pSttNd->FindSectionNode();
-        if( !( pSectNd && pSectNd->GetSection().CalcHiddenFlag() ) )
+        if (pFrameNd->IsContentNode())
         {
-            // in a table in table situation we have to assure that we don't leave the
-            // outer table cell when the inner table is looking for a PrvNxt...
-            const SwTableNode *const pTableNd = pSttNd->IsTableNode()
-                    ? pSttNd->StartOfSectionNode()->FindTableNode()
-                    : pSttNd->FindTableNode();
-            SwNodeIndex aIdx( rFrameNd );
+            // TODO why does this not check for nested tables like forward direction
+            return pFrameNd;
+        }
+        else if (pFrameNd->IsEndNode() && pFrameNd->StartOfSectionNode()->IsTableNode())
+        {
+            if (pLayout == nullptr
+                || !pLayout->HasMergedParas()
+                || pFrameNd->StartOfSectionNode()->GetRedlineMergeFlag() != SwNode::Merge::Hidden)
+            {
+                pFrameNd = pFrameNd->StartOfSectionNode();
+                return pFrameNd;
+            }
+            else
+            {
+                aIdx = *pFrameNd->StartOfSectionNode();
+                --aIdx;
+                pFrameNd = &aIdx.GetNode();
+            }
+        }
+        else
+        {
+            pFrameNd = GoPrevSection( &aIdx, true, false );
+            if ( nullptr != pFrameNd && !(
+                    ::CheckNodesRange( aIdx.GetNode(), rFrameNd, true ) &&
+                    // Never out of the table at the start
+                    pFrameNd->FindTableNode() == pTableNd &&
+                    // Bug 37652: Never out of the table at the end
+                    (!pFrameNd->FindTableNode() || pFrameNd->FindTableBoxStartNode()
+                        == pSttNd->FindTableBoxStartNode() ) &&
+                     (!pSectNd || pSttNd->IsSectionNode() ||
+                      pSectNd->GetIndex() < pFrameNd->GetIndex())
+                    ))
+            {
+                pFrameNd = nullptr; // no preceding content node, stop search
+            }
+        }
+    }
+    while (pFrameNd != nullptr);
 
-            // search backward for a content or table node
+    // search forward for a content or table node
 
-            --aIdx;
+    aIdx = pEnd->GetIndex() + 1;
+    pFrameNd = &aIdx.GetNode();
+
+    do
+    {
+        if (pFrameNd->IsContentNode())
+        {
+            // Undo when merging a table with one before, if there is also one after it.
+            // However, if the node is in a table, it needs to be returned if the
+            // SttNode is a section or a table!
+            SwTableNode *const pTableNode = pFrameNd->FindTableNode();
+            if (pSttNd->IsTableNode() &&
+                nullptr != pTableNode &&
+                // TABLE IN TABLE:
+                pTableNode != pSttNd->StartOfSectionNode()->FindTableNode())
+            {
+                pFrameNd = pTableNode;
+            }
+            return pFrameNd;
+        }
+        else if (pFrameNd->IsTableNode())
+        {
+            if (pLayout == nullptr
+                || !pLayout->HasMergedParas()
+                || pFrameNd->GetRedlineMergeFlag() != SwNode::Merge::Hidden)
+            {
+                return pFrameNd;
+            }
+            else
+            {
+                aIdx = *pFrameNd->EndOfSectionNode();
+                ++aIdx;
+                pFrameNd = &aIdx.GetNode();
+            }
+        }
+        else
+        {
+            pFrameNd = GoNextSection( &aIdx, true, false );
+            // NEVER leave the section when doing this!
+            if (pFrameNd
+                && !(::CheckNodesRange(aIdx.GetNode(), rFrameNd, true)
+                     && (pFrameNd->FindTableNode() == pTableNd &&
+                        // NEVER go out of the table cell at the end
+                        (!pFrameNd->FindTableNode() || pFrameNd->FindTableBoxStartNode()
+                            == pSttNd->FindTableBoxStartNode()))
+                     && (!pSectNd || pSttNd->IsSectionNode() ||
+                       pSectNd->EndOfSectionIndex() > pFrameNd->GetIndex()))
+                )
+            {
+                pFrameNd = nullptr; // no following content node, stop search
+            }
+        }
+    }
+    while (pFrameNd != nullptr);
+
+    // probably this is dead code, because the GoNextSection()
+    // should have ended up in the first text node in the table and
+    // then checked it's in a table?
+    {
+        aIdx = pEnd->GetIndex() + 1;
+
+        pFrameNd = nullptr;
+
+        // is there some sectionnodes before a tablenode?
+        while( aIdx.GetNode().IsSectionNode() )
+        {
+            const SwSection& rSect = aIdx.GetNode().
+                GetSectionNode()->GetSection();
+            if( rSect.IsHiddenFlag() )
+                aIdx = aIdx.GetNode().EndOfSectionIndex()+1;
+            else
+                ++aIdx;
+        }
+        if( aIdx.GetNode().IsTableNode() )
+        {
             pFrameNd = &aIdx.GetNode();
-
-            do
-            {
-                if (pFrameNd->IsContentNode())
-                {
-                    // TODO why does this not check for nested tables like forward direction
-                    return pFrameNd;
-                }
-                else if (pFrameNd->IsEndNode() && pFrameNd->StartOfSectionNode()->IsTableNode())
-                {
-                    if (pLayout == nullptr
-                        || !pLayout->HasMergedParas()
-                        || pFrameNd->StartOfSectionNode()->GetRedlineMergeFlag() != SwNode::Merge::Hidden)
-                    {
-                        pFrameNd = pFrameNd->StartOfSectionNode();
-                        return pFrameNd;
-                    }
-                    else
-                    {
-                        aIdx = *pFrameNd->StartOfSectionNode();
-                        --aIdx;
-                        pFrameNd = &aIdx.GetNode();
-                    }
-                }
-                else
-                {
-                    pFrameNd = GoPrevSection( &aIdx, true, false );
-                    if ( nullptr != pFrameNd && !(
-                            ::CheckNodesRange( aIdx.GetNode(), rFrameNd, true ) &&
-                            // Never out of the table at the start
-                            pFrameNd->FindTableNode() == pTableNd &&
-                            // Bug 37652: Never out of the table at the end
-                            (!pFrameNd->FindTableNode() || pFrameNd->FindTableBoxStartNode()
-                                == pSttNd->FindTableBoxStartNode() ) &&
-                             (!pSectNd || pSttNd->IsSectionNode() ||
-                              pSectNd->GetIndex() < pFrameNd->GetIndex())
-                            ))
-                    {
-                        pFrameNd = nullptr; // no preceding content node, stop search
-                    }
-                }
-            }
-            while (pFrameNd != nullptr);
-
-            // search forward for a content or table node
-
-            aIdx = pEnd->GetIndex() + 1;
-            pFrameNd = &aIdx.GetNode();
-
-            do
-            {
-                if (pFrameNd->IsContentNode())
-                {
-                    // Undo when merging a table with one before, if there is also one after it.
-                    // However, if the node is in a table, it needs to be returned if the
-                    // SttNode is a section or a table!
-                    SwTableNode *const pTableNode = pFrameNd->FindTableNode();
-                    if (pSttNd->IsTableNode() &&
-                        nullptr != pTableNode &&
-                        // TABLE IN TABLE:
-                        pTableNode != pSttNd->StartOfSectionNode()->FindTableNode())
-                    {
-                        pFrameNd = pTableNode;
-                    }
-                    return pFrameNd;
-                }
-                else if (pFrameNd->IsTableNode())
-                {
-                    if (pLayout == nullptr
-                        || !pLayout->HasMergedParas()
-                        || pFrameNd->GetRedlineMergeFlag() != SwNode::Merge::Hidden)
-                    {
-                        return pFrameNd;
-                    }
-                    else
-                    {
-                        aIdx = *pFrameNd->EndOfSectionNode();
-                        ++aIdx;
-                        pFrameNd = &aIdx.GetNode();
-                    }
-                }
-                else
-                {
-                    pFrameNd = GoNextSection( &aIdx, true, false );
-                    // NEVER leave the section when doing this!
-                    if (pFrameNd
-                        && !(::CheckNodesRange(aIdx.GetNode(), rFrameNd, true)
-                             && (pFrameNd->FindTableNode() == pTableNd &&
-                                // NEVER go out of the table cell at the end
-                                (!pFrameNd->FindTableNode() || pFrameNd->FindTableBoxStartNode()
-                                    == pSttNd->FindTableBoxStartNode()))
-                             && (!pSectNd || pSttNd->IsSectionNode() ||
-                               pSectNd->EndOfSectionIndex() > pFrameNd->GetIndex()))
-                        )
-                    {
-                        pFrameNd = nullptr; // no following content node, stop search
-                    }
-                }
-            }
-            while (pFrameNd != nullptr);
-
-            // probably this is dead code, because the GoNextSection()
-            // should have ended up in the first text node in the table and
-            // then checked it's in a table?
-            {
-                aIdx = pEnd->GetIndex() + 1;
-
-                pFrameNd = nullptr;
-
-                // is there some sectionnodes before a tablenode?
-                while( aIdx.GetNode().IsSectionNode() )
-                {
-                    const SwSection& rSect = aIdx.GetNode().
-                        GetSectionNode()->GetSection();
-                    if( rSect.IsHiddenFlag() )
-                        aIdx = aIdx.GetNode().EndOfSectionIndex()+1;
-                    else
-                        ++aIdx;
-                }
-                if( aIdx.GetNode().IsTableNode() )
-                {
-                    pFrameNd = &aIdx.GetNode();
-                    assert(!"this isn't dead code?");
-                }
-            }
+            assert(!"this isn't dead code?");
         }
     }
     return pFrameNd;
