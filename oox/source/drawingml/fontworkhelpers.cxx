@@ -1291,7 +1291,7 @@ lcl_createGradientStopColor(const uno::Reference<beans::XPropertySet>& rXPropSet
     else
     {
         // solid color and solid transparency
-        SAL_WARN("oox.drawingml", "methode should not be called in this case");
+        SAL_WARN("oox.drawingml", "method should not be called in this case");
         if (!(FontworkHelpers::getThemeColorFromShape("FillColorThemeReference", rXPropSet,
                                                       aStopColor.TTColor)))
         {
