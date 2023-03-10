@@ -150,7 +150,7 @@ namespace connectivity
         OSQLParseNode*  buildNode_STR_NUM(OSQLParseNode*& pLiteral);
         OSQLParseNode*  buildNode_Date(const double& fValue, sal_Int32 nType);
 
-        static ::osl::Mutex& getMutex();
+        static std::mutex& getMutex();
 
     public:
         // if NULL, a default context will be used

@@ -4502,7 +4502,6 @@ void setParser(OSQLParser* _pParser)
 
 void OSQLParser::setParseTree(OSQLParseNode* pNewParseTree)
 {
-	::osl::MutexGuard aGuard(getMutex());
 	m_pParseTree.reset(pNewParseTree);
 }
 
@@ -4574,7 +4573,7 @@ std::unique_ptr<OSQLParseNode> OSQLParser::parseTree(OUString& rErrorMessage,
 
 
 	// Guard the parsing
-	::osl::MutexGuard aGuard(getMutex());
+	std::unique_lock aGuard(getMutex());
 	// must be reset
 	setParser(this);
 

@@ -1141,9 +1141,9 @@ OUString OSQLParser::stringToDouble(const OUString& _rValue,sal_Int16 _nScale)
 }
 
 
-::osl::Mutex& OSQLParser::getMutex()
+std::mutex& OSQLParser::getMutex()
 {
-    static ::osl::Mutex aMutex;
+    static std::mutex aMutex;
     return aMutex;
 }
 
@@ -1154,7 +1154,7 @@ std::unique_ptr<OSQLParseNode> OSQLParser::predicateTree(OUString& rErrorMessage
                                          bool bUseRealName)
 {
     // Guard the parsing
-    ::osl::MutexGuard aGuard(getMutex());
+    std::unique_lock aGuard(getMutex());
     // must be reset
     setParser(this);
 
@@ -1322,7 +1322,7 @@ OSQLParser::OSQLParser(css::uno::Reference< css::uno::XComponentContext > xConte
 #endif
 #endif
 
-    ::osl::MutexGuard aGuard(getMutex());
+    std::unique_lock aGuard(getMutex());
     // Do we have to initialize the data?
     if (s_nRefCount == 0)
     {
@@ -1472,7 +1472,7 @@ OSQLParser::OSQLParser(css::uno::Reference< css::uno::XComponentContext > xConte
 
 OSQLParser::~OSQLParser()
 {
-    ::osl::MutexGuard aGuard(getMutex());
+    std::unique_lock aGuard(getMutex());
     OSL_ENSURE(s_nRefCount > 0, "OSQLParser::~OSQLParser() : suspicious call : has a refcount of 0 !");
     if (!--s_nRefCount)
     {
