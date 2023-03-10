@@ -500,7 +500,7 @@ void Control::LogicInvalidate(const tools::Rectangle* pRectangle)
     VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier();
     if (!pParent || !dynamic_cast<vcl::DocWindow*>(GetParent()))
     {
-        // if control doesn't belong to a DocWindow, the overriden base class
+        // if control doesn't belong to a DocWindow, the overridden base class
         // method has to be invoked
         Window::LogicInvalidate(pRectangle);
         return;
