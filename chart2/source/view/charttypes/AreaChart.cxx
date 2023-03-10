@@ -31,7 +31,6 @@
 #include <Stripe.hxx>
 #include <DateHelper.hxx>
 #include <unonames.hxx>
-#include <ConfigAccess.hxx>
 
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
@@ -43,6 +42,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <officecfg/Office/Compatibility.hxx>
+#include <officecfg/Office/Chart.hxx>
 
 #include <limits>
 
@@ -635,7 +635,7 @@ void AreaChart::createShapes()
         }
     }
 
-    const bool bUseErrorRectangle = ConfigAccess::getUseErrorRectangle();
+    const bool bUseErrorRectangle = officecfg::Office::Chart::ErrorProperties::ErrorRectangle::get();
 
     sal_Int32 nZ=1;
     for( auto const& rZSlot : m_aZSlots )
