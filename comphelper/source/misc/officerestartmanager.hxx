@@ -24,7 +24,7 @@
 #include <com/sun/star/awt/XCallback.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <cppuhelper/implbase.hxx>
 #include <utility>
 
@@ -35,7 +35,7 @@ class OOfficeRestartManager : public ::cppu::WeakImplHelper< css::task::XRestart
                                                            , css::awt::XCallback
                                                            , css::lang::XServiceInfo >
 {
-    ::osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     bool m_bOfficeInitialized;

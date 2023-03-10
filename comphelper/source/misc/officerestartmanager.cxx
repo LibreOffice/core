@@ -39,7 +39,7 @@ void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task:
         throw uno::RuntimeException();
 
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         // if the restart already running there is no need to trigger it again
         if ( m_bRestartRequested )
@@ -76,7 +76,7 @@ void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task:
 
 sal_Bool SAL_CALL OOfficeRestartManager::isRestartRequested( sal_Bool bOfficeInitialized )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( bOfficeInitialized && !m_bOfficeInitialized )
         m_bOfficeInitialized = bOfficeInitialized;
