@@ -26,6 +26,7 @@
 #include <config_gpgme.h>
 
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Writer.hxx>
 
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
@@ -229,42 +230,12 @@ static sal_uInt16 getGroupNodeId( std::u16string_view rModule )
 
 namespace {
 
-class MailMergeCfg_Impl : public utl::ConfigItem
+bool MailMergeCfgIsEmailSupported()
 {
-private:
-    // variables
-    bool bIsEmailSupported;
-
-    virtual void    ImplCommit() override;
-
-public:
-    MailMergeCfg_Impl();
-
-    virtual void Notify( const css::uno::Sequence< OUString >& _rPropertyNames) override;
-
-    bool IsEmailSupported() const {return bIsEmailSupported;}
-
-};
-
+    std::optional<bool> b = officecfg::Office::Writer::MailMergeWizard::EMailSupported::get();
+    return b && *b;
 }
 
-MailMergeCfg_Impl::MailMergeCfg_Impl() :
-    utl::ConfigItem("Office.Writer/MailMergeWizard"),
-    bIsEmailSupported(false)
-{
-    Sequence<OUString> aNames { "EMailSupported" };
-    const Sequence< Any > aValues = GetProperties(aNames);
-    const Any* pValues = aValues.getConstArray();
-    if(aValues.hasElements() && pValues[0].hasValue())
-        pValues[0] >>= bIsEmailSupported;
-}
-
-void MailMergeCfg_Impl::ImplCommit()
-{
-}
-
-void MailMergeCfg_Impl::Notify( const css::uno::Sequence< OUString >& )
-{
 }
 
 //typedef SfxTabPage* (*FNCreateTabPage)(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rAttrSet);
@@ -1460,7 +1431,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                         continue;
                     if ( ( RID_SW_TP_STD_FONT_CJK != nPageId || SvtCJKOptions::IsCJKFontEnabled() ) &&
                          ( RID_SW_TP_STD_FONT_CTL != nPageId || aCTLLanguageOptions.IsCTLFontEnabled() ) &&
-                         ( RID_SW_TP_MAILCONFIG != nPageId || MailMergeCfg_Impl().IsEmailSupported() ) )
+                         ( RID_SW_TP_MAILCONFIG != nPageId || MailMergeCfgIsEmailSupported() ) )
                         AddTabPage( nPageId, CuiResId(SID_SW_EDITOPTIONS_RES[i].first), nGroup );
                 }
 #ifdef DBG_UTIL
