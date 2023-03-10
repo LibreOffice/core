@@ -226,6 +226,10 @@ void ScTiledRenderingTest::tearDown()
     }
 
     m_callbackWrapper.clear();
+
+    comphelper::LibreOfficeKit::setCompatFlag(
+        comphelper::LibreOfficeKit::Compat::none);
+
     comphelper::LibreOfficeKit::setActive(false);
 
     UnoApiXmlTest::tearDown();
