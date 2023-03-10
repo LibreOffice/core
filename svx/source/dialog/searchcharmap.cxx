@@ -329,9 +329,7 @@ void SvxSearchCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
     nX = aSize.Width() / COLUMN_COUNT;
     nY = aSize.Height() / ROW_COUNT;
 
-    //scrollbar settings -- error
-    int nLastRow = (getMaxCharCount() - 1 + COLUMN_COUNT) / COLUMN_COUNT;
-    mxScrollArea->vadjustment_configure(mxScrollArea->vadjustment_get_value(), 0, nLastRow, 1, ROW_COUNT - 1, ROW_COUNT);
+    UpdateScrollRange();
 
     // rearrange CharSet element in sync with nX- and nY-multiples
     Size aDrawSize(nX * COLUMN_COUNT, nY * ROW_COUNT);
@@ -339,6 +337,13 @@ void SvxSearchCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
     m_nYGap = (aSize.Height() - aDrawSize.Height()) / 2;
 
     mbRecalculateFont = false;
+}
+
+void SvxSearchCharSet::UpdateScrollRange()
+{
+    //scrollbar settings
+    int nLastRow = (getMaxCharCount() - 1 + COLUMN_COUNT) / COLUMN_COUNT;
+    mxScrollArea->vadjustment_configure(mxScrollArea->vadjustment_get_value(), 0, nLastRow, 1, ROW_COUNT - 1, ROW_COUNT);
 }
 
 void SvxSearchCharSet::SelectIndex(int nNewIndex, bool bFocus)
