@@ -44,7 +44,7 @@
    * place new images at extra/source/tipoftheday and do not forget to add the files to vcl/Package_tipoftheday.mk
    * images are scaled to 150x150px; const ThumbSize() in tipoftheday.cxx
  * module
-   * use on of the options below; an overlay is drawn on the default image tipoftheday.png except for the generic soffice (and of course not if an image is set)
+   * use one of the options below; an overlay is drawn on the default image tipoftheday.png except for the generic soffice (and of course not if an image is set)
 */
 enum tipModule : sal_uInt8
 { swriter, scalc, sdraw, simpress, soffice };
