@@ -4277,7 +4277,34 @@ static SwTwips lcl_CalcMinRowHeight( const SwRowFrame* _pRow,
         // this frame's minimal height, because the rest will go to follow frame.
         else if ( !_pRow->IsInSplit() && rSz.GetHeightSizeType() == SwFrameSize::Minimum )
         {
-            nHeight = rSz.GetHeight() - lcl_calcHeightOfRowBeforeThisFrame(*_pRow);
+            bool bSplitFly = false;
+            if (_pRow->IsInFly())
+            {
+                // See if we're in a split fly that is anchored on a page that has enough space to
+                // host this row with its minimum row height.
+                const SwFlyFrame* pFly = _pRow->FindFlyFrame();
+                if (pFly->IsFlySplitAllowed())
+                {
+                    SwFrame* pAnchor = const_cast<SwFlyFrame*>(pFly)->FindAnchorCharFrame();
+                    if (pAnchor)
+                    {
+                        if (pAnchor->FindPageFrame()->getFramePrintArea().Height() > rSz.GetHeight())
+                        {
+                            bSplitFly = true;
+                        }
+                    }
+                }
+            }
+
+            if (bSplitFly)
+            {
+                // Split fly: enforce minimum row height for the master and follows.
+                nHeight = rSz.GetHeight();
+            }
+            else
+            {
+                nHeight = rSz.GetHeight() - lcl_calcHeightOfRowBeforeThisFrame(*_pRow);
+            }
         }
     }
 
