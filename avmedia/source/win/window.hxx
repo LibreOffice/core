@@ -25,7 +25,8 @@
 
 #include "wincommon.hxx"
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/multicontainer2.hxx>
+#include <comphelper/interfacecontainer4.hxx>
+#include <mutex>
 
 #include <com/sun/star/media/XPlayerWindow.hpp>
 
@@ -95,8 +96,14 @@ public:
 
 private:
 
-    ::osl::Mutex                                maMutex;
-    comphelper::OMultiTypeInterfaceContainerHelper2  maListeners;
+    std::mutex                                       maMutex;
+    comphelper::OInterfaceContainerHelper4<css::awt::XWindowListener>  maWindowListeners;
+    comphelper::OInterfaceContainerHelper4<css::awt::XFocusListener>  maFocusListeners;
+    comphelper::OInterfaceContainerHelper4<css::awt::XKeyListener>  maKeyListeners;
+    comphelper::OInterfaceContainerHelper4<css::awt::XMouseListener>  maMouseListeners;
+    comphelper::OInterfaceContainerHelper4<css::awt::XMouseMotionListener>  maMouseMotionListeners;
+    comphelper::OInterfaceContainerHelper4<css::awt::XPaintListener>  maPaintListeners;
+    comphelper::OInterfaceContainerHelper4<css::lang::XEventListener>  maEventListeners;
     css::media::ZoomLevel                       meZoomLevel;
     Player&                                     mrPlayer;
     HWND                                        mnFrameWnd;

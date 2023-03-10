@@ -98,7 +98,6 @@ static WNDCLASSW* lcl_getWndClass()
 }
 
 Window::Window( Player& rPlayer ) :
-    maListeners( maMutex ),
     meZoomLevel( media::ZoomLevel_NOT_AVAILABLE ),
     mrPlayer( rPlayer ),
     mnFrameWnd( nullptr ),
@@ -349,62 +348,74 @@ void SAL_CALL Window::setFocus(  )
 
 void SAL_CALL Window::addWindowListener( const uno::Reference< awt::XWindowListener >& xListener )
 {
-    maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
+    std::unique_lock g(maMutex);
+    maWindowListeners.addInterface( g, xListener );
 }
 
 void SAL_CALL Window::removeWindowListener( const uno::Reference< awt::XWindowListener >& xListener )
 {
-    maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
+    std::unique_lock g(maMutex);
+    maWindowListeners.removeInterface( g, xListener );
 }
 
 void SAL_CALL Window::addFocusListener( const uno::Reference< awt::XFocusListener >& xListener )
 {
-    maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
+    std::unique_lock g(maMutex);
+    maFocusListeners.addInterface( g, xListener );
 }
 
 void SAL_CALL Window::removeFocusListener( const uno::Reference< awt::XFocusListener >& xListener )
 {
-    maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
+    std::unique_lock g(maMutex);
+    maFocusListeners.removeInterface( g, xListener );
 }
 
 void SAL_CALL Window::addKeyListener( const uno::Reference< awt::XKeyListener >& xListener )
 {
-    maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
+    std::unique_lock g(maMutex);
+    maKeyListeners.addInterface( g, xListener );
 }
 
 void SAL_CALL Window::removeKeyListener( const uno::Reference< awt::XKeyListener >& xListener )
 {
-    maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
+    std::unique_lock g(maMutex);
+    maKeyListeners.removeInterface( g, xListener );
 }
 
 void SAL_CALL Window::addMouseListener( const uno::Reference< awt::XMouseListener >& xListener )
 {
-    maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
+    std::unique_lock g(maMutex);
+    maMouseListeners.addInterface( g, xListener );
 }
 
 void SAL_CALL Window::removeMouseListener( const uno::Reference< awt::XMouseListener >& xListener )
 {
-    maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
+    std::unique_lock g(maMutex);
+    maMouseListeners.removeInterface( g, xListener );
 }
 
 void SAL_CALL Window::addMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& xListener )
 {
-    maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
+    std::unique_lock g(maMutex);
+    maMouseMotionListeners.addInterface( g, xListener );
 }
 
 void SAL_CALL Window::removeMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& xListener )
 {
-    maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
+    std::unique_lock g(maMutex);
+    maMouseMotionListeners.removeInterface( g, xListener );
 }
 
 void SAL_CALL Window::addPaintListener( const uno::Reference< awt::XPaintListener >& xListener )
 {
-    maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
+    std::unique_lock g(maMutex);
+    maPaintListeners.addInterface( g, xListener );
 }
 
 void SAL_CALL Window::removePaintListener( const uno::Reference< awt::XPaintListener >& xListener )
 {
-    maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
+    std::unique_lock g(maMutex);
+    maPaintListeners.removeInterface( g, xListener );
 }
 
 void SAL_CALL Window::dispose(  )
@@ -413,64 +424,38 @@ void SAL_CALL Window::dispose(  )
 
 void SAL_CALL Window::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
-    maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
+    std::unique_lock g(maMutex);
+    maEventListeners.addInterface( g, xListener );
 }
 
 void SAL_CALL Window::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
-    maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
+    std::unique_lock g(maMutex);
+    maEventListeners.removeInterface( g, xListener );
 }
 
 void Window::fireMousePressedEvent( const css::awt::MouseEvent& rEvt )
 {
-    comphelper::OInterfaceContainerHelper2* pContainer = maListeners.getContainer( cppu::UnoType<awt::XMouseListener>::get());
-
-    if( pContainer )
-    {
-        comphelper::OInterfaceIteratorHelper2 aIter( *pContainer );
-
-        while( aIter.hasMoreElements() )
-            static_cast< awt::XMouseListener* >( aIter.next() )->mousePressed( rEvt );
-    }
+    std::unique_lock g(maMutex);
+    maMouseListeners.notifyEach(g, &awt::XMouseListener::mousePressed, rEvt);
 }
 
 void Window::fireMouseReleasedEvent( const css::awt::MouseEvent& rEvt )
 {
-    comphelper::OInterfaceContainerHelper2* pContainer = maListeners.getContainer( cppu::UnoType<awt::XMouseListener>::get());
-
-    if( pContainer )
-    {
-        comphelper::OInterfaceIteratorHelper2 aIter( *pContainer );
-
-        while( aIter.hasMoreElements() )
-            static_cast< awt::XMouseListener* >( aIter.next() )->mouseReleased( rEvt );
-    }
+    std::unique_lock g(maMutex);
+    maMouseListeners.notifyEach(g, &awt::XMouseListener::mouseReleased, rEvt);
 }
 
 void Window::fireMouseMovedEvent( const css::awt::MouseEvent& rEvt )
 {
-    comphelper::OInterfaceContainerHelper2* pContainer = maListeners.getContainer( cppu::UnoType<awt::XMouseMotionListener>::get());
-
-    if( pContainer )
-    {
-        comphelper::OInterfaceIteratorHelper2 aIter( *pContainer );
-
-        while( aIter.hasMoreElements() )
-            static_cast< awt::XMouseMotionListener* >( aIter.next() )->mouseMoved( rEvt );
-    }
+    std::unique_lock g(maMutex);
+    maMouseMotionListeners.notifyEach(g, &awt::XMouseMotionListener::mouseMoved, rEvt);
 }
 
 void Window::fireSetFocusEvent( const css::awt::FocusEvent& rEvt )
 {
-    comphelper::OInterfaceContainerHelper2* pContainer = maListeners.getContainer( cppu::UnoType<awt::XFocusListener>::get());
-
-    if( pContainer )
-    {
-        comphelper::OInterfaceIteratorHelper2 aIter( *pContainer );
-
-        while( aIter.hasMoreElements() )
-            static_cast< awt::XFocusListener* >( aIter.next() )->focusGained( rEvt );
-    }
+    std::unique_lock g(maMutex);
+    maFocusListeners.notifyEach(g, &awt::XFocusListener::focusGained, rEvt);
 }
 
 OUString SAL_CALL Window::getImplementationName(  )
