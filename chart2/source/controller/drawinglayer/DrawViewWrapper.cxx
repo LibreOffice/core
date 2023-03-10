@@ -19,9 +19,10 @@
 
 #include <DrawViewWrapper.hxx>
 #include <chartview/DrawModelWrapper.hxx>
-#include <ConfigurationAccess.hxx>
 
 #include <unotools/lingucfg.hxx>
+#include <unotools/syslocale.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/langitem.hxx>
 #include <svl/intitem.hxx>
@@ -40,6 +41,7 @@
 
 #include <sfx2/objsh.hxx>
 #include <svx/helperhittest3d.hxx>
+#include <officecfg/Office/Calc.hxx>
 
 using namespace ::com::sun::star;
 
@@ -255,6 +257,14 @@ SdrOutliner* DrawViewWrapper::getOutliner() const
 
 SfxItemSet DrawViewWrapper::getPositionAndSizeItemSetFromMarkedObject() const
 {
+    SvtSysLocale aSysLocale;
+    MeasurementSystem eSys = aSysLocale.GetLocaleData().getMeasurementSystemEnum();
+    sal_uInt16 nAttrMetric;
+    if( eSys == MeasurementSystem::Metric )
+        nAttrMetric = officecfg::Office::Calc::Layout::Other::MeasureUnit::Metric::get();
+    else
+        nAttrMetric = officecfg::Office::Calc::Layout::Other::MeasureUnit::NonMetric::get();
+
     SfxItemSet aFullSet(
         GetModel().GetItemPool(),
         svl::Items<
@@ -264,7 +274,7 @@ SfxItemSet DrawViewWrapper::getPositionAndSizeItemSetFromMarkedObject() const
             SID_ATTR_METRIC, SID_ATTR_METRIC>);
     SfxItemSet aGeoSet( E3dView::GetGeoAttrFromMarked() );
     aFullSet.Put( aGeoSet );
-    aFullSet.Put( SfxUInt16Item(SID_ATTR_METRIC,static_cast< sal_uInt16 >( ConfigurationAccess::getFieldUnit())));
+    aFullSet.Put( SfxUInt16Item(SID_ATTR_METRIC, nAttrMetric) );
     return aFullSet;
 }
 
