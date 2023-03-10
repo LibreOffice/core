@@ -27,6 +27,16 @@ public:
 
     static void trigger_changed(weld::IconView& rIconView) { rIconView.signal_selection_changed(); }
 
+    static void trigger_scrollv(weld::ScrolledWindow& rScrolledWindow)
+    {
+        rScrolledWindow.signal_vadjustment_changed();
+    }
+
+    static void trigger_scrollh(weld::ScrolledWindow& rScrolledWindow)
+    {
+        rScrolledWindow.signal_hadjustment_changed();
+    }
+
     static void trigger_toggled(weld::Toggleable& rButton) { rButton.signal_toggled(); }
 
     static void trigger_row_activated(weld::TreeView& rTreeView)

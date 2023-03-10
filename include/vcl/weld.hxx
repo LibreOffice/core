@@ -404,6 +404,8 @@ public:
 
 class VCL_DLLPUBLIC ScrolledWindow : virtual public Container
 {
+    friend class ::LOKTrigger;
+
     Link<ScrolledWindow&, void> m_aVChangeHdl;
     Link<ScrolledWindow&, void> m_aHChangeHdl;
 
