@@ -15,12 +15,7 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,harfbuzz))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,harfbuzz,0))
 
-# * external/harfbuzz/negativeadvance.patch sent upstram as
-#   <https://github.com/harfbuzz/harfbuzz/pull/3128> "hb_graphite2_cluster_t::advance can apparently
-#   be negative":
 $(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
-    external/harfbuzz/negativeadvance.patch \
-	external/harfbuzz/62e803b36173fd096d7ad460dd1d1db9be542593.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
