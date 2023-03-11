@@ -16,6 +16,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -133,15 +134,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104394_lostTextbox, "tdf104394_lostTextbox.docx"
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf146984_anchorInShape, "tdf146984_anchorInShape.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf154129_framePr1, "tdf154129_framePr1.docx")
 {
-    // This was only one page b/c the page break was missing.
-    CPPUNIT_ASSERT_EQUAL(2, getPages());
-
-    const auto& pLayout = parseLayoutDump();
-    // There are shapes on both pages - these should be non-zero numbers
-    //assertXPath(pLayout, "//page[1]//anchored", 3);
-    //assertXPath(pLayout, "//page[2]//anchored", 2);
+    for (size_t i = 1; i < 4; ++i)
+    {
+        uno::Reference<drawing::XShape> xTextFrame = getShape(i);
+        // The anchor is defined in the style, and only the first style was checked, not the parents
+        auto nAnchor = getProperty<sal_Int16>(xTextFrame, "HoriOrientRelation");
+        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, nAnchor);
+        nAnchor = getProperty<sal_Int16>(xTextFrame, "VertOrientRelation");
+        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, nAnchor);
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak, "tdf153613_anchoredAfterPgBreak.docx")

@@ -1584,224 +1584,219 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
         return;
     try
     {
-        StyleSheetEntryPtr pParaStyle =
-            GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(rAppendContext.pLastParagraphProperties->GetParaStyleName());
+        // A paragraph's properties come from direct formatting or somewhere in the style hierarchy
+        std::vector<const ParagraphProperties*> vProps;
+        vProps.emplace_back(rAppendContext.pLastParagraphProperties.get());
+        sal_Int8 nSafetyLimit = 16;
+        StyleSheetEntryPtr pStyle = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(
+            rAppendContext.pLastParagraphProperties->GetParaStyleName());
+        while (nSafetyLimit-- && pStyle && pStyle->m_pProperties)
+        {
+            vProps.emplace_back(&pStyle->m_pProperties->props());
+            assert(pStyle->m_sBaseStyleIdentifier != pStyle->m_sStyleName);
+            if (pStyle->m_sBaseStyleIdentifier.isEmpty())
+                break;
+            pStyle = GetStyleSheetTable()->FindStyleSheetByISTD(pStyle->m_sBaseStyleIdentifier);
+        }
+        SAL_WARN_IF(!nSafetyLimit,"writerfilter.dmapper","Inherited style loop likely: early exit");
 
         std::vector<beans::PropertyValue> aFrameProperties;
 
-        if ( pParaStyle )
+        sal_Int32 nWidth = -1;
+        for (const auto pProp : vProps)
         {
-            const StyleSheetPropertyMap* pStyleProperties = pParaStyle->m_pProperties.get();
-            if (!pStyleProperties)
-                return;
-            sal_Int32 nWidth =
-                rAppendContext.pLastParagraphProperties->Getw() > 0 ?
-                    rAppendContext.pLastParagraphProperties->Getw() :
-                    pStyleProperties->props().Getw();
-            bool bAutoWidth = nWidth < 1;
-            if( bAutoWidth )
-                nWidth = DEFAULT_FRAME_MIN_WIDTH;
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_WIDTH), nWidth));
+            if (pProp->Getw() < 0)
+                continue;
+            nWidth = pProp->Getw();
+            break;
+        }
+        bool bAutoWidth = nWidth < 1;
+        if (bAutoWidth)
+            nWidth = DEFAULT_FRAME_MIN_WIDTH;
+        aFrameProperties.push_back(
+            comphelper::makePropertyValue(getPropertyName(PROP_WIDTH), nWidth));
+        aFrameProperties.push_back(
+            comphelper::makePropertyValue(getPropertyName(PROP_WIDTH_TYPE),
+                                          bAutoWidth ? text::SizeType::MIN : text::SizeType::FIX));
 
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HEIGHT),
-                rAppendContext.pLastParagraphProperties->Geth() > 0 ?
-                    rAppendContext.pLastParagraphProperties->Geth() :
-                    pStyleProperties->props().Geth() > 0 ? pStyleProperties->props().Geth() : DEFAULT_FRAME_MIN_HEIGHT));
+        bool bValidH = false;
+        sal_Int32 nHeight = DEFAULT_FRAME_MIN_HEIGHT;
+        for (const auto pProp : vProps)
+        {
+            if (pProp->Geth() < 0)
+                continue;
+            nHeight = pProp->Geth();
+            bValidH = true;
+            break;
+        }
+        aFrameProperties.push_back(
+            comphelper::makePropertyValue(getPropertyName(PROP_HEIGHT), nHeight));
 
-            sal_Int16 nhRule = sal_Int16(
-                rAppendContext.pLastParagraphProperties->GethRule() >= 0 ?
-                    rAppendContext.pLastParagraphProperties->GethRule() :
-                    pStyleProperties->props().GethRule());
-            if ( nhRule < 0 )
+        sal_Int16 nhRule = -1;
+        for (const auto pProp : vProps)
+        {
+            if (pProp->GethRule() < 0)
+                continue;
+            nhRule = pProp->GethRule();
+            break;
+        }
+        if (nhRule < 0)
+        {
+            if (bValidH && nHeight)
             {
-                if ( rAppendContext.pLastParagraphProperties->Geth() >= 0 ||
-                    pStyleProperties->props().GethRule() >= 0 )
-                {
-                    // [MS-OE376] Word uses a default value of "atLeast" for
-                    // this attribute when the value of the h attribute is not 0.
-                    nhRule = text::SizeType::MIN;
-                }
-                else
-                {
-                    nhRule = text::SizeType::VARIABLE;
-                }
-            }
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), nhRule));
-
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_WIDTH_TYPE), bAutoWidth ?  text::SizeType::MIN : text::SizeType::FIX));
-
-            if (const std::optional<sal_Int16> nDirection = PopFrameDirection())
-            {
-                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_FRM_DIRECTION), *nDirection));
-            }
-
-            sal_Int16 nHoriOrient = sal_Int16(
-                rAppendContext.pLastParagraphProperties->GetxAlign() >= 0 ?
-                    rAppendContext.pLastParagraphProperties->GetxAlign() :
-                    pStyleProperties->props().GetxAlign() >= 0 ? pStyleProperties->props().GetxAlign() : text::HoriOrientation::NONE );
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT), nHoriOrient));
-
-            //set a non negative default value
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT_POSITION),
-                rAppendContext.pLastParagraphProperties->IsxValid() ?
-                    rAppendContext.pLastParagraphProperties->Getx() :
-                    pStyleProperties->props().IsxValid()
-                        ? pStyleProperties->props().Getx() : DEFAULT_VALUE));
-
-            //Default the anchor in case FramePr_hAnchor is missing ECMA 17.3.1.11
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT_RELATION), sal_Int16(
-                rAppendContext.pLastParagraphProperties->GethAnchor() >= 0 ?
-                    rAppendContext.pLastParagraphProperties->GethAnchor() :
-                pStyleProperties->props().GethAnchor() >=0 ? pStyleProperties->props().GethAnchor() : text::RelOrientation::FRAME )));
-
-            sal_Int16 nVertOrient = sal_Int16(
-                rAppendContext.pLastParagraphProperties->GetyAlign() >= 0 ?
-                    rAppendContext.pLastParagraphProperties->GetyAlign() :
-                    pStyleProperties->props().GetyAlign() >= 0 ? pStyleProperties->props().GetyAlign() : text::VertOrientation::NONE );
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT), nVertOrient));
-
-            //set a non negative default value
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_POSITION),
-                rAppendContext.pLastParagraphProperties->IsyValid() ?
-                    rAppendContext.pLastParagraphProperties->Gety() :
-                    pStyleProperties->props().IsyValid()
-                        ? pStyleProperties->props().Gety() : DEFAULT_VALUE));
-
-            //Default the anchor in case FramePr_vAnchor is missing ECMA 17.3.1.11
-            if (rAppendContext.pLastParagraphProperties->GetWrap() == text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE &&
-                pStyleProperties->props().GetWrap()
-                    == text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE)
-            {
-                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_RELATION), sal_Int16(
-                    rAppendContext.pLastParagraphProperties->GetvAnchor() >= 0 ?
-                    rAppendContext.pLastParagraphProperties->GetvAnchor() :
-                    pStyleProperties->props().GetvAnchor() >= 0 ? pStyleProperties->props().GetvAnchor() : text::RelOrientation::FRAME)));
+                // [MS-OE376] Word uses a default value of "atLeast" for
+                // this attribute when the value of the h attribute is not 0.
+                nhRule = text::SizeType::MIN;
             }
             else
             {
-                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_RELATION), sal_Int16(
-                    rAppendContext.pLastParagraphProperties->GetvAnchor() >= 0 ?
-                    rAppendContext.pLastParagraphProperties->GetvAnchor() :
-                    pStyleProperties->props().GetvAnchor() >= 0 ? pStyleProperties->props().GetvAnchor() : text::RelOrientation::PAGE_PRINT_AREA)));
+                nhRule = text::SizeType::VARIABLE;
             }
-
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SURROUND),
-                rAppendContext.pLastParagraphProperties->GetWrap() != text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE
-                ? rAppendContext.pLastParagraphProperties->GetWrap()
-                : pStyleProperties->props().GetWrap()
-                      != text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE
-                  ? pStyleProperties->props().GetWrap()
-                  : text::WrapTextMode_NONE ));
-
-            /** FDO#73546 : distL & distR should be unsigned integers <Ecma 20.4.3.6>
-                Swapped the array elements 11,12 & 13,14 since 11 & 12 are
-                LEFT & RIGHT margins and 13,14 are TOP and BOTTOM margins respectively.
-            */
-            sal_Int32 nRightDist;
-            sal_Int32 nLeftDist = nRightDist =
-                rAppendContext.pLastParagraphProperties->GethSpace() >= 0 ?
-                rAppendContext.pLastParagraphProperties->GethSpace() :
-                pStyleProperties->props().GethSpace() >= 0
-                    ? pStyleProperties->props().GethSpace() : 0;
-
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_LEFT_MARGIN), nHoriOrient == text::HoriOrientation::LEFT ? 0 : nLeftDist));
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_RIGHT_MARGIN), nHoriOrient == text::HoriOrientation::RIGHT ? 0 : nRightDist));
-
-            sal_Int32 nBottomDist;
-            sal_Int32 nTopDist = nBottomDist =
-                rAppendContext.pLastParagraphProperties->GetvSpace() >= 0 ?
-                rAppendContext.pLastParagraphProperties->GetvSpace() :
-                pStyleProperties->props().GetvSpace() >= 0
-                    ? pStyleProperties->props().GetvSpace() : 0;
-
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_TOP_MARGIN), nVertOrient == text::VertOrientation::TOP ? 0 : nTopDist));
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_BOTTOM_MARGIN), nVertOrient == text::VertOrientation::BOTTOM ? 0 : nBottomDist));
-            // If there is no fill, the Word default is 100% transparency.
-            // Otherwise CellColorHandler has priority, and this setting
-            // will be ignored.
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_BACK_COLOR_TRANSPARENCY), sal_Int32(100)));
-
-            uno::Sequence<beans::PropertyValue> aGrabBag( comphelper::InitPropertySequence({
-                    { "ParaFrameProperties", uno::Any(rAppendContext.pLastParagraphProperties->IsFrameMode()) }
-            }));
-            aFrameProperties.push_back(comphelper::makePropertyValue("FrameInteropGrabBag", aGrabBag));
-
-            lcl_MoveBorderPropertiesToFrame(aFrameProperties,
-                rAppendContext.pLastParagraphProperties->GetStartingRange(),
-                rAppendContext.pLastParagraphProperties->GetEndingRange());
         }
-        else
+        aFrameProperties.push_back(
+            comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), nhRule));
+
+        bool bValidX = false;
+        sal_Int32 nX = DEFAULT_VALUE;
+        for (const auto pProp : vProps)
         {
-            sal_Int32 nWidth = rAppendContext.pLastParagraphProperties->Getw();
-            bool bAutoWidth = nWidth < 1;
-            if( bAutoWidth )
-                nWidth = DEFAULT_FRAME_MIN_WIDTH;
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_WIDTH), nWidth));
-
-            sal_Int16 nhRule = sal_Int16(rAppendContext.pLastParagraphProperties->GethRule());
-            if ( nhRule < 0 )
-            {
-                if ( rAppendContext.pLastParagraphProperties->Geth() >= 0 )
-                {
-                    // [MS-OE376] Word uses a default value of atLeast for
-                    // this attribute when the value of the h attribute is not 0.
-                    nhRule = text::SizeType::MIN;
-                }
-                else
-                {
-                    nhRule = text::SizeType::VARIABLE;
-                }
-            }
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), nhRule));
-
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_WIDTH_TYPE), bAutoWidth ?  text::SizeType::MIN : text::SizeType::FIX));
-
-            sal_Int16 nHoriOrient = sal_Int16(
-                rAppendContext.pLastParagraphProperties->GetxAlign() >= 0 ?
-                    rAppendContext.pLastParagraphProperties->GetxAlign() :
-                    text::HoriOrientation::NONE );
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT), nHoriOrient));
-
-            sal_Int16 nVertOrient = sal_Int16(
-                rAppendContext.pLastParagraphProperties->GetyAlign() >= 0 ?
-                    rAppendContext.pLastParagraphProperties->GetyAlign() :
-                    text::VertOrientation::NONE );
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT), nVertOrient));
-
-            sal_Int32 nVertDist = rAppendContext.pLastParagraphProperties->GethSpace();
-            if( nVertDist < 0 )
-                nVertDist = 0;
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_LEFT_MARGIN), nVertOrient == text::VertOrientation::TOP ? 0 : nVertDist));
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_RIGHT_MARGIN), nVertOrient == text::VertOrientation::BOTTOM ? 0 : nVertDist));
-
-            sal_Int32 nHoriDist = rAppendContext.pLastParagraphProperties->GetvSpace();
-            if( nHoriDist < 0 )
-                nHoriDist = 0;
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_TOP_MARGIN), nHoriOrient == text::HoriOrientation::LEFT ? 0 : nHoriDist));
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_BOTTOM_MARGIN), nHoriOrient == text::HoriOrientation::RIGHT ? 0 : nHoriDist));
-
-            if( rAppendContext.pLastParagraphProperties->Geth() > 0 )
-                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HEIGHT), rAppendContext.pLastParagraphProperties->Geth()));
-
-            if( rAppendContext.pLastParagraphProperties->IsxValid() )
-                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT_POSITION), rAppendContext.pLastParagraphProperties->Getx()));
-
-            if( rAppendContext.pLastParagraphProperties->GethAnchor() >= 0 )
-                aFrameProperties.push_back(comphelper::makePropertyValue("HoriOrientRelation", sal_Int16(rAppendContext.pLastParagraphProperties->GethAnchor())));
-
-            if( rAppendContext.pLastParagraphProperties->IsyValid() )
-                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_POSITION), rAppendContext.pLastParagraphProperties->Gety()));
-
-            if( rAppendContext.pLastParagraphProperties->GetvAnchor() >= 0 )
-                aFrameProperties.push_back(comphelper::makePropertyValue("VertOrientRelation", sal_Int16(rAppendContext.pLastParagraphProperties->GetvAnchor())));
-
-            if( rAppendContext.pLastParagraphProperties->GetWrap() >= text::WrapTextMode_NONE )
-                aFrameProperties.push_back(comphelper::makePropertyValue("Surround", rAppendContext.pLastParagraphProperties->GetWrap()));
-
-            lcl_MoveBorderPropertiesToFrame(aFrameProperties,
-                rAppendContext.pLastParagraphProperties->GetStartingRange(),
-                rAppendContext.pLastParagraphProperties->GetEndingRange());
+            bValidX = pProp->IsxValid();
+            if (!bValidX)
+                continue;
+            nX = pProp->Getx();
+            break;
         }
+        aFrameProperties.push_back(
+            comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT_POSITION), nX));
+
+        sal_Int16 nHoriOrient = text::HoriOrientation::NONE;
+        for (const auto pProp : vProps)
+        {
+            if (pProp->GetxAlign() < 0)
+                continue;
+            nHoriOrient = pProp->GetxAlign();
+            break;
+        }
+        aFrameProperties.push_back(
+            comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT), nHoriOrient));
+
+        //Default the anchor in case FramePr_hAnchor is missing ECMA 17.3.1.11
+        sal_Int16 nHAnchor = text::RelOrientation::FRAME; // 'text'
+        for (const auto pProp : vProps)
+        {
+            if (pProp->GethAnchor() < 0)
+                continue;
+            nHAnchor = pProp->GethAnchor();
+            break;
+        }
+        aFrameProperties.push_back(
+            comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT_RELATION), nHAnchor));
+
+        bool bValidY = false;
+        sal_Int32 nY = DEFAULT_VALUE;
+        for (const auto pProp : vProps)
+        {
+            bValidY = pProp->IsyValid();
+            if (!bValidY)
+                continue;
+            nY = pProp->Gety();
+            break;
+        }
+        aFrameProperties.push_back(
+            comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_POSITION), nY));
+
+        sal_Int16 nVertOrient = text::VertOrientation::NONE;
+        for (const auto pProp : vProps)
+        {
+            if (pProp->GetyAlign() < 0)
+                continue;
+            nVertOrient = pProp->GetyAlign();
+            break;
+        }
+        aFrameProperties.push_back(
+            comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT), nVertOrient));
+
+        //Default the anchor in case FramePr_vAnchor is missing ECMA 17.3.1.11
+        sal_Int16 nVAnchor = text::RelOrientation::FRAME; // 'text'
+        // vAlign is ignored if vAnchor is set to 'text'. So, if w:y is not defined,
+        // but there is a defined vAlign, then a missing vAnchor should become 'margin'.
+        if (!bValidY && nVertOrient)
+        {
+            nVAnchor = text::RelOrientation::PAGE_PRINT_AREA; // 'margin'
+        }
+        for (const auto pProp : vProps)
+        {
+            if (pProp->GetvAnchor() < 0)
+                continue;
+            nVAnchor = pProp->GetvAnchor();
+            break;
+        }
+        aFrameProperties.push_back(
+            comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_RELATION), nVAnchor));
+
+        text::WrapTextMode nWrap = text::WrapTextMode_NONE;
+        for (const auto pProp : vProps)
+        {
+            if (pProp->GetWrap() == text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE)
+                continue;
+            nWrap = pProp->GetWrap();
+            break;
+        }
+        aFrameProperties.push_back(
+            comphelper::makePropertyValue(getPropertyName(PROP_SURROUND), nWrap));
+
+        sal_Int32 nRightDist = 0;
+        sal_Int32 nLeftDist = 0;
+        for (const auto pProp : vProps)
+        {
+            if (pProp->GethSpace() < 0)
+                continue;
+            nLeftDist = nRightDist = pProp->GethSpace();
+            break;
+        }
+        aFrameProperties.push_back(comphelper::makePropertyValue(
+            getPropertyName(PROP_LEFT_MARGIN),
+            nHoriOrient == text::HoriOrientation::LEFT ? 0 : nLeftDist));
+        aFrameProperties.push_back(comphelper::makePropertyValue(
+            getPropertyName(PROP_RIGHT_MARGIN),
+            nHoriOrient == text::HoriOrientation::RIGHT ? 0 : nRightDist));
+
+        sal_Int32 nBottomDist = 0;
+        sal_Int32 nTopDist = 0;
+        for (const auto pProp : vProps)
+        {
+            if (pProp->GetvSpace() < 0)
+                continue;
+            nTopDist = nBottomDist = pProp->GetvSpace();
+            break;
+        }
+        aFrameProperties.push_back(comphelper::makePropertyValue(
+            getPropertyName(PROP_TOP_MARGIN),
+            nVertOrient == text::VertOrientation::TOP ? 0 : nTopDist));
+        aFrameProperties.push_back(comphelper::makePropertyValue(
+            getPropertyName(PROP_BOTTOM_MARGIN),
+            nVertOrient == text::VertOrientation::BOTTOM ? 0 : nBottomDist));
+
+        if (const std::optional<sal_Int16> nDirection = PopFrameDirection())
+        {
+            aFrameProperties.push_back(
+                comphelper::makePropertyValue(getPropertyName(PROP_FRM_DIRECTION), *nDirection));
+        }
+
+        // If there is no fill, the Word default is 100% transparency.
+        // Otherwise CellColorHandler has priority, and this setting
+        // will be ignored.
+        aFrameProperties.push_back(comphelper::makePropertyValue(
+            getPropertyName(PROP_BACK_COLOR_TRANSPARENCY), sal_Int32(100)));
+
+        uno::Sequence<beans::PropertyValue> aGrabBag(comphelper::InitPropertySequence(
+            { { "ParaFrameProperties",
+                uno::Any(rAppendContext.pLastParagraphProperties->IsFrameMode()) } }));
+        aFrameProperties.push_back(comphelper::makePropertyValue("FrameInteropGrabBag", aGrabBag));
+
+        lcl_MoveBorderPropertiesToFrame(aFrameProperties,
+                                        rAppendContext.pLastParagraphProperties->GetStartingRange(),
+                                        rAppendContext.pLastParagraphProperties->GetEndingRange());
 
         //frame conversion has to be executed after table conversion
         RegisterFrameConversion(
