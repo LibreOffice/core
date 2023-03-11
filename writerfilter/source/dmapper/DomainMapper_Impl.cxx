@@ -1772,13 +1772,16 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
             aFrameProperties.push_back(comphelper::makePropertyValue(
                 getPropertyName(PROP_VERT_ORIENT_RELATION), nVAnchor));
 
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SURROUND),
-                rAppendContext.pLastParagraphProperties->GetWrap() != text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE
-                ? rAppendContext.pLastParagraphProperties->GetWrap()
-                : pStyleProperties->props().GetWrap()
-                      != text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE
-                  ? pStyleProperties->props().GetWrap()
-                  : text::WrapTextMode_NONE ));
+            text::WrapTextMode nWrap = text::WrapTextMode_NONE;
+            for (const auto pProp : vProps)
+            {
+                if (pProp->GetWrap() == text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE)
+                    continue;
+                nWrap = pProp->GetWrap();
+                break;
+            }
+            aFrameProperties.push_back(
+                comphelper::makePropertyValue(getPropertyName(PROP_SURROUND), nWrap));
 
             /** FDO#73546 : distL & distR should be unsigned integers <Ecma 20.4.3.6>
                 Swapped the array elements 11,12 & 13,14 since 11 & 12 are
