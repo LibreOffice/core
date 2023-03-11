@@ -696,27 +696,38 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
                 xSet->setPropertyValue(u"CharFontFamilyComplex", uno::Any(nFontFamily));
             }
 
-            // LO uses shape fill, MS Office character fill. Currently only this solid fill workaround
-            // is implemented.
-            // ToDo: Consider other fill styles
-            // ToDo: Consider Color Theme
-            xSet->setPropertyValue(UNO_NAME_FILLSTYLE, uno::Any(drawing::FillStyle_SOLID));
-            sal_Int32 aFillColor(COL_BLACK); //default
-            if (rCharProps.maFillProperties.maFillColor.isUsed())
+            // LO uses shape properties, MS Office character properties. Copy them from char to shape.
+            // Outline
+            if (rCharProps.moTextOutlineProperties.has_value())
             {
-                aFillColor = static_cast<sal_Int32>(
-                    rCharProps.maFillProperties.maFillColor.getColor(rFilter.getGraphicHelper())
-                        .GetRGBColor());
-                if (rCharProps.maFillProperties.maFillColor.hasTransparency())
+                oox::drawingml::ShapePropertyMap aStrokeShapeProps(rFilter.getModelObjectHelper());
+                rCharProps.moTextOutlineProperties.value().pushToPropMap(
+                    aStrokeShapeProps, rFilter.getGraphicHelper());
+                for (const auto& rProp : aStrokeShapeProps.makePropertyValueSequence())
                 {
-                    const sal_Int16 aTransparence
-                        = rCharProps.maFillProperties.maFillColor.getTransparency();
-                    xSet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::Any(aTransparence));
+                    xSet->setPropertyValue(rProp.Name, rProp.Value);
                 }
             }
-            xSet->setPropertyValue(UNO_NAME_FILLCOLOR, uno::Any(aFillColor));
+            else
+            {
+                xSet->setPropertyValue(UNO_NAME_LINESTYLE, uno::Any(drawing::LineStyle_NONE));
+            }
 
-            // ToDo: copy character outline to shape stroke.
+            // Fill
+            // ToDo: Replace flip and rotate constants in parameters with actual values.
+            oox::drawingml::ShapePropertyMap aFillShapeProps(rFilter.getModelObjectHelper());
+            rCharProps.maFillProperties.pushToPropMap(aFillShapeProps, rFilter.getGraphicHelper(),
+                                                      /*nShapeRotation*/ 0,
+                                                      /*nPhClr*/ API_RGB_TRANSPARENT,
+                                                      /*nPhClrTheme*/ -1,
+                                                      /*bFlipH*/ false, /*bFlipV*/ false,
+                                                      /*bIsCustomShape*/ true);
+            for (const auto& rProp : aFillShapeProps.makePropertyValueSequence())
+            {
+                xSet->setPropertyValue(rProp.Name, rProp.Value);
+            }
+
+            // ToDo: Import WordArt glow and simple shadow effects. They are available in LO.
         }
 
         // LO does not evaluate paragraph alignment in text path mode. Use text area anchor instead.

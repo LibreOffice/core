@@ -16,7 +16,9 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
@@ -24,6 +26,7 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -584,6 +587,133 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontworkDarkenTransparency)
     // The original "Background 2" is 0xEBDDC3 = rgb(235, 221, 195) => luminance 84.31%
     CPPUNIT_ASSERT_EQUAL(uno::Any(Color(208, 175, 114)),
                          xShapeProps->getPropertyValue(u"FillColor"));
+}
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
+{
+    loadFromURL(u"tdf139618_ImportWordArtGradient.pptx");
+    // Without the patch all WordArt was imported with solid color. Now gradient is imported.
+    // This test covers several aspects of import of gradient fill.
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    // linear gradient, MSO UI 21deg, solid transparency on outline
+    {
+        uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::FillStyle_GRADIENT),
+                             xShapeProps->getPropertyValue(u"FillStyle"));
+        awt::Gradient aGradient;
+        xShapeProps->getPropertyValue(u"FillGradient") >>= aGradient;
+        CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(690), aGradient.Angle);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(16760832), aGradient.StartColor);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(12582912), aGradient.EndColor);
+
+        CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::LineStyle_SOLID),
+                             xShapeProps->getPropertyValue(u"LineStyle"));
+        sal_Int32 nOutlineColor;
+        xShapeProps->getPropertyValue(u"LineColor") >>= nOutlineColor;
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7384391), nOutlineColor);
+        sal_Int16 nLineTransparence;
+        xShapeProps->getPropertyValue(u"LineTransparence") >>= nLineTransparence;
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(60), nLineTransparence);
+    }
+
+    // radial gradient, direct color with transparency, focus center, dotted outline
+    // The stop color transparency is imported as transparency gradient with same geometry.
+    {
+        uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::FillStyle_GRADIENT),
+                             xShapeProps->getPropertyValue(u"FillStyle"));
+        awt::Gradient aGradient;
+        xShapeProps->getPropertyValue(u"FillGradient") >>= aGradient;
+        CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_RADIAL, aGradient.Style);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(15132160), aGradient.EndColor);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(33760), aGradient.StartColor);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(50), aGradient.XOffset);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(50), aGradient.YOffset);
+
+        xShapeProps->getPropertyValue(u"FillTransparenceGradient") >>= aGradient;
+        CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_RADIAL, aGradient.Style);
+        // Transparency is encoded in gray color.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5000268), aGradient.EndColor);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6710886), aGradient.StartColor);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(50), aGradient.XOffset);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(50), aGradient.YOffset);
+
+        CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::LineStyle_DASH),
+                             xShapeProps->getPropertyValue(u"LineStyle"));
+        CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::LineCap_ROUND),
+                             xShapeProps->getPropertyValue(u"LineCap"));
+        CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(7384391)),
+                             xShapeProps->getPropertyValue(u"LineColor"));
+        drawing::LineDash aLineDash;
+        xShapeProps->getPropertyValue(u"LineDash") >>= aLineDash;
+        CPPUNIT_ASSERT_EQUAL(drawing::DashStyle_ROUNDRELATIVE, aLineDash.Style);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(1), aLineDash.Dots);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aLineDash.Dashes);
+    }
+
+    // solid theme color accent 1, rectangular transparency gradient, focus top-right, no outline
+    // FillProperties::pushToPropMap imports this currently (Mar 2023) as color gradient.
+    // Thus no theme color is tested but direct color.
+    {
+        uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::FillStyle_GRADIENT),
+                             xShapeProps->getPropertyValue(u"FillStyle"));
+        awt::Gradient aGradient;
+        xShapeProps->getPropertyValue(u"FillGradient") >>= aGradient;
+        CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_RECT, aGradient.Style);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4485828), aGradient.EndColor);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4485828), aGradient.StartColor);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(100), aGradient.XOffset);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aGradient.YOffset);
+
+        xShapeProps->getPropertyValue(u"FillTransparenceGradient") >>= aGradient;
+        CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_RECT, aGradient.Style);
+        // Transparency is encoded in gray color.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(16777215), aGradient.EndColor);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aGradient.StartColor);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(100), aGradient.XOffset);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aGradient.YOffset);
+
+        CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::LineStyle_NONE),
+                             xShapeProps->getPropertyValue(u"LineStyle"));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWordArtBitmapFill)
+{
+    // The document has a WordArt shape with bitmap fill.
+    // Without fix it was imported as solid color fill.
+    loadFromURL(u"tdf139618_WordArtBitmapFill.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::FillStyle_BITMAP),
+                         xShapeProps->getPropertyValue(u"FillStyle"));
+
+    // Test some bitmap properties
+    CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::BitmapMode_REPEAT),
+                         xShapeProps->getPropertyValue(u"FillBitmapMode"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(true), xShapeProps->getPropertyValue(u"FillBitmapTile"));
+    uno::Reference<awt::XBitmap> xBitmap;
+    xShapeProps->getPropertyValue(u"FillBitmap") >>= xBitmap;
+
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xGraphic.set(xBitmap, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xGraphicDescriptor(xGraphic, uno::UNO_QUERY_THROW);
+    OUString sMimeType;
+    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("MimeType") >>= sMimeType);
+    CPPUNIT_ASSERT_EQUAL(OUString("image/jpeg"), sMimeType);
+    awt::Size aSize100thMM;
+    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("Size100thMM") >>= aSize100thMM);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1592), aSize100thMM.Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1592), aSize100thMM.Height);
 }
 CPPUNIT_PLUGIN_IMPLEMENT();
 

@@ -1297,6 +1297,32 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkRectGradient)
     assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:schemeClr/w14:lumOff", "val", "60000");
     assertXPath(pXmlDoc, sElement + "w14:gs[3]/w14:schemeClr/w14:alpha", "val", "70000");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testThemeColorTransparency)
+{
+    // The document has first a Fontwork shape with solid fill theme color with transparency and
+    // outline transparency and second a textbox with character transparency.
+    // Without fix the transparency was not written to file.
+    loadFromURL(u"tdf139618_ThemeColorTransparency.pptx");
+
+    save("Impress Office Open XML");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
+
+    // Make sure a:alpha is written for line color and for fill color.
+    // Make sure fill color is a schemeClr.
+    OString sElement = "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p/a:r/a:rPr/";
+    assertXPath(pXmlDoc, sElement + "a:ln/a:solidFill/a:srgbClr/a:alpha", "val", "25000");
+    assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr", "val", "accent1");
+    assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr/a:lumMod", "val", "60000");
+    assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr/a:lumOff", "val", "40000");
+    assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr/a:alpha", "val", "35000");
+
+    // Make sure a:alpha is written for characters and fill color is a schemeClr.
+    sElement = "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:r/a:rPr/";
+    assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr", "val", "accent4");
+    assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr/a:lumMod", "val", "75000");
+    assertXPath(pXmlDoc, sElement + "a:solidFill/a:schemeClr/a:alpha", "val", "20000");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

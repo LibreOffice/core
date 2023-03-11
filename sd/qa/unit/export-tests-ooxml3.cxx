@@ -575,20 +575,21 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf125573_FontWorkScaleX)
     assertXPath(pXmlDocContent,
                 "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr[@fromWordArt='1']");
 
-    // State of Nov 2022. It needs to be updated, when import of fill and stroke is implemented.
     // Error was, that text in legacy shapes of category "Follow Path" was not scaled to the path.
     uno::Reference<beans::XPropertySet> xShapeArchProps(getShapeFromPage(0, 0));
     awt::Rectangle aBoundRectArch;
     xShapeArchProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectArch;
     // BoundRect is DPI dependent, thus allow some range.
+    // Expected width is 13139 in 96dpi and is 13106 in 120 dpi, for example
     // (Without fix Expected less than: 85 Actual  : 10432)
-    CPPUNIT_ASSERT_LESS(sal_Int32(85), std::abs(aBoundRectArch.Width - 13038));
+    CPPUNIT_ASSERT_LESS(sal_Int32(85), std::abs(aBoundRectArch.Width - 13139));
 
     // Error was, that text in shapes of category "Warp" was not scaled to the path.
     uno::Reference<beans::XPropertySet> xShapeWaveProps(getShapeFromPage(0, 1));
     awt::Rectangle aBoundRectWave;
     xShapeWaveProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectWave;
     // BoundRect is DPI dependent, thus allow some range.
+    // Expected with is 11576 in 96dpt and is 11578 in 120dpi, for example
     CPPUNIT_ASSERT_LESS(sal_Int32(85), std::abs(aBoundRectWave.Width - 11576));
 }
 

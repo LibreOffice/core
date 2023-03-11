@@ -582,6 +582,18 @@ bool DrawingML::WriteSchemeColor(OUString const& rPropertyName, const uno::Refer
                 break;
         }
     }
+    // Alpha is actually not contained in maTransformations although possible (as of Mar 2023).
+    sal_Int16 nAPITransparency(0);
+    if ((rPropertyName == u"FillColorThemeReference"
+         && GetProperty(xPropertySet, "FillTransparence"))
+        || (rPropertyName == u"LineColorThemeReference"
+            && GetProperty(xPropertySet, "LineTransparence"))
+        || (rPropertyName == u"CharColorThemeReference"
+            && GetProperty(xPropertySet, "CharTransparence")))
+        mAny >>= nAPITransparency;
+    if (nAPITransparency != 0)
+        mpFS->singleElementNS(XML_a, XML_alpha, XML_val,
+                              OString::number(MAX_PERCENT - (PER_PERCENT * nAPITransparency)));
 
     mpFS->endElementNS(XML_a, XML_schemeClr);
     mpFS->endElementNS(XML_a, XML_solidFill);
