@@ -4612,13 +4612,17 @@ namespace {
 */
 class DispatchResultListener : public cppu::WeakImplHelper<css::frame::XDispatchResultListener>
 {
-    OString maCommand;                 ///< Command for which this is the result.
-    std::shared_ptr<CallbackFlushHandler> mpCallback; ///< Callback to call.
+    const OString maCommand; ///< Command for which this is the result.
+    const std::shared_ptr<CallbackFlushHandler> mpCallback; ///< Callback to call.
+    const std::chrono::steady_clock::time_point mSaveTime; //< The time we started saving.
+    const bool mbWasModified; //< Whether or not the document was modified before saving.
 
 public:
     DispatchResultListener(const char* pCommand, std::shared_ptr<CallbackFlushHandler> pCallback)
         : maCommand(pCommand)
         , mpCallback(std::move(pCallback))
+        , mSaveTime(std::chrono::steady_clock::now())
+        , mbWasModified(SfxObjectShell::Current()->IsModified())
     {
         assert(mpCallback);
     }
@@ -4635,6 +4639,14 @@ public:
         }
 
         unoAnyToJson(aJson, "result", rEvent.Result);
+        aJson.put("wasModified", mbWasModified);
+        aJson.put("startUnixTimeMics",
+                  std::chrono::time_point_cast<std::chrono::microseconds>(mSaveTime)
+                      .time_since_epoch()
+                      .count());
+        aJson.put("saveDurationMics", std::chrono::duration_cast<std::chrono::microseconds>(
+                                          std::chrono::steady_clock::now() - mSaveTime)
+                                          .count());
         mpCallback->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
     }
 
