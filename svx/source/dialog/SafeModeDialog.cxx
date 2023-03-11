@@ -19,6 +19,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/FileExportedDialog.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -82,7 +83,8 @@ SafeModeDialog::SafeModeDialog(weld::Window* pParent)
     RadioBtnHdl(*mxRadioRestore);
 
     // Set URL for help button (module=safemode)
-    OUString sURL("http://hub.libreoffice.org/send-feedback/?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
+    OUString sURL(officecfg::Office::Common::Menus::SendFeedbackURL::get()  //officecfg/registry/data/org/openoffice/Office/Common.xcu => https://hub.libreoffice.org/send-feedback/
+     + "?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
         "&LOlocale=" + utl::ConfigManager::getUILocale() + "&LOmodule=safemode");
     mxBugLink->set_uri(sURL);
 

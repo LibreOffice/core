@@ -23,6 +23,10 @@ $(eval $(call gb_CppunitTest_set_include,svx_dialogs_test,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,svx_dialogs_test,\
+    officecfg/registry \
+))
+
 $(eval $(call gb_CppunitTest_use_libraries,svx_dialogs_test, \
     basegfx \
     comphelper \
