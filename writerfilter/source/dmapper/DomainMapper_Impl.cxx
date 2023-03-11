@@ -1692,18 +1692,29 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
             aFrameProperties.push_back(comphelper::makePropertyValue(
                 getPropertyName(PROP_HORI_ORIENT_RELATION), nHAnchor));
 
-            sal_Int16 nVertOrient = sal_Int16(
-                rAppendContext.pLastParagraphProperties->GetyAlign() >= 0 ?
-                    rAppendContext.pLastParagraphProperties->GetyAlign() :
-                    pStyleProperties->props().GetyAlign() >= 0 ? pStyleProperties->props().GetyAlign() : text::VertOrientation::NONE );
+            sal_Int16 nVertOrient = text::VertOrientation::NONE;
+            for (const auto pProp : vProps)
+            {
+                if (pProp->GetyAlign() < 0)
+                    continue;
+                nVertOrient = pProp->GetyAlign();
+                break;
+            }
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT), nVertOrient));
 
             //set a non negative default value
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_POSITION),
-                rAppendContext.pLastParagraphProperties->IsyValid() ?
-                    rAppendContext.pLastParagraphProperties->Gety() :
-                    pStyleProperties->props().IsyValid()
-                        ? pStyleProperties->props().Gety() : DEFAULT_VALUE));
+            bool bValidY = false;
+            sal_Int32 nY = DEFAULT_VALUE;
+            for (const auto pProp : vProps)
+            {
+                bValidY = pProp->IsyValid();
+                if (!bValidY)
+                    continue;
+                nY = pProp->Gety();
+                break;
+            }
+            aFrameProperties.push_back(
+                comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_POSITION), nY));
 
             //Default the anchor in case FramePr_vAnchor is missing ECMA 17.3.1.11
             sal_Int16 nVAnchor = text::RelOrientation::FRAME; // 'text'
