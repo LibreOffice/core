@@ -1603,6 +1603,21 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
         StyleSheetEntryPtr pParaStyle =
             GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(rAppendContext.pLastParagraphProperties->GetParaStyleName());
 
+        // A paragraph's properties come from direct formatting or somewhere in the style hierarchy
+        std::vector<const ParagraphProperties*> vProps;
+        vProps.emplace_back(rAppendContext.pLastParagraphProperties.get());
+        sal_Int8 nSafetyLimit = 16;
+        StyleSheetEntryPtr pStyle = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(
+            rAppendContext.pLastParagraphProperties->GetParaStyleName());
+        while (--nSafetyLimit && pStyle && pStyle->m_pProperties)
+        {
+            vProps.emplace_back(&pStyle->m_pProperties->props());
+            assert(pStyle->m_sBaseStyleIdentifier != pStyle->m_sStyleName);
+            if (pStyle->m_sBaseStyleIdentifier.isEmpty())
+                break;
+            pStyle = GetStyleSheetTable()->FindStyleSheetByISTD(pStyle->m_sBaseStyleIdentifier);
+        }
+
         std::vector<beans::PropertyValue> aFrameProperties;
 
         if ( pParaStyle )
@@ -1665,10 +1680,16 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                         ? pStyleProperties->props().Getx() : DEFAULT_VALUE));
 
             //Default the anchor in case FramePr_hAnchor is missing ECMA 17.3.1.11
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT_RELATION), sal_Int16(
-                rAppendContext.pLastParagraphProperties->GethAnchor() >= 0 ?
-                    rAppendContext.pLastParagraphProperties->GethAnchor() :
-                pStyleProperties->props().GethAnchor() >=0 ? pStyleProperties->props().GethAnchor() : text::RelOrientation::FRAME )));
+            sal_Int16 nHAnchor = text::RelOrientation::FRAME;
+            for (const auto pProp : vProps)
+            {
+                if (pProp->GethAnchor() < 0)
+                    continue;
+                nHAnchor = pProp->GethAnchor();
+                break;
+            }
+            aFrameProperties.push_back(comphelper::makePropertyValue(
+                getPropertyName(PROP_HORI_ORIENT_RELATION), nHAnchor));
 
             sal_Int16 nVertOrient = sal_Int16(
                 rAppendContext.pLastParagraphProperties->GetyAlign() >= 0 ?

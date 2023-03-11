@@ -16,6 +16,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -132,6 +133,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104394_lostTextbox, "tdf104394_lostTextbox.docx"
 {
     // This was only one page b/c the textbox was missing.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf154129_framePr1, "tdf154129_framePr1.docx")
+{
+    for (size_t i = 1; i < 4; ++i)
+    {
+        uno::Reference<drawing::XShape> xTextFrame = getShape(i);
+        // The anchor is defined in the style, and only the first style was checked, not the parents
+        auto nAnchor = getProperty<sal_Int16>(xTextFrame, "HoriOrientRelation");
+        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, nAnchor);
+        //nAnchor = getProperty<sal_Int16>(xTextFrame, "VertOrientRelation");
+        //CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, nAnchor);
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak, "tdf153613_anchoredAfterPgBreak.docx")
