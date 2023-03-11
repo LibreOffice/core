@@ -306,7 +306,11 @@ bool LogicalFontInstance::GetGlyphOutlineUntransformed(sal_GlyphId nGlyph,
         hb_draw_funcs_set_close_path_func(m_pHbDrawFuncs, close_path_func, pUserData, nullptr);
     }
 
+#if HB_VERSION_ATLEAST(7, 0, 0)
+    hb_font_draw_glyph(GetHbFontUntransformed(), nGlyph, m_pHbDrawFuncs, &rPolyPoly);
+#else
     hb_font_get_glyph_shape(GetHbFontUntransformed(), nGlyph, m_pHbDrawFuncs, &rPolyPoly);
+#endif
     return true;
 }
 
