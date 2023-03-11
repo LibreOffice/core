@@ -1651,10 +1651,14 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
             aFrameProperties.push_back(
                 comphelper::makePropertyValue(getPropertyName(PROP_HEIGHT), nHeight));
 
-            sal_Int16 nhRule = sal_Int16(
-                rAppendContext.pLastParagraphProperties->GethRule() >= 0 ?
-                    rAppendContext.pLastParagraphProperties->GethRule() :
-                    pStyleProperties->props().GethRule());
+            sal_Int16 nhRule = -1;
+            for (const auto pProp : vProps)
+            {
+                if (pProp->GethRule() < 0)
+                    continue;
+                nhRule = pProp->GethRule();
+                break;
+            }
             if ( nhRule < 0 )
             {
                 if ( rAppendContext.pLastParagraphProperties->Geth() >= 0 ||
