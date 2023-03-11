@@ -1667,18 +1667,29 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_FRM_DIRECTION), *nDirection));
             }
 
-            sal_Int16 nHoriOrient = sal_Int16(
-                rAppendContext.pLastParagraphProperties->GetxAlign() >= 0 ?
-                    rAppendContext.pLastParagraphProperties->GetxAlign() :
-                    pStyleProperties->props().GetxAlign() >= 0 ? pStyleProperties->props().GetxAlign() : text::HoriOrientation::NONE );
+            sal_Int16 nHoriOrient = text::HoriOrientation::NONE;
+            for (const auto pProp : vProps)
+            {
+                if (pProp->GetxAlign() < 0)
+                    continue;
+                nHoriOrient = pProp->GetxAlign();
+                break;
+            }
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT), nHoriOrient));
 
             //set a non negative default value
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT_POSITION),
-                rAppendContext.pLastParagraphProperties->IsxValid() ?
-                    rAppendContext.pLastParagraphProperties->Getx() :
-                    pStyleProperties->props().IsxValid()
-                        ? pStyleProperties->props().Getx() : DEFAULT_VALUE));
+            bool bValidX = false;
+            sal_Int32 nX = DEFAULT_VALUE;
+            for (const auto pProp : vProps)
+            {
+                bValidX = pProp->IsxValid();
+                if (!bValidX)
+                    continue;
+                nX = pProp->Getx();
+                break;
+            }
+            aFrameProperties.push_back(
+                comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT_POSITION), nX));
 
             //Default the anchor in case FramePr_hAnchor is missing ECMA 17.3.1.11
             sal_Int16 nHAnchor = text::RelOrientation::FRAME;
