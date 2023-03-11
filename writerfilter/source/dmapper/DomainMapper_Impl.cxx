@@ -1706,22 +1706,21 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                         ? pStyleProperties->props().Gety() : DEFAULT_VALUE));
 
             //Default the anchor in case FramePr_vAnchor is missing ECMA 17.3.1.11
-            if (rAppendContext.pLastParagraphProperties->GetWrap() == text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE &&
-                pStyleProperties->props().GetWrap()
-                    == text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE)
+            sal_Int16 nVAnchor = text::RelOrientation::FRAME; // 'text'
+            if (rAppendContext.pLastParagraphProperties->GetWrap() != text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE ||
+                pStyleProperties->props().GetWrap() != text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE)
             {
-                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_RELATION), sal_Int16(
-                    rAppendContext.pLastParagraphProperties->GetvAnchor() >= 0 ?
-                    rAppendContext.pLastParagraphProperties->GetvAnchor() :
-                    pStyleProperties->props().GetvAnchor() >= 0 ? pStyleProperties->props().GetvAnchor() : text::RelOrientation::FRAME)));
+                nVAnchor = text::RelOrientation::PAGE_PRINT_AREA; // 'margin'
             }
-            else
+            for (const auto pProp : vProps)
             {
-                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_RELATION), sal_Int16(
-                    rAppendContext.pLastParagraphProperties->GetvAnchor() >= 0 ?
-                    rAppendContext.pLastParagraphProperties->GetvAnchor() :
-                    pStyleProperties->props().GetvAnchor() >= 0 ? pStyleProperties->props().GetvAnchor() : text::RelOrientation::PAGE_PRINT_AREA)));
+                if (pProp->GetvAnchor() < 0)
+                    continue;
+                nVAnchor = pProp->GetvAnchor();
+                break;
             }
+            aFrameProperties.push_back(comphelper::makePropertyValue(
+                getPropertyName(PROP_VERT_ORIENT_RELATION), nVAnchor));
 
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SURROUND),
                 rAppendContext.pLastParagraphProperties->GetWrap() != text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE

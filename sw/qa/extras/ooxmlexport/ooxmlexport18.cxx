@@ -143,8 +143,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154129_framePr1, "tdf154129_framePr1.docx")
         // The anchor is defined in the style, and only the first style was checked, not the parents
         auto nAnchor = getProperty<sal_Int16>(xTextFrame, "HoriOrientRelation");
         CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, nAnchor);
-        //nAnchor = getProperty<sal_Int16>(xTextFrame, "VertOrientRelation");
-        //CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, nAnchor);
+        nAnchor = getProperty<sal_Int16>(xTextFrame, "VertOrientRelation");
+        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, nAnchor);
     }
 }
 
