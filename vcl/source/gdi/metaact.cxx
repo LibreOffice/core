@@ -1483,6 +1483,8 @@ MetaMoveClipRegionAction::MetaMoveClipRegionAction( tools::Long nHorzMove, tools
 
 void MetaMoveClipRegionAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowY(pOut->LogicToPixel(Point(mnHorzMove, mnVertMove)).Y()))
+        return;
     pOut->MoveClipRegion( mnHorzMove, mnVertMove );
 }
 
