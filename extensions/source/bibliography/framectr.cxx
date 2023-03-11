@@ -481,7 +481,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
     {
         RemoveFilter();
     }
-    else if( _rURL.Complete == "slot:5503" || aCommand == "CloseDoc" )
+    else if( _rURL.Complete == ".uno:CloseDoc" || aCommand == "CloseDoc" )
     {
         Application::PostUserEvent( LINK( this, BibFrameController_Impl,
                                     DisposeHdl ) );
