@@ -15,13 +15,7 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,harfbuzz))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,harfbuzz,0))
 
-#   <https://github.com/harfbuzz/harfbuzz/pull/3874> "Adjust unsafe-to-break for non-zero ValueFormat2":
 $(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
-    external/harfbuzz/3874.patch.1 \
-    external/harfbuzz/0001-hb-view-Fix-cairo-slanting-condition.patch.1 \
-    external/harfbuzz/0001-font-Respect-subfont-slant-setting-in-hb-draw.patch.1 \
-    external/harfbuzz/0001-buffer-diff-Fix-check-for-glyph-flag-equality.patch.1 \
-    external/harfbuzz/0001-PairPos-Another-attempt-at-fixing-unsafe-to-break-wi.patch.1 \
     $(if $(filter LINUX,$(OS)), \
         external/harfbuzz/harfbuzz-fd-hack.patch.0 \
     ) \
