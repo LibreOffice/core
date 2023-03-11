@@ -195,7 +195,7 @@ namespace
                 {
                     --rDelCount;
                 }
-                rLastIdx--;
+                --rLastIdx;
             }
         }
     }
@@ -2696,7 +2696,7 @@ void DocumentContentOperationsManager::MoveAndJoin( SwPaM& rPaM, SwPosition& rPo
     SwNodeIndex aIdx( rPaM.Start()->GetNode() );
     bool bJoinText = aIdx.GetNode().IsTextNode();
     bool bOneNode = rPaM.GetPoint()->GetNode() == rPaM.GetMark()->GetNode();
-    aIdx--;             // in front of the move area!
+    --aIdx;             // in front of the move area!
 
     bool bRet = MoveRange( rPaM, rPos, SwMoveFlags::DEFAULT );
     if( !bRet || bOneNode )
@@ -5038,7 +5038,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                         pEnd->AdjustContent( -nCpyLen );
                 }
 
-                aRg.aStart++;
+                ++aRg.aStart;
 
                 if( bOneNode )
                 {
@@ -5089,13 +5089,13 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
 
                 // Correct the area again
                 if( bEndEqualIns )
-                    aRg.aEnd--;
+                    --aRg.aEnd;
                 // The end would also be moved
                 else if( rPos == *pEnd )
                 {
                     rPos.Adjust(SwNodeOffset(-1));
                     rPos.SetContent( nContentEnd );
-                    aRg.aEnd--;
+                    --aRg.aEnd;
                 }
             }
             else if( bCanMoveBack )
@@ -5119,7 +5119,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                 pDestTextNd = rDoc.GetNodes().MakeTextNode( aInsPos.GetNode(),
                             rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD));
                 aDestIdx.Assign( pDestTextNd, 0  );
-                aInsPos--;
+                --aInsPos;
 
                 // if we have to insert an extra text node
                 // at the destination, this node will be our new destination

@@ -1475,7 +1475,7 @@ static bool isGraphicNode(const SwFrameFormat* pFrameFormat)
     }
     auto index = *pFrameFormat->GetContent().GetContentIdx();
     // consider the next node -> there is the graphic stored
-    index++;
+    ++index;
     return index.GetNode().IsGrfNode();
 }
 

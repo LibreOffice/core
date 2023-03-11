@@ -645,8 +645,11 @@ SetNextCursor:
                 RestoreSavePos();
             return true;
         }
-        else if( pNd->IsTableNode() && aCellStt++ )
+        else if( pNd->IsTableNode() )
+        {
+            ++aCellStt;
             goto GoNextCell;
+        }
 
         bProt = false; // index is now on a content node
         goto SetNextCursor;
@@ -697,8 +700,11 @@ SetPrevCursor:
                 RestoreSavePos();
             return true;
         }
-        else if( pNd->StartOfSectionNode()->IsTableNode() && aCellStt-- )
+        else if( pNd->StartOfSectionNode()->IsTableNode() )
+        {
+            --aCellStt;
             goto GoPrevCell;
+        }
 
         bProt = false; // index is now on a content node
         goto SetPrevCursor;

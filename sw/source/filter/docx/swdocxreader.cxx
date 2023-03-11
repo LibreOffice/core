@@ -176,7 +176,7 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
             }
 
             // Do not copy name
-            aStart++;
+            ++aStart;
 
             // Get content
             SwPaM aPam( aStart );

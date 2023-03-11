@@ -118,7 +118,7 @@ void XTextRangeOrNodeIndexPosition::Set( Reference<XTextRange> const & rRange )
 void XTextRangeOrNodeIndexPosition::Set( SwNode const & rIndex )
 {
     m_oIndex = rIndex;
-    (*m_oIndex)-- ;   // previous node!!!
+    --(*m_oIndex) ;   // previous node!!!
     m_xRange = nullptr;
 }
 

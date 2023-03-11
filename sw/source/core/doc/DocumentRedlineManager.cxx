@@ -2286,8 +2286,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         // tracked deletion of the text containing such a table leaves an
                         // empty table at the place of the table (a problem inherited from OOo).
                         pTextNd = nullptr;
-                        while( --aIdx && pDelNd->GetIndex() < aIdx.GetIndex() &&
-                                !aIdx.GetNode().IsContentNode() )
+                        while( --aIdx > *pDelNd && !aIdx.GetNode().IsContentNode() )
                         {
                             // possible table end
                             if( aIdx.GetNode().IsEndNode() && aIdx.GetNode().FindTableNode() )

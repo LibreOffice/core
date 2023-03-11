@@ -2497,7 +2497,7 @@ void SwWrtShell::MakeOutlineContentVisible(const size_t nPos, bool bMakeVisible,
             pNd->GetContentNode()->DelFrames(nullptr);
         else if (pNd->IsTableNode())
             pNd->GetTableNode()->DelFrames(nullptr);
-        aIdx++;
+        ++aIdx;
     }
 
     if (bMakeVisible) // make outline nodes outline content visible
@@ -2529,7 +2529,7 @@ void SwWrtShell::MakeOutlineContentVisible(const size_t nPos, bool bMakeVisible,
                         }
                     }
                 }
-                aIdx++;
+                ++aIdx;
             }
         }
     }
@@ -2651,7 +2651,7 @@ bool SwWrtShell::HasFoldedOutlineContentSelected()
             continue;
         // Return true if any nodes in PaM are folded outline content nodes.
         SwOutlineNodes::size_type nPos;
-        for (SwNodeIndex aIdx = aPointIdx; aIdx <= aMarkIdx; aIdx++)
+        for (SwNodeIndex aIdx = aPointIdx; aIdx <= aMarkIdx; ++aIdx)
         {
             if (GetDoc()->GetNodes().GetOutLineNds().Seek_Entry(&(aIdx.GetNode()), &nPos) &&
                     !GetAttrOutlineContentVisible(nPos))

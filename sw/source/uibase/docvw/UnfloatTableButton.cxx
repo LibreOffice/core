@@ -120,7 +120,7 @@ void UnfloatTableButton::MouseButtonDown(const MouseEvent& /*rMEvt*/)
     if (pTextFrame->GetTextNodeFirst() == nullptr)
         return;
 
-    SwNodeIndex aInsertPos((*pTextFrame->GetTextNodeFirst()));
+    SwNodeIndex aInsertPos(*pTextFrame->GetTextNodeFirst());
 
     SwTableNode* pTableNode = pTableFrame->GetTable()->GetTableNode();
     if (pTableNode == nullptr)
