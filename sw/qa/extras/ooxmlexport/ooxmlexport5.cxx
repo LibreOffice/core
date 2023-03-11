@@ -1418,6 +1418,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf112287)
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr","vAnchor","margin");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf112287B)
+{
+    loadAndSave("tdf112287B.docx");
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr","vAnchor","text");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr","hAnchor","text");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testZOrderInHeader)
 {
     loadAndSave("tdf120760_ZOrderInHeader.docx");

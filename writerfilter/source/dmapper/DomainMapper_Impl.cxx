@@ -1718,8 +1718,9 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 
             //Default the anchor in case FramePr_vAnchor is missing ECMA 17.3.1.11
             sal_Int16 nVAnchor = text::RelOrientation::FRAME; // 'text'
-            if (rAppendContext.pLastParagraphProperties->GetWrap() != text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE ||
-                pStyleProperties->props().GetWrap() != text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE)
+            // vAlign is ignored if vAnchor is set to 'text'. So, if w:y is not defined,
+            // but there is a defined vAlign, then a missing vAnchor should become 'margin'.
+            if (!bValidY && nVertOrient)
             {
                 nVAnchor = text::RelOrientation::PAGE_PRINT_AREA; // 'margin'
             }
