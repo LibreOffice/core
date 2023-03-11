@@ -5689,6 +5689,9 @@ if test "$cross_compiling" = "yes"; then
             sub_conf_opts="$sub_conf_opts --with-main-module=writer"
         fi
     fi
+    # windows uses full-internal python and that in turn relies on openssl, so also enable openssl
+    # when cross-compiling for aarch64, overriding the defaults below
+    test "${PLATFORMID}" = "windows_aarch64" && sub_conf_opts="$sub_conf_opts --enable-openssl --with-tls=openssl"
 
     # Don't bother having configure look for stuff not needed for the build platform anyway
     # WARNING: any option with an argument containing spaces must be handled separately (see --with-theme)
@@ -5772,6 +5775,7 @@ if test "$cross_compiling" = "yes"; then
         LIBXSLT
         MDDS
         NATIVE
+        OPENSSL
         ORCUS
         PYTHON
         SCRIPTING
