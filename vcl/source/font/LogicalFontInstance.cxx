@@ -306,7 +306,11 @@ basegfx::B2DPolyPolygon LogicalFontInstance::GetGlyphOutlineUntransformed(sal_Gl
     }
 
     basegfx::B2DPolyPolygon aPolyPoly;
+#if HB_VERSION_ATLEAST(7, 0, 0)
+    hb_font_draw_glyph(GetHbFontUntransformed(), nGlyph, m_pHbDrawFuncs, &aPolyPoly);
+#else
     hb_font_get_glyph_shape(GetHbFontUntransformed(), nGlyph, m_pHbDrawFuncs, &aPolyPoly);
+#endif
     return aPolyPoly;
 }
 
