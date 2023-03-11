@@ -1887,8 +1887,8 @@ void trimMemory(int nTarget)
             return;
         pSVData->dropCaches();
         vcl::graphic::Manager::get().dropCache();
-        // free up any deeper dirtied thread stacks.
-        comphelper::ThreadPool::getSharedOptimalPool().shutdown();
+        // TODO: ideally - free up any deeper dirtied thread stacks.
+        // comphelper::ThreadPool::getSharedOptimalPool().shutdown();
     }
     // else for now caches re-fill themselves as/when used.
 }

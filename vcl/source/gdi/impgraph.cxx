@@ -1424,6 +1424,9 @@ void ImpGraphic::updateFromLoadedGraphic(const ImpGraphic* pGraphic)
 
 void ImpGraphic::dumpState(rtl::OStringBuffer &rState)
 {
+    if (meType == GraphicType::NONE && mnSizeBytes == 0)
+        return; // uninteresting.
+
     rState.append("\n\t");
 
     if (mbSwapOut)
@@ -1433,8 +1436,12 @@ void ImpGraphic::dumpState(rtl::OStringBuffer &rState)
 
     rState.append(static_cast<sal_Int32>(meType));
     rState.append("\tsize:\t");
-    rState.append(static_cast<sal_Int64>(mnSizeBytes/1024));
-    rState.append("\tkb\t");
+    rState.append(static_cast<sal_Int64>(mnSizeBytes));
+    rState.append("\t");
+    rState.append(static_cast<sal_Int32>(maSwapInfo.maSizePixel.Width()));
+    rState.append("x");
+    rState.append(static_cast<sal_Int32>(maSwapInfo.maSizePixel.Height()));
+    rState.append("\t");
     rState.append(static_cast<sal_Int32>(maExPrefSize.Width()));
     rState.append("x");
     rState.append(static_cast<sal_Int32>(maExPrefSize.Height()));

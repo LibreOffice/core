@@ -92,7 +92,7 @@ void Manager::loopGraphicsAndSwapOut(std::unique_lock<std::mutex>& rGuard, bool 
             continue;
 
         sal_Int64 nCurrentGraphicSize = getGraphicSizeBytes(pEachImpGraphic);
-        if (nCurrentGraphicSize > 100000)
+        if (nCurrentGraphicSize > 100000 || bDropAll)
         {
             if (!pEachImpGraphic->mpContext)
             {
@@ -166,7 +166,6 @@ void Manager::dumpState(rtl::OStringBuffer &rState)
     rState.append(static_cast<sal_Int64>(mnUsedSize/1024));
     rState.append("\tkb");
 
-    sal_Int32 i = 0;
     for (ImpGraphic* pEachImpGraphic : m_pImpGraphicList)
     {
         pEachImpGraphic->dumpState(rState);

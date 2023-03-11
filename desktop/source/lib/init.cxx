@@ -2567,6 +2567,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->setOption = lo_setOption;
         m_pOfficeClass->dumpState = lo_dumpState;
         m_pOfficeClass->extractRequest = lo_extractRequest;
+        m_pOfficeClass->trimMemory = lo_trimMemory;
 
         gOfficeClass = m_pOfficeClass;
     }
