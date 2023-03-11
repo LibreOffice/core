@@ -1626,19 +1626,30 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
             const StyleSheetPropertyMap* pStyleProperties = pParaStyle->m_pProperties.get();
             if (!pStyleProperties)
                 return;
-            sal_Int32 nWidth =
-                rAppendContext.pLastParagraphProperties->Getw() > 0 ?
-                    rAppendContext.pLastParagraphProperties->Getw() :
-                    pStyleProperties->props().Getw();
+
+            sal_Int32 nWidth = -1;
+            for (const auto pProp : vProps)
+            {
+                if (pProp->Getw() < 0)
+                    continue;
+                nWidth = pProp->Getw();
+                break;
+            }
             bool bAutoWidth = nWidth < 1;
             if( bAutoWidth )
                 nWidth = DEFAULT_FRAME_MIN_WIDTH;
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_WIDTH), nWidth));
 
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HEIGHT),
-                rAppendContext.pLastParagraphProperties->Geth() > 0 ?
-                    rAppendContext.pLastParagraphProperties->Geth() :
-                    pStyleProperties->props().Geth() > 0 ? pStyleProperties->props().Geth() : DEFAULT_FRAME_MIN_HEIGHT));
+            sal_Int32 nHeight = DEFAULT_FRAME_MIN_HEIGHT;
+            for (const auto pProp : vProps)
+            {
+                if (pProp->Geth() < 0)
+                    continue;
+                nHeight = pProp->Geth();
+                break;
+            }
+            aFrameProperties.push_back(
+                comphelper::makePropertyValue(getPropertyName(PROP_HEIGHT), nHeight));
 
             sal_Int16 nhRule = sal_Int16(
                 rAppendContext.pLastParagraphProperties->GethRule() >= 0 ?
