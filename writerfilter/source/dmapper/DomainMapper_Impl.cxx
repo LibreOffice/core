@@ -1612,9 +1612,6 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
         return;
     try
     {
-        StyleSheetEntryPtr pParaStyle =
-            GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(rAppendContext.pLastParagraphProperties->GetParaStyleName());
-
         // A paragraph's properties come from direct formatting or somewhere in the style hierarchy
         std::vector<const ParagraphProperties*> vProps;
         vProps.emplace_back(rAppendContext.pLastParagraphProperties.get());
@@ -1633,12 +1630,8 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 
         std::vector<beans::PropertyValue> aFrameProperties;
 
-        if ( pParaStyle )
+        if (vProps.size() > 1)
         {
-            const StyleSheetPropertyMap* pStyleProperties = pParaStyle->m_pProperties.get();
-            if (!pStyleProperties)
-                return;
-
             sal_Int32 nWidth = -1;
             for (const auto pProp : vProps)
             {
@@ -1652,12 +1645,14 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 nWidth = DEFAULT_FRAME_MIN_WIDTH;
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_WIDTH), nWidth));
 
+            bool bValidH = false;
             sal_Int32 nHeight = DEFAULT_FRAME_MIN_HEIGHT;
             for (const auto pProp : vProps)
             {
                 if (pProp->Geth() < 0)
                     continue;
                 nHeight = pProp->Geth();
+                bValidH = true;
                 break;
             }
             aFrameProperties.push_back(
@@ -1673,8 +1668,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
             }
             if ( nhRule < 0 )
             {
-                if ( rAppendContext.pLastParagraphProperties->Geth() >= 0 ||
-                    pStyleProperties->props().GethRule() >= 0 )
+                if (bValidH)
                 {
                     // [MS-OE376] Word uses a default value of "atLeast" for
                     // this attribute when the value of the h attribute is not 0.
