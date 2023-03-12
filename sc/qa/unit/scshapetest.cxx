@@ -57,6 +57,7 @@ public:
     void testTdf137576_LogicRectInNewMeasureline();
     void testMeasurelineHideColSave();
     void testHideColsShow();
+    void testFormSizeWithHiddenCol();
     void testTdf138138_MoveCellWithRotatedShape();
     void testLoadVerticalFlip();
     void testTdf117948_CollapseBeforeShape();
@@ -85,6 +86,7 @@ public:
     CPPUNIT_TEST(testTdf137576_LogicRectInNewMeasureline);
     CPPUNIT_TEST(testMeasurelineHideColSave);
     CPPUNIT_TEST(testHideColsShow);
+    CPPUNIT_TEST(testFormSizeWithHiddenCol);
     CPPUNIT_TEST(testTdf138138_MoveCellWithRotatedShape);
     CPPUNIT_TEST(testLoadVerticalFlip);
     CPPUNIT_TEST(testTdf117948_CollapseBeforeShape);
@@ -757,6 +759,34 @@ void ScShapeTest::testHideColsShow()
     CPPUNIT_ASSERT_MESSAGE("Show: Object should be visible", pObj->IsVisible());
     tools::Rectangle aSnapRectShow(pObj->GetSnapRect());
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRectOrig, aSnapRectShow, 1);
+}
+
+void ScShapeTest::testFormSizeWithHiddenCol()
+{
+    // The document contains a form (Listbox) shape anchored "To Cell (resize with cell)" with starts in cell B5 and
+    // ends in cell D5. The error was the form shape was resized if there was hidden col/row.
+
+    createScDoc("tdf154005.ods");
+
+    // Get document and shape
+    ScDocument* pDoc = getScDoc();
+    SdrUnoObj* pObj = static_cast<SdrUnoObj*>(lcl_getSdrObjectWithAssert(*pDoc, 0));
+
+    // Check Position and Size
+    pDoc->SetDrawPageSize(0); // trigger recalcpos
+    tools::Rectangle aRect(2432, 3981, 4932, 4631); // expected snap rect from values in file
+    const tools::Rectangle& rShapeRect(pObj->GetSnapRect());
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aRect, rShapeRect, 1);
+
+    // Check anchor
+    ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
+    CPPUNIT_ASSERT_MESSAGE("expected object meta data", pData);
+
+    const OUString sActual("start col " + OUString::number(pData->maStart.Col()) + " row "
+                           + OUString::number(pData->maStart.Row()) + " end col "
+                           + OUString::number(pData->maEnd.Col()) + " row "
+                           + OUString::number(pData->maEnd.Row()));
+    CPPUNIT_ASSERT_EQUAL(OUString("start col 1 row 4 end col 3 row 4"), sActual);
 }
 
 void ScShapeTest::testTdf138138_MoveCellWithRotatedShape()

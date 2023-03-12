@@ -703,6 +703,18 @@ void lcl_SetLogicRectFromAnchor(SdrObject* pObj, const ScDrawObjData& rAnchor, c
     if (!pObj || !pDoc || !rAnchor.maEnd.IsValid() || !rAnchor.maStart.IsValid())
         return;
 
+    SCROW nHiddenRows = 0;
+    SCCOL nHiddenCols = 0;
+    // tdf#154005: Handle hidden row/col: remove hidden row/cols size from the ScDrawObjData shape size in case of forms
+    if (pObj->GetObjIdentifier() == SdrObjKind::UNO && pObj->GetObjInventor() == SdrInventor::FmForm)
+    {
+        nHiddenRows = ((rAnchor.maEnd.Row() - rAnchor.maStart.Row()) + 1) -
+            (pDoc->CountVisibleRows(rAnchor.maStart.Row(), rAnchor.maEnd.Row(), rAnchor.maStart.Tab()));
+
+        nHiddenCols = ((rAnchor.maEnd.Col() - rAnchor.maStart.Col()) + 1) -
+            (pDoc->CountVisibleCols(rAnchor.maStart.Col(), rAnchor.maEnd.Col(), rAnchor.maStart.Tab()));
+    }
+
     // In case of a vertical mirrored custom shape, LibreOffice uses internally an additional 180deg
     // in aGeo.nRotationAngle and in turn has a different logic rectangle position. We remove flip,
     // set the logic rectangle, and apply flip again. You cannot simple use a 180deg-rotated
@@ -726,8 +738,8 @@ void lcl_SetLogicRectFromAnchor(SdrObject* pObj, const ScDrawObjData& rAnchor, c
     aStartPoint.AdjustY(rAnchor.maStartOffset.getY());
 
     const tools::Rectangle aEndCellRect(
-        pDoc->GetMMRect(rAnchor.maEnd.Col(), rAnchor.maEnd.Row(), rAnchor.maEnd.Col(),
-                        rAnchor.maEnd.Row(), rAnchor.maEnd.Tab(), false /*bHiddenAsZero*/));
+        pDoc->GetMMRect(rAnchor.maEnd.Col() - nHiddenCols, rAnchor.maEnd.Row() - nHiddenRows, rAnchor.maEnd.Col() - nHiddenCols,
+                        rAnchor.maEnd.Row() - nHiddenRows, rAnchor.maEnd.Tab(), false /*bHiddenAsZero*/));
     Point aEndPoint(aEndCellRect.Left(), aEndCellRect.Top());
     aEndPoint.AdjustX(rAnchor.maEndOffset.getX());
     aEndPoint.AdjustY(rAnchor.maEndOffset.getY());
