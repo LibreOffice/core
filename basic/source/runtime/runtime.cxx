@@ -1491,6 +1491,10 @@ namespace
             case '[':
                 sResult.append(*start++);
                 seenright = 0;
+                if (start < end && *start=='!'){
+                    sResult.append('^');
+                    start++;
+                }
                 while (start < end && !seenright)
                 {
                     switch (*start)
@@ -1504,9 +1508,6 @@ namespace
                     case ']':
                         sResult.append(*start);
                         seenright = 1;
-                        break;
-                    case '!':
-                        sResult.append('^');
                         break;
                     default:
                         if (NeedEsc(*start))

@@ -114,6 +114,7 @@ void VBATest::testMiscVBAFunctions()
         "minute.vb",
         "month.vb",
         "monthname.vb",
+        "like.vb",
         "oct.vb",
         "optional_paramters.vb",
         "qbcolor.vb",
