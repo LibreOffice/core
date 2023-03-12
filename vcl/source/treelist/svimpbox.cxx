@@ -946,6 +946,7 @@ void SvImpLBox::MakeVisible( SvTreeListEntry* pEntry, bool bMoveToTop )
     FillView();
     m_aVerSBar->SetThumbPos( static_cast<tools::Long>(m_pView->GetVisiblePos( m_pStartEntry )) );
     ShowCursor( true );
+    m_pView->NotifyScrolled();
     m_pView->Invalidate();
 }
 
