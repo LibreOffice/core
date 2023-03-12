@@ -1630,6 +1630,28 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 
         std::vector<beans::PropertyValue> aFrameProperties;
 
+        sal_Int16 nHoriOrient = text::HoriOrientation::NONE;
+        for (const auto pProp : vProps)
+        {
+            if (pProp->GetxAlign() < 0)
+                continue;
+            nHoriOrient = pProp->GetxAlign();
+            break;
+        }
+        aFrameProperties.push_back(
+            comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT), nHoriOrient));
+
+        sal_Int16 nVertOrient = text::VertOrientation::NONE;
+        for (const auto pProp : vProps)
+        {
+            if (pProp->GetyAlign() < 0)
+                continue;
+            nVertOrient = pProp->GetyAlign();
+            break;
+        }
+        aFrameProperties.push_back(
+            comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT), nVertOrient));
+
         if (vProps.size() > 1)
         {
             sal_Int32 nWidth = -1;
@@ -1688,16 +1710,6 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_FRM_DIRECTION), *nDirection));
             }
 
-            sal_Int16 nHoriOrient = text::HoriOrientation::NONE;
-            for (const auto pProp : vProps)
-            {
-                if (pProp->GetxAlign() < 0)
-                    continue;
-                nHoriOrient = pProp->GetxAlign();
-                break;
-            }
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT), nHoriOrient));
-
             //set a non negative default value
             bool bValidX = false;
             sal_Int32 nX = DEFAULT_VALUE;
@@ -1723,16 +1735,6 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
             }
             aFrameProperties.push_back(comphelper::makePropertyValue(
                 getPropertyName(PROP_HORI_ORIENT_RELATION), nHAnchor));
-
-            sal_Int16 nVertOrient = text::VertOrientation::NONE;
-            for (const auto pProp : vProps)
-            {
-                if (pProp->GetyAlign() < 0)
-                    continue;
-                nVertOrient = pProp->GetyAlign();
-                break;
-            }
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT), nVertOrient));
 
             //set a non negative default value
             bool bValidY = false;
@@ -1845,18 +1847,6 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), nhRule));
 
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_WIDTH_TYPE), bAutoWidth ?  text::SizeType::MIN : text::SizeType::FIX));
-
-            sal_Int16 nHoriOrient = sal_Int16(
-                rAppendContext.pLastParagraphProperties->GetxAlign() >= 0 ?
-                    rAppendContext.pLastParagraphProperties->GetxAlign() :
-                    text::HoriOrientation::NONE );
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT), nHoriOrient));
-
-            sal_Int16 nVertOrient = sal_Int16(
-                rAppendContext.pLastParagraphProperties->GetyAlign() >= 0 ?
-                    rAppendContext.pLastParagraphProperties->GetyAlign() :
-                    text::VertOrientation::NONE );
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT), nVertOrient));
 
             sal_Int32 nVertDist = rAppendContext.pLastParagraphProperties->GethSpace();
             if( nVertDist < 0 )
