@@ -12,6 +12,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdouno.hxx>
 
 #include <docsh.hxx>
 #include <drwlayer.hxx>
@@ -33,10 +34,12 @@ public:
 
     void testFitToCellSize();
     void testCustomShapeCellAnchoredRotatedShape();
+    void testFormSizeWithHiddenCol();
 
     CPPUNIT_TEST_SUITE(ScShapeTest);
     CPPUNIT_TEST(testFitToCellSize);
     CPPUNIT_TEST(testCustomShapeCellAnchoredRotatedShape);
+    CPPUNIT_TEST(testFormSizeWithHiddenCol);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -169,6 +172,50 @@ void ScShapeTest::testCustomShapeCellAnchoredRotatedShape()
     CPPUNIT_ASSERT_EQUAL(sExpected, sActual);
 
     pDocSh->DoClose();
+}
+
+void ScShapeTest::testFormSizeWithHiddenCol()
+{
+    // The document contains a form (Listbox) shape anchored "To Cell (resize with cell)" with starts in cell B5 and
+    // ends in cell D5. The error was the form shape was resized if there was hidden col/row.
+    OUString aFileURL;
+    createFileURL("tdf154005.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get the document model
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+
+    // Get the shape
+    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT(pDrawLayer);
+
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT(pPage);
+
+    SdrUnoObj* pObj = dynamic_cast<SdrUnoObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pObj);
+
+    // Check Position and Size
+    rDoc.SetDrawPageSize(0); // trigger recalcpos
+    tools::Rectangle aRect(2432, 3981, 4932, 4631); // expected snap rect from values in file
+    const tools::Rectangle& rShapeRect(pObj->GetSnapRect());
+    const OUString sPosSizeErrors(lcl_compareRectWithTolerance(aRect, rShapeRect, 1));
+    CPPUNIT_ASSERT_EQUAL(OUString(), sPosSizeErrors);
+
+    // Check anchor
+    ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
+    CPPUNIT_ASSERT_MESSAGE("expected object meta data", pData);
+    const OUString sActual("start col " + OUString::number(pData->maStart.Col()) + " row "
+                           + OUString::number(pData->maStart.Row()) + " end col "
+                           + OUString::number(pData->maEnd.Col()) + " row "
+                           + OUString::number(pData->maEnd.Row()));
+    CPPUNIT_ASSERT_EQUAL(OUString("start col 1 row 4 end col 3 row 4"), sActual);
 }
 
 void ScShapeTest::tearDown()

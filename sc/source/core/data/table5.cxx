@@ -775,6 +775,28 @@ SCROW ScTable::CountVisibleRows(SCROW nStartRow, SCROW nEndRow) const
     return nCount;
 }
 
+SCCOL ScTable::CountVisibleCols(SCCOL nStartCol, SCCOL nEndCol) const
+{
+    assert(nStartCol <= nEndCol);
+    SCCOL nCount = 0;
+    SCCOL nCol = nStartCol;
+    ScFlatBoolColSegments::RangeData aData;
+    while (nCol <= nEndCol)
+    {
+        if (!mpHiddenCols->getRangeData(nCol, aData))
+            break;
+
+        if (aData.mnCol2 > nEndCol)
+            aData.mnCol2 = nEndCol;
+
+        if (!aData.mbValue)
+            nCount += aData.mnCol2 - nCol + 1;
+
+        nCol = aData.mnCol2 + 1;
+    }
+    return nCount;
+}
+
 sal_uInt32 ScTable::GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZero ) const
 {
     sal_uInt32 nHeight = 0;
