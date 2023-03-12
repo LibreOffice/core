@@ -1787,22 +1787,28 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 Swapped the array elements 11,12 & 13,14 since 11 & 12 are
                 LEFT & RIGHT margins and 13,14 are TOP and BOTTOM margins respectively.
             */
-            sal_Int32 nRightDist;
-            sal_Int32 nLeftDist = nRightDist =
-                rAppendContext.pLastParagraphProperties->GethSpace() >= 0 ?
-                rAppendContext.pLastParagraphProperties->GethSpace() :
-                pStyleProperties->props().GethSpace() >= 0
-                    ? pStyleProperties->props().GethSpace() : 0;
+            sal_Int32 nRightDist = 0;
+            sal_Int32 nLeftDist = 0;
+            for (const auto pProp : vProps)
+            {
+                if (pProp->GethSpace() < 0)
+                    continue;
+                nLeftDist = nRightDist = pProp->GethSpace();
+                break;
+            }
 
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_LEFT_MARGIN), nHoriOrient == text::HoriOrientation::LEFT ? 0 : nLeftDist));
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_RIGHT_MARGIN), nHoriOrient == text::HoriOrientation::RIGHT ? 0 : nRightDist));
 
-            sal_Int32 nBottomDist;
-            sal_Int32 nTopDist = nBottomDist =
-                rAppendContext.pLastParagraphProperties->GetvSpace() >= 0 ?
-                rAppendContext.pLastParagraphProperties->GetvSpace() :
-                pStyleProperties->props().GetvSpace() >= 0
-                    ? pStyleProperties->props().GetvSpace() : 0;
+            sal_Int32 nBottomDist = 0;
+            sal_Int32 nTopDist = 0;
+            for (const auto pProp : vProps)
+            {
+                if (pProp->GetvSpace() < 0)
+                    continue;
+                nTopDist = nBottomDist = pProp->GetvSpace();
+                break;
+            }
 
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_TOP_MARGIN), nVertOrient == text::VertOrientation::TOP ? 0 : nTopDist));
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_BOTTOM_MARGIN), nVertOrient == text::VertOrientation::BOTTOM ? 0 : nBottomDist));
