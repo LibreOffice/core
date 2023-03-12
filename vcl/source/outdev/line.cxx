@@ -330,28 +330,25 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
 
         bool bDone(false);
 
-        if(bTryB2d)
+        if (bFuzzing)
+        {
+            const basegfx::B2DRange aRange(basegfx::utils::getRange(aFillPolyPolygon));
+            if (aRange.getMaxX() - aRange.getMinX() > 0x10000000
+                || aRange.getMaxY() - aRange.getMinY() > 0x10000000)
+            {
+                SAL_WARN("vcl.gdi", "drawLine, skipping suspicious range of: "
+                                        << aRange << " for fuzzing performance");
+                bDone = true;
+            }
+        }
+
+        if (bTryB2d && !bDone)
         {
             bDone = mpGraphics->DrawPolyPolygon(
                 basegfx::B2DHomMatrix(),
                 aFillPolyPolygon,
                 0.0,
                 *this);
-        }
-
-        if(!bDone)
-        {
-            if (bFuzzing)
-            {
-                const basegfx::B2DRange aRange(basegfx::utils::getRange(aFillPolyPolygon));
-                if (aRange.getMaxX() - aRange.getMinX() > 0x10000000
-                    || aRange.getMaxY() - aRange.getMinY() > 0x10000000)
-                {
-                    SAL_WARN("vcl.gdi", "drawLine, skipping suspicious range of: "
-                                            << aRange << " for fuzzing performance");
-                    bDone = true;
-                }
-            }
         }
 
         if(!bDone)
