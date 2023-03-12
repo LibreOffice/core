@@ -8680,10 +8680,17 @@ void ScInterpreter::ScIndex()
         nArea = GetUInt32();
     else
         nArea = 1;
+    bool bColMissing;
     if (nParamCount >= 3)
+    {
+        bColMissing = IsMissing();
         nCol = static_cast<SCCOL>(GetInt16());
+    }
     else
+    {
+        bColMissing = false;
         nCol = 0;
+    }
     if (nParamCount >= 2)
         nRow = static_cast<SCROW>(GetInt32());
     else
@@ -8716,25 +8723,57 @@ void ScInterpreter::ScIndex()
                 {
                     SCSIZE nC, nR;
                     pMat->GetDimensions(nC, nR);
+
                     // Access one element of a vector independent of col/row
-                    // orientation?
-                    bool bVector = ((nCol == 0 || nRow == 0) && (nC == 1 || nR == 1));
-                    SCSIZE nElement = ::std::max( static_cast<SCSIZE>(nCol),
-                            static_cast<SCSIZE>(nRow));
+                    // orientation. Excel documentation does not mention, but
+                    // i62850 had a .xls example of a row vector accessed by
+                    // row number returning one element. This
+                    // INDEX(row_vector;element) behaves the same as
+                    // INDEX(row_vector;0;element) and thus contradicts Excel
+                    // documentation where the second parameter is always
+                    // row_num.
+                    //
+                    // ODFF v1.3 in 6.14.6 INDEX states "If DataSource is a
+                    // one-dimensional row vector, Row is optional, which
+                    // effectively makes Row act as the column offset into the
+                    // vector". Guess the first Row is a typo and should read
+                    // Column instead.
+
+                    const bool bRowVectorSpecial = (nParamCount == 2 || bColMissing);
+                    const bool bRowVectorElement = (nR == 1 && (nCol != 0 || (bRowVectorSpecial && nRow != 0)));
+                    const bool bVectorElement = (bRowVectorElement || (nC == 1 && nRow != 0));
+
                     if (nC == 0 || nR == 0 ||
-                            (!bVector && (o3tl::make_unsigned(nCol) > nC ||
-                                          o3tl::make_unsigned(nRow) > nR)) ||
-                            (bVector && nElement > nC * nR))
+                            (!bVectorElement && (o3tl::make_unsigned(nCol) > nC ||
+                                                 o3tl::make_unsigned(nRow) > nR)))
                         PushIllegalArgument();
                     else if (nCol == 0 && nRow == 0)
                         sp = nOldSp;
-                    else if (bVector)
+                    else if (bVectorElement)
                     {
-                        --nElement;
-                        if (pMat->IsStringOrEmpty( nElement))
-                            PushString( pMat->GetString(nElement).getString());
+                        // Vectors here don't replicate to the other dimension.
+                        SCSIZE nElement, nOtherDimension;
+                        if (bRowVectorElement && !bRowVectorSpecial)
+                        {
+                            nElement = o3tl::make_unsigned(nCol);
+                            nOtherDimension = o3tl::make_unsigned(nRow);
+                        }
                         else
-                            PushDouble( pMat->GetDouble( nElement));
+                        {
+                            nElement = o3tl::make_unsigned(nRow);
+                            nOtherDimension = o3tl::make_unsigned(nCol);
+                        }
+
+                        if (nElement == 0 || nElement > nC * nR || nOtherDimension > 1)
+                            PushIllegalArgument();
+                        else
+                        {
+                            --nElement;
+                            if (pMat->IsStringOrEmpty( nElement))
+                                PushString( pMat->GetString(nElement).getString());
+                            else
+                                PushDouble( pMat->GetDouble( nElement));
+                        }
                     }
                     else if (nCol == 0)
                     {
