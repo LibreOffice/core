@@ -96,10 +96,10 @@ public:
     bool operator==( SwNodeOffset nOther ) const { return GetIndex() == nOther; }
     bool operator!=( SwNodeOffset nOther ) const { return GetIndex() != nOther; }
 
-    bool operator<( const SwNode& rNd ) const { return operator<(rNd.GetIndex()); }
-    bool operator<=( const SwNode& rNd ) const { return operator<=(rNd.GetIndex()); }
-    bool operator>( const SwNode& rNd ) const { return operator>(rNd.GetIndex()); }
-    bool operator>=( const SwNode& rNd ) const { return operator>=(rNd.GetIndex()); }
+    bool operator<( const SwNode& rNd ) const { assert(&GetNodes() == &rNd.GetNodes()); return operator<(rNd.GetIndex()); }
+    bool operator<=( const SwNode& rNd ) const { return operator==(rNd) || operator<(rNd); }
+    bool operator>( const SwNode& rNd ) const { assert(&GetNodes() == &rNd.GetNodes()); return operator>(rNd.GetIndex()); }
+    bool operator>=( const SwNode& rNd ) const { return operator==(rNd) || operator>(rNd); }
     bool operator==( const SwNode& rNd ) const { return m_pNode == &rNd; }
     bool operator!=( const SwNode& rNd ) const { return m_pNode != &rNd; }
 

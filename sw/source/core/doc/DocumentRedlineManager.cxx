@@ -1210,6 +1210,9 @@ SwExtraRedlineTable& DocumentRedlineManager::GetExtraRedlineTable()
 
 bool DocumentRedlineManager::IsInRedlines(const SwNode & rNode) const
 {
+    if (&rNode.GetNodes() != &m_rDoc.GetNodes())
+        return false;
+
     SwPosition aPos(rNode);
     SwNode & rEndOfRedlines = m_rDoc.GetNodes().GetEndOfRedlines();
     SwPaM aPam(SwPosition(*rEndOfRedlines.StartOfSectionNode()),
