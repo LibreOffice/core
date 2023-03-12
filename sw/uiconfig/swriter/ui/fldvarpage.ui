@@ -429,9 +429,9 @@
                       <object class="GtkComboBoxText" id="level">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="tooltip-text" translatable="yes" context="fldvarpage|level|tooltip_text">Choose heading number to prepend to displayed field, where the number comes from the first prior heading whose outline level is equal to or less than the selected outline level. If “None” is selected, no heading number is displayed.</property>
+                        <property name="tooltip-text" translatable="yes" context="fldvarpage|level|tooltip_text">Choose heading number to prepend to displayed field, where the number comes from the first prior heading whose outline level is equal to or less than the selected outline level. If [None] is selected, no heading number is displayed.</property>
                         <items>
-                          <item translatable="yes" context="fldvarpage|level">None</item>
+                          <item translatable="yes" context="fldvarpage|level">[None]</item>
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="level-atkobject">
