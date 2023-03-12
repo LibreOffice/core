@@ -3142,9 +3142,6 @@ void MSWordExportBase::AddLinkTarget(std::u16string_view rURL)
         return;
 
     sCmp = sCmp.toAsciiLowerCase();
-    SwNodeOffset nIdx(0);
-    bool noBookmark = false;
-
     if( sCmp == "outline" )
     {
         SwPosition aPos(*m_pCurPam->GetPoint());
@@ -3153,81 +3150,57 @@ void MSWordExportBase::AddLinkTarget(std::u16string_view rURL)
         // save the name of the bookmark and the
         // node index number of where it points to
         if( m_rDoc.GotoOutline( aPos, aName ) )
-        {
-            nIdx = aPos.GetNodeIndex();
-            noBookmark = true;
-        }
+            m_aImplicitBookmarks.emplace_back(aURL, aPos.GetNodeIndex());
     }
     else if( sCmp == "graphic" )
     {
-        SwNodeIndex* pIdx;
         OUString aName(BookmarkToWriter(aURL.subView(0, nPos)));
-        const SwFlyFrameFormat* pFormat = m_rDoc.FindFlyByName(aName, SwNodeType::Grf);
-        if (pFormat && nullptr != (pIdx = const_cast<SwNodeIndex*>(pFormat->GetContent().GetContentIdx())))
-        {
-            nIdx = pIdx->GetNext()->GetIndex();
-            noBookmark = true;
-        }
+        if (const SwFlyFrameFormat* pFormat = m_rDoc.FindFlyByName(aName, SwNodeType::Grf))
+            if (const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx())
+                m_aImplicitBookmarks.emplace_back(aURL, pIdx->GetNext()->GetIndex());
     }
     else if( sCmp == "frame" )
     {
-        SwNodeIndex* pIdx;
         OUString aName(BookmarkToWriter(aURL.subView(0, nPos)));
-        const SwFlyFrameFormat* pFormat = m_rDoc.FindFlyByName(aName, SwNodeType::Text);
-        if (pFormat && nullptr != (pIdx = const_cast<SwNodeIndex*>(pFormat->GetContent().GetContentIdx())))
-        {
-            nIdx = pIdx->GetIndex() + 1;
-            noBookmark = true;
-        }
+        if (const SwFlyFrameFormat* pFormat = m_rDoc.FindFlyByName(aName, SwNodeType::Text))
+            if (const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx())
+                m_aImplicitBookmarks.emplace_back(aURL, pIdx->GetIndex() + 1);
     }
     else if( sCmp == "ole" )
     {
-        SwNodeIndex* pIdx;
         OUString aName(BookmarkToWriter(aURL.subView(0, nPos)));
-        const SwFlyFrameFormat* pFormat = m_rDoc.FindFlyByName(aName, SwNodeType::Ole);
-        if (pFormat && nullptr != (pIdx = const_cast<SwNodeIndex*>(pFormat->GetContent().GetContentIdx())))
-        {
-            nIdx = pIdx->GetNext()->GetIndex();
-            noBookmark = true;
-        }
+        if (const SwFlyFrameFormat* pFormat = m_rDoc.FindFlyByName(aName, SwNodeType::Ole))
+            if (const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx())
+                m_aImplicitBookmarks.emplace_back(aURL, pIdx->GetNext()->GetIndex());
     }
     else if( sCmp == "region" )
     {
-        SwNodeIndex* pIdx;
         OUString aName(BookmarkToWriter(aURL.subView(0, nPos)));
         for (const SwSectionFormat* pFormat : m_rDoc.GetSections())
         {
-            if (aName == pFormat->GetSection()->GetSectionName()
-                && nullptr != (pIdx = const_cast<SwNodeIndex*>(pFormat->GetContent().GetContentIdx())))
+            if (aName == pFormat->GetSection()->GetSectionName())
             {
-                nIdx = pIdx->GetIndex() + 1;
-                noBookmark = true;
-                break;
+                if (const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx())
+                {
+                    m_aImplicitBookmarks.emplace_back(aURL, pIdx->GetIndex() + 1);
+                    break;
+                }
             }
         }
     }
     else if( sCmp == "table" )
     {
         OUString aName(BookmarkToWriter(aURL.subView(0, nPos)));
-        const SwTable* pTable = SwTable::FindTable(m_rDoc.FindTableFormatByName(aName));
-        if (pTable)
-        {
-            SwTableNode* pTableNode = const_cast<SwTableNode*>(pTable->GetTabSortBoxes()[1]->GetSttNd()->FindTableNode());
-            if (pTableNode)
-            {
-                nIdx = pTableNode->GetIndex() + 2;
-                noBookmark = true;
-            }
-        }
+        if (const SwTable* pTable = SwTable::FindTable(m_rDoc.FindTableFormatByName(aName)))
+            if (const SwTableNode* pTableNode = pTable->GetTabSortBoxes()[1]->GetSttNd()->FindTableNode())
+                m_aImplicitBookmarks.emplace_back(aURL, pTableNode->GetIndex() + 2);
     }
     else if (sCmp == "toxmark")
     {
         OUString const name(aURL.copy(0, nPos));
         OUString const nameDecoded(INetURLObject::decode(name,
                                INetURLObject::DecodeMechanism::WithCharset));
-        std::optional<std::pair<SwTOXMark, sal_Int32>> const tmp(
-            sw::PrepareJumpToTOXMark(m_rDoc, nameDecoded));
-        if (tmp)
+        if (const auto tmp = sw::PrepareJumpToTOXMark(m_rDoc, nameDecoded))
         {
             SwTOXMark const* pMark(&tmp->first);
             for (sal_Int32 i = 0; i < tmp->second; ++i)
@@ -3240,13 +3213,6 @@ void MSWordExportBase::AddLinkTarget(std::u16string_view rURL)
                 m_TOXMarkBookmarksByTOXMark.emplace(pMark, nameDecoded);
             }
         }
-    }
-    if (noBookmark)
-    {
-        aBookmarkPair aImplicitBookmark;
-        aImplicitBookmark.first = aURL;
-        aImplicitBookmark.second = nIdx;
-        m_aImplicitBookmarks.push_back(aImplicitBookmark);
     }
 }
 
