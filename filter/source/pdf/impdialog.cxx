@@ -198,6 +198,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< Property
     mbViewPDF = maConfigItem.ReadBool( "ViewPDFAfterExport", false );
 
     mbExportBookmarks = maConfigItem.ReadBool( "ExportBookmarks", true );
+    mbExportBookmarksUserSelection = mbExportBookmarks;
     if ( mbIsPresentation )
         mbExportHiddenSlides = maConfigItem.ReadBool( "ExportHiddenSlides", false );
     if ( mbIsSpreadsheet )
@@ -619,6 +620,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
         mxCbTaggedPDF->set_active(pParent->mbUseTaggedPDFUserSelection);
     else
         mbUseTaggedPDFUserSelection = pParent->mbUseTaggedPDFUserSelection;
+    mxCbExportBookmarks->set_active(pParent->mbExportBookmarksUserSelection);
     TogglePDFVersionOrUniversalAccessibilityHandle(*mxCbPDFA);
 
     mxCbExportFormFields->set_active(pParent->mbExportFormFields);
@@ -628,7 +630,6 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     mxCbAllowDuplicateFieldNames->set_active( pParent->mbAllowDuplicateFieldNames );
     mxFormsFrame->set_sensitive(pParent->mbExportFormFields);
 
-    mxCbExportBookmarks->set_active( pParent->mbExportBookmarks );
 
     mxCbExportNotes->set_active( pParent->mbExportNotes );
     mxCbExportNotesInMargin->set_active( pParent->mbExportNotesInMargin );
@@ -761,6 +762,10 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* pParent )
 
     if (!bIsPDFA && !bIsPDFUA)
         mbUseTaggedPDFUserSelection = pParent->mbUseTaggedPDF;
+    if (!bIsPDFUA)
+    {
+        pParent->mbExportBookmarksUserSelection = pParent->mbExportBookmarks;
+    }
 
     pParent->mbUseTaggedPDFUserSelection = mbUseTaggedPDFUserSelection;
     pParent->mbExportFormFields = mxCbExportFormFields->get_active();
@@ -897,6 +902,23 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePDFVersionOrUniversalAccessibilityHa
         // restore the users values of subordinate controls
         mxCbTaggedPDF->set_active(mbUseTaggedPDFUserSelection);
     }
+
+    if (bIsPDFUA)
+    {
+        if (mxCbExportBookmarks->get_sensitive())
+        {
+            if (mpParent)
+            {
+                mpParent->mbExportBookmarksUserSelection = mxCbExportBookmarks->get_active();
+            }
+            mxCbExportBookmarks->set_active(true);
+        }
+    }
+    else if (mpParent)
+    {
+        mxCbExportBookmarks->set_active(mpParent->mbExportBookmarksUserSelection);
+    }
+    mxCbExportBookmarks->set_sensitive(!bIsPDFUA);
 
     // PDF/A doesn't allow launch action, so enable/disable the selection on the Link page
     ImpPDFTabLinksPage* pLinksPage = mpParent ? mpParent->getLinksPage() : nullptr;
