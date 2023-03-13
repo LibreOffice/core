@@ -43,6 +43,7 @@
 #include "sal/types.h"
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
+#include "o3tl/safeint.hxx"
 #include "rtl/stringconcat.hxx"
 #endif
 
@@ -1012,6 +1013,38 @@ public:
     OUStringBuffer & insert(sal_Int32 offset, const OUString & str)
     {
         return insert( offset, str.getStr(), str.getLength() );
+    }
+#endif
+
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
+    /**
+     @overload
+     @internal
+    */
+    template <typename T1, typename T2>
+    OUStringBuffer& insert(sal_Int32 offset, OUStringConcat<T1, T2>&& c)
+    {
+        const size_t l = c.length();
+        if (l == 0)
+            return *this;
+        if (l > o3tl::make_unsigned(std::numeric_limits<sal_Int32>::max() - pData->length))
+            throw std::bad_alloc();
+
+        rtl_uStringbuffer_insert(&pData, &nCapacity, offset, nullptr, l);
+
+        /* insert the new characters */
+        c.addData(pData->buffer + offset);
+        return *this;
+    }
+
+    /**
+     @overload
+     @internal
+    */
+    template <typename T, std::size_t N>
+    OUStringBuffer& insert(sal_Int32 offset, StringNumberBase<sal_Unicode, T, N>&& c)
+    {
+        return insert(offset, c.buf, c.length);
     }
 #endif
 

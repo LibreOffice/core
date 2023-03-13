@@ -709,7 +709,7 @@ OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer& rString, 
     if ( nNumeralID >= 0x02 && nNumeralID <= 0x13 )
         nNatNum = 1;
     if ( nNatNum )
-        rString.insert( nPos, Concat2View("[NatNum"+OUString::number(nNatNum)+"]"));
+        rString.insert(nPos, "[NatNum" + OUString::number(nNatNum) + "]");
     return sCalendar;
 }
 
@@ -1101,11 +1101,8 @@ SvNumberformat::SvNumberformat(OUString& rString,
                         sBuff.remove(nPosOld, nPos - nPosOld);
                         if (!sStr.isEmpty())
                         {
-                            sBuff.insert(nPosOld, sStr);
-                            nPos = nPosOld + sStr.getLength();
-                            sBuff.insert(nPos, "]");
-                            sBuff.insert(nPosOld, "[");
-                            nPos += 2;
+                            sBuff.insert(nPosOld, "[" + sStr + "]");
+                            nPos = nPosOld + sStr.getLength() + 2;
                             nPosOld = nPos;     // position before string
                         }
                         else
@@ -5210,18 +5207,16 @@ static void lcl_insertLCID( OUStringBuffer& rFormatStr, sal_uInt32 nLCID, sal_In
         // No format code, no locale.
         return;
 
-    OUStringBuffer aLCIDString = OUString::number( nLCID , 16 ).toAsciiUpperCase();
+    auto aLCIDString = OUString::number( nLCID , 16 ).toAsciiUpperCase();
     // Search for only last DBNum which is the last element before insertion position
     if ( bDBNumInserted && nPosInsertLCID >= 8
-        && aLCIDString.getLength() > 4
-        && rFormatStr.indexOf( "[DBNum", nPosInsertLCID-8) == nPosInsertLCID-8 )
+        && aLCIDString.length > 4
+        && OUString::unacquired(rFormatStr).match( "[DBNum", nPosInsertLCID-8) )
     {   // remove DBNumX code if long LCID
         nPosInsertLCID -= 8;
         rFormatStr.remove( nPosInsertLCID, 8 );
     }
-    aLCIDString.insert( 0, "[$-" );
-    aLCIDString.append( "]" );
-    rFormatStr.insert( nPosInsertLCID, aLCIDString );
+    rFormatStr.insert( nPosInsertLCID, "[$-" + aLCIDString + "]" );
 }
 
 /** Increment nAlphabetID for CJK numerals
