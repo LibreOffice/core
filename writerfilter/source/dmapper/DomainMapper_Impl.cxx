@@ -1811,12 +1811,14 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 comphelper::makePropertyValue(getPropertyName(PROP_FRM_DIRECTION), *nDirection));
         }
 
+        // If there is no fill, the Word default is 100% transparency.
+        // Otherwise CellColorHandler has priority, and this setting
+        // will be ignored.
+        aFrameProperties.push_back(comphelper::makePropertyValue(
+            getPropertyName(PROP_BACK_COLOR_TRANSPARENCY), sal_Int32(100)));
+
         if (vProps.size() > 1)
         {
-            // If there is no fill, the Word default is 100% transparency.
-            // Otherwise CellColorHandler has priority, and this setting
-            // will be ignored.
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_BACK_COLOR_TRANSPARENCY), sal_Int32(100)));
 
             uno::Sequence<beans::PropertyValue> aGrabBag( comphelper::InitPropertySequence({
                     { "ParaFrameProperties", uno::Any(rAppendContext.pLastParagraphProperties->IsFrameMode()) }

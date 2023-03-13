@@ -109,6 +109,12 @@ DECLARE_RTFEXPORT_TEST(testTdf130817, "tdf130817.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("$"), xEndnote1->getAnchor()->getString());
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf154129_transparentFrame, "tdf154129_transparentFrame.rtf")
+{
+    // Without the fix, this was zero, and the text frame with "Visible" just looks white.
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(getShape(1), "FillTransparence"));
+}
+
 DECLARE_RTFEXPORT_TEST(testTdf137683_charHighlightNone, "tdf137683_charHighlightNone.rtf")
 {
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1), uno::UNO_QUERY_THROW);
