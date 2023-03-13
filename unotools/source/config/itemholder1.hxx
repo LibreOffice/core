@@ -53,8 +53,4 @@ class ItemHolder1 : public ::cppu::WeakImplHelper< css::lang::XEventListener >
         static void impl_newItem(TItemInfo& rItem);
 };
 
-// namespaces
-
-#undef css
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
