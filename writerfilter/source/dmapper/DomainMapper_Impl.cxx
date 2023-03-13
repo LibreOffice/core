@@ -1819,10 +1819,6 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                     { "ParaFrameProperties", uno::Any(rAppendContext.pLastParagraphProperties->IsFrameMode()) }
             }));
             aFrameProperties.push_back(comphelper::makePropertyValue("FrameInteropGrabBag", aGrabBag));
-
-            lcl_MoveBorderPropertiesToFrame(aFrameProperties,
-                rAppendContext.pLastParagraphProperties->GetStartingRange(),
-                rAppendContext.pLastParagraphProperties->GetEndingRange());
         }
         else
         {
@@ -1837,11 +1833,11 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 nHoriDist = 0;
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_TOP_MARGIN), nHoriOrient == text::HoriOrientation::LEFT ? 0 : nHoriDist));
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_BOTTOM_MARGIN), nHoriOrient == text::HoriOrientation::RIGHT ? 0 : nHoriDist));
-
-            lcl_MoveBorderPropertiesToFrame(aFrameProperties,
-                rAppendContext.pLastParagraphProperties->GetStartingRange(),
-                rAppendContext.pLastParagraphProperties->GetEndingRange());
         }
+
+        lcl_MoveBorderPropertiesToFrame(aFrameProperties,
+                                        rAppendContext.pLastParagraphProperties->GetStartingRange(),
+                                        rAppendContext.pLastParagraphProperties->GetEndingRange());
 
         //frame conversion has to be executed after table conversion
         RegisterFrameConversion(
