@@ -1315,12 +1315,20 @@ IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, weld::Button&, void)
 void ImpPDFTabSecurityPage::enablePermissionControls()
 {
     bool bIsPDFASel = false;
+    bool bIsPDFUASel = false;
     ImpPDFTabDialog* pParent = static_cast<ImpPDFTabDialog*>(GetDialogController());
     ImpPDFTabGeneralPage* pGeneralPage = pParent ? pParent->getGeneralPage() : nullptr;
     if (pGeneralPage)
     {
         bIsPDFASel = pGeneralPage->IsPdfaSelected();
+        bIsPDFUASel = pGeneralPage->IsPdfUaSelected();
     }
+    // ISO 14289-1:2014, Clause: 7.16
+    if (bIsPDFUASel)
+    {
+        mxCbEnableAccessibility->set_active(true);
+    }
+    mxCbEnableAccessibility->set_sensitive(!bIsPDFUASel);
     if (bIsPDFASel)
     {
         mxUserPwdPdfa->show();
