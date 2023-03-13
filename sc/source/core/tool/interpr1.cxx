@@ -10036,7 +10036,7 @@ void ScInterpreter::ScErrorType_ODF()
 
     switch ( nErr )
     {
-        case FormulaError::ParameterExpected :  // #NULL!
+        case FormulaError::NoCode :             // #NULL!
             nErrType = 1;
             break;
         case FormulaError::DivisionByZero :     // #DIV/0!
@@ -10054,7 +10054,7 @@ void ScInterpreter::ScErrorType_ODF()
         case FormulaError::IllegalFPOperation : // #NUM!
             nErrType = 6;
             break;
-        case FormulaError::NotAvailable :          // #N/A
+        case FormulaError::NotAvailable :       // #N/A
             nErrType = 7;
             break;
         /*
