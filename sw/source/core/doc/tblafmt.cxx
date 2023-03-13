@@ -731,6 +731,13 @@ bool SwTableAutoFormat::LastRowStartColumnIsRow()
 {
     return GetBoxFormat(12) == GetBoxFormat(13);
 }
+bool SwTableAutoFormat::HasHeaderRow() const
+{   // Wild guessing for PDF export: is header different from odd or body?
+    // It would be vastly better to do like SdrTableObj and have flags that
+    // determine which "special" styles apply, instead of horrible guessing.
+    return !(GetBoxFormat(1) == GetBoxFormat(5))
+        || !(GetBoxFormat(1) == GetBoxFormat(10));
+}
 
 bool SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions )
 {

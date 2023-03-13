@@ -238,6 +238,7 @@ public:
     bool FirstRowStartColumnIsRow();
     bool LastRowEndColumnIsRow();
     bool LastRowStartColumnIsRow();
+    bool HasHeaderRow() const;
 
     bool Load( SvStream& rStream, const SwAfVersions& );
     bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;

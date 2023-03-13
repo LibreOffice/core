@@ -80,6 +80,7 @@
 #include <frmtool.hxx>
 #include <strings.hrc>
 #include <frameformats.hxx>
+#include <tblafmt.hxx>
 #include <authfld.hxx>
 #include <dcontact.hxx>
 
@@ -188,6 +189,22 @@ bool lcl_IsHeadlineCell( const SwCellFrame& rCellFrame )
         OUString sStyleName;
         SwStyleNameMapper::FillProgName( pTextFormat->GetName(), sStyleName, SwGetPoolIdFromName::TxtColl );
         bRet = sStyleName == aTableHeadingName;
+    }
+
+    // tdf#153935 wild guessing for 1st row based on table autoformat
+    if (!bRet && !rCellFrame.GetUpper()->GetPrev())
+    {
+        SwTable const*const pTable(rCellFrame.FindTabFrame()->GetTable());
+        assert(pTable);
+        OUString const& rStyleName(pTable->GetTableStyleName());
+        if (!rStyleName.isEmpty())
+        {
+            if (SwTableAutoFormat const*const pTableAF =
+                pTable->GetFrameFormat()->GetDoc()->GetTableStyles().FindAutoFormat(rStyleName))
+            {
+                bRet |= pTableAF->HasHeaderRow();
+            }
+        }
     }
 
     return bRet;
