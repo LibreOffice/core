@@ -2541,8 +2541,7 @@ bool SbaTableQueryBrowser::implSelect(const weld::TreeIter* pEntry)
         {
             while (rTreeView.iter_compare(*xNextTemp, *xConnection) != 0)
             {
-                sNameBuffer.insert(0,'/');
-                sNameBuffer.insert(0, rTreeView.get_text(*xTemp));
+                sNameBuffer.insert(0, rTreeView.get_text(*xTemp) + "/");
                 rTreeView.copy_iterator(*xNextTemp, *xTemp);
                 if (!rTreeView.iter_parent(*xNextTemp))
                     break;

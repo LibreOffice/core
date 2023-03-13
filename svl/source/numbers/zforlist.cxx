@@ -4596,8 +4596,7 @@ void NfCurrencyEntry::CompletePositiveFormatString(OUStringBuffer& rStr, std::u1
         break;
         case 2:                                         // $ 1
         {
-            rStr.insert(0, ' ');
-            rStr.insert(0, rSymStr);
+            rStr.insert(0, OUString::Concat(rSymStr) + " ");
         }
         break;
         case 3:                                         // 1 $
@@ -4622,21 +4621,18 @@ void NfCurrencyEntry::CompleteNegativeFormatString(OUStringBuffer& rStr,
     {
         case 0:                                         // ($1)
         {
-            rStr.insert(0, rSymStr);
-            rStr.insert(0, '(');
+            rStr.insert(0, OUString::Concat("(") + rSymStr);
             rStr.append(')');
         }
         break;
         case 1:                                         // -$1
         {
-            rStr.insert(0, rSymStr);
-            rStr.insert(0, '-');
+            rStr.insert(0, OUString::Concat("-") + rSymStr);
         }
         break;
         case 2:                                         // $-1
         {
-            rStr.insert(0, '-');
-            rStr.insert(0, rSymStr);
+            rStr.insert(0, OUString::Concat(rSymStr) + "-");
         }
         break;
         case 3:                                         // $1-
@@ -4679,9 +4675,7 @@ void NfCurrencyEntry::CompleteNegativeFormatString(OUStringBuffer& rStr,
         break;
         case 9:                                         // -$ 1
         {
-            rStr.insert(0, ' ');
-            rStr.insert(0, rSymStr);
-            rStr.insert(0, '-');
+            rStr.insert(0, OUString::Concat("-") + rSymStr + " ");
         }
         break;
         case 10:                                        // 1 $-
@@ -4693,14 +4687,12 @@ void NfCurrencyEntry::CompleteNegativeFormatString(OUStringBuffer& rStr,
         break;
         case 11:                                        // $ -1
         {
-            rStr.insert(0, " -");
-            rStr.insert(0, rSymStr);
+            rStr.insert(0, OUString::Concat(rSymStr) + " -");
         }
         break;
         case 12 :                                       // $ 1-
         {
-            rStr.insert(0, ' ');
-            rStr.insert(0, rSymStr);
+            rStr.insert(0, OUString::Concat(rSymStr) + " ");
             rStr.append('-');
         }
         break;
@@ -4713,9 +4705,7 @@ void NfCurrencyEntry::CompleteNegativeFormatString(OUStringBuffer& rStr,
         break;
         case 14 :                                       // ($ 1)
         {
-            rStr.insert(0, ' ');
-            rStr.insert(0, rSymStr);
-            rStr.insert(0, '(');
+            rStr.insert(0, OUString::Concat("(") + rSymStr + " ");
             rStr.append(')');
         }
         break;

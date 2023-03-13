@@ -159,8 +159,7 @@ static void lcl_OutName( OUStringBuffer& rBuffer,
     OUString sPrefix = xNode->getPrefix();
     if( !sPrefix.isEmpty() )
     {
-        rBuffer.insert( 0, ':' );
-        rBuffer.insert( 0, sPrefix );
+        rBuffer.insert( 0, sPrefix + ":" );
     }
 }
 
@@ -194,8 +193,7 @@ static void lcl_OutInstance( OUStringBuffer& rBuffer,
             sInstanceName = sId;
     }
 
-    rBuffer.insert( 0, sInstanceName );
-    rBuffer.insert( 0, "instance('" );
+    rBuffer.insert( 0, "instance('" + sInstanceName );
 }
 
 OUString Model::getDefaultBindingExpressionForNode(

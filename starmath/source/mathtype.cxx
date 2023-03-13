@@ -683,8 +683,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
             {
                 OUString aStr;
                 TypeFaceToString(aStr,nTypeFace);
-                aStr += "\"";
-                rRet.insert(nTextStart,aStr);
+                rRet.insert(nTextStart, aStr + "\"");
                 rRet.append("\"");
             }
             else if (nRecord == END && !rRet.isEmpty())
@@ -2895,8 +2894,7 @@ bool MathType::HandleChar(sal_Int32 &rTextStart, int &rSetSize, int nLevel,
             {
                 OUString aStr;
                 TypeFaceToString(aStr,nOldTypeFace);
-                aStr += "\"";
-                rRet.insert(std::min(rTextStart, rRet.getLength()), aStr);
+                rRet.insert(std::min(rTextStart, rRet.getLength()), aStr + "\"");
 
                 aStr.clear();
                 TypeFaceToString(aStr,nTypeFace);
@@ -2921,8 +2919,7 @@ bool MathType::HandleChar(sal_Int32 &rTextStart, int &rSetSize, int nLevel,
                 rRet.insert(nOldLen, "\"");
                 OUString aStr;
                 TypeFaceToString(aStr,nOldTypeFace);
-                aStr += "\"";
-                rRet.insert(rTextStart,aStr);
+                rRet.insert(rTextStart, aStr + "\"");
             }
             rTextStart = rRet.getLength();
         }
@@ -2934,8 +2931,7 @@ bool MathType::HandleChar(sal_Int32 &rTextStart, int &rSetSize, int nLevel,
                 rRet.insert(nOldLen, "\"");
                 OUString aStr;
                 TypeFaceToString(aStr,nOldTypeFace);
-                aStr += "\"";
-                rRet.insert(rTextStart, aStr);
+                rRet.insert(rTextStart, aStr + "\"");
             }
             rTextStart = rRet.getLength();
         }

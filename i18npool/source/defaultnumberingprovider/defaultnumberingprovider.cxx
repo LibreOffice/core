@@ -452,7 +452,7 @@ void lcl_formatPersianWord( sal_Int32 nNumber, OUString& rsResult )
         {
             if (nSection > SAL_N_ELEMENTS( table_PersianWord_decadeX))
                 throw IllegalArgumentException();   // does not happen with sal_Int32
-            aTemp.insert( 0, asPersianWord_conjunction).insert( 0, table_PersianWord_decadeX[nSection-1]);
+            aTemp.insert( 0, table_PersianWord_decadeX[nSection-1] + asPersianWord_conjunction );
         }
 
         unsigned int nDigit;

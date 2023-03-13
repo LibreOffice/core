@@ -1821,9 +1821,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
                 //  #107805# always quote embedded strings - even space would otherwise
                 //  be recognized as thousands separator in French.
 
-                aNumStr.insert(nInsertPos, '"');
-                aNumStr.insert(nInsertPos, it.second);
-                aNumStr.insert(nInsertPos, '"');
+                aNumStr.insert(nInsertPos, OUString::Concat("\"") + it.second + "\"");
             }
         }
     }

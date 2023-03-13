@@ -868,8 +868,7 @@ bool SdrAngleItem::GetPresentation(
     if(ePres == SfxItemPresentation::Complete)
     {
         OUString aStr = SdrItemPool::GetItemName(Which());
-        aText.insert(0, ' ');
-        aText.insert(0, aStr);
+        aText.insert(0, aStr + " ");
     }
 
     rText = aText.makeStringAndClear();
