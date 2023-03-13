@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -336,60 +336,6 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="tabstopposft">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="label" translatable="yes" context="tocentriespage|tabstopposft">Tab stop position:</property>
-                            <property name="use-underline">True</property>
-                            <property name="mnemonic-widget">tabstoppos</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkSpinButton" id="tabstoppos">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="halign">start</property>
-                            <property name="hexpand">True</property>
-                            <property name="activates-default">True</property>
-                            <property name="truncate-multiline">True</property>
-                            <property name="adjustment">adjustment1</property>
-                            <property name="digits">2</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="tabstoppos-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|tabstoppos">Enter the distance to leave between the left page margin and the tab stop.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="alignright">
-                            <property name="label" translatable="yes" context="tocentriespage|alignright">Align right</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="use-underline">True</property>
-                            <property name="draw-indicator">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="alignright-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|alignright">Aligns the tab stop to the right page margin.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">2</property>
-                            <property name="top-attach">3</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkLabel" id="chapterentryft">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
@@ -407,9 +353,9 @@
                           <object class="GtkComboBoxText" id="chapterentry">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
+                            <property name="tooltip-text" translatable="yes" context="tocentriespage|tooltip_text|chapterentry">Select the heading information to include in the index entry.</property>
                             <property name="valign">center</property>
                             <property name="hexpand">True</property>
-                            <property name="tooltip_text" translatable="yes" context="tocentriespage|tooltip_text|chapterentry">Select the heading information to include in the index entry.</property>
                             <items>
                               <item translatable="yes" context="tocentriespage|chapterentry">Number</item>
                               <item translatable="yes" context="tocentriespage|chapterentry">Contents</item>
@@ -444,12 +390,12 @@
                           <object class="GtkSpinButton" id="entryoutlinelevel">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
+                            <property name="tooltip-text" translatable="yes" context="tocentriespage|entryoutlinelevel">Enter the number of levels of the heading number or list number to show in the index. For example, select “2” to show the first two levels of the number.</property>
                             <property name="halign">start</property>
                             <property name="hexpand">True</property>
                             <property name="activates-default">True</property>
                             <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustment2</property>
-                            <property name="tooltip_text" translatable="yes" context="tocentriespage|entryoutlinelevel">Enter the number of levels of the heading number or list number to show in the index. For example, select “2” to show the first two levels of the number.</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="entryoutlinelevel-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|entryoutlinelevel">Enter the number of levels of the heading number or list number to show in the index. For example, select “2” to show the first two levels of the number. To enable numbers for headings, choose “Tools - Heading Numbering”.</property>
@@ -495,6 +441,76 @@
                             <property name="left-attach">1</property>
                             <property name="top-attach">1</property>
                           </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="tabstopposft">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes" context="tocentriespage|tabstopposft">Tab stop position:</property>
+                            <property name="use-underline">True</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="spacing">12</property>
+                            <child>
+                              <object class="GtkSpinButton" id="tabstoppos">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="halign">start</property>
+                                <property name="hexpand">True</property>
+                                <property name="activates-default">True</property>
+                                <property name="truncate-multiline">True</property>
+                                <property name="adjustment">adjustment1</property>
+                                <property name="digits">2</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="tabstoppos-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|tabstoppos">Enter the distance to leave between the left page margin and the tab stop.</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="alignright">
+                                <property name="label" translatable="yes" context="tocentriespage|alignright">Align right</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">False</property>
+                                <property name="use-underline">True</property>
+                                <property name="draw-indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="alignright-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|alignright">Aligns the tab stop to the right page margin.</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
                         </child>
                         <child>
                           <placeholder/>
@@ -587,8 +603,8 @@
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">True</property>
                                 <property name="no-show-all">True</property>
-                                <property name="use-underline">True</property>
                                 <property name="tooltip-text" translatable="yes" context="tocentriespage|chapterno|tooltip_text">Insert in the “Structure” to include the heading number or list number of the entry text in the generated index.</property>
+                                <property name="use-underline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="chapterno-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|chapterno">Insert in the “Structure” to include the heading number or list number of the entry text in the generated index. To enable numbers for headings, choose “Tools - Heading Numbering“.</property>
@@ -645,8 +661,8 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">True</property>
-                                <property name="use-underline">True</property>
                                 <property name="tooltip-text" translatable="yes" context="tocentriespage|extended_tip|chapterinfo">Insert to include heading number or contents. Select inserted icon to choose what information to display.</property>
+                                <property name="use-underline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="chapterinfo-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|chapterinfo">Insert to include heading number or contents. The heading information comes from the heading immediately prior to the entry. Select the inserted icon to choose what information to display.</property>
