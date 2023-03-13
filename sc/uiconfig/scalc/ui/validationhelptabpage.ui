@@ -89,7 +89,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="validationhelptabpage|inputhelp_label">_Input help:</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">inputhelp</property>
+                <property name="mnemonic_widget">inputhelp_text</property>
                 <property name="xalign">0</property>
                 <property name="yalign">0</property>
               </object>
@@ -106,14 +106,14 @@
                 <property name="vexpand">True</property>
                 <property name="shadow_type">in</property>
                 <child>
-                  <object class="GtkTextView" id="inputhelp">
+                  <object class="GtkTextView" id="inputhelp_text">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="inputhelp-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="validationhelptabpage|extended_tip|inputhelp">Enter the message that you want to display when the cell or cell range is selected.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="validationhelptabpage|extended_tip|inputhelp_text">Enter the message that you want to display when the cell or cell range is selected.</property>
                       </object>
                     </child>
                   </object>

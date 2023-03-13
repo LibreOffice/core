@@ -691,11 +691,10 @@ IMPL_LINK_NOARG(ScTPValidationValue, CheckHdl, weld::Toggleable&, void)
 // Input Help Page
 
 ScTPValidationHelp::ScTPValidationHelp(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet)
-    : SfxTabPage(pPage, pController, IS_MOBILE ? OUString("modules/scalc/ui/validationhelptabpage-mobile.ui")
-            : OUString("modules/scalc/ui/validationhelptabpage.ui"), "ValidationHelpTabPage", &rArgSet)
+    : SfxTabPage(pPage, pController, "modules/scalc/ui/validationhelptabpage.ui", "ValidationHelpTabPage", &rArgSet)
     , m_xTsbHelp(m_xBuilder->weld_check_button("tsbhelp"))
     , m_xEdtTitle(m_xBuilder->weld_entry("title"))
-    , m_xEdInputHelp(m_xBuilder->weld_text_view("inputhelp"))
+    , m_xEdInputHelp(m_xBuilder->weld_text_view("inputhelp_text"))
 {
     m_xEdInputHelp->set_size_request(m_xEdInputHelp->get_approximate_digit_width() * 40, m_xEdInputHelp->get_height_rows(13));
 }
@@ -743,8 +742,7 @@ ScTPValidationError::ScTPValidationError(weld::Container* pPage, weld::DialogCon
                                          const SfxItemSet& rArgSet)
 
     :   SfxTabPage      ( pPage, pController,
-                          IS_MOBILE ? OUString("modules/scalc/ui/erroralerttabpage-mobile.ui")
-                                : OUString("modules/scalc/ui/erroralerttabpage.ui"), "ErrorAlertTabPage",
+                          "modules/scalc/ui/erroralerttabpage.ui", "ErrorAlertTabPage",
                           &rArgSet )
     , m_xTsbShow(m_xBuilder->weld_check_button("tsbshow"))
     , m_xLbAction(m_xBuilder->weld_combo_box("actionCB"))
