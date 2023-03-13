@@ -593,10 +593,9 @@ void XclExpBiff8Encrypter::EncryptBytes( SvStream& rStrm, vector<sal_uInt8>& aBy
     sal_uInt16 nBlockOffset = GetOffsetInBlock(nStrmPos);
     sal_uInt32 nBlockPos = GetBlockPos(nStrmPos);
 
-#if DEBUG_XL_ENCRYPTION
-    fprintf(stdout, "XclExpBiff8Encrypter::EncryptBytes: stream pos = %ld  offset in block = %d  block pos = %ld\n",
-            nStrmPos, nBlockOffset, nBlockPos);
-#endif
+    SAL_INFO("sc.filter", "XclExpBiff8Encrypter::EncryptBytes: stream pos = "
+                              << nStrmPos << " offset in block = " << nBlockOffset
+                              << " block pos = " << nBlockPos);
 
     sal_uInt16 nSize = static_cast< sal_uInt16 >( aBytes.size() );
     if (nSize == 0)
