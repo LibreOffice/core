@@ -19,6 +19,7 @@
 
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 
+#include "A11yCheckIssuesPanel.hxx"
 #include "ThemePanel.hxx"
 #include "StylePresetsPanel.hxx"
 #include "PageStylesPanel.hxx"
@@ -193,6 +194,12 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     else if (rsResourceURL.endsWith("/TableEditPanel"))
     {
         std::unique_ptr<PanelLayout> xPanel = sw::sidebar::TableEditPanel::Create(pParent, xFrame, pBindings );
+        xElement = sfx2::sidebar::SidebarPanelBase::Create(
+                        rsResourceURL, xFrame, std::move(xPanel), ui::LayoutSize(-1,-1,-1));
+    }
+    else if (rsResourceURL.endsWith("/A11yCheckIssuesPanel"))
+    {
+        std::unique_ptr<PanelLayout> xPanel = sw::sidebar::A11yCheckIssuesPanel::Create(pParent, pBindings);
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
                         rsResourceURL, xFrame, std::move(xPanel), ui::LayoutSize(-1,-1,-1));
     }

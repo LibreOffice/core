@@ -81,6 +81,26 @@
         </prop>
       </node>
 
+      <node oor:name="A11yCheckDeck" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Accessibility Check</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>A11yCheckDeck</value>
+        </prop>
+        <prop oor:name="IconURL" oor:type="xs:string">
+          <value>private:graphicrepository/cmd/lc_adddirect.png</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            WriterVariants, any, visible ;
+          </value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>900</value>
+        </prop>
+      </node>
+
       <node oor:name="ShapesDeck" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Shapes</value>
@@ -571,6 +591,38 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>500</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+      </node>
+
+      <node oor:name="A11yCheckIssuesPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Accessibility Issues</value>
+        </prop>
+        <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>A11yCheckIssuesPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>A11yCheckDeck</value>
+        </prop>
+        <prop oor:name="DefaultMenuCommand">
+          <value></value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            WriterVariants, any, visible ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SwPanelFactory/A11yCheckIssuesPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>100</value>
         </prop>
         <prop oor:name="WantsAWT" oor:type="xs:boolean">
           <value>false</value>
