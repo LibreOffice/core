@@ -1805,13 +1805,14 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
             getPropertyName(PROP_BOTTOM_MARGIN),
             nVertOrient == text::VertOrientation::BOTTOM ? 0 : nBottomDist));
 
+        if (const std::optional<sal_Int16> nDirection = PopFrameDirection())
+        {
+            aFrameProperties.push_back(
+                comphelper::makePropertyValue(getPropertyName(PROP_FRM_DIRECTION), *nDirection));
+        }
+
         if (vProps.size() > 1)
         {
-            if (const std::optional<sal_Int16> nDirection = PopFrameDirection())
-            {
-                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_FRM_DIRECTION), *nDirection));
-            }
-
             // If there is no fill, the Word default is 100% transparency.
             // Otherwise CellColorHandler has priority, and this setting
             // will be ignored.
