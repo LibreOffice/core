@@ -2188,6 +2188,8 @@ void VclScrolledWindow::DumpAsPropertyTree(::tools::JsonWriter& rJsonWriter)
 {
     VclBin::DumpAsPropertyTree(rJsonWriter);
 
+    rJsonWriter.put("user_managed_scrolling", m_bUserManagedScrolling);
+
     {
         auto aVertical = rJsonWriter.startNode("vertical");
 

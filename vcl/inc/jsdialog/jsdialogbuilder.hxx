@@ -488,6 +488,13 @@ public:
         if (!m_bIsFreezed && m_pSender)
             m_pSender->sendClosePopup(nWindowId);
     }
+
+    virtual void set_buildable_name(const OString& rName) override
+    {
+        SalInstanceWidget::set_buildable_name(rName);
+        assert(false); // we remember old name in GetLOKWeldWidgetsMap()
+        // TODO: implement renaming or avoid it for LOK
+    }
 };
 
 class JSDialog final : public JSWidget<SalInstanceDialog, ::Dialog>
@@ -529,10 +536,16 @@ public:
 
     virtual void vadjustment_configure(int value, int lower, int upper, int step_increment,
                                        int page_increment, int page_size) override;
+    virtual void vadjustment_set_value(int value) override;
+    void vadjustment_set_value_no_notification(int value);
+    virtual void vadjustment_set_page_size(int size) override;
     virtual void set_vpolicy(VclPolicyType eVPolicy) override;
 
     virtual void hadjustment_configure(int value, int lower, int upper, int step_increment,
                                        int page_increment, int page_size) override;
+    virtual void hadjustment_set_value(int value) override;
+    void hadjustment_set_value_no_notification(int value);
+    virtual void hadjustment_set_page_size(int size) override;
     virtual void set_hpolicy(VclPolicyType eVPolicy) override;
 };
 

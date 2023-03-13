@@ -1424,6 +1424,23 @@ void JSScrolledWindow::vadjustment_configure(int value, int lower, int upper, in
     sendUpdate();
 }
 
+void JSScrolledWindow::vadjustment_set_value(int value)
+{
+    SalInstanceScrolledWindow::vadjustment_set_value(value);
+    sendUpdate();
+}
+
+void JSScrolledWindow::vadjustment_set_value_no_notification(int value)
+{
+    SalInstanceScrolledWindow::vadjustment_set_value(value);
+}
+
+void JSScrolledWindow::vadjustment_set_page_size(int size)
+{
+    SalInstanceScrolledWindow::vadjustment_set_page_size(size);
+    sendUpdate();
+}
+
 void JSScrolledWindow::set_vpolicy(VclPolicyType eVPolicy)
 {
     SalInstanceScrolledWindow::set_vpolicy(eVPolicy);
@@ -1435,6 +1452,23 @@ void JSScrolledWindow::hadjustment_configure(int value, int lower, int upper, in
 {
     SalInstanceScrolledWindow::hadjustment_configure(value, lower, upper, step_increment,
                                                      page_increment, page_size);
+    sendUpdate();
+}
+
+void JSScrolledWindow::hadjustment_set_value(int value)
+{
+    SalInstanceScrolledWindow::hadjustment_set_value(value);
+    sendUpdate();
+}
+
+void JSScrolledWindow::hadjustment_set_value_no_notification(int value)
+{
+    SalInstanceScrolledWindow::hadjustment_set_value(value);
+}
+
+void JSScrolledWindow::hadjustment_set_page_size(int size)
+{
+    SalInstanceScrolledWindow::hadjustment_set_page_size(size);
     sendUpdate();
 }
 

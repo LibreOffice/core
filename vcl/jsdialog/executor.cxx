@@ -552,20 +552,20 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
         }
         else if (sControlType == "scrolledwindow")
         {
-            auto pScrolledWindow = dynamic_cast<weld::ScrolledWindow*>(pWidget);
+            auto pScrolledWindow = dynamic_cast<JSScrolledWindow*>(pWidget);
             if (pScrolledWindow)
             {
                 if (sAction == "scrollv")
                 {
                     sal_Int32 nValue = o3tl::toInt32(rData["data"]);
-                    pScrolledWindow->vadjustment_set_value(nValue);
+                    pScrolledWindow->vadjustment_set_value_no_notification(nValue);
                     LOKTrigger::trigger_scrollv(*pScrolledWindow);
                     return true;
                 }
                 else if (sAction == "scrollh")
                 {
                     sal_Int32 nValue = o3tl::toInt32(rData["data"]);
-                    pScrolledWindow->hadjustment_set_value(nValue);
+                    pScrolledWindow->hadjustment_set_value_no_notification(nValue);
                     LOKTrigger::trigger_scrollh(*pScrolledWindow);
                     return true;
                 }
