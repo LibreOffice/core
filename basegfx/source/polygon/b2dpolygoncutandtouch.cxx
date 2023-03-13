@@ -179,14 +179,12 @@ namespace basegfx
             // (as in adaptiveSubdivideByCount) it is now possible to calculate back the
             // cut positions in the polygon to relative cut positions on the original bezier
             // segment.
-            const sal_uInt32 nTempPointCount(rPointVector.size());
             const sal_uInt32 nEdgeCount(rPolygon.count() ? rPolygon.count() - 1 : 0);
 
-            if(nTempPointCount && nEdgeCount)
+            if(!rPointVector.empty() && nEdgeCount)
             {
-                for(sal_uInt32 a(0); a < nTempPointCount; a++)
+                for( const auto& rTempPoint : rPointVector )
                 {
-                    const temporaryPoint& rTempPoint = rPointVector[a];
                     const double fCutPosInPolygon(static_cast<double>(rTempPoint.getIndex()) + rTempPoint.getCut());
                     const double fRelativeCutPos(fCutPosInPolygon / static_cast<double>(nEdgeCount));
                     rTempPoints.emplace_back(rTempPoint.getPoint(), nInd, fRelativeCutPos);

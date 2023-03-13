@@ -218,18 +218,17 @@ namespace basegfx
             // by Y,X,atan2 when adding nodes
             if(rCandidate.count())
             {
-                for(sal_uInt32 a(0); a < rCandidate.count(); a++)
+                for(const auto& rPolygonCandidate : rCandidate)
                 {
-                    const B2DPolygon& aPolygonCandidate(rCandidate.getB2DPolygon(a));
-                    const sal_uInt32 nCount(aPolygonCandidate.count());
+                    const sal_uInt32 nCount {rPolygonCandidate.count()};
 
                     if(nCount > 2)
                     {
-                        B2DPoint aPrevPnt(aPolygonCandidate.getB2DPoint(nCount - 1));
+                        B2DPoint aPrevPnt(rPolygonCandidate.getB2DPoint(nCount - 1));
 
                         for(sal_uInt32 b(0); b < nCount; b++)
                         {
-                            B2DPoint aNextPnt(aPolygonCandidate.getB2DPoint(b));
+                            B2DPoint aNextPnt(rPolygonCandidate.getB2DPoint(b));
 
                             if( !aPrevPnt.equal(aNextPnt) )
                             {

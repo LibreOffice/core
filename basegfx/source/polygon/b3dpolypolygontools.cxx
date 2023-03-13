@@ -37,12 +37,10 @@ namespace basegfx::utils
         B3DRange getRange(const B3DPolyPolygon& rCandidate)
         {
             B3DRange aRetval;
-            const sal_uInt32 nPolygonCount(rCandidate.count());
 
-            for(sal_uInt32 a(0); a < nPolygonCount; a++)
+            for(const auto& rPolygon : rCandidate )
             {
-                const B3DPolygon& aCandidate = rCandidate.getB3DPolygon(a);
-                aRetval.expand(getRange(aCandidate));
+                aRetval.expand(getRange(rPolygon));
             }
 
             return aRetval;
@@ -389,9 +387,9 @@ namespace basegfx::utils
         {
             B3DPolyPolygon aRetval;
 
-            for(sal_uInt32 a(0); a < rCandidate.count(); a++)
+            for( const auto& rB3DPolygon : rCandidate)
             {
-                aRetval.append(applyDefaultNormalsSphere(rCandidate.getB3DPolygon(a), rCenter));
+                aRetval.append(applyDefaultNormalsSphere(rB3DPolygon, rCenter));
             }
 
             return aRetval;
@@ -401,9 +399,9 @@ namespace basegfx::utils
         {
             B3DPolyPolygon aRetval;
 
-            for(sal_uInt32 a(0); a < rCandidate.count(); a++)
+            for( const auto& rB3DPolygon : rCandidate )
             {
-                aRetval.append(invertNormals(rCandidate.getB3DPolygon(a)));
+                aRetval.append(invertNormals(rB3DPolygon));
             }
 
             return aRetval;
@@ -413,9 +411,9 @@ namespace basegfx::utils
         {
             B3DPolyPolygon aRetval;
 
-            for(sal_uInt32 a(0); a < rCandidate.count(); a++)
+            for( const auto& rB3DPolygon : rCandidate)
             {
-                aRetval.append(applyDefaultTextureCoordinatesParallel(rCandidate.getB3DPolygon(a), rRange, bChangeX, bChangeY));
+                aRetval.append(applyDefaultTextureCoordinatesParallel(rB3DPolygon, rRange, bChangeX, bChangeY));
             }
 
             return aRetval;
@@ -425,9 +423,9 @@ namespace basegfx::utils
         {
             B3DPolyPolygon aRetval;
 
-            for(sal_uInt32 a(0); a < rCandidate.count(); a++)
+            for( const auto& rB3DPolygon : rCandidate )
             {
-                aRetval.append(applyDefaultTextureCoordinatesSphere(rCandidate.getB3DPolygon(a), rCenter, bChangeX, bChangeY));
+                aRetval.append(applyDefaultTextureCoordinatesSphere(rB3DPolygon, rCenter, bChangeX, bChangeY));
             }
 
             return aRetval;
@@ -445,10 +443,9 @@ namespace basegfx::utils
             {
                 sal_Int32 nInsideCount(0);
 
-                for(sal_uInt32 a(0); a < nPolygonCount; a++)
+                for(const auto& rPolygon : rCandidate )
                 {
-                    const B3DPolygon& aPolygon(rCandidate.getB3DPolygon(a));
-                    const bool bInside(isInside(aPolygon, rPoint, false/*bWithBorder*/));
+                    const bool bInside(isInside(rPolygon, rPoint, false/*bWithBorder*/));
 
                     if(bInside)
                     {

@@ -162,12 +162,11 @@ namespace basegfx::utils
 
         B2DPolyPolygon clipPolyPolygonOnParallelAxis(const B2DPolyPolygon& rCandidate, bool bParallelToXAxis, bool bAboveAxis, double fValueOnOtherAxis, bool bStroke)
         {
-            const sal_uInt32 nPolygonCount(rCandidate.count());
             B2DPolyPolygon aRetval;
 
-            for(sal_uInt32 a(0); a < nPolygonCount; a++)
+            for(const auto& rB2DPolygon : rCandidate )
             {
-                const B2DPolyPolygon aClippedPolyPolygon(clipPolygonOnParallelAxis(rCandidate.getB2DPolygon(a), bParallelToXAxis, bAboveAxis, fValueOnOtherAxis, bStroke));
+                const B2DPolyPolygon aClippedPolyPolygon(clipPolygonOnParallelAxis(rB2DPolygon, bParallelToXAxis, bAboveAxis, fValueOnOtherAxis, bStroke));
 
                 if(aClippedPolyPolygon.count())
                 {
@@ -284,10 +283,9 @@ namespace basegfx::utils
 
         B2DPolyPolygon clipPolyPolygonOnRange(const B2DPolyPolygon& rCandidate, const B2DRange& rRange, bool bInside, bool bStroke)
         {
-            const sal_uInt32 nPolygonCount(rCandidate.count());
             B2DPolyPolygon aRetval;
 
-            if(!nPolygonCount)
+            if(!rCandidate.count())
             {
                 // source is empty
                 return aRetval;
@@ -309,9 +307,9 @@ namespace basegfx::utils
 
             if(bInside)
             {
-                for(sal_uInt32 a(0); a < nPolygonCount; a++)
+                for( const auto& rClippedPoly : rCandidate)
                 {
-                    const B2DPolyPolygon aClippedPolyPolygon(clipPolygonOnRange(rCandidate.getB2DPolygon(a), rRange, bInside, bStroke));
+                    const B2DPolyPolygon aClippedPolyPolygon(clipPolygonOnRange(rClippedPoly , rRange, bInside, bStroke));
 
                     if(aClippedPolyPolygon.count())
                     {
@@ -345,10 +343,10 @@ namespace basegfx::utils
                     // line clipping, create line snippets by first adding all cut points and
                     // then marching along the edges and detecting if they are inside or outside
                     // the clip polygon
-                    for(sal_uInt32 a(0); a < rCandidate.count(); a++)
+                    for(const auto& rPolygon : rCandidate)
                     {
                         // add cuts with clip to polygon, including bezier segments
-                        const B2DPolygon aCandidate(addPointsAtCuts(rCandidate.getB2DPolygon(a), rClip));
+                        const B2DPolygon aCandidate(addPointsAtCuts(rPolygon, rClip));
                         const sal_uInt32 nPointCount(aCandidate.count());
                         const sal_uInt32 nEdgeCount(aCandidate.isClosed() ? nPointCount : nPointCount - 1);
                         B2DCubicBezier aEdge;

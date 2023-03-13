@@ -31,6 +31,7 @@
 #include <utility>
 #include <vector>
 #include <algorithm>
+#include <numeric>
 
 namespace basegfx
 {
@@ -441,9 +442,9 @@ namespace basegfx
                 {
                     basegfx::B2DPoint* pLast(&maSNV[0].mpPN->maPoint);
 
-                    for(a = 1; a < nNodeCount; a++)
+                    for(const auto& rSN : maSNV)
                     {
-                        basegfx::B2DPoint* pCurrent(&maSNV[a].mpPN->maPoint);
+                        basegfx::B2DPoint* pCurrent(&rSN.mpPN->maPoint);
 
                         if(pLast->equal(*pCurrent) && (pLast->getX() != pCurrent->getX() || pLast->getY() != pCurrent->getY()))
                         {
@@ -533,25 +534,13 @@ namespace basegfx
                 if(!nOriginalCount)
                     return;
 
-                sal_uInt32 nPointCount(0);
-                sal_uInt32 a(0);
-
-                // count points
-                for(a = 0; a < nOriginalCount; a++)
-                {
-                    const B2DPolygon& aCandidate(aGeometry.getB2DPolygon(a));
-                    const sal_uInt32 nCandCount(aCandidate.count());
-
-                    // If it's not a bezier curve, at least three points would be needed to have a
-                    // topological relevant (not empty) polygon. Since it's not known here if trivial
-                    // edges (dead ends) will be kept or sorted out, add non-bezier polygons with
-                    // more than one point.
-                    // For bezier curves, the minimum for defining an area is also one.
-                    if(nCandCount)
-                    {
-                        nPointCount += nCandCount;
-                    }
-                }
+                // If it's not a bezier curve, at least three points would be needed to have a
+                // topological relevant (not empty) polygon. Since it's not known here if trivial
+                // edges (dead ends) will be kept or sorted out, add non-bezier polygons with
+                // more than one point.
+                // For bezier curves, the minimum for defining an area is also one.
+                sal_uInt32 nPointCount = std::accumulate( aGeometry.begin(), aGeometry.end(), sal_uInt32(0),
+                    [](sal_uInt32 a, const basegfx::B2DPolygon& b){return a + b.count();});
 
                 if(!nPointCount)
                     return;
@@ -564,16 +553,15 @@ namespace basegfx
                 // fill data
                 sal_uInt32 nInsertIndex(0);
 
-                for(a = 0; a < nOriginalCount; a++)
+                for(const auto& rCandidate : aGeometry )
                 {
-                    const B2DPolygon& aCandidate(aGeometry.getB2DPolygon(a));
-                    const sal_uInt32 nCandCount(aCandidate.count());
+                    const sal_uInt32 nCandCount(rCandidate.count());
 
                     // use same condition as above, the data vector is
                     // pre-allocated
                     if(nCandCount)
                     {
-                        impAddPolygon(nInsertIndex, aCandidate);
+                        impAddPolygon(nInsertIndex, rCandidate);
                         nInsertIndex += nCandCount;
                     }
                 }
@@ -708,13 +696,11 @@ namespace basegfx::utils
         {
             B2DPolyPolygon aRetval;
 
-            for(sal_uInt32 a(0); a < rCandidate.count(); a++)
+            for(const auto& rPolygon : rCandidate)
             {
-                const B2DPolygon& aCandidate(rCandidate.getB2DPolygon(a));
-
-                if(utils::getOrientation(aCandidate) != B2VectorOrientation::Neutral)
+                if(utils::getOrientation(rPolygon) != B2VectorOrientation::Neutral)
                 {
-                    aRetval.append(aCandidate);
+                    aRetval.append(rPolygon);
                 }
             }
 
