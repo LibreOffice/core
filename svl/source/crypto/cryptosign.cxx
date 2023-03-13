@@ -26,6 +26,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <comphelper/lok.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
@@ -640,7 +641,11 @@ NSSCMSMessage *CreateCMSMessage(const PRTime* time,
     // if it works, and fallback if it doesn't.
     if (SECKEYPrivateKey * pPrivateKey = PK11_FindKeyByAnyCert(cert, nullptr))
     {
-        SECKEY_DestroyPrivateKey(pPrivateKey);
+        if (!comphelper::LibreOfficeKit::isActive())
+        {
+            // pPrivateKey only exists in the memory in the LOK case, don't delete it.
+            SECKEY_DestroyPrivateKey(pPrivateKey);
+        }
         *cms_signer = NSS_CMSSignerInfo_Create(result, cert, SEC_OID_SHA256);
     }
     else
