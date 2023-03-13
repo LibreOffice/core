@@ -941,6 +941,21 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf145085)
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 1, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf154125)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    insertArrayToCell("A1", u"=INDEX({11;21},0,1)");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("11"), pDoc->GetString(ScAddress(0, 0, 0)));
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 21
+    // - Actual  :
+    CPPUNIT_ASSERT_EQUAL(OUString("21"), pDoc->GetString(ScAddress(0, 1, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf148863)
 {
     createScDoc();
