@@ -84,10 +84,11 @@ public:
     }
 
     /**
-     * Get the logical rectangle of each part in the document.
+     * Get the extent of each page in the document.
      *
-     * A part refers to an individual page in Writer and has no relevant for
-     * Calc or Impress.
+     * This function is relevant for Writer documents only. It is a
+     * mistake that the API has "part" in its name as Writer documents
+     * don't have parts.
      *
      * @return a rectangle list, using the same format as
      * LOK_CALLBACK_TEXT_SELECTION.
