@@ -1217,10 +1217,11 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
                 // Heading: H1 - H6
 
-                if (pTextNd->IsOutline()
+                if (int nRealLevel = pTextNd->GetAttrOutlineLevel() - 1;
+                    nRealLevel >= 0
+                    && !pTextNd->IsInRedlines()
                     && sw::IsParaPropsNode(*pFrame->getRootFrame(), *pTextNd))
                 {
-                    int nRealLevel = pTextNd->GetAttrOutlineLevel()-1;
                     switch(nRealLevel)
                     {
                         case 0 :
