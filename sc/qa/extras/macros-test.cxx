@@ -48,6 +48,7 @@ public:
     void testTdf104902();
     void testTdf64639();
     void testTdf142033();
+    void testTdf89920();
     void testPasswordProtectedUnicodeString();
     void testPasswordProtectedArrayInUserType();
     void testTdf131296_legacy();
@@ -82,6 +83,7 @@ public:
     CPPUNIT_TEST(testTdf104902);
     CPPUNIT_TEST(testTdf64639);
     CPPUNIT_TEST(testTdf142033);
+    CPPUNIT_TEST(testTdf89920);
     CPPUNIT_TEST(testPasswordProtectedUnicodeString);
     CPPUNIT_TEST(testPasswordProtectedArrayInUserType);
     CPPUNIT_TEST(testTdf131296_legacy);
@@ -324,6 +326,32 @@ void ScMacrosTest::testTdf142033()
     // - Actual  : string withnewlines
     CPPUNIT_ASSERT_EQUAL(OUString(u"string with" + OUStringChar(u'\xA') + u"newlines"), rDoc.GetString(ScAddress(1,0,0)));
     CPPUNIT_ASSERT_EQUAL(OUString(u"string with" + OUStringChar(u'\xA') + u"newlines"), rDoc.GetString(ScAddress(1,1,0)));
+}
+
+void ScMacrosTest::testTdf89920()
+{
+    loadFromURL(u"tdf89920.ods");
+
+    executeMacro("vnd.sun.Star.script:Standard.Module1.SearchAndReplaceNewline?language=Basic&"
+                 "location=document");
+
+    // Export to ODS
+    saveAndReload("calc8");
+
+    xmlDocUniquePtr pContentXml = parseExport("content.xml");
+    CPPUNIT_ASSERT(pContentXml);
+
+    assertXPathContent(pContentXml,
+                       "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
+                       "table:table-row[1]/table:table-cell[1]/text:p[1]",
+                       "aa bb");
+
+    // Without the fix in place, this test would have failed here with
+    // - Expression: xmlXPathNodeSetGetLength(pXmlNodes) > 0
+    assertXPathContent(pContentXml,
+                       "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
+                       "table:table-row[1]/table:table-cell[1]/text:p[2]",
+                       "cc dd");
 }
 
 void ScMacrosTest::testPasswordProtectedUnicodeString()
