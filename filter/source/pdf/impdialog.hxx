@@ -97,6 +97,7 @@ class ImpPDFTabDialog final : public SfxTabDialogController
     bool                        mbExportFormFields;
     bool                        mbAllowDuplicateFieldNames;
     bool                        mbExportBookmarks;
+    bool                        mbExportBookmarksUserSelection = true;
     bool                        mbExportHiddenSlides;
     bool                        mbSinglePageSheets;
     sal_Int32                   mnOpenBookmarkLevels;
