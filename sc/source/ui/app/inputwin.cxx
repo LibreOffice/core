@@ -2553,6 +2553,7 @@ IMPL_LINK_NOARG(ScPosWnd, ModifyHdl, weld::ComboBox&, void)
 
 void ScPosWnd::DoEnter()
 {
+    bool bOpenManageNamesDialog = false;
     OUString aText = m_xWidget->get_active_text();
     if ( !aText.isEmpty() )
     {
@@ -2615,11 +2616,8 @@ void ScPosWnd::DoEnter()
                 }
                 else if (eType == SC_MANAGE_NAMES)
                 {
-                    sal_uInt16          nId  = ScNameDlgWrapper::GetChildWindowId();
-                    SfxViewFrame& rViewFrm = pViewSh->GetViewFrame();
-                    SfxChildWindow* pWnd = rViewFrm.GetChildWindow( nId );
-
-                    SC_MOD()->SetRefDialog( nId, pWnd == nullptr );
+                    // dialog is only set below after calling 'ReleaseFocus_Impl' to ensure it gets focus
+                    bOpenManageNamesDialog = true;
                 }
                 else
                 {
@@ -2654,6 +2652,16 @@ void ScPosWnd::DoEnter()
         m_xWidget->set_entry_text(aPosStr);
 
     ReleaseFocus_Impl();
+
+    if (bOpenManageNamesDialog)
+    {
+        const sal_uInt16 nId  = ScNameDlgWrapper::GetChildWindowId();
+        ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+        assert(pViewSh);
+        SfxViewFrame& rViewFrm = pViewSh->GetViewFrame();
+        SfxChildWindow* pWnd = rViewFrm.GetChildWindow( nId );
+        SC_MOD()->SetRefDialog( nId, pWnd == nullptr );
+    }
 }
 
 IMPL_LINK_NOARG(ScPosWnd, ActivateHdl, weld::ComboBox&, bool)
