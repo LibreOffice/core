@@ -1773,6 +1773,38 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
         aFrameProperties.push_back(
             comphelper::makePropertyValue(getPropertyName(PROP_SURROUND), nWrap));
 
+        sal_Int32 nRightDist = 0;
+        sal_Int32 nLeftDist = 0;
+        for (const auto pProp : vProps)
+        {
+            if (pProp->GethSpace() < 0)
+                continue;
+            nLeftDist = nRightDist = pProp->GethSpace();
+            break;
+        }
+        aFrameProperties.push_back(comphelper::makePropertyValue(
+            getPropertyName(PROP_LEFT_MARGIN),
+            nHoriOrient == text::HoriOrientation::LEFT ? 0 : nLeftDist));
+        aFrameProperties.push_back(comphelper::makePropertyValue(
+            getPropertyName(PROP_RIGHT_MARGIN),
+            nHoriOrient == text::HoriOrientation::RIGHT ? 0 : nRightDist));
+
+        sal_Int32 nBottomDist = 0;
+        sal_Int32 nTopDist = 0;
+        for (const auto pProp : vProps)
+        {
+            if (pProp->GetvSpace() < 0)
+                continue;
+            nTopDist = nBottomDist = pProp->GetvSpace();
+            break;
+        }
+        aFrameProperties.push_back(comphelper::makePropertyValue(
+            getPropertyName(PROP_TOP_MARGIN),
+            nVertOrient == text::VertOrientation::TOP ? 0 : nTopDist));
+        aFrameProperties.push_back(comphelper::makePropertyValue(
+            getPropertyName(PROP_BOTTOM_MARGIN),
+            nVertOrient == text::VertOrientation::BOTTOM ? 0 : nBottomDist));
+
         if (vProps.size() > 1)
         {
             if (const std::optional<sal_Int16> nDirection = PopFrameDirection())
@@ -1780,36 +1812,6 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_FRM_DIRECTION), *nDirection));
             }
 
-
-            /** FDO#73546 : distL & distR should be unsigned integers <Ecma 20.4.3.6>
-                Swapped the array elements 11,12 & 13,14 since 11 & 12 are
-                LEFT & RIGHT margins and 13,14 are TOP and BOTTOM margins respectively.
-            */
-            sal_Int32 nRightDist = 0;
-            sal_Int32 nLeftDist = 0;
-            for (const auto pProp : vProps)
-            {
-                if (pProp->GethSpace() < 0)
-                    continue;
-                nLeftDist = nRightDist = pProp->GethSpace();
-                break;
-            }
-
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_LEFT_MARGIN), nHoriOrient == text::HoriOrientation::LEFT ? 0 : nLeftDist));
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_RIGHT_MARGIN), nHoriOrient == text::HoriOrientation::RIGHT ? 0 : nRightDist));
-
-            sal_Int32 nBottomDist = 0;
-            sal_Int32 nTopDist = 0;
-            for (const auto pProp : vProps)
-            {
-                if (pProp->GetvSpace() < 0)
-                    continue;
-                nTopDist = nBottomDist = pProp->GetvSpace();
-                break;
-            }
-
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_TOP_MARGIN), nVertOrient == text::VertOrientation::TOP ? 0 : nTopDist));
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_BOTTOM_MARGIN), nVertOrient == text::VertOrientation::BOTTOM ? 0 : nBottomDist));
             // If there is no fill, the Word default is 100% transparency.
             // Otherwise CellColorHandler has priority, and this setting
             // will be ignored.
@@ -1819,20 +1821,6 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                     { "ParaFrameProperties", uno::Any(rAppendContext.pLastParagraphProperties->IsFrameMode()) }
             }));
             aFrameProperties.push_back(comphelper::makePropertyValue("FrameInteropGrabBag", aGrabBag));
-        }
-        else
-        {
-            sal_Int32 nVertDist = rAppendContext.pLastParagraphProperties->GethSpace();
-            if( nVertDist < 0 )
-                nVertDist = 0;
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_LEFT_MARGIN), nVertOrient == text::VertOrientation::TOP ? 0 : nVertDist));
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_RIGHT_MARGIN), nVertOrient == text::VertOrientation::BOTTOM ? 0 : nVertDist));
-
-            sal_Int32 nHoriDist = rAppendContext.pLastParagraphProperties->GetvSpace();
-            if( nHoriDist < 0 )
-                nHoriDist = 0;
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_TOP_MARGIN), nHoriOrient == text::HoriOrientation::LEFT ? 0 : nHoriDist));
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_BOTTOM_MARGIN), nHoriOrient == text::HoriOrientation::RIGHT ? 0 : nHoriDist));
         }
 
         lcl_MoveBorderPropertiesToFrame(aFrameProperties,
