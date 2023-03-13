@@ -1708,6 +1708,19 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
         aFrameProperties.push_back(
             comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT), nHoriOrient));
 
+        bool bValidY = false;
+        sal_Int32 nY = DEFAULT_VALUE;
+        for (const auto pProp : vProps)
+        {
+            bValidY = pProp->IsyValid();
+            if (!bValidY)
+                continue;
+            nY = pProp->Gety();
+            break;
+        }
+        aFrameProperties.push_back(
+            comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_POSITION), nY));
+
         sal_Int16 nVertOrient = text::VertOrientation::NONE;
         for (const auto pProp : vProps)
         {
@@ -1737,20 +1750,6 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
             }
             aFrameProperties.push_back(comphelper::makePropertyValue(
                 getPropertyName(PROP_HORI_ORIENT_RELATION), nHAnchor));
-
-            //set a non negative default value
-            bool bValidY = false;
-            sal_Int32 nY = DEFAULT_VALUE;
-            for (const auto pProp : vProps)
-            {
-                bValidY = pProp->IsyValid();
-                if (!bValidY)
-                    continue;
-                nY = pProp->Gety();
-                break;
-            }
-            aFrameProperties.push_back(
-                comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_POSITION), nY));
 
             //Default the anchor in case FramePr_vAnchor is missing ECMA 17.3.1.11
             sal_Int16 nVAnchor = text::RelOrientation::FRAME; // 'text'
@@ -1840,9 +1839,6 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 
             if( rAppendContext.pLastParagraphProperties->GethAnchor() >= 0 )
                 aFrameProperties.push_back(comphelper::makePropertyValue("HoriOrientRelation", sal_Int16(rAppendContext.pLastParagraphProperties->GethAnchor())));
-
-            if( rAppendContext.pLastParagraphProperties->IsyValid() )
-                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_POSITION), rAppendContext.pLastParagraphProperties->Gety()));
 
             if( rAppendContext.pLastParagraphProperties->GetvAnchor() >= 0 )
                 aFrameProperties.push_back(comphelper::makePropertyValue("VertOrientRelation", sal_Int16(rAppendContext.pLastParagraphProperties->GetvAnchor())));
