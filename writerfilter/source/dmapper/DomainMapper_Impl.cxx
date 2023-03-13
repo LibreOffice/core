@@ -1670,7 +1670,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
         }
         if (nhRule < 0)
         {
-            if (bValidH)
+            if (bValidH && nHeight)
             {
                 // [MS-OE376] Word uses a default value of "atLeast" for
                 // this attribute when the value of the h attribute is not 0.
