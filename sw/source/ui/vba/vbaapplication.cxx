@@ -354,7 +354,7 @@ void SAL_CALL SwVbaApplication::setStatusBar( const OUString& _statusbar )
 
 float SAL_CALL SwVbaApplication::CentimetersToPoints( float Centimeters )
 {
-    return VbaApplicationBase::CentimetersToPoints( Centimeters );
+    return o3tl::convert(Centimeters, o3tl::Length::cm, o3tl::Length::pt);
 }
 
 float SAL_CALL SwVbaApplication::PointsToCentimeters( float Points )

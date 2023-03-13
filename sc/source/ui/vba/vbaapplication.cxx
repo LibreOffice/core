@@ -1336,6 +1336,12 @@ ScVbaApplication::InchesToPoints( double Inches )
    return result;
 }
 
+double SAL_CALL
+ScVbaApplication::CentimetersToPoints( double Centimeters )
+{
+   return o3tl::convert(Centimeters, o3tl::Length::cm, o3tl::Length::pt);
+}
+
 void
 ScVbaApplication::Volatile( const uno::Any& aVolatile )
 {
