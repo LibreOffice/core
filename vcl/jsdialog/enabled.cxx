@@ -95,6 +95,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/scalc/ui/rowheightdialog.ui"
         || rUIFile == u"modules/scalc/ui/samplingdialog.ui"
         || rUIFile == u"modules/scalc/ui/selectsource.ui"
+        || rUIFile == u"modules/scalc/ui/standardfilterdialog.ui"
         || rUIFile == u"modules/scalc/ui/textimportcsv.ui"
         || rUIFile == u"modules/scalc/ui/ttestdialog.ui"
         || rUIFile == u"modules/scalc/ui/ungroupdialog.ui"
