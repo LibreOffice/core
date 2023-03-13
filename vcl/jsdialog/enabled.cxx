@@ -116,6 +116,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/swriter/ui/paradialog.ui"
         || rUIFile == u"modules/swriter/ui/sectionpage.ui"
         || rUIFile == u"modules/swriter/ui/splittable.ui"
+        || rUIFile == u"modules/swriter/ui/templatedialog2.ui"
         || rUIFile == u"modules/swriter/ui/translationdialog.ui"
         // sfx
         || rUIFile == u"sfx/ui/cmisinfopage.ui"
@@ -125,6 +126,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"sfx/ui/documentpropertiesdialog.ui"
         || rUIFile == u"sfx/ui/editdurationdialog.ui"
         || rUIFile == u"sfx/ui/linefragment.ui"
+        || rUIFile == u"sfx/ui/managestylepage.ui"
         || rUIFile == u"sfx/ui/password.ui"
         // svx
         || rUIFile == u"svx/ui/accessibilitycheckdialog.ui"
