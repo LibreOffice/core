@@ -18,13 +18,8 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
     // mobile only dialogs
     if (bMobile)
     {
-        if (// scalc
-            rUIFile == u"modules/scalc/ui/erroralerttabpage-mobile.ui"
-            || rUIFile == u"modules/scalc/ui/validationcriteriapage.ui"
-            || rUIFile == u"modules/scalc/ui/validationdialog.ui"
-            || rUIFile == u"modules/scalc/ui/validationhelptabpage-mobile.ui"
-            // swriter
-            || rUIFile == u"modules/swriter/ui/watermarkdialog.ui"
+        if (// swriter
+            rUIFile == u"modules/swriter/ui/watermarkdialog.ui"
             || rUIFile == u"modules/swriter/ui/wordcount-mobile.ui"
             // svx
             || rUIFile == u"svx/ui/findreplacedialog-mobile.ui")
@@ -79,6 +74,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/scalc/ui/deletecells.ui"
         || rUIFile == u"modules/scalc/ui/deletecontents.ui"
         || rUIFile == u"modules/scalc/ui/descriptivestatisticsdialog.ui"
+        || rUIFile == u"modules/scalc/ui/erroralerttabpage.ui"
         || rUIFile == u"modules/scalc/ui/exponentialsmoothingdialog.ui"
         || rUIFile == u"modules/scalc/ui/fourieranalysisdialog.ui"
         || rUIFile == u"modules/scalc/ui/goalseekdlg.ui"
@@ -97,6 +93,9 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/scalc/ui/textimportcsv.ui"
         || rUIFile == u"modules/scalc/ui/ttestdialog.ui"
         || rUIFile == u"modules/scalc/ui/ungroupdialog.ui"
+        || rUIFile == u"modules/scalc/ui/validationcriteriapage.ui"
+        || rUIFile == u"modules/scalc/ui/validationdialog.ui"
+        || rUIFile == u"modules/scalc/ui/validationhelptabpage.ui"
         || rUIFile == u"modules/scalc/ui/ztestdialog.ui"
         // schart
         || rUIFile == u"modules/schart/ui/charttypedialog.ui"

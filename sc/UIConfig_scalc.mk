@@ -125,7 +125,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/dropmenu \
 	sc/uiconfig/scalc/ui/doubledialog \
 	sc/uiconfig/scalc/ui/erroralerttabpage \
-	sc/uiconfig/scalc/ui/erroralerttabpage-mobile \
 	sc/uiconfig/scalc/ui/externaldata \
 	sc/uiconfig/scalc/ui/exponentialsmoothingdialog \
 	sc/uiconfig/scalc/ui/filldlg \
@@ -263,7 +262,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/validationdialog \
 	sc/uiconfig/scalc/ui/validationcriteriapage \
 	sc/uiconfig/scalc/ui/validationhelptabpage \
-	sc/uiconfig/scalc/ui/validationhelptabpage-mobile \
 	sc/uiconfig/scalc/ui/warnautocorrect \
 	sc/uiconfig/scalc/ui/xmlsourcedialog \
 	sc/uiconfig/scalc/ui/zoombox \

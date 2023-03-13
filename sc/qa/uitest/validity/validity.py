@@ -61,7 +61,7 @@ class validity(UITestCase):
                 select_pos(xTabs, "1")
                 xtsbhelp = xDialog.getChild("tsbhelp")
                 xtitle = xDialog.getChild("title")
-                xinputhelp = xDialog.getChild("inputhelp")
+                xinputhelp = xDialog.getChild("inputhelp_text")
 
                 xtsbhelp.executeAction("CLICK", tuple())
                 xtitle.executeAction("TYPE", mkPropertyValues({"TEXT":"A"}))
@@ -71,7 +71,7 @@ class validity(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 xtsbhelp = xDialog.getChild("tsbhelp")
                 xtitle = xDialog.getChild("title")
-                xinputhelp = xDialog.getChild("inputhelp")
+                xinputhelp = xDialog.getChild("inputhelp_text")
                 select_pos(xTabs, "1")
                 self.assertEqual(get_state_as_dict(xtsbhelp)["Selected"], "true")
                 self.assertEqual(get_state_as_dict(xtitle)["Text"], "A")
