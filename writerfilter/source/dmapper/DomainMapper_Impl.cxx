@@ -1817,14 +1817,10 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
         aFrameProperties.push_back(comphelper::makePropertyValue(
             getPropertyName(PROP_BACK_COLOR_TRANSPARENCY), sal_Int32(100)));
 
-        if (vProps.size() > 1)
-        {
-
-            uno::Sequence<beans::PropertyValue> aGrabBag( comphelper::InitPropertySequence({
-                    { "ParaFrameProperties", uno::Any(rAppendContext.pLastParagraphProperties->IsFrameMode()) }
-            }));
-            aFrameProperties.push_back(comphelper::makePropertyValue("FrameInteropGrabBag", aGrabBag));
-        }
+        uno::Sequence<beans::PropertyValue> aGrabBag(comphelper::InitPropertySequence(
+            { { "ParaFrameProperties",
+                uno::Any(rAppendContext.pLastParagraphProperties->IsFrameMode()) } }));
+        aFrameProperties.push_back(comphelper::makePropertyValue("FrameInteropGrabBag", aGrabBag));
 
         lcl_MoveBorderPropertiesToFrame(aFrameProperties,
                                         rAppendContext.pLastParagraphProperties->GetStartingRange(),
