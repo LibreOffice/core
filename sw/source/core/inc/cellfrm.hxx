@@ -27,7 +27,7 @@ struct SwCursorMoveState;
 class SwBorderAttrs;
 
 /// SwCellFrame is one table cell in the document layout.
-class SwCellFrame final : public SwLayoutFrame
+class SW_DLLPUBLIC SwCellFrame final : public SwLayoutFrame
 {
     const SwTableBox* m_pTabBox;
 

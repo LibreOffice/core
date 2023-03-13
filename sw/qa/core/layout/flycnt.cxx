@@ -28,6 +28,7 @@
 #include <itabenum.hxx>
 #include <frmmgr.hxx>
 #include <frameformats.hxx>
+#include <cellfrm.hxx>
 
 namespace
 {
@@ -474,6 +475,41 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWidow)
     auto pText2 = dynamic_cast<SwTextFrame*>(pCell2->GetLower());
     // And then similarly this was 1, not 2.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(2), pText2->GetThisLines());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyCompat14)
+{
+    // Given a Word 2010 document with 2 pages, one table row each:
+    std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(true,
+                                                                                        pChanges);
+    pChanges->commit();
+    comphelper::ScopeGuard g([pChanges] {
+        officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(
+            false, pChanges);
+        pChanges->commit();
+    });
+    createSwDoc("floattable-compat14.docx");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure that the first row is entirely on page 1:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    auto pPage1Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage1Objs[0]);
+    CPPUNIT_ASSERT(pPage1Fly);
+    SwFrame* pTab1 = pPage1Fly->GetLower();
+    SwFrame* pRow1 = pTab1->GetLower();
+    auto pCell1 = dynamic_cast<SwCellFrame*>(pRow1->GetLower());
+    // Without the accompanying fix in place, this test would have failed, the first row was split,
+    // but not in Word.
+    CPPUNIT_ASSERT(!pCell1->GetFollowCell());
 }
 }
 
