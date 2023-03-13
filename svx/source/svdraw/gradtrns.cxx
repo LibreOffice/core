@@ -30,7 +30,7 @@
 void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& rV, const SdrObject* pObj)
 {
     // handle start color
-    rV.aCol1 = rG.aGradient.GetStartColor();
+    rV.aCol1 = Color(rG.aGradient.GetColorStops().front().getStopColor());
     if(100 != rG.aGradient.GetStartIntens())
     {
         const double fFact(static_cast<double>(rG.aGradient.GetStartIntens()) / 100.0);
@@ -38,7 +38,7 @@ void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& r
     }
 
     // handle end color
-    rV.aCol2 = rG.aGradient.GetEndColor();
+    rV.aCol2 = Color(rG.aGradient.GetColorStops().back().getStopColor());
     if(100 != rG.aGradient.GetEndIntens())
     {
         const double fFact(static_cast<double>(rG.aGradient.GetEndIntens()) / 100.0);
@@ -186,14 +186,18 @@ void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& r
     rG = rGOld;
 
     // handle color changes
-    if(rV.aCol1 != rGOld.aGradient.GetStartColor())
+    if(rV.aCol1 != Color(rGOld.aGradient.GetColorStops().front().getStopColor()))
     {
-        rG.aGradient.SetStartColor(rV.aCol1);
+        basegfx::ColorStops aNewColorStops(rG.aGradient.GetColorStops());
+        basegfx::utils::replaceStartColor(aNewColorStops, rV.aCol1.getBColor());
+        rG.aGradient.SetColorStops(aNewColorStops);
         rG.aGradient.SetStartIntens(100);
     }
-    if(rV.aCol2 != rGOld.aGradient.GetEndColor())
+    if(rV.aCol2 != Color(rGOld.aGradient.GetColorStops().back().getStopColor()))
     {
-        rG.aGradient.SetEndColor(rV.aCol2);
+        basegfx::ColorStops aNewColorStops(rG.aGradient.GetColorStops());
+        basegfx::utils::replaceEndColor(aNewColorStops, rV.aCol2.getBColor());
+        rG.aGradient.SetColorStops(aNewColorStops);
         rG.aGradient.SetEndIntens(100);
     }
 

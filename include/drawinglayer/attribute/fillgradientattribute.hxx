@@ -25,9 +25,9 @@
 
 namespace basegfx
 {
-class ColorStep;
+class ColorStop;
 class BColor;
-typedef std::vector<ColorStep> ColorSteps;
+typedef std::vector<ColorStop> ColorStops;
 }
 
 namespace drawinglayer::attribute
@@ -56,17 +56,17 @@ public:
     /* MCGR: Adaptions for MultiColorGradients
 
        Direct Start/EndCOlor is no longer required, instead the
-       full color gradient is handed over as ColorSteps vector.
+       full color gradient is handed over as ColorStops vector.
        To add the former Start/EndColor in a compatible way, just
-       prepare an instance of basegfx::ColorSteps with the
+       prepare an instance of basegfx::ColorStops with the
        StartColor at 0.0 and the EndColor at 1.0.
 
        A rigid correction/input data will be done by the constructor,
-       including to sort the ColorSteps by offset and removing invalid
-       entries (see sortAndCorrectColorSteps)
+       including to sort the ColorStops by offset and removing invalid
+       entries (see sortAndCorrectColorStops)
 
-       To access e.g. the StartColor, use getColorSteps().front(), and
-       getColorSteps().back(), accordingly, for EndColor. The existence
+       To access e.g. the StartColor, use getColorStops().front(), and
+       getColorStops().back(), accordingly, for EndColor. The existence
        of at least one entry is guaranteed, so no need to check before
        accessing using of front()/back() calls. If only one color entry
        exists, start == end color is assumed, so not really a gradient
@@ -74,7 +74,7 @@ public:
     */
     /// constructors/assignmentoperator/destructor
     FillGradientAttribute(GradientStyle eStyle, double fBorder, double fOffsetX, double fOffsetY,
-                          double fAngle, const basegfx::ColorSteps& rColorSteps,
+                          double fAngle, const basegfx::ColorStops& rColorStops,
                           sal_uInt16 nSteps = 0);
     FillGradientAttribute();
     FillGradientAttribute(const FillGradientAttribute&);
@@ -98,7 +98,7 @@ public:
     double getOffsetX() const;
     double getOffsetY() const;
     double getAngle() const;
-    const basegfx::ColorSteps& getColorSteps() const;
+    const basegfx::ColorStops& getColorStops() const;
     sal_uInt16 getSteps() const;
 };
 

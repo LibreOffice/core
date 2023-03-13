@@ -347,9 +347,18 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     if (pEntry->GetName () == pName->GetValue ())
                     {
                         XGradient aGradient(pEntry->GetGradient());
+                        basegfx::ColorStops aNewColorStops(aGradient.GetColorStops());
 
-                        if (rReq.GetSlot () == SID_SETGRADSTARTCOLOR) aGradient.SetStartColor (aColor);
-                        else aGradient.SetEndColor (aColor);
+                        if (SID_SETGRADSTARTCOLOR == rReq.GetSlot ())
+                        {
+                            basegfx::utils::replaceStartColor(aNewColorStops, aColor.getBColor());
+                        }
+                        else
+                        {
+                            basegfx::utils::replaceEndColor(aNewColorStops, aColor.getBColor());
+                        }
+
+                        aGradient.SetColorStops(aNewColorStops);
 
                         XFillStyleItem aStyleItem(drawing::FillStyle_GRADIENT);
                         aStyleItem.SetWhich(XATTR_FILLSTYLE);
@@ -364,12 +373,14 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 if (i >= nCounts)
                 {
                     Color aBlack (0, 0, 0);
-                    XGradient aGradient ((rReq.GetSlot () == SID_SETGRADSTARTCOLOR)
-                                             ? aColor
-                                             : aBlack,
-                                         (rReq.GetSlot () == SID_SETGRADENDCOLOR)
-                                             ? aColor
-                                             : aBlack);
+                    XGradient aGradient (
+                        basegfx::utils::createColorStopsFromStartEndColor(
+                            (rReq.GetSlot () == SID_SETGRADSTARTCOLOR)
+                                             ? aColor.getBColor()
+                                             : aBlack.getBColor(),
+                            (rReq.GetSlot () == SID_SETGRADENDCOLOR)
+                                             ? aColor.getBColor()
+                                             : aBlack.getBColor()));
 
                     GetDoc()->GetGradientList()->Insert(std::make_unique<XGradientEntry>(aGradient, pName->GetValue()));
 
@@ -568,10 +579,12 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     if (i >= nCounts)
                     {
                         Color aBlack (0, 0, 0);
-                        XGradient aGradient (aBlack, aBlack, static_cast<css::awt::GradientStyle>(pStyle->GetValue ()),
-                                             Degree10(pAngle->GetValue () * 10), static_cast<short>(pCenterX->GetValue ()),
-                                             static_cast<short>(pCenterY->GetValue ()), static_cast<short>(pBorder->GetValue ()),
-                                             static_cast<short>(pStart->GetValue ()), static_cast<short>(pEnd->GetValue ()));
+                        XGradient aGradient (
+                            basegfx::utils::createColorStopsFromStartEndColor(aBlack.getBColor(), aBlack.getBColor()),
+                            static_cast<css::awt::GradientStyle>(pStyle->GetValue ()),
+                            Degree10(pAngle->GetValue () * 10), static_cast<short>(pCenterX->GetValue ()),
+                            static_cast<short>(pCenterY->GetValue ()), static_cast<short>(pBorder->GetValue ()),
+                            static_cast<short>(pStart->GetValue ()), static_cast<short>(pEnd->GetValue ()));
 
                         pGradientList->Insert(std::make_unique<XGradientEntry>(aGradient, pName->GetValue()));
                         XFillStyleItem aStyleItem(drawing::FillStyle_GRADIENT);
@@ -854,8 +867,8 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
                         const XGradient         &rGradient         = rFillGradientItem.GetGradientValue ();
 
                         aColor = (rWhatKind.GetValue () == 3)
-                                    ? rGradient.GetStartColor ()
-                                    : rGradient.GetEndColor ();
+                                    ? Color(rGradient.GetColorStops().front().getStopColor())
+                                    : Color(rGradient.GetColorStops().back().getStopColor());
                         break;
                     }
 

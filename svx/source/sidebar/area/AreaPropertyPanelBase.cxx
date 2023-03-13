@@ -127,8 +127,10 @@ void AreaPropertyPanelBase::Initialize()
     maGradientLinear.SetXOffset(DEFAULT_CENTERX);
     maGradientLinear.SetYOffset(DEFAULT_CENTERY);
     maGradientLinear.SetAngle(Degree10(DEFAULT_ANGLE));
-    maGradientLinear.SetStartColor(Color(DEFAULT_STARTVALUE));
-    maGradientLinear.SetEndColor(Color(DEFAULT_ENDVALUE));
+    maGradientLinear.SetColorStops(
+        basegfx::utils::createColorStopsFromStartEndColor(
+            Color(DEFAULT_STARTVALUE).getBColor(),
+            Color(DEFAULT_ENDVALUE).getBColor()));
     maGradientLinear.SetBorder(DEFAULT_BORDER);
     maGradientLinear.SetGradientStyle(css::awt::GradientStyle_LINEAR);
 
@@ -295,11 +297,12 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
 
             if (pSh && pSh->GetItem(SID_COLOR_TABLE))
             {
-                XGradient aGradient;
+                XGradient aGradient(
+                    basegfx::utils::createColorStopsFromStartEndColor(
+                        mxLbFillGradFrom->GetSelectEntryColor().getBColor(),
+                        mxLbFillGradTo->GetSelectEntryColor().getBColor()));
                 aGradient.SetAngle(Degree10(mxMTRAngle->get_value(FieldUnit::DEGREE) * 10));
                 aGradient.SetGradientStyle(static_cast<css::awt::GradientStyle>(mxGradientStyle->get_active()));
-                aGradient.SetStartColor(mxLbFillGradFrom->GetSelectEntryColor());
-                aGradient.SetEndColor(mxLbFillGradTo->GetSelectEntryColor());
 
                 const XFillGradientItem aXFillGradientItem(mxLbFillAttr->get_active_text(), aGradient);
 
@@ -485,8 +488,8 @@ void AreaPropertyPanelBase::FillStyleChanged(bool bUpdateModel)
                     // #i122676# change FillStyle and Gradient in one call
                     XFillStyleItem aXFillStyleItem(drawing::FillStyle_GRADIENT);
                     setFillStyleAndGradient(&aXFillStyleItem, aXFillGradientItem);
-                    mxLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
-                    mxLbFillGradTo->SelectEntry(aGradient.GetEndColor());
+                    mxLbFillGradFrom->SelectEntry(Color(aGradient.GetColorStops().front().getStopColor()));
+                    mxLbFillGradTo->SelectEntry(Color(aGradient.GetColorStops().back().getStopColor()));
 
                     mxMTRAngle->set_value(toDegrees(aGradient.GetAngle()), FieldUnit::DEGREE);
                     css::awt::GradientStyle eXGS = aGradient.GetGradientStyle();
@@ -506,8 +509,8 @@ void AreaPropertyPanelBase::FillStyleChanged(bool bUpdateModel)
                         const OUString aString(mpFillGradientItem->GetName());
                         mxLbFillAttr->set_active_text(aString);
                         const XGradient aGradient = mpFillGradientItem->GetGradientValue();
-                        mxLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
-                        mxLbFillGradTo->SelectEntry(aGradient.GetEndColor());
+                        mxLbFillGradFrom->SelectEntry(Color(aGradient.GetColorStops().front().getStopColor()));
+                        mxLbFillGradTo->SelectEntry(Color(aGradient.GetColorStops().back().getStopColor()));
                         mxGradientStyle->set_active(
                             sal::static_int_cast<sal_Int32>(aGradient.GetGradientStyle()));
                         if (mxGradientStyle->get_active() == sal_Int32(GradientStyle::Radial))

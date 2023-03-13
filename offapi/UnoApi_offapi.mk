@@ -1714,6 +1714,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/awt,\
 	AdjustmentEvent \
 	AdjustmentType \
 	CharSet \
+	ColorStop \
+	ColorStopSequence \
 	Command \
 	DeviceCapability \
 	DeviceInfo \
@@ -1737,6 +1739,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/awt,\
 	FontWeight \
 	FontWidth \
 	Gradient \
+	Gradient2 \
 	GradientStyle \
 	ImageDrawMode \
 	ImageAlign \

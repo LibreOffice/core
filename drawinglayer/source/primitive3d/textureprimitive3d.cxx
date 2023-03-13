@@ -94,12 +94,12 @@ namespace drawinglayer::primitive3d
                 // create TransparenceTexturePrimitive3D with fixed transparence as replacement
                 const basegfx::BColor aGray(getTransparence(), getTransparence(), getTransparence());
 
-                // create ColorSteps with StartColor == EndColor == aGray
-                const basegfx::ColorSteps aColorSteps {
-                    basegfx::ColorStep(0.0, aGray),
-                    basegfx::ColorStep(1.0, aGray) };
+                // create ColorStops with StartColor == EndColor == aGray
+                const basegfx::ColorStops aColorStops {
+                    basegfx::ColorStop(0.0, aGray),
+                    basegfx::ColorStop(1.0, aGray) };
 
-                const attribute::FillGradientAttribute aFillGradient(attribute::GradientStyle::Linear, 0.0, 0.0, 0.0, 0.0, aColorSteps);
+                const attribute::FillGradientAttribute aFillGradient(attribute::GradientStyle::Linear, 0.0, 0.0, 0.0, 0.0, aColorStops);
                 const Primitive3DReference xRef(new TransparenceTexturePrimitive3D(aFillGradient, getChildren(), getTextureSize()));
                 return { xRef };
             }

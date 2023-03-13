@@ -59,13 +59,15 @@ void AreaTransparencyGradientPopup::InitStatus(XFillFloatTransparenceItem const 
     const XGradient& rGradient = pGradientItem->GetGradientValue();
 
     XGradient aGradient;
+    Color aStart(rGradient.GetColorStops().front().getStopColor());
+    Color aEnd(rGradient.GetColorStops().back().getStopColor());
 
     if (rGradient.GetXOffset() == AreaPropertyPanelBase::DEFAULT_CENTERX
         && rGradient.GetYOffset() == AreaPropertyPanelBase::DEFAULT_CENTERY
         && static_cast<sal_Int32>(toDegrees(rGradient.GetAngle())) == AreaPropertyPanelBase::DEFAULT_ANGLE
-        && static_cast<sal_uInt16>(((static_cast<sal_uInt16>(rGradient.GetStartColor().GetRed()) + 1) * 100) / 255)
+        && static_cast<sal_uInt16>(((static_cast<sal_uInt16>(aStart.GetRed()) + 1) * 100) / 255)
             == AreaPropertyPanelBase::DEFAULT_STARTVALUE
-        && static_cast<sal_uInt16>(((static_cast<sal_uInt16>(rGradient.GetEndColor().GetRed()) + 1) * 100) / 255)
+        && static_cast<sal_uInt16>(((static_cast<sal_uInt16>(aEnd.GetRed()) + 1) * 100) / 255)
             == AreaPropertyPanelBase::DEFAULT_ENDVALUE
         && rGradient.GetBorder() == AreaPropertyPanelBase::DEFAULT_BORDER)
     {
@@ -78,8 +80,10 @@ void AreaTransparencyGradientPopup::InitStatus(XFillFloatTransparenceItem const 
     mxMtrTrgrCenterX->set_value(aGradient.GetXOffset(), FieldUnit::PERCENT);
     mxMtrTrgrCenterY->set_value(aGradient.GetYOffset(), FieldUnit::PERCENT);
     mxMtrTrgrAngle->set_value(toDegrees(aGradient.GetAngle()), FieldUnit::DEGREE);
-    mxMtrTrgrStartValue->set_value(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(aGradient.GetStartColor().GetRed()) + 1) * 100) / 255), FieldUnit::PERCENT);
-    mxMtrTrgrEndValue->set_value(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(aGradient.GetEndColor().GetRed()) + 1) * 100) / 255), FieldUnit::PERCENT);
+    aStart = Color(aGradient.GetColorStops().front().getStopColor());
+    aEnd = Color(aGradient.GetColorStops().back().getStopColor());
+    mxMtrTrgrStartValue->set_value(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(aStart.GetRed()) + 1) * 100) / 255), FieldUnit::PERCENT);
+    mxMtrTrgrEndValue->set_value(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(aEnd.GetRed()) + 1) * 100) / 255), FieldUnit::PERCENT);
     mxMtrTrgrBorder->set_value(aGradient.GetBorder(), FieldUnit::PERCENT);
 }
 
@@ -122,8 +126,9 @@ void AreaTransparencyGradientPopup::ExecuteValueModify(sal_uInt8 nStartCol, sal_
     mxMtrTrgrAngle->set_value(nVal, FieldUnit::DEGREE);
     //End of new code
     XGradient aTmpGradient(
-        Color(nStartCol, nStartCol, nStartCol),
-        Color(nEndCol, nEndCol, nEndCol),
+        basegfx::utils::createColorStopsFromStartEndColor(
+            Color(nStartCol, nStartCol, nStartCol).getBColor(),
+            Color(nEndCol, nEndCol, nEndCol).getBColor()),
         static_cast<css::awt::GradientStyle>(mrAreaPropertyPanel.GetSelectedTransparencyTypeIndex()-2),
         Degree10(static_cast<sal_Int16>(mxMtrTrgrAngle->get_value(FieldUnit::DEGREE)) * 10),
         static_cast<sal_uInt16>(mxMtrTrgrCenterX->get_value(FieldUnit::PERCENT)),

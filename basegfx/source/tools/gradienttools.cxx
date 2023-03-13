@@ -21,6 +21,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <com/sun/star/awt/Gradient2.hpp>
 
 #include <algorithm>
 #include <cmath>
@@ -263,19 +264,123 @@ namespace basegfx
 
     namespace utils
     {
+        /* Tooling method to convert UNO API data to ColorStops
+           This will try to extract ColorStop data from the given
+           Any, so if it's of type awt::Gradient2 that data will be
+           extracted, converted and copied into the given ColorStops.
+        */
+        void fillColorStopsFromAny(ColorStops& rColorStops, const css::uno::Any& rVal)
+        {
+            css::awt::Gradient2 aGradient2;
+            if (!(rVal >>= aGradient2))
+                return;
+
+            const sal_Int32 nLen(aGradient2.ColorStops.getLength());
+
+            if (0 == nLen)
+                return;
+
+            // we have ColorStops
+            rColorStops.clear();
+            rColorStops.reserve(nLen);
+            const css::awt::ColorStop* pSourceColorStop(aGradient2.ColorStops.getConstArray());
+
+            for (sal_Int32 a(0); a < nLen; a++, pSourceColorStop++)
+            {
+                rColorStops.emplace_back(
+                    pSourceColorStop->StopOffset,
+                    BColor(pSourceColorStop->StopColor.Red, pSourceColorStop->StopColor.Green, pSourceColorStop->StopColor.Blue));
+            }
+        }
+
+        /* Tooling method to fill a awt::ColorStopSequence with
+           the data from the given ColorStops. This is used in
+           UNO API implementations.
+        */
+        void fillColorStopSequenceFromColorStops(css::awt::ColorStopSequence& rColorStopSequence, const ColorStops& rColorStops)
+        {
+            // fill ColorStops to extended Gradient2
+            rColorStopSequence.realloc(rColorStops.size());
+            css::awt::ColorStop* pTargetColorStop(rColorStopSequence.getArray());
+
+            for (const auto& candidate : rColorStops)
+            {
+                pTargetColorStop->StopOffset = candidate.getStopOffset();
+                pTargetColorStop->StopColor = css::rendering::RGBColor(
+                    candidate.getStopColor().getRed(),
+                    candidate.getStopColor().getGreen(),
+                    candidate.getStopColor().getBlue());
+                pTargetColorStop++;
+            }
+        }
+
+        /* Tooling method that allows to replace the StartColor in a
+           vector of ColorStops. A vector in 'ordered state' is expected,
+           so you may use/have used sortAndCorrectColorStops, see below.
+           This method is for convenience & backwards compatibility, please
+           think about handling multi-colored gradients directly.
+        */
+        void replaceStartColor(ColorStops& rColorStops, const BColor& rStart)
+        {
+            ColorStops::iterator a1stNonStartColor(rColorStops.begin());
+
+            // search for highest existing non-StartColor
+            while (a1stNonStartColor != rColorStops.end() && basegfx::fTools::lessOrEqual(a1stNonStartColor->getStopOffset(), 0.0))
+                a1stNonStartColor++;
+
+            // create new ColorStops by 1st adding new one and then all
+            // non-StartColor entries
+            ColorStops aNewColorStops;
+
+            aNewColorStops.reserve(rColorStops.size() + 1);
+            aNewColorStops.emplace_back(0.0, rStart);
+            aNewColorStops.insert(aNewColorStops.end(), a1stNonStartColor, rColorStops.end());
+
+            // assign & done
+            rColorStops = aNewColorStops;
+        }
+
+        /* Tooling method that allows to replace the EndColor in a
+           vector of ColorStops. A vector in 'ordered state' is expected,
+           so you may use/have used sortAndCorrectColorStops, see below.
+           This method is for convenience & backwards compatibility, please
+           think about handling multi-colored gradients directly.
+        */
+        void replaceEndColor(ColorStops& rColorStops, const BColor& rEnd)
+        {
+            // erase all evtl. existing EndColor(s)
+            while (!rColorStops.empty() && basegfx::fTools::moreOrEqual(rColorStops.back().getStopOffset(), 1.0))
+                rColorStops.pop_back();
+
+            // add at the end of existing ColorStops
+            rColorStops.emplace_back(1.0, rEnd);
+        }
+
+        // Tooling method to quickly create a ColorStop vector for a given set of Start/EndColor
+        ColorStops createColorStopsFromStartEndColor(const BColor& rStart, const BColor& rEnd)
+        {
+            return ColorStops {
+                ColorStop(0.0, rStart),
+                ColorStop(1.0, rEnd) };
+        }
+
         /* Tooling method to guarantee sort and correctness for
-           the given ColorSteps vector.
+           the given ColorStops vector.
+           A vector fulfilling these conditions is called to be
+           in 'ordered state'.
+
            At return, the following conditions are guaranteed:
-           - contains no ColorSteps with offset < 0.0 (will
+           - contains no ColorStops with offset < 0.0 (will
              be removed)
-           - contains no ColorSteps with offset > 0.0 (will
+           - contains no ColorStops with offset > 1.0 (will
              be removed)
-           - contains no ColorSteps with identical offset
-             (will be removed, 1st one wins)
+           - contains no two ColorStops with identical offsets
+             (will be removed, 1st one/smallest offset wins
+             which is also given by sort tooling)
            - will be sorted from lowest offset to highest
            - if all colors are the same, the content will
              be reduced to a single entry with offset 0.0
-             (StartColor)
+             (force to StartColor)
 
            Some more notes:
            - It can happen that the result is empty
@@ -283,30 +388,30 @@ namespace basegfx
              the same color, this represents single-color
              regions inside the gradient
            - A entry with 0.0 is not required or forced, so
-             no 'StartColor' is required on this level
+             no 'StartColor' is technically required
            - A entry with 1.0 is not required or forced, so
-             no 'EndColor' is required on this level
+             no 'EndColor' is technically required
 
            All this is done in one run (sort + O(N)) without
            creating a copy of the data in any form
         */
-        void sortAndCorrectColorSteps(ColorSteps& rColorSteps)
+        void sortAndCorrectColorStops(ColorStops& rColorStops)
         {
             // no content, we are done
-            if (rColorSteps.empty())
+            if (rColorStops.empty())
                 return;
 
-            if (1 == rColorSteps.size())
+            if (1 == rColorStops.size())
             {
                 // no gradient at all, but preserve given color
                 // and force it to be the StartColor
-                rColorSteps[0] = ColorStep(0.0, rColorSteps[0].getColor());
+                rColorStops[0] = ColorStop(0.0, rColorStops[0].getStopColor());
             }
 
             // start with sorting the input data. Remember that
             // this preserves the order of equal entries, where
             // equal is defined here by offset (see use operator==)
-            std::sort(rColorSteps.begin(), rColorSteps.end());
+            std::sort(rColorStops.begin(), rColorStops.end());
 
             // prepare status values
             bool bSameColorInit(false);
@@ -318,10 +423,10 @@ namespace basegfx
             // and write with write <= read all the time. Step over the
             // data using read and check for valid entry. If valid, decide
             // how to keep it
-            for (size_t read(0); read < rColorSteps.size(); read++)
+            for (size_t read(0); read < rColorStops.size(); read++)
             {
                 // get offset of entry at read position
-                const double rOff(rColorSteps[read].getOffset());
+                const double rOff(rColorStops[read].getStopOffset());
 
                 // step over < 0 values
                 if (basegfx::fTools::less(rOff, 0.0))
@@ -338,23 +443,23 @@ namespace basegfx
                 if(bSameColorInit)
                 {
                     // already initialized, compare
-                    bAllTheSameColor = bAllTheSameColor && aFirstColor == rColorSteps[read].getColor();
+                    bAllTheSameColor = bAllTheSameColor && aFirstColor == rColorStops[read].getStopColor();
                 }
                 else
                 {
                     // do initialize, remember 1st valid color
                     bSameColorInit = true;
-                    aFirstColor = rColorSteps[read].getColor();
+                    aFirstColor = rColorStops[read].getStopColor();
                 }
 
                 // copy if write target is empty (write at start) or when
                 // write target is different to read
-                if (0 == write || rOff != rColorSteps[write-1].getOffset())
+                if (0 == write || rOff != rColorStops[write-1].getStopOffset())
                 {
                     if (write != read)
                     {
                         // copy read to write backwards to close gaps
-                        rColorSteps[write] = rColorSteps[read];
+                        rColorStops[write] = rColorStops[read];
                     }
 
                     // always forward write position
@@ -364,44 +469,44 @@ namespace basegfx
 
             // correct size when length is reduced. write is always at
             // last used position + 1
-            if (rColorSteps.size() > write)
+            if (rColorStops.size() > write)
             {
-                rColorSteps.resize(write);
+                rColorStops.resize(write);
             }
 
-            if (bSameColorInit && bAllTheSameColor && rColorSteps.size() > 1)
+            if (bSameColorInit && bAllTheSameColor && rColorStops.size() > 1)
             {
                 // id all-the-same color is detected, reset to single
                 // entry, but also force to StartColor and preserve the color
-                rColorSteps.resize(1);
-                rColorSteps[0] = ColorStep(0.0, aFirstColor);
+                rColorStops.resize(1);
+                rColorStops[0] = ColorStop(0.0, aFirstColor);
             }
         }
 
         BColor modifyBColor(
-            const ColorSteps& rColorSteps,
+            const ColorStops& rColorStops,
             double fScaler,
             sal_uInt32 nRequestedSteps)
         {
             // no color at all, done
-            if (rColorSteps.empty())
+            if (rColorStops.empty())
                 return BColor();
 
             // outside range -> at start
             if (fScaler <= 0.0)
-                return rColorSteps.front().getColor();
+                return rColorStops.front().getStopColor();
 
             // outside range -> at end
             if (fScaler >= 1.0)
-                return rColorSteps.back().getColor();
+                return rColorStops.back().getStopColor();
 
             // special case for the 'classic' case with just two colors:
             // we can optimize that and keep the speed/resources low
             // by avoiding some calculations and an O(log(N)) array access
-            if (2 == rColorSteps.size())
+            if (2 == rColorStops.size())
             {
-                const basegfx::BColor aCStart(rColorSteps.front().getColor());
-                const basegfx::BColor aCEnd(rColorSteps.back().getColor());
+                const basegfx::BColor aCStart(rColorStops.front().getStopColor());
+                const basegfx::BColor aCEnd(rColorStops.back().getStopColor());
                 const sal_uInt32 nSteps(
                     calculateNumberOfSteps(
                         nRequestedSteps,
@@ -421,25 +526,25 @@ namespace basegfx
             //       all is good/fast as expected
             const auto upperBound(
                 std::lower_bound(
-                    rColorSteps.begin(),
-                    rColorSteps.end(),
-                    ColorStep(fScaler),
-                    [](const ColorStep& x, const ColorStep& y) { return x.getOffset() < y.getOffset(); }));
+                    rColorStops.begin(),
+                    rColorStops.end(),
+                    ColorStop(fScaler),
+                    [](const ColorStop& x, const ColorStop& y) { return x.getStopOffset() < y.getStopOffset(); }));
 
             // no upper bound, done
-            if (rColorSteps.end() == upperBound)
-                return rColorSteps.back().getColor();
+            if (rColorStops.end() == upperBound)
+                return rColorStops.back().getStopColor();
 
             // lower bound is one entry back
             const auto lowerBound(upperBound - 1);
 
             // no lower bound, done
-            if (rColorSteps.end() == lowerBound)
-                return rColorSteps.back().getColor();
+            if (rColorStops.end() == lowerBound)
+                return rColorStops.back().getStopColor();
 
             // we have lower and upper bound, get colors
-            const BColor aCStart(lowerBound->getColor());
-            const BColor aCEnd(upperBound->getColor());
+            const BColor aCStart(lowerBound->getStopColor());
+            const BColor aCEnd(upperBound->getStopColor());
 
             // when there are just two color steps this cannot happen, but when using
             // a range of colors this *may* be used inside the range to represent
@@ -456,8 +561,8 @@ namespace basegfx
 
             // get offsets and scale to new [0.0 .. 1.0] relative range for
             // partial outer range
-            const double fOffsetStart(lowerBound->getOffset());
-            const double fOffsetEnd(upperBound->getOffset());
+            const double fOffsetStart(lowerBound->getStopOffset());
+            const double fOffsetEnd(upperBound->getStopOffset());
             const double fAdaptedScaler((fScaler - fOffsetStart) / (fOffsetEnd - fOffsetStart));
 
             // interpolate & evtl. apply steps

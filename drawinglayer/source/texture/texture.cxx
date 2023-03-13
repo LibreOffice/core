@@ -72,11 +72,11 @@ namespace drawinglayer::texture
         GeoTexSvxGradient::GeoTexSvxGradient(
             const basegfx::B2DRange& rDefinitionRange,
             sal_uInt32 nRequestedSteps,
-            const basegfx::ColorSteps& rColorSteps,
+            const basegfx::ColorStops& rColorStops,
             double fBorder)
         : maDefinitionRange(rDefinitionRange)
         , mnRequestedSteps(nRequestedSteps)
-        , mnColorSteps(rColorSteps)
+        , mnColorStops(rColorStops)
         , mfBorder(fBorder)
         {
         }
@@ -93,7 +93,7 @@ namespace drawinglayer::texture
                 && maGradientInfo == pCompare->maGradientInfo
                 && maDefinitionRange == pCompare->maDefinitionRange
                 && mnRequestedSteps == pCompare->mnRequestedSteps
-                && mnColorSteps == pCompare->mnColorSteps
+                && mnColorStops == pCompare->mnColorStops
                 && mfBorder == pCompare->mfBorder);
         }
 
@@ -101,10 +101,10 @@ namespace drawinglayer::texture
             const basegfx::B2DRange& rDefinitionRange,
             const basegfx::B2DRange& rOutputRange,
             sal_uInt32 nRequestedSteps,
-            const basegfx::ColorSteps& rColorSteps,
+            const basegfx::ColorStops& rColorStops,
             double fBorder,
             double fAngle)
-        : GeoTexSvxGradient(rDefinitionRange, nRequestedSteps, rColorSteps, fBorder)
+        : GeoTexSvxGradient(rDefinitionRange, nRequestedSteps, rColorStops, fBorder)
         , mfUnitMinX(0.0)
         , mfUnitWidth(1.0)
         , mfUnitMaxY(1.0)
@@ -135,14 +135,14 @@ namespace drawinglayer::texture
             basegfx::BColor& rOuterColor)
         {
             // no color at all, done
-            if (mnColorSteps.empty())
+            if (mnColorStops.empty())
                 return;
 
             // fill in return parameter rOuterColor before returning
-            rOuterColor = mnColorSteps.front().getColor();
+            rOuterColor = mnColorStops.front().getStopColor();
 
             // only one color, done
-            if (mnColorSteps.size() < 2)
+            if (mnColorStops.size() < 2)
                 return;
 
             // prepare unit range transform
@@ -156,19 +156,19 @@ namespace drawinglayer::texture
             aPattern.scale(mfUnitWidth, 1.0);
             aPattern.translate(mfUnitMinX, 0.0);
 
-            // outer loop over ColorSteps, each is from cs_l to cs_r
-            for (auto cs_l(mnColorSteps.begin()), cs_r(cs_l + 1); cs_r != mnColorSteps.end(); cs_l++, cs_r++)
+            // outer loop over ColorStops, each is from cs_l to cs_r
+            for (auto cs_l(mnColorStops.begin()), cs_r(cs_l + 1); cs_r != mnColorStops.end(); cs_l++, cs_r++)
             {
                 // get colors & calculate steps
-                const basegfx::BColor aCStart(cs_l->getColor());
-                const basegfx::BColor aCEnd(cs_r->getColor());
+                const basegfx::BColor aCStart(cs_l->getStopColor());
+                const basegfx::BColor aCEnd(cs_r->getStopColor());
                 const sal_uInt32 nSteps(basegfx::utils::calculateNumberOfSteps(
                     maGradientInfo.getRequestedSteps(), aCStart, aCEnd));
 
                 // get offsets & calculate StripeWidth
                 // nSteps is >= 1, see getRequestedSteps, so no check needed here
-                const double fOffsetStart(cs_l->getOffset());
-                const double fOffsetEnd(cs_r->getOffset());
+                const double fOffsetStart(cs_l->getStopOffset());
+                const double fOffsetEnd(cs_r->getStopOffset());
                 const double fStripeWidth((fOffsetEnd - fOffsetStart) / nSteps);
 
                 // for the 1st color range we do not need to create the 1st step
@@ -177,7 +177,7 @@ namespace drawinglayer::texture
                 // colored using rOuterColor.
                 // We *need* to create this though for all 'inner' color ranges
                 // to get a correct start
-                const sal_uInt32 nStartInnerLoop(cs_l == mnColorSteps.begin() ? 1 : 0);
+                const sal_uInt32 nStartInnerLoop(cs_l == mnColorStops.begin() ? 1 : 0);
 
                 for (sal_uInt32 innerLoop(nStartInnerLoop); innerLoop < nSteps; innerLoop++)
                 {
@@ -211,29 +211,29 @@ namespace drawinglayer::texture
         void GeoTexSvxGradientLinear::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             // no color at all, done
-            if (mnColorSteps.empty())
+            if (mnColorStops.empty())
                 return;
 
             // just single color, done
-            if (mnColorSteps.size() < 2)
+            if (mnColorStops.size() < 2)
             {
-                rBColor = mnColorSteps.front().getColor();
+                rBColor = mnColorStops.front().getStopColor();
                 return;
             }
 
             // texture-back-transform X/Y -> t [0.0..1.0] and determine color
             const double fScaler(basegfx::utils::getLinearGradientAlpha(rUV, maGradientInfo));
-            rBColor = basegfx::utils::modifyBColor(mnColorSteps, fScaler, mnRequestedSteps);
+            rBColor = basegfx::utils::modifyBColor(mnColorStops, fScaler, mnRequestedSteps);
         }
 
         GeoTexSvxGradientAxial::GeoTexSvxGradientAxial(
             const basegfx::B2DRange& rDefinitionRange,
             const basegfx::B2DRange& rOutputRange,
             sal_uInt32 nRequestedSteps,
-            const basegfx::ColorSteps& rColorSteps,
+            const basegfx::ColorStops& rColorStops,
             double fBorder,
             double fAngle)
-        : GeoTexSvxGradient(rDefinitionRange, nRequestedSteps, rColorSteps, fBorder)
+        : GeoTexSvxGradient(rDefinitionRange, nRequestedSteps, rColorStops, fBorder)
         , mfUnitMinX(0.0)
         , mfUnitWidth(1.0)
         {
@@ -262,15 +262,15 @@ namespace drawinglayer::texture
             basegfx::BColor& rOuterColor)
         {
             // no color at all, done
-            if (mnColorSteps.empty())
+            if (mnColorStops.empty())
                 return;
 
             // fill in return parameter rOuterColor before returning
             // CAUTION: for GradientAxial the color range is inverted (!)
-            rOuterColor = mnColorSteps.back().getColor();
+            rOuterColor = mnColorStops.back().getStopColor();
 
             // only one color, done
-            if (mnColorSteps.size() < 2)
+            if (mnColorStops.size() < 2)
                 return;
 
             // prepare unit range transform
@@ -284,25 +284,25 @@ namespace drawinglayer::texture
             aPattern.scale(mfUnitWidth, 1.0);
             aPattern.translate(mfUnitMinX, 0.0);
 
-            // outer loop over ColorSteps, each is from cs_l to cs_r
+            // outer loop over ColorStops, each is from cs_l to cs_r
             // CAUTION: for GradientAxial the color range is used inverted (!)
             //          thus, to loop backward, use rbegin/rend
-            for (auto cs_r(mnColorSteps.rbegin()), cs_l(cs_r + 1); cs_l != mnColorSteps.rend(); cs_l++, cs_r++)
+            for (auto cs_r(mnColorStops.rbegin()), cs_l(cs_r + 1); cs_l != mnColorStops.rend(); cs_l++, cs_r++)
             {
                 // get colors & calculate steps
-                const basegfx::BColor aCStart(cs_l->getColor());
-                const basegfx::BColor aCEnd(cs_r->getColor());
+                const basegfx::BColor aCStart(cs_l->getStopColor());
+                const basegfx::BColor aCEnd(cs_r->getStopColor());
                 const sal_uInt32 nSteps(basegfx::utils::calculateNumberOfSteps(
                     maGradientInfo.getRequestedSteps(), aCStart, aCEnd));
 
                 // get offsets & calculate StripeWidth
                 // nSteps is >= 1, see getRequestedSteps, so no check needed here
-                const double fOffsetStart(cs_l->getOffset());
-                const double fOffsetEnd(cs_r->getOffset());
+                const double fOffsetStart(cs_l->getStopOffset());
+                const double fOffsetEnd(cs_r->getStopOffset());
                 const double fStripeWidth((fOffsetEnd - fOffsetStart) / nSteps);
 
                 // for the 1st color range we do not need to create the 1st step, see above
-                const sal_uInt32 nStartInnerLoop(cs_r == mnColorSteps.rbegin() ? 1 : 0);
+                const sal_uInt32 nStartInnerLoop(cs_r == mnColorStops.rbegin() ? 1 : 0);
 
                 for (sal_uInt32 innerLoop(nStartInnerLoop); innerLoop < nSteps; innerLoop++)
                 {
@@ -326,31 +326,31 @@ namespace drawinglayer::texture
         void GeoTexSvxGradientAxial::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             // no color at all, done
-            if (mnColorSteps.empty())
+            if (mnColorStops.empty())
                 return;
 
             // just single color, done
-            if (mnColorSteps.size() < 2)
+            if (mnColorStops.size() < 2)
             {
                 // CAUTION: for GradientAxial the color range is used inverted (!)
-                rBColor = mnColorSteps.back().getColor();
+                rBColor = mnColorStops.back().getStopColor();
                 return;
             }
 
             // texture-back-transform X/Y -> t [0.0..1.0] and determine color
             const double fScaler(basegfx::utils::getAxialGradientAlpha(rUV, maGradientInfo));
-            rBColor = basegfx::utils::modifyBColor(mnColorSteps, fScaler, mnRequestedSteps);
+            rBColor = basegfx::utils::modifyBColor(mnColorStops, fScaler, mnRequestedSteps);
         }
 
 
         GeoTexSvxGradientRadial::GeoTexSvxGradientRadial(
             const basegfx::B2DRange& rDefinitionRange,
             sal_uInt32 nRequestedSteps,
-            const basegfx::ColorSteps& rColorSteps,
+            const basegfx::ColorStops& rColorStops,
             double fBorder,
             double fOffsetX,
             double fOffsetY)
-        : GeoTexSvxGradient(rDefinitionRange, nRequestedSteps, rColorSteps, fBorder)
+        : GeoTexSvxGradient(rDefinitionRange, nRequestedSteps, rColorStops, fBorder)
         {
             maGradientInfo = basegfx::utils::createRadialODFGradientInfo(
                 rDefinitionRange,
@@ -368,32 +368,32 @@ namespace drawinglayer::texture
             basegfx::BColor& rOuterColor)
         {
             // no color at all, done
-            if (mnColorSteps.empty())
+            if (mnColorStops.empty())
                 return;
 
             // fill in return parameter rOuterColor before returning
-            rOuterColor = mnColorSteps.front().getColor();
+            rOuterColor = mnColorStops.front().getStopColor();
 
             // only one color, done
-            if (mnColorSteps.size() < 2)
+            if (mnColorStops.size() < 2)
                 return;
 
-            // outer loop over ColorSteps, each is from cs_l to cs_r
-            for (auto cs_l(mnColorSteps.begin()), cs_r(cs_l + 1); cs_r != mnColorSteps.end(); cs_l++, cs_r++)
+            // outer loop over ColorStops, each is from cs_l to cs_r
+            for (auto cs_l(mnColorStops.begin()), cs_r(cs_l + 1); cs_r != mnColorStops.end(); cs_l++, cs_r++)
             {
                 // get colors & calculate steps
-                const basegfx::BColor aCStart(cs_l->getColor());
-                const basegfx::BColor aCEnd(cs_r->getColor());
+                const basegfx::BColor aCStart(cs_l->getStopColor());
+                const basegfx::BColor aCEnd(cs_r->getStopColor());
                 const sal_uInt32 nSteps(basegfx::utils::calculateNumberOfSteps(
                     maGradientInfo.getRequestedSteps(), aCStart, aCEnd));
 
                 // get offsets & calculate StripeWidth
-                const double fOffsetStart(cs_l->getOffset());
-                const double fOffsetEnd(cs_r->getOffset());
+                const double fOffsetStart(cs_l->getStopOffset());
+                const double fOffsetEnd(cs_r->getStopOffset());
                 const double fStripeWidth((fOffsetEnd - fOffsetStart) / nSteps);
 
                 // get correct start for inner loop (see above)
-                const sal_uInt32 nStartInnerLoop(cs_l == mnColorSteps.begin() ? 1 : 0);
+                const sal_uInt32 nStartInnerLoop(cs_l == mnColorStops.begin() ? 1 : 0);
 
                 for (sal_uInt32 innerLoop(nStartInnerLoop); innerLoop < nSteps; innerLoop++)
                 {
@@ -413,31 +413,31 @@ namespace drawinglayer::texture
         void GeoTexSvxGradientRadial::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             // no color at all, done
-            if (mnColorSteps.empty())
+            if (mnColorStops.empty())
                 return;
 
             // just single color, done
-            if (mnColorSteps.size() < 2)
+            if (mnColorStops.size() < 2)
             {
-                rBColor = mnColorSteps.front().getColor();
+                rBColor = mnColorStops.front().getStopColor();
                 return;
             }
 
             // texture-back-transform X/Y -> t [0.0..1.0] and determine color
             const double fScaler(basegfx::utils::getRadialGradientAlpha(rUV, maGradientInfo));
-            rBColor = basegfx::utils::modifyBColor(mnColorSteps, fScaler, mnRequestedSteps);
+            rBColor = basegfx::utils::modifyBColor(mnColorStops, fScaler, mnRequestedSteps);
         }
 
 
         GeoTexSvxGradientElliptical::GeoTexSvxGradientElliptical(
             const basegfx::B2DRange& rDefinitionRange,
             sal_uInt32 nRequestedSteps,
-            const basegfx::ColorSteps& rColorSteps,
+            const basegfx::ColorStops& rColorStops,
             double fBorder,
             double fOffsetX,
             double fOffsetY,
             double fAngle)
-        : GeoTexSvxGradient(rDefinitionRange, nRequestedSteps, rColorSteps, fBorder)
+        : GeoTexSvxGradient(rDefinitionRange, nRequestedSteps, rColorStops, fBorder)
         {
             maGradientInfo = basegfx::utils::createEllipticalODFGradientInfo(
                 rDefinitionRange,
@@ -456,36 +456,36 @@ namespace drawinglayer::texture
             basegfx::BColor& rOuterColor)
         {
             // no color at all, done
-            if (mnColorSteps.empty())
+            if (mnColorStops.empty())
                 return;
 
             // fill in return parameter rOuterColor before returning
-            rOuterColor = mnColorSteps.front().getColor();
+            rOuterColor = mnColorStops.front().getStopColor();
 
             // only one color, done
-            if (mnColorSteps.size() < 2)
+            if (mnColorStops.size() < 2)
                 return;
 
             // prepare vars dependent on aspect ratio
             const double fAR(maGradientInfo.getAspectRatio());
             const bool bMTO(fAR > 1.0);
 
-            // outer loop over ColorSteps, each is from cs_l to cs_r
-            for (auto cs_l(mnColorSteps.begin()), cs_r(cs_l + 1); cs_r != mnColorSteps.end(); cs_l++, cs_r++)
+            // outer loop over ColorStops, each is from cs_l to cs_r
+            for (auto cs_l(mnColorStops.begin()), cs_r(cs_l + 1); cs_r != mnColorStops.end(); cs_l++, cs_r++)
             {
                 // get colors & calculate steps
-                const basegfx::BColor aCStart(cs_l->getColor());
-                const basegfx::BColor aCEnd(cs_r->getColor());
+                const basegfx::BColor aCStart(cs_l->getStopColor());
+                const basegfx::BColor aCEnd(cs_r->getStopColor());
                 const sal_uInt32 nSteps(basegfx::utils::calculateNumberOfSteps(
                     maGradientInfo.getRequestedSteps(), aCStart, aCEnd));
 
                 // get offsets & calculate StripeWidth
-                const double fOffsetStart(cs_l->getOffset());
-                const double fOffsetEnd(cs_r->getOffset());
+                const double fOffsetStart(cs_l->getStopOffset());
+                const double fOffsetEnd(cs_r->getStopOffset());
                 const double fStripeWidth((fOffsetEnd - fOffsetStart) / nSteps);
 
                 // get correct start for inner loop (see above)
-                const sal_uInt32 nStartInnerLoop(cs_l == mnColorSteps.begin() ? 1 : 0);
+                const sal_uInt32 nStartInnerLoop(cs_l == mnColorStops.begin() ? 1 : 0);
 
                 for (sal_uInt32 innerLoop(nStartInnerLoop); innerLoop < nSteps; innerLoop++)
                 {
@@ -508,31 +508,31 @@ namespace drawinglayer::texture
         void GeoTexSvxGradientElliptical::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             // no color at all, done
-            if (mnColorSteps.empty())
+            if (mnColorStops.empty())
                 return;
 
             // just single color, done
-            if (mnColorSteps.size() < 2)
+            if (mnColorStops.size() < 2)
             {
-                rBColor = mnColorSteps.front().getColor();
+                rBColor = mnColorStops.front().getStopColor();
                 return;
             }
 
             // texture-back-transform X/Y -> t [0.0..1.0] and determine color
             const double fScaler(basegfx::utils::getEllipticalGradientAlpha(rUV, maGradientInfo));
-            rBColor = basegfx::utils::modifyBColor(mnColorSteps, fScaler, mnRequestedSteps);
+            rBColor = basegfx::utils::modifyBColor(mnColorStops, fScaler, mnRequestedSteps);
         }
 
 
         GeoTexSvxGradientSquare::GeoTexSvxGradientSquare(
             const basegfx::B2DRange& rDefinitionRange,
             sal_uInt32 nRequestedSteps,
-            const basegfx::ColorSteps& rColorSteps,
+            const basegfx::ColorStops& rColorStops,
             double fBorder,
             double fOffsetX,
             double fOffsetY,
             double fAngle)
-        : GeoTexSvxGradient(rDefinitionRange, nRequestedSteps, rColorSteps, fBorder)
+        : GeoTexSvxGradient(rDefinitionRange, nRequestedSteps, rColorStops, fBorder)
         {
             maGradientInfo = basegfx::utils::createSquareODFGradientInfo(
                 rDefinitionRange,
@@ -551,32 +551,32 @@ namespace drawinglayer::texture
             basegfx::BColor& rOuterColor)
         {
             // no color at all, done
-            if (mnColorSteps.empty())
+            if (mnColorStops.empty())
                 return;
 
             // fill in return parameter rOuterColor before returning
-            rOuterColor = mnColorSteps.front().getColor();
+            rOuterColor = mnColorStops.front().getStopColor();
 
             // only one color, done
-            if (mnColorSteps.size() < 2)
+            if (mnColorStops.size() < 2)
                 return;
 
-            // outer loop over ColorSteps, each is from cs_l to cs_r
-            for (auto cs_l(mnColorSteps.begin()), cs_r(cs_l + 1); cs_r != mnColorSteps.end(); cs_l++, cs_r++)
+            // outer loop over ColorStops, each is from cs_l to cs_r
+            for (auto cs_l(mnColorStops.begin()), cs_r(cs_l + 1); cs_r != mnColorStops.end(); cs_l++, cs_r++)
             {
                 // get colors & calculate steps
-                const basegfx::BColor aCStart(cs_l->getColor());
-                const basegfx::BColor aCEnd(cs_r->getColor());
+                const basegfx::BColor aCStart(cs_l->getStopColor());
+                const basegfx::BColor aCEnd(cs_r->getStopColor());
                 const sal_uInt32 nSteps(basegfx::utils::calculateNumberOfSteps(
                     maGradientInfo.getRequestedSteps(), aCStart, aCEnd));
 
                 // get offsets & calculate StripeWidth
-                const double fOffsetStart(cs_l->getOffset());
-                const double fOffsetEnd(cs_r->getOffset());
+                const double fOffsetStart(cs_l->getStopOffset());
+                const double fOffsetEnd(cs_r->getStopOffset());
                 const double fStripeWidth((fOffsetEnd - fOffsetStart) / nSteps);
 
                 // get correct start for inner loop (see above)
-                const sal_uInt32 nStartInnerLoop(cs_l == mnColorSteps.begin() ? 1 : 0);
+                const sal_uInt32 nStartInnerLoop(cs_l == mnColorStops.begin() ? 1 : 0);
 
                 for (sal_uInt32 innerLoop(nStartInnerLoop); innerLoop < nSteps; innerLoop++)
                 {
@@ -596,31 +596,31 @@ namespace drawinglayer::texture
         void GeoTexSvxGradientSquare::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             // no color at all, done
-            if (mnColorSteps.empty())
+            if (mnColorStops.empty())
                 return;
 
             // just single color, done
-            if (mnColorSteps.size() < 2)
+            if (mnColorStops.size() < 2)
             {
-                rBColor = mnColorSteps.front().getColor();
+                rBColor = mnColorStops.front().getStopColor();
                 return;
             }
 
             // texture-back-transform X/Y -> t [0.0..1.0] and determine color
             const double fScaler(basegfx::utils::getSquareGradientAlpha(rUV, maGradientInfo));
-            rBColor = basegfx::utils::modifyBColor(mnColorSteps, fScaler, mnRequestedSteps);
+            rBColor = basegfx::utils::modifyBColor(mnColorStops, fScaler, mnRequestedSteps);
         }
 
 
         GeoTexSvxGradientRect::GeoTexSvxGradientRect(
             const basegfx::B2DRange& rDefinitionRange,
             sal_uInt32 nRequestedSteps,
-            const basegfx::ColorSteps& rColorSteps,
+            const basegfx::ColorStops& rColorStops,
             double fBorder,
             double fOffsetX,
             double fOffsetY,
             double fAngle)
-        : GeoTexSvxGradient(rDefinitionRange, nRequestedSteps, rColorSteps, fBorder)
+        : GeoTexSvxGradient(rDefinitionRange, nRequestedSteps, rColorStops, fBorder)
         {
             maGradientInfo = basegfx::utils::createRectangularODFGradientInfo(
                 rDefinitionRange,
@@ -639,36 +639,36 @@ namespace drawinglayer::texture
             basegfx::BColor& rOuterColor)
         {
             // no color at all, done
-            if (mnColorSteps.empty())
+            if (mnColorStops.empty())
                 return;
 
             // fill in return parameter rOuterColor before returning
-            rOuterColor = mnColorSteps.front().getColor();
+            rOuterColor = mnColorStops.front().getStopColor();
 
             // only one color, done
-            if (mnColorSteps.size() < 2)
+            if (mnColorStops.size() < 2)
                 return;
 
             // prepare vars dependent on aspect ratio
             const double fAR(maGradientInfo.getAspectRatio());
             const bool bMTO(fAR > 1.0);
 
-            // outer loop over ColorSteps, each is from cs_l to cs_r
-            for (auto cs_l(mnColorSteps.begin()), cs_r(cs_l + 1); cs_r != mnColorSteps.end(); cs_l++, cs_r++)
+            // outer loop over ColorStops, each is from cs_l to cs_r
+            for (auto cs_l(mnColorStops.begin()), cs_r(cs_l + 1); cs_r != mnColorStops.end(); cs_l++, cs_r++)
             {
                 // get colors & calculate steps
-                const basegfx::BColor aCStart(cs_l->getColor());
-                const basegfx::BColor aCEnd(cs_r->getColor());
+                const basegfx::BColor aCStart(cs_l->getStopColor());
+                const basegfx::BColor aCEnd(cs_r->getStopColor());
                 const sal_uInt32 nSteps(basegfx::utils::calculateNumberOfSteps(
                     maGradientInfo.getRequestedSteps(), aCStart, aCEnd));
 
                 // get offsets & calculate StripeWidth
-                const double fOffsetStart(cs_l->getOffset());
-                const double fOffsetEnd(cs_r->getOffset());
+                const double fOffsetStart(cs_l->getStopOffset());
+                const double fOffsetEnd(cs_r->getStopOffset());
                 const double fStripeWidth((fOffsetEnd - fOffsetStart) / nSteps);
 
                 // get correct start for inner loop (see above)
-                const sal_uInt32 nStartInnerLoop(cs_l == mnColorSteps.begin() ? 1 : 0);
+                const sal_uInt32 nStartInnerLoop(cs_l == mnColorStops.begin() ? 1 : 0);
 
                 for (sal_uInt32 innerLoop(nStartInnerLoop); innerLoop < nSteps; innerLoop++)
                 {
@@ -691,19 +691,19 @@ namespace drawinglayer::texture
         void GeoTexSvxGradientRect::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             // no color at all, done
-            if (mnColorSteps.empty())
+            if (mnColorStops.empty())
                 return;
 
             // just single color, done
-            if (mnColorSteps.size() < 2)
+            if (mnColorStops.size() < 2)
             {
-                rBColor = mnColorSteps.front().getColor();
+                rBColor = mnColorStops.front().getStopColor();
                 return;
             }
 
             // texture-back-transform X/Y -> t [0.0..1.0] and determine color
             const double fScaler(basegfx::utils::getRectangularGradientAlpha(rUV, maGradientInfo));
-            rBColor = basegfx::utils::modifyBColor(mnColorSteps, fScaler, mnRequestedSteps);
+            rBColor = basegfx::utils::modifyBColor(mnColorStops, fScaler, mnRequestedSteps);
         }
 
 

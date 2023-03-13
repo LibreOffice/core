@@ -193,9 +193,9 @@ void PageStylesPanel::Update()
             mxBgGradientLB->show();
 
             const XGradient xGradient = GetGradientSetOrDefault();
-            const Color aStartColor = xGradient.GetStartColor();
+            const Color aStartColor(xGradient.GetColorStops().front().getStopColor());
             mxBgColorLB->SelectEntry(aStartColor);
-            const Color aEndColor = xGradient.GetEndColor();
+            const Color aEndColor(xGradient.GetColorStops().back().getStopColor());
             mxBgGradientLB->SelectEntry(aEndColor);
         }
         break;
@@ -550,9 +550,10 @@ void PageStylesPanel::ModifyFillColor()
         break;
         case GRADIENT:
         {
-            XGradient aGradient;
-            aGradient.SetStartColor(mxBgColorLB->GetSelectEntryColor());
-            aGradient.SetEndColor(mxBgGradientLB->GetSelectEntryColor());
+            XGradient aGradient(
+                basegfx::utils::createColorStopsFromStartEndColor(
+                    mxBgColorLB->GetSelectEntryColor().getBColor(),
+                    mxBgGradientLB->GetSelectEntryColor().getBColor()));
 
             XFillGradientItem aItem(aGradient);
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_GRADIENT, SfxCallMode::RECORD, { &aItem });

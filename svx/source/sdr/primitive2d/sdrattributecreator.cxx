@@ -444,8 +444,8 @@ namespace drawinglayer::primitive2d
                         && pGradientItem->IsEnabled())
                     {
                         const XGradient& rGradient = pGradientItem->GetGradientValue();
-                        const sal_uInt8 nStartLuminance(rGradient.GetStartColor().GetLuminance());
-                        const sal_uInt8 nEndLuminance(rGradient.GetEndColor().GetLuminance());
+                        const sal_uInt8 nStartLuminance(Color(rGradient.GetColorStops().front().getStopColor()).GetLuminance());
+                        const sal_uInt8 nEndLuminance(Color(rGradient.GetColorStops().back().getStopColor()).GetLuminance());
                         const bool bCompletelyTransparent(0xff == nStartLuminance && 0xff == nEndLuminance);
 
                         if(bCompletelyTransparent)
@@ -472,62 +472,36 @@ namespace drawinglayer::primitive2d
                         case drawing::FillStyle_GRADIENT :
                         {
                             XGradient aXGradient(rSet.Get(XATTR_FILLGRADIENT).GetGradientValue());
-
-                            const Color aStartColor(aXGradient.GetStartColor());
-                            const sal_uInt16 nStartIntens(aXGradient.GetStartIntens());
-                            basegfx::BColor aStart(aStartColor.getBColor());
-
-                            if(nStartIntens != 100)
-                            {
-                                const basegfx::BColor aBlack;
-                                aStart = interpolate(aBlack, aStart, static_cast<double>(nStartIntens) * 0.01);
-                            }
-
-                            const Color aEndColor(aXGradient.GetEndColor());
-                            const sal_uInt16 nEndIntens(aXGradient.GetEndIntens());
-                            basegfx::BColor aEnd(aEndColor.getBColor());
-
-                            if(nEndIntens != 100)
-                            {
-                                const basegfx::BColor aBlack;
-                                aEnd = interpolate(aBlack, aEnd, static_cast<double>(nEndIntens) * 0.01);
-                            }
-
-                            // prepare ColorSteps
-                            // currently always two (Start/EndColor) to stay compatible
-                            // for now, but that will change. It already gets manipulated
-                            // by the test cases below
-                            basegfx::ColorSteps aColorSteps {
-                                basegfx::ColorStep(0.0, aStart),
-                                basegfx::ColorStep(1.0, aEnd) };
+                            basegfx::ColorStops aColorStops(aXGradient.GetColorStops());
 
                             // test code here, can/will be removed later
                             static sal_uInt32 nUseGradientSteps(0);
+
                             switch(nUseGradientSteps)
                             {
                                 case 1:
                                 {
                                     // just test a nice valid gradient
-                                    aColorSteps.clear();
-                                    aColorSteps.emplace_back(0.0, basegfx::BColor(1.0, 0.0, 0.0)); // red
-                                    aColorSteps.emplace_back(0.25, basegfx::BColor(0.0, 1.0, 0.0)); // green@25%
-                                    aColorSteps.emplace_back(0.50, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
-                                    aColorSteps.emplace_back(0.75, basegfx::BColor(1.0, 0.0, 1.0)); // pink@75%
-                                    aColorSteps.emplace_back(1.0, basegfx::BColor(0.0, 0.0, 1.0)); // blue
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 0.0, 0.0)); // red
+                                    aColorStops.emplace_back(0.25, basegfx::BColor(0.0, 1.0, 0.0)); // green@25%
+                                    aColorStops.emplace_back(0.50, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    aColorStops.emplace_back(0.75, basegfx::BColor(1.0, 0.0, 1.0)); // pink@75%
+                                    aColorStops.emplace_back(1.0, basegfx::BColor(0.0, 0.0, 1.0)); // blue
                                     break;
                                 }
 
                                 case 2:
                                 {
                                     // single added in-between, no change of start/end
-                                    aColorSteps.emplace_back(0.5, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    aColorStops.emplace_back(0.5, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
                                     break;
                                 }
 
                                 case 3:
                                 {
                                     // check additional StartColor, the one given directly has to win
-                                    aColorSteps.emplace_back(0.0, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
                                     break;
                                 }
 
@@ -535,63 +509,63 @@ namespace drawinglayer::primitive2d
                                 {
                                     // check additional EndColor, the one given directly has to win
                                     // due this one being added *after* the original one
-                                    aColorSteps.emplace_back(1.0, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    aColorStops.emplace_back(1.0, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
                                     break;
                                 }
 
                                 case 5:
                                 {
                                     // check invalid color (too low index), has to be ignored
-                                    aColorSteps.emplace_back(-1.0, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    aColorStops.emplace_back(-1.0, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
                                     break;
                                 }
 
                                 case 6:
                                 {
                                     // check invalid color (too high index), has to be ignored
-                                    aColorSteps.emplace_back(2.0, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    aColorStops.emplace_back(2.0, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
                                     break;
                                 }
 
                                 case 7:
                                 {
                                     // check in-between single-color section
-                                    aColorSteps.emplace_back(0.3, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
-                                    aColorSteps.emplace_back(0.7, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    aColorStops.emplace_back(0.3, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    aColorStops.emplace_back(0.7, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
                                     break;
                                 }
 
                                 case 8:
                                 {
                                     // check in-between single-color sections
-                                    aColorSteps.emplace_back(0.2, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
-                                    aColorSteps.emplace_back(0.4, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
-                                    aColorSteps.emplace_back(0.5, aStart);
-                                    aColorSteps.emplace_back(0.6, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
-                                    aColorSteps.emplace_back(0.8, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    aColorStops.emplace_back(0.2, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    aColorStops.emplace_back(0.4, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    aColorStops.emplace_back(0.5, aXGradient.GetColorStops().front().getStopColor());
+                                    aColorStops.emplace_back(0.6, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    aColorStops.emplace_back(0.8, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
                                     break;
                                 }
 
                                 case 9:
                                 {
                                     // check single-color start area
-                                    aColorSteps.emplace_back(0.6, aStart);
+                                    aColorStops.emplace_back(0.6, aXGradient.GetColorStops().front().getStopColor());
                                     break;
                                 }
 
                                 case 10:
                                 {
                                     // check single-color end area
-                                    aColorSteps.emplace_back(0.4, aEnd);
+                                    aColorStops.emplace_back(0.4, aXGradient.GetColorStops().back().getStopColor());
                                     break;
                                 }
 
                                 case 11:
                                 {
                                     // check case without direct Start/EndColor
-                                    aColorSteps.clear();
-                                    aColorSteps.emplace_back(0.4, aEnd);
-                                    aColorSteps.emplace_back(0.6, aStart);
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(0.4, aXGradient.GetColorStops().back().getStopColor());
+                                    aColorStops.emplace_back(0.6, aXGradient.GetColorStops().front().getStopColor());
                                     break;
                                 }
 
@@ -601,13 +575,32 @@ namespace drawinglayer::primitive2d
                                 }
                             }
 
+                            if(aXGradient.GetStartIntens() != 100 || aXGradient.GetEndIntens() != 100)
+                            {
+                                // Need to do the (old, crazy) blend against black for a
+                                // used intensity, but now for all ColorStops relative to their
+                                // offsets, where 0 means black and 100 means original color
+                                const double fStartIntensity(aXGradient.GetStartIntens() * 0.01);
+                                const double fEndIntensity(aXGradient.GetEndIntens() * 0.01);
+                                const basegfx::BColor aBlack;
+
+                                for (auto& candidate : aColorStops)
+                                {
+                                    const double fOffset(candidate.getStopOffset());
+                                    const double fIntensity((fStartIntensity * (1.0 - fOffset)) + (fEndIntensity * fOffset));
+                                    candidate = basegfx::ColorStop(
+                                        fOffset,
+                                        basegfx::interpolate(aBlack, candidate.getStopColor(), fIntensity));
+                                }
+                            }
+
                             aGradient = attribute::FillGradientAttribute(
                                 XGradientStyleToGradientStyle(aXGradient.GetGradientStyle()),
                                 static_cast<double>(aXGradient.GetBorder()) * 0.01,
                                 static_cast<double>(aXGradient.GetXOffset()) * 0.01,
                                 static_cast<double>(aXGradient.GetYOffset()) * 0.01,
                                 toRadians(aXGradient.GetAngle()),
-                                aColorSteps,
+                                aColorStops,
                                 rSet.Get(XATTR_GRADIENTSTEPCOUNT).GetValue());
 
                             break;
@@ -747,8 +740,8 @@ namespace drawinglayer::primitive2d
             {
                 // test if float transparence is completely transparent
                 const XGradient& rGradient = pGradientItem->GetGradientValue();
-                const sal_uInt8 nStartLuminance(rGradient.GetStartColor().GetLuminance());
-                const sal_uInt8 nEndLuminance(rGradient.GetEndColor().GetLuminance());
+                const sal_uInt8 nStartLuminance(Color(rGradient.GetColorStops().front().getStopColor()).GetLuminance());
+                const sal_uInt8 nEndLuminance(Color(rGradient.GetColorStops().back().getStopColor()).GetLuminance());
                 const bool bCompletelyTransparent(0xff == nStartLuminance && 0xff == nEndLuminance);
                 const bool bNotTransparent(0x00 == nStartLuminance && 0x00 == nEndLuminance);
 
@@ -761,17 +754,15 @@ namespace drawinglayer::primitive2d
                     const double fStartLum(nStartLuminance / 255.0);
                     const double fEndLum(nEndLuminance / 255.0);
 
-                    const basegfx::ColorSteps aColorSteps {
-                        basegfx::ColorStep(0.0, basegfx::BColor(fStartLum, fStartLum, fStartLum)),
-                        basegfx::ColorStep(1.0, basegfx::BColor(fEndLum, fEndLum, fEndLum)) };
-
                     return attribute::FillGradientAttribute(
                         XGradientStyleToGradientStyle(rGradient.GetGradientStyle()),
                         static_cast<double>(rGradient.GetBorder()) * 0.01,
                         static_cast<double>(rGradient.GetXOffset()) * 0.01,
                         static_cast<double>(rGradient.GetYOffset()) * 0.01,
                         toRadians(rGradient.GetAngle()),
-                        aColorSteps);
+                        basegfx::utils::createColorStopsFromStartEndColor(
+                            basegfx::BColor(fStartLum, fStartLum, fStartLum),
+                            basegfx::BColor(fEndLum, fEndLum, fEndLum)));
                 }
             }
 

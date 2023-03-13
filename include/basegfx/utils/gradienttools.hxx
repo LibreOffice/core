@@ -27,12 +27,14 @@
 #include <utility>
 #include <basegfx/basegfxdllapi.h>
 #include <vector>
+#include <com/sun/star/awt/ColorStopSequence.hdl>
 
+namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
 namespace basegfx { class B2DRange; }
 
 namespace basegfx
 {
-    /* MCGR: Provide ColorStep definition
+    /* MCGR: Provide ColorStop definition
 
         This is the needed combination of offset and color:
 
@@ -52,59 +54,60 @@ namespace basegfx
         Color is defined as:
         - RGB with unit values [0.0 .. 1.0]
 
-        These definitions are packed in a std::vector<ColorStep> ColorSteps,
+        These definitions are packed in a std::vector<ColorStop> ColorStops,
         see typedef below.
     */
-    class UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) ColorStep
+    class UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) ColorStop
     {
     private:
-        // offset in the range of [0.0 .. 1.0], checked & force by constructor
-        double mfOffset;
+        // offset in the range of [0.0 .. 1.0]
+        double mfStopOffset;
 
-        // color of ColorStep entry
-        BColor maColor;
+        // RGB color of ColorStop entry
+        BColor maStopColor;
 
     public:
         // constructor - defaults are needed to have a default constructor
-        // e.g. for usage in std::vector::insert
-        // ensure [0.0 .. 1.0] range for mfOffset
-        ColorStep(double fOffset = 0.0, const BColor& rColor = BColor())
-            : mfOffset(fOffset)
-            , maColor(rColor)
+        // e.g. for usage in std::vector::insert (even when only reducing)
+        // ensure [0.0 .. 1.0] range for mfStopOffset
+        ColorStop(double fStopOffset = 0.0, const BColor& rStopColor = BColor())
+            : mfStopOffset(fStopOffset)
+            , maStopColor(rStopColor)
         {
-            // NOTE: I originally *corrected* mfOffset here by using
-            //   mfOffset(std::max(0.0, std::min(fOffset, 1.0)))
+            // NOTE: I originally *corrected* mfStopOffset here by using
+            //   mfStopOffset(std::max(0.0, std::min(fOffset, 1.0)))
             // While that is formally correct, it moves an invalid
             // entry to 0.0 or 1.0, thus creating additional wrong
             // Start/EndColor entries. That may then 'overlay' the
             // correct entry when corrections are applied to the
-            // vector of entries (see sortAndCorrectColorSteps)
+            // vector of entries (see sortAndCorrectColorStops)
             // which leads to getting the wanted Start/EndColor
             // to be factically deleted, what is an error.
         }
 
-        double getOffset() const { return mfOffset; }
-        const BColor& getColor() const { return maColor; }
+        double getStopOffset() const { return mfStopOffset; }
+        const BColor& getStopColor() const { return maStopColor; }
 
-        bool operator<(const ColorStep& rCandidate) const
+        // needed for std::sort
+        bool operator<(const ColorStop& rCandidate) const
         {
-            return getOffset() < rCandidate.getOffset();
+            return getStopOffset() < rCandidate.getStopOffset();
         }
 
-        bool operator==(const ColorStep& rCandidate) const
+        bool operator==(const ColorStop& rCandidate) const
         {
-            return getOffset() == rCandidate.getOffset() && getColor() == rCandidate.getColor();
+            return getStopOffset() == rCandidate.getStopOffset() && getStopColor() == rCandidate.getStopColor();
         }
     };
 
-    /* MCGR: Provide ColorSteps definition to the FillGradientAttribute
+    /* MCGR: Provide ColorStops definition to the FillGradientAttribute
 
         This array should be sorted ascending by offsets, from lowest to
         highest. Since all the primitive data definition where it is used
         is read-only, this can/will be guaranteed by forcing/checking this
         in the constructor, see ::FillGradientAttribute
     */
-    typedef std::vector<ColorStep> ColorSteps;
+    typedef std::vector<ColorStop> ColorStops;
 
     /** Gradient definition as used in ODF 1.2
 
@@ -193,33 +196,78 @@ namespace basegfx
 
     namespace utils
     {
-        /* Helper to sort and correct ColorSteps. This will
-           sort and then correct the given ColorSteps. The
-           corrected version will
-           - be sorted
-           - have no double values
-           - have no values with offset < 0.0
-           - have no values with offset > 1.0
-           thus be ready to be used in multi-color gradients.
-
-           NOTE: The returned version may be empty (!) if no
-                 valid entries were contained
-           NOTE: It does not necessarily contain values for
-                 offset == 0.0 and 1.0 if there were none
-                 given (so no Start/EndColor)
-           NOTE: If it contains only one entry that entry is
-                 set to StartColor and the Color is preserved.
-                 This is also done when all Colors are the same
+        /* Tooling method to convert UNO API data to ColorStops.
+           This will try to extract ColorStop data from the given
+           Any, so if it's of type awt::Gradient2 that data will be
+           extracted, converted and copied into the given ColorStops.
         */
-        BASEGFX_DLLPUBLIC void sortAndCorrectColorSteps(ColorSteps& rColorSteps);
+        BASEGFX_DLLPUBLIC void fillColorStopsFromAny(ColorStops& rColorStops, const css::uno::Any& rVal);
 
-        /* Helper to grep the correct ColorStep out of
-           ColorSteps and interpolate as needed for given
+        /* Tooling method to fill a awt::ColorStopSequence with
+           the data from the given ColorStops. This is used in
+           UNO API implementations.
+        */
+        BASEGFX_DLLPUBLIC void fillColorStopSequenceFromColorStops(css::awt::ColorStopSequence& rColorStopSequence, const ColorStops& rColorStops);
+
+        /* Tooling method that allows to replace the StartColor in a
+           vector of ColorStops. A vector in 'ordered state' is expected,
+           so you may use/have used sortAndCorrectColorStops, see below.
+           This method is for convenience & backwards compatibility, please
+           think about handling multi-colored gradients directly.
+        */
+        BASEGFX_DLLPUBLIC void replaceStartColor(ColorStops& rColorStops, const BColor& rStart);
+
+        /* Tooling method that allows to replace the EndColor in a
+           vector of ColorStops. A vector in 'ordered state' is expected,
+           so you may use/have used sortAndCorrectColorStops, see below.
+           This method is for convenience & backwards compatibility, please
+           think about handling multi-colored gradients directly.
+        */
+        BASEGFX_DLLPUBLIC void replaceEndColor(ColorStops& rColorStops, const BColor& rEnd);
+
+        // Tooling method to quickly create a ColorStop vector for a given set of Start/EndColor
+        BASEGFX_DLLPUBLIC ColorStops createColorStopsFromStartEndColor(const BColor& rStart, const BColor& rEnd);
+
+        /* Tooling method to guarantee sort and correctness for
+           the given ColorStops vector.
+           A vector fulfilling these conditions is called to be
+           in 'ordered state'.
+
+           At return, the following conditions are guaranteed:
+           - contains no ColorStops with offset < 0.0 (will
+             be removed)
+           - contains no ColorStops with offset > 1.0 (will
+             be removed)
+           - contains no two ColorStops with identical offsets
+             (will be removed, 1st one/smallest offset wins
+             which is also given by sort tooling)
+           - will be sorted from lowest offset to highest
+           - if all colors are the same, the content will
+             be reduced to a single entry with offset 0.0
+             (force to StartColor)
+
+           Some more notes:
+           - It can happen that the result is empty
+           - It is allowed to have consecutive entries with
+             the same color, this represents single-color
+             regions inside the gradient
+           - A entry with 0.0 is not required or forced, so
+             no 'StartColor' is technically required
+           - A entry with 1.0 is not required or forced, so
+             no 'EndColor' is technically required
+
+           All this is done in one run (sort + O(N)) without
+           creating a copy of the data in any form
+        */
+        BASEGFX_DLLPUBLIC void sortAndCorrectColorStops(ColorStops& rColorStops);
+
+        /* Helper to grep the correct ColorStop out of
+           ColorStops and interpolate as needed for given
            relative value in fScaler in the range of [0.0 .. 1.0].
            It also takes care of evtl. given RequestedSteps.
         */
         BASEGFX_DLLPUBLIC BColor modifyBColor(
-            const ColorSteps& rColorSteps,
+            const ColorStops& rColorStops,
             double fScaler,
             sal_uInt32 nRequestedSteps);
 

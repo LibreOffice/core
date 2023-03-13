@@ -972,9 +972,10 @@ void ChartController::executeDispatch_FillGradient(std::u16string_view sJSONGrad
 
             if( xPropSet.is() )
             {
-                OUString aPrefferedName = OUString::number(static_cast<sal_Int32>(aXGradient.GetStartColor()))
-                                + OUString::number(static_cast<sal_Int32>(aXGradient.GetEndColor()))
-                                + OUString::number(static_cast<sal_Int32>(aXGradient.GetAngle().get()));
+                OUString aPrefferedName =
+                    OUString::number(static_cast<sal_Int32>(Color(aXGradient.GetColorStops().front().getStopColor())))
+                    + OUString::number(static_cast<sal_Int32>(Color(aXGradient.GetColorStops().back().getStopColor())))
+                    + OUString::number(static_cast<sal_Int32>(aXGradient.GetAngle().get()));
 
                 OUString aNewName = PropertyHelper::addGradientUniqueNameToTable(css::uno::Any(aGradient),
                                         xChartModel,

@@ -303,8 +303,8 @@ static rtl::Reference<SdrObject> ImpCreateShadowObjectClone(const SdrObject& rOr
         if(bGradientFillUsed)
         {
             XGradient aGradient(rOriginalSet.Get(XATTR_FILLGRADIENT).GetGradientValue());
-            sal_uInt8 nStartLuminance(aGradient.GetStartColor().GetLuminance());
-            sal_uInt8 nEndLuminance(aGradient.GetEndColor().GetLuminance());
+            sal_uInt8 nStartLuminance(Color(aGradient.GetColorStops().front().getStopColor()).GetLuminance());
+            sal_uInt8 nEndLuminance(Color(aGradient.GetColorStops().back().getStopColor()).GetLuminance());
 
             if(aGradient.GetStartIntens() != 100)
             {
@@ -326,8 +326,10 @@ static rtl::Reference<SdrObject> ImpCreateShadowObjectClone(const SdrObject& rOr
                 static_cast<sal_uInt8>((nEndLuminance * aShadowColor.GetGreen()) / 256),
                 static_cast<sal_uInt8>((nEndLuminance * aShadowColor.GetBlue()) / 256));
 
-            aGradient.SetStartColor(aStartColor);
-            aGradient.SetEndColor(aEndColor);
+            aGradient.SetColorStops(
+                basegfx::utils::createColorStopsFromStartEndColor(
+                    aStartColor.getBColor(),
+                    aEndColor.getBColor()));
             aTempSet.Put(XFillGradientItem(aGradient));
             aTempSet.Put(XFillTransparenceItem(nShadowTransparence));
         }

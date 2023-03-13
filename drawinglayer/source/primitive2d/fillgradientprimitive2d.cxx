@@ -45,7 +45,7 @@ namespace drawinglayer::primitive2d
                         getDefinitionRange(),
                         getOutputRange(),
                         getFillGradient().getSteps(),
-                        getFillGradient().getColorSteps(),
+                        getFillGradient().getColorStops(),
                         getFillGradient().getBorder(),
                         getFillGradient().getAngle());
                     aGradient.appendTransformationsAndColors(rEntries, rOuterColor);
@@ -57,7 +57,7 @@ namespace drawinglayer::primitive2d
                         getDefinitionRange(),
                         getOutputRange(),
                         getFillGradient().getSteps(),
-                        getFillGradient().getColorSteps(),
+                        getFillGradient().getColorStops(),
                         getFillGradient().getBorder(),
                         getFillGradient().getAngle());
                     aGradient.appendTransformationsAndColors(rEntries, rOuterColor);
@@ -68,7 +68,7 @@ namespace drawinglayer::primitive2d
                     texture::GeoTexSvxGradientRadial aGradient(
                         getDefinitionRange(),
                         getFillGradient().getSteps(),
-                        getFillGradient().getColorSteps(),
+                        getFillGradient().getColorStops(),
                         getFillGradient().getBorder(),
                         getFillGradient().getOffsetX(),
                         getFillGradient().getOffsetY());
@@ -80,7 +80,7 @@ namespace drawinglayer::primitive2d
                     texture::GeoTexSvxGradientElliptical aGradient(
                         getDefinitionRange(),
                         getFillGradient().getSteps(),
-                        getFillGradient().getColorSteps(),
+                        getFillGradient().getColorStops(),
                         getFillGradient().getBorder(),
                         getFillGradient().getOffsetX(),
                         getFillGradient().getOffsetY(),
@@ -93,7 +93,7 @@ namespace drawinglayer::primitive2d
                     texture::GeoTexSvxGradientSquare aGradient(
                         getDefinitionRange(),
                         getFillGradient().getSteps(),
-                        getFillGradient().getColorSteps(),
+                        getFillGradient().getColorStops(),
                         getFillGradient().getBorder(),
                         getFillGradient().getOffsetX(),
                         getFillGradient().getOffsetY(),
@@ -106,7 +106,7 @@ namespace drawinglayer::primitive2d
                     texture::GeoTexSvxGradientRect aGradient(
                         getDefinitionRange(),
                         getFillGradient().getSteps(),
-                        getFillGradient().getColorSteps(),
+                        getFillGradient().getColorStops(),
                         getFillGradient().getBorder(),
                         getFillGradient().getOffsetX(),
                         getFillGradient().getOffsetY(),

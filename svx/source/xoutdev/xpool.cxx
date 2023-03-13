@@ -108,7 +108,10 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster)
     rPoolDefaults[XATTR_LINECAP            -XATTR_START] = new XLineCapItem;
     rPoolDefaults[XATTR_FILLSTYLE                -XATTR_START] = new XFillStyleItem;
     rPoolDefaults[XATTR_FILLCOLOR                -XATTR_START] = new XFillColorItem   (aNullStr,aNullFillCol);
-    rPoolDefaults[XATTR_FILLGRADIENT         -XATTR_START] = new XFillGradientItem(XGradient(COL_BLACK, COL_WHITE));
+
+    // XGradient() default already creates [COL_BLACK, COL_WHITE] as defaults
+    rPoolDefaults[XATTR_FILLGRADIENT         -XATTR_START] = new XFillGradientItem(XGradient());
+
     rPoolDefaults[XATTR_FILLHATCH                -XATTR_START] = new XFillHatchItem   (aNullHatch);
     rPoolDefaults[XATTR_FILLBITMAP               -XATTR_START] = new XFillBitmapItem  (Graphic());
     rPoolDefaults[XATTR_FILLTRANSPARENCE     -XATTR_START] = new XFillTransparenceItem;
@@ -123,7 +126,14 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster)
     rPoolDefaults[XATTR_FILLBMP_STRETCH      -XATTR_START] = new XFillBmpStretchItem;
     rPoolDefaults[XATTR_FILLBMP_POSOFFSETX       -XATTR_START] = new XFillBmpPosOffsetXItem;
     rPoolDefaults[XATTR_FILLBMP_POSOFFSETY       -XATTR_START] = new XFillBmpPosOffsetYItem;
-    rPoolDefaults[XATTR_FILLFLOATTRANSPARENCE    -XATTR_START] = new XFillFloatTransparenceItem( XGradient(COL_BLACK, COL_BLACK), false );
+
+    rPoolDefaults[XATTR_FILLFLOATTRANSPARENCE    -XATTR_START] = new XFillFloatTransparenceItem(
+        XGradient(
+            basegfx::utils::createColorStopsFromStartEndColor(
+                COL_BLACK.getBColor(),
+                COL_BLACK.getBColor())),
+                false);
+
     rPoolDefaults[XATTR_SECONDARYFILLCOLOR       -XATTR_START] = new XSecondaryFillColorItem(aNullStr, aNullFillCol);
     rPoolDefaults[XATTR_FILLBACKGROUND           -XATTR_START] = new XFillBackgroundItem;
     rPoolDefaults[XATTR_FILLUSESLIDEBACKGROUND   -XATTR_START] = new XFillUseSlideBackgroundItem;

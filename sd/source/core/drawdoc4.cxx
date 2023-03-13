@@ -154,7 +154,10 @@ void SdDrawDocument::CreateLayoutTemplates()
     Color    aNullCol(COL_DEFAULT_SHAPE_STROKE);
 
     XDash     aNullDash;
-    XGradient aNullGrad(aNullCol,COL_WHITE);
+    XGradient aNullGrad(
+        basegfx::utils::createColorStopsFromStartEndColor(
+            aNullCol.getBColor(),
+            COL_WHITE.getBColor()));
     aNullGrad.SetStartIntens( 100 );
     aNullGrad.SetEndIntens( 100 );
     XHatch    aNullHatch(aNullCol);
@@ -414,8 +417,12 @@ void SdDrawDocument::CreateLayoutTemplates()
         pISet->Put(XFillStyleItem(drawing::FillStyle_GRADIENT));           // fill with gradient
         aGradient.SetGradientStyle( ::awt::GradientStyle_RECT);            // square type
         aGradient.SetAngle( 0_deg10 );                                 // 0° angle
-        aGradient.SetStartColor( Color(0xcccccc) );                        // white
-        aGradient.SetEndColor( COL_WHITE );                                // light gray 3
+
+        aGradient.SetColorStops(
+            basegfx::utils::createColorStopsFromStartEndColor(
+                Color(0xcccccc).getBColor(),    // light gray 3
+                COL_WHITE.getBColor())); // white
+
         aFillGradient.SetName( aShapesName );
         aFillGradient.SetGradientValue(aGradient);
         pISet->Put( aFillGradient );
@@ -434,8 +441,12 @@ void SdDrawDocument::CreateLayoutTemplates()
 
         aGradient.SetGradientStyle( ::awt::GradientStyle_LINEAR );
         aGradient.SetAngle( 300_deg10 );
-        aGradient.SetStartColor( COL_WHITE );                              // white
-        aGradient.SetEndColor( Color(0xcccccc) );                          // light gray 3
+
+        aGradient.SetColorStops(
+            basegfx::utils::createColorStopsFromStartEndColor(
+                COL_WHITE.getBColor(),  // white
+                Color(0xcccccc).getBColor())); // light gray 3
+
         aFillGradient.SetName( aName );
         aFillGradient.SetGradientValue(aGradient);
         pISet->Put( XFillStyleItem(drawing::FillStyle_GRADIENT) );
@@ -449,8 +460,11 @@ void SdDrawDocument::CreateLayoutTemplates()
         pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_FILLED_BLUE );
         pISet = &pSheet->GetItemSet();
 
-        aGradient.SetStartColor( Color(0x00729fcf) );                   // light blue 2
-        aGradient.SetEndColor( Color(0x00355269) );                     // dark blue 2
+        aGradient.SetColorStops(
+            basegfx::utils::createColorStopsFromStartEndColor(
+                Color(0x00729fcf).getBColor(),   // light blue 2
+                Color(0x00355269).getBColor())); // dark blue 2
+
         aFillGradient.SetName( aName );
         aFillGradient.SetGradientValue(aGradient);
         pISet->Put( aFillGradient );
@@ -464,8 +478,11 @@ void SdDrawDocument::CreateLayoutTemplates()
         pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_FILLED_GREEN );
         pISet = &pSheet->GetItemSet();
 
-        aGradient.SetStartColor( Color(0x0077bc65) );                   // light green 2
-        aGradient.SetEndColor( Color(0x00127622) );                     // dark green 2
+        aGradient.SetColorStops(
+            basegfx::utils::createColorStopsFromStartEndColor(
+                Color(0x0077bc65).getBColor(),   // light green 2
+                Color(0x00127622).getBColor())); // dark green 2
+
         aFillGradient.SetName( aName );
         aFillGradient.SetGradientValue(aGradient);
         pISet->Put( aFillGradient );
@@ -480,8 +497,11 @@ void SdDrawDocument::CreateLayoutTemplates()
         pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_FILLED_RED );
         pISet = &pSheet->GetItemSet();
 
-        aGradient.SetStartColor( Color(0x00ff6d6d) );                   // light red 2
-        aGradient.SetEndColor( Color(0x00c9211e) );                     // dark red 2
+        aGradient.SetColorStops(
+            basegfx::utils::createColorStopsFromStartEndColor(
+                Color(0x00ff6d6d).getBColor(),   // light red 2
+                Color(0x00c9211e).getBColor())); // dark red 2
+
         aFillGradient.SetName( aName );
         aFillGradient.SetGradientValue(aGradient);
         pISet->Put( aFillGradient );
@@ -495,8 +515,11 @@ void SdDrawDocument::CreateLayoutTemplates()
         pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_FILLED_YELLOW );
         pISet = &pSheet->GetItemSet();
 
-        aGradient.SetStartColor( Color(0x00ffde59) );                   // light gold 2
-        aGradient.SetEndColor( Color(0x00b47804) );                     // dark gold 2
+        aGradient.SetColorStops(
+            basegfx::utils::createColorStopsFromStartEndColor(
+                Color(0x00ffde59).getBColor(),   // light gold 2
+                Color(0x00b47804).getBColor())); // dark gold 2
+
         aFillGradient.SetName( aName );
         aFillGradient.SetGradientValue(aGradient);
         pISet->Put( aFillGradient );

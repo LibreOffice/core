@@ -71,6 +71,7 @@
 #define MID_GRADIENT_STARTINTENSITY 9
 #define MID_GRADIENT_ENDINTENSITY   10
 #define MID_GRADIENT_STEPCOUNT      11
+#define MID_GRADIENT_COLORSTOPSEQUENCE 12
 
 // XFillHatchItem
 // Don't use 0 as it used for the whole struct

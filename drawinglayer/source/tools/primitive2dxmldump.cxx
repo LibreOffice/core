@@ -301,18 +301,19 @@ void writeSdrFillAttribute(::tools::XmlWriter& rWriter,
         rWriter.attribute("angle", rGradient.getAngle());
         rWriter.attribute("steps", rGradient.getSteps());
 
-        auto const& rColorSteps(rGradient.getColorSteps());
-        for (size_t a(0); a < rColorSteps.size(); a++)
+        auto const& rColorStops(rGradient.getColorStops());
+        for (size_t a(0); a < rColorStops.size(); a++)
         {
             if (0 == a)
-                rWriter.attribute("startColor", convertColorToString(rColorSteps[a].getColor()));
-            else if (rColorSteps.size() == a + 1)
-                rWriter.attribute("endColor", convertColorToString(rColorSteps[a].getColor()));
+                rWriter.attribute("startColor",
+                                  convertColorToString(rColorStops[a].getStopColor()));
+            else if (rColorStops.size() == a + 1)
+                rWriter.attribute("endColor", convertColorToString(rColorStops[a].getStopColor()));
             else
             {
-                rWriter.startElement("colorStep");
-                rWriter.attribute("offset", rColorSteps[a].getOffset());
-                rWriter.attribute("color", convertColorToString(rColorSteps[a].getColor()));
+                rWriter.startElement("colorStop");
+                rWriter.attribute("stopOffset", rColorStops[a].getStopOffset());
+                rWriter.attribute("stopColor", convertColorToString(rColorStops[a].getStopColor()));
                 rWriter.endElement();
             }
         }

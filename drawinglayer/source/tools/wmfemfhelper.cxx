@@ -711,17 +711,13 @@ namespace wmfemfhelper
             }
         }
 
-        const basegfx::ColorSteps aColorSteps {
-            basegfx::ColorStep(0.0, aStart),
-            basegfx::ColorStep(1.0, aEnd) };
-
         return drawinglayer::attribute::FillGradientAttribute(
             aGradientStyle,
             static_cast<double>(rGradient.GetBorder()) * 0.01,
             static_cast<double>(rGradient.GetOfsX()) * 0.01,
             static_cast<double>(rGradient.GetOfsY()) * 0.01,
             toRadians(rGradient.GetAngle()),
-            aColorSteps,
+            basegfx::utils::createColorStopsFromStartEndColor(aStart, aEnd),
             rGradient.GetSteps());
     }
 
@@ -926,7 +922,7 @@ namespace wmfemfhelper
         if(aAttribute.hasSingleColor())
         {
             // not really a gradient. Create filled rectangle
-            return CreateColorWallpaper(rRange, aAttribute.getColorSteps().front().getColor(), rPropertyHolder);
+            return CreateColorWallpaper(rRange, aAttribute.getColorStops().front().getStopColor(), rPropertyHolder);
         }
         else
         {
@@ -2809,7 +2805,7 @@ namespace wmfemfhelper
                                     rTargetHolders.Current().append(
                                         new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                                             std::move(xSubContent),
-                                            aAttribute.getColorSteps().front().getColor().luminance()));
+                                            aAttribute.getColorStops().front().getStopColor().luminance()));
                                 }
                                 else
                                 {
@@ -2929,7 +2925,7 @@ namespace wmfemfhelper
                                     rTargetHolders.Current().append(
                                         new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                                             std::move(aPolyPolygon),
-                                            aAttribute.getColorSteps().front().getColor()));
+                                            aAttribute.getColorStops().front().getStopColor()));
                                 }
                                 else
                                 {

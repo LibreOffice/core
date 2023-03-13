@@ -1626,8 +1626,12 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf129789)
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, rStyleItemH2.GetValue());
         const XFillGradientItem& rGradientItem = pCaptionH2->GetMergedItem(XATTR_FILLGRADIENT);
-        CPPUNIT_ASSERT_EQUAL(Color(0xdde8cb), rGradientItem.GetGradientValue().GetStartColor());
-        CPPUNIT_ASSERT_EQUAL(Color(0xffd7d7), rGradientItem.GetGradientValue().GetEndColor());
+        CPPUNIT_ASSERT_EQUAL(
+            Color(0xdde8cb),
+            Color(rGradientItem.GetGradientValue().GetColorStops().front().getStopColor()));
+        CPPUNIT_ASSERT_EQUAL(
+            Color(0xffd7d7),
+            Color(rGradientItem.GetGradientValue().GetColorStops().back().getStopColor()));
 
         SdrCaptionObj* const pCaptionH9 = checkCaption(*pDoc, ScAddress(7, 8, 0), false);
 
@@ -1635,8 +1639,12 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf129789)
 
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, rStyleItemH9.GetValue());
         const XFillGradientItem& rGradientItem2 = pCaptionH2->GetMergedItem(XATTR_FILLGRADIENT);
-        CPPUNIT_ASSERT_EQUAL(Color(0xdde8cb), rGradientItem2.GetGradientValue().GetStartColor());
-        CPPUNIT_ASSERT_EQUAL(Color(0xffd7d7), rGradientItem2.GetGradientValue().GetEndColor());
+        CPPUNIT_ASSERT_EQUAL(
+            Color(0xdde8cb),
+            Color(rGradientItem2.GetGradientValue().GetColorStops().front().getStopColor()));
+        CPPUNIT_ASSERT_EQUAL(
+            Color(0xffd7d7),
+            Color(rGradientItem2.GetGradientValue().GetColorStops().back().getStopColor()));
     }
 
     {
