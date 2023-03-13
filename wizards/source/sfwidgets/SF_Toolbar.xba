@@ -154,7 +154,7 @@ End Property	&apos;	SFWidgets.SF_Toolbar.Name (get)
 
 REM -----------------------------------------------------------------------------
 Property Get ResourceURL() As String
-&apos;&apos;&apos;	Returns True when the toolbar is available in all documents of the same type
+&apos;&apos;&apos;	Returns URL of the toolbar, in the form private:toolbar/xxx
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		MsgBox myToolbar.ResourceURL
 

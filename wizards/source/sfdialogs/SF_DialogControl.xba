@@ -82,6 +82,45 @@ Private _OnNodeExpanded		As String		&apos; Script to invoke when a node is expan
 Private _SelectListener		As Object		&apos; com.sun.star.view.XSelectionChangeListener
 Private _ExpandListener		As Object		&apos; com.sun.star.awt.tree.XTreeExpansionListener
 
+&apos;	Updatable events
+Private _ActionListener		As Object		&apos; com.sun.star.awt.XActionListener
+Private _OnActionPerformed	As String		&apos; Script to invoke when action triggered
+Private _ActionCounter		As Integer		&apos; Counts the number of events set on the listener
+&apos; ---
+Private _AdjustmentListener	As Strung		&apos; com.sun.star.awt.XAdjustmentListener
+Private _OnAdjustmentValueChanged As String	&apos; Script to invoke when scrollbar value has changed
+Private _AdjustmentCounter	As Integer		&apos; Counts the number of events set on the listener
+&apos; ---
+Private _FocusListener		As Object		&apos; com.sun.star.awt.XFocusListener
+Private _OnFocusGained		As String		&apos; Script to invoke when control gets focus
+Private _OnFocusLost		As String		&apos; Script to invoke when control loses focus
+Private _FocusCounter		As Integer		&apos; Counts the number of events set on the listener
+&apos; ---
+Private _ItemListener		As Object		&apos; com.sun.star.awt.XItemListener
+Private _OnItemStateChanged	As String		&apos; Script to invoke when status of item changes
+Private _ItemCounter		As Integer		&apos; Counts the number of events set on the listener
+&apos; ---
+Private _KeyListener		As Object		&apos; com.sun.star.awt.XKeyListener
+Private _OnKeyPressed		As String		&apos; Script to invoke when Key clicked in control
+Private _OnKeyReleased		As String		&apos; Script to invoke when Key released in control
+Private _KeyCounter			As Integer		&apos; Counts the number of events set on the listener
+&apos; ---
+Private _MouseListener		As Object		&apos; com.sun.star.awt.XMouseListener
+Private _OnMouseEntered		As String		&apos; Script to invoke when mouse enters control
+Private _OnMouseExited		As String		&apos; Script to invoke when mouse leaves control
+Private _OnMousePressed		As String		&apos; Script to invoke when mouse clicked in control
+Private _OnMouseReleased	As String		&apos; Script to invoke when mouse released in control
+Private _MouseCounter		As Integer		&apos; Counts the number of events set on the listener
+&apos; ---
+Private _MouseMotionListener As Object		&apos; com.sun.star.awt.XMouseMotionListener
+Private _OnMouseDragged		As String		&apos; Script to invoke when mouse is dragged from the control
+Private _OnMouseMoved		As String		&apos; Script to invoke when mouse is moved across the control
+Private _MouseMotionCounter	As Integer	&apos; Counts the number of events set on the listener
+&apos; ---
+Private _TextListener		As Object		&apos; com.sun.star.awt.XTextListener
+Private _OnTextChanged		As String		&apos; Script to invoke when textual content has changed
+Private _TextCounter		As Integer		&apos; Counts the number of events set on the listener
+
 &apos;	Table control attributes
 Private _ColumnWidths		As Variant		&apos; Array of column widths
 
@@ -127,10 +166,43 @@ Private Sub Class_Initialize()
 	Set _GridDataModel = Nothing
 	_ImplementationName = &quot;&quot;
 	_ControlType = &quot;&quot;
+
 	_OnNodeSelected = &quot;&quot;
 	_OnNodeExpanded = &quot;&quot;
 	Set _SelectListener = Nothing
 	Set _ExpandListener = Nothing
+
+	Set _ActionListener = Nothing
+	_OnActionPerformed = &quot;&quot;
+	_ActionCounter = 0
+	Set _AdjustmentListener = Nothing
+	_OnAdjustmentValueChanged = &quot;&quot;
+	_AdjustmentCounter = 0
+	Set _FocusListener = Nothing
+	_OnFocusGained = &quot;&quot;
+	_OnFocusLost = &quot;&quot;
+	_FocusCounter = 0
+	Set _KeyListener = Nothing
+	_OnKeyPressed = &quot;&quot;
+	_OnKeyReleased = &quot;&quot;
+	_KeyCounter = 0
+	Set _MouseListener = Nothing
+	_OnMouseEntered = &quot;&quot;
+	_OnMouseExited = &quot;&quot;
+	_OnMousePressed = &quot;&quot;
+	_OnMouseReleased = &quot;&quot;
+	_MouseCounter = 0
+	Set _MouseMotionListener = Nothing
+	_OnMouseDragged = &quot;&quot;
+	_OnMouseMoved = &quot;&quot;
+	_MouseMotionCounter = 0
+	Set _ItemListener = Nothing
+	_OnItemStateChanged = &quot;&quot;
+	_ItemCounter = 0
+	Set _TextListener = Nothing
+	_OnTextChanged = &quot;&quot;
+	_TextCounter = 0
+
 	_ColumnWidths = Array()
 End Sub		&apos;	SFDialogs.SF_DialogControl Constructor
 
@@ -284,10 +356,22 @@ Property Get OnActionPerformed() As Variant
 End Property	&apos;	SFDialogs.SF_DialogControl.OnActionPerformed (get)
 
 REM -----------------------------------------------------------------------------
+Property Let OnActionPerformed(Optional ByVal pvActionPerformed As Variant)
+&apos;&apos;&apos;	Set the updatable property OnActionPerformed
+	_PropertySet(&quot;OnActionPerformed&quot;, pvActionPerformed)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnActionPerformed (let)
+
+REM -----------------------------------------------------------------------------
 Property Get OnAdjustmentValueChanged() As Variant
 &apos;&apos;&apos;	Get the script associated with the OnAdjustmentValueChanged event
 	OnAdjustmentValueChanged = _PropertyGet(&quot;OnAdjustmentValueChanged&quot;)
 End Property	&apos;	SFDialogs.SF_DialogControl.OnAdjustmentValueChanged (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnAdjustmentValueChanged(Optional ByVal pvAdjustmentValueChanged As Variant)
+&apos;&apos;&apos;	Set the updatable property OnAdjustmentValueChanged
+	_PropertySet(&quot;OnAdjustmentValueChanged&quot;, pvAdjustmentValueChanged)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnAdjustmentValueChanged (let)
 
 REM -----------------------------------------------------------------------------
 Property Get OnFocusGained() As Variant
@@ -296,10 +380,22 @@ Property Get OnFocusGained() As Variant
 End Property	&apos;	SFDialogs.SF_DialogControl.OnFocusGained (get)
 
 REM -----------------------------------------------------------------------------
+Property Let OnFocusGained(Optional ByVal pvOnFocusGained As Variant)
+&apos;&apos;&apos;	Set the updatable property OnFocusGained
+	_PropertySet(&quot;OnFocusGained&quot;, pvOnFocusGained)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnFocusGained (let)
+
+REM -----------------------------------------------------------------------------
 Property Get OnFocusLost() As Variant
 &apos;&apos;&apos;	Get the script associated with the OnFocusLost event
 	OnFocusLost = _PropertyGet(&quot;OnFocusLost&quot;)
 End Property	&apos;	SFDialogs.SF_DialogControl.OnFocusLost (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnFocusLost(Optional ByVal pvOnFocusLost As Variant)
+&apos;&apos;&apos;	Set the updatable property OnFocusLost
+	_PropertySet(&quot;OnFocusLost&quot;, pvOnFocusLost)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnFocusLost (let)
 
 REM -----------------------------------------------------------------------------
 Property Get OnItemStateChanged() As Variant
@@ -308,10 +404,22 @@ Property Get OnItemStateChanged() As Variant
 End Property	&apos;	SFDialogs.SF_DialogControl.OnItemStateChanged (get)
 
 REM -----------------------------------------------------------------------------
+Property Let OnItemStateChanged(Optional ByVal pvItemStateChanged As Variant)
+&apos;&apos;&apos;	Set the updatable property OnItemStateChanged
+	_PropertySet(&quot;OnItemStateChanged&quot;, pvItemStateChanged)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnItemStateChanged (let)
+
+REM -----------------------------------------------------------------------------
 Property Get OnKeyPressed() As Variant
 &apos;&apos;&apos;	Get the script associated with the OnKeyPressed event
 	OnKeyPressed = _PropertyGet(&quot;OnKeyPressed&quot;)
 End Property	&apos;	SFDialogs.SF_DialogControl.OnKeyPressed (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnKeyPressed(Optional ByVal pvOnKeyPressed As Variant)
+&apos;&apos;&apos;	Set the updatable property OnKeyPressed
+	_PropertySet(&quot;OnKeyPressed&quot;, pvOnKeyPressed)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnKeyPressed (let)
 
 REM -----------------------------------------------------------------------------
 Property Get OnKeyReleased() As Variant
@@ -320,10 +428,22 @@ Property Get OnKeyReleased() As Variant
 End Property	&apos;	SFDialogs.SF_DialogControl.OnKeyReleased (get)
 
 REM -----------------------------------------------------------------------------
+Property Let OnKeyReleased(Optional ByVal pvOnKeyReleased As Variant)
+&apos;&apos;&apos;	Set the updatable property OnKeyReleased
+	_PropertySet(&quot;OnKeyReleased&quot;, pvOnKeyReleased)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnKeyReleased (let)
+
+REM -----------------------------------------------------------------------------
 Property Get OnMouseDragged() As Variant
 &apos;&apos;&apos;	Get the script associated with the OnMouseDragged event
 	OnMouseDragged = _PropertyGet(&quot;OnMouseDragged&quot;)
 End Property	&apos;	SFDialogs.SF_DialogControl.OnMouseDragged (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnMouseDragged(Optional ByVal pvOnMouseDragged As Variant)
+&apos;&apos;&apos;	Set the updatable property OnMouseDragged
+	_PropertySet(&quot;OnMouseDragged&quot;, pvOnMouseDragged)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnMouseDragged (let)
 
 REM -----------------------------------------------------------------------------
 Property Get OnMouseEntered() As Variant
@@ -332,10 +452,22 @@ Property Get OnMouseEntered() As Variant
 End Property	&apos;	SFDialogs.SF_DialogControl.OnMouseEntered (get)
 
 REM -----------------------------------------------------------------------------
+Property Let OnMouseEntered(Optional ByVal pvOnMouseEntered As Variant)
+&apos;&apos;&apos;	Set the updatable property OnMouseEntered
+	_PropertySet(&quot;OnMouseEntered&quot;, pvOnMouseEntered)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnMouseEntered (let)
+
+REM -----------------------------------------------------------------------------
 Property Get OnMouseExited() As Variant
 &apos;&apos;&apos;	Get the script associated with the OnMouseExited event
 	OnMouseExited = _PropertyGet(&quot;OnMouseExited&quot;)
 End Property	&apos;	SFDialogs.SF_DialogControl.OnMouseExited (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnMouseExited(Optional ByVal pvOnMouseExited As Variant)
+&apos;&apos;&apos;	Set the updatable property OnMouseExited
+	_PropertySet(&quot;OnMouseExited&quot;, pvOnMouseExited)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnMouseExited (let)
 
 REM -----------------------------------------------------------------------------
 Property Get OnMouseMoved() As Variant
@@ -344,16 +476,34 @@ Property Get OnMouseMoved() As Variant
 End Property	&apos;	SFDialogs.SF_DialogControl.OnMouseMoved (get)
 
 REM -----------------------------------------------------------------------------
+Property Let OnMouseMoved(Optional ByVal pvOnMouseMoved As Variant)
+&apos;&apos;&apos;	Set the updatable property OnMouseMoved
+	_PropertySet(&quot;OnMouseMoved&quot;, pvOnMouseMoved)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnMouseMoved (let)
+
+REM -----------------------------------------------------------------------------
 Property Get OnMousePressed() As Variant
 &apos;&apos;&apos;	Get the script associated with the OnMousePressed event
 	OnMousePressed = _PropertyGet(&quot;OnMousePressed&quot;)
 End Property	&apos;	SFDialogs.SF_DialogControl.OnMousePressed (get)
 
 REM -----------------------------------------------------------------------------
+Property Let OnMousePressed(Optional ByVal pvOnMousePressed As Variant)
+&apos;&apos;&apos;	Set the updatable property OnMousePressed
+	_PropertySet(&quot;OnMousePressed&quot;, pvOnMousePressed)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnMousePressed (let)
+
+REM -----------------------------------------------------------------------------
 Property Get OnMouseReleased() As Variant
 &apos;&apos;&apos;	Get the script associated with the OnMouseReleased event
 	OnMouseReleased = _PropertyGet(&quot;OnMouseReleased&quot;)
 End Property	&apos;	SFDialogs.SF_DialogControl.OnMouseReleased (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnMouseReleased(Optional ByVal pvOnMouseReleased As Variant)
+&apos;&apos;&apos;	Set the updatable property OnMouseReleased
+	_PropertySet(&quot;OnMouseReleased&quot;, pvOnMouseReleased)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnMouseReleased (let)
 
 REM -----------------------------------------------------------------------------
 Property Get OnNodeExpanded() As Variant
@@ -384,6 +534,12 @@ Property Get OnTextChanged() As Variant
 &apos;&apos;&apos;	Get the script associated with the OnTextChanged event
 	OnTextChanged = _PropertyGet(&quot;OnTextChanged&quot;)
 End Property	&apos;	SFDialogs.SF_DialogControl.OnTextChanged (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnTextChanged(Optional ByVal pvTextChanged As Variant)
+&apos;&apos;&apos;	Set the updatable property OnTextChanged
+	_PropertySet(&quot;OnTextChanged&quot;, pvTextChanged)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnTextChanged (let)
 
 REM -----------------------------------------------------------------------------
 Property Get Page() As Variant
@@ -1606,7 +1762,24 @@ Const cstSubArgs = &quot;&quot;
 			If oControlEvents.hasByName(sEventName) Then
 				_PropertyGet = oControlEvents.getByName(sEventName).ScriptCode
 			Else
-				_PropertyGet = &quot;&quot;
+				&apos;	Check OnEvents set dynamically by code
+				Select Case UCase(psProperty)
+					Case UCase(&quot;OnActionPerformed&quot;)			:	_PropertyGet = _OnActionPerformed
+					Case UCase(&quot;OnAdjustmentValueChanged&quot;)	:	_PropertyGet = _OnAdjustmentValueChanged
+					Case UCase(&quot;OnFocusGained&quot;)				:	_PropertyGet = _OnFocusGained
+					Case UCase(&quot;OnFocusLost&quot;)				:	_PropertyGet = _OnFocusLost
+					Case UCase(&quot;OnItemStateChanged&quot;)		:	_PropertyGet = _OnItemStateChanged
+					Case UCase(&quot;OnKeyPressed&quot;)				:	_PropertyGet = _OnKeyPressed
+					Case UCase(&quot;OnKeyReleased&quot;)				:	_PropertyGet = _OnKeyReleased
+					Case UCase(&quot;OnMouseDragged&quot;)			:	_PropertyGet = _OnMouseDragged
+					Case UCase(&quot;OnMouseEntered&quot;)			:	_PropertyGet = _OnMouseEntered
+					Case UCase(&quot;OnMouseExited&quot;)				:	_PropertyGet = _OnMouseExited
+					Case UCase(&quot;OnMouseMoved&quot;)				:	_PropertyGet = _OnMouseMoved
+					Case UCase(&quot;OnMousePressed&quot;)			:	_PropertyGet = _OnMousePressed
+					Case UCase(&quot;OnMouseReleased&quot;)			:	_PropertyGet = _OnMouseReleased
+					Case UCase(&quot;OnTextChanged&quot;)				:	_PropertyGet = _OnTextChanged
+					Case Else								:	_PropertyGet = &quot;&quot;
+				End Select
 			End If
 		Case UCase(&quot;OnNodeExpanded&quot;)
 			Select Case _ControlType
@@ -1893,6 +2066,29 @@ Const cstSubArgs = &quot;Value&quot;
 					End If
 				Case Else	:	GoTo CatchType
 			End Select
+		Case UCase(&quot;OnActionPerformed&quot;), UCase(&quot;OnAdjustmentValueChanged&quot;), UCase(&quot;OnFocusGained&quot;), UCase(&quot;OnFocusLost&quot;) _
+				, UCase(&quot;OnItemStateChanged&quot;), UCase(&quot;OnKeyPressed&quot;), UCase(&quot;OnKeyReleased&quot;) _
+				, UCase(&quot;OnMouseDragged&quot;), UCase(&quot;OnMouseEntered&quot;), UCase(&quot;OnMouseExited&quot;), UCase(&quot;OnMouseMoved&quot;) _
+				, UCase(&quot;OnMousePressed&quot;), UCase(&quot;OnMouseReleased&quot;), UCase(&quot;OnTextChanged&quot;)
+			If Not ScriptForge.SF_Utils._Validate(pvValue, psProperty, V_STRING) Then GoTo Catch
+			&apos;	Check control type for not universal event types
+			Select Case UCase(psProperty)
+				Case UCase(&quot;OnActionPerformed&quot;), UCase(&quot;OnItemStateChanged&quot;)
+					Select Case _ControlType
+						Case CTLBUTTON, CTLCHECKBOX, CTLCOMBOBOX, CTLLISTBOX, CTLRADIOBUTTON
+						Case Else	:	GoTo CatchType
+					End Select
+				Case UCase(&quot;OnAdjustmentValueChanged&quot;)
+					If _ControlType &lt;&gt; CTLSCROLLBAR Then GoTo CatchType
+				Case UCase(&quot;OnTextChanged&quot;)
+					Select Case _ControlType
+						Case CTLCOMBOBOX, CTLCURRENCYFIELD, CTLDATEFIELD, CTLFILECONTROL, CTLFORMATTEDFIELD _
+								, CTLNUMERICFIELD, CTLPATTERNFIELD, CTLTEXTFIELD, CTLTIMEFIELD, CTLTREECONTROL
+						Case Else	:	GoTo CatchType
+					End Select
+				Case Else
+			End Select
+			bSet = SF_DialogListener._SetOnProperty([Me], psProperty, pvValue)
 		Case UCase(&quot;OnNodeExpanded&quot;)
 			Select Case _ControlType
 				Case CTLTREECONTROL

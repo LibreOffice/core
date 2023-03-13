@@ -1840,10 +1840,10 @@ class SFDialogs:
         servicename = 'SFDialogs.Dialog'
         servicesynonyms = ('dialog', 'sfdialogs.dialog')
         serviceproperties = dict(Caption = True, Height = True, Modal = False, Name = False,
-                                 OnFocusGained = False, OnFocusLost = False, OnKeyPressed = False,
-                                 OnKeyReleased = False, OnMouseDragged = False, OnMouseEntered = False,
-                                 OnMouseExited = False, OnMouseMoved = False, OnMousePressed = False,
-                                 OnMouseReleased = False,
+                                 OnFocusGained = True, OnFocusLost = True, OnKeyPressed = True,
+                                 OnKeyReleased = True, OnMouseDragged = True, OnMouseEntered = True,
+                                 OnMouseExited = True, OnMouseMoved = True, OnMousePressed = True,
+                                 OnMouseReleased = True,
                                  Page = True, Visible = True, Width = True, XDialogModel = False, XDialogView = False)
         # Class constants used together with the Execute() method
         OKBUTTON, CANCELBUTTON = 1, 0
@@ -1906,12 +1906,12 @@ class SFDialogs:
         serviceproperties = dict(Cancel = True, Caption = True, ControlType = False, CurrentNode = True,
                                  Default = True, Enabled = True, Format = True, ListCount = False,
                                  ListIndex = True, Locked = True, MultiSelect = True, Name = False,
-                                 OnActionPerformed = False, OnAdjustmentValueChanged = False, OnFocusGained = False,
-                                 OnFocusLost = False, OnItemStateChanged = False, OnKeyPressed = False,
-                                 OnKeyReleased = False, OnMouseDragged = False, OnMouseEntered = False,
-                                 OnMouseExited = False, OnMouseMoved = False, OnMousePressed = False,
-                                 OnMouseReleased = False, OnNodeExpanded = True, OnNodeSelected = True,
-                                 OnTextChanged = False, Page = True, Parent = False, Picture = True,
+                                 OnActionPerformed = True, OnAdjustmentValueChanged = True, OnFocusGained = True,
+                                 OnFocusLost = True, OnItemStateChanged = True, OnKeyPressed = True,
+                                 OnKeyReleased = True, OnMouseDragged = True, OnMouseEntered = True,
+                                 OnMouseExited = True, OnMouseMoved = True, OnMousePressed = True,
+                                 OnMouseReleased = True, OnNodeExpanded = True, OnNodeSelected = True,
+                                 OnTextChanged = True, Page = True, Parent = False, Picture = True,
                                  RootNode = False, RowSource = True, Text = False, TipText = True,
                                  TripleState = True, Value = True, Visible = True,
                                  XControlModel = False, XControlView = False, XGridColumnModel = False,

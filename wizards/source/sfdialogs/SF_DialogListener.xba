@@ -13,7 +13,7 @@ Option Explicit
 &apos;&apos;&apos;	SF_Listener
 &apos;&apos;&apos;	===========
 &apos;&apos;&apos;		The current module is dedicated to the management of dialog control events, triggered by user actions,
-&apos;&apos;&apos;		which cannot be defined with the Basic IDE
+&apos;&apos;&apos;		which are not defined with the Basic IDE
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Concerned events:
 &apos;&apos;&apos;			TreeControl control type, prefix = _SFEXP_
@@ -30,6 +30,11 @@ Option Explicit
 &apos;&apos;&apos;					XItemListener: for listboxes, comboboxes and radio buttons
 &apos;&apos;&apos;					
 &apos;&apos;&apos;			The described events are processed thru UNO listeners
+&apos;&apos;&apos;
+&apos;&apos;&apos;			&quot;On&quot; events defined by code, prefix = _SFFOCUS_, _SFKEY_, _SFMOUSE_, _SFMOVE_, _SFITEM_, _SFADJUST_, _SFTEXT_
+&apos;&apos;&apos;			-----------
+&apos;&apos;&apos;				All event types applicable on dialogs and control types &lt;&gt; TreeControl
+&apos;&apos;&apos;				The events MUST NOT be preset in the Basic IDE
 &apos;&apos;&apos;
 &apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
 
@@ -63,7 +68,7 @@ Finally:
 	Exit Sub
 Catch:
 	GoTo Finally
-End Sub
+End Sub			&apos;	SFDialogs.SF_Dialoglistener._SFEXP_requestChildNodes
 
 Sub _SFEXP_disposing(ByRef poEvent As Object)
 End Sub
@@ -84,7 +89,7 @@ REM ----------------------------------------------------------------------------
 Public Sub _SFSEL_selectionChanged(Optional ByRef poEvent As Object)
 &apos;&apos;&apos;	Triggered by the OnNodeSelected event of a tree control
 &apos;&apos;&apos;	The event is triggered thru a com.sun.star.view.XSelectionChangeListener
-&apos;&apos;&apos;	The argument is passed to a user routine sstored in the SF_DialogControl instance
+&apos;&apos;&apos;	The argument is passed to a user routine stored in the SF_DialogControl instance
 &apos;&apos;&apos;		as a scripting framework URI
 &apos;&apos;&apos;
 &apos;&apos;&apos;	Nothing happens if there are several selected nodes or none
@@ -108,7 +113,7 @@ Finally:
 	Exit Sub
 Catch:
 	GoTo Finally
-End Sub
+End Sub			&apos;	SFDialogs.SF_Dialoglistener._SFSEL_selectionChanged
 
 Sub _SFSEL_disposing(ByRef poEvent As Object)
 End Sub
@@ -153,7 +158,7 @@ Try:
 
 Finally:
 	Exit Sub
-End Sub
+End Sub			&apos;	SFDialogs.SF_Dialoglistener._SFTAB_actionPerformed
 
 REM -----------------------------------------------------------------------------
 Public Sub _SFTAB_itemStateChanged(Optional ByRef poEvent As Object)
@@ -187,13 +192,442 @@ Try:
 
 Finally:
 	Exit Sub
-End Sub
+End Sub			&apos;	SFDialogs.SF_Dialoglistener._SFTAB_itemStateChanged
 
 REM -----------------------------------------------------------------------------
 Public Sub _SFTAB_disposing(Optional ByRef poEvent As Object)
 End Sub
 
+REM ========================== PUBLIC METHODS (GENERIC DIALOG AND CONTROL EVENTS)
+
+&apos;&apos;&apos;	Next methods SIMULATE the behaviour of events set on dialogs and dialog controls
+&apos;&apos;&apos;	in the Events tab of a dialog editing page in the Basic IDE.
+&apos;&apos;&apos;	They are not triggered by events preset in the Basic IDE.
+&apos;&apos;&apos;	They are triggered ONLY when the event has been set by code with one of the OnXxxYyyy properties,
+&apos;&apos;&apos;	like in:
+&apos;&apos;&apos;		dialog.OnActionPerformed = &quot;vnd....&quot;	&apos;	URI notation
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFACTION_actionPerformed(Optional ByRef poEvent As Object)
+&apos;&apos;&apos;	Triggered by the OnActionPerformed event in a dialog control
+&apos;&apos;&apos;	The event is triggered thru a com.sun.star.awt.XActionListener
+&apos;&apos;&apos;	The argument is passed to a user routine stored in the SF_DialogControl instance
+&apos;&apos;&apos;		as a scripting framework URI
+
+	_TriggerEvent(&quot;actionPerformed&quot;, poEvent)
+
+End Sub			&apos;	SFDialogs.SF_Dialoglistener. _SFACTION_actionPerformed
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFACTION_disposing()
+End Sub
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFADJUST_adjustmentValueChanged(Optional ByRef poEvent As Object)
+&apos;&apos;&apos;	Triggered by the OnAdjustmentValueChanged event in a scrollbar
+&apos;&apos;&apos;	The event is triggered thru a com.sun.star.awt.XAdjustmentListener
+&apos;&apos;&apos;	The argument is passed to a user routine stored in the SF_DialogControl instance
+&apos;&apos;&apos;		as a scripting framework URI
+
+	_TriggerEvent(&quot;adjustmentValueChanged&quot;, poEvent)
+
+End Sub			&apos;	SFDialogs.SF_Dialoglistener. _SFADJUST_adjustmentValueChanged
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFADJUST_disposing()
+End Sub
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFFOCUS_focusGained(Optional ByRef poEvent As Object)
+&apos;&apos;&apos;	Triggered by the OnFocusGained event in a dialog or dialog control
+&apos;&apos;&apos;	The event is triggered thru a com.sun.star.awt.XFocusListener
+&apos;&apos;&apos;	The argument is passed to a user routine stored in the SF_Dialog or SF_DialogControl instance
+&apos;&apos;&apos;		as a scripting framework URI
+
+	_TriggerEvent(&quot;focusGained&quot;, poEvent)
+
+End Sub			&apos;	SFDialogs.SF_Dialoglistener._SFFOCUS_focusGained
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFFOCUS_focusLost(Optional ByRef poEvent As Object)
+&apos;&apos;&apos;	Triggered by the OnFocusLost event in a dialog or dialog control
+&apos;&apos;&apos;	The event is triggered thru a com.sun.star.awt.XFocusListener
+&apos;&apos;&apos;	The argument is passed to a user routine stored in the SF_Dialog or SF_DialogControl instance
+&apos;&apos;&apos;		as a scripting framework URI
+
+	_TriggerEvent(&quot;focusLost&quot;, poEvent)
+
+End Sub			&apos;	SFDialogs.SF_Dialoglistener._SFFOCUS_focusLost
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFFOCUS_disposing()
+End Sub
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFITEM_itemStateChanged(Optional ByRef poEvent As Object)
+&apos;&apos;&apos;	Triggered by the OnItemStateChanged event in a dialog control
+&apos;&apos;&apos;	The event is triggered thru a com.sun.star.awt.XItemListener
+&apos;&apos;&apos;	The argument is passed to a user routine stored in the SF_DialogControl instance
+&apos;&apos;&apos;		as a scripting framework URI
+
+	_TriggerEvent(&quot;itemStateChanged&quot;, poEvent)
+
+End Sub			&apos;	SFDialogs.SF_Dialoglistener. _SFACTION_actionPerformed
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFITEM_disposing()
+End Sub
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFKEY_keyPressed(Optional ByRef poEvent As Object)
+&apos;&apos;&apos;	Triggered by the OnKeyPressed event in a dialog or dialog control
+&apos;&apos;&apos;	The event is triggered thru a com.sun.star.awt.XKeyListener
+&apos;&apos;&apos;	The argument is passed to a user routine stored in the SF_Dialog or SF_DialogControl instance
+&apos;&apos;&apos;		as a scripting framework URI
+
+	_TriggerEvent(&quot;keyPressed&quot;, poEvent)
+
+End Sub			&apos;	SFDialogs.SF_Dialoglistener._SFKEY_keyPressed
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFKEY_keyReleased(Optional ByRef poEvent As Object)
+&apos;&apos;&apos;	Triggered by the OnKeyReleased event in a dialog or dialog control
+&apos;&apos;&apos;	The event is triggered thru a com.sun.star.awt.XKeyListener
+&apos;&apos;&apos;	The argument is passed to a user routine stored in the SF_Dialog or SF_DialogControl instance
+&apos;&apos;&apos;		as a scripting framework URI
+
+	_TriggerEvent(&quot;keyReleased&quot;, poEvent)
+
+End Sub			&apos;	SFDialogs.SF_Dialoglistener._SFKEY_keyReleased
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFKEY_disposing()
+End Sub
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFMOUSE_mouseEntered(Optional ByRef poEvent As Object)
+&apos;&apos;&apos;	Triggered by the OnMouseEntered event in a dialog or dialog control
+&apos;&apos;&apos;	The event is triggered thru a com.sun.star.awt.XMouseListener
+&apos;&apos;&apos;	The argument is passed to a user routine stored in the SF_Dialog or SF_DialogControl instance
+&apos;&apos;&apos;		as a scripting framework URI
+
+	_TriggerEvent(&quot;mouseEntered&quot;, poEvent)
+
+End Sub			&apos;	SFDialogs.SF_Dialoglistener._SFMOUSE_mouseEntered
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFMOUSE_mouseExited(Optional ByRef poEvent As Object)
+&apos;&apos;&apos;	Triggered by the OnMouseExited event in a dialog or dialog control
+&apos;&apos;&apos;	The event is triggered thru a com.sun.star.awt.XMouseListener
+&apos;&apos;&apos;	The argument is passed to a user routine stored in the SF_Dialog or SF_DialogControl instance
+&apos;&apos;&apos;		as a scripting framework URI
+
+	_TriggerEvent(&quot;mouseExited&quot;, poEvent)
+
+End Sub			&apos;	SFDialogs.SF_Dialoglistener._SFMOUSE_mouseExited
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFMOUSE_mousePressed(Optional ByRef poEvent As Object)
+&apos;&apos;&apos;	Triggered by the OnMousePressed event in a dialog or dialog control
+&apos;&apos;&apos;	The event is triggered thru a com.sun.star.awt.XMouseListener
+&apos;&apos;&apos;	The argument is passed to a user routine stored in the SF_Dialog or SF_DialogControl instance
+&apos;&apos;&apos;		as a scripting framework URI
+
+	_TriggerEvent(&quot;mousePressed&quot;, poEvent)
+
+End Sub			&apos;	SFDialogs.SF_Dialoglistener._SFMOUSE_mousePressed
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFMOUSE_mouseReleased(Optional ByRef poEvent As Object)
+&apos;&apos;&apos;	Triggered by the OnMouseReleased event in a dialog or dialog control
+&apos;&apos;&apos;	The event is triggered thru a com.sun.star.awt.XMouseListener
+&apos;&apos;&apos;	The argument is passed to a user routine stored in the SF_Dialog or SF_DialogControl instance
+&apos;&apos;&apos;		as a scripting framework URI
+
+	_TriggerEvent(&quot;mouseReleased&quot;, poEvent)
+
+End Sub			&apos;	SFDialogs.SF_Dialoglistener._SFMOUSE_mouseReleased
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFMOUSE_disposing()
+End Sub
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFMOVE_mouseDragged(Optional ByRef poEvent As Object)
+&apos;&apos;&apos;	Triggered by the OnMouseDragged event in a dialog or dialog control
+&apos;&apos;&apos;	The event is triggered thru a com.sun.star.awt.XMouseMotionListener
+&apos;&apos;&apos;	The argument is passed to a user routine stored in the SF_Dialog or SF_DialogControl instance
+&apos;&apos;&apos;		as a scripting framework URI
+
+	_TriggerEvent(&quot;mouseDragged&quot;, poEvent)
+
+End Sub			&apos;	SFDialogs.SF_Dialoglistener._SFMOUSE_mouseDragged
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFMOVE_mouseMoved(Optional ByRef poEvent As Object)
+&apos;&apos;&apos;	Triggered by the OnMouseMoved event in a dialog or dialog control
+&apos;&apos;&apos;	The event is triggered thru a com.sun.star.awt.XMouseMotionListener
+&apos;&apos;&apos;	The argument is passed to a user routine stored in the SF_Dialog or SF_DialogControl instance
+&apos;&apos;&apos;		as a scripting framework URI
+
+	_TriggerEvent(&quot;mouseMoved&quot;, poEvent)
+
+End Sub			&apos;	SFDialogs.SF_Dialoglistener._SFMOUSE_mouseMoved
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFMOVE_disposing()
+End Sub
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFTEXT_textChanged(Optional ByRef poEvent As Object)
+&apos;&apos;&apos;	Triggered by the OnTextChanged event in a dialog control
+&apos;&apos;&apos;	The event is triggered thru a com.sun.star.awt.XTextListener
+&apos;&apos;&apos;	The argument is passed to a user routine stored in the SF_DialogControl instance
+&apos;&apos;&apos;		as a scripting framework URI
+
+	_TriggerEvent(&quot;textChanged&quot;, poEvent)
+
+End Sub			&apos;	SFDialogs.SF_Dialoglistener. _SFTEXT_textChanged
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFTEXT_disposing()
+End Sub
+
 REM ============================================================= PRIVATE METHODS
+
+REM -----------------------------------------------------------------------------
+Public Function _SetOnProperty(ByRef poInstance As Object _
+								, ByVal psProperty As String _
+								, ByVal psScript As String _
+								) As Boolean
+&apos;&apos;&apos;	Set one of the On properties related to either a SF_Dialog or SF_DialogControl instance
+&apos;&apos;&apos;	Such a property is typically set by next pseudo-code:
+&apos;&apos;&apos;		poInstance.psProperty = psScript
+&apos;&apos;&apos;	It requires a strictly identical nomenclature of internal variables in both classes.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		poInstance: a SF_Dialog or a SF_DialogControl instance
+&apos;&apos;&apos;		psProperty: one of the applicable On properties (&quot;OnFocusGained&quot;, &quot;OnMouseMoved&quot;, ...)
+&apos;&apos;&apos;		psScript: the script to run when the event is triggered
+&apos;&apos;&apos;					When the zero-length strng, the trigger is deactivated
+
+Dim bSet As Boolean							&apos;	Return value
+Dim oModel As Object						&apos;	com.sun.star.awt.XControlModel
+Dim oView As Object							&apos;	com.sun.star.awt.XControl
+Dim oDialogEvents As Object					&apos;	com.sun.star.container.XNameContainer
+Dim sListener As String						&apos;	Applicable listener, depending on property, f.i. &quot;XMouseListener&quot;
+Dim sEventName As String					&apos;	Internal event name
+Dim iCounterIncrement As Integer			&apos;	Increment to be applied on listener counter
+Dim sPrevious As String						&apos;	Actual value of script before the change
+
+Const cstPrefix = &quot;com.sun.star.awt.&quot;
+
+	bSet = True
+
+Check:
+	If IsNull(poInstance) Or Len(psProperty) = 0 Then GoTo Catch
+	With poInstance
+
+		&apos;	Initialize local variables depending on instance type
+		If .ObjectType = &quot;DIALOG&quot; Then
+			Set oModel = ._DialogModel
+			Set oView = ._DialogControl
+		Else		&apos;	DIALOGCONTROL
+			Set oModel = ._ControlModel
+			Set oView = ._ControlView
+		End If
+		If IsNull(oModel) Or IsNull(oView) Then GoTo Catch
+
+		&apos;	Ignore request if an event has been statically preset (in the Basic IDE) with the same name
+		Set oDialogEvents = oModel.getEvents()
+		sListener = ._GetListener(psProperty)
+		sEventName = cstPrefix &amp; sListener &amp; &quot;::&quot; &amp; ._GetEventName(psProperty)
+		If oDialogEvents.hasByName(sEventName) Then GoTo Catch
+
+Try:
+		&apos;	Note the target scripts. Compare previous and new values. Fix the increment to be applied on counter
+		Select Case UCase(psProperty)
+			Case UCase(&quot;OnActionPerformed&quot;)
+				sPrevious = ._OnActionPerformed
+				._OnActionPerformed = psScript
+			Case UCase(&quot;OnAdjustmentValueChanged&quot;)
+				sPrevious = ._OnAdjustmentValueChanged
+				._OnAdjustmentValueChanged = psScript
+			Case UCase(&quot;OnFocusGained&quot;)
+				sPrevious = ._OnfocusGained
+				._OnFocusGained = psScript
+			Case UCase(&quot;OnFocusLost&quot;)
+				sPrevious = ._OnFocusLost
+				._OnFocusLost = psScript
+			Case UCase(&quot;OnItemStateChanged&quot;)
+				sPrevious = ._OnItemStateChanged
+				._OnItemStateChanged = psScript
+			Case UCase(&quot;OnKeyPressed&quot;)
+				sPrevious = ._OnKeyPressed
+				._OnKeyPressed = psScript
+			Case UCase(&quot;OnKeyReleased&quot;)
+				sPrevious = ._OnKeyReleased
+				._OnKeyReleased = psScript
+			Case UCase(&quot;OnMouseDragged&quot;)
+				sPrevious = ._OnMouseDragged
+				._OnMouseDragged = psScript
+			Case UCase(&quot;OnMouseEntered&quot;)
+				sPrevious = ._OnMouseEntered
+				._OnMouseEntered = psScript
+			Case UCase(&quot;OnMouseExited&quot;)
+				sPrevious = ._OnMouseExited
+				._OnMouseExited = psScript
+			Case UCase(&quot;OnMouseMoved&quot;)
+				sPrevious = ._OnMouseMoved
+				._OnMouseMoved = psScript
+			Case UCase(&quot;OnMousePressed&quot;)
+				sPrevious = ._OnMousePressed
+				._OnMousePressed = psScript
+			Case UCase(&quot;OnMouseReleased&quot;)
+				sPrevious = ._OnMouseReleased
+				._OnMouseReleased = psScript
+			Case UCase(&quot;OnTextChanged&quot;)
+				sPrevious = ._OnTextChanged
+				._OnTextChanged = psScript
+		End Select
+		&apos;	Compare previous and new event to know what to do next with the listener
+		If sPrevious = psScript Then GoTo Finally				&apos;	No change
+		If Len(sPrevious) = 0 Then			&apos;	New event
+			iCounterIncrement = +1
+		ElseIf Len(psScript) = 0 Then		&apos;	Cancel event
+			iCounterIncrement = -1
+		Else								&apos;	Event replacement
+			iCounterIncrement = 0
+		End If
+
+		&apos;	Setup a new fresh listener, only once by listener during dialog or control life time,
+		&apos;	(re)add it to the instance view or remove the existing one if not needed anymore
+		Select Case sListener
+			Case &quot;XActionListener&quot;
+				._ActionCounter = ._ActionCounter + iCounterIncrement
+				If ._ActionCounter = 1 Then
+					If IsNull(._ActionListener) Then Set ._ActionListener = CreateUnoListener(&quot;_SFACTION_&quot;, cstPrefix &amp; sListener)
+					If iCounterIncrement = 1 Then oView.addActionListener(._ActionListener)
+				ElseIf ._ActionCounter &lt;= 0 Then
+					If Not IsNull(._ActionListener) Then oView.removeActionListener(._ActionListener)
+					._ActionCounter = 0		&apos;	Prevent negative values
+				End If
+			Case &quot;XAdjustmentListener&quot;
+				._AdjustmentCounter = ._AdjustmentCounter + iCounterIncrement
+				If ._AdjustmentCounter = 1 Then
+					If IsNull(._AdjustmentListener) Then Set ._AdjustmentListener = CreateUnoListener(&quot;_SFADJUST_&quot;, cstPrefix &amp; sListener)
+					If iCounterIncrement = 1 Then oView.addAdjustmentListener(._AdjustmentListener)
+				ElseIf ._AdjustmentCounter &lt;= 0 Then
+					If Not IsNull(._AdjustmentListener) Then oView.removeAdjustmentListener(._AdjustmentListener)
+					._AdjustmentCounter = 0		&apos;	Prevent negative values
+				End If
+			Case &quot;XFocusListener&quot;
+				._FocusCounter = ._FocusCounter + iCounterIncrement
+				If ._FocusCounter = 1 Then
+					If IsNull(._FocusListener) Then Set ._FocusListener = CreateUnoListener(&quot;_SFFOCUS_&quot;, cstPrefix &amp; sListener)
+					If iCounterIncrement = 1 Then oView.addFocusListener(._FocusListener)
+				ElseIf ._FocusCounter &lt;= 0 Then
+					If Not IsNull(._FocusListener) Then oView.removeFocusListener(._FocusListener)
+					._FocusCounter = 0		&apos;	Prevent negative values
+				End If
+			Case &quot;XItemListener&quot;
+				._ItemCounter = ._ItemCounter + iCounterIncrement
+				If ._ItemCounter = 1 Then
+					If IsNull(._ItemListener) Then Set ._ItemListener = CreateUnoListener(&quot;_SFITEM_&quot;, cstPrefix &amp; sListener)
+					If iCounterIncrement = 1 Then oView.addItemListener(._ItemListener)
+				ElseIf ._ItemCounter &lt;= 0 Then
+					If Not IsNull(._ItemListener) Then oView.removeItemListener(._ItemListener)
+					._ItemCounter = 0		&apos;	Prevent negative values
+				End If
+			Case &quot;XKeyListener&quot;
+				._KeyCounter = ._KeyCounter + iCounterIncrement
+				If ._KeyCounter= 1 Then
+					If IsNull(._KeyListener) Then Set ._KeyListener = CreateUnoListener(&quot;_SFKEY_&quot;, cstPrefix &amp; sListener)
+					If iCounterIncrement = 1 Then oView.addKeyListener(._KeyListener)
+				ElseIf ._KeyCounter &lt;= 0 Then
+					If Not IsNull(._KeyListener) Then oView.removeKeyListener(._KeyListener)
+					._KeyCounter = 0		&apos;	Prevent negative values
+				End If
+			Case &quot;XMouseListener&quot;
+				._MouseCounter = ._MouseCounter + iCounterIncrement
+				If ._MouseCounter= 1 Then
+					If IsNull(._MouseListener) Then Set ._MouseListener = CreateUnoListener(&quot;_SFMOUSE_&quot;, cstPrefix &amp; sListener)
+					If iCounterIncrement = 1 Then oView.addMouseListener(._MouseListener)
+				ElseIf ._MouseCounter &lt;= 0 Then
+					If Not IsNull(._MouseListener) Then oView.removeMouseListener(._MouseListener)
+					._MouseCounter = 0		&apos;	Prevent negative values
+				End If
+			Case &quot;XMouseMotionListener&quot;
+				._MouseMotionCounter = ._MouseMotionCounter + iCounterIncrement
+				If ._MouseMotionCounter = 1 Then
+					If IsNull(._MouseMotionListener) Then Set ._MouseMotionListener = CreateUnoListener(&quot;_SFMOVE_&quot;, cstPrefix &amp; sListener)
+					If iCounterIncrement = 1 Then oView.addMouseMotionListener(._MouseMotionListener)
+				ElseIf ._MouseMotionCounter &lt;= 0 Then
+					If Not IsNull(._MouseMotionListener) Then oView.removeMouseMotionListener(._MouseMotionListener)
+					._MouseMotionCounter = 0		&apos;	Prevent negative values
+				End If
+			Case &quot;XTextListener&quot;
+				._TextCounter = ._TextCounter + iCounterIncrement
+				If ._TextCounter = 1 Then
+					If IsNull(._TextListener) Then Set ._TextListener = CreateUnoListener(&quot;_SFTEXT_&quot;, cstPrefix &amp; sListener)
+					If iCounterIncrement = 1 Then oView.addTextListener(._TextListener)
+				ElseIf ._TextCounter &lt;= 0 Then
+					If Not IsNull(._TextListener) Then oView.removeTextListener(._TextListener)
+					._TextCounter = 0		&apos;	Prevent negative values
+				End If
+		End Select
+
+	End With
+		
+Finally:
+	_SetOnProperty = bSet
+	Exit Function
+Catch:
+	bSet = False
+	GoTo Finally
+End Function	&apos;	SFDialogs.SF_Dialoglistener._SetOnProperty
+
+REM -----------------------------------------------------------------------------
+Public Sub _TriggerEvent(ByVal EventType, Optional ByRef poEvent As Object)
+&apos;&apos;&apos;	Triggered by the EventType event in a dialog or dialog control
+&apos;&apos;&apos;	The argument is passed to a user routine stored in the SF_Dialog or SF_DialogControl instance
+&apos;&apos;&apos;		as a scripting framework URI
+
+Dim oDialog As Object				&apos;	The SF_Dialog or SF_DialogControl object having triggered the event
+Dim sScript As String				&apos;	Script to be invoked
+
+	On Local Error GoTo Catch		&apos;	Avoid stopping event scripts
+
+Check:	
+	If IsNull(poEvent) Or IsMissing(poEvent) Then Exit Sub
+
+Try:
+	Set oDialog = ScriptForge.SF_Services.CreateScriptService(&quot;SFDialogs.DialogEvent&quot;, poEvent)
+	If IsNull(oDialog) Then Exit Sub
+	With oDialog
+		Select Case EventType
+			Case &quot;actionPerformed&quot;			:	sScript = .OnActionPerformed
+			Case &quot;adjustmentValueChanged&quot;	:	sScript = .OnAdjustmentValueChanged
+			Case &quot;focusGained&quot;				:	sScript = .OnFocusGained
+			Case &quot;focusLost&quot;				:	sScript = .OnFocusLost
+			Case &quot;itemStateChanged&quot;			:	sScript = .OnItemStateChanged
+			Case &quot;mouseDragged&quot;				:	sScript = .OnMouseDragged
+			Case &quot;mouseEntered&quot;				:	sScript = .OnMouseEntered
+			Case &quot;mouseExited&quot;				:	sScript = .OnMouseExited
+			Case &quot;mouseMoved&quot;				:	sScript = .OnMouseMoved
+			Case &quot;mousePressed&quot;				:	sScript = .OnMousePressed
+			Case &quot;mouseReleased&quot;			:	sScript = .OnMouseReleased
+			Case &quot;textChanged&quot;				:	sScript = .OnTextChanged
+			Case Else						:	sScript = &quot;&quot;		&apos;	Should not happen
+		End Select
+		If Len(sScript) = 0 Then Exit Sub
+		ScriptForge.SF_Session._ExecuteScript(sScript, poEvent)
+	End With
+
+Finally:
+	Exit Sub
+Catch:
+	GoTo Finally
+End Sub			&apos;	SFDialogs.SF_Dialoglistener._TriggerEvent
 
 REM ============================================ END OF SFDIALOGS.SF_DIALOGLISTENER
 </script:module>
