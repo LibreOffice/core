@@ -152,8 +152,8 @@ namespace drawinglayer::attribute
 
                 if(!rFillTransparenceGradientAttribute.isDefault())
                 {
-                    const double fTransA(rFillTransparenceGradientAttribute.getColorSteps().front().getColor().luminance());
-                    const double fTransB(rFillTransparenceGradientAttribute.getColorSteps().back().getColor().luminance());
+                    const double fTransA(rFillTransparenceGradientAttribute.getColorStops().front().getStopColor().luminance());
+                    const double fTransB(rFillTransparenceGradientAttribute.getColorStops().back().getStopColor().luminance());
 
                     fTransparence = (fTransA + fTransB) * 0.5;
                 }
@@ -161,8 +161,8 @@ namespace drawinglayer::attribute
                 if(!rFillGradientAttribute.isDefault())
                 {
                     // gradient fill
-                    const basegfx::BColor aStart(rFillGradientAttribute.getColorSteps().front().getColor());
-                    const basegfx::BColor aEnd(rFillGradientAttribute.getColorSteps().back().getColor());
+                    const basegfx::BColor aStart(rFillGradientAttribute.getColorStops().front().getStopColor());
+                    const basegfx::BColor aEnd(rFillGradientAttribute.getColorStops().back().getStopColor());
 
                     aRetval = basegfx::interpolate(aStart, aEnd, 0.5);
                 }

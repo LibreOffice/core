@@ -259,8 +259,8 @@ void VclMetafileProcessor2D::impConvertFillGradientAttributeToVCLGradient(
     Gradient& o_rVCLGradient, const attribute::FillGradientAttribute& rFiGrAtt,
     bool bIsTransparenceGradient) const
 {
-    const basegfx::BColor aStartColor(rFiGrAtt.getColorSteps().front().getColor());
-    const basegfx::BColor aEndColor(rFiGrAtt.getColorSteps().back().getColor());
+    const basegfx::BColor aStartColor(rFiGrAtt.getColorStops().front().getStopColor());
+    const basegfx::BColor aEndColor(rFiGrAtt.getColorStops().back().getStopColor());
 
     if (bIsTransparenceGradient)
     {
@@ -2049,9 +2049,9 @@ void VclMetafileProcessor2D::processPolyPolygonGradientPrimitive2D(
         return;
     }
 
-    if (!rGradientCandidate.getFillGradient().getColorSteps().empty())
+    if (!rGradientCandidate.getFillGradient().getColorStops().empty())
     {
-        // MCGR: if we have COlorSteps, do not try to fallbacl to old VCL-Gradient,
+        // MCGR: if we have ColorStops, do not try to fallback to old VCL-Gradient,
         // that will *not* be capable of representing this properly. Use the
         // correct decomposition instead
         process(rGradientCandidate);

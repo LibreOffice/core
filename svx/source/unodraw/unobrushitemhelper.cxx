@@ -157,8 +157,8 @@ static sal_uInt16 getTransparenceForSvxBrushItem(const SfxItemSet& rSourceSet, b
         && pGradientItem->IsEnabled())
     {
         const XGradient& rGradient = pGradientItem->GetGradientValue();
-        const sal_uInt16 nStartLuminance(rGradient.GetStartColor().GetLuminance());
-        const sal_uInt16 nEndLuminance(rGradient.GetEndColor().GetLuminance());
+        const sal_uInt16 nStartLuminance(Color(rGradient.GetColorStops().front().getStopColor()).GetLuminance());
+        const sal_uInt16 nEndLuminance(Color(rGradient.GetColorStops().back().getStopColor()).GetLuminance());
 
         // luminance is [0..255], transparence needs to be in [0..100].Maximum is 51200, thus sal_uInt16 is okay to use
         nFillTransparence = static_cast< sal_uInt16 >(((nStartLuminance + nEndLuminance) * 100) / 512);
@@ -224,8 +224,8 @@ std::unique_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSo
         {
             // cannot be directly supported, but do the best possible
             const XGradient aXGradient(rSourceSet.Get(XATTR_FILLGRADIENT).GetGradientValue());
-            const basegfx::BColor aStartColor(aXGradient.GetStartColor().getBColor() * (aXGradient.GetStartIntens() * 0.01));
-            const basegfx::BColor aEndColor(aXGradient.GetEndColor().getBColor() * (aXGradient.GetEndIntens() * 0.01));
+            const basegfx::BColor aStartColor(aXGradient.GetColorStops().front().getStopColor() * (aXGradient.GetStartIntens() * 0.01));
+            const basegfx::BColor aEndColor(aXGradient.GetColorStops().back().getStopColor() * (aXGradient.GetEndIntens() * 0.01));
 
             // use half/half mixed color from gradient start and end
             Color aMixedColor((aStartColor + aEndColor) * 0.5);

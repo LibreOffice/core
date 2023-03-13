@@ -1245,11 +1245,12 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction const & rAct, GDIMetaF
                         std::move(aSource));
                     // #i125211# Use the ranges from the SdrObject to create a new empty SfxItemSet
                     SfxItemSet aGradAttr(mpModel->GetItemPool(), pPath->GetMergedItemSet().GetRanges());
-                    XGradient aXGradient;
+                    XGradient aXGradient(
+                        basegfx::utils::createColorStopsFromStartEndColor(
+                            rGrad.GetStartColor().getBColor(),
+                            rGrad.GetEndColor().getBColor()));
 
                     aXGradient.SetGradientStyle(static_cast<css::awt::GradientStyle>(rGrad.GetStyle()));
-                    aXGradient.SetStartColor(rGrad.GetStartColor());
-                    aXGradient.SetEndColor(rGrad.GetEndColor());
                     aXGradient.SetAngle(rGrad.GetAngle());
                     aXGradient.SetBorder(rGrad.GetBorder());
                     aXGradient.SetXOffset(rGrad.GetOfsX());
@@ -1442,8 +1443,9 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaGradientAction const & rAct)
     const css::awt::GradientStyle aXGradientStyle(getXGradientStyleFromGradientStyle(rGradient.GetStyle()));
     const XFillGradientItem aXFillGradientItem(
         XGradient(
-            rGradient.GetStartColor(),
-            rGradient.GetEndColor(),
+            basegfx::utils::createColorStopsFromStartEndColor(
+                rGradient.GetStartColor().getBColor(),
+                rGradient.GetEndColor().getBColor()),
             aXGradientStyle,
             rGradient.GetAngle(),
             rGradient.GetOfsX(),
@@ -1504,8 +1506,9 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaGradientExAction const & rAct)
     const css::awt::GradientStyle aXGradientStyle(getXGradientStyleFromGradientStyle(rGradient.GetStyle()));
     const XFillGradientItem aXFillGradientItem(
         XGradient(
-            rGradient.GetStartColor(),
-            rGradient.GetEndColor(),
+            basegfx::utils::createColorStopsFromStartEndColor(
+                rGradient.GetStartColor().getBColor(),
+                rGradient.GetEndColor().getBColor()),
             aXGradientStyle,
             rGradient.GetAngle(),
             rGradient.GetOfsX(),

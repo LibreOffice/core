@@ -279,8 +279,8 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
         }
         case drawing::FillStyle_GRADIENT: {
             const XGradient& rGrad=rSet.Get(XATTR_FILLGRADIENT).GetGradientValue();
-            Color aCol1(rGrad.GetStartColor());
-            Color aCol2(rGrad.GetEndColor());
+            Color aCol1(Color(rGrad.GetColorStops().front().getStopColor()));
+            Color aCol2(Color(rGrad.GetColorStops().back().getStopColor()));
             const basegfx::BColor aAverageColor(basegfx::average(aCol1.getBColor(), aCol2.getBColor()));
             rCol = Color(aAverageColor);
             bRetval = true;

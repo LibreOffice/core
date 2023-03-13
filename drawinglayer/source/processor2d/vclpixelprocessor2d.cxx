@@ -500,9 +500,9 @@ void VclPixelProcessor2D::processPolyPolygonGradientPrimitive2D(
     // direct draw of gradient
     const attribute::FillGradientAttribute& rGradient(rPolygonCandidate.getFillGradient());
     basegfx::BColor aStartColor(
-        maBColorModifierStack.getModifiedColor(rGradient.getColorSteps().front().getColor()));
+        maBColorModifierStack.getModifiedColor(rGradient.getColorStops().front().getStopColor()));
     basegfx::BColor aEndColor(
-        maBColorModifierStack.getModifiedColor(rGradient.getColorSteps().back().getColor()));
+        maBColorModifierStack.getModifiedColor(rGradient.getColorStops().back().getStopColor()));
     basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolygonCandidate.getB2DPolyPolygon());
 
     if (!aLocalPolyPolygon.count())
@@ -938,9 +938,9 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
 {
     const attribute::FillGradientAttribute& rFillGradient = rPrimitive.getFillGradient();
 
-    // MCGR: If GradientSteps are used, use decomposition since vcl is not able
+    // MCGR: If GradientStops are used, use decomposition since vcl is not able
     // to render multi-color gradients
-    if (rFillGradient.getColorSteps().size() > 2)
+    if (rFillGradient.getColorStops().size() > 2)
     {
         process(rPrimitive);
         return;
@@ -994,8 +994,8 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
 
     GradientStyle eGradientStyle = convertGradientStyle(rFillGradient.getStyle());
 
-    Gradient aGradient(eGradientStyle, Color(rFillGradient.getColorSteps().front().getColor()),
-                       Color(rFillGradient.getColorSteps().back().getColor()));
+    Gradient aGradient(eGradientStyle, Color(rFillGradient.getColorStops().front().getStopColor()),
+                       Color(rFillGradient.getColorStops().back().getStopColor()));
 
     aGradient.SetAngle(Degree10(static_cast<int>(basegfx::rad2deg<10>(rFillGradient.getAngle()))));
     aGradient.SetBorder(rFillGradient.getBorder() * 100);

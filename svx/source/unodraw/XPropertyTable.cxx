@@ -536,8 +536,8 @@ uno::Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const noex
     awt::Gradient aGradient;
 
     aGradient.Style = aXGradient.GetGradientStyle();
-    aGradient.StartColor = static_cast<sal_Int32>(aXGradient.GetStartColor());
-    aGradient.EndColor = static_cast<sal_Int32>(aXGradient.GetEndColor());
+    aGradient.StartColor = static_cast<sal_Int32>(Color(aXGradient.GetColorStops().front().getStopColor()));
+    aGradient.EndColor = static_cast<sal_Int32>(Color(aXGradient.GetColorStops().back().getStopColor()));
     aGradient.Angle = static_cast<short>(aXGradient.GetAngle());
     aGradient.Border = aXGradient.GetBorder();
     aGradient.XOffset = aXGradient.GetXOffset();
@@ -555,11 +555,12 @@ std::unique_ptr<XPropertyEntry> SvxUnoXGradientTable::createEntry(const OUString
     if(!(rAny >>= aGradient))
         return std::unique_ptr<XPropertyEntry>();
 
-    XGradient aXGradient;
+    XGradient aXGradient(
+        basegfx::utils::createColorStopsFromStartEndColor(
+            Color(ColorTransparency, aGradient.StartColor).getBColor(),
+            Color(ColorTransparency, aGradient.EndColor).getBColor()));
 
     aXGradient.SetGradientStyle( aGradient.Style );
-    aXGradient.SetStartColor( Color(ColorTransparency, aGradient.StartColor) );
-    aXGradient.SetEndColor( Color(ColorTransparency, aGradient.EndColor) );
     aXGradient.SetAngle( Degree10(aGradient.Angle) );
     aXGradient.SetBorder( aGradient.Border );
     aXGradient.SetXOffset( aGradient.XOffset );

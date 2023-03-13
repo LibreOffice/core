@@ -399,9 +399,9 @@ void SlideBackground::Update()
             mxFillGrad2->show();
 
             const XGradient xGradient = GetGradientSetOrDefault();
-            const Color aStartColor = xGradient.GetStartColor();
+            const Color aStartColor(xGradient.GetColorStops().front().getStopColor());
             mxFillGrad1->SelectEntry(aStartColor);
-            const Color aEndColor = xGradient.GetEndColor();
+            const Color aEndColor(xGradient.GetColorStops().back().getStopColor());
             mxFillGrad2->SelectEntry(aEndColor);
         }
         break;
@@ -1127,9 +1127,10 @@ IMPL_LINK_NOARG(SlideBackground, FillColorHdl, ColorListBox&, void)
         break;
         case drawing::FillStyle_GRADIENT:
         {
-            XGradient aGradient;
-            aGradient.SetStartColor(mxFillGrad1->GetSelectEntryColor());
-            aGradient.SetEndColor(mxFillGrad2->GetSelectEntryColor());
+            XGradient aGradient(
+                basegfx::utils::createColorStopsFromStartEndColor(
+                    mxFillGrad1->GetSelectEntryColor().getBColor(),
+                    mxFillGrad2->GetSelectEntryColor().getBColor()));
 
             // the name doesn't really matter, it'll be converted to unique one eventually,
             // but it has to be non-empty

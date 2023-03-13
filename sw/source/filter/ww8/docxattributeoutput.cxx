@@ -9343,8 +9343,8 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
         AddToAttrList( m_rExport.SdrExporter().getFlyFillAttrList(), XML_type, "gradient" );
 
         const XGradient& rGradient = rFillGradient.GetGradientValue();
-        OString sStartColor = msfilter::util::ConvertColor(rGradient.GetStartColor());
-        OString sEndColor = msfilter::util::ConvertColor(rGradient.GetEndColor());
+        OString sStartColor = msfilter::util::ConvertColor(Color(rGradient.GetColorStops().front().getStopColor()));
+        OString sEndColor = msfilter::util::ConvertColor(Color(rGradient.GetColorStops().back().getStopColor()));
 
         // Calculate the angle that was originally in the imported DOCX file
         // (reverse calculate the angle that was converted in the file

@@ -2804,16 +2804,17 @@ void EnhancedCustomShape2d::AdaptObjColor(
 
             if ( nColorCount || 0.0 != dBrightness )
             {
-                aXGradient.SetStartColor(
-                    GetColorData(
-                        aXGradient.GetStartColor(),
-                        std::min(nColorIndex, nColorCount-1),
-                        dBrightness ));
-                aXGradient.SetEndColor(
-                    GetColorData(
-                        aXGradient.GetEndColor(),
-                        std::min(nColorIndex, nColorCount-1),
-                        dBrightness ));
+                basegfx::ColorStops aColorStops(aXGradient.GetColorStops());
+                for (auto& candidate : aColorStops)
+                {
+                    candidate = basegfx::ColorStop(
+                        candidate.getStopOffset(),
+                        GetColorData(
+                            Color(candidate.getStopColor()),
+                            std::min(nColorIndex, nColorCount-1),
+                            dBrightness ).getBColor());
+                }
+                aXGradient.SetColorStops(aColorStops);
             }
 
             rObj.SetMergedItem( XFillGradientItem( "", aXGradient ) );

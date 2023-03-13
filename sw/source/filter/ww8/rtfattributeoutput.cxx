@@ -3691,13 +3691,13 @@ void RtfAttributeOutput::FormatFillGradient(const XFillGradientItem& rFillGradie
         "fillType", OString::number(7))); // Shade using the fillAngle
 
     const XGradient& rGradient = rFillGradient.GetGradientValue();
-    const Color& rStartColor = rGradient.GetStartColor();
+    const Color aStartColor(rGradient.GetColorStops().front().getStopColor());
     m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-        "fillBackColor", OString::number(wwUtility::RGBToBGR(rStartColor))));
+        "fillBackColor", OString::number(wwUtility::RGBToBGR(aStartColor))));
 
-    const Color& rEndColor = rGradient.GetEndColor();
+    const Color aEndColor(rGradient.GetColorStops().back().getStopColor());
     m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-        "fillColor", OString::number(wwUtility::RGBToBGR(rEndColor))));
+        "fillColor", OString::number(wwUtility::RGBToBGR(aEndColor))));
 
     switch (rGradient.GetGradientStyle())
     {

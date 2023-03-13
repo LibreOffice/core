@@ -30,7 +30,7 @@ namespace drawinglayer::attribute
             double                                  mfOffsetX;
             double                                  mfOffsetY;
             double                                  mfAngle;
-            basegfx::ColorSteps                     maColorSteps;
+            basegfx::ColorStops                     maColorStops;
             GradientStyle                           meStyle;
             sal_uInt16                              mnSteps;
 
@@ -40,31 +40,31 @@ namespace drawinglayer::attribute
                 double fOffsetX,
                 double fOffsetY,
                 double fAngle,
-                const basegfx::ColorSteps& rColorSteps,
+                const basegfx::ColorStops& rColorStops,
                 sal_uInt16 nSteps)
             :   mfBorder(fBorder),
                 mfOffsetX(fOffsetX),
                 mfOffsetY(fOffsetY),
                 mfAngle(fAngle),
-                maColorSteps(rColorSteps), // copy ColorSteps
+                maColorStops(rColorStops), // copy ColorStops
                 meStyle(eStyle),
                 mnSteps(nSteps)
             {
-                // Correct the local ColorSteps. That will guarantee that the
+                // Correct the local ColorStops. That will guarantee that the
                 // content does contain no offsets < 0.0, > 1.0 or double
                 // ones, also secures sorted arrangement and checks for
                 // double colors, too (see there for more information).
                 // This is what the usages of this in primitives need.
                 // Since FillGradientAttribute is read-only doing this
                 // once here in the constructor is sufficient
-                basegfx::utils::sortAndCorrectColorSteps(maColorSteps);
+                basegfx::utils::sortAndCorrectColorStops(maColorStops);
 
-                // sortAndCorrectColorSteps is rigid and can return
+                // sortAndCorrectColorStops is rigid and can return
                 // an empty result. To keep things simple, add a single
                 // fallback value
-                if (maColorSteps.empty())
+                if (maColorStops.empty())
                 {
-                    maColorSteps.emplace_back(0.0, basegfx::BColor());
+                    maColorStops.emplace_back(0.0, basegfx::BColor());
                 }
             }
 
@@ -73,12 +73,12 @@ namespace drawinglayer::attribute
                 mfOffsetX(0.0),
                 mfOffsetY(0.0),
                 mfAngle(0.0),
-                maColorSteps(),
+                maColorStops(),
                 meStyle(GradientStyle::Linear),
                 mnSteps(0)
             {
                 // always add a fallback color, see above
-                maColorSteps.emplace_back(0.0, basegfx::BColor());
+                maColorStops.emplace_back(0.0, basegfx::BColor());
             }
 
             // data read access
@@ -87,7 +87,7 @@ namespace drawinglayer::attribute
             double getOffsetX() const { return mfOffsetX; }
             double getOffsetY() const { return mfOffsetY; }
             double getAngle() const { return mfAngle; }
-            const basegfx::ColorSteps& getColorSteps() const { return maColorSteps; }
+            const basegfx::ColorStops& getColorStops() const { return maColorStops; }
             sal_uInt16 getSteps() const { return mnSteps; }
 
             bool hasSingleColor() const
@@ -96,7 +96,7 @@ namespace drawinglayer::attribute
                 // or single entry -> no gradient.
                 // No need to check for all-the-same color since this is checked/done
                 // in the constructor already, see there
-                return maColorSteps.size() < 2;
+                return maColorStops.size() < 2;
             }
 
             bool operator==(const ImpFillGradientAttribute& rCandidate) const
@@ -106,7 +106,7 @@ namespace drawinglayer::attribute
                     && getOffsetX() == rCandidate.getOffsetX()
                     && getOffsetY() == rCandidate.getOffsetY()
                     && getAngle() == rCandidate.getAngle()
-                    && getColorSteps() == rCandidate.getColorSteps()
+                    && getColorStops() == rCandidate.getColorStops()
                     && getSteps() == rCandidate.getSteps());
             }
         };
@@ -126,10 +126,10 @@ namespace drawinglayer::attribute
             double fOffsetX,
             double fOffsetY,
             double fAngle,
-            const basegfx::ColorSteps& rColorSteps,
+            const basegfx::ColorStops& rColorStops,
             sal_uInt16 nSteps)
         :   mpFillGradientAttribute(ImpFillGradientAttribute(
-                eStyle, fBorder, fOffsetX, fOffsetY, fAngle, rColorSteps, nSteps))
+                eStyle, fBorder, fOffsetX, fOffsetY, fAngle, rColorStops, nSteps))
         {
         }
 
@@ -167,9 +167,9 @@ namespace drawinglayer::attribute
             return rCandidate.mpFillGradientAttribute == mpFillGradientAttribute;
         }
 
-        const basegfx::ColorSteps& FillGradientAttribute::getColorSteps() const
+        const basegfx::ColorStops& FillGradientAttribute::getColorStops() const
         {
-            return mpFillGradientAttribute->getColorSteps();
+            return mpFillGradientAttribute->getColorStops();
         }
 
         double FillGradientAttribute::getBorder() const

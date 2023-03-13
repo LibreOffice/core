@@ -5747,7 +5747,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
                                 {
                                     const XFillGradientItem* pGradientItem = pItemSet->GetItemIfSet( XATTR_FILLGRADIENT, false );
                                     if ( pGradientItem )
-                                        aDefColor = pGradientItem->GetGradientValue().GetStartColor();
+                                        aDefColor = Color(pGradientItem->GetGradientValue().GetColorStops().front().getStopColor());
                                 }
                                 break;
                                 case drawing::FillStyle_HATCH :
@@ -7399,8 +7399,8 @@ static void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const
 
                     css::awt::Gradient aGradient;
                     aGradient.Style = aXGradient.GetGradientStyle();
-                    aGradient.StartColor = static_cast<sal_Int32>(aXGradient.GetStartColor());
-                    aGradient.EndColor = static_cast<sal_Int32>(aXGradient.GetEndColor());
+                    aGradient.StartColor = static_cast<sal_Int32>(Color(aXGradient.GetColorStops().front().getStopColor()));
+                    aGradient.EndColor = static_cast<sal_Int32>(Color(aXGradient.GetColorStops().back().getStopColor()));
                     aGradient.Angle = static_cast<short>(aXGradient.GetAngle());
                     aGradient.Border = aXGradient.GetBorder();
                     aGradient.XOffset = aXGradient.GetXOffset();

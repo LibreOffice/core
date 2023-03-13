@@ -625,7 +625,9 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     XColorListRef pColorList( XColorList::CreateStdColorList() );
     const ::Color aNullLineCol(COL_DEFAULT_SHAPE_STROKE); // #i121448# Use defined default color
     const ::Color aNullFillCol(COL_DEFAULT_SHAPE_FILLING); // #i121448# Use defined default color
-    const XGradient aNullGrad(COL_BLACK, COL_WHITE);
+    // XGradient() default already creates [COL_BLACK, COL_WHITE] as defaults
+    const XGradient aNullGrad;
+
     const XHatch aNullHatch(aNullLineCol);
     std::vector<SfxPoolItem*> pDefaults
     {
