@@ -1744,30 +1744,30 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
         aFrameProperties.push_back(
             comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT), nVertOrient));
 
+        //Default the anchor in case FramePr_vAnchor is missing ECMA 17.3.1.11
+        sal_Int16 nVAnchor = text::RelOrientation::FRAME; // 'text'
+        // vAlign is ignored if vAnchor is set to 'text'. So, if w:y is not defined,
+        // but there is a defined vAlign, then a missing vAnchor should become 'margin'.
+        if (!bValidY && nVertOrient)
+        {
+            nVAnchor = text::RelOrientation::PAGE_PRINT_AREA; // 'margin'
+        }
+        for (const auto pProp : vProps)
+        {
+            if (pProp->GetvAnchor() < 0)
+                continue;
+            nVAnchor = pProp->GetvAnchor();
+            break;
+        }
+        aFrameProperties.push_back(
+            comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_RELATION), nVAnchor));
+
         if (vProps.size() > 1)
         {
             if (const std::optional<sal_Int16> nDirection = PopFrameDirection())
             {
                 aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_FRM_DIRECTION), *nDirection));
             }
-
-            //Default the anchor in case FramePr_vAnchor is missing ECMA 17.3.1.11
-            sal_Int16 nVAnchor = text::RelOrientation::FRAME; // 'text'
-            // vAlign is ignored if vAnchor is set to 'text'. So, if w:y is not defined,
-            // but there is a defined vAlign, then a missing vAnchor should become 'margin'.
-            if (!bValidY && nVertOrient)
-            {
-                nVAnchor = text::RelOrientation::PAGE_PRINT_AREA; // 'margin'
-            }
-            for (const auto pProp : vProps)
-            {
-                if (pProp->GetvAnchor() < 0)
-                    continue;
-                nVAnchor = pProp->GetvAnchor();
-                break;
-            }
-            aFrameProperties.push_back(comphelper::makePropertyValue(
-                getPropertyName(PROP_VERT_ORIENT_RELATION), nVAnchor));
 
             text::WrapTextMode nWrap = text::WrapTextMode_NONE;
             for (const auto pProp : vProps)
@@ -1836,9 +1836,6 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 nHoriDist = 0;
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_TOP_MARGIN), nHoriOrient == text::HoriOrientation::LEFT ? 0 : nHoriDist));
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_BOTTOM_MARGIN), nHoriOrient == text::HoriOrientation::RIGHT ? 0 : nHoriDist));
-
-            if( rAppendContext.pLastParagraphProperties->GetvAnchor() >= 0 )
-                aFrameProperties.push_back(comphelper::makePropertyValue("VertOrientRelation", sal_Int16(rAppendContext.pLastParagraphProperties->GetvAnchor())));
 
             if( rAppendContext.pLastParagraphProperties->GetWrap() >= text::WrapTextMode_NONE )
                 aFrameProperties.push_back(comphelper::makePropertyValue("Surround", rAppendContext.pLastParagraphProperties->GetWrap()));
