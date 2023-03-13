@@ -279,6 +279,32 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf142033)
     CPPUNIT_ASSERT_EQUAL(OUString(u"string with" + OUStringChar(u'\xA') + u"newlines"), rDoc.GetString(ScAddress(1,1,0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf89920)
+{
+    loadFromURL(u"tdf89920.ods");
+
+    executeMacro("vnd.sun.Star.script:Standard.Module1.SearchAndReplaceNewline?language=Basic&"
+                 "location=document");
+
+    // Export to ODS
+    saveAndReload("calc8");
+
+    xmlDocUniquePtr pContentXml = parseExport("content.xml");
+    CPPUNIT_ASSERT(pContentXml);
+
+    assertXPathContent(pContentXml,
+                       "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
+                       "table:table-row[1]/table:table-cell[1]/text:p[1]",
+                       "aa bb");
+
+    // Without the fix in place, this test would have failed here with
+    // - Expression: xmlXPathNodeSetGetLength(pXmlNodes) > 0
+    assertXPathContent(pContentXml,
+                       "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
+                       "table:table-row[1]/table:table-cell[1]/text:p[2]",
+                       "cc dd");
+}
+
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testPasswordProtectedUnicodeString)
 {
     const OUString sCorrectString(u"English Русский 中文");
