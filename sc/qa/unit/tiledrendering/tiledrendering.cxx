@@ -104,8 +104,7 @@ void ScTiledRenderingTest::tearDown()
 
     m_callbackWrapper.clear();
 
-    comphelper::LibreOfficeKit::setCompatFlag(
-        comphelper::LibreOfficeKit::Compat::none);
+    comphelper::LibreOfficeKit::resetCompatFlag();
 
     comphelper::LibreOfficeKit::setActive(false);
 

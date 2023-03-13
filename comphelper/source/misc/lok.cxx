@@ -178,9 +178,11 @@ bool isLocalRendering()
     return g_bLocalRendering;
 }
 
-void setCompatFlag(Compat flag) { g_eCompatFlags = flag; }
+void setCompatFlag(Compat flag) { g_eCompatFlags = static_cast<Compat>(g_eCompatFlags | flag); }
 
-bool isCompatFlagSet(Compat flag) { return g_eCompatFlags == flag; }
+bool isCompatFlagSet(Compat flag) { return (g_eCompatFlags & flag) == flag; }
+
+void resetCompatFlag() { g_eCompatFlags = Compat::none; }
 
 void setLocale(const LanguageTag& rLanguageTag)
 {

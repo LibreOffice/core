@@ -84,6 +84,8 @@ enum Compat : sal_uInt32
 COMPHELPER_DLLPUBLIC void setCompatFlag(Compat flag);
 /// Get compatibility flags
 COMPHELPER_DLLPUBLIC bool isCompatFlagSet(Compat flag);
+/// Reset compatibility flags
+COMPHELPER_DLLPUBLIC void resetCompatFlag();
 
 /// Check whether clients want viewId in visible cursor invalidation payload.
 COMPHELPER_DLLPUBLIC bool isViewIdForVisCursorInvalidation();
