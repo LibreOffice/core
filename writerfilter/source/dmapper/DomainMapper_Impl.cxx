@@ -1630,6 +1630,23 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 
         std::vector<beans::PropertyValue> aFrameProperties;
 
+        sal_Int32 nWidth = -1;
+        for (const auto pProp : vProps)
+        {
+            if (pProp->Getw() < 0)
+                continue;
+            nWidth = pProp->Getw();
+            break;
+        }
+        bool bAutoWidth = nWidth < 1;
+        if (bAutoWidth)
+            nWidth = DEFAULT_FRAME_MIN_WIDTH;
+        aFrameProperties.push_back(
+            comphelper::makePropertyValue(getPropertyName(PROP_WIDTH), nWidth));
+        aFrameProperties.push_back(
+            comphelper::makePropertyValue(getPropertyName(PROP_WIDTH_TYPE),
+                                          bAutoWidth ? text::SizeType::MIN : text::SizeType::FIX));
+
         sal_Int16 nHoriOrient = text::HoriOrientation::NONE;
         for (const auto pProp : vProps)
         {
@@ -1654,19 +1671,6 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 
         if (vProps.size() > 1)
         {
-            sal_Int32 nWidth = -1;
-            for (const auto pProp : vProps)
-            {
-                if (pProp->Getw() < 0)
-                    continue;
-                nWidth = pProp->Getw();
-                break;
-            }
-            bool bAutoWidth = nWidth < 1;
-            if( bAutoWidth )
-                nWidth = DEFAULT_FRAME_MIN_WIDTH;
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_WIDTH), nWidth));
-
             bool bValidH = false;
             sal_Int32 nHeight = DEFAULT_FRAME_MIN_HEIGHT;
             for (const auto pProp : vProps)
@@ -1702,8 +1706,6 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 }
             }
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), nhRule));
-
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_WIDTH_TYPE), bAutoWidth ?  text::SizeType::MIN : text::SizeType::FIX));
 
             if (const std::optional<sal_Int16> nDirection = PopFrameDirection())
             {
@@ -1824,12 +1826,6 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
         }
         else
         {
-            sal_Int32 nWidth = rAppendContext.pLastParagraphProperties->Getw();
-            bool bAutoWidth = nWidth < 1;
-            if( bAutoWidth )
-                nWidth = DEFAULT_FRAME_MIN_WIDTH;
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_WIDTH), nWidth));
-
             sal_Int16 nhRule = sal_Int16(rAppendContext.pLastParagraphProperties->GethRule());
             if ( nhRule < 0 )
             {
@@ -1845,8 +1841,6 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 }
             }
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), nhRule));
-
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_WIDTH_TYPE), bAutoWidth ?  text::SizeType::MIN : text::SizeType::FIX));
 
             sal_Int32 nVertDist = rAppendContext.pLastParagraphProperties->GethSpace();
             if( nVertDist < 0 )
