@@ -72,6 +72,8 @@ class OTextInputStream : public WeakImplHelper< XTextInputStream2, XServiceInfo 
     /// @throws IOException
     /// @throws RuntimeException
     sal_Int32 implReadNext();
+    /// @throws RuntimeException
+    void checkNull();
 
 public:
     OTextInputStream();
@@ -122,22 +124,33 @@ OTextInputStream::~OTextInputStream()
     }
 }
 
+// Check uninitialized object
+
+void OTextInputStream::checkNull()
+{
+    if (mxStream==nullptr){
+        throw RuntimeException("Uninitialized object");
+    }
+}
 
 // XTextInputStream
 
 OUString OTextInputStream::readLine(  )
 {
+    checkNull();
     static Sequence< sal_Unicode > aDummySeq;
     return implReadString( aDummySeq, true, true );
 }
 
 OUString OTextInputStream::readString( const Sequence< sal_Unicode >& Delimiters, sal_Bool bRemoveDelimiter )
 {
+    checkNull();
     return implReadString( Delimiters, bRemoveDelimiter, false );
 }
 
 sal_Bool OTextInputStream::isEOF()
 {
+    checkNull();
     bool bRet = false;
     if( mnCharsInBuffer == 0 && mbReachedEOF )
         bRet = true;
@@ -337,26 +350,31 @@ void OTextInputStream::setEncoding( const OUString& Encoding )
 
 sal_Int32 OTextInputStream::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
+    checkNull();
     return mxStream->readBytes( aData, nBytesToRead );
 }
 
 sal_Int32 OTextInputStream::readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
+    checkNull();
     return mxStream->readSomeBytes( aData, nMaxBytesToRead );
 }
 
 void OTextInputStream::skipBytes( sal_Int32 nBytesToSkip )
 {
+    checkNull();
     mxStream->skipBytes( nBytesToSkip );
 }
 
 sal_Int32 OTextInputStream::available(  )
 {
+    checkNull();
     return mxStream->available();
 }
 
 void OTextInputStream::closeInput(  )
 {
+    checkNull();
     mxStream->closeInput();
 }
 
