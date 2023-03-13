@@ -1609,7 +1609,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
         sal_Int8 nSafetyLimit = 16;
         StyleSheetEntryPtr pStyle = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(
             rAppendContext.pLastParagraphProperties->GetParaStyleName());
-        while (--nSafetyLimit && pStyle && pStyle->m_pProperties)
+        while (nSafetyLimit-- && pStyle && pStyle->m_pProperties)
         {
             vProps.emplace_back(&pStyle->m_pProperties->props());
             assert(pStyle->m_sBaseStyleIdentifier != pStyle->m_sStyleName);
@@ -1617,6 +1617,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 break;
             pStyle = GetStyleSheetTable()->FindStyleSheetByISTD(pStyle->m_sBaseStyleIdentifier);
         }
+        SAL_WARN_IF(!nSafetyLimit,"writerfilter.dmapper","Inherited style loop likely: early exit");
 
         std::vector<beans::PropertyValue> aFrameProperties;
 
