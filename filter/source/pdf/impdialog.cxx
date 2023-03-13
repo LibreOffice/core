@@ -883,7 +883,7 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePDFVersionOrUniversalAccessibilityHa
         mxCbTaggedPDF->set_active(true);
 
         // if a password was set, inform the user that this will not be used
-        if (pSecPage && pSecPage->hasPassword())
+        if (bIsPDFA && pSecPage && pSecPage->hasPassword())
         {
             mxPasswordUnusedWarnDialog =
                 std::shared_ptr<weld::MessageDialog>(Application::CreateMessageDialog(m_xContainer.get(),
