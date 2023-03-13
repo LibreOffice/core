@@ -35,14 +35,11 @@
 
 namespace {
 
-bool lcl_GetTextWithBreaks( const EditTextObject& rData, ScDocument* pDoc, OUString& rVal )
+void lcl_GetTextWithBreaks( const EditTextObject& rData, ScDocument* pDoc, OUString& rVal )
 {
-    //  true = more than 1 paragraph
-
     EditEngine& rEngine = pDoc->GetEditEngine();
     rEngine.SetText(rData);
     rVal = rEngine.GetText();
-    return ( rEngine.GetParagraphCount() > 1 );
 }
 
 }
@@ -81,7 +78,6 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
         pNote = nullptr;
     }
 
-    bool bMultiLine = false;
     CellType eCellType = aCell.getType();
     switch (rSearchItem.GetCellType())
     {
@@ -90,7 +86,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
             if ( eCellType == CELLTYPE_FORMULA )
                 aString = aCell.getFormula()->GetFormula(rDocument.GetGrammar());
             else if ( eCellType == CELLTYPE_EDIT )
-                bMultiLine = lcl_GetTextWithBreaks(*aCell.getEditText(), &rDocument, aString);
+                lcl_GetTextWithBreaks(*aCell.getEditText(), &rDocument, aString);
             else
             {
                 if( !bSearchFormatted )
@@ -102,7 +98,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
         }
         case SvxSearchCellType::VALUE:
             if ( eCellType == CELLTYPE_EDIT )
-                bMultiLine = lcl_GetTextWithBreaks(*aCell.getEditText(), &rDocument, aString);
+                lcl_GetTextWithBreaks(*aCell.getEditText(), &rDocument, aString);
             else
             {
                 if( !bSearchFormatted )
@@ -114,10 +110,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
         case SvxSearchCellType::NOTE:
         {
             if (pNote)
-            {
                 aString = pNote->GetText();
-                bMultiLine = pNote->HasMultiLineText();
-            }
             break;
         }
         default:
@@ -264,7 +257,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
         pFCell->SetMatColsRows( nMatCols, nMatRows );
         aCol[nCol].SetFormulaCell(nRow, pFCell);
     }
-    else if ( bMultiLine && aString.indexOf('\n') != -1 )
+    else if (aString.indexOf('\n') != -1 && eCellType != CELLTYPE_FORMULA)
     {
         ScFieldEditEngine& rEngine = rDocument.GetEditEngine();
         rEngine.SetTextCurrentDefaults(aString);
