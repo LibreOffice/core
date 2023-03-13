@@ -1647,6 +1647,43 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
             comphelper::makePropertyValue(getPropertyName(PROP_WIDTH_TYPE),
                                           bAutoWidth ? text::SizeType::MIN : text::SizeType::FIX));
 
+        bool bValidH = false;
+        sal_Int32 nHeight = DEFAULT_FRAME_MIN_HEIGHT;
+        for (const auto pProp : vProps)
+        {
+            if (pProp->Geth() < 0)
+                continue;
+            nHeight = pProp->Geth();
+            bValidH = true;
+            break;
+        }
+        aFrameProperties.push_back(
+            comphelper::makePropertyValue(getPropertyName(PROP_HEIGHT), nHeight));
+
+        sal_Int16 nhRule = -1;
+        for (const auto pProp : vProps)
+        {
+            if (pProp->GethRule() < 0)
+                continue;
+            nhRule = pProp->GethRule();
+            break;
+        }
+        if (nhRule < 0)
+        {
+            if (bValidH)
+            {
+                // [MS-OE376] Word uses a default value of "atLeast" for
+                // this attribute when the value of the h attribute is not 0.
+                nhRule = text::SizeType::MIN;
+            }
+            else
+            {
+                nhRule = text::SizeType::VARIABLE;
+            }
+        }
+        aFrameProperties.push_back(
+            comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), nhRule));
+
         sal_Int16 nHoriOrient = text::HoriOrientation::NONE;
         for (const auto pProp : vProps)
         {
@@ -1671,42 +1708,6 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 
         if (vProps.size() > 1)
         {
-            bool bValidH = false;
-            sal_Int32 nHeight = DEFAULT_FRAME_MIN_HEIGHT;
-            for (const auto pProp : vProps)
-            {
-                if (pProp->Geth() < 0)
-                    continue;
-                nHeight = pProp->Geth();
-                bValidH = true;
-                break;
-            }
-            aFrameProperties.push_back(
-                comphelper::makePropertyValue(getPropertyName(PROP_HEIGHT), nHeight));
-
-            sal_Int16 nhRule = -1;
-            for (const auto pProp : vProps)
-            {
-                if (pProp->GethRule() < 0)
-                    continue;
-                nhRule = pProp->GethRule();
-                break;
-            }
-            if ( nhRule < 0 )
-            {
-                if (bValidH)
-                {
-                    // [MS-OE376] Word uses a default value of "atLeast" for
-                    // this attribute when the value of the h attribute is not 0.
-                    nhRule = text::SizeType::MIN;
-                }
-                else
-                {
-                    nhRule = text::SizeType::VARIABLE;
-                }
-            }
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), nhRule));
-
             if (const std::optional<sal_Int16> nDirection = PopFrameDirection())
             {
                 aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_FRM_DIRECTION), *nDirection));
@@ -1826,22 +1827,6 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
         }
         else
         {
-            sal_Int16 nhRule = sal_Int16(rAppendContext.pLastParagraphProperties->GethRule());
-            if ( nhRule < 0 )
-            {
-                if ( rAppendContext.pLastParagraphProperties->Geth() >= 0 )
-                {
-                    // [MS-OE376] Word uses a default value of atLeast for
-                    // this attribute when the value of the h attribute is not 0.
-                    nhRule = text::SizeType::MIN;
-                }
-                else
-                {
-                    nhRule = text::SizeType::VARIABLE;
-                }
-            }
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), nhRule));
-
             sal_Int32 nVertDist = rAppendContext.pLastParagraphProperties->GethSpace();
             if( nVertDist < 0 )
                 nVertDist = 0;
@@ -1853,9 +1838,6 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 nHoriDist = 0;
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_TOP_MARGIN), nHoriOrient == text::HoriOrientation::LEFT ? 0 : nHoriDist));
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_BOTTOM_MARGIN), nHoriOrient == text::HoriOrientation::RIGHT ? 0 : nHoriDist));
-
-            if( rAppendContext.pLastParagraphProperties->Geth() > 0 )
-                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HEIGHT), rAppendContext.pLastParagraphProperties->Geth()));
 
             if( rAppendContext.pLastParagraphProperties->IsxValid() )
                 aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT_POSITION), rAppendContext.pLastParagraphProperties->Getx()));
