@@ -217,6 +217,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153613_textboxAfterPgBreak2, "tdf153613_textboxA
     assertXPathContent(pLayout, "//page[2]/body/txt", "There should be no prior carriage return.");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf153613_textboxAfterPgBreak3, "tdf153613_textboxAfterPgBreak3.docx")
+{
+    // All anchored TO-character shapes stay on the first page, before the page break.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
+
+    const auto& pLayout = parseLayoutDump();
+    assertXPath(pLayout, "//page[2]//anchored", 0);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_sdtAfterPgBreak, "tdf153613_sdtAfterPgBreak.docx")
 {
     CPPUNIT_ASSERT_EQUAL(2, getPages());
