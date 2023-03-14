@@ -33,6 +33,7 @@ class SwChapterNumRules;
 class SwOutlineTabDialog final : public SfxTabDialogController
 {
     static     sal_uInt16    s_nNumLevel;
+    static_assert(sizeof(s_nNumLevel) * CHAR_BIT >= MAXLEVEL);
 
     OUString            m_aCollNames[MAXLEVEL];
 
