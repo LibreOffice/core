@@ -2167,7 +2167,7 @@ void ScColumn::RestoreFromCache(SvStream& rStrm)
                     rStrm.ReadInt32(nStrLength);
                     std::unique_ptr<char[]> pStr(new char[nStrLength]);
                     rStrm.ReadBytes(pStr.get(), nStrLength);
-                    OString aOStr(pStr.get(), nStrLength);
+                    std::string_view aOStr(pStr.get(), nStrLength);
                     OUString aStr = OStringToOUString(aOStr, RTL_TEXTENCODING_UTF8);
                     rString = rPool.intern(aStr);
                 }
@@ -2189,7 +2189,7 @@ void ScColumn::RestoreFromCache(SvStream& rStrm)
                     rStrm.ReadInt32(nStrLength);
                     std::unique_ptr<char[]> pStr(new char[nStrLength]);
                     rStrm.ReadBytes(pStr.get(), nStrLength);
-                    OString aOStr(pStr.get(), nStrLength);
+                    std::string_view aOStr(pStr.get(), nStrLength);
                     OUString aStr = OStringToOUString(aOStr, RTL_TEXTENCODING_UTF8);
                     for (sal_uInt64 i = 0; i < nFormulaGroupSize; ++i)
                     {

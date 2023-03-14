@@ -53,8 +53,7 @@ public:
         }
         else
         {
-            OString aStr(s.data(), s.size());
-            mpDoc->SetString(mnCol, mnRow, 0, OStringToOUString(aStr, RTL_TEXTENCODING_UTF8));
+            mpDoc->SetString(mnCol, mnRow, 0, OStringToOUString(s, RTL_TEXTENCODING_UTF8));
         }
 
         ++mnCol;

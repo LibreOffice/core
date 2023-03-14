@@ -158,9 +158,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             {
                 if(aContentAtPos.aFnd.pAttr)
                 {
-                    sText = OStringToOUString(OString::number(
-                                static_cast<const SwTableBoxValue*>(aContentAtPos.aFnd.pAttr)->GetValue()),
-                                osl_getThreadTextEncoding());
+                    sText = OUString::number(
+                                static_cast<const SwTableBoxValue*>(aContentAtPos.aFnd.pAttr)->GetValue());
                 }
                 break;
             }

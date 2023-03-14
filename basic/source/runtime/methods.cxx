@@ -4168,7 +4168,7 @@ void SbRtl_StrConv(StarBASIC *, SbxArray & rPar, bool)
             }
         }
         pChar[nSize] = '\0';
-        OString aOStr(pChar.get());
+        std::string_view aOStr(pChar.get());
 
         // there is no concept about default codepage in unix. so it is incorrectly in unix
         OUString aOUStr = OStringToOUString(aOStr, encodingVal);

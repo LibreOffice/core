@@ -160,9 +160,7 @@ VersionInfo VendorSettings::getVersionInformation(std::u16string_view sVendor) c
         CXmlCharPtr sVersion = xmlNodeListGetString(
             m_xmlDocVendorSettings,
             xPathObjectMin->nodesetval->nodeTab[0]->xmlChildrenNode, 1);
-        OString osVersion(sVersion);
-        aVersionInfo.sMinVersion = OStringToOUString(
-            osVersion, RTL_TEXTENCODING_UTF8);
+        aVersionInfo.sMinVersion = sVersion;
     }
 
     //Get maxVersion
@@ -180,9 +178,7 @@ VersionInfo VendorSettings::getVersionInformation(std::u16string_view sVendor) c
         CXmlCharPtr sVersion = xmlNodeListGetString(
             m_xmlDocVendorSettings,
             xPathObjectMax->nodesetval->nodeTab[0]->xmlChildrenNode, 1);
-        OString osVersion(sVersion);
-        aVersionInfo.sMaxVersion = OStringToOUString(
-            osVersion, RTL_TEXTENCODING_UTF8);
+        aVersionInfo.sMaxVersion = sVersion;
     }
 
     //Get excludeVersions
@@ -202,9 +198,7 @@ VersionInfo VendorSettings::getVersionInformation(std::u16string_view sVendor) c
                 {
                     CXmlCharPtr sVersion = xmlNodeListGetString(
                         m_xmlDocVendorSettings, cur->xmlChildrenNode, 1);
-                    OString osVersion(sVersion);
-                    OUString usVersion = OStringToOUString(
-                        osVersion, RTL_TEXTENCODING_UTF8);
+                    OUString usVersion = sVersion;
                     aVersionInfo.vecExcludeVersions.push_back(usVersion);
                 }
             }
@@ -341,7 +335,7 @@ OUString BootParams::getJREHome()
                 UNO_JAVA_JFW_ENV_JREHOME" is set, but the environment variable "
                 "JAVA_HOME is not set.");
         }
-        OString osJRE(pJRE);
+        std::string_view osJRE(pJRE);
         OUString usJRE = OStringToOUString(osJRE, osl_getThreadTextEncoding());
         if (File::getFileURLFromSystemPath(usJRE, sJRE) != File::E_None)
             throw FrameworkException(

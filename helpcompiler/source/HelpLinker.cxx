@@ -71,7 +71,7 @@ IndexerPreProcessor::~IndexerPreProcessor()
 
 static std::string getEncodedPath( const std::string& Path )
 {
-    OString aOStr_Path( Path.c_str() );
+    std::string_view aOStr_Path( Path.c_str() );
     OUString aOUStr_Path( OStringToOUString
         ( aOStr_Path, osl_getThreadTextEncoding() ) );
     OUString aPathURL;
@@ -834,9 +834,9 @@ static void StructuredXMLErrorFunction(SAL_UNUSED_PARAMETER void *, xmlErrorPtr 
 HelpProcessingErrorInfo& HelpProcessingErrorInfo::operator=( const struct HelpProcessingException& e )
 {
     m_eErrorClass = e.m_eErrorClass;
-    OString tmpErrorMsg( e.m_aErrorMsg.c_str() );
+    std::string_view tmpErrorMsg( e.m_aErrorMsg.c_str() );
     m_aErrorMsg = OStringToOUString( tmpErrorMsg, osl_getThreadTextEncoding() );
-    OString tmpXMLParsingFile( e.m_aXMLParsingFile.c_str() );
+    std::string_view tmpXMLParsingFile( e.m_aXMLParsingFile.c_str() );
     m_aXMLParsingFile = OStringToOUString( tmpXMLParsingFile, osl_getThreadTextEncoding() );
     m_nXMLParsingLine = e.m_nXMLParsingLine;
     return *this;

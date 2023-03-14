@@ -348,7 +348,7 @@ static OUString getUString(const char* pString)
     if (pString == nullptr)
         return OUString();
 
-    OString sString(pString, strlen(pString));
+    std::string_view sString(pString, strlen(pString));
     return OStringToOUString(sString, RTL_TEXTENCODING_UTF8);
 }
 

@@ -2426,7 +2426,7 @@ void SvNumberFormatter::ImpAdjustFormatCodeDefault(
     if (LocaleDataWrapper::areChecksEnabled())
     {
         // check the locale data for correctness
-        OStringBuffer aMsg;
+        OUStringBuffer aMsg;
         sal_Int32 nElem, nShort, nMedium, nLong, nShortDef, nMediumDef, nLongDef;
         nShort = nMedium = nLong = nShortDef = nMediumDef = nLongDef = -1;
         for ( nElem = 0; nElem < nCnt; nElem++ )
@@ -2471,10 +2471,8 @@ void SvNumberFormatter::ImpAdjustFormatCodeDefault(
                 aMsg.insert(0, "SvNumberFormatter::ImpAdjustFormatCodeDefault: ");
                 aMsg.append("\nXML locale data FormatElement formatindex: ");
                 aMsg.append(static_cast<sal_Int32>(pFormatArr[nElem].Index));
-                OUString aUMsg(OStringToOUString(aMsg,
-                    RTL_TEXTENCODING_ASCII_US));
+                LocaleDataWrapper::outputCheckMessage(xLocaleData->appendLocaleInfo(aMsg));
                 aMsg.setLength(0);
-                LocaleDataWrapper::outputCheckMessage(xLocaleData->appendLocaleInfo(aUMsg));
             }
         }
         if ( nShort != -1 && nShortDef == -1 )
@@ -2487,10 +2485,9 @@ void SvNumberFormatter::ImpAdjustFormatCodeDefault(
         {
             aMsg.insert(0, "SvNumberFormatter::ImpAdjustFormatCodeDefault: ");
             aMsg.append("\nXML locale data FormatElement group of: ");
-            OUString aUMsg(OStringToOUString(aMsg, RTL_TEXTENCODING_ASCII_US));
-            aMsg.setLength(0);
             LocaleDataWrapper::outputCheckMessage(
-                xLocaleData->appendLocaleInfo(Concat2View(aUMsg + pFormatArr[0].NameID)));
+                xLocaleData->appendLocaleInfo(Concat2View(aMsg + pFormatArr[0].NameID)));
+            aMsg.setLength(0);
         }
     }
     // find the default (medium preferred, then long) and reset all other defaults

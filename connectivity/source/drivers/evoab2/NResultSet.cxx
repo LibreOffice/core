@@ -88,7 +88,7 @@ static OUString
 valueToOUString( GValue& _rValue )
 {
     const char *pStr = g_value_get_string( &_rValue );
-    OString aStr( pStr ? pStr : "" );
+    std::string_view aStr( pStr ? pStr : "" );
     OUString sResult( OStringToOUString( aStr, RTL_TEXTENCODING_UTF8 ) );
     g_value_unset( &_rValue );
     return sResult;

@@ -173,7 +173,7 @@ OUString SfxContentHelper::GetActiveHelpString( const OUString& rURL )
         sal_Int32 nRead = xStream->readBytes( lData, 1024 );
         while ( nRead > 0 )
         {
-            OString sOldString( reinterpret_cast<char const *>(lData.getConstArray()), nRead );
+            std::string_view sOldString( reinterpret_cast<char const *>(lData.getConstArray()), nRead );
             OUString sString = OStringToOUString( sOldString, RTL_TEXTENCODING_UTF8 );
             aRet.append( sString );
 

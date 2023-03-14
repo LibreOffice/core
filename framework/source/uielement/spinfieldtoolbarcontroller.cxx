@@ -441,7 +441,7 @@ OUString SpinfieldToolbarController::FormatOutputString( double fValue )
             snprintf( aBuffer, 128, aFormat.getStr(), static_cast<tools::Long>( fValue ));
 
         sal_Int32 nSize = strlen( aBuffer );
-        OString aTmp( aBuffer, nSize );
+        std::string_view aTmp( aBuffer, nSize );
         return OStringToOUString( aTmp, osl_getThreadTextEncoding() );
 #endif
     }

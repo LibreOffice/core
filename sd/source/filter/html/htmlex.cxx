@@ -1068,7 +1068,7 @@ OUString HtmlExport::DocumentMetadata() const
 
     const sal_uInt64 nLen = aStream.GetSize();
     OSL_ENSURE(nLen < o3tl::make_unsigned(SAL_MAX_INT32), "Stream can't fit in OString");
-    OString aData(static_cast<const char*>(aStream.GetData()), static_cast<sal_Int32>(nLen));
+    std::string_view aData(static_cast<const char*>(aStream.GetData()), static_cast<sal_Int32>(nLen));
 
     return OStringToOUString(aData, RTL_TEXTENCODING_UTF8);
 }

@@ -32,9 +32,10 @@ template <typename F> OUString dumpXmlToString(F f)
     }
     f(writer);
     xmlFreeTextWriter(writer);
-    OString s(reinterpret_cast<char const*>(xmlBufferContent(buf)), xmlBufferLength(buf));
+    std::string_view s(reinterpret_cast<char const*>(xmlBufferContent(buf)), xmlBufferLength(buf));
+    OUString rv = OStringToOUString(s, RTL_TEXTENCODING_ISO_8859_1); //TODO
     xmlBufferFree(buf);
-    return OStringToOUString(s, RTL_TEXTENCODING_ISO_8859_1); //TODO
+    return rv;
 }
 }
 

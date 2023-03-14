@@ -485,8 +485,7 @@ start:
             if( !p->pOUString )
                 p->pOUString = new OUString;
 
-            ::OString  aOStr  = OString::number( n );
-            (*p->pOUString) = ::OStringToOUString( aOStr, RTL_TEXTENCODING_ASCII_US );
+            (*p->pOUString) = OUString::number(n);
             break;
         }
         case SbxOBJECT:
@@ -742,8 +741,7 @@ start:
                 SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
             else
             {
-                ::OString  aOStr  = OString::number( n );
-                (*p->pOUString) = ::OStringToOUString( aOStr, RTL_TEXTENCODING_ASCII_US );
+                (*p->pOUString) = OUString::number(n);
             }
             break;
         case SbxOBJECT:
