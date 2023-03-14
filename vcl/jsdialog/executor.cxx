@@ -206,7 +206,7 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                         // We send OutPutSize for the drawing area bitmap
                         // get_size_request is not necessarily updated
                         // therefore it may be incorrect.
-                        Size size = rRefDevice.GetOutputSize();
+                        Size size = rRefDevice.GetOutputSizePixel();
                         posX = posX * size.Width();
                         posY = posY * size.Height();
                         if (sAction == "click")

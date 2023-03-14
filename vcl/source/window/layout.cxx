@@ -3089,10 +3089,17 @@ void VclDrawingArea::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     rJsonWriter.put("type", "drawingarea");
 
     ScopedVclPtrInstance<VirtualDevice> pDevice;
-    pDevice->SetOutputSize( GetSizePixel() );
-    tools::Rectangle aRect(Point(0,0), GetSizePixel());
+    OutputDevice* pRefDevice = GetOutDev();
+    Size aRenderSize(pRefDevice->PixelToLogic(GetOutputSizePixel()));
+    Size aOutputSize = GetSizePixel();
+    pDevice->SetOutputSize(aRenderSize);
+    tools::Rectangle aRect(Point(0,0), aRenderSize);
+
     Paint(*pDevice, aRect);
-    BitmapEx aImage = pDevice->GetBitmapEx( Point(0,0), GetSizePixel() );
+
+    BitmapEx aImage = pDevice->GetBitmapEx(Point(0,0), aRenderSize);
+    aImage.Scale(aOutputSize);
+
     SvMemoryStream aOStm(65535, 65535);
     if(GraphicConverter::Export(aOStm, aImage, ConvertDataFormat::PNG) == ERRCODE_NONE)
     {
