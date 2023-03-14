@@ -949,7 +949,14 @@ array_type assembleGrid(const VclGrid &rGrid)
     {
         for (sal_Int32 y = 0; y < nMaxY; ++y)
         {
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 13
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdangling-reference"
+#endif
             const GridEntry &rEntry = A[x][y];
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 13
+#pragma GCC diagnostic pop
+#endif
             const vcl::Window *pChild = rEntry.pChild;
             if (pChild && pChild->IsVisible())
             {
@@ -1072,7 +1079,14 @@ static void calcMaxs(const array_type &A, std::vector<VclGrid::Value> &rWidths, 
     {
         for (sal_Int32 y = 0; y < nMaxY; ++y)
         {
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 13
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdangling-reference"
+#endif
             const GridEntry &rEntry = A[x][y];
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 13
+#pragma GCC diagnostic pop
+#endif
             const vcl::Window *pChild = rEntry.pChild;
             if (!pChild || !pChild->IsVisible())
                 continue;
@@ -1103,7 +1117,14 @@ static void calcMaxs(const array_type &A, std::vector<VclGrid::Value> &rWidths, 
     {
         for (sal_Int32 y = 0; y < nMaxY; ++y)
         {
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 13
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdangling-reference"
+#endif
             const GridEntry &rEntry = A[x][y];
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 13
+#pragma GCC diagnostic pop
+#endif
             const vcl::Window *pChild = rEntry.pChild;
             if (!pChild || !pChild->IsVisible())
                 continue;
@@ -1348,7 +1369,14 @@ void VclGrid::setAllocation(const Size& rAllocation)
     {
         for (sal_Int32 y = 0; y < nMaxY; ++y)
         {
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 13
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdangling-reference"
+#endif
             GridEntry &rEntry = A[x][y];
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 13
+#pragma GCC diagnostic pop
+#endif
             vcl::Window *pChild = rEntry.pChild;
             if (pChild)
             {
