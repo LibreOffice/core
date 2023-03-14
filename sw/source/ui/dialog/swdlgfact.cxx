@@ -852,8 +852,7 @@ sal_uInt16 AbstractMailMergeWizard_Impl::GetRestartPage() const
 std::optional<SwLanguageListItem> AbstractSwTranslateLangSelectDlg_Impl::GetSelectedLanguage()
 {
 #if !ENABLE_WASM_STRIP_EXTRA
-    SwTranslateLangSelectDlg* pDlg = dynamic_cast<SwTranslateLangSelectDlg*>(m_xDlg.get());
-    return pDlg->GetSelectedLanguage();
+    return SwTranslateLangSelectDlg::GetSelectedLanguage();
 #else
     return {};
 #endif

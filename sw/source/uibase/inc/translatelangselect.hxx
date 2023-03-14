@@ -49,14 +49,13 @@ class SwTranslateLangSelectDlg final : public weld::GenericDialogController
 public:
     static int selectedLangIdx;
     SwTranslateLangSelectDlg(weld::Window* pParent, SwWrtShell& rSh);
-    std::optional<SwLanguageListItem> GetSelectedLanguage();
+    static std::optional<SwLanguageListItem> GetSelectedLanguage();
 
 private:
     SwWrtShell& m_rWrtSh;
     std::unique_ptr<weld::ComboBox> m_xLanguageListBox;
     std::unique_ptr<weld::Button> m_xBtnCancel;
     std::unique_ptr<weld::Button> m_xBtnTranslate;
-    std::vector<SwLanguageListItem> m_xLanguageVec;
 
     bool m_bTranslationStarted;
     bool m_bCancelTranslation;

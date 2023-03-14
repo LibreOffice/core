@@ -39,6 +39,41 @@
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <linguistic/translate.hxx>
 
+static const std::vector<SwLanguageListItem>& getLanguageVec()
+{
+    static const std::vector<SwLanguageListItem> gLanguageVec{
+        SwLanguageListItem("BG", "Bulgarian"),
+        SwLanguageListItem("CS", "Czech"),
+        SwLanguageListItem("DA", "Danish"),
+        SwLanguageListItem("DE", "German"),
+        SwLanguageListItem("EL", "Greek"),
+        SwLanguageListItem("EN-GB", "English (British)"),
+        SwLanguageListItem("EN-US", "English (American)"),
+        SwLanguageListItem("ES", "Spanish"),
+        SwLanguageListItem("ET", "Estonian"),
+        SwLanguageListItem("FI", "Finnish"),
+        SwLanguageListItem("FR", "French"),
+        SwLanguageListItem("HU", "Hungarian"),
+        SwLanguageListItem("ID", "Indonesian"),
+        SwLanguageListItem("IT", "Italian"),
+        SwLanguageListItem("JA", "Japanese"),
+        SwLanguageListItem("LT", "Lithuanian"),
+        SwLanguageListItem("LV", "Latvian"),
+        SwLanguageListItem("NL", "Dutch"),
+        SwLanguageListItem("PL", "Polish"),
+        SwLanguageListItem("PT-BR", "Portuguese (Brazilian)"),
+        SwLanguageListItem("PT-PT", "Portuguese (European)"),
+        SwLanguageListItem("RO", "Romanian"),
+        SwLanguageListItem("RU", "Russian"),
+        SwLanguageListItem("SK", "Slovak"),
+        SwLanguageListItem("SL", "Slovenian"),
+        SwLanguageListItem("SV", "Swedish"),
+        SwLanguageListItem("TR", "Turkish"),
+        SwLanguageListItem("ZH", "Chinese (simplified)")
+    };
+    return gLanguageVec;
+}
+
 int SwTranslateLangSelectDlg::selectedLangIdx = -1;
 SwTranslateLangSelectDlg::SwTranslateLangSelectDlg(weld::Window* pParent, SwWrtShell& rSh)
     : GenericDialogController(pParent, "modules/swriter/ui/translationdialog.ui",
@@ -47,36 +82,6 @@ SwTranslateLangSelectDlg::SwTranslateLangSelectDlg(weld::Window* pParent, SwWrtS
     , m_xLanguageListBox(m_xBuilder->weld_combo_box("combobox1"))
     , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
     , m_xBtnTranslate(m_xBuilder->weld_button("translate"))
-    , m_xLanguageVec({
-          SwLanguageListItem("BG", "Bulgarian"),
-          SwLanguageListItem("CS", "Czech"),
-          SwLanguageListItem("DA", "Danish"),
-          SwLanguageListItem("DE", "German"),
-          SwLanguageListItem("EL", "Greek"),
-          SwLanguageListItem("EN-GB", "English (British)"),
-          SwLanguageListItem("EN-US", "English (American)"),
-          SwLanguageListItem("ES", "Spanish"),
-          SwLanguageListItem("ET", "Estonian"),
-          SwLanguageListItem("FI", "Finnish"),
-          SwLanguageListItem("FR", "French"),
-          SwLanguageListItem("HU", "Hungarian"),
-          SwLanguageListItem("ID", "Indonesian"),
-          SwLanguageListItem("IT", "Italian"),
-          SwLanguageListItem("JA", "Japanese"),
-          SwLanguageListItem("LT", "Lithuanian"),
-          SwLanguageListItem("LV", "Latvian"),
-          SwLanguageListItem("NL", "Dutch"),
-          SwLanguageListItem("PL", "Polish"),
-          SwLanguageListItem("PT-BR", "Portuguese (Brazilian)"),
-          SwLanguageListItem("PT-PT", "Portuguese (European)"),
-          SwLanguageListItem("RO", "Romanian"),
-          SwLanguageListItem("RU", "Russian"),
-          SwLanguageListItem("SK", "Slovak"),
-          SwLanguageListItem("SL", "Slovenian"),
-          SwLanguageListItem("SV", "Swedish"),
-          SwLanguageListItem("TR", "Turkish"),
-          SwLanguageListItem("ZH", "Chinese (simplified)"),
-      })
     , m_bTranslationStarted(false)
     , m_bCancelTranslation(false)
 {
@@ -84,7 +89,7 @@ SwTranslateLangSelectDlg::SwTranslateLangSelectDlg(weld::Window* pParent, SwWrtS
     m_xBtnCancel->connect_clicked(LINK(this, SwTranslateLangSelectDlg, LangSelectCancelHdl));
     m_xBtnTranslate->connect_clicked(LINK(this, SwTranslateLangSelectDlg, LangSelectTranslateHdl));
 
-    for (const auto& item : m_xLanguageVec)
+    for (const auto& item : getLanguageVec())
     {
         m_xLanguageListBox->append_text(OStringToOUString(item.getName(), RTL_TEXTENCODING_UTF8));
     }
@@ -99,7 +104,7 @@ std::optional<SwLanguageListItem> SwTranslateLangSelectDlg::GetSelectedLanguage(
 {
     if (SwTranslateLangSelectDlg::selectedLangIdx != -1)
     {
-        return m_xLanguageVec.at(SwTranslateLangSelectDlg::selectedLangIdx);
+        return getLanguageVec().at(SwTranslateLangSelectDlg::selectedLangIdx);
     }
 
     return {};
@@ -143,7 +148,7 @@ IMPL_LINK_NOARG(SwTranslateLangSelectDlg, LangSelectTranslateHdl, weld::Button&,
     const OString aAuthKey
         = OUStringToOString(rDeeplOptions.getAuthKey(), RTL_TEXTENCODING_UTF8).trim();
     const auto aTargetLang
-        = m_xLanguageVec.at(SwTranslateLangSelectDlg::selectedLangIdx).getLanguage();
+        = getLanguageVec().at(SwTranslateLangSelectDlg::selectedLangIdx).getLanguage();
 
     m_bTranslationStarted = true;
 
