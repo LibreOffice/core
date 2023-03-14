@@ -171,7 +171,6 @@ namespace
     {
         const SotAction_Impl* pFormats = sot::GetExchangeDestinationWriterFreeAreaCopy();
         // tdf#52547 prefer BITMAP over HTML
-        CPPUNIT_ASSERT(FindFormatIndex(pFormats, SotClipboardFormatId::BITMAP) < FindFormatIndex(pFormats, SotClipboardFormatId::HTML));
         // tdf#78801 prefer image over html over text
         CPPUNIT_ASSERT(FindFormatIndex(pFormats, SotClipboardFormatId::BITMAP) < FindFormatIndex(pFormats, SotClipboardFormatId::HTML));
         CPPUNIT_ASSERT(FindFormatIndex(pFormats, SotClipboardFormatId::HTML) < FindFormatIndex(pFormats, SotClipboardFormatId::STRING));
