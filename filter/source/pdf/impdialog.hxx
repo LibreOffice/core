@@ -110,6 +110,7 @@ class ImpPDFTabDialog final : public SfxTabDialogController
     bool                        mbDisplayPDFDocumentTitle;
     sal_Int32                   mnMagnification;
     sal_Int32                   mnInitialView;
+    sal_Int32                   mnInitialViewUserSelection;
     sal_Int32                   mnZoom;
     sal_Int32                   mnInitialPage;
 
@@ -162,6 +163,7 @@ public:
 
     Sequence< PropertyValue >   GetFilterData();
 
+    ImpPDFTabOpnFtrPage*        getOpenPage() const;
     ImpPDFTabSecurityPage*      getSecurityPage() const;
     ImpPDFTabLinksPage*         getLinksPage() const;
     ImpPDFTabGeneralPage*       getGeneralPage() const;
@@ -249,6 +251,8 @@ public:
 /// Class tab page viewer
 class ImpPDFTabOpnFtrPage : public SfxTabPage
 {
+    friend class ImpPDFTabGeneralPage;
+
     bool                        mbUseCTLFont;
 
     std::unique_ptr<weld::RadioButton> mxRbOpnPageOnly;
@@ -271,6 +275,7 @@ class ImpPDFTabOpnFtrPage : public SfxTabPage
     DECL_LINK(ToggleRbMagnHdl, weld::Toggleable&, void);
 
     void                        ToggleRbPgLyContinueFacingHdl();
+    void ToggleInitialView(ImpPDFTabDialog & rParent);
 
 public:
     ImpPDFTabOpnFtrPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
@@ -279,7 +284,7 @@ public:
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
-    void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
+    void                        SetFilterConfigItem(ImpPDFTabDialog* pParent);
 };
 
 /// Class tab page viewer
