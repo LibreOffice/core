@@ -110,6 +110,10 @@
 
 #define COMBO_WIDTH_IN_CHARS        18
 
+#define MAX_MRU_CURRENCIES          5
+
+#define INVALID_CURRENCY            sal_uInt16(-2)
+
 // namespaces
 using namespace ::editeng;
 using namespace ::com::sun::star;
@@ -3894,15 +3898,13 @@ namespace
             , m_rSelectedFormat(rSelectedFormat)
             , m_eSelectedLanguage(eSelectedLanguage)
         {
-            std::vector< OUString > aList;
-            std::vector< sal_uInt16 > aCurrencyList;
             const NfCurrencyTable& rCurrencyTable = SvNumberFormatter::GetTheCurrencyTable();
             sal_uInt16 nLen = rCurrencyTable.size();
 
             SvNumberFormatter aFormatter( m_xControl->getContext(), LANGUAGE_SYSTEM );
             m_eFormatLanguage = aFormatter.GetLanguage();
 
-            SvxCurrencyToolBoxControl::GetCurrencySymbols( aList, true, aCurrencyList );
+            const SvxCurrencyToolBoxControl::SvxCurrencyVect_t &rCurrencies = pControl->GetCurrencySymbols( );
 
             sal_uInt16 nPos = 0, nCount = 0;
             sal_Int32 nSelectedPos = -1;
@@ -3912,9 +3914,11 @@ namespace
             OUString sLongestString;
 
             m_xCurrencyLb->freeze();
-            for( const auto& rItem : aList )
+            for( const SvxCurrencyToolBoxControl::SvxCurrencyData& curr : rCurrencies )
             {
-                sal_uInt16& rCurrencyIndex = aCurrencyList[ nCount ];
+                const OUString& rItem = curr.m_label;
+                sal_uInt16 rCurrencyIndex = rCurrencies[ nCount ].m_currencyIdx;
+
                 if ( rCurrencyIndex < nLen )
                 {
                     m_xCurrencyLb->append_text(rItem);
@@ -3991,6 +3995,8 @@ namespace
 
         m_xControl->execute(nSelected + 1);
 
+        m_xCurrencyLb->scroll_to_row(0);
+
         m_xControl->EndPopupMode();
 
         return true;
@@ -4012,6 +4018,26 @@ void SvxCurrencyToolBoxControl::initialize( const css::uno::Sequence< css::uno::
     ToolBoxItemId nId;
     if (getToolboxId(nId, &pToolBox) && pToolBox->GetItemCommand(nId) == m_aCommandURL)
         pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWN | pToolBox->GetItemBits(nId));
+}
+
+const SvxCurrencyToolBoxControl::SvxCurrencyVect_t  &SvxCurrencyToolBoxControl::GetCurrencySymbols( ) {
+    inner_GetCurrencySymbols( true, m_currencies, m_mru_currencies );
+    return m_currencies;
+}
+
+void SvxCurrencyToolBoxControl::addMruCurrency(sal_Int16 currencyPosition) {
+    if (currencyPosition == 1)
+        return;
+
+    const SvxCurrencyData& curr = m_currencies[currencyPosition];
+    auto currencyIter = std::find( m_mru_currencies.begin(), m_mru_currencies.end(), curr );
+
+    if ( currencyIter != m_mru_currencies.end() )
+        m_mru_currencies.erase( currencyIter );
+
+    m_mru_currencies.insert( m_mru_currencies.begin(), curr );
+    if (m_mru_currencies.size() > MAX_MRU_CURRENCIES)
+        m_mru_currencies.resize( MAX_MRU_CURRENCIES );
 }
 
 std::unique_ptr<WeldToolbarPopup> SvxCurrencyToolBoxControl::weldPopupWindow()
@@ -4046,11 +4072,12 @@ void SvxCurrencyToolBoxControl::execute( sal_Int16 nSelectModifier )
                 nFormatKey = rxNumberFormats->queryKey( m_aFormatString, aLocale, false );
                 if ( nFormatKey == NUMBERFORMAT_ENTRY_NOT_FOUND )
                     nFormatKey = rxNumberFormats->addNew( m_aFormatString, aLocale );
-                }
-                catch( const uno::Exception& )
-                {
-                    nFormatKey = m_nFormatKey;
-                }
+                addMruCurrency(nSelectModifier);
+            }
+            catch( const uno::Exception& )
+            {
+                nFormatKey = m_nFormatKey;
+            }
         }
         else
             nFormatKey = m_nFormatKey;
@@ -4092,77 +4119,134 @@ Reference< css::accessibility::XAccessible > SvxFontNameBox_Impl::CreateAccessib
 }
 
 //static
+sal_uInt16 const SvxCurrencyToolBoxControl::SvxCurrencyData::InvalidCurrency = INVALID_CURRENCY;
+
+SvxCurrencyToolBoxControl::SvxCurrencyData::SvxCurrencyData(
+        sal_uInt16 currencyIdx,
+        bool onlyIsoCode
+) :
+    m_currencyIdx(currencyIdx),
+    m_onlyIsoCode(onlyIsoCode)
+{}
+
+bool SvxCurrencyToolBoxControl::SvxCurrencyData::operator == (const SvxCurrencyData& other) const
+{
+    return
+        (m_currencyIdx == other.m_currencyIdx) &&
+        (m_onlyIsoCode == other.m_onlyIsoCode);
+}
+
+//static
 void SvxCurrencyToolBoxControl::GetCurrencySymbols( std::vector<OUString>& rList, bool bFlag,
                                                     std::vector<sal_uInt16>& rCurrencyList )
 {
-    rCurrencyList.clear();
+    SvxCurrencyVect_t currencies, mru_currencies;
 
+    inner_GetCurrencySymbols(bFlag, currencies, mru_currencies);
+
+    rList.resize(currencies.size());
+    rCurrencyList.resize(currencies.size());
+
+    for (size_t j = 0; j < currencies.size(); j++) {
+        rList[j] = std::move(currencies[j].m_label);
+        rCurrencyList[j] = currencies[j].m_currencyIdx;
+    }
+}
+
+//static
+void SvxCurrencyToolBoxControl::inner_GetCurrencySymbols(
+        bool bFlag,
+        SvxCurrencyVect_t &pCurrencies,
+        SvxCurrencyVect_t &p_mru_currencies)
+{
     const NfCurrencyTable& rCurrencyTable = SvNumberFormatter::GetTheCurrencyTable();
     sal_uInt16 nCount = rCurrencyTable.size();
 
-    sal_uInt16 nStart = 1;
+    // reserving space for mru currencies on top of vector after -1 element
+    pCurrencies.resize( p_mru_currencies.size() + 1);
+    std::fill( pCurrencies.begin() + 1, pCurrencies.end(), SvxCurrencyData() );
 
-    OUString aString( ApplyLreOrRleEmbedding( rCurrencyTable[0].GetSymbol() ) + " " );
-    aString += ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString(
+    // lambda for vector insertion: mru currencies are on top
+    auto addCurrency = [&pCurrencies, &p_mru_currencies]
+                (SvxCurrencyData& curr,    size_t position = SIZE_MAX)
+    {
+        auto mruIter = std::find(p_mru_currencies.begin(), p_mru_currencies.end(), curr);
+
+        if (mruIter == p_mru_currencies.end()) {
+            if (position == SIZE_MAX)
+                pCurrencies.push_back( std::move(curr) );
+            else
+                pCurrencies.insert( pCurrencies.begin() + position, std::move(curr) );
+        }
+        else {
+            size_t index = mruIter - p_mru_currencies.begin();
+            pCurrencies[index] = std::move(curr);
+        }
+    };
+
+    SvxCurrencyData aCurr( sal_uInt16(-1) );
+    aCurr.m_label = ApplyLreOrRleEmbedding( rCurrencyTable[0].GetSymbol() ) + " ";
+    aCurr.m_label  += ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString(
                                        rCurrencyTable[0].GetLanguage() ) );
 
-    rList.push_back( aString );
-    rCurrencyList.push_back( sal_uInt16(-1) ); // nAuto
-
-    if( bFlag )
-    {
-        rList.push_back( aString );
-        rCurrencyList.push_back( 0 );
-        ++nStart;
+    pCurrencies[0] = aCurr;
+    if( bFlag ) {
+        aCurr.m_currencyIdx = 0;
+        addCurrency( aCurr );
     }
+
+    sal_uInt16 nStart = pCurrencies.size();
 
     CollatorWrapper aCollator( ::comphelper::getProcessComponentContext() );
     aCollator.loadDefaultCollator( Application::GetSettings().GetLanguageTag().getLocale(), 0 );
 
     static const OUStringLiteral aTwoSpace(u"  ");
 
+    // appending "long symbol" list
     for( sal_uInt16 i = 1; i < nCount; ++i )
     {
-        OUString aStr( ApplyLreOrRleEmbedding( rCurrencyTable[i].GetBankSymbol() ) );
-        aStr += aTwoSpace;
-        aStr += ApplyLreOrRleEmbedding( rCurrencyTable[i].GetSymbol() );
-        aStr += aTwoSpace;
-        aStr += ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString(
+        SvxCurrencyData curr( i );
+        curr.m_label = ApplyLreOrRleEmbedding( rCurrencyTable[i].GetBankSymbol() );
+        curr.m_label += aTwoSpace;
+        curr.m_label += ApplyLreOrRleEmbedding( rCurrencyTable[i].GetSymbol() );
+        curr.m_label += aTwoSpace;
+        curr.m_label += ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString(
                                         rCurrencyTable[i].GetLanguage() ) );
 
-        std::vector<OUString>::size_type j = nStart;
-        for( ; j < rList.size(); ++j )
-            if ( aCollator.compareString( aStr, rList[j] ) < 0 )
+        SvxCurrencyVect_t::size_type j = nStart;
+        for( ; j < pCurrencies.size(); ++j )
+            if ( aCollator.compareString( curr.m_label, pCurrencies[j].m_label ) < 0 )
                 break;  // insert before first greater than
 
-        rList.insert( rList.begin() + j, aStr );
-        rCurrencyList.insert( rCurrencyList.begin() + j, i );
+        addCurrency( curr, j );
     }
 
     // Append ISO codes to symbol list.
     // XXX If this is to be changed, various other places would had to be
     // adapted that assume this order!
-    std::vector<OUString>::size_type nCont = rList.size();
+    size_t nCont = pCurrencies.size();
 
     for ( sal_uInt16 i = 1; i < nCount; ++i )
     {
         bool bInsert = true;
-        OUString aStr( ApplyLreOrRleEmbedding( rCurrencyTable[i].GetBankSymbol() ) );
+        SvxCurrencyData curr( i, true );
+        curr.m_label = ApplyLreOrRleEmbedding(rCurrencyTable[i].GetBankSymbol());
 
-        std::vector<OUString>::size_type j = nCont;
-        for ( ; j < rList.size() && bInsert; ++j )
+        size_t j = nCont;
+        for ( ; j < pCurrencies.size() && bInsert; ++j )
         {
-            if( rList[j] == aStr )
+            if( pCurrencies[j].m_label == curr.m_label )
                 bInsert = false;
-            else if ( aCollator.compareString( aStr, rList[j] ) < 0 )
+            else if ( aCollator.compareString( curr.m_label, pCurrencies[j].m_label ) < 0 )
                 break;  // insert before first greater than
         }
         if ( bInsert )
-        {
-            rList.insert( rList.begin() + j, aStr );
-            rCurrencyList.insert( rCurrencyList.begin() + j, i );
-        }
+            addCurrency( curr, j );
     }
+
+    for ( int j = p_mru_currencies.size() - 1; j > 0; j-- )
+        if ( pCurrencies[j].m_currencyIdx == SvxCurrencyData::InvalidCurrency )
+            pCurrencies.erase( pCurrencies.begin() + j );
 }
 
 ListBoxColorWrapper::ListBoxColorWrapper(ColorListBox* pControl)

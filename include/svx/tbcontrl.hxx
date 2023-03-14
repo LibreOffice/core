@@ -249,14 +249,43 @@ public:
 
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxCurrencyToolBoxControl final : public svt::PopupWindowController
 {
+public:
+    // struct containing currency data
+    struct SvxCurrencyData {
+        sal_uInt16 m_currencyIdx;
+        bool m_onlyIsoCode;
+        OUString m_label;
+
+        static const sal_uInt16 InvalidCurrency;
+
+        SvxCurrencyData(
+            sal_uInt16 currencyIdx = InvalidCurrency,
+            bool onlyIsoCode = false
+        );
+
+        bool operator == (const SvxCurrencyData& other) const;
+    };
+
+    typedef std::vector<SvxCurrencyData> SvxCurrencyVect_t;
+
 private:
     OUString     m_aFormatString;
     LanguageType m_eLanguage;
     sal_uInt32   m_nFormatKey;
+    SvxCurrencyVect_t  m_currencies;
+    SvxCurrencyVect_t  m_mru_currencies;
+
+    void addMruCurrency(sal_Int16 currencyPosition);
+
+    // inner static method for backward compatibility
+    static void inner_GetCurrencySymbols( bool bFlag, SvxCurrencyVect_t &p_mru_currencies,
+                                    SvxCurrencyVect_t &pCurrencies);
 
 public:
     static void GetCurrencySymbols( std::vector<OUString>& rList, bool bFlag,
                                     std::vector<sal_uInt16>& rCurrencyList );
+
+    const SvxCurrencyVect_t& GetCurrencySymbols();
 
     explicit SvxCurrencyToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
     virtual ~SvxCurrencyToolBoxControl() override;
