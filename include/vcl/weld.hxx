@@ -2356,7 +2356,9 @@ public:
 private:
     friend class ::LOKTrigger;
 
-    virtual void click(const Point& rPos) = 0;
+    virtual void click(const Point&) = 0;
+
+    virtual void dblclick(const Point&){};
 };
 
 enum class Placement

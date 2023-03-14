@@ -187,7 +187,7 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
             auto pArea = dynamic_cast<weld::DrawingArea*>(pWidget);
             if (pArea)
             {
-                if (sAction == "click")
+                if (sAction == "click" || sAction == "dblclick")
                 {
                     OUString sClickData = rData["data"];
                     int nSeparatorPos = sClickData.indexOf(';');
@@ -209,7 +209,10 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                         Size size = rRefDevice.GetOutputSize();
                         posX = posX * size.Width();
                         posY = posY * size.Height();
-                        LOKTrigger::trigger_click(*pArea, Point(posX, posY));
+                        if (sAction == "click")
+                            LOKTrigger::trigger_click(*pArea, Point(posX, posY));
+                        else
+                            LOKTrigger::trigger_dblclick(*pArea, Point(posX, posY));
                         return true;
                     }
 
