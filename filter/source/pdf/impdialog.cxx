@@ -93,7 +93,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< Property
     mbOpenInFullScreenMode( false ),
     mbDisplayPDFDocumentTitle( false ),
     mnMagnification( 0 ),
-    mnInitialView( 0 ),
+    mnInitialView( 1 ),
     mnZoom( 0 ),
     mnInitialPage( 1 ),
     mnPageLayout( 0 ),
@@ -225,6 +225,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< Property
     mbDisplayPDFDocumentTitle = maConfigItem.ReadBool( "DisplayPDFDocumentTitle", true );
 
     mnInitialView = maConfigItem.ReadInt32( "InitialView", 0 );
+    mnInitialViewUserSelection = mnInitialView;
     mnMagnification = maConfigItem.ReadInt32( "Magnification", 0 );
     mnZoom = maConfigItem.ReadInt32( "Zoom", 100 );
     mnPageLayout = maConfigItem.ReadInt32( "PageLayout", 0 );
@@ -288,6 +289,15 @@ ImpPDFTabSecurityPage* ImpPDFTabDialog::getSecurityPage() const
     return nullptr;
 }
 
+ImpPDFTabOpnFtrPage * ImpPDFTabDialog::getOpenPage() const
+{
+    SfxTabPage* pOpenPage = GetTabPage("initialview");
+    if (pOpenPage)
+    {
+        return static_cast<ImpPDFTabOpnFtrPage*>(pOpenPage);
+    }
+    return nullptr;
+}
 
 ImpPDFTabLinksPage* ImpPDFTabDialog::getLinksPage() const
 {
@@ -920,6 +930,12 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePDFVersionOrUniversalAccessibilityHa
     }
     mxCbExportBookmarks->set_sensitive(!bIsPDFUA);
 
+    ImpPDFTabOpnFtrPage *const pOpenPage(mpParent ? mpParent->getOpenPage() : nullptr);
+    if (pOpenPage)
+    {
+        pOpenPage->ToggleInitialView(*mpParent);
+    }
+
     // PDF/A doesn't allow launch action, so enable/disable the selection on the Link page
     ImpPDFTabLinksPage* pLinksPage = mpParent ? mpParent->getLinksPage() : nullptr;
     if (pLinksPage)
@@ -969,6 +985,10 @@ void ImpPDFTabOpnFtrPage::GetFilterConfigItem( ImpPDFTabDialog* pParent  )
         pParent->mnInitialView = 1;
     else if( mxRbOpnThumbs->get_active() )
         pParent->mnInitialView = 2;
+    if (!pParent->mbPDFUACompliance)
+    {
+        pParent->mnInitialViewUserSelection = pParent->mnInitialView;
+    }
 
     pParent->mnMagnification = 0;
     if( mxRbMagnFitWin->get_active() )
@@ -996,7 +1016,7 @@ void ImpPDFTabOpnFtrPage::GetFilterConfigItem( ImpPDFTabDialog* pParent  )
     pParent->mbFirstPageLeft = mbUseCTLFont && mxCbPgLyFirstOnLeft->get_active();
 }
 
-void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* pParent )
+void ImpPDFTabOpnFtrPage::SetFilterConfigItem(ImpPDFTabDialog *const pParent)
 {
     mbUseCTLFont = pParent->mbUseCTLFont;
     switch( pParent->mnPageLayout )
@@ -1066,6 +1086,52 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* pParent )
         mxCbPgLyFirstOnLeft->set_active(pParent->mbFirstPageLeft);
         ToggleRbPgLyContinueFacingHdl();
     }
+
+    // The call from ImpPDFTabGeneralPage::SetFilterConfigItem() did not init
+    // the radio buttons correctly becuse ImpPDFTabOpnFtrPage did not yet exist.
+    ToggleInitialView(*pParent);
+}
+
+void ImpPDFTabOpnFtrPage::ToggleInitialView(ImpPDFTabDialog & rParent)
+{
+    bool const bIsPDFUA(rParent.getGeneralPage()->IsPdfUaSelected());
+    if (bIsPDFUA)
+    {   // only allow Outline for PDF/UA
+        if (mxRbOpnOutline->get_sensitive())
+        {
+            if (mxRbOpnPageOnly->get_active())
+            {
+                rParent.mnInitialViewUserSelection = 0;
+            }
+            else if (mxRbOpnOutline->get_active())
+            {
+                rParent.mnInitialViewUserSelection = 1;
+            }
+            else if (mxRbOpnThumbs->get_active())
+            {
+                rParent.mnInitialViewUserSelection = 2;
+            }
+            mxRbOpnOutline->set_active(true);
+        }
+    }
+    else
+    {
+        switch (rParent.mnInitialViewUserSelection)
+        {
+            case 0:
+                mxRbOpnPageOnly->set_active(true);
+                break;
+            case 1:
+                mxRbOpnOutline->set_active(true);
+                break;
+            case 2:
+                mxRbOpnThumbs->set_active(true);
+                break;
+        }
+    }
+    mxRbOpnPageOnly->set_sensitive(!bIsPDFUA);
+    mxRbOpnThumbs->set_sensitive(!bIsPDFUA);
+    mxRbOpnOutline->set_sensitive(!bIsPDFUA);
 }
 
 IMPL_LINK_NOARG(ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl, weld::Toggleable&, void)
