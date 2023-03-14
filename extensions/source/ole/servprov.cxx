@@ -305,8 +305,7 @@ css::uno::Sequence<OUString> OleConverter::getSupportedServiceNames()
             "com.sun.star.bridge.OleBridgeSupplier2",
             "com.sun.star.bridge.oleautomation.BridgeSupplier"};
     }
-    return css::uno::Sequence<OUString>{
-        "com.sun.star.bridge.OleBridgeSupplierVar1"};
+    return {"com.sun.star.bridge.OleBridgeSupplierVar1"};
 }
 
 // XInitialize ------------------------------------------------------------------------------

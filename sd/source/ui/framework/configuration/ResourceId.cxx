@@ -384,8 +384,7 @@ sal_Bool ResourceId::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> ResourceId::getSupportedServiceNames()
 {
-    return css::uno::Sequence<OUString>{
-        "com.sun.star.drawing.framework.ResourceId"};
+    return {"com.sun.star.drawing.framework.ResourceId"};
 }
 
 /** When eMode is DIRECTLY then the anchor of the called object and the

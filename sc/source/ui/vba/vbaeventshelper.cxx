@@ -626,8 +626,7 @@ OUString ScVbaEventsHelper::getImplementationName()
 
 css::uno::Sequence<OUString> ScVbaEventsHelper::getSupportedServiceNames()
 {
-    return css::uno::Sequence<OUString>{
-        "com.sun.star.script.vba.VBASpreadsheetEventProcessor"};
+    return {"com.sun.star.script.vba.VBASpreadsheetEventProcessor"};
 }
 
 // protected ------------------------------------------------------------------
