@@ -520,7 +520,6 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , nSidebarSizeLB_InitialSelection(0)
     , nNotebookbarSizeLB_InitialSelection(0)
     , nStyleLB_InitialSelection(0)
-    , pAppearanceCfg(new SvtTabAppearanceCfg)
     , pCanvasSettings(new CanvasSettings)
     , m_xIconSizeLB(m_xBuilder->weld_combo_box("iconsize"))
     , m_xSidebarIconSizeLB(m_xBuilder->weld_combo_box("sidebariconsize"))
@@ -736,40 +735,43 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     }
 
     bool bAppearanceChanged = false;
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
     // Mouse Snap Mode
-    SnapType eOldSnap = pAppearanceCfg->GetSnapMode();
+    SnapType eOldSnap = static_cast<SnapType>(officecfg::Office::Common::View::Dialog::MousePositioning::get());
     SnapType eNewSnap = static_cast<SnapType>(m_xMousePosLB->get_active());
     if(eNewSnap > SnapType::NONE)
         eNewSnap = SnapType::NONE;
 
     if ( eNewSnap != eOldSnap )
     {
-        pAppearanceCfg->SetSnapMode(eNewSnap );
+        officecfg::Office::Common::View::Dialog::MousePositioning::set(static_cast<sal_Int16>(eNewSnap), batch);
         bAppearanceChanged = true;
     }
 
     // Middle Mouse Button
-    MouseMiddleButtonAction eOldMiddleMouse = pAppearanceCfg->GetMiddleMouseButton();
+    MouseMiddleButtonAction eOldMiddleMouse = static_cast<MouseMiddleButtonAction>(officecfg::Office::Common::View::Dialog::MiddleMouseButton::get());
     short eNewMiddleMouse = m_xMouseMiddleLB->get_active();
     if(eNewMiddleMouse > 2)
         eNewMiddleMouse = 2;
 
     if ( eNewMiddleMouse != static_cast<short>(eOldMiddleMouse) )
     {
-        pAppearanceCfg->SetMiddleMouseButton( static_cast<MouseMiddleButtonAction>(eNewMiddleMouse) );
+        officecfg::Office::Common::View::Dialog::MiddleMouseButton::set(eNewMiddleMouse, batch);
         bAppearanceChanged = true;
     }
 
     if (m_xFontAntiAliasing->get_state_changed_from_saved())
     {
-        pAppearanceCfg->SetFontAntiAliasing(m_xFontAntiAliasing->get_active());
+        bool b = m_xFontAntiAliasing->get_active();
+        officecfg::Office::Common::View::FontAntiAliasing::Enabled::set(b, batch);
         bAppearanceChanged = true;
     }
 
     if (m_xAAPointLimit->get_value_changed_from_saved())
     {
-        pAppearanceCfg->SetFontAntialiasingMinPixelHeight(m_xAAPointLimit->get_value(FieldUnit::PIXEL));
+        sal_Int64 i = m_xAAPointLimit->get_value(FieldUnit::PIXEL);
+        officecfg::Office::Common::View::FontAntiAliasing::MinPixelHeight::set(i, batch);
         bAppearanceChanged = true;
     }
 
@@ -857,8 +859,8 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 
     if ( bAppearanceChanged )
     {
-        pAppearanceCfg->Commit();
-        pAppearanceCfg->SetApplicationDefaults ( GetpApp() );
+        batch->commit();
+        SvtTabAppearanceCfg::SetApplicationDefaults ( GetpApp() );
     }
 
     if(bRepaintWindows)
@@ -940,15 +942,19 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_xAppearanceStyleLB->save_value();
 
     // Mouse Snap
-    m_xMousePosLB->set_active(static_cast<sal_Int32>(pAppearanceCfg->GetSnapMode()));
+    sal_Int16 nMouseSnap = officecfg::Office::Common::View::Dialog::MousePositioning::get();
+    m_xMousePosLB->set_active(static_cast<sal_Int32>(nMouseSnap));
     m_xMousePosLB->save_value();
 
     // Mouse Snap
-    m_xMouseMiddleLB->set_active(static_cast<short>(pAppearanceCfg->GetMiddleMouseButton()));
+    sal_Int16 nMiddleMouseButton = officecfg::Office::Common::View::Dialog::MiddleMouseButton::get();
+    m_xMouseMiddleLB->set_active(static_cast<short>(nMiddleMouseButton));
     m_xMouseMiddleLB->save_value();
 
-    m_xFontAntiAliasing->set_active( pAppearanceCfg->IsFontAntiAliasing() );
-    m_xAAPointLimit->set_value(pAppearanceCfg->GetFontAntialiasingMinPixelHeight(), FieldUnit::PIXEL);
+    bool bFontAntiAliasing = officecfg::Office::Common::View::FontAntiAliasing::Enabled::get();
+    m_xFontAntiAliasing->set_active( bFontAntiAliasing );
+    sal_Int16 nFontAntiAliasingMinPixelHeight = officecfg::Office::Common::View::FontAntiAliasing::MinPixelHeight::get();
+    m_xAAPointLimit->set_value(nFontAntiAliasingMinPixelHeight, FieldUnit::PIXEL);
 
     // WorkingSet
     m_xFontShowCB->set_active(officecfg::Office::Common::Font::View::ShowFontBoxWYSIWYG::get());

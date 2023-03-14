@@ -72,8 +72,6 @@ public:
     virtual void        Reset( const SfxItemSet* rSet ) override;
 };
 
-class SvtTabAppearanceCfg;
-
 class OfaViewTabPage : public SfxTabPage
 {
 private:
@@ -82,7 +80,6 @@ private:
     sal_Int32      nNotebookbarSizeLB_InitialSelection;
     sal_Int32      nStyleLB_InitialSelection;
 
-    std::unique_ptr<SvtTabAppearanceCfg>    pAppearanceCfg;
     std::unique_ptr<CanvasSettings>         pCanvasSettings;
 
     std::vector<vcl::IconThemeInfo> mInstalledIconThemes;

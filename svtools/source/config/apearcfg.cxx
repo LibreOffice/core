@@ -21,120 +21,18 @@
 #include <svtools/apearcfg.hxx>
 
 #include <o3tl/any.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <tools/debug.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 
-#define DEFAULT_DRAGMODE    DragMode::SystemDep
-#define DEFAULT_SNAPMODE    SnapType::ToButton
-#define DEFAULT_AAMINHEIGHT 8
+static bool bInitialized = false;
 
-using namespace ::com::sun::star::uno;
+bool SvtTabAppearanceCfg::IsInitialized() { return bInitialized; }
 
-bool SvtTabAppearanceCfg::bInitialized = false;
-
-SvtTabAppearanceCfg::SvtTabAppearanceCfg()
-    :ConfigItem("Office.Common/View")
-    ,nDragMode          ( DEFAULT_DRAGMODE )
-    ,nSnapMode          ( DEFAULT_SNAPMODE )
-    ,nMiddleMouse       ( MouseMiddleButtonAction::AutoScroll )
-    ,nAAMinPixelHeight  ( DEFAULT_AAMINHEIGHT )
-    ,bFontAntialiasing  ( true )
-    ,bMenuMouseFollow   ( false )
-{
-    const Sequence<OUString>& rNames = GetPropertyNames();
-    Sequence<Any> aValues = GetProperties(rNames);
-    const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == rNames.getLength(), "GetProperties failed");
-
-    if(aValues.getLength() != rNames.getLength())
-        return;
-
-    for(int nProp = 0; nProp < rNames.getLength(); ++nProp, ++pValues)
-    {
-        if(pValues->hasValue())
-        {
-            switch(nProp)
-            {
-                case  0:    //"Window/Drag"
-                {
-                    short nTmp;
-                    if (*pValues >>= nTmp)
-                        nDragMode = static_cast<DragMode>(nTmp);
-                    break;
-                }
-                case  1: bMenuMouseFollow = *o3tl::doAccess<bool>(*pValues); break; //"Menu/FollowMouse",
-                case  2:
-                {
-                    short nTmp;
-                    if (*pValues >>= nTmp)
-                        nSnapMode = static_cast<SnapType>(nTmp); //"Dialog/MousePositioning",
-                    break;
-                }
-                case  3: { short nTmp = 0; *pValues >>= nTmp; nMiddleMouse = static_cast<MouseMiddleButtonAction>(nTmp); break; } //"Dialog/MiddleMouseButton",
-                case  4: bFontAntialiasing = *o3tl::doAccess<bool>(*pValues); break;    // "FontAntialiasing/Enabled",
-                case  5: *pValues >>= nAAMinPixelHeight; break;                         // "FontAntialiasing/MinPixelHeight",
-            }
-        }
-    }
-}
-
-SvtTabAppearanceCfg::~SvtTabAppearanceCfg( )
-{
-}
-
-const Sequence<OUString>& SvtTabAppearanceCfg::GetPropertyNames()
-{
-    static Sequence<OUString> const aNames
-    {
-             "Window/Drag"                       //  0
-            ,"Menu/FollowMouse"                  //  1
-            ,"Dialog/MousePositioning"           //  2
-            ,"Dialog/MiddleMouseButton"          //  3
-            ,"FontAntiAliasing/Enabled"          //  4
-            ,"FontAntiAliasing/MinPixelHeight"   //  5
-    };
-    return aNames;
-}
-
-void  SvtTabAppearanceCfg::ImplCommit()
-{
-    const Sequence<OUString>& rNames = GetPropertyNames();
-    Sequence<Any> aValues(rNames.getLength());
-    Any* pValues = aValues.getArray();
-
-    for(int nProp = 0; nProp < rNames.getLength(); nProp++)
-    {
-        switch(nProp)
-        {
-            case  0: pValues[nProp] <<= static_cast<short>(nDragMode); break;        // "Window/Drag",
-            case  1: pValues[nProp] <<= bMenuMouseFollow; break;        // "Menu/FollowMouse",
-            case  2: pValues[nProp] <<= static_cast<short>(nSnapMode); break;        // "Dialog/MousePositioning",
-            case  3: pValues[nProp] <<= static_cast<short>(nMiddleMouse); break; // "Dialog/MiddleMouseButton",
-            case  4: pValues[nProp] <<= bFontAntialiasing; break;       // "FontAntialiasing/Enabled",
-            case  5: pValues[nProp] <<= nAAMinPixelHeight; break;       // "FontAntialiasing/MinPixelHeight",
-        }
-    }
-    PutProperties(rNames, aValues);
-}
-
-void SvtTabAppearanceCfg::Notify( const css::uno::Sequence< OUString >& )
-{
-}
-
-void SvtTabAppearanceCfg::SetSnapMode ( SnapType nSet )
-{
-    nSnapMode = nSet;
-    SetModified();
-}
-
-void SvtTabAppearanceCfg::SetMiddleMouseButton ( MouseMiddleButtonAction nSet )
-{
-    nMiddleMouse = nSet;
-    SetModified();
-}
+void SvtTabAppearanceCfg::SetInitialized() { bInitialized = true; }
 
 void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
 {
@@ -150,6 +48,11 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
     // and set it here
     hAppStyle.SetUseSystemUIFonts( bUseSystemUIFonts );
 
+    bool bFontAntialiasing = officecfg::Office::Common::View::FontAntiAliasing::Enabled::get();
+    sal_Int16 nAAMinPixelHeight = officecfg::Office::Common::View::FontAntiAliasing::MinPixelHeight::get();
+    MouseMiddleButtonAction nMiddleMouse = static_cast<MouseMiddleButtonAction>(officecfg::Office::Common::View::Dialog::MiddleMouseButton::get());
+    bool bMenuMouseFollow = officecfg::Office::Common::View::Menu::FollowMouse::get();
+
     // font anti aliasing
     hAppStyle.SetAntialiasingMinPixelHeight( nAAMinPixelHeight );
     hAppStyle.SetDisplayOptions( bFontAntialiasing ? DisplayOptions::NONE : DisplayOptions::AADisable );
@@ -161,6 +64,7 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
 
     nMouseOptions &=  ~ MouseSettingsOptions(MouseSettingsOptions::AutoCenterPos | MouseSettingsOptions::AutoDefBtnPos);
 
+    SnapType nSnapMode = static_cast<SnapType>(officecfg::Office::Common::View::Dialog::MousePositioning::get());
     switch ( nSnapMode )
     {
     case SnapType::ToButton:

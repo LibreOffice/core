@@ -19,7 +19,6 @@
 #pragma once
 
 #include <svtools/svtdllapi.h>
-#include <unotools/configitem.hxx>
 
 class Application;
 enum class MouseMiddleButtonAction;
@@ -37,47 +36,11 @@ enum class DragMode {
 };
 
 
-class SVT_DLLPUBLIC SvtTabAppearanceCfg final : public utl::ConfigItem
+namespace SvtTabAppearanceCfg
 {
-    DragMode        nDragMode           ;
-    SnapType        nSnapMode           ;
-    MouseMiddleButtonAction nMiddleMouse;
-    short           nAAMinPixelHeight   ;
-    bool            bFontAntialiasing       ;
-
-    bool            bMenuMouseFollow        ;
-
-    static bool  bInitialized ;
-
-    SVT_DLLPRIVATE static const css::uno::Sequence<OUString>& GetPropertyNames();
-    virtual void    ImplCommit() override;
-
-public:
-    SvtTabAppearanceCfg( );
-    virtual ~SvtTabAppearanceCfg( ) override;
-
-    virtual void Notify( const css::uno::Sequence< OUString >& _rPropertyNames) override;
-
-    DragMode  GetDragMode  () const { return nDragMode; }
-
-    SnapType    GetSnapMode () const { return nSnapMode; }
-    void        SetSnapMode ( SnapType nSet );
-
-    MouseMiddleButtonAction GetMiddleMouseButton () const { return nMiddleMouse; }
-    void        SetMiddleMouseButton ( MouseMiddleButtonAction nSet );
-
-    void        SetApplicationDefaults ( Application* pApp );
-
-    bool        IsMenuMouseFollow() const{return bMenuMouseFollow;}
-
-    void        SetFontAntiAliasing( bool bSet )    { bFontAntialiasing = bSet; SetModified(); }
-    bool        IsFontAntiAliasing() const { return bFontAntialiasing; }
-
-    sal_uInt16  GetFontAntialiasingMinPixelHeight( ) const { return nAAMinPixelHeight; }
-    void        SetFontAntialiasingMinPixelHeight( sal_uInt16 _nMinHeight ) { nAAMinPixelHeight = _nMinHeight; SetModified(); }
-
-    static bool IsInitialized()  { return bInitialized; }
-    static void SetInitialized() { bInitialized = true; }
+    SVT_DLLPUBLIC void SetApplicationDefaults ( Application* pApp );
+    SVT_DLLPUBLIC bool IsInitialized();
+    SVT_DLLPUBLIC void SetInitialized();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

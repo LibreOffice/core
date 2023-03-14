@@ -1541,9 +1541,8 @@ int Desktop::Main()
 
     svtools::ApplyFontSubstitutionsToVcl();
 
-    SvtTabAppearanceCfg aAppearanceCfg;
     SvtTabAppearanceCfg::SetInitialized();
-    aAppearanceCfg.SetApplicationDefaults( this );
+    SvtTabAppearanceCfg::SetApplicationDefaults( this );
     SvtAccessibilityOptions aOptions;
     aOptions.SetVCLSettings();
     SetSplashScreenProgress(60);
@@ -1851,8 +1850,7 @@ void Desktop::OverrideSystemSettings( AllSettings& rSettings )
 
     DragFullOptions nDragFullOptions = hStyleSettings.GetDragFullOptions();
 
-    SvtTabAppearanceCfg aAppearanceCfg;
-    DragMode nDragMode = aAppearanceCfg.GetDragMode();
+    DragMode nDragMode = static_cast<DragMode>(officecfg::Office::Common::View::Window::Drag::get());
     switch ( nDragMode )
     {
     case DragMode::FullWindow:
@@ -1867,7 +1865,8 @@ void Desktop::OverrideSystemSettings( AllSettings& rSettings )
     }
 
     MouseFollowFlags nFollow = hMouseSettings.GetFollow();
-    hMouseSettings.SetFollow( aAppearanceCfg.IsMenuMouseFollow() ? (nFollow|MouseFollowFlags::Menu) : (nFollow&~MouseFollowFlags::Menu));
+    bool bMenuFollowMouse = officecfg::Office::Common::View::Menu::FollowMouse::get();
+    hMouseSettings.SetFollow( bMenuFollowMouse ? (nFollow|MouseFollowFlags::Menu) : (nFollow&~MouseFollowFlags::Menu));
     rSettings.SetMouseSettings(hMouseSettings);
 
     bool bMenuIcons = officecfg::Office::Common::View::Menu::ShowIconsInMenues::get();
