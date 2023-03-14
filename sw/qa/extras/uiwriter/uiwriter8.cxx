@@ -2487,7 +2487,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf97899)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf151462)
 {
     createSwDoc("tdf151462.odt");
-    //   xmlDocUniquePtr pLayout = parseLayoutDump();
     dispatchCommand(mxComponent, ".uno:UpdateAllIndexes", {});
 
     xmlDocUniquePtr pLayout = parseLayoutDump();
