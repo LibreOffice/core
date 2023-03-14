@@ -3113,9 +3113,8 @@ bool PDFWriterImpl::emitFonts()
                 sal_uInt64 nStartPos = 0;
                 if( aSubsetInfo.m_nFontType == FontType::SFNT_TTF )
                 {
-                    aLine.append( static_cast<sal_Int32>(aBuffer.size()) );
-
-                    aLine.append( ">>\n"
+                    aLine.append( OString::number(static_cast<sal_Int32>(aBuffer.size()))
+                               + ">>\n"
                                  "stream\n" );
                     if ( !writeBuffer( aLine ) ) return false;
                     if ( osl::File::E_None != m_aFile.getPos(nStartPos) ) return false;
@@ -3138,14 +3137,13 @@ bool PDFWriterImpl::emitFonts()
                     getPfbSegmentLengths(aBuffer.data(), static_cast<int>(aBuffer.size()), aSegmentLengths);
                     // the lengths below are mandatory for PDF-exported Type1 fonts
                     // because the PFB segment headers get stripped! WhyOhWhy.
-                    aLine.append( static_cast<sal_Int32>(aSegmentLengths[0]) );
-                    aLine.append( "/Length2 " );
-                    aLine.append( static_cast<sal_Int32>(aSegmentLengths[1]) );
-                    aLine.append( "/Length3 " );
-                    aLine.append( static_cast<sal_Int32>(aSegmentLengths[2]) );
-
-                    aLine.append( ">>\n"
-                                 "stream\n" );
+                    aLine.append( OString::number(static_cast<sal_Int32>(aSegmentLengths[0]) )
+                        + "/Length2 "
+                        + OString::number( static_cast<sal_Int32>(aSegmentLengths[1]) )
+                        + "/Length3 "
+                        + OString::number( static_cast<sal_Int32>(aSegmentLengths[2]) )
+                        + ">>\n"
+                          "stream\n" );
                     if ( !writeBuffer( aLine ) ) return false;
                     if ( osl::File::E_None != m_aFile.getPos(nStartPos) ) return false;
 
@@ -3207,14 +3205,14 @@ bool PDFWriterImpl::emitFonts()
                     aLine.append( ((i & 15) == 15) ? "\n" : " " );
                 }
                 aLine.append( "]\n"
-                             "/FontDescriptor " );
-                aLine.append( nFontDescriptor );
-                aLine.append( " 0 R\n" );
+                             "/FontDescriptor "
+                    + OString::number( nFontDescriptor )
+                    + " 0 R\n" );
                 if( nToUnicodeStream )
                 {
-                    aLine.append( "/ToUnicode " );
-                    aLine.append( nToUnicodeStream );
-                    aLine.append( " 0 R\n" );
+                    aLine.append( "/ToUnicode "
+                        + OString::number( nToUnicodeStream )
+                        + " 0 R\n" );
                 }
                 aLine.append( ">>\n"
                              "endobj\n\n" );
@@ -3225,15 +3223,14 @@ bool PDFWriterImpl::emitFonts()
             else
             {
                 OStringBuffer aErrorComment( 256 );
-                aErrorComment.append( "CreateFontSubset failed for font \"" );
-                aErrorComment.append( OUStringToOString( pFace->GetFamilyName(), RTL_TEXTENCODING_UTF8 ) );
-                aErrorComment.append( '\"' );
+                aErrorComment.append( "CreateFontSubset failed for font \""
+                    + OUStringToOString( pFace->GetFamilyName(), RTL_TEXTENCODING_UTF8 )
+                    + "\"" );
                 if( pFace->GetItalic() == ITALIC_NORMAL )
                     aErrorComment.append( " italic" );
                 else if( pFace->GetItalic() == ITALIC_OBLIQUE )
                     aErrorComment.append( " oblique" );
-                aErrorComment.append( " weight=" );
-                aErrorComment.append( sal_Int32(pFace->GetWeight()) );
+                aErrorComment.append( " weight=" + OString::number( sal_Int32(pFace->GetWeight()) ) );
                 emitComment( aErrorComment.getStr() );
             }
         }
@@ -3264,11 +3261,11 @@ bool PDFWriterImpl::emitFonts()
     int ni = 0;
     for (auto const& itemMap : aFontIDToObject)
     {
-        aFontDict.append( "/F" );
-        aFontDict.append( itemMap.first );
-        aFontDict.append( ' ' );
-        aFontDict.append( itemMap.second );
-        aFontDict.append( " 0 R" );
+        aFontDict.append( "/F"
+            + OString::number( itemMap.first )
+            + " "
+            + OString::number( itemMap.second )
+            + " 0 R" );
         if( ((++ni) & 7) == 0 )
             aFontDict.append( '\n' );
     }
@@ -3304,8 +3301,8 @@ sal_Int32 PDFWriterImpl::emitResources()
     sal_Int32 nResourceDict = getResourceDictObj();
     CHECK_RETURN( updateObject( nResourceDict ) );
     aLine.setLength( 0 );
-    aLine.append( nResourceDict );
-    aLine.append( " 0 obj\n" );
+    aLine.append( OString::number(nResourceDict)
+        + " 0 obj\n" );
     m_aGlobalResourceDict.append( aLine, getFontDictObject() );
     aLine.append( "endobj\n\n" );
     CHECK_RETURN( writeBuffer( aLine ) );
@@ -3396,23 +3393,22 @@ sal_Int32 PDFWriterImpl::emitOutline()
         OStringBuffer aLine( 1024 );
 
         CHECK_RETURN( updateObject( rItem.m_nObject ) );
-        aLine.append( rItem.m_nObject );
-        aLine.append( " 0 obj\n" );
-        aLine.append( "<<" );
+        aLine.append( OString::number(rItem.m_nObject)
+            + " 0 obj\n"
+              "<<" );
         // number of visible children (all levels)
         if( i > 0 || aCounts[0] > 0 )
         {
-            aLine.append( "/Count " );
-            aLine.append( aCounts[i] );
+            aLine.append( "/Count " + OString::number( aCounts[i] ) );
         }
         if( ! rItem.m_aChildren.empty() )
         {
             // children list: First, Last
-            aLine.append( "/First " );
-            aLine.append( m_aOutline[rItem.m_aChildren.front()].m_nObject );
-            aLine.append( " 0 R/Last " );
-            aLine.append( m_aOutline[rItem.m_aChildren.back()].m_nObject );
-            aLine.append( " 0 R\n" );
+            aLine.append( "/First "
+                + OString::number( m_aOutline[rItem.m_aChildren.front()].m_nObject )
+                + " 0 R/Last "
+                + OString::number( m_aOutline[rItem.m_aChildren.back()].m_nObject )
+                + " 0 R\n" );
         }
         if( i > 0 )
         {
@@ -3426,20 +3422,20 @@ sal_Int32 PDFWriterImpl::emitOutline()
                 aLine.append( "/Dest" );
                 appendDest( rItem.m_nDestID, aLine );
             }
-            aLine.append( "/Parent " );
-            aLine.append( rItem.m_nParentObject );
-            aLine.append( " 0 R" );
+            aLine.append( "/Parent "
+                + OString::number( rItem.m_nParentObject )
+                + " 0 R" );
             if( rItem.m_nPrevObject )
             {
-                aLine.append( "/Prev " );
-                aLine.append( rItem.m_nPrevObject );
-                aLine.append( " 0 R" );
+                aLine.append( "/Prev "
+                    + OString::number( rItem.m_nPrevObject )
+                    + " 0 R" );
             }
             if( rItem.m_nNextObject )
             {
-                aLine.append( "/Next " );
-                aLine.append( rItem.m_nNextObject );
-                aLine.append( " 0 R" );
+                aLine.append( "/Next "
+                    + OString::number( rItem.m_nNextObject )
+                    + " 0 R" );
             }
         }
         aLine.append( ">>\nendobj\n\n" );
@@ -3561,10 +3557,10 @@ bool PDFWriterImpl::emitScreenAnnotations()
             continue;
 
         // Annot dictionary.
-        aLine.append(rScreen.m_nObject);
-        aLine.append(" 0 obj\n");
-        aLine.append("<</Type/Annot");
-        aLine.append("/Subtype/Screen/Rect[");
+        aLine.append(OString::number(rScreen.m_nObject)
+            + " 0 obj\n"
+              "<</Type/Annot"
+              "/Subtype/Screen/Rect[");
         appendFixedInt(rScreen.m_aRect.Left(), aLine);
         aLine.append(' ');
         appendFixedInt(rScreen.m_aRect.Top(), aLine);
@@ -3575,9 +3571,9 @@ bool PDFWriterImpl::emitScreenAnnotations()
         aLine.append("]");
 
         // Action dictionary.
-        aLine.append("/A<</Type/Action /S/Rendition /AN ");
-        aLine.append(rScreen.m_nObject);
-        aLine.append(" 0 R ");
+        aLine.append("/A<</Type/Action /S/Rendition /AN "
+            + OString::number(rScreen.m_nObject)
+            + " 0 R ");
 
         // Rendition dictionary.
         aLine.append("/R<</Type/Rendition /S/MR ");
@@ -3622,27 +3618,27 @@ bool PDFWriterImpl::emitScreenAnnotations()
         // Alt text is a "Multi-language Text Array"
         aLine.append(" /Alt [ () ");
         appendUnicodeTextStringEncrypt(rScreen.m_AltText, rScreen.m_nObject, aLine);
-        aLine.append(" ] ");
-        aLine.append(">>");
+        aLine.append(" ] "
+                     ">>");
 
         // End Rendition dictionary by requesting play/pause/stop controls.
-        aLine.append("/P<</BE<</C true >>>>");
-        aLine.append(">>");
+        aLine.append("/P<</BE<</C true >>>>"
+                     ">>");
 
         // End Action dictionary.
         aLine.append("/OP 0 >>");
 
         if (0 < rScreen.m_nStructParent)
         {
-            aLine.append("\n/StructParent ");
-            aLine.append(rScreen.m_nStructParent);
-            aLine.append("\n");
+            aLine.append("\n/StructParent "
+                + OString::number(rScreen.m_nStructParent)
+                + "\n");
         }
 
         // End Annot dictionary.
-        aLine.append("/P ");
-        aLine.append(m_aPages[rScreen.m_nPage].m_nPageObject);
-        aLine.append(" 0 R\n>>\nendobj\n\n");
+        aLine.append("/P "
+            + OString::number(m_aPages[rScreen.m_nPage].m_nPageObject)
+            + " 0 R\n>>\nendobj\n\n");
         CHECK_RETURN(writeBuffer(aLine));
     }
 

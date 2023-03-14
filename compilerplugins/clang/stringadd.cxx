@@ -21,7 +21,7 @@
 #include "clang/AST/StmtVisitor.h"
 
 /**
-    Look for repeated addition to OUString/OString.
+    Look for repeated addition to OUString/OString/OUStringBuffer/OStringBuffer.
 
     Eg.
       OUString x = "xxx";
@@ -60,6 +60,9 @@ public:
             return false;
         // TODO the += depends on the result of the preceding assign, so can't merge
         if (fn == SRCDIR "/editeng/source/misc/svxacorr.cxx")
+            return false;
+        // TODO this file has a boatload of buffer appends' and I don't feel like fixing them all now
+        if (fn == SRCDIR "/vcl/source/gdi/pdfwriter_impl.cxx")
             return false;
         return true;
     }
@@ -143,12 +146,26 @@ StringAdd::VarDeclAndSummands StringAdd::findAssignOrAdd(Stmt const* stmt)
             {
                 auto tc = loplugin::TypeCheck(varDeclLHS->getType());
                 if (!tc.Class("OUString").Namespace("rtl").GlobalNamespace()
-                    && !tc.Class("OString").Namespace("rtl").GlobalNamespace())
+                    && !tc.Class("OString").Namespace("rtl").GlobalNamespace()
+                    && !tc.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
+                    && !tc.Class("OStringBuffer").Namespace("rtl").GlobalNamespace())
                     return {};
                 if (varDeclLHS->getStorageDuration() == SD_Static)
                     return {};
                 if (!varDeclLHS->hasInit())
                     return {};
+                if (tc.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
+                    || tc.Class("OStringBuffer").Namespace("rtl").GlobalNamespace())
+                {
+                    // ignore the constructor that gives the buffer a default size
+                    if (auto cxxConstructor = dyn_cast<CXXConstructExpr>(varDeclLHS->getInit()))
+                        if (auto constructorDecl = cxxConstructor->getConstructor())
+                            if (constructorDecl->getNumParams() == 1
+                                && loplugin::TypeCheck(constructorDecl->getParamDecl(0)->getType())
+                                       .Typedef("sal_Int32")
+                                       .GlobalNamespace())
+                                return {};
+                }
                 return { varDeclLHS, (isCompileTimeConstant(varDeclLHS->getInit())
                                           ? Summands::OnlyCompileTimeConstants
                                           : (isSideEffectFree(varDeclLHS->getInit())
@@ -171,6 +188,24 @@ StringAdd::VarDeclAndSummands StringAdd::findAssignOrAdd(Stmt const* stmt)
                                   : (isSideEffectFree(rhs) ? Summands::OnlySideEffectFree
                                                            : Summands::SideEffect)) };
                 }
+    if (auto memberCall = dyn_cast<CXXMemberCallExpr>(stmt))
+        if (auto cxxMethodDecl = dyn_cast_or_null<CXXMethodDecl>(memberCall->getDirectCallee()))
+            if (cxxMethodDecl->getIdentifier() && cxxMethodDecl->getName() == "append")
+                if (auto declRefExprLHS
+                    = dyn_cast<DeclRefExpr>(ignore(memberCall->getImplicitObjectArgument())))
+                    if (auto varDeclLHS = dyn_cast<VarDecl>(declRefExprLHS->getDecl()))
+                    {
+                        auto tc = loplugin::TypeCheck(varDeclLHS->getType());
+                        if (!tc.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
+                            && !tc.Class("OStringBuffer").Namespace("rtl").GlobalNamespace())
+                            return {};
+                        auto rhs = memberCall->getArg(0);
+                        return { varDeclLHS,
+                                 (isCompileTimeConstant(rhs)
+                                      ? Summands::OnlyCompileTimeConstants
+                                      : (isSideEffectFree(rhs) ? Summands::OnlySideEffectFree
+                                                               : Summands::SideEffect)) };
+                    }
     return {};
 }
 
@@ -182,20 +217,41 @@ bool StringAdd::checkForCompoundAssign(Stmt const* stmt1, Stmt const* stmt2,
         stmt2 = exprCleanup->getSubExpr();
     if (auto switchCase = dyn_cast<SwitchCase>(stmt2))
         stmt2 = switchCase->getSubStmt();
-    auto operatorCall = dyn_cast<CXXOperatorCallExpr>(stmt2);
-    if (!operatorCall)
-        return false;
-    if (operatorCall->getOperator() != OO_PlusEqual)
-        return false;
-    auto declRefExprLHS = dyn_cast<DeclRefExpr>(ignore(operatorCall->getArg(0)));
+
+    const DeclRefExpr* declRefExprLHS;
+    const Expr* rhs;
+    auto tc = loplugin::TypeCheck(varDecl.varDecl->getType());
+    if (tc.Class("OString") || tc.Class("OUString"))
+    {
+        auto operatorCall = dyn_cast<CXXOperatorCallExpr>(stmt2);
+        if (!operatorCall)
+            return false;
+        if (operatorCall->getOperator() != OO_PlusEqual)
+            return false;
+        declRefExprLHS = dyn_cast<DeclRefExpr>(ignore(operatorCall->getArg(0)));
+        rhs = operatorCall->getArg(1);
+    }
+    else
+    {
+        // OUStringBuffer, OStringBuffer
+        auto memberCall = dyn_cast<CXXMemberCallExpr>(stmt2);
+        if (!memberCall)
+            return false;
+        auto cxxMethodDecl = dyn_cast_or_null<CXXMethodDecl>(memberCall->getDirectCallee());
+        if (!cxxMethodDecl)
+            return false;
+        if (!cxxMethodDecl->getIdentifier() || cxxMethodDecl->getName() != "append")
+            return false;
+        declRefExprLHS = dyn_cast<DeclRefExpr>(ignore(memberCall->getImplicitObjectArgument()));
+        rhs = memberCall->getArg(0);
+    }
     if (!declRefExprLHS)
         return false;
     if (declRefExprLHS->getDecl() != varDecl.varDecl)
         return false;
     // if either side is a compile-time-constant, then we don't care about
     // side-effects
-    auto rhs = operatorCall->getArg(1);
-    auto const ctcRhs = isCompileTimeConstant(rhs);
+    bool const ctcRhs = isCompileTimeConstant(rhs);
     if (!ctcRhs)
     {
         auto const sefRhs = isSideEffectFree(rhs);
@@ -207,16 +263,23 @@ bool StringAdd::checkForCompoundAssign(Stmt const* stmt1, Stmt const* stmt2,
             return true;
         }
     }
+    SourceRange mergeRange(stmt1->getSourceRange().getBegin(), stmt2->getSourceRange().getEnd());
     // if we cross a #ifdef boundary
-    if (containsPreprocessingConditionalInclusion(
-            SourceRange(stmt1->getSourceRange().getBegin(), stmt2->getSourceRange().getEnd())))
+    if (containsPreprocessingConditionalInclusion(mergeRange))
     {
         varDecl.summands
             = ctcRhs ? Summands::OnlyCompileTimeConstants
                      : isSideEffectFree(rhs) ? Summands::OnlySideEffectFree : Summands::SideEffect;
         return true;
     }
-    report(DiagnosticsEngine::Warning, "simplify by merging with the preceding assignment",
+    // If there is a comment between two calls, rather don't suggest merge
+    // IMO, code clarity trumps efficiency (as far as plugin warnings go, anyway).
+    if (containsComment(mergeRange))
+        return true;
+    // I don't think the OUStringAppend functionality can handle this efficiently
+    if (isa<ConditionalOperator>(ignore(rhs)))
+        return false;
+    report(DiagnosticsEngine::Warning, "simplify by merging with the preceding assign/append",
            stmt2->getBeginLoc())
         << stmt2->getSourceRange();
     return true;
@@ -419,7 +482,9 @@ bool StringAdd::isSideEffectFree(Expr const* expr)
     if (auto constructExpr = dyn_cast<CXXConstructExpr>(expr))
     {
         auto dc = loplugin::DeclCheck(constructExpr->getConstructor());
-        if (dc.MemberFunction().Class("OUString") || dc.MemberFunction().Class("OString"))
+        if (dc.MemberFunction().Class("OUString") || dc.MemberFunction().Class("OString")
+            || dc.MemberFunction().Class("OUStringBuffer")
+            || dc.MemberFunction().Class("OStringBuffer"))
             if (constructExpr->getNumArgs() == 0 || isSideEffectFree(constructExpr->getArg(0)))
                 return true;
         // Expr::HasSideEffects does not like stuff that passes through OUStringLiteral

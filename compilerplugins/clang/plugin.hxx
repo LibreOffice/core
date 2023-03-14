@@ -102,6 +102,8 @@ protected:
 
     bool containsPreprocessingConditionalInclusion(SourceRange range);
 
+    bool containsComment(SourceRange range);
+
     enum class IdenticalDefaultArgumentsResult { No, Yes, Maybe };
     IdenticalDefaultArgumentsResult checkIdenticalDefaultArguments(
         Expr const * argument1, Expr const * argument2);

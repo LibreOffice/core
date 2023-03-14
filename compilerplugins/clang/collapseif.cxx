@@ -38,7 +38,6 @@ public:
 
 private:
     int getNoCharsInSourceCodeOfExpr(IfStmt const*);
-    bool containsComment(Stmt const* stmt);
 };
 
 bool CollapseIf::VisitIfStmt(IfStmt const* ifStmt)
@@ -73,7 +72,7 @@ bool CollapseIf::VisitIfStmt(IfStmt const* ifStmt)
 
     // Sometimes there is a comment between the first and second if, so
     // merging them would make the comment more awkward to write.
-    if (containsComment(ifStmt))
+    if (containsComment(ifStmt->getSourceRange()))
         return true;
 
     report(DiagnosticsEngine::Warning, "nested if should be collapsed into one statement %0 %1",
@@ -99,27 +98,6 @@ int CollapseIf::getNoCharsInSourceCodeOfExpr(IfStmt const* ifStmt)
             ++count;
 
     return count;
-}
-
-bool CollapseIf::containsComment(Stmt const* stmt)
-{
-    SourceManager& SM = compiler.getSourceManager();
-    auto range = stmt->getSourceRange();
-    SourceLocation startLoc = range.getBegin();
-    SourceLocation endLoc = range.getEnd();
-    char const* p1 = SM.getCharacterData(startLoc);
-    char const* p2 = SM.getCharacterData(endLoc);
-    p2 += Lexer::MeasureTokenLength(endLoc, SM, compiler.getLangOpts());
-
-    // check for comments
-    constexpr char const comment1[] = "/*";
-    constexpr char const comment2[] = "//";
-    if (std::search(p1, p2, comment1, comment1 + strlen(comment1)) != p2)
-        return true;
-    if (std::search(p1, p2, comment2, comment2 + strlen(comment2)) != p2)
-        return true;
-
-    return false;
 }
 
 /** Off by default because some places are a judgement call if it should be collapsed or not. */

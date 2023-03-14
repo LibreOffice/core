@@ -543,6 +543,32 @@ bool Plugin::containsPreprocessingConditionalInclusion(SourceRange range)
     return false;
 }
 
+bool Plugin::containsComment(SourceRange range)
+{
+    SourceManager& SM = compiler.getSourceManager();
+    SourceLocation startLoc = range.getBegin();
+    SourceLocation endLoc = range.getEnd();
+    char const* p1 = SM.getCharacterData(startLoc);
+    char const* p2 = SM.getCharacterData(endLoc);
+    p2 += Lexer::MeasureTokenLength(endLoc, SM, compiler.getLangOpts());
+
+    // when doing 'make solenv.check' we don't want the special comments in the
+    // unit test files to trigger this check
+    constexpr char const comment0[] = "// expected-error";
+    if (std::search(p1, p2, comment0, comment0 + strlen(comment0)) != p2)
+        return false;
+
+    // check for comments
+    constexpr char const comment1[] = "/*";
+    constexpr char const comment2[] = "//";
+    if (std::search(p1, p2, comment1, comment1 + strlen(comment1)) != p2)
+        return true;
+    if (std::search(p1, p2, comment2, comment2 + strlen(comment2)) != p2)
+        return true;
+
+    return false;
+}
+
 Plugin::IdenticalDefaultArgumentsResult Plugin::checkIdenticalDefaultArguments(
     Expr const * argument1, Expr const * argument2)
 {

@@ -27,48 +27,48 @@ static const char XXX2[] = "xxx";
 void f1(OUString s1, int i, OString o)
 {
     OUString s2 = s1;
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s2 += "xxx";
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s2 += "xxx";
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s2 += s1;
     s2 = s1 + "xxx";
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s2 += s1;
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s2 += OUString::number(i);
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s2 += XXX1;
     // expected-error-re@+2 {{rather use O[U]String::Concat than constructing '{{(rtl::)?}}OUStringLiteral<4>'{{( \(aka 'rtl::OUStringLiteral<4>'\))?}} from 'const char16_t{{ ?}}[4]' on LHS of + (where RHS is of type 'const char{{ ?}}[4]') [loplugin:stringadd]}}
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s2 += OUStringLiteral(XXX1u) + XXX2;
 
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s2 += OStringToOUString(o, RTL_TEXTENCODING_UTF8);
 }
 void f2(OString s1, int i, OUString u)
 {
     OString s2 = s1;
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s2 += "xxx";
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s2 += "xxx";
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s2 += s1;
     s2 = s1 + "xxx";
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s2 += s1;
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s2 += OString::number(i);
 
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s2 += OUStringToOString(u, RTL_TEXTENCODING_ASCII_US);
 }
 void f3(OUString aStr, int nFirstContent)
 {
     OUString aFirstStr = aStr.copy(0, nFirstContent);
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     aFirstStr += "...";
 }
 OUString side_effect();
@@ -76,15 +76,15 @@ void f4(int i)
 {
     OUString s1;
     OUString s2("xxx");
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s2 += "xxx";
     ++i;
     // any other kind of statement breaks the chain (at least for now)
     s2 += "xxx";
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s2 += side_effect();
     s1 += "yyy";
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s1 += "yyy";
 }
 }
@@ -94,13 +94,13 @@ namespace test2
 void f(OUString s3)
 {
     s3 += "xxx";
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s3 += "xxx";
 }
 void g(OString s3)
 {
     s3 += "xxx";
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s3 += "xxx";
 }
 }
@@ -114,28 +114,28 @@ struct Bar
 void f(Bar b1, Bar& b2, Bar* b3)
 {
     OUString s3 = "xxx";
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s3 += b1.m_field;
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s3 += b2.m_field;
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s3 += b3->m_field;
 }
 OUString side_effect();
 void f2(OUString s)
 {
     OUString sRet = "xxx";
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     sRet += side_effect();
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     sRet += "xxx";
     sRet += side_effect();
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     sRet += "xxx";
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     sRet += "xxx";
     sRet += s;
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     sRet += "xxx";
 }
 }
@@ -151,7 +151,7 @@ void f()
     sRet += ";";
 #endif
     sRet += " ";
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     sRet += side_effect();
 }
 }
@@ -172,9 +172,9 @@ namespace test6
 void f(OUString sComma, OUString maExtension, int mnDocumentIconID)
 {
     OUString sValue;
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     sValue += sComma + sComma + maExtension + sComma;
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     sValue += OUString::number(mnDocumentIconID) + sComma;
 }
 struct Foo
@@ -188,7 +188,7 @@ void g(int x, const Foo& aValidation)
     {
         case 1:
             sCondition += "cell-content-is-in-list(";
-            // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+            // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
             sCondition += aValidation.sFormula1 + ")";
     }
 }
@@ -251,11 +251,49 @@ C getC();
 void f1(C c)
 {
     OString s;
-    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
     s += c.constStringFunction(c.constIntFunction());
     s += c.constStringFunction(c.nonConstIntFunction());
     s += c.nonConstStringFunction();
     s += getC().constStringFunction(c.constIntFunction());
+}
+}
+
+namespace test11
+{
+void f1()
+{
+    OUStringBuffer aFirstStr1("aaa");
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
+    aFirstStr1.append("...");
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
+    aFirstStr1.append("...");
+}
+}
+
+namespace test12
+{
+void f1(int j)
+{
+    OUStringBuffer aFirstStr1(12);
+    // no warning expected
+    aFirstStr1.append("...");
+    // expected-error@+1 {{simplify by merging with the preceding assign/append [loplugin:stringadd]}}
+    aFirstStr1.append("...");
+    // no warning expected
+    aFirstStr1.append(((j + 1) % 15) ? " " : "\n");
+}
+}
+
+namespace test13
+{
+void f1()
+{
+    OUStringBuffer aFirstStr1(12);
+    // no warning expected
+    aFirstStr1.append("...");
+    // because we have a comment between them
+    aFirstStr1.append("...");
 }
 }
 
