@@ -36,75 +36,14 @@
 
 using namespace css;
 
-namespace sc_apitest
-{
 class ScShapeTest : public ScModelTestBase
 {
 public:
-    ScShapeTest();
-    void testTdf143619_validation_circle_pos();
-    void testTdf140252_DragCreateFormControl();
-    void testTdf134355_DragCreateCustomShape();
-    void testTdf140252_LayerOfControl();
-    void testTdf137082_LTR_to_RTL();
-    void testTdf137082_RTL_cell_anchored();
-    void testTdf137081_RTL_page_anchored();
-    void testTdf139583_Rotate180deg();
-    void testTdf137033_FlipHori_Resize();
-    void testTdf137033_RotShear_ResizeHide();
-    void testTdf137033_RotShear_Hide();
-    void testTdf137576_LogicRectInDefaultMeasureline();
-    void testTdf137576_LogicRectInNewMeasureline();
-    void testMeasurelineHideColSave();
-    void testHideColsShow();
-    void testFormSizeWithHiddenCol();
-    void testTdf138138_MoveCellWithRotatedShape();
-    void testLoadVerticalFlip();
-    void testTdf117948_CollapseBeforeShape();
-    void testTdf137355_UndoHideRows();
-    void testTdf152081_UndoHideColsWithNotes();
-    void testTdf115655_HideDetail();
-    void testFitToCellSize();
-    void testCustomShapeCellAnchoredRotatedShape();
-    void testTdf144242_Line_noSwapWH();
-    void testTdf144242_OpenBezier_noSwapWH();
-    void testLargeAnchorOffset();
-
-    CPPUNIT_TEST_SUITE(ScShapeTest);
-    CPPUNIT_TEST(testTdf143619_validation_circle_pos);
-    CPPUNIT_TEST(testTdf140252_DragCreateFormControl);
-    CPPUNIT_TEST(testTdf134355_DragCreateCustomShape);
-    CPPUNIT_TEST(testTdf140252_LayerOfControl);
-    CPPUNIT_TEST(testTdf137082_LTR_to_RTL);
-    CPPUNIT_TEST(testTdf137082_RTL_cell_anchored);
-    CPPUNIT_TEST(testTdf137081_RTL_page_anchored);
-    CPPUNIT_TEST(testTdf139583_Rotate180deg);
-    CPPUNIT_TEST(testTdf137033_FlipHori_Resize);
-    CPPUNIT_TEST(testTdf137033_RotShear_ResizeHide);
-    CPPUNIT_TEST(testTdf137033_RotShear_Hide);
-    CPPUNIT_TEST(testTdf137576_LogicRectInDefaultMeasureline);
-    CPPUNIT_TEST(testTdf137576_LogicRectInNewMeasureline);
-    CPPUNIT_TEST(testMeasurelineHideColSave);
-    CPPUNIT_TEST(testHideColsShow);
-    CPPUNIT_TEST(testFormSizeWithHiddenCol);
-    CPPUNIT_TEST(testTdf138138_MoveCellWithRotatedShape);
-    CPPUNIT_TEST(testLoadVerticalFlip);
-    CPPUNIT_TEST(testTdf117948_CollapseBeforeShape);
-    CPPUNIT_TEST(testTdf137355_UndoHideRows);
-    CPPUNIT_TEST(testTdf152081_UndoHideColsWithNotes);
-    CPPUNIT_TEST(testTdf115655_HideDetail);
-    CPPUNIT_TEST(testFitToCellSize);
-    CPPUNIT_TEST(testCustomShapeCellAnchoredRotatedShape);
-    CPPUNIT_TEST(testTdf144242_Line_noSwapWH);
-    CPPUNIT_TEST(testTdf144242_OpenBezier_noSwapWH);
-    CPPUNIT_TEST(testLargeAnchorOffset);
-    CPPUNIT_TEST_SUITE_END();
+    ScShapeTest()
+        : ScModelTestBase("sc/qa/unit/data/ods")
+    {
+    }
 };
-
-ScShapeTest::ScShapeTest()
-    : ScModelTestBase("sc/qa/unit/data/ods")
-{
-}
 
 static SdrPage* lcl_getSdrPageWithAssert(ScDocument& rDoc)
 {
@@ -127,7 +66,7 @@ static SdrObject* lcl_getSdrObjectWithAssert(ScDocument& rDoc, sal_uInt16 nObjNu
     return pObj;
 }
 
-void ScShapeTest::testTdf144242_OpenBezier_noSwapWH()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf144242_OpenBezier_noSwapWH)
 {
     // Shapes, which have rotation incorporated in their points, got erroneously width-height
     // swapped, because they report a rotation. (Rotation was introduced to align text with curve.)
@@ -160,7 +99,7 @@ void ScShapeTest::testTdf144242_OpenBezier_noSwapWH()
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectRect, aSnapRect, 40);
 }
 
-void ScShapeTest::testTdf144242_Line_noSwapWH()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf144242_Line_noSwapWH)
 {
     // Shapes, which have rotation incorporated in their points, got erroneously width-height
     // swapped, because they report a rotation. (Rotation was introduced to align text with line.)
@@ -193,7 +132,7 @@ void ScShapeTest::testTdf144242_Line_noSwapWH()
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectRect, aSnapRect, 40);
 }
 
-void ScShapeTest::testTdf143619_validation_circle_pos()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf143619_validation_circle_pos)
 {
     // Load a document, which has validation circle around cell E6.
     createScDoc("tdf143619_validationCirclePos.ods");
@@ -219,7 +158,7 @@ void ScShapeTest::testTdf143619_validation_circle_pos()
     CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(6523, 1736), aPos, 1);
 }
 
-void ScShapeTest::testTdf140252_DragCreateFormControl()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf140252_DragCreateFormControl)
 {
     // Error was, that drag-created form controls were initially not on layer 'controls' and thus
     // other shapes could be placed in front of form controls.
@@ -264,7 +203,7 @@ void ScShapeTest::testTdf140252_DragCreateFormControl()
     CPPUNIT_ASSERT_EQUAL(nExpectedID, nActualID);
 }
 
-void ScShapeTest::testTdf134355_DragCreateCustomShape()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf134355_DragCreateCustomShape)
 {
     // Error was, that drag-created custom shapes were initially on layer "controls", although that
     // layer is exclusively for form controls. Effect was, that other shapes could not be brought in
@@ -304,7 +243,7 @@ void ScShapeTest::testTdf134355_DragCreateCustomShape()
     CPPUNIT_ASSERT_EQUAL(nExpectedID, nActualID);
 }
 
-void ScShapeTest::testTdf140252_LayerOfControl()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf140252_LayerOfControl)
 {
     // Error was, that a newly inserted control shape was put on layer
     // "vorne" instead of layer "control".
@@ -331,7 +270,7 @@ void ScShapeTest::testTdf140252_LayerOfControl()
     CPPUNIT_ASSERT_EQUAL(nExpectedID, nActualID);
 }
 
-void ScShapeTest::testTdf137082_LTR_to_RTL()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf137082_LTR_to_RTL)
 {
     // Before the fix for tdf137081 and tdf137082, when flipping sheet from LTR to RTL, page anchored
     // shapes were mirrored, but cell anchored shapes not. This was changed so, that shapes are always
@@ -363,7 +302,7 @@ void ScShapeTest::testTdf137082_LTR_to_RTL()
                                  nRotateRTLActual.get());
 }
 
-void ScShapeTest::testTdf137082_RTL_cell_anchored()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf137082_RTL_cell_anchored)
 {
     // Error was, that cell anchored custom shapes wrote wrong offsets to file and thus were wrong on
     // reloading. The file contains one custom shape with "resize" and another one without.
@@ -398,7 +337,7 @@ void ScShapeTest::testTdf137082_RTL_cell_anchored()
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRectB, pObj->GetSnapRect(), 1);
 }
 
-void ScShapeTest::testTdf137081_RTL_page_anchored()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf137081_RTL_page_anchored)
 {
     // Error was, that page anchored lines and custom shapes were mirrored on opening. The document
     // contains measure line, polyline and transformed custom shape.
@@ -456,7 +395,7 @@ void ScShapeTest::testTdf137081_RTL_page_anchored()
     CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aTopLeft, pObjCS->GetLogicRect().TopLeft(), 1);
 }
 
-void ScShapeTest::testTdf139583_Rotate180deg()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf139583_Rotate180deg)
 {
     // Load an empty document.
     createScDoc("ManualColWidthRowHeight.ods");
@@ -490,7 +429,7 @@ void ScShapeTest::testTdf139583_Rotate180deg()
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aRect, pObj->GetSnapRect(), 1);
 }
 
-void ScShapeTest::testTdf137033_FlipHori_Resize()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf137033_FlipHori_Resize)
 {
     // Load a document, which has a rotated custom shape, which is horizontal flipped. Error was, that
     // if such shape was anchored "resize with cell", then after save and reload it was distorted.
@@ -518,7 +457,7 @@ void ScShapeTest::testTdf137033_FlipHori_Resize()
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectRect, aSnapRect, 1);
 }
 
-void ScShapeTest::testTdf137033_RotShear_ResizeHide()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf137033_RotShear_ResizeHide)
 {
     // For rotated or sheared shapes anchored "To Cell (resize with cell) hiding rows or columns will
     // not only change size but rotation and shear angle too. Error was, that not the original angles
@@ -570,7 +509,7 @@ void ScShapeTest::testTdf137033_RotShear_ResizeHide()
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectRect, aSnapRect, 7);
 }
 
-void ScShapeTest::testTdf137033_RotShear_Hide()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf137033_RotShear_Hide)
 {
     // Hiding row or columns affect cell anchored shape based on their snap rectangle. The first
     // attempt to fix lost position has used the logic rect instead. For rotated or sheared shape it
@@ -603,7 +542,7 @@ void ScShapeTest::testTdf137033_RotShear_Hide()
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectRect, aSnapRect, 1);
 }
 
-void ScShapeTest::testTdf137576_LogicRectInDefaultMeasureline()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf137576_LogicRectInDefaultMeasureline)
 {
     // Error was, that the empty logical rectangle of a default measure line (Ctrl+Click)
     // resulted in zeros in NonRotatedAnchor and a wrong position when reloading.
@@ -649,7 +588,7 @@ void ScShapeTest::testTdf137576_LogicRectInDefaultMeasureline()
     CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aOldPos, aNewPos, 1);
 }
 
-void ScShapeTest::testTdf137576_LogicRectInNewMeasureline()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf137576_LogicRectInNewMeasureline)
 {
     // Error was, that a new measure line had no logical rectangle. This resulted in zeros in
     // NonRotatedAnchor. As a result the position was wrong when reloading.
@@ -683,7 +622,7 @@ void ScShapeTest::testTdf137576_LogicRectInNewMeasureline()
     pObj.clear();
 }
 
-void ScShapeTest::testMeasurelineHideColSave()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testMeasurelineHideColSave)
 {
     // The document contains a SdrMeasureObj anchored "To Cell (resize with cell)" with start in cell
     // D11 and end in cell I5. Error was, that after hiding col A and saving, start and end point
@@ -721,7 +660,7 @@ void ScShapeTest::testMeasurelineHideColSave()
     CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aEndPoint, pObj->GetPoint(1), 2);
 }
 
-void ScShapeTest::testHideColsShow()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testHideColsShow)
 {
     // The document contains a shape anchored "To Cell (resize with cell)" with starts in cell C3 and
     //ends in cell D5. Error was, that hiding cols C and D and then show them again extends the shape
@@ -761,7 +700,7 @@ void ScShapeTest::testHideColsShow()
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRectOrig, aSnapRectShow, 1);
 }
 
-void ScShapeTest::testFormSizeWithHiddenCol()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testFormSizeWithHiddenCol)
 {
     // The document contains a form (Listbox) shape anchored "To Cell (resize with cell)" with starts in cell B5 and
     // ends in cell D5. The error was the form shape was resized if there was hidden col/row.
@@ -789,7 +728,7 @@ void ScShapeTest::testFormSizeWithHiddenCol()
     CPPUNIT_ASSERT_EQUAL(OUString("start col 1 row 4 end col 3 row 4"), sActual);
 }
 
-void ScShapeTest::testTdf138138_MoveCellWithRotatedShape()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf138138_MoveCellWithRotatedShape)
 {
     // The document contains a 90deg rotated, cell-anchored rectangle in column D. Insert 2 columns
     // after column B, save and reload. The shape was not correctly moved to column F.
@@ -828,7 +767,7 @@ void ScShapeTest::testTdf138138_MoveCellWithRotatedShape()
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectedRect, aSnapRect, 1);
 }
 
-void ScShapeTest::testLoadVerticalFlip()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testLoadVerticalFlip)
 {
     // The document has a cell anchored custom shape with vertical flip. Error was, that the
     // flip was lost on loading.
@@ -842,7 +781,7 @@ void ScShapeTest::testLoadVerticalFlip()
     CPPUNIT_ASSERT_MESSAGE("Load: Object should be vertically flipped", pObj->IsMirroredY());
 }
 
-void ScShapeTest::testTdf117948_CollapseBeforeShape()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf117948_CollapseBeforeShape)
 {
     // The document contains a column group left from the image. The group is expanded. Collapse the
     // group, save and reload. The original error was, that the line was on wrong position after reload.
@@ -885,7 +824,7 @@ void ScShapeTest::testTdf117948_CollapseBeforeShape()
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aExpectedRect1, aSnapRect1Reload, 2);
 }
 
-void ScShapeTest::testTdf137355_UndoHideRows()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf137355_UndoHideRows)
 {
     // The document contains a shape anchored "To Cell" with start in cell C3 and end in cell D6.
     // Error was, that hiding rows 3 to 6 and undo that action "lost" the shape.
@@ -921,7 +860,7 @@ void ScShapeTest::testTdf137355_UndoHideRows()
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRectOrig, aSnapRectUndo, 1);
 }
 
-void ScShapeTest::testTdf152081_UndoHideColsWithNotes()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf152081_UndoHideColsWithNotes)
 {
     createScDoc("tdf152081_UndoHideColsWithNotes.ods");
 
@@ -950,7 +889,7 @@ void ScShapeTest::testTdf152081_UndoHideColsWithNotes()
     CPPUNIT_ASSERT_MESSAGE("Undo: Note object should be visible", pObj->IsVisible());
 }
 
-void ScShapeTest::testTdf115655_HideDetail()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf115655_HideDetail)
 {
     // The document contains an image inside a cell anchored "To Cell (resize with cell)". The cell
     // belongs to a group. On loading the group is expanded.
@@ -995,7 +934,7 @@ void ScShapeTest::testTdf115655_HideDetail()
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRectOrig, aSnapRectReload, 1);
 }
 
-void ScShapeTest::testFitToCellSize()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testFitToCellSize)
 {
     // The document has a cell anchored custom shape. Applying
     // FitToCellSize should resize and position the shape so,
@@ -1024,7 +963,7 @@ void ScShapeTest::testFitToCellSize()
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aCellRect, rShapeRect, 2);
 }
 
-void ScShapeTest::testCustomShapeCellAnchoredRotatedShape()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testCustomShapeCellAnchoredRotatedShape)
 {
     // The example doc contains a cell anchored custom shape that is rotated
     // and sheared. Error was, that the shape lost position and size on
@@ -1053,7 +992,7 @@ void ScShapeTest::testCustomShapeCellAnchoredRotatedShape()
     CPPUNIT_ASSERT_EQUAL(OUString("start col 1 row 1 end col 2 row 8"), sActual);
 }
 
-void ScShapeTest::testLargeAnchorOffset()
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testLargeAnchorOffset)
 {
     // The example doc contains a resize-with-cell-anchored measure line
     // with a large vertical offset that shifts the start point onto the
@@ -1079,9 +1018,6 @@ void ScShapeTest::testLargeAnchorOffset()
     //   - after reload Y expected 9089 actual 9643 Tolerance 1
     const Point aNewPos = pObj->GetRelativePos();
     CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aOldPos, aNewPos, 1);
-}
-
-CPPUNIT_TEST_SUITE_REGISTRATION(ScShapeTest);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
