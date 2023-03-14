@@ -1373,6 +1373,8 @@ void SwTOXBaseSection::UpdateTemplate(const SwTextNode* pOwnChapterNode,
                 if (pTextNd->GetText().getLength() &&
                     pTextNd->getLayoutFrame(pLayout) &&
                     pTextNd->GetNodes().IsDocNodes() &&
+                    // tdf#40142 - consider level settings of the various text nodes
+                    o3tl::make_unsigned(pTextNd->GetAttrOutlineLevel()) <= GetLevel() &&
                     (!pLayout || !pLayout->HasMergedParas()
                         || static_cast<SwTextFrame*>(pTextNd->getLayoutFrame(pLayout))->GetTextNodeForParaProps() == pTextNd) &&
                     (!IsFromChapter() || IsHeadingContained(pOwnChapterNode, *pTextNd)))

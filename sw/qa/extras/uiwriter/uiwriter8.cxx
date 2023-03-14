@@ -2484,13 +2484,25 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf97899)
     CPPUNIT_ASSERT(!sCharStyleName.isEmpty());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf40142)
+{
+    createSwDoc("tdf40142.odt");
+    dispatchCommand(mxComponent, ".uno:UpdateAllIndexes", {});
+
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    // Without the fix in place, this test would have failed with
+    // - Expected: 2
+    // - Actual  : 4
+    assertXPath(pLayout, "/root/page[1]/body/section[2]/txt", 2);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf151462)
 {
     createSwDoc("tdf151462.odt");
     dispatchCommand(mxComponent, ".uno:UpdateAllIndexes", {});
 
     xmlDocUniquePtr pLayout = parseLayoutDump();
-    // tdf#151462 - without the fix in place, there would be just the first index entry
+    // Without the fix in place, there would be just the first index entry
     assertXPath(pLayout,
                 "/root/page[1]/body/txt[2]/anchored/fly/section/txt[1]/SwParaPortion/"
                 "SwLineLayout[1]/SwLinePortion[1]",
@@ -2504,7 +2516,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf151462)
                 "SwLineLayout[1]/SwLinePortion[1]",
                 "portion", "sub three");
 
-    // tdf#151462 - without the fix in place, there would be just the first index entry
+    // Without the fix in place, there would be just the first index entry
     assertXPath(pLayout,
                 "/root/page[1]/body/txt[6]/anchored/fly/section/txt[1]/SwParaPortion/"
                 "SwLineLayout[1]/SwLinePortion[1]",
