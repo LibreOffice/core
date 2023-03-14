@@ -18,7 +18,7 @@ class Tdf137945(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "1")
-                xInput = xDialog.getChild("inputhelp")
+                xInput = xDialog.getChild("inputhelp_text")
                 xTitle = xDialog.getChild("title")
 
                 self.assertEqual("test", get_state_as_dict(xTitle)['Text'])
