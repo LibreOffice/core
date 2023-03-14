@@ -87,7 +87,7 @@ Private _ActionListener		As Object		&apos; com.sun.star.awt.XActionListener
 Private _OnActionPerformed	As String		&apos; Script to invoke when action triggered
 Private _ActionCounter		As Integer		&apos; Counts the number of events set on the listener
 &apos; ---
-Private _AdjustmentListener	As Strung		&apos; com.sun.star.awt.XAdjustmentListener
+Private _AdjustmentListener	As Object		&apos; com.sun.star.awt.XAdjustmentListener
 Private _OnAdjustmentValueChanged As String	&apos; Script to invoke when scrollbar value has changed
 Private _AdjustmentCounter	As Integer		&apos; Counts the number of events set on the listener
 &apos; ---
