@@ -3237,6 +3237,7 @@ void XMLShapeExport::ImpExportFrameShape(
         SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_FLOATING_FRAME, true, true);
     }
 
+    ImpExportDescription(xShape);
 }
 
 void XMLShapeExport::ImpExportAppletShape(
@@ -3292,6 +3293,7 @@ void XMLShapeExport::ImpExportAppletShape(
         }
     }
 
+    ImpExportDescription(xShape);
 }
 
 void XMLShapeExport::ImpExportPluginShape(
@@ -3338,6 +3340,7 @@ void XMLShapeExport::ImpExportPluginShape(
         }
     }
 
+    ImpExportDescription(xShape);
 }
 
 static void lcl_CopyStream(
@@ -3581,6 +3584,8 @@ void XMLShapeExport::ImpExportMediaShape(
         // The media has a preview, export it.
         ExportGraphicPreview(xGraphic, mrExport, u"MediaPreview", u".png", "image/png");
     }
+
+    ImpExportDescription(xShape);
 }
 
 void XMLShapeExport::ImpExport3DSceneShape( const uno::Reference< drawing::XShape >& xShape, XMLShapeExportFlags nFeatures, awt::Point* pRefPoint)
