@@ -1238,7 +1238,7 @@ Try:
 		_GridColumnModel.removeColumn(i)
 	Next i
 
-	&apos;	LBounds, UBounds - Basic or Pytho
+	&apos;	LBounds, UBounds - Basic or Python
 	iDims = ScriptForge.SF_Array.CountDims(DataArray)
 	Select Case iDims
 		Case -1, 0		:	GoTo Catch
