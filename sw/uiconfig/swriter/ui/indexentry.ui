@@ -480,8 +480,9 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="applytoallcb">
-                <property name="label" translatable="yes" context="indexentry|applytoallcb">Apply to all similar texts</property>
+                <property name="label" translatable="yes" context="indexentry|applytoallcb">Apply to all other occurrences</property>
                 <property name="can-focus">True</property>
+                 <property name="tooltip-text" translatable="yes" context="indexentry|applytoallcb|tooltip_text">Add an index entry to any other occurences of the selected text specified in “Entry”.</property>
                 <property name="receives-default">False</property>
                 <property name="no-show-all">True</property>
                 <property name="halign">start</property>
