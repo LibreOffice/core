@@ -8746,7 +8746,7 @@ void ScInterpreter::ScIndex()
                     if (nC == 0 || nR == 0 ||
                             (!bVectorElement && (o3tl::make_unsigned(nCol) > nC ||
                                                  o3tl::make_unsigned(nRow) > nR)))
-                        PushIllegalArgument();
+                        PushError( FormulaError::NoRef);
                     else if (nCol == 0 && nRow == 0)
                         sp = nOldSp;
                     else if (bVectorElement)
@@ -8765,7 +8765,7 @@ void ScInterpreter::ScIndex()
                         }
 
                         if (nElement == 0 || nElement > nC * nR || nOtherDimension > 1)
-                            PushIllegalArgument();
+                            PushError( FormulaError::NoRef);
                         else
                         {
                             --nElement;
@@ -8791,7 +8791,7 @@ void ScInterpreter::ScIndex()
                             PushMatrix(pResMat);
                         }
                         else
-                            PushIllegalArgument();
+                            PushError( FormulaError::NoRef);
                     }
                     else if (nRow == 0)
                     {
@@ -8808,7 +8808,7 @@ void ScInterpreter::ScIndex()
                             PushMatrix(pResMat);
                         }
                         else
-                            PushIllegalArgument();
+                            PushError( FormulaError::NoRef);
                     }
                     else
                     {
@@ -8832,7 +8832,7 @@ void ScInterpreter::ScIndex()
                 SCTAB nTab1 = 0;
                 PopSingleRef( nCol1, nRow1, nTab1);
                 if (nCol > 1 || nRow > 1)
-                    PushIllegalArgument();
+                    PushError( FormulaError::NoRef);
                 else
                     PushSingleRef( nCol1, nRow1, nTab1);
             }
@@ -8852,7 +8852,7 @@ void ScInterpreter::ScIndex()
                     FormulaConstTokenRef xRef = PopToken();
                     if (nGlobalError != FormulaError::NONE || !xRef)
                     {
-                        PushIllegalParameter();
+                        PushError( FormulaError::NoRef);
                         return;
                     }
                     ScRange aRange( ScAddress::UNINITIALIZED);
@@ -8871,7 +8871,7 @@ void ScInterpreter::ScIndex()
                         (nCol > 0 && nCol1+nCol-1 > nCol2) ||
                         (nRow > 0 && nRow1+nRow-1 > nRow2 && !bRowArray ) ||
                         ( nRow > nCol2 - nCol1 + 1 && bRowArray ))
-                    PushIllegalArgument();
+                    PushError( FormulaError::NoRef);
                 else if (nCol == 0 && nRow == 0)
                 {
                     if ( nCol1 == nCol2 && nRow1 == nRow2 )
@@ -8906,7 +8906,8 @@ void ScInterpreter::ScIndex()
             }
             break;
         default:
-            PushIllegalParameter();
+            PopError();
+            PushError( FormulaError::NoRef);
     }
 }
 
