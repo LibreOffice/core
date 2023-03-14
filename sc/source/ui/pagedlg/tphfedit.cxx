@@ -243,7 +243,7 @@ bool ScEditWindow::MouseButtonDown(const MouseEvent& rMEvt)
     bool bRet = WeldEditView::MouseButtonDown(rMEvt);
     if (!bHadFocus)
     {
-        assert(HasFocus());
+        assert(comphelper::LibreOfficeKit::isActive() || HasFocus());
         GetFocus();
     }
     return bRet;
