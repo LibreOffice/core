@@ -510,6 +510,19 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyCompat14)
     // Without the accompanying fix in place, this test would have failed, the first row was split,
     // but not in Word.
     CPPUNIT_ASSERT(!pCell1->GetFollowCell());
+    // Also make sure that the second row is entirely on page 2:
+    auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
+    CPPUNIT_ASSERT(pPage2);
+    const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
+    auto pPage2Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage2Objs[0]);
+    CPPUNIT_ASSERT(pPage2Fly);
+    SwFrame* pTab2 = pPage2Fly->GetLower();
+    SwFrame* pRow2 = pTab2->GetLower();
+    auto pCell2 = dynamic_cast<SwCellFrame*>(pRow2->GetLower());
+    // Without the accompanying fix in place, this test would have failed, the second row was split,
+    // but not in Word.
+    CPPUNIT_ASSERT(!pCell2->GetPreviousCell());
 }
 }
 
