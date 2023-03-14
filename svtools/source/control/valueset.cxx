@@ -80,8 +80,6 @@ ValueSet::ValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
     , mbFormat(true)
     , mbHighlight(false)
 {
-    maVirDev->SetBackground(Application::GetSettings().GetStyleSettings().GetFaceColor());
-
     mnItemWidth         = 0;
     mnItemHeight        = 0;
     mnTextOffset        = 0;
@@ -998,6 +996,7 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
 
     // Init VirDev
     maVirDev->SetSettings(rRenderContext.GetSettings());
+    maVirDev->SetBackground(Application::GetSettings().GetStyleSettings().GetFaceColor());
     maVirDev->SetOutputSizePixel(aWinSize);
 
     // nothing is changed in case of too small items
