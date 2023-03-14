@@ -48,7 +48,7 @@ REM ----------------------------------------------------------------------------
 Public Sub _SFEXP_requestChildNodes(Optional ByRef poEvent As Object)
 &apos;&apos;&apos;	Triggered by the OnNodeExpanded event of a tree control
 &apos;&apos;&apos;	The event is triggered thru a com.sun.star.view.XTreeExpansionListener
-&apos;&apos;&apos;	The argument is passed to a user routine sstored in the SF_DialogControl instance
+&apos;&apos;&apos;	The argument is passed to a user routine stored in the SF_DialogControl instance
 &apos;&apos;&apos;		as a scripting framework URI
 
 Dim oControl As Object				&apos;	The SF_DialogControl object having triggered the event
