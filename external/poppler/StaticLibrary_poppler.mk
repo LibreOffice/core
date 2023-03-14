@@ -53,24 +53,26 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,poppler,\
 ))
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,poppler,\
+	UnpackedTarball/poppler/goo/gbase64 \
+	UnpackedTarball/poppler/goo/gbasename \
 	UnpackedTarball/poppler/goo/gfile \
-	UnpackedTarball/poppler/goo/GooTimer \
+	UnpackedTarball/poppler/goo/glibc \
+	UnpackedTarball/poppler/goo/glibc_strtok_r \
+	UnpackedTarball/poppler/goo/grandom \
+	UnpackedTarball/poppler/goo/gstrtod \
 	UnpackedTarball/poppler/goo/GooString \
+	UnpackedTarball/poppler/goo/GooTimer \
+	UnpackedTarball/poppler/goo/ImgWriter \
+	UnpackedTarball/poppler/goo/JpegWriter \
 	UnpackedTarball/poppler/goo/NetPBMWriter \
 	UnpackedTarball/poppler/goo/PNGWriter \
 	UnpackedTarball/poppler/goo/TiffWriter \
-	UnpackedTarball/poppler/goo/JpegWriter \
-	UnpackedTarball/poppler/goo/ImgWriter \
-	UnpackedTarball/poppler/goo/gstrtod \
-	UnpackedTarball/poppler/goo/grandom \
-	UnpackedTarball/poppler/goo/glibc \
-	UnpackedTarball/poppler/goo/glibc_strtok_r \
 	UnpackedTarball/poppler/fofi/FoFiBase \
 	UnpackedTarball/poppler/fofi/FoFiEncodings \
+	UnpackedTarball/poppler/fofi/FoFiIdentifier \
 	UnpackedTarball/poppler/fofi/FoFiTrueType \
 	UnpackedTarball/poppler/fofi/FoFiType1 \
 	UnpackedTarball/poppler/fofi/FoFiType1C \
-	UnpackedTarball/poppler/fofi/FoFiIdentifier \
 	UnpackedTarball/poppler/poppler/Annot \
 	UnpackedTarball/poppler/poppler/AnnotStampImageHelper \
 	UnpackedTarball/poppler/poppler/Array \
@@ -80,6 +82,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,poppler,\
 	UnpackedTarball/poppler/poppler/CertificateInfo \
 	UnpackedTarball/poppler/poppler/CharCodeToUnicode \
 	UnpackedTarball/poppler/poppler/CMap \
+	UnpackedTarball/poppler/poppler/DCTStream \
 	UnpackedTarball/poppler/poppler/DateInfo \
 	UnpackedTarball/poppler/poppler/Decrypt \
 	UnpackedTarball/poppler/poppler/Dict \
@@ -88,8 +91,8 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,poppler,\
 	UnpackedTarball/poppler/poppler/FILECacheLoader \
 	UnpackedTarball/poppler/poppler/FileSpec \
 	UnpackedTarball/poppler/poppler/FontEncodingTables \
-	UnpackedTarball/poppler/poppler/Form \
 	UnpackedTarball/poppler/poppler/FontInfo \
+	UnpackedTarball/poppler/poppler/Form \
 	UnpackedTarball/poppler/poppler/Function \
 	UnpackedTarball/poppler/poppler/Gfx \
 	UnpackedTarball/poppler/poppler/GfxFont \
@@ -101,43 +104,42 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,poppler,\
 	UnpackedTarball/poppler/poppler/JBIG2Stream \
 	UnpackedTarball/poppler/poppler/JSInfo \
 	UnpackedTarball/poppler/poppler/Lexer \
-	UnpackedTarball/poppler/poppler/Link \
 	UnpackedTarball/poppler/poppler/Linearization \
+	UnpackedTarball/poppler/poppler/Link \
 	UnpackedTarball/poppler/poppler/LocalPDFDocBuilder \
 	UnpackedTarball/poppler/poppler/MarkedContentOutputDev \
+	UnpackedTarball/poppler/poppler/Movie \
 	UnpackedTarball/poppler/poppler/NameToCharCode \
 	UnpackedTarball/poppler/poppler/Object \
 	UnpackedTarball/poppler/poppler/OptionalContent \
 	UnpackedTarball/poppler/poppler/Outline \
 	UnpackedTarball/poppler/poppler/OutputDev \
 	UnpackedTarball/poppler/poppler/Page \
+	UnpackedTarball/poppler/poppler/PageLabelInfo \
 	UnpackedTarball/poppler/poppler/PageTransition \
 	UnpackedTarball/poppler/poppler/Parser \
 	UnpackedTarball/poppler/poppler/PDFDoc \
 	UnpackedTarball/poppler/poppler/PDFDocBuilder \
 	UnpackedTarball/poppler/poppler/PDFDocEncoding \
 	UnpackedTarball/poppler/poppler/PDFDocFactory \
-	UnpackedTarball/poppler/poppler/ProfileData \
 	UnpackedTarball/poppler/poppler/PreScanOutputDev \
+	UnpackedTarball/poppler/poppler/ProfileData \
+	UnpackedTarball/poppler/poppler/PSOutputDev \
 	UnpackedTarball/poppler/poppler/PSTokenizer \
+	UnpackedTarball/poppler/poppler/Rendition \
+	UnpackedTarball/poppler/poppler/SecurityHandler \
 	UnpackedTarball/poppler/poppler/SignatureInfo \
+	UnpackedTarball/poppler/poppler/Sound \
 	UnpackedTarball/poppler/poppler/Stream \
-	UnpackedTarball/poppler/poppler/StructTreeRoot \
 	UnpackedTarball/poppler/poppler/StructElement \
+	UnpackedTarball/poppler/poppler/StructTreeRoot \
+	UnpackedTarball/poppler/poppler/TextOutputDev \
+	UnpackedTarball/poppler/poppler/UTF \
 	UnpackedTarball/poppler/poppler/UnicodeMap \
 	UnpackedTarball/poppler/poppler/UnicodeMapFuncs \
 	UnpackedTarball/poppler/poppler/UnicodeTypeTable \
-	UnpackedTarball/poppler/poppler/UTF \
-	UnpackedTarball/poppler/poppler/XRef \
-	UnpackedTarball/poppler/poppler/PSOutputDev \
-	UnpackedTarball/poppler/poppler/TextOutputDev \
-	UnpackedTarball/poppler/poppler/PageLabelInfo \
-	UnpackedTarball/poppler/poppler/SecurityHandler \
-	UnpackedTarball/poppler/poppler/Sound \
 	UnpackedTarball/poppler/poppler/ViewerPreferences \
-	UnpackedTarball/poppler/poppler/Movie \
-	UnpackedTarball/poppler/poppler/Rendition \
-	UnpackedTarball/poppler/poppler/DCTStream \
+	UnpackedTarball/poppler/poppler/XRef \
 	UnpackedTarball/poppler/splash/SplashBitmap \
 ))
 
