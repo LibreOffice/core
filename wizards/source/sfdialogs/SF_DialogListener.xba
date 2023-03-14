@@ -408,7 +408,7 @@ Public Function _SetOnProperty(ByRef poInstance As Object _
 &apos;&apos;&apos;		poInstance: a SF_Dialog or a SF_DialogControl instance
 &apos;&apos;&apos;		psProperty: one of the applicable On properties (&quot;OnFocusGained&quot;, &quot;OnMouseMoved&quot;, ...)
 &apos;&apos;&apos;		psScript: the script to run when the event is triggered
-&apos;&apos;&apos;					When the zero-length strng, the trigger is deactivated
+&apos;&apos;&apos;					When the zero-length string, the trigger is deactivated
 
 Dim bSet As Boolean							&apos;	Return value
 Dim oModel As Object						&apos;	com.sun.star.awt.XControlModel
