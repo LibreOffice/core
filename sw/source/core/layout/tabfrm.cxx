@@ -1087,6 +1087,22 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
         bTryToSplit = false;
     }
 
+    SwFlyFrame* pFly = FindFlyFrame();
+    if (bSplitRowAllowed && pFly && pFly->IsFlySplitAllowed())
+    {
+        // The remaining size is less than the minimum row height, then don't even try to split the
+        // row, just move it forward.
+        const SwFormatFrameSize& rRowSize = pRow->GetFormat()->GetFrameSize();
+        if (rRowSize.GetHeightSizeType() == SwFrameSize::Minimum)
+        {
+            SwTwips nMinHeight = rRowSize.GetHeight();
+            if (nMinHeight > nRemainingSpaceForLastRow)
+            {
+                bSplitRowAllowed = false;
+            }
+        }
+    }
+
     // #i29771#
     // To avoid loops, we do some checks before actually trying to split
     // the row. Maybe we should keep the next row in this table.
