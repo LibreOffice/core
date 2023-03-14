@@ -1023,12 +1023,7 @@ void SvImpLBox::DrawNet(vcl::RenderContext& rRenderContext)
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
     // Set color to draw the vertical and horizontal lines
-    Color aOldLineColor = rRenderContext.GetLineColor();
-    Color aBackgroundColor = rRenderContext.GetBackground().GetColor();
-    if (aBackgroundColor.IsDark())
-        rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
-    else
-        rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+    rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
 
     Point aPos1, aPos2;
     sal_uInt16 nDistance;
@@ -1069,7 +1064,6 @@ void SvImpLBox::DrawNet(vcl::RenderContext& rRenderContext)
         pEntry = m_pView->NextVisible(pEntry);
     }
 
-    rRenderContext.SetLineColor(aOldLineColor);
     rRenderContext.Pop();
 }
 
