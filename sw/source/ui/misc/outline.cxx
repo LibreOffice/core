@@ -129,7 +129,9 @@ SwNumNamesDlg::SwNumNamesDlg(weld::Window *pParent)
 
 static sal_uInt16 lcl_BitToLevel(sal_uInt16 nActLevel)
 {
-    sal_uInt16 nTmp = nActLevel;
+    constexpr sal_uInt16 MAXLEVEL_MASK = USHRT_MAX >> (sizeof(sal_uInt16) * CHAR_BIT - MAXLEVEL);
+    assert((nActLevel & MAXLEVEL_MASK) == nActLevel);
+    sal_uInt16 nTmp = nActLevel & MAXLEVEL_MASK; // a safety measure
     sal_uInt16 nTmpLevel = 0;
     while( 0 != (nTmp >>= 1) )
         nTmpLevel++;
@@ -151,6 +153,13 @@ SwOutlineTabDialog::SwOutlineTabDialog(weld::Window* pParent, const SfxItemSet* 
 
     m_xNumRule.reset(new SwNumRule(*rSh.GetOutlineNumRule()));
     GetCancelButton().connect_clicked(LINK(this, SwOutlineTabDialog, CancelHdl));
+
+    if (auto nOutlinePos = m_rWrtSh.GetOutlinePos(MAXLEVEL); nOutlinePos != SwOutlineNodes::npos)
+    {
+        int nTmp = m_rWrtSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nOutlinePos);
+        assert(nTmp < MAXLEVEL);
+        SetActNumLevel(nTmp < 0 ? USHRT_MAX : (1 << nTmp));
+    }
 
     AddTabPage("position", &SwNumPositionTabPage::Create, nullptr);
     AddTabPage("numbering", &SwOutlineSettingsTabPage::Create, nullptr);
@@ -528,21 +537,15 @@ void    SwOutlineSettingsTabPage::Update()
 
 IMPL_LINK( SwOutlineSettingsTabPage, LevelHdl, weld::TreeView&, rBox, void )
 {
-    m_nActLevel = 0;
     auto aRows = rBox.get_selected_rows();
-    if (std::find(aRows.begin(), aRows.end(), MAXLEVEL) != aRows.end())
+    assert(aRows.empty() || aRows.size() == 1); // Single selection only
+    if (aRows.empty() || aRows[0] == MAXLEVEL)
     {
-        m_nActLevel = 0xFFFF;
+        m_nActLevel = USHRT_MAX;
     }
     else
     {
-        sal_uInt16 nMask = 1;
-        for( sal_uInt16 i = 0; i < MAXLEVEL; i++ )
-        {
-            if (std::find(aRows.begin(), aRows.end(), i) != aRows.end())
-                m_nActLevel |= nMask;
-            nMask <<= 1;
-        }
+        m_nActLevel = 1 << aRows[0];
     }
     Update();
 }
@@ -754,13 +757,6 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     }
 
     m_xNumberBox->SelectNumberingType(rNumFormat.GetNumberingType());
-    SwOutlineNodes::size_type nOutlinePos = m_pSh->GetOutlinePos(MAXLEVEL);
-    int nTmp = 0;
-    if(nOutlinePos != SwOutlineNodes::npos)
-    {
-        nTmp = o3tl::narrowing<sal_uInt16>(m_pSh->getIDocumentOutlineNodesAccess()->getOutlineLevel(nOutlinePos));
-    }
-    m_xLevelLB->select(nTmp-1);
 
     // collect char styles
     m_xCharFormatLB->clear();
