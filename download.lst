@@ -475,8 +475,8 @@ LIBPNG_TARBALL := libpng-1.6.37.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-POPPLER_SHA256SUM := d9aa9cacdfbd0f8e98fc2b3bb008e645597ed480685757c3e7bc74b4278d15c0
-POPPLER_TARBALL := poppler-22.12.0.tar.xz
+POPPLER_SHA256SUM := b04148bf849c1965ada7eff6be4685130e3a18a84e0cce73bf9bc472ec32f2b4
+POPPLER_TARBALL := poppler-23.03.0.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
