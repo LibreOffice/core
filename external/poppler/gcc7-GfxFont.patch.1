@@ -1,0 +1,94 @@
+Revert of upstream: https://gitlab.freedesktop.org/poppler/poppler/-/commit/d5ea5a24124badf2b32a7d08dd2c06a4a40f93fb
+
+gcc 7.5.0 says:
+
+workdir/UnpackedTarball/poppler/poppler/GfxFont.cc: In member function ‘std::optional<GfxFontLoc> GfxFont::locateFont(XRef*, PSOutputDev*)’:
+/home/taichi/libo-core/workdir/UnpackedTarball/poppler/poppler/GfxFont.cc:660:24: error: could not convert ‘fontLoc’ from ‘GfxFontLoc’ to ‘std::optional<GfxFontLoc>’
+                 return fontLoc;
+                        ^~~~~~~
+workdir/UnpackedTarball/poppler/poppler/GfxFont.cc:671:16: error: could not convert ‘fontLoc’ from ‘GfxFontLoc’ to ‘std::optional<GfxFontLoc>’
+         return fontLoc;
+                ^~~~~~~
+workdir/UnpackedTarball/poppler/poppler/GfxFont.cc:680:16: error: could not convert ‘fontLoc’ from ‘GfxFontLoc’ to ‘std::optional<GfxFontLoc>’
+         return fontLoc;
+                ^~~~~~~
+libo-core/workdir/UnpackedTarball/poppler/poppler/GfxFont.cc:711:24: error: could not convert ‘fontLoc’ from ‘GfxFontLoc’ to ‘std::optional<GfxFontLoc>’
+                 return fontLoc;
+                        ^~~~~~~
+workdir/UnpackedTarball/poppler/poppler/GfxFont.cc:723:20: error: could not convert ‘fontLoc’ from ‘GfxFontLoc’ to ‘std::optional<GfxFontLoc>’
+             return fontLoc;
+                    ^~~~~~~
+workdir/UnpackedTarball/poppler/poppler/GfxFont.cc:752:20: error: could not convert ‘fontLoc’ from ‘GfxFontLoc’ to ‘std::optional<GfxFontLoc>’
+             return fontLoc;
+                    ^~~~~~~
+workdir/UnpackedTarball/poppler/poppler/GfxFont.cc: In static member function ‘static std::optional<GfxFontLoc> GfxFont::getExternalFont(GooString*, bool)’:
+workdir/UnpackedTarball/poppler/poppler/GfxFont.cc:814:12: error: could not convert ‘fontLoc’ from ‘GfxFontLoc’ to ‘std::optional<GfxFontLoc>’
+     return fontLoc;
+
+diff --git a/poppler/GfxFont.cc b/poppler/GfxFont.cc
+index cc2ce038..b0d0d610 100644
+--- a/poppler/GfxFont.cc
++++ b/poppler/GfxFont.cc
+@@ -657,7 +657,7 @@ std::optional<GfxFontLoc> GfxFont::locateFont(XRef *xref, PSOutputDev *ps)
+                 fontLoc.locType = gfxFontLocEmbedded;
+                 fontLoc.fontType = type;
+                 fontLoc.embFontID = embFontID;
+-                return fontLoc;
++                return std::move(fontLoc); // std::move only required to please g++-7
+             }
+         }
+     }
+@@ -668,7 +668,7 @@ std::optional<GfxFontLoc> GfxFont::locateFont(XRef *xref, PSOutputDev *ps)
+         fontLoc.locType = gfxFontLocResident;
+         fontLoc.fontType = fontType1;
+         fontLoc.path = *name;
+-        return fontLoc;
++        return std::move(fontLoc); // std::move only required to please g++-7
+     }
+ 
+     //----- PS resident Base-14 font
+@@ -677,7 +677,7 @@ std::optional<GfxFontLoc> GfxFont::locateFont(XRef *xref, PSOutputDev *ps)
+         fontLoc.locType = gfxFontLocResident;
+         fontLoc.fontType = fontType1;
+         fontLoc.path = ((Gfx8BitFont *)this)->base14->base14Name;
+-        return fontLoc;
++        return std::move(fontLoc); // std::move only required to please g++-7
+     }
+ 
+     //----- external font file (fontFile, fontDir)
+@@ -708,7 +708,7 @@ std::optional<GfxFontLoc> GfxFont::locateFont(XRef *xref, PSOutputDev *ps)
+                 fontLoc.fontType = fontCIDType2;
+                 fontLoc.setPath(path);
+                 fontLoc.fontNum = fontNum;
+-                return fontLoc;
++                return std::move(fontLoc); // std::move only required to please g++-7
+             }
+         } else {
+             GfxFontLoc fontLoc;
+@@ -720,7 +720,7 @@ std::optional<GfxFontLoc> GfxFont::locateFont(XRef *xref, PSOutputDev *ps)
+                 fontLoc.fontType = fontType1;
+                 fontLoc.fontNum = fontNum;
+             }
+-            return fontLoc;
++            return std::move(fontLoc); // std::move only required to please g++-7
+         }
+         delete path;
+     }
+@@ -749,7 +749,7 @@ std::optional<GfxFontLoc> GfxFont::locateFont(XRef *xref, PSOutputDev *ps)
+             fontLoc.fontType = fontType1;
+             fontLoc.path = substName;
+             fontLoc.substIdx = substIdx;
+-            return fontLoc;
++            return std::move(fontLoc); // std::move only required to please g++-7
+         } else {
+             path = globalParams->findFontFile(substName);
+             if (path) {
+@@ -811,7 +811,7 @@ std::optional<GfxFontLoc> GfxFont::getExternalFont(GooString *path, bool cid)
+     fontLoc.locType = gfxFontLocExternal;
+     fontLoc.fontType = fontType;
+     fontLoc.setPath(path);
+-    return fontLoc;
++    return std::move(fontLoc); // std::move only required to please g++-7
+ }
+ 
+ std::optional<std::vector<unsigned char>> GfxFont::readEmbFontFile(XRef *xref)

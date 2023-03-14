@@ -100,6 +100,7 @@ poppler_cmap-files =                            \
 	cMap/Adobe-GB1/GB-EUC-H                     \
 	cMap/Adobe-GB1/GB-EUC-V                     \
 	cMap/Adobe-GB1/GB-H                         \
+	cMap/Adobe-GB1/GB-V                         \
 	cMap/Adobe-GB1/GBK2K-H                      \
 	cMap/Adobe-GB1/GBK2K-V                      \
 	cMap/Adobe-GB1/GBK-EUC-H                    \
@@ -114,10 +115,9 @@ poppler_cmap-files =                            \
 	cMap/Adobe-GB1/GBT-EUC-H                    \
 	cMap/Adobe-GB1/GBT-EUC-V                    \
 	cMap/Adobe-GB1/GBT-H                        \
+	cMap/Adobe-GB1/GBT-V                        \
 	cMap/Adobe-GB1/GBTpc-EUC-H                  \
 	cMap/Adobe-GB1/GBTpc-EUC-V                  \
-	cMap/Adobe-GB1/GBT-V                        \
-	cMap/Adobe-GB1/GB-V                         \
 	cMap/Adobe-GB1/UCS2-GBK-EUC                 \
 	cMap/Adobe-GB1/UCS2-GBpc-EUC                \
 	cMap/Adobe-GB1/UniGB-UCS2-H                 \
@@ -131,17 +131,17 @@ poppler_cmap-files =                            \
 	cMap/Adobe-Japan1/78-EUC-H                  \
 	cMap/Adobe-Japan1/78-EUC-V                  \
 	cMap/Adobe-Japan1/78-H                      \
-	cMap/Adobe-Japan1/78ms-RKSJ-H               \
-	cMap/Adobe-Japan1/78ms-RKSJ-V               \
 	cMap/Adobe-Japan1/78-RKSJ-H                 \
 	cMap/Adobe-Japan1/78-RKSJ-V                 \
 	cMap/Adobe-Japan1/78-V                      \
+	cMap/Adobe-Japan1/78ms-RKSJ-H               \
+	cMap/Adobe-Japan1/78ms-RKSJ-V               \
 	cMap/Adobe-Japan1/83pv-RKSJ-H               \
-	cMap/Adobe-Japan1/90msp-RKSJ-H              \
-	cMap/Adobe-Japan1/90msp-RKSJ-V              \
 	cMap/Adobe-Japan1/90ms-RKSJ-H               \
 	cMap/Adobe-Japan1/90ms-RKSJ-UCS2            \
 	cMap/Adobe-Japan1/90ms-RKSJ-V               \
+	cMap/Adobe-Japan1/90msp-RKSJ-H              \
+	cMap/Adobe-Japan1/90msp-RKSJ-V              \
 	cMap/Adobe-Japan1/90pv-RKSJ-H               \
 	cMap/Adobe-Japan1/90pv-RKSJ-UCS2            \
 	cMap/Adobe-Japan1/90pv-RKSJ-UCS2C           \
@@ -201,9 +201,6 @@ poppler_cmap-files =                            \
 	cMap/Adobe-Japan1/UniJIS2004-UTF32-V        \
 	cMap/Adobe-Japan1/UniJIS2004-UTF8-H         \
 	cMap/Adobe-Japan1/UniJIS2004-UTF8-V         \
-	cMap/Adobe-Japan1/UniJISPro-UCS2-HW-V       \
-	cMap/Adobe-Japan1/UniJISPro-UCS2-V          \
-	cMap/Adobe-Japan1/UniJISPro-UTF8-V          \
 	cMap/Adobe-Japan1/UniJIS-UCS2-H             \
 	cMap/Adobe-Japan1/UniJIS-UCS2-HW-H          \
 	cMap/Adobe-Japan1/UniJIS-UCS2-HW-V          \
@@ -214,10 +211,13 @@ poppler_cmap-files =                            \
 	cMap/Adobe-Japan1/UniJIS-UTF32-V            \
 	cMap/Adobe-Japan1/UniJIS-UTF8-H             \
 	cMap/Adobe-Japan1/UniJIS-UTF8-V             \
-	cMap/Adobe-Japan1/UniJISX02132004-UTF32-H   \
-	cMap/Adobe-Japan1/UniJISX02132004-UTF32-V   \
+	cMap/Adobe-Japan1/UniJISPro-UCS2-HW-V       \
+	cMap/Adobe-Japan1/UniJISPro-UCS2-V          \
+	cMap/Adobe-Japan1/UniJISPro-UTF8-V          \
 	cMap/Adobe-Japan1/UniJISX0213-UTF32-H       \
 	cMap/Adobe-Japan1/UniJISX0213-UTF32-V       \
+	cMap/Adobe-Japan1/UniJISX02132004-UTF32-H   \
+	cMap/Adobe-Japan1/UniJISX02132004-UTF32-V   \
 	cMap/Adobe-Japan1/V                         \
 	cMap/Adobe-Japan1/WP-Symbol                 \
 	cMap/Adobe-Japan2/Adobe-Japan2-0            \
@@ -235,6 +235,7 @@ poppler_cmap-files =                            \
 	cMap/Adobe-Korea1/KSC-H                     \
 	cMap/Adobe-Korea1/KSC-Johab-H               \
 	cMap/Adobe-Korea1/KSC-Johab-V               \
+	cMap/Adobe-Korea1/KSC-V                     \
 	cMap/Adobe-Korea1/KSCms-UHC-H               \
 	cMap/Adobe-Korea1/KSCms-UHC-HW-H            \
 	cMap/Adobe-Korea1/KSCms-UHC-HW-V            \
@@ -244,7 +245,6 @@ poppler_cmap-files =                            \
 	cMap/Adobe-Korea1/KSCpc-EUC-UCS2            \
 	cMap/Adobe-Korea1/KSCpc-EUC-UCS2C           \
 	cMap/Adobe-Korea1/KSCpc-EUC-V               \
-	cMap/Adobe-Korea1/KSC-V                     \
 	cMap/Adobe-Korea1/UCS2-KSCms-UHC            \
 	cMap/Adobe-Korea1/UCS2-KSCpc-EUC            \
 	cMap/Adobe-Korea1/UniKS-UCS2-H              \
