@@ -45,13 +45,13 @@ class exportToPDF(UITestCase):
                     for child in nonSelectedChildren:
                         self.assertEqual("false", get_state_as_dict(xDialog.getChild(child))['Selected'])
 
-                    checkedChildren = ['all', 'allbookmarks', 'changeany', 'default', 'defaultlayout', 'fitdefault', 'jpegcompress', 'pageonly', 'printhigh']
+                    checkedChildren = ['all', 'allbookmarks', 'changeany', 'default', 'defaultlayout', 'fitdefault', 'jpegcompress', 'outline', 'printhigh']
 
                     for child in checkedChildren:
                         self.assertEqual("true", get_state_as_dict(xDialog.getChild(child))['Checked'])
 
                     nonCheckedChildren = ['changecomment', 'changeform', 'changeinsdel', 'changenone', 'contfacinglayout', 'contlayout', 'fitvis',
-                            'fitwidth', 'fitwin', 'fitzoom', 'losslesscompress', 'openinternet', 'openpdf', 'outline', 'printlow', 'printnone', 'range',
+                            'fitwidth', 'fitwin', 'fitzoom', 'losslesscompress', 'openinternet', 'openpdf', 'pageonly', 'printlow', 'printnone', 'range',
                             'selection', 'singlelayout', 'thumbs', 'visiblebookmark']
 
                     for child in nonCheckedChildren:

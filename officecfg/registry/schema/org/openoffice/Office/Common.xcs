@@ -5267,7 +5267,7 @@
                 </info>
               </enumeration>
             </constraints>
-            <value>0</value>
+            <value>1</value>
           </prop>
           <prop oor:name="Magnification" oor:type="xs:int" oor:nillable="false">
             <info>
