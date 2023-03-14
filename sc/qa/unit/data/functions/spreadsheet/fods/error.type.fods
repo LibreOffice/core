@@ -6951,6 +6951,24 @@
      <table:table-cell table:style-name="ce12" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
+    <table:table-row table:style-name="ro7">
+     <table:table-cell table:style-name="ce11" table:formula="of:=ERROR.TYPE(#NULL!)" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce15" table:formula="of:=[.A18]=[.B18]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=FORMULA([.A18])" office:value-type="string" office:string-value="=ERROR.TYPE(#NULL!)" calcext:value-type="string">
+      <text:p>=ERROR.TYPE(#NULL!)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="19"/>
+     <table:table-cell table:style-name="ce29"/>
+     <table:table-cell table:style-name="ce12" table:number-columns-repeated="2"/>
+     <table:table-cell table:number-columns-repeated="3"/>
+    </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:style-name="ce11"/>
      <table:table-cell/>
