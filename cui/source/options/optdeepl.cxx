@@ -18,7 +18,7 @@
  */
 
 #include "optdeepl.hxx"
-#include <svtools/deeplcfg.hxx>
+#include <officecfg/Office/Linguistic.hxx>
 
 OptDeeplTabPage::OptDeeplTabPage(weld::Container* pPage, weld::DialogController* pController,
                                  const SfxItemSet& rSet)
@@ -32,16 +32,17 @@ OptDeeplTabPage::~OptDeeplTabPage() {}
 
 void OptDeeplTabPage::Reset(const SfxItemSet*)
 {
-    SvxDeeplOptions& rDeeplOptions = SvxDeeplOptions::Get();
-    m_xAPIUrl->set_text(rDeeplOptions.getAPIUrl());
-    m_xAuthKey->set_text(rDeeplOptions.getAuthKey());
+    m_xAPIUrl->set_text(*officecfg::Office::Linguistic::Translation::Deepl::ApiURL::get());
+    m_xAuthKey->set_text(*officecfg::Office::Linguistic::Translation::Deepl::AuthKey::get());
 }
 
 bool OptDeeplTabPage::FillItemSet(SfxItemSet*)
 {
-    SvxDeeplOptions& rDeeplOptions = SvxDeeplOptions::Get();
-    rDeeplOptions.setAPIUrl(m_xAPIUrl->get_text());
-    rDeeplOptions.setAuthKey(m_xAuthKey->get_text());
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Linguistic::Translation::Deepl::ApiURL::set(m_xAPIUrl->get_text(), batch);
+    officecfg::Office::Linguistic::Translation::Deepl::AuthKey::set(m_xAuthKey->get_text(), batch);
+    batch->commit();
     return false;
 }
 

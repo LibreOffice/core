@@ -143,7 +143,6 @@
 #include <tools/json_writer.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
-#include <svtools/deeplcfg.hxx>
 #include <vcl/fontcharmap.hxx>
 #ifdef IOS
 #include <vcl/sysdata.hxx>
@@ -7351,9 +7350,10 @@ void setDeeplConfig()
         OUString aAuthKey = OStringToOUString(pAuthKeyString, RTL_TEXTENCODING_UTF8);
         try
         {
-            SvxDeeplOptions& rDeeplOptions = SvxDeeplOptions::Get();
-            rDeeplOptions.setAPIUrl(aAPIUrl);
-            rDeeplOptions.setAuthKey(aAuthKey);
+            std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+            officecfg::Office::Linguistic::Translation::Deepl::ApiURL::set(aAPIUrl, batch);
+            officecfg::Office::Linguistic::Translation::Deepl::AuthKey::set(aAuthKey, batch);
+            batch->commit();
         }
         catch(uno::Exception const& rException)
         {

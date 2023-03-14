@@ -108,9 +108,9 @@
 #include <config_wasm_strip.h>
 #if !ENABLE_WASM_STRIP_EXTRA
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Linguistic.hxx>
 #include <svl/visitem.hxx>
 #include <translatelangselect.hxx>
-#include <svtools/deeplcfg.hxx>
 #endif // ENABLE_WASM_STRIP_EXTRA
 #include <translatehelper.hxx>
 #include <IDocumentContentOperations.hxx>
@@ -1940,14 +1940,15 @@ void SwTextShell::Execute(SfxRequest &rReq)
         const SfxPoolItem* pTargetLangStringItem = nullptr;
         if (pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_TARGETLANG_STR, false, &pTargetLangStringItem))
         {
-            SvxDeeplOptions& rDeeplOptions = SvxDeeplOptions::Get();
-            if (rDeeplOptions.getAPIUrl().isEmpty() || rDeeplOptions.getAuthKey().isEmpty())
+            std::optional<OUString> oDeeplAPIUrl = officecfg::Office::Linguistic::Translation::Deepl::ApiURL::get();
+            std::optional<OUString> oDeeplKey = officecfg::Office::Linguistic::Translation::Deepl::AuthKey::get();
+            if (!oDeeplAPIUrl || oDeeplAPIUrl->isEmpty() || !oDeeplKey || oDeeplKey->isEmpty())
             {
                 SAL_WARN("sw.ui", "SID_FM_TRANSLATE: API options are not set");
                 break;
             }
-            const OString aAPIUrl = OUStringToOString(rtl::Concat2View(rDeeplOptions.getAPIUrl() + "?tag_handling=html"), RTL_TEXTENCODING_UTF8).trim();
-            const OString aAuthKey = OUStringToOString(rDeeplOptions.getAuthKey(), RTL_TEXTENCODING_UTF8).trim();
+            const OString aAPIUrl = OUStringToOString(rtl::Concat2View(*oDeeplAPIUrl + "?tag_handling=html"), RTL_TEXTENCODING_UTF8).trim();
+            const OString aAuthKey = OUStringToOString(*oDeeplKey, RTL_TEXTENCODING_UTF8).trim();
             OString aTargetLang = OUStringToOString(static_cast<const SfxStringItem*>(pTargetLangStringItem)->GetValue(), RTL_TEXTENCODING_UTF8);
             SwTranslateHelper::TranslateAPIConfig aConfig({aAPIUrl, aAuthKey, aTargetLang});
             SwTranslateHelper::TranslateDocument(rWrtSh, aConfig);
@@ -2474,8 +2475,9 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                         rSet.Put(SfxVisibilityItem(nWhich, false));
                         break;
                     }
-                    const SvxDeeplOptions& rDeeplOptions = SvxDeeplOptions::Get();
-                    if (rDeeplOptions.getAPIUrl().isEmpty() || rDeeplOptions.getAuthKey().isEmpty())
+                    std::optional<OUString> oDeeplAPIUrl = officecfg::Office::Linguistic::Translation::Deepl::ApiURL::get();
+                    std::optional<OUString> oDeeplKey = officecfg::Office::Linguistic::Translation::Deepl::AuthKey::get();
+                    if (!oDeeplAPIUrl || oDeeplAPIUrl->isEmpty() || !oDeeplKey || oDeeplKey->isEmpty())
                     {
                         rSet.DisableItem(nWhich);
                     }
