@@ -1044,7 +1044,7 @@ i12626
     bool updateObject( sal_Int32 n ) override;
 
     /// See vcl::PDFObjectContainer::writeBuffer().
-    bool writeBuffer( const void* pBuffer, sal_uInt64 nBytes ) override;
+    bool writeBufferBytes( const void* pBuffer, sal_uInt64 nBytes ) override;
     void beginCompression();
     void endCompression();
     void beginRedirect( SvStream* pStream, const tools::Rectangle& );

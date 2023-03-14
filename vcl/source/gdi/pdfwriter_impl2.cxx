@@ -1588,7 +1588,7 @@ void PDFWriterImpl::putG4Bits( sal_uInt32 i_nLength, sal_uInt32 i_nCode, BitStre
     {
         io_rState.mnBuffer |= static_cast<sal_uInt8>( i_nCode >> (i_nLength - io_rState.mnNextBitPos) );
         i_nLength -= io_rState.mnNextBitPos;
-        writeBuffer( &io_rState.getByte(), 1 );
+        writeBufferBytes( &io_rState.getByte(), 1 );
         io_rState.flush();
     }
     assert(i_nLength < 9);
@@ -1597,7 +1597,7 @@ void PDFWriterImpl::putG4Bits( sal_uInt32 i_nLength, sal_uInt32 i_nCode, BitStre
     io_rState.mnNextBitPos -= i_nLength;
     if( io_rState.mnNextBitPos == 0 )
     {
-        writeBuffer( &io_rState.getByte(), 1 );
+        writeBufferBytes( &io_rState.getByte(), 1 );
         io_rState.flush();
     }
 }
@@ -1934,7 +1934,7 @@ void PDFWriterImpl::writeG4Stream( BitmapReadAccess const * i_pBitmap )
     putG4Bits( 12, 1, aBitState );
     if( aBitState.mnNextBitPos != 8 )
     {
-        writeBuffer( &aBitState.getByte(), 1 );
+        writeBufferBytes( &aBitState.getByte(), 1 );
         aBitState.flush();
     }
 }

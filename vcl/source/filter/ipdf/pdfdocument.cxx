@@ -89,7 +89,7 @@ bool PDFDocument::updateObject(sal_Int32 nObject)
     return true;
 }
 
-bool PDFDocument::writeBuffer(const void* pBuffer, sal_uInt64 nBytes)
+bool PDFDocument::writeBufferBytes(const void* pBuffer, sal_uInt64 nBytes)
 {
     std::size_t nWritten = m_aEditBuffer.WriteBytes(pBuffer, nBytes);
     return nWritten == nBytes;

@@ -10,6 +10,7 @@
 #pragma once
 
 #include <sal/types.h>
+#include <string_view>
 
 namespace vcl
 {
@@ -26,7 +27,13 @@ public:
     virtual bool updateObject(sal_Int32 n) = 0;
 
     // Write pBuffer to the end of the output.
-    virtual bool writeBuffer(const void* pBuffer, sal_uInt64 nBytes) = 0;
+    virtual bool writeBufferBytes(const void* pBuffer, sal_uInt64 nBytes) = 0;
+
+    // Utility method, reduces verbosity at call sites
+    bool writeBuffer(std::string_view aBuffer)
+    {
+        return writeBufferBytes(aBuffer.data(), aBuffer.size());
+    }
 
     virtual void checkAndEnableStreamEncryption(sal_Int32 nObject) = 0;
 
