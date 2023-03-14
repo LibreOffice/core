@@ -77,7 +77,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf152186)
     createSdImpressDoc("pptx/tdf152186.pptx");
     saveAndReload("Impress MS PowerPoint 2007 XML");
 
-    bool bHasShadow;
+    bool bHasShadow = bool();
     const SdrPage* pPage = GetPage(1);
     for (size_t i = 0; i < pPage->GetObjCount(); ++i)
     {
