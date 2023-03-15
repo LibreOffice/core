@@ -158,22 +158,11 @@ namespace
     };
 
     // predicate for checking whether or not a driver accepts a given URL
-    class AcceptsURL
+    bool AcceptsURL( const OUString& _rURL, const Reference<XDriver>& _rDriver )
     {
-    protected:
-        const OUString& m_rURL;
-
-    public:
-        // ctor
-        explicit AcceptsURL( const OUString& _rURL ) : m_rURL( _rURL ) { }
-
-
-        bool operator()( const Reference<XDriver>& _rDriver ) const
-        {
-            // ask the driver
-            return _rDriver.is() && _rDriver->acceptsURL( m_rURL );
-        }
-    };
+        // ask the driver
+        return _rDriver.is() && _rDriver->acceptsURL( _rURL );
+    }
 
 #if !ENABLE_FUZZERS
     sal_Int32 lcl_getDriverPrecedence( const Reference<XComponentContext>& _rContext, Sequence< OUString >& _rPrecedence )
@@ -620,7 +609,7 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const OUString& _rU
                     // extract the driver from the access, then ask the resulting driver for acceptance
                     const DriverAccess& ensuredAccess = EnsureDriver(m_xContext)(driverAccess);
                     const Reference<XDriver> driver = ExtractDriverFromAccess()(ensuredAccess);
-                    return AcceptsURL(_rURL)(driver);
+                    return AcceptsURL(_rURL, driver);
                 });
         } // if ( m_aDriversBS.find(sDriverFactoryName ) == m_aDriversBS.end() )
         else
@@ -643,7 +632,7 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const OUString& _rU
             [&_rURL] (const DriverCollection::value_type& element) {
                 // extract the driver from the collection element, then ask the resulting driver for acceptance
                 const Reference<XDriver> driver = ExtractDriverFromCollectionElement()(element);
-                return AcceptsURL(_rURL)(driver);
+                return AcceptsURL(_rURL, driver);
             });
 
         if ( m_aDriversRT.end() != aPos )
