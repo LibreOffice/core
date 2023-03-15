@@ -263,8 +263,6 @@ public:
                 const css::uno::Reference< css::chart2::XDataSeries >& xGivenDataSeries,
                 bool bForward );
 
-    static bool isSupportingFloorAndWall( const rtl::Reference< ::chart::Diagram > & xDiagram );
-
     static bool setDiagramPositioning( const rtl::Reference<::chart::ChartModel>& xChartModel,
         const css::awt::Rectangle& rPosRect /*100th mm*/ );
 

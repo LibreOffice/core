@@ -1320,26 +1320,6 @@ bool DiagramHelper::moveSeries( const rtl::Reference< Diagram >& xDiagram, const
     return bMoved;
 }
 
-bool DiagramHelper::isSupportingFloorAndWall( const rtl::Reference< Diagram >& xDiagram )
-{
-    //pies and donuts currently do not support this because of wrong files from older versions
-    //todo: allow this in future again, if fileversion is available for OLE objects (metastream)
-    //thus the wrong bottom can be removed on import
-
-    const std::vector< rtl::Reference< ChartType > > aTypes(
-            ::chart::DiagramHelper::getChartTypesFromDiagram( xDiagram ) );
-    for( rtl::Reference< ChartType > const & xType : aTypes )
-    {
-        if( xType.is() && xType->getChartType().match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
-            return false;
-        if( xType.is() && xType->getChartType().match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
-            return false;
-        if( xType.is() && xType->getChartType().match(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET) )
-            return false;
-    }
-    return true;
-}
-
 static void lcl_ensureRange0to1( double& rValue )
 {
     if(rValue<0.0)

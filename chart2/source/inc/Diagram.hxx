@@ -178,6 +178,8 @@ public:
 
     bool isPieOrDonutChart();
 
+    bool isSupportingFloorAndWall();
+
 private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

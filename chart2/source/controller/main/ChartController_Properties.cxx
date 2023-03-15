@@ -729,7 +729,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
         }
         if( eObjectType==OBJECTTYPE_DIAGRAM_WALL || eObjectType==OBJECTTYPE_DIAGRAM_FLOOR )
         {
-            if( !DiagramHelper::isSupportingFloorAndWall( getFirstDiagram() ) )
+            if( !getFirstDiagram()->isSupportingFloorAndWall() )
                 return bRet;
         }
 

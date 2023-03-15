@@ -284,7 +284,7 @@ void ObjectHierarchy::createWallAndFloor(
 {
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
     bool bIsThreeD = ( nDimensionCount == 3 );
-    bool bHasWall = DiagramHelper::isSupportingFloorAndWall( xDiagram );
+    bool bHasWall = xDiagram->isSupportingFloorAndWall();
     if( bHasWall && bIsThreeD )
     {
         rContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, u"" ) );

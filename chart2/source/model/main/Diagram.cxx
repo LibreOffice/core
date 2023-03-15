@@ -820,6 +820,27 @@ bool Diagram::isPieOrDonutChart()
     return false;
 }
 
+bool Diagram::isSupportingFloorAndWall()
+{
+    //pies and donuts currently do not support this because of wrong files from older versions
+    //todo: allow this in future again, if fileversion is available for OLE objects (metastream)
+    //thus the wrong bottom can be removed on import
+
+    const std::vector< rtl::Reference< ChartType > > aTypes(
+            ::chart::DiagramHelper::getChartTypesFromDiagram( this ) );
+    for( rtl::Reference< ChartType > const & xType : aTypes )
+    {
+        OUString sChartType = xType->getChartType();
+        if( sChartType.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
+            return false;
+        if( sChartType.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
+            return false;
+        if( sChartType.match(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET) )
+            return false;
+    }
+    return true;
+}
+
 
 } //  namespace chart
 

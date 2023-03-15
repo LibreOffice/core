@@ -143,7 +143,7 @@ void VDiagram::createShapes_2d()
     //create independent group shape as container for datapoints and such things
     m_xCoordinateRegionShape = ShapeFactory::createGroup2D(xOuterGroup_Shapes,"testonly;CooContainer=XXX_CID");
 
-    bool bAddFloorAndWall = DiagramHelper::isSupportingFloorAndWall( m_xDiagram );
+    bool bAddFloorAndWall = m_xDiagram->isSupportingFloorAndWall();
 
     //add back wall
     {
@@ -442,7 +442,7 @@ void VDiagram::createShapes_3d()
 
     m_xAspectRatio3D = xOuterGroup_Shapes;
 
-    bool bAddFloorAndWall = DiagramHelper::isSupportingFloorAndWall( m_xDiagram );
+    bool bAddFloorAndWall = m_xDiagram->isSupportingFloorAndWall();
 
     const bool bDoubleSided = false;
 
