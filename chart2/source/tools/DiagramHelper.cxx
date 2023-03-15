@@ -1438,28 +1438,6 @@ sal_Int32 DiagramHelper::getCorrectedMissingValueTreatment(
     return nResult;
 }
 
-DiagramPositioningMode DiagramHelper::getDiagramPositioningMode( const rtl::Reference<
-                Diagram > & xDiagram )
-{
-    DiagramPositioningMode eMode = DiagramPositioningMode_AUTO;
-    if( xDiagram.is() )
-    {
-        RelativePosition aRelPos;
-        RelativeSize aRelSize;
-        if( (xDiagram->getPropertyValue("RelativePosition") >>= aRelPos ) &&
-            (xDiagram->getPropertyValue("RelativeSize") >>= aRelSize ) )
-        {
-            bool bPosSizeExcludeAxes=false;
-            xDiagram->getPropertyValue("PosSizeExcludeAxes") >>= bPosSizeExcludeAxes;
-            if( bPosSizeExcludeAxes )
-                eMode = DiagramPositioningMode_EXCLUDING;
-            else
-                eMode = DiagramPositioningMode_INCLUDING;
-        }
-    }
-    return eMode;
-}
-
 static void lcl_ensureRange0to1( double& rValue )
 {
     if(rValue<0.0)

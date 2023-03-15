@@ -51,13 +51,6 @@ class DataSeries;
 class Diagram;
 class LabeledDataSequence;
 
-enum DiagramPositioningMode
-{
-    DiagramPositioningMode_AUTO,
-    DiagramPositioningMode_EXCLUDING,
-    DiagramPositioningMode_INCLUDING
-};
-
 class OOO_DLLPUBLIC_CHARTTOOLS DiagramHelper
 {
 public:
@@ -286,8 +279,6 @@ public:
     static sal_Int32 getCorrectedMissingValueTreatment(
             const rtl::Reference< ::chart::Diagram > & xDiagram,
             const rtl::Reference< ::chart::ChartType >& xChartType );
-
-    static DiagramPositioningMode getDiagramPositioningMode( const rtl::Reference< ::chart::Diagram > & xDiagram );
 
     static bool setDiagramPositioning( const rtl::Reference<::chart::ChartModel>& xChartModel,
         const css::awt::Rectangle& rPosRect /*100th mm*/ );

@@ -43,6 +43,14 @@ class Legend;
 class DataTable;
 class Wall;
 
+enum DiagramPositioningMode
+{
+    DiagramPositioningMode_AUTO,
+    DiagramPositioningMode_EXCLUDING,
+    DiagramPositioningMode_INCLUDING
+};
+
+
 namespace impl
 {
 typedef ::cppu::WeakImplHelper<
@@ -158,6 +166,8 @@ public:
     {
         return m_xDataTable;
     };
+
+    DiagramPositioningMode getDiagramPositioningMode();
 
 private:
     // ____ XModifyListener ____

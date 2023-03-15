@@ -702,6 +702,25 @@ css::uno::Sequence< OUString > SAL_CALL Diagram::getSupportedServiceNames()
         "com.sun.star.beans.PropertySet" };
 }
 
+DiagramPositioningMode Diagram::getDiagramPositioningMode()
+{
+    DiagramPositioningMode eMode = DiagramPositioningMode_AUTO;
+    chart2::RelativePosition aRelPos;
+    chart2::RelativeSize aRelSize;
+    if( (getFastPropertyValue(PROP_DIAGRAM_REL_POS) >>= aRelPos ) &&
+        (getFastPropertyValue(PROP_DIAGRAM_REL_SIZE) >>= aRelSize ) )
+    {
+        bool bPosSizeExcludeAxes=false;
+        getFastPropertyValue(PROP_DIAGRAM_POSSIZE_EXCLUDE_LABELS) >>= bPosSizeExcludeAxes;
+        if( bPosSizeExcludeAxes )
+            eMode = DiagramPositioningMode_EXCLUDING;
+        else
+            eMode = DiagramPositioningMode_INCLUDING;
+    }
+    return eMode;
+}
+
+
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
