@@ -160,6 +160,7 @@ class SvxBoxInfoItem;
 class SvxBoxItem;
 class SvxColorItem;
 class SvxLineItem;
+class SvxRectangleAlignmentItem;
 class SvxTextRotateItem;
 class SvxWritingModeItem;
 class XColorItem;
@@ -191,7 +192,8 @@ constexpr TypedWhichId<SfxVoidItem>    SDRATTR_SHADOWPERSP        (SDRATTR_SHADO
 constexpr TypedWhichId<SdrMetricItem>  SDRATTR_SHADOWSIZEX        (SDRATTR_SHADOW_FIRST+ 7);
 constexpr TypedWhichId<SdrMetricItem>  SDRATTR_SHADOWSIZEY        (SDRATTR_SHADOW_FIRST+ 8);
 constexpr TypedWhichId<SdrMetricItem>  SDRATTR_SHADOWBLUR         (SDRATTR_SHADOW_FIRST+ 9);
-constexpr sal_uInt16                   SDRATTR_SHADOW_LAST        (SDRATTR_SHADOWBLUR);                      /* 1078   */ /* 1078   */ /* 1061   */ /* Pool V1: 1039 */
+constexpr TypedWhichId<SvxRectangleAlignmentItem> SDRATTR_SHADOWALIGNMENT(SDRATTR_SHADOW_FIRST + 10);
+constexpr sal_uInt16                   SDRATTR_SHADOW_LAST        (SDRATTR_SHADOWALIGNMENT);                 /* 1078   */ /* 1078   */ /* 1061   */ /* Pool V1: 1039 */
 
 constexpr sal_uInt16                             SDRATTR_CAPTION_FIRST     (SDRATTR_SHADOW_LAST + 1);        /* 1080   */ /* 1080   */ /* 1063   */ /* Pool V1: 1041 */
 constexpr TypedWhichId<SdrCaptionTypeItem>       SDRATTR_CAPTIONTYPE       (SDRATTR_CAPTION_FIRST+ 0);       /*   1080 */ /*   1080 */ /*   1063 */

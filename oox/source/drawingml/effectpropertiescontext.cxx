@@ -87,6 +87,7 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
             mrEffectProperties.maShadow.moShadowSx = rAttribs.getInteger( XML_sx, 0 );
             mrEffectProperties.maShadow.moShadowSy = rAttribs.getInteger( XML_sy, 0 );
             mrEffectProperties.maShadow.moShadowBlur = rAttribs.getInteger( XML_blurRad, 0 );
+            mrEffectProperties.maShadow.moShadowAlignment = convertToRectangleAlignment( rAttribs.getToken(XML_algn, XML_b) );
 
             model::ColorDefinition* pColor = nullptr;
             if (mpEffectStyle)

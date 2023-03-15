@@ -96,6 +96,7 @@ inline constexpr OUStringLiteral UNO_NAME_SHADOWSIZEX = u"ShadowSizeX";
 inline constexpr OUStringLiteral UNO_NAME_SHADOWSIZEY = u"ShadowSizeY";
 inline constexpr OUStringLiteral UNO_NAME_SHADOWTRANSPARENCE = u"ShadowTransparence";
 inline constexpr OUStringLiteral UNO_NAME_SHADOWBLUR = u"ShadowBlur";
+inline constexpr OUStringLiteral UNO_NAME_SHADOWALIGNMENT = u"ShadowAlignment";
 
 inline constexpr OUStringLiteral UNO_NAME_EDGERADIUS = u"CornerRadius";
 

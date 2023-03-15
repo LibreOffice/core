@@ -49,6 +49,7 @@
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
 #include <drawinglayer/attribute/sdrglowattribute.hxx>
+#include <docmodel/theme/FormatScheme.hxx>
 #include <osl/diagnose.h>
 
 // for SlideBackgroundFillPrimitive2D
@@ -65,6 +66,35 @@ namespace drawinglayer::primitive2d
 {
 namespace
 {
+/// @returns the offset to apply/unapply to scale according to correct origin for a given alignment.
+basegfx::B2DTuple getShadowScaleOriginOffset(const basegfx::B2DTuple& aScale,
+                                             model::RectangleAlignment eAlignment)
+{
+    switch (eAlignment)
+    {
+        case model::RectangleAlignment::TopLeft:
+            return { 0, 0 };
+        case model::RectangleAlignment::Top:
+            return { aScale.getX() / 2, 0 };
+        case model::RectangleAlignment::TopRight:
+            return { aScale.getX(), 0 };
+        case model::RectangleAlignment::Left:
+            return { 0, aScale.getY() / 2 };
+        case model::RectangleAlignment::Center:
+            return { aScale.getX() / 2, aScale.getY() / 2 };
+        case model::RectangleAlignment::Right:
+            return { aScale.getX(), aScale.getY() / 2 };
+        case model::RectangleAlignment::BottomLeft:
+            return { 0, aScale.getY() };
+        case model::RectangleAlignment::Bottom:
+            return { aScale.getX() / 2, aScale.getY() };
+        case model::RectangleAlignment::BottomRight:
+            return { aScale.getX(), aScale.getY() };
+        default:
+            return { 0, 0 };
+    }
+};
+
 // See also: SdrTextObj::AdjustRectToTextDistance
 basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
                                      const basegfx::B2DRange& rSnapRange)
@@ -775,19 +805,10 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 double fShearX = 0;
                 rObjectMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
                 // Scale the shadow
-                double nTranslateX = aTranslate.getX();
-                double nTranslateY = aTranslate.getY();
-
-                // The origin for scaling is the top left corner by default. A negative
-                // shadow offset changes the origin.
-                if (rShadow.getOffset().getX() < 0)
-                    nTranslateX += aScale.getX();
-                if (rShadow.getOffset().getY() < 0)
-                    nTranslateY += aScale.getY();
-
-                aShadowOffset.translate(-nTranslateX, -nTranslateY);
+                aTranslate += getShadowScaleOriginOffset(aScale, rShadow.getAlignment());
+                aShadowOffset.translate(-aTranslate);
                 aShadowOffset.scale(rShadow.getSize().getX() * 0.00001, rShadow.getSize().getY() * 0.00001);
-                aShadowOffset.translate(nTranslateX, nTranslateY);
+                aShadowOffset.translate(aTranslate);
             }
 
             aShadowOffset.translate(rShadow.getOffset().getX(), rShadow.getOffset().getY());

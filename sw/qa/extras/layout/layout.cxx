@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <vcl/scheduler.hxx>
+#include <svx/svddef.hxx>
 
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
@@ -1157,22 +1158,30 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf137025)
     // SDRATTR_TEXT_LEFTDIST
     assertXPath(pXmlDoc,
                 "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObject"
-                "/DefaultProperties/SfxItemSet/SdrMetricItem/SfxInt32Item[@whichId='1072']",
+                "/DefaultProperties/SfxItemSet/SdrMetricItem/SfxInt32Item"
+                "[@whichId='"
+                    + OString::number(SDRATTR_TEXT_LEFTDIST) + "']",
                 "value", "567");
     // SDRATTR_TEXT_RIGHTDIST
     assertXPath(pXmlDoc,
                 "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObject"
-                "/DefaultProperties/SfxItemSet/SdrMetricItem/SfxInt32Item[@whichId='1073']",
+                "/DefaultProperties/SfxItemSet/SdrMetricItem/SfxInt32Item"
+                "[@whichId='"
+                    + OString::number(SDRATTR_TEXT_RIGHTDIST) + "']",
                 "value", "1134");
     // SDRATTR_TEXT_UPPERDIST
     assertXPath(pXmlDoc,
                 "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObject"
-                "/DefaultProperties/SfxItemSet/SdrMetricItem/SfxInt32Item[@whichId='1074']",
+                "/DefaultProperties/SfxItemSet/SdrMetricItem/SfxInt32Item"
+                "[@whichId='"
+                    + OString::number(SDRATTR_TEXT_UPPERDIST) + "']",
                 "value", "1701");
     // SDRATTR_TEXT_LOWERDIST
     assertXPath(pXmlDoc,
                 "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObject"
-                "/DefaultProperties/SfxItemSet/SdrMetricItem/SfxInt32Item[@whichId='1075']",
+                "/DefaultProperties/SfxItemSet/SdrMetricItem/SfxInt32Item"
+                "[@whichId='"
+                    + OString::number(SDRATTR_TEXT_LOWERDIST) + "']",
                 "value", "2268");
 
     // Check the textbox-shape import too

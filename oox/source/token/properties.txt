@@ -471,6 +471,7 @@ Segments
 SelectedItems
 SelectedPage
 Shadow
+ShadowAlignment
 ShadowColor
 ShadowFormat
 ShadowSizeX

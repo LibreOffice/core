@@ -80,6 +80,53 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowScaleOrigin)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-684), fShadowY);
 }
 
+CPPUNIT_TEST_FIXTURE(SdrTest, testShadowAlignment)
+{
+    loadFromURL(u"tdf150020-shadow-alignment.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence
+        = renderPageToPrimitives(xDrawPage);
+
+    // Examine the created primitives.
+    drawinglayer::Primitive2dXmlDump aDumper;
+    xmlDocUniquePtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: -567
+    // - Actual  : 162
+    // - In <>, attribute 'xy13' of '(//shadow/transform)[1]' incorrect value.
+    // i.e. shadow alignment was ignored while scaling the shadow.
+    assertXPath(pDocument, "(//shadow/transform)[1]", "xy13", "-567");
+    assertXPath(pDocument, "(//shadow/transform)[1]", "xy23", "162");
+
+    assertXPath(pDocument, "(//shadow/transform)[2]", "xy13", "-1794");
+    assertXPath(pDocument, "(//shadow/transform)[2]", "xy23", "162");
+
+    assertXPath(pDocument, "(//shadow/transform)[3]", "xy13", "-3021");
+    assertXPath(pDocument, "(//shadow/transform)[3]", "xy23", "161");
+
+    assertXPath(pDocument, "(//shadow/transform)[4]", "xy13", "-567");
+    assertXPath(pDocument, "(//shadow/transform)[4]", "xy23", "-749");
+
+    assertXPath(pDocument, "(//shadow/transform)[5]", "xy13", "-3021");
+    assertXPath(pDocument, "(//shadow/transform)[5]", "xy23", "-750");
+
+    assertXPath(pDocument, "(//shadow/transform)[6]", "xy13", "-566");
+    assertXPath(pDocument, "(//shadow/transform)[6]", "xy23", "-1691");
+
+    assertXPath(pDocument, "(//shadow/transform)[7]", "xy13", "-1794");
+    assertXPath(pDocument, "(//shadow/transform)[7]", "xy23", "-1693");
+
+    assertXPath(pDocument, "(//shadow/transform)[8]", "xy13", "-3022");
+    assertXPath(pDocument, "(//shadow/transform)[8]", "xy23", "-1691");
+
+    assertXPath(pDocument, "(//shadow/transform)[9]", "xy13", "-1794");
+    assertXPath(pDocument, "(//shadow/transform)[9]", "xy23", "-750");
+}
+
 CPPUNIT_TEST_FIXTURE(SdrTest, testZeroWidthTextWrap)
 {
     // Load a document containing a 0-width shape with text.
