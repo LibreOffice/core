@@ -53,6 +53,7 @@
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/xtextit0.hxx>
+#include <svx/RectangleAlignmentItem.hxx>
 #include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <svx/svdotext.hxx>
 #include <sdr/attribute/sdrtextattribute.hxx>
@@ -401,7 +402,9 @@ namespace drawinglayer::primitive2d
 
                     sal_Int32 nBlur(rSet.Get(SDRATTR_SHADOWBLUR).GetValue());
 
-                    return attribute::SdrShadowAttribute(aOffset, aSize, static_cast<double>(nTransparence) * 0.01,nBlur, aColor.getBColor());
+                    model::RectangleAlignment eAlignment{rSet.Get(SDRATTR_SHADOWALIGNMENT).GetValue()};
+
+                    return attribute::SdrShadowAttribute(aOffset, aSize, static_cast<double>(nTransparence) * 0.01, nBlur, eAlignment, aColor.getBColor());
                 }
             }
 

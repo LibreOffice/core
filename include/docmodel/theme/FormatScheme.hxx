@@ -308,6 +308,8 @@ enum class RectangleAlignment
     Bottom,
     BottomRight
 };
+constexpr sal_uInt16 RECTANGLE_ALIGNMENT_COUNT
+    = static_cast<sal_uInt16>(RectangleAlignment::BottomRight) + 1;
 
 enum class BlipEffectType
 {

@@ -14,6 +14,7 @@
 
 #include <basegfx/numeric/ftools.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <docmodel/theme/FormatScheme.hxx>
 
 #include <algorithm>
 
@@ -38,6 +39,7 @@ void EffectShadowProperties::assignUsed(const EffectShadowProperties& rSourcePro
     assignIfUsed( moShadowSy, rSourceProps.moShadowSy );
     moShadowColor.assignIfUsed( rSourceProps.moShadowColor );
     assignIfUsed( moShadowBlur, rSourceProps.moShadowBlur );
+    assignIfUsed( moShadowAlignment, rSourceProps.moShadowAlignment );
 
 }
 
@@ -105,6 +107,9 @@ void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
             rPropMap.setProperty( PROP_ShadowColor, it->moColor.getColor(rGraphicHelper ) );
             rPropMap.setProperty( PROP_ShadowTransparence, it->moColor.getTransparency());
             rPropMap.setProperty( PROP_ShadowBlur, convertEmuToHmm(nAttrBlur));
+            rPropMap.setProperty(
+                PROP_ShadowAlignment,
+                static_cast<sal_Int32>(maShadow.moShadowAlignment.value_or(model::RectangleAlignment::Bottom)));
 
         }
     }

@@ -31,6 +31,10 @@ namespace basegfx {
     class B2DVector;
 }
 
+namespace model {
+    enum class RectangleAlignment;
+}
+
 namespace drawinglayer::attribute {
     class ImpSdrShadowAttribute;
 }
@@ -53,6 +57,7 @@ namespace drawinglayer::attribute
                 const basegfx::B2DVector& rSize,
                 double fTransparence,
                 sal_Int32 nBlur,
+                model::RectangleAlignment eAlignment,
                 const basegfx::BColor& rColor);
             SdrShadowAttribute();
             SdrShadowAttribute(const SdrShadowAttribute&);
@@ -72,6 +77,7 @@ namespace drawinglayer::attribute
             const basegfx::B2DVector& getSize() const;
             double getTransparence() const;
             sal_Int32 getBlur() const;
+            model::RectangleAlignment getAlignment() const;
             const basegfx::BColor& getColor() const;
         };
 

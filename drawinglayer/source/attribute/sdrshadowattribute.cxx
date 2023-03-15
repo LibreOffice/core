@@ -20,6 +20,7 @@
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/color/bcolor.hxx>
+#include <docmodel/theme/FormatScheme.hxx>
 
 
 namespace drawinglayer::attribute
@@ -32,6 +33,7 @@ namespace drawinglayer::attribute
             basegfx::B2DVector                  maSize;                     // [0.0 .. 2.0]
             double                              mfTransparence;             // [0.0 .. 1.0], 0.0==no transp.
             sal_Int32                           mnBlur;                     // [0   .. 180], radius of the blur
+            model::RectangleAlignment           meAlignment{model::RectangleAlignment::Unset}; // alignment of the shadow
             basegfx::BColor                     maColor;                    // color of shadow
 
             ImpSdrShadowAttribute(
@@ -39,11 +41,13 @@ namespace drawinglayer::attribute
                 const basegfx::B2DVector& rSize,
                 double fTransparence,
                 sal_Int32 nBlur,
+                model::RectangleAlignment eAlignment,
                 const basegfx::BColor& rColor)
             :   maOffset(rOffset),
                 maSize(rSize),
                 mfTransparence(fTransparence),
                 mnBlur(nBlur),
+                meAlignment(eAlignment),
                 maColor(rColor)
             {
             }
@@ -67,6 +71,7 @@ namespace drawinglayer::attribute
                     && getSize() == rCandidate.getSize()
                     && getTransparence() == rCandidate.getTransparence()
                         && getBlur() == rCandidate.getBlur()
+                    && meAlignment == rCandidate.meAlignment
                     && getColor() == rCandidate.getColor());
             }
         };
@@ -86,9 +91,10 @@ namespace drawinglayer::attribute
             const basegfx::B2DVector& rSize,
             double fTransparence,
             sal_Int32 nBlur,
+            model::RectangleAlignment eAlignment,
             const basegfx::BColor& rColor)
         :   mpSdrShadowAttribute(ImpSdrShadowAttribute(
-                rOffset, rSize, fTransparence,nBlur, rColor))
+                rOffset, rSize, fTransparence, nBlur, eAlignment, rColor))
         {
         }
 
@@ -139,6 +145,11 @@ namespace drawinglayer::attribute
         sal_Int32 SdrShadowAttribute::getBlur() const
         {
             return mpSdrShadowAttribute->getBlur();
+        }
+
+        model::RectangleAlignment SdrShadowAttribute::getAlignment() const
+        {
+            return mpSdrShadowAttribute->meAlignment;
         }
 
         const basegfx::BColor& SdrShadowAttribute::getColor() const
