@@ -43,11 +43,9 @@ class Legend;
 class DataTable;
 class Wall;
 
-enum DiagramPositioningMode
+enum class DiagramPositioningMode
 {
-    DiagramPositioningMode_AUTO,
-    DiagramPositioningMode_EXCLUDING,
-    DiagramPositioningMode_INCLUDING
+    Auto, Excluding, Including
 };
 
 

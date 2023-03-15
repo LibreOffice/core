@@ -704,7 +704,7 @@ css::uno::Sequence< OUString > SAL_CALL Diagram::getSupportedServiceNames()
 
 DiagramPositioningMode Diagram::getDiagramPositioningMode()
 {
-    DiagramPositioningMode eMode = DiagramPositioningMode_AUTO;
+    DiagramPositioningMode eMode = DiagramPositioningMode::Auto;
     chart2::RelativePosition aRelPos;
     chart2::RelativeSize aRelSize;
     if( (getFastPropertyValue(PROP_DIAGRAM_REL_POS) >>= aRelPos ) &&
@@ -713,9 +713,9 @@ DiagramPositioningMode Diagram::getDiagramPositioningMode()
         bool bPosSizeExcludeAxes=false;
         getFastPropertyValue(PROP_DIAGRAM_POSSIZE_EXCLUDE_LABELS) >>= bPosSizeExcludeAxes;
         if( bPosSizeExcludeAxes )
-            eMode = DiagramPositioningMode_EXCLUDING;
+            eMode = DiagramPositioningMode::Excluding;
         else
-            eMode = DiagramPositioningMode_INCLUDING;
+            eMode = DiagramPositioningMode::Including;
     }
     return eMode;
 }

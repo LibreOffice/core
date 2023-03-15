@@ -228,7 +228,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
                     = ChartTypeHelper::shiftCategoryPosAtXAxisPerDefault(xChartType);
 
             bool bExcludingPositioning
-                = xDiagram->getDiagramPositioningMode() == DiagramPositioningMode_EXCLUDING;
+                = xDiagram->getDiagramPositioningMode() == DiagramPositioningMode::Excluding;
             VSeriesPlotter* pPlotter = VSeriesPlotter::createSeriesPlotter(
                 xChartType, nDimensionCount, bExcludingPositioning);
             if (!pPlotter)
