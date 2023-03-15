@@ -38,6 +38,7 @@
 
 #include <basegfx/numeric/ftools.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
@@ -760,6 +761,49 @@ void Diagram::setGeometry3D( sal_Int32 nNewGeometry )
             series, "Geometry3D", uno::Any( nNewGeometry ));
     }
 }
+
+sal_Int32 Diagram::getGeometry3D( bool& rbFound, bool& rbAmbiguous )
+{
+    sal_Int32 nCommonGeom( css::chart2::DataPointGeometry3D::CUBOID );
+    rbFound = false;
+    rbAmbiguous = false;
+
+    std::vector< rtl::Reference< DataSeries > > aSeriesVec =
+        DiagramHelper::getDataSeriesFromDiagram( this );
+
+    if( aSeriesVec.empty())
+        rbAmbiguous = true;
+
+    for (auto const& series : aSeriesVec)
+    {
+        try
+        {
+            sal_Int32 nGeom = 0;
+            if( series->getPropertyValue( "Geometry3D") >>= nGeom )
+            {
+                if( ! rbFound )
+                {
+                    // first series
+                    nCommonGeom = nGeom;
+                    rbFound = true;
+                }
+                // further series: compare for uniqueness
+                else if( nCommonGeom != nGeom )
+                {
+                    rbAmbiguous = true;
+                    break;
+                }
+            }
+        }
+        catch( const uno::Exception & )
+        {
+            DBG_UNHANDLED_EXCEPTION("chart2");
+        }
+    }
+
+    return nCommonGeom;
+}
+
 
 
 } //  namespace chart

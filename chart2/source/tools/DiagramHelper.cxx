@@ -1354,50 +1354,6 @@ bool DiagramHelper::isPieOrDonutChart( const rtl::Reference< Diagram >& xDiagram
     return false;
 }
 
-sal_Int32 DiagramHelper::getGeometry3D(
-    const rtl::Reference< Diagram > & xDiagram,
-    bool& rbFound, bool& rbAmbiguous )
-{
-    sal_Int32 nCommonGeom( DataPointGeometry3D::CUBOID );
-    rbFound = false;
-    rbAmbiguous = false;
-
-    std::vector< rtl::Reference< DataSeries > > aSeriesVec =
-        DiagramHelper::getDataSeriesFromDiagram( xDiagram );
-
-    if( aSeriesVec.empty())
-        rbAmbiguous = true;
-
-    for (auto const& series : aSeriesVec)
-    {
-        try
-        {
-            sal_Int32 nGeom = 0;
-            if( series->getPropertyValue( "Geometry3D") >>= nGeom )
-            {
-                if( ! rbFound )
-                {
-                    // first series
-                    nCommonGeom = nGeom;
-                    rbFound = true;
-                }
-                // further series: compare for uniqueness
-                else if( nCommonGeom != nGeom )
-                {
-                    rbAmbiguous = true;
-                    break;
-                }
-            }
-        }
-        catch( const uno::Exception & )
-        {
-            DBG_UNHANDLED_EXCEPTION("chart2");
-        }
-    }
-
-    return nCommonGeom;
-}
-
 static void lcl_ensureRange0to1( double& rValue )
 {
     if(rValue<0.0)

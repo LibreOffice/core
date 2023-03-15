@@ -267,10 +267,6 @@ public:
 
     static bool isPieOrDonutChart( const rtl::Reference< ::chart::Diagram >& xDiagram );
 
-    static sal_Int32 getGeometry3D(
-        const rtl::Reference< ::chart::Diagram > & xDiagram,
-        bool& rbFound, bool& rbAmbiguous );
-
     static bool setDiagramPositioning( const rtl::Reference<::chart::ChartModel>& xChartModel,
         const css::awt::Rectangle& rPosRect /*100th mm*/ );
 

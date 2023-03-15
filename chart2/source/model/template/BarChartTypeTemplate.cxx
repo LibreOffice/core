@@ -184,7 +184,7 @@ bool  BarChartTypeTemplate::matchesTemplate2(
     {
 
         bool bGeomFound = false, bGeomAmbiguous = false;
-        sal_Int32 aCommonGeom = DiagramHelper::getGeometry3D( xDiagram, bGeomFound, bGeomAmbiguous );
+        sal_Int32 aCommonGeom = xDiagram->getGeometry3D( bGeomFound, bGeomAmbiguous );
 
         if( !bGeomAmbiguous )
         {

@@ -1691,7 +1691,7 @@ void WrappedSolidTypeProperty::setPropertyValue( const Any& rOuterValue, const R
 
     bool bFound = false;
     bool bAmbiguous = false;
-    sal_Int32 nOldSolidType = DiagramHelper::getGeometry3D( xDiagram, bFound, bAmbiguous );
+    sal_Int32 nOldSolidType = xDiagram->getGeometry3D( bFound, bAmbiguous );
     if( bFound && ( nOldSolidType != nNewSolidType || bAmbiguous ) )
         xDiagram->setGeometry3D( nNewSolidType );
 }
@@ -1703,7 +1703,7 @@ Any WrappedSolidTypeProperty::getPropertyValue( const Reference< beans::XPropert
     {
         bool bFound = false;
         bool bAmbiguous = false;
-        sal_Int32 nGeometry = DiagramHelper::getGeometry3D( xDiagram, bFound, bAmbiguous );
+        sal_Int32 nGeometry = xDiagram->getGeometry3D( bFound, bAmbiguous );
         if( bFound )
             m_aOuterValue <<= nGeometry;
     }

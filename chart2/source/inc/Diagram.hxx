@@ -174,6 +174,8 @@ public:
 
     void setGeometry3D( sal_Int32 nNewGeometry );
 
+    sal_Int32 getGeometry3D( bool& rbFound, bool& rbAmbiguous );
+
 private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
