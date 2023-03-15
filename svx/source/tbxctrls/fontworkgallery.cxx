@@ -129,7 +129,7 @@ void FontWorkGalleryDialog::fillFavorites(sal_uInt16 nThemeId)
     maIdToTitleMap.clear();
 
     std::vector<OUString> aTitles;
-    GalleryExplorer::FillObjListTitle(nThemeId, aTitles);
+    (void)GalleryExplorer::FillObjListTitle(nThemeId, aTitles);
     assert(aTitles.size() == nFavCount);
 
     for( size_t nFavorite = 1; nFavorite <= nFavCount; nFavorite++ )
