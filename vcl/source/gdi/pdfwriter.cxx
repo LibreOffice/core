@@ -335,9 +335,9 @@ sal_Int32 PDFWriter::CreateLink(const tools::Rectangle& rRect, sal_Int32 nPageNr
     return xImplementation->createLink(rRect, nPageNr, rAltText);
 }
 
-sal_Int32 PDFWriter::CreateScreen(const tools::Rectangle& rRect, sal_Int32 nPageNr)
+sal_Int32 PDFWriter::CreateScreen(const tools::Rectangle& rRect, sal_Int32 nPageNr, OUString const& rAltText)
 {
-    return xImplementation->createScreen(rRect, nPageNr);
+    return xImplementation->createScreen(rRect, nPageNr, rAltText);
 }
 
 sal_Int32 PDFWriter::RegisterDestReference( sal_Int32 nDestId, const tools::Rectangle& rRect, sal_Int32 nPageNr, DestAreaType eType )
