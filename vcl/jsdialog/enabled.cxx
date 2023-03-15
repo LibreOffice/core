@@ -52,6 +52,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"cui/ui/paraindentspacing.ui"
         || rUIFile == u"cui/ui/paratabspage.ui"
         || rUIFile == u"cui/ui/password.ui"
+        || rUIFile == u"cui/ui/pastespecial.ui"
         || rUIFile == u"cui/ui/patterntabpage.ui"
         || rUIFile == u"cui/ui/positionpage.ui"
         || rUIFile == u"cui/ui/queryduplicatedialog.ui"
