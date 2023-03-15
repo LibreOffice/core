@@ -643,38 +643,6 @@ std::vector< std::vector< rtl::Reference< DataSeries > > >
     return aResult;
 }
 
-bool DiagramHelper::isCategoryDiagram(
-            const rtl::Reference< Diagram >& xDiagram )
-{
-    try
-    {
-        for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : xDiagram->getBaseCoordinateSystems() )
-        {
-            for( sal_Int32 nN = xCooSys->getDimension(); nN--; )
-            {
-                const sal_Int32 nMaximumScaleIndex = xCooSys->getMaximumAxisIndexByDimension(nN);
-                for(sal_Int32 nI=0; nI<=nMaximumScaleIndex; ++nI)
-                {
-                    rtl::Reference< Axis > xAxis = xCooSys->getAxisByDimension2( nN,nI );
-                    OSL_ASSERT( xAxis.is());
-                    if( xAxis.is())
-                    {
-                        ScaleData aScaleData = xAxis->getScaleData();
-                        if( aScaleData.AxisType == AxisType::CATEGORY || aScaleData.AxisType == AxisType::DATE )
-                            return true;
-                    }
-                }
-            }
-        }
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-
-    return false;
-}
-
 static void lcl_generateAutomaticCategoriesFromChartType(
             Sequence< OUString >& rRet,
             const rtl::Reference< ChartType >& xChartType )

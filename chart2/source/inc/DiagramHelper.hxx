@@ -178,9 +178,6 @@ public:
         getDataSeriesGroups(
             const rtl::Reference< ::chart::Diagram > & xDiagram );
 
-    static bool isCategoryDiagram(
-            const rtl::Reference< ::chart::Diagram >& xDiagram );
-
     static css::uno::Sequence< OUString >
         getExplicitSimpleCategories( ChartModel& rModel );
 

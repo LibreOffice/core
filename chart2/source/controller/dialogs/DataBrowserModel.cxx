@@ -201,7 +201,7 @@ private:
 
 bool lcl_ShowCategoriesAsDataLabel( const rtl::Reference< ::chart::Diagram > & xDiagram )
 {
-    return !DiagramHelper::isCategoryDiagram(xDiagram);
+    return !xDiagram->isCategory();
 }
 
 } // anonymous namespace

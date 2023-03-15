@@ -234,6 +234,8 @@ public:
             bool bSetAxisType = false, // when this flag is true ...
             bool bCategoryAxis = true);// set the AxisType to CATEGORY or back to REALNUMBER
 
+    bool isCategory();
+
 private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

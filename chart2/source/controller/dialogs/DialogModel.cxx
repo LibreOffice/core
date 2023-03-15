@@ -653,7 +653,7 @@ bool DialogModel::isCategoryDiagram() const
 {
     bool bRet = false;
     if( m_xChartDocument.is())
-        bRet = DiagramHelper::isCategoryDiagram( m_xChartDocument->getFirstChartDiagram() );
+        bRet = m_xChartDocument->getFirstChartDiagram()->isCategory();
     return bRet;
 }
 

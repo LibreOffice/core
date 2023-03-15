@@ -1179,6 +1179,38 @@ void Diagram::setCategories(
     }
 }
 
+bool Diagram::isCategory()
+{
+    try
+    {
+        for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : getBaseCoordinateSystems() )
+        {
+            for( sal_Int32 nN = xCooSys->getDimension(); nN--; )
+            {
+                const sal_Int32 nMaximumScaleIndex = xCooSys->getMaximumAxisIndexByDimension(nN);
+                for(sal_Int32 nI=0; nI<=nMaximumScaleIndex; ++nI)
+                {
+                    rtl::Reference< Axis > xAxis = xCooSys->getAxisByDimension2( nN,nI );
+                    OSL_ASSERT( xAxis.is());
+                    if( xAxis.is())
+                    {
+                        chart2::ScaleData aScaleData = xAxis->getScaleData();
+                        if( aScaleData.AxisType == chart2::AxisType::CATEGORY || aScaleData.AxisType == chart2::AxisType::DATE )
+                            return true;
+                    }
+                }
+            }
+        }
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+
+    return false;
+}
+
+
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
