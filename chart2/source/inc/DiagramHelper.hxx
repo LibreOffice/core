@@ -271,10 +271,6 @@ public:
         const rtl::Reference< ::chart::Diagram > & xDiagram,
         bool& rbFound, bool& rbAmbiguous );
 
-    static void setGeometry3D(
-        const rtl::Reference< ::chart::Diagram > & xDiagram,
-        sal_Int32 nNewGeometry );
-
     static bool setDiagramPositioning( const rtl::Reference<::chart::ChartModel>& xChartModel,
         const css::awt::Rectangle& rPosRect /*100th mm*/ );
 

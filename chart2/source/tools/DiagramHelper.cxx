@@ -1398,20 +1398,6 @@ sal_Int32 DiagramHelper::getGeometry3D(
     return nCommonGeom;
 }
 
-void DiagramHelper::setGeometry3D(
-    const rtl::Reference< Diagram > & xDiagram,
-    sal_Int32 nNewGeometry )
-{
-    std::vector< rtl::Reference< DataSeries > > aSeriesVec =
-        DiagramHelper::getDataSeriesFromDiagram( xDiagram );
-
-    for (auto const& series : aSeriesVec)
-    {
-        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(
-            series, "Geometry3D", uno::Any( nNewGeometry ));
-    }
-}
-
 static void lcl_ensureRange0to1( double& rValue )
 {
     if(rValue<0.0)

@@ -21,6 +21,7 @@
 #include <ChartTypeHelper.hxx>
 #include <ChartTypeManager.hxx>
 #include <ChartTypeTemplate.hxx>
+#include <DataSeriesHelper.hxx>
 #include <PropertyHelper.hxx>
 #include "Wall.hxx"
 #include <ModifyListenerHelper.hxx>
@@ -746,6 +747,18 @@ sal_Int32 Diagram::getCorrectedMissingValueTreatment(
     }
 
     return nResult;
+}
+
+void Diagram::setGeometry3D( sal_Int32 nNewGeometry )
+{
+    std::vector< rtl::Reference< DataSeries > > aSeriesVec =
+        DiagramHelper::getDataSeriesFromDiagram( this );
+
+    for (auto const& series : aSeriesVec)
+    {
+        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(
+            series, "Geometry3D", uno::Any( nNewGeometry ));
+    }
 }
 
 

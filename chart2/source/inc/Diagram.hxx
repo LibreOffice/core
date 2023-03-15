@@ -172,6 +172,8 @@ public:
     sal_Int32 getCorrectedMissingValueTreatment(
             const rtl::Reference< ::chart::ChartType >& xChartType );
 
+    void setGeometry3D( sal_Int32 nNewGeometry );
+
 private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
