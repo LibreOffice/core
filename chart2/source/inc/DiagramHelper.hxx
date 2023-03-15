@@ -265,8 +265,6 @@ public:
 
     static bool isSupportingFloorAndWall( const rtl::Reference< ::chart::Diagram > & xDiagram );
 
-    static bool isPieOrDonutChart( const rtl::Reference< ::chart::Diagram >& xDiagram );
-
     static bool setDiagramPositioning( const rtl::Reference<::chart::ChartModel>& xChartModel,
         const css::awt::Rectangle& rPosRect /*100th mm*/ );
 

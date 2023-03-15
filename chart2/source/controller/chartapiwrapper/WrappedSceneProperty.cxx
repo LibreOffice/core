@@ -49,7 +49,7 @@ WrappedD3DTransformMatrixProperty::~WrappedD3DTransformMatrixProperty()
 
 void WrappedD3DTransformMatrixProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
 {
-    if( DiagramHelper::isPieOrDonutChart( m_spChart2ModelContact->getDiagram() ) )
+    if( m_spChart2ModelContact->getDiagram()->isPieOrDonutChart() )
     {
         drawing::HomogenMatrix aHM;
         if( rOuterValue >>= aHM )
@@ -74,7 +74,7 @@ void WrappedD3DTransformMatrixProperty::setPropertyValue( const Any& rOuterValue
 
 Any WrappedD3DTransformMatrixProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
 {
-    if( DiagramHelper::isPieOrDonutChart( m_spChart2ModelContact->getDiagram() ) )
+    if( m_spChart2ModelContact->getDiagram()->isPieOrDonutChart() )
     {
         uno::Any aAMatrix( WrappedProperty::getPropertyValue( xInnerPropertySet ) );
         drawing::HomogenMatrix aHM;

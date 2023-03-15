@@ -344,7 +344,7 @@ bool lcl_IsPieOrDonut( const rtl::Reference< Diagram >& xDiagram )
     //the size is checked after complete creation to get the datalabels into the given space
 
     //todo: this is just a workaround at the moment for pie and donut labels
-    return DiagramHelper::isPieOrDonutChart( xDiagram );
+    return xDiagram->isPieOrDonutChart();
 }
 
 void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDrawModelWrapper, ChartModel& rModel)

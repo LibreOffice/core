@@ -21,6 +21,7 @@
 #include <ChartTypeHelper.hxx>
 #include <ChartTypeManager.hxx>
 #include <ChartTypeTemplate.hxx>
+#include <ChartType.hxx>
 #include <DataSeriesHelper.hxx>
 #include <PropertyHelper.hxx>
 #include "Wall.hxx"
@@ -35,6 +36,7 @@
 #include <BaseCoordinateSystem.hxx>
 #include <Legend.hxx>
 #include <DataTable.hxx>
+#include <servicenames_charttypes.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -804,6 +806,19 @@ sal_Int32 Diagram::getGeometry3D( bool& rbFound, bool& rbAmbiguous )
     return nCommonGeom;
 }
 
+bool Diagram::isPieOrDonutChart()
+{
+    rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeByIndex(
+        this, 0 ) );
+
+    if( xChartType .is() )
+    {
+        OUString aChartType = xChartType->getChartType();
+        if( aChartType == CHART2_SERVICE_NAME_CHARTTYPE_PIE )
+            return true;
+    }
+    return false;
+}
 
 
 } //  namespace chart

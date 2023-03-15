@@ -1340,20 +1340,6 @@ bool DiagramHelper::isSupportingFloorAndWall( const rtl::Reference< Diagram >& x
     return true;
 }
 
-bool DiagramHelper::isPieOrDonutChart( const rtl::Reference< Diagram >& xDiagram )
-{
-    rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeByIndex(
-        xDiagram, 0 ) );
-
-    if( xChartType .is() )
-    {
-        OUString aChartType = xChartType->getChartType();
-        if( aChartType == CHART2_SERVICE_NAME_CHARTTYPE_PIE )
-            return true;
-    }
-    return false;
-}
-
 static void lcl_ensureRange0to1( double& rValue )
 {
     if(rValue<0.0)

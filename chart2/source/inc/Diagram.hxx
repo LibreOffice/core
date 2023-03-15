@@ -176,6 +176,8 @@ public:
 
     sal_Int32 getGeometry3D( bool& rbFound, bool& rbAmbiguous );
 
+    bool isPieOrDonutChart();
+
 private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

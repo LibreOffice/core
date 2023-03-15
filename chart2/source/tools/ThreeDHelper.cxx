@@ -1248,7 +1248,7 @@ void ThreeDHelper::setDefaultRotation( const uno::Reference< beans::XPropertySet
 
 void ThreeDHelper::setDefaultRotation( const rtl::Reference< Diagram >& xDiagram )
 {
-    bool bPieOrDonut( DiagramHelper::isPieOrDonutChart( xDiagram ) );
+    bool bPieOrDonut( xDiagram->isPieOrDonutChart() );
     ThreeDHelper::setDefaultRotation( xDiagram, bPieOrDonut );
 }
 
