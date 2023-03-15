@@ -1,7 +1,7 @@
 #include <sal/types.h>
 
 /* libjpeg-turbo build number */
-#define BUILD  "20230228"
+#define BUILD  "20230315"
 
 /* Compiler's inline keyword */
 #undef inline
@@ -19,7 +19,7 @@
 #define PACKAGE_NAME  "libjpeg-turbo"
 
 /* Version number of package */
-#define VERSION  "2.1.5"
+#define VERSION  "2.1.5.1"
 
 /* The size of `size_t', as computed by sizeof. */
 /* #undef SIZEOF_SIZE_T */
