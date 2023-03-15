@@ -23,6 +23,7 @@
 #include <rootfrm.hxx>
 #include <dcontact.hxx>
 #include <flyfrm.hxx>
+#include <tabfrm.hxx>
 #include <txtfrm.hxx>
 #include <cellfrm.hxx>
 #include <swtable.hxx>
@@ -336,8 +337,9 @@ void SwFrame::DestroyImpl()
         && (GetDep() || IsTextFrame())) // sw_redlinehide: text frame may not have Dep!
     {
         assert(!IsTextFrame() || GetDep() || static_cast<SwTextFrame*>(this)->GetMergedPara());
+        const bool bInDocDtor = IsTabFrame() && static_cast<SwTabFrame*>(this)->GetFormat()->GetDoc()->IsInDtor();
         SwRootFrame *pRootFrame = getRootFrame();
-        if( pRootFrame && pRootFrame->IsAnyShellAccessible() )
+        if( !bInDocDtor && pRootFrame && pRootFrame->IsAnyShellAccessible() )
         {
             SwViewShell *pVSh = pRootFrame->GetCurrShell();
             if( pVSh && pVSh->Imp() )
