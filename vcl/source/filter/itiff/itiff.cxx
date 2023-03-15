@@ -162,7 +162,7 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
 
         if (bOk && bFuzzing)
         {
-            const uint64_t MAX_PIXEL_SIZE = 150000000;
+            const uint64_t MAX_PIXEL_SIZE = 120000000;
             const uint64_t MAX_TILE_SIZE = 100000000;
             nTotalPixelsRequired += nPixelsRequired;
             if (TIFFTileSize64(tif) > MAX_TILE_SIZE || nTotalPixelsRequired > MAX_PIXEL_SIZE)
