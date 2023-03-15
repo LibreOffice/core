@@ -284,6 +284,47 @@ void batchPrint( std::u16string_view rPrinterName, const Reference< XPrintable >
     xDoc->print( aPrinterArgs );
 }
 
+// Get xDoc module name
+OUString getName(const Reference< XPrintable > & xDoc)
+{
+    OUString aDocService;
+    Reference< XModel > xModel( xDoc, UNO_QUERY );
+    const Reference<XServiceInfo> xServiceInfo(xModel, UNO_QUERY_THROW);
+    if ( xModel.is() )
+    {
+        utl::MediaDescriptor aMediaDesc( xModel->getArgs() );
+        aDocService = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_DOCUMENTSERVICE, OUString() );
+    }
+    OString aModuleId = OUStringToOString(aDocService, osl_getThreadTextEncoding());
+    if (aModuleId == "com.sun.star.text.TextDocument"
+        || aModuleId == "com.sun.star.text.GlobalDocument")
+        return "Writer";
+    else if (aModuleId == "com.sun.star.text.WebDocument")
+        return "Writer/Web";
+    else if (aModuleId == "com.sun.star.drawing.DrawingDocument")
+        return "Draw";
+    else if (aModuleId == "com.sun.star.presentation.PresentationDocument")
+        return "Impress";
+    else if (aModuleId == "com.sun.star.sheet.SpreadsheetDocument")
+        return "Calc";
+    else if (aModuleId == "com.sun.star.script.BasicIDE")
+        return "Basic";
+    else if (aModuleId == "com.sun.star.formula.FormulaProperties")
+        return "Math";
+    else if (aModuleId == "com.sun.star.sdb.RelationDesign")
+        return "Relation Design";
+    else if (aModuleId == "com.sun.star.sdb.QueryDesign")
+        return "Query Design";
+    else if (aModuleId == "com.sun.star.sdb.TableDesign")
+        return "Table Design";
+    else if (aModuleId == "com.sun.star.sdb.DataSourceBrowser")
+        return "Data Source Browser";
+    else if (aModuleId == "com.sun.star.sdb.DatabaseDocument")
+        return "Database";
+
+    return OUString();
+}
+
 } // anonymous namespace
 
 DispatchWatcher::DispatchWatcher()
@@ -661,9 +702,10 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                                 OString aTargetURL8 = OUStringToOString(aTempName, osl_getThreadTextEncoding());
                                 if (aDispatchRequest.aRequestType != REQUEST_CAT)
                                 {
+                                    OUString name=getName(xDoc);
                                     std::cout << "convert " << aSource8;
                                     if (!bMultiFileTarget)
-                                        std::cout << " -> " << aTargetURL8;
+                                        std::cout << " -> " << aTargetURL8 << " as a " << name <<" document";
                                     std::cout << " using filter : " << OUStringToOString(aFilter, osl_getThreadTextEncoding()) << std::endl;
                                     if (!bMultiFileTarget && FStatHelper::IsDocument(aOutFile))
                                         std::cout << "Overwriting: " << OUStringToOString(aTempName, osl_getThreadTextEncoding()) << std::endl ;
