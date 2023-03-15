@@ -170,14 +170,6 @@ public:
         getDataSeriesFromDiagram(
             const rtl::Reference< ::chart::Diagram > & xDiagram );
 
-    /** return all data series in this diagram grouped by chart-types
-     */
-    static std::vector<
-               std::vector<
-                   rtl::Reference< ::chart::DataSeries > > >
-        getDataSeriesGroups(
-            const rtl::Reference< ::chart::Diagram > & xDiagram );
-
     static css::uno::Sequence< OUString >
         getExplicitSimpleCategories( ChartModel& rModel );
 

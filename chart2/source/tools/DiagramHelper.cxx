@@ -623,26 +623,6 @@ std::vector< rtl::Reference< ::chart::DataSeries > >
     return aResult;
 }
 
-std::vector< std::vector< rtl::Reference< DataSeries > > >
-        DiagramHelper::getDataSeriesGroups( const rtl::Reference< Diagram > & xDiagram )
-{
-    if (!xDiagram)
-        return {};
-
-    std::vector< std::vector< rtl::Reference< DataSeries > > > aResult;
-
-    //iterate through all coordinate systems
-    for( rtl::Reference< BaseCoordinateSystem > const & coords : xDiagram->getBaseCoordinateSystems() )
-    {
-        //iterate through all chart types in the current coordinate system
-        for( rtl::Reference< ChartType >  const & chartType : coords->getChartTypes2() )
-        {
-            aResult.push_back( chartType->getDataSeries2() );
-        }
-    }
-    return aResult;
-}
-
 static void lcl_generateAutomaticCategoriesFromChartType(
             Sequence< OUString >& rRet,
             const rtl::Reference< ChartType >& xChartType )

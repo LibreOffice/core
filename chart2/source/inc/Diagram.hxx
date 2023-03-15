@@ -236,6 +236,13 @@ public:
 
     bool isCategory();
 
+    /** return all data series in this diagram grouped by chart-types
+     */
+    std::vector<
+           std::vector<
+               rtl::Reference< ::chart::DataSeries > > >
+        getDataSeriesGroups();
+
 private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

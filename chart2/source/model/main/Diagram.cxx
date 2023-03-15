@@ -1210,6 +1210,22 @@ bool Diagram::isCategory()
     return false;
 }
 
+std::vector< std::vector< rtl::Reference< DataSeries > > >
+Diagram::getDataSeriesGroups()
+{
+    std::vector< std::vector< rtl::Reference< DataSeries > > > aResult;
+
+    //iterate through all coordinate systems
+    for( rtl::Reference< BaseCoordinateSystem > const & coords : getBaseCoordinateSystems() )
+    {
+        //iterate through all chart types in the current coordinate system
+        for( rtl::Reference< ChartType >  const & chartType : coords->getChartTypes2() )
+        {
+            aResult.push_back( chartType->getDataSeries2() );
+        }
+    }
+    return aResult;
+}
 
 } //  namespace chart
 

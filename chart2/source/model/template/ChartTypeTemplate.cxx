@@ -183,7 +183,7 @@ void ChartTypeTemplate::changeDiagram( const rtl::Reference< Diagram >& xDiagram
     try
     {
         std::vector< std::vector< rtl::Reference< DataSeries > > > aSeriesSeq =
-            DiagramHelper::getDataSeriesGroups( xDiagram );
+            xDiagram->getDataSeriesGroups();
         std::vector< rtl::Reference< DataSeries > > aFlatSeriesSeq( FlattenSequence( aSeriesSeq ));
         const sal_Int32 nFormerSeriesCount = aFlatSeriesSeq.size();
 
@@ -394,7 +394,7 @@ void ChartTypeTemplate::applyStyles( const rtl::Reference< ::chart::Diagram >& x
 {
     // apply chart-type specific styles, like "symbols on" for example
     std::vector< std::vector< rtl::Reference< DataSeries > > > aNewSeriesSeq(
-        DiagramHelper::getDataSeriesGroups( xDiagram ));
+        xDiagram->getDataSeriesGroups());
     for( std::size_t i=0; i<aNewSeriesSeq.size(); ++i )
     {
         const sal_Int32 nNumSeries = aNewSeriesSeq[i].size();
