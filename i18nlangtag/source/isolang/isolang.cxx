@@ -778,6 +778,7 @@ IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_KAZAKH_CYRILLIC_LSO,                 "kk-Cyrl", ""  , k0    },   // MS reserved
     { LANGUAGE_KANURI_NIGERIA,                      "kr-Latn", "NG", k0    },   // macrolanguage code; MS since rev.15
     { LANGUAGE_TAMAZIGHT_ARABIC_MOROCCO,           "tzm-Arab", "MA", k0    },   // MS since rev.15, was reserved
+    { LANGUAGE_USER_ROHINGYA_HANIFI,               "rhg-Rhog", "MM", k0    },
 };
 
 Bcp47CountryEntry const aImplBcp47CountryEntries[] =
