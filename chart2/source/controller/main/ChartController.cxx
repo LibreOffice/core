@@ -1437,7 +1437,7 @@ void ChartController::executeDispatch_MoveSeries( bool bForward )
             SchResId(STR_OBJECT_DATASERIES)),
         m_xUndoManager );
 
-    bool bChanged = DiagramHelper::moveSeries( getFirstDiagram(), xGivenDataSeries, bForward );
+    bool bChanged = getFirstDiagram()->moveSeries( xGivenDataSeries, bForward );
     if( bChanged )
     {
         m_aSelection.setSelection( ObjectIdentifier::getMovedSeriesCID( aObjectCID, bForward ) );

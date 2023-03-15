@@ -223,46 +223,6 @@ public:
                 const rtl::Reference< ::chart::ChartType >& xFirstType,
                 const rtl::Reference< ::chart::ChartType >& xSecondType );
 
-    /**
-        * Test if a series can be moved.
-        *
-        * @param xDiagram
-        *  Reference to the diagram that contains the series.
-        *
-        * @param xGivenDataSeries
-        *  Reference to the series that should be tested for moving.
-        *
-        * @param bForward
-        *  Direction of the move to be checked.
-        *
-        * @returns </sal_True> if the series can be moved.
-        *
-        */
-    static bool isSeriesMoveable(
-            const rtl::Reference< ::chart::Diagram >& xDiagram,
-            const css::uno::Reference< css::chart2::XDataSeries >& xGivenDataSeries,
-            bool bForward );
-
-    /**
-        * Move a series forward or backward.
-        *
-        * @param xDiagram
-        *  Reference to the diagram that contains the series.
-        *
-        * @param xGivenDataSeries
-        *  Reference to the series that should be moved.
-        *
-        * @param bForward
-        *  Direction in which the series should be moved.
-        *
-        * @returns </sal_True> if the series was moved successfully.
-        *
-        */
-    static bool moveSeries(
-                const rtl::Reference< ::chart::Diagram >& xDiagram,
-                const css::uno::Reference< css::chart2::XDataSeries >& xGivenDataSeries,
-                bool bForward );
-
     static bool setDiagramPositioning( const rtl::Reference<::chart::ChartModel>& xChartModel,
         const css::awt::Rectangle& rPosRect /*100th mm*/ );
 

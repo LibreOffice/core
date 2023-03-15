@@ -204,13 +204,11 @@ void ControllerState::update(
 
     bIsDeleteableObjectSelected = ChartController::isObjectDeleteable( aSelObj );
 
-    bMayMoveSeriesForward = (aObjectType!=OBJECTTYPE_DATA_POINT) && DiagramHelper::isSeriesMoveable(
-        ChartModelHelper::findDiagram( xModel ),
+    bMayMoveSeriesForward = (aObjectType!=OBJECTTYPE_DATA_POINT) && xDiagram && xDiagram->isSeriesMoveable(
         xGivenDataSeries,
         MOVE_SERIES_FORWARD );
 
-    bMayMoveSeriesBackward = (aObjectType!=OBJECTTYPE_DATA_POINT) && DiagramHelper::isSeriesMoveable(
-        ChartModelHelper::findDiagram( xModel ),
+    bMayMoveSeriesBackward = (aObjectType!=OBJECTTYPE_DATA_POINT) && xDiagram && xDiagram->isSeriesMoveable(
         xGivenDataSeries,
         MOVE_SERIES_BACKWARD );
 

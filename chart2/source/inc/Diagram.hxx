@@ -33,6 +33,7 @@
 #include <vector>
 
 namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::chart2 { class XDataSeries; }
 namespace com::sun::star::chart2::data { class XDataSource; }
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -179,6 +180,44 @@ public:
     bool isPieOrDonutChart();
 
     bool isSupportingFloorAndWall();
+
+    /**
+    * Move a series forward or backward.
+    *
+    * @param xDiagram
+    *  Reference to the diagram that contains the series.
+    *
+    * @param xGivenDataSeries
+    *  Reference to the series that should be moved.
+    *
+    * @param bForward
+    *  Direction in which the series should be moved.
+    *
+    * @returns </sal_True> if the series was moved successfully.
+    *
+    */
+    bool moveSeries(
+                const css::uno::Reference< css::chart2::XDataSeries >& xGivenDataSeries,
+                bool bForward );
+
+    /**
+    * Test if a series can be moved.
+    *
+    * @param xDiagram
+    *  Reference to the diagram that contains the series.
+    *
+    * @param xGivenDataSeries
+    *  Reference to the series that should be tested for moving.
+    *
+    * @param bForward
+    *  Direction of the move to be checked.
+    *
+    * @returns </sal_True> if the series can be moved.
+    *
+    */
+    bool isSeriesMoveable(
+            const css::uno::Reference< css::chart2::XDataSeries >& xGivenDataSeries,
+            bool bForward );
 
 private:
     // ____ XModifyListener ____
