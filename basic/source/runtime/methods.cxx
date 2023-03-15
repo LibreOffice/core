@@ -59,6 +59,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/script/XErrorQuery.hpp>
+#include <ooo/vba/VbStrConv.hpp>
 #include <ooo/vba/VbTriState.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
 #include <memory>
@@ -4084,6 +4085,40 @@ void SbRtl_QBColor(StarBASIC *, SbxArray & rPar, bool)
     rPar.Get(0)->PutLong(nRGB);
 }
 
+static std::vector<sal_uInt8> byteArray2Vec(SbxArray* pArr)
+{
+    std::vector<sal_uInt8> result;
+    if (pArr)
+    {
+        const sal_uInt32 nCount = pArr->Count();
+        result.reserve(nCount + 1); // to avoid reallocation when padding in vbFromUnicode
+        for (sal_uInt32 i = 0; i < nCount; i++)
+            result.push_back(pArr->Get(i)->GetByte());
+    }
+    return result;
+}
+
+// Makes sure to get the byte array if passed, or the string converted to the bytes using
+// StringToByteArray in basic/source/sbx/sbxstr.cxx
+static std::vector<sal_uInt8> getByteArray(SbxValue& val)
+{
+    if (val.GetFullType() == SbxOBJECT)
+        if (auto pObj = val.GetObject())
+            if (pObj->GetType() == (SbxARRAY | SbxBYTE))
+                if (auto pArr = dynamic_cast<SbxArray*>(pObj))
+                    return byteArray2Vec(pArr);
+
+    // Convert to string
+    tools::SvRef<SbxValue> pStringValue(new SbxValue(SbxSTRING));
+    *pStringValue = val;
+
+    // Convert string to byte array
+    tools::SvRef<SbxValue> pValue(new SbxValue(SbxOBJECT));
+    pValue->PutObject(new SbxArray(SbxBYTE));
+    *pValue = *pStringValue; // Does the magic of conversion of strings to byte arrays
+    return byteArray2Vec(dynamic_cast<SbxArray*>(pValue->GetObject()));
+}
+
 // StrConv(string, conversion, LCID)
 void SbRtl_StrConv(StarBASIC *, SbxArray & rPar, bool)
 {
@@ -4094,7 +4129,6 @@ void SbRtl_StrConv(StarBASIC *, SbxArray & rPar, bool)
         return;
     }
 
-    OUString aOldStr = rPar.Get(1)->GetOUString();
     sal_Int32 nConversion = rPar.Get(2)->GetLong();
     LanguageType nLanguage = LANGUAGE_SYSTEM;
     if (nArgCount == 3)
@@ -4102,127 +4136,101 @@ void SbRtl_StrConv(StarBASIC *, SbxArray & rPar, bool)
         sal_Int32 lcid = rPar.Get(3)->GetLong();
         nLanguage = LanguageType(lcid);
     }
-    OUString sLanguage = LanguageTag(nLanguage).getLanguage();
-    rtl_TextEncoding encodingVal = utl_getWinTextEncodingFromLangStr(sLanguage);
 
-    sal_Int32 nOldLen = aOldStr.getLength();
-    if( nOldLen == 0 )
+    if (nConversion == ooo::vba::VbStrConv::vbUnicode) // This mode does not combine
     {
-        // null string,return
-        rPar.Get(0)->PutString(aOldStr);
-        return;
-    }
-
-    TransliterationFlags nType = TransliterationFlags::NONE;
-    if ( (nConversion & 0x03) == 3 ) //  vbProperCase
-    {
-        const CharClass& rCharClass = GetCharClass();
-        aOldStr = rCharClass.titlecase( aOldStr.toAsciiLowerCase(), 0, nOldLen );
-    }
-    else if ( (nConversion & 0x01) == 1 ) // vbUpperCase
-    {
-        nType |= TransliterationFlags::LOWERCASE_UPPERCASE;
-    }
-    else if ( (nConversion & 0x02) == 2 ) // vbLowerCase
-    {
-        nType |= TransliterationFlags::UPPERCASE_LOWERCASE;
-    }
-    if ( (nConversion & 0x04) == 4 ) // vbWide
-    {
-        nType |= TransliterationFlags::HALFWIDTH_FULLWIDTH;
-    }
-    else if ( (nConversion & 0x08) == 8 ) // vbNarrow
-    {
-        nType |= TransliterationFlags::FULLWIDTH_HALFWIDTH;
-    }
-    if ( (nConversion & 0x10) == 16) // vbKatakana
-    {
-        nType |= TransliterationFlags::HIRAGANA_KATAKANA;
-    }
-    else if ( (nConversion & 0x20) == 32 ) // vbHiragana
-    {
-        nType |= TransliterationFlags::KATAKANA_HIRAGANA;
-    }
-    OUString aNewStr( aOldStr );
-    if( nType != TransliterationFlags::NONE )
-    {
-        uno::Reference< uno::XComponentContext > xContext = getProcessComponentContext();
-        ::utl::TransliterationWrapper aTransliterationWrapper( xContext, nType );
-        uno::Sequence<sal_Int32> aOffsets;
-        aTransliterationWrapper.loadModuleIfNeeded( nLanguage );
-        aNewStr = aTransliterationWrapper.transliterate( aOldStr, nLanguage, 0, nOldLen, &aOffsets );
-    }
-
-    if ( (nConversion & 0x40) == 64 ) // vbUnicode
-    {
-        // convert the string to byte string, preserving unicode (2 bytes per character)
-        sal_Int32 nSize = aNewStr.getLength()*2;
-        const sal_Unicode* pSrc = aNewStr.getStr();
-        std::unique_ptr<char[]> pChar(new char[nSize+1]);
-        for( sal_Int32 i=0; i < nSize; i++ )
-        {
-            pChar[i] = static_cast< char >( (i%2) ? ((*pSrc) >> 8) & 0xff : (*pSrc) & 0xff );
-            if( i%2 )
-            {
-                pSrc++;
-            }
-        }
-        pChar[nSize] = '\0';
-        std::string_view aOStr(pChar.get());
-
-        // there is no concept about default codepage in unix. so it is incorrectly in unix
-        OUString aOUStr = OStringToOUString(aOStr, encodingVal);
+        // Assume that the passed byte array is encoded in the defined encoding, convert to
+        // UTF-16 and store as string. Passed strings are converted to byte array first.
+        auto inArray = getByteArray(*rPar.Get(1));
+        std::string_view s(reinterpret_cast<char*>(inArray.data()), inArray.size() / sizeof(char));
+        const auto encoding = utl_getWinTextEncodingFromLangStr(LanguageTag(nLanguage).getBcp47());
+        OUString aOUStr = OStringToOUString(s, encoding);
         rPar.Get(0)->PutString(aOUStr);
         return;
     }
-    else if ( (nConversion & 0x80) == 128 ) // vbFromUnicode
+
+    if (nConversion == ooo::vba::VbStrConv::vbFromUnicode) // This mode does not combine
     {
-        // there is no concept about default codepage in unix. so it is incorrectly in unix
-        OString aOStr = OUStringToOString(aNewStr, encodingVal);
-        const char* pChar = aOStr.getStr();
-        sal_Int32 nArraySize = aOStr.getLength();
+        // Assume that the passed byte array is UTF-16-encoded (system-endian), convert to specified
+        // encoding and store as byte array. Passed strings are converted to byte array first.
+        auto inArray = getByteArray(*rPar.Get(1));
+        while (inArray.size() % sizeof(sal_Unicode))
+            inArray.push_back('\0');
+        std::u16string_view s(reinterpret_cast<sal_Unicode*>(inArray.data()),
+                              inArray.size() / sizeof(sal_Unicode));
+        const auto encoding = utl_getWinTextEncodingFromLangStr(LanguageTag(nLanguage).getBcp47());
+        OString aOStr = OUStringToOString(s, encoding);
+        const sal_Int32 lb = IsBaseIndexOne() ? 1 : 0;
+        const sal_Int32 ub = lb + aOStr.getLength() - 1;
         SbxDimArray* pArray = new SbxDimArray(SbxBYTE);
-        bool bIncIndex = IsBaseIndexOne();
-        if(nArraySize)
+        pArray->unoAddDim(lb, ub);
+
+        for (sal_Int32 i = 0; i < aOStr.getLength(); ++i)
         {
-            if( bIncIndex )
+            SbxVariable* pNew = new SbxVariable(SbxBYTE);
+            pNew->PutByte(aOStr[i]);
+            pArray->Put(pNew, i);
+        }
+
+        SbxVariable* retVar = rPar.Get(0);
+        SbxFlagBits nFlags = retVar->GetFlags();
+        retVar->ResetFlag(SbxFlagBits::Fixed);
+        retVar->PutObject(pArray);
+        retVar->SetFlags(nFlags);
+        retVar->SetParameters(nullptr);
+        return;
+    }
+
+    std::vector<TransliterationFlags> aTranslitSet;
+    auto check = [&nConversion, &aTranslitSet](sal_Int32 conv, TransliterationFlags flag)
+    {
+        if ((nConversion & conv) != conv)
+            return false;
+
+        aTranslitSet.push_back(flag);
+        nConversion &= ~conv;
+        return true;
+    };
+
+    // Check mutually exclusive bits together
+
+    if (!check(ooo::vba::VbStrConv::vbProperCase, TransliterationFlags::TITLE_CASE))
+        if (!check(ooo::vba::VbStrConv::vbUpperCase, TransliterationFlags::LOWERCASE_UPPERCASE))
+            check(ooo::vba::VbStrConv::vbLowerCase, TransliterationFlags::UPPERCASE_LOWERCASE);
+
+    if (!check(ooo::vba::VbStrConv::vbWide, TransliterationFlags::HALFWIDTH_FULLWIDTH))
+        check(ooo::vba::VbStrConv::vbNarrow, TransliterationFlags::FULLWIDTH_HALFWIDTH);
+
+    if (!check(ooo::vba::VbStrConv::vbKatakana, TransliterationFlags::HIRAGANA_KATAKANA))
+        check(ooo::vba::VbStrConv::vbHiragana, TransliterationFlags::KATAKANA_HIRAGANA);
+
+    if (nConversion) // unknown / incorrectly combined bits
+        return StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
+
+    OUString aStr = rPar.Get(1)->GetOUString();
+    if (!aStr.isEmpty() && !aTranslitSet.empty())
+    {
+        uno::Reference< uno::XComponentContext > xContext = getProcessComponentContext();
+
+        for (auto transliterationFlag : aTranslitSet)
+        {
+            if (transliterationFlag == TransliterationFlags::TITLE_CASE)
             {
-                pArray->AddDim(1, nArraySize);
+                // TransliterationWrapper only handles the first character of the passed string
+                // when handling TITLE_CASE; see Transliteration_titlecase::transliterateImpl in
+                // i18npool/source/transliteration/transliteration_body.cxx
+                CharClass aCharClass{ xContext, LanguageTag(nLanguage) };
+                aStr = aCharClass.titlecase(aCharClass.lowercase(aStr));
             }
             else
             {
-                pArray->AddDim(0, nArraySize - 1);
+                utl::TransliterationWrapper aWrapper(xContext, transliterationFlag);
+                aStr = aWrapper.transliterate(aStr, nLanguage, 0, aStr.getLength(), nullptr);
             }
         }
-        else
-        {
-            pArray->unoAddDim(0, -1);
-        }
-
-        for( sal_Int32 i=0; i< nArraySize; i++)
-        {
-            SbxVariable* pNew = new SbxVariable( SbxBYTE );
-            pNew->PutByte(*pChar);
-            pChar++;
-            pNew->SetFlag( SbxFlagBits::Write );
-            sal_Int32 aIdx[1];
-            aIdx[0] = i;
-            if( bIncIndex )
-            {
-                ++aIdx[0];
-            }
-            pArray->Put(pNew, aIdx);
-        }
-
-        SbxVariableRef refVar = rPar.Get(0);
-        SbxFlagBits nFlags = refVar->GetFlags();
-        refVar->ResetFlag( SbxFlagBits::Fixed );
-        refVar->PutObject( pArray );
-        refVar->SetFlags( nFlags );
-        refVar->SetParameters( nullptr );
-        return;
     }
-    rPar.Get(0)->PutString(aNewStr);
+
+    rPar.Get(0)->PutString(aStr);
 }
 
 
