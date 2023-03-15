@@ -928,7 +928,7 @@ The following structure describes the permissions used in PDF security
     sal_Int32 CreateLink(const tools::Rectangle& rRect, sal_Int32 nPageNr, OUString const& rAltText);
 
     /// Creates a screen annotation.
-    sal_Int32 CreateScreen(const tools::Rectangle& rRect, sal_Int32 nPageNr);
+    sal_Int32 CreateScreen(const tools::Rectangle& rRect, sal_Int32 nPageNr, OUString const& rAltText);
 
     /** creates a destination which is not intended to be referred to by a link, but by a public destination Id.
 

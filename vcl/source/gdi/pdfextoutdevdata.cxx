@@ -195,9 +195,10 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
                 rWriter.Push(PushFlags::MAPMODE);
                 rWriter.SetMapMode(mParaMapModes.front());
                 mParaMapModes.pop_front();
-                mParaIds.push_back(rWriter.CreateScreen(mParaRects.front(), mParaInts.front()));
+                mParaIds.push_back(rWriter.CreateScreen(mParaRects.front(), mParaInts.front(), mParaOUStrings.front()));
                 mParaRects.pop_front();
                 mParaInts.pop_front();
+                mParaOUStrings.pop_front();
                 rWriter.Pop();
             }
             break;
@@ -675,12 +676,13 @@ sal_Int32 PDFExtOutDevData::CreateLink(const tools::Rectangle& rRect, OUString c
     return mpGlobalSyncData->mCurId++;
 }
 
-sal_Int32 PDFExtOutDevData::CreateScreen(const tools::Rectangle& rRect, sal_Int32 nPageNr)
+sal_Int32 PDFExtOutDevData::CreateScreen(const tools::Rectangle& rRect, OUString const& rAltText, sal_Int32 nPageNr)
 {
     mpGlobalSyncData->mActions.push_back(PDFExtOutDevDataSync::CreateScreen);
     mpGlobalSyncData->mParaRects.push_back(rRect);
     mpGlobalSyncData->mParaMapModes.push_back(mrOutDev.GetMapMode());
     mpGlobalSyncData->mParaInts.push_back(nPageNr);
+    mpGlobalSyncData->mParaOUStrings.push_back(rAltText);
     return mpGlobalSyncData->mCurId++;
 }
 
