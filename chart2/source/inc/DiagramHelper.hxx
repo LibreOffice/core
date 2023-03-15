@@ -275,11 +275,6 @@ public:
         const rtl::Reference< ::chart::Diagram > & xDiagram,
         sal_Int32 nNewGeometry );
 
-    //returns integer from constant group css::chart::MissingValueTreatment
-    static sal_Int32 getCorrectedMissingValueTreatment(
-            const rtl::Reference< ::chart::Diagram > & xDiagram,
-            const rtl::Reference< ::chart::ChartType >& xChartType );
-
     static bool setDiagramPositioning( const rtl::Reference<::chart::ChartModel>& xChartModel,
         const css::awt::Rectangle& rPosRect /*100th mm*/ );
 

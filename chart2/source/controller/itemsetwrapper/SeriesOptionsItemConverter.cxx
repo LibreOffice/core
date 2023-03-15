@@ -130,8 +130,7 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         }
 
         m_aSupportedMissingValueTreatments = ChartTypeHelper::getSupportedMissingValueTreatments( xChartType );
-        m_nMissingValueTreatment = DiagramHelper::getCorrectedMissingValueTreatment(
-            ChartModelHelper::findDiagram(m_xChartModel), xChartType );
+        m_nMissingValueTreatment = xDiagram->getCorrectedMissingValueTreatment( xChartType );
 
         uno::Reference< beans::XPropertySet > xProp( m_xChartModel->getDataProvider(), uno::UNO_QUERY );
         if( xProp.is() )

@@ -240,7 +240,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
             if (pVCooSys)
                 pPlotter->setExplicitCategoriesProvider(pVCooSys->getExplicitCategoriesProvider());
             sal_Int32 nMissingValueTreatment
-                = DiagramHelper::getCorrectedMissingValueTreatment(xDiagram, xChartType);
+                = xDiagram->getCorrectedMissingValueTreatment(xChartType);
 
             if (pVCooSys)
                 pVCooSys->addMinimumAndMaximumSupplier(pPlotter);

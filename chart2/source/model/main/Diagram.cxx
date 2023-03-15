@@ -18,6 +18,7 @@
  */
 
 #include <Diagram.hxx>
+#include <ChartTypeHelper.hxx>
 #include <ChartTypeManager.hxx>
 #include <ChartTypeTemplate.hxx>
 #include <PropertyHelper.hxx>
@@ -38,6 +39,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
+#include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -718,6 +720,32 @@ DiagramPositioningMode Diagram::getDiagramPositioningMode()
             eMode = DiagramPositioningMode::Including;
     }
     return eMode;
+}
+
+
+sal_Int32 Diagram::getCorrectedMissingValueTreatment(
+            const rtl::Reference< ChartType >& xChartType )
+{
+    sal_Int32 nResult = css::chart::MissingValueTreatment::LEAVE_GAP;
+    const uno::Sequence < sal_Int32 > aAvailableMissingValueTreatments(
+                ChartTypeHelper::getSupportedMissingValueTreatments( xChartType ) );
+
+    if( getFastPropertyValue( PROP_DIAGRAM_MISSING_VALUE_TREATMENT ) >>= nResult )
+    {
+        //ensure that the set value is supported by this charttype
+        for( sal_Int32 n : aAvailableMissingValueTreatments )
+            if( n == nResult )
+                return nResult; //ok
+    }
+
+    //otherwise use the first supported one
+    if( aAvailableMissingValueTreatments.hasElements() )
+    {
+        nResult = aAvailableMissingValueTreatments[0];
+        return nResult;
+    }
+
+    return nResult;
 }
 
 

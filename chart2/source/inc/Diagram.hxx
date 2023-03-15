@@ -39,6 +39,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace chart
 {
 class BaseCoordinateSystem;
+class ChartType;
 class Legend;
 class DataTable;
 class Wall;
@@ -166,6 +167,10 @@ public:
     };
 
     DiagramPositioningMode getDiagramPositioningMode();
+
+    //returns integer from constant group css::chart::MissingValueTreatment
+    sal_Int32 getCorrectedMissingValueTreatment(
+            const rtl::Reference< ::chart::ChartType >& xChartType );
 
 private:
     // ____ XModifyListener ____

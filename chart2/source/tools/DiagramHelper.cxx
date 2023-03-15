@@ -1412,32 +1412,6 @@ void DiagramHelper::setGeometry3D(
     }
 }
 
-sal_Int32 DiagramHelper::getCorrectedMissingValueTreatment(
-            const rtl::Reference< Diagram > & xDiagram,
-            const rtl::Reference< ChartType >& xChartType )
-{
-    sal_Int32 nResult = css::chart::MissingValueTreatment::LEAVE_GAP;
-    const uno::Sequence < sal_Int32 > aAvailableMissingValueTreatments(
-                ChartTypeHelper::getSupportedMissingValueTreatments( xChartType ) );
-
-    if( xDiagram.is() && (xDiagram->getPropertyValue( "MissingValueTreatment" ) >>= nResult) )
-    {
-        //ensure that the set value is supported by this charttype
-        for( sal_Int32 n : aAvailableMissingValueTreatments )
-            if( n == nResult )
-                return nResult; //ok
-    }
-
-    //otherwise use the first supported one
-    if( aAvailableMissingValueTreatments.hasElements() )
-    {
-        nResult = aAvailableMissingValueTreatments[0];
-        return nResult;
-    }
-
-    return nResult;
-}
-
 static void lcl_ensureRange0to1( double& rValue )
 {
     if(rValue<0.0)
