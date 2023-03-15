@@ -642,6 +642,29 @@ public:
         CPPUNIT_ASSERT(std::isnan(res));
     }
 
+    void test_payloadNaN() {
+        // Test that a quiet NaN payload is propagated and behaves as we
+        // expect. Ideally that could be done with a constexpr in
+        // sal/rtl/math.cxx to fail already during compile time instead of make
+        // check, but..
+        // See
+        // https://grouper.ieee.org/groups/msc/ANSI_IEEE-Std-754-2019/background/nan-propagation.pdf
+        double fVal1 = std::numeric_limits<double>::quiet_NaN();
+        reinterpret_cast<sal_math_Double*>(&fVal1)->nan_parts.fraction_lo = 0xbeef;
+        const double fVal2 = 0 + fVal1;
+        CPPUNIT_ASSERT(std::isnan(fVal2));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Your platform does not support propagation of NaN payloads.",
+                static_cast<sal_uInt32>(0xbeef),
+                static_cast<sal_uInt32>(reinterpret_cast<const sal_math_Double*>(&fVal2)->nan_parts.fraction_lo));
+        reinterpret_cast<sal_math_Double*>(&fVal1)->nan_parts.fraction_lo = 0xdead;
+        const double fVal3 = fVal1 + fVal2;
+        // Result is one of the payloaded NaNs but the standard does not
+        // specify which.
+        CPPUNIT_ASSERT_MESSAGE("Your platform does not support propagation of two combined NaN payloads.",
+                0xbeef == reinterpret_cast<const sal_math_Double*>(&fVal3)->nan_parts.fraction_lo ||
+                0xdead == reinterpret_cast<const sal_math_Double*>(&fVal3)->nan_parts.fraction_lo);
+    }
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(test_stringToDouble_good);
     CPPUNIT_TEST(test_stringToDouble_bad);
@@ -656,6 +679,7 @@ public:
     CPPUNIT_TEST(test_acosh);
     CPPUNIT_TEST(test_asinh);
     CPPUNIT_TEST(test_atanh);
+    CPPUNIT_TEST(test_payloadNaN);
     CPPUNIT_TEST_SUITE_END();
 };
 
