@@ -37,8 +37,10 @@ endif
 endif
 
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,libjpeg-turbo,\
+    UnpackedTarball/libjpeg-turbo/jaricom \
     UnpackedTarball/libjpeg-turbo/jcapimin \
     UnpackedTarball/libjpeg-turbo/jcapistd \
+    UnpackedTarball/libjpeg-turbo/jcarith \
     UnpackedTarball/libjpeg-turbo/jccoefct \
     UnpackedTarball/libjpeg-turbo/jccolor \
     UnpackedTarball/libjpeg-turbo/jcdctmgr \
@@ -56,6 +58,7 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,libjpeg-turbo,\
     UnpackedTarball/libjpeg-turbo/jctrans \
     UnpackedTarball/libjpeg-turbo/jdapimin \
     UnpackedTarball/libjpeg-turbo/jdapistd \
+    UnpackedTarball/libjpeg-turbo/jdarith \
     UnpackedTarball/libjpeg-turbo/jdatadst \
     UnpackedTarball/libjpeg-turbo/jdatasrc \
     UnpackedTarball/libjpeg-turbo/jdcoefct \
@@ -80,14 +83,11 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,libjpeg-turbo,\
     UnpackedTarball/libjpeg-turbo/jidctfst \
     UnpackedTarball/libjpeg-turbo/jidctint \
     UnpackedTarball/libjpeg-turbo/jidctred \
+    UnpackedTarball/libjpeg-turbo/jmemmgr \
+    UnpackedTarball/libjpeg-turbo/jmemnobs \
     UnpackedTarball/libjpeg-turbo/jquant1 \
     UnpackedTarball/libjpeg-turbo/jquant2 \
     UnpackedTarball/libjpeg-turbo/jutils \
-    UnpackedTarball/libjpeg-turbo/jmemmgr \
-    UnpackedTarball/libjpeg-turbo/jmemnobs \
-    UnpackedTarball/libjpeg-turbo/jaricom \
-    UnpackedTarball/libjpeg-turbo/jcarith \
-    UnpackedTarball/libjpeg-turbo/jdarith \
 ))
 
 ifneq ($(NASM),)
