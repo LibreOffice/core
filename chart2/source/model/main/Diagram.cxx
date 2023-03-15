@@ -1002,29 +1002,23 @@ static bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
 }
 
 bool Diagram::isSeriesMoveable(
-    const Reference< css::chart2::XDataSeries >& xGivenDataSeries,
+    const rtl::Reference< DataSeries >& xGivenDataSeries,
     bool bForward )
 {
     const bool bDoMove = false;
 
-    rtl::Reference pGivenDataSeries = dynamic_cast<DataSeries*>(xGivenDataSeries.get());
-    assert(pGivenDataSeries || !xGivenDataSeries);
-
     bool bIsMoveable = lcl_moveSeriesOrCheckIfMoveIsAllowed(
-        *this, pGivenDataSeries, bForward, bDoMove );
+        *this, xGivenDataSeries, bForward, bDoMove );
 
     return bIsMoveable;
 }
 
-bool Diagram::moveSeries( const Reference< css::chart2::XDataSeries >& xGivenDataSeries, bool bForward )
+bool Diagram::moveSeries( const rtl::Reference< DataSeries >& xGivenDataSeries, bool bForward )
 {
     const bool bDoMove = true;
 
-    rtl::Reference pGivenDataSeries = dynamic_cast<DataSeries*>(xGivenDataSeries.get());
-    assert(pGivenDataSeries || !xGivenDataSeries);
-
     bool bMoved = lcl_moveSeriesOrCheckIfMoveIsAllowed(
-        *this, pGivenDataSeries, bForward, bDoMove );
+        *this, xGivenDataSeries, bForward, bDoMove );
 
     return bMoved;
 }

@@ -524,7 +524,7 @@ DialogModel::tRolesWithRanges DialogModel::getRolesWithRanges(
 }
 
 void DialogModel::moveSeries(
-    const Reference< XDataSeries > & xSeries,
+    const rtl::Reference< DataSeries > & xSeries,
     MoveDirection eDirection )
 {
     m_aTimerTriggeredControllerLock.startTimer();

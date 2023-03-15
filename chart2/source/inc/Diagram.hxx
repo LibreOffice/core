@@ -41,6 +41,7 @@ namespace chart
 {
 class BaseCoordinateSystem;
 class ChartType;
+class DataSeries;
 class Legend;
 class DataTable;
 class Wall;
@@ -197,7 +198,7 @@ public:
     *
     */
     bool moveSeries(
-                const css::uno::Reference< css::chart2::XDataSeries >& xGivenDataSeries,
+                const rtl::Reference< DataSeries >& xGivenDataSeries,
                 bool bForward );
 
     /**
@@ -216,7 +217,7 @@ public:
     *
     */
     bool isSeriesMoveable(
-            const css::uno::Reference< css::chart2::XDataSeries >& xGivenDataSeries,
+            const rtl::Reference< DataSeries >& xGivenDataSeries,
             bool bForward );
 
 private:

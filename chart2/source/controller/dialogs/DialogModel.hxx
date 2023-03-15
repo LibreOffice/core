@@ -104,7 +104,7 @@ public:
         Down, Up
     };
 
-    void moveSeries( const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
+    void moveSeries( const rtl::Reference< DataSeries > & xSeries,
                      MoveDirection eDirection );
 
     /// @return the newly inserted series
