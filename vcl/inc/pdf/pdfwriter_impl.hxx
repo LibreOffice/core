@@ -477,9 +477,12 @@ struct PDFScreen : public PDFAnnotation
     OUString m_aTempFileURL;
     /// ID of the EmbeddedFile object.
     sal_Int32 m_nTempFileObject;
+    /// alternative text description
+    OUString m_AltText;
 
-    PDFScreen()
+    PDFScreen(OUString const& rAltText)
         : m_nTempFileObject(0)
+        , m_AltText(rAltText)
     {
     }
 };
@@ -1307,7 +1310,7 @@ public:
     void      setLinkPropertyId( sal_Int32 nLinkId, sal_Int32 nPropertyId );
 
     // screens
-    sal_Int32 createScreen(const tools::Rectangle& rRect, sal_Int32 nPageNr);
+    sal_Int32 createScreen(const tools::Rectangle& rRect, sal_Int32 nPageNr, OUString const& rAltText);
     void setScreenURL(sal_Int32 nScreenId, const OUString& rURL);
     void setScreenStream(sal_Int32 nScreenId, const OUString& rURL);
 

@@ -2022,6 +2022,16 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     if (xShape->getShapeType() == "com.sun.star.drawing.MediaShape")
                     {
                         uno::Reference<beans::XPropertySet> xShapePropSet(xShape, uno::UNO_QUERY);
+                        OUString title;
+                        xShapePropSet->getPropertyValue("Title") >>= title;
+                        OUString description;
+                        xShapePropSet->getPropertyValue("Description") >>= description;
+                        OUString const altText(title.isEmpty()
+                            ? description
+                            : description.isEmpty()
+                                ? title
+                                : OUString::Concat(title) + OUString::Concat("\n") + OUString::Concat(description));
+
                         OUString aMediaURL;
                         xShapePropSet->getPropertyValue("MediaURL") >>= aMediaURL;
                         if (!aMediaURL.isEmpty())
@@ -2030,7 +2040,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             tools::Rectangle aPDFRect(SwRectToPDFRect(pCurrPage, aSnapRect.SVRect()));
                             for (sal_Int32 nScreenPageNum : aScreenPageNums)
                             {
-                                sal_Int32 nScreenId = pPDFExtOutDevData->CreateScreen(aPDFRect, nScreenPageNum);
+                                sal_Int32 nScreenId = pPDFExtOutDevData->CreateScreen(aPDFRect, altText, nScreenPageNum);
                                 if (aMediaURL.startsWith("vnd.sun.star.Package:"))
                                 {
                                     // Embedded media.

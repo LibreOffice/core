@@ -1644,11 +1644,21 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
             // Handle linked videos.
             if (xShape->getShapeType() == "com.sun.star.drawing.MediaShape" || xShape->getShapeType() == "com.sun.star.presentation.MediaShape")
             {
+                OUString title;
+                xShapePropSet->getPropertyValue("Title") >>= title;
+                OUString description;
+                xShapePropSet->getPropertyValue("Description") >>= description;
+                OUString const altText(title.isEmpty()
+                    ? description
+                    : description.isEmpty()
+                        ? title
+                        : OUString::Concat(title) + OUString::Concat("\n") + OUString::Concat(description));
+
                 OUString aMediaURL;
                 xShapePropSet->getPropertyValue("MediaURL") >>= aMediaURL;
                 if (!aMediaURL.isEmpty())
                 {
-                    sal_Int32 nScreenId = rPDFExtOutDevData.CreateScreen(aLinkRect, rPDFExtOutDevData.GetCurrentPageNumber());
+                    sal_Int32 nScreenId = rPDFExtOutDevData.CreateScreen(aLinkRect, altText, rPDFExtOutDevData.GetCurrentPageNumber());
                     if (aMediaURL.startsWith("vnd.sun.star.Package:"))
                     {
                         OUString aTempFileURL;
