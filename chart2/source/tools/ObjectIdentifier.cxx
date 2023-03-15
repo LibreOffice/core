@@ -57,10 +57,10 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
-const sal_Unicode m_aMultiClick[] = u"MultiClick";
-const sal_Unicode m_aDragMethodEquals[] = u"DragMethod=";
-const sal_Unicode m_aDragParameterEquals[] = u"DragParameter=";
-const sal_Unicode m_aProtocol[] = u"CID/";
+const OUStringLiteral m_aMultiClick = u"MultiClick";
+const OUStringLiteral m_aDragMethodEquals = u"DragMethod=";
+const OUStringLiteral m_aDragParameterEquals = u"DragParameter=";
+const OUStringLiteral m_aProtocol = u"CID/";
 const OUString m_aPieSegmentDragMethodServiceName("PieSegmentDragging");
 
 namespace
@@ -442,7 +442,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForParticles(
 
     OUStringBuffer aRet( m_aProtocol );
     aRet.append( lcl_createClassificationStringForType( eObjectType, rDragMethodServiceName, rDragParameterString ));
-    if(o3tl::make_unsigned(aRet.getLength()) >= std::size(m_aProtocol))
+    if(aRet.getLength() > m_aProtocol.getLength())
         aRet.append("/");
 
     if(!rParentParticle.empty())
@@ -571,7 +571,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierWithParent(
 
     OUStringBuffer aRet( m_aProtocol );
     aRet.append( lcl_createClassificationStringForType( eObjectType, rDragMethodServiceName, rDragParameterString ));
-    if(o3tl::make_unsigned(aRet.getLength()) >= std::size(m_aProtocol))
+    if(aRet.getLength() > m_aProtocol.getLength())
         aRet.append("/");
     aRet.append(rParentPartical);
     if(!rParentPartical.empty())
@@ -747,7 +747,7 @@ bool ObjectIdentifier::isMultiClickObject( std::u16string_view rClassifiedIdenti
     //was selected before;
 
     //!!!!! by definition the name of a MultiClickObject starts with "CID/MultiClick:"
-    bool bRet = o3tl::starts_with(rClassifiedIdentifier.substr( std::size(m_aProtocol)-1 ), m_aMultiClick);
+    bool bRet = o3tl::starts_with(rClassifiedIdentifier.substr( m_aProtocol.getLength() ), m_aMultiClick);
     return bRet;
 }
 
