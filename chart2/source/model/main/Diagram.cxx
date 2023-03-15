@@ -1060,6 +1060,12 @@ rtl::Reference< ChartType > Diagram::getChartTypeByIndex( sal_Int32 nIndex )
     return xChartType;
 }
 
+bool Diagram::isSupportingDateAxis()
+{
+    return ::chart::ChartTypeHelper::isSupportingDateAxis( getChartTypeByIndex( 0 ), 0 );
+}
+
+
 
 } //  namespace chart
 

@@ -224,6 +224,8 @@ public:
 
     rtl::Reference< ChartType > getChartTypeByIndex( sal_Int32 nIndex );
 
+    bool isSupportingDateAxis();
+
 private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

@@ -135,7 +135,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
         return;
 
     uno::Reference<util::XNumberFormatsSupplier> xNumberFormatsSupplier(&rChartModel);
-    if (rChartModel.hasInternalDataProvider() && DiagramHelper::isSupportingDateAxis(xDiagram))
+    if (rChartModel.hasInternalDataProvider() && xDiagram->isSupportingDateAxis())
         m_nDefaultDateNumberFormat = DiagramHelper::getDateNumberFormat(xNumberFormatsSupplier);
 
     sal_Int32 nDimensionCount = DiagramHelper::getDimension(xDiagram);

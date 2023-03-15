@@ -968,12 +968,6 @@ void DiagramHelper::switchToTextCategories( const rtl::Reference<::chart::ChartM
     }
 }
 
-bool DiagramHelper::isSupportingDateAxis( const rtl::Reference< Diagram >& xDiagram )
-{
-    return ::chart::ChartTypeHelper::isSupportingDateAxis(
-            xDiagram->getChartTypeByIndex( 0 ), 0 );
-}
-
 bool DiagramHelper::isDateNumberFormat( sal_Int32 nNumberFormat, const Reference< util::XNumberFormats >& xNumberFormats )
 {
     bool bIsDate = false;

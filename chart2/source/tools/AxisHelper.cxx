@@ -194,7 +194,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
             else if( xChartDoc.is() && xChartDoc->hasInternalDataProvider() && nDimensionIndex == 0 ) //maybe date axis
             {
                 rtl::Reference< Diagram > xDiagram( xChartDoc->getFirstChartDiagram() );
-                if( DiagramHelper::isSupportingDateAxis( xDiagram ) )
+                if( xDiagram->isSupportingDateAxis() )
                 {
                     nNumberFormatKey = DiagramHelper::getDateNumberFormat( xChartDoc );
                 }

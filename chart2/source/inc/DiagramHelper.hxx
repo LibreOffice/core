@@ -204,7 +204,6 @@ public:
     static void switchToTextCategories(
         const rtl::Reference<::chart::ChartModel> & xChartDoc );
 
-    static bool isSupportingDateAxis( const rtl::Reference< ::chart::Diagram >& xDiagram );
     static bool isDateNumberFormat( sal_Int32 nNumberFormat, const css::uno::Reference< css::util::XNumberFormats >& xNumberFormats );
     static sal_Int32 getDateNumberFormat( const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
     static sal_Int32 getDateTimeInputNumberFormat( const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier, double fNumber );
