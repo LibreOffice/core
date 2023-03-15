@@ -2569,7 +2569,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             break;
         //tdf112342: Break before images as well, if there are page break
         if (m_pImpl->isBreakDeferred(BreakType::PAGE_BREAK)
-            && nSprmId == NS_ooxml::LN_inline_inline)
+            && nSprmId == NS_ooxml::LN_inline_inline && !m_pImpl->IsInShape())
         {
             if (m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun())
             {
