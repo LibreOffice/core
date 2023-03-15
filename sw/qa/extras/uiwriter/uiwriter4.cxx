@@ -1077,8 +1077,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf84695)
     SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXTextDocument);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'a', 0);
-    Scheduler::ProcessEventsToIdle();
+    emulateTyping(*pXTextDocument, u"a");
 
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
     // This was empty, Enter did not start the fly frame edit mode.
@@ -1102,8 +1101,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf84695NormalChar)
     // Now pressing 'a' should add a character.
     SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXTextDocument);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'a', 0);
-    Scheduler::ProcessEventsToIdle();
+    emulateTyping(*pXTextDocument, u"a");
 
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
     // This was empty, pressing a normal character did not start the fly frame edit mode.

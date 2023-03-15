@@ -2215,10 +2215,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf127635)
 
     SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXTextDocument);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'a', 0);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, ' ', 0);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'b', 0);
-    Scheduler::ProcessEventsToIdle();
+    emulateTyping(*pXTextDocument, u"a b");
 
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
@@ -2235,10 +2232,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf127635)
                            pDoc->getIDocumentRedlineAccess().IsRedlineOn());
     CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
 
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, ' ', 0);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'd', 0);
-    Scheduler::ProcessEventsToIdle();
+    emulateTyping(*pXTextDocument, u"c d");
 
     SwEditShell* const pEditShell(pDoc->GetEditShell());
     // accept all redlines
@@ -2414,12 +2408,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf89954)
     pWrtShell->EndPara();
     SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXTextDocument);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 't', 0);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'e', 0);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 's', 0);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 't', 0);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '.', 0);
-    Scheduler::ProcessEventsToIdle();
+    emulateTyping(*pXTextDocument, u"test.");
 
     SwNodeIndex aNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1);
     // Placeholder character for the comment anchor was ^A (CH_TXTATR_BREAKWORD), not <fff9> (CH_TXTATR_INWORD).

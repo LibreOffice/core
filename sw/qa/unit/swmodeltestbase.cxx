@@ -22,9 +22,11 @@
 #include <rtl/ustrbuf.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <vcl/scheduler.hxx>
 
 #include <IDocumentLayoutAccess.hxx>
 #include <docsh.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <rootfrm.hxx>
 #include <unotxdoc.hxx>
 #include <view.hxx>
@@ -625,6 +627,16 @@ void SwModelTestBase::WrapFromTempFile(SvMemoryStream& rStream)
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     rStream.WriteStream(aFileStream);
     rStream.Seek(0);
+}
+
+void SwModelTestBase::emulateTyping(SwXTextDocument& rTextDoc, const std::u16string_view& rStr)
+{
+    for (const char16_t c : rStr)
+    {
+        rTextDoc.postKeyEvent(LOK_KEYEVENT_KEYINPUT, c, 0);
+        rTextDoc.postKeyEvent(LOK_KEYEVENT_KEYUP, c, 0);
+        Scheduler::ProcessEventsToIdle();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

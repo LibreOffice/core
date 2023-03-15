@@ -348,6 +348,8 @@ protected:
 
     bool isExported(){ return mbExported; }
 
+    void emulateTyping(SwXTextDocument& rTextDoc, const std::u16string_view& rStr);
+
 private:
     void loadURL(OUString const& rURL, const char* pName, const char* pPassword);
 

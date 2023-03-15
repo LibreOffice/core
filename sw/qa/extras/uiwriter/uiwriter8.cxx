@@ -40,19 +40,6 @@
 #include <officecfg/Office/Common.hxx>
 
 /// 8th set of tests asserting the behavior of Writer user interface shells.
-namespace
-{
-void emulateTyping(SwXTextDocument& rTextDoc, const std::u16string_view& rStr)
-{
-    for (const char16_t c : rStr)
-    {
-        rTextDoc.postKeyEvent(LOK_KEYEVENT_KEYINPUT, c, 0);
-        rTextDoc.postKeyEvent(LOK_KEYEVENT_KEYUP, c, 0);
-        Scheduler::ProcessEventsToIdle();
-    }
-}
-} //namespace
-
 class SwUiWriterTest8 : public SwModelTestBase
 {
 public:
