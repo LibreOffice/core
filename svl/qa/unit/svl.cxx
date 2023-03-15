@@ -1173,14 +1173,15 @@ void Test::testIsNumberFormat()
         { "1999-11-23 12:34:56,789", false },   // comma not in en-US if 'T' separator is not present,
                                                 // debatable, 'T' "may be omitted by mutual consent of those
                                                 // interchanging data, if ambiguity can be avoided."
-        { "1999-11-23T12:34:56/789", false }
+        { "1999-11-23T12:34:56/789", false },
+        { "−1000", true } // unicode minus
     };
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
     {
         sal_uInt32 nIndex = 0;
         double nNumber = 0;
-        OUString aString = OUString::createFromAscii(aTests[i].pFormat);
+        OUString aString = OUString::fromUtf8(aTests[i].pFormat);
         bool bIsNumber = aFormatter.IsNumberFormat(aString, nIndex, nNumber);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(aTests[i].pFormat, aTests[i].bIsNumber, bIsNumber);
 
