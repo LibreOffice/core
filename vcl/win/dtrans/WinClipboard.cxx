@@ -58,8 +58,7 @@ osl::Mutex s_aClipboardSingletonMutex;
 /*XEventListener,*/
 CWinClipboard::CWinClipboard(const uno::Reference<uno::XComponentContext>& rxContext,
                              const OUString& aClipboardName)
-    : WeakComponentImplHelper<XSystemClipboard, XFlushableClipboard, XServiceInfo>(m_aMutex)
-    , m_xContext(rxContext)
+    : m_xContext(rxContext)
     , m_itsName(aClipboardName)
     , m_pCurrentClipContent(nullptr)
 {
@@ -95,7 +94,7 @@ uno::Reference<datatransfer::XTransferable> SAL_CALL CWinClipboard::getContents(
 {
     osl::MutexGuard aGuard(m_aContentMutex);
 
-    if (rBHelper.bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
                                       static_cast<XClipboardEx*>(this));
 
@@ -139,7 +138,7 @@ IDataObjectPtr CWinClipboard::getIDataObject()
 {
     osl::MutexGuard aGuard(m_aContentMutex);
 
-    if (rBHelper.bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
                                       static_cast<XClipboardEx*>(this));
 
@@ -163,7 +162,7 @@ void SAL_CALL CWinClipboard::setContents(
 {
     osl::MutexGuard aGuard(m_aContentMutex);
 
-    if (rBHelper.bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
                                       static_cast<XClipboardEx*>(this));
 
@@ -189,7 +188,7 @@ void SAL_CALL CWinClipboard::setContents(
 
 OUString SAL_CALL CWinClipboard::getName()
 {
-    if (rBHelper.bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
                                       static_cast<XClipboardEx*>(this));
 
@@ -202,7 +201,7 @@ void SAL_CALL CWinClipboard::flushClipboard()
 {
     osl::MutexGuard aGuard(m_aContentMutex);
 
-    if (rBHelper.bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
                                       static_cast<XClipboardEx*>(this));
 
@@ -224,7 +223,7 @@ void SAL_CALL CWinClipboard::flushClipboard()
 
 sal_Int8 SAL_CALL CWinClipboard::getRenderingCapabilities()
 {
-    if (rBHelper.bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
                                       static_cast<XClipboardEx*>(this));
 
@@ -237,7 +236,7 @@ sal_Int8 SAL_CALL CWinClipboard::getRenderingCapabilities()
 void SAL_CALL CWinClipboard::addClipboardListener(
     const uno::Reference<datatransfer::clipboard::XClipboardListener>& listener)
 {
-    if (rBHelper.bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
                                       static_cast<XClipboardEx*>(this));
 
@@ -246,13 +245,14 @@ void SAL_CALL CWinClipboard::addClipboardListener(
         throw lang::IllegalArgumentException("empty reference", static_cast<XClipboardEx*>(this),
                                              1);
 
-    rBHelper.aLC.addInterface(cppu::UnoType<decltype(listener)>::get(), listener);
+    std::unique_lock aGuard(m_aMutex);
+    maClipboardListeners.addInterface(aGuard, listener);
 }
 
 void SAL_CALL CWinClipboard::removeClipboardListener(
     const uno::Reference<datatransfer::clipboard::XClipboardListener>& listener)
 {
-    if (rBHelper.bDisposed)
+    if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
                                       static_cast<XClipboardEx*>(this));
 
@@ -261,50 +261,35 @@ void SAL_CALL CWinClipboard::removeClipboardListener(
         throw lang::IllegalArgumentException("empty reference", static_cast<XClipboardEx*>(this),
                                              1);
 
-    rBHelper.aLC.removeInterface(cppu::UnoType<decltype(listener)>::get(), listener);
+    std::unique_lock aGuard(m_aMutex);
+    maClipboardListeners.removeInterface(aGuard, listener);
 }
 
 void CWinClipboard::notifyAllClipboardListener()
 {
-    if (rBHelper.bDisposed)
+    if (m_bDisposed)
         return;
 
-    osl::ClearableMutexGuard aGuard(rBHelper.rMutex);
-    if (rBHelper.bDisposed)
+    std::unique_lock aGuard(m_aMutex);
+    if (m_bDisposed)
         return;
-    aGuard.clear();
 
-    cppu::OInterfaceContainerHelper* pICHelper = rBHelper.aLC.getContainer(
-        cppu::UnoType<datatransfer::clipboard::XClipboardListener>::get());
-    if (!pICHelper)
+    if (!maClipboardListeners.getLength(aGuard))
         return;
 
     try
     {
-        cppu::OInterfaceIteratorHelper iter(*pICHelper);
         uno::Reference<datatransfer::XTransferable> rXTransf(getContents());
         datatransfer::clipboard::ClipboardEvent aClipbEvent(static_cast<XClipboard*>(this),
                                                             rXTransf);
-
-        while (iter.hasMoreElements())
-        {
-            try
-            {
-                uno::Reference<datatransfer::clipboard::XClipboardListener> xCBListener(
-                    iter.next(), uno::UNO_QUERY);
-                if (xCBListener.is())
-                    xCBListener->changedContents(aClipbEvent);
-            }
-            catch (uno::RuntimeException&)
-            {
-                TOOLS_WARN_EXCEPTION("vcl", "");
-            }
-        }
+        maClipboardListeners.notifyEach(
+            aGuard, &datatransfer::clipboard::XClipboardListener::changedContents, aClipbEvent);
     }
     catch (const lang::DisposedException&)
     {
         OSL_FAIL("Service Manager disposed");
 
+        aGuard.unlock();
         // no further clipboard changed notifications
         unregisterClipboardViewer();
     }

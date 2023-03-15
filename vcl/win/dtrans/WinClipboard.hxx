@@ -21,8 +21,8 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
@@ -48,10 +48,9 @@
 // by this class!
 
 class CWinClipboard final
-    : public cppu::BaseMutex,
-      public cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
-                                           css::datatransfer::clipboard::XFlushableClipboard,
-                                           css::lang::XServiceInfo>
+    : public comphelper::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
+                                                 css::datatransfer::clipboard::XFlushableClipboard,
+                                                 css::lang::XServiceInfo>
 {
     friend STDMETHODIMP_(ULONG) CXNotifyingDataObject::Release();
 
@@ -62,6 +61,8 @@ class CWinClipboard final
     com::sun::star::uno::Reference<com::sun::star::datatransfer::XTransferable> m_foreignContent;
     osl::Mutex m_aContentMutex;
     osl::Mutex m_aContentCacheMutex;
+    comphelper::OInterfaceContainerHelper4<css::datatransfer::clipboard::XClipboardListener>
+        maClipboardListeners;
 
     void notifyAllClipboardListener();
     void onReleaseDataObject(CXNotifyingDataObject* theCaller);
