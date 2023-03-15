@@ -166,6 +166,12 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
 
                     return true;
                 }
+                else if (sAction == "select")
+                {
+                    LOKTrigger::trigger_selected(
+                        *pButton, OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US));
+                    return true;
+                }
             }
         }
         else if (sControlType == "checkbox")

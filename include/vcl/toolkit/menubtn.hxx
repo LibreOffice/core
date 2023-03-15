@@ -92,6 +92,8 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 
     void SetCurItemId();
+
+    virtual void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
