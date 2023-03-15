@@ -166,6 +166,11 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, StringMap
 
                     return true;
                 }
+                else if (sAction == "select")
+                {
+                    LOKTrigger::trigger_selected(*pButton, rData["data"]);
+                    return true;
+                }
             }
         }
         else if (sControlType == "checkbox")

@@ -1582,6 +1582,8 @@ struct VCL_DLLPUBLIC TriStateEnabled
 
 class VCL_DLLPUBLIC MenuButton : virtual public ToggleButton
 {
+    friend class ::LOKTrigger;
+
     Link<const OUString&, void> m_aSelectHdl;
 
 protected:

@@ -265,6 +265,23 @@ void MenuButton::SetCurItemId(){
     msCurItemIdent = mpMenu->GetCurItemIdent();
 }
 
+void MenuButton::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+{
+    PushButton::DumpAsPropertyTree(rJsonWriter);
+
+    if (mpMenu)
+    {
+        auto aMenuNode = rJsonWriter.startArray("menu");
+        for (int i = 0; i < mpMenu->GetItemCount(); i++)
+        {
+            auto aEntryNode = rJsonWriter.startStruct();
+            auto sId = mpMenu->GetItemId(i);
+            rJsonWriter.put("id", mpMenu->GetItemIdent(sId));
+            rJsonWriter.put("text", mpMenu->GetItemText(sId));
+        }
+    }
+}
+
 //class MenuToggleButton ----------------------------------------------------
 
 MenuToggleButton::MenuToggleButton( vcl::Window* pParent, WinBits nWinBits )

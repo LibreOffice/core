@@ -66,6 +66,11 @@ public:
         rDrawingArea.dblclick(rPos);
     }
 
+    static void trigger_selected(weld::MenuButton& rButton, const OUString& rIdent)
+    {
+        rButton.signal_selected(rIdent);
+    }
+
     static void trigger_value_changed(weld::SpinButton& rSpinButton)
     {
         rSpinButton.signal_value_changed();
