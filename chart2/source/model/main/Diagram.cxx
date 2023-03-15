@@ -828,8 +828,7 @@ bool Diagram::isSupportingFloorAndWall()
     //todo: allow this in future again, if fileversion is available for OLE objects (metastream)
     //thus the wrong bottom can be removed on import
 
-    const std::vector< rtl::Reference< ChartType > > aTypes(
-            ::chart::DiagramHelper::getChartTypesFromDiagram( this ) );
+    const std::vector< rtl::Reference< ChartType > > aTypes = getChartTypes();
     for( rtl::Reference< ChartType > const & xType : aTypes )
     {
         OUString sChartType = xType->getChartType();
@@ -1021,6 +1020,25 @@ bool Diagram::moveSeries( const rtl::Reference< DataSeries >& xGivenDataSeries, 
         *this, xGivenDataSeries, bForward, bDoMove );
 
     return bMoved;
+}
+
+std::vector< rtl::Reference< ChartType > > Diagram::getChartTypes()
+{
+    std::vector< rtl::Reference< ChartType > > aResult;
+    try
+    {
+        for( rtl::Reference< BaseCoordinateSystem > const & coords : getBaseCoordinateSystems() )
+        {
+            const std::vector< rtl::Reference< ChartType > > & aChartTypeSeq( coords->getChartTypes2());
+            aResult.insert( aResult.end(), aChartTypeSeq.begin(), aChartTypeSeq.end() );
+        }
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+
+    return aResult;
 }
 
 

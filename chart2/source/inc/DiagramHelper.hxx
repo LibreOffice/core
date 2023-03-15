@@ -215,10 +215,6 @@ public:
     static rtl::Reference< ChartType >
         getChartTypeByIndex( const rtl::Reference< ::chart::Diagram >& xDiagram, sal_Int32 nIndex );
 
-    static std::vector< rtl::Reference< ChartType > >
-        getChartTypesFromDiagram(
-            const rtl::Reference< ::chart::Diagram > & xDiagram );
-
     SAL_DLLPRIVATE static bool areChartTypesCompatible(
                 const rtl::Reference< ::chart::ChartType >& xFirstType,
                 const rtl::Reference< ::chart::ChartType >& xSecondType );

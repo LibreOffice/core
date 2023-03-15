@@ -1092,30 +1092,6 @@ sal_Int32 DiagramHelper::getPercentNumberFormat( const Reference< util::XNumberF
     return nRet;
 }
 
-std::vector< rtl::Reference< ChartType > >
-    DiagramHelper::getChartTypesFromDiagram(
-        const rtl::Reference< Diagram > & xDiagram )
-{
-    if(!xDiagram)
-        return {};
-
-    std::vector< rtl::Reference< ChartType > > aResult;
-    try
-    {
-        for( rtl::Reference< BaseCoordinateSystem > const & coords : xDiagram->getBaseCoordinateSystems() )
-        {
-            const std::vector< rtl::Reference< ChartType > > & aChartTypeSeq( coords->getChartTypes2());
-            aResult.insert( aResult.end(), aChartTypeSeq.begin(), aChartTypeSeq.end() );
-        }
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-
-    return aResult;
-}
-
 bool DiagramHelper::areChartTypesCompatible( const rtl::Reference< ChartType >& xFirstType,
                 const rtl::Reference< ChartType >& xSecondType )
 {

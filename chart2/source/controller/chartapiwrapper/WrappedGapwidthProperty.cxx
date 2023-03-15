@@ -78,7 +78,7 @@ void WrappedBarPositionProperty_Base::setPropertyValue( const Any& rOuterValue, 
     if( m_nDimensionIndex!=1 )
         return;
 
-    const std::vector< rtl::Reference< ChartType > > aChartTypeList( DiagramHelper::getChartTypesFromDiagram( xDiagram ) );
+    const std::vector< rtl::Reference< ChartType > > aChartTypeList( xDiagram->getChartTypes() );
     for( rtl::Reference< ChartType > const & chartType : aChartTypeList )
     {
         try
@@ -117,7 +117,7 @@ Any WrappedBarPositionProperty_Base::getPropertyValue( const Reference< beans::X
 
         if( m_nDimensionIndex==1 )
         {
-            std::vector< rtl::Reference< ChartType > > aChartTypeList( DiagramHelper::getChartTypesFromDiagram( xDiagram ) );
+            std::vector< rtl::Reference< ChartType > > aChartTypeList = xDiagram->getChartTypes();
             for( std::size_t nN = 0; nN < aChartTypeList.size() && !bInnerValueDetected; nN++ )
             {
                 try

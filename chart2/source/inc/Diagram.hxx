@@ -220,6 +220,8 @@ public:
             const rtl::Reference< DataSeries >& xGivenDataSeries,
             bool bForward );
 
+    std::vector< rtl::Reference< ChartType > > getChartTypes();
+
 private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

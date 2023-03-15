@@ -157,8 +157,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL MinMaxLineWrapper::getPropert
 void SAL_CALL MinMaxLineWrapper::setPropertyValue( const OUString& rPropertyName, const uno::Any& rValue )
 {
     rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
-    const std::vector< rtl::Reference< ChartType > > & aTypes(
-            ::chart::DiagramHelper::getChartTypesFromDiagram( xDiagram ) );
+    const std::vector< rtl::Reference< ChartType > > & aTypes = xDiagram->getChartTypes();
     for( rtl::Reference< ChartType > const & xType : aTypes )
     {
         if( xType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
@@ -189,8 +188,7 @@ uno::Any SAL_CALL MinMaxLineWrapper::getPropertyValue( const OUString& rProperty
     rtl::Reference< DataSeries > xPropSet;
 
     rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
-    const std::vector< rtl::Reference< ChartType > > aTypes(
-            ::chart::DiagramHelper::getChartTypesFromDiagram( xDiagram ) );
+    const std::vector< rtl::Reference< ChartType > > aTypes = xDiagram->getChartTypes();
     for( rtl::Reference< ChartType > const & xType : aTypes )
     {
         if( xType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )

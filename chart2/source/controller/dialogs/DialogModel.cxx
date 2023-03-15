@@ -245,8 +245,8 @@ rtl::Reference< ::chart::DataSeries > lcl_CreateNewSeries(
         std::size_t nGroupIndex=0;
         if( xChartType.is())
         {
-            std::vector< rtl::Reference< ::chart::ChartType > > aCTs(
-                ::chart::DiagramHelper::getChartTypesFromDiagram( xDiagram ));
+            std::vector< rtl::Reference< ::chart::ChartType > > aCTs =
+                xDiagram->getChartTypes();
             for( ; nGroupIndex < aCTs.size(); ++nGroupIndex)
                 if( aCTs[nGroupIndex] == xChartType )
                     break;

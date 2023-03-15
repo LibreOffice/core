@@ -224,7 +224,7 @@ void ChartTypeTemplate::changeDiagram( const rtl::Reference< Diagram >& xDiagram
 
         // remove charttype groups from all coordinate systems
         std::vector< rtl::Reference< ChartType > > aOldChartTypesSeq =
-            DiagramHelper::getChartTypesFromDiagram(xDiagram);
+            xDiagram->getChartTypes();
 
         for( rtl::Reference< BaseCoordinateSystem > const & coords : xDiagram->getBaseCoordinateSystems() )
         {
@@ -274,7 +274,7 @@ void ChartTypeTemplate::changeDiagramData(
         DiagramHelper::setCategoriesToDiagram( aData.Categories, xDiagram, true, supportsCategories() );
 
         std::vector< rtl::Reference< ChartType > > aChartTypes =
-            DiagramHelper::getChartTypesFromDiagram( xDiagram );
+            xDiagram->getChartTypes();
         sal_Int32 nMax = std::min( aChartTypes.size(), aData.Series.size());
         for( sal_Int32 i=0; i<nMax; ++i )
         {
