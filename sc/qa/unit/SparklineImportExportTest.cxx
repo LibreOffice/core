@@ -26,12 +26,6 @@ public:
     {
     }
 
-    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathContextPtr) override
-    {
-        XmlTestTools::registerOOXMLNamespaces(pXmlXPathContextPtr);
-        XmlTestTools::registerODFNamespaces(pXmlXPathContextPtr);
-    }
-
     void testSparklinesRoundtripXLSX();
     void testSparklinesExportODS();
     void testSparklinesRoundtripODS();

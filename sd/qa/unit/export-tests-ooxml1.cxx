@@ -50,11 +50,6 @@ public:
         : SdModelTestBase("/sd/qa/unit/data/")
     {
     }
-
-    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
-    {
-        XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
-    }
 };
 
 namespace

@@ -39,7 +39,6 @@ class XmloffDrawTest : public UnoApiXmlTest
 {
 public:
     XmloffDrawTest();
-    void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
     uno::Reference<drawing::XShape> getShape(sal_uInt8 nShapeIndex);
 
     uno::Reference<beans::XPropertySet>
@@ -73,11 +72,6 @@ public:
 XmloffDrawTest::XmloffDrawTest()
     : UnoApiXmlTest("/xmloff/qa/unit/data/")
 {
-}
-
-void XmloffDrawTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
-{
-    XmlTestTools::registerODFNamespaces(pXmlXpathCtx);
 }
 
 uno::Reference<drawing::XShape> XmloffDrawTest::getShape(sal_uInt8 nShapeIndex)

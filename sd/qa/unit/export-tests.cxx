@@ -53,11 +53,6 @@ public:
     {
     }
 
-    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
-    {
-        XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
-    }
-
 protected:
     uno::Reference<awt::XBitmap> getBitmapFromTable(OUString const& rName);
 };

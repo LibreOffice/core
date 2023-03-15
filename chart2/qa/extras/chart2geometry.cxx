@@ -25,9 +25,6 @@ using beans::XPropertySet;
 
 class Chart2GeometryTest : public ChartTest
 {
-protected:
-    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;
-
 public:
     Chart2GeometryTest()
         : ChartTest("/chart2/qa/extras/data/")
@@ -67,12 +64,6 @@ public:
 
     CPPUNIT_TEST_SUITE_END();
 };
-
-void Chart2GeometryTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
-{
-    XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
-    XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
-}
 
 static OString OU2O(std::u16string_view sOUSource)
 {

@@ -24,17 +24,9 @@ using beans::XPropertySet;
 
 class Chart2ExportTest : public ChartTest
 {
-protected:
-
-    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;
 public:
     Chart2ExportTest() : ChartTest("/chart2/qa/extras/data/") {}
 };
-
-void Chart2ExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
-{
-    XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
-}
 
 namespace {
 

@@ -105,11 +105,6 @@ public:
     CPPUNIT_TEST(testTdf136956);
     CPPUNIT_TEST(testEncodedTableStyles);
     CPPUNIT_TEST_SUITE_END();
-
-    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
-    {
-        XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
-    }
 };
 
 void SdMiscTest::testTdf99396()

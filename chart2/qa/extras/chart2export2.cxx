@@ -22,20 +22,12 @@ using beans::XPropertySet;
 
 class Chart2ExportTest2 : public ChartTest
 {
-protected:
-    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;
-
 public:
     Chart2ExportTest2()
         : ChartTest("/chart2/qa/extras/data/")
     {
     }
 };
-
-void Chart2ExportTest2::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
-{
-    XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
-}
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testSetSeriesToSecondaryAxisXLSX)
 {

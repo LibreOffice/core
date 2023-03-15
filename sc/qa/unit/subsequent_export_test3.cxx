@@ -40,9 +40,6 @@ using namespace ::com::sun::star::uno;
 
 class ScExportTest3 : public ScModelTestBase
 {
-protected:
-    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;
-
 public:
     ScExportTest3()
         : ScModelTestBase("sc/qa/unit/data")
@@ -53,12 +50,6 @@ protected:
     void testCeilingFloor(const OUString& sFormatType);
     void testFunctionsExcel2010(const OUString& sFormatType);
 };
-
-void ScExportTest3::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
-{
-    XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
-    XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
-}
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testBordersExchangeXLSX)
 {

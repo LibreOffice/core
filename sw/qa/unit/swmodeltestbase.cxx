@@ -559,17 +559,6 @@ xmlDocUniquePtr SwModelTestBase::parseExportedFile()
     return parseXmlStream(&stream);
 }
 
-void SwModelTestBase::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
-{
-    // docx
-    XmlTestTools::registerOOXMLNamespaces(pXmlXpathCtx);
-    // odt
-    XmlTestTools::registerODFNamespaces(pXmlXpathCtx);
-    // reqif-xhtml
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("reqif-xhtml"),
-                       BAD_CAST("http://www.w3.org/1999/xhtml"));
-}
-
 void SwModelTestBase::createSwDoc(const char* pName, const char* pPassword)
 {
     if (!pName)

@@ -75,11 +75,6 @@ public:
         : SdModelTestBase("/sd/qa/unit/data/")
     {
     }
-
-    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
-    {
-        XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
-    }
 };
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testRepeatBitmapMode)

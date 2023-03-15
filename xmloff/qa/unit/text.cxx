@@ -32,17 +32,11 @@ class XmloffStyleTest : public UnoApiXmlTest
 {
 public:
     XmloffStyleTest();
-    void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
 };
 
 XmloffStyleTest::XmloffStyleTest()
     : UnoApiXmlTest("/xmloff/qa/unit/data/")
 {
-}
-
-void XmloffStyleTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
-{
-    XmlTestTools::registerODFNamespaces(pXmlXpathCtx);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMailMergeInEditeng)

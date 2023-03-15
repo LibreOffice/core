@@ -40,12 +40,6 @@ public:
     {
     }
 
-    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
-    {
-        XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
-        XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
-    }
-
     int testTdf115005_FallBack_Images(bool bAddReplacementImages);
 };
 

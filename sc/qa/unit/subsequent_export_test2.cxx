@@ -30,9 +30,6 @@ using namespace ::com::sun::star::uno;
 
 class ScExportTest2 : public ScModelTestBase
 {
-protected:
-    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;
-
 public:
     ScExportTest2();
 };
@@ -40,12 +37,6 @@ public:
 ScExportTest2::ScExportTest2()
     : ScModelTestBase("sc/qa/unit/data")
 {
-}
-
-void ScExportTest2::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
-{
-    XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
-    XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testGroupShape)

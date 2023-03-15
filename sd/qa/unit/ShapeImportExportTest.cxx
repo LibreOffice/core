@@ -38,12 +38,6 @@ public:
     CPPUNIT_TEST(testTextDistancesOOXML_Export);
     CPPUNIT_TEST(testTextDistancesODP_OOXML_Export);
     CPPUNIT_TEST_SUITE_END();
-
-    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
-    {
-        XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
-        XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
-    }
 };
 
 namespace

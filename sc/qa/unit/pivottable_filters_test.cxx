@@ -37,9 +37,6 @@ using namespace ::com::sun::star::uno;
 
 class ScPivotTableFiltersTest : public ScModelTestBase
 {
-protected:
-    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;
-
 public:
     ScPivotTableFiltersTest();
 
@@ -157,11 +154,6 @@ public:
 ScPivotTableFiltersTest::ScPivotTableFiltersTest()
     : ScModelTestBase("sc/qa/unit/data")
 {
-}
-
-void ScPivotTableFiltersTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
-{
-    XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
 }
 
 namespace

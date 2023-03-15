@@ -21,14 +21,7 @@ public:
         : UnoApiXmlTest("/oox/qa/unit/data/")
     {
     }
-
-    void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
 };
-
-void Test::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
-{
-    XmlTestTools::registerOOXMLNamespaces(pXmlXpathCtx);
-}
 
 CPPUNIT_TEST_FIXTURE(Test, testPolylineConnectorPosition)
 {

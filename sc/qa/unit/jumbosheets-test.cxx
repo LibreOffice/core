@@ -69,9 +69,6 @@ public:
 
     CPPUNIT_TEST_SUITE_END();
 
-protected:
-    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;
-
 private:
     void testRoundtripColumn2000(std::u16string_view name, const char* format);
     void testRoundtripNamedRanges(std::u16string_view name, const char* format);
@@ -378,12 +375,6 @@ void ScJumboSheetsTest::tearDown()
     SC_MOD()->SetDefaultsOptions(aDefaultsOption);
 
     UnoApiXmlTest::tearDown();
-}
-
-void ScJumboSheetsTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
-{
-    XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
-    XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScJumboSheetsTest);

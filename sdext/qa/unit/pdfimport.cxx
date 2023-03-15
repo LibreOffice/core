@@ -452,11 +452,6 @@ namespace
 
     class PDFITest : public test::BootstrapFixture, public XmlTestTools
     {
-    protected:
-            virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
-            {
-                XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
-            };
     public:
         void testXPDFParser()
         {

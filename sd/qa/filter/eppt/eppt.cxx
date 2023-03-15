@@ -26,13 +26,7 @@ class Test : public UnoApiXmlTest
 {
 public:
     Test();
-    void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
 };
-
-void Test::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
-{
-    XmlTestTools::registerOOXMLNamespaces(pXmlXpathCtx);
-}
 
 Test::Test()
     : UnoApiXmlTest("/sd/qa/filter/eppt/data/")

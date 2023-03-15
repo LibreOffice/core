@@ -46,8 +46,6 @@ using namespace ::com::sun::star::uno;
 class ScExportTest : public ScModelTestBase
 {
 protected:
-    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;
-
     void testExcelCellBorders(const OUString& sFormatType);
 
 public:
@@ -56,12 +54,6 @@ public:
     {
     }
 };
-
-void ScExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
-{
-    XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
-    XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
-}
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testExport)
 {

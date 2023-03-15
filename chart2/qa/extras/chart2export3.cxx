@@ -24,17 +24,9 @@ using beans::XPropertySet;
 
 class Chart2ExportTest3 : public ChartTest
 {
-protected:
-
-    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;
 public:
     Chart2ExportTest3() : ChartTest("/chart2/qa/extras/data/") {}
 };
-
-void Chart2ExportTest3::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
-{
-    XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
-}
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testTdf108107)
 {

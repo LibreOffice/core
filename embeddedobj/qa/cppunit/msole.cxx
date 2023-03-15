@@ -38,14 +38,7 @@ public:
         : UnoApiXmlTest("/embeddedobj/qa/cppunit/data/")
     {
     }
-
-    void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
 };
-}
-
-void Test::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
-{
-    XmlTestTools::registerODFNamespaces(pXmlXpathCtx);
 }
 
 namespace

@@ -35,8 +35,6 @@ using namespace ::com::sun::star::uno;
 
 class ScMacrosTest : public UnoApiXmlTest
 {
-protected:
-    void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;
 public:
     ScMacrosTest();
 
@@ -110,12 +108,6 @@ public:
 
     CPPUNIT_TEST_SUITE_END();
 };
-
-void ScMacrosTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
-{
-    XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
-    XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
-}
 
 // I suppose you could say this test doesn't really belong here, OTOH
 // we need a full document to run the test ( it related originally to an

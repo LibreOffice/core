@@ -304,11 +304,6 @@ protected:
     xmlDocUniquePtr parseExportedFile();
 
     /**
-     * Helper method to return nodes represented by rXPath.
-     */
-    void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
-
-    /**
      * Creates a new document to be used with the internal sw/ API.
      *
      * Examples:
