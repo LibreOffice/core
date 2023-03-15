@@ -212,7 +212,7 @@ void ObjectHierarchy::createAxesTree(
     const rtl::Reference< Diagram > & xDiagram  )
 {
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
-    rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+    rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeByIndex( 0 ) );
     bool bSupportsAxesGrids = ChartTypeHelper::isSupportingMainAxis( xChartType, nDimensionCount, 0 );
     if( !bSupportsAxesGrids )
         return;

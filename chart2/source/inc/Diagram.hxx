@@ -222,6 +222,8 @@ public:
 
     std::vector< rtl::Reference< ChartType > > getChartTypes();
 
+    rtl::Reference< ChartType > getChartTypeByIndex( sal_Int32 nIndex );
+
 private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

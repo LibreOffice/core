@@ -643,30 +643,6 @@ std::vector< std::vector< rtl::Reference< DataSeries > > >
     return aResult;
 }
 
-rtl::Reference< ChartType >
-    DiagramHelper::getChartTypeByIndex( const rtl::Reference< Diagram >& xDiagram, sal_Int32 nIndex )
-{
-    if (!xDiagram)
-        return nullptr;
-
-    rtl::Reference< ChartType > xChartType;
-
-    //iterate through all coordinate systems
-    sal_Int32 nTypesSoFar = 0;
-    for( rtl::Reference< BaseCoordinateSystem > const & coords : xDiagram->getBaseCoordinateSystems() )
-    {
-        const std::vector< rtl::Reference< ChartType > > & aChartTypeList( coords->getChartTypes2() );
-        if( nIndex >= 0 && o3tl::make_unsigned(nIndex) < nTypesSoFar + aChartTypeList.size() )
-        {
-            xChartType = aChartTypeList[nIndex - nTypesSoFar];
-            break;
-        }
-        nTypesSoFar += aChartTypeList.size();
-    }
-
-    return xChartType;
-}
-
 namespace
 {
 
@@ -995,7 +971,7 @@ void DiagramHelper::switchToTextCategories( const rtl::Reference<::chart::ChartM
 bool DiagramHelper::isSupportingDateAxis( const rtl::Reference< Diagram >& xDiagram )
 {
     return ::chart::ChartTypeHelper::isSupportingDateAxis(
-            DiagramHelper::getChartTypeByIndex( xDiagram, 0 ), 0 );
+            xDiagram->getChartTypeByIndex( 0 ), 0 );
 }
 
 bool DiagramHelper::isDateNumberFormat( sal_Int32 nNumberFormat, const Reference< util::XNumberFormats >& xNumberFormats )

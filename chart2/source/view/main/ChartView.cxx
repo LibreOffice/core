@@ -927,7 +927,9 @@ bool getAvailablePosAndSizeForDiagram(
     rParam.mbUseFixedInnerSize = false;
 
     //@todo: we need a size dependent on the axis labels
-    rtl::Reference<ChartType> xChartType(DiagramHelper::getChartTypeByIndex(xDiagram, 0));
+    rtl::Reference<ChartType> xChartType;
+    if (xDiagram)
+        xChartType = xDiagram->getChartTypeByIndex(0);
 
     sal_Int32 nXDistance = sal_Int32(rPageSize.Width * constPageLayoutDistancePercentage);
     sal_Int32 nYDistance = sal_Int32(rPageSize.Height * constPageLayoutDistancePercentage);
@@ -1992,7 +1994,9 @@ bool ChartView::createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::
 {
     rtl::Reference<Diagram> xDiagram = mrChartModel.getFirstChartDiagram();
 
-    rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+    rtl::Reference< ChartType > xChartType;
+    if (xDiagram)
+        xChartType = xDiagram->getChartTypeByIndex( 0 );
     sal_Int32 nDimension = DiagramHelper::getDimension( xDiagram );
 
     if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 0 ) )

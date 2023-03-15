@@ -890,7 +890,7 @@ void AxisHelper::getAxisOrGridPossibilities( Sequence< sal_Bool >& rPossibilityL
 
     //set possibilities:
     sal_Int32 nIndex=0;
-    rtl::Reference< ChartType > xChartType = DiagramHelper::getChartTypeByIndex( xDiagram, 0 );
+    rtl::Reference< ChartType > xChartType = xDiagram->getChartTypeByIndex( 0 );
     for(nIndex=0;nIndex<3;nIndex++)
         pPossibilityList[nIndex]=ChartTypeHelper::isSupportingMainAxis(xChartType,nDimensionCount,nIndex);
     for(nIndex=3;nIndex<6;nIndex++)

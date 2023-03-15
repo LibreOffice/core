@@ -56,7 +56,7 @@ bool lcl_isRightAngledAxesSetAndSupported( const rtl::Reference< Diagram >& xDia
         if(bRightAngledAxes)
         {
             if( ChartTypeHelper::isSupportingRightAngledAxes(
-                    DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) ) )
+                    xDiagram->getChartTypeByIndex( 0 ) ) )
             {
                 return true;
             }
@@ -152,7 +152,7 @@ bool lcl_isLightScheme( const rtl::Reference< Diagram >& xDiagram, bool bRealist
     if(!bIsOn)
         return false;
 
-    rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+    rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeByIndex( 0 ) );
 
     sal_Int32 nColor = 0;
     xDiagram->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTCOLOR_2 ) >>= nColor;
@@ -178,7 +178,7 @@ bool lcl_isLightScheme( const rtl::Reference< Diagram >& xDiagram, bool bRealist
         if(!bRightAngledAxes)
         {
             if( ChartTypeHelper::isSupportingRightAngledAxes(
-                    DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) ) )
+                    xDiagram->getChartTypeByIndex( 0 ) ) )
             {
                 ::basegfx::B3DHomMatrix aRotation( lcl_getCompleteRotationMatrix( xDiagram ) );
                 BaseGFXHelper::ReduceToRotationMatrix( aRotation );
@@ -209,7 +209,7 @@ void lcl_setLightsForScheme( const rtl::Reference< Diagram >& xDiagram, const Th
 
     xDiagram->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_2, uno::Any( true ) );
 
-    rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+    rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeByIndex( 0 ) );
     uno::Any aADirection( rScheme == ThreeDLookScheme::ThreeDLookScheme_Simple
         ? ChartTypeHelper::getDefaultSimpleLightDirection(xChartType)
         : ChartTypeHelper::getDefaultRealisticLightDirection(xChartType) );
@@ -263,7 +263,7 @@ bool lcl_isSimpleScheme( drawing::ShadeMode aShadeMode
         return false;
     if(nObjectLines==0)
     {
-        rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+        rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeByIndex( 0 ) );
         return ChartTypeHelper::noBordersForSimpleScheme( xChartType );
     }
     if(nObjectLines!=1)
@@ -288,7 +288,7 @@ void lcl_setSimpleScheme( drawing::ShadeMode& rShadeMode
     rShadeMode = drawing::ShadeMode_FLAT;
     rnRoundedEdges = 0;
 
-    rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+    rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeByIndex( 0 ) );
     rnObjectLines = ChartTypeHelper::noBordersForSimpleScheme( xChartType ) ? 0 : 1;
 }
 
@@ -1003,7 +1003,7 @@ void ThreeDHelper::setRotationAngleToDiagram(
         bool bRightAngledAxes = false;
         xDiagram->getPropertyValue( "RightAngledAxes") >>= bRightAngledAxes;
         if(!bRightAngledAxes || !ChartTypeHelper::isSupportingRightAngledAxes(
-                    DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) ) )
+                    xDiagram->getChartTypeByIndex( 0 ) ) )
         {
             ::basegfx::B3DHomMatrix aNewRotation;
             aNewRotation.rotate( fXAngleRad, fYAngleRad, fZAngleRad );

@@ -236,8 +236,7 @@ bool LineChartTypeTemplate::matchesTemplate2(
     {
         try
         {
-            rtl::Reference< ChartType > xChartType =
-                DiagramHelper::getChartTypeByIndex( xDiagram, 0 );
+            rtl::Reference< ChartType > xChartType = xDiagram->getChartTypeByIndex( 0 );
             setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE, xChartType->getPropertyValue(CHART_UNONAME_CURVE_STYLE) );
             setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION, xChartType->getPropertyValue(CHART_UNONAME_CURVE_RESOLUTION) );
             setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER, xChartType->getPropertyValue(CHART_UNONAME_SPLINE_ORDER) );

@@ -314,7 +314,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
     else
     {
         // No data series at specified column position. Use the first chart type.
-        xChartType = DiagramHelper::getChartTypeByIndex( xDiagram, 0 );
+        xChartType = xDiagram->getChartTypeByIndex( 0 );
         nStartCol = nAfterColumnIndex;
     }
 

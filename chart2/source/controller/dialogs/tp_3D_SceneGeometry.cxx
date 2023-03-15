@@ -114,7 +114,7 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage(weld::Container* pPar
     m_xMFPerspective->set_sensitive( m_xCbxPerspective->get_active() );
 
     //RightAngledAxes
-    if (ChartTypeHelper::isSupportingRightAngledAxes(DiagramHelper::getChartTypeByIndex(m_xDiagram, 0)))
+    if (ChartTypeHelper::isSupportingRightAngledAxes(m_xDiagram->getChartTypeByIndex(0)))
     {
         bool bRightAngledAxes = false;
         m_xDiagram->getPropertyValue( "RightAngledAxes" ) >>= bRightAngledAxes;

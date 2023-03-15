@@ -349,7 +349,7 @@ bool PieChartTypeTemplate::matchesTemplate2(
     if( bResult )
     {
         rtl::Reference< ChartType > xCTProp =
-            DiagramHelper::getChartTypeByIndex( xDiagram, 0 );
+            xDiagram->getChartTypeByIndex( 0 );
         bool bUseRings = false;
         if( xCTProp->getPropertyValue( "UseRings") >>= bUseRings )
         {

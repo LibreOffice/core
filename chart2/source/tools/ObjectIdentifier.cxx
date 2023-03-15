@@ -1298,14 +1298,16 @@ rtl::Reference< DataSeries > ObjectIdentifier::getDataSeriesForCID(
     lcl_parseSeriesIndices( nChartTypeIndex, nSeriesIndex, nPointIndex, rObjectCID );
 
     rtl::Reference< DataSeries > xSeries;
-    rtl::Reference< ChartType > xDataSeriesContainer( DiagramHelper::getChartTypeByIndex( xDiagram, nChartTypeIndex ) );
-    if( xDataSeriesContainer.is() )
+    if (xDiagram)
     {
-        const std::vector< rtl::Reference< DataSeries > > & aDataSeriesSeq( xDataSeriesContainer->getDataSeries2() );
-        if( nSeriesIndex >= 0 && o3tl::make_unsigned(nSeriesIndex) < aDataSeriesSeq.size() )
-            xSeries = aDataSeriesSeq[nSeriesIndex];
+        rtl::Reference< ChartType > xDataSeriesContainer( xDiagram->getChartTypeByIndex( nChartTypeIndex ) );
+        if( xDataSeriesContainer.is() )
+        {
+            const std::vector< rtl::Reference< DataSeries > > & aDataSeriesSeq( xDataSeriesContainer->getDataSeries2() );
+            if( nSeriesIndex >= 0 && o3tl::make_unsigned(nSeriesIndex) < aDataSeriesSeq.size() )
+                xSeries = aDataSeriesSeq[nSeriesIndex];
+        }
     }
-
     return xSeries;
 }
 

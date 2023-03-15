@@ -212,9 +212,6 @@ public:
     static sal_Int32 getPercentNumberFormat( const css::uno::Reference<
                 css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
 
-    static rtl::Reference< ChartType >
-        getChartTypeByIndex( const rtl::Reference< ::chart::Diagram >& xDiagram, sal_Int32 nIndex );
-
     SAL_DLLPRIVATE static bool areChartTypesCompatible(
                 const rtl::Reference< ::chart::ChartType >& xFirstType,
                 const rtl::Reference< ::chart::ChartType >& xSecondType );

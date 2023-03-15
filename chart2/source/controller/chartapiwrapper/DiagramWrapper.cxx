@@ -421,10 +421,10 @@ struct StaticDiagramWrapperPropertyArray : public rtl::StaticAggregate< Sequence
 {
 };
 
-bool lcl_isXYChart( const rtl::Reference< ::chart::Diagram >& rDiagram )
+bool lcl_isXYChart( const rtl::Reference< ::chart::Diagram >& xDiagram )
 {
     bool bRet = false;
-    rtl::Reference< ::chart::ChartType > xChartType( ::chart::DiagramHelper::getChartTypeByIndex( rDiagram, 0 ) );
+    rtl::Reference< ::chart::ChartType > xChartType( xDiagram->getChartTypeByIndex( 0 ) );
     if( xChartType.is() )
     {
         OUString aChartType( xChartType->getChartType() );
@@ -594,20 +594,23 @@ OUString SAL_CALL DiagramWrapper::getDiagramType()
         aRet = lcl_getDiagramType( aTemplateAndService.sServiceName );
     }
 
-    if( aRet.isEmpty())
+    if( !aRet.isEmpty())
+        return aRet;
+
+    // none of the standard templates matched
+    // use first chart type
+    if (xDiagram)
     {
-        // none of the standard templates matched
-        // use first chart type
-        rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+        rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeByIndex( 0 ) );
         if( xChartType.is() )
         {
             aRet = xChartType->getChartType();
             if( !aRet.isEmpty() )
                 aRet = lcl_getOldChartTypeName( aRet );
         }
-        if( aRet.isEmpty())
-            aRet = "com.sun.star.chart.BarDiagram";
     }
+    if( aRet.isEmpty())
+        aRet = "com.sun.star.chart.BarDiagram";
 
     return aRet;
 }

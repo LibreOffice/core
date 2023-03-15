@@ -810,8 +810,7 @@ sal_Int32 Diagram::getGeometry3D( bool& rbFound, bool& rbAmbiguous )
 
 bool Diagram::isPieOrDonutChart()
 {
-    rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeByIndex(
-        this, 0 ) );
+    rtl::Reference< ChartType > xChartType = getChartTypeByIndex( 0 );
 
     if( xChartType .is() )
     {
@@ -1039,6 +1038,26 @@ std::vector< rtl::Reference< ChartType > > Diagram::getChartTypes()
     }
 
     return aResult;
+}
+
+rtl::Reference< ChartType > Diagram::getChartTypeByIndex( sal_Int32 nIndex )
+{
+    rtl::Reference< ChartType > xChartType;
+
+    //iterate through all coordinate systems
+    sal_Int32 nTypesSoFar = 0;
+    for( rtl::Reference< BaseCoordinateSystem > const & coords : getBaseCoordinateSystems() )
+    {
+        const std::vector< rtl::Reference< ChartType > > & aChartTypeList( coords->getChartTypes2() );
+        if( nIndex >= 0 && o3tl::make_unsigned(nIndex) < nTypesSoFar + aChartTypeList.size() )
+        {
+            xChartType = aChartTypeList[nIndex - nTypesSoFar];
+            break;
+        }
+        nTypesSoFar += aChartTypeList.size();
+    }
+
+    return xChartType;
 }
 
 

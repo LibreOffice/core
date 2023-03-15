@@ -620,7 +620,7 @@ void DialogModel::setCategories( const Reference< chart2::data::XLabeledDataSequ
     // categories
     bool bSupportsCategories = true;
 
-    rtl::Reference< ChartType > xFirstChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+    rtl::Reference< ChartType > xFirstChartType( xDiagram->getChartTypeByIndex( 0 ) );
     if( xFirstChartType.is() )
     {
         sal_Int32 nAxisType = ChartTypeHelper::getAxisType( xFirstChartType, 0 ); // x-axis

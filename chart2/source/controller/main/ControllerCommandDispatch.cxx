@@ -401,7 +401,9 @@ void ModelState::update( const rtl::Reference<::chart::ChartModel> & xModel )
 
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
 
-    rtl::Reference< ChartType > xFirstChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+    rtl::Reference< ChartType > xFirstChartType;
+    if (xDiagram)
+        xFirstChartType = xDiagram->getChartTypeByIndex( 0 );
     bSupportsStatistics = ChartTypeHelper::isSupportingStatisticProperties( xFirstChartType, nDimensionCount );
     bSupportsAxes = ChartTypeHelper::isSupportingMainAxis( xFirstChartType, nDimensionCount, 0 );
 

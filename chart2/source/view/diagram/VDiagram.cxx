@@ -56,7 +56,7 @@ VDiagram::VDiagram(
 
     ThreeDHelper::getRotationAngleFromDiagram( xDiagram, m_fXAnglePi, m_fYAnglePi, m_fZAnglePi );
     if( ChartTypeHelper::isSupportingRightAngledAxes(
-            DiagramHelper::getChartTypeByIndex( m_xDiagram, 0 ) ) )
+            m_xDiagram->getChartTypeByIndex( 0 ) ) )
     {
         if(xDiagram.is())
             xDiagram->getPropertyValue("RightAngledAxes") >>= m_bRightAngledAxes;
