@@ -638,7 +638,7 @@ typename SwCursorShell::StartsWith SwCursorShell::StartsWith_()
     }
     nNode = rNodes.GetEndOfContent();
     pContentNode = SwNodes::GoPrevious(&nNode);
-    if (pContentNode->GetTextNode()->IsHidden())
+    if (pContentNode && pContentNode->GetTextNode()->IsHidden())
     {
         return StartsWith::HiddenPara;
     }
@@ -2798,7 +2798,7 @@ bool SwCursorShell::IsEndOfDoc() const
     if( !pCNd )
         pCNd = SwNodes::GoPrevious( &aIdx );
 
-    return aIdx == m_pCurrentCursor->GetPoint()->GetNode() &&
+    return aIdx == m_pCurrentCursor->GetPoint()->GetNode() && pCNd &&
             pCNd->Len() == m_pCurrentCursor->GetPoint()->GetContentIndex();
 }
 
