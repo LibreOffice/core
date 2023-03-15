@@ -598,7 +598,7 @@ uno::Reference< chart2::data::XLabeledDataSequence > DialogModel::getCategories(
         if( m_xChartDocument.is())
         {
             rtl::Reference< Diagram > xDiagram( m_xChartDocument->getFirstChartDiagram());
-            xResult = DiagramHelper::getCategoriesFromDiagram( xDiagram );
+            xResult = xDiagram->getCategories();
         }
     }
     catch( const uno::Exception & )
@@ -626,7 +626,7 @@ void DialogModel::setCategories( const Reference< chart2::data::XLabeledDataSequ
         sal_Int32 nAxisType = ChartTypeHelper::getAxisType( xFirstChartType, 0 ); // x-axis
         bSupportsCategories = (nAxisType == AxisType::CATEGORY);
     }
-    DiagramHelper::setCategoriesToDiagram( xCategories, xDiagram, true, bSupportsCategories );
+    xDiagram->setCategories( xCategories, true, bSupportsCategories );
 }
 
 OUString DialogModel::getCategoriesRange() const

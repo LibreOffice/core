@@ -226,6 +226,14 @@ public:
 
     bool isSupportingDateAxis();
 
+    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+        getCategories();
+
+    void setCategories(
+            const css::uno::Reference< css::chart2::data::XLabeledDataSequence >& xCategories,
+            bool bSetAxisType = false, // when this flag is true ...
+            bool bCategoryAxis = true);// set the AxisType to CATEGORY or back to REALNUMBER
+
 private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

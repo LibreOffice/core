@@ -35,11 +35,13 @@
 #include <unonames.hxx>
 #include <BaseCoordinateSystem.hxx>
 #include <Legend.hxx>
+#include <Axis.hxx>
 #include <DataTable.hxx>
 #include <servicenames_charttypes.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
@@ -1065,7 +1067,117 @@ bool Diagram::isSupportingDateAxis()
     return ::chart::ChartTypeHelper::isSupportingDateAxis( getChartTypeByIndex( 0 ), 0 );
 }
 
+static std::vector< rtl::Reference< Axis > > lcl_getAxisHoldingCategoriesFromDiagram(
+    Diagram& rDiagram )
+{
+    std::vector< rtl::Reference< Axis > > aRet;
 
+    // return first x-axis as fall-back
+    rtl::Reference< Axis > xFallBack;
+    try
+    {
+        for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : rDiagram.getBaseCoordinateSystems() )
+        {
+            OSL_ASSERT( xCooSys.is());
+            for( sal_Int32 nN = xCooSys->getDimension(); nN--; )
+            {
+                const sal_Int32 nMaximumScaleIndex = xCooSys->getMaximumAxisIndexByDimension(nN);
+                for(sal_Int32 nI=0; nI<=nMaximumScaleIndex; ++nI)
+                {
+                    rtl::Reference< Axis > xAxis = xCooSys->getAxisByDimension2( nN,nI );
+                    OSL_ASSERT( xAxis.is());
+                    if( xAxis.is())
+                    {
+                        chart2::ScaleData aScaleData = xAxis->getScaleData();
+                        if( aScaleData.Categories.is() || (aScaleData.AxisType == chart2::AxisType::CATEGORY) )
+                        {
+                            aRet.push_back(xAxis);
+                        }
+                        if( (nN == 0) && !xFallBack.is())
+                            xFallBack = xAxis;
+                    }
+                }
+            }
+        }
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2" );
+    }
+
+    if( aRet.empty() )
+        aRet.push_back(xFallBack);
+
+    return aRet;
+}
+
+uno::Reference< chart2::data::XLabeledDataSequence > Diagram::getCategories()
+{
+    uno::Reference< chart2::data::XLabeledDataSequence > xResult;
+
+    try
+    {
+        std::vector< rtl::Reference< Axis > > aCatAxes(
+            lcl_getAxisHoldingCategoriesFromDiagram( *this ));
+        //search for first categories
+        if (aCatAxes.empty())
+            return xResult;
+
+        rtl::Reference< Axis > xCatAxis(aCatAxes[0]);
+        if( !xCatAxis.is())
+            return xResult;
+
+        chart2::ScaleData aScaleData( xCatAxis->getScaleData());
+        if( !aScaleData.Categories.is() )
+            return xResult;
+
+        xResult = aScaleData.Categories;
+        uno::Reference<beans::XPropertySet> xProp(xResult->getValues(), uno::UNO_QUERY );
+        if( xProp.is() )
+        {
+            try
+            {
+                xProp->setPropertyValue( "Role", uno::Any( OUString("categories") ) );
+            }
+            catch( const uno::Exception & )
+            {
+                DBG_UNHANDLED_EXCEPTION("chart2");
+            }
+        }
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+
+    return xResult;
+}
+
+void Diagram::setCategories(
+    const uno::Reference< chart2::data::XLabeledDataSequence >& xCategories,
+    bool bSetAxisType  /* = false */,
+    bool bCategoryAxis /* = true */ )
+{
+    std::vector< rtl::Reference< Axis > > aCatAxes(
+        lcl_getAxisHoldingCategoriesFromDiagram( *this ));
+
+    for (const rtl::Reference< Axis >& xCatAxis : aCatAxes)
+    {
+        if( xCatAxis.is())
+        {
+            chart2::ScaleData aScaleData( xCatAxis->getScaleData());
+            aScaleData.Categories = xCategories;
+            if( bSetAxisType )
+            {
+                if( bCategoryAxis )
+                    aScaleData.AxisType = chart2::AxisType::CATEGORY;
+                else if( aScaleData.AxisType == chart2::AxisType::CATEGORY || aScaleData.AxisType == chart2::AxisType::DATE )
+                    aScaleData.AxisType = chart2::AxisType::REALNUMBER;
+            }
+            xCatAxis->setScaleData( aScaleData );
+        }
+    }
+}
 
 } //  namespace chart
 

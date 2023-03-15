@@ -482,7 +482,7 @@ void DiagramHelper::replaceCoordinateSystem(
 
     try
     {
-        uno::Reference< chart2::data::XLabeledDataSequence > xCategories = DiagramHelper::getCategoriesFromDiagram( xDiagram );
+        uno::Reference< chart2::data::XLabeledDataSequence > xCategories = xDiagram->getCategories();
 
         // move chart types of xCooSysToReplace to xReplacement
         xReplacement->setChartTypes( xCooSysToReplace->getChartTypes());
@@ -491,7 +491,7 @@ void DiagramHelper::replaceCoordinateSystem(
         xDiagram->addCoordinateSystem( xReplacement );
 
         if( xCategories.is() )
-            DiagramHelper::setCategoriesToDiagram( xCategories, xDiagram );
+            xDiagram->setCategories( xCategories );
     }
     catch( const uno::Exception & )
     {
@@ -643,55 +643,6 @@ std::vector< std::vector< rtl::Reference< DataSeries > > >
     return aResult;
 }
 
-namespace
-{
-
-std::vector< rtl::Reference< Axis > > lcl_getAxisHoldingCategoriesFromDiagram(
-    const rtl::Reference< Diagram > & xDiagram )
-{
-    std::vector< rtl::Reference< Axis > > aRet;
-
-    // return first x-axis as fall-back
-    rtl::Reference< Axis > xFallBack;
-    if (xDiagram.is()) try
-    {
-        for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : xDiagram->getBaseCoordinateSystems() )
-        {
-            OSL_ASSERT( xCooSys.is());
-            for( sal_Int32 nN = xCooSys->getDimension(); nN--; )
-            {
-                const sal_Int32 nMaximumScaleIndex = xCooSys->getMaximumAxisIndexByDimension(nN);
-                for(sal_Int32 nI=0; nI<=nMaximumScaleIndex; ++nI)
-                {
-                    rtl::Reference< Axis > xAxis = xCooSys->getAxisByDimension2( nN,nI );
-                    OSL_ASSERT( xAxis.is());
-                    if( xAxis.is())
-                    {
-                        ScaleData aScaleData = xAxis->getScaleData();
-                        if( aScaleData.Categories.is() || (aScaleData.AxisType == AxisType::CATEGORY) )
-                        {
-                            aRet.push_back(xAxis);
-                        }
-                        if( (nN == 0) && !xFallBack.is())
-                            xFallBack = xAxis;
-                    }
-                }
-            }
-        }
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2" );
-    }
-
-    if( aRet.empty() )
-        aRet.push_back(xFallBack);
-
-    return aRet;
-}
-
-} // anonymous namespace
-
 bool DiagramHelper::isCategoryDiagram(
             const rtl::Reference< Diagram >& xDiagram )
 {
@@ -722,77 +673,6 @@ bool DiagramHelper::isCategoryDiagram(
     }
 
     return false;
-}
-
-void DiagramHelper::setCategoriesToDiagram(
-    const uno::Reference< chart2::data::XLabeledDataSequence >& xCategories,
-    const rtl::Reference< Diagram >& xDiagram,
-    bool bSetAxisType  /* = false */,
-    bool bCategoryAxis /* = true */ )
-{
-    std::vector< rtl::Reference< Axis > > aCatAxes(
-        lcl_getAxisHoldingCategoriesFromDiagram( xDiagram ));
-
-    for (const rtl::Reference< Axis >& xCatAxis : aCatAxes)
-    {
-        if( xCatAxis.is())
-        {
-            ScaleData aScaleData( xCatAxis->getScaleData());
-            aScaleData.Categories = xCategories;
-            if( bSetAxisType )
-            {
-                if( bCategoryAxis )
-                    aScaleData.AxisType = AxisType::CATEGORY;
-                else if( aScaleData.AxisType == AxisType::CATEGORY || aScaleData.AxisType == AxisType::DATE )
-                    aScaleData.AxisType = AxisType::REALNUMBER;
-            }
-            xCatAxis->setScaleData( aScaleData );
-        }
-    }
-}
-
-uno::Reference< chart2::data::XLabeledDataSequence >
-    DiagramHelper::getCategoriesFromDiagram(
-        const rtl::Reference< Diagram > & xDiagram )
-{
-    uno::Reference< chart2::data::XLabeledDataSequence > xResult;
-
-    try
-    {
-        std::vector< rtl::Reference< Axis > > aCatAxes(
-            lcl_getAxisHoldingCategoriesFromDiagram( xDiagram ));
-        //search for first categories
-        if (!aCatAxes.empty())
-        {
-            rtl::Reference< Axis > xCatAxis(aCatAxes[0]);
-            if( xCatAxis.is())
-            {
-                ScaleData aScaleData( xCatAxis->getScaleData());
-                if( aScaleData.Categories.is() )
-                {
-                    xResult = aScaleData.Categories;
-                    uno::Reference<beans::XPropertySet> xProp(xResult->getValues(), uno::UNO_QUERY );
-                    if( xProp.is() )
-                    {
-                        try
-                        {
-                            xProp->setPropertyValue( "Role", uno::Any( OUString("categories") ) );
-                        }
-                        catch( const uno::Exception & )
-                        {
-                            DBG_UNHANDLED_EXCEPTION("chart2");
-                        }
-                    }
-                }
-            }
-        }
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-
-    return xResult;
 }
 
 static void lcl_generateAutomaticCategoriesFromChartType(

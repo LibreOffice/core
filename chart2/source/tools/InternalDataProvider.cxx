@@ -376,10 +376,10 @@ InternalDataProvider::InternalDataProvider(
                 else
                     m_aInternalData.setComplexColumnLabels( std::move(aNewCategories) );
                 if( bConnectToModel )
-                    DiagramHelper::setCategoriesToDiagram(
-                        rtl::Reference< LabeledDataSequence >(new LabeledDataSequence(
-                            createDataSequenceByRangeRepresentation( lcl_aCategoriesRangeName ))),
-                        xDiagram );
+                    xDiagram->setCategories(
+                        new LabeledDataSequence(
+                            createDataSequenceByRangeRepresentation( lcl_aCategoriesRangeName ))
+                         );
             }
 
             // data series

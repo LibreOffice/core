@@ -191,7 +191,7 @@ void ChartTypeTemplate::changeDiagram( const rtl::Reference< Diagram >& xDiagram
         rtl::Reference< DataInterpreter > xInterpreter( getDataInterpreter2());
         InterpretedData aData;
         aData.Series = aSeriesSeq;
-        aData.Categories = DiagramHelper::getCategoriesFromDiagram( xDiagram );
+        aData.Categories = xDiagram->getCategories();
 
         if( xInterpreter->isDataCompatible( aData ) )
         {
@@ -271,7 +271,7 @@ void ChartTypeTemplate::changeDiagramData(
             }
 
         // categories
-        DiagramHelper::setCategoriesToDiagram( aData.Categories, xDiagram, true, supportsCategories() );
+        xDiagram->setCategories( aData.Categories, true, supportsCategories() );
 
         std::vector< rtl::Reference< ChartType > > aChartTypes =
             xDiagram->getChartTypes();

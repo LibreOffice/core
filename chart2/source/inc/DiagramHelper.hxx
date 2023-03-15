@@ -181,16 +181,6 @@ public:
     static bool isCategoryDiagram(
             const rtl::Reference< ::chart::Diagram >& xDiagram );
 
-    static void setCategoriesToDiagram(
-            const css::uno::Reference< css::chart2::data::XLabeledDataSequence >& xCategories,
-            const rtl::Reference< ::chart::Diagram >& xDiagram,
-            bool bSetAxisType = false, // when this flag is true ...
-            bool bCategoryAxis = true);// set the AxisType to CATEGORY or back to REALNUMBER
-
-    static css::uno::Reference< css::chart2::data::XLabeledDataSequence >
-        getCategoriesFromDiagram(
-            const rtl::Reference< ::chart::Diagram > & xDiagram );
-
     static css::uno::Sequence< OUString >
         getExplicitSimpleCategories( ChartModel& rModel );
 

@@ -207,7 +207,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                             DataSeriesHelper::getAllDataSequencesByRole( xSource->getDataSequences(), "values-x" ) );
                         if( aXValues.empty() )
                         {
-                            uno::Reference< chart2::data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDiagram ) );
+                            uno::Reference< chart2::data::XLabeledDataSequence > xCategories( xDiagram->getCategories() );
                             if( xCategories.is() )
                             {
                                 Reference< data::XDataSequence > xSeq( xCategories->getValues());
