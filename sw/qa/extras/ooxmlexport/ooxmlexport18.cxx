@@ -102,6 +102,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104394_lostTextbox, "tdf104394_lostTextbox.docx"
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf146984_anchorInShape, "tdf146984_anchorInShape.docx")
+{
+    // This was only one page b/c the page break was missing.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    const auto& pLayout = parseLayoutDump();
+    // There are shapes on both pages - these should be non-zero numbers
+    //assertXPath(pLayout, "//page[1]//anchored", 3);
+    //assertXPath(pLayout, "//page[2]//anchored", 2);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak, "tdf153613_anchoredAfterPgBreak.docx")
 {
     const auto& pLayout = parseLayoutDump();
