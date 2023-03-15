@@ -2445,6 +2445,7 @@ void SwTableNode::DelFrames(SwRootFrame const*const pLayout)
                 // Relation CONTENT_FLOWS_FROM for current next paragraph will change
                 // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
+                if (!GetDoc().IsInDtor())
                 {
                     SwViewShell* pViewShell( pFrame->getRootFrame()->GetCurrShell() );
                     if ( pViewShell && pViewShell->GetLayout() &&
