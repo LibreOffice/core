@@ -197,13 +197,13 @@ void OJoinTableView::dispose()
 IMPL_LINK(OJoinTableView, HorzScrollHdl, weld::Scrollbar&, rScrollbar, void)
 {
     // move all windows
-    ScrollPane(m_aScrollOffset.X() - rScrollbar.adjustment_get_value(), true, false);
+    ScrollPane(rScrollbar.adjustment_get_value() - m_aScrollOffset.X(), true, false);
 }
 
 IMPL_LINK(OJoinTableView, VertScrollHdl, weld::Scrollbar&, rScrollbar, void)
 {
     // move all windows
-    ScrollPane(m_aScrollOffset.Y() - rScrollbar.adjustment_get_value(), false, false);
+    ScrollPane(rScrollbar.adjustment_get_value() - m_aScrollOffset.Y(), false, false);
 }
 
 void OJoinTableView::Resize()
