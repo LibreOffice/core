@@ -437,6 +437,7 @@
 #define STR_INSERT_DOC_UNDO                     NC_("STR_INSERT_DOC_UNDO", "Insert file")
 #define STR_INSERT_GLOSSARY                     NC_("STR_INSERT_GLOSSARY", "Insert AutoText")
 #define STR_DELBOOKMARK                         NC_("STR_DELBOOKMARK", "Delete bookmark: $1")
+#define STR_DELETE_BOOKMARKS                    NC_("STR_DELETE_BOOKMARKS", "Delete bookmarks")
 #define STR_INSBOOKMARK                         NC_("STR_INSBOOKMARK", "Insert bookmark: $1")
 #define STR_UPDATE_BOOKMARK                     NC_("STR_UPDATE_BOOKMARK", "Update bookmark: $1")
 #define STR_UPDATE_BOOKMARKS                    NC_("STR_UPDATE_BOOKMARKS", "Update bookmarks")

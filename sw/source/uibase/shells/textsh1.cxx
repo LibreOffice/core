@@ -675,13 +675,13 @@ void DeleteBookmarks(SfxRequest& rReq, SwWrtShell& rWrtSh)
         aBookmarkNamePrefix = pBookmarkNamePrefix->GetValue();
     }
 
-    rWrtSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::DELBOOKMARK, nullptr);
+    rWrtSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::DELETE_BOOKMARKS, nullptr);
     rWrtSh.StartAction();
     comphelper::ScopeGuard g(
         [&rWrtSh]
         {
             rWrtSh.EndAction();
-            rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::DELBOOKMARK, nullptr);
+            rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::DELETE_BOOKMARKS, nullptr);
         });
 
     IDocumentMarkAccess* pMarkAccess = rWrtSh.GetDoc()->getIDocumentMarkAccess();
