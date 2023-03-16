@@ -563,39 +563,6 @@ rtl::Reference< Axis > DiagramHelper::getAttachedAxis(
     return AxisHelper::getAxis( 1, DiagramHelper::isSeriesAttachedToMainAxis( xSeries ), xDiagram );
 }
 
-rtl::Reference< ChartType > DiagramHelper::getChartTypeOfSeries(
-                                const rtl::Reference< Diagram >&   xDiagram
-                              , const uno::Reference< XDataSeries >&        xGivenDataSeries )
-{
-    if( !xGivenDataSeries.is() )
-        return nullptr;
-    if(!xDiagram.is())
-        return nullptr;
-    rtl::Reference pGivenDataSeries = dynamic_cast<DataSeries*>(xGivenDataSeries.get());
-    assert(pGivenDataSeries);
-
-    //iterate through the model to find the given xSeries
-    //the found parent indicates the charttype
-
-    //iterate through all coordinate systems
-
-    for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : xDiagram->getBaseCoordinateSystems() )
-    {
-        //iterate through all chart types in the current coordinate system
-        const std::vector< rtl::Reference< ChartType > > & aChartTypeList( xCooSys->getChartTypes2() );
-        for( rtl::Reference< ChartType > const & xChartType : aChartTypeList )
-        {
-            //iterate through all series in this chart type
-            for( rtl::Reference< DataSeries > const & dataSeries : xChartType->getDataSeries2() )
-            {
-                if( pGivenDataSeries==dataSeries )
-                    return xChartType;
-            }
-        }
-    }
-    return nullptr;
-}
-
 static void lcl_generateAutomaticCategoriesFromChartType(
             Sequence< OUString >& rRet,
             const rtl::Reference< ChartType >& xChartType )

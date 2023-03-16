@@ -1132,7 +1132,7 @@ rtl::Reference< ChartType > AxisHelper::getFirstChartTypeWithSeriesAttachedToAxi
         sal_Int32 nCurrentIndex = DataSeriesHelper::getAttachedAxisIndex(series);
         if( nAttachedAxisIndex == nCurrentIndex )
         {
-            xChartType = DiagramHelper::getChartTypeOfSeries(xDiagram, series);
+            xChartType = xDiagram->getChartTypeOfSeries(series);
             if(xChartType.is())
                 break;
         }

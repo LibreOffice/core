@@ -212,7 +212,7 @@ TextLabelItemConverter::TextLabelItemConverter(
     maConverters.emplace_back(new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
 
     rtl::Reference< Diagram > xDiagram(ChartModelHelper::findDiagram(xChartModel));
-    rtl::Reference< ChartType > xChartType(DiagramHelper::getChartTypeOfSeries(xDiagram, xSeries));
+    rtl::Reference< ChartType > xChartType(xDiagram->getChartTypeOfSeries(xSeries));
     bool bFound = false;
     bool bAmbiguous = false;
     bool bSwapXAndY = DiagramHelper::getVertical(xDiagram, bFound, bAmbiguous);

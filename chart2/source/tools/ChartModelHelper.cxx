@@ -125,14 +125,16 @@ rtl::Reference< ChartType > ChartModelHelper::getChartTypeOfSeries(
                                 const rtl::Reference<::chart::ChartModel>& xModel
                               , const uno::Reference< XDataSeries >&   xGivenDataSeries )
 {
-    return DiagramHelper::getChartTypeOfSeries( ChartModelHelper::findDiagram( xModel ), xGivenDataSeries );
+    rtl::Reference<Diagram> xDiagram = ChartModelHelper::findDiagram( xModel );
+    return xDiagram ? xDiagram->getChartTypeOfSeries( xGivenDataSeries ) : nullptr;
 }
 
 rtl::Reference< ChartType > ChartModelHelper::getChartTypeOfSeries(
                                 const rtl::Reference<::chart::ChartModel>& xModel
                               , const rtl::Reference< DataSeries >&   xGivenDataSeries )
 {
-    return DiagramHelper::getChartTypeOfSeries( ChartModelHelper::findDiagram( xModel ), xGivenDataSeries );
+    rtl::Reference<Diagram> xDiagram = ChartModelHelper::findDiagram( xModel );
+    return xDiagram ? xDiagram->getChartTypeOfSeries( xGivenDataSeries ) : nullptr;
 }
 
 awt::Size ChartModelHelper::getDefaultPageSize()

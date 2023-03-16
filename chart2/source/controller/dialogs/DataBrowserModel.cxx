@@ -297,7 +297,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
     if( xSeries.is())
     {
         // Use the chart type of the currently selected data series.
-        xChartType = DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries );
+        xChartType = xDiagram->getChartTypeOfSeries( xSeries );
 
         // Find the corresponding header and determine the last column of this
         // data series.

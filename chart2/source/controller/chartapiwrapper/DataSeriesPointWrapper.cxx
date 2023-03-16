@@ -547,7 +547,7 @@ bool DataSeriesPointWrapper::isSupportingAreaProperties()
 {
     rtl::Reference< DataSeries > xSeries( getDataSeries() );
     rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
-    rtl::Reference< ::chart::ChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ) );
+    rtl::Reference< ::chart::ChartType > xChartType( xDiagram->getChartTypeOfSeries( xSeries ) );
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
 
     return ChartTypeHelper::isSupportingAreaProperties( xChartType, nDimensionCount );

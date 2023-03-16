@@ -77,7 +77,7 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         m_bAttachToMainAxis = DiagramHelper::isSeriesAttachedToMainAxis( xDataSeries );
 
         rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram(xChartModel) );
-        rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram , xDataSeries ) );
+        rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeOfSeries( xDataSeries ) );
 
         m_xCooSys = DataSeriesHelper::getCoordinateSystemOfSeries( xDataSeries, xDiagram );
         if( m_xCooSys.is() )
@@ -207,7 +207,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
 
                 uno::Reference< XDataSeries > xDataSeries( GetPropertySet(), uno::UNO_QUERY );
                 rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram(m_xChartModel) );
-                rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram , xDataSeries ) );
+                rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeOfSeries( xDataSeries ) );
                 if( xChartType.is() )
                 {
                     sal_Int32 nAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);

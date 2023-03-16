@@ -70,7 +70,7 @@ OUString lcl_getDataSeriesName( std::u16string_view rObjectCID, const rtl::Refer
     rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel );
     if( xDiagram.is() && xSeries.is() )
     {
-        rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ) );
+        rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeOfSeries( xSeries ) );
         if( xChartType.is() )
         {
             aRet = ::chart::DataSeriesHelper::getDataSeriesLabel(

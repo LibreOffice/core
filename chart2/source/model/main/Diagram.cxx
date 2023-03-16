@@ -1249,6 +1249,45 @@ std::vector< rtl::Reference< ::chart::DataSeries > >
     return aResult;
 }
 
+rtl::Reference< ChartType > Diagram::getChartTypeOfSeries(
+        const uno::Reference< chart2::XDataSeries >& xGivenDataSeries )
+{
+    if( !xGivenDataSeries.is() )
+        return nullptr;
+    rtl::Reference pGivenDataSeries = dynamic_cast<DataSeries*>(xGivenDataSeries.get());
+    assert(pGivenDataSeries);
+    return getChartTypeOfSeries(pGivenDataSeries);
+}
+
+rtl::Reference< ChartType > Diagram::getChartTypeOfSeries(
+        const rtl::Reference< DataSeries >& xGivenDataSeries )
+{
+    if( !xGivenDataSeries.is() )
+        return nullptr;
+
+    //iterate through the model to find the given xSeries
+    //the found parent indicates the charttype
+
+    //iterate through all coordinate systems
+
+    for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : getBaseCoordinateSystems() )
+    {
+        //iterate through all chart types in the current coordinate system
+        const std::vector< rtl::Reference< ChartType > > & aChartTypeList( xCooSys->getChartTypes2() );
+        for( rtl::Reference< ChartType > const & xChartType : aChartTypeList )
+        {
+            //iterate through all series in this chart type
+            for( rtl::Reference< DataSeries > const & dataSeries : xChartType->getDataSeries2() )
+            {
+                if( xGivenDataSeries==dataSeries )
+                    return xChartType;
+            }
+        }
+    }
+    return nullptr;
+}
+
+
 
 } //  namespace chart
 

@@ -1095,7 +1095,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatDataSeries" );
                 }
 
-                rtl::Reference< ChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ) );
+                rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeOfSeries( xSeries ) );
                 if( xChartType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
                 {
                     try

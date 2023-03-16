@@ -246,6 +246,11 @@ public:
     std::vector< rtl::Reference< ::chart::DataSeries > >
         getDataSeries();
 
+    rtl::Reference< ChartType >
+        getChartTypeOfSeries( const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
+    rtl::Reference< ChartType >
+        getChartTypeOfSeries( const rtl::Reference< DataSeries >& xSeries );
+
 private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
