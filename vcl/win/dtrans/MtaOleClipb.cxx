@@ -438,7 +438,7 @@ bool CMtaOleClipboard::onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncCli
 
     // we need exclusive access because the clipboard changed notifier
     // thread also accesses this variable
-    MutexGuard aGuard( m_pfncClipViewerCallbackMutex );
+    std::unique_lock aGuard( m_pfncClipViewerCallbackMutex );
 
     // register if not yet done
     if ( ( nullptr != pfncClipViewerCallback ) && ( nullptr == m_pfncClipViewerCallback ) )
@@ -502,7 +502,7 @@ LRESULT CMtaOleClipboard::onClipboardUpdate()
     // registering ourself as clipboard
     if ( !m_bInRegisterClipViewer )
     {
-        MutexGuard aGuard( m_ClipboardChangedEventCountMutex );
+        std::unique_lock aGuard( m_ClipboardChangedEventCountMutex );
 
         m_ClipboardChangedEventCount++;
         SetEvent( m_hClipboardChangedEvent );
@@ -713,7 +713,7 @@ DWORD WINAPI CMtaOleClipboard::clipboardChangedNotifierThreadProc( _In_ LPVOID p
         MsgWaitForMultipleObjects(2, pInst->m_hClipboardChangedNotifierEvents, false, INFINITE,
                                   QS_ALLINPUT | QS_ALLPOSTMESSAGE);
 
-        ClearableMutexGuard aGuard2( pInst->m_ClipboardChangedEventCountMutex );
+        std::unique_lock aGuard2( pInst->m_ClipboardChangedEventCountMutex );
 
         if ( pInst->m_ClipboardChangedEventCount > 0 )
         {
@@ -721,17 +721,17 @@ DWORD WINAPI CMtaOleClipboard::clipboardChangedNotifierThreadProc( _In_ LPVOID p
             if ( 0 == pInst->m_ClipboardChangedEventCount )
                 ResetEvent( pInst->m_hClipboardChangedEvent );
 
-            aGuard2.clear( );
+            aGuard2.unlock( );
 
             // nobody should touch m_pfncClipViewerCallback while we do
-            MutexGuard aClipViewerGuard( pInst->m_pfncClipViewerCallbackMutex );
+            std::unique_lock aClipViewerGuard( pInst->m_pfncClipViewerCallbackMutex );
 
             // notify all clipboard listener
             if ( pInst->m_pfncClipViewerCallback )
                 pInst->m_pfncClipViewerCallback( );
         }
         else
-            aGuard2.clear( );
+            aGuard2.unlock( );
     }
 
     return 0;

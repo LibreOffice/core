@@ -20,7 +20,7 @@
 #pragma once
 
 #include <sal/types.h>
-#include <osl/mutex.hxx>
+#include <mutex>
 
 #include <objidl.h>
 
@@ -96,10 +96,10 @@ private:
     HANDLE                      m_hClipboardChangedNotifierEvents[2];
     HANDLE&                     m_hClipboardChangedEvent;
     HANDLE&                     m_hTerminateClipboardChangedNotifierEvent;
-    osl::Mutex                  m_ClipboardChangedEventCountMutex;
+    std::mutex                  m_ClipboardChangedEventCountMutex;
     sal_Int32                   m_ClipboardChangedEventCount;
 
-    osl::Mutex                  m_pfncClipViewerCallbackMutex;
+    std::mutex                  m_pfncClipViewerCallbackMutex;
 
     static CMtaOleClipboard*    s_theMtaOleClipboardInst;
 
