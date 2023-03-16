@@ -419,6 +419,11 @@ void PDFWriter::SetStructureBoundingBox( const tools::Rectangle& rRect )
     xImplementation->setStructureBoundingBox( rRect );
 }
 
+void PDFWriter::SetStructureAnnotIds(::std::vector<sal_Int32> const& rAnnotIds)
+{
+    xImplementation->setStructureAnnotIds(rAnnotIds);
+}
+
 void PDFWriter::SetActualText( const OUString& rText )
 {
     xImplementation->setActualText( rText );

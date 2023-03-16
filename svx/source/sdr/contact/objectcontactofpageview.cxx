@@ -392,6 +392,17 @@ namespace sdr::contact
             return false;
         }
 
+        ::vcl::PDFExtOutDevData const* ObjectContactOfPageView::GetPDFExtOutDevData() const
+        {
+            if (!isOutputToPDFFile())
+            {
+                return nullptr;
+            }
+            vcl::PDFExtOutDevData* pPDFExtOutDevData(dynamic_cast<vcl::PDFExtOutDevData*>(
+                mrPageWindow.GetPaintWindow().GetOutputDevice().GetExtOutDevData()));
+            return pPDFExtOutDevData;
+        }
+
         // gray display mode
         bool ObjectContactOfPageView::isDrawModeGray() const
         {
