@@ -131,14 +131,20 @@ public:
 
     bool PreTraverseIfStmt(IfStmt* stmt)
     {
-        contextuallyConvertedExprs_.push_back(stmt->getCond()->IgnoreParenImpCasts());
+        if (auto const cond = stmt->getCond())
+        {
+            contextuallyConvertedExprs_.push_back(cond->IgnoreParenImpCasts());
+        }
         return true;
     }
 
-    bool PostTraverseIfStmt(IfStmt*, bool)
+    bool PostTraverseIfStmt(IfStmt* stmt, bool)
     {
-        assert(!contextuallyConvertedExprs_.empty());
-        contextuallyConvertedExprs_.pop_back();
+        if (stmt->getCond() != nullptr)
+        {
+            assert(!contextuallyConvertedExprs_.empty());
+            contextuallyConvertedExprs_.pop_back();
+        }
         return true;
     }
 

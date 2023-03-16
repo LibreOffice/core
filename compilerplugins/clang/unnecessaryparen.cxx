@@ -262,8 +262,10 @@ bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
 
 bool UnnecessaryParen::VisitIfStmt(const IfStmt* ifStmt)
 {
-    handleUnreachableCodeConditionParens(ifStmt->getCond());
-    VisitSomeStmt(ifStmt, ifStmt->getCond(), "if");
+    if (auto const cond = ifStmt->getCond()) {
+        handleUnreachableCodeConditionParens(cond);
+        VisitSomeStmt(ifStmt, cond, "if");
+    }
     return true;
 }
 

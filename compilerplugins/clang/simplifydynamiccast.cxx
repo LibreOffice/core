@@ -46,15 +46,19 @@ private:
 
 bool SimplifyDynamicCast::TraverseIfStmt(IfStmt* ifStmt)
 {
-    auto condExpr = ifStmt->getCond()->IgnoreParenImpCasts();
-    auto dynamicCastExpr = dyn_cast<CXXDynamicCastExpr>(condExpr);
-    if (!dynamicCastExpr)
+    CXXDynamicCastExpr const* dynamicCastExpr = nullptr;
+    if (Expr const* condExpr = ifStmt->getCond())
     {
-        if (auto binaryOp = dyn_cast<BinaryOperator>(condExpr))
+        condExpr = condExpr->IgnoreParenImpCasts();
+        dynamicCastExpr = dyn_cast<CXXDynamicCastExpr>(condExpr);
+        if (!dynamicCastExpr)
         {
-            if (binaryOp->getOpcode() == BO_NE)
-                dynamicCastExpr
-                    = dyn_cast<CXXDynamicCastExpr>(binaryOp->getLHS()->IgnoreParenImpCasts());
+            if (auto binaryOp = dyn_cast<BinaryOperator>(condExpr))
+            {
+                if (binaryOp->getOpcode() == BO_NE)
+                    dynamicCastExpr
+                        = dyn_cast<CXXDynamicCastExpr>(binaryOp->getLHS()->IgnoreParenImpCasts());
+            }
         }
     }
     Decl const* subExprDecl = nullptr;
