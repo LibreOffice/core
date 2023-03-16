@@ -580,6 +580,25 @@ void SalInstanceWidget::connect_key_release(const Link<const KeyEvent&, bool>& r
     weld::Widget::connect_key_release(rLink);
 }
 
+IMPL_LINK(SalInstanceWidget, SettingsChangedHdl, VclWindowEvent&, rEvent, void)
+{
+    if (rEvent.GetId() != VclEventId::WindowDataChanged)
+        return;
+
+    DataChangedEvent* pData = static_cast<DataChangedEvent*>(rEvent.GetData());
+    if (pData->GetType() == DataChangedEventType::SETTINGS)
+        m_aStyleUpdatedHdl.Call(*this);
+}
+
+void SalInstanceWidget::connect_style_updated(const Link<Widget&, void>& rLink)
+{
+    if (m_aStyleUpdatedHdl.IsSet())
+        m_xWidget->RemoveEventListener(LINK(this, SalInstanceWidget, SettingsChangedHdl));
+    weld::Widget::connect_style_updated(rLink);
+    if (m_aStyleUpdatedHdl.IsSet())
+        m_xWidget->AddEventListener(LINK(this, SalInstanceWidget, SettingsChangedHdl));
+}
+
 bool SalInstanceWidget::get_extents_relative_to(const Widget& rRelative, int& x, int& y, int& width,
                                                 int& height) const
 {
@@ -633,6 +652,8 @@ void SalInstanceWidget::queue_resize() { m_xWidget->queue_resize(); }
 
 SalInstanceWidget::~SalInstanceWidget()
 {
+    if (m_aStyleUpdatedHdl.IsSet())
+        m_xWidget->RemoveEventListener(LINK(this, SalInstanceWidget, SettingsChangedHdl));
     if (m_aMnemonicActivateHdl.IsSet())
         m_xWidget->SetMnemonicActivateHdl(Link<vcl::Window&, bool>());
     if (m_bMouseEventListener)
@@ -6231,6 +6252,11 @@ void SalInstanceDrawingArea::connect_key_press(const Link<const KeyEvent&, bool>
 void SalInstanceDrawingArea::connect_key_release(const Link<const KeyEvent&, bool>& rLink)
 {
     weld::Widget::connect_key_release(rLink);
+}
+
+void SalInstanceDrawingArea::connect_style_updated(const Link<Widget&, void>& rLink)
+{
+    weld::Widget::connect_style_updated(rLink);
 }
 
 void SalInstanceDrawingArea::set_cursor(PointerStyle ePointerStyle)

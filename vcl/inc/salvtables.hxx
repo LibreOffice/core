@@ -188,6 +188,7 @@ private:
     DECL_LINK(EventListener, VclWindowEvent&, void);
     DECL_LINK(KeyEventListener, VclWindowEvent&, bool);
     DECL_LINK(MouseEventListener, VclWindowEvent&, void);
+    DECL_LINK(SettingsChangedHdl, VclWindowEvent&, void);
     DECL_LINK(MnemonicActivateHdl, vcl::Window&, bool);
 
     static void DoRecursivePaint(vcl::Window* pWindow, const Point& rPos, OutputDevice& rOutput);
@@ -332,6 +333,8 @@ public:
     virtual void connect_key_press(const Link<const KeyEvent&, bool>& rLink) override;
 
     virtual void connect_key_release(const Link<const KeyEvent&, bool>& rLink) override;
+
+    virtual void connect_style_updated(const Link<Widget&, void>& rLink) override;
 
     virtual bool get_extents_relative_to(const Widget& rRelative, int& x, int& y, int& width,
                                          int& height) const override;
@@ -1310,6 +1313,8 @@ public:
     virtual void connect_key_press(const Link<const KeyEvent&, bool>& rLink) override;
 
     virtual void connect_key_release(const Link<const KeyEvent&, bool>& rLink) override;
+
+    virtual void connect_style_updated(const Link<Widget&, void>& rLink) override;
 
     virtual void set_cursor(PointerStyle ePointerStyle) override;
 

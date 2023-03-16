@@ -2681,6 +2681,15 @@ protected:
     }
 #endif
 
+    virtual void connect_style_updated(const Link<Widget&, void>& rLink) override
+    {
+        if (m_aStyleUpdatedHdl.IsSet())
+            ImplGetDefaultWindow()->RemoveEventListener(LINK(this, GtkInstanceWidget, SettingsChangedHdl));
+        weld::Widget::connect_style_updated(rLink);
+        if (m_aStyleUpdatedHdl.IsSet())
+            ImplGetDefaultWindow()->AddEventListener(LINK(this, GtkInstanceWidget, SettingsChangedHdl));
+    }
+
     bool SwapForRTL() const
     {
         return ::SwapForRTL(m_pWidget);
@@ -3381,6 +3390,8 @@ private:
         gtk_style_context_add_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pBgCssProvider),
                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
+
+    DECL_LINK(SettingsChangedHdl, VclWindowEvent&, void);
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
     static void update_style(GtkWidget* pWidget, gpointer pData)
@@ -4276,6 +4287,9 @@ public:
 
     virtual ~GtkInstanceWidget() override
     {
+        if (m_aStyleUpdatedHdl.IsSet())
+            ImplGetDefaultWindow()->RemoveEventListener(LINK(this, GtkInstanceWidget, SettingsChangedHdl));
+
         if (m_pDragCancelEvent)
             Application::RemoveUserEvent(m_pDragCancelEvent);
         if (m_nDragMotionSignalId)
@@ -4547,6 +4561,16 @@ public:
     }
 };
 
+}
+
+IMPL_LINK(GtkInstanceWidget, SettingsChangedHdl, VclWindowEvent&, rEvent, void)
+{
+    if (rEvent.GetId() != VclEventId::WindowDataChanged)
+        return;
+
+    DataChangedEvent* pData = static_cast<DataChangedEvent*>(rEvent.GetData());
+    if (pData->GetType() == DataChangedEventType::SETTINGS)
+        m_aStyleUpdatedHdl.Call(*this);
 }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -18303,10 +18327,6 @@ private:
         m_pSurface = get_underlying_cairo_surface(*m_xDevice);
         GtkInstanceWidget::signal_size_allocate(nWidth, nHeight);
     }
-    void signal_style_updated()
-    {
-        m_aStyleUpdatedHdl.Call(*this);
-    }
     static gboolean signalQueryTooltip(GtkWidget* pGtkWidget, gint x, gint y,
                                          gboolean /*keyboard_mode*/, GtkTooltip *tooltip,
                                          gpointer widget)
@@ -18407,7 +18427,6 @@ private:
     }
 #endif
 
-    DECL_LINK(SettingsChangedHdl, VclWindowEvent&, void);
 public:
     GtkInstanceDrawingArea(GtkDrawingArea* pDrawingArea, GtkInstanceBuilder* pBuilder, a11yref xA11y, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pDrawingArea), pBuilder, bTakeOwnership)
@@ -18449,8 +18468,6 @@ public:
         gtk_widget_set_has_tooltip(m_pWidget, true);
         g_object_set_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea", this);
         m_xDevice->EnableRTL(get_direction());
-
-        ImplGetDefaultWindow()->AddEventListener(LINK(this, GtkInstanceDrawingArea, SettingsChangedHdl));
     }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -18640,8 +18657,6 @@ public:
         g_clear_object(&m_pZoomGesture);
 #endif
 
-        ImplGetDefaultWindow()->RemoveEventListener(LINK(this, GtkInstanceDrawingArea, SettingsChangedHdl));
-
         g_object_steal_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea");
 #if !GTK_CHECK_VERSION(4, 0, 0)
         if (m_pAccessible)
@@ -18681,16 +18696,6 @@ public:
         m_aMouseReleaseHdl.Call(aEvent);
     }
 };
-
-IMPL_LINK(GtkInstanceDrawingArea, SettingsChangedHdl, VclWindowEvent&, rEvent, void)
-{
-    if (rEvent.GetId() != VclEventId::WindowDataChanged)
-        return;
-
-    DataChangedEvent* pData = static_cast<DataChangedEvent*>(rEvent.GetData());
-    if (pData->GetType() == DataChangedEventType::SETTINGS)
-        signal_style_updated();
-}
 
 IMHandler::IMHandler(GtkInstanceDrawingArea* pArea)
     : m_pArea(pArea)

@@ -87,6 +87,7 @@ protected:
     Link<Widget&, void> m_aFocusInHdl;
     Link<Widget&, void> m_aFocusOutHdl;
     Link<Widget&, bool> m_aMnemonicActivateHdl;
+    Link<Widget&, void> m_aStyleUpdatedHdl;
     Link<const Size&, void> m_aSizeAllocateHdl;
     Link<const KeyEvent&, bool> m_aKeyPressHdl;
     Link<const KeyEvent&, bool> m_aKeyReleaseHdl;
@@ -277,6 +278,12 @@ public:
     {
         assert(!m_aMouseReleaseHdl.IsSet() || !rLink.IsSet());
         m_aMouseReleaseHdl = rLink;
+    }
+
+    virtual void connect_style_updated(const Link<Widget&, void>& rLink)
+    {
+        assert(!m_aStyleUpdatedHdl.IsSet() || !rLink.IsSet());
+        m_aStyleUpdatedHdl = rLink;
     }
 
     virtual void grab_add() = 0;
@@ -2274,7 +2281,6 @@ public:
 
 protected:
     Link<draw_args, void> m_aDrawHdl;
-    Link<Widget&, void> m_aStyleUpdatedHdl;
     Link<const CommandEvent&, bool> m_aCommandHdl;
     Link<Widget&, tools::Rectangle> m_aGetFocusRectHdl;
     Link<tools::Rectangle&, OUString> m_aQueryTooltipHdl;
@@ -2304,7 +2310,6 @@ protected:
 
 public:
     void connect_draw(const Link<draw_args, void>& rLink) { m_aDrawHdl = rLink; }
-    void connect_style_updated(const Link<Widget&, void>& rLink) { m_aStyleUpdatedHdl = rLink; }
     void connect_command(const Link<const CommandEvent&, bool>& rLink) { m_aCommandHdl = rLink; }
     void connect_focus_rect(const Link<Widget&, tools::Rectangle>& rLink)
     {
