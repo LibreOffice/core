@@ -136,8 +136,8 @@
                   <item translatable="yes" context="sidebararea|gradientstyle">Axial</item>
                   <item translatable="yes" context="sidebararea|gradientstyle">Radial</item>
                   <item translatable="yes" context="sidebararea|gradientstyle">Ellipsoid</item>
-                  <item translatable="yes" context="sidebararea|gradientstyle">Quadratic</item>
-                  <item translatable="yes" context="sidebararea|gradientstyle">Square</item>
+                  <item translatable="yes" context="sidebararea|gradientstyle">Square (Quadratic)</item>
+                  <item translatable="yes" context="sidebararea|gradientstyle">Rectangular</item>
                 </items>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="gradientstyle-atkobject">

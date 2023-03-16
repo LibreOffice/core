@@ -220,8 +220,8 @@
                       <item translatable="yes" context="gradientpage|gradienttypelb">Axial</item>
                       <item translatable="yes" context="gradientpage|gradienttypelb">Radial</item>
                       <item translatable="yes" context="gradientpage|gradienttypelb">Ellipsoid</item>
-                      <item translatable="yes" context="gradientpage|gradienttypelb">Quadratic</item>
-                      <item translatable="yes" context="gradientpage|gradienttypelb">Square</item>
+                      <item translatable="yes" context="gradientpage|gradienttypelb">Square (Quadratic)</item>
+                      <item translatable="yes" context="gradientpage|gradienttypelb">Rectangular</item>
                     </items>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="gradienttypelb-atkobject">

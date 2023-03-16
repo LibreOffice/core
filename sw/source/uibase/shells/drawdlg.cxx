@@ -297,7 +297,7 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest const & rReq)
 
 static void lcl_unifyFillTransparencyItems(const SfxItemSet& rSet)
 {
-    // Transparent fill options are None, Solid, Linear, Axial, Radial, Elliptical, Quadratic, Square.
+    // Transparent fill options are None, Solid, Linear, Axial, Radial, Elliptical, Square, Rectangular.
     // But this is represented across two items namely XFillTransparenceItem (for None and Solid)
     // and XFillFloatTransparenceItem (for the rest). To simplify the representation in LOKit case let's
     // use XFillFloatTransparenceItem to carry the information of XFillTransparenceItem when gradients

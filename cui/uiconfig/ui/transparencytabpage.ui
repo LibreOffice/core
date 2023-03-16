@@ -289,8 +289,8 @@
                       <item translatable="yes" context="transparencytabpage|liststoreTYPE">Axial</item>
                       <item translatable="yes" context="transparencytabpage|liststoreTYPE">Radial</item>
                       <item translatable="yes" context="transparencytabpage|liststoreTYPE">Ellipsoid</item>
-                      <item translatable="yes" context="transparencytabpage|liststoreTYPE">Quadratic</item>
-                      <item translatable="yes" context="transparencytabpage|liststoreTYPE">Square</item>
+                      <item translatable="yes" context="transparencytabpage|liststoreTYPE">Square (Quadratic)</item>
+                      <item translatable="yes" context="transparencytabpage|liststoreTYPE">Rectangular</item>
                     </items>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="LB_TRGR_GRADIENT_TYPES-atkobject">

@@ -1201,8 +1201,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkEllipticalGradient)
 
 CPPUNIT_TEST_FIXTURE(Test, testFontworkSquareGradient)
 {
-    // The document has a Fontwork shape with UI settings: gradient fill Type "Quadratic" (which is
-    // "square" in ODF and API), From Color #4963ef 40%, To Color #ffff6e 90%, Center x|y 100%|50%,
+    // The document has a Fontwork shape with UI settings: gradient fill Type "Square (Quadratic)",
+    // From Color #4963ef 40%, To Color #ffff6e 90%, Center x|y 100%|50%,
     // no transparency
     // Without fix the gradient was not exported at all.
     loadFromURL(u"tdf51195_Fontwork_squareGradient.odt");
@@ -1245,8 +1245,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkSquareGradient)
 CPPUNIT_TEST_FIXTURE(Test, testFontworkRectGradient)
 {
     // The document has a Fontwork shape with UI settings: solid color theme Accent 4 60% lighter,
-    // transparency gradient Type "Square" (which is "rectangle" in ODF and API, tdf#154071),
-    // Center x|y 50%|50%, Transition start 10%, Start value 70%, End value 5%.
+    // transparency gradient Type "Rectangular", Center x|y 50%|50%, Transition start 10%,
+    // Start value 70%, End value 5%.
     // Without fix the gradient was not exported at all.
     loadFromURL(u"tdf51195_Fontwork_rectGradient.odt");
 
