@@ -3424,6 +3424,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:InsertSlide"),
         OUString(".uno:DeleteSlide"),
         OUString(".uno:DuplicateSlide"),
+        OUString(".uno:ChangeTheme"),
         OUString(".uno:Cut"),
         OUString(".uno:Copy"),
         OUString(".uno:Paste"),
