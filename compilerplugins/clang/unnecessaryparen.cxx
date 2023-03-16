@@ -552,7 +552,6 @@ bool UnnecessaryParen::VisitMemberExpr(const MemberExpr* memberExpr)
 // in Clang's lib/Analysis/ReachableCode.cpp looks for, descending into certain unary and binary
 // operators):
 void UnnecessaryParen::handleUnreachableCodeConditionParens(Expr const * expr) {
-    // Cf. :
     auto const e = ignoreAllImplicit(expr);
     if (auto const e1 = dyn_cast<ParenExpr>(e)) {
         auto const sub = e1->getSubExpr();
