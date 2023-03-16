@@ -23,6 +23,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/window.hxx>
 #include <sal/log.hxx>
+#include <sfx2/app.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/request.hxx>
@@ -107,11 +108,6 @@ int SfxLokHelper::createView()
         return -1;
 
     return createView(pViewShell->GetViewFrame(), pViewShell->GetDocId());
-}
-
-std::unordered_map<OUString, css::uno::Reference<com::sun::star::ui::XAcceleratorConfiguration>>& SfxLokHelper::getAcceleratorConfs()
-{
-    return SfxApplication::GetOrCreate()->GetAcceleratorConfs_Impl();
 }
 
 int SfxLokHelper::createView(int nDocId)

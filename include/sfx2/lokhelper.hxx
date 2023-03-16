@@ -23,7 +23,6 @@
 #include <rtl/string.hxx>
 #include <optional>
 #include <string_view>
-#include <sfx2/app.hxx>
 
 struct SFX2_DLLPUBLIC LokMouseEventData
 {
@@ -50,8 +49,6 @@ struct SFX2_DLLPUBLIC LokMouseEventData
 class SFX2_DLLPUBLIC SfxLokHelper
 {
 public:
-    /// Gets the short cut accelerators.
-    static std::unordered_map<OUString, css::uno::Reference<com::sun::star::ui::XAcceleratorConfiguration>>& getAcceleratorConfs();
     /// Create a new view shell from the current view frame.
     /// This assumes a single document is ever loaded.
     static int createView();
