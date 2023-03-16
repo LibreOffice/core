@@ -339,6 +339,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsColumnBreakDeferred( false ),
         m_bIsPageBreakDeferred( false ),
         m_nLineBreaksDeferred( 0 ),
+        m_bIsBreakDeferredByAnchor(false),
         m_bSdtEndDeferred(false),
         m_bParaSdtEndDeferred(false),
         m_bStartTOC(false),
