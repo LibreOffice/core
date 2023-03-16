@@ -79,8 +79,10 @@ void WrappedStockProperty::setPropertyValue( const css::uno::Any& rOuterValue, c
 
     rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
     rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
-    sal_Int32 nDimension = ::chart::DiagramHelper::getDimension( xDiagram );
-    if( !(xChartDoc.is() && xDiagram.is() && nDimension==2) )
+    if( !xChartDoc || !xDiagram )
+        return;
+    sal_Int32 nDimension = xDiagram->getDimension();
+    if( nDimension != 2 )
         return;
 
     rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = xChartDoc->getTypeManager();

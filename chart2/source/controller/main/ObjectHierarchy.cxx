@@ -211,7 +211,7 @@ void ObjectHierarchy::createAxesTree(
     const rtl::Reference<::chart::ChartModel> & xChartDoc,
     const rtl::Reference< Diagram > & xDiagram  )
 {
-    sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
+    sal_Int32 nDimensionCount = xDiagram->getDimension();
     rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeByIndex( 0 ) );
     bool bSupportsAxesGrids = ChartTypeHelper::isSupportingMainAxis( xChartType, nDimensionCount, 0 );
     if( !bSupportsAxesGrids )
@@ -282,7 +282,7 @@ void ObjectHierarchy::createWallAndFloor(
     tChildContainer & rContainer,
     const rtl::Reference< Diagram > & xDiagram )
 {
-    sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
+    sal_Int32 nDimensionCount = xDiagram->getDimension();
     bool bIsThreeD = ( nDimensionCount == 3 );
     bool bHasWall = xDiagram->isSupportingFloorAndWall();
     if( bHasWall && bIsThreeD )
@@ -320,7 +320,7 @@ void ObjectHierarchy::createDataSeriesTree(
 {
     try
     {
-        sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
+        sal_Int32 nDimensionCount = xDiagram->getDimension();
         std::vector< rtl::Reference< BaseCoordinateSystem > > aCooSysSeq(
             xDiagram->getBaseCoordinateSystems());
         for( std::size_t nCooSysIdx=0; nCooSysIdx<aCooSysSeq.size(); ++nCooSysIdx )

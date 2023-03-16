@@ -505,7 +505,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     if( !xDiagram.is())
         return aUsedOuterRect;
 
-    sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
+    sal_Int32 nDimensionCount = xDiagram->getDimension();
     if(!nDimensionCount)
     {
         //@todo handle mixed dimension
@@ -1995,9 +1995,12 @@ bool ChartView::createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::
     rtl::Reference<Diagram> xDiagram = mrChartModel.getFirstChartDiagram();
 
     rtl::Reference< ChartType > xChartType;
+    sal_Int32 nDimension = 0;
     if (xDiagram)
+    {
         xChartType = xDiagram->getChartTypeByIndex( 0 );
-    sal_Int32 nDimension = DiagramHelper::getDimension( xDiagram );
+        nDimension = xDiagram->getDimension();
+    }
 
     if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 0 ) )
         rParam.mpVTitleX = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, mxRootShape, mrChartModel

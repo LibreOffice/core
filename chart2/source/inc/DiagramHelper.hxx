@@ -119,23 +119,6 @@ public:
         const rtl::Reference< ::chart::BaseCoordinateSystem > & xCorrespondingCoordinateSystem
         );
 
-    /** Returns the dimension found for all chart types in the tree.  If the
-        dimension is not unique, 0 is returned.
-     */
-    static sal_Int32 getDimension(
-        const rtl::Reference< ::chart::Diagram > & xDiagram );
-
-    /** Sets the dimension of the diagram given.
-
-        1. Sets the dimension of all used ChartTypes
-        2. Adapts the DataSeriesTree to reflect the new dimension
-        3. If new coordinate-systems have to be created, adapts the
-           XCoordinateSystemContainer of the diagram.
-     */
-    static void setDimension(
-        const rtl::Reference< ::chart::Diagram > & xDiagram,
-        sal_Int32 nNewDimensionCount );
-
     static bool isSeriesAttachedToMainAxis(
         const css::uno::Reference< css::chart2::XDataSeries >& xDataSeries );
 

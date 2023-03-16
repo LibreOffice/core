@@ -448,7 +448,7 @@ bool SelectionHelper::isRotateableObject( std::u16string_view rCID
     if( !ObjectIdentifier::isRotateableObject( rCID ) )
         return false;
 
-    sal_Int32 nDimensionCount = DiagramHelper::getDimension( ChartModelHelper::findDiagram( xChartModel ) );
+    sal_Int32 nDimensionCount = ChartModelHelper::findDiagram( xChartModel )->getDimension();
 
     return nDimensionCount == 3;
 }

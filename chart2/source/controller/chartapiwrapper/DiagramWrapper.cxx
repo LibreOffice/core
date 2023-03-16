@@ -1320,9 +1320,9 @@ void WrappedDim3DProperty::setPropertyValue( const Any& rOuterValue, const Refer
     if( !xDiagram.is() )
         return;
 
-    bool bOld3D = DiagramHelper::getDimension( xDiagram ) == 3;
+    bool bOld3D = xDiagram->getDimension() == 3;
     if( bOld3D != bNew3D )
-        DiagramHelper::setDimension( xDiagram, bNew3D ? 3 : 2 );
+        xDiagram->setDimension( bNew3D ? 3 : 2 );
 }
 
 Any WrappedDim3DProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
@@ -1330,7 +1330,7 @@ Any WrappedDim3DProperty::getPropertyValue( const Reference< beans::XPropertySet
     rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     if( xDiagram.is() )
     {
-        bool b3D = DiagramHelper::getDimension( xDiagram ) == 3;
+        bool b3D = xDiagram->getDimension() == 3;
         m_aOuterValue <<= b3D;
     }
     return m_aOuterValue;
@@ -1487,8 +1487,10 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
 
     rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
     rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
-    sal_Int32 nDimension = ::chart::DiagramHelper::getDimension( xDiagram );
-    if( !(xChartDoc.is() && xDiagram.is() && nDimension == 2) )
+    if( !xChartDoc || !xDiagram )
+        return;
+    sal_Int32 nDimension = xDiagram->getDimension();
+    if( nDimension != 2 )
         return;
 
     rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = xChartDoc->getTypeManager();

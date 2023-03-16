@@ -236,7 +236,7 @@ void ControllerState::update(
     if( xGivenDataSeries.is())
     {
         bMayAddMenuTrendline = true;
-        sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
+        sal_Int32 nDimensionCount = xDiagram->getDimension();
         rtl::Reference< ::chart::ChartType > xFirstChartType(
             DataSeriesHelper::getChartTypeOfSeries( xGivenDataSeries, xDiagram ));
 
@@ -399,7 +399,9 @@ void ModelState::update( const rtl::Reference<::chart::ChartModel> & xModel )
 
     bIsReadOnly = xModel->isReadonly();
 
-    sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
+    sal_Int32 nDimensionCount = 0;
+    if (xDiagram)
+        nDimensionCount = xDiagram->getDimension();
 
     rtl::Reference< ChartType > xFirstChartType;
     if (xDiagram)

@@ -433,7 +433,9 @@ void ChartElementsPanel::updateData()
         return;
 
     rtl::Reference< Diagram > xDiagram(ChartModelHelper::findDiagram(mxModel));
-    sal_Int32 nDimension = DiagramHelper::getDimension(xDiagram);
+    sal_Int32 nDimension = 0;
+    if (xDiagram)
+        nDimension = xDiagram->getDimension();
     SolarMutexGuard aGuard;
 
     mxCBLegend->set_active(isLegendVisible(mxModel));

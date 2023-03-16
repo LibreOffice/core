@@ -886,7 +886,7 @@ void AxisHelper::getAxisOrGridPossibilities( Sequence< sal_Bool >& rPossibilityL
     rPossibilityList.realloc(6);
     sal_Bool* pPossibilityList = rPossibilityList.getArray();
 
-    sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
+    sal_Int32 nDimensionCount = xDiagram->getDimension();
 
     //set possibilities:
     sal_Int32 nIndex=0;

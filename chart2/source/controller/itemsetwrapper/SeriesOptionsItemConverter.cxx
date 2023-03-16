@@ -87,7 +87,7 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
             m_bClockwise = (aScale.Orientation == chart2::AxisOrientation_REVERSE);
         }
 
-        sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
+        sal_Int32 nDimensionCount = xDiagram->getDimension();
         m_bSupportingOverlapAndGapWidthProperties = ChartTypeHelper::isSupportingOverlapAndGapWidthProperties( xChartType, nDimensionCount );
 
         if( m_bSupportingOverlapAndGapWidthProperties )

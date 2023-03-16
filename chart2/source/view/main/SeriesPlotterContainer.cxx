@@ -138,7 +138,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
     if (rChartModel.hasInternalDataProvider() && xDiagram->isSupportingDateAxis())
         m_nDefaultDateNumberFormat = DiagramHelper::getDateNumberFormat(xNumberFormatsSupplier);
 
-    sal_Int32 nDimensionCount = DiagramHelper::getDimension(xDiagram);
+    sal_Int32 nDimensionCount = xDiagram->getDimension();
     if (!nDimensionCount)
     {
         //@todo handle mixed dimension

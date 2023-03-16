@@ -1366,6 +1366,80 @@ void Diagram::replaceCoordinateSystem(
     }
 }
 
+sal_Int32 Diagram::getDimension()
+{
+    // -1: not yet set
+    sal_Int32 nResult = -1;
+
+    try
+    {
+        for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : getBaseCoordinateSystems() )
+        {
+            if(xCooSys.is())
+            {
+                nResult = xCooSys->getDimension();
+                break;
+            }
+        }
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+
+    return nResult;
+}
+
+void Diagram::setDimension( sal_Int32 nNewDimensionCount )
+{
+    if( getDimension() == nNewDimensionCount )
+        return;
+
+    try
+    {
+        bool rbFound = false;
+        bool rbAmbiguous = true;
+        StackMode eStackMode = DiagramHelper::getStackMode( this, rbFound, rbAmbiguous );
+        bool bIsSupportingOnlyDeepStackingFor3D=false;
+
+        //change all coordinate systems:
+        auto aCoordSystems = getBaseCoordinateSystems();
+        for( rtl::Reference<BaseCoordinateSystem> const & xOldCooSys : aCoordSystems )
+        {
+            rtl::Reference< BaseCoordinateSystem > xNewCooSys;
+
+            const std::vector< rtl::Reference< ChartType > > aChartTypeList( xOldCooSys->getChartTypes2() );
+            for( rtl::Reference< ChartType > const & xChartType : aChartTypeList )
+            {
+                bIsSupportingOnlyDeepStackingFor3D = ChartTypeHelper::isSupportingOnlyDeepStackingFor3D( xChartType );
+                if(!xNewCooSys.is())
+                {
+                    xNewCooSys = dynamic_cast<BaseCoordinateSystem*>(xChartType->createCoordinateSystem( nNewDimensionCount ).get());
+                    assert(xNewCooSys);
+                    break;
+                }
+                //@todo make sure that all following charttypes are also capable of the new dimension
+                //otherwise separate them in a different group
+                //BM: might be done in replaceCoordinateSystem()
+            }
+
+            // replace the old coordinate system at all places where it was used
+            replaceCoordinateSystem( xOldCooSys, xNewCooSys );
+        }
+
+        //correct stack mode if necessary
+        if( nNewDimensionCount==3 && eStackMode != StackMode::ZStacked && bIsSupportingOnlyDeepStackingFor3D )
+            DiagramHelper::setStackMode( this, StackMode::ZStacked );
+        else if( nNewDimensionCount==2 && eStackMode == StackMode::ZStacked )
+            DiagramHelper::setStackMode( this, StackMode::NONE );
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+}
+
+
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

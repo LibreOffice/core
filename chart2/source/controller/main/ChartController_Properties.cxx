@@ -205,7 +205,7 @@ wrapper::ItemConverter* createItemConverter(
                 rtl::Reference< ChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
 
                 rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
-                sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
+                sal_Int32 nDimensionCount = xDiagram->getDimension();
                 if( !ChartTypeHelper::isSupportingAreaProperties( xChartType, nDimensionCount ) )
                     eMapTo = wrapper::GraphicObjectType::LineDataPoint;
 

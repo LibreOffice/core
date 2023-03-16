@@ -273,6 +273,21 @@ public:
         const rtl::Reference< ::chart::BaseCoordinateSystem > & xCooSysToReplace,
         const rtl::Reference< ::chart::BaseCoordinateSystem > & xReplacement );
 
+
+    /** Returns the dimension found for all chart types in the tree.  If the
+        dimension is not unique, 0 is returned.
+     */
+    sal_Int32 getDimension();
+
+    /** Sets the dimension of the diagram given.
+
+        1. Sets the dimension of all used ChartTypes
+        2. Adapts the DataSeriesTree to reflect the new dimension
+        3. If new coordinate-systems have to be created, adapts the
+           XCoordinateSystemContainer of the diagram.
+     */
+    void setDimension( sal_Int32 nNewDimensionCount );
+
 private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
