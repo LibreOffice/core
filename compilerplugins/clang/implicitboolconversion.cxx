@@ -691,12 +691,32 @@ bool ImplicitBoolConversion::VisitImplicitCastExpr(
     if (isBool(compat::getSubExprAsWritten(expr)) && !isBool(expr)) {
         // Ignore NoOp from 'sal_Bool' (aka 'unsigned char') to 'const unsigned
         // char' in makeAny(b) with b of type sal_Bool:
-        if (expr->getCastKind() != CK_NoOp) {
-            if (nested.empty()) {
-                reportWarning(expr);
-            } else {
-                nested.top().push_back(expr);
+        if (expr->getCastKind() == CK_NoOp) {
+            return true;
+        }
+        // Ignore implicit conversions from bool to int in
+        //
+        //   #define _G_STR_NONNULL(x) (x + !x)
+        //
+        // from
+        // <https://gitlab.gnome.org/GNOME/glib/-/commit/48730d2b30473c5eeda2badf9a65d380304477c3>
+        // "gstrfuncs: Add back x + !x warning workaround":
+        if (auto const sub = dyn_cast<UnaryOperator>(compat::getSubExprAsWritten(expr))) {
+            if (sub->getOpcode() == UO_LNot) {
+                auto const l = expr->getBeginLoc();
+                if (compiler.getSourceManager().isMacroBodyExpansion(l)
+                    && Lexer::getImmediateMacroName(
+                            l, compiler.getSourceManager(), compiler.getLangOpts())
+                        == "_G_STR_NONNULL")
+                {
+                    return true;
+                }
             }
+        }
+        if (nested.empty()) {
+            reportWarning(expr);
+        } else {
+            nested.top().push_back(expr);
         }
         return true;
     }
