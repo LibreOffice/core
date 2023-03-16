@@ -10,7 +10,6 @@ from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from org.libreoffice.unotest import systemPathToFileUrl
 from uitest.uihelper.common import select_by_text
-from uitest.uihelper.common import get_state_as_dict
 from tempfile import TemporaryDirectory
 import os.path
 
