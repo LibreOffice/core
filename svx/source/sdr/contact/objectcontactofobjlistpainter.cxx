@@ -152,6 +152,17 @@ bool ObjectContactOfObjListPainter::isExportTaggedPDF() const
     return false;
 }
 
+::vcl::PDFExtOutDevData const* ObjectContactOfObjListPainter::GetPDFExtOutDevData() const
+{
+    if (!isOutputToPDFFile())
+    {
+        return nullptr;
+    }
+    vcl::PDFExtOutDevData *const pPDFExtOutDevData(
+        dynamic_cast<vcl::PDFExtOutDevData*>(mrTargetOutputDevice.GetExtOutDevData()));
+    return pPDFExtOutDevData;
+}
+
 OutputDevice* ObjectContactOfObjListPainter::TryToGetOutputDevice() const
 {
     return &mrTargetOutputDevice;

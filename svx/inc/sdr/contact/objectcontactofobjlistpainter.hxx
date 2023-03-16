@@ -78,6 +78,7 @@ public:
     // pdf export? Default is false
     virtual bool isOutputToPDFFile() const override;
     virtual bool isExportTaggedPDF() const override;
+    virtual ::vcl::PDFExtOutDevData const* GetPDFExtOutDevData() const override;
 
     virtual OutputDevice* TryToGetOutputDevice() const override;
 };

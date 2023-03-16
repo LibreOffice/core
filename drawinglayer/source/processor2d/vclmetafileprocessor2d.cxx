@@ -2449,6 +2449,7 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
                 case vcl::PDFWriter::Table:
                 case vcl::PDFWriter::Formula:
                 case vcl::PDFWriter::Figure:
+                case vcl::PDFWriter::Annot:
                 {
                     auto const range(rStructureTagCandidate.getB2DRange(getViewInformation2D()));
                     tools::Rectangle const aLogicRect(
@@ -2459,6 +2460,10 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
                 }
                 default:
                     break;
+            }
+            if (rTagElement == vcl::PDFWriter::Annot)
+            {
+                mpPDFExtOutDevData->SetStructureAnnotIds(rStructureTagCandidate.GetAnnotIds());
             }
             if (rTagElement == vcl::PDFWriter::TableHeader)
             {

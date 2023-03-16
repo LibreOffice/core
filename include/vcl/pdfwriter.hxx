@@ -127,7 +127,7 @@ public:
         Table, TableRow, TableHeader, TableData,
 
         // inline level elements
-        Span, Quote, Note, Reference, BibEntry, Code, Link,
+        Span, Quote, Note, Reference, BibEntry, Code, Link, Annot,
 
         // illustration elements
         Figure, Formula, Form
@@ -1146,6 +1146,11 @@ The following structure describes the permissions used in PDF security
     the new bounding box for the structural element
      */
     void SetStructureBoundingBox( const tools::Rectangle& rRect );
+
+    /** set the annotations that should be referenced as children of the
+        current structural element.
+     */
+    void SetStructureAnnotIds(::std::vector<sal_Int32> const& rAnnotIds);
 
     /** set the ActualText attribute of a structural element
 
