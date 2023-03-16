@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <algorithm>
+#include <bitset>
 #include <cassert>
 #include <cstdlib>
 #include <map>
@@ -1660,6 +1661,7 @@ void ConstantGroup::dumpHdlFile(
     OUString headerDefine(dumpHeaderDefine(out, u"HDL"));
     out << "\n";
     addDefaultHIncludes(includes);
+    includes.addRtlUstringHxx();
     includes.dump(out, nullptr, true);
     out << "\n";
     if (codemaker::cppumaker::dumpNamespaceOpen(out, name_, true)) {
@@ -1685,6 +1687,10 @@ void ConstantGroup::dumpHppFile(
 
 void ConstantGroup::dumpDeclaration(FileStream & out)
 {
+    unoidl::ConstantValue::Type largestType = unoidl::ConstantValue::TYPE_BOOLEAN;
+    OUString largestTypeName = "sal_Bool";
+    bool haveFloatingPoint = false;
+
     for (const unoidl::ConstantGroupEntity::Member& member : entity_->getMembers()) {
         out << "static const ";
         switch (member.value.type) {
@@ -1693,30 +1699,60 @@ void ConstantGroup::dumpDeclaration(FileStream & out)
             break;
         case unoidl::ConstantValue::TYPE_BYTE:
             out << "::sal_Int8";
+            if (largestType < unoidl::ConstantValue::TYPE_BYTE) {
+                largestType = unoidl::ConstantValue::TYPE_BYTE;
+                largestTypeName = "sal_Int8";
+            }
             break;
         case unoidl::ConstantValue::TYPE_SHORT:
             out << "::sal_Int16";
+            if (largestType < unoidl::ConstantValue::TYPE_SHORT) {
+                largestType = unoidl::ConstantValue::TYPE_SHORT;
+                largestTypeName = "sal_Int16";
+            }
             break;
         case unoidl::ConstantValue::TYPE_UNSIGNED_SHORT:
             out << "::sal_uInt16";
+            if (largestType < unoidl::ConstantValue::TYPE_UNSIGNED_SHORT) {
+                largestType = unoidl::ConstantValue::TYPE_UNSIGNED_SHORT;
+                largestTypeName = "sal_uInt16";
+            }
             break;
         case unoidl::ConstantValue::TYPE_LONG:
             out << "::sal_Int32";
+            if (largestType < unoidl::ConstantValue::TYPE_LONG) {
+                largestType = unoidl::ConstantValue::TYPE_LONG;
+                largestTypeName = "sal_Int32";
+            }
             break;
         case unoidl::ConstantValue::TYPE_UNSIGNED_LONG:
             out << "::sal_uInt32";
+            if (largestType < unoidl::ConstantValue::TYPE_UNSIGNED_LONG) {
+                largestType = unoidl::ConstantValue::TYPE_UNSIGNED_LONG;
+                largestTypeName = "sal_uInt32";
+            }
             break;
         case unoidl::ConstantValue::TYPE_HYPER:
             out << "::sal_Int64";
+            if (largestType < unoidl::ConstantValue::TYPE_HYPER) {
+                largestType = unoidl::ConstantValue::TYPE_HYPER;
+                largestTypeName = "sal_Int64";
+            }
             break;
         case unoidl::ConstantValue::TYPE_UNSIGNED_HYPER:
             out << "::sal_uInt64";
+            if (largestType < unoidl::ConstantValue::TYPE_UNSIGNED_HYPER) {
+                largestType = unoidl::ConstantValue::TYPE_UNSIGNED_HYPER;
+                largestTypeName = "sal_uInt64";
+            }
             break;
         case unoidl::ConstantValue::TYPE_FLOAT:
             out << "float";
+            haveFloatingPoint = true;
             break;
         case unoidl::ConstantValue::TYPE_DOUBLE:
             out << "double";
+            haveFloatingPoint = true;
             break;
         }
         out << " " << member.name << " = ";
@@ -1769,6 +1805,129 @@ void ConstantGroup::dumpDeclaration(FileStream & out)
             break;
         }
         out << ";\n";
+    }
+
+    // If there are only integral constants, generate a function to
+    // produce a symbolic string of a value of the type.
+
+    if (!haveFloatingPoint) {
+        out << "\n"
+              "#ifdef LIBO_INTERNAL_ONLY\n";
+        out << "inline ::rtl::OUString to_string(::" << largestTypeName << " input_value) {\n";
+
+        out << "    switch (input_value) {\n";
+
+        std::set<sal_uInt64> handledValues;
+
+        // Go through each constant and generate a case for exactly
+        // that, unless there was another constant with the same
+        // value.
+        for (const unoidl::ConstantGroupEntity::Member& member : entity_->getMembers()) {
+            bool skip = false;
+            switch (member.value.type) {
+            case unoidl::ConstantValue::TYPE_BOOLEAN:
+                if (!handledValues.insert(static_cast<sal_uInt64>(member.value.booleanValue)).second)
+                    skip = true;
+                break;
+            case unoidl::ConstantValue::TYPE_BYTE:
+                if (!handledValues.insert(static_cast<sal_uInt64>(member.value.byteValue)).second)
+                    skip = true;
+                break;
+            case unoidl::ConstantValue::TYPE_SHORT:
+                if (!handledValues.insert(static_cast<sal_uInt64>(member.value.shortValue)).second)
+                    skip = true;
+                break;
+            case unoidl::ConstantValue::TYPE_UNSIGNED_SHORT:
+                if (!handledValues.insert(static_cast<sal_uInt64>(member.value.unsignedShortValue)).second)
+                    skip = true;
+                break;
+            case unoidl::ConstantValue::TYPE_LONG:
+                if (!handledValues.insert(static_cast<sal_uInt64>(member.value.longValue)).second)
+                    skip = true;
+                break;
+            case unoidl::ConstantValue::TYPE_UNSIGNED_LONG:
+                if (!handledValues.insert(static_cast<sal_uInt64>(member.value.unsignedLongValue)).second)
+                    skip = true;
+                break;
+            case unoidl::ConstantValue::TYPE_HYPER:
+                if (!handledValues.insert(static_cast<sal_uInt64>(member.value.hyperValue)).second)
+                    skip = true;
+                break;
+            case unoidl::ConstantValue::TYPE_UNSIGNED_HYPER:
+                if (!handledValues.insert(member.value.unsignedHyperValue).second)
+                    skip = true;
+                break;
+            default:
+                assert(false); // Can not happen
+            }
+
+            if (!skip)
+                out << "    case (" << largestTypeName << ")" << member.name << ": return \"" << member.name << "\";\n";
+        }
+        out << "    default:\n";
+
+        // Next generate code to check for each individual bit, for
+        // the constants that are single bit values.
+
+        handledValues.clear();
+
+        out << "        ::rtl::OUString result_string;\n"
+               "        " << largestTypeName << " accum_value = input_value;\n";
+        for (const unoidl::ConstantGroupEntity::Member& member : entity_->getMembers()) {
+            bool skip = false;
+            switch (member.value.type) {
+            case unoidl::ConstantValue::TYPE_BOOLEAN:
+                if (!member.value.booleanValue || !handledValues.insert(static_cast<sal_uInt64>(member.value.booleanValue)).second)
+                    skip = true;
+                break;
+            case unoidl::ConstantValue::TYPE_BYTE:
+                if (std::bitset<8>(member.value.byteValue).count() != 1 || !handledValues.insert(static_cast<sal_uInt64>(member.value.byteValue)).second)
+                    skip = true;
+                break;
+            case unoidl::ConstantValue::TYPE_SHORT:
+                if (std::bitset<16>(member.value.shortValue).count() != 1 || !handledValues.insert(static_cast<sal_uInt64>(member.value.shortValue)).second)
+                    skip = true;
+                break;
+            case unoidl::ConstantValue::TYPE_UNSIGNED_SHORT:
+                if (std::bitset<16>(member.value.unsignedShortValue).count() != 1 || !handledValues.insert(static_cast<sal_uInt64>(member.value.unsignedShortValue)).second)
+                    skip = true;
+                break;
+            case unoidl::ConstantValue::TYPE_LONG:
+                if (std::bitset<32>(member.value.longValue).count() != 1 || !handledValues.insert(static_cast<sal_uInt64>(member.value.longValue)).second)
+                    skip = true;
+                break;
+            case unoidl::ConstantValue::TYPE_UNSIGNED_LONG:
+                if (std::bitset<32>(member.value.unsignedLongValue).count() != 1 || !handledValues.insert(static_cast<sal_uInt64>(member.value.unsignedLongValue)).second)
+                    skip = true;
+                break;
+            case unoidl::ConstantValue::TYPE_HYPER:
+                if (std::bitset<64>(member.value.hyperValue).count() != 1 || !handledValues.insert(static_cast<sal_uInt64>(member.value.hyperValue)).second)
+                    skip = true;
+                break;
+            case unoidl::ConstantValue::TYPE_UNSIGNED_HYPER:
+                if (std::bitset<64>(member.value.unsignedHyperValue).count() != 1 || !handledValues.insert(member.value.unsignedHyperValue).second)
+                    skip = true;
+                break;
+            default:
+                assert(false);
+            }
+
+            if (!skip)
+                out << "        if ((accum_value&" << member.name << ") == (" << largestTypeName << ")" << member.name << ") {\n"
+                       "            if (!result_string.isEmpty())\n"
+                       "                result_string += \"+\";\n"
+                       "            result_string += \"" << member.name << "\";\n"
+                       "            accum_value &= ~" << member.name << ";\n"
+                       "        }\n";
+        }
+        out << "        if (accum_value == 0 && !result_string.isEmpty())\n"
+               "            return result_string;\n"
+               "    }\n";
+
+        out << "    return ::rtl::OUString::number(input_value);\n"
+               "}\n"
+               "#endif\n";
+        // The caller takes care of finally calling dumpNamespaceClose().
     }
 }
 
