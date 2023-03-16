@@ -305,8 +305,8 @@ void ChartTypeTabPage::initializePage()
         return;
     rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = m_xChartModel->getTypeManager();
     rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( m_xChartModel );
-    DiagramHelper::tTemplateWithServiceName aTemplate =
-        DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
+    Diagram::tTemplateWithServiceName aTemplate =
+        xDiagram->getTemplate( xChartTypeManager );
     OUString aServiceName( aTemplate.sServiceName );
 
     bool bFound = false;

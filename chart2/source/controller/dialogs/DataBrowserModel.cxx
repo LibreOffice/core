@@ -755,8 +755,8 @@ void DataBrowserModel::updateFromModel()
 
     // set template at DialogModel
     rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = m_xChartDocument->getTypeManager();
-    DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-        DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
+    Diagram::tTemplateWithServiceName aTemplateAndService =
+        xDiagram->getTemplate( xChartTypeManager );
     if( aTemplateAndService.xChartTypeTemplate.is())
         m_apDialogModel->setTemplate( aTemplateAndService.xChartTypeTemplate );
 

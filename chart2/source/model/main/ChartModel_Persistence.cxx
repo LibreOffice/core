@@ -718,7 +718,7 @@ void SAL_CALL ChartModel::modified( const lang::EventObject& rEvenObject)
             rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = getTypeManager();
             rtl::Reference<Diagram> xDiagram(getFirstChartDiagram());
 
-            DiagramHelper::tTemplateWithServiceName aTemplateAndService = DiagramHelper::getTemplateForDiagram(xDiagram, xChartTypeManager);
+            Diagram::tTemplateWithServiceName aTemplateAndService = xDiagram->getTemplate(xChartTypeManager);
             aTemplateAndService.xChartTypeTemplate->changeDiagramData(xDiagram, xDataSource, aArguments);
         }
         catch (const uno::Exception &)

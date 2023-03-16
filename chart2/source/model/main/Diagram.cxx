@@ -401,7 +401,7 @@ void SAL_CALL Diagram::setDiagramData(
     const Sequence< beans::PropertyValue >& aArguments )
 {
     rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = new ::chart::ChartTypeManager( m_xContext );
-    DiagramHelper::tTemplateWithServiceName aTemplateAndService = DiagramHelper::getTemplateForDiagram( this, xChartTypeManager );
+    Diagram::tTemplateWithServiceName aTemplateAndService = getTemplate( xChartTypeManager );
     rtl::Reference< ::chart::ChartTypeTemplate > xTemplate( aTemplateAndService.xChartTypeTemplate );
     if( !xTemplate.is() )
         xTemplate = xChartTypeManager->createTemplate( "com.sun.star.chart2.template.Column" );
@@ -1620,6 +1620,43 @@ bool Diagram::getVertical( bool& rbFound, bool& rbAmbiguous )
         }
     }
     return bValue;
+}
+
+Diagram::tTemplateWithServiceName
+    Diagram::getTemplate(
+        const rtl::Reference< ::chart::ChartTypeManager > & xChartTypeManager )
+{
+    tTemplateWithServiceName aResult;
+
+    if( !xChartTypeManager )
+        return aResult;
+
+    Sequence< OUString > aServiceNames( xChartTypeManager->getAvailableServiceNames());
+    const sal_Int32 nLength = aServiceNames.getLength();
+
+    bool bTemplateFound = false;
+
+    for( sal_Int32 i = 0; ! bTemplateFound && i < nLength; ++i )
+    {
+        try
+        {
+            rtl::Reference< ::chart::ChartTypeTemplate > xTempl =
+                xChartTypeManager->createTemplate( aServiceNames[ i ] );
+
+            if (xTempl.is() && xTempl->matchesTemplate2(this, true))
+            {
+                aResult.xChartTypeTemplate = xTempl;
+                aResult.sServiceName = aServiceNames[ i ];
+                bTemplateFound = true;
+            }
+        }
+        catch( const uno::Exception & )
+        {
+            DBG_UNHANDLED_EXCEPTION("chart2");
+        }
+    }
+
+    return aResult;
 }
 
 } //  namespace chart

@@ -54,23 +54,6 @@ class LabeledDataSequence;
 class OOO_DLLPUBLIC_CHARTTOOLS DiagramHelper
 {
 public:
-    struct tTemplateWithServiceName {
-        rtl::Reference< ::chart::ChartTypeTemplate > xChartTypeTemplate;
-        OUString sServiceName;
-    };
-
-    /** tries to find a template in the chart-type manager that matches the
-        given diagram.
-
-        @return
-            A pair containing a template with the correct properties set as
-            first entry and the service name of the templates second entry.  If
-            no template was found both elements are empty.
-     */
-    static tTemplateWithServiceName
-        getTemplateForDiagram(
-            const rtl::Reference< ::chart::Diagram > & xDiagram,
-            const rtl::Reference< ::chart::ChartTypeManager > & xChartTypeManager);
 
     /** Retrieves the stackmode of the first DataSeries or none. If the series have differing stack
         modes, rbAmbiguous is set to true. If no series is there rbFound is set to false.

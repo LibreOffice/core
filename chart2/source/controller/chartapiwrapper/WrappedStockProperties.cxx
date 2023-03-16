@@ -86,8 +86,8 @@ void WrappedStockProperty::setPropertyValue( const css::uno::Any& rOuterValue, c
         return;
 
     rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = xChartDoc->getTypeManager();
-    DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-            DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
+    Diagram::tTemplateWithServiceName aTemplateAndService =
+            xDiagram->getTemplate( xChartTypeManager );
 
     rtl::Reference< ::chart::ChartTypeTemplate > xTemplate =
             getNewTemplate( bNewValue, aTemplateAndService.sServiceName, xChartTypeManager );
@@ -142,8 +142,8 @@ css::uno::Any WrappedVolumeProperty::getPropertyValue( const css::uno::Reference
         if( !aSeriesVector.empty() )
         {
             rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = xChartDoc->getTypeManager();
-            DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-                    DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
+            Diagram::tTemplateWithServiceName aTemplateAndService =
+                    xDiagram->getTemplate( xChartTypeManager );
 
             if(    aTemplateAndService.sServiceName == "com.sun.star.chart2.template.StockVolumeLowHighClose"
                 || aTemplateAndService.sServiceName == "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" )
@@ -211,8 +211,8 @@ css::uno::Any WrappedUpDownProperty::getPropertyValue( const css::uno::Reference
         if( !aSeriesVector.empty() )
         {
             rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = xChartDoc->getTypeManager();
-            DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-                    DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
+            Diagram::tTemplateWithServiceName aTemplateAndService =
+                    xDiagram->getTemplate( xChartTypeManager );
 
             if(    aTemplateAndService.sServiceName == "com.sun.star.chart2.template.StockOpenLowHighClose"
                 || aTemplateAndService.sServiceName == "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" )

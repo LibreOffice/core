@@ -65,10 +65,8 @@ DocumentChartTypeTemplateProvider::DocumentChartTypeTemplateProvider(
     rtl::Reference< Diagram > xDia( xDoc->getFirstChartDiagram());
     if( xDia.is())
     {
-        DiagramHelper::tTemplateWithServiceName aResult(
-            DiagramHelper::getTemplateForDiagram(
-                xDia,
-                xDoc->getTypeManager() ));
+        Diagram::tTemplateWithServiceName aResult(
+            xDia->getTemplate( xDoc->getTypeManager() ));
         m_xTemplate = aResult.xChartTypeTemplate;
     }
 }

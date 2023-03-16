@@ -75,44 +75,6 @@ using ::com::sun::star::chart2::XAnyDescriptionAccess;
 namespace chart
 {
 
-DiagramHelper::tTemplateWithServiceName
-    DiagramHelper::getTemplateForDiagram(
-        const rtl::Reference< Diagram > & xDiagram,
-        const rtl::Reference< ::chart::ChartTypeManager > & xChartTypeManager )
-{
-    DiagramHelper::tTemplateWithServiceName aResult;
-
-    if( ! (xChartTypeManager.is() && xDiagram.is()))
-        return aResult;
-
-    Sequence< OUString > aServiceNames( xChartTypeManager->getAvailableServiceNames());
-    const sal_Int32 nLength = aServiceNames.getLength();
-
-    bool bTemplateFound = false;
-
-    for( sal_Int32 i = 0; ! bTemplateFound && i < nLength; ++i )
-    {
-        try
-        {
-            rtl::Reference< ::chart::ChartTypeTemplate > xTempl =
-                xChartTypeManager->createTemplate( aServiceNames[ i ] );
-
-            if (xTempl.is() && xTempl->matchesTemplate2(xDiagram, true))
-            {
-                aResult.xChartTypeTemplate = xTempl;
-                aResult.sServiceName = aServiceNames[ i ];
-                bTemplateFound = true;
-            }
-        }
-        catch( const uno::Exception & )
-        {
-            DBG_UNHANDLED_EXCEPTION("chart2");
-        }
-    }
-
-    return aResult;
-}
-
 StackMode DiagramHelper::getStackModeFromChartType(
     const rtl::Reference< ChartType > & xChartType,
     bool& rbFound, bool& rbAmbiguous,

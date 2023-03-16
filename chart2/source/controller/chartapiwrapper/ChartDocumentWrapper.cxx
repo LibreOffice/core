@@ -1192,8 +1192,8 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                     rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartDoc );
                     ThreeDLookScheme e3DScheme = ThreeDHelper::detectScheme( xDiagram );
                     rtl::Reference< ::chart::ChartTypeManager > xTemplateManager = xChartDoc->getTypeManager();
-                    DiagramHelper::tTemplateWithServiceName aTemplateWithService(
-                        DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateManager ));
+                    Diagram::tTemplateWithServiceName aTemplateWithService(
+                        xDiagram->getTemplate( xTemplateManager ));
                     if( aTemplateWithService.xChartTypeTemplate.is())
                         aTemplateWithService.xChartTypeTemplate->resetStyles2( xDiagram );//#i109371#
                     xTemplate->changeDiagram( xDiagram );

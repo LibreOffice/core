@@ -42,6 +42,8 @@ namespace chart
 class Axis;
 class BaseCoordinateSystem;
 class ChartType;
+class ChartTypeManager;
+class ChartTypeTemplate;
 class DataSeries;
 class Legend;
 class DataTable;
@@ -314,6 +316,22 @@ public:
         "vertical==true" for bar charts, "vertical==false" for column charts
     */
     bool getVertical( bool& rbOutFoundResult, bool& rbOutAmbiguousResult );
+
+    struct tTemplateWithServiceName {
+        rtl::Reference< ::chart::ChartTypeTemplate > xChartTypeTemplate;
+        OUString sServiceName;
+    };
+
+    /** tries to find a template in the chart-type manager that matches this
+        diagram.
+
+        @return
+            A pair containing a template with the correct properties set as
+            first entry and the service name of the templates second entry.  If
+            no template was found both elements are empty.
+     */
+    tTemplateWithServiceName
+        getTemplate(const rtl::Reference< ::chart::ChartTypeManager > & xChartTypeManager);
 
 private:
     // ____ XModifyListener ____

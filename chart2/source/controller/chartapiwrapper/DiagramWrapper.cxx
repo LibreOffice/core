@@ -588,8 +588,8 @@ OUString SAL_CALL DiagramWrapper::getDiagramType()
         }
 
         rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = xChartDoc->getTypeManager();
-        DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-            DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
+        Diagram::tTemplateWithServiceName aTemplateAndService =
+            xDiagram->getTemplate( xChartTypeManager );
 
         aRet = lcl_getDiagramType( aTemplateAndService.sServiceName );
     }
@@ -1455,8 +1455,8 @@ bool WrappedNumberOfLinesProperty::detectInnerValue( uno::Any& rInnerValue ) con
         if( !aSeriesVector.empty() )
         {
             rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = xChartDoc->getTypeManager();
-            DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-                    DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
+            Diagram::tTemplateWithServiceName aTemplateAndService =
+                    xDiagram->getTemplate( xChartTypeManager );
             if( aTemplateAndService.sServiceName == "com.sun.star.chart2.template.ColumnWithLine" )
             {
                 try
@@ -1494,8 +1494,8 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
         return;
 
     rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = xChartDoc->getTypeManager();
-    DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-            DiagramHelper::getTemplateForDiagram( xDiagram, xChartTypeManager );
+    Diagram::tTemplateWithServiceName aTemplateAndService =
+            xDiagram->getTemplate( xChartTypeManager );
 
     rtl::Reference< ChartTypeTemplate > xTemplate;
     if( aTemplateAndService.sServiceName == "com.sun.star.chart2.template.ColumnWithLine" )
