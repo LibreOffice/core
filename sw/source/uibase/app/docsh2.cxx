@@ -1197,11 +1197,12 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 // Ok.  I did my best.
                 break;
 
-            SfxStringItem aApp(SID_DOC_SERVICE, "com.sun.star.text.TextDocument");
-            SfxStringItem aTarget(SID_TARGETNAME, "_blank");
-            pViewShell->GetDispatcher()->ExecuteList(SID_OPENDOC,
-                SfxCallMode::API|SfxCallMode::SYNCHRON,
-                { &aApp, &aTarget });
+            if (SfxDispatcher* pDispatch = pViewShell->GetDispatcher())
+            {
+                SfxStringItem aApp(SID_DOC_SERVICE, "com.sun.star.text.TextDocument");
+                SfxStringItem aTarget(SID_TARGETNAME, "_blank");
+                pDispatch->ExecuteList(SID_OPENDOC, SfxCallMode::API|SfxCallMode::SYNCHRON, { &aApp, &aTarget });
+            }
         }
         break;
         case SID_CLASSIFICATION_APPLY:
