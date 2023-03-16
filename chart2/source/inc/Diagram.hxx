@@ -47,6 +47,7 @@ class ChartTypeTemplate;
 class DataSeries;
 class Legend;
 class DataTable;
+class RegressionCurveModel;
 enum class StackMode;
 class Wall;
 
@@ -332,6 +333,9 @@ public:
      */
     tTemplateWithServiceName
         getTemplate(const rtl::Reference< ::chart::ChartTypeManager > & xChartTypeManager);
+
+    std::vector<rtl::Reference<::chart::RegressionCurveModel> >
+        getAllRegressionCurvesNotMeanValueLine();
 
 private:
     // ____ XModifyListener ____

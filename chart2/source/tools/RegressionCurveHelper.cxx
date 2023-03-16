@@ -843,24 +843,6 @@ OUString RegressionCurveHelper::getRegressionCurveName( const Reference< XRegres
     return aResult;
 }
 
-std::vector< rtl::Reference< RegressionCurveModel > >
-    RegressionCurveHelper::getAllRegressionCurvesNotMeanValueLine(
-        const rtl::Reference< Diagram > & xDiagram )
-{
-    std::vector< rtl::Reference< RegressionCurveModel > > aResult;
-    std::vector< rtl::Reference< DataSeries > > aSeries( xDiagram->getDataSeries());
-    for (auto const& elem : aSeries)
-    {
-        for( rtl::Reference< RegressionCurveModel > const & curve : elem->getRegressionCurves2() )
-        {
-            if( ! isMeanValueLine( curve ))
-                aResult.push_back( curve );
-        }
-    }
-
-    return aResult;
-}
-
 void RegressionCurveHelper::resetEquationPosition(
     const Reference< chart2::XRegressionCurve > & xCurve )
 {

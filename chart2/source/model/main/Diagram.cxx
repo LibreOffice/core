@@ -25,6 +25,8 @@
 #include <ChartType.hxx>
 #include <DataSeriesHelper.hxx>
 #include <PropertyHelper.hxx>
+#include <RegressionCurveHelper.hxx>
+#include <RegressionCurveModel.hxx>
 #include "Wall.hxx"
 #include <ModifyListenerHelper.hxx>
 #include <UserDefinedProperties.hxx>
@@ -1653,6 +1655,23 @@ Diagram::tTemplateWithServiceName
         catch( const uno::Exception & )
         {
             DBG_UNHANDLED_EXCEPTION("chart2");
+        }
+    }
+
+    return aResult;
+}
+
+std::vector< rtl::Reference< RegressionCurveModel > >
+    Diagram::getAllRegressionCurvesNotMeanValueLine()
+{
+    std::vector< rtl::Reference< RegressionCurveModel > > aResult;
+    std::vector< rtl::Reference< DataSeries > > aSeries( getDataSeries());
+    for (auto const& elem : aSeries)
+    {
+        for( rtl::Reference< RegressionCurveModel > const & curve : elem->getRegressionCurves2() )
+        {
+            if( ! RegressionCurveHelper::isMeanValueLine( curve ))
+                aResult.push_back( curve );
         }
     }
 
