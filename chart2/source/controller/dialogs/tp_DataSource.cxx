@@ -72,8 +72,7 @@ bool lcl_UpdateCurrentSeriesName(weld::TreeView& rOutListBox)
     ::chart::SeriesEntry * pEntry = weld::fromId<::chart::SeriesEntry*>(rOutListBox.get_id(nEntry));
     if (pEntry->m_xDataSeries.is() && pEntry->m_xChartType.is())
     {
-        OUString aLabel(::chart::DataSeriesHelper::getDataSeriesLabel(
-                        pEntry->m_xDataSeries,
+        OUString aLabel(pEntry->m_xDataSeries->getLabelForRole(
                         pEntry->m_xChartType->getRoleOfSequenceForSeriesLabel()));
         if (!aLabel.isEmpty())
         {

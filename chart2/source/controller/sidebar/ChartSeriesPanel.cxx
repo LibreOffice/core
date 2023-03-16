@@ -239,7 +239,7 @@ OUString getSeriesLabel(const rtl::Reference<::chart::ChartModel>& xModel, std::
         return OUString();
 
     rtl::Reference<ChartType> xChartType = getChartType(xModel);
-    return DataSeriesHelper::getDataSeriesLabel(xSeries, xChartType->getRoleOfSequenceForSeriesLabel());
+    return xSeries->getLabelForRole(xChartType->getRoleOfSequenceForSeriesLabel());
 }
 
 OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)

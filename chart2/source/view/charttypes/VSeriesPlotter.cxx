@@ -517,7 +517,7 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Referen
                         if ( m_xChartTypeModel )
                             aRole = m_xChartTypeModel->getRoleOfSequenceForSeriesLabel();
                         const rtl::Reference< DataSeries >& xSeries( rDataSeries.getModel() );
-                        pTextList[i] = DataSeriesHelper::getDataSeriesLabel( xSeries, aRole );
+                        pTextList[i] = xSeries->getLabelForRole( aRole );
                         break;
                     }
                     case DataPointCustomLabelFieldType_PERCENTAGE:
@@ -575,7 +575,7 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Referen
                 if ( m_xChartTypeModel )
                     aRole = m_xChartTypeModel->getRoleOfSequenceForSeriesLabel();
                 const rtl::Reference< DataSeries >& xSeries( rDataSeries.getModel() );
-                pTextList[1] = DataSeriesHelper::getDataSeriesLabel( xSeries, aRole );
+                pTextList[1] = xSeries->getLabelForRole( aRole );
             }
 
             if( pLabel->ShowNumber )
@@ -2351,7 +2351,7 @@ uno::Sequence<OUString> VSeriesPlotter::getSeriesNames() const
                 rtl::Reference< DataSeries > xSeries( pSeries ? pSeries->getModel() : nullptr );
                 if( xSeries.is() )
                 {
-                    OUString aSeriesName( DataSeriesHelper::getDataSeriesLabel( xSeries, aRole ) );
+                    OUString aSeriesName( xSeries->getLabelForRole( aRole ) );
                     aRetVector.push_back( aSeriesName );
                 }
             }
@@ -2372,7 +2372,7 @@ uno::Sequence<OUString> VSeriesPlotter::getAllSeriesNames() const
     {
         if (pSeries)
         {
-            OUString aSeriesName(DataSeriesHelper::getDataSeriesLabel(pSeries->getModel(), aRole));
+            OUString aSeriesName(pSeries->getModel()->getLabelForRole(aRole));
             aRetVector.push_back(aSeriesName);
         }
     }
@@ -2812,7 +2812,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
             }
 
             // label
-            aLabelText = DataSeriesHelper::getDataSeriesLabel( rSeries.getModel(), m_xChartTypeModel.is() ? m_xChartTypeModel->getRoleOfSequenceForSeriesLabel() : "values-y");
+            aLabelText = rSeries.getModel()->getLabelForRole( m_xChartTypeModel.is() ? m_xChartTypeModel->getRoleOfSequenceForSeriesLabel() : "values-y");
             aEntry.aLabel = FormattedStringHelper::createFormattedStringSequence( xContext, aLabelText, xTextProperties );
 
             aResult.push_back(aEntry);

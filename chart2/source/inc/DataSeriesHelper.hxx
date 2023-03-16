@@ -98,16 +98,6 @@ getAllDataSequences(
 OOO_DLLPUBLIC_CHARTTOOLS rtl::Reference< ::chart::DataSource >
     getDataSource( const std::vector< rtl::Reference< ::chart::DataSeries > > & aSeries );
 
-/** Get the label of a series (e.g. for the legend)
-
-    @param rLabelSequenceRole
-        The data sequence contained in xSeries that has this role will be used
-        to take its label.
- */
-OOO_DLLPUBLIC_CHARTTOOLS OUString getDataSeriesLabel(
-    const rtl::Reference< ::chart::DataSeries > & xSeries,
-    const OUString & rLabelSequenceRole );
-
 /** Get the label of a labeled sequence including necessary automatic generation
  */
 OOO_DLLPUBLIC_CHARTTOOLS OUString getLabelForLabeledDataSequence(

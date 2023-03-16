@@ -651,11 +651,10 @@ void DataBrowser::RenewTable()
             spHeader->SetColor( nColor );
         spHeader->SetChartType( elemHeader.m_xChartType, elemHeader.m_bSwapXAndYAxis );
         spHeader->SetSeriesName(
-            DataSeriesHelper::getDataSeriesLabel(
-                        elemHeader.m_xDataSeries,
-                        (elemHeader.m_xChartType.is() ?
+            elemHeader.m_xDataSeries->getLabelForRole(
+                        elemHeader.m_xChartType.is() ?
                          elemHeader.m_xChartType->getRoleOfSequenceForSeriesLabel() :
-                         OUString("values-y"))));
+                         OUString("values-y")));
         // index is 1-based, as 0 is for the column that contains the row-numbers
         spHeader->SetRange( elemHeader.m_nStartColumn + 1, elemHeader.m_nEndColumn + 1 );
         spHeader->SetGetFocusHdl( aFocusLink );
@@ -1276,11 +1275,10 @@ void DataBrowser::RenewSeriesHeaders()
             spHeader->SetColor( nColor );
         spHeader->SetChartType( elemHeader.m_xChartType, elemHeader.m_bSwapXAndYAxis );
         spHeader->SetSeriesName(
-            DataSeriesHelper::getDataSeriesLabel(
-                        elemHeader.m_xDataSeries,
-                        (elemHeader.m_xChartType.is() ?
+            elemHeader.m_xDataSeries->getLabelForRole(
+                        elemHeader.m_xChartType.is() ?
                          elemHeader.m_xChartType->getRoleOfSequenceForSeriesLabel() :
-                         OUString( "values-y"))));
+                         OUString( "values-y")));
         spHeader->SetRange( elemHeader.m_nStartColumn + 1, elemHeader.m_nEndColumn + 1 );
         spHeader->SetGetFocusHdl( aFocusLink );
         spHeader->SetEditChangedHdl( aSeriesHeaderChangedLink );

@@ -143,6 +143,14 @@ public:
 
     const tRegressionCurveContainerType & getRegressionCurves2() const { return m_aRegressionCurves; }
 
+    /** Get the label of a series (e.g. for the legend)
+
+        @param rLabelSequenceRole
+            The data sequence contained in xSeries that has this role will be used
+            to take its label.
+     */
+    OUString getLabelForRole( const OUString & rLabelSequenceRole );
+
 private:
 
     // late initialization to call after copy-constructing

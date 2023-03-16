@@ -434,7 +434,7 @@ std::vector< DialogModel::tSeriesWithChartTypeByName >
             {
                 aResult.push_back(
                     ::chart::DialogModel::tSeriesWithChartTypeByName(
-                        ::chart::DataSeriesHelper::getDataSeriesLabel( dataSeries, aRole ),
+                        dataSeries->getLabelForRole( aRole ),
                         std::make_pair( dataSeries, rxChartType )));
             }
         }

@@ -27,11 +27,13 @@
 #include <CloneHelper.hxx>
 #include <RegressionCurveModel.hxx>
 #include <ModifyListenerHelper.hxx>
+#include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <algorithm>
 
@@ -551,6 +553,136 @@ css::uno::Sequence< OUString > SAL_CALL DataSeries::getSupportedServiceNames()
         "com.sun.star.chart2.DataSeries",
         "com.sun.star.chart2.DataPointProperties",
         "com.sun.star.beans.PropertySet" };
+}
+
+static Reference< chart2::data::XLabeledDataSequence > lcl_findLSequenceWithOnlyLabel(
+    const Sequence< Reference< chart2::data::XLabeledDataSequence > > & rDataSequences )
+{
+    Reference< chart2::data::XLabeledDataSequence > xResult;
+
+    for( auto const & labeledData : rDataSequences )
+    {
+        OSL_ENSURE( labeledData.is(), "empty LabeledDataSequence" );
+        // no values are set but a label exists
+        if( labeledData.is() &&
+            ( ! labeledData->getValues().is() &&
+              labeledData->getLabel().is()))
+        {
+            xResult.set( labeledData );
+            break;
+        }
+    }
+
+    return xResult;
+}
+
+static OUString lcl_getDataSequenceLabel( const Reference< chart2::data::XDataSequence > & xSequence )
+{
+    OUString aResult;
+
+    Reference< chart2::data::XTextualDataSequence > xTextSeq( xSequence, uno::UNO_QUERY );
+    if( xTextSeq.is())
+    {
+        Sequence< OUString > aSeq( xTextSeq->getTextualData());
+
+        const sal_Int32 nMax = aSeq.getLength() - 1;
+        OUStringBuffer aBuf;
+
+        for( sal_Int32 i = 0; i <= nMax; ++i )
+        {
+            aBuf.append( aSeq[i] );
+            if( i < nMax )
+                aBuf.append( ' ');
+        }
+        aResult = aBuf.makeStringAndClear();
+    }
+    else if( xSequence.is())
+    {
+        Sequence< uno::Any > aSeq( xSequence->getData());
+
+        const sal_Int32 nMax = aSeq.getLength() - 1;
+        OUString aVal;
+        OUStringBuffer aBuf;
+        double fNum = 0;
+
+        for( sal_Int32 i = 0; i <= nMax; ++i )
+        {
+            if( aSeq[i] >>= aVal )
+            {
+                aBuf.append( aVal );
+                if( i < nMax )
+                    aBuf.append(  ' ');
+            }
+            else if( aSeq[ i ] >>= fNum )
+            {
+                aBuf.append( fNum );
+                if( i < nMax )
+                    aBuf.append( ' ');
+            }
+        }
+        aResult = aBuf.makeStringAndClear();
+    }
+
+    return aResult;
+}
+
+static OUString getLabelForLabeledDataSequence(
+    const Reference< chart2::data::XLabeledDataSequence > & xLabeledSeq )
+{
+    OUString aResult;
+    if( xLabeledSeq.is())
+    {
+        Reference< chart2::data::XDataSequence > xSeq( xLabeledSeq->getLabel());
+        if( xSeq.is() )
+            aResult = lcl_getDataSequenceLabel( xSeq );
+        if( !xSeq.is() || aResult.isEmpty() )
+        {
+            // no label set or label content is empty -> use auto-generated one
+            Reference< chart2::data::XDataSequence > xValueSeq( xLabeledSeq->getValues() );
+            if( xValueSeq.is() )
+            {
+                Sequence< OUString > aLabels( xValueSeq->generateLabel(
+                    chart2::data::LabelOrigin_SHORT_SIDE ) );
+                // no labels returned is interpreted as: auto-generation not
+                // supported by sequence
+                if( aLabels.hasElements() )
+                    aResult=aLabels[0];
+                else
+                {
+                    //todo?: maybe use the index of the series as name
+                    //but as the index may change it would be better to have such a name persistent
+                    //what is not possible at the moment
+                    //--> maybe use the identifier as part of the name ...
+                    aResult = lcl_getDataSequenceLabel( xValueSeq );
+                }
+            }
+        }
+    }
+    return aResult;
+}
+
+OUString DataSeries::getLabelForRole( const OUString & rLabelSequenceRole )
+{
+    OUString aResult;
+
+    Reference< chart2::data::XLabeledDataSequence > xLabeledSeq(
+        ::chart::DataSeriesHelper::getDataSequenceByRole( this, rLabelSequenceRole ));
+    if( xLabeledSeq.is())
+        aResult = getLabelForLabeledDataSequence( xLabeledSeq );
+    else
+    {
+        // special case: labeled data series with only a label and no values may
+        // serve as label
+        xLabeledSeq.set( lcl_findLSequenceWithOnlyLabel( getDataSequences() ));
+        if( xLabeledSeq.is())
+        {
+            Reference< chart2::data::XDataSequence > xSeq( xLabeledSeq->getLabel());
+            if( xSeq.is())
+                aResult = lcl_getDataSequenceLabel( xSeq );
+        }
+    }
+
+    return aResult;
 }
 
 }  // namespace chart
