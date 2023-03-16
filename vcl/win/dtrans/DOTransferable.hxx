@@ -31,6 +31,7 @@
 
 #include <systools/win32/comtools.hxx>
 
+#include <mutex>
 #include <vector>
 
 // forward
@@ -84,7 +85,7 @@ private:
     const css::uno::Reference< css::uno::XComponentContext >          m_xContext;
     CDataFormatTranslator                                             m_DataFormatTranslator;
     css::uno::Reference< css::datatransfer::XMimeContentTypeFactory > m_rXMimeCntFactory;
-    ::osl::Mutex                                                      m_aMutex;
+    std::mutex                                                        m_aMutex;
     bool                                                              m_bUnicodeRegistered;
     CLIPFORMAT                                                        m_TxtFormatOnClipboard;
 

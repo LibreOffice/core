@@ -236,7 +236,7 @@ Any SAL_CALL CDOTransferable::getTransferData( const DataFlavor& aFlavor )
 {
     OSL_ASSERT( isValidFlavor( aFlavor ) );
 
-    MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     // convert dataflavor to formatetc
 
