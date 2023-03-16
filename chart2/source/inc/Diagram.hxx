@@ -266,6 +266,13 @@ public:
         const css::uno::Reference< css::uno::XComponentContext > & xContext,
         bool bAdaptAxes=true );
 
+    /** Replaces all occurrences of xCooSysToReplace in the tree with
+        xReplacement in the diagram's tree
+     */
+    SAL_DLLPRIVATE void replaceCoordinateSystem(
+        const rtl::Reference< ::chart::BaseCoordinateSystem > & xCooSysToReplace,
+        const rtl::Reference< ::chart::BaseCoordinateSystem > & xReplacement );
+
 private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

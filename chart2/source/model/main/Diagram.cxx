@@ -1342,6 +1342,30 @@ bool Diagram::attachSeriesToAxis( bool bAttachToMainAxis
     return bChanged;
 }
 
+void Diagram::replaceCoordinateSystem(
+    const rtl::Reference< BaseCoordinateSystem > & xCooSysToReplace,
+    const rtl::Reference< BaseCoordinateSystem > & xReplacement )
+{
+    // update the coordinate-system container
+    try
+    {
+        uno::Reference< chart2::data::XLabeledDataSequence > xCategories = getCategories();
+
+        // move chart types of xCooSysToReplace to xReplacement
+        xReplacement->setChartTypes( xCooSysToReplace->getChartTypes());
+
+        removeCoordinateSystem( xCooSysToReplace );
+        addCoordinateSystem( xReplacement );
+
+        if( xCategories.is() )
+            setCategories( xCategories );
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+}
+
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

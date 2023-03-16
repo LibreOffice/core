@@ -454,7 +454,7 @@ void DiagramHelper::setDimension(
             }
 
             // replace the old coordinate system at all places where it was used
-            DiagramHelper::replaceCoordinateSystem( xDiagram, xOldCooSys, xNewCooSys );
+            xDiagram->replaceCoordinateSystem( xOldCooSys, xNewCooSys );
         }
 
         //correct stack mode if necessary
@@ -462,36 +462,6 @@ void DiagramHelper::setDimension(
             DiagramHelper::setStackMode( xDiagram, StackMode::ZStacked );
         else if( nNewDimensionCount==2 && eStackMode == StackMode::ZStacked )
             DiagramHelper::setStackMode( xDiagram, StackMode::NONE );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-}
-
-void DiagramHelper::replaceCoordinateSystem(
-    const rtl::Reference< Diagram > & xDiagram,
-    const rtl::Reference< BaseCoordinateSystem > & xCooSysToReplace,
-    const rtl::Reference< BaseCoordinateSystem > & xReplacement )
-{
-    OSL_ASSERT( xDiagram.is());
-    if( ! xDiagram.is())
-        return;
-
-    // update the coordinate-system container
-
-    try
-    {
-        uno::Reference< chart2::data::XLabeledDataSequence > xCategories = xDiagram->getCategories();
-
-        // move chart types of xCooSysToReplace to xReplacement
-        xReplacement->setChartTypes( xCooSysToReplace->getChartTypes());
-
-        xDiagram->removeCoordinateSystem( xCooSysToReplace );
-        xDiagram->addCoordinateSystem( xReplacement );
-
-        if( xCategories.is() )
-            xDiagram->setCategories( xCategories );
     }
     catch( const uno::Exception & )
     {

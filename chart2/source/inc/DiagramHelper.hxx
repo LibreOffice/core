@@ -136,14 +136,6 @@ public:
         const rtl::Reference< ::chart::Diagram > & xDiagram,
         sal_Int32 nNewDimensionCount );
 
-    /** Replaces all occurrences of xCooSysToReplace in the tree with
-        xReplacement in the diagram's tree
-     */
-    SAL_DLLPRIVATE static void replaceCoordinateSystem(
-        const rtl::Reference< ::chart::Diagram > & xDiagram,
-        const rtl::Reference< ::chart::BaseCoordinateSystem > & xCooSysToReplace,
-        const rtl::Reference< ::chart::BaseCoordinateSystem > & xReplacement );
-
     static bool isSeriesAttachedToMainAxis(
         const css::uno::Reference< css::chart2::XDataSeries >& xDataSeries );
 
