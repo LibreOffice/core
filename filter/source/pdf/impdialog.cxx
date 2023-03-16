@@ -1088,7 +1088,7 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem(ImpPDFTabDialog *const pParent)
     }
 
     // The call from ImpPDFTabGeneralPage::SetFilterConfigItem() did not init
-    // the radio buttons correctly becuse ImpPDFTabOpnFtrPage did not yet exist.
+    // the radio buttons correctly because ImpPDFTabOpnFtrPage did not yet exist.
     ToggleInitialView(*pParent);
 }
 
