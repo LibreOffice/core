@@ -8,32 +8,24 @@
  */
 
 #include <sal/config.h>
+#include <test/unoapixml_test.hxx>
 
-#include <o3tl/cppunittraitshelper.hxx>
-#include <test/bootstrapfixture.hxx>
-#include <test/xmltesttools.hxx>
-#include <unotools/tempfile.hxx>
-
-#include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/sfxmodelfactory.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 
 #include <document.hxx>
 #include <smdll.hxx>
 
 #include <memory>
 
-namespace
-{
 using namespace ::com::sun::star;
 
-typedef tools::SvRef<SmDocShell> SmDocShellRef;
-
-class MathMLExportTest : public test::BootstrapFixture, public XmlTestTools
+class MathMLExportTest : public UnoApiXmlTest
 {
 public:
-    virtual void setUp() override;
-    virtual void tearDown() override;
+    MathMLExportTest()
+        : UnoApiXmlTest("starmath/qa/extras/data/")
+    {
+    }
 
     void testBlank();
     void testTdf97049();
@@ -48,72 +40,49 @@ public:
 protected:
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;
 
-    void checkMathVariant(bool bCapital, bool bSmall);
-
-private:
-    xmlDocUniquePtr exportAndParse();
-
-    SmDocShellRef mxDocShell;
+    void checkMathVariant(SmDocShell& rDocShell, bool bCapital, bool bSmall);
 };
-
-void MathMLExportTest::setUp()
-{
-    BootstrapFixture::setUp();
-    SmGlobals::ensure();
-    mxDocShell
-        = new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS
-                         | SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
-}
-
-void MathMLExportTest::tearDown()
-{
-    if (mxDocShell.is())
-        mxDocShell->DoClose();
-    BootstrapFixture::tearDown();
-}
 
 void MathMLExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
 {
     xmlXPathRegisterNs(pXmlXPathCtx, BAD_CAST("m"), BAD_CAST("http://www.w3.org/1998/Math/MathML"));
 }
 
-xmlDocUniquePtr MathMLExportTest::exportAndParse()
-{
-    utl::TempFileNamed aTempFile;
-    aTempFile.EnableKillingFile();
-    SfxMedium aStoreMedium(aTempFile.GetURL(), StreamMode::STD_WRITE);
-    std::shared_ptr<const SfxFilter> pExportFilter = SfxFilter::GetFilterByName(MATHML_XML);
-    aStoreMedium.SetFilter(pExportFilter);
-    CPPUNIT_ASSERT(mxDocShell->ConvertTo(aStoreMedium));
-    aStoreMedium.Commit();
-    xmlDocUniquePtr pDoc = parseXml(aTempFile);
-    CPPUNIT_ASSERT(pDoc);
-    return pDoc;
-}
-
 void MathMLExportTest::testBlank()
 {
-    mxDocShell->SetText("x`y~~z");
-    xmlDocUniquePtr pDoc = exportAndParse();
+    mxComponent = loadFromDesktop("private:factory/smath");
+    SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
+    pDocShell->SetText("x`y~~z");
+    save("MathML XML (Math)");
+    xmlDocUniquePtr pDoc = parseXml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mspace[1]", "width", "0.5em");
     assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mspace[2]", "width", "4em");
 }
 
 void MathMLExportTest::testTdf97049()
 {
-    mxDocShell->SetText("intd {{1 over x} dx}");
-    xmlDocUniquePtr pDoc = exportAndParse();
+    mxComponent = loadFromDesktop("private:factory/smath");
+    SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
+    pDocShell->SetText("intd {{1 over x} dx}");
+    save("MathML XML (Math)");
+    xmlDocUniquePtr pDoc = parseXml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mo[1]", "stretchy", "true");
     auto aContent = getXPathContent(pDoc, "/m:math/m:semantics/m:mrow/m:mo[1]");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aContent.getLength());
     CPPUNIT_ASSERT_EQUAL(u'\x222B', aContent[0]);
 }
 
-void MathMLExportTest::checkMathVariant(bool bCapital, bool bSmall)
+void MathMLExportTest::checkMathVariant(SmDocShell& rDocShell, bool bCapital, bool bSmall)
 {
-    mxDocShell->SetText("%GAMMA %iGAMMA {ital %GAMMA} {nitalic %iGAMMA} "
-                        "%gamma %igamma {ital %gamma} {nitalic %igamma}");
-    xmlDocUniquePtr pDoc = exportAndParse();
+    rDocShell.SetText("%GAMMA %iGAMMA {ital %GAMMA} {nitalic %iGAMMA} "
+                      "%gamma %igamma {ital %gamma} {nitalic %igamma}");
+    save("MathML XML (Math)");
+    xmlDocUniquePtr pDoc = parseXml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
     if (bCapital)
         assertXPathNoAttribute(pDoc, "/m:math/m:semantics/m:mrow/m:mi[1]", "mathvariant");
     else
@@ -128,22 +97,25 @@ void MathMLExportTest::checkMathVariant(bool bCapital, bool bSmall)
     assertXPathNoAttribute(pDoc, "/m:math/m:semantics/m:mrow/m:mstyle[3]/m:mi[1]", "mathvariant");
     assertXPathNoAttribute(pDoc, "/m:math/m:semantics/m:mrow/m:mi[4]", "mathvariant");
     assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mstyle[4]/m:mi[1]", "mathvariant", "normal");
-    mxDocShell->SetText("");
+    rDocShell.SetText("");
 }
 
 void MathMLExportTest::testTdf101022()
 {
-    checkMathVariant(false, true); // default mode 2
+    mxComponent = loadFromDesktop("private:factory/smath");
+    SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
 
-    mxDocShell->SetGreekCharStyle(1); // mode 1
-    checkMathVariant(true, true);
+    checkMathVariant(*pDocShell, false, true); // default mode 2
 
-    mxDocShell->SetGreekCharStyle(0); // mode 0
-    checkMathVariant(false, false);
+    pDocShell->SetGreekCharStyle(1); // mode 1
+    checkMathVariant(*pDocShell, true, true);
+
+    pDocShell->SetGreekCharStyle(0); // mode 0
+    checkMathVariant(*pDocShell, false, false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MathMLExportTest);
-}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

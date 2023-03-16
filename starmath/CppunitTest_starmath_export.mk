@@ -41,6 +41,7 @@ $(eval $(call gb_CppunitTest_use_libraries,starmath_export,\
     sm \
     smd \
     sot \
+    subsequenttest \
     svl \
     svt \
     svx \
@@ -58,30 +59,7 @@ $(eval $(call gb_CppunitTest_use_libraries,starmath_export,\
 $(eval $(call gb_CppunitTest_use_ure,starmath_export))
 $(eval $(call gb_CppunitTest_use_vcl,starmath_export))
 
-$(eval $(call gb_CppunitTest_use_components,starmath_export,\
-    configmgr/source/configmgr \
-    framework/util/fwk \
-    i18npool/util/i18npool \
-    package/source/xstor/xstor \
-    package/util/package2 \
-    sfx2/util/sfx \
-    starmath/util/sm \
-    starmath/util/smd \
-    toolkit/util/tk \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
-    unotools/util/utl \
-    comphelper/util/comphelp \
-    filter/source/config/cache/filterconfig1 \
-    oox/util/oox \
-    sax/source/expatwrap/expwrap \
-    svl/source/fsstor/fsstorage \
-    svl/util/svl \
-    svx/util/svx \
-    unoxml/source/service/unoxml \
-    uui/util/uui \
-    xmloff/util/xo \
-))
+$(eval $(call gb_CppunitTest_use_rdb,starmath_export,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,starmath_export))
 
