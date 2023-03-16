@@ -5844,3 +5844,17 @@ SfxVoidItem WidgetTestDialog SID_WIDGET_TEST_DIALOG
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Application;
 ]
+
+SfxVoidItem ChangeTheme FN_CHANGE_THEME
+(SfxStringItem NewTheme FN_PARAM_NEW_THEME)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    GroupId = SfxGroupId::Application;
+]

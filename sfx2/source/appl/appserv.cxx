@@ -50,6 +50,7 @@
 
 #include <svtools/addresstemplate.hxx>
 #include <svtools/restartdialog.hxx>
+#include <svtools/colorcfg.hxx>
 #include <svl/visitem.hxx>
 
 #include <unotools/configmgr.hxx>
@@ -571,6 +572,19 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_SHOW_CREDITS:
         {
             showDocument( "CREDITS" );
+            break;
+        }
+
+        case FN_CHANGE_THEME:
+        {
+            const SfxStringItem* pNewThemeArg = rReq.GetArg<SfxStringItem>(FN_PARAM_NEW_THEME);
+            if (!pNewThemeArg)
+            {
+                SAL_WARN("sfx.appl", "FN_CHANGE_THEME: no theme name");
+                break;
+            }
+            svtools::EditableColorConfig aEditableConfig;
+            aEditableConfig.LoadScheme(pNewThemeArg->GetValue());
             break;
         }
 
