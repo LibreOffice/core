@@ -456,6 +456,8 @@ cmd/32/fa/deleterecord.png cmd/32/ar/deleterecord.png
 cmd/32/fa/incrementlevel.png cmd/ar/incrementlevel.png
 cmd/32/fa/incrementsublevels.png cmd/ar/incrementsublevels.png
 cmd/32/fa/insertneutralparagraph.png cmd/32/ar/insertneutralparagraph.png
+cmd/32/fa/jumpdownthislevel.png cmd/32/ar/jumpdownthislevel.png
+cmd/32/fa/jumpupthislevel.png cmd/32/ar/jumpupthislevel.png
 cmd/32/fa/linenumberdialog.png cmd/32/ar/linenumberingdialog.png
 cmd/32/fa/linenumberingdialog.png cmd/32/ar/linenumberingdialog.png
 cmd/32/fa/movedown.png cmd/ar/movedown.png
@@ -495,6 +497,8 @@ cmd/32/he/deleterecord.png cmd/32/ar/deleterecord.png
 cmd/32/he/incrementlevel.png cmd/ar/incrementlevel.png
 cmd/32/he/incrementsublevels.png cmd/ar/incrementsublevels.png
 cmd/32/he/insertneutralparagraph.png cmd/32/ar/insertneutralparagraph.png
+cmd/32/he/jumpdownthislevel.png cmd/32/ar/jumpdownthislevel.png
+cmd/32/he/jumpupthislevel.png cmd/32/ar/jumpupthislevel.png
 cmd/32/he/linenumberdialog.png cmd/32/ar/linenumberingdialog.png
 cmd/32/he/linenumberingdialog.png cmd/32/ar/linenumberingdialog.png
 cmd/32/he/movedown.png cmd/ar/movedown.png
@@ -581,6 +585,8 @@ cmd/32/ur/decrementsublevels.png cmd/ar/decrementsublevels.png
 cmd/32/ur/defaultbullet.png cmd/32/ar/defaultbullet.png
 cmd/32/ur/defaultnumbering.png cmd/32/ar/defaultnumbering.png
 cmd/32/ur/deleterecord.png cmd/32/ar/deleterecord.png
+cmd/32/ur/jumpdownthislevel.png cmd/32/ar/jumpdownthislevel.png
+cmd/32/ur/jumpupthislevel.png cmd/32/ar/jumpupthislevel.png
 cmd/32/ur/incrementlevel.png cmd/ar/incrementlevel.png
 cmd/32/ur/incrementsublevels.png cmd/ar/incrementsublevels.png
 cmd/32/ur/insertneutralparagraph.png cmd/32/ar/insertneutralparagraph.png
@@ -646,6 +652,8 @@ cmd/fa/lc_deleterecord.png cmd/ar/lc_deleterecord.png
 cmd/fa/lc_incrementlevel.png cmd/ar/lc_incrementlevel.png
 cmd/fa/lc_incrementsublevels.png cmd/ar/lc_incrementsublevels.png
 cmd/fa/lc_insertneutralparagraph.png cmd/ar/lc_insertneutralparagraph.png
+cmd/fa/lc_jumpdownthislevel.png cmd/ar/lc_jumpdownthislevel.png
+cmd/fa/lc_jumpupthislevel.png cmd/ar/lc_jumpupthislevel.png
 cmd/fa/lc_linenumberdialog.png cmd/ar/lc_linenumberingdialog.png
 cmd/fa/lc_linenumberingdialog.png cmd/ar/sc_linenumberingdialog.png
 cmd/fa/lc_movedown.png cmd/ar/lc_movedown.png
@@ -678,6 +686,8 @@ cmd/fa/sc_deleterecord.png cmd/ar/sc_deleterecord.png
 cmd/fa/sc_incrementlevel.png cmd/ar/sc_incrementlevel.png
 cmd/fa/sc_incrementsublevels.png cmd/ar/sc_incrementsublevels.png
 cmd/fa/sc_insertneutralparagraph.png cmd/ar/sc_insertneutralparagraph.png
+cmd/fa/sc_jumpdownthislevel.png cmd/ar/sc_jumpdownthislevel.png
+cmd/fa/sc_jumpupthislevel.png cmd/ar/sc_jumpupthislevel.png
 cmd/fa/sc_linenumberdialog.png cmd/ar/sc_linenumberingdialog.png
 cmd/fa/sc_linenumberingdialog.png cmd/ar/sc_linenumberingdialog.png
 cmd/fa/sc_movedown.png cmd/ar/sc_movedown.png
@@ -724,6 +734,8 @@ cmd/he/lc_deleterecord.png cmd/ar/lc_deleterecord.png
 cmd/he/lc_incrementlevel.png cmd/ar/lc_incrementlevel.png
 cmd/he/lc_incrementsublevels.png cmd/ar/lc_incrementsublevels.png
 cmd/he/lc_insertneutralparagraph.png cmd/ar/lc_insertneutralparagraph.png
+cmd/he/lc_jumpdownthislevel.png cmd/ar/lc_jumpdownthislevel.png
+cmd/he/lc_jumpupthislevel.png cmd/ar/lc_jumpupthislevel.png
 cmd/he/lc_linenumberdialog.png cmd/ar/lc_linenumberingdialog.png
 cmd/he/lc_linenumberingdialog.png cmd/ar/lc_linenumberingdialog.png
 cmd/he/lc_movedown.png cmd/ar/lc_movedown.png
@@ -756,6 +768,8 @@ cmd/he/sc_deleterecord.png cmd/ar/sc_deleterecord.png
 cmd/he/sc_incrementlevel.png cmd/ar/sc_incrementlevel.png
 cmd/he/sc_incrementsublevels.png cmd/ar/sc_incrementsublevels.png
 cmd/he/sc_insertneutralparagraph.png cmd/ar/sc_insertneutralparagraph.png
+cmd/he/sc_jumpdownthislevel.png cmd/ar/sc_jumpdownthislevel.png
+cmd/he/sc_jumpupthislevel.png cmd/ar/sc_jumpupthislevel.png
 cmd/he/sc_linenumberdialog.png cmd/ar/sc_linenumberingdialog.png
 cmd/he/sc_linenumberingdialog.png cmd/ar/sc_linenumberingdialog.png
 cmd/he/sc_movedown.png cmd/ar/sc_movedown.png
@@ -902,6 +916,8 @@ cmd/ur/lc_deleterecord.png cmd/ar/lc_deleterecord.png
 cmd/ur/lc_incrementlevel.png cmd/ar/lc_incrementlevel.png
 cmd/ur/lc_incrementsublevels.png cmd/ar/lc_incrementsublevels.png
 cmd/ur/lc_insertneutralparagraph.png cmd/ar/lc_insertneutralparagraph.png
+cmd/ur/lc_jumpdownthislevel.png cmd/ar/lc_jumpdownthislevel.png
+cmd/ur/lc_jumpupthislevel.png cmd/ar/lc_jumpupthislevel.png
 cmd/ur/lc_linenumberdialog.png cmd/ar/lc_linenumberingdialog.png
 cmd/ur/lc_linenumberingdialog.png cmd/ar/lc_linenumberingdialog.png
 cmd/ur/lc_movedown.png cmd/ar/lc_movedown.png
@@ -934,6 +950,8 @@ cmd/ur/sc_deleterecord.png cmd/ar/sc_deleterecord.png
 cmd/ur/sc_incrementlevel.png cmd/ar/sc_incrementlevel.png
 cmd/ur/sc_incrementsublevels.png cmd/ar/sc_incrementsublevels.png
 cmd/ur/sc_insertneutralparagraph.png cmd/ar/sc_insertneutralparagraph.png
+cmd/ur/sc_jumpdownthislevel.png cmd/ar/sc_jumpdownthislevel.png
+cmd/ur/sc_jumpupthislevel.png cmd/ar/sc_jumpupthislevel.png
 cmd/ur/sc_linenumberdialog.png cmd/ar/sc_linenumberingdialog.png
 cmd/ur/sc_linenumberingdialog.png cmd/ar/sc_linenumberingdialog.png
 cmd/ur/sc_movedown.png cmd/ar/sc_movedown.png
