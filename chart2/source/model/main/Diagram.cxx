@@ -55,6 +55,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <o3tl/safeint.hxx>
+#include <rtl/math.hxx>
 
 #include <algorithm>
 #include <utility>
@@ -1536,6 +1537,90 @@ StackMode Diagram::getStackMode( bool& rbFound, bool& rbAmbiguous )
     return eGlobalStackMode;
 }
 
+void Diagram::setVertical( bool bVertical /* = true */ )
+{
+    try
+    {
+        uno::Any aValue;
+        aValue <<= bVertical;
+        for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : getBaseCoordinateSystems() )
+        {
+            bool bChanged = false;
+            bool bOldSwap = false;
+            if( !(xCooSys->getPropertyValue("SwapXAndYAxis") >>= bOldSwap)
+                || bVertical != bOldSwap )
+                bChanged = true;
+
+            if( bChanged )
+                xCooSys->setPropertyValue("SwapXAndYAxis", aValue);
+
+            const sal_Int32 nDimensionCount = xCooSys->getDimension();
+            sal_Int32 nDimIndex = 0;
+            for (nDimIndex=0; nDimIndex < nDimensionCount; ++nDimIndex)
+            {
+                const sal_Int32 nMaximumScaleIndex = xCooSys->getMaximumAxisIndexByDimension(nDimIndex);
+                for (sal_Int32 nI = 0; nI <= nMaximumScaleIndex; ++nI)
+                {
+                    rtl::Reference<Axis> xAxis = xCooSys->getAxisByDimension2(nDimIndex,nI);
+                    if (!xAxis.is())
+                        continue;
+
+                    //adapt title rotation only when axis swapping has changed
+                    if (!bChanged)
+                        continue;
+
+                    Reference< beans::XPropertySet > xTitleProps( xAxis->getTitleObject(), uno::UNO_QUERY );
+                    if (!xTitleProps.is())
+                        continue;
+
+                    double fAngleDegree = 0.0;
+                    xTitleProps->getPropertyValue("TextRotation") >>= fAngleDegree;
+                    if (fAngleDegree != 0.0 &&
+                        !rtl::math::approxEqual(fAngleDegree, 90.0))
+                        continue;
+
+                    double fNewAngleDegree = 0.0;
+                    if( !bVertical && nDimIndex == 1 )
+                        fNewAngleDegree = 90.0;
+                    else if( bVertical && nDimIndex == 0 )
+                        fNewAngleDegree = 90.0;
+
+                    xTitleProps->setPropertyValue("TextRotation", uno::Any(fNewAngleDegree));
+                }
+            }
+        }
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+}
+
+bool Diagram::getVertical( bool& rbFound, bool& rbAmbiguous )
+{
+    bool bValue = false;
+    rbFound = false;
+    rbAmbiguous = false;
+
+    for (rtl::Reference<BaseCoordinateSystem> const & coords : getBaseCoordinateSystems())
+    {
+        bool bCurrent = false;
+        if (coords->getPropertyValue("SwapXAndYAxis") >>= bCurrent)
+        {
+            if (!rbFound)
+            {
+                bValue = bCurrent;
+                rbFound = true;
+            }
+            else if (bCurrent != bValue)
+            {
+                // ambiguous -> choose always first found
+                rbAmbiguous = true;
+            }
+        }
+    }
+    return bValue;
+}
 
 } //  namespace chart
 

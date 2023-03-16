@@ -170,7 +170,7 @@ bool  BarChartTypeTemplate::matchesTemplate2(
     {
         bool bFound = false;
         bool bAmbiguous = false;
-        bool bVertical = DiagramHelper::getVertical( xDiagram, bFound, bAmbiguous );
+        bool bVertical = xDiagram->getVertical( bFound, bAmbiguous );
         if( m_eBarDirection == HORIZONTAL )
             bResult = bVertical;
         else if( m_eBarDirection == VERTICAL )
@@ -272,7 +272,7 @@ void BarChartTypeTemplate::resetStyles2(
         }
     }
 
-    DiagramHelper::setVertical( xDiagram, false );
+    xDiagram->setVertical( false );
 }
 
 void BarChartTypeTemplate::createCoordinateSystems(
@@ -280,7 +280,7 @@ void BarChartTypeTemplate::createCoordinateSystems(
 {
     ChartTypeTemplate::createCoordinateSystems( xDiagram );
 
-    DiagramHelper::setVertical( xDiagram, m_eBarDirection == HORIZONTAL );
+    xDiagram->setVertical( m_eBarDirection == HORIZONTAL );
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2( BarChartTypeTemplate, ChartTypeTemplate, OPropertySet )

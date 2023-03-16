@@ -242,7 +242,7 @@ DataPointItemConverter::DataPointItemConverter(
     rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeOfSeries( xSeries ) );
     bool bFound = false;
     bool bAmbiguous = false;
-    bool bSwapXAndY = DiagramHelper::getVertical( xDiagram, bFound, bAmbiguous );
+    bool bSwapXAndY = xDiagram->getVertical( bFound, bAmbiguous );
     m_aAvailableLabelPlacements = ChartTypeHelper::getSupportedLabelPlacements( xChartType, bSwapXAndY, xSeries );
 
     m_bForbidPercentValue = ChartTypeHelper::getAxisType( xChartType, 0 ) != AxisType::CATEGORY;

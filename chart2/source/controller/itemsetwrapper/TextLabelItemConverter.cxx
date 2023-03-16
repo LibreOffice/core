@@ -215,7 +215,7 @@ TextLabelItemConverter::TextLabelItemConverter(
     rtl::Reference< ChartType > xChartType(xDiagram->getChartTypeOfSeries(xSeries));
     bool bFound = false;
     bool bAmbiguous = false;
-    bool bSwapXAndY = DiagramHelper::getVertical(xDiagram, bFound, bAmbiguous);
+    bool bSwapXAndY = xDiagram->getVertical(bFound, bAmbiguous);
     maAvailableLabelPlacements = ChartTypeHelper::getSupportedLabelPlacements(xChartType, bSwapXAndY, xSeries);
 
     mbForbidPercentValue = ChartTypeHelper::getAxisType(xChartType, 0) != AxisType::CATEGORY;

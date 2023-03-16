@@ -72,22 +72,6 @@ public:
             const rtl::Reference< ::chart::Diagram > & xDiagram,
             const rtl::Reference< ::chart::ChartTypeManager > & xChartTypeManager);
 
-    /** Sets the "SwapXAndYAxis" property at all coordinate systems found in the
-        given diagram.
-
-        "vertical==true" for bar charts, "vertical==false" for column charts
-     */
-    static void setVertical( const rtl::Reference< ::chart::Diagram > & xDiagram,
-                             bool bVertical );
-
-    /** Gets the "SwapXAndYAxis" property at all coordinate systems found in the
-        given diagram.
-
-        "vertical==true" for bar charts, "vertical==false" for column charts
-    */
-    static bool getVertical( const rtl::Reference< ::chart::Diagram > & xDiagram,
-                             bool& rbOutFoundResult, bool& rbOutAmbiguousResult );
-
     /** Retrieves the stackmode of the first DataSeries or none. If the series have differing stack
         modes, rbAmbiguous is set to true. If no series is there rbFound is set to false.
 

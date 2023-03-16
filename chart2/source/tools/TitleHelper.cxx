@@ -50,7 +50,7 @@ uno::Reference< XTitled > lcl_getTitleParentFromDiagram(
         nTitleIndex == TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION )
     {
         bool bDummy = false;
-        bool bIsVertical = DiagramHelper::getVertical( xDiagram, bDummy, bDummy );
+        bool bIsVertical = xDiagram && xDiagram->getVertical( bDummy, bDummy );
 
         if( nTitleIndex == TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION )
             nTitleIndex = bIsVertical ? TitleHelper::X_AXIS_TITLE : TitleHelper::Y_AXIS_TITLE;
@@ -269,7 +269,7 @@ uno::Reference< XTitle > TitleHelper::createTitle(
             try
             {
                 bool bDummy = false;
-                bool bIsVertical = DiagramHelper::getVertical( xDiagram, bDummy, bDummy );
+                bool bIsVertical = xDiagram->getVertical( bDummy, bDummy );
 
                 if( (!bIsVertical && eTitleType == TitleHelper::Y_AXIS_TITLE)
                     || (bIsVertical && eTitleType == TitleHelper::X_AXIS_TITLE)

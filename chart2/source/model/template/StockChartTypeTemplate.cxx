@@ -238,7 +238,7 @@ void StockChartTypeTemplate::resetStyles2(
         }
     }
 
-    DiagramHelper::setVertical( xDiagram, false );
+    xDiagram->setVertical( false );
 }
 
 rtl::Reference< ChartType > StockChartTypeTemplate::getChartTypeForIndex( sal_Int32 nChartTypeIndex )

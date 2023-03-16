@@ -1385,9 +1385,9 @@ void WrappedVerticalProperty::setPropertyValue( const Any& rOuterValue, const Re
 
     bool bFound = false;
     bool bAmbiguous = false;
-    bool bOldVertical = DiagramHelper::getVertical( xDiagram, bFound, bAmbiguous );
+    bool bOldVertical = xDiagram->getVertical( bFound, bAmbiguous );
     if( bFound && ( bOldVertical != bNewVertical || bAmbiguous ) )
-        DiagramHelper::setVertical( xDiagram, bNewVertical );
+        xDiagram->setVertical( bNewVertical );
 }
 
 Any WrappedVerticalProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
@@ -1397,7 +1397,7 @@ Any WrappedVerticalProperty::getPropertyValue( const Reference< beans::XProperty
     {
         bool bFound = false;
         bool bAmbiguous = false;
-        bool bVertical = DiagramHelper::getVertical( xDiagram, bFound, bAmbiguous );
+        bool bVertical = xDiagram->getVertical( bFound, bAmbiguous );
         if( bFound )
             m_aOuterValue <<= bVertical;
     }

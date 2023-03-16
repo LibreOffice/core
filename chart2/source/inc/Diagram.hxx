@@ -300,6 +300,21 @@ public:
      */
     void setStackMode(StackMode eStackMode);
 
+
+    /** Sets the "SwapXAndYAxis" property at all coordinate systems found in the
+        given diagram.
+
+        "vertical==true" for bar charts, "vertical==false" for column charts
+     */
+    void setVertical( bool bVertical );
+
+    /** Gets the "SwapXAndYAxis" property at all coordinate systems found in the
+        given diagram.
+
+        "vertical==true" for bar charts, "vertical==false" for column charts
+    */
+    bool getVertical( bool& rbOutFoundResult, bool& rbOutAmbiguousResult );
+
 private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

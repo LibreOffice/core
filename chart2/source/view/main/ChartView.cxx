@@ -1931,7 +1931,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
         return;
 
     bool bDummy = false;
-    bool bIsVertical = DiagramHelper::getVertical(xDiagram, bDummy, bDummy);
+    bool bIsVertical = xDiagram && xDiagram->getVertical(bDummy, bDummy);
 
     if (getAvailablePosAndSizeForDiagram(aParam, rPageSize, xDiagram))
     {
@@ -2021,7 +2021,7 @@ bool ChartView::createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::
         return false;
 
     bool bDummy = false;
-    bool bIsVertical = DiagramHelper::getVertical( xDiagram, bDummy, bDummy );
+    bool bIsVertical = xDiagram && xDiagram->getVertical( bDummy, bDummy );
 
     if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension ) )
         rParam.mpVTitleSecondX = lcl_createTitle( TitleHelper::SECONDARY_X_AXIS_TITLE, mxRootShape, mrChartModel
