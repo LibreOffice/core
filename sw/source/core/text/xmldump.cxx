@@ -174,9 +174,6 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
 
     switch ( GetType(  ) )
     {
-    case SwFrameType::Header:
-        name = "header";
-        break;
     case SwFrameType::Footer:
         name = "footer";
         break;

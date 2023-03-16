@@ -44,6 +44,8 @@ class SwHeaderFrame final : public SwHeadFootFrame
 {
 public:
     SwHeaderFrame( SwFrameFormat* pFrame, SwFrame* pSib ) : SwHeadFootFrame(pFrame, pSib, SwFrameType::Header) {};
+
+    void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
 };
 
 /// Footer in the document layout, inside a page.
