@@ -1229,8 +1229,8 @@ bool WrappedStackingProperty::detectInnerValue( StackMode& eStackMode ) const
 {
     bool bHasDetectableInnerValue = false;
     bool bIsAmbiguous = false;
-    eStackMode = DiagramHelper::getStackMode( m_spChart2ModelContact->getDiagram()
-        , bHasDetectableInnerValue, bIsAmbiguous );
+    rtl::Reference<Diagram> xDiagram = m_spChart2ModelContact->getDiagram();
+    eStackMode = xDiagram ? xDiagram->getStackMode( bHasDetectableInnerValue, bIsAmbiguous ) : StackMode::NONE;
     return bHasDetectableInnerValue;
 }
 
@@ -1258,7 +1258,7 @@ void WrappedStackingProperty::setPropertyValue( const Any& rOuterValue, const Re
     if( xDiagram.is() )
     {
         StackMode eNewStackMode = bNewValue ? m_eStackMode : StackMode::NONE;
-        DiagramHelper::setStackMode( xDiagram, eNewStackMode );
+        xDiagram->setStackMode( eNewStackMode );
     }
 }
 

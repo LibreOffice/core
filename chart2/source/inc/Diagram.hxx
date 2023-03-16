@@ -45,6 +45,7 @@ class ChartType;
 class DataSeries;
 class Legend;
 class DataTable;
+enum class StackMode;
 class Wall;
 
 enum class DiagramPositioningMode
@@ -287,6 +288,17 @@ public:
            XCoordinateSystemContainer of the diagram.
      */
     void setDimension( sal_Int32 nNewDimensionCount );
+
+
+    StackMode getStackMode(bool& rbFound, bool& rbAmbiguous);
+
+    /** The stacking mode is only set at the series found inside
+        the first chart type.  This is the standard for all current
+        templates (the only template that has more than one chart-type and
+        allows stacking is bar/line combi, and for this the stacking only
+        applies to the first chart type/the bars)
+     */
+    void setStackMode(StackMode eStackMode);
 
 private:
     // ____ XModifyListener ____

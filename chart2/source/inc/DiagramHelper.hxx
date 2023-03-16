@@ -88,22 +88,6 @@ public:
     static bool getVertical( const rtl::Reference< ::chart::Diagram > & xDiagram,
                              bool& rbOutFoundResult, bool& rbOutAmbiguousResult );
 
-    static StackMode getStackMode(
-        const rtl::Reference< ::chart::Diagram > & xDiagram,
-        bool& rbFound, bool& rbAmbiguous
-        );
-
-    /** The stacking mode is only set at the series found inside
-        the first chart type.  This is the standard for all current
-        templates (the only template that has more than one chart-type and
-        allows stacking is bar/line combi, and for this the stacking only
-        applies to the first chart type/the bars)
-     */
-    static void setStackMode(
-        const rtl::Reference< ::chart::Diagram > & xDiagram,
-        StackMode eStackMode
-        );
-
     /** Retrieves the stackmode of the first DataSeries or none. If the series have differing stack
         modes, rbAmbiguous is set to true. If no series is there rbFound is set to false.
 

@@ -672,7 +672,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
             eStackMode = StackMode::ZStacked;
         else if( bPercent )
             eStackMode = StackMode::YStackedPercent;
-        DiagramHelper::setStackMode( xDia, eStackMode );
+        xDia->setStackMode( eStackMode );
     }
 
     // notify listeners

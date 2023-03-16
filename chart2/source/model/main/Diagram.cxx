@@ -44,6 +44,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
+#include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
@@ -1399,7 +1400,7 @@ void Diagram::setDimension( sal_Int32 nNewDimensionCount )
     {
         bool rbFound = false;
         bool rbAmbiguous = true;
-        StackMode eStackMode = DiagramHelper::getStackMode( this, rbFound, rbAmbiguous );
+        StackMode eStackMode = getStackMode( rbFound, rbAmbiguous );
         bool bIsSupportingOnlyDeepStackingFor3D=false;
 
         //change all coordinate systems:
@@ -1429,14 +1430,110 @@ void Diagram::setDimension( sal_Int32 nNewDimensionCount )
 
         //correct stack mode if necessary
         if( nNewDimensionCount==3 && eStackMode != StackMode::ZStacked && bIsSupportingOnlyDeepStackingFor3D )
-            DiagramHelper::setStackMode( this, StackMode::ZStacked );
+            setStackMode( StackMode::ZStacked );
         else if( nNewDimensionCount==2 && eStackMode == StackMode::ZStacked )
-            DiagramHelper::setStackMode( this, StackMode::NONE );
+            setStackMode( StackMode::NONE );
     }
     catch( const uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
+}
+
+void Diagram::setStackMode( StackMode eStackMode )
+{
+    try
+    {
+        bool bValueFound = false;
+        bool bIsAmbiguous = false;
+        StackMode eOldStackMode = getStackMode( bValueFound, bIsAmbiguous );
+
+        if( eStackMode == eOldStackMode && !bIsAmbiguous )
+            return;
+
+        chart2::StackingDirection eNewDirection = chart2::StackingDirection_NO_STACKING;
+        if( eStackMode == StackMode::YStacked || eStackMode == StackMode::YStackedPercent )
+            eNewDirection = chart2::StackingDirection_Y_STACKING;
+        else if( eStackMode == StackMode::ZStacked )
+            eNewDirection = chart2::StackingDirection_Z_STACKING;
+
+        uno::Any aNewDirection( eNewDirection );
+
+        bool bPercent = false;
+        if( eStackMode == StackMode::YStackedPercent )
+            bPercent = true;
+
+        //iterate through all coordinate systems
+        for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : getBaseCoordinateSystems() )
+        {
+            //set correct percent stacking
+            const sal_Int32 nMaximumScaleIndex = xCooSys->getMaximumAxisIndexByDimension(1);
+            for(sal_Int32 nI=0; nI<=nMaximumScaleIndex; ++nI)
+            {
+                rtl::Reference< Axis > xAxis = xCooSys->getAxisByDimension2( 1,nI );
+                if( xAxis.is())
+                {
+                    chart2::ScaleData aScaleData = xAxis->getScaleData();
+                    if( (aScaleData.AxisType==chart2::AxisType::PERCENT) != bPercent )
+                    {
+                        if( bPercent )
+                            aScaleData.AxisType = chart2::AxisType::PERCENT;
+                        else
+                            aScaleData.AxisType = chart2::AxisType::REALNUMBER;
+                        xAxis->setScaleData( aScaleData );
+                    }
+                }
+            }
+            //iterate through all chart types in the current coordinate system
+            const std::vector< rtl::Reference< ChartType > > & aChartTypeList( xCooSys->getChartTypes2() );
+            if (aChartTypeList.empty())
+                continue;
+
+            rtl::Reference< ChartType > xChartType( aChartTypeList[0] );
+
+            //iterate through all series in this chart type
+            for( rtl::Reference< DataSeries > const & dataSeries : xChartType->getDataSeries2() )
+            {
+                dataSeries->setPropertyValue( "StackingDirection", aNewDirection );
+            }
+        }
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+}
+
+StackMode Diagram::getStackMode( bool& rbFound, bool& rbAmbiguous )
+{
+    rbFound=false;
+    rbAmbiguous=false;
+
+    StackMode eGlobalStackMode = StackMode::NONE;
+
+    //iterate through all coordinate systems
+    for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : getBaseCoordinateSystems() )
+    {
+        //iterate through all chart types in the current coordinate system
+        std::vector< rtl::Reference< ChartType > > aChartTypeList( xCooSys->getChartTypes2() );
+        for( std::size_t nT = 0; nT < aChartTypeList.size(); ++nT )
+        {
+            rtl::Reference< ChartType > xChartType( aChartTypeList[nT] );
+
+            StackMode eLocalStackMode = DiagramHelper::getStackModeFromChartType(
+                xChartType, rbFound, rbAmbiguous, xCooSys );
+
+            if( rbFound && eLocalStackMode != eGlobalStackMode && nT>0 )
+            {
+                rbAmbiguous = true;
+                return eGlobalStackMode;
+            }
+
+            eGlobalStackMode = eLocalStackMode;
+        }
+    }
+
+    return eGlobalStackMode;
 }
 
 
