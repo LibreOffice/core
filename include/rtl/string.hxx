@@ -452,9 +452,22 @@ public:
     /**
       Release the string data.
     */
+#if defined LIBO_INTERNAL_ONLY && __cplusplus >= 202002L
+    constexpr
+#endif
     ~OString()
     {
-        rtl_string_release( pData );
+#if defined LIBO_INTERNAL_ONLY && __cplusplus >= 202002L
+        if (std::is_constant_evaluated()) {
+           //TODO: We would want to
+           //
+           //   assert(SAL_STRING_IS_STATIC(pData));
+           //
+           // here, but that wouldn't work because read of member `str` of OUStringLiteral's
+           // anonymous union with active member `more` is not allowed in a constant expression.
+        } else
+#endif
+            rtl_string_release( pData );
     }
 
 #if defined LIBO_INTERNAL_ONLY
