@@ -683,7 +683,7 @@ void ValueSet::ImplDraw(vcl::RenderContext& rRenderContext)
     {
         if (!(GetStyle() & WB_FLATVALUESET))
         {
-            const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
             Size aWinSize(GetOutputSizePixel());
             Point aPos1(NAME_LINE_OFF_X, mnTextOffset + NAME_LINE_OFF_Y);
             Point aPos2(aWinSize.Width() - (NAME_LINE_OFF_X * 2), mnTextOffset + NAME_LINE_OFF_Y);
@@ -995,9 +995,9 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
     }
 
     // Init VirDev
-    maVirDev->SetSettings(rRenderContext.GetSettings());
     maVirDev->SetBackground(Application::GetSettings().GetStyleSettings().GetFaceColor());
     maVirDev->SetOutputSizePixel(aWinSize);
+    maVirDev->Erase();
 
     // nothing is changed in case of too small items
     if ((mnItemWidth <= 0) ||
@@ -1230,7 +1230,7 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext,
     tools::Rectangle aRect(rRect);
 
     // draw selection
-    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     rRenderContext.SetFillColor();
 
     Color aDoubleColor;
@@ -1393,7 +1393,7 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
     if ((aRect.GetHeight() <= 0) || (aRect.GetWidth() <= 0))
         return;
 
-    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
     if (pItem == mpNoneItem.get())
     {
