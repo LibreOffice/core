@@ -1420,6 +1420,7 @@ SvtLineListBox::SvtLineListBox(std::unique_ptr<weld::MenuButton> pControl)
     m_xTopLevel->connect_focus_in(LINK(this, SvtLineListBox, FocusHdl));
     m_xControl->set_popover(m_xTopLevel.get());
     m_xControl->connect_toggled(LINK(this, SvtLineListBox, ToggleHdl));
+    m_xControl->connect_style_updated(LINK(this, SvtLineListBox, StyleUpdatedHdl));
 
     // lock size to these maxes height/width so it doesn't jump around in size
     m_xControl->set_label(GetLineStyleName(SvxBorderLineStyle::NONE));
@@ -1449,6 +1450,12 @@ IMPL_LINK(SvtLineListBox, ToggleHdl, weld::Toggleable&, rButton, void)
 {
     if (rButton.get_active())
         FocusHdl(*m_xTopLevel);
+}
+
+IMPL_LINK_NOARG(SvtLineListBox, StyleUpdatedHdl, weld::Widget&, void)
+{
+    UpdateEntries();
+    UpdatePreview();
 }
 
 IMPL_LINK_NOARG(SvtLineListBox, NoneHdl, weld::Button&, void)

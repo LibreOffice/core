@@ -254,6 +254,7 @@ private:
     DECL_DLLPRIVATE_LINK(FocusHdl, weld::Widget&, void);
     DECL_DLLPRIVATE_LINK(ToggleHdl, weld::Toggleable&, void);
     DECL_DLLPRIVATE_LINK(NoneHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(StyleUpdatedHdl, weld::Widget&, void);
 
     void            UpdateEntries();
 
