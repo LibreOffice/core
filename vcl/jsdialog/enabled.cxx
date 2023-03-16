@@ -44,6 +44,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"cui/ui/imagetabpage.ui"
         || rUIFile == u"cui/ui/macroselectordialog.ui"
         || rUIFile == u"cui/ui/numberingformatpage.ui"
+        || rUIFile == u"cui/ui/pageformatpage.ui"
         || rUIFile == u"cui/ui/paragalignpage.ui"
         || rUIFile == u"cui/ui/paraindentspacing.ui"
         || rUIFile == u"cui/ui/paratabspage.ui"
@@ -91,12 +92,15 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/scalc/ui/movingaveragedialog.ui"
         || rUIFile == u"modules/scalc/ui/optimalcolwidthdialog.ui"
         || rUIFile == u"modules/scalc/ui/optimalrowheightdialog.ui"
+        || rUIFile == u"modules/scalc/ui/pagetemplatedialog.ui"
+        || rUIFile == u"modules/scalc/ui/paratemplatedialog.ui"
         || rUIFile == u"modules/scalc/ui/pivotfielddialog.ui"
         || rUIFile == u"modules/scalc/ui/pivottablelayoutdialog.ui"
         || rUIFile == u"modules/scalc/ui/regressiondialog.ui"
         || rUIFile == u"modules/scalc/ui/rowheightdialog.ui"
         || rUIFile == u"modules/scalc/ui/samplingdialog.ui"
         || rUIFile == u"modules/scalc/ui/selectsource.ui"
+        || rUIFile == u"modules/scalc/ui/sheetprintpage.ui"
         || rUIFile == u"modules/scalc/ui/sortcriteriapage.ui"
         || rUIFile == u"modules/scalc/ui/sortdialog.ui"
         || rUIFile == u"modules/scalc/ui/sortkey.ui"
@@ -151,6 +155,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"sfx/ui/documentinfopage.ui"
         || rUIFile == u"sfx/ui/documentpropertiesdialog.ui"
         || rUIFile == u"sfx/ui/editdurationdialog.ui"
+        || rUIFile == u"svx/ui/headfootformatpage.ui"
         || rUIFile == u"sfx/ui/linefragment.ui"
         || rUIFile == u"sfx/ui/managestylepage.ui"
         || rUIFile == u"sfx/ui/password.ui"
@@ -163,7 +168,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"uui/ui/macrowarnmedium.ui"
         // vcl
         || rUIFile == u"vcl/ui/wizard.ui"
-        // xmlsec
+        // filter
         || rUIFile == u"filter/ui/pdfgeneralpage.ui"
         || rUIFile == u"filter/ui/pdflinkspage.ui"
         || rUIFile == u"filter/ui/pdfoptionsdialog.ui"
@@ -172,7 +177,9 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"filter/ui/pdfuserinterfacepage.ui"
         || rUIFile == u"filter/ui/pdfviewpage.ui"
         || rUIFile == u"filter/ui/warnpdfdialog.ui"
+        // writerperfect
         || rUIFile == u"writerperfect/ui/exportepub.ui"
+        // xmlsec
         || rUIFile == u"xmlsec/ui/certgeneral.ui"
         || rUIFile == u"xmlsec/ui/certpage.ui"
         || rUIFile == u"xmlsec/ui/digitalsignaturesdialog.ui"
