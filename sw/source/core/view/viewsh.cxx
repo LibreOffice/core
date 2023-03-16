@@ -2214,7 +2214,6 @@ void SwViewShell::ApplyViewOptions( const SwViewOption &rOpt )
         if(&rSh == this)
             continue;
         SwViewOption aOpt( *rSh.GetViewOptions() );
-        aOpt.SetColorConfig( rOpt.GetColorConfig() );
         aOpt.SetFieldName( rOpt.IsFieldName() );
         aOpt.SetShowHiddenField( rOpt.IsShowHiddenField() );
         aOpt.SetShowHiddenPara( rOpt.IsShowHiddenPara() );

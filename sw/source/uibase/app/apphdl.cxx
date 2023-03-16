@@ -79,6 +79,7 @@
 #include <swabstdlg.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/lok.hxx>
 
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
@@ -969,8 +970,9 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, Con
     }
     else if ( pBrdCst == m_pColorConfig.get() )
     {
-        //invalidate all edit windows
-        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        //invalidate only the current view in tiled rendering mode, or all views otherwise
+        bool bOnlyInvalidateCurrentView = comphelper::LibreOfficeKit::isActive();
+        SfxViewShell* pViewShell = bOnlyInvalidateCurrentView ? SfxViewShell::Current() : SfxViewShell::GetFirst();
         while(pViewShell)
         {
             if(pViewShell->GetWindow())
@@ -981,11 +983,14 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, Con
                    dynamic_cast< const SwSrcView *>( pViewShell ) !=  nullptr)
                 {
                     SwViewOption aNewOptions = *pSwView->GetWrtShell().GetViewOptions();
+                    aNewOptions.SetThemeName(m_pColorConfig->GetCurrentSchemeName());
                     aNewOptions.SetColorConfig(*m_pColorConfig);
                     pSwView->GetWrtShell().ApplyViewOptions(aNewOptions);
                     pViewShell->GetWindow()->Invalidate();
                 }
             }
+            if (bOnlyInvalidateCurrentView)
+                break;
             pViewShell = SfxViewShell::GetNext( *pViewShell );
         }
     }

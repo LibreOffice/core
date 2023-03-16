@@ -468,6 +468,11 @@ ColorConfigValue ColorConfig::GetColorValue(ColorConfigEntry eEntry, bool bSmart
     return aRet;
 }
 
+const OUString& ColorConfig::GetCurrentSchemeName() const
+{
+    return m_pImpl->GetLoadedScheme();
+}
+
 EditableColorConfig::EditableColorConfig() :
     m_pImpl(new ColorConfig_Impl),
     m_bModified(false)

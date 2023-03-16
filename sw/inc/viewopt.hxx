@@ -248,6 +248,7 @@ class SW_DLLPUBLIC SwViewOption
 {
     SwViewColors m_aColorConfig;
     static SwViewColors s_aInitialColorConfig;
+    OUString m_sThemeName;
 
     static sal_uInt16   s_nPixelTwips;// 1 Pixel == ? Twips
 
@@ -312,6 +313,16 @@ public:
     const SwViewColors& GetColorConfig() const
     {
         return m_aColorConfig;
+    }
+
+    void SetThemeName(const OUString& rThemeName)
+    {
+        m_sThemeName = rThemeName;
+    }
+
+    OUString GetThemeName() const
+    {
+        return m_sThemeName;
     }
 
     static void SetInitialColorConfig(const SwViewColors& rColorConfig)
