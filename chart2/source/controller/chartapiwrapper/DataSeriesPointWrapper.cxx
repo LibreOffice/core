@@ -331,7 +331,7 @@ void WrappedAttachedAxisProperty::setPropertyValue( const Any& rOuterValue, cons
     {
         rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
         if( xDiagram.is() )
-            ::chart::DiagramHelper::attachSeriesToAxis( bNewAttachedToMainAxis, xDataSeries, xDiagram, m_spChart2ModelContact->m_xContext, false );
+            xDiagram->attachSeriesToAxis( bNewAttachedToMainAxis, xDataSeries, m_spChart2ModelContact->m_xContext, false );
     }
 }
 

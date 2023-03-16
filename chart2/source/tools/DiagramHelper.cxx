@@ -506,49 +506,6 @@ bool DiagramHelper::isSeriesAttachedToMainAxis(
     return (nAxisIndex==0);
 }
 
-bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
-                        , const uno::Reference< chart2::XDataSeries >& xDataSeries
-                        , const rtl::Reference< Diagram >& xDiagram
-                        , const uno::Reference< uno::XComponentContext > & xContext
-                        , bool bAdaptAxes )
-{
-    bool bChanged = false;
-
-    //set property at axis
-    Reference< beans::XPropertySet > xProp( xDataSeries, uno::UNO_QUERY_THROW );
-
-    sal_Int32 nNewAxisIndex = bAttachToMainAxis ? 0 : 1;
-    sal_Int32 nOldAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
-    rtl::Reference< Axis > xOldAxis = xDiagram->getAttachedAxis( xDataSeries );
-
-    if( nOldAxisIndex != nNewAxisIndex )
-    {
-        try
-        {
-            xProp->setPropertyValue( "AttachedAxisIndex", uno::Any( nNewAxisIndex ) );
-            bChanged = true;
-        }
-        catch( const uno::Exception & )
-        {
-            DBG_UNHANDLED_EXCEPTION("chart2");
-        }
-    }
-
-    if( bChanged && xDiagram.is() )
-    {
-        rtl::Reference< Axis > xAxis = AxisHelper::getAxis( 1, bAttachToMainAxis, xDiagram );
-        if(!xAxis.is()) //create an axis if necessary
-            xAxis = AxisHelper::createAxis( 1, bAttachToMainAxis, xDiagram, xContext );
-        if( bAdaptAxes )
-        {
-            AxisHelper::makeAxisVisible( xAxis );
-            AxisHelper::hideAxisIfNoDataIsAttached( xOldAxis, xDiagram );
-        }
-    }
-
-    return bChanged;
-}
-
 static void lcl_generateAutomaticCategoriesFromChartType(
             Sequence< OUString >& rRet,
             const rtl::Reference< ChartType >& xChartType )

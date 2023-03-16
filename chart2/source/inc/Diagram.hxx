@@ -261,6 +261,11 @@ public:
     rtl::Reference< ::chart::Axis > getAttachedAxis(
         const rtl::Reference< ::chart::DataSeries >& xSeries );
 
+    bool attachSeriesToAxis( bool bMainAxis,
+        const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
+        const css::uno::Reference< css::uno::XComponentContext > & xContext,
+        bool bAdaptAxes=true );
+
 private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

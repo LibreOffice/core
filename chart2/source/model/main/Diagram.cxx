@@ -1300,6 +1300,48 @@ rtl::Reference< Axis > Diagram::getAttachedAxis(
     return AxisHelper::getAxis( 1, DiagramHelper::isSeriesAttachedToMainAxis( xSeries ), this );
 }
 
+bool Diagram::attachSeriesToAxis( bool bAttachToMainAxis
+                        , const uno::Reference< chart2::XDataSeries >& xDataSeries
+                        , const uno::Reference< uno::XComponentContext > & xContext
+                        , bool bAdaptAxes )
+{
+    bool bChanged = false;
+
+    //set property at axis
+    Reference< beans::XPropertySet > xProp( xDataSeries, uno::UNO_QUERY_THROW );
+
+    sal_Int32 nNewAxisIndex = bAttachToMainAxis ? 0 : 1;
+    sal_Int32 nOldAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
+    rtl::Reference< Axis > xOldAxis = getAttachedAxis( xDataSeries );
+
+    if( nOldAxisIndex != nNewAxisIndex )
+    {
+        try
+        {
+            xProp->setPropertyValue( "AttachedAxisIndex", uno::Any( nNewAxisIndex ) );
+            bChanged = true;
+        }
+        catch( const uno::Exception & )
+        {
+            DBG_UNHANDLED_EXCEPTION("chart2");
+        }
+    }
+
+    if( bChanged )
+    {
+        rtl::Reference< Axis > xAxis = AxisHelper::getAxis( 1, bAttachToMainAxis, this );
+        if(!xAxis.is()) //create an axis if necessary
+            xAxis = AxisHelper::createAxis( 1, bAttachToMainAxis, this, xContext );
+        if( bAdaptAxes )
+        {
+            AxisHelper::makeAxisVisible( xAxis );
+            AxisHelper::hideAxisIfNoDataIsAttached( xOldAxis, this );
+        }
+    }
+
+    return bChanged;
+}
+
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

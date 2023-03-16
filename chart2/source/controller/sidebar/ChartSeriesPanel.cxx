@@ -219,7 +219,7 @@ void setAttachedAxisType(const rtl::Reference<::chart::ChartModel>&
         return;
 
     rtl::Reference<Diagram> xDiagram = xModel->getFirstChartDiagram();
-    DiagramHelper::attachSeriesToAxis(bPrimary, xDataSeries, xDiagram, comphelper::getProcessComponentContext());
+    xDiagram->attachSeriesToAxis(bPrimary, xDataSeries, comphelper::getProcessComponentContext());
 }
 
 rtl::Reference<ChartType> getChartType(

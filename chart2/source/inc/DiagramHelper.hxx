@@ -147,12 +147,6 @@ public:
     static bool isSeriesAttachedToMainAxis(
         const css::uno::Reference< css::chart2::XDataSeries >& xDataSeries );
 
-    static bool attachSeriesToAxis( bool bMainAxis,
-        const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
-        const rtl::Reference< ::chart::Diagram >& xDiagram,
-        const css::uno::Reference< css::uno::XComponentContext > & xContext,
-        bool bAdaptAxes=true );
-
     static css::uno::Sequence< OUString >
         getExplicitSimpleCategories( ChartModel& rModel );
 

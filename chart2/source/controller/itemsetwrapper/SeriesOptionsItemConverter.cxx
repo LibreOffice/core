@@ -184,8 +184,8 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
             if( bAttachToMainAxis != m_bAttachToMainAxis )
             {
                 //change model:
-                bChanged = DiagramHelper::attachSeriesToAxis( bAttachToMainAxis, uno::Reference< XDataSeries >::query( GetPropertySet() )
-                    , ChartModelHelper::findDiagram(m_xChartModel), m_xCC );
+                bChanged = ChartModelHelper::findDiagram(m_xChartModel)->attachSeriesToAxis( bAttachToMainAxis, uno::Reference< XDataSeries >::query( GetPropertySet() )
+                    , m_xCC );
 
                 if( bChanged )
                     m_bAttachToMainAxis = bAttachToMainAxis;
