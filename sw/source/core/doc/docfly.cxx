@@ -363,26 +363,25 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
     case RndStdIds::FLY_AT_FLY:    // LAYER_IMPL
     case RndStdIds::FLY_AT_PAGE:
         {
-            // If no position attributes are coming in, we correct the position in a way
-            // such that the fly's document coordinates are preserved.
-            // If only the alignment changes in the position attributes (text::RelOrientation::FRAME
-            // vs. text::RelOrientation::PRTAREA), we also correct the position.
+            // If only the anchor type has changed (char -> para -> page) and the absolute position
+            // is unchanged even though there is a new relative orientation
+            // (likely because the old orientation was not valid for the new anchor type),
+            // then adjust the position to account for the moved anchor position.
             const SwFormatHoriOrient* pHoriOrientItem = rSet.GetItemIfSet( RES_HORI_ORIENT, false );
 
             SwFormatHoriOrient aOldH( rFormat.GetHoriOrient() );
             bool bPutOldH(false);
 
-            if( text::HoriOrientation::NONE == aOldH.GetHoriOrient() && ( !pHoriOrientItem ||
-                aOldH.GetPos() == pHoriOrientItem->GetPos() ))
+            if (text::HoriOrientation::NONE == aOldH.GetHoriOrient() && pHoriOrientItem
+                && text::HoriOrientation::NONE == pHoriOrientItem->GetHoriOrient()
+                && aOldH.GetPos() == pHoriOrientItem->GetPos())
             {
                 SwTwips nPos = (RndStdIds::FLY_AS_CHAR == nOld) ? 0 : aOldH.GetPos();
                 nPos += aOldAnchorPos.getX() - aNewAnchorPos.getX();
 
-                if( pHoriOrientItem )
-                {
-                    aOldH.SetHoriOrient( pHoriOrientItem->GetHoriOrient() );
-                    aOldH.SetRelationOrient( pHoriOrientItem->GetRelationOrient() );
-                }
+                assert(aOldH.GetRelationOrient() != pHoriOrientItem->GetRelationOrient());
+                aOldH.SetRelationOrient(pHoriOrientItem->GetRelationOrient());
+
                 aOldH.SetPos( nPos );
                 bPutOldH = true;
             }
@@ -406,19 +405,16 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
             const SwFormatVertOrient* pVertOrientItem = rSet.GetItemIfSet( RES_VERT_ORIENT, false );
             SwFormatVertOrient aOldV( rFormat.GetVertOrient() );
 
-            // #i28922# - correction: compare <aOldV.GetVertOrient() with
-            // <text::VertOrientation::NONE>
-            if( text::VertOrientation::NONE == aOldV.GetVertOrient() && (!pVertOrientItem ||
-                aOldV.GetPos() == pVertOrientItem->GetPos() ) )
+            if (text::VertOrientation::NONE == aOldV.GetVertOrient() && pVertOrientItem
+                && text::VertOrientation::NONE == pVertOrientItem->GetVertOrient()
+                && aOldV.GetPos() == pVertOrientItem->GetPos())
             {
                 SwTwips nPos = (RndStdIds::FLY_AS_CHAR == nOld) ? 0 : aOldV.GetPos();
                 nPos += aOldAnchorPos.getY() - aNewAnchorPos.getY();
-                if( pVertOrientItem )
-                {
-                    SwFormatVertOrient& rV = const_cast<SwFormatVertOrient&>(*pVertOrientItem);
-                    aOldV.SetVertOrient( rV.GetVertOrient() );
-                    aOldV.SetRelationOrient( rV.GetRelationOrient() );
-                }
+
+                assert(aOldV.GetRelationOrient() != pVertOrientItem->GetRelationOrient());
+                aOldV.SetRelationOrient(pVertOrientItem->GetRelationOrient());
+
                 aOldV.SetPos( nPos );
                 rSet.Put( aOldV );
             }

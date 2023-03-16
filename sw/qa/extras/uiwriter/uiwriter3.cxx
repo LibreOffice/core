@@ -1759,6 +1759,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, TestAsCharTextBox)
     // Without the fix in place the two texboxes has been fallen apart, and  asserts will broken.
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135581)
+{
+    createSwDoc("tdf135581.odt");
+
+    selectShape(1);
+    dispatchCommand(mxComponent, ".uno:SetAnchorAtChar", {}); // this is "to char"
+
+    // Without the fix, the image was moving when the anchor changed, letting text flow back.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140975)
 {
     // Load the bugdoc
