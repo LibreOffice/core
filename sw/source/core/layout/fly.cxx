@@ -97,7 +97,15 @@ SwTwips GetFlyAnchorBottom(SwFlyFrame* pFly, const SwFrame& rAnchor)
             return 0;
         }
 
-        return aRectFnSet.GetBottom(pAnchorUpper->getFrameArea());
+        // See if the fly height would still fit the body frame and the overlap would happen just
+        // because of a vertical offset.
+        SwTwips nFlyHeight = aRectFnSet.GetHeight(pFly->getFrameArea());
+        SwTwips nAnchorUpperHeight = aRectFnSet.GetHeight(pAnchorUpper->getFramePrintArea());
+        if (nFlyHeight <= nAnchorUpperHeight)
+        {
+            // Yes, it would fit: allow overlap.
+            return aRectFnSet.GetBottom(pAnchorUpper->getFrameArea());
+        }
     }
 
     // Word >= 2013 style: the fly has to stay inside the body frame.
