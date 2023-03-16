@@ -519,7 +519,7 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
 
     sal_Int32 nNewAxisIndex = bAttachToMainAxis ? 0 : 1;
     sal_Int32 nOldAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
-    rtl::Reference< Axis > xOldAxis = DiagramHelper::getAttachedAxis( xDataSeries, xDiagram );
+    rtl::Reference< Axis > xOldAxis = xDiagram->getAttachedAxis( xDataSeries );
 
     if( nOldAxisIndex != nNewAxisIndex )
     {
@@ -547,20 +547,6 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
     }
 
     return bChanged;
-}
-
-rtl::Reference< Axis > DiagramHelper::getAttachedAxis(
-        const uno::Reference< XDataSeries >& xSeries,
-        const rtl::Reference< Diagram >& xDiagram )
-{
-    return AxisHelper::getAxis( 1, DiagramHelper::isSeriesAttachedToMainAxis( xSeries ), xDiagram );
-}
-
-rtl::Reference< Axis > DiagramHelper::getAttachedAxis(
-        const rtl::Reference< DataSeries >& xSeries,
-        const rtl::Reference< Diagram >& xDiagram )
-{
-    return AxisHelper::getAxis( 1, DiagramHelper::isSeriesAttachedToMainAxis( xSeries ), xDiagram );
 }
 
 static void lcl_generateAutomaticCategoriesFromChartType(

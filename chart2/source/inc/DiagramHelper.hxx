@@ -153,14 +153,6 @@ public:
         const css::uno::Reference< css::uno::XComponentContext > & xContext,
         bool bAdaptAxes=true );
 
-    static rtl::Reference< ::chart::Axis > getAttachedAxis(
-        const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
-        const rtl::Reference< ::chart::Diagram >& xDiagram );
-
-    static rtl::Reference< ::chart::Axis > getAttachedAxis(
-        const rtl::Reference< ::chart::DataSeries >& xSeries,
-        const rtl::Reference< ::chart::Diagram >& xDiagram );
-
     static css::uno::Sequence< OUString >
         getExplicitSimpleCategories( ChartModel& rModel );
 

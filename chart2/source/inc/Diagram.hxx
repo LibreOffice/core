@@ -39,6 +39,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {
+class Axis;
 class BaseCoordinateSystem;
 class ChartType;
 class DataSeries;
@@ -250,6 +251,12 @@ public:
         getChartTypeOfSeries( const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
     rtl::Reference< ChartType >
         getChartTypeOfSeries( const rtl::Reference< DataSeries >& xSeries );
+
+    rtl::Reference< ::chart::Axis > getAttachedAxis(
+        const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
+
+    rtl::Reference< ::chart::Axis > getAttachedAxis(
+        const rtl::Reference< ::chart::DataSeries >& xSeries );
 
 private:
     // ____ XModifyListener ____

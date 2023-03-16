@@ -489,7 +489,7 @@ void AxisHelper::hideAxisIfNoDataIsAttached( const rtl::Reference< Axis >& xAxis
     std::vector< rtl::Reference< DataSeries > > aSeriesVector = xDiagram->getDataSeries();
     for (auto const& series : aSeriesVector)
     {
-        rtl::Reference< Axis > xCurrentAxis = DiagramHelper::getAttachedAxis(series, xDiagram );
+        rtl::Reference< Axis > xCurrentAxis = xDiagram->getAttachedAxis(series);
         if( xCurrentAxis==xAxis )
         {
             bOtherSeriesAttachedToThisAxis = true;

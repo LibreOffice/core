@@ -18,6 +18,7 @@
  */
 
 #include <Diagram.hxx>
+#include <AxisHelper.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ChartTypeManager.hxx>
 #include <ChartTypeTemplate.hxx>
@@ -1287,7 +1288,17 @@ rtl::Reference< ChartType > Diagram::getChartTypeOfSeries(
     return nullptr;
 }
 
+rtl::Reference< Axis > Diagram::getAttachedAxis(
+        const uno::Reference< css::chart2::XDataSeries >& xSeries )
+{
+    return AxisHelper::getAxis( 1, DiagramHelper::isSeriesAttachedToMainAxis( xSeries ), this );
+}
 
+rtl::Reference< Axis > Diagram::getAttachedAxis(
+        const rtl::Reference< DataSeries >& xSeries )
+{
+    return AxisHelper::getAxis( 1, DiagramHelper::isSeriesAttachedToMainAxis( xSeries ), this );
+}
 
 } //  namespace chart
 

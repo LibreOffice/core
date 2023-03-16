@@ -114,7 +114,7 @@ bool lcl_deleteDataSeries(
                 xUndoManager );
 
             rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xModel );
-            rtl::Reference< Axis > xAxis = DiagramHelper::getAttachedAxis( xSeries, xDiagram );
+            rtl::Reference< Axis > xAxis = xDiagram->getAttachedAxis( xSeries );
 
             DataSeriesHelper::deleteSeries( xSeries, xChartType );
 
