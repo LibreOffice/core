@@ -1255,16 +1255,6 @@ std::vector< rtl::Reference< ::chart::DataSeries > >
 }
 
 rtl::Reference< ChartType > Diagram::getChartTypeOfSeries(
-        const uno::Reference< chart2::XDataSeries >& xGivenDataSeries )
-{
-    if( !xGivenDataSeries.is() )
-        return nullptr;
-    rtl::Reference pGivenDataSeries = dynamic_cast<DataSeries*>(xGivenDataSeries.get());
-    assert(pGivenDataSeries);
-    return getChartTypeOfSeries(pGivenDataSeries);
-}
-
-rtl::Reference< ChartType > Diagram::getChartTypeOfSeries(
         const rtl::Reference< DataSeries >& xGivenDataSeries )
 {
     if( !xGivenDataSeries.is() )
@@ -1293,26 +1283,19 @@ rtl::Reference< ChartType > Diagram::getChartTypeOfSeries(
 }
 
 rtl::Reference< Axis > Diagram::getAttachedAxis(
-        const uno::Reference< css::chart2::XDataSeries >& xSeries )
-{
-    return AxisHelper::getAxis( 1, DiagramHelper::isSeriesAttachedToMainAxis( xSeries ), this );
-}
-
-rtl::Reference< Axis > Diagram::getAttachedAxis(
         const rtl::Reference< DataSeries >& xSeries )
 {
     return AxisHelper::getAxis( 1, DiagramHelper::isSeriesAttachedToMainAxis( xSeries ), this );
 }
 
 bool Diagram::attachSeriesToAxis( bool bAttachToMainAxis
-                        , const uno::Reference< chart2::XDataSeries >& xDataSeries
+                        , const rtl::Reference< DataSeries >& xDataSeries
                         , const uno::Reference< uno::XComponentContext > & xContext
                         , bool bAdaptAxes )
 {
     bool bChanged = false;
 
     //set property at axis
-    Reference< beans::XPropertySet > xProp( xDataSeries, uno::UNO_QUERY_THROW );
 
     sal_Int32 nNewAxisIndex = bAttachToMainAxis ? 0 : 1;
     sal_Int32 nOldAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
@@ -1322,7 +1305,7 @@ bool Diagram::attachSeriesToAxis( bool bAttachToMainAxis
     {
         try
         {
-            xProp->setPropertyValue( "AttachedAxisIndex", uno::Any( nNewAxisIndex ) );
+            xDataSeries->setPropertyValue( "AttachedAxisIndex", uno::Any( nNewAxisIndex ) );
             bChanged = true;
         }
         catch( const uno::Exception & )

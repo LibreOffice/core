@@ -49,9 +49,9 @@ namespace chart::wrapper
 SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         const rtl::Reference<::chart::ChartModel>& xChartModel
         , uno::Reference< uno::XComponentContext > xContext
-        , const uno::Reference< beans::XPropertySet >& xPropertySet
+        , const rtl::Reference< ::chart::DataSeries >& xDataSeries
         , SfxItemPool& rItemPool )
-        : ItemConverter( xPropertySet, rItemPool )
+        : ItemConverter( xDataSeries, rItemPool )
         , m_xChartModel(xChartModel)
         , m_xCC(std::move(xContext))
         , m_bAttachToMainAxis(true)
@@ -72,8 +72,6 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
 {
     try
     {
-        uno::Reference< XDataSeries > xDataSeries( xPropertySet, uno::UNO_QUERY );
-
         m_bAttachToMainAxis = DiagramHelper::isSeriesAttachedToMainAxis( xDataSeries );
 
         rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram(xChartModel) );
@@ -148,7 +146,7 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
             }
         }
 
-        m_bHideLegendEntry = !xPropertySet->getPropertyValue("ShowLegendEntry").get<bool>();
+        m_bHideLegendEntry = !xDataSeries->getPropertyValue("ShowLegendEntry").get<bool>();
     }
     catch( const uno::Exception & )
     {
@@ -184,7 +182,8 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
             if( bAttachToMainAxis != m_bAttachToMainAxis )
             {
                 //change model:
-                bChanged = ChartModelHelper::findDiagram(m_xChartModel)->attachSeriesToAxis( bAttachToMainAxis, uno::Reference< XDataSeries >::query( GetPropertySet() )
+                rtl::Reference<DataSeries> xDataSeries = dynamic_cast<DataSeries*>( GetPropertySet().get() );
+                bChanged = ChartModelHelper::findDiagram(m_xChartModel)->attachSeriesToAxis( bAttachToMainAxis, xDataSeries
                     , m_xCC );
 
                 if( bChanged )
@@ -205,7 +204,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                 if( nWhichId == SCHATTR_BAR_OVERLAP )
                     aPropName = "OverlapSequence";
 
-                uno::Reference< XDataSeries > xDataSeries( GetPropertySet(), uno::UNO_QUERY );
+                rtl::Reference< DataSeries > xDataSeries( dynamic_cast<DataSeries*>(GetPropertySet().get()) );
                 rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram(m_xChartModel) );
                 rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeOfSeries( xDataSeries ) );
                 if( xChartType.is() )

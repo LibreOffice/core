@@ -170,7 +170,7 @@ namespace chart::RegressionCurveHelper
      */
     OOO_DLLPUBLIC_CHARTTOOLS void initializeCurveCalculator(
         const css::uno::Reference<css::chart2::XRegressionCurveCalculator>& xOutCurveCalculator,
-        const css::uno::Reference<css::chart2::XDataSeries>& xSeries,
+        const rtl::Reference<::chart::DataSeries>& xSeries,
         const rtl::Reference<::chart::ChartModel>& xModel );
 
     OOO_DLLPUBLIC_CHARTTOOLS OUString getUINameForRegressionCurve(

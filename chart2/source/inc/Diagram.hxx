@@ -255,18 +255,13 @@ public:
         getDataSeries();
 
     rtl::Reference< ChartType >
-        getChartTypeOfSeries( const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
-    rtl::Reference< ChartType >
         getChartTypeOfSeries( const rtl::Reference< DataSeries >& xSeries );
-
-    rtl::Reference< ::chart::Axis > getAttachedAxis(
-        const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
 
     rtl::Reference< ::chart::Axis > getAttachedAxis(
         const rtl::Reference< ::chart::DataSeries >& xSeries );
 
     bool attachSeriesToAxis( bool bMainAxis,
-        const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
+        const rtl::Reference< DataSeries >& xSeries,
         const css::uno::Reference< css::uno::XComponentContext > & xContext,
         bool bAdaptAxes=true );
 

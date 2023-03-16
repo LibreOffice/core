@@ -64,11 +64,6 @@ public:
     static rtl::Reference< ChartType >
         getChartTypeOfSeries(
             const rtl::Reference<::chart::ChartModel>& xModel
-            , const css::uno::Reference< css::chart2::XDataSeries >& xGivenDataSeries );
-
-    static rtl::Reference< ChartType >
-        getChartTypeOfSeries(
-            const rtl::Reference<::chart::ChartModel>& xModel
             , const rtl::Reference< ::chart::DataSeries >& xGivenDataSeries );
 
     static css::awt::Size getDefaultPageSize();

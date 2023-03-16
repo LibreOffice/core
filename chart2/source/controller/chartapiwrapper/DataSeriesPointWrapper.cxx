@@ -318,7 +318,7 @@ Any WrappedAttachedAxisProperty::getPropertyValue( const Reference< beans::XProp
 
 void WrappedAttachedAxisProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
 {
-    uno::Reference< chart2::XDataSeries > xDataSeries( xInnerPropertySet, uno::UNO_QUERY );
+    rtl::Reference< ::chart::DataSeries > xDataSeries( dynamic_cast<::chart::DataSeries*>(xInnerPropertySet.get()) );
 
     sal_Int32 nChartAxisAssign = css::chart::ChartAxisAssign::PRIMARY_Y;
     if( ! (rOuterValue >>= nChartAxisAssign) )

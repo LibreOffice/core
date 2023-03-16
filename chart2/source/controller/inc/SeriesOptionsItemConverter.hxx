@@ -27,6 +27,7 @@ namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace chart { class ChartModel; }
 namespace chart { class BaseCoordinateSystem; }
+namespace chart { class DataSeries; }
 
 namespace chart::wrapper
 {
@@ -37,7 +38,7 @@ public:
     SeriesOptionsItemConverter(
         const rtl::Reference<::chart::ChartModel> & xChartModel,
         css::uno::Reference< css::uno::XComponentContext > xContext,
-        const css::uno::Reference< css::beans::XPropertySet > & rPropertySet,
+        const rtl::Reference<::chart::DataSeries> & rPropertySet,
         SfxItemPool& rItemPool );
     virtual ~SeriesOptionsItemConverter() override;
 

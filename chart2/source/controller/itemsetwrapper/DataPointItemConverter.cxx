@@ -234,8 +234,10 @@ DataPointItemConverter::DataPointItemConverter(
     m_aConverters.emplace_back( new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
     if( bDataSeries )
     {
+        assert(dynamic_cast<DataSeries*>(rPropertySet.get()));
         m_aConverters.emplace_back( new StatisticsItemConverter( xChartModel, rPropertySet, rItemPool ));
-        m_aConverters.emplace_back( new SeriesOptionsItemConverter( xChartModel, xContext, rPropertySet, rItemPool ));
+        m_aConverters.emplace_back( new SeriesOptionsItemConverter( xChartModel, xContext,
+            dynamic_cast<DataSeries*>(rPropertySet.get()), rItemPool ));
     }
 
     rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram(xChartModel) );

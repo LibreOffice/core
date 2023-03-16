@@ -123,14 +123,6 @@ std::vector< rtl::Reference< DataSeries > > ChartModelHelper::getDataSeries(
 
 rtl::Reference< ChartType > ChartModelHelper::getChartTypeOfSeries(
                                 const rtl::Reference<::chart::ChartModel>& xModel
-                              , const uno::Reference< XDataSeries >&   xGivenDataSeries )
-{
-    rtl::Reference<Diagram> xDiagram = ChartModelHelper::findDiagram( xModel );
-    return xDiagram ? xDiagram->getChartTypeOfSeries( xGivenDataSeries ) : nullptr;
-}
-
-rtl::Reference< ChartType > ChartModelHelper::getChartTypeOfSeries(
-                                const rtl::Reference<::chart::ChartModel>& xModel
                               , const rtl::Reference< DataSeries >&   xGivenDataSeries )
 {
     rtl::Reference<Diagram> xDiagram = ChartModelHelper::findDiagram( xModel );
