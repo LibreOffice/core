@@ -136,7 +136,7 @@ css::uno::Any WrappedVolumeProperty::getPropertyValue( const css::uno::Reference
     if( xDiagram.is() && xChartDoc.is() )
     {
         std::vector< rtl::Reference< DataSeries > > aSeriesVector =
-            DiagramHelper::getDataSeriesFromDiagram( xDiagram );
+            xDiagram->getDataSeries();
         if( !aSeriesVector.empty() )
         {
             rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = xChartDoc->getTypeManager();
@@ -205,7 +205,7 @@ css::uno::Any WrappedUpDownProperty::getPropertyValue( const css::uno::Reference
     if( xDiagram.is() && xChartDoc.is() )
     {
         std::vector< rtl::Reference< DataSeries > > aSeriesVector =
-            DiagramHelper::getDataSeriesFromDiagram( xDiagram );
+            xDiagram->getDataSeries();
         if( !aSeriesVector.empty() )
         {
             rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = xChartDoc->getTypeManager();

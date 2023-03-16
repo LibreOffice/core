@@ -166,10 +166,6 @@ public:
             const rtl::Reference< ::chart::Diagram >& xDiagram,
             const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
 
-    static std::vector< rtl::Reference< ::chart::DataSeries > >
-        getDataSeriesFromDiagram(
-            const rtl::Reference< ::chart::Diagram > & xDiagram );
-
     static css::uno::Sequence< OUString >
         getExplicitSimpleCategories( ChartModel& rModel );
 

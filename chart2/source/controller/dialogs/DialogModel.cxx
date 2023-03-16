@@ -718,7 +718,7 @@ void DialogModel::setData(
             ThreeDLookScheme e3DScheme = ThreeDHelper::detectScheme( xDiagram );
 
             std::vector< rtl::Reference< DataSeries > > aSeriesToReUse =
-                DiagramHelper::getDataSeriesFromDiagram( xDiagram );
+                xDiagram->getDataSeries();
             applyInterpretedData(
                 xInterpreter->interpretDataSource(
                     xDataSource, rArguments,

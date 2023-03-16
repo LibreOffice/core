@@ -529,7 +529,7 @@ OUString ObjectNameProvider::getHelpText( std::u16string_view rObjectCID, const 
             if( nIndex != -1 )
             {
                 std::vector< rtl::Reference< DataSeries > > aSeriesVector =
-                    DiagramHelper::getDataSeriesFromDiagram( xDiagram );
+                    xDiagram->getDataSeries();
                 sal_Int32 nSeriesIndex = -1;
                 for( nSeriesIndex=aSeriesVector.size();nSeriesIndex--;)
                 {
@@ -743,7 +743,7 @@ OUString ObjectNameProvider::getSelectedObjectText( std::u16string_view rObjectC
             // replace data series index
             {
                 std::vector< rtl::Reference< DataSeries > > aSeriesVector(
-                    DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+                    xDiagram->getDataSeries() );
                 sal_Int32 nSeriesIndex = -1;
                 for( nSeriesIndex=aSeriesVector.size();nSeriesIndex--;)
                 {

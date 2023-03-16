@@ -116,7 +116,7 @@ std::vector< rtl::Reference< DataSeries > > ChartModelHelper::getDataSeries(
 
     rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartDoc );
     if( xDiagram.is())
-        aResult = DiagramHelper::getDataSeriesFromDiagram( xDiagram );
+        aResult = xDiagram->getDataSeries();
 
     return aResult;
 }

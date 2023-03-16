@@ -60,30 +60,31 @@ public:
 
     bool detectInnerValue( PROPERTYTYPE& rValue, bool& rHasAmbiguousValue ) const
     {
-        bool bHasDetectableInnerValue = false;
         rHasAmbiguousValue = false;
-        if( m_ePropertyType == DIAGRAM &&
-            m_spChart2ModelContact )
+        if( m_ePropertyType != DIAGRAM || !m_spChart2ModelContact )
+            return false;
+        bool bHasDetectableInnerValue = false;
+        rtl::Reference<Diagram> xDiagram = m_spChart2ModelContact->getDiagram();
+        if (!xDiagram)
+            return false;
+        std::vector< rtl::Reference< DataSeries > > aSeriesVector =
+            xDiagram->getDataSeries();
+        for (auto const& series : aSeriesVector)
         {
-            std::vector< rtl::Reference< DataSeries > > aSeriesVector =
-                ::chart::DiagramHelper::getDataSeriesFromDiagram( m_spChart2ModelContact->getDiagram() );
-            for (auto const& series : aSeriesVector)
+            PROPERTYTYPE aCurValue = getValueFromSeries( series );
+            if( !bHasDetectableInnerValue )
+                rValue = aCurValue;
+            else
             {
-                PROPERTYTYPE aCurValue = getValueFromSeries( series );
-                if( !bHasDetectableInnerValue )
-                    rValue = aCurValue;
-                else
+                if( rValue != aCurValue )
                 {
-                    if( rValue != aCurValue )
-                    {
-                        rHasAmbiguousValue = true;
-                        break;
-                    }
-                    else
-                        rValue = aCurValue;
+                    rHasAmbiguousValue = true;
+                    break;
                 }
-                bHasDetectableInnerValue = true;
+                else
+                    rValue = aCurValue;
             }
+            bHasDetectableInnerValue = true;
         }
         return bHasDetectableInnerValue;
     }
@@ -93,7 +94,7 @@ public:
             m_spChart2ModelContact )
         {
             std::vector< rtl::Reference< DataSeries > > aSeriesVector =
-                ::chart::DiagramHelper::getDataSeriesFromDiagram( m_spChart2ModelContact->getDiagram() );
+                m_spChart2ModelContact->getDiagram()->getDataSeries();
             for (auto const& series : aSeriesVector)
             {
                 setValueToSeries( series, aNewValue );

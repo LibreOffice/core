@@ -225,7 +225,9 @@ rtl::Reference< DataSource > DataSourceHelper::pressUsedDataIntoRectangularForma
     if( xCategories.is() )
         aResultVector.push_back( xCategories );
 
-    std::vector< rtl::Reference< DataSeries > > aSeriesVector = DiagramHelper::getDataSeriesFromDiagram( xDiagram );
+    std::vector< rtl::Reference< DataSeries > > aSeriesVector;
+    if (xDiagram)
+        aSeriesVector = xDiagram->getDataSeries();
     uno::Reference< chart2::data::XDataSource > xSeriesSource =
         DataSeriesHelper::getDataSource( aSeriesVector );
     const Sequence< Reference< chart2::data::XLabeledDataSequence > > aDataSequences( xSeriesSource->getDataSequences() );
@@ -258,7 +260,7 @@ uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges(
         if( xCategories.is() )
             lcl_addRanges( aResult, xCategories );
 
-        std::vector< rtl::Reference< DataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+        std::vector< rtl::Reference< DataSeries > > aSeriesVector( xDiagram->getDataSeries() );
         for (auto const& series : aSeriesVector)
         {
             lcl_addDataSourceRanges( aResult, series );

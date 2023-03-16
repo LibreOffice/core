@@ -36,6 +36,7 @@
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <DataSeries.hxx>
+#include <Diagram.hxx>
 #include <ResId.hxx>
 #include <strings.hrc>
 #include <DiagramHelper.hxx>
@@ -847,7 +848,7 @@ std::vector< rtl::Reference< RegressionCurveModel > >
         const rtl::Reference< Diagram > & xDiagram )
 {
     std::vector< rtl::Reference< RegressionCurveModel > > aResult;
-    std::vector< rtl::Reference< DataSeries > > aSeries( DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
+    std::vector< rtl::Reference< DataSeries > > aSeries( xDiagram->getDataSeries());
     for (auto const& elem : aSeries)
     {
         for( rtl::Reference< RegressionCurveModel > const & curve : elem->getRegressionCurves2() )

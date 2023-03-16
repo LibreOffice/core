@@ -1294,7 +1294,7 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
         drawing::LineStyle aLineStyle( drawing::LineStyle_SOLID );
 
         std::vector< rtl::Reference< DataSeries > > aSeriesList =
-            DiagramHelper::getDataSeriesFromDiagram( xDiagram );
+            xDiagram->getDataSeries();
         sal_Int32 nSeriesCount = static_cast<sal_Int32>( aSeriesList.size() );
 
         OUString aPercentDiagonalPropertyName( "PercentDiagonal" );
@@ -1393,7 +1393,7 @@ void ThreeDHelper::setRoundedEdgesAndObjectLines(
     uno::Any aARoundedEdges( static_cast< sal_Int16 >( nRoundedEdges ));
 
     std::vector< rtl::Reference< DataSeries > > aSeriesList =
-        DiagramHelper::getDataSeriesFromDiagram( xDiagram );
+        xDiagram->getDataSeries();
     for( auto const&  xSeries : aSeriesList)
     {
         if( nRoundedEdges>=0 && nRoundedEdges<=100 )

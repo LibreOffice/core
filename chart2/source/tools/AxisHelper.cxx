@@ -486,7 +486,7 @@ void AxisHelper::hideAxisIfNoDataIsAttached( const rtl::Reference< Axis >& xAxis
 {
     //axis is hidden if no data is attached anymore but data is available
     bool bOtherSeriesAttachedToThisAxis = false;
-    std::vector< rtl::Reference< DataSeries > > aSeriesVector = DiagramHelper::getDataSeriesFromDiagram( xDiagram );
+    std::vector< rtl::Reference< DataSeries > > aSeriesVector = xDiagram->getDataSeries();
     for (auto const& series : aSeriesVector)
     {
         rtl::Reference< Axis > xCurrentAxis = DiagramHelper::getAttachedAxis(series, xDiagram );
@@ -1126,7 +1126,7 @@ void AxisHelper::setRTLAxisLayout( const rtl::Reference< BaseCoordinateSystem >&
 rtl::Reference< ChartType > AxisHelper::getFirstChartTypeWithSeriesAttachedToAxisIndex( const rtl::Reference< Diagram >& xDiagram, const sal_Int32 nAttachedAxisIndex )
 {
     rtl::Reference< ChartType > xChartType;
-    std::vector< rtl::Reference< DataSeries > > aSeriesVector = DiagramHelper::getDataSeriesFromDiagram( xDiagram );
+    std::vector< rtl::Reference< DataSeries > > aSeriesVector = xDiagram->getDataSeries();
     for (auto const& series : aSeriesVector)
     {
         sal_Int32 nCurrentIndex = DataSeriesHelper::getAttachedAxisIndex(series);

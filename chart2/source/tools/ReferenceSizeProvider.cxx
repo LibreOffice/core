@@ -95,7 +95,7 @@ void ReferenceSizeProvider::setValuesAtAllDataSeries()
 
     // DataSeries/Points
     std::vector< rtl::Reference< DataSeries > > aSeries =
-        DiagramHelper::getDataSeriesFromDiagram( xDiagram );
+        xDiagram->getDataSeries();
 
     for (auto const& elem : aSeries)
     {
@@ -253,7 +253,7 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
 
     // DataSeries/Points
     std::vector< rtl::Reference< DataSeries > > aSeries =
-        DiagramHelper::getDataSeriesFromDiagram( xDiagram );
+        xDiagram->getDataSeries();
 
     for (auto const& elem : aSeries)
     {

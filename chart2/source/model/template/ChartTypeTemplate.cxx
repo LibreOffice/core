@@ -252,7 +252,7 @@ void ChartTypeTemplate::changeDiagramData(
     {
         // interpret new data and re-use existing series
         std::vector< rtl::Reference< DataSeries > > aFlatSeriesSeq =
-            DiagramHelper::getDataSeriesFromDiagram( xDiagram );
+            xDiagram->getDataSeries();
         const sal_Int32 nFormerSeriesCount = aFlatSeriesSeq.size();
         rtl::Reference< DataInterpreter > xInterpreter( getDataInterpreter2());
         InterpretedData aData =

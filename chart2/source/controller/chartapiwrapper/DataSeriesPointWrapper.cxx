@@ -560,7 +560,7 @@ rtl::Reference< DataSeries > DataSeriesPointWrapper::getDataSeries()
     {
         rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
         std::vector< rtl::Reference< DataSeries > > aSeriesList =
-            ::chart::DiagramHelper::getDataSeriesFromDiagram( xDiagram );
+            xDiagram->getDataSeries();
 
         if( m_nSeriesIndexInNewAPI >= 0 && o3tl::make_unsigned(m_nSeriesIndexInNewAPI) < aSeriesList.size() )
             xSeries = aSeriesList[m_nSeriesIndexInNewAPI];

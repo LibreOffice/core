@@ -243,6 +243,9 @@ public:
                rtl::Reference< ::chart::DataSeries > > >
         getDataSeriesGroups();
 
+    std::vector< rtl::Reference< ::chart::DataSeries > >
+        getDataSeries();
+
 private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

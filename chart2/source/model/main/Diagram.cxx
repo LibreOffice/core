@@ -759,7 +759,7 @@ sal_Int32 Diagram::getCorrectedMissingValueTreatment(
 void Diagram::setGeometry3D( sal_Int32 nNewGeometry )
 {
     std::vector< rtl::Reference< DataSeries > > aSeriesVec =
-        DiagramHelper::getDataSeriesFromDiagram( this );
+        getDataSeries();
 
     for (auto const& series : aSeriesVec)
     {
@@ -774,8 +774,7 @@ sal_Int32 Diagram::getGeometry3D( bool& rbFound, bool& rbAmbiguous )
     rbFound = false;
     rbAmbiguous = false;
 
-    std::vector< rtl::Reference< DataSeries > > aSeriesVec =
-        DiagramHelper::getDataSeriesFromDiagram( this );
+    std::vector< rtl::Reference< DataSeries > > aSeriesVec = getDataSeries();
 
     if( aSeriesVec.empty())
         rbAmbiguous = true;
@@ -1226,6 +1225,30 @@ Diagram::getDataSeriesGroups()
     }
     return aResult;
 }
+
+std::vector< rtl::Reference< ::chart::DataSeries > >
+    Diagram::getDataSeries()
+{
+    std::vector< rtl::Reference< DataSeries > > aResult;
+    try
+    {
+        for( rtl::Reference< BaseCoordinateSystem > const & coords : getBaseCoordinateSystems() )
+        {
+            for( rtl::Reference< ChartType> const & chartType : coords->getChartTypes2() )
+            {
+                const std::vector< rtl::Reference< DataSeries > > aSeriesSeq( chartType->getDataSeries2() );
+                aResult.insert( aResult.end(), aSeriesSeq.begin(), aSeriesSeq.end() );
+            }
+        }
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+
+    return aResult;
+}
+
 
 } //  namespace chart
 

@@ -260,7 +260,7 @@ void BarChartTypeTemplate::resetStyles2(
 {
     ChartTypeTemplate::resetStyles2( xDiagram );
     std::vector< rtl::Reference< DataSeries > > aSeriesVec(
-        DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
+        xDiagram->getDataSeries());
     uno::Any aLineStyleAny( drawing::LineStyle_NONE );
     for (auto const& series : aSeriesVec)
     {

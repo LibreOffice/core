@@ -188,7 +188,7 @@ void AreaChartTypeTemplate::resetStyles2( const rtl::Reference< ::chart::Diagram
 {
     ChartTypeTemplate::resetStyles2( xDiagram );
     std::vector< rtl::Reference< ::chart::DataSeries > > aSeriesVec(
-        DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
+        xDiagram->getDataSeries());
     uno::Any aLineStyleAny( drawing::LineStyle_NONE );
     for (auto const& series : aSeriesVec)
     {

@@ -292,7 +292,7 @@ bool PieChartTypeTemplate::matchesTemplate2(
             sal_Int32 nOuterSeriesIndex = 0;
 
             std::vector< rtl::Reference< DataSeries > > aSeriesVec =
-                DiagramHelper::getDataSeriesFromDiagram( xDiagram );
+                xDiagram->getDataSeries();
 
             //tdf#108067 The outer series is the last series in OOXML-heavy environments
             if( !officecfg::Office::Compatibility::View::ReverseXAxisOrientationDoughnutChart::get() )
@@ -533,7 +533,7 @@ void PieChartTypeTemplate::resetStyles2( const rtl::Reference< ::chart::Diagram 
     // vary colors by point,
     // line style
     std::vector< rtl::Reference< DataSeries > > aSeriesVec =
-        DiagramHelper::getDataSeriesFromDiagram( xDiagram );
+        xDiagram->getDataSeries();
     uno::Any aLineStyleAny( drawing::LineStyle_NONE );
     for (auto const& series : aSeriesVec)
     {

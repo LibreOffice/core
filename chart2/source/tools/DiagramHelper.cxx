@@ -596,33 +596,6 @@ rtl::Reference< ChartType > DiagramHelper::getChartTypeOfSeries(
     return nullptr;
 }
 
-std::vector< rtl::Reference< ::chart::DataSeries > >
-    DiagramHelper::getDataSeriesFromDiagram(
-        const rtl::Reference< Diagram > & xDiagram )
-{
-    std::vector< rtl::Reference< DataSeries > > aResult;
-    if (!xDiagram)
-        return aResult;
-
-    try
-    {
-        for( rtl::Reference< BaseCoordinateSystem > const & coords : xDiagram->getBaseCoordinateSystems() )
-        {
-            for( rtl::Reference< ChartType> const & chartType : coords->getChartTypes2() )
-            {
-                const std::vector< rtl::Reference< DataSeries > > aSeriesSeq( chartType->getDataSeries2() );
-                aResult.insert( aResult.end(), aSeriesSeq.begin(), aSeriesSeq.end() );
-            }
-        }
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-
-    return aResult;
-}
-
 static void lcl_generateAutomaticCategoriesFromChartType(
             Sequence< OUString >& rRet,
             const rtl::Reference< ChartType >& xChartType )

@@ -438,10 +438,10 @@ void ChartController::executeDispatch_InsertMenu_MeanValues()
         //if a series is selected insert mean value only for that series:
         lcl_InsertMeanValueLine( xSeries );
     }
-    else
+    else if (rtl::Reference<Diagram> xDiagram = getFirstDiagram())
     {
         std::vector< rtl::Reference< DataSeries > > aSeries =
-            DiagramHelper::getDataSeriesFromDiagram( getFirstDiagram());
+            xDiagram->getDataSeries();
 
         for( const auto& xSrs : aSeries )
             lcl_InsertMeanValueLine( xSrs );
