@@ -477,10 +477,12 @@ struct PDFScreen : public PDFAnnotation
     sal_Int32 m_nTempFileObject;
     /// alternative text description
     OUString m_AltText;
+    sal_Int32 m_nStructParent;
 
     PDFScreen(OUString const& rAltText)
         : m_nTempFileObject(0)
         , m_AltText(rAltText)
+        , m_nStructParent(-1)
     {
     }
 };
@@ -584,6 +586,7 @@ struct PDFStructureElement
     std::list< PDFStructureElementKid >                 m_aKids;
     std::map<PDFWriter::StructAttribute, PDFStructureAttribute >
                                                         m_aAttributes;
+    ::std::vector<sal_Int32>                            m_AnnotIds;
     tools::Rectangle                                    m_aBBox;
     OUString                                            m_aActualText;
     OUString                                            m_aAltText;
@@ -686,7 +689,7 @@ class PDFWriterImpl final : public VirtualDevice, public PDFObjectContainer
 public:
     friend struct vcl::pdf::PDFPage;
 
-    static const char* getStructureTag( PDFWriter::StructElement );
+    const char* getStructureTag( PDFWriter::StructElement );
     static const char* getAttributeTag( PDFWriter::StructAttribute eAtr );
     static const char* getAttributeValueTag( PDFWriter::StructAttributeValue eVal );
 
@@ -973,6 +976,7 @@ i12626
     sal_Int32 emitNamedDestinations();//i56629
     // writes outline dict and tree
     sal_Int32 emitOutline();
+    template<typename T> void AppendAnnotKid(PDFStructureElement& i_rEle, T & rAnnot);
     // puts the attribute objects of a structure element into the returned string,
     // helper for emitStructure
     OString emitStructureAttributes( PDFStructureElement& rEle );
@@ -1316,6 +1320,7 @@ public:
     bool setStructureAttribute( enum PDFWriter::StructAttribute eAttr, enum PDFWriter::StructAttributeValue eVal );
     bool setStructureAttributeNumerical( enum PDFWriter::StructAttribute eAttr, sal_Int32 nValue );
     void setStructureBoundingBox( const tools::Rectangle& rRect );
+    void setStructureAnnotIds(::std::vector<sal_Int32> const& rAnnotIds);
     void setActualText( const OUString& rText );
     void setAlternateText( const OUString& rText );
 

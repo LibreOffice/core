@@ -67,6 +67,8 @@ public:
     virtual bool isOutputToPrinter() const override;
     virtual bool isOutputToRecordingMetaFile() const override;
     virtual bool isOutputToPDFFile() const override;
+    virtual bool isExportTaggedPDF() const override;
+    virtual ::vcl::PDFExtOutDevData const* GetPDFExtOutDevData() const override;
     virtual bool isDrawModeGray() const override;
     virtual bool isDrawModeHighContrast() const override;
     virtual SdrPageView* TryToGetSdrPageView() const override;
@@ -177,6 +179,8 @@ void PagePrimitiveExtractor::InvalidatePartOfView(const basegfx::B2DRange& rRang
 bool PagePrimitiveExtractor::isOutputToPrinter() const { return mrViewObjectContactOfPageObj.GetObjectContact().isOutputToPrinter(); }
 bool PagePrimitiveExtractor::isOutputToRecordingMetaFile() const { return mrViewObjectContactOfPageObj.GetObjectContact().isOutputToRecordingMetaFile(); }
 bool PagePrimitiveExtractor::isOutputToPDFFile() const { return mrViewObjectContactOfPageObj.GetObjectContact().isOutputToPDFFile(); }
+bool PagePrimitiveExtractor::isExportTaggedPDF() const { return mrViewObjectContactOfPageObj.GetObjectContact().isExportTaggedPDF(); }
+::vcl::PDFExtOutDevData const* PagePrimitiveExtractor::GetPDFExtOutDevData() const { return mrViewObjectContactOfPageObj.GetObjectContact().GetPDFExtOutDevData(); }
 bool PagePrimitiveExtractor::isDrawModeGray() const { return mrViewObjectContactOfPageObj.GetObjectContact().isDrawModeGray(); }
 bool PagePrimitiveExtractor::isDrawModeHighContrast() const { return mrViewObjectContactOfPageObj.GetObjectContact().isDrawModeHighContrast(); }
 SdrPageView* PagePrimitiveExtractor::TryToGetSdrPageView() const { return mrViewObjectContactOfPageObj.GetObjectContact().TryToGetSdrPageView(); }
