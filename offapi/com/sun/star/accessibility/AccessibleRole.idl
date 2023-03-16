@@ -34,10 +34,6 @@ module com { module sun { module star { module accessibility {
     include future extensions to the set of roles we have to use constants
     here.</p>
 
-    <p>For some roles there exist two labels with the same value.  Please
-    use the one with the underscores.  The other ones are somewhat
-    deprecated and will be removed in the future. </p>
-
     @see XAccessibleContext
 
     @since OOo 1.1.2
