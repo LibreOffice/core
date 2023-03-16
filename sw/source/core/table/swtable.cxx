@@ -1614,38 +1614,58 @@ bool SwTable::IsDeleted() const
     return true;
 }
 
+void SwTable::GatherFormulas(std::vector<SwTableBoxFormula*>& rvFormulas)
+{
+    for(SfxPoolItem* pItem: GetFrameFormat()->GetDoc()->GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA))
+    {
+        auto pBoxFormula = dynamic_cast<SwTableBoxFormula*>(pItem);
+        assert(pBoxFormula); // use StaticWhichCast instead?
+        if(!pBoxFormula->GetDefinedIn())
+            continue;
+        const SwNode* pNd = pBoxFormula->GetNodeOfFormula();
+        if(!pNd || &pNd->GetNodes() != &pNd->GetDoc().GetNodes()) // is this ever valid or should we assert here?
+            continue;
+        rvFormulas.push_back(pBoxFormula);
+    }
+}
+
+void SwTable::Split(OUString sNewTableName, sal_uInt16 nSplitLine, SwHistory* pHistory)
+{
+    SwTableFormulaUpdate aHint(this);
+    aHint.m_eFlags = TBL_SPLITTBL;
+    aHint.m_aData.pNewTableNm = &sNewTableName;
+    aHint.m_nSplitLine = nSplitLine;
+    aHint.m_pHistory = pHistory;
+
+    std::vector<SwTableBoxFormula*> vFormulas;
+    GatherFormulas(vFormulas);
+    for(auto pBoxFormula: vFormulas)
+    {
+        const SwNode* pNd = pBoxFormula->GetNodeOfFormula();
+        const SwTableNode* pTableNd = pNd->FindTableNode();
+        if(pTableNd == nullptr)
+            continue;
+        if(&pTableNd->GetTable() == this)
+        {
+            sal_uInt16 nLnPos = SwTableFormula::GetLnPosInTable(*this, pBoxFormula->GetTableBox());
+            aHint.m_bBehindSplitLine = USHRT_MAX != nLnPos && aHint.m_nSplitLine <= nLnPos;
+        }
+        else
+            aHint.m_bBehindSplitLine = false;
+        pBoxFormula->ToSplitMergeBoxNmWithHistory(aHint, pHistory);
+    }
+}
+
 void SwTable::Merge(SwTable& rTable, SwHistory* pHistory)
 {
     SwTableFormulaUpdate aHint(this);
-    aHint.m_aData.pDelTable = &rTable;
     aHint.m_eFlags = TBL_MERGETBL;
+    aHint.m_aData.pDelTable = &rTable;
     aHint.m_pHistory = pHistory;
-    // process all table box formulas
-    for(SfxPoolItem* pItem : GetFrameFormat()->GetDoc()->GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA))
-    {
-        auto pBoxFormula = pItem->DynamicWhichCast(RES_BOXATR_FORMULA);
-        assert(pBoxFormula);
-        if(pBoxFormula->GetDefinedIn())
-        {
-            const SwNode* pNd = pBoxFormula->GetNodeOfFormula();
-            // for a history record the unchanged formula is needed
-            SwTableBoxFormula aCopy(*pBoxFormula);
-            aHint.m_bModified = false;
-            pBoxFormula->ToSplitMergeBoxNm(aHint);
-
-            if(aHint.m_bModified)
-            {
-                // external rendering
-                aCopy.PtrToBoxNm(this);
-                aHint.m_pHistory->Add(
-                    &aCopy,
-                    &aCopy,
-                    pNd->FindTableBoxStartNode()->GetIndex());
-            }
-        }
-        else
-            pBoxFormula->ToSplitMergeBoxNm(aHint);
-    }
+    std::vector<SwTableBoxFormula*> vFormulas;
+    GatherFormulas(vFormulas);
+    for(auto pBoxFormula: vFormulas)
+        pBoxFormula->ToSplitMergeBoxNmWithHistory(aHint, pHistory);
 }
 
 void SwTable::UpdateFields(TableFormulaUpdateFlags eFlags)

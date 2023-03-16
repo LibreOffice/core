@@ -602,7 +602,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
     if(pHt && RES_TABLEFML_UPDATE == pHt->Which())
         pUpdateField = static_cast<SwTableFormulaUpdate*>(pHt);
     assert(!pHt || pUpdateField);
-    assert(!pUpdateField || pUpdateField->m_eFlags == TBL_CALC || pUpdateField->m_eFlags == TBL_SPLITTBL);
+    assert(!pUpdateField || pUpdateField->m_eFlags == TBL_CALC);
     auto pFieldType = GetFieldType( SwFieldIds::Table, OUString(), false );
     if(pFieldType && (!pUpdateField || pUpdateField->m_eFlags == TBL_CALC))
     {

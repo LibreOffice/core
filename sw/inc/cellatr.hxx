@@ -27,6 +27,8 @@
 #include "hintids.hxx"
 #include "cellfml.hxx"
 
+class SwHistory;
+
 /** The number formatter's default locale's @ Text format.
     Not necessarily system locale, but the locale the formatter was constructed
     with. For this SvNumberFormatter::IsTextFormat() always returns true.
@@ -72,6 +74,7 @@ public:
         { return const_cast<SwTableBoxFormula*>(this)->GetTableBox(); }
 
     void TryBoxNmToPtr();
+    void ToSplitMergeBoxNmWithHistory(SwTableFormulaUpdate& rUpdate, SwHistory* pHistory);
     void ChangeState( const SfxPoolItem* pItem );
     void Calc( SwTableCalcPara& rCalcPara, double& rValue );
 };

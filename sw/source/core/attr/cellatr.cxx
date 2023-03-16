@@ -104,6 +104,28 @@ void SwTableBoxFormula::TryBoxNmToPtr()
         BoxNmToPtr(&pTableNd->GetTable());
     }
 }
+void SwTableBoxFormula::ToSplitMergeBoxNmWithHistory(SwTableFormulaUpdate& rUpdate, SwHistory* pHistory)
+{
+    if(!pHistory)
+    {
+        ToSplitMergeBoxNm(rUpdate);
+        return;
+    }
+    auto pNd = GetNodeOfFormula();
+    // for a history record the unchanged formula is needed
+    SwTableBoxFormula aCopy(*this);
+    rUpdate.m_bModified = false;
+    ToSplitMergeBoxNm(rUpdate);
+    if(rUpdate.m_bModified)
+    {
+        // external rendering
+        aCopy.PtrToBoxNm(&pNd->FindTableNode()->GetTable());
+        pHistory->Add(
+            &aCopy,
+            &aCopy,
+            pNd->FindTableBoxStartNode()->GetIndex());
+    }
+}
 void SwTableBoxFormula::ChangeState( const SfxPoolItem* pItem )
 {
     if( !m_pDefinedIn )
@@ -137,40 +159,9 @@ void SwTableBoxFormula::ChangeState( const SfxPoolItem* pItem )
     case TBL_BOXPTR:
     case TBL_RELBOXNAME:
     case TBL_BOXNAME:
-        assert(false); // PtrToBoxNm, ToRelBoxNm and BoxNmToPtr are all public -- use just them directly
-        break;
-
     case TBL_SPLITTBL:
-        if( &pTableNd->GetTable() == pUpdateField->m_pTable )
-        {
-            sal_uInt16 nLnPos = SwTableFormula::GetLnPosInTable(
-                                    pTableNd->GetTable(), GetTableBox() );
-            pUpdateField->m_bBehindSplitLine = USHRT_MAX != nLnPos &&
-                                        pUpdateField->m_nSplitLine <= nLnPos;
-        }
-        else
-            pUpdateField->m_bBehindSplitLine = false;
-        [[fallthrough]];
     case TBL_MERGETBL:
-        if( pUpdateField->m_pHistory )
-        {
-            // for a history record the unchanged formula is needed
-            SwTableBoxFormula aCopy( *this );
-            pUpdateField->m_bModified = false;
-            ToSplitMergeBoxNm( *pUpdateField );
-
-            if( pUpdateField->m_bModified )
-            {
-                // external rendering
-                aCopy.PtrToBoxNm( &pTableNd->GetTable() );
-                pUpdateField->m_pHistory->Add(
-                    &aCopy,
-                    &aCopy,
-                    pNd->FindTableBoxStartNode()->GetIndex());
-            }
-        }
-        else
-            ToSplitMergeBoxNm( *pUpdateField );
+        assert(false); // PtrToBoxNm, ToRelBoxNm and BoxNmToPtr are all public -- use just them directly
         break;
     }
 }

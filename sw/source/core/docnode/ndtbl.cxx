@@ -3090,33 +3090,22 @@ void SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnM
     SwTable& rTable = pTNd->GetTable();
     rTable.SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>()); // Delete HTML Layout
 
-    SwTableFormulaUpdate aMsgHint( &rTable );
-
     SwHistory aHistory;
-    if (GetIDocumentUndoRedo().DoesUndo())
-    {
-        aMsgHint.m_pHistory = &aHistory;
-    }
-
     {
         SwNodeOffset nSttIdx = pNd->FindTableBoxStartNode()->GetIndex();
-
         // Find top-level Line
-        SwTableBox* pBox = rTable.GetTableBox( nSttIdx );
-        if( pBox )
+        SwTableBox* pBox = rTable.GetTableBox(nSttIdx);
+        sal_uInt16 nSplitLine = 0;
+        if(pBox)
         {
             SwTableLine* pLine = pBox->GetUpper();
-            while( pLine->GetUpper() )
+            while(pLine->GetUpper())
                 pLine = pLine->GetUpper()->GetUpper();
 
             // pLine contains the top-level Line now
-            aMsgHint.m_nSplitLine = rTable.GetTabLines().GetPos( pLine );
+            nSplitLine = rTable.GetTabLines().GetPos(pLine);
         }
-
-        OUString sNewTableNm( GetUniqueTableName() );
-        aMsgHint.m_aData.pNewTableNm = &sNewTableNm;
-        aMsgHint.m_eFlags = TBL_SPLITTBL;
-        getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
+        rTable.Split(GetUniqueTableName(), nSplitLine, GetIDocumentUndoRedo().DoesUndo() ? &aHistory : nullptr);
     }
 
     // Find Lines for the Layout update

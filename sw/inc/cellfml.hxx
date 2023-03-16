@@ -109,7 +109,6 @@ protected:
                             *rCalcPara.m_pTable, &rCalcPara );
     }
 
-    static sal_uInt16 GetLnPosInTable( const SwTable& rTable, const SwTableBox* pBox );
 
 public:
 
@@ -146,6 +145,7 @@ public:
     void GetBoxesOfFormula(const SwTable& rTable, SwSelBoxes& rBoxes);
     // are all boxes valid which this formula relies on?
     bool HasValidBoxes() const;
+    static sal_uInt16 GetLnPosInTable( const SwTable& rTable, const SwTableBox* pBox );
 };
 
 #endif

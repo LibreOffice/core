@@ -176,9 +176,9 @@ private:
     void ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox);
     // Only used for TBL_BOXNAME and TBL_RELBOXNAME for now
     void UpdateFields(TableFormulaUpdateFlags eFlags);
+    void GatherFormulas(std::vector<SwTableBoxFormula*>& rvFormulas);
 
 public:
-
     SwHTMLTableLayout *GetHTMLTableLayout() { return m_xHTMLLayout.get(); }
     const SwHTMLTableLayout *GetHTMLTableLayout() const { return m_xHTMLLayout.get(); }
     void SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout> const& r);    //Change of property!
@@ -366,6 +366,7 @@ public:
     void SwitchFormulasToInternalRepresentation()
         { UpdateFields(TBL_BOXPTR); }
     void Merge(SwTable& rTable, SwHistory* pHistory);
+    void Split(OUString sNewTableName, sal_uInt16 nSplitLine, SwHistory* pHistory);
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
