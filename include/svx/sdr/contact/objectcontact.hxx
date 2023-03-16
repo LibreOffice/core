@@ -30,6 +30,10 @@ namespace tools { class Rectangle; }
 class SdrPageView;
 class OutputDevice;
 
+namespace vcl {
+    class PDFExtOutDevData;
+}
+
 namespace basegfx {
     class B2DRange;
     class B2DHomMatrix;
@@ -138,6 +142,7 @@ public:
     // pdf export? Default is false
     virtual bool isOutputToPDFFile() const;
     virtual bool isExportTaggedPDF() const;
+    virtual ::vcl::PDFExtOutDevData const* GetPDFExtOutDevData() const;
 
     // gray display mode
     virtual bool isDrawModeGray() const;

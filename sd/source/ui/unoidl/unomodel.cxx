@@ -1658,7 +1658,8 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
                 xShapePropSet->getPropertyValue("MediaURL") >>= aMediaURL;
                 if (!aMediaURL.isEmpty())
                 {
-                    sal_Int32 nScreenId = rPDFExtOutDevData.CreateScreen(aLinkRect, altText, rPDFExtOutDevData.GetCurrentPageNumber());
+                    SdrObject const*const pSdrObj(SdrObject::getSdrObjectFromXShape(xShape));
+                    sal_Int32 nScreenId = rPDFExtOutDevData.CreateScreen(aLinkRect, altText, rPDFExtOutDevData.GetCurrentPageNumber(), pSdrObj);
                     if (aMediaURL.startsWith("vnd.sun.star.Package:"))
                     {
                         OUString aTempFileURL;

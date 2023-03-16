@@ -2040,7 +2040,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             tools::Rectangle aPDFRect(SwRectToPDFRect(pCurrPage, aSnapRect.SVRect()));
                             for (sal_Int32 nScreenPageNum : aScreenPageNums)
                             {
-                                sal_Int32 nScreenId = pPDFExtOutDevData->CreateScreen(aPDFRect, altText, nScreenPageNum);
+                                sal_Int32 nScreenId = pPDFExtOutDevData->CreateScreen(aPDFRect, altText, nScreenPageNum, pObject);
                                 if (aMediaURL.startsWith("vnd.sun.star.Package:"))
                                 {
                                     // Embedded media.

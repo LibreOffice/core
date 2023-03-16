@@ -59,6 +59,7 @@ struct PDFExtOutDevDataSync
                     SetStructureAttribute,
                     SetStructureAttributeNumerical,
                     SetStructureBoundingBox,
+                    SetStructureAnnotIds,
                     SetActualText,
                     SetAlternateText,
                     CreateControl,
@@ -196,6 +197,8 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
                 rWriter.SetMapMode(mParaMapModes.front());
                 mParaMapModes.pop_front();
                 mParaIds.push_back(rWriter.CreateScreen(mParaRects.front(), mParaInts.front(), mParaOUStrings.front()));
+                // resolve AnnotIds structural attribute
+                rWriter.SetLinkPropertyID(mParaIds.back(), sal_Int32(mParaIds.size()-1));
                 mParaRects.pop_front();
                 mParaInts.pop_front();
                 mParaOUStrings.pop_front();
@@ -278,6 +281,7 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
             case PDFExtOutDevDataSync::SetStructureAttribute:
             case PDFExtOutDevDataSync::SetStructureAttributeNumerical:
             case PDFExtOutDevDataSync::SetStructureBoundingBox:
+            case PDFExtOutDevDataSync::SetStructureAnnotIds:
             case PDFExtOutDevDataSync::SetActualText:
             case PDFExtOutDevDataSync::SetAlternateText:
             case PDFExtOutDevDataSync::CreateControl:
@@ -374,6 +378,19 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
             {
                 rWriter.SetStructureBoundingBox( mParaRects.front() );
                 mParaRects.pop_front();
+            }
+            break;
+            case PDFExtOutDevDataSync::SetStructureAnnotIds:
+            {
+                ::std::vector<sal_Int32> annotIds;
+                auto size(mParaInts.front());
+                mParaInts.pop_front();
+                for (auto i = 0; i < size; ++i)
+                {
+                    annotIds.push_back(mParaInts.front());
+                    mParaInts.pop_front();
+                }
+                rWriter.SetStructureAnnotIds(annotIds);
             }
             break;
             case PDFExtOutDevDataSync::SetActualText :
@@ -676,14 +693,26 @@ sal_Int32 PDFExtOutDevData::CreateLink(const tools::Rectangle& rRect, OUString c
     return mpGlobalSyncData->mCurId++;
 }
 
-sal_Int32 PDFExtOutDevData::CreateScreen(const tools::Rectangle& rRect, OUString const& rAltText, sal_Int32 nPageNr)
+sal_Int32 PDFExtOutDevData::CreateScreen(const tools::Rectangle& rRect, OUString const& rAltText, sal_Int32 nPageNr, SdrObject const*const pObj)
 {
     mpGlobalSyncData->mActions.push_back(PDFExtOutDevDataSync::CreateScreen);
     mpGlobalSyncData->mParaRects.push_back(rRect);
     mpGlobalSyncData->mParaMapModes.push_back(mrOutDev.GetMapMode());
     mpGlobalSyncData->mParaInts.push_back(nPageNr);
     mpGlobalSyncData->mParaOUStrings.push_back(rAltText);
-    return mpGlobalSyncData->mCurId++;
+    auto const ret(mpGlobalSyncData->mCurId++);
+    m_ScreenAnnotations[pObj].push_back(ret);
+    return ret;
+}
+
+::std::vector<sal_Int32> const& PDFExtOutDevData::GetScreenAnnotIds(SdrObject const*const pObj) const
+{
+    auto const it(m_ScreenAnnotations.find(pObj));
+    if (it == m_ScreenAnnotations.end())
+    {
+        assert(false); // expected?
+    }
+    return it->second;
 }
 
 void PDFExtOutDevData::SetLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )
@@ -792,6 +821,17 @@ void PDFExtOutDevData::SetStructureBoundingBox( const tools::Rectangle& rRect )
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::SetStructureBoundingBox );
     mpPageSyncData->mParaRects.push_back( rRect );
 }
+
+void PDFExtOutDevData::SetStructureAnnotIds(::std::vector<sal_Int32> const& rAnnotIds)
+{
+    mpPageSyncData->PushAction(mrOutDev, PDFExtOutDevDataSync::SetStructureAnnotIds);
+    mpPageSyncData->mParaInts.push_back(rAnnotIds.size());
+    for (sal_Int32 const id : rAnnotIds)
+    {
+        mpPageSyncData->mParaInts.push_back(id);
+    }
+}
+
 void PDFExtOutDevData::SetActualText( const OUString& rText )
 {
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::SetActualText );

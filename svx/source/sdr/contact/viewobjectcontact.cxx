@@ -35,6 +35,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdotext.hxx>
 #include <vcl/pdfwriter.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
 
 using namespace com::sun::star;
 
@@ -404,6 +405,8 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
                     eElement = vcl::PDFWriter::Section;
                 else if (nIdentifier == SdrObjKind::Table)
                     eElement = vcl::PDFWriter::Table;
+                else if (nIdentifier == SdrObjKind::Media)
+                    eElement = vcl::PDFWriter::Annot;
                 else if ( nIdentifier == SdrObjKind::TitleText )
                     eElement = vcl::PDFWriter::Heading;
                 else if ( nIdentifier == SdrObjKind::OutlineText )
@@ -429,13 +432,22 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
                         nAnchorId = pUserCall->GetPDFAnchorStructureElementId(*pSdrObj);
                     }
 
+                    ::std::vector<sal_Int32> annotIds;
+                    if (eElement == vcl::PDFWriter::Annot)
+                    {
+                        auto const pPDFExtOutDevData(GetObjectContact().GetPDFExtOutDevData());
+                        assert(pPDFExtOutDevData);
+                        annotIds = pPDFExtOutDevData->GetScreenAnnotIds(pSdrObj);
+                    }
+
                     drawinglayer::primitive2d::Primitive2DReference xReference(
                         new drawinglayer::primitive2d::StructureTagPrimitive2D(
                             eElement,
                             bBackground,
                             bImage,
                             std::move(xNewPrimitiveSequence),
-                            nAnchorId));
+                            nAnchorId,
+                            &annotIds));
                     xNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer { xReference };
                 }
             }

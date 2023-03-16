@@ -1964,6 +1964,31 @@ static void appendStructureAttributeLine( PDFWriter::StructAttribute i_eAttr, co
     o_rLine.append( "\n" );
 }
 
+template<typename T>
+void PDFWriterImpl::AppendAnnotKid(PDFStructureElement& i_rEle, T & rAnnot)
+{
+    // update struct parent of link
+    OString const aStructParentEntry(OString::number(i_rEle.m_nObject) + " 0 R");
+    m_aStructParentTree.push_back( aStructParentEntry );
+    rAnnot.m_nStructParent = m_aStructParentTree.size()-1;
+    sal_Int32 const nAnnotObj(rAnnot.m_nObject);
+
+    sal_Int32 const nRefObject = createObject();
+    if (updateObject(nRefObject))
+    {
+        OString aRef =
+            OString::number( nRefObject ) +
+            " 0 obj\n"
+            "<</Type/OBJR/Obj " +
+            OString::number(nAnnotObj) +
+            " 0 R>>\n"
+            "endobj\n\n";
+        writeBuffer( aRef );
+    }
+
+    i_rEle.m_aKids.emplace_back( nRefObject );
+}
+
 OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
 {
     // create layout, list and table attribute sets
@@ -1987,27 +2012,7 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
                 nLink = link_it->second;
             if( nLink >= 0 && o3tl::make_unsigned(nLink) < m_aLinks.size() )
             {
-                // update struct parent of link
-                OString aStructParentEntry =
-                    OString::number( i_rEle.m_nObject ) +
-                    " 0 R";
-                m_aStructParentTree.push_back( aStructParentEntry );
-                m_aLinks[ nLink ].m_nStructParent = m_aStructParentTree.size()-1;
-
-                sal_Int32 nRefObject = createObject();
-                if (updateObject(nRefObject))
-                {
-                    OString aRef =
-                        OString::number( nRefObject ) +
-                        " 0 obj\n"
-                        "<</Type/OBJR/Obj " +
-                        OString::number( m_aLinks[ nLink ].m_nObject ) +
-                        " 0 R>>\n"
-                        "endobj\n\n";
-                    writeBuffer( aRef );
-                }
-
-                i_rEle.m_aKids.emplace_back( nRefObject );
+                AppendAnnotKid(i_rEle, m_aLinks[nLink]);
             }
             else
             {
@@ -2229,6 +2234,17 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
             aLine.append( "/Lang" );
             appendLiteralStringEncrypt( aLocBuf, rEle.m_nObject, aLine );
             aLine.append( "\n" );
+        }
+    }
+    if (!rEle.m_AnnotIds.empty())
+    {
+        for (auto const id : rEle.m_AnnotIds)
+        {
+            auto const it(m_aLinkPropertyMap.find(id));
+            assert(it != m_aLinkPropertyMap.end());
+
+            assert(0 <= it->second && o3tl::make_unsigned(it->second) < m_aScreens.size());
+            AppendAnnotKid(rEle, m_aScreens[it->second]);
         }
     }
     if( ! rEle.m_aKids.empty() )
@@ -3620,6 +3636,13 @@ bool PDFWriterImpl::emitScreenAnnotations()
 
         // End Action dictionary.
         aLine.append("/OP 0 >>");
+
+        if (0 < rScreen.m_nStructParent)
+        {
+            aLine.append("\n/StructParent ");
+            aLine.append(rScreen.m_nStructParent);
+            aLine.append("\n");
+        }
 
         // End Annot dictionary.
         aLine.append("/P ");
@@ -10558,9 +10581,17 @@ const char* PDFWriterImpl::getStructureTag( PDFWriter::StructElement eType )
         aTagStrings[ PDFWriter::BibEntry ]      = "BibEntry";
         aTagStrings[ PDFWriter::Code ]          = "Code";
         aTagStrings[ PDFWriter::Link ]          = "Link";
+        aTagStrings[ PDFWriter::Annot ]         = "Annot";
         aTagStrings[ PDFWriter::Figure ]        = "Figure";
         aTagStrings[ PDFWriter::Formula ]       = "Formula";
         aTagStrings[ PDFWriter::Form ]          = "Form";
+    }
+
+    if (eType == PDFWriter::Annot
+        && (m_aContext.Version == PDFWriter::PDFVersion::PDF_A_1
+            || m_aContext.Version < PDFWriter::PDFVersion::PDF_1_5))
+    {
+        return "Figure"; // fallback
     }
 
     std::map< PDFWriter::StructElement, const char* >::const_iterator it = aTagStrings.find( eType );
@@ -11313,6 +11344,18 @@ void PDFWriterImpl::setStructureBoundingBox( const tools::Rectangle& rRect )
         // convert to default user space now, since the mapmode may change
         m_aPages[nPageNr].convertRect( m_aStructure[ m_nCurrentStructElement ].m_aBBox );
     }
+}
+
+void PDFWriterImpl::setStructureAnnotIds(::std::vector<sal_Int32> const& rAnnotIds)
+{
+    assert(!(m_nCurrentPage < 0 || m_aPages.size() <= o3tl::make_unsigned(m_nCurrentPage)));
+
+    if (!m_aContext.Tagged || m_nCurrentStructElement <= 0 || !m_bEmitStructure)
+    {
+        return;
+    }
+
+    m_aStructure[m_nCurrentStructElement].m_AnnotIds = rAnnotIds;
 }
 
 void PDFWriterImpl::setActualText( const OUString& rText )
