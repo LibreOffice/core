@@ -105,6 +105,14 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="FormulaMark" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
+          <info>
+            <desc>Indicates whether formulas are marked.</desc>
+            <label>Formula indicator and hint</label>
+          </info>
+          <value>false</value>
+        </prop>
         <prop oor:name="ValueHighlighting" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
           <info>
