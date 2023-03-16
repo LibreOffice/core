@@ -8,28 +8,22 @@
  */
 
 #include <sal/config.h>
-#include <test/bootstrapfixture.hxx>
+#include <test/unoapi_test.hxx>
 
-#include <comphelper/fileformat.h>
-
-#include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/sfxmodelfactory.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 
 #include <document.hxx>
 #include <smdll.hxx>
 
-namespace
-{
 using namespace ::com::sun::star;
 
-typedef tools::SvRef<SmDocShell> SmDocShellRef;
-
-class Test : public test::BootstrapFixture
+class Test : public UnoApiTest
 {
 public:
-    virtual void setUp() override;
-    virtual void tearDown() override;
+    Test()
+        : UnoApiTest("starmath/qa/extras/data/")
+    {
+    }
 
     void testColor();
     void testSimple();
@@ -56,51 +50,13 @@ public:
     CPPUNIT_TEST(testTdf151842);
     CPPUNIT_TEST(testMathmlEntities);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    void loadURL(const OUString& rURL)
-    {
-        // Cf.
-        // filter/source/config/fragments/filters/MathML_XML__Math_.xcu
-        auto pFilter = std::make_shared<SfxFilter>(
-            MATHML_XML, OUString(),
-            SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::TEMPLATE,
-            SotClipboardFormatId::STARCALC_8, "MathML 2.0", OUString(), OUString(),
-            "private:factory/smath*");
-        pFilter->SetVersion(SOFFICE_FILEFORMAT_60);
-
-        mxDocShell = new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT
-                                    | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS
-                                    | SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
-
-        SfxMedium* pSrcMed = new SfxMedium(rURL, StreamMode::STD_READ);
-        pSrcMed->SetFilter(pFilter);
-        pSrcMed->UseInteractionHandler(false);
-        bool bLoaded = mxDocShell->DoLoad(pSrcMed);
-        CPPUNIT_ASSERT_MESSAGE(
-            OString("failed to load " + OUStringToOString(rURL, RTL_TEXTENCODING_UTF8)).getStr(),
-            bLoaded);
-    }
-
-    SmDocShellRef mxDocShell;
 };
-
-void Test::setUp()
-{
-    BootstrapFixture::setUp();
-    SmGlobals::ensure();
-}
-
-void Test::tearDown()
-{
-    if (mxDocShell.is())
-        mxDocShell->DoClose();
-    BootstrapFixture::tearDown();
-}
 
 void Test::testColor()
 {
-    loadURL(m_directories.getURLFromSrc(u"starmath/qa/extras/data/color.mml"));
+    loadFromURL(u"color.mml");
+    SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     CPPUNIT_ASSERT_EQUAL(OUString("{ color black b"
                                   " color white w"
                                   " color red r"
@@ -121,73 +77,91 @@ void Test::testColor()
                                   " color dvip apricot"
                                   " a color yellow y"
                                   " color rgb 220 20 61 x }"),
-                         mxDocShell->GetText());
+                         pDocShell->GetText());
 }
 
 void Test::testSimple()
 {
-    loadURL(m_directories.getURLFromSrc(u"starmath/qa/extras/data/simple.mml"));
+    loadFromURL(u"simple.mml");
+    SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("left ( { a + b } right ) ^ 2"),
-                                 mxDocShell->GetText());
+                                 pDocShell->GetText());
 }
 
 void Test::testNsPrefixMath()
 {
-    loadURL(m_directories.getURLFromSrc(u"starmath/qa/extras/data/ns-prefix-math.mml"));
+    loadFromURL(u"ns-prefix-math.mml");
+    SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("left ( { a + b } right ) ^ 2"),
-                                 mxDocShell->GetText());
+                                 pDocShell->GetText());
 }
 
 void Test::testMaction()
 {
-    loadURL(m_directories.getURLFromSrc(u"starmath/qa/extras/data/maction.mml"));
+    loadFromURL(u"maction.mml");
+    SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("matrix{ 1 ## 2 ## 3 }"),
-                                 mxDocShell->GetText());
+                                 pDocShell->GetText());
 }
 
 void Test::testMspace()
 {
-    loadURL(m_directories.getURLFromSrc(u"starmath/qa/extras/data/mspace.mml"));
-    CPPUNIT_ASSERT_EQUAL(OUString("{ a b ~ c ~~``` d }"), mxDocShell->GetText());
+    loadFromURL(u"mspace.mml");
+    SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
+    CPPUNIT_ASSERT_EQUAL(OUString("{ a b ~ c ~~``` d }"), pDocShell->GetText());
 }
 
 void Test::testtdf99556()
 {
-    loadURL(m_directories.getURLFromSrc(u"starmath/qa/extras/data/tdf99556-1.mml"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("sqrt { }"), mxDocShell->GetText());
+    loadFromURL(u"tdf99556-1.mml");
+    SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("sqrt { }"), pDocShell->GetText());
 }
 
 void Test::testTdf103430()
 {
-    loadURL(m_directories.getURLFromSrc(u"starmath/qa/extras/data/tdf103430.mml"));
+    loadFromURL(u"tdf103430.mml");
+    SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     CPPUNIT_ASSERT_EQUAL(
         OUString("{ frac { { nitalic d ^ 2 nitalic color blue y } } { { color dvip "
                  "apricot nitalic d font sans bold italic color red x } } }"),
-        mxDocShell->GetText());
+        pDocShell->GetText());
 }
 
 void Test::testTdf103500()
 {
-    loadURL(m_directories.getURLFromSrc(u"starmath/qa/extras/data/tdf103500.mml"));
+    loadFromURL(u"tdf103500.mml");
+    SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     CPPUNIT_ASSERT_EQUAL(
         OUString("{ { int csup b csub a { { frac { 1 } { x } } ` nitalic d x } } = { "
                  "intd csup b csub a { { frac { 1 } { y } } ` nitalic d y } } }"),
-        mxDocShell->GetText());
+        pDocShell->GetText());
 }
 
 void Test::testTdf137008()
 {
     // Without the fix in place, this test would have crashed
-    loadURL(m_directories.getURLFromSrc(u"starmath/qa/extras/data/tdf137008.mml"));
-    CPPUNIT_ASSERT_EQUAL(OUString("matrix{ { } # ## # }"), mxDocShell->GetText());
+    loadFromURL(u"tdf137008.mml");
+    SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
+    CPPUNIT_ASSERT_EQUAL(OUString("matrix{ { } # ## # }"), pDocShell->GetText());
 }
 
 void Test::testTdf151842()
 {
     // Without the fix in place, this test would have crashed
-    loadURL(m_directories.getURLFromSrc(u"starmath/qa/extras/data/tdf151842.odf"));
-    CPPUNIT_ASSERT_EQUAL(OUString("test"), mxDocShell->GetText());
-    SmFormat aFormat = mxDocShell->GetFormat();
+    loadFromURL(u"tdf151842.odf");
+    SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), pDocShell->GetText());
+    SmFormat aFormat = pDocShell->GetFormat();
 
     // Without the fix in place, this test would have failed with
     // - Expected: 4233
@@ -197,12 +171,13 @@ void Test::testTdf151842()
 
 void Test::testMathmlEntities()
 {
-    loadURL(m_directories.getURLFromSrc(u"starmath/qa/extras/data/mthmlentities.mml"));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"{ \u03C3 \u221E \u221E \u03C3 }"), mxDocShell->GetText());
+    loadFromURL(u"mthmlentities.mml");
+    SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"{ \u03C3 \u221E \u221E \u03C3 }"), pDocShell->GetText());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
-} // namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
