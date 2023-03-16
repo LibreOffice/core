@@ -2658,7 +2658,8 @@ void BmpWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 void BmpWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     // Setup
-    rRenderContext.SetBackground();
+    rRenderContext.SetBackground(Wallpaper(Application::GetSettings().GetStyleSettings().GetDialogColor()));
+    rRenderContext.Erase();
     // #i119307# the graphic might have transparency, set up white as the color
     // to use when drawing a rectangle under the image
     rRenderContext.SetLineColor(COL_WHITE);
