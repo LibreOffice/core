@@ -524,6 +524,48 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyCompat14)
     // but not in Word.
     CPPUNIT_ASSERT(!pCell2->GetPreviousCell());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyCompat14Nosplit)
+{
+    // Given a Word 2010 document with 2 pages, 2 rows on page 1, 1 row on page 2:
+    std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(true,
+                                                                                        pChanges);
+    pChanges->commit();
+    comphelper::ScopeGuard g([pChanges] {
+        officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(
+            false, pChanges);
+        pChanges->commit();
+    });
+    createSwDoc("floattable-compat14-nosplit.docx");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure that the last row is on a separate page:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    auto pPage1Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage1Objs[0]);
+    CPPUNIT_ASSERT(pPage1Fly);
+    SwFrame* pTab1 = pPage1Fly->GetLower();
+    SwFrame* pRow1 = pTab1->GetLower();
+    CPPUNIT_ASSERT(pRow1->GetNext());
+    auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
+    // Without the accompanying fix in place, this test would have failed, all rows were on page 1.
+    CPPUNIT_ASSERT(pPage2);
+    const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
+    auto pPage2Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage2Objs[0]);
+    CPPUNIT_ASSERT(pPage2Fly);
+    SwFrame* pTab2 = pPage2Fly->GetLower();
+    SwFrame* pRow2 = pTab2->GetLower();
+    CPPUNIT_ASSERT(!pRow2->GetNext());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
