@@ -102,7 +102,7 @@ public:
     void            ImplInitBaselines(LogicalFontInstance *pFontInstance);
 
 private:
-    bool            ShouldNotUseUnderlineMetrics(int, int, int, int) const;
+    bool            ShouldNotUseUnderlineMetrics() const;
     bool            ImplInitTextLineSizeHarfBuzz(LogicalFontInstance *pFontInstance);
     bool            ShouldUseWinMetrics(int, int, int, int, int, int) const;
 
