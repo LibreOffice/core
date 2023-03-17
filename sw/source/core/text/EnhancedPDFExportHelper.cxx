@@ -1100,7 +1100,7 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
         BeginTag( vcl::PDFWriter::ListItem, aListItemString );
         assert(rTextFrame.GetPara());
         // check whether to open LIBody now or delay until after Lbl
-        if (!rTextFrame.GetPara()->HasNumberingPortion())
+        if (!rTextFrame.GetPara()->HasNumberingPortion(SwParaPortion::OnlyNumbering))
         {
             BeginTag(vcl::PDFWriter::LIBody, aListBodyString);
         }
@@ -1204,7 +1204,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             {
                 SwTextFrame const& rTextFrame(*static_cast<const SwTextFrame*>(pFrame));
                 // lazy open LIBody after Lbl
-                if (rTextFrame.GetPara()->HasNumberingPortion())
+                if (rTextFrame.GetPara()->HasNumberingPortion(SwParaPortion::OnlyNumbering))
                 {
                     assert(!rTextFrame.IsFollow());
                     BeginTag(vcl::PDFWriter::LIBody, aListBodyString);

@@ -2683,7 +2683,7 @@ TextFrameIndex SwParaPortion::GetParLen() const
     return nLen;
 }
 
-bool SwParaPortion::HasNumberingPortion() const
+bool SwParaPortion::HasNumberingPortion(FootnoteOrNot const eFootnote) const
 {
     SwLinePortion const* pPortion(nullptr);
     // the first line may contain only fly portion...
@@ -2695,7 +2695,8 @@ bool SwParaPortion::HasNumberingPortion() const
             pPortion = pPortion->GetNextPortion();
         }
     }
-    return pPortion && pPortion->InNumberGrp() && !pPortion->IsFootnoteNumPortion();
+    return pPortion && pPortion->InNumberGrp()
+        && (eFootnote == SwParaPortion::FootnoteToo || !pPortion->IsFootnoteNumPortion());
 }
 
 const SwDropPortion *SwParaPortion::FindDropPortion() const
