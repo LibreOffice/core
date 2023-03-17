@@ -1299,6 +1299,12 @@ void ExtCfDataBarRule::finalizeImport()
             pDataBar->maAxisColor = maModel.mnAxisColor;
             break;
         }
+        case POSITIVEFILLCOLOR:
+        {
+            ScDataBarFormatData* pDataBar = mpTarget;
+            pDataBar->maPositiveColor = maModel.mnPositiveColor;
+            break;
+        }
         case NEGATIVEFILLCOLOR:
         {
             ScDataBarFormatData* pDataBar = mpTarget;
@@ -1342,6 +1348,15 @@ void ExtCfDataBarRule::importDataBar( const AttributeList& rAttribs )
     mnRuleType = DATABAR;
     maModel.mbGradient = rAttribs.getBool( XML_gradient, true );
     maModel.maAxisPosition = rAttribs.getString( XML_axisPosition, "automatic" );
+}
+
+void ExtCfDataBarRule::importPositiveFillColor( const AttributeList& rAttribs )
+{
+    mnRuleType = POSITIVEFILLCOLOR;
+    ThemeBuffer& rThemeBuffer = getTheme();
+    GraphicHelper& rGraphicHelper = getBaseFilter().getGraphicHelper();
+    ::Color aColor = importOOXColor(rAttribs, rThemeBuffer, rGraphicHelper);
+    maModel.mnPositiveColor = aColor;
 }
 
 void ExtCfDataBarRule::importNegativeFillColor( const AttributeList& rAttribs )
