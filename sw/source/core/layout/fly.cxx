@@ -90,21 +90,36 @@ SwTwips GetFlyAnchorBottom(SwFlyFrame* pFly, const SwFrame& rAnchor)
     bool bLegacy = rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN);
     if (bLegacy)
     {
-        // Word <= 2010 style: the fly can overlap with the bottom margin / footer area.
-        const SwFrame* pAnchorUpper = rAnchor.FindPageFrame();
-        if (!pAnchorUpper)
+        // Word <= 2010 style: the fly can overlap with the bottom margin / footer area in case the
+        // fly height fits the body height and the fly bottom fits the page.
+        const SwPageFrame* pPage = rAnchor.FindPageFrame();
+        if (!pPage)
         {
             return 0;
         }
 
-        // See if the fly height would still fit the body frame and the overlap would happen just
-        // because of a vertical offset.
-        SwTwips nFlyHeight = aRectFnSet.GetHeight(pFly->getFrameArea());
-        SwTwips nAnchorUpperHeight = aRectFnSet.GetHeight(pAnchorUpper->getFramePrintArea());
-        if (nFlyHeight <= nAnchorUpperHeight)
+        const SwFrame* pBody = pPage->FindBodyCont();
+        if (!pBody)
         {
-            // Yes, it would fit: allow overlap.
-            return aRectFnSet.GetBottom(pAnchorUpper->getFrameArea());
+            return 0;
+        }
+
+        // See if the fly height would fit at least the page height, ignoring the vertical offset.
+        SwTwips nFlyHeight = aRectFnSet.GetHeight(pFly->getFrameArea());
+        SwTwips nPageHeight = aRectFnSet.GetHeight(pPage->getFramePrintArea());
+        if (nFlyHeight <= nPageHeight)
+        {
+            // Yes, it would fit: allow overlap if there is no problematic vertical offset.
+            SwTwips nDeadline = aRectFnSet.GetBottom(pPage->getFrameArea());
+            SwTwips nFlyTop = aRectFnSet.GetTop(pFly->getFrameArea());
+            SwTwips nBodyHeight = aRectFnSet.GetHeight(pBody->getFramePrintArea());
+            if (nDeadline - nFlyTop > nBodyHeight)
+            {
+                // If the fly would now grow to nDeadline then it would not fit the body height, so
+                // limit the height.
+                nDeadline = nFlyTop + nBodyHeight;
+            }
+            return nDeadline;
         }
     }
 
