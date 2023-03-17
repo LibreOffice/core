@@ -206,6 +206,7 @@ interface TableEditView
     SID_HELPLINES_MOVE  [ ExecMethod = ExecDrawOpt; StateMethod = GetDrawOptState; ]
 
     SID_STYLE_FAMILY2           [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_FAMILY3           [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
     SID_STYLE_FAMILY4           [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
     SID_STYLE_APPLY             [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
     SID_STYLE_WATERCAN          [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]

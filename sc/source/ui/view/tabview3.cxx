@@ -255,7 +255,7 @@ void ScTabView::InvalidateAttribs()
 
     rBindings.Invalidate( SID_STYLE_APPLY );
     rBindings.Invalidate( SID_STYLE_FAMILY2 );
-    // StarCalc knows only paragraph- or cell format templates
+    rBindings.Invalidate( SID_STYLE_FAMILY3 );
 
     rBindings.Invalidate( SID_ATTR_CHAR_FONT );
     rBindings.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );

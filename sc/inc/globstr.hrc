@@ -84,6 +84,7 @@
 #define STR_UNDO_EDITCELLSTYLE                  NC_("STR_UNDO_EDITCELLSTYLE", "Edit Cell Style")
 #define STR_UNDO_APPLYPAGESTYLE                 NC_("STR_UNDO_APPLYPAGESTYLE", "Apply Page Style")
 #define STR_UNDO_EDITPAGESTYLE                  NC_("STR_UNDO_EDITPAGESTYLE", "Edit Page Style")
+#define STR_UNDO_EDITGRAPHICSTYLE               NC_("STR_UNDO_EDITGRAPHICSTYLE", "Edit Drawing Style")
 #define STR_UNDO_DETADDPRED                     NC_("STR_UNDO_DETADDPRED", "Trace Precedents")
 #define STR_UNDO_DETDELPRED                     NC_("STR_UNDO_DETDELPRED", "Remove Precedent")
 #define STR_UNDO_DETADDSUCC                     NC_("STR_UNDO_DETADDSUCC", "Trace Dependents")

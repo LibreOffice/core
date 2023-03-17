@@ -33,18 +33,6 @@ interface TableDrawText
     // others:
     SID_DRAW_CHART              [ StateMethod = StateDisableItems; ]
     SID_OPENDLG_FUNCTION        [ StateMethod = StateDisableItems; ]
-    SID_STYLE_FAMILY2           [ StateMethod = StateDisableItems; ]
-    SID_STYLE_FAMILY4           [ StateMethod = StateDisableItems; ]
-    SID_STYLE_APPLY             [ StateMethod = StateDisableItems; ]
-    SID_STYLE_WATERCAN          [ StateMethod = StateDisableItems; ]
-    SID_STYLE_NEW_BY_EXAMPLE    [ StateMethod = StateDisableItems; ]
-    SID_STYLE_UPDATE_BY_EXAMPLE [ StateMethod = StateDisableItems; ]
-    SID_STYLE_NEW               [ StateMethod = StateDisableItems; ]
-    SID_STYLE_EDIT              [ StateMethod = StateDisableItems; ]
-    SID_STYLE_DELETE            [ StateMethod = StateDisableItems; ]
-    SID_STYLE_HIDE              [ StateMethod = StateDisableItems; ]
-    SID_STYLE_SHOW              [ StateMethod = StateDisableItems; ]
-
 
     SID_CUT             [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_COPY            [ ExecMethod = Execute; StateMethod = GetState; ]

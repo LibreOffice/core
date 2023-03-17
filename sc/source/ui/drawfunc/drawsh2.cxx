@@ -415,7 +415,7 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
     }
     else
     {
-        rSet.Put( pDrView->GetDefaultAttr() );
+        pDrView->GetAttributes(rSet);
     }
 
     SdrPageView* pPV = pDrView->GetSdrPageView();

@@ -68,6 +68,7 @@
 #include <docpool.hxx>
 #include <printfun.hxx>
 #include <undostyl.hxx>
+#include <futext.hxx>
 
 #include <memory>
 
@@ -918,6 +919,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
     ScDocument&         rDoc        = pDocSh->GetDocument();
     ScMarkData&         rMark       = GetViewData().GetMarkData();
     ScModule*           pScMod      = SC_MOD();
+    SdrObject*          pEditObject = GetDrawView()->GetTextEditObject();
     OUString            aRefName;
     bool                bUndo       = rDoc.IsUndoEnabled();
 
@@ -942,6 +944,8 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
             eFamily = SfxStyleFamily::Para;
         else if (sFamily == "PageStyles")
             eFamily = SfxStyleFamily::Page;
+        else if (sFamily == "GraphicStyles")
+            eFamily = SfxStyleFamily::Frame;
     }
 
     OUString                aStyleName;
@@ -1343,6 +1347,100 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
         } // case SfxStyleFamily::Page:
         break;
 
+        case SfxStyleFamily::Frame:
+        {
+            switch ( nSlotId )
+            {
+                case SID_STYLE_DELETE:
+                {
+                    if ( pStyleSheet )
+                    {
+                        pStylePool->Remove( pStyleSheet );
+                        InvalidateAttribs();
+                        pDocSh->SetDocumentModified();
+                        nRetMask = sal_uInt16(true);
+                        bAddUndo = true;
+                        rReq.Done();
+                    }
+                    else
+                        nRetMask = sal_uInt16(false);
+                }
+                break;
+
+                case SID_STYLE_HIDE:
+                case SID_STYLE_SHOW:
+                {
+                    if ( pStyleSheet )
+                    {
+                        pStyleSheet->SetHidden( nSlotId == SID_STYLE_HIDE );
+                        InvalidateAttribs();
+                        rReq.Done();
+                    }
+                    else
+                        nRetMask = sal_uInt16(false);
+                }
+                break;
+
+                case SID_STYLE_APPLY:
+                {
+                    if ( pStyleSheet && !pScMod->GetIsWaterCan() )
+                    {
+                        GetScDrawView()->ScEndTextEdit();
+                        GetScDrawView()->SetStyleSheet(static_cast<SfxStyleSheet*>(pStyleSheet), false);
+
+                        GetScDrawView()->InvalidateAttribs();
+                        InvalidateAttribs();
+                        rReq.Done();
+                    }
+                }
+                break;
+
+                case SID_STYLE_NEW_BY_EXAMPLE:
+                case SID_STYLE_UPDATE_BY_EXAMPLE:
+                {
+                    if (nSlotId == SID_STYLE_NEW_BY_EXAMPLE)
+                    {
+                        pStyleSheet = &pStylePool->Make( aStyleName, eFamily, SfxStyleSearchBits::UserDefined );
+
+                        // when a style is present, then this will become
+                        // the parent of the new style:
+                        if (SfxStyleSheet* pOldStyle = GetDrawView()->GetStyleSheet())
+                            pStyleSheet->SetParent(pOldStyle->GetName());
+                    }
+                    else
+                    {
+                        pStyleSheet = GetDrawView()->GetStyleSheet();
+                        aOldData.InitFromStyle( pStyleSheet );
+                    }
+
+                    if ( bUndo )
+                    {
+                        OUString aUndo = ScResId( STR_UNDO_EDITGRAPHICSTYLE );
+                        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, GetViewShellId() );
+                        bListAction = true;
+                    }
+
+                    SfxItemSet aCoreSet(GetDrawView()->GetModel().GetItemPool());
+                    GetDrawView()->GetAttributes(aCoreSet, true);
+
+                    SfxItemSet* pStyleSet = &pStyleSheet->GetItemSet();
+                    pStyleSet->Put(aCoreSet);
+                    static_cast<SfxStyleSheet*>(pStyleSheet)->Broadcast(SfxHint(SfxHintId::DataChanged));
+
+                    aNewData.InitFromStyle( pStyleSheet );
+                    bAddUndo = true;
+
+                    //  call SetStyleSheet after adding the ScUndoModifyStyle
+                    //  (pStyleSheet pointer is used!)
+                    bStyleToMarked = true;
+                    rReq.Done();
+                }
+                break;
+                default:
+                    break;
+            }
+        }
+        break;
         default:
             break;
     } // switch ( eFamily )
@@ -1367,7 +1465,6 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                     break;
 
                 case SfxStyleFamily::Para:
-                default:
                     {
                         SfxItemSet& rSet = pStyleSheet->GetItemSet();
 
@@ -1408,6 +1505,10 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                             rSet.Put( aBoxInfoItem );
                         }
                     }
+                    break;
+
+                case SfxStyleFamily::Frame:
+                default:
                     break;
             }
 
@@ -1461,7 +1562,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
 
                         rDoc.GetPool()->CellStyleCreated( pStyleSheet->GetName(), rDoc );
                     }
-                    else
+                    else if ( SfxStyleFamily::Page == eFam )
                     {
                         //! Here also queries for Page Styles
 
@@ -1475,6 +1576,14 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
 
                         rDoc.ModifyStyleSheet( *pStyleSheet, *pOutSet );
                         rBindings.Invalidate( FID_RESET_PRINTZOOM );
+                    }
+                    else
+                    {
+                        SfxItemSet& rAttr = pStyleSheet->GetItemSet();
+                        sdr::properties::CleanupFillProperties(rAttr);
+
+                        static_cast<SfxStyleSheet*>(pStyleSheet)->Broadcast(SfxHint(SfxHintId::DataChanged));
+                        GetScDrawView()->InvalidateAttribs();
                     }
 
                     pDocSh->SetDocumentModified();
@@ -1516,12 +1625,29 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
     {
         //  call SetStyleSheetToMarked after adding the ScUndoModifyStyle,
         //  so redo will find the modified style
-        SetStyleSheetToMarked( static_cast<SfxStyleSheet*>(pStyleSheet) );
+        if (eFamily == SfxStyleFamily::Para)
+        {
+            SetStyleSheetToMarked( static_cast<SfxStyleSheet*>(pStyleSheet) );
+        }
+        else if (eFamily == SfxStyleFamily::Frame)
+        {
+            GetScDrawView()->ScEndTextEdit();
+            GetScDrawView()->SetStyleSheet( static_cast<SfxStyleSheet*>(pStyleSheet), false );
+        }
         InvalidateAttribs();
     }
 
     if ( bListAction )
         pDocSh->GetUndoManager()->LeaveListAction();
+
+    // The above call to ScEndTextEdit left us in an inconsistent state:
+    // Text editing isn't active, but the text edit shell still is. And we
+    // couldn't just deactivate it fully, because in case of editing a
+    // comment, that will make the comment disappear. So let's try to
+    // reactivate text editing instead:
+    auto pFuText = dynamic_cast<FuText*>(GetDrawFuncPtr());
+    if (pFuText && pEditObject != GetDrawView()->GetTextEditObject())
+        pFuText->SetInEditMode(pEditObject);
 }
 
 void ScTabViewShell::GetStyleState( SfxItemSet& rSet )
@@ -1555,6 +1681,17 @@ void ScTabViewShell::GetStyleState( SfxItemSet& rSet )
             case SID_STYLE_FAMILY2:     // cell style sheets
             {
                 SfxStyleSheet* pStyleSheet = const_cast<SfxStyleSheet*>(GetStyleSheetFromMarked());
+
+                if ( pStyleSheet )
+                    rSet.Put( SfxTemplateItem( nSlotId, pStyleSheet->GetName() ) );
+                else
+                    rSet.Put( SfxTemplateItem( nSlotId, OUString() ) );
+            }
+            break;
+
+            case SID_STYLE_FAMILY3:     // drawing style sheets
+            {
+                SfxStyleSheet* pStyleSheet = GetDrawView()->GetStyleSheet();
 
                 if ( pStyleSheet )
                     rSet.Put( SfxTemplateItem( nSlotId, pStyleSheet->GetName() ) );

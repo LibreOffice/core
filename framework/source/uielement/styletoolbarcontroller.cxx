@@ -34,7 +34,8 @@ OUString MapFamilyToCommand( std::u16string_view rFamily )
         return ".uno:CharStyle";
     else if ( rFamily == u"PageStyles" )
         return ".uno:PageStyle";
-    else if ( rFamily == u"FrameStyles" )
+    else if ( rFamily == u"FrameStyles" ||
+              rFamily == u"GraphicStyles" )  // In sc
         return ".uno:FrameStyle";
     else if ( rFamily == u"NumberingStyles" )
         return ".uno:ListStyle";

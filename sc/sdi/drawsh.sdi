@@ -35,18 +35,6 @@ interface TableDraw
     SID_OPENDLG_EDIT_PRINTAREA  [ StateMethod = StateDisableItems; ]
     // others:
     SID_DRAW_CHART              [ StateMethod = StateDisableItems; ]
-    SID_STYLE_FAMILY2           [ StateMethod = StateDisableItems; ]
-    SID_STYLE_FAMILY4           [ StateMethod = StateDisableItems; ]
-    SID_STYLE_APPLY             [ StateMethod = StateDisableItems; ]
-    SID_STYLE_WATERCAN          [ StateMethod = StateDisableItems; ]
-    SID_STYLE_NEW_BY_EXAMPLE    [ StateMethod = StateDisableItems; ]
-    SID_STYLE_UPDATE_BY_EXAMPLE [ StateMethod = StateDisableItems; ]
-    SID_STYLE_NEW               [ StateMethod = StateDisableItems; ]
-    SID_STYLE_EDIT              [ StateMethod = StateDisableItems; ]
-    SID_STYLE_DELETE            [ StateMethod = StateDisableItems; ]
-    SID_STYLE_HIDE              [ StateMethod = StateDisableItems; ]
-    SID_STYLE_SHOW              [ StateMethod = StateDisableItems; ]
-
 
     SID_TEXT_STANDARD       [ ExecMethod = ExecDrawAttr; StateMethod = NoState; ]
     SID_DRAWTEXT_ATTR_DLG   [ ExecMethod = ExecDrawAttr; StateMethod = NoState; ]

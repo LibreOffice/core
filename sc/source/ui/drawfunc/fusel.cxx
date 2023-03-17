@@ -46,6 +46,7 @@
 #include <charthelper.hxx>
 #include <docuno.hxx>
 #include <docsh.hxx>
+#include <stlpool.hxx>
 
 //  maximal permitted mouse movement to start Drag&Drop
 //! fusel,fuconstr,futext - combine them!
@@ -439,6 +440,13 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     }
                 }
             }
+        }
+
+        if (SC_MOD()->GetIsWaterCan())
+        {
+            auto pStyleSheet = rViewData.GetDocument().GetStyleSheetPool()->GetActualStyleSheet();
+            if (pStyleSheet && pStyleSheet->GetFamily() == SfxStyleFamily::Frame)
+                pView->SetStyleSheet(static_cast<SfxStyleSheet*>(pStyleSheet), false);
         }
     }
 
