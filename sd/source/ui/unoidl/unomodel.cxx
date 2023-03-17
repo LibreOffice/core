@@ -1944,8 +1944,8 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
             // hint value if screen display. Only then the AutoColor mechanisms shall be applied
             rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor( pPV, bScreenDisplay ) );
         }
-        aView.SdrPaintView::CompleteRedraw( pOut, aRegion, &aImplRenderPaintProc );
 
+        // produce link annots for media shapes before painting them
         if ( pPDFExtOutDevData && pPage )
         {
             try
@@ -2092,7 +2092,18 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                         }
                     }
                 }
+            }
+            catch (const uno::Exception&)
+            {
+            }
+        }
 
+        aView.SdrPaintView::CompleteRedraw(pOut, aRegion, &aImplRenderPaintProc);
+
+        if (pPDFExtOutDevData && pPage)
+        {
+            try
+            {
                 Size        aPageSize( mpDoc->GetSdPage( 0, PageKind::Standard )->GetSize() );
                 Point aPoint( 0, 0 );
                 ::tools::Rectangle   aPageRect( aPoint, aPageSize );
