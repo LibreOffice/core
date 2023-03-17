@@ -26,6 +26,7 @@
 
 #include <salgdi.hxx>
 #include <toolbarvalue.hxx>
+#include <menubarvalue.hxx>
 
 #include <cassert>
 

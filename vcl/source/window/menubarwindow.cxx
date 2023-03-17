@@ -33,6 +33,7 @@
 #include <bitmaps.hlst>
 #include <window.h>
 #include "bufferdevice.hxx"
+#include <menubarvalue.hxx>
 
 // document closing button
 #define IID_DOCUMENTCLOSE 1

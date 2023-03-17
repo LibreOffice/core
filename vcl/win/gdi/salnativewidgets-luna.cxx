@@ -40,6 +40,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <toolbarvalue.hxx>
+#include <menubarvalue.hxx>
 
 #include <win/svsys.h>
 #include <win/salgdi.h>
