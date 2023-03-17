@@ -61,6 +61,7 @@ inline constexpr OUStringLiteral RID_BMP_INPUT_OK = u"sc/res/sc26051.png";
 
 inline constexpr OUStringLiteral BMP_STYLES_FAMILY_CELL = u"sc/res/sf01.png";
 inline constexpr OUStringLiteral BMP_STYLES_FAMILY_PAGE = u"sc/res/sf02.png";
+inline constexpr OUStringLiteral BMP_STYLES_FAMILY_GRAPHICS = u"sd/res/sf01.png";
 
 inline constexpr OUStringLiteral BMP_ICON_SET_CIRCLES1_GRAY = u"sc/res/icon-set-circles1-gray.png";
 inline constexpr OUStringLiteral BMP_ICON_SET_CIRCLES1_GREEN = u"sc/res/icon-set-circles1-green.png";

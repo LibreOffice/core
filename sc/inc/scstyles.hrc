@@ -41,4 +41,13 @@ const std::pair<TranslateId, SfxStyleSearchBits> RID_PAGESTYLEFAMILY[] =
     { {}, SfxStyleSearchBits::Auto }
 };
 
+const std::pair<TranslateId, SfxStyleSearchBits> RID_GRAPHICSTYLEFAMILY[] =
+{
+    { NC_("RID_GRAPHICSTYLEFAMILY", "All Styles") , SfxStyleSearchBits::AllVisible },
+    { NC_("RID_GRAPHICSTYLEFAMILY", "Hidden Styles") , SfxStyleSearchBits::Hidden },
+    { NC_("RID_GRAPHICSTYLEFAMILY", "Applied Styles") , SfxStyleSearchBits::Used },
+    { NC_("RID_GRAPHICSTYLEFAMILY", "Custom Styles") , SfxStyleSearchBits::UserDefined },
+    { {}, SfxStyleSearchBits::Auto }
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

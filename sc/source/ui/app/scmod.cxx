@@ -2308,6 +2308,11 @@ std::optional<SfxStyleFamilies> ScModule::CreateStyleFamilies()
                                                     BMP_STYLES_FAMILY_PAGE,
                                                     RID_PAGESTYLEFAMILY, SC_MOD()->GetResLocale()));
 
+    aStyleFamilies.emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Frame,
+                                                    ScResId(STR_STYLE_FAMILY_GRAPHICS),
+                                                    BMP_STYLES_FAMILY_GRAPHICS,
+                                                    RID_GRAPHICSTYLEFAMILY, SC_MOD()->GetResLocale()));
+
     return aStyleFamilies;
 }
 
