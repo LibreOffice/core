@@ -274,6 +274,12 @@ void ExtConditionalFormattingContext::onEndElement()
         break;
         case XLS14_TOKEN( cfRule ):
         {
+            if (IsSpecificTextCondMode(maModel.eOperator) && nFormulaCount == 1)
+            {
+                maModel.aFormula = aChars;
+                maModel.eOperator = ScConditionMode::Direct;
+            }
+
             getStyles().getExtDxfs().forEachMem( &Dxf::finalizeImport );
             maModel.aStyle = getStyles().createExtDxfStyle(rStyleIdx);
             rStyleIdx++;
