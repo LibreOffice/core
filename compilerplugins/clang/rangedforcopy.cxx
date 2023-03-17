@@ -45,6 +45,11 @@ bool RangedForCopy::VisitCXXForRangeStmt( const CXXForRangeStmt* stmt )
     const VarDecl* varDecl = stmt->getLoopVariable();
     if (!varDecl)
       return true;
+    if (isa<DecompositionDecl>(varDecl))
+    {
+        // Assume that use of a non-reference structured binding is intentional:
+        return true;
+    }
 
     const QualType type = varDecl->getType();
     if (type->isRecordType() && !type->isReferenceType() && !type->isPointerType())
