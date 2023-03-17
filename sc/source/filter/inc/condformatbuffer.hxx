@@ -271,6 +271,7 @@ public:
     void importAxisColor(  const AttributeList& rAttribs );
     void importCfvo(  const AttributeList& rAttribs );
     ExCfRuleModel& getModel() { return maModel; }
+    const ScDataBarFormatData* GetDataBarData() { return mpTarget; }
 };
 
 class ExtCfCondFormat
@@ -311,6 +312,7 @@ public:
     void                finalizeImport();
 private:
     CondFormatRef       createCondFormat();
+    void                updateImport(const ScDataBarFormatData* pTarget);
 
 private:
     typedef RefVector< CondFormat > CondFormatVec;
