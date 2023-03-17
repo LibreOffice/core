@@ -1199,6 +1199,16 @@ public:
 
 }
 
+void CondFormatBuffer::updateImport(const ScDataBarFormatData* pTarget)
+{
+    for ( const auto& rRule : maCfRules )
+    {
+        if ( rRule && rRule->GetDataBarData() == pTarget )
+            rRule->finalizeImport();
+    }
+}
+
+
 void CondFormatBuffer::finalizeImport()
 {
     std::unordered_set<size_t> aDoneExtCFs;
@@ -1226,6 +1236,8 @@ void CondFormatBuffer::finalizeImport()
             for (const auto& rxEntry : rEntries)
             {
                 CondFormatRuleRef xRule = rCondFormat.createRule();
+                if (ScDataBarFormat *pData = dynamic_cast<ScDataBarFormat*>(rxEntry.get()))
+                    updateImport(pData->GetDataBarData());
                 ScFormatEntry* pNewEntry = rxEntry->Clone(pDoc);
                 sal_Int32 nPriority = rPriorities[nEntryIdx];
                 if (nPriority == -1)
