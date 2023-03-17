@@ -7391,15 +7391,15 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, tools::Long nWid
             {
                 if ( !pFontInstance->mxFontMetric->GetAboveUnderlineSize() )
                     ImplInitAboveTextLineSize();
-                nLineHeight = HCONV( pFontInstance->mxFontMetric->GetAboveUnderlineSize() );
-                nLinePos    = HCONV( pFontInstance->mxFontMetric->GetAboveUnderlineOffset() );
+                nLineHeight = pFontInstance->mxFontMetric->GetAboveUnderlineSize();
+                nLinePos    = pFontInstance->mxFontMetric->GetAboveUnderlineOffset();
             }
             else
             {
                 if ( !pFontInstance->mxFontMetric->GetUnderlineSize() )
                     ImplInitTextLineSize();
-                nLineHeight = HCONV( pFontInstance->mxFontMetric->GetUnderlineSize() );
-                nLinePos    = HCONV( pFontInstance->mxFontMetric->GetUnderlineOffset() );
+                nLineHeight = pFontInstance->mxFontMetric->GetUnderlineSize();
+                nLinePos    = pFontInstance->mxFontMetric->GetUnderlineOffset();
             }
             break;
         case LINESTYLE_BOLD:
@@ -7412,16 +7412,15 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, tools::Long nWid
             {
                 if ( !pFontInstance->mxFontMetric->GetAboveBoldUnderlineSize() )
                     ImplInitAboveTextLineSize();
-                nLineHeight = HCONV( pFontInstance->mxFontMetric->GetAboveBoldUnderlineSize() );
-                nLinePos    = HCONV( pFontInstance->mxFontMetric->GetAboveBoldUnderlineOffset() );
+                nLineHeight = pFontInstance->mxFontMetric->GetAboveBoldUnderlineSize();
+                nLinePos    = pFontInstance->mxFontMetric->GetAboveBoldUnderlineOffset();
             }
             else
             {
                 if ( !pFontInstance->mxFontMetric->GetBoldUnderlineSize() )
                     ImplInitTextLineSize();
-                nLineHeight = HCONV( pFontInstance->mxFontMetric->GetBoldUnderlineSize() );
-                nLinePos    = HCONV( pFontInstance->mxFontMetric->GetBoldUnderlineOffset() );
-                nLinePos += nLineHeight/2;
+                nLineHeight = pFontInstance->mxFontMetric->GetBoldUnderlineSize();
+                nLinePos    = pFontInstance->mxFontMetric->GetBoldUnderlineOffset();
             }
             break;
         case LINESTYLE_DOUBLE:
@@ -7429,17 +7428,17 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, tools::Long nWid
             {
                 if ( !pFontInstance->mxFontMetric->GetAboveDoubleUnderlineSize() )
                     ImplInitAboveTextLineSize();
-                nLineHeight = HCONV( pFontInstance->mxFontMetric->GetAboveDoubleUnderlineSize() );
-                nLinePos    = HCONV( pFontInstance->mxFontMetric->GetAboveDoubleUnderlineOffset1() );
-                nLinePos2   = HCONV( pFontInstance->mxFontMetric->GetAboveDoubleUnderlineOffset2() );
+                nLineHeight = pFontInstance->mxFontMetric->GetAboveDoubleUnderlineSize();
+                nLinePos    = pFontInstance->mxFontMetric->GetAboveDoubleUnderlineOffset1();
+                nLinePos2   = pFontInstance->mxFontMetric->GetAboveDoubleUnderlineOffset2();
             }
             else
             {
                 if ( !pFontInstance->mxFontMetric->GetDoubleUnderlineSize() )
                     ImplInitTextLineSize();
-                nLineHeight = HCONV( pFontInstance->mxFontMetric->GetDoubleUnderlineSize() );
-                nLinePos    = HCONV( pFontInstance->mxFontMetric->GetDoubleUnderlineOffset1() );
-                nLinePos2   = HCONV( pFontInstance->mxFontMetric->GetDoubleUnderlineOffset2() );
+                nLineHeight = pFontInstance->mxFontMetric->GetDoubleUnderlineSize();
+                nLinePos    = pFontInstance->mxFontMetric->GetDoubleUnderlineOffset1();
+                nLinePos2   = pFontInstance->mxFontMetric->GetDoubleUnderlineOffset2();
             }
             break;
         default:
@@ -7448,6 +7447,23 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, tools::Long nWid
 
     if ( !nLineHeight )
         return;
+
+    // tdf#154235
+    // nLinePos/nLinePos2 is the distance from baseline to the top of the line,
+    // while in PDF we stroke the line so the position is to the middle of the
+    // line, we add half of nLineHeight to account for that.
+    auto nOffset = nLineHeight / 2;
+    if (m_aCurrentPDFState.m_aFont.IsOutline() && eTextLine == LINESTYLE_SINGLE)
+    {
+        // Except when outlining, as now we are drawing a rectangle, so
+        // nLinePos is the bottom of the rectangle, so need to add nLineHeight
+        // to it.
+        nOffset = nLineHeight;
+    }
+
+    nLineHeight = HCONV(nLineHeight);
+    nLinePos = HCONV(nLinePos + nOffset);
+    nLinePos2 = HCONV(nLinePos2 + nOffset);
 
     // outline attribute ?
     if (m_aCurrentPDFState.m_aFont.IsOutline() && eTextLine == LINESTYLE_SINGLE)
@@ -7460,7 +7476,7 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, tools::Long nWid
 
         // draw rectangle instead
         aLine.append( "0 " );
-        m_aPages.back().appendMappedLength( static_cast<sal_Int32>(-nLinePos * 1.5), aLine );
+        m_aPages.back().appendMappedLength( static_cast<sal_Int32>(-nLinePos), aLine );
         aLine.append( " " );
         m_aPages.back().appendMappedLength( static_cast<sal_Int32>(nWidth), aLine, false );
         aLine.append( ' ' );
@@ -7468,6 +7484,7 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, tools::Long nWid
         aLine.append( " re h B\n" );
         return;
     }
+
 
     m_aPages.back().appendMappedLength( static_cast<sal_Int32>(nLineHeight), aLine );
     aLine.append( " w " );
@@ -7575,21 +7592,21 @@ void PDFWriterImpl::drawStrikeoutLine( OStringBuffer& aLine, tools::Long nWidth,
         case STRIKEOUT_SINGLE:
             if ( !pFontInstance->mxFontMetric->GetStrikeoutSize() )
                 ImplInitTextLineSize();
-            nLineHeight = HCONV( pFontInstance->mxFontMetric->GetStrikeoutSize() );
-            nLinePos    = HCONV( pFontInstance->mxFontMetric->GetStrikeoutOffset() );
+            nLineHeight = pFontInstance->mxFontMetric->GetStrikeoutSize();
+            nLinePos    = pFontInstance->mxFontMetric->GetStrikeoutOffset();
             break;
         case STRIKEOUT_BOLD:
             if ( !pFontInstance->mxFontMetric->GetBoldStrikeoutSize() )
                 ImplInitTextLineSize();
-            nLineHeight = HCONV( pFontInstance->mxFontMetric->GetBoldStrikeoutSize() );
-            nLinePos    = HCONV( pFontInstance->mxFontMetric->GetBoldStrikeoutOffset() );
+            nLineHeight = pFontInstance->mxFontMetric->GetBoldStrikeoutSize();
+            nLinePos    = pFontInstance->mxFontMetric->GetBoldStrikeoutOffset();
             break;
         case STRIKEOUT_DOUBLE:
             if ( !pFontInstance->mxFontMetric->GetDoubleStrikeoutSize() )
                 ImplInitTextLineSize();
-            nLineHeight = HCONV( pFontInstance->mxFontMetric->GetDoubleStrikeoutSize() );
-            nLinePos    = HCONV( pFontInstance->mxFontMetric->GetDoubleStrikeoutOffset1() );
-            nLinePos2   = HCONV( pFontInstance->mxFontMetric->GetDoubleStrikeoutOffset2() );
+            nLineHeight = pFontInstance->mxFontMetric->GetDoubleStrikeoutSize();
+            nLinePos    = pFontInstance->mxFontMetric->GetDoubleStrikeoutOffset1();
+            nLinePos2   = pFontInstance->mxFontMetric->GetDoubleStrikeoutOffset2();
             break;
         default:
             break;
@@ -7597,6 +7614,14 @@ void PDFWriterImpl::drawStrikeoutLine( OStringBuffer& aLine, tools::Long nWidth,
 
     if ( !nLineHeight )
         return;
+
+    // tdf#154235
+    // nLinePos/nLinePos2 is the distance from baseline to the bottom of the line,
+    // while in PDF we stroke the line so the position is to the middle of the
+    // line, we add half of nLineHeight to account for that.
+    nLinePos = HCONV(nLinePos + nLineHeight / 2);
+    nLinePos2 = HCONV(nLinePos2 + nLineHeight / 2);
+    nLineHeight = HCONV(nLineHeight);
 
     m_aPages.back().appendMappedLength( static_cast<sal_Int32>(nLineHeight), aLine );
     aLine.append( " w " );
