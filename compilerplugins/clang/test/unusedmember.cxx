@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <cstddef>
+
 namespace Enum
 {
 namespace
@@ -223,6 +225,31 @@ void f()
 }
 }
 
+namespace Offsetof
+{
+namespace
+{
+struct S
+{
+    int i;
+};
+}
+void f() { (void)offsetof(S, i); }
+}
+
+namespace OffsetofTemplate
+{
+namespace
+{
+template <typename> struct S
+{
+    int i;
+};
+template <typename T> void f1() { (void)offsetof(T, i); }
+}
+void f() { f1<S<void>>(); }
+}
+
 int main()
 {
     (void)&Enum::f;
@@ -233,6 +260,8 @@ int main()
     (void)&Aligned::f;
     (void)&Bases::f;
     (void)&Unnamed::f;
+    (void)&Offsetof::f;
+    (void)&OffsetofTemplate::f;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

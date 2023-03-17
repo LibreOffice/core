@@ -220,6 +220,10 @@ public:
             return true;
         }
         auto const t1 = expr->getTypeSourceInfo()->getType();
+        if (t1->isTemplateTypeParmType())
+        {
+            return true;
+        }
         RecordDecl const* d;
         if (auto const t2 = t1->getAs<InjectedClassNameType>())
         {
