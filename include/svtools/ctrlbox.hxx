@@ -20,6 +20,7 @@
 #pragma once
 
 #include <svtools/svtdllapi.h>
+#include <svtools/toolbarmenu.hxx>
 #include <editeng/borderline.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/metric.hxx>
@@ -198,7 +199,7 @@ inline Color sameDistColor( Color /*rMain*/, Color rDefault )
 
 class ValueSet;
 
-class SVT_DLLPUBLIC SvtLineListBox
+class SVT_DLLPUBLIC SvtLineListBox final : public WeldToolbarPopup
 {
 public:
     typedef Color (*ColorFunc)(Color);
@@ -244,6 +245,8 @@ public:
 
     void            set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
 
+    virtual void    GrabFocus() override;
+
 private:
 
     SVT_DLLPRIVATE void         ImpGetLine( tools::Long nLine1, tools::Long nLine2, tools::Long nDistance,
@@ -251,7 +254,6 @@ private:
                                     SvxBorderLineStyle nStyle, BitmapEx& rBmp );
 
     DECL_DLLPRIVATE_LINK(ValueSelectHdl, ValueSet*, void);
-    DECL_DLLPRIVATE_LINK(FocusHdl, weld::Widget&, void);
     DECL_DLLPRIVATE_LINK(ToggleHdl, weld::Toggleable&, void);
     DECL_DLLPRIVATE_LINK(NoneHdl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(StyleUpdatedHdl, weld::Widget&, void);
@@ -264,8 +266,6 @@ private:
     SvtLineListBox&    operator =( const SvtLineListBox& ) = delete;
 
     std::unique_ptr<weld::MenuButton> m_xControl;
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Widget> m_xTopLevel;
     std::unique_ptr<weld::Button> m_xNoneButton;
     std::unique_ptr<ValueSet> m_xLineSet;
     std::unique_ptr<weld::CustomWeld> m_xLineSetWin;

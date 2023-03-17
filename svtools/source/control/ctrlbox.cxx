@@ -1399,9 +1399,8 @@ void SvtLineListBox::ImpGetLine( tools::Long nLine1, tools::Long nLine2, tools::
 }
 
 SvtLineListBox::SvtLineListBox(std::unique_ptr<weld::MenuButton> pControl)
-    : m_xControl(std::move(pControl))
-    , m_xBuilder(Application::CreateBuilder(m_xControl.get(), "svt/ui/linewindow.ui"))
-    , m_xTopLevel(m_xBuilder->weld_widget("line_popup_window"))
+    : WeldToolbarPopup(css::uno::Reference<css::frame::XFrame>(), pControl.get(), "svt/ui/linewindow.ui", "line_popup_window")
+    , m_xControl(std::move(pControl))
     , m_xNoneButton(m_xBuilder->weld_button("none_line_button"))
     , m_xLineSet(new ValueSet(nullptr))
     , m_xLineSetWin(new weld::CustomWeld(*m_xBuilder, "lineset", *m_xLineSet))
@@ -1417,7 +1416,6 @@ SvtLineListBox::SvtLineListBox(std::unique_ptr<weld::MenuButton> pControl)
 
     m_xNoneButton->connect_clicked(LINK(this, SvtLineListBox, NoneHdl));
 
-    m_xTopLevel->connect_focus_in(LINK(this, SvtLineListBox, FocusHdl));
     m_xControl->set_popover(m_xTopLevel.get());
     m_xControl->connect_toggled(LINK(this, SvtLineListBox, ToggleHdl));
     m_xControl->connect_style_updated(LINK(this, SvtLineListBox, StyleUpdatedHdl));
@@ -1438,7 +1436,7 @@ SvtLineListBox::SvtLineListBox(std::unique_ptr<weld::MenuButton> pControl)
     aVirDev->SetMapMode(MapMode(MapUnit::MapTwip));
 }
 
-IMPL_LINK_NOARG(SvtLineListBox, FocusHdl, weld::Widget&, void)
+void SvtLineListBox::GrabFocus()
 {
     if (GetSelectEntryStyle() == SvxBorderLineStyle::NONE)
         m_xNoneButton->grab_focus();
@@ -1449,7 +1447,7 @@ IMPL_LINK_NOARG(SvtLineListBox, FocusHdl, weld::Widget&, void)
 IMPL_LINK(SvtLineListBox, ToggleHdl, weld::Toggleable&, rButton, void)
 {
     if (rButton.get_active())
-        FocusHdl(*m_xTopLevel);
+        GrabFocus();
 }
 
 IMPL_LINK_NOARG(SvtLineListBox, StyleUpdatedHdl, weld::Widget&, void)
