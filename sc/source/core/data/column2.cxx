@@ -734,10 +734,10 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
         // All cells are empty.
         return nOldWidth;
 
-    sc::SingleColumnSpanSet aSpanSet(GetDoc().GetSheetLimits());
     sc::SingleColumnSpanSet::SpansType aMarkedSpans;
     if (pMarkData && (pMarkData->IsMarked() || pMarkData->IsMultiMarked()))
     {
+        sc::SingleColumnSpanSet aSpanSet(GetDoc().GetSheetLimits());
         aSpanSet.scan(*pMarkData, nTab, nCol);
         aSpanSet.getSpans(aMarkedSpans);
     }
