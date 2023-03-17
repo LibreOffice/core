@@ -107,6 +107,13 @@ protected:
     void paste(std::u16string_view aFilename, css::uno::Reference<css::text::XTextRange> const& xTextRange);
 
 public:
+    /// Temporarily enables DOCX::ImportFloatingTableAsSplitFly.
+    class SWQAHELPER_DLLPUBLIC FlySplitGuard
+    {
+    public:
+        FlySplitGuard();
+        ~FlySplitGuard();
+    };
     SwModelTestBase(const OUString& pTestDocumentPath = OUString(), const char* pFilter = "");
 
 protected:

@@ -9,10 +9,6 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <comphelper/configuration.hxx>
-#include <comphelper/scopeguard.hxx>
-#include <officecfg/Office/Writer.hxx>
-
 #include <IDocumentLayoutAccess.hxx>
 #include <anchoredobject.hxx>
 #include <flyfrms.hxx>
@@ -45,16 +41,7 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWithTable)
 {
     // Given a document with a multi-page floating table:
-    std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(true,
-                                                                                        pChanges);
-    pChanges->commit();
-    comphelper::ScopeGuard g([pChanges] {
-        officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(
-            false, pChanges);
-        pChanges->commit();
-    });
+    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable.docx");
 
     // When laying out that document:
@@ -103,16 +90,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWithTable)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyVertOffset)
 {
     // Given a document with a floattable, split on 2 pages and a positive vertical offset:
-    std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(true,
-                                                                                        pChanges);
-    pChanges->commit();
-    comphelper::ScopeGuard g([pChanges] {
-        officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(
-            false, pChanges);
-        pChanges->commit();
-    });
+    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable-vertoffset.docx");
 
     // When laying out that document:
@@ -156,16 +134,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyVertOffset)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFly3Pages)
 {
     // Given a document with a floattable, split on 3 pages:
-    std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(true,
-                                                                                        pChanges);
-    pChanges->commit();
-    comphelper::ScopeGuard g([pChanges] {
-        officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(
-            false, pChanges);
-        pChanges->commit();
-    });
+    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable-3pages.docx");
 
     // When laying out that document:
@@ -221,16 +190,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFly3Pages)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyRow)
 {
     // Given a document with a floattable, single row split on 2 pages:
-    std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(true,
-                                                                                        pChanges);
-    pChanges->commit();
-    comphelper::ScopeGuard g([pChanges] {
-        officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(
-            false, pChanges);
-        pChanges->commit();
-    });
+    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable-rowsplit.docx");
 
     // When laying out that document:
@@ -317,16 +277,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyEnable)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyFooter)
 {
     // Given a document with a floattable, table split on 2 pages with headers/footers:
-    std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(true,
-                                                                                        pChanges);
-    pChanges->commit();
-    comphelper::ScopeGuard g([pChanges] {
-        officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(
-            false, pChanges);
-        pChanges->commit();
-    });
+    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable-footer.docx");
 
     // When laying out that document:
@@ -365,16 +316,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyFooter)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyFooter2Rows)
 {
     // Given a document with a 2nd page that contains the second half of a split row + a last row:
-    std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(true,
-                                                                                        pChanges);
-    pChanges->commit();
-    comphelper::ScopeGuard g([pChanges] {
-        officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(
-            false, pChanges);
-        pChanges->commit();
-    });
+    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable-footer-2rows.docx");
 
     // When laying out that document:
@@ -395,16 +337,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyFooter2Rows)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFly2Cols)
 {
     // Given a document with a 2nd page that contains the second half of a split row and 2 columns:
-    std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(true,
-                                                                                        pChanges);
-    pChanges->commit();
-    comphelper::ScopeGuard g([pChanges] {
-        officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(
-            false, pChanges);
-        pChanges->commit();
-    });
+    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable-2cols.docx");
 
     // When laying out that document:
@@ -425,16 +358,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFly2Cols)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWidow)
 {
     // Given a document with a 2nd page that contains 2 lines, due to widow control:
-    std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(true,
-                                                                                        pChanges);
-    pChanges->commit();
-    comphelper::ScopeGuard g([pChanges] {
-        officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(
-            false, pChanges);
-        pChanges->commit();
-    });
+    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable-widow.docx");
 
     // When laying out that document:
@@ -480,16 +404,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWidow)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyCompat14)
 {
     // Given a Word 2010 document with 2 pages, one table row each:
-    std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(true,
-                                                                                        pChanges);
-    pChanges->commit();
-    comphelper::ScopeGuard g([pChanges] {
-        officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(
-            false, pChanges);
-        pChanges->commit();
-    });
+    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable-compat14.docx");
 
     // When laying out that document:
@@ -528,16 +443,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyCompat14)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyCompat14Nosplit)
 {
     // Given a Word 2010 document with 2 pages, 2 rows on page 1, 1 row on page 2:
-    std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(true,
-                                                                                        pChanges);
-    pChanges->commit();
-    comphelper::ScopeGuard g([pChanges] {
-        officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(
-            false, pChanges);
-        pChanges->commit();
-    });
+    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable-compat14-nosplit.docx");
 
     // When laying out that document:
@@ -570,16 +476,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyCompat14Nosplit)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyCompat14Body)
 {
     // Given a Word 2010 document with 2 pages, 1 row on page 1, 1 row on page 2:
-    std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(true,
-                                                                                        pChanges);
-    pChanges->commit();
-    comphelper::ScopeGuard g([pChanges] {
-        officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(
-            false, pChanges);
-        pChanges->commit();
-    });
+    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable-compat14-body.docx");
 
     // When laying out that document:

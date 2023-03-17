@@ -23,6 +23,8 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/scheduler.hxx>
+#include <comphelper/configuration.hxx>
+#include <officecfg/Office/Writer.hxx>
 
 #include <IDocumentLayoutAccess.hxx>
 #include <docsh.hxx>
@@ -33,6 +35,24 @@
 #include <viewsh.hxx>
 
 using namespace css;
+
+SwModelTestBase::FlySplitGuard::FlySplitGuard()
+{
+    std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(true,
+                                                                                        pChanges);
+    pChanges->commit();
+}
+
+SwModelTestBase::FlySplitGuard::~FlySplitGuard()
+{
+    std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(false,
+                                                                                        pChanges);
+    pChanges->commit();
+}
 
 void SwModelTestBase::paste(std::u16string_view aFilename,
                             uno::Reference<text::XTextRange> const& xTextRange)

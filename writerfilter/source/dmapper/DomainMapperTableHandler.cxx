@@ -1604,7 +1604,8 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
             m_aTableProperties->getValue(TablePropertyMap::TABLE_WIDTH, nTableWidth);
             sal_Int32 nTableWidthType = text::SizeType::FIX;
             m_aTableProperties->getValue(TablePropertyMap::TABLE_WIDTH_TYPE, nTableWidthType);
-            if (m_rDMapper_Impl.GetSectionContext() && nestedTableLevel <= 1 && !m_rDMapper_Impl.IsInHeaderFooter())
+            // Split flys don't need to go via m_aPendingFloatingTables.
+            if (m_rDMapper_Impl.GetSectionContext() && nestedTableLevel <= 1 && !m_rDMapper_Impl.IsInHeaderFooter() && !IsFlySplitAllowed())
             {
                 m_rDMapper_Impl.m_aPendingFloatingTables.emplace_back(xStart, xEnd,
                                 comphelper::containerToSequence(aFrameProperties),

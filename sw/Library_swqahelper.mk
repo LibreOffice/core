@@ -26,6 +26,10 @@ $(eval $(call gb_Library_use_externals,swqahelper, \
 	libxml2 \
 ))
 
+$(eval $(call gb_Library_use_custom_headers,swqahelper,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_add_defs,swqahelper,\
 	-DSWQAHELPER_DLLIMPLEMENTATION \
 ))
