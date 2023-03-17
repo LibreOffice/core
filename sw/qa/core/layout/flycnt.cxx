@@ -566,6 +566,52 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyCompat14Nosplit)
     SwFrame* pRow2 = pTab2->GetLower();
     CPPUNIT_ASSERT(!pRow2->GetNext());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyCompat14Body)
+{
+    // Given a Word 2010 document with 2 pages, 1 row on page 1, 1 row on page 2:
+    std::shared_ptr<comphelper::ConfigurationChanges> pChanges(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(true,
+                                                                                        pChanges);
+    pChanges->commit();
+    comphelper::ScopeGuard g([pChanges] {
+        officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::set(
+            false, pChanges);
+        pChanges->commit();
+    });
+    createSwDoc("floattable-compat14-body.docx");
+
+    // When laying out that document:
+    // (This is legacy mode, but still Word doesn't split row 2 because 1) row 2 has a minimal
+    // height, so even the first part of row 2 would not fit the body frame and 2) Word allows using
+    // the bottom margin area in legacy mode, but only in case the fly height <= body height.)
+    calcLayout();
+
+    // Then make sure that the second row is on a page 2:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    auto pPage1Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage1Objs[0]);
+    CPPUNIT_ASSERT(pPage1Fly);
+    SwFrame* pTab1 = pPage1Fly->GetLower();
+    SwFrame* pRow1 = pTab1->GetLower();
+    // Without the accompanying fix in place, this test would have failed, part of row 2 was on page
+    // 1.
+    CPPUNIT_ASSERT(!pRow1->GetNext());
+    auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
+    CPPUNIT_ASSERT(pPage2);
+    const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
+    auto pPage2Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage2Objs[0]);
+    CPPUNIT_ASSERT(pPage2Fly);
+    SwFrame* pTab2 = pPage2Fly->GetLower();
+    SwFrame* pRow2 = pTab2->GetLower();
+    CPPUNIT_ASSERT(!pRow2->GetNext());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
