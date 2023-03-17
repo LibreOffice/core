@@ -1491,7 +1491,8 @@ namespace
             case '[':
                 sResult.append(*start++);
                 seenright = 0;
-                if (start < end && *start=='!'){
+                if (start < end && *start == '!')
+                {
                     sResult.append('^');
                     start++;
                 }
