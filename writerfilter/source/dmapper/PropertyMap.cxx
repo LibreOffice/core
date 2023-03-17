@@ -1354,6 +1354,96 @@ void SectionPropertyMap::HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl&
     rAnchoredObjectAnchors.clear();
 }
 
+void BeforeConvertToTextFrame(std::deque<css::uno::Any>& rFramedRedlines, std::vector<sal_Int32>& redPos, std::vector<sal_Int32>& redLen, std::vector<OUString>& redCell, std::vector<OUString>& redTable)
+{
+    // convert redline ranges to cursor movement and character length
+    for( size_t i = 0; i < rFramedRedlines.size(); i+=3)
+    {
+        uno::Reference<text::XText> xCell;
+        uno::Reference< text::XTextRange > xRange;
+        rFramedRedlines[i] >>= xRange;
+        uno::Reference< beans::XPropertySet > xRangeProperties;
+        if ( xRange.is() )
+        {
+            OUString sTableName;
+            OUString sCellName;
+            xRangeProperties.set( xRange, uno::UNO_QUERY_THROW );
+            if (xRangeProperties->getPropertySetInfo()->hasPropertyByName("TextTable"))
+            {
+                uno::Any aTable = xRangeProperties->getPropertyValue("TextTable");
+                if ( aTable != uno::Any() )
+                {
+                    uno::Reference<text::XTextTable> xTable;
+                    aTable >>= xTable;
+                    uno::Reference<beans::XPropertySet> xTableProperties(xTable, uno::UNO_QUERY);
+                    xTableProperties->getPropertyValue("TableName") >>= sTableName;
+                }
+                if (xRangeProperties->getPropertySetInfo()->hasPropertyByName("Cell"))
+                {
+                    uno::Any aCell = xRangeProperties->getPropertyValue("Cell");
+                    if ( aCell != uno::Any() )
+                    {
+                        aCell >>= xCell;
+                        uno::Reference<beans::XPropertySet> xCellProperties(xCell, uno::UNO_QUERY);
+                        xCellProperties->getPropertyValue("CellName") >>= sCellName;
+                    }
+                }
+            }
+            redTable.push_back(sTableName);
+            redCell.push_back(sCellName);
+            bool bOk = false;
+            if (!sTableName.isEmpty() && !sCellName.isEmpty())
+            {
+                uno::Reference<text::XTextCursor> xRangeCursor = xCell->createTextCursorByRange( xRange );
+                if ( xRangeCursor.is() )
+                {
+                    bOk = true;
+                    sal_Int32 nLen = xRange->getString().getLength();
+                    redLen.push_back(nLen);
+                    xRangeCursor->gotoStart(true);
+                    redPos.push_back(xRangeCursor->getString().getLength() - nLen);
+                }
+            }
+            if (!bOk)
+            {
+                // missing cell or failed createTextCursorByRange()
+                redLen.push_back(-1);
+                redPos.push_back(-1);
+            }
+        }
+    }
+}
+
+void AfterConvertToTextFrame(DomainMapper_Impl& rDM_Impl, std::deque<css::uno::Any>& aFramedRedlines, std::vector<sal_Int32>& redPos, std::vector<sal_Int32>& redLen, std::vector<OUString>& redCell, std::vector<OUString>& redTable)
+{
+    uno::Reference<text::XTextTablesSupplier> xTextDocument(rDM_Impl.GetTextDocument(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTables = xTextDocument->getTextTables();
+    for( size_t i = 0; i < aFramedRedlines.size(); i+=3)
+    {
+        OUString sType;
+        beans::PropertyValues aRedlineProperties( 3 );
+        // skip failed createTextCursorByRange()
+        if (redPos[i/3] == -1)
+            continue;
+        aFramedRedlines[i+1] >>= sType;
+        aFramedRedlines[i+2] >>= aRedlineProperties;
+        uno::Reference<text::XTextTable> xTable(xTables->getByName(redTable[i/3]), uno::UNO_QUERY);
+        uno::Reference<text::XText> xCell(xTable->getCellByName(redCell[i/3]), uno::UNO_QUERY);
+        uno::Reference<text::XTextCursor> xCrsr = xCell->createTextCursor();
+        xCrsr->goRight(redPos[i/3], false);
+        xCrsr->goRight(redLen[i/3], true);
+        uno::Reference < text::XRedline > xRedline( xCrsr, uno::UNO_QUERY_THROW );
+        try
+        {
+            xRedline->makeRedline( sType, aRedlineProperties );
+        }
+        catch (const uno::Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION("writerfilter", "makeRedline() failed");
+        }
+    }
+}
+
 void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 {
     SectionPropertyMap* pPrevSection = rDM_Impl.GetLastSectionContext();
@@ -1409,66 +1499,10 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             std::deque<css::uno::Any> aFramedRedlines = rDM_Impl.m_aStoredRedlines[StoredRedlines::FRAME];
             try
             {
-                // convert redline ranges to cursor movement and character length
                 std::vector<sal_Int32> redPos, redLen;
                 std::vector<OUString> redCell;
                 std::vector<OUString> redTable;
-                for( size_t i = 0; i < aFramedRedlines.size(); i+=3)
-                {
-                    uno::Reference<text::XText> xCell;
-                    uno::Reference< text::XTextRange > xRange;
-                    aFramedRedlines[i] >>= xRange;
-                    uno::Reference< beans::XPropertySet > xRangeProperties;
-                    if ( xRange.is() )
-                    {
-                        OUString sTableName;
-                        OUString sCellName;
-                        xRangeProperties.set( xRange, uno::UNO_QUERY_THROW );
-                        if (xRangeProperties->getPropertySetInfo()->hasPropertyByName("TextTable"))
-                        {
-                            uno::Any aTable = xRangeProperties->getPropertyValue("TextTable");
-                            if ( aTable != uno::Any() )
-                            {
-                                uno::Reference<text::XTextTable> xTable;
-                                aTable >>= xTable;
-                                uno::Reference<beans::XPropertySet> xTableProperties(xTable, uno::UNO_QUERY);
-                                xTableProperties->getPropertyValue("TableName") >>= sTableName;
-                            }
-                            if (xRangeProperties->getPropertySetInfo()->hasPropertyByName("Cell"))
-                            {
-                                uno::Any aCell = xRangeProperties->getPropertyValue("Cell");
-                                if ( aCell != uno::Any() )
-                                {
-                                    aCell >>= xCell;
-                                    uno::Reference<beans::XPropertySet> xCellProperties(xCell, uno::UNO_QUERY);
-                                    xCellProperties->getPropertyValue("CellName") >>= sCellName;
-                                }
-                            }
-                        }
-                        redTable.push_back(sTableName);
-                        redCell.push_back(sCellName);
-                        bool bOk = false;
-                        if (!sTableName.isEmpty() && !sCellName.isEmpty())
-                        {
-                            uno::Reference<text::XTextCursor> xRangeCursor = xCell->createTextCursorByRange( xRange );
-                            if ( xRangeCursor.is() )
-                            {
-                                bOk = true;
-                                sal_Int32 nLen = xRange->getString().getLength();
-                                redLen.push_back(nLen);
-                                xRangeCursor->gotoStart(true);
-                                redPos.push_back(xRangeCursor->getString().getLength() - nLen);
-                            }
-                        }
-                        if (!bOk)
-                        {
-                            // missing cell or failed createTextCursorByRange()
-                            redLen.push_back(-1);
-                            redPos.push_back(-1);
-                        }
-                    }
-                }
-
+                BeforeConvertToTextFrame(aFramedRedlines, redPos, redLen, redCell, redTable);
                 const uno::Reference< text::XTextContent >& xTextContent =
                         xBodyText->convertToTextFrame(rInfo.m_xStart, rInfo.m_xEnd,
                                               rInfo.m_aFrameProperties);
@@ -1489,32 +1523,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                     }
                 }
 
-                uno::Reference<text::XTextTablesSupplier> xTextDocument(rDM_Impl.GetTextDocument(), uno::UNO_QUERY);
-                uno::Reference<container::XNameAccess> xTables = xTextDocument->getTextTables();
-                for( size_t i = 0; i < aFramedRedlines.size(); i+=3)
-                {
-                    OUString sType;
-                    beans::PropertyValues aRedlineProperties( 3 );
-                    // skip failed createTextCursorByRange()
-                    if (redPos[i/3] == -1)
-                        continue;
-                    aFramedRedlines[i+1] >>= sType;
-                    aFramedRedlines[i+2] >>= aRedlineProperties;
-                    uno::Reference<text::XTextTable> xTable(xTables->getByName(redTable[i/3]), uno::UNO_QUERY);
-                    uno::Reference<text::XText> xCell(xTable->getCellByName(redCell[i/3]), uno::UNO_QUERY);
-                    uno::Reference<text::XTextCursor> xCrsr = xCell->createTextCursor();
-                    xCrsr->goRight(redPos[i/3], false);
-                    xCrsr->goRight(redLen[i/3], true);
-                    uno::Reference < text::XRedline > xRedline( xCrsr, uno::UNO_QUERY_THROW );
-                    try
-                    {
-                        xRedline->makeRedline( sType, aRedlineProperties );
-                    }
-                    catch (const uno::Exception&)
-                    {
-                        DBG_UNHANDLED_EXCEPTION("writerfilter", "makeRedline() failed");
-                    }
-                }
+                AfterConvertToTextFrame(rDM_Impl, aFramedRedlines, redPos, redLen, redCell, redTable);
             }
             catch (const uno::Exception&)
             {

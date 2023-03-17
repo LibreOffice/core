@@ -34,6 +34,7 @@
 #include <utility>
 #include <vector>
 #include <set>
+#include <deque>
 
 namespace com::sun::star {
     namespace beans {
@@ -411,6 +412,10 @@ public:
     void HandleMarginsHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl );
     void ClearHeaderFooterLinkToPrevious( bool bHeader, PageType eType );
 };
+
+void BeforeConvertToTextFrame(std::deque<css::uno::Any>& rFramedRedlines, std::vector<sal_Int32>& redPos, std::vector<sal_Int32>& redLen, std::vector<OUString>& redCell, std::vector<OUString>& redTable);
+
+void AfterConvertToTextFrame(DomainMapper_Impl& rDM_Impl, std::deque<css::uno::Any>& aFramedRedlines, std::vector<sal_Int32>& redPos, std::vector<sal_Int32>& redLen, std::vector<OUString>& redCell, std::vector<OUString>& redTable);
 
 class ParagraphProperties : public SvRefBase
 {
