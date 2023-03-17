@@ -2228,6 +2228,7 @@ fileType
 fileVersion
 filetime
 fill
+fillColor
 fillClrLst
 fillFormulas
 fillId
