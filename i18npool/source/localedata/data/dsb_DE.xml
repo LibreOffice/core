@@ -178,7 +178,7 @@
       <FormatCode>H:MM AM/PM</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey4" default="false" type="medium" usage="TIME" formatindex="42">
-      <FormatCode>H:MM:SS AM/PM</FormatCode><!-- with commonly used 24-hour time, the AM/PM indicator is not needed -->
+      <FormatCode>H:MM:SS AM/PM</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey5" default="false" type="medium" usage="TIME" formatindex="43">
       <FormatCode>[H]:MM:SS</FormatCode>
