@@ -1639,6 +1639,27 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testRowIndex1BasedXLSX)
     CPPUNIT_ASSERT_EQUAL(OUString("Third line."), aStr);
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCondFormatCfvoScaleValueXLSX)
+{
+    createScDoc("xlsx/condformat_databar.xlsx");
+
+    ScDocument* pDoc = getScDoc();
+    ScConditionalFormat* pFormat = pDoc->GetCondFormat(0, 0, 0);
+    const ScFormatEntry* pEntry = pFormat->GetEntry(0);
+    CPPUNIT_ASSERT(pEntry);
+    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::Databar, pEntry->GetType());
+    const ScDataBarFormat* pDataBar = static_cast<const ScDataBarFormat*>(pEntry);
+    const ScDataBarFormatData* pDataBarFormatData = pDataBar->GetDataBarData();
+    const ScColorScaleEntry* pLower = pDataBarFormatData->mpLowerLimit.get();
+    const ScColorScaleEntry* pUpper = pDataBarFormatData->mpUpperLimit.get();
+
+    CPPUNIT_ASSERT_EQUAL(COLORSCALE_VALUE, pLower->GetType());
+    CPPUNIT_ASSERT_EQUAL(COLORSCALE_VALUE, pUpper->GetType());
+
+    CPPUNIT_ASSERT_EQUAL(0.0, pLower->GetValue());
+    CPPUNIT_ASSERT_EQUAL(1.0, pUpper->GetValue());
+}
+
 ScFiltersTest::ScFiltersTest()
     : ScModelTestBase("sc/qa/unit/data")
 {
