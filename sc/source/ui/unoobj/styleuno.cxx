@@ -26,6 +26,10 @@
 #include <svx/pageitem.hxx>
 #include <editeng/pbinitem.hxx>
 #include <svx/unomid.hxx>
+#include <svx/unoshape.hxx>
+#include <svx/unoshprp.hxx>
+#include <svx/xflbstit.hxx>
+#include <svx/xflbmtit.hxx>
 #include <editeng/unonrule.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/printer.hxx>
@@ -42,6 +46,7 @@
 #include <tools/UnitConversion.hxx>
 #include <osl/diagnose.h>
 
+#include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
@@ -76,6 +81,26 @@
 #include <stylehelper.hxx>
 
 using namespace ::com::sun::star;
+
+static const SfxItemPropertySet* lcl_GetGraphicStyleSet()
+{
+    static const SfxItemPropertyMapEntry aGraphicStyleMap_Impl[] =
+    {
+        SVX_UNOEDIT_NUMBERING_PROPERTY,
+        SHADOW_PROPERTIES
+        LINE_PROPERTIES
+        LINE_PROPERTIES_START_END
+        FILL_PROPERTIES
+        EDGERADIUS_PROPERTIES
+        TEXT_PROPERTIES_DEFAULTS
+        CONNECTOR_PROPERTIES
+        SPECIAL_DIMENSIONING_PROPERTIES_DEFAULTS
+        {SC_UNONAME_HIDDEN,   ATTR_HIDDEN,         cppu::UnoType<sal_Bool>::get(), 0, 0 },
+        {SC_UNONAME_DISPNAME, SC_WID_UNO_DISPNAME, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::READONLY, 0 },
+    };
+    static SfxItemPropertySet aGraphicStyleSet_Impl( aGraphicStyleMap_Impl );
+    return &aGraphicStyleSet_Impl;
+}
 
 static const SfxItemPropertySet* lcl_GetCellStyleSet()
 {
@@ -381,18 +406,20 @@ static const SfxItemPropertyMap* lcl_GetFooterStyleMap()
     return &aFooterStyleMap;
 }
 
-//  access index on the style types: 0 = Cell, 1 = Page
+//  access index on the style types: 0 = Cell, 1 = Page, 2 = Drawing
 
-#define SC_STYLE_FAMILY_COUNT 2
+#define SC_STYLE_FAMILY_COUNT 3
 
 constexpr OUStringLiteral SC_FAMILYNAME_CELL = u"CellStyles";
 constexpr OUStringLiteral SC_FAMILYNAME_PAGE = u"PageStyles";
+constexpr OUStringLiteral SC_FAMILYNAME_GRAPHIC = u"GraphicStyles";
 
-const SfxStyleFamily aStyleFamilyTypes[SC_STYLE_FAMILY_COUNT] = { SfxStyleFamily::Para, SfxStyleFamily::Page };
+const SfxStyleFamily aStyleFamilyTypes[SC_STYLE_FAMILY_COUNT] = { SfxStyleFamily::Para, SfxStyleFamily::Page, SfxStyleFamily::Frame };
 
 constexpr OUStringLiteral SCSTYLE_SERVICE = u"com.sun.star.style.Style";
 constexpr OUStringLiteral SCCELLSTYLE_SERVICE = u"com.sun.star.style.CellStyle";
 constexpr OUStringLiteral SCPAGESTYLE_SERVICE = u"com.sun.star.style.PageStyle";
+constexpr OUStringLiteral SCGRAPHICSTYLE_SERVICE = u"com.sun.star.style.GraphicStyle";
 
 SC_SIMPLE_SERVICE_INFO( ScStyleFamiliesObj, "ScStyleFamiliesObj", "com.sun.star.style.StyleFamilies" )
 SC_SIMPLE_SERVICE_INFO( ScStyleFamilyObj, "ScStyleFamilyObj", "com.sun.star.style.StyleFamily" )
@@ -442,6 +469,8 @@ rtl::Reference<ScStyleFamilyObj> ScStyleFamiliesObj::GetObjectByType_Impl(SfxSty
             return new ScStyleFamilyObj( pDocShell, SfxStyleFamily::Para );
         else if ( nType == SfxStyleFamily::Page )
             return new ScStyleFamilyObj( pDocShell, SfxStyleFamily::Page );
+        else if ( nType == SfxStyleFamily::Frame )
+            return new ScStyleFamilyObj( pDocShell, SfxStyleFamily::Frame );
     }
     OSL_FAIL("getStyleFamilyByType: no DocShell or wrong SfxStyleFamily");
     return nullptr;
@@ -463,6 +492,8 @@ rtl::Reference<ScStyleFamilyObj> ScStyleFamiliesObj::GetObjectByName_Impl(std::u
             return new ScStyleFamilyObj( pDocShell, SfxStyleFamily::Para );
         else if ( aName == SC_FAMILYNAME_PAGE )
             return new ScStyleFamilyObj( pDocShell, SfxStyleFamily::Page );
+        else if ( aName == SC_FAMILYNAME_GRAPHIC )
+            return new ScStyleFamilyObj( pDocShell, SfxStyleFamily::Frame );
     }
     // no assertion - called directly from getByName
     return nullptr;
@@ -510,12 +541,12 @@ uno::Any SAL_CALL ScStyleFamiliesObj::getByName( const OUString& aName )
 
 uno::Sequence<OUString> SAL_CALL ScStyleFamiliesObj::getElementNames()
 {
-    return {SC_FAMILYNAME_CELL, SC_FAMILYNAME_PAGE};
+    return {SC_FAMILYNAME_CELL, SC_FAMILYNAME_PAGE, SC_FAMILYNAME_GRAPHIC};
 }
 
 sal_Bool SAL_CALL ScStyleFamiliesObj::hasByName( const OUString& aName )
 {
-    return aName == SC_FAMILYNAME_CELL || aName == SC_FAMILYNAME_PAGE;
+    return aName == SC_FAMILYNAME_CELL || aName == SC_FAMILYNAME_PAGE || aName == SC_FAMILYNAME_GRAPHIC;
 }
 
 // style::XStyleLoader
@@ -755,7 +786,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const OUString& aName )
 
                 //! InvalidateAttribs();        // Bindings-Invalidate
             }
-            else
+            else if ( eFamily == SfxStyleFamily::Page )
             {
                 if ( rDoc.RemovePageStyleInUse( aString ) )
                     pDocShell->PageStyleModified( ScResId(STR_STYLENAME_STANDARD), true );
@@ -765,6 +796,15 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const OUString& aName )
                 SfxBindings* pBindings = pDocShell->GetViewBindings();
                 if (pBindings)
                     pBindings->Invalidate( SID_STYLE_FAMILY4 );
+                pDocShell->SetDocumentModified();
+            }
+            else
+            {
+                pStylePool->Remove( pStyle );
+
+                SfxBindings* pBindings = pDocShell->GetViewBindings();
+                if (pBindings)
+                    pBindings->Invalidate( SID_STYLE_FAMILY3 );
                 pDocShell->SetDocumentModified();
             }
         }
@@ -897,6 +937,8 @@ uno::Any SAL_CALL ScStyleFamilyObj::getPropertyValue( const OUString& sPropertyN
             pResId = STR_STYLE_FAMILY_CELL; break;
         case SfxStyleFamily::Page:
             pResId = STR_STYLE_FAMILY_PAGE; break;
+        case SfxStyleFamily::Frame:
+            pResId = STR_STYLE_FAMILY_GRAPHICS; break;
         default:
             OSL_FAIL( "ScStyleFamilyObj::getPropertyValue(): invalid family" );
     }
@@ -932,12 +974,18 @@ void SAL_CALL ScStyleFamilyObj::removeVetoableChangeListener( const OUString&, c
 //  default ctor is needed for reflection
 
 ScStyleObj::ScStyleObj(ScDocShell* pDocSh, SfxStyleFamily eFam, OUString aName)
-    : pPropSet( (eFam == SfxStyleFamily::Para) ? lcl_GetCellStyleSet() : lcl_GetPageStyleSet() )
-    , pDocShell(pDocSh)
+    : pDocShell(pDocSh)
     , eFamily(eFam)
     , aStyleName(std::move(aName))
     , pStyle_cached(nullptr)
 {
+    if (eFam == SfxStyleFamily::Para)
+        pPropSet = lcl_GetCellStyleSet();
+    else if (eFam == SfxStyleFamily::Page)
+        pPropSet = lcl_GetPageStyleSet();
+    else
+        pPropSet = lcl_GetGraphicStyleSet();
+
     //  if create by ServiceProvider then pDocShell is NULL
 
     if (pDocShell)
@@ -1055,12 +1103,14 @@ void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
             pDocShell->SetDocumentModified();
         }
     }
-    else
+    else if ( eFamily == SfxStyleFamily::Page )
     {
         //! ModifyStyleSheet on document (save old values)
 
         pDocShell->PageStyleModified( aStyleName, true );
     }
+    else
+        static_cast<SfxStyleSheet*>(GetStyle_Impl())->Broadcast(SfxHint(SfxHintId::DataChanged));
 }
 
 // container::XNamed
@@ -1098,9 +1148,9 @@ void SAL_CALL ScStyleObj::setName( const OUString& aNewName )
     if ( eFamily == SfxStyleFamily::Para && !rDoc.IsImportingXML() )
         rDoc.GetPool()->CellStyleCreated( aNewName, rDoc );
 
-    //  cell styles = 2, page styles = 4
-    sal_uInt16 nId = ( eFamily == SfxStyleFamily::Para ) ?
-                    SID_STYLE_FAMILY2 : SID_STYLE_FAMILY4;
+    // cell styles = 2, drawing styles = 3, page styles = 4
+    sal_uInt16 nId = eFamily == SfxStyleFamily::Para ? SID_STYLE_FAMILY2 :
+                    (eFamily == SfxStyleFamily::Page ? SID_STYLE_FAMILY4 : SID_STYLE_FAMILY3);
     SfxBindings* pBindings = pDocShell->GetViewBindings();
     if (pBindings)
     {
@@ -1165,7 +1215,23 @@ beans::PropertyState ScStyleObj::getPropertyState_Impl( std::u16string_view aPro
         {
             nWhich = ATTR_BORDER;
         }
-        if ( IsScItemWid( nWhich ) )
+        if ( nWhich == OWN_ATTR_FILLBMP_MODE )
+        {
+            if ( pItemSet->GetItemState( XATTR_FILLBMP_STRETCH, false ) == SfxItemState::SET ||
+                 pItemSet->GetItemState( XATTR_FILLBMP_TILE, false ) == SfxItemState::SET )
+            {
+                eRet = beans::PropertyState_DIRECT_VALUE;
+            }
+            else
+            {
+                eRet = beans::PropertyState_AMBIGUOUS_VALUE;
+            }
+        }
+        else if ( nWhich == SDRATTR_TEXTDIRECTION )
+        {
+            eRet = beans::PropertyState_DEFAULT_VALUE;
+        }
+        else if ( IsScItemWid( nWhich ) || eFamily == SfxStyleFamily::Frame )
         {
             SfxItemState eState = pItemSet->GetItemState( nWhich, false );
 
@@ -1178,11 +1244,10 @@ beans::PropertyState ScStyleObj::getPropertyState_Impl( std::u16string_view aPro
                 eRet = beans::PropertyState_DIRECT_VALUE;
             else if ( eState == SfxItemState::DEFAULT )
                 eRet = beans::PropertyState_DEFAULT_VALUE;
-            else if ( eState == SfxItemState::DONTCARE )
-                eRet = beans::PropertyState_AMBIGUOUS_VALUE;    // should not happen
             else
             {
-                OSL_FAIL("unknown ItemState");
+                assert(eFamily == SfxStyleFamily::Frame);
+                eRet = beans::PropertyState_AMBIGUOUS_VALUE;
             }
         }
     }
@@ -1299,6 +1364,19 @@ uno::Any ScStyleObj::getPropertyDefault_Impl( std::u16string_view aPropertyName 
                     break;
             }
         }
+        else if ( nWhich == SDRATTR_TEXTDIRECTION )
+        {
+            aAny <<= false;
+        }
+        else if ( nWhich == OWN_ATTR_FILLBMP_MODE )
+        {
+            aAny <<= css::drawing::BitmapMode_REPEAT;
+        }
+        else if ( nWhich != OWN_ATTR_TEXTCOLUMNS )
+        {
+            SfxItemSet aItemSet(*pStyleSet->GetPool(), pStyleSet->GetRanges());
+            aAny = SvxItemPropertySet_getPropertyValue(pResultEntry, aItemSet);
+        }
     }
     return aAny;
 }
@@ -1410,7 +1488,7 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
             pDocShell->SetDocumentModified();
         }
     }
-    else
+    else if ( eFamily == SfxStyleFamily::Page )
     {
         // #i22448# apply the default BoxInfoItem for page styles again
         // (same content as in ScStyleSheet::GetItemSet, to control the dialog)
@@ -1422,6 +1500,8 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
 
         pDocShell->PageStyleModified( aStyleName, true );
     }
+    else
+        static_cast<SfxStyleSheet*>(GetStyle_Impl())->Broadcast(SfxHint(SfxHintId::DataChanged));
 }
 
 void SAL_CALL ScStyleObj::setPropertiesToDefault( const uno::Sequence<OUString>& aPropertyNames )
@@ -1730,6 +1810,37 @@ void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const
                     break;
             }
         }
+        else if (pEntry->nWID == OWN_ATTR_FILLBMP_MODE)
+        {
+            css::drawing::BitmapMode eMode;
+            if (!pValue)
+            {
+                rSet.ClearItem(XATTR_FILLBMP_STRETCH);
+                rSet.ClearItem(XATTR_FILLBMP_TILE);
+            }
+            else if (*pValue >>= eMode)
+            {
+                rSet.Put(XFillBmpStretchItem(eMode == css::drawing::BitmapMode_STRETCH));
+                rSet.Put(XFillBmpTileItem(eMode == css::drawing::BitmapMode_REPEAT));
+            }
+        }
+        else if(pEntry->nMemberId == MID_NAME &&
+               (pEntry->nWID == XATTR_FILLBITMAP || pEntry->nWID == XATTR_FILLGRADIENT ||
+                pEntry->nWID == XATTR_FILLHATCH || pEntry->nWID == XATTR_FILLFLOATTRANSPARENCE ||
+                pEntry->nWID == XATTR_LINESTART || pEntry->nWID == XATTR_LINEEND || pEntry->nWID == XATTR_LINEDASH))
+        {
+            OUString aTempName;
+            if (*pValue >>= aTempName)
+                SvxShape::SetFillAttribute(pEntry->nWID, aTempName, rSet);
+        }
+        else if(pEntry->nWID == SDRATTR_TEXTDIRECTION)
+        {
+            return; // not yet implemented for styles
+        }
+        else if(!SvxUnoTextRangeBase::SetPropertyValueHelper(pEntry, *pValue, rSet))
+        {
+            SvxItemPropertySet_setPropertyValue(pEntry, *pValue, rSet);
+        }
     }
 
     //! DocFunc-??
@@ -1757,12 +1868,14 @@ void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const
             }
         }
     }
-    else
+    else if ( eFamily == SfxStyleFamily::Page )
     {
         //! ModifyStyleSheet on document (save old values)
 
         pDocShell->PageStyleModified( aStyleName, true );
     }
+    else
+        static_cast<SfxStyleSheet*>(GetStyle_Impl())->Broadcast(SfxHint(SfxHintId::DataChanged));
 }
 
 uno::Any ScStyleObj::getPropertyValue_Impl( std::u16string_view aPropertyName )
@@ -1889,6 +2002,30 @@ uno::Any ScStyleObj::getPropertyValue_Impl( std::u16string_view aPropertyName )
                         break;
                 }
             }
+            else if ( nWhich == SDRATTR_TEXTDIRECTION )
+            {
+                aAny <<= false;
+            }
+            else if ( nWhich == OWN_ATTR_FILLBMP_MODE )
+            {
+                const XFillBmpStretchItem* pStretchItem = pItemSet->GetItem<XFillBmpStretchItem>(XATTR_FILLBMP_STRETCH);
+                const XFillBmpTileItem* pTileItem = pItemSet->GetItem<XFillBmpTileItem>(XATTR_FILLBMP_TILE);
+
+                if ( pStretchItem && pTileItem )
+                {
+                    if ( pTileItem->GetValue() )
+                        aAny <<= css::drawing::BitmapMode_REPEAT;
+                    else if ( pStretchItem->GetValue() )
+                        aAny <<= css::drawing::BitmapMode_STRETCH;
+                    else
+                        aAny <<= css::drawing::BitmapMode_NO_REPEAT;
+                }
+            }
+            else if ( nWhich != OWN_ATTR_TEXTCOLUMNS )
+            {
+                if (!SvxUnoTextRangeBase::GetPropertyValueHelper(*pItemSet, pResultEntry, aAny))
+                    aAny = SvxItemPropertySet_getPropertyValue(pResultEntry, *pItemSet);
+            }
         }
     }
 
@@ -1919,11 +2056,13 @@ sal_Bool SAL_CALL ScStyleObj::supportsService( const OUString& rServiceName )
 
 uno::Sequence<OUString> SAL_CALL ScStyleObj::getSupportedServiceNames()
 {
-    const bool bPage = ( eFamily == SfxStyleFamily::Page );
+    if (eFamily == SfxStyleFamily::Page)
+        return {SCSTYLE_SERVICE, SCPAGESTYLE_SERVICE};
 
-    return {SCSTYLE_SERVICE,
-            (bPage ? OUString(SCPAGESTYLE_SERVICE)
-                   : OUString(SCCELLSTYLE_SERVICE))};
+    if (eFamily == SfxStyleFamily::Frame)
+        return {SCSTYLE_SERVICE, SCGRAPHICSTYLE_SERVICE};
+
+    return {SCSTYLE_SERVICE, SCCELLSTYLE_SERVICE};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

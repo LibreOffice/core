@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_XPOOL_HXX
 #define INCLUDED_SVX_XPOOL_HXX
 
+#include <svx/svxdllapi.h>
 #include <svl/itempool.hxx>
 #include <memory>
 
@@ -29,7 +30,7 @@
 |*
 \************************************************************************/
 
-class XOutdevItemPool : public SfxItemPool
+class SVXCORE_DLLPUBLIC XOutdevItemPool : public SfxItemPool
 {
 protected:
     std::vector<SfxPoolItem*>* mpLocalPoolDefaults;

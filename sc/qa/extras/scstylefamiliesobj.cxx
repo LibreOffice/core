@@ -82,7 +82,7 @@ private:
 ScStyleFamiliesObj::ScStyleFamiliesObj()
     : UnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<container::XNameContainer>::get())
-    , XIndexAccess(2)
+    , XIndexAccess(3)
     , XNameAccess("CellStyles")
     , XServiceInfo("ScStyleFamiliesObj", "com.sun.star.style.StyleFamilies")
 {

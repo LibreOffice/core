@@ -443,6 +443,7 @@
 #define STR_FORM_SCROLLBAR                      NC_("STR_FORM_SCROLLBAR", "Scroll Bar")
 #define STR_STYLE_FAMILY_CELL                   NC_("STR_STYLE_FAMILY_CELL", "Cell Styles")
 #define STR_STYLE_FAMILY_PAGE                   NC_("STR_STYLE_FAMILY_PAGE", "Page Styles")
+#define STR_STYLE_FAMILY_GRAPHICS               NC_("STR_STYLE_FAMILY_GRAPHICS", "Drawing Styles")
 #define STR_ERR_DATAPILOTSOURCE                 NC_("STR_ERR_DATAPILOTSOURCE", "Pivot table source data is invalid.")
 #define STR_OPTIONS_WARN_SEPARATORS             NC_("STR_OPTIONS_WARN_SEPARATORS", "Because the current formula separator settings conflict with the locale, the formula separators have been reset to their default values.")
 #define STR_UNDO_INSERT_CURRENT_DATE            NC_("STR_UNDO_INSERT_CURRENT_DATE", "Insert Current Date")

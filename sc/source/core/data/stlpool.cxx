@@ -101,7 +101,7 @@ rtl::Reference<SfxStyleSheetBase> ScStyleSheetPool::Create( const OUString&   rN
                                              SfxStyleSearchBits nMaskP )
 {
     rtl::Reference<ScStyleSheet> pSheet = new ScStyleSheet( rName, *this, eFamily, nMaskP );
-    if ( eFamily == SfxStyleFamily::Para && ScResId(STR_STYLENAME_STANDARD) != rName )
+    if ( eFamily != SfxStyleFamily::Page && ScResId(STR_STYLENAME_STANDARD) != rName )
         pSheet->SetParent( ScResId(STR_STYLENAME_STANDARD) );
 
     return pSheet;

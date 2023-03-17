@@ -26,6 +26,10 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svx/pageitem.hxx>
+#include <svx/svddef.hxx>
+#include <svx/svdpool.hxx>
+#include <svx/xdef.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/sizeitem.hxx>
@@ -77,6 +81,7 @@ bool ScStyleSheet::HasParentSupport () const
     switch ( GetFamily() )
     {
     case SfxStyleFamily::Para: bHasParentSupport = true;   break;
+    case SfxStyleFamily::Frame: bHasParentSupport = true;   break;
     case SfxStyleFamily::Page: bHasParentSupport = false;  break;
     default:
         {
@@ -217,6 +222,23 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                 }
                 break;
 
+            case SfxStyleFamily::Frame:
+            {
+                SfxItemPool* pItemPool = &GetPool()->GetPool();
+                if (dynamic_cast<SdrItemPool*>(pItemPool) == nullptr)
+                    pItemPool = pItemPool->GetSecondaryPool();
+
+                pSet = new SfxItemSetFixed<
+                        XATTR_LINE_FIRST, XATTR_LINE_LAST,
+                        XATTR_FILL_FIRST, XATTR_FILL_LAST,
+                        SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,
+                        SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_WORDWRAP,
+                        SDRATTR_EDGE_FIRST, SDRATTR_MEASURE_LAST,
+                        SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
+                        EE_PARA_START, EE_CHAR_END>(*pItemPool);
+            }
+            break;
+
             case SfxStyleFamily::Para:
             default:
                 pSet = new SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END>( GetPool()->GetPool() );
@@ -272,15 +294,33 @@ bool ScStyleSheet::IsUsed() const
                 eUsage = Usage::NOTUSED;
             return eUsage == Usage::USED;
         }
+        case SfxStyleFamily::Frame:
+        {
+            const size_t nListenerCount = GetSizeOfVector();
+            for (size_t n = 0; n < nListenerCount; ++n)
+            {
+                auto pUser(dynamic_cast<svl::StyleSheetUser*>(GetListener(n)));
+                if (pUser && pUser->isUsedByModel())
+                {
+                    eUsage = Usage::USED;
+                    break;
+                }
+                else
+                    eUsage = Usage::NOTUSED;
+            }
+            return eUsage == Usage::USED;
+        }
         default:
             return true;
     }
 }
 
-void ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
+void ScStyleSheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if ( rHint.GetId() == SfxHintId::Dying )
         GetItemSet().SetParent( nullptr );
+    if (GetFamily() == SfxStyleFamily::Frame)
+        SfxStyleSheet::Notify(rBC, rHint);
 }
 
 // Avoid creating a Style "Standard" if this is not the Standard-Name;

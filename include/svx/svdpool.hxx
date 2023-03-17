@@ -20,7 +20,6 @@
 #pragma once
 
 #include <svx/xpool.hxx>
-#include <svx/svxdllapi.h>
 
 class XLineAttrSetItem;
 class XFillAttrSetItem;

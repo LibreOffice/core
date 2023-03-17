@@ -264,6 +264,7 @@ const ProvNamesId_Type aProvNamesId[] =
     { "com.sun.star.text.TextField.SheetName",          Type::SHEETFIELD },
     { "com.sun.star.style.CellStyle",                   Type::CELLSTYLE },
     { "com.sun.star.style.PageStyle",                   Type::PAGESTYLE },
+    { "com.sun.star.style.GraphicStyle",                Type::GRAPHICSTYLE },
     { "com.sun.star.sheet.TableAutoFormat",             Type::AUTOFORMAT },
     { "com.sun.star.sheet.TableAutoFormats",            Type::AUTOFORMATS },
     { "com.sun.star.sheet.SheetCellRanges",             Type::CELLRANGES },
@@ -422,6 +423,9 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             break;
         case Type::PAGESTYLE:
             xRet.set(static_cast<style::XStyle*>(new ScStyleObj( nullptr, SfxStyleFamily::Page, OUString() )));
+            break;
+        case Type::GRAPHICSTYLE:
+            xRet.set(static_cast<style::XStyle*>(new ScStyleObj( nullptr, SfxStyleFamily::Frame, OUString() )));
             break;
         case Type::AUTOFORMAT:
             xRet.set(static_cast<container::XIndexAccess*>(new ScAutoFormatObj( SC_AFMTOBJ_INVALID )));
