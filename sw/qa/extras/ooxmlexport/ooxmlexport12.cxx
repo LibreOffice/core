@@ -1509,6 +1509,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149388)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132271)
 {
+    SwModelTestBase::FlySplitGuard aGuard;
     // see also testTdf149388
     loadAndSave("tdf149388.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");

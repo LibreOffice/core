@@ -1619,7 +1619,17 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                 // the start of an outer table cell, that's not yet
                 // implemented.
                 if (xTextAppendAndConvert.is() && !bTableStartsAtCellStart)
+                {
+                    std::deque<css::uno::Any> aFramedRedlines = m_rDMapper_Impl.m_aStoredRedlines[StoredRedlines::FRAME];
+                    std::vector<sal_Int32> redPos, redLen;
+                    std::vector<OUString> redCell;
+                    std::vector<OUString> redTable;
+                    BeforeConvertToTextFrame(aFramedRedlines, redPos, redLen, redCell, redTable);
+
                     xTextAppendAndConvert->convertToTextFrame(xStart, xEnd, comphelper::containerToSequence(aFrameProperties));
+
+                    AfterConvertToTextFrame(m_rDMapper_Impl, aFramedRedlines, redPos, redLen, redCell, redTable);
+                }
             }
         }
 
