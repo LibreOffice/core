@@ -205,6 +205,18 @@ interface TableEditView
     SID_GRID_USE        [ ExecMethod = ExecDrawOpt; StateMethod = GetDrawOptState; ]
     SID_HELPLINES_MOVE  [ ExecMethod = ExecDrawOpt; StateMethod = GetDrawOptState; ]
 
+    SID_STYLE_FAMILY2           [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_FAMILY4           [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_APPLY             [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_WATERCAN          [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_NEW_BY_EXAMPLE    [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_UPDATE_BY_EXAMPLE [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_NEW               [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_EDIT              [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_DELETE            [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_HIDE              [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_SHOW              [ ExecMethod = ExecStyle; StateMethod = GetStyleState; ]
+
     SID_GETUNDOSTRINGS  [ StateMethod = GetUndoState; ]
     SID_GETREDOSTRINGS  [ StateMethod = GetUndoState; ]
     SID_UNDO            [ ExecMethod = ExecuteUndo; StateMethod = GetUndoState; ]

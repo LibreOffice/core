@@ -60,7 +60,6 @@ public:
     void        GetBorderState( SfxItemSet& rSet );
 
     void        ExecuteStyle( SfxRequest& rReq );
-    void        GetStyleState( SfxItemSet& rSet );
 
     void        ExecuteTextDirection( const SfxRequest& rReq );
     void        GetTextDirectionState( SfxItemSet& rSet );

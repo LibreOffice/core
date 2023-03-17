@@ -277,6 +277,9 @@ public:
     void            ExecDrawOpt(const SfxRequest& rReq);
     void            GetDrawOptState(SfxItemSet &rSet);
 
+    void            ExecStyle(SfxRequest& rReq);
+    void            GetStyleState(SfxItemSet &rSet);
+
     void            UpdateDrawShell();
     void            SetDrawShell( bool bActive );
     void            SetDrawTextShell( bool bActive );

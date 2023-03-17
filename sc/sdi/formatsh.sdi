@@ -39,17 +39,6 @@ interface TableFont
 interface FormatForSelection
 {
     // slots which are disabled in the DrawShell {{
-    SID_STYLE_FAMILY2           [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
-    SID_STYLE_APPLY             [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
-    SID_STYLE_WATERCAN          [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
-    SID_STYLE_NEW_BY_EXAMPLE    [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
-    SID_STYLE_UPDATE_BY_EXAMPLE [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
-    SID_STYLE_NEW               [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
-    SID_STYLE_FAMILY4           [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
-    SID_STYLE_EDIT              [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
-    SID_STYLE_DELETE            [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
-    SID_STYLE_HIDE              [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
-    SID_STYLE_SHOW              [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
     SID_STYLE_PREVIEW           [ ExecMethod = ExecuteStyle; ]
     SID_STYLE_END_PREVIEW           [ ExecMethod = ExecuteStyle; ]
     SID_CLASSIFICATION_APPLY [ ExecMethod = ExecuteStyle; ]
