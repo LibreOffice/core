@@ -19,6 +19,9 @@
 
 #undef SC_DLLIMPLEMENTATION
 
+#include <svx/drawitem.hxx>
+#include <svx/ofaitem.hxx>
+#include <svx/svdview.hxx>
 #include <svx/numinf.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxdlg.hxx>
@@ -130,6 +133,105 @@ void ScStyleDlg::PageCreated(const OString& rPageId, SfxTabPage& rTabPage)
 }
 
 void ScStyleDlg::RefreshInputSet()
+{
+    SfxItemSet* pItemSet = GetInputSetImpl();
+    pItemSet->ClearItem();
+    pItemSet->SetParent( GetStyleSheet().GetItemSet().GetParent() );
+}
+
+ScDrawStyleDlg::ScDrawStyleDlg(weld::Window* pParent, SfxStyleSheetBase& rStyleBase, SdrView* pView)
+    : SfxStyleDialogController(pParent, "modules/scalc/ui/drawtemplatedialog.ui", "DrawTemplateDialog", rStyleBase)
+    , mpView(pView)
+{
+    AddTabPage("line", RID_SVXPAGE_LINE);
+    AddTabPage("area", RID_SVXPAGE_AREA);
+    AddTabPage("shadowing", RID_SVXPAGE_SHADOW);
+    AddTabPage("transparency", RID_SVXPAGE_TRANSPARENCE);
+    AddTabPage("font", RID_SVXPAGE_CHAR_NAME);
+    AddTabPage("fonteffect", RID_SVXPAGE_CHAR_EFFECTS);
+    AddTabPage("background", RID_SVXPAGE_BKG);
+    AddTabPage("indents", RID_SVXPAGE_STD_PARAGRAPH);
+    AddTabPage("text", RID_SVXPAGE_TEXTATTR);
+    AddTabPage("animation", RID_SVXPAGE_TEXTANIMATION);
+    AddTabPage("dimensioning", RID_SVXPAGE_MEASURE);
+    AddTabPage("alignment", RID_SVXPAGE_ALIGN_PARAGRAPH);
+    AddTabPage("tabs", RID_SVXPAGE_TABULATOR);
+    if (SvtCJKOptions::IsAsianTypographyEnabled())
+        AddTabPage("asiantypo", RID_SVXPAGE_PARA_ASIAN);
+    else
+        RemoveTabPage("asiantypo");
+}
+
+void ScDrawStyleDlg::PageCreated(const OString& rPageId, SfxTabPage& rTabPage)
+{
+    SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+    SdrModel& rModel = mpView->GetModel();
+
+    if (rPageId == "line")
+    {
+        aSet.Put(SvxColorListItem(rModel.GetColorList(), SID_COLOR_TABLE));
+        aSet.Put(SvxDashListItem(rModel.GetDashList(), SID_DASH_LIST));
+        aSet.Put(SvxLineEndListItem(rModel.GetLineEndList(), SID_LINEEND_LIST));
+        aSet.Put(SfxUInt16Item(SID_DLG_TYPE, 1));
+        rTabPage.PageCreated(aSet);
+    }
+    else if (rPageId == "area")
+    {
+        aSet.Put(SvxColorListItem(rModel.GetColorList(), SID_COLOR_TABLE));
+        aSet.Put(SvxGradientListItem(rModel.GetGradientList(), SID_GRADIENT_LIST));
+        aSet.Put(SvxHatchListItem(rModel.GetHatchList(), SID_HATCH_LIST));
+        aSet.Put(SvxBitmapListItem(rModel.GetBitmapList(), SID_BITMAP_LIST));
+        aSet.Put(SvxPatternListItem(rModel.GetPatternList(), SID_PATTERN_LIST));
+        aSet.Put(SfxUInt16Item(SID_PAGE_TYPE, 0));
+        aSet.Put(SfxUInt16Item(SID_DLG_TYPE, 1));
+        aSet.Put(SfxUInt16Item(SID_TABPAGE_POS, 0));
+        rTabPage.PageCreated(aSet);
+    }
+    else if (rPageId == "shadowing")
+    {
+        aSet.Put(SvxColorListItem(rModel.GetColorList(), SID_COLOR_TABLE));
+        aSet.Put(SfxUInt16Item(SID_PAGE_TYPE, 0));
+        aSet.Put(SfxUInt16Item(SID_DLG_TYPE, 1));
+        rTabPage.PageCreated(aSet);
+    }
+    else if (rPageId == "transparency")
+    {
+        aSet.Put (SfxUInt16Item(SID_PAGE_TYPE, 0));
+        aSet.Put (SfxUInt16Item(SID_DLG_TYPE, 1));
+        rTabPage.PageCreated(aSet);
+    }
+    else if (rPageId == "font")
+    {
+        if (SfxObjectShell* pDocSh = SfxObjectShell::Current())
+        {
+            SvxFontListItem aItem(*static_cast<const SvxFontListItem*>(
+                pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST)));
+
+            aSet.Put(SvxFontListItem(aItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
+        }
+        rTabPage.PageCreated(aSet);
+    }
+    else if (rPageId == "fonteffect")
+    {
+        rTabPage.PageCreated(aSet);
+    }
+    else if (rPageId == "background")
+    {
+        aSet.Put(SfxUInt32Item(SID_FLAG_TYPE, static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR)));
+        rTabPage.PageCreated(aSet);
+    }
+    else if (rPageId == "text")
+    {
+        rTabPage.PageCreated(aSet);
+    }
+    else if (rPageId == "dimensioning")
+    {
+        aSet.Put(OfaPtrItem(SID_OBJECT_LIST, mpView));
+        rTabPage.PageCreated(aSet);
+    }
+}
+
+void ScDrawStyleDlg::RefreshInputSet()
 {
     SfxItemSet* pItemSet = GetInputSetImpl();
     pItemSet->ClearItem();

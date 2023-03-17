@@ -1522,7 +1522,12 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
             weld::Window* pDialogParent = rReq.GetFrameWeld();
             if (!pDialogParent)
                 pDialogParent = GetFrameWeld();
-            pDlg.disposeAndReset(pFact->CreateScStyleDlg(pDialogParent, *pStyleSheet, bPage));
+
+            if (eFam == SfxStyleFamily::Frame)
+                pDlg.disposeAndReset(pFact->CreateScDrawStyleDlg(pDialogParent, *pStyleSheet, GetDrawView()));
+            else
+                pDlg.disposeAndReset(pFact->CreateScStyleDlg(pDialogParent, *pStyleSheet, bPage));
+
             short nResult = pDlg->Execute();
             SetInFormatDialog(false);
 

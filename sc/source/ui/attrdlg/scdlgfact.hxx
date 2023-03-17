@@ -791,6 +791,10 @@ public:
                                                           SfxStyleSheetBase& rStyleBase,
                                                           bool bPage) override;
 
+    virtual VclPtr<SfxAbstractTabDialog> CreateScDrawStyleDlg(weld::Window* pParent,
+                                                              SfxStyleSheetBase& rStyleBase,
+                                                              SdrView* pView) override;
+
     virtual VclPtr<SfxAbstractTabDialog> CreateScSubTotalDlg(weld::Window* pParent,
                                                              const SfxItemSet& rArgSet) override;
     virtual VclPtr<SfxAbstractTabDialog> CreateScCharDlg(weld::Window* pParent,

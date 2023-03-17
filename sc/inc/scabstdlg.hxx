@@ -43,6 +43,7 @@ class ScTabViewShell;
 class ScConditionalFormat;
 class ScConditionalFormatList;
 class Date;
+class SdrView;
 enum class CreateNameFlags;
 enum class CellShiftDisabledFlags;
 
@@ -550,6 +551,10 @@ public:
     virtual VclPtr<SfxAbstractTabDialog> CreateScStyleDlg(weld::Window* pParent,
                                                           SfxStyleSheetBase&  rStyleBase,
                                                           bool bPage /*true : page, false: para*/) = 0;
+
+    virtual VclPtr<SfxAbstractTabDialog> CreateScDrawStyleDlg(weld::Window* pParent,
+                                                              SfxStyleSheetBase& rStyleBase,
+                                                              SdrView* pView) = 0;
 
     virtual VclPtr<SfxAbstractTabDialog> CreateScSubTotalDlg(weld::Window* pParent,
                                                              const SfxItemSet& rArgSet) = 0;
