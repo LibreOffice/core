@@ -32,11 +32,13 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void        onStartElement( const AttributeList& rAttribs ) override;
+    virtual void        onCharacters( const OUString& rChars ) override;
+    virtual void        onEndElement() override;
 
 private:
     ScDataBarFormatData* mpTarget;
-
     bool mbFirstEntry;
+    ExtCfDataBarRuleRef mpRule;
 };
 
 struct ExtCondFormatRuleModel
