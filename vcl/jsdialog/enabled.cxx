@@ -130,6 +130,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/swriter/ui/contentcontrollistitemdlg.ui"
         || rUIFile == u"modules/swriter/ui/dropcapspage.ui"
         || rUIFile == u"modules/swriter/ui/dropdownfielddialog.ui"
+        || rUIFile == u"modules/swriter/ui/footnoteareapage.ui"
         || rUIFile == u"modules/swriter/ui/footnotesendnotestabpage.ui"
         || rUIFile == u"modules/swriter/ui/indentpage.ui"
         || rUIFile == u"modules/swriter/ui/insertcaption.ui"
@@ -141,6 +142,8 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/swriter/ui/sectionpage.ui"
         || rUIFile == u"modules/swriter/ui/splittable.ui"
         || rUIFile == u"modules/swriter/ui/templatedialog2.ui"
+        || rUIFile == u"modules/swriter/ui/templatedialog8.ui"
+        || rUIFile == u"modules/swriter/ui/textgridpage.ui"
         || rUIFile == u"modules/swriter/ui/translationdialog.ui"
         // sfx
         || rUIFile == u"sfx/ui/cmisinfopage.ui"
@@ -158,6 +161,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"svx/ui/accessibilitycheckentry.ui"
         || rUIFile == u"svx/ui/findreplacedialog.ui"
         || rUIFile == u"svx/ui/fontworkgallerydialog.ui"
+        || rUIFile == u"svx/ui/headfootformatpage.ui"
         // uui
         || rUIFile == u"uui/ui/macrowarnmedium.ui"
         // vcl
