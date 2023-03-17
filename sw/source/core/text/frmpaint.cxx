@@ -673,8 +673,15 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
         }
     }
 
-    Num_Info aNumInfo( *this );
-    SwTaggedPDFHelper aTaggedPDFHelperNumbering( &aNumInfo, nullptr, nullptr, rRenderContext );
+    // tdf140219-2.odt text frame with only fly portions and a follow is not
+    // actually a paragraph - delay creating all structured elements to follow.
+    bool const isPDFTaggingEnabled(!HasFollow() || GetPara()->HasContentPortions());
+    ::std::optional<SwTaggedPDFHelper> oTaggedPDFHelperNumbering;
+    if (isPDFTaggingEnabled)
+    {
+        Num_Info aNumInfo(*this);
+        oTaggedPDFHelperNumbering.emplace(&aNumInfo, nullptr, nullptr, rRenderContext);
+    }
 
     // Lbl unfortunately must be able to contain multiple numbering portions
     // that may be on multiple lines of text (but apparently always in the
@@ -683,7 +690,7 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
     // Paragraph tag - if there is a list label, opening should be delayed.
     ::std::optional<SwTaggedPDFHelper> oTaggedParagraph;
 
-    if (IsFollow() || !GetPara()->HasNumberingPortion(SwParaPortion::FootnoteToo))
+    if (isPDFTaggingEnabled && !GetPara()->HasNumberingPortion(SwParaPortion::FootnoteToo))
     {   // no Lbl needed => open paragraph tag now
         Frame_Info aFrameInfo(*this);
         oTaggedParagraph.emplace(nullptr, &aFrameInfo, nullptr, rRenderContext);
@@ -773,7 +780,7 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
         {
             do
             {
-                aLine.DrawTextLine(rRect, aClip, IsUndersized(), oTaggedLabel, oTaggedParagraph);
+                aLine.DrawTextLine(rRect, aClip, IsUndersized(), oTaggedLabel, oTaggedParagraph, isPDFTaggingEnabled);
 
             } while( aLine.Next() && aLine.Y() <= nBottom );
         }
@@ -791,7 +798,7 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
     OSL_ENSURE( ! IsSwapped(), "A frame is swapped after Paint" );
 
     assert(!oTaggedLabel); // must have been closed if opened
-    assert(oTaggedParagraph || rRect.GetIntersection(getFrameArea()) != getFrameArea()); // must have been created during complete paint (PDF export is always complete paint)
+    assert(!isPDFTaggingEnabled || oTaggedParagraph || rRect.GetIntersection(getFrameArea()) != getFrameArea()); // must have been created during complete paint (PDF export is always complete paint)
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

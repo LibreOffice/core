@@ -2699,6 +2699,20 @@ bool SwParaPortion::HasNumberingPortion(FootnoteOrNot const eFootnote) const
         && (eFootnote == SwParaPortion::FootnoteToo || !pPortion->IsFootnoteNumPortion());
 }
 
+bool SwParaPortion::HasContentPortions() const
+{
+    SwLinePortion const* pPortion(nullptr);
+    for (SwLineLayout const* pLine = this; pLine && !pPortion; pLine = pLine->GetNext())
+    {
+        pPortion = pLine->GetFirstPortion();
+        while (pPortion && (pPortion->InGlueGrp() || pPortion->IsFlyPortion()))
+        {   // skip margins and fly spacers
+            pPortion = pPortion->GetNextPortion();
+        }
+    }
+    return pPortion != nullptr;
+}
+
 const SwDropPortion *SwParaPortion::FindDropPortion() const
 {
     const SwLineLayout *pLay = this;

@@ -321,6 +321,7 @@ public:
     bool IsMargin() const { return m_bMargin; }
     enum FootnoteOrNot { OnlyNumbering, FootnoteToo };
     bool HasNumberingPortion(FootnoteOrNot) const;
+    bool HasContentPortions() const;
 
     // Set nErgo in the QuoVadisPortion
     void SetErgoSumNum( const OUString &rErgo );

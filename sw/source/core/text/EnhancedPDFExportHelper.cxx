@@ -976,9 +976,18 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
     const SwTextFrame& rTextFrame = static_cast<const SwTextFrame&>(rFrame);
 
     // Lowers of NonStructureElements should not be considered:
-
-    if ( lcl_IsInNonStructEnv( rTextFrame ) || rTextFrame.IsFollow() )
+    if (lcl_IsInNonStructEnv(rTextFrame))
         return;
+
+    // do it for the first one in the follow chain that has content
+    for (SwFlowFrame const* pPrecede = rTextFrame.GetPrecede(); pPrecede; pPrecede = pPrecede->GetPrecede())
+    {
+        SwTextFrame const*const pText(static_cast<SwTextFrame const*>(pPrecede));
+        if (!pText->HasPara() || pText->GetPara()->HasContentPortions())
+        {
+            return;
+        }
+    }
 
     const SwTextNode *const pTextNd = rTextFrame.GetTextNodeForParaProps();
     const SwNumRule* pNumRule = pTextNd->GetNumRule();
@@ -1099,7 +1108,7 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
     {
         BeginTag( vcl::PDFWriter::ListItem, aListItemString );
         assert(rTextFrame.GetPara());
-        // check whether to open LIBody now or delay until after Lbl
+        // check whether to open LBody now or delay until after Lbl
         if (!rTextFrame.GetPara()->HasNumberingPortion(SwParaPortion::OnlyNumbering))
         {
             BeginTag(vcl::PDFWriter::LIBody, aListBodyString);
@@ -1203,10 +1212,9 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
         case SwFrameType::Txt :
             {
                 SwTextFrame const& rTextFrame(*static_cast<const SwTextFrame*>(pFrame));
-                // lazy open LIBody after Lbl
+                // lazy open LBody after Lbl
                 if (rTextFrame.GetPara()->HasNumberingPortion(SwParaPortion::OnlyNumbering))
                 {
-                    assert(!rTextFrame.IsFollow());
                     BeginTag(vcl::PDFWriter::LIBody, aListBodyString);
                 }
 

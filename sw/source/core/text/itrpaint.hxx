@@ -51,7 +51,8 @@ public:
     void DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         const bool bUnderSz,
         ::std::optional<SwTaggedPDFHelper> & roTaggedLabel,
-        ::std::optional<SwTaggedPDFHelper> & roTaggedParagraph);
+        ::std::optional<SwTaggedPDFHelper> & roTaggedParagraph,
+        bool isPDFTaggingEnabled);
     void PaintDropPortion();
     // if PaintMultiPortion is called recursively, we have to pass the
     // surrounding SwBidiPortion
