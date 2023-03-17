@@ -66,7 +66,8 @@ SwViewColors::SwViewColors() :
     m_aPageBreakColor(COL_BLUE),
     m_aScriptIndicatorColor(COL_GREEN),
     m_aShadowColor(COL_GRAY),
-    m_aHeaderFooterMarkColor(COL_BLUE)
+    m_aHeaderFooterMarkColor(COL_BLUE),
+    m_nAppearanceFlags(ViewOptFlags::NONE)
 {}
 
 SwViewColors::SwViewColors(const svtools::ColorConfig& rConfig)
