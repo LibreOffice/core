@@ -808,22 +808,20 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
 
         // Go though all non-empty cells within selection.
         sc::CellStoreType::const_iterator itPos = maCells.begin();
-        for (const auto& rMarkedSpan : aMarkedSpans)
+        for (auto [ nRow, nRow2 ] : aMarkedSpans)
         {
-            SCROW nRow1 = rMarkedSpan.mnRow1, nRow2 = rMarkedSpan.mnRow2;
-            SCROW nRow = nRow1;
             while (nRow <= nRow2)
             {
-                std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(itPos, nRow);
-                itPos = aPos.first;
+                size_t nOffset;
+                std::tie(itPos, nOffset) = maCells.position(itPos, nRow);
                 if (itPos->type == sc::element_type_empty)
                 {
                     // Skip empty cells.
-                    nRow += itPos->size - aPos.second;
+                    nRow += itPos->size - nOffset;
                     continue;
                 }
 
-                for (size_t nOffset = aPos.second; nOffset < itPos->size; ++nOffset, ++nRow)
+                for (; nOffset < itPos->size && nRow <= nRow2; ++nOffset, ++nRow)
                 {
                     SvtScriptType nScript = rDocument.GetScriptType(nCol, nRow, nTab);
                     if (nScript == SvtScriptType::NONE)
