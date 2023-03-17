@@ -166,6 +166,7 @@ public:
     void testCondFormatImportCellIs();
     void testCondFormatThemeColor2XLSX(); // negative bar color and axis color
     void testCondFormatThemeColor3XLSX(); // theme index 2 and 3 are switched
+    void testCondFormatCfvoScaleValueXLSX();
     void testComplexIconSetsXLSX();
     void testTdf101104();
     void testTdf64401();
@@ -288,6 +289,7 @@ public:
     CPPUNIT_TEST(testCondFormatImportCellIs);
     CPPUNIT_TEST(testCondFormatThemeColor2XLSX);
     CPPUNIT_TEST(testCondFormatThemeColor3XLSX);
+    CPPUNIT_TEST(testCondFormatCfvoScaleValueXLSX);
     CPPUNIT_TEST(testComplexIconSetsXLSX);
     CPPUNIT_TEST(testTdf101104);
     CPPUNIT_TEST(testTdf64401);
@@ -2568,6 +2570,31 @@ void ScFiltersTest::testCondFormatThemeColor2XLSX()
     CPPUNIT_ASSERT(pDataBarFormatData->mxNegativeColor);
     CPPUNIT_ASSERT_EQUAL(Color(217, 217, 217), *pDataBarFormatData->mxNegativeColor);
     CPPUNIT_ASSERT_EQUAL(Color(197, 90, 17), pDataBarFormatData->maAxisColor);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testCondFormatCfvoScaleValueXLSX()
+{
+    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc(u"condformat_databar.", FORMAT_XLSX);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load condformat_databar.xlsx", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScConditionalFormat* pFormat = rDoc.GetCondFormat(0, 0, 0);
+    const ScFormatEntry* pEntry = pFormat->GetEntry(0);
+    CPPUNIT_ASSERT(pEntry);
+    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::Databar, pEntry->GetType());
+    const ScDataBarFormat* pDataBar = static_cast<const ScDataBarFormat*>(pEntry);
+    const ScDataBarFormatData* pDataBarFormatData = pDataBar->GetDataBarData();
+    const ScColorScaleEntry* pLower = pDataBarFormatData->mpLowerLimit.get();
+    const ScColorScaleEntry* pUpper = pDataBarFormatData->mpUpperLimit.get();
+
+    CPPUNIT_ASSERT_EQUAL(COLORSCALE_VALUE, pLower->GetType());
+    CPPUNIT_ASSERT_EQUAL(COLORSCALE_VALUE, pUpper->GetType());
+
+    CPPUNIT_ASSERT_EQUAL(double(0.0), pLower->GetValue());
+    CPPUNIT_ASSERT_EQUAL(double(1.0), pUpper->GetValue());
 
     xDocSh->DoClose();
 }
