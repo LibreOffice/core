@@ -598,6 +598,8 @@ public:
     bool IsCursorInFootnote() const;
 
     inline Point& GetCursorDocPos() const;
+    // get cursor position relative to the page it is in
+    Point GetCursorPagePos() const;
     inline bool IsCursorPtAtEnd() const;
 
     inline const  SwPaM* GetTableCrs() const;

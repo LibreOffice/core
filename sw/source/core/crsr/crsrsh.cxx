@@ -1168,6 +1168,20 @@ bool SwCursorShell::IsCursorInFootnote() const
     return aStartNodeType == SwStartNodeType::SwFootnoteStartNode;
 }
 
+Point SwCursorShell::GetCursorPagePos() const
+{
+    Point aRet(-1, -1);
+    if (SwFrame *pFrame = GetCurrFrame())
+    {
+        if (SwPageFrame* pCurrentPage = pFrame->FindPageFrame())
+        {
+            const Point& rDocPos = GetCursorDocPos();
+            aRet = rDocPos - pCurrentPage->getFrameArea().TopLeft();
+        }
+    }
+    return aRet;
+}
+
 bool SwCursorShell::IsInFrontOfLabel() const
 {
     return m_pCurrentCursor->IsInFrontOfLabel();

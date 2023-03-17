@@ -533,6 +533,11 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
             ";total-pages:" +
             OUString::number( pCursorShell->GetPageCnt() ) + ";";
 
+        // cursor position relative to the page
+        Point aCursorPagePos = pFEShell->GetCursorPagePos();
+        sValue += "cursor-position-in-page-horizontal:" + OUString::number(aCursorPagePos.getX())
+                + ";cursor-position-in-page-vertical:" + OUString::number(aCursorPagePos.getY()) + ";";
+
         SwContentFrame* pCurrFrame = pCursorShell->GetCurrFrame();
         SwPageFrame* pCurrPage=static_cast<SwFrame*>(pCurrFrame)->FindPageFrame();
         sal_uLong nLineNum = 0;
