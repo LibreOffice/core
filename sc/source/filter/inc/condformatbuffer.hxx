@@ -242,6 +242,7 @@ struct ExCfRuleModel
     ::Color mnNegativeColor;
     OUString maAxisPosition; // DataBar
     OUString maColorScaleType; // Cfvo
+    OUString msScaleTypeValue; // Cfvo
     bool mbGradient; // DataBar
     bool mbIsLower; // Cfvo
 };

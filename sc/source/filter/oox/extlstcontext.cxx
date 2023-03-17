@@ -80,10 +80,38 @@ void ExtCfRuleContext::onStartElement( const AttributeList& rAttribs )
             xRule->importCfvo( rAttribs );
             xRule->getModel().mbIsLower = mbFirstEntry;
             mbFirstEntry = false;
+            mpRule = xRule;
             break;
         }
         default:
             break;
+    }
+}
+
+void ExtCfRuleContext::onCharacters( const OUString& rChars )
+{
+    switch( getCurrentElement() )
+    {
+        case XM_TOKEN( f ):
+        {
+            if (mpRule)
+            {
+                mpRule->getModel().msScaleTypeValue = rChars;
+            }
+        }
+        break;
+    }
+}
+
+void ExtCfRuleContext::onEndElement()
+{
+    switch( getCurrentElement() )
+    {
+        case XLS14_TOKEN( cfvo ):
+        {
+            mpRule.reset();
+            break;
+        }
     }
 }
 
