@@ -5578,6 +5578,31 @@
         </constraints>
         <value>0</value>
       </prop>
+      <prop oor:name="ApplicationAppearance" oor:type="xs:short" oor:nillable="false">
+        <!-- UIHints: Tools  Options - General  View  [Section] Appearance -->
+        <info>
+          <desc>Specifies the application colors.</desc>
+          <label>Application Colors</label>
+        </info>
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc>Automatic, following the system settings</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc>Light</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc>Dark</desc>
+            </info>
+          </enumeration>
+        </constraints>
+        <value>1</value>
+      </prop>
       <prop oor:name="MaxOpenDocuments" oor:type="xs:int">
         <info>
           <desc>Determines the maximum count of documents, which are allowed to
