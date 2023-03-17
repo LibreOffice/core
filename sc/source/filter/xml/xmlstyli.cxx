@@ -610,6 +610,8 @@ SvXMLStyleContext *XMLTableStylesContext::CreateStyleStyleChildContext(
     // use own wrapper for text and paragraph, to record style usage
     if (nFamily == XmlStyleFamily::TEXT_PARAGRAPH || nFamily == XmlStyleFamily::TEXT_TEXT)
         pStyle = new  ScCellTextStyleContext( GetImport(),*this, nFamily );
+    else if (nFamily == XmlStyleFamily::SD_GRAPHICS_ID)
+        pStyle = new ScShapeStyleContext( GetImport(), *this, nFamily );
     else
         pStyle = SvXMLStylesContext::CreateStyleStyleChildContext(
                     nFamily, nElement, xAttrList );
@@ -655,6 +657,7 @@ SvXMLStyleContext *XMLTableStylesContext::CreateDefaultStyleStyleChildContext(
 }
 
 constexpr OUStringLiteral gsCellStyleServiceName(u"com.sun.star.style.CellStyle");
+constexpr OUStringLiteral gsGraphicStyleServiceName(u"com.sun.star.style.GraphicStyle");
 
 XMLTableStylesContext::XMLTableStylesContext( SvXMLImport& rImport,
         const bool bTempAutoStyles )
@@ -772,6 +775,14 @@ uno::Reference < XNameContainer >
                     sName = "RowStyles";
             }
             break;
+            case XmlStyleFamily::SD_GRAPHICS_ID:
+            {
+                if( xGraphicStyles.is() )
+                    xStyles.set(xGraphicStyles);
+                else
+                    sName = "GraphicStyles";
+            }
+            break;
             default: break;
         }
         if( !xStyles.is() && !sName.isEmpty() && GetScImport().GetModel().is() )
@@ -806,6 +817,9 @@ uno::Reference < XNameContainer >
                 case XmlStyleFamily::TABLE_ROW:
                     const_cast<XMLTableStylesContext *>(this)->xRowStyles.set(xStyles);
                     break;
+                case XmlStyleFamily::SD_GRAPHICS_ID:
+                    const_cast<XMLTableStylesContext *>(this)->xGraphicStyles.set(xStyles);
+                    break;
                 default: break;
                 }
             }
@@ -833,6 +847,9 @@ OUString XMLTableStylesContext::GetServiceName( XmlStyleFamily nFamily ) const
             break;
         case XmlStyleFamily::TABLE_TABLE:
             sServiceName = XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME;
+            break;
+        case XmlStyleFamily::SD_GRAPHICS_ID:
+            sServiceName = gsGraphicStyleServiceName;
             break;
         default: break;
         }
@@ -1032,6 +1049,12 @@ void ScCellTextStyleContext::FillPropertySet( const uno::Reference<beans::XPrope
         // if it's a different shape, BlockSheet is called from XMLTableShapeImportHelper::finishShape
         // formatted text in page headers/footers can be ignored
     }
+}
+
+void ScShapeStyleContext::Finish(bool bOverwrite)
+{
+    // set parent styles
+    XMLPropStyleContext::Finish(bOverwrite);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

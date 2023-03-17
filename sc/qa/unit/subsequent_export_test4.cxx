@@ -39,6 +39,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 
 using namespace ::com::sun::star;
@@ -1453,6 +1454,66 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testAutofilterHiddenButton)
     {
         auto sPath = "/x:table/x:autoFilter/x:filterColumn[" + std::to_string(i) + "]";
         assertXPath(pDocXml, sPath.c_str(), "hiddenButton", "1");
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testShapeStyles)
+{
+    createScDoc();
+
+    {
+        uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
+                                                                             uno::UNO_QUERY_THROW);
+        uno::Reference<container::XNameContainer> xGraphicStyles(
+            xStyleFamiliesSupplier->getStyleFamilies()->getByName("GraphicStyles"),
+            uno::UNO_QUERY_THROW);
+
+        // create styles
+        uno::Reference<style::XStyle> xStyle(
+            xMSF->createInstance("com.sun.star.style.GraphicStyle"), uno::UNO_QUERY_THROW);
+        xGraphicStyles->insertByName("MyStyle1", Any(xStyle));
+        uno::Reference<beans::XPropertySet>(xStyle, uno::UNO_QUERY_THROW)
+            ->setPropertyValue("FillColor", Any(COL_RED));
+
+        xStyle.set(xMSF->createInstance("com.sun.star.style.GraphicStyle"), uno::UNO_QUERY_THROW);
+        xGraphicStyles->insertByName("MyStyle2", Any(xStyle));
+        xStyle->setParentStyle("MyStyle1");
+
+        xStyle.set(xMSF->createInstance("com.sun.star.style.GraphicStyle"), uno::UNO_QUERY_THROW);
+        xGraphicStyles->insertByName("MyStyle3", Any(xStyle));
+        xStyle->setParentStyle("MyStyle2");
+
+        // create shape
+        uno::Reference<drawing::XShape> xShape(
+            xMSF->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY_THROW);
+
+        uno::Reference<drawing::XDrawPagesSupplier> xDPS(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XShapes> xShapes(xDPS->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY_THROW);
+        xShapes->add(xShape);
+        uno::Reference<beans::XPropertySet>(xShape, uno::UNO_QUERY_THROW)
+            ->setPropertyValue("Style", Any(xStyle));
+    }
+
+    saveAndReload("calc8");
+
+    {
+        uno::Reference<drawing::XDrawPagesSupplier> xDPS(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XShapes> xShapes(xDPS->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xShape(xShapes->getByIndex(0), uno::UNO_QUERY_THROW);
+
+        // check style hierarchy
+        uno::Reference<style::XStyle> xStyle(xShape->getPropertyValue("Style"),
+                                             uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(OUString("MyStyle3"), xStyle->getName());
+        CPPUNIT_ASSERT_EQUAL(OUString("MyStyle2"), xStyle->getParentStyle());
+
+        // check that styles have effect on shapes
+        Color nColor;
+        xShape->getPropertyValue("FillColor") >>= nColor;
+        CPPUNIT_ASSERT_EQUAL(COL_RED, nColor);
     }
 }
 

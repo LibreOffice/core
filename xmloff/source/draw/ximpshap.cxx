@@ -671,7 +671,11 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                             else
                             {
                                 // get graphics family
-                                xFamilies->getByName("graphics") >>= xFamily;
+                                if (xFamilies->hasByName("graphics"))
+                                    xFamilies->getByName("graphics") >>= xFamily;
+                                else
+                                    xFamilies->getByName("GraphicStyles") >>= xFamily;
+
                                 aStyleName = GetImport().GetStyleDisplayName(
                                     XmlStyleFamily::SD_GRAPHICS_ID,
                                     aStyleName );

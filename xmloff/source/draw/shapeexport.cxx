@@ -1439,8 +1439,9 @@ void XMLShapeExport::ExportGraphicDefaults()
         {
             aStEx->exportDefaultStyle( xDefaults, XML_STYLE_FAMILY_SD_GRAPHICS_NAME, xPropertySetMapper );
 
-            // write graphic family styles
+            // write graphic styles (family name differs depending on the module)
             aStEx->exportStyleFamily("graphics", OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), xPropertySetMapper, false, XmlStyleFamily::SD_GRAPHICS_ID);
+            aStEx->exportStyleFamily("GraphicStyles", OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), xPropertySetMapper, false, XmlStyleFamily::SD_GRAPHICS_ID);
         }
     }
     catch(const lang::ServiceNotRegisteredException&)

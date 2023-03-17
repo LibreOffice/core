@@ -392,6 +392,8 @@ ScXMLExport::ScXMLExport(
     GetAutoStylePool()->AddFamily(XmlStyleFamily::TABLE_TABLE, XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME,
         xTableStylesExportPropertySetMapper, XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX);
 
+    GetShapeExport(); // make sure the graphics styles family is added
+
     if( !(getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT)) )
         return;
 
@@ -1980,10 +1982,7 @@ void ScXMLExport::ExportStyles_( bool bUsed )
             uno::Reference <beans::XPropertySet> xProperties(xMultiServiceFactory->createInstance("com.sun.star.sheet.Defaults"), uno::UNO_QUERY);
             if (xProperties.is())
                 aStylesExp->exportDefaultStyle(xProperties, XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME, xCellStylesExportPropertySetMapper);
-            if (pSharedData->HasShapes())
-            {
-                GetShapeExport()->ExportGraphicDefaults();
-            }
+            GetShapeExport()->ExportGraphicDefaults();
         }
         collectDataStyles(false);
     }
@@ -2339,7 +2338,6 @@ void ScXMLExport::collectAutoStyles()
             // stored styles for notes
 
             rtl::Reference<SvXMLExportPropertyMapper> xShapeMapper = XMLShapeExport::CreateShapePropMapper( *this );
-            GetShapeExport(); // make sure the graphics styles family is added
 
             const std::vector<ScNoteStyleEntry>& rNoteEntries = pSheetData->GetNoteStyles();
             for (const auto& rNoteEntry : rNoteEntries)

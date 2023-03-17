@@ -24,6 +24,7 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlimppr.hxx>
+#include <xmloff/XMLShapeStyleContext.hxx>
 #include <xmloff/XMLTextMasterPageContext.hxx>
 #include <xmloff/txtstyli.hxx>
 #include "xmlimprt.hxx"
@@ -115,6 +116,7 @@ class XMLTableStylesContext : public SvXMLStylesContext
     css::uno::Reference< css::container::XNameContainer > xColumnStyles;
     css::uno::Reference< css::container::XNameContainer > xRowStyles;
     css::uno::Reference< css::container::XNameContainer > xTableStyles;
+    css::uno::Reference< css::container::XNameContainer > xGraphicStyles;
     sal_Int32 nNumberFormatIndex;
     sal_Int32 nConditionalFormatIndex;
     sal_Int32 nCellStyleIndex;
@@ -220,6 +222,12 @@ public:
     // override FillPropertySet to store style information
     virtual void FillPropertySet(
             const css::uno::Reference< css::beans::XPropertySet > & rPropSet ) override;
+};
+
+class ScShapeStyleContext : public XMLShapeStyleContext
+{
+    using XMLShapeStyleContext::XMLShapeStyleContext;
+    void Finish(bool bOverwrite) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
