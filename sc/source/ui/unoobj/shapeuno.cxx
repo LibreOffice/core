@@ -33,6 +33,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 
@@ -44,6 +45,7 @@
 #include <drwlayer.hxx>
 #include <userdat.hxx>
 #include <unonames.hxx>
+#include <styleuno.hxx>
 
 using namespace ::com::sun::star;
 
@@ -59,6 +61,7 @@ static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetShapeMap()
         { SC_UNONAME_MOVEPROTECT, 0, cppu::UnoType<sal_Bool>::get(), 0, 0 },
         { SC_UNONAME_HYPERLINK, 0, cppu::UnoType<OUString>::get(), 0, 0 },
         { SC_UNONAME_URL, 0, cppu::UnoType<OUString>::get(), 0, 0 },
+        { SC_UNONAME_STYLE, 0, cppu::UnoType<style::XStyle>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
     };
     return aShapeMap_Impl;
 }
@@ -649,6 +652,22 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
                 pObj->SetMoveProtect( aProt );
         }
     }
+    else if ( aPropertyName == SC_UNONAME_STYLE )
+    {
+        if (SdrObject* pObj = GetSdrObject())
+        {
+            uno::Reference<style::XStyle> xStyle(aValue, uno::UNO_QUERY);
+            auto pStyleSheetObj = dynamic_cast<ScStyleObj*>(xStyle.get());
+            if (!pStyleSheetObj)
+                throw lang::IllegalArgumentException();
+
+            auto pStyleSheet = pStyleSheetObj->GetStyle_Impl();
+            auto pOldStyleSheet = pObj->GetStyleSheet();
+
+            if (pStyleSheet != pOldStyleSheet)
+                pObj->SetStyleSheet(static_cast<SfxStyleSheet*>(pStyleSheet), false);
+        }
+    }
     else
     {
         GetShapePropertySet();
@@ -842,6 +861,20 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
         if ( SdrObject* pObj = GetSdrObject() )
             aProt = pObj->IsMoveProtect();
         aAny <<= aProt;
+    }
+    else if ( aPropertyName == SC_UNONAME_STYLE )
+    {
+        if (SdrObject* pObj = GetSdrObject())
+        {
+            if (auto pStyleSheet = pObj->GetStyleSheet())
+            {
+                ScDrawLayer& rModel(static_cast< ScDrawLayer& >(pObj->getSdrModelFromSdrObject()));
+                ScDocument* pDoc = rModel.GetDocument();
+                aAny <<= uno::Reference<style::XStyle>(new ScStyleObj(
+                    static_cast<ScDocShell*>(pDoc ? pDoc->GetDocumentShell() : nullptr),
+                    SfxStyleFamily::Frame, pStyleSheet->GetName()));
+            }
+        }
     }
     else
     {

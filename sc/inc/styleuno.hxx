@@ -170,7 +170,6 @@ private:
     OUString                aStyleName;
     SfxStyleSheetBase*      pStyle_cached;
 
-    SfxStyleSheetBase*      GetStyle_Impl( bool bUseCachedValue = false );
     const SfxItemSet*       GetStyleItemSet_Impl( std::u16string_view rPropName, const SfxItemPropertyMapEntry*& rpEntry );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
@@ -198,6 +197,7 @@ public:
     bool                    IsInserted() const      { return pDocShell != nullptr; }
     SfxStyleFamily          GetFamily() const       { return eFamily; }
     void                    InitDoc( ScDocShell* pNewDocSh, const OUString& rNewName );
+    SfxStyleSheetBase*      GetStyle_Impl( bool bUseCachedValue = false );
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

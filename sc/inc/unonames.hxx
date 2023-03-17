@@ -198,6 +198,7 @@ inline constexpr OUStringLiteral SC_UNONAME_HORIPOS          = u"HoriOrientPosit
 inline constexpr OUStringLiteral SC_UNONAME_VERTPOS          = u"VertOrientPosition";
 inline constexpr OUStringLiteral SC_UNONAME_HYPERLINK        = u"Hyperlink";
 inline constexpr OUStringLiteral SC_UNONAME_MOVEPROTECT      = u"MoveProtect";
+inline constexpr OUStringLiteral SC_UNONAME_STYLE            = u"Style";
 
 //  other cell properties
 inline constexpr OUStringLiteral SC_UNONAME_CHCOLHDR         = u"ChartColumnAsLabel";
