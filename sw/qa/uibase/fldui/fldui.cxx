@@ -79,7 +79,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBiblioPageNumberUpdate)
     OUStringBuffer aFieldBuffer;
     for (const auto& rField : aCoreFields)
     {
-        aFieldBuffer.append(rField).append(TOX_STYLE_DELIMITER);
+        aFieldBuffer.append(rField + OUStringChar(TOX_STYLE_DELIMITER));
     }
     SwFieldMgr aMgr(pWrtShell);
     aMgr.UpdateCurField(0, aFieldBuffer.makeStringAndClear(), OUString());

@@ -867,9 +867,9 @@ void ScHTMLExport::WriteTables()
             {
                 // clear <TABLE ALIGN=LEFT> with <BR CLEAR=LEFT>
                 aByteStrOut.append(OOO_STRING_SVTOOLS_HTML_linebreak);
-                aByteStrOut.append(' ').
-                    append(OOO_STRING_SVTOOLS_HTML_O_clear).append('=').
-                    append(OOO_STRING_SVTOOLS_HTML_AL_left);
+                aByteStrOut.append(" "
+                        OOO_STRING_SVTOOLS_HTML_O_clear "="
+                        OOO_STRING_SVTOOLS_HTML_AL_left);
                 TAG_ON_LF( aByteStrOut.makeStringAndClear().getStr() );
             }
         }
@@ -956,8 +956,8 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
             nC = rMergeAttr.GetColMerge();
         if ( nC > 1 )
         {
-            aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_colspan).
-                append('=').append(static_cast<sal_Int32>(nC));
+            aStrTD.append(" " OOO_STRING_SVTOOLS_HTML_O_colspan
+                    "=" + OString::number(static_cast<sal_Int32>(nC)));
             nC = nC + nCol;
             for ( jC=nCol, v=0; jC<nC; jC++ )
                 v += pDoc->GetColWidth( jC, nTab );
@@ -970,8 +970,8 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
             nR = rMergeAttr.GetRowMerge();
         if ( nR > 1 )
         {
-            aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_rowspan).
-                append('=').append(static_cast<sal_Int32>(nR));
+            aStrTD.append(" " OOO_STRING_SVTOOLS_HTML_O_rowspan
+                "=" + OString::number(static_cast<sal_Int32>(nR)));
             nR += nRow;
             v = pDoc->GetRowHeight( nRow, nR-1, nTab );
             nHeightPixel = ToPixel( static_cast< sal_uInt16 >( v ) );
@@ -1075,14 +1075,12 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
     }
     if ( pChar )
     {
-        aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_valign).
-            append('=').append(pChar);
+        aStrTD.append(OString::Concat(" " OOO_STRING_SVTOOLS_HTML_O_valign "=") + pChar);
     }
 
     if ( aHTMLStyle.aBackgroundColor != aBgColor )
     {
-        aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_bgcolor).
-            append('=');
+        aStrTD.append(" " OOO_STRING_SVTOOLS_HTML_O_bgcolor "=");
         aStrTD.append(lcl_makeHTMLColorTriplet(aBgColor));
     }
 
@@ -1160,8 +1158,8 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
         }
         if ( nSetFontSizeNumber )
         {
-            aStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_size).
-                append('=').append(static_cast<sal_Int32>(nSetFontSizeNumber));
+            aStr.append(" " OOO_STRING_SVTOOLS_HTML_O_size "="
+                + OString::number(static_cast<sal_Int32>(nSetFontSizeNumber)));
         }
         if ( bSetFontColor )
         {
@@ -1171,8 +1169,8 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
             if ( aColor == COL_AUTO )
                 aColor = COL_BLACK;
 
-            aStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_color).
-                append('=').append(lcl_makeHTMLColorTriplet(aColor));
+            aStr.append(" " OOO_STRING_SVTOOLS_HTML_O_color "="
+                + lcl_makeHTMLColorTriplet(aColor));
         }
         TAG_ON(aStr.makeStringAndClear().getStr());
     }

@@ -751,8 +751,8 @@ sal_uInt32 VmlDrawing::convertControlTextColor( std::u16string_view aTextColor )
             return OleHelper::encodeOleColor( (nR << 16) | (nG << 8) | nB );
         }
 
-        OSL_ENSURE( false, OStringBuffer( "VmlDrawing::convertControlTextColor - invalid color name '" ).
-            append( OUStringToOString( aTextColor, RTL_TEXTENCODING_ASCII_US ) ).append( '\'' ).getStr() );
+        OSL_ENSURE( false, OStringBuffer( "VmlDrawing::convertControlTextColor - invalid color name '"
+                + OUStringToOString( aTextColor, RTL_TEXTENCODING_ASCII_US ) + "\'" ).getStr() );
         return AX_SYSCOLOR_WINDOWTEXT;
     }
 

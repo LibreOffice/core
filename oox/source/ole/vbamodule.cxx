@@ -255,7 +255,7 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg )
                     // normal source code line
                     if( !mbExecutable )
                         aSourceCode.append( "Rem " );
-                    aSourceCode.append( aCodeLine ).append( '\n' );
+                    aSourceCode.append( aCodeLine + "\n" );
                 }
             }
         }

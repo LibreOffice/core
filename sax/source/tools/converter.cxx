@@ -1492,13 +1492,11 @@ static void convertTime(
     if (i_rDateTime.Hours   < 10) {
         i_rBuffer.append('0');
     }
-    i_rBuffer.append( static_cast<sal_Int32>(i_rDateTime.Hours)   )
-             .append(':');
+    i_rBuffer.append( OUString::number(static_cast<sal_Int32>(i_rDateTime.Hours)) + ":");
     if (i_rDateTime.Minutes < 10) {
         i_rBuffer.append('0');
     }
-    i_rBuffer.append( static_cast<sal_Int32>(i_rDateTime.Minutes) )
-             .append(':');
+    i_rBuffer.append( OUString::number(static_cast<sal_Int32>(i_rDateTime.Minutes) ) + ":");
     if (i_rDateTime.Seconds < 10) {
         i_rBuffer.append('0');
     }

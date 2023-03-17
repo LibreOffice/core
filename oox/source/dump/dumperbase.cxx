@@ -267,7 +267,7 @@ void StringHelper::appendHex( OUStringBuffer& rStr, sal_uInt8 nData, bool bPrefi
     static const sal_Unicode spcHexDigits[] = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F' };
     if( bPrefix )
         rStr.append( "0x" );
-    rStr.append( spcHexDigits[ (nData >> 4) & 0x0F ] ).append( spcHexDigits[ nData & 0x0F ] );
+    rStr.append( OUStringChar(spcHexDigits[ (nData >> 4) & 0x0F ] ) + OUStringChar( spcHexDigits[ nData & 0x0F ] ) );
 }
 
 void StringHelper::appendHex( OUStringBuffer& rStr, sal_Int8 nData, bool bPrefix )
@@ -524,7 +524,7 @@ void StringHelper::appendIndex( OUStringBuffer& rStr, sal_Int64 nIdx )
 {
     OUStringBuffer aToken;
     appendDec( aToken, nIdx );
-    rStr.append( '[' ).append( aToken ).append( ']' );
+    rStr.append( "[" +  aToken + "]" );
 }
 
 std::u16string_view StringHelper::getToken( std::u16string_view rData, sal_Int32& rnPos, sal_Unicode cSep )

@@ -277,11 +277,11 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
         sal_Int32 nWidth  = lclGetArrowSize( rArrowProps.moArrowWidth.value_or( XML_med ) );
 
         sal_Int32 nNameIndex = nWidth * 3 + nLength + 1;
-        aBuffer.append( ' ' ).append( nNameIndex );
+        aBuffer.append( " " + OUString::number( nNameIndex ));
         if (bIsArrow)
         {
             // Arrow marker form depends also on line width
-            aBuffer.append(' ').append(nLineWidth);
+            aBuffer.append(" " + OUString::number(nLineWidth));
         }
         OUString aMarkerName = aBuffer.makeStringAndClear();
 

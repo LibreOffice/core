@@ -24,6 +24,7 @@
 #include <cstddef>
 #include <memory>
 #include <optional>
+#include <string_view>
 
 #include <o3tl/typed_flags_set.hxx>
 #include <sfx2/dllapi.h>
@@ -164,8 +165,8 @@ public:
     void             SetActiveFrame( const css::uno::Reference< css::frame::XFrame > & rFrame );
     css::uno::Reference< css::frame::XFrame > GetActiveFrame() const;
                      // Reconfig
-    sal_uInt16       EnterRegistrations(const char *pFile = nullptr, int nLine = 0);
-    void             LeaveRegistrations( const char *pFile = nullptr, int nLine = 0 );
+    sal_uInt16       EnterRegistrations( std::string_view pFile = {}, int nLine = 0);
+    void             LeaveRegistrations( std::string_view pFile = {}, int nLine = 0 );
     void             Register( SfxControllerItem& rBinding );
     void             Release( SfxControllerItem& rBinding );
     SfxDispatcher*   GetDispatcher() const
@@ -192,9 +193,9 @@ public:
 #define ENTERREGISTRATIONS() EnterRegistrations(__FILE__, __LINE__)
 #define LEAVEREGISTRATIONS() LeaveRegistrations(__FILE__, __LINE__)
 #define DENTERREGISTRATIONS() \
-        EnterRegistrations( OStringBuffer(__FILE__).append('(').append(reinterpret_cast<sal_Int64>(this)).append(')').getStr(), __LINE__ )
+        EnterRegistrations( Concat2View(OString::Concat(__FILE__) + "(" + OString::number(reinterpret_cast<sal_Int64>(this)) + ")"), __LINE__ )
 #define DLEAVEREGISTRATIONS(  ) \
-        LeaveRegistrations( OStringBuffer(__FILE__).append('(').append(reinterpret_cast<sal_Int64>(this)).append(')').getStr(), __LINE__ )
+        LeaveRegistrations( Concat2View(OString::Concat(__FILE__) + "(" + OString::number(reinterpret_cast<sal_Int64>(this)) + ")"), __LINE__ )
 #else
 #define ENTERREGISTRATIONS() EnterRegistrations()
 #define LEAVEREGISTRATIONS() LeaveRegistrations()

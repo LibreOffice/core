@@ -700,7 +700,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_width "=\"");
             if( nPercentWidth )
-                sOut.append(static_cast<sal_Int32>(nPercentWidth)).append('%');
+                sOut.append(OString::number(static_cast<sal_Int32>(nPercentWidth)) + "%");
             else
                 sOut.append(static_cast<sal_Int32>(aPixelSz.Width()));
             sOut.append("\"");
@@ -711,7 +711,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_height "=\"");
             if( nPercentHeight )
-                sOut.append(static_cast<sal_Int32>(nPercentHeight)).append('%');
+                sOut.append(OString::number(static_cast<sal_Int32>(nPercentHeight)) + "%");
             else
                 sOut.append(static_cast<sal_Int32>(aPixelSz.Height()));
             sOut.append("\"");
@@ -1521,7 +1521,7 @@ SwHTMLWriter& OutHTML_BulletImage( SwHTMLWriter& rWrt,
 
     OStringBuffer sOut;
     if( pTag )
-        sOut.append('<').append(pTag);
+        sOut.append(OString::Concat("<") + pTag);
 
     sOut.append(' ');
     sOut.append(OOO_STRING_SVTOOLS_HTML_O_style "=\"");
@@ -1609,8 +1609,7 @@ static SwHTMLWriter & OutHTML_FrameFormatAsMulticol( SwHTMLWriter& rWrt,
     if( rWrt.m_bLFPossible )
         rWrt.OutNewLine();
 
-    OStringBuffer sOut;
-    sOut.append('<').append(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_multicol);
+    OStringBuffer sOut("<" + rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_multicol);
 
     const SwFormatCol& rFormatCol = rFrameFormat.GetCol();
 
@@ -1717,8 +1716,7 @@ static SwHTMLWriter& OutHTML_FrameFormatAsDivOrSpan( SwHTMLWriter& rWrt,
     if( rWrt.m_bLFPossible )
         rWrt.OutNewLine();
 
-    OStringBuffer sOut;
-    sOut.append('<').append(rWrt.GetNamespace() + aTag);
+    OStringBuffer sOut("<" + rWrt.GetNamespace() + aTag);
 
     rWrt.Strm().WriteOString( sOut );
     sOut.setLength(0);

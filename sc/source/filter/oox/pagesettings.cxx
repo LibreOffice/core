@@ -795,9 +795,9 @@ Reference<text::XTextContent> HeaderFooterParser::createField( const OUString& r
     }
     catch( Exception& )
     {
-        OSL_FAIL( OStringBuffer( "HeaderFooterParser::createField - error while creating text field \"" ).
-            append( OUStringToOString( rServiceName, RTL_TEXTENCODING_ASCII_US ) ).
-            append( '"' ).getStr() );
+        OSL_FAIL( OStringBuffer( "HeaderFooterParser::createField - error while creating text field \""
+                + OUStringToOString( rServiceName, RTL_TEXTENCODING_ASCII_US )
+                + "\"" ).getStr() );
     }
     return xContent;
 }

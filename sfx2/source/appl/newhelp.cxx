@@ -600,7 +600,6 @@ void IndexTabPage_Impl::InitializeIndex()
             {
                 int ndx,tmp;
                 OUString aIndex, aTempString;
-                OUStringBuffer aData( 128 );            // Capacity of up to 128 characters
                 sfx2::KeywordInfo::iterator it;
 
                 for ( int i = 0; i < aKeywordList.getLength(); ++i )
@@ -646,8 +645,7 @@ void IndexTabPage_Impl::InitializeIndex()
                     {
                         if ( aAnchorList[0].getLength() > 0 )
                         {
-                            aData.append( aRefList[0] ).append( '#' ).append( aAnchorList[0] );
-                            sId = weld::toId(new IndexEntry_Impl(aData.makeStringAndClear(), insert));
+                            sId = weld::toId(new IndexEntry_Impl(aRefList[0] + "#" + aAnchorList[0], insert));
                         }
                         else
                             sId = weld::toId(new IndexEntry_Impl(aRefList[0], insert));
@@ -662,20 +660,10 @@ void IndexTabPage_Impl::InitializeIndex()
 
                     for ( sal_uInt32 j = 1; j < nRefListLen ; ++j )
                     {
-                        aData
-                            .append( aKeywordPair )
-                            .append( ' ' )
-                            .append( '-' )
-                            .append( ' ' )
-                            .append( aTitleList[j] );
-
-                        aTempString = aData.makeStringAndClear();
+                        aTempString = aKeywordPair + " - " + aTitleList[j];
 
                         if ( aAnchorList[j].getLength() > 0 )
-                        {
-                            aData.append( aRefList[j] ).append( '#' ).append( aAnchorList[j] );
-                            sId = weld::toId(new IndexEntry_Impl(aData.makeStringAndClear(), insert));
-                        }
+                            sId = weld::toId(new IndexEntry_Impl(aRefList[j] + "#" + aAnchorList[j], insert));
                         else
                             sId = weld::toId(new IndexEntry_Impl(aRefList[j], insert));
 

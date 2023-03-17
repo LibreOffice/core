@@ -1084,7 +1084,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                     buf.append( "    ( " );
                     for ( int nCount = opt.nProp.size(); nCount; --nCount )
                     {
-                        buf.append( static_cast<sal_Int32>(*pIt), 16 ).append(' ');
+                        buf.append( OString::number(static_cast<sal_Int32>(*pIt), 16) + " ");
                         ++pIt;
                     }
                     buf.append( ")" );

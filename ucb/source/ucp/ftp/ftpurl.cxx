@@ -258,17 +258,14 @@ OUString FTPURL::ident(bool withslash,bool internal) const
 
         if((m_bShowPassword || internal) &&
            !aPassword.isEmpty() )
-            bff.append(':')
-                .append(aPassword);
+            bff.append(":" + aPassword);
 
         bff.append('@');
     }
     bff.append(m_aHost);
 
     if( m_aPort != "21" )
-        bff.append(':')
-            .append(m_aPort)
-            .append('/');
+        bff.append(":" + m_aPort + "/");
     else
         bff.append('/');
 
@@ -276,7 +273,7 @@ OUString FTPURL::ident(bool withslash,bool internal) const
         if(i == 0)
             bff.append(m_aPathSegmentVec[i]);
         else
-            bff.append('/').append(m_aPathSegmentVec[i]);
+            bff.append("/" + m_aPathSegmentVec[i]);
     if(withslash)
         if(!bff.isEmpty() && bff[bff.getLength()-1] != '/')
             bff.append('/');
@@ -303,8 +300,7 @@ OUString FTPURL::parent(bool internal) const
                         aAccount);
 
         if((internal || m_bShowPassword) && !aPassword.isEmpty())
-            bff.append(':')
-                .append(aPassword);
+            bff.append(":" + aPassword);
 
         bff.append('@');
     }
@@ -312,9 +308,7 @@ OUString FTPURL::parent(bool internal) const
     bff.append(m_aHost);
 
     if( m_aPort != "21" )
-        bff.append(':')
-            .append(m_aPort)
-            .append('/');
+        bff.append(":" + m_aPort + "/");
     else
         bff.append('/');
 
@@ -326,7 +320,7 @@ OUString FTPURL::parent(bool internal) const
         else if(i == 0)
             bff.append(m_aPathSegmentVec[i]);
         else
-            bff.append('/').append(m_aPathSegmentVec[i]);
+            bff.append("/" + m_aPathSegmentVec[i]);
 
     if(last.isEmpty())
         bff.append("..");

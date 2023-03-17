@@ -1044,7 +1044,7 @@ static OUString lcl_getDatePatternsConfigString( const LocaleDataWrapper& rLocal
         const OUString* pPatterns = aDateAcceptancePatterns.getConstArray();
         aBuf.append( pPatterns[0]);
         for (sal_Int32 i=1; i < nPatterns; ++i)
-            aBuf.append(';').append( pPatterns[i]);
+            aBuf.append(";" + pPatterns[i]);
     }
     return aBuf.makeStringAndClear();
 }

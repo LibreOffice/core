@@ -480,7 +480,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                         OUStringBuffer aBuffer;
                         for (const auto& rName : aNames)
                         {
-                            aBuffer.append(rName).append(' ');
+                            aBuffer.append(rName + " ");
                         }
                         const OUString s = aBuffer.makeStringAndClear();
                         pTableView->InsertText(s);

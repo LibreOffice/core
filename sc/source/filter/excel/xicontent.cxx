@@ -379,7 +379,7 @@ void XclImpHyperlink::ConvertToValidTabName(OUString& rUrl)
                 // quite.  When this occurs, the whole table name needs to be
                 // quoted.
                 bQuoteTabName = true;
-                aTabName.append(c).append(c);
+                aTabName.append(OUStringChar(c) + OUStringChar(c));
                 ++i;
                 continue;
             }

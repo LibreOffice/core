@@ -276,10 +276,6 @@ bool StringAdd::VisitCXXMemberCallExpr(CXXMemberCallExpr const* methodCall)
     if (!tc1.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
         && !tc1.Class("OStringBuffer").Namespace("rtl").GlobalNamespace())
         return true;
-    auto paramType = methodDecl->getParamDecl(0)->getType();
-    // char is still a pain to work with, when constructing a chained +
-    if (paramType->isCharType() || loplugin::TypeCheck(paramType).Typedef("sal_Unicode"))
-        return true;
     auto arg = methodCall->getArg(0);
     // I don't think the OUStringAppend functionality can handle this efficiently
     if (isa<ConditionalOperator>(ignore(arg)))
@@ -295,10 +291,6 @@ bool StringAdd::VisitCXXMemberCallExpr(CXXMemberCallExpr const* methodCall)
     auto methodDecl2 = methodCall2->getMethodDecl();
     if (!methodDecl2->getIdentifier() || methodDecl2->getName() != "append"
         || methodCall2->getNumArgs() == 0)
-        return true;
-    auto paramType2 = methodDecl2->getParamDecl(0)->getType();
-    // char is still a pain to work with, when constructing a chained +
-    if (paramType2->isCharType() || loplugin::TypeCheck(paramType2).Typedef("sal_Unicode"))
         return true;
     arg = methodCall2->getArg(0);
     // I don't think the OUStringAppend functionality can handle this efficiently

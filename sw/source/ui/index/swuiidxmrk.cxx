@@ -1314,7 +1314,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl, weld::Button&, void)
         OUStringBuffer sFields;
         for(OUString & s : m_sFields)
         {
-            sFields.append(s).append(TOX_STYLE_DELIMITER);
+            sFields.append(s + OUStringChar(TOX_STYLE_DELIMITER));
         }
         if(m_bNewEntry)
         {

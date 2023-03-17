@@ -3029,7 +3029,7 @@ void ScInterpreter::ScRoman()
                     else
                         nSteps = nMode;
                 }
-                aRoman.append( pChars[ nIndex ] ).append( pChars[ nIndex2 ] );
+                aRoman.append( OUStringChar(pChars[ nIndex ]) + OUStringChar(pChars[ nIndex2 ]) );
                 nVal = sal::static_int_cast<sal_uInt16>( nVal + pValues[ nIndex ] );
                 nVal = sal::static_int_cast<sal_uInt16>( nVal - pValues[ nIndex2 ] );
             }

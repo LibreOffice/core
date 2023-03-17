@@ -2377,7 +2377,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                     OUStringBuffer aBuffer;
                                     for (const auto& rName : aNames)
                                     {
-                                        aBuffer.append(rName).append(' ');
+                                        aBuffer.append(rName + " ");
                                     }
                                     pHdl->InsertFunction( aBuffer.makeStringAndClear(), false );       // without "()"
                                 }

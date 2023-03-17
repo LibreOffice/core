@@ -572,8 +572,8 @@ void SwTableFormula::BoxNmsToPtr( const SwTable& rTable, OUStringBuffer& rNewStr
     }
 
     pBox = rTable.GetTableBox( rFirstBox );
-    rNewStr.append(reinterpret_cast<sal_IntPtr>(pBox))
-            .append(rFirstBox[ rFirstBox.getLength()-1 ]); // get label for the box
+    rNewStr.append(OUString::number(reinterpret_cast<sal_IntPtr>(pBox))
+        + OUStringChar(rFirstBox[ rFirstBox.getLength()-1 ])); // get label for the box
 }
 
 /// create external formula (for UI)
@@ -1233,8 +1233,8 @@ void SwTableFormula::SplitMergeBoxNm_( const SwTable& rTable, OUStringBuffer& rN
     if( pLastBox )
         rNewStr.append(OUString::number(reinterpret_cast<sal_IntPtr>(pEndBox)) + ":");
 
-    rNewStr.append(reinterpret_cast<sal_IntPtr>(pSttBox))
-            .append(rFirstBox[ rFirstBox.getLength()-1] );
+    rNewStr.append(OUString::number(reinterpret_cast<sal_IntPtr>(pSttBox))
+        + OUStringChar(rFirstBox[ rFirstBox.getLength()-1] ));
 }
 
 /// Create external formula but remember that the formula is placed in a split/merged table

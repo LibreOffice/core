@@ -91,7 +91,7 @@ static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, bool bBalloon, 
         sBuf.append(" - ");
         sBuf.append(GetAppLangDateTimeString(rRedl.GetTimeStamp()));
         if( bBalloon && !rRedl.GetComment().isEmpty() )
-            sBuf.append('\n').append(rRedl.GetComment());
+            sBuf.append("\n" + rRedl.GetComment());
     }
     return sBuf.makeStringAndClear();
 }

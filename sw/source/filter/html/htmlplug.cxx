@@ -1295,7 +1295,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameForma
             css::text::WrapTextMode_THROUGH == rFrameFormat.GetSurround().GetSurround() )
         {
             // A HIDDEN plug-in
-            sOut.append(' ').append(OOO_STRING_SW_HTML_O_Hidden);
+            sOut.append(" " OOO_STRING_SW_HTML_O_Hidden);
             nFrameOpts = HTML_FRMOPTS_HIDDEN_EMBED;
             bHiddenEmbed = true;
         }
@@ -1354,7 +1354,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameForma
         aAny = xSet->getPropertyValue("AppletIsScript");
         aAny >>= bScript;
         if( bScript )
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_mayscript);
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_mayscript);
 
         nFrameOpts = bInCntnr ? HTML_FRMOPTS_APPLET_CNTNR
                             : HTML_FRMOPTS_APPLET;

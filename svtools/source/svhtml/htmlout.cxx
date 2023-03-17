@@ -436,7 +436,7 @@ static OString lcl_ConvertCharToHTML( sal_uInt32 c,
         char *pBuffer = cBuffer;
         while( nLen-- )
             aDest.append(*pBuffer++);
-        aDest.append('&').append(pStr).append(';');
+        aDest.append(OString::Concat("&") + pStr + ";");
     }
     else
     {
@@ -465,9 +465,9 @@ static OString lcl_ConvertCharToHTML( sal_uInt32 c,
             while( nLen-- )
                 aDest.append(*pBuffer++);
 
-            aDest.append('&').append('#').append(static_cast<sal_Int32>(c))
+            aDest.append("&#" + OString::number(static_cast<sal_Int32>(c))
                     // Unicode code points guaranteed to fit into sal_Int32
-                 .append(';');
+                 + ";");
             if( pNonConvertableChars )
             {
                 OUString cs(&c, 1);
@@ -634,15 +634,14 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     pShape = OOO_STRING_SVTOOLS_HTML_SH_rect;
                     tools::Rectangle aRect( pRectObj->GetRectangle() );
 
-                    aCoords = OStringBuffer()
-                        .append(static_cast<sal_Int32>(aRect.Left()))
-                        .append(',')
-                        .append(static_cast<sal_Int32>(aRect.Top()))
-                        .append(',')
-                        .append(static_cast<sal_Int32>(aRect.Right()))
-                        .append(',')
-                        .append(static_cast<sal_Int32>(aRect.Bottom()))
-                        .makeStringAndClear();
+                    aCoords =
+                        OString::number(static_cast<sal_Int32>(aRect.Left()))
+                        + ","
+                        + OString::number(static_cast<sal_Int32>(aRect.Top()))
+                        + ","
+                        + OString::number(static_cast<sal_Int32>(aRect.Right()))
+                        + ","
+                        + OString::number(static_cast<sal_Int32>(aRect.Bottom()));;
                 }
                 break;
             case IMapObjectType::Circle:
@@ -653,13 +652,12 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     Point aCenter( pCirc->GetCenter() );
                     tools::Long nOff = pCirc->GetRadius();
 
-                    aCoords = OStringBuffer()
-                        .append(static_cast<sal_Int32>(aCenter.X()))
-                        .append(',')
-                        .append(static_cast<sal_Int32>(aCenter.Y()))
-                        .append(',')
-                        .append(static_cast<sal_Int32>(nOff))
-                        .makeStringAndClear();
+                    aCoords =
+                        OString::number(static_cast<sal_Int32>(aCenter.X()))
+                        + ","
+                        + OString::number(static_cast<sal_Int32>(aCenter.Y()))
+                        + ","
+                        + OString::number(static_cast<sal_Int32>(nOff));
                 }
                 break;
             case IMapObjectType::Polygon:
@@ -669,23 +667,24 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     pShape= OOO_STRING_SVTOOLS_HTML_SH_poly;
                     tools::Polygon aPoly( pPolyObj->GetPolygon() );
                     sal_uInt16 nCount = aPoly.GetSize();
-                    OStringBuffer aTmpBuf;
+                    OString aTmpBuf;
                     if( nCount>0 )
                     {
                         const Point& rPoint = aPoly[0];
-                        aTmpBuf.append(static_cast<sal_Int32>(rPoint.X()))
-                            .append(',')
-                            .append(static_cast<sal_Int32>(rPoint.Y()));
+                        aTmpBuf = OString::number(static_cast<sal_Int32>(rPoint.X()))
+                            + ","
+                            + OString::number(static_cast<sal_Int32>(rPoint.Y()));
                     }
                     for( sal_uInt16 j=1; j<nCount; j++ )
                     {
                         const Point& rPoint = aPoly[j];
-                        aTmpBuf.append(',')
-                            .append(static_cast<sal_Int32>(rPoint.X()))
-                            .append(',')
-                            .append(static_cast<sal_Int32>(rPoint.Y()));
+                        aTmpBuf =
+                            ","
+                            + OString::number(static_cast<sal_Int32>(rPoint.X()))
+                            + ","
+                            + OString::number(static_cast<sal_Int32>(rPoint.Y()));
                     }
-                    aCoords = aTmpBuf.makeStringAndClear();
+                    aCoords = aTmpBuf;
                 }
                 break;
             default:
@@ -781,9 +780,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
                                    const OUString *pSBModule )
 {
     // script is not indented!
-    OStringBuffer sOut;
-    sOut.append('<')
-        .append(OOO_STRING_SVTOOLS_HTML_script);
+    OStringBuffer sOut("<" OOO_STRING_SVTOOLS_HTML_script);
 
     if( !rLanguage.isEmpty() )
     {
@@ -947,8 +944,10 @@ OString HTMLOutFuncs::CreateTableDataOptionsValNum(
             }
             else
                 nLang = LANGUAGE_SYSTEM;
-            aStrTD.append(static_cast<sal_Int32>(static_cast<sal_uInt16>(nLang))).append(';').
-                append(aNumStr);
+            aStrTD.append(
+                OString::number(static_cast<sal_Int32>(static_cast<sal_uInt16>(nLang)))
+                + ";"
+                + aNumStr);
         }
         aStrTD.append('\"');
     }

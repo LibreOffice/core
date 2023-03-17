@@ -301,7 +301,7 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const tools::Rectangl
                         unsigned char nSegmentType = (nSeg & 0xE000) >> 13;
                         unsigned short nSegmentCount = nSeg & 0x03FF;
 
-                        aSegmentInfo.append(';').append(static_cast<sal_Int32>(nSeg));
+                        aSegmentInfo.append(";" + OString::number(static_cast<sal_Int32>(nSeg)));
                         switch (nSegmentType)
                         {
                             case msopathLineTo:
@@ -534,7 +534,7 @@ sal_Int32 RtfSdrExport::StartShape()
     if (ESCHER_ShpInst_PictureFrame == m_nShapeType)
         impl_writeGraphic();
 
-    m_rAttrOutput.RunText().append('{').append(OOO_STRING_SVTOOLS_RTF_SHP);
+    m_rAttrOutput.RunText().append("{" OOO_STRING_SVTOOLS_RTF_SHP);
     m_rAttrOutput.RunText().append(
         "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPINST);
 
@@ -669,7 +669,7 @@ void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj, TextTypes e
 
     bool bShape = eType == TXT_HFTXTBOX;
     if (bShape)
-        m_rAttrOutput.RunText().append('{').append(OOO_STRING_SVTOOLS_RTF_SHPTXT).append(' ');
+        m_rAttrOutput.RunText().append("{" OOO_STRING_SVTOOLS_RTF_SHPTXT " ");
     for (sal_Int32 n = 0; n < nPara; ++n)
     {
         if (n)
@@ -720,7 +720,7 @@ void RtfSdrExport::EndShape(sal_Int32 nShapeElement)
     if (nShapeElement >= 0)
     {
         // end of the shape
-        m_rAttrOutput.RunText().append('}').append('}');
+        m_rAttrOutput.RunText().append("}}");
     }
 }
 

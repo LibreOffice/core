@@ -1328,17 +1328,17 @@ bool OpCodeProviderImpl::initFuncOpCode( FunctionInfo& orFuncInfo, const ApiToke
                 (orFuncInfo.mnApiOpCode != OPCODE_UNKNOWN) &&
                 (orFuncInfo.mnApiOpCode != OPCODE_NONAME);
             OSL_ENSURE( bIsValid,
-                OStringBuffer( "OpCodeProviderImpl::initFuncOpCode - no valid opcode for ODF function \"" ).
-                append( OUStringToOString( orFuncInfo.maOdfFuncName, RTL_TEXTENCODING_ASCII_US ) ).
-                append( '"' ).getStr() );
+                OStringBuffer( "OpCodeProviderImpl::initFuncOpCode - no valid opcode for ODF function \""
+                    + OUStringToOString( orFuncInfo.maOdfFuncName, RTL_TEXTENCODING_ASCII_US )
+                    + "\"" ).getStr() );
 
             if( bIsValid && (orFuncInfo.mnApiOpCode == OPCODE_EXTERNAL) )
             {
                 bIsValid = (aIt->second.Data >>= orFuncInfo.maExtProgName) && !orFuncInfo.maExtProgName.isEmpty();
                 OSL_ENSURE( bIsValid,
-                    OStringBuffer( "OpCodeProviderImpl::initFuncOpCode - no programmatical name for external function \"" ).
-                    append( OUStringToOString( orFuncInfo.maOdfFuncName, RTL_TEXTENCODING_ASCII_US ) ).
-                    append( '"' ).getStr() );
+                    OStringBuffer( "OpCodeProviderImpl::initFuncOpCode - no programmatical name for external function \""
+                        + OUStringToOString( orFuncInfo.maOdfFuncName, RTL_TEXTENCODING_ASCII_US )
+                        + "\"" ).getStr() );
             }
 
             // add to parser map, if OOXML function name exists

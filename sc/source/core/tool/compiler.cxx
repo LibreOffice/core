@@ -1623,7 +1623,7 @@ struct ConventionXL_OOX : public ConventionXL_A1
 
     static void makeExternalDocStr( OUStringBuffer& rBuffer, sal_uInt16 nFileId )
     {
-        rBuffer.append('[').append( static_cast<sal_Int32>(nFileId+1) ).append(']');
+        rBuffer.append("[" + OUString::number( static_cast<sal_Int32>(nFileId+1) ) + "]");
     }
 };
 

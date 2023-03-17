@@ -1841,9 +1841,9 @@ sal_Int32 lclCreateFormat( const Reference< XNumberFormats >& rxNumFmts,
             OSL_ENSURE( rFmtCode.startsWith( "#\\ ?/" ) ||
                         rFmtCode.startsWith( "#\\ ?\?/" ) ||
                         rFmtCode.startsWith( "#\\ ?\?\?/" ),
-                OStringBuffer( "lclCreateFormat - cannot create number format '" ).
-                append( OUStringToOString( rFmtCode, osl_getThreadTextEncoding() ) ).
-                append( '\'' ).getStr() );
+                OStringBuffer( "lclCreateFormat - cannot create number format '"
+                    + OUStringToOString( rFmtCode, osl_getThreadTextEncoding() )
+                    + "\'" ).getStr() );
         }
     }
     return nIndex;

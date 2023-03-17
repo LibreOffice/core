@@ -379,7 +379,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_width "=\"");
         if( nPercentWidth != SAL_MAX_UINT32 )
         {
-            sOut.append(static_cast<sal_Int32>(nPercentWidth)).append('%');
+            sOut.append(OString::number(static_cast<sal_Int32>(nPercentWidth)) + "%");
         }
         else
         {
@@ -642,8 +642,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
 
     if( rWrt.m_bLFPossible )
         rWrt.OutNewLine();  // <TABLE> in new line
-    OStringBuffer sOut;
-    sOut.append('<').append(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_table);
+    OStringBuffer sOut("<" + rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_table);
 
     const SvxFrameDirection nOldDirection = rWrt.m_nDirection;
     if( pFrameFormat )
@@ -677,7 +676,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_width "=\"");
         if( HasRelWidths() )
-            sOut.append(static_cast<sal_Int32>(m_nTabWidth)).append('%');
+            sOut.append(OString::number(static_cast<sal_Int32>(m_nTabWidth)) + "%");
         else if( Application::GetDefaultDevice() )
         {
             sal_Int32 nPixWidth = Application::GetDefaultDevice()->LogicToPixel(

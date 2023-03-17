@@ -903,12 +903,12 @@ OUString lclEncodeDosPath(
         if ( path.length() > 2 && o3tl::starts_with(path, u"\\\\") )
         {
             // UNC
-            aBuf.append(EXC_URL_DOSDRIVE).append('@');
+            aBuf.append(OUStringChar(EXC_URL_DOSDRIVE) + "@");
             path = path.substr(2);
         }
         else if ( path.length() > 2 && o3tl::starts_with(path.substr(1), u":\\") )
         {
-            aBuf.append(EXC_URL_DOSDRIVE).append(path[0]);
+            aBuf.append(OUStringChar(EXC_URL_DOSDRIVE) + OUStringChar(path[0]));
             path = path.substr(3);
         }
         else if ( !bIsRel )
@@ -926,14 +926,14 @@ OUString lclEncodeDosPath(
                 // Excel seems confused by this token).
                 aBuf.append(EXC_URL_PARENTDIR);
             else
-                aBuf.append(path.substr(0,nPos)).append(EXC_URL_SUBDIR);
+                aBuf.append(path.substr(0,nPos) + OUStringChar(EXC_URL_SUBDIR));
 
             path = path.substr(nPos + 1);
         }
 
         // file name
         if (pTableName)    // enclose file name in brackets if table name follows
-            aBuf.append('[').append(path).append(']');
+            aBuf.append(OUString::Concat("[") + path + "]");
         else
             aBuf.append(path);
     }

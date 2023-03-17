@@ -1310,13 +1310,13 @@ bool SfxBindings::NextJob_Impl(Timer const * pTimer)
 }
 
 
-sal_uInt16 SfxBindings::EnterRegistrations(const char *pFile, int nLine)
+sal_uInt16 SfxBindings::EnterRegistrations(std::string_view pFile, int nLine)
 {
     SAL_INFO(
         "sfx.control",
         std::setw(std::min(nRegLevel, sal_uInt16(8))) << ' ' << "this = " << this
             << " Level = " << nRegLevel << " SfxBindings::EnterRegistrations "
-            << (pFile
+            << (!pFile.empty()
                 ? SAL_STREAM("File: " << pFile << " Line: " << nLine) : ""));
 
     // When bindings are locked, also lock sub bindings.
@@ -1351,7 +1351,7 @@ sal_uInt16 SfxBindings::EnterRegistrations(const char *pFile, int nLine)
 }
 
 
-void SfxBindings::LeaveRegistrations( const char *pFile, int nLine )
+void SfxBindings::LeaveRegistrations(  std::string_view pFile, int nLine )
 {
     DBG_ASSERT( nRegLevel, "Leave without Enter" );
 
@@ -1412,7 +1412,7 @@ void SfxBindings::LeaveRegistrations( const char *pFile, int nLine )
         "sfx.control",
         std::setw(std::min(nRegLevel, sal_uInt16(8))) << ' ' << "this = " << this
             << " Level = " << nRegLevel << " SfxBindings::LeaveRegistrations "
-            << (pFile
+            << (!pFile.empty()
                 ? SAL_STREAM("File: " << pFile << " Line: " << nLine) : ""));
 }
 

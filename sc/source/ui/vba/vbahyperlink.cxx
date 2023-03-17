@@ -221,7 +221,7 @@ void ScVbaHyperlink::setUrlComponents( const UrlComponents& rUrlComp )
     ensureTextField();
     OUStringBuffer aUrl( rUrlComp.first );
     if( !rUrlComp.second.isEmpty() )
-        aUrl.append( '#' ).append( rUrlComp.second );
+        aUrl.append( "#" + rUrlComp.second );
     mxTextField->setPropertyValue("URL", uno::Any( aUrl.makeStringAndClear() ) );
 }
 

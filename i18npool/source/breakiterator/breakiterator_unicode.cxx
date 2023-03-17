@@ -127,11 +127,12 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
     assert( 0 <= breakType && breakType <= 9 && 0 <= rBreakType && rBreakType <= 9 && 0 <= nWordType && nWordType <= 9);
     const OString aLangtagStr( LanguageTag::convertToBcp47( rLocale).toUtf8());
     OStringBuffer aKeyBuf(64);
-    aKeyBuf.append( aLangtagStr).append(';');
+    aKeyBuf.append( aLangtagStr + ";" );
     if (rule)
         aKeyBuf.append(rule);
-    aKeyBuf.append(';').append( static_cast<char>('0'+breakType)).append(';').
-        append( static_cast<char>('0'+rBreakType)).append(';').append( static_cast<char>('0'+nWordType));
+    aKeyBuf.append(";" + OStringChar(static_cast<char>('0'+breakType)) + ";"
+        + OStringChar(static_cast<char>('0'+rBreakType)) + ";"
+        + OStringChar( static_cast<char>('0'+nWordType)));
     // langtag;rule;breakType;rBreakType;nWordType
     const OString aBIMapGlobalKey( aKeyBuf.makeStringAndClear());
 

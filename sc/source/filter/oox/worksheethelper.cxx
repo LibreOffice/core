@@ -1014,7 +1014,7 @@ OUString WorksheetGlobals::getHyperlinkUrl( const HyperlinkModel& rHyperlink ) c
     if( !rHyperlink.maTarget.isEmpty() )
         aUrlBuffer.append( getBaseFilter().getAbsoluteUrl( rHyperlink.maTarget ) );
     if( !rHyperlink.maLocation.isEmpty() )
-        aUrlBuffer.append( '#' ).append( rHyperlink.maLocation );
+        aUrlBuffer.append( "#" + rHyperlink.maLocation );
     OUString aUrl = aUrlBuffer.makeStringAndClear();
 
     if( aUrl.startsWith("#") )

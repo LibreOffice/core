@@ -139,30 +139,34 @@ void writeUTF8(OStringBuffer & rSink, sal_uInt32 nChar)
     if (nChar < 0x80)
         rSink.append(char(nChar));
     else if (nChar < 0x800)
-        rSink.append(char(nChar >> 6 | 0xC0))
-             .append(char((nChar & 0x3F) | 0x80));
+        rSink.append(OStringChar(char(nChar >> 6 | 0xC0))
+                + OStringChar(char((nChar & 0x3F) | 0x80)));
     else if (nChar < 0x10000)
-        rSink.append(char(nChar >> 12 | 0xE0))
-             .append(char((nChar >> 6 & 0x3F) | 0x80))
-             .append(char((nChar & 0x3F) | 0x80));
+        rSink.append(
+            OStringChar(char(nChar >> 12 | 0xE0))
+             + OStringChar(char((nChar >> 6 & 0x3F) | 0x80))
+             + OStringChar(char((nChar & 0x3F) | 0x80)));
     else if (nChar < 0x200000)
-        rSink.append(char(nChar >> 18 | 0xF0))
-             .append(char((nChar >> 12 & 0x3F) | 0x80))
-             .append(char((nChar >> 6 & 0x3F) | 0x80))
-             .append(char((nChar & 0x3F) | 0x80));
+        rSink.append(
+            OStringChar(char(nChar >> 18 | 0xF0))
+             + OStringChar(char((nChar >> 12 & 0x3F) | 0x80))
+             + OStringChar(char((nChar >> 6 & 0x3F) | 0x80))
+             + OStringChar(char((nChar & 0x3F) | 0x80)));
     else if (nChar < 0x4000000)
-        rSink.append(char(nChar >> 24 | 0xF8))
-             .append(char((nChar >> 18 & 0x3F) | 0x80))
-             .append(char((nChar >> 12 & 0x3F) | 0x80))
-             .append(char((nChar >> 6 & 0x3F) | 0x80))
-             .append(char((nChar & 0x3F) | 0x80));
+        rSink.append(
+            OStringChar(char(nChar >> 24 | 0xF8))
+            + OStringChar(char((nChar >> 18 & 0x3F) | 0x80))
+            + OStringChar(char((nChar >> 12 & 0x3F) | 0x80))
+            + OStringChar(char((nChar >> 6 & 0x3F) | 0x80))
+            + OStringChar(char((nChar & 0x3F) | 0x80)));
     else
-        rSink.append(char(nChar >> 30 | 0xFC))
-             .append(char((nChar >> 24 & 0x3F) | 0x80))
-             .append(char((nChar >> 18 & 0x3F) | 0x80))
-             .append(char((nChar >> 12 & 0x3F) | 0x80))
-             .append(char((nChar >> 6 & 0x3F) | 0x80))
-             .append(char((nChar & 0x3F) | 0x80));
+        rSink.append(
+            OStringChar(char(nChar >> 30 | 0xFC))
+            + OStringChar(char((nChar >> 24 & 0x3F) | 0x80))
+            + OStringChar(char((nChar >> 18 & 0x3F) | 0x80))
+            + OStringChar(char((nChar >> 12 & 0x3F) | 0x80))
+            + OStringChar(char((nChar >> 6 & 0x3F) | 0x80))
+            + OStringChar(char((nChar & 0x3F) | 0x80)));
 }
 
 bool translateUTF8Char(const char *& rBegin,

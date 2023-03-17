@@ -4392,11 +4392,11 @@ void XclImpObjectManager::ConvertObjects()
 
 OUString XclImpObjectManager::GetDefaultObjName( const XclImpDrawObjBase& rDrawObj ) const
 {
-    OUStringBuffer aDefName;
+    OUString aDefName;
     DefObjNameMap::const_iterator aIt = maDefObjNames.find( rDrawObj.GetObjType() );
     if( aIt != maDefObjNames.end() )
-        aDefName.append(aIt->second);
-    return aDefName.append(' ').append(static_cast<sal_Int32>(rDrawObj.GetObjId())).makeStringAndClear();
+        aDefName = aIt->second;
+    return aDefName + " " + OUString::number(static_cast<sal_Int32>(rDrawObj.GetObjId()));
 }
 
 ScRange XclImpObjectManager::GetUsedArea( SCTAB nScTab ) const

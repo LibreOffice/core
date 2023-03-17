@@ -139,11 +139,11 @@ bool lclConvertWildcardsToRegExp( OUString& rValue )
                     aBuffer.append( '.' );
                 break;
                 case '*':
-                    aBuffer.append( '.' ).append( '*' );
+                    aBuffer.append( ".*" );
                 break;
                 case '\\': case '.': case '|': case '(': case ')': case '^': case '$':
                     // quote RE meta characters
-                    aBuffer.append( '\\' ).append( *pcChar );
+                    aBuffer.append( "\\" + OUStringChar(*pcChar) );
                 break;
                 default:
                     aBuffer.append( *pcChar );

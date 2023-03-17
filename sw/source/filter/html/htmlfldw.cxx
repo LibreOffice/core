@@ -268,21 +268,20 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
     // Output the <sdfield> tag.
     if( pTypeStr )
     {
-        OStringBuffer sOut;
-        sOut.append('<');
-        sOut.append(rWrt.GetNamespace());
-        sOut.append(OOO_STRING_SVTOOLS_HTML_sdfield).append(' ').
-            append(OOO_STRING_SVTOOLS_HTML_O_type).append('=').
-            append(pTypeStr);
+        OStringBuffer sOut("<"
+            + rWrt.GetNamespace()
+            + OOO_STRING_SVTOOLS_HTML_sdfield " "
+            OOO_STRING_SVTOOLS_HTML_O_type "="
+            + pTypeStr);
         if( pSubStr )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_subtype).
-                append('=').append(pSubStr);
+            sOut.append(OString::Concat(" " OOO_STRING_SVTOOLS_HTML_O_subtype "=")
+                + pSubStr);
         }
         if( pFormatStr )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_format).
-                append('=').append(pFormatStr);
+            sOut.append(OString::Concat(" " OOO_STRING_SVTOOLS_HTML_O_format "=")
+                + pFormatStr);
         }
         if( !aName.isEmpty() )
         {
@@ -309,7 +308,7 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
         }
         if( bFixed )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_sdfixed);
+            sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_sdfixed);
         }
         sOut.append('>');
         rWrt.Strm().WriteOString( sOut );
