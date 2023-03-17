@@ -5613,8 +5613,10 @@
           </desc>
         </info>
         <value>
-          <!-- tdf#152267 -->
-          <it>Liberation Serif,100,-123,100,420</it>
+          <!-- tdf#152267, tdf#154235 -->
+          <it>Liberation Serif</it>
+          <it>Liberation Sans</it>
+          <it>Liberation Mono</it>
         </value>
       </prop>
       <prop oor:name="PluginsEnabled" oor:type="xs:boolean" oor:nillable="false">
