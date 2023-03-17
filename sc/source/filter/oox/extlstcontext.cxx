@@ -165,11 +165,23 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
         if (aType == "dataBar")
         {
             // an ext entry does not need to have an existing corresponding entry
+            ScDataBarFormatData* pInfo;
             ExtLst::const_iterator aExt = getExtLst().find( aId );
-            if(aExt == getExtLst().end())
-                return nullptr;
+            if (aExt == getExtLst().end())
+            {
+                pInfo = new ScDataBarFormatData();
+                if (pInfo)
+                {
+                    auto pFormat = std::make_unique<ScDataBarFormat>(&getScDocument());
+                    pFormat->SetDataBarData(pInfo);
+                    maEntries.push_back(std::move(pFormat));
+                }
+            }
+            else
+            {
+                pInfo = aExt->second;
+            }
 
-            ScDataBarFormatData* pInfo = aExt->second;
             if (!pInfo)
             {
                 return nullptr;
