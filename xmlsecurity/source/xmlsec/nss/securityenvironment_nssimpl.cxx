@@ -156,7 +156,7 @@ OUString SecurityEnvironment_NssImpl::getSecurityEnvironmentInformation()
     OUStringBuffer buff;
     for (auto& slot : m_Slots)
     {
-        buff.append(OUString::createFromAscii(PK11_GetTokenName(slot)));
+        buff.appendAscii(PK11_GetTokenName(slot));
         buff.append("\n");
     }
     return buff.makeStringAndClear();

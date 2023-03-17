@@ -1129,7 +1129,7 @@ void Converter::convertDuration(OUStringBuffer& rBuffer,
                 ostr.fill('0');
                 ostr.width(9);
                 ostr << rDuration.NanoSeconds;
-                rBuffer.append(OUString::createFromAscii(ostr.str().c_str()));
+                rBuffer.appendAscii(ostr.str().c_str());
             }
             rBuffer.append('S');
         }
@@ -1510,7 +1510,7 @@ static void convertTime(
         ostr.fill('0');
         ostr.width(9);
         ostr << i_rDateTime.NanoSeconds;
-        i_rBuffer.append(OUString::createFromAscii(ostr.str().c_str()));
+        i_rBuffer.appendAscii(ostr.str().c_str());
     }
 }
 

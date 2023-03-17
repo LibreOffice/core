@@ -99,7 +99,7 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
                 }
                 else
                 {
-                    aBuffer.append( OUString::createFromAscii(typeid( *_rxDest ).name()) );
+                    aBuffer.appendAscii( typeid( *_rxDest ).name() );
                 }
                 aBuffer.append( "' implementation).\n" );
 

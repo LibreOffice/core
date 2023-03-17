@@ -131,7 +131,7 @@ namespace
             ostr.fill('0');
             ostr.width(9);
             ostr << rTime.NanoSeconds;
-            sInfo.append(OUString::createFromAscii(ostr.str().c_str()));
+            sInfo.appendAscii(ostr.str().c_str());
         }
 
         return sInfo.makeStringAndClear();

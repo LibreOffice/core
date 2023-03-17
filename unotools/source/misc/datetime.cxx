@@ -299,7 +299,7 @@ OUString toISO8601(const css::util::DateTime& rDateTime)
             ostr.fill('0');
             ostr.width(9);
             ostr << rDateTime.NanoSeconds;
-            rBuffer.append(OUString::createFromAscii(ostr.str().c_str()));
+            rBuffer.appendAscii(ostr.str().c_str());
         }
     }
     return rBuffer.makeStringAndClear();
