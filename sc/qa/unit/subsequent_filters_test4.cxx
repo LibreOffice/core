@@ -981,6 +981,44 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testColorScaleNumWithRefXLSX)
                          pColorScaleEntry->GetFormula(formula::FormulaGrammar::GRAM_NATIVE));
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf153514)
+{
+    ScDocument aDoc;
+    OUString aFullUrl = m_directories.getURLFromSrc(u"sc/qa/unit/data/xml/tdf153514.xml");
+
+    OUString aValidPath;
+    osl::FileBase::getSystemPathFromFileURL(aFullUrl, aValidPath);
+
+    ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
+    CPPUNIT_ASSERT(pOrcus);
+
+    pOrcus->importODS_Styles(aDoc, aValidPath);
+    ScStyleSheetPool* pStyleSheetPool = aDoc.GetStyleSheetPool();
+
+    ScStyleSheet* pStyleSheet;
+    // Case sensitive tests
+    pStyleSheet = pStyleSheetPool->FindCaseIns("aBcD", SfxStyleFamily::Para);
+    CPPUNIT_ASSERT_EQUAL(OUString("aBcD"), pStyleSheet->GetName());
+    pStyleSheet = pStyleSheetPool->FindCaseIns("abCd", SfxStyleFamily::Para);
+    CPPUNIT_ASSERT_EQUAL(OUString("abCd"), pStyleSheet->GetName());
+    pStyleSheet = pStyleSheetPool->FindCaseIns("Abcd", SfxStyleFamily::Para);
+    CPPUNIT_ASSERT_EQUAL(OUString("Abcd"), pStyleSheet->GetName());
+    pStyleSheet = pStyleSheetPool->FindCaseIns("ABCD", SfxStyleFamily::Para);
+    CPPUNIT_ASSERT_EQUAL(OUString("ABCD"), pStyleSheet->GetName());
+    // Case insensitive tests
+    pStyleSheet = pStyleSheetPool->FindCaseIns("abcd", SfxStyleFamily::Para);
+    CPPUNIT_ASSERT(pStyleSheet);
+    CPPUNIT_ASSERT(pStyleSheet->GetName().equalsIgnoreAsciiCase("abcd"));
+    CPPUNIT_ASSERT(pStyleSheet->GetName() != "abcd");
+    pStyleSheet = pStyleSheetPool->FindCaseIns("ABCd", SfxStyleFamily::Para);
+    CPPUNIT_ASSERT(pStyleSheet);
+    CPPUNIT_ASSERT(pStyleSheet->GetName().equalsIgnoreAsciiCase("ABCd"));
+    CPPUNIT_ASSERT(pStyleSheet->GetName() != "ABCd");
+    // Not match tests
+    pStyleSheet = pStyleSheetPool->FindCaseIns("NotFound", SfxStyleFamily::Para);
+    CPPUNIT_ASSERT(!pStyleSheet);
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testOrcusODSStyleInterface)
 {
     ScDocument aDoc;

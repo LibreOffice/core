@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<office:styles xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0">
+    <style:style style:name="aBcD" style:family="table-cell" style:parent-style-name="Status">
+        <style:text-properties fo:color="#cc0000"/>
+    </style:style>
+    <style:style style:name="abCd" style:family="table-cell" style:parent-style-name="Status">
+        <style:text-properties fo:color="#cc0000"/>
+    </style:style>
+    <style:style style:name="Abcd" style:family="table-cell" style:parent-style-name="Status">
+        <style:text-properties fo:color="#cc0000"/>
+    </style:style>
+    <style:style style:name="ABCD" style:family="table-cell" style:parent-style-name="Status">
+        <style:text-properties fo:color="#cc0000"/>
+    </style:style>
+</office:styles>
