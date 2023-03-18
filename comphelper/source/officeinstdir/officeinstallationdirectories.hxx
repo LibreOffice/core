@@ -35,9 +35,9 @@ namespace comphelper {
 
 typedef cppu::WeakImplHelper<
             css::util::XOfficeInstallationDirectories,
-            css::lang::XServiceInfo > UnoImplBase;
+            css::lang::XServiceInfo > OfficeInstallationDirectories_Base;
 
-class OfficeInstallationDirectories : public UnoImplBase
+class OfficeInstallationDirectories : public OfficeInstallationDirectories_Base
 {
 public:
     explicit OfficeInstallationDirectories(
