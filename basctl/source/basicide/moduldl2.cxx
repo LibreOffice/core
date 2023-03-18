@@ -1322,7 +1322,7 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
 
             // tdf#151741 - store all libraries to the file system, otherwise they
             // cannot be renamed/moved since the SfxLibraryContainer::renameLibrary
-            // moves the foldes/files on the file system
+            // moves the folders/files on the file system
             Reference<script::XLibraryContainer2> xModLibContainer(
                 rDocument.getLibraryContainer(E_SCRIPTS), UNO_QUERY);
             Reference<script::XLibraryContainer2> xDlgLibContainer(
