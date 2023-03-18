@@ -226,24 +226,6 @@ IMPL_LINK( ScDocument, GetUserDefinedColor, sal_uInt16, nColorIndex, Color* )
     return const_cast<Color*>(&(xColorList->GetColor(nColorIndex)->GetColor()));
 }
 
-void ScDocument::DeleteDrawLayer()
-{
-    ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
-
-    // remove DrawingLayer's SfxItemPool from Calc's SfxItemPool where
-    // it is registered as secondary pool
-    if (mxPoolHelper.is() && !IsClipOrUndo()) //Using IsClipOrUndo as a proxy for SharePooledResources called
-    {
-        ScDocumentPool* pLocalPool = mxPoolHelper->GetDocPool();
-
-        if(pLocalPool && pLocalPool->GetSecondaryPool())
-        {
-            pLocalPool->SetSecondaryPool(nullptr);
-        }
-    }
-    mpDrawLayer.reset();
-}
-
 bool ScDocument::DrawGetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) const
 {
     return mpDrawLayer->GetPrintArea( rRange, bSetHor, bSetVer );

@@ -2673,7 +2673,6 @@ private:
     void    ImplCreateOptions(); // Suggestion: switch to on-demand?
     void    ImplDeleteOptions();
 
-    void    DeleteDrawLayer();
     SC_DLLPUBLIC bool   DrawGetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) const;
 
     void    UpdateDrawPrinter();

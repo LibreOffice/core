@@ -327,6 +327,7 @@ ScDocumentPool::ScDocumentPool()
 ScDocumentPool::~ScDocumentPool()
 {
     Delete();
+    SetSecondaryPool(nullptr);
 
     for ( sal_uInt16 i=0; i < ATTR_ENDINDEX-ATTR_STARTINDEX+1; i++ )
     {

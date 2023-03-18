@@ -386,7 +386,7 @@ ScDocument::~ScDocument()
     pDBCollection.reset();
     pSelectionAttr.reset();
     apTemporaryChartLock.reset();
-    DeleteDrawLayer();
+    mpDrawLayer.reset();
     mpPrinter.disposeAndClear();
     ImplDeleteOptions();
     pConsolidateDlgData.reset();
