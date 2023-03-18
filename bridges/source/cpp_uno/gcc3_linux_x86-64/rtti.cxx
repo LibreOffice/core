@@ -156,7 +156,7 @@ std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
     // the symbol is prefixed with _ZTI
     char const * rttiName = symName.getStr() +4;
 
-    SAL_INFO("bridges", "Generated rtti for" << rttiName);
+    SAL_INFO("bridges", "Generated rtti for " << rttiName);
 
     std::unique_ptr<Generated> newRtti;
     switch (pTypeDescr.eTypeClass) {
