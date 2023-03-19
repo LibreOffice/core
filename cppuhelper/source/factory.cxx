@@ -20,6 +20,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/factory.hxx>
@@ -58,13 +59,8 @@ namespace cppu
 
 namespace {
 
-struct OFactoryComponentHelper_Mutex
-{
-    Mutex   aMutex;
-};
-
 class OFactoryComponentHelper
-    : public OFactoryComponentHelper_Mutex
+    : public cppu::BaseMutex
     , public WeakComponentImplHelper<
           XServiceInfo,
           XSingleServiceFactory,
@@ -79,7 +75,7 @@ public:
         ComponentFactoryFunc fptr,
         const Sequence< OUString > * pServiceNames_,
         bool bOneInstance_ )
-        : WeakComponentImplHelper( aMutex )
+        : WeakComponentImplHelper( m_aMutex )
         , bOneInstance( bOneInstance_ )
         , xSMgr( rServiceManager )
         , pCreateFunction( pCreateFunction_ )
@@ -188,7 +184,7 @@ Reference<XInterface > OFactoryComponentHelper::createInstance()
     {
         if( !xTheInstance.is() )
         {
-            MutexGuard aGuard( aMutex );
+            MutexGuard aGuard( m_aMutex );
             if( !xTheInstance.is() )
                 xTheInstance = createInstanceEveryTime( Reference< XComponentContext >() );
         }
@@ -204,7 +200,7 @@ Reference<XInterface > OFactoryComponentHelper::createInstanceWithArguments(
     {
         if( !xTheInstance.is() )
         {
-            MutexGuard aGuard( aMutex );
+            MutexGuard aGuard( m_aMutex );
 //          OSL_ENSURE( !xTheInstance.is(), "### arguments will be ignored!" );
             if( !xTheInstance.is() )
                 xTheInstance = createInstanceWithArgumentsEveryTime(
@@ -224,7 +220,7 @@ Reference< XInterface > OFactoryComponentHelper::createInstanceWithContext(
     {
         if( !xTheInstance.is() )
         {
-            MutexGuard aGuard( aMutex );
+            MutexGuard aGuard( m_aMutex );
 //          OSL_ENSURE( !xTheInstance.is(), "### context will be ignored!" );
             if( !xTheInstance.is() )
                 xTheInstance = createInstanceEveryTime( xContext );
@@ -242,7 +238,7 @@ Reference< XInterface > OFactoryComponentHelper::createInstanceWithArgumentsAndC
     {
         if( !xTheInstance.is() )
         {
-            MutexGuard aGuard( aMutex );
+            MutexGuard aGuard( m_aMutex );
 //          OSL_ENSURE( !xTheInstance.is(), "### context and arguments will be ignored!" );
             if( !xTheInstance.is() )
                 xTheInstance = createInstanceWithArgumentsEveryTime( rArguments, xContext );
@@ -291,7 +287,7 @@ void OFactoryComponentHelper::disposing()
     Reference<XInterface > x;
     {
         // do not delete in the guard section
-        MutexGuard aGuard( aMutex );
+        MutexGuard aGuard( m_aMutex );
         x = xTheInstance;
         xTheInstance.clear();
     }
@@ -449,7 +445,7 @@ Sequence< Type > ORegistryFactoryHelper::getTypes()
 Reference< beans::XPropertySetInfo >
 ORegistryFactoryHelper::getPropertySetInfo()
 {
-    ::osl::MutexGuard guard( aMutex );
+    ::osl::MutexGuard guard( m_aMutex );
     if (! m_xInfo.is())
         m_xInfo = createPropertySetInfo( getInfoHelper() );
     return m_xInfo;
@@ -459,7 +455,7 @@ ORegistryFactoryHelper::getPropertySetInfo()
 
 IPropertyArrayHelper & ORegistryFactoryHelper::getInfoHelper()
 {
-    ::osl::MutexGuard guard( aMutex );
+    ::osl::MutexGuard guard( m_aMutex );
     if (m_property_array_helper == nullptr)
     {
         beans::Property prop(
@@ -516,7 +512,7 @@ Reference<XInterface > ORegistryFactoryHelper::createInstanceEveryTime(
         Reference< XInterface > x( createModuleFactory() );
         if (x.is())
         {
-            MutexGuard aGuard( aMutex );
+            MutexGuard aGuard( m_aMutex );
             if( !xModuleFactory.is() && !xModuleFactoryDepr.is() )
             {
                 xModuleFactory.set( x, UNO_QUERY );
@@ -544,7 +540,7 @@ Reference<XInterface > SAL_CALL ORegistryFactoryHelper::createInstanceWithArgume
         Reference< XInterface > x( createModuleFactory() );
         if (x.is())
         {
-            MutexGuard aGuard( aMutex );
+            MutexGuard aGuard( m_aMutex );
             if( !xModuleFactory.is() && !xModuleFactoryDepr.is() )
             {
                 xModuleFactory.set( x, UNO_QUERY );
@@ -574,7 +570,7 @@ Reference< XInterface > ORegistryFactoryHelper::createInstanceWithArgumentsAndCo
         Reference< XInterface > x( createModuleFactory() );
         if (x.is())
         {
-            MutexGuard aGuard( aMutex );
+            MutexGuard aGuard( m_aMutex );
             if( !xModuleFactory.is() && !xModuleFactoryDepr.is() )
             {
                 xModuleFactory.set( x, UNO_QUERY );
@@ -657,7 +653,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
 // XServiceInfo
 Sequence< OUString > ORegistryFactoryHelper::getSupportedServiceNames()
 {
-    MutexGuard aGuard( aMutex );
+    MutexGuard aGuard( m_aMutex );
     if( !aServiceNames.hasElements() )
     {
         // not yet loaded
