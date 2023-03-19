@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <cstddef>
 #include <cstdlib>
 #include <cstring>
 #include <cwchar>
@@ -832,12 +833,13 @@ template <typename C> using STRINGDATA = typename STRINGDATA_<C>::T;
 
 template <typename IMPL_RTL_STRINGDATA> IMPL_RTL_STRINGDATA* Alloc( sal_Int32 nLen )
 {
+    constexpr auto fix = offsetof(IMPL_RTL_STRINGDATA, buffer) + sizeof IMPL_RTL_STRINGDATA::buffer;
     IMPL_RTL_STRINGDATA * pData
         = (sal::static_int_cast< sal_uInt32 >(nLen)
-           <= ((SAL_MAX_UINT32 - sizeof (IMPL_RTL_STRINGDATA))
+           <= ((SAL_MAX_UINT32 - fix)
                / sizeof (STRCODE<IMPL_RTL_STRINGDATA>)))
         ? static_cast<IMPL_RTL_STRINGDATA *>(rtl_allocateString(
-            sizeof (IMPL_RTL_STRINGDATA) + nLen * sizeof (STRCODE<IMPL_RTL_STRINGDATA>)))
+            fix + nLen * sizeof (STRCODE<IMPL_RTL_STRINGDATA>)))
         : nullptr;
     if (pData != nullptr) {
         pData->refCount = 1;
