@@ -67,9 +67,12 @@ typedef ::cppu::WeakImplHelper<
     Diagram_Base;
 }
 
-class OOO_DLLPUBLIC_CHARTTOOLS Diagram final :
-    public impl::Diagram_Base,
-    public ::property::OPropertySet
+class OOO_DLLPUBLIC_CHARTTOOLS Diagram
+#if !defined __GNUC__ || __GNUC__ >= 12
+    final
+#endif
+    : public impl::Diagram_Base
+    , public ::property::OPropertySet
 {
 public:
     Diagram( css::uno::Reference< css::uno::XComponentContext > xContext );
