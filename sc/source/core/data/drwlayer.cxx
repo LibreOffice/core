@@ -72,6 +72,7 @@
 #include <attrib.hxx>
 #include <charthelper.hxx>
 #include <table.hxx>
+#include <stlpool.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <memory>
@@ -280,6 +281,8 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, OUString _aName ) :
 
     rPool.FreezeIdRanges();                         // the pool is also used directly
 
+    SetStyleSheetPool(pDocument ? pDocument->GetStyleSheetPool() : new ScStyleSheetPool(rPool, pDocument));
+
     SdrLayerAdmin& rAdmin = GetLayerAdmin();
     rAdmin.NewLayer("vorne",    SC_LAYER_FRONT.get());
     rAdmin.NewLayer("hinten",   SC_LAYER_BACK.get());
@@ -292,9 +295,11 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, OUString _aName ) :
     ScModule* pScMod = SC_MOD();
     Outliner& rOutliner = GetDrawOutliner();
     rOutliner.SetCalcFieldValueHdl( LINK( pScMod, ScModule, CalcFieldValueHdl ) );
+    rOutliner.SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));
 
     Outliner& rHitOutliner = GetHitTestOutliner();
     rHitOutliner.SetCalcFieldValueHdl( LINK( pScMod, ScModule, CalcFieldValueHdl ) );
+    rHitOutliner.SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));
 
     // set FontHeight pool defaults without changing static SdrEngineDefaults
     SfxItemPool* pOutlinerPool = rOutliner.GetEditTextObjectPool();
