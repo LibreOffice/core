@@ -10,6 +10,7 @@
 #include <sal/config.h>
 #include <test/unoapixml_test.hxx>
 
+#include <o3tl/cppunittraitshelper.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 
 #include <document.hxx>
