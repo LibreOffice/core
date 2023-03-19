@@ -30,20 +30,14 @@ using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace
-{
-    OUString str_ac_singleton()
-    {
-        return "/singletons/com.sun.star.security.theAccessController";
-    }
-}
+constexpr OUStringLiteral ACCESS_CONTROLLER_SINGLETON = u"/singletons/com.sun.star.security.theAccessController";
 
 namespace cppu
 {
 
 AccessControl::AccessControl( Reference< XComponentContext > const & xContext )
 {
-    if (! (xContext->getValueByName( str_ac_singleton() ) >>= m_xController))
+    if (! (xContext->getValueByName( ACCESS_CONTROLLER_SINGLETON ) >>= m_xController))
     {
         throw SecurityException( "no access controller!" );
     }
