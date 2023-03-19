@@ -123,9 +123,7 @@ drawing::Direction3D BarChart::getPreferredDiagramAspectRatio() const
         }
         if( m_pMainPosHelper && m_pMainPosHelper->isSwapXAndY() )
         {
-            double fTemp = aRet.DirectionX;
-            aRet.DirectionX = aRet.DirectionY;
-            aRet.DirectionY = fTemp;
+            std::swap(aRet.DirectionX, aRet.DirectionY);
         }
     }
     else

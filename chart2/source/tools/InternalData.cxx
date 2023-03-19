@@ -258,9 +258,7 @@ void InternalData::swapRowWithNext( sal_Int32 nRowIndex )
     {
         size_t nIndex1 = nColIdx + nRowIndex*m_nColumnCount;
         size_t nIndex2 = nIndex1 + m_nColumnCount;
-        double fTemp = m_aData[nIndex1];
-        m_aData[nIndex1] = m_aData[nIndex2];
-        m_aData[nIndex2] = fTemp;
+        std::swap(m_aData[nIndex1], m_aData[nIndex2]);
     }
 
     std::vector< uno::Any > aTemp( m_aRowLabels[nRowIndex] );
@@ -278,9 +276,7 @@ void InternalData::swapColumnWithNext( sal_Int32 nColumnIndex )
     {
         size_t nIndex1 = nColumnIndex + nRowIdx*m_nColumnCount;
         size_t nIndex2 = nIndex1 + 1;
-        double fTemp = m_aData[nIndex1];
-        m_aData[nIndex1] = m_aData[nIndex2];
-        m_aData[nIndex2] = fTemp;
+        std::swap(m_aData[nIndex1], m_aData[nIndex2]);
     }
 
     std::vector< uno::Any > aTemp( m_aColumnLabels[nColumnIndex] );
