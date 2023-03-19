@@ -154,9 +154,8 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
                 // symbol and rtti-name is nearly identical,
                 // the symbol is prefixed with _ZTI
                 char const * rttiName = symName.getStr() +4;
-#if defined BRIDGES_DEBUG
-                fprintf( stderr,"generated rtti for %s\n", rttiName );
-#endif
+                SAL_INFO("bridges", "generated rtti for " << rttiName);
+
                 if (pTypeDescr->pBaseTypeDescription)
                 {
                     // ensure availability of base
