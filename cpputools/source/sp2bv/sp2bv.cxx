@@ -24,35 +24,34 @@
 
 static bool hasOption(char const * szOption, int argc, char** argv);
 
-
-#define HELP_TEXT    \
-"SYNOPSIS \n\n" \
-"\tsp2bv [-h] [-?] string \n\n" \
-"DESCRIPTION\n\n" \
-"\tsp2bv stands for \"system path to bootstrap variable\"." \
-" First the system path is converted into a file URL. Then all " \
-"characters which have a special meaning in bootstrap variables, " \
-"such as \'$\' are escaped. The resulting string is written to " \
-"stdout and can be assigned to a bootstrap variable.\n" \
-"\n\n" \
-"OPTIONS \n\n" \
-"\tThe following options are supported: \n" \
-"-?\n " \
-"--help" \
-"    Display help information.\n"
+const char* HELP_TEXT =
+    "SYNOPSIS \n\n"
+    "\tsp2bv [-h] [-?] string \n\n"
+    "DESCRIPTION\n\n"
+    "\tsp2bv stands for \"system path to bootstrap variable\"."
+    " First the system path is converted into a file URL. Then all "
+    "characters which have a special meaning in bootstrap variables, "
+    "such as \'$\' are escaped. The resulting string is written to "
+    "stdout and can be assigned to a bootstrap variable.\n"
+    "\n\n"
+    "OPTIONS \n\n"
+    "\tThe following options are supported: \n"
+    "-?\n "
+    "--help"
+    "    Display help information.\n";
 
 
 int main(int argc, char **argv)
 {
     if( hasOption("--help",argc, argv) || hasOption("-h", argc, argv))
     {
-        fprintf(stdout, HELP_TEXT);// default
+        fputs(HELP_TEXT, stdout);// default
         return 0;
     }
 
     if (argc != 2)
     {
-        fprintf(stdout, HELP_TEXT);
+        fputs(HELP_TEXT, stdout);
         return -1;
     }
 
