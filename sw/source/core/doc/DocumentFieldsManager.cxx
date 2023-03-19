@@ -598,12 +598,11 @@ void DocumentFieldsManager::UpdateRefFields()
 
 void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
 {
-    OSL_ENSURE( !pHt || RES_TABLEFML_UPDATE  == pHt->Which(),
-            "What MessageItem is this?" );
     SwTableFormulaUpdate* pUpdateField = nullptr;
     if(pHt && RES_TABLEFML_UPDATE == pHt->Which())
         pUpdateField = static_cast<SwTableFormulaUpdate*>(pHt);
-    assert(!pUpdateField || pUpdateField->m_eFlags != TBL_BOXPTR); // use SwTable::SwitchFormulasToInternalRepresentation
+    assert(!pHt || pUpdateField);
+    assert(!pUpdateField || pUpdateField->m_eFlags == TBL_CALC || pUpdateField->m_eFlags == TBL_SPLITTBL || pUpdateField->m_eFlags == TBL_MERGETBL);
     auto pFieldType = GetFieldType( SwFieldIds::Table, OUString(), false );
     if(pFieldType && (!pUpdateField || pUpdateField->m_eFlags == TBL_CALC))
     {
@@ -640,7 +639,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
     }
 
     // all fields/boxes are now invalid, so we can start to calculate
-    if(pHt && ( RES_TABLEFML_UPDATE != pHt->Which() || TBL_CALC != static_cast<SwTableFormulaUpdate*>(pHt)->m_eFlags))
+    if(pHt && pUpdateField->m_eFlags != TBL_CALC)
         return;
 
     std::optional<SwCalc> oCalc;
@@ -730,7 +729,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
     // calculate the formula at the boxes
     for (const SfxPoolItem* pItem : m_rDoc.GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA))
     {
-        auto pFormula = const_cast<SwTableBoxFormula*>(dynamic_cast<const SwTableBoxFormula*>(pItem));
+        auto pFormula = const_cast<SwTableBoxFormula*>(pItem->DynamicWhichCast(RES_BOXATR_FORMULA));
         if(!pFormula || !pFormula->GetDefinedIn() || pFormula->IsValid())
             continue;
         SwTableBox* pBox = pFormula->GetTableBox();
