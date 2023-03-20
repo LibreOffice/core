@@ -3581,17 +3581,33 @@ bool PDFWriterImpl::emitScreenAnnotations()
         aLine.append("/C<</Type/MediaClip /S/MCD ");
         if (bEmbed)
         {
-            aLine.append("/D << /Type /Filespec /F (<embedded file>) /EF << /F ");
+            aLine.append("\n/D << /Type /Filespec /F (<embedded file>) ");
+            if (PDFWriter::PDFVersion::PDF_1_7 <= m_aContext.Version)
+            {   // ISO 14289-1:2014, Clause: 7.11
+                aLine.append("/UF (<embedded file>) ");
+            }
+            aLine.append("/EF << /F ");
             aLine.append(rScreen.m_nTempFileObject);
-            aLine.append(" 0 R >> >>");
+            aLine.append(" 0 R >>");
         }
         else
         {
             // Linked.
-            aLine.append("/D << /Type /Filespec /FS /URL /F ");
+            aLine.append("\n/D << /Type /Filespec /FS /URL /F ");
             appendLiteralStringEncrypt(rScreen.m_aURL, rScreen.m_nObject, aLine, osl_getThreadTextEncoding());
-            aLine.append(" >>");
+            if (PDFWriter::PDFVersion::PDF_1_7 <= m_aContext.Version)
+            {   // ISO 14289-1:2014, Clause: 7.11
+                aLine.append("/UF ");
+                appendUnicodeTextStringEncrypt(rScreen.m_aURL, rScreen.m_nObject, aLine);
+            }
         }
+        if (PDFWriter::PDFVersion::PDF_1_6 <= m_aContext.Version
+            && !rScreen.m_AltText.isEmpty())
+        {   // ISO 14289-1:2014, Clause: 7.11
+            aLine.append("/Desc ");
+            appendUnicodeTextStringEncrypt(rScreen.m_AltText, rScreen.m_nObject, aLine);
+        }
+        aLine.append(" >>\n"); // end of /D
         // Allow playing the video via a tempfile.
         aLine.append("/P <</TF (TEMPACCESS)>>");
         // ISO 14289-1:2014, Clause: 7.18.6.2
@@ -3600,7 +3616,7 @@ bool PDFWriterImpl::emitScreenAnnotations()
         // ISO 14289-1:2014, Clause: 7.18.6.2
         // Alt text is a "Multi-language Text Array"
         aLine.append(" /Alt [ () ");
-        appendLiteralStringEncrypt(rScreen.m_AltText, rScreen.m_nObject, aLine, osl_getThreadTextEncoding());
+        appendUnicodeTextStringEncrypt(rScreen.m_AltText, rScreen.m_nObject, aLine);
         aLine.append(" ] ");
         aLine.append(">>");
 
@@ -9188,7 +9204,12 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
     if (m_aContext.UseReferenceXObject && rEmit.m_nEmbeddedObject > 0)
     {
         // Write the reference dictionary.
-        aLine.append("/Ref<< /F << /Type /Filespec /F (<embedded file>) /EF << /F ");
+        aLine.append("/Ref<< /F << /Type /Filespec /F (<embedded file>) ");
+        if (PDFWriter::PDFVersion::PDF_1_7 <= m_aContext.Version)
+        {   // ISO 14289-1:2014, Clause: 7.11
+            aLine.append("/UF (<embedded file>) ");
+        }
+        aLine.append("/EF << /F ");
         aLine.append(rEmit.m_nEmbeddedObject);
         aLine.append(" 0 R >> >> /Page 0 >>\n");
     }
