@@ -720,34 +720,41 @@ DECLARE_OOXMLEXPORT_TEST(testN793998, "n793998.docx")
     CPPUNIT_ASSERT(nTextPortion + nTabPortion > nParagraph - nRightMargin);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testN779642, "n779642.docx")
+CPPUNIT_TEST_FIXTURE(Test, testN779642)
 {
-    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    SwModelTestBase::FlySplitGuard aGuard;
+    auto verify = [this]() {
+        uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
 
-    // First problem: check that we have 2 tables, nesting caused the
-    // creation of outer one to fail
-    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of imported tables", sal_Int32(2), xTables->getCount());
+        // First problem: check that we have 2 tables, nesting caused the
+        // creation of outer one to fail
+        uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of imported tables", sal_Int32(2), xTables->getCount());
 
-    // Second problem: check that the outer table is in a frame, at the bottom of the page
-    uno::Reference<text::XTextTable> xTextTable(xTextTablesSupplier->getTextTables()->getByName("Table2"), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xAnchor(xTextTable->getAnchor(), uno::UNO_QUERY);
-    uno::Any aFrame = xAnchor->getPropertyValue("TextFrame");
-    uno::Reference<beans::XPropertySet> xFrame;
-    aFrame >>= xFrame;
-    sal_Int16 nValue;
-    xFrame->getPropertyValue("VertOrient") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation", text::VertOrientation::BOTTOM, nValue);
-    xFrame->getPropertyValue("VertOrientRelation") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation relation", text::RelOrientation::PAGE_PRINT_AREA, nValue);
+        // Second problem: check that the outer table is in a frame, at the bottom of the page
+        uno::Reference<text::XTextTable> xTextTable(xTextTablesSupplier->getTextTables()->getByName("Table2"), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xAnchor(xTextTable->getAnchor(), uno::UNO_QUERY);
+        uno::Any aFrame = xAnchor->getPropertyValue("TextFrame");
+        uno::Reference<beans::XPropertySet> xFrame;
+        aFrame >>= xFrame;
+        sal_Int16 nValue;
+        xFrame->getPropertyValue("VertOrient") >>= nValue;
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation", text::VertOrientation::BOTTOM, nValue);
+        xFrame->getPropertyValue("VertOrientRelation") >>= nValue;
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation relation", text::RelOrientation::PAGE_PRINT_AREA, nValue);
 
-    // tdf#106572 - perhaps not the best test to hijack since this file
-    // produces an error in Word, but it nicely matches danger points,
-    // and has a different first footer, so nice visual confirmation.
-    discardDumpedLayout();
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    // There is no footer text on the first page.
-    assertXPath(pXmlDoc, "/root/page[1]/footer/txt", 0);
+        // tdf#106572 - perhaps not the best test to hijack since this file
+        // produces an error in Word, but it nicely matches danger points,
+        // and has a different first footer, so nice visual confirmation.
+        discardDumpedLayout();
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        // There is no footer text on the first page.
+        assertXPath(pXmlDoc, "/root/page[1]/footer/txt", 0);
+    };
+    createSwDoc("n779642.docx");
+    verify();
+    reload(mpFilter, "n779642.docx");
+    verify();
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTbLrHeight, "tblr-height.docx")
