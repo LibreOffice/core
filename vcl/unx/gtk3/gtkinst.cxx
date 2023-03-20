@@ -3132,12 +3132,12 @@ private:
 
     bool signal_motion(const GdkEventMotion* pEvent)
     {
-        GtkTargetList* pDragData = (m_eDragAction != 0 && m_nPressedButton != -1 && m_xDragSource.is()) ? gtk_drag_source_get_target_list(m_pWidget) : nullptr;
+        const bool bDragData = m_eDragAction != 0 && m_nPressedButton != -1 && m_xDragSource.is() && gtk_drag_source_get_target_list(m_pWidget);
         bool bUnsetDragIcon(false);
-        if (pDragData && gtk_drag_check_threshold(m_pWidget, m_nPressStartX, m_nPressStartY, pEvent->x, pEvent->y) && !do_signal_drag_begin(bUnsetDragIcon))
+        if (bDragData && gtk_drag_check_threshold(m_pWidget, m_nPressStartX, m_nPressStartY, pEvent->x, pEvent->y) && !do_signal_drag_begin(bUnsetDragIcon))
         {
             GdkDragContext* pContext = gtk_drag_begin_with_coordinates(m_pWidget,
-                                                                       pDragData,
+                                                                       gtk_drag_source_get_target_list(m_pWidget),
                                                                        m_eDragAction,
                                                                        m_nPressedButton,
                                                                        const_cast<GdkEvent*>(reinterpret_cast<const GdkEvent*>(pEvent)),
