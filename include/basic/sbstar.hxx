@@ -63,7 +63,7 @@ class BASIC_DLLPUBLIC StarBASIC final : public SbxObject
     BASIC_DLLPRIVATE BasicDebugFlags    BreakPoint( sal_Int32 nLine, sal_Int32 nCol1, sal_Int32 nCol2 );
     BASIC_DLLPRIVATE BasicDebugFlags    StepPoint( sal_Int32 nLine, sal_Int32 nCol1, sal_Int32 nCol2 );
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
-    virtual bool StoreData( SvStream& ) const override;
+    virtual std::pair<bool, sal_uInt32> StoreData( SvStream& ) const override;
     bool             ErrorHdl();
     BasicDebugFlags  BreakHdl();
     virtual ~StarBASIC() override;

@@ -48,7 +48,7 @@ typedef tools::SvRef<SbxObject> SbxObjectRef;
 class BASIC_DLLPUBLIC SbxBase : virtual public SvRefBase
 {
     virtual bool LoadData( SvStream&, sal_uInt16 ) = 0;
-    virtual bool StoreData( SvStream& ) const = 0;
+    virtual std::pair<bool, sal_uInt32> StoreData( SvStream& ) const = 0;
 protected:
     SbxFlagBits nFlags;          // Flag-Bits
 
@@ -81,7 +81,7 @@ public:
     virtual void    Clear() = 0;
 
     static SbxBaseRef Load( SvStream& );
-    bool            Store( SvStream& );
+    std::pair<bool, sal_uInt32> Store( SvStream& );
     virtual bool    LoadCompleted();
 
     static ErrCode const & GetError();

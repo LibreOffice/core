@@ -35,6 +35,7 @@
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include <utility>
+#include <filefmt.hxx>
 using namespace com::sun::star::uno;
 
 // SbxVariable
@@ -515,7 +516,7 @@ bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     return true;
 }
 
-bool SbxVariable::StoreData( SvStream& rStrm ) const
+std::pair<bool, sal_uInt32> SbxVariable::StoreData( SvStream& rStrm ) const
 {
     rStrm.WriteUChar( 0xFF );      // Marker
     bool bValStore;
@@ -532,16 +533,16 @@ bool SbxVariable::StoreData( SvStream& rStrm ) const
         // So that the method will not be executed in any case!
         // CAST, to avoid const!
         pThis->SetFlag( SbxFlagBits::NoBroadcast );
-        bValStore = SbxValue::StoreData( rStrm );
+        bValStore = SbxValue::StoreData( rStrm ).first;
         pThis->ResetFlag( SbxFlagBits::NoBroadcast );
     }
     else
     {
-        bValStore = SbxValue::StoreData( rStrm );
+        bValStore = SbxValue::StoreData( rStrm ).first;
     }
     if( !bValStore )
     {
-        return false;
+        return { false, 0 };
     }
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, maName,
                                                       RTL_TEXTENCODING_ASCII_US);
@@ -555,7 +556,7 @@ bool SbxVariable::StoreData( SvStream& rStrm ) const
     {
         rStrm.WriteUChar( 0 );
     }
-    return true;
+    return { true, B_IMG_VERSION_12 };
 }
 
 // SbxInfo

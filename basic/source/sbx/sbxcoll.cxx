@@ -293,16 +293,16 @@ bool SbxStdCollection::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     return bRes;
 }
 
-bool SbxStdCollection::StoreData( SvStream& rStrm ) const
+std::pair<bool, sal_uInt32> SbxStdCollection::StoreData( SvStream& rStrm ) const
 {
-    bool bRes = SbxCollection::StoreData( rStrm );
+    const auto& [bRes, nVersion] = SbxCollection::StoreData(rStrm);
     if( bRes )
     {
         write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, aElemClass,
             RTL_TEXTENCODING_ASCII_US);
         rStrm.WriteBool( bAddRemoveOk );
     }
-    return bRes;
+    return { bRes, nVersion };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

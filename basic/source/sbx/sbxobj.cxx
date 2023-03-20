@@ -31,6 +31,7 @@
 #include <svl/SfxBroadcaster.hxx>
 #include "sbxdec.hxx"
 #include "sbxres.hxx"
+#include <filefmt.hxx>
 
 
 static OUString pNameProp;          // Name-Property
@@ -603,11 +604,11 @@ bool SbxObject::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     return true;
 }
 
-bool SbxObject::StoreData( SvStream& rStrm ) const
+std::pair<bool, sal_uInt32> SbxObject::StoreData( SvStream& rStrm ) const
 {
-    if( !SbxVariable::StoreData( rStrm ) )
+    if( !SbxVariable::StoreData(rStrm).first )
     {
-        return false;
+        return { false, 0 };
     }
     OUString aDfltProp;
     if( pDfltProp )
@@ -622,20 +623,21 @@ bool SbxObject::StoreData( SvStream& rStrm ) const
     rStrm.Seek( nPos );
     rStrm.WriteUInt32( nNew - nPos );
     rStrm.Seek( nNew );
-    if( !pMethods->Store( rStrm ) )
+    const auto& [bSuccess, nVersion] = pMethods->Store( rStrm );
+    if( !bSuccess )
     {
-        return false;
+        return { false, 0 };
     }
-    if( !pProps->Store( rStrm ) )
+    if( !pProps->Store( rStrm ).first )
     {
-        return false;
+        return { false, 0 };
     }
-    if( !pObjs->Store( rStrm ) )
+    if( !pObjs->Store( rStrm ).first )
     {
-        return false;
+        return { false, 0 };
     }
     const_cast<SbxObject*>(this)->SetModified( false );
-    return true;
+    return { true, nVersion };
 }
 
 static bool CollectAttrs( const SbxBase* p, OUString& rRes )

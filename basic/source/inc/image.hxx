@@ -79,7 +79,7 @@ public:
     bool Load( SvStream&, sal_uInt32& nVer );
                             // nVer is set to version
                             // of image
-    bool Save( SvStream&, sal_uInt32 = B_CURVERSION );
+    bool Save( SvStream&, sal_uInt32 );
     bool IsError() const            { return bError;    }
 
     const sal_uInt8* GetCode() const { return aCode.data(); }

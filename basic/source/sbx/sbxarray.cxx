@@ -26,6 +26,7 @@
 
 #include <cstddef>
 #include <optional>
+#include <filefmt.hxx>
 
 struct SbxVarEntry
 {
@@ -357,7 +358,7 @@ bool SbxArray::LoadData( SvStream& rStrm, sal_uInt16 /*nVer*/ )
     return bRes;
 }
 
-bool SbxArray::StoreData( SvStream& rStrm ) const
+std::pair<bool, sal_uInt32> SbxArray::StoreData( SvStream& rStrm ) const
 {
     sal_uInt32 nElem = 0;
     // Which elements are even defined?
@@ -367,17 +368,24 @@ bool SbxArray::StoreData( SvStream& rStrm ) const
             nElem++;
     }
     rStrm.WriteUInt16( nElem );
+
+    sal_uInt32 nVersion = B_IMG_VERSION_12;
     for( size_t n = 0; n < mVarEntries.size(); n++ )
     {
         const SbxVarEntry& rEntry = mVarEntries[n];
         if (rEntry.mpVar.is() && !(rEntry.mpVar->GetFlags() & SbxFlagBits::DontStore))
         {
             rStrm.WriteUInt16( n );
-            if (!rEntry.mpVar->Store(rStrm))
-                return false;
+            const auto& [bSuccess, nVersionModule] = rEntry.mpVar->Store(rStrm);
+            if (!bSuccess)
+                return { false, 0 };
+            else if (nVersionModule > nVersion)
+            {
+                nVersion = nVersionModule;
+            }
         }
     }
-    return true;
+    return { true, nVersion };
 }
 
 // #100883 Method to set method directly to parameter array
@@ -559,7 +567,7 @@ bool SbxDimArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     return SbxArray::LoadData( rStrm, nVer );
 }
 
-bool SbxDimArray::StoreData( SvStream& rStrm ) const
+std::pair<bool, sal_uInt32> SbxDimArray::StoreData( SvStream& rStrm ) const
 {
     assert(m_vDimensions.size() <= sal::static_int_cast<size_t>(std::numeric_limits<sal_Int16>::max()));
     rStrm.WriteInt16( m_vDimensions.size() );

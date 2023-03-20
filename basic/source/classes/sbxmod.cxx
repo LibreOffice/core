@@ -1606,7 +1606,7 @@ bool SbModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         return false;
     }
     // If the image is in old format, we fix up the method start offsets
-    if ( nImgVer < B_EXT_IMG_VERSION )
+    if ( nImgVer < B_IMG_VERSION_12 )
     {
         fixUpMethodStart( false, p.get() );
         p->ReleaseLegacyBuffer();
@@ -1631,14 +1631,14 @@ bool SbModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     return true;
 }
 
-bool SbModule::StoreData( SvStream& rStrm ) const
+std::pair<bool, sal_uInt32> SbModule::StoreData( SvStream& rStrm ) const
 {
     bool bFixup = ( pImage && !pImage->ExceedsLegacyLimits() );
     if ( bFixup )
         fixUpMethodStart( true );
-    bool bRet = SbxObject::StoreData( rStrm );
-    if ( !bRet )
-        return false;
+    const auto& [bSuccess, nVersion] = SbxObject::StoreData(rStrm);
+    if (!bSuccess)
+        return { false, 0 };
 
     if( pImage )
     {
@@ -1650,10 +1650,10 @@ bool SbModule::StoreData( SvStream& rStrm ) const
         // It should be noted that it probably isn't necessary
         // It would be better not to store the image ( more flexible with
         // formats )
-        bool bRes = pImage->Save( rStrm, B_LEGACYVERSION );
+        bool bRes = pImage->Save( rStrm, nVersion );
         if ( bFixup )
             fixUpMethodStart( false ); // restore method starts
-        return bRes;
+        return { bRes, nVersion };
 
     }
     else
@@ -1663,7 +1663,7 @@ bool SbModule::StoreData( SvStream& rStrm ) const
         aImg.aComment = aComment;
         aImg.aName = GetName();
         rStrm.WriteUChar( 1 );
-        return aImg.Save( rStrm );
+        return { aImg.Save(rStrm, nVersion), nVersion };
     }
 }
 
@@ -1767,7 +1767,8 @@ void SbModule::StoreBinaryData( SvStream& rStrm )
     if (!Compile())
         return;
 
-    if (!SbxObject::StoreData(rStrm))
+    const auto& [bSuccess, nVersion] = SbxObject::StoreData(rStrm);
+    if (!bSuccess)
         return;
 
     pImage->aOUSource.clear();
@@ -1775,7 +1776,7 @@ void SbModule::StoreBinaryData( SvStream& rStrm )
     pImage->aName = GetName();
 
     rStrm.WriteUChar(1);
-    pImage->Save(rStrm);
+    pImage->Save(rStrm, nVersion);
 
     pImage->aOUSource = aOUSource;
 }
@@ -1916,15 +1917,16 @@ bool SbJScriptModule::LoadData( SvStream& rStrm, sal_uInt16 )
     return true;
 }
 
-bool SbJScriptModule::StoreData( SvStream& rStrm ) const
+std::pair<bool, sal_uInt32> SbJScriptModule::StoreData( SvStream& rStrm ) const
 {
-    if( !SbxObject::StoreData( rStrm ) )
-        return false;
+    const auto& [bSuccess, nVersion] = SbxObject::StoreData(rStrm);
+    if( !bSuccess )
+        return { false, 0 };
 
     // Write the source string
     OUString aTmp = aOUSource;
     rStrm.WriteUniOrByteString( aTmp, osl_getThreadTextEncoding() );
-    return true;
+    return { true, nVersion };
 }
 
 
@@ -2006,16 +2008,23 @@ bool SbMethod::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     return true;
 }
 
-bool SbMethod::StoreData( SvStream& rStrm ) const
+std::pair<bool, sal_uInt32> SbMethod::StoreData( SvStream& rStrm ) const
 {
-    if( !SbxMethod::StoreData( rStrm ) )
-        return false;
+    auto [bSuccess, nVersion] = SbxMethod::StoreData(rStrm);
+    if( !bSuccess )
+        return { false, 0 };
 
     //tdf#94617
-    sal_Int16 nMax = std::numeric_limits<sal_Int16>::max();
-    sal_Int16 nStartTemp = nStart % nMax;
-    sal_uInt16 nDebugFlagsTemp = nStart / nMax;
-    nDebugFlagsTemp |= 0x8000;
+    const sal_Int16 nMax = std::numeric_limits<sal_Int16>::max();
+    // tdf#142391 - store method using binary format 0x13 only when actually needed, i.e.,
+    // when method starts at an offset that would overflow 16 bits
+    const sal_Int16 nStartTemp = nStart % nMax;
+    sal_uInt16 nDebugFlagsTemp = static_cast<sal_uInt16>(nDebugFlags);
+    if (nStart >= nMax)
+    {
+        nDebugFlagsTemp = (nStart / nMax) | 0x8000;
+        nVersion = B_IMG_VERSION_13;
+    }
 
     rStrm.WriteUInt16( nDebugFlagsTemp )
          .WriteInt16( nLine1 )
@@ -2023,7 +2032,7 @@ bool SbMethod::StoreData( SvStream& rStrm ) const
          .WriteInt16( nStartTemp )
          .WriteBool( bInvalid );
 
-    return true;
+    return { true, nVersion };
 }
 
 void SbMethod::GetLineRange( sal_uInt16& l1, sal_uInt16& l2 )

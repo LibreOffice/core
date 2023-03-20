@@ -1847,22 +1847,28 @@ bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
     return true;
 }
 
-bool StarBASIC::StoreData( SvStream& r ) const
+std::pair<bool, sal_uInt32> StarBASIC::StoreData( SvStream& r ) const
 {
-    if( !SbxObject::StoreData( r ) )
+    auto [bSuccess, nVersion] = SbxObject::StoreData(r);
+    if( !bSuccess )
     {
-        return false;
+        return { false, 0 };
     }
     assert(pModules.size() < SAL_MAX_UINT16);
     r.WriteUInt16( static_cast<sal_uInt16>(pModules.size()));
     for( const auto& rpModule: pModules )
     {
-        if( !rpModule->Store( r ) )
+        const auto& [bSuccessModule, nVersionModule] = rpModule->Store(r);
+        if( !bSuccessModule )
         {
-            return false;
+            return { false, 0 };
+        }
+        else if (nVersionModule > nVersion)
+        {
+            nVersion = nVersionModule;
         }
     }
-    return true;
+    return { true, nVersion };
 }
 
 bool StarBASIC::GetUNOConstant( const OUString& rName, css::uno::Any& aOut )

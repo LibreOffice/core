@@ -41,6 +41,7 @@ public:
     void testStarBasic();
     void testMSP();
     void testPasswordProtectedStarBasic();
+    void testTdf142391();
     void testTdf114427();
     void testRowColumn();
     void testTdf104902();
@@ -75,6 +76,7 @@ public:
     CPPUNIT_TEST(testStarBasic);
     CPPUNIT_TEST(testMSP);
     CPPUNIT_TEST(testPasswordProtectedStarBasic);
+    CPPUNIT_TEST(testTdf142391);
     CPPUNIT_TEST(testTdf114427);
     CPPUNIT_TEST(testRowColumn);
     CPPUNIT_TEST(testTdf104902);
@@ -157,6 +159,37 @@ void ScMacrosTest::testPasswordProtectedStarBasic()
 
     aValue = rDoc.GetString(2,0,0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Far Method script did not change the value of Sheet1.C1", OUString("success"), aValue);
+}
+
+void ScMacrosTest::testTdf142391()
+{
+    loadFromURL(u"tdf142391.ods");
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    // User defined types
+    executeMacro(
+        "vnd.sun.Star.script:Standard.Module1.LoadAndExecuteTest?language=Basic&location=document");
+    OUString aValue = rDoc.GetString(0, 0, 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("User defined types script did not change the value of Sheet1.A1",
+                                 OUString("success"), aValue);
+
+    // Big Module
+    executeMacro(
+        "vnd.sun.Star.script:MyLibrary.BigModule.bigMethod?language=Basic&location=document");
+    aValue = rDoc.GetString(1, 0, 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Big module script did not change the value of Sheet1.B1",
+                                 OUString("success"), aValue);
+
+    // tdf#142391 - method exceeds 0xffff offset for methods
+    executeMacro(
+        "vnd.sun.Star.script:MyLibrary.BigModule.farBigMethod?language=Basic&location=document");
+    aValue = rDoc.GetString(2, 0, 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Far Method script did not change the value of Sheet1.C1",
+                                 OUString("success"), aValue);
 }
 
 void ScMacrosTest::testStarBasic()

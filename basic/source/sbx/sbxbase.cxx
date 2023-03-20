@@ -31,6 +31,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <filefmt.hxx>
 
 // AppData-Structure for SBX:
 
@@ -248,7 +249,7 @@ SbxBaseRef SbxBase::Load( SvStream& rStrm )
     return p;
 }
 
-bool SbxBase::Store( SvStream& rStrm )
+std::pair<bool, sal_uInt32> SbxBase::Store( SvStream& rStrm )
 {
     if( ( nFlags & SbxFlagBits::DontStore ) == SbxFlagBits::NONE )
     {
@@ -258,7 +259,7 @@ bool SbxBase::Store( SvStream& rStrm )
              .WriteUInt16( GetVersion() );
         sal_uInt64 const nOldPos = rStrm.Tell();
         rStrm.WriteUInt32( 0 );
-        bool bRes = StoreData( rStrm );
+        auto [bRes, nVersion] = StoreData(rStrm);
         sal_uInt64 const nNewPos = rStrm.Tell();
         rStrm.Seek( nOldPos );
         rStrm.WriteUInt32( nNewPos - nOldPos );
@@ -267,10 +268,10 @@ bool SbxBase::Store( SvStream& rStrm )
             bRes = false;
         if( bRes )
             bRes = true;
-        return bRes;
+        return { bRes, nVersion };
     }
     else
-        return true;
+        return { true, B_IMG_VERSION_12 };
 }
 
 bool SbxBase::LoadCompleted()

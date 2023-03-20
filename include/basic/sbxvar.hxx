@@ -103,7 +103,7 @@ protected:
     virtual void Broadcast( SfxHintId );      // Broadcast-Call
     virtual ~SbxValue() override;
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
-    virtual bool StoreData( SvStream& ) const override;
+    virtual std::pair<bool, sal_uInt32> StoreData( SvStream& ) const override;
 public:
     SBX_DECL_PERSIST_NODATA(SBXID_VALUE,1);
     SbxValue();
@@ -258,7 +258,7 @@ protected:
     SbxObject* pParent = nullptr;   // Currently attached object
     virtual ~SbxVariable() override;
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
-    virtual bool StoreData( SvStream& ) const override;
+    virtual std::pair<bool, sal_uInt32> StoreData( SvStream& ) const override;
 public:
     SBX_DECL_PERSIST_NODATA(SBXID_VARIABLE,2);
     SbxVariable();

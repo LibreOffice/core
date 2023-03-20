@@ -47,7 +47,7 @@ class BASIC_DLLPUBLIC SbMethod : public SbxMethod
     BASIC_DLLPRIVATE SbMethod( const OUString&, SbxDataType, SbModule* );
     BASIC_DLLPRIVATE SbMethod( const SbMethod& );
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
-    virtual bool StoreData( SvStream& ) const override;
+    virtual std::pair<bool, sal_uInt32> StoreData( SvStream& ) const override;
     virtual ~SbMethod() override;
 
 public:

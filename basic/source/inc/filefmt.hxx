@@ -45,9 +45,9 @@
 //                       new integer type suffix 'b')
 //
 
-#define B_LEGACYVERSION 0x00000011
-#define B_EXT_IMG_VERSION 0x00000012
-#define B_CURVERSION 0x00000013
+#define B_IMG_VERSION_11 0x00000011
+#define B_IMG_VERSION_12 0x00000012
+#define B_IMG_VERSION_13 0x00000013
 
 // The file contains either a module- or a library-record.
 // Those records contain further records. Every record's got

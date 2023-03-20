@@ -124,11 +124,11 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
         nFlags = static_cast<SbiImageFlags>(nTmpFlags);
         eCharSet = nCharSet;
         eCharSet = GetSOLoadTextEncoding( eCharSet );
-        bBadVer  = ( nVersion > B_CURVERSION );
+        bBadVer  = ( nVersion > B_IMG_VERSION_13 );
         nDimBase = static_cast<sal_uInt16>(lDimBase);
     }
 
-    bool bLegacy = ( nVersion < B_EXT_IMG_VERSION );
+    bool bLegacy = ( nVersion < B_IMG_VERSION_12 );
 
     sal_uInt64 nNext;
     while( ( nNext = r.Tell() ) < nLast )
@@ -373,7 +373,7 @@ done:
 
 bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
 {
-    bool bLegacy = ( nVer < B_EXT_IMG_VERSION );
+    bool bLegacy = ( nVer < B_IMG_VERSION_12 );
 
     // detect if old code exceeds legacy limits
     // if so, then disallow save
@@ -381,7 +381,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     {
         SbiImage aEmptyImg;
         aEmptyImg.aName = aName;
-        aEmptyImg.Save( r, B_LEGACYVERSION );
+        aEmptyImg.Save( r, B_IMG_VERSION_11 );
         return true;
     }
     // First of all the header
@@ -391,11 +391,11 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     eCharSet = GetSOStoreTextEncoding( eCharSet );
     if ( bLegacy )
     {
-        r.WriteInt32( B_LEGACYVERSION );
+        r.WriteInt32( B_IMG_VERSION_11 );
     }
     else
     {
-        r.WriteInt32( B_CURVERSION );
+        r.WriteInt32( nVer );
     }
     r .WriteInt32( eCharSet )
       .WriteInt32( nDimBase )

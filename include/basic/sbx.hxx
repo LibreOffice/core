@@ -105,7 +105,7 @@ class BASIC_DLLPUBLIC SbxArray : public SbxBase
 protected:
     virtual ~SbxArray() override;
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
-    virtual bool StoreData( SvStream& ) const override;
+    virtual std::pair<bool, sal_uInt32> StoreData( SvStream& ) const override;
 
 public:
     SBX_DECL_PERSIST_NODATA(SBXID_ARRAY,1);
@@ -142,7 +142,7 @@ class BASIC_DLLPUBLIC SbxDimArray final : public SbxArray
     sal_uInt32 Offset(const sal_Int32*);
     sal_uInt32 Offset(SbxArray*);
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
-    virtual bool StoreData( SvStream& ) const override;
+    virtual std::pair<bool, sal_uInt32> StoreData( SvStream& ) const override;
     virtual ~SbxDimArray() override;
 public:
     SBX_DECL_PERSIST_NODATA(SBXID_DIMARRAY,1);
@@ -192,7 +192,7 @@ class SbxStdCollection final : public SbxCollection
     bool bAddRemoveOk;
     virtual ~SbxStdCollection() override;
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
-    virtual bool StoreData( SvStream& ) const override;
+    virtual std::pair<bool, sal_uInt32> StoreData( SvStream& ) const override;
     virtual void CollAdd( SbxArray* pPar ) override;
     virtual void CollRemove( SbxArray* pPar ) override;
 public:

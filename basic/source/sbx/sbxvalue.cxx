@@ -32,6 +32,7 @@
 #include "sbxconv.hxx"
 #include <rtlproto.hxx>
 #include <runtime.hxx>
+#include <filefmt.hxx>
 
 
 ///////////////////////////// constructors
@@ -1466,7 +1467,7 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
     return true;
 }
 
-    bool SbxValue::StoreData( SvStream& r ) const
+    std::pair<bool, sal_uInt32> SbxValue::StoreData( SvStream& r ) const
     {
         sal_uInt16 nType = sal::static_int_cast< sal_uInt16 >(aData.eType);
         r.WriteUInt16( nType );
@@ -1560,9 +1561,9 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
                 break;
             default:
                 SAL_WARN( "basic.sbx", "Saving a non-supported data type" );
-                return false;
+                return { false, 0 };
         }
-        return true;
+        return { true, B_IMG_VERSION_12 };
     }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
