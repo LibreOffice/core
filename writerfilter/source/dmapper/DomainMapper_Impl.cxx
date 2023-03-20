@@ -3755,15 +3755,23 @@ void DomainMapper_Impl::RemoveTemporaryFootOrEndnotes()
 
 static void lcl_convertToNoteIndices(std::deque<sal_Int32>& rNoteIds, sal_Int32& rFirstNoteIndex)
 {
-    // convert arbitrary footnote identifiers to 0, 1, 2...
-    // indices, keeping their possible random order
+    // rNoteIds contains XML footnote identifiers in the loaded order of the footnotes
+    // (the same order as in footnotes.xml), i.e. it maps temporary footnote positions to the
+    // identifiers. For example: Ids[0] = 100; Ids[1] = -1, Ids[2] = 5.
+    // To copy the footnotes in their final place, create an array, which map the (normalized)
+    // footnote identifiers to the temporary footnote positions. Using the previous example,
+    // Pos[0] = 1; Pos[1] = 2; Pos[2] = 0 (where [0], [1], [2] are the normalized
+    // -1, 5 and 100 identifiers).
     std::deque<sal_Int32> aSortedIds = rNoteIds;
     std::sort(aSortedIds.begin(), aSortedIds.end());
     std::map<sal_Int32, size_t> aMapIds;
+    // normalize footnote identifiers to 0, 1, 2 ...
     for (size_t i = 0; i < aSortedIds.size(); ++i)
         aMapIds[aSortedIds[i]] = i;
+    // reusing rNoteIds, create the Pos array to map normalized identifiers to the loaded positions
+    std::deque<sal_Int32> aOrigNoteIds = rNoteIds;
     for (size_t i = 0; i < rNoteIds.size(); ++i)
-        rNoteIds[i] = aMapIds[rNoteIds[i]];
+        rNoteIds[aMapIds[aOrigNoteIds[i]]] = i;
     rFirstNoteIndex = rNoteIds.front();
     rNoteIds.pop_front();
 }

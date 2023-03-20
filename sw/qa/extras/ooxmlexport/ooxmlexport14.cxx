@@ -1317,6 +1317,41 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152506)
     CPPUNIT_ASSERT_EQUAL( OUString("Footnote for pg5"), xLastButOne->getString().trim() );
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf153255)
+{
+    loadAndSave("tdf153255.docx");
+    xmlDocUniquePtr pXml = parseExport("word/footnotes.xml");
+    CPPUNIT_ASSERT(pXml);
+
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
+    uno::Reference<text::XTextRange> xLastFootnote(xFootnotes->getByIndex(5), uno::UNO_QUERY);
+    // This was "Footnote for pg2" (replaced footnotes)
+    CPPUNIT_ASSERT_EQUAL( OUString("Footnote for pg 6"), xLastFootnote->getString().trim() );
+
+    uno::Reference<text::XTextRange> xLastButOne(xFootnotes->getByIndex(4), uno::UNO_QUERY);
+    // This was "Footnote for pg 6" (replaced footnotes)
+    CPPUNIT_ASSERT_EQUAL( OUString("Footnote for pg5"), xLastButOne->getString().trim() );
+
+    // check all the remaining footnotes
+
+    uno::Reference<text::XTextRange> xFootnote1(xFootnotes->getByIndex(0), uno::UNO_QUERY);
+    // This was "Footnote for pg3" (replaced footnotes)
+    CPPUNIT_ASSERT_EQUAL( OUString("Footnote for pg1"), xFootnote1->getString().trim() );
+
+    uno::Reference<text::XTextRange> xFootnote2(xFootnotes->getByIndex(1), uno::UNO_QUERY);
+    // This was "Footnote for pg5" (replaced footnotes)
+    CPPUNIT_ASSERT_EQUAL( OUString("Footnote for pg2"), xFootnote2->getString().trim() );
+
+    uno::Reference<text::XTextRange> xFootnote3(xFootnotes->getByIndex(2), uno::UNO_QUERY);
+    // This was "Footnote for pg4." (replaced footnotes)
+    CPPUNIT_ASSERT_EQUAL( OUString("Footnote for pg3"), xFootnote3->getString().trim() );
+
+    uno::Reference<text::XTextRange> xFootnote4(xFootnotes->getByIndex(3), uno::UNO_QUERY);
+    // This was "Footnote for pg1" (replaced footnotes)
+    CPPUNIT_ASSERT_EQUAL( OUString("Footnote for pg4."), xFootnote4->getString().trim() );
+}
+
 // skip test for macOS (missing fonts?)
 #if !defined(MACOSX)
 DECLARE_OOXMLEXPORT_TEST(testTdf146346, "tdf146346.docx")
