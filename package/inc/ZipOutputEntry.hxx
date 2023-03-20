@@ -31,6 +31,7 @@
 #include <unotools/tempfile.hxx>
 #include "CRC32.hxx"
 #include <atomic>
+#include <exception>
 
 struct ZipEntry;
 class ZipPackageBuffer;

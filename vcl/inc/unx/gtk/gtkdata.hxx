@@ -39,6 +39,7 @@
 #include <saltimer.hxx>
 #include <o3tl/enumarray.hxx>
 
+#include <exception>
 #include <string_view>
 #include <vector>
 

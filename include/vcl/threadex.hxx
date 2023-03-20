@@ -24,6 +24,7 @@
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
 
+#include <exception>
 #include <optional>
 #include <memory>
 #include <utility>

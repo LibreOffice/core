@@ -26,6 +26,7 @@
 #include <comphelper/threadpool.hxx>
 
 #include <cstddef>
+#include <exception>
 #include <vector>
 
 struct ZipEntry;

@@ -19,6 +19,7 @@
 #include <queue>
 #include <mutex>
 #include <condition_variable>
+#include <exception>
 
 typedef css::uno::Sequence< sal_Int8 > Buffer;
 
