@@ -835,8 +835,8 @@ template <typename IMPL_RTL_STRINGDATA> IMPL_RTL_STRINGDATA* Alloc( sal_Int32 nL
 {
     constexpr auto fix = offsetof(IMPL_RTL_STRINGDATA, buffer) + sizeof IMPL_RTL_STRINGDATA::buffer;
     IMPL_RTL_STRINGDATA * pData
-        = (sal::static_int_cast< sal_uInt32 >(nLen)
-           <= ((SAL_MAX_UINT32 - fix)
+        = (o3tl::make_unsigned(nLen)
+           <= ((std::numeric_limits<std::size_t>::max() - fix)
                / sizeof (STRCODE<IMPL_RTL_STRINGDATA>)))
         ? static_cast<IMPL_RTL_STRINGDATA *>(rtl_allocateString(
             fix + nLen * sizeof (STRCODE<IMPL_RTL_STRINGDATA>)))
