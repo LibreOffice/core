@@ -170,12 +170,12 @@ void SfxLokHelper::setView(int nId)
         {
             DisableCallbacks dc;
 
-            if (pViewShell == SfxViewShell::Current())
-                return;
-
             // update the current LOK language and locale for the dialog tunneling
             comphelper::LibreOfficeKit::setLanguageTag(pViewShell->GetLOKLanguageTag());
             comphelper::LibreOfficeKit::setLocale(pViewShell->GetLOKLocale());
+
+            if (pViewShell == SfxViewShell::Current())
+                return;
 
             SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
             pViewFrame->MakeActive_Impl(false);
