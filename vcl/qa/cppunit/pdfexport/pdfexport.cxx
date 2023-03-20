@@ -3610,13 +3610,19 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testMediaShapeAnnot)
     CPPUNIT_ASSERT(pR);
     auto pC = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pR->LookupElement("C"));
     CPPUNIT_ASSERT(pC);
+    auto pD = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pC->LookupElement("D"));
+    CPPUNIT_ASSERT(pD);
+    auto pDesc = dynamic_cast<vcl::filter::PDFHexStringElement*>(pD->LookupElement("Desc"));
+    CPPUNIT_ASSERT(pDesc);
+    CPPUNIT_ASSERT_EQUAL(OUString("alternativloser text\nand some description"),
+                         ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pDesc));
     auto pAlt = dynamic_cast<vcl::filter::PDFArrayElement*>(pC->LookupElement("Alt"));
     CPPUNIT_ASSERT(pAlt);
     auto pLang = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pAlt->GetElement(0));
     CPPUNIT_ASSERT_EQUAL(OString(""), pLang->GetValue());
-    auto pAltText = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pAlt->GetElement(1));
-    CPPUNIT_ASSERT_EQUAL(OString("alternativloser text\\nand some description"),
-                         pAltText->GetValue());
+    auto pAltText = dynamic_cast<vcl::filter::PDFHexStringElement*>(pAlt->GetElement(1));
+    CPPUNIT_ASSERT_EQUAL(OUString("alternativloser text\nand some description"),
+                         ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAltText));
 
     auto pStructParent
         = dynamic_cast<vcl::filter::PDFNumberElement*>(pAnnot->Lookup("StructParent"));
