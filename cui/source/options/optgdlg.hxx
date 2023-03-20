@@ -95,11 +95,6 @@ private:
     std::unique_ptr<weld::Label> m_xAAPointLimitLabel;
     std::unique_ptr<weld::MetricSpinButton> m_xAAPointLimit;
 
-    std::unique_ptr<weld::Widget> m_xMenuIconBox;
-    std::unique_ptr<weld::ComboBox> m_xMenuIconsLB;
-
-    std::unique_ptr<weld::ComboBox> m_xContextMenuShortcutsLB;
-
     std::unique_ptr<weld::CheckButton> m_xFontShowCB;
 
     std::unique_ptr<weld::CheckButton> m_xUseHardwareAccell;

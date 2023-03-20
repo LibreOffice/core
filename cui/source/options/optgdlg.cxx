@@ -530,9 +530,6 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xFontAntiAliasing(m_xBuilder->weld_check_button("aafont"))
     , m_xAAPointLimitLabel(m_xBuilder->weld_label("aafrom"))
     , m_xAAPointLimit(m_xBuilder->weld_metric_spin_button("aanf", FieldUnit::PIXEL))
-    , m_xMenuIconBox(m_xBuilder->weld_widget("menuiconsbox"))
-    , m_xMenuIconsLB(m_xBuilder->weld_combo_box("menuicons"))
-    , m_xContextMenuShortcutsLB(m_xBuilder->weld_combo_box("contextmenushortcuts"))
     , m_xFontShowCB(m_xBuilder->weld_check_button("showfontpreview"))
     , m_xUseHardwareAccell(m_xBuilder->weld_check_button("useaccel"))
     , m_xUseAntiAliase(m_xBuilder->weld_check_button("useaa"))
@@ -547,9 +544,6 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , m_sAutoStr(m_xIconStyleLB->get_text(0))
 {
     OUString sToolKitName(Application::GetToolkitName());
-    if (sToolKitName.startsWith("gtk"))
-        m_xMenuIconBox->hide();
-
     const bool bHasDarkMode = sToolKitName.startsWith("gtk") || sToolKitName == "osx" || sToolKitName == "win";
     if (!bHasDarkMode)
         m_xDarkModeFrame->hide();
@@ -781,31 +775,10 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         bModified = true;
     }
 
-    if (m_xMenuIconsLB->get_value_changed_from_saved())
-    {
-        officecfg::Office::Common::View::Menu::IsSystemIconsInMenus::set(m_xMenuIconsLB->get_active() == 0, xChanges);
-        officecfg::Office::Common::View::Menu::ShowIconsInMenues::set(m_xMenuIconsLB->get_active() == 2, xChanges);
-        bModified = true;
-        bMenuOptModified = true;
-        bAppearanceChanged = true;
-    }
-
     if (m_xAppearanceStyleLB->get_value_changed_from_saved())
     {
         bDarkModeOptModified = true;
         bModified = true;
-    }
-
-    if (m_xContextMenuShortcutsLB->get_value_changed_from_saved())
-    {
-        officecfg::Office::Common::View::Menu::ShortcutsInContextMenus::set(
-            m_xContextMenuShortcutsLB->get_active() == 0 ?
-            TRISTATE_INDET :
-            static_cast<TriState>(m_xContextMenuShortcutsLB->get_active() - 1),
-            xChanges);
-        bModified = true;
-        bMenuOptModified = true;
-        bAppearanceChanged = true;
     }
 
     // #i95644#  if disabled, do not use value, see in ::Reset()
@@ -958,15 +931,6 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
 
     // WorkingSet
     m_xFontShowCB->set_active(officecfg::Office::Common::Font::View::ShowFontBoxWYSIWYG::get());
-    bool bSystemMenuIcons = officecfg::Office::Common::View::Menu::IsSystemIconsInMenus::get();
-    bool bMenuIcons = officecfg::Office::Common::View::Menu::ShowIconsInMenues::get();
-    m_xMenuIconsLB->set_active(bSystemMenuIcons ? 0 : (bMenuIcons ? 2 : 1));
-    m_xMenuIconsLB->save_value();
-
-    TriState eContextMenuShortcuts = static_cast<TriState>(officecfg::Office::Common::View::Menu::ShortcutsInContextMenus::get());
-    bool bContextMenuShortcutsNonDefault = eContextMenuShortcuts == TRISTATE_FALSE || eContextMenuShortcuts == TRISTATE_TRUE;
-    m_xContextMenuShortcutsLB->set_active(bContextMenuShortcutsNonDefault ? eContextMenuShortcuts + 1 : 0);
-    m_xContextMenuShortcutsLB->save_value();
 
     UpdateHardwareAccelStatus();
     m_xUseHardwareAccell->save_state();

@@ -23,7 +23,7 @@
     <property name="border-width">6</property>
     <property name="column-spacing">24</property>
     <child>
-      <!-- n-columns=1 n-rows=5 -->
+      <!-- n-columns=1 n-rows=4 -->
       <object class="GtkGrid" id="grid2">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -123,129 +123,6 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="optviewpage|label4">Mouse</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkFrame" id="frame3">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label-xalign">0</property>
-            <property name="shadow-type">none</property>
-            <child>
-              <!-- n-columns=1 n-rows=2 -->
-              <object class="GtkGrid" id="grid8">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-start">12</property>
-                <property name="margin-top">6</property>
-                <property name="row-spacing">3</property>
-                <child>
-                  <!-- n-columns=2 n-rows=1 -->
-                  <object class="GtkGrid" id="menuiconsbox">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="column-spacing">6</property>
-                    <child>
-                      <object class="GtkLabel" id="label13">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="optviewpage|label13">Menu icons:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">menuicons</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="menuicons">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="hexpand">True</property>
-                        <items>
-                          <item translatable="yes" context="optviewpage|menuicons">Automatic</item>
-                          <item translatable="yes" context="optviewpage|menuicons">Hide</item>
-                          <item translatable="yes" context="optviewpage|menuicons">Show</item>
-                        </items>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="menuicons-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | menuicons">Displays icons next to the corresponding menu items. Select from "Automatic", "Hide" and "Show". "Automatic" displays icons according to system settings and themes.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <!-- n-columns=2 n-rows=1 -->
-                  <object class="GtkGrid" id="menushortcutsbpx">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="column-spacing">6</property>
-                    <child>
-                      <object class="GtkComboBoxText" id="contextmenushortcuts">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="hexpand">True</property>
-                        <items>
-                          <item translatable="yes" context="optviewpage|contextmenushortcuts">Automatic</item>
-                          <item translatable="yes" context="optviewpage|contextmenushortcuts">Hide</item>
-                          <item translatable="yes" context="optviewpage|contextmenushortcuts">Show</item>
-                        </items>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label10">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="optviewpage|label10">Shortcuts:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">contextmenushortcuts</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-            <child type="label">
-              <object class="GtkLabel" id="label3">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="optviewpage|label3">Visibility</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -839,8 +716,6 @@
     <widgets>
       <widget name="label11"/>
       <widget name="label12"/>
-      <widget name="label13"/>
-      <widget name="label10"/>
       <widget name="label8"/>
       <widget name="label9"/>
       <widget name="label14"/>
@@ -852,8 +727,6 @@
     <widgets>
       <widget name="mousepos"/>
       <widget name="mousemiddle"/>
-      <widget name="menuicons"/>
-      <widget name="contextmenushortcuts"/>
       <widget name="notebookbariconsize"/>
       <widget name="sidebariconsize"/>
       <widget name="iconsize"/>
