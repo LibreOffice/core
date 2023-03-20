@@ -112,6 +112,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/swriter/ui/footnoteareapage.ui"
         || rUIFile == u"modules/swriter/ui/footnotesendnotestabpage.ui"
         || rUIFile == u"modules/swriter/ui/indentpage.ui"
+        || rUIFile == u"modules/swriter/ui/insertbreak.ui"
         || rUIFile == u"modules/swriter/ui/insertcaption.ui"
         || rUIFile == u"modules/swriter/ui/insertsectiondialog.ui"
         || rUIFile == u"modules/swriter/ui/linenumbering.ui"
