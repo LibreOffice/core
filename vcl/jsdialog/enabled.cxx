@@ -102,6 +102,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/swriter/ui/captionoptions.ui"
         || rUIFile == u"modules/swriter/ui/characterproperties.ui"
         || rUIFile == u"modules/swriter/ui/charurlpage.ui"
+        || rUIFile == u"modules/swriter/ui/columndialog.ui"
         || rUIFile == u"modules/swriter/ui/columnpage.ui"
         || rUIFile == u"modules/swriter/ui/contentcontroldlg.ui"
         || rUIFile == u"modules/swriter/ui/contentcontrollistitemdlg.ui"
