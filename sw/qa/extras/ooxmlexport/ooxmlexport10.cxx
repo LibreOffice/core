@@ -928,10 +928,22 @@ DECLARE_OOXMLEXPORT_TEST(mathtype, "mathtype.docx")
     CPPUNIT_ASSERT(xModel->supportsService("com.sun.star.formula.FormulaProperties"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf8255, "tdf8255.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf8255)
 {
-    // This was 1: a full-page-wide multi-page floating table was imported as a TextFrame.
-    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+    SwModelTestBase::FlySplitGuard aGuard;
+    auto verify = [this]() {
+        // A full-page-wide multi-page floating table should be allowed to split:
+        uno::Reference<text::XTextFramesSupplier> xDocument(mxComponent, uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xFrame(xDocument->getTextFrames()->getByName("Frame1"),
+                                                   uno::UNO_QUERY);
+        bool bIsSplitAllowed{};
+        xFrame->getPropertyValue("IsSplitAllowed") >>= bIsSplitAllowed;
+        CPPUNIT_ASSERT(bIsSplitAllowed);
+    };
+    createSwDoc("tdf8255.docx");
+    verify();
+    reload(mpFilter, "tdf8255.docx");
+    verify();
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf87460, "tdf87460.docx")
