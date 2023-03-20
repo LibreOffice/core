@@ -1182,16 +1182,28 @@ void ScTabView::ScrollHdl(ScrollAdaptor* pScroll)
 
                 tools::Long nScrollPos = GetScrollBarPos( *pScroll ) + nScrollMin;
                 nDelta = nScrollPos - nViewPos;
-                if ( nScrollPos > nPrevDragPos )
+
+                // tdf#152406 Disable anti-jitter code for scroll wheel events
+                // After moving thousands of columns to the right via
+                // horizontal scroll wheel or trackpad swipe events, most
+                // vertical scroll wheel or trackpad swipe events will trigger
+                // the anti-jitter code because nScrollPos and nPrevDragPos
+                // will be equal and nDelta will be overriden and set to zero.
+                // So, only use the anti-jitter code for mouse drag events.
+                if ( eType == ScrollType::Drag )
                 {
-                    if (nDelta<0) nDelta=0;
+                    if ( nScrollPos > nPrevDragPos )
+                    {
+                        if (nDelta<0) nDelta=0;
+                    }
+                    else if ( nScrollPos < nPrevDragPos )
+                    {
+                        if (nDelta>0) nDelta=0;
+                    }
+                    else
+                        nDelta = 0;
                 }
-                else if ( nScrollPos < nPrevDragPos )
-                {
-                    if (nDelta>0) nDelta=0;
-                }
-                else
-                    nDelta = 0;
+
                 nPrevDragPos = nScrollPos;
             }
             break;
