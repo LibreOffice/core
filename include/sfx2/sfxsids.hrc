@@ -350,6 +350,7 @@ class SvxZoomItem;
 #define SID_STYLE_DESIGNER                  TypedWhichId<SfxBoolItem>(SID_SFX_START + 539)
 
 #define SID_SIDEBAR_DECK                    (SID_SFX_START + 850)
+#define SID_SIDEBAR_DECK_TOGGLE             TypedWhichId<SfxBoolItem>(SID_SFX_START + 851)
 
 #define SID_TEMPLATE_ADDRESSBOOKSOURCE      (SID_SFX_START + 1655)
 

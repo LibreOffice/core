@@ -23,6 +23,7 @@
 #include <unotools/resmgr.hxx>
 
 #define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
+#define NNC_(Context, StringSingular, StringPlural) TranslateNId(Context, reinterpret_cast<char const *>(u8##StringSingular), reinterpret_cast<char const *>(u8##StringPlural))
 
 #define STR_UNKNOWN_APPLICATION                 NC_("STR_UNKNOWN_APPLICATION", "Unknown")
 #define STR_IMPORT_ONLY                         NC_("STR_IMPORT_ONLY", "import filter")
@@ -75,6 +76,9 @@
 #define STR_WARN_TRANSP_CONVERTED_SHORT         NC_("STR_WARN_TRANSP_CONVERTED_SHORT", "Transparencies removed")
 #define STR_ERR_SIGNATURE_FAILED                NC_("STR_ERR_SIGNATURE_FAILED", "Signature generation failed")
 #define STR_ERR_PDF_EXPORT_ABORTED              NC_("STR_ERR_PDF_EXPORT_ABORTED", "PDF export aborted")
+#define STR_WARN_PDFUA_ISSUES                   NNC_("STR_WARN_PDFUA_ISSUES", "One accessibility issue detected. Do you want to continue?", "%1 accessibility issues detected. Do you want to continue?")
+#define STR_PDFUA_IGNORE                        NC_("STR_PDFUA_IGNORE", "Continue")
+#define STR_PDFUA_INVESTIGATE                   NNC_("STR_PDFUA_INVESTIGATE", "Investigate issue", "Investigate issues")
 
 // Progress bar status indicator when importing or exporting
 #define STR_FILTER_DOC_LOADING                  NC_("STR_FILTER_DOC_LOADING", "Loading: ")
@@ -83,6 +87,11 @@
 static inline OUString FilterResId(TranslateId aId)
 {
     return Translate::get(aId, Translate::Create("flt"));
+}
+
+static inline OUString FilterResId(TranslateNId aContextSingularPlural, int nCardinality)
+{
+    return Translate::nget(aContextSingularPlural, nCardinality, Translate::Create("flt"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

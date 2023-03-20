@@ -31,7 +31,7 @@ using namespace css;
 
 namespace sfx2::sidebar {
 
-void Sidebar::ToggleDeck(std::u16string_view rsDeckId, SfxViewFrame* pViewFrame)
+void Sidebar::ShowDeck(std::u16string_view rsDeckId, SfxViewFrame* pViewFrame, bool bToggle)
 {
     if (!pViewFrame)
         return;
@@ -46,7 +46,7 @@ void Sidebar::ToggleDeck(std::u16string_view rsDeckId, SfxViewFrame* pViewFrame)
     if (!pController)
         return;
 
-    if (bInitiallyVisible && pController->IsDeckVisible(rsDeckId))
+    if (bToggle && bInitiallyVisible && pController->IsDeckVisible(rsDeckId))
     {
         // close the sidebar if it was already visible and showing this sidebar deck
         const util::URL aURL(Tools::GetURL(".uno:Sidebar"));

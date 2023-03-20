@@ -4336,7 +4336,7 @@ SfxVoidItem StylePreview SID_STYLE_PREVIEW
 ]
 
 SfxVoidItem SidebarDeck SID_SIDEBAR_DECK
-(SfxStringItem SidebarDeck SID_SIDEBAR_DECK)
+(SfxStringItem SidebarDeck SID_SIDEBAR_DECK, SfxBoolItem SidebarDeckToggle SID_SIDEBAR_DECK_TOGGLE)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

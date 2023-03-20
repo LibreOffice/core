@@ -26,7 +26,10 @@
 #include <sfx2/passwd.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <sfx2/objsh.hxx>
+#include <svl/stritem.hxx>
 #include <svx/AccessibilityCheckDialog.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/sfxsids.hrc>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -333,16 +336,35 @@ IMPL_LINK_NOARG(ImpPDFTabDialog, OkHdl, weld::Button&, void)
         if (pShell)
         {
             sfx::AccessibilityIssueCollection aCollection = pShell->runAccessibilityCheck();
-            if (!aCollection.getIssues().empty())
+            auto aIssues = aCollection.getIssues();
+            int nIssueCount(aIssues.size());
+            if (!aIssues.empty())
             {
-                mpAccessibilityCheckDialog = std::make_shared<svx::AccessibilityCheckDialog>(
-                    m_xDialog.get(), aCollection, [pShell]() -> sfx::AccessibilityIssueCollection {
-                        return pShell->runAccessibilityCheck();
-                    });
-                mpAccessibilityCheckDialog->getDialog()->set_modal(true);
-                weld::DialogController::runAsync(mpAccessibilityCheckDialog, [this](sal_Int32 retValue){
-                    m_xDialog->response(retValue);
-                });
+                OUString aMessage(FilterResId(STR_WARN_PDFUA_ISSUES, nIssueCount));
+                aMessage = aMessage.replaceFirst("%1", OUString::number(nIssueCount));
+
+                std::unique_ptr<weld::MessageDialog> xPDFUADialog(Application::CreateMessageDialog(
+                    getGeneralPage()->GetFrameWeld(), VclMessageType::Warning,
+                    VclButtonsType::Cancel, aMessage));
+                xPDFUADialog->add_button(FilterResId(STR_PDFUA_INVESTIGATE, nIssueCount), RET_NO);
+                xPDFUADialog->add_button(FilterResId(STR_PDFUA_IGNORE), RET_YES);
+                xPDFUADialog->set_default_response(RET_YES);
+
+                int ret = xPDFUADialog->run();
+                if (ret == RET_YES)
+                    m_xDialog->response(RET_OK);
+                else if (ret == RET_NO)
+                {
+                    m_xDialog->response(RET_CANCEL);
+                    // Show accessiblity check Sidebar deck
+                    SfxDispatcher* pDispatcher = pShell->GetDispatcher();
+                    if (pDispatcher)
+                    {
+                        const SfxStringItem sDeckName(SID_SIDEBAR_DECK, "A11yCheckDeck");
+                        pDispatcher->ExecuteList(SID_SIDEBAR_DECK, SfxCallMode::RECORD,
+                                                 { &sDeckName });
+                    }
+                }
             }
             else
             {

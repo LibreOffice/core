@@ -3346,7 +3346,9 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
         if (pDeckIdItem)
         {
             const OUString aDeckId(pDeckIdItem->GetValue());
-            ::sfx2::sidebar::Sidebar::ToggleDeck(aDeckId, this);
+            const SfxBoolItem* pToggleItem = rReq.GetArg<SfxBoolItem>(SID_SIDEBAR_DECK_TOGGLE);
+            bool bToggle = pToggleItem && pToggleItem->GetValue();
+            ::sfx2::sidebar::Sidebar::ShowDeck(aDeckId, this, bToggle);
         }
         rReq.Done();
         return;
