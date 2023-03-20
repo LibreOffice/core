@@ -279,6 +279,8 @@ void DocxAttributeOutput::TableDefinition(
                                        pAttributes);
         m_pSerializer->singleElementNS(XML_w, XML_tblpPr, pAttributes);
         bFloatingTableWritten = true;
+        // The outer table was floating, make sure potential inner tables are not floating.
+        m_rExport.SetFloatingTableFrame(nullptr);
     }
 
     // Extract properties from grab bag

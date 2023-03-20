@@ -1618,7 +1618,9 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                 // Only execute the conversion if the table is not anchored at
                 // the start of an outer table cell, that's not yet
                 // implemented.
-                if (xTextAppendAndConvert.is() && !bTableStartsAtCellStart)
+                // Tables starting at cell start are not a problem if we don't delay via
+                // m_aPendingFloatingTables.
+                if (xTextAppendAndConvert.is() && (!bTableStartsAtCellStart || IsFlySplitAllowed()))
                 {
                     std::deque<css::uno::Any> aFramedRedlines = m_rDMapper_Impl.m_aStoredRedlines[StoredRedlines::FRAME];
                     std::vector<sal_Int32> redPos, redLen;
