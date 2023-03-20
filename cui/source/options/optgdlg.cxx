@@ -537,7 +537,6 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xForceSkiaRaster(m_xBuilder->weld_check_button("forceskiaraster"))
     , m_xSkiaStatusEnabled(m_xBuilder->weld_label("skiaenabled"))
     , m_xSkiaStatusDisabled(m_xBuilder->weld_label("skiadisabled"))
-    , m_xMousePosLB(m_xBuilder->weld_combo_box("mousepos"))
     , m_xMouseMiddleLB(m_xBuilder->weld_combo_box("mousemiddle"))
     , m_xMoreIcons(m_xBuilder->weld_button("btnMoreIcons"))
     , m_xRunGPTests(m_xBuilder->weld_button("btn_rungptest"))
@@ -731,18 +730,6 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     bool bAppearanceChanged = false;
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
-    // Mouse Snap Mode
-    SnapType eOldSnap = static_cast<SnapType>(officecfg::Office::Common::View::Dialog::MousePositioning::get());
-    SnapType eNewSnap = static_cast<SnapType>(m_xMousePosLB->get_active());
-    if(eNewSnap > SnapType::NONE)
-        eNewSnap = SnapType::NONE;
-
-    if ( eNewSnap != eOldSnap )
-    {
-        officecfg::Office::Common::View::Dialog::MousePositioning::set(static_cast<sal_Int16>(eNewSnap), batch);
-        bAppearanceChanged = true;
-    }
-
     // Middle Mouse Button
     MouseMiddleButtonAction eOldMiddleMouse = static_cast<MouseMiddleButtonAction>(officecfg::Office::Common::View::Dialog::MiddleMouseButton::get());
     short eNewMiddleMouse = m_xMouseMiddleLB->get_active();
@@ -914,12 +901,7 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_xAppearanceStyleLB->set_active(officecfg::Office::Common::Misc::Appearance::get());
     m_xAppearanceStyleLB->save_value();
 
-    // Mouse Snap
-    sal_Int16 nMouseSnap = officecfg::Office::Common::View::Dialog::MousePositioning::get();
-    m_xMousePosLB->set_active(static_cast<sal_Int32>(nMouseSnap));
-    m_xMousePosLB->save_value();
-
-    // Mouse Snap
+    // Middle Mouse Button
     sal_Int16 nMiddleMouseButton = officecfg::Office::Common::View::Dialog::MiddleMouseButton::get();
     m_xMouseMiddleLB->set_active(static_cast<short>(nMiddleMouseButton));
     m_xMouseMiddleLB->save_value();

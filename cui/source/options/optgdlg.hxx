@@ -105,7 +105,6 @@ private:
     std::unique_ptr<weld::Label> m_xSkiaStatusEnabled;
     std::unique_ptr<weld::Label> m_xSkiaStatusDisabled;
 
-    std::unique_ptr<weld::ComboBox> m_xMousePosLB;
     std::unique_ptr<weld::ComboBox> m_xMouseMiddleLB;
     std::unique_ptr<weld::Button> m_xMoreIcons;
     std::unique_ptr<weld::Button> m_xRunGPTests;

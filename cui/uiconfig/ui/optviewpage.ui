@@ -37,7 +37,7 @@
             <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=2 n-rows=2 -->
+              <!-- n-columns=2 n-rows=1 -->
               <object class="GtkGrid" id="grid7">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -46,20 +46,6 @@
                 <property name="hexpand">True</property>
                 <property name="row-spacing">3</property>
                 <property name="column-spacing">6</property>
-                <child>
-                  <object class="GtkLabel" id="label11">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="optviewpage|label11">_Positioning:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">mousepos</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
                 <child>
                   <object class="GtkLabel" id="label12">
                     <property name="visible">True</property>
@@ -71,27 +57,6 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="mousepos">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <items>
-                      <item translatable="yes" context="optviewpage|mousepos">Default button</item>
-                      <item translatable="yes" context="optviewpage|mousepos">Dialog center</item>
-                      <item translatable="yes" context="optviewpage|mousepos">No automatic positioning</item>
-                    </items>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="mousepos-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | mousepos">Specifies if and how the mouse pointer will be positioned in newly opened dialogs.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
                     <property name="top-attach">0</property>
                   </packing>
                 </child>
@@ -113,7 +78,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
-                    <property name="top-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
               </object>
@@ -714,7 +679,6 @@
   </object>
   <object class="GtkSizeGroup" id="sizegroupLabel">
     <widgets>
-      <widget name="label11"/>
       <widget name="label12"/>
       <widget name="label8"/>
       <widget name="label9"/>
@@ -725,7 +689,6 @@
   </object>
   <object class="GtkSizeGroup" id="sizegroupWidget">
     <widgets>
-      <widget name="mousepos"/>
       <widget name="mousemiddle"/>
       <widget name="notebookbariconsize"/>
       <widget name="sidebariconsize"/>
