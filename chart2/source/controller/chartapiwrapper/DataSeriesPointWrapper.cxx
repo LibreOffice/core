@@ -247,30 +247,16 @@ uno::Sequence< Property > lcl_GetPropertySequence( DataSeriesPointWrapper::eType
     return comphelper::containerToSequence( aProperties );
 }
 
-struct StaticSeriesWrapperPropertyArray_Initializer
+const Sequence< Property >& StaticSeriesWrapperPropertyArray()
 {
-    Sequence< Property >* operator()()
-    {
-        static Sequence< Property > aPropSeq( lcl_GetPropertySequence( DataSeriesPointWrapper::DATA_SERIES ) );
-        return &aPropSeq;
-    }
+    static Sequence< Property > aPropSeq( lcl_GetPropertySequence( DataSeriesPointWrapper::DATA_SERIES ) );
+    return aPropSeq;
 };
 
-struct StaticSeriesWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticSeriesWrapperPropertyArray_Initializer >
+const Sequence< Property >& StaticPointWrapperPropertyArray()
 {
-};
-
-struct StaticPointWrapperPropertyArray_Initializer
-{
-    Sequence< Property >* operator()()
-    {
-        static Sequence< Property > aPropSeq( lcl_GetPropertySequence( DataSeriesPointWrapper::DATA_POINT ) );
-        return &aPropSeq;
-    }
-};
-
-struct StaticPointWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticPointWrapperPropertyArray_Initializer >
-{
+    static Sequence< Property > aPropSeq( lcl_GetPropertySequence( DataSeriesPointWrapper::DATA_POINT ) );
+    return aPropSeq;
 };
 
 //PROP_SERIES_ATTACHED_AXIS
@@ -720,9 +706,9 @@ Reference< beans::XPropertySet > DataSeriesPointWrapper::getInnerPropertySet()
 const Sequence< beans::Property >& DataSeriesPointWrapper::getPropertySequence()
 {
     if( m_eType == DATA_SERIES )
-        return *StaticSeriesWrapperPropertyArray::get();
+        return StaticSeriesWrapperPropertyArray();
     else
-        return *StaticPointWrapperPropertyArray::get();
+        return StaticPointWrapperPropertyArray();
 }
 
 std::vector< std::unique_ptr<WrappedProperty> > DataSeriesPointWrapper::createWrappedProperties()

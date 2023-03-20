@@ -225,35 +225,25 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
-struct StaticLegendWrapperPropertyArray_Initializer
+const Sequence< Property >& StaticLegendWrapperPropertyArray()
 {
-    Sequence< Property >* operator()()
-    {
-        static Sequence< Property > aPropSeq( lcl_GetPropertySequence() );
-        return &aPropSeq;
-    }
+    static Sequence< Property > aPropSeq = []()
+        {
+            std::vector< css::beans::Property > aProperties;
+            lcl_AddPropertiesToVector( aProperties );
+            ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
+            ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
+            ::chart::FillProperties::AddPropertiesToVector( aProperties );
+            ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
+            ::chart::wrapper::WrappedAutomaticPositionProperties::addProperties( aProperties );
+            ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
 
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-        ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
-        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
-        ::chart::FillProperties::AddPropertiesToVector( aProperties );
-        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
-        ::chart::wrapper::WrappedAutomaticPositionProperties::addProperties( aProperties );
-        ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
+            std::sort( aProperties.begin(), aProperties.end(),
+                         ::chart::PropertyNameLess() );
 
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-};
-
-struct StaticLegendWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticLegendWrapperPropertyArray_Initializer >
-{
+            return comphelper::containerToSequence( aProperties );
+        }();
+    return aPropSeq;
 };
 
 } // anonymous namespace
@@ -380,7 +370,7 @@ Reference< beans::XPropertySet > LegendWrapper::getInnerPropertySet()
 
 const Sequence< beans::Property >& LegendWrapper::getPropertySequence()
 {
-    return *StaticLegendWrapperPropertyArray::get();
+    return StaticLegendWrapperPropertyArray();
 }
 
 std::vector< std::unique_ptr<WrappedProperty> > LegendWrapper::createWrappedProperties()

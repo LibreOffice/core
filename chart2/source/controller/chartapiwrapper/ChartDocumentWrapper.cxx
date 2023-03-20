@@ -221,30 +221,20 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
-struct StaticChartDocumentWrapperPropertyArray_Initializer
+const Sequence< Property > &  StaticChartDocumentWrapperPropertyArray()
 {
-    Sequence< Property >* operator()()
-    {
-        static Sequence< Property > aPropSeq( lcl_GetPropertySequence() );
-        return &aPropSeq;
-    }
+    static Sequence< Property > aPropSeq = []()
+        {
+            std::vector< css::beans::Property > aProperties;
+            lcl_AddPropertiesToVector( aProperties );
 
-private:
-    static uno::Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
+            std::sort( aProperties.begin(), aProperties.end(),
+                         ::chart::PropertyNameLess() );
 
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-};
-
-struct StaticChartDocumentWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticChartDocumentWrapperPropertyArray_Initializer >
-{
-};
+            return comphelper::containerToSequence( aProperties );
+        }();
+    return aPropSeq;
+}
 
 } //  anonymous namespace
 
@@ -1384,7 +1374,7 @@ Reference< beans::XPropertySet > ChartDocumentWrapper::getInnerPropertySet()
 }
 const Sequence< beans::Property >& ChartDocumentWrapper::getPropertySequence()
 {
-    return *StaticChartDocumentWrapperPropertyArray::get();
+    return StaticChartDocumentWrapperPropertyArray();
 }
 
 std::vector< std::unique_ptr<WrappedProperty> > ChartDocumentWrapper::createWrappedProperties()

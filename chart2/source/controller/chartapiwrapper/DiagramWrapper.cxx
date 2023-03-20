@@ -386,39 +386,29 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID );
 }
 
-struct StaticDiagramWrapperPropertyArray_Initializer
+const Sequence< Property >& StaticDiagramWrapperPropertyArray()
 {
-    Sequence< Property >* operator()()
-    {
-        static Sequence< Property > aPropSeq( lcl_GetPropertySequence() );
-        return &aPropSeq;
-    }
+    static Sequence< Property > aPropSeq = []()
+        {
+            std::vector< css::beans::Property > aProperties;
+            lcl_AddPropertiesToVector( aProperties );
+            ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
+            ::chart::FillProperties::AddPropertiesToVector( aProperties );
+            ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
+            ::chart::SceneProperties::AddPropertiesToVector( aProperties );
+            WrappedStatisticProperties::addProperties( aProperties );
+            WrappedSymbolProperties::addProperties( aProperties );
+            WrappedDataCaptionProperties::addProperties( aProperties );
+            WrappedSplineProperties::addProperties( aProperties );
+            WrappedStockProperties::addProperties( aProperties );
+            WrappedAutomaticPositionProperties::addProperties( aProperties );
 
-private:
-    static uno::Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
-        ::chart::FillProperties::AddPropertiesToVector( aProperties );
-        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
-        ::chart::SceneProperties::AddPropertiesToVector( aProperties );
-        WrappedStatisticProperties::addProperties( aProperties );
-        WrappedSymbolProperties::addProperties( aProperties );
-        WrappedDataCaptionProperties::addProperties( aProperties );
-        WrappedSplineProperties::addProperties( aProperties );
-        WrappedStockProperties::addProperties( aProperties );
-        WrappedAutomaticPositionProperties::addProperties( aProperties );
+            std::sort( aProperties.begin(), aProperties.end(),
+                         ::chart::PropertyNameLess() );
 
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-};
-
-struct StaticDiagramWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticDiagramWrapperPropertyArray_Initializer >
-{
+            return comphelper::containerToSequence( aProperties );
+        }();
+    return aPropSeq;
 };
 
 bool lcl_isXYChart( const rtl::Reference< ::chart::Diagram >& xDiagram )
@@ -1842,7 +1832,7 @@ Reference< beans::XPropertySet > DiagramWrapper::getInnerPropertySet()
 
 const Sequence< beans::Property >& DiagramWrapper::getPropertySequence()
 {
-    return *StaticDiagramWrapperPropertyArray::get();
+    return StaticDiagramWrapperPropertyArray();
 }
 
 std::vector< std::unique_ptr<WrappedProperty> > DiagramWrapper::createWrappedProperties()

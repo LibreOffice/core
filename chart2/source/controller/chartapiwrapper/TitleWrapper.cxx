@@ -153,36 +153,27 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
-struct StaticTitleWrapperPropertyArray_Initializer
+const Sequence< Property > & StaticTitleWrapperPropertyArray()
 {
-    Sequence< Property >* operator()()
-    {
-        static Sequence< Property > aPropSeq( lcl_GetPropertySequence() );
-        return &aPropSeq;
-    }
+    static Sequence< Property > aPropSeq = []()
+        {
+            std::vector< beans::Property > aProperties;
+            lcl_AddPropertiesToVector( aProperties );
+            ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
+            ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
+            ::chart::FillProperties::AddPropertiesToVector( aProperties );
+            ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
+            ::chart::wrapper::WrappedAutomaticPositionProperties::addProperties( aProperties );
+            ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
 
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-        ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
-        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
-        ::chart::FillProperties::AddPropertiesToVector( aProperties );
-        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
-        ::chart::wrapper::WrappedAutomaticPositionProperties::addProperties( aProperties );
-        ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
+            std::sort( aProperties.begin(), aProperties.end(),
+                         ::chart::PropertyNameLess() );
 
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
+            return comphelper::containerToSequence( aProperties );
+        }();
+    return aPropSeq;
 };
 
-struct StaticTitleWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticTitleWrapperPropertyArray_Initializer >
-{
-};
 
 } // anonymous namespace
 
@@ -470,7 +461,7 @@ Reference< beans::XPropertySet > TitleWrapper::getInnerPropertySet()
 
 const Sequence< beans::Property >& TitleWrapper::getPropertySequence()
 {
-    return *StaticTitleWrapperPropertyArray::get();
+    return StaticTitleWrapperPropertyArray();
 }
 
 std::vector< std::unique_ptr<WrappedProperty> > TitleWrapper::createWrappedProperties()
