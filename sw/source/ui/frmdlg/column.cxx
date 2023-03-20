@@ -89,7 +89,7 @@ SwColumnDlg::SwColumnDlg(weld::Window* pParent, SwWrtShell& rSh)
     , m_bSectionChanged(false)
     , m_bSelSectionChanged(false)
     , m_bFrameChanged(false)
-    , m_xContentArea(m_xDialog->weld_content_area())
+    , m_xContentArea(m_xBuilder->weld_container("content"))
     , m_xOkButton(m_xBuilder->weld_button("ok"))
 {
     SwRect aRect;
