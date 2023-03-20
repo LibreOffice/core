@@ -80,6 +80,7 @@ else
 		$(gb_TEST_ENV_VARS) \
 		$(gb_UITest_COMMAND) \
 		--soffice="$(gb_UITest_SOFFICEARG)" \
+		$(if $(ONEPROCESS),--oneprocess) \
 		--userdir=$(call gb_Helper_make_url,$(dir $(call gb_UITest_get_target,$*))user) \
 		--dir=$(strip $(MODULES)) \
 		$(gb_UITest_GDBTRACE) \
@@ -104,6 +105,7 @@ $(call gb_UITest_get_target,$(1)) : MODULES :=
 $(eval $(call gb_TestHelpers_use_more_fonts,$(call gb_UITest_get_target,$(1))))
 $(eval $(call gb_Module_register_target,$(call gb_UITest_get_target,$(1)),$(call gb_UITest_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),UITest)
+$(call gb_UITest_get_target,$(1)) : ONEPROCESS := $(false)
 
 endef
 
@@ -131,6 +133,10 @@ endef
 
 define gb_UITest_use_configuration
 $(call gb_UITest_get_target,$(1)) : gb_UITest_use_config := $(2)
+endef
+
+define gb_UITest_use_oneprocess
+$(call gb_UITest_get_target,$(1)) : ONEPROCESS := $(true)
 endef
 
 

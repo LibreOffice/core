@@ -15,19 +15,29 @@ from libreoffice.connection import PersistentConnection
 
 class UITestCase(unittest.TestCase):
 
-    def __init__(self, test_name, opts):
+    def __init__(self, test_name, opts, connection=None):
         unittest.TestCase.__init__(self, test_name)
         self.opts = opts
+        self.parent_connection = connection
+        self.connection = None
+
+    def getConnection(self):
+        if self.parent_connection:
+            return self.parent_connection
+        return self.connection
 
     def setUp(self):
         self.setSignalHandler()
-        self.connection = PersistentConnection(self.opts)
-        self.connection.setUp()
-        self.xContext = self.connection.getContext()
+        if not self.getConnection():
+            self.connection = PersistentConnection(self.opts)
+            self.connection.setUp()
+        self.xContext = self.getConnection().getContext()
         self.xUITest = self.xContext.ServiceManager.createInstanceWithContext(
                 "org.libreoffice.uitest.UITest", self.xContext)
 
         self.ui_test = UITest(self.xUITest, self.xContext)
+        if self.parent_connection:
+            self.ui_test.set_use_dispose(False)
         self.startTime = time.time()
 
     def tearDown(self):
@@ -43,14 +53,16 @@ class UITestCase(unittest.TestCase):
                 except Exception as e:
                     print(e)
 
-            self.connection.tearDown()
+            if self.connection:
+                self.connection.tearDown()
         finally:
             self.resetSignalHandler()
-            self.connection.kill()
+            if self.connection:
+                self.connection.kill()
 
     def signalHandler(self, signum, frame):
-        if self.connection:
-            self.connection.kill()
+        if self.getConnection():
+            self.getConnection().kill()
 
     def setSignalHandler(self):
         signal.signal(signal.SIGABRT, self.signalHandler)

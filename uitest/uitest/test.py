@@ -22,6 +22,10 @@ class UITest(object):
         self._xUITest = xUITest
         self._xContext = xContext
         self._desktop = None
+        self.use_dispose = True
+
+    def set_use_dispose(self, use_dispose):
+        self.use_dispose = use_dispose
 
     def get_desktop(self):
         if self._desktop:
@@ -207,7 +211,14 @@ class UITest(object):
         if not component:
             print("close_doc: active frame has no component")
             return
-        component.dispose()
+        if self.use_dispose:
+            component.dispose()
+        else:
+            if component.isModified():
+                with self.execute_dialog_through_command('.uno:CloseDoc', close_button="discard") as xConfirmationDialog:
+                    pass
+            else:
+                self._xUITest.executeCommand(".uno:CloseDoc")
         frames = desktop.getFrames()
         if frames:
             frames[0].activate()

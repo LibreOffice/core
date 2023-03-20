@@ -16,12 +16,13 @@ import types
 from uitest.framework import UITestCase
 
 from libreoffice.connection import OfficeConnection
+from libreoffice.connection import PersistentConnection
 
 test_name_limit_found = False
 
 def parseArgs(argv):
     (optlist,args) = getopt.getopt(argv[1:], "hr",
-            ["help", "soffice=", "userdir=", "dir=", "file=", "gdb"])
+            ["help", "soffice=", "oneprocess", "userdir=", "dir=", "file=", "gdb"])
     return (dict(optlist), args)
 
 def usage():
@@ -94,7 +95,7 @@ def add_tests_for_file(test_file, test_suite):
                     continue
                 test_name_limit_found = True
 
-            obj = c(test_name, opts)
+            obj = c(test_name, opts, connection)
             test_suite.addTest(obj)
 
 def get_test_suite_for_dir(opts):
@@ -108,6 +109,10 @@ def get_test_suite_for_dir(opts):
 
 if __name__ == '__main__':
     (opts,args) = parseArgs(sys.argv)
+    connection = None
+    if "--oneprocess" in opts:
+        connection = PersistentConnection(opts)
+        connection.setUp()
     if "-h" in opts or "--help" in opts:
         usage()
         sys.exit()
@@ -135,6 +140,9 @@ if __name__ == '__main__':
     print("Tests failed: %d" % len(result.failures))
     print("Tests errors: %d" % len(result.errors))
     print("Tests skipped: %d" % len(result.skipped))
+    if connection:
+        connection.tearDown()
+        connection.kill()
     if not result.wasSuccessful():
         sys.exit(1)
     sys.exit(0)
