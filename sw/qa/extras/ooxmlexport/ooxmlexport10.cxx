@@ -45,6 +45,12 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <IDocumentLayoutAccess.hxx>
+#include <rootfrm.hxx>
+#include <pagefrm.hxx>
+#include <flyfrms.hxx>
+#include <sortedobjs.hxx>
+#include <txtfrm.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -1217,16 +1223,45 @@ DECLARE_OOXMLEXPORT_TEST(testTdf97371, "tdf97371.docx")
     CPPUNIT_ASSERT(nDiff < 10);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf99140, "tdf99140.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf99140)
 {
-    // This was 1: a multi-page floating table was imported as a TextFrame.
-    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+    SwModelTestBase::FlySplitGuard aGuard;
+    auto verify = [this]() {
+        // A multi-page floating table appeared only on the first page.
+        SwDoc* pDoc = getSwDoc();
+        SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+        auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+        CPPUNIT_ASSERT(pPage1);
+        const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+        auto pPage1Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage1Objs[0]);
+        CPPUNIT_ASSERT(pPage1Fly);
+        SwFrame* pTab1 = pPage1Fly->GetLower();
+        // This was text::HoriOrientation::NONE, the second table was too wide due to this.
+        CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(9622), pTab1->getFrameArea().Width());
+        SwFrame* pRow1 = pTab1->GetLower();
+        SwFrame* pCell1 = pRow1->GetLower();
+        auto pText1 = dynamic_cast<SwTextFrame*>(pCell1->GetLower());
+        CPPUNIT_ASSERT(pText1);
+        CPPUNIT_ASSERT_EQUAL(OUString("Table2:A1"), pText1->GetText());
 
-    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xTableProperties(xTables->getByIndex(1), uno::UNO_QUERY);
-    // This was text::HoriOrientation::NONE, the second table was too wide due to this.
-    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::LEFT_AND_WIDTH, getProperty<sal_Int16>(xTableProperties, "HoriOrient"));
+        auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
+        CPPUNIT_ASSERT(pPage2);
+        const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
+        auto pPage2Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage2Objs[0]);
+        CPPUNIT_ASSERT(pPage2Fly);
+        SwFrame* pTab2 = pPage2Fly->GetLower();
+        SwFrame* pRow2 = pTab2->GetLower();
+        SwFrame* pCell2 = pRow2->GetLower();
+        auto pText2 = dynamic_cast<SwTextFrame*>(pCell2->GetLower());
+        CPPUNIT_ASSERT(pText2);
+        CPPUNIT_ASSERT_EQUAL(OUString("Table2:A2"), pText2->GetText());
+    };
+    createSwDoc("tdf99140.docx");
+    verify();
+    reload(mpFilter, "tdf99140.docx");
+    verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTableMarginAdjustment)
