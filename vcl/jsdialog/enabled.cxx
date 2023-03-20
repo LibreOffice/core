@@ -55,6 +55,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"cui/ui/queryduplicatedialog.ui"
         || rUIFile == u"cui/ui/similaritysearchdialog.ui"
         || rUIFile == u"cui/ui/specialcharacters.ui"
+        || rUIFile == u"cui/ui/spellingdialog.ui"
         || rUIFile == u"cui/ui/splitcellsdialog.ui"
         || rUIFile == u"cui/ui/textflowpage.ui"
         || rUIFile == u"cui/ui/transparencytabpage.ui"
