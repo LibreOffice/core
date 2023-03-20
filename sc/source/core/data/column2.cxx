@@ -808,6 +808,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
 
         // Go though all non-empty cells within selection.
         sc::CellStoreType::const_iterator itPos = maCells.begin();
+        // coverity[auto_causes_copy] This trivial copy is intentional
         for (auto [ nRow, nRow2 ] : aMarkedSpans)
         {
             while (nRow <= nRow2)
