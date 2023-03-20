@@ -520,6 +520,16 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testUTF16_nonBMP)
                          getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf154273)
+{
+    createSwWebDoc("tdf154273.html");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 'test'
+    // - Actual  : &apos;test&apos;
+    CPPUNIT_ASSERT_EQUAL(OUString("'test' "), getParagraph(1)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleData)
 {
     // Given an XHTML with an <object> (containing non-image, non-OLE2 data) and an inner <object>
