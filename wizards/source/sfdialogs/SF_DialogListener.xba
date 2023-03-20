@@ -55,7 +55,7 @@ Dim oControl As Object				&apos;	The SF_DialogControl object having triggered th
 
 	On Local Error GoTo Catch		&apos;	Avoid stopping event scripts
 
-Check:	
+Check:
 	&apos;	Ensure there is a node
 	If IsNull(poEvent) Or IsMissing(poEvent) Then Exit Sub
 	If IsNull(poEvent.Node) Then Exit Sub

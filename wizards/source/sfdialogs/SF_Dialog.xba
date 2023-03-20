@@ -74,7 +74,7 @@ Private _DialogModel		As Object		&apos; com.sun.star.awt.XControlModel - stardiv
 Private _Displayed			As Boolean		&apos; True after Execute()
 Private _Modal				As Boolean		&apos; Set by Execute()
 
-&apos;	Dialog position and dimensions
+&apos;	Dialog position and dimensions in pixels
 Private _Left				As Long
 Private _Top				As Long
 Private _Width				As Long
@@ -885,7 +885,7 @@ Public Function Resize(Optional ByVal Left As Variant _
 								, Optional ByVal Height As Variant _
 								) As Boolean
 &apos;&apos;&apos;	Move the top-left corner of a dialog to new coordinates and/or modify its dimensions
-&apos;&apos;&apos;	All distances are expressed in 1/100 mm.
+&apos;&apos;&apos;	All distances are expressed in pixels.
 &apos;&apos;&apos;	Without arguments, the method resets the initial dimensions
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		Left : the horizontal distance from the top-left corner
@@ -932,10 +932,10 @@ Try:
 		&apos;	Trace the elements to change
 		iFlags = 0
 		With com.sun.star.awt.PosSize
-			If Left &gt;= 0	Then iFlags = iFlags + .X		Else Left = oPosSize.X
-			If Top &gt;= 0	Then iFlags = iFlags + .Y			Else Top = oPosSize.Y
-			If Width &gt; 0	Then iFlags = iFlags + .WIDTH	Else Width = oPosSize.Width
-			If Height &gt; 0	Then iFlags = iFlags + .HEIGHT	Else Height = oPosSize.Height
+			If CLng(Left) &gt;= 0	Then iFlags = iFlags + .X		Else Left = oPosSize.X
+			If CLng(Top) &gt;= 0	Then iFlags = iFlags + .Y		Else Top = oPosSize.Y
+			If CLng(Width) &gt; 0	Then iFlags = iFlags + .WIDTH	Else Width = oPosSize.Width
+			If CLng(Height) &gt; 0	Then iFlags = iFlags + .HEIGHT	Else Height = oPosSize.Height
 		End With
 		&apos;	Rewrite
 		If iFlags &gt; 0 Then .setPosSize(CLng(Left), CLng(Top), CLng(Width), CLng(Height), iFlags)
@@ -948,7 +948,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	SF_Documents.SF_Dialog.Resize
+End Function	&apos;	SFDialogss.SF_Dialog.Resize
 
 REM -----------------------------------------------------------------------------
 Public Function SetPageManager(Optional ByVal PilotControls As Variant _
@@ -1386,7 +1386,7 @@ Const cstSubArgs = &quot;&quot;
 		Case UCase(&quot;Caption&quot;)
 			If oSession.HasUNOProperty(_DialogModel, &quot;Title&quot;) Then _PropertyGet = _DialogModel.Title
 		Case UCase(&quot;Height&quot;)
-			If oSession.HasUNOProperty(_DialogModel, &quot;Height&quot;) Then _PropertyGet = _DialogModel.Height
+			If oSession.HasUNOMethod(_DialogControl, &quot;getPosSize&quot;) Then _PropertyGet = _DialogControl.getPosSize().Height
 		Case UCase(&quot;Modal&quot;)
 			_PropertyGet = _Modal
 		Case UCase(&quot;Name&quot;)
@@ -1420,7 +1420,7 @@ Const cstSubArgs = &quot;&quot;
 		Case UCase(&quot;Visible&quot;)
 			If oSession.HasUnoMethod(_DialogControl, &quot;isVisible&quot;) Then _PropertyGet = CBool(_DialogControl.isVisible())
 		Case UCase(&quot;Width&quot;)
-			If oSession.HasUNOProperty(_DialogModel, &quot;Width&quot;) Then _PropertyGet = _DialogModel.Width
+			If oSession.HasUNOMethod(_DialogControl, &quot;getPosSize&quot;) Then _PropertyGet = _DialogControl.getPosSize().Width
 		Case UCase(&quot;XDialogModel&quot;)
 			Set _PropertyGet = _DialogModel
 		Case UCase(&quot;XDialogView&quot;)
@@ -1467,7 +1467,7 @@ Const cstSubArgs = &quot;Value&quot;
 			If oSession.HasUNOProperty(_DialogModel, &quot;Title&quot;) Then _DialogModel.Title = pvValue
 		Case UCase(&quot;Height&quot;)
 			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Height&quot;, ScriptForge.V_NUMERIC) Then GoTo Catch
-			If oSession.HasUNOProperty(_DialogModel, &quot;Height&quot;) Then _DialogModel.Height = pvValue
+			If oSession.HasUnoMethod(_DialogControl, &quot;setPosSize&quot;) Then _DialogControl.setPosSize(-1, -1, -1, CLng(pvValue), com.sun.star.awt.PosSize.HEIGHT)
 		Case UCase(&quot;OnFocusGained&quot;), UCase(&quot;OnFocusLost&quot;), UCase(&quot;OnKeyPressed&quot;), UCase(&quot;OnKeyReleased&quot;) _
 				, UCase(&quot;OnMouseDragged&quot;), UCase(&quot;OnMouseEntered&quot;), UCase(&quot;OnMouseExited&quot;), UCase(&quot;OnMouseMoved&quot;) _
 				, UCase(&quot;OnMousePressed&quot;), UCase(&quot;OnMouseReleased&quot;)
@@ -1485,7 +1485,7 @@ Const cstSubArgs = &quot;Value&quot;
 			If oSession.HasUnoMethod(_DialogControl, &quot;setVisible&quot;) Then _DialogControl.setVisible(pvValue)
 		Case UCase(&quot;Width&quot;)
 			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Width&quot;, ScriptForge.V_NUMERIC) Then GoTo Catch
-			If oSession.HasUNOProperty(_DialogModel, &quot;Width&quot;) Then _DialogModel.Width = pvValue
+			If oSession.HasUnoMethod(_DialogControl, &quot;setPosSize&quot;) Then _DialogControl.setPosSize(-1, -1, CLng(pvValue), -1, com.sun.star.awt.PosSize.WIDTH)
 		Case Else
 			bSet = False
 	End Select

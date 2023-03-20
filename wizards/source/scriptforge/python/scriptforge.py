@@ -1904,7 +1904,7 @@ class SFDialogs:
         servicename = 'SFDialogs.DialogControl'
         servicesynonyms = ()
         serviceproperties = dict(Cancel = True, Caption = True, ControlType = False, CurrentNode = True,
-                                 Default = True, Enabled = True, Format = True, ListCount = False,
+                                 Default = True, Enabled = True, Format = True, Height = True, ListCount = False,
                                  ListIndex = True, Locked = True, MultiSelect = True, Name = False,
                                  OnActionPerformed = True, OnAdjustmentValueChanged = True, OnFocusGained = True,
                                  OnFocusLost = True, OnItemStateChanged = True, OnKeyPressed = True,
@@ -1913,7 +1913,7 @@ class SFDialogs:
                                  OnMouseReleased = True, OnNodeExpanded = True, OnNodeSelected = True,
                                  OnTextChanged = True, Page = True, Parent = False, Picture = True,
                                  RootNode = False, RowSource = True, Text = False, TipText = True,
-                                 TripleState = True, Value = True, Visible = True,
+                                 TripleState = True, Value = True, Visible = True, Width = True, X = True, Y = True,
                                  XControlModel = False, XControlView = False, XGridColumnModel = False,
                                  XGridDataModel = False, XTreeDataModel = False)
 
@@ -1937,6 +1937,9 @@ class SFDialogs:
 
         def FindNode(self, displayvalue, datavalue = ScriptForge.cstSymEmpty, casesensitive = False):
             return self.ExecMethod(self.vbMethod + self.flgUno, 'FindNode', displayvalue, datavalue, casesensitive)
+
+        def Resize(self, left = -1, top = -1, width = -1, height = -1):
+            return self.ExecMethod(self.vbMethod, 'Resize', left, top, width, height)
 
         def SetFocus(self):
             return self.ExecMethod(self.vbMethod, 'SetFocus')

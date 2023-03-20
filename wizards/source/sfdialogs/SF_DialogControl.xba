@@ -75,6 +75,12 @@ Private _GridDataModel		As Object		&apos; com.sun.star.awt.grid.XGridDataModel
 Private	_ImplementationName	As String
 Private _ControlType		As String		&apos; One of the CTLxxx constants
 
+&apos;	Control position and dimensions
+Private _Left				As Long
+Private _Top				As Long
+Private _Width				As Long
+Private _Height				As Long
+
 &apos;	Tree control on-select and on-expand attributes
 &apos;	Tree controls may be associated with events not defined in the Basic IDE
 Private _OnNodeSelected		As String		&apos; Script to invoke when a node is selected
@@ -166,6 +172,11 @@ Private Sub Class_Initialize()
 	Set _GridDataModel = Nothing
 	_ImplementationName = &quot;&quot;
 	_ControlType = &quot;&quot;
+
+	_Left = -1
+	_Top = -1
+	_Width = -1
+	_Height = -1
 
 	_OnNodeSelected = &quot;&quot;
 	_OnNodeExpanded = &quot;&quot;
@@ -299,6 +310,18 @@ Property Let Format(Optional ByVal pvFormat As Variant)
 &apos;&apos;&apos;	NB: Format is read-only for formatted field controls
 	_PropertySet(&quot;Format&quot;, pvFormat)
 End Property	&apos;	SFDialogs.SF_DialogControl.Format (let)
+
+REM -----------------------------------------------------------------------------
+Property Get Height() As Variant
+&apos;&apos;&apos;	The Height property refers to the height of the control
+	Height = _PropertyGet(&quot;Height&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.Height (get)
+
+REM -----------------------------------------------------------------------------
+Property Let Height(Optional ByVal pvHeight As Variant)
+&apos;&apos;&apos;	Set the updatable property Height
+	_PropertySet(&quot;Height&quot;, pvHeight)
+End Property	&apos;	SFDialogs.SF_DialogControl.Height (let)
 
 REM -----------------------------------------------------------------------------
 Property Get ListCount() As Long
@@ -648,6 +671,42 @@ Property Let Visible(Optional ByVal pvVisible As Variant)
 &apos;&apos;&apos;	Set the updatable property Visible
 	_PropertySet(&quot;Visible&quot;, pvVisible)
 End Property	&apos;	SFDialogs.SF_DialogControl.Visible (let)
+
+REM -----------------------------------------------------------------------------
+Property Get Width() As Variant
+&apos;&apos;&apos;	The Width property refers to the Width of the control
+	Width = _PropertyGet(&quot;Width&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.Width (get)
+
+REM -----------------------------------------------------------------------------
+Property Let Width(Optional ByVal pvWidth As Variant)
+&apos;&apos;&apos;	Set the updatable property Width
+	_PropertySet(&quot;Width&quot;, pvWidth)
+End Property	&apos;	SFDialogs.SF_DialogControl.Width (let)
+
+REM -----------------------------------------------------------------------------
+Property Get X() As Variant
+&apos;&apos;&apos;	The X property refers to the X coordinate of the top-left corner of the control
+	X = _PropertyGet(&quot;X&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.X (get)
+
+REM -----------------------------------------------------------------------------
+Property Let X(Optional ByVal pvX As Variant)
+&apos;&apos;&apos;	Set the updatable property X
+	_PropertySet(&quot;X&quot;, pvX)
+End Property	&apos;	SFDialogs.SF_DialogControl.X (let)
+
+REM -----------------------------------------------------------------------------
+Property Get Y() As Variant
+&apos;&apos;&apos;	The Y property refers to the Y coordinate of the top-left corner of the control
+	Y = _PropertyGet(&quot;Y&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.Y (get)
+
+REM -----------------------------------------------------------------------------
+Property Let Y(Optional ByVal pvY As Variant)
+&apos;&apos;&apos;	Set the updatable property Y
+	_PropertySet(&quot;Y&quot;, pvY)
+End Property	&apos;	SFDialogs.SF_DialogControl.Y (let)
 
 REM -----------------------------------------------------------------------------
 Property Get XControlModel() As Object
@@ -1043,6 +1102,7 @@ Public Function Properties() As Variant
 					, &quot;Default&quot; _
 					, &quot;Enabled&quot; _
 					, &quot;Format&quot; _
+					, &quot;Height&quot; _
 					, &quot;ListCount&quot; _
 					, &quot;ListIndex&quot; _
 					, &quot;Locked&quot; _
@@ -1074,14 +1134,89 @@ Public Function Properties() As Variant
 					, &quot;TripleState&quot; _
 					, &quot;Value&quot; _
 					, &quot;Visible&quot; _
+					, &quot;Width&quot; _
+					, &quot;X&quot; _
 					, &quot;XControlModel&quot; _
 					, &quot;XControlView&quot; _
 					, &quot;XGridColumnModel&quot; _
 					, &quot;XGridDataModel&quot; _
 					, &quot;XTreeDataModel&quot; _
+					, &quot;Y&quot; _
 					)
 
 End Function	&apos;	SFDialogs.SF_DialogControl.Properties
+
+REM -----------------------------------------------------------------------------
+Public Function Resize(Optional ByVal Left As Variant _
+								, Optional ByVal Top As Variant _
+								, Optional ByVal Width As Variant _
+								, Optional ByVal Height As Variant _
+								) As Boolean
+&apos;&apos;&apos;	Move the top-left corner of a dialog control to new coordinates and/or modify its dimensions
+&apos;&apos;&apos;	All distances are expressed in pixels and are measured from the top-left corner of the parent dialog.
+&apos;&apos;&apos;	Without arguments, the method resets the initial dimensions.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Left : the horizontal distance from the top-left corner
+&apos;&apos;&apos;		Top : the vertical distance from the top-left corner
+&apos;&apos;&apos;		Width : the horizontal width of the rectangle containing the control
+&apos;&apos;&apos;		Height : the vertical height of the rectangle containing the control
+&apos;&apos;&apos;		Negative or missing arguments are left unchanged
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		oControl.Resize(100, 200, Height := 6000)	&apos;	Width is not changed
+
+Dim bResize As Boolean				&apos;	Return value
+Dim oPosSize As Object				&apos;	com.sun.star.awt.Rectangle
+Dim iFlags As Integer				&apos;	com.sun.star.awt.PosSize constants
+Const cstThisSub = &quot;SFDialogs.DialogControl.Resize&quot;
+Const cstSubArgs = &quot;[Left], [Top], [Width], [Height]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bResize = False
+
+Check:
+	If IsMissing(Left) Or IsEmpty(Left) Then Left = -1
+	If IsMissing(Top) Or IsEmpty(Top) Then Top = -1
+	If IsMissing(Height) Or IsEmpty(Height) Then Height = -1
+	If IsMissing(Width) Or IsEmpty(Width) Then Width = -1
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(Left, &quot;Left&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Top, &quot;Top&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Width, &quot;Width&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Height, &quot;Height&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	End If
+
+Try:
+	With _ControlView
+		Set oPosSize = .getPosSize()
+		&apos;	Reset factory settings
+		If Left = -1 And Top = -1 And Width = -1 And Height = -1 Then
+			Left = _Left
+			Top = _Top
+			Width = _Width
+			Height = _Height
+		End If
+		&apos;	Trace the elements to change
+		iFlags = 0
+		With com.sun.star.awt.PosSize
+			If CLng(Left) &gt;= 0	Then iFlags = iFlags + .X		Else Left = oPosSize.X
+			If CLng(Top) &gt;= 0	Then iFlags = iFlags + .Y		Else Top = oPosSize.Y
+			If CLng(Width) &gt; 0	Then iFlags = iFlags + .WIDTH	Else Width = oPosSize.Width
+			If CLng(Height) &gt; 0	Then iFlags = iFlags + .HEIGHT	Else Height = oPosSize.Height
+		End With
+		&apos;	Rewrite
+		If iFlags &gt; 0 Then .setPosSize(CLng(Left), CLng(Top), CLng(Width), CLng(Height), iFlags)
+	End With
+	bResize = True
+
+Finally:
+	Resize = bResize
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SF_Documents.SF_DialogControl.Resize
 
 REM -----------------------------------------------------------------------------
 Public Function SetFocus() As Boolean
@@ -1582,6 +1717,7 @@ Public Sub _Initialize()
 
 Dim vServiceName As Variant		&apos;	Split service name
 Dim sType As String				&apos;	Last component of service name
+Dim oPosSize As Object			&apos;	com.sun.star.awt.Rectangle
 
 Try:
 	_ImplementationName = _ControlModel.getImplementationName()
@@ -1604,6 +1740,15 @@ Try:
 			Set _GridDataModel = _ControlModel.GridDataModel
 		Case Else					:	_ControlType = sType
 	End Select
+
+	&apos;	Store initial position and dimensions
+	Set oPosSize = _ControlView.getPosSize()
+	With oPosSize
+		_Left = .X
+		_Top = .Y
+		_Width = .Width
+		_Height = .Height
+	End With
 
 	&apos;	Store  the SF_DialogControl object in the parent cache
 	Set _Parent._ControlCache(_IndexOfNames) = [Me]
@@ -1698,6 +1843,8 @@ Const cstSubArgs = &quot;&quot;
 					End If
 				Case Else	:	GoTo CatchType
 			End Select
+		Case UCase(&quot;Height&quot;)
+			If oSession.HasUNOMethod(_ControlView, &quot;getPosSize&quot;) Then _PropertyGet = _ControlView.getPosSize().Height
 		Case UCase(&quot;ListCount&quot;)
 			Select Case _ControlType
 				Case CTLCOMBOBOX, CTLLISTBOX
@@ -1911,6 +2058,12 @@ Const cstSubArgs = &quot;&quot;
 			_PropertyGet = vGet
 		Case UCase(&quot;Visible&quot;)
 			If oSession.HasUnoMethod(_ControlView, &quot;isVisible&quot;) Then _PropertyGet = CBool(_ControlView.isVisible())
+		Case UCase(&quot;Width&quot;)
+			If oSession.HasUNOMethod(_ControlView, &quot;getPosSize&quot;) Then _PropertyGet = _ControlView.getPosSize().Width
+		Case UCase(&quot;X&quot;)
+			If oSession.HasUNOMethod(_ControlView, &quot;getPosSize&quot;) Then _PropertyGet = _ControlView.getPosSize().X
+		Case UCase(&quot;Y&quot;)
+			If oSession.HasUNOMethod(_ControlView, &quot;getPosSize&quot;) Then _PropertyGet = _ControlView.getPosSize().Y
 		Case UCase(&quot;XControlModel&quot;)
 			Set _PropertyGet = _ControlModel
 		Case UCase(&quot;XControlView&quot;)
@@ -2024,6 +2177,9 @@ Const cstSubArgs = &quot;Value&quot;
 					End If
 				Case Else	:	GoTo CatchType
 			End Select
+		Case UCase(&quot;Height&quot;)
+			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Height&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+			If oSession.HasUnoMethod(_ControlView, &quot;setPosSize&quot;) Then _ControlView.setPosSize(-1, -1, -1, CLng(pvValue), com.sun.star.awt.PosSize.HEIGHT)
 		Case UCase(&quot;ListIndex&quot;)
 			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;ListIndex&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
 			Select Case _ControlType
@@ -2251,6 +2407,15 @@ Const cstSubArgs = &quot;Value&quot;
 				End If
 				_ControlView.setVisible(pvValue)
 			End If
+		Case UCase(&quot;Width&quot;)
+			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Width&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+			If oSession.HasUnoMethod(_ControlView, &quot;setPosSize&quot;) Then _ControlView.setPosSize(-1, -1, CLng(pvValue), -1, com.sun.star.awt.PosSize.WIDTH)
+		Case &quot;X&quot;
+			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;X&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+			If oSession.HasUnoMethod(_ControlView, &quot;setPosSize&quot;) Then _ControlView.setPosSize(CLng(pvValue), -1, -1, -1, com.sun.star.awt.PosSize.X)
+		Case &quot;Y&quot;
+			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Y&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+			If oSession.HasUnoMethod(_ControlView, &quot;setPosSize&quot;) Then _ControlView.setPosSize(-1, CLng(pvValue), -1, -1, com.sun.star.awt.PosSize.Y)
 		Case Else
 			bSet = False
 	End Select
