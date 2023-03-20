@@ -369,9 +369,6 @@ static typelib_TypeClass cpp_mediate(
 
     TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
 
-    OString cstr( OUStringToOString( aMemberDescr.get()->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
-    SAL_WARN("bridges", "calling " << cstr.getStr() << ", nFunctionIndex=" << nFunctionIndex);
-
     typelib_TypeClass eRet;
     switch (aMemberDescr.get()->eTypeClass)
     {
