@@ -658,14 +658,14 @@ public:
     void AllowCycleFocusOut();
 };
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 extern "C" {
 
 GType ooo_fixed_get_type();
+#if !GTK_CHECK_VERSION(4, 0, 0)
 AtkObject* ooo_fixed_get_accessible(GtkWidget *obj);
+#endif
 
 } // extern "C"
-#endif
 
 #if !GTK_CHECK_VERSION(3, 22, 0)
 enum GdkAnchorHints

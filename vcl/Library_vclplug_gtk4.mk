@@ -85,6 +85,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk4,\
     vcl/unx/gtk4/fpicker/SalGtkFilePicker \
     vcl/unx/gtk4/fpicker/SalGtkFolderPicker \
     vcl/unx/gtk4/fpicker/SalGtkPicker \
+    vcl/unx/gtk4/a11y \
     vcl/unx/gtk4/convert3to4 \
     vcl/unx/gtk4/customcellrenderer \
     vcl/unx/gtk4/gtkdata \
