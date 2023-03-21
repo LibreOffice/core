@@ -1763,6 +1763,9 @@ rtl::Reference<SdrObject> XclImpChartObj::DoCreateSdrObj( XclImpDffConverter& rD
         Reference< XEmbeddedObject > xEmbObj = pDocShell->GetEmbeddedObjectContainer().
                 CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aEmbObjName, &sBaseURL );
 
+        if (!xEmbObj)
+            return xSdrObj;
+
         /*  Set the size to the embedded object, this prevents that font sizes
             of text objects are changed in the chart when the object is
             inserted into the draw page. */
