@@ -1741,7 +1741,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 
         // Edit only if the shown content is coming from the current view.
         if (State::HIDDEN != m_eState &&
-                (State::ACTIVE == m_eState || m_pActiveShell == GetActiveView()->GetWrtShellPtr())
+                (State::ACTIVE == m_eState || (GetActiveView() && m_pActiveShell == GetActiveView()->GetWrtShellPtr()))
                 && lcl_IsContent(*xEntry, *m_xTreeView))
         {
             const bool bReadonly = m_pActiveShell->GetView().GetDocShell()->IsReadOnly();

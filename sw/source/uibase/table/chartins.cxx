@@ -66,7 +66,6 @@ Point SwGetChartDialogPos( const vcl::Window *pParentWin, const Size& rDialogSiz
         tools::Rectangle aDesktop = pParentWin->GetDesktopRectPixel();
         Size aSpace = pParentWin->LogicToPixel(Size(8, 12), MapMode(MapUnit::MapAppFont));
 
-        bool bLayoutRTL = ::GetActiveView()->GetWrtShell().IsTableRightToLeft();
         bool bCenterHor = false;
 
         if ( aDesktop.Bottom() - aObjAbs.Bottom() >= rDialogSize.Height() + aSpace.Height() )
@@ -88,12 +87,16 @@ Point SwGetChartDialogPos( const vcl::Window *pParentWin, const Size& rDialogSiz
 
             if ( bFitLeft || bFitRight )
             {
-                // if both fit, prefer right in RTL mode, left otherwise
-                bool bPutRight = bFitRight && ( bLayoutRTL || !bFitLeft );
-                if ( bPutRight )
-                    aRet.setX( aObjAbs.Right() + aSpace.Width() );
-                else
-                    aRet.setX( aObjAbs.Left() - rDialogSize.Width() - aSpace.Width() );
+                if (SwView* pView = GetActiveView())
+                {
+                    // if both fit, prefer right in RTL mode, left otherwise
+                    bool bLayoutRTL = pView->GetWrtShell().IsTableRightToLeft();
+                    bool bPutRight = bFitRight && ( bLayoutRTL || !bFitLeft );
+                    if ( bPutRight )
+                        aRet.setX( aObjAbs.Right() + aSpace.Width() );
+                    else
+                        aRet.setX( aObjAbs.Left() - rDialogSize.Width() - aSpace.Width() );
+                }
 
                 // center vertically
                 aRet.setY( aObjAbs.Top() + ( aObjAbs.GetHeight() - rDialogSize.Height() ) / 2 );
@@ -125,6 +128,8 @@ Point SwGetChartDialogPos( const vcl::Window *pParentWin, const Size& rDialogSiz
 SwInsertChart::SwInsertChart( const Link<css::ui::dialogs::DialogClosedEvent*, void>& rLink )
 {
     SwView *pView = ::GetActiveView();
+    if (!pView)
+        return;
 
     // get range string of marked data
     SwWrtShell &rWrtShell = pView->GetWrtShell();

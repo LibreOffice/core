@@ -277,19 +277,20 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
 
     if (rId == "font")
     {
-        OSL_ENSURE(::GetActiveView(), "no active view");
+        if (SwView* pView = GetActiveView())
+        {
+            SvxFontListItem aFontListItem( *static_cast<const SvxFontListItem*>(pView->
+                GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) );
 
-        SvxFontListItem aFontListItem( *static_cast<const SvxFontListItem*>(::GetActiveView()->
-            GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) );
-
-        aSet.Put (SvxFontListItem( aFontListItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
-        sal_uInt32 nFlags = 0;
-        if(rPage.GetItemSet().GetParent() && 0 == (m_nHtmlMode & HTMLMODE_ON ))
-            nFlags = SVX_RELATIVE_MODE;
-        if( SfxStyleFamily::Char == m_nType )
-            nFlags = nFlags|SVX_PREVIEW_CHARACTER;
-        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlags));
-        rPage.PageCreated(aSet);
+            aSet.Put (SvxFontListItem( aFontListItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
+            sal_uInt32 nFlags = 0;
+            if(rPage.GetItemSet().GetParent() && 0 == (m_nHtmlMode & HTMLMODE_ON ))
+                nFlags = SVX_RELATIVE_MODE;
+            if( SfxStyleFamily::Char == m_nType )
+                nFlags = nFlags|SVX_PREVIEW_CHARACTER;
+            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlags));
+            rPage.PageCreated(aSet);
+        }
     }
     else if (rId == "fonteffect")
     {

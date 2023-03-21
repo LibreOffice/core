@@ -37,7 +37,6 @@ const WhichRangesContainer SwCondCollPage::s_aPageRg(svl::Items<FN_COND_COLL, FN
 
 SwCondCollPage::SwCondCollPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
     : SfxTabPage(pPage, pController, "modules/swriter/ui/conditionpage.ui", "ConditionPage", &rSet)
-    , m_rSh(::GetActiveView()->GetWrtShell())
     , m_pCmds(SwCondCollItem::GetCmds())
     , m_pFormat(nullptr)
     , m_xTbLinks(m_xBuilder->weld_tree_view("links"))
@@ -122,9 +121,13 @@ bool SwCondCollPage::FillItemSet(SfxItemSet *rSet)
 void SwCondCollPage::Reset(const SfxItemSet *)
 {
     m_xTbLinks->clear();
-
-    SfxStyleSheetBasePool* pPool = m_rSh.GetView().GetDocShell()->GetStyleSheetPool();
     m_xStyleLB->clear();
+
+    SwView* pView = GetActiveView();
+    if (!pView)
+        return;
+
+    SfxStyleSheetBasePool* pPool = pView->GetWrtShell().GetView().GetDocShell()->GetStyleSheetPool();
     const SfxStyleSheetBase* pBase = pPool->First(SfxStyleFamily::Para);
     while (pBase)
     {
@@ -198,9 +201,14 @@ void SwCondCollPage::SelectHdl(const weld::Widget* pBox)
     if (pBox == m_xFilterLB.get())
     {
         m_xStyleLB->clear();
+
+        SwView* pView = GetActiveView();
+        if (!pView)
+            return;
+
         const sal_Int32 nSelPos = m_xFilterLB->get_active();
         const SfxStyleSearchBits nSearchFlags = static_cast<SfxStyleSearchBits>(m_xFilterLB->get_id(nSelPos).toInt32());
-        SfxStyleSheetBasePool* pPool = m_rSh.GetView().GetDocShell()->GetStyleSheetPool();
+        SfxStyleSheetBasePool* pPool = pView->GetWrtShell().GetView().GetDocShell()->GetStyleSheetPool();
         const SfxStyleSheetBase* pBase = pPool->First(SfxStyleFamily::Para, nSearchFlags);
 
         bool bEmpty = true;

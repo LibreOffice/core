@@ -221,7 +221,7 @@ void SwFieldDlg::ReInitTabPage(std::string_view rPageId, bool bOnlyActivate)
 // newly initialise after activation of a few TabPages
 void SwFieldDlg::Activate()
 {
-    SwView* pView = ::GetActiveView();
+    SwView* pView = GetActiveView();
     if( !pView )
         return;
 
@@ -246,7 +246,6 @@ void SwFieldDlg::EnableInsert(bool bEnable)
     if( bEnable )
     {
         SwView* pView = ::GetActiveView();
-        OSL_ENSURE(pView, "no view found");
         if( !pView ||
                 (pView->GetWrtShell().IsReadOnlyAvailable() &&
                     pView->GetWrtShell().HasReadonlySel())

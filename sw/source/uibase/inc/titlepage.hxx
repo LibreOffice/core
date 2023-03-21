@@ -24,8 +24,6 @@ class SwPageDesc;
 class SwTitlePageDlg final : public SfxDialogController
 {
 private:
-    SwWrtShell& mrSh;
-
     std::unique_ptr<const SwFormatPageDesc> mpPageFormatDesc;
 
     SwPageDesc* mpTitleDesc;

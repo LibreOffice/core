@@ -90,8 +90,7 @@ SwTextGridPage::SwTextGridPage(weld::Container* pPage, weld::DialogController* p
     m_xDisplayCB->connect_toggled(LINK(this, SwTextGridPage, DisplayGridHdl));
 
     //Get the default paper mode
-    SwView *pView   = ::GetActiveView();
-    if( pView )
+    if (SwView *pView = GetActiveView())
     {
         if (SwWrtShell* pSh = pView->GetWrtShellPtr())
         {
@@ -150,8 +149,7 @@ bool SwTextGridPage::FillItemSet(SfxItemSet *rSet)
     }
 
     // draw ticks of ruler
-    SwView * pView = ::GetActiveView();
-    if (pView)
+    if (SwView * pView = GetActiveView())
     {
         if ( m_bHRulerChanged )
             pView->GetHRuler().DrawTicks();

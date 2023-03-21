@@ -129,19 +129,22 @@ SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
 
 void SwWordCountFloatDlg::UpdateCounts()
 {
-    SwWrtShell &rSh = ::GetActiveView()->GetWrtShell();
-    SwDocStat aCurrCnt;
-    SwDocStat aDocStat;
+    if (SwView* pView = GetActiveView())
     {
-        auto& rDocShell(*GetActiveView()->GetDocShell());
-        SwWait aWait(rDocShell, true);
-        auto aLock = rDocShell.LockAllViews();
-        rSh.StartAction();
-        rSh.CountWords( aCurrCnt );
-        aDocStat = rSh.GetUpdatedDocStat();
-        rSh.EndAction();
+        SwWrtShell &rSh = pView->GetWrtShell();
+        SwDocStat aCurrCnt;
+        SwDocStat aDocStat;
+        {
+            auto& rDocShell(*pView->GetDocShell());
+            SwWait aWait(rDocShell, true);
+            auto aLock = rDocShell.LockAllViews();
+            rSh.StartAction();
+            rSh.CountWords( aCurrCnt );
+            aDocStat = rSh.GetUpdatedDocStat();
+            rSh.EndAction();
+        }
+        SetValues(aCurrCnt, aDocStat);
     }
-    SetValues(aCurrCnt, aDocStat);
 }
 
 void SwWordCountFloatDlg::SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat)

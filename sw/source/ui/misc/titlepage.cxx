@@ -146,7 +146,6 @@ sal_uInt16 SwTitlePageDlg::GetInsertPosition() const
 
 SwTitlePageDlg::SwTitlePageDlg(weld::Window *pParent)
     : SfxDialogController(pParent, "modules/swriter/ui/titlepage.ui", "DLG_TITLEPAGE")
-    , mrSh(*::GetActiveView()->GetWrtShellPtr())
     , m_xUseExistingPagesRB(m_xBuilder->weld_radio_button("RB_USE_EXISTING_PAGES"))
     , m_xPageCountNF(m_xBuilder->weld_spin_button("NF_PAGE_COUNT"))
     , m_xDocumentStartRB(m_xBuilder->weld_radio_button("RB_DOCUMENT_START"))
@@ -160,46 +159,51 @@ SwTitlePageDlg::SwTitlePageDlg(weld::Window *pParent)
     , m_xPagePropertiesPB(m_xBuilder->weld_button("PB_PAGE_PROPERTIES"))
     , m_xOkPB(m_xBuilder->weld_button("ok"))
 {
+    SwView* pView = GetActiveView();
+    if (!pView)
+        return;
+    SwWrtShell& rWrtShell = pView->GetWrtShell();
+
     m_xOkPB->connect_clicked(LINK(this, SwTitlePageDlg, OKHdl));
     m_xRestartNumberingCB->connect_toggled(LINK(this, SwTitlePageDlg, RestartNumberingHdl));
     m_xSetPageNumberCB->connect_toggled(LINK(this, SwTitlePageDlg, SetPageNumberHdl));
-    m_xPageStartNF->set_max(mrSh.GetPageCnt() + 1);
+    m_xPageStartNF->set_max(rWrtShell.GetPageCnt() + 1);
 
     sal_uInt16 nSetPage = 1;
     sal_uInt16 nResetPage = 1;
     sal_uInt16 nTitlePages = 1;
-    lcl_PushCursor(mrSh);
+    lcl_PushCursor(rWrtShell);
 
-    SwView& rView = mrSh.GetView();
+    SwView& rView = rWrtShell.GetView();
     rView.InvalidateRulerPos();
 
     bool bMaybeResetNumbering = false;
 
-    mpTitleDesc = mrSh.GetPageDescFromPool(RES_POOLPAGE_FIRST);
-    mpIndexDesc = mrSh.GetPageDescFromPool(RES_POOLPAGE_REGISTER);
-    mpNormalDesc = mrSh.GetPageDescFromPool(RES_POOLPAGE_STANDARD);
+    mpTitleDesc = rWrtShell.GetPageDescFromPool(RES_POOLPAGE_FIRST);
+    mpIndexDesc = rWrtShell.GetPageDescFromPool(RES_POOLPAGE_REGISTER);
+    mpNormalDesc = rWrtShell.GetPageDescFromPool(RES_POOLPAGE_STANDARD);
 
-    mrSh.StartOfSection();
-    if (lcl_GetPageDesc(mrSh, nSetPage, &mpPageFormatDesc))
+    rWrtShell.StartOfSection();
+    if (lcl_GetPageDesc(rWrtShell, nSetPage, &mpPageFormatDesc))
     {
         if (mpPageFormatDesc->GetPageDesc() == mpTitleDesc)
         {
-            while (mrSh.SttNxtPg())
+            while (rWrtShell.SttNxtPg())
             {
-                const size_t nCurIdx = mrSh.GetCurPageDesc();
-                const SwPageDesc& rPageDesc = mrSh.GetPageDesc(nCurIdx);
+                const size_t nCurIdx = rWrtShell.GetCurPageDesc();
+                const SwPageDesc& rPageDesc = rWrtShell.GetPageDesc(nCurIdx);
 
                 if (mpIndexDesc != &rPageDesc)
                 {
                     mpNormalDesc = &rPageDesc;
-                    bMaybeResetNumbering = lcl_GetPageDesc(mrSh, nResetPage, nullptr);
+                    bMaybeResetNumbering = lcl_GetPageDesc(rWrtShell, nResetPage, nullptr);
                     break;
                 }
                 ++nTitlePages;
             }
         }
     }
-    lcl_PopCursor(mrSh);
+    lcl_PopCursor(rWrtShell);
 
     m_xUseExistingPagesRB->set_active(true);
     m_xPageCountNF->set_value(nTitlePages);
@@ -207,7 +211,7 @@ SwTitlePageDlg::SwTitlePageDlg(weld::Window *pParent)
 
     m_xDocumentStartRB->set_active(true);
     m_xPageStartNF->set_sensitive(false);
-    m_xPageStartNF->set_value(lcl_GetCurrentPage(mrSh));
+    m_xPageStartNF->set_value(lcl_GetCurrentPage(rWrtShell));
     Link<weld::Toggleable&,void> aStartPageHdl = LINK(this, SwTitlePageDlg, StartPageHdl);
     m_xDocumentStartRB->connect_toggled(aStartPageHdl);
     m_xPageStartRB->connect_toggled(aStartPageHdl);
@@ -255,16 +259,24 @@ SwTitlePageDlg::~SwTitlePageDlg()
 
 IMPL_LINK_NOARG(SwTitlePageDlg, EditHdl, weld::Button&, void)
 {
-    SwView& rView = mrSh.GetView();
-    rView.GetDocShell()->FormatPage(getDialog(), m_xPagePropertiesLB->get_active_text(), "page", mrSh);
+    SwView* pView = GetActiveView();
+    if (!pView)
+        return;
+    SwWrtShell& rWrtShell = pView->GetWrtShell();
+    SwView& rView = rWrtShell.GetView();
+    rView.GetDocShell()->FormatPage(getDialog(), m_xPagePropertiesLB->get_active_text(), "page", rWrtShell);
     rView.InvalidateRulerPos();
 }
 
 IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl, weld::Button&, void)
 {
-    lcl_PushCursor(mrSh);
+    SwView* pView = GetActiveView();
+    if (!pView)
+        return;
+    SwWrtShell& rWrtShell = pView->GetWrtShell();
+    lcl_PushCursor(rWrtShell);
 
-    mrSh.StartUndo();
+    rWrtShell.StartUndo();
 
     SwFormatPageDesc aTitleDesc(mpTitleDesc);
 
@@ -278,41 +290,41 @@ IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl, weld::Button&, void)
     {
         // Assuming that a failure to GotoPage means the end of the document,
         // insert new pages after the last page.
-        if (!lcl_GotoPage(mrSh, GetInsertPosition()))
+        if (!lcl_GotoPage(rWrtShell, GetInsertPosition()))
         {
-            mrSh.EndPg();
+            rWrtShell.EndPg();
             // Add one more page as a content page to follow the new title pages.
-            mrSh.InsertPageBreak();
+            rWrtShell.InsertPageBreak();
         }
         for (sal_uInt16 nI = 0; nI < nNumTitlePages; ++nI)
-            mrSh.InsertPageBreak();
+            rWrtShell.InsertPageBreak();
         // In order to be able to access these new pages, the layout needs to be recalculated first.
-        mrSh.CalcLayout();
+        rWrtShell.CalcLayout();
     }
 
-    if (lcl_GotoPage(mrSh, GetInsertPosition()))
+    if (lcl_GotoPage(rWrtShell, GetInsertPosition()))
     {
-        mrSh.SetAttrItem(aTitleDesc);
+        rWrtShell.SetAttrItem(aTitleDesc);
         for (sal_uInt16 nI = 1; nI < nNumTitlePages; ++nI)
         {
-            if (mrSh.SttNxtPg())
-                lcl_ChangePage(mrSh, SAL_MAX_UINT16, mpIndexDesc);
+            if (rWrtShell.SttNxtPg())
+                lcl_ChangePage(rWrtShell, SAL_MAX_UINT16, mpIndexDesc);
         }
     }
 
     if ((m_xRestartNumberingCB->get_active() || nNumTitlePages > 1)
-        && lcl_GotoPage(mrSh, GetInsertPosition(), nNumTitlePages))
+        && lcl_GotoPage(rWrtShell, GetInsertPosition(), nNumTitlePages))
     {
         sal_uInt16 nPgNo
             = m_xRestartNumberingCB->get_active() ? m_xRestartNumberingNF->get_value() : 0;
         const SwPageDesc* pNewDesc = nNumTitlePages > 1 ? mpNormalDesc : nullptr;
-        lcl_ChangePage(mrSh, nPgNo, pNewDesc);
+        lcl_ChangePage(rWrtShell, nPgNo, pNewDesc);
     }
 
-    mrSh.EndUndo();
-    lcl_PopCursor(mrSh);
+    rWrtShell.EndUndo();
+    lcl_PopCursor(rWrtShell);
     if (!m_xUseExistingPagesRB->get_active())
-        lcl_GotoPage(mrSh, GetInsertPosition());
+        lcl_GotoPage(rWrtShell, GetInsertPosition());
     m_xDialog->response(RET_OK);
 }
 

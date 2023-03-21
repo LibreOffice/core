@@ -140,9 +140,7 @@ SwNumFormatTreeView::SwNumFormatTreeView(std::unique_ptr<weld::TreeView> xContro
 
 void SwNumFormatBase::Init()
 {
-    SwView *pView = GetActiveView();
-
-    if (pView)
+    if (SwView *pView = GetActiveView())
         m_eCurLanguage = pView->GetWrtShell().GetCurLang();
     else
         m_eCurLanguage = SvtSysLocale().GetLanguageTag().getLanguageType();
@@ -172,7 +170,6 @@ void SwNumFormatBase::SetFormatType(const SvNumFormatType nFormatType)
         return;
 
     SwView *pView = GetActiveView();
-    OSL_ENSURE(pView, "no view found");
     if(!pView)
         return;
     SwWrtShell &rSh = pView->GetWrtShell();
@@ -307,7 +304,6 @@ void SwNumFormatBase::SetDefFormat(const sal_uInt32 nDefaultFormat)
     }
 
     SwView *pView = GetActiveView();
-    OSL_ENSURE(pView, "no view found");
     if(!pView)
         return;
     SwWrtShell &rSh = pView->GetWrtShell();

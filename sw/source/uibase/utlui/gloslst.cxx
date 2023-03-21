@@ -144,7 +144,9 @@ bool SwGlossaryList::GetShortName(std::u16string_view rLongName,
     else if(1 < nCount)
     {
         SwView *pView  = ::GetActiveView();
-        SwGlossDecideDlg aDlg(pView ? pView->GetFrameWeld() : nullptr);
+        if (!pView)
+            return bRet;
+        SwGlossDecideDlg aDlg(pView->GetFrameWeld());
         OUString sTitle = aDlg.get_title() + " " + aTripleStrings.front().sBlock;
         aDlg.set_title(sTitle);
 

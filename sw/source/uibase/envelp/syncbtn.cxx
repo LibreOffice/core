@@ -44,8 +44,7 @@ SwSyncChildWin::SwSyncChildWin(vcl::Window* _pParent,
         weld::Dialog* pDlg = pBtnDlg->getDialog();
         Point aPos;
 
-        SwView* pActiveView = ::GetActiveView();
-        if (pActiveView)
+        if (SwView* pActiveView = GetActiveView())
         {
             const SwEditWin &rEditWin = pActiveView->GetEditWin();
             aPos = rEditWin.OutputToScreenPixel(Point(0, 0));

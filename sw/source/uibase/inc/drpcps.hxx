@@ -74,7 +74,7 @@ class SwDropCapsPict final : public weld::CustomWidgetController
     Size            CalcTextSize();
     inline void     InitPrinter();
     void            InitPrinter_();
-    static void     GetFontSettings( const SwDropCapsPage& _rPage, vcl::Font& _rFont, sal_uInt16 _nWhich );
+    static void     GetFontSettings( vcl::Font& _rFont, sal_uInt16 _nWhich );
     void            GetFirstScriptSegment(sal_Int32 &start, sal_Int32 &end, sal_uInt16 &scriptType);
     bool            GetNextScriptSegment(size_t &nIdx, sal_Int32 &start, sal_Int32 &end, sal_uInt16 &scriptType);
 
@@ -117,8 +117,6 @@ friend class SwDropCapsPict;
     bool          m_bModified;
     bool          m_bFormat;
     bool          m_bHtmlMode;
-
-    SwWrtShell &m_rSh;
 
     std::unique_ptr<weld::CheckButton> m_xDropCapsBox;
     std::unique_ptr<weld::CheckButton> m_xWholeWordCB;

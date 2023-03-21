@@ -97,19 +97,21 @@ SFX_IMPL_INTERFACE(SwTextShell, SwBaseShell)
 
 IMPL_STATIC_LINK( SwTextShell, DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, pEvent, void )
 {
-    SwView* pView = ::GetActiveView();
-    SwWrtShell& rWrtShell = pView->GetWrtShell();
+    if (SwView* pView = GetActiveView())
+    {
+        SwWrtShell& rWrtShell = pView->GetWrtShell();
 
-    sal_Int16 nDialogRet = pEvent->DialogResult;
-    if( nDialogRet == ui::dialogs::ExecutableDialogResults::CANCEL )
-    {
-        rWrtShell.Undo();
-        rWrtShell.GetIDocumentUndoRedo().ClearRedo();
-    }
-    else
-    {
-        OSL_ENSURE( nDialogRet == ui::dialogs::ExecutableDialogResults::OK,
-            "dialog execution failed" );
+        sal_Int16 nDialogRet = pEvent->DialogResult;
+        if( nDialogRet == ui::dialogs::ExecutableDialogResults::CANCEL )
+        {
+            rWrtShell.Undo();
+            rWrtShell.GetIDocumentUndoRedo().ClearRedo();
+        }
+        else
+        {
+            OSL_ENSURE( nDialogRet == ui::dialogs::ExecutableDialogResults::OK,
+                "dialog execution failed" );
+        }
     }
 }
 

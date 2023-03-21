@@ -118,8 +118,10 @@ void SwFieldPage::InsertField(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType, con
                             sal_Unicode cSeparator, bool bIsAutomaticLanguage)
 {
     SwView* pView = GetActiveView();
-    SwWrtShell *pSh = m_pWrtShell ? m_pWrtShell : pView->GetWrtShellPtr();
+    if (!pView)
+        return;
 
+    SwWrtShell *pSh = m_pWrtShell ? m_pWrtShell : pView->GetWrtShellPtr();
     if (!pSh)
         return;
 
