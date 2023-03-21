@@ -1594,7 +1594,8 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
         { "footer", "Footer" }, // RES_POOLCOLL_FOOTER
         { "Index Heading", "Index Heading" }, // RES_POOLCOLL_TOX_IDXH
         { "Caption", "Caption" }, // RES_POOLCOLL_LABEL
-        { "Table of Figures", "Drawing" }, // RES_POOLCOLL_LABEL_DRAWING
+        { "table of figures", "Figure Index 1" }, // RES_POOLCOLL_TOX_ILLUS1
+        { "Table of Figures", "Figure Index 1" }, // RES_POOLCOLL_TOX_ILLUS1
         { "Envelope Address", "Addressee" }, // RES_POOLCOLL_ENVELOPE_ADDRESS
         { "Envelope Return", "Sender" }, // RES_POOLCOLL_SEND_ADDRESS
         { "footnote reference", "Footnote Symbol" }, // RES_POOLCHR_FOOTNOTE; tdf#82173

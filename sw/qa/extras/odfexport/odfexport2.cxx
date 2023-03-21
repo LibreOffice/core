@@ -606,6 +606,9 @@ DECLARE_ODFEXPORT_TEST(testTdf153090, "Custom-Style-TOC.docx")
     uno::Reference<container::XIndexAccess> xIndexes(xIndexSupplier->getDocumentIndexes());
     uno::Reference<text::XDocumentIndex> xTOC(xIndexes->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("_CustomImageCaption"), getProperty<OUString>(xTOC, "CreateFromParagraphStyle"));
+    // tdf#153659 this was imported as "table of figures" instead of "Figure Index 1"
+    // thus custom settings were not retained after ToF update
+    CPPUNIT_ASSERT_EQUAL(OUString("Figure Index 1"), getProperty<OUString>(getParagraph(1), "ParaStyleName"));
 
     xTOC->update();
     OUString const tocContent(xTOC->getAnchor()->getString());
