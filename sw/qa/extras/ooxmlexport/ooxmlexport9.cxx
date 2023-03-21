@@ -1156,10 +1156,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107033, "tdf107033.docx")
 }
 
 #if HAVE_MORE_FONTS
-DECLARE_OOXMLEXPORT_TEST(testTdf107889, "tdf107889.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf107889)
 {
-    // This was 1, multi-page table was imported as a floating one.
-    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+    SwModelTestBase::FlySplitGuard aGuard;
+    auto verify = [this]() {
+        // This was 1, multi-page table was imported as a non-split fly.
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "//tab", 2);
+    };
+    createSwDoc("tdf107889.docx");
+    verify();
+    reload(mpFilter, "tdf107889.docx");
+    verify();
 }
 #endif
 
