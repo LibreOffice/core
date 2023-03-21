@@ -25,4 +25,9 @@
     <service name="com.sun.star.reflection.CoreReflection"/>
     <singleton name="com.sun.star.reflection.theCoreReflection"/>
   </implementation>
+  <implementation name="com.sun.star.comp.stoc.Dump"
+      constructor="com_sun_star_comp_stoc_Dump_get_implementation"
+      single-instance="true">
+    <singleton name="com.sun.star.reflection.Dump"/>
+  </implementation>
 </component>

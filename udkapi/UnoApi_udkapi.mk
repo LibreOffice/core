@@ -104,6 +104,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/java,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/reflection,\
 	theCoreReflection \
+	Dump \
 	ProxyFactory \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/registry,\
@@ -378,6 +379,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/reflection,\
 	XCompoundTypeDescription \
 	XConstantTypeDescription \
 	XConstantsTypeDescription \
+	XDump \
 	XEnumTypeDescription \
 	XIdlArray \
 	XIdlClass \

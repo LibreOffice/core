@@ -1,0 +1,58 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com {  module sun {  module star {  module reflection {
+
+/** Dump any UNOIDL value as a string.
+
+    Mainly useful for logging and debugging purposes.
+
+    @since LibreOffice 7.6
+*/
+interface XDump {
+    /** Dump a UNOIDL value as a string.
+
+        This just dumps the value itself, without any further decoration.
+
+        @param value  any UNOIDL value
+
+        @returns a string representation of the given value
+     */
+    string dumpValue([in] any value);
+
+    /** Dump the value of a UNOIDL ANY as a string.
+
+        This dumps the type and value of the given ANY.
+
+        @param value  any UNOIDL ANY
+
+        @returns a string representation of the given ANY
+     */
+    string dumpAny([in] any value);
+
+    /** Dump a numeric UNOIDL value, interpreted relative to a UNOIDL constants group, as a string.
+
+        @param constantsGroup  the name (in dotted notation, as supported by
+        /singletons/theTypeDescriptionManager) of a UNOIDL constants group
+
+        @param value  a UNOIDL value of type BOOLEAN, BYTE, SHORT, UNSIGNED SHORT, LONG, UNSIGNED
+        LONG, HYPER, UNSIGNED HYPER, FLOAT, or DOUBLE
+
+        @returns a string representation of the given numeric value
+
+        @throws com::sun::star::lang::IllegalArgumentException  if the constantsGroup argument does
+        not represent a UNOIDL constants group or the value argument is of wrong type
+     */
+    string dumpConstant([in] string constantsGroup, [in] any value)
+        raises (com::sun::star::lang::IllegalArgumentException);
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -30,6 +30,7 @@ $(eval $(call gb_Module_add_targets,stoc,\
 endif
 
 $(eval $(call gb_Module_add_check_targets,stoc, \
+    CppunitTest_stoc_dump \
     CppunitTest_stoc_uriproc \
 ))
 

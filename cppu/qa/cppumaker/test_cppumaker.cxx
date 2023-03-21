@@ -352,9 +352,6 @@
 #include <test/codemaker/cppumaker/TestException1.hpp>
 #include <test/codemaker/cppumaker/TestException2.hpp>
 #include <test/codemaker/cppumaker/Constants.hpp>
-#include <test/codemaker/cppumaker/ByteBits.hpp>
-#include <test/codemaker/cppumaker/ShortBits.hpp>
-#include <test/codemaker/cppumaker/UnsignedHyperBits.hpp>
 
 #include <memory>
 #include <com/sun/star/uno/Any.hxx>
@@ -393,14 +390,11 @@ public:
 
     void testConstants();
 
-    void testSymbolicConstants();
-
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testBigStruct);
     CPPUNIT_TEST(testPolyStruct);
     CPPUNIT_TEST(testExceptions);
     CPPUNIT_TEST(testConstants);
-    CPPUNIT_TEST(testSymbolicConstants);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -554,32 +548,6 @@ void Test::testConstants() {
     CPPUNIT_ASSERT_EQUAL(
         SAL_MAX_UINT64,
         test::codemaker::cppumaker::Constants::unsignedHyperMax);
-}
-
-void Test::testSymbolicConstants() {
-    CPPUNIT_ASSERT_EQUAL(OUString("byteMin"), test::codemaker::cppumaker::Constants::to_string(static_cast<sal_uInt64>(-128)));
-    CPPUNIT_ASSERT_EQUAL(OUString("byteMax"), test::codemaker::cppumaker::Constants::to_string(127));
-    CPPUNIT_ASSERT_EQUAL(OUString("longMin"), test::codemaker::cppumaker::Constants::to_string(static_cast<sal_uInt64>(-2147483648)));
-    CPPUNIT_ASSERT_EQUAL(OUString("longMax"), test::codemaker::cppumaker::Constants::to_string(2147483647));
-    CPPUNIT_ASSERT_EQUAL(OUString("hyperMin"), test::codemaker::cppumaker::Constants::to_string(static_cast<sal_uInt64>(SAL_MIN_INT64)));
-    CPPUNIT_ASSERT_EQUAL(OUString("hyperMax"), test::codemaker::cppumaker::Constants::to_string(SAL_MAX_INT64));
-    CPPUNIT_ASSERT_EQUAL(OUString("17"), test::codemaker::cppumaker::Constants::to_string(17));
-    CPPUNIT_ASSERT_EQUAL(OUString("2147483646"), test::codemaker::cppumaker::Constants::to_string(2147483646));
-
-    CPPUNIT_ASSERT_EQUAL(OUString("0"), test::codemaker::cppumaker::ByteBits::to_string(0));
-    CPPUNIT_ASSERT_EQUAL(OUString("BIT0+BIT2"), test::codemaker::cppumaker::ByteBits::to_string(5));
-    CPPUNIT_ASSERT_EQUAL(OUString("BIT4"), test::codemaker::cppumaker::ByteBits::to_string(16));
-    CPPUNIT_ASSERT_EQUAL(OUString("BIT0+BIT4"), test::codemaker::cppumaker::ByteBits::to_string(17));
-    CPPUNIT_ASSERT_EQUAL(OUString("BIT7"), test::codemaker::cppumaker::ByteBits::to_string(-128));
-    CPPUNIT_ASSERT_EQUAL(OUString("ALL"), test::codemaker::cppumaker::ByteBits::to_string(-1));
-
-    CPPUNIT_ASSERT_EQUAL(OUString("BIT7"), test::codemaker::cppumaker::ShortBits::to_string(128));
-    CPPUNIT_ASSERT_EQUAL(OUString("ALL"), test::codemaker::cppumaker::ShortBits::to_string(-1));
-
-    CPPUNIT_ASSERT_EQUAL(OUString("BIT63"), test::codemaker::cppumaker::UnsignedHyperBits::to_string(9223372036854775808u));
-    CPPUNIT_ASSERT_EQUAL(OUString("BIT0+BIT62"), test::codemaker::cppumaker::UnsignedHyperBits::to_string(4611686018427387905));
-    CPPUNIT_ASSERT_EQUAL(OUString("BIT0+BIT63"), test::codemaker::cppumaker::UnsignedHyperBits::to_string(9223372036854775809u));
-    CPPUNIT_ASSERT_EQUAL(OUString("ALL"), test::codemaker::cppumaker::UnsignedHyperBits::to_string(SAL_MAX_UINT64));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -28,6 +28,7 @@ $(eval $(call gb_Library_add_exception_objects,reflection,\
     stoc/source/corereflection/crefl \
     stoc/source/corereflection/crenum \
     stoc/source/corereflection/criface \
+    stoc/source/corereflection/dump \
 ))
 
 # vim:set noet sw=4 ts=4:

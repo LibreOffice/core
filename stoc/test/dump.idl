@@ -1,0 +1,85 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module org { module libreoffice { module test {
+
+constants Constants {
+    const byte byteMin = -128;
+    const byte byteMax = 127;
+    const short shortMin = -32768;
+    const short shortMax = 32767;
+    const unsigned short unsignedShortMin = 0;
+    const unsigned short unsignedShortMax = 65535;
+    const long longMin = -2147483648;
+    const long longMax = 2147483647;
+    const unsigned long unsignedLongMin = 0;
+    const unsigned long unsignedLongMax = 4294967295;
+    const hyper hyperMin = -9223372036854775808;
+    const hyper hyperMax = 9223372036854775807;
+    const unsigned hyper unsignedHyperMin = 0;
+    const unsigned hyper unsignedHyperMax = 18446744073709551615;
+};
+
+constants ByteBits {
+    const byte BIT0 = 1;
+    const byte BIT1 = 2;
+    const byte BIT2 = 4;
+    const byte BIT3 = 8;
+    const byte BIT4 = 16;
+    const byte BIT5 = 32;
+    const byte BIT6 = 64;
+    const byte BIT7 = -128;
+    const byte ALL = -1;
+};
+
+constants ShortBits {
+    const short BIT0 = 1;
+    const short BIT1 = 2;
+    const short BIT2 = 4;
+    const short BIT3 = 8;
+    const short BIT4 = 16;
+    const short BIT5 = 32;
+    const short BIT6 = 64;
+    const short BIT7 = 128;
+    const short BIT8 = 256;
+    const short BIT9 = 512;
+    const short BIT10 = 1024;
+    const short BIT11 = 2048;
+    const short BIT12 = 4096;
+    const short BIT13 = 8192;
+    const short BIT14 = 16384;
+    const short BIT15 = -32768;
+    const short ALL = -1;
+};
+
+constants UnsignedHyperBits {
+    const unsigned hyper BIT0 = 1;
+    const unsigned hyper BIT1 = 2;
+    const unsigned hyper BIT2 = 4;
+    const unsigned hyper BIT3 = 8;
+    const unsigned hyper BIT4 = 16;
+    const unsigned hyper BIT5 = 32;
+    const unsigned hyper BIT6 = 64;
+    const unsigned hyper BIT7 = 128;
+    const unsigned hyper BIT8 = 256;
+    const unsigned hyper BIT9 = 512;
+    const unsigned hyper BIT10 = 1024;
+    const unsigned hyper BIT11 = 2048;
+    const unsigned hyper BIT12 = 4096;
+    const unsigned hyper BIT13 = 8192;
+    const unsigned hyper BIT14 = 16384;
+    const unsigned hyper BIT15 = 32768;
+    const unsigned hyper BIT62 = 4611686018427387904;
+    const unsigned hyper BIT63 = 9223372036854775808;
+    const unsigned hyper ALL = 18446744073709551615;
+};
+
+}; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
