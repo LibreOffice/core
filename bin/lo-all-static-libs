@@ -119,6 +119,7 @@ echo $INSTDIR/$LIBO_LIB_FOLDER/lib*.a \
      $WORKDIR/UnpackedTarball/libexttextcat/src/.libs/*.a \
      $WORKDIR/UnpackedTarball/libmspub/src/lib/.libs/*.a \
      $WORKDIR/UnpackedTarball/libmwaw/src/lib/.libs/*.a \
+     $WORKDIR/UnpackedTarball/libnumbertext/src/.libs/*.a \
      $WORKDIR/UnpackedTarball/libodfgen/src/.libs/*.a \
      $WORKDIR/UnpackedTarball/liborcus/src/*/.libs/*.a \
      $WORKDIR/UnpackedTarball/librevenge/src/*/.libs/*.a \
