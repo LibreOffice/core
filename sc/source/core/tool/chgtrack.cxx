@@ -43,6 +43,7 @@
 #include <tools/json_writer.hxx>
 #include <algorithm>
 #include <memory>
+#include <strings.hrc>
 #include <utility>
 
 ScChangeAction::ScChangeAction( ScChangeActionType eTypeP, const ScRange& rRange )
@@ -2061,9 +2062,7 @@ void ScChangeTrack::Init()
     bUseFixDateTime = false;
     bTimeNanoSeconds = true;
 
-    const SvtUserOptions& rUserOpt = SC_MOD()->GetUserOptions();
-    maUser = rUserOpt.GetFirstName() + " " + rUserOpt.GetLastName();
-    maUserCollection.insert(maUser);
+    CreateAuthorName();
 }
 
 void ScChangeTrack::DtorClear()
@@ -2160,10 +2159,9 @@ void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, Config
     if ( rDoc.IsInDtorClear() )
         return;
 
-    const SvtUserOptions& rUserOptions = SC_MOD()->GetUserOptions();
     size_t nOldCount = maUserCollection.size();
 
-    SetUser(rUserOptions.GetFirstName() + " " + rUserOptions.GetLastName());
+    CreateAuthorName();
 
     if ( maUserCollection.size() != nOldCount )
     {
@@ -2177,6 +2175,22 @@ void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, Config
             pDocSh->Broadcast( ScPaintHint( ScRange(0,0,0,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB), PaintPartFlags::Grid ) );
     }
 }
+
+void ScChangeTrack::CreateAuthorName()
+{
+    const SvtUserOptions& rUserOptions = SC_MOD()->GetUserOptions();
+    OUString aFirstName(rUserOptions.GetFirstName());
+    OUString aLastName(rUserOptions.GetLastName());
+    if (aFirstName.isEmpty() && aLastName.isEmpty())
+        SetUser(ScResId(STR_CHG_UNKNOWN_AUTHOR));
+    else if(!aFirstName.isEmpty() && aLastName.isEmpty())
+        SetUser(aFirstName);
+    else if(aFirstName.isEmpty() && !aLastName.isEmpty())
+        SetUser(aLastName);
+    else
+        SetUser(aFirstName + " " + aLastName);
+}
+
 
 void ScChangeTrack::SetUser( const OUString& rUser )
 {

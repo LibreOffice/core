@@ -966,6 +966,7 @@ public:
     bool IsInDeleteTop() const { return bInDeleteTop; }
     bool IsInDeleteUndo() const { return bInDeleteUndo; }
     bool IsInPasteCut() const { return bInPasteCut; }
+    void CreateAuthorName();
     SC_DLLPUBLIC void SetUser( const OUString& rUser );
     const OUString& GetUser() const { return maUser;}
     const std::set<OUString>& GetUserCollection() const { return maUserCollection;}

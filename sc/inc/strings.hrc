@@ -202,6 +202,7 @@
 #define STR_CHG_REJECTED                            NC_("STR_CHG_REJECTED", "Rejected")
 #define STR_CHG_NO_ENTRY                            NC_("STR_CHG_NO_ENTRY", "No Entry")
 #define STR_CHG_EMPTY                               NC_("STR_CHG_EMPTY", "<empty>")
+#define STR_CHG_UNKNOWN_AUTHOR                      NC_("STR_CHG_UNKNOWN_AUTHOR", "Unknown Author")
 
 #define STR_NOT_PROTECTED                           NC_("STR_NOT_PROTECTED", "Not protected")
 #define STR_NOT_PASS_PROTECTED                      NC_("STR_NOT_PASS_PROTECTED", "Not password-protected")

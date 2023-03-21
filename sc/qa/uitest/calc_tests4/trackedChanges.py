@@ -70,7 +70,7 @@ class CalcTrackedChanges(UITestCase):
                 xChangesList = xTrackDlg.getChild("calcchanges")
                 self.assertEqual(1, len(xChangesList.getChildren()))
 
-                textStart = "Changed contents\tSheet1.A1\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textStart = "Changed contents\tSheet1.A1\tUnknown Author\t" + datetime.datetime.now().strftime("%m/%d/%Y")
 
                 xChild = xChangesList.getChild('0')
                 self.assertTrue(get_state_as_dict(xChild)["Text"].startswith(textStart))
@@ -78,11 +78,11 @@ class CalcTrackedChanges(UITestCase):
                 xChild.executeAction("EXPAND", tuple())
 
                 self.assertEqual(3, len(xChild.getChildren()))
-                textStartChild1 = "<empty>\tSheet1.A1\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textStartChild1 = "<empty>\tSheet1.A1\tUnknown Author\t" + datetime.datetime.now().strftime("%m/%d/%Y")
                 textEndChild1 = "(Original: <empty>)"
-                textStartChild2 = "'Hello'\tSheet1.A1\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textStartChild2 = "'Hello'\tSheet1.A1\tUnknown Author\t" + datetime.datetime.now().strftime("%m/%d/%Y")
                 textEndChild2 = "(Changed to 'Hello')"
-                textStartChild3 = "'There'\tSheet1.A1\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textStartChild3 = "'There'\tSheet1.A1\tUnknown Author\t" + datetime.datetime.now().strftime("%m/%d/%Y")
                 textEndChild3 = "(Changed to 'There')"
 
                 self.assertTrue(get_state_as_dict(xChild.getChild('0'))["Text"].startswith(textStartChild1))
@@ -113,7 +113,7 @@ class CalcTrackedChanges(UITestCase):
                 xChangesList = xTrackDlg.getChild("calcchanges")
                 self.assertEqual(1, len(xChangesList.getChildren()))
 
-                textStart = "Row deleted\t(Sheet1.1:1)\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textStart = "Row deleted\t(Sheet1.1:1)\tUnknown Author\t" + datetime.datetime.now().strftime("%m/%d/%Y")
                 textEnd = "(Row 1:1 deleted)"
 
                 xChild = xChangesList.getChild('0')
@@ -125,7 +125,7 @@ class CalcTrackedChanges(UITestCase):
                 xChild.executeAction("EXPAND", tuple())
 
                 self.assertEqual(1, len(xChild.getChildren()))
-                textStartChild1 = "Changed contents\t(Sheet1.A1)\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textStartChild1 = "Changed contents\t(Sheet1.A1)\tUnknown Author\t" + datetime.datetime.now().strftime("%m/%d/%Y")
                 textEndChild1 = "(Cell (A1) changed from '<empty>' to 'Hello')"
 
                 self.assertTrue(get_state_as_dict(xChild.getChild('0'))["Text"].startswith(textStartChild1))
@@ -147,9 +147,9 @@ class CalcTrackedChanges(UITestCase):
                 xChangesList = xTrackDlg.getChild("calcchanges")
                 self.assertEqual(2, len(xChangesList.getChildren()))
 
-                textStart = "Changed contents\tSheet1.A1\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textStart = "Changed contents\tSheet1.A1\tUnknown Author\t" + datetime.datetime.now().strftime("%m/%d/%Y")
                 textEnd = "(Cell A1 changed from '<empty>' to 'Test LibreOffice')"
-                textStart2 = "Changed contents\tSheet1.A2\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textStart2 = "Changed contents\tSheet1.A2\tUnknown Author\t" + datetime.datetime.now().strftime("%m/%d/%Y")
                 textEnd2 = "(Cell A2 changed from '<empty>' to 'Test LibreOffice')"
                 self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].startswith(textStart))
                 self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].endswith(textEnd))
@@ -197,9 +197,9 @@ class CalcTrackedChanges(UITestCase):
                 xChangesList = xTrackDlg.getChild("calcchanges")
                 self.assertEqual(2, len(xChangesList.getChildren()))
 
-                textStart = "Changed contents\tSheet1.A1\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textStart = "Changed contents\tSheet1.A1\tUnknown Author\t" + datetime.datetime.now().strftime("%m/%d/%Y")
                 textEnd = "(Cell A1 changed from '<empty>' to 'Test LibreOffice')"
-                textStart2 = "Changed contents\tSheet1.A2\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textStart2 = "Changed contents\tSheet1.A2\tUnknown Author\t" + datetime.datetime.now().strftime("%m/%d/%Y")
                 textEnd2 = "(Cell A2 changed from '<empty>' to 'Test LibreOffice')"
                 self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].startswith(textStart))
                 self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].endswith(textEnd))
@@ -239,9 +239,9 @@ class CalcTrackedChanges(UITestCase):
                 xChangesList = xTrackDlg.getChild("calcchanges")
                 self.assertEqual(2, len(xChangesList.getChildren()))
 
-                textStart = "Changed contents\tSheet1.A1\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textStart = "Changed contents\tSheet1.A1\tUnknown Author\t" + datetime.datetime.now().strftime("%m/%d/%Y")
                 textEnd = "(Cell A1 changed from '<empty>' to 'Test LibreOffice')"
-                textStart2 = "Changed contents\tSheet1.A2\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textStart2 = "Changed contents\tSheet1.A2\tUnknown Author\t" + datetime.datetime.now().strftime("%m/%d/%Y")
                 textEnd2 = "(Cell A2 changed from '<empty>' to 'Test LibreOffice')"
                 self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].startswith(textStart))
                 self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].endswith(textEnd))
@@ -301,9 +301,9 @@ class CalcTrackedChanges(UITestCase):
                 xChangesList = xTrackDlg.getChild("calcchanges")
                 self.assertEqual(2, len(xChangesList.getChildren()))
 
-                textStart = "Changed contents\tSheet1.A1\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textStart = "Changed contents\tSheet1.A1\tUnknown Author\t" + datetime.datetime.now().strftime("%m/%d/%Y")
                 textEnd = "(Cell A1 changed from '<empty>' to 'Test LibreOffice')"
-                textStart2 = "Changed contents\tSheet1.A2\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textStart2 = "Changed contents\tSheet1.A2\tUnknown Author\t" + datetime.datetime.now().strftime("%m/%d/%Y")
                 textEnd2 = "(Cell A2 changed from '<empty>' to 'Test LibreOffice')"
                 self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].startswith(textStart))
                 self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].endswith(textEnd))
