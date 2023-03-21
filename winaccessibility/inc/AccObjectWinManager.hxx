@@ -102,8 +102,8 @@ public:
 
     LRESULT Get_ToATInterface(HWND hWnd, long lParam, WPARAM wParam);
 
-    void  DecreaseState( css::accessibility::XAccessible* pXAcc,unsigned short pState );
-    void  IncreaseState( css::accessibility::XAccessible* pXAcc,unsigned short pState );
+    void  DecreaseState(css::accessibility::XAccessible* pXAcc, sal_Int64 nState);
+    void  IncreaseState(css::accessibility::XAccessible* pXAcc, sal_Int64 nState);
     void  UpdateState( css::accessibility::XAccessible* pXAcc );
 
     void  SetValue( css::accessibility::XAccessible* pXAcc, css::uno::Any pAny );
