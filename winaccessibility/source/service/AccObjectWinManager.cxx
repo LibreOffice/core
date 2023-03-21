@@ -796,11 +796,11 @@ AccObjectWinManager::CreateAccEventListener(XAccessible* pXAcc)
    * @param pState Changed state.
    * @return
    */
-void AccObjectWinManager::DecreaseState( XAccessible* pXAcc,unsigned short pState )
+void AccObjectWinManager::DecreaseState(XAccessible* pXAcc, sal_Int64 nState)
 {
     AccObject* pAccObj = GetAccObjByXAcc( pXAcc );
     if( pAccObj )
-        pAccObj->DecreaseState( pState );
+        pAccObj->DecreaseState(nState);
 }
 
 /**
@@ -811,11 +811,11 @@ void AccObjectWinManager::DecreaseState( XAccessible* pXAcc,unsigned short pStat
    * @param pState Changed state.
    * @return
    */
-void AccObjectWinManager::IncreaseState( XAccessible* pXAcc,unsigned short pState )
+void AccObjectWinManager::IncreaseState(XAccessible* pXAcc, sal_Int64 nState)
 {
     AccObject* pAccObj = GetAccObjByXAcc( pXAcc );
     if( pAccObj )
-        pAccObj->IncreaseState( pState );
+        pAccObj->IncreaseState(nState);
 }
 
 void  AccObjectWinManager::UpdateState( css::accessibility::XAccessible* pXAcc )
