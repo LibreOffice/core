@@ -123,10 +123,22 @@ DECLARE_SW_ROUNDTRIP_TEST(testBadDocm, "bad.docm", nullptr, DocmTest)
     CPPUNIT_ASSERT_EQUAL(OUString("MS Word 2007 XML VBA"), pTextDoc->GetDocShell()->GetMedium()->GetFilter()->GetName());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf109063, "tdf109063.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf109063)
 {
-    // This was 1, near-page-width table was imported as a TextFrame.
-    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+    SwModelTestBase::FlySplitGuard aGuard;
+    auto verify = [this]() {
+        // A near-page-width table should be allowed to split:
+        uno::Reference<text::XTextFramesSupplier> xDocument(mxComponent, uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xFrame(xDocument->getTextFrames()->getByName("Frame1"),
+                                                   uno::UNO_QUERY);
+        bool bIsSplitAllowed{};
+        xFrame->getPropertyValue("IsSplitAllowed") >>= bIsSplitAllowed;
+        CPPUNIT_ASSERT(bIsSplitAllowed);
+    };
+    createSwDoc("tdf109063.docx");
+    verify();
+    reload(mpFilter, "tdf109063.docx");
+    verify();
 }
 
 CPPUNIT_TEST_FIXTURE(DocmTest, testTdf108269)
