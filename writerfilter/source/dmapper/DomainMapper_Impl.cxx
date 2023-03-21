@@ -4796,26 +4796,52 @@ static OUString lcl_ExtractVariableAndHint( std::u16string_view rCommand, OUStri
     return OUString(sRet);
 }
 
+static size_t nextCode(std::u16string_view rCommand, size_t pos)
+{
+    bool inQuotes = false;
+    for (; pos < rCommand.size(); ++pos)
+    {
+        switch (rCommand[pos])
+        {
+        case '"':
+            inQuotes = !inQuotes;
+            break;
+        case '\\':
+            ++pos;
+            if (!inQuotes)
+                return pos;
+            break;
+        }
+    }
+    return std::u16string_view::npos;
+}
+
+// Returns the position of the field code
+static size_t findCode(std::u16string_view rCommand, sal_Unicode cSwitch)
+{
+    for (size_t i = nextCode(rCommand, 0); i < rCommand.size(); i = nextCode(rCommand, i))
+        if (rCommand[i] == cSwitch)
+            return i;
+
+    return std::u16string_view::npos;
+}
 
 static bool lcl_FindInCommand(
     std::u16string_view rCommand,
     sal_Unicode cSwitch,
     OUString& rValue )
 {
-    bool bRet = false;
-    OUString sSearch = "\\" + OUStringChar( cSwitch );
-    size_t nIndex = rCommand.find( sSearch  );
-    if( nIndex != std::u16string_view::npos )
+    if (size_t i = findCode(rCommand, cSwitch); i < rCommand.size())
     {
-        bRet = true;
-        //find next '\' or end of string
-        size_t nEndIndex = rCommand.find( '\\', nIndex + 1);
-        if( nEndIndex == std::u16string_view::npos )
-            nEndIndex = rCommand.size() ;
-        if( nEndIndex - nIndex > 3 )
-            rValue = rCommand.substr( nIndex + 3, nEndIndex - nIndex - 3);
+        ++i;
+        size_t next = nextCode(rCommand, i);
+        if (next < rCommand.size())
+            --next; // get back before the next '\\'
+        rValue = o3tl::trim(rCommand.substr(i, next - i));
+        return true;
     }
-    return bRet;
+
+    return false;
 }
 
 static OUString lcl_trim(std::u16string_view sValue)
@@ -6049,45 +6075,49 @@ void DomainMapper_Impl::handleAuthor
 static uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool bHyperlinks, const OUString& sChapterNoSeparator,
                                    const uno::Sequence< beans::PropertyValues >& aLevel )
 {
-    //create a copy of the level and add two new entries - hyperlink start and end
-    bool bChapterNoSeparator  = !sChapterNoSeparator.isEmpty();
-    sal_Int32 nAdd = (bHyperlinks && bChapterNoSeparator) ? 4 : 2;
-    uno::Sequence< beans::PropertyValues > aNewLevel( aLevel.getLength() + nAdd);
-    beans::PropertyValues* pNewLevel = aNewLevel.getArray();
-    if( bHyperlinks )
-    {
-        beans::PropertyValues aHyperlink{ comphelper::makePropertyValue(
-            getPropertyName( PROP_TOKEN_TYPE ), getPropertyName( PROP_TOKEN_HYPERLINK_START )) };
-        pNewLevel[0] = aHyperlink;
-        aHyperlink = { comphelper::makePropertyValue(
-            getPropertyName(PROP_TOKEN_TYPE), getPropertyName( PROP_TOKEN_HYPERLINK_END )) };
-        pNewLevel[aNewLevel.getLength() -1] = aHyperlink;
-    }
-    if( bChapterNoSeparator )
-    {
-        beans::PropertyValues aChapterNo{
-            comphelper::makePropertyValue(getPropertyName( PROP_TOKEN_TYPE ),
-                                          getPropertyName( PROP_TOKEN_CHAPTER_INFO )),
-            comphelper::makePropertyValue(getPropertyName( PROP_CHAPTER_FORMAT ),
-                                          //todo: is ChapterFormat::Number correct?
-                                          sal_Int16(text::ChapterFormat::NUMBER))
-        };
-        pNewLevel[aNewLevel.getLength() - (bHyperlinks ? 4 : 2) ] = aChapterNo;
+    //create a copy of the level and add new entries
 
-        beans::PropertyValues aChapterSeparator{
-            comphelper::makePropertyValue(getPropertyName( PROP_TOKEN_TYPE ),
-                                          getPropertyName( PROP_TOKEN_TEXT )),
-            comphelper::makePropertyValue(getPropertyName( PROP_TEXT ), sChapterNoSeparator)
-        };
-        pNewLevel[aNewLevel.getLength() - (bHyperlinks ? 3 : 1)] = aChapterSeparator;
-    }
-    //copy the 'old' entries except the last (page no)
-    std::copy(aLevel.begin(), std::prev(aLevel.end()), std::next(pNewLevel));
-    //copy page no entry (last or last but one depending on bHyperlinks
-    sal_Int32 nPageNo = aNewLevel.getLength() - (bHyperlinks ? 2 : 3);
-    pNewLevel[nPageNo] = aLevel[aLevel.getLength() - 1];
+    std::vector<css::beans::PropertyValues> aNewLevel;
+    aNewLevel.reserve(aLevel.getLength() + 4); // at most 4 added items
 
-    return aNewLevel;
+    static constexpr OUStringLiteral tokType(u"TokenType");
+    static constexpr OUStringLiteral tokHStart(u"TokenHyperlinkStart");
+    static constexpr OUStringLiteral tokHEnd(u"TokenHyperlinkEnd");
+    static constexpr OUStringLiteral tokPNum(u"TokenPageNumber");
+
+    if (bHyperlinks)
+        aNewLevel.push_back({ comphelper::makePropertyValue(tokType, tokHStart) });
+
+    for (const auto& item : aLevel)
+    {
+        if (bHyperlinks
+            && std::any_of(item.begin(), item.end(),
+                           [](const css::beans::PropertyValue& p) {
+                               return p.Name == tokType
+                                      && (p.Value == tokHStart || p.Value == tokHEnd);
+                           }))
+            continue; // We add hyperlink ourselves, so just skip existing hyperlink start / end
+
+        if (!sChapterNoSeparator.isEmpty()
+            && std::any_of(item.begin(), item.end(),
+                           [](const css::beans::PropertyValue& p)
+                           { return p.Name == tokType && p.Value == tokPNum; }))
+        {
+            // This is an existing page number token; insert the chapter and separator before it
+            aNewLevel.push_back(
+                { comphelper::makePropertyValue(tokType, OUString("TokenChapterInfo")),
+                  comphelper::makePropertyValue("ChapterFormat", text::ChapterFormat::NUMBER) });
+            aNewLevel.push_back({ comphelper::makePropertyValue(tokType, OUString("TokenText")),
+                                  comphelper::makePropertyValue("Text", sChapterNoSeparator) });
+        }
+
+        aNewLevel.push_back(item);
+    }
+
+    if (bHyperlinks)
+        aNewLevel.push_back({ comphelper::makePropertyValue(tokType, tokHEnd) });
+
+    return comphelper::containerToSequence(aNewLevel);
 }
 
 /// Returns title of the TOC placed in paragraph(s) before TOC field inside STD-frame
@@ -6178,6 +6208,26 @@ static auto FilterChars(std::u16string_view const& rStyleName) -> OUString
     return msfilter::util::CreateDOCXStyleId(rStyleName);
 }
 
+static OUString UnquoteFieldText(std::u16string_view s)
+{
+    OUStringBuffer result(s.size());
+    for (size_t i = 0; i < s.size(); ++i)
+    {
+        switch (s[i])
+        {
+        case '"':
+            continue;
+        case '\\':
+            if (i < s.size() - 1)
+                ++i;
+            [[fallthrough]];
+        default:
+            result.append(s[i]);
+        }
+    }
+    return result.makeStringAndClear();
+}
+
 OUString DomainMapper_Impl::ConvertTOCStyleName(OUString const& rTOCStyleName)
 {
     assert(!rTOCStyleName.isEmpty());
@@ -6242,7 +6292,7 @@ void DomainMapper_Impl::handleToc
     if( lcl_FindInCommand( pContext->GetCommand(), 'd', sValue ))
     {
                         //todo: insert the chapter number into each level and insert the separator additionally
-        sChapterNoSeparator = sValue;
+        sChapterNoSeparator = UnquoteFieldText(sValue);
     }
 //                  \f Builds a table of contents using TC entries instead of outline levels
     if( lcl_FindInCommand( pContext->GetCommand(), 'f', sValue ))

@@ -1037,6 +1037,56 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153791)
     CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xRun, "CharColor"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf154319)
+{
+    createSwDoc("tdf154319-ToC_with_s_and_d.docx");
+
+    css::uno::Reference<css::text::XDocumentIndexesSupplier> xSupplier(mxComponent,
+                                                                       css::uno::UNO_QUERY_THROW);
+    auto xIndexes = xSupplier->getDocumentIndexes();
+    css::uno::Reference<css::beans::XPropertySet> xTOCIndex(xIndexes->getByIndex(0),
+                                                            css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::container::XIndexReplace> xLevelFormats;
+    CPPUNIT_ASSERT(xTOCIndex->getPropertyValue("LevelFormat") >>= xLevelFormats);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), xLevelFormats->getCount());
+
+    const auto checkPropVal = [](const auto& expected, const css::beans::PropertyValues& entry,
+                                 const OUString& name) {
+        auto it
+            = std::find_if(entry.begin(), entry.end(),
+                           [&name](const css::beans::PropertyValue& p) { return p.Name == name; });
+        OString msg = "Property: " + name.toUtf8();
+        CPPUNIT_ASSERT_MESSAGE(msg.getStr(), it != entry.end());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), css::uno::Any(expected), it->Value);
+    };
+
+    //start with level 1, 0 is the header level
+    for (sal_Int32 nLevel = 1; nLevel < xLevelFormats->getCount(); ++nLevel)
+    {
+        css::uno::Sequence<css::beans::PropertyValues> aLevel;
+        xLevelFormats->getByIndex(nLevel) >>= aLevel;
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aLevel.getLength());
+
+        checkPropVal(OUString("TokenHyperlinkStart"), aLevel[0], "TokenType");
+
+        checkPropVal(OUString("TokenEntryNumber"), aLevel[1], "TokenType");
+
+        checkPropVal(OUString("TokenEntryText"), aLevel[2], "TokenType");
+
+        checkPropVal(OUString("TokenTabStop"), aLevel[3], "TokenType");
+
+        checkPropVal(OUString("TokenChapterInfo"), aLevel[4], "TokenType");
+
+        checkPropVal(OUString("TokenText"), aLevel[5], "TokenType");
+        checkPropVal(OUString("\""), aLevel[5], "Text");
+
+        checkPropVal(OUString("TokenPageNumber"), aLevel[6], "TokenType");
+
+        checkPropVal(OUString("TokenHyperlinkEnd"), aLevel[7], "TokenType");
+    }
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();

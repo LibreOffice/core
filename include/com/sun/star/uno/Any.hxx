@@ -600,6 +600,14 @@ inline bool SAL_CALL operator == ( const Any & rAny, const ::rtl::OUString & val
     return (typelib_TypeClass_STRING == rAny.pType->eTypeClass &&
             value == * static_cast< const ::rtl::OUString * >( rAny.pData ) );
 }
+
+#if defined LIBO_INTERNAL_ONLY
+template<std::size_t N>
+inline bool SAL_CALL operator == (const Any& rAny, const rtl::OUStringLiteral<N>& value)
+{
+    return operator ==(rAny, rtl::OUString(value));
+}
+#endif
 // type
 
 template<>

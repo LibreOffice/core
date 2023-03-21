@@ -451,6 +451,10 @@ template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, ::rtl::OUString & value );
 template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const ::rtl::OUString & value );
+#if defined LIBO_INTERNAL_ONLY
+template<std::size_t N>
+inline bool SAL_CALL operator == (const Any& rAny, const rtl::OUStringLiteral<N>& value);
+#endif
 // type
 template<>
 inline bool SAL_CALL operator >>= ( const Any & rAny, Type & value );
