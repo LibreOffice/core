@@ -214,9 +214,7 @@ private:
 
     virtual std::unique_ptr<Resetter> preTest(const char* filename) override
     {
-        if (getTestName().indexOf("XHTML") != -1)
-            setFilterOptions("XHTML");
-        else if (getTestName().indexOf("ReqIf") != -1)
+        if (getTestName().indexOf("ReqIf") != -1)
         {
             if (o3tl::ends_with(filename, ".xhtml"))
             {
@@ -854,8 +852,12 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIfTableHeight)
     assertXPathNoAttribute(pDoc, "//reqif-xhtml:td", "height");
 }
 
-DECLARE_HTMLEXPORT_TEST(testXHTMLUseCSS, "xhtml-css.odt")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testXHTMLUseCSS)
 {
+    createSwDoc("xhtml-css.odt");
+    setFilterOptions("XHTML");
+    save(OUString::createFromAscii(mpFilter));
+
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
