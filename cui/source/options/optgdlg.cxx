@@ -665,7 +665,6 @@ std::unique_ptr<SfxTabPage> OfaViewTabPage::Create( weld::Container* pPage, weld
 bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 {
     bool bModified = false;
-    bool bMenuOptModified = false;
     bool bDarkModeOptModified = false;
     bool bRepaintWindows(false);
     std::shared_ptr<comphelper::ConfigurationChanges> xChanges(comphelper::ConfigurationChanges::create());
@@ -799,23 +798,8 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 
     xChanges->commit();
 
-    if (bMenuOptModified || bDarkModeOptModified)
-    {
-        // Set changed settings to the application instance
-        AllSettings aAllSettings = Application::GetSettings();
-
-        if (bMenuOptModified)
-        {
-            StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
-            aAllSettings.SetStyleSettings(aStyleSettings);
-        }
-
-        if (bDarkModeOptModified)
-            MiscSettings::SetDarkMode(m_xAppearanceStyleLB->get_active());
-
-        Application::MergeSystemSettings( aAllSettings );
-        Application::SetSettings(aAllSettings);
-    }
+    if (bDarkModeOptModified)
+        MiscSettings::SetDarkMode(m_xAppearanceStyleLB->get_active());
 
     if ( bAppearanceChanged )
     {
