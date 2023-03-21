@@ -115,7 +115,7 @@ namespace drawinglayer::texture
                 return false;
 
             // not needed when the last two ColorStops have different offset, then
-            // a visible range will be pocessed already
+            // a visible range will be processed already
             if (!basegfx::fTools::equal(mnColorStops.back().getStopOffset(), penultimate->getStopOffset()))
                 return false;
 

@@ -508,7 +508,7 @@ namespace basegfx
 
                 // we need to extend the interpolation to the local
                 // range of ColorStops. Despite having two ColorStops
-                // these are not necessarily at 0.0 and 1.0, so mabe
+                // these are not necessarily at 0.0 and 1.0, so may be
                 // not the classical Start/EndColor (what is allowed)
                 fScaler = (fScaler - fMin) / (fMax - fMin);
                 return basegfx::interpolate(
