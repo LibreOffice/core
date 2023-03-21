@@ -264,13 +264,15 @@ SwMMResultSaveDialog::SwMMResultSaveDialog(weld::Window* pParent)
     m_xFromRB->connect_toggled(aLink);
     // m_pSaveAsOneRB is the default, so disable m_xFromNF and m_xToNF initially.
     aLink.Call(*m_xSaveAsOneRB);
-    SwView* pView = ::GetActiveView();
-    const std::shared_ptr<SwMailMergeConfigItem>& xConfigItem = pView->GetMailMergeConfigItem();
-    assert(xConfigItem);
-    sal_Int32 nCount = xConfigItem->GetMergedDocumentCount();
-    m_xFromNF->set_max(nCount);
-    m_xToNF->set_max(nCount);
-    m_xToNF->set_value(nCount);
+    if (SwView* pView = GetActiveView())
+    {
+        const std::shared_ptr<SwMailMergeConfigItem>& xConfigItem = pView->GetMailMergeConfigItem();
+        assert(xConfigItem);
+        sal_Int32 nCount = xConfigItem->GetMergedDocumentCount();
+        m_xFromNF->set_max(nCount);
+        m_xToNF->set_max(nCount);
+        m_xToNF->set_value(nCount);
+    }
 
     m_xOKButton->connect_clicked(LINK(this, SwMMResultSaveDialog, SaveOutputHdl_Impl));
 }
@@ -357,7 +359,9 @@ SwMMResultEmailDialog::~SwMMResultEmailDialog()
 void SwMMResultPrintDialog::FillInPrinterSettings()
 {
     //fill printer ListBox
-    SwView* pView = ::GetActiveView();
+    SwView* pView = GetActiveView();
+    if (!pView)
+        return;
     const std::shared_ptr<SwMailMergeConfigItem>& xConfigItem = pView->GetMailMergeConfigItem();
     const std::vector<OUString>& rPrinters = Printer::GetPrinterQueues();
     unsigned int nCount = rPrinters.size();
@@ -390,7 +394,9 @@ void SwMMResultPrintDialog::FillInPrinterSettings()
 
 void SwMMResultEmailDialog::FillInEmailSettings()
 {
-    SwView* pView = ::GetActiveView();
+    SwView* pView = GetActiveView();
+    if (!pView)
+        return;
     const std::shared_ptr<SwMailMergeConfigItem>& xConfigItem = pView->GetMailMergeConfigItem();
     assert(xConfigItem);
 
@@ -546,7 +552,9 @@ int documentEndPageNumber(SwMailMergeConfigItem* pConfigItem, int document, bool
 
 IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
 {
-    SwView* pView = ::GetActiveView();
+    SwView* pView = GetActiveView();
+    if (!pView)
+        return;
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
     assert(xConfigItem);
 
@@ -742,7 +750,9 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
 
 IMPL_LINK(SwMMResultPrintDialog, PrinterChangeHdl_Impl, weld::ComboBox&, rBox, void)
 {
-    SwView* pView = ::GetActiveView();
+    SwView* pView = GetActiveView();
+    if (!pView)
+        return;
     const std::shared_ptr<SwMailMergeConfigItem>& xConfigItem = pView->GetMailMergeConfigItem();
     assert(xConfigItem);
     if (rBox.get_active() != -1)
@@ -778,7 +788,9 @@ IMPL_LINK(SwMMResultPrintDialog, PrinterChangeHdl_Impl, weld::ComboBox&, rBox, v
 
 IMPL_LINK_NOARG(SwMMResultPrintDialog, PrintHdl_Impl, weld::Button&, void)
 {
-    SwView* pView = ::GetActiveView();
+    SwView* pView = GetActiveView();
+    if (!pView)
+        return;
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
     assert(xConfigItem);
 
@@ -892,7 +904,9 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendAsHdl_Impl, weld::Button&, void)
 // Send documents as e-mail
 IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, void)
 {
-    SwView* pView = ::GetActiveView();
+    SwView* pView = GetActiveView();
+    if (!pView)
+        return;
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
     assert(xConfigItem);
 

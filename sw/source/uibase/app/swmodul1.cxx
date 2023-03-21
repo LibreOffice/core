@@ -107,8 +107,7 @@ static void lcl_SetUIPrefs(const SwViewOption &rPref, SwView* pView, SwViewShell
 
 SwWrtShell* GetActiveWrtShell()
 {
-    SwView *pActive = ::GetActiveView();
-    if( pActive )
+    if (SwView *pActive = GetActiveView())
         return &pActive->GetWrtShell();
     return nullptr;
 }
