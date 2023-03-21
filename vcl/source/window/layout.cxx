@@ -402,7 +402,7 @@ void VclBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 sal_uInt16 VclBox::getDefaultAccessibleRole() const
 {
 #if defined(_WIN32)
-    //fdo#74284 call Boxes Panels, keep then as "Filler" under
+    //fdo#74284 call Boxes Panels, keep them as "Filler" under
     //at least Linux seeing as that's what Gtk does for GtkBoxes
     return css::accessibility::AccessibleRole::PANEL;
 #else
