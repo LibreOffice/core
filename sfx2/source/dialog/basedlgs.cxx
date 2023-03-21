@@ -233,6 +233,17 @@ SfxSingleTabDialogController::SfxSingleTabDialogController(weld::Widget *pParent
     m_xOKBtn->connect_clicked(LINK(this, SfxSingleTabDialogController, OKHdl_Impl));
 }
 
+SfxSingleTabDialogController::SfxSingleTabDialogController(weld::Widget *pParent, const SfxItemSet* pSet,
+    const OUString& rContainerId, const OUString& rUIXMLDescription, const OUString& rID)
+    : SfxOkDialogController(pParent, rUIXMLDescription, rID)
+    , m_pInputSet(pSet)
+    , m_xContainer(m_xBuilder->weld_container(rContainerId))
+    , m_xOKBtn(m_xBuilder->weld_button("ok"))
+    , m_xHelpBtn(m_xBuilder->weld_button("help"))
+{
+    m_xOKBtn->connect_clicked(LINK(this, SfxSingleTabDialogController, OKHdl_Impl));
+}
+
 SfxSingleTabDialogController::~SfxSingleTabDialogController()
 {
 }

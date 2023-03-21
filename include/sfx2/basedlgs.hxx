@@ -107,6 +107,10 @@ public:
         const OUString& rUIXMLDescription = OUString("sfx/ui/singletabdialog.ui"),
         const OUString& rID = OUString("SingleTabDialog"));
 
+    SfxSingleTabDialogController(weld::Widget* pParent, const SfxItemSet* pOptionsSet,
+        const OUString& rContainerId, const OUString& rUIXMLDescription,
+        const OUString& rID);
+
     weld::Container* get_content_area() { return m_xContainer.get(); }
 
     virtual             ~SfxSingleTabDialogController() override;
