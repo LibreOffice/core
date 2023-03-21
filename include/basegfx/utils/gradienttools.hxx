@@ -196,6 +196,11 @@ namespace basegfx
 
     namespace utils
     {
+        /* Tooling method to reverse ColorStops, including offsets.
+           When also mirroring offsets a valid sort keeps valid.
+        */
+        BASEGFX_DLLPUBLIC void reverseColorStops(ColorStops& rColorStops);
+
         /* Tooling method to convert UNO API data to ColorStops.
            This will try to extract ColorStop data from the given
            Any, so if it's of type awt::Gradient2 that data will be
@@ -238,13 +243,8 @@ namespace basegfx
              be removed)
            - contains no ColorStops with offset > 1.0 (will
              be removed)
-           - contains no two ColorStops with identical offsets
-             (will be removed, 1st one/smallest offset wins
-             which is also given by sort tooling)
+           - ColorStops with identical offsets are now allowed
            - will be sorted from lowest offset to highest
-           - if all colors are the same, the content will
-             be reduced to a single entry with offset 0.0
-             (force to StartColor)
 
            Some more notes:
            - It can happen that the result is empty

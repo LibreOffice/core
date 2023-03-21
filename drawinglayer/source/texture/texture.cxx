@@ -97,6 +97,42 @@ namespace drawinglayer::texture
                 && mfBorder == pCompare->mfBorder);
         }
 
+        bool GeoTexSvxGradient::checkPenultimate()
+        {
+            // not needed when no ColorStops
+            if (mnColorStops.empty())
+                return false;
+
+            // not needed when last ColorStop at the end or outside
+            if (basegfx::fTools::moreOrEqual(mnColorStops.back().getStopOffset(), 1.0))
+                return false;
+
+            // get penultimate entry
+            const auto penultimate(mnColorStops.rbegin() + 1);
+
+            // if there is none, we need no correction and are done
+            if (penultimate == mnColorStops.rend())
+                return false;
+
+            // not needed when the last two ColorStops have different offset, then
+            // a visible range will be pocessed already
+            if (!basegfx::fTools::equal(mnColorStops.back().getStopOffset(), penultimate->getStopOffset()))
+                return false;
+
+            // not needed when the last two ColorStops have the same Color, then the
+            // range before solves the problem
+            if (mnColorStops.back().getStopColor() == penultimate->getStopColor())
+                return false;
+
+            // Here we need to temporarily add a ColorStop entry with the
+            // same color as the last entry to correctly 'close' the
+            // created gradient geometry.
+            // The simplest way is to temporarily add an entry to the local
+            // ColorStops for this at 1.0 (using same color)
+            mnColorStops.emplace_back(1.0, mnColorStops.back().getStopColor());
+            return true;
+        }
+
         GeoTexSvxGradientLinear::GeoTexSvxGradientLinear(
             const basegfx::B2DRange& rDefinitionRange,
             const basegfx::B2DRange& rOutputRange,
@@ -145,6 +181,9 @@ namespace drawinglayer::texture
             if (mnColorStops.size() < 2)
                 return;
 
+            // check if we need last-ColorStop-correction
+            const bool bPenultimateUsed(checkPenultimate());
+
             // prepare unit range transform
             basegfx::B2DHomMatrix aPattern;
 
@@ -159,16 +198,22 @@ namespace drawinglayer::texture
             // outer loop over ColorStops, each is from cs_l to cs_r
             for (auto cs_l(mnColorStops.begin()), cs_r(cs_l + 1); cs_r != mnColorStops.end(); cs_l++, cs_r++)
             {
+                // get offsets
+                const double fOffsetStart(cs_l->getStopOffset());
+                const double fOffsetEnd(cs_r->getStopOffset());
+
+                // same offset, empty ColorStopRange, continue with next step
+                if (basegfx::fTools::equal(fOffsetStart, fOffsetEnd))
+                    continue;
+
                 // get colors & calculate steps
                 const basegfx::BColor aCStart(cs_l->getStopColor());
                 const basegfx::BColor aCEnd(cs_r->getStopColor());
                 const sal_uInt32 nSteps(basegfx::utils::calculateNumberOfSteps(
                     maGradientInfo.getRequestedSteps(), aCStart, aCEnd));
 
-                // get offsets & calculate StripeWidth
+                // calculate StripeWidth
                 // nSteps is >= 1, see getRequestedSteps, so no check needed here
-                const double fOffsetStart(cs_l->getStopOffset());
-                const double fOffsetEnd(cs_r->getStopOffset());
                 const double fStripeWidth((fOffsetEnd - fOffsetStart) / nSteps);
 
                 // for the 1st color range we do not need to create the 1st step
@@ -206,6 +251,9 @@ namespace drawinglayer::texture
                     rEntries.push_back(aB2DHomMatrixAndBColor);
                 }
             }
+
+            if (bPenultimateUsed)
+                mnColorStops.pop_back();
         }
 
         void GeoTexSvxGradientLinear::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
@@ -237,6 +285,12 @@ namespace drawinglayer::texture
         , mfUnitMinX(0.0)
         , mfUnitWidth(1.0)
         {
+            // ARGH! GradientAxial uses the ColorStops in reverse order compared
+            // with the other gradients. Either stay 'thinking reverse' for the
+            // rest of time or adapt it here and go in same order as the other five,
+            // so unifications/tooling will be possible
+            basegfx::utils::reverseColorStops(mnColorStops);
+
             maGradientInfo = basegfx::utils::createAxialODFGradientInfo(
                 rDefinitionRange,
                 nRequestedSteps,
@@ -266,12 +320,14 @@ namespace drawinglayer::texture
                 return;
 
             // fill in return parameter rOuterColor before returning
-            // CAUTION: for GradientAxial the color range is inverted (!)
-            rOuterColor = mnColorStops.back().getStopColor();
+            rOuterColor = mnColorStops.front().getStopColor();
 
             // only one color, done
             if (mnColorStops.size() < 2)
                 return;
+
+            // check if we need last-ColorStop-correction
+            const bool bPenultimateUsed(checkPenultimate());
 
             // prepare unit range transform
             basegfx::B2DHomMatrix aPattern;
@@ -285,42 +341,49 @@ namespace drawinglayer::texture
             aPattern.translate(mfUnitMinX, 0.0);
 
             // outer loop over ColorStops, each is from cs_l to cs_r
-            // CAUTION: for GradientAxial the color range is used inverted (!)
-            //          thus, to loop backward, use rbegin/rend
-            for (auto cs_r(mnColorStops.rbegin()), cs_l(cs_r + 1); cs_l != mnColorStops.rend(); cs_l++, cs_r++)
+            for (auto cs_l(mnColorStops.begin()), cs_r(cs_l + 1); cs_r != mnColorStops.end(); cs_l++, cs_r++)
             {
+                // get offsets
+                const double fOffsetStart(cs_l->getStopOffset());
+                const double fOffsetEnd(cs_r->getStopOffset());
+
+                // same offset, empty ColorStopRange, continue with next step
+                if (basegfx::fTools::equal(fOffsetStart, fOffsetEnd))
+                    continue;
+
                 // get colors & calculate steps
                 const basegfx::BColor aCStart(cs_l->getStopColor());
                 const basegfx::BColor aCEnd(cs_r->getStopColor());
                 const sal_uInt32 nSteps(basegfx::utils::calculateNumberOfSteps(
                     maGradientInfo.getRequestedSteps(), aCStart, aCEnd));
 
-                // get offsets & calculate StripeWidth
+                // calculate StripeWidth
                 // nSteps is >= 1, see getRequestedSteps, so no check needed here
-                const double fOffsetStart(cs_l->getStopOffset());
-                const double fOffsetEnd(cs_r->getStopOffset());
                 const double fStripeWidth((fOffsetEnd - fOffsetStart) / nSteps);
 
                 // for the 1st color range we do not need to create the 1st step, see above
-                const sal_uInt32 nStartInnerLoop(cs_r == mnColorStops.rbegin() ? 1 : 0);
+                const sal_uInt32 nStartInnerLoop(cs_l == mnColorStops.begin() ? 1 : 0);
 
                 for (sal_uInt32 innerLoop(nStartInnerLoop); innerLoop < nSteps; innerLoop++)
                 {
                     // calculate pos in Y
-                    const double fPos(fOffsetEnd - (fStripeWidth * innerLoop));
+                    const double fPos(fOffsetStart + (fStripeWidth * innerLoop));
 
                     // already centered in Y on X-Axis, just scale in Y
                     basegfx::B2DHomMatrix aNew(aPattern);
-                    aNew.scale(1.0, fPos);
+                    aNew.scale(1.0, 1.0 - fPos);
 
                     // set and add at target
                     B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
 
                     aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * aNew;
-                    aB2DHomMatrixAndBColor.maBColor = interpolate(aCEnd, aCStart, double(innerLoop) / double(nSteps - 1));
+                    aB2DHomMatrixAndBColor.maBColor = interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1));
                     rEntries.push_back(aB2DHomMatrixAndBColor);
                 }
             }
+
+            if (bPenultimateUsed)
+                mnColorStops.pop_back();
         }
 
         void GeoTexSvxGradientAxial::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
@@ -332,14 +395,16 @@ namespace drawinglayer::texture
             // just single color, done
             if (mnColorStops.size() < 2)
             {
-                // CAUTION: for GradientAxial the color range is used inverted (!)
-                rBColor = mnColorStops.back().getStopColor();
+                // we use the reverse ColorSteps here, so use front value
+                rBColor = mnColorStops.front().getStopColor();
                 return;
             }
 
             // texture-back-transform X/Y -> t [0.0..1.0] and determine color
             const double fScaler(basegfx::utils::getAxialGradientAlpha(rUV, maGradientInfo));
-            rBColor = basegfx::utils::modifyBColor(mnColorStops, fScaler, mnRequestedSteps);
+
+                // we use the reverse ColorSteps here, so mirror scaler value
+            rBColor = basegfx::utils::modifyBColor(mnColorStops, 1.0 - fScaler, mnRequestedSteps);
         }
 
 
@@ -378,18 +443,27 @@ namespace drawinglayer::texture
             if (mnColorStops.size() < 2)
                 return;
 
+            // check if we need last-ColorStop-correction
+            const bool bPenultimateUsed(checkPenultimate());
+
             // outer loop over ColorStops, each is from cs_l to cs_r
             for (auto cs_l(mnColorStops.begin()), cs_r(cs_l + 1); cs_r != mnColorStops.end(); cs_l++, cs_r++)
             {
+                // get offsets
+                const double fOffsetStart(cs_l->getStopOffset());
+                const double fOffsetEnd(cs_r->getStopOffset());
+
+                // same offset, empty ColorStopRange, continue with next step
+                if (basegfx::fTools::equal(fOffsetStart, fOffsetEnd))
+                    continue;
+
                 // get colors & calculate steps
                 const basegfx::BColor aCStart(cs_l->getStopColor());
                 const basegfx::BColor aCEnd(cs_r->getStopColor());
                 const sal_uInt32 nSteps(basegfx::utils::calculateNumberOfSteps(
                     maGradientInfo.getRequestedSteps(), aCStart, aCEnd));
 
-                // get offsets & calculate StripeWidth
-                const double fOffsetStart(cs_l->getStopOffset());
-                const double fOffsetEnd(cs_r->getStopOffset());
+                // calculate StripeWidth
                 const double fStripeWidth((fOffsetEnd - fOffsetStart) / nSteps);
 
                 // get correct start for inner loop (see above)
@@ -408,6 +482,9 @@ namespace drawinglayer::texture
                     rEntries.push_back(aB2DHomMatrixAndBColor);
                 }
             }
+
+            if (bPenultimateUsed)
+                mnColorStops.pop_back();
         }
 
         void GeoTexSvxGradientRadial::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
@@ -466,6 +543,9 @@ namespace drawinglayer::texture
             if (mnColorStops.size() < 2)
                 return;
 
+            // check if we need last-ColorStop-correction
+            const bool bPenultimateUsed(checkPenultimate());
+
             // prepare vars dependent on aspect ratio
             const double fAR(maGradientInfo.getAspectRatio());
             const bool bMTO(fAR > 1.0);
@@ -473,15 +553,21 @@ namespace drawinglayer::texture
             // outer loop over ColorStops, each is from cs_l to cs_r
             for (auto cs_l(mnColorStops.begin()), cs_r(cs_l + 1); cs_r != mnColorStops.end(); cs_l++, cs_r++)
             {
+                // get offsets
+                const double fOffsetStart(cs_l->getStopOffset());
+                const double fOffsetEnd(cs_r->getStopOffset());
+
+                // same offset, empty ColorStopRange, continue with next step
+                if (basegfx::fTools::equal(fOffsetStart, fOffsetEnd))
+                    continue;
+
                 // get colors & calculate steps
                 const basegfx::BColor aCStart(cs_l->getStopColor());
                 const basegfx::BColor aCEnd(cs_r->getStopColor());
                 const sal_uInt32 nSteps(basegfx::utils::calculateNumberOfSteps(
                     maGradientInfo.getRequestedSteps(), aCStart, aCEnd));
 
-                // get offsets & calculate StripeWidth
-                const double fOffsetStart(cs_l->getStopOffset());
-                const double fOffsetEnd(cs_r->getStopOffset());
+                // calculate StripeWidth
                 const double fStripeWidth((fOffsetEnd - fOffsetStart) / nSteps);
 
                 // get correct start for inner loop (see above)
@@ -503,6 +589,9 @@ namespace drawinglayer::texture
                     rEntries.push_back(aB2DHomMatrixAndBColor);
                 }
             }
+
+            if (bPenultimateUsed)
+                mnColorStops.pop_back();
         }
 
         void GeoTexSvxGradientElliptical::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
@@ -561,18 +650,27 @@ namespace drawinglayer::texture
             if (mnColorStops.size() < 2)
                 return;
 
+            // check if we need last-ColorStop-correction
+            const bool bPenultimateUsed(checkPenultimate());
+
             // outer loop over ColorStops, each is from cs_l to cs_r
             for (auto cs_l(mnColorStops.begin()), cs_r(cs_l + 1); cs_r != mnColorStops.end(); cs_l++, cs_r++)
             {
+                // get offsets
+                const double fOffsetStart(cs_l->getStopOffset());
+                const double fOffsetEnd(cs_r->getStopOffset());
+
+                // same offset, empty ColorStopRange, continue with next step
+                if (basegfx::fTools::equal(fOffsetStart, fOffsetEnd))
+                    continue;
+
                 // get colors & calculate steps
                 const basegfx::BColor aCStart(cs_l->getStopColor());
                 const basegfx::BColor aCEnd(cs_r->getStopColor());
                 const sal_uInt32 nSteps(basegfx::utils::calculateNumberOfSteps(
                     maGradientInfo.getRequestedSteps(), aCStart, aCEnd));
 
-                // get offsets & calculate StripeWidth
-                const double fOffsetStart(cs_l->getStopOffset());
-                const double fOffsetEnd(cs_r->getStopOffset());
+                // calculate StripeWidth
                 const double fStripeWidth((fOffsetEnd - fOffsetStart) / nSteps);
 
                 // get correct start for inner loop (see above)
@@ -591,6 +689,9 @@ namespace drawinglayer::texture
                     rEntries.push_back(aB2DHomMatrixAndBColor);
                 }
             }
+
+            if (bPenultimateUsed)
+                mnColorStops.pop_back();
         }
 
         void GeoTexSvxGradientSquare::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
@@ -649,6 +750,9 @@ namespace drawinglayer::texture
             if (mnColorStops.size() < 2)
                 return;
 
+            // check if we need last-ColorStop-correction
+            const bool bPenultimateUsed(checkPenultimate());
+
             // prepare vars dependent on aspect ratio
             const double fAR(maGradientInfo.getAspectRatio());
             const bool bMTO(fAR > 1.0);
@@ -656,15 +760,21 @@ namespace drawinglayer::texture
             // outer loop over ColorStops, each is from cs_l to cs_r
             for (auto cs_l(mnColorStops.begin()), cs_r(cs_l + 1); cs_r != mnColorStops.end(); cs_l++, cs_r++)
             {
+                // get offsets
+                const double fOffsetStart(cs_l->getStopOffset());
+                const double fOffsetEnd(cs_r->getStopOffset());
+
+                // same offset, empty ColorStopRange, continue with next step
+                if (basegfx::fTools::equal(fOffsetStart, fOffsetEnd))
+                    continue;
+
                 // get colors & calculate steps
                 const basegfx::BColor aCStart(cs_l->getStopColor());
                 const basegfx::BColor aCEnd(cs_r->getStopColor());
                 const sal_uInt32 nSteps(basegfx::utils::calculateNumberOfSteps(
                     maGradientInfo.getRequestedSteps(), aCStart, aCEnd));
 
-                // get offsets & calculate StripeWidth
-                const double fOffsetStart(cs_l->getStopOffset());
-                const double fOffsetEnd(cs_r->getStopOffset());
+                // calculate StripeWidth
                 const double fStripeWidth((fOffsetEnd - fOffsetStart) / nSteps);
 
                 // get correct start for inner loop (see above)
@@ -686,6 +796,9 @@ namespace drawinglayer::texture
                     rEntries.push_back(aB2DHomMatrixAndBColor);
                 }
             }
+
+            if (bPenultimateUsed)
+                mnColorStops.pop_back();
         }
 
         void GeoTexSvxGradientRect::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
