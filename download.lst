@@ -82,8 +82,8 @@ CT2N_TARBALL := 1f467e5bb703f12cbbb09d5cf67ecf4a-converttexttonumber-1-5-0.oxt
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-CURL_SHA256SUM := 759690f9a375a720f8bcce9f953897b0d93f31eed9649b74f846d54bbf63bbcc
-CURL_TARBALL := curl-8.0.0.tar.xz
+CURL_SHA256SUM := 0a381cd82f4d00a9a334438b8ca239afea5bfefcfa9a1025f2bf118e79e0b5f0
+CURL_TARBALL := curl-8.0.1.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
