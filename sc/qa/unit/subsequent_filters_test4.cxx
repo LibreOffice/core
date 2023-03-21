@@ -984,15 +984,12 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testColorScaleNumWithRefXLSX)
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf153514)
 {
     ScDocument aDoc;
-    OUString aFullUrl = m_directories.getURLFromSrc(u"sc/qa/unit/data/xml/tdf153514.xml");
-
-    OUString aValidPath;
-    osl::FileBase::getSystemPathFromFileURL(aFullUrl, aValidPath);
+    OUString aPath = createFilePath(u"xml/tdf153514.xml");
 
     ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
     CPPUNIT_ASSERT(pOrcus);
 
-    pOrcus->importODS_Styles(aDoc, aValidPath);
+    pOrcus->importODS_Styles(aDoc, aPath);
     ScStyleSheetPool* pStyleSheetPool = aDoc.GetStyleSheetPool();
 
     ScStyleSheet* pStyleSheet;
@@ -1022,16 +1019,12 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf153514)
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testOrcusODSStyleInterface)
 {
     ScDocument aDoc;
-    OUString aFullUrl = m_directories.getURLFromSrc(u"sc/qa/unit/data/xml/styles.xml");
-
-    /* This loop below trims file:// from the start because orcus doesn't accept such a URL */
-    OUString aValidPath;
-    osl::FileBase::getSystemPathFromFileURL(aFullUrl, aValidPath);
+    OUString aPath = createFilePath(u"xml/styles.xml");
 
     ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
     CPPUNIT_ASSERT(pOrcus);
 
-    pOrcus->importODS_Styles(aDoc, aValidPath);
+    pOrcus->importODS_Styles(aDoc, aPath);
     ScStyleSheetPool* pStyleSheetPool = aDoc.GetStyleSheetPool();
 
     /* Test cases for Style "Name1"
