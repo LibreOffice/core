@@ -775,6 +775,7 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* pParent )
     if (!bIsPDFUA)
     {
         pParent->mbExportBookmarksUserSelection = pParent->mbExportBookmarks;
+        pParent->mbUseReferenceXObjectUserSelection = pParent->mbUseReferenceXObject;
     }
 
     pParent->mbUseTaggedPDFUserSelection = mbUseTaggedPDFUserSelection;
@@ -923,12 +924,22 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePDFVersionOrUniversalAccessibilityHa
             }
             mxCbExportBookmarks->set_active(true);
         }
+        if (mxCbUseReferenceXObject->get_sensitive())
+        {
+            if (mpParent)
+            {
+                mpParent->mbUseReferenceXObjectUserSelection = mxCbUseReferenceXObject->get_active();
+            }
+            mxCbUseReferenceXObject->set_active(false);
+        }
     }
     else if (mpParent)
     {
         mxCbExportBookmarks->set_active(mpParent->mbExportBookmarksUserSelection);
+        mxCbUseReferenceXObject->set_active(mpParent->mbUseReferenceXObjectUserSelection);
     }
     mxCbExportBookmarks->set_sensitive(!bIsPDFUA);
+    mxCbUseReferenceXObject->set_sensitive(!bIsPDFUA);
 
     ImpPDFTabOpnFtrPage *const pOpenPage(mpParent ? mpParent->getOpenPage() : nullptr);
     if (pOpenPage)
