@@ -712,6 +712,8 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 mbUseTaggedPDF = true;
                 // ISO 14289-1:2014, Clause: 7.16
                 mbCanExtractForAccessibility = true;
+                // ISO 14289-1:2014, Clause: 7.20
+                mbUseReferenceXObject = false;
             }
 
             // copy in context the values default in the constructor or set by the FilterData sequence of properties
