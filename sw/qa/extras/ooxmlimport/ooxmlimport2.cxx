@@ -37,6 +37,10 @@
 #include <docsh.hxx>
 #include <rootfrm.hxx>
 #include <frame.hxx>
+#include <pagefrm.hxx>
+#include <cntfrm.hxx>
+#include <flyfrms.hxx>
+#include <tabfrm.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -667,9 +671,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121804)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf114217)
 {
+    SwModelTestBase::FlySplitGuard aGuard;
+    // The floating table was not split between page 1 and page 2.
     createSwDoc("tdf114217.docx");
-    // This was 1, multi-page table was imported as a floating one.
-    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    auto pPage1Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage1Objs[0]);
+    CPPUNIT_ASSERT(pPage1Fly);
+    auto pTab1 = dynamic_cast<SwTabFrame*>(pPage1Fly->GetLower());
+    CPPUNIT_ASSERT(pTab1);
+    CPPUNIT_ASSERT(pTab1->HasFollow());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf119200)
