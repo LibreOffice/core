@@ -689,8 +689,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             break;
         case FN_NUM_FORMAT_TABLE_DLG:
         {
-            SwView* pView = GetActiveView();
-            if(pView)
+            if (SwView* pView = GetActiveView())
             {
                 FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( pView) !=  nullptr );
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));

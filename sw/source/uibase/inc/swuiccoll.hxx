@@ -31,7 +31,6 @@ class SwCondCollPage final : public SfxTabPage
 {
     std::vector<OUString> m_aStrArr;
 
-    SwWrtShell          &m_rSh;
     const CommandStruct*m_pCmds;
     SwFormat*              m_pFormat;
 

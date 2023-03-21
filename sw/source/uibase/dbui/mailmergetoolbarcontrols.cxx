@@ -291,9 +291,8 @@ uno::Reference<awt::XWindow> MMCurrentEntryController::createItemWindow(const un
 
 IMPL_LINK(MMCurrentEntryController, CurrentEditUpdatedHdl, weld::Entry&, rEdit, bool)
 {
-    SwView* pView = ::GetActiveView();
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem;
-    if (pView)
+    if (SwView* pView = GetActiveView())
         xConfigItem = pView->GetMailMergeConfigItem();
 
     if (!xConfigItem)
@@ -315,9 +314,8 @@ void MMCurrentEntryController::statusChanged(const frame::FeatureStateEvent& rEv
     if (!m_xCurrentEdit)
         return;
 
-    SwView* pView = ::GetActiveView();
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem;
-    if (pView)
+    if (SwView* pView = GetActiveView())
         xConfigItem = pView->GetMailMergeConfigItem();
 
     if (!xConfigItem || !rEvent.IsEnabled)
@@ -360,9 +358,8 @@ uno::Reference<awt::XWindow> MMExcludeEntryController::createItemWindow(const un
 
 IMPL_STATIC_LINK(MMExcludeEntryController, ExcludeHdl, weld::Toggleable&, rCheckbox, void)
 {
-    SwView* pView = ::GetActiveView();
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem;
-    if (pView)
+    if (SwView* pView = GetActiveView())
         xConfigItem = pView->GetMailMergeConfigItem();
 
     if (xConfigItem)
@@ -374,9 +371,8 @@ void MMExcludeEntryController::statusChanged(const frame::FeatureStateEvent& rEv
     if (!m_xExcludeCheckbox)
         return;
 
-    SwView* pView = ::GetActiveView();
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem;
-    if (pView)
+    if (SwView* pView = GetActiveView())
         xConfigItem = pView->GetMailMergeConfigItem();
 
     if (!xConfigItem || !rEvent.IsEnabled)
