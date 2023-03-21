@@ -1975,7 +1975,14 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                                             if (pDrawPage)
                                             {
                                                 sal_uInt32 nOrdNum = pAnchoredObj->GetDrawObj()->GetOrdNum();
-                                                pDrawPage->SetObjectOrdNum(maAnchoredDrawObj.GetDrawObj()->GetOrdNumDirect(), nOrdNum);
+                                                if (maAnchoredDrawObj.GetDrawObj()->GetOrdNum() >= nOrdNum)
+                                                {
+                                                    pDrawPage->SetObjectOrdNum(maAnchoredDrawObj.GetDrawObj()->GetOrdNumDirect(), nOrdNum);
+                                                }
+                                                else
+                                                {
+                                                    pDrawPage->SetObjectOrdNum(nOrdNum, maAnchoredDrawObj.GetDrawObj()->GetOrdNumDirect() + 1);
+                                                }
                                                 break;
                                             }
                                         }
