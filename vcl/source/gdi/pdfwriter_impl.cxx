@@ -752,8 +752,7 @@ bool PDFPage::emit(sal_Int32 nParentObject )
             aLine.append( ((i+1)%15) ? " " : "\n" );
         }
         aLine.append( "]\n" );
-        if (m_pWriter->m_aContext.Version != PDFWriter::PDFVersion::PDF_A_1
-            && PDFWriter::PDFVersion::PDF_1_5 <= m_pWriter->m_aContext.Version)
+        if (PDFWriter::PDFVersion::PDF_1_5 <= m_pWriter->m_aContext.Version)
         {
             // ISO 14289-1:2014, Clause: 7.18.3
             aLine.append( "/Tabs(S)\n" );
@@ -10612,8 +10611,7 @@ const char* PDFWriterImpl::getStructureTag( PDFWriter::StructElement eType )
     }
 
     if (eType == PDFWriter::Annot
-        && (m_aContext.Version == PDFWriter::PDFVersion::PDF_A_1
-            || m_aContext.Version < PDFWriter::PDFVersion::PDF_1_5))
+        && m_aContext.Version < PDFWriter::PDFVersion::PDF_1_5)
     {
         return "Figure"; // fallback
     }
@@ -11156,7 +11154,6 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
                 if (eVal == PDFWriter::Row || eVal == PDFWriter::Column || eVal == PDFWriter::Both)
                 {
                     if (eType == PDFWriter::TableHeader
-                        && m_aContext.Version != PDFWriter::PDFVersion::PDF_A_1
                         && PDFWriter::PDFVersion::PDF_1_5 <= m_aContext.Version)
                     {
                         bInsert = true;
@@ -11177,7 +11174,6 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
                 if (eVal == PDFWriter::Header || eVal == PDFWriter::Footer || eVal == PDFWriter::Watermark)
                 {
                     if (eType == PDFWriter::NonStructElement
-                        && m_aContext.Version != PDFWriter::PDFVersion::PDF_A_1
                         && PDFWriter::PDFVersion::PDF_1_7 <= m_aContext.Version)
                     {
                         bInsert = true;
