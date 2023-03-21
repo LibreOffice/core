@@ -1170,7 +1170,6 @@ void ScTabView::ScrollHdl(ScrollAdaptor* pScroll)
             if ( pScroll == aVScrollBottom.get() ) nDelta = aViewData.VisibleCellsY( SC_SPLIT_BOTTOM );
             if (nDelta==0) nDelta=1;
             break;
-        default: // added to avoid warnings
         case ScrollType::Drag:
             {
                 // only scroll in the correct direction, do not jitter around hidden ranges
@@ -1182,30 +1181,29 @@ void ScTabView::ScrollHdl(ScrollAdaptor* pScroll)
 
                 tools::Long nScrollPos = GetScrollBarPos( *pScroll ) + nScrollMin;
                 nDelta = nScrollPos - nViewPos;
-
-                // tdf#152406 Disable anti-jitter code for scroll wheel events
-                // After moving thousands of columns to the right via
-                // horizontal scroll wheel or trackpad swipe events, most
-                // vertical scroll wheel or trackpad swipe events will trigger
-                // the anti-jitter code because nScrollPos and nPrevDragPos
-                // will be equal and nDelta will be overriden and set to zero.
-                // So, only use the anti-jitter code for mouse drag events.
-                if ( eType == ScrollType::Drag )
+                if ( nScrollPos > nPrevDragPos )
                 {
-                    if ( nScrollPos > nPrevDragPos )
-                    {
-                        if (nDelta<0) nDelta=0;
-                    }
-                    else if ( nScrollPos < nPrevDragPos )
-                    {
-                        if (nDelta>0) nDelta=0;
-                    }
-                    else
-                        nDelta = 0;
+                    if (nDelta<0) nDelta=0;
                 }
-
+                else if ( nScrollPos < nPrevDragPos )
+                {
+                    if (nDelta>0) nDelta=0;
+                }
+                else
+                    nDelta = 0;
                 nPrevDragPos = nScrollPos;
             }
+            break;
+        default:
+            // Note tdf#152406 no anti-jitter code, unlike ScrollType::Drag,
+            // for scroll wheel events.
+            // After moving thousands of columns to the right via horizontal
+            // scroll wheel or trackpad swipe events, most vertical scroll
+            // wheel or trackpad swipe events would trigger the anti-jitter
+            // code because nScrollPos and nPrevDragPos would be equal and
+            // nDelta will be overriden and set to zero. So, only use the
+            // anti-jitter code for mouse drag events.
+            nDelta = GetScrollBarPos(*pScroll) - nViewPos;
             break;
     }
 
