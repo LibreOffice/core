@@ -227,31 +227,10 @@ void ChartType::GetDefaultValue( sal_Int32 /* nHandle */, uno::Any& rAny ) const
 namespace
 {
 
-struct StaticChartTypeInfoHelper_Initializer
+::cppu::OPropertyArrayHelper& StaticChartTypeInfoHelper()
 {
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( Sequence< beans::Property >{} );
-        return &aPropHelper;
-    }
-};
-
-struct StaticChartTypeInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticChartTypeInfoHelper_Initializer >
-{
-};
-
-struct StaticChartTypeInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticChartTypeInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticChartTypeInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticChartTypeInfo_Initializer >
-{
+    static ::cppu::OPropertyArrayHelper aPropHelper( Sequence< beans::Property >{} );
+    return aPropHelper;
 };
 
 }
@@ -259,13 +238,15 @@ struct StaticChartTypeInfo : public rtl::StaticAggregate< uno::Reference< beans:
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL ChartType::getInfoHelper()
 {
-    return *StaticChartTypeInfoHelper::get();
+    return StaticChartTypeInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ChartType::getPropertySetInfo()
 {
-    return *StaticChartTypeInfo::get();
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo( StaticChartTypeInfoHelper() ) );
+    return xPropertySetInfo;
 }
 
 // ____ XModifyBroadcaster ____
