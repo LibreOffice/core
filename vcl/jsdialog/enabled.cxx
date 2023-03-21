@@ -173,6 +173,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/swriter/ui/formattablepage.ui"
         || rUIFile == u"modules/swriter/ui/indentpage.ui"
         || rUIFile == u"modules/swriter/ui/indexentry.ui"
+        || rUIFile == u"modules/swriter/ui/inforeadonlydialog.ui"
         || rUIFile == u"modules/swriter/ui/insertbreak.ui"
         || rUIFile == u"modules/swriter/ui/insertcaption.ui"
         || rUIFile == u"modules/swriter/ui/insertsectiondialog.ui"
