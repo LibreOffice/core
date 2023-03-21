@@ -32,6 +32,7 @@
 #include <tools/fract.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <txtfly.hxx>
 #include <viewimp.hxx>
 #include <textboxhelper.hxx>
@@ -516,6 +517,13 @@ void SwAnchoredDrawObject::SetDrawObjAnchor()
         DrawObj()->SetAnchorPos( aNewAnchorPos );
         // correct object position, caused by setting new anchor position
         DrawObj()->Move( aMove );
+        // Sync textbox if it wasn't done at move
+        if ( SwTextBoxHelper::isTextBox(&GetFrameFormat(), RES_DRAWFRMFMT) && GetFrameFormat().GetDoc() &&
+            GetFrameFormat().GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() &&
+            GetFrameFormat().GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()->IsInConstructor())
+        {
+            SwTextBoxHelper::changeAnchor(&GetFrameFormat(), GetFrameFormat().FindRealSdrObject());
+        }
         // --> #i70122# - missing invalidation
         InvalidateObjRectWithSpaces();
     }
