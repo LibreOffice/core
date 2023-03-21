@@ -152,10 +152,10 @@ interface XAccessibleContext : ::com::sun::star::uno::XInterface
     /** Returns the set of states that are currently active for this
         object.
 
-        <p>See the documentation of XAccessibleStateType for a
+        <p>See the documentation of AccessibleStateType for a
         description of the individual states.</p>
 
-        @see XAccessibleStateType
+        @see AccessibleStateType
     */
     hyper getAccessibleStateSet ();
 
