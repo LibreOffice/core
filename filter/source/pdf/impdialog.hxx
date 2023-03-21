@@ -86,6 +86,7 @@ class ImpPDFTabDialog final : public SfxTabDialogController
     bool                        mbExportNotesInMargin;
     bool                        mbViewPDF;
     bool                        mbUseReferenceXObject;
+    bool                        mbUseReferenceXObjectUserSelection = false;
     bool                        mbExportNotesPages;
     bool                        mbExportOnlyNotesPages;
     bool                        mbUseTransitionEffects;
