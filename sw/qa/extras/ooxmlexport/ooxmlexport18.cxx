@@ -632,6 +632,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148026)
     assertXPath(pXmlDoc, "//w:hyperlink", "tgtFrame", "_self");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf153664)
+{
+    loadAndReload("Table-of-Figures.odt");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
+    CPPUNIT_ASSERT(pXmlStyles);
+    // Without the fix this was styleId='FigureIndex1' and name was "Figure Index 1"
+    // This led to syle settings being reset when ToF was updated in Word
+    // TOF's paragraph style should be exported as "Table of Figures" as that's the default Word style name
+    assertXPath(pXmlStyles, "/w:styles/w:style[12]", "styleId", "TableofFigures");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableofFigures']/w:name", "val", "Table of Figures");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

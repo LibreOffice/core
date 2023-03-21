@@ -268,7 +268,7 @@ sal_uInt16 MSWordStyles::GetWWId( const SwFormat& rFormat )
         case RES_POOLCOLL_FOOTER:           nRet = ww::stiFooter;            break;
         case RES_POOLCOLL_TOX_IDXH:         nRet = ww::stiIndexHeading;      break;
         case RES_POOLCOLL_LABEL:            nRet = ww::stiCaption;           break;
-        case RES_POOLCOLL_LABEL_DRAWING:    nRet = ww::stiToCaption;         break;
+        case RES_POOLCOLL_TOX_ILLUS1:       nRet = ww::stiToCaption;         break;
         case RES_POOLCOLL_ENVELOPE_ADDRESS: nRet = ww::stiEnvAddr;           break;
         case RES_POOLCOLL_SEND_ADDRESS:     nRet = ww::stiEnvRet;            break;
         case RES_POOLCHR_FOOTNOTE_ANCHOR:   nRet = ww::stiFootnoteRef;       break;
