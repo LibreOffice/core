@@ -1093,89 +1093,157 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf115394PPT)
     CPPUNIT_ASSERT_EQUAL(1.0, fTransitionDuration);
 }
 
-CPPUNIT_TEST_FIXTURE(SdExportTest, testBulletsAsImage)
+CPPUNIT_TEST_FIXTURE(SdExportTest, testBulletsAsImageImpress8)
 {
-    std::vector<OUString> vFormat{ "impress8", "Impress Office Open XML", "MS PowerPoint 97" };
-    for (size_t i = 0; i < vFormat.size(); i++)
+    createSdImpressDoc("odp/BulletsAsImage.odp");
+    saveAndReload("impress8");
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+    uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
+    uno::Reference<beans::XPropertySet> xPropSet(xParagraph, uno::UNO_QUERY_THROW);
+
+    uno::Reference<container::XIndexAccess> xLevels(xPropSet->getPropertyValue("NumberingRules"),
+                                                    uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aProperties;
+    xLevels->getByIndex(0) >>= aProperties; // 1st level
+
+    uno::Reference<awt::XBitmap> xBitmap;
+    awt::Size aSize;
+    sal_Int16 nNumberingType = -1;
+
+    for (beans::PropertyValue const& rProperty : std::as_const(aProperties))
     {
-        OUString sExportFormat = vFormat[i];
-        createSdImpressDoc("odp/BulletsAsImage.odp");
-        const OString sFailedMessageBase = "Failed on filter " + sExportFormat.toUtf8();
-        saveAndReload(sExportFormat);
-
-        uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
-        uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
-        uno::Reference<beans::XPropertySet> xPropSet(xParagraph, uno::UNO_QUERY_THROW);
-
-        uno::Reference<container::XIndexAccess> xLevels(
-            xPropSet->getPropertyValue("NumberingRules"), uno::UNO_QUERY_THROW);
-        uno::Sequence<beans::PropertyValue> aProperties;
-        xLevels->getByIndex(0) >>= aProperties; // 1st level
-
-        uno::Reference<awt::XBitmap> xBitmap;
-        awt::Size aSize;
-        sal_Int16 nNumberingType = -1;
-
-        for (beans::PropertyValue const& rProperty : std::as_const(aProperties))
+        if (rProperty.Name == "NumberingType")
         {
-            if (rProperty.Name == "NumberingType")
-            {
-                nNumberingType = rProperty.Value.get<sal_Int16>();
-            }
-            else if (rProperty.Name == "GraphicBitmap")
-            {
-                xBitmap = rProperty.Value.get<uno::Reference<awt::XBitmap>>();
-            }
-            else if (rProperty.Name == "GraphicSize")
-            {
-                aSize = rProperty.Value.get<awt::Size>();
-            }
+            nNumberingType = rProperty.Value.get<sal_Int16>();
         }
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), style::NumberingType::BITMAP,
-                                     nNumberingType);
-
-        // Graphic Bitmap
-        const OString sFailed = sFailedMessageBase + "No bitmap for the bullets";
-        CPPUNIT_ASSERT_MESSAGE(sFailed.getStr(), xBitmap.is());
-        Graphic aGraphic(uno::Reference<graphic::XGraphic>(xBitmap, uno::UNO_QUERY));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), GraphicType::Bitmap,
-                                     aGraphic.GetType());
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessageBase.getStr(),
-                               aGraphic.GetSizeBytes() > o3tl::make_unsigned(0));
-
-        if (sExportFormat == "impress8" || sExportFormat == "MS PowerPoint 97")
+        else if (rProperty.Name == "GraphicBitmap")
         {
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), tools::Long(16),
-                                         aGraphic.GetSizePixel().Width());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), tools::Long(16),
-                                         aGraphic.GetSizePixel().Height());
+            xBitmap = rProperty.Value.get<uno::Reference<awt::XBitmap>>();
         }
-        else // FIXME: what happened here
+        else if (rProperty.Name == "GraphicSize")
         {
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), tools::Long(64),
-                                         aGraphic.GetSizePixel().Width());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), tools::Long(64),
-                                         aGraphic.GetSizePixel().Height());
-        }
-
-        // Graphic Size
-        if (sExportFormat == "impress8")
-        {
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), sal_Int32(500), aSize.Width);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), sal_Int32(500), aSize.Height);
-        }
-        else if (sExportFormat == "MS PowerPoint 97") // seems like a conversion error
-        {
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), sal_Int32(504), aSize.Width);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), sal_Int32(504), aSize.Height);
-        }
-        else // FIXME: totally wrong
-        {
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), sal_Int32(790), aSize.Width);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), sal_Int32(790), aSize.Height);
+            aSize = rProperty.Value.get<awt::Size>();
         }
     }
+
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::BITMAP, nNumberingType);
+
+    // Graphic Bitmap
+    CPPUNIT_ASSERT_MESSAGE("No bitmap for the bullets", xBitmap.is());
+    Graphic aGraphic(uno::Reference<graphic::XGraphic>(xBitmap, uno::UNO_QUERY));
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT(aGraphic.GetSizeBytes() > o3tl::make_unsigned(0));
+
+    CPPUNIT_ASSERT_EQUAL(tools::Long(16), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(16), aGraphic.GetSizePixel().Height());
+
+    // Graphic Size
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(500), aSize.Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(500), aSize.Height);
+}
+
+CPPUNIT_TEST_FIXTURE(SdExportTest, testBulletsAsImageImpressOfficeOpenXml)
+{
+    createSdImpressDoc("odp/BulletsAsImage.odp");
+    saveAndReload("Impress Office Open XML");
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+    uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
+    uno::Reference<beans::XPropertySet> xPropSet(xParagraph, uno::UNO_QUERY_THROW);
+
+    uno::Reference<container::XIndexAccess> xLevels(xPropSet->getPropertyValue("NumberingRules"),
+                                                    uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aProperties;
+    xLevels->getByIndex(0) >>= aProperties; // 1st level
+
+    uno::Reference<awt::XBitmap> xBitmap;
+    awt::Size aSize;
+    sal_Int16 nNumberingType = -1;
+
+    for (beans::PropertyValue const& rProperty : std::as_const(aProperties))
+    {
+        if (rProperty.Name == "NumberingType")
+        {
+            nNumberingType = rProperty.Value.get<sal_Int16>();
+        }
+        else if (rProperty.Name == "GraphicBitmap")
+        {
+            xBitmap = rProperty.Value.get<uno::Reference<awt::XBitmap>>();
+        }
+        else if (rProperty.Name == "GraphicSize")
+        {
+            aSize = rProperty.Value.get<awt::Size>();
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::BITMAP, nNumberingType);
+
+    // Graphic Bitmap
+    CPPUNIT_ASSERT_MESSAGE("No bitmap for the bullets", xBitmap.is());
+    Graphic aGraphic(uno::Reference<graphic::XGraphic>(xBitmap, uno::UNO_QUERY));
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT(aGraphic.GetSizeBytes() > o3tl::make_unsigned(0));
+
+    // FIXME: what happened here
+    CPPUNIT_ASSERT_EQUAL(tools::Long(64), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(64), aGraphic.GetSizePixel().Height());
+
+    // Graphic Size
+    // FIXME: totally wrong
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(790), aSize.Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(790), aSize.Height);
+}
+
+CPPUNIT_TEST_FIXTURE(SdExportTest, testBulletsAsImageMsPowerpoint97)
+{
+    createSdImpressDoc("odp/BulletsAsImage.odp");
+    saveAndReload("MS PowerPoint 97");
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+    uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
+    uno::Reference<beans::XPropertySet> xPropSet(xParagraph, uno::UNO_QUERY_THROW);
+
+    uno::Reference<container::XIndexAccess> xLevels(xPropSet->getPropertyValue("NumberingRules"),
+                                                    uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aProperties;
+    xLevels->getByIndex(0) >>= aProperties; // 1st level
+
+    uno::Reference<awt::XBitmap> xBitmap;
+    awt::Size aSize;
+    sal_Int16 nNumberingType = -1;
+
+    for (beans::PropertyValue const& rProperty : std::as_const(aProperties))
+    {
+        if (rProperty.Name == "NumberingType")
+        {
+            nNumberingType = rProperty.Value.get<sal_Int16>();
+        }
+        else if (rProperty.Name == "GraphicBitmap")
+        {
+            xBitmap = rProperty.Value.get<uno::Reference<awt::XBitmap>>();
+        }
+        else if (rProperty.Name == "GraphicSize")
+        {
+            aSize = rProperty.Value.get<awt::Size>();
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::BITMAP, nNumberingType);
+
+    // Graphic Bitmap
+    CPPUNIT_ASSERT_MESSAGE("No bitmap for the bullets", xBitmap.is());
+    Graphic aGraphic(uno::Reference<graphic::XGraphic>(xBitmap, uno::UNO_QUERY));
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT(aGraphic.GetSizeBytes() > o3tl::make_unsigned(0));
+
+    CPPUNIT_ASSERT_EQUAL(tools::Long(16), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(16), aGraphic.GetSizePixel().Height());
+
+    // Graphic Size
+    // seems like a conversion error
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(504), aSize.Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(504), aSize.Height);
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf113822)
