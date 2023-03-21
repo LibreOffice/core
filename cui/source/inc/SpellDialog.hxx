@@ -165,6 +165,7 @@ private:
     std::unique_ptr<weld::Button> m_xClosePB;
     std::unique_ptr<weld::Toolbar> m_xToolbar;
     std::unique_ptr<weld::CustomWeld> m_xSentenceEDWeld;
+    std::shared_ptr<SfxSingleTabDialogController> m_xOptionsDlg;
 
     DECL_LINK(ChangeHdl, weld::Button&, void);
     DECL_LINK(DoubleClickChangeHdl, weld::TreeView&, bool);

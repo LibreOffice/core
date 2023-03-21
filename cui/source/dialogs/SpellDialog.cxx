@@ -225,6 +225,12 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
 
 SpellDialog::~SpellDialog()
 {
+    if (m_xOptionsDlg)
+    {
+        m_xOptionsDlg->response(RET_CANCEL);
+        m_xOptionsDlg.reset();
+    }
+
     if (m_pInitHdlEvent)
         Application::RemoveUserEvent(m_pInitHdlEvent);
     if (pImpl)
@@ -462,19 +468,21 @@ IMPL_LINK_NOARG(SpellDialog, CheckGrammarHdl, weld::Toggleable&, void)
 
 void SpellDialog::StartSpellOptDlg_Impl()
 {
-    SfxItemSetFixed<SID_AUTOSPELL_CHECK,SID_AUTOSPELL_CHECK> aSet( SfxGetpApp()->GetPool() );
-    SfxSingleTabDialogController aDlg(m_xDialog.get(), &aSet, "cui/ui/spelloptionsdialog.ui", "SpellOptionsDialog");
+    auto xSet = std::make_shared<SfxItemSetFixed<SID_AUTOSPELL_CHECK,SID_AUTOSPELL_CHECK>>( SfxGetpApp()->GetPool() );
+    m_xOptionsDlg = std::make_shared<SfxSingleTabDialogController>(m_xDialog.get(), xSet.get(), "cui/ui/spelloptionsdialog.ui", "SpellOptionsDialog");
 
-    std::unique_ptr<SfxTabPage> xPage = SvxLinguTabPage::Create(aDlg.get_content_area(), &aDlg, &aSet);
+    std::unique_ptr<SfxTabPage> xPage = SvxLinguTabPage::Create(m_xOptionsDlg->get_content_area(), m_xOptionsDlg.get(), xSet.get());
     static_cast<SvxLinguTabPage*>(xPage.get())->HideGroups( GROUP_MODULES );
-    aDlg.SetTabPage(std::move(xPage));
-    if (RET_OK == aDlg.run())
-    {
-        InitUserDicts();
-        const SfxItemSet* pOutSet = aDlg.GetOutputItemSet();
-        if(pOutSet)
-            OfaTreeOptionsDialog::ApplyLanguageOptions(*pOutSet);
-    }
+    m_xOptionsDlg->SetTabPage(std::move(xPage));
+    weld::GenericDialogController::runAsync(m_xOptionsDlg, [this, xSet] (sal_uInt32 nResult) {
+        if (RET_OK == nResult)
+        {
+            InitUserDicts();
+            const SfxItemSet* pOutSet = m_xOptionsDlg->GetOutputItemSet();
+            if(pOutSet)
+                OfaTreeOptionsDialog::ApplyLanguageOptions(*pOutSet);
+        }
+    });
 }
 
 namespace
