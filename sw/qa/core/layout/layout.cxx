@@ -258,6 +258,21 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextboxModification)
     CPPUNIT_ASSERT(!pDocShell->IsModified());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxInHeaderIsPositioned)
+{
+    // Load a document with a floating text box in the header
+    createSwDoc("header-textbox.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 8051
+    // - Actual  : 1418
+    // Comparison with 7000 chosen due to variability between devices
+    CPPUNIT_ASSERT_GREATEREQUAL(
+        double(7000), getXPath(pXmlDoc, "//anchored/fly/infos/bounds", "left").toDouble());
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBtlrNestedCell)
 {
     // Load a document with a nested table, the inner A1 cell has a btlr text direction.
