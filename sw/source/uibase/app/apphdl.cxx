@@ -171,9 +171,8 @@ void SwModule::StateOther(SfxItemSet &rSet)
             case FN_MAILMERGE_NEXT_ENTRY:
             case FN_MAILMERGE_LAST_ENTRY:
             {
-                SwView* pView = ::GetActiveView();
                 std::shared_ptr<SwMailMergeConfigItem> xConfigItem;
-                if (pView)
+                if (SwView* pView = GetActiveView())
                     xConfigItem = pView->GetMailMergeConfigItem();
                 if (!xConfigItem)
                     rSet.DisableItem(nWhich);
@@ -205,9 +204,8 @@ void SwModule::StateOther(SfxItemSet &rSet)
             case FN_MAILMERGE_PRINT_DOCUMENTS:
             case FN_MAILMERGE_EMAIL_DOCUMENTS:
             {
-                SwView* pView = ::GetActiveView();
                 std::shared_ptr<SwMailMergeConfigItem> xConfigItem;
-                if (pView)
+                if (SwView* pView = GetActiveView())
                     xConfigItem = pView->EnsureMailMergeConfigItem();
 
                 // #i51949# hide e-Mail option if e-Mail is not supported
@@ -751,6 +749,9 @@ void SwModule::ExecOther(SfxRequest& rReq)
         case FN_MAILMERGE_CURRENT_ENTRY:
         {
             SwView* pView = ::GetActiveView();
+            if (!pView)
+                return;
+
             const std::shared_ptr<SwMailMergeConfigItem>& xConfigItem = pView->GetMailMergeConfigItem();
             if (!xConfigItem)
                 return;
@@ -812,14 +813,18 @@ void SwModule::ExecOther(SfxRequest& rReq)
         case FN_MAILMERGE_PRINT_DOCUMENTS:
         case FN_MAILMERGE_EMAIL_DOCUMENTS:
         {
-            std::shared_ptr<SwMailMergeConfigItem> xConfigItem = GetActiveView()->GetMailMergeConfigItem();
+            SwView* pView = ::GetActiveView();
+            if (!pView)
+                return;
+
+            std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
             assert(xConfigItem);
             if (!xConfigItem->GetResultSet().is())
             {
                 // The connection has been attempted, but failed or no results found,
                 // so invalidate the toolbar buttons in case they need to be disabled.
                 SfxBindings& rBindings
-                    = GetActiveView()->GetWrtShell().GetView().GetViewFrame()->GetBindings();
+                    = pView->GetWrtShell().GetView().GetViewFrame()->GetBindings();
                 rBindings.Invalidate(FN_MAILMERGE_CREATE_DOCUMENTS);
                 rBindings.Invalidate(FN_MAILMERGE_SAVE_DOCUMENTS);
                 rBindings.Invalidate(FN_MAILMERGE_PRINT_DOCUMENTS);
@@ -834,7 +839,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
 
             if (nWhich == FN_MAILMERGE_CREATE_DOCUMENTS)
             {
-                xConfigItem = SwDBManager::PerformMailMerge(GetActiveView());
+                xConfigItem = SwDBManager::PerformMailMerge(pView);
 
                 if (xConfigItem && xConfigItem->GetTargetView())
                     xConfigItem->GetTargetView()->GetViewFrame()->GetFrame().Appear();

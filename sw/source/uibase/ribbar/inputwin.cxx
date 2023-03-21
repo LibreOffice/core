@@ -335,9 +335,11 @@ void  SwInputWindow::ApplyFormula()
     if (!m_pView)
     {
         // presumably there must be an active view now since the event arrived
-        SwView *const pActiveView = ::GetActiveView();
-        // this just makes the input window go away, so that the next time it works
-        pActiveView->GetViewFrame()->GetDispatcher()->Execute(FN_EDIT_FORMULA, SfxCallMode::ASYNCHRON);
+        if (SwView* pView = GetActiveView())
+        {
+            // this just makes the input window go away, so that the next time it works
+            pView->GetViewFrame()->GetDispatcher()->Execute(FN_EDIT_FORMULA, SfxCallMode::ASYNCHRON);
+        }
         return;
     }
 
@@ -368,9 +370,11 @@ void  SwInputWindow::CancelFormula()
     if (!m_pView)
     {
         // presumably there must be an active view now since the event arrived
-        SwView *const pActiveView = ::GetActiveView();
-        // this just makes the input window go away, so that the next time it works
-        pActiveView->GetViewFrame()->GetDispatcher()->Execute(FN_EDIT_FORMULA, SfxCallMode::ASYNCHRON);
+        if (SwView* pActiveView = GetActiveView())
+        {
+            // this just makes the input window go away, so that the next time it works
+            pActiveView->GetViewFrame()->GetDispatcher()->Execute(FN_EDIT_FORMULA, SfxCallMode::ASYNCHRON);
+        }
         return;
     }
 
