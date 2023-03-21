@@ -210,9 +210,8 @@ SwRedlineAcceptDlg::~SwRedlineAcceptDlg()
 
 void SwRedlineAcceptDlg::Init(SwRedlineTable::size_type nStart)
 {
-    SwView *pView = ::GetActiveView();
     std::optional<SwWait> oWait;
-    if (pView)
+    if (SwView *pView = GetActiveView())
         oWait.emplace(*pView->GetDocShell(), false);
     weld::TreeView& rTreeView = m_pTable->GetWidget();
     m_aUsedSeqNo.clear();
@@ -245,7 +244,9 @@ void SwRedlineAcceptDlg::InitAuthors()
         return;
 
     SwView *pView = ::GetActiveView();
-    SwWrtShell* pSh = pView ? pView->GetWrtShellPtr() : nullptr;
+    if (!pView)
+        return;
+    SwWrtShell* pSh = pView->GetWrtShellPtr();
 
     SvxTPFilter *pFilterPage = m_xTabPagesCTRL->GetFilterPage();
 
@@ -491,7 +492,10 @@ SwRedlineTable::size_type SwRedlineAcceptDlg::CalcDiff(SwRedlineTable::size_type
 
     weld::TreeView& rTreeView = m_pTable->GetWidget();
     rTreeView.freeze();
-    SwView *pView   = ::GetActiveView();
+    SwView *pView = ::GetActiveView();
+    if (!pView)
+        return SwRedlineTable::npos;
+
     SwWrtShell* pSh = pView->GetWrtShellPtr();
     if (!pSh)
         return SwRedlineTable::npos;
@@ -662,7 +666,11 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
 
 void SwRedlineAcceptDlg::RemoveParents(SwRedlineTable::size_type nStart, SwRedlineTable::size_type nEnd)
 {
-    SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
+    SwView *pView = ::GetActiveView();
+    if (!pView)
+        return;
+
+    SwWrtShell* pSh = pView->GetWrtShellPtr();
     if (!pSh)
         return;
 
@@ -926,7 +934,11 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
 
 void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
 {
-    SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
+    SwView *pView = ::GetActiveView();
+    if (!pView)
+        return;
+
+    SwWrtShell* pSh = pView->GetWrtShellPtr();
     if (!pSh)
         return;
 
@@ -1070,14 +1082,17 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
 
 SwRedlineTable::size_type SwRedlineAcceptDlg::GetRedlinePos(const weld::TreeIter& rEntry)
 {
-    if (SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr())
-    {
-        weld::TreeView& rTreeView = m_pTable->GetWidget();
-        return pSh->FindRedlineOfData( *static_cast<SwRedlineDataParent*>(weld::fromId<RedlinData*>(
-                                        rTreeView.get_id(rEntry))->pData)->pData );
-    }
-    else
+    SwView* pView = GetActiveView();
+    if (!pView)
         return SwRedlineTable::npos;
+
+    SwWrtShell* pSh = pView->GetWrtShellPtr();
+    if (!pSh)
+        return SwRedlineTable::npos;
+
+    weld::TreeView& rTreeView = m_pTable->GetWidget();
+    return pSh->FindRedlineOfData( *static_cast<SwRedlineDataParent*>(weld::fromId<RedlinData*>(
+                                    rTreeView.get_id(rEntry))->pData)->pData );
 }
 
 IMPL_LINK_NOARG(SwRedlineAcceptDlg, AcceptHdl, SvxTPView*, void)
@@ -1102,10 +1117,12 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, RejectAllHdl, SvxTPView*, void)
 
 IMPL_LINK_NOARG(SwRedlineAcceptDlg, UndoHdl, SvxTPView*, void)
 {
-    SwView * pView = ::GetActiveView();
-    pView->GetViewFrame().GetDispatcher()->
-                Execute(SID_UNDO, SfxCallMode::SYNCHRON);
-    m_pTPView->EnableUndo(pView->GetSlotState(SID_UNDO) != nullptr);
+    if (SwView* pView = GetActiveView())
+    {
+        pView->GetViewFrame().GetDispatcher()->
+                    Execute(SID_UNDO, SfxCallMode::SYNCHRON);
+        m_pTPView->EnableUndo(pView->GetSlotState(SID_UNDO) != nullptr);
+    }
 
     Activate();
 }
@@ -1131,7 +1148,11 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
 {
     m_aSelectTimer.Stop();
 
-    SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
+    SwView* pView = GetActiveView();
+    if (!pView)
+        return;
+
+    SwWrtShell* pSh = pView->GetWrtShellPtr();
     if (!pSh)
         return;
 
@@ -1228,7 +1249,11 @@ IMPL_LINK(SwRedlineAcceptDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
         return false;
 
-    SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
+    SwView* pView = GetActiveView();
+    if (!pView)
+        return false;
+
+    SwWrtShell* pSh = pView->GetWrtShellPtr();
     if (!pSh)
         return false;
 
@@ -1353,7 +1378,7 @@ IMPL_LINK(SwRedlineAcceptDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
         if (nSortMode == 4)
             nSortMode = -1; // unsorted / sorted by position
 
-        SwWait aWait( *::GetActiveView()->GetDocShell(), false );
+        SwWait aWait( *pView->GetDocShell(), false );
         m_pTable->HeaderBarClick(nSortMode);
         if (nSortMode == -1)
             Init();             // newly fill everything

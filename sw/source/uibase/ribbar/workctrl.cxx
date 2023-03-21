@@ -140,13 +140,16 @@ IMPL_STATIC_LINK(SwTbxAutoTextCtrl, PopupHdl, Menu*, pMenu, bool)
     OUString sShortName =
         pGlossaryList->GetBlockShortName(nBlock - 1, nId - (100 * nBlock) - 1);
 
-    SwGlossaryHdl* pGlosHdl = ::GetActiveView()->GetGlosHdl();
-    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc();
-    if ( fnSetActGroup )
-        (*fnSetActGroup)( sGroup );
-    pGlosHdl->SetCurGroup(sGroup, true);
-    pGlosHdl->InsertGlossary(sShortName);
+    if (SwView* pView = GetActiveView())
+    {
+        SwGlossaryHdl* pGlosHdl = pView->GetGlosHdl();
+        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+        ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc();
+        if ( fnSetActGroup )
+            (*fnSetActGroup)( sGroup );
+        pGlosHdl->SetCurGroup(sGroup, true);
+        pGlosHdl->InsertGlossary(sShortName);
+    }
 
     return false;
 }
@@ -719,8 +722,7 @@ void SAL_CALL NavElementToolBoxControl::statusChanged( const frame::FeatureState
     else
         m_pBox->set_sensitive(true);
 
-    SwView* pView = GetActiveView();
-    if (pView)
+    if (SwView* pView = GetActiveView())
     {
         pView->GetViewFrame().GetBindings().Invalidate(FN_SCROLL_NEXT);
         pView->GetViewFrame().GetBindings().Invalidate(FN_SCROLL_PREV);

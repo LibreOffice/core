@@ -169,10 +169,15 @@ bool SwDropCapsPict::GetNextScriptSegment(size_t &nIdx, sal_Int32 &start, sal_In
 #define LINES  10
 #define BORDER  2
 
-void SwDropCapsPict::GetFontSettings( const SwDropCapsPage& _rPage, vcl::Font& _rFont, sal_uInt16 _nWhich )
+void SwDropCapsPict::GetFontSettings( vcl::Font& _rFont, sal_uInt16 _nWhich )
 {
-    SfxItemSet aSet( _rPage.m_rSh.GetAttrPool(), _nWhich, _nWhich);
-    _rPage.m_rSh.GetCurAttr(aSet);
+    SwView* pView = GetActiveView();
+    if (!pView)
+        return;
+    SwWrtShell& rWrtShell = pView->GetWrtShell();
+
+    SfxItemSet aSet( rWrtShell.GetAttrPool(), _nWhich, _nWhich);
+    rWrtShell.GetCurAttr(aSet);
     SvxFontItem aFormatFont(static_cast<const SvxFontItem &>( aSet.Get(_nWhich)));
 
     _rFont.SetFamily(aFormatFont.GetFamily());
@@ -183,6 +188,11 @@ void SwDropCapsPict::GetFontSettings( const SwDropCapsPage& _rPage, vcl::Font& _
 
 void SwDropCapsPict::UpdatePaintSettings()
 {
+    SwView* pView = GetActiveView();
+    if (!pView)
+        return;
+    SwWrtShell& rWrtShell = pView->GetWrtShell();
+
     maBackColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
     maTextLineColor = COL_LIGHTGRAY;
 
@@ -194,33 +204,33 @@ void SwDropCapsPict::UpdatePaintSettings()
     if (mpPage)
     {
         // tdf#135244: preview generation should not jump document view
-        auto aLock(mpPage->m_rSh.GetView().GetDocShell()->LockAllViews());
+        auto aLock(rWrtShell.GetView().GetDocShell()->LockAllViews());
 
         if (!mpPage->m_xTemplateBox->get_active())
         {
             // query the Font at paragraph's beginning
-            mpPage->m_rSh.Push();
-            mpPage->m_rSh.SttCursorMove();
-            mpPage->m_rSh.ClearMark();
+            rWrtShell.Push();
+            rWrtShell.SttCursorMove();
+            rWrtShell.ClearMark();
             SwWhichPara pSwuifnParaCurr = GoCurrPara;
             SwMoveFnCollection const & pSwuifnParaStart = fnParaStart;
-            mpPage->m_rSh.MovePara(pSwuifnParaCurr,pSwuifnParaStart);
+            rWrtShell.MovePara(pSwuifnParaCurr,pSwuifnParaStart);
             // normal
-            GetFontSettings( *mpPage, aFont, RES_CHRATR_FONT );
+            GetFontSettings( aFont, RES_CHRATR_FONT );
 
             // CJK
-            GetFontSettings( *mpPage, maCJKFont, RES_CHRATR_CJK_FONT );
+            GetFontSettings( maCJKFont, RES_CHRATR_CJK_FONT );
 
             // CTL
-            GetFontSettings( *mpPage, maCTLFont, RES_CHRATR_CTL_FONT );
+            GetFontSettings( maCTLFont, RES_CHRATR_CTL_FONT );
 
-            mpPage->m_rSh.EndCursorMove();
-            mpPage->m_rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
+            rWrtShell.EndCursorMove();
+            rWrtShell.Pop(SwCursorShell::PopMode::DeleteCurrent);
         }
         else
         {
             // query Font at character template
-            SwCharFormat *pFormat = mpPage->m_rSh.GetCharStyle(
+            SwCharFormat *pFormat = rWrtShell.GetCharStyle(
                                     mpPage->m_xTemplateBox->get_active_text(),
                                     SwWrtShell::GETSTYLE_CREATEANY );
             OSL_ENSURE(pFormat, "character style doesn't exist!");
@@ -232,7 +242,7 @@ void SwDropCapsPict::UpdatePaintSettings()
             aFont.SetCharSet(rFormatFont.GetCharSet());
         }
 
-        const Color& rFontColor = mpPage->m_rSh.GetViewOptions()->GetFontColor();
+        const Color& rFontColor = rWrtShell.GetViewOptions()->GetFontColor();
         aFont.SetColor( rFontColor );
         maCJKFont.SetColor( rFontColor );
         maCTLFont.SetColor( rFontColor );
@@ -463,7 +473,6 @@ SwDropCapsPage::SwDropCapsPage(weld::Container* pPage, weld::DialogController* p
     : SfxTabPage(pPage, pController, "modules/swriter/ui/dropcapspage.ui", "DropCapPage", &rSet)
     , m_bModified(false)
     , m_bFormat(true)
-    , m_rSh(::GetActiveView()->GetWrtShell())
     , m_xDropCapsBox(m_xBuilder->weld_check_button("checkCB_SWITCH"))
     , m_xWholeWordCB(m_xBuilder->weld_check_button("checkCB_WORD"))
     , m_xSwitchText(m_xBuilder->weld_label("labelFT_DROPCAPS"))
@@ -550,7 +559,9 @@ void  SwDropCapsPage::Reset(const SfxItemSet *rSet)
         m_xDistanceField->set_value(0, FieldUnit::TWIP);
     }
 
-    ::FillCharStyleListBox(*m_xTemplateBox, m_rSh.GetView().GetDocShell(), true);
+    SwView* pView = GetActiveView();
+    if (pView)
+        ::FillCharStyleListBox(*m_xTemplateBox, pView->GetWrtShell().GetView().GetDocShell(), true);
 
     m_xTemplateBox->insert_text(0, SwResId(SW_STR_NONE));
 
@@ -571,7 +582,8 @@ void  SwDropCapsPage::Reset(const SfxItemSet *rSet)
         m_xTextEdit->set_text(GetDefaultString(nVal));
     else
     {
-        m_xTextEdit->set_text(m_rSh.GetDropText(nVal));
+        if (pView)
+            m_xTextEdit->set_text(pView->GetWrtShell().GetDropText(nVal));
         m_xTextEdit->set_sensitive(true);
         m_xTextText->set_sensitive(true);
     }
@@ -635,12 +647,15 @@ void SwDropCapsPage::ModifyEntry(const weld::Entry& rEdit)
             : 0;
         bool bSetText = false;
 
-        if (m_bFormat || m_rSh.GetDropText(1).isEmpty())
-            sPreview = GetDefaultString(nVal);
-        else
+        if (SwView* pView = GetActiveView())
         {
-            bSetText = true;
-            sPreview = m_rSh.GetDropText(nVal);
+            if (m_bFormat || pView->GetWrtShell().GetDropText(1).isEmpty())
+                sPreview = GetDefaultString(nVal);
+            else
+            {
+                bSetText = true;
+                sPreview = pView->GetWrtShell().GetDropText(nVal);
+            }
         }
 
         OUString sEdit(m_xTextEdit->get_text());
@@ -710,8 +725,9 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
         aFormat.GetWholeWord() = m_xWholeWordCB->get_active();
 
         // template
-        if (m_xTemplateBox->get_active())
-            aFormat.SetCharFormat(m_rSh.GetCharStyle(m_xTemplateBox->get_active_text()));
+        if (SwView* pView = GetActiveView())
+            if (m_xTemplateBox->get_active())
+                aFormat.SetCharFormat(pView->GetWrtShell().GetCharStyle(m_xTemplateBox->get_active_text()));
     }
     else
     {

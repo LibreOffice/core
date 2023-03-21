@@ -1014,9 +1014,10 @@ sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
         SfxStringItem aOptionsItem( SID_OPTIONS, "HRC" );
         SfxLinkItem aLink( SID_DONELINK,
                             LINK( this, SwNavigationPI, DoneLink ) );
-        GetActiveView()->GetViewFrame().GetDispatcher()->ExecuteList(
-                    SID_OPENDOC, SfxCallMode::ASYNCHRON,
-                    { &aFileItem, &aOptionsItem, &aLink });
+        if (SwView* pView = GetActiveView())
+            pView->GetViewFrame().GetDispatcher()->ExecuteList(
+                        SID_OPENDOC, SfxCallMode::ASYNCHRON,
+                        { &aFileItem, &aOptionsItem, &aLink });
     }
     return nRet;
 }

@@ -174,9 +174,11 @@ SwCharURLPage::SwCharURLPage(weld::Container* pPage, weld::DialogController* pCo
         m_xURLPB->connect_clicked(LINK( this, SwCharURLPage, InsertFileHdl));
     m_xEventPB->connect_clicked(LINK( this, SwCharURLPage, EventHdl));
 
-    SwView *pView = ::GetActiveView();
-    ::FillCharStyleListBox(*m_xVisitedLB, pView->GetDocShell());
-    ::FillCharStyleListBox(*m_xNotVisitedLB, pView->GetDocShell());
+    if (SwView* pView = GetActiveView())
+    {
+        ::FillCharStyleListBox(*m_xVisitedLB, pView->GetDocShell());
+        ::FillCharStyleListBox(*m_xNotVisitedLB, pView->GetDocShell());
+    }
     m_xVisitedLB->set_active_id(OUString::number(RES_POOLCHR_INET_VISIT));
     m_xVisitedLB->save_value();
     m_xNotVisitedLB->set_active_id(OUString::number(RES_POOLCHR_INET_NORMAL));
@@ -306,8 +308,9 @@ IMPL_LINK_NOARG(SwCharURLPage, InsertFileHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SwCharURLPage, EventHdl, weld::Button&, void)
 {
-    m_bModified |= SwMacroAssignDlg::INetFormatDlg(GetFrameWeld(),
-                    ::GetActiveView()->GetWrtShell(), m_oINetMacroTable);
+    if (SwView* pView = GetActiveView())
+        m_bModified |= SwMacroAssignDlg::INetFormatDlg(GetFrameWeld(),
+                        pView->GetWrtShell(), m_oINetMacroTable);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
