@@ -6218,7 +6218,6 @@ void DomainMapper_Impl::handleToc
     OUString sTemplate;
     OUString sChapterNoSeparator;
     OUString sFigureSequence;
-    uno::Reference< beans::XPropertySet > xTOC;
     OUString aBookmarkName;
 
 //                  \a Builds a table of figures but does not include the captions's label and number
@@ -6317,6 +6316,8 @@ void DomainMapper_Impl::handleToc
 
     const OUString aTocTitle = extractTocTitle();
 
+    uno::Reference<beans::XPropertySet> xTOC;
+
     if (m_xTextFactory.is() && ! m_aTextAppendStack.empty())
     {
         const auto& xTextAppend = GetTopTextAppend();
@@ -6352,13 +6353,17 @@ void DomainMapper_Impl::handleToc
     }
 
     m_bStartTOC = true;
+    pContext->SetTOC(xTOC);
+    m_bParaHadField = false;
 
-    if (xTOC.is())
-        xTOC->setPropertyValue(getPropertyName( PROP_TITLE ), uno::Any(aTocTitle));
+    if (!xTOC)
+        return;
+
+    xTOC->setPropertyValue(getPropertyName( PROP_TITLE ), uno::Any(aTocTitle));
 
     if (!aBookmarkName.isEmpty())
         xTOC->setPropertyValue(getPropertyName(PROP_TOC_BOOKMARK), uno::Any(aBookmarkName));
-    if( !bTableOfFigures && xTOC.is() )
+    if (!bTableOfFigures)
     {
         xTOC->setPropertyValue( getPropertyName( PROP_LEVEL ), uno::Any( nMaxLevel ) );
         xTOC->setPropertyValue( getPropertyName( PROP_CREATE_FROM_OUTLINE ), uno::Any( bFromOutline ));
@@ -6427,7 +6432,7 @@ void DomainMapper_Impl::handleToc
             }
         }
     }
-    else if (bTableOfFigures && xTOC.is())
+    else // if (bTableOfFigures)
     {
         if (!sFigureSequence.isEmpty())
             xTOC->setPropertyValue(getPropertyName(PROP_LABEL_CATEGORY),
@@ -6452,8 +6457,6 @@ void DomainMapper_Impl::handleToc
             xLevelFormats->replaceByIndex( 1, uno::Any( aNewLevel ) );
         }
     }
-    pContext->SetTOC( xTOC );
-    m_bParaHadField = false;
 }
 
 uno::Reference<beans::XPropertySet> DomainMapper_Impl::createSectionForRange(
