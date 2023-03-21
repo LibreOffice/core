@@ -264,6 +264,17 @@ namespace basegfx
 
     namespace utils
     {
+        /* Tooling method to reverse ColorStops, including offsets.
+           When also mirroring offsets a valid sort keeps valid.
+        */
+        void reverseColorStops(ColorStops& rColorStops)
+        {
+            // can use std::reverse, but also need to adapt offset(s)
+            std::reverse(rColorStops.begin(), rColorStops.end());
+            for (auto& candidate : rColorStops)
+                candidate = ColorStop(1.0 - candidate.getStopOffset(), candidate.getStopColor());
+        }
+
         /* Tooling method to convert UNO API data to ColorStops
            This will try to extract ColorStop data from the given
            Any, so if it's of type awt::Gradient2 that data will be
@@ -374,13 +385,8 @@ namespace basegfx
              be removed)
            - contains no ColorStops with offset > 1.0 (will
              be removed)
-           - contains no two ColorStops with identical offsets
-             (will be removed, 1st one/smallest offset wins
-             which is also given by sort tooling)
+           - ColorStops with identical offsets are now allowed
            - will be sorted from lowest offset to highest
-           - if all colors are the same, the content will
-             be reduced to a single entry with offset 0.0
-             (force to StartColor)
 
            Some more notes:
            - It can happen that the result is empty
@@ -404,8 +410,15 @@ namespace basegfx
             if (1 == rColorStops.size())
             {
                 // no gradient at all, but preserve given color
-                // and force it to be the StartColor
-                rColorStops[0] = ColorStop(0.0, rColorStops[0].getStopColor());
+                // evtl. correct offset to be in valid range [0.0 .. 1.0]
+                // NOTE: This does not move it to 0.0 or 1.0, it *can* still
+                //       be somewhere in-between what is allowed
+                rColorStops[0] = ColorStop(
+                    std::max(0.0, std::min(1.0, rColorStops[0].getStopOffset())),
+                    rColorStops[0].getStopColor());
+
+                // done
+                return;
             }
 
             // start with sorting the input data. Remember that
@@ -414,9 +427,6 @@ namespace basegfx
             std::sort(rColorStops.begin(), rColorStops.end());
 
             // prepare status values
-            bool bSameColorInit(false);
-            bool bAllTheSameColor(true);
-            basegfx::BColor aFirstColor;
             size_t write(0);
 
             // use the paradigm of a band machine with two heads, read
@@ -428,7 +438,7 @@ namespace basegfx
                 // get offset of entry at read position
                 const double rOff(rColorStops[read].getStopOffset());
 
-                // step over < 0 values
+                // step over < 0 values, these are outside and will be removed
                 if (basegfx::fTools::less(rOff, 0.0))
                     continue;
 
@@ -438,23 +448,9 @@ namespace basegfx
                     break;
 
                 // entry is valid value at read position
-
-                // check/init for all-the-same color
-                if(bSameColorInit)
-                {
-                    // already initialized, compare
-                    bAllTheSameColor = bAllTheSameColor && aFirstColor == rColorStops[read].getStopColor();
-                }
-                else
-                {
-                    // do initialize, remember 1st valid color
-                    bSameColorInit = true;
-                    aFirstColor = rColorStops[read].getStopColor();
-                }
-
                 // copy if write target is empty (write at start) or when
-                // write target is different to read
-                if (0 == write || rOff != rColorStops[write-1].getStopOffset())
+                // write target is different to read in color or offset
+                if (0 == write || !(rColorStops[read] == rColorStops[write-1]))
                 {
                     if (write != read)
                     {
@@ -473,14 +469,6 @@ namespace basegfx
             {
                 rColorStops.resize(write);
             }
-
-            if (bSameColorInit && bAllTheSameColor && rColorStops.size() > 1)
-            {
-                // id all-the-same color is detected, reset to single
-                // entry, but also force to StartColor and preserve the color
-                rColorStops.resize(1);
-                rColorStops[0] = ColorStop(0.0, aFirstColor);
-            }
         }
 
         BColor modifyBColor(
@@ -493,11 +481,13 @@ namespace basegfx
                 return BColor();
 
             // outside range -> at start
-            if (fScaler <= 0.0)
+            const double fMin(rColorStops.front().getStopOffset());
+            if (fScaler < fMin)
                 return rColorStops.front().getStopColor();
 
             // outside range -> at end
-            if (fScaler >= 1.0)
+            const double fMax(rColorStops.back().getStopOffset());
+            if (fScaler > fMax)
                 return rColorStops.back().getStopColor();
 
             // special case for the 'classic' case with just two colors:
@@ -505,6 +495,9 @@ namespace basegfx
             // by avoiding some calculations and an O(log(N)) array access
             if (2 == rColorStops.size())
             {
+                if (fTools::equal(fMin, fMax))
+                    return rColorStops.front().getStopColor();
+
                 const basegfx::BColor aCStart(rColorStops.front().getStopColor());
                 const basegfx::BColor aCEnd(rColorStops.back().getStopColor());
                 const sal_uInt32 nSteps(
@@ -513,6 +506,11 @@ namespace basegfx
                         aCStart,
                         aCEnd));
 
+                // we need to extend the interpolation to the local
+                // range of ColorStops. Despite having two ColorStops
+                // these are not necessarily at 0.0 and 1.0, so mabe
+                // not the classical Start/EndColor (what is allowed)
+                fScaler = (fScaler - fMin) / (fMax - fMin);
                 return basegfx::interpolate(
                     aCStart,
                     aCEnd,
@@ -525,7 +523,7 @@ namespace basegfx
             //       debug test code created by the stl. In a pro version,
             //       all is good/fast as expected
             const auto upperBound(
-                std::lower_bound(
+                std::upper_bound(
                     rColorStops.begin(),
                     rColorStops.end(),
                     ColorStop(fScaler),

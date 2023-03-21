@@ -494,28 +494,39 @@ namespace drawinglayer::primitive2d
                                 case 2:
                                 {
                                     // single added in-between, no change of start/end
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 0.0, 0.0)); // red
                                     aColorStops.emplace_back(0.5, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    aColorStops.emplace_back(1.0, basegfx::BColor(0.0, 0.0, 1.0)); // blue
                                     break;
                                 }
 
                                 case 3:
                                 {
-                                    // check additional StartColor, the one given directly has to win
+                                    // check additional StartColor, the second one has to win
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 0.0, 0.0)); // red
                                     aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    aColorStops.emplace_back(1.0, basegfx::BColor(0.0, 0.0, 1.0)); // blue
                                     break;
                                 }
 
                                 case 4:
                                 {
-                                    // check additional EndColor, the one given directly has to win
-                                    // due this one being added *after* the original one
+                                    // check additional EndColor, the first one has to win
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 0.0, 0.0)); // red
                                     aColorStops.emplace_back(1.0, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    aColorStops.emplace_back(1.0, basegfx::BColor(0.0, 0.0, 1.0)); // blue
                                     break;
                                 }
 
                                 case 5:
                                 {
                                     // check invalid color (too low index), has to be ignored
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 0.0, 0.0)); // red
+                                    aColorStops.emplace_back(1.0, basegfx::BColor(0.0, 0.0, 1.0)); // blue
                                     aColorStops.emplace_back(-1.0, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
                                     break;
                                 }
@@ -523,6 +534,9 @@ namespace drawinglayer::primitive2d
                                 case 6:
                                 {
                                     // check invalid color (too high index), has to be ignored
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 0.0, 0.0)); // red
+                                    aColorStops.emplace_back(1.0, basegfx::BColor(0.0, 0.0, 1.0)); // blue
                                     aColorStops.emplace_back(2.0, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
                                     break;
                                 }
@@ -530,33 +544,45 @@ namespace drawinglayer::primitive2d
                                 case 7:
                                 {
                                     // check in-between single-color section
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 0.0, 0.0)); // red
                                     aColorStops.emplace_back(0.3, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
                                     aColorStops.emplace_back(0.7, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    aColorStops.emplace_back(1.0, basegfx::BColor(0.0, 0.0, 1.0)); // blue
                                     break;
                                 }
 
                                 case 8:
                                 {
                                     // check in-between single-color sections
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 0.0, 0.0)); // red
                                     aColorStops.emplace_back(0.2, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
                                     aColorStops.emplace_back(0.4, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
-                                    aColorStops.emplace_back(0.5, aXGradient.GetColorStops().front().getStopColor());
+                                    aColorStops.emplace_back(0.5, basegfx::BColor(1.0, 0.0, 0.0)); // red
                                     aColorStops.emplace_back(0.6, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
                                     aColorStops.emplace_back(0.8, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    aColorStops.emplace_back(1.0, basegfx::BColor(0.0, 0.0, 1.0)); // blue
                                     break;
                                 }
 
                                 case 9:
                                 {
                                     // check single-color start area
-                                    aColorStops.emplace_back(0.6, aXGradient.GetColorStops().front().getStopColor());
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 0.0, 0.0)); // red
+                                    aColorStops.emplace_back(0.6, basegfx::BColor(1.0, 0.0, 0.0)); // red
+                                    aColorStops.emplace_back(1.0, basegfx::BColor(0.0, 0.0, 1.0)); // blue
                                     break;
                                 }
 
                                 case 10:
                                 {
                                     // check single-color end area
-                                    aColorStops.emplace_back(0.4, aXGradient.GetColorStops().back().getStopColor());
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 0.0, 0.0)); // red
+                                    aColorStops.emplace_back(0.4, basegfx::BColor(0.0, 0.0, 1.0)); // blue
+                                    aColorStops.emplace_back(1.0, basegfx::BColor(0.0, 0.0, 1.0)); // blue
                                     break;
                                 }
 
@@ -564,8 +590,41 @@ namespace drawinglayer::primitive2d
                                 {
                                     // check case without direct Start/EndColor
                                     aColorStops.clear();
-                                    aColorStops.emplace_back(0.4, aXGradient.GetColorStops().back().getStopColor());
-                                    aColorStops.emplace_back(0.6, aXGradient.GetColorStops().front().getStopColor());
+                                    aColorStops.emplace_back(0.4, basegfx::BColor(1.0, 0.0, 0.0)); // red
+                                    aColorStops.emplace_back(0.6, basegfx::BColor(0.0, 0.0, 1.0)); // blue
+                                    break;
+                                }
+
+                                case 12:
+                                {
+                                    // check case without colors at all
+                                    aColorStops.clear();
+                                    break;
+                                }
+
+                                case 13:
+                                {
+                                    // check case with single stop
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(0.5, basegfx::BColor(1.0, 0.0, 0.0)); // red
+                                    break;
+                                }
+
+                                case 14:
+                                {
+                                    // check case with single-double stop
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(0.5, basegfx::BColor(1.0, 0.0, 0.0)); // red
+                                    aColorStops.emplace_back(0.5, basegfx::BColor(1.0, 0.0, 0.0)); // red
+                                    break;
+                                }
+
+                                case 15:
+                                {
+                                    // check case with single stop diff colors
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(0.5, basegfx::BColor(1.0, 0.0, 0.0)); // red
+                                    aColorStops.emplace_back(0.5, basegfx::BColor(0.0, 0.0, 1.0)); // blue
                                     break;
                                 }
 

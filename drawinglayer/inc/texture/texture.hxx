@@ -60,6 +60,9 @@ namespace drawinglayer::texture
             basegfx::ColorStops                 mnColorStops;
             double                              mfBorder;
 
+            // check if we need last-ColorStop-correction
+            bool checkPenultimate();
+
         public:
             GeoTexSvxGradient(
                 const basegfx::B2DRange& rDefinitionRange,

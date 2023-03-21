@@ -940,10 +940,22 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
 
     // MCGR: If GradientStops are used, use decomposition since vcl is not able
     // to render multi-color gradients
-    if (rFillGradient.getColorStops().size() > 2)
+    if (rFillGradient.getColorStops().size() != 2)
     {
         process(rPrimitive);
         return;
+    }
+
+    // MCGR: If GradientStops do not start and stop at traditional Start/EndColor,
+    // use decomposition since vcl is not able to render this
+    if (!rFillGradient.getColorStops().empty())
+    {
+        if (!basegfx::fTools::equalZero(rFillGradient.getColorStops().front().getStopOffset())
+            || !basegfx::fTools::equal(rFillGradient.getColorStops().back().getStopOffset(), 1.0))
+        {
+            process(rPrimitive);
+            return;
+        }
     }
 
     // VCL should be able to handle all styles, but for tdf#133477 the VCL result
