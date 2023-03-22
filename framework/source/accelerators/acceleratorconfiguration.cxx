@@ -64,7 +64,10 @@ namespace framework
     static OUString lcl_getKeyString(const css::awt::KeyEvent& aKeyEvent)
     {
         const sal_Int32 nBeginIndex = 4; // "KEY_" is the prefix of an identifier...
-        OUStringBuffer sKeyBuffer((KeyMapping::get().mapCodeToIdentifier(aKeyEvent.KeyCode)).subView(nBeginIndex));
+        OUString sKey(KeyMapping::get().mapCodeToIdentifier(aKeyEvent.KeyCode));
+        if (sKey.getLength() < nBeginIndex) // dead key
+            return OUString();
+        OUStringBuffer sKeyBuffer(sKey.subView(nBeginIndex));
 
         if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT )
             sKeyBuffer.append("_SHIFT");
