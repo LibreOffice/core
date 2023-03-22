@@ -63,6 +63,7 @@
 
 
     <xsl:template match="table:table" name="table:table">
+        <xsl:text>&#xa;</xsl:text>
         <xsl:param name="globalData" />
 
         <!-- The table will only be created if the table:scenario is active -->
@@ -71,6 +72,7 @@
                 <xsl:with-param name="globalData" select="$globalData" />
             </xsl:call-template>
         </xsl:if>
+        <xsl:text>&#xa;</xsl:text>
     </xsl:template>
 
 
@@ -110,10 +112,12 @@
                 </xsl:element>
             </xsl:when>
             <xsl:otherwise>
+                <xsl:text>&#xa;</xsl:text>
                 <xsl:call-template name="create-table-element">
                     <xsl:with-param name="globalData" select="$globalData" />
                     <xsl:with-param name="allVisibleTableRows" select="$allVisibleTableRows" />
                 </xsl:call-template>
+                <xsl:text>&#xa;</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
