@@ -100,6 +100,19 @@ class UITest(object):
         finally:
             self.close_doc()
 
+    # Resets the setting to the old value at exit
+    @contextmanager
+    def set_config(self, path, new_value):
+        xChanges = self._xContext.ServiceManager.createInstanceWithArgumentsAndContext('com.sun.star.configuration.ReadWriteAccess', ("",), self._xContext)
+        try:
+            old_value = xChanges.getByHierarchicalName(path)
+            xChanges.replaceByHierarchicalName(path, new_value)
+            xChanges.commitChanges()
+            yield
+        finally:
+            xChanges.replaceByHierarchicalName(path, old_value)
+            xChanges.commitChanges()
+
     # Calls UITest.close_doc at exit
     @contextmanager
     def load_empty_file(self, app):
