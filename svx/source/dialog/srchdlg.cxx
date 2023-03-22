@@ -301,6 +301,7 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     , m_xSearchFormattedCB(m_xBuilder->weld_check_button("searchformatted"))
     , m_xWordBtn(m_xBuilder->weld_check_button("wholewords"))
     , m_xCloseBtn(m_xBuilder->weld_button("close"))
+    , m_xHelpBtn(m_xBuilder->weld_button("help"))
     , m_xIncludeDiacritics(m_xBuilder->weld_check_button("includediacritics"))
     , m_xIncludeKashida(m_xBuilder->weld_check_button("includekashida"))
     , m_xOtherOptionsExpander(m_xBuilder->weld_expander("OptionsExpander"))
@@ -327,6 +328,12 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     , m_xAllSheetsCB(m_xBuilder->weld_check_button("allsheets"))
     , m_xCalcStrFT(m_xBuilder->weld_label("entirecells"))
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        m_xCloseBtn->hide();
+        m_xHelpBtn->hide();
+    }
+
     m_aPresentIdle.SetTimeout(50);
     m_aPresentIdle.SetInvokeHandler(LINK(this, SvxSearchDialog, PresentTimeoutHdl_Impl));
 
