@@ -2292,8 +2292,7 @@ void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
     if( m_bNewFormula )
     {
         // No matter what was set, an update of the table is always a good idea
-        SwTableFormulaUpdate aTableUpdate( &pSttNd->FindTableNode()->GetTable() );
-        rDoc.getIDocumentFieldsAccess().UpdateTableFields( &aTableUpdate );
+        rDoc.getIDocumentFieldsAccess().UpdateTableFields(&pSttNd->FindTableNode()->GetTable());
     }
 
     if( !pNd->IsContentNode() )

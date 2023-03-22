@@ -710,8 +710,7 @@ void sw_setValue( SwXCell &rCell, double nVal )
     aSet.Put(aVal);
     pDoc->SetTableBoxFormulaAttrs( *rCell.m_pBox, aSet );
     // update table
-    SwTableFormulaUpdate aTableUpdate( SwTable::FindTable( rCell.GetFrameFormat() ));
-    pDoc->getIDocumentFieldsAccess().UpdateTableFields( &aTableUpdate );
+    pDoc->getIDocumentFieldsAccess().UpdateTableFields(SwTable::FindTable(rCell.GetFrameFormat()));
 }
 
 
@@ -853,8 +852,7 @@ void SwXCell::setFormula(const OUString& rFormula)
     aSet.Put(aFormula);
     GetDoc()->SetTableBoxFormulaAttrs( *m_pBox, aSet );
     // update table
-    SwTableFormulaUpdate aTableUpdate( SwTable::FindTable( GetFrameFormat() ));
-    pMyDoc->getIDocumentFieldsAccess().UpdateTableFields( &aTableUpdate );
+    pMyDoc->getIDocumentFieldsAccess().UpdateTableFields(SwTable::FindTable(GetFrameFormat()));
 }
 
 double SwXCell::getValue()

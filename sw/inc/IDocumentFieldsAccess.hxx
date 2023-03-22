@@ -38,6 +38,7 @@ class SwMsgPoolItem;
 class DateTime;
 class SetGetExpField;
 class SwNode;
+class SwTable;
 enum class SwFieldIds : sal_uInt16;
 template <class T> class SwHashTable;
 struct HashStr;
@@ -95,7 +96,7 @@ namespace com::sun::star::uno { class Any; }
 
     virtual void UpdateRefFields() = 0;
 
-    virtual void UpdateTableFields(SfxPoolItem* pHt) = 0;
+    virtual void UpdateTableFields(const SwTable* pTable) = 0;
 
     virtual void UpdateExpFields(SwTextField* pField, bool bUpdateRefFields) = 0;
 

@@ -26,6 +26,7 @@
 #include "format.hxx"
 #include "hintids.hxx"
 #include "cellfml.hxx"
+#include "node.hxx"
 
 class SwHistory;
 
@@ -75,7 +76,19 @@ public:
 
     void TryBoxNmToPtr();
     void ToSplitMergeBoxNmWithHistory(SwTableFormulaUpdate& rUpdate, SwHistory* pHistory);
-    void ChangeState( const SfxPoolItem* pItem );
+    void ChangeState()
+    {
+        if(!m_pDefinedIn)
+            return;
+        // detect table that contains this attribute
+        const SwNode* pNd = GetNodeOfFormula();
+        if(!pNd) // || &pNd->GetNodes() != &pNd->GetDoc().GetNodes())
+            return;
+        const SwTableNode* pTableNd = pNd->FindTableNode();
+        if(pTableNd == nullptr)
+            return;
+        ChgValid(false);
+    }
     void Calc( SwTableCalcPara& rCalcPara, double& rValue );
 };
 

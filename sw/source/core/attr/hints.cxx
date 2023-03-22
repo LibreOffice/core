@@ -81,10 +81,11 @@ SwUpdateAttr::SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW, std::vect
 {
 }
 
-SwTableFormulaUpdate::SwTableFormulaUpdate( const SwTable* pNewTable )
-    : SwMsgPoolItem( RES_TABLEFML_UPDATE ),
-    m_pTable( pNewTable ), m_pHistory( nullptr ), m_nSplitLine( USHRT_MAX ),
-    m_eFlags( TBL_CALC )
+SwTableFormulaUpdate::SwTableFormulaUpdate(const SwTable* pNewTable)
+    : m_pTable(pNewTable)
+    , m_pHistory(nullptr)
+    , m_nSplitLine(USHRT_MAX)
+    , m_eFlags(TBL_CALC)
 {
     m_aData.pDelTable = nullptr;
     m_bModified = m_bBehindSplitLine = false;

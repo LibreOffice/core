@@ -4116,8 +4116,7 @@ void SwDoc::ChkBoxNumFormat( SwTableBox& rBox, bool bCallUpdate )
     const SwTableNode* pTableNd = rBox.GetSttNd()->FindTableNode();
     if( bCallUpdate )
     {
-        SwTableFormulaUpdate aTableUpdate( &pTableNd->GetTable() );
-        getIDocumentFieldsAccess().UpdateTableFields( &aTableUpdate );
+        getIDocumentFieldsAccess().UpdateTableFields(&pTableNd->GetTable());
 
         // TL_CHART2: update charts (when cursor leaves cell and
         // automatic update is enabled)

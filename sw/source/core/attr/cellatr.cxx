@@ -126,45 +126,6 @@ void SwTableBoxFormula::ToSplitMergeBoxNmWithHistory(SwTableFormulaUpdate& rUpda
             pNd->FindTableBoxStartNode()->GetIndex());
     }
 }
-void SwTableBoxFormula::ChangeState( const SfxPoolItem* pItem )
-{
-    if( !m_pDefinedIn )
-        return ;
-
-    SwTableFormulaUpdate* pUpdateField;
-    if( !pItem || RES_TABLEFML_UPDATE != pItem->Which() )
-    {
-        // reset value flag
-        ChgValid( false );
-        return ;
-    }
-
-    pUpdateField = const_cast<SwTableFormulaUpdate*>(static_cast<const SwTableFormulaUpdate*>(pItem));
-
-    // detect table that contains this attribute
-    const SwTableNode* pTableNd;
-    const SwNode* pNd = GetNodeOfFormula();
-    if (!pNd || &pNd->GetNodes() != &pNd->GetDoc().GetNodes())
-        return;
-    pTableNd = pNd->FindTableNode();
-    if( pTableNd == nullptr )
-        return;
-
-    switch( pUpdateField->m_eFlags )
-    {
-    case TBL_CALC:
-        // reset value flag
-        ChgValid( false );
-        break;
-    case TBL_BOXPTR:
-    case TBL_RELBOXNAME:
-    case TBL_BOXNAME:
-    case TBL_SPLITTBL:
-    case TBL_MERGETBL:
-        assert(false); // PtrToBoxNm, ToRelBoxNm and BoxNmToPtr are all public -- use just them directly
-        break;
-    }
-}
 
 void SwTableBoxFormula::Calc( SwTableCalcPara& rCalcPara, double& rValue )
 {

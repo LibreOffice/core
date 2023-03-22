@@ -1708,8 +1708,6 @@ void SwTable::UpdateFields(TableFormulaUpdateFlags eFlags)
         }
     }
     // process all table box formulas
-    SwTableFormulaUpdate aHint(this);
-    aHint.m_eFlags = eFlags;
     for(const SfxPoolItem* pItem : pDoc->GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA))
     {
         auto pBoxFormula = const_cast<SwTableBoxFormula*>(pItem->DynamicWhichCast(RES_BOXATR_FORMULA));
@@ -1718,7 +1716,7 @@ void SwTable::UpdateFields(TableFormulaUpdateFlags eFlags)
             if(eFlags == TBL_BOXPTR)
                 pBoxFormula->TryBoxNmToPtr();
             else
-                pBoxFormula->ChangeState(&aHint);
+                pBoxFormula->ChangeState();
         }
     }
 }

@@ -262,8 +262,7 @@ void SwEditShell::UpdateTable()
         if( DoesUndo() )
             StartUndo();
         EndAllTableBoxEdit();
-        SwTableFormulaUpdate aTableUpdate( &pTableNd->GetTable() );
-        GetDoc()->getIDocumentFieldsAccess().UpdateTableFields( &aTableUpdate );
+        GetDoc()->getIDocumentFieldsAccess().UpdateTableFields(&pTableNd->GetTable());
         if( DoesUndo() )
             EndUndo();
         EndAllAction();

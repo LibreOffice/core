@@ -533,12 +533,10 @@ bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & r
                     SwDoc::IsIdxInTable(aTableNdIdx);
                 if( pTableNd )
                 {
-                    SwTableFormulaUpdate aTableUpdate( &pTableNd->
-                                                 GetTable() );
                     if (bUpdateFields)
-                        UpdateTableFields( &aTableUpdate );
+                        UpdateTableFields(&pTableNd->GetTable());
                     else
-                        pNewField->GetTyp()->CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aTableUpdate));
+                        pNewField->GetTyp()->CallSwClientNotify(sw::LegacyModifyHint(nullptr, nullptr));
 
                     if (! bUpdateFields)
                         bTableSelBreak = true;
@@ -596,15 +594,10 @@ void DocumentFieldsManager::UpdateRefFields()
             static_cast<SwGetRefFieldType*>(pFieldType.get())->UpdateGetReferences();
 }
 
-void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
+void DocumentFieldsManager::UpdateTableFields(const SwTable* pTable)
 {
-    SwTableFormulaUpdate* pUpdateField = nullptr;
-    if(pHt && RES_TABLEFML_UPDATE == pHt->Which())
-        pUpdateField = static_cast<SwTableFormulaUpdate*>(pHt);
-    assert(!pHt || pUpdateField);
-    assert(!pUpdateField || pUpdateField->m_eFlags == TBL_CALC);
     auto pFieldType = GetFieldType( SwFieldIds::Table, OUString(), false );
-    if(pFieldType && (!pUpdateField || pUpdateField->m_eFlags == TBL_CALC))
+    if(pFieldType)
     {
         std::vector<SwFormatField*> vFields;
         pFieldType->GatherFields(vFields);
@@ -616,8 +609,8 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
             // re-set the value flag
             // JP 17.06.96: internal representation of all formulas
             //              (reference to other table!!!)
-            if(pUpdateField && nsSwExtendedSubType::SUB_CMD & pField->GetSubType())
-                pField->PtrToBoxNm(pUpdateField->m_pTable);
+            if(pTable && nsSwExtendedSubType::SUB_CMD & pField->GetSubType())
+                pField->PtrToBoxNm(pTable);
             else
                 // reset the value flag for all
                 pField->ChgValid(false);
@@ -628,7 +621,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
     {
         auto pBoxFormula = const_cast<SwTableBoxFormula*>(pItem->DynamicWhichCast(RES_BOXATR_FORMULA));
         if(pBoxFormula && pBoxFormula->GetDefinedIn())
-            pBoxFormula->ChangeState(pHt);
+            pBoxFormula->ChangeState();
     }
 
     SwRootFrame const* pLayout(nullptr);
@@ -637,10 +630,6 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
         assert(!pLayout || pLay->IsHideRedlines() == pLayout->IsHideRedlines()); // TODO
         pLayout = pLay;
     }
-
-    // all fields/boxes are now invalid, so we can start to calculate
-    if(pHt && pUpdateField->m_eFlags != TBL_CALC)
-        return;
 
     std::optional<SwCalc> oCalc;
 
@@ -668,7 +657,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                     continue;
 
                 // if this field is not in the to-be-updated table, skip it
-                if( pHt && &pTableNd->GetTable() != pUpdateField->m_pTable )
+                if(pTable && &pTableNd->GetTable() != pTable)
                     continue;
 
                 if( !oCalc )
@@ -722,7 +711,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                 }
                 oCalc->SetCalcError( SwCalcError::NONE );
             }
-            pFormatField->UpdateTextNode(nullptr, pHt);
+            pFormatField->UpdateTextNode(nullptr, nullptr);
         }
     }
 
@@ -736,7 +725,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
         if(!pBox || !pBox->GetSttNd() || !pBox->GetSttNd()->GetNodes().IsDocNodes())
             continue;
         const SwTableNode* pTableNd = pBox->GetSttNd()->FindTableNode();
-        if(pHt && &pTableNd->GetTable() != pUpdateField->m_pTable)
+        if(pTable && &pTableNd->GetTable() != pTable)
             continue;
         double nValue;
         if( !oCalc )

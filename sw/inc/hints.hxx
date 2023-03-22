@@ -299,7 +299,7 @@ enum TableFormulaUpdateFlags { TBL_CALC = 0,
                          TBL_MERGETBL,
                          TBL_SPLITTBL
                        };
-class SwTableFormulaUpdate final : public SwMsgPoolItem
+class SwTableFormulaUpdate final
 {
 public:
     const SwTable* m_pTable;         ///< Pointer to the current table

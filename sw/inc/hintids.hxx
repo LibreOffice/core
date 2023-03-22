@@ -433,7 +433,6 @@ constexpr TypedWhichId<SwFormatChg> RES_FMT_CHG(168);
 constexpr TypedWhichId<SwAttrSetChg> RES_ATTRSET_CHG(169);
 constexpr TypedWhichId<SwUpdateAttr> RES_UPDATE_ATTR(170);
 constexpr TypedWhichId<SwPtrMsgPoolItem> RES_REFMARKFLD_UPDATE(171);
-constexpr TypedWhichId<SwTableFormulaUpdate> RES_TABLEFML_UPDATE(173);
 constexpr TypedWhichId<SwMsgPoolItem> RES_UPDATEDDETBL(174);
 constexpr TypedWhichId<SwMsgPoolItem> RES_TBLHEADLINECHG(175);
 constexpr TypedWhichId<SwAutoFormatGetDocNode> RES_AUTOFMT_DOCNODE(176);
