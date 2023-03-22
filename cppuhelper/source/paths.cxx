@@ -99,9 +99,11 @@ bool cppu::nextDirectoryItem(osl::Directory & directory, OUString * url) {
                 "Cannot stat in directory");
         }
         if (stat.getFileType() != osl::FileStatus::Directory) { //TODO: symlinks
-            // Ignore backup files:
+            // Ignore backup and spurious junk files:
             OUString name(stat.getFileName());
-            if (!(name.match(".") || name.endsWith("~"))) {
+            if (name.match(".") || !name.endsWithIgnoreAsciiCase(u".rdb")) {
+                SAL_WARN("cppuhelper", "ignoring <" << stat.getFileURL() << ">");
+            } else {
                 *url = stat.getFileURL();
                 return true;
             }
