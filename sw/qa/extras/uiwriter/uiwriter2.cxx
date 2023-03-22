@@ -2448,12 +2448,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButtonSmallTable)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButton)
 {
+    SwModelTestBase::FlySplitGuard aGuard;
     // Different use cases where unfloat button should be visible
     const std::vector<OUString> aTestFiles = {
         "unfloatable_floating_table.odt", // Typical use case of multipage floating table
-        "unfloatable_floating_table.docx", // Need to test the DOCX import whether we detect the floating table correctly
         "unfloatable_floating_table.doc", // Also the DOC import
-        "unfloatable_small_floating_table.docx" // Atypical use case, when the table is small, but because of it's position is it broken to two pages
     };
 
     for (const OUString& aTestFile : aTestFiles)
@@ -2467,15 +2466,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButton)
         CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(), pWrtShell);
 
         const SwSortedObjs* pAnchored;
-        if (sTestFileName == "unfloatable_small_floating_table.docx")
-            pAnchored = pWrtShell->GetLayout()
-                            ->GetLower()
-                            ->GetLower()
-                            ->GetLower()
-                            ->GetNext()
-                            ->GetDrawObjs();
-        else
-            pAnchored = pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs();
+        pAnchored = pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs();
         CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(), pAnchored);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailureMessage.getStr(), static_cast<size_t>(1),
                                      pAnchored->size());
@@ -2521,10 +2512,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButtonReadOnlyMode)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloating)
 {
+    SwModelTestBase::FlySplitGuard aGuard;
     // Test unfloating with tables imported from different file formats
     const std::vector<OUString> aTestFiles = {
         "unfloatable_floating_table.odt",
-        "unfloatable_floating_table.docx",
         "unfloatable_floating_table.doc",
     };
 
@@ -2534,7 +2525,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloating)
         OString sFailureMessage = OString::Concat("Failure in the test file: ") + sTestFileName;
 
         // Test what happens when pushing the unfloat button
-        createSwDoc("unfloatable_floating_table.docx");
+        createSwDoc(sTestFileName.getStr());
         SwDoc* pDoc = getSwDoc();
         SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
         CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(), pWrtShell);
