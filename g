@@ -100,7 +100,7 @@ refresh_all_hooks()
     wingit=$(git --version | grep -ic windows)
     gitbash=$(echo $OSTYPE | grep -ic msys)
 
-    # In the win-git-bash, do not make links, it make only copies
+    # In the win-git-bash, do not make links, it makes only copies
     if [ $gitbash -eq 1 ]; then
         if [ -d ".git" ]; then
             if [ ! -e "${lnkfile}" ] || [ ! -L "${lnkfile}" ] ; then
