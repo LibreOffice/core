@@ -198,6 +198,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xWordBtn;
 
     std::unique_ptr<weld::Button> m_xCloseBtn;
+    std::unique_ptr<weld::Button> m_xHelpBtn;
     std::unique_ptr<weld::CheckButton> m_xIncludeDiacritics;
     std::unique_ptr<weld::CheckButton> m_xIncludeKashida;
     std::unique_ptr<weld::Expander> m_xOtherOptionsExpander;
