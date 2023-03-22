@@ -28,6 +28,7 @@
 
 #include <sal/config.h>
 
+#include <cstdlib>
 #include <iostream>
 #include <string_view>
 
@@ -458,7 +459,8 @@ void Desktop::Init()
     }
     catch (css::uno::Exception & e)
     {
-        SetBootstrapError( BE_UNO_SERVICEMANAGER, e.Message );
+        HandleBootstrapErrors( BE_UNO_SERVICEMANAGER, e.Message );
+        std::abort();
     }
 
     // Check whether safe mode is enabled
