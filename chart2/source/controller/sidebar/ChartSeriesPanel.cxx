@@ -141,7 +141,7 @@ bool isTrendlineVisible(const rtl::Reference<::chart::ChartModel>& xModel,
     if (!xRegressionCurveContainer.is())
         return false;
 
-    return xRegressionCurveContainer->getRegressionCurves().hasElements();
+    return !xRegressionCurveContainer->getRegressionCurves2().empty();
 }
 
 void setTrendlineVisible(const rtl::Reference<::chart::ChartModel>&

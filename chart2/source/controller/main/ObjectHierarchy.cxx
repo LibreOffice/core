@@ -23,6 +23,7 @@
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <RegressionCurveHelper.hxx>
+#include <RegressionCurveModel.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
@@ -356,12 +357,12 @@ void ObjectHierarchy::createDataSeriesTree(
                     // Statistics
                     if( ChartTypeHelper::isSupportingStatisticProperties( xChartType, nDimensionCount ) )
                     {
-                        Sequence< Reference< chart2::XRegressionCurve > > aCurves( xSeries->getRegressionCurves());
-                        for( sal_Int32 nCurveIdx=0; nCurveIdx<aCurves.getLength(); ++nCurveIdx )
+                        const std::vector< rtl::Reference< RegressionCurveModel > > & rCurves( xSeries->getRegressionCurves2());
+                        for( size_t nCurveIdx=0; nCurveIdx<rCurves.size(); ++nCurveIdx )
                         {
-                            bool bIsAverageLine = RegressionCurveHelper::isMeanValueLine( aCurves[nCurveIdx] );
+                            bool bIsAverageLine = RegressionCurveHelper::isMeanValueLine( rCurves[nCurveIdx] );
                             aSeriesSubContainer.emplace_back( ObjectIdentifier::createDataCurveCID( aSeriesParticle, nCurveIdx, bIsAverageLine ) );
-                            if( RegressionCurveHelper::hasEquation( aCurves[nCurveIdx] ) )
+                            if( RegressionCurveHelper::hasEquation( rCurves[nCurveIdx] ) )
                             {
                                 aSeriesSubContainer.emplace_back( ObjectIdentifier::createDataCurveEquationCID( aSeriesParticle, nCurveIdx ) );
                             }
