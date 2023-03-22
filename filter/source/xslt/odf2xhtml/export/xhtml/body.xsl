@@ -254,7 +254,9 @@
     <xsl:template match="draw:text-box">
         <xsl:param name="globalData"/>
 
+        <xsl:text>&#xa;</xsl:text>
         <xsl:comment>Next 'div' was a 'draw:text-box'.</xsl:comment>
+        <xsl:text>&#xa;</xsl:text>
         <xsl:element name="div">
             <xsl:variable name="dimension">
                 <xsl:apply-templates select="@fo:min-width" />
@@ -379,10 +381,14 @@
                 <!-- The paragraph is written as DIV as there might be nested paragraphs (see above choose block) -->
                 <xsl:choose>
                     <xsl:when test="name() = 'text:p'">
+                        <xsl:text>&#xa;</xsl:text>
                         <xsl:comment>Next 'div' was a 'text:p'.</xsl:comment>
+                        <xsl:text>&#xa;</xsl:text>
                     </xsl:when>
                     <xsl:otherwise>
+                        <xsl:text>&#xa;</xsl:text>
                         <xsl:comment>Next 'div' was a 'draw:page'.</xsl:comment>
+                        <xsl:text>&#xa;</xsl:text>
                     </xsl:otherwise>
                 </xsl:choose>
                 <xsl:element name="div">
@@ -840,7 +846,9 @@
                         <!-- every following frame sibling till the next draw:frame
                             have to be encapsulated within a div with left indent.
                             To be moved altogether according the indent (usually right) -->
+                        <xsl:text>&#xa;</xsl:text>
                         <xsl:comment>Next 'div' added for floating.</xsl:comment>
+                        <xsl:text>&#xa;</xsl:text>
                         <xsl:element name="div">
                             <xsl:attribute name="style">
                                 <xsl:text>display:inline; position:relative; left:</xsl:text>
@@ -1031,7 +1039,9 @@
         </xsl:variable>
         <!-- if the frame is anchored on a paragraph -->
         <xsl:if test="@text:anchor-type='paragraph'">
+            <xsl:text>&#xa;</xsl:text>
             <xsl:comment>Next 'div' is emulating the top height of a draw:frame.</xsl:comment>
+            <xsl:text>&#xa;</xsl:text>
             <!-- When the svg:y is set relative to the paragraph content, the best way to emulate a positive height,
              is to add an invisible division inbetween with a height.
              Often text will flow into this 'gap', which is handled separately!
@@ -1070,9 +1080,9 @@
                 <xsl:otherwise>div</xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:comment>Next '
-            <xsl:value-of select="$elem-name"/>' is a draw:frame.
-        </xsl:comment>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:comment>Next '<xsl:value-of select="$elem-name"/>' is a draw:frame. </xsl:comment>
+        <xsl:text>&#xa;</xsl:text>
         <xsl:element name="{$elem-name}">
             <xsl:choose>
                 <xsl:when test="draw:object/math:math">
@@ -2812,12 +2822,15 @@
         <xsl:param name="globalData"/>
 
         <xsl:if test="not(contains(@text:display, 'none'))">
+            <xsl:text>&#xa;</xsl:text>
             <xsl:comment>Next 'div' was a 'text:section'.</xsl:comment>
+            <xsl:text>&#xa;</xsl:text>
             <xsl:element name="div">
                 <xsl:call-template name="apply-styles-and-content">
                     <xsl:with-param name="globalData" select="$globalData"/>
                 </xsl:call-template>
             </xsl:element>
+            <xsl:text>&#xa;</xsl:text>
         </xsl:if>
     </xsl:template>
 
