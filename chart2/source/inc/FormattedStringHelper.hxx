@@ -18,9 +18,9 @@
  */
 #pragma once
 
-#include <vector>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <vector>
 
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::chart2 { class XFormattedString2; }
@@ -33,9 +33,8 @@ class FormattedString;
 class FormattedStringHelper
 {
 public:
-    static std::vector<
-            rtl::Reference< ::chart::FormattedString > >
-            createFormattedStringSequence(
+    static rtl::Reference< ::chart::FormattedString >
+            createFormattedString(
                     const OUString & rString
                     , const css::uno::Reference< css::beans::XPropertySet > & xTextProperties ) noexcept;
 };

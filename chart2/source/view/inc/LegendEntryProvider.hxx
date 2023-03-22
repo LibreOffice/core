@@ -63,7 +63,7 @@ struct ViewLegendEntry
 
     /** The descriptive text for a legend entry.
      */
-    std::vector< rtl::Reference< ::chart::FormattedString > >  aLabel;
+    rtl::Reference< ::chart::FormattedString > xLabel;
 };
 
 

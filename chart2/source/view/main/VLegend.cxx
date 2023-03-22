@@ -161,22 +161,17 @@ awt::Size lcl_createTextShapes(
         try
         {
             OUString aLabelString;
-            const std::vector< rtl::Reference< ::chart::FormattedString > > & rLabelSeq = rEntry.aLabel;
-            for( size_t i = 0; i < rLabelSeq.size(); ++i )
+            if (rEntry.xLabel)
             {
-                // todo: support more than one text range
-                if( i == 1 )
-                    break;
-
                 // tdf#150034 limit legend label text
-                if (rLabelSeq[i]->getString().getLength() > 520)
+                if (rEntry.xLabel->getString().getLength() > 520)
                 {
-                    sal_Int32 nIndex = rLabelSeq[i]->getString().indexOf(' ', 500);
-                    rLabelSeq[i]->setString(
-                        rLabelSeq[i]->getString().copy(0, nIndex > 500 ? nIndex : 500));
+                    sal_Int32 nIndex = rEntry.xLabel->getString().indexOf(' ', 500);
+                    rEntry.xLabel->setString(
+                        rEntry.xLabel->getString().copy(0, nIndex > 500 ? nIndex : 500));
                 }
 
-                aLabelString += rLabelSeq[i]->getString();
+                aLabelString += rEntry.xLabel->getString();
                 // workaround for Issue #i67540#
                 if( aLabelString.isEmpty())
                     aLabelString = " ";
@@ -425,7 +420,7 @@ awt::Size lcl_placeLegendEntries(
                 {
                     try
                     {
-                        OUString aLabelString = rEntries[0].aLabel[0]->getString();
+                        OUString aLabelString = rEntries[0].xLabel->getString();
                         static const OUStringLiteral sDots = u"...";
                         for (sal_Int32 nNewLen = aLabelString.getLength() - sDots.getLength(); nNewLen > 0; )
                         {
@@ -440,7 +435,7 @@ awt::Size lcl_placeLegendEntries(
                                 if (rRemainingSpace.Width - nWidth >= 0)
                                 {
                                     aTextShapes.push_back(xEntry);
-                                    rEntries[0].aLabel[0]->setString(aNewLabel);
+                                    rEntries[0].xLabel->setString(aNewLabel);
                                     aRowHeights[0] = nSumHeight;
                                     aColumnWidths[0] = nWidth;
                                     break;

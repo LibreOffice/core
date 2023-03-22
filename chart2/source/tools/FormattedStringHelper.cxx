@@ -31,8 +31,8 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-std::vector< rtl::Reference< ::chart::FormattedString > >
-            FormattedStringHelper::createFormattedStringSequence(
+rtl::Reference< ::chart::FormattedString >
+            FormattedStringHelper::createFormattedString(
                       const OUString & rString
                     , const Reference< beans::XPropertySet > & xTextProperties ) noexcept
 {
@@ -52,7 +52,7 @@ std::vector< rtl::Reference< ::chart::FormattedString > >
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
-    return { xFormStr };
+    return xFormStr;
 }
 
 } //namespace chart
