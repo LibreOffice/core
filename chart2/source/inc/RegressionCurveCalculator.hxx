@@ -42,28 +42,6 @@ public:
     static bool isLogarithmicScaling(
         const css::uno::Reference< css::chart2::XScaling >& xScaling );
 
-protected:
-    virtual OUString ImplGetRepresentation(
-        const css::uno::Reference< css::util::XNumberFormatter >& xNumFormatter,
-        sal_Int32 nNumberFormatKey, sal_Int32* pFormulaLength = nullptr ) const = 0;
-
-    static OUString getFormattedString(
-        const css::uno::Reference< css::util::XNumberFormatter >& xNumFormatter,
-        sal_Int32 nNumberFormatKey,
-        double fNumber,
-        const sal_Int32* pStringLength );
-
-    static void addStringToEquation( OUStringBuffer& aStrEquation, sal_Int32& nLineLength, OUStringBuffer const & aAddString, const sal_Int32* pMaxLength );
-
-    double m_fCorrelationCoefficient;
-
-    sal_Int32 mDegree;
-    bool  mForceIntercept;
-    double    mInterceptValue;
-    sal_Int32 mPeriod;
-    OUString mXName, mYName;
-    sal_Int32 mnMovingType;
-
     // ____ XRegressionCurveCalculator ____
     virtual void SAL_CALL setRegressionProperties(
         sal_Int32 aDegree,
@@ -96,6 +74,28 @@ protected:
 
     virtual void SAL_CALL setXYNames(
         const OUString& aXName, const OUString& aYName ) override;
+
+protected:
+    virtual OUString ImplGetRepresentation(
+        const css::uno::Reference< css::util::XNumberFormatter >& xNumFormatter,
+        sal_Int32 nNumberFormatKey, sal_Int32* pFormulaLength = nullptr ) const = 0;
+
+    static OUString getFormattedString(
+        const css::uno::Reference< css::util::XNumberFormatter >& xNumFormatter,
+        sal_Int32 nNumberFormatKey,
+        double fNumber,
+        const sal_Int32* pStringLength );
+
+    static void addStringToEquation( OUStringBuffer& aStrEquation, sal_Int32& nLineLength, OUStringBuffer const & aAddString, const sal_Int32* pMaxLength );
+
+    double m_fCorrelationCoefficient;
+
+    sal_Int32 mDegree;
+    bool  mForceIntercept;
+    double    mInterceptValue;
+    sal_Int32 mPeriod;
+    OUString mXName, mYName;
+    sal_Int32 mnMovingType;
 };
 
 } //  namespace chart

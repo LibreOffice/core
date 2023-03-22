@@ -26,6 +26,7 @@
 #include <LabelPositionHelper.hxx>
 #include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
+#include <RegressionCurveCalculator.hxx>
 #include <RegressionCurveHelper.hxx>
 #include <unonames.hxx>
 
@@ -744,7 +745,7 @@ double VDataSeries::getXMeanValue() const
 {
     if( std::isnan( m_fXMeanValue ) )
     {
-        uno::Reference< XRegressionCurveCalculator > xCalculator( RegressionCurveHelper::createRegressionCurveCalculatorByServiceName( u"com.sun.star.chart2.MeanValueRegressionCurve" ) );
+        rtl::Reference< RegressionCurveCalculator > xCalculator( RegressionCurveHelper::createRegressionCurveCalculatorByServiceName( u"com.sun.star.chart2.MeanValueRegressionCurve" ) );
         uno::Sequence< double > aXValuesDummy;
         xCalculator->recalculateRegression( aXValuesDummy, getAllX() );
         m_fXMeanValue = xCalculator->getCurveValue( 1.0 );
@@ -756,7 +757,7 @@ double VDataSeries::getYMeanValue() const
 {
     if( std::isnan( m_fYMeanValue ) )
     {
-        uno::Reference< XRegressionCurveCalculator > xCalculator(
+        rtl::Reference< RegressionCurveCalculator > xCalculator(
             RegressionCurveHelper::createRegressionCurveCalculatorByServiceName(u"com.sun.star.chart2.MeanValueRegressionCurve"));
         uno::Sequence< double > aXValuesDummy;
         xCalculator->recalculateRegression( aXValuesDummy, getAllY() );

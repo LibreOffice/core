@@ -135,10 +135,10 @@ rtl::Reference< RegressionCurveModel > RegressionCurveHelper::createRegressionCu
     return xResult;
 }
 
-Reference< XRegressionCurveCalculator > RegressionCurveHelper::createRegressionCurveCalculatorByServiceName(
+rtl::Reference< RegressionCurveCalculator > RegressionCurveHelper::createRegressionCurveCalculatorByServiceName(
     std::u16string_view aServiceName )
 {
-    Reference< XRegressionCurveCalculator > xResult;
+    rtl::Reference< RegressionCurveCalculator > xResult;
 
     // todo: use factory methods with service name
     if( aServiceName == u"com.sun.star.chart2.MeanValueRegressionCurve" )

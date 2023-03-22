@@ -19,6 +19,7 @@
 
 #include <RegressionCurveModel.hxx>
 #include <LinePropertiesHelper.hxx>
+#include <RegressionCurveCalculator.hxx>
 #include <RegressionCurveHelper.hxx>
 #include "RegressionEquation.hxx"
 #include <CloneHelper.hxx>
