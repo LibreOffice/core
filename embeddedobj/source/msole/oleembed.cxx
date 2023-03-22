@@ -217,7 +217,7 @@ uno::Reference< embed::XStorage > OleEmbeddedObject::CreateTemporarySubstorage( 
     if ( !xResult.is() )
     {
         o_aStorageName.clear();
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("Failed to create temporary storage for OLE embed object");
     }
 
     return xResult;
@@ -238,7 +238,7 @@ OUString OleEmbeddedObject::MoveToTemporarySubstream()
     }
 
     if ( aResult.isEmpty() )
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("Failed to rename temporary storage for OLE embed object");
 
     return aResult;
 }
@@ -326,7 +326,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
                     aEmbedFactory = aConfigHelper.GetFactoryNameByMediaType( aMediaType );
 
                 if ( aEmbedFactory.isEmpty() )
-                    throw uno::RuntimeException();
+                    throw uno::RuntimeException("Failed to get OLE embedded object factory");
 
                 uno::Reference< uno::XInterface > xFact = m_xContext->getServiceManager()->createInstanceWithContext( aEmbedFactory, m_xContext );
 
@@ -858,7 +858,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
 
         try {
             if ( !m_pOleComponent )
-                throw uno::RuntimeException();
+                throw uno::RuntimeException("Null reference to OLE component");
 
             // ==== the STAMPIT related solution =============================
             m_aVerbExecutionController.StartControlExecution();
