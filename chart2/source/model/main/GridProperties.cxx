@@ -53,71 +53,38 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
-struct StaticGridDefaults_Initializer
+const ::chart::tPropertyValueMap & StaticGridDefaults()
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
+    static ::chart::tPropertyValueMap aStaticDefaults = []()
+        {
+            ::chart::tPropertyValueMap aTmp;
+            ::chart::LinePropertiesHelper::AddDefaultsToMap( aTmp );
 
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_GRID_SHOW, false );
+            ::chart::PropertyHelper::setPropertyValueDefault( aTmp, PROP_GRID_SHOW, false );
 
-        // override other defaults
-        ::chart::PropertyHelper::setPropertyValue< sal_Int32 >(
-            rOutMap, ::chart::LinePropertiesHelper::PROP_LINE_COLOR, 0xb3b3b3 );  // gray30
-    }
+            // override other defaults
+            ::chart::PropertyHelper::setPropertyValue< sal_Int32 >(
+                aTmp, ::chart::LinePropertiesHelper::PROP_LINE_COLOR, 0xb3b3b3 );  // gray30
+            return aTmp;
+        }();
+    return aStaticDefaults;
 };
 
-struct StaticGridDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticGridDefaults_Initializer >
+::cppu::OPropertyArrayHelper& StaticGridInfoHelper()
 {
-};
+    static ::cppu::OPropertyArrayHelper aPropHelper = []()
+        {
+            std::vector< Property > aProperties;
+            lcl_AddPropertiesToVector( aProperties );
+            ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
+            ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-struct StaticGridInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
+            std::sort( aProperties.begin(), aProperties.end(),
+                         ::chart::PropertyNameLess() );
 
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
-        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-
-};
-
-struct StaticGridInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticGridInfoHelper_Initializer >
-{
-};
-
-struct StaticGridInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticGridInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticGridInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticGridInfo_Initializer >
-{
+            return comphelper::containerToSequence( aProperties );
+        }();
+    return aPropHelper;
 };
 
 } // anonymous namespace
@@ -142,7 +109,7 @@ GridProperties::~GridProperties()
 // ____ OPropertySet ____
 void GridProperties::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticGridDefaults::get();
+    const tPropertyValueMap& rStaticDefaults = StaticGridDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
         rAny.clear();
@@ -152,13 +119,15 @@ void GridProperties::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 
 ::cppu::IPropertyArrayHelper & SAL_CALL GridProperties::getInfoHelper()
 {
-    return *StaticGridInfoHelper::get();
+    return StaticGridInfoHelper();
 }
 
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL GridProperties::getPropertySetInfo()
 {
-    return *StaticGridInfo::get();
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo(StaticGridInfoHelper() ) );
+    return xPropertySetInfo;
 }
 
 // ____ XCloneable ____

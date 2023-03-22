@@ -56,58 +56,31 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID );
 }
 
-struct StaticCooSysDefaults_Initializer
+const ::chart::tPropertyValueMap & StaticCooSysDefaults()
 {
-    ::chart::tPropertyValueMap* operator()()
+    static ::chart::tPropertyValueMap aStaticDefaults = []()
     {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        ::chart::PropertyHelper::setPropertyValueDefault( aStaticDefaults, PROP_COORDINATESYSTEM_SWAPXANDYAXIS, false );
-        return &aStaticDefaults;
-    }
+        ::chart::tPropertyValueMap aMap;
+        ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_COORDINATESYSTEM_SWAPXANDYAXIS, false );
+        return aMap;
+    }();
+    return aStaticDefaults;
 };
 
-struct StaticCooSysDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticCooSysDefaults_Initializer >
+::cppu::OPropertyArrayHelper& StaticCooSysInfoHelper()
 {
-};
+    static ::cppu::OPropertyArrayHelper aPropHelper = []()
+        {
+            std::vector< css::beans::Property > aProperties;
+            lcl_AddPropertiesToVector( aProperties );
+            ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-struct StaticCooSysInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
+            std::sort( aProperties.begin(), aProperties.end(),
+                         ::chart::PropertyNameLess() );
 
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-};
-
-struct StaticCooSysInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticCooSysInfoHelper_Initializer >
-{
-};
-
-struct StaticCooSysInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticCooSysInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticCooSysInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticCooSysInfo_Initializer >
-{
+            return comphelper::containerToSequence( aProperties );
+        }();
+    return aPropHelper;
 };
 
 } // anonymous namespace
@@ -382,7 +355,7 @@ void BaseCoordinateSystem::fireModifyEvent()
 // ____ OPropertySet ____
 void BaseCoordinateSystem::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticCooSysDefaults::get();
+    const tPropertyValueMap& rStaticDefaults = StaticCooSysDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
         rAny.clear();
@@ -393,13 +366,15 @@ void BaseCoordinateSystem::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) 
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL BaseCoordinateSystem::getInfoHelper()
 {
-    return *StaticCooSysInfoHelper::get();
+    return StaticCooSysInfoHelper();
 }
 
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL BaseCoordinateSystem::getPropertySetInfo()
 {
-    return *StaticCooSysInfo::get();
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo(StaticCooSysInfoHelper() ) );
+    return xPropertySetInfo;
 }
 
 using impl::BaseCoordinateSystem_Base;

@@ -50,18 +50,10 @@ void lcl_AddPropertiesToVector(std::vector<beans::Property>& rProps)
                         nBound | nMaybeDefault);
 }
 
-struct StaticDataTableDefaults_Initializer
+const ::chart::tPropertyValueMap& StaticDataTableDefaults()
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap(aStaticDefaults);
-        return &aStaticDefaults;
-    }
-
-private:
-    static void lcl_AddDefaultsToMap(::chart::tPropertyValueMap& aMap)
-    {
+    static ::chart::tPropertyValueMap aStaticDefaults = []() {
+        ::chart::tPropertyValueMap aMap;
         ::chart::LinePropertiesHelper::AddDefaultsToMap(aMap);
         ::chart::FillProperties::AddDefaultsToMap(aMap);
         ::chart::CharacterProperties::AddDefaultsToMap(aMap);
@@ -86,25 +78,14 @@ private:
             aMap, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight);
         ::chart::PropertyHelper::setPropertyValue(
             aMap, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight);
-    }
+        return aMap;
+    }();
+    return aStaticDefaults;
 };
 
-struct StaticDataTableDefaults
-    : public rtl::StaticAggregate<::chart::tPropertyValueMap, StaticDataTableDefaults_Initializer>
+cppu::OPropertyArrayHelper& StaticDataTableInfoHelper()
 {
-};
-
-struct StaticDataTableInfoHelper_Initializer
-{
-    cppu::OPropertyArrayHelper* operator()()
-    {
-        static cppu::OPropertyArrayHelper aPropHelper(lcl_GetPropertySequence());
-        return &aPropHelper;
-    }
-
-private:
-    static uno::Sequence<beans::Property> lcl_GetPropertySequence()
-    {
+    static cppu::OPropertyArrayHelper aPropHelper = []() {
         std::vector<beans::Property> aProperties;
         lcl_AddPropertiesToVector(aProperties);
         ::chart::LinePropertiesHelper::AddPropertiesToVector(aProperties);
@@ -113,28 +94,8 @@ private:
         std::sort(aProperties.begin(), aProperties.end(), ::chart::PropertyNameLess());
 
         return comphelper::containerToSequence(aProperties);
-    }
-};
-
-struct StaticDataTableInfoHelper
-    : public rtl::StaticAggregate<::cppu::OPropertyArrayHelper,
-                                  StaticDataTableInfoHelper_Initializer>
-{
-};
-
-struct StaticDataTableInfo_Initializer
-{
-    uno::Reference<beans::XPropertySetInfo>* operator()()
-    {
-        static uno::Reference<beans::XPropertySetInfo> xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticDataTableInfoHelper::get()));
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticDataTableInfo : public rtl::StaticAggregate<uno::Reference<beans::XPropertySetInfo>,
-                                                         StaticDataTableInfo_Initializer>
-{
+    }();
+    return aPropHelper;
 };
 
 } // anonymous namespace
@@ -194,7 +155,7 @@ void DataTable::firePropertyChangeEvent()
 // ____ OPropertySet ____
 void DataTable::GetDefaultValue(sal_Int32 nHandle, uno::Any& rAny) const
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticDataTableDefaults::get();
+    const tPropertyValueMap& rStaticDefaults = StaticDataTableDefaults();
     auto aFound = rStaticDefaults.find(nHandle);
     if (aFound == rStaticDefaults.end())
         rAny.clear();
@@ -204,13 +165,15 @@ void DataTable::GetDefaultValue(sal_Int32 nHandle, uno::Any& rAny) const
 
 ::cppu::IPropertyArrayHelper& SAL_CALL DataTable::getInfoHelper()
 {
-    return *StaticDataTableInfoHelper::get();
+    return StaticDataTableInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference<beans::XPropertySetInfo> SAL_CALL DataTable::getPropertySetInfo()
 {
-    return *StaticDataTableInfo::get();
+    static uno::Reference<beans::XPropertySetInfo> xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo(StaticDataTableInfoHelper()));
+    return xPropertySetInfo;
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static

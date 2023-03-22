@@ -39,45 +39,21 @@ using ::com::sun::star::beans::Property;
 namespace
 {
 
-struct StaticDataPointInfoHelper_Initializer
+::cppu::OPropertyArrayHelper& StaticDataPointInfoHelper()
 {
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
+    static ::cppu::OPropertyArrayHelper aPropHelper = []()
+        {
+            std::vector< css::beans::Property > aProperties;
+            ::chart::DataPointProperties::AddPropertiesToVector( aProperties );
+            ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
+            ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        ::chart::DataPointProperties::AddPropertiesToVector( aProperties );
-        ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
-        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
+            std::sort( aProperties.begin(), aProperties.end(),
+                         ::chart::PropertyNameLess() );
 
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-};
-
-struct StaticDataPointInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticDataPointInfoHelper_Initializer >
-{
-};
-
-struct StaticDataPointInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticDataPointInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticDataPointInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticDataPointInfo_Initializer >
-{
+            return comphelper::containerToSequence( aProperties );
+        }();
+    return aPropHelper;
 };
 
 } // anonymous namespace
@@ -208,13 +184,15 @@ void SAL_CALL DataPoint::setFastPropertyValue_NoBroadcast(
 
 ::cppu::IPropertyArrayHelper & SAL_CALL DataPoint::getInfoHelper()
 {
-    return *StaticDataPointInfoHelper::get();
+    return StaticDataPointInfoHelper();
 }
 
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL DataPoint::getPropertySetInfo()
 {
-    return *StaticDataPointInfo::get();
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo(StaticDataPointInfoHelper() ) );
+    return xPropertySetInfo;
 }
 
 // ____ XModifyBroadcaster ____

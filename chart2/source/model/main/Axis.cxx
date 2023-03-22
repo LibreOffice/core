@@ -206,88 +206,56 @@ void lcl_AddPropertiesToVector(
 
 }
 
-struct StaticAxisDefaults_Initializer
+const ::chart::tPropertyValueMap &  StaticAxisDefaults()
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::CharacterProperties::AddDefaultsToMap( rOutMap );
-        ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
+    static ::chart::tPropertyValueMap aStaticDefaults = []()
+        {
+            ::chart::tPropertyValueMap aMap;
+            ::chart::CharacterProperties::AddDefaultsToMap( aMap );
+            ::chart::LinePropertiesHelper::AddDefaultsToMap( aMap );
 
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_SHOW, true );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_CROSSOVER_POSITION, css::chart::ChartAxisPosition_ZERO );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_DISPLAY_LABELS, true );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_LINK_NUMBERFORMAT_TO_SOURCE, true );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_LABEL_POSITION, css::chart::ChartAxisLabelPosition_NEAR_AXIS );
-        ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_AXIS_TEXT_ROTATION, 0.0 );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_BREAK, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_OVERLAP, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_STACKED, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_ARRANGE_ORDER, css::chart::ChartAxisArrangeOrderType_AUTO );
+            ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_AXIS_SHOW, true );
+            ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_AXIS_CROSSOVER_POSITION, css::chart::ChartAxisPosition_ZERO );
+            ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_AXIS_DISPLAY_LABELS, true );
+            ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_AXIS_LINK_NUMBERFORMAT_TO_SOURCE, true );
+            ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_AXIS_LABEL_POSITION, css::chart::ChartAxisLabelPosition_NEAR_AXIS );
+            ::chart::PropertyHelper::setPropertyValueDefault< double >( aMap, PROP_AXIS_TEXT_ROTATION, 0.0 );
+            ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_AXIS_TEXT_BREAK, false );
+            ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_AXIS_TEXT_OVERLAP, false );
+            ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_AXIS_TEXT_STACKED, false );
+            ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_AXIS_TEXT_ARRANGE_ORDER, css::chart::ChartAxisArrangeOrderType_AUTO );
 
-        float fDefaultCharHeight = 10.0;
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
+            float fDefaultCharHeight = 10.0;
+            ::chart::PropertyHelper::setPropertyValue( aMap, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
+            ::chart::PropertyHelper::setPropertyValue( aMap, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
+            ::chart::PropertyHelper::setPropertyValue( aMap, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
 
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_AXIS_MAJOR_TICKMARKS, 2 /* CHAXIS_MARK_OUTER */ );
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_AXIS_MINOR_TICKMARKS, 0 /* CHAXIS_MARK_NONE */ );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_MARK_POSITION, css::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_DISPLAY_UNITS, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TRY_STAGGERING_FIRST, false );
-    }
+            ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aMap, PROP_AXIS_MAJOR_TICKMARKS, 2 /* CHAXIS_MARK_OUTER */ );
+            ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aMap, PROP_AXIS_MINOR_TICKMARKS, 0 /* CHAXIS_MARK_NONE */ );
+            ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_AXIS_MARK_POSITION, css::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
+            ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_AXIS_DISPLAY_UNITS, false );
+            ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_AXIS_TRY_STAGGERING_FIRST, false );
+            return aMap;
+        }();
+    return aStaticDefaults;
 };
 
-struct StaticAxisDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticAxisDefaults_Initializer >
+::cppu::OPropertyArrayHelper& StaticAxisInfoHelper()
 {
-};
+    static ::cppu::OPropertyArrayHelper aPropHelper = []()
+        {
+            std::vector< css::beans::Property > aProperties;
+            lcl_AddPropertiesToVector( aProperties );
+            ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
+            ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
+            ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-struct StaticAxisInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
+            std::sort( aProperties.begin(), aProperties.end(),
+                         ::chart::PropertyNameLess() );
 
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-        ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
-        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
-        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-};
-
-struct StaticAxisInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticAxisInfoHelper_Initializer >
-{
-};
-
-struct StaticAxisInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticAxisInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticAxisInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticAxisInfo_Initializer >
-{
+            return comphelper::containerToSequence( aProperties );
+        }();
+    return aPropHelper;
 };
 
 typedef uno::Reference< beans::XPropertySet > lcl_tSubGridType;
@@ -575,7 +543,7 @@ void Axis::fireModifyEvent()
 // ____ OPropertySet ____
 void Axis::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticAxisDefaults::get();
+    const tPropertyValueMap& rStaticDefaults = StaticAxisDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
         rAny.clear();
@@ -585,13 +553,15 @@ void Axis::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 
 ::cppu::IPropertyArrayHelper & SAL_CALL Axis::getInfoHelper()
 {
-    return *StaticAxisInfoHelper::get();
+    return StaticAxisInfoHelper();
 }
 
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL Axis::getPropertySetInfo()
 {
-    return *StaticAxisInfo::get();
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo(StaticAxisInfoHelper() ) );
+    return xPropertySetInfo;
 }
 
 using impl::Axis_Base;

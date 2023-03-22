@@ -49,43 +49,37 @@ using ::osl::MutexGuard;
 namespace
 {
 
-struct StaticDataSeriesDefaults : public rtl::StaticWithInit< ::chart::tPropertyValueMap, StaticDataSeriesDefaults >
+const ::chart::tPropertyValueMap & StaticDataSeriesDefaults()
 {
-    ::chart::tPropertyValueMap operator()()
-    {
-        ::chart::tPropertyValueMap aStaticDefaults;
-        ::chart::DataSeriesProperties::AddDefaultsToMap( aStaticDefaults );
-        ::chart::CharacterProperties::AddDefaultsToMap( aStaticDefaults );
-        float fDefaultCharHeight = 10.0;
-        ::chart::PropertyHelper::setPropertyValue( aStaticDefaults, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
-        ::chart::PropertyHelper::setPropertyValue( aStaticDefaults, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
-        ::chart::PropertyHelper::setPropertyValue( aStaticDefaults, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
-        return aStaticDefaults;
-    }
+    static const ::chart::tPropertyValueMap aStaticDefaults = []()
+        {
+            ::chart::tPropertyValueMap aMap;
+            ::chart::DataSeriesProperties::AddDefaultsToMap( aMap );
+            ::chart::CharacterProperties::AddDefaultsToMap( aMap );
+            float fDefaultCharHeight = 10.0;
+            ::chart::PropertyHelper::setPropertyValue( aMap, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
+            ::chart::PropertyHelper::setPropertyValue( aMap, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
+            ::chart::PropertyHelper::setPropertyValue( aMap, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
+            return aMap;
+        }();
+    return aStaticDefaults;
 };
 
-struct StaticDataSeriesInfoHelper : public rtl::StaticWithInit< ::cppu::OPropertyArrayHelper, StaticDataSeriesInfoHelper, StaticDataSeriesInfoHelper, uno::Sequence< Property > >
+::cppu::OPropertyArrayHelper& StaticDataSeriesInfoHelper()
 {
-    uno::Sequence< Property > operator()()
-    {
-        std::vector< css::beans::Property > aProperties;
-        ::chart::DataSeriesProperties::AddPropertiesToVector( aProperties );
-        ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
-        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
+    static ::cppu::OPropertyArrayHelper oHelper = []()
+        {
+            std::vector< css::beans::Property > aProperties;
+            ::chart::DataSeriesProperties::AddPropertiesToVector( aProperties );
+            ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
+            ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
+            std::sort( aProperties.begin(), aProperties.end(),
+                         ::chart::PropertyNameLess() );
 
-        return comphelper::containerToSequence( aProperties );
-    }
-};
-
-struct StaticDataSeriesInfo : public rtl::StaticWithInit< uno::Reference< beans::XPropertySetInfo >, StaticDataSeriesInfo >
-{
-    uno::Reference< beans::XPropertySetInfo > operator()()
-    {
-        return ::cppu::OPropertySetHelper::createPropertySetInfo(StaticDataSeriesInfoHelper::get() );
-    }
+            return comphelper::containerToSequence( aProperties );
+        }();
+    return oHelper;
 };
 
 void lcl_SetParent(
@@ -229,7 +223,7 @@ uno::Reference< util::XCloneable > SAL_CALL DataSeries::createClone()
 // ____ OPropertySet ____
 void DataSeries::GetDefaultValue( sal_Int32 nHandle, uno::Any& rDest ) const
 {
-    const tPropertyValueMap& rStaticDefaults = StaticDataSeriesDefaults::get();
+    const tPropertyValueMap& rStaticDefaults = StaticDataSeriesDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
         rDest.clear();
@@ -240,13 +234,15 @@ void DataSeries::GetDefaultValue( sal_Int32 nHandle, uno::Any& rDest ) const
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL DataSeries::getInfoHelper()
 {
-    return StaticDataSeriesInfoHelper::get();
+    return StaticDataSeriesInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL DataSeries::getPropertySetInfo()
 {
-    return StaticDataSeriesInfo::get();
+    static uno::Reference< beans::XPropertySetInfo > xPropSetInfo =
+        ::cppu::OPropertySetHelper::createPropertySetInfo(StaticDataSeriesInfoHelper() );
+    return xPropSetInfo;
 }
 
 void SAL_CALL DataSeries::getFastPropertyValue

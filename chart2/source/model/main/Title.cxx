@@ -139,86 +139,54 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID );
 }
 
-struct StaticTitleDefaults_Initializer
+const ::chart::tPropertyValueMap& StaticTitleDefaults()
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
-        ::chart::FillProperties::AddDefaultsToMap( rOutMap );
+    static ::chart::tPropertyValueMap aStaticDefaults = []()
+        {
+            ::chart::tPropertyValueMap aTmp;
 
-        // ParagraphProperties
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_TITLE_PARA_ADJUST,
-                                                          css::style::ParagraphAdjust_CENTER );
-        // PROP_TITLE_PARA_LAST_LINE_ADJUST
+            ::chart::LinePropertiesHelper::AddDefaultsToMap( aTmp );
+            ::chart::FillProperties::AddDefaultsToMap( aTmp );
 
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_TITLE_PARA_LEFT_MARGIN, 0 );
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_TITLE_PARA_RIGHT_MARGIN, 0 );
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_TITLE_PARA_TOP_MARGIN, 0 );
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_TITLE_PARA_BOTTOM_MARGIN, 0 );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_TITLE_PARA_IS_HYPHENATION, true );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_TITLE_VISIBLE, true );
+            // ParagraphProperties
+            ::chart::PropertyHelper::setPropertyValueDefault( aTmp, PROP_TITLE_PARA_ADJUST,
+                                                              css::style::ParagraphAdjust_CENTER );
+            // PROP_TITLE_PARA_LAST_LINE_ADJUST
 
-        // own properties
-        ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_TITLE_TEXT_ROTATION, 0.0 );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_TITLE_TEXT_STACKED, false );
+            ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aTmp, PROP_TITLE_PARA_LEFT_MARGIN, 0 );
+            ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aTmp, PROP_TITLE_PARA_RIGHT_MARGIN, 0 );
+            ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aTmp, PROP_TITLE_PARA_TOP_MARGIN, 0 );
+            ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aTmp, PROP_TITLE_PARA_BOTTOM_MARGIN, 0 );
+            ::chart::PropertyHelper::setPropertyValueDefault( aTmp, PROP_TITLE_PARA_IS_HYPHENATION, true );
+            ::chart::PropertyHelper::setPropertyValueDefault( aTmp, PROP_TITLE_VISIBLE, true );
 
-        // override other defaults
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::FillProperties::PROP_FILL_STYLE, drawing::FillStyle_NONE );
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_NONE );
-    }
+            // own properties
+            ::chart::PropertyHelper::setPropertyValueDefault< double >( aTmp, PROP_TITLE_TEXT_ROTATION, 0.0 );
+            ::chart::PropertyHelper::setPropertyValueDefault( aTmp, PROP_TITLE_TEXT_STACKED, false );
+
+            // override other defaults
+            ::chart::PropertyHelper::setPropertyValue( aTmp, ::chart::FillProperties::PROP_FILL_STYLE, drawing::FillStyle_NONE );
+            ::chart::PropertyHelper::setPropertyValue( aTmp, ::chart::LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_NONE );
+            return aTmp;
+        }();
+    return aStaticDefaults;
 };
 
-struct StaticTitleDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticTitleDefaults_Initializer >
+::cppu::OPropertyArrayHelper& StaticTitleInfoHelper()
 {
-};
+    static ::cppu::OPropertyArrayHelper aPropHelper = []()
+        {
+            std::vector< css::beans::Property > aProperties;
+            lcl_AddPropertiesToVector( aProperties );
+            ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
+            ::chart::FillProperties::AddPropertiesToVector( aProperties );
 
-struct StaticTitleInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
+            std::sort( aProperties.begin(), aProperties.end(),
+                         ::chart::PropertyNameLess() );
 
-private:
-    static uno::Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-        ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
-        ::chart::FillProperties::AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-
-};
-
-struct StaticTitleInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticTitleInfoHelper_Initializer >
-{
-};
-
-struct StaticTitleInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticTitleInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticTitleInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticTitleInfo_Initializer >
-{
+            return comphelper::containerToSequence( aProperties );
+        }();
+    return aPropHelper;
 };
 
 } // anonymous namespace
@@ -283,7 +251,7 @@ void SAL_CALL Title::setText( const uno::Sequence< uno::Reference< chart2::XForm
 // ____ OPropertySet ____
 void Title::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticTitleDefaults::get();
+    const tPropertyValueMap& rStaticDefaults = StaticTitleDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
         rAny.clear();
@@ -293,13 +261,15 @@ void Title::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 
 ::cppu::IPropertyArrayHelper & SAL_CALL Title::getInfoHelper()
 {
-    return *StaticTitleInfoHelper::get();
+    return StaticTitleInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL Title::getPropertySetInfo()
 {
-    return *StaticTitleInfo::get();
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo(StaticTitleInfoHelper() ) );
+    return xPropertySetInfo;
 }
 
 // ____ XModifyBroadcaster ____

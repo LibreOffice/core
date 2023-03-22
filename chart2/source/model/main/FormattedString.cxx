@@ -35,58 +35,26 @@ using ::osl::MutexGuard;
 namespace
 {
 
-struct StaticFormattedStringDefaults_Initializer
+const ::chart::tPropertyValueMap & StaticFormattedStringDefaults()
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        ::chart::CharacterProperties::AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
+    static ::chart::tPropertyValueMap aStaticDefaults;
+    ::chart::CharacterProperties::AddDefaultsToMap( aStaticDefaults );
+    return aStaticDefaults;
 };
 
-struct StaticFormattedStringDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticFormattedStringDefaults_Initializer >
+::cppu::OPropertyArrayHelper& StaticFormattedStringInfoHelper()
 {
-};
+    static ::cppu::OPropertyArrayHelper aPropHelper = []()
+        {
+            std::vector< css::beans::Property > aProperties;
+            ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
 
-struct StaticFormattedStringInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
+            std::sort( aProperties.begin(), aProperties.end(),
+                         ::chart::PropertyNameLess() );
 
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-
-};
-
-struct StaticFormattedStringInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticFormattedStringInfoHelper_Initializer >
-{
-};
-
-struct StaticFormattedStringInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticFormattedStringInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticFormattedStringInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticFormattedStringInfo_Initializer >
-{
+            return comphelper::containerToSequence( aProperties );
+        }();
+    return aPropHelper;
 };
 
 } // anonymous namespace
@@ -241,7 +209,7 @@ void FormattedString::fireModifyEvent()
 // ____ OPropertySet ____
 void FormattedString::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticFormattedStringDefaults::get();
+    const tPropertyValueMap& rStaticDefaults = StaticFormattedStringDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
         rAny.clear();
@@ -252,13 +220,15 @@ void FormattedString::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL FormattedString::getInfoHelper()
 {
-    return *StaticFormattedStringInfoHelper::get();
+    return StaticFormattedStringInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL FormattedString::getPropertySetInfo()
 {
-    return *StaticFormattedStringInfo::get();
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo(StaticFormattedStringInfoHelper() ) );
+    return xPropertySetInfo;
 }
 
 using impl::FormattedString_Base;
