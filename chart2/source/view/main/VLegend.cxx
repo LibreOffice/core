@@ -23,6 +23,7 @@
 #include <PropertyMapper.hxx>
 #include <ChartModel.hxx>
 #include <ObjectIdentifier.hxx>
+#include <FormattedString.hxx>
 #include <RelativePositionHelper.hxx>
 #include <ShapeFactory.hxx>
 #include <RelativeSizeHelper.hxx>
@@ -160,22 +161,22 @@ awt::Size lcl_createTextShapes(
         try
         {
             OUString aLabelString;
-            Sequence< Reference< XFormattedString2 > > aLabelSeq = rEntry.aLabel;
-            for( sal_Int32 i = 0; i < aLabelSeq.getLength(); ++i )
+            const std::vector< rtl::Reference< ::chart::FormattedString > > & rLabelSeq = rEntry.aLabel;
+            for( size_t i = 0; i < rLabelSeq.size(); ++i )
             {
                 // todo: support more than one text range
                 if( i == 1 )
                     break;
 
                 // tdf#150034 limit legend label text
-                if (aLabelSeq[i]->getString().getLength() > 520)
+                if (rLabelSeq[i]->getString().getLength() > 520)
                 {
-                    sal_Int32 nIndex = aLabelSeq[i]->getString().indexOf(' ', 500);
-                    aLabelSeq[i]->setString(
-                        aLabelSeq[i]->getString().copy(0, nIndex > 500 ? nIndex : 500));
+                    sal_Int32 nIndex = rLabelSeq[i]->getString().indexOf(' ', 500);
+                    rLabelSeq[i]->setString(
+                        rLabelSeq[i]->getString().copy(0, nIndex > 500 ? nIndex : 500));
                 }
 
-                aLabelString += aLabelSeq[i]->getString();
+                aLabelString += rLabelSeq[i]->getString();
                 // workaround for Issue #i67540#
                 if( aLabelString.isEmpty())
                     aLabelString = " ";

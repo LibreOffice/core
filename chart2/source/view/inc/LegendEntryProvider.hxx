@@ -36,6 +36,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {
+class FormattedString;
 
 enum class LegendSymbolStyle
 {
@@ -62,8 +63,7 @@ struct ViewLegendEntry
 
     /** The descriptive text for a legend entry.
      */
-    css::uno::Sequence<
-        css::uno::Reference< css::chart2::XFormattedString2 > >  aLabel;
+    std::vector< rtl::Reference< ::chart::FormattedString > >  aLabel;
 };
 
 

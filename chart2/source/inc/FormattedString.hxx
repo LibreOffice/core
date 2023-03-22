@@ -18,13 +18,13 @@
  */
 #pragma once
 
-#include <OPropertySet.hxx>
+#include "OPropertySet.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <ModifyListenerHelper.hxx>
+#include "ModifyListenerHelper.hxx"
 
 namespace chart
 {
@@ -71,7 +71,6 @@ public:
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
         { ::property::OPropertySet::removeVetoableChangeListener(p1, p2); }
 
-private:
     explicit FormattedString( const FormattedString & rOther );
 
     // ____ XFormattedString ____
@@ -116,6 +115,7 @@ private:
     virtual void SAL_CALL disposing(
         const css::lang::EventObject& Source ) override;
 
+private:
     // ____ OPropertySet ____
     virtual void firePropertyChangeEvent() override;
     using OPropertySet::disposing;

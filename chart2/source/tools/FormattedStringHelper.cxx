@@ -18,6 +18,7 @@
  */
 
 #include <FormattedStringHelper.hxx>
+#include <FormattedString.hxx>
 #include <com/sun/star/chart2/FormattedString.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/property.hxx>
@@ -30,32 +31,28 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-Sequence< Reference< chart2::XFormattedString2 > >
+std::vector< rtl::Reference< ::chart::FormattedString > >
             FormattedStringHelper::createFormattedStringSequence(
-                     const Reference< uno::XComponentContext > & xContext
-                    , const OUString & rString
+                      const OUString & rString
                     , const Reference< beans::XPropertySet > & xTextProperties ) noexcept
 {
-    Reference< XFormattedString2 > xFormStr;
+    rtl::Reference< FormattedString > xFormStr;
     try
     {
-        if( xContext.is() )
-        {
-            xFormStr = chart2::FormattedString::create(xContext);
+        xFormStr = new FormattedString();
 
-            xFormStr->setString( rString );
+        xFormStr->setString( rString );
 
-            // set character properties
-            comphelper::copyProperties(
-                xTextProperties, Reference< beans::XPropertySet >( xFormStr, uno::UNO_QUERY_THROW ) );
-        }
+        // set character properties
+        comphelper::copyProperties(
+            xTextProperties, Reference< beans::XPropertySet >( static_cast<cppu::OWeakObject*>(xFormStr.get()), uno::UNO_QUERY_THROW ) );
     }
     catch( const uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
-    return Sequence< Reference< XFormattedString2 > >( & xFormStr, 1 );
+    return { xFormStr };
 }
 
 } //namespace chart

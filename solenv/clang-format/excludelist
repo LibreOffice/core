@@ -1016,6 +1016,7 @@ chart2/source/inc/EventListenerHelper.hxx
 chart2/source/inc/ExplicitCategoriesProvider.hxx
 chart2/source/inc/ExponentialRegressionCurveCalculator.hxx
 chart2/source/inc/FillProperties.hxx
+chart2/source/inc/FormattedString.hxx
 chart2/source/inc/FormattedStringHelper.hxx
 chart2/source/inc/InternalData.hxx
 chart2/source/inc/InternalDataProvider.hxx
@@ -1081,7 +1082,6 @@ chart2/source/model/main/DataSeriesProperties.cxx
 chart2/source/model/main/DataSeriesProperties.hxx
 chart2/source/model/main/Diagram.cxx
 chart2/source/model/main/FormattedString.cxx
-chart2/source/model/main/FormattedString.hxx
 chart2/source/model/main/GridProperties.cxx
 chart2/source/model/main/GridProperties.hxx
 chart2/source/model/main/Legend.cxx

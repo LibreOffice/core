@@ -30,6 +30,7 @@
 
 #include <CommonConverters.hxx>
 #include <ExplicitCategoriesProvider.hxx>
+#include <FormattedString.hxx>
 #include <ObjectIdentifier.hxx>
 #include <StatisticsHelper.hxx>
 #include <PlottingPositionHelper.hxx>
@@ -2787,7 +2788,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                 aLabelText = aCategoryNames[nIdx];
                 if( xShape.is() || !aLabelText.isEmpty() )
                 {
-                    aEntry.aLabel = FormattedStringHelper::createFormattedStringSequence( xContext, aLabelText, xTextProperties );
+                    aEntry.aLabel = FormattedStringHelper::createFormattedStringSequence( aLabelText, xTextProperties );
                     aResult.push_back(aEntry);
                 }
             }
@@ -2813,7 +2814,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
 
             // label
             aLabelText = rSeries.getModel()->getLabelForRole( m_xChartTypeModel.is() ? m_xChartTypeModel->getRoleOfSequenceForSeriesLabel() : "values-y");
-            aEntry.aLabel = FormattedStringHelper::createFormattedStringSequence( xContext, aLabelText, xTextProperties );
+            aEntry.aLabel = FormattedStringHelper::createFormattedStringSequence( aLabelText, xTextProperties );
 
             aResult.push_back(aEntry);
         }
@@ -2833,7 +2834,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                 //label
                 OUString aResStr( RegressionCurveHelper::getUINameForRegressionCurve( aCurves[i] ) );
                 replaceParamterInString( aResStr, u"%SERIESNAME", aLabelText );
-                aEntry.aLabel = FormattedStringHelper::createFormattedStringSequence( xContext, aResStr, xTextProperties );
+                aEntry.aLabel = FormattedStringHelper::createFormattedStringSequence( aResStr, xTextProperties );
 
                 // symbol
                 rtl::Reference<SvxShapeGroup> xSymbolGroup(ShapeFactory::createGroup2D( xTarget ));

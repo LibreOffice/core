@@ -18,24 +18,25 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Sequence.h>
+#include <vector>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
 
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::chart2 { class XFormattedString2; }
-namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace chart
 {
+class FormattedString;
 
 class FormattedStringHelper
 {
 public:
-    static css::uno::Sequence<
-            css::uno::Reference< css::chart2::XFormattedString2 > >
+    static std::vector<
+            rtl::Reference< ::chart::FormattedString > >
             createFormattedStringSequence(
-                     const css::uno::Reference< css::uno::XComponentContext > & xContext
-                    , const OUString & rString
+                    const OUString & rString
                     , const css::uno::Reference< css::beans::XPropertySet > & xTextProperties ) noexcept;
 };
 
