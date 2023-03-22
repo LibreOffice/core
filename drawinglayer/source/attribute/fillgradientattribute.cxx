@@ -154,6 +154,41 @@ namespace drawinglayer::attribute
             return mpFillGradientAttribute->hasSingleColor();
         }
 
+        // MCGR: Check if rendering cannot be handled by old vcl stuff
+        bool FillGradientAttribute::cannotBeHandledByVCL() const
+        {
+            // MCGR: If GradientStops are used, use decomposition since vcl is not able
+            // to render multi-color gradients
+            if (getColorStops().size() != 2)
+            {
+                return true;
+            }
+
+            // MCGR: If GradientStops do not start and stop at traditional Start/EndColor,
+            // use decomposition since vcl is not able to render this
+            if (!getColorStops().empty())
+            {
+                if (!basegfx::fTools::equalZero(getColorStops().front().getStopOffset())
+                    || !basegfx::fTools::equal(getColorStops().back().getStopOffset(), 1.0))
+                {
+                    return true;
+                }
+            }
+
+            // VCL should be able to handle all styles, but for tdf#133477 the VCL result
+            // is different from processing the gradient manually by drawinglayer
+            // (and the Writer unittest for it fails). Keep using the drawinglayer code
+            // until somebody founds out what's wrong and fixes it.
+            if (getStyle() != drawinglayer::attribute::GradientStyle::Linear
+                && getStyle() != drawinglayer::attribute::GradientStyle::Axial
+                && getStyle() != drawinglayer::attribute::GradientStyle::Radial)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         FillGradientAttribute& FillGradientAttribute::operator=(const FillGradientAttribute&) = default;
 
         FillGradientAttribute& FillGradientAttribute::operator=(FillGradientAttribute&&) = default;

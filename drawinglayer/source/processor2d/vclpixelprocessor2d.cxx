@@ -497,16 +497,30 @@ void VclPixelProcessor2D::processBitmapPrimitive2D(
 void VclPixelProcessor2D::processPolyPolygonGradientPrimitive2D(
     const primitive2d::PolyPolygonGradientPrimitive2D& rPolygonCandidate)
 {
-    // direct draw of gradient
+    basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolygonCandidate.getB2DPolyPolygon());
+
+    // no geometry, no need to render, done
+    if (!aLocalPolyPolygon.count())
+        return;
+
+    // *try* direct draw (AKA using old VCL stuff) to render gradient
     const attribute::FillGradientAttribute& rGradient(rPolygonCandidate.getFillGradient());
+
+    // MCGR: *many* - and not only GradientStops - cases cannot be handled by VCL
+    // so use decomposition
+    // NOTE: There may be even more reasons to detect, e.g. a ViewTransformation
+    // that uses shear/rotate/mirror (what VCL cannot handle at all), see
+    // other checks already in processFillGradientPrimitive2D
+    if (rGradient.cannotBeHandledByVCL())
+    {
+        process(rPolygonCandidate);
+        return;
+    }
+
     basegfx::BColor aStartColor(
         maBColorModifierStack.getModifiedColor(rGradient.getColorStops().front().getStopColor()));
     basegfx::BColor aEndColor(
         maBColorModifierStack.getModifiedColor(rGradient.getColorStops().back().getStopColor()));
-    basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolygonCandidate.getB2DPolyPolygon());
-
-    if (!aLocalPolyPolygon.count())
-        return;
 
     if (aStartColor == aEndColor)
     {
@@ -515,12 +529,11 @@ void VclPixelProcessor2D::processPolyPolygonGradientPrimitive2D(
         mpOutputDevice->SetLineColor();
         mpOutputDevice->SetFillColor(Color(aStartColor));
         mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
+        return;
     }
-    else
-    {
-        // use the primitive decomposition of the metafile
-        process(rPolygonCandidate);
-    }
+
+    // use the primitive decomposition
+    process(rPolygonCandidate);
 }
 
 void VclPixelProcessor2D::processPolyPolygonColorPrimitive2D(
@@ -938,33 +951,9 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
 {
     const attribute::FillGradientAttribute& rFillGradient = rPrimitive.getFillGradient();
 
-    // MCGR: If GradientStops are used, use decomposition since vcl is not able
-    // to render multi-color gradients
-    if (rFillGradient.getColorStops().size() != 2)
-    {
-        process(rPrimitive);
-        return;
-    }
-
-    // MCGR: If GradientStops do not start and stop at traditional Start/EndColor,
-    // use decomposition since vcl is not able to render this
-    if (!rFillGradient.getColorStops().empty())
-    {
-        if (!basegfx::fTools::equalZero(rFillGradient.getColorStops().front().getStopOffset())
-            || !basegfx::fTools::equal(rFillGradient.getColorStops().back().getStopOffset(), 1.0))
-        {
-            process(rPrimitive);
-            return;
-        }
-    }
-
-    // VCL should be able to handle all styles, but for tdf#133477 the VCL result
-    // is different from processing the gradient manually by drawinglayer
-    // (and the Writer unittest for it fails). Keep using the drawinglayer code
-    // until somebody founds out what's wrong and fixes it.
-    if (rFillGradient.getStyle() != drawinglayer::attribute::GradientStyle::Linear
-        && rFillGradient.getStyle() != drawinglayer::attribute::GradientStyle::Axial
-        && rFillGradient.getStyle() != drawinglayer::attribute::GradientStyle::Radial)
+    // MCGR: *many* - and not only GradientStops - cases cannot be handled by VCL
+    // so use decomposition
+    if (rFillGradient.cannotBeHandledByVCL())
     {
         process(rPrimitive);
         return;

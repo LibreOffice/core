@@ -475,7 +475,8 @@ namespace drawinglayer::primitive2d
                             basegfx::ColorStops aColorStops(aXGradient.GetColorStops());
 
                             // test code here, can/will be removed later
-                            static sal_uInt32 nUseGradientSteps(0);
+                            static const char* pUseGradientSteps(std::getenv("MCGR_TEST"));
+                            static int nUseGradientSteps(pUseGradientSteps ? std::atoi(pUseGradientSteps) : 0);
 
                             switch(nUseGradientSteps)
                             {
@@ -483,11 +484,11 @@ namespace drawinglayer::primitive2d
                                 {
                                     // just test a nice valid gradient
                                     aColorStops.clear();
-                                    aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 0.0, 0.0)); // red
-                                    aColorStops.emplace_back(0.25, basegfx::BColor(0.0, 1.0, 0.0)); // green@25%
-                                    aColorStops.emplace_back(0.50, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
-                                    aColorStops.emplace_back(0.75, basegfx::BColor(1.0, 0.0, 1.0)); // pink@75%
-                                    aColorStops.emplace_back(1.0, basegfx::BColor(0.0, 0.0, 1.0)); // blue
+                                    aColorStops.emplace_back(0.0, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(0.25, COL_LIGHTGREEN.getBColor()); // green@25%
+                                    aColorStops.emplace_back(0.50, COL_YELLOW.getBColor()); // yellow@50%
+                                    aColorStops.emplace_back(0.75, COL_LIGHTMAGENTA.getBColor()); // pink@75%
+                                    aColorStops.emplace_back(1.0, COL_LIGHTBLUE.getBColor()); // blue
                                     break;
                                 }
 
@@ -495,9 +496,9 @@ namespace drawinglayer::primitive2d
                                 {
                                     // single added in-between, no change of start/end
                                     aColorStops.clear();
-                                    aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 0.0, 0.0)); // red
-                                    aColorStops.emplace_back(0.5, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
-                                    aColorStops.emplace_back(1.0, basegfx::BColor(0.0, 0.0, 1.0)); // blue
+                                    aColorStops.emplace_back(0.0, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(0.5, COL_YELLOW.getBColor()); // yellow@50%
+                                    aColorStops.emplace_back(1.0, COL_LIGHTBLUE.getBColor()); // blue
                                     break;
                                 }
 
@@ -505,9 +506,9 @@ namespace drawinglayer::primitive2d
                                 {
                                     // check additional StartColor, the second one has to win
                                     aColorStops.clear();
-                                    aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 0.0, 0.0)); // red
-                                    aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
-                                    aColorStops.emplace_back(1.0, basegfx::BColor(0.0, 0.0, 1.0)); // blue
+                                    aColorStops.emplace_back(0.0, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(0.0, COL_YELLOW.getBColor()); // yellow@50%
+                                    aColorStops.emplace_back(1.0, COL_LIGHTBLUE.getBColor()); // blue
                                     break;
                                 }
 
@@ -515,9 +516,9 @@ namespace drawinglayer::primitive2d
                                 {
                                     // check additional EndColor, the first one has to win
                                     aColorStops.clear();
-                                    aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 0.0, 0.0)); // red
-                                    aColorStops.emplace_back(1.0, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
-                                    aColorStops.emplace_back(1.0, basegfx::BColor(0.0, 0.0, 1.0)); // blue
+                                    aColorStops.emplace_back(0.0, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(1.0, COL_YELLOW.getBColor()); // yellow@50%
+                                    aColorStops.emplace_back(1.0, COL_LIGHTBLUE.getBColor()); // blue
                                     break;
                                 }
 
@@ -525,9 +526,9 @@ namespace drawinglayer::primitive2d
                                 {
                                     // check invalid color (too low index), has to be ignored
                                     aColorStops.clear();
-                                    aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 0.0, 0.0)); // red
-                                    aColorStops.emplace_back(1.0, basegfx::BColor(0.0, 0.0, 1.0)); // blue
-                                    aColorStops.emplace_back(-1.0, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    aColorStops.emplace_back(0.0, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(1.0, COL_LIGHTBLUE.getBColor()); // blue
+                                    aColorStops.emplace_back(-1.0, COL_YELLOW.getBColor()); // yellow@50%
                                     break;
                                 }
 
@@ -535,9 +536,9 @@ namespace drawinglayer::primitive2d
                                 {
                                     // check invalid color (too high index), has to be ignored
                                     aColorStops.clear();
-                                    aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 0.0, 0.0)); // red
-                                    aColorStops.emplace_back(1.0, basegfx::BColor(0.0, 0.0, 1.0)); // blue
-                                    aColorStops.emplace_back(2.0, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
+                                    aColorStops.emplace_back(0.0, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(1.0, COL_LIGHTBLUE.getBColor()); // blue
+                                    aColorStops.emplace_back(2.0, COL_YELLOW.getBColor()); // yellow@50%
                                     break;
                                 }
 
@@ -545,10 +546,10 @@ namespace drawinglayer::primitive2d
                                 {
                                     // check in-between single-color section
                                     aColorStops.clear();
-                                    aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 0.0, 0.0)); // red
-                                    aColorStops.emplace_back(0.3, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
-                                    aColorStops.emplace_back(0.7, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
-                                    aColorStops.emplace_back(1.0, basegfx::BColor(0.0, 0.0, 1.0)); // blue
+                                    aColorStops.emplace_back(0.0, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(0.3, COL_YELLOW.getBColor()); // yellow@50%
+                                    aColorStops.emplace_back(0.7, COL_YELLOW.getBColor()); // yellow@50%
+                                    aColorStops.emplace_back(1.0, COL_LIGHTBLUE.getBColor()); // blue
                                     break;
                                 }
 
@@ -556,13 +557,13 @@ namespace drawinglayer::primitive2d
                                 {
                                     // check in-between single-color sections
                                     aColorStops.clear();
-                                    aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 0.0, 0.0)); // red
-                                    aColorStops.emplace_back(0.2, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
-                                    aColorStops.emplace_back(0.4, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
-                                    aColorStops.emplace_back(0.5, basegfx::BColor(1.0, 0.0, 0.0)); // red
-                                    aColorStops.emplace_back(0.6, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
-                                    aColorStops.emplace_back(0.8, basegfx::BColor(1.0, 1.0, 0.0)); // yellow@50%
-                                    aColorStops.emplace_back(1.0, basegfx::BColor(0.0, 0.0, 1.0)); // blue
+                                    aColorStops.emplace_back(0.0, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(0.2, COL_YELLOW.getBColor()); // yellow@50%
+                                    aColorStops.emplace_back(0.4, COL_YELLOW.getBColor()); // yellow@50%
+                                    aColorStops.emplace_back(0.5, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(0.6, COL_YELLOW.getBColor()); // yellow@50%
+                                    aColorStops.emplace_back(0.8, COL_YELLOW.getBColor()); // yellow@50%
+                                    aColorStops.emplace_back(1.0, COL_LIGHTBLUE.getBColor()); // blue
                                     break;
                                 }
 
@@ -570,9 +571,9 @@ namespace drawinglayer::primitive2d
                                 {
                                     // check single-color start area
                                     aColorStops.clear();
-                                    aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 0.0, 0.0)); // red
-                                    aColorStops.emplace_back(0.6, basegfx::BColor(1.0, 0.0, 0.0)); // red
-                                    aColorStops.emplace_back(1.0, basegfx::BColor(0.0, 0.0, 1.0)); // blue
+                                    aColorStops.emplace_back(0.0, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(0.6, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(1.0, COL_LIGHTBLUE.getBColor()); // blue
                                     break;
                                 }
 
@@ -580,9 +581,9 @@ namespace drawinglayer::primitive2d
                                 {
                                     // check single-color end area
                                     aColorStops.clear();
-                                    aColorStops.emplace_back(0.0, basegfx::BColor(1.0, 0.0, 0.0)); // red
-                                    aColorStops.emplace_back(0.4, basegfx::BColor(0.0, 0.0, 1.0)); // blue
-                                    aColorStops.emplace_back(1.0, basegfx::BColor(0.0, 0.0, 1.0)); // blue
+                                    aColorStops.emplace_back(0.0, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(0.4, COL_LIGHTBLUE.getBColor()); // blue
+                                    aColorStops.emplace_back(1.0, COL_LIGHTBLUE.getBColor()); // blue
                                     break;
                                 }
 
@@ -590,8 +591,8 @@ namespace drawinglayer::primitive2d
                                 {
                                     // check case without direct Start/EndColor
                                     aColorStops.clear();
-                                    aColorStops.emplace_back(0.4, basegfx::BColor(1.0, 0.0, 0.0)); // red
-                                    aColorStops.emplace_back(0.6, basegfx::BColor(0.0, 0.0, 1.0)); // blue
+                                    aColorStops.emplace_back(0.4, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(0.6, COL_LIGHTBLUE.getBColor()); // blue
                                     break;
                                 }
 
@@ -606,7 +607,7 @@ namespace drawinglayer::primitive2d
                                 {
                                     // check case with single stop
                                     aColorStops.clear();
-                                    aColorStops.emplace_back(0.5, basegfx::BColor(1.0, 0.0, 0.0)); // red
+                                    aColorStops.emplace_back(0.5, COL_LIGHTRED.getBColor()); // red
                                     break;
                                 }
 
@@ -614,8 +615,8 @@ namespace drawinglayer::primitive2d
                                 {
                                     // check case with single-double stop
                                     aColorStops.clear();
-                                    aColorStops.emplace_back(0.5, basegfx::BColor(1.0, 0.0, 0.0)); // red
-                                    aColorStops.emplace_back(0.5, basegfx::BColor(1.0, 0.0, 0.0)); // red
+                                    aColorStops.emplace_back(0.5, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(0.5, COL_LIGHTRED.getBColor()); // red
                                     break;
                                 }
 
@@ -623,8 +624,23 @@ namespace drawinglayer::primitive2d
                                 {
                                     // check case with single stop diff colors
                                     aColorStops.clear();
-                                    aColorStops.emplace_back(0.5, basegfx::BColor(1.0, 0.0, 0.0)); // red
-                                    aColorStops.emplace_back(0.5, basegfx::BColor(0.0, 0.0, 1.0)); // blue
+                                    aColorStops.emplace_back(0.5, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(0.5, COL_LIGHTBLUE.getBColor()); // blue
+                                    break;
+                                }
+
+                                case 16:
+                                {
+                                    // check case with gradient, hard change, gradient
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(0.0, COL_LIGHTGREEN.getBColor()); // green
+                                    aColorStops.emplace_back(0.2, COL_LIGHTGREEN.getBColor()); // green
+                                    aColorStops.emplace_back(0.2, COL_LIGHTBLUE.getBColor()); // blue
+                                    aColorStops.emplace_back(0.5, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(0.5, COL_LIGHTBLUE.getBColor()); // blue
+                                    aColorStops.emplace_back(0.8, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(0.8, COL_LIGHTGREEN.getBColor()); // green
+                                    aColorStops.emplace_back(1.0, COL_LIGHTGREEN.getBColor()); // green
                                     break;
                                 }
 
