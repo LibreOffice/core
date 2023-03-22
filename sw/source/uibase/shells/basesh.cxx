@@ -929,13 +929,15 @@ void UpdateFieldContent(SfxRequest& rReq, SwWrtShell& rWrtSh)
     }
 
     SwDoc* pDoc = rWrtSh.GetDoc();
-    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSBOOKMARK, nullptr);
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UndoArg1, rRefmark.GetRefName());
+    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::UPDATE_FIELD, &aRewriter);
     rWrtSh.StartAction();
     comphelper::ScopeGuard g(
-        [&rWrtSh]
+        [&rWrtSh, &aRewriter]
         {
             rWrtSh.EndAction();
-            rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSBOOKMARK, nullptr);
+            rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::UPDATE_FIELD, &aRewriter);
         });
 
     comphelper::SequenceAsHashMap aMap(aField);
