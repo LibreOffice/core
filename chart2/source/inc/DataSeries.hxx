@@ -149,6 +149,8 @@ public:
      */
     OUString getLabelForRole( const OUString & rLabelSequenceRole );
 
+    bool hasUnhiddenData();
+
 private:
 
     // late initialization to call after copy-constructing

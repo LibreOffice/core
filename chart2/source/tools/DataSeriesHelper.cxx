@@ -526,42 +526,6 @@ bool hasAttributedDataPointDifferentValue( const Reference< chart2::XDataSeries 
 namespace
 {
 
-bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSequence >& xDataSequence )
-{
-    if( !xDataSequence.is() )
-        return false;
-    uno::Reference< beans::XPropertySet > xProp( xDataSequence, uno::UNO_QUERY );
-    if( xProp.is() )
-    {
-        uno::Sequence< sal_Int32 > aHiddenValues;
-        try
-        {
-            xProp->getPropertyValue( "HiddenValues" ) >>= aHiddenValues;
-            if( !aHiddenValues.hasElements() )
-                return true;
-        }
-        catch( const uno::Exception& )
-        {
-            return true;
-        }
-    }
-    return xDataSequence->getData().hasElements();
-}
-
-}
-
-bool hasUnhiddenData( const rtl::Reference< DataSeries >& xSeries )
-{
-    uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aDataSequences = xSeries->getDataSequences();
-
-    for(sal_Int32 nN = aDataSequences.getLength();nN--;)
-    {
-        if( !aDataSequences[nN].is() )
-            continue;
-        if( lcl_SequenceHasUnhiddenData( aDataSequences[nN]->getValues() ) )
-            return true;
-    }
-    return false;
 }
 
 sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nIndex, const Reference< chart2::data::XDataSequence >& xDataSequence, bool bTranslate )

@@ -685,6 +685,41 @@ OUString DataSeries::getLabelForRole( const OUString & rLabelSequenceRole )
     return aResult;
 }
 
+static bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSequence >& xDataSequence )
+{
+    uno::Reference< beans::XPropertySet > xProp( xDataSequence, uno::UNO_QUERY );
+    if( xProp.is() )
+    {
+        uno::Sequence< sal_Int32 > aHiddenValues;
+        try
+        {
+            xProp->getPropertyValue( "HiddenValues" ) >>= aHiddenValues;
+            if( !aHiddenValues.hasElements() )
+                return true;
+        }
+        catch( const uno::Exception& )
+        {
+            return true;
+        }
+    }
+    return xDataSequence->getData().hasElements();
+}
+
+bool DataSeries::hasUnhiddenData()
+{
+    MutexGuard aGuard( m_aMutex );
+
+    for(uno::Reference< chart2::data::XLabeledDataSequence > const & rDataSequence : m_aDataSequences)
+    {
+        if( !rDataSequence.is() )
+            continue;
+        if( lcl_SequenceHasUnhiddenData( rDataSequence->getValues() ) )
+            return true;
+    }
+    return false;
+}
+
+
 }  // namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

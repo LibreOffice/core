@@ -253,7 +253,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
             for (std::size_t nS = 0; nS < aSeriesList.size(); ++nS)
             {
                 rtl::Reference<DataSeries> const& xDataSeries = aSeriesList[nS];
-                if (!bIncludeHiddenCells && !DataSeriesHelper::hasUnhiddenData(xDataSeries))
+                if (!bIncludeHiddenCells && !xDataSeries->hasUnhiddenData())
                     continue;
 
                 std::unique_ptr<VDataSeries> pSeries(new VDataSeries(xDataSeries));

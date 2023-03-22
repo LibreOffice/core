@@ -160,9 +160,6 @@ OOO_DLLPUBLIC_CHARTTOOLS bool hasAttributedDataPointDifferentValue(
     const OUString& rPropertyName,
     const css::uno::Any& rPropertyValue );
 
-OOO_DLLPUBLIC_CHARTTOOLS bool hasUnhiddenData( const rtl::Reference<
-        ::chart::DataSeries >& xSeries );
-
 OOO_DLLPUBLIC_CHARTTOOLS
 sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nClippedIndex, const css::uno::Reference<
         css::chart2::data::XDataSequence >& xDataSequence, bool bTranslate );
