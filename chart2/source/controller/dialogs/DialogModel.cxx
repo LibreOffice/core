@@ -581,7 +581,7 @@ rtl::Reference< ::chart::DataSeries > DialogModel::insertSeriesAfter(
 }
 
 void DialogModel::deleteSeries(
-    const Reference< XDataSeries > & xSeries,
+    const rtl::Reference< DataSeries > & xSeries,
     const rtl::Reference< ChartType > & xChartType )
 {
     m_aTimerTriggeredControllerLock.startTimer();

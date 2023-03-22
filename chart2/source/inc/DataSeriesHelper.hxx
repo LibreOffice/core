@@ -127,11 +127,11 @@ rtl::Reference< ::chart::BaseCoordinateSystem >
 OOO_DLLPUBLIC_CHARTTOOLS
 rtl::Reference< ::chart::ChartType >
     getChartTypeOfSeries(
-        const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
+        const rtl::Reference< ::chart::DataSeries > & xSeries,
         const rtl::Reference< ::chart::Diagram > & xDiagram );
 
 OOO_DLLPUBLIC_CHARTTOOLS void deleteSeries(
-    const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
+    const rtl::Reference< ::chart::DataSeries > & xSeries,
     const rtl::Reference< ::chart::ChartType > & xChartType );
 
 OOO_DLLPUBLIC_CHARTTOOLS void switchSymbolsOnOrOff(
@@ -160,24 +160,24 @@ OOO_DLLPUBLIC_CHARTTOOLS bool hasAttributedDataPointDifferentValue(
     const OUString& rPropertyName,
     const css::uno::Any& rPropertyValue );
 
-OOO_DLLPUBLIC_CHARTTOOLS bool hasUnhiddenData( const css::uno::Reference<
-        css::chart2::XDataSeries >& xSeries );
+OOO_DLLPUBLIC_CHARTTOOLS bool hasUnhiddenData( const rtl::Reference<
+        ::chart::DataSeries >& xSeries );
 
 OOO_DLLPUBLIC_CHARTTOOLS
 sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nClippedIndex, const css::uno::Reference<
         css::chart2::data::XDataSequence >& xDataSequence, bool bTranslate );
 
-OOO_DLLPUBLIC_CHARTTOOLS bool hasDataLabelsAtSeries( const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
+OOO_DLLPUBLIC_CHARTTOOLS bool hasDataLabelsAtSeries( const rtl::Reference< ::chart::DataSeries >& xSeries );
 
-OOO_DLLPUBLIC_CHARTTOOLS bool hasDataLabelsAtPoints( const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
+OOO_DLLPUBLIC_CHARTTOOLS bool hasDataLabelsAtPoints( const rtl::Reference< ::chart::DataSeries >& xSeries );
 
-OOO_DLLPUBLIC_CHARTTOOLS bool hasDataLabelAtPoint( const css::uno::Reference< css::chart2::XDataSeries >& xSeries, sal_Int32 nPointIndex );
+OOO_DLLPUBLIC_CHARTTOOLS bool hasDataLabelAtPoint( const rtl::Reference< ::chart::DataSeries >& xSeries, sal_Int32 nPointIndex );
 
-OOO_DLLPUBLIC_CHARTTOOLS void insertDataLabelsToSeriesAndAllPoints( const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
+OOO_DLLPUBLIC_CHARTTOOLS void insertDataLabelsToSeriesAndAllPoints( const rtl::Reference< ::chart::DataSeries >& xSeries );
 
 OOO_DLLPUBLIC_CHARTTOOLS void insertDataLabelToPoint( const css::uno::Reference< css::beans::XPropertySet >& xPointPropertySet );
 
-OOO_DLLPUBLIC_CHARTTOOLS void deleteDataLabelsFromSeriesAndAllPoints( const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
+OOO_DLLPUBLIC_CHARTTOOLS void deleteDataLabelsFromSeriesAndAllPoints( const rtl::Reference< ::chart::DataSeries >& xSeries );
 
 OOO_DLLPUBLIC_CHARTTOOLS void deleteDataLabelsFromPoint( const css::uno::Reference< css::beans::XPropertySet >& xPointPropertySet );
 

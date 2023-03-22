@@ -86,7 +86,6 @@ public:
     virtual void SAL_CALL resetDataPoint( sal_Int32 nIndex ) override;
     virtual void SAL_CALL resetAllDataPoints() override;
 
-private:
     // ____ XDataSink ____
     /// @see css::chart2::data::XDataSink
     virtual void SAL_CALL setData( const css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >& aData ) override;
@@ -94,7 +93,6 @@ private:
     // ____ XDataSource ____
     /// @see css::chart2::data::XDataSource
     virtual css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > SAL_CALL getDataSequences() override;
-public:
 
     // ____ OPropertySet ____
     virtual void GetDefaultValue( sal_Int32 nHandle, css::uno::Any& rAny ) const override;

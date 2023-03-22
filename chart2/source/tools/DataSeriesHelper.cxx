@@ -112,24 +112,23 @@ void lcl_getCooSysAndChartTypeOfSeries(
     }
 }
 
-void lcl_insertOrDeleteDataLabelsToSeriesAndAllPoints( const Reference< chart2::XDataSeries >& xSeries, bool bInsert )
+void lcl_insertOrDeleteDataLabelsToSeriesAndAllPoints( const rtl::Reference< ::chart::DataSeries >& xSeries, bool bInsert )
 {
     try
     {
-        Reference< beans::XPropertySet > xSeriesProperties( xSeries, uno::UNO_QUERY );
-        if( xSeriesProperties.is() )
+        if( xSeries.is() )
         {
             DataPointLabel aLabelAtSeries;
-            xSeriesProperties->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabelAtSeries;
+            xSeries->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabelAtSeries;
             aLabelAtSeries.ShowNumber = bInsert;
             if( !bInsert )
             {
                 aLabelAtSeries.ShowNumberInPercent = false;
                 aLabelAtSeries.ShowCategoryName = false;
             }
-            xSeriesProperties->setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabelAtSeries));
+            xSeries->setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabelAtSeries));
             uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-            if( xSeriesProperties->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
+            if( xSeries->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
             {
                 for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
                 {
@@ -386,28 +385,24 @@ rtl::Reference< ::chart::BaseCoordinateSystem > getCoordinateSystemOfSeries(
 }
 
 rtl::Reference< ::chart::ChartType > getChartTypeOfSeries(
-    const Reference< chart2::XDataSeries > & xSeries,
+    const rtl::Reference< DataSeries > & xSeries,
     const rtl::Reference< Diagram > & xDiagram )
 {
     rtl::Reference< ::chart::ChartType > xResult;
     rtl::Reference< ::chart::BaseCoordinateSystem > xDummy;
-    rtl::Reference< DataSeries> pSeries = dynamic_cast<DataSeries*>(xSeries.get());
-    assert(pSeries);
-    lcl_getCooSysAndChartTypeOfSeries( pSeries, xDiagram, xDummy, xResult );
+    lcl_getCooSysAndChartTypeOfSeries( xSeries, xDiagram, xDummy, xResult );
 
     return xResult;
 }
 
 void deleteSeries(
-    const Reference< chart2::XDataSeries > & xSeries,
+    const rtl::Reference< ::chart::DataSeries > & xSeries,
     const rtl::Reference< ::chart::ChartType > & xChartType )
 {
     try
     {
-        rtl::Reference<DataSeries> pSeries = dynamic_cast<DataSeries*>(xSeries.get());
-        assert(pSeries);
         std::vector< rtl::Reference< DataSeries > > aSeries = xChartType->getDataSeries2();
-        auto aIt = std::find( aSeries.begin(), aSeries.end(), pSeries );
+        auto aIt = std::find( aSeries.begin(), aSeries.end(), xSeries );
         if( aIt != aSeries.end())
         {
             aSeries.erase( aIt );
@@ -555,11 +550,9 @@ bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSeque
 
 }
 
-bool hasUnhiddenData( const uno::Reference< chart2::XDataSeries >& xSeries )
+bool hasUnhiddenData( const rtl::Reference< DataSeries >& xSeries )
 {
-    uno::Reference< chart2::data::XDataSource > xDataSource( xSeries, uno::UNO_QUERY );
-
-    uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aDataSequences = xDataSource->getDataSequences();
+    uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aDataSequences = xSeries->getDataSequences();
 
     for(sal_Int32 nN = aDataSequences.getLength();nN--;)
     {
@@ -605,16 +598,15 @@ sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nIndex, const Refere
     return nIndex;
 }
 
-bool hasDataLabelsAtSeries( const Reference< chart2::XDataSeries >& xSeries )
+bool hasDataLabelsAtSeries( const rtl::Reference< DataSeries >& xSeries )
 {
     bool bRet = false;
     try
     {
-        Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY );
-        if( xProp.is() )
+        if( xSeries.is() )
         {
             DataPointLabel aLabel;
-            if( xProp->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel )
+            if( xSeries->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel )
                 bRet = aLabel.ShowNumber || aLabel.ShowNumberInPercent || aLabel.ShowCategoryName
                        || aLabel.ShowSeriesName;
         }
@@ -626,16 +618,15 @@ bool hasDataLabelsAtSeries( const Reference< chart2::XDataSeries >& xSeries )
     return bRet;
 }
 
-bool hasDataLabelsAtPoints( const Reference< chart2::XDataSeries >& xSeries )
+bool hasDataLabelsAtPoints( const rtl::Reference< DataSeries >& xSeries )
 {
     bool bRet = false;
     try
     {
-        Reference< beans::XPropertySet > xSeriesProperties( xSeries, uno::UNO_QUERY );
-        if( xSeriesProperties.is() )
+        if( xSeries.is() )
         {
             uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-            if( xSeriesProperties->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
+            if( xSeries->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
             {
                 for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
                 {
@@ -661,23 +652,22 @@ bool hasDataLabelsAtPoints( const Reference< chart2::XDataSeries >& xSeries )
     return bRet;
 }
 
-bool hasDataLabelAtPoint( const Reference< chart2::XDataSeries >& xSeries, sal_Int32 nPointIndex )
+bool hasDataLabelAtPoint( const rtl::Reference< DataSeries >& xSeries, sal_Int32 nPointIndex )
 {
     bool bRet = false;
     try
     {
         Reference< beans::XPropertySet > xProp;
-        Reference< beans::XPropertySet > xSeriesProperties( xSeries, uno::UNO_QUERY );
-        if( xSeriesProperties.is() )
+        if( xSeries.is() )
         {
             uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-            if( xSeriesProperties->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
+            if( xSeries->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
             {
                 auto aIt = std::find( std::as_const(aAttributedDataPointIndexList).begin(), std::as_const(aAttributedDataPointIndexList).end(), nPointIndex );
                 if( aIt != std::as_const(aAttributedDataPointIndexList).end())
                     xProp = xSeries->getDataPointByIndex(nPointIndex);
                 else
-                    xProp = xSeriesProperties;
+                    xProp = xSeries;
             }
             if( xProp.is() )
             {
@@ -696,12 +686,12 @@ bool hasDataLabelAtPoint( const Reference< chart2::XDataSeries >& xSeries, sal_I
     return bRet;
 }
 
-void insertDataLabelsToSeriesAndAllPoints( const Reference< chart2::XDataSeries >& xSeries )
+void insertDataLabelsToSeriesAndAllPoints( const rtl::Reference< DataSeries >& xSeries )
 {
     lcl_insertOrDeleteDataLabelsToSeriesAndAllPoints( xSeries, true /*bInsert*/ );
 }
 
-void deleteDataLabelsFromSeriesAndAllPoints( const Reference< chart2::XDataSeries >& xSeries )
+void deleteDataLabelsFromSeriesAndAllPoints( const rtl::Reference< DataSeries >& xSeries )
 {
     lcl_insertOrDeleteDataLabelsToSeriesAndAllPoints( xSeries, false /*bInsert*/ );
 }
