@@ -61,7 +61,7 @@ void TitleDialogData::readFromModel( const rtl::Reference<::chart::ChartModel>& 
          nTitleIndex < +TitleHelper::NORMAL_TITLE_END;
          nTitleIndex++)
     {
-        uno::Reference< XTitle > xTitle =  TitleHelper::getTitle(
+        rtl::Reference< Title > xTitle =  TitleHelper::getTitle(
             static_cast< TitleHelper::eTitleType >( nTitleIndex ), xChartModel );
         pExistenceList[nTitleIndex] = xTitle.is();
         pTextList[nTitleIndex]=TitleHelper::getCompleteString( xTitle );
@@ -96,7 +96,7 @@ bool TitleDialogData::writeDifferenceToModel(
         else if( !pOldState || ( pOldState->aTextList[nN] != aTextList[nN] ) )
         {
             //change content
-            uno::Reference< XTitle > xTitle(
+            rtl::Reference< Title > xTitle(
                 TitleHelper::getTitle( static_cast< TitleHelper::eTitleType >( nN ), xChartModel ) );
             if(xTitle.is())
             {

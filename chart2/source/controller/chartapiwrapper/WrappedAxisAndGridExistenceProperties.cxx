@@ -287,7 +287,7 @@ Any WrappedAxisTitleExistenceProperty::getPropertyValue( const Reference< beans:
 {
     bool bHasTitle = false;
 
-    Reference< chart2::XTitle > xTitle( TitleHelper::getTitle( m_eTitleType, m_spChart2ModelContact->getDocumentModel() ) );
+    rtl::Reference< Title > xTitle( TitleHelper::getTitle( m_eTitleType, m_spChart2ModelContact->getDocumentModel() ) );
     if( xTitle.is() && !TitleHelper::getCompleteString( xTitle ).isEmpty() )
         bHasTitle = true;
 

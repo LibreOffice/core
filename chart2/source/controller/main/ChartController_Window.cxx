@@ -1195,7 +1195,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     bool bIsAxisVisible = AxisHelper::isAxisVisible( xAxis );
                     bool bIsMajorGridVisible = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, true /*bMainGrid*/, xDiagram );
                     bool bIsMinorGridVisible = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, false /*bMainGrid*/, xDiagram );
-                    bool bHasTitle = !TitleHelper::getCompleteString( xAxis->getTitleObject() ).isEmpty();
+                    bool bHasTitle = !TitleHelper::getCompleteString( xAxis->getTitleObject2() ).isEmpty();
 
                     if( eObjectType  != OBJECTTYPE_AXIS && bIsAxisVisible )
                         lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatAxis" );

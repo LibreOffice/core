@@ -22,6 +22,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include "charttoolsdllapi.hxx"
+#include "Title.hxx"
 
 namespace chart { class ChartModel; }
 namespace chart { class ReferenceSizeProvider; }
@@ -52,23 +53,21 @@ public:
         TITLE_AT_STANDARD_Y_AXIS_POSITION  //equals the X_AXIS_TITLE for barchart
     };
 
-    static css::uno::Reference< css::chart2::XTitle >
+    static rtl::Reference< ::chart::Title >
         getTitle( eTitleType nTitleIndex
                     , ChartModel& rModel );
 
-    static css::uno::Reference< css::chart2::XTitle >
+    static rtl::Reference< ::chart::Title >
         getTitle( eTitleType nTitleIndex
                     , const rtl::Reference< ::chart::ChartModel >& xModel );
 
-    static css::uno::Reference<
-            css::chart2::XTitle >
+    static rtl::Reference< ::chart::Title >
         createTitle(  eTitleType nTitleIndex
                     , const OUString& rTitleText
                     , const rtl::Reference< ::chart::ChartModel >& xModel
                     , const css::uno::Reference< css::uno::XComponentContext > & xContext
                     , ReferenceSizeProvider * pRefSizeProvider = nullptr );
-    static css::uno::Reference<
-            css::chart2::XTitle >
+    static rtl::Reference< ::chart::Title >
           createOrShowTitle(  eTitleType nTitleIndex
                     , const OUString& rTitleText
                     , const rtl::Reference< ::chart::ChartModel >& xModel
@@ -77,14 +76,14 @@ public:
     static void removeTitle( eTitleType nTitleIndex
                     , const rtl::Reference< ::chart::ChartModel >& xModel );
 
-    static OUString getCompleteString( const css::uno::Reference< css::chart2::XTitle >& xTitle );
+    static OUString getCompleteString( const rtl::Reference< ::chart::Title >& xTitle );
     static void setCompleteString( const OUString& rNewText
-        , const css::uno::Reference< css::chart2::XTitle >& xTitle
+        , const rtl::Reference< ::chart::Title >& xTitle
         , const css::uno::Reference< css::uno::XComponentContext > & xContext
         , const float * pDefaultCharHeight = nullptr );
 
     static bool getTitleType( eTitleType& rType
-                    , const css::uno::Reference< css::chart2::XTitle >& xTitle
+                    , const rtl::Reference< ::chart::Title >& xTitle
                     , const rtl::Reference< ::chart::ChartModel >& xModel );
     static void hideTitle( eTitleType nTitleIndex,
             const rtl::Reference< ::chart::ChartModel > & xModel);

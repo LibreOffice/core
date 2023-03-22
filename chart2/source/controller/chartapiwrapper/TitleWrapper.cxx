@@ -75,12 +75,12 @@ WrappedTitleStringProperty::WrappedTitleStringProperty( const Reference< uno::XC
 
 void WrappedTitleStringProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
 {
-    Reference< chart2::XTitle > xTitle(xInnerPropertySet,uno::UNO_QUERY);
-    if(xTitle.is())
+    Title* pTitle = dynamic_cast<Title*>(xInnerPropertySet.get());
+    if(pTitle)
     {
         OUString aString;
         rOuterValue >>= aString;
-        TitleHelper::setCompleteString( aString, xTitle, m_xContext );
+        TitleHelper::setCompleteString( aString, pTitle, m_xContext );
     }
 }
 Any WrappedTitleStringProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const

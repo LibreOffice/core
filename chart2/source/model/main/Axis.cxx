@@ -27,6 +27,7 @@
 #include <AxisHelper.hxx>
 #include <EventListenerHelper.hxx>
 #include <ModifyListenerHelper.hxx>
+#include <Title.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
@@ -356,7 +357,8 @@ Axis::Axis( const Axis & rOther ) :
         lcl_CloneSubGrids( rOther.m_aSubGridProperties, m_aSubGridProperties );
     ModifyListenerHelper::addListenerToAllSequenceElements( m_aSubGridProperties, m_xModifyEventForwarder );
 
-    m_xTitle.set( CloneHelper::CreateRefClone< chart2::XTitle >()( rOther.m_xTitle ));
+    if ( rOther.m_xTitle )
+        m_xTitle = new Title( *rOther.m_xTitle );
     if( m_xTitle.is())
         ModifyListenerHelper::addListener( m_xTitle, m_xModifyEventForwarder );
 }
@@ -494,10 +496,23 @@ Reference< chart2::XTitle > SAL_CALL Axis::getTitleObject()
     return m_xTitle;
 }
 
+rtl::Reference< Title > Axis::getTitleObject2() const
+{
+    MutexGuard aGuard( m_aMutex );
+    return m_xTitle;
+}
+
 void SAL_CALL Axis::setTitleObject( const Reference< chart2::XTitle >& xNewTitle )
 {
+    rtl::Reference<Title> xTitle = dynamic_cast<Title*>(xNewTitle.get());
+    assert(!xNewTitle || xTitle);
+    setTitleObject(xTitle);
+}
+
+void Axis::setTitleObject( const rtl::Reference< Title >& xNewTitle )
+{
     Reference< util::XModifyListener > xModifyEventForwarder;
-    Reference< chart2::XTitle > xOldTitle;
+    rtl::Reference< Title > xOldTitle;
     {
         MutexGuard aGuard( m_aMutex );
         xOldTitle = m_xTitle;

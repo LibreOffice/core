@@ -120,13 +120,13 @@ awt::Rectangle ExplicitValueProvider::AddSubtractAxisTitleSizes(
     awt::Rectangle aRet(rPositionAndSize);
 
     //add axis title sizes to the diagram size
-    uno::Reference<chart2::XTitle> xTitle_Height(
+    rtl::Reference<::chart::Title> xTitle_Height(
         TitleHelper::getTitle(TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, rModel));
-    uno::Reference<chart2::XTitle> xTitle_Width(
+    rtl::Reference<::chart::Title> xTitle_Width(
         TitleHelper::getTitle(TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION, rModel));
-    uno::Reference<chart2::XTitle> xSecondTitle_Height(
+    rtl::Reference<::chart::Title> xSecondTitle_Height(
         TitleHelper::getTitle(TitleHelper::SECONDARY_X_AXIS_TITLE, rModel));
-    uno::Reference<chart2::XTitle> xSecondTitle_Width(
+    rtl::Reference<::chart::Title> xSecondTitle_Width(
         TitleHelper::getTitle(TitleHelper::SECONDARY_Y_AXIS_TITLE, rModel));
     if (xTitle_Height.is() || xTitle_Width.is() || xSecondTitle_Height.is()
         || xSecondTitle_Width.is())

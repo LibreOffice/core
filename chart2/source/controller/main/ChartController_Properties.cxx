@@ -352,7 +352,7 @@ OUString lcl_getTitleCIDForCommand( std::string_view rDispatchCommand, const rtl
     else if( rDispatchCommand == "SecondaryYTitle" )
         nTitleType = TitleHelper::SECONDARY_Y_AXIS_TITLE;
 
-    uno::Reference< XTitle > xTitle( TitleHelper::getTitle( nTitleType, xChartModel ) );
+    rtl::Reference< Title > xTitle( TitleHelper::getTitle( nTitleType, xChartModel ) );
     return ObjectIdentifier::createClassifiedIdentifierForObject( xTitle, xChartModel );
 }
 

@@ -215,9 +215,9 @@ void ChartController::executeDispatch_NewArrangement()
                  eType < TitleHelper::NORMAL_TITLE_END;
                  ++eType )
             {
-                Reference< beans::XPropertyState > xTitleState(
+                rtl::Reference< Title > xTitleState =
                     TitleHelper::getTitle(
-                        static_cast< TitleHelper::eTitleType >( eType ), xModel ), uno::UNO_QUERY );
+                        static_cast< TitleHelper::eTitleType >( eType ), xModel );
                 if( xTitleState.is())
                     xTitleState->setPropertyToDefault( "RelativePosition");
             }

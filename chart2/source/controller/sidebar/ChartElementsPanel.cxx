@@ -146,12 +146,11 @@ void setLegendOverlay(const css::uno::Reference<css::frame::XModel>& xModel, boo
 
 bool isTitleVisible(const rtl::Reference<::chart::ChartModel>& xModel, TitleHelper::eTitleType eTitle)
 {
-    css::uno::Reference<css::uno::XInterface> xTitle = TitleHelper::getTitle(eTitle, xModel);
+    rtl::Reference<Title> xTitle = TitleHelper::getTitle(eTitle, xModel);
     if (!xTitle.is())
         return false;
 
-    css::uno::Reference<css::beans::XPropertySet> xPropSet(xTitle, css::uno::UNO_QUERY_THROW);
-    css::uno::Any aAny = xPropSet->getPropertyValue("Visible");
+    css::uno::Any aAny = xTitle->getPropertyValue("Visible");
     bool bVisible = aAny.get<bool>();
     return bVisible;
 }

@@ -151,7 +151,9 @@ ChartModel::ChartModel( const ChartModel & rOther )
         m_xOldModelAgg->setDelegator( *this );
 
         Reference< util::XModifyListener > xListener;
-        Reference< chart2::XTitle > xNewTitle = CreateRefClone< chart2::XTitle >()( rOther.m_xTitle );
+        rtl::Reference< Title > xNewTitle;
+        if ( rOther.m_xTitle )
+            xNewTitle = new Title(*rOther.m_xTitle);
         rtl::Reference< ::chart::Diagram > xNewDiagram;
         if (rOther.m_xDiagram.is())
             xNewDiagram = new ::chart::Diagram( *rOther.m_xDiagram );
@@ -540,7 +542,7 @@ void SAL_CALL ChartModel::dispose()
     m_xOwnNumberFormatsSupplier.clear();
     m_xChartTypeManager.clear();
     m_xDiagram.clear();
-    DisposeHelper::DisposeAndClear( m_xTitle );
+    m_xTitle.clear();
     m_xPageBackground.clear();
     m_xXMLNamespaceMap.clear();
 
@@ -928,7 +930,20 @@ uno::Reference< chart2::XTitle > SAL_CALL ChartModel::getTitleObject()
     return m_xTitle;
 }
 
-void SAL_CALL ChartModel::setTitleObject( const uno::Reference< chart2::XTitle >& xTitle )
+rtl::Reference< Title > ChartModel::getTitleObject2() const
+{
+    MutexGuard aGuard( m_aModelMutex );
+    return m_xTitle;
+}
+
+void SAL_CALL ChartModel::setTitleObject( const uno::Reference< chart2::XTitle >& xNewTitle )
+{
+    rtl::Reference<Title> xTitle = dynamic_cast<Title*>(xNewTitle.get());
+    assert(!xNewTitle || xTitle);
+    setTitleObject(xTitle);
+}
+
+void ChartModel::setTitleObject( const rtl::Reference< Title >& xTitle )
 {
     {
         MutexGuard aGuard( m_aModelMutex );

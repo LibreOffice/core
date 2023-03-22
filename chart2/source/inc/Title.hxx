@@ -40,7 +40,7 @@ typedef ::cppu::WeakImplHelper<
     Title_Base;
 }
 
-class Title final :
+class OOO_DLLPUBLIC_CHARTTOOLS Title final :
     public impl::Title_Base,
     public ::property::OPropertySet
 {
@@ -58,7 +58,6 @@ public:
     /// merge XTypeProvider implementations
      DECLARE_XTYPEPROVIDER()
 
-private:
     explicit Title( const Title & rOther );
 
     // ____ OPropertySet ____
@@ -83,6 +82,8 @@ private:
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+
+private:
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

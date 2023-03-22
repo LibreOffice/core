@@ -410,9 +410,9 @@ OUString ObjectNameProvider::getTitleName( std::u16string_view rObjectCID
 {
     OUString aRet;
 
-    Reference< XTitle > xTitle(
-        ObjectIdentifier::getObjectPropertySet( rObjectCID , xChartModel ), uno::UNO_QUERY );
-    if( xTitle.is() )
+    rtl::Reference<Title> xTitle =
+        dynamic_cast<Title*>(ObjectIdentifier::getObjectPropertySet( rObjectCID , xChartModel ).get());
+    if( xTitle )
     {
         TitleHelper::eTitleType eType;
         if( TitleHelper::getTitleType( eType, xTitle, xChartModel ) )

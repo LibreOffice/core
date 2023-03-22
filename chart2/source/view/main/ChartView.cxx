@@ -1072,7 +1072,7 @@ std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
         nXDistance = 450; // 1/100 mm
     }
 
-    uno::Reference< XTitle > xTitle( TitleHelper::getTitle( eType, rModel ) );
+    rtl::Reference< Title > xTitle( TitleHelper::getTitle( eType, rModel ) );
     OUString aCompleteString = TitleHelper::getCompleteString(xTitle);
     if (aCompleteString.isEmpty() || !VTitle::isVisible(xTitle))
         return apVTitle;
@@ -1109,8 +1109,7 @@ std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
     rbAutoPosition = true;
     awt::Point aNewPosition(0,0);
     chart2::RelativePosition aRelativePosition;
-    uno::Reference<beans::XPropertySet> xProp(xTitle, uno::UNO_QUERY);
-    if (xProp.is() && (xProp->getPropertyValue("RelativePosition") >>= aRelativePosition))
+    if (xTitle.is() && (xTitle->getPropertyValue("RelativePosition") >>= aRelativePosition))
     {
         rbAutoPosition = false;
 

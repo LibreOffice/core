@@ -31,6 +31,7 @@
 
 namespace chart
 {
+class Title;
 
 namespace impl
 {
@@ -101,6 +102,9 @@ public:
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
+    rtl::Reference< ::chart::Title > getTitleObject2() const;
+    void setTitleObject( const rtl::Reference< ::chart::Title >& xNewTitle );
+
 private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
@@ -126,7 +130,7 @@ private:
 
     css::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > >     m_aSubGridProperties;
 
-    css::uno::Reference< css::chart2::XTitle >          m_xTitle;
+    rtl::Reference< ::chart::Title >          m_xTitle;
 };
 
 } //  namespace chart

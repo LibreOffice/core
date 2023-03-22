@@ -139,20 +139,23 @@ uno::Reference< XTitled > lcl_getTitleParent( TitleHelper::eTitleType nTitleInde
 
 }
 
-uno::Reference< XTitle > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIndex
+rtl::Reference< Title > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIndex
                             , ChartModel& rModel )
 {
     if(nTitleIndex == TitleHelper::MAIN_TITLE)
-        return rModel.getTitleObject();
+        return rModel.getTitleObject2();
 
     rtl::Reference< Diagram > xDiagram = rModel.getFirstChartDiagram();
     uno::Reference< XTitled > xTitled( lcl_getTitleParent( nTitleIndex, xDiagram ) );
-    if( xTitled.is())
-        return xTitled->getTitleObject();
-    return nullptr;
+    if( !xTitled )
+        return nullptr;
+    uno::Reference<XTitle> xTitle = xTitled->getTitleObject();
+    auto pTitle = dynamic_cast<Title*>(xTitle.get());
+    assert(!xTitle || pTitle);
+    return pTitle;
 }
 
-uno::Reference< XTitle > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIndex
+rtl::Reference< Title > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIndex
                             , const rtl::Reference<ChartModel>& xModel )
 {
     uno::Reference< XTitled > xTitled;
@@ -167,22 +170,24 @@ uno::Reference< XTitle > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIn
             xDiagram = xModel->getFirstChartDiagram();
         xTitled = lcl_getTitleParent( nTitleIndex, xDiagram );
     }
-    if( xTitled.is())
-        return xTitled->getTitleObject();
-    return nullptr;
+    if( !xTitled )
+        return nullptr;
+    uno::Reference<XTitle> xTitle = xTitled->getTitleObject();
+    Title* pTitle = dynamic_cast<Title*>(xTitle.get());
+    assert(!xTitle || pTitle);
+    return pTitle;
 }
 
-uno::Reference< XTitle > TitleHelper::createOrShowTitle(
+rtl::Reference< Title > TitleHelper::createOrShowTitle(
       TitleHelper::eTitleType eTitleType
     , const OUString& rTitleText
     , const rtl::Reference<ChartModel>& xModel
     , const uno::Reference< uno::XComponentContext > & xContext )
 {
-    uno::Reference< chart2::XTitle > xTitled( TitleHelper::getTitle( eTitleType, xModel ) );
+    rtl::Reference< Title > xTitled( TitleHelper::getTitle( eTitleType, xModel ) );
     if( xTitled.is())
     {
-        css::uno::Reference<css::beans::XPropertySet> xProps(xTitled, css::uno::UNO_QUERY_THROW);
-        xProps->setPropertyValue("Visible",css::uno::Any(true));
+        xTitled->setPropertyValue("Visible",css::uno::Any(true));
         return xTitled;
     }
     else
@@ -191,7 +196,7 @@ uno::Reference< XTitle > TitleHelper::createOrShowTitle(
     }
 }
 
-uno::Reference< XTitle > TitleHelper::createTitle(
+rtl::Reference< Title > TitleHelper::createTitle(
       TitleHelper::eTitleType eTitleType
     , const OUString& rTitleText
     , const rtl::Reference<ChartModel>& xModel
@@ -289,7 +294,7 @@ uno::Reference< XTitle > TitleHelper::createTitle(
 
 }
 
-OUString TitleHelper::getCompleteString( const uno::Reference< XTitle >& xTitle )
+OUString TitleHelper::getCompleteString( const rtl::Reference< Title >& xTitle )
 {
     if(!xTitle.is())
         return OUString();
@@ -301,7 +306,7 @@ OUString TitleHelper::getCompleteString( const uno::Reference< XTitle >& xTitle 
 }
 
 void TitleHelper::setCompleteString( const OUString& rNewText
-                    , const uno::Reference< XTitle >& xTitle
+                    , const rtl::Reference< Title >& xTitle
                     , const uno::Reference< uno::XComponentContext > & xContext
                     , const float * pDefaultCharHeight /* = 0 */ )
 {
@@ -312,9 +317,8 @@ void TitleHelper::setCompleteString( const OUString& rNewText
     OUString aNewText = rNewText;
 
     bool bStacked = false;
-    uno::Reference< beans::XPropertySet > xTitleProperties( xTitle, uno::UNO_QUERY );
-    if( xTitleProperties.is() )
-        xTitleProperties->getPropertyValue( "StackCharacters" ) >>= bStacked;
+    if( xTitle.is() )
+        xTitle->getPropertyValue( "StackCharacters" ) >>= bStacked;
 
     if( bStacked )
     {
@@ -384,13 +388,13 @@ void TitleHelper::removeTitle( TitleHelper::eTitleType nTitleIndex
 }
 
 bool TitleHelper::getTitleType( eTitleType& rType
-                    , const css::uno::Reference< css::chart2::XTitle >& xTitle
+                    , const rtl::Reference< Title >& xTitle
                     , const rtl::Reference<ChartModel>& xModel )
 {
     if( !xTitle.is() || !xModel.is() )
         return false;
 
-    Reference< chart2::XTitle > xCurrentTitle;
+    rtl::Reference< Title > xCurrentTitle;
     for( sal_Int32 nTitleType = TITLE_BEGIN; nTitleType < NORMAL_TITLE_END; nTitleType++ )
     {
         xCurrentTitle = TitleHelper::getTitle( static_cast<eTitleType>(nTitleType), xModel );

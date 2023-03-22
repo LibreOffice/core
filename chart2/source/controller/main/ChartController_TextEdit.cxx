@@ -144,8 +144,8 @@ bool ChartController::EndTextEdit()
         // lock controllers till end of block
         ControllerLockGuardUNO aCLGuard( getChartModel() );
 
-        TitleHelper::setCompleteString( aString, uno::Reference<
-            css::chart2::XTitle >::query( xPropSet ), m_xCC );
+        Title* pTitle = dynamic_cast<Title*>(xPropSet.get());
+        TitleHelper::setCompleteString( aString, pTitle, m_xCC );
 
         OSL_ENSURE(m_pTextActionUndoGuard, "ChartController::EndTextEdit: no TextUndoGuard!");
         if (m_pTextActionUndoGuard)

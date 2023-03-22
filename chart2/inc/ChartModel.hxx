@@ -76,6 +76,7 @@ class ChartTypeTemplate;
 class InternalDataProvider;
 class NameContainer;
 class PageBackground;
+class Title;
 
 namespace impl
 {
@@ -167,8 +168,7 @@ private:
     // Diagram Access
     rtl::Reference< ::chart::Diagram > m_xDiagram;
 
-    css::uno::Reference< css::chart2::XTitle >
-                                          m_xTitle;
+    rtl::Reference< ::chart::Title > m_xTitle;
 
     rtl::Reference< ::chart::PageBackground > m_xPageBackground;
 
@@ -474,6 +474,9 @@ public:
     void removeDataProviders();
 
     const rtl::Reference< ::chart::ChartTypeManager > & getTypeManager() const { return m_xChartTypeManager; }
+
+    rtl::Reference< ::chart::Title > getTitleObject2() const;
+    void setTitleObject( const rtl::Reference< ::chart::Title >& Title );
 
 private:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;

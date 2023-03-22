@@ -813,7 +813,7 @@ void ChartController::executeDispatch_InsertAxisTitle()
 {
     try
     {
-        uno::Reference< XTitle > xTitle;
+        rtl::Reference< Title > xTitle;
         {
             UndoGuard aUndoGuard(
             ActionDescriptionProvider::createDescription(

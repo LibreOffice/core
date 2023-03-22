@@ -143,10 +143,10 @@ AllTitleItemConverter::AllTitleItemConverter(
 {
     for(sal_Int32 nTitle = TitleHelper::TITLE_BEGIN; nTitle < TitleHelper::NORMAL_TITLE_END; nTitle++ )
     {
-        uno::Reference< chart2::XTitle > xTitle( TitleHelper::getTitle( TitleHelper::eTitleType(nTitle), xChartModel ) );
+        rtl::Reference< Title > xTitle( TitleHelper::getTitle( TitleHelper::eTitleType(nTitle), xChartModel ) );
         if(!xTitle.is())
             continue;
-        uno::Reference< beans::XPropertySet > xObjectProperties( xTitle, uno::UNO_QUERY);
+        uno::Reference< beans::XPropertySet > xObjectProperties( xTitle );
         m_aConverters.emplace_back(
             new ::chart::wrapper::TitleItemConverter(
                 xObjectProperties, rItemPool, rDrawModel, xNamedPropertyContainerFactory, nullptr));

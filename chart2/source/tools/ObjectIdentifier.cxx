@@ -288,6 +288,25 @@ bool ObjectIdentifier::operator<( const ObjectIdentifier& rOID ) const
 }
 
 OUString ObjectIdentifier::createClassifiedIdentifierForObject(
+          const rtl::Reference< ::chart::Title >& xTitle
+        , const rtl::Reference<::chart::ChartModel>& xChartModel )
+{
+    TitleHelper::eTitleType aTitleType;
+    OUString aRet;
+    const std::u16string_view aObjectID;
+    const std::u16string_view aDragMethodServiceName;
+    const std::u16string_view aDragParameterString;
+    if( TitleHelper::getTitleType( aTitleType, xTitle, xChartModel ) )
+    {
+        enum ObjectType eObjectType = OBJECTTYPE_TITLE;
+        OUString aParentParticle = lcl_getTitleParentParticle( aTitleType );
+        aRet = ObjectIdentifier::createClassifiedIdentifierWithParent(
+            eObjectType, aObjectID, aParentParticle, aDragMethodServiceName, aDragParameterString );
+    }
+    return aRet;
+}
+
+OUString ObjectIdentifier::createClassifiedIdentifierForObject(
           const Reference< uno::XInterface >& xObject
         , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
@@ -302,20 +321,8 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
     try
     {
         //title
-        Reference< XTitle > xTitle( xObject, uno::UNO_QUERY );
-        if( xTitle.is() )
-        {
-            TitleHelper::eTitleType aTitleType;
-            if( TitleHelper::getTitleType( aTitleType, xTitle, xChartModel ) )
-            {
-                eObjectType = OBJECTTYPE_TITLE;
-                aParentParticle = lcl_getTitleParentParticle( aTitleType );
-                aRet = ObjectIdentifier::createClassifiedIdentifierWithParent(
-                    eObjectType, aObjectID, aParentParticle, aDragMethodServiceName, aDragParameterString );
-            }
-            return aRet;
-
-        }
+        if( ::chart::Title* pTitle = dynamic_cast<::chart::Title*>(xObject.get()) )
+            return createClassifiedIdentifierForObject(rtl::Reference<Title>(pTitle), xChartModel);
 
         uno::Reference<chart2::XDataTable> xDataTable(xObject, uno::UNO_QUERY);
         if (xDataTable.is())
@@ -1113,8 +1120,8 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
             case OBJECTTYPE_TITLE:
                 {
                     TitleHelper::eTitleType aTitleType = getTitleTypeForCID( rObjectCID );
-                    Reference< XTitle > xTitle( TitleHelper::getTitle( aTitleType, xChartModel ) );
-                    xObjectProperties.set( xTitle, uno::UNO_QUERY );
+                    rtl::Reference< Title > xTitle( TitleHelper::getTitle( aTitleType, xChartModel ) );
+                    xObjectProperties = xTitle;
                 }
                 break;
             case OBJECTTYPE_LEGEND:
