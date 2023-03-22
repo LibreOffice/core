@@ -150,11 +150,11 @@ namespace svxform
         std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
 
         if (DGTInstance == m_eGroup)
-            xMenu->set_visible("additem", false);
+            xMenu->remove("additem");
         else
         {
-            xMenu->set_visible("addelement", false);
-            xMenu->set_visible("addattribute", false);
+            xMenu->remove("addelement");
+            xMenu->remove("addattribute");
 
             if (DGTSubmission == m_eGroup)
             {
