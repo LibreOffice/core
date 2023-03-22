@@ -89,6 +89,13 @@ public:
     // check if it is defined by a single color, then it is no gradient at all
     bool hasSingleColor() const;
 
+    // MCGR: Check if rendering cannot be handled by old vcl stuff
+    // due to various restrictions, based on local parameters. There
+    // may be even more reasons on caller's side, e.g. a
+    // ViewTransformation that uses shear/rotate/mirror (what VCL
+    // cannot do at all)
+    bool cannotBeHandledByVCL() const;
+
     // compare operator
     bool operator==(const FillGradientAttribute& rCandidate) const;
 
