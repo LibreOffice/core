@@ -888,7 +888,7 @@ void DataBrowserModel::updateFromModel()
 }
 
 void DataBrowserModel::addErrorBarRanges(
-    const Reference< chart2::XDataSeries > & xDataSeries,
+    const rtl::Reference< DataSeries > & xDataSeries,
     sal_Int32 nNumberFormatKey,
     sal_Int32 & rInOutSequenceIndex,
     sal_Int32 & rInOutHeaderEnd, bool bYError )
@@ -918,9 +918,7 @@ void DataBrowserModel::addErrorBarRanges(
 
         for (uno::Reference<chart2::data::XLabeledDataSequence> const & rDataSequence : aSequences)
         {
-            rtl::Reference<DataSeries> pDataSeries = dynamic_cast<DataSeries*>(xDataSeries.get());
-            assert(pDataSeries || !xDataSeries);
-            m_aColumns.emplace_back(pDataSeries, lcl_getUIRoleName(rDataSequence),
+            m_aColumns.emplace_back(xDataSeries, lcl_getUIRoleName(rDataSequence),
                                              rDataSequence, NUMBER, nNumberFormatKey);
             ++rInOutSequenceIndex;
             ++rInOutHeaderEnd;

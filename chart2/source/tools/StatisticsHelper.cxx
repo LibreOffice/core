@@ -18,6 +18,7 @@
  */
 
 #include <StatisticsHelper.hxx>
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <ErrorBar.hxx>
 #include <unonames.hxx>
@@ -281,18 +282,17 @@ void StatisticsHelper::setErrorDataSequence(
 }
 
 Reference< beans::XPropertySet > StatisticsHelper::addErrorBars(
-    const Reference< chart2::XDataSeries > & xDataSeries,
+    const rtl::Reference< DataSeries > & xDataSeries,
     sal_Int32 nStyle,
     bool bYError /* = true */ )
 {
     Reference< beans::XPropertySet > xErrorBar;
-    Reference< beans::XPropertySet > xSeriesProp( xDataSeries, uno::UNO_QUERY );
-    if( !xSeriesProp.is())
+    if( !xDataSeries.is())
         return xErrorBar;
 
     const OUString aPropName(
             bYError ? OUString(CHART_UNONAME_ERRORBAR_Y) : OUString(CHART_UNONAME_ERRORBAR_X));
-    if( !( xSeriesProp->getPropertyValue( aPropName ) >>= xErrorBar ) ||
+    if( !( xDataSeries->getPropertyValue( aPropName ) >>= xErrorBar ) ||
         !xErrorBar.is())
     {
         xErrorBar.set( new ErrorBar );
@@ -304,28 +304,27 @@ Reference< beans::XPropertySet > StatisticsHelper::addErrorBars(
         xErrorBar->setPropertyValue( "ErrorBarStyle", uno::Any( nStyle ));
     }
 
-    xSeriesProp->setPropertyValue( aPropName, uno::Any( xErrorBar ));
+    xDataSeries->setPropertyValue( aPropName, uno::Any( xErrorBar ));
 
     return xErrorBar;
 }
 
 Reference< beans::XPropertySet > StatisticsHelper::getErrorBars(
-    const Reference< chart2::XDataSeries > & xDataSeries,
+    const rtl::Reference< DataSeries > & xDataSeries,
     bool bYError /* = true */ )
 {
-    Reference< beans::XPropertySet > xSeriesProp( xDataSeries, uno::UNO_QUERY );
     Reference< beans::XPropertySet > xErrorBar;
     const OUString aPropName(
             bYError ? OUString(CHART_UNONAME_ERRORBAR_Y) : OUString(CHART_UNONAME_ERRORBAR_X));
 
-    if ( xSeriesProp.is())
-        xSeriesProp->getPropertyValue( aPropName ) >>= xErrorBar;
+    if ( xDataSeries.is())
+        xDataSeries->getPropertyValue( aPropName ) >>= xErrorBar;
 
     return xErrorBar;
 }
 
 bool StatisticsHelper::hasErrorBars(
-    const Reference< chart2::XDataSeries > & xDataSeries,
+    const rtl::Reference< DataSeries > & xDataSeries,
     bool bYError /* = true */ )
 {
     Reference< beans::XPropertySet > xErrorBar( getErrorBars( xDataSeries, bYError ));
@@ -337,7 +336,7 @@ bool StatisticsHelper::hasErrorBars(
 }
 
 void StatisticsHelper::removeErrorBars(
-    const Reference< chart2::XDataSeries > & xDataSeries,
+    const rtl::Reference< DataSeries > & xDataSeries,
     bool bYError /* = true  */ )
 {
     Reference< beans::XPropertySet > xErrorBar( getErrorBars( xDataSeries, bYError ));
@@ -347,7 +346,7 @@ void StatisticsHelper::removeErrorBars(
 }
 
 bool StatisticsHelper::usesErrorBarRanges(
-    const Reference< chart2::XDataSeries > & xDataSeries,
+    const rtl::Reference< DataSeries > & xDataSeries,
     bool bYError /* = true */ )
 {
     Reference< beans::XPropertySet > xErrorBar( getErrorBars( xDataSeries, bYError ));

@@ -146,7 +146,7 @@ private:
     void removeComplexCategoryLevel( sal_Int32 nAtColumnIndex );
 
     void addErrorBarRanges(
-        const css::uno::Reference<css::chart2::XDataSeries > & xDataSeries,
+        const rtl::Reference<::chart::DataSeries > & xDataSeries,
         sal_Int32 nNumberFormatKey,
         sal_Int32 & rInOutSequenceIndex,
         sal_Int32 & rInOutHeaderEnd, bool bYError );

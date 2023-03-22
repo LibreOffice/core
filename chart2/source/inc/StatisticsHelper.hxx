@@ -20,6 +20,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 #include "charttoolsdllapi.hxx"
 
 namespace com::sun::star::beans { class XPropertySet; }
@@ -30,6 +31,7 @@ namespace com::sun::star::chart2::data { class XDataSource; }
 namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
 namespace com::sun::star::uno { template <typename > class Sequence; }
 namespace chart { class LabeledDataSequence; }
+namespace chart { class DataSeries; }
 
 namespace chart::StatisticsHelper
 {
@@ -74,25 +76,25 @@ namespace chart::StatisticsHelper
     /// @return the newly created or existing error bar object
     OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::beans::XPropertySet >
         addErrorBars(
-            const css::uno::Reference< css::chart2::XDataSeries > & xDataSeries,
+            const rtl::Reference< ::chart::DataSeries > & xDataSeries,
             sal_Int32 nStyle,
             bool bYError = true );
 
     OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::beans::XPropertySet >
         getErrorBars(
-            const css::uno::Reference< css::chart2::XDataSeries > & xDataSeries,
+            const rtl::Reference< ::chart::DataSeries > & xDataSeries,
             bool bYError = true );
 
     OOO_DLLPUBLIC_CHARTTOOLS bool hasErrorBars(
-        const css::uno::Reference< css::chart2::XDataSeries > & xDataSeries,
+        const rtl::Reference< ::chart::DataSeries > & xDataSeries,
         bool bYError = true );
 
     OOO_DLLPUBLIC_CHARTTOOLS void removeErrorBars(
-        const css::uno::Reference< css::chart2::XDataSeries > & xDataSeries,
+        const rtl::Reference< ::chart::DataSeries > & xDataSeries,
         bool bYError = true );
 
     OOO_DLLPUBLIC_CHARTTOOLS bool usesErrorBarRanges(
-        const css::uno::Reference< css::chart2::XDataSeries > & xDataSeries,
+        const rtl::Reference< ::chart::DataSeries > & xDataSeries,
         bool bYError = true );
 
 } //  namespace chart
