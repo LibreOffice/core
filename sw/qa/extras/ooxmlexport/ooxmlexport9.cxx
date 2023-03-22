@@ -848,12 +848,19 @@ DECLARE_OOXMLEXPORT_TEST(testBnc519228OddBreaks, "bnc519228_odd-breaksB.docx")
     getParagraphOfText( 1, getProperty< uno::Reference<text::XText> >(page5Style, "HeaderText"), "This is the header for odd pages");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf79329, "tdf79329.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf79329)
 {
-    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
-    // This was 1: only the inner, not the outer table was created.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xTables->getCount());
+    SwModelTestBase::FlySplitGuard aGuard;
+    auto verify = [this]() {
+        uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+        // This was 1: only the inner, not the outer table was created.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xTables->getCount());
+    };
+    createSwDoc("tdf79329.docx");
+    verify();
+    reload(mpFilter, "tdf79329.docx");
+    verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf103982)

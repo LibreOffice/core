@@ -1618,9 +1618,10 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                 // Only execute the conversion if the table is not anchored at
                 // the start of an outer table cell, that's not yet
                 // implemented.
-                // Tables starting at cell start are not a problem if we don't delay via
-                // m_aPendingFloatingTables.
-                if (xTextAppendAndConvert.is() && (!bTableStartsAtCellStart || IsFlySplitAllowed()))
+                // Multi-page floating tables works if an outer/toplevel table is floating, but not
+                // when an inner table would float.
+                bool bToplevelSplitFly = IsFlySplitAllowed() && nestedTableLevel <= 1;
+                if (xTextAppendAndConvert.is() && (!bTableStartsAtCellStart || bToplevelSplitFly))
                 {
                     std::deque<css::uno::Any> aFramedRedlines = m_rDMapper_Impl.m_aStoredRedlines[StoredRedlines::FRAME];
                     std::vector<sal_Int32> redPos, redLen;
