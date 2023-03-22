@@ -58,6 +58,7 @@ A11yCheckIssuesPanel::A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* p
     : PanelLayout(pParent, "A11yCheckIssuesPanel", "modules/swriter/ui/a11ycheckissuespanel.ui")
     , m_xAccessibilityCheckBox(m_xBuilder->weld_box("accessibilityCheckBox"))
     , m_xScrolledWindow(m_xBuilder->weld_scrolled_window("scrolledwindow"))
+    , mpDoc(nullptr)
     , maA11yCheckController(FN_STAT_ACCESSIBILITY_CHECK, *pBindings, *this)
     , mnIssueCount(0)
 {
