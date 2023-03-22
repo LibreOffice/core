@@ -36,6 +36,7 @@ namespace sdr::properties
             }
             else
             {
+                RectangleProperties::applyDefaultStyleSheetFromSdrModel();
                 SetMergedItem(XFillStyleItem(com::sun::star::drawing::FillStyle_NONE));
                 SetMergedItem(XLineStyleItem(com::sun::star::drawing::LineStyle_NONE));
             }

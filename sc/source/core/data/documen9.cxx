@@ -130,6 +130,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
             OSL_ENSURE(!pLocalPool->GetSecondaryPool(), "OOps, already a secondary pool set where the DrawingLayer ItemPool is to be placed (!)");
             pLocalPool->SetSecondaryPool(&mpDrawLayer->GetItemPool());
         }
+        mpDrawLayer->CreateDefaultStyles();
     }
 
     //  Drawing pages are accessed by table number, so they must also be present

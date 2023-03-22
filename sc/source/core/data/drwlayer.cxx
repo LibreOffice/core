@@ -343,6 +343,13 @@ ScDrawLayer::~ScDrawLayer()
     }
 }
 
+void ScDrawLayer::CreateDefaultStyles()
+{
+    // Default
+    auto pSheet = &GetStyleSheetPool()->Make(ScResId(STR_STYLENAME_STANDARD), SfxStyleFamily::Frame, SfxStyleSearchBits::ScStandard);
+    SetDefaultStyleSheet(static_cast<SfxStyleSheet*>(pSheet));
+}
+
 void ScDrawLayer::UseHyphenator()
 {
     if (!bHyphenatorSet)

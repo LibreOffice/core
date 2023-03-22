@@ -118,6 +118,7 @@ public:
     virtual SdrModel* AllocModel() const override;
     virtual void    SetChanged( bool bFlg = true ) override;
 
+    void            CreateDefaultStyles();
     bool            HasObjects() const;
 
     bool            ScAddPage( SCTAB nTab );

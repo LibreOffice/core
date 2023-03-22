@@ -759,6 +759,11 @@ void ScPostIt::CreateCaption( const ScAddress& rPos, const SdrCaptionObj* pCapti
     }
     else
     {
+        // set default size, undoing sdr::TextProperties::SetStyleSheet's
+        // adjustment that use a wrong min height.
+        maNoteData.mxCaption->SetMergedItem(makeSdrTextMinFrameHeightItem(SC_NOTECAPTION_HEIGHT));
+        maNoteData.mxCaption->SetMergedItem(makeSdrTextMinFrameWidthItem(SC_NOTECAPTION_WIDTH));
+        maNoteData.mxCaption->NbcAdjustTextFrameWidthAndHeight();
         // set default formatting and default position
         ScCaptionUtil::SetDefaultItems( *maNoteData.mxCaption, mrDoc, nullptr );
         aCreator.AutoPlaceCaption();
