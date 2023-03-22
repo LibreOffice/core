@@ -101,7 +101,7 @@ bool cppu::nextDirectoryItem(osl::Directory & directory, OUString * url) {
         if (stat.getFileType() != osl::FileStatus::Directory) { //TODO: symlinks
             // Ignore backup and spurious junk files:
             OUString name(stat.getFileName());
-            if (name.match(".") || !name.endsWithIgnoreAsciiCase(u".rdb")) {
+            if (name.startsWith(".") || !name.endsWithIgnoreAsciiCase(u".rdb")) {
                 SAL_WARN("cppuhelper", "ignoring <" << stat.getFileURL() << ">");
             } else {
                 *url = stat.getFileURL();
