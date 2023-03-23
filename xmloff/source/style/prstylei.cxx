@@ -70,73 +70,73 @@ void XMLPropStyleContext::SetAttribute( sal_Int32 nElement,
 
 namespace
 {
-    struct theStandardSet :
-        public rtl::StaticWithInit<OldFillStyleDefinitionSet, theStandardSet>
+    const OldFillStyleDefinitionSet & theStandardSet()
     {
-        OldFillStyleDefinitionSet operator () ()
-        {
-            OldFillStyleDefinitionSet aSet;
-            aSet.insert("BackColorRGB");
-            aSet.insert("BackTransparent");
-            aSet.insert("BackColorTransparency");
-            aSet.insert("BackGraphic");
-            aSet.insert("BackGraphicFilter");
-            aSet.insert("BackGraphicLocation");
-            aSet.insert("BackGraphicTransparency");
-            return aSet;
-        }
+        static const OldFillStyleDefinitionSet theSet = []()
+            {
+                OldFillStyleDefinitionSet aSet;
+                aSet.insert("BackColorRGB");
+                aSet.insert("BackTransparent");
+                aSet.insert("BackColorTransparency");
+                aSet.insert("BackGraphic");
+                aSet.insert("BackGraphicFilter");
+                aSet.insert("BackGraphicLocation");
+                aSet.insert("BackGraphicTransparency");
+                return aSet;
+            }();
+        return theSet;
     };
-    struct theHeaderSet :
-        public rtl::StaticWithInit<OldFillStyleDefinitionSet, theHeaderSet>
+    const OldFillStyleDefinitionSet & theHeaderSet()
     {
-        OldFillStyleDefinitionSet operator () ()
-        {
-            OldFillStyleDefinitionSet aSet;
-            aSet.insert("HeaderBackColorRGB");
-            aSet.insert("HeaderBackTransparent");
-            aSet.insert("HeaderBackColorTransparency");
-            aSet.insert("HeaderBackGraphic");
-            aSet.insert("HeaderBackGraphicFilter");
-            aSet.insert("HeaderBackGraphicLocation");
-            aSet.insert("HeaderBackGraphicTransparency");
-            return aSet;
-        }
+        static const OldFillStyleDefinitionSet theSet = []()
+            {
+                OldFillStyleDefinitionSet aSet;
+                aSet.insert("HeaderBackColorRGB");
+                aSet.insert("HeaderBackTransparent");
+                aSet.insert("HeaderBackColorTransparency");
+                aSet.insert("HeaderBackGraphic");
+                aSet.insert("HeaderBackGraphicFilter");
+                aSet.insert("HeaderBackGraphicLocation");
+                aSet.insert("HeaderBackGraphicTransparency");
+                return aSet;
+            }();
+        return theSet;
     };
-    struct theFooterSet :
-        public rtl::StaticWithInit<OldFillStyleDefinitionSet, theFooterSet>
+    const OldFillStyleDefinitionSet & theFooterSet()
     {
-        OldFillStyleDefinitionSet operator () ()
-        {
-            OldFillStyleDefinitionSet aSet;
-            aSet.insert("FooterBackColorRGB");
-            aSet.insert("FooterBackTransparent");
-            aSet.insert("FooterBackColorTransparency");
-            aSet.insert("FooterBackGraphic");
-            aSet.insert("FooterBackGraphicFilter");
-            aSet.insert("FooterBackGraphicLocation");
-            aSet.insert("FooterBackGraphicTransparency");
-            return aSet;
-        }
+        static const OldFillStyleDefinitionSet theSet = []()
+            {
+                OldFillStyleDefinitionSet aSet;
+                aSet.insert("FooterBackColorRGB");
+                aSet.insert("FooterBackTransparent");
+                aSet.insert("FooterBackColorTransparency");
+                aSet.insert("FooterBackGraphic");
+                aSet.insert("FooterBackGraphicFilter");
+                aSet.insert("FooterBackGraphicLocation");
+                aSet.insert("FooterBackGraphicTransparency");
+                return aSet;
+            }();
+        return theSet;
     };
-    struct theParaSet :
-        public rtl::StaticWithInit<OldFillStyleDefinitionSet, theParaSet>
+    const OldFillStyleDefinitionSet & theParaSet()
     {
-        OldFillStyleDefinitionSet operator () ()
-        {
-            OldFillStyleDefinitionSet aSet;
-            // Caution: here it is *not* 'ParaBackColorRGB' as it should be, but indeed
-            // 'ParaBackColor' is used, see aXMLParaPropMap definition (line 313)
-            aSet.insert("ParaBackColor");
-            aSet.insert("ParaBackTransparent");
-            aSet.insert("ParaBackGraphicLocation");
-            aSet.insert("ParaBackGraphicFilter");
-            aSet.insert("ParaBackGraphic");
+        static const OldFillStyleDefinitionSet theSet = []()
+            {
+                OldFillStyleDefinitionSet aSet;
+                // Caution: here it is *not* 'ParaBackColorRGB' as it should be, but indeed
+                // 'ParaBackColor' is used, see aXMLParaPropMap definition (line 313)
+                aSet.insert("ParaBackColor");
+                aSet.insert("ParaBackTransparent");
+                aSet.insert("ParaBackGraphicLocation");
+                aSet.insert("ParaBackGraphicFilter");
+                aSet.insert("ParaBackGraphic");
 
-            // These are not used in aXMLParaPropMap definition, thus not needed here
-            // aSet.insert("ParaBackColorTransparency");
-            // aSet.insert("ParaBackGraphicTransparency");
-            return aSet;
-        }
+                // These are not used in aXMLParaPropMap definition, thus not needed here
+                // aSet.insert("ParaBackColorTransparency");
+                // aSet.insert("ParaBackGraphicTransparency");
+                return aSet;
+            }();
+        return theSet;
     };
 }
 
@@ -159,17 +159,17 @@ XMLPropStyleContext::~XMLPropStyleContext()
 
 const OldFillStyleDefinitionSet& XMLPropStyleContext::getStandardSet()
 {
-    return theStandardSet::get();
+    return theStandardSet();
 }
 
 const OldFillStyleDefinitionSet& XMLPropStyleContext::getHeaderSet()
 {
-    return theHeaderSet::get();
+    return theHeaderSet();
 }
 
 const OldFillStyleDefinitionSet& XMLPropStyleContext::getFooterSet()
 {
-    return theFooterSet::get();
+    return theFooterSet();
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > XMLPropStyleContext::createFastChildContext(
@@ -272,7 +272,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
 
         if(doNewDrawingLayerFillStyleDefinitionsExist(s_FillStyle))
         {
-            deactivateOldFillStyleDefinitions(theParaSet::get());
+            deactivateOldFillStyleDefinitions(theParaSet());
             bDrawingLayerFillStylesUsed = true;
         }
     }

@@ -613,17 +613,10 @@ void SvtFilterOptions::SetVisio2Draw(bool bFlag)
     SetModified();
 }
 
-namespace
-{
-    class theFilterOptions
-         : public rtl::Static<SvtFilterOptions, theFilterOptions>
-    {
-    };
-}
-
 SvtFilterOptions& SvtFilterOptions::Get()
 {
-    return theFilterOptions::get();
+    static SvtFilterOptions aOptions;
+    return aOptions;
 }
 
 bool SvtFilterOptions::IsEnablePPTPreview() const

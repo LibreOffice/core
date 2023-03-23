@@ -188,22 +188,11 @@ namespace dxcanvas
         return uno::Any();
     }
 
-    namespace
-    {
-        struct DeviceColorSpace: public rtl::StaticWithInit<uno::Reference<rendering::XColorSpace>,
-                                                            DeviceColorSpace>
-        {
-            uno::Reference<rendering::XColorSpace> operator()()
-            {
-                return vcl::unotools::createStandardColorSpace();
-            }
-        };
-    }
-
     uno::Reference<rendering::XColorSpace> DeviceHelper::getColorSpace() const
     {
         // always the same
-        return DeviceColorSpace::get();
+        static uno::Reference<rendering::XColorSpace> theSpace = vcl::unotools::createStandardColorSpace();
+        return theSpace;
     }
 }
 

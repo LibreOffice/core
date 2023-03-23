@@ -245,13 +245,15 @@ IMPL_STATIC_LINK(MissingPluginInstaller, launchUi, void *, p, void)
 }
 
 
-struct TheMissingPluginInstaller:
-    public rtl::Static<MissingPluginInstaller, TheMissingPluginInstaller>
-{};
+MissingPluginInstaller& TheMissingPluginInstaller()
+{
+    static MissingPluginInstaller theInstaller;
+    return theInstaller;
+}
 
 
 void MissingPluginInstallerThread::execute() {
-    MissingPluginInstaller & inst = TheMissingPluginInstaller::get();
+    MissingPluginInstaller & inst = TheMissingPluginInstaller();
     for (;;) {
         std::vector<OString> details;
         {
@@ -330,7 +332,7 @@ Player::~Player()
 
 void SAL_CALL Player::disposing()
 {
-    TheMissingPluginInstaller::get().detach(this);
+    TheMissingPluginInstaller().detach(this);
 
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -532,7 +534,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
             maSizeCondition.set();
         }
     } else if (gst_is_missing_plugin_message(message)) {
-        TheMissingPluginInstaller::get().report(this, message);
+        TheMissingPluginInstaller().report(this, message);
         if( mnWidth == 0 ) {
             // an error occurred, set condition so that OOo thread doesn't wait for us
             maSizeCondition.set();

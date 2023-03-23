@@ -72,15 +72,13 @@ namespace
 
         SmCmdBoxWrapper::RegisterChildWindow(true);
     }
-
-    struct theSmDLLInstance : public rtl::Static<SmDLL, theSmDLLInstance> {};
 }
 
 namespace SmGlobals
 {
     void ensure()
     {
-        theSmDLLInstance::get();
+        static SmDLL theDll;
     }
 }
 

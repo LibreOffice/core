@@ -343,14 +343,10 @@ std::vector< SvtCompatibilityEntry > SvtCompatibilityOptions::GetList() const
     return m_pImpl->GetOptions();
 }
 
-namespace
-{
-    class theCompatibilityOptionsMutex : public rtl::Static<osl::Mutex, theCompatibilityOptionsMutex>{};
-}
-
 Mutex& SvtCompatibilityOptions::GetOwnStaticMutex()
 {
-    return theCompatibilityOptionsMutex::get();
+    static osl::Mutex aMutex;
+    return aMutex;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

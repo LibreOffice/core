@@ -67,12 +67,10 @@ public:
 
 namespace
 {
-    //thread-safe double-locked class to ensure createNonDocMSPs is called once
-    class theNonDocMSPCreator : public rtl::StaticWithArg<NonDocMSPCreator, ActiveMSPList*, theNonDocMSPCreator> {};
-
+    //thread-safe method to ensure createNonDocMSPs is called once
     void ensureNonDocMSPs(ActiveMSPList *pList)
     {
-        theNonDocMSPCreator::get(pList);
+        static NonDocMSPCreator theCreator(pList);
     }
 }
 

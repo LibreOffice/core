@@ -338,13 +338,17 @@ namespace {
     // global
     std::weak_ptr<SvtCTLOptions_Impl> g_pCTLOptions;
 
-    struct CTLMutex : public rtl::Static< osl::Mutex, CTLMutex > {};
+    osl::Mutex& CTLMutex()
+    {
+        static osl::Mutex aMutex;
+        return aMutex;
+    }
 }
 
 SvtCTLOptions::SvtCTLOptions( bool bDontLoad )
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( CTLMutex::get() );
+    ::osl::MutexGuard aGuard( CTLMutex() );
 
     m_pImpl = g_pCTLOptions.lock();
     if ( !m_pImpl )
@@ -364,7 +368,7 @@ SvtCTLOptions::SvtCTLOptions( bool bDontLoad )
 SvtCTLOptions::~SvtCTLOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( CTLMutex::get() );
+    ::osl::MutexGuard aGuard( CTLMutex() );
 
     m_pImpl->RemoveListener(this);
     m_pImpl.reset();

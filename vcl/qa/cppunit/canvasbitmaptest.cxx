@@ -385,20 +385,13 @@ private:
         return false;
     }
 
-    struct PaletteColorSpaceHolder: public rtl::StaticWithInit<uno::Reference<rendering::XColorSpace>,
-                                                               PaletteColorSpaceHolder>
-    {
-        uno::Reference<rendering::XColorSpace> operator()()
-        {
-            return vcl::unotools::createStandardColorSpace();
-        }
-    };
-
     virtual uno::Reference< rendering::XColorSpace > SAL_CALL getColorSpace(  ) override
     {
         // this is the method from XBitmapPalette. Return palette color
         // space here
-        return PaletteColorSpaceHolder::get();
+        static uno::Reference<rendering::XColorSpace> aColorSpace =
+            vcl::unotools::createStandardColorSpace();
+        return aColorSpace;
     }
 
     // XIntegerBitmapColorSpace

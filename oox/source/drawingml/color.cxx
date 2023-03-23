@@ -159,7 +159,11 @@ PresetColorsPool::PresetColorsPool() :
         maHighlightColors[static_cast<size_t>(nEntry.first)] = nEntry.second;
 }
 
-struct StaticPresetColorsPool : public ::rtl::Static< PresetColorsPool, StaticPresetColorsPool > {};
+PresetColorsPool& StaticPresetColorsPool()
+{
+    static PresetColorsPool thePool;
+    return thePool;
+}
 
 const double DEC_GAMMA          = 2.3;
 const double INC_GAMMA          = 1.0 / DEC_GAMMA;
@@ -264,7 +268,7 @@ Color::Color() :
     /*  Do not pass nDefaultRgb to ContainerHelper::getVectorElement(), to be
         able to catch the existing vector entries without corresponding XML
         token identifier. */
-    ::Color nRgbValue = ContainerHelper::getVectorElement( StaticPresetColorsPool::get().maDmlColors, nToken, API_RGB_TRANSPARENT );
+    ::Color nRgbValue = ContainerHelper::getVectorElement( StaticPresetColorsPool().maDmlColors, nToken, API_RGB_TRANSPARENT );
     return (sal_Int32(nRgbValue) >= 0) ? nRgbValue : nDefaultRgb;
 }
 
@@ -273,7 +277,7 @@ Color::Color() :
     /*  Do not pass nDefaultRgb to ContainerHelper::getVectorElement(), to be
         able to catch the existing vector entries without corresponding XML
         token identifier. */
-    ::Color nRgbValue = ContainerHelper::getVectorElement( StaticPresetColorsPool::get().maVmlColors, nToken, API_RGB_TRANSPARENT );
+    ::Color nRgbValue = ContainerHelper::getVectorElement( StaticPresetColorsPool().maVmlColors, nToken, API_RGB_TRANSPARENT );
     return (sal_Int32(nRgbValue) >= 0) ? nRgbValue : nDefaultRgb;
 }
 
@@ -282,7 +286,7 @@ Color::Color() :
     /*  Do not pass nDefaultRgb to ContainerHelper::getVectorElement(), to be
         able to catch the existing vector entries without corresponding XML
         token identifier. */
-    ::Color nRgbValue = ContainerHelper::getVectorElement( StaticPresetColorsPool::get().maHighlightColors, nToken, API_RGB_TRANSPARENT );
+    ::Color nRgbValue = ContainerHelper::getVectorElement( StaticPresetColorsPool().maHighlightColors, nToken, API_RGB_TRANSPARENT );
     return (sal_Int32(nRgbValue) >= 0) ? nRgbValue : nDefaultRgb;
 }
 

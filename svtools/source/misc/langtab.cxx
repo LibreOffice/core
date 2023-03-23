@@ -84,7 +84,11 @@ public:
     void            AddEntry( const OUString& rString, const LanguageType eType);
 };
 
-struct theLanguageTable : public rtl::Static< SvtLanguageTableImpl, theLanguageTable > {};
+SvtLanguageTableImpl& theLanguageTable()
+{
+    static SvtLanguageTableImpl aTable;
+    return aTable;
+}
 }
 
 OUString ApplyLreOrRleEmbedding( const OUString &rText )
@@ -224,7 +228,7 @@ bool SvtLanguageTableImpl::HasType( const LanguageType eType ) const
 
 bool SvtLanguageTable::HasLanguageType( const LanguageType eType )
 {
-    return theLanguageTable::get().HasType( eType );
+    return theLanguageTable().HasType( eType );
 }
 
 OUString SvtLanguageTableImpl::GetString( const LanguageType eType ) const
@@ -251,7 +255,7 @@ OUString SvtLanguageTableImpl::GetString( const LanguageType eType ) const
 
 OUString SvtLanguageTable::GetLanguageString( const LanguageType eType )
 {
-    return theLanguageTable::get().GetString( eType );
+    return theLanguageTable().GetString( eType );
 }
 
 LanguageType SvtLanguageTableImpl::GetType( std::u16string_view rStr ) const
@@ -272,7 +276,7 @@ LanguageType SvtLanguageTableImpl::GetType( std::u16string_view rStr ) const
 
 LanguageType SvtLanguageTable::GetLanguageType( std::u16string_view rStr )
 {
-    return theLanguageTable::get().GetType( rStr );
+    return theLanguageTable().GetType( rStr );
 }
 
 sal_uInt32 SvtLanguageTableImpl::GetEntryCount() const
@@ -282,7 +286,7 @@ sal_uInt32 SvtLanguageTableImpl::GetEntryCount() const
 
 sal_uInt32 SvtLanguageTable::GetLanguageEntryCount()
 {
-    return theLanguageTable::get().GetEntryCount();
+    return theLanguageTable().GetEntryCount();
 }
 
 
@@ -296,7 +300,7 @@ LanguageType SvtLanguageTableImpl::GetTypeAtIndex( sal_uInt32 nIndex ) const
 
 LanguageType SvtLanguageTable::GetLanguageTypeAtIndex( sal_uInt32 nIndex )
 {
-    return theLanguageTable::get().GetTypeAtIndex( nIndex);
+    return theLanguageTable().GetTypeAtIndex( nIndex);
 }
 
 void SvtLanguageTableImpl::AddEntry( const OUString& rString, const LanguageType eType )
@@ -337,7 +341,7 @@ void SvtLanguageTableImpl::AddEntry( const OUString& rString, const LanguageType
 
 void SvtLanguageTable::AddLanguageTag( const LanguageTag& rLanguageTag )
 {
-    theLanguageTable::get().AddEntry( lcl_getDescription(rLanguageTag), rLanguageTag.getLanguageType());
+    theLanguageTable().AddEntry( lcl_getDescription(rLanguageTag), rLanguageTag.getLanguageType());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

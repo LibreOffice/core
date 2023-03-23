@@ -788,18 +788,11 @@ public:
     }
 };
 
-struct OGLColorSpaceHolder : public rtl::StaticWithInit<uno::Reference<rendering::XIntegerBitmapColorSpace>, OGLColorSpaceHolder>
-{
-    uno::Reference<rendering::XIntegerBitmapColorSpace> operator()()
-    {
-        return new OGLColorSpace();
-    }
-};
-
 uno::Reference<rendering::XIntegerBitmapColorSpace> const &
 getOGLColorSpace()
 {
-    return OGLColorSpaceHolder::get();
+    static uno::Reference<rendering::XIntegerBitmapColorSpace> theSpace = new OGLColorSpace();
+    return theSpace;
 }
 
 void buildMipmaps(

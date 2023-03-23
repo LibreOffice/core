@@ -62,15 +62,17 @@ using namespace ::com::sun::star::uno;
 namespace dp_misc {
 namespace {
 
-struct UnoRc : public rtl::StaticWithInit<
-    std::shared_ptr<rtl::Bootstrap>, UnoRc> {
-    std::shared_ptr<rtl::Bootstrap> operator () () {
-        OUString unorc( "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("louno") );
-        ::rtl::Bootstrap::expandMacros( unorc );
-        auto ret = std::make_shared<::rtl::Bootstrap>( unorc );
-        OSL_ASSERT( ret->getHandle() != nullptr );
-        return ret;
-    }
+std::shared_ptr<rtl::Bootstrap> & UnoRc()
+{
+    static std::shared_ptr<rtl::Bootstrap> theRc = []()
+        {
+            OUString unorc( "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("louno") );
+            ::rtl::Bootstrap::expandMacros( unorc );
+            auto ret = std::make_shared<::rtl::Bootstrap>( unorc );
+            OSL_ASSERT( ret->getHandle() != nullptr );
+            return ret;
+        }();
+    return theRc;
 };
 
 OUString generateOfficePipeId()
@@ -293,7 +295,7 @@ OUString makeURLAppendSysPathSegment( std::u16string_view baseURL, OUString cons
 OUString expandUnoRcTerm( OUString const & term_ )
 {
     OUString term(term_);
-    UnoRc::get()->expandMacrosFrom( term );
+    UnoRc()->expandMacrosFrom( term );
     return term;
 }
 
@@ -318,7 +320,7 @@ OUString expandUnoRcUrl( OUString const & url )
         rcurl = ::rtl::Uri::decode(
             rcurl, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
         // expand macro string:
-        UnoRc::get()->expandMacrosFrom( rcurl );
+        UnoRc()->expandMacrosFrom( rcurl );
         return rcurl;
     }
     else {

@@ -65,7 +65,11 @@ struct TSharedStorages final
             a) shared root storages
             b) shared "inbetween" storages
             of the share and user layer. */
-struct SharedStorages: public rtl::Static<TSharedStorages, SharedStorages> {};
+TSharedStorages& SharedStorages()
+{
+    static TSharedStorages theStorages;
+    return theStorages;
+}
 
 }
 
@@ -103,7 +107,7 @@ PresetHandler::~PresetHandler()
         Otherwise we will disconnect all other open configuration access
         objects which base on these storages.
      */
-    auto & sharedStorages = SharedStorages::get();
+    auto & sharedStorages = SharedStorages();
     sharedStorages.m_lStoragesShare.closePath(m_sRelPathShare);
     sharedStorages.m_lStoragesUser.closePath (m_sRelPathUser );
 
@@ -169,7 +173,7 @@ void lcl_throwCorruptedUIConfigurationException(
 
 css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorageShare()
 {
-    auto & sharedStorages = SharedStorages::get();
+    auto & sharedStorages = SharedStorages();
     css::uno::Reference< css::embed::XStorage > xRoot = sharedStorages.m_lStoragesShare.getRootStorage();
     if (xRoot.is())
         return xRoot;
@@ -228,7 +232,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
 
 css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorageUser()
 {
-    auto & sharedStorages = SharedStorages::get();
+    auto & sharedStorages = SharedStorages();
     css::uno::Reference< css::embed::XStorage > xRoot = sharedStorages.m_lStoragesUser.getRootStorage();
     if (xRoot.is())
         return xRoot;
@@ -287,7 +291,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageShare
         xWorking = m_xWorkingStorageShare;
     }
 
-    return SharedStorages::get().m_lStoragesShare.getParentStorage(xWorking);
+    return SharedStorages().m_lStoragesShare.getParentStorage(xWorking);
 }
 
 css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageUser()
@@ -298,7 +302,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageUser(
         xWorking = m_xWorkingStorageUser;
     }
 
-    return SharedStorages::get().m_lStoragesUser.getParentStorage(xWorking);
+    return SharedStorages().m_lStoragesUser.getParentStorage(xWorking);
 }
 
 void PresetHandler::connectToResource(      PresetHandler::EConfigType                   eConfigType  ,
@@ -538,7 +542,7 @@ void PresetHandler::commitUserChanges()
         case E_GLOBAL :
         case E_MODULES :
         {
-            auto & sharedStorages = SharedStorages::get();
+            auto & sharedStorages = SharedStorages();
             sPath = sharedStorages.m_lStoragesUser.getPathOfStorage(xWorking);
             sharedStorages.m_lStoragesUser.commitPath(sPath);
             sharedStorages.m_lStoragesUser.notifyPath(sPath);
@@ -573,7 +577,7 @@ void PresetHandler::addStorageListener(XMLBasedAcceleratorConfiguration* pListen
         case E_GLOBAL :
         case E_MODULES :
         {
-            SharedStorages::get().m_lStoragesUser.addStorageListener(pListener, sRelPath);
+            SharedStorages().m_lStoragesUser.addStorageListener(pListener, sRelPath);
         }
         break;
 
@@ -603,7 +607,7 @@ void PresetHandler::removeStorageListener(XMLBasedAcceleratorConfiguration* pLis
         case E_GLOBAL :
         case E_MODULES :
         {
-            SharedStorages::get().m_lStoragesUser.removeStorageListener(pListener, sRelPath);
+            SharedStorages().m_lStoragesUser.removeStorageListener(pListener, sRelPath);
         }
         break;
 
@@ -623,9 +627,9 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
     try
     {
         if (bShare)
-            xPath = SharedStorages::get().m_lStoragesShare.openPath(sPath, eMode);
+            xPath = SharedStorages().m_lStoragesShare.openPath(sPath, eMode);
         else
-            xPath = SharedStorages::get().m_lStoragesUser.openPath(sPath, eMode);
+            xPath = SharedStorages().m_lStoragesUser.openPath(sPath, eMode);
     }
     catch(const css::uno::RuntimeException&)
         { throw; }

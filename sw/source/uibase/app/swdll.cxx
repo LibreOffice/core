@@ -59,7 +59,11 @@ namespace
         }
     };
 
-    struct theSwDLLInstance : public rtl::Static<SwDLLInstance, theSwDLLInstance> {};
+    SwDLLInstance& theSwDLLInstance()
+    {
+        static SwDLLInstance aInstance;
+        return aInstance;
+    }
 }
 
 namespace SwGlobals
@@ -67,12 +71,12 @@ namespace SwGlobals
     void ensure()
     {
         // coverity[side_effect_free : FALSE] - not actually side-effect-free
-        theSwDLLInstance::get();
+        theSwDLLInstance();
     }
 
     sw::Filters & getFilters()
     {
-        return theSwDLLInstance::get()->getFilters();
+        return theSwDLLInstance()->getFilters();
     }
 }
 

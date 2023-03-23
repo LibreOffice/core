@@ -3431,7 +3431,11 @@ struct RandomNumberGenerator
     }
 };
 
-class theRandomNumberGenerator : public rtl::Static<RandomNumberGenerator, theRandomNumberGenerator> {};
+RandomNumberGenerator& theRandomNumberGenerator()
+{
+    static RandomNumberGenerator theGenerator;
+    return theGenerator;
+}
 
 }
 
@@ -3444,7 +3448,7 @@ void SbRtl_Randomize(StarBASIC *, SbxArray & rPar, bool)
     if (rPar.Count() == 2)
     {
         int nSeed = static_cast<int>(rPar.Get(1)->GetInteger());
-        theRandomNumberGenerator::get().global_rng.seed(nSeed);
+        theRandomNumberGenerator().global_rng.seed(nSeed);
     }
     // without parameter, no need to do anything - RNG is seeded at first use
 }
@@ -3458,7 +3462,7 @@ void SbRtl_Rnd(StarBASIC *, SbxArray & rPar, bool)
     else
     {
         std::uniform_real_distribution<double> dist(0.0, 1.0);
-        double const tmp(dist(theRandomNumberGenerator::get().global_rng));
+        double const tmp(dist(theRandomNumberGenerator().global_rng));
         rPar.Get(0)->PutDouble(tmp);
     }
 }

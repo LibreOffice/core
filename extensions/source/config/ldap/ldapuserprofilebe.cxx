@@ -46,7 +46,7 @@ LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContex
     // the configuration for the backend would create another instance of the
     // backend, which would try and read the configuration which would...
     {
-        osl::Mutex & aInitMutex = rtl::Static< osl::Mutex, LdapUserProfileBe >::get();
+        static osl::Mutex aInitMutex;
         osl::MutexGuard aInitGuard(aInitMutex);
 
         static bool bReentrantCall; // = false

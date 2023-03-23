@@ -32,36 +32,39 @@ namespace dp_misc
 {
 namespace
 {
-    struct StrOperatingSystem :
-        public rtl::StaticWithInit<OUString, StrOperatingSystem> {
-             OUString operator () () {
+    const OUString & StrOperatingSystem()
+    {
+        static const OUString theOS = []()
+            {
                 OUString os( "$_OS" );
                 ::rtl::Bootstrap::expandMacros( os );
                 return os;
-            }
+            }();
+        return theOS;
     };
 
-    struct StrCPU :
-        public rtl::StaticWithInit<OUString, StrCPU> {
-            OUString operator () () {
+    const OUString & StrCPU()
+    {
+        static const OUString theCPU = []()
+            {
                 OUString arch( "$_ARCH" );
                 ::rtl::Bootstrap::expandMacros( arch );
                 return arch;
-            }
+            }();
+        return theCPU;
     };
 
 
-    struct StrPlatform : public rtl::StaticWithInit<
-        OUString, StrPlatform> {
-            OUString operator () () {
-                return StrOperatingSystem::get() + "_" + StrCPU::get();
-            }
+    const OUString & StrPlatform()
+    {
+        static const OUString thePlatform = StrOperatingSystem() + "_" + StrCPU();
+        return thePlatform;
     };
 
     bool checkOSandCPU(std::u16string_view os, std::u16string_view cpu)
     {
-        return (os == StrOperatingSystem::get())
-            && (cpu == StrCPU::get());
+        return (os == StrOperatingSystem())
+            && (cpu == StrCPU());
     }
 
     bool isPlatformSupported( std::u16string_view token )
@@ -161,7 +164,7 @@ namespace
 
 OUString const & getPlatformString()
 {
-    return StrPlatform::get();
+    return StrPlatform();
 }
 
 bool platform_fits( std::u16string_view platform_string )
@@ -172,9 +175,9 @@ bool platform_fits( std::u16string_view platform_string )
         const std::u16string_view token(
             o3tl::trim(o3tl::getToken(platform_string, 0, ',', index )) );
         // check if this platform:
-        if (o3tl::equalsIgnoreAsciiCase( token, StrPlatform::get() ) ||
+        if (o3tl::equalsIgnoreAsciiCase( token, StrPlatform() ) ||
             (token.find( '_' ) == std::u16string_view::npos && /* check OS part only */
-             o3tl::equalsIgnoreAsciiCase( token, StrOperatingSystem::get() )))
+             o3tl::equalsIgnoreAsciiCase( token, StrOperatingSystem() )))
         {
             return true;
         }
