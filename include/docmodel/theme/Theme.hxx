@@ -37,7 +37,7 @@ struct DOCMODEL_DLLPUBLIC ThemeFont
     OUString maPanose;
     sal_Int16 maPitch = 0;
     sal_Int16 maFamily = 0;
-    sal_Int32 maCharset = 0;
+    sal_Int32 maCharset = 1;
 
     sal_Int16 getPitchFamily() const { return (maPitch & 0x0F) | (maFamily & 0x0F) << 4; }
 };
@@ -59,10 +59,27 @@ private:
     std::vector<ThemeSupplementalFont> maMajorSupplementalFontList;
 
 public:
-    FontScheme() = default;
+    FontScheme()
+        : maName("Office")
+    {
+    }
+
     FontScheme(OUString const& rName)
         : maName(rName)
     {
+    }
+
+    static FontScheme getDefault()
+    {
+        FontScheme aDefault;
+        aDefault.maMinorLatin.maTypeface = "Arial";
+        aDefault.maMinorAsian.maTypeface = "DejaVu Sans";
+        aDefault.maMinorComplex.maTypeface = "DejaVu Sans";
+
+        aDefault.maMajorLatin.maTypeface = "Arial";
+        aDefault.maMajorAsian.maTypeface = "DejaVu Sans";
+        aDefault.maMajorComplex.maTypeface = "DejaVu Sans";
+        return aDefault;
     }
 
     const OUString& getName() const { return maName; }
@@ -143,7 +160,7 @@ private:
     OUString maName;
     std::unique_ptr<model::ColorSet> mpColorSet;
 
-    FontScheme maFontScheme;
+    FontScheme maFontScheme = FontScheme::getDefault();
     FormatScheme maFormatScheme;
 
 public:

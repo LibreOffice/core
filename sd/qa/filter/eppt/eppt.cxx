@@ -13,6 +13,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/util/Color.hpp>
+#include <com/sun/star/util/XTheme.hpp>
 
 #include <test/xmldocptr.hxx>
 #include <docmodel/uno/UnoTheme.hxx>
@@ -63,40 +64,57 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
 {
     // Given a document with a master slide and a theme, lt1 is set to 0x000002:
     mxComponent = loadFromDesktop("private:factory/simpress");
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XMasterPageTarget> xDrawPage(
-        xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
+    {
+        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<drawing::XMasterPageTarget> xDrawPage(
+            xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
 
-    auto pTheme = std::make_shared<model::Theme>("mytheme");
-    std::unique_ptr<model::ColorSet> pColorSet(new model::ColorSet("mycolorscheme"));
-    pColorSet->add(model::ThemeColorType::Dark1, 0x1);
-    pColorSet->add(model::ThemeColorType::Light1, 0x2);
-    pColorSet->add(model::ThemeColorType::Dark2, 0x3);
-    pColorSet->add(model::ThemeColorType::Light2, 0x4);
-    pColorSet->add(model::ThemeColorType::Accent1, 0x5);
-    pColorSet->add(model::ThemeColorType::Accent2, 0x6);
-    pColorSet->add(model::ThemeColorType::Accent3, 0x7);
-    pColorSet->add(model::ThemeColorType::Accent4, 0x8);
-    pColorSet->add(model::ThemeColorType::Accent5, 0x9);
-    pColorSet->add(model::ThemeColorType::Accent6, 0xa);
-    pColorSet->add(model::ThemeColorType::Hyperlink, 0xb);
-    pColorSet->add(model::ThemeColorType::FollowedHyperlink, 0xc);
-    pTheme->SetColorSet(std::move(pColorSet));
+        auto pTheme = std::make_shared<model::Theme>("mytheme");
+        std::unique_ptr<model::ColorSet> pColorSet(new model::ColorSet("mycolorscheme"));
+        pColorSet->add(model::ThemeColorType::Dark1, 0x111111);
+        pColorSet->add(model::ThemeColorType::Light1, 0x222222);
+        pColorSet->add(model::ThemeColorType::Dark2, 0x333333);
+        pColorSet->add(model::ThemeColorType::Light2, 0x444444);
+        pColorSet->add(model::ThemeColorType::Accent1, 0x555555);
+        pColorSet->add(model::ThemeColorType::Accent2, 0x666666);
+        pColorSet->add(model::ThemeColorType::Accent3, 0x777777);
+        pColorSet->add(model::ThemeColorType::Accent4, 0x888888);
+        pColorSet->add(model::ThemeColorType::Accent5, 0x999999);
+        pColorSet->add(model::ThemeColorType::Accent6, 0xaaaaaa);
+        pColorSet->add(model::ThemeColorType::Hyperlink, 0xbbbbbb);
+        pColorSet->add(model::ThemeColorType::FollowedHyperlink, 0xcccccc);
+        pTheme->SetColorSet(std::move(pColorSet));
 
-    xMasterPage->setPropertyValue("Theme", uno::Any(model::theme::createXTheme(pTheme)));
+        xMasterPage->setPropertyValue("Theme", uno::Any(model::theme::createXTheme(pTheme)));
+    }
 
-    // When exporting to PPTX:
-    save("Impress Office Open XML");
+    // Export to PPTX and load again:
+    saveAndReload("Impress Office Open XML");
 
-    // Then verify that this color is not lost:
+    // Verify that this color is not lost:
     xmlDocUniquePtr pXmlDoc = parseExport("ppt/theme/theme1.xml");
-    assertXPath(pXmlDoc, "//a:clrScheme/a:lt1/a:srgbClr", "val", "000002");
-    // Without the fix in place, this test would have failed with:
-    // - Expected: 1
-    // - Actual  : 0
-    // - XPath '//a:clrScheme/a:lt1/a:srgbClr' number of nodes is incorrect
-    // i.e. the RGB color was lost on export.
+    assertXPath(pXmlDoc, "//a:clrScheme/a:lt1/a:srgbClr", "val",
+                "222222"); // expected color 22-22-22
+
+    // Check the theme after loading again
+    {
+        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<drawing::XMasterPageTarget> xDrawPage(
+            xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
+        uno::Reference<util::XTheme> xTheme(xMasterPage->getPropertyValue("Theme"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(true, xTheme.is());
+
+        auto* pUnoTheme = dynamic_cast<UnoTheme*>(xTheme.get());
+        CPPUNIT_ASSERT(pUnoTheme);
+        auto pTheme = pUnoTheme->getTheme();
+
+        CPPUNIT_ASSERT_EQUAL(OUString("mytheme"), pTheme->GetName());
+        CPPUNIT_ASSERT_EQUAL(OUString("mycolorscheme"), pTheme->GetColorSet()->getName());
+        CPPUNIT_ASSERT_EQUAL(OUString("Office"), pTheme->getFontScheme().getName());
+        CPPUNIT_ASSERT_EQUAL(OUString(""), pTheme->getFormatScheme().getName());
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testLoopingFromAnimation)

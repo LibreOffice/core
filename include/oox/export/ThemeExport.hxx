@@ -17,6 +17,7 @@ namespace model
 {
 class Theme;
 class FontScheme;
+class FormatScheme;
 }
 
 namespace oox
@@ -35,7 +36,8 @@ private:
     static bool writeColorSet(sax_fastparser::FSHelperPtr pFS, model::Theme const& rTheme);
     static bool writeFontScheme(sax_fastparser::FSHelperPtr pFS,
                                 model::FontScheme const& rFontScheme);
-    static bool writeFormatScheme(sax_fastparser::FSHelperPtr pFS);
+    static bool writeFormatScheme(sax_fastparser::FSHelperPtr pFS,
+                                  model::FormatScheme const& rFormatScheme);
 };
 
 } // end namespace oox
