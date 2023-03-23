@@ -1029,28 +1029,33 @@ MetaTextAction::MetaTextAction( const Point& rPt, const OUString& rStr,
     mnLen       ( nLen )
 {}
 
-static bool AllowY(long nY)
+static bool AllowDim(long nDim)
 {
     static bool bFuzzing = utl::ConfigManager::IsFuzzing();
     if (bFuzzing)
     {
-        if (nY > 0x20000000 || nY < -0x20000000)
+        if (nDim > 0x20000000 || nDim < -0x20000000)
         {
-            SAL_WARN("vcl", "skipping huge y: " << nY);
+            SAL_WARN("vcl", "skipping huge dimension: " << nDim);
             return false;
         }
     }
     return true;
 }
 
+static bool AllowPoint(const Point& rPoint)
+{
+    return AllowDim(rPoint.X()) && AllowDim(rPoint.Y());
+}
+
 static bool AllowRect(const tools::Rectangle& rRect)
 {
-    return AllowY(rRect.Top()) && AllowY(rRect.Bottom());
+    return AllowDim(rRect.Top()) && AllowDim(rRect.Bottom());
 }
 
 void MetaTextAction::Execute( OutputDevice* pOut )
 {
-    if (!AllowY(pOut->LogicToPixel(maPt).Y()))
+    if (!AllowDim(pOut->LogicToPixel(maPt).Y()))
         return;
 
     pOut->DrawText( maPt, maStr, mnIndex, mnLen );
@@ -1278,7 +1283,7 @@ MetaStretchTextAction::MetaStretchTextAction( const Point& rPt, sal_uInt32 nWidt
 
 void MetaStretchTextAction::Execute( OutputDevice* pOut )
 {
-    if (!AllowY(pOut->LogicToPixel(maPt).Y()))
+    if (!AllowDim(pOut->LogicToPixel(maPt).Y()))
         return;
 
     pOut->DrawStretchText( maPt, mnWidth, maStr, mnIndex, mnLen );
@@ -2461,7 +2466,7 @@ MetaMoveClipRegionAction::MetaMoveClipRegionAction( long nHorzMove, long nVertMo
 
 void MetaMoveClipRegionAction::Execute( OutputDevice* pOut )
 {
-    if (!AllowY(pOut->LogicToPixel(Point(mnHorzMove, mnVertMove)).Y()))
+    if (!AllowPoint(pOut->LogicToPixel(Point(mnHorzMove, mnVertMove))))
         return;
     pOut->MoveClipRegion( mnHorzMove, mnVertMove );
 }
