@@ -4125,6 +4125,11 @@
           <value xml:lang="en-US">Open the Style Inspector Deck</value>
         </prop>
       </node>
+      <node oor:name=".uno:SidebarDeck.A11yCheckDeck" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Open the Accessibility Check Deck</value>
+        </prop>
+      </node>
     </node>
   </node>
 </oor:component-data>
