@@ -174,7 +174,7 @@ protected:
 };
 
 /// Calculates what scaling factor will be used for autofit text scaling of this shape.
-sal_Int16 GetTextFitToSizeScale(SdrObject* pObject)
+double GetTextFitToSizeScale(SdrObject* pObject)
 {
     SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObject);
     if (!pTextObj)
@@ -189,7 +189,7 @@ sal_Int16 GetTextFitToSizeScale(SdrObject* pObject)
         return 0;
     }
 
-    return pTextObj->GetFontScaleY();
+    return pTextObj->GetFontScale();
 }
 }
 
@@ -2441,7 +2441,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
 
     case OWN_ATTR_TEXTFITTOSIZESCALE:
     {
-        sal_Int16 nMaxScale = 0;
+        double nMaxScale = 0.0;
         if (rValue >>= nMaxScale)
         {
             SdrTextFitToSizeTypeItem aItem(GetSdrObject()->GetMergedItem(SDRATTR_TEXT_FITTOSIZE));
@@ -2939,7 +2939,8 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
 
     case OWN_ATTR_TEXTFITTOSIZESCALE:
     {
-        rValue <<= GetTextFitToSizeScale(GetSdrObject());
+        double nScale = GetTextFitToSizeScale(GetSdrObject());
+        rValue <<= nScale;
         break;
     }
 

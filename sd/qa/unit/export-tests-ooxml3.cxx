@@ -416,7 +416,7 @@ void SdOOXMLExportTest3::testFontScale()
     // Rounding errors possible, approximate value (+/- 1%)
     OUString sScale = getXPath(
         pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr/a:normAutofit", "fontScale");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(76000), sScale.toInt32(), 1000);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(81111), sScale.toInt32(), 1000);
 
     xDocShRef->DoClose();
 }

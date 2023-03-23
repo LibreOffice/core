@@ -1737,10 +1737,10 @@ void SdOOXMLExportTest2::testTextColumns_3columns()
         CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(300)),
                              xColProps->getPropertyValue("AutomaticDistance"));
         // Scale value may be unstable; just test that the text is actually scaled
-        sal_Int16 nScale;
-        CPPUNIT_ASSERT(xProps->getPropertyValue("TextFitToSizeScale") >>= nScale);
-        CPPUNIT_ASSERT_GREATER(sal_Int16(0), nScale);
-        CPPUNIT_ASSERT_LESS(sal_Int16(100), nScale);
+        double fScale;
+        CPPUNIT_ASSERT(xProps->getPropertyValue("TextFitToSizeScale") >>= fScale);
+        CPPUNIT_ASSERT_GREATER(0.0, fScale);
+        CPPUNIT_ASSERT_LESS(100.0, fScale);
     }
 
     utl::TempFile tempFile;
@@ -1760,10 +1760,10 @@ void SdOOXMLExportTest2::testTextColumns_3columns()
         CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(300)),
                              xColProps->getPropertyValue("AutomaticDistance"));
         // Scale value may be unstable; just test that the text is actually scaled
-        sal_Int16 nScale;
-        CPPUNIT_ASSERT(xProps->getPropertyValue("TextFitToSizeScale") >>= nScale);
-        CPPUNIT_ASSERT_GREATER(sal_Int16(0), nScale);
-        CPPUNIT_ASSERT_LESS(sal_Int16(100), nScale);
+        double fScale;
+        CPPUNIT_ASSERT(xProps->getPropertyValue("TextFitToSizeScale") >>= fScale);
+        CPPUNIT_ASSERT_GREATER(0.0, fScale);
+        CPPUNIT_ASSERT_LESS(100.0, fScale);
     }
 
     xDocShRef->DoClose();

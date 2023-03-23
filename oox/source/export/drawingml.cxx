@@ -3622,16 +3622,29 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
             {
                 const sal_Int32 MAX_SCALE_VAL = 100000;
                 sal_Int32 nFontScale = MAX_SCALE_VAL;
+                sal_Int32 nSpacingReduction = 0;
                 SvxShapeText* pTextShape = dynamic_cast<SvxShapeText*>(rXIface.get());
                 if (pTextShape)
                 {
                     SdrTextObj* pTextObject = dynamic_cast<SdrTextObj*>(pTextShape->GetSdrObject());
                     if (pTextObject)
-                        nFontScale = pTextObject->GetFontScaleY() * 1000;
+                    {
+                        nFontScale = sal_Int32(pTextObject->GetFontScale() * 1000.0);
+                        nSpacingReduction = sal_Int32((100.0 - pTextObject->GetSpacingScale()) * 1000.0);
+                    }
                 }
 
-                mpFS->singleElementNS(XML_a, XML_normAutofit, XML_fontScale,
-                    sax_fastparser::UseIf(OString::number(nFontScale), nFontScale < MAX_SCALE_VAL && nFontScale > 0));
+                bool bExportFontScale = false;
+                if (nFontScale < MAX_SCALE_VAL && nFontScale > 0)
+                    bExportFontScale = true;
+
+                bool bExportSpaceReduction = false;
+                if (nSpacingReduction < MAX_SCALE_VAL && nSpacingReduction > 0)
+                    bExportSpaceReduction = true;
+
+                mpFS->singleElementNS(XML_a, XML_normAutofit,
+                    XML_fontScale, sax_fastparser::UseIf(OString::number(nFontScale), bExportFontScale),
+                    XML_lnSpcReduction, sax_fastparser::UseIf(OString::number(nSpacingReduction), bExportSpaceReduction));
             }
             else
             {

@@ -414,8 +414,12 @@ public:
     void            QuickDelete( const ESelection& rSel );
     void            QuickMarkToBeRepainted( sal_Int32 nPara );
 
-    void            SetGlobalCharStretching(double nX, double nY);
-    void            GetGlobalCharStretching(double& rX, double& rY) const;
+    void setGlobalScale(double fFontScaleX, double fFontScaleY, double fSpacingScaleX, double fSpacingScaleY);
+
+    void getGlobalSpacingScale(double& rX, double& rY) const;
+    void getGlobalFontScale(double& rX, double& rY) const;
+
+    void setRoundFontSizeToPt(bool bRound) const;
 
     void            SetEditTextObjectPool( SfxItemPool* pPool );
     SfxItemPool*    GetEditTextObjectPool() const;

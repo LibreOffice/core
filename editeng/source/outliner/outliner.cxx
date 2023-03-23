@@ -47,6 +47,8 @@
 #include <libxml/xmlwriter.h>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
+#include <o3tl/temporary.hxx>
 #include <osl/diagnose.h>
 
 #include <memory>
@@ -805,7 +807,6 @@ bool Outliner::Collapse( Paragraph const * pPara )
     return false;
 }
 
-
 vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
 {
     const SvxNumberFormat* pFmt = GetNumberFormat( nPara );
@@ -844,16 +845,16 @@ vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
     }
 
     // Use original scale...
-    double nStretchX, nStretchY;
-    GetGlobalCharStretching(nStretchX, nStretchY);
+    double nStretchY = 100.0;
+    getGlobalScale(o3tl::temporary(double()), nStretchY, o3tl::temporary(double()), o3tl::temporary(double()));
 
-    sal_uInt16 nScale = pFmt->GetBulletRelSize() * nStretchY / 100;
-    sal_uLong nScaledLineHeight = aStdFont.GetFontSize().Height();
-    nScaledLineHeight *= nScale*10;
-    nScaledLineHeight /= 1000;
+    double fScale = pFmt->GetBulletRelSize() * nStretchY / 100;
+    double fScaledLineHeight = aStdFont.GetFontSize().Height();
+    fScaledLineHeight *= fScale * 10.0;
+    fScaledLineHeight /= 1000.0;
 
     aBulletFont.SetAlignment( ALIGN_BOTTOM );
-    aBulletFont.SetFontSize( Size( 0, nScaledLineHeight ) );
+    aBulletFont.SetFontSize(Size(0, basegfx::fround(fScaledLineHeight)));
     bool bVertical = IsVertical();
     aBulletFont.SetVertical( bVertical );
     aBulletFont.SetOrientation( Degree10(bVertical ? (IsTopToBottom() ? 2700 : 900) : 0) );
@@ -891,8 +892,11 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
     bool bRightToLeftPara = pEditEngine->IsRightToLeft( nPara );
 
     tools::Rectangle aBulletArea( ImpCalcBulletArea( nPara, true, false ) );
-    double nStretchX, nStretchY;
-    GetGlobalCharStretching(nStretchX, nStretchY);
+
+    double nStretchX = 100.0;
+    getGlobalScale(o3tl::temporary(double()), o3tl::temporary(double()),
+                   nStretchX, o3tl::temporary(double()));
+
     tools::Long nStretchBulletX = basegfx::fround(double(aBulletArea.Left()) * nStretchX / 100.0);
     tools::Long nStretchBulletWidth = basegfx::fround(double(aBulletArea.GetWidth()) * nStretchX / 100.0);
     aBulletArea = tools::Rectangle(Point(nStretchBulletX, aBulletArea.Top()),

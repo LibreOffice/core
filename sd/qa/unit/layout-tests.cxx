@@ -303,7 +303,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testFitToFrameTextFitting)
     // into new line) by shrinking or expanding the text horizontally
     // and vertically.
 
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odg/FitToFrameText.odg"), PPTX);
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odg/FitToFrameText.odg"), ODG);
 
     std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
     MetafileXmlDump dumper;

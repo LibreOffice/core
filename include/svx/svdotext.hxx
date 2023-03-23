@@ -253,6 +253,7 @@ private:
     void ImpAutoFitText( SdrOutliner& rOutliner ) const;
     void ImpAutoFitText( SdrOutliner& rOutliner, const Size& rShapeSize, bool bIsVerticalWriting ) const;
     SVX_DLLPRIVATE SdrObjectUniquePtr ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const;
+    void autoFitTextForCompatibility(SdrOutliner& rOutliner, const Size& rShapeSize) const;
     SVX_DLLPRIVATE void ImpRegisterLink();
     SVX_DLLPRIVATE void ImpDeregisterLink();
     SVX_DLLPRIVATE ImpSdrObjTextLinkUserData* GetLinkUserData() const;
@@ -380,7 +381,9 @@ public:
     // FitToSize and Fontwork are not taken into account in GetTextSize()!
     virtual const Size& GetTextSize() const;
     void FitFrameToTextSize();
-    sal_uInt16 GetFontScaleY() const;
+
+    double GetFontScale() const;
+    double GetSpacingScale() const;
 
     // Simultaneously sets the text into the Outliner (possibly
     // the one of the EditOutliner) and sets the PaperSize.
