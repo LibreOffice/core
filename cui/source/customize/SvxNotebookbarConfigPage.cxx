@@ -237,7 +237,7 @@ void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(std::u16string_view sClassId
         if (xImage.is())
             rTreeView.set_image(rIter, xImage, -1);
         rTreeView.set_text(rIter, aName, 0);
-        rTreeView.set_id(rIter, sUIItemCommand);
+        rTreeView.set_id(rIter, sUIItemId);
     }
 }
 
@@ -431,6 +431,7 @@ void SvxNotebookbarConfigPage::SelectElement()
 
     aEntries = std::move(aTempEntries);
 
+    static_cast<SvxNotebookbarEntriesListBox*>(m_xContentsListBox.get())->GetTooltipMap().clear();
     weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
     rTreeView.bulk_insert_for_each(
         aEntries.size(), [this, &rTreeView, &aEntries](weld::TreeIter& rIter, int nIdx) {
@@ -447,6 +448,13 @@ void SvxNotebookbarConfigPage::SelectElement()
             }
             InsertEntryIntoNotebookbarTabUI(aEntries[nIdx].sClassId, aEntries[nIdx].sDisplayName,
                                             aEntries[nIdx].sActionName, rTreeView, rIter);
+            if (aEntries[nIdx].sClassId != u"GtkSeparatorMenuItem"
+                && aEntries[nIdx].sClassId != u"GtkSeparator")
+            {
+                static_cast<SvxNotebookbarEntriesListBox*>(m_xContentsListBox.get())
+                    ->GetTooltipMap()[aEntries[nIdx].sDisplayName]
+                    = aEntries[nIdx].sActionName;
+            }
         });
 
     aEntries.clear();
@@ -539,16 +547,16 @@ IMPL_LINK(SvxNotebookbarEntriesListBox, KeyInputHdl, const KeyEvent&, rKeyEvent,
 
 IMPL_LINK(SvxNotebookbarEntriesListBox, QueryTooltip, const weld::TreeIter&, rIter, OUString)
 {
-    OUString sCommand = m_xControl->get_id(rIter);
-    if (sCommand.isEmpty())
+    const OUString& rsCommand = m_aTooltipMap[m_xControl->get_id(rIter)];
+    if (rsCommand.isEmpty())
         return OUString();
     OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(m_pPage->GetFrame()));
-    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(sCommand, aModuleName);
-    OUString sTooltipLabel = vcl::CommandInfoProvider::GetTooltipForCommand(sCommand, aProperties,
+    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(rsCommand, aModuleName);
+    OUString sTooltipLabel = vcl::CommandInfoProvider::GetTooltipForCommand(rsCommand, aProperties,
                                                                             m_pPage->GetFrame());
     return CuiResId(RID_CUISTR_COMMANDLABEL) + ": "
            + m_xControl->get_text(rIter).replaceFirst("~", "") + "\n"
-           + CuiResId(RID_CUISTR_COMMANDNAME) + ": " + sCommand + "\n"
+           + CuiResId(RID_CUISTR_COMMANDNAME) + ": " + rsCommand + "\n"
            + CuiResId(RID_CUISTR_COMMANDTIP) + ": " + sTooltipLabel.replaceFirst("~", "");
 }
 
