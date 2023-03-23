@@ -605,12 +605,6 @@ interface BaseTextSelection
         StateMethod = GetState;
     ]
 
-    SID_ACCESSIBILITY_CHECK
-    [
-        ExecMethod = ExecDlg;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
     SID_GRAPHIC_SIZE_CHECK
     [
         ExecMethod = ExecDlg;

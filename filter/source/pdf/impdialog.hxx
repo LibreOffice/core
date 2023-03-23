@@ -21,7 +21,6 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/passwd.hxx>
-#include <svx/AccessibilityCheckDialog.hxx>
 
 #include <vcl/pdfwriter.hxx>
 #include <vcl/FilterConfigItem.hxx>
@@ -128,8 +127,6 @@ class ImpPDFTabDialog final : public SfxTabDialogController
     bool                        mbCanCopyOrExtract;
     bool                        mbCanExtractForAccessibility;
     css::uno::Reference< css::beans::XMaterialHolder > mxPreparedPasswords;
-
-    std::shared_ptr< svx::AccessibilityCheckDialog > mpAccessibilityCheckDialog;
 
     bool                        mbIsRangeChecked;
     OUString                    msPageRange;

@@ -469,7 +469,6 @@ class SvxZoomItem;
 // Used for redaction
 #define SID_SHAPE_NAME                      (SID_SFX_START + 810)
 #define SID_GRAPHIC_SIZE_CHECK              (SID_SFX_START + 811)
-#define SID_ACCESSIBILITY_CHECK             (SID_SFX_START + 812)
 #define SID_ASYNCHRON                       (SID_SFX_START + 813)
 #define SID_ACCESSIBILITY_CHECK_ONLINE      (SID_SFX_START + 814)
 #define SID_THEME_DIALOG                    (SID_SFX_START + 815)

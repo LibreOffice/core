@@ -135,7 +135,6 @@ static sal_uInt8 nFooterPos;
 #include <swslots.hxx>
 
 #include <AccessibilityCheck.hxx>
-#include <svx/AccessibilityCheckDialog.hxx>
 
 namespace
 {
@@ -3027,21 +3026,6 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 rReq.Done(*pOutSet);
                 bDone = true;
             }
-        }
-        break;
-        case SID_ACCESSIBILITY_CHECK:
-        {
-            sw::AccessibilityCheck aCheck(rSh.GetDoc());
-            aCheck.check();
-            std::shared_ptr<svx::AccessibilityCheckDialog> aDialog
-                = std::make_shared<svx::AccessibilityCheckDialog>(
-                    pMDI, aCheck.getIssueCollection(),
-                    [&rSh]() -> sfx::AccessibilityIssueCollection {
-                        sw::AccessibilityCheck aA11yCheck(rSh.GetDoc());
-                        aA11yCheck.check();
-                        return aA11yCheck.getIssueCollection();
-                    });
-            weld::DialogController::runAsync(aDialog, [](int){});
         }
         break;
 

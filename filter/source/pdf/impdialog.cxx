@@ -27,7 +27,6 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/stritem.hxx>
-#include <svx/AccessibilityCheckDialog.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
 
@@ -386,12 +385,6 @@ ImpPDFTabDialog::~ImpPDFTabDialog()
 {
     maConfigItem.WriteModifiedConfig();
     maConfigI18N.WriteModifiedConfig();
-    if (mpAccessibilityCheckDialog)
-    {
-        // restore set_modal to its original state
-        mpAccessibilityCheckDialog->getDialog()->set_modal(false);
-        mpAccessibilityCheckDialog->response(RET_CANCEL);
-    }
 }
 
 void ImpPDFTabDialog::PageCreated(const OString& rId, SfxTabPage& rPage)

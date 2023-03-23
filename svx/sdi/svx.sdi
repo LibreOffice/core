@@ -12559,23 +12559,6 @@ SfxVoidItem ThemeDialog SID_THEME_DIALOG
     GroupId = SfxGroupId::Modify;
 ]
 
-SfxVoidItem AccessibilityCheck SID_ACCESSIBILITY_CHECK
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Modify;
-]
-
 SfxBoolItem AccessibilityCheckOnline SID_ACCESSIBILITY_CHECK_ONLINE
 (SfxBoolItem Enable FN_PARAM_1)
 [

@@ -149,7 +149,6 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"sfx/ui/managestylepage.ui"
         || rUIFile == u"sfx/ui/password.ui"
         // svx
-        || rUIFile == u"svx/ui/accessibilitycheckdialog.ui"
         || rUIFile == u"svx/ui/accessibilitycheckentry.ui"
         || rUIFile == u"svx/ui/findreplacedialog.ui"
         || rUIFile == u"svx/ui/fontworkgallerydialog.ui"
