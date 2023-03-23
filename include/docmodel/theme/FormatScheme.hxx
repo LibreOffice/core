@@ -79,6 +79,8 @@ struct DOCMODEL_DLLPUBLIC ColorDefinition
     ThemeColorType meSchemeType = ThemeColorType::Unknown;
     std::vector<Transformation> maTransformations;
 
+    Color getRGBColor() const { return Color(mnComponent1, mnComponent2, mnComponent3); }
+
     void setCRGB(sal_Int32 nR, sal_Int32 nG, sal_Int32 nB)
     {
         mnComponent1 = nR;
@@ -436,9 +438,9 @@ enum class LineEndLength
 
 struct DOCMODEL_DLLPUBLIC LineEnd
 {
-    LineEndType meType;
-    LineEndWidth meWidth;
-    LineEndLength meLength;
+    LineEndType meType = LineEndType::None;
+    LineEndWidth meWidth = LineEndWidth::Unset;
+    LineEndLength meLength = LineEndLength::Unset;
 };
 
 struct DOCMODEL_DLLPUBLIC DashStop
@@ -527,6 +529,42 @@ public:
 
     const OUString& getName() const { return maName; }
 
+    std::vector<FillStyle> const& getFillStyleList() const { return maFillStyleList; }
+
+    FillStyle* addFillStyle()
+    {
+        if (maFillStyleList.size() > 3)
+            return nullptr;
+        auto& rFillStyle = maFillStyleList.emplace_back();
+        return &rFillStyle;
+    }
+
+    void ensureFillStyleList() const
+    {
+        if (!maFillStyleList.empty())
+            return;
+
+        auto* pThis = const_cast<FormatScheme*>(this);
+        {
+            FillStyle* pFillStyle = pThis->addFillStyle();
+            auto pFill = std::make_shared<SolidFill>();
+            pFill->maColorDefinition.meType = model::ColorType::Placeholder;
+            pFillStyle->mpFill = pFill;
+        }
+        {
+            FillStyle* pFillStyle = pThis->addFillStyle();
+            auto pFill = std::make_shared<SolidFill>();
+            pFill->maColorDefinition.meType = model::ColorType::Placeholder;
+            pFillStyle->mpFill = pFill;
+        }
+        {
+            FillStyle* pFillStyle = pThis->addFillStyle();
+            auto pFill = std::make_shared<SolidFill>();
+            pFill->maColorDefinition.meType = model::ColorType::Placeholder;
+            pFillStyle->mpFill = pFill;
+        }
+    }
+
     std::vector<LineStyle> const& getLineStyleList() const { return maLineStyleList; }
 
     LineStyle* addLineStyle()
@@ -535,6 +573,51 @@ public:
             return nullptr;
         auto& rLineStyle = maLineStyleList.emplace_back();
         return &rLineStyle;
+    }
+
+    void ensureLineStyleList() const
+    {
+        if (!maLineStyleList.empty())
+            return;
+
+        auto* pThis = const_cast<FormatScheme*>(this);
+
+        {
+            LineStyle* pLineStyle = pThis->addLineStyle();
+            pLineStyle->mnWidth = 6350;
+            pLineStyle->meCapType = CapType::Flat;
+            pLineStyle->mePenAlignment = PenAlignmentType::Center;
+            pLineStyle->meCompoundLineType = CompoundLineType::Single;
+            pLineStyle->maLineDash.mePresetType = PresetDashType::Solid;
+            pLineStyle->maLineJoin.meType = LineJoinType::Miter;
+            auto pFill = std::make_shared<SolidFill>();
+            pFill->maColorDefinition.meType = model::ColorType::Placeholder;
+            pLineStyle->maLineFillStyle.mpFill = pFill;
+        }
+        {
+            LineStyle* pLineStyle = pThis->addLineStyle();
+            pLineStyle->mnWidth = 6350;
+            pLineStyle->meCapType = CapType::Flat;
+            pLineStyle->mePenAlignment = PenAlignmentType::Center;
+            pLineStyle->meCompoundLineType = CompoundLineType::Single;
+            pLineStyle->maLineDash.mePresetType = PresetDashType::Solid;
+            pLineStyle->maLineJoin.meType = LineJoinType::Miter;
+            auto pFill = std::make_shared<SolidFill>();
+            pFill->maColorDefinition.meType = model::ColorType::Placeholder;
+            pLineStyle->maLineFillStyle.mpFill = pFill;
+        }
+        {
+            LineStyle* pLineStyle = pThis->addLineStyle();
+            pLineStyle->mnWidth = 6350;
+            pLineStyle->meCapType = CapType::Flat;
+            pLineStyle->mePenAlignment = PenAlignmentType::Center;
+            pLineStyle->meCompoundLineType = CompoundLineType::Single;
+            pLineStyle->maLineDash.mePresetType = PresetDashType::Solid;
+            pLineStyle->maLineJoin.meType = LineJoinType::Miter;
+            auto pFill = std::make_shared<SolidFill>();
+            pFill->maColorDefinition.meType = model::ColorType::Placeholder;
+            pLineStyle->maLineFillStyle.mpFill = pFill;
+        }
     }
 
     std::vector<EffectStyle> const& getEffectStyleList() const { return maEffectStyleList; }
@@ -547,14 +630,16 @@ public:
         return &rEffectStyle;
     }
 
-    std::vector<FillStyle> const& getFillStyleList() const { return maFillStyleList; }
-
-    FillStyle* addFillStyle()
+    void ensureEffectStyleList() const
     {
-        if (maFillStyleList.size() > 3)
-            return nullptr;
-        auto& rFillStyle = maFillStyleList.emplace_back();
-        return &rFillStyle;
+        if (!maEffectStyleList.empty())
+            return;
+
+        auto* pThis = const_cast<FormatScheme*>(this);
+
+        pThis->addEffectStyle();
+        pThis->addEffectStyle();
+        pThis->addEffectStyle();
     }
 
     std::vector<FillStyle> const& getBackgroundFillStyleList() const
@@ -568,6 +653,33 @@ public:
             return nullptr;
         auto& rBackgroundFillStyle = maBackgroundFillStyleList.emplace_back();
         return &rBackgroundFillStyle;
+    }
+
+    void ensureBackgroundFillStyleList() const
+    {
+        if (!maBackgroundFillStyleList.empty())
+            return;
+
+        auto* pThis = const_cast<FormatScheme*>(this);
+
+        {
+            FillStyle* pFillStyle = pThis->addBackgroundFillStyle();
+            auto pFill = std::make_shared<SolidFill>();
+            pFill->maColorDefinition.meType = model::ColorType::Placeholder;
+            pFillStyle->mpFill = pFill;
+        }
+        {
+            FillStyle* pFillStyle = pThis->addBackgroundFillStyle();
+            auto pFill = std::make_shared<SolidFill>();
+            pFill->maColorDefinition.meType = model::ColorType::Placeholder;
+            pFillStyle->mpFill = pFill;
+        }
+        {
+            FillStyle* pFillStyle = pThis->addBackgroundFillStyle();
+            auto pFill = std::make_shared<SolidFill>();
+            pFill->maColorDefinition.meType = model::ColorType::Placeholder;
+            pFillStyle->mpFill = pFill;
+        }
     }
 };
 

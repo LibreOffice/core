@@ -90,13 +90,6 @@ private:
     virtual void ImplWriteNotes( sal_uInt32 nPageNum ) override;
     virtual void ImplWriteSlideMaster( sal_uInt32 nPageNum, css::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
     void ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum );
-
-    /// Export the color set part of a theme.
-    static bool WriteColorSets(const FSHelperPtr& pFS, model::Theme* pTheme);
-
-    /// Same as WriteColorSets(), but works from a grab-bag.
-    bool WriteColorSchemes(const FSHelperPtr& pFS, const OUString& rThemePath);
-
     static void WriteDefaultColorSchemes(const FSHelperPtr& pFS);
     void WriteTheme( sal_Int32 nThemeNum, model::Theme* pTheme );
 

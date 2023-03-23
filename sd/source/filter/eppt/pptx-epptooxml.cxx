@@ -56,6 +56,7 @@
 #include <comphelper/diagnose_ex.hxx>
 
 #include <oox/export/utils.hxx>
+#include <oox/export/ThemeExport.hxx>
 #include <docmodel/theme/Theme.hxx>
 
 #include "pptx-animations.hxx"
@@ -1938,172 +1939,6 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceTextBody(
     return *this;
 }
 
-#define SYS_COLOR_SCHEMES "      <a:dk1>\
-        <a:sysClr val=\"windowText\" lastClr=\"000000\"/>\
-      </a:dk1>\
-      <a:lt1>\
-        <a:sysClr val=\"window\" lastClr=\"FFFFFF\"/>\
-      </a:lt1>"
-
-#define MINIMAL_THEME "    <a:fontScheme name=\"Office\">\
-      <a:majorFont>\
-        <a:latin typeface=\"Arial\"/>\
-        <a:ea typeface=\"DejaVu Sans\"/>\
-        <a:cs typeface=\"DejaVu Sans\"/>\
-      </a:majorFont>\
-      <a:minorFont>\
-        <a:latin typeface=\"Arial\"/>\
-        <a:ea typeface=\"DejaVu Sans\"/>\
-        <a:cs typeface=\"DejaVu Sans\"/>\
-      </a:minorFont>\
-    </a:fontScheme>\
-    <a:fmtScheme name=\"Office\">\
-      <a:fillStyleLst>\
-        <a:solidFill>\
-          <a:schemeClr val=\"phClr\"/>\
-        </a:solidFill>\
-        <a:gradFill rotWithShape=\"1\">\
-          <a:gsLst>\
-            <a:gs pos=\"0\">\
-              <a:schemeClr val=\"phClr\">\
-                <a:tint val=\"50000\"/>\
-                <a:satMod val=\"300000\"/>\
-              </a:schemeClr>\
-            </a:gs>\
-            <a:gs pos=\"35000\">\
-              <a:schemeClr val=\"phClr\">\
-                <a:tint val=\"37000\"/>\
-                <a:satMod val=\"300000\"/>\
-              </a:schemeClr>\
-            </a:gs>\
-            <a:gs pos=\"100000\">\
-              <a:schemeClr val=\"phClr\">\
-                <a:tint val=\"15000\"/>\
-                <a:satMod val=\"350000\"/>\
-              </a:schemeClr>\
-            </a:gs>\
-          </a:gsLst>\
-          <a:lin ang=\"16200000\" scaled=\"1\"/>\
-        </a:gradFill>\
-        <a:gradFill rotWithShape=\"1\">\
-          <a:gsLst>\
-            <a:gs pos=\"0\">\
-              <a:schemeClr val=\"phClr\">\
-                <a:shade val=\"51000\"/>\
-                <a:satMod val=\"130000\"/>\
-              </a:schemeClr>\
-            </a:gs>\
-            <a:gs pos=\"80000\">\
-              <a:schemeClr val=\"phClr\">\
-                <a:shade val=\"93000\"/>\
-                <a:satMod val=\"130000\"/>\
-              </a:schemeClr>\
-            </a:gs>\
-            <a:gs pos=\"100000\">\
-              <a:schemeClr val=\"phClr\">\
-                <a:shade val=\"94000\"/>\
-                <a:satMod val=\"135000\"/>\
-              </a:schemeClr>\
-            </a:gs>\
-          </a:gsLst>\
-          <a:lin ang=\"16200000\" scaled=\"0\"/>\
-        </a:gradFill>\
-      </a:fillStyleLst>\
-      <a:lnStyleLst>\
-        <a:ln w=\"6350\" cap=\"flat\" cmpd=\"sng\" algn=\"ctr\">\
-          <a:solidFill>\
-            <a:schemeClr val=\"phClr\">\
-              <a:shade val=\"95000\"/>\
-              <a:satMod val=\"105000\"/>\
-            </a:schemeClr>\
-          </a:solidFill>\
-          <a:prstDash val=\"solid\"/>\
-          <a:miter/>\
-        </a:ln>\
-        <a:ln w=\"12700\" cap=\"flat\" cmpd=\"sng\" algn=\"ctr\">\
-          <a:solidFill>\
-            <a:schemeClr val=\"phClr\"/>\
-          </a:solidFill>\
-          <a:prstDash val=\"solid\"/>\
-          <a:miter/>\
-        </a:ln>\
-        <a:ln w=\"19050\" cap=\"flat\" cmpd=\"sng\" algn=\"ctr\">\
-          <a:solidFill>\
-            <a:schemeClr val=\"phClr\"/>\
-          </a:solidFill>\
-          <a:prstDash val=\"solid\"/>\
-          <a:miter/>\
-        </a:ln>\
-      </a:lnStyleLst>\
-      <a:effectStyleLst>\
-        <a:effectStyle>\
-          <a:effectLst/>\
-        </a:effectStyle>\
-        <a:effectStyle>\
-          <a:effectLst/>\
-        </a:effectStyle>\
-        <a:effectStyle>\
-          <a:effectLst>\
-            <a:outerShdw blurRad=\"40000\" dist=\"23000\" dir=\"5400000\" rotWithShape=\"0\">\
-              <a:srgbClr val=\"000000\">\
-                <a:alpha val=\"35000\"/>\
-              </a:srgbClr>\
-            </a:outerShdw>\
-          </a:effectLst>\
-        </a:effectStyle>\
-      </a:effectStyleLst>\
-      <a:bgFillStyleLst>\
-        <a:solidFill>\
-          <a:schemeClr val=\"phClr\"/>\
-        </a:solidFill>\
-        <a:gradFill rotWithShape=\"1\">\
-          <a:gsLst>\
-            <a:gs pos=\"0\">\
-              <a:schemeClr val=\"phClr\">\
-                <a:tint val=\"40000\"/>\
-                <a:satMod val=\"350000\"/>\
-              </a:schemeClr>\
-            </a:gs>\
-            <a:gs pos=\"40000\">\
-              <a:schemeClr val=\"phClr\">\
-                <a:tint val=\"45000\"/>\
-                <a:shade val=\"99000\"/>\
-                <a:satMod val=\"350000\"/>\
-              </a:schemeClr>\
-            </a:gs>\
-            <a:gs pos=\"100000\">\
-              <a:schemeClr val=\"phClr\">\
-                <a:shade val=\"20000\"/>\
-                <a:satMod val=\"255000\"/>\
-              </a:schemeClr>\
-            </a:gs>\
-          </a:gsLst>\
-          <a:path path=\"circle\">\
-            <a:fillToRect l=\"50000\" t=\"-80000\" r=\"50000\" b=\"180000\"/>\
-          </a:path>\
-        </a:gradFill>\
-        <a:gradFill rotWithShape=\"1\">\
-          <a:gsLst>\
-            <a:gs pos=\"0\">\
-              <a:schemeClr val=\"phClr\">\
-                <a:tint val=\"80000\"/>\
-                <a:satMod val=\"300000\"/>\
-              </a:schemeClr>\
-            </a:gs>\
-            <a:gs pos=\"100000\">\
-              <a:schemeClr val=\"phClr\">\
-                <a:shade val=\"30000\"/>\
-                <a:satMod val=\"200000\"/>\
-              </a:schemeClr>\
-            </a:gs>\
-          </a:gsLst>\
-          <a:path path=\"circle\">\
-            <a:fillToRect l=\"50000\" t=\"50000\" r=\"50000\" b=\"50000\"/>\
-          </a:path>\
-        </a:gradFill>\
-      </a:bgFillStyleLst>\
-    </a:fmtScheme>"
-
 void PowerPointExport::WriteDefaultColorSchemes(const FSHelperPtr& pFS)
 {
     for (int nId = PredefinedClrSchemeId::dk2; nId != PredefinedClrSchemeId::Count; nId++)
@@ -2155,155 +1990,15 @@ void PowerPointExport::WriteDefaultColorSchemes(const FSHelperPtr& pFS)
     }
 }
 
-bool PowerPointExport::WriteColorSets(const FSHelperPtr& pFS, model::Theme* pTheme)
-{
-    static std::map<PredefinedClrSchemeId, sal_Int32> aPredefinedClrTokens =
-    {
-        { dk1, XML_dk1 },
-        { lt1, XML_lt1 },
-        { dk2, XML_dk2 },
-        { lt2, XML_lt2 },
-        { accent1, XML_accent1 },
-        { accent2, XML_accent2 },
-        { accent3, XML_accent3 },
-        { accent4, XML_accent4 },
-        { accent5, XML_accent5 },
-        { accent6, XML_accent6 },
-        { hlink, XML_hlink },
-        { folHlink, XML_folHlink }
-    };
-
-    if (!pTheme)
-    {
-        return false;
-    }
-
-    model::ColorSet* pColorSet = pTheme->GetColorSet();
-    if (!pColorSet)
-    {
-        return false;
-    }
-
-    for (int nId = PredefinedClrSchemeId::dk1; nId < PredefinedClrSchemeId::Count; nId++)
-    {
-        sal_Int32 nToken = aPredefinedClrTokens[static_cast<PredefinedClrSchemeId>(nId)];
-        pFS->startElementNS(XML_a, nToken);
-        model::ThemeColorType eType = model::convertToThemeColorType(nId);
-        pFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(static_cast<sal_Int32>(pColorSet->getColor(eType))));
-        pFS->endElementNS(XML_a, nToken);
-    }
-
-    return true;
-}
-
-bool PowerPointExport::WriteColorSchemes(const FSHelperPtr& pFS, const OUString& rThemePath)
-{
-    try
-    {
-        uno::Reference<beans::XPropertySet> xDocProps(getModel(), uno::UNO_QUERY);
-        if (xDocProps.is())
-        {
-            uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
-
-            static const OUStringLiteral aGrabBagPropName = u"InteropGrabBag";
-            if (xPropsInfo.is() && xPropsInfo->hasPropertyByName(aGrabBagPropName))
-            {
-                comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(aGrabBagPropName));
-                uno::Sequence<beans::PropertyValue> aCurrentTheme;
-
-                aGrabBag.getValue(rThemePath) >>= aCurrentTheme;
-
-                if (!aCurrentTheme.hasElements())
-                    return false;
-
-                // Order is important
-                for (int nId = PredefinedClrSchemeId::dk2; nId != PredefinedClrSchemeId::Count; nId++)
-                {
-                    OUString sName = PredefinedClrNames[static_cast<PredefinedClrSchemeId>(nId)];
-                    sal_Int32 nColor = 0;
-
-                    for (auto aIt = std::cbegin(aCurrentTheme); aIt != std::cend(aCurrentTheme); aIt++)
-                    {
-                        if (aIt->Name == sName)
-                        {
-                            aIt->Value >>= nColor;
-                            break;
-                        }
-                    }
-
-                    OUString sOpenColorScheme ="<a:" + sName + ">";
-                    pFS->write(sOpenColorScheme);
-
-                    pFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(nColor));
-
-                    OUString sCloseColorScheme = "</a:" + sName + ">";
-                    pFS->write(sCloseColorScheme);
-                }
-
-                // TODO: write complete color schemes & only if successful, protection against partial export
-                return true;
-            }
-        }
-    }
-    catch (const uno::Exception&)
-    {
-        SAL_WARN("writerfilter", "Failed to save documents grab bag");
-    }
-
-    return false;
-}
-
 void PowerPointExport::WriteTheme(sal_Int32 nThemeNum, model::Theme* pTheme)
 {
+    if (!pTheme)
+        return;
     OUString sThemePath = "ppt/theme/theme" + OUString::number(nThemeNum + 1) + ".xml";
 
-    FSHelperPtr pFS = openFragmentStreamWithSerializer(sThemePath,
-                      "application/vnd.openxmlformats-officedocument.theme+xml");
+    oox::ThemeExport aThemeExport(this);
 
-    OUString aThemeName("Office Theme");
-    if (pTheme)
-    {
-        aThemeName = pTheme->GetName();
-    }
-    pFS->startElementNS(XML_a, XML_theme,
-                        FSNS(XML_xmlns, XML_a), this->getNamespaceURL(OOX_NS(dml)),
-                        XML_name, aThemeName);
-
-    pFS->startElementNS(XML_a, XML_themeElements);
-    OUString aColorSchemeName("Office");
-    if (pTheme)
-    {
-        model::ColorSet* pColorSet = pTheme->GetColorSet();
-        if (pColorSet)
-        {
-            aColorSchemeName = pColorSet->getName();
-        }
-    }
-    pFS->startElementNS(XML_a, XML_clrScheme, XML_name, aColorSchemeName);
-
-    if (!WriteColorSets(pFS, pTheme))
-    {
-        pFS->write(SYS_COLOR_SCHEMES);
-        if (!WriteColorSchemes(pFS, sThemePath))
-        {
-            // if style is not defined, try to use first one
-            if (!WriteColorSchemes(pFS, "ppt/theme/theme1.xml"))
-            {
-                // color schemes are required - use default values
-                WriteDefaultColorSchemes(pFS);
-            }
-        }
-    }
-
-    pFS->endElementNS(XML_a, XML_clrScheme);
-
-    // export remaining part
-    pFS->write(MINIMAL_THEME);
-
-    pFS->endElementNS(XML_a, XML_themeElements);
-    pFS->endElementNS(XML_a, XML_theme);
-
-    pFS->endDocument();
+    aThemeExport.write(sThemePath, *pTheme);
 }
 
 bool PowerPointExport::ImplCreateDocument()
@@ -2344,6 +2039,7 @@ void PowerPointExport::WriteNotesMaster()
         openFragmentStreamWithSerializer("ppt/notesMasters/notesMaster1.xml",
                                          "application/vnd.openxmlformats-officedocument.presentationml.notesMaster+xml");
     // write theme per master
+
     WriteTheme(mnMasterPages, nullptr);
 
     // add implicit relation to the presentation theme
