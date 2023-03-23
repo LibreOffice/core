@@ -634,9 +634,8 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
         rRenderContext.SetFillColor(rStyleSettings.GetDisableColor());
         for (i = n2 - n1 + 1; i < ROW_COUNT * COLUMN_COUNT; i++)
         {
-            Point pix = MapIndexToPixel(i + n1);
             rRenderContext.DrawRect(
-                tools::Rectangle(Point(pix.X(), pix.Y()), Size(nX + 2, nY + 2)));
+                tools::Rectangle(MapIndexToPixel(i + n1), Size(nX + 2, nY + 2)));
         }
     }
 }
