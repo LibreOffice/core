@@ -31,7 +31,7 @@
 
 #include <animate/AnimationRenderer.hxx>
 
-sal_uLong Animation::mnAnimCount = 0;
+sal_uLong Animation::gAnimationRendererCount = 0;
 
 Animation::Animation()
     : maTimer("vcl::Animation")

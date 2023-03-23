@@ -90,12 +90,12 @@ public:
     friend SvStream& WriteAnimation(SvStream& rOStream, const Animation& rAnimation);
 
 public:
-    SAL_DLLPRIVATE static void ImplIncAnimCount() { mnAnimCount++; }
-    SAL_DLLPRIVATE static void ImplDecAnimCount() { mnAnimCount--; }
+    SAL_DLLPRIVATE static void ImplIncAnimCount() { gAnimationRendererCount++; }
+    SAL_DLLPRIVATE static void ImplDecAnimCount() { gAnimationRendererCount--; }
     SAL_DLLPRIVATE sal_uLong ImplGetCurPos() const { return mnFrameIndex; }
 
 private:
-    SAL_DLLPRIVATE static sal_uLong mnAnimCount;
+    SAL_DLLPRIVATE static sal_uLong gAnimationRendererCount;
 
     std::vector<std::unique_ptr<AnimationFrame>> maFrames;
     std::vector<std::unique_ptr<AnimationRenderer>> maRenderers;
