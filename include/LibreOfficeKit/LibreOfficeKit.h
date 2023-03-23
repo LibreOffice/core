@@ -493,6 +493,15 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::setViewTimezone().
     void (*setViewTimezone) (LibreOfficeKitDocument* pThis, int nId, const char* timezone);
 
+    /// @see lok::Document::setAccessibilityState().
+    void (*setAccessibilityState) (LibreOfficeKitDocument* pThis, int nId, bool nEnabled);
+
+    /// @see lok::Document::getA11yFocusedParagraph.
+    char* (*getA11yFocusedParagraph) (LibreOfficeKitDocument* pThis);
+
+    /// @see lok::Document::getA11yCaretPosition.
+    int (*getA11yCaretPosition) (LibreOfficeKitDocument* pThis);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

@@ -1309,6 +1309,11 @@ static void doc_sendContentControlEvent(LibreOfficeKitDocument* pThis, const cha
 
 static void doc_setViewTimezone(LibreOfficeKitDocument* pThis, int nId, const char* timezone);
 
+static void doc_setAccessibilityState(LibreOfficeKitDocument* pThis, int nId, bool bEnabled);
+
+static char* doc_getA11yFocusedParagraph(LibreOfficeKitDocument* pThis);
+
+static int doc_getA11yCaretPosition(LibreOfficeKitDocument* pThis);
 } // extern "C"
 
 namespace {
@@ -1361,6 +1366,45 @@ vcl::Font FindFont_FallbackToDefault(std::u16string_view rFontName)
     return OutputDevice::GetDefaultFont(DefaultFontType::SANS_UNICODE, LANGUAGE_NONE,
                                         GetDefaultFontFlags::NONE);
 }
+
+int getDocumentType (LibreOfficeKitDocument* pThis)
+{
+    SetLastExceptionMsg();
+
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    try
+    {
+        uno::Reference<lang::XServiceInfo> xDocument(pDocument->mxComponent, uno::UNO_QUERY_THROW);
+
+        if (xDocument->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
+        {
+            return LOK_DOCTYPE_SPREADSHEET;
+        }
+        else if (xDocument->supportsService("com.sun.star.presentation.PresentationDocument"))
+        {
+            return LOK_DOCTYPE_PRESENTATION;
+        }
+        else if (xDocument->supportsService("com.sun.star.drawing.DrawingDocument"))
+        {
+            return LOK_DOCTYPE_DRAWING;
+        }
+        else if (xDocument->supportsService("com.sun.star.text.TextDocument") || xDocument->supportsService("com.sun.star.text.WebDocument"))
+        {
+            return LOK_DOCTYPE_TEXT;
+        }
+        else
+        {
+            SetLastExceptionMsg("unknown document type");
+        }
+    }
+    catch (const uno::Exception& exception)
+    {
+        SetLastExceptionMsg("exception: " + exception.Message);
+    }
+    return LOK_DOCTYPE_OTHER;
+}
+
 } // anonymous namespace
 
 LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xComponent, int nDocumentId)
@@ -1457,6 +1501,11 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
         m_pDocumentClass->sendContentControlEvent = doc_sendContentControlEvent;
 
         m_pDocumentClass->setViewTimezone = doc_setViewTimezone;
+
+        m_pDocumentClass->setAccessibilityState = doc_setAccessibilityState;
+
+        m_pDocumentClass->getA11yFocusedParagraph = doc_getA11yFocusedParagraph;
+        m_pDocumentClass->getA11yCaretPosition = doc_getA11yCaretPosition;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -1764,6 +1813,9 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
         case LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
         case LOK_CALLBACK_REFERENCE_MARKS:
         case LOK_CALLBACK_CELL_AUTO_FILL_AREA:
+        case LOK_CALLBACK_A11Y_FOCUS_CHANGED:
+        case LOK_CALLBACK_A11Y_CARET_CHANGED:
+        case LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
         {
             const auto& pos = std::find(m_queue1.rbegin(), m_queue1.rend(), type);
             auto pos2 = toQueue2(pos);
@@ -1822,6 +1874,9 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             case LOK_CALLBACK_SET_PART:
             case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
             case LOK_CALLBACK_RULER_UPDATE:
+            case LOK_CALLBACK_A11Y_FOCUS_CHANGED:
+            case LOK_CALLBACK_A11Y_CARET_CHANGED:
+            case LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
             {
                 if (removeAll(type))
                     SAL_INFO("lok", "Removed dups of [" << type << "]: [" << aCallbackData.getPayload() << "].");
@@ -3615,40 +3670,7 @@ static int doc_getDocumentType (LibreOfficeKitDocument* pThis)
     comphelper::ProfileZone aZone("doc_getDocumentType");
 
     SolarMutexGuard aGuard;
-    SetLastExceptionMsg();
-
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-
-    try
-    {
-        uno::Reference<lang::XServiceInfo> xDocument(pDocument->mxComponent, uno::UNO_QUERY_THROW);
-
-        if (xDocument->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
-        {
-            return LOK_DOCTYPE_SPREADSHEET;
-        }
-        else if (xDocument->supportsService("com.sun.star.presentation.PresentationDocument"))
-        {
-            return LOK_DOCTYPE_PRESENTATION;
-        }
-        else if (xDocument->supportsService("com.sun.star.drawing.DrawingDocument"))
-        {
-            return LOK_DOCTYPE_DRAWING;
-        }
-        else if (xDocument->supportsService("com.sun.star.text.TextDocument") || xDocument->supportsService("com.sun.star.text.WebDocument"))
-        {
-            return LOK_DOCTYPE_TEXT;
-        }
-        else
-        {
-            SetLastExceptionMsg("unknown document type");
-        }
-    }
-    catch (const uno::Exception& exception)
-    {
-        SetLastExceptionMsg("exception: " + exception.Message);
-    }
-    return LOK_DOCTYPE_OTHER;
+    return getDocumentType(pThis);
 }
 
 static int doc_getParts (LibreOfficeKitDocument* pThis)
@@ -3768,6 +3790,46 @@ static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)
     }
 
     return convertOUString(pDoc->getPartPageRectangles());
+}
+
+static char* doc_getA11yFocusedParagraph(LibreOfficeKitDocument* pThis)
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        return nullptr;
+    }
+
+    if (SfxViewShell* pViewShell = SfxViewShell::Current())
+    {
+        return convertOUString(pViewShell->getA11yFocusedParagraph());
+
+    }
+    return nullptr;
+}
+
+static int  doc_getA11yCaretPosition(LibreOfficeKitDocument* pThis)
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        return -1;
+    }
+    if (SfxViewShell* pViewShell = SfxViewShell::Current())
+    {
+        return pViewShell->getA11yCaretPosition();
+
+    }
+    return -1;
+
 }
 
 static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
@@ -6395,8 +6457,6 @@ static void doc_setViewLanguage(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*p
     SfxLokHelper::setViewLocale(nId, sLanguage);
 }
 
-
-
 unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
                               const char* pFontName,
                               const char* pChar,
@@ -6936,6 +6996,18 @@ static void doc_setViewTimezone(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*p
         OUString sTimezone = OStringToOUString(pTimezone, RTL_TEXTENCODING_UTF8);
         SfxLokHelper::setViewTimezone(nId, true, sTimezone);
     }
+}
+
+static void doc_setAccessibilityState(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, int nId, bool nEnabled)
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    int nDocType = getDocumentType(pThis);
+    if (nDocType != LOK_DOCTYPE_TEXT)
+        return;
+
+    SfxLokHelper::setAccessibilityState(nId, nEnabled);
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)

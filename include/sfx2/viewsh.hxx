@@ -57,6 +57,7 @@ class SfxPrinter;
 class NotifyEvent;
 class SfxInPlaceClient;
 class SfxLokCallbackInterface;
+class LOKDocumentFocusListener;
 class SfxStoringHelper;
 class VCLXPopupMenu;
 namespace rtl { class OStringBuffer; }
@@ -173,6 +174,8 @@ friend class SfxPrinterController;
     LanguageTag                 maLOKLanguageTag;
     LanguageTag                 maLOKLocale;
     LOKDeviceFormFactor         maLOKDeviceFormFactor;
+    bool                        mbLOKAccessibilityEnabled;
+    rtl::Reference<LOKDocumentFocusListener>   mpLOKDocumentFocusListener;
     std::unordered_set<OUString>    mvLOKBlockedCommandList;
     OUString maLOKTimezone;
     bool maLOKIsTimezoneSet;
@@ -214,6 +217,9 @@ public:
 private:
     /// SfxInterface initializer.
     static void InitInterface_Impl();
+
+    LOKDocumentFocusListener& GetLOKDocumentFocusListener();
+    const LOKDocumentFocusListener& GetLOKDocumentFocusListener() const;
 
 public:
 
@@ -427,6 +433,8 @@ public:
     void SetLOKLanguageTag(const OUString& rBcp47LanguageTag);
     /// Get the LibreOfficeKit language of this view.
     const LanguageTag& GetLOKLanguageTag() const { return maLOKLanguageTag; }
+    /// Enable/Disable LibreOfficeKit AT support for this view.
+    void SetLOKAccessibilityState(bool bEnabled);
 
     /// Get the LibreOfficeKit timezone of this view. See @SetLOKTimezone.
     std::pair<bool, OUString> GetLOKTimezone() const
@@ -466,6 +474,9 @@ public:
 
     StylesHighlighterColorMap& GetStylesHighlighterParaColorMap() { return ParaStylesColorMap; }
     StylesHighlighterColorMap& GetStylesHighlighterCharColorMap() { return CharStylesColorMap; }
+
+    OUString getA11yFocusedParagraph() const;
+    int getA11yCaretPosition() const;
 };
 
 #endif // INCLUDED_SFX2_VIEWSH_HXX

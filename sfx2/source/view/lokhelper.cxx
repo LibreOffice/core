@@ -145,10 +145,11 @@ void SfxLokHelper::destroyView(int nId)
     const ViewShellId nViewShellId(nId);
     std::vector<SfxViewShell*>& rViewArr = pApp->GetViewShells_Impl();
 
-    for (const SfxViewShell* pViewShell : rViewArr)
+    for (SfxViewShell* pViewShell : rViewArr)
     {
         if (pViewShell->GetViewShellId() == nViewShellId)
         {
+            pViewShell->SetLOKAccessibilityState(false);
             SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
             SfxRequest aRequest(rViewFrame, SID_CLOSEWIN);
             rViewFrame.Exec_Impl(aRequest);
@@ -307,6 +308,20 @@ void SfxLokHelper::setViewLanguage(int nId, const OUString& rBcp47LanguageTag)
         if (pViewShell->GetViewShellId() == ViewShellId(nId))
         {
             pViewShell->SetLOKLanguageTag(rBcp47LanguageTag);
+            return;
+        }
+    }
+}
+
+void SfxLokHelper::setAccessibilityState(int nId, bool nEnabled)
+{
+    std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();
+
+    for (SfxViewShell* pViewShell : rViewArr)
+    {
+        if (pViewShell->GetViewShellId() == ViewShellId(nId))
+        {
+            pViewShell->SetLOKAccessibilityState(nEnabled);
             return;
         }
     }

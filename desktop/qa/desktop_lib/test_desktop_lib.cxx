@@ -3641,9 +3641,15 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(67), offsetof(struct _LibreOfficeKitDocumentClass, getEditMode));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(68),
                          offsetof(struct _LibreOfficeKitDocumentClass, setViewTimezone));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(69),
+                         offsetof(struct _LibreOfficeKitDocumentClass, setAccessibilityState));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(70),
+                         offsetof(struct _LibreOfficeKitDocumentClass, getA11yFocusedParagraph));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(71),
+                         offsetof(struct _LibreOfficeKitDocumentClass, getA11yCaretPosition));
 
     // As above
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(69), sizeof(struct _LibreOfficeKitDocumentClass));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(72), sizeof(struct _LibreOfficeKitDocumentClass));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
