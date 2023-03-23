@@ -20,6 +20,7 @@
 #define INCLUDED_SVX_SOURCE_INC_DATANAVI_HXX
 
 #include <config_options.h>
+#include <o3tl/sorted_vector.hxx>
 #include <vcl/builderpage.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/transfer.hxx>
@@ -184,8 +185,11 @@ namespace svxform
 
         weld::Container* m_pParent;
         std::unique_ptr<weld::Toolbar> m_xToolBox;
+        std::unique_ptr<weld::Menu> m_xMenu;
         std::unique_ptr<weld::TreeView> m_xItemList;
         std::unique_ptr<weld::TreeIter> m_xScratchIter;
+
+        o3tl::sorted_vector<OString> m_aRemovedMenuEntries;
 
         DataTreeDropTarget m_aDropHelper;
 
@@ -220,6 +224,8 @@ namespace svxform
 
         void                        DeleteAndClearTree();
 
+        void                        SetMenuEntrySensitive(const OString& rIdent, bool bSensitive);
+
     public:
         XFormsPage(weld::Container* pParent, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup);
         virtual ~XFormsPage() override;
@@ -230,7 +236,7 @@ namespace svxform
         OUString             LoadInstance(const css::uno::Sequence< css::beans::PropertyValue >& _xPropSeq);
 
         bool                 DoMenuAction(std::string_view rMenuID);
-        void                 EnableMenuItems(weld::Menu* pMenu);
+        void                 EnableMenuItems();
 
         const OUString&      GetInstanceName() const { return m_sInstanceName; }
         const OUString&      GetInstanceURL() const { return m_sInstanceURL; }
