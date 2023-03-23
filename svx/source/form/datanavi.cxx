@@ -189,6 +189,15 @@ namespace svxform
         m_xItemList->clear();
     }
 
+    void XFormsPage::SelectFirstEntry()
+    {
+        if (m_xItemList->get_iter_first(*m_xScratchIter))
+        {
+            m_xItemList->select(*m_xScratchIter);
+            ItemSelectHdl(*m_xItemList);
+        }
+    }
+
     XFormsPage::XFormsPage(weld::Container* pPage, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup)
         : BuilderPage(pPage, nullptr, "svx/ui/xformspage.ui", "XFormsPage")
         , m_pParent(pPage)
@@ -1316,6 +1325,10 @@ namespace svxform
 
         // load xforms models of the current document
         LoadModels();
+
+        // tdf#154322 select the first entry of the current page by default
+        if (XFormsPage* pPage = GetPage(sPageId))
+            pPage->SelectFirstEntry();
     }
 
     DataNavigatorWindow::~DataNavigatorWindow()
