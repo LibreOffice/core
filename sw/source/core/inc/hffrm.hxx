@@ -53,6 +53,8 @@ class SwFooterFrame final : public SwHeadFootFrame
 {
 public:
     SwFooterFrame( SwFrameFormat* pFrame, SwFrame* pSib ) : SwHeadFootFrame(pFrame, pSib, SwFrameType::Footer) {};
+
+    void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
 };
 
 #endif
