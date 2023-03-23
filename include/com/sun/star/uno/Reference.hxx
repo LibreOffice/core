@@ -387,13 +387,13 @@ inline Reference< interface_type > Reference< interface_type >::query(
 
 #if defined LIBO_INTERNAL_ONLY
 template< class interface_type > template< class other_type >
-inline Reference< other_type > Reference< interface_type >::query()
+inline Reference< other_type > Reference< interface_type >::query() const
 {
     return Reference< other_type >(*this, UNO_QUERY);
 }
 
 template< class interface_type > template< class other_type >
-inline Reference< other_type > Reference< interface_type >::queryThrow()
+inline Reference< other_type > Reference< interface_type >::queryThrow() const
 {
     return Reference< other_type >(*this, UNO_QUERY_THROW);
 }

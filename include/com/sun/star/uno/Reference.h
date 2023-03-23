@@ -566,14 +566,14 @@ public:
 
         @return new reference
     */
-    template< class other_type > inline Reference< other_type > query();
+    template< class other_type > inline Reference< other_type > query() const;
     /** Queries this for the required interface, and returns the requested reference, or throws
         on failure. A syntactic sugar for 'Reference< other_type > xOther(xThis, UNO_QUERY_THROW)'
         that avoids some verbocity.
 
         @return new reference
     */
-    template< class other_type > inline Reference< other_type > queryThrow();
+    template< class other_type > inline Reference< other_type > queryThrow() const;
 #endif
 };
 
