@@ -591,7 +591,7 @@ static bool AllowPoint(const Point& rPoint)
 
 static bool AllowRect(const tools::Rectangle& rRect)
 {
-    return AllowDim(rRect.Top()) && AllowDim(rRect.Bottom());
+    return AllowPoint(rRect.TopLeft()) && AllowPoint(rRect.BottomRight());
 }
 
 void MetaTextAction::Execute( OutputDevice* pOut )
