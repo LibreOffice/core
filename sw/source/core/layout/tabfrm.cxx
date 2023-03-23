@@ -2832,201 +2832,196 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
     const bool bWrapAllowed = rIDSA.get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) ||
                                 ( !IsInFootnote() && nullptr == FindFooterOrHeader() );
 
-    if ( pPage->GetSortedObjs() && bWrapAllowed )
+    if (!bWrapAllowed || !pPage->GetSortedObjs())
+        return bInvalidatePrtArea;
+
+    SwRectFnSet aRectFnSet(this);
+    const bool bConsiderWrapOnObjPos
+        = rIDSA.get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION);
+    tools::Long nPrtPos = aRectFnSet.GetTop(getFrameArea());
+    nPrtPos = aRectFnSet.YInc(nPrtPos, rUpper);
+    SwRect aRect(getFrameArea());
+    if (pSpaceBelowBottom)
     {
-        SwRectFnSet aRectFnSet(this);
-        const bool bConsiderWrapOnObjPos = rIDSA.get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION);
-        tools::Long nPrtPos = aRectFnSet.GetTop(getFrameArea());
-        nPrtPos = aRectFnSet.YInc( nPrtPos, rUpper );
-        SwRect aRect( getFrameArea() );
-        if (pSpaceBelowBottom)
-        {   // set to space below table frame
-            aRectFnSet.SetTopAndHeight(aRect, aRectFnSet.GetBottom(aRect), *pSpaceBelowBottom);
-        }
-        else
+        // set to space below table frame
+        aRectFnSet.SetTopAndHeight(aRect, aRectFnSet.GetBottom(aRect), *pSpaceBelowBottom);
+    }
+    else
+    {
+        tools::Long nYDiff = aRectFnSet.YDiff(aRectFnSet.GetTop(getFramePrintArea()), rUpper);
+        if (nYDiff > 0)
+            aRectFnSet.AddBottom(aRect, -nYDiff);
+    }
+
+    bool bAddVerticalFlyOffsets = rIDSA.get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS);
+
+    for (size_t i = 0; i < pPage->GetSortedObjs()->size(); ++i)
+    {
+        SwAnchoredObject* pAnchoredObj = (*pPage->GetSortedObjs())[i];
+        auto pFly = pAnchoredObj->DynCastFlyFrame();
+        if (!pFly)
+            continue;
+
+        const SwRect aFlyRect = pFly->GetObjRectWithSpaces();
+        // #i26945# - correction of conditions,
+        // if Writer fly frame has to be considered:
+        // - no need to check, if top of Writer fly frame differs
+        //   from FAR_AWAY, because it's also checked, if the Writer
+        //   fly frame rectangle overlaps with <aRect>
+        // - no check, if bottom of anchor frame is prior the top of
+        //   the table, because Writer fly frames can be negative positioned.
+        // - correct check, if the Writer fly frame is a lower of the
+        //   table, because table lines/rows can split and an at-character
+        //   anchored Writer fly frame could be positioned in the follow
+        //   flow line.
+        // - add condition, that an existing anchor character text frame
+        //   has to be on the same page as the table.
+        //   E.g., it could happen, that the fly frame is still registered
+        //   at the page frame, the table is on, but it's anchor character
+        //   text frame has already changed its page.
+        const SwTextFrame* pAnchorCharFrame = pFly->FindAnchorCharFrame();
+        bool bConsiderFly =
+            // #i46807# - do not consider invalid
+            // Writer fly frames.
+            (pFly->isFrameAreaDefinitionValid() || bAddVerticalFlyOffsets)
+            // fly anchored at character or at paragraph
+            && pFly->IsFlyAtContentFrame()
+            // fly overlaps with corresponding table rectangle
+            && aFlyRect.Overlaps(aRect)
+            // fly isn't lower of table and
+            // anchor character frame of fly isn't lower of table
+            && (pSpaceBelowBottom // not if in ShouldBwdMoved
+                || (!IsAnLower(pFly) && (!pAnchorCharFrame || !IsAnLower(pAnchorCharFrame))))
+            // table isn't lower of fly
+            && !pFly->IsAnLower(this)
+            // fly is lower of fly, the table is in
+            // #123274# - correction
+            // assure that fly isn't a lower of a fly, the table isn't in.
+            // E.g., a table in the body doesn't wrap around a graphic,
+            // which is inside a frame.
+            && (!pMyFly || pMyFly->IsAnLower(pFly))
+            && pMyFly == pFly->GetAnchorFrameContainingAnchPos()->FindFlyFrame()
+            // anchor frame not on following page
+            && pPage->GetPhyPageNum() >= pFly->GetAnchorFrame()->FindPageFrame()->GetPhyPageNum()
+            // anchor character text frame on same page
+            && (!pAnchorCharFrame ||
+                pAnchorCharFrame->FindPageFrame()->GetPhyPageNum() == pPage->GetPhyPageNum());
+
+        if (!bConsiderFly)
+            continue;
+
+        const SwFrame* pFlyHeaderFooterFrame = pFly->GetAnchorFrame()->FindFooterOrHeader();
+        const SwFrame* pThisHeaderFooterFrame = FindFooterOrHeader();
+        if (pFlyHeaderFooterFrame != pThisHeaderFooterFrame
+            // #148493# If bConsiderWrapOnObjPos is set,
+            // we want to consider the fly if it is located in the header and
+            // the table is located in the body:
+            && (!bConsiderWrapOnObjPos || nullptr != pThisHeaderFooterFrame
+                || !pFlyHeaderFooterFrame->IsHeaderFrame()))
         {
-            tools::Long nYDiff = aRectFnSet.YDiff( aRectFnSet.GetTop(getFramePrintArea()), rUpper );
-            if (nYDiff > 0)
-                aRectFnSet.AddBottom( aRect, -nYDiff );
+            continue;
         }
 
-        bool bAddVerticalFlyOffsets = rIDSA.get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS);
+        text::WrapTextMode nSurround = pFly->GetFormat()->GetSurround().GetSurround();
+        // If the frame format is a TextBox of a draw shape,
+        // then use the surround of the original shape.
+        bool bWrapThrough = nSurround == text::WrapTextMode_THROUGH;
+        SwTextBoxHelper::getShapeWrapThrough(pFly->GetFormat(), bWrapThrough);
+        if (bWrapThrough)
+            continue;
+        if (!bWrapThrough && nSurround == text::WrapTextMode_THROUGH)
+            nSurround = text::WrapTextMode_PARALLEL;
 
-        for ( size_t i = 0; i < pPage->GetSortedObjs()->size(); ++i )
+        const SwFormatHoriOrient& rHori= pFly->GetFormat()->GetHoriOrient();
+        bool bShiftDown = css::text::WrapTextMode_NONE == nSurround;
+        if (!bShiftDown && bAddVerticalFlyOffsets)
         {
-            SwAnchoredObject* pAnchoredObj = (*pPage->GetSortedObjs())[i];
-            if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
+            if (nSurround == text::WrapTextMode_PARALLEL
+                && rHori.GetHoriOrient() == text::HoriOrientation::NONE)
             {
-                const SwRect aFlyRect = pFly->GetObjRectWithSpaces();
-                // #i26945# - correction of conditions,
-                // if Writer fly frame has to be considered:
-                // - no need to check, if top of Writer fly frame differs
-                //   from FAR_AWAY, because it's also checked, if the Writer
-                //   fly frame rectangle overlaps with <aRect>
-                // - no check, if bottom of anchor frame is prior the top of
-                //   the table, because Writer fly frames can be negative positioned.
-                // - correct check, if the Writer fly frame is a lower of the
-                //   table, because table lines/rows can split and an at-character
-                //   anchored Writer fly frame could be positioned in the follow
-                //   flow line.
-                // - add condition, that an existing anchor character text frame
-                //   has to be on the same page as the table.
-                //   E.g., it could happen, that the fly frame is still registered
-                //   at the page frame, the table is on, but it's anchor character
-                //   text frame has already changed its page.
-                const SwTextFrame* pAnchorCharFrame = pFly->FindAnchorCharFrame();
-                bool bConsiderFly =
-                    // #i46807# - do not consider invalid
-                    // Writer fly frames.
-                    (pFly->isFrameAreaDefinitionValid() || bAddVerticalFlyOffsets) &&
-                    // fly anchored at character or at paragraph
-                    pFly->IsFlyAtContentFrame() &&
-                    // fly overlaps with corresponding table rectangle
-                    aFlyRect.Overlaps( aRect ) &&
-                    // fly isn't lower of table and
-                    // anchor character frame of fly isn't lower of table
-                    (pSpaceBelowBottom // not if in ShouldBwdMoved
-                     || (!IsAnLower( pFly ) &&
-                          (!pAnchorCharFrame || !IsAnLower(pAnchorCharFrame)))) &&
-                    // table isn't lower of fly
-                    !pFly->IsAnLower( this ) &&
-                    // fly is lower of fly, the table is in
-                    // #123274# - correction
-                    // assure that fly isn't a lower of a fly, the table isn't in.
-                    // E.g., a table in the body doesn't wrap around a graphic,
-                    // which is inside a frame.
-                    ( ( !pMyFly ||
-                        pMyFly->IsAnLower( pFly ) ) &&
-                      pMyFly == pFly->GetAnchorFrameContainingAnchPos()->FindFlyFrame() ) &&
-                    // anchor frame not on following page
-                    pPage->GetPhyPageNum() >=
-                      pFly->GetAnchorFrame()->FindPageFrame()->GetPhyPageNum() &&
-                    // anchor character text frame on same page
-                    ( !pAnchorCharFrame ||
-                      pAnchorCharFrame->FindPageFrame()->GetPhyPageNum() ==
-                        pPage->GetPhyPageNum() );
+                // We know that wrapping was requested and the table frame overlaps with
+                // the fly frame. Check if the print area overlaps with the fly frame as
+                // well (in case the table does not use all the available width).
+                basegfx::B1DRange aTabRange(
+                    aRectFnSet.GetLeft(aRect) + aRectFnSet.GetLeft(getFramePrintArea()),
+                    aRectFnSet.GetLeft(aRect) + aRectFnSet.GetLeft(getFramePrintArea())
+                        + aRectFnSet.GetWidth(getFramePrintArea()));
 
-                if ( bConsiderFly )
-                {
-                    const SwFrame* pFlyHeaderFooterFrame = pFly->GetAnchorFrame()->FindFooterOrHeader();
-                    const SwFrame* pThisHeaderFooterFrame = FindFooterOrHeader();
+                // Ignore spacing when determining the left/right edge of the fly, like
+                // Word does.
+                const SwRect aFlyRectWithoutSpaces = pFly->GetObjRect();
+                basegfx::B1DRange aFlyRange(aRectFnSet.GetLeft(aFlyRectWithoutSpaces),
+                                            aRectFnSet.GetRight(aFlyRectWithoutSpaces));
 
-                    if ( pFlyHeaderFooterFrame != pThisHeaderFooterFrame &&
-                        // #148493# If bConsiderWrapOnObjPos is set,
-                        // we want to consider the fly if it is located in the header and
-                        // the table is located in the body:
-                         ( !bConsiderWrapOnObjPos || nullptr != pThisHeaderFooterFrame || !pFlyHeaderFooterFrame->IsHeaderFrame() ) )
-                        bConsiderFly = false;
-                }
-
-                text::WrapTextMode nSurround = text::WrapTextMode_NONE;
-                if ( bConsiderFly )
-                {
-                    nSurround = pFly->GetFormat()->GetSurround().GetSurround();
-                    // If the frame format is a TextBox of a draw shape,
-                    // then use the surround of the original shape.
-                    bool bWrapThrough = nSurround == text::WrapTextMode_THROUGH;
-                    SwTextBoxHelper::getShapeWrapThrough(pFly->GetFormat(), bWrapThrough);
-                    if (bWrapThrough)
-                        bConsiderFly = false;
-                    else if (!bWrapThrough && nSurround == text::WrapTextMode_THROUGH)
-                        nSurround = text::WrapTextMode_PARALLEL;
-                }
-
-                if (bConsiderFly)
-                {
-                    const SwFormatHoriOrient &rHori= pFly->GetFormat()->GetHoriOrient();
-                    bool bShiftDown = css::text::WrapTextMode_NONE == nSurround;
-                    if (!bShiftDown && bAddVerticalFlyOffsets)
-                    {
-                        if (nSurround == text::WrapTextMode_PARALLEL
-                            && rHori.GetHoriOrient() == text::HoriOrientation::NONE)
-                        {
-                            // We know that wrapping was requested and the table frame overlaps with
-                            // the fly frame. Check if the print area overlaps with the fly frame as
-                            // well (in case the table does not use all the available width).
-                            basegfx::B1DRange aTabRange(
-                                aRectFnSet.GetLeft(aRect) + aRectFnSet.GetLeft(getFramePrintArea()),
-                                aRectFnSet.GetLeft(aRect) + aRectFnSet.GetLeft(getFramePrintArea())
-                                    + aRectFnSet.GetWidth(getFramePrintArea()));
-
-                            // Ignore spacing when determining the left/right edge of the fly, like
-                            // Word does.
-                            const SwRect aFlyRectWithoutSpaces = pFly->GetObjRect();
-                            basegfx::B1DRange aFlyRange(aRectFnSet.GetLeft(aFlyRectWithoutSpaces),
-                                                        aRectFnSet.GetRight(aFlyRectWithoutSpaces));
-
-                            // If it does, shift the table down. Do this only in the compat case,
-                            // normally an SwFlyPortion is created instead that increases the height
-                            // of the first table row.
-                            bShiftDown = aTabRange.overlaps(aFlyRange);
-                        }
-                    }
-
-                    if (bShiftDown)
-                    {
-                        // possible cases:
-                        //        both in body
-                        //        both in same fly
-                        //        any comb. of body, footnote, header/footer
-                        // to keep it safe, check only in doc body vs page margin for now
-                        tools::Long nBottom = aRectFnSet.GetBottom(aFlyRect);
-                        // tdf#138039 don't grow beyond the page body
-                        // if the fly is anchored below the table; the fly
-                        // must move with its anchor frame to the next page
-                        SwRectFnSet fnPage(pPage);
-                        if (!IsInDocBody() // TODO
-                            || fnPage.YDiff(fnPage.GetBottom(aFlyRect), fnPage.GetPrtBottom(*pPage)) <= 0
-                            || !IsNextOnSamePage(*pPage, *this,
-                                *static_cast<SwTextFrame*>(pFly->GetAnchorFrameContainingAnchPos())))
-                        {
-                            if (aRectFnSet.YDiff( nPrtPos, nBottom ) < 0)
-                                nPrtPos = nBottom;
-                            // tdf#116501 subtract flys blocking space from below
-                            // TODO this may not work ideally for multiple flys
-                            if (pSpaceBelowBottom
-                                && aRectFnSet.YDiff(aRectFnSet.GetBottom(aRect), nBottom) < 0)
-                            {
-                                if (aRectFnSet.YDiff(aRectFnSet.GetTop(aRect), aRectFnSet.GetTop(aFlyRect)) < 0)
-                                {
-                                    aRectFnSet.SetBottom(aRect, aRectFnSet.GetTop(aFlyRect));
-                                }
-                                else
-                                {
-                                    aRectFnSet.SetHeight(aRect, 0);
-                                }
-                            }
-                            bInvalidatePrtArea = true;
-                        }
-                    }
-                    if ((css::text::WrapTextMode_RIGHT == nSurround
-                         || css::text::WrapTextMode_PARALLEL == nSurround) &&
-                         text::HoriOrientation::LEFT == rHori.GetHoriOrient() )
-                    {
-                        const tools::Long nWidth = aRectFnSet.XDiff(
-                            aRectFnSet.GetRight(aFlyRect),
-                            aRectFnSet.GetLeft(pFly->GetAnchorFrame()->getFrameArea()) );
-                        rLeftOffset = std::max( rLeftOffset, nWidth );
-                        bInvalidatePrtArea = true;
-                    }
-                    if ((css::text::WrapTextMode_LEFT == nSurround
-                         || css::text::WrapTextMode_PARALLEL == nSurround) &&
-                         text::HoriOrientation::RIGHT == rHori.GetHoriOrient() )
-                    {
-                        const tools::Long nWidth = aRectFnSet.XDiff(
-                            aRectFnSet.GetRight(pFly->GetAnchorFrame()->getFrameArea()),
-                            aRectFnSet.GetLeft(aFlyRect) );
-                        rRightOffset = std::max( rRightOffset, nWidth );
-                        bInvalidatePrtArea = true;
-                    }
-                }
+                // If it does, shift the table down. Do this only in the compat case,
+                // normally an SwFlyPortion is created instead that increases the height
+                // of the first table row.
+                bShiftDown = aTabRange.overlaps(aFlyRange);
             }
         }
-        rUpper = aRectFnSet.YDiff( nPrtPos, aRectFnSet.GetTop(getFrameArea()) );
-        if (pSpaceBelowBottom)
+
+        if (bShiftDown)
         {
-            *pSpaceBelowBottom = aRectFnSet.GetHeight(aRect);
+            // possible cases:
+            //        both in body
+            //        both in same fly
+            //        any comb. of body, footnote, header/footer
+            // to keep it safe, check only in doc body vs page margin for now
+            tools::Long nBottom = aRectFnSet.GetBottom(aFlyRect);
+            // tdf#138039 don't grow beyond the page body
+            // if the fly is anchored below the table; the fly
+            // must move with its anchor frame to the next page
+            SwRectFnSet fnPage(pPage);
+            if (!IsInDocBody() // TODO
+                || fnPage.YDiff(fnPage.GetBottom(aFlyRect), fnPage.GetPrtBottom(*pPage)) <= 0
+                || !IsNextOnSamePage(
+                       *pPage, *this,
+                       *static_cast<SwTextFrame*>(pFly->GetAnchorFrameContainingAnchPos())))
+            {
+                if (aRectFnSet.YDiff(nPrtPos, nBottom) < 0)
+                    nPrtPos = nBottom;
+                // tdf#116501 subtract flys blocking space from below
+                // TODO this may not work ideally for multiple flys
+                if (pSpaceBelowBottom && aRectFnSet.YDiff(aRectFnSet.GetBottom(aRect), nBottom) < 0)
+                {
+                    if (aRectFnSet.YDiff(aRectFnSet.GetTop(aRect), aRectFnSet.GetTop(aFlyRect)) < 0)
+                    {
+                        aRectFnSet.SetBottom(aRect, aRectFnSet.GetTop(aFlyRect));
+                    }
+                    else
+                    {
+                        aRectFnSet.SetHeight(aRect, 0);
+                    }
+                }
+                bInvalidatePrtArea = true;
+            }
         }
+
+        if ((css::text::WrapTextMode_RIGHT == nSurround
+             || css::text::WrapTextMode_PARALLEL == nSurround)
+            && text::HoriOrientation::LEFT == rHori.GetHoriOrient())
+        {
+            const tools::Long nWidth
+                = aRectFnSet.XDiff(aRectFnSet.GetRight(aFlyRect),
+                                   aRectFnSet.GetLeft(pFly->GetAnchorFrame()->getFrameArea()));
+            rLeftOffset = std::max(rLeftOffset, nWidth);
+            bInvalidatePrtArea = true;
+        }
+        if ((css::text::WrapTextMode_LEFT == nSurround
+             || css::text::WrapTextMode_PARALLEL == nSurround)
+            && text::HoriOrientation::RIGHT == rHori.GetHoriOrient())
+        {
+            const tools::Long nWidth
+                = aRectFnSet.XDiff(aRectFnSet.GetRight(pFly->GetAnchorFrame()->getFrameArea()),
+                                   aRectFnSet.GetLeft(aFlyRect));
+            rRightOffset = std::max(rRightOffset, nWidth);
+            bInvalidatePrtArea = true;
+        }
+    }
+    rUpper = aRectFnSet.YDiff( nPrtPos, aRectFnSet.GetTop(getFrameArea()) );
+    if (pSpaceBelowBottom)
+    {
+        *pSpaceBelowBottom = aRectFnSet.GetHeight(aRect);
     }
 
     return bInvalidatePrtArea;
