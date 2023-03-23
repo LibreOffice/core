@@ -237,6 +237,7 @@ namespace svxform
 
         bool                 DoMenuAction(std::string_view rMenuID);
         void                 EnableMenuItems();
+        void                 SelectFirstEntry();
 
         const OUString&      GetInstanceName() const { return m_sInstanceName; }
         const OUString&      GetInstanceURL() const { return m_sInstanceURL; }
