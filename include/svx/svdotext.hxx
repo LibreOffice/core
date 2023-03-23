@@ -250,6 +250,8 @@ private:
                                        Fraction&        aFitXCorrection ) const;
     void ImpAutoFitText( SdrOutliner& rOutliner ) const;
     void ImpAutoFitText( SdrOutliner& rOutliner, const Size& rShapeSize, bool bIsVerticalWriting ) const;
+    void autoFitTextForCompatibility(SdrOutliner& rOutliner, const Size& rShapeSize) const;
+
     SVX_DLLPRIVATE rtl::Reference<SdrObject> ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const;
     SVX_DLLPRIVATE void ImpRegisterLink();
     SVX_DLLPRIVATE void ImpDeregisterLink();
@@ -378,7 +380,9 @@ public:
     // FitToSize and Fontwork are not taken into account in GetTextSize()!
     virtual const Size& GetTextSize() const;
     void FitFrameToTextSize();
-    sal_uInt16 GetFontScaleY() const;
+
+    double GetFontScale() const;
+    double GetSpacingScale() const;
 
     // Simultaneously sets the text into the Outliner (possibly
     // the one of the EditOutliner) and sets the PaperSize.

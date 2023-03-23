@@ -186,13 +186,13 @@ void Diagram::syncDiagramFontHeights()
     {
         // Find out the minimum scale within this group.
         const ShapePairs& rShapePairs = rNameAndPairs.second;
-        sal_Int16 nMinScale = 100;
+        double nMinScale = 100.0;
         for (const auto& rShapePair : rShapePairs)
         {
             uno::Reference<beans::XPropertySet> xPropertySet(rShapePair.second, uno::UNO_QUERY);
             if (xPropertySet.is())
             {
-                sal_Int16 nTextFitToSizeScale = 0;
+                double nTextFitToSizeScale = 0.0;
                 xPropertySet->getPropertyValue("TextFitToSizeScale") >>= nTextFitToSizeScale;
                 if (nTextFitToSizeScale > 0 && nTextFitToSizeScale < nMinScale)
                 {
@@ -202,7 +202,7 @@ void Diagram::syncDiagramFontHeights()
         }
 
         // Set that minimum scale for all members of the group.
-        if (nMinScale < 100)
+        if (nMinScale < 100.0)
         {
             for (const auto& rShapePair : rShapePairs)
             {

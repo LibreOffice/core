@@ -65,7 +65,7 @@ void TextBody::insertAt(
     for (auto const& paragraph : maParagraphs)
     {
         paragraph->insertAt(rFilterBase, xText, xAt, rTextStyleProperties, aMasterTextStyle,
-                            maTextListStyle, (nIndex == 0), nCharHeight, getTextProperties().mnFontScale);
+                            maTextListStyle, (nIndex == 0), nCharHeight);
         ++nIndex;
     }
 }
@@ -149,7 +149,7 @@ void TextBody::ApplyStyleEmpty(
         TextParagraphProperties aParaProp;
         aParaProp.apply(*pTextParagraphStyle);
         aParaProp.pushToPropSet(&rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(),
-                                true, nCharHeight, getTextProperties().mnFontScale, true);
+                                true, nCharHeight, true);
     }
 }
 

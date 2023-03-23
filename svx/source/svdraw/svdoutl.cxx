@@ -50,7 +50,7 @@ void SdrOutliner::SetTextObj( const SdrTextObj* pObj )
             nOutlinerMode2 = OutlinerMode::TextObject;
         Init( nOutlinerMode2 );
 
-        SetGlobalCharStretching();
+        setGlobalScale(100.0, 100.0, 100.0, 100.0);
 
         EEControlBits nStat = GetControlWord();
         nStat &= ~EEControlBits( EEControlBits::STRETCHING | EEControlBits::AUTOPAGESIZE );

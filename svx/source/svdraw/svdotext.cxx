@@ -43,6 +43,7 @@
 #include <svx/sdtfsitm.hxx>
 #include <svx/sdtmfitm.hxx>
 #include <svx/xtextit0.hxx>
+#include <svx/compatflags.hxx>
 #include <sdr/properties/textproperties.hxx>
 #include <sdr/contact/viewcontactoftextobj.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
@@ -51,8 +52,11 @@
 #include <vcl/virdev.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <sal/log.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <o3tl/temporary.hxx>
 #include <unotools/configmgr.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
 
 using namespace com::sun::star;
 
@@ -906,6 +910,9 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
         }
 #endif
     }
+
+    rOutliner.setRoundFontSizeToPt(false);
+
     unsigned nLoopCount=0;
     bool bNoMoreLoop = false;
     tools::Long nXDiff0=0x7FFFFFFF;
@@ -980,7 +987,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
             nY = nX;
             bNoMoreLoop = true;
         }
-        rOutliner.SetGlobalCharStretching(nX, nY);
+        rOutliner.setGlobalScale(nX, nY);
         nLoopCount++;
         Size aSiz(rOutliner.CalcTextSize());
         tools::Long nXDiff = aSiz.Width() - nWantWdt;
@@ -1165,7 +1172,8 @@ void SdrTextObj::ImpInitDrawOutliner( SdrOutliner& rOutl ) const
         nOutlinerMode = OutlinerMode::TextObject;
     rOutl.Init( nOutlinerMode );
 
-    rOutl.SetGlobalCharStretching(100.0, 100.0);
+    rOutl.setGlobalScale(100.0, 100.0, 100.0, 100.0);
+
     EEControlBits nStat=rOutl.GetControlWord();
     nStat &= ~EEControlBits(EEControlBits::STRETCHING|EEControlBits::AUTOPAGESIZE);
     rOutl.SetControlWord(nStat);
@@ -1223,15 +1231,26 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( bool             bContourFrame,
     }
 }
 
-sal_uInt16 SdrTextObj::GetFontScaleY() const
+double SdrTextObj::GetFontScale() const
 {
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
     // This eventually calls ImpAutoFitText
     UpdateOutlinerFormatting(rOutliner, o3tl::temporary(tools::Rectangle()));
 
-    double nStretchY;
-    rOutliner.GetGlobalCharStretching(o3tl::temporary(double()), nStretchY);
-    return nStretchY;
+    double fScaleY;
+    rOutliner.getGlobalScale(o3tl::temporary(double()), fScaleY, o3tl::temporary(double()), o3tl::temporary(double()));
+    return fScaleY;
+}
+
+double SdrTextObj::GetSpacingScale() const
+{
+    SdrOutliner& rOutliner = ImpGetDrawOutliner();
+    // This eventually calls ImpAutoFitText
+    UpdateOutlinerFormatting(rOutliner, o3tl::temporary(tools::Rectangle()));
+
+    double fSpacingScaleY;
+    rOutliner.getGlobalScale(o3tl::temporary(double()), o3tl::temporary(double()), o3tl::temporary(double()), fSpacingScaleY);
+    return fSpacingScaleY;
 }
 
 void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner ) const
@@ -1246,6 +1265,12 @@ void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner ) const
 void SdrTextObj::ImpAutoFitText(SdrOutliner& rOutliner, const Size& rTextSize,
                                 bool bIsVerticalWriting) const
 {
+    if (!bIsVerticalWriting)
+    {
+        autoFitTextForCompatibility(rOutliner, rTextSize);
+        return;
+    }
+
     // EditEngine formatting is unstable enough for
     // line-breaking text that we need some more samples
 
@@ -1253,6 +1278,7 @@ void SdrTextObj::ImpAutoFitText(SdrOutliner& rOutliner, const Size& rTextSize,
     double nMinStretchX = 0.0;
     double nMinStretchY = 0.0;
     std::array<sal_Int32, 10> aOldStretchXVals = {0,0,0,0,0,0,0,0,0,0};
+    rOutliner.setRoundFontSizeToPt(false);
     for (size_t i = 0; i < aOldStretchXVals.size(); ++i)
     {
         const Size aCurrTextSize = rOutliner.CalcTextSizeNTP();
@@ -1276,7 +1302,7 @@ void SdrTextObj::ImpAutoFitText(SdrOutliner& rOutliner, const Size& rTextSize,
         fFactor = std::sqrt(fFactor);
 
         double nCurrStretchX, nCurrStretchY;
-        rOutliner.GetGlobalCharStretching(nCurrStretchX, nCurrStretchY);
+        rOutliner.getGlobalScale(nCurrStretchX, nCurrStretchY, o3tl::temporary(double()), o3tl::temporary(double()));
 
         if (fFactor >= 0.98)
         {
@@ -1295,20 +1321,107 @@ void SdrTextObj::ImpAutoFitText(SdrOutliner& rOutliner, const Size& rTextSize,
             nCurrStretchX = double(basegfx::fround(nCurrStretchX * fFactor * 100.0)) / 100.00;
             nCurrStretchY = double(basegfx::fround(nCurrStretchY * fFactor * 100.0)) / 100.00;
 
-            rOutliner.SetGlobalCharStretching(std::min(100.0, nCurrStretchX), std::min(100.0, nCurrStretchY));
+            double nStretchX = std::min(100.0, nCurrStretchX);
+            double nStretchY = std::min(100.0, nCurrStretchY);
+
+            rOutliner.setGlobalScale(nStretchX, nStretchY, nStretchX, nStretchY);
             SAL_INFO("svx", "zoom is " << nCurrStretchX);
         }
     }
 
     const SdrTextFitToSizeTypeItem& rItem = GetObjectItem(SDRATTR_TEXT_FITTOSIZE);
-    if (rItem.GetMaxScale() > 0)
+    if (rItem.GetMaxScale() > 0.0)
     {
-        nMinStretchX = std::min<sal_uInt16>(rItem.GetMaxScale(), nMinStretchX);
-        nMinStretchY = std::min<sal_uInt16>(rItem.GetMaxScale(), nMinStretchY);
+        nMinStretchX = std::min(rItem.GetMaxScale(), nMinStretchX);
+        nMinStretchY = std::min(rItem.GetMaxScale(), nMinStretchY);
     }
 
     SAL_INFO("svx", "final zoom is " << nMinStretchX);
-    rOutliner.SetGlobalCharStretching(std::min(100.0, nMinStretchX), std::min(100.0, nMinStretchY));
+
+    nMinStretchX = std::min(100.0, nMinStretchX);
+    nMinStretchY = std::min(100.0, nMinStretchY);
+
+    rOutliner.setGlobalScale(nMinStretchX, nMinStretchY, nMinStretchX, nMinStretchY);
+}
+
+void SdrTextObj::autoFitTextForCompatibility(SdrOutliner& rOutliner, const Size& rTextBoxSize) const
+{
+    rOutliner.setRoundFontSizeToPt(true);
+
+    const SdrTextFitToSizeTypeItem& rItem = GetObjectItem(SDRATTR_TEXT_FITTOSIZE);
+    double fMaxScale = rItem.GetMaxScale();
+    if (fMaxScale > 0.0)
+    {
+        rOutliner.setGlobalScale(fMaxScale, fMaxScale, 100.0, 100.0);
+    }
+    else
+    {
+        fMaxScale = 100.0;
+    }
+
+    Size aCurrentTextBoxSize = rOutliner.CalcTextSizeNTP();
+    tools::Long nExtendTextBoxBy = -50;
+    aCurrentTextBoxSize.extendBy(0, nExtendTextBoxBy);
+    double fCurrentFitFactor = double(rTextBoxSize.Height()) / aCurrentTextBoxSize.Height();
+
+    if (fCurrentFitFactor >= 1.0)
+        return;
+
+    sal_Int32 nFontHeight = GetObjectItemSet().Get(EE_CHAR_FONTHEIGHT).GetHeight();
+
+    double fFontHeightPt = o3tl::convert(double(nFontHeight), o3tl::Length::mm100, o3tl::Length::pt);
+    double fMinY = 0.0;
+    double fMaxY = fMaxScale;
+
+    double fBestFontScale = 0.0;
+    double fBestSpacing = fMaxScale;
+    double fBestFitFactor = fCurrentFitFactor;
+
+    double fInTheMidle = 0.5;
+
+    int iteration = 0;
+    double fFitFactorTarget = 1.00;
+
+    while (iteration < 10)
+    {
+        iteration++;
+        double fScaleY = fMinY + (fMaxY - fMinY) * fInTheMidle;
+
+        double fScaledFontHeight = fFontHeightPt * (fScaleY / 100.0);
+        double fRoundedScaledFontHeight = std::floor(fScaledFontHeight * 10.0) / 10.0;
+        double fCurrentFontScale = (fRoundedScaledFontHeight / fFontHeightPt) * 100.0;
+
+        fCurrentFitFactor = 0.0; // reset fit factor;
+
+        for (double fCurrentSpacing : {100.0, 90.0, 80.0})
+        {
+            if (fCurrentFitFactor >= fFitFactorTarget)
+                continue;
+
+            rOutliner.setGlobalScale(fCurrentFontScale, fCurrentFontScale, 100.0, fCurrentSpacing);
+
+            aCurrentTextBoxSize = rOutliner.CalcTextSizeNTP();
+            aCurrentTextBoxSize.extendBy(0, nExtendTextBoxBy);
+            fCurrentFitFactor = double(rTextBoxSize.Height()) / aCurrentTextBoxSize.Height();
+
+            if (fCurrentSpacing == 100.0)
+            {
+                if (fCurrentFitFactor > fFitFactorTarget)
+                    fMinY = fCurrentFontScale;
+                else
+                    fMaxY = fCurrentFontScale;
+            }
+
+            if ((fBestFitFactor < fFitFactorTarget && fCurrentFitFactor > fBestFitFactor)
+            ||  (fCurrentFitFactor >= fFitFactorTarget && fCurrentFitFactor < fBestFitFactor))
+            {
+                fBestFontScale = fCurrentFontScale;
+                fBestSpacing = fCurrentSpacing;
+                fBestFitFactor = fCurrentFitFactor;
+            }
+        }
+    }
+    rOutliner.setGlobalScale(fBestFontScale, fBestFontScale, 100.0, fBestSpacing);
 }
 
 void SdrTextObj::SetupOutlinerFormatting( SdrOutliner& rOutl, tools::Rectangle& rPaintRect ) const

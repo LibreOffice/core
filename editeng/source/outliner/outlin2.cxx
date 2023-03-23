@@ -482,7 +482,7 @@ void Outliner::QuickFormatDoc()
     pEditEngine->QuickFormatDoc();
 }
 
-void Outliner::SetGlobalCharStretching(double nX, double nY)
+void Outliner::setGlobalScale(double rFontX, double rFontY, double rSpacingX, double rSpacingY)
 {
     // reset bullet size
     sal_Int32 nParagraphs = pParaList->GetParagraphCount();
@@ -493,12 +493,18 @@ void Outliner::SetGlobalCharStretching(double nX, double nY)
             pPara->aBulSize.setWidth( -1 );
     }
 
-    pEditEngine->SetGlobalCharStretching( nX, nY );
+    pEditEngine->setGlobalScale(rFontX, rFontY, rSpacingX, rSpacingY);
 }
 
-void Outliner::GetGlobalCharStretching(double& rX, double& rY) const
+void Outliner::getGlobalScale(double& rFontX, double& rFontY, double& rSpacingX, double& rSpacingY) const
 {
-    pEditEngine->GetGlobalCharStretching(rX, rY);
+    pEditEngine->getGlobalFontScale(rFontX, rFontY);
+    pEditEngine->getGlobalSpacingScale(rSpacingX, rSpacingY);
+}
+
+void Outliner::setRoundFontSizeToPt(bool bRound) const
+{
+    pEditEngine->setRoundFontSizeToPt(bRound);
 }
 
 void Outliner::EraseVirtualDevice()

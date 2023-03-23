@@ -410,7 +410,7 @@ void SdOOXMLExportTest3::testFontScale()
     // Rounding errors possible, approximate value (+/- 1%)
     OUString sScale = getXPath(
         pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr/a:normAutofit", "fontScale");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(76000), sScale.toInt32(), 1000);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(81111), sScale.toInt32(), 1000);
 }
 
 void SdOOXMLExportTest3::testShapeAutofitPPTX()
@@ -2086,15 +2086,12 @@ void SdOOXMLExportTest3::testAutofittedTextboxIndent()
 
     save("Impress Office Open XML");
 
-    // Without the accompanying fix in place, these tests would have failed with:
-    // - Expected: 691200
-    // - Actual  : 1080000
-    // i.e. paragraph indent wasn't scaled proportionally to autofitted textbox
-    // font scale on export
+    // Check that the indent hasn't changed and wasn't scaled when exporting
+    // (the behaviour changed).
 
     xmlDocUniquePtr pXmlDocContent1 = parseExport("ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p[1]/a:pPr", "marL",
-                "712800");
+                "1080000");
 }
 
 void SdOOXMLExportTest3::testTdf151622_oleIcon()
