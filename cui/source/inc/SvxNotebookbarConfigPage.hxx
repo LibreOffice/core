@@ -74,6 +74,9 @@ public:
 
 class SvxNotebookbarEntriesListBox final : public SvxMenuEntriesListBox
 {
+    typedef std::unordered_map<OUString, OUString> TooltipMap;
+    TooltipMap m_aTooltipMap;
+
     void ChangedVisibility(int nRow);
     DECL_LINK(CheckButtonHdl, const weld::TreeView::iter_col&, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
@@ -82,6 +85,8 @@ class SvxNotebookbarEntriesListBox final : public SvxMenuEntriesListBox
 public:
     SvxNotebookbarEntriesListBox(std::unique_ptr<weld::TreeView> xControl, SvxConfigPage* pPg);
     virtual ~SvxNotebookbarEntriesListBox() override;
+
+    TooltipMap& GetTooltipMap() { return m_aTooltipMap; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
