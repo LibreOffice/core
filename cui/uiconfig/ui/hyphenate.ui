@@ -208,11 +208,13 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
+                    <property name="tooltip-text" context="hyphenate|tooltip|left" translatable="yes">Left</property>
                     <property name="halign">end</property>
                     <property name="image">image1</property>
                     <property name="always-show-image">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="left-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="hyphenate|button_name|left">Left</property>
                         <property name="AtkObject::accessible-description" translatable="yes" context="hyphenate|extended_tip|left">Set the position of the hyphen. This option is only available if more than one hyphenation suggestion is displayed.</property>
                       </object>
                     </child>
@@ -227,11 +229,13 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
+                    <property name="tooltip-text" context="hyphenate|tooltip|right" translatable="yes">Right</property>
                     <property name="halign">start</property>
                     <property name="image">image2</property>
                     <property name="always-show-image">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="right-atkobject">
+                        <property name="AtkObject::accessible-name" context="hyphenate|button_name|right" translatable="yes">Right</property>
                         <property name="AtkObject::accessible-description" translatable="yes" context="hyphenate|extended_tip|right">Set the position of the hyphen. This option is only available if more than one hyphenation suggestion is displayed.</property>
                       </object>
                     </child>
