@@ -167,15 +167,11 @@ namespace drawinglayer::texture
         }
 
         void GeoTexSvxGradientLinear::appendTransformationsAndColors(
-            std::vector< B2DHomMatrixAndBColor >& rEntries,
-            basegfx::BColor& rOuterColor)
+            std::function<void(const basegfx::B2DHomMatrix& rMatrix, const basegfx::BColor& rColor)> aCallback)
         {
             // no color at all, done
             if (mnColorStops.empty())
                 return;
-
-            // fill in return parameter rOuterColor before returning
-            rOuterColor = mnColorStops.front().getStopColor();
 
             // only one color, done
             if (mnColorStops.size() < 2)
@@ -217,9 +213,9 @@ namespace drawinglayer::texture
                 const double fStripeWidth((fOffsetEnd - fOffsetStart) / nSteps);
 
                 // for the 1st color range we do not need to create the 1st step
-                // since it will be equal to StartColor and thus rOuterColor, so
+                // since it will be equal to StartColor and thus OuterColor, so
                 // will be painted by the 1st, always-created background polygon
-                // colored using rOuterColor.
+                // colored using OuterColor.
                 // We *need* to create this though for all 'inner' color ranges
                 // to get a correct start
                 const sal_uInt32 nStartInnerLoop(cs_l == mnColorStops.begin() ? 1 : 0);
@@ -244,11 +240,9 @@ namespace drawinglayer::texture
                     aNew.translate(0.0, fPos);
 
                     // set and add at target
-                    B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
-
-                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * aNew;
-                    aB2DHomMatrixAndBColor.maBColor = interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1));
-                    rEntries.push_back(aB2DHomMatrixAndBColor);
+                    aCallback(
+                        maGradientInfo.getTextureTransform() * aNew,
+                        interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1)));
                 }
             }
 
@@ -312,15 +306,11 @@ namespace drawinglayer::texture
         }
 
         void GeoTexSvxGradientAxial::appendTransformationsAndColors(
-            std::vector< B2DHomMatrixAndBColor >& rEntries,
-            basegfx::BColor& rOuterColor)
+            std::function<void(const basegfx::B2DHomMatrix& rMatrix, const basegfx::BColor& rColor)> aCallback)
         {
             // no color at all, done
             if (mnColorStops.empty())
                 return;
-
-            // fill in return parameter rOuterColor before returning
-            rOuterColor = mnColorStops.front().getStopColor();
 
             // only one color, done
             if (mnColorStops.size() < 2)
@@ -374,11 +364,9 @@ namespace drawinglayer::texture
                     aNew.scale(1.0, 1.0 - fPos);
 
                     // set and add at target
-                    B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
-
-                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * aNew;
-                    aB2DHomMatrixAndBColor.maBColor = interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1));
-                    rEntries.push_back(aB2DHomMatrixAndBColor);
+                    aCallback(
+                        maGradientInfo.getTextureTransform() * aNew,
+                        interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1)));
                 }
             }
 
@@ -429,15 +417,11 @@ namespace drawinglayer::texture
         }
 
         void GeoTexSvxGradientRadial::appendTransformationsAndColors(
-            std::vector< B2DHomMatrixAndBColor >& rEntries,
-            basegfx::BColor& rOuterColor)
+            std::function<void(const basegfx::B2DHomMatrix& rMatrix, const basegfx::BColor& rColor)> aCallback)
         {
             // no color at all, done
             if (mnColorStops.empty())
                 return;
-
-            // fill in return parameter rOuterColor before returning
-            rOuterColor = mnColorStops.front().getStopColor();
 
             // only one color, done
             if (mnColorStops.size() < 2)
@@ -475,11 +459,9 @@ namespace drawinglayer::texture
                     const double fSize(1.0 - (fOffsetStart + (fStripeWidth * innerLoop)));
 
                     // set and add at target
-                    B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
-
-                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * basegfx::utils::createScaleB2DHomMatrix(fSize, fSize);
-                    aB2DHomMatrixAndBColor.maBColor = interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1));
-                    rEntries.push_back(aB2DHomMatrixAndBColor);
+                    aCallback(
+                        maGradientInfo.getTextureTransform() * basegfx::utils::createScaleB2DHomMatrix(fSize, fSize),
+                        interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1)));
                 }
             }
 
@@ -529,15 +511,11 @@ namespace drawinglayer::texture
         }
 
         void GeoTexSvxGradientElliptical::appendTransformationsAndColors(
-            std::vector< B2DHomMatrixAndBColor >& rEntries,
-            basegfx::BColor& rOuterColor)
+            std::function<void(const basegfx::B2DHomMatrix& rMatrix, const basegfx::BColor& rColor)> aCallback)
         {
             // no color at all, done
             if (mnColorStops.empty())
                 return;
-
-            // fill in return parameter rOuterColor before returning
-            rOuterColor = mnColorStops.front().getStopColor();
 
             // only one color, done
             if (mnColorStops.size() < 2)
@@ -579,14 +557,12 @@ namespace drawinglayer::texture
                     const double fSize(fOffsetStart + (fStripeWidth * innerLoop));
 
                     // set and add at target
-                    B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
-
-                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform()
+                    aCallback(
+                        maGradientInfo.getTextureTransform()
                         * basegfx::utils::createScaleB2DHomMatrix(
                             1.0 - (bMTO ? fSize / fAR : fSize),
-                            1.0 - (bMTO ? fSize : fSize * fAR));
-                    aB2DHomMatrixAndBColor.maBColor = interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1));
-                    rEntries.push_back(aB2DHomMatrixAndBColor);
+                            1.0 - (bMTO ? fSize : fSize * fAR)),
+                        interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1)));
                 }
             }
 
@@ -636,15 +612,11 @@ namespace drawinglayer::texture
         }
 
         void GeoTexSvxGradientSquare::appendTransformationsAndColors(
-            std::vector< B2DHomMatrixAndBColor >& rEntries,
-            basegfx::BColor& rOuterColor)
+            std::function<void(const basegfx::B2DHomMatrix& rMatrix, const basegfx::BColor& rColor)> aCallback)
         {
             // no color at all, done
             if (mnColorStops.empty())
                 return;
-
-            // fill in return parameter rOuterColor before returning
-            rOuterColor = mnColorStops.front().getStopColor();
 
             // only one color, done
             if (mnColorStops.size() < 2)
@@ -682,11 +654,9 @@ namespace drawinglayer::texture
                     const double fSize(1.0 - (fOffsetStart + (fStripeWidth * innerLoop)));
 
                     // set and add at target
-                    B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
-
-                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * basegfx::utils::createScaleB2DHomMatrix(fSize, fSize);
-                    aB2DHomMatrixAndBColor.maBColor = interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1));
-                    rEntries.push_back(aB2DHomMatrixAndBColor);
+                    aCallback(
+                        maGradientInfo.getTextureTransform() * basegfx::utils::createScaleB2DHomMatrix(fSize, fSize),
+                        interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1)));
                 }
             }
 
@@ -736,15 +706,11 @@ namespace drawinglayer::texture
         }
 
         void GeoTexSvxGradientRect::appendTransformationsAndColors(
-            std::vector< B2DHomMatrixAndBColor >& rEntries,
-            basegfx::BColor& rOuterColor)
+            std::function<void(const basegfx::B2DHomMatrix& rMatrix, const basegfx::BColor& rColor)> aCallback)
         {
             // no color at all, done
             if (mnColorStops.empty())
                 return;
-
-            // fill in return parameter rOuterColor before returning
-            rOuterColor = mnColorStops.front().getStopColor();
 
             // only one color, done
             if (mnColorStops.size() < 2)
@@ -786,14 +752,12 @@ namespace drawinglayer::texture
                     const double fSize(fOffsetStart + (fStripeWidth * innerLoop));
 
                     // set and add at target
-                    B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
-
-                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform()
+                    aCallback(
+                        maGradientInfo.getTextureTransform()
                         * basegfx::utils::createScaleB2DHomMatrix(
                             1.0 - (bMTO ? fSize / fAR : fSize),
-                            1.0 - (bMTO ? fSize : fSize * fAR));
-                    aB2DHomMatrixAndBColor.maBColor = interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1));
-                    rEntries.push_back(aB2DHomMatrixAndBColor);
+                            1.0 - (bMTO ? fSize : fSize * fAR)),
+                        interpolate(aCStart, aCEnd, double(innerLoop) / double(nSteps - 1)));
                 }
             }
 

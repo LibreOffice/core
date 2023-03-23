@@ -28,7 +28,6 @@
 // predefines
 
 namespace basegfx { class B2DPolygon; }
-namespace drawinglayer::texture { struct B2DHomMatrixAndBColor; }
 
 
 // FillGradientPrimitive2D class
@@ -62,20 +61,6 @@ namespace drawinglayer::primitive2d
             /// the gradient definition
             attribute::FillGradientAttribute        maFillGradient;
 
-            /// local helpers
-            void generateMatricesAndColors(
-                std::vector< drawinglayer::texture::B2DHomMatrixAndBColor >& rEntries,
-                basegfx::BColor& rOuterColor) const;
-            void createOverlappingFill(
-                Primitive2DContainer& rContainer,
-                const std::vector< drawinglayer::texture::B2DHomMatrixAndBColor >& rEntries,
-                const basegfx::BColor& rOuterColor,
-                const basegfx::B2DPolygon& rUnitPolygon) const;
-            void createNonOverlappingFill(
-                Primitive2DContainer& rContainer,
-                const std::vector< drawinglayer::texture::B2DHomMatrixAndBColor >& rEntries,
-                const basegfx::BColor& rOuterColor,
-                const basegfx::B2DPolygon& rUnitPolygon) const;
 
         protected:
             /// local helper
@@ -85,6 +70,12 @@ namespace drawinglayer::primitive2d
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
+            /// helpers that support e.g. direct paint/geometry creation
+            basegfx::B2DPolygon getUnitPolygon() const;
+            basegfx::BColor getOuterColor() const;
+            void generateMatricesAndColors(
+                std::function<void(const basegfx::B2DHomMatrix& rMatrix, const basegfx::BColor& rColor)> aCallback) const;
+
             /// constructors. The one without definition range will use output range as definition range
             FillGradientPrimitive2D(
                 const basegfx::B2DRange& rOutputRange,

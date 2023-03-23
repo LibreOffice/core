@@ -950,13 +950,13 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
     const primitive2d::FillGradientPrimitive2D& rPrimitive)
 {
     const attribute::FillGradientAttribute& rFillGradient = rPrimitive.getFillGradient();
+    bool useDecompose(false);
 
     // MCGR: *many* - and not only GradientStops - cases cannot be handled by VCL
     // so use decomposition
     if (rFillGradient.cannotBeHandledByVCL())
     {
-        process(rPrimitive);
-        return;
+        useDecompose = true;
     }
 
     // tdf#149754 VCL gradient draw is not capable to handle all primitive gradient definitions,
@@ -972,27 +972,87 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
     // I see no real reason to fallback here to OutputDevice::DrawGradient and VCL
     // gradient paint at all (system-dependent renderers wouldn't in the future), but
     // will for convenience only add that needed additional correcting case
-    if (!rPrimitive.getDefinitionRange().isInside(rPrimitive.getOutputRange()))
+    if (!useDecompose && !rPrimitive.getDefinitionRange().isInside(rPrimitive.getOutputRange()))
     {
-        process(rPrimitive);
-        return;
+        useDecompose = true;
     }
 
     // tdf#151081 need to use regular primitive decomposition when the gradient
     // is transformed in any other way then just translate & scale
-    basegfx::B2DVector aScale, aTranslate;
-    double fRotate, fShearX;
-
-    maCurrentTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
-
-    // detect if transformation is rotated, sheared or mirrored in X and/or Y
-    if (!basegfx::fTools::equalZero(fRotate) || !basegfx::fTools::equalZero(fShearX)
-        || aScale.getX() < 0.0 || aScale.getY() < 0.0)
+    if (!useDecompose)
     {
-        process(rPrimitive);
+        basegfx::B2DVector aScale, aTranslate;
+        double fRotate, fShearX;
+
+        maCurrentTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
+
+        // detect if transformation is rotated, sheared or mirrored in X and/or Y
+        if (!basegfx::fTools::equalZero(fRotate) || !basegfx::fTools::equalZero(fShearX)
+            || aScale.getX() < 0.0 || aScale.getY() < 0.0)
+        {
+            useDecompose = true;
+        }
+    }
+
+    if (useDecompose)
+    {
+        // default is to use the direct render below. For security,
+        // keep the (simple) fallback to decompose in place here
+        static bool bTryDirectRender(true);
+
+        if (bTryDirectRender)
+        {
+            // MCGR: Avoid one level of primitive creation, use FillGradientPrimitive2D
+            // tooling to directly create needed geoemtry & color for getting better
+            // performance (partially compensate for potentially more expensive multi
+            // color gradients).
+            // To handle a primitive that needs paint, either use decompose, or - when you
+            // do not want that for any reason, e.g. extra primitives created - implement
+            // a direct handling in your primitive rendererer. This is always possible
+            // since primitives by definition are self-contained what means they have all
+            // needed data locally available to do so.
+            // The question is the complexity to invest - the implemented decompose
+            // is always a good hint what is neeed to do this. In this case I decided
+            // to add some tooling methods to the primitive itself to support this. These
+            // are used in decompose and can be used - as here now - for direct handling,
+            // too. This is always a possibility in primitive handling - you can, but do not
+            // have to.
+            mpOutputDevice->SetFillColor(
+                Color(maBColorModifierStack.getModifiedColor(rPrimitive.getOuterColor())));
+            mpOutputDevice->SetLineColor();
+            mpOutputDevice->DrawTransparent(
+                maCurrentTransformation,
+                basegfx::B2DPolyPolygon(
+                    basegfx::utils::createPolygonFromRect(rPrimitive.getOutputRange())),
+                0.0);
+
+            // paint solid fill steps by providing callback as lambda
+            auto aCallback([&rPrimitive, this](const basegfx::B2DHomMatrix& rMatrix,
+                                               const basegfx::BColor& rColor) {
+                // create part polygon
+                basegfx::B2DPolygon aNewPoly(rPrimitive.getUnitPolygon());
+                aNewPoly.transform(rMatrix);
+
+                // create solid fill
+                mpOutputDevice->SetFillColor(Color(maBColorModifierStack.getModifiedColor(rColor)));
+                mpOutputDevice->DrawTransparent(maCurrentTransformation,
+                                                basegfx::B2DPolyPolygon(aNewPoly), 0.0);
+            });
+
+            // call value generator to trigger callbacks
+            rPrimitive.generateMatricesAndColors(aCallback);
+        }
+        else
+        {
+            // use the decompose
+            process(rPrimitive);
+        }
+
         return;
     }
 
+    // try to use vcl - since vcl uses the old gradient paint mechanisms this may
+    // create wrong geometries. If so, add another case above for useDecompose
     GradientStyle eGradientStyle = convertGradientStyle(rFillGradient.getStyle());
 
     Gradient aGradient(eGradientStyle, Color(rFillGradient.getColorStops().front().getStopColor()),
