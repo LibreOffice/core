@@ -367,6 +367,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153964_firstIndentAfterBreak14, "tdf153964_first
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaFirstLineIndent"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf76022_textboxWrap)
+{
+    // Granted, this is an ODT with a bit of an anomoly - tables ignore fly wrapping.
+    createSwDoc("tdf76022_textboxWrap.odt");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Did you make wrapping sane/interoperable?", 1, getPages());
+
+    // When saving to DOCX, the table should obey the fly wrapping
+    reload("Office Open XML Text", "");
+
+    // The fly takes up the whole page, so the table needs to shift down to the next page.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
 {
     // Given a docx document with a shape with vert="mongolianVert".
