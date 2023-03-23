@@ -2690,7 +2690,7 @@ bool SwParaPortion::HasNumberingPortion(FootnoteOrNot const eFootnote) const
     for (SwLineLayout const* pLine = this; pLine && !pPortion; pLine = pLine->GetNext())
     {
         pPortion = pLine->GetFirstPortion();
-        while (pPortion && (pPortion->InGlueGrp() || pPortion->IsFlyPortion()))
+        while (pPortion && (pPortion->InGlueGrp() || pPortion->IsKernPortion() || pPortion->IsFlyPortion()))
         {   // skip margins and fly spacers - numbering should be first then
             pPortion = pPortion->GetNextPortion();
         }
@@ -2705,7 +2705,7 @@ bool SwParaPortion::HasContentPortions() const
     for (SwLineLayout const* pLine = this; pLine && !pPortion; pLine = pLine->GetNext())
     {
         pPortion = pLine->GetFirstPortion();
-        while (pPortion && (pPortion->InGlueGrp() || pPortion->IsFlyPortion()))
+        while (pPortion && (pPortion->InGlueGrp() || pPortion->IsKernPortion() || pPortion->IsFlyPortion()))
         {   // skip margins and fly spacers
             pPortion = pPortion->GetNextPortion();
         }
