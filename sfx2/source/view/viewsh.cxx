@@ -46,8 +46,21 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
+#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
+
+#include <cppuhelper/weakref.hxx>
+
+#include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
+#include <com/sun/star/accessibility/AccessibleTextType.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
 
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
@@ -218,6 +231,350 @@ void SAL_CALL SfxClipboardChangeListener::changedContents( const datatransfer::c
     AsyncExecuteInfo* pInfo = new AsyncExecuteInfo( ASYNCEXECUTE_CMD_CHANGEDCONTENTS, this );
     if (!Application::PostUserEvent( LINK( nullptr, SfxClipboardChangeListener, AsyncExecuteHdl_Impl ), pInfo ))
         delete pInfo;
+}
+
+class LOKDocumentFocusListener :
+    public ::cppu::WeakImplHelper< accessibility::XAccessibleEventListener >
+{
+
+    std::set< uno::Reference< uno::XInterface > > m_aRefList;
+
+public:
+    /// @throws lang::IndexOutOfBoundsException
+    /// @throws uno::RuntimeException
+    void attachRecursive(
+        const uno::Reference< accessibility::XAccessible >& xAccessible
+    );
+
+    /// @throws lang::IndexOutOfBoundsException
+    /// @throws uno::RuntimeException
+    void attachRecursive(
+        const uno::Reference< accessibility::XAccessible >& xAccessible,
+        const uno::Reference< accessibility::XAccessibleContext >& xContext
+    );
+
+    /// @throws lang::IndexOutOfBoundsException
+    /// @throws uno::RuntimeException
+    void attachRecursive(
+        const uno::Reference< accessibility::XAccessible >& xAccessible,
+        const uno::Reference< accessibility::XAccessibleContext >& xContext,
+        const sal_Int64 nStateSet
+    );
+
+    /// @throws lang::IndexOutOfBoundsException
+    /// @throws uno::RuntimeException
+    void detachRecursive(
+        const uno::Reference< accessibility::XAccessible >& xAccessible
+    );
+
+    /// @throws lang::IndexOutOfBoundsException
+    /// @throws uno::RuntimeException
+    void detachRecursive(
+        const uno::Reference< accessibility::XAccessibleContext >& xContext
+    );
+
+    /// @throws lang::IndexOutOfBoundsException
+    /// @throws uno::RuntimeException
+    void detachRecursive(
+        const uno::Reference< accessibility::XAccessibleContext >& xContext,
+        const sal_Int64 nStateSet
+    );
+
+    /// @throws lang::IndexOutOfBoundsException
+    /// @throws uno::RuntimeException
+    static uno::Reference< accessibility::XAccessible > getAccessible(const lang::EventObject& aEvent );
+
+    // XEventListener
+    virtual void SAL_CALL disposing( const lang::EventObject& Source ) override;
+
+    // XAccessibleEventListener
+    virtual void SAL_CALL notifyEvent( const accessibility::AccessibleEventObject& aEvent ) override;
+
+};
+
+void LOKDocumentFocusListener::disposing( const lang::EventObject& aEvent )
+{
+
+    // Unref the object here, but do not remove as listener since the object
+    // might no longer be in a state that safely allows this.
+    if( aEvent.Source.is() )
+        m_aRefList.erase(aEvent.Source);
+
+}
+
+void LOKDocumentFocusListener::notifyEvent( const accessibility::AccessibleEventObject& aEvent )
+{
+    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent:event id: " << aEvent.EventId);
+    try {
+        switch( aEvent.EventId )
+        {
+            case accessibility::AccessibleEventId::STATE_CHANGED:
+            {
+                sal_Int16 nState = accessibility::AccessibleStateType::INVALID;
+                aEvent.NewValue >>= nState;
+                SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: STATE_CHANGED: XAccessible: " << getAccessible(aEvent).get());
+
+                if( accessibility::AccessibleStateType::FOCUSED == nState )
+                {
+                    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: FOCUSED");
+
+                    uno::Reference<css::accessibility::XAccessibleText> xAccText(getAccessible(aEvent), uno::UNO_QUERY);
+                    if( xAccText.is() )
+                    {
+                        OUString sText = xAccText->getText();
+                        sal_Int32 nLength = sText.getLength();
+                        SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: xAccText: " << xAccText.get() << ", text: " << sText);
+
+                        if (nLength)
+                        {
+                            css::uno::Reference<css::accessibility::XAccessibleTextAttributes> xAccTextAttr(xAccText, uno::UNO_QUERY);
+                            css::uno::Sequence< OUString > aRequestedAttributes;
+
+                            sal_Int32 nPos = 0;
+                            while (nPos < nLength)
+                            {
+                                css::accessibility::TextSegment aTextSegment =
+                                        xAccText->getTextAtIndex(nPos, css::accessibility::AccessibleTextType::ATTRIBUTE_RUN);
+                                SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: text segment: '" << aTextSegment.SegmentText
+                                        << "', start: " << aTextSegment.SegmentStart << ", end: " << aTextSegment.SegmentEnd);
+
+                                css::uno::Sequence< css::beans::PropertyValue > aRunAttributeList;
+                                if (xAccTextAttr.is())
+                                {
+                                    aRunAttributeList = xAccTextAttr->getRunAttributes(nPos, aRequestedAttributes);
+                                }
+                                else
+                                {
+                                    aRunAttributeList = xAccText->getCharacterAttributes(nPos, aRequestedAttributes);
+                                }
+
+                                sal_Int32 nSize = aRunAttributeList.getLength();
+                                SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: attribute list size: " << nSize);
+                                if (nSize)
+                                {
+                                    OUString sValue;
+                                    OUString sAttributes = "{ ";
+                                    for (const auto& attribute: aRunAttributeList)
+                                    {
+                                        if (attribute.Name.isEmpty())
+                                            continue;
+
+                                        if (attribute.Name == "CharHeight" || attribute.Name == "CharWeight")
+                                        {
+                                            float fValue;
+                                            attribute.Value >>= fValue;
+                                            sValue = OUString::number(fValue);
+                                        }
+                                        else if (attribute.Name == "CharPosture")
+                                        {
+                                            awt::FontSlant nValue;
+                                            attribute.Value >>= nValue;
+                                            sValue = OUString::number((unsigned int)(nValue));
+                                        }
+                                        else if (attribute.Name == "CharUnderline")
+                                        {
+                                            sal_Int16 nValue;
+                                            attribute.Value >>= nValue;
+                                            sValue = OUString::number(nValue);
+                                        }
+                                        else if (attribute.Name == "CharFontName")
+                                        {
+                                            attribute.Value >>= sValue;
+                                        }
+                                        else if (attribute.Name == "Rsid")
+                                        {
+                                            sal_uInt32 nValue;
+                                            attribute.Value >>= nValue;
+                                            sValue = OUString::number(nValue);
+                                        }
+
+                                        if (!sValue.isEmpty())
+                                        {
+                                            if (sAttributes != "{ ")
+                                                sAttributes += ", ";
+                                            sAttributes += attribute.Name + ": ";
+                                            sAttributes += sValue;
+                                            sValue = "";
+                                        }
+                                    }
+                                    sAttributes += " }";
+                                    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: attributes: " << sAttributes);
+                                    }
+                                nPos = aTextSegment.SegmentEnd + 1;
+                            }
+                        }
+
+                    }
+                }
+
+                break;
+            }
+
+            case accessibility::AccessibleEventId::CHILD:
+            {
+                uno::Reference< accessibility::XAccessible > xChild;
+                if( (aEvent.OldValue >>= xChild) && xChild.is() )
+                    detachRecursive(xChild);
+
+                if( (aEvent.NewValue >>= xChild) && xChild.is() )
+                    attachRecursive(xChild);
+
+                break;
+            }
+
+            case accessibility::AccessibleEventId::INVALIDATE_ALL_CHILDREN:
+                SAL_INFO("lok.a11y", "Invalidate all children called");
+                break;
+
+            default:
+                break;
+        }
+    }
+    catch( const lang::IndexOutOfBoundsException& e )
+    {
+        SAL_WARN("lok.a11y", "Focused object has invalid index in parent");
+    }
+}
+
+uno::Reference< accessibility::XAccessible > LOKDocumentFocusListener::getAccessible(const lang::EventObject& aEvent )
+{
+    uno::Reference< accessibility::XAccessible > xAccessible(aEvent.Source, uno::UNO_QUERY);
+
+    if( xAccessible.is() )
+        return xAccessible;
+
+    uno::Reference< accessibility::XAccessibleContext > xContext(aEvent.Source, uno::UNO_QUERY);
+
+    if( xContext.is() )
+    {
+        uno::Reference< accessibility::XAccessible > xParent( xContext->getAccessibleParent() );
+        if( xParent.is() )
+        {
+            uno::Reference< accessibility::XAccessibleContext > xParentContext( xParent->getAccessibleContext() );
+            if( xParentContext.is() )
+            {
+                return xParentContext->getAccessibleChild( xContext->getAccessibleIndexInParent() );
+            }
+        }
+    }
+
+    return uno::Reference< accessibility::XAccessible >();
+}
+
+void LOKDocumentFocusListener::attachRecursive(
+    const uno::Reference< accessibility::XAccessible >& xAccessible
+)
+{
+    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::attachRecursive(1): xAccessible: " << xAccessible.get());
+
+    uno::Reference< accessibility::XAccessibleContext > xContext =
+        xAccessible->getAccessibleContext();
+
+    if( xContext.is() )
+        attachRecursive(xAccessible, xContext);
+}
+
+void LOKDocumentFocusListener::attachRecursive(
+    const uno::Reference< accessibility::XAccessible >& xAccessible,
+    const uno::Reference< accessibility::XAccessibleContext >& xContext
+)
+{
+    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::attachRecursive(2): xAccessible: " << xAccessible.get()
+            << ", role: " << xContext->getAccessibleRole()
+            << ", name: " << xContext->getAccessibleName()
+            << ", parent: " << xContext->getAccessibleParent().get()
+            << ", child count: " << xContext->getAccessibleChildCount());
+
+    sal_Int64 nStateSet = xContext->getAccessibleStateSet();
+
+    attachRecursive(xAccessible, xContext, nStateSet);
+}
+
+void LOKDocumentFocusListener::attachRecursive(
+    const uno::Reference< accessibility::XAccessible >& xAccessible,
+    const uno::Reference< accessibility::XAccessibleContext >& xContext,
+    const sal_Int64 nStateSet
+)
+{
+    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::attachRecursive(3) #1: this: " << this
+            << ", xAccessible: " << xAccessible.get()
+            << ", role: " << xContext->getAccessibleRole()
+            << ", name: " << xContext->getAccessibleName()
+            << ", parent: " << xContext->getAccessibleParent().get()
+            << ", child count: " << xContext->getAccessibleChildCount());
+
+    uno::Reference< accessibility::XAccessibleEventBroadcaster > xBroadcaster =
+        uno::Reference< accessibility::XAccessibleEventBroadcaster >(xContext, uno::UNO_QUERY);
+
+    if (!xBroadcaster.is())
+        return;
+    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::attachRecursive(3) #2: xBroadcaster.is()");
+    // If not already done, add the broadcaster to the list and attach as listener.
+    const uno::Reference< uno::XInterface >& xInterface = xBroadcaster;
+    if( m_aRefList.insert(xInterface).second )
+    {
+        SAL_INFO("lok.a11y", "LOKDocumentFocusListener::attachRecursive(3) #3: m_aRefList.insert(xInterface).second");
+        xBroadcaster->addAccessibleEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
+
+        const sal_Int32 MAX_ATTACHABLE_CHILDREN = 10;
+        sal_Int32 n, nmax = xContext->getAccessibleChildCount();
+        if( ( nStateSet & accessibility::AccessibleStateType::MANAGES_DESCENDANTS ) && nmax > MAX_ATTACHABLE_CHILDREN )
+            nmax = MAX_ATTACHABLE_CHILDREN;
+
+        for( n = 0; n < nmax; n++ )
+        {
+            uno::Reference< accessibility::XAccessible > xChild( xContext->getAccessibleChild( n ) );
+
+            if( xChild.is() )
+                attachRecursive(xChild);
+        }
+    }
+}
+
+void LOKDocumentFocusListener::detachRecursive(
+    const uno::Reference< accessibility::XAccessible >& xAccessible
+)
+{
+    uno::Reference< accessibility::XAccessibleContext > xContext =
+        xAccessible->getAccessibleContext();
+
+    if( xContext.is() )
+        detachRecursive(xContext);
+}
+
+void LOKDocumentFocusListener::detachRecursive(
+    const uno::Reference< accessibility::XAccessibleContext >& xContext
+)
+{
+    sal_Int64 nStateSet = xContext->getAccessibleStateSet();
+
+   detachRecursive(xContext, nStateSet);
+}
+
+void LOKDocumentFocusListener::detachRecursive(
+    const uno::Reference< accessibility::XAccessibleContext >& xContext,
+    const sal_Int64 nStateSet
+)
+{
+    uno::Reference< accessibility::XAccessibleEventBroadcaster > xBroadcaster =
+        uno::Reference< accessibility::XAccessibleEventBroadcaster >(xContext, uno::UNO_QUERY);
+
+    if( xBroadcaster.is() && 0 < m_aRefList.erase(xBroadcaster) )
+    {
+        xBroadcaster->removeAccessibleEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
+
+        if( ( nStateSet & accessibility::AccessibleStateType::MANAGES_DESCENDANTS ) == 0 )
+        {
+            sal_Int32 n, nmax = xContext->getAccessibleChildCount();
+            for( n = 0; n < nmax; n++ )
+            {
+                uno::Reference< accessibility::XAccessible > xChild( xContext->getAccessibleChild( n ) );
+
+                if( xChild.is() )
+                    detachRecursive(xChild);
+            }
+        }
+    }
 }
 
 sal_uInt32 SfxViewShell_Impl::m_nLastViewShellId = 0;
@@ -1069,6 +1426,8 @@ SfxViewShell::SfxViewShell
 ,   maLOKLanguageTag(LANGUAGE_NONE)
 ,   maLOKLocale(LANGUAGE_NONE)
 ,   maLOKDeviceFormFactor(LOKDeviceFormFactor::UNKNOWN)
+,   mbLOKAccessibilityEnabled(false)
+,   mpLOKDocumentFocusListener(nullptr)
 {
     SetMargin( pViewFrame->GetMargin_Impl() );
 
@@ -1641,6 +2000,57 @@ void SfxViewShell::SetLOKLanguageTag(const OUString& rBcp47LanguageTag)
         maLOKLanguageTag = aTag;
     else
         maLOKLanguageTag = aFallbackTag;
+}
+
+LOKDocumentFocusListener& SfxViewShell::GetLOKDocumentFocusListener()
+{
+    if (mpLOKDocumentFocusListener)
+        return *mpLOKDocumentFocusListener;
+
+    mpLOKDocumentFocusListener.reset(new LOKDocumentFocusListener);
+    return *mpLOKDocumentFocusListener;
+}
+
+void SfxViewShell::SetLOKAccessibilityState(bool bEnabled)
+{
+    if (bEnabled == mbLOKAccessibilityEnabled)
+        return;
+    mbLOKAccessibilityEnabled = bEnabled;
+
+    SAL_DEBUG("SfxViewShell::SetLOKAccessibilityState: bEnabled: " << bEnabled);
+    LOKDocumentFocusListener& rDocumentFocusListener = GetLOKDocumentFocusListener();
+
+    if (!pWindow)
+        return;
+
+    uno::Reference< accessibility::XAccessible > xAccessible =
+        pWindow->GetAccessible();
+
+    if (!xAccessible.is())
+        return;
+
+    if (mbLOKAccessibilityEnabled)
+    {
+        try
+        {
+            rDocumentFocusListener.attachRecursive(xAccessible);
+        }
+        catch (const uno::Exception&)
+        {
+            SAL_WARN("SetLOKAccessibilityState", "Exception caught processing LOKDocumentFocusListener::attachRecursive");
+        }
+    }
+    else
+    {
+        try
+        {
+            rDocumentFocusListener.detachRecursive(xAccessible);
+        }
+        catch (const uno::Exception&)
+        {
+            SAL_WARN("SetLOKAccessibilityState", "Exception caught processing LOKDocumentFocusListener::detachRecursive");
+        }
+    }
 }
 
 void SfxViewShell::SetLOKLocale(const OUString& rBcp47LanguageTag)

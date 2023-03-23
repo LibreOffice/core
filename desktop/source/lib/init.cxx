@@ -1311,6 +1311,7 @@ static void doc_sendContentControlEvent(LibreOfficeKitDocument* pThis, const cha
 
 static void doc_setViewTimezone(LibreOfficeKitDocument* pThis, int nId, const char* timezone);
 
+static void doc_setAccessibilityState(LibreOfficeKitDocument* pThis, int nId, bool bEnabled);
 } // extern "C"
 
 namespace {
@@ -1459,6 +1460,8 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
         m_pDocumentClass->sendContentControlEvent = doc_sendContentControlEvent;
 
         m_pDocumentClass->setViewTimezone = doc_setViewTimezone;
+
+        m_pDocumentClass->setAccessibilityState = doc_setAccessibilityState;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -6398,12 +6401,13 @@ static void doc_setViewLanguage(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*p
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
+    SAL_DEBUG("doc_setViewLanguage: nId: " << nId);
     OUString sLanguage = OStringToOUString(language, RTL_TEXTENCODING_UTF8);
     SfxLokHelper::setViewLanguage(nId, sLanguage);
     SfxLokHelper::setViewLocale(nId, sLanguage);
+
+    SfxLokHelper::setAccessibilityState(nId, true);
 }
-
-
 
 unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
                               const char* pFontName,
@@ -6944,6 +6948,15 @@ static void doc_setViewTimezone(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*p
         OUString sTimezone = OStringToOUString(pTimezone, RTL_TEXTENCODING_UTF8);
         SfxLokHelper::setViewTimezone(nId, true, sTimezone);
     }
+}
+
+static void doc_setAccessibilityState(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId, bool nEnabled)
+{
+    SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
+
+    SfxLokHelper::setAccessibilityState(nId, nEnabled);
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)

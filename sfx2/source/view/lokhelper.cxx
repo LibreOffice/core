@@ -314,6 +314,20 @@ void SfxLokHelper::setViewLanguage(int nId, const OUString& rBcp47LanguageTag)
     }
 }
 
+void SfxLokHelper::setAccessibilityState(int nId, bool nEnabled)
+{
+    std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();
+
+    for (SfxViewShell* pViewShell : rViewArr)
+    {
+        if (pViewShell->GetViewShellId() == ViewShellId(nId))
+        {
+            pViewShell->SetLOKAccessibilityState(nEnabled);
+            return;
+        }
+    }
+}
+
 void SfxLokHelper::setViewLocale(int nId, const OUString& rBcp47LanguageTag)
 {
     std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();

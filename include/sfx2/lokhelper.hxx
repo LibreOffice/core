@@ -83,6 +83,8 @@ public:
     static void setViewLanguage(int nId, const OUString& rBcp47LanguageTag);
     /// Set the default language for views.
     static void setDefaultLanguage(const OUString& rBcp47LanguageTag);
+    /// Enable/Disable AT support for the given view.
+    static void setAccessibilityState(int nId, bool nEnabled);
     /// Get the language used by the loading view (used for all save operations).
     static const LanguageTag & getLoadLanguage();
     /// Set the language used by the loading view (used for all save operations).
