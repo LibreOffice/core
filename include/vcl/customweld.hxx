@@ -30,7 +30,7 @@ public:
     }
     // rRect is in Logical units rather than Pixels
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) = 0;
-    virtual void Resize() {}
+    virtual void Resize() { Invalidate(); }
     virtual bool MouseButtonDown(const MouseEvent&) { return false; }
     virtual bool MouseMove(const MouseEvent&) { return false; }
     virtual bool MouseButtonUp(const MouseEvent&) { return false; }
