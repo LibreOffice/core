@@ -8,6 +8,8 @@
  */
 
 #include "qahelper.hxx"
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/propertysequence.hxx>
 #include "csv_handler.hxx"
 #include "debughelper.hxx"
 #include <drwlayer.hxx>
@@ -33,6 +35,8 @@
 #include <scitems.hxx>
 #include <stringutil.hxx>
 #include <tokenarray.hxx>
+#include <vcl/keycodes.hxx>
+#include <vcl/scheduler.hxx>
 
 #include <orcus/csv_parser.hpp>
 
@@ -269,6 +273,70 @@ void ScModelTestBase::testFormats(ScDocument* pDoc,std::u16string_view sFormat)
     pCondFormat = pDoc->GetCondFormat(1,1,2);
     const ScRangeList& rRange3 = pCondFormat->GetRange();
     CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(1,1,2,3,1,2)), rRange3);
+}
+
+void ScModelTestBase::goToCell(const OUString& rCell)
+{
+    uno::Sequence<beans::PropertyValue> aArgs
+        = comphelper::InitPropertySequence({ { "ToPoint", uno::Any(rCell) } });
+    dispatchCommand(mxComponent, ".uno:GoToCell", aArgs);
+}
+
+void ScModelTestBase::typeString(const std::u16string_view& rStr)
+{
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    for (const char16_t c : rStr)
+    {
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, c, 0);
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, c, 0);
+        Scheduler::ProcessEventsToIdle();
+    }
+}
+
+void ScModelTestBase::insertStringToCell(const OUString& rCell, const std::u16string_view& rStr)
+{
+    goToCell(rCell);
+
+    typeString(rStr);
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+}
+
+void ScModelTestBase::insertArrayToCell(const OUString& rCell, const std::u16string_view& rStr)
+{
+    goToCell(rCell);
+
+    typeString(rStr);
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+}
+
+void ScModelTestBase::insertNewSheet(ScDocument& rDoc)
+{
+    sal_Int32 nTabs = static_cast<sal_Int32>(rDoc.GetTableCount());
+
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "Name", uno::Any(OUString("NewTab")) }, { "Index", uno::Any(nTabs + 1) } }));
+    dispatchCommand(mxComponent, ".uno:Insert", aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(nTabs + 1), rDoc.GetTableCount());
+}
+
+void ScModelTestBase::executeAutoSum()
+{
+    dispatchCommand(mxComponent, ".uno:AutoSum", {});
+
+    // Use RETURN key to exit autosum edit view
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
 }
 
 const SdrOle2Obj* ScModelTestBase::getSingleOleObject(ScDocument& rDoc, sal_uInt16 nPage)
