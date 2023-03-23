@@ -509,6 +509,40 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyCompat14Body)
     SwFrame* pRow2 = pTab2->GetLower();
     CPPUNIT_ASSERT(!pRow2->GetNext());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyFollowHorizontalPosition)
+{
+    // Given a document with 2 pages, master fly on page 1, follow fly on page 2:
+    SwModelTestBase::FlySplitGuard aGuard;
+    createSwDoc("floattable-hori-pos.docx");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure that the follow fly doesn't have a different horizontal position:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    auto pPage1Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage1Objs[0]);
+    CPPUNIT_ASSERT(pPage1Fly);
+    tools::Long nPage1FlyLeft = pPage1Fly->getFrameArea().Left();
+    auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
+    CPPUNIT_ASSERT(pPage2);
+    const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
+    auto pPage2Fly = dynamic_cast<SwFlyAtContentFrame*>(rPage2Objs[0]);
+    CPPUNIT_ASSERT(pPage2Fly);
+    tools::Long nPage2FlyLeft = pPage2Fly->getFrameArea().Left();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 5528
+    // - Actual  : 284
+    // i.e. the follow fly was pushed towards the left, instead of having the same position as the
+    // master fly.
+    CPPUNIT_ASSERT_EQUAL(nPage1FlyLeft, nPage2FlyLeft);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

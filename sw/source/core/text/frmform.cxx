@@ -340,25 +340,31 @@ bool SwTextFrame::CalcFollow(TextFrameIndex const nTextOfst)
 
 void SwTextFrame::MakePos()
 {
+    Point aOldPos = getFrameArea().Pos();
     SwFrame::MakePos();
 
-    // Find the master frame.
-    const SwTextFrame* pMaster = this;
-    while (pMaster->IsFollow())
+    // Recalc split flys if our position changed.
+    if (aOldPos != getFrameArea().Pos())
     {
-        pMaster = pMaster->FindMaster();
-    }
-    // Find which flys are effectively anchored to this frame.
-    for (const auto& pFly : pMaster->GetSplitFlyDrawObjs())
-    {
-        SwTextFrame* pFlyAnchor = pFly->FindAnchorCharFrame();
-        if (pFlyAnchor != this)
+        // Find the master frame.
+        const SwTextFrame* pMaster = this;
+        while (pMaster->IsFollow())
         {
-            continue;
+            pMaster = pMaster->FindMaster();
         }
-        // Possibly this fly was positioned relative to us, invalidate its position now that our
-        // position is changed.
-        pFly->InvalidatePos();
+        // Find which flys are effectively anchored to this frame.
+        for (const auto& pFly : pMaster->GetSplitFlyDrawObjs())
+        {
+            SwTextFrame* pFlyAnchor = pFly->FindAnchorCharFrame();
+            if (pFlyAnchor != this)
+            {
+                continue;
+            }
+            // Possibly this fly was positioned relative to us, invalidate its position now that our
+            // position is changed.
+            pFly->UnlockPosition();
+            pFly->InvalidatePos();
+        }
     }
 
     // Inform LOK clients about change in position of redlines (if any)
