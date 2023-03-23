@@ -123,6 +123,9 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/schart/ui/tp_RangeChooser.ui"
         || rUIFile == u"modules/schart/ui/tp_DataSource.ui"
         || rUIFile == u"modules/schart/ui/wizelementspage.ui"
+        // simpress
+        || rUIFile == u"modules/simpress/ui/headerfooterdialog.ui"
+        || rUIFile == u"modules/simpress/ui/headerfootertab.ui"
         // swriter
         || rUIFile == u"modules/swriter/ui/captionoptions.ui"
         || rUIFile == u"modules/swriter/ui/characterproperties.ui"
