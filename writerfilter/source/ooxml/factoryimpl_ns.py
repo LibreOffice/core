@@ -11,24 +11,13 @@ from xml.dom import minidom
 import sys
 
 
-# factoryMutexDecl
-
-
-def factoryMutexDecl(nsLabel):
-    print("typedef rtl::Static<osl::Mutex, OOXMLFactory_%s> OOXMLFactory_%s_Mutex;" % (nsLabel, nsLabel))
-    print()
-
-
 # factoryConstructor
 
 
 def factoryConstructor(nsLabel):
     print("""OOXMLFactory_%s::OOXMLFactory_%s()
 {
-    // multi-thread-safe mutex for all platforms
-
-    osl::MutexGuard aGuard(OOXMLFactory_%s_Mutex::get());
-}""" % (nsLabel, nsLabel, nsLabel))
+}""" % (nsLabel, nsLabel))
     print()
 
 
@@ -738,7 +727,6 @@ using namespace com::sun::star;
     for nsNode in [i for i in getChildrenByName(modelNode, "namespace") if i.getAttribute("name") == nsName]:
         nsLabel = nsToLabel(nsNode)
 
-        factoryMutexDecl(nsLabel)
         factoryConstructor(nsLabel)
         factoryDestructor(nsLabel)
         factoryGetInstance(nsLabel)
