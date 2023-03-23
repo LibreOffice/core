@@ -147,32 +147,36 @@ namespace svxform
         }
 
         std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xItemList.get(), "svx/ui/formdatamenu.ui"));
-        std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
+        m_xMenu = xBuilder->weld_menu("menu");
+        m_aRemovedMenuEntries.clear();
 
         if (DGTInstance == m_eGroup)
-            xMenu->remove("additem");
+            m_aRemovedMenuEntries.insert("additem");
         else
         {
-            xMenu->remove("addelement");
-            xMenu->remove("addattribute");
+            m_aRemovedMenuEntries.insert("addelement");
+            m_aRemovedMenuEntries.insert("addattribute");
 
             if (DGTSubmission == m_eGroup)
             {
-                xMenu->set_label("additem", SvxResId(RID_STR_DATANAV_ADD_SUBMISSION));
-                xMenu->set_label("edit", SvxResId(RID_STR_DATANAV_EDIT_SUBMISSION));
-                xMenu->set_label("delete", SvxResId(RID_STR_DATANAV_REMOVE_SUBMISSION));
+                m_xMenu->set_label("additem", SvxResId(RID_STR_DATANAV_ADD_SUBMISSION));
+                m_xMenu->set_label("edit", SvxResId(RID_STR_DATANAV_EDIT_SUBMISSION));
+                m_xMenu->set_label("delete", SvxResId(RID_STR_DATANAV_REMOVE_SUBMISSION));
             }
             else
             {
-                xMenu->set_label("additem", SvxResId(RID_STR_DATANAV_ADD_BINDING));
-                xMenu->set_label("edit", SvxResId(RID_STR_DATANAV_EDIT_BINDING));
-                xMenu->set_label("delete", SvxResId(RID_STR_DATANAV_REMOVE_BINDING));
+                m_xMenu->set_label("additem", SvxResId(RID_STR_DATANAV_ADD_BINDING));
+                m_xMenu->set_label("edit", SvxResId(RID_STR_DATANAV_EDIT_BINDING));
+                m_xMenu->set_label("delete", SvxResId(RID_STR_DATANAV_REMOVE_BINDING));
             }
         }
-        EnableMenuItems(xMenu.get());
-        OString sCommand = xMenu->popup_at_rect(m_xItemList.get(), tools::Rectangle(aPos, Size(1,1)));
+        for (const auto& rRemove : m_aRemovedMenuEntries)
+            m_xMenu->remove(rRemove);
+        EnableMenuItems();
+        OString sCommand = m_xMenu->popup_at_rect(m_xItemList.get(), tools::Rectangle(aPos, Size(1,1)));
         if (!sCommand.isEmpty())
             DoMenuAction(sCommand);
+        m_xMenu.reset();
         return true;
     }
 
@@ -242,7 +246,7 @@ namespace svxform
 
     IMPL_LINK_NOARG(XFormsPage, ItemSelectHdl, weld::TreeView&, void)
     {
-        EnableMenuItems(nullptr);
+        EnableMenuItems();
         PrepDnD();
     }
 
@@ -674,7 +678,7 @@ namespace svxform
         }
 
         m_pNaviWin->DisableNotify( false );
-        EnableMenuItems( nullptr );
+        EnableMenuItems();
         if ( bIsDocModified )
             svxform::DataNavigatorWindow::SetDocModified();
         return bHandled;
@@ -1103,7 +1107,7 @@ namespace svxform
                 break;
         }
 
-        EnableMenuItems( nullptr );
+        EnableMenuItems();
 
         return sRet;
     }
@@ -1161,7 +1165,14 @@ namespace svxform
         return DoToolBoxAction(rMenuID);
     }
 
-    void XFormsPage::EnableMenuItems(weld::Menu* pMenu)
+    void XFormsPage::SetMenuEntrySensitive(const OString& rIdent, bool bSensitive)
+    {
+        if (m_aRemovedMenuEntries.find(rIdent) != m_aRemovedMenuEntries.end())
+            return;
+        m_xMenu->set_sensitive(rIdent, bSensitive);
+    }
+
+    void XFormsPage::EnableMenuItems()
     {
         bool bEnableAdd = false;
         bool bEnableEdit = false;
@@ -1212,13 +1223,13 @@ namespace svxform
         m_xToolBox->set_item_sensitive("edit", bEnableEdit);
         m_xToolBox->set_item_sensitive("delete", bEnableRemove);
 
-        if (pMenu)
+        if (m_xMenu)
         {
-            pMenu->set_sensitive("additem", bEnableAdd);
-            pMenu->set_sensitive("addelement", bEnableAdd);
-            pMenu->set_sensitive("addattribute", bEnableAdd);
-            pMenu->set_sensitive("edit", bEnableEdit);
-            pMenu->set_sensitive("delete", bEnableRemove);
+            SetMenuEntrySensitive("additem", bEnableAdd);
+            SetMenuEntrySensitive("addelement", bEnableAdd);
+            SetMenuEntrySensitive("addattribute", bEnableAdd);
+            SetMenuEntrySensitive("edit", bEnableEdit);
+            SetMenuEntrySensitive("delete", bEnableRemove);
         }
         if ( DGTInstance != m_eGroup )
             return;
@@ -1247,10 +1258,10 @@ namespace svxform
         }
         m_xToolBox->set_item_label("edit", SvxResId(pResId1));
         m_xToolBox->set_item_label("delete", SvxResId(pResId2));
-        if (pMenu)
+        if (m_xMenu)
         {
-            pMenu->set_label("edit", SvxResId( pResId1 ) );
-            pMenu->set_label("delete", SvxResId( pResId2 ) );
+            m_xMenu->set_label("edit", SvxResId( pResId1 ) );
+            m_xMenu->set_label("delete", SvxResId( pResId2 ) );
         }
     }
 
