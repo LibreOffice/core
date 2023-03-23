@@ -2912,18 +2912,22 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                         bConsiderFly = false;
                 }
 
+                text::WrapTextMode nSurround = text::WrapTextMode_NONE;
                 if ( bConsiderFly )
                 {
-                    text::WrapTextMode nSurround = pFly->GetFormat()->GetSurround().GetSurround();
+                    nSurround = pFly->GetFormat()->GetSurround().GetSurround();
                     // If the frame format is a TextBox of a draw shape,
                     // then use the surround of the original shape.
                     bool bWrapThrough = nSurround == text::WrapTextMode_THROUGH;
                     SwTextBoxHelper::getShapeWrapThrough(pFly->GetFormat(), bWrapThrough);
-                    if (bWrapThrough && nSurround != text::WrapTextMode_THROUGH)
-                        nSurround = text::WrapTextMode_THROUGH;
+                    if (bWrapThrough)
+                        bConsiderFly = false;
                     else if (!bWrapThrough && nSurround == text::WrapTextMode_THROUGH)
                         nSurround = text::WrapTextMode_PARALLEL;
+                }
 
+                if (bConsiderFly)
+                {
                     const SwFormatHoriOrient &rHori= pFly->GetFormat()->GetHoriOrient();
                     bool bShiftDown = css::text::WrapTextMode_NONE == nSurround;
                     if (!bShiftDown && bAddVerticalFlyOffsets)
