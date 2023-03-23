@@ -722,17 +722,7 @@ VclMetafileProcessor2D::~VclMetafileProcessor2D()
 
     - UnoControlPDFExportContact is only created when PDFExtOutDevData is used at the
       target and uno control data is created in UnoControlPDFExportContact::do_PaintObject.
-      This may be added in primitive MetaFile renderer.
-      Adding support...
-      OOps, the necessary helper stuff is in svx/source/form/formpdxexport.cxx in namespace
-      svxform. Have to talk to FS if this has to be like that. Especially since
-      vcl::PDFWriter::AnyWidget is filled out, which is already part of vcl.
-      Wrote an eMail to FS, he is on vacation currently. I see no reason why not to move
-      that stuff to somewhere else, maybe tools or svtools ?!? We will see...
-      Moved to toolkit, so I have to link against it. I tried VCL first, but it did
-      not work since VCLUnoHelper::CreateFont is unresolved in VCL (!). Other than the name
-      may imply, it is defined in toolkit (!). Since toolkit is linked against VCL itself,
-      the lowest movement plane is toolkit.
+      This was added in primitive MetaFile renderer.
       Checked form control export, it works well. Done.
 
     - In goodies, in GraphicObject::Draw, when the used Graphic is linked, infos are
