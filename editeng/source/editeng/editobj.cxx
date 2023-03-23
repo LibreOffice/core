@@ -70,11 +70,14 @@ void XEditAttribute::SetItem(const SfxPoolItem& rNew)
     pItem = &rNew;
 }
 
-XParaPortionList::XParaPortionList(
-    OutputDevice* pRefDev, sal_uInt32 nPW, double nStretchX, double nStretchY)
+XParaPortionList::XParaPortionList(OutputDevice* pRefDev, sal_uInt32 nPW,
+            double fFontScaleX, double fFontScaleY,
+            double fSpacingScaleX, double fSpacingScaleY)
     : pRefDevPtr(pRefDev)
-    , mnStretchX(nStretchX)
-    , mnStretchY(nStretchY)
+    , mfFontScaleX(fFontScaleX)
+    , mfFontScaleY(fFontScaleY)
+    , mfSpacingScaleX(fSpacingScaleX)
+    , mfSpacingScaleY(fSpacingScaleY)
     , nPaperWidth(nPW)
 {
 }

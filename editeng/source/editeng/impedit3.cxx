@@ -668,7 +668,8 @@ void ImpEditEngine::CheckPageOverflow()
 
 static sal_Int32 ImplCalculateFontIndependentLineSpacing( const sal_Int32 nFontHeight )
 {
-    return ( nFontHeight * 12 ) / 10;   // + 20%
+    constexpr const double f120Percent = 12.0 / 10.0;
+    return basegfx::fround(nFontHeight * f120Percent);  // + 20%
 }
 
 tools::Long ImpEditEngine::GetColumnWidth(const Size& rPaperSize) const
@@ -827,7 +828,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     {
         aBulletArea = GetEditEnginePtr()->GetBulletArea( GetParaPortions().GetPos( pParaPortion ) );
         if ( !aBulletArea.IsWidthEmpty() && aBulletArea.Right() > 0 )
-            pParaPortion->SetBulletX( static_cast<sal_Int32>(GetXValue( aBulletArea.Right() )) );
+            pParaPortion->SetBulletX(sal_Int32(scaleXSpacingValue(aBulletArea.Right())));
         else
             pParaPortion->SetBulletX( 0 ); // if Bullet is set incorrectly
     }
@@ -861,10 +862,10 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         sal_Int32 nPortionStart = 0;
         sal_Int32 nPortionEnd = 0;
 
-        tools::Long nStartX = GetXValue( rLRItem.GetTextLeft() + nSpaceBeforeAndMinLabelWidth );
+        tools::Long nStartX = scaleXSpacingValue(rLRItem.GetTextLeft() + nSpaceBeforeAndMinLabelWidth);
         if ( nIndex == 0 )
         {
-            tools::Long nFI = GetXValue( rLRItem.GetTextFirstLineOffset() );
+            tools::Long nFI = scaleXSpacingValue(rLRItem.GetTextFirstLineOffset());
             nStartX += nFI;
 
             if ( !nLine && ( pParaPortion->GetBulletX() > nStartX ) )
@@ -876,13 +877,13 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         const bool bAutoSize = IsEffectivelyVertical() ? aStatus.AutoPageHeight() : aStatus.AutoPageWidth();
         tools::Long nMaxLineWidth = GetColumnWidth(bAutoSize ? aMaxAutoPaperSize : aPaperSize);
 
-        nMaxLineWidth -= GetXValue( rLRItem.GetRight() );
+        nMaxLineWidth -= scaleXSpacingValue(rLRItem.GetRight());
         nMaxLineWidth -= nStartX;
 
         // If PaperSize == long_max, one cannot take away any negative
         // first line indent. (Overflow)
         if ( ( nMaxLineWidth < 0 ) && ( nStartX < 0 ) )
-            nMaxLineWidth = GetColumnWidth(aPaperSize) - GetXValue(rLRItem.GetRight());
+            nMaxLineWidth = GetColumnWidth(aPaperSize) - scaleXSpacingValue(rLRItem.GetRight());
 
         // If still less than 0, it may be just the right edge.
         if ( nMaxLineWidth <= 0 )
@@ -962,7 +963,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 }
                 nXWidth = nMaxRangeWidth;
                 if ( nXWidth )
-                    nMaxLineWidth = nXWidth - nStartX - GetXValue( rLRItem.GetRight() );
+                    nMaxLineWidth = nXWidth - nStartX - scaleXSpacingValue(rLRItem.GetRight());
                 else
                 {
                     // Try further down in the polygon.
@@ -1052,14 +1053,14 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         tools::Long nOldTmpWidth = nTmpWidth;
 
                         // Search for Tab-Pos...
-                        tools::Long nCurPos = nTmpWidth+nStartX;
+                        tools::Long nCurPos = nTmpWidth + nStartX;
                         // consider scaling
-                        if ( aStatus.DoStretch() && ( mnStretchX != 100.0 ) )
-                            nCurPos = basegfx::fround(double(nCurPos) * 100.0 / std::max(mnStretchX, 1.0));
+                        if (aStatus.DoStretch() && (mfFontScaleX != 100.0))
+                            nCurPos = basegfx::fround(double(nCurPos) * 100.0 / std::max(mfFontScaleX, 1.0));
 
                         short nAllSpaceBeforeText = static_cast< short >(rLRItem.GetTextLeft()/* + rLRItem.GetTextLeft()*/ + nSpaceBeforeAndMinLabelWidth);
                         aCurrentTab.aTabStop = pNode->GetContentAttribs().FindTabStop( nCurPos - nAllSpaceBeforeText /*rLRItem.GetTextLeft()*/, aEditDoc.GetDefTab() );
-                        aCurrentTab.nTabPos = GetXValue( static_cast<tools::Long>( aCurrentTab.aTabStop.GetTabPos() + nAllSpaceBeforeText /*rLRItem.GetTextLeft()*/ ) );
+                        aCurrentTab.nTabPos = scaleXFontValue(tools::Long(aCurrentTab.aTabStop.GetTabPos() + nAllSpaceBeforeText/*rLRItem.GetTextLeft()*/));
                         aCurrentTab.bValid = false;
 
                         // Switch direction in R2L para...
@@ -1286,8 +1287,8 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     // No spacing within L2R/R2L nesting
                     if ( bAllow )
                     {
-                        tools::Long nExtraSpace = pPortion->GetSize().Height()/5;
-                        nExtraSpace = GetXValue( nExtraSpace );
+                        tools::Long nExtraSpace = pPortion->GetSize().Height() / 5;
+                        nExtraSpace = scaleXSpacingValue(nExtraSpace);
                         pPortion->adjustSize(nExtraSpace, 0);
                         nTmpWidth += nExtraSpace;
                     }
@@ -1500,12 +1501,13 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             bSameLineAgain = true;
         }
 
-
         if ( !bSameLineAgain && !aStatus.IsOutliner() )
         {
             if ( rLSItem.GetLineSpaceRule() == SvxLineSpaceRule::Min )
             {
-                sal_uInt16 nMinHeight = GetYValue( rLSItem.GetLineHeight() );
+                double fMinHeight = scaleYSpacingValue(rLSItem.GetLineHeight());
+                sal_uInt16 nMinHeight = basegfx::fround(fMinHeight);
+
                 sal_uInt16 nTxtHeight = pLine->GetHeight();
                 if ( nTxtHeight < nMinHeight )
                 {
@@ -1517,7 +1519,9 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             }
             else if ( rLSItem.GetLineSpaceRule() == SvxLineSpaceRule::Fix )
             {
-                sal_uInt16 nFixHeight = GetYValue( rLSItem.GetLineHeight() );
+                double fFixHeight = scaleYSpacingValue(rLSItem.GetLineHeight());
+                sal_uInt16 nFixHeight = basegfx::fround(fFixHeight);
+
                 sal_uInt16 nTxtHeight = pLine->GetHeight();
                 pLine->SetMaxAscent( static_cast<sal_uInt16>(pLine->GetMaxAscent() + ( nFixHeight - nTxtHeight ) ) );
                 pLine->SetHeight( nFixHeight, nTxtHeight );
@@ -1526,27 +1530,49 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             {
                 // There are documents with PropLineSpace 0, why?
                 // (cmc: re above question :-) such documents can be seen by importing a .ppt
-                if ( rLSItem.GetPropLineSpace() && ( rLSItem.GetPropLineSpace() < 100 ) )
+                sal_uInt16 nPropLineSpace = rLSItem.GetPropLineSpace();
+                double fProportionalScale = double(nPropLineSpace) / 100.0;
+                constexpr const double f80Percent = 8.0 / 10.0;
+                double fSpacingFactor = mfSpacingScaleY / 100.0;
+                if (nPropLineSpace && nPropLineSpace < 100)
                 {
                     // Adapted code from sw/source/core/text/itrform2.cxx
-                    sal_uInt16 nPropLineSpace = rLSItem.GetPropLineSpace();
                     sal_uInt16 nAscent = pLine->GetMaxAscent();
-                    sal_uInt16 nNewAscent = pLine->GetTxtHeight() * nPropLineSpace / 100 * 4 / 5; // 80%
-                    if ( !nAscent || nAscent > nNewAscent )
-                    {
-                        pLine->SetMaxAscent( nNewAscent );
-                    }
-                    sal_uInt16 nHeight = pLine->GetHeight() * nPropLineSpace / 100;
-                    pLine->SetHeight( nHeight, pLine->GetTxtHeight() );
+                    sal_uInt16 nNewAscent = basegfx::fround(pLine->GetTxtHeight() * fSpacingFactor * fProportionalScale * f80Percent);
+                    if (!nAscent || nAscent > nNewAscent)
+                        pLine->SetMaxAscent(nNewAscent);
+                    sal_uInt16 nHeight = basegfx::fround(pLine->GetHeight() * fProportionalScale * fSpacingFactor);
+
+                    pLine->SetHeight(nHeight, pLine->GetTxtHeight());
                 }
-                else if ( rLSItem.GetPropLineSpace() && ( rLSItem.GetPropLineSpace() != 100 ) )
+                else if (nPropLineSpace && nPropLineSpace != 100)
                 {
                     sal_uInt16 nTxtHeight = pLine->GetHeight();
-                    sal_Int32 nPropTextHeight = nTxtHeight * rLSItem.GetPropLineSpace() / 100;
+                    sal_Int32 nPropTextHeight = nTxtHeight * fProportionalScale * fSpacingFactor;
                     // The Ascent has to be adjusted for the difference:
                     tools::Long nDiff = pLine->GetHeight() - nPropTextHeight;
                     pLine->SetMaxAscent( static_cast<sal_uInt16>( pLine->GetMaxAscent() - nDiff ) );
                     pLine->SetHeight( static_cast<sal_uInt16>( nPropTextHeight ), nTxtHeight );
+                }
+            }
+            else if (rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Off)
+            {
+                if (mfSpacingScaleY < 100.0)
+                {
+                    double fSpacingFactor = mfSpacingScaleY / 100.0;
+                    sal_uInt16 nPropLineSpace = basegfx::fround(100.0 * fSpacingFactor);
+                    if (nPropLineSpace && nPropLineSpace < 100)
+                    {
+                        // Adapted code from sw/source/core/text/itrform2.cxx
+                        sal_uInt16 nAscent = pLine->GetMaxAscent();
+                        sal_uInt16 nNewAscent = basegfx::fround(pLine->GetTxtHeight() * fSpacingFactor);
+                        if (!nAscent || nAscent > nNewAscent)
+                            pLine->SetMaxAscent(nNewAscent);
+                        sal_uInt16 nHeight = basegfx::fround(pLine->GetHeight() * fSpacingFactor);
+
+                        pLine->SetHeight(nHeight, pLine->GetTxtHeight());
+                    }
+
                 }
             }
         }
@@ -1558,8 +1584,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             // has to be used for the Alignment. If it does not fit or if it
             // will change the paper width, it will be formatted again for
             // Justification! = LEFT anyway.
-            tools::Long nMaxLineWidthFix = GetColumnWidth(aPaperSize)
-                                        - GetXValue( rLRItem.GetRight() ) - nStartX;
+            tools::Long nMaxLineWidthFix = GetColumnWidth(aPaperSize) - scaleXSpacingValue(rLRItem.GetRight()) - nStartX;
             if ( aTextSize.Width() < nMaxLineWidthFix )
                 nMaxLineWidth = nMaxLineWidthFix;
         }
@@ -1784,23 +1809,23 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion )
     sal_Int32 nSpaceBeforeAndMinLabelWidth = GetSpaceBeforeAndMinLabelWidth( pParaPortion->GetNode(), &nSpaceBefore );
     const SvxLRSpaceItem& rLRItem = GetLRSpaceItem( pParaPortion->GetNode() );
     const SvxLineSpacingItem& rLSItem = pParaPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
-    tools::Long nStartX = GetXValue( rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOffset() + nSpaceBefore );
+    tools::Long nStartX = scaleXSpacingValue(rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOffset() + nSpaceBefore);
 
     tools::Rectangle aBulletArea { Point(), Point() };
     if ( bLineBreak )
     {
-        nStartX = GetXValue( rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOffset() + nSpaceBeforeAndMinLabelWidth );
+        nStartX = scaleXSpacingValue(rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOffset() + nSpaceBeforeAndMinLabelWidth);
     }
     else
     {
         aBulletArea = GetEditEnginePtr()->GetBulletArea( GetParaPortions().GetPos( pParaPortion ) );
         if ( !aBulletArea.IsEmpty() && aBulletArea.Right() > 0 )
-            pParaPortion->SetBulletX( static_cast<sal_Int32>(GetXValue( aBulletArea.Right() )) );
+            pParaPortion->SetBulletX(sal_Int32(scaleXSpacingValue(aBulletArea.Right())));
         else
             pParaPortion->SetBulletX( 0 ); // If Bullet set incorrectly.
         if ( pParaPortion->GetBulletX() > nStartX )
         {
-            nStartX = GetXValue( rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOffset() + nSpaceBeforeAndMinLabelWidth );
+            nStartX = scaleXSpacingValue(rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOffset() + nSpaceBeforeAndMinLabelWidth);
             if ( pParaPortion->GetBulletX() > nStartX )
                 nStartX = pParaPortion->GetBulletX();
         }
@@ -1828,7 +1853,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion )
         sal_Int32 nPara = GetParaPortions().GetPos( pParaPortion );
         SvxAdjust eJustification = GetJustification( nPara );
         tools::Long nMaxLineWidth = GetColumnWidth(aPaperSize);
-        nMaxLineWidth -= GetXValue( rLRItem.GetRight() );
+        nMaxLineWidth -= scaleXSpacingValue(rLRItem.GetRight());
         if ( nMaxLineWidth < 0 )
             nMaxLineWidth = 1;
         if ( eJustification ==  SvxAdjust::Center )
@@ -2994,20 +3019,24 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
 
         if ( aStatus.DoStretch() )
         {
-            if (mnStretchY != 100.0)
+            if (mfFontScaleY != 100.0)
             {
-                double fNewHeight = (double(aRealSz.Height()) * mnStretchY) / 100.0;
+                double fHeightRounded = roundToNearestPt(aRealSz.Height());
+                double fNewHeight = fHeightRounded * (mfFontScaleY / 100.0);
+                fNewHeight = roundToNearestPt(fNewHeight);
                 aRealSz.setHeight(basegfx::fround(fNewHeight));
             }
-            if (mnStretchX != 100.0)
+            if (mfFontScaleX != 100.0)
             {
-                if (mnStretchX == mnStretchY && nRelWidth == 100 )
+                if (mfFontScaleX == mfFontScaleY && nRelWidth == 100 )
                 {
                     aRealSz.setWidth( 0 );
                 }
                 else
                 {
-                    double fNewWidth = (double(aRealSz.Width()) * mnStretchX) / 100.0;
+                    double fWidthRounded = roundToNearestPt(aRealSz.Width());
+                    double fNewWidth = fWidthRounded * (mfFontScaleX / 100.0);
+                    fNewWidth = roundToNearestPt(fNewWidth);
                     aRealSz.setWidth(basegfx::fround(fNewWidth));
 
                     // Also the Kerning: (long due to handle Interim results)
@@ -3023,15 +3052,15 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
   >0        >100        > (Proportional)
   <0        >100        < (The amount, thus disproportional)
 */
-                    if (nKerning < 0 && mnStretchX > 100.0)
+                    if (nKerning < 0 && mfFontScaleX > 100.0)
                     {
                         // disproportional
-                        nKerning = basegfx::fround((double(nKerning) * 100.0) / mnStretchX);
+                        nKerning = basegfx::fround((double(nKerning) * 100.0) / mfFontScaleX);
                     }
                     else if ( nKerning )
                     {
                         // Proportional
-                        nKerning = basegfx::fround((double(nKerning) * mnStretchX) / 100.0);
+                        nKerning = basegfx::fround((double(nKerning) * mfFontScaleX) / 100.0);
                     }
                     rFont.SetFixKerning( static_cast<short>(nKerning) );
                 }
@@ -3369,7 +3398,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
 
             const SvxLineSpacingItem& rLSItem = pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
             sal_uInt16 nSBL = ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix )
-                                ? GetYValue( rLSItem.GetInterLineSpace() ) : 0;
+                                ? scaleYSpacingValue(rLSItem.GetInterLineSpace()) : 0;
             bool bPaintBullet (false);
 
             for ( sal_Int32 nLine = 0; nLine < nLines; nLine++ )
@@ -4033,7 +4062,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
             if ( !aStatus.IsOutliner() )
             {
                 const SvxULSpaceItem& rULItem = pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE );
-                tools::Long nUL = GetYValue( rULItem.GetLower() );
+                tools::Long nUL = scaleYSpacingValue(rULItem.GetLower());
                 adjustYDirectionAware(aStartPos, nUL);
             }
 
@@ -4359,10 +4388,10 @@ tools::Long ImpEditEngine::CalcVertLineSpacing(Point& rStartPos) const
 
         const SvxLineSpacingItem& rLSItem = pPortion->GetNode()->GetContentAttribs().GetItem(EE_PARA_SBL);
         sal_uInt16 nSBL = ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix )
-                            ? GetYValue( rLSItem.GetInterLineSpace() ) : 0;
+                            ? scaleYSpacingValue(rLSItem.GetInterLineSpace()) : 0;
 
         const SvxULSpaceItem& rULItem = pPortion->GetNode()->GetContentAttribs().GetItem(EE_PARA_ULSPACE);
-        tools::Long nUL = GetYValue( rULItem.GetLower() );
+        tools::Long nUL = scaleYSpacingValue(rULItem.GetLower());
 
         const EditLineList& rLines = pPortion->GetLines();
         sal_Int32 nLineCount = rLines.Count();
@@ -4459,28 +4488,35 @@ void ImpEditEngine::SetFlatMode( bool bFlat )
         pActiveView->ShowCursor();
 }
 
-void ImpEditEngine::SetCharStretching(double nX, double nY)
+void ImpEditEngine::setScale(double fFontScaleX, double fFontScaleY, double fSpacingScaleX, double fSpacingScaleY)
 {
     bool bChanged;
-    if ( !IsEffectivelyVertical() )
+
+    if (!IsEffectivelyVertical())
     {
-        bChanged = mnStretchX != nX || mnStretchY != nY;
-        mnStretchX = nX;
-        mnStretchY = nY;
+        bChanged = mfFontScaleX != fFontScaleX || mfFontScaleY != fFontScaleY ||
+                   mfSpacingScaleX != fSpacingScaleX || mfSpacingScaleY != fSpacingScaleY;
+        mfFontScaleX = fFontScaleX;
+        mfFontScaleY = fFontScaleY;
+        mfSpacingScaleX = fSpacingScaleX;
+        mfSpacingScaleY = fSpacingScaleY;
     }
     else
     {
-        bChanged = mnStretchX != nY || mnStretchY != nX;
-        mnStretchX = nY;
-        mnStretchY = nX;
+        bChanged = mfFontScaleX != fFontScaleY || mfFontScaleY != fFontScaleX ||
+                   mfSpacingScaleX != fSpacingScaleY || mfSpacingScaleY != fSpacingScaleX;
+        mfFontScaleX = fFontScaleY;
+        mfFontScaleY = fFontScaleX;
+        mfSpacingScaleX = fSpacingScaleY;
+        mfSpacingScaleY = fSpacingScaleX;
     }
 
     if (bChanged && aStatus.DoStretch())
     {
         FormatFullDoc();
         // (potentially) need everything redrawn
-        aInvalidRect=tools::Rectangle(0,0,1000000,1000000);
-        UpdateViews( GetActiveView() );
+        aInvalidRect = tools::Rectangle(0, 0, 1000000, 1000000);
+        UpdateViews(GetActiveView());
     }
 }
 

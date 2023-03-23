@@ -528,8 +528,11 @@ private:
 
     Color               maBackgroundColor;
 
-    double mnStretchX;
-    double mnStretchY;
+    double mfFontScaleX;
+    double mfFontScaleY;
+    double mfSpacingScaleX;
+    double mfSpacingScaleY;
+    bool mbRoundToNearestPt;
 
     CharCompressType    nAsianCompressionMode;
 
@@ -733,11 +736,40 @@ private:
                             std::vector<std::unique_ptr<SvxFontItem>>& rFontTable, SvxColorList& rColorList );
     sal_Int32           LogicToTwips( sal_Int32 n );
 
-    inline short        GetXValue( short nXValue ) const;
-    inline tools::Long         GetXValue( tools::Long nXValue ) const;
+    double scaleXSpacingValue(tools::Long nXValue) const
+    {
+        if (!aStatus.DoStretch() || mfSpacingScaleX == 100.0)
+            return nXValue;
 
-    inline short        GetYValue( short nYValue ) const;
-    inline sal_uInt16   GetYValue( sal_uInt16 nYValue ) const;
+        return double(nXValue) * mfSpacingScaleX / 100.0;
+    }
+
+    double scaleYSpacingValue(sal_uInt16 nYValue) const
+    {
+        if (!aStatus.DoStretch() || mfSpacingScaleY == 100.0)
+            return nYValue;
+
+        return double(nYValue) * mfSpacingScaleY / 100.0;
+    }
+
+    double scaleYFontValue(sal_uInt16 nYValue) const
+    {
+        if (!aStatus.DoStretch() || (mfFontScaleY == 100.0))
+            return nYValue;
+
+        return double(nYValue) * mfFontScaleY / 100.0;
+    }
+
+    double scaleXFontValue(tools::Long nXValue) const
+    {
+        if (!aStatus.DoStretch() || (mfFontScaleX == 100.0))
+            return nXValue;
+
+        return double(nXValue) * mfFontScaleY / 100.0;
+    }
+
+    void setRoundToNearestPt(bool bRound) { mbRoundToNearestPt = bRound; }
+    double roundToNearestPt(double fInput) const;
 
     ContentNode*        GetPrevVisNode( ContentNode const * pCurNode );
     ContentNode*        GetNextVisNode( ContentNode const * pCurNode );
@@ -1080,8 +1112,19 @@ public:
     SvxCellJustifyMethod    GetJustifyMethod( sal_Int32 nPara ) const;
     SvxCellVerJustify       GetVerJustification( sal_Int32 nPara ) const;
 
-    void                SetCharStretching(double nX, double nY);
-    inline void         GetCharStretching(double& rX, double& rY) const;
+    void setScale(double fFontScaleX, double fFontScaleY, double fSpacingScaleX, double fSpacingScaleY);
+
+    void getFontScale(double& rX, double& rY) const
+    {
+        rX = mfFontScaleX;
+        rY = mfFontScaleY;
+    }
+
+    void getSpacingScale(double& rX, double& rY) const
+    {
+        rX = mfSpacingScaleX;
+        rY = mfSpacingScaleY;
+    }
 
     sal_Int32           GetBigTextObjectStart() const                               { return nBigTextObjectStart; }
 
@@ -1280,45 +1323,6 @@ inline ParaPortion* ImpEditEngine::FindParaPortion( ContentNode const * pNode )
     sal_Int32 nPos = aEditDoc.GetPos( pNode );
     DBG_ASSERT( nPos < GetParaPortions().Count(), "Portionloser Node?" );
     return GetParaPortions()[ nPos ];
-}
-
-inline void ImpEditEngine::GetCharStretching(double& rX, double& rY) const
-{
-    rX = mnStretchX;
-    rY = mnStretchY;
-}
-
-inline short ImpEditEngine::GetXValue( short nXValue ) const
-{
-    if ( !aStatus.DoStretch() || ( mnStretchX == 100.0 ) )
-        return nXValue;
-
-    return basegfx::fround(double(nXValue) * mnStretchX / 100.0);
-}
-
-
-inline tools::Long ImpEditEngine::GetXValue( tools::Long nXValue ) const
-{
-    if ( !aStatus.DoStretch() || ( mnStretchX == 100.0 ) )
-        return nXValue;
-
-    return basegfx::fround(nXValue * mnStretchX / 100.0);
-}
-
-inline short ImpEditEngine::GetYValue( short nYValue ) const
-{
-    if ( !aStatus.DoStretch() || ( mnStretchY == 100.0 ) )
-        return nYValue;
-
-    return basegfx::fround(double(nYValue) * mnStretchY / 100.0);
-}
-
-inline sal_uInt16 ImpEditEngine::GetYValue( sal_uInt16 nYValue ) const
-{
-    if ( !aStatus.DoStretch() || ( mnStretchY == 100.0 ) )
-        return nYValue;
-
-    return basegfx::fround(double(nYValue) * mnStretchY / 100.0);
 }
 
 inline PointerStyle ImpEditView::GetPointer()

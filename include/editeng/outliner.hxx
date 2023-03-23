@@ -931,8 +931,10 @@ public:
     bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder );
     bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder, bool* pbBulletPos );
 
-    void            SetGlobalCharStretching(double nX = 100.0, double nY = 100.0);
-    void            GetGlobalCharStretching(double& rX, double& rY) const;
+    void setGlobalScale(double rFontX = 100.0, double rFontY = 100.0, double rSpacingX = 100.0, double rSpacingY = 100.0);
+    void getGlobalScale(double& rFontX, double& rFontY, double& rSpacingX, double& rSpacingY) const;
+    void setRoundFontSizeToPt(bool bRound) const;
+
     void            EraseVirtualDevice();
 
     bool            ShouldCreateBigTextObject() const;

@@ -2006,14 +2006,13 @@ Point EditEngine::GetDocPosTopLeft( sal_Int32 nParagraph )
         else
         {
             const SvxLRSpaceItem& rLRItem = pImpEditEngine->GetLRSpaceItem( pPPortion->GetNode() );
-// TL_NF_LR         aPoint.X() = pImpEditEngine->GetXValue( (short)(rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOffset()) );
             sal_Int32 nSpaceBefore = 0;
             pImpEditEngine->GetSpaceBeforeAndMinLabelWidth( pPPortion->GetNode(), &nSpaceBefore );
             short nX = static_cast<short>(rLRItem.GetTextLeft()
                             + rLRItem.GetTextFirstLineOffset()
                             + nSpaceBefore);
-            aPoint.setX( pImpEditEngine->GetXValue( nX
-                             ) );
+
+            aPoint.setX(pImpEditEngine->scaleXSpacingValue(nX));
         }
         aPoint.setY( pImpEditEngine->GetParaPortions().GetYOffset( pPPortion ) );
     }
@@ -2266,14 +2265,24 @@ bool EditEngine::HasText( const SvxSearchItem& rSearchItem )
     return pImpEditEngine->HasText( rSearchItem );
 }
 
-void EditEngine::SetGlobalCharStretching(double nX, double nY)
+void EditEngine::setGlobalScale(double fFontScaleX, double fFontScaleY, double fSpacingScaleX, double fSpacingScaleY)
 {
-    pImpEditEngine->SetCharStretching( nX, nY );
+    pImpEditEngine->setScale(fFontScaleX, fFontScaleY, fSpacingScaleX, fSpacingScaleY);
 }
 
-void EditEngine::GetGlobalCharStretching(double& rX, double& rY) const
+void EditEngine::getGlobalSpacingScale(double& rX, double& rY) const
 {
-    pImpEditEngine->GetCharStretching( rX, rY );
+    pImpEditEngine->getSpacingScale(rX, rY);
+}
+
+void EditEngine::getGlobalFontScale(double& rX, double& rY) const
+{
+    pImpEditEngine->getFontScale(rX, rY);
+}
+
+void EditEngine::setRoundFontSizeToPt(bool bRound) const
+{
+    pImpEditEngine->setRoundToNearestPt(bRound);
 }
 
 bool EditEngine::ShouldCreateBigTextObject() const

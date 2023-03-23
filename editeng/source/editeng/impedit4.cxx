@@ -1093,7 +1093,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
     // sleeper set up when Olli paragraphs not hacked!
     if ( bAllowBigObjects && bOnlyFullParagraphs && IsFormatted() && IsUpdateLayout() && ( nTextPortions >= nBigObjectStart ) )
     {
-        XParaPortionList* pXList = new XParaPortionList( GetRefDevice(), GetColumnWidth(aPaperSize), mnStretchX, mnStretchY );
+        XParaPortionList* pXList = new XParaPortionList(GetRefDevice(), GetColumnWidth(aPaperSize), mfFontScaleX, mfFontScaleY, mfSpacingScaleX, mfSpacingScaleY);
         pTxtObj->SetPortionInfo(std::unique_ptr<XParaPortionList>(pXList));
         for ( nNode = nStartNode; nNode <= nEndNode; nNode++  )
         {
@@ -1178,9 +1178,11 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
     XParaPortionList* pPortionInfo = rTextObjectImpl.GetPortionInfo();
 
     if ( pPortionInfo && ( static_cast<tools::Long>(pPortionInfo->GetPaperWidth()) == GetColumnWidth(aPaperSize) )
-            && ( pPortionInfo->GetRefMapMode() == GetRefDevice()->GetMapMode() )
-            && ( pPortionInfo->GetStretchX() == mnStretchX)
-            && ( pPortionInfo->GetStretchY() == mnStretchY))
+            && pPortionInfo->GetRefMapMode() == GetRefDevice()->GetMapMode()
+            && pPortionInfo->getFontScaleX() == mfFontScaleX
+            && pPortionInfo->getFontScaleY() == mfFontScaleY
+            && pPortionInfo->getSpacingScaleX() == mfSpacingScaleX
+            && pPortionInfo->getSpacingScaleY() == mfSpacingScaleY)
     {
         if ( (pPortionInfo->GetRefDevPtr() == GetRefDevice()) ||
              (pPortionInfo->RefDevIsVirtual() && GetRefDevice()->IsVirtual()) )
@@ -3101,6 +3103,20 @@ sal_Int32 ImpEditEngine::LogicToTwips(sal_Int32 n)
     MapMode aTwipsMode( MapUnit::MapTwip );
     aSz = pRefDev->LogicToLogic( aSz, nullptr, &aTwipsMode );
     return aSz.Width();
+}
+
+double ImpEditEngine::roundToNearestPt(double fInput) const
+{
+    if (mbRoundToNearestPt)
+    {
+        double fInputPt = o3tl::convert(fInput, o3tl::Length::mm100, o3tl::Length::pt);
+        auto nInputRounded = basegfx::fround(fInputPt);
+        return o3tl::convert(double(nInputRounded), o3tl::Length::pt, o3tl::Length::mm100);
+    }
+    else
+    {
+        return fInput;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
