@@ -559,6 +559,22 @@ public:
         @return interface reference of demanded type (may be null)
     */
     SAL_WARN_UNUSED_RESULT inline static Reference< interface_type > SAL_CALL query( XInterface * pInterface );
+#if defined LIBO_INTERNAL_ONLY
+    /** Queries this for the required interface, and returns the requested reference, possibly empty.
+        A syntactic sugar for 'Reference< other_type > xOther(xThis, UNO_QUERY)' that avoids some
+        verbocity.
+
+        @return new reference
+    */
+    template< class other_type > inline Reference< other_type > query();
+    /** Queries this for the required interface, and returns the requested reference, or throws
+        on failure. A syntactic sugar for 'Reference< other_type > xOther(xThis, UNO_QUERY_THROW)'
+        that avoids some verbocity.
+
+        @return new reference
+    */
+    template< class other_type > inline Reference< other_type > queryThrow();
+#endif
 };
 
 }

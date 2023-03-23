@@ -1041,8 +1041,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154319)
 {
     createSwDoc("tdf154319-ToC_with_s_and_d.docx");
 
-    css::uno::Reference<css::text::XDocumentIndexesSupplier> xSupplier(mxComponent,
-                                                                       css::uno::UNO_QUERY_THROW);
+    auto xSupplier(mxComponent.queryThrow<css::text::XDocumentIndexesSupplier>());
     auto xIndexes = xSupplier->getDocumentIndexes();
     css::uno::Reference<css::beans::XPropertySet> xTOCIndex(xIndexes->getByIndex(0),
                                                             css::uno::UNO_QUERY_THROW);
