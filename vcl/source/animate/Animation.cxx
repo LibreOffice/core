@@ -328,7 +328,7 @@ void Animation::RenderNextFrameInAllRenderers()
         {
             Stop();
             mbLoopTerminated = true;
-            mnFrameIndex = mnAnimCount - 1;
+            mnFrameIndex = maFrames.size() - 1;
             maBitmapEx = maFrames[mnFrameIndex]->maBitmapEx;
             return;
         }
