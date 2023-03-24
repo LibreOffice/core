@@ -114,6 +114,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/scalc/ui/samplingdialog.ui"
         || rUIFile == u"modules/scalc/ui/selectsource.ui"
         || rUIFile == u"modules/scalc/ui/sheetprintpage.ui"
+        || rUIFile == u"modules/scalc/ui/simplerefdialog.ui"
         || rUIFile == u"modules/scalc/ui/sortcriteriapage.ui"
         || rUIFile == u"modules/scalc/ui/sortdialog.ui"
         || rUIFile == u"modules/scalc/ui/sortkey.ui"
@@ -127,7 +128,9 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/scalc/ui/validationhelptabpage.ui"
         || rUIFile == u"modules/scalc/ui/ztestdialog.ui"
         // schart
+        || rUIFile == u"modules/schart/ui/attributedialog.ui"
         || rUIFile == u"modules/schart/ui/charttypedialog.ui"
+        || rUIFile == u"modules/schart/ui/datarangedialog.ui"
         || rUIFile == u"modules/schart/ui/insertaxisdlg.ui"
         || rUIFile == u"modules/schart/ui/inserttitledlg.ui"
         || rUIFile == u"modules/schart/ui/tp_ChartType.ui"
