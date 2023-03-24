@@ -2275,7 +2275,13 @@ void ShapeExport::WriteTableCellProperties(const Reference< XPropertySet>& xCell
     aVerticalAlignment >>= eVerticalAlignment;
     sVerticalAlignment = GetTextVerticalAdjust(eVerticalAlignment);
 
+    sal_Int32 nRotateAngle = 0;
+    Any aRotateAngle = xCellPropSet->getPropertyValue("RotateAngle");
+    aRotateAngle >>= nRotateAngle;
+    std::optional<OString> aTextVerticalValue = GetTextVerticalType(nRotateAngle);
+
     mpFS->startElementNS(XML_a, XML_tcPr, XML_anchor, sVerticalAlignment,
+    XML_vert, aTextVerticalValue,
     XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeftMargin)), nLeftMargin > 0),
     XML_marR, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nRightMargin)), nRightMargin > 0));
 
