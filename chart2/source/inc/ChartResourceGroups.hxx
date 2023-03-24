@@ -113,16 +113,16 @@ private:
     DECL_LINK(LineTypeChangeHdl, weld::ComboBox&, void);
     DECL_LINK(SplineDetailsDialogHdl, weld::Button&, void);
     DECL_LINK(SteppedDetailsDialogHdl, weld::Button&, void);
-    SplinePropertiesDialog& getSplinePropertiesDialog();
-    SteppedPropertiesDialog& getSteppedPropertiesDialog();
+    std::shared_ptr<SplinePropertiesDialog> getSplinePropertiesDialog();
+    std::shared_ptr<SteppedPropertiesDialog> getSteppedPropertiesDialog();
 
 private:
     weld::Window* m_pParent;
     std::unique_ptr<weld::Label> m_xFT_LineType;
     std::unique_ptr<weld::ComboBox> m_xLB_LineType;
     std::unique_ptr<weld::Button> m_xPB_DetailsDialog;
-    std::unique_ptr<SplinePropertiesDialog> m_xSplinePropertiesDialog;
-    std::unique_ptr<SteppedPropertiesDialog> m_xSteppedPropertiesDialog;
+    std::shared_ptr<SplinePropertiesDialog> m_xSplinePropertiesDialog;
+    std::shared_ptr<SteppedPropertiesDialog> m_xSteppedPropertiesDialog;
 };
 
 class GeometryResourceGroup final : public ChangingResource
