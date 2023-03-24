@@ -136,6 +136,8 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/schart/ui/datarangedialog.ui"
         || rUIFile == u"modules/schart/ui/insertaxisdlg.ui"
         || rUIFile == u"modules/schart/ui/inserttitledlg.ui"
+        || rUIFile == u"modules/schart/ui/smoothlinesdlg.ui"
+        || rUIFile == u"modules/schart/ui/steppedlinesdlg.ui"
         || rUIFile == u"modules/schart/ui/tp_ChartType.ui"
         || rUIFile == u"modules/schart/ui/tp_RangeChooser.ui"
         || rUIFile == u"modules/schart/ui/tp_DataSource.ui"
