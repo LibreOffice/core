@@ -55,6 +55,9 @@ private:
     /// the last used scaling, used from getDecomposition for buffering
     basegfx::B2DVector maLastViewScaling;
 
+    /// yet another special snowflake way to generate PDF Alt text
+    OUString m_AltText;
+
     /** used from getXControl() to create a local awt::XControl which is remembered in mxXControl
                 and from thereon always used and returned by getXControl()
              */
@@ -71,17 +74,14 @@ private:
                           const geometry::ViewInformation2D& rViewInformation) const override;
 
 public:
-    /// constructor
-    ControlPrimitive2D(basegfx::B2DHomMatrix aTransform,
-                       css::uno::Reference<css::awt::XControlModel> xControlModel);
-
-    /** constructor with an additional XControl as parameter to allow to hand it over at incarnation time
+    /** constructor with an optional XControl as parameter to allow to hand it over at incarnation time
         if it exists. This will avoid to create a 2nd one on demand in createXControl()
         and thus double the XControls.
      */
     ControlPrimitive2D(basegfx::B2DHomMatrix aTransform,
                        css::uno::Reference<css::awt::XControlModel> xControlModel,
-                       css::uno::Reference<css::awt::XControl> xXControl);
+                       css::uno::Reference<css::awt::XControl> xXControl,
+                       ::std::u16string_view rTitle, ::std::u16string_view rDescription);
 
     /// data read access
     const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
@@ -95,6 +95,8 @@ public:
         incarnation
      */
     const css::uno::Reference<css::awt::XControl>& getXControl() const;
+
+    OUString const& GetAltText() const { return m_AltText; }
 
     /// compare operator
     virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;

@@ -111,7 +111,10 @@ namespace sdr::contact {
             const drawinglayer::primitive2d::Primitive2DReference xRetval(
                 new drawinglayer::primitive2d::ControlPrimitive2D(
                     aTransform,
-                    xControlModel));
+                    xControlModel,
+                    nullptr,
+                    GetSdrObject().GetTitle(),
+                    GetSdrObject().GetDescription()));
 
             rVisitor.visit(xRetval);
         }

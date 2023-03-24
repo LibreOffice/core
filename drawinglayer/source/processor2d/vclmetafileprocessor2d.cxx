@@ -1145,8 +1145,6 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
     if (bPDFExport)
     {
         // PDF export. Emulate data handling from UnoControlPDFExportContact
-        // I have now moved describePDFControl to toolkit, thus i can implement the PDF
-        // form control support now as follows
         std::unique_ptr<vcl::PDFWriter::AnyWidget> pPDFControl(
             ::toolkitform::describePDFControl(rXControl, *mpPDFExtOutDevData));
 
@@ -1167,6 +1165,11 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
             pPDFControl->TextFont.SetFontSize(aFontSize);
 
             mpPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::Form);
+            OUString const& rAltText(rControlPrimitive.GetAltText());
+            if (!rAltText.isEmpty())
+            {
+                mpPDFExtOutDevData->SetAlternateText(rAltText);
+            }
             mpPDFExtOutDevData->CreateControl(*pPDFControl);
             mpPDFExtOutDevData->EndStructureElement();
 
