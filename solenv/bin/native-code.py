@@ -307,7 +307,7 @@ core_constructor_list = [
     ("lingucomponent_MacSpellChecker_get_implementation", "#ifdef IOS"),
 # lingucomponent/source/spellcheck/languagetool/LanguageTool.component
     ("lingucomponent_LanguageToolGrammarChecker_get_implementation", "#if !ENABLE_FUZZERS"),
-    "lingucomponent_NumberText_get_implementation",
+    ("lingucomponent_NumberText_get_implementation", "#if !ENABLE_FUZZERS"),
 # lingucomponent/source/thesaurus/libnth/lnth.component
     "lingucomponent_Thesaurus_get_implementation",
     "lingucomponent_SpellChecker_get_implementation",
