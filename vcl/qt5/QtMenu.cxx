@@ -59,7 +59,7 @@ QtMenu::QtMenu(bool bMenuBar)
 {
 }
 
-bool QtMenu::HasNativeMenuBar() { return true; }
+bool QtMenu::VisibleMenuBar() { return true; }
 
 void QtMenu::InsertMenuItem(QtMenuItem* pSalMenuItem, unsigned nPos)
 {
@@ -849,7 +849,8 @@ int QtMenu::GetMenuBarHeight() const
 {
     if (!validateQMenuBar() || mpQMenuBar->isHidden())
         return 0;
-    return mpQMenuBar->height() * mpFrame->devicePixelRatioF();
+
+    return mpQMenuBar->height();
 }
 
 QtMenuItem::QtMenuItem(const SalItemParams* pItemData)

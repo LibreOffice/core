@@ -69,15 +69,14 @@ private:
 public:
     QtMenu(bool bMenuBar);
 
-    virtual bool HasNativeMenuBar() override;
-    virtual int GetMenuBarHeight() const override;
-    virtual void ShowMenuBar(bool bVisible) override;
+    virtual bool VisibleMenuBar() override; // must return TRUE to actually DISPLAY native menu bars
 
     virtual void InsertItem(SalMenuItem* pSalMenuItem, unsigned nPos) override;
     virtual void RemoveItem(unsigned nPos) override;
     virtual void SetSubMenu(SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos) override;
     virtual void SetFrame(const SalFrame* pFrame) override;
     const QtFrame* GetFrame() const;
+    virtual void ShowMenuBar(bool bVisible) override;
     virtual bool ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangle& rRect,
                                      FloatWinPopupFlags nFlags) override;
     QtMenu* GetTopLevel();
@@ -96,6 +95,7 @@ public:
     virtual bool AddMenuBarButton(const SalMenuButtonItem&) override;
     virtual void RemoveMenuBarButton(sal_uInt16 nId) override;
     virtual tools::Rectangle GetMenuBarButtonRectPixel(sal_uInt16 nId, SalFrame*) override;
+    virtual int GetMenuBarHeight() const override;
 
     void SetMenu(Menu* pMenu) { mpVCLMenu = pMenu; }
     Menu* GetMenu() { return mpVCLMenu; }
