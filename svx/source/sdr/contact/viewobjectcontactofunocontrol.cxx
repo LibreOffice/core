@@ -1568,7 +1568,9 @@ namespace sdr::contact {
         // create a primitive and hand over the existing xControl. This will
         // allow the primitive to not need to create another one on demand.
         rContainer.push_back( new ::drawinglayer::primitive2d::ControlPrimitive2D(
-            m_aTransformation, xControlModel, rControl.getControl() ) );
+            m_aTransformation, xControlModel, rControl.getControl(),
+            m_pVOCImpl->getViewContact().GetSdrObject().GetTitle(),
+            m_pVOCImpl->getViewContact().GetSdrObject().GetDescription()) );
     }
 
     sal_uInt32 LazyControlCreationPrimitive2D::getPrimitive2DID() const

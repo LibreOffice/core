@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <utility>
+#include <rtl/ustrbuf.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
@@ -239,20 +240,21 @@ namespace drawinglayer::primitive2d
 
         ControlPrimitive2D::ControlPrimitive2D(
             basegfx::B2DHomMatrix aTransform,
-            uno::Reference< awt::XControlModel > xControlModel)
-        :   maTransform(std::move(aTransform)),
-            mxControlModel(std::move(xControlModel))
-        {
-        }
-
-        ControlPrimitive2D::ControlPrimitive2D(
-            basegfx::B2DHomMatrix aTransform,
             uno::Reference< awt::XControlModel > xControlModel,
-            uno::Reference< awt::XControl > xXControl)
+            uno::Reference<awt::XControl> xXControl,
+            ::std::u16string_view const rTitle,
+            ::std::u16string_view const rDescription)
         :   maTransform(std::move(aTransform)),
             mxControlModel(std::move(xControlModel)),
             mxXControl(std::move(xXControl))
         {
+            ::rtl::OUStringBuffer buf(rTitle);
+            if (!rTitle.empty() && !rDescription.empty())
+            {
+                buf.append(" - ");
+            }
+            buf.append(rDescription);
+            m_AltText = buf.makeStringAndClear();
         }
 
         const uno::Reference< awt::XControl >& ControlPrimitive2D::getXControl() const
