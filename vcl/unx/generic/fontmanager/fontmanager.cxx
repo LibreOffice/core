@@ -23,6 +23,7 @@
 
 #include <unx/fontmanager.hxx>
 #include <impfontcharmap.hxx>
+#include <unotools/syslocaleoptions.hxx>
 #include <unx/gendata.hxx>
 #include <unx/helper.hxx>
 #include <vcl/fontcharmap.hxx>
@@ -453,8 +454,8 @@ void PrintFontManager::analyzeSfntFamilyName( void const * pTTFont, ::std::vecto
     GetTTNameRecords( static_cast<TrueTypeFont const *>(pTTFont), aNameRecords );
     if( !aNameRecords.empty() )
     {
-        LanguageTag aSystem("");
-        LanguageType eLang = aSystem.getLanguageType();
+        LanguageTag aUILang(SvtSysLocaleOptions().GetRealUILanguageTag());
+        LanguageType eLang = aUILang.getLanguageType();
         int nLastMatch = -1;
         for( size_t i = 0; i < aNameRecords.size(); i++ )
         {
@@ -480,7 +481,7 @@ void PrintFontManager::analyzeSfntFamilyName( void const * pTTFont, ::std::vecto
             {
                 AppleLanguageId aAppleId = static_cast<AppleLanguageId>(static_cast<sal_uInt16>(aNameRecords[i].languageID));
                 LanguageTag aApple(makeLanguageTagFromAppleLanguageId(aAppleId));
-                if (aApple == aSystem)
+                if (aApple == aUILang)
                     nMatch = 8000;
                 else if (aAppleId == AppleLanguageId::ENGLISH)
                     nMatch = 2000;
