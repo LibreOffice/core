@@ -814,8 +814,7 @@ static OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
         if( !sLine.isEmpty()
             && !sLine.startsWith( "<?xml" ) )
         {
-            sResult.append( sLine );
-            sResult.append( '\n' );
+            sResult.append( sLine + "\n" );
         }
     }
 

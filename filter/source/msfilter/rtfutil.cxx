@@ -180,20 +180,17 @@ OString OutChar(sal_Unicode c, int* pUCMode, rtl_TextEncoding eDestEnc, bool* pS
                 {
                     if (*pUCMode != nLen)
                     {
-                        aBuf.append("\\uc");
-                        aBuf.append(nLen);
+                        aBuf.append("\\uc" + OString::number(nLen));
                         // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.
                         aBuf.append(' ');
                         *pUCMode = nLen;
                     }
-                    aBuf.append("\\u");
-                    aBuf.append(static_cast<sal_Int32>(c));
+                    aBuf.append("\\u" + OString::number(static_cast<sal_Int32>(c)));
                 }
 
                 for (sal_Int32 nI = 0; nI < nLen; ++nI)
                 {
-                    aBuf.append("\\'");
-                    aBuf.append(OutHex(sConverted[nI], 2));
+                    aBuf.append("\\'" + OutHex(sConverted[nI], 2));
                 }
             }
     }
@@ -222,10 +219,9 @@ OString OutString(const OUString& rStr, rtl_TextEncoding eDestEnc, bool bUnicode
         aBuf.append(OutChar(rStr[n], &nUCMode, eDestEnc, nullptr, bUnicode));
     if (nUCMode != 1)
     {
-        aBuf.append(OOO_STRING_SVTOOLS_RTF_UC);
-        aBuf.append(sal_Int32(1));
         aBuf.append(
-            " "); // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;
+            OOO_STRING_SVTOOLS_RTF_UC + OString::number(sal_Int32(1))
+            + " "); // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;
     }
     return aBuf.makeStringAndClear();
 }

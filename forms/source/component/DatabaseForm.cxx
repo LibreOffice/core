@@ -437,9 +437,7 @@ OUString ODatabaseForm::GetDataEncoded(bool _bURLEncoded,const Reference<XContro
         Encode( aName );
         Encode( aValue );
 
-        aResult.append(aName);
-        aResult.append('=');
-        aResult.append(aValue);
+        aResult.append(aName + "=" + aValue);
 
         if (pSuccObj < aSuccObjList.end() - 1)
         {
@@ -905,9 +903,9 @@ void ODatabaseForm::Encode( OUString& rString )
                     short nLo = static_cast<sal_Int16>(nCharCode) - (nHi*16);
                     if( nHi > 9 ) nHi += int('A')-10; else nHi += int('0');
                     if( nLo > 9 ) nLo += int('A')-10; else nLo += int('0');
-                    aResult.append('%');
-                    aResult.append(static_cast<sal_Unicode>(nHi));
-                    aResult.append(static_cast<sal_Unicode>(nLo));
+                    aResult.append("%"
+                        + OUStringChar(static_cast<sal_Unicode>(nHi))
+                        + OUStringChar(static_cast<sal_Unicode>(nLo)) );
                 }
             }
         }

@@ -76,8 +76,8 @@ void lcl_ParserHelper(INetURLObject& _rParser, css::util::URL& _rURL,bool _bUseI
         OUStringBuffer aPath(128);
         for ( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
         {
-            aPath.append( '/');
-            aPath.append( _rParser.getName( nIndex, false, INetURLObject::DecodeMechanism::NONE ));
+            aPath.append( "/"
+                + _rParser.getName( nIndex, false, INetURLObject::DecodeMechanism::NONE ));
         }
 
         if ( nCount > 0 )
@@ -227,8 +227,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL )
                 aCompletePath.append( aURL.Name );
             else
             {
-                aCompletePath.append( '/' );
-                aCompletePath.append( aURL.Name );
+                aCompletePath.append( "/" + aURL.Name );
             }
         }
 

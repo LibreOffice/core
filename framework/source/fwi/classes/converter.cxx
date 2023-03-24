@@ -76,36 +76,37 @@ OUString Converter::convert_DateTime2ISO8601( const DateTime& aSource )
         sBuffer.append("0");
     sBuffer.append( nYear );
 
-    sBuffer.append("-");
     // write month formatted as "MM"
+    sBuffer.append("-");
     if (nMonth<10)
         sBuffer.append("0");
     sBuffer.append( nMonth );
 
-    sBuffer.append("-");
     // write day formatted as "DD"
+    sBuffer.append("-");
     if (nDay<10)
         sBuffer.append("0");
     sBuffer.append( nDay );
 
-    sBuffer.append("T");
     // write hours formatted as "hh"
+    sBuffer.append("T");
     if (nHour<10)
         sBuffer.append("0");
     sBuffer.append( nHour );
 
-    sBuffer.append(":");
     // write min formatted as "mm"
+    sBuffer.append(":");
     if (nMin<10)
         sBuffer.append("0");
     sBuffer.append( nMin );
 
-    sBuffer.append(":");
     // write sec formatted as "ss"
+    sBuffer.append(":");
     if (nSec<10)
         sBuffer.append("0");
     sBuffer.append( nSec );
 
+    // write time-zone
     sBuffer.append("Z");
 
     return sBuffer.makeStringAndClear();

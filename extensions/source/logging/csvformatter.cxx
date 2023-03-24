@@ -202,8 +202,7 @@ namespace logging
         sal_Int32 columns = m_Columnnames.getLength();
         for(sal_Int32 i=0; i<columns; i++)
         {
-            buf.append(m_Columnnames[i]);
-            buf.append(comma_char);
+            buf.append(m_Columnnames[i] + OUStringChar(comma_char));
         }
         buf.setLength(buf.getLength()-1);
         buf.append(dos_newline);
@@ -216,14 +215,12 @@ namespace logging
 
         if(m_LogEventNo)
         {
-            aLogEntry.append( record.SequenceNumber );
-            aLogEntry.append(comma_char);
+            aLogEntry.append(record.SequenceNumber + comma_char);
         }
 
         if(m_LogThread)
         {
-            aLogEntry.append( record.ThreadID );
-            aLogEntry.append(comma_char);
+            aLogEntry.append(record.ThreadID + OUStringChar(comma_char));
         }
 
         if(m_LogTimestamp)
