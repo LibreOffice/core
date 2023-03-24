@@ -1347,7 +1347,6 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
     sal_Int16 nZoomFactor = static_cast < sal_Int16 > (pVOpt->GetZoom());
     bool bViewLayoutBookMode = pVOpt->IsViewLayoutBookMode();
     sal_Int16 nViewLayoutColumns = pVOpt->GetViewLayoutColumns();
-    bool bHideWhitespace = pVOpt->IsHideWhitespaceMode();
 
     bool bSelectedFrame = ( m_pWrtShell->GetSelFrameType() != FrameTypeFlags::NONE ),
              bGotVisibleLeft = false,
@@ -1355,7 +1354,6 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
              bGotZoomType = false,
              bGotZoomFactor = false, bGotIsSelectedFrame = false,
              bGotViewLayoutColumns = false, bGotViewLayoutBookMode = false,
-             bGotHideWhitespace = false,
              bBrowseMode = false, bGotBrowseMode = false;
     bool bKeepRatio = pVOpt->IsKeepRatio();
     bool bGotKeepRatio = false;
@@ -1418,11 +1416,6 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         {
             rValue.Value >>= bKeepRatio;
             bGotKeepRatio = true;
-        }
-        else if (rValue.Name == "HideWhitespace")
-        {
-            rValue.Value >>= bHideWhitespace;
-            bGotHideWhitespace = true;
         }
         // Fallback to common SdrModel processing
         else
@@ -1493,21 +1486,11 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         m_pWrtShell->SetMacroExecAllowed( bSavedFlagValue );
     }
 
-    SwViewOption aUsrPref(*pVOpt);
-    bool bUsrPrefModified = false;
     if (bGotKeepRatio && bKeepRatio != pVOpt->IsKeepRatio())
     {
         // Got a custom value, then it makes sense to trigger notifications.
+        SwViewOption aUsrPref(*pVOpt);
         aUsrPref.SetKeepRatio(bKeepRatio);
-        bUsrPrefModified = true;
-    }
-    if (bGotHideWhitespace && bHideWhitespace != pVOpt->IsHideWhitespaceMode())
-    {
-        aUsrPref.SetHideWhitespaceMode(bHideWhitespace);
-        bUsrPrefModified = true;
-    }
-    if (bUsrPrefModified)
-    {
         SW_MOD()->ApplyUsrPref(aUsrPref, this);
     }
 
@@ -1612,9 +1595,6 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
 
     aVector.push_back(
         comphelper::makePropertyValue("KeepRatio", m_pWrtShell->GetViewOptions()->IsKeepRatio()));
-
-    aVector.push_back(comphelper::makePropertyValue(
-        "HideWhitespace", m_pWrtShell->GetViewOptions()->IsHideWhitespaceMode()));
 
     rSequence = comphelper::containerToSequence(aVector);
 

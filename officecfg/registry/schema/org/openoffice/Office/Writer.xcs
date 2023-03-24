@@ -1610,14 +1610,6 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="HideWhitespace" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: View - Show Whitespace -->
-          <info>
-            <desc>Specifies whether to hide whitespace.</desc>
-            <label>View Layout Hide Whitespace</label>
-          </info>
-          <value>false</value>
-        </prop>
       </group>
     </group>
     <group oor:name="Grid">
