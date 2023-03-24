@@ -25,6 +25,7 @@
 #include <frmmgr.hxx>
 #include <frameformats.hxx>
 #include <cellfrm.hxx>
+#include <ndtxt.hxx>
 
 namespace
 {
@@ -542,6 +543,60 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyFollowHorizontalPosition)
     // i.e. the follow fly was pushed towards the left, instead of having the same position as the
     // master fly.
     CPPUNIT_ASSERT_EQUAL(nPage1FlyLeft, nPage2FlyLeft);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCursorTraversal)
+{
+    // Given a document with a multi-page floating table:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwPageDesc aStandard(pDoc->GetPageDesc(0));
+    SwFormatFrameSize aPageSize(aStandard.GetMaster().GetFrameSize());
+    // 5cm for the page height, 2cm are the top and bottom margins, so 1cm remains for the body
+    // frame:
+    aPageSize.SetHeight(2834);
+    aStandard.GetMaster().SetFormatAttr(aPageSize);
+    pDoc->ChgPageDesc(0, aStandard);
+    // Insert a table:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/1);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+    pWrtShell->GoPrevCell();
+    pWrtShell->Insert("A1");
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert("A2");
+    // Select cell:
+    pWrtShell->SelAll();
+    // Select table:
+    pWrtShell->SelAll();
+    // Wrap the table in a text frame:
+    SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
+    pWrtShell->StartAllAction();
+    aMgr.InsertFlyFrame(RndStdIds::FLY_AT_PARA, aMgr.GetPos(), aMgr.GetSize());
+    pWrtShell->EndAllAction();
+    // Allow the text frame to split:
+    pWrtShell->StartAllAction();
+    SwFrameFormats& rFlys = *pDoc->GetSpzFrameFormats();
+    SwFrameFormat* pFly = rFlys[0];
+    SwAttrSet aSet(pFly->GetAttrSet());
+    aSet.Put(SwFormatFlySplit(true));
+    pDoc->SetAttr(aSet, *pFly);
+    pWrtShell->EndAllAction();
+
+    // When going from A1 to A2:
+    pWrtShell->GotoTable("Table1");
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    CPPUNIT_ASSERT_EQUAL(OUString("A1"), pTextNode->GetText());
+    pWrtShell->Down(/*bSelect=*/false);
+
+    // Then make sure we get to A2 and don't stay in A1:
+    pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: A2
+    // - Actual  : A1
+    // i.e. the cursor didn't get from A1 to A2.
+    CPPUNIT_ASSERT_EQUAL(OUString("A2"), pTextNode->GetText());
 }
 }
 
