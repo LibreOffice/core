@@ -468,7 +468,7 @@ void SwViewShell::ImplStartAction()
 
 void SwViewShell::ImplLockPaint()
 {
-    if ( GetWin() && GetWin()->IsVisible() )
+    if ( GetWin() && GetWin()->IsVisible() && !comphelper::LibreOfficeKit::isActive())
         GetWin()->EnablePaint( false ); //Also cut off the controls.
     Imp()->LockPaint();
 }
@@ -478,7 +478,7 @@ void SwViewShell::ImplUnlockPaint( bool bVirDev )
     CurrShell aCurr( this );
     if ( GetWin() && GetWin()->IsVisible() )
     {
-        if ( (bInSizeNotify || bVirDev ) && VisArea().HasArea() )
+        if ( (bInSizeNotify || bVirDev ) && VisArea().HasArea() && !comphelper::LibreOfficeKit::isActive())
         {
             //Refresh with virtual device to avoid flickering.
             VclPtrInstance<VirtualDevice> pVout( *mpOut );
