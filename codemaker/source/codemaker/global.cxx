@@ -97,8 +97,7 @@ OString createFileNameFromType( const OString& destination,
     if (bWithSeparator)
         fileNameBuf.append("/");
 
-    fileNameBuf.append(type);
-    fileNameBuf.append(postfix);
+    fileNameBuf.append(type + postfix);
 
     OString fileName(fileNameBuf.makeStringAndClear());
 

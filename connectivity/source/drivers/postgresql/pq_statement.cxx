@@ -253,10 +253,10 @@ static void raiseSQLException(
         buf.append( "]" );
     }
     buf.append(
-        OUString( errorMsg, strlen(errorMsg) , ConnectionSettings::encoding ) );
-    buf.append( " (caused by statement '" );
-    buf.append( OStringToOUString( sql, ConnectionSettings::encoding ) );
-    buf.append( "')" );
+        OUString( errorMsg, strlen(errorMsg) , ConnectionSettings::encoding )
+        + " (caused by statement '"
+        + OStringToOUString( sql, ConnectionSettings::encoding )
+        + "')" );
     OUString error = buf.makeStringAndClear();
     SAL_WARN("connectivity.postgresql", error);
     throw SQLException( error, owner, OUString(), 1, Any() );
@@ -607,8 +607,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
             bufferQuoteQualifiedIdentifier(buf, schemaName, tableName, pConnectionSettings );
         else
             bufferQuoteIdentifier( buf, lastTableInserted, pConnectionSettings );
-        buf.append( " WHERE oid = " );
-        buf.append( nLastOid );
+        buf.append( " WHERE oid = " + OUString::number(nLastOid) );
         query = buf.makeStringAndClear();
     }
     else if ( lastTableInserted.size() && lastQuery.getLength() )
@@ -700,8 +699,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
                 if( bAdditionalCondition )
                     buf.append( " AND " );
                 bufferQuoteIdentifier( buf, columnNameUnicode, pConnectionSettings );
-                buf.append( " = " );
-                buf.append( value );
+                buf.append( " = " + value );
                 bAdditionalCondition = true;
             }
             query = buf.makeStringAndClear();

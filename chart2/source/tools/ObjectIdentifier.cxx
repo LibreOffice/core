@@ -90,15 +90,13 @@ OUString lcl_createClassificationStringForType( ObjectType eObjectType
     {
         if( !aRet.isEmpty() )
             aRet.append(":");
-        aRet.append( m_aDragMethodEquals );
-        aRet.append( rDragMethodServiceName );
+        aRet.append( OUString::Concat(m_aDragMethodEquals) + rDragMethodServiceName );
 
         if( !rDragParameterString.empty() )
         {
             if( !aRet.isEmpty() )
                 aRet.append(":");
-            aRet.append( m_aDragParameterEquals );
-            aRet.append( rDragParameterString );
+            aRet.append( OUString::Concat(m_aDragParameterEquals) + rDragParameterString );
         }
     }
     return aRet.makeStringAndClear();
@@ -584,9 +582,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierWithParent(
     if(!rParentPartical.empty())
         aRet.append(":");
 
-    aRet.append(getStringForType( eObjectType ));
-    aRet.append("=");
-    aRet.append(rParticleID);
+    aRet.append(getStringForType( eObjectType ) + "=" + rParticleID);
 
     return aRet.makeStringAndClear();
 }
@@ -1014,8 +1010,7 @@ OUString ObjectIdentifier::createChildParticleWithIndex( ObjectType eObjectType,
     OUStringBuffer aRet( getStringForType( eObjectType ) );
     if( !aRet.isEmpty() )
     {
-        aRet.append("=");
-        aRet.append(nIndex);
+        aRet.append("=" + OUString::number(nIndex));
     }
     return aRet.makeStringAndClear();
 }

@@ -628,22 +628,18 @@ void Connection::runBackupService(const short nAction)
     OString sFBKPath = OUStringToOString(m_sFBKPath, RTL_TEXTENCODING_UTF8);
 
 
-    OStringBuffer aRequest; // byte array
-
-
-    aRequest.append(static_cast<char>(nAction));
-
-    aRequest.append(char(isc_spb_dbname)); // .fdb
     sal_uInt16 nFDBLength = sFDBPath.getLength();
-    aRequest.append(static_cast<char>(nFDBLength & 0xFF)); // least significant byte first
-    aRequest.append(static_cast<char>((nFDBLength >> 8) & 0xFF));
-    aRequest.append(sFDBPath);
-
-    aRequest.append(char(isc_spb_bkp_file)); // .fbk
     sal_uInt16 nFBKLength = sFBKPath.getLength();
-    aRequest.append(static_cast<char>(nFBKLength & 0xFF));
-    aRequest.append(static_cast<char>((nFBKLength >> 8) & 0xFF));
-    aRequest.append(sFBKPath);
+    OStringBuffer aRequest( // byte array
+        OStringChar(static_cast<char>(nAction))
+        + OStringChar(char(isc_spb_dbname)) // .fdb
+        + OStringChar(static_cast<char>(nFDBLength & 0xFF)) // least significant byte first
+        + OStringChar(static_cast<char>((nFDBLength >> 8) & 0xFF))
+        + sFDBPath
+        + OStringChar(char(isc_spb_bkp_file)) // .fbk
+        + OStringChar(static_cast<char>(nFBKLength & 0xFF))
+        + OStringChar(static_cast<char>((nFBKLength >> 8) & 0xFF))
+        + sFBKPath);
 
     if (nAction == isc_action_svc_restore)
     {

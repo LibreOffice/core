@@ -812,20 +812,14 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getTables(const Any& /*catalog
 
     if (types.getLength() == 1)
     {
-        buffer.append("AND TABLE_TYPE LIKE '");
-        buffer.append(types[0]);
-        buffer.append("'");
+        buffer.append("AND TABLE_TYPE LIKE '" + types[0] + "'");
     }
     else if (types.getLength() > 1)
     {
-        buffer.append("AND (TABLE_TYPE LIKE '");
-        buffer.append(types[0]);
-        buffer.append("'");
+        buffer.append("AND (TABLE_TYPE LIKE '" + types[0] + "'");
         for (sal_Int32 i = 1; i < types.getLength(); ++i)
         {
-            buffer.append(" OR TABLE_TYPE LIKE '");
-            buffer.append(types[i]);
-            buffer.append("'");
+            buffer.append(" OR TABLE_TYPE LIKE '" + types[i] + "'");
         }
         buffer.append(")");
     }

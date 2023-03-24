@@ -1861,8 +1861,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
             {
                 if (bDisabled)
                 {
-                    aDisabledMsg.append(simplified);
-                    aDisabledMsg.append(" ");
+                    aDisabledMsg.append(simplified + " ");
                 }
                 else
                 {
@@ -1890,8 +1889,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
 
         if (!aModule.is())
         {
-            aMissingMsg.append(simplified);
-            aMissingMsg.append(" ");
+            aMissingMsg.append(simplified + " ");
         }
 
         if (aModule.is() &&

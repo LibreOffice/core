@@ -830,8 +830,9 @@ static OUString impl_doComposeTableName( const Reference< XDatabaseMetaData >& _
 
     if ( !_rSchema.isEmpty() && aNameComps.bSchemas )
     {
-        aComposedName.append( _bQuote ? quoteName( sQuoteString, _rSchema ) : _rSchema );
-        aComposedName.append( "." );
+        aComposedName.append(
+            (_bQuote ? quoteName( sQuoteString, _rSchema ) : _rSchema )
+            + "." );
     }
 
     aComposedName.append( _bQuote ? quoteName( sQuoteString, _rName ) : _rName );

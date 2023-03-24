@@ -155,12 +155,11 @@ sdbcx::ObjectType OKeysHelper::appendObject( const OUString& _rForName, const Re
     {
         // if we're here, we belong to a table which is not new, i.e. already exists in the database.
         // In this case, really append the new index.
-        OUStringBuffer aSql;
-        aSql.append("ALTER TABLE ");
+        OUStringBuffer aSql("ALTER TABLE ");
         OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
 
-        aSql.append(composeTableName( m_pTable->getConnection()->getMetaData(), m_pTable, ::dbtools::EComposeRule::InTableDefinitions, true ));
-        aSql.append(" ADD ");
+        aSql.append(composeTableName( m_pTable->getConnection()->getMetaData(), m_pTable, ::dbtools::EComposeRule::InTableDefinitions, true )
+            + " ADD ");
 
         if ( nKeyType == KeyType::PRIMARY )
         {
@@ -188,9 +187,9 @@ sdbcx::ObjectType OKeysHelper::appendObject( const OUString& _rForName, const Re
 
         if ( nKeyType == KeyType::FOREIGN )
         {
-            aSql.append(" REFERENCES ");
-            aSql.append(::dbtools::quoteTableName(m_pTable->getConnection()->getMetaData(),sReferencedName,::dbtools::EComposeRule::InTableDefinitions));
-            aSql.append(" (");
+            aSql.append(" REFERENCES "
+                + ::dbtools::quoteTableName(m_pTable->getConnection()->getMetaData(),sReferencedName,::dbtools::EComposeRule::InTableDefinitions)
+                + " (");
 
             for(sal_Int32 i=0;i<xColumns->getCount();++i)
             {
@@ -200,9 +199,9 @@ sdbcx::ObjectType OKeysHelper::appendObject( const OUString& _rForName, const Re
                 aSql.append(::dbtools::quoteName( aQuote,getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_RELATEDCOLUMN)))));
 
             }
-            aSql.append(")");
-            aSql.append(getKeyRuleString(true   ,nUpdateRule));
-            aSql.append(getKeyRuleString(false  ,nDeleteRule));
+            aSql.append(")"
+                + getKeyRuleString(true   ,nUpdateRule)
+                + getKeyRuleString(false  ,nDeleteRule));
         }
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
@@ -272,10 +271,9 @@ void OKeysHelper::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
     }
     else
     {
-        OUStringBuffer aSql;
-        aSql.append("ALTER TABLE ");
-
-        aSql.append( composeTableName( m_pTable->getConnection()->getMetaData(), m_pTable,::dbtools::EComposeRule::InTableDefinitions, true ));
+        OUStringBuffer aSql(
+            "ALTER TABLE "
+            + composeTableName( m_pTable->getConnection()->getMetaData(), m_pTable,::dbtools::EComposeRule::InTableDefinitions, true ));
 
         sal_Int32 nKeyType = KeyType::PRIMARY;
         if ( xKey.is() )

@@ -130,8 +130,7 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
         sal_Int32 nParenPos = sTypeName.indexOf('(');
         if ( nParenPos == -1 )
         {
-            aSql.append(sTypeName);
-            aSql.append("(");
+            aSql.append(sTypeName + "(");
         }
         else
         {
@@ -161,10 +160,7 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
     OUString aDefault = ::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
     if ( !aDefault.isEmpty() )
     {
-        aSql.append(" DEFAULT ");
-        aSql.append(sPrefix);
-        aSql.append(aDefault);
-        aSql.append(sPostfix);
+        aSql.append(" DEFAULT " + sPrefix + aDefault + sPostfix);
     } // if ( aDefault.getLength() )
 
     return aSql.makeStringAndClear();
@@ -188,17 +184,14 @@ OUString createStandardColumnPart(const Reference< XPropertySet >& xColProp,cons
     if ( xPropInfo.is() && xPropInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)) )
         xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)) >>= sAutoIncrementValue;
 
-    aSql.append(" ");
-
-    aSql.append(createStandardTypePart(xColProp, _xConnection, _sCreatePattern));
+    aSql.append(" " + createStandardTypePart(xColProp, _xConnection, _sCreatePattern));
 
     if(::comphelper::getINT32(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISNULLABLE))) == ColumnValue::NO_NULLS)
         aSql.append(" NOT NULL");
 
     if ( bIsAutoIncrement && !sAutoIncrementValue.isEmpty())
     {
-        aSql.append(" ");
-        aSql.append(sAutoIncrementValue);
+        aSql.append(" " + sAutoIncrementValue);
     }
 
     if ( _pHelper )
@@ -224,8 +217,7 @@ OUString createStandardCreateStatement(const Reference< XPropertySet >& descript
     if ( sComposedName.isEmpty() )
         ::dbtools::throwFunctionSequenceException(_xConnection);
 
-    aSql.append(sComposedName);
-    aSql.append(" (");
+    aSql.append(sComposedName + " (");
 
     // columns
     Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
@@ -241,8 +233,9 @@ OUString createStandardCreateStatement(const Reference< XPropertySet >& descript
     {
         if ( (xColumns->getByIndex(i) >>= xColProp) && xColProp.is() )
         {
-            aSql.append(createStandardColumnPart(xColProp,_xConnection,_pHelper,_sCreatePattern));
-            aSql.append(",");
+            aSql.append(
+                createStandardColumnPart(xColProp,_xConnection,_pHelper,_sCreatePattern)
+                + ",");
         }
     }
     return aSql.makeStringAndClear();
@@ -305,8 +298,7 @@ OUString createStandardKeyStatement(const Reference< XPropertySet >& descriptor,
                     if(!xColumns.is() || !xColumns->getCount())
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
-                    aSql.append(" PRIMARY KEY ");
-                    aSql.append(generateColumnNames(xColumns,xMetaData));
+                    aSql.append(" PRIMARY KEY " + generateColumnNames(xColumns,xMetaData));
                 }
                 else if(nKeyType == KeyType::UNIQUE)
                 {
@@ -315,8 +307,7 @@ OUString createStandardKeyStatement(const Reference< XPropertySet >& descriptor,
                     if(!xColumns.is() || !xColumns->getCount())
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
-                    aSql.append(" UNIQUE ");
-                    aSql.append(generateColumnNames(xColumns,xMetaData));
+                    aSql.append(" UNIQUE " + generateColumnNames(xColumns,xMetaData));
                 }
                 else if(nKeyType == KeyType::FOREIGN)
                 {

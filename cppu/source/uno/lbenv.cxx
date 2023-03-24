@@ -697,8 +697,7 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
     {
         writeLine( stream, "###################################"
                    "###########################################", pFilter );
-        buf.append( "environment: " );
-        buf.append( pEnv->pTypeName );
+        buf.append( OUString::Concat("environment: ") + OUString::unacquired(&pEnv->pTypeName) );
         writeLine( stream, buf, pFilter );
         buf.setLength(0);
         writeLine( stream, "NO INTERFACE INFORMATION AVAILABLE!", pFilter );
@@ -707,8 +706,7 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
 
     writeLine( stream, "########################################"
                "######################################", pFilter );
-    buf.append( "environment dump: " );
-    buf.append( pEnv->pTypeName );
+    buf.append( OUString::Concat("environment dump: ") + OUString::unacquired(&pEnv->pTypeName) );
     writeLine( stream, buf, pFilter );
     buf.setLength(0);
 
@@ -724,11 +722,11 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
         buf.append( "+ " );
         if (pOEntry->mixedObject)
             buf.append( "mixed " );
-        buf.append( "object entry: nRef=" );
-        buf.append( pOEntry->nRef );
-        buf.append( "; oid=\"" );
-        buf.append( pOEntry->oid );
-        buf.append( '\"' );
+        buf.append( "object entry: nRef="
+                + OUString::number(pOEntry->nRef)
+                + "; oid=\""
+                + pOEntry->oid
+                + "\"" );
         writeLine( stream, buf, pFilter );
         buf.setLength(0);
 
@@ -737,21 +735,19 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
         {
             const InterfaceEntry & rIEntry = pOEntry->aInterfaces[nPos];
 
-            buf.append( "  - " );
-            buf.append( rIEntry.pTypeDescr->aBase.pTypeName );
+            buf.append( OUString::Concat("  - ")
+                + OUString::unacquired(&rIEntry.pTypeDescr->aBase.pTypeName) );
             if (rIEntry.fpFreeProxy)
             {
-                buf.append( "; proxy free=0x" );
-                buf.append(
-                    reinterpret_cast< sal_IntPtr >(rIEntry.fpFreeProxy), 16 );
+                buf.append( "; proxy free=0x"
+                    + OUString::number( reinterpret_cast< sal_IntPtr >(rIEntry.fpFreeProxy), 16 ) );
             }
             else
             {
                 buf.append( "; original" );
             }
-            buf.append( "; ptr=0x" );
-            buf.append(
-                reinterpret_cast< sal_IntPtr >(rIEntry.pInterface), 16 );
+            buf.append( "; ptr=0x"
+                + OUString::number(reinterpret_cast< sal_IntPtr >(rIEntry.pInterface), 16 ) );
 
             if (pOEntry->find( rIEntry.pInterface, nPos + 1 ) < 0)
             {

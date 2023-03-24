@@ -44,8 +44,8 @@ OUString firebird::StatusVectorToString(const ISC_STATUS_ARRAY& rStatusVector,
         while(fb_interpret(msg, sizeof(msg), &pStatus))
         {
             // TODO: verify encoding
-            buf.append("\n*");
-            buf.append(OUString(msg, strlen(msg), RTL_TEXTENCODING_UTF8));
+            buf.append("\n*"
+                + OUString(msg, strlen(msg), RTL_TEXTENCODING_UTF8));
         }
     }
     catch (...)

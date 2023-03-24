@@ -864,8 +864,7 @@ namespace connectivity
             OSL_ENSURE( xStatement.is(), "ODriverDelegator::onConnectedNewDatabase: could not create a statement!" );
             if ( xStatement.is() )
             {
-                OUStringBuffer aStatement;
-                aStatement.append( "SET DATABASE COLLATION \"" );
+                OUStringBuffer aStatement( "SET DATABASE COLLATION \"" );
                 aStatement.appendAscii( lcl_getCollationForLocale( lcl_getSystemLocale( m_xContext ) ) );
                 aStatement.append( "\"" );
 

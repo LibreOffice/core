@@ -33,8 +33,7 @@ OUString GetkeyBindingStrByXkeyBinding(const Sequence<KeyStroke>& keySet)
     OUStringBuffer buf;
     for (const auto& k : keySet)
     {
-        buf.append('\n');
-        buf.append(k.KeyChar);
+        buf.append("\n" + OUStringChar(k.KeyChar));
     }
     return buf.makeStringAndClear();
 }

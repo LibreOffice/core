@@ -82,8 +82,7 @@ uno::Reference< chart2::data::XLabeledDataSequence > lcl_getErrorBarLabeledSeque
         aRole.append( 'x');
 
     OUString aPlainRole = aRole.makeStringAndClear();
-    aRole.append( aPlainRole );
-    aRole.append( '-' );
+    aRole.append( aPlainRole + "-" );
 
     if( bPositiveValue )
         aRole.append( "positive" );

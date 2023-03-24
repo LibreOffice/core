@@ -406,11 +406,10 @@ void alterColumnByDescriptor(
         bufferQuoteQualifiedIdentifier( buf, schemaName, tableName, settings );
         buf.append( "ALTER COLUMN" );
         bufferQuoteIdentifier( buf, futureColumnName, settings );
-        buf.append( "SET DEFAULT " );
         // LEM TODO: check out
         // default value is not quoted, caller needs to quote himself (otherwise
         // how to pass e.g. nextval('something' ) ????
-        buf.append( futureDefaultValue );
+        buf.append( "SET DEFAULT " + futureDefaultValue );
 //        bufferQuoteConstant( buf, defaultValue, encoding );
         transaction.executeUpdate( buf.makeStringAndClear() );
     }

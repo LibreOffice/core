@@ -477,8 +477,8 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  )
 
     for (auto const& elem : m_aBatchVector)
     {
-        aBatchSql.append(OUStringToOString(elem,getOwnConnection()->getTextEncoding()));
-        aBatchSql.append(";");
+        aBatchSql.append(OUStringToOString(elem,getOwnConnection()->getTextEncoding())
+            + ";");
     }
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");

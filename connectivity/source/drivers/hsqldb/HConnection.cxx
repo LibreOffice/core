@@ -281,8 +281,7 @@ namespace connectivity::hsqldb
             ::dbtools::qualifiedNameComponents( xMetaData, _rTableName, sCatalog, sSchema, sName, ::dbtools::EComposeRule::Complete );
 
             // get the table information
-            OUStringBuffer sSQL;
-            sSQL.append( "SELECT HSQLDB_TYPE FROM INFORMATION_SCHEMA.SYSTEM_TABLES" );
+            OUStringBuffer sSQL( "SELECT HSQLDB_TYPE FROM INFORMATION_SCHEMA.SYSTEM_TABLES" );
             HTools::appendTableFilterCrit( sSQL, sCatalog, sSchema, sName, true );
             sSQL.append( " AND TABLE_TYPE = 'TABLE'" );
 

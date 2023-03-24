@@ -152,10 +152,10 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const OUString& _rForName, const
         OUString aComposedName = dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aTable, true, ::dbtools::EComposeRule::InIndexDefinitions);
         if (!_rForName.isEmpty() )
         {
-            aSql.append( ::dbtools::quoteName( aQuote, _rForName ) );
-            aSql.append(" ON ");
-            aSql.append(aComposedName);
-            aSql.append(" ( ");
+            aSql.append( ::dbtools::quoteName( aQuote, _rForName )
+                + " ON "
+                + aComposedName
+                + " ( ");
 
             Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
             Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
@@ -192,8 +192,8 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const OUString& _rForName, const
 
             xColumns->getByIndex(0) >>= xColProp;
 
-            aSql.append(".");
-            aSql.append(::dbtools::quoteName( aQuote,comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME)))));
+            aSql.append("."
+                + ::dbtools::quoteName( aQuote,comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME)))));
         }
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );

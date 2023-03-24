@@ -90,9 +90,8 @@ OUString Tables::createStandardColumnPart(const Reference< XPropertySet >& xColP
     if ( xPropInfo.is() && xPropInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)) )
         xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)) >>= sAutoIncrementValue;
 
-    aSql.append(" ");
-
-    aSql.append(dbtools::createStandardTypePart(xColProp, _xConnection));
+    aSql.append(" "
+        + dbtools::createStandardTypePart(xColProp, _xConnection));
     // Add character set for (VAR)BINARY (fix) types:
     // (VAR) BINARY is distinguished from other CHAR types by its character set.
     // Octets is a special character set for binary data.
@@ -104,15 +103,13 @@ OUString Tables::createStandardColumnPart(const Reference< XPropertySet >& xColP
             >>= aType;
         if(aType == DataType::BINARY || aType == DataType::VARBINARY)
         {
-            aSql.append(" ");
-            aSql.append("CHARACTER SET OCTETS");
+            aSql.append(" CHARACTER SET OCTETS");
         }
     }
 
     if ( bIsAutoIncrement && !sAutoIncrementValue.isEmpty())
     {
-        aSql.append(" ");
-        aSql.append(sAutoIncrementValue);
+        aSql.append(" " + sAutoIncrementValue);
     }
     // AutoIncrement "IDENTITY" is implicitly "NOT NULL"
     else if(::comphelper::getINT32(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISNULLABLE))) == ColumnValue::NO_NULLS)
@@ -149,8 +146,8 @@ ObjectType Tables::appendObject(const OUString& rName,
     if ( sComposedName.isEmpty() )
         ::dbtools::throwFunctionSequenceException(xConnection);
 
-    aSqlBuffer.append(sComposedName);
-    aSqlBuffer.append(" (");
+    aSqlBuffer.append(sComposedName
+        + " (");
 
     // columns
     Reference<XColumnsSupplier> xColumnSup(rDescriptor,UNO_QUERY);
@@ -166,8 +163,8 @@ ObjectType Tables::appendObject(const OUString& rName,
     {
         if ( (xColumns->getByIndex(i) >>= xColProp) && xColProp.is() )
         {
-            aSqlBuffer.append(createStandardColumnPart(xColProp,xConnection));
-            aSqlBuffer.append(",");
+            aSqlBuffer.append(createStandardColumnPart(xColProp,xConnection)
+                + ",");
         }
     }
     OUString sSql = aSqlBuffer.makeStringAndClear();

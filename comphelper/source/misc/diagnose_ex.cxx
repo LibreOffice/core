@@ -372,12 +372,10 @@ void DbgUnhandledException(const css::uno::Any & caught, const char* currentFunc
         const char* area, const char* explanatory)
 {
         OStringBuffer sMessage( 512 );
-        sMessage.append( "DBG_UNHANDLED_EXCEPTION in " );
-        sMessage.append(currentFunction);
+        sMessage.append( OString::Concat("DBG_UNHANDLED_EXCEPTION in ") + currentFunction);
         if (explanatory)
         {
-            sMessage.append("\n    when: ");
-            sMessage.append(explanatory);
+            sMessage.append(OString::Concat("\n    when: ") + explanatory);
         }
         sMessage.append(" exception: ");
         exceptionToStringImpl(sMessage, caught);

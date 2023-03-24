@@ -263,10 +263,9 @@ void PreparedStatement::close(  )
 void PreparedStatement::raiseSQLException( const char * errorMsg )
 {
     OUStringBuffer buf(128);
-    buf.append( "pq_driver: ");
-    buf.append(
-        OUString( errorMsg, strlen(errorMsg) , ConnectionSettings::encoding ) );
-    buf.append( " (caused by statement '" );
+    buf.append( "pq_driver: "
+        + OUString( errorMsg, strlen(errorMsg) , ConnectionSettings::encoding )
+        + " (caused by statement '" );
     buf.appendAscii( m_executedStatement.getStr() );
     buf.append( "')" );
     OUString error = buf.makeStringAndClear();

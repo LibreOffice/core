@@ -1406,8 +1406,7 @@ static void columnMetaData2DatabaseTypeDescription(
             oidMap[row->getInt(12)] = DatabaseTypeDescription();
             if( domains )
                 queryBuf.append( " OR " );
-            queryBuf.append( "oid = " );
-            queryBuf.append( row->getInt(12 ) );
+            queryBuf.append( "oid = " + OUString::number( row->getInt(12 ) ) );
             domains ++;
         }
     }
