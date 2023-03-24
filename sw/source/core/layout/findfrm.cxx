@@ -41,6 +41,7 @@
 #include <sal/log.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <formatflysplit.hxx>
+#include <flyfrms.hxx>
 
 
 /// Searches the first ContentFrame in BodyText below the page.
@@ -308,7 +309,19 @@ static const SwFrame* lcl_FindLayoutFrame( const SwFrame* pFrame, bool bNext )
 {
     const SwFrame* pRet = nullptr;
     if ( pFrame->IsFlyFrame() )
-        pRet = bNext ? static_cast<const SwFlyFrame*>(pFrame)->GetNextLink() : static_cast<const SwFlyFrame*>(pFrame)->GetPrevLink();
+    {
+        auto pFlyFrame = static_cast<const SwFlyFrame*>(pFrame);
+        if (pFlyFrame->IsFlySplitAllowed())
+        {
+            // This is a flow frame, look up the follow/precede.
+            auto pFlyAtContent = static_cast<const SwFlyAtContentFrame*>(pFlyFrame);
+            pRet = bNext ? pFlyAtContent->GetFollow() : pFlyAtContent->GetPrecede();
+        }
+        else
+        {
+            pRet = bNext ? pFlyFrame->GetNextLink() : pFlyFrame->GetPrevLink();
+        }
+    }
     else
         pRet = bNext ? pFrame->GetNext() : pFrame->GetPrev();
 
