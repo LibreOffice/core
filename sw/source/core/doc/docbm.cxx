@@ -218,6 +218,12 @@ namespace
         {
             return nFirstContent < nSecondContent;
         }
+        SwContentNode const*const pFirstNode(rFirstStart.nContent.GetContentNode());
+        SwContentNode const*const pSecondNode(rSecondStart.nContent.GetContentNode());
+        if ((pFirstNode != nullptr) != (pSecondNode != nullptr))
+        {   // consistency with SwPosition::operator<
+            return pSecondNode != nullptr;
+        }
         auto *const pCRFirst (dynamic_cast<::sw::mark::CrossRefBookmark const*>(pFirst));
         auto *const pCRSecond(dynamic_cast<::sw::mark::CrossRefBookmark const*>(pSecond));
         if ((pCRFirst == nullptr) == (pCRSecond == nullptr))
