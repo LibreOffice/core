@@ -507,6 +507,11 @@ public:
     virtual void undo_collapse() override;
     virtual void response(int response) override;
     virtual weld::Button* weld_widget_for_response(int response) override;
+    virtual int run() override;
+    virtual bool runAsync(std::shared_ptr<weld::DialogController> aOwner,
+                          const std::function<void(sal_Int32)>& rEndDialogFn) override;
+    virtual bool runAsync(std::shared_ptr<Dialog> const& rxSelf,
+                          const std::function<void(sal_Int32)>& func) override;
 };
 
 class JSAssistant final : public JSWidget<SalInstanceAssistant, vcl::RoadmapWizard>
@@ -519,6 +524,11 @@ public:
     virtual void set_current_page(const OUString& rIdent) override;
     virtual void response(int response) override;
     virtual weld::Button* weld_widget_for_response(int response) override;
+    virtual int run() override;
+    virtual bool runAsync(std::shared_ptr<weld::DialogController> aOwner,
+                          const std::function<void(sal_Int32)>& rEndDialogFn) override;
+    virtual bool runAsync(std::shared_ptr<Dialog> const& rxSelf,
+                          const std::function<void(sal_Int32)>& func) override;
 };
 
 class JSContainer final : public JSWidget<SalInstanceContainer, vcl::Window>

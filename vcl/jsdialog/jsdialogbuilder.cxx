@@ -854,7 +854,6 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OUString& id)
         RememberWidget("__DIALOG__", pRet.get());
 
         initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
-        sendFullUpdate();
         m_bSentInitialUpdate = true;
     }
 
@@ -883,7 +882,6 @@ std::unique_ptr<weld::Assistant> JSInstanceBuilder::weld_assistant(const OUStrin
         RememberWidget("__DIALOG__", pRet.get());
 
         initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
-        sendFullUpdate();
         m_bSentInitialUpdate = true;
     }
 
@@ -1333,6 +1331,52 @@ void JSAssistant::response(int response)
 
     sendClose();
     SalInstanceAssistant::response(response);
+}
+
+int JSDialog::run()
+{
+    sendFullUpdate(true);
+    int ret = SalInstanceDialog::run();
+    return ret;
+}
+
+bool JSDialog::runAsync(std::shared_ptr<weld::DialogController> aOwner,
+                        const std::function<void(sal_Int32)>& rEndDialogFn)
+{
+    bool ret = SalInstanceDialog::runAsync(aOwner, rEndDialogFn);
+    sendFullUpdate();
+    return ret;
+}
+
+bool JSDialog::runAsync(std::shared_ptr<Dialog> const& rxSelf,
+                        const std::function<void(sal_Int32)>& func)
+{
+    bool ret = SalInstanceDialog::runAsync(rxSelf, func);
+    sendFullUpdate();
+    return ret;
+}
+
+int JSAssistant::run()
+{
+    sendFullUpdate(true);
+    int ret = SalInstanceDialog::run();
+    return ret;
+}
+
+bool JSAssistant::runAsync(std::shared_ptr<weld::DialogController> aOwner,
+                           const std::function<void(sal_Int32)>& rEndDialogFn)
+{
+    bool ret = SalInstanceDialog::runAsync(aOwner, rEndDialogFn);
+    sendFullUpdate();
+    return ret;
+}
+
+bool JSAssistant::runAsync(std::shared_ptr<Dialog> const& rxSelf,
+                           const std::function<void(sal_Int32)>& func)
+{
+    bool ret = SalInstanceDialog::runAsync(rxSelf, func);
+    sendFullUpdate();
+    return ret;
 }
 
 weld::Button* JSDialog::weld_widget_for_response(int nResponse)
