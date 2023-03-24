@@ -225,7 +225,8 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
          // paras inside cells inside new documents:
         ( pNode->getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) ||
           !m_pFrame->IsInTab() ||
-          ( !nLMWithNum && (!bLabelAlignmentActive || bListLevelIndentsApplicable) ) ) )
+          (bListLevelIndentsApplicable && nLMWithNum == rTextLeftMargin.GetTextLeft())
+          || (!bLabelAlignmentActive && nLMWithNum == 0)))
     {
         mnLeft = m_pFrame->getFramePrintArea().Left() + m_pFrame->getFrameArea().Left();
         if( mnLeft >= mnRight )   // e.g. with large paragraph indentations in slim table columns
