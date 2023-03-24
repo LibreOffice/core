@@ -1003,7 +1003,7 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
         if (bTryDirectRender)
         {
             // MCGR: Avoid one level of primitive creation, use FillGradientPrimitive2D
-            // tooling to directly create needed geoemtry & color for getting better
+            // tooling to directly create needed geometry & color for getting better
             // performance (partially compensate for potentially more expensive multi
             // color gradients).
             // To handle a primitive that needs paint, either use decompose, or - when you
@@ -1012,7 +1012,7 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
             // since primitives by definition are self-contained what means they have all
             // needed data locally available to do so.
             // The question is the complexity to invest - the implemented decompose
-            // is always a good hint what is neeed to do this. In this case I decided
+            // is always a good hint of what is needed to do this. In this case I decided
             // to add some tooling methods to the primitive itself to support this. These
             // are used in decompose and can be used - as here now - for direct handling,
             // too. This is always a possibility in primitive handling - you can, but do not
