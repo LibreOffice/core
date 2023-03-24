@@ -25,6 +25,7 @@
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 
 #include <o3tl/string_view.hxx>
+#include <optional>
 #include <osl/diagnose.h>
 #include <sax/tools/converter.hxx>
 #include <oox/token/tokens.hxx>
@@ -374,6 +375,19 @@ const char* GetHatchPattern( const drawing::Hatch& rHatch )
         }
     }
     return sPattern;
+}
+
+std::optional<OString> GetTextVerticalType(sal_Int32 nRotateAngle)
+{
+    switch (nRotateAngle)
+    {
+      case 9000:
+          return "vert";
+      case 27000:
+          return "vert270";
+      default:
+          return {};
+    }
 }
 
 namespace
