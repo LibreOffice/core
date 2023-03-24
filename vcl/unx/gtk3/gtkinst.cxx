@@ -6499,7 +6499,7 @@ public:
     {
         if (!m_nToplevelFocusChangedSignalId)
             m_nToplevelFocusChangedSignalId = g_signal_connect(m_pWindow, "notify::has-toplevel-focus", G_CALLBACK(signalToplevelFocusChanged), this);
-        GtkInstanceContainer::connect_container_focus_changed(rLink);
+        weld::Container::connect_container_focus_changed(rLink);
     }
 
     virtual void disable_notify_events() override
