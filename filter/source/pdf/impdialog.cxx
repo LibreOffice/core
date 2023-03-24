@@ -355,7 +355,7 @@ IMPL_LINK_NOARG(ImpPDFTabDialog, OkHdl, weld::Button&, void)
                 else if (ret == RET_NO)
                 {
                     m_xDialog->response(RET_CANCEL);
-                    // Show accessiblity check Sidebar deck
+                    // Show accessibility check Sidebar deck
                     SfxDispatcher* pDispatcher = pShell->GetDispatcher();
                     if (pDispatcher)
                     {
