@@ -447,6 +447,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134250)
 
     // this would crash in 2 different ways
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
@@ -456,11 +457,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134250)
                          xTextContent->getAnchor()->getString());
 
     dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
@@ -468,6 +471,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134250)
                          xTextContent->getAnchor()->getString());
 
     dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
@@ -503,12 +507,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134436)
 
     // first, the section doesn't get deleted
     dispatchCommand(mxComponent, ".uno:Delete", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
     CPPUNIT_ASSERT_EQUAL(OUString(""), pWrtShell->GetCursor()->GetText());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
@@ -516,12 +522,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134436)
 
     // second, the section does get deleted because point is at the end
     dispatchCommand(mxComponent, ".uno:Delete", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSections->getCount());
     CPPUNIT_ASSERT_EQUAL(OUString(""), pWrtShell->GetCursor()->GetText());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
@@ -529,18 +537,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134436)
 
     // the problem was that the section was not deleted on Redo
     dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSections->getCount());
     CPPUNIT_ASSERT_EQUAL(OUString(""), pWrtShell->GetCursor()->GetText());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
     CPPUNIT_ASSERT_EQUAL(OUString("a\nb\n"), pWrtShell->GetCursor()->GetText());
 
     dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSections->getCount());
@@ -571,6 +582,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134252)
                          xCursor->getString());
 
     dispatchCommand(mxComponent, ".uno:Delete", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
@@ -578,6 +590,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134252)
 
     // this would crash
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSections->getCount());
@@ -585,12 +598,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134252)
                          xCursor->getString());
 
     dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
     CPPUNIT_ASSERT_EQUAL(OUString(""), xCursor->getString());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSections->getCount());
@@ -598,6 +613,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134252)
                          xCursor->getString());
 
     dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());

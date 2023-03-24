@@ -131,6 +131,7 @@ void LOKitSearchTest::lcl_search(const OUString& rKey, bool bFindAll, bool bBack
     }));
 
     dispatchCommand(mxComponent, ".uno:ExecuteSearch", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
 }
 
 void LOKitSearchTest::lcl_replace(const OUString& rKey, const OUString& rReplace, bool bAll)
@@ -146,6 +147,7 @@ void LOKitSearchTest::lcl_replace(const OUString& rKey, const OUString& rReplace
     }));
 
     dispatchCommand(mxComponent, ".uno:ExecuteSearch", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
 }
 
 namespace

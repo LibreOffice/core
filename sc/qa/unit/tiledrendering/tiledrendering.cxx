@@ -768,6 +768,7 @@ void ScTiledRenderingTest::testTextViewSelection()
     // Create a selection on two cells in the second view, that's a text selection in LOK terms.
     aView1.m_bTextViewSelectionInvalidated = false;
     dispatchCommand(mxComponent, ".uno:GoRightSel", {});
+    Scheduler::ProcessEventsToIdle();
     // Make sure the first view got its notification.
     CPPUNIT_ASSERT(aView1.m_bTextViewSelectionInvalidated);
 }
@@ -784,6 +785,7 @@ void ScTiledRenderingTest::testDocumentSizeChanged()
         comphelper::makePropertyValue("ToPoint", OUString("$A$30")),
     };
     dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
     // Assert that the size in the payload is not 0.
     CPPUNIT_ASSERT(m_aDocumentSize.getWidth() > 0);
     CPPUNIT_ASSERT(m_aDocumentSize.getHeight() > 0);
@@ -856,6 +858,7 @@ void ScTiledRenderingTest::testMoveShapeHandle()
             {"NewPosY", uno::Any(y+1)}
         }));
         dispatchCommand(mxComponent, ".uno:MoveShapeHandle", aPropertyValues);
+        Scheduler::ProcessEventsToIdle();
         CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
         lcl_extractHandleParameters(aView1.m_ShapeSelection, id, x ,y);
         CPPUNIT_ASSERT_EQUAL(x-1, oldX);
@@ -1078,6 +1081,7 @@ void ScTiledRenderingTest::testAutoSum()
 
     uno::Sequence<beans::PropertyValue> aArgs;
     dispatchCommand(mxComponent, ".uno:AutoSum", aArgs);
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_sCellFormula.startsWith("=SUM("));
 }
 
@@ -1097,6 +1101,7 @@ void ScTiledRenderingTest::testHideColRow()
             }));
 
         dispatchCommand(mxComponent, ".uno:SelectColumn", aArgs2);
+        Scheduler::ProcessEventsToIdle();
     }
 
     SCCOL nOldCurX = ScDocShell::GetViewData()->GetCurX();
@@ -1104,6 +1109,7 @@ void ScTiledRenderingTest::testHideColRow()
     {
         uno::Sequence<beans::PropertyValue> aArgs;
         dispatchCommand(mxComponent, ".uno:HideColumn", aArgs);
+        Scheduler::ProcessEventsToIdle();
     }
 
     SCCOL nNewCurX = ScDocShell::GetViewData()->GetCurX();
@@ -1122,6 +1128,7 @@ void ScTiledRenderingTest::testHideColRow()
                 { "Modifier", uno::Any(sal_uInt16(0)) }
             }));
         dispatchCommand(mxComponent, ".uno:SelectRow", aArgs2);
+        Scheduler::ProcessEventsToIdle();
     }
 
     nOldCurX = ScDocShell::GetViewData()->GetCurX();
@@ -1129,6 +1136,7 @@ void ScTiledRenderingTest::testHideColRow()
     {
         uno::Sequence<beans::PropertyValue> aArgs;
         dispatchCommand(mxComponent, ".uno:HideRow", aArgs);
+        Scheduler::ProcessEventsToIdle();
     }
     nNewCurX = ScDocShell::GetViewData()->GetCurX();
     nNewCurY = ScDocShell::GetViewData()->GetCurY();
@@ -1167,6 +1175,7 @@ void ScTiledRenderingTest::testInvalidateOnCopyPasteCells()
     // paste cells
     aView.m_bInvalidateTiles = false;
     dispatchCommand(mxComponent, ".uno:Paste", aArgs);
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
 }
 
@@ -1191,6 +1200,7 @@ void ScTiledRenderingTest::testInvalidateOnInserRowCol()
     aView.m_bInvalidateTiles = false;
     aView.m_aInvalidations.clear();
     dispatchCommand(mxComponent, ".uno:InsertRows", aArgs);
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(2), aView.m_aInvalidations.size());
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(-75, 51240, 32212230, 63990), aView.m_aInvalidations[0]);
@@ -1207,6 +1217,7 @@ void ScTiledRenderingTest::testInvalidateOnInserRowCol()
     aView.m_bInvalidateTiles = false;
     aView.m_aInvalidations.clear();
     dispatchCommand(mxComponent, ".uno:InsertColumns", aArgs);
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(2), aView.m_aInvalidations.size());
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(254925, -15, 32212230, 63990), aView.m_aInvalidations[0]);
@@ -1236,6 +1247,7 @@ void ScTiledRenderingTest::testCommentCallback()
             {"Author", uno::Any(OUString("LOK User1"))},
         }));
         dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
+        Scheduler::ProcessEventsToIdle();
 
         // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
         CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
@@ -1266,6 +1278,7 @@ void ScTiledRenderingTest::testCommentCallback()
             {"Author", uno::Any(OUString("LOK User2"))},
         });
         dispatchCommand(mxComponent, ".uno:EditAnnotation", aArgs);
+        Scheduler::ProcessEventsToIdle();
 
         // We received a LOK_CALLBACK_COMMENT callback with comment 'Modify' action
         CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
@@ -1287,6 +1300,7 @@ void ScTiledRenderingTest::testCommentCallback()
             {"Id", uno::Any(OUString::createFromAscii(aCommentId.c_str()))}
         });
         dispatchCommand(mxComponent, ".uno:DeleteNote", aArgs);
+        Scheduler::ProcessEventsToIdle();
 
         // We received a LOK_CALLBACK_COMMENT callback with comment 'Remove' action
         CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
@@ -1330,12 +1344,14 @@ void ScTiledRenderingTest::testUndoLimiting()
     // try to execute undo in view #2
     SfxLokHelper::setView(nView2);
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
     // check that undo has not been executed on view #2
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
 
     // try to execute undo in view #1
     SfxLokHelper::setView(nView1);
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
     // check that undo has been executed on view #1
     CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetUndoActionCount());
 
@@ -1345,12 +1361,14 @@ void ScTiledRenderingTest::testUndoLimiting()
     // try to execute redo in view #2
     SfxLokHelper::setView(nView2);
     dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
     // check that redo has not been executed on view #2
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetRedoActionCount());
 
     // try to execute redo in view #1
     SfxLokHelper::setView(nView1);
     dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
     // check that redo has been executed on view #1
     CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetRedoActionCount());
 }
@@ -1388,6 +1406,7 @@ void ScTiledRenderingTest::testUndoRepairDispatch()
     // try to execute undo in view #2
     SfxLokHelper::setView(nView2);
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
     // check that undo has not been executed on view #2
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
 
@@ -1398,6 +1417,7 @@ void ScTiledRenderingTest::testUndoRepairDispatch()
         {"Repair", uno::Any(true)}
     }));
     dispatchCommand(mxComponent, ".uno:Undo", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
     // check that undo has been executed on view #2 in repair mode
     CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetUndoActionCount());
 }
@@ -1427,12 +1447,14 @@ void ScTiledRenderingTest::testInsertGraphicInvalidations()
             { "FileName", uno::Any(createFileURL(u"smile.png")) }
         }));
     dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
 
     // undo image insertion in view and see if both views are invalidated
     aView.m_bInvalidateTiles = false;
     uno::Sequence<beans::PropertyValue> aArgs2;
     dispatchCommand(mxComponent, ".uno:Undo", aArgs2);
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
 }
 
@@ -1930,6 +1952,7 @@ void ScTiledRenderingTest::testInsertDeletePageInvalidation()
             { "Index", uno::Any(sal_Int32(1)) }
         }));
     dispatchCommand(mxComponent, ".uno:Insert", aArgs);
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(6), aView1.m_aInvalidations.size());
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[0]);
@@ -1942,6 +1965,7 @@ void ScTiledRenderingTest::testInsertDeletePageInvalidation()
             { "Index", uno::Any(sal_Int32(1)) }
         }));
     dispatchCommand(mxComponent, ".uno:Remove", aArgs2);
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(5), aView1.m_aInvalidations.size());
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[0]);
@@ -2755,6 +2779,7 @@ void ScTiledRenderingTest::testSheetViewDataCrash()
             { "Index", uno::Any(sal_Int32(2)) }
         }));
     dispatchCommand(mxComponent, ".uno:Insert", aArgs);
+    Scheduler::ProcessEventsToIdle();
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
@@ -2789,6 +2814,7 @@ void ScTiledRenderingTest::testTextBoxInsert()
             { "CreateDirectly",  uno::Any(true) }
         }));
     dispatchCommand(mxComponent, ".uno:DrawText", aArgs);
+    Scheduler::ProcessEventsToIdle();
 
     // check if we have textbox selected
     CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
@@ -2826,6 +2852,7 @@ void ScTiledRenderingTest::testCommentCellCopyPaste()
             {"Author", uno::Any(OUString("LOK Client"))},
         }));
         dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
+        Scheduler::ProcessEventsToIdle();
 
         // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
         CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView.m_aCommentCallbackResult.get<std::string>("action"));
@@ -2842,10 +2869,12 @@ void ScTiledRenderingTest::testCommentCellCopyPaste()
         // Single cell(with comment) copy paste test
         {
             dispatchCommand(mxComponent, ".uno:Copy", aCopyPasteArgs);
+            Scheduler::ProcessEventsToIdle();
 
             pTabViewShell->SetCursor(1, 49);
             Scheduler::ProcessEventsToIdle();
             dispatchCommand(mxComponent, ".uno:Paste", aCopyPasteArgs); // Paste to cell B50
+            Scheduler::ProcessEventsToIdle();
 
             // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
             CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView.m_aCommentCallbackResult.get<std::string>("action"));
@@ -2872,10 +2901,12 @@ void ScTiledRenderingTest::testCommentCellCopyPaste()
             Scheduler::ProcessEventsToIdle();
 
             dispatchCommand(mxComponent, ".uno:Copy", aCopyPasteArgs);
+            Scheduler::ProcessEventsToIdle();
 
             pTabViewShell->SetCursor(3, 49);
             Scheduler::ProcessEventsToIdle();
             dispatchCommand(mxComponent, ".uno:Paste", aCopyPasteArgs); // Paste to cell D50
+            Scheduler::ProcessEventsToIdle();
 
             // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
             CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView.m_aCommentCallbackResult.get<std::string>("action"));
@@ -2915,6 +2946,7 @@ void ScTiledRenderingTest::testInvalidEntrySave()
 
     uno::Sequence<beans::PropertyValue> aArgs;
     dispatchCommand(mxComponent, ".uno:Save", aArgs);
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_MESSAGE("Should not be marked modified after save", !pDocSh->IsModified());
 
@@ -2978,12 +3010,14 @@ void ScTiledRenderingTest::testUndoReordering()
     // try to execute undo in view #1
     SfxLokHelper::setView(nView1);
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
     // check that undo has been executed on view #1
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
 
     // try to execute undo in view #2
     SfxLokHelper::setView(nView2);
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
     // check that undo has been executed on view #2
     CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetUndoActionCount());
 }
@@ -3053,6 +3087,7 @@ void ScTiledRenderingTest::testUndoReorderingRedo()
     // View 1 presses undo, and the second cell is erased
     SfxLokHelper::setView(nView1);
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(std::size_t(2), pUndoManager->GetUndoActionCount());
     CPPUNIT_ASSERT_EQUAL(OUString("xx"), pDoc->GetString(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 1, 0)));
@@ -3072,6 +3107,7 @@ void ScTiledRenderingTest::testUndoReorderingRedo()
 
     // View 1 presses undo again, and the first cell is erased
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 1, 0)));
@@ -3141,6 +3177,7 @@ void ScTiledRenderingTest::testUndoReorderingMulti()
     // View 1 presses undo
     SfxLokHelper::setView(nView1);
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(std::size_t(2), pUndoManager->GetUndoActionCount());
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("CC"), pDoc->GetString(ScAddress(0, 2, 0)));

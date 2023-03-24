@@ -117,6 +117,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf116640)
         comphelper::InitPropertySequence({ { "Columns", uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, ".uno:InsertSection", aArgs);
+    Scheduler::ProcessEventsToIdle();
 
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(),
@@ -130,14 +131,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf116640)
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xTextColumns->getColumnCount());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSections->getCount());
 
     dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSections->getCount());
 }
@@ -912,6 +916,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf147181_TrackedMovingOfMultipleTable
 
     // accept changes results 1 table (removing moved table)
     dispatchCommand(mxComponent, ".uno:AcceptAllTrackedChanges", {});
+    Scheduler::ProcessEventsToIdle();
     uno::Reference<container::XIndexAccess> xTables2(xTablesSupplier->getTextTables(),
                                                      uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables2->getCount());
@@ -2240,12 +2245,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testNestedGroupTextBoxCopyCrash)
     createSwDoc("tdf149550.docx");
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
     // This crashed here before the fix.
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_ESCAPE);
     Scheduler::ProcessEventsToIdle();
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_MESSAGE("Where is the doc, it crashed, isn't it?!", mxComponent);
 
@@ -2271,11 +2279,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testCrashOnExit)
 
     // Remove the textbox
     dispatchCommand(mxComponent, ".uno:RemoveTextBox", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(false, xProperties->getPropertyValue("TextBox").get<bool>());
 
     // Readd the textbox (to run the textboxhelper::create() method)
     dispatchCommand(mxComponent, ".uno:AddTextBox", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(true, xProperties->getPropertyValue("TextBox").get<bool>());
 
@@ -2315,6 +2325,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf151828_Comment2)
     uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "KeyModifier", uno::Any(KEY_MOD1) } }));
     dispatchCommand(mxComponent, ".uno:BasicShapes", aArgs);
+    Scheduler::ProcessEventsToIdle();
 
     auto xBasicShape = getShape(1);
     auto pObject = SdrObject::getSdrObjectFromXShape(xBasicShape);
@@ -2326,10 +2337,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf151828_Comment2)
 
     // cut and paste it
     dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
@@ -2362,8 +2375,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf151828)
 
     // cut and paste the table
     dispatchCommand(mxComponent, ".uno:SelectTable", {});
+    Scheduler::ProcessEventsToIdle();
     dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     // move cursor into the pasted table
     CPPUNIT_ASSERT(pWrtShell->MoveTable(GotoPrevTable, fnTableStart));

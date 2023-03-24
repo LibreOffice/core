@@ -3691,6 +3691,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testKeepWithNextPlusFlyFollowTextFlow)
     }
 
     dispatchCommand(mxComponent, ".uno:Fieldnames", {});
+    Scheduler::ProcessEventsToIdle();
 
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -3708,6 +3709,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testKeepWithNextPlusFlyFollowTextFlow)
     }
 
     dispatchCommand(mxComponent, ".uno:Fieldnames", {});
+    Scheduler::ProcessEventsToIdle();
 
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();

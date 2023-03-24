@@ -2466,6 +2466,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf138873)
     CPPUNIT_ASSERT_EQUAL(OUString("A DDD C"), getParagraph(1)->getString());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString("A B C"), getParagraph(1)->getString());
 
@@ -2473,8 +2474,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf138873)
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, this test would have failed with
     // - Expected: A B C
