@@ -1043,8 +1043,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154319)
 
     auto xSupplier(mxComponent.queryThrow<css::text::XDocumentIndexesSupplier>());
     auto xIndexes = xSupplier->getDocumentIndexes();
-    css::uno::Reference<css::beans::XPropertySet> xTOCIndex(xIndexes->getByIndex(0),
-                                                            css::uno::UNO_QUERY_THROW);
+    auto xTOCIndex(xIndexes->getByIndex(0).queryThrow<css::beans::XPropertySet>());
     css::uno::Reference<css::container::XIndexReplace> xLevelFormats;
     CPPUNIT_ASSERT(xTOCIndex->getPropertyValue("LevelFormat") >>= xLevelFormats);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11), xLevelFormats->getCount());
