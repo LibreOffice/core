@@ -527,6 +527,8 @@ struct PDFWidget : public PDFAnnotation
     std::vector<sal_Int32>      m_aSelectedEntries;
     typedef std::unordered_map<OString, SvMemoryStream*> PDFAppearanceStreams;
     std::unordered_map<OString, PDFAppearanceStreams> m_aAppearances;
+    sal_Int32 m_nStructParent = -1;
+
     PDFWidget()
             : m_eType( PDFWriter::PushButton ),
               m_nTextStyle( DrawTextFlags::NONE ),

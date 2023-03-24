@@ -2242,8 +2242,16 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
             auto const it(m_aLinkPropertyMap.find(id));
             assert(it != m_aLinkPropertyMap.end());
 
-            assert(0 <= it->second && o3tl::make_unsigned(it->second) < m_aScreens.size());
-            AppendAnnotKid(rEle, m_aScreens[it->second]);
+            if (rEle.m_eType == PDFWriter::Form)
+            {
+                assert(0 <= it->second && o3tl::make_unsigned(it->second) < m_aWidgets.size());
+                AppendAnnotKid(rEle, m_aWidgets[it->second]);
+            }
+            else
+            {
+                assert(0 <= it->second && o3tl::make_unsigned(it->second) < m_aScreens.size());
+                AppendAnnotKid(rEle, m_aScreens[it->second]);
+            }
         }
     }
     if( ! rEle.m_aKids.empty() )
@@ -4675,6 +4683,13 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                 {
                     aLine.append( "4\n" );
                     iRectMargin = 1;
+                }
+
+                if (0 < rWidget.m_nStructParent)
+                {
+                    aLine.append("/StructParent ");
+                    aLine.append(rWidget.m_nStructParent);
+                    aLine.append("\n");
                 }
 
                 aLine.append("/Rect[" );
