@@ -228,8 +228,11 @@ bool SetGetExpField::operator==( const SetGetExpField& rField ) const
 
 bool SetGetExpField::operator<( const SetGetExpField& rField ) const
 {
-    if (m_nPageNumber != 0 && rField.m_nPageNumber != 0 && m_nPageNumber != rField.m_nPageNumber)
+    if (m_nPageNumber != rField.m_nPageNumber)
     {
+        // sort "invalid" page nums of 0 after valid page nums of non 0
+        if (m_nPageNumber == 0 || rField.m_nPageNumber == 0)
+            return m_nPageNumber != 0;
         return m_nPageNumber < rField.m_nPageNumber;
     }
     if( m_nNode < rField.m_nNode || ( m_nNode == rField.m_nNode && m_nContent < rField.m_nContent ))
