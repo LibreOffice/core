@@ -369,7 +369,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153964_firstIndentAfterBreak14, "tdf153964_first
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf76022_textboxWrap)
 {
-    // Granted, this is an ODT with a bit of an anomoly - tables ignore fly wrapping.
+    // Granted, this is an ODT with a bit of an anomaly - tables ignore fly wrapping.
     createSwDoc("tdf76022_textboxWrap.odt");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Did you make wrapping sane/interoperable?", 1, getPages());
 
