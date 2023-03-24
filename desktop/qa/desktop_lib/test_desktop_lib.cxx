@@ -606,6 +606,7 @@ void DesktopLOKTest::testSearchCalc()
         {"SearchItem.Command", uno::Any(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
     }));
     dispatchCommand(mxComponent, ".uno:ExecuteSearch", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
 
     std::vector<OString> aSelections;
     sal_Int32 nIndex = 0;
@@ -636,6 +637,7 @@ void DesktopLOKTest::testSearchAllNotificationsCalc()
         {"SearchItem.Command", uno::Any(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
     }));
     dispatchCommand(mxComponent, ".uno:ExecuteSearch", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
 
     // This was 1, make sure that we get no notifications about selection changes during search.
     CPPUNIT_ASSERT_EQUAL(0, m_nSelectionBeforeSearchResult);
