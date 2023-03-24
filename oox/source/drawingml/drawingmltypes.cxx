@@ -375,6 +375,19 @@ const char* GetHatchPattern( const drawing::Hatch& rHatch )
     return sPattern;
 }
 
+std::optional<OString> GetTextVerticalType(sal_Int32 nRotateAngle)
+{
+    switch (nRotateAngle)
+    {
+      case 9000:
+          return "vert";
+      case 27000:
+          return "vert270";
+      default:
+          return {};
+    }
+}
+
 /** converts the attributes from a CT_RelativeRect to an IntegerRectangle2D */
 IntegerRectangle2D GetRelativeRect( const Reference< XFastAttributeList >& xAttribs )
 {
