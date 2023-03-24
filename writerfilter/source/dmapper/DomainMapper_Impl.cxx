@@ -6073,35 +6073,34 @@ void DomainMapper_Impl::handleAuthor
 }
 
 static uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool bHyperlinks, const OUString& sChapterNoSeparator,
-                                   const uno::Sequence< beans::PropertyValues >& aLevel )
+                                   const uno::Sequence< beans::PropertyValues >& aLevel, const uno::Sequence<style::TabStop>& tabs)
 {
     //create a copy of the level and add new entries
 
     std::vector<css::beans::PropertyValues> aNewLevel;
-    aNewLevel.reserve(aLevel.getLength() + 4); // at most 4 added items
+    aNewLevel.reserve(aLevel.getLength() + 5); // at most 5 added items
 
     static constexpr OUStringLiteral tokType(u"TokenType");
     static constexpr OUStringLiteral tokHStart(u"TokenHyperlinkStart");
     static constexpr OUStringLiteral tokHEnd(u"TokenHyperlinkEnd");
     static constexpr OUStringLiteral tokPNum(u"TokenPageNumber");
+    static constexpr OUStringLiteral tokENum(u"TokenEntryNumber");
 
     if (bHyperlinks)
         aNewLevel.push_back({ comphelper::makePropertyValue(tokType, tokHStart) });
 
     for (const auto& item : aLevel)
     {
-        if (bHyperlinks
-            && std::any_of(item.begin(), item.end(),
-                           [](const css::beans::PropertyValue& p) {
-                               return p.Name == tokType
-                                      && (p.Value == tokHStart || p.Value == tokHEnd);
-                           }))
+        OUString tokenType;
+        if (auto it = std::find_if(item.begin(), item.end(),
+                                   [](const auto& p) { return p.Name == tokType; });
+            it != item.end())
+            it->Value >>= tokenType;
+
+        if (bHyperlinks && (tokenType == tokHStart || tokenType == tokHEnd))
             continue; // We add hyperlink ourselves, so just skip existing hyperlink start / end
 
-        if (!sChapterNoSeparator.isEmpty()
-            && std::any_of(item.begin(), item.end(),
-                           [](const css::beans::PropertyValue& p)
-                           { return p.Name == tokType && p.Value == tokPNum; }))
+        if (!sChapterNoSeparator.isEmpty() && tokenType == tokPNum)
         {
             // This is an existing page number token; insert the chapter and separator before it
             aNewLevel.push_back(
@@ -6112,6 +6111,14 @@ static uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool
         }
 
         aNewLevel.push_back(item);
+
+        if (tabs.hasElements() && tokenType == tokENum)
+        {
+            // There is a fixed tab stop position needed in the level after the numbering
+            aNewLevel.push_back(
+                { comphelper::makePropertyValue(tokType, OUString("TokenTabStop")),
+                  comphelper::makePropertyValue("TabStopPosition", tabs[0].Position) });
+        }
     }
 
     if (bHyperlinks)
@@ -6464,22 +6471,38 @@ void DomainMapper_Impl::handleToc
             xTOC->setPropertyValue(getPropertyName(PROP_CREATE_FROM_LEVEL_PARAGRAPH_STYLES), uno::Any( true ));
 
         }
-        if(bHyperlinks  || !sChapterNoSeparator.isEmpty())
-        {
-            uno::Reference< container::XIndexReplace> xLevelFormats;
-            xTOC->getPropertyValue(getPropertyName(PROP_LEVEL_FORMAT)) >>= xLevelFormats;
-            sal_Int32 nLevelCount = xLevelFormats->getCount();
-                            //start with level 1, 0 is the header level
-            for( sal_Int32 nLevel = 1; nLevel < nLevelCount; ++nLevel)
-            {
-                uno::Sequence< beans::PropertyValues > aLevel;
-                xLevelFormats->getByIndex( nLevel ) >>= aLevel;
 
-                uno::Sequence< beans::PropertyValues > aNewLevel = lcl_createTOXLevelHyperlinks(
-                                                    bHyperlinks, sChapterNoSeparator,
-                                                    aLevel );
-                xLevelFormats->replaceByIndex( nLevel, uno::Any( aNewLevel ) );
+        uno::Reference<container::XNameContainer> xStyles;
+        if (auto xStylesSupplier = GetTextDocument().query<style::XStyleFamiliesSupplier>())
+        {
+            auto xStyleFamilies = xStylesSupplier->getStyleFamilies();
+            xStyleFamilies->getByName(getPropertyName(PROP_PARAGRAPH_STYLES)) >>= xStyles;
+        }
+
+        uno::Reference< container::XIndexReplace> xLevelFormats;
+        xTOC->getPropertyValue(getPropertyName(PROP_LEVEL_FORMAT)) >>= xLevelFormats;
+        sal_Int32 nLevelCount = xLevelFormats->getCount();
+                        //start with level 1, 0 is the header level
+        for( sal_Int32 nLevel = 1; nLevel < nLevelCount; ++nLevel)
+        {
+            uno::Sequence< beans::PropertyValues > aLevel;
+            xLevelFormats->getByIndex( nLevel ) >>= aLevel;
+
+            // Get the tab stops coming from the styles; store to the level definitions
+            uno::Sequence<style::TabStop> tabStops;
+            if (xStyles)
+            {
+                OUString style;
+                xTOC->getPropertyValue("ParaStyleLevel" + OUString::number(nLevel)) >>= style;
+                uno::Reference<beans::XPropertySet> xStyle;
+                if (xStyles->getByName(style) >>= xStyle)
+                    xStyle->getPropertyValue("ParaTabStops") >>= tabStops;
             }
+
+            uno::Sequence< beans::PropertyValues > aNewLevel = lcl_createTOXLevelHyperlinks(
+                                                bHyperlinks, sChapterNoSeparator,
+                                                aLevel, tabStops);
+            xLevelFormats->replaceByIndex( nLevel, uno::Any( aNewLevel ) );
         }
     }
     else // if (bTableOfFigures)
@@ -6503,7 +6526,7 @@ void DomainMapper_Impl::handleToc
 
             uno::Sequence< beans::PropertyValues > aNewLevel = lcl_createTOXLevelHyperlinks(
                                                 bHyperlinks, sChapterNoSeparator,
-                                                aLevel );
+                                                aLevel, {});
             xLevelFormats->replaceByIndex( 1, uno::Any( aNewLevel ) );
         }
     }

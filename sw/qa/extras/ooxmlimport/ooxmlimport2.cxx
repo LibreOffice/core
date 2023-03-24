@@ -1050,14 +1050,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154319)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11), xLevelFormats->getCount());
 
     const auto checkPropVal = [](const auto& expected, const css::beans::PropertyValues& entry,
-                                 const OUString& name) {
+                                 const OUString& name, sal_Int32 level) {
         auto it
             = std::find_if(entry.begin(), entry.end(),
                            [&name](const css::beans::PropertyValue& p) { return p.Name == name; });
-        OString msg = "Property: " + name.toUtf8();
+        OString msg = "Property: " + name.toUtf8() + ", level: " + OString::number(level);
         CPPUNIT_ASSERT_MESSAGE(msg.getStr(), it != entry.end());
         CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), css::uno::Any(expected), it->Value);
     };
+
+    // tdf#154360: check tab stops between the number and the entry text
+    constexpr sal_Int32 levelTabStops[]
+        = { 776, 1270, 1270, 1270, 1270, 1270, 1270, 1270, 1270, 1270 };
 
     //start with level 1, 0 is the header level
     for (sal_Int32 nLevel = 1; nLevel < xLevelFormats->getCount(); ++nLevel)
@@ -1065,24 +1069,27 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154319)
         css::uno::Sequence<css::beans::PropertyValues> aLevel;
         xLevelFormats->getByIndex(nLevel) >>= aLevel;
 
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aLevel.getLength());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aLevel.getLength());
 
-        checkPropVal(OUString("TokenHyperlinkStart"), aLevel[0], "TokenType");
+        checkPropVal(OUString("TokenHyperlinkStart"), aLevel[0], "TokenType", nLevel);
 
-        checkPropVal(OUString("TokenEntryNumber"), aLevel[1], "TokenType");
+        checkPropVal(OUString("TokenEntryNumber"), aLevel[1], "TokenType", nLevel);
 
-        checkPropVal(OUString("TokenEntryText"), aLevel[2], "TokenType");
+        checkPropVal(OUString("TokenTabStop"), aLevel[2], "TokenType", nLevel);
+        checkPropVal(levelTabStops[nLevel - 1], aLevel[2], "TabStopPosition", nLevel);
 
-        checkPropVal(OUString("TokenTabStop"), aLevel[3], "TokenType");
+        checkPropVal(OUString("TokenEntryText"), aLevel[3], "TokenType", nLevel);
 
-        checkPropVal(OUString("TokenChapterInfo"), aLevel[4], "TokenType");
+        checkPropVal(OUString("TokenTabStop"), aLevel[4], "TokenType", nLevel);
 
-        checkPropVal(OUString("TokenText"), aLevel[5], "TokenType");
-        checkPropVal(OUString("\""), aLevel[5], "Text");
+        checkPropVal(OUString("TokenChapterInfo"), aLevel[5], "TokenType", nLevel);
 
-        checkPropVal(OUString("TokenPageNumber"), aLevel[6], "TokenType");
+        checkPropVal(OUString("TokenText"), aLevel[6], "TokenType", nLevel);
+        checkPropVal(OUString("\""), aLevel[6], "Text", nLevel);
 
-        checkPropVal(OUString("TokenHyperlinkEnd"), aLevel[7], "TokenType");
+        checkPropVal(OUString("TokenPageNumber"), aLevel[7], "TokenType", nLevel);
+
+        checkPropVal(OUString("TokenHyperlinkEnd"), aLevel[8], "TokenType", nLevel);
     }
 }
 
