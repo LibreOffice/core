@@ -135,8 +135,7 @@ OUString FbCreateStmtParser::compose() const
 {
     ensureProperTableLengths();
     OUStringBuffer sSql(128);
-    sSql.append("CREATE TABLE ");
-    sSql.append(getTableName());
+    sSql.append("CREATE TABLE " + getTableName());
 
     lcl_appendWithSpace(sSql, u"("); // column declaration
     auto& rColumns = getColumnDef();
@@ -183,8 +182,7 @@ OUString FbCreateStmtParser::compose() const
             // start with 0:
             // HSQLDB: first value will be 0.
             // Firebird: first value will be 1.
-            sSql.append(columnIter->getStartValue() - 1);
-            sSql.append(")");
+            sSql.append(OUString::number(columnIter->getStartValue() - 1) + ")");
         }
         else if (!columnIter->isNullable())
             lcl_appendWithSpace(sSql, u"NOT NULL");

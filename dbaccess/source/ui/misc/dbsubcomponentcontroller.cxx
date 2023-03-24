@@ -535,8 +535,7 @@ namespace dbaui
         Reference< XTitle > xTitle(getPrivateModel(),UNO_QUERY);
         if ( xTitle.is() )
         {
-            sTitle.append( xTitle->getTitle() );
-            sTitle.append(" : ");
+            sTitle.append( xTitle->getTitle() + " : ");
         }
         sTitle.append( getPrivateTitle() );
         return sTitle.makeStringAndClear();

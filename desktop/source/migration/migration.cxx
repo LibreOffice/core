@@ -728,8 +728,8 @@ void MigrationImpl::copyConfig()
                 // shared registrymodifications.xcu does not exists
                 // the configuration is split in many registry files
                 // determine the file names from the first element in included paths
-                OUStringBuffer buf(m_aInfo.userdata);
-                buf.append("/user/registry/data");
+                OUStringBuffer buf(m_aInfo.userdata
+                    + "/user/registry/data");
                 sal_Int32 n = 0;
                 do {
                     OUString seg(comp.first.getToken(0, '.', n));
@@ -741,8 +741,7 @@ void MigrationImpl::copyConfig()
                         SAL_INFO( "desktop.migration", "configuration migration component " << comp.first << " ignored (cannot be encoded as file path)" );
                         goto next;
                     }
-                    buf.append('/');
-                    buf.append(enc);
+                    buf.append("/" + enc);
                 } while (n >= 0);
                 buf.append(".xcu");
                 regFilePath = buf.makeStringAndClear();

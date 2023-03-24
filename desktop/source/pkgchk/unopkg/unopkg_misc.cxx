@@ -55,14 +55,11 @@ namespace unopkg {
 OUString toString( OptionInfo const * info )
 {
     assert(info != nullptr);
-    OUStringBuffer buf;
-    buf.append("--");
+    OUStringBuffer buf("--");
     buf.appendAscii(info->m_name);
     if (info->m_short_option != '\0')
     {
-        buf.append(" (short -" );
-        buf.append(info->m_short_option );
-        buf.append(")");
+        buf.append(" (short -" + OUStringChar(info->m_short_option) + ")");
     }
     if (info->m_has_argument)
         buf.append(" <argument>" );

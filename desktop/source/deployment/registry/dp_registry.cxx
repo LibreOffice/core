@@ -381,8 +381,8 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
             OUStringBuffer buf;
             buf.append(
                 Reference<lang::XServiceInfo>(
-                    ambiguousBackend, UNO_QUERY_THROW )->getImplementationName() );
-            buf.append( ": " );
+                    ambiguousBackend, UNO_QUERY_THROW )->getImplementationName()
+                + ": " );
             const Sequence< Reference<deployment::XPackageTypeInfo> > types(
                 ambiguousBackend->getSupportedPackageTypes() );
             for ( sal_Int32 pos = 0; pos < types.getLength(); ++pos ) {
@@ -391,9 +391,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
                 buf.append( xInfo->getMediaType() );
                 const OUString filter( xInfo->getFileFilter() );
                 if (!filter.isEmpty()) {
-                    buf.append( " (" );
-                    buf.append( filter );
-                    buf.append( ")" );
+                    buf.append( " (" + filter + ")" );
                 }
                 if (pos < (types.getLength() - 1))
                     buf.append( ", " );

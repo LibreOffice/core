@@ -88,8 +88,7 @@ namespace dbaui
             OUStringBuffer aCompleteName;
             if ( !msRelativeRoot.isEmpty() )
             {
-                aCompleteName.append( msRelativeRoot );
-                aCompleteName.append( "/" );
+                aCompleteName.append( msRelativeRoot + "/" );
             }
             aCompleteName.append( _rObjectName );
 

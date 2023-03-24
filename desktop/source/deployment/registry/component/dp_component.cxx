@@ -858,13 +858,9 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
     if (!m_unorc_inited || !m_unorc_modified)
         return;
 
-    OStringBuffer buf;
-
-    buf.append("ORIGIN=");
     OUString sOrigin = dp_misc::makeRcTerm(m_cachePath);
     OString osOrigin = OUStringToOString(sOrigin, RTL_TEXTENCODING_UTF8);
-    buf.append(osOrigin);
-    buf.append(LF);
+    OStringBuffer buf("ORIGIN=" + osOrigin + OStringChar(LF));
 
     if (! m_jar_typelibs.empty())
     {
@@ -913,9 +909,8 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
         bool space = false;
         if (!sCommonRDB.isEmpty())
         {
-            buf.append( "?$ORIGIN/" );
-            buf.append( OUStringToOString(
-                            sCommonRDB, RTL_TEXTENCODING_ASCII_US ) );
+            buf.append( "?$ORIGIN/"
+                + OUStringToOString( sCommonRDB, RTL_TEXTENCODING_ASCII_US ) );
             space = true;
         }
         if (!sNativeRDB.isEmpty())
@@ -951,8 +946,7 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
             {
                 buf.append(' ');
             }
-            buf.append('?');
-            buf.append(OUStringToOString(component, RTL_TEXTENCODING_UTF8));
+            buf.append("?" + OUStringToOString(component, RTL_TEXTENCODING_UTF8));
             space = true;
         }
         buf.append(LF);

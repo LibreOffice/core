@@ -823,8 +823,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatement( const 
     {
         if ( !elem.isEmpty() )
         {
-            aSql.append(elem);
-            aSql.append(",");
+            aSql.append(elem + ",");
             aValues.append("?,");
         }
     }

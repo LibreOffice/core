@@ -213,8 +213,7 @@ OUString ObjectCopySource::getSelectStatement() const
     }
     else
     {   // table
-        OUStringBuffer aSQL;
-        aSQL.append( "SELECT " );
+        OUStringBuffer aSQL( "SELECT " );
 
         // we need to create the sql stmt with column names
         // otherwise it is possible that names don't match

@@ -881,31 +881,25 @@ IMPL_LINK_NOARG(UpdateDialog, selectionHandler, weld::TreeView&, void)
                         m_noDependency = m_noDependency.replaceAt( nPos, sProductName.getLength(), utl::ConfigManager::getProductName() );
                     }
 
-                    b.append(m_noInstall);
-                    b.append(LF);
-                    b.append(m_noDependency);
+                    b.append(m_noInstall + OUStringChar(LF) + m_noDependency);
                     for (sal_Int32 i = 0;
                          i < data.unsatisfiedDependencies.getLength(); ++i)
                     {
-                        b.append(LF);
-                        b.append("  ");
+                        b.append(OUStringChar(LF) + "  ");
                             // U+2003 EM SPACE would be better than two spaces,
                             // but some fonts do not contain it
                         b.append(
                             confineToParagraph(
                                 data.unsatisfiedDependencies[i]));
                     }
-                    b.append(LF);
-                    b.append("  ");
-                    b.append(m_noDependencyCurVer);
+                    b.append(OUStringChar(LF) + "  " + m_noDependencyCurVer);
                 }
                 break;
             }
             case SPECIFIC_ERROR:
             {
                 UpdateDialog::SpecificError & data = m_specificErrors[ pos ];
-                b.append(m_failure);
-                b.append(LF);
+                b.append(m_failure + OUStringChar(LF));
                 b.append( data.message.isEmpty() ? m_unknownError : data.message );
                 break;
             }

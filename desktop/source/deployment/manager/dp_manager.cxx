@@ -941,17 +941,16 @@ void PackageManagerImpl::removePackage(
 
 OUString PackageManagerImpl::getDeployPath( ActivePackages::Data const & data )
 {
-    OUStringBuffer buf;
-    buf.append( data.temporaryName );
+    OUStringBuffer buf( data.temporaryName );
     //The bundled extensions are not contained in an additional folder
     //with a unique name. data.temporaryName contains already the
     //UTF8 encoded folder name. See PackageManagerImpl::synchronize
     if (m_context != "bundled")
     {
-        buf.append( "_/" );
-        buf.append( ::rtl::Uri::encode( data.fileName, rtl_UriCharClassPchar,
-                                    rtl_UriEncodeIgnoreEscapes,
-                                    RTL_TEXTENCODING_UTF8 ) );
+        buf.append( "_/"
+            + ::rtl::Uri::encode( data.fileName, rtl_UriCharClassPchar,
+                                  rtl_UriEncodeIgnoreEscapes,
+                                  RTL_TEXTENCODING_UTF8 ) );
     }
     return makeURL( m_activePackages, buf.makeStringAndClear() );
 }

@@ -259,8 +259,8 @@ public:
         OStringBuffer aOutput;
         for (const auto &s : aEvents)
         {
-            aOutput.append(OUStringToOString(s, RTL_TEXTENCODING_UTF8));
-            aOutput.append("\n");
+            aOutput.append(OUStringToOString(s, RTL_TEXTENCODING_UTF8)
+                + "\n");
         }
         if (aOutput.getLength() > 0)
         {
@@ -3120,8 +3120,7 @@ static char* lo_extractRequest(LibreOfficeKit* /*pThis*/, const char* pFilePath)
 
                 if( xLTS.is() )
                 {
-                    OUStringBuffer jsonText;
-                    jsonText.append("{ \"Targets\": { ");
+                    OUStringBuffer jsonText("{ \"Targets\": { ");
                     bool lastParentheses = extractLinks(xLTS->getLinks(), false, jsonText);
                     jsonText.append("} }");
                     if (!lastParentheses)
