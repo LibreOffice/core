@@ -114,8 +114,7 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
         short decsep = 0;
         short ndig = 0;
         short ncdig = 0;    // number of digits after decimal point
-        OUStringBuffer aSearchStr("0123456789DEde");
-        aSearchStr.append(cNonIntntlDecSep);
+        OUStringBuffer aSearchStr(OUString::Concat("0123456789DEde") + OUStringChar(cNonIntntlDecSep));
         if( cIntntlDecSep != cNonIntntlDecSep )
             aSearchStr.append(cIntntlDecSep);
         if( cIntntlDecSepAlt && cIntntlDecSepAlt != cNonIntntlDecSep )

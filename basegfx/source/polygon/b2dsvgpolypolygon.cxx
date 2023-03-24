@@ -704,9 +704,9 @@ namespace basegfx::utils
                     aResult.append(' ');
                 }
 
-                aResult.append(aPoint.getX());
-                aResult.append(',');
-                aResult.append(aPoint.getY());
+                aResult.append(OUString::number(aPoint.getX())
+                        + ","
+                        + OUString::number(aPoint.getY()));
             }
 
             return aResult.makeStringAndClear();

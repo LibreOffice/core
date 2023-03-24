@@ -1540,9 +1540,9 @@ ErrCode BasicManager::ExecuteMacro( OUString const& i_fullyQualifiedName, std::u
             sal_Int32 nPos {0};
             for (;;)
             {
-                aBuff.append( "\"" );
-                aBuff.append( o3tl::getToken(sArgs2, 0, ',', nPos) );
-                aBuff.append( "\"" );
+                aBuff.append( OUString::Concat("\"")
+                    + o3tl::getToken(sArgs2, 0, ',', nPos)
+                    + "\"" );
                 if (nPos<0)
                     break;
                 aBuff.append( "," );

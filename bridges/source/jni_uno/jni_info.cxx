@@ -166,8 +166,7 @@ JNI_interface_type_info::JNI_interface_type_info(
                             &attribute_td->aBase.pMemberName );
 
                     // getter
-                    sig_buf.append( "()" );
-                    sig_buf.append( type_sig );
+                    sig_buf.append( "()" + type_sig );
                     OString method_signature( sig_buf.makeStringAndClear() );
                     OString method_name(
                         OUStringToOString(
@@ -182,11 +181,7 @@ JNI_interface_type_info::JNI_interface_type_info(
                     if (! attribute_td->bReadOnly)
                     {
                         // setter
-                        sig_buf.ensureCapacity( 64 );
-                        sig_buf.append( '(' );
-                        sig_buf.append( type_sig );
-                        sig_buf.append( ")V" );
-                        method_signature = sig_buf.makeStringAndClear();
+                        method_signature = "(" + type_sig + ")V";
                         method_name = OUStringToOString(
                             rtl::Concat2View("set" + member_name),
                             RTL_TEXTENCODING_JAVA_UTF8 );
