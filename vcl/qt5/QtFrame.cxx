@@ -249,16 +249,8 @@ QtFrame::~QtFrame()
 void QtFrame::Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExtentsWidth,
                      sal_Int32 nExtentsHeight) const
 {
-    QRect aParentUpdateRect(scaledQRect(QRect(nExtentsX, nExtentsY, nExtentsWidth, nExtentsHeight),
-                                        1 / devicePixelRatioF()));
-    if (!m_pTopLevel)
-        m_pQWidget->update(aParentUpdateRect);
-    else
-    {
-        QRect aIntersectedRect(aParentUpdateRect.intersected(m_pQWidget->geometry()));
-        if (!aIntersectedRect.isEmpty())
-            m_pQWidget->update(aIntersectedRect.translated(-m_pQWidget->geometry().topLeft()));
-    }
+    m_pQWidget->update(scaledQRect(QRect(nExtentsX, nExtentsY, nExtentsWidth, nExtentsHeight),
+                                   1 / devicePixelRatioF()));
 }
 
 SalGraphics* QtFrame::AcquireGraphics()
@@ -272,7 +264,7 @@ SalGraphics* QtFrame::AcquireGraphics()
     {
         if (!m_pSvpGraphics)
         {
-            QSize aSize = asChild()->size() * devicePixelRatioF();
+            QSize aSize = m_pQWidget->size() * devicePixelRatioF();
             m_pSvpGraphics.reset(new QtSvpGraphics(this));
             m_pSurface.reset(
                 cairo_image_surface_create(CAIRO_FORMAT_ARGB32, aSize.width(), aSize.height()));
@@ -289,7 +281,7 @@ SalGraphics* QtFrame::AcquireGraphics()
         {
             m_pQtGraphics.reset(new QtGraphics(this));
             m_pQImage.reset(
-                new QImage(asChild()->size() * devicePixelRatioF(), Qt_DefaultFormat32));
+                new QImage(m_pQWidget->size() * devicePixelRatioF(), Qt_DefaultFormat32));
             m_pQImage->fill(Qt::transparent);
             m_pQtGraphics->ChangeQImage(m_pQImage.get());
         }
@@ -455,25 +447,32 @@ void QtFrame::SetMaxClientSize(tools::Long nWidth, tools::Long nHeight)
     }
 }
 
+int QtFrame::menuBarOffset() const
+{
+    QtMainWindow* pTopLevel = m_pParent->GetTopLevelWindow();
+    if (pTopLevel && pTopLevel->menuBar() && pTopLevel->menuBar()->isVisible())
+        return round(pTopLevel->menuBar()->geometry().height() * devicePixelRatioF());
+    return 0;
+}
+
 void QtFrame::SetDefaultPos()
 {
     if (!m_bDefaultPos)
         return;
 
-    QWidget* const pChildWin = asChild()->window();
-    QPoint aPos;
-
-    // center on parent or screen
+    // center on parent
     if (m_pParent)
     {
+        const qreal fRatio = devicePixelRatioF();
         QWidget* const pParentWin = m_pParent->asChild()->window();
-        aPos = (pParentWin->rect().center() - pChildWin->rect().center()) * devicePixelRatioF();
+        QWidget* const pChildWin = asChild()->window();
+        QPoint aPos = (pParentWin->rect().center() - pChildWin->rect().center()) * fRatio;
+        aPos.ry() -= menuBarOffset();
+        SetPosSize(aPos.x(), aPos.y(), 0, 0, SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y);
+        assert(!m_bDefaultPos);
     }
     else
-        aPos = windowHandle()->screen()->availableGeometry().center() - pChildWin->rect().center();
-
-    SetPosSize(aPos.x(), aPos.y(), 0, 0, SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y);
-    assert(!m_bDefaultPos);
+        m_bDefaultPos = false;
 }
 
 Size QtFrame::CalcDefaultSize()
@@ -567,11 +566,10 @@ void QtFrame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, too
     {
         const SalFrameGeometry& aParentGeometry = m_pParent->maGeometry;
         if (QGuiApplication::isRightToLeft())
-            nX = aParentGeometry.x() + aParentGeometry.width() - nX - maGeometry.width()
-                 - aParentGeometry.rightDecoration() - 1;
+            nX = aParentGeometry.x() + aParentGeometry.width() - nX - maGeometry.width() - 1;
         else
-            nX += aParentGeometry.x() + aParentGeometry.leftDecoration();
-        nY += aParentGeometry.y() + aParentGeometry.topDecoration();
+            nX += aParentGeometry.x();
+        nY += aParentGeometry.y() + menuBarOffset();
     }
 
     if (!(nFlags & SAL_FRAME_POSSIZE_X))
@@ -589,8 +587,8 @@ void QtFrame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, too
 
 void QtFrame::GetClientSize(tools::Long& rWidth, tools::Long& rHeight)
 {
-    rWidth = maGeometry.width();
-    rHeight = maGeometry.height();
+    rWidth = round(m_pQWidget->width() * devicePixelRatioF());
+    rHeight = round(m_pQWidget->height() * devicePixelRatioF());
 }
 
 void QtFrame::GetWorkArea(tools::Rectangle& rRect)
@@ -1530,16 +1528,6 @@ void QtFrame::handleDragLeave()
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);
     m_pDropTarget->fire_dragExit(aEvent);
     m_bInDrag = false;
-}
-
-QPoint QtFrame::mapToParent(const QPoint& rPos) const
-{
-    return m_pTopLevel ? m_pQWidget->mapToParent(rPos) : rPos;
-}
-
-QPoint QtFrame::mapFromParent(const QPoint& rPos) const
-{
-    return m_pTopLevel ? m_pQWidget->mapFromParent(rPos) : rPos;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

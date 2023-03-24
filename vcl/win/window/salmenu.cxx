@@ -115,7 +115,7 @@ WinSalMenu::~WinSalMenu()
     ::DestroyMenu( mhMenu );
 }
 
-bool WinSalMenu::HasNativeMenuBar()
+bool WinSalMenu::VisibleMenuBar()
 {
     // The Win32 implementation never shows a native
     // menubar. Thus, native menus are only visible
