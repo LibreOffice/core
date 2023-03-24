@@ -298,10 +298,12 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf103994)
     goToCell("A1");
 
     dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
 
     goToCell("B1");
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, this test would have failed with
     // - Expected: ='file:///tmp/lu124171irlmb.tmp'#$Sheet1.A1
@@ -386,9 +388,11 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf107869)
 
     goToCell("A1");
     dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
+    Scheduler::ProcessEventsToIdle();
 
     goToCell("A2");
     dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_MESSAGE("There should be a note on A1", pDoc->HasNote(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_MESSAGE("There should be a note on A2", pDoc->HasNote(ScAddress(0, 1, 0)));
@@ -396,8 +400,10 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf107869)
     goToCell("A1");
 
     dispatchCommand(mxComponent, ".uno:SelectRow", {});
+    Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+    Scheduler::ProcessEventsToIdle();
 
     for (size_t i = 0; i < 10; ++i)
     {
@@ -406,6 +412,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf107869)
         CPPUNIT_ASSERT_MESSAGE("There should be no note on A2", !pDoc->HasNote(ScAddress(0, 1, 0)));
 
         dispatchCommand(mxComponent, ".uno:Undo", {});
+        Scheduler::ProcessEventsToIdle();
 
         CPPUNIT_ASSERT_EQUAL(OUString("A"), pDoc->GetString(ScAddress(0, 0, 0)));
         CPPUNIT_ASSERT_EQUAL(OUString("B"), pDoc->GetString(ScAddress(0, 1, 0)));
@@ -413,15 +420,19 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf107869)
         CPPUNIT_ASSERT_MESSAGE("There should be a note on A2", pDoc->HasNote(ScAddress(0, 1, 0)));
 
         dispatchCommand(mxComponent, ".uno:Redo", {});
+        Scheduler::ProcessEventsToIdle();
     }
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     goToCell("A1:A2");
 
     dispatchCommand(mxComponent, ".uno:SelectRow", {});
+    Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+    Scheduler::ProcessEventsToIdle();
 
     for (size_t i = 0; i < 10; ++i)
     {
@@ -431,6 +442,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf107869)
         CPPUNIT_ASSERT_MESSAGE("There should be no note on A2", !pDoc->HasNote(ScAddress(0, 1, 0)));
 
         dispatchCommand(mxComponent, ".uno:Undo", {});
+        Scheduler::ProcessEventsToIdle();
 
         CPPUNIT_ASSERT_EQUAL(OUString("A"), pDoc->GetString(ScAddress(0, 0, 0)));
         CPPUNIT_ASSERT_EQUAL(OUString("B"), pDoc->GetString(ScAddress(0, 1, 0)));
@@ -438,6 +450,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf107869)
         CPPUNIT_ASSERT_MESSAGE("There should be a note on A2", pDoc->HasNote(ScAddress(0, 1, 0)));
 
         dispatchCommand(mxComponent, ".uno:Redo", {});
+        Scheduler::ProcessEventsToIdle();
     }
 }
 
@@ -484,6 +497,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf63805)
     CPPUNIT_ASSERT_EQUAL(OUString("2014-05-31"), pDoc->GetString(ScAddress(0, 19, 0)));
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString("2012-10-31"), pDoc->GetString(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 1, 0)));
@@ -530,13 +544,16 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf94208)
     goToCell("A3:A8");
 
     dispatchCommand(mxComponent, ".uno:SelectRow", {});
+    Scheduler::ProcessEventsToIdle();
 
     //type Control-D/Fill Down
     dispatchCommand(mxComponent, ".uno:FillDown", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(0, 0, 0)));
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, this test would have failed with
     // - Expected: 1
@@ -661,11 +678,13 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119162)
 
     // Without the fix in place, this test would have hung here
     dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString(u"Test" + OUStringChar(u'\xA')),
                          pDoc->GetString(ScAddress(0, 0, 0)));
 
     dispatchCommand(mxComponent, ".uno:ChangeCaseToLower", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString(u"test" + OUStringChar(u'\xA')),
                          pDoc->GetString(ScAddress(0, 0, 0)));
@@ -689,6 +708,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf90579)
     goToCell("C1:C2");
 
     dispatchCommand(mxComponent, ".uno:ConvertFormulaToValue", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString("2310"), pDoc->GetString(ScAddress(2, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("LibreOffice"), pDoc->GetString(ScAddress(2, 1, 0)));
@@ -696,6 +716,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf90579)
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetFormula(2, 1, 0));
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString("2310"), pDoc->GetString(ScAddress(2, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("LibreOffice"), pDoc->GetString(ScAddress(2, 1, 0)));
@@ -711,6 +732,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124820)
     goToCell("B2");
 
     dispatchCommand(mxComponent, ".uno:Strikeout", {});
+    Scheduler::ProcessEventsToIdle();
 
     saveAndReload("Calc Office Open XML");
     pDoc = getScDoc();
@@ -733,6 +755,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119155)
 
     // Without the fix in place, this test would have hung here
     dispatchCommand(mxComponent, ".uno:ChangeCaseToTitleCase", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString("Collagene Expert Targeted Wrinkle Corrector Unboxed 10 Ml"),
                          pDoc->GetString(ScAddress(2, 1, 0)));
@@ -755,6 +778,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf146795)
     goToCell("B2");
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
 
     // Move to B3
     ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
@@ -769,6 +793,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf146795)
 
     // Without the fix in place, this test would have crashed here
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString("a"), pDoc->GetString(ScAddress(1, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("a"), pDoc->GetString(ScAddress(1, 2, 0)));
@@ -799,6 +824,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf147744)
     goToCell("A2");
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
 
     // Move to A3
     ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
@@ -811,6 +837,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf147744)
 
     // Without the fix in place, this test would have crashed here
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(0, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(0, 2, 0)));
@@ -845,12 +872,14 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138432)
     goToCell("A1");
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
 
     goToCell("A2");
 
     typeString(u"=");
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
@@ -1003,6 +1032,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf145640)
     goToCell("A2:F17");
 
     dispatchCommand(mxComponent, ".uno:SortDescending", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A15:B15:C15:D15:E15:F15)"), pDoc->GetFormula(6, 3, 0));
 
@@ -1012,6 +1042,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf145640)
     CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(6, 3, 0)));
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A4:B4:C4:D4:E4:F4)"), pDoc->GetFormula(6, 3, 0));
     CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(6, 3, 0)));
@@ -1039,10 +1070,12 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf97215)
 
     // Without the fix in place, this test would have hung here
     dispatchCommand(mxComponent, ".uno:SortAscending", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString("Inserted at bottom"), pDoc->GetString(ScAddress(0, 0, 0)));
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString("Inserted at bottom"), pDoc->GetString(ScAddress(0, 23, 0)));
 
@@ -1306,15 +1339,18 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117706)
 
     // Use Adding Selection
     dispatchCommand(mxComponent, ".uno:StatusSelectionModeExp", {});
+    Scheduler::ProcessEventsToIdle();
 
     goToCell("A1");
     dispatchCommand(mxComponent, ".uno:SelectRow", {});
+    Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:GoDown", {});
     dispatchCommand(mxComponent, ".uno:GoDown", {});
     lcl_AssertCurrentCursorPosition(*pDocSh, u"A3");
 
     dispatchCommand(mxComponent, ".uno:SelectRow", {});
+    Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
 
@@ -1370,11 +1406,14 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf149503)
     ScDocument* pDoc = getScDoc();
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, this test would have crashed here
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     ScDPCollection* pDPs = pDoc->GetDPCollection();
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDPs->GetCount());
@@ -1386,8 +1425,10 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf108292)
     ScDocument* pDoc = getScDoc();
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
 
     // Open a new document
     createScDoc();
@@ -1395,6 +1436,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf108292)
 
     // Without the fix in place, this test would have crashed
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString("2D"), pDoc->GetString(ScAddress(26, 0, 0)));
 }
@@ -1410,15 +1452,18 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testMultiRangeCol)
 
     // Use Adding Selection
     dispatchCommand(mxComponent, ".uno:StatusSelectionModeExp", {});
+    Scheduler::ProcessEventsToIdle();
 
     goToCell("A1");
     dispatchCommand(mxComponent, ".uno:SelectColumn", {});
+    Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:GoRight", {});
     dispatchCommand(mxComponent, ".uno:GoRight", {});
     lcl_AssertCurrentCursorPosition(*pDocSh, u"C1");
 
     dispatchCommand(mxComponent, ".uno:SelectColumn", {});
+    Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
 
@@ -1724,12 +1769,14 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf108654)
     CPPUNIT_ASSERT_EQUAL(OUString("=VLOOKUP(C127,#REF!,D$1,0)"), aFormula);
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     aFormula = pDoc->GetFormula(3, 126, 1);
     CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(1), pDoc->GetTableCount());
 }
@@ -1791,16 +1838,19 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133326)
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     aFormula = pDoc->GetFormula(0, 0, 1);
     CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(1), pDoc->GetTableCount());
 
     dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
     aFormula = pDoc->GetFormula(0, 0, 1);
@@ -1808,6 +1858,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133326)
 
     // Without the fix in place, it would have crashed here
     dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
 
     aFormula = pDoc->GetFormula(0, 0, 1);
     CPPUNIT_ASSERT_EQUAL(OUString("=RAND()*1000000"), aFormula);
@@ -1821,6 +1872,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126685)
     ScDocument* pDoc = getScDoc();
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {}); // test should crash here without the fix
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(
         OUString("Control Height will change from 0.65 to 0.61 cm with 120dpi ..."),
@@ -1858,11 +1910,13 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119793)
     Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5084), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1381), xShape->getPosition().Y);
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, this test would have failed with
     // - Expected: 4984
@@ -1953,12 +2007,15 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124818)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
 }
@@ -2135,12 +2192,14 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124822)
     CPPUNIT_ASSERT_EQUAL(OUString("X"), pDoc->GetString(ScAddress(0, 0, 2)));
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:Cut", {});
 
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 0, 2)));
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString("X"), pDoc->GetString(ScAddress(0, 0, 2)));
 }
@@ -2172,6 +2231,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118189)
 
     // Without the fix in place, this test would have crashed here
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     aFormula = pDoc->GetFormula(0, 77, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
@@ -2215,11 +2275,13 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118207)
     CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     aFormula = pDoc->GetFormula(1, 77, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     aFormula = pDoc->GetFormula(1, 77, 0);
     CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
@@ -2227,6 +2289,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118207)
     CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     aFormula = pDoc->GetFormula(0, 77, 0);
     CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
@@ -2255,6 +2318,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124778)
     uno::Sequence<beans::PropertyValue> aArgs
         = comphelper::InitPropertySequence({ { "Text", uno::Any(OUString("Comment")) } });
     dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_MESSAGE("There should be a note on A1", pDoc->HasNote(ScAddress(0, 0, 0)));
 
@@ -2279,6 +2343,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138428)
     uno::Sequence<beans::PropertyValue> aArgs
         = comphelper::InitPropertySequence({ { "Text", uno::Any(OUString("Comment")) } });
     dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
+    Scheduler::ProcessEventsToIdle();
 
     ScDocument* pDoc = getScDoc();
     CPPUNIT_ASSERT_MESSAGE("There should be a note on A1", pDoc->HasNote(ScAddress(0, 0, 0)));
@@ -2296,21 +2361,25 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138428)
 
     // Without the fix in place, this test would have crashed here
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_MESSAGE("There should be a note on A1", pDoc->HasNote(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be a note on B1", !pDoc->HasNote(ScAddress(1, 0, 0)));
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be a note on A1", !pDoc->HasNote(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be a note on B1", !pDoc->HasNote(ScAddress(1, 0, 0)));
 
     dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_MESSAGE("There should be a note on A1", pDoc->HasNote(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be a note on B1", !pDoc->HasNote(ScAddress(1, 0, 0)));
 
     dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_MESSAGE("There should be a note on A1", pDoc->HasNote(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_MESSAGE("There should be a note on B1", pDoc->HasNote(ScAddress(1, 0, 0)));
@@ -2352,6 +2421,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf130614)
     lcl_SelectObjectByName(*getViewShell(), u"Object 1");
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
 
     // Open a new document
     createScDoc();
@@ -2359,6 +2429,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf130614)
 
     // Without the fix in place, this test would have crashed here
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     SdrPage* pPage = pDrawLayer->GetPage(0);
@@ -2616,11 +2687,13 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf134675)
     goToCell("A:A");
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
 
     // Select column B to Z
     goToCell("B:Z");
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     for (size_t i = 1; i < 24; ++i)
     {
@@ -2719,6 +2792,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf107952)
     goToCell("D10");
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, this test would have failed with
     // - Expected: 1
@@ -2729,6 +2803,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf107952)
     goToCell("D10");
 
     dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
 
     lcl_AssertCurrentCursorPosition(*pDocSh, u"B1");
 }
@@ -2765,11 +2840,13 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144022)
     goToCell("A5:B79");
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
 
     goToCell("D5");
 
     //Without the fix in place, this test would have crashed
     dispatchCommand(mxComponent, ".uno:PasteTransposed", {});
+    Scheduler::ProcessEventsToIdle();
 
     for (size_t i = 3; i < 76; ++i)
     {
@@ -2789,10 +2866,12 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf99386)
     goToCell("A1:B1");
 
     dispatchCommand(mxComponent, ".uno:ToggleMergeCells", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString("0"), pDoc->GetString(ScAddress(1, 1, 0)));
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString("This"), pDoc->GetString(ScAddress(1, 0, 0)));
 
@@ -2852,6 +2931,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf152014)
     goToCell("A1");
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
 
     // Create a second document
     mxComponent2 = loadFromDesktop("private:factory/scalc");
@@ -2860,6 +2940,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf152014)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xFrames->getCount());
 
     dispatchCommand(mxComponent2, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     ScModelObj* pModelObj2 = dynamic_cast<ScModelObj*>(mxComponent2.get());
     CPPUNIT_ASSERT(pModelObj2);
