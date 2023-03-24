@@ -1008,7 +1008,7 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
             // color gradients).
             // To handle a primitive that needs paint, either use decompose, or - when you
             // do not want that for any reason, e.g. extra primitives created - implement
-            // a direct handling in your primitive rendererer. This is always possible
+            // a direct handling in your primitive renderer. This is always possible
             // since primitives by definition are self-contained what means they have all
             // needed data locally available to do so.
             // The question is the complexity to invest - the implemented decompose
