@@ -74,8 +74,7 @@ static void save_FixedWidthList(const ScCsvSplits& rSplits)
     sal_uInt32 n = rSplits.Count();
     for (sal_uInt32 i = 0; i < n; ++i)
     {
-        sSplits.append(rSplits[i]);
-        sSplits.append(";");
+        sSplits.append(OUString::number(rSplits[i]) + ";");
     }
 
     OUString sFixedWidthLists = sSplits.makeStringAndClear();

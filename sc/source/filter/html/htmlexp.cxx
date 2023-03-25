@@ -139,19 +139,19 @@ void ScFormatFilterPluginImpl::ScExportHTML( SvStream& rStrm, const OUString& rB
 
 static OString lcl_getColGroupString(sal_Int32 nSpan, sal_Int32 nWidth)
 {
-    OStringBuffer aByteStr(OOO_STRING_SVTOOLS_HTML_colgroup);
-    aByteStr.append(' ');
+    OStringBuffer aByteStr(OString::Concat(OOO_STRING_SVTOOLS_HTML_colgroup)
+        + " ");
     if( nSpan > 1 )
     {
-        aByteStr.append(OOO_STRING_SVTOOLS_HTML_O_span);
-        aByteStr.append("=\"");
-        aByteStr.append(nSpan);
-        aByteStr.append("\" ");
+        aByteStr.append(OString::Concat(OOO_STRING_SVTOOLS_HTML_O_span)
+            + "=\""
+            + OString::number(nSpan)
+            + "\" ");
     }
-    aByteStr.append(OOO_STRING_SVTOOLS_HTML_O_width);
-    aByteStr.append("=\"");
-    aByteStr.append(nWidth);
-    aByteStr.append('"');
+    aByteStr.append(OString::Concat(OOO_STRING_SVTOOLS_HTML_O_width)
+        + "=\""
+        + OString::number(nWidth)
+        + "\"");
     return aByteStr.makeStringAndClear();
 }
 
@@ -866,8 +866,9 @@ void ScHTMLExport::WriteTables()
             if ( bTabAlignedLeft )
             {
                 // clear <TABLE ALIGN=LEFT> with <BR CLEAR=LEFT>
-                aByteStrOut.append(OOO_STRING_SVTOOLS_HTML_linebreak);
-                aByteStrOut.append(" "
+                aByteStrOut.append(
+                        OOO_STRING_SVTOOLS_HTML_linebreak
+                        " "
                         OOO_STRING_SVTOOLS_HTML_O_clear "="
                         OOO_STRING_SVTOOLS_HTML_AL_left);
                 TAG_ON_LF( aByteStrOut.makeStringAndClear().getStr() );
@@ -1080,8 +1081,8 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
 
     if ( aHTMLStyle.aBackgroundColor != aBgColor )
     {
-        aStrTD.append(" " OOO_STRING_SVTOOLS_HTML_O_bgcolor "=");
-        aStrTD.append(lcl_makeHTMLColorTriplet(aBgColor));
+        aStrTD.append(" " OOO_STRING_SVTOOLS_HTML_O_bgcolor "="
+            + lcl_makeHTMLColorTriplet(aBgColor));
     }
 
     double fVal = 0.0;

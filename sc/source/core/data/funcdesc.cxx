@@ -161,8 +161,7 @@ OUString ScFuncDesc::GetParamList() const
                 aSig.append(maDefArgNames[i]);
                 if ( i != nArgCount-1 )
                 {
-                    aSig.append(sep);
-                    aSig.append( " " );
+                    aSig.append(sep + " " );
                 }
             }
             // If only suppressed parameters follow the last added parameter,
@@ -175,46 +174,35 @@ OUString ScFuncDesc::GetParamList() const
         {
             for ( sal_uInt16 nArg = 0; nArg < nVarArgsStart; nArg++ )
             {
-                aSig.append(maDefArgNames[nArg]);
-                aSig.append(sep);
-                aSig.append( " " );
+                aSig.append(maDefArgNames[nArg] + sep + " ");
             }
             /* NOTE: Currently there are no suppressed var args parameters. If
              * there were, we'd have to cope with it here and above for the fix
              * parameters. For now parameters are always added, so no special
              * treatment of a trailing "; " necessary. */
-            aSig.append(maDefArgNames[nVarArgsStart]);
-            aSig.append('1');
-            aSig.append(sep);
-            aSig.append(' ');
-            aSig.append(maDefArgNames[nVarArgsStart]);
-            aSig.append('2');
-            aSig.append(sep);
-            aSig.append(" ... ");
+            aSig.append(maDefArgNames[nVarArgsStart]
+                + "1"
+                + sep + " "
+                + maDefArgNames[nVarArgsStart]
+                + "2"
+                + sep + " ... ");
         }
         else
         {
             for ( sal_uInt16 nArg = 0; nArg < nVarArgsStart; nArg++ )
             {
-                aSig.append(maDefArgNames[nArg]);
-                aSig.append(sep);
-                aSig.append( " " );
+                aSig.append(maDefArgNames[nArg] + sep + " ");
             }
 
-            aSig.append(maDefArgNames[nVarArgsStart]);
-            aSig.append('1');
-            aSig.append(sep);
-            aSig.append(maDefArgNames[nVarArgsStart+1]);
-            aSig.append('1');
-            aSig.append(sep);
-            aSig.append( " " );
-            aSig.append(maDefArgNames[nVarArgsStart]);
-            aSig.append('2');
-            aSig.append(sep);
-            aSig.append(maDefArgNames[nVarArgsStart+1]);
-            aSig.append('2');
-            aSig.append(sep);
-            aSig.append( " ... " );
+            aSig.append(maDefArgNames[nVarArgsStart]
+                + "1" + sep
+                + maDefArgNames[nVarArgsStart+1]
+                + "1" + sep
+                + " "
+                + maDefArgNames[nVarArgsStart]
+                + "2" + sep
+                + maDefArgNames[nVarArgsStart+1]
+                + "2" + sep + " ... " );
         }
     }
 
@@ -232,11 +220,9 @@ OUString ScFuncDesc::getSignature() const
         OUString aParamList = GetParamList();
         if( !aParamList.isEmpty() )
         {
-            aSig.append( "( " );
-            aSig.append(aParamList);
+            aSig.append( "( " + aParamList
             // U+00A0 (NBSP) prevents automatic line break
-            aSig.append( u'\x00A0' );
-            aSig.append( ")" );
+                + u"\x00A0" ")" );
         }
         else
             aSig.append( "()" );
@@ -252,9 +238,7 @@ OUString ScFuncDesc::getFormula( const ::std::vector< OUString >& _aArguments ) 
 
     if(mxFuncName)
     {
-        aFormula.append( *mxFuncName );
-
-        aFormula.append( "(" );
+        aFormula.append( *mxFuncName + "(" );
         if ( nArgCount > 0 && !_aArguments.empty() && !_aArguments[0].isEmpty())
         {
             ::std::vector< OUString >::const_iterator aIter = _aArguments.begin();
@@ -264,8 +248,7 @@ OUString ScFuncDesc::getFormula( const ::std::vector< OUString >& _aArguments ) 
             ++aIter;
             while( aIter != aEnd && !aIter->isEmpty() )
             {
-                aFormula.append( sep );
-                aFormula.append( *aIter );
+                aFormula.append( sep + *aIter );
                 ++aIter;
             }
         }

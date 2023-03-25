@@ -1273,8 +1273,7 @@ OString createHexStringFromDigit(sal_uInt8 nDigit)
 
 OString createGuidStringFromInt(sal_uInt8 nGuid[16])
 {
-    OStringBuffer aBuffer;
-    aBuffer.append('{');
+    OStringBuffer aBuffer("{");
     for(size_t i = 0; i < 16; ++i)
     {
         aBuffer.append(createHexStringFromDigit(nGuid[i]));
@@ -1751,8 +1750,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uInt32 nScHandle ) :
                 {
                     bool bList = false;
                     OUStringBuffer sListBuf;
-                    OUStringBuffer sFormulaBuf;
-                    sFormulaBuf.append( '"' );
+                    OUStringBuffer sFormulaBuf("\"");
                     /*  Formula is a list of string tokens -> build the Excel string.
                         Data validity is BIFF8 only (important for the XclExpString object).
                         Excel uses the NUL character as string list separator. */
@@ -1765,9 +1763,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uInt32 nScHandle ) :
                             const std::u16string_view aToken( o3tl::getToken(aString, 0, '\n', nStringIx ) );
                             if (aToken.find(',') != std::u16string_view::npos)
                             {
-                                sListBuf.append('"');
-                                sListBuf.append(aToken);
-                                sListBuf.append('"');
+                                sListBuf.append(OUString::Concat("\"") + aToken + "\"");
                                 bList = true;
                             }
                             else

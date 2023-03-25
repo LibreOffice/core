@@ -386,19 +386,18 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,  // multiple (repeate
     }
 
     ScRefAddress aRef;
-    OUStringBuffer aForString;
-    aForString.append('=');
-    aForString.append(ScCompiler::GetNativeSymbol(ocTableOp));
-    aForString.append(ScCompiler::GetNativeSymbol( ocOpen));
+    OUStringBuffer aForString("="
+        + ScCompiler::GetNativeSymbol(ocTableOp)
+        + ScCompiler::GetNativeSymbol( ocOpen));
 
     const OUString& sSep = ScCompiler::GetNativeSymbol( ocSep);
     if (rParam.meMode == ScTabOpParam::Column) // column only
     {
         aRef.Set( rParam.aRefFormulaCell.GetAddress(), true, false, false );
-        aForString.append(aRef.GetRefString(*this, nTab1));
-        aForString.append(sSep);
-        aForString.append(rParam.aRefColCell.GetRefString(*this, nTab1));
-        aForString.append(sSep);
+        aForString.append(aRef.GetRefString(*this, nTab1)
+            + sSep
+            + rParam.aRefColCell.GetRefString(*this, nTab1)
+            + sSep);
         aRef.Set( nCol1, nRow1, nTab1, false, true, true );
         aForString.append(aRef.GetRefString(*this, nTab1));
         nCol1++;
@@ -408,10 +407,10 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,  // multiple (repeate
     else if (rParam.meMode == ScTabOpParam::Row) // row only
     {
         aRef.Set( rParam.aRefFormulaCell.GetAddress(), false, true, false );
-        aForString.append(aRef.GetRefString(*this, nTab1));
-        aForString.append(sSep);
-        aForString.append(rParam.aRefRowCell.GetRefString(*this, nTab1));
-        aForString.append(sSep);
+        aForString.append(aRef.GetRefString(*this, nTab1)
+            + sSep
+            + rParam.aRefRowCell.GetRefString(*this, nTab1)
+            + sSep);
         aRef.Set( nCol1, nRow1, nTab1, true, false, true );
         aForString.append(aRef.GetRefString(*this, nTab1));
         nRow1++;
@@ -420,15 +419,15 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,  // multiple (repeate
     }
     else // both
     {
-        aForString.append(rParam.aRefFormulaCell.GetRefString(*this, nTab1));
-        aForString.append(sSep);
-        aForString.append(rParam.aRefColCell.GetRefString(*this, nTab1));
-        aForString.append(sSep);
+        aForString.append(rParam.aRefFormulaCell.GetRefString(*this, nTab1)
+            + sSep
+            + rParam.aRefColCell.GetRefString(*this, nTab1)
+            + sSep);
         aRef.Set( nCol1, nRow1 + 1, nTab1, false, true, true );
-        aForString.append(aRef.GetRefString(*this, nTab1));
-        aForString.append(sSep);
-        aForString.append(rParam.aRefRowCell.GetRefString(*this, nTab1));
-        aForString.append(sSep);
+        aForString.append(aRef.GetRefString(*this, nTab1)
+            + sSep
+            + rParam.aRefRowCell.GetRefString(*this, nTab1)
+            + sSep);
         aRef.Set( nCol1 + 1, nRow1, nTab1, true, false, true );
         aForString.append(aRef.GetRefString(*this, nTab1));
         nCol1++; nRow1++;

@@ -2457,19 +2457,15 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                     if (pStr)
                         aBuf.append(*pStr);
 
-                    aBuf.append('#');
-                    aBuf.append(aExtInfo.maTabName);
-                    aBuf.append('.');
                     OUString aRefCalcA1(aTempAddr.Format(ScRefFlags::ADDR_ABS, nullptr, formula::FormulaGrammar::CONV_OOO));
-                    aBuf.append(aRefCalcA1);
+                    aBuf.append("#" + aExtInfo.maTabName + "." + aRefCalcA1);
                     ScGlobal::OpenURL(aBuf.makeStringAndClear(), aTarget);
                 }
                 else
                 {
                     // Internal reference.
-                    aBuf.append('#');
                     OUString aUrlCalcA1(aTempAddr.Format(ScRefFlags::ADDR_ABS_3D, &rDoc, formula::FormulaGrammar::CONV_OOO));
-                    aBuf.append(aUrlCalcA1);
+                    aBuf.append("#" + aUrlCalcA1);
                     ScGlobal::OpenURL(aBuf.makeStringAndClear(), aTarget, isTiledRendering);
                 }
             }

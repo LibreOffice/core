@@ -264,22 +264,11 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testBordersExchangeXLSX)
 
 static OUString toString(const ScBigRange& rRange)
 {
-    OUStringBuffer aBuf;
-    aBuf.append("(columns:");
-    aBuf.append(rRange.aStart.Col());
-    aBuf.append('-');
-    aBuf.append(rRange.aEnd.Col());
-    aBuf.append(";rows:");
-    aBuf.append(rRange.aStart.Row());
-    aBuf.append('-');
-    aBuf.append(rRange.aEnd.Row());
-    aBuf.append(";sheets:");
-    aBuf.append(rRange.aStart.Tab());
-    aBuf.append('-');
-    aBuf.append(rRange.aEnd.Tab());
-    aBuf.append(')');
-
-    return aBuf.makeStringAndClear();
+    return "(columns:" + OUString::number(rRange.aStart.Col()) + "-"
+           + OUString::number(rRange.aEnd.Col()) + ";rows:" + OUString::number(rRange.aStart.Row())
+           + "-" + OUString::number(rRange.aEnd.Row())
+           + ";sheets:" + OUString::number(rRange.aStart.Tab()) + "-"
+           + OUString::number(rRange.aEnd.Tab()) + ")";
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLSX)

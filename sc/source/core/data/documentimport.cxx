@@ -489,19 +489,18 @@ void ScDocumentImport::setTableOpCells(const ScRange& rRange, const ScTabOpParam
 
     ScDocument& rDoc = mpImpl->mrDoc;
     ScRefAddress aRef;
-    OUStringBuffer aFormulaBuf;
-    aFormulaBuf.append('=');
-    aFormulaBuf.append(ScCompiler::GetNativeSymbol(ocTableOp));
-    aFormulaBuf.append(ScCompiler::GetNativeSymbol(ocOpen));
+    OUStringBuffer aFormulaBuf("="
+        + ScCompiler::GetNativeSymbol(ocTableOp)
+        + ScCompiler::GetNativeSymbol(ocOpen));
 
     OUString aSep = ScCompiler::GetNativeSymbol(ocSep);
     if (rParam.meMode == ScTabOpParam::Column) // column only
     {
         aRef.Set(rParam.aRefFormulaCell.GetAddress(), true, false, false);
-        aFormulaBuf.append(aRef.GetRefString(rDoc, nTab));
-        aFormulaBuf.append(aSep);
-        aFormulaBuf.append(rParam.aRefColCell.GetRefString(rDoc, nTab));
-        aFormulaBuf.append(aSep);
+        aFormulaBuf.append(aRef.GetRefString(rDoc, nTab)
+            + aSep
+            + rParam.aRefColCell.GetRefString(rDoc, nTab)
+            + aSep);
         aRef.Set(nCol1, nRow1, nTab, false, true, true);
         aFormulaBuf.append(aRef.GetRefString(rDoc, nTab));
         nCol1++;
@@ -511,10 +510,10 @@ void ScDocumentImport::setTableOpCells(const ScRange& rRange, const ScTabOpParam
     else if (rParam.meMode == ScTabOpParam::Row) // row only
     {
         aRef.Set(rParam.aRefFormulaCell.GetAddress(), false, true, false);
-        aFormulaBuf.append(aRef.GetRefString(rDoc, nTab));
-        aFormulaBuf.append(aSep);
-        aFormulaBuf.append(rParam.aRefRowCell.GetRefString(rDoc, nTab));
-        aFormulaBuf.append(aSep);
+        aFormulaBuf.append(aRef.GetRefString(rDoc, nTab)
+            + aSep
+            + rParam.aRefRowCell.GetRefString(rDoc, nTab)
+            + aSep);
         aRef.Set(nCol1, nRow1, nTab, true, false, true);
         aFormulaBuf.append(aRef.GetRefString(rDoc, nTab));
         ++nRow1;
@@ -523,15 +522,15 @@ void ScDocumentImport::setTableOpCells(const ScRange& rRange, const ScTabOpParam
     }
     else // both
     {
-        aFormulaBuf.append(rParam.aRefFormulaCell.GetRefString(rDoc, nTab));
-        aFormulaBuf.append(aSep);
-        aFormulaBuf.append(rParam.aRefColCell.GetRefString(rDoc, nTab));
-        aFormulaBuf.append(aSep);
+        aFormulaBuf.append(rParam.aRefFormulaCell.GetRefString(rDoc, nTab)
+            + aSep
+            + rParam.aRefColCell.GetRefString(rDoc, nTab)
+            + aSep);
         aRef.Set(nCol1, nRow1 + 1, nTab, false, true, true);
-        aFormulaBuf.append(aRef.GetRefString(rDoc, nTab));
-        aFormulaBuf.append(aSep);
-        aFormulaBuf.append(rParam.aRefRowCell.GetRefString(rDoc, nTab));
-        aFormulaBuf.append(aSep);
+        aFormulaBuf.append(aRef.GetRefString(rDoc, nTab)
+            + aSep
+            + rParam.aRefRowCell.GetRefString(rDoc, nTab)
+            + aSep);
         aRef.Set(nCol1 + 1, nRow1, nTab, true, false, true);
         aFormulaBuf.append(aRef.GetRefString(rDoc, nTab));
         ++nCol1;

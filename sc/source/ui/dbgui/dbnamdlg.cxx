@@ -247,20 +247,17 @@ void ScDbNameDlg::Init()
 
 void ScDbNameDlg::SetInfoStrings( const ScDBData* pDBData )
 {
-    OUStringBuffer aBuf;
-    aBuf.append(aStrSource);
+    OUStringBuffer aBuf(aStrSource);
     if (pDBData)
     {
-        aBuf.append(' ');
-        aBuf.append(pDBData->GetSourceString());
+        aBuf.append(" " + pDBData->GetSourceString());
     }
     m_xFTSource->set_label(aBuf.makeStringAndClear());
 
     aBuf.append(aStrOperations);
     if (pDBData)
     {
-        aBuf.append(' ');
-        aBuf.append(pDBData->GetOperations());
+        aBuf.append(" " + pDBData->GetOperations());
     }
     m_xFTOperations->set_label(aBuf.makeStringAndClear());
 }

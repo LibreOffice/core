@@ -131,8 +131,7 @@ void ScModelTestBase::testFile(const OUString& aFileName, ScDocument& rDoc, SCTA
     catch (const orcus::parse_error& e)
     {
         std::cout << "reading csv content file failed: " << e.what() << std::endl;
-        OStringBuffer aErrorMsg("csv parser error: ");
-        aErrorMsg.append(e.what());
+        OString aErrorMsg = OString::Concat("csv parser error: ") + e.what();
         CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), false);
     }
 }
@@ -155,8 +154,7 @@ void ScModelTestBase::testCondFile( const OUString& aFileName, ScDocument* pDoc,
     catch (const orcus::parse_error& e)
     {
         std::cout << "reading csv content file failed: " << e.what() << std::endl;
-        OStringBuffer aErrorMsg("csv parser error: ");
-        aErrorMsg.append(e.what());
+        OString aErrorMsg = OString::Concat("csv parser error: ") + e.what();
         CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), false);
     }
 }

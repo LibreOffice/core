@@ -425,16 +425,14 @@ void ScDocument::CreateValidTabName(OUString& rName) const
         if ( !ValidNewTabName(rName) )
         {
             SCTAB i = 1;
-            OUStringBuffer aName;
+            OUString aName;
             do
             {
                 i++;
-                aName = rName;
-                aName.append('_');
-                aName.append(static_cast<sal_Int32>(i));
+                aName = rName + "_" + OUString::number(static_cast<sal_Int32>(i));
             }
-            while (!ValidNewTabName(aName.toString()) && (i < MAXTAB+1));
-            rName = aName.makeStringAndClear();
+            while (!ValidNewTabName(aName) && (i < MAXTAB+1));
+            rName = aName;
         }
     }
 }

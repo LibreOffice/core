@@ -1258,10 +1258,7 @@ ErrCode ImportExcel8::Read()
             SCTAB nTab = 1;
             while ( true )
             {
-                OUStringBuffer aBuf;
-                aBuf.append("Sheet");
-                aBuf.append(static_cast<sal_Int32>(nTab++));
-                OUString sTmpName = aBuf.makeStringAndClear();
+                OUString sTmpName = "Sheet" + OUString::number(static_cast<sal_Int32>(nTab++));
 
                 if ( std::find(aCodeNames.begin(), aCodeNames.end(), sTmpName) == aCodeNames.end() ) // generated codename not found
                 {

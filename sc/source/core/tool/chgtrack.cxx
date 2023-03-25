@@ -492,12 +492,10 @@ OUString ScChangeAction::GetRefString(
                 {
                     OUString aTmp;
                     rDoc.GetName( aTmpRange.aStart.Tab(), aTmp );
-                    aBuf.append(aTmp);
-                    aBuf.append('.');
+                    aBuf.append(aTmp + ".");
                 }
-                aBuf.append(ScColToAlpha(aTmpRange.aStart.Col()));
-                aBuf.append(':');
-                aBuf.append(ScColToAlpha(aTmpRange.aEnd.Col()));
+                aBuf.append(ScColToAlpha(aTmpRange.aStart.Col())
+                    + ":" + ScColToAlpha(aTmpRange.aEnd.Col()));
             break;
             case SC_CAT_INSERT_ROWS :
             case SC_CAT_DELETE_ROWS :
@@ -505,12 +503,10 @@ OUString ScChangeAction::GetRefString(
                 {
                     OUString aTmp;
                     rDoc.GetName( aTmpRange.aStart.Tab(), aTmp );
-                    aBuf.append(aTmp);
-                    aBuf.append('.');
+                    aBuf.append(aTmp + ".");
                 }
-                aBuf.append(static_cast<sal_Int64>(aTmpRange.aStart.Row()+1));
-                aBuf.append(':');
-                aBuf.append(static_cast<sal_Int64>(aTmpRange.aEnd.Row()+1));
+                aBuf.append(OUString::number(static_cast<sal_Int64>(aTmpRange.aStart.Row()+1))
+                    + ":" + OUString::number(static_cast<sal_Int64>(aTmpRange.aEnd.Row()+1)));
             break;
             default:
             {

@@ -846,8 +846,7 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, std
                 else if (nEndCellDotPos < 0)
                 {
                     // sheet name in the end cell is omitted (e.g. Sheet2.A1:B2).
-                    aBuf.append('.');
-                    aBuf.append(aEndCell);
+                    aBuf.append("." + aEndCell);
                 }
                 aEndCell = aBuf.makeStringAndClear();
             }

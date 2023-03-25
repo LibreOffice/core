@@ -1100,8 +1100,7 @@ static OUString lcl_convertExcelSubtotalName(const OUString& rName)
         const sal_Unicode c = p[i];
         if (c == '\\')
         {
-            aBuf.append(c);
-            aBuf.append(c);
+            aBuf.append(OUStringChar(c) + OUStringChar(c));
         }
         else
             aBuf.append(c);

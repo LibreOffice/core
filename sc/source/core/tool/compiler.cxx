@@ -5438,8 +5438,8 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
                 }
                 else if (mbRefConventionChartOOXML)
                 {
-                    aBuffer.append("[0]");
-                    aBuffer.append(pConv->getSpecialSymbol(ScCompiler::Convention::SHEET_SEPARATOR));
+                    aBuffer.append("[0]"
+                        + OUStringChar(pConv->getSpecialSymbol(ScCompiler::Convention::SHEET_SEPARATOR)));
                 }
                 aBuffer.append(pData->GetName());
             }

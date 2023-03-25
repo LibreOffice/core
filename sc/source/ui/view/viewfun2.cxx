@@ -874,9 +874,7 @@ OUString ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSub
     ScCompiler aComp(rDoc, rAddr, aArray, rDoc.GetGrammar());
     OUStringBuffer aBuf;
     aComp.CreateStringFromTokenArray(aBuf);
-    OUString aFormula = aBuf.makeStringAndClear();
-    aBuf.append('=');
-    aBuf.append(aFormula);
+    aBuf.insert(0, "=");
     return aBuf.makeStringAndClear();
 }
 

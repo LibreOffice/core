@@ -1411,8 +1411,7 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
 
             OUString aFuncNameStr;
             OUString aDescFuncNameStr;
-            OStringBuffer aPayload;
-            aPayload.append("[ ");
+            OStringBuffer aPayload("[ ");
             for (const OUString& rFunc : rFuncStrVec)
             {
                 if ( rFunc[rFunc.getLength()-1] == cParenthesesReplacement )
@@ -1434,16 +1433,16 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
                 {
                     if ( !ppFDesc->getFunctionName().isEmpty() )
                     {
-                        aPayload.append("{");
-                        aPayload.append("\"index\": ");
-                        aPayload.append(static_cast<sal_Int64>(nCurIndex));
-                        aPayload.append(", ");
-                        aPayload.append("\"signature\": \"");
-                        aPayload.append(escapeJSON(ppFDesc->getSignature()));
-                        aPayload.append("\", ");
-                        aPayload.append("\"description\": \"");
-                        aPayload.append(escapeJSON(ppFDesc->getDescription()));
-                        aPayload.append("\"}, ");
+                        aPayload.append("{"
+                            "\"index\": "
+                            + OString::number(static_cast<sal_Int64>(nCurIndex))
+                            + ", "
+                            "\"signature\": \""
+                            + escapeJSON(ppFDesc->getSignature())
+                            + "\", "
+                            "\"description\": \""
+                            + escapeJSON(ppFDesc->getDescription())
+                            + "\"}, ");
                     }
                 }
                 ++nCurIndex;

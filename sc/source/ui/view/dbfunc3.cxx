@@ -1354,14 +1354,12 @@ static OUString lcl_replaceMemberNameInSubtotal(const OUString& rSubtotal, std::
         else if (c == '\\')
         {
             // Escape a backslash character.
-            aWordBuf.append(c);
-            aWordBuf.append(c);
+            aWordBuf.append(OUStringChar(c) + OUStringChar(c));
         }
         else if (c == '?')
         {
             // A literal '?' must be escaped with a backslash ('\');
-            aWordBuf.append('\\');
-            aWordBuf.append(c);
+            aWordBuf.append("\\" + OUStringChar(c));
         }
         else
             aWordBuf.append(c);

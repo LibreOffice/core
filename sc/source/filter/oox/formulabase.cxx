@@ -1565,8 +1565,7 @@ OUString FormulaProcessorBase::generateAddress2dString( const BinAddress& rAddre
 OUString FormulaProcessorBase::generateApiArray( const Matrix< Any >& rMatrix )
 {
     OSL_ENSURE( !rMatrix.empty(), "FormulaProcessorBase::generateApiArray - missing matrix values" );
-    OUStringBuffer aBuffer;
-    aBuffer.append( API_TOKEN_ARRAY_OPEN );
+    OUStringBuffer aBuffer(( OUStringChar(API_TOKEN_ARRAY_OPEN) ));
     for( size_t nRow = 0, nHeight = rMatrix.height(); nRow < nHeight; ++nRow )
     {
         if( nRow > 0 )

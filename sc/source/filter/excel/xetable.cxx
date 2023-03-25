@@ -979,10 +979,10 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
                 {
                     // calculate the cell range.
                     sFmlaCellRange.append( XclXmlUtils::ToOString(
-                                rStrm.GetRoot().GetStringBuf(), aMatScRange.aStart ).getStr());
-                    sFmlaCellRange.append(":");
+                                rStrm.GetRoot().GetStringBuf(), aMatScRange.aStart )
+                                + OString::Concat(":"));
                     sFmlaCellRange.append( XclXmlUtils::ToOString(
-                                rStrm.GetRoot().GetStringBuf(), aMatScRange.aEnd ).getStr());
+                                    rStrm.GetRoot().GetStringBuf(), aMatScRange.aEnd ));
                 }
 
                 if (    aMatScRange.aStart.Col() == GetXclPos().mnCol &&
