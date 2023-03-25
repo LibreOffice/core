@@ -775,24 +775,23 @@ SCROW ScTable::CountVisibleRows(SCROW nStartRow, SCROW nEndRow) const
     return nCount;
 }
 
-SCCOL ScTable::CountVisibleCols(SCCOL nStartCol, SCCOL nEndCol) const
+SCROW ScTable::CountHiddenRows(SCROW nStartRow, SCROW nEndRow) const
 {
-    assert(nStartCol <= nEndCol);
-    SCCOL nCount = 0;
-    SCCOL nCol = nStartCol;
-    ScFlatBoolColSegments::RangeData aData;
-    while (nCol <= nEndCol)
+    SCROW nCount = 0;
+    SCROW nRow = nStartRow;
+    ScFlatBoolRowSegments::RangeData aData;
+    while (nRow <= nEndRow)
     {
-        if (!mpHiddenCols->getRangeData(nCol, aData))
+        if (!mpHiddenRows->getRangeData(nRow, aData))
             break;
 
-        if (aData.mnCol2 > nEndCol)
-            aData.mnCol2 = nEndCol;
+        if (aData.mnRow2 > nEndRow)
+            aData.mnRow2 = nEndRow;
 
-        if (!aData.mbValue)
-            nCount += aData.mnCol2 - nCol + 1;
+        if (aData.mbValue)
+            nCount += aData.mnRow2 - nRow + 1;
 
-        nCol = aData.mnCol2 + 1;
+        nRow = aData.mnRow2 + 1;
     }
     return nCount;
 }
@@ -818,6 +817,27 @@ sal_uInt32 ScTable::GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow, bool bHidd
     }
 
     return nHeight;
+}
+
+SCCOL ScTable::CountHiddenCols(SCCOL nStartCol, SCCOL nEndCol) const
+{
+    SCCOL nCount = 0;
+    SCCOL nCol = nStartCol;
+    ScFlatBoolColSegments::RangeData aData;
+    while (nCol <= nEndCol)
+    {
+        if (!mpHiddenCols->getRangeData(nCol, aData))
+            break;
+
+        if (aData.mnCol2 > nEndCol)
+            aData.mnCol2 = nEndCol;
+
+        if (aData.mbValue)
+            nCount += aData.mnCol2 - nCol + 1;
+
+        nCol = aData.mnCol2 + 1;
+    }
+    return nCount;
 }
 
 SCCOLROW ScTable::LastHiddenColRow(SCCOLROW nPos, bool bCol) const

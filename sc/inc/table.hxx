@@ -905,8 +905,9 @@ public:
     SCROW       FirstVisibleRow(SCROW nStartRow, SCROW nEndRow) const;
     SCROW       LastVisibleRow(SCROW nStartRow, SCROW nEndRow) const;
     SCROW       CountVisibleRows(SCROW nStartRow, SCROW nEndRow) const;
-    SCCOL       CountVisibleCols(SCCOL nStartCol, SCCOL nEndCol) const;
+    SCROW       CountHiddenRows(SCROW nStartRow, SCROW nEndRow) const;
     sal_uInt32  GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZero = true) const;
+    SCCOL       CountHiddenCols(SCCOL nStartCol, SCCOL nEndCol) const;
 
     SCCOLROW    LastHiddenColRow(SCCOLROW nPos, bool bCol) const;
 
