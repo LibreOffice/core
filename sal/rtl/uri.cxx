@@ -143,7 +143,7 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
         }
         else
         {
-            OStringBuffer aBuf;
+            OStringBuffer aBuf(16);
             aBuf.append(static_cast< char >(nChar));
             rtl_TextToUnicodeConverter aConverter
                 = rtl_createTextToUnicodeConverter(eCharset);
