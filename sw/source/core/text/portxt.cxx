@@ -590,7 +590,10 @@ TextFrameIndex SwTextPortion::GetSpaceCnt(const SwTextSizeInfo &rInf,
 
     if ( InExpGrp() || PortionType::InputField == GetWhichPor() )
     {
-        if( !IsBlankPortion() && !InNumberGrp() && !IsCombinedPortion() )
+        if (OUString ExpOut;
+            (!IsBlankPortion()
+             || (GetExpText(rInf, ExpOut) && OUStringChar(CH_BLANK) == ExpOut))
+            && !InNumberGrp() && !IsCombinedPortion())
         {
             // OnWin() likes to return a blank instead of an empty string from
             // time to time. We cannot use that here at all, however.
@@ -627,7 +630,10 @@ tools::Long SwTextPortion::CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeI
 
     if ( InExpGrp() || PortionType::InputField == GetWhichPor() )
     {
-        if( !IsBlankPortion() && !InNumberGrp() && !IsCombinedPortion() )
+        if (OUString ExpOut;
+            (!IsBlankPortion()
+             || (GetExpText(rInf, ExpOut) && OUStringChar(CH_BLANK) == ExpOut))
+            && !InNumberGrp() && !IsCombinedPortion())
         {
             // OnWin() likes to return a blank instead of an empty string from
             // time to time. We cannot use that here at all, however.

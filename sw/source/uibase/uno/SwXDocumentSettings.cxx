@@ -155,7 +155,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_HYPHENATE_URLS,
     HANDLE_WORD_LIKE_WRAP_FOR_AS_CHAR_FLYS,
     HANDLE_NO_NUMBERING_SHOW_FOLLOWBY,
-    HANDLE_DROP_CAP_PUNCTUATION
+    HANDLE_DROP_CAP_PUNCTUATION,
+    HANDLE_USE_VARIABLE_WIDTH_NBSP,
 };
 
 }
@@ -258,6 +259,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { OUString("WordLikeWrapForAsCharFlys"), HANDLE_WORD_LIKE_WRAP_FOR_AS_CHAR_FLYS, cppu::UnoType<bool>::get(), 0 },
         { OUString("NoNumberingShowFollowBy"), HANDLE_NO_NUMBERING_SHOW_FOLLOWBY, cppu::UnoType<bool>::get(), 0 },
         { OUString("DropCapPunctuation"), HANDLE_DROP_CAP_PUNCTUATION, cppu::UnoType<bool>::get(), 0 },
+        { OUString("UseVariableWidthNBSP"), HANDLE_USE_VARIABLE_WIDTH_NBSP, cppu::UnoType<bool>::get(), 0 },
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -1092,6 +1094,14 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     DocumentSettingId::DROP_CAP_PUNCTUATION, bTmp);
         }
         break;
+        case HANDLE_USE_VARIABLE_WIDTH_NBSP:
+        {
+            bool bTmp;
+            if (rValue >>= bTmp)
+                mpDoc->getIDocumentSettingAccess().set(
+                    DocumentSettingId::USE_VARIABLE_WIDTH_NBSP, bTmp);
+        }
+        break;
         default:
             throw UnknownPropertyException(OUString::number(rInfo.mnHandle));
     }
@@ -1636,6 +1646,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::DROP_CAP_PUNCTUATION);
+        }
+        break;
+        case HANDLE_USE_VARIABLE_WIDTH_NBSP:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::USE_VARIABLE_WIDTH_NBSP);
         }
         break;
         default:

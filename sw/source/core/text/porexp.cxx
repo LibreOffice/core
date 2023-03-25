@@ -18,6 +18,7 @@
  */
 
 #include <viewopt.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <SwPortionHandler.hxx>
 #include "inftxt.hxx"
 #include "porexp.hxx"
@@ -204,14 +205,57 @@ bool SwBlankPortion::Format( SwTextFormatInfo &rInf )
 
 void SwBlankPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
-    if( !m_bMulti ) // No gray background for multiportion brackets
-        rInf.DrawViewOpt( *this, PortionType::Blank );
-    SwExpandPortion::Paint( rInf );
+    if (m_cChar == CHAR_HARDBLANK)
+    {
+        if (rInf.GetOpt().IsBlank())
+        {
+            // Draw background
+            rInf.DrawViewOpt(*this, PortionType::Blank);
+
+            // Draw tilde or degree sign
+            OUString aMarker = (rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess()
+                                    .get(DocumentSettingId::USE_VARIABLE_WIDTH_NBSP)
+                                  ? u"~"
+                                  : u"°");
+
+            SwPosSize aMarkerSize(rInf.GetTextSize(aMarker));
+            Point aPos(rInf.GetPos());
+
+            std::shared_ptr<SwRect> pPortionRect = std::make_shared<SwRect>();
+            rInf.CalcRect(*this, pPortionRect.get());
+            aPos.AdjustX((pPortionRect->Width() / 2) - (aMarkerSize.Width() / 2));
+
+            SwTextPaintInfo aInf(rInf, &aMarker);
+            aInf.SetPos(aPos);
+            SwTextPortion aMarkerPor;
+            aMarkerPor.Width(aMarkerSize.Width());
+            aMarkerPor.Height(aMarkerSize.Height());
+            aMarkerPor.SetAscent(GetAscent());
+
+            Color colorBackup = aInf.GetFont()->GetColor();
+            aInf.GetFont()->SetColor(NON_PRINTING_CHARACTER_COLOR);
+            aInf.DrawText(aMarkerPor, TextFrameIndex(aMarker.getLength()), true);
+            aInf.GetFont()->SetColor(colorBackup);
+        }
+    }
+    else
+    {
+        if (!m_bMulti) // No gray background for multiportion brackets
+            rInf.DrawViewOpt(*this, PortionType::Blank);
+
+        SwExpandPortion::Paint(rInf);
+    }
 }
 
-bool SwBlankPortion::GetExpText( const SwTextSizeInfo&, OUString &rText ) const
+bool SwBlankPortion::GetExpText( const SwTextSizeInfo& rInf, OUString &rText ) const
 {
-    rText = OUString(m_cChar);
+    if (m_cChar == CHAR_HARDBLANK
+        && rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+            DocumentSettingId::USE_VARIABLE_WIDTH_NBSP))
+        rText = OUString(CH_BLANK);
+    else
+        rText = OUString(m_cChar);
+
     return true;
 }
 

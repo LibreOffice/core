@@ -179,6 +179,7 @@ class DocumentSettingManager final :
     bool mbWrapAsCharFlysLikeInOOXML;
     bool mbNoNumberingShowFollowBy;
     bool mbDropCapPunctuation; // tdf#150200, tdf#150438
+    bool mbUseVariableWidthNBSP : 1; // tdf#41652
 
 public:
 

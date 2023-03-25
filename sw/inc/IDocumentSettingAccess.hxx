@@ -126,7 +126,9 @@ enum class DocumentSettingId
     NO_NUMBERING_SHOW_FOLLOWBY,
     // drop cap punctuation: smaller dashes, bullet, asterisks, quotation marks etc.
     // by extending the rounding box of the glyph to the baseline
-    DROP_CAP_PUNCTUATION
+    DROP_CAP_PUNCTUATION,
+    // render NBSP as standard-space-width (prettier when justified)
+    USE_VARIABLE_WIDTH_NBSP,
 };
 
 /** Provides access to settings of a document

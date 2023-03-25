@@ -64,6 +64,7 @@ SvtCompatibilityEntry::SvtCompatibilityEntry()
     setValue<bool>( Index::SubtractFlysAnchoredAtFlys, false );
     setValue<bool>( Index::EmptyDbFieldHidesPara, true );
     setValue<bool>( Index::AddTableLineSpacing, false );
+    setValue<bool>( Index::UseVariableWidthNBSP, false );
 }
 
 OUString SvtCompatibilityEntry::getName( const Index rIdx )
@@ -89,7 +90,9 @@ OUString SvtCompatibilityEntry::getName( const Index rIdx )
         "MsWordCompTrailingBlanks",
         "SubtractFlysAnchoredAtFlys",
         "EmptyDbFieldHidesPara",
-        "AddTableLineSpacing",
+        "UseVariableWidthNBSP",
+
+        "AddTableLineSpacing" // Must be the last one
     };
 
     /* Size of sPropertyName array not equal size of the SvtCompatibilityEntry::Index enum class */

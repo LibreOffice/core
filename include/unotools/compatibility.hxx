@@ -60,6 +60,8 @@ class SvtCompatibilityEntry
             MsWordTrailingBlanks,
             SubtractFlysAnchoredAtFlys,
             EmptyDbFieldHidesPara,
+            UseVariableWidthNBSP,
+
             /// special entry: optcomp.cxx converts the other values to
             /// integers but not this one because it doesn't have its own
             /// checkbox, so keep it at the end!
