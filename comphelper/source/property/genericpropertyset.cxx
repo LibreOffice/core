@@ -152,7 +152,6 @@ void GenericPropertySet::_setPropertyValues( const PropertyMapEntry** ppEntries,
             aEvt.PropertyName = (*ppEntries)->maName;
             aEvt.NewValue = *pValues;
             pHelper->notifyEach( aGuard, &XPropertyChangeListener::propertyChange, aEvt );
-            aGuard.lock();
         }
 
         ppEntries++;
