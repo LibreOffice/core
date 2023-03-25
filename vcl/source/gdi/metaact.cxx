@@ -2213,6 +2213,9 @@ MetaHatchAction::MetaHatchAction( const tools::PolyPolygon& rPolyPoly, const Hat
 
 void MetaHatchAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(pOut->LogicToPixel(maPolyPoly.GetBoundRect())))
+        return;
+
     pOut->DrawHatch( maPolyPoly, maHatch );
 }
 
