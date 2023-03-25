@@ -818,6 +818,11 @@ rtl::Reference<MetaAction> SvmReader::TextLineHandler()
     mrStream.ReadInt32(nTempWidth);
 
     pAction->SetStartPoint(aPos);
+    if (nTempWidth < 0)
+    {
+        SAL_WARN("vcl.gdi", "negative width");
+        nTempWidth = 0;
+    }
     pAction->SetWidth(nTempWidth);
 
     sal_uInt32 nTempStrikeout(0);
