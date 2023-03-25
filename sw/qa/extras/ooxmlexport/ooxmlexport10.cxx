@@ -1170,6 +1170,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95775, "tdf95775.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf92157, "tdf92157.docx")
 {
     // A graphic with dimensions 0,0 should not fail on load
+
+    // Additionally, the bookmark names should not change (they got a "1" appended when copied)
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xBookmarksByName = xBookmarksSupplier->getBookmarks();
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName("referentiegegevens"));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName("referentiegegevens_bk"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf97417, "section_break_numbering.docx")
