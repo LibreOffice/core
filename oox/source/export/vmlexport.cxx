@@ -1080,8 +1080,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                 if ( opt.nProp.size() )
                 {
                     const sal_uInt8 *pIt = opt.nProp.data();
-                    OStringBuffer buf;
-                    buf.append( "    ( " );
+                    OStringBuffer buf( "    ( " );
                     for ( int nCount = opt.nProp.size(); nCount; --nCount )
                     {
                         buf.append( OString::number(static_cast<sal_Int32>(*pIt), 16) + " ");

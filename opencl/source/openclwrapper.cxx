@@ -77,12 +77,11 @@ OString generateMD5(const void* pData, size_t length)
             pBuffer, RTL_DIGEST_LENGTH_MD5);
     SAL_WARN_IF(aError != rtl_Digest_E_None, "opencl", "md5 generation failed");
 
-    OStringBuffer aBuffer;
+    OStringBuffer aBuffer(length * 2);
     const char* const pString = "0123456789ABCDEF";
     for(sal_uInt8 val : pBuffer)
     {
-        aBuffer.append(pString[val/16]);
-        aBuffer.append(pString[val%16]);
+        aBuffer.append(OStringChar(pString[val/16]) + OStringChar(pString[val%16]));
     }
     return aBuffer.makeStringAndClear();
 }
