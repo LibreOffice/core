@@ -221,12 +221,12 @@
 #define STR_POOLNUMRULE_BUL1                    NC_("STR_POOLNUMRULE_BUL1", "Bullet •")
 //Bullet \u2013
 #define STR_POOLNUMRULE_BUL2                    NC_("STR_POOLNUMRULE_BUL2", "Bullet –")
-//Bullet \uE4C4
-#define STR_POOLNUMRULE_BUL3                    NC_("STR_POOLNUMRULE_BUL3", "Bullet ")
-//Bullet \uE49E
-#define STR_POOLNUMRULE_BUL4                    NC_("STR_POOLNUMRULE_BUL4", "Bullet ")
-//Bullet \uE20B
-#define STR_POOLNUMRULE_BUL5                    NC_("STR_POOLNUMRULE_BUL5", "Bullet ")
+//Bullet \u2611
+#define STR_POOLNUMRULE_BUL3                    NC_("STR_POOLNUMRULE_BUL3", "Bullet ☑")
+//Bullet \u27A2
+#define STR_POOLNUMRULE_BUL4                    NC_("STR_POOLNUMRULE_BUL4", "Bullet ➢")
+//Bullet \u2717
+#define STR_POOLNUMRULE_BUL5                    NC_("STR_POOLNUMRULE_BUL5", "Bullet ✗")
 #define STR_COLUMN_VALUESET_ITEM0               NC_("STR_COLUMN_VALUESET_ITEM0", "1 column")
 #define STR_COLUMN_VALUESET_ITEM1               NC_("STR_COLUMN_VALUESET_ITEM1", "2 columns with equal size")
 #define STR_COLUMN_VALUESET_ITEM2               NC_("STR_COLUMN_VALUESET_ITEM2", "3 columns with equal size")
