@@ -232,7 +232,7 @@ namespace
 namespace sw
 {
     // TODO: use SaveBookmark (from DelBookmarks)
-    void CopyBookmarks(const SwPaM& rPam, const SwPosition& rCpyPam)
+    void CopyBookmarks(const SwPaM& rPam, const SwPosition& rCpyPam, SwCopyFlags flags)
     {
         const SwDoc& rSrcDoc = rPam.GetDoc();
         SwDoc& rDestDoc =  rCpyPam.GetDoc();
@@ -295,9 +295,19 @@ namespace sw
                 lcl_SetCpyPos(pMark->GetOtherMarkPos(), rStt, *pCpyStt, *aTmpPam.GetMark(), nDelCount);
             }
 
+            OUString sRequestedName = pMark->GetName();
+            if (flags & SwCopyFlags::IsMoveToFly)
+            {
+                assert(&rSrcDoc == &rDestDoc);
+                // Ensure the name can be given to NewMark, since this is ultimately a move
+                auto pSoonToBeDeletedMark = const_cast<sw::mark::IMark*>(pMark);
+                rDestDoc.getIDocumentMarkAccess()->renameMark(pSoonToBeDeletedMark,
+                                                              sRequestedName + "COPY_IS_MOVE");
+            }
+
             ::sw::mark::IMark* const pNewMark = rDestDoc.getIDocumentMarkAccess()->makeMark(
                 aTmpPam,
-                pMark->GetName(),
+                sRequestedName,
                 IDocumentMarkAccess::GetType(*pMark),
                 ::sw::mark::InsertMode::CopyText);
             // Explicitly try to get exactly the same name as in the source
@@ -308,7 +318,7 @@ namespace sw
                     || IDocumentMarkAccess::GetType(*pMark) == IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
                 continue; // can't insert duplicate cross reference mark
             }
-            rDestDoc.getIDocumentMarkAccess()->renameMark(pNewMark, pMark->GetName());
+            rDestDoc.getIDocumentMarkAccess()->renameMark(pNewMark, sRequestedName);
 
             // copying additional attributes for bookmarks or fieldmarks
             ::sw::mark::IBookmark* const pNewBookmark =
@@ -3664,7 +3674,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
             targetPos = pCopiedPaM->second;
         }
 
-        sw::CopyBookmarks(pCopiedPaM ? pCopiedPaM->first : aRgTmp, targetPos);
+        sw::CopyBookmarks(pCopiedPaM ? pCopiedPaM->first : aRgTmp, targetPos, flags);
     }
 
     if (rRg.aStart != rRg.aEnd)

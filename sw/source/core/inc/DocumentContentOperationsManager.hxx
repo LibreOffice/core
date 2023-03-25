@@ -179,7 +179,8 @@ private:
 };
 
 
-void CopyBookmarks(const SwPaM& rPam, const SwPosition& rTarget);
+void CopyBookmarks(const SwPaM& rPam, const SwPosition& rTarget,
+                   SwCopyFlags flags = SwCopyFlags::Default);
 
 void CalcBreaks(std::vector<std::pair<SwNodeOffset, sal_Int32>> & rBreaks,
         SwPaM const & rPam, bool const isOnlyFieldmarks = false);
