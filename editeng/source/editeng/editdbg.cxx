@@ -58,241 +58,253 @@
 
 #if defined( DBG_UTIL ) || ( OSL_DEBUG_LEVEL > 1 )
 
+namespace
+{
+struct DebOutBuffer
+{
+    OStringBuffer str;
+    void append(std::string_view descr, const SfxEnumItemInterface& rItem)
+    {
+        str.append(descr + OString::number(rItem.GetEnumValue()));
+    }
+    void append(std::string_view descr, const SvxLRSpaceItem& rItem)
+    {
+        str.append(OString::Concat(descr) + "FI=" + OString::number(rItem.GetTextFirstLineOffset())
+                   + ", LI=" + OString::number(rItem.GetTextLeft())
+                   + ", RI=" + OString::number(rItem.GetRight()));
+    }
+    void append(std::string_view descr, const SvxNumBulletItem& rItem)
+    {
+        str.append(descr);
+        for (sal_uInt16 nLevel = 0; nLevel < 3; nLevel++)
+        {
+            str.append("Level" + OString::number(nLevel) + "=");
+            const SvxNumberFormat* pFmt = rItem.GetNumRule().Get(nLevel);
+            if (pFmt)
+            {
+                str.append("(" + OString::number(pFmt->GetFirstLineOffset()) + ","
+                           + OString::number(pFmt->GetAbsLSpace()) + ",");
+                if (pFmt->GetNumberingType() == SVX_NUM_BITMAP)
+                    str.append("Bitmap");
+                else if (pFmt->GetNumberingType() != SVX_NUM_CHAR_SPECIAL)
+                    str.append("Number");
+                else
+                {
+                    str.append("Char=[" + OString::number(pFmt->GetBulletChar()) + "]");
+                }
+                str.append(") ");
+            }
+        }
+    }
+    void append(std::string_view descr, const SfxBoolItem& rItem)
+    {
+        str.append(descr + OString::number(static_cast<int>(rItem.GetValue())));
+    }
+    void append(std::string_view descr, const SfxInt16Item& rItem)
+    {
+        str.append(descr + OString::number(rItem.GetValue()));
+    }
+    void append(std::string_view descr, const SfxUInt16Item& rItem)
+    {
+        str.append(descr + OString::number(rItem.GetValue()));
+    }
+    void append(const SvxULSpaceItem& rItem)
+    {
+        str.append("SB=" + OString::number(rItem.GetUpper())
+                   + ", SA=" + OString::number(rItem.GetLower()));
+    }
+    void append(std::string_view descr, const SvxLineSpacingItem& rItem)
+    {
+        str.append(descr);
+        if (rItem.GetLineSpaceRule() == SvxLineSpaceRule::Min)
+        {
+            str.append("Min: " + OString::number(rItem.GetInterLineSpace()));
+        }
+        else if (rItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop)
+        {
+            str.append("Prop: " + OString::number(rItem.GetPropLineSpace()));
+        }
+        else
+            str.append("Unsupported Type!");
+    }
+    void append(const SvxTabStopItem& rTabs)
+    {
+        str.append("Tabs: " + OString::number(rTabs.Count()));
+        if (rTabs.Count())
+        {
+            str.append("( ");
+            for (sal_uInt16 i = 0; i < rTabs.Count(); ++i)
+            {
+                const SvxTabStop& rTab = rTabs[i];
+                str.append(OString::number(rTab.GetTabPos()) + " ");
+            }
+            str.append(')');
+        }
+    }
+    void append(std::string_view descr, const SvxColorItem& rItem)
+    {
+        Color aColor(rItem.GetValue());
+        str.append(descr + OString::number(aColor.GetRed()) + ", "
+                   + OString::number(aColor.GetGreen()) + ", " + OString::number(aColor.GetBlue()));
+    }
+    void append(std::string_view descr, const SvxFontItem& rItem)
+    {
+        str.append(descr + OUStringToOString(rItem.GetFamilyName(), RTL_TEXTENCODING_ASCII_US)
+                   + " (CharSet: " + OString::number(rItem.GetCharSet()) + ")");
+    }
+    void append(std::string_view descr, const SvxEscapementItem& rItem)
+    {
+        str.append(descr + OString::number(rItem.GetEsc()) + ", "
+                   + OString::number(rItem.GetProportionalHeight()));
+    }
+    void appendHeightAndPts(std::string_view descr, tools::Long h, MapUnit eUnit)
+    {
+        MapMode aItemMapMode(eUnit);
+        MapMode aPntMap(MapUnit::MapPoint);
+        Size aSz = OutputDevice::LogicToLogic(Size(0, h), aItemMapMode, aPntMap);
+        str.append(descr + OString::number(h) + " Points=" + OString::number(aSz.Height()));
+    }
+    void append(std::string_view descr, const SvxFontHeightItem& rItem, const SfxItemPool& rPool)
+    {
+        appendHeightAndPts(descr, rItem.GetHeight(), rPool.GetMetric(rItem.Which()));
+    }
+    void append(std::string_view descr, const SvxKerningItem& rItem, const SfxItemPool& rPool)
+    {
+        appendHeightAndPts(descr, rItem.GetValue(), rPool.GetMetric(rItem.Which()));
+    }
+};
+}
+
 static OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
 {
-    OStringBuffer aDebStr;
+    DebOutBuffer buffer;
     switch ( rItem.Which() )
     {
         case EE_PARA_WRITINGDIR:
-            aDebStr.append("WritingDir="
-                + OString::number(static_cast<sal_Int32>(static_cast<const SvxFrameDirectionItem&>(rItem).GetValue())));
+            buffer.append("WritingDir=", rItem.StaticWhichCast(EE_PARA_WRITINGDIR));
         break;
         case EE_PARA_OUTLLRSPACE:
+            buffer.append("Outline ", rItem.StaticWhichCast(EE_PARA_OUTLLRSPACE));
+        break;
         case EE_PARA_LRSPACE:
-            aDebStr.append("FI="
-            + OString::number(static_cast<sal_Int32>(static_cast<const SvxLRSpaceItem&>(rItem).GetTextFirstLineOffset()))
-            + ", LI="
-            + OString::number(static_cast<sal_Int32>(static_cast<const SvxLRSpaceItem&>(rItem).GetTextLeft()))
-            + ", RI="
-            + OString::number(static_cast<sal_Int32>(static_cast<const SvxLRSpaceItem&>(rItem).GetRight())));
+            buffer.append("", rItem.StaticWhichCast(EE_PARA_LRSPACE));
         break;
         case EE_PARA_NUMBULLET:
-            aDebStr.append("NumItem ");
-            for ( sal_uInt16 nLevel = 0; nLevel < 3; nLevel++ )
-            {
-                aDebStr.append("Level"
-                    + OString::number(static_cast<sal_Int32>(nLevel))
-                    + "=");
-                const SvxNumberFormat* pFmt = static_cast<const SvxNumBulletItem&>(rItem).GetNumRule().Get( nLevel );
-                if ( pFmt )
-                {
-                    aDebStr.append("("
-                        + OString::number(pFmt->GetFirstLineOffset())
-                        + ","
-                        + OString::number(pFmt->GetAbsLSpace())
-                        + ",");
-                    if ( pFmt->GetNumberingType() == SVX_NUM_BITMAP )
-                        aDebStr.append("Bitmap");
-                    else if( pFmt->GetNumberingType() != SVX_NUM_CHAR_SPECIAL )
-                        aDebStr.append("Number");
-                    else
-                    {
-                        aDebStr.append("Char=["
-                            + OString::number(static_cast<sal_Int32>(pFmt->GetBulletChar()))
-                            + "]");
-                    }
-                    aDebStr.append(") ");
-                }
-            }
+            buffer.append("NumItem ", rItem.StaticWhichCast(EE_PARA_NUMBULLET));
         break;
         case EE_PARA_BULLETSTATE:
-            aDebStr.append("ShowBullet="
-                + OString::number(static_cast<sal_Int32>(static_cast<const SfxBoolItem&>(rItem).GetValue())));
+            buffer.append("ShowBullet=", rItem.StaticWhichCast(EE_PARA_BULLETSTATE));
         break;
         case EE_PARA_HYPHENATE:
-            aDebStr.append("Hyphenate="
-                + OString::number(static_cast<sal_Int32>(static_cast<const SfxBoolItem&>(rItem).GetValue())));
+            buffer.append("Hyphenate=", rItem.StaticWhichCast(EE_PARA_HYPHENATE));
         break;
         case EE_PARA_OUTLLEVEL:
-            aDebStr.append("Level="
-                + OString::number(static_cast<sal_Int32>(static_cast<const SfxInt16Item&>(rItem).GetValue())));
+            buffer.append("Level=", rItem.StaticWhichCast(EE_PARA_OUTLLEVEL));
         break;
         case EE_PARA_ULSPACE:
-            aDebStr.append("SB="
-                + OString::number(static_cast<sal_Int32>(static_cast<const SvxULSpaceItem&>(rItem).GetUpper()))
-                + ", SA="
-                + OString::number(static_cast<sal_Int32>(static_cast<const SvxULSpaceItem&>(rItem).GetLower())));
+            buffer.append(rItem.StaticWhichCast(EE_PARA_ULSPACE));
         break;
         case EE_PARA_SBL:
-            aDebStr.append("SBL=");
-            if ( static_cast<const SvxLineSpacingItem&>(rItem).GetLineSpaceRule() == SvxLineSpaceRule::Min )
-            {
-                aDebStr.append("Min: "
-                    + OString::number(static_cast<sal_Int32>(static_cast<const SvxLineSpacingItem&>(rItem).GetInterLineSpace())));
-            }
-            else if ( static_cast<const SvxLineSpacingItem&>(rItem).GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop )
-            {
-                aDebStr.append("Prop: "
-                    + OString::number(static_cast<sal_Int32>(static_cast<const SvxLineSpacingItem&>(rItem).GetPropLineSpace())));
-            }
-            else
-                aDebStr.append("Unsupported Type!");
+            buffer.append("SBL=", rItem.StaticWhichCast(EE_PARA_SBL));
         break;
         case EE_PARA_JUST:
-            aDebStr.append("SvxAdust="
-                + OString::number(static_cast<sal_Int32>(static_cast<const SvxAdjustItem&>(rItem).GetAdjust())));
+            buffer.append("SvxAdust=", rItem.StaticWhichCast(EE_PARA_JUST));
         break;
         case EE_PARA_TABS:
-        {
-            aDebStr.append("Tabs: ");
-            const SvxTabStopItem& rTabs = static_cast<const SvxTabStopItem&>(rItem);
-            aDebStr.append(static_cast<sal_Int32>(rTabs.Count()));
-            if ( rTabs.Count() )
-            {
-                aDebStr.append("( ");
-                for (sal_uInt16 i = 0; i < rTabs.Count(); ++i)
-                {
-                    const SvxTabStop& rTab = rTabs[i];
-                    aDebStr.append(OString::number(rTab.GetTabPos()) + " ");
-                }
-                aDebStr.append(')');
-            }
-        }
+            buffer.append(rItem.StaticWhichCast(EE_PARA_TABS));
         break;
         case EE_CHAR_LANGUAGE:
+            buffer.append("Language=", rItem.StaticWhichCast(EE_CHAR_LANGUAGE));
+        break;
         case EE_CHAR_LANGUAGE_CJK:
+            buffer.append("LanguageCJK=", rItem.StaticWhichCast(EE_CHAR_LANGUAGE_CJK));
+        break;
         case EE_CHAR_LANGUAGE_CTL:
-            aDebStr.append("Language=");
-            aDebStr.append(static_cast<sal_Int32>(static_cast<sal_uInt16>(static_cast<const SvxLanguageItem&>(rItem).GetLanguage())));
+            buffer.append("LanguageCTL=", rItem.StaticWhichCast(EE_CHAR_LANGUAGE_CTL));
         break;
         case EE_CHAR_COLOR:
-        {
-            aDebStr.append("Color= ");
-            Color aColor( static_cast<const SvxColorItem&>(rItem).GetValue() );
-            aDebStr.append(
-                OString::number(static_cast<sal_Int32>(aColor.GetRed()))
-                + ", "
-                + OString::number(static_cast<sal_Int32>(aColor.GetGreen()))
-                + ", "
-                + OString::number(static_cast<sal_Int32>(aColor.GetBlue())));
-        }
+            buffer.append("Color= ", rItem.StaticWhichCast(EE_CHAR_COLOR));
         break;
         case EE_CHAR_BKGCOLOR:
-        {
-            aDebStr.append("FillColor= ");
-            Color aColor( static_cast<const SvxColorItem&>(rItem).GetValue() );
-            aDebStr.append(
-                OString::number(static_cast<sal_Int32>(aColor.GetRed()))
-                + ", "
-                + OString::number(static_cast<sal_Int32>(aColor.GetGreen()))
-                + ", "
-                + OString::number(static_cast<sal_Int32>(aColor.GetBlue())));
-        }
+            buffer.append("FillColor= ", rItem.StaticWhichCast(EE_CHAR_BKGCOLOR));
         break;
         case EE_CHAR_FONTINFO:
+            buffer.append("Font=", rItem.StaticWhichCast(EE_CHAR_FONTINFO));
+        break;
         case EE_CHAR_FONTINFO_CJK:
+            buffer.append("FontCJK=", rItem.StaticWhichCast(EE_CHAR_FONTINFO_CJK));
+        break;
         case EE_CHAR_FONTINFO_CTL:
-        {
-            aDebStr.append("Font="
-                + OUStringToOString(static_cast<const SvxFontItem&>(rItem).GetFamilyName(), RTL_TEXTENCODING_ASCII_US)
-                + " (CharSet: "
-                + OString::number(static_cast<sal_Int32>(static_cast<const SvxFontItem&>(rItem).GetCharSet()))
-                + ")");
-        }
+            buffer.append("FontCTL=", rItem.StaticWhichCast(EE_CHAR_FONTINFO_CTL));
         break;
         case EE_CHAR_FONTHEIGHT:
+            buffer.append("Size=", rItem.StaticWhichCast(EE_CHAR_FONTHEIGHT), rPool);
+        break;
         case EE_CHAR_FONTHEIGHT_CJK:
+            buffer.append("SizeCJK=", rItem.StaticWhichCast(EE_CHAR_FONTHEIGHT_CJK), rPool);
+        break;
         case EE_CHAR_FONTHEIGHT_CTL:
-        {
-            aDebStr.append("Groesse="
-                + OString::number(static_cast<sal_Int32>(static_cast<const SvxFontHeightItem&>(rItem).GetHeight())));
-            Size aSz( 0, static_cast<const SvxFontHeightItem&>(rItem).GetHeight() );
-            MapUnit eUnit = rPool.GetMetric( rItem.Which() );
-            MapMode aItemMapMode(eUnit);
-            MapMode aPntMap( MapUnit::MapPoint );
-            aSz = OutputDevice::LogicToLogic( aSz, aItemMapMode, aPntMap );
-            aDebStr.append(" Points="
-                + OString::number(static_cast<sal_Int32>(aSz.Height())));
-        }
+            buffer.append("SizeCTL=", rItem.StaticWhichCast(EE_CHAR_FONTHEIGHT_CTL), rPool);
         break;
         case EE_CHAR_FONTWIDTH:
-        {
-            aDebStr.append("Breite="
-                + OString::number(static_cast<sal_Int32>(static_cast<const SvxCharScaleWidthItem&>(rItem).GetValue()))
-                + "%");
-        }
+            buffer.append("Width=", rItem.StaticWhichCast(EE_CHAR_FONTWIDTH));
         break;
         case EE_CHAR_WEIGHT:
+            buffer.append("FontWeight=", rItem.StaticWhichCast(EE_CHAR_WEIGHT));
+        break;
         case EE_CHAR_WEIGHT_CJK:
+            buffer.append("FontWeightCJK=", rItem.StaticWhichCast(EE_CHAR_WEIGHT_CJK));
+        break;
         case EE_CHAR_WEIGHT_CTL:
-            aDebStr.append("FontWeight=");
-            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxWeightItem&>(rItem).GetWeight()));
+            buffer.append("FontWeightCTL=", rItem.StaticWhichCast(EE_CHAR_WEIGHT_CTL));
         break;
         case EE_CHAR_UNDERLINE:
-            aDebStr.append("FontUnderline="
-                + OString::number(static_cast<sal_Int32>(static_cast<const SvxUnderlineItem&>(rItem).GetLineStyle())));
+            buffer.append("FontUnderline=", rItem.StaticWhichCast(EE_CHAR_UNDERLINE));
         break;
         case EE_CHAR_OVERLINE:
-            aDebStr.append("FontOverline="
-                + OString::number(static_cast<sal_Int32>(static_cast<const SvxOverlineItem&>(rItem).GetLineStyle())));
+            buffer.append("FontOverline=", rItem.StaticWhichCast(EE_CHAR_OVERLINE));
         break;
         case EE_CHAR_EMPHASISMARK:
-            aDebStr.append("FontUnderline="
-                + OString::number(static_cast<sal_Int32>(static_cast<const SvxEmphasisMarkItem&>(rItem).GetEmphasisMark())));
+            buffer.append("FontEmphasisMark=", rItem.StaticWhichCast(EE_CHAR_EMPHASISMARK));
         break;
         case EE_CHAR_RELIEF:
-            aDebStr.append("FontRelief="
-                + OString::number(static_cast<sal_Int32>(static_cast<const SvxCharReliefItem&>(rItem).GetValue())));
+            buffer.append("FontRelief=", rItem.StaticWhichCast(EE_CHAR_RELIEF));
         break;
         case EE_CHAR_STRIKEOUT:
-            aDebStr.append("FontStrikeout="
-                + OString::number(static_cast<sal_Int32>(static_cast<const SvxCrossedOutItem&>(rItem).GetStrikeout())));
+            buffer.append("FontStrikeout=", rItem.StaticWhichCast(EE_CHAR_STRIKEOUT));
         break;
         case EE_CHAR_ITALIC:
+            buffer.append("FontPosture=", rItem.StaticWhichCast(EE_CHAR_ITALIC));
+        break;
         case EE_CHAR_ITALIC_CJK:
+            buffer.append("FontPostureCJK=", rItem.StaticWhichCast(EE_CHAR_ITALIC_CJK));
+        break;
         case EE_CHAR_ITALIC_CTL:
-            aDebStr.append("FontPosture="
-                + OString::number(static_cast<sal_Int32>(static_cast<const SvxPostureItem&>(rItem).GetPosture())));
+            buffer.append("FontPostureCTL=", rItem.StaticWhichCast(EE_CHAR_ITALIC_CTL));
         break;
         case EE_CHAR_OUTLINE:
-            aDebStr.append("FontOutline="
-                + OString::number(static_cast<sal_Int32>(static_cast<const SvxContourItem&>(rItem).GetValue())));
+            buffer.append("FontOutline=", rItem.StaticWhichCast(EE_CHAR_OUTLINE));
         break;
         case EE_CHAR_SHADOW:
-            aDebStr.append("FontShadowed="
-            + OString::number(static_cast<sal_Int32>(static_cast<const SvxShadowedItem&>(rItem).GetValue())));
+            buffer.append("FontShadowed=", rItem.StaticWhichCast(EE_CHAR_SHADOW));
         break;
         case EE_CHAR_ESCAPEMENT:
-            aDebStr.append("Escape="
-            + OString::number(static_cast<sal_Int32>(static_cast<const SvxEscapementItem&>(rItem).GetEsc()))
-            + ", "
-            + OString::number(static_cast<sal_Int32>(static_cast<const SvxEscapementItem&>(rItem).GetProportionalHeight())));
+            buffer.append("Escape=", rItem.StaticWhichCast(EE_CHAR_ESCAPEMENT));
         break;
         case EE_CHAR_PAIRKERNING:
-            aDebStr.append("PairKerning="
-                + OString::number(static_cast<sal_Int32>(static_cast<const SvxAutoKernItem&>(rItem).GetValue())));
+            buffer.append("PairKerning=", rItem.StaticWhichCast(EE_CHAR_PAIRKERNING));
         break;
         case EE_CHAR_KERNING:
-        {
-            aDebStr.append("Kerning="
-                + OString::number(static_cast<sal_Int32>(static_cast<const SvxKerningItem&>(rItem).GetValue())));
-            Size aSz( 0, static_cast<short>(static_cast<const SvxKerningItem&>(rItem).GetValue()) );
-            MapUnit eUnit = rPool.GetMetric( rItem.Which() );
-            MapMode aItemMapMode(eUnit);
-            MapMode aPntMap( MapUnit::MapPoint );
-            aSz = OutputDevice::LogicToLogic( aSz, aItemMapMode, aPntMap );
-            aDebStr.append(" Points=" + OString::number(static_cast<sal_Int32>(aSz.Height())));
-        }
+            buffer.append("Kerning=", rItem.StaticWhichCast(EE_CHAR_KERNING), rPool);
         break;
         case EE_CHAR_WLM:
-            aDebStr.append("WordLineMode="
-                + OString::number(static_cast<sal_Int32>(static_cast<const SvxWordLineModeItem&>(rItem).GetValue())));
+            buffer.append("WordLineMode=", rItem.StaticWhichCast(EE_CHAR_WLM));
         break;
         case EE_CHAR_XMLATTRIBS:
-            aDebStr.append("XMLAttribs=...");
+            buffer.str.append("XMLAttribs=...");
         break;
     }
-    return aDebStr.makeStringAndClear();
+    return buffer.str.makeStringAndClear();
 }
 
 static void DbgOutItemSet(FILE* fp, const SfxItemSet& rSet, bool bSearchInParent, bool bShowALL)
@@ -355,7 +367,7 @@ void EditEngine::DumpData(const EditEngine* pEE, bool bInfoBox)
                 "\nA"
                 + OString::number(nPortion)
                 + ":  "
-                + OString::number(static_cast<sal_Int32>(rAttr->GetItem()->Which()))
+                + OString::number(rAttr->GetItem()->Which())
                 + "\t"
                 + OString::number(rAttr->GetStart())
                 + "\t"
@@ -387,7 +399,7 @@ void EditEngine::DumpData(const EditEngine* pEE, bool bInfoBox)
             aPortionStr.append(" "
                 + OString::number(rPortion.GetLen())
                 + "("
-                + OString::number(static_cast<sal_Int32>(rPortion.GetSize().Width()))
+                + OString::number(rPortion.GetSize().Width())
                 + ")"
                 "["
                 + OString::number(static_cast<sal_Int32>(rPortion.GetKind()))
