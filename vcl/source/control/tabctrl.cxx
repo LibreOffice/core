@@ -2312,6 +2312,11 @@ void NotebookbarTabControlBase::SetContext( vcl::EnumContext::Context eContext )
     if (!bHandled)
         bLastContextWasSupported = false;
     eLastContext = eContext;
+
+    // tdf#152908 Tabbed compact toolbar does not repaint itself when tabs getting removed
+    // For unknown reason this is needed by the tabbed compact toolbar for other than gtk
+    // vcl backends.
+    Resize();
 }
 
 void NotebookbarTabControlBase::dispose()
