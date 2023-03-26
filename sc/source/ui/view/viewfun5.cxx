@@ -565,18 +565,15 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             MakeDrawLayer();    // before loading model, so 3D factory has been created
 
             ScDocShellRef aDragShellRef( new ScDocShell );
+            aDragShellRef->MakeDrawLayer();
             aDragShellRef->DoInitNew();
 
-            std::unique_ptr<FmFormModel> pModel(
-                new FmFormModel(
-                    nullptr,
-                    aDragShellRef.get()));
+            ScDrawLayer* pModel = aDragShellRef->GetDocument().GetDrawLayer();
 
-            pModel->GetItemPool().FreezeIdRanges();
             xStm->Seek(0);
 
             css::uno::Reference< css::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
-            SvxDrawingLayerImport( pModel.get(), xInputStream );
+            SvxDrawingLayerImport( pModel, xInputStream );
 
             // set everything to right layer:
             size_t nObjCount = 0;
@@ -598,8 +595,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                 nObjCount += pPage->GetObjCount();          // count group object only once
             }
 
-            PasteDraw(aPos, pModel.get(), (nObjCount > 1), u"A", u"B");     // grouped if more than 1 object
-            pModel.reset();
+            PasteDraw(aPos, pModel, (nObjCount > 1), u"A", u"B");     // grouped if more than 1 object
             aDragShellRef->DoClose();
             bRet = true;
         }

@@ -47,6 +47,7 @@
 #include <docsh.hxx>
 #include <dragdata.hxx>
 #include <gridwin.hxx>
+#include <stlpool.hxx>
 
 bool bPasteIsMove = false;
 
@@ -213,10 +214,15 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
             ScChartHelper::GetChartNames( aExcludedChartNames, pPage );
         }
 
-        // #89247# Set flag for ScDocument::UpdateChartListeners() which is
-        // called during paste.
         if ( !bSameDocClipboard )
+        {
+            auto pPool = static_cast<ScStyleSheetPool*>(pScDrawView->GetModel().GetStyleSheetPool());
+            pPool->CopyUsedGraphicStylesFrom(pModel->GetStyleSheetPool());
+
+            // #89247# Set flag for ScDocument::UpdateChartListeners() which is
+            // called during paste.
             GetViewData().GetDocument().SetPastingDrawFromOtherDoc( true );
+        }
 
         pScDrawView->Paste(*pModel, aPos, nullptr, nOptions);
 

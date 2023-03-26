@@ -45,8 +45,10 @@ public:
     void                CreateStandardStyles();
     void                CopyStdStylesFrom( ScStyleSheetPool* pSrcPool );
 
-    void                CopyStyleFrom( ScStyleSheetPool* pSrcPool,
-                                       const OUString& rName, SfxStyleFamily eFamily );
+    void                CopyUsedGraphicStylesFrom( SfxStyleSheetBasePool* pSrcPool );
+    void                CopyStyleFrom( SfxStyleSheetBasePool* pSrcPool,
+                                       const OUString& rName, SfxStyleFamily eFamily,
+                                       bool bNewStyleHierarchy = false );
 
     bool                HasStandardStyles() const { return bHasStandardStyles; }
 

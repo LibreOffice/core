@@ -54,6 +54,9 @@
 #include <viewdata.hxx>
 #include <scmod.hxx>
 #include <dragdata.hxx>
+#include <stlpool.hxx>
+#include <scresid.hxx>
+#include <globstr.hrc>
 
 #include <editeng/eeitem.hxx>
 
@@ -358,7 +361,11 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
         }
         else if ( nFormat == SotClipboardFormatId::DRAWING )
         {
-            bOK = SetObject( m_pModel.get(), SCDRAWTRANS_TYPE_DRAWMODEL, rFlavor );
+            SdrView aView(*m_pModel);
+            SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel().GetPage(0));
+            aView.MarkAllObj( pPv );
+            auto pNewModel = aView.CreateMarkedObjModel();
+            bOK = SetObject( pNewModel.get(), SCDRAWTRANS_TYPE_DRAWMODEL, rFlavor );
         }
         else if ( nFormat == SotClipboardFormatId::BITMAP
             || nFormat == SotClipboardFormatId::PNG
@@ -429,19 +436,20 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* 
         case SCDRAWTRANS_TYPE_DRAWMODEL:
             {
                 SdrModel* pDrawModel = static_cast<SdrModel*>(pUserObject);
+                pDrawModel->BurnInStyleSheetAttributes();
                 rxOStm->SetBufferSize( 0xff00 );
 
                 // for the changed pool defaults from drawing layer pool set those
                 // attributes as hard attributes to preserve them for saving
-                const SfxItemPool& rItemPool = m_pModel->GetItemPool();
+                const SfxItemPool& rItemPool = pDrawModel->GetItemPool();
                 const SvxFontHeightItem& rDefaultFontHeight = rItemPool.GetDefaultItem(EE_CHAR_FONTHEIGHT);
 
                 // SW should have no MasterPages
-                OSL_ENSURE(0 == m_pModel->GetMasterPageCount(), "SW with MasterPages (!)");
+                OSL_ENSURE(0 == pDrawModel->GetMasterPageCount(), "SW with MasterPages (!)");
 
-                for(sal_uInt16 a(0); a < m_pModel->GetPageCount(); a++)
+                for(sal_uInt16 a(0); a < pDrawModel->GetPageCount(); a++)
                 {
-                    const SdrPage* pPage(m_pModel->GetPage(a));
+                    const SdrPage* pPage(pDrawModel->GetPage(a));
                     SdrObjListIter aIter(pPage, SdrIterMode::DeepNoGroups);
 
                     while(aIter.IsMore())
@@ -676,6 +684,10 @@ void ScDrawTransferObj::InitDocShell()
 
     ScDocument& rDestDoc = pDocSh->GetDocument();
     rDestDoc.InitDrawLayer( pDocSh );
+
+    auto pPool = rDestDoc.GetStyleSheetPool();
+    pPool->CopyStyleFrom(m_pModel->GetStyleSheetPool(), ScResId(STR_STYLENAME_STANDARD), SfxStyleFamily::Frame);
+    pPool->CopyUsedGraphicStylesFrom(m_pModel->GetStyleSheetPool());
 
     SdrModel* pDestModel = rDestDoc.GetDrawLayer();
     // #i71538# use complete SdrViews

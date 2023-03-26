@@ -195,7 +195,7 @@ namespace sdr::properties
                         pTargetStyleSheet = dynamic_cast< SfxStyleSheet* >(
                             pTargetStyleSheetPool->Find(
                                 rProps.GetStyleSheet()->GetName(),
-                                SfxStyleFamily::All));
+                                rProps.GetStyleSheet()->GetFamily()));
                     }
                 }
             }

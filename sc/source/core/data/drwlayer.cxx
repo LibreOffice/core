@@ -385,8 +385,11 @@ SdrModel* ScDrawLayer::AllocModel() const
 {
     //  Allocated model (for clipboard etc) must not have a pointer
     //  to the original model's document, pass NULL as document:
+    auto pNewModel = std::make_unique<ScDrawLayer>(nullptr, aName);
+    auto pNewPool = static_cast<ScStyleSheetPool*>(pNewModel->GetStyleSheetPool());
+    pNewPool->CopyUsedGraphicStylesFrom(GetStyleSheetPool());
 
-    return new ScDrawLayer( nullptr, aName );
+    return pNewModel.release();
 }
 
 bool ScDrawLayer::ScAddPage( SCTAB nTab )
@@ -1930,6 +1933,12 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
         if (bObjectInArea && (pOldObject->GetLayer() != SC_LAYER_INTERN)
             && !IsNoteCaption(pOldObject))
         {
+            // Copy style sheet
+            auto pStyleSheet = pOldObject->GetStyleSheet();
+            if (pStyleSheet && !bSameDoc)
+                pDoc->GetStyleSheetPool()->CopyStyleFrom(pClipDoc->GetStyleSheetPool(),
+                    pStyleSheet->GetName(), pStyleSheet->GetFamily(), true);
+
             // Clone to target SdrModel
             rtl::Reference<SdrObject> pNewObject(pOldObject->CloneSdrObject(*this));
 

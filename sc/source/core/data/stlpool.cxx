@@ -125,8 +125,9 @@ void ScStyleSheetPool::Remove( SfxStyleSheetBase* pStyle )
     }
 }
 
-void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
-                                      const OUString& rName, SfxStyleFamily eFamily )
+void ScStyleSheetPool::CopyStyleFrom( SfxStyleSheetBasePool* pSrcPool,
+                                      const OUString& rName, SfxStyleFamily eFamily,
+                                      bool bNewStyleHierarchy )
 {
     //  this is the Dest-Pool
 
@@ -136,8 +137,10 @@ void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
 
     const SfxItemSet& rSourceSet = pStyleSheet->GetItemSet();
     SfxStyleSheetBase* pDestSheet = Find( rName, eFamily );
+    if (pDestSheet && bNewStyleHierarchy)
+        return;
     if (!pDestSheet)
-        pDestSheet = &Make( rName, eFamily );
+        pDestSheet = &Make( rName, eFamily, pStyleSheet->GetMask() );
     SfxItemSet& rDestSet = pDestSheet->GetItemSet();
     rDestSet.PutExtended( rSourceSet, SfxItemState::DONTCARE, SfxItemState::DEFAULT );
 
@@ -176,6 +179,38 @@ void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
             }
         }
     }
+
+    const OUString aParentName = pStyleSheet->GetParent();
+    if (!bNewStyleHierarchy || aParentName.isEmpty())
+        return;
+
+    CopyStyleFrom(pSrcPool, aParentName, eFamily, bNewStyleHierarchy);
+    pDestSheet->SetParent(aParentName);
+}
+
+void ScStyleSheetPool::CopyUsedGraphicStylesFrom(SfxStyleSheetBasePool* pSrcPool)
+{
+    //  this is the Dest-Pool
+
+    std::vector<std::pair<SfxStyleSheetBase*, OUString>> aNewStyles;
+
+    auto pSrcSheet = pSrcPool->First(SfxStyleFamily::Frame);
+    while (pSrcSheet)
+    {
+        if (pSrcSheet->IsUsed() && !Find(pSrcSheet->GetName(), pSrcSheet->GetFamily()))
+        {
+            auto pDestSheet = &Make(pSrcSheet->GetName(), pSrcSheet->GetFamily(), pSrcSheet->GetMask());
+            aNewStyles.emplace_back(pDestSheet, pSrcSheet->GetParent());
+
+            SfxItemSet& rDestSet = pDestSheet->GetItemSet();
+            rDestSet.Put(pSrcSheet->GetItemSet());
+        }
+
+        pSrcSheet = pSrcPool->Next();
+    }
+
+    for (const auto& style : aNewStyles)
+        style.first->SetParent(style.second);
 }
 
 //                      Standard templates
@@ -185,6 +220,7 @@ void ScStyleSheetPool::CopyStdStylesFrom( ScStyleSheetPool* pSrcPool )
     //  Copy Default styles
 
     CopyStyleFrom( pSrcPool, ScResId(STR_STYLENAME_STANDARD),     SfxStyleFamily::Para );
+    CopyStyleFrom( pSrcPool, ScResId(STR_STYLENAME_STANDARD),     SfxStyleFamily::Frame );
     CopyStyleFrom( pSrcPool, ScResId(STR_STYLENAME_STANDARD),     SfxStyleFamily::Page );
     CopyStyleFrom( pSrcPool, ScResId(STR_STYLENAME_REPORT),       SfxStyleFamily::Page );
 }

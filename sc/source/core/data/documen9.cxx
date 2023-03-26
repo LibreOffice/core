@@ -45,6 +45,7 @@
 #include <rechead.hxx>
 #include <poolhelp.hxx>
 #include <docpool.hxx>
+#include <stlpool.hxx>
 #include <editutil.hxx>
 #include <charthelper.hxx>
 #include <conditio.hxx>
@@ -76,6 +77,12 @@ void ScDocument::TransferDrawPage(const ScDocument& rSrcDoc, SCTAB nSrcPos, SCTA
             SdrObject* pOldObject = aIter.Next();
             while (pOldObject)
             {
+                // Copy style sheet
+                auto pStyleSheet = pOldObject->GetStyleSheet();
+                if (pStyleSheet)
+                    GetStyleSheetPool()->CopyStyleFrom(rSrcDoc.GetStyleSheetPool(),
+                                                       pStyleSheet->GetName(), pStyleSheet->GetFamily(), true);
+
                 // Clone to target SdrModel
                 rtl::Reference<SdrObject> pNewObject(pOldObject->CloneSdrObject(*mpDrawLayer));
                 pNewObject->NbcMove(Size(0,0));
