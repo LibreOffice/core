@@ -644,6 +644,112 @@ namespace drawinglayer::primitive2d
                                     break;
                                 }
 
+                                case 17:
+                                {
+                                    // check case with single stop < 0.0
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(-0.5, COL_LIGHTRED.getBColor()); // red
+                                    break;
+                                }
+
+                                case 18:
+                                {
+                                    // check case with single stop > 1.0
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(1.5, COL_LIGHTRED.getBColor()); // red
+                                    break;
+                                }
+
+                                case 19:
+                                {
+                                    // check case with stops overlapping 0.0
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(-0.5, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(0.5, COL_LIGHTBLUE.getBColor()); // blue
+                                    break;
+                                }
+
+                                case 20:
+                                {
+                                    // check case with stops overlapping 1.0
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(0.5, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(1.5, COL_LIGHTBLUE.getBColor()); // blue
+                                    break;
+                                }
+
+                                case 21:
+                                {
+                                    // check case with multiple stops < 0.0
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(-0.5, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(-0.4, COL_LIGHTBLUE.getBColor()); // blue
+                                    aColorStops.emplace_back(-0.3, COL_LIGHTGREEN.getBColor()); // green
+                                    break;
+                                }
+
+                                case 22:
+                                {
+                                    // check case with multiple stops > 1.0
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(1.3, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(1.4, COL_LIGHTBLUE.getBColor()); // blue
+                                    aColorStops.emplace_back(1.5, COL_LIGHTGREEN.getBColor()); // green
+                                    break;
+                                }
+
+                                case 23:
+                                {
+                                    // check case with stops overlapping 0.0 and 1.0
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(-0.5, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(0.5, COL_LIGHTBLUE.getBColor()); // blue
+                                    aColorStops.emplace_back(0.5, COL_LIGHTGREEN.getBColor()); // green
+                                    aColorStops.emplace_back(1.5, COL_LIGHTRED.getBColor()); // red
+                                    break;
+                                }
+
+                                case 24:
+                                {
+                                    // check case with stops overlapping 0.0 and 1.0 and multiple entries
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(-0.5, COL_LIGHTGREEN.getBColor()); // green
+                                    aColorStops.emplace_back(-0.5, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(0.4, COL_LIGHTBLUE.getBColor()); // blue
+                                    aColorStops.emplace_back(0.5, COL_YELLOW.getBColor()); // yellow
+                                    aColorStops.emplace_back(0.6, COL_LIGHTGREEN.getBColor()); // green
+                                    aColorStops.emplace_back(1.5, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(1.5, COL_LIGHTGREEN.getBColor()); // green
+                                    break;
+                                }
+
+                                case 25:
+                                {
+                                    // check case with just two stops overlapping 0.0 and 1.0
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(-0.5, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(1.5, COL_LIGHTGREEN.getBColor()); // green
+                                    break;
+                                }
+
+                                case 26:
+                                {
+                                    // check case with just two stops overlapping 0.0 and 1.0 faaaar out
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(-5.5, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(5.5, COL_LIGHTGREEN.getBColor()); // green
+                                    break;
+                                }
+
+                                case 27:
+                                {
+                                    // check case with just two stops overlapping 0.0 and 1.0 faaaar out but closer to one
+                                    aColorStops.clear();
+                                    aColorStops.emplace_back(-1.5, COL_LIGHTRED.getBColor()); // red
+                                    aColorStops.emplace_back(5.5, COL_LIGHTGREEN.getBColor()); // green
+                                    break;
+                                }
+
                                 default:
                                 {
                                     break;
