@@ -1859,6 +1859,7 @@ const char* PDFWriterImpl::getAttributeTag( PDFWriter::StructAttribute eAttr )
         aAttributeStrings[ PDFWriter::RowSpan ]             = "RowSpan";
         aAttributeStrings[ PDFWriter::ColSpan ]             = "ColSpan";
         aAttributeStrings[ PDFWriter::Scope ]               = "Scope";
+        aAttributeStrings[ PDFWriter::Role ]                = "Role";
         aAttributeStrings[ PDFWriter::Type ]                = "Type";
         aAttributeStrings[ PDFWriter::Subtype ]             = "Subtype";
         aAttributeStrings[ PDFWriter::LinkAnnotation ]      = "LinkAnnotation";
@@ -1907,6 +1908,10 @@ const char* PDFWriterImpl::getAttributeValueTag( PDFWriter::StructAttributeValue
         aValueStrings[ PDFWriter::Header ]                  = "Header";
         aValueStrings[ PDFWriter::Footer ]                  = "Footer";
         aValueStrings[ PDFWriter::Watermark ]               = "Watermark";
+        aValueStrings[ PDFWriter::Rb ]                      = "Rb";
+        aValueStrings[ PDFWriter::Cb ]                      = "Cb";
+        aValueStrings[ PDFWriter::Pb ]                      = "Pb";
+        aValueStrings[ PDFWriter::Tv ]                      = "Tv";
         aValueStrings[ PDFWriter::Disc ]                    = "Disc";
         aValueStrings[ PDFWriter::Circle ]                  = "Circle";
         aValueStrings[ PDFWriter::Square ]                  = "Square";
@@ -1977,10 +1982,15 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
 {
     // create layout, list and table attribute sets
     OStringBuffer aLayout(256), aList(64), aTable(64);
+    OStringBuffer aPrintField;
     for (auto const& attribute : i_rEle.m_aAttributes)
     {
         if( attribute.first == PDFWriter::ListNumbering )
             appendStructureAttributeLine( attribute.first, attribute.second, aList, true );
+        else if (attribute.first == PDFWriter::Role)
+        {
+            appendStructureAttributeLine(attribute.first, attribute.second, aPrintField, true);
+        }
         else if( attribute.first == PDFWriter::RowSpan ||
                  attribute.first == PDFWriter::ColSpan ||
                  attribute.first == PDFWriter::Scope)
@@ -2028,47 +2038,37 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
     }
 
     std::vector< sal_Int32 > aAttribObjects;
-    if( !aLayout.isEmpty() )
+    auto const WriteAttrs = [&](char const*const pName, OStringBuffer & rBuf)
     {
         aAttribObjects.push_back( createObject() );
         if (updateObject( aAttribObjects.back() ))
         {
-            OString aObj =
-                OString::number(aAttribObjects.back())
-                + " 0 obj\n"
-                  "<</O/Layout\n";
-            aLayout.append( ">>\nendobj\n\n" );
-            writeBuffer( aObj );
-            writeBuffer( aLayout );
+            OStringBuffer aObj( 64 );
+            aObj.append( aAttribObjects.back() );
+            aObj.append( " 0 obj\n"
+                         "<</O");
+            aObj.append(pName);
+            aObj.append("\n");
+            rBuf.append(">>\nendobj\n\n");
+            writeBuffer(aObj);
+            writeBuffer(rBuf);
         }
+    };
+    if( !aLayout.isEmpty() )
+    {
+        WriteAttrs("/Layout", aLayout);
     }
     if( !aList.isEmpty() )
     {
-        aAttribObjects.push_back( createObject() );
-        if (updateObject( aAttribObjects.back() ))
-        {
-            OString aObj =
-                OString::number( aAttribObjects.back() )
-                + " 0 obj\n"
-                  "<</O/List\n";
-            aList.append( ">>\nendobj\n\n" );
-            writeBuffer( aObj );
-            writeBuffer( aList );
-        }
+        WriteAttrs("/List", aList);
+    }
+    if (!aPrintField.isEmpty())
+    {
+        WriteAttrs("/PrintField", aPrintField);
     }
     if( !aTable.isEmpty() )
     {
-        aAttribObjects.push_back( createObject() );
-        if (updateObject( aAttribObjects.back() ))
-        {
-            OString aObj =
-                OString::number( aAttribObjects.back() )
-                + " 0 obj\n"
-                  "<</O/Table\n";
-            aTable.append( ">>\nendobj\n\n" );
-            writeBuffer( aObj );
-            writeBuffer( aTable );
-        }
+        WriteAttrs("/Table", aTable);
     }
 
     OStringBuffer aRet( 64 );
@@ -11164,6 +11164,16 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
                 if (eVal == PDFWriter::Header || eVal == PDFWriter::Footer || eVal == PDFWriter::Watermark)
                 {
                     if (eType == PDFWriter::NonStructElement
+                        && PDFWriter::PDFVersion::PDF_1_7 <= m_aContext.Version)
+                    {
+                        bInsert = true;
+                    }
+                }
+                break;
+            case PDFWriter::Role:
+                if (eVal == PDFWriter::Rb || eVal == PDFWriter::Cb || eVal == PDFWriter::Pb || eVal == PDFWriter::Tv)
+                {
+                    if (eType == PDFWriter::Form
                         && PDFWriter::PDFVersion::PDF_1_7 <= m_aContext.Version)
                     {
                         bInsert = true;
