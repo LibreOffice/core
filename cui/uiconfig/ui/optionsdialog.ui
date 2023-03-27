@@ -151,7 +151,7 @@
                     <property name="vexpand">True</property>
                     <property name="model">liststore1</property>
                     <property name="headers-visible">False</property>
-                    <property name="search-column">1</property>
+                    <property name="search-column">0</property>
                     <property name="enable-tree-lines">True</property>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
