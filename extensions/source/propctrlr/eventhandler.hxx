@@ -56,9 +56,8 @@ namespace pcr
 
         EventDescription(
             EventId _nId,
-            const char* _pListenerNamespaceAscii,
-            const char* _pListenerClassAsciiName,
-            const char* _pListenerMethodAsciiName,
+            std::u16string_view listenerClassName,
+            std::u16string_view listenerMethodName,
             TranslateId pDisplayNameResId,
             OUString _sHelpId,
             OString _sUniqueBrowseId );

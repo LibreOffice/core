@@ -123,27 +123,23 @@ namespace pcr
     namespace PropertyAttribute = css::beans::PropertyAttribute;
     namespace FormComponentType = css::form::FormComponentType;
 
-    EventDescription::EventDescription( EventId _nId, const char* _pListenerNamespaceAscii, const char* _pListenerClassAsciiName,
-            const char* _pListenerMethodAsciiName, TranslateId pDisplayNameResId, OUString _sHelpId, OString _sUniqueBrowseId )
+    EventDescription::EventDescription( EventId _nId, std::u16string_view listenerClassName,
+            std::u16string_view listenerMethodName, TranslateId pDisplayNameResId, OUString _sHelpId, OString _sUniqueBrowseId )
         :sDisplayName(PcrRes( pDisplayNameResId ))
-        ,sListenerMethodName( OUString::createFromAscii( _pListenerMethodAsciiName ) )
+        ,sListenerClassName( listenerClassName )
+        ,sListenerMethodName( listenerMethodName )
         ,sHelpId(std::move( _sHelpId ))
         ,sUniqueBrowseId(std::move( _sUniqueBrowseId ))
         ,nId( _nId )
     {
-        OUStringBuffer aQualifiedListenerClass( "com.sun.star." );
-        aQualifiedListenerClass.appendAscii( _pListenerNamespaceAscii );
-        aQualifiedListenerClass.append( "." );
-        aQualifiedListenerClass.appendAscii( _pListenerClassAsciiName );
-        sListenerClassName = aQualifiedListenerClass.makeStringAndClear();
     }
 
     namespace
     {
-        #define DESCRIBE_EVENT( map, asciinamespace, asciilistener, asciimethod, id_postfix ) \
+        #define DESCRIBE_EVENT( map, listener, method, id_postfix ) \
             map.emplace(  \
-                asciimethod, \
-                EventDescription( ++nEventId, asciinamespace, asciilistener, asciimethod, RID_STR_EVT_##id_postfix, HID_EVT_##id_postfix, UID_BRWEVT_##id_postfix ) )
+                u"" method, \
+                EventDescription( ++nEventId, u"com.sun.star." listener, u"" method, RID_STR_EVT_##id_postfix, HID_EVT_##id_postfix, UID_BRWEVT_##id_postfix ) )
 
         bool lcl_getEventDescriptionForMethod( const OUString& _rMethodName, EventDescription& _out_rDescription )
         {
@@ -151,39 +147,39 @@ namespace pcr
                 EventMap aMap;
                 sal_Int32 nEventId = 0;
 
-                DESCRIBE_EVENT(aMap, "form", "XApproveActionListener",     "approveAction",          APPROVEACTIONPERFORMED);
-                DESCRIBE_EVENT(aMap, "awt",  "XActionListener",            "actionPerformed",        ACTIONPERFORMED);
-                DESCRIBE_EVENT(aMap, "form", "XChangeListener",            "changed",                CHANGED);
-                DESCRIBE_EVENT(aMap, "awt",  "XTextListener",              "textChanged",            TEXTCHANGED);
-                DESCRIBE_EVENT(aMap, "awt",  "XItemListener",              "itemStateChanged",       ITEMSTATECHANGED);
-                DESCRIBE_EVENT(aMap, "awt",  "XFocusListener",             "focusGained",            FOCUSGAINED);
-                DESCRIBE_EVENT(aMap, "awt",  "XFocusListener",             "focusLost",              FOCUSLOST);
-                DESCRIBE_EVENT(aMap, "awt",  "XKeyListener",               "keyPressed",             KEYTYPED);
-                DESCRIBE_EVENT(aMap, "awt",  "XKeyListener",               "keyReleased",            KEYUP);
-                DESCRIBE_EVENT(aMap, "awt",  "XMouseListener",             "mouseEntered",           MOUSEENTERED);
-                DESCRIBE_EVENT(aMap, "awt",  "XMouseMotionListener",       "mouseDragged",           MOUSEDRAGGED);
-                DESCRIBE_EVENT(aMap, "awt",  "XMouseMotionListener",       "mouseMoved",             MOUSEMOVED);
-                DESCRIBE_EVENT(aMap, "awt",  "XMouseListener",             "mousePressed",           MOUSEPRESSED);
-                DESCRIBE_EVENT(aMap, "awt",  "XMouseListener",             "mouseReleased",          MOUSERELEASED);
-                DESCRIBE_EVENT(aMap, "awt",  "XMouseListener",             "mouseExited",            MOUSEEXITED);
-                DESCRIBE_EVENT(aMap, "form", "XResetListener",             "approveReset",           APPROVERESETTED);
-                DESCRIBE_EVENT(aMap, "form", "XResetListener",             "resetted",               RESETTED);
-                DESCRIBE_EVENT(aMap, "form", "XSubmitListener",            "approveSubmit",          SUBMITTED);
-                DESCRIBE_EVENT(aMap, "form", "XUpdateListener",            "approveUpdate",          BEFOREUPDATE);
-                DESCRIBE_EVENT(aMap, "form", "XUpdateListener",            "updated",                AFTERUPDATE);
-                DESCRIBE_EVENT(aMap, "form", "XLoadListener",              "loaded",                 LOADED);
-                DESCRIBE_EVENT(aMap, "form", "XLoadListener",              "reloading",              RELOADING);
-                DESCRIBE_EVENT(aMap, "form", "XLoadListener",              "reloaded",               RELOADED);
-                DESCRIBE_EVENT(aMap, "form", "XLoadListener",              "unloading",              UNLOADING);
-                DESCRIBE_EVENT(aMap, "form", "XLoadListener",              "unloaded",               UNLOADED);
-                DESCRIBE_EVENT(aMap, "form", "XConfirmDeleteListener",     "confirmDelete",          CONFIRMDELETE);
-                DESCRIBE_EVENT(aMap, "sdb",  "XRowSetApproveListener",     "approveRowChange",       APPROVEROWCHANGE);
-                DESCRIBE_EVENT(aMap, "sdbc", "XRowSetListener",            "rowChanged",             ROWCHANGE);
-                DESCRIBE_EVENT(aMap, "sdb",  "XRowSetApproveListener",     "approveCursorMove",      POSITIONING);
-                DESCRIBE_EVENT(aMap, "sdbc", "XRowSetListener",            "cursorMoved",            POSITIONED);
-                DESCRIBE_EVENT(aMap, "form", "XDatabaseParameterListener", "approveParameter",       APPROVEPARAMETER);
-                DESCRIBE_EVENT(aMap, "sdb",  "XSQLErrorListener",          "errorOccured",           ERROROCCURRED);
-                DESCRIBE_EVENT(aMap, "awt",  "XAdjustmentListener",        "adjustmentValueChanged", ADJUSTMENTVALUECHANGED);
+                DESCRIBE_EVENT(aMap, "form.XApproveActionListener",     "approveAction",          APPROVEACTIONPERFORMED);
+                DESCRIBE_EVENT(aMap, "awt.XActionListener",             "actionPerformed",        ACTIONPERFORMED);
+                DESCRIBE_EVENT(aMap, "form.XChangeListener",            "changed",                CHANGED);
+                DESCRIBE_EVENT(aMap, "awt.XTextListener",               "textChanged",            TEXTCHANGED);
+                DESCRIBE_EVENT(aMap, "awt.XItemListener",               "itemStateChanged",       ITEMSTATECHANGED);
+                DESCRIBE_EVENT(aMap, "awt.XFocusListener",              "focusGained",            FOCUSGAINED);
+                DESCRIBE_EVENT(aMap, "awt.XFocusListener",              "focusLost",              FOCUSLOST);
+                DESCRIBE_EVENT(aMap, "awt.XKeyListener",                "keyPressed",             KEYTYPED);
+                DESCRIBE_EVENT(aMap, "awt.XKeyListener",                "keyReleased",            KEYUP);
+                DESCRIBE_EVENT(aMap, "awt.XMouseListener",              "mouseEntered",           MOUSEENTERED);
+                DESCRIBE_EVENT(aMap, "awt.XMouseMotionListener",        "mouseDragged",           MOUSEDRAGGED);
+                DESCRIBE_EVENT(aMap, "awt.XMouseMotionListener",        "mouseMoved",             MOUSEMOVED);
+                DESCRIBE_EVENT(aMap, "awt.XMouseListener",              "mousePressed",           MOUSEPRESSED);
+                DESCRIBE_EVENT(aMap, "awt.XMouseListener",              "mouseReleased",          MOUSERELEASED);
+                DESCRIBE_EVENT(aMap, "awt.XMouseListener",              "mouseExited",            MOUSEEXITED);
+                DESCRIBE_EVENT(aMap, "form.XResetListener",             "approveReset",           APPROVERESETTED);
+                DESCRIBE_EVENT(aMap, "form.XResetListener",             "resetted",               RESETTED);
+                DESCRIBE_EVENT(aMap, "form.XSubmitListener",            "approveSubmit",          SUBMITTED);
+                DESCRIBE_EVENT(aMap, "form.XUpdateListener",            "approveUpdate",          BEFOREUPDATE);
+                DESCRIBE_EVENT(aMap, "form.XUpdateListener",            "updated",                AFTERUPDATE);
+                DESCRIBE_EVENT(aMap, "form.XLoadListener",              "loaded",                 LOADED);
+                DESCRIBE_EVENT(aMap, "form.XLoadListener",              "reloading",              RELOADING);
+                DESCRIBE_EVENT(aMap, "form.XLoadListener",              "reloaded",               RELOADED);
+                DESCRIBE_EVENT(aMap, "form.XLoadListener",              "unloading",              UNLOADING);
+                DESCRIBE_EVENT(aMap, "form.XLoadListener",              "unloaded",               UNLOADED);
+                DESCRIBE_EVENT(aMap, "form.XConfirmDeleteListener",     "confirmDelete",          CONFIRMDELETE);
+                DESCRIBE_EVENT(aMap, "sdb.XRowSetApproveListener",      "approveRowChange",       APPROVEROWCHANGE);
+                DESCRIBE_EVENT(aMap, "sdbc.XRowSetListener",            "rowChanged",             ROWCHANGE);
+                DESCRIBE_EVENT(aMap, "sdb.XRowSetApproveListener",      "approveCursorMove",      POSITIONING);
+                DESCRIBE_EVENT(aMap, "sdbc.XRowSetListener",            "cursorMoved",            POSITIONED);
+                DESCRIBE_EVENT(aMap, "form.XDatabaseParameterListener", "approveParameter",       APPROVEPARAMETER);
+                DESCRIBE_EVENT(aMap, "sdb.XSQLErrorListener",           "errorOccured",           ERROROCCURRED);
+                DESCRIBE_EVENT(aMap, "awt.XAdjustmentListener",         "adjustmentValueChanged", ADJUSTMENTVALUECHANGED);
 
                 return aMap;
             }();
