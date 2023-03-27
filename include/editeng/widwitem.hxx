@@ -22,13 +22,10 @@
 #include <svl/intitem.hxx>
 #include <editeng/editengdllapi.h>
 
-// class SvxWidowsItem ---------------------------------------------------
-
-/*  [Description]
-
-    This item describes the number of lines for the widows control.
-*/
-
+/// A widow line is a paragraph-ending line that goes to the following page or column (has past, but
+/// no future).
+///
+/// nL specifies the minimum number of lines, to prevent widows.
 class EDITENG_DLLPUBLIC SvxWidowsItem final : public SfxByteItem
 {
 public:

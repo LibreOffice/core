@@ -22,13 +22,10 @@
 #include <svl/intitem.hxx>
 #include <editeng/editengdllapi.h>
 
-// class SvxOrphansItem --------------------------------------------------
-
-/*  [Description]
-
-    This item describes the number of lines for the orphans system.
-*/
-
+/// An orphan line is a paragraph-starting line that is still on the previous page or column (has
+/// future, but no past).
+///
+/// nL specifies the minimum number of lines, to prevent orphans.
 class EDITENG_DLLPUBLIC SvxOrphansItem final : public SfxByteItem
 {
 public:
