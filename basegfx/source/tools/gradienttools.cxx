@@ -436,16 +436,60 @@ namespace basegfx
             for (size_t read(0); read < rColorStops.size(); read++)
             {
                 // get offset of entry at read position
-                const double rOff(rColorStops[read].getStopOffset());
+                double fOff(rColorStops[read].getStopOffset());
+
+                if (basegfx::fTools::less(fOff, 0.0) && read + 1 < rColorStops.size())
+                {
+                    // value < 0.0 and we have a next entry. check for gradient snippet
+                    // containing 0.0 resp. StartColor
+                    const double fOff2(rColorStops[read + 1].getStopOffset());
+
+                    if (basegfx::fTools::more(fOff2, 0.0))
+                    {
+                        // read is the start of a gradient snippet containing 0.0. Correct
+                        // entry to StartColor, interpolate to correct StartColor
+                        rColorStops[read] = ColorStop(0.0, basegfx::interpolate(
+                            rColorStops[read].getStopColor(),
+                            rColorStops[read + 1].getStopColor(),
+                            (0.0 - fOff) / (fOff2 - fOff)));
+
+                        // adapt fOff
+                        fOff = 0.0;
+                    }
+                }
 
                 // step over < 0 values, these are outside and will be removed
-                if (basegfx::fTools::less(rOff, 0.0))
+                if (basegfx::fTools::less(fOff, 0.0))
+                {
                     continue;
+                }
+
+                if (basegfx::fTools::less(fOff, 1.0) && read + 1 < rColorStops.size())
+                {
+                    // value < 1.0 and we have a next entry. check for gradient snippet
+                    // containing 1.0 resp. EndColor
+                    const double fOff2(rColorStops[read + 1].getStopOffset());
+
+                    if (basegfx::fTools::more(fOff2, 1.0))
+                    {
+                        // read is the start of a gradient snippet containing 1.0. Correct
+                        // next entry to EndColor, interpolate to correct EndColor
+                        rColorStops[read + 1] = ColorStop(1.0, basegfx::interpolate(
+                            rColorStops[read].getStopColor(),
+                            rColorStops[read + 1].getStopColor(),
+                            (1.0 - fOff) / (fOff2 - fOff)));
+
+                        // adapt fOff
+                        fOff = 1.0;
+                    }
+                }
 
                 // step over > 1 values; even break, since all following
                 // entries will also be bigger due to being sorted, so done
-                if (basegfx::fTools::more(rOff, 1.0))
+                if (basegfx::fTools::more(fOff, 1.0))
+                {
                     break;
+                }
 
                 // entry is valid value at read position
                 // copy if write target is empty (write at start) or when
@@ -467,7 +511,26 @@ namespace basegfx
             // last used position + 1
             if (rColorStops.size() > write)
             {
-                rColorStops.resize(write);
+                if (0 == write)
+                {
+                    // no valid entries at all, but not empty. This can only happen
+                    // when all entries are below 0.0 or above 1.0 (else a gradient
+                    // snippet spawning over both would have been detected)
+                    if (basegfx::fTools::less(rColorStops.back().getStopOffset(), 0.0))
+                    {
+                        // all outside too low, rescue last due to being closest to content
+                        rColorStops = ColorStops { ColorStop(0.0, rColorStops.back().getStopColor()) };
+                    }
+                    else // if (basegfx::fTools::more(rColorStops.front().getStopOffset(), 1.0))
+                    {
+                        // all outside too high, rescue first due to being closest to content
+                        rColorStops = ColorStops { ColorStop(1.0, rColorStops.front().getStopColor()) };
+                    }
+                }
+                else
+                {
+                    rColorStops.resize(write);
+                }
             }
         }
 
