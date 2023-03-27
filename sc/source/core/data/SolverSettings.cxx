@@ -430,13 +430,13 @@ void SolverSettings::SetEngineOptions(css::uno::Sequence<css::beans::PropertyVal
             OUString sParamType = std::get<OUString>(aParamInfo[2]);
             if (sParamType == "int")
             {
-                sal_Int32 nValue;
+                sal_Int32 nValue = 0;
                 aProp.Value >>= nValue;
                 SetParameter(eParamId, OUString::number(nValue));
             }
             if (sParamType == "bool")
             {
-                bool bValue;
+                bool bValue = false;
                 aProp.Value >>= bValue;
                 if (sLOParamName == "NonNegative")
                 {
