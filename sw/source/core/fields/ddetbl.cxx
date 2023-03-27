@@ -87,15 +87,7 @@ void SwDDETable::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
     if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
-        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-        switch(pLegacy->GetWhich())
-        {
-            case RES_UPDATEDDETBL:
-                ChangeContent();
-                break;
-            default:
-                SwTable::SwClientNotify(rModify, rHint);
-        }
+        SwTable::SwClientNotify(rModify, rHint);
     }
     else if (rHint.GetId() == SfxHintId::SwField)
     {
