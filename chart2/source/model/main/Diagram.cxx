@@ -19,6 +19,7 @@
 
 #include <Diagram.hxx>
 #include <AxisHelper.hxx>
+#include <BaseGFXHelper.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ChartTypeManager.hxx>
 #include <ChartTypeTemplate.hxx>
@@ -41,6 +42,7 @@
 #include <Axis.hxx>
 #include <DataTable.hxx>
 #include <servicenames_charttypes.hxx>
+#include <defines.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -617,7 +619,7 @@ void SAL_CALL Diagram::setFastPropertyValue( sal_Int32 nHandle, const Any& rValu
     {
         sal_Int32 fPerspective = 20;
         if( rValue >>=fPerspective )
-            ThreeDHelper::setCameraDistance( this, ThreeDHelper::PerspectiveToCameraDistance( fPerspective ) );
+            setCameraDistance( ThreeDHelper::PerspectiveToCameraDistance( fPerspective ) );
     }
     else if( nHandle == PROP_DIAGRAM_ROTATION_HORIZONTAL
         || nHandle == PROP_DIAGRAM_ROTATION_VERTICAL )
@@ -644,7 +646,7 @@ void SAL_CALL Diagram::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) co
     if( nHandle == PROP_DIAGRAM_PERSPECTIVE )
     {
         sal_Int32 nPerspective = ::basegfx::fround( ThreeDHelper::CameraDistanceToPerspective(
-            ThreeDHelper::getCameraDistance( const_cast< Diagram* >( this ) ) ) );
+            const_cast< Diagram* >( this )->getCameraDistance() ) );
         rValue <<= nPerspective;
     }
     else if( nHandle == PROP_DIAGRAM_ROTATION_HORIZONTAL
@@ -1660,6 +1662,50 @@ std::vector< rtl::Reference< RegressionCurveModel > >
 
     return aResult;
 }
+
+double Diagram::getCameraDistance()
+{
+    double fCameraDistance = FIXED_SIZE_FOR_3D_CHART_VOLUME;
+
+    try
+    {
+        drawing::CameraGeometry aCG( ThreeDHelper::getDefaultCameraGeometry() );
+        getFastPropertyValue( SceneProperties::PROP_SCENE_CAMERA_GEOMETRY ) >>= aCG;
+        ::basegfx::B3DVector aVRP( BaseGFXHelper::Position3DToB3DVector( aCG.vrp ) );
+        fCameraDistance = aVRP.getLength();
+
+        ThreeDHelper::ensureCameraDistanceRange( fCameraDistance );
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+    return fCameraDistance;
+}
+
+void Diagram::setCameraDistance(double fCameraDistance )
+{
+    try
+    {
+        if( fCameraDistance <= 0 )
+            fCameraDistance = FIXED_SIZE_FOR_3D_CHART_VOLUME;
+
+        drawing::CameraGeometry aCG( ThreeDHelper::getDefaultCameraGeometry() );
+        getFastPropertyValue( SceneProperties::PROP_SCENE_CAMERA_GEOMETRY ) >>= aCG;
+        ::basegfx::B3DVector aVRP( BaseGFXHelper::Position3DToB3DVector( aCG.vrp ) );
+        if( ::basegfx::fTools::equalZero( aVRP.getLength() ) )
+            aVRP = ::basegfx::B3DVector(0,0,1);
+        aVRP.setLength(fCameraDistance);
+        aCG.vrp = BaseGFXHelper::B3DVectorToPosition3D( aVRP );
+
+        setFastPropertyValue( SceneProperties::PROP_SCENE_CAMERA_GEOMETRY, uno::Any( aCG ));
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+}
+
 
 } //  namespace chart
 

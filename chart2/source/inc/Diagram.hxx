@@ -332,6 +332,9 @@ public:
     std::vector<rtl::Reference<::chart::RegressionCurveModel> >
         getAllRegressionCurvesNotMeanValueLine();
 
+    double getCameraDistance();
+    void setCameraDistance( double fCameraDistance );
+
 private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

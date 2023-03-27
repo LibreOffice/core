@@ -90,11 +90,6 @@ public:
         sal_Int32& rnElevationDeg, sal_Int32& rnRotationDeg
         , double fXRad, double fYRad, double fZRad );
 
-    static double getCameraDistance(
-        const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties );
-    static void setCameraDistance(
-        const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties
-            , double fCameraDistance );
     SAL_DLLPRIVATE static void ensureCameraDistanceRange( double& rfCameraDistance );
     SAL_DLLPRIVATE static void getCameraDistanceRange( double& rfMinimumDistance, double& rfMaximumDistance );
 

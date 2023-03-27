@@ -1070,57 +1070,6 @@ void ThreeDHelper::ensureCameraDistanceRange( double& rfCameraDistance )
         rfCameraDistance = fMax;
 }
 
-double ThreeDHelper::getCameraDistance(
-        const Reference< beans::XPropertySet >& xSceneProperties )
-{
-    double fCameraDistance = FIXED_SIZE_FOR_3D_CHART_VOLUME;
-
-    if( !xSceneProperties.is() )
-        return fCameraDistance;
-
-    try
-    {
-        drawing::CameraGeometry aCG( ThreeDHelper::getDefaultCameraGeometry() );
-        xSceneProperties->getPropertyValue( "D3DCameraGeometry" ) >>= aCG;
-        ::basegfx::B3DVector aVRP( BaseGFXHelper::Position3DToB3DVector( aCG.vrp ) );
-        fCameraDistance = aVRP.getLength();
-
-        ensureCameraDistanceRange( fCameraDistance );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-    return fCameraDistance;
-}
-
-void ThreeDHelper::setCameraDistance(
-        const Reference< beans::XPropertySet >& xSceneProperties, double fCameraDistance )
-{
-    if( !xSceneProperties.is() )
-        return;
-
-    try
-    {
-        if( fCameraDistance <= 0 )
-            fCameraDistance = FIXED_SIZE_FOR_3D_CHART_VOLUME;
-
-        drawing::CameraGeometry aCG( ThreeDHelper::getDefaultCameraGeometry() );
-        xSceneProperties->getPropertyValue( "D3DCameraGeometry" ) >>= aCG;
-        ::basegfx::B3DVector aVRP( BaseGFXHelper::Position3DToB3DVector( aCG.vrp ) );
-        if( ::basegfx::fTools::equalZero( aVRP.getLength() ) )
-            aVRP = ::basegfx::B3DVector(0,0,1);
-        aVRP.setLength(fCameraDistance);
-        aCG.vrp = BaseGFXHelper::B3DVectorToPosition3D( aVRP );
-
-        xSceneProperties->setPropertyValue( "D3DCameraGeometry", uno::Any( aCG ));
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-}
-
 double ThreeDHelper::CameraDistanceToPerspective( double fCameraDistance )
 {
     double fMin, fMax;
