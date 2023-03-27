@@ -459,15 +459,21 @@ template<typename C> struct ToStringHelper<std::basic_string_view<C>> {
 // An internal marker class used by O(U)String::Concat:
 template<typename C> struct StringConcatMarker {};
 
-template<typename C> struct ToStringHelper<StringConcatMarker<C>> {
-    static constexpr std::size_t length(StringConcatMarker<C>) { return 0; }
-
-    constexpr C * operator()(C * buffer, StringConcatMarker<C>) const SAL_RETURNS_NONNULL
-    { return buffer; }
-};
-
 using OStringConcatMarker = StringConcatMarker<char>;
 using OUStringConcatMarker = StringConcatMarker<sal_Unicode>;
+
+template<typename C> constexpr bool allowStringConcat<C, StringConcatMarker<C>> = true;
+
+template <typename C, typename T2, std::enable_if_t<allowStringConcat<C, T2>, int> Dummy>
+struct StringConcat<C, StringConcatMarker<C>, T2, Dummy>
+{
+public:
+    StringConcat( const T2& right_ ) : right( right_ ) {}
+    std::size_t length() const { return ToStringHelper< T2 >::length( right ); }
+    C* addData( C* buffer ) const SAL_RETURNS_NONNULL { return ToStringHelper< T2 >()( buffer, right ); }
+private:
+    const T2& right;
+};
 
 } // namespace
 

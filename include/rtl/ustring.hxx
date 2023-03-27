@@ -3313,14 +3313,14 @@ public:
     // would not compile):
     template<typename T> [[nodiscard]] static
     OUStringConcat<OUStringConcatMarker, T>
-    Concat(T const & value) { return OUStringConcat<OUStringConcatMarker, T>({}, value); }
+    Concat(T const & value) { return OUStringConcat<OUStringConcatMarker, T>(value); }
 
     // This overload is needed so that an argument of type 'char const[N]' ends up as
     // 'OUStringConcat<rtl::OUStringConcatMarker, char const[N]>' rather than as
     // 'OUStringConcat<rtl::OUStringConcatMarker, char[N]>':
     template<typename T, std::size_t N> [[nodiscard]] static
     OUStringConcat<OUStringConcatMarker, T[N]>
-    Concat(T (& value)[N]) { return OUStringConcat<OUStringConcatMarker, T[N]>({}, value); }
+    Concat(T (& value)[N]) { return OUStringConcat<OUStringConcatMarker, T[N]>(value); }
 #endif
 
 private:
