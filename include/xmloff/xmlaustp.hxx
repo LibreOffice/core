@@ -51,7 +51,7 @@ class XMLOFF_DLLPUBLIC SvXMLAutoStylePoolP : public salhelper::SimpleReferenceOb
     friend class Test;
     friend class SvXMLAutoStylePoolP_Impl;
 
-    std::unique_ptr<SvXMLAutoStylePoolP_Impl>    pImpl;
+    std::unique_ptr<SvXMLAutoStylePoolP_Impl>    m_pImpl;
 
 protected:
 

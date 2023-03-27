@@ -31,12 +31,12 @@ bool SinglePropertySetInfoCache::hasProperty(
 {
     if( !rPropSetInfo.is() )
         rPropSetInfo = rPropSet->getPropertySetInfo();
-    Map::iterator aIter = map_.find( rPropSetInfo );
-    if( aIter != map_.end() )
+    Map::iterator aIter = m_Map.find( rPropSetInfo );
+    if( aIter != m_Map.end() )
     {
         return (*aIter).second;
     }
-    bool bRet = rPropSetInfo->hasPropertyByName( sName );
+    bool bRet = rPropSetInfo->hasPropertyByName( m_sName );
     // Check whether the property set info is destroyed if it is assigned to a
     // weak reference only; if it is destroyed, then every instance of
     // getPropertySetInfo returns a new object; Such property set infos must not
@@ -46,7 +46,7 @@ bool SinglePropertySetInfoCache::hasProperty(
     rPropSetInfo = xWeakInfo;
     if( rPropSetInfo.is() )
     {
-        map_.emplace(rPropSetInfo, bRet);
+        m_Map.emplace(rPropSetInfo, bRet);
     }
     return bRet;
 }

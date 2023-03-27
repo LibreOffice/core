@@ -42,15 +42,15 @@ class NameSpaceEntry final
 {
 public:
     // sName refers to the full namespace name
-    OUString     sName;
+    OUString     m_sName;
     // sPrefix is the prefix used to declare a given item to be from a given namespace
-    OUString     sPrefix;
+    OUString     m_sPrefix;
     // nKey is the unique identifier of a namespace
-    sal_uInt16   nKey;
+    sal_uInt16   m_nKey;
 
     bool operator==(NameSpaceEntry const & rhs) const
     {
-        return sName == rhs.sName && sPrefix == rhs.sPrefix && nKey == rhs.nKey;
+        return m_sName == rhs.m_sName && m_sPrefix == rhs.m_sPrefix && m_nKey == rhs.m_nKey;
     }
 };
 
@@ -82,12 +82,12 @@ typedef std::unordered_map < sal_uInt16, KeyToNameSpaceMapEntry > KeyToNameSpace
 
 class XMLOFF_DLLPUBLIC SvXMLNamespaceMap
 {
-    OUString                    sXMLNS;
+    OUString                    m_sXMLNS;
 
-    NameSpaceHash               aNameHash;
-    mutable NameSpaceHash       aNameCache;
+    NameSpaceHash               m_aNameHash;
+    mutable NameSpaceHash       m_aNameCache;
     KeyToNameSpaceMap           maKeyToNamespaceMap;
-    mutable QNameCache          aQNameCache;
+    mutable QNameCache          m_aQNameCache;
     SAL_DLLPRIVATE sal_uInt16 Add_( const OUString& rPrefix, const OUString &rName, sal_uInt16 nKey );
 
 public:
@@ -134,7 +134,7 @@ public:
     /* Give access to all namespace definitions, including multiple entries
        for the same key (needed for saving sheets separately in Calc).
        This might be replaced by a better interface later. */
-    const NameSpaceHash& GetAllEntries() const { return aNameHash; }
+    const NameSpaceHash& GetAllEntries() const { return m_aNameHash; }
 
     void Clear();
 

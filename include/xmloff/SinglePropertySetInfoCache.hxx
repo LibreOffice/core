@@ -35,8 +35,8 @@ class SinglePropertySetInfoCache
     typedef std::map<css::uno::Reference<css::beans::XPropertySetInfo>, bool>
         Map;
 
-    OUString sName;
-    Map map_;
+    OUString m_sName;
+    Map m_Map;
 
 public:
 
@@ -52,7 +52,7 @@ public:
 
 inline SinglePropertySetInfoCache::SinglePropertySetInfoCache(
         OUString _sName ) :
-    sName(std::move( _sName ))
+    m_sName(std::move( _sName ))
 {
 }
 
