@@ -20,7 +20,6 @@ OOXML generally
 ---------------
 
 - http://www.ecma-international.org/publications/standards/Ecma-376.htm
-- http://www.asahi-net.or.jp/~eb2m-mrt/ooxml/dependencies.html
 
 Related modules
 ---------------
