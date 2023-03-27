@@ -3531,8 +3531,9 @@ void DomainMapper::lcl_endSectionGroup()
         pSectionContext->CloseSectionGroup( *m_pImpl );
         // Remove the dummy paragraph if added for
         // handling the section properties if section starts with a table
-        if (m_pImpl->GetIsDummyParaAddedForTableInSection())
-            m_pImpl->RemoveDummyParaForTableInSection();
+        // tdf#135786: Added annotation condition
+        if (m_pImpl->GetIsDummyParaAddedForTableInSection() && (m_pImpl->GetAnnotationId() < 0))
+             m_pImpl->RemoveDummyParaForTableInSection();
     }
     m_pImpl->SetIsTextFrameInserted( false );
     m_pImpl->PopProperties(CONTEXT_SECTION);

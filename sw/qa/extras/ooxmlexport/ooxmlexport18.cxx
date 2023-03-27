@@ -658,6 +658,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153664)
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableofFigures']/w:name", "val", "Table of Figures");
 }
 
-CPPUNIT_PLUGIN_IMPLEMENT();
+DECLARE_OOXMLEXPORT_TEST(testTdf135786, "tdf135786.docx")
+{
+    // Empty first line remain, if the section's initial dummy paragraph is not deleted:
+    // - Expected: 2
+    // - Actual  : 3
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+}
+
+    CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -906,6 +906,7 @@ public:
 
     void PushAnnotation();
     void PopAnnotation();
+    sal_Int32 GetAnnotationId() { return m_nAnnotationId; }
 
     /// A field context starts with a cFieldStart.
     void PushFieldContext();
