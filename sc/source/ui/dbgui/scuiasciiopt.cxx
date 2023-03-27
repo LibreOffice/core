@@ -339,7 +339,6 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     , mxCkbDetectNumber(m_xBuilder->weld_check_button("detectspecialnumbers"))
     , mxCkbEvaluateFormulas(m_xBuilder->weld_check_button("evaluateformulas"))
     , mxCkbSkipEmptyCells(m_xBuilder->weld_check_button("skipemptycells"))
-    , mxFtType(m_xBuilder->weld_label("textcolumntype"))
     , mxLbType(m_xBuilder->weld_combo_box("columntype"))
     , mxAltTitle(m_xBuilder->weld_label("textalttitle"))
     , mxTableBox(new ScCsvTableBox(*m_xBuilder))
@@ -545,7 +544,6 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     }
 
     mxLbType->connect_changed( LINK( this, ScImportAsciiDlg, LbColTypeHdl ) );
-    mxFtType->set_sensitive(false);
     mxLbType->set_sensitive(false);
 
     // *** table box preview ***
@@ -931,12 +929,11 @@ IMPL_LINK( ScImportAsciiDlg, ColTypeHdl, ScCsvTableBox&, rTableBox, void )
     bool bEmpty = (nType == CSV_TYPE_MULTI);
     bool bEnable = ((0 <= nType) && (nType < nTypeCount)) || bEmpty;
 
-    mxFtType->set_sensitive( bEnable );
     mxLbType->set_sensitive( bEnable );
 
     if (bEmpty)
         mxLbType->set_active(-1);
-    else if (bEnable)
+    else
         mxLbType->set_active(nType);
 }
 
