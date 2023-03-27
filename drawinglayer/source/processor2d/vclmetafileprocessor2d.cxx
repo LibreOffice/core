@@ -1166,6 +1166,25 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
 
             mpPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::Form);
             OUString const& rAltText(rControlPrimitive.GetAltText());
+            vcl::PDFWriter::StructAttributeValue role;
+            switch (pPDFControl->Type)
+            {
+                case vcl::PDFWriter::PushButton:
+                    role = vcl::PDFWriter::Pb;
+                    break;
+                case vcl::PDFWriter::RadioButton:
+                    role = vcl::PDFWriter::Rb;
+                    break;
+                case vcl::PDFWriter::CheckBox:
+                    role = vcl::PDFWriter::Cb;
+                    break;
+                default: // there is a paucity of roles, tv is the catch-all one
+                    role = vcl::PDFWriter::Tv;
+                    break;
+            }
+            // ISO 14289-1:2014, Clause: 7.18.4
+            mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Role, role);
+            // ISO 14289-1:2014, Clause: 7.18.1
             if (!rAltText.isEmpty())
             {
                 mpPDFExtOutDevData->SetAlternateText(rAltText);
