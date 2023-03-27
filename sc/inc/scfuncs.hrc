@@ -3002,7 +3002,7 @@ const TranslateId SC_OPCODE_F_TEST_MS_ARY[] =
 // -=*# Resource for function TTEST #*=-
 const TranslateId SC_OPCODE_T_TEST_ARY[] =
 {
-    NC_("SC_OPCODE_T_TEST", "Calculates the T test."),
+    NC_("SC_OPCODE_T_TEST", "Calculates the t-test."),
     NC_("SC_OPCODE_T_TEST", "Data 1"),
     NC_("SC_OPCODE_T_TEST", "The first record array."),
     NC_("SC_OPCODE_T_TEST", "Data 2"),
@@ -3010,13 +3010,13 @@ const TranslateId SC_OPCODE_T_TEST_ARY[] =
     NC_("SC_OPCODE_T_TEST", "Mode"),
     NC_("SC_OPCODE_T_TEST", "Mode specifies the number of distribution tails to return. 1 = one-tailed, 2 = two-tailed distribution"),
     NC_("SC_OPCODE_T_TEST", "Type"),
-    NC_("SC_OPCODE_T_TEST", "The type of the T test.")
+    NC_("SC_OPCODE_T_TEST", "The type of the t-test.")
 };
 
 // -=*# Resource for function T.TEST #*=-
 const TranslateId SC_OPCODE_T_TEST_MS_ARY[] =
 {
-    NC_("SC_OPCODE_T_TEST_MS", "Calculates the T test."),
+    NC_("SC_OPCODE_T_TEST_MS", "Calculates the t-test."),
     NC_("SC_OPCODE_T_TEST_MS", "Data 1"),
     NC_("SC_OPCODE_T_TEST_MS", "The first record array."),
     NC_("SC_OPCODE_T_TEST_MS", "Data 2"),
@@ -3024,7 +3024,7 @@ const TranslateId SC_OPCODE_T_TEST_MS_ARY[] =
     NC_("SC_OPCODE_T_TEST_MS", "Mode"),
     NC_("SC_OPCODE_T_TEST_MS", "Mode specifies the number of distribution tails to return. 1 = one-tailed, 2 = two-tailed distribution"),
     NC_("SC_OPCODE_T_TEST_MS", "Type"),
-    NC_("SC_OPCODE_T_TEST_MS", "The type of the T test.")
+    NC_("SC_OPCODE_T_TEST_MS", "The type of the t-test.")
 };
 
 // -=*# Resource for function RSQ #*=-
