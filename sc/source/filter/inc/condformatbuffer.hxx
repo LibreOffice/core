@@ -219,9 +219,9 @@ public:
     const ScRangeList& getRanges() const { return maModel.maRanges; }
 
     void                setReadyForFinalize() { mbReadyForFinalize = true; }
+    void                insertRule( CondFormatRuleRef const & xRule );
 private:
     CondFormatRuleRef   createRule();
-    void                insertRule( CondFormatRuleRef const & xRule );
 
 private:
     typedef RefMap< sal_Int32, CondFormatRule > CondFormatRuleMap;
