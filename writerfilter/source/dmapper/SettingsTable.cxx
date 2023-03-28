@@ -26,6 +26,8 @@
 
 #include <rtl/ustring.hxx>
 #include <sfx2/zoomitem.hxx>
+#include <com/sun/star/text/XDependentTextField.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -95,6 +97,7 @@ struct SettingsTable_Impl
     bool                m_bNoLeading = false;
     OUString            m_sDecimalSymbol;
     OUString            m_sListSeparator;
+    std::vector<std::pair<OUString, OUString>> m_aDocVars;
 
     uno::Sequence<beans::PropertyValue> m_pThemeFontLangProps;
 
@@ -136,7 +139,6 @@ struct SettingsTable_Impl
     , m_pThemeFontLangProps(3)
     , m_pCurrentCompatSetting(3)
     {}
-
 };
 
 SettingsTable::SettingsTable(const DomainMapper& rDomainMapper)
@@ -186,6 +188,12 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
         break;
     case NS_ooxml::LN_CT_View_val:
         m_pImpl->m_nView = nIntValue;
+        break;
+    case NS_ooxml::LN_CT_DocVar_name:
+        m_pImpl->m_aDocVars.back().first = sStringValue;
+        break;
+    case NS_ooxml::LN_CT_DocVar_val:
+        m_pImpl->m_aDocVars.back().second = sStringValue;
         break;
     case NS_ooxml::LN_CT_CompatSetting_name:
         m_pImpl->m_pCurrentCompatSetting.getArray()[0]
@@ -339,6 +347,25 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
             aValue.Name = "compatSetting";
             aValue.Value <<= m_pImpl->m_pCurrentCompatSetting;
             m_pImpl->m_aCompatSettings.push_back(aValue);
+        }
+    }
+    break;
+    case NS_ooxml::LN_CT_Settings_docVars:
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if (pProperties)
+        {
+            pProperties->resolve(*this);
+        }
+    }
+    break;
+    case NS_ooxml::LN_CT_DocVar:
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if (pProperties)
+        {
+            m_pImpl->m_aDocVars.push_back(std::make_pair(OUString(), OUString()));
+            pProperties->resolve(*this);
         }
     }
     break;
@@ -569,6 +596,35 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
             // (extending the recent GrabBag support)    TODO support password verification...
             css::uno::Sequence<sal_Int8> aDummyKey { 1 };
             xDocProps->setPropertyValue("RedlineProtectionKey", uno::Any( aDummyKey ));
+        }
+    }
+
+    // Create or overwrite DocVars based on found in settings
+    if (m_pImpl->m_aDocVars.size())
+    {
+        uno::Reference< text::XTextFieldsSupplier > xFieldsSupplier(xDoc, uno::UNO_QUERY_THROW);
+        uno::Reference< container::XNameAccess > xFieldMasterAccess = xFieldsSupplier->getTextFieldMasters();
+        for (const auto& docVar : m_pImpl->m_aDocVars)
+        {
+            uno::Reference< beans::XPropertySet > xMaster;
+            OUString sFieldMasterService("com.sun.star.text.FieldMaster.User." + docVar.first);
+
+            // Find or create Field Master
+            if (xFieldMasterAccess->hasByName(sFieldMasterService))
+            {
+                xMaster.set(xFieldMasterAccess->getByName(sFieldMasterService), uno::UNO_QUERY_THROW);
+            }
+            else
+            {
+                xMaster.set(xTextFactory->createInstance("com.sun.star.text.FieldMaster.User"), uno::UNO_QUERY_THROW);
+                xMaster->setPropertyValue(getPropertyName(PROP_NAME), uno::Any(docVar.first));
+                uno::Reference<text::XDependentTextField> xField(
+                    xTextFactory->createInstance("com.sun.star.text.TextField.User"),
+                    uno::UNO_QUERY);
+                xField->attachTextFieldMaster(xMaster);
+            }
+
+            xMaster->setPropertyValue(getPropertyName(PROP_CONTENT), uno::Any(docVar.second));
         }
     }
 
