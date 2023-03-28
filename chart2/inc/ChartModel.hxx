@@ -76,6 +76,7 @@ class ChartTypeTemplate;
 class InternalDataProvider;
 class NameContainer;
 class PageBackground;
+class RangeHighlighter;
 class Title;
 
 namespace impl
@@ -147,7 +148,7 @@ private:
     //the content of this should be always synchronized with the current m_xViewWindow size. The variable is necessary to hold the information as long as no view window exists.
     css::awt::Size                                     m_aVisualAreaSize;
     css::uno::Reference< css::frame::XModel >          m_xParent;
-    css::uno::Reference< css::chart2::data::XRangeHighlighter > m_xRangeHighlighter;
+    rtl::Reference< ::chart::RangeHighlighter >        m_xRangeHighlighter;
     css::uno::Reference<css::awt::XRequestCallback>    m_xPopupRequest;
     std::vector< GraphicObject >                            m_aGraphicObjectVector;
 

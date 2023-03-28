@@ -41,12 +41,6 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-uno::Reference< chart2::data::XRangeHighlighter > ChartModelHelper::createRangeHighlighter(
-        const rtl::Reference< ChartModel > & xSelectionSupplier )
-{
-    return new RangeHighlighter( xSelectionSupplier );
-}
-
 rtl::Reference< InternalDataProvider > ChartModelHelper::createInternalDataProvider(
     const rtl::Reference<::chart::ChartModel>& xChartDoc, bool bConnectToModel )
 {

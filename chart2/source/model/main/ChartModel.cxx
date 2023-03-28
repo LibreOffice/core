@@ -35,6 +35,7 @@
 #include <ChartView.hxx>
 #include <PopupRequest.hxx>
 #include <ModifyListenerHelper.hxx>
+#include <RangeHighlighter.hxx>
 #include <Diagram.hxx>
 #include <dumpxmltostring.hxx>
 
@@ -394,7 +395,11 @@ void SAL_CALL ChartModel::disconnectController( const uno::Reference< frame::XCo
     if( m_xCurrentController == xController )
         m_xCurrentController.clear();
 
-    DisposeHelper::DisposeAndClear( m_xRangeHighlighter );
+    if (m_xRangeHighlighter)
+    {
+        m_xRangeHighlighter->dispose();
+        m_xRangeHighlighter.clear();
+    }
     DisposeHelper::DisposeAndClear(m_xPopupRequest);
 }
 
@@ -479,7 +484,11 @@ void SAL_CALL ChartModel::setCurrentController( const uno::Reference< frame::XCo
 
     m_xCurrentController = xController;
 
-    DisposeHelper::DisposeAndClear( m_xRangeHighlighter );
+    if (m_xRangeHighlighter)
+    {
+        m_xRangeHighlighter->dispose();
+        m_xRangeHighlighter.clear();
+    }
     DisposeHelper::DisposeAndClear(m_xPopupRequest);
 }
 
@@ -560,7 +569,11 @@ void SAL_CALL ChartModel::dispose()
     m_aControllers.disposeAndClear( lang::EventObject( static_cast< cppu::OWeakObject * >( this )));
     m_xCurrentController.clear();
 
-    DisposeHelper::DisposeAndClear( m_xRangeHighlighter );
+    if (m_xRangeHighlighter)
+    {
+        m_xRangeHighlighter->dispose();
+        m_xRangeHighlighter.clear();
+    }
     DisposeHelper::DisposeAndClear(m_xPopupRequest);
 
     if( m_xOldModelAgg.is())
@@ -877,7 +890,7 @@ Reference< chart2::data::XDataSource > SAL_CALL ChartModel::getUsedData()
 Reference< chart2::data::XRangeHighlighter > SAL_CALL ChartModel::getRangeHighlighter()
 {
     if( ! m_xRangeHighlighter.is())
-        m_xRangeHighlighter.set( ChartModelHelper::createRangeHighlighter( this ));
+        m_xRangeHighlighter = new RangeHighlighter( this );
     return m_xRangeHighlighter;
 }
 
