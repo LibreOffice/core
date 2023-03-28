@@ -205,7 +205,9 @@ void CondFormatContext::onEndElement()
         case XLS_TOKEN( cfRule ):
             if (mxCondFmt && mxRule)
             {
-                mxCondFmt->insertRule(mxRule);
+                if (!mxRule->getCurColorScale() ||
+                    !getCondFormats().insertColorScale(mxCondFmt, mxRule))
+                    mxCondFmt->insertRule(mxRule);
             }
         break;
     }
