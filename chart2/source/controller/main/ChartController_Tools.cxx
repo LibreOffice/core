@@ -199,7 +199,7 @@ void ChartController::executeDispatch_NewArrangement()
             xDiagram->setPropertyToDefault( "PosSizeExcludeAxes");
 
             // 3d rotation
-            ThreeDHelper::set3DSettingsToDefault( xDiagram );
+            xDiagram->set3DSettingsToDefault();
 
             // legend
             Reference< beans::XPropertyState > xLegendState( xDiagram->getLegend(), uno::UNO_QUERY );

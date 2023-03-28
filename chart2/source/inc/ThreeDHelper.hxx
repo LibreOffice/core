@@ -82,12 +82,6 @@ public:
     static double CameraDistanceToPerspective( double fCameraDistance );
     static double PerspectiveToCameraDistance( double fPerspective );
 
-    static void set3DSettingsToDefault( const rtl::Reference< ::chart::Diagram >& xSceneProperties );
-    static void setDefaultRotation( const rtl::Reference< ::chart::Diagram >& xDiagram );
-    static void setDefaultIllumination( const rtl::Reference< ::chart::Diagram >& xDiagram );
-
-    static void setDefaultRotation( const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties, bool bPieOrDonut );
-
     static CuboidPlanePosition getAutomaticCuboidPlanePositionForStandardLeftWall( const rtl::Reference<
             ::chart::Diagram >& xDiagram );
     static CuboidPlanePosition getAutomaticCuboidPlanePositionForStandardBackWall(const rtl::Reference<

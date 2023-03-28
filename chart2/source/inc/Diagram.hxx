@@ -348,6 +348,8 @@ public:
     ThreeDLookScheme detectScheme();
     void setScheme( ThreeDLookScheme aScheme );
 
+    void setDefaultRotation( bool bPieOrDonut );
+
 private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

@@ -545,7 +545,7 @@ void PieChartTypeTemplate::resetStyles2( const rtl::Reference< ::chart::Diagram 
     }
 
     //reset scene properties
-    ThreeDHelper::setDefaultRotation( xDiagram, false );
+    xDiagram->setDefaultRotation( false );
 }
 
 // ____ XChartTypeTemplate ____
@@ -555,7 +555,7 @@ void PieChartTypeTemplate::adaptDiagram( const rtl::Reference< ::chart::Diagram 
         return;
 
     //different default for scene geometry:
-    ThreeDHelper::setDefaultRotation( xDiagram, true );
+    xDiagram->setDefaultRotation( true );
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2( PieChartTypeTemplate, ChartTypeTemplate, OPropertySet )

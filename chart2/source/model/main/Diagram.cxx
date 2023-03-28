@@ -445,17 +445,118 @@ void SAL_CALL Diagram::setTitleObject( const uno::Reference< chart2::XTitle >& x
 // ____ X3DDefaultSetter ____
 void SAL_CALL Diagram::set3DSettingsToDefault()
 {
-    ThreeDHelper::set3DSettingsToDefault( this );
+    setPropertyToDefault( "D3DSceneDistance");
+    setPropertyToDefault( "D3DSceneFocalLength");
+    setDefaultRotation();
+    setDefaultIllumination();
 }
 
 void SAL_CALL Diagram::setDefaultRotation()
 {
-    ThreeDHelper::setDefaultRotation( this );
+    bool bPieOrDonut( isPieOrDonutChart() );
+    setDefaultRotation( bPieOrDonut );
+}
+
+static ::basegfx::B3DHomMatrix lcl_getCompleteRotationMatrix( Diagram& rDiagram )
+{
+    ::basegfx::B3DHomMatrix aCompleteRotation;
+    double fXAngleRad=0.0;
+    double fYAngleRad=0.0;
+    double fZAngleRad=0.0;
+    rDiagram.getRotationAngle( fXAngleRad, fYAngleRad, fZAngleRad );
+    aCompleteRotation.rotate( fXAngleRad, fYAngleRad, fZAngleRad );
+    return aCompleteRotation;
+}
+static void lcl_RotateLightSource( Diagram& rDiagram
+                           , int nLightSourceDirectionProp
+                           , int nLightSourceOnProp
+                           , const ::basegfx::B3DHomMatrix& rRotationMatrix )
+{
+    bool bLightOn = false;
+    if( !(rDiagram.getFastPropertyValue( nLightSourceOnProp ) >>= bLightOn) )
+        return;
+
+    if( bLightOn )
+    {
+        drawing::Direction3D aLight;
+        if( rDiagram.getFastPropertyValue( nLightSourceDirectionProp ) >>= aLight )
+        {
+            ::basegfx::B3DVector aLightVector( BaseGFXHelper::Direction3DToB3DVector( aLight ) );
+            aLightVector = rRotationMatrix*aLightVector;
+
+            rDiagram.setFastPropertyValue( nLightSourceDirectionProp
+                , uno::Any( BaseGFXHelper::B3DVectorToDirection3D( aLightVector ) ) );
+        }
+    }
+}
+
+static void lcl_setLightsForScheme( Diagram& rDiagram, const ThreeDLookScheme& rScheme )
+{
+    if( rScheme == ThreeDLookScheme::ThreeDLookScheme_Unknown)
+        return;
+
+    // "D3DSceneLightOn2" / UNO_NAME_3D_SCENE_LIGHTON_2
+    rDiagram.setFastPropertyValue( PROP_SCENE_LIGHT_ON_2, uno::Any( true ) );
+
+    rtl::Reference< ChartType > xChartType( rDiagram.getChartTypeByIndex( 0 ) );
+    uno::Any aADirection( rScheme == ThreeDLookScheme::ThreeDLookScheme_Simple
+        ? ChartTypeHelper::getDefaultSimpleLightDirection(xChartType)
+        : ChartTypeHelper::getDefaultRealisticLightDirection(xChartType) );
+
+    // "D3DSceneLightDirection2" / UNO_NAME_3D_SCENE_LIGHTDIRECTION_2
+    rDiagram.setFastPropertyValue( PROP_SCENE_LIGHT_DIRECTION_2, aADirection );
+    //rotate light direction when right angled axes are off but supported
+    {
+        bool bRightAngledAxes = false;
+        rDiagram.getFastPropertyValue( PROP_DIAGRAM_RIGHT_ANGLED_AXES ) >>= bRightAngledAxes; // "RightAngledAxes"
+        if(!bRightAngledAxes)
+        {
+            if( ChartTypeHelper::isSupportingRightAngledAxes( xChartType ) )
+            {
+                ::basegfx::B3DHomMatrix aRotation( lcl_getCompleteRotationMatrix( rDiagram ) );
+                BaseGFXHelper::ReduceToRotationMatrix( aRotation );
+                // "D3DSceneLightDirection2", "D3DSceneLightOn2"
+                lcl_RotateLightSource( rDiagram, PROP_SCENE_LIGHT_DIRECTION_2, PROP_SCENE_LIGHT_ON_2, aRotation );
+            }
+        }
+    }
+
+    sal_Int32 nColor = ::chart::ChartTypeHelper::getDefaultDirectLightColor(
+        rScheme == ThreeDLookScheme::ThreeDLookScheme_Simple, xChartType);
+    // "D3DSceneLightColor2" / UNO_NAME_3D_SCENE_LIGHTCOLOR_2
+    rDiagram.setFastPropertyValue( PROP_SCENE_LIGHT_COLOR_2, uno::Any( nColor ) );
+
+    sal_Int32 nAmbientColor = ::chart::ChartTypeHelper::getDefaultAmbientLightColor(
+        rScheme == ThreeDLookScheme::ThreeDLookScheme_Simple, xChartType);
+    // "D3DSceneAmbientColor" / UNO_NAME_3D_SCENE_AMBIENTCOLOR
+    rDiagram.setFastPropertyValue( PROP_SCENE_AMBIENT_COLOR, uno::Any( nAmbientColor ) );
 }
 
 void SAL_CALL Diagram::setDefaultIllumination()
 {
-    ThreeDHelper::setDefaultIllumination( this );
+    drawing::ShadeMode aShadeMode( drawing::ShadeMode_SMOOTH );
+    try
+    {
+        // "D3DSceneShadeMode"
+        getFastPropertyValue( PROP_SCENE_SHADE_MODE )>>= aShadeMode;
+        // "D3DSceneLightOn1" / UNO_NAME_3D_SCENE_LIGHTON_1
+        setFastPropertyValue( PROP_SCENE_LIGHT_ON_1, uno::Any( false ) );
+        setFastPropertyValue( PROP_SCENE_LIGHT_ON_3, uno::Any( false ) );
+        setFastPropertyValue( PROP_SCENE_LIGHT_ON_4, uno::Any( false ) );
+        setFastPropertyValue( PROP_SCENE_LIGHT_ON_5, uno::Any( false ) );
+        setFastPropertyValue( PROP_SCENE_LIGHT_ON_6, uno::Any( false ) );
+        setFastPropertyValue( PROP_SCENE_LIGHT_ON_7, uno::Any( false ) );
+        setFastPropertyValue( PROP_SCENE_LIGHT_ON_8, uno::Any( false ) );
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+
+    ThreeDLookScheme aScheme = (aShadeMode == drawing::ShadeMode_FLAT)
+                                   ? ThreeDLookScheme::ThreeDLookScheme_Simple
+                                   : ThreeDLookScheme::ThreeDLookScheme_Realistic;
+    lcl_setLightsForScheme( *this, aScheme );
 }
 
 // ____ XCoordinateSystemContainer ____
@@ -1868,29 +1969,6 @@ static ::basegfx::B3DHomMatrix lcl_getInverseRotationMatrix( Diagram& rDiagram )
     return aInverseRotation;
 }
 
-static void lcl_RotateLightSource( Diagram& rDiagram
-                           , int nLightSourceDirectionProp
-                           , int nLightSourceOnProp
-                           , const ::basegfx::B3DHomMatrix& rRotationMatrix )
-{
-    bool bLightOn = false;
-    if( !(rDiagram.getFastPropertyValue( nLightSourceOnProp ) >>= bLightOn) )
-        return;
-
-    if( bLightOn )
-    {
-        drawing::Direction3D aLight;
-        if( rDiagram.getFastPropertyValue( nLightSourceDirectionProp ) >>= aLight )
-        {
-            ::basegfx::B3DVector aLightVector( BaseGFXHelper::Direction3DToB3DVector( aLight ) );
-            aLightVector = rRotationMatrix*aLightVector;
-
-            rDiagram.setFastPropertyValue( nLightSourceDirectionProp
-                , uno::Any( BaseGFXHelper::B3DVectorToDirection3D( aLightVector ) ) );
-        }
-    }
-}
-
 static void lcl_rotateLights( const ::basegfx::B3DHomMatrix& rLightRotation, Diagram& rDiagram )
 {
     ::basegfx::B3DHomMatrix aLightRotation( rLightRotation );
@@ -1992,16 +2070,6 @@ static bool lcl_isRealisticScheme( drawing::ShadeMode aShadeMode
     if(nObjectLines!=0)
         return false;
     return true;
-}
-static ::basegfx::B3DHomMatrix lcl_getCompleteRotationMatrix( Diagram& rDiagram )
-{
-    ::basegfx::B3DHomMatrix aCompleteRotation;
-    double fXAngleRad=0.0;
-    double fYAngleRad=0.0;
-    double fZAngleRad=0.0;
-    rDiagram.getRotationAngle( fXAngleRad, fYAngleRad, fZAngleRad );
-    aCompleteRotation.rotate( fXAngleRad, fYAngleRad, fZAngleRad );
-    return aCompleteRotation;
 }
 static bool lcl_isLightScheme( Diagram& rDiagram, bool bRealistic )
 {
@@ -2115,47 +2183,6 @@ static void lcl_setSimpleScheme( drawing::ShadeMode& rShadeMode
     rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeByIndex( 0 ) );
     rnObjectLines = ChartTypeHelper::noBordersForSimpleScheme( xChartType ) ? 0 : 1;
 }
-static void lcl_setLightsForScheme( Diagram& rDiagram, const ThreeDLookScheme& rScheme )
-{
-    if( rScheme == ThreeDLookScheme::ThreeDLookScheme_Unknown)
-        return;
-
-    // "D3DSceneLightOn2" / UNO_NAME_3D_SCENE_LIGHTON_2
-    rDiagram.setFastPropertyValue( PROP_SCENE_LIGHT_ON_2, uno::Any( true ) );
-
-    rtl::Reference< ChartType > xChartType( rDiagram.getChartTypeByIndex( 0 ) );
-    uno::Any aADirection( rScheme == ThreeDLookScheme::ThreeDLookScheme_Simple
-        ? ChartTypeHelper::getDefaultSimpleLightDirection(xChartType)
-        : ChartTypeHelper::getDefaultRealisticLightDirection(xChartType) );
-
-    // "D3DSceneLightDirection2" / UNO_NAME_3D_SCENE_LIGHTDIRECTION_2
-    rDiagram.setFastPropertyValue( PROP_SCENE_LIGHT_DIRECTION_2, aADirection );
-    //rotate light direction when right angled axes are off but supported
-    {
-        bool bRightAngledAxes = false;
-        rDiagram.getFastPropertyValue( PROP_DIAGRAM_RIGHT_ANGLED_AXES ) >>= bRightAngledAxes; // "RightAngledAxes"
-        if(!bRightAngledAxes)
-        {
-            if( ChartTypeHelper::isSupportingRightAngledAxes( xChartType ) )
-            {
-                ::basegfx::B3DHomMatrix aRotation( lcl_getCompleteRotationMatrix( rDiagram ) );
-                BaseGFXHelper::ReduceToRotationMatrix( aRotation );
-                // "D3DSceneLightDirection2", "D3DSceneLightOn2"
-                lcl_RotateLightSource( rDiagram, PROP_SCENE_LIGHT_DIRECTION_2, PROP_SCENE_LIGHT_ON_2, aRotation );
-            }
-        }
-    }
-
-    sal_Int32 nColor = ::chart::ChartTypeHelper::getDefaultDirectLightColor(
-        rScheme == ThreeDLookScheme::ThreeDLookScheme_Simple, xChartType);
-    rDiagram.setPropertyValue( UNO_NAME_3D_SCENE_LIGHTCOLOR_2, uno::Any( nColor ) );
-
-    sal_Int32 nAmbientColor = ::chart::ChartTypeHelper::getDefaultAmbientLightColor(
-        rScheme == ThreeDLookScheme::ThreeDLookScheme_Simple, xChartType);
-    // "D3DSceneAmbientColor" / UNO_NAME_3D_SCENE_AMBIENTCOLOR
-    rDiagram.setFastPropertyValue( PROP_SCENE_AMBIENT_COLOR, uno::Any( nAmbientColor ) );
-}
-
 void Diagram::setScheme( ThreeDLookScheme aScheme )
 {
     if( aScheme == ThreeDLookScheme::ThreeDLookScheme_Unknown )
@@ -2188,6 +2215,20 @@ void Diagram::setScheme( ThreeDLookScheme aScheme )
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
+}
+
+void Diagram::setDefaultRotation( bool bPieOrDonut )
+{
+    drawing::CameraGeometry aCameraGeo( ThreeDHelper::getDefaultCameraGeometry( bPieOrDonut ) );
+    // "D3DCameraGeometry"
+    setFastPropertyValue( PROP_SCENE_CAMERA_GEOMETRY, uno::Any( aCameraGeo ));
+
+    ::basegfx::B3DHomMatrix aSceneRotation;
+    if( bPieOrDonut )
+        aSceneRotation.rotate( -M_PI/3.0, 0, 0 );
+    // "D3DTransformMatrix"
+    setFastPropertyValue( PROP_SCENE_TRANSF_MATRIX,
+        uno::Any( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aSceneRotation )));
 }
 
 } //  namespace chart

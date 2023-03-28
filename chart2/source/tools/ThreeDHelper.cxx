@@ -135,44 +135,6 @@ void lcl_rotateLights( const ::basegfx::B3DHomMatrix& rLightRottion, const Refer
     return aCompleteRotation;
 }
 
-void lcl_setLightsForScheme( const rtl::Reference< Diagram >& xDiagram, const ThreeDLookScheme& rScheme )
-{
-    if(!xDiagram.is())
-        return;
-    if( rScheme == ThreeDLookScheme::ThreeDLookScheme_Unknown)
-        return;
-
-    xDiagram->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_2, uno::Any( true ) );
-
-    rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeByIndex( 0 ) );
-    uno::Any aADirection( rScheme == ThreeDLookScheme::ThreeDLookScheme_Simple
-        ? ChartTypeHelper::getDefaultSimpleLightDirection(xChartType)
-        : ChartTypeHelper::getDefaultRealisticLightDirection(xChartType) );
-
-    xDiagram->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTDIRECTION_2, aADirection );
-    //rotate light direction when right angled axes are off but supported
-    {
-        bool bRightAngledAxes = false;
-        xDiagram->getPropertyValue( "RightAngledAxes") >>= bRightAngledAxes;
-        if(!bRightAngledAxes)
-        {
-            if( ChartTypeHelper::isSupportingRightAngledAxes( xChartType ) )
-            {
-                ::basegfx::B3DHomMatrix aRotation( lcl_getCompleteRotationMatrix( xDiagram ) );
-                BaseGFXHelper::ReduceToRotationMatrix( aRotation );
-                lcl_RotateLightSource( xDiagram, "D3DSceneLightDirection2", "D3DSceneLightOn2", aRotation );
-            }
-        }
-    }
-
-    sal_Int32 nColor = ::chart::ChartTypeHelper::getDefaultDirectLightColor(
-        rScheme == ThreeDLookScheme::ThreeDLookScheme_Simple, xChartType);
-    xDiagram->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTCOLOR_2, uno::Any( nColor ) );
-
-    sal_Int32 nAmbientColor = ::chart::ChartTypeHelper::getDefaultAmbientLightColor(
-        rScheme == ThreeDLookScheme::ThreeDLookScheme_Simple, xChartType);
-    xDiagram->setPropertyValue( UNO_NAME_3D_SCENE_AMBIENTCOLOR, uno::Any( nAmbientColor ) );
-}
 
 } //end anonymous namespace
 
@@ -789,66 +751,6 @@ double ThreeDHelper::PerspectiveToCameraDistance( double fPerspective )
     double fRet = a/(fPerspective - b);
 
     return fRet;
-}
-
-void ThreeDHelper::set3DSettingsToDefault( const rtl::Reference< Diagram >& xDiagram )
-{
-    if(xDiagram.is())
-    {
-        xDiagram->setPropertyToDefault( "D3DSceneDistance");
-        xDiagram->setPropertyToDefault( "D3DSceneFocalLength");
-    }
-    ThreeDHelper::setDefaultRotation( xDiagram );
-    ThreeDHelper::setDefaultIllumination( xDiagram );
-}
-
-void ThreeDHelper::setDefaultRotation( const uno::Reference< beans::XPropertySet >& xSceneProperties, bool bPieOrDonut )
-{
-    if( !xSceneProperties.is() )
-        return;
-
-    drawing::CameraGeometry aCameraGeo( ThreeDHelper::getDefaultCameraGeometry( bPieOrDonut ) );
-    xSceneProperties->setPropertyValue( "D3DCameraGeometry", uno::Any( aCameraGeo ));
-
-    ::basegfx::B3DHomMatrix aSceneRotation;
-    if( bPieOrDonut )
-        aSceneRotation.rotate( -M_PI/3.0, 0, 0 );
-    xSceneProperties->setPropertyValue( "D3DTransformMatrix",
-        uno::Any( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aSceneRotation )));
-}
-
-void ThreeDHelper::setDefaultRotation( const rtl::Reference< Diagram >& xDiagram )
-{
-    bool bPieOrDonut( xDiagram->isPieOrDonutChart() );
-    ThreeDHelper::setDefaultRotation( xDiagram, bPieOrDonut );
-}
-
-void ThreeDHelper::setDefaultIllumination( const rtl::Reference<::chart::Diagram>& xDiagram )
-{
-    if( !xDiagram.is() )
-        return;
-
-    drawing::ShadeMode aShadeMode( drawing::ShadeMode_SMOOTH );
-    try
-    {
-        xDiagram->getPropertyValue( "D3DSceneShadeMode" )>>= aShadeMode;
-        xDiagram->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_1, uno::Any( false ) );
-        xDiagram->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_3, uno::Any( false ) );
-        xDiagram->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_4, uno::Any( false ) );
-        xDiagram->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_5, uno::Any( false ) );
-        xDiagram->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_6, uno::Any( false ) );
-        xDiagram->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_7, uno::Any( false ) );
-        xDiagram->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_8, uno::Any( false ) );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-
-    ThreeDLookScheme aScheme = (aShadeMode == drawing::ShadeMode_FLAT)
-                                   ? ThreeDLookScheme::ThreeDLookScheme_Simple
-                                   : ThreeDLookScheme::ThreeDLookScheme_Realistic;
-    lcl_setLightsForScheme( xDiagram, aScheme );
 }
 
 void ThreeDHelper::getRoundedEdgesAndObjectLines(
