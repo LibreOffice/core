@@ -148,6 +148,7 @@ private:
 /** Represents a single rule in a conditional formatting. */
 class CondFormatRule final : public WorksheetHelper
 {
+friend class CondFormatBuffer;
 public:
     explicit            CondFormatRule( const CondFormat& rCondFormat, ScConditionalFormat* pFormat );
 
@@ -167,6 +168,7 @@ public:
 
     /** Returns the priority of this rule. */
     sal_Int32    getPriority() const { return maModel.mnPriority; }
+    ColorScaleRule*     getCurColorScale() const { return mpColor.get(); }
 
     ColorScaleRule*     getColorScale();
     DataBarRule*        getDataBar();
@@ -310,6 +312,8 @@ public:
     static sal_Int32    convertToApiOperator( sal_Int32 nToken );
     static ScConditionMode convertToInternalOperator( sal_Int32 nToken );
     void                finalizeImport();
+    bool                insertColorScale(CondFormatRef const & xCondFmt, CondFormatRuleRef const & xRule);
+
 private:
     CondFormatRef       createCondFormat();
     void                updateImport(const ScDataBarFormatData* pTarget);
