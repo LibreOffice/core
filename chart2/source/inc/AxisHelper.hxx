@@ -117,10 +117,6 @@ public:
 
     static rtl::Reference< ::chart::BaseCoordinateSystem >
         getCoordinateSystemOfAxis(
-              const css::uno::Reference< css::chart2::XAxis >& xAxis
-            , const rtl::Reference< ::chart::Diagram >& xDiagram );
-    static rtl::Reference< ::chart::BaseCoordinateSystem >
-        getCoordinateSystemOfAxis(
               const rtl::Reference< ::chart::Axis >& xAxis
             , const rtl::Reference< ::chart::Diagram >& xDiagram );
 
@@ -132,14 +128,11 @@ public:
             , const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys );
 
     static rtl::Reference< ::chart::Axis >
-        getCrossingMainAxis( const css::uno::Reference< css::chart2::XAxis >& xAxis
-            , const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys );
-    static rtl::Reference< ::chart::Axis >
         getCrossingMainAxis( const rtl::Reference< ::chart::Axis >& xAxis
             , const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys );
 
     static rtl::Reference< ::chart::Axis >
-        getParallelAxis( const css::uno::Reference< css::chart2::XAxis >& xAxis
+        getParallelAxis( const rtl::Reference< ::chart::Axis >& xAxis
             , const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     static rtl::Reference< ::chart::GridProperties >
@@ -154,18 +147,10 @@ public:
             , const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     static bool getIndicesForAxis(
-              const css::uno::Reference< css::chart2::XAxis >& xAxis
-            , const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys
-            , sal_Int32& rOutDimensionIndex, sal_Int32& rOutAxisIndex );
-    static bool getIndicesForAxis(
               const rtl::Reference< ::chart::Axis >& xAxis
             , const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys
             , sal_Int32& rOutDimensionIndex, sal_Int32& rOutAxisIndex );
 
-    static bool getIndicesForAxis(
-              const css::uno::Reference< css::chart2::XAxis >& xAxis
-            , const rtl::Reference< ::chart::Diagram >& xDiagram
-            , sal_Int32& rOutCooSysIndex, sal_Int32& rOutDimensionIndex, sal_Int32& rOutAxisIndex );
     static bool getIndicesForAxis(
               const rtl::Reference< ::chart::Axis >& xAxis
             , const rtl::Reference< ::chart::Diagram >& xDiagram

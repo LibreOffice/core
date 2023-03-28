@@ -56,7 +56,7 @@ public:
         If the given Axis could not be found or for another reason no correct output can be given false is returned.
      */
     virtual bool getExplicitValuesForAxis(
-        css::uno::Reference< css::chart2::XAxis > xAxis
+        rtl::Reference< ::chart::Axis > xAxis
         , ExplicitScaleData&  rExplicitScale
         , ExplicitIncrementData& rExplicitIncrement )=0;
 

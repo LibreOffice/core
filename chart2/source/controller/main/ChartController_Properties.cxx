@@ -157,7 +157,7 @@ wrapper::ItemConverter* createItemConverter(
                 ExplicitIncrementData aExplicitIncrement;
                 if( pExplicitValueProvider )
                     pExplicitValueProvider->getExplicitValuesForAxis(
-                        uno::Reference< XAxis >( xObjectProperties, uno::UNO_QUERY ),
+                        dynamic_cast< Axis* >( xObjectProperties.get() ),
                         aExplicitScale, aExplicitIncrement );
 
                 pItemConverter =  new wrapper::AxisItemConverter(

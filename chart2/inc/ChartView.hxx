@@ -115,7 +115,7 @@ public:
 
     // ___ExplicitValueProvider___
     virtual bool getExplicitValuesForAxis(
-        css::uno::Reference< css::chart2::XAxis > xAxis
+        rtl::Reference< ::chart::Axis > xAxis
         , ExplicitScaleData&  rExplicitScale
         , ExplicitIncrementData& rExplicitIncrement ) override;
     virtual rtl::Reference< SvxShape >

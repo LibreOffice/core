@@ -330,7 +330,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
         }
 
         //axis
-        Reference< XAxis > xAxis( xObject, uno::UNO_QUERY );
+        rtl::Reference< Axis > xAxis = dynamic_cast<Axis*>( xObject.get() );
         if( xAxis.is() )
         {
             rtl::Reference< BaseCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis( xAxis, ChartModelHelper::findDiagram( xChartModel ) ) );

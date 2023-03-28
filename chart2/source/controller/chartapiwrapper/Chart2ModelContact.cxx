@@ -139,7 +139,7 @@ rtl::Reference<SvxDrawPage> Chart2ModelContact::getDrawPage() const
 }
 
 void Chart2ModelContact::getExplicitValuesForAxis(
-    const Reference< XAxis > & xAxis,
+    const rtl::Reference< Axis > & xAxis,
     ExplicitScaleData &  rOutExplicitScale,
     ExplicitIncrementData & rOutExplicitIncrement )
 {

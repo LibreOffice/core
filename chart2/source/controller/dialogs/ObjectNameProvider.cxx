@@ -334,8 +334,8 @@ OUString ObjectNameProvider::getAxisName( std::u16string_view rObjectCID
 {
     OUString aRet;
 
-    Reference< XAxis > xAxis(
-        ObjectIdentifier::getObjectPropertySet( rObjectCID , xChartModel ), uno::UNO_QUERY );
+    rtl::Reference< ::chart::Axis > xAxis =
+        dynamic_cast<::chart::Axis*>(ObjectIdentifier::getObjectPropertySet( rObjectCID , xChartModel ).get());
 
     sal_Int32 nCooSysIndex = 0;
     sal_Int32 nDimensionIndex = 0;

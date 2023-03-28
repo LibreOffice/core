@@ -70,7 +70,7 @@ public:
         case properties are 'auto'.
      */
     void getExplicitValuesForAxis(
-        const css::uno::Reference< css::chart2::XAxis > & xAxis,
+        const rtl::Reference< ::chart::Axis > & xAxis,
         ExplicitScaleData &  rOutExplicitScale,
         ExplicitIncrementData & rOutExplicitIncrement );
 

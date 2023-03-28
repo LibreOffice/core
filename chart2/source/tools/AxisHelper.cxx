@@ -592,14 +592,6 @@ rtl::Reference< Axis > AxisHelper::getAxis( sal_Int32 nDimensionIndex, sal_Int32
     return xRet;
 }
 
-rtl::Reference< Axis > AxisHelper::getCrossingMainAxis( const Reference< chart2::XAxis >& xAxis
-            , const rtl::Reference< BaseCoordinateSystem >& xCooSys )
-{
-    rtl::Reference< Axis > pAxis = dynamic_cast<Axis*>(xAxis.get());
-    assert(pAxis || !xAxis);
-    return getCrossingMainAxis(pAxis, xCooSys);
-}
-
 rtl::Reference< Axis > AxisHelper::getCrossingMainAxis( const rtl::Reference< Axis >& xAxis
             , const rtl::Reference< BaseCoordinateSystem >& xCooSys )
 {
@@ -620,7 +612,7 @@ rtl::Reference< Axis > AxisHelper::getCrossingMainAxis( const rtl::Reference< Ax
     return AxisHelper::getAxis( nDimensionIndex, 0, xCooSys );
 }
 
-rtl::Reference< Axis > AxisHelper::getParallelAxis( const Reference< XAxis >& xAxis
+rtl::Reference< Axis > AxisHelper::getParallelAxis( const rtl::Reference< Axis >& xAxis
             , const rtl::Reference< Diagram >& xDiagram )
 {
     try
@@ -717,16 +709,6 @@ sal_Int32 AxisHelper::getDimensionIndexOfAxis(
 }
 
 bool AxisHelper::getIndicesForAxis(
-              const Reference< chart2::XAxis >& xAxis
-            , const rtl::Reference< BaseCoordinateSystem >& xCooSys
-            , sal_Int32& rOutDimensionIndex, sal_Int32& rOutAxisIndex )
-{
-    rtl::Reference< Axis > pAxis = dynamic_cast<Axis*>(xAxis.get());
-    assert(pAxis || !xAxis);
-    return getIndicesForAxis(pAxis, xCooSys, rOutDimensionIndex, rOutAxisIndex);
-}
-
-bool AxisHelper::getIndicesForAxis(
               const rtl::Reference< Axis >& xAxis
             , const rtl::Reference< BaseCoordinateSystem >& xCooSys
             , sal_Int32& rOutDimensionIndex, sal_Int32& rOutAxisIndex )
@@ -756,14 +738,6 @@ bool AxisHelper::getIndicesForAxis(
         }
     }
     return false;
-}
-
-bool AxisHelper::getIndicesForAxis( const Reference< chart2::XAxis >& xAxis, const rtl::Reference< Diagram >& xDiagram
-            , sal_Int32& rOutCooSysIndex, sal_Int32& rOutDimensionIndex, sal_Int32& rOutAxisIndex )
-{
-    rtl::Reference< Axis > pAxis = dynamic_cast<Axis*>(xAxis.get());
-    assert(pAxis || !xAxis);
-    return getIndicesForAxis(pAxis, xDiagram, rOutCooSysIndex, rOutDimensionIndex, rOutAxisIndex);
 }
 
 bool AxisHelper::getIndicesForAxis( const rtl::Reference< Axis >& xAxis, const rtl::Reference< Diagram >& xDiagram
@@ -999,15 +973,6 @@ bool AxisHelper::changeVisibilityOfGrids( const rtl::Reference< Diagram >& xDiag
         }
     }
     return bChanged;
-}
-
-rtl::Reference< BaseCoordinateSystem > AxisHelper::getCoordinateSystemOfAxis(
-              const Reference< XAxis >& xAxis
-            , const rtl::Reference< Diagram >& xDiagram )
-{
-    rtl::Reference< Axis > pAxis = dynamic_cast<Axis*>(xAxis.get());
-    assert(pAxis || !xAxis);
-    return getCoordinateSystemOfAxis(pAxis, xDiagram);
 }
 
 rtl::Reference< BaseCoordinateSystem > AxisHelper::getCoordinateSystemOfAxis(

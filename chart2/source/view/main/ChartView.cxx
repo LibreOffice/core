@@ -780,7 +780,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
 }
 
 bool ChartView::getExplicitValuesForAxis(
-                     uno::Reference< XAxis > xAxis
+                     rtl::Reference< Axis > xAxis
                      , ExplicitScaleData&  rExplicitScale
                      , ExplicitIncrementData& rExplicitIncrement )
 {
