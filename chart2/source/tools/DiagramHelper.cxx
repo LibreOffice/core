@@ -457,7 +457,7 @@ bool DiagramHelper::setDiagramPositioning( const rtl::Reference<::chart::ChartMo
 
     bool bChanged = false;
     awt::Size aPageSize( ChartModelHelper::getPageSize(xChartModel) );
-    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
+    rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
     if( !xDiagram.is() )
         return bChanged;
 
@@ -499,7 +499,7 @@ awt::Rectangle DiagramHelper::getDiagramRectangleFromModel( const rtl::Reference
 {
     awt::Rectangle aRet(-1,-1,-1,-1);
 
-    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
+    rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
     if( !xDiagram.is() )
         return aRet;
 

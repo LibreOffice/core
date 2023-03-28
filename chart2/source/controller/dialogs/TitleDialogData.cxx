@@ -41,7 +41,7 @@ TitleDialogData::TitleDialogData( std::unique_ptr<ReferenceSizeProvider> pRefSiz
 
 void TitleDialogData::readFromModel( const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
-    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram(xChartModel);
+    rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
 
     //get possibilities
     uno::Sequence< sal_Bool > aAxisPossibilityList;

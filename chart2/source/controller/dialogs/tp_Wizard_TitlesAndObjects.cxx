@@ -76,7 +76,7 @@ void TitlesAndObjectsTabPage::initializePage()
 
     //init grid checkboxes
     {
-        rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( m_xChartModel );
+        rtl::Reference< Diagram > xDiagram = m_xChartModel->getFirstChartDiagram();
         uno::Sequence< sal_Bool > aPossibilityList;
         uno::Sequence< sal_Bool > aExistenceList;
         AxisHelper::getAxisOrGridPossibilities( aPossibilityList, xDiagram, false );
@@ -121,7 +121,7 @@ void TitlesAndObjectsTabPage::commitToModel()
 
     //commit grid changes to model
     {
-        rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xModel );
+        rtl::Reference< Diagram > xDiagram = xModel->getFirstChartDiagram();
         uno::Sequence< sal_Bool > aOldExistenceList;
         AxisHelper::getAxisOrGridExistence( aOldExistenceList, xDiagram, false );
         uno::Sequence< sal_Bool > aNewExistenceList(aOldExistenceList);

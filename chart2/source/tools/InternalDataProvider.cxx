@@ -313,7 +313,7 @@ InternalDataProvider::InternalDataProvider(
         return;
     try
     {
-        rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xModel ) );
+        rtl::Reference< Diagram > xDiagram( xModel->getFirstChartDiagram() );
         if( xDiagram.is())
         {
             //data in columns?

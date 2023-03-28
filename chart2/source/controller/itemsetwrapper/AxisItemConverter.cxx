@@ -355,7 +355,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
             //necessary tp display the crossing value with an appropriate format
 
             rtl::Reference< BaseCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(
-                m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
+                m_xAxis, m_xChartDoc->getFirstChartDiagram() ) );
 
             rtl::Reference< Axis > xCrossingMainAxis = AxisHelper::getCrossingMainAxis( m_xAxis, xCooSys );
 
@@ -405,7 +405,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
             {
                 rtl::Reference< BaseCoordinateSystem > xCooSys(
                         AxisHelper::getCoordinateSystemOfAxis(
-                              m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
+                              m_xAxis, m_xChartDoc->getFirstChartDiagram() ) );
 
                 sal_Int32 nFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
                     m_xAxis, xCooSys, m_xChartDoc);
@@ -434,7 +434,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
         case SCHATTR_AXIS_ALLOW_DATEAXIS:
         {
             rtl::Reference< BaseCoordinateSystem > xCooSys(
-                AxisHelper::getCoordinateSystemOfAxis( m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
+                AxisHelper::getCoordinateSystemOfAxis( m_xAxis, m_xChartDoc->getFirstChartDiagram() ) );
             sal_Int32 nDimensionIndex=0; sal_Int32 nAxisIndex=0;
             AxisHelper::getIndicesForAxis(m_xAxis, xCooSys, nDimensionIndex, nAxisIndex );
             bool bChartTypeAllowsDateAxis = ChartTypeHelper::isSupportingDateAxis( AxisHelper::getChartTypeByIndex( xCooSys, 0 ), nDimensionIndex );
@@ -716,7 +716,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                     {
                         //keep old and new settings for axis positioning in sync somehow
                         rtl::Reference< BaseCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(
-                            m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
+                            m_xAxis, m_xChartDoc->getFirstChartDiagram() ) );
 
                         sal_Int32 nDimensionIndex=0;
                         sal_Int32 nAxisIndex=0;
@@ -757,7 +757,8 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                 //move the parallel axes to the other side if necessary
                 if( eAxisPos==css::chart::ChartAxisPosition_START || eAxisPos==css::chart::ChartAxisPosition_END )
                 {
-                    rtl::Reference< Axis > xParallelAxis = AxisHelper::getParallelAxis( m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) );
+                    rtl::Reference<Diagram> xDiagram = m_xChartDoc->getFirstChartDiagram();
+                    rtl::Reference< Axis > xParallelAxis = AxisHelper::getParallelAxis( m_xAxis, xDiagram );
                     if( xParallelAxis.is() )
                     {
                         css::chart::ChartAxisPosition eOtherPos;
@@ -793,7 +794,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                 //keep old and new settings for axis positioning in sync somehow
                 {
                     rtl::Reference< BaseCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(
-                        m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
+                        m_xAxis, m_xChartDoc->getFirstChartDiagram() ) );
 
                     sal_Int32 nDimensionIndex=0;
                     sal_Int32 nAxisIndex=0;
@@ -840,7 +841,8 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                 //move the parallel axes to the other side if necessary
                 if( ePos==css::chart::ChartAxisLabelPosition_OUTSIDE_START || ePos==css::chart::ChartAxisLabelPosition_OUTSIDE_END )
                 {
-                    rtl::Reference< Axis > xParallelAxis = AxisHelper::getParallelAxis( m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) );
+                    rtl::Reference<Diagram> xDiagram = m_xChartDoc->getFirstChartDiagram();
+                    rtl::Reference< Axis > xParallelAxis = AxisHelper::getParallelAxis( m_xAxis, xDiagram );
                     if( xParallelAxis.is() )
                     {
                         css::chart::ChartAxisLabelPosition eOtherPos;
@@ -941,7 +943,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                     {
                         rtl::Reference< BaseCoordinateSystem > xCooSys =
                             AxisHelper::getCoordinateSystemOfAxis(
-                                m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) );
+                                m_xAxis, m_xChartDoc->getFirstChartDiagram() );
 
                         sal_Int32 nFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
                             m_xAxis, xCooSys, m_xChartDoc);

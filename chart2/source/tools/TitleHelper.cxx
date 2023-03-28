@@ -208,7 +208,7 @@ rtl::Reference< Title > TitleHelper::createTitle(
 
     if( !xTitled.is() )
     {
-        rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xModel ) );
+        rtl::Reference< Diagram > xDiagram( xModel->getFirstChartDiagram() );
         rtl::Reference< Axis > xAxis;
         switch( eTitleType )
         {
@@ -230,7 +230,7 @@ rtl::Reference< Title > TitleHelper::createTitle(
 
     if(xTitled.is())
     {
-        rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xModel ) );
+        rtl::Reference< Diagram > xDiagram( xModel->getFirstChartDiagram() );
 
         xTitle = new ::chart::Title();
 

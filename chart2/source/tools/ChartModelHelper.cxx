@@ -76,24 +76,9 @@ rtl::Reference< InternalDataProvider > ChartModelHelper::createInternalDataProvi
     return new InternalDataProvider( xChartDoc, bConnectToModel, bDefaultDataInColumns );
 }
 
-rtl::Reference< Diagram > ChartModelHelper::findDiagram( const rtl::Reference<::chart::ChartModel>& xChartDoc )
-{
-    try
-    {
-        if( !xChartDoc )
-            return nullptr;
-        return xChartDoc->getFirstChartDiagram();
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-    return nullptr;
-}
-
 rtl::Reference< BaseCoordinateSystem > ChartModelHelper::getFirstCoordinateSystem( const rtl::Reference<::chart::ChartModel>& xModel )
 {
-    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xModel );
+    rtl::Reference< Diagram > xDiagram = xModel->getFirstChartDiagram();
     if( xDiagram.is() )
     {
         auto& rCooSysSeq( xDiagram->getBaseCoordinateSystems() );
@@ -108,7 +93,7 @@ std::vector< rtl::Reference< DataSeries > > ChartModelHelper::getDataSeries(
 {
     std::vector< rtl::Reference< DataSeries > > aResult;
 
-    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartDoc );
+    rtl::Reference< Diagram > xDiagram = xChartDoc->getFirstChartDiagram();
     if( xDiagram.is())
         aResult = xDiagram->getDataSeries();
 
@@ -119,7 +104,7 @@ rtl::Reference< ChartType > ChartModelHelper::getChartTypeOfSeries(
                                 const rtl::Reference<::chart::ChartModel>& xModel
                               , const rtl::Reference< DataSeries >&   xGivenDataSeries )
 {
-    rtl::Reference<Diagram> xDiagram = ChartModelHelper::findDiagram( xModel );
+    rtl::Reference<Diagram> xDiagram = xModel->getFirstChartDiagram();
     return xDiagram ? xDiagram->getChartTypeOfSeries( xGivenDataSeries ) : nullptr;
 }
 
@@ -155,7 +140,7 @@ bool ChartModelHelper::isIncludeHiddenCells( const rtl::Reference<::chart::Chart
 {
     bool bIncluded = true;  // hidden cells are included by default.
 
-    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram(xChartModel) );
+    rtl::Reference< Diagram > xDiagram( xChartModel->getFirstChartDiagram() );
     if (!xDiagram.is())
         return bIncluded;
 

@@ -91,7 +91,7 @@ void ReferenceSizeProvider::setValuesAtTitle(
 
 void ReferenceSizeProvider::setValuesAtAllDataSeries()
 {
-    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( m_xChartDoc ));
+    rtl::Reference< Diagram > xDiagram( m_xChartDoc->getFirstChartDiagram());
 
     // DataSeries/Points
     std::vector< rtl::Reference< DataSeries > > aSeries =
@@ -224,7 +224,7 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
         return eResult;
 
     // diagram is needed by the rest of the objects
-    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartDoc );
+    rtl::Reference< Diagram > xDiagram = xChartDoc->getFirstChartDiagram();
     if( ! xDiagram.is())
         return eResult;
 
@@ -301,7 +301,7 @@ void ReferenceSizeProvider::setAutoResizeState( ReferenceSizeProvider::AutoResiz
     impl_setValuesAtTitled( m_xChartDoc );
 
     // diagram is needed by the rest of the objects
-    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( m_xChartDoc );
+    rtl::Reference< Diagram > xDiagram = m_xChartDoc->getFirstChartDiagram();
     if( ! xDiagram.is())
         return;
 

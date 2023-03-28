@@ -113,7 +113,7 @@ bool lcl_deleteDataSeries(
                     ActionDescriptionProvider::ActionType::Delete, SchResId( STR_OBJECT_DATASERIES )),
                 xUndoManager );
 
-            rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xModel );
+            rtl::Reference< Diagram > xDiagram = xModel->getFirstChartDiagram();
             rtl::Reference< Axis > xAxis = xDiagram->getAttachedAxis( xSeries );
 
             DataSeriesHelper::deleteSeries( xSeries, xChartType );
@@ -185,7 +185,7 @@ void ChartController::executeDispatch_NewArrangement()
     try
     {
         rtl::Reference<::chart::ChartModel> xModel( getChartModel() );
-        rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xModel );
+        rtl::Reference< Diagram > xDiagram = xModel->getFirstChartDiagram();
         if( xDiagram.is())
         {
             UndoGuard aUndoGuard(

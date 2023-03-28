@@ -240,7 +240,7 @@ DataPointItemConverter::DataPointItemConverter(
             dynamic_cast<DataSeries*>(rPropertySet.get()), rItemPool ));
     }
 
-    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram(xChartModel) );
+    rtl::Reference< Diagram > xDiagram( xChartModel->getFirstChartDiagram() );
     rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeOfSeries( xSeries ) );
     bool bFound = false;
     bool bAmbiguous = false;

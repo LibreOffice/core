@@ -122,7 +122,7 @@ ObjectPropertiesDialogParameter::~ObjectPropertiesDialogParameter()
 void ObjectPropertiesDialogParameter::init( const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     m_xChartDocument = xChartModel;
-    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
+    rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
     rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aObjectCID, xChartModel );
     rtl::Reference< ChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
     sal_Int32 nDimensionCount = 0;

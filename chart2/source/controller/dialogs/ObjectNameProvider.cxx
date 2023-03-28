@@ -66,7 +66,7 @@ OUString lcl_getDataSeriesName( std::u16string_view rObjectCID, const rtl::Refer
 {
     OUString aRet;
 
-    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+    rtl::Reference< Diagram > xDiagram( xChartModel->getFirstChartDiagram() );
     rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel );
     if( xDiagram.is() && xSeries.is() )
     {
@@ -340,7 +340,7 @@ OUString ObjectNameProvider::getAxisName( std::u16string_view rObjectCID
     sal_Int32 nCooSysIndex = 0;
     sal_Int32 nDimensionIndex = 0;
     sal_Int32 nAxisIndex = 0;
-    AxisHelper::getIndicesForAxis( xAxis, ChartModelHelper::findDiagram( xChartModel ), nCooSysIndex, nDimensionIndex, nAxisIndex );
+    AxisHelper::getIndicesForAxis( xAxis, xChartModel->getFirstChartDiagram(), nCooSysIndex, nDimensionIndex, nAxisIndex );
 
     switch(nDimensionIndex)
     {
@@ -433,7 +433,7 @@ OUString ObjectNameProvider::getGridName( std::u16string_view rObjectCID
     sal_Int32 nDimensionIndex = -1;
     sal_Int32 nAxisIndex = -1;
     rtl::Reference< Axis > xAxis = ObjectIdentifier::getAxisForCID( rObjectCID , xChartModel );
-    AxisHelper::getIndicesForAxis( xAxis, ChartModelHelper::findDiagram( xChartModel )
+    AxisHelper::getIndicesForAxis( xAxis, xChartModel->getFirstChartDiagram()
               , nCooSysIndex , nDimensionIndex, nAxisIndex );
 
     bool bMainGrid = (ObjectIdentifier::getObjectType( rObjectCID ) == OBJECTTYPE_GRID);
@@ -509,7 +509,7 @@ OUString ObjectNameProvider::getHelpText( std::u16string_view rObjectCID, const 
         else
             aRet=SchResId(STR_TIP_DATAPOINT);
 
-        rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+        rtl::Reference< Diagram > xDiagram( xChartModel->getFirstChartDiagram() );
         rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel );
         if( xDiagram.is() && xSeries.is() )
         {
@@ -731,7 +731,7 @@ OUString ObjectNameProvider::getSelectedObjectText( std::u16string_view rObjectC
     {
         aRet = SchResId( STR_STATUS_DATAPOINT_MARKED );
 
-        rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartDocument ) );
+        rtl::Reference< Diagram > xDiagram( xChartDocument->getFirstChartDiagram() );
         rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartDocument );
         if( xDiagram.is() && xSeries.is() )
         {

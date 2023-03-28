@@ -77,7 +77,7 @@ double InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals(
     ExplicitValueProvider* pExplicitValueProvider( xChartView.get() );
     if( pExplicitValueProvider )
     {
-        rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+        rtl::Reference< Diagram > xDiagram( xChartModel->getFirstChartDiagram() );
         rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rSelectedObjectCID, xChartModel );
         rtl::Reference< Axis > xAxis = xDiagram->getAttachedAxis( xSeries );
         if(!xAxis.is())

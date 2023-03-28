@@ -211,7 +211,7 @@ TextLabelItemConverter::TextLabelItemConverter(
 {
     maConverters.emplace_back(new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
 
-    rtl::Reference< Diagram > xDiagram(ChartModelHelper::findDiagram(xChartModel));
+    rtl::Reference< Diagram > xDiagram(xChartModel->getFirstChartDiagram());
     rtl::Reference< ChartType > xChartType(xDiagram->getChartTypeOfSeries(xSeries));
     bool bFound = false;
     bool bAmbiguous = false;

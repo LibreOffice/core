@@ -74,7 +74,7 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
     {
         m_bAttachToMainAxis = DiagramHelper::isSeriesAttachedToMainAxis( xDataSeries );
 
-        rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram(xChartModel) );
+        rtl::Reference< Diagram > xDiagram( xChartModel->getFirstChartDiagram() );
         rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeOfSeries( xDataSeries ) );
 
         m_xCooSys = DataSeriesHelper::getCoordinateSystemOfSeries( xDataSeries, xDiagram );
@@ -183,7 +183,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
             {
                 //change model:
                 rtl::Reference<DataSeries> xDataSeries = dynamic_cast<DataSeries*>( GetPropertySet().get() );
-                bChanged = ChartModelHelper::findDiagram(m_xChartModel)->attachSeriesToAxis( bAttachToMainAxis, xDataSeries
+                bChanged = m_xChartModel->getFirstChartDiagram()->attachSeriesToAxis( bAttachToMainAxis, xDataSeries
                     , m_xCC );
 
                 if( bChanged )
@@ -205,7 +205,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                     aPropName = "OverlapSequence";
 
                 rtl::Reference< DataSeries > xDataSeries( dynamic_cast<DataSeries*>(GetPropertySet().get()) );
-                rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram(m_xChartModel) );
+                rtl::Reference< Diagram > xDiagram( m_xChartModel->getFirstChartDiagram() );
                 rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeOfSeries( xDataSeries ) );
                 if( xChartType.is() )
                 {
@@ -238,7 +238,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
             if( m_bSupportingBarConnectors )
             {
                 bool bOldConnectBars = false;
-                rtl::Reference< Diagram > xDiagramProperties( ChartModelHelper::findDiagram(m_xChartModel), uno::UNO_QUERY );
+                rtl::Reference< Diagram > xDiagramProperties( m_xChartModel->getFirstChartDiagram() );
                 if( xDiagramProperties.is() &&
                     (xDiagramProperties->getPropertyValue( "ConnectBars" ) >>= bOldConnectBars) &&
                     bOldConnectBars != m_bConnectBars )
@@ -257,7 +257,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
             if( m_bSupportingAxisSideBySide )
             {
                 bool bOldGroupBarsPerAxis = true;
-                rtl::Reference< Diagram > xDiagramProperties( ChartModelHelper::findDiagram(m_xChartModel), uno::UNO_QUERY );
+                rtl::Reference< Diagram > xDiagramProperties( m_xChartModel->getFirstChartDiagram() );
                 if( xDiagramProperties.is() &&
                     (xDiagramProperties->getPropertyValue( "GroupBarsPerAxis" ) >>= bOldGroupBarsPerAxis) &&
                     bOldGroupBarsPerAxis != m_bGroupBarsPerAxis )
@@ -274,7 +274,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
             if( m_bSupportingStartingAngle )
             {
                 m_nStartingAngle = static_cast< const SdrAngleItem & >( rItemSet.Get( nWhichId )).GetValue().get() / 100;
-                rtl::Reference< Diagram > xDiagramProperties( ChartModelHelper::findDiagram(m_xChartModel), uno::UNO_QUERY );
+                rtl::Reference< Diagram > xDiagramProperties( m_xChartModel->getFirstChartDiagram() );
                 if( xDiagramProperties.is() )
                 {
                     xDiagramProperties->setPropertyValue( "StartingAngle" , uno::Any(m_nStartingAngle) );
@@ -311,7 +311,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                 {
                     try
                     {
-                        rtl::Reference< Diagram > xDiagramProperties( ChartModelHelper::findDiagram(m_xChartModel), uno::UNO_QUERY );
+                        rtl::Reference< Diagram > xDiagramProperties( m_xChartModel->getFirstChartDiagram() );
                         if( xDiagramProperties.is() )
                         {
                             xDiagramProperties->setPropertyValue( "MissingValueTreatment" , uno::Any( nNew ));

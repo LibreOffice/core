@@ -40,7 +40,7 @@ View3DDialog::View3DDialog(weld::Window* pParent, const rtl::Reference<::chart::
     , m_aControllerLocker(xChartModel)
     , m_xTabControl(m_xBuilder->weld_notebook("tabcontrol"))
 {
-    rtl::Reference< Diagram > xSceneProperties = ChartModelHelper::findDiagram( xChartModel );
+    rtl::Reference< Diagram > xSceneProperties = xChartModel->getFirstChartDiagram();
 
     m_xTabControl->append_page("geometry", SchResId(STR_PAGE_PERSPECTIVE));
     m_xGeometry.reset(new ThreeD_SceneGeometry_TabPage(m_xTabControl->get_page("geometry"), xSceneProperties, m_aControllerLocker));

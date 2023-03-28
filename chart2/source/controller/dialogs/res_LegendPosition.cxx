@@ -79,7 +79,7 @@ void LegendPositionResources::writeToResources( const rtl::Reference<::chart::Ch
 {
     try
     {
-        rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
+        rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
         uno::Reference< beans::XPropertySet > xProp( xDiagram->getLegend(), uno::UNO_QUERY );
         if( xProp.is() )
         {

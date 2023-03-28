@@ -113,7 +113,7 @@ void ObjectHierarchy::createTree( const rtl::Reference<::chart::ChartModel>& xCh
         return;
 
     //@todo: change ObjectIdentifier to take an XChartDocument rather than XModel
-    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartDocument );
+    rtl::Reference< Diagram > xDiagram = xChartDocument->getFirstChartDiagram();
     ObjectIdentifier aDiaOID;
     if( xDiagram.is() )
         aDiaOID = ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForObject( static_cast<cppu::OWeakObject*>(xDiagram.get()), xChartDocument ) );

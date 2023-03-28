@@ -180,7 +180,7 @@ void ChartTypeTabPage::stateChanged()
     commitToModel( aParameter );
 
     //detect the new ThreeDLookScheme
-    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram(m_xChartModel);
+    rtl::Reference< Diagram > xDiagram = m_xChartModel->getFirstChartDiagram();
     // tdf#124295 - select always a 3D scheme
     if (ThreeDLookScheme aThreeDLookScheme = xDiagram->detectScheme();
         aThreeDLookScheme != ThreeDLookScheme::ThreeDLookScheme_Unknown)
@@ -245,12 +245,12 @@ void ChartTypeTabPage::selectMainType()
     m_pCurrentMainType->adjustParameterToMainType( aParameter );
     commitToModel( aParameter );
     //detect the new ThreeDLookScheme
-    aParameter.eThreeDLookScheme = ChartModelHelper::findDiagram( m_xChartModel )->detectScheme();
+    aParameter.eThreeDLookScheme = m_xChartModel->getFirstChartDiagram()->detectScheme();
     if (!aParameter.b3DLook
         && aParameter.eThreeDLookScheme != ThreeDLookScheme::ThreeDLookScheme_Realistic)
         aParameter.eThreeDLookScheme = ThreeDLookScheme::ThreeDLookScheme_Realistic;
 
-    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram(m_xChartModel);
+    rtl::Reference< Diagram > xDiagram = m_xChartModel->getFirstChartDiagram();
     try
     {
         xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
@@ -304,7 +304,7 @@ void ChartTypeTabPage::initializePage()
     if( !m_xChartModel.is() )
         return;
     rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = m_xChartModel->getTypeManager();
-    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( m_xChartModel );
+    rtl::Reference< Diagram > xDiagram = m_xChartModel->getFirstChartDiagram();
     Diagram::tTemplateWithServiceName aTemplate =
         xDiagram->getTemplate( xChartTypeManager );
     OUString aServiceName( aTemplate.sServiceName );

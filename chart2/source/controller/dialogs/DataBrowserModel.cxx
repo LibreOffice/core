@@ -286,7 +286,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
         nAfterColumnIndex = getCategoryColumnCount()-1;
 
     sal_Int32 nStartCol = 0;
-    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram(m_xChartDocument);
+    rtl::Reference< Diagram > xDiagram = m_xChartDocument->getFirstChartDiagram();
     rtl::Reference<ChartType> xChartType;
     rtl::Reference<DataSeries> xSeries;
     if (o3tl::make_unsigned(nAfterColumnIndex) < m_aColumns.size())
@@ -749,7 +749,7 @@ void DataBrowserModel::updateFromModel()
     m_aColumns.clear();
     m_aHeaders.clear();
 
-    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( m_xChartDocument ));
+    rtl::Reference< Diagram > xDiagram( m_xChartDocument->getFirstChartDiagram());
     if( !xDiagram.is())
         return;
 

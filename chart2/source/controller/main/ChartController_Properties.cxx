@@ -204,7 +204,7 @@ wrapper::ItemConverter* createItemConverter(
                 rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( aObjectCID, xChartModel );
                 rtl::Reference< ChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
 
-                rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
+                rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
                 sal_Int32 nDimensionCount = xDiagram->getDimension();
                 if( !ChartTypeHelper::isSupportingAreaProperties( xChartType, nDimensionCount ) )
                     eMapTo = wrapper::GraphicObjectType::LineDataPoint;
@@ -384,14 +384,14 @@ OUString lcl_getAxisCIDForCommand( std::string_view rDispatchCommand, const rtl:
         nDimensionIndex=1; bMainAxis=false;
     }
 
-    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
+    rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
     rtl::Reference< Axis > xAxis = AxisHelper::getAxis( nDimensionIndex, bMainAxis, xDiagram );
     return ObjectIdentifier::createClassifiedIdentifierForObject( xAxis, xChartModel );
 }
 
 OUString lcl_getGridCIDForCommand( std::string_view rDispatchCommand, const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
-    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
+    rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
 
     if( rDispatchCommand == "DiagramGridAll")
         return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_GRID, u"ALLELEMENTS" );

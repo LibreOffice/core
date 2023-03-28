@@ -132,7 +132,7 @@ OUString lcl_getTitleParentParticle( TitleHelper::eTitleType aTitleType )
 
 rtl::Reference<ChartType> lcl_getFirstStockChartType( const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
-    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+    rtl::Reference< Diagram > xDiagram( xChartModel->getFirstChartDiagram() );
     if(!xDiagram.is())
         return nullptr;
 
@@ -212,7 +212,7 @@ void lcl_getDiagramAndCooSys( std::u16string_view rObjectCID
     sal_Int32 nDiagramIndex = -1;
     sal_Int32 nCooSysIndex = -1;
     lcl_parseCooSysIndices( nDiagramIndex, nCooSysIndex, rObjectCID );
-    xDiagram = ChartModelHelper::findDiagram( xChartModel );//todo use nDiagramIndex when more than one diagram is possible in future
+    xDiagram = xChartModel->getFirstChartDiagram();//todo use nDiagramIndex when more than one diagram is possible in future
     if( !xDiagram.is() )
         return;
 
@@ -333,7 +333,8 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
         rtl::Reference< Axis > xAxis = dynamic_cast<Axis*>( xObject.get() );
         if( xAxis.is() )
         {
-            rtl::Reference< BaseCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis( xAxis, ChartModelHelper::findDiagram( xChartModel ) ) );
+            rtl::Reference<Diagram> xDiagram = xChartModel->getFirstChartDiagram();
+            rtl::Reference< BaseCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis( xAxis, xDiagram ) );
             OUString aCooSysParticle( createParticleForCoordinateSystem( xCooSys, xChartModel ) );
             sal_Int32 nDimensionIndex=-1;
             sal_Int32 nAxisIndex=-1;
@@ -411,7 +412,8 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
         //axis
         if( xAxis.is() )
         {
-            rtl::Reference< BaseCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis( xAxis, ChartModelHelper::findDiagram( xChartModel ) ) );
+            rtl::Reference<Diagram> xDiagram = xChartModel->getFirstChartDiagram();
+            rtl::Reference< BaseCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis( xAxis, xDiagram ) );
             OUString aCooSysParticle( createParticleForCoordinateSystem( xCooSys, xChartModel ) );
             sal_Int32 nDimensionIndex=-1;
             sal_Int32 nAxisIndex=-1;
@@ -474,7 +476,7 @@ OUString ObjectIdentifier::createParticleForCoordinateSystem(
 {
     OUString aRet;
 
-    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+    rtl::Reference< Diagram > xDiagram( xChartModel->getFirstChartDiagram() );
     if( xDiagram.is() )
     {
         std::size_t nCooSysIndex = 0;

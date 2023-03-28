@@ -50,7 +50,7 @@ AllAxisItemConverter::AllAxisItemConverter(
     const awt::Size* pRefSize )
         : MultipleItemConverter( rItemPool )
 {
-    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+    rtl::Reference< Diagram > xDiagram( xChartModel->getFirstChartDiagram() );
     const std::vector< rtl::Reference< Axis > > aElementList = AxisHelper::getAllAxesOfDiagram( xDiagram );
     for( rtl::Reference< Axis > const & axis : aElementList )
     {
@@ -79,7 +79,7 @@ AllGridItemConverter::AllGridItemConverter(
     const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory )
         : MultipleItemConverter( rItemPool )
 {
-    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+    rtl::Reference< Diagram > xDiagram( xChartModel->getFirstChartDiagram() );
     std::vector< rtl::Reference< GridProperties > > aElementList( AxisHelper::getAllGrids( xDiagram ) );
     for( rtl::Reference< GridProperties > const & xObjectProperties : aElementList )
     {

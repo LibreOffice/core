@@ -273,7 +273,7 @@ uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges(
 
 uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges( const rtl::Reference<::chart::ChartModel> & xChartModel )
 {
-    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+    rtl::Reference< Diagram > xDiagram( xChartModel->getFirstChartDiagram() );
     return getUsedDataRanges( xDiagram );
 }
 
@@ -385,7 +385,7 @@ void DataSourceHelper::setRangeSegmentation(
     uno::Reference< data::XDataProvider > xDataProvider( xChartModel->getDataProvider() );
     if( !xDataProvider.is() )
         return;
-    rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
+    rtl::Reference< Diagram > xDiagram( xChartModel->getFirstChartDiagram() );
     if( !xDiagram.is() )
         return;
     rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = xChartModel->getTypeManager();

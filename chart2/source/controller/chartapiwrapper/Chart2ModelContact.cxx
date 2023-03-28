@@ -156,7 +156,7 @@ sal_Int32 Chart2ModelContact::getExplicitNumberFormatKeyForAxis(
 {
     rtl::Reference< BaseCoordinateSystem > xCooSys(
         AxisHelper::getCoordinateSystemOfAxis(
-              xAxis, ChartModelHelper::findDiagram( m_xChartModel ) ) );
+              xAxis, m_xChartModel.get()->getFirstChartDiagram() ) );
 
     return ExplicitValueProvider::getExplicitNumberFormatKeyForAxis( xAxis, xCooSys
               , m_xChartModel.get() );
@@ -195,7 +195,7 @@ awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingTitle() const
 awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingAxes() const
 {
     awt::Rectangle aRect(0,0,0,0);
-    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( m_xChartModel );
+    rtl::Reference< Diagram > xDiagram = m_xChartModel.get()->getFirstChartDiagram();
 
     if( xDiagram && xDiagram->getDiagramPositioningMode() == DiagramPositioningMode::Including )
         aRect = DiagramHelper::getDiagramRectangleFromModel(m_xChartModel.get());
@@ -211,7 +211,7 @@ awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingAxes() const
 awt::Rectangle Chart2ModelContact::GetDiagramRectangleExcludingAxes() const
 {
     awt::Rectangle aRect(0,0,0,0);
-    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( m_xChartModel );
+    rtl::Reference< Diagram > xDiagram = m_xChartModel.get()->getFirstChartDiagram();
 
     if( xDiagram && xDiagram->getDiagramPositioningMode() == DiagramPositioningMode::Excluding )
         aRect = DiagramHelper::getDiagramRectangleFromModel(m_xChartModel.get());

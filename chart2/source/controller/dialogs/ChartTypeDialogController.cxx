@@ -314,7 +314,7 @@ void ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
 
     // locked controllers
     ControllerLockGuardUNO aCtrlLockGuard( xChartModel );
-    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
+    rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
     Diagram::tTemplateWithServiceName aTemplateWithService(
         xDiagram->getTemplate( xTemplateManager ));
     if( aTemplateWithService.xChartTypeTemplate.is())
@@ -1155,7 +1155,7 @@ void CombiColumnLineChartDialogController::fillExtraControls(
     if (!m_xMF_NumberOfLines)
         return;
 
-    rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
+    rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
     if(!xDiagram.is())
         return;
 
