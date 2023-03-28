@@ -439,8 +439,7 @@ bool SdrTextObj::HasText() const
 
 void SdrTextObj::AppendFamilyToStyleName(OUString& styleName, SfxStyleFamily family)
 {
-    OUStringBuffer aFam;
-    aFam.append(static_cast<sal_Int32>(family));
+    OUStringBuffer aFam = OUString::number(static_cast<sal_Int32>(family));
     comphelper::string::padToLength(aFam, PADDING_LENGTH_FOR_STYLE_FAMILY , PADDING_CHARACTER_FOR_STYLE_FAMILY);
 
     styleName += "|" + aFam;

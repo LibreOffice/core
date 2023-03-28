@@ -92,8 +92,7 @@ namespace svx
         OUStringBuffer aExtensionList;
         for ( auto const & extension : std::as_const(m_aFilterExtensions) )
         {
-            aExtensionList.append( extension );
-            aExtensionList.append( ';' );
+            aExtensionList.append( extension + ";" );
         }
         m_rLocationInput.SetFilter( aExtensionList.makeStringAndClear() );
         _rBrowseButton.connect_clicked(LINK(this, DatabaseLocationInputController_Impl, OnButtonAction));

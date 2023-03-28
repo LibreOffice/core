@@ -66,8 +66,7 @@ uno::Reference< container::XNameContainer > XGradientList::createInstance()
 
 bool XGradientList::Create()
 {
-    OUStringBuffer aStr(SvxResId(RID_SVXSTR_GRADIENT));
-    aStr.append(" 1");
+    OUStringBuffer aStr(SvxResId(RID_SVXSTR_GRADIENT) + " 1");
     sal_Int32 nLen = aStr.getLength() - 1;
 
     // XGradient() default already creates [COL_BLACK, COL_WHITE] as defaults

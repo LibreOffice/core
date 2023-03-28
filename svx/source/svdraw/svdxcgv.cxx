@@ -375,8 +375,8 @@ bool SdrExchangeView::Paste(
             }
             else
             {
-                aStr.append(static_cast<sal_Int32>(nCloneErrCnt));
-                aStr.append(" drawing objects.");
+                aStr.append(OString::number(static_cast<sal_Int32>(nCloneErrCnt))
+                    + " drawing objects.");
             }
 
             aStr.append(" Not copying object connectors.");

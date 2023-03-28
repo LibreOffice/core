@@ -1002,8 +1002,7 @@ OUString SdrModel::GetMetricString(tools::Long nVal, bool bNoUnitChars, sal_Int3
         nDecimalMark = nNumDigits;
     }
 
-    OUStringBuffer aBuf;
-    aBuf.append(static_cast<sal_Int32>(fLocalValue + 0.5));
+    OUStringBuffer aBuf = OUString::number(static_cast<sal_Int32>(fLocalValue + 0.5));
 
     if(nDecimalMark < 0)
     {

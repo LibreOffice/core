@@ -810,9 +810,7 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
                             if ( !aFilter.isEmpty() )
                                 aFilter.append( " OR " );
 
-                            aFilter.append( "( " );
-                            aFilter.append( aRowFilter );
-                            aFilter.append( " )" );
+                            aFilter.append( "( " + aRowFilter + " )" );
                         }
                     }
                 }

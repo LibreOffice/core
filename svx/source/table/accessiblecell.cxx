@@ -514,10 +514,11 @@ OUString AccessibleCell::getCellName( sal_Int32 nCol, sal_Int32 nRow )
                         static_cast<sal_uInt16>(nCol)));
         else
         {
-            aBuf.append( static_cast<sal_Unicode>( 'A' +
-                        (static_cast<sal_uInt16>(nCol) / 26) - 1));
-            aBuf.append( static_cast<sal_Unicode>( 'A' +
-                        (static_cast<sal_uInt16>(nCol) % 26)));
+            aBuf.append(
+                OUStringChar(static_cast<sal_Unicode>( 'A' +
+                         (static_cast<sal_uInt16>(nCol) / 26) - 1))
+                + OUStringChar( static_cast<sal_Unicode>( 'A' +
+                                (static_cast<sal_uInt16>(nCol) % 26))) );
         }
     }
     else

@@ -852,10 +852,10 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             OStringBuffer aExtraInfo;
             OString handleArrayStr;
 
-            aExtraInfo.append("{\"id\":\"");
-            aExtraInfo.append(reinterpret_cast<sal_IntPtr>(pO));
-            aExtraInfo.append("\",\"type\":");
-            aExtraInfo.append(static_cast<sal_Int32>(pO->GetObjIdentifier()));
+            aExtraInfo.append("{\"id\":\""
+                + OString::number(reinterpret_cast<sal_IntPtr>(pO))
+                + "\",\"type\":"
+                + OString::number(static_cast<sal_Int32>(pO->GetObjIdentifier())));
 
             // In core, the gridOffset is calculated based on the LogicRect's TopLeft coordinate
             // In online, we have the SnapRect and we calculate it based on its TopLeft coordinate
@@ -871,10 +871,10 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                 Point p(aGridOffset.getX(), aGridOffset.getY());
                 if (convertMapMode)
                     p = o3tl::convert(p, o3tl::Length::mm100, o3tl::Length::twip);
-                aExtraInfo.append(",\"gridOffsetX\":");
-                aExtraInfo.append(nSignX * p.getX());
-                aExtraInfo.append(",\"gridOffsetY\":");
-                aExtraInfo.append(p.getY());
+                aExtraInfo.append(",\"gridOffsetX\":"
+                    + OString::number(nSignX * p.getX())
+                    + ",\"gridOffsetY\":"
+                    + OString::number(p.getY()));
             }
 
             if (bWriterGraphic)
@@ -901,10 +901,8 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                             nPos += rProp.getLength() + 1; // '='
                             if (aExtraInfo.getLength() > 2) // != "{ "
                                 aExtraInfo.append(", ");
-                            aExtraInfo.append("\"is");
-                            aExtraInfo.append(rProp);
-                            aExtraInfo.append("\": ");
-                            aExtraInfo.append(OString::boolean(aObjectCID[nPos] == '1'));
+                            aExtraInfo.append("\"is" + rProp + "\": "
+                                + OString::boolean(aObjectCID[nPos] == '1'));
                         }
 
                         std::u16string_view sDragMethod = lcl_getDragMethodServiceName(aValue);
@@ -916,10 +914,10 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                             std::u16string_view sDragParameters = lcl_getDragParameterString(aValue);
                             if (!sDragParameters.empty())
                             {
-                                aExtraInfo.append(", \"dragInfo\": { ");
-                                aExtraInfo.append("\"dragMethod\": \"");
-                                aExtraInfo.append(OUString(sDragMethod).toUtf8());
-                                aExtraInfo.append("\"");
+                                aExtraInfo.append(", \"dragInfo\": { "
+                                    "\"dragMethod\": \""
+                                    + OUString(sDragMethod).toUtf8()
+                                    + "\"");
 
                                 sal_Int32 nStartIndex = 0;
                                 std::array<int, 5> aDragParameters;
@@ -937,8 +935,8 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                                 else if (aDragParameters[0] > 100)
                                     aDragParameters[0] = 100;
 
-                                aExtraInfo.append(", \"initialOffset\": ");
-                                aExtraInfo.append(static_cast<sal_Int32>(aDragParameters[0]));
+                                aExtraInfo.append(", \"initialOffset\": "
+                                    + OString::number(static_cast<sal_Int32>(aDragParameters[0])));
 
                                 // drag direction constraint
                                 Point aMinPos(aDragParameters[1], aDragParameters[2]);
@@ -946,9 +944,9 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                                 Point aDragDirection = aMaxPos - aMinPos;
                                 aDragDirection = o3tl::convert(aDragDirection, o3tl::Length::mm100, o3tl::Length::twip);
 
-                                aExtraInfo.append(", \"dragDirection\": [");
-                                aExtraInfo.append(aDragDirection.toString());
-                                aExtraInfo.append("]");
+                                aExtraInfo.append(", \"dragDirection\": ["
+                                    + aDragDirection.toString()
+                                    + "]");
 
                                 // polygon approximating the pie segment or donut segment
                                 if (pO->GetObjIdentifier() == SdrObjKind::PathFill)
@@ -991,12 +989,12 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                                                     aSelection.toString() +
                                                     R"elem(\" preserveAspectRatio=\"xMidYMid\" xmlns=\"http://www.w3.org/2000/svg\">)elem";
 
-                                                aExtraInfo.append(", \"svg\": \"");
-                                                aExtraInfo.append(sSVGElem);
-                                                aExtraInfo.append("\\n  ");
-                                                aExtraInfo.append(sPolygonElem);
-                                                aExtraInfo.append("\\n</svg>");
-                                                aExtraInfo.append("\""); // svg
+                                                aExtraInfo.append(", \"svg\": \""
+                                                    + sSVGElem
+                                                    + "\\n  "
+                                                    + sPolygonElem
+                                                    + "\\n</svg>"
+                                                    "\""); // svg
                                             }
                                         }
                                     }
@@ -1107,8 +1105,8 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             if (!aExtraInfo.isEmpty())
             {
                 sSelectionTextView = sSelectionText + ", " + aExtraInfo + "}";
-                aExtraInfo.append(handleArrayStr);
-                aExtraInfo.append("}");
+                aExtraInfo.append(handleArrayStr
+                    + "}");
                 sSelectionText += ", " + aExtraInfo;
                 aExtraInfo.setLength(0);
             }

@@ -155,12 +155,7 @@ namespace svxform
                 // now find a free label
                 sal_Int32 i=2;
                 while ( aUsedLabels.find( sLabel ) != aUsedLabels.end() )
-                {
-                    OUStringBuffer aBuffer( _rBaseLabel );
-                    aBuffer.append( " " );
-                    aBuffer.append( i++ );
-                    sLabel = aBuffer.makeStringAndClear();
-                }
+                    sLabel = _rBaseLabel + " " + OUString::number( i++ );
             }
             catch( const Exception& )
             {
@@ -685,10 +680,7 @@ namespace svxform
         OUString sName;
         do
         {
-            OUStringBuffer aBuf( _rBaseName );
-            aBuf.append( " " );
-            aBuf.append( ++n );
-            sName = aBuf.makeStringAndClear();
+            sName = OUString::Concat(_rBaseName) + " " + OUString::number( ++n );
         }
         while ( _rxContainer->hasByName( sName ) );
 
