@@ -1097,6 +1097,12 @@ CondFormat::CondFormat( const WorksheetHelper& rHelper ) :
 {
 }
 
+CondFormat::~CondFormat()
+{
+    if (!mbReadyForFinalize && mpFormat)
+        delete mpFormat;
+}
+
 void CondFormat::importConditionalFormatting( const AttributeList& rAttribs )
 {
     getAddressConverter().convertToCellRangeList( maModel.maRanges, rAttribs.getString( XML_sqref, OUString() ), getSheetIndex(), true );
@@ -1135,10 +1141,16 @@ void CondFormat::finalizeImport()
     ScDocument& rDoc = getScDocument();
     mpFormat->SetRange(maModel.maRanges);
     maRules.forEachMem( &CondFormatRule::finalizeImport );
-    SCTAB nTab = maModel.maRanges.GetTopLeftCorner().Tab();
-    sal_Int32 nIndex = getScDocument().AddCondFormat(std::unique_ptr<ScConditionalFormat>(mpFormat), nTab);
 
-    rDoc.AddCondFormatData( maModel.maRanges, nTab, nIndex );
+    if (mpFormat->size() > 0)
+    {
+        SCTAB nTab = maModel.maRanges.GetTopLeftCorner().Tab();
+        sal_Int32 nIndex = getScDocument().AddCondFormat(std::unique_ptr<ScConditionalFormat>(mpFormat), nTab);
+
+        rDoc.AddCondFormatData( maModel.maRanges, nTab, nIndex );
+    }
+    else
+        mbReadyForFinalize = false;
 }
 
 CondFormatRuleRef CondFormat::createRule()

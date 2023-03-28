@@ -201,6 +201,7 @@ class CondFormat final : public WorksheetHelper
 friend class CondFormatBuffer;
 public:
     explicit            CondFormat( const WorksheetHelper& rHelper );
+    ~CondFormat();
 
     /** Imports settings from the conditionalFormatting element. */
     void                importConditionalFormatting( const AttributeList& rAttribs );
