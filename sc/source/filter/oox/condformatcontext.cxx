@@ -202,6 +202,12 @@ void CondFormatContext::onEndElement()
             if(mxCondFmt)
                 mxCondFmt->setReadyForFinalize();
             break;
+        case XLS_TOKEN( cfRule ):
+            if (mxCondFmt && mxRule)
+            {
+                mxCondFmt->insertRule(mxRule);
+            }
+        break;
     }
 }
 
