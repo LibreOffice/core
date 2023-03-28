@@ -54,7 +54,7 @@ VDiagram::VDiagram(
     if( m_nDimensionCount != 3)
         return;
 
-    ThreeDHelper::getRotationAngleFromDiagram( xDiagram, m_fXAnglePi, m_fYAnglePi, m_fZAnglePi );
+    xDiagram->getRotationAngle( m_fXAnglePi, m_fYAnglePi, m_fZAnglePi );
     if( ChartTypeHelper::isSupportingRightAngledAxes(
             m_xDiagram->getChartTypeByIndex( 0 ) ) )
     {

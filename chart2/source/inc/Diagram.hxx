@@ -335,6 +335,15 @@ public:
     double getCameraDistance();
     void setCameraDistance( double fCameraDistance );
 
+    void getRotation(
+            sal_Int32& rnHorizontalAngleDegree, sal_Int32& rnVerticalAngleDegree );
+    void setRotation(
+            sal_Int32 nHorizontalAngleDegree, sal_Int32 nVerticalYAngleDegree );
+    void getRotationAngle(
+            double& rfXAngleRad, double& rfYAngleRad, double& rfZAngleRad );
+    void setRotationAngle(
+            double fXAngleRad, double fYAngleRad, double fZAngleRad );
+
 private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

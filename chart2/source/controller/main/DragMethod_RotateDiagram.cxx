@@ -77,11 +77,11 @@ DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWr
     if( !xDiagram.is() )
         return;
 
-    ThreeDHelper::getRotationFromDiagram( xDiagram
-        , m_nInitialHorizontalAngleDegree, m_nInitialVerticalAngleDegree );
+    xDiagram->getRotation(
+        m_nInitialHorizontalAngleDegree, m_nInitialVerticalAngleDegree );
 
-    ThreeDHelper::getRotationAngleFromDiagram( xDiagram
-        , m_fInitialXAngleRad, m_fInitialYAngleRad, m_fInitialZAngleRad );
+    xDiagram->getRotationAngle(
+        m_fInitialXAngleRad, m_fInitialYAngleRad, m_fInitialZAngleRad );
 
     if( ChartTypeHelper::isSupportingRightAngledAxes(
         xDiagram->getChartTypeByIndex( 0 ) ) )
@@ -160,13 +160,16 @@ bool DragMethod_RotateDiagram::EndSdrDrag(bool /*bCopy*/)
         if(m_bRightAngledAxes)
             ThreeDHelper::adaptRadAnglesForRightAngledAxes( fResultX, fResultY );
 
-        ThreeDHelper::setRotationAngleToDiagram( ChartModelHelper::findDiagram( getChartModel() )
-            , fResultX, fResultY, fResultZ );
+        rtl::Reference<Diagram> xDiagram = ChartModelHelper::findDiagram( getChartModel() );
+        if (xDiagram)
+            xDiagram->setRotationAngle( fResultX, fResultY, fResultZ );
     }
     else
     {
-        ThreeDHelper::setRotationToDiagram( ChartModelHelper::findDiagram( getChartModel() )
-            , m_nInitialHorizontalAngleDegree+m_nAdditionalHorizontalAngleDegree, m_nInitialVerticalAngleDegree+m_nAdditionalVerticalAngleDegree );
+        rtl::Reference<Diagram> xDiagram = ChartModelHelper::findDiagram( getChartModel() );
+        if (xDiagram)
+            xDiagram->setRotation(
+                m_nInitialHorizontalAngleDegree+m_nAdditionalHorizontalAngleDegree, m_nInitialVerticalAngleDegree+m_nAdditionalVerticalAngleDegree );
     }
 
     return true;

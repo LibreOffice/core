@@ -59,21 +59,7 @@ public:
      */
     static css::drawing::CameraGeometry getDefaultCameraGeometry( bool bPie=false );
 
-    static void getRotationAngleFromDiagram(
-        const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties
-            , double& rfXAngleRad, double& rfYAngleRad, double& rfZAngleRad );
-    static void setRotationAngleToDiagram(
-        const rtl::Reference< ::chart::Diagram >& xSceneProperties
-            , double fXAngleRad, double fYAngleRad, double fZAngleRad );
-
-    static void getRotationFromDiagram(
-        const rtl::Reference< ::chart::Diagram >& xSceneProperties
-            , sal_Int32& rnHorizontalAngleDegree, sal_Int32& rnVerticalAngleDegree );
-    static void setRotationToDiagram(
-        const rtl::Reference< ::chart::Diagram >& xSceneProperties
-            , sal_Int32 nHorizontalAngleDegree, sal_Int32 nVerticalYAngleDegree );
-
-    static void switchRightAngledAxes( const css::uno::Reference< css::beans::XPropertySet >& xSceneProperties
+    static void switchRightAngledAxes( const rtl::Reference< Diagram >& xSceneProperties
             , bool bRightAngledAxes );
 
     static void adaptRadAnglesForRightAngledAxes( double& rfXAngleRad, double& rfYAngleRad );

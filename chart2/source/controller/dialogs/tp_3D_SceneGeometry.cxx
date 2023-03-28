@@ -69,7 +69,7 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage(weld::Container* pPar
     , m_xMFPerspective(m_xBuilder->weld_metric_spin_button("MTR_FLD_PERSPECTIVE", FieldUnit::PERCENT))
 {
     double fXAngle, fYAngle, fZAngle;
-    ThreeDHelper::getRotationAngleFromDiagram( m_xDiagram, fXAngle, fYAngle, fZAngle );
+    m_xDiagram->getRotationAngle( fXAngle, fYAngle, fZAngle );
 
     fXAngle = basegfx::rad2deg(fXAngle);
     fYAngle = basegfx::rad2deg(fYAngle);
@@ -159,7 +159,7 @@ void ThreeD_SceneGeometry_TabPage::applyAnglesToModel()
     fYAngle = basegfx::deg2rad(fYAngle);
     fZAngle = basegfx::deg2rad(fZAngle);
 
-    ThreeDHelper::setRotationAngleToDiagram( m_xDiagram, fXAngle, fYAngle, fZAngle );
+    m_xDiagram->setRotationAngle( fXAngle, fYAngle, fZAngle );
 
     m_bAngleChangePending = false;
     m_aAngleTimer.Stop();
