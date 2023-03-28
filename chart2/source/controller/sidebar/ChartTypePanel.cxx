@@ -182,7 +182,7 @@ void ChartTypePanel::Initialize()
             m_pCurrentMainType = getSelectedMainType();
 
             //set ThreeDLookScheme
-            aParameter.eThreeDLookScheme = ThreeDHelper::detectScheme(xDiagram);
+            aParameter.eThreeDLookScheme = xDiagram->detectScheme();
             if (!aParameter.b3DLook
                 && aParameter.eThreeDLookScheme != ThreeDLookScheme::ThreeDLookScheme_Realistic)
                 aParameter.eThreeDLookScheme = ThreeDLookScheme::ThreeDLookScheme_Realistic;
@@ -370,7 +370,7 @@ void ChartTypePanel::stateChanged()
 
     //detect the new ThreeDLookScheme
     rtl::Reference<Diagram> xDiagram = ChartModelHelper::findDiagram(m_xChartModel);
-    aParameter.eThreeDLookScheme = ThreeDHelper::detectScheme(xDiagram);
+    aParameter.eThreeDLookScheme = xDiagram->detectScheme();
     try
     {
         xDiagram->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
@@ -413,8 +413,7 @@ void ChartTypePanel::selectMainType()
     m_pCurrentMainType->adjustParameterToMainType(aParameter);
     commitToModel(aParameter);
     //detect the new ThreeDLookScheme
-    aParameter.eThreeDLookScheme
-        = ThreeDHelper::detectScheme(ChartModelHelper::findDiagram(m_xChartModel));
+    aParameter.eThreeDLookScheme = ChartModelHelper::findDiagram(m_xChartModel)->detectScheme();
     if (!aParameter.b3DLook
         && aParameter.eThreeDLookScheme != ThreeDLookScheme::ThreeDLookScheme_Realistic)
         aParameter.eThreeDLookScheme = ThreeDLookScheme::ThreeDLookScheme_Realistic;

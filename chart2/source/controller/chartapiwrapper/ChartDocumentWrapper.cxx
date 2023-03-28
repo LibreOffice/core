@@ -1180,7 +1180,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                     // locked controllers
                     ControllerLockGuardUNO aCtrlLockGuard( xChartDoc );
                     rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartDoc );
-                    ThreeDLookScheme e3DScheme = ThreeDHelper::detectScheme( xDiagram );
+                    ThreeDLookScheme e3DScheme = xDiagram->detectScheme();
                     rtl::Reference< ::chart::ChartTypeManager > xTemplateManager = xChartDoc->getTypeManager();
                     Diagram::tTemplateWithServiceName aTemplateWithService(
                         xDiagram->getTemplate( xTemplateManager ));
@@ -1189,7 +1189,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                     xTemplate->changeDiagram( xDiagram );
                     if( AllSettings::GetMathLayoutRTL() )
                         AxisHelper::setRTLAxisLayout( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 ) );
-                    ThreeDHelper::setScheme( xDiagram, e3DScheme );
+                    xDiagram->setScheme( e3DScheme );
                 }
                 else
                 {

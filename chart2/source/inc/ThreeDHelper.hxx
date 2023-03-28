@@ -95,10 +95,6 @@ public:
     static CuboidPlanePosition getAutomaticCuboidPlanePositionForStandardBottom(const rtl::Reference<
             ::chart::Diagram >& xDiagram );
 
-    static ThreeDLookScheme detectScheme( const rtl::Reference< ::chart::Diagram >& xDiagram );
-    static void setScheme( const rtl::Reference< ::chart::Diagram >& xDiagram
-            , ThreeDLookScheme aScheme );
-
     //sal_Int32 nRoundedEdges:  <0 or >100 -> mixed state
     //sal_Int32 nObjectLines:  0->no lines; 1->all lines on; other->mixed state
 

@@ -323,7 +323,7 @@ void ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
     if( AllSettings::GetMathLayoutRTL() )
         AxisHelper::setRTLAxisLayout( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 ) );
     if( rParameter.b3DLook )
-        ThreeDHelper::setScheme( xDiagram, rParameter.eThreeDLookScheme );
+        xDiagram->setScheme( rParameter.eThreeDLookScheme );
 
     if (xDiagram.is())
     {

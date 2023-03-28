@@ -135,71 +135,6 @@ void lcl_rotateLights( const ::basegfx::B3DHomMatrix& rLightRottion, const Refer
     return aCompleteRotation;
 }
 
-bool lcl_isEqual( const drawing::Direction3D& rA, const drawing::Direction3D& rB )
-{
-    return ::rtl::math::approxEqual(rA.DirectionX, rB.DirectionX)
-        && ::rtl::math::approxEqual(rA.DirectionY, rB.DirectionY)
-        && ::rtl::math::approxEqual(rA.DirectionZ, rB.DirectionZ);
-}
-
-bool lcl_isLightScheme( const rtl::Reference< Diagram >& xDiagram, bool bRealistic )
-{
-    if(!xDiagram.is())
-        return false;
-
-    bool bIsOn = false;
-    xDiagram->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_2 ) >>= bIsOn;
-    if(!bIsOn)
-        return false;
-
-    rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeByIndex( 0 ) );
-
-    sal_Int32 nColor = 0;
-    xDiagram->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTCOLOR_2 ) >>= nColor;
-    if( nColor != ::chart::ChartTypeHelper::getDefaultDirectLightColor( !bRealistic, xChartType ) )
-        return false;
-
-    sal_Int32 nAmbientColor = 0;
-    xDiagram->getPropertyValue( UNO_NAME_3D_SCENE_AMBIENTCOLOR ) >>= nAmbientColor;
-    if( nAmbientColor != ::chart::ChartTypeHelper::getDefaultAmbientLightColor( !bRealistic, xChartType ) )
-        return false;
-
-    drawing::Direction3D aDirection(0,0,0);
-    xDiagram->getPropertyValue( UNO_NAME_3D_SCENE_LIGHTDIRECTION_2 ) >>= aDirection;
-
-    drawing::Direction3D aDefaultDirection( bRealistic
-        ? ChartTypeHelper::getDefaultRealisticLightDirection(xChartType)
-        : ChartTypeHelper::getDefaultSimpleLightDirection(xChartType) );
-
-    //rotate default light direction when right angled axes are off but supported
-    {
-        bool bRightAngledAxes = false;
-        xDiagram->getPropertyValue( "RightAngledAxes") >>= bRightAngledAxes;
-        if(!bRightAngledAxes)
-        {
-            if( ChartTypeHelper::isSupportingRightAngledAxes(
-                    xDiagram->getChartTypeByIndex( 0 ) ) )
-            {
-                ::basegfx::B3DHomMatrix aRotation( lcl_getCompleteRotationMatrix( xDiagram ) );
-                BaseGFXHelper::ReduceToRotationMatrix( aRotation );
-                ::basegfx::B3DVector aLightVector( BaseGFXHelper::Direction3DToB3DVector( aDefaultDirection ) );
-                aLightVector = aRotation*aLightVector;
-                aDefaultDirection = BaseGFXHelper::B3DVectorToDirection3D( aLightVector );
-            }
-        }
-    }
-
-    return lcl_isEqual( aDirection, aDefaultDirection );
-}
-
-bool lcl_isRealisticLightScheme( const rtl::Reference< Diagram >& xDiagram )
-{
-    return lcl_isLightScheme( xDiagram, true /*bRealistic*/ );
-}
-bool lcl_isSimpleLightScheme( const rtl::Reference< Diagram >& xDiagram )
-{
-    return lcl_isLightScheme( xDiagram, false /*bRealistic*/ );
-}
 void lcl_setLightsForScheme( const rtl::Reference< Diagram >& xDiagram, const ThreeDLookScheme& rScheme )
 {
     if(!xDiagram.is())
@@ -237,59 +172,6 @@ void lcl_setLightsForScheme( const rtl::Reference< Diagram >& xDiagram, const Th
     sal_Int32 nAmbientColor = ::chart::ChartTypeHelper::getDefaultAmbientLightColor(
         rScheme == ThreeDLookScheme::ThreeDLookScheme_Simple, xChartType);
     xDiagram->setPropertyValue( UNO_NAME_3D_SCENE_AMBIENTCOLOR, uno::Any( nAmbientColor ) );
-}
-
-bool lcl_isRealisticScheme( drawing::ShadeMode aShadeMode
-                    , sal_Int32 nRoundedEdges
-                    , sal_Int32 nObjectLines )
-{
-    if(aShadeMode!=drawing::ShadeMode_SMOOTH)
-        return false;
-    if(nRoundedEdges!=5)
-        return false;
-    if(nObjectLines!=0)
-        return false;
-    return true;
-}
-
-bool lcl_isSimpleScheme( drawing::ShadeMode aShadeMode
-                    , sal_Int32 nRoundedEdges
-                    , sal_Int32 nObjectLines
-                    , const rtl::Reference< Diagram >& xDiagram )
-{
-    if(aShadeMode!=drawing::ShadeMode_FLAT)
-        return false;
-    if(nRoundedEdges!=0)
-        return false;
-    if(nObjectLines==0)
-    {
-        rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeByIndex( 0 ) );
-        return ChartTypeHelper::noBordersForSimpleScheme( xChartType );
-    }
-    if(nObjectLines!=1)
-        return false;
-    return true;
-}
-
-void lcl_setRealisticScheme( drawing::ShadeMode& rShadeMode
-                    , sal_Int32& rnRoundedEdges
-                    , sal_Int32& rnObjectLines )
-{
-    rShadeMode = drawing::ShadeMode_SMOOTH;
-    rnRoundedEdges = 5;
-    rnObjectLines = 0;
-}
-
-void lcl_setSimpleScheme( drawing::ShadeMode& rShadeMode
-                    , sal_Int32& rnRoundedEdges
-                    , sal_Int32& rnObjectLines
-                    , const rtl::Reference< Diagram >& xDiagram )
-{
-    rShadeMode = drawing::ShadeMode_FLAT;
-    rnRoundedEdges = 0;
-
-    rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeByIndex( 0 ) );
-    rnObjectLines = ChartTypeHelper::noBordersForSimpleScheme( xChartType ) ? 0 : 1;
 }
 
 } //end anonymous namespace
@@ -907,77 +789,6 @@ double ThreeDHelper::PerspectiveToCameraDistance( double fPerspective )
     double fRet = a/(fPerspective - b);
 
     return fRet;
-}
-
-ThreeDLookScheme ThreeDHelper::detectScheme( const rtl::Reference< Diagram >& xDiagram )
-{
-    ThreeDLookScheme aScheme = ThreeDLookScheme::ThreeDLookScheme_Unknown;
-
-    sal_Int32 nRoundedEdges;
-    sal_Int32 nObjectLines;
-    ThreeDHelper::getRoundedEdgesAndObjectLines( xDiagram, nRoundedEdges, nObjectLines );
-
-    //get shade mode and light settings:
-    drawing::ShadeMode aShadeMode( drawing::ShadeMode_SMOOTH );
-    try
-    {
-        if( xDiagram.is() )
-            xDiagram->getPropertyValue( "D3DSceneShadeMode" )>>= aShadeMode;
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-
-    if( lcl_isSimpleScheme( aShadeMode, nRoundedEdges, nObjectLines, xDiagram ) )
-    {
-        if( lcl_isSimpleLightScheme(xDiagram) )
-            aScheme = ThreeDLookScheme::ThreeDLookScheme_Simple;
-    }
-    else if( lcl_isRealisticScheme( aShadeMode, nRoundedEdges, nObjectLines ) )
-    {
-        if( lcl_isRealisticLightScheme(xDiagram) )
-            aScheme = ThreeDLookScheme::ThreeDLookScheme_Realistic;
-    }
-
-    return aScheme;
-}
-
-void ThreeDHelper::setScheme( const rtl::Reference< Diagram >& xDiagram, ThreeDLookScheme aScheme )
-{
-    if( aScheme == ThreeDLookScheme::ThreeDLookScheme_Unknown )
-        return;
-
-    drawing::ShadeMode aShadeMode;
-    sal_Int32 nRoundedEdges;
-    sal_Int32 nObjectLines;
-
-    if( aScheme == ThreeDLookScheme::ThreeDLookScheme_Simple )
-        lcl_setSimpleScheme(aShadeMode,nRoundedEdges,nObjectLines,xDiagram);
-    else
-        lcl_setRealisticScheme(aShadeMode,nRoundedEdges,nObjectLines);
-
-    try
-    {
-        ThreeDHelper::setRoundedEdgesAndObjectLines( xDiagram, nRoundedEdges, nObjectLines );
-
-        if( xDiagram.is() )
-        {
-            drawing::ShadeMode aOldShadeMode;
-            if( ! ( (xDiagram->getPropertyValue( "D3DSceneShadeMode" )>>=aOldShadeMode) &&
-                    aOldShadeMode == aShadeMode ))
-            {
-                xDiagram->setPropertyValue( "D3DSceneShadeMode", uno::Any( aShadeMode ));
-            }
-        }
-
-        lcl_setLightsForScheme( xDiagram, aScheme );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-
 }
 
 void ThreeDHelper::set3DSettingsToDefault( const rtl::Reference< Diagram >& xDiagram )

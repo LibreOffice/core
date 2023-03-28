@@ -50,6 +50,7 @@ class DataTable;
 class RegressionCurveModel;
 enum class StackMode;
 class Wall;
+enum class ThreeDLookScheme;
 
 enum class DiagramPositioningMode
 {
@@ -343,6 +344,9 @@ public:
             double& rfXAngleRad, double& rfYAngleRad, double& rfZAngleRad );
     void setRotationAngle(
             double fXAngleRad, double fYAngleRad, double fZAngleRad );
+
+    ThreeDLookScheme detectScheme();
+    void setScheme( ThreeDLookScheme aScheme );
 
 private:
     // ____ XModifyListener ____

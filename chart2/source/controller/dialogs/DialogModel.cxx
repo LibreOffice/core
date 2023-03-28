@@ -548,7 +548,7 @@ rtl::Reference< ::chart::DataSeries > DialogModel::insertSeriesAfter(
     try
     {
         rtl::Reference< Diagram > xDiagram( m_xChartDocument->getFirstChartDiagram() );
-        ThreeDLookScheme e3DScheme = ThreeDHelper::detectScheme( xDiagram );
+        ThreeDLookScheme e3DScheme = xDiagram->detectScheme();
 
         sal_Int32 nSeriesInChartType = 0;
         const sal_Int32 nTotalSeries = countSeries();
@@ -571,7 +571,7 @@ rtl::Reference< ::chart::DataSeries > DialogModel::insertSeriesAfter(
         if( xNewSeries.is())
             addNewSeriesToContainer(xChartType, xSeries, xNewSeries);
 
-        ThreeDHelper::setScheme( xDiagram, e3DScheme );
+        xDiagram->setScheme( e3DScheme );
     }
     catch( const uno::Exception & )
     {
@@ -715,7 +715,7 @@ void DialogModel::setData(
         if( xInterpreter.is())
         {
             rtl::Reference< Diagram > xDiagram( m_xChartDocument->getFirstChartDiagram() );
-            ThreeDLookScheme e3DScheme = ThreeDHelper::detectScheme( xDiagram );
+            ThreeDLookScheme e3DScheme = xDiagram->detectScheme();
 
             std::vector< rtl::Reference< DataSeries > > aSeriesToReUse =
                 xDiagram->getDataSeries();
@@ -725,7 +725,7 @@ void DialogModel::setData(
                     aSeriesToReUse ),
                 aSeriesToReUse);
 
-            ThreeDHelper::setScheme( xDiagram, e3DScheme );
+            xDiagram->setScheme( e3DScheme );
         }
     }
     catch( const uno::Exception & )

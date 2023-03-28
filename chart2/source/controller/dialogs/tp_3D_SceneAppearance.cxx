@@ -56,7 +56,7 @@ lcl_ModelProperties lcl_getPropertiesFromModel( rtl::Reference<::chart::ChartMod
         rtl::Reference< ::chart::Diagram > xDiagram( ::chart::ChartModelHelper::findDiagram( xModel ) );
         xDiagram->getPropertyValue( "D3DSceneShadeMode" ) >>= aProps.m_aShadeMode;
         ::chart::ThreeDHelper::getRoundedEdgesAndObjectLines( xDiagram, aProps.m_nRoundedEdges, aProps.m_nObjectLines );
-        aProps.m_eScheme = ::chart::ThreeDHelper::detectScheme( xDiagram );
+        aProps.m_eScheme = xDiagram->detectScheme();
     }
     catch( const uno::Exception & )
     {
@@ -273,9 +273,9 @@ IMPL_LINK_NOARG(ThreeD_SceneAppearance_TabPage, SelectSchemeHdl, weld::ComboBox&
         rtl::Reference< Diagram > xDiagram = ::chart::ChartModelHelper::findDiagram( m_xChartModel );
 
         if( m_xLB_Scheme->get_active() == POS_3DSCHEME_REALISTIC )
-            ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme::ThreeDLookScheme_Realistic );
+            xDiagram->setScheme( ThreeDLookScheme::ThreeDLookScheme_Realistic );
         else if( m_xLB_Scheme->get_active() == POS_3DSCHEME_SIMPLE )
-            ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme::ThreeDLookScheme_Simple );
+            xDiagram->setScheme( ThreeDLookScheme::ThreeDLookScheme_Simple );
         else
         {
             OSL_FAIL( "Invalid Entry selected" );
