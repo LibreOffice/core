@@ -147,9 +147,7 @@ private:
 
     std::optional<SfxItemSet> CreateItemSet( sal_uInt16 nId );
     static void     ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
-    void            InitTreeAndHandler();
     void            Initialize( const css::uno::Reference< css::frame::XFrame >& _xFrame );
-    void            InitWidgets();
 
     void            LoadExtensionOptions( std::u16string_view rExtensionId );
     static OUString GetModuleIdentifier( const css::uno::Reference<
@@ -173,6 +171,9 @@ private:
 
     virtual weld::Button& GetOKButton() const override { return *xOkPB; }
     virtual const SfxItemSet* GetExampleSet() const override { return nullptr; }
+
+    // Common initialization
+    OfaTreeOptionsDialog(weld::Window* pParent, bool fromExtensionManager);
 
 public:
     OfaTreeOptionsDialog(weld::Window* pParent,
