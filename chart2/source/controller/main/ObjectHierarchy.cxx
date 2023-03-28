@@ -32,6 +32,7 @@
 #include <ChartModel.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
+#include <GridProperties.hxx>
 #include <LegendHelper.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 #include <unonames.hxx>
@@ -258,19 +259,17 @@ void ObjectHierarchy::createAxesTree(
             lcl_addAxisTitle( xAxis, rContainer, xChartDoc );
         }
 
-        Reference< beans::XPropertySet > xGridProperties( xAxis->getGridProperties() );
+        rtl::Reference< ::chart::GridProperties > xGridProperties( xAxis->getGridProperties2() );
         if( AxisHelper::isGridVisible( xGridProperties ) )
         {
             //main grid
             rContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartDoc ) );
         }
 
-        Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );
-        sal_Int32 nSubGrid = 0;
-        for( nSubGrid = 0; nSubGrid < aSubGrids.getLength(); ++nSubGrid )
+        std::vector< rtl::Reference< ::chart::GridProperties > > aSubGrids( xAxis->getSubGridProperties2() );
+        for( size_t nSubGrid = 0; nSubGrid < aSubGrids.size(); ++nSubGrid )
         {
-            Reference< beans::XPropertySet > xSubGridProperties( aSubGrids[nSubGrid] );
-            if( AxisHelper::isGridVisible( xSubGridProperties ) )
+            if( AxisHelper::isGridVisible( aSubGrids[nSubGrid] ) )
             {
                 //sub grid
                 rContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartDoc, nSubGrid ) );

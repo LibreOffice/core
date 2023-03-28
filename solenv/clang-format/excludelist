@@ -1018,6 +1018,7 @@ chart2/source/inc/ExponentialRegressionCurveCalculator.hxx
 chart2/source/inc/FillProperties.hxx
 chart2/source/inc/FormattedString.hxx
 chart2/source/inc/FormattedStringHelper.hxx
+chart2/source/inc/GridProperties.hxx
 chart2/source/inc/InternalData.hxx
 chart2/source/inc/InternalDataProvider.hxx
 chart2/source/inc/LabeledDataSequence.hxx
@@ -1083,7 +1084,6 @@ chart2/source/model/main/DataSeriesProperties.hxx
 chart2/source/model/main/Diagram.cxx
 chart2/source/model/main/FormattedString.cxx
 chart2/source/model/main/GridProperties.cxx
-chart2/source/model/main/GridProperties.hxx
 chart2/source/model/main/Legend.cxx
 chart2/source/model/main/PageBackground.cxx
 chart2/source/model/main/PageBackground.hxx

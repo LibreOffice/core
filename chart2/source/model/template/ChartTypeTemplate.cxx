@@ -24,6 +24,7 @@
 #include <ChartType.hxx>
 #include <DataSeries.hxx>
 #include <DataSource.hxx>
+#include <GridProperties.hxx>
 
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
@@ -494,7 +495,7 @@ void ChartTypeTemplate::createCoordinateSystems(
     {
         rtl::Reference< Axis > xAxis = xCooSys->getAxisByDimension2( 1, 0 );
         if( xAxis.is())
-            AxisHelper::makeGridVisible( xAxis->getGridProperties() );
+            AxisHelper::makeGridVisible( xAxis->getGridProperties2() );
     }
 
     std::vector< rtl::Reference< BaseCoordinateSystem > > aCoordinateSystems(

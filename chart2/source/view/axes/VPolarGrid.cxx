@@ -20,6 +20,7 @@
 #include "VPolarGrid.hxx"
 #include "VCartesianGrid.hxx"
 #include "Tickmarks.hxx"
+#include <GridProperties.hxx>
 #include <PlottingPositionHelper.hxx>
 #include <ShapeFactory.hxx>
 #include <ObjectIdentifier.hxx>
@@ -38,7 +39,7 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 
 VPolarGrid::VPolarGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
-                       , std::vector< Reference< beans::XPropertySet > > aGridPropertiesList )
+                       , std::vector< rtl::Reference< ::chart::GridProperties > > aGridPropertiesList )
             : VAxisOrGridBase( nDimensionIndex, nDimensionCount )
             , m_aGridPropertiesList( std::move(aGridPropertiesList) )
             , m_pPosHelper( new PolarPlottingPositionHelper() )

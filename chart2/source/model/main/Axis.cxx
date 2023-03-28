@@ -18,7 +18,7 @@
  */
 
 #include <Axis.hxx>
-#include "GridProperties.hxx"
+#include <GridProperties.hxx>
 #include <CharacterProperties.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <UserDefinedProperties.hxx>
@@ -258,31 +258,16 @@ const ::chart::tPropertyValueMap &  StaticAxisDefaults()
     return aPropHelper;
 };
 
-typedef uno::Reference< beans::XPropertySet > lcl_tSubGridType;
-
-void lcl_CloneSubGrids(
-    const uno::Sequence< lcl_tSubGridType > & rSource, uno::Sequence< lcl_tSubGridType > & rDestination )
+std::vector< rtl::Reference< ::chart::GridProperties > > lcl_CloneSubGrids(
+    const std::vector< rtl::Reference< ::chart::GridProperties > > & rSource )
 {
-    rDestination.realloc( rSource.getLength());
-    lcl_tSubGridType * pDestBegin = rDestination.getArray();
-    lcl_tSubGridType * pDestEnd   = pDestBegin + rDestination.getLength();
-    lcl_tSubGridType * pDestIt    = pDestBegin;
-
-    for( Reference< beans::XPropertySet > const & i : rSource )
+    std::vector< rtl::Reference< ::chart::GridProperties > > aDestination;
+    aDestination.reserve( rSource.size());
+    for( rtl::Reference< ::chart::GridProperties > const & i : rSource )
     {
-        Reference< beans::XPropertySet > xSubGrid( i );
-        if( xSubGrid.is())
-        {
-            Reference< util::XCloneable > xCloneable( xSubGrid, uno::UNO_QUERY );
-            if( xCloneable.is())
-                xSubGrid.set( xCloneable->createClone(), uno::UNO_QUERY );
-        }
-
-        (*pDestIt) = xSubGrid;
-        OSL_ASSERT( pDestIt != pDestEnd );
-        ++pDestIt;
+        aDestination.push_back(new ::chart::GridProperties(*i));
     }
-    OSL_ASSERT( pDestIt == pDestEnd );
+    return aDestination;
 }
 
 } // anonymous namespace
@@ -314,16 +299,17 @@ Axis::Axis( const Axis & rOther ) :
     m_xModifyEventForwarder( new ModifyEventForwarder() ),
     m_aScaleData( rOther.m_aScaleData )
 {
-    m_xGrid.set( CloneHelper::CreateRefClone< beans::XPropertySet >()( rOther.m_xGrid ));
+    if (rOther.m_xGrid)
+        m_xGrid = new ::chart::GridProperties(*rOther.m_xGrid);
     if( m_xGrid.is())
         ModifyListenerHelper::addListener( m_xGrid, m_xModifyEventForwarder );
 
     if( m_aScaleData.Categories.is())
         ModifyListenerHelper::addListener( m_aScaleData.Categories, m_xModifyEventForwarder );
 
-    if( rOther.m_aSubGridProperties.hasElements() )
-        lcl_CloneSubGrids( rOther.m_aSubGridProperties, m_aSubGridProperties );
-    ModifyListenerHelper::addListenerToAllSequenceElements( m_aSubGridProperties, m_xModifyEventForwarder );
+    if( !rOther.m_aSubGridProperties.empty() )
+        m_aSubGridProperties = lcl_CloneSubGrids( rOther.m_aSubGridProperties );
+    ModifyListenerHelper::addListenerToAllElements( m_aSubGridProperties, m_xModifyEventForwarder );
 
     if ( rOther.m_xTitle )
         m_xTitle = new Title( *rOther.m_xTitle );
@@ -343,7 +329,7 @@ Axis::~Axis()
     try
     {
         ModifyListenerHelper::removeListener( m_xGrid, m_xModifyEventForwarder );
-        ModifyListenerHelper::removeListenerFromAllSequenceElements( m_aSubGridProperties, m_xModifyEventForwarder );
+        ModifyListenerHelper::removeListenerFromAllElements( m_aSubGridProperties, m_xModifyEventForwarder );
         ModifyListenerHelper::removeListener( m_xTitle, m_xModifyEventForwarder );
         if( m_aScaleData.Categories.is())
         {
@@ -356,7 +342,7 @@ Axis::~Axis()
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
-    m_aSubGridProperties.realloc(0);
+    m_aSubGridProperties.clear();
     m_xGrid = nullptr;
     m_xTitle = nullptr;
 }
@@ -365,32 +351,31 @@ void Axis::AllocateSubGrids()
 {
     Reference< util::XModifyListener > xModifyEventForwarder;
     Reference< lang::XEventListener > xEventListener;
-    std::vector< Reference< beans::XPropertySet > > aOldBroadcasters;
-    std::vector< Reference< beans::XPropertySet > > aNewBroadcasters;
+    std::vector< rtl::Reference< GridProperties > > aOldBroadcasters;
+    std::vector< rtl::Reference< GridProperties > > aNewBroadcasters;
     {
         MutexGuard aGuard( m_aMutex );
         xModifyEventForwarder = m_xModifyEventForwarder;
         xEventListener = this;
 
         sal_Int32 nNewSubIncCount = m_aScaleData.IncrementData.SubIncrements.getLength();
-        sal_Int32 nOldSubIncCount = m_aSubGridProperties.getLength();
+        sal_Int32 nOldSubIncCount = m_aSubGridProperties.size();
 
         if( nOldSubIncCount > nNewSubIncCount )
         {
             // remove superfluous entries
             for( sal_Int32 i = nNewSubIncCount; i < nOldSubIncCount; ++i )
                 aOldBroadcasters.push_back( m_aSubGridProperties[ i ] );
-            m_aSubGridProperties.realloc( nNewSubIncCount );
+            m_aSubGridProperties.resize( nNewSubIncCount );
         }
         else if( nOldSubIncCount < nNewSubIncCount )
         {
-            m_aSubGridProperties.realloc( nNewSubIncCount );
-            auto pSubGridProperties = m_aSubGridProperties.getArray();
+            m_aSubGridProperties.resize( nNewSubIncCount );
 
             // allocate new entries
             for( sal_Int32 i = nOldSubIncCount; i < nNewSubIncCount; ++i )
             {
-                pSubGridProperties[ i ] = new GridProperties();
+                m_aSubGridProperties[ i ] = new GridProperties();
                 LinePropertiesHelper::SetLineInvisible( m_aSubGridProperties[ i ] );
                 LinePropertiesHelper::SetLineColor( m_aSubGridProperties[ i ], static_cast<sal_Int32>(0xdddddd) ); //gray2
                 aNewBroadcasters.push_back( m_aSubGridProperties[ i ] );
@@ -445,7 +430,18 @@ Reference< beans::XPropertySet > SAL_CALL Axis::getGridProperties()
     MutexGuard aGuard( m_aMutex );
     return m_xGrid;
 }
+rtl::Reference< ::chart::GridProperties > Axis::getGridProperties2()
+{
+    MutexGuard aGuard( m_aMutex );
+    return m_xGrid;
+}
 Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubGridProperties()
+{
+    MutexGuard aGuard( m_aMutex );
+    return comphelper::containerToSequence<Reference< beans::XPropertySet >>(m_aSubGridProperties);
+}
+
+std::vector< rtl::Reference< GridProperties > > Axis::getSubGridProperties2()
 {
     MutexGuard aGuard( m_aMutex );
     return m_aSubGridProperties;

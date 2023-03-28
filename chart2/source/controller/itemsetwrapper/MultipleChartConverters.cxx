@@ -28,6 +28,7 @@
 #include <ChartModel.hxx>
 #include <Diagram.hxx>
 #include <DataSeries.hxx>
+#include <GridProperties.hxx>
 #include <TitleHelper.hxx>
 #include <TitleItemConverter.hxx>
 #include <Axis.hxx>
@@ -79,8 +80,8 @@ AllGridItemConverter::AllGridItemConverter(
         : MultipleItemConverter( rItemPool )
 {
     rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
-    const Sequence< Reference< beans::XPropertySet > > aElementList( AxisHelper::getAllGrids( xDiagram ) );
-    for( Reference< beans::XPropertySet > const & xObjectProperties : aElementList )
+    std::vector< rtl::Reference< GridProperties > > aElementList( AxisHelper::getAllGrids( xDiagram ) );
+    for( rtl::Reference< GridProperties > const & xObjectProperties : aElementList )
     {
         m_aConverters.emplace_back( new ::chart::wrapper::GraphicPropertyItemConverter(
                                         xObjectProperties, rItemPool, rDrawModel, xNamedPropertyContainerFactory,

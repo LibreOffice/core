@@ -27,6 +27,7 @@
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <ChartType.hxx>
+#include <GridProperties.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <servicenames_charttypes.hxx>
@@ -1168,7 +1169,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                     sal_Int32 nSubGridIndex = -1;
                     lcl_parseGridIndices( nSubGridIndex, rObjectCID );
 
-                    xObjectProperties.set( AxisHelper::getGridProperties( xCooSys , nDimensionIndex, nAxisIndex, nSubGridIndex ) );
+                    xObjectProperties = AxisHelper::getGridProperties( xCooSys , nDimensionIndex, nAxisIndex, nSubGridIndex );
                 }
                 break;
             case OBJECTTYPE_DATA_LABELS:

@@ -25,6 +25,7 @@
 #include <CommonConverters.hxx>
 #include <AxisHelper.hxx>
 #include <VLineProperties.hxx>
+#include <GridProperties.hxx>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
@@ -149,7 +150,7 @@ static void addLine3D( std::vector<std::vector<css::drawing::Position3D>>& rPoin
 }
 
 VCartesianGrid::VCartesianGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
-                               , std::vector< Reference< beans::XPropertySet > >  aGridPropertiesList )
+                               , std::vector< rtl::Reference< ::chart::GridProperties > > aGridPropertiesList )
             : VAxisOrGridBase( nDimensionIndex, nDimensionCount )
             , m_aGridPropertiesList( std::move(aGridPropertiesList) )
 {
@@ -163,7 +164,7 @@ VCartesianGrid::~VCartesianGrid()
 }
 
 void VCartesianGrid::fillLinePropertiesFromGridModel( std::vector<VLineProperties>& rLinePropertiesList
-                                     , const std::vector< Reference< beans::XPropertySet > > & rGridPropertiesList )
+                                     , const std::vector< rtl::Reference< ::chart::GridProperties > > & rGridPropertiesList )
 {
     rLinePropertiesList.clear();
     if( rGridPropertiesList.empty() )

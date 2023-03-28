@@ -35,6 +35,7 @@
 #include <DataSeries.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
+#include <GridProperties.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 #include <chartview/ChartSfxItemIds.hxx>
 #include <NumberFormatterWrapper.hxx>
@@ -901,7 +902,7 @@ void ChartController::executeDispatch_InsertMajorGrid()
         rtl::Reference< Axis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getChartModel() );
         if( xAxis.is() )
         {
-            AxisHelper::makeGridVisible( xAxis->getGridProperties() );
+            AxisHelper::makeGridVisible( xAxis->getGridProperties2() );
             aUndoGuard.commit();
         }
     }
@@ -923,7 +924,7 @@ void ChartController::executeDispatch_DeleteMajorGrid()
         rtl::Reference< Axis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getChartModel() );
         if( xAxis.is() )
         {
-            AxisHelper::makeGridInvisible( xAxis->getGridProperties() );
+            AxisHelper::makeGridInvisible( xAxis->getGridProperties2() );
             aUndoGuard.commit();
         }
     }
@@ -945,8 +946,8 @@ void ChartController::executeDispatch_InsertMinorGrid()
         rtl::Reference< Axis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getChartModel() );
         if( xAxis.is() )
         {
-            const Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );
-            for( Reference< beans::XPropertySet > const & props : aSubGrids)
+            std::vector< rtl::Reference< ::chart::GridProperties > > aSubGrids( xAxis->getSubGridProperties2() );
+            for( rtl::Reference< GridProperties > const & props : aSubGrids)
                 AxisHelper::makeGridVisible( props );
             aUndoGuard.commit();
         }
@@ -969,8 +970,8 @@ void ChartController::executeDispatch_DeleteMinorGrid()
         rtl::Reference< Axis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getChartModel() );
         if( xAxis.is() )
         {
-            const Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );
-            for( Reference< beans::XPropertySet > const & props : aSubGrids)
+            std::vector< rtl::Reference< ::chart::GridProperties > > aSubGrids( xAxis->getSubGridProperties2() );
+            for( rtl::Reference< ::chart::GridProperties > const & props : aSubGrids)
                 AxisHelper::makeGridInvisible( props );
             aUndoGuard.commit();
         }

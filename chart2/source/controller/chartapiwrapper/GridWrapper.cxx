@@ -22,6 +22,7 @@
 #include "Chart2ModelContact.hxx"
 #include <AxisIndexDefines.hxx>
 #include <BaseCoordinateSystem.hxx>
+#include <GridProperties.hxx>
 
 #include <LinePropertiesHelper.hxx>
 #include <UserDefinedProperties.hxx>
@@ -113,7 +114,7 @@ Reference< beans::XPropertySet > GridWrapper::getInnerPropertySet()
         getDimensionAndSubGridBool( m_eType, nDimensionIndex, bSubGrid );
 
         sal_Int32 nSubGridIndex = bSubGrid ? 0 : -1;
-        xRet.set( AxisHelper::getGridProperties( xCooSys , nDimensionIndex, MAIN_AXIS_INDEX, nSubGridIndex ) );
+        xRet = AxisHelper::getGridProperties( xCooSys , nDimensionIndex, MAIN_AXIS_INDEX, nSubGridIndex );
     }
     catch( const uno::Exception & )
     {

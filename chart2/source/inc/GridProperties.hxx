@@ -22,9 +22,9 @@
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <ModifyListenerHelper.hxx>
+#include "ModifyListenerHelper.hxx"
 
-#include <OPropertySet.hxx>
+#include "OPropertySet.hxx"
 
 namespace chart
 {
@@ -39,12 +39,13 @@ typedef ::cppu::WeakImplHelper<
     GridProperties_Base;
 }
 
-class GridProperties final :
+class OOO_DLLPUBLIC_CHARTTOOLS GridProperties final :
         public impl::GridProperties_Base,
         public ::property::OPropertySet
 {
 public:
     explicit GridProperties();
+    explicit GridProperties( const GridProperties & rOther );
     virtual ~GridProperties() override;
 
     /// XServiceInfo declarations
@@ -56,9 +57,6 @@ public:
      DECLARE_XINTERFACE()
     /// merge XTypeProvider implementations
      DECLARE_XTYPEPROVIDER()
-
-private:
-    explicit GridProperties( const GridProperties & rOther );
 
     // ____ OPropertySet ____
     virtual void GetDefaultValue( sal_Int32 nHandle, css::uno::Any& rAny ) const override;
@@ -77,6 +75,8 @@ private:
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+
+private:
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

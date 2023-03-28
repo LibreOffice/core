@@ -23,6 +23,7 @@
 #include "VCartesianCoordinateSystem.hxx"
 #include "VPolarCoordinateSystem.hxx"
 #include <BaseCoordinateSystem.hxx>
+#include <GridProperties.hxx>
 #include <ChartModel.hxx>
 #include <ScaleAutomatism.hxx>
 #include <ShapeFactory.hxx>
@@ -193,14 +194,14 @@ rtl::Reference< Axis > VCoordinateSystem::getAxisByDimension( sal_Int32 nDimensi
     return nullptr;
 }
 
-std::vector< Reference< beans::XPropertySet > > VCoordinateSystem::getGridListFromAxis( const rtl::Reference< Axis >& xAxis )
+std::vector< rtl::Reference< ::chart::GridProperties > > VCoordinateSystem::getGridListFromAxis( const rtl::Reference< Axis >& xAxis )
 {
-    std::vector< Reference< beans::XPropertySet > > aRet;
+    std::vector< rtl::Reference< ::chart::GridProperties > > aRet;
 
     if( xAxis.is() )
     {
-        aRet.push_back( xAxis->getGridProperties() );
-        auto aSubGrids( comphelper::sequenceToContainer<std::vector< Reference< beans::XPropertySet > > >( xAxis->getSubGridProperties() ) );
+        aRet.push_back( xAxis->getGridProperties2() );
+        std::vector<rtl::Reference<::chart::GridProperties>> aSubGrids = xAxis->getSubGridProperties2();
         aRet.insert( aRet.end(), aSubGrids.begin(), aSubGrids.end() );
     }
 

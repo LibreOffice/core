@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "GridProperties.hxx"
+#include <GridProperties.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <UserDefinedProperties.hxx>
 #include <PropertyHelper.hxx>

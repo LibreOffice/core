@@ -27,7 +27,7 @@ namespace chart { struct VLineProperties; }
 
 namespace chart
 {
-
+class GridProperties;
 class PolarPlottingPositionHelper;
 
 class VPolarGrid : public VAxisOrGridBase
@@ -36,7 +36,7 @@ class VPolarGrid : public VAxisOrGridBase
 public:
     VPolarGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
         , std::vector<
-            css::uno::Reference< css::beans::XPropertySet > > aGridPropertiesList //main grid, subgrid, subsubgrid etc
+            rtl::Reference< ::chart::GridProperties > > aGridPropertiesList //main grid, subgrid, subsubgrid etc
         );
     virtual ~VPolarGrid() override;
 
@@ -54,7 +54,7 @@ public:
 
 private: //member
     std::vector<
-        css::uno::Reference< css::beans::XPropertySet > > m_aGridPropertiesList;//main grid, subgrid, subsubgrid etc
+        rtl::Reference< ::chart::GridProperties > > m_aGridPropertiesList;//main grid, subgrid, subsubgrid etc
     std::unique_ptr<PolarPlottingPositionHelper> m_pPosHelper;
     std::vector< ExplicitIncrementData >   m_aIncrements;
 

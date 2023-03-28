@@ -48,6 +48,7 @@ class ScaleAutomatism;
 class ChartModel;
 class Axis;
 class BaseCoordinateSystem;
+class GridProperties;
 class VAxisBase;
 
 class VCoordinateSystem
@@ -146,7 +147,7 @@ protected: //methods
 
     rtl::Reference< ::chart::Axis >
         getAxisByDimension( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex  ) const;
-    static std::vector< css::uno::Reference< css::beans::XPropertySet > >
+    static std::vector< rtl::Reference< ::chart::GridProperties > >
         getGridListFromAxis( const rtl::Reference< ::chart::Axis >& xAxis );
 
     VAxisBase* getVAxis( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );

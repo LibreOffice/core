@@ -21,10 +21,10 @@
 #include "VAxisOrGridBase.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-namespace chart { struct VLineProperties; }
-
 namespace chart
 {
+class GridProperties;
+struct VLineProperties;
 
 class VCartesianGrid : public VAxisOrGridBase
 {
@@ -32,7 +32,7 @@ class VCartesianGrid : public VAxisOrGridBase
 public:
     VCartesianGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
         , std::vector<
-            css::uno::Reference< css::beans::XPropertySet > > aGridPropertiesList //main grid, subgrid, subsubgrid etc
+            rtl::Reference< ::chart::GridProperties > > aGridPropertiesList //main grid, subgrid, subsubgrid etc
         );
     virtual ~VCartesianGrid() override;
 
@@ -40,11 +40,11 @@ public:
 
     static void fillLinePropertiesFromGridModel( std::vector<VLineProperties>& rLinePropertiesList
                     , const std::vector<
-                        css::uno::Reference< css::beans::XPropertySet > >& rGridPropertiesList );
+                        rtl::Reference< ::chart::GridProperties > >& rGridPropertiesList );
 
 private:
     std::vector<
-        css::uno::Reference< css::beans::XPropertySet > > m_aGridPropertiesList; //main grid, subgrid, subsubgrid etc
+        rtl::Reference< ::chart::GridProperties > > m_aGridPropertiesList; //main grid, subgrid, subsubgrid etc
 };
 
 } //namespace chart

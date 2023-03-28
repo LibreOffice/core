@@ -37,6 +37,7 @@
 #include <ExplicitCategoriesProvider.hxx>
 #include <unonames.hxx>
 #include <BaseCoordinateSystem.hxx>
+#include <GridProperties.hxx>
 
 #include <o3tl/safeint.hxx>
 #include <unotools/saveopt.hxx>
@@ -429,10 +430,10 @@ void AxisHelper::showGrid( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bo
         return;
 
     if( bMainGrid )
-        AxisHelper::makeGridVisible( xAxis->getGridProperties() );
+        AxisHelper::makeGridVisible( xAxis->getGridProperties2() );
     else
     {
-        const Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );
+        std::vector< rtl::Reference< GridProperties > > aSubGrids( xAxis->getSubGridProperties2() );
         for( auto const & i : aSubGrids )
             AxisHelper::makeGridVisible( i );
     }
@@ -448,7 +449,7 @@ void AxisHelper::makeAxisVisible( const rtl::Reference< Axis >& xAxis )
     }
 }
 
-void AxisHelper::makeGridVisible( const Reference< beans::XPropertySet >& xGridProperties )
+void AxisHelper::makeGridVisible( const rtl::Reference< GridProperties >& xGridProperties )
 {
     if( xGridProperties.is() )
     {
@@ -504,16 +505,16 @@ void AxisHelper::hideGrid( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bo
         return;
 
     if( bMainGrid )
-        AxisHelper::makeGridInvisible( xAxis->getGridProperties() );
+        AxisHelper::makeGridInvisible( xAxis->getGridProperties2() );
     else
     {
-        const Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );
+        std::vector< rtl::Reference< ::chart::GridProperties > > aSubGrids( xAxis->getSubGridProperties2() );
         for( auto const & i : aSubGrids)
             AxisHelper::makeGridInvisible( i );
     }
 }
 
-void AxisHelper::makeGridInvisible( const Reference< beans::XPropertySet >& xGridProperties )
+void AxisHelper::makeGridInvisible( const rtl::Reference< ::chart::GridProperties >& xGridProperties )
 {
     if( xGridProperties.is() )
     {
@@ -535,11 +536,11 @@ bool AxisHelper::isGridShown( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex,
         return bRet;
 
     if( bMainGrid )
-        bRet = AxisHelper::isGridVisible( xAxis->getGridProperties() );
+        bRet = AxisHelper::isGridVisible( xAxis->getGridProperties2() );
     else
     {
-        Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );
-        if( aSubGrids.hasElements() )
+        std::vector< rtl::Reference< ::chart::GridProperties > > aSubGrids( xAxis->getSubGridProperties2() );
+        if( !aSubGrids.empty() )
             bRet = AxisHelper::isGridVisible( aSubGrids[0] );
     }
 
@@ -669,7 +670,7 @@ bool AxisHelper::areAxisLabelsVisible( const rtl::Reference< Axis >& xAxis )
     return bRet;
 }
 
-bool AxisHelper::isGridVisible( const Reference< beans::XPropertySet >& xGridproperties )
+bool AxisHelper::isGridVisible( const rtl::Reference< ::chart::GridProperties >& xGridproperties )
 {
     bool bRet = false;
 
@@ -682,22 +683,22 @@ bool AxisHelper::isGridVisible( const Reference< beans::XPropertySet >& xGridpro
     return bRet;
 }
 
-Reference< beans::XPropertySet > AxisHelper::getGridProperties(
+rtl::Reference< GridProperties > AxisHelper::getGridProperties(
             const rtl::Reference< BaseCoordinateSystem >& xCooSys
         , sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex, sal_Int32 nSubGridIndex )
 {
-    Reference< beans::XPropertySet > xRet;
+    rtl::Reference< GridProperties > xRet;
 
     rtl::Reference< Axis > xAxis( AxisHelper::getAxis( nDimensionIndex, nAxisIndex, xCooSys ) );
     if( xAxis.is() )
     {
         if( nSubGridIndex<0 )
-            xRet.set( xAxis->getGridProperties() );
+            xRet = xAxis->getGridProperties2();
         else
         {
-            Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );
-            if (nSubGridIndex < aSubGrids.getLength())
-                xRet.set( aSubGrids[nSubGridIndex] );
+            std::vector< rtl::Reference< GridProperties > > aSubGrids( xAxis->getSubGridProperties2() );
+            if (nSubGridIndex < static_cast<sal_Int32>(aSubGrids.size()))
+                xRet = aSubGrids[nSubGridIndex];
         }
     }
 
@@ -846,26 +847,26 @@ std::vector< rtl::Reference< Axis > > AxisHelper::getAllAxesOfDiagram(
     return aAxisVector;
 }
 
-Sequence< Reference< beans::XPropertySet > > AxisHelper::getAllGrids( const rtl::Reference< Diagram >& xDiagram )
+std::vector< rtl::Reference< GridProperties > > AxisHelper::getAllGrids( const rtl::Reference< Diagram >& xDiagram )
 {
     const std::vector< rtl::Reference< Axis > > aAllAxes = AxisHelper::getAllAxesOfDiagram( xDiagram );
-    std::vector< Reference< beans::XPropertySet > > aGridVector;
+    std::vector< rtl::Reference< GridProperties > > aGridVector;
 
     for( rtl::Reference< Axis > const & xAxis : aAllAxes )
     {
-        Reference< beans::XPropertySet > xGridProperties( xAxis->getGridProperties() );
+        rtl::Reference< GridProperties > xGridProperties( xAxis->getGridProperties2() );
         if( xGridProperties.is() )
             aGridVector.push_back( xGridProperties );
 
-        const Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );
-        for( Reference< beans::XPropertySet > const & xSubGrid : aSubGrids )
+        std::vector< rtl::Reference< GridProperties > > aSubGrids( xAxis->getSubGridProperties2() );
+        for( rtl::Reference< GridProperties > const & xSubGrid : aSubGrids )
         {
             if( xSubGrid.is() )
                 aGridVector.push_back( xSubGrid );
         }
     }
 
-    return comphelper::containerToSequence( aGridVector );
+    return aGridVector;
 }
 
 void AxisHelper::getAxisOrGridPossibilities( Sequence< sal_Bool >& rPossibilityList

@@ -42,6 +42,7 @@ class Axis;
 class BaseCoordinateSystem;
 class ChartType;
 class Diagram;
+class GridProperties;
 
 class OOO_DLLPUBLIC_CHARTTOOLS AxisHelper
 {
@@ -97,17 +98,17 @@ public:
                 , const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     static void makeAxisVisible( const rtl::Reference< ::chart::Axis >& xAxis );
-    static void makeGridVisible( const css::uno::Reference< css::beans::XPropertySet >& xGridProperties );
+    static void makeGridVisible( const rtl::Reference< ::chart::GridProperties >& xGridProperties );
 
     static void makeAxisInvisible( const rtl::Reference< ::chart::Axis >& xAxis );
-    static void makeGridInvisible( const css::uno::Reference< css::beans::XPropertySet >& xGridProperties );
+    static void makeGridInvisible( const rtl::Reference< ::chart::GridProperties >& xGridProperties );
 
     static void hideAxisIfNoDataIsAttached( const rtl::Reference< ::chart::Axis >& xAxis
                                           , const rtl::Reference< ::chart::Diagram >& xDiagram);
 
     SAL_DLLPRIVATE static bool areAxisLabelsVisible( const rtl::Reference< ::chart::Axis >& xAxisProperties );
     static bool isAxisVisible( const rtl::Reference< ::chart::Axis >& xAxis );
-    static bool isGridVisible( const css::uno::Reference< css::beans::XPropertySet >& xGridProperties );
+    static bool isGridVisible( const rtl::Reference< ::chart::GridProperties >& xGridProperties );
 
     static rtl::Reference< ::chart::BaseCoordinateSystem >
         getCoordinateSystemByIndex(
@@ -141,7 +142,7 @@ public:
         getParallelAxis( const css::uno::Reference< css::chart2::XAxis >& xAxis
             , const rtl::Reference< ::chart::Diagram >& xDiagram );
 
-    static css::uno::Reference< css::beans::XPropertySet >
+    static rtl::Reference< ::chart::GridProperties >
         getGridProperties( const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys
                 , sal_Int32 nDimensionIndex
                 , sal_Int32 nAxisIndex //0: Primary axis, 1: secondary axis
@@ -184,7 +185,7 @@ public:
             getAllAxesOfCoordinateSystem( const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys
             , bool bOnlyVisible = false );
 
-    static css::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > >
+    static std::vector< rtl::Reference< ::chart::GridProperties > >
             getAllGrids( const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     static void getAxisOrGridPossibilities( css::uno::Sequence< sal_Bool >& rPossibilityList
