@@ -1108,7 +1108,6 @@ CondFormatRuleRef CondFormat::importCfRule( const AttributeList& rAttribs )
 {
     CondFormatRuleRef xRule = createRule();
     xRule->importCfRule( rAttribs );
-    insertRule( xRule );
     return xRule;
 }
 
