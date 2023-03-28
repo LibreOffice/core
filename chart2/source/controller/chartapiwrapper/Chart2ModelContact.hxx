@@ -75,7 +75,7 @@ public:
         ExplicitIncrementData & rOutExplicitIncrement );
 
     sal_Int32 getExplicitNumberFormatKeyForAxis(
-            const css::uno::Reference< css::chart2::XAxis >& xAxis );
+            const rtl::Reference< ::chart::Axis >& xAxis );
 
     static sal_Int32 getExplicitNumberFormatKeyForSeries(
             const css::uno::Reference< css::chart2::XDataSeries >& xSeries );

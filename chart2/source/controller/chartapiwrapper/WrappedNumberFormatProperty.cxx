@@ -19,6 +19,7 @@
 
 #include "WrappedNumberFormatProperty.hxx"
 #include "Chart2ModelContact.hxx"
+#include <Axis.hxx>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <unonames.hxx>
@@ -68,7 +69,8 @@ Any WrappedNumberFormatProperty::getPropertyValue( const Reference< beans::XProp
             nKey = Chart2ModelContact::getExplicitNumberFormatKeyForSeries( xSeries );
         else
         {
-            Reference< chart2::XAxis > xAxis( xInnerPropertySet, uno::UNO_QUERY );
+            rtl::Reference< Axis > xAxis = dynamic_cast<Axis*>(xInnerPropertySet.get());
+            assert(xAxis || !xInnerPropertySet);
             nKey = m_spChart2ModelContact->getExplicitNumberFormatKeyForAxis( xAxis );
         }
         aRet <<= nKey;

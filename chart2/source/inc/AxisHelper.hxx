@@ -59,11 +59,6 @@ public:
     static css::chart2::ScaleData getDateCheckedScale( const rtl::Reference< ::chart::Axis >& xAxis, ChartModel& rModel );
 
     static sal_Int32 getExplicitNumberFormatKeyForAxis(
-                  const css::uno::Reference< css::chart2::XAxis >& xAxis
-                , const rtl::Reference< ::chart::BaseCoordinateSystem >& xCorrespondingCoordinateSystem
-                , const rtl::Reference< ::chart::ChartModel>& xChartDoc
-                , bool bSearchForParallelAxisIfNothingIsFound );
-    static sal_Int32 getExplicitNumberFormatKeyForAxis(
                   const rtl::Reference< ::chart::Axis >& xAxis
                 , const rtl::Reference< ::chart::BaseCoordinateSystem >& xCorrespondingCoordinateSystem
                 , const rtl::Reference< ::chart::ChartModel>& xChartDoc

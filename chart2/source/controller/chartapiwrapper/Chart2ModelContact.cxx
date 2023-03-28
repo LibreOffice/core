@@ -26,6 +26,7 @@
 #include <ObjectIdentifier.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 #include <chartview/DrawModelWrapper.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <ChartView.hxx>
 #include <DiagramHelper.hxx>
@@ -151,7 +152,7 @@ void Chart2ModelContact::getExplicitValuesForAxis(
 }
 
 sal_Int32 Chart2ModelContact::getExplicitNumberFormatKeyForAxis(
-            const Reference< chart2::XAxis >& xAxis )
+            const rtl::Reference< ::chart::Axis >& xAxis )
 {
     rtl::Reference< BaseCoordinateSystem > xCooSys(
         AxisHelper::getCoordinateSystemOfAxis(

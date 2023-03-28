@@ -27,6 +27,7 @@ namespace com::sun::star::awt { struct Size; }
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::chart2 { class XAxis; }
 namespace com::sun::star::chart2 { class XChartDocument; }
+namespace chart { class Axis; }
 namespace chart { struct ExplicitIncrementData; }
 namespace chart { struct ExplicitScaleData; }
 namespace chart { class ChartModel; }
@@ -60,8 +61,7 @@ protected:
 
 private:
     std::vector< std::unique_ptr<ItemConverter> >  m_aConverters;
-    css::uno::Reference<
-        css::chart2::XAxis >  m_xAxis;
+    rtl::Reference<::chart::Axis>  m_xAxis;
 
     rtl::Reference<::chart::ChartModel>m_xChartDoc;
 

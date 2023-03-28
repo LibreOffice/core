@@ -135,17 +135,6 @@ void AxisHelper::checkDateAxis( chart2::ScaleData& rScale, ExplicitCategoriesPro
 }
 
 sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
-                  const Reference< chart2::XAxis >& xAxis
-                , const rtl::Reference< BaseCoordinateSystem > & xCorrespondingCoordinateSystem
-                , const rtl::Reference<ChartModel>& xChartDoc
-                , bool bSearchForParallelAxisIfNothingIsFound )
-{
-    rtl::Reference< Axis > pAxis = dynamic_cast<Axis*>(xAxis.get());
-    assert(pAxis || !xAxis);
-    return getExplicitNumberFormatKeyForAxis(pAxis, xCorrespondingCoordinateSystem, xChartDoc, bSearchForParallelAxisIfNothingIsFound);
-}
-
-sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                   const rtl::Reference< Axis >& xAxis
                 , const rtl::Reference< BaseCoordinateSystem > & xCorrespondingCoordinateSystem
                 , const rtl::Reference<ChartModel>& xChartDoc

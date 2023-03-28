@@ -101,8 +101,8 @@ AxisItemConverter::AxisItemConverter(
     m_aConverters.emplace_back(
         new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
 
-    m_xAxis.set( Reference< chart2::XAxis >( rPropertySet, uno::UNO_QUERY ) );
-    OSL_ASSERT( m_xAxis.is());
+    m_xAxis = dynamic_cast<::chart::Axis*>(rPropertySet.get());
+    assert(m_xAxis);
 }
 
 AxisItemConverter::~AxisItemConverter()
