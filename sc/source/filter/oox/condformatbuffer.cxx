@@ -1208,6 +1208,31 @@ void CondFormatBuffer::updateImport(const ScDataBarFormatData* pTarget)
     }
 }
 
+bool CondFormatBuffer::insertColorScale(CondFormatRef const & xCondFmt, CondFormatRuleRef const & xRule)
+{
+    CondFormatRef xFoundFmt;
+    ScRangeList aRanges = xCondFmt->getRanges();
+
+    for (auto& rCondFmt : maCondFormats)
+    {
+        if (xCondFmt == rCondFmt)
+            continue;
+
+        if (aRanges == rCondFmt->getRanges())
+        {
+            xFoundFmt = rCondFmt;
+            break;
+        }
+    }
+
+    if (xFoundFmt)
+    {
+        xRule->mpFormat = xFoundFmt->mpFormat;
+        xFoundFmt->insertRule(xRule);
+    }
+
+    return (bool)xFoundFmt;
+}
 
 void CondFormatBuffer::finalizeImport()
 {
