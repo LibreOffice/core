@@ -652,8 +652,14 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testXHTML)
     assertXPath(pDoc, "/html/body", "xml:lang", "en-US");
 }
 
-DECLARE_HTMLEXPORT_TEST(testReqIfParagraph, "reqif-p.xhtml")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfParagraph)
 {
+    setImportFilterOptions("xhtmlns=reqif-xhtml");
+    setImportFilterName("HTML (StarWriter)");
+    createSwDoc("reqif-p.xhtml");
+    setFilterOptions("xhtmlns=reqif-xhtml");
+    save(OUString::createFromAscii(mpFilter));
+
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
