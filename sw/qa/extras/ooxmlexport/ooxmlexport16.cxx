@@ -994,6 +994,27 @@ CPPUNIT_TEST_FIXTURE(Test, Test_ShadowDirection)
                 "rotWithShape", "0");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf150542)
+{
+    loadAndSave("tdf150542.docx");
+
+    xmlDocUniquePtr pSettingsDoc = parseExport("word/settings.xml");
+    // Ensure that all docvars from input are written back and with correct values.
+    // Order of document variables is not checked. So this can fail at some time if order is changed.
+    assertXPath(pSettingsDoc,
+                "/w:settings/w:docVars/w:docVar[1]", "name", u"LocalChars\u00C1\u0072\u0076\u00ED\u007A\u0074\u0075\u0072\u006F\u0054\u00FC\u006B\u00F6\u0072\u0066\u00FA\u0072\u00F3\u0067\u00E9\u0070");
+    assertXPath(pSettingsDoc,
+                "/w:settings/w:docVars/w:docVar[1]", "val", u"Correct value (\u00E1\u0072\u0076\u00ED\u007A\u0074\u0075\u0072\u006F\u0020\u0074\u00FC\u006B\u00F6\u0072\u0066\u00FA\u0072\u00F3\u0067\u00E9\u0070)");
+    assertXPath(pSettingsDoc,
+                "/w:settings/w:docVars/w:docVar[2]", "name", "DocVar1");
+    assertXPath(pSettingsDoc,
+                "/w:settings/w:docVars/w:docVar[2]", "val", "DocVar1 Value");
+    assertXPath(pSettingsDoc,
+                "/w:settings/w:docVars/w:docVar[3]", "name", "DocVar3");
+    assertXPath(pSettingsDoc,
+                "/w:settings/w:docVars/w:docVar[3]", "val", "DocVar3 Value");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf139549)
 {
     loadAndSave("tdf139549.docx");

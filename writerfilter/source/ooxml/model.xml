@@ -18823,6 +18823,9 @@
       <attribute name="uri" tokenid="ooxml:CT_CompatSetting_uri"/>
       <attribute name="val" tokenid="ooxml:CT_CompatSetting_val"/>
     </resource>
+    <resource name="CT_DocVars" resource="Properties">
+      <element name="docVar" tokenid="ooxml:CT_DocVar"/>
+    </resource>
     <resource name="CT_DocVar" resource="Properties">
       <attribute name="name" tokenid="ooxml:CT_DocVar_name"/>
       <attribute name="val" tokenid="ooxml:CT_DocVar_val"/>
