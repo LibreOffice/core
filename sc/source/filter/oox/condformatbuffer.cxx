@@ -116,15 +116,18 @@ void SetCfvoData( ColorScaleRuleModelEntry* pEntry, const AttributeList& rAttrib
     OUString aType = rAttribs.getString( XML_type, OUString() );
     OUString aVal = rAttribs.getString(XML_val, OUString());
 
-    double nVal = 0.0;
-    bool bVal = isValue(aVal, nVal);
-    if( !bVal || aType == "formula" )
+    if (aVal != "\"\"")
     {
-        pEntry->maFormula = aVal;
-    }
-    else
-    {
-        pEntry->mnVal = nVal;
+        double nVal = 0.0;
+        bool bVal = isValue(aVal, nVal);
+        if( !bVal || aType == "formula" )
+        {
+            pEntry->maFormula = aVal;
+        }
+        else
+        {
+            pEntry->mnVal = nVal;
+        }
     }
 
     if (aType == "num")
