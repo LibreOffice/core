@@ -105,8 +105,8 @@ public:
     static void hideAxisIfNoDataIsAttached( const rtl::Reference< ::chart::Axis >& xAxis
                                           , const rtl::Reference< ::chart::Diagram >& xDiagram);
 
-    SAL_DLLPRIVATE static bool areAxisLabelsVisible( const css::uno::Reference< css::beans::XPropertySet >& xAxisProperties );
-    static bool isAxisVisible( const css::uno::Reference< css::chart2::XAxis >& xAxis );
+    SAL_DLLPRIVATE static bool areAxisLabelsVisible( const rtl::Reference< ::chart::Axis >& xAxisProperties );
+    static bool isAxisVisible( const rtl::Reference< ::chart::Axis >& xAxis );
     static bool isGridVisible( const css::uno::Reference< css::beans::XPropertySet >& xGridProperties );
 
     static rtl::Reference< ::chart::BaseCoordinateSystem >

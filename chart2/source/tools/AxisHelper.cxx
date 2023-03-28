@@ -645,27 +645,26 @@ bool AxisHelper::isAxisShown( sal_Int32 nDimensionIndex, bool bMainAxis
     return AxisHelper::isAxisVisible( AxisHelper::getAxis( nDimensionIndex, bMainAxis, xDiagram ) );
 }
 
-bool AxisHelper::isAxisVisible( const Reference< XAxis >& xAxis )
+bool AxisHelper::isAxisVisible( const rtl::Reference< Axis >& xAxis )
 {
     bool bRet = false;
 
-    Reference< beans::XPropertySet > xProps( xAxis, uno::UNO_QUERY );
-    if( xProps.is() )
+    if( xAxis.is() )
     {
-        xProps->getPropertyValue( "Show" ) >>= bRet;
-        bRet = bRet && ( LinePropertiesHelper::IsLineVisible( xProps )
-            || areAxisLabelsVisible( xProps ) );
+        xAxis->getPropertyValue( "Show" ) >>= bRet;
+        bRet = bRet && ( LinePropertiesHelper::IsLineVisible( xAxis )
+            || areAxisLabelsVisible( xAxis ) );
     }
 
     return bRet;
 }
 
-bool AxisHelper::areAxisLabelsVisible( const Reference< beans::XPropertySet >& xAxisProperties )
+bool AxisHelper::areAxisLabelsVisible( const rtl::Reference< Axis >& xAxis )
 {
     bool bRet = false;
-    if( xAxisProperties.is() )
+    if( xAxis.is() )
     {
-        xAxisProperties->getPropertyValue( "DisplayLabels" ) >>= bRet;
+        xAxis->getPropertyValue( "DisplayLabels" ) >>= bRet;
     }
     return bRet;
 }
