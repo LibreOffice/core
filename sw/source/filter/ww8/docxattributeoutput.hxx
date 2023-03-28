@@ -952,9 +952,8 @@ private:
     // close of hyperlink needed
     bool m_closeHyperlinkInThisRun;
     bool m_closeHyperlinkInPreviousRun;
-    bool m_startedHyperlink;
     // Count nested HyperLinks
-    std::stack<sal_Int32> m_nHyperLinkCount;
+    std::vector<sal_Int32> m_nHyperLinkCount;
     sal_Int16 m_nFieldsInHyperlink;
 
     // If the exported numbering rule defines the outlines

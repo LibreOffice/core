@@ -889,6 +889,12 @@ DECLARE_OOXMLEXPORT_TEST(testGroupedShapeLink, "grouped_link.docx")
                          getProperty<OUString>(xGroupShape->getByIndex(1), "Hyperlink"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf147810, "tdf147810.odt")
+{
+    // Without the accompanying fix in place, this test would have crashed,
+    // because the exported file was corrupted.
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
