@@ -65,77 +65,6 @@ bool lcl_isRightAngledAxesSetAndSupported( const rtl::Reference< Diagram >& xDia
     return false;
 }
 
-void lcl_RotateLightSource( const Reference< beans::XPropertySet >& xSceneProperties
-                           , const OUString& rLightSourceDirection
-                           , const OUString& rLightSourceOn
-                           , const ::basegfx::B3DHomMatrix& rRotationMatrix )
-{
-    if( !xSceneProperties.is() )
-        return;
-
-    bool bLightOn = false;
-    if( !(xSceneProperties->getPropertyValue( rLightSourceOn ) >>= bLightOn) )
-        return;
-
-    if( bLightOn )
-    {
-        drawing::Direction3D aLight;
-        if( xSceneProperties->getPropertyValue( rLightSourceDirection ) >>= aLight )
-        {
-            ::basegfx::B3DVector aLightVector( BaseGFXHelper::Direction3DToB3DVector( aLight ) );
-            aLightVector = rRotationMatrix*aLightVector;
-
-            xSceneProperties->setPropertyValue( rLightSourceDirection
-                , uno::Any( BaseGFXHelper::B3DVectorToDirection3D( aLightVector ) ) );
-        }
-    }
-}
-
-void lcl_rotateLights( const ::basegfx::B3DHomMatrix& rLightRottion, const Reference< beans::XPropertySet >& xSceneProperties )
-{
-    if(!xSceneProperties.is())
-        return;
-
-    ::basegfx::B3DHomMatrix aLightRottion( rLightRottion );
-    BaseGFXHelper::ReduceToRotationMatrix( aLightRottion );
-
-    lcl_RotateLightSource( xSceneProperties, "D3DSceneLightDirection1", "D3DSceneLightOn1", aLightRottion );
-    lcl_RotateLightSource( xSceneProperties, "D3DSceneLightDirection2", "D3DSceneLightOn2", aLightRottion );
-    lcl_RotateLightSource( xSceneProperties, "D3DSceneLightDirection3", "D3DSceneLightOn3", aLightRottion );
-    lcl_RotateLightSource( xSceneProperties, "D3DSceneLightDirection4", "D3DSceneLightOn4", aLightRottion );
-    lcl_RotateLightSource( xSceneProperties, "D3DSceneLightDirection5", "D3DSceneLightOn5", aLightRottion );
-    lcl_RotateLightSource( xSceneProperties, "D3DSceneLightDirection6", "D3DSceneLightOn6", aLightRottion );
-    lcl_RotateLightSource( xSceneProperties, "D3DSceneLightDirection7", "D3DSceneLightOn7", aLightRottion );
-    lcl_RotateLightSource( xSceneProperties, "D3DSceneLightDirection8", "D3DSceneLightOn8", aLightRottion );
-}
-
-::basegfx::B3DHomMatrix lcl_getInverseRotationMatrix( const rtl::Reference< Diagram >& xSceneProperties )
-{
-    ::basegfx::B3DHomMatrix aInverseRotation;
-    double fXAngleRad=0.0;
-    double fYAngleRad=0.0;
-    double fZAngleRad=0.0;
-    xSceneProperties->getRotationAngle(
-        fXAngleRad, fYAngleRad, fZAngleRad );
-    aInverseRotation.rotate( 0.0, 0.0, -fZAngleRad );
-    aInverseRotation.rotate( 0.0, -fYAngleRad, 0.0 );
-    aInverseRotation.rotate( -fXAngleRad, 0.0, 0.0 );
-    return aInverseRotation;
-}
-
-::basegfx::B3DHomMatrix lcl_getCompleteRotationMatrix( const rtl::Reference< Diagram >& xSceneProperties )
-{
-    ::basegfx::B3DHomMatrix aCompleteRotation;
-    double fXAngleRad=0.0;
-    double fYAngleRad=0.0;
-    double fZAngleRad=0.0;
-    xSceneProperties->getRotationAngle(
-        fXAngleRad, fYAngleRad, fZAngleRad );
-    aCompleteRotation.rotate( fXAngleRad, fYAngleRad, fZAngleRad );
-    return aCompleteRotation;
-}
-
-
 } //end anonymous namespace
 
 drawing::CameraGeometry ThreeDHelper::getDefaultCameraGeometry( bool bPie )
@@ -678,36 +607,6 @@ void ThreeDHelper::adaptRadAnglesForRightAngledAxes( double& rfXAngleRad, double
     rfYAngleRad = ThreeDHelper::getValueClippedToRange(rfYAngleRad, basegfx::deg2rad(ThreeDHelper::getYDegreeAngleLimitForRightAngledAxes()) );
 }
 
-
-void ThreeDHelper::switchRightAngledAxes( const rtl::Reference< Diagram >& xSceneProperties, bool bRightAngledAxes )
-{
-    try
-    {
-        if( xSceneProperties.is() )
-        {
-            bool bOldRightAngledAxes = false;
-            xSceneProperties->getPropertyValue( "RightAngledAxes") >>= bOldRightAngledAxes;
-            if( bOldRightAngledAxes!=bRightAngledAxes)
-            {
-                xSceneProperties->setPropertyValue( "RightAngledAxes", uno::Any( bRightAngledAxes ));
-                if(bRightAngledAxes)
-                {
-                    ::basegfx::B3DHomMatrix aInverseRotation( lcl_getInverseRotationMatrix( xSceneProperties ) );
-                    lcl_rotateLights( aInverseRotation, xSceneProperties );
-                }
-                else
-                {
-                    ::basegfx::B3DHomMatrix aCompleteRotation( lcl_getCompleteRotationMatrix( xSceneProperties ) );
-                    lcl_rotateLights( aCompleteRotation, xSceneProperties );
-                }
-            }
-        }
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-}
 
 void ThreeDHelper::getCameraDistanceRange( double& rfMinimumDistance, double& rfMaximumDistance )
 {

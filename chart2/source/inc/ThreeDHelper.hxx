@@ -59,9 +59,6 @@ public:
      */
     static css::drawing::CameraGeometry getDefaultCameraGeometry( bool bPie=false );
 
-    static void switchRightAngledAxes( const rtl::Reference< Diagram >& xSceneProperties
-            , bool bRightAngledAxes );
-
     static void adaptRadAnglesForRightAngledAxes( double& rfXAngleRad, double& rfYAngleRad );
     static double getXDegreeAngleLimitForRightAngledAxes() { return 90.0; }
     static double getYDegreeAngleLimitForRightAngledAxes() { return 45.0; }

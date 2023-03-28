@@ -249,7 +249,8 @@ IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, RightAngledAxesToggled, weld::Togg
         m_xMFZRotation->set_value(m_nZRotation, FieldUnit::DEGREE);
     }
 
-    ThreeDHelper::switchRightAngledAxes( m_xDiagram, m_xCbxRightAngledAxes->get_active() );
+    if (m_xDiagram)
+        m_xDiagram->switchRightAngledAxes( m_xCbxRightAngledAxes->get_active() );
 }
 
 } //namespace chart

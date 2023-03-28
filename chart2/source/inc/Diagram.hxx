@@ -350,6 +350,8 @@ public:
 
     void setDefaultRotation( bool bPieOrDonut );
 
+    void switchRightAngledAxes( bool bRightAngledAxes );
+
 private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(

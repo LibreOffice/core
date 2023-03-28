@@ -2231,6 +2231,33 @@ void Diagram::setDefaultRotation( bool bPieOrDonut )
         uno::Any( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aSceneRotation )));
 }
 
+void Diagram::switchRightAngledAxes( bool bRightAngledAxes )
+{
+    try
+    {
+        bool bOldRightAngledAxes = false;
+        getFastPropertyValue( PROP_DIAGRAM_RIGHT_ANGLED_AXES ) >>= bOldRightAngledAxes; // "RightAngledAxes"
+        if( bOldRightAngledAxes!=bRightAngledAxes)
+        {
+            setFastPropertyValue( PROP_DIAGRAM_RIGHT_ANGLED_AXES, uno::Any( bRightAngledAxes ));
+            if(bRightAngledAxes)
+            {
+                ::basegfx::B3DHomMatrix aInverseRotation( lcl_getInverseRotationMatrix( *this ) );
+                lcl_rotateLights( aInverseRotation, *this );
+            }
+            else
+            {
+                ::basegfx::B3DHomMatrix aCompleteRotation( lcl_getCompleteRotationMatrix( *this ) );
+                lcl_rotateLights( aCompleteRotation, *this );
+            }
+        }
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+}
+
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
