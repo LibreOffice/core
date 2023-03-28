@@ -464,8 +464,13 @@ using OUStringConcatMarker = StringConcatMarker<sal_Unicode>;
 
 template<typename C> constexpr bool allowStringConcat<C, StringConcatMarker<C>> = true;
 
+#if defined __GNUC__ && !defined __clang__
+template <typename C, typename T2>
+struct StringConcat<C, StringConcatMarker<C>, T2>
+#else
 template <typename C, typename T2, std::enable_if_t<allowStringConcat<C, T2>, int> Dummy>
 struct StringConcat<C, StringConcatMarker<C>, T2, Dummy>
+#endif
 {
 public:
     StringConcat( const T2& right_ ) : right( right_ ) {}
