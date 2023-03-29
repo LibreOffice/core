@@ -229,27 +229,6 @@ std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >
 }
 
 std::vector<uno::Reference<chart2::data::XLabeledDataSequence> >
-getAllDataSequences( const uno::Sequence<uno::Reference<chart2::XDataSeries> >& aSeries )
-{
-    std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aSeqVec;
-
-    for( uno::Reference<chart2::XDataSeries> const & dataSeries : aSeries )
-    {
-        Reference< chart2::data::XDataSource > xSource( dataSeries, uno::UNO_QUERY );
-        if( xSource.is())
-        {
-            const Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeq( xSource->getDataSequences());
-            for (const auto & i : aSeq)
-            {
-                aSeqVec.push_back(i);
-            }
-        }
-    }
-
-    return aSeqVec;
-}
-
-std::vector<uno::Reference<chart2::data::XLabeledDataSequence> >
 getAllDataSequences( const std::vector<rtl::Reference<DataSeries> >& aSeries )
 {
     std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aSeqVec;
@@ -332,15 +311,14 @@ void setStackModeAtSeries(
     }
 }
 
-sal_Int32 getAttachedAxisIndex( const Reference< chart2::XDataSeries > & xSeries )
+sal_Int32 getAttachedAxisIndex( const rtl::Reference< DataSeries > & xSeries )
 {
     sal_Int32 nRet = 0;
     try
     {
-        Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY );
-        if( xProp.is() )
+        if( xSeries.is() )
         {
-            xProp->getPropertyValue( "AttachedAxisIndex" ) >>= nRet;
+            xSeries->getPropertyValue( "AttachedAxisIndex" ) >>= nRet;
         }
     }
     catch( const uno::Exception & )
@@ -351,7 +329,7 @@ sal_Int32 getAttachedAxisIndex( const Reference< chart2::XDataSeries > & xSeries
 }
 
 sal_Int32 getNumberFormatKeyFromAxis(
-    const Reference< chart2::XDataSeries > & xSeries,
+    const rtl::Reference< DataSeries > & xSeries,
     const rtl::Reference< BaseCoordinateSystem > & xCorrespondingCoordinateSystem,
     sal_Int32 nDimensionIndex,
     sal_Int32 nAxisIndex /* = -1 */ )
@@ -375,14 +353,12 @@ sal_Int32 getNumberFormatKeyFromAxis(
 }
 
 rtl::Reference< ::chart::BaseCoordinateSystem > getCoordinateSystemOfSeries(
-    const Reference< chart2::XDataSeries > & xSeries,
+    const rtl::Reference< DataSeries > & xSeries,
     const rtl::Reference< Diagram > & xDiagram )
 {
     rtl::Reference< ::chart::BaseCoordinateSystem > xResult;
     rtl::Reference< ::chart::ChartType > xDummy;
-    rtl::Reference< DataSeries> pSeries = dynamic_cast<DataSeries*>(xSeries.get());
-    assert(pSeries);
-    lcl_getCooSysAndChartTypeOfSeries( pSeries, xDiagram, xResult, xDummy );
+    lcl_getCooSysAndChartTypeOfSeries( xSeries, xDiagram, xResult, xDummy );
 
     return xResult;
 }
@@ -418,14 +394,14 @@ void deleteSeries(
     }
 }
 
-void switchSymbolsOnOrOff( const Reference< beans::XPropertySet > & xSeriesProperties,
+void switchSymbolsOnOrOff( const rtl::Reference< DataSeries > & xSeries,
                     bool bSymbolsOn, sal_Int32 nSeriesIndex )
 {
-    if( !xSeriesProperties.is() )
+    if( !xSeries )
         return;
 
     chart2::Symbol aSymbProp;
-    if( xSeriesProperties->getPropertyValue( "Symbol") >>= aSymbProp )
+    if( xSeries->getPropertyValue( "Symbol") >>= aSymbProp )
     {
         if( !bSymbolsOn )
             aSymbProp.Style = chart2::SymbolStyle_NONE;
@@ -434,51 +410,43 @@ void switchSymbolsOnOrOff( const Reference< beans::XPropertySet > & xSeriesPrope
             aSymbProp.Style = chart2::SymbolStyle_STANDARD;
             aSymbProp.StandardSymbol = nSeriesIndex;
         }
-        xSeriesProperties->setPropertyValue( "Symbol", uno::Any( aSymbProp ));
+        xSeries->setPropertyValue( "Symbol", uno::Any( aSymbProp ));
     }
     //todo: check attributed data points
 }
 
-void switchLinesOnOrOff( const Reference< beans::XPropertySet > & xSeriesProperties, bool bLinesOn )
+void switchLinesOnOrOff( const rtl::Reference< DataSeries > & xSeries, bool bLinesOn )
 {
-    if( !xSeriesProperties.is() )
+    if( !xSeries )
         return;
 
     if( bLinesOn )
     {
         // keep line-styles that are not NONE
         drawing::LineStyle eLineStyle;
-        if( (xSeriesProperties->getPropertyValue( "LineStyle") >>= eLineStyle ) &&
+        if( (xSeries->getPropertyValue( "LineStyle") >>= eLineStyle ) &&
             eLineStyle == drawing::LineStyle_NONE )
         {
-            xSeriesProperties->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_SOLID ) );
+            xSeries->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_SOLID ) );
         }
     }
     else
-        xSeriesProperties->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_NONE ) );
+        xSeries->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_NONE ) );
 }
 
-void makeLinesThickOrThin( const Reference< beans::XPropertySet > & xSeriesProperties, bool bThick )
+void makeLinesThickOrThin( const rtl::Reference< ::chart::DataSeries > & xSeries, bool bThick )
 {
-    if( !xSeriesProperties.is() )
+    if( !xSeries )
         return;
 
     sal_Int32 nNewValue = bThick ? 80 : 0;
     sal_Int32 nOldValue = 0;
-    if( (xSeriesProperties->getPropertyValue( "LineWidth") >>= nOldValue ) &&
+    if( (xSeries->getPropertyValue( "LineWidth") >>= nOldValue ) &&
         nOldValue != nNewValue )
     {
         if( !(bThick && nOldValue>0))
-            xSeriesProperties->setPropertyValue( "LineWidth", uno::Any( nNewValue ) );
+            xSeries->setPropertyValue( "LineWidth", uno::Any( nNewValue ) );
     }
-}
-
-void setPropertyAlsoToAllAttributedDataPoints( const Reference< chart2::XDataSeries >& xSeries,
-                                              const OUString& rPropertyName, const uno::Any& rPropertyValue )
-{
-    rtl::Reference<DataSeries> pSeries = dynamic_cast<DataSeries*>(xSeries.get());
-    assert(!xSeries || pSeries);
-    setPropertyAlsoToAllAttributedDataPoints(pSeries, rPropertyName, rPropertyValue);
 }
 
 void setPropertyAlsoToAllAttributedDataPoints( const rtl::Reference< ::chart::DataSeries >& xSeries,

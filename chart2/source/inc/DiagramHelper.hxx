@@ -71,7 +71,7 @@ public:
         );
 
     static bool isSeriesAttachedToMainAxis(
-        const css::uno::Reference< css::chart2::XDataSeries >& xDataSeries );
+        const rtl::Reference< ::chart::DataSeries >& xDataSeries );
 
     static css::uno::Sequence< OUString >
         getExplicitSimpleCategories( ChartModel& rModel );

@@ -295,7 +295,7 @@ Any WrappedAttachedAxisProperty::getPropertyValue( const Reference< beans::XProp
 {
     Any aRet;
 
-    uno::Reference< chart2::XDataSeries > xDataSeries( xInnerPropertySet, uno::UNO_QUERY );
+    rtl::Reference< ::chart::DataSeries > xDataSeries( dynamic_cast<::chart::DataSeries*>(xInnerPropertySet.get()) );
     bool bAttachedToMainAxis = ::chart::DiagramHelper::isSeriesAttachedToMainAxis( xDataSeries );
     if( bAttachedToMainAxis )
         aRet <<= css::chart::ChartAxisAssign::PRIMARY_Y;

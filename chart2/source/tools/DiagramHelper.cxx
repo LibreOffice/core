@@ -156,7 +156,7 @@ StackMode DiagramHelper::getStackModeFromChartType(
 }
 
 bool DiagramHelper::isSeriesAttachedToMainAxis(
-                          const uno::Reference< chart2::XDataSeries >& xDataSeries )
+                          const rtl::Reference< ::chart::DataSeries >& xDataSeries )
 {
     sal_Int32 nAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
     return (nAxisIndex==0);

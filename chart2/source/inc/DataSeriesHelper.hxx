@@ -85,10 +85,6 @@ OOO_DLLPUBLIC_CHARTTOOLS std::vector<
 OOO_DLLPUBLIC_CHARTTOOLS
 std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >
 getAllDataSequences(
-    const css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> >& aSeries );
-OOO_DLLPUBLIC_CHARTTOOLS
-std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >
-getAllDataSequences(
     const std::vector<rtl::Reference<::chart::DataSeries> >& aSeries );
 
 /** Retrieves all data sequences found in the given data series and puts them
@@ -109,11 +105,11 @@ OOO_DLLPUBLIC_CHARTTOOLS void setStackModeAtSeries(
     StackMode eStackMode );
 
 OOO_DLLPUBLIC_CHARTTOOLS sal_Int32 getAttachedAxisIndex(
-    const css::uno::Reference< css::chart2::XDataSeries > & xSeries );
+    const rtl::Reference< ::chart::DataSeries > & xSeries );
 
 /// @param nAxisIndex, if -1 it is determined by the given data series via getAttachedAxisIndex
 OOO_DLLPUBLIC_CHARTTOOLS sal_Int32 getNumberFormatKeyFromAxis(
-    const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
+    const rtl::Reference< ::chart::DataSeries > & xSeries,
     const rtl::Reference< ::chart::BaseCoordinateSystem > & xCorrespondingCoordinateSystem,
     sal_Int32 nDimensionIndex,
     sal_Int32 nAxisIndex = -1 );
@@ -121,7 +117,7 @@ OOO_DLLPUBLIC_CHARTTOOLS sal_Int32 getNumberFormatKeyFromAxis(
 OOO_DLLPUBLIC_CHARTTOOLS
 rtl::Reference< ::chart::BaseCoordinateSystem >
     getCoordinateSystemOfSeries(
-        const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
+        const rtl::Reference< ::chart::DataSeries > & xSeries,
         const rtl::Reference< ::chart::Diagram > & xDiagram );
 
 OOO_DLLPUBLIC_CHARTTOOLS
@@ -135,20 +131,16 @@ OOO_DLLPUBLIC_CHARTTOOLS void deleteSeries(
     const rtl::Reference< ::chart::ChartType > & xChartType );
 
 OOO_DLLPUBLIC_CHARTTOOLS void switchSymbolsOnOrOff(
-    const css::uno::Reference< css::beans::XPropertySet > & xSeriesProperties,
+    const rtl::Reference< ::chart::DataSeries > & xSeries,
     bool bSymbolsOn, sal_Int32 nSeriesIndex );
 
 OOO_DLLPUBLIC_CHARTTOOLS void switchLinesOnOrOff(
-    const css::uno::Reference< css::beans::XPropertySet > & xSeriesProperties,
+    const rtl::Reference< ::chart::DataSeries > & xSeries,
     bool bLinesOn );
 
 OOO_DLLPUBLIC_CHARTTOOLS
-void makeLinesThickOrThin( const css::uno::Reference< css::beans::XPropertySet > & xSeriesProperties, bool bThick );
+void makeLinesThickOrThin( const rtl::Reference< ::chart::DataSeries > & xSeries, bool bThick );
 
-OOO_DLLPUBLIC_CHARTTOOLS void setPropertyAlsoToAllAttributedDataPoints(
-        const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
-        const OUString& rPropertyName,
-        const css::uno::Any& rPropertyValue );
 OOO_DLLPUBLIC_CHARTTOOLS void setPropertyAlsoToAllAttributedDataPoints(
         const rtl::Reference< ::chart::DataSeries >& xSeries,
         const OUString& rPropertyName,
