@@ -22,6 +22,7 @@
 #include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
 #include <DataSeries.hxx>
+#include <DataSeriesProperties.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <Axis.hxx>
@@ -32,6 +33,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using namespace ::chart::DataSeriesProperties;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -103,7 +105,8 @@ void ReferenceSizeProvider::setValuesAtAllDataSeries()
         Sequence< sal_Int32 > aPointIndexes;
         try
         {
-            if( elem->getPropertyValue( "AttributedDataPoints") >>= aPointIndexes )
+            // "AttributedDataPoints"
+            if( elem->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS) >>= aPointIndexes )
             {
                 for( sal_Int32 idx : std::as_const(aPointIndexes) )
                     setValuesAtPropertySet(
@@ -265,7 +268,8 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
         Sequence< sal_Int32 > aPointIndexes;
         try
         {
-            if( elem->getPropertyValue( "AttributedDataPoints") >>= aPointIndexes )
+            // "AttributedDataPoints"
+            if( elem->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS) >>= aPointIndexes )
             {
                 for( sal_Int32 idx : std::as_const(aPointIndexes) )
                 {

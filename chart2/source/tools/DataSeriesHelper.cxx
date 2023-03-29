@@ -19,6 +19,7 @@
 
 #include <DataSeriesHelper.hxx>
 #include <DataSeries.hxx>
+#include <DataSeriesProperties.hxx>
 #include <DataSource.hxx>
 #include <ChartType.hxx>
 #include <unonames.hxx>
@@ -49,6 +50,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using namespace ::chart::DataSeriesProperties;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -128,7 +130,8 @@ void lcl_insertOrDeleteDataLabelsToSeriesAndAllPoints( const rtl::Reference< ::c
             }
             xSeries->setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabelAtSeries));
             uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-            if( xSeries->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
+            // "AttributedDataPoints"
+            if( xSeries->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS ) >>= aAttributedDataPointIndexList )
             {
                 for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
                 {
@@ -486,7 +489,8 @@ void setPropertyAlsoToAllAttributedDataPoints( const rtl::Reference< ::chart::Da
 
     xSeries->setPropertyValue( rPropertyName, rPropertyValue );
     uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-    if( xSeries->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
+    // "AttributedDataPoints"
+    if( xSeries->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS ) >>= aAttributedDataPointIndexList )
     {
         for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
         {
@@ -500,15 +504,15 @@ void setPropertyAlsoToAllAttributedDataPoints( const rtl::Reference< ::chart::Da
     }
 }
 
-bool hasAttributedDataPointDifferentValue( const Reference< chart2::XDataSeries >& xSeries,
+bool hasAttributedDataPointDifferentValue( const rtl::Reference< DataSeries >& xSeries,
                                               const OUString& rPropertyName, const uno::Any& rPropertyValue )
 {
-    Reference< beans::XPropertySet > xSeriesProperties( xSeries, uno::UNO_QUERY );
-    if( !xSeriesProperties.is() )
+    if( !xSeries.is() )
         return false;
 
     uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-    if( xSeriesProperties->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
+    // "AttributedDataPoints"
+    if( xSeries->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS ) >>= aAttributedDataPointIndexList )
     {
         for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
         {
@@ -590,7 +594,8 @@ bool hasDataLabelsAtPoints( const rtl::Reference< DataSeries >& xSeries )
         if( xSeries.is() )
         {
             uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-            if( xSeries->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
+            // "AttributedDataPoints"
+            if( xSeries->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS ) >>= aAttributedDataPointIndexList )
             {
                 for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
                 {
@@ -625,7 +630,8 @@ bool hasDataLabelAtPoint( const rtl::Reference< DataSeries >& xSeries, sal_Int32
         if( xSeries.is() )
         {
             uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-            if( xSeries->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
+            // "AttributedDataPoints"
+            if( xSeries->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS ) >>= aAttributedDataPointIndexList )
             {
                 auto aIt = std::find( std::as_const(aAttributedDataPointIndexList).begin(), std::as_const(aAttributedDataPointIndexList).end(), nPointIndex );
                 if( aIt != std::as_const(aAttributedDataPointIndexList).end())

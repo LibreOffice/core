@@ -133,7 +133,7 @@ bool lcl_NumberFormatFromItemToPropertySet( sal_uInt16 nWhichId, const SfxItemSe
     uno::Any aOldValue( xPropertySet->getPropertyValue(aPropertyName) );
     if( bOverwriteAttributedDataPointsAlso )
     {
-        Reference< chart2::XDataSeries > xSeries( xPropertySet, uno::UNO_QUERY);
+        rtl::Reference< DataSeries > xSeries( dynamic_cast<DataSeries*>(xPropertySet.get()) );
         if( aValue != aOldValue ||
             ::chart::DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, aPropertyName, aOldValue ) )
         {
@@ -181,7 +181,7 @@ bool lcl_UseSourceFormatFromItemToPropertySet( sal_uInt16 nWhichId, const SfxIte
     uno::Any aOldValue( xPropertySet->getPropertyValue(aPropertyName) );
     if( bOverwriteAttributedDataPointsAlso )
     {
-        Reference< chart2::XDataSeries > xSeries( xPropertySet, uno::UNO_QUERY);
+        rtl::Reference< DataSeries > xSeries( dynamic_cast<DataSeries*>(xPropertySet.get()) );
         if( aNewValue != aOldValue ||
             ::chart::DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, aPropertyName, aOldValue ) )
         {
@@ -341,7 +341,7 @@ bool DataPointItemConverter::ApplySpecialItem(
                 rValue = rItem.GetValue();
                 if( m_bOverwriteLabelsForAttributedDataPointsAlso )
                 {
-                    Reference< chart2::XDataSeries > xSeries( GetPropertySet(), uno::UNO_QUERY);
+                    rtl::Reference<DataSeries> xSeries(dynamic_cast<DataSeries*>(GetPropertySet().get()));
                     if( bOldValue != bool(rValue) ||
                         DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, CHART_UNONAME_LABEL , aOldValue ) )
                     {
@@ -382,7 +382,7 @@ bool DataPointItemConverter::ApplySpecialItem(
                 GetPropertySet()->getPropertyValue( "LabelSeparator" ) >>= aOldValue;
                 if( m_bOverwriteLabelsForAttributedDataPointsAlso )
                 {
-                    Reference< chart2::XDataSeries > xSeries( GetPropertySet(), uno::UNO_QUERY);
+                    rtl::Reference<DataSeries> xSeries(dynamic_cast<DataSeries*>(GetPropertySet().get()));
                     if( aOldValue != aNewValue ||
                         DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, "LabelSeparator" , uno::Any( aOldValue ) ) )
                     {
@@ -413,7 +413,7 @@ bool DataPointItemConverter::ApplySpecialItem(
                 GetPropertySet()->getPropertyValue( "TextWordWrap" ) >>= bOld;
                 if( m_bOverwriteLabelsForAttributedDataPointsAlso )
                 {
-                    Reference< chart2::XDataSeries > xSeries( GetPropertySet(), uno::UNO_QUERY);
+                    rtl::Reference<DataSeries> xSeries(dynamic_cast<DataSeries*>(GetPropertySet().get()));
                     if( bOld!=bNew ||
                         DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, "TextWordWrap", uno::Any( bOld ) ) )
                     {
@@ -445,7 +445,7 @@ bool DataPointItemConverter::ApplySpecialItem(
                 GetPropertySet()->getPropertyValue("LabelPlacement") >>= nOld;
                 if( m_bOverwriteLabelsForAttributedDataPointsAlso )
                 {
-                    Reference< chart2::XDataSeries > xSeries( GetPropertySet(), uno::UNO_QUERY);
+                    rtl::Reference<DataSeries> xSeries(dynamic_cast<DataSeries*>(GetPropertySet().get()));
                     if( nOld!=nNew ||
                         DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, "LabelPlacement" , uno::Any( nOld ) ) )
                     {
@@ -635,7 +635,7 @@ void DataPointItemConverter::FillSpecialItem(
                 if( m_bOverwriteLabelsForAttributedDataPointsAlso )
                 {
                     if( DataSeriesHelper::hasAttributedDataPointDifferentValue(
-                        Reference< chart2::XDataSeries >( GetPropertySet(), uno::UNO_QUERY), CHART_UNONAME_LABEL , uno::Any(aLabel) ) )
+                        dynamic_cast<DataSeries*>(GetPropertySet().get()), CHART_UNONAME_LABEL , uno::Any(aLabel) ) )
                     {
                         rOutItemSet.InvalidateItem(nWhichId);
                     }

@@ -156,7 +156,7 @@ OOO_DLLPUBLIC_CHARTTOOLS void setPropertyAlsoToAllAttributedDataPoints(
 
 
 OOO_DLLPUBLIC_CHARTTOOLS bool hasAttributedDataPointDifferentValue(
-    const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
+    const rtl::Reference< ::chart::DataSeries >& xSeries,
     const OUString& rPropertyName,
     const css::uno::Any& rPropertyValue );
 

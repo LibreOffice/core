@@ -23,6 +23,7 @@
 #include <ChartTypeHelper.hxx>
 #include <ChartType.hxx>
 #include <DataSeries.hxx>
+#include <DataSeriesProperties.hxx>
 #include <DataSource.hxx>
 #include <GridProperties.hxx>
 
@@ -47,6 +48,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using namespace ::chart::DataSeriesProperties;
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -380,7 +382,8 @@ void ChartTypeTemplate::applyStyle2(
             lcl_ensureCorrectLabelPlacement( xSeries, aAvailablePlacements );
 
             uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-            if( xSeries->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
+            // "AttributedDataPoints"
+            if( xSeries->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS ) >>= aAttributedDataPointIndexList )
                 for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
                     lcl_ensureCorrectLabelPlacement( xSeries->getDataPointByIndex(aAttributedDataPointIndexList[nN]), aAvailablePlacements );
         }
@@ -444,7 +447,8 @@ void ChartTypeTemplate::resetStyles2( const rtl::Reference< ::chart::Diagram >& 
                 lcl_resetLabelPlacementIfDefault( xSeries, nDefaultPlacement );
 
                 uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-                if( xSeries->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
+                // "AttributedDataPoints"
+                if( xSeries->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS ) >>= aAttributedDataPointIndexList )
                     for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
                         lcl_resetLabelPlacementIfDefault( xSeries->getDataPointByIndex(aAttributedDataPointIndexList[nN]), nDefaultPlacement );
             }

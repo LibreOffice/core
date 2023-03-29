@@ -48,6 +48,7 @@
 #include <StatisticsHelper.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
+#include <DataSeriesProperties.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <LegendHelper.hxx>
@@ -97,6 +98,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using namespace ::chart::DataSeriesProperties;
 using ::com::sun::star::uno::Reference;
 
 namespace chart
@@ -1061,7 +1063,8 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 if( xSeries.is() )
                 {
                     uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-                    if( xSeries->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
+                    // "AttributedDataPoints"
+                    if( xSeries->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS ) >>= aAttributedDataPointIndexList )
                     {
                         if( aAttributedDataPointIndexList.hasElements() )
                         {

@@ -127,7 +127,7 @@ bool numberFormatFromItemToPropertySet(
     uno::Any aOldValue = xPropertySet->getPropertyValue(aPropertyName);
     if (bOverwriteDataPoints)
     {
-        Reference<chart2::XDataSeries> xSeries(xPropertySet, uno::UNO_QUERY);
+        rtl::Reference<DataSeries> xSeries( dynamic_cast<DataSeries*>(xPropertySet.get()) );
         if (aValue != aOldValue ||
             ::chart::DataSeriesHelper::hasAttributedDataPointDifferentValue(xSeries, aPropertyName, aOldValue))
         {
@@ -177,7 +177,7 @@ bool useSourceFormatFromItemToPropertySet(
     uno::Any aOldValue(xPropertySet->getPropertyValue(aPropertyName));
     if (bOverwriteDataPoints)
     {
-        Reference<chart2::XDataSeries> xSeries(xPropertySet, uno::UNO_QUERY);
+        rtl::Reference<DataSeries> xSeries(dynamic_cast<DataSeries*>(xPropertySet.get()));
         if (aNewValue != aOldValue ||
             ::chart::DataSeriesHelper::hasAttributedDataPointDifferentValue(xSeries, aPropertyName, aOldValue))
         {
@@ -289,7 +289,7 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
                 rValue = rItem.GetValue();
                 if (mbDataSeries)
                 {
-                    Reference<chart2::XDataSeries> xSeries(GetPropertySet(), uno::UNO_QUERY);
+                    rtl::Reference<DataSeries> xSeries(dynamic_cast<DataSeries*>(GetPropertySet().get()));
                     if (bOldValue != bool(rValue) ||
                         DataSeriesHelper::hasAttributedDataPointDifferentValue(xSeries, CHART_UNONAME_LABEL, aOldValue))
                     {
@@ -327,7 +327,7 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
                 GetPropertySet()->getPropertyValue("LabelSeparator") >>= aOldValue;
                 if (mbDataSeries)
                 {
-                    Reference<chart2::XDataSeries> xSeries(GetPropertySet(), uno::UNO_QUERY);
+                    rtl::Reference<DataSeries> xSeries(dynamic_cast<DataSeries*>(GetPropertySet().get()));
                     if (aOldValue != aNewValue ||
                         DataSeriesHelper::hasAttributedDataPointDifferentValue(xSeries, "LabelSeparator", uno::Any(aOldValue)))
                     {
@@ -357,7 +357,7 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
                 GetPropertySet()->getPropertyValue( "TextWordWrap" ) >>= bOld;
                 if( mbDataSeries )
                 {
-                    Reference< chart2::XDataSeries > xSeries( GetPropertySet(), uno::UNO_QUERY);
+                    rtl::Reference< DataSeries > xSeries( dynamic_cast<DataSeries*>(GetPropertySet().get()) );
                     if( bOld!=bNew ||
                         DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, "TextWordWrap", uno::Any( bOld ) ) )
                     {
@@ -387,7 +387,7 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
                 GetPropertySet()->getPropertyValue("LabelPlacement") >>= nOld;
                 if (mbDataSeries)
                 {
-                    Reference<chart2::XDataSeries> xSeries(GetPropertySet(), uno::UNO_QUERY);
+                    rtl::Reference<DataSeries> xSeries(dynamic_cast<DataSeries*>(GetPropertySet().get()));
                     if (nOld != nNew ||
                         DataSeriesHelper::hasAttributedDataPointDifferentValue(xSeries, "LabelPlacement", uno::Any(nOld)))
                     {
@@ -553,7 +553,7 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
                 if (mbDataSeries)
                 {
                     if (DataSeriesHelper::hasAttributedDataPointDifferentValue(
-                            Reference<chart2::XDataSeries>(GetPropertySet(), uno::UNO_QUERY), CHART_UNONAME_LABEL, uno::Any(aLabel)))
+                            dynamic_cast<DataSeries*>(GetPropertySet().get()), CHART_UNONAME_LABEL, uno::Any(aLabel)))
                     {
                         rOutItemSet.InvalidateItem(nWhichId);
                     }

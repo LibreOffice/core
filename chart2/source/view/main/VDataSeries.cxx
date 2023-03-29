@@ -21,6 +21,7 @@
 #include <memory>
 #include <VDataSeries.hxx>
 #include <DataSeries.hxx>
+#include <DataSeriesProperties.hxx>
 #include <ObjectIdentifier.hxx>
 #include <CommonConverters.hxx>
 #include <LabelPositionHelper.hxx>
@@ -47,6 +48,7 @@ namespace chart {
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
+using namespace ::chart::DataSeriesProperties;
 
 void VDataSequence::init( const uno::Reference< data::XDataSequence >& xModel )
 {
@@ -227,12 +229,12 @@ VDataSeries::VDataSeries( const rtl::Reference< DataSeries >& xDataSeries )
 
     try
     {
-        //get AttributedDataPoints
-        xDataSeries->getPropertyValue("AttributedDataPoints") >>= m_aAttributedDataPointIndexList;
+        // "AttributedDataPoints"
+        xDataSeries->getFastPropertyValue(PROP_DATASERIES_ATTRIBUTED_DATA_POINTS) >>= m_aAttributedDataPointIndexList;
 
-        xDataSeries->getPropertyValue("StackingDirection") >>= m_eStackingDirection;
+        xDataSeries->getFastPropertyValue(PROP_DATASERIES_STACKING_DIRECTION) >>= m_eStackingDirection; // "StackingDirection"
 
-        xDataSeries->getPropertyValue("AttachedAxisIndex") >>= m_nAxisIndex;
+        xDataSeries->getFastPropertyValue(PROP_DATASERIES_ATTACHED_AXIS_INDEX) >>= m_nAxisIndex; // "AttachedAxisIndex"
         if(m_nAxisIndex<0)
             m_nAxisIndex=0;
     }

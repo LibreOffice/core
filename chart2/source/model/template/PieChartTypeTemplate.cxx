@@ -26,6 +26,7 @@
 #include <DiagramHelper.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
+#include <DataSeriesProperties.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <ThreeDHelper.hxx>
@@ -41,6 +42,7 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
+using namespace ::chart::DataSeriesProperties;
 
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Sequence;
@@ -305,9 +307,9 @@ bool PieChartTypeTemplate::matchesTemplate2(
                 rtl::Reference< DataSeries > xSeries( aSeriesVec[nOuterSeriesIndex] );
                 xSeries->getPropertyValue( "Offset") >>= fOffset;
 
-                //get AttributedDataPoints
+                // "AttributedDataPoints"
                 uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-                if( xSeries->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
+                if( xSeries->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS ) >>= aAttributedDataPointIndexList )
                 {
                     for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
                     {
@@ -428,7 +430,8 @@ void PieChartTypeTemplate::applyStyle2(
             double fOffsetToSet = fDefaultOffset;
 
             uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-            xSeries->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList;
+            // "AttributedDataPoints"
+            xSeries->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS ) >>= aAttributedDataPointIndexList;
 
             // determine whether to set the new offset
             bool bSetOffset = ( ePieOffsetMode == chart2::PieChartOffsetMode_ALL_EXPLODED );
