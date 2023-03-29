@@ -840,9 +840,10 @@ css::chart::ChartRegressionCurveType WrappedRegressionCurvesProperty::getValueFr
 void WrappedRegressionCurvesProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const css::chart::ChartRegressionCurveType& aNewValue ) const
 {
     uno::Reference< chart2::XRegressionCurveContainer > xRegressionCurveContainer( xSeriesPropertySet, uno::UNO_QUERY );
-    uno::Reference< chart2::XRegressionCurve > xRegressionCurve( xSeriesPropertySet, uno::UNO_QUERY );
-
-    if( xRegressionCurveContainer.is() && xRegressionCurve.is() )
+    if (!xRegressionCurveContainer)
+        return;
+    rtl::Reference< ::chart::RegressionCurveModel> xRegressionCurve = RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegressionCurveContainer );
+    if( xRegressionCurve.is() )
     {
         SvxChartRegress eNewRegressionType = lcl_getRegressionType( aNewValue );
 
