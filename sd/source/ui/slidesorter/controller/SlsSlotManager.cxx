@@ -820,6 +820,7 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
     // page view and layout
     SdPage* pPage      = nullptr;
     sal_uInt16 nSelectedPages = mrSlideSorter.GetController().GetPageSelector().GetSelectedPageCount();
+    View* pDrView = &mrSlideSorter.GetView();
 
     //Set number of slides
     if (nSelectedPages > 0)
@@ -836,7 +837,10 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
             sal_Int32 nPageCount = mrSlideSorter.GetModel().GetPageCount();
             sal_Int32 nActivePageCount = static_cast<sal_Int32>(mrSlideSorter.GetModel().GetDocument()->GetActiveSdPageCount());
 
-            aPageStr = (nPageCount == nActivePageCount) ? SdResId(STR_SD_PAGE_COUNT) : SdResId(STR_SD_PAGE_COUNT_CUSTOM);
+            if (pDrView->GetDoc().GetDocumentType() == DocumentType::Draw)
+                aPageStr = (nPageCount == nActivePageCount) ? SdResId(STR_SD_PAGE_COUNT_DRAW) : SdResId(STR_SD_PAGE_COUNT_CUSTOM_DRAW);
+            else
+                aPageStr = (nPageCount == nActivePageCount) ? SdResId(STR_SD_PAGE_COUNT) : SdResId(STR_SD_PAGE_COUNT_CUSTOM);
 
             aPageStr = aPageStr.replaceFirst("%1", OUString::number(nFirstPage));
             aPageStr = aPageStr.replaceFirst("%2", OUString::number(nPageCount));
