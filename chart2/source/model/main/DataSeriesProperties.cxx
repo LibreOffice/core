@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DataSeriesProperties.hxx"
+#include <DataSeriesProperties.hxx>
 #include "DataPointProperties.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>

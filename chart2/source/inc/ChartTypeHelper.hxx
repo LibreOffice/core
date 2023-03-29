@@ -29,6 +29,7 @@ namespace com::sun::star::chart2 { class XDataSeries; }
 namespace chart
 {
 class ChartType;
+class DataSeries;
 
 class OOO_DLLPUBLIC_CHARTTOOLS ChartTypeHelper
 {
@@ -56,7 +57,7 @@ public:
     //returns sequence of css::chart::DataLabelPlacement
     static css::uno::Sequence < sal_Int32 > getSupportedLabelPlacements(
         const rtl::Reference< ::chart::ChartType >& xChartType, bool bSwapXAndY
-        , const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
+        , const rtl::Reference< ::chart::DataSeries >& xSeries );
 
     //returns sequence of css::chart::MissingValueTreatment
     static css::uno::Sequence < sal_Int32 > getSupportedMissingValueTreatments(

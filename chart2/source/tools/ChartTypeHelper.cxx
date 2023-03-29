@@ -20,6 +20,7 @@
 #include <ChartTypeHelper.hxx>
 #include <ChartType.hxx>
 #include <BaseCoordinateSystem.hxx>
+#include <DataSeriesProperties.hxx>
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
 
@@ -33,6 +34,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using namespace ::chart::DataSeriesProperties;
 
 namespace chart
 {
@@ -240,7 +242,7 @@ bool ChartTypeHelper::isSupportingBarConnectors(
 
 uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const rtl::Reference< ChartType >& xChartType
                                                                          , bool bSwapXAndY
-                                                                         , const uno::Reference< chart2::XDataSeries >& xSeries )
+                                                                         , const rtl::Reference< DataSeries >& xSeries )
 {
     uno::Sequence < sal_Int32 > aRet;
     if( !xChartType.is() )
@@ -288,9 +290,8 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
 
         bool bStacked = false;
         {
-            uno::Reference< beans::XPropertySet > xSeriesProp( xSeries, uno::UNO_QUERY );
             chart2::StackingDirection eStacking = chart2::StackingDirection_NO_STACKING;
-            xSeriesProp->getPropertyValue( "StackingDirection" ) >>= eStacking;
+            xSeries->getFastPropertyValue( PROP_DATASERIES_STACKING_DIRECTION ) >>= eStacking; // "StackingDirection"
             bStacked = (eStacking == chart2::StackingDirection_Y_STACKING);
         }
 
@@ -319,9 +320,8 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
     {
         bool bStacked = false;
         {
-            uno::Reference<beans::XPropertySet> xSeriesProp(xSeries, uno::UNO_QUERY);
             chart2::StackingDirection eStacking = chart2::StackingDirection_NO_STACKING;
-            xSeriesProp->getPropertyValue("StackingDirection") >>= eStacking;
+            xSeries->getFastPropertyValue(PROP_DATASERIES_STACKING_DIRECTION) >>= eStacking; // "StackingDirection"
             bStacked = (eStacking == chart2::StackingDirection_Y_STACKING);
         }
 

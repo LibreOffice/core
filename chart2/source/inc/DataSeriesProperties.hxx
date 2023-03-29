@@ -18,8 +18,8 @@
  */
 #pragma once
 
-#include <PropertyHelper.hxx>
-#include <FastPropertyIdRanges.hxx>
+#include "PropertyHelper.hxx"
+#include "FastPropertyIdRanges.hxx"
 
 #include <vector>
 

@@ -1007,6 +1007,7 @@ chart2/source/inc/ConfigColorScheme.hxx
 chart2/source/inc/DataInterpreter.hxx
 chart2/source/inc/DataSeries.hxx
 chart2/source/inc/DataSeriesHelper.hxx
+chart2/source/inc/DataSeriesProperties.hxx
 chart2/source/inc/DataSource.hxx
 chart2/source/inc/DataSourceHelper.hxx
 chart2/source/inc/Diagram.hxx
@@ -1080,7 +1081,6 @@ chart2/source/model/main/DataPointProperties.cxx
 chart2/source/model/main/DataPointProperties.hxx
 chart2/source/model/main/DataSeries.cxx
 chart2/source/model/main/DataSeriesProperties.cxx
-chart2/source/model/main/DataSeriesProperties.hxx
 chart2/source/model/main/Diagram.cxx
 chart2/source/model/main/FormattedString.cxx
 chart2/source/model/main/GridProperties.cxx
