@@ -3398,6 +3398,14 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         }
     }
 
+    vcl::Window* pAccLabelFor = getAccessibleRelationLabelFor();
+    if (pAccLabelFor)
+        rJsonWriter.put("labelFor", pAccLabelFor->get_id());
+
+    vcl::Window* pAccLabelledBy = GetAccessibleRelationLabeledBy();
+    if (pAccLabelledBy)
+        rJsonWriter.put("labelledBy", pAccLabelledBy->get_id());
+
     mpWindowImpl->maDumpAsPropertyTreeHdl.Call(rJsonWriter);
 }
 
