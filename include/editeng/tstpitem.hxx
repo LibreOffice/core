@@ -92,6 +92,7 @@ typedef o3tl::sorted_vector<SvxTabStop> SvxTabStopArr;
 class EDITENG_DLLPUBLIC SvxTabStopItem final : public SfxPoolItem
 {
     SvxTabStopArr maTabStops;
+    /// Defines default tab width for tabs without dedicated tab stop in the paragraph.
     sal_Int32 mnDefaultDistance = 0;
 
 public:
