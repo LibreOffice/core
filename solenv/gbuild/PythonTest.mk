@@ -48,6 +48,7 @@ else
 		$(if $(gb_CppunitTest__interactive),, \
 			$(if $(value gb_CppunitTest_postprocess), \
 				rm -fr $@.core && mkdir $@.core && cd $@.core &&)) \
+		$(call gb_CppunitTest_coredumpctl_setup,$@) \
 		{ \
 		$(if $(filter gdb,$(gb_PythonTest_GDBTRACE)),,$(gb_PythonTest_PRECOMMAND)) \
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
@@ -62,7 +63,7 @@ else
 		$(gb_TEST_ENV_VARS) \
 		$(if $(filter gdb,$(CPPUNITTRACE)),\
 			PYTHONWARNINGS=default) \
-		$(ICECREAM_RUN) $(gb_PythonTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_RR) \
+		$(ICECREAM_RUN) $(gb_CppunitTest_coredumpctl_run) $(gb_PythonTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_RR) \
 			$(gb_PythonTest_COMMAND) \
 			$(if $(PYTHON_TEST_NAME),$(PYTHON_TEST_NAME),$(MODULES)) \
 		; } \

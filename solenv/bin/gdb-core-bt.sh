@@ -35,6 +35,26 @@ then
             echo
         fi
     done
+    if test -n "$WITH_COREDUMPCTL"; then
+        # Unfortunately `coredumpctl debug` only operates on the most recent core dump matching any
+        # given criteria, not on all core dumps matching those criteria; so get the PIDs of all core
+        # dumps matching the given COREDUMP_USER_UNIT (and for which a core dump is still present)
+        # first, and then iterate over them (though this introduces possibilities for some,
+        # hopefully unlikely and mostly harmless, races, like when core dumps disappear in between,
+        # or multiple matching core dumps have identical PIDs):
+        for i in $($COREDUMPCTL --json=short list COREDUMP_USER_UNIT="$LIBO_TEST_UNIT".scope | \
+                       $JQ -r 'map(select(.corefile=="present"))|map(.pid)|join(" ")')
+        do
+            GDBCOMMANDFILE=$(mktemp)
+            printf 'info registers\nthread apply all backtrace full\n' >"$GDBCOMMANDFILE"
+            PYTHONWARNINGS=default $COREDUMPCTL debug \
+                COREDUMP_USER_UNIT="$LIBO_TEST_UNIT".scope COREDUMP_PID="$i" \
+                --debugger-arguments="-iex 'add-auto-load-safe-path ${INSTDIR?}' \
+                    -x '$GDBCOMMANDFILE' --batch"
+            rm "$GDBCOMMANDFILE"
+            found=x
+        done
+    fi
     if [ -z "$found" -a "$EXITCODE" -ge 128 ]; then
         echo
         echo "No core file identified in directory ${COREDIR}"

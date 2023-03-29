@@ -2822,6 +2822,13 @@ AC_ARG_WITH(onedrive-client-secret,
         authentication on OneDrive. If either this or
         --with-onedrive-client-id is empty, the feature will be disabled]),
 )
+
+dnl Check for coredumpctl support to present information about crashing test processes:
+AC_ARG_WITH(coredumpctl,
+    AS_HELP_STRING([--with-coredumpctl],
+        [Use coredumpctl (together with systemd-run) to retrieve core dumps of crashing test
+        processes.]))
+
 dnl ===================================================================
 dnl Do we want to use pre-build binary tarball for recompile
 dnl ===================================================================
@@ -14559,6 +14566,53 @@ if test $_os = WINNT -a -f "$SRC_ROOT/antivirusDetection.vbs" ; then
         AC_MSG_RESULT([n/a])
     fi
 fi
+
+dnl ===================================================================
+
+AC_MSG_CHECKING([for coredumpctl support])
+if test -z "$with_coredumpctl" && test $_os != Linux; then
+    with_coredumpctl=no
+fi
+if test "$with_coredumpctl" = no; then
+    WITH_COREDUMPCTL=
+else
+    AC_PATH_PROG(COREDUMPCTL, coredumpctl)
+    AC_PATH_PROG(JQ, jq)
+    AC_PATH_PROG(SYSTEMD_ESCAPE, systemd-escape)
+    AC_PATH_PROG(SYSTEMD_RUN, systemd-run)
+    if test -z "$COREDUMPCTL" || test -z "$JQ" || test -z "$SYSTEMD_ESCAPE" \
+        || test -z "$SYSTEMD_RUN"
+    then
+        if test -z "$with_coredumpctl"; then
+            WITH_COREDUMPCTL=
+        else
+            if test -z "$COREDUMPCTL"; then
+                AC_MSG_ERROR([coredumpctl not found])
+            fi
+            if test -z "$JQ"; then
+                AC_MSG_ERROR([jq not found])
+            fi
+            if test -z "$SYSTEMD_ESCAPE"; then
+                AC_MSG_ERROR([syystemd-escape not found])
+            fi
+            if test -z "$SYSTEMD_RUN"; then
+                AC_MSG_ERROR([systemd-run not found])
+            fi
+        fi
+    else
+        WITH_COREDUMPCTL=TRUE
+    fi
+fi
+if test -z "$WITH_COREDUMPCTL"; then
+    AC_MSG_RESULT([no])
+else
+    AC_MSG_RESULT([yes])
+fi
+AC_SUBST(COREDUMPCTL)
+AC_SUBST(JQ)
+AC_SUBST(SYSTEMD_ESCAPE)
+AC_SUBST(SYSTEMD_RUN)
+AC_SUBST(WITH_COREDUMPCTL)
 
 dnl ===================================================================
 dnl Setting up the environment.

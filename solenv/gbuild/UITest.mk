@@ -37,7 +37,7 @@ else
 gb_UITest_SOFFICEARG:=path:$(INSTROOT)/$(LIBO_BIN_FOLDER)/soffice
 endif
 
-gb_UITest_COMMAND = $(ICECREAM_RUN) $(gb_CppunitTest_RR) $(gb_UITest_EXECUTABLE) $(SRCDIR)/uitest/test_main.py
+gb_UITest_COMMAND = $(ICECREAM_RUN) $(gb_CppunitTest_coredumpctl_run) $(gb_CppunitTest_RR) $(gb_UITest_EXECUTABLE) $(SRCDIR)/uitest/test_main.py
 
 gb_TEST_ENV_VARS += LIBO_LANG=C
 
@@ -65,6 +65,7 @@ else
 		    rm -fr $@.core && mkdir -p $(dir $(call gb_UITest_get_target,$*))user/ && mkdir $@.core && cd $@.core && ) \
 		$(if $(gb_UITest_use_config), \
 		    cp $(gb_UITest_use_config) $(dir $(call gb_UITest_get_target,$*))user/. && ) \
+		$(call gb_CppunitTest_coredumpctl_setup,$@) \
 		($(gb_UITest_PRECOMMAND) \
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
