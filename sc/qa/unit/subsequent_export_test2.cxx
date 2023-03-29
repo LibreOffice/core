@@ -23,6 +23,8 @@
 #include <dpcache.hxx>
 #include <dpobject.hxx>
 #include <clipparam.hxx>
+#include <scresid.hxx>
+#include <globstr.hrc>
 
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
@@ -147,6 +149,7 @@ public:
     void testTdf121718_UseFirstPageNumberXLSX();
     void testHeaderFontStyleXLSX();
     void testTdf135828_Shape_Rect();
+    void testTdf154445_unused_pagestyles();
     void testTdf123139XLSX();
     void testTdf123353();
     void testTdf140098();
@@ -276,6 +279,7 @@ public:
     CPPUNIT_TEST(testTdf121718_UseFirstPageNumberXLSX);
     CPPUNIT_TEST(testHeaderFontStyleXLSX);
     CPPUNIT_TEST(testTdf135828_Shape_Rect);
+    CPPUNIT_TEST(testTdf154445_unused_pagestyles);
     CPPUNIT_TEST(testTdf123139XLSX);
     CPPUNIT_TEST(testTdf123353);
     CPPUNIT_TEST(testTdf140098);
@@ -1887,6 +1891,27 @@ void ScExportTest2::testTdf135828_Shape_Rect()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-570600, nYPosOfTopleft, 10000);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(294840, nWidth, 10000);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1988280, nHeight, 10000);
+}
+
+void ScExportTest2::testTdf154445_unused_pagestyles()
+{
+    createScDoc("ods/tdf108188_pagestyle.ods");
+
+    // Check if the user defined page style is present
+    const OUString aTestPageStyle = "TestPageStyle";
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(aTestPageStyle, pDoc->GetPageStyle(0));
+
+    // Change page style to default so the user defined one is not used anymore
+    pDoc->SetPageStyle(0, ScResId(STR_STYLENAME_STANDARD));
+
+    // Save and reload the document to check if the unused page styles are still present
+    saveAndReload("calc8");
+    pDoc = getScDoc();
+
+    // Without the accompanying fix in place, the unused page styles don't exist anymore
+    ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
+    CPPUNIT_ASSERT(pStylePool->Find(aTestPageStyle, SfxStyleFamily::Page));
 }
 
 void ScExportTest2::testTdf123139XLSX()
