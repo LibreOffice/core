@@ -2015,13 +2015,14 @@ std::pair<bool, sal_uInt32> SbMethod::StoreData( SvStream& rStrm ) const
         return { false, 0 };
 
     //tdf#94617
-    const sal_Int16 nMax = std::numeric_limits<sal_Int16>::max();
+    const sal_uInt32 nMax = std::numeric_limits<sal_Int16>::max();
     // tdf#142391 - store method using binary format 0x13 only when actually needed, i.e.,
     // when method starts at an offset that would overflow 16 bits
     const sal_Int16 nStartTemp = nStart % nMax;
     sal_uInt16 nDebugFlagsTemp = static_cast<sal_uInt16>(nDebugFlags);
     if (nStart >= nMax)
     {
+        assert(nStart <= nMax * 0x7FFF); // Larger addresses can't be stored in version 13
         nDebugFlagsTemp = (nStart / nMax) | 0x8000;
         nVersion = B_IMG_VERSION_13;
     }
