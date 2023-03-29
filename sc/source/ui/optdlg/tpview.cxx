@@ -30,15 +30,11 @@
 #include <appoptio.hxx>
 #include <scmod.hxx>
 #include <svl/eitem.hxx>
-#include <svx/colorbox.hxx>
 #include <svtools/unitconv.hxx>
 
 ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet&  rArgSet)
     : SfxTabPage(pPage, pController, "modules/scalc/ui/tpviewpage.ui", "TpViewPage", &rArgSet)
     , m_xGridLB(m_xBuilder->weld_combo_box("grid"))
-    , m_xColorFT(m_xBuilder->weld_label("color_label"))
-    , m_xColorLB(new ColorListBox(m_xBuilder->weld_menu_button("color"),
-                [this]{ return GetDialogController()->getDialog(); }))
     , m_xBreakCB(m_xBuilder->weld_check_button("break"))
     , m_xGuideLineCB(m_xBuilder->weld_check_button("guideline"))
     , m_xFormulaCB(m_xBuilder->weld_check_button("formula"))
@@ -88,14 +84,10 @@ ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogContr
     m_xRowColHeaderCB->connect_toggled(aCBHdl);
     m_xSummaryCB->connect_toggled(aCBHdl);
     m_xThemedCursorRB->connect_toggled(aCBHdl);
-
-    m_xColorLB->SetSlotId(SID_ATTR_CHAR_COLOR);
-    m_xColorLB->SetAutoDisplayColor(SC_STD_GRIDCOLOR);
 }
 
 ScTpContentOptions::~ScTpContentOptions()
 {
-    m_xColorLB.reset();
 }
 
 std::unique_ptr<SfxTabPage> ScTpContentOptions::Create( weld::Container* pPage, weld::DialogController* pController,
@@ -123,19 +115,11 @@ bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
         m_xVScrollCB->get_state_changed_from_saved() ||
         m_xTblRegCB->get_state_changed_from_saved() ||
         m_xOutlineCB->get_state_changed_from_saved() ||
-        m_xColorLB->IsValueChangedFromSaved() ||
         m_xBreakCB->get_state_changed_from_saved() ||
         m_xSummaryCB->get_state_changed_from_saved() ||
         m_xThemedCursorRB->get_state_changed_from_saved() ||
         m_xGuideLineCB->get_state_changed_from_saved())
     {
-        NamedColor aNamedColor = m_xColorLB->GetSelectedEntry();
-        if (aNamedColor.first == COL_AUTO)
-        {
-            aNamedColor.first = SC_STD_GRIDCOLOR;
-            aNamedColor.second.clear();
-        }
-        m_xLocalOptions->SetGridColor(aNamedColor.first, aNamedColor.second);
         rCoreSet->Put(ScTpViewItem(*m_xLocalOptions));
         bRet = true;
     }
@@ -211,7 +195,6 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
     m_xTblRegCB->save_state();
     m_xOutlineCB->save_state();
     m_xGridLB->save_value();
-    m_xColorLB->SaveValue();
     m_xBreakCB->save_state();
     m_xGuideLineCB->save_state();
     m_xSummaryCB->save_state();
@@ -278,30 +261,15 @@ void ScTpContentOptions::InitGridOpt()
 
     if ( bGrid || bGridOnTop )
     {
-        m_xColorFT->set_sensitive(true);
-        m_xColorLB->set_sensitive(true);
         if ( !bGridOnTop )
             nSelPos = 0;
         else
             nSelPos = 1;
     }
     else
-    {
-        m_xColorFT->set_sensitive(false);
-        m_xColorLB->set_sensitive(false);
         nSelPos = 2;
-    }
 
     m_xGridLB->set_active (nSelPos);
-
-    //  select grid color entry
-    OUString  aName;
-    Color     aCol    = m_xLocalOptions->GetGridColor( &aName );
-
-    if (aName.trim().isEmpty() && aCol == SC_STD_GRIDCOLOR)
-        aCol = COL_AUTO;
-
-    m_xColorLB->SelectEntry(std::make_pair(aCol, aName));
 }
 
 IMPL_LINK( ScTpContentOptions, GridHdl, weld::ComboBox&, rLb, void )
@@ -310,8 +278,6 @@ IMPL_LINK( ScTpContentOptions, GridHdl, weld::ComboBox&, rLb, void )
     bool    bGrid = ( nSelPos <= 1 );
     bool    bGridOnTop = ( nSelPos == 1 );
 
-    m_xColorFT->set_sensitive(bGrid);
-    m_xColorLB->set_sensitive(bGrid);
     m_xLocalOptions->SetOption( VOPT_GRID, bGrid );
     m_xLocalOptions->SetOption( VOPT_GRID_ONTOP, bGridOnTop );
 }

@@ -3514,12 +3514,6 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
             const ScMarkData& rMarkData = GetMarkData();
             rTabSett.mbSelected = rMarkData.GetTableSelect( nTab );
             rMarkData.FillRangeListWithMarks( &rTabSett.maSelection, true );
-
-            // grid color
-            rTabSett.maGridColor = COL_AUTO;
-            const Color& rGridColor = maOptions.GetGridColor();
-            if (rGridColor != SC_STD_GRIDCOLOR)
-                rTabSett.maGridColor = rGridColor;
             rTabSett.mbShowGrid = pViewTab->bShowGrid;
 
             // view mode and zoom
@@ -3674,12 +3668,6 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
             // get some settings from displayed Excel sheet, set at Calc document
             if( nTab == GetTabNo() )
             {
-                // grid color -- #i47435# set automatic grid color explicitly
-                Color aGridColor(rTabSett.maGridColor);
-                if (aGridColor == COL_AUTO)
-                    aGridColor = SC_STD_GRIDCOLOR;
-                maOptions.SetGridColor(aGridColor, OUString());
-
                 // view mode and default zoom (for new sheets) from current sheet
                 if( rTabSett.mnNormalZoom )
                     aDefZoomX = aDefZoomY = Fraction( rTabSett.mnNormalZoom, 100L );
@@ -3911,12 +3899,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
         {
             Color aColor;
             if (rSetting.Value >>= aColor)
-            {
-                // #i47435# set automatic grid color explicitly
-                if( aColor == COL_AUTO )
-                    aColor = SC_STD_GRIDCOLOR;
                 maOptions.SetGridColor(aColor, OUString());
-            }
         }
         else if ( sName == SC_UNO_SHOWPAGEBR )
             maOptions.SetOption(VOPT_PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
