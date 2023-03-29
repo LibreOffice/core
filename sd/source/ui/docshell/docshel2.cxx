@@ -305,12 +305,17 @@ bool DrawDocShell::IsNewPageNameValid( OUString & rInOutPageName, bool bResetStr
 {
     bool bCanUseNewName = false;
 
-    // check if name is something like 'Slide n'
-    OUString aStrPage(SdResId(STR_SD_PAGE) + " ");
+    // check if name is something like 'Slide/Page n'
+    OUString aStrPage;
+    if (GetDoc()->GetDocumentType() == DocumentType::Draw)
+        aStrPage = SdResId(STR_PAGE_NAME) + " ";
+    else
+        // using the same strings as SdPage::GetName
+        aStrPage = SdResId(STR_PAGE) + " ";
 
     bool bIsStandardName = false;
 
-    // prevent also _future_ slide names of the form "'STR_SD_PAGE' + ' ' + '[0-9]+|[a-z]|[A-Z]|[CDILMVX]+|[cdilmvx]+'"
+    // prevent also _future_ slide names of the form "'STR_PAGE' + ' ' + '[0-9]+|[a-z]|[A-Z]|[CDILMVX]+|[cdilmvx]+'"
     // (arabic, lower- and upper case single letter, lower- and upper case roman numbers)
     if (rInOutPageName.startsWith(aStrPage) &&
         rInOutPageName.getLength() > aStrPage.getLength())
