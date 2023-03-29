@@ -2731,7 +2731,8 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
             if (bIsPie)
             {
                 bool bDonut = false;
-                if ((m_xChartTypeModel->getPropertyValue("UseRings") >>= bDonut) && bDonut)
+                // "UseRings"
+                if ((m_xChartTypeModel->getFastPropertyValue(PROP_PIECHARTTYPE_USE_RINGS) >>= bDonut) && bDonut)
                     bIsPie = false;
             }
         }

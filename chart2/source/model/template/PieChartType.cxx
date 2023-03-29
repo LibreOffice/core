@@ -37,21 +37,14 @@ using ::com::sun::star::uno::Reference;
 namespace
 {
 
-enum
-{
-    PROP_PIECHARTTYPE_USE_RINGS,
-    PROP_PIECHARTTYPE_3DRELATIVEHEIGHT
-};
-
-
 ::chart::tPropertyValueMap& StaticPieChartTypeDefaults()
 {
     static ::chart::tPropertyValueMap aStaticDefaults =
         []()
         {
             ::chart::tPropertyValueMap aOutMap;
-            ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_PIECHARTTYPE_USE_RINGS, false );
-            ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aOutMap, PROP_PIECHARTTYPE_3DRELATIVEHEIGHT, 100 );
+            ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, ::chart::PROP_PIECHARTTYPE_USE_RINGS, false );
+            ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aOutMap, ::chart::PROP_PIECHARTTYPE_3DRELATIVEHEIGHT, 100 );
             return aOutMap;
         }();
     return aStaticDefaults;
@@ -64,12 +57,12 @@ enum
         {
             std::vector< css::beans::Property > aProperties {
                 { "UseRings",
-                  PROP_PIECHARTTYPE_USE_RINGS,
+                  ::chart::PROP_PIECHARTTYPE_USE_RINGS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT },
                 { "3DRelativeHeight",
-                  PROP_PIECHARTTYPE_3DRELATIVEHEIGHT,
+                  ::chart::PROP_PIECHARTTYPE_3DRELATIVEHEIGHT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::MAYBEVOID }
             };

@@ -252,7 +252,7 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
     if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
     {
         bool bDonut = false;
-        xChartType->getPropertyValue( "UseRings") >>= bDonut;
+        xChartType->getFastPropertyValue( PROP_PIECHARTTYPE_USE_RINGS ) >>= bDonut; // "UseRings"
 
         if(!bDonut)
         {
@@ -593,7 +593,7 @@ sal_Int32 ChartTypeHelper::getNumberOfDisplayedSeries(
             if( aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_PIE )
             {
                 bool bDonut = false;
-                if( (xChartType->getPropertyValue( "UseRings") >>= bDonut)
+                if( (xChartType->getFastPropertyValue( PROP_PIECHARTTYPE_USE_RINGS ) >>= bDonut) // "UseRings"
                     && !bDonut )
                 {
                     return nNumberOfSeries>0 ? 1 : 0;

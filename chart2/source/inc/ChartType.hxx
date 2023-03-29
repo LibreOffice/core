@@ -38,6 +38,14 @@ class BaseCoordinateSystem;
 class DataSeries;
 class ModifyEventForwarder;
 
+enum
+{
+    PROP_PIECHARTTYPE_USE_RINGS,
+    PROP_PIECHARTTYPE_3DRELATIVEHEIGHT
+};
+
+
+
 namespace impl
 {
 typedef ::cppu::WeakImplHelper<

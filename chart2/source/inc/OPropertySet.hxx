@@ -138,15 +138,15 @@ protected:
         ( css::uno::Any& rValue,
           sal_Int32 nHandle ) const override;
 
-    /// make original interface function visible again
-    using ::com::sun::star::beans::XFastPropertySet::getFastPropertyValue;
-
     /** implement this method in derived classes to get called when properties
         change.
      */
     virtual void firePropertyChangeEvent();
 
 public:
+    /// make original interface function visible again
+    using ::com::sun::star::beans::XFastPropertySet::getFastPropertyValue;
+
     // Interfaces
 
     // ____ XInterface ____

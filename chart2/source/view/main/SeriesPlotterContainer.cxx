@@ -212,11 +212,13 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
                 try
                 {
                     sal_Int32 n3DRelativeHeightOldValue(100);
-                    uno::Any aAny = xChartType->getPropertyValue("3DRelativeHeight");
+                    uno::Any aAny = xChartType->getFastPropertyValue(
+                        PROP_PIECHARTTYPE_3DRELATIVEHEIGHT); // "3DRelativeHeight"
                     aAny >>= n3DRelativeHeightOldValue;
                     if (n3DRelativeHeightOldValue != n3DRelativeHeight)
-                        xChartType->setPropertyValue("3DRelativeHeight",
-                                                     uno::Any(n3DRelativeHeight));
+                        xChartType->setFastPropertyValue(
+                            PROP_PIECHARTTYPE_3DRELATIVEHEIGHT, // "3DRelativeHeight"
+                            uno::Any(n3DRelativeHeight));
                 }
                 catch (const uno::Exception&)
                 {

@@ -207,7 +207,7 @@ PieChart::PieChart( const rtl::Reference<ChartType>& xChartTypeModel
 
     try
     {
-        xChartTypeModel->getPropertyValue( "UseRings") >>= m_bUseRings;
+        xChartTypeModel->getFastPropertyValue(PROP_PIECHARTTYPE_USE_RINGS) >>= m_bUseRings; //  "UseRings"
         if( m_bUseRings )
         {
             m_pPosHelper->m_fRadiusOffset = 1.0;
@@ -730,7 +730,7 @@ void PieChart::createShapes()
     {
         try
         {
-            uno::Any aAny = m_xChartTypeModel->getPropertyValue( "3DRelativeHeight" );
+            uno::Any aAny = m_xChartTypeModel->getFastPropertyValue( PROP_PIECHARTTYPE_3DRELATIVEHEIGHT ); // "3DRelativeHeight"
             aAny >>= n3DRelativeHeight;
         }
         catch (const uno::Exception&) { }

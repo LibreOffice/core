@@ -251,8 +251,8 @@ void PieChartTypeTemplate::createChartTypes(
     try
     {
         rtl::Reference< ChartType > xCT = new PieChartType();
-        xCT->setPropertyValue(
-            "UseRings", getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ));
+        xCT->setFastPropertyValue(
+            PROP_PIECHARTTYPE_USE_RINGS, getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS )); // "UseRings"
         rCoordSys[0]->setChartTypes( std::vector{xCT} );
 
         if( !aSeriesSeq.empty() )
@@ -348,10 +348,9 @@ bool PieChartTypeTemplate::matchesTemplate2(
     //check UseRings
     if( bResult )
     {
-        rtl::Reference< ChartType > xCTProp =
-            xDiagram->getChartTypeByIndex( 0 );
+        rtl::Reference< ChartType > xCTProp = xDiagram->getChartTypeByIndex( 0 );
         bool bUseRings = false;
-        if( xCTProp->getPropertyValue( "UseRings") >>= bUseRings )
+        if( xCTProp->getFastPropertyValue( PROP_PIECHARTTYPE_USE_RINGS ) >>= bUseRings ) // "UseRings"
         {
             bResult = ( bTemplateUsesRings == bUseRings );
         }
@@ -367,8 +366,8 @@ rtl::Reference< ChartType > PieChartTypeTemplate::getChartTypeForIndex( sal_Int3
     try
     {
         xResult = new PieChartType();
-        xResult->setPropertyValue(
-            "UseRings", getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ));
+        xResult->setFastPropertyValue(
+            PROP_PIECHARTTYPE_USE_RINGS, getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS )); // "UseRings"
     }
     catch( const uno::Exception & )
     {
@@ -387,8 +386,8 @@ rtl::Reference< ChartType > PieChartTypeTemplate::getChartTypeForNewSeries2(
     {
         xResult = new PieChartType();
         ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
-        xResult->setPropertyValue(
-            "UseRings", getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ));
+        xResult->setFastPropertyValue(
+            PROP_PIECHARTTYPE_USE_RINGS, getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS )); // "UseRings"
     }
     catch( const uno::Exception & )
     {
