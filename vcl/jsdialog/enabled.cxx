@@ -36,6 +36,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"cui/ui/cellalignment.ui"
         || rUIFile == u"cui/ui/charnamepage.ui"
         || rUIFile == u"cui/ui/colorpage.ui"
+        || rUIFile == u"cui/ui/colorpickerdialog.ui"
         || rUIFile == u"cui/ui/effectspage.ui"
         || rUIFile == u"cui/ui/eventassigndialog.ui"
         || rUIFile == u"cui/ui/fontfeaturesdialog.ui"
