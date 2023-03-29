@@ -138,6 +138,7 @@ class SdrVertShearAllItem;
 class SdrVertShearOneItem;
 class SdrYesNoItem;
 class SfxBoolItem;
+class SfxGrabBagItem;
 class SfxInt16Item;
 class SfxUInt16Item;
 class SfxUInt32Item;
@@ -416,7 +417,8 @@ constexpr TypedWhichId<SvxBoxInfoItem>    SDRATTR_TABLE_BORDER_INNER  (SDRATTR_T
 constexpr TypedWhichId<SvxLineItem>       SDRATTR_TABLE_BORDER_TLBR   (SDRATTR_TABLE_FIRST+2);
 constexpr TypedWhichId<SvxLineItem>       SDRATTR_TABLE_BORDER_BLTR   (SDRATTR_TABLE_FIRST+3);
 constexpr TypedWhichId<SvxTextRotateItem> SDRATTR_TABLE_TEXT_ROTATION (SDRATTR_TABLE_FIRST+4);
-constexpr sal_uInt16                      SDRATTR_TABLE_LAST          (SDRATTR_TABLE_TEXT_ROTATION);
+constexpr TypedWhichId<SfxGrabBagItem>    SDRATTR_TABLE_GRABBAG       (SDRATTR_TABLE_FIRST+5);
+constexpr sal_uInt16                      SDRATTR_TABLE_LAST          (SDRATTR_TABLE_GRABBAG);
 
 constexpr sal_uInt16                  SDRATTR_GLOW_FIRST (SDRATTR_TABLE_LAST+1);
 constexpr TypedWhichId<SdrMetricItem> SDRATTR_GLOW_RADIUS   (SDRATTR_GLOW_FIRST+0);

@@ -27,6 +27,7 @@
 
 #include <rtl/ref.hxx>
 #include <svl/style.hxx>
+#include <svl/grabbagitem.hxx>
 #include <svx/sdtaitm.hxx>
 #include "tablemodel.hxx"
 #include <editeng/unotext.hxx>
@@ -210,6 +211,8 @@ private:
     tools::Rectangle       maCellRect;
 
     css::uno::Reference< css::table::XTable > mxTable;
+
+    std::unique_ptr<SfxGrabBagItem> mpGrabBagItem = {};
 };
 
 

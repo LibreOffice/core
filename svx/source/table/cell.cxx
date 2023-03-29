@@ -27,6 +27,7 @@
 
 #include <comphelper/sequence.hxx>
 #include <o3tl/any.hxx>
+#include <svl/grabbagitem.hxx>
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
 
@@ -95,6 +96,7 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
         { u"LeftBorder",                   SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, LEFT_BORDER },
         { u"RightBorder",                  SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, RIGHT_BORDER },
         { u"RotateAngle",                  SDRATTR_TABLE_TEXT_ROTATION,    cppu::UnoType<sal_Int32>::get(), 0, 0 },
+        { u"CellInteropGrabBag",           SDRATTR_TABLE_GRABBAG,          cppu::UnoType<css::uno::Sequence<css::beans::PropertyValue>>::get(), 0, 0},
 
         SVX_UNOEDIT_OUTLINER_PROPERTIES,
         SVX_UNOEDIT_CHAR_PROPERTIES,
@@ -1102,6 +1104,14 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
             mpProperties->SetObjectItem(SvxTextRotateItem(Degree10(nRotVal/10), SDRATTR_TABLE_TEXT_ROTATION));
             return;
         }
+        case SDRATTR_TABLE_GRABBAG:
+        {
+            if (mpGrabBagItem == nullptr)
+                mpGrabBagItem.reset(new SfxGrabBagItem);
+
+            mpGrabBagItem->PutValue(rValue, 0);
+            return;
+        }
         default:
         {
             SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID);
@@ -1221,6 +1231,17 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
         {
             const SvxTextRotateItem& rTextRotate = mpProperties->GetItem(SDRATTR_TABLE_TEXT_ROTATION);
             return Any(sal_Int32(to<Degree100>(rTextRotate.GetValue())));
+        }
+        case SDRATTR_TABLE_GRABBAG:
+        {
+            if (mpGrabBagItem != nullptr)
+            {
+                Any aGrabBagSequence;
+                mpGrabBagItem->QueryValue(aGrabBagSequence);
+                return aGrabBagSequence;
+            }
+            else
+                return Any{css::uno::Sequence<css::beans::PropertyValue>()};
         }
         default:
         {

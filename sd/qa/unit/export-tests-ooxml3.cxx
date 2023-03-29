@@ -2089,6 +2089,22 @@ void SdOOXMLExportTest3::testTdf94122_autoColor()
                 "val", "000000");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTableCellVerticalPropertyRoundtrip)
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tcPr-vert-roundtrip.pptx"), PPTX);
+
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXml = parseExport(tempFile, "ppt/slides/slide1.xml");
+
+    assertXPath(pXml, "(//a:tcPr)[1]", "vert", "vert270");
+    assertXPath(pXml, "(//a:tcPr)[2]", "vert", "vert");
+    assertXPath(pXml, "(//a:tcPr)[3]", "vert", "wordArtVert");
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest3);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
