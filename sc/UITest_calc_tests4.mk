@@ -17,4 +17,6 @@ $(eval $(call gb_UITest_set_defs,calc_tests4, \
     TDOC="$(SRCDIR)/sc/qa/uitest/data" \
 ))
 
+$(eval $(call gb_UITest_use_oneprocess,calc_tests4))
+
 # vim: set noet sw=4 ts=4:
