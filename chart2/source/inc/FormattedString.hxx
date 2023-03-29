@@ -25,6 +25,7 @@
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include "ModifyListenerHelper.hxx"
+#include "PropertyHelper.hxx"
 
 namespace chart
 {
@@ -133,6 +134,8 @@ private:
 
     rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 };
+
+OOO_DLLPUBLIC_CHARTTOOLS const ::chart::tPropertyValueMap & StaticFormattedStringDefaults();
 
 } //  namespace chart
 

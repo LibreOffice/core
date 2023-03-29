@@ -205,7 +205,10 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID );
 
 }
+} // namespace
 
+namespace chart
+{
 const ::chart::tPropertyValueMap &  StaticAxisDefaults()
 {
     static ::chart::tPropertyValueMap aStaticDefaults = []()
@@ -239,7 +242,10 @@ const ::chart::tPropertyValueMap &  StaticAxisDefaults()
         }();
     return aStaticDefaults;
 };
+} // namespace chart
 
+namespace
+{
 ::cppu::OPropertyArrayHelper& StaticAxisInfoHelper()
 {
     static ::cppu::OPropertyArrayHelper aPropHelper = []()

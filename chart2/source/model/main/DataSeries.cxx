@@ -46,9 +46,8 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::osl::MutexGuard;
 
-namespace
+namespace chart
 {
-
 const ::chart::tPropertyValueMap & StaticDataSeriesDefaults()
 {
     static const ::chart::tPropertyValueMap aStaticDefaults = []()
@@ -64,6 +63,10 @@ const ::chart::tPropertyValueMap & StaticDataSeriesDefaults()
         }();
     return aStaticDefaults;
 };
+} // namespace chart
+
+namespace
+{
 
 ::cppu::OPropertyArrayHelper& StaticDataSeriesInfoHelper()
 {

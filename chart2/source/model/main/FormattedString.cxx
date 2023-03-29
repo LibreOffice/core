@@ -32,15 +32,22 @@ using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Sequence;
 using ::osl::MutexGuard;
 
-namespace
+namespace chart
 {
-
 const ::chart::tPropertyValueMap & StaticFormattedStringDefaults()
 {
-    static ::chart::tPropertyValueMap aStaticDefaults;
-    ::chart::CharacterProperties::AddDefaultsToMap( aStaticDefaults );
+    static ::chart::tPropertyValueMap aStaticDefaults = []
+        {
+            ::chart::tPropertyValueMap aMap;
+            ::chart::CharacterProperties::AddDefaultsToMap( aMap );
+            return aMap;
+        }();
     return aStaticDefaults;
 };
+} // namespace chart
+
+namespace
+{
 
 ::cppu::OPropertyArrayHelper& StaticFormattedStringInfoHelper()
 {

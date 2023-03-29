@@ -105,6 +105,10 @@ void lcl_AddPropertiesToVector(
 
 }
 
+} // namespace
+
+namespace chart
+{
 const ::chart::tPropertyValueMap& StaticLegendDefaults()
 {
     static ::chart::tPropertyValueMap aStaticDefaults = []()
@@ -127,7 +131,10 @@ const ::chart::tPropertyValueMap& StaticLegendDefaults()
         }();
     return aStaticDefaults;
 };
+} // namespace chart
 
+namespace
+{
 ::cppu::OPropertyArrayHelper& StaticLegendInfoHelper()
 {
     static ::cppu::OPropertyArrayHelper aPropHelper = []()

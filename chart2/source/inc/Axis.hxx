@@ -28,6 +28,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include "ModifyListenerHelper.hxx"
 #include "charttoolsdllapi.hxx"
+#include "PropertyHelper.hxx"
 
 namespace chart
 {
@@ -136,6 +137,8 @@ private:
 
     rtl::Reference< ::chart::Title >          m_xTitle;
 };
+
+OOO_DLLPUBLIC_CHARTTOOLS const ::chart::tPropertyValueMap &  StaticAxisDefaults();
 
 } //  namespace chart
 

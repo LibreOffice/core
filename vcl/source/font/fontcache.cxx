@@ -25,6 +25,7 @@
 #include <font/PhysicalFontFace.hxx>
 #include <font/PhysicalFontFamily.hxx>
 #include <font/LogicalFontInstance.hxx>
+#include <tools/debug.hxx>
 #include <impfontcache.hxx>
 
 using namespace vcl::font;
@@ -95,6 +96,7 @@ ImplFontCache::ImplFontCache()
 
 ImplFontCache::~ImplFontCache()
 {
+    DBG_TESTSOLARMUTEX();
     for (const auto & rLFI : maFontInstanceList)
     {
         rLFI.second->mpFontCache = nullptr;
@@ -112,6 +114,7 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFont
 rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFontCollection const * pFontList,
     vcl::font::FontSelectPattern& aFontSelData )
 {
+    DBG_TESTSOLARMUTEX();
     rtl::Reference<LogicalFontInstance> pFontInstance;
     PhysicalFontFamily* pFontFamily = nullptr;
 
@@ -240,6 +243,7 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetGlyphFallbackFont( Physica
 
 void ImplFontCache::Invalidate()
 {
+    DBG_TESTSOLARMUTEX();
     // #112304# make sure the font cache is really clean
     mpLastHitCacheEntry = nullptr;
     for (auto const & pair : maFontInstanceList)

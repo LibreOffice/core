@@ -30,6 +30,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include "ModifyListenerHelper.hxx"
+#include "PropertyHelper.hxx"
 
 // STL
 #include <vector>
@@ -180,6 +181,8 @@ private:
 
     rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 };
+
+OOO_DLLPUBLIC_CHARTTOOLS const tPropertyValueMap & StaticDataSeriesDefaults();
 
 }  // namespace chart
 
