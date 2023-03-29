@@ -27,6 +27,7 @@
 #include <Diagram.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
+#include <Legend.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <vector>
@@ -238,9 +239,9 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
         return eResult;
 
     // Legend
-    Reference< beans::XPropertySet > xLegendProp( xDiagram->getLegend(), uno::UNO_QUERY );
-    if( xLegendProp.is())
-        getAutoResizeFromPropSet( xLegendProp, eResult );
+    rtl::Reference< Legend > xLegend( xDiagram->getLegend2() );
+    if( xLegend.is())
+        getAutoResizeFromPropSet( xLegend, eResult );
     if( eResult == AUTO_RESIZE_AMBIGUOUS )
         return eResult;
 
@@ -313,9 +314,9 @@ void ReferenceSizeProvider::setAutoResizeState( ReferenceSizeProvider::AutoResiz
     impl_setValuesAtTitled( xDiagram );
 
     // Legend
-    Reference< beans::XPropertySet > xLegendProp( xDiagram->getLegend(), uno::UNO_QUERY );
-    if( xLegendProp.is())
-        setValuesAtPropertySet( xLegendProp );
+    rtl::Reference< Legend > xLegend( xDiagram->getLegend2() );
+    if( xLegend.is())
+        setValuesAtPropertySet( xLegend );
 
     // Axes (incl. Axis Titles)
     const std::vector< rtl::Reference< Axis > > aAxes = AxisHelper::getAllAxesOfDiagram( xDiagram );

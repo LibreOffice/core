@@ -80,19 +80,19 @@ void LegendPositionResources::writeToResources( const rtl::Reference<::chart::Ch
     try
     {
         rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
-        uno::Reference< beans::XPropertySet > xProp( xDiagram->getLegend(), uno::UNO_QUERY );
-        if( xProp.is() )
+        rtl::Reference< Legend > xLegend = xDiagram->getLegend2();
+        if( xLegend.is() )
         {
             //show
             bool bShowLegend = false;
-            xProp->getPropertyValue( "Show" ) >>= bShowLegend;
+            xLegend->getPropertyValue( "Show" ) >>= bShowLegend;
             if (m_xCbxShow)
                 m_xCbxShow->set_active( bShowLegend );
             PositionEnable();
 
             //position
             chart2::LegendPosition ePos;
-            xProp->getPropertyValue( "AnchorPosition" )  >>= ePos;
+            xLegend->getPropertyValue( "AnchorPosition" )  >>= ePos;
             switch( ePos )
             {
                 case chart2::LegendPosition_LINE_START:

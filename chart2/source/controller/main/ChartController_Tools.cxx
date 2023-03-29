@@ -202,12 +202,12 @@ void ChartController::executeDispatch_NewArrangement()
             xDiagram->set3DSettingsToDefault();
 
             // legend
-            Reference< beans::XPropertyState > xLegendState( xDiagram->getLegend(), uno::UNO_QUERY );
-            if( xLegendState.is())
+            rtl::Reference< Legend > xLegend = xDiagram->getLegend2();
+            if( xLegend.is())
             {
-                xLegendState->setPropertyToDefault( "RelativePosition");
-                xLegendState->setPropertyToDefault( "RelativeSize");
-                xLegendState->setPropertyToDefault( "AnchorPosition");
+                xLegend->setPropertyToDefault( "RelativePosition");
+                xLegend->setPropertyToDefault( "RelativeSize");
+                xLegend->setPropertyToDefault( "AnchorPosition");
             }
 
             // titles
@@ -633,14 +633,14 @@ bool ChartController::executeDispatch_Delete()
                 rtl::Reference< Diagram > xDiagram( xChartDoc->getFirstChartDiagram());
                 if( xDiagram.is())
                 {
-                    uno::Reference< beans::XPropertySet > xLegendProp( xDiagram->getLegend(), uno::UNO_QUERY );
-                    if( xLegendProp.is())
+                    rtl::Reference< Legend > xLegend( xDiagram->getLegend2() );
+                    if( xLegend.is())
                     {
                         UndoGuard aUndoGuard(
                             ActionDescriptionProvider::createDescription(
                                 ActionDescriptionProvider::ActionType::Delete, SchResId( STR_OBJECT_LEGEND )),
                             m_xUndoManager );
-                        xLegendProp->setPropertyValue( "Show", uno::Any( false ));
+                        xLegend->setPropertyValue( "Show", uno::Any( false ));
                         bReturn = true;
                         aUndoGuard.commit();
                     }
