@@ -28,6 +28,7 @@
 
 namespace com::sun::star {
     namespace awt { struct Gradient;
+                    struct Gradient2;
                     class XBitmap; }
     namespace graphic { class XGraphic; }
     namespace container { class XNameContainer; }
@@ -102,8 +103,10 @@ public:
 
     /** Inserts a new named fill gradient, returns the gradient name, based on
         an internal constant name with a new unused index appended. */
+    OUString     insertFillGradient( const css::awt::Gradient2& rGradient );
     OUString     insertFillGradient( const css::awt::Gradient& rGradient );
 
+    OUString     insertTransGrandient( const css::awt::Gradient2& rGradient );
     OUString     insertTransGrandient( const css::awt::Gradient& rGradient );
 
     OUString     insertFillHatch( const css::drawing::Hatch& rHatch );

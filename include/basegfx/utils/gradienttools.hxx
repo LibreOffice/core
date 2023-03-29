@@ -196,6 +196,15 @@ namespace basegfx
 
     namespace utils
     {
+        /* Tooling method to check if a ColorStop vector is defined
+           by a single color. It returns true if this is the case.
+           If true is returned, rSingleColor contains that single
+           color for convenience.
+           NOTE: If no ColorStop is defined, a fallback to BColor-default
+                 (which is black) and true will be returned
+        */
+        BASEGFX_DLLPUBLIC bool isSingleColor(const ColorStops& rColorStops, BColor& rSingleColor);
+
         /* Tooling method to reverse ColorStops, including offsets.
            When also mirroring offsets a valid sort keeps valid.
         */

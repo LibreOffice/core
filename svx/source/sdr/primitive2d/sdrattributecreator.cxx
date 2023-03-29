@@ -444,9 +444,9 @@ namespace drawinglayer::primitive2d
                         && pGradientItem->IsEnabled())
                     {
                         const XGradient& rGradient = pGradientItem->GetGradientValue();
-                        const sal_uInt8 nStartLuminance(Color(rGradient.GetColorStops().front().getStopColor()).GetLuminance());
-                        const sal_uInt8 nEndLuminance(Color(rGradient.GetColorStops().back().getStopColor()).GetLuminance());
-                        const bool bCompletelyTransparent(0xff == nStartLuminance && 0xff == nEndLuminance);
+                        basegfx::BColor aSingleColor;
+                        const bool bSingleColor(basegfx::utils::isSingleColor(rGradient.GetColorStops(), aSingleColor));
+                        const bool bCompletelyTransparent(bSingleColor && basegfx::fTools::equal(aSingleColor.luminance(), 1.0));
 
                         if(bCompletelyTransparent)
                         {
@@ -921,10 +921,10 @@ namespace drawinglayer::primitive2d
             {
                 // test if float transparence is completely transparent
                 const XGradient& rGradient = pGradientItem->GetGradientValue();
-                const sal_uInt8 nStartLuminance(Color(rGradient.GetColorStops().front().getStopColor()).GetLuminance());
-                const sal_uInt8 nEndLuminance(Color(rGradient.GetColorStops().back().getStopColor()).GetLuminance());
-                const bool bCompletelyTransparent(0xff == nStartLuminance && 0xff == nEndLuminance);
-                const bool bNotTransparent(0x00 == nStartLuminance && 0x00 == nEndLuminance);
+                basegfx::BColor aSingleColor;
+                const bool bSingleColor(basegfx::utils::isSingleColor(rGradient.GetColorStops(), aSingleColor));
+                const bool bCompletelyTransparent(bSingleColor && basegfx::fTools::equal(aSingleColor.luminance(), 1.0));
+                const bool bNotTransparent(bSingleColor && basegfx::fTools::equalZero(aSingleColor.luminance()));
 
                 // create nothing when completely transparent: This case is already checked for the
                 // normal fill attributes, XFILL_NONE will be used.
@@ -932,18 +932,13 @@ namespace drawinglayer::primitive2d
                 // Both cases are optimizations, always creating FillGradientAttribute will work, too
                 if(!bNotTransparent && !bCompletelyTransparent)
                 {
-                    const double fStartLum(nStartLuminance / 255.0);
-                    const double fEndLum(nEndLuminance / 255.0);
-
                     return attribute::FillGradientAttribute(
                         XGradientStyleToGradientStyle(rGradient.GetGradientStyle()),
                         static_cast<double>(rGradient.GetBorder()) * 0.01,
                         static_cast<double>(rGradient.GetXOffset()) * 0.01,
                         static_cast<double>(rGradient.GetYOffset()) * 0.01,
                         toRadians(rGradient.GetAngle()),
-                        basegfx::utils::createColorStopsFromStartEndColor(
-                            basegfx::BColor(fStartLum, fStartLum, fStartLum),
-                            basegfx::BColor(fEndLum, fEndLum, fEndLum)));
+                        rGradient.GetColorStops());
                 }
             }
 
