@@ -3558,6 +3558,12 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType(const uno::Reference< embed:
                                                     const uno::Reference< embed::XStorage >& xTarget,
                                                     const uno::Sequence<OUString>& rExceptions)
 {
+    if (!xSource.is())
+    {
+        SAL_WARN( "sfx.doc", "SfxObjectShell::GetStorage() failed");
+        return false;
+    }
+
     // This method does not commit the target storage and should not do it
     bool bResult = true;
 
