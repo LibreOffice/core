@@ -1984,6 +1984,18 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf102261_testParaTabStopDefaultDis
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTableCellVerticalPropertyRoundtrip)
+{
+    createSdImpressDoc("pptx/tcPr-vert-roundtrip.pptx");
+    saveAndReload("Impress Office Open XML");
+
+    xmlDocUniquePtr pXml = parseExport("ppt/slides/slide1.xml");
+
+    assertXPath(pXml, "(//a:tcPr)[1]", "vert", "vert270");
+    assertXPath(pXml, "(//a:tcPr)[2]", "vert", "vert");
+    assertXPath(pXml, "(//a:tcPr)[3]", "vert", "wordArtVert");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

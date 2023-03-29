@@ -2317,6 +2317,20 @@ void ShapeExport::WriteTableCellProperties(const Reference< XPropertySet>& xCell
     aRotateAngle >>= nRotateAngle;
     std::optional<OString> aTextVerticalValue = GetTextVerticalType(nRotateAngle);
 
+    Sequence<PropertyValue> aGrabBag;
+    if( !aTextVerticalValue &&
+        (xCellPropSet->getPropertyValue("CellInteropGrabBag") >>= aGrabBag) )
+    {
+        for (auto const& rIt : std::as_const(aGrabBag))
+        {
+            if (rIt.Name == "mso-tcPr-vert-value")
+            {
+                aTextVerticalValue = rIt.Value.get<OUString>().toUtf8();
+                break;
+            }
+        }
+    }
+
     mpFS->startElementNS(XML_a, XML_tcPr, XML_anchor, sVerticalAlignment,
     XML_vert, aTextVerticalValue,
     XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeftMargin)), nLeftMargin > 0),
