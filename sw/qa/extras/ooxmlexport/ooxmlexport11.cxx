@@ -878,6 +878,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149996, "lorem_hyperlink.fodt")
     // because the exported file was corrupted.
 }
 
+DECLARE_OOXMLEXPORT_TEST(testGroupedShapeLink, "grouped_link.docx")
+{
+    // tdf#145147 Hyperlink in grouped shape not imported
+    // tdf#154469 Hyperlink in grouped shape not exported
+    uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("https://www.libreoffice.org"),
+                         getProperty<OUString>(xGroupShape->getByIndex(0), "Hyperlink"));
+    CPPUNIT_ASSERT_EQUAL(OUString("https://www.documentfoundation.org"),
+                         getProperty<OUString>(xGroupShape->getByIndex(1), "Hyperlink"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

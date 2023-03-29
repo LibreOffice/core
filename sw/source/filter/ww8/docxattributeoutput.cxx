@@ -6625,10 +6625,12 @@ void DocxAttributeOutput::WritePostponedCustomShape()
 
     for( const auto & rPostponedDrawing : *m_oPostponedCustomShape)
     {
+        m_rExport.GetFilter().SetMaxDocId(m_anchorId + 1);
         if ( IsAlternateContentChoiceOpen() )
             m_rExport.SdrExporter().writeDMLDrawing(rPostponedDrawing.object, rPostponedDrawing.frame, m_anchorId++);
         else
             m_rExport.SdrExporter().writeDMLAndVMLDrawing(rPostponedDrawing.object, *rPostponedDrawing.frame, m_anchorId++);
+        m_anchorId = m_rExport.GetFilter().GetMaxDocId();
     }
     m_oPostponedCustomShape.reset();
 }
@@ -6647,10 +6649,12 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
     for( const auto & rPostponedDrawing : *pPostponedDMLDrawings )
     {
         // Avoid w:drawing within another w:drawing.
+        m_rExport.GetFilter().SetMaxDocId(m_anchorId + 1);
         if ( IsAlternateContentChoiceOpen() && !( m_rExport.SdrExporter().IsDrawingOpen()) )
            m_rExport.SdrExporter().writeDMLDrawing(rPostponedDrawing.object, rPostponedDrawing.frame, m_anchorId++);
         else
             m_rExport.SdrExporter().writeDMLAndVMLDrawing(rPostponedDrawing.object, *rPostponedDrawing.frame, m_anchorId++);
+        m_anchorId = m_rExport.GetFilter().GetMaxDocId();
     }
 
     m_oPostponedOLEs = std::move(pPostponedOLEs);
@@ -6706,6 +6710,7 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
                     {
                         if (!m_oPostponedDMLDrawings)
                         {
+                            m_rExport.GetFilter().SetMaxDocId(m_anchorId + 1);
                             if ( IsAlternateContentChoiceOpen() )
                             {
                                 // Do not write w:drawing inside w:drawing. Instead Postpone the Inner Drawing.
@@ -6716,6 +6721,7 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
                             }
                             else
                                 m_rExport.SdrExporter().writeDMLAndVMLDrawing( pSdrObj, rFrame.GetFrameFormat(), m_anchorId++);
+                            m_anchorId = m_rExport.GetFilter().GetMaxDocId();
 
                             m_bPostponedProcessingFly = false ;
                         }
