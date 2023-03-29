@@ -916,7 +916,13 @@ typedef enum
      * Payload is an opaque string that matches this set of states.
      * this will be emitted after creating a new view.
      */
-    LOK_CALLBACK_VIEW_RENDER_STATE = 60
+    LOK_CALLBACK_VIEW_RENDER_STATE = 60,
+
+    /**
+     * Informs the LibreOfficeKit client that the background color surrounding
+     * the document has changed.
+    */
+   LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR = 61
 }
 LibreOfficeKitCallbackType;
 
@@ -1067,6 +1073,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_EXPORT_FILE";
     case LOK_CALLBACK_VIEW_RENDER_STATE:
         return "LOK_CALLBACK_VIEW_RENDER_STATE";
+    case LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR:
+        return "LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");

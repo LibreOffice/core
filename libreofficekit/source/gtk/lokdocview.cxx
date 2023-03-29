@@ -1487,6 +1487,7 @@ callback (gpointer pData)
     case LOK_CALLBACK_MEDIA_SHAPE:
     case LOK_CALLBACK_EXPORT_FILE:
     case LOK_CALLBACK_VIEW_RENDER_STATE:
+    case LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR:
     {
         // TODO: Implement me
         break;
