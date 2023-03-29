@@ -252,6 +252,13 @@ public:
         rtl_uString_acquire( pData );
     }
 
+#if defined LIBO_INTERNAL_ONLY
+    /// @cond INTERNAL
+    // Catch inadvertent conversions to the above ctor:
+    OUString(std::nullptr_t) = delete;
+    /// @endcond
+#endif
+
     /** New OUString from OUString data without acquiring it.  Takeover of ownership.
 
         The SAL_NO_ACQUIRE dummy parameter is only there to distinguish this
