@@ -96,6 +96,7 @@ public:
     sal_uInt32  CalcNewOffset( sal_Int16 nOffset );
     void        ReleaseLegacyBuffer();
     bool        ExceedsLegacyLimits();
+    bool        ExceedsImgVersion12Limits();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

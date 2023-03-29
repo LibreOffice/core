@@ -45,7 +45,6 @@
 //                       new integer type suffix 'b')
 //
 
-#define B_IMG_VERSION_11 0x00000011
 #define B_IMG_VERSION_12 0x00000012
 #define B_IMG_VERSION_13 0x00000013
 

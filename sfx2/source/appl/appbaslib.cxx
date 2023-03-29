@@ -150,13 +150,13 @@ void SfxBasicManagerHolder::impl_releaseContainers()
     mxDialogContainer.clear();
 }
 
-bool SfxBasicManagerHolder::LegacyPsswdBinaryLimitExceeded( std::vector< OUString >& sModules )
+bool SfxBasicManagerHolder::ImgVersion12PsswdBinaryLimitExceeded( std::vector< OUString >& sModules )
 {
 #if !HAVE_FEATURE_SCRIPTING
     (void) sModules;
 #else
     if ( mpBasicManager )
-        return mpBasicManager->LegacyPsswdBinaryLimitExceeded( sModules );
+        return mpBasicManager->ImgVersion12PsswdBinaryLimitExceeded( sModules );
 #endif
     return true;
 }

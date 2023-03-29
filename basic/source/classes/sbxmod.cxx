@@ -1667,11 +1667,11 @@ std::pair<bool, sal_uInt32> SbModule::StoreData( SvStream& rStrm ) const
     }
 }
 
-bool SbModule::ExceedsLegacyModuleSize()
+bool SbModule::ExceedsImgVersion12ModuleSize()
 {
     if ( !IsCompiled() )
         Compile();
-    return pImage && pImage->ExceedsLegacyLimits();
+    return pImage && pImage->ExceedsImgVersion12Limits();
 }
 
 namespace {

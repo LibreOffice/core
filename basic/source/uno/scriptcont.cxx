@@ -572,7 +572,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
     // save/saveas etc are handled in sfxbasemodel::storeSelf &
     // sfxbasemodel::impl_store
     std::vector<OUString> aNames;
-    if ( bExport && pBasicMgr->LegacyPsswdBinaryLimitExceeded(aNames) )
+    if ( bExport && pBasicMgr->ImgVersion12PsswdBinaryLimitExceeded(aNames) )
     {
         if ( xHandler.is() )
         {

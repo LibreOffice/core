@@ -84,6 +84,7 @@
 
 #include "iahndl.hxx"
 #include "nameclashdlg.hxx"
+#include <comphelper/string.hxx>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -382,19 +383,8 @@ UUIInteractionHelper::handleRequest_impl(
         if (aAnyRequest >>= aModSizeException )
         {
             std::vector< OUString > aArguments;
-            uno::Sequence< OUString > sModules
-                = aModSizeException.Names;
-            if ( sModules.hasElements() )
-            {
-                OUStringBuffer aName;
-                for ( sal_Int32 index=0; index< sModules.getLength(); ++index )
-                {
-                    if ( index )
-                        aName.append(",");
-                    aName.append(sModules[index]);
-                }
-                aArguments.push_back( aName.makeStringAndClear() );
-            }
+            aArguments.push_back(
+                comphelper::string::convertCommaSeparated(aModSizeException.Names));
             handleErrorHandlerRequest( task::InteractionClassification_WARNING,
                                        ERRCODE_UUI_IO_MODULESIZEEXCEEDED,
                                        aArguments,

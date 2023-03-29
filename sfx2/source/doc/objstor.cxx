@@ -3812,7 +3812,7 @@ bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference< ta
     std::vector< OUString > sModules;
     if ( xHandler.is() )
     {
-        if( pImpl->aBasicManager.LegacyPsswdBinaryLimitExceeded( sModules ) )
+        if( pImpl->aBasicManager.ImgVersion12PsswdBinaryLimitExceeded( sModules ) )
         {
             rtl::Reference<ModuleSizeExceeded> pReq =  new ModuleSizeExceeded( sModules );
             xHandler->handle( pReq );

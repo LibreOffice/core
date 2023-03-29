@@ -172,11 +172,11 @@ public:
     /** retrieves a global constant in the basic library, referring to some UNO object, returns true if a value is found ( value is in aOut ) false otherwise. */
     bool            GetGlobalUNOConstant( const OUString& rName, css::uno::Any& aOut );
     /** determines whether there are password-protected modules whose size exceeds the
-        legacy module size
+        B_IMG_VERSION_12 module size
         @param _out_rModuleNames
-            takes the names of modules whose size exceeds the legacy limit
+            takes the names of modules whose size exceeds the B_IMG_VERSION_12 limit
     */
-    bool            LegacyPsswdBinaryLimitExceeded( std::vector< OUString >& _out_rModuleNames );
+    bool            ImgVersion12PsswdBinaryLimitExceeded( std::vector< OUString >& _out_rModuleNames );
     bool HasExeCode( std::u16string_view );
     /// determines whether the Basic Manager has a given macro, given by fully qualified name
     bool            HasMacro( OUString const& i_fullyQualifiedName ) const;

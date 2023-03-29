@@ -85,7 +85,7 @@ public:
     /** checks if any modules in the SfxLibraryContainer exceed the binary
         limits.
     */
-    bool LegacyPsswdBinaryLimitExceeded( std::vector< OUString >& sModules );
+    bool ImgVersion12PsswdBinaryLimitExceeded( std::vector< OUString >& sModules );
 
     virtual void Notify(SfxBroadcaster& rBC, SfxHint const& rHint) override;
 

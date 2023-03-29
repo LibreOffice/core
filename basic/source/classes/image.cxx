@@ -373,31 +373,13 @@ done:
 
 bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
 {
-    bool bLegacy = ( nVer < B_IMG_VERSION_12 );
-
-    // detect if old code exceeds legacy limits
-    // if so, then disallow save
-    if ( bLegacy && ExceedsLegacyLimits() )
-    {
-        SbiImage aEmptyImg;
-        aEmptyImg.aName = aName;
-        aEmptyImg.Save( r, B_IMG_VERSION_11 );
-        return true;
-    }
     // First of all the header
     sal_uInt64 nStart = SbiOpenRecord( r, FileOffset::Module, 1 );
     sal_uInt64 nPos;
 
     eCharSet = GetSOStoreTextEncoding( eCharSet );
-    if ( bLegacy )
-    {
-        r.WriteInt32( B_IMG_VERSION_11 );
-    }
-    else
-    {
-        r.WriteInt32( nVer );
-    }
-    r .WriteInt32( eCharSet )
+    r .WriteInt32( nVer )
+      .WriteInt32( eCharSet )
       .WriteInt32( nDimBase )
       .WriteInt16( static_cast<sal_uInt16>(nFlags) )
       .WriteInt16( 0 )
@@ -429,17 +411,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     if (aCode.size() && r.good())
     {
         nPos = SbiOpenRecord( r, FileOffset::PCode, 1 );
-        if ( bLegacy )
-        {
-            PCodeBuffConvertor<sal_uInt32, sal_uInt16> aNewToLegacy(aCode.data(), aCode.size());
-            aNewToLegacy.convert();
-            aLegacyPCode = aNewToLegacy.GetBuffer();
-            r.WriteBytes(aLegacyPCode.data(), aLegacyPCode.size());
-        }
-        else
-        {
-            r.WriteBytes(aCode.data(), aCode.size());
-        }
+        r.WriteBytes(aCode.data(), aCode.size());
         SbiCloseRecord( r, nPos );
     }
     // String-Pool?
@@ -713,6 +685,12 @@ void  SbiImage::ReleaseLegacyBuffer()
 bool SbiImage::ExceedsLegacyLimits()
 {
     return (nStringSize > 0xFF00) || (CalcLegacyOffset(aCode.size()) > 0xFF00);
+}
+
+bool SbiImage::ExceedsImgVersion12Limits()
+{
+    const sal_Int16 nMax = std::numeric_limits<sal_Int16>::max();
+    return nStringSize >= nMax || CalcLegacyOffset(aCode.size()) >= nMax;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1390,7 +1390,7 @@ void BasicManager::SetGlobalUNOConstant( const OUString& rName, const uno::Any& 
     pStandardLib->Insert( xUnoObj.get() );
 }
 
-bool BasicManager::LegacyPsswdBinaryLimitExceeded( std::vector< OUString >& _out_rModuleNames )
+bool BasicManager::ImgVersion12PsswdBinaryLimitExceeded( std::vector< OUString >& _out_rModuleNames )
 {
     try
     {
@@ -1409,19 +1409,16 @@ bool BasicManager::LegacyPsswdBinaryLimitExceeded( std::vector< OUString >& _out
 
             uno::Reference< container::XNameAccess > xScriptLibrary( xScripts->getByName( scriptElementName ), uno::UNO_QUERY_THROW );
             const uno::Sequence< OUString > aElementNames( xScriptLibrary->getElementNames() );
-            sal_Int32 nLen = aElementNames.getLength();
 
-            std::vector< OUString > aBigModules( nLen );
-            sal_Int32 nBigModules = 0;
-
+            std::vector<OUString> aBigModules;
             for ( auto const & libraryElementName : aElementNames )
             {
                 SbModule* pMod = pBasicLib->FindModule( libraryElementName );
-                if ( pMod && pMod->ExceedsLegacyModuleSize() )
-                    aBigModules[ nBigModules++ ] = libraryElementName;
+                if ( pMod && pMod->ExceedsImgVersion12ModuleSize() )
+                    aBigModules.push_back(libraryElementName);
             }
 
-            if ( nBigModules )
+            if (!aBigModules.empty())
             {
                 _out_rModuleNames.swap(aBigModules);
                 return true;

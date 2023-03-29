@@ -120,7 +120,7 @@ public:
     // Store only image, no source (needed for new password protection)
     SAL_DLLPRIVATE void StoreBinaryData( SvStream& );
     SAL_DLLPRIVATE void LoadBinaryData( SvStream& );
-    SAL_DLLPRIVATE bool ExceedsLegacyModuleSize();
+    SAL_DLLPRIVATE bool ExceedsImgVersion12ModuleSize();
     SAL_DLLPRIVATE void fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg = nullptr ) const;
     SAL_DLLPRIVATE bool HasExeCode();
     bool     IsVBASupport() const { return mbVBASupport; }
