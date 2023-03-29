@@ -82,17 +82,15 @@ static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, bool bBalloon, 
     default: break;
     }
 
-    OUStringBuffer sBuf;
-    if (pResId)
-    {
-        sBuf.append(SwResId(pResId));
-        sBuf.append(": ");
-        sBuf.append(rRedl.GetAuthorString());
-        sBuf.append(" - ");
-        sBuf.append(GetAppLangDateTimeString(rRedl.GetTimeStamp()));
-        if( bBalloon && !rRedl.GetComment().isEmpty() )
-            sBuf.append("\n" + rRedl.GetComment());
-    }
+    if (!pResId)
+        return OUString();
+    OUStringBuffer sBuf(SwResId(pResId)
+            + ": "
+            + rRedl.GetAuthorString()
+            + " - "
+            + GetAppLangDateTimeString(rRedl.GetTimeStamp()));
+    if( bBalloon && !rRedl.GetComment().isEmpty() )
+        sBuf.append("\n" + rRedl.GetComment());
     return sBuf.makeStringAndClear();
 }
 

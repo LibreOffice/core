@@ -330,8 +330,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                     case '\\':
                         if( aBuffer.isEmpty() )
                         {
-                            aBuffer.append( '\'' );
-                            aBuffer.append( sRange.subView(0, i) );
+                            aBuffer.append( OUString::Concat("\'") + sRange.subView(0, i) );
                         }
                         if( '\'' == c || '\\' == c )
                             aBuffer.append( '\\' );

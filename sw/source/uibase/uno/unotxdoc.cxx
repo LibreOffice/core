@@ -996,8 +996,7 @@ static OUString lcl_CreateOutlineString(const size_t nIndex, const SwDoc* pDoc)
             tools::Long nVal = aNumVector[nLevel];
             nVal ++;
             nVal -= pOutlRule->Get(nLevel).GetStart();
-            sEntry.append( nVal );
-            sEntry.append(".");
+            sEntry.append( OUString::number(nVal) + ".");
         }
     OUString sOutlineText = pDoc->getIDocumentOutlineNodes().getOutlineText(
                 nIndex, pDoc->GetDocShell()->GetWrtShell()->GetLayout(), false);

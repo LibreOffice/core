@@ -776,9 +776,9 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                                 ::sax::Converter::convertMeasure(aOut, nWidth,
                                        util::MeasureUnit::TWIP,
                                        util::MeasureUnit::POINT);
-                                aOut.append( ' ' );
-                                aOut.append( GetXMLToken( eStyle ) );
-                                aOut.append( ' ' );
+                                aOut.append( " "
+                                    + GetXMLToken( eStyle )
+                                    + " " );
                                 ::sax::Converter::convertColor(aOut,
                                         pLine->GetColor());
                             }

@@ -298,9 +298,7 @@ static OUString lcl_dbg_out(const SwpHints & rHints)
 
     for (size_t i = 0; i < rHints.Count(); ++i)
     {
-        aStr.append("  ");
-        aStr.append(lcl_dbg_out(*rHints.Get(i)));
-        aStr.append("\n");
+        aStr.append("  " + lcl_dbg_out(*rHints.Get(i)) + "\n");
     }
 
     aStr.append("]\n");
@@ -647,8 +645,7 @@ static OUString lcl_dbg_out(SwOutlineNodes const & rNodes)
 
     for (size_t i = 0; i < rNodes.size(); i++)
     {
-        aStr.append(lcl_dbg_out(*rNodes[i]));
-        aStr.append("\n");
+        aStr.append(lcl_dbg_out(*rNodes[i]) + "\n");
     }
 
     aStr.append("]\n");
@@ -669,10 +666,7 @@ static OUString lcl_dbg_out(const SvxNumberFormat & rFormat)
 
 static OUString lcl_dbg_out(const SwNumRule & rRule)
 {
-    OUStringBuffer aResult("[ ");
-
-    aResult.append(rRule.GetName());
-    aResult.append(" [");
+    OUStringBuffer aResult("[ " + rRule.GetName() + " [");
 
     for (sal_uInt8 n = 0; n < MAXLEVEL; n++)
     {
@@ -682,9 +676,7 @@ static OUString lcl_dbg_out(const SwNumRule & rRule)
         aResult.append(lcl_dbg_out(rRule.Get(n)));
     }
 
-    aResult.append("]");
-
-    aResult.append("]");
+    aResult.append("]]");
 
     return aResult.makeStringAndClear();
 }
@@ -792,9 +784,7 @@ static OUString lcl_dbg_out(const SwFormTokens & rTokens)
         if (aIt != rTokens.begin())
             aStr.append(", ");
 
-        aStr.append(lcl_TokenType2Str(aIt->eTokenType));
-        aStr.append(": ");
-        aStr.append(lcl_dbg_out(*aIt));
+        aStr.append(lcl_TokenType2Str(aIt->eTokenType) + ": " + lcl_dbg_out(*aIt));
     }
 
     aStr.append("]");

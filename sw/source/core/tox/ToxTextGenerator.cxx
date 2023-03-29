@@ -451,8 +451,7 @@ ToxTextGenerator::ConstructPageNumberPlaceholder(size_t numberOfToxSources)
     // Place holder for the PageNumber; we only respect the first one
     retval.append(C_NUM_REPL);
     for (size_t i = 1; i < numberOfToxSources; ++i) {
-        retval.append(SwTOXMark::S_PAGE_DELI);
-        retval.append(C_NUM_REPL);
+        retval.append(SwTOXMark::S_PAGE_DELI + OUStringChar(C_NUM_REPL));
     }
     retval.append(C_END_PAGE_NUM);
     return retval.makeStringAndClear();

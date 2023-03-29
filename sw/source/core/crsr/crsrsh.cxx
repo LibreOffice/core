@@ -1330,14 +1330,14 @@ OUString SwCursorShell::getPageRectangles()
     OUStringBuffer aBuf;
     for (const SwFrame* pFrame = pLayout->GetLower(); pFrame; pFrame = pFrame->GetNext())
     {
-        aBuf.append(pFrame->getFrameArea().Left());
-        aBuf.append(", ");
-        aBuf.append(pFrame->getFrameArea().Top());
-        aBuf.append(", ");
-        aBuf.append(pFrame->getFrameArea().Width());
-        aBuf.append(", ");
-        aBuf.append(pFrame->getFrameArea().Height());
-        aBuf.append("; ");
+        aBuf.append(OUString::number(pFrame->getFrameArea().Left())
+            + ", "
+            + OUString::number(pFrame->getFrameArea().Top())
+            + ", "
+            + OUString::number(pFrame->getFrameArea().Width())
+            + ", "
+            + OUString::number(pFrame->getFrameArea().Height())
+            + "; ");
     }
     if (!aBuf.isEmpty())
         aBuf.setLength( aBuf.getLength() - 2); // remove the last "; "

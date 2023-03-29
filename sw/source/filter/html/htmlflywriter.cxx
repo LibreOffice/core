@@ -1391,27 +1391,26 @@ SwHTMLWriter& OutHTML_ImageStart( HtmlWriter& rHtml, SwHTMLWriter& rWrt, const S
         aTag = OOO_STRING_SVTOOLS_HTML_object;
     rHtml.start(aTag);
 
-    OStringBuffer sBuffer;
     if(rWrt.mbEmbedImages)
     {
         OUString aGraphicInBase64;
         if (XOutBitmap::GraphicToBase64(rGraphic, aGraphicInBase64))
         {
-            sBuffer.append(OOO_STRING_SVTOOLS_HTML_O_data);
-            sBuffer.append(":");
-            sBuffer.append(OUStringToOString(aGraphicInBase64, RTL_TEXTENCODING_UTF8));
-            rHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_src, sBuffer.makeStringAndClear().getStr());
+            OString sBuffer(OString::Concat(OOO_STRING_SVTOOLS_HTML_O_data)
+                + ":"
+                + OUStringToOString(aGraphicInBase64, RTL_TEXTENCODING_UTF8));
+            rHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_src, sBuffer.getStr());
         }
         else
             rWrt.m_nWarn = WARN_SWG_POOR_LOAD;
     }
     else
     {
-        sBuffer.append(OUStringToOString(aGraphicURL, RTL_TEXTENCODING_UTF8));
+        OString sBuffer(OUStringToOString(aGraphicURL, RTL_TEXTENCODING_UTF8));
         OString aAttribute(OOO_STRING_SVTOOLS_HTML_O_src);
         if (bReplacement)
             aAttribute = OOO_STRING_SVTOOLS_HTML_O_data;
-        rHtml.attribute(aAttribute, sBuffer.makeStringAndClear().getStr());
+        rHtml.attribute(aAttribute, sBuffer.getStr());
     }
 
     if (bReplacement)
@@ -1523,8 +1522,7 @@ SwHTMLWriter& OutHTML_BulletImage( SwHTMLWriter& rWrt,
     if( pTag )
         sOut.append(OString::Concat("<") + pTag);
 
-    sOut.append(' ');
-    sOut.append(OOO_STRING_SVTOOLS_HTML_O_style "=\"");
+    sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_style "=\"");
     if(!aLink.isEmpty())
     {
         sOut.append(OOO_STRING_SVTOOLS_HTML_O_src "=\"");

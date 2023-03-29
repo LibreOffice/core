@@ -1255,8 +1255,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameForma
                                   "ole" );
     uno::Any aAny;
     SvGlobalName aGlobName( xObj->getClassID() );
-    OStringBuffer sOut;
-    sOut.append('<');
+    OStringBuffer sOut("<");
     if( aGlobName == SvGlobalName( SO3_PLUGIN_CLASSID ) )
     {
         // first the plug-in specifics
@@ -1427,15 +1426,16 @@ SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameForma
             const OUString& rName = rCommand.GetCommand();
             const OUString& rValue = rCommand.GetArgument();
             rWrt.OutNewLine();
-            OStringBuffer sBuf;
-            sBuf.append("<" + rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_param
-                    " " OOO_STRING_SVTOOLS_HTML_O_name
-                    "=\"");
-            rWrt.Strm().WriteOString( sBuf );
+            sOut.append(
+                "<" + rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_param
+                " " OOO_STRING_SVTOOLS_HTML_O_name
+                "=\"");
+            rWrt.Strm().WriteOString( sOut );
             sOut.setLength(0);
             HTMLOutFuncs::Out_String( rWrt.Strm(), rName );
-            sBuf.append("\" " OOO_STRING_SVTOOLS_HTML_O_value "=\"");
-            rWrt.Strm().WriteOString( sBuf );
+            sOut.append("\" " OOO_STRING_SVTOOLS_HTML_O_value "=\"");
+            rWrt.Strm().WriteOString( sOut );
+            sOut.setLength(0);
             HTMLOutFuncs::Out_String( rWrt.Strm(), rValue ).WriteCharPtr( "\">" );
         }
 

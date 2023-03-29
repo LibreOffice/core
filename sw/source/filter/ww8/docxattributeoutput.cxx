@@ -7413,9 +7413,9 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
         // FIXME so far we support the ww8 limit of levels only
         if ( *pIt < sal_Unicode( WW8ListManager::nMaxLevel ) )
         {
-            aBuffer.append( pPrev, pIt - pPrev );
-            aBuffer.append( '%' );
-            aBuffer.append( sal_Int32( *pIt ) + 1 );
+            aBuffer.append( OUString::Concat(std::u16string_view(pPrev, pIt - pPrev))
+                + "%"
+                + OUString::number(sal_Int32( *pIt ) + 1 ));
 
             pPrev = pIt + 1;
         }

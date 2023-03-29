@@ -464,9 +464,9 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFormatFootnote& rFormatFootnote,
         }
     }
 
-    OStringBuffer sOut;
-    sOut.append("<" + GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor " "
-            OOO_STRING_SVTOOLS_HTML_O_class "=\"");
+    OStringBuffer sOut("<"
+        + GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor " "
+        OOO_STRING_SVTOOLS_HTML_O_class "=\"");
     Strm().WriteOString( sOut );
     sOut.setLength(0);
     HTMLOutFuncs::Out_String( Strm(), sClass );

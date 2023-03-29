@@ -715,8 +715,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     if( rHTMLWrt.m_bLFPossible )
         rHTMLWrt.OutNewLine();
 
-    OStringBuffer sOut;
-    sOut.append("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_division);
+    OStringBuffer sOut("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_division);
 
     const OUString& rName = rSection.GetSectionName();
     if( !rName.isEmpty() && !bContinued )
@@ -1217,8 +1216,7 @@ void SwHTMLWriter::OutAnchor( const OUString& rName )
         return;
     }
 
-    OStringBuffer sOut;
-    sOut.append("<" + GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor " ");
+    OStringBuffer sOut("<" + GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor " ");
     if (!mbXHTML)
     {
         sOut.append(OOO_STRING_SVTOOLS_HTML_O_name "=\"");
@@ -1448,8 +1446,7 @@ void SwHTMLWriter::OutLanguage( LanguageType nLang )
     if (!(LANGUAGE_DONTKNOW != nLang && !mbReqIF))
         return;
 
-    OStringBuffer sOut;
-    sOut.append(' ');
+    OStringBuffer sOut(" ");
     if (mbXHTML)
         sOut.append(OOO_STRING_SVTOOLS_XHTML_O_lang);
     else

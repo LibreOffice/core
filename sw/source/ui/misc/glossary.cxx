@@ -85,8 +85,7 @@ static OUString lcl_GetValidShortCut( const OUString& rName )
     while( rName[nStart-1]==' ' && nStart < nSz )
         nStart++;
 
-    OUStringBuffer aBuf;
-    aBuf.append(rName[nStart-1]);
+    OUStringBuffer aBuf(OUString::number(rName[nStart-1]));
 
     for( ; nStart < nSz; ++nStart )
     {

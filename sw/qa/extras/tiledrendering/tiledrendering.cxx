@@ -3085,8 +3085,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButton)
         OStringBuffer aItemList;
         for (auto &item : aItems)
         {
-            aItemList.append(item.second.get_value<std::string>().c_str());
-            aItemList.append(";");
+            aItemList.append(item.second.get_value<std::string>().c_str()
+                + OString::Concat(";"));
         }
         CPPUNIT_ASSERT_EQUAL(OString("2019/2020;2020/2021;2021/2022;2022/2023;2023/2024;2024/2025;"), aItemList.toString());
 

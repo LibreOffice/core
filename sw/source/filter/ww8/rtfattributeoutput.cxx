@@ -180,17 +180,16 @@ static OString OutTBLBorderLine(RtfExport const& rExport, const editeng::SvxBord
         else
         {
             // use \brdrth to double the value range...
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTH OOO_STRING_SVTOOLS_RTF_BRDRW);
-            aRet.append(static_cast<sal_Int32>(fConverted) / 2);
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTH OOO_STRING_SVTOOLS_RTF_BRDRW
+                        + OString::number(static_cast<sal_Int32>(fConverted) / 2));
         }
 
-        aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRCF);
-        aRet.append(static_cast<sal_Int32>(rExport.GetColor(pLine->GetColor())));
+        aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRCF
+                    + OString::number(static_cast<sal_Int32>(rExport.GetColor(pLine->GetColor()))));
     }
     else // tdf#129758 "no border" may be needed to override style
     {
-        aRet.append(pStr);
-        aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRNONE);
+        aRet.append(OString::Concat(pStr) + OOO_STRING_SVTOOLS_RTF_BRDRNONE);
     }
     return aRet.makeStringAndClear();
 }
@@ -203,8 +202,7 @@ static OString OutBorderLine(RtfExport const& rExport, const editeng::SvxBorderL
     aRet.append(OutTBLBorderLine(rExport, pLine, pStr));
     if (pLine)
     {
-        aRet.append(OOO_STRING_SVTOOLS_RTF_BRSP);
-        aRet.append(static_cast<sal_Int32>(nDist));
+        aRet.append(OOO_STRING_SVTOOLS_RTF_BRSP + OString::number(static_cast<sal_Int32>(nDist)));
     }
     if (eShadowLocation == SvxShadowLocation::BottomRight)
         aRet.append(LO_STRING_SVTOOLS_RTF_BRDRSH);
@@ -381,9 +379,7 @@ void RtfAttributeOutput::StartParagraphProperties()
     OStringBuffer aPar;
     if (!m_rExport.GetRTFFlySyntax())
     {
-        aPar.append(OOO_STRING_SVTOOLS_RTF_PARD);
-        aPar.append(OOO_STRING_SVTOOLS_RTF_PLAIN);
-        aPar.append(' ');
+        aPar.append(OOO_STRING_SVTOOLS_RTF_PARD OOO_STRING_SVTOOLS_RTF_PLAIN " ");
     }
     if (!m_bBufferSectionHeaders)
         m_rExport.Strm().WriteOString(aPar);
@@ -654,9 +650,8 @@ void RtfAttributeOutput::FormatDrop(const SwTextNode& /*rNode*/,
 void RtfAttributeOutput::ParagraphStyle(sal_uInt16 nStyle)
 {
     OString* pStyle = m_rExport.GetStyle(nStyle);
-    OStringBuffer aStyle;
-    aStyle.append(OOO_STRING_SVTOOLS_RTF_S);
-    aStyle.append(static_cast<sal_Int32>(nStyle));
+    OStringBuffer aStyle(OOO_STRING_SVTOOLS_RTF_S
+                         + OString::number(static_cast<sal_Int32>(nStyle)));
     if (pStyle)
         aStyle.append(*pStyle);
     if (!m_bBufferSectionHeaders)
@@ -2248,9 +2243,8 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 aBuf.append(char(0x00));
                             xPropSet->getPropertyValue("Name") >>= aTmp;
                             aStr = OUStringToOString(aTmp, m_rExport.GetCurrentEncoding());
-                            aBuf.append(static_cast<char>(aStr.getLength()));
-                            aBuf.append(aStr);
-                            aBuf.append(char(0x00));
+                            aBuf.append(OStringChar(static_cast<char>(aStr.getLength())) + aStr
+                                        + OStringChar(char(0x00)));
                             xPropSet->getPropertyValue("DefaultText") >>= aTmp;
                             aStr = OUStringToOString(aTmp, m_rExport.GetCurrentEncoding());
                             aBuf.append(static_cast<char>(aStr.getLength()));
@@ -4112,31 +4106,27 @@ static OString ExportPICT(const SwFlyFrameFormat* pFlyFrameFormat, const Size& r
         //Given the original size and taking cropping into account
         //first, how much has the original been scaled to get the
         //final rendered size
-        aRet.append(OOO_STRING_SVTOOLS_RTF_PICSCALEX);
-        aRet.append(static_cast<sal_Int32>((100 * rRendered.Width()) / nXCroppedSize));
-        aRet.append(OOO_STRING_SVTOOLS_RTF_PICSCALEY);
-        aRet.append(static_cast<sal_Int32>((100 * rRendered.Height()) / nYCroppedSize));
+        aRet.append(
+            OOO_STRING_SVTOOLS_RTF_PICSCALEX
+            + OString::number(static_cast<sal_Int32>((100 * rRendered.Width()) / nXCroppedSize))
+            + OOO_STRING_SVTOOLS_RTF_PICSCALEY
+            + OString::number(static_cast<sal_Int32>((100 * rRendered.Height()) / nYCroppedSize))
 
-        aRet.append(OOO_STRING_SVTOOLS_RTF_PICCROPL);
-        aRet.append(rCr.GetLeft());
-        aRet.append(OOO_STRING_SVTOOLS_RTF_PICCROPR);
-        aRet.append(rCr.GetRight());
-        aRet.append(OOO_STRING_SVTOOLS_RTF_PICCROPT);
-        aRet.append(rCr.GetTop());
-        aRet.append(OOO_STRING_SVTOOLS_RTF_PICCROPB);
-        aRet.append(rCr.GetBottom());
+            + OOO_STRING_SVTOOLS_RTF_PICCROPL + OString::number(rCr.GetLeft())
+            + OOO_STRING_SVTOOLS_RTF_PICCROPR + OString::number(rCr.GetRight())
+            + OOO_STRING_SVTOOLS_RTF_PICCROPT + OString::number(rCr.GetTop())
+            + OOO_STRING_SVTOOLS_RTF_PICCROPB + OString::number(rCr.GetBottom())
 
-        aRet.append(OOO_STRING_SVTOOLS_RTF_PICW);
-        aRet.append(static_cast<sal_Int32>(rMapped.Width()));
-        aRet.append(OOO_STRING_SVTOOLS_RTF_PICH);
-        aRet.append(static_cast<sal_Int32>(rMapped.Height()));
+            + OOO_STRING_SVTOOLS_RTF_PICW + OString::number(static_cast<sal_Int32>(rMapped.Width()))
+            + OOO_STRING_SVTOOLS_RTF_PICH
+            + OString::number(static_cast<sal_Int32>(rMapped.Height()))
 
-        aRet.append(OOO_STRING_SVTOOLS_RTF_PICWGOAL);
-        aRet.append(static_cast<sal_Int32>(rOrig.Width()));
-        aRet.append(OOO_STRING_SVTOOLS_RTF_PICHGOAL);
-        aRet.append(static_cast<sal_Int32>(rOrig.Height()));
+            + OOO_STRING_SVTOOLS_RTF_PICWGOAL
+            + OString::number(static_cast<sal_Int32>(rOrig.Width()))
+            + OOO_STRING_SVTOOLS_RTF_PICHGOAL
+            + OString::number(static_cast<sal_Int32>(rOrig.Height()))
 
-        aRet.append(pBLIPType);
+            + pBLIPType);
         if (bIsWMF)
         {
             aRet.append(sal_Int32(8));

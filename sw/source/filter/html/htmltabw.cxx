@@ -310,8 +310,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     }
 
     rWrt.OutNewLine();  // <TH>/<TD> in new line
-    OStringBuffer sOut;
-    sOut.append('<');
+    OStringBuffer sOut("<");
     OString aTag(bHead ? OOO_STRING_SVTOOLS_HTML_tableheader : OOO_STRING_SVTOOLS_HTML_tabledata);
     sOut.append(rWrt.GetNamespace() + aTag);
 
