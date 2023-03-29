@@ -902,6 +902,29 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     else
     {
         pFS->startElementNS(mnXmlNamespace, XML_wsp);
+        if (m_xParent.is())
+        {
+            pFS->startElementNS(mnXmlNamespace, XML_cNvPr, XML_id,
+                                OString::number(GetShapeID(xShape) == -1 ? GetNewShapeID(xShape)
+                                                                         : GetShapeID(xShape)),
+                                XML_name, GetShapeName(xShape));
+
+            if (GetProperty(rXPropSet, "Hyperlink"))
+            {
+                OUString sURL;
+                mAny >>= sURL;
+                if (!sURL.isEmpty())
+                {
+                    OUString sRelId = mpFB->addRelation(
+                        mpFS->getOutputStream(), oox::getRelationship(Relationship::HYPERLINK),
+                        mpURLTransformer->getTransformedString(sURL),
+                        mpURLTransformer->isExternalURL(sURL));
+
+                    mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
+                }
+            }
+            pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
+        }
         pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr);
     }
 
