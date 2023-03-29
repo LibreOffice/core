@@ -19,22 +19,16 @@
 #pragma once
 
 #include "charttoolsdllapi.hxx"
-
-namespace com::sun::star::uno
-{
-template <class interface_type> class Reference;
-}
-namespace com::sun::star::frame
-{
-class XModel;
-}
+#include <rtl/ref.hxx>
 
 namespace chart
 {
+class ChartModel;
+
 class OOO_DLLPUBLIC_CHARTTOOLS ChartViewHelper
 {
 public:
-    static void setViewToDirtyState(const css::uno::Reference<css::frame::XModel>& xChartModel);
+    static void setViewToDirtyState(const rtl::Reference<::chart::ChartModel>& xChartModel);
 };
 
 } //namespace chart

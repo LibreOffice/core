@@ -18,6 +18,7 @@
  */
 
 #include <ChartViewHelper.hxx>
+#include <ChartModel.hxx>
 #include <servicenames.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -30,18 +31,17 @@ namespace chart
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 
-void ChartViewHelper::setViewToDirtyState(const uno::Reference<frame::XModel>& xChartModel)
+void ChartViewHelper::setViewToDirtyState(const rtl::Reference<::chart::ChartModel>& xChartModel)
 {
     try
     {
-        uno::Reference<lang::XMultiServiceFactory> xFact(xChartModel, uno::UNO_QUERY);
-        if (xFact.is())
+        if (xChartModel.is())
         {
             Reference<util::XModifyListener> xModifyListener(
-                xFact->createInstance(CHART_VIEW_SERVICE_NAME), uno::UNO_QUERY);
+                xChartModel->createInstance(CHART_VIEW_SERVICE_NAME), uno::UNO_QUERY);
             if (xModifyListener.is())
             {
-                lang::EventObject aEvent(xChartModel);
+                lang::EventObject aEvent(static_cast<cppu::OWeakObject*>(xChartModel.get()));
                 xModifyListener->modified(aEvent);
             }
         }

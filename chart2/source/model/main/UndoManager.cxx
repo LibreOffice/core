@@ -18,6 +18,7 @@
  */
 
 #include "UndoManager.hxx"
+#include <ChartModel.hxx>
 #include <ChartViewHelper.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -49,7 +50,7 @@ namespace chart
         class UndoManager_Impl : public ::framework::IUndoManagerImplementation
         {
         public:
-            UndoManager_Impl( UndoManager& i_antiImpl, ::cppu::OWeakObject& i_parent, ::osl::Mutex& i_mutex )
+            UndoManager_Impl( UndoManager& i_antiImpl, ::chart::ChartModel& i_parent, ::osl::Mutex& i_mutex )
                 :m_rAntiImpl( i_antiImpl )
                 ,m_rParent( i_parent )
                 ,m_rMutex( i_mutex )
@@ -70,7 +71,7 @@ namespace chart
             virtual Reference< XUndoManager >   getThis() override;
 
             // attribute access
-            ::cppu::OWeakObject&                getParent() { return m_rParent; }
+            ::chart::ChartModel&                getParent() { return m_rParent; }
             ::framework::UndoManagerHelper&     getUndoHelper() { return m_aUndoHelper; }
 
             // public interface
@@ -83,7 +84,7 @@ namespace chart
 
         private:
             UndoManager&                        m_rAntiImpl;
-            ::cppu::OWeakObject&                m_rParent;
+            ::chart::ChartModel&                m_rParent;
             ::osl::Mutex&                       m_rMutex;
             bool                                m_bDisposed;
 
@@ -172,7 +173,7 @@ namespace chart
 
     using impl::UndoManagerMethodGuard;
 
-    UndoManager::UndoManager( ::cppu::OWeakObject& i_parent, ::osl::Mutex& i_mutex )
+    UndoManager::UndoManager( ::chart::ChartModel& i_parent, ::osl::Mutex& i_mutex )
         :m_pImpl( new impl::UndoManager_Impl( *this, i_parent, i_mutex ) )
     {
     }
@@ -225,7 +226,7 @@ namespace chart
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->getUndoHelper().undo( aGuard );
 
-        ChartViewHelper::setViewToDirtyState( Reference< XModel >( getParent(), UNO_QUERY ) );
+        ChartViewHelper::setViewToDirtyState( &m_pImpl->getParent() );
     }
 
     void SAL_CALL UndoManager::redo(  )
@@ -233,7 +234,7 @@ namespace chart
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->getUndoHelper().redo( aGuard );
 
-        ChartViewHelper::setViewToDirtyState( Reference< XModel >( getParent(), UNO_QUERY ) );
+        ChartViewHelper::setViewToDirtyState( &m_pImpl->getParent() );
     }
 
     sal_Bool SAL_CALL UndoManager::isUndoPossible(  )

@@ -28,6 +28,7 @@
 
 namespace chart
 {
+class ChartModel;
 
     namespace impl
     {
@@ -40,7 +41,7 @@ namespace chart
     class UndoManager : public impl::UndoManager_Base
     {
     public:
-        UndoManager( ::cppu::OWeakObject& i_parent, ::osl::Mutex& i_mutex );
+        UndoManager( ::chart::ChartModel& i_parent, ::osl::Mutex& i_mutex );
         virtual ~UndoManager();
 
         // XInterface
