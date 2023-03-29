@@ -264,6 +264,38 @@ namespace basegfx
 
     namespace utils
     {
+        /* Tooling method to check if a ColorStop vector is defined
+           by a single color. It returns true if this is the case.
+           If true is returned, rSingleColor contains that single
+           color for convenience.
+           NOTE: If no ColorStop is defined, a fallback to BColor-default
+                 (which is black) and true will be returned
+        */
+        bool isSingleColor(const ColorStops& rColorStops, BColor& rSingleColor)
+        {
+            if (rColorStops.empty())
+            {
+                rSingleColor = BColor();
+                return true;
+            }
+
+            if (1 == rColorStops.size())
+            {
+                rSingleColor = rColorStops.front().getStopColor();
+                return true;
+            }
+
+            rSingleColor = rColorStops.front().getStopColor();
+
+            for (auto const& rCandidate : rColorStops)
+            {
+                if (rCandidate.getStopColor() != rSingleColor)
+                    return false;
+            }
+
+            return true;
+        }
+
         /* Tooling method to reverse ColorStops, including offsets.
            When also mirroring offsets a valid sort keeps valid.
         */

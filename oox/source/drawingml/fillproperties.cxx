@@ -27,9 +27,10 @@
 #include <vcl/BitmapFilter.hxx>
 #include <vcl/BitmapMonochromeFilter.hxx>
 #include <docmodel/uno/UnoThemeColor.hxx>
+#include <basegfx/utils/gradienttools.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
@@ -478,7 +479,112 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
         case XML_gradFill:
             // do not create gradient struct if property is not supported...
-            if( rPropMap.supportsProperty( ShapeProperty::FillGradient ) )
+            static bool bMCGR(nullptr != std::getenv("MCGR_TEST"));
+
+            if( bMCGR && rPropMap.supportsProperty( ShapeProperty::FillGradient ) )
+            {
+                // use awt::Gradient2, prepare ColorStops
+                awt::Gradient2 aGradient;
+                basegfx::ColorStops aColorStops;
+                basegfx::ColorStops aTransparencyStops;
+                bool bContainsTransparency(false);
+
+                // set defaults
+                aGradient.Angle = 900;
+                aGradient.StartIntensity = 100;
+                aGradient.EndIntensity = 100;
+                aGradient.Style = awt::GradientStyle_LINEAR;
+
+                // convert to ColorStops, check for contained transparency
+                for (const auto& rCandidate : maGradientProps.maGradientStops)
+                {
+                    const ::Color aColor(rCandidate.second.getColor(rGraphicHelper, nPhClr));
+                    aColorStops.emplace_back(rCandidate.first, aColor.getBColor());
+                    bContainsTransparency = bContainsTransparency || rCandidate.second.hasTransparency();
+                }
+
+                // if we have transparency, convert to ColorStops
+                if (bContainsTransparency)
+                {
+                    for (const auto& rCandidate : maGradientProps.maGradientStops)
+                    {
+                        const double fTrans(rCandidate.second.getTransparency() * (1.0/100.0));
+                        aTransparencyStops.emplace_back(rCandidate.first, basegfx::BColor(fTrans, fTrans, fTrans));
+                    }
+                }
+
+                // "rotate with shape" set to false -> do not rotate
+                if (!maGradientProps.moRotateWithShape.value_or(true))
+                {
+                    nShapeRotation = 0;
+                }
+
+                if (maGradientProps.moGradientPath.has_value())
+                {
+                    IntegerRectangle2D aFillToRect = maGradientProps.moFillToRect.value_or( IntegerRectangle2D( 0, 0, MAX_PERCENT, MAX_PERCENT ) );
+                    sal_Int32 nCenterX = (MAX_PERCENT + aFillToRect.X1 - aFillToRect.X2) / 2;
+                    aGradient.XOffset = getLimitedValue<sal_Int16, sal_Int32>(
+                        nCenterX / PER_PERCENT, 0, 100);
+                    sal_Int32 nCenterY = (MAX_PERCENT + aFillToRect.Y1 - aFillToRect.Y2) / 2;
+                    aGradient.YOffset = getLimitedValue<sal_Int16, sal_Int32>(
+                        nCenterY / PER_PERCENT, 0, 100);
+
+                    if( maGradientProps.moGradientPath.value() == XML_circle )
+                    {
+                        // Style should be radial at least when the horizontal center is at 50%.
+                        // Otherwise import as a linear gradient, because it is the most similar to the MSO radial style.
+                        // aGradient.Style = awt::GradientStyle_LINEAR;
+                        if( aGradient.XOffset == 100 && aGradient.YOffset == 100 )
+                            aGradient.Angle = 450;
+                        else if( aGradient.XOffset == 0 && aGradient.YOffset == 100 )
+                            aGradient.Angle = 3150;
+                        else if( aGradient.XOffset == 100 && aGradient.YOffset == 0 )
+                            aGradient.Angle = 1350;
+                        else if( aGradient.XOffset == 0 && aGradient.YOffset == 0 )
+                            aGradient.Angle = 2250;
+                        else
+                            aGradient.Style = awt::GradientStyle_RADIAL;
+                    }
+                    else
+                    {
+                        aGradient.Style = awt::GradientStyle_RECT;
+                    }
+
+                    basegfx::utils::reverseColorStops(aColorStops);
+                    basegfx::utils::reverseColorStops(aTransparencyStops);
+                }
+                else if (!maGradientProps.maGradientStops.empty())
+                {
+                    // aGradient.Style = awt::GradientStyle_LINEAR;
+                    sal_Int32 nShadeAngle = maGradientProps.moShadeAngle.value_or( 0 );
+                    // Adjust for flips
+                    if ( bFlipH )
+                        nShadeAngle = 180*60000 - nShadeAngle;
+                    if ( bFlipV )
+                        nShadeAngle = -nShadeAngle;
+                    const sal_Int32 nDmlAngle = nShadeAngle + nShapeRotation;
+                    // convert DrawingML angle (in 1/60000 degrees) to API angle (in 1/10 degrees)
+                    aGradient.Angle = static_cast< sal_Int16 >( (8100 - (nDmlAngle / (PER_DEGREE / 10))) % 3600 );
+                }
+
+                // set ColorStops using UNO API
+                basegfx::utils::fillColorStopSequenceFromColorStops(aGradient.ColorStops, aColorStops);
+
+                // push gradient or named gradient to property map
+                if (rPropMap.setProperty(ShapeProperty::FillGradient, aGradient))
+                {
+                    eFillStyle = FillStyle_GRADIENT;
+                }
+
+                // push gradient transparency to property map if it exists
+                if (!aTransparencyStops.empty())
+                {
+                    basegfx::utils::fillColorStopSequenceFromColorStops(aGradient.ColorStops, aTransparencyStops);
+                    rPropMap.setProperty(ShapeProperty::GradientTransparency, aGradient);
+                }
+            }
+
+            if( !bMCGR && rPropMap.supportsProperty( ShapeProperty::FillGradient ) )
             {
                 sal_Int32 nEndTrans     = 0;
                 sal_Int32 nStartTrans   = 0;
