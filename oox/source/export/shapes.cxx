@@ -1640,17 +1640,38 @@ static void lcl_GetConnectorAdjustValue(const Reference<XShape>& xShape, tools::
     }
 }
 
-static sal_Int32 lcl_GetGluePointId(sal_Int32 nGluePointId)
+static sal_Int32 lcl_GetGluePointId(const Reference<XShape>& xShape, sal_Int32 nGluePointId)
 {
     if (nGluePointId > 3)
         return nGluePointId - 4;
     else
     {
-        // change id of the bounding box (1 <-> 3)
-        if (nGluePointId == 1)
-            return 3; // Right
-        else if (nGluePointId == 3)
-            return 1; // Left
+        bool bFlipH = false;
+        bool bFlipV = false;
+        Reference<XPropertySet> xShapeProps(xShape, UNO_QUERY);
+        if (xShapeProps->getPropertySetInfo()->hasPropertyByName("CustomShapeGeometry"))
+        {
+            Sequence<PropertyValue> aGeometrySeq;
+            xShapeProps->getPropertyValue("CustomShapeGeometry") >>= aGeometrySeq;
+            for (int i = 0; i < aGeometrySeq.getLength(); i++)
+            {
+                const PropertyValue& rProp = aGeometrySeq[i];
+                if (rProp.Name == "MirroredX")
+                    rProp.Value >>= bFlipH;
+
+                if (rProp.Name == "MirroredY")
+                    rProp.Value >>= bFlipV;
+            }
+        }
+
+        if ((!bFlipH && !bFlipV) || (bFlipH && bFlipV))
+        {
+            // change id of the bounding box (1 <-> 3)
+            if (nGluePointId == 1)
+                nGluePointId = 3; // Right
+            else if (nGluePointId == 3)
+                nGluePointId = 1; // Left
+        }
     }
 
     return nGluePointId;
@@ -1708,12 +1729,12 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
     if (GetProperty(rXPropSet, "StartGluePointIndex"))
         mAny >>= nStartGlueId;
     if (nStartGlueId != -1)
-        nStartGlueId = lcl_GetGluePointId(nStartGlueId);
+        nStartGlueId = lcl_GetGluePointId(rXShapeA, nStartGlueId);
 
     if (GetProperty(rXPropSet, "EndGluePointIndex"))
         mAny >>= nEndGlueId;
     if (nEndGlueId != -1)
-        nEndGlueId = lcl_GetGluePointId(nEndGlueId);
+        nEndGlueId = lcl_GetGluePointId(rXShapeB, nEndGlueId);
 
     // Position is relative to group in Word, but relative to anchor of group in API.
     if (GetDocumentType() == DOCUMENT_DOCX && !mbUserShapes && m_xParent.is())

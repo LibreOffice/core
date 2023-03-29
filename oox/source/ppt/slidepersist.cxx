@@ -654,11 +654,16 @@ void SlidePersist::createConnectorShapeConnection()
                         nGlueId += 4;
                     else
                     {
-                        // change id of the left and right glue points of the bounding box (1 <-> 3)
-                        if (nGlueId == 1)
-                            nGlueId = 3; // Right
-                        else if (nGlueId == 3)
-                            nGlueId = 1; // Left
+                        bool bFlipH = pShape->second->getFlipH();
+                        bool bFlipV = pShape->second->getFlipV();
+                        if ((!bFlipH && !bFlipV) || (bFlipH && bFlipV))
+                        {
+                            // change id of the left and right glue points of the bounding box (1 <-> 3)
+                            if (nGlueId == 1)
+                                nGlueId = 3; // Right
+                            else if (nGlueId == 3)
+                                nGlueId = 1; // Left
+                        }
                     }
 
                     bool bStart = aConnectorShapeProperties[j].mbStartShape;

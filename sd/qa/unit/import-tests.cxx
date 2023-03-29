@@ -83,6 +83,7 @@ public:
     }
 
     void testDocumentLayout();
+    void testTdf154363();
     void testTdf152434();
     void testStandardConnectors();
     void testConnectors();
@@ -161,6 +162,7 @@ public:
     CPPUNIT_TEST_SUITE(SdImportTest);
 
     CPPUNIT_TEST(testDocumentLayout);
+    CPPUNIT_TEST(testTdf154363);
     CPPUNIT_TEST(testTdf152434);
     CPPUNIT_TEST(testStandardConnectors);
     CPPUNIT_TEST(testConnectors);
@@ -343,6 +345,30 @@ void SdImportTest::testDocumentLayout()
                               .getStr());
             }
         }
+    }
+}
+
+void SdImportTest::testTdf154363()
+{
+    sal_Int32 nGlueId;
+    createSdImpressDoc("pptx/tdf154363.pptx");
+    {
+        uno::Reference<beans::XPropertySet> xConnector1(getShapeFromPage(1, 0), uno::UNO_SET_THROW);
+        uno::Reference<beans::XPropertySet> xConnector2(getShapeFromPage(3, 0), uno::UNO_SET_THROW);
+        nGlueId = xConnector1->getPropertyValue("StartGluePointIndex").get<sal_Int32>();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nGlueId);
+        nGlueId = xConnector2->getPropertyValue("EndGluePointIndex").get<sal_Int32>();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nGlueId);
+    }
+
+    saveAndReload("Impress MS PowerPoint 2007 XML");
+    {
+        uno::Reference<beans::XPropertySet> xConnector1(getShapeFromPage(1, 0), uno::UNO_SET_THROW);
+        uno::Reference<beans::XPropertySet> xConnector2(getShapeFromPage(3, 0), uno::UNO_SET_THROW);
+        nGlueId = xConnector1->getPropertyValue("StartGluePointIndex").get<sal_Int32>();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nGlueId);
+        nGlueId = xConnector2->getPropertyValue("EndGluePointIndex").get<sal_Int32>();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nGlueId);
     }
 }
 
