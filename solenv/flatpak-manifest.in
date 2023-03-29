@@ -4,7 +4,7 @@
     "runtime-version": "22.08",
     "sdk": "org.freedesktop.Sdk",
     "sdk-extensions": [
-        "org.freedesktop.Sdk.Extension.openjdk11"
+        "org.freedesktop.Sdk.Extension.openjdk17"
     ],
     "command": "libreoffice",
     "modules": [
@@ -12,7 +12,7 @@
             "name": "openjdk",
             "buildsystem": "simple",
             "build-commands": [
-                "/usr/lib/sdk/openjdk11/install.sh"
+                "/usr/lib/sdk/openjdk17/install.sh"
             ]
         },
         {
@@ -27,8 +27,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.gnome.org/GNOME/gvfs/-/archive/2a3a35adc4e1b7a3195033b072917abbb97a9f4e/gvfs-2a3a35adc4e1b7a3195033b072917abbb97a9f4e.tar.gz",
-                    "sha256": "1e1bbe249be35b7b864a2dad707188e69b3cef1cd66a24df6e83b24a4c329c44"
+                    "url": "https://gitlab.gnome.org/GNOME/gvfs/-/archive/1.50.4/gvfs-1.50.4.tar.gz",
+                    "sha256": "c67bba49c5b1dbe0b8b8f53b45eab545f6a6ce36fcdf3c11ac92464732b60ea5"
                 }
             ]
         },
@@ -48,8 +48,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://kerberos.org/dist/krb5/1.16/krb5-1.16.2.tar.gz",
-                    "sha256": "9f721e1fe593c219174740c71de514c7228a97d23eb7be7597b2ae14e487f027"
+                    "url": "https://kerberos.org/dist/krb5/1.20/krb5-1.20.1.tar.gz",
+                    "sha256": "704aed49b19eb5a7178b34b2873620ec299db08752d6a8574f95d41879ab8851"
                 }
             ]
         },
@@ -64,8 +64,8 @@
                 },
                 {
                     "type": "archive",
-                    "url": "https://archive.apache.org/dist/ant/binaries/apache-ant-1.10.5-bin.tar.xz",
-                    "sha256": "cebb705dbbe26a41d359b8be08ec066caba4e8686670070ce44bbf2b57ae113f",
+                    "url": "https://archive.apache.org/dist/ant/binaries/apache-ant-1.10.13-bin.tar.xz",
+                    "sha512": "26e56bf670c22c8093fe51ec952fa51e813b1ab4200cb09fcd68fa291c5f6f626d7c6a42b4d3358b38111466e249d4bc6089b8c4093383759d6f8a08d39bc32d",
                     "dest": "ant"
                 },
                 {
