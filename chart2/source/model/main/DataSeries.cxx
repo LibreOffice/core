@@ -686,6 +686,8 @@ OUString DataSeries::getLabelForRole( const OUString & rLabelSequenceRole )
 
 static bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSequence >& xDataSequence )
 {
+    if (!xDataSequence.is())
+        return false;
     uno::Reference< beans::XPropertySet > xProp( xDataSequence, uno::UNO_QUERY );
     if( xProp.is() )
     {
