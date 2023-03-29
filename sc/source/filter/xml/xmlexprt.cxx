@@ -2609,7 +2609,8 @@ void ScXMLExport::collectAutoStyles()
     }
 
     if (getExportFlags() & SvXMLExportFlags::MASTERSTYLES)
-        GetPageExport()->collectAutoStyles(true);
+        // tdf#154445 - export all page styles even if they are not in use
+        GetPageExport()->collectAutoStyles(false);
 
     mbAutoStylesCollected = true;
 }
@@ -2671,7 +2672,8 @@ void ScXMLExport::ExportAutoStyles_()
 
 void ScXMLExport::ExportMasterStyles_()
 {
-    GetPageExport()->exportMasterStyles( true );
+    // tdf#154445 - export all page styles even if they are not in use
+    GetPageExport()->exportMasterStyles( false );
 }
 
 void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > const & xShape )

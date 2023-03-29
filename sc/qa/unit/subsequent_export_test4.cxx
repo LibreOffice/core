@@ -18,6 +18,8 @@
 #include <stlpool.hxx>
 #include <formulacell.hxx>
 #include <validat.hxx>
+#include <scresid.hxx>
+#include <globstr.hrc>
 
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
@@ -416,6 +418,27 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testHeaderFontStyleXLSX)
                && static_cast<const SvxPostureItem&>(*rAttrib.pAttr).GetPosture() == ITALIC_NORMAL;
     });
     CPPUNIT_ASSERT_MESSAGE("Second line should be italic.", bHasItalic);
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf154445_unused_pagestyles)
+{
+    createScDoc("ods/tdf108188_pagestyle.ods");
+
+    // Check if the user defined page style is present
+    const OUString aTestPageStyle = "TestPageStyle";
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(aTestPageStyle, pDoc->GetPageStyle(0));
+
+    // Change page style to default so the user defined one is not used anymore
+    pDoc->SetPageStyle(0, ScResId(STR_STYLENAME_STANDARD));
+
+    // Save and reload the document to check if the unused page styles are still present
+    saveAndReload("calc8");
+    pDoc = getScDoc();
+
+    // Without the accompanying fix in place, the unused page styles don't exist anymore
+    ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
+    CPPUNIT_ASSERT(pStylePool->Find(aTestPageStyle, SfxStyleFamily::Page));
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf135828_Shape_Rect)
