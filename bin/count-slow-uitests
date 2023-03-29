@@ -1,0 +1,20 @@
+#!/bin/sh
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# Run this from the source root dir to count the number of non-oneprocess ui tests
+
+for i in */UITest_*.mk
+do
+     if grep -q oneprocess $i; then
+         continue
+     fi
+
+     echo $i
+done
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab:
