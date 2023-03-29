@@ -20,18 +20,20 @@
 #pragma once
 
 #include "charttoolsdllapi.hxx"
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace chart
 {
+class DataSeries;
 
 class OOO_DLLPUBLIC_CHARTTOOLS ColorPerPointHelper
 {
 public:
     static bool hasPointOwnColor(
-        const css::uno::Reference< css::beans::XPropertySet >& xDataSeriesProperties
+        const rtl::Reference< ::chart::DataSeries >& xDataSeries
         , sal_Int32 nPointIndex
         , const css::uno::Reference< css::beans::XPropertySet >& xDataPointProperties //may be NULL this is just for performance
          );
@@ -39,7 +41,7 @@ public:
     // returns true if AttributedDataPoints contains nPointIndex and the
     // property Color is DEFAULT
     SAL_DLLPRIVATE static bool hasPointOwnProperties(
-        const css::uno::Reference< css::beans::XPropertySet >& xSeriesProperties
+        const rtl::Reference< ::chart::DataSeries >& xDataSeries
         , sal_Int32 nPointIndex );
 };
 

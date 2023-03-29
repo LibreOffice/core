@@ -18,33 +18,35 @@
  */
 
 #include <ColorPerPointHelper.hxx>
+#include <DataSeries.hxx>
+#include <DataSeriesProperties.hxx>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 
 #include <algorithm>
 
-namespace chart
-{
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using namespace ::chart::DataSeriesProperties;
+
+namespace chart
+{
 
 bool ColorPerPointHelper::hasPointOwnColor(
-        const css::uno::Reference< css::beans::XPropertySet >& xDataSeriesProperties
+        const rtl::Reference< DataSeries >& xDataSeries
         , sal_Int32 nPointIndex
         , const css::uno::Reference< css::beans::XPropertySet >& xDataPointProperties //may be NULL this is just for performance
          )
 {
-    if( !xDataSeriesProperties.is() )
+    if( !xDataSeries.is() )
         return false;
 
-    if( hasPointOwnProperties( xDataSeriesProperties, nPointIndex ))
+    if( hasPointOwnProperties( xDataSeries, nPointIndex ))
     {
         uno::Reference< beans::XPropertyState > xPointState( xDataPointProperties, uno::UNO_QUERY );
         if( !xPointState.is() )
         {
-            uno::Reference< XDataSeries > xSeries( xDataSeriesProperties, uno::UNO_QUERY );
-            if(xSeries.is())
-                xPointState.set( xSeries->getDataPointByIndex( nPointIndex ), uno::UNO_QUERY );
+            xPointState.set( xDataSeries->getDataPointByIndex( nPointIndex ), uno::UNO_QUERY );
         }
         if( !xPointState.is() )
             return false;
@@ -56,13 +58,13 @@ bool ColorPerPointHelper::hasPointOwnColor(
 }
 
 bool ColorPerPointHelper::hasPointOwnProperties(
-    const css::uno::Reference< css::beans::XPropertySet >& xSeriesProperties
+    const rtl::Reference< ::chart::DataSeries >& xDataSeries
     , sal_Int32 nPointIndex )
 {
-    if( xSeriesProperties.is() )
+    if( xDataSeries.is() )
     {
         uno::Sequence< sal_Int32 > aIndexList;
-        if( xSeriesProperties->getPropertyValue( "AttributedDataPoints" ) >>= aIndexList )
+        if( xDataSeries->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS ) >>= aIndexList ) // "AttributedDataPoints"
         {
             const sal_Int32 * pBegIt = aIndexList.getConstArray();
             const sal_Int32 * pEndIt = pBegIt + aIndexList.getLength();
