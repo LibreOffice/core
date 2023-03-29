@@ -34,6 +34,8 @@
 #include <detfunc.hxx>
 #include <scerrors.hxx>
 #include <tabvwsh.hxx>
+#include <scresid.hxx>
+#include <globstr.hrc>
 
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -1732,7 +1734,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf108188_pagestyle)
     // Without the accompanying fix in place, the page styles are always used
     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
     CPPUNIT_ASSERT(pStylePool->Find(aTestPageStyle, SfxStyleFamily::Page)->IsUsed());
-    CPPUNIT_ASSERT(!pStylePool->Find("Default", SfxStyleFamily::Page)->IsUsed());
+    CPPUNIT_ASSERT(
+        !pStylePool->Find(ScResId(STR_STYLENAME_STANDARD), SfxStyleFamily::Page)->IsUsed());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
