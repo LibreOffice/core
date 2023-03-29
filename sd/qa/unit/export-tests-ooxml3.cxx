@@ -133,6 +133,7 @@ public:
     void testTdf152436();
     void testLinkedOLE();
     void testTdf102261_testParaTabStopDefaultDistance();
+    void testTableCellVerticalPropertyRoundtrip();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest3);
 
@@ -227,6 +228,7 @@ public:
     CPPUNIT_TEST(testTdf152436);
     CPPUNIT_TEST(testLinkedOLE);
     CPPUNIT_TEST(testTdf102261_testParaTabStopDefaultDistance);
+    CPPUNIT_TEST(testTableCellVerticalPropertyRoundtrip);
     CPPUNIT_TEST_SUITE_END();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -2154,6 +2156,18 @@ void SdOOXMLExportTest3::testTdf102261_testParaTabStopDefaultDistance()
             sal_Int32{ 2540 },
             xPropSet->getPropertyValue("ParaTabStopDefaultDistance").get<sal_Int32>());
     }
+}
+
+void SdOOXMLExportTest3::testTableCellVerticalPropertyRoundtrip()
+{
+    createSdImpressDoc("pptx/tcPr-vert-roundtrip.pptx");
+    saveAndReload("Impress Office Open XML");
+
+    xmlDocUniquePtr pXml = parseExport("ppt/slides/slide1.xml");
+
+    assertXPath(pXml, "(//a:tcPr)[1]", "vert", "vert270");
+    assertXPath(pXml, "(//a:tcPr)[2]", "vert", "vert");
+    assertXPath(pXml, "(//a:tcPr)[3]", "vert", "wordArtVert");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest3);

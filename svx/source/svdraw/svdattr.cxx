@@ -43,6 +43,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
+#include <svl/grabbagitem.hxx>
+
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/sdgcpitm.hxx>
@@ -327,6 +329,7 @@ SdrItemPool::SdrItemPool(
     rPoolDefaults[ SDRATTR_TABLE_BORDER_TLBR - SDRATTR_START ] = new SvxLineItem( SDRATTR_TABLE_BORDER_TLBR );
     rPoolDefaults[ SDRATTR_TABLE_BORDER_BLTR - SDRATTR_START ] = new SvxLineItem( SDRATTR_TABLE_BORDER_BLTR );
     rPoolDefaults[ SDRATTR_TABLE_TEXT_ROTATION - SDRATTR_START ] = new SvxTextRotateItem(0_deg10, SDRATTR_TABLE_TEXT_ROTATION);
+    rPoolDefaults[ SDRATTR_TABLE_GRABBAG - SDRATTR_START ] = new SfxGrabBagItem(SDRATTR_TABLE_GRABBAG);
 
     rPoolDefaults[ SDRATTR_GLOW_RADIUS - SDRATTR_START ] = new SdrMetricItem(SDRATTR_GLOW_RADIUS, 0);
     rPoolDefaults[ SDRATTR_GLOW_COLOR - SDRATTR_START ] = new XColorItem(SDRATTR_GLOW_COLOR, aNullCol);
