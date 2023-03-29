@@ -221,6 +221,10 @@ public:
      */
     sal_Int32 GetUniqueId() { return mnMaxDocId++; }
 
+    sal_Int32 GetMaxDocId() { return mnMaxDocId; }
+
+    void SetMaxDocId(sal_Int32 maxDocId) { mnMaxDocId = maxDocId; }
+
     /** Write the document properties into into the current OPC package.
 
         @param xProperties  The document properties to export.
