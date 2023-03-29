@@ -494,6 +494,7 @@ cmd/32/tablemenu.png cmd/32/tabledialog.png
 cmd/32/tableselectall.png cmd/32/selecttable.png
 cmd/32/tableselectmenu.png cmd/32/selecttable.png
 cmd/32/tablesort.png cmd/32/datasort.png
+cmd/32/tabletransformdialog.png cmd/32/transformdialog.png
 cmd/32/templatemenu.png cmd/32/templatemanager.png
 cmd/32/textalign.png cmd/32/alignblock.png
 cmd/32/textattributes.png cmd/32/fontdialog.png
@@ -1115,6 +1116,7 @@ cmd/lc_tablemenu.png cmd/lc_tabledialog.png
 cmd/lc_tableselectall.png cmd/lc_selecttable.png
 cmd/lc_tableselectmenu.png cmd/lc_selecttable.png
 cmd/lc_tablesort.png cmd/lc_datasort.png
+cmd/lc_tabletransformdialog.png cmd/lc_transformdialog.png
 cmd/lc_templatemenu.png cmd/lc_templatemanager.png
 cmd/lc_textalign.png cmd/lc_alignblock.png
 cmd/lc_textattributes.png cmd/lc_fontdialog.png
@@ -1534,6 +1536,7 @@ cmd/sc_tablemenu.png cmd/sc_tabledialog.png
 cmd/sc_tableselectall.png cmd/sc_selecttable.png
 cmd/sc_tableselectmenu.png cmd/sc_selecttable.png
 cmd/sc_tablesort.png cmd/sc_datasort.png
+cmd/sc_tabletransformdialog.png cmd/sc_transformdialog.png
 cmd/sc_templatemenu.png cmd/sc_templatemanager.png
 cmd/sc_textalign.png cmd/sc_alignblock.png
 cmd/sc_textattributes.png cmd/sc_fontdialog.png

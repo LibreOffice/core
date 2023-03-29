@@ -2805,3 +2805,8 @@ cmd/sc_borderdialog-more.png cmd/sc_controlproperties.png
 cmd/sc_textwrap-more.png cmd/sc_controlproperties.png
 cmd/sc_formatarea-more.png cmd/sc_controlproperties.png
 cmd/sc_formatline-more.png cmd/sc_controlproperties.png
+
+# Table context menu
+cmd/32/tabletransformdialog.png cmd/32/transformdialog.png
+cmd/lc_tabletransformdialog.png cmd/lc_transformdialog.png
+cmd/sc_tabletransformdialog.png cmd/sc_transformdialog.png

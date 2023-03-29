@@ -13,6 +13,7 @@
   <menu:menuitem menu:id=".uno:Paste"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:MergeCells"/>
+  <menu:menuitem menu:id=".uno:SplitCell"/>
   <menu:menu menu:id=".uno:TableInsertMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:InsertRowsBefore"/>
@@ -47,7 +48,6 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FontDialog"/>
   <menu:menuitem menu:id=".uno:ParagraphDialog"/>
-  <menu:menuitem menu:id=".uno:TransformDialog"/>
   <menu:menuseparator/>
   <menu:menu menu:id=".uno:ObjectAlign">
     <menu:menupopup>
@@ -73,6 +73,7 @@
       <menu:menuitem menu:id=".uno:ReverseOrder"/>
     </menu:menupopup>
   </menu:menu>
+  <menu:menuitem menu:id=".uno:TableTransformDialog"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:TableDialog"/>
 </menu:menupopup>

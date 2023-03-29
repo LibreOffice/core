@@ -2995,3 +2995,8 @@ cmd/sc_stars-empty.png sc/res/icon-set-stars-empty.png
 cmd/32/redactionpreviewexport.png cmd/32/exportdirecttopdf.png
 cmd/lc_redactionpreviewexport.png cmd/lc_exportdirecttopdf.png
 cmd/sc_redactionpreviewexport.png cmd/sc_exportdirecttopdf.png
+
+# Table context menu
+cmd/32/tabletransformdialog.png cmd/32/transformdialog.png
+cmd/lc_tabletransformdialog.png cmd/lc_transformdialog.png
+cmd/sc_tabletransformdialog.png cmd/sc_transformdialog.png
