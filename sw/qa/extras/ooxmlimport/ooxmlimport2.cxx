@@ -1146,16 +1146,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154695)
     }
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf145147)
-{
-    createSwDoc("grouped_link.docx");
-    uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("https://www.libreoffice.org"),
-                         getProperty<OUString>(xGroupShape->getByIndex(0), "Hyperlink"));
-    CPPUNIT_ASSERT_EQUAL(OUString("https://www.documentfoundation.org"),
-                         getProperty<OUString>(xGroupShape->getByIndex(1), "Hyperlink"));
-}
-
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
