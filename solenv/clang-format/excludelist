@@ -3717,7 +3717,6 @@ extensions/source/propctrlr/eventhandler.cxx
 extensions/source/propctrlr/eventhandler.hxx
 extensions/source/propctrlr/fontdialog.cxx
 extensions/source/propctrlr/fontdialog.hxx
-extensions/source/propctrlr/fontitemids.hxx
 extensions/source/propctrlr/formbrowsertools.cxx
 extensions/source/propctrlr/formbrowsertools.hxx
 extensions/source/propctrlr/formcomponenthandler.cxx
