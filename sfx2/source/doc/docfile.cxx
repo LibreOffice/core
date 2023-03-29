@@ -2368,7 +2368,8 @@ void SfxMedium::Transfer_Impl()
     // a special case, an interaction handler should be used for
     // authentication in case it is available
     Reference< css::ucb::XCommandEnvironment > xComEnv;
-    Reference< css::task::XInteractionHandler > xInteractionHandler = GetInteractionHandler();
+    bool bForceInteractionHandler = GetURLObject().isAnyKnownWebDAVScheme();
+    Reference< css::task::XInteractionHandler > xInteractionHandler = GetInteractionHandler(bForceInteractionHandler);
     if (xInteractionHandler.is())
         xComEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler,
                                                   Reference< css::ucb::XProgressHandler >() );
