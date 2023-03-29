@@ -802,7 +802,7 @@ bool UpdateFieldContents(SfxRequest& rReq, SwWrtShell& rWrtSh)
     pFields->GetValue() >>= aFields;
 
     SwDoc* pDoc = rWrtSh.GetDoc();
-    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSBOOKMARK, nullptr);
+    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::UPDATE_FIELDS, nullptr);
     rWrtSh.StartAction();
 
     std::vector<const SwFormatRefMark*> aRefMarks;
@@ -882,7 +882,7 @@ bool UpdateFieldContents(SfxRequest& rReq, SwWrtShell& rWrtSh)
     }
 
     rWrtSh.EndAction();
-    pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSBOOKMARK, nullptr);
+    pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::UPDATE_FIELDS, nullptr);
     return true;
 }
 
