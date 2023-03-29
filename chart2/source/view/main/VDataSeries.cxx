@@ -896,9 +896,8 @@ bool VDataSeries::isAttributedDataPoint( sal_Int32 index ) const
 bool VDataSeries::isVaryColorsByPoint() const
 {
     bool bVaryColorsByPoint = false;
-    Reference< beans::XPropertySet > xSeriesProp( getPropertiesOfSeries() );
-    if( xSeriesProp.is() )
-        xSeriesProp->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint;
+    if( m_xDataSeries )
+        m_xDataSeries->getFastPropertyValue(PROP_DATASERIES_VARY_COLORS_BY_POINT) >>= bVaryColorsByPoint; // "VaryColorsByPoint"
     return bVaryColorsByPoint;
 }
 

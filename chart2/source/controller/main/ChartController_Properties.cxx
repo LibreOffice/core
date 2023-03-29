@@ -47,6 +47,7 @@
 #include <ChartModel.hxx>
 #include <ColorPerPointHelper.hxx>
 #include <DataSeries.hxx>
+#include <DataSeriesProperties.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <ControllerLockGuard.hxx>
@@ -71,6 +72,7 @@ namespace chart
 {
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using namespace ::chart::DataSeriesProperties;
 using ::com::sun::star::uno::Reference;
 
 namespace
@@ -220,7 +222,8 @@ wrapper::ItemConverter* createItemConverter(
                     nPointIndex = o3tl::toInt32(aParticleID);
                     bool bVaryColorsByPoint = false;
                     if( xSeries.is() &&
-                        (xSeries->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint) &&
+                        // "VaryColorsByPoint"
+                        (xSeries->getFastPropertyValue(PROP_DATASERIES_VARY_COLORS_BY_POINT) >>= bVaryColorsByPoint) &&
                         bVaryColorsByPoint )
                     {
                         if( !ColorPerPointHelper::hasPointOwnColor( xSeries, nPointIndex, xObjectProperties ) )

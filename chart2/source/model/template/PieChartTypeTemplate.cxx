@@ -485,7 +485,7 @@ void PieChartTypeTemplate::applyStyle2(
         DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::Any( drawing::LineStyle_NONE ) );
 
         // vary colors by point
-        xSeries->setPropertyValue( "VaryColorsByPoint", uno::Any( true ));
+        xSeries->setFastPropertyValue( PROP_DATASERIES_VARY_COLORS_BY_POINT, uno::Any( true )); // "VaryColorsByPoint"
     }
     catch( const uno::Exception & )
     {

@@ -27,6 +27,7 @@
 #include <Diagram.hxx>
 #include <BaseCoordinateSystem.hxx>
 #include <DataSeries.hxx>
+#include <DataSeriesProperties.hxx>
 
 #include <CommonConverters.hxx>
 #include <ExplicitCategoriesProvider.hxx>
@@ -95,6 +96,7 @@ namespace chart {
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart;
 using namespace ::com::sun::star::chart2;
+using namespace ::chart::DataSeriesProperties;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
@@ -702,7 +704,8 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Referen
             {
                 xTextShape->setPosition(aRelPos);
                 if( !m_xChartTypeModel->getChartType().equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_PIE) &&
-                    rDataSeries.getPropertiesOfSeries()->getPropertyValue( "ShowCustomLeaderLines" ).get<sal_Bool>())
+                    // "ShowCustomLeaderLines"
+                    rDataSeries.getModel()->getFastPropertyValue( PROP_DATASERIES_SHOW_CUSTOM_LEADERLINES ).get<sal_Bool>())
                 {
                     sal_Int32 nX1 = rScreenPosition2D.X;
                     sal_Int32 nY1 = rScreenPosition2D.Y;
@@ -2451,7 +2454,8 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
                     if (!pSeries)
                         continue;
 
-                    if (!pSeries->getPropertiesOfSeries()->getPropertyValue("ShowLegendEntry").get<sal_Bool>())
+                    // "ShowLegendEntry"
+                    if (!pSeries->getModel()->getFastPropertyValue(PROP_DATASERIES_SHOW_LEGEND_ENTRY).get<sal_Bool>())
                     {
                         continue;
                     }
@@ -2748,7 +2752,8 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
             Sequence<sal_Int32> deletedLegendEntries;
             try
             {
-                rSeries.getPropertiesOfSeries()->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntries;
+                // "DeletedLegendEntries"
+                rSeries.getModel()->getFastPropertyValue(PROP_DATASERIES_DELETED_LEGEND_ENTRIES) >>= deletedLegendEntries;
             }
             catch (const uno::Exception&)
             {

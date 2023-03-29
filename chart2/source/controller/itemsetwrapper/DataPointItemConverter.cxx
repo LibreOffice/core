@@ -27,6 +27,7 @@
 #include <SeriesOptionsItemConverter.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
+#include <DataSeriesProperties.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <ChartModel.hxx>
@@ -62,6 +63,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using namespace ::chart::DataSeriesProperties;
 using ::com::sun::star::uno::Reference;
 
 namespace chart::wrapper {
@@ -253,7 +255,8 @@ DataPointItemConverter::DataPointItemConverter(
         return;
 
     uno::Sequence<sal_Int32> deletedLegendEntriesSeq;
-    xSeries->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq;
+    // "DeletedLegendEntries"
+    xSeries->getFastPropertyValue(PROP_DATASERIES_DELETED_LEGEND_ENTRIES) >>= deletedLegendEntriesSeq;
     for (const auto& deletedLegendEntry : std::as_const(deletedLegendEntriesSeq))
     {
         if (nPointIndex == deletedLegendEntry)
@@ -574,7 +577,8 @@ bool DataPointItemConverter::ApplySpecialItem(
             if (bHideLegendEntry != m_bHideLegendEntry)
             {
                 uno::Sequence<sal_Int32> deletedLegendEntriesSeq;
-                m_xSeries->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq;
+                // "DeletedLegendEntries"
+                m_xSeries->getFastPropertyValue(PROP_DATASERIES_DELETED_LEGEND_ENTRIES) >>= deletedLegendEntriesSeq;
                 std::vector<sal_Int32> deletedLegendEntries;
                 for (const auto& deletedLegendEntry : std::as_const(deletedLegendEntriesSeq))
                 {
@@ -583,7 +587,8 @@ bool DataPointItemConverter::ApplySpecialItem(
                 }
                 if (bHideLegendEntry)
                     deletedLegendEntries.push_back(m_nPointIndex);
-                m_xSeries->setPropertyValue("DeletedLegendEntries", uno::Any(comphelper::containerToSequence(deletedLegendEntries)));
+                // "DeletedLegendEntries"
+                m_xSeries->setFastPropertyValue(PROP_DATASERIES_DELETED_LEGEND_ENTRIES, uno::Any(comphelper::containerToSequence(deletedLegendEntries)));
             }
         }
         break;

@@ -23,6 +23,7 @@
 #include <ChartTypeHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <DataSeries.hxx>
+#include <DataSeriesProperties.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <FillProperties.hxx>
 #include <CharacterProperties.hxx>
@@ -59,6 +60,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::chart::wrapper;
+using namespace ::chart::DataSeriesProperties;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -617,9 +619,10 @@ beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const OU
         {
             if( rPropertyName == "FillColor")
             {
-                rtl::Reference< DataSeries > xSeriesProp = getDataSeries();
+                rtl::Reference< DataSeries > xSeries = getDataSeries();
                 bool bVaryColorsByPoint = false;
-                if( xSeriesProp.is() && (xSeriesProp->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint)
+                // "VaryColorsByPoint"
+                if( xSeries.is() && (xSeries->getFastPropertyValue(PROP_DATASERIES_VARY_COLORS_BY_POINT) >>= bVaryColorsByPoint)
                     && bVaryColorsByPoint )
                     return beans::PropertyState_DIRECT_VALUE;
             }
@@ -836,9 +839,10 @@ Any SAL_CALL DataSeriesPointWrapper::getPropertyValue( const OUString& rProperty
     {
         if( rPropertyName == "FillColor" )
         {
-            rtl::Reference< DataSeries > xSeriesProp = getDataSeries();
+            rtl::Reference< DataSeries > xSeries = getDataSeries();
             bool bVaryColorsByPoint = false;
-            if( xSeriesProp.is() && (xSeriesProp->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint)
+            // "VaryColorsByPoint"
+            if( xSeries.is() && (xSeries->getFastPropertyValue(PROP_DATASERIES_VARY_COLORS_BY_POINT) >>= bVaryColorsByPoint)
                 && bVaryColorsByPoint )
             {
                 uno::Reference< beans::XPropertyState > xPointState( DataSeriesPointWrapper::getDataPointProperties(), uno::UNO_QUERY );

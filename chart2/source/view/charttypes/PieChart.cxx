@@ -26,6 +26,8 @@
 #include <CommonConverters.hxx>
 #include <ObjectIdentifier.hxx>
 #include <ChartType.hxx>
+#include <DataSeries.hxx>
+#include <DataSeriesProperties.hxx>
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart2/XColorScheme.hpp>
@@ -41,6 +43,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using namespace ::chart::DataSeriesProperties;
 
 namespace chart {
 
@@ -490,8 +493,8 @@ void PieChart::createTextLabelShape(
         }
     }
 
-    bool bShowLeaderLine = rSeries.getPropertiesOfSeries()
-                                   ->getPropertyValue("ShowCustomLeaderLines")
+    bool bShowLeaderLine = rSeries.getModel()
+                                   ->getFastPropertyValue(PROP_DATASERIES_SHOW_CUSTOM_LEADERLINES) // "ShowCustomLeaderLines"
                                    .get<sal_Bool>();
     if (m_bPieLabelsAllowToMove)
     {
@@ -593,19 +596,20 @@ double PieChart::getMaxOffset()
         return m_fMaxOffset;
 
     VDataSeries* pSeries = rSeriesList.front().get();
-    uno::Reference< beans::XPropertySet > xSeriesProp( pSeries->getPropertiesOfSeries() );
-    if( !xSeriesProp.is() )
+    rtl::Reference< DataSeries > xSeries( pSeries->getModel() );
+    if( !xSeries.is() )
         return m_fMaxOffset;
 
     double fExplodePercentage=0.0;
-    xSeriesProp->getPropertyValue( "Offset") >>= fExplodePercentage;
+    xSeries->getPropertyValue( "Offset") >>= fExplodePercentage;
     if(fExplodePercentage>m_fMaxOffset)
         m_fMaxOffset=fExplodePercentage;
 
     if(!m_bSizeExcludesLabelsAndExplodedSegments)
     {
         uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-        if( xSeriesProp->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
+        // "AttributedDataPoints"
+        if( xSeries->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS ) >>= aAttributedDataPointIndexList )
         {
             for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
             {
