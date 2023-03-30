@@ -463,8 +463,35 @@ MetaPolyLineAction::MetaPolyLineAction( tools::Polygon aPoly, LineInfo aLineInfo
     maPoly      (std::move( aPoly ))
 {}
 
+static bool AllowDim(tools::Long nDim)
+{
+    static bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    if (bFuzzing)
+    {
+        if (nDim > 0x20000000 || nDim < -0x20000000)
+        {
+            SAL_WARN("vcl", "skipping huge dimension: " << nDim);
+            return false;
+        }
+    }
+    return true;
+}
+
+static bool AllowPoint(const Point& rPoint)
+{
+    return AllowDim(rPoint.X()) && AllowDim(rPoint.Y());
+}
+
+static bool AllowRect(const tools::Rectangle& rRect)
+{
+    return AllowPoint(rRect.TopLeft()) && AllowPoint(rRect.BottomRight());
+}
+
 void MetaPolyLineAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowRect(pOut->LogicToPixel(maPoly.GetBoundRect())))
+        return;
+
     if( maLineInfo.IsDefault() )
         pOut->DrawPolyLine( maPoly );
     else
@@ -569,30 +596,6 @@ MetaTextAction::MetaTextAction( const Point& rPt, OUString aStr,
     mnIndex     ( nIndex ),
     mnLen       ( nLen )
 {}
-
-static bool AllowDim(tools::Long nDim)
-{
-    static bool bFuzzing = utl::ConfigManager::IsFuzzing();
-    if (bFuzzing)
-    {
-        if (nDim > 0x20000000 || nDim < -0x20000000)
-        {
-            SAL_WARN("vcl", "skipping huge dimension: " << nDim);
-            return false;
-        }
-    }
-    return true;
-}
-
-static bool AllowPoint(const Point& rPoint)
-{
-    return AllowDim(rPoint.X()) && AllowDim(rPoint.Y());
-}
-
-static bool AllowRect(const tools::Rectangle& rRect)
-{
-    return AllowPoint(rRect.TopLeft()) && AllowPoint(rRect.BottomRight());
-}
 
 void MetaTextAction::Execute( OutputDevice* pOut )
 {
