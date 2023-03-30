@@ -1290,17 +1290,9 @@ void SdrTextObj::ImpAutoFitText(SdrOutliner& rOutliner, const Size& rTextSize,
     {
         const Size aCurrTextSize = rOutliner.CalcTextSizeNTP();
         double fFactor = 1.0;
-        if( bIsVerticalWriting )
-        {
-            if (aCurrTextSize.Width() != 0)
-            {
-                fFactor = double(rTextSize.Width())/aCurrTextSize.Width();
-            }
-        }
-        else if (aCurrTextSize.Height() != 0)
-        {
-            fFactor = double(rTextSize.Height())/aCurrTextSize.Height();
-        }
+        if (aCurrTextSize.Width() != 0)
+            fFactor = double(rTextSize.Width())/aCurrTextSize.Width();
+
         // fFactor scales in both x and y directions
         // - this is fine for bulleted words
         // - but it scales too much for a long paragraph
