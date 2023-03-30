@@ -424,8 +424,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
                         aBuf.append( "1" );
                         if( nPages > 1 )
                         {
-                            aBuf.append( "-" );
-                            aBuf.append( nPages );
+                            aBuf.append( "-" + OUString::number( nPages ) );
                         }
                         xController->setValue("PageRange", css::uno::Any(aBuf.makeStringAndClear()));
                     }

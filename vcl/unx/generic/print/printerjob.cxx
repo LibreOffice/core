@@ -394,18 +394,18 @@ PrinterJob::EndJob()
 
     // write document trailer according to Document Structuring Conventions (DSC)
     OStringBuffer aTrailer(512);
-    aTrailer.append( "%%Trailer\n" );
-    aTrailer.append( "%%BoundingBox: 0 0 " );
-    aTrailer.append( static_cast<sal_Int32>(mnMaxWidthPt) );
-    aTrailer.append( " " );
-    aTrailer.append( static_cast<sal_Int32>(mnMaxHeightPt) );
+    aTrailer.append( "%%Trailer\n"
+        "%%BoundingBox: 0 0 "
+        + OString::number( static_cast<sal_Int32>(mnMaxWidthPt) )
+        + " "
+        + OString::number( static_cast<sal_Int32>(mnMaxHeightPt) ) );
     if( mnLandscapes > mnPortraits )
         aTrailer.append("\n%%Orientation: Landscape");
     else
         aTrailer.append("\n%%Orientation: Portrait");
-    aTrailer.append( "\n%%Pages: " );
-    aTrailer.append( static_cast<sal_Int32>(maPageVector.size()) );
-    aTrailer.append( "\n%%EOF\n" );
+    aTrailer.append( "\n%%Pages: "
+        + OString::number( static_cast<sal_Int32>(maPageVector.size()) )
+        + "\n%%EOF\n" );
     WritePS (mpJobTrailer.get(), aTrailer.getStr());
 
     /*
@@ -654,15 +654,15 @@ static bool writeFeature( osl::File* pFile, const PPDKey* pKey, const PPDValue* 
         aFeature.append( "%%IncludeFeature:" );
     else
         aFeature.append( "%%BeginFeature:" );
-    aFeature.append( " *" );
-    aFeature.append( OUStringToOString( pKey->getKey(), RTL_TEXTENCODING_ASCII_US ) );
-    aFeature.append( ' ' );
-    aFeature.append( OUStringToOString( pValue->m_aOption, RTL_TEXTENCODING_ASCII_US ) );
+    aFeature.append( " *"
+        + OUStringToOString( pKey->getKey(), RTL_TEXTENCODING_ASCII_US )
+        + " "
+        + OUStringToOString( pValue->m_aOption, RTL_TEXTENCODING_ASCII_US ) );
     if( !bUseIncluseFeature )
     {
-        aFeature.append( '\n' );
-        aFeature.append( OUStringToOString( pValue->m_aValue, RTL_TEXTENCODING_ASCII_US ) );
-        aFeature.append( "\n%%EndFeature" );
+        aFeature.append( "\n"
+            + OUStringToOString( pValue->m_aValue, RTL_TEXTENCODING_ASCII_US )
+            + "\n%%EndFeature" );
     }
     aFeature.append( "\n} stopped cleartomark\n" );
     sal_uInt64 nWritten = 0;
@@ -931,16 +931,12 @@ bool PrinterJob::writeSetup( osl::File* pFile, const JobData& rJob )
     {
         std::vector< OString >::const_iterator it = aFonts.begin();
         OStringBuffer aLine( 256 );
-        aLine.append( "%%DocumentSuppliedResources: font " );
-        aLine.append( *it );
-        aLine.append( "\n" );
+        aLine.append( "%%DocumentSuppliedResources: font " + (*it) + "\n" );
         WritePS ( pFile, aLine.getStr() );
         while( (++it) != aFonts.end() )
         {
             aLine.setLength(0);
-            aLine.append( "%%+ font " );
-            aLine.append( *it );
-            aLine.append( "\n" );
+            aLine.append( "%%+ font " + (*it) + "\n" );
             WritePS ( pFile, aLine.getStr() );
         }
     }

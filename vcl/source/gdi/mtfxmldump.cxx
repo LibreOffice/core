@@ -868,11 +868,10 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                         rWriter.attribute("first", rArray[aIndex]);
                     if (aIndex + aLength - 1 < o3tl::narrowing<sal_Int32>(rArray.size()))
                         rWriter.attribute("last", rArray[aIndex + aLength - 1]);
-                    OUStringBuffer sDxLengthString;
+                    OUStringBuffer sDxLengthString(std::max((aLength - aIndex) * 4, sal_Int32(0)));
                     for (sal_Int32 i = 0; i < aLength - aIndex; ++i)
                     {
-                        sDxLengthString.append(rArray[aIndex + i]);
-                        sDxLengthString.append(" ");
+                        sDxLengthString.append(OUString::number(rArray[aIndex + i]) + " ");
                     }
                     rWriter.content(sDxLengthString);
                     rWriter.endElement();

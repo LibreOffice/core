@@ -9573,9 +9573,9 @@ IMPL_LINK_NOARG(GtkInstanceNotebook, SizeAllocateHdl, void*, void)
 
 OUString vcl_font_to_css(const vcl::Font& rFont)
 {
-    OUStringBuffer sCSS;
-    sCSS.append("font-family: \"" + rFont.GetFamilyName() + "\"; ");
-    sCSS.append("font-size: " + OUString::number(rFont.GetFontSize().Height()) + "pt; ");
+    OUStringBuffer sCSS(
+        "font-family: \"" + rFont.GetFamilyName() + "\"; "
+        "font-size: " + OUString::number(rFont.GetFontSize().Height()) + "pt; ");
     switch (rFont.GetItalic())
     {
         case ITALIC_NONE:

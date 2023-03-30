@@ -749,11 +749,11 @@ bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
         {
             OString sURL(OUStringToOString(rBmk.GetURL(), eSysCSet));
             OString sDesc(OUStringToOString(rBmk.GetDescription(), eSysCSet));
-            OStringBuffer sOut;
-            sOut.append(sURL.getLength());
-            sOut.append("@" + sURL);
-            sOut.append(sDesc.getLength());
-            sOut.append("@" + sDesc);
+            OString sOut =
+                OString::number(sURL.getLength())
+                + "@" + sURL
+                + OString::number(sDesc.getLength())
+                + "@" + sDesc;
 
             Sequence< sal_Int8 > aSeq(sOut.getLength());
             memcpy(aSeq.getArray(), sOut.getStr(), sOut.getLength());

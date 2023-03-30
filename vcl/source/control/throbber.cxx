@@ -179,7 +179,7 @@ void Throbber::setImageList( ::std::vector< Image > && i_images )
 {
     ::std::vector< OUString > aImageURLs;
 
-    char const* const pResolutions[] = { "16", "32", "64" };
+    sal_Unicode const* const pResolutions[] = { u"16", u"32", u"64" };
     size_t const nImageCounts[] = { 6, 12, 12 };
 
     size_t index = 0;
@@ -193,14 +193,12 @@ void Throbber::setImageList( ::std::vector< Image > && i_images )
     aImageURLs.reserve( nImageCounts[index] );
     for ( size_t i=0; i<nImageCounts[index]; ++i )
     {
-        OUStringBuffer aURL;
-        aURL.append( "private:graphicrepository/vcl/res/spinner-" );
-        aURL.appendAscii( pResolutions[index] );
-        aURL.append( "-" );
+        OUStringBuffer aURL( OUString::Concat("private:graphicrepository/vcl/res/spinner-")
+            + pResolutions[index]
+            + "-" );
         if ( i < 9 )
             aURL.append( "0" );
-        aURL.append     ( sal_Int32( i + 1 ) );
-        aURL.append( ".png" );
+        aURL.append( OUString::number( sal_Int32( i + 1 ) ) + ".png" );
 
         aImageURLs.push_back( aURL.makeStringAndClear() );
     }

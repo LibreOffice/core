@@ -330,13 +330,9 @@ void checkAndInsert(CRCHash& rHash, sal_uInt64 nCRC, const char* pLocation)
     auto it = rHash.find(nCRC);
     if (it != rHash.end())
     {
-        OStringBuffer aBuf("CRC collision between ");
-        aBuf.append(pLocation);
-        aBuf.append(" and ");
-        aBuf.append(it->second);
-        aBuf.append(" hash is 0x");
-        aBuf.append(static_cast<sal_Int64>(nCRC), 16);
-        CPPUNIT_FAIL(aBuf.toString().getStr());
+        OString aBuf = OString::Concat("CRC collision between ") + pLocation + " and " + it->second
+                       + " hash is 0x" + OString::number(static_cast<sal_Int64>(nCRC), 16);
+        CPPUNIT_FAIL(aBuf.getStr());
     }
     rHash[nCRC] = pLocation;
 }

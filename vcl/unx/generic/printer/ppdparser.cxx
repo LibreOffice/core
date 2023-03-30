@@ -178,13 +178,11 @@ namespace psp
         aKey.append( i_rKey );
         if( !i_rOption.empty() || !i_rValue.empty() )
         {
-            aKey.append( ':' );
-            aKey.append( i_rOption );
+            aKey.append( OUString::Concat(":") + i_rOption );
         }
         if( !i_rValue.empty() )
         {
-            aKey.append( ':' );
-            aKey.append( i_rValue );
+            aKey.append( OUString::Concat(":") + i_rValue );
         }
         if( !aKey.isEmpty() && !i_rTranslation.isEmpty() )
         {
@@ -209,8 +207,7 @@ namespace psp
         aKey.append( i_rKey );
         if( !i_rOption.empty() )
         {
-            aKey.append( ':' );
-            aKey.append( i_rOption );
+            aKey.append( OUString::Concat(":") + i_rOption );
         }
         if( !aKey.isEmpty() )
         {
@@ -637,9 +634,9 @@ PPDParser::PPDParser(OUString aFile, const std::vector<PPDKey*>& keys)
                     OUString::number(PWG_TO_POINTS(pPWGMedia -> length));
                 if ( pImageableAreaValue )
                     pImageableAreaValue->m_aValue = aBuf.makeStringAndClear();
-                aBuf.append( PWG_TO_POINTS(pPWGMedia -> width) );
-                aBuf.append( " " );
-                aBuf.append( PWG_TO_POINTS(pPWGMedia -> length) );
+                aBuf.append( OUString::number(PWG_TO_POINTS(pPWGMedia -> width))
+                    + " "
+                    + OUString::number(PWG_TO_POINTS(pPWGMedia -> length) ));
                 if ( pPaperDimensionValue )
                     pPaperDimensionValue->m_aValue = aBuf.makeStringAndClear();
                 if (aValueName.equals(pKey -> getDefaultValue() -> m_aOption)) {
@@ -1113,8 +1110,7 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
                 while (line != rLines.end() && oddDoubleQuoteCount(aBuffer))
                 {
                     // copy the newlines also
-                    aBuffer.append('\n');
-                    aBuffer.append(*line);
+                    aBuffer.append("\n" + *line);
                     ++line;
                 }
                 aLine = aBuffer.makeStringAndClear();

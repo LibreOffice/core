@@ -89,9 +89,7 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
     SAL_INFO("vcl.pdfwriter", "PDFObjectCopier::copyExternalResource: " << rObject.GetObjectValue()
                                                                         << " -> " << nObject);
 
-    OStringBuffer aLine;
-    aLine.append(nObject);
-    aLine.append(" 0 obj\n");
+    OStringBuffer aLine = OString::number(nObject) + " 0 obj\n";
 
     if (rObject.GetDictionary())
     {
@@ -104,9 +102,7 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
             else
                 aLine.append(" ");
 
-            aLine.append("/");
-            aLine.append(rPair.first);
-            aLine.append(" ");
+            aLine.append("/" + rPair.first + " ");
             copyRecursively(aLine, *rPair.second, rDocBuffer, rCopiedResources);
         }
 

@@ -234,14 +234,11 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     }
     Size aLogicPaperSize(o3tl::convert(i_rOrigSize, o3tl::Length::mm100, eUnit));
     OUString aNumText( rLocWrap.getNum( aLogicPaperSize.Width(), nDigits ) );
-    OUStringBuffer aBuf;
-    aBuf.append( aNumText + " " );
+    OUStringBuffer aBuf( aNumText + " " );
     aBuf.appendAscii( eUnit == o3tl::Length::mm ? "mm" : "in" );
     if( !i_rPaperName.empty() )
     {
-        aBuf.append( " (" );
-        aBuf.append( i_rPaperName );
-        aBuf.append( ')' );
+        aBuf.append( OUString::Concat(" (")  + i_rPaperName + ")" );
     }
     maHorzText = aBuf.makeStringAndClear();
 

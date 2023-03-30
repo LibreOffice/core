@@ -124,10 +124,8 @@ bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )
     // write header job data
     aStream.WriteLine("JobData 1");
 
-    OStringBuffer aLine;
-
-    aLine.append("printer=");
-    aLine.append(OUStringToOString(m_aPrinterName, RTL_TEXTENCODING_UTF8));
+    OStringBuffer aLine("printer="
+        + OUStringToOString(m_aPrinterName, RTL_TEXTENCODING_UTF8));
     aStream.WriteLine(aLine);
     aLine.setLength(0);
 
@@ -139,49 +137,30 @@ bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )
     aStream.WriteLine(aLine);
     aLine.setLength(0);
 
-    aLine.append("copies=");
-    aLine.append(static_cast<sal_Int32>(m_nCopies));
-    aStream.WriteLine(aLine);
-    aLine.setLength(0);
+    aStream.WriteLine(Concat2View("copies=" + OString::number(static_cast<sal_Int32>(m_nCopies))));
 
     if (m_nPDFDevice > 0)
     {
-        aLine.append("collate=");
-        aLine.append(OString::boolean(m_bCollate));
-        aStream.WriteLine(aLine);
-        aLine.setLength(0);
+        aStream.WriteLine(Concat2View("collate=" + OString::boolean(m_bCollate)));
     }
 
-    aLine.append("marginadjustment=");
-    aLine.append(static_cast<sal_Int32>(m_nLeftMarginAdjust));
-    aLine.append(',');
-    aLine.append(static_cast<sal_Int32>(m_nRightMarginAdjust));
-    aLine.append(',');
-    aLine.append(static_cast<sal_Int32>(m_nTopMarginAdjust));
-    aLine.append(',');
-    aLine.append(static_cast<sal_Int32>(m_nBottomMarginAdjust));
-    aStream.WriteLine(aLine);
-    aLine.setLength(0);
+    aStream.WriteLine(Concat2View(
+        "marginadjustment="
+        + OString::number(static_cast<sal_Int32>(m_nLeftMarginAdjust))
+        + ","
+        + OString::number(static_cast<sal_Int32>(m_nRightMarginAdjust))
+        + ",'"
+        + OString::number(static_cast<sal_Int32>(m_nTopMarginAdjust))
+        + ","
+        + OString::number(static_cast<sal_Int32>(m_nBottomMarginAdjust))));
 
-    aLine.append("colordepth=");
-    aLine.append(static_cast<sal_Int32>(m_nColorDepth));
-    aStream.WriteLine(aLine);
-    aLine.setLength(0);
+    aStream.WriteLine(Concat2View("colordepth=" + OString::number(static_cast<sal_Int32>(m_nColorDepth))));
 
-    aLine.append("pslevel=");
-    aLine.append(static_cast<sal_Int32>(m_nPSLevel));
-    aStream.WriteLine(aLine);
-    aLine.setLength(0);
+    aStream.WriteLine(Concat2View("pslevel=" + OString::number(static_cast<sal_Int32>(m_nPSLevel))));
 
-    aLine.append("pdfdevice=");
-    aLine.append(static_cast<sal_Int32>(m_nPDFDevice));
-    aStream.WriteLine(aLine);
-    aLine.setLength(0);
+    aStream.WriteLine(Concat2View("pdfdevice=" + OString::number(static_cast<sal_Int32>(m_nPDFDevice))));
 
-    aLine.append("colordevice=");
-    aLine.append(static_cast<sal_Int32>(m_nColorDevice));
-    aStream.WriteLine(aLine);
-    aLine.setLength(0);
+    aStream.WriteLine(Concat2View("colordevice=" + OString::number(static_cast<sal_Int32>(m_nColorDevice))));
 
     // now append the PPDContext stream buffer
     aStream.WriteLine( "PPDContextData" );
