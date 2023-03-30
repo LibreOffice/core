@@ -89,7 +89,7 @@
 #define RID_STR_DLGIMP_CLASH_RENAME         NC_("RID_STR_DLGIMP_CLASH_RENAME", "Rename")
 #define RID_STR_DLGIMP_CLASH_REPLACE        NC_("RID_STR_DLGIMP_CLASH_REPLACE", "Replace")
 #define RID_STR_DLGIMP_CLASH_TITLE          NC_("RID_STR_DLGIMP_CLASH_TITLE", "Dialog Import - Name already used")
-#define RID_STR_DLGIMP_CLASH_TEXT           NC_("RID_STR_DLGIMP_CLASH_TEXT", "The library already contains a dialog with the name:\n\n$(ARG1)\n\nRename dialog to keep current dialog or replace existing dialog.\n ")
+#define RID_STR_DLGIMP_CLASH_TEXT           NC_("RID_STR_DLGIMP_CLASH_TEXT", "The library already contains a dialog with the name:\n\n$(ARG1)\n\nChoose “Rename” to give the imported dialog a new automatic name, or “Replace” to overwrite the existing dialog completely.\n ")
 #define RID_STR_DLGIMP_MISMATCH_ADD         NC_("RID_STR_DLGIMP_MISMATCH_ADD", "Add")
 #define RID_STR_DLGIMP_MISMATCH_OMIT        NC_("RID_STR_DLGIMP_MISMATCH_OMIT", "Omit")
 #define RID_STR_DLGIMP_MISMATCH_TITLE       NC_("RID_STR_DLGIMP_MISMATCH_TITLE", "Dialog Import - Language Mismatch")
