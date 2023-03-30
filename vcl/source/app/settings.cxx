@@ -2785,6 +2785,8 @@ void MiscSettings::SetDarkMode(int nMode)
 
 int MiscSettings::GetAppColorMode()
 {
+    if (utl::ConfigManager::IsFuzzing())
+        return 0;
     return officecfg::Office::Common::Misc::ApplicationAppearance::get();
 }
 
