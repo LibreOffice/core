@@ -195,8 +195,7 @@ uno::Reference<rdf::XURI> createBaseURI(
     }
     if (!i_rSubDocument.empty())
     {
-        buf.append(i_rSubDocument);
-        buf.append('/');
+        buf.append(OUString::Concat(i_rSubDocument) + "/");
     }
     if (!buf.isEmpty())
     {

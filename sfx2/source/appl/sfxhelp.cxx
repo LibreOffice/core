@@ -524,10 +524,7 @@ OUString SfxHelp::CreateHelpURL_Impl( const OUString& aCommandURL, const OUStrin
     AppendConfigToken( aHelpURL, true );
 
     if ( bHasAnchor )
-    {
-        aHelpURL.append('#');
-        aHelpURL.append(aAnchor);
-    }
+        aHelpURL.append("#" + aAnchor);
 
     return aHelpURL.makeStringAndClear();
 }

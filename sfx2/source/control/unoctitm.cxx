@@ -893,9 +893,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
-    OUStringBuffer aBuffer;
-    aBuffer.append(aEvent.FeatureURL.Complete);
-    aBuffer.append(u'=');
+    OUStringBuffer aBuffer(aEvent.FeatureURL.Complete + "=");
 
     if (aEvent.FeatureURL.Path == "Bold" ||
         aEvent.FeatureURL.Path == "CenterPara" ||
