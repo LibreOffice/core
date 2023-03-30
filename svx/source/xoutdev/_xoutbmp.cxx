@@ -32,6 +32,11 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+constexpr OUStringLiteral FORMAT_SVG = u"svg";
+constexpr OUStringLiteral FORMAT_WMF = u"wmf";
+constexpr OUStringLiteral FORMAT_EMF = u"emf";
+constexpr OUStringLiteral FORMAT_PDF = u"pdf";
+
 constexpr OUStringLiteral FORMAT_BMP = u"bmp";
 constexpr OUStringLiteral FORMAT_GIF = u"gif";
 constexpr OUStringLiteral FORMAT_JPG = u"jpg";
@@ -104,6 +109,64 @@ Graphic XOutBitmap::MirrorGraphic( const Graphic& rGraphic, const BmpMirrorFlags
     return aRetGraphic;
 }
 
+static OUString match(std::u16string_view filter, const OUString& expected, bool matchEmpty = true)
+{
+    return (matchEmpty && filter.empty()) || expected.equalsIgnoreAsciiCase(filter) ? expected
+                                                                                    : OUString();
+}
+
+static OUString isKnownVectorFormat(const Graphic& rGraphic, std::u16string_view rFilter)
+{
+    const auto& pData(rGraphic.getVectorGraphicData());
+    if (!pData || pData->getBinaryDataContainer().getSize() == 0)
+        return {};
+
+    // Does the filter name match the original format?
+    switch (pData->getType())
+    {
+        case VectorGraphicDataType::Svg:
+            return match(rFilter, FORMAT_SVG, false);
+        case VectorGraphicDataType::Wmf:
+            return match(rFilter, FORMAT_WMF, false);
+        case VectorGraphicDataType::Emf:
+            return match(rFilter, FORMAT_EMF, false);
+        case VectorGraphicDataType::Pdf:
+            return match(rFilter, FORMAT_PDF, false);
+    }
+
+    if (rGraphic.GetGfxLink().IsEMF())
+        return match(rFilter, FORMAT_EMF, false);
+
+    return {};
+}
+
+static OUString isKnownRasterFormat(const GfxLink& rLink, std::u16string_view rFilter)
+{
+    // tdf#60684: use native format if possible but it must correspond to filter name
+    // or no specific format has been required
+    // without this, you may save for example file with png extension but jpg content
+    switch (rLink.GetType())
+    {
+        case GfxLinkType::NativeGif:
+            return match(rFilter, FORMAT_GIF);
+
+        // #i15508# added BMP type for better exports (no call/trigger found, prob used in HTML export)
+        case GfxLinkType::NativeBmp:
+            return match(rFilter, FORMAT_BMP);
+
+        case GfxLinkType::NativeJpg:
+            return match(rFilter, FORMAT_JPG);
+        case GfxLinkType::NativePng:
+            return match(rFilter, FORMAT_PNG);
+        case GfxLinkType::NativeTif:
+            return match(rFilter, FORMAT_TIF);
+        case GfxLinkType::NativeWebp:
+            return match(rFilter, FORMAT_WEBP);
+        default:
+            return {};
+    }
+}
+
 ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                                  const OUString& rFilterName, const XOutFlags nFlags,
                                  const Size* pMtfSize_100TH_MM,
@@ -114,11 +177,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
         return ERRCODE_NONE;
 
     INetURLObject   aURL( rFileName );
-    Graphic         aGraphic;
-    OUString        aExt;
     GraphicFilter&  rFilter = GraphicFilter::GetGraphicFilter();
-    ErrCode         nErr = ERRCODE_GRFILTER_FILTERERROR;
-    bool            bTransparent = rGraphic.IsTransparent(), bAnimated = rGraphic.IsAnimated();
 
     DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "XOutBitmap::WriteGraphic(...): invalid URL" );
 
@@ -133,44 +192,27 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
     }
 
     // #i121128# use shortcut to write Vector Graphic Data data in original form (if possible)
-    auto const & rVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
-
-    if (rVectorGraphicDataPtr && rVectorGraphicDataPtr->getBinaryDataContainer().getSize())
+    if (OUString aExt = isKnownVectorFormat(rGraphic, rFilterName); !aExt.isEmpty())
     {
-        // Does the filter name match the original format?
-        const bool bIsSvg(rFilterName.equalsIgnoreAsciiCase("svg") && VectorGraphicDataType::Svg == rVectorGraphicDataPtr->getType());
-        const bool bIsWmf(rFilterName.equalsIgnoreAsciiCase("wmf") && VectorGraphicDataType::Wmf == rVectorGraphicDataPtr->getType());
-        bool bIsEmf(rFilterName.equalsIgnoreAsciiCase("emf") && VectorGraphicDataType::Emf == rVectorGraphicDataPtr->getType());
-        if (!bIsEmf)
+        if (!(nFlags & XOutFlags::DontAddExtension))
+            aURL.setExtension(aExt);
+
+        rFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        if (pMediaType)
+            if (auto xGraphic = rGraphic.GetXGraphic().query<css::beans::XPropertySet>())
+                xGraphic->getPropertyValue("MimeType") >>= *pMediaType;
+
+        SfxMedium aMedium(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE | StreamMode::SHARE_DENYNONE | StreamMode::TRUNC);
+        SvStream* pOStm = aMedium.GetOutStream();
+
+        if (pOStm)
         {
-            bIsEmf = rFilterName.equalsIgnoreAsciiCase("emf") && rGraphic.GetGfxLink().IsEMF();
-        }
-        const bool bIsPdf(rFilterName.equalsIgnoreAsciiCase("pdf") && VectorGraphicDataType::Pdf == rVectorGraphicDataPtr->getType());
+            auto& rDataContainer = rGraphic.getVectorGraphicData()->getBinaryDataContainer();
+            pOStm->WriteBytes(rDataContainer.getData(), rDataContainer.getSize());
+            aMedium.Commit();
 
-        if (bIsSvg || bIsWmf || bIsEmf || bIsPdf)
-        {
-            if (!(nFlags & XOutFlags::DontAddExtension))
-            {
-                aURL.setExtension(rFilterName);
-            }
-
-            rFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-            if (pMediaType)
-                if (auto xGraphic = rGraphic.GetXGraphic().query<css::beans::XPropertySet>())
-                    xGraphic->getPropertyValue("MimeType") >>= *pMediaType;
-
-            SfxMedium aMedium(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE | StreamMode::SHARE_DENYNONE | StreamMode::TRUNC);
-            SvStream* pOStm = aMedium.GetOutStream();
-
-            if (pOStm)
-            {
-                auto & rDataContainer = rVectorGraphicDataPtr->getBinaryDataContainer();
-                pOStm->WriteBytes(rDataContainer.getData(), rDataContainer.getSize());
-                aMedium.Commit();
-
-                if (!aMedium.GetError())
-                    return ERRCODE_NONE;
-            }
+            if (!aMedium.GetError())
+                return ERRCODE_NONE;
         }
     }
 
@@ -181,27 +223,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
     {
         // try to write native link
         const GfxLink aGfxLink( rGraphic.GetGfxLink() );
-
-        switch( aGfxLink.GetType() )
-        {
-            case GfxLinkType::NativeGif: aExt = FORMAT_GIF; break;
-
-            // #i15508# added BMP type for better exports (no call/trigger found, prob used in HTML export)
-            case GfxLinkType::NativeBmp: aExt = FORMAT_BMP; break;
-
-            case GfxLinkType::NativeJpg: aExt = FORMAT_JPG; break;
-            case GfxLinkType::NativePng: aExt = FORMAT_PNG; break;
-            case GfxLinkType::NativeTif: aExt = FORMAT_TIF; break;
-            case GfxLinkType::NativeWebp: aExt = FORMAT_WEBP; break;
-
-            default:
-            break;
-        }
-
-        // tdf#60684: use native format if possible but it must correspond to filter name
-        // or no specific format has been required
-        // without this, you may save for example file with png extension but jpg content
-        if( !aExt.isEmpty() && (aExt == rFilterName || rFilterName.isEmpty()) )
+        if (OUString aExt = isKnownRasterFormat(aGfxLink, rFilterName); !aExt.isEmpty())
         {
             if( !(nFlags & XOutFlags::DontAddExtension) )
                 aURL.setExtension( aExt );
@@ -225,6 +247,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
     }
 
     OUString  aFilter( rFilterName );
+    bool bTransparent = rGraphic.IsTransparent(), bAnimated = rGraphic.IsAnimated();
     bool    bWriteTransGrf = ( aFilter.equalsIgnoreAsciiCase( "transgrf" ) ) ||
                                 ( aFilter.equalsIgnoreAsciiCase( "gif" ) ) ||
                                 ( nFlags & XOutFlags::UseGifIfPossible ) ||
@@ -246,7 +269,8 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
 
     if( GRFILTER_FORMAT_NOTFOUND != nFilter )
     {
-        aExt = rFilter.GetExportFormatShortName( nFilter ).toAsciiLowerCase();
+        Graphic aGraphic;
+        OUString aExt = rFilter.GetExportFormatShortName( nFilter ).toAsciiLowerCase();
 
         if( bWriteTransGrf )
         {
@@ -322,11 +346,11 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
             rFileName = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
             if (pMediaType)
                 *pMediaType = rFilter.GetExportFormatMediaType(nFilter);
-            nErr = ExportGraphic( aGraphic, aURL, rFilter, nFilter, pFilterData );
+            return ExportGraphic( aGraphic, aURL, rFilter, nFilter, pFilterData );
         }
     }
 
-    return nErr;
+    return ERRCODE_GRFILTER_FILTERERROR;
 }
 
 bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString, bool bAddPrefix,
