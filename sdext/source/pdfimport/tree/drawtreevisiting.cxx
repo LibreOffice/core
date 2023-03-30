@@ -221,8 +221,6 @@ void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
     }
     else
     {
-        OUStringBuffer aBuf(256);
-
         basegfx::B2DHomMatrix mat(rGC.Transformation);
 
         if (rElem.MirrorVertical)
@@ -237,21 +235,21 @@ void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
         double scale = convPx2mm(100);
         mat.scale(scale, scale);
 
-        aBuf.append("matrix(");
-        aBuf.append(mat.get(0, 0));
-        aBuf.append(' ');
-        aBuf.append(mat.get(1, 0));
-        aBuf.append(' ');
-        aBuf.append(mat.get(0, 1));
-        aBuf.append(' ');
-        aBuf.append(mat.get(1, 1));
-        aBuf.append(' ');
-        aBuf.append(mat.get(0, 2));
-        aBuf.append(' ');
-        aBuf.append(mat.get(1, 2));
-        aBuf.append(")");
+        rProps[ sDrawTransform ] =
+            OUString::Concat("matrix(")
+            + OUString::number(mat.get(0, 0))
+            + " "
+            + OUString::number(mat.get(1, 0))
+            + " "
+            + OUString::number(mat.get(0, 1))
+            + " "
+            + OUString::number(mat.get(1, 1))
+            + " "
+            + OUString::number(mat.get(0, 2))
+            + " "
+            + OUString::number(mat.get(1, 2))
+            + ")";
 
-        rProps[ sDrawTransform ] = aBuf.makeStringAndClear();
     }
 }
 
@@ -334,12 +332,11 @@ void DrawXmlEmitter::visit( PolyPolyElement& elem, const std::list< std::unique_
     // so we need to tell fillFrameProps here that the transformation for
     // a PolyPolyElement was already applied (aside from translation)
     fillFrameProps( elem, aProps, m_rEmitContext, true );
-    OUStringBuffer aBuf( 64 );
-    aBuf.append( "0 0 " );
-    aBuf.append( convPx2mmPrec2(elem.w)*100.0 );
-    aBuf.append( ' ' );
-    aBuf.append( convPx2mmPrec2(elem.h)*100.0 );
-    aProps[ "svg:viewBox" ] = aBuf.makeStringAndClear();
+    aProps[ "svg:viewBox" ] =
+        "0 0 "
+        + OUString::number( convPx2mmPrec2(elem.w)*100.0 )
+        + " "
+        + OUString::number( convPx2mmPrec2(elem.h)*100.0 );
     aProps[ "svg:d" ]       = basegfx::utils::exportToSvgD( elem.PolyPoly, false, true, false );
 
     m_rEmitContext.rEmitter.beginTag( "draw:path", aProps );

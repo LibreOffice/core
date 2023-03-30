@@ -64,8 +64,7 @@ void OdfEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
 {
     OSL_PRECOND(pTag,"Invalid tag string");
 
-    OUStringBuffer aElement;
-    aElement.append("<");
+    OUStringBuffer aElement("<");
     aElement.appendAscii(pTag);
     aElement.append(" ");
 
@@ -105,8 +104,7 @@ void OdfEmitter::write( const OUString& rText )
 
 void OdfEmitter::endTag( const char* pTag )
 {
-    OUStringBuffer aElement;
-    aElement.append("</");
+    OUStringBuffer aElement("</");
     aElement.appendAscii(pTag);
     aElement.append(">");
     write(aElement.makeStringAndClear());

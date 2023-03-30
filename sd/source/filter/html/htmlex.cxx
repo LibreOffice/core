@@ -629,11 +629,11 @@ void HtmlExport::ExportSingleDocument()
     mnPagesWritten = 0;
     InitProgress(mnSdPageCount);
 
-    OUStringBuffer aStr(gaHTMLHeader);
-    aStr.append(DocumentMetadata());
-    aStr.append("\r\n");
-    aStr.append("</head>\r\n");
-    aStr.append(CreateBodyTag());
+    OUStringBuffer aStr(gaHTMLHeader
+        + DocumentMetadata()
+        + "\r\n"
+        "</head>\r\n"
+        + CreateBodyTag());
 
     for(sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; ++nSdPage)
     {
@@ -655,8 +655,7 @@ void HtmlExport::ExportSingleDocument()
 
         lclAppendStyle(aStr, u"h1", sStyle);
 
-        aStr.append(sTitleText);
-        aStr.append("</h1>\r\n");
+        aStr.append(sTitleText + "</h1>\r\n");
 
         // write outline text
         aStr.append(CreateTextForPage( pOutliner, pPage, true, pPage->GetPageBackgroundColor() ));
@@ -669,11 +668,10 @@ void HtmlExport::ExportSingleDocument()
 
             if (!aNotesStr.isEmpty())
             {
-                aStr.append("<br>\r\n<h3>");
-                aStr.append(RESTOHTML(STR_HTMLEXP_NOTES));
-                aStr.append(":</h3>\r\n");
-
-                aStr.append(aNotesStr);
+                aStr.append("<br>\r\n<h3>"
+                    + RESTOHTML(STR_HTMLEXP_NOTES)
+                    + ":</h3>\r\n"
+                    + aNotesStr);
             }
         }
 
@@ -1089,13 +1087,13 @@ bool HtmlExport::CreateHtmlTextForPresPages()
         }
 
         // HTML head
-        OUStringBuffer aStr(gaHTMLHeader);
-        aStr.append(CreateMetaCharset());
-        aStr.append("  <title>");
-        aStr.append(StringToHTMLString(maPageNames[nSdPage]));
-        aStr.append("</title>\r\n");
-        aStr.append("</head>\r\n");
-        aStr.append(CreateBodyTag());
+        OUStringBuffer aStr(gaHTMLHeader
+            + CreateMetaCharset()
+            + "  <title>"
+            + StringToHTMLString(maPageNames[nSdPage])
+            + "</title>\r\n"
+            "</head>\r\n"
+            + CreateBodyTag());
 
         // navigation bar
         aStr.append(CreateNavBar(nSdPage, true));
@@ -1103,8 +1101,7 @@ bool HtmlExport::CreateHtmlTextForPresPages()
         // page title
         OUString sTitleText( CreateTextForTitle(pOutliner,pPage, pPage->GetPageBackgroundColor()) );
         lclAppendStyle(aStr, u"h1", getParagraphStyle(pOutliner, 0));
-        aStr.append(sTitleText);
-        aStr.append("</h1>\r\n");
+        aStr.append(sTitleText + "</h1>\r\n");
 
         // write outline text
         aStr.append(CreateTextForPage( pOutliner, pPage, true, pPage->GetPageBackgroundColor() ));
@@ -1117,11 +1114,10 @@ bool HtmlExport::CreateHtmlTextForPresPages()
 
             if (!aNotesStr.isEmpty())
             {
-                aStr.append("<br>\r\n<h3>");
-                aStr.append(RESTOHTML(STR_HTMLEXP_NOTES));
-                aStr.append(":</h3>\r\n");
-
-                aStr.append(aNotesStr);
+                aStr.append("<br>\r\n<h3>"
+                    + RESTOHTML(STR_HTMLEXP_NOTES)
+                    + ":</h3>\r\n"
+                    + aNotesStr);
             }
         }
 
@@ -1380,8 +1376,8 @@ OUString HtmlExport::CreateTextForNotesPage( SdrOutliner* pOutliner,
             for (sal_Int32 nPara = 0; nPara < nCount; nPara++)
             {
                 lclAppendStyle(aStr, u"p", getParagraphStyle(pOutliner, nPara));
-                aStr.append(ParagraphToHTMLString(pOutliner, nPara, rBackgroundColor));
-                aStr.append("</p>\r\n");
+                aStr.append(ParagraphToHTMLString(pOutliner, nPara, rBackgroundColor)
+                    + "</p>\r\n");
             }
         }
     }
@@ -1601,17 +1597,16 @@ bool HtmlExport::CreateHtmlForPresPages()
             {
                 if( nSdPage < (mnSdPageCount-1) || bEndless )
                 {
-                    aStr.append("<meta http-equiv=\"refresh\" content=\"");
-                    aStr.append(fSecs);
-                    aStr.append("; URL=");
+                    aStr.append("<meta http-equiv=\"refresh\" content=\""
+                        + OUString::number(fSecs)
+                        + "; URL=");
 
                     int nPage = nSdPage + 1;
                     if( nPage == mnSdPageCount )
                         nPage = 0;
 
-                    aStr.append(maHTMLFiles[nPage]);
-
-                    aStr.append("\">\r\n");
+                    aStr.append(maHTMLFiles[nPage]
+                        + "\">\r\n");
                 }
             }
         }
@@ -1628,10 +1623,10 @@ bool HtmlExport::CreateHtmlForPresPages()
         if(!mbFrames )
             aStr.append(CreateNavBar(nSdPage, false));
         // Image
-        aStr.append("<center>");
-        aStr.append("<img src=\"");
-        aStr.append(maImageFiles[nSdPage]);
-        aStr.append("\" alt=\"\"");
+        aStr.append("<center>"
+            "<img src=\""
+            + maImageFiles[nSdPage]
+            + "\" alt=\"\"");
 
         if (!aClickableObjects.empty())
             aStr.append(" USEMAP=\"#map0\"");
@@ -1648,12 +1643,11 @@ bool HtmlExport::CreateHtmlForPresPages()
 
             if (!aNotesStr.isEmpty())
             {
-                aStr.append("<h3>");
-                aStr.append(RESTOHTML(STR_HTMLEXP_NOTES));
-                aStr.append(":</h3><br>\r\n\r\n<p>");
-
-                aStr.append(aNotesStr);
-                aStr.append("\r\n</p>\r\n");
+                aStr.append("<h3>"
+                    + RESTOHTML(STR_HTMLEXP_NOTES)
+                    + ":</h3><br>\r\n\r\n<p>"
+                    + aNotesStr
+                    + "\r\n</p>\r\n");
             }
         }
 
@@ -1897,21 +1891,20 @@ bool HtmlExport::CreateContentPage()
         SetDocColors();
 
     // html head
-    OUStringBuffer aStr(gaHTMLHeader);
-    aStr.append(CreateMetaCharset());
-    aStr.append("  <title>");
-    aStr.append(StringToHTMLString(maPageNames[0]));
-    aStr.append("</title>\r\n</head>\r\n");
-    aStr.append(CreateBodyTag());
+    OUStringBuffer aStr(
+        gaHTMLHeader
+        + CreateMetaCharset()
+        + "  <title>"
+        + StringToHTMLString(maPageNames[0])
+        + "</title>\r\n</head>\r\n"
+        + CreateBodyTag());
 
     // page head
     aStr.append("<center>\r\n");
 
     if(mbHeader)
     {
-        aStr.append("<h1>");
-        aStr.append(getDocumentTitle());
-        aStr.append("</h1><br>\r\n");
+        aStr.append("<h1>" + getDocumentTitle() + "</h1><br>\r\n");
     }
 
     aStr.append("<h2>");
@@ -1924,15 +1917,14 @@ bool HtmlExport::CreateContentPage()
         aStr.append(CreateLink(StringToHTMLString(maHTMLFiles[0]),
                                RESTOHTML(STR_HTMLEXP_CLICKSTART)));
 
-    aStr.append("</h2>\r\n</center>\r\n");
-
-    aStr.append("<center><table width=\"90%\"><tr>\r\n");
+    aStr.append("</h2>\r\n</center>\r\n"
+        "<center><table width=\"90%\"><tr>\r\n");
 
     // table of content
-    aStr.append("<td valign=\"top\" align=\"left\" width=\"25%\">\r\n");
-    aStr.append("<h3>");
-    aStr.append(RESTOHTML(STR_HTMLEXP_CONTENTS));
-    aStr.append("</h3>");
+    aStr.append("<td valign=\"top\" align=\"left\" width=\"25%\">\r\n"
+        "<h3>"
+        + RESTOHTML(STR_HTMLEXP_CONTENTS)
+        + "</h3>");
 
     for(sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
     {
@@ -1951,51 +1943,51 @@ bool HtmlExport::CreateContentPage()
 
     if (!maAuthor.isEmpty())
     {
-        aStr.append("<p><strong>");
-        aStr.append(RESTOHTML(STR_HTMLEXP_AUTHOR));
-        aStr.append(":</strong> ");
-        aStr.append(StringToHTMLString(maAuthor));
-        aStr.append("</p>\r\n");
+        aStr.append("<p><strong>"
+            + RESTOHTML(STR_HTMLEXP_AUTHOR)
+            + ":</strong> "
+            + StringToHTMLString(maAuthor)
+            + "</p>\r\n");
     }
 
     if (!maEMail.isEmpty())
     {
-        aStr.append("<p><strong>");
-        aStr.append(RESTOHTML(STR_HTMLEXP_EMAIL));
-        aStr.append(":</strong> <a href=\"mailto:");
-        aStr.append(maEMail);
-        aStr.append("\">");
-        aStr.append(StringToHTMLString(maEMail));
-        aStr.append("</a></p>\r\n");
+        aStr.append("<p><strong>"
+            + RESTOHTML(STR_HTMLEXP_EMAIL)
+            + ":</strong> <a href=\"mailto:"
+            + maEMail
+            + "\">"
+            + StringToHTMLString(maEMail)
+            + "</a></p>\r\n");
     }
 
     if (!maHomePage.isEmpty())
     {
-        aStr.append("<p><strong>");
-        aStr.append(RESTOHTML(STR_HTMLEXP_HOMEPAGE));
-        aStr.append(":</strong> <a href=\"");
-        aStr.append(maHomePage);
-        aStr.append("\">");
-        aStr.append(StringToHTMLString(maHomePage));
-        aStr.append("</a> </p>\r\n");
+        aStr.append("<p><strong>"
+            + RESTOHTML(STR_HTMLEXP_HOMEPAGE)
+            + ":</strong> <a href=\""
+            + maHomePage
+            + "\">"
+            + StringToHTMLString(maHomePage)
+            + "</a> </p>\r\n");
     }
 
     if (!maInfo.isEmpty())
     {
-        aStr.append("<p><strong>");
-        aStr.append(RESTOHTML(STR_HTMLEXP_INFO));
-        aStr.append(":</strong><br>\r\n");
-        aStr.append(StringToHTMLString(maInfo));
-        aStr.append("</p>\r\n");
+        aStr.append("<p><strong>"
+            + RESTOHTML(STR_HTMLEXP_INFO)
+            + ":</strong><br>\r\n"
+            + StringToHTMLString(maInfo)
+            + "</p>\r\n");
     }
 
     if(mbDownload)
     {
-        aStr.append("<p><a href=\"");
-        aStr.append(maDocFileName);
-        aStr.append("\">");
-        aStr.append(RESTOHTML(STR_HTMLEXP_DOWNLOAD));
-        aStr.append("</a></p>\r\n");
+        aStr.append("<p><a href=\""
+            + maDocFileName
+            + "\">"
+            + RESTOHTML(STR_HTMLEXP_DOWNLOAD)
+            + "</a></p>\r\n");
     }
 
     for(sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
@@ -2007,13 +1999,12 @@ bool HtmlExport::CreateContentPage()
             StringToHTMLString(maPageNames[nSdPage]) +
             "\">");
 
-        aStr.append(CreateLink(maHTMLFiles[nSdPage], aText));
-        aStr.append("\r\n");
+        aStr.append(CreateLink(maHTMLFiles[nSdPage], aText)
+            + "\r\n");
     }
 
-    aStr.append("</td></tr></table></center>\r\n");
-
-    aStr.append("</body>\r\n</html>");
+    aStr.append("</td></tr></table></center>\r\n"
+                "</body>\r\n</html>");
 
     bool bOk = WriteHtml(maIndex, false, aStr);
 
@@ -2037,12 +2028,12 @@ bool HtmlExport::CreateNotesPages()
             SetDocColors( pPage );
 
         // Html head
-        OUStringBuffer aStr(gaHTMLHeader);
-        aStr.append(CreateMetaCharset());
-        aStr.append("  <title>");
-        aStr.append(StringToHTMLString(maPageNames[0]));
-        aStr.append("</title>\r\n</head>\r\n");
-        aStr.append(CreateBodyTag());
+        OUStringBuffer aStr(gaHTMLHeader
+            + CreateMetaCharset()
+            + "  <title>"
+            + StringToHTMLString(maPageNames[0])
+            + "</title>\r\n</head>\r\n"
+            + CreateBodyTag());
 
         if(pPage)
             aStr.append(CreateTextForNotesPage( pOutliner, pPage, maBackColor ));
@@ -2076,12 +2067,12 @@ bool HtmlExport::CreateOutlinePages()
     for (sal_Int32 nPage = 0; nPage < (mbImpress?2:1) && bOk; ++nPage)
     {
         // Html head
-        OUStringBuffer aStr(gaHTMLHeader);
-        aStr.append(CreateMetaCharset());
-        aStr.append("  <title>");
-        aStr.append(StringToHTMLString(maPageNames[0]));
-        aStr.append("</title>\r\n</head>\r\n");
-        aStr.append(CreateBodyTag());
+        OUStringBuffer aStr(gaHTMLHeader
+            + CreateMetaCharset()
+            + "  <title>"
+            + StringToHTMLString(maPageNames[0])
+            + "</title>\r\n</head>\r\n"
+            + CreateBodyTag());
 
         SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
         for(sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
@@ -2097,8 +2088,8 @@ bool HtmlExport::CreateOutlinePages()
                 aTitle = maPageNames[nSdPage];
 
             lclAppendStyle(aStr, u"p", getParagraphStyle(pOutliner, 0));
-            aStr.append(CreateLink(aLink, aTitle));
-            aStr.append("</p>");
+            aStr.append(CreateLink(aLink, aTitle)
+                + "</p>");
 
             if(nPage==1)
             {
@@ -2273,18 +2264,18 @@ bool HtmlExport::CreateFrames()
     OUStringBuffer aStr(
         "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\"\r\n"
         "    \"http://www.w3.org/TR/html4/frameset.dtd\">\r\n"
-        "<html>\r\n<head>\r\n");
+        "<html>\r\n<head>\r\n"
 
-    aStr.append(CreateMetaCharset());
-    aStr.append("  <title>");
-    aStr.append(StringToHTMLString(maPageNames[0]));
-    aStr.append("</title>\r\n");
+        + CreateMetaCharset()
+        + "  <title>"
+        + StringToHTMLString(maPageNames[0])
+        + "</title>\r\n"
 
-    aStr.append("<script type=\"text/javascript\">\r\n<!--\r\n");
+        "<script type=\"text/javascript\">\r\n<!--\r\n"
 
-    aStr.append("var nCurrentPage = 0;\r\nvar nPageCount = ");
-    aStr.append(static_cast<sal_Int32>(mnSdPageCount));
-    aStr.append(";\r\n\r\n");
+        "var nCurrentPage = 0;\r\nvar nPageCount = "
+        + OUString::number(static_cast<sal_Int32>(mnSdPageCount))
+        + ";\r\n\r\n");
 
     OUString aFunction = JS_NavigateAbs;
 
@@ -2312,55 +2303,57 @@ bool HtmlExport::CreateFrames()
         aTmp = aTmp.replaceAll(aPlaceHolder, gaHTMLExtension);
         aStr.append(aTmp);
     }
-    aStr.append("// -->\r\n</script>\r\n");
+    aStr.append("// -->\r\n</script>\r\n"
 
-    aStr.append("</head>\r\n");
+        "</head>\r\n"
 
-    aStr.append("<frameset cols=\"*,");
-    aStr.append(static_cast<sal_Int32>(mnWidthPixel + 16));
-    aStr.append("\">\r\n");
+        "<frameset cols=\"*,"
+        + OUString::number(static_cast<sal_Int32>(mnWidthPixel + 16))
+        + "\">\r\n");
     if(mbImpress)
     {
-        aStr.append("  <frameset rows=\"42,*\">\r\n");
-        aStr.append("    <frame src=\"navbar3");
-        aStr.append(gaHTMLExtension);
-        aStr.append("\" name=\"navbar2\" marginwidth=\"4\" marginheight=\"4\" scrolling=\"no\">\r\n");
+        aStr.append(
+            "  <frameset rows=\"42,*\">\r\n"
+            "    <frame src=\"navbar3"
+            + gaHTMLExtension
+            + "\" name=\"navbar2\" marginwidth=\"4\" marginheight=\"4\" scrolling=\"no\">\r\n");
     }
-    aStr.append("    <frame src=\"outline0");
-    aStr.append(gaHTMLExtension);
-    aStr.append("\" name=\"outline\">\r\n");
+    aStr.append("    <frame src=\"outline0"
+        + gaHTMLExtension
+        + "\" name=\"outline\">\r\n");
     if(mbImpress)
         aStr.append("  </frameset>\r\n");
 
     if(mbNotes)
     {
-        aStr.append("  <frameset rows=\"42,");
-        aStr.append(static_cast<sal_Int32>(static_cast<double>(mnWidthPixel) * 0.75) + 16);
-        aStr.append(",*\">\r\n");
+        aStr.append("  <frameset rows=\"42,"
+            + OUString::number(static_cast<sal_Int32>(static_cast<double>(mnWidthPixel) * 0.75) + 16)
+            + ",*\">\r\n");
     }
     else
         aStr.append("  <frameset rows=\"42,*\">\r\n");
 
-    aStr.append("    <frame src=\"navbar0");
-    aStr.append(gaHTMLExtension);
-    aStr.append("\" name=\"navbar1\" marginwidth=\"4\" marginheight=\"4\" scrolling=\"no\">\r\n");
+    aStr.append(
+        "    <frame src=\"navbar0"
+        + gaHTMLExtension
+        + "\" name=\"navbar1\" marginwidth=\"4\" marginheight=\"4\" scrolling=\"no\">\r\n"
 
-    aStr.append("    <frame src=\"");
-    aStr.append(maHTMLFiles[0]);
-    aStr.append("\" name=\"show\" marginwidth=\"4\" marginheight=\"4\">\r\n");
+        "    <frame src=\""
+        + maHTMLFiles[0]
+        + "\" name=\"show\" marginwidth=\"4\" marginheight=\"4\">\r\n");
 
     if(mbNotes)
     {
-        aStr.append("    <frame src=\"note0");
-        aStr.append(gaHTMLExtension);
-        aStr.append("\" name=\"notes\">\r\n");
+        aStr.append("    <frame src=\"note0"
+            + gaHTMLExtension
+            + "\" name=\"notes\">\r\n");
     }
-    aStr.append("  </frameset>\r\n");
+    aStr.append("  </frameset>\r\n"
 
-    aStr.append("<noframes>\r\n");
-    aStr.append(CreateBodyTag());
-    aStr.append(RESTOHTML(STR_HTMLEXP_NOFRAMES));
-    aStr.append("\r\n</noframes>\r\n</frameset>\r\n</html>");
+        "<noframes>\r\n"
+        + CreateBodyTag()
+        + RESTOHTML(STR_HTMLEXP_NOFRAMES)
+        + "\r\n</noframes>\r\n</frameset>\r\n</html>");
 
     bool bOk = WriteHtml(maFramePage, false, aStr);
 
@@ -2390,13 +2383,14 @@ bool HtmlExport::CreateNavBarFrames()
 
     for( int nFile = 0; nFile < 3 && bOk; nFile++ )
     {
-        OUStringBuffer aStr(gaHTMLHeader);
-        aStr.append(CreateMetaCharset());
-        aStr.append("  <title>");
-        aStr.append(StringToHTMLString(maPageNames[0]));
-        aStr.append("</title>\r\n</head>\r\n");
-        aStr.append(CreateBodyTag());
-        aStr.append("<center>\r\n");
+        OUStringBuffer aStr(
+            gaHTMLHeader
+            + CreateMetaCharset()
+            + "  <title>"
+            + StringToHTMLString(maPageNames[0])
+            + "</title>\r\n</head>\r\n"
+            + CreateBodyTag()
+            + "<center>\r\n");
 
         // first page
         aButton = SdResId(STR_HTMLEXP_FIRSTPAGE);
@@ -2407,8 +2401,8 @@ bool HtmlExport::CreateNavBarFrames()
         if(nFile != 0 && mnSdPageCount > 1)
             aButton = CreateLink(u"JavaScript:parent.NavigateAbs(0)", aButton);
 
-        aStr.append(aButton);
-        aStr.append("\r\n");
+        aStr.append(aButton
+            + "\r\n");
 
         // to the previous page
         aButton = SdResId(STR_PUBLISH_BACK);
@@ -2420,8 +2414,8 @@ bool HtmlExport::CreateNavBarFrames()
         if(nFile != 0 && mnSdPageCount > 1)
             aButton = CreateLink(u"JavaScript:parent.NavigateRel(-1)", aButton);
 
-        aStr.append(aButton);
-        aStr.append("\r\n");
+        aStr.append(aButton
+            + "\r\n");
 
         // to the next page
         aButton = SdResId(STR_PUBLISH_NEXT);
@@ -2433,8 +2427,8 @@ bool HtmlExport::CreateNavBarFrames()
         if(nFile != 2 && mnSdPageCount > 1)
             aButton = CreateLink(u"JavaScript:parent.NavigateRel(1)", aButton);
 
-        aStr.append(aButton);
-        aStr.append("\r\n");
+        aStr.append(aButton
+            + "\r\n");
 
         // to the last page
         aButton = SdResId(STR_HTMLEXP_LASTPAGE);
@@ -2451,8 +2445,8 @@ bool HtmlExport::CreateNavBarFrames()
             aButton = CreateLink(aLink, aButton);
         }
 
-        aStr.append(aButton);
-        aStr.append("\r\n");
+        aStr.append(aButton
+            + "\r\n");
 
         // content
         if (mbContentsPage)
@@ -2462,8 +2456,8 @@ bool HtmlExport::CreateNavBarFrames()
                 aButton = CreateImage(GetButtonName(BTN_INDEX), aButton);
 
             // to the overview
-            aStr.append(CreateLink(maIndex, aButton, u"_top"));
-            aStr.append("\r\n");
+            aStr.append(CreateLink(maIndex, aButton, u"_top")
+                + "\r\n");
         }
 
         // text mode
@@ -2474,13 +2468,14 @@ bool HtmlExport::CreateNavBarFrames()
                 aButton = CreateImage(GetButtonName(BTN_TEXT), aButton);
 
             OUString aText0("text0" + gaHTMLExtension);
-            aStr.append(CreateLink(aText0, aButton, u"_top"));
-            aStr.append("\r\n");
+            aStr.append(CreateLink(aText0, aButton, u"_top")
+                + "\r\n");
         }
 
         // and finished...
-        aStr.append("</center>\r\n");
-        aStr.append("</body>\r\n</html>");
+        aStr.append(
+            "</center>\r\n"
+            "</body>\r\n</html>");
 
         OUString aFileName("navbar" + OUString::number(nFile));
 
@@ -2664,17 +2659,17 @@ OUString HtmlExport::CreateBodyTag() const
         if( (aTextColor == COL_AUTO) && (!maBackColor.IsDark()) )
             aTextColor = COL_BLACK;
 
-        aStr.append(" text=\"");
-        aStr.append(ColorToHTMLString( aTextColor ));
-        aStr.append("\" bgcolor=\"");
-        aStr.append(ColorToHTMLString( maBackColor ));
-        aStr.append("\" link=\"");
-        aStr.append(ColorToHTMLString( maLinkColor ));
-        aStr.append("\" vlink=\"");
-        aStr.append(ColorToHTMLString( maVLinkColor ));
-        aStr.append("\" alink=\"");
-        aStr.append(ColorToHTMLString( maALinkColor ));
-        aStr.append("\"");
+        aStr.append(" text=\""
+            + ColorToHTMLString( aTextColor )
+            + "\" bgcolor=\""
+            + ColorToHTMLString( maBackColor )
+            + "\" link=\""
+            + ColorToHTMLString( maLinkColor )
+            + "\" vlink=\""
+            + ColorToHTMLString( maVLinkColor )
+            + "\" alink=\""
+            + ColorToHTMLString( maALinkColor )
+            + "\"");
     }
 
     aStr.append(">\r\n");
@@ -2687,16 +2682,12 @@ OUString HtmlExport::CreateLink( std::u16string_view aLink,
                                  std::u16string_view aText,
                                  std::u16string_view aTarget )
 {
-    OUStringBuffer aStr( "<a href=\"" );
-    aStr.append(aLink);
+    OUStringBuffer aStr( OUString::Concat("<a href=\"") + aLink);
     if (!aTarget.empty())
     {
-        aStr.append("\" target=\"");
-        aStr.append(aTarget);
+        aStr.append(OUString::Concat("\" target=\"") + aTarget);
     }
-    aStr.append("\">");
-    aStr.append(aText);
-    aStr.append("</a>");
+    aStr.append(OUString::Concat("\">") + aText + "</a>");
 
     return aStr.makeStringAndClear();
 }
@@ -2704,15 +2695,11 @@ OUString HtmlExport::CreateLink( std::u16string_view aLink,
 // creates an image tag
 OUString HtmlExport::CreateImage( std::u16string_view aImage, std::u16string_view aAltText )
 {
-    OUStringBuffer aStr( "<img src=\"");
-    aStr.append(aImage);
-    aStr.append("\" border=0");
+    OUStringBuffer aStr( OUString::Concat("<img src=\"") + aImage + "\" border=0");
 
     if (!aAltText.empty())
     {
-        aStr.append(" alt=\"");
-        aStr.append(aAltText);
-        aStr.append('"');
+        aStr.append(OUString::Concat(" alt=\"") + aAltText + "\"");
     }
     else
     {
@@ -2944,11 +2931,12 @@ bool HtmlExport::CreateImageFileList()
     OUStringBuffer aStr;
     for( sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
     {
-        aStr.append(static_cast<sal_Int32>(nSdPage + 1));
-        aStr.append(';');
-        aStr.append(maURLPath);
-        aStr.append(maImageFiles[nSdPage]);
-        aStr.append("\r\n");
+        aStr.append(
+            OUString::number(static_cast<sal_Int32>(nSdPage + 1))
+            + ";"
+            + maURLPath
+            + maImageFiles[nSdPage]
+            + "\r\n");
     }
 
     bool bOk = WriteHtml("picture.txt", false, aStr);

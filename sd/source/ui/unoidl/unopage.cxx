@@ -1564,20 +1564,18 @@ void SdGenericDrawPage::getBackground( Any& )
 
 OUString SdGenericDrawPage::getBookmarkURL() const
 {
-    OUStringBuffer aRet;
+    OUString aRet;
     if( SvxFmDrawPage::mpPage )
     {
         OUString aFileName( static_cast<SdPage*>(SvxFmDrawPage::mpPage)->GetFileName() );
         if( !aFileName.isEmpty() )
         {
             const OUString aBookmarkName( SdDrawPage::getPageApiNameFromUiName( static_cast<SdPage*>(SvxFmDrawPage::mpPage)->GetBookmarkName() ) );
-            aRet.append( aFileName );
-            aRet.append( '#' );
-            aRet.append( aBookmarkName );
+            aRet = aFileName + "#" + aBookmarkName;
         }
     }
 
-    return aRet.makeStringAndClear();
+    return aRet;
 }
 
 void SdGenericDrawPage::setBookmarkURL( std::u16string_view rURL )

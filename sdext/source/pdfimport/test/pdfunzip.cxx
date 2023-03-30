@@ -378,17 +378,16 @@ static int write_fonts( const char* i_pInFile, const char* i_pOutFile, PDFFile* 
         if( ! pStream )
             continue;
 
-        OStringBuffer aOutStream( i_pOutFile );
-        aOutStream.append( "_font_" );
-        aOutStream.append( sal_Int32(pStreamRef->m_nNumber) );
-        aOutStream.append( "_" );
-        aOutStream.append( sal_Int32(pStreamRef->m_nGeneration) );
-        aOutStream.append( "_" );
-        aOutStream.append( aFontName );
+        OStringBuffer aOutStream( OString::Concat(i_pOutFile)
+            + "_font_"
+            + OString::number( sal_Int32(pStreamRef->m_nNumber) )
+            + "_"
+            + OString::number( sal_Int32(pStreamRef->m_nGeneration) )
+            + "_"
+            + aFontName );
         if( pFileType )
         {
-            aOutStream.append( "." );
-            aOutStream.append( pFileType );
+            aOutStream.append( OString::Concat(".") + pFileType );
         }
         FileEmitContext aContext( aOutStream.getStr(), i_pInFile, i_pPDFFile );
         aContext.m_bDecrypt = i_pPDFFile->isEncrypted();

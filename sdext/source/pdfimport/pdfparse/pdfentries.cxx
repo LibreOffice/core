@@ -950,11 +950,11 @@ bool PDFTrailer::emit( EmitContext& rWriteContext ) const
                    section_end->first == nLast+1 )
                 nLast = section_end->first;
             // write first object number and number of following entries
-            OStringBuffer aBuf( 21 );
-            aBuf.append( sal_Int32( section_begin->first ) );
-            aBuf.append( ' ' );
-            aBuf.append( sal_Int32(nLast - section_begin->first + 1) );
-            aBuf.append( "\r\n" );
+            OStringBuffer aBuf =
+                OString::number(sal_Int32( section_begin->first ) )
+                + " "
+                + OString::number(sal_Int32(nLast - section_begin->first + 1))
+                + "\r\n";
             if( ! rWriteContext.write( aBuf.getStr(), aBuf.getLength() ) )
                 return false;
             while( section_begin != section_end )
@@ -966,14 +966,12 @@ bool PDFTrailer::emit( EmitContext& rWriteContext ) const
                 int nPad = 10 - aOffset.getLength();
                 for( int i = 0; i < nPad; i++ )
                     aBuf.append( '0' );
-                aBuf.append( aOffset );
-                aBuf.append( ' ' );
+                aBuf.append( aOffset +  " " );
                 OString aGeneration( OString::number( section_begin->second.first ) );
                 nPad = 5 - aGeneration.getLength();
                 for( int i = 0; i < nPad; i++ )
                     aBuf.append( '0' );
-                aBuf.append( aGeneration );
-                aBuf.append( " n\r\n" );
+                aBuf.append( aGeneration + " n\r\n" );
                 if( ! rWriteContext.write( aBuf.getStr(), 20 ) )
                     return false;
                 ++section_begin;

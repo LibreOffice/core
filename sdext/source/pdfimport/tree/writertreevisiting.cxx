@@ -254,28 +254,24 @@ void WriterXmlEmitter::fillFrameProps( DrawElement&       rElem,
         }
         if( fShearX != 0.0 )
         {
-            aBuf.append( "skewX( " );
-            aBuf.append( fShearX );
-            aBuf.append( " )" );
+            aBuf.append( "skewX( " + OUString::number(fShearX) + " )" );
         }
         if( fRotate != 0.0 )
         {
             if( !aBuf.isEmpty() )
                 aBuf.append( ' ' );
-            aBuf.append( "rotate( " );
-            aBuf.append( -fRotate );
-            aBuf.append( " )" );
+            aBuf.append( "rotate( " + OUString::number(-fRotate) + " )" );
 
         }
         if( ! rElem.isCharacter )
         {
             if( !aBuf.isEmpty() )
                 aBuf.append( ' ' );
-            aBuf.append( "translate( " );
-            aBuf.append( convertPixelToUnitString( rel_x ) );
-            aBuf.append( ' ' );
-            aBuf.append( convertPixelToUnitString( rel_y ) );
-            aBuf.append( " )" );
+            aBuf.append( "translate( "
+                + convertPixelToUnitString( rel_x )
+                + " "
+                + convertPixelToUnitString( rel_y )
+                + " )" );
         }
 
         rProps[ "draw:transform" ] = aBuf.makeStringAndClear();
@@ -358,12 +354,11 @@ void WriterXmlEmitter::visit( PolyPolyElement& elem, const std::list< std::uniqu
 
     PropertyMap aProps;
     fillFrameProps( elem, aProps, m_rEmitContext );
-    OUStringBuffer aBuf( 64 );
-    aBuf.append( "0 0 " );
-    aBuf.append( convPx2mmPrec2(elem.w)*100.0 );
-    aBuf.append( ' ' );
-    aBuf.append( convPx2mmPrec2(elem.h)*100.0 );
-    aProps[ "svg:viewBox" ] = aBuf.makeStringAndClear();
+    aProps[ "svg:viewBox" ] =
+        "0 0 "
+        + OUString::number(convPx2mmPrec2(elem.w)*100.0)
+        + " "
+        + OUString::number( convPx2mmPrec2(elem.h)*100.0 );
     aProps[ "svg:d" ]       = basegfx::utils::exportToSvgD( elem.PolyPoly, true, true, false );
 
     m_rEmitContext.rEmitter.beginTag( "draw:path", aProps );
@@ -1113,10 +1108,7 @@ void WriterXmlFinalizer::visit( ParagraphElement& elem, const std::list< std::un
         if( ! bIsCenter && elem.x > p_x + p_w/10 )
         {
             // indent
-            OUStringBuffer aBuf( 32 );
-            aBuf.append( convPx2mm( elem.x - p_x ) );
-            aBuf.append( "mm" );
-            aParaProps[ "fo:margin-left" ] = aBuf.makeStringAndClear();
+            aParaProps[ "fo:margin-left" ] = OUString::number(convPx2mm( elem.x - p_x )) + "mm";
         }
 
         // check whether to leave some space to next paragraph
@@ -1129,10 +1121,8 @@ void WriterXmlFinalizer::visit( ParagraphElement& elem, const std::list< std::un
         {
             if( pNextPara->y - (elem.y+elem.h) > convmm2Px( 10 ) )
             {
-                OUStringBuffer aBuf( 32 );
-                aBuf.append( convPx2mm( pNextPara->y - (elem.y+elem.h) ) );
-                aBuf.append( "mm" );
-                aParaProps[ "fo:margin-bottom" ] = aBuf.makeStringAndClear();
+                aParaProps[ "fo:margin-bottom" ] =
+                    OUString::number( convPx2mm( pNextPara->y - (elem.y+elem.h) ) ) + "mm";
             }
         }
     }
