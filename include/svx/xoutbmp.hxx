@@ -59,7 +59,8 @@ public:
     static ErrCode      WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                                       const OUString& rFilterName, const XOutFlags nFlags,
                                       const Size* pMtfSize_100TH_MM = nullptr,
-                                      const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr);
+                                      const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr,
+                                      OUString* pMediaType = nullptr );
     static bool GraphicToBase64(const Graphic& rGraphic, OUString& rOUString,
                                 bool bAddPrefix = true,
                                 ConvertDataFormat aTargetFormat = ConvertDataFormat::Unknown);

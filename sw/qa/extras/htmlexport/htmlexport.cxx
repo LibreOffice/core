@@ -2464,6 +2464,29 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf153923)
     assertXPath(pDoc, "/html/body//dd");
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIfTransparentTifImg)
+{
+    // reqIf export must keep the TIF encoding of the image
+    createSwDoc("reqif-transparent-tif-img.odt");
+    ExportToReqif();
+
+    SvMemoryStream aStream;
+    WrapReqifFromTempFile(aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    assertXPath(pXmlDoc, "//reqif-xhtml:p/reqif-xhtml:object[1]", "type", "image/tiff");
+    OUString imageName = getXPath(pXmlDoc, "//reqif-xhtml:p/reqif-xhtml:object[1]", "data");
+    // Without the accompanying fix in place, this test would have failed,
+    // ending with .gif, because XOutFlags::UseGifIfSensible flag combined
+    // with the transparent image would result in GIF export
+    CPPUNIT_ASSERT(imageName.endsWith(".tif"));
+
+    INetURLObject aURL(maTempFile.GetURL());
+    aURL.setName(imageName);
+    GraphicDescriptor aDescriptor(aURL);
+    aDescriptor.Detect();
+    CPPUNIT_ASSERT_EQUAL(GraphicFileFormat::TIF, aDescriptor.GetFileFormat());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
