@@ -1967,18 +1967,21 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
             Size aMM100Size = o3tl::convert( rSize.GetSize(),
                             o3tl::Length::twip, o3tl::Length::mm100 );
 
-            OUString aFilterName("");
+            OUString aFilterName;
 
-            if (rHTMLWrt.mbReqIF && !bWritePNGFallback)
+            if (rHTMLWrt.mbReqIF)
             {
-                // Writing image without fallback PNG in ReqIF mode: force PNG
-                // output.
-                // But don't force it when writing the original format and we'll write PNG inside
-                // that.
-                aFilterName = "PNG";
-                nFlags &= ~XOutFlags::UseNativeIfPossible;
+                // In ReqIF mode, do not try to write GIF for other image types
                 nFlags &= ~XOutFlags::UseGifIfSensible;
-                aMimeType = "image/png";
+                if (!bWritePNGFallback)
+                {
+                    // Writing image without fallback PNG in ReqIF mode: force PNG
+                    // output.
+                    // But don't force it when writing the original format and we'll write PNG inside
+                    // that.
+                    aFilterName = "PNG";
+                    nFlags &= ~XOutFlags::UseNativeIfPossible;
+                }
             }
 
             const Graphic& rGraphic = pGrfNd->GetGrf();
@@ -1986,6 +1989,8 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
             // So that Graphic::IsTransparent() can report true.
             if (!rGraphic.isAvailable())
                 const_cast<Graphic&>(rGraphic).makeAvailable();
+
+            OUString aMimeTypeOverride;
 
             if (rHTMLWrt.mbReqIF && bWritePNGFallback)
             {
@@ -1998,7 +2003,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
                 else if (rGraphic.GetGfxLink().IsEMF())
                 {
                     aFilterName = "emf";
-                    aMimeType = "image/x-emf"; // avoid image/x-wmf
+                    aMimeTypeOverride = "image/x-emf"; // avoid image/x-wmf
                 }
                 else if (pVectorGraphicData && pVectorGraphicData->getType() == VectorGraphicDataType::Wmf)
                 {
@@ -2007,12 +2012,12 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
                 else if (rGraphic.GetGfxLink().GetType() == GfxLinkType::NativeTif)
                 {
                     aFilterName = "tif";
-                    aMimeType = "image/tiff"; // avoid image/x-vclgraphic
+                    aMimeTypeOverride = "image/tiff"; // avoid image/x-vclgraphic
                 }
             }
 
             ErrCode nErr = XOutBitmap::WriteGraphic( rGraphic, aGraphicURL,
-                    aFilterName, nFlags, &aMM100Size );
+                    aFilterName, nFlags, &aMM100Size, nullptr, &aMimeType );
             if( nErr )
             {
                 rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD;
@@ -2021,6 +2026,8 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
             aGraphicURL = URIHelper::SmartRel2Abs(
                 INetURLObject(rWrt.GetBaseURL()), aGraphicURL,
                 URIHelper::GetMaybeFileHdl() );
+            if (!aMimeTypeOverride.isEmpty())
+                aMimeType = aMimeTypeOverride;
         }
         else
         {
