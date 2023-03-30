@@ -1560,20 +1560,27 @@ void SwFormatHoriOrient::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-// Partially implemented inline in hxx
 SwFormatAnchor::SwFormatAnchor( RndStdIds nRnd, sal_uInt16 nPage )
     : SfxPoolItem( RES_ANCHOR ),
     m_eAnchorId( nRnd ),
     m_nPageNumber( nPage ),
     // OD 2004-05-05 #i28701# - get always new increased order number
     m_nOrder( ++s_nOrderCounter )
-{}
+{
+    assert( m_eAnchorId == RndStdIds::FLY_AT_PARA
+        || m_eAnchorId == RndStdIds::FLY_AS_CHAR
+        || m_eAnchorId == RndStdIds::FLY_AT_PAGE
+        || m_eAnchorId == RndStdIds::FLY_AT_FLY
+        || m_eAnchorId == RndStdIds::FLY_AT_CHAR);
+    // only FLY_AT_PAGE should have a valid page
+    assert( m_eAnchorId == RndStdIds::FLY_AT_PAGE || nPage == 0 );
+}
 
 SwFormatAnchor::SwFormatAnchor( const SwFormatAnchor &rCpy )
     : SfxPoolItem( RES_ANCHOR )
     , m_oContentAnchor( rCpy.m_oContentAnchor )
-    , m_eAnchorId( rCpy.GetAnchorId() )
-    , m_nPageNumber( rCpy.GetPageNum() )
+    , m_eAnchorId( rCpy.m_eAnchorId )
+    , m_nPageNumber( rCpy.m_nPageNumber )
     // OD 2004-05-05 #i28701# - get always new increased order number
     , m_nOrder( ++s_nOrderCounter )
 {
@@ -1585,22 +1592,23 @@ SwFormatAnchor::~SwFormatAnchor()
 
 void SwFormatAnchor::SetAnchor( const SwPosition *pPos )
 {
+    if (!pPos)
+    {
+        m_oContentAnchor.reset();
+        return;
+    }
     // anchor only to paragraphs, or start nodes in case of RndStdIds::FLY_AT_FLY
     // also allow table node, this is used when a table is selected and is converted to a frame by the UI
-    assert(!pPos
-            || (RndStdIds::FLY_AT_FLY == m_eAnchorId && pPos->GetNode().GetStartNode())
+    assert((RndStdIds::FLY_AT_FLY == m_eAnchorId && pPos->GetNode().GetStartNode())
             || (RndStdIds::FLY_AT_PARA == m_eAnchorId && pPos->GetNode().GetTableNode())
             || pPos->GetNode().GetTextNode());
-    if (pPos)
-        m_oContentAnchor.emplace(*pPos);
-    else
-        m_oContentAnchor.reset();
+    // verify that the SwPosition being passed to us is not screwy
+    assert(!pPos->nContent.GetContentNode()
+            || &pPos->nNode.GetNode() == pPos->nContent.GetContentNode());
+    m_oContentAnchor.emplace(*pPos);
     // Flys anchored AT paragraph should not point into the paragraph content
-    if (m_oContentAnchor &&
-        ((RndStdIds::FLY_AT_PARA == m_eAnchorId) || (RndStdIds::FLY_AT_FLY == m_eAnchorId)))
-    {
+    if ((RndStdIds::FLY_AT_PARA == m_eAnchorId) || (RndStdIds::FLY_AT_FLY == m_eAnchorId))
         m_oContentAnchor->nContent.Assign( nullptr, 0 );
-    }
 }
 
 SwNode* SwFormatAnchor::GetAnchorNode() const
@@ -1633,8 +1641,8 @@ SwFormatAnchor& SwFormatAnchor::operator=(const SwFormatAnchor& rAnchor)
 {
     if (this != &rAnchor)
     {
-        m_eAnchorId  = rAnchor.GetAnchorId();
-        m_nPageNumber   = rAnchor.GetPageNum();
+        m_eAnchorId  = rAnchor.m_eAnchorId;
+        m_nPageNumber   = rAnchor.m_nPageNumber;
         // OD 2004-05-05 #i28701# - get always new increased order number
         m_nOrder = ++s_nOrderCounter;
         m_oContentAnchor  = rAnchor.m_oContentAnchor;
@@ -1647,8 +1655,8 @@ bool SwFormatAnchor::operator==( const SfxPoolItem& rAttr ) const
     assert(SfxPoolItem::operator==(rAttr));
     SwFormatAnchor const& rFormatAnchor(static_cast<SwFormatAnchor const&>(rAttr));
     // OD 2004-05-05 #i28701# - Note: <mnOrder> hasn't to be considered.
-    return ( m_eAnchorId == rFormatAnchor.GetAnchorId() &&
-             m_nPageNumber == rFormatAnchor.GetPageNum()   &&
+    return ( m_eAnchorId == rFormatAnchor.m_eAnchorId &&
+             m_nPageNumber == rFormatAnchor.m_nPageNumber   &&
                 // compare anchor: either both do not point into a textnode or
                 // both do (valid m_oContentAnchor) and the positions are equal
              (m_oContentAnchor == rFormatAnchor.m_oContentAnchor) );
@@ -1674,7 +1682,7 @@ bool SwFormatAnchor::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_ANCHOR_ANCHORTYPE:
 
             text::TextContentAnchorType eRet;
-            switch (GetAnchorId())
+            switch (m_eAnchorId)
             {
                 case  RndStdIds::FLY_AT_CHAR:
                     eRet = text::TextContentAnchorType_AT_CHARACTER;
@@ -1749,10 +1757,12 @@ bool SwFormatAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 case  text::TextContentAnchorType_AT_CHARACTER:
                     eAnchor = RndStdIds::FLY_AT_CHAR;
                     break;
-                //case  text::TextContentAnchorType_AT_PARAGRAPH:
-                default:
+                case text::TextContentAnchorType_AT_PARAGRAPH:
                     eAnchor = RndStdIds::FLY_AT_PARA;
                     break;
+                default:                    
+                    eAnchor = RndStdIds::FLY_AT_PARA; // just to keep some compilers happy
+                    assert(false);
             }
             SetType( eAnchor );
         }
@@ -1762,15 +1772,20 @@ bool SwFormatAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nVal = 0;
             if((rVal >>= nVal) && nVal > 0)
             {
-                SetPageNum( nVal );
-                if (RndStdIds::FLY_AT_PAGE == GetAnchorId())
+                if (RndStdIds::FLY_AT_PAGE == m_eAnchorId)
                 {
+                    SetPageNum( nVal );
                     // If the anchor type is page and a valid page number
                     // is set, the content position has to be deleted to not
                     // confuse the layout (frmtool.cxx). However, if the
                     // anchor type is not page, any content position will
                     // be kept.
                     m_oContentAnchor.reset();
+                }
+                else
+                {
+                    assert(false && "cannot set page number on this anchor type");
+                    bRet = false;
                 }
             }
             else

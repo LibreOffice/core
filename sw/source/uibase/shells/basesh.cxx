@@ -1474,7 +1474,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 rSh.ChgAnchor(eSet);
             else if (rSh.IsFrameSelected())
             {
-                SwFormatAnchor aAnc(eSet, rSh.GetPhyPageNum());
+                SwFormatAnchor aAnc(eSet, eSet == RndStdIds::FLY_AT_PAGE ? rSh.GetPhyPageNum() : 0);
                 SfxItemSet aSet(SwFEShell::makeItemSetFromFormatAnchor(GetPool(), aAnc));
                 rSh.SetFlyFrameAttr(aSet);
             }

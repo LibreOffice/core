@@ -1099,7 +1099,7 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
             OSL_ENSURE( pSh , "shell not found");
             if (pSh)
             {
-                SwFormatAnchor aAnc( eAnchorId, pSh->GetPhyPageNum() );
+                SwFormatAnchor aAnc( eAnchorId, eAnchorId == RndStdIds::FLY_AT_PAGE ? pSh->GetPhyPageNum() : 0 );
                 bRet = nullptr != rSet->Put( aAnc );
             }
         }
@@ -1767,7 +1767,7 @@ DeactivateRC SwFramePage::DeactivatePage(SfxItemSet * _pSet)
             if (pSh)
             {
                 RndStdIds eAnchorId = GetAnchor();
-                SwFormatAnchor aAnc( eAnchorId, pSh->GetPhyPageNum() );
+                SwFormatAnchor aAnc( eAnchorId, eAnchorId == RndStdIds::FLY_AT_PAGE ? pSh->GetPhyPageNum() : 0 );
                 _pSet->Put( aAnc );
             }
         }

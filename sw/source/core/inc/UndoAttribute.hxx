@@ -87,6 +87,7 @@ class SwUndoFormatAttr final : public SwUndo
     friend class SwUndoDefaultAttr;
     OUString m_sFormatName;
     std::optional<SfxItemSet> m_oOldSet;      // old attributes
+    sal_Int32 m_nAnchorContentOffset;
     SwNodeOffset m_nNodeIndex;
     const sal_uInt16 m_nFormatWhich;
     const bool m_bSaveDrawPt;

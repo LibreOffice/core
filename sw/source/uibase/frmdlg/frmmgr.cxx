@@ -227,7 +227,7 @@ void SwFlyFrameAttrMgr::SetAnchor( RndStdIds eId )
     sal_uInt16 nPhyPageNum, nVirtPageNum;
     m_pOwnSh->GetPageNum( nPhyPageNum, nVirtPageNum );
 
-    m_aSet.Put( SwFormatAnchor( eId, nPhyPageNum ) );
+    m_aSet.Put( SwFormatAnchor( eId, RndStdIds::FLY_AT_PAGE == eId ? nPhyPageNum : 0 ) );
     if ((RndStdIds::FLY_AT_PAGE == eId) || (RndStdIds::FLY_AT_PARA == eId) || (RndStdIds::FLY_AT_CHAR == eId)
         || (RndStdIds::FLY_AT_FLY == eId))
     {
