@@ -277,7 +277,7 @@ void OutputDevice::ImplDrawWaveTextLine( tools::Long nBaseX, tools::Long nBaseY,
                                          bool bIsAbove )
 {
     static bool bFuzzing = utl::ConfigManager::IsFuzzing();
-    if (bFuzzing && nWidth > 100000)
+    if (bFuzzing && nWidth > 20000)
     {
         SAL_WARN("vcl.gdi", "drawLine, skipping suspicious WaveTextLine of length: "
                                 << nWidth << " for fuzzing performance");
