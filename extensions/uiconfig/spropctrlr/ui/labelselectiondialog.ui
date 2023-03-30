@@ -167,7 +167,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="noassignment-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="labelselectiondialog|extended_tip|nosssignement">Check the No assignment box to remove the link between a control and the assigned label field.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="labelselectiondialog|extended_tip|noassignment">Check the “No assignment” box to remove the link between a control and the assigned label field.</property>
                   </object>
                 </child>
               </object>
