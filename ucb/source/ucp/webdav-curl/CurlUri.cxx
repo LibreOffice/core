@@ -307,9 +307,7 @@ OUString ConnectionEndPointString(std::u16string_view rHostName, sal_uInt16 cons
     // Is host a numeric IPv6 address?
     if ((rHostName.find(':') != std::u16string_view::npos) && (rHostName[0] != '['))
     {
-        aBuf.append("[");
-        aBuf.append(rHostName);
-        aBuf.append("]");
+        aBuf.append(OUString::Concat("[") + rHostName + "]");
     }
     else
     {
@@ -318,8 +316,7 @@ OUString ConnectionEndPointString(std::u16string_view rHostName, sal_uInt16 cons
 
     if ((nPort != DEFAULT_HTTP_PORT) && (nPort != DEFAULT_HTTPS_PORT))
     {
-        aBuf.append(":");
-        aBuf.append(sal_Int32(nPort));
+        aBuf.append(":" + OUString::number(sal_Int32(nPort)));
     }
     return aBuf.makeStringAndClear();
 }

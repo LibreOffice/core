@@ -47,13 +47,12 @@ auto DumpResources(std::vector<DAVResource> const& rResources) -> OUString
     OUStringBuffer buf;
     for (auto const& rResource : rResources)
     {
-        buf.append("resource URL: <");
-        buf.append(rResource.uri);
+        buf.append("resource URL: <" + rResource.uri);
         try {
             CurlUri const uri(rResource.uri);
-            buf.append("> parsed URL: <");
-            buf.append(DecodeURI(uri.GetRelativeReference()));
-            buf.append("> ");
+            buf.append("> parsed URL: <"
+                + DecodeURI(uri.GetRelativeReference())
+                + "> ");
         } catch (...) {
             // parsing uri could fail
             buf.append("> parsing URL failed! ");
@@ -61,9 +60,7 @@ auto DumpResources(std::vector<DAVResource> const& rResources) -> OUString
         buf.append("properties: ");
         for (auto const& it : rResource.properties)
         {
-            buf.append("\"");
-            buf.append(it.Name);
-            buf.append("\" ");
+            buf.append("\"" + it.Name + "\" ");
         }
         buf.append("\n");
     }

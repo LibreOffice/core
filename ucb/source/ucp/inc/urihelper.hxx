@@ -94,16 +94,10 @@ namespace ucb_impl::urihelper {
         while ( nIndex >= 0 );
 
         if ( !aParams.isEmpty() )
-        {
-            aResult.append( u'?' );
-            aResult.append( aParams );
-        }
+            aResult.append( u"?" + aParams );
 
         if ( !aFragment.isEmpty() )
-        {
-            aResult.append( u'#' );
-            aResult.append( aFragment );
-        }
+            aResult.append( u"#" + aFragment );
 
         return aResult.makeStringAndClear();
     }

@@ -61,8 +61,7 @@ using namespace cppu;
 
 static OUString makeHierarchalNameSegment( std::u16string_view rIn  )
 {
-    OUStringBuffer aBuffer;
-    aBuffer.append( "['" );
+    OUStringBuffer aBuffer( "['" );
 
     size_t nCount = rIn.size();
     for ( size_t n = 0; n < nCount; ++n )

@@ -929,8 +929,7 @@ OUString HierarchyEntry::createPathFromHierarchyURL(
 
     if ( nLen )
     {
-        OUStringBuffer aNewPath;
-        aNewPath.append( "['" );
+        OUStringBuffer aNewPath( "['" );
 
         sal_Int32 nStart = 0;
         sal_Int32 nEnd   = aPath.indexOf( '/' );
@@ -1028,8 +1027,7 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*()
     {
         try
         {
-            OUStringBuffer aKey;
-            aKey.append( "['" );
+            OUStringBuffer aKey( "['" );
             makeXMLName( names.getConstArray()[ pos ], aKey );
             aKey.append( "']" );
 

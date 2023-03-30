@@ -1348,9 +1348,9 @@ auto CurlProcessor::ProcessRequest(
                     {
                         static char const hexDigit[16] = { '0', '1', '2', '3', '4', '5', '6', '7',
                                                            '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
-                        buf.append("\\x");
-                        buf.append(hexDigit[static_cast<sal_uInt8>(bytes[i]) >> 4]);
-                        buf.append(hexDigit[bytes[i] & 0x0F]);
+                        buf.append(OString::Concat("\\x")
+                                   + OStringChar(hexDigit[static_cast<sal_uInt8>(bytes[i]) >> 4])
+                                   + OStringChar(hexDigit[bytes[i] & 0x0F]));
                     }
                     else
                     {

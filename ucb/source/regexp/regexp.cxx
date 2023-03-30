@@ -189,8 +189,7 @@ OUString Regexp::getRegexp() const
                 break;
 
             case KIND_DOMAIN:
-                aBuffer.append("([^/?#]");
-                aBuffer.append(sal_Unicode(m_bEmptyDomain ? '*' : '+'));
+                aBuffer.append("([^/?#]" + OUStringChar(sal_Unicode(m_bEmptyDomain ? '*' : '+')));
                 if (!m_aInfix.isEmpty())
                     appendStringLiteral(&aBuffer, m_aInfix);
                 aBuffer.append("([/?#].*)?)");
@@ -220,8 +219,7 @@ OUString Regexp::getRegexp() const
                 break;
 
             case KIND_DOMAIN:
-                aBuffer.append("[^/?#]");
-                aBuffer.append( m_bEmptyDomain ? '*' : '+' );
+                aBuffer.append("[^/?#]" + OUStringChar( m_bEmptyDomain ? '*' : '+' ));
                 if (!m_aInfix.isEmpty())
                     appendStringLiteral(&aBuffer, m_aInfix);
                 aBuffer.append("([/?#].*)?");

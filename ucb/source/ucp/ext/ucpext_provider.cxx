@@ -101,8 +101,7 @@ namespace ucb::ucp::ext
         const OUString sIdentifier( i_rIdentifier->getContentIdentifier() );
 
         // the scheme needs to be lower-case
-        OUStringBuffer aComposer;
-        aComposer.append( sIdentifier.copy( 0, sScheme.getLength() ).toAsciiLowerCase() );
+        OUStringBuffer aComposer( sIdentifier.copy( 0, sScheme.getLength() ).toAsciiLowerCase() );
 
         // one : is required after the scheme
         std::u16string_view sRemaining( sIdentifier.subView( sScheme.getLength() ) );
@@ -121,8 +120,7 @@ namespace ucb::ucp::ext
         {
             if ( sRemaining[0] != '/' )
             {
-                aComposer.append( '/' );
-                aComposer.append( sRemaining );
+                aComposer.append( OUString::Concat("/") + sRemaining );
             }
             else
             {
