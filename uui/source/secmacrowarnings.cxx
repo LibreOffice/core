@@ -182,8 +182,8 @@ void MacroWarning::SetStorage( const css::uno::Reference < css::embed::XStorage 
 
     for( sal_Int32 i = 1 ; i < nCnt ; ++i )
     {
-        s.append("\n");
-        s.append(GetContentPart( rInfos[ i ].Signer->getSubjectName(), aCN_Id ));
+        s.append(OUString::Concat("\n")
+            + GetContentPart( rInfos[ i ].Signer->getSubjectName(), aCN_Id ));
     }
 
     mxSignsFI->set_label(s.makeStringAndClear());

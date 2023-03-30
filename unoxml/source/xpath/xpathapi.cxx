@@ -226,15 +226,11 @@ namespace XPath
             }
             int line = pError->line;
             if (line) {
-                buf.append("Line: ");
-                buf.append(static_cast<sal_Int32>(line));
-                buf.append("\n");
+                buf.append("Line: " + OUString::number(static_cast<sal_Int32>(line)) + "\n");
             }
             int column = pError->int2;
             if (column) {
-                buf.append("Column: ");
-                buf.append(static_cast<sal_Int32>(column));
-                buf.append("\n");
+                buf.append("Column: " + OUString::number(static_cast<sal_Int32>(column)) + "\n");
             }
         } else {
             buf.append("no error argument!");

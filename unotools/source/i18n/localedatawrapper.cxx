@@ -347,13 +347,13 @@ const std::vector< LanguageType >& LocaleDataWrapper::getInstalledLanguageTypes(
 //                      && aDebugLocale != "es-BR"  // ?!? Brazil/es
                     )
                 {
-                    OUStringBuffer aMsg("ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambiguous locale (MS-LCID?)\n");
-                    aMsg.append(aDebugLocale);
-                    aMsg.append("  ->  0x");
-                    aMsg.append(static_cast<sal_Int32>(static_cast<sal_uInt16>(eLang)), 16);
-                    aMsg.append("  ->  ");
-                    aMsg.append(aBackLanguageTag.getBcp47());
-                    outputCheckMessage( aMsg );
+                    outputCheckMessage(Concat2View(
+                        "ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambiguous locale (MS-LCID?)\n"
+                        + aDebugLocale
+                        + "  ->  0x"
+                        + OUString::number(static_cast<sal_Int32>(static_cast<sal_uInt16>(eLang)), 16)
+                        + "  ->  "
+                        + aBackLanguageTag.getBcp47() ));
                 }
                 eLang = LANGUAGE_DONTKNOW;
             }
@@ -1234,8 +1234,7 @@ OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
 
     // check if digits and separators will fit into fixed buffer or allocate
     size_t nGuess = ImplGetNumberStringLengthGuess( aLocaleDataItem, nDecimals );
-    OUStringBuffer aNumBuf(int(nGuess + 16));
-    OUStringBuffer aBuf(int(rCurrencySymbol.size() + nGuess + 20 ));
+    OUStringBuffer aNumBuf(sal_Int32(nGuess + 16));
 
     bool bNeg;
     if ( nNumber < 0 )
@@ -1286,27 +1285,22 @@ OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
         }
     }
 
+    OUString aCur;
     if ( !bNeg )
     {
         switch( getCurrPositiveFormat() )
         {
             case 0:
-                aBuf.append( rCurrencySymbol );
-                aBuf.append( aNumBuf );
+                aCur = rCurrencySymbol + aNumBuf;
                 break;
             case 1:
-                aBuf.append( aNumBuf );
-                aBuf.append( rCurrencySymbol );
+                aCur = aNumBuf + rCurrencySymbol;
                 break;
             case 2:
-                aBuf.append( rCurrencySymbol );
-                aBuf.append( ' ' );
-                aBuf.append( aNumBuf );
+                aCur = OUString::Concat(rCurrencySymbol) + " " + aNumBuf;
                 break;
             case 3:
-                aBuf.append( aNumBuf );
-                aBuf.append( ' ' );
-                aBuf.append( rCurrencySymbol );
+                aCur = aNumBuf + " " + rCurrencySymbol;
                 break;
         }
     }
@@ -1315,101 +1309,57 @@ OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
         switch( getCurrNegativeFormat() )
         {
             case 0:
-                 aBuf.append( '(' );
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( aNumBuf );
-                 aBuf.append( ')' );
+                 aCur = OUString::Concat("(") + rCurrencySymbol + aNumBuf + ")";
                 break;
             case 1:
-                 aBuf.append( '-' );
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( aNumBuf );
+                 aCur = OUString::Concat("-") + rCurrencySymbol + aNumBuf;
                 break;
             case 2:
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( '-' );
-                 aBuf.append( aNumBuf );
+                 aCur = OUString::Concat(rCurrencySymbol) + "-" + aNumBuf;
                 break;
             case 3:
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( aNumBuf );
-                 aBuf.append( '-' );
+                 aCur = rCurrencySymbol + aNumBuf + "-";
                 break;
             case 4:
-                 aBuf.append( '(' );
-                 aBuf.append( aNumBuf );
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( ')' );
+                 aCur = "(" + aNumBuf + rCurrencySymbol + ")";
                 break;
             case 5:
-                 aBuf.append( '-' );
-                 aBuf.append( aNumBuf );
-                 aBuf.append( rCurrencySymbol );
+                 aCur = "-" + aNumBuf + rCurrencySymbol;
                 break;
             case 6:
-                 aBuf.append( aNumBuf );
-                 aBuf.append( '-' );
-                 aBuf.append( rCurrencySymbol );
+                 aCur = aNumBuf + "-" + rCurrencySymbol;
                 break;
             case 7:
-                 aBuf.append( aNumBuf );
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( '-' );
+                 aCur = aNumBuf + rCurrencySymbol + "-";
                 break;
             case 8:
-                 aBuf.append( '-' );
-                 aBuf.append( aNumBuf );
-                 aBuf.append( ' ' );
-                 aBuf.append( rCurrencySymbol );
+                 aCur = "-" + aNumBuf + " " + rCurrencySymbol;
                 break;
             case 9:
-                 aBuf.append( '-' );
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( ' ' );
-                 aBuf.append( aNumBuf );
+                 aCur = OUString::Concat("-") + rCurrencySymbol + " " + aNumBuf;
                 break;
             case 10:
-                 aBuf.append( aNumBuf );
-                 aBuf.append( ' ' );
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( '-' );
+                 aCur = aNumBuf + " " + rCurrencySymbol + "-";
                 break;
             case 11:
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( ' ' );
-                 aBuf.append( '-' );
-                 aBuf.append( aNumBuf );
+                 aCur = OUString::Concat(rCurrencySymbol) + " -" + aNumBuf;
                 break;
             case 12:
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( ' ' );
-                 aBuf.append( aNumBuf );
-                 aBuf.append( '-' );
+                 aCur = OUString::Concat(rCurrencySymbol) + " " + aNumBuf + "-";
                 break;
             case 13:
-                 aBuf.append( aNumBuf );
-                 aBuf.append( '-' );
-                 aBuf.append( ' ' );
-                 aBuf.append( rCurrencySymbol );
+                 aCur = aNumBuf + "- " + rCurrencySymbol;
                 break;
             case 14:
-                 aBuf.append( '(' );
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( ' ' );
-                 aBuf.append( aNumBuf );
-                 aBuf.append( ')' );
+                 aCur = OUString::Concat("(") + rCurrencySymbol + " " + aNumBuf + ")";
                 break;
             case 15:
-                 aBuf.append( '(' );
-                 aBuf.append( aNumBuf );
-                 aBuf.append( ' ' );
-                 aBuf.append( rCurrencySymbol );
-                 aBuf.append( ')' );
+                 aCur = "(" + aNumBuf + " " + rCurrencySymbol + ")";
                 break;
         }
     }
 
-    return aBuf.makeStringAndClear();
+    return aCur;
 }
 
 // --- number parsing -------------------------------------------------

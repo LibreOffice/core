@@ -410,9 +410,7 @@ bool InternetProxyDecider_Impl::shouldUseProxy( std::u16string_view rHost,
          ( rHost[ 0 ] != '[' ) )
     {
         // host is given as numeric IPv6 address
-        aBuffer.append( "[" );
-        aBuffer.append( rHost );
-        aBuffer.append( "]" );
+        aBuffer.append( OUString::Concat("[") + rHost + "]" );
     }
     else
     {
@@ -420,20 +418,18 @@ bool InternetProxyDecider_Impl::shouldUseProxy( std::u16string_view rHost,
         aBuffer.append( rHost );
     }
 
-    aBuffer.append( ':' );
-    aBuffer.append( nPort );
-    const OUString aHostAndPort( aBuffer.makeStringAndClear() );
+    aBuffer.append( ":" + OUString::number( nPort ) );
 
     for (auto const& noProxy : m_aNoProxyList)
     {
         if ( bUseFullyQualified )
         {
-            if ( noProxy.second.Matches( aHostAndPort ) )
+            if ( noProxy.second.Matches( aBuffer ) )
                 return false;
         }
         else
         {
-            if ( noProxy.first.Matches( aHostAndPort ) )
+            if ( noProxy.first.Matches( aBuffer ) )
                 return false;
         }
     }
@@ -889,17 +885,10 @@ void InternetProxyDecider_Impl::setNoProxyList(
                 if ( aTmp != aServer.toAsciiLowerCase() )
                 {
                     if ( bIPv6Address )
-                    {
-                        aFullyQualifiedHost.append( "[" );
-                        aFullyQualifiedHost.append( aTmp );
-                        aFullyQualifiedHost.append( "]" );
-                    }
+                        aFullyQualifiedHost.append( "[" + aTmp + "]" );
                     else
-                    {
                         aFullyQualifiedHost.append( aTmp );
-                    }
-                    aFullyQualifiedHost.append( ":" );
-                    aFullyQualifiedHost.append( aPort );
+                    aFullyQualifiedHost.append( ":" + aPort );
                 }
             }
 

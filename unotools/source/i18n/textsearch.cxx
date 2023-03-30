@@ -357,8 +357,7 @@ void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, std::u16string_vi
                 }
                 break;
             default:
-                sBuff.append(rReplaceStr[i]);
-                sBuff.append(rReplaceStr[i+1]);
+                sBuff.append(OUStringChar(rReplaceStr[i]) + OUStringChar(rReplaceStr[i+1]));
                 i += 1;
                 break;
             }
@@ -379,8 +378,7 @@ void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, std::u16string_vi
                 i += 1;
                 break;
             default:
-                sBuff.append(rReplaceStr[i]);
-                sBuff.append(rReplaceStr[i+1]);
+                sBuff.append(OUStringChar(rReplaceStr[i]) + OUStringChar(rReplaceStr[i+1]));
                 i += 1;
                 break;
             }
