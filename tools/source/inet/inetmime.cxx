@@ -1270,10 +1270,11 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
                                         bDone = true;
                                         break;
                                     }
-                                    sText.append(rBody.subView(
-                                        (pEncodedTextCopyBegin - pBegin),
-                                        (q - 1 - pEncodedTextCopyBegin)));
-                                    sText.append(char(nDigit1 << 4 | nDigit2));
+                                    sText.append(
+                                        rBody.subView(
+                                            (pEncodedTextCopyBegin - pBegin),
+                                            (q - 1 - pEncodedTextCopyBegin))
+                                        + OStringChar(char(nDigit1 << 4 | nDigit2)));
                                     q += 2;
                                     pEncodedTextCopyBegin = q;
                                     break;
@@ -1290,10 +1291,11 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
                                     break;
 
                                 case '_':
-                                    sText.append(rBody.subView(
-                                        (pEncodedTextCopyBegin - pBegin),
-                                        (q - 1 - pEncodedTextCopyBegin)));
-                                    sText.append(' ');
+                                    sText.append(
+                                        rBody.subView(
+                                            (pEncodedTextCopyBegin - pBegin),
+                                            (q - 1 - pEncodedTextCopyBegin))
+                                        + OString::Concat(" "));
                                     pEncodedTextCopyBegin = q;
                                     break;
 

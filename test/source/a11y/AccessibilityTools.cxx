@@ -660,9 +660,7 @@ OUString AccessibilityTools::debugName(accessibility::XAccessibleAction* xAct)
         if (i > 0)
             r.append(", ");
 
-        r.append("description=\"");
-        r.append(xAct->getAccessibleActionDescription(i));
-        r.append('"');
+        r.append("description=\"" + xAct->getAccessibleActionDescription(i) + "\"");
 
         const auto& xKeyBinding = xAct->getAccessibleActionKeyBinding(i);
         if (xKeyBinding)
@@ -689,8 +687,7 @@ OUString AccessibilityTools::debugName(accessibility::XAccessibleAction* xAct)
                         r.append("<Mod3>");
                     if (keyStroke.Modifiers & awt::KeyModifier::SHIFT)
                         r.append("<Shift>");
-                    r.append(keyStroke.KeyChar);
-                    r.append('"');
+                    r.append(OUStringChar(keyStroke.KeyChar) + "\"");
                 }
             }
             r.append("]");

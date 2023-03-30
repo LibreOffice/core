@@ -2062,15 +2062,13 @@ bool INetURLObject::convertAbsToRel(OUString const & rTheAbsURIRef,
     // to the new relative URL:
     if (aSubject.m_aQuery.isPresent())
     {
-        aSynRelURIRef.append('?');
-        aSynRelURIRef.append(aSubject.decode(aSubject.m_aQuery,
-                                         eDecodeMechanism, eCharset));
+        aSynRelURIRef.append("?"
+            + aSubject.decode(aSubject.m_aQuery, eDecodeMechanism, eCharset));
     }
     if (aSubject.m_aFragment.isPresent())
     {
-        aSynRelURIRef.append('#');
-        aSynRelURIRef.append(aSubject.decode(aSubject.m_aFragment,
-            eDecodeMechanism, eCharset));
+        aSynRelURIRef.append("#"
+            + aSubject.decode(aSubject.m_aFragment, eDecodeMechanism, eCharset));
     }
 
     rTheRelURIRef = aSynRelURIRef.makeStringAndClear();
@@ -3354,8 +3352,9 @@ bool INetURLObject::insertName(std::u16string_view rTheName,
     }
 
     OUStringBuffer aNewPath(256);
-    aNewPath.append(pPathBegin, pPrefixEnd - pPathBegin);
-    aNewPath.append('/');
+    aNewPath.append(
+        OUString::Concat(std::u16string_view(pPathBegin, pPrefixEnd - pPathBegin))
+        + "/");
     encodeText(aNewPath, rTheName, PART_PCHAR,
                eMechanism, eCharset, true);
     if (bInsertSlash) {
@@ -3607,9 +3606,7 @@ INetURLObject::getAbbreviated(
                 OUStringBuffer aResult(aBuffer);
                 if (pSuffixEnd != pBegin)
                     aResult.append("...");
-                aResult.append(aSegment);
-                aResult.append(aTrailer);
-                aResult.append(aRest);
+                aResult.append(aSegment + aTrailer + aRest);
                 if (rStringWidth->
                             queryStringWidth(aResult.makeStringAndClear())
                         <= nWidth)
@@ -3644,12 +3641,10 @@ INetURLObject::getAbbreviated(
                                     eMechanism,
                                     eCharset));
                 pPrefixBegin = p;
-                OUStringBuffer aResult(aBuffer);
-                aResult.append(aSegment);
+                OUStringBuffer aResult(aBuffer + aSegment);
                 if (pPrefixBegin != pEnd)
                     aResult.append("...");
-                aResult.append(aTrailer);
-                aResult.append(aRest);
+                aResult.append(aTrailer + aRest);
                 if (rStringWidth->
                             queryStringWidth(aResult.makeStringAndClear())
                         <= nWidth)
@@ -3681,13 +3676,11 @@ INetURLObject::getAbbreviated(
                               eCharset));
     if (m_aQuery.isPresent())
     {
-        aBuffer.append('?');
-        aBuffer.append(decode(m_aQuery, eMechanism, eCharset));
+        aBuffer.append("?" + decode(m_aQuery, eMechanism, eCharset));
     }
     if (m_aFragment.isPresent())
     {
-        aBuffer.append('#');
-        aBuffer.append(decode(m_aFragment, eMechanism, eCharset));
+        aBuffer.append("#" + decode(m_aFragment, eMechanism, eCharset));
     }
     if (!aBuffer.isEmpty())
     {
@@ -3980,8 +3973,7 @@ OUString INetURLObject::GetHostPort(DecodeMechanism eMechanism,
     OUStringBuffer aHostPort(decode(m_aHost, eMechanism, eCharset));
     if (m_aPort.isPresent())
     {
-        aHostPort.append(':');
-        aHostPort.append(decode(m_aPort, eMechanism, eCharset));
+        aHostPort.append(":" + decode(m_aPort, eMechanism, eCharset));
     }
     return aHostPort.makeStringAndClear();
 }
@@ -4362,8 +4354,7 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
             if (pDelimiter)
                 *pDelimiter = '/';
 
-            OUStringBuffer aSynFSysPath;
-            aSynFSysPath.append("//");
+            OUStringBuffer aSynFSysPath("//");
             if (m_aHost.isPresent() && m_aHost.getLength() > 0)
                 aSynFSysPath.append(decode(m_aHost, DecodeMechanism::WithCharset,
                                        RTL_TEXTENCODING_UTF8));
@@ -4393,10 +4384,9 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
             OUStringBuffer aSynFSysPath(64);
             if (m_aHost.isPresent() && m_aHost.getLength() > 0)
             {
-                aSynFSysPath.append("\\\\");
-                aSynFSysPath.append(decode(m_aHost, DecodeMechanism::WithCharset,
-                                       RTL_TEXTENCODING_UTF8));
-                aSynFSysPath.append('\\');
+                aSynFSysPath.append("\\\\"
+                    + decode(m_aHost, DecodeMechanism::WithCharset, RTL_TEXTENCODING_UTF8)
+                    + "\\");
             }
             sal_Unicode const * p
                 = m_aAbsURIRef.getStr() + m_aPath.getBegin();

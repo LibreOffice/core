@@ -68,10 +68,8 @@ void TestLokCallbackWrapper::libreOfficeKitViewInvalidateTilesCallback(
         buf.append("EMPTY");
     if (comphelper::LibreOfficeKit::isPartInInvalidation())
     {
-        buf.append(", ");
-        buf.append(static_cast<sal_Int32>(nPart));
-        buf.append(", ");
-        buf.append(static_cast<sal_Int32>(nMode));
+        buf.append(", " + OString::number(static_cast<sal_Int32>(nPart)) + ", "
+                   + OString::number(static_cast<sal_Int32>(nMode)));
     }
     callCallback(LOK_CALLBACK_INVALIDATE_TILES, buf.makeStringAndClear().getStr(), NO_VIEWID);
 }
