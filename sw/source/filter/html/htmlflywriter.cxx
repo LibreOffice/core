@@ -1974,8 +1974,6 @@ static SwHTMLWriter& OutHTML_FrameFormatGrfNode( SwHTMLWriter& rWrt, const SwFra
             if (!rGraphic.isAvailable())
                 const_cast<Graphic&>(rGraphic).makeAvailable();
 
-            OUString aMimeTypeOverride;
-
             if (rWrt.mbReqIF && bWritePNGFallback)
             {
                 // ReqIF: force native data if possible.
@@ -1987,7 +1985,6 @@ static SwHTMLWriter& OutHTML_FrameFormatGrfNode( SwHTMLWriter& rWrt, const SwFra
                 else if (rGraphic.GetGfxLink().IsEMF())
                 {
                     aFilterName = "emf";
-                    aMimeTypeOverride = "image/x-emf"; // avoid image/x-wmf
                 }
                 else if (pVectorGraphicData && pVectorGraphicData->getType() == VectorGraphicDataType::Wmf)
                 {
@@ -1996,7 +1993,6 @@ static SwHTMLWriter& OutHTML_FrameFormatGrfNode( SwHTMLWriter& rWrt, const SwFra
                 else if (rGraphic.GetGfxLink().GetType() == GfxLinkType::NativeTif)
                 {
                     aFilterName = "tif";
-                    aMimeTypeOverride = "image/tiff"; // avoid image/x-vclgraphic
                 }
             }
 
@@ -2010,8 +2006,6 @@ static SwHTMLWriter& OutHTML_FrameFormatGrfNode( SwHTMLWriter& rWrt, const SwFra
             aGraphicURL = URIHelper::SmartRel2Abs(
                 INetURLObject(rWrt.GetBaseURL()), aGraphicURL,
                 URIHelper::GetMaybeFileHdl() );
-            if (!aMimeTypeOverride.isEmpty())
-                aMimeType = aMimeTypeOverride;
         }
         else
         {

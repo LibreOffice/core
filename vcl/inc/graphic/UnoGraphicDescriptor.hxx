@@ -27,31 +27,31 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <vcl/graph.hxx>
 
-#define MIMETYPE_BMP        "image/x-MS-bmp"
-#define MIMETYPE_GIF        "image/gif"
-#define MIMETYPE_JPG        "image/jpeg"
-#define MIMETYPE_PCD        "image/x-photo-cd"
-#define MIMETYPE_PCX        "image/x-pcx"
-#define MIMETYPE_PNG        "image/png"
-#define MIMETYPE_TIF        "image/tiff"
-#define MIMETYPE_XBM        "image/x-xbitmap"
-#define MIMETYPE_XPM        "image/x-xpixmap"
-#define MIMETYPE_PBM        "image/x-portable-bitmap"
-#define MIMETYPE_PGM        "image/x-portable-graymap"
-#define MIMETYPE_PPM        "image/x-portable-pixmap"
-#define MIMETYPE_RAS        "image/x-cmu-raster"
-#define MIMETYPE_TGA        "image/x-targa"
-#define MIMETYPE_PSD        "image/vnd.adobe.photoshop"
-#define MIMETYPE_EPS        "image/x-eps"
-#define MIMETYPE_DXF        "image/vnd.dxf"
-#define MIMETYPE_MET        "image/x-met"
-#define MIMETYPE_PCT        "image/x-pict"
-#define MIMETYPE_SVM        "image/x-svm"
-#define MIMETYPE_WMF        "image/x-wmf"
-#define MIMETYPE_EMF        "image/x-emf"
-#define MIMETYPE_SVG        "image/svg+xml"
-#define MIMETYPE_PDF        "application/pdf"
-#define MIMETYPE_WEBP       "image/webp"
+inline constexpr OUStringLiteral MIMETYPE_BMP = u"image/x-MS-bmp";
+inline constexpr OUStringLiteral MIMETYPE_GIF = u"image/gif";
+inline constexpr OUStringLiteral MIMETYPE_JPG = u"image/jpeg";
+inline constexpr OUStringLiteral MIMETYPE_PCD = u"image/x-photo-cd";
+inline constexpr OUStringLiteral MIMETYPE_PCX = u"image/x-pcx";
+inline constexpr OUStringLiteral MIMETYPE_PNG = u"image/png";
+inline constexpr OUStringLiteral MIMETYPE_TIF = u"image/tiff";
+inline constexpr OUStringLiteral MIMETYPE_XBM = u"image/x-xbitmap";
+inline constexpr OUStringLiteral MIMETYPE_XPM = u"image/x-xpixmap";
+inline constexpr OUStringLiteral MIMETYPE_PBM = u"image/x-portable-bitmap";
+inline constexpr OUStringLiteral MIMETYPE_PGM = u"image/x-portable-graymap";
+inline constexpr OUStringLiteral MIMETYPE_PPM = u"image/x-portable-pixmap";
+inline constexpr OUStringLiteral MIMETYPE_RAS = u"image/x-cmu-raster";
+inline constexpr OUStringLiteral MIMETYPE_TGA = u"image/x-targa";
+inline constexpr OUStringLiteral MIMETYPE_PSD = u"image/vnd.adobe.photoshop";
+inline constexpr OUStringLiteral MIMETYPE_EPS = u"image/x-eps";
+inline constexpr OUStringLiteral MIMETYPE_DXF = u"image/vnd.dxf";
+inline constexpr OUStringLiteral MIMETYPE_MET = u"image/x-met";
+inline constexpr OUStringLiteral MIMETYPE_PCT = u"image/x-pict";
+inline constexpr OUStringLiteral MIMETYPE_SVM = u"image/x-svm";
+inline constexpr OUStringLiteral MIMETYPE_WMF = u"image/x-wmf";
+inline constexpr OUStringLiteral MIMETYPE_EMF = u"image/x-emf";
+inline constexpr OUStringLiteral MIMETYPE_SVG = u"image/svg+xml";
+inline constexpr OUStringLiteral MIMETYPE_PDF = u"application/pdf";
+inline constexpr OUStringLiteral MIMETYPE_WEBP = u"image/webp";
 inline constexpr OUStringLiteral MIMETYPE_VCLGRAPHIC = u"image/x-vclgraphic";
 
 namespace comphelper { class PropertySetInfo; }
