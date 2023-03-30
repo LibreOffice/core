@@ -29,6 +29,7 @@
 #include <algorithm>
 #include <string.h>
 
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
@@ -67,19 +68,23 @@ XUnbufferedStream::XUnbufferedStream(
 , mbCheckCRC(!bRecoveryMode && !utl::ConfigManager::IsFuzzing())
 {
     mnZipCurrent = maEntry.nOffset;
+    sal_Int64 nSize;
     if ( mbRawStream )
     {
         mnZipSize = maEntry.nMethod == DEFLATED ? maEntry.nCompressedSize : maEntry.nSize;
-        mnZipEnd = maEntry.nOffset + mnZipSize;
+        nSize = mnZipSize;
     }
     else
     {
         mnZipSize = maEntry.nSize;
-        mnZipEnd = maEntry.nMethod == DEFLATED ? maEntry.nOffset + maEntry.nCompressedSize : maEntry.nOffset + maEntry.nSize;
+        nSize = maEntry.nMethod == DEFLATED ? maEntry.nCompressedSize : maEntry.nSize;
     }
 
     if (mnZipSize < 0)
         throw ZipIOException("The stream seems to be broken!");
+
+    if (o3tl::checked_add(maEntry.nOffset, nSize, mnZipEnd))
+        throw ZipIOException("Integer-overflow");
 
     bool bHaveEncryptData = rData.is() && rData->m_aInitVector.hasElements() &&
         ((rData->m_aSalt.hasElements() && rData->m_nIterationCount != 0)
