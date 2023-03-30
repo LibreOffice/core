@@ -1105,10 +1105,7 @@ sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge )
                     {
                         if ( i != j && xSeq[i].formatIndex == nIdx )
                         {
-                            aDupes.append( i );
-                            aDupes.append("(");
-                            aDupes.append(xSeq[i].formatKey);
-                            aDupes.append( ") ");
+                            aDupes.append( OUString::number(i) + "(" + xSeq[i].formatKey + ") ");
                         }
                     }
                     if ( !aDupes.isEmpty() )
@@ -2469,8 +2466,8 @@ void SvNumberFormatter::ImpAdjustFormatCodeDefault(
             if (!aMsg.isEmpty())
             {
                 aMsg.insert(0, "SvNumberFormatter::ImpAdjustFormatCodeDefault: ");
-                aMsg.append("\nXML locale data FormatElement formatindex: ");
-                aMsg.append(static_cast<sal_Int32>(pFormatArr[nElem].Index));
+                aMsg.append("\nXML locale data FormatElement formatindex: "
+                    + OUString::number(static_cast<sal_Int32>(pFormatArr[nElem].Index)));
                 LocaleDataWrapper::outputCheckMessage(xLocaleData->appendLocaleInfo(aMsg));
                 aMsg.setLength(0);
             }
@@ -3201,8 +3198,7 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
             }
             else
             {
-                sString.append('#');
-                sString.append(rThSep);
+                sString.append("#" + rThSep);
                 padToLength(sString, sString.getLength() + nDigitsInFirstGroup, '#');
             }
         }
@@ -3314,9 +3310,7 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
         sString.append( ';' );
         if (IsRed)
         {
-            sString.append('[');
-            sString.append(pFormatScanner->GetRedString());
-            sString.append(']');
+            sString.append("[" +pFormatScanner->GetRedString() + "]");
         }
         sString.append( sNegNatNumModifier );
         if ( isNegNatNum12 )
@@ -3332,12 +3326,10 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
             sString.append( aIntegerFractionDelimiterString );
         else
         {
-            sString.append( '"' );
-            sString.append( aIntegerFractionDelimiterString );
-            sString.append( '"' );
+            sString.append( "\"" + aIntegerFractionDelimiterString + "\"" );
         }
-        sString.append( pFormat->GetNumeratorString( 0 ) );
-        sString.append( '/' );
+        sString.append( pFormat->GetNumeratorString( 0 )
+            + "/" );
         if ( nPrecision > 0 )
             padToLength(sString, sString.getLength() + nPrecision, '?');
         else
@@ -3356,29 +3348,23 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
 
             if (pFormat && pFormat->HasPositiveBracketPlaceholder())
             {
-                 sTmpStr.append('_');
-                 sTmpStr.append(')');
+                 sTmpStr.append("_)");
             }
             sTmpStr.append(';');
 
             if (IsRed)
             {
-                sTmpStr.append('[');
-                sTmpStr.append(pFormatScanner->GetRedString());
-                sTmpStr.append(']');
+                sTmpStr.append("[" + pFormatScanner->GetRedString() + "]");
             }
             sTmpStr.append( sNegNatNumModifier );
 
             if (insertBrackets)
             {
-                sTmpStr.append('(');
-                sTmpStr.append(sString);
-                sTmpStr.append(')');
+                sTmpStr.append("(" + sString + ")");
             }
             else
             {
-                sTmpStr.append('-');
-                sTmpStr.append(sString);
+                sTmpStr.append("-" + sString);
             }
             sString = sTmpStr;
         }
@@ -3972,9 +3958,7 @@ bool SvNumberFormatter::GetNewCurrencySymbolString( sal_uInt32 nFormat, OUString
                 if ( aSymbol.indexOf( '-' ) != -1 ||
                         aSymbol.indexOf( ']' ) != -1 )
                 {
-                    sBuff.append('"');
-                    sBuff.append( aSymbol);
-                    sBuff.append('"');
+                    sBuff.append("\"" + aSymbol + "\"");
                 }
                 else
                 {
@@ -4526,8 +4510,7 @@ OUString NfCurrencyEntry::BuildSymbolString(bool bBank,
 OUString NfCurrencyEntry::Impl_BuildFormatStringNumChars( const LocaleDataWrapper& rLoc,
                                                           sal_uInt16 nDecimalFormat) const
 {
-    OUStringBuffer aBuf;
-    aBuf.append("#" + rLoc.getNumThousandSep() + "##0");
+    OUStringBuffer aBuf("#" + rLoc.getNumThousandSep() + "##0");
     if (nDecimalFormat && nDigits)
     {
         aBuf.append(rLoc.getNumDecimalSep());

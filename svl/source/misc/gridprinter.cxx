@@ -91,8 +91,7 @@ void GridPrinter::print( const char* pHeader ) const
     }
 
     // Make the row separator string.
-    OUStringBuffer aBuf;
-    aBuf.append("+");
+    OUStringBuffer aBuf("+");
     for (size_t col = 0; col < ns.column; ++col)
     {
         aBuf.append("-");

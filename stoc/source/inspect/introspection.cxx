@@ -1441,8 +1441,8 @@ struct TypeKey {
         // those matches, too:
         OUStringBuffer b(static_cast<int>(theTypes.size() * 64));
         for (const css::uno::Type& rType : theTypes) {
-            b.append(rType.getTypeName());
-            b.append('*'); // arbitrary delimiter not used by type grammar
+            b.append(rType.getTypeName()
+                + "*"); // arbitrary delimiter not used by type grammar
         }
         types = b.makeStringAndClear();
     }

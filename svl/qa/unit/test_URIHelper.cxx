@@ -254,12 +254,11 @@ void Test::testNormalizedMakeRelative() {
             : ref.is() && ref->getUriReference().equalsAscii(tests[i].relative);
         OString msg;
         if (!ok) {
-            OStringBuffer buf;
-            buf.append('<');
-            buf.append(tests[i].base);
-            buf.append(">, <");
-            buf.append(tests[i].absolute);
-            buf.append(">: ");
+            OStringBuffer buf(OString::Concat("<")
+                + tests[i].base
+                + ">, <"
+                + tests[i].absolute
+                + ">: ");
             if (ref.is()) {
                 buf.append('<');
                 buf.append(
@@ -273,9 +272,7 @@ void Test::testNormalizedMakeRelative() {
             if (tests[i].relative == nullptr) {
                 buf.append("none");
             } else {
-                buf.append('<');
-                buf.append(tests[i].relative);
-                buf.append('>');
+                buf.append(OString::Concat("<") + tests[i].relative + ">");
             }
             msg = buf.makeStringAndClear();
         }
@@ -383,22 +380,18 @@ void Test::testFindFirstURLInText() {
         OString msg;
         if (!ok) {
             OStringBuffer buf;
-            buf.append('"');
-            buf.append(tests[i].input);
-            buf.append("\" -> ");
+            buf.append(OString::Concat("\"")
+                + tests[i].input
+                + "\" -> ");
             buf.append(tests[i].result == nullptr ? "none" : tests[i].result);
-            buf.append(" (");
-            buf.append(tests[i].begin);
-            buf.append(", ");
-            buf.append(tests[i].end);
-            buf.append(')');
-            buf.append(" != ");
-            buf.append(OUStringToOString(result, RTL_TEXTENCODING_UTF8));
-            buf.append(" (");
-            buf.append(begin);
-            buf.append(", ");
-            buf.append(end);
-            buf.append(')');
+            buf.append(" ("
+                + OString::number(tests[i].begin)
+                + ", "
+                + OString::number(tests[i].end)
+                + ")"
+                " != "
+                + OUStringToOString(result, RTL_TEXTENCODING_UTF8)
+                + " (" + OString::number(begin) + ", " + OString::number(end) +")");
             msg = buf.makeStringAndClear();
         }
         CPPUNIT_ASSERT_MESSAGE(msg.getStr(), ok);

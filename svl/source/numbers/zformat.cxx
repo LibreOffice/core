@@ -1334,8 +1334,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                 {
                     NumFor[nIndex].Enlarge(nCnt);
                     pSc->CopyInfo( &(NumFor[nIndex].Info()), nCnt );
-                    sBuff.append(";");
-                    sBuff.append(aAdd);
+                    sBuff.append(";" + aAdd);
                 }
             }
         }
@@ -1352,8 +1351,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                 {
                     NumFor[nIndex].Enlarge(nCnt);
                     pSc->CopyInfo( &(NumFor[nIndex].Info()), nCnt );
-                    sBuff.append(";");
-                    sBuff.append(aAdd);
+                    sBuff.append(";" + aAdd);
                 }
             }
         }
@@ -5435,9 +5433,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                         }
                         else
                         {
-                            aStr.append( '"' );
-                            aStr.append( rStrArray[j] );
-                            aStr.append( '"' );
+                            aStr.append( "\"" + rStrArray[j] + "\"" );
                         }
                         break;
                     case NF_SYMBOLTYPE_CALDEL :
@@ -5768,13 +5764,11 @@ OUString SvNumberformat::GetNatNumModifierString( sal_uInt16 nNumFor ) const
     const SvNumberNatNum& rNum = NumFor[nNumFor].GetNatNum();
     if ( !rNum.IsSet() )
         return "";
-    OUStringBuffer sNatNumModifier = "[NatNum";
     const sal_Int32 nNum = rNum.GetNatNum();
-    sNatNumModifier.append( nNum );
+    OUStringBuffer sNatNumModifier = "[NatNum" + OUString::number( nNum );
     if ( NatNumTakesParameters( nNum ) )
     {
-        sNatNumModifier.append( " " );
-        sNatNumModifier.append( rNum.GetParams() );
+        sNatNumModifier.append( " " + rNum.GetParams() );
     }
     sNatNumModifier.append( "]" );
 

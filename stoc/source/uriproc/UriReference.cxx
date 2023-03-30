@@ -53,13 +53,11 @@ OUString UriReference::getUriReference()
     std::lock_guard g(m_mutex);
     OUStringBuffer buf(128);
     if (!m_scheme.isEmpty()) {
-        buf.append(m_scheme);
-        buf.append(':');
+        buf.append(m_scheme + ":");
     }
     appendSchemeSpecificPart(buf);
     if (m_hasFragment) {
-        buf.append('#');
-        buf.append(m_fragment);
+        buf.append("#" + m_fragment);
     }
     return buf.makeStringAndClear();
 }

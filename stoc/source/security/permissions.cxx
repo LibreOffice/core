@@ -238,13 +238,11 @@ OUString SocketPermission::toString() const
 {
     OUStringBuffer buf( 48 );
     // host
-    buf.append( "com.sun.star.connection.SocketPermission (host=\"" );
-    buf.append( m_host );
+    buf.append( "com.sun.star.connection.SocketPermission (host=\""
+        + m_host );
     if (m_resolvedHost)
     {
-        buf.append( '[' );
-        buf.append( m_ip );
-        buf.append( ']' );
+        buf.append( "[" + m_ip  + "]" );
     }
     // port
     if (0 != m_lowerPort || 65535 != m_upperPort)
@@ -260,9 +258,9 @@ OUString SocketPermission::toString() const
         }
     }
     // actions
-    buf.append( "\", actions=\"" );
-    buf.append( makeStrings( m_actions, s_actions ) );
-    buf.append( "\")" );
+    buf.append( "\", actions=\""
+        + makeStrings( m_actions, s_actions )
+        + "\")" );
     return buf.makeStringAndClear();
 }
 

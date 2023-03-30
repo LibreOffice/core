@@ -658,8 +658,7 @@ OUString PasswordContainer::createIV()
     OUStringBuffer aBuffer;
     for (sal_uInt8 i : iv)
     {
-        aBuffer.append(OUString::number(i >> 4, 16));
-        aBuffer.append(OUString::number(i & 15, 16));
+        aBuffer.append(OUString::number(i >> 4, 16) + OUString::number(i & 15, 16));
     }
     return aBuffer.makeStringAndClear();
 }
@@ -851,8 +850,8 @@ static OUString ReencodeAsOldHash(std::u16string_view rPass)
     {
         auto tmp = rPass.substr(ind * 2, 2);
         unsigned char i = static_cast<char>(rtl_ustr_toInt64_WithLength(tmp.data(), 16, tmp.size()));
-        aBuffer.append(static_cast< sal_Unicode >('a' + (i >> 4)));
-        aBuffer.append(static_cast< sal_Unicode >('a' + (i & 15)));
+        aBuffer.append(OUStringChar(static_cast< sal_Unicode >('a' + (i >> 4)))
+                + OUStringChar(static_cast< sal_Unicode >('a' + (i & 15))));
     }
     return aBuffer.makeStringAndClear();
 }
