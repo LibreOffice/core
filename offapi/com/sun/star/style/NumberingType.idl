@@ -546,6 +546,35 @@ published constants NumberingType
      */
     const short NUMBER_LEGAL_KO = 71;
 
+    /** Numbering in Cyrillic alphabet upper case letters
+
+        @since LibreOffice 7.6
+        See https://en.wikipedia.org/wiki/Ukrainian_alphabet
+      */
+    const short CHARS_CYRILLIC_UPPER_LETTER_UK = 72;
+
+    /** Numbering in Cyrillic alphabet lower case letters
+
+        @since LibreOffice 7.6
+        See https://en.wikipedia.org/wiki/Ukrainian_alphabet
+      */
+    const short CHARS_CYRILLIC_LOWER_LETTER_UK = 73;
+
+    /** Numbering in Cyrillic alphabet upper case letters
+
+        @since LibreOffice 7.6
+        See https://en.wikipedia.org/wiki/Ukrainian_alphabet
+      */
+    const short CHARS_CYRILLIC_UPPER_LETTER_N_UK = 74;
+
+    /** Numbering in Cyrillic alphabet upper case letters
+
+        @since LibreOffice 7.6
+        See https://en.wikipedia.org/wiki/Ukrainian_alphabet
+      */
+    const short CHARS_CYRILLIC_LOWER_LETTER_N_UK = 75;
+
+
 };
 
 

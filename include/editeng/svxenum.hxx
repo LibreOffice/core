@@ -210,7 +210,11 @@ enum SvxNumType : sal_Int16
     SVX_NUM_ARABIC_ZERO3          = css::style::NumberingType::ARABIC_ZERO3,
     SVX_NUM_ARABIC_ZERO4          = css::style::NumberingType::ARABIC_ZERO4,
     SVX_NUM_ARABIC_ZERO5          = css::style::NumberingType::ARABIC_ZERO5,
-    SVX_NUM_SZEKELY_ROVAS         = css::style::NumberingType::SZEKELY_ROVAS
+    SVX_NUM_SZEKELY_ROVAS         = css::style::NumberingType::SZEKELY_ROVAS,
+    SVX_NUM_CHARS_CYRILLIC_UPPER_LETTER_UK = css::style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_UK,
+    SVX_NUM_CHARS_CYRILLIC_LOWER_LETTER_UK = css::style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_UK,
+    SVX_NUM_CHARS_CYRILLIC_UPPER_LETTER_N_UK = css::style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_UK,
+    SVX_NUM_CHARS_CYRILLIC_LOWER_LETTER_N_UK = css::style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_UK
 };
 
 #endif

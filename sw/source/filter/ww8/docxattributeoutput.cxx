@@ -6966,6 +6966,10 @@ static OString lcl_ConvertNumberingType(sal_Int16 nNumberingType, const SfxItemS
         case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_SR:
         case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_SR:
         case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_SR:
+        case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_UK:
+        case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_UK:
+        case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_UK:
+        case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_UK:
 */
         default: break;
     }

@@ -200,6 +200,24 @@ const sal_Unicode table_CyrillicLowerLetter_sr[] = {
     0x0444, 0x0445, 0x0446, 0x0447, 0x045F, 0x0448
 };
 
+// Ukrainian Cyrillic upper letters
+const sal_Unicode table_CyrillicUpperLetter_uk[] = {
+    0x0410, 0x0411, 0x0412, 0x0413, 0x0490, 0x0414, 0x0415, 0x0404,
+    0x0416, 0x0417, 0x0418, 0x0406, 0x0407, 0x0419, 0x041A, 0x041B,
+    0x041C, 0x041D, 0x041E, 0x041F, 0x0420, 0x0421, 0x0422, 0x0423,
+    0x0424, 0x0425, 0x0426, 0x0427, 0x0428, 0x0429, 0x042C, 0x042E,
+    0x042F
+};
+
+// Ukrainian cyrillic lower letters
+const sal_Unicode table_CyrillicLowerLetter_uk[] = {
+    0x0430, 0x0431, 0x0432, 0x0433, 0x0491, 0x0434, 0x0435, 0x0454,
+    0x0436, 0x0437, 0x0438, 0x0456, 0x0457, 0x0439, 0x043A, 0x043B,
+    0x043C, 0x043D, 0x043E, 0x043F, 0x0440, 0x0441, 0x0442, 0x0443,
+    0x0444, 0x0445, 0x0446, 0x0447, 0x0448, 0x0449, 0x044C, 0x044E,
+    0x044F
+};
+
 const sal_Unicode table_GreekUpperLetter[] = {
     0x0391, 0x0392, 0x0393, 0x0394, 0x0395, 0x03DB, 0x0396, 0x0397, 0x0398,
     0x0399, 0x039A, 0x039B, 0x039C, 0x039D, 0x039E, 0x039F, 0x03A0, 0x03DF,
@@ -958,6 +976,29 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                       result); // 1=>a, 2=>b, ..., 27=>z, 28=>aa, 29=>bb, ...
               break;
 
+         case CHARS_CYRILLIC_UPPER_LETTER_UK:
+              lcl_formatChars2( table_CyrillicUpperLetter_uk,
+                      table_CyrillicLowerLetter_uk,
+                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_uk), number-1,
+                      result);
+              break;
+         case CHARS_CYRILLIC_LOWER_LETTER_UK:
+              lcl_formatChars( table_CyrillicLowerLetter_uk,
+                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_uk), number-1,
+                      result);
+              break;
+         case CHARS_CYRILLIC_UPPER_LETTER_N_UK:
+              lcl_formatChars3( table_CyrillicUpperLetter_uk,
+                      table_CyrillicLowerLetter_uk,
+                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_uk), number-1,
+                      result);
+              break;
+         case CHARS_CYRILLIC_LOWER_LETTER_N_UK:
+              lcl_formatChars1( table_CyrillicLowerLetter_uk,
+                      SAL_N_ELEMENTS(table_CyrillicLowerLetter_uk), number-1,
+                      result);
+              break;
+
           case CHARS_GREEK_LOWER_LETTER:
               lcl_formatCharsGR( table_GreekLowerLetter, number, result);
               break;
@@ -1100,6 +1141,10 @@ const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_SR,   S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_A S_CYR_B ", ... (sr)", LANG_ALL},
         {style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_SR, C_CYR_A ", " C_CYR_B ", .., " C_CYR_A S_CYR_A ", " C_CYR_B S_CYR_B ", ... (sr)", LANG_ALL},
         {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_SR, S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_B S_CYR_B ", ... (sr)", LANG_ALL},
+        {style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_UK,   C_CYR_A ", " C_CYR_B ", .., " C_CYR_A S_CYR_A ", " C_CYR_A S_CYR_B ", ... (uk)", LANG_ALL},
+        {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_UK,   S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_A S_CYR_B ", ... (uk)", LANG_ALL},
+        {style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_UK, C_CYR_A ", " C_CYR_B ", .., " C_CYR_A S_CYR_A ", " C_CYR_B S_CYR_B ", ... (uk)", LANG_ALL},
+        {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_UK, S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_B S_CYR_B ", ... (uk)", LANG_ALL},
         {style::NumberingType::CHARS_PERSIAN,        nullptr, LANG_CTL},
         {style::NumberingType::CHARS_PERSIAN_WORD,   nullptr, LANG_CTL},
         {style::NumberingType::SZEKELY_ROVAS,        nullptr, LANG_CTL},
