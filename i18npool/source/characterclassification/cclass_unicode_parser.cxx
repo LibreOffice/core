@@ -906,8 +906,9 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                     {
                         if ( cLast == '\\' )
                         {   // escaped
-                            aSymbol.append(rText.subView(postSymbolIndex, nextCharIndex - postSymbolIndex - 2));
-                            aSymbol.append(OUString(&current, 1));
+                            aSymbol.append(
+                                OUString::Concat(rText.subView(postSymbolIndex, nextCharIndex - postSymbolIndex - 2))
+                                + OUString(&current, 1));
                         }
                         else
                         {
@@ -931,8 +932,9 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 {
                     if ( cLast == '\\' )
                     {   // escaped
-                        aSymbol.append(rText.subView(postSymbolIndex, nextCharIndex - postSymbolIndex - 2));
-                        aSymbol.append(OUString(&current, 1));
+                        aSymbol.append(
+                            rText.subView(postSymbolIndex, nextCharIndex - postSymbolIndex - 2)
+                            + OUString(&current, 1));
                     }
                     else if (current == nextChar &&
                             !(nContTypes & KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING) )

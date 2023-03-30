@@ -165,9 +165,9 @@ std::unique_ptr<JavaInfo> createJavaInfo(
     buf.append(info->getRuntimeLibrary());
     if (!info->getLibraryPath().isEmpty())
     {
-        buf.append("\n");
-        buf.append(info->getLibraryPath());
-        buf.append("\n");
+        buf.append("\n"
+            + info->getLibraryPath()
+            + "\n");
     }
     OUString sVendorData = buf.makeStringAndClear();
     return std::unique_ptr<JavaInfo>(

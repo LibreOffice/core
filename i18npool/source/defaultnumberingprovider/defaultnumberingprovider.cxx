@@ -1129,8 +1129,7 @@ OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
         aPropertiesRange[1].Name = "Value";
         for (sal_Int32 j = 1; j <= 3; j++) {
             aPropertiesRange[1].Value <<= j;
-            result.append( makeNumberingString( aProperties, aLocale ) );
-            result.append(", ");
+            result.append( makeNumberingString( aProperties, aLocale ) + ", " );
         }
         result.append("...");
         // Make known duplicate generated identifiers unique.

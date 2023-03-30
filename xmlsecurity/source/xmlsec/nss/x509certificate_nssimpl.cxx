@@ -543,8 +543,7 @@ static OUString CompatDNCryptoAPI(std::u16string_view rDN)
             {
                 if (rDN.size() != i+1 && rDN[i+1] == '"')
                 {
-                    buf.append('\\');
-                    buf.append(rDN[i+1]);
+                    buf.append(OUString::Concat("\\") + OUStringChar(rDN[i+1]));
                     ++i;
                 }
                 else

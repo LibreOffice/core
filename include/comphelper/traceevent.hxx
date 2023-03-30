@@ -63,18 +63,13 @@ protected:
         if (args.size() == 0)
             return "";
 
-        OUStringBuffer sResult;
-        sResult.append(",\"args\":{");
+        OUStringBuffer sResult(",\"args\":{");
         bool first = true;
         for (auto& i : args)
         {
             if (!first)
                 sResult.append(',');
-            sResult.append('"');
-            sResult.append(i.first);
-            sResult.append("\":\"");
-            sResult.append(i.second);
-            sResult.append('"');
+            sResult.append("\"" + i.first + "\":\"" + i.second + "\"");
             first = false;
         }
         sResult.append('}');
