@@ -147,10 +147,6 @@ refresh_all_hooks()
         fi
     fi
 
-    if [ $wingit -eq 0 ] && [ "$OSTYPE" == "cygwin" ] ; then
-        echo "When you using GIT for Windows, and get git-error look to .git-hooks/README"
-    fi
-
     popd > /dev/null
 
 }
