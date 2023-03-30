@@ -263,7 +263,7 @@ void DocxAttributeOutput::TableDefinition(
     m_pSerializer->singleElementNS(XML_w, XML_tblLayout, FSNS(XML_w, XML_type), "fixed");
 
     // Look for the table style property in the table grab bag
-    std::map<OUString, css::uno::Any> aGrabBag
+    const std::map<OUString, css::uno::Any>& rGrabBag
         = pTableFormat->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG)->GetGrabBag();
 
     // We should clear the TableStyle map. In case of Table inside multiple tables it contains the
@@ -284,7 +284,7 @@ void DocxAttributeOutput::TableDefinition(
     }
 
     // Extract properties from grab bag
-    for (const auto& rGrabBagElement : aGrabBag)
+    for (const auto& rGrabBagElement : rGrabBag)
     {
         if (rGrabBagElement.first == "TableStyleName")
         {
@@ -564,14 +564,14 @@ void DocxAttributeOutput::TableBackgrounds(
 
     const OString sColor = msfilter::util::ConvertColor(aColor);
 
-    std::map<OUString, css::uno::Any> aGrabBag
+    const std::map<OUString, css::uno::Any>& rGrabBag
         = pFormat->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG)->GetGrabBag();
 
     OString sOriginalColor;
-    std::map<OUString, css::uno::Any>::iterator aGrabBagElement = aGrabBag.find("originalColor");
-    if (aGrabBagElement != aGrabBag.end())
+    auto aGrabBagIt = rGrabBag.find("originalColor");
+    if (aGrabBagIt != rGrabBag.end())
         sOriginalColor
-            = OUStringToOString(aGrabBagElement->second.get<OUString>(), RTL_TEXTENCODING_UTF8);
+            = OUStringToOString(aGrabBagIt->second.get<OUString>(), RTL_TEXTENCODING_UTF8);
 
     if (sOriginalColor != sColor)
     {
@@ -586,7 +586,7 @@ void DocxAttributeOutput::TableBackgrounds(
     {
         rtl::Reference<sax_fastparser::FastAttributeList> pAttrList;
 
-        for (const auto& rGrabBagElement : aGrabBag)
+        for (const auto& rGrabBagElement : rGrabBag)
         {
             if (!rGrabBagElement.second.has<OUString>())
                 continue;

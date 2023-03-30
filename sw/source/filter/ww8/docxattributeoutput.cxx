@@ -385,9 +385,9 @@ static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutpu
         SwTable& rTable = pTableNode->GetTable();
         SwFrameFormat* pTableFormat = rTable.GetFrameFormat();
         const SfxGrabBagItem* pTableGrabBag = pTableFormat->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG);
-        std::map<OUString, css::uno::Any> aTableGrabBag = pTableGrabBag->GetGrabBag();
+        const std::map<OUString, css::uno::Any> & rTableGrabBag = pTableGrabBag->GetGrabBag();
         // no grabbag?
-        if (aTableGrabBag.find("TablePosition") == aTableGrabBag.end())
+        if (rTableGrabBag.find("TablePosition") == rTableGrabBag.end())
         {
             if (pFrameFormat->GetFlySplit().GetValue())
             {
