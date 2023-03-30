@@ -418,9 +418,9 @@ void  SwPagePreviewWin::KeyInput( const KeyEvent &rKEvt )
         sal_uInt16 nSlot = 0;
         switch(rKeyCode.GetCode())
         {
-            case KEY_ADD : nSlot = SID_ZOOM_OUT;         break;
+            case KEY_ADD : nSlot = SID_ZOOM_IN;         break;
             case KEY_ESCAPE: nSlot = FN_CLOSE_PAGEPREVIEW; break;
-            case KEY_SUBTRACT : nSlot = SID_ZOOM_IN;    break;
+            case KEY_SUBTRACT : nSlot = SID_ZOOM_OUT;    break;
         }
         if(nSlot)
         {
