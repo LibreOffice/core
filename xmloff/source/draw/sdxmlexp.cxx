@@ -1428,8 +1428,7 @@ void SdXMLExport::ImpWriteHeaderFooterDecls()
         sal_Int32 nIndex = 1;
         for( const auto& rDecl : maHeaderDeclsVector )
         {
-            sBuffer.append( aPrefix );
-            sBuffer.append( nIndex );
+            sBuffer.append( aPrefix + OUString::number( nIndex ) );
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_NAME, sBuffer.makeStringAndClear());
 
             SvXMLElementExport aElem(*this, XML_NAMESPACE_PRESENTATION, XML_HEADER_DECL, true, true);
@@ -1445,8 +1444,7 @@ void SdXMLExport::ImpWriteHeaderFooterDecls()
         sal_Int32 nIndex = 1;
         for( const auto& rDecl : maFooterDeclsVector )
         {
-            sBuffer.append( aPrefix );
-            sBuffer.append( nIndex );
+            sBuffer.append( aPrefix + OUString::number( nIndex ) );
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_NAME, sBuffer.makeStringAndClear());
 
             SvXMLElementExport aElem(*this, XML_NAMESPACE_PRESENTATION, XML_FOOTER_DECL, false, false);
@@ -1463,8 +1461,7 @@ void SdXMLExport::ImpWriteHeaderFooterDecls()
     sal_Int32 nIndex = 1;
     for( const auto& rDecl : maDateTimeDeclsVector )
     {
-        sBuffer.append( aPrefix );
-        sBuffer.append( nIndex );
+        sBuffer.append( aPrefix + OUString::number( nIndex ) );
         AddAttribute( XML_NAMESPACE_PRESENTATION, XML_NAME, sBuffer.makeStringAndClear());
 
         AddAttribute( XML_NAMESPACE_PRESENTATION, XML_SOURCE, rDecl.mbFixed ? XML_FIXED : XML_CURRENT_DATE );

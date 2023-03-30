@@ -155,10 +155,7 @@ bool XMLFontFamilyNamePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
             if( nFirst <= nLast )
             {
                 if( !sValue.isEmpty() )
-                {
-                    sValue.append( ',' );
-                    sValue.append( ' ' );
-                }
+                    sValue.append( ", " );
                 sal_Int32 nLen = nLast-nFirst+1;
                 std::u16string_view sFamily( aStrFamilyName.subView( nFirst, nLen ) );
                 bool bQuote = false;

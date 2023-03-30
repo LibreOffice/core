@@ -212,14 +212,10 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
         {
             // ...if it's in the xmlns namespace, make the prefix
             // don't bother caching this, it rarely happens
-            OUStringBuffer sQName;
-            sQName.append ( m_sXMLNS );
             if (!rLocalName.isEmpty()) // not default namespace
-            {
-                sQName.append ( ':' );
-                sQName.append ( rLocalName );
-            }
-            return sQName.makeStringAndClear();
+                return m_sXMLNS + ":" + rLocalName;
+            else
+                return m_sXMLNS;
         }
         case XML_NAMESPACE_XML:
         {
@@ -242,21 +238,14 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
                 {
                     // ...if it's in our map, make the prefix
                     const OUString & prefix( (*aIter).second.sPrefix );
-                    OUStringBuffer sQName(prefix.getLength() + 1 + rLocalName.getLength());
+                    OUString sQName;
                     if (!prefix.isEmpty()) // not default namespace
-                    {
-                        sQName.append( prefix );
-                        sQName.append( ':' );
-                    }
-                    sQName.append ( rLocalName );
-                    if (bCache)
-                    {
-                        OUString sString(sQName.makeStringAndClear());
-                        m_aQNameCache.emplace(QNamePair(nKey, rLocalName), sString);
-                        return sString;
-                    }
+                        sQName = prefix + ":" + rLocalName;
                     else
-                        return sQName.makeStringAndClear();
+                        sQName = rLocalName;
+                    if (bCache)
+                        m_aQNameCache.emplace(QNamePair(nKey, rLocalName), sQName);
+                    return sQName;
                 }
                 else
                 {

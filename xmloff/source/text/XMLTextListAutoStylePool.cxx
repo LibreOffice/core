@@ -108,13 +108,10 @@ XMLTextListAutoStylePoolEntry_Impl::XMLTextListAutoStylePoolEntry_Impl(
 
     // create a name that hasn't been used before. The created name has not
     // to be added to the array, because it will never tried again
-    OUStringBuffer sBuffer( 7 );
     do
     {
         rName++;
-        sBuffer.append( rPrefix );
-        sBuffer.append( static_cast<sal_Int32>(rName) );
-        sName = sBuffer.makeStringAndClear();
+        sName = rPrefix + OUString::number( static_cast<sal_Int32>(rName) );
     }
     while (rNames.find(sName) != rNames.end());
 }

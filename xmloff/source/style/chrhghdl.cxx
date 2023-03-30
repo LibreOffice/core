@@ -66,8 +66,7 @@ bool XMLCharHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
         fSize = ::std::max<float>(fSize, 1.0f); // fdo#49876: 0pt is invalid
         ::sax::Converter::convertDouble(aOut, static_cast<double>(fSize), true,
                 util::MeasureUnit::POINT, util::MeasureUnit::POINT);
-        aOut.append( 'p');
-        aOut.append( 't');
+        aOut.append( "pt" );
     }
 
     rStrExpValue = aOut.makeStringAndClear();

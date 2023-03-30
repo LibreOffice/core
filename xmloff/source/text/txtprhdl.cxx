@@ -926,8 +926,7 @@ bool XMLTextEmphasizePropHdl_Impl::exportXML(
             if( nType != 0 )
             {
                 enum XMLTokenEnum ePos = bBelow ? XML_BELOW : XML_ABOVE;
-                aOut.append( ' ' );
-                aOut.append( GetXMLToken(ePos) );
+                aOut.append( " " + GetXMLToken(ePos) );
             }
             rStrExpValue = aOut.makeStringAndClear();
         }

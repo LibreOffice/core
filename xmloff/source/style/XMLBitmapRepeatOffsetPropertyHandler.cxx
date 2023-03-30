@@ -81,8 +81,7 @@ bool XMLBitmapRepeatOffsetPropertyHandler::exportXML(
     {
         OUStringBuffer aOut;
         ::sax::Converter::convertPercent( aOut, nValue );
-        aOut.append( ' ' );
-        aOut.append( mbX ? msHorizontal : msVertical );
+        aOut.append( " " + ( mbX ? msHorizontal : msVertical ) );
         rStrExpValue = aOut.makeStringAndClear();
 
         return true;

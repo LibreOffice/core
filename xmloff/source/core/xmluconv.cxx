@@ -900,9 +900,9 @@ OUString SvXMLUnitConverter::encodeStyleName(
             if( c > 0x000f )
                 aBuffer.append( static_cast< sal_Unicode >(
                         aHexTab[ (c >> 4) & 0x0f ] ) );
-            aBuffer.append( static_cast< sal_Unicode >(
-                        aHexTab[ c & 0x0f ] ) );
-            aBuffer.append( '_' );
+            aBuffer.append(
+                OUStringChar(static_cast< sal_Unicode >( aHexTab[ c & 0x0f ] ) )
+                + "_" );
             if( pEncoded )
                 *pEncoded = true;
         }

@@ -274,15 +274,10 @@ SvXMLNumFmtExport::~SvXMLNumFmtExport()
 
 static OUString lcl_CreateStyleName( sal_Int32 nKey, sal_Int32 nPart, bool bDefPart, std::u16string_view rPrefix )
 {
-    OUStringBuffer aFmtName(10);
-    aFmtName.append( rPrefix );
-    aFmtName.append( nKey );
-    if (!bDefPart)
-    {
-        aFmtName.append( 'P' );
-        aFmtName.append( nPart );
-    }
-    return aFmtName.makeStringAndClear();
+    if (bDefPart)
+        return rPrefix + OUString::number(nKey);
+    else
+        return rPrefix + OUString::number(nKey) + "P" + OUString::number( nPart );
 }
 
 void SvXMLNumFmtExport::AddCalendarAttr_Impl( const OUString& rCalendar )

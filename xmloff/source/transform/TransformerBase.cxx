@@ -1050,9 +1050,9 @@ bool XMLTransformerBase::EncodeStyleName( OUString& rName ) const
             if( c > 0x000f )
                 aBuffer.append( static_cast< sal_Unicode >(
                         aHexTab[ (c >> 4) & 0x0f ] ) );
-            aBuffer.append( static_cast< sal_Unicode >(
-                        aHexTab[ c & 0x0f ] ) );
-            aBuffer.append( '_' );
+            aBuffer.append(
+                OUString::number(static_cast< sal_Unicode >( aHexTab[ c & 0x0f ] ) )
+                + "_" );
             bEncoded = true;
         }
     }

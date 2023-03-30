@@ -70,9 +70,7 @@ struct2string(void *data,
 {
     assert(type->eTypeClass == typelib_TypeClass_STRUCT);
 
-    OUStringBuffer result;
-
-    result.append("{");
+    OUStringBuffer result("{");
 
     const typelib_CompoundTypeDescription *compoundType =
         &reinterpret_cast<const typelib_StructTypeDescription*>(type)->aBase;
@@ -81,9 +79,10 @@ struct2string(void *data,
     {
         if (i > 0)
             result.append(":");
-        result.append(compoundType->ppMemberNames[i]);
-        result.append("=");
-        result.append(data2string(static_cast<char *>(data)+compoundType->pMemberOffsets[i],
+        result.append(
+            OUString::unacquired(&compoundType->ppMemberNames[i])
+            + "="
+            + data2string(static_cast<char *>(data)+compoundType->pMemberOffsets[i],
                                   compoundType->ppTypeRefs[i]));
     }
 
@@ -161,8 +160,7 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
 
         if (!rParentName.isEmpty())
         {
-            aStemBuffer.append("-");
-            aStemBuffer.append(rParentName);
+            aStemBuffer.append("-" + rParentName);
         }
 
         // Create a name based on the properties used
@@ -173,12 +171,13 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
             OUString sXMLName(rFamilyData.mxMapper->getPropertySetMapper()->GetEntryXMLName(rState.mnIndex));
             if (sXMLName.isEmpty())
                 continue;
-            aStemBuffer.append("-");
-            aStemBuffer.append(static_cast<sal_Int32>(rFamilyData.mxMapper->getPropertySetMapper()->GetEntryNameSpace(rState.mnIndex)));
-            aStemBuffer.append(":");
-            aStemBuffer.append(sXMLName);
-            aStemBuffer.append("=");
-            aStemBuffer.append(any2string(rState.maValue));
+            aStemBuffer.append(
+                "-"
+                + OUString::number(static_cast<sal_Int32>(rFamilyData.mxMapper->getPropertySetMapper()->GetEntryNameSpace(rState.mnIndex)))
+                + ":"
+                + sXMLName
+                + "="
+                + any2string(rState.maValue));
         }
 
 #if 0
@@ -191,9 +190,8 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
 
         // create a name that hasn't been used before. The created name has not
         // to be added to the array, because it will never tried again
-        OUStringBuffer aTry( aStemBuffer );
 
-        msName = aTry.makeStringAndClear();
+        msName = aStemBuffer;
         bool bWarned = false;
         while (rFamilyData.maNameSet.find(msName) !=
                rFamilyData.maNameSet.end())
@@ -202,10 +200,7 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
                 SAL_WARN("xmloff", "Overlapping style name for " << msName);
             bWarned = true;
             rFamilyData.mnName++;
-            aTry.append( aStemBuffer );
-            aTry.append( "-" );
-            aTry.append( static_cast<sal_Int64>(rFamilyData.mnName) );
-            msName = aTry.makeStringAndClear();
+            msName = aStemBuffer + "-" + OUString::number( static_cast<sal_Int64>(rFamilyData.mnName) );
         }
         rFamilyData.maNameSet.insert(msName);
     }
@@ -213,13 +208,10 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
     {
         // create a name that hasn't been used before. The created name has not
         // to be added to the array, because it will never tried again
-        OUStringBuffer sBuffer( 7 );
         do
         {
             rFamilyData.mnName++;
-            sBuffer.append( rFamilyData.maStrPrefix );
-            sBuffer.append( static_cast<sal_Int64>(rFamilyData.mnName) );
-            msName = sBuffer.makeStringAndClear();
+            msName = rFamilyData.maStrPrefix + OUString::number( static_cast<sal_Int64>(rFamilyData.mnName) );
         }
         while (rFamilyData.maNameSet.find(msName) != rFamilyData.maNameSet.end() || rFamilyData.maReservedNameSet.find(msName) != rFamilyData.maReservedNameSet.end());
     }
