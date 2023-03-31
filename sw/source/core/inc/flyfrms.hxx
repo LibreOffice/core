@@ -200,6 +200,8 @@ public:
     SwFlyAtContentFrame* GetFollow();
     const SwFlyAtContentFrame* GetPrecede() const;
     SwFlyAtContentFrame* GetPrecede();
+    /// Like Cut(), except that follow chaining is maintained.
+    void DelEmpty();
     void dumpAsXmlAttributes(xmlTextWriterPtr pWriter) const override;
 };
 

@@ -37,7 +37,54 @@ public:
         : SwModelTestBase("/sw/qa/core/layout/data/")
     {
     }
+
+    /// Creates a document with a multi-page floating table: 1 columns and 2 rows.
+    void Create1x2SplitFly();
 };
+
+void Test::Create1x2SplitFly()
+{
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwPageDesc aStandard(pDoc->GetPageDesc(0));
+    SwFormatFrameSize aPageSize(aStandard.GetMaster().GetFrameSize());
+    // 5cm for the page height, 2cm are the top and bottom margins, so 1cm remains for the body
+    // frame:
+    aPageSize.SetHeight(2834);
+    aStandard.GetMaster().SetFormatAttr(aPageSize);
+    pDoc->ChgPageDesc(0, aStandard);
+    // Insert a table:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/1);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+    pWrtShell->GoPrevCell();
+    pWrtShell->Insert("A1");
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert("A2");
+    // Select cell:
+    pWrtShell->SelAll();
+    // Select table:
+    pWrtShell->SelAll();
+    // Wrap the table in a text frame:
+    SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
+    pWrtShell->StartAllAction();
+    aMgr.InsertFlyFrame(RndStdIds::FLY_AT_PARA, aMgr.GetPos(), aMgr.GetSize());
+    pWrtShell->EndAllAction();
+    // Allow the text frame to split:
+    pWrtShell->StartAllAction();
+    SwFrameFormats& rFlys = *pDoc->GetSpzFrameFormats();
+    SwFrameFormat* pFly = rFlys[0];
+    SwAttrSet aSet(pFly->GetAttrSet());
+    aSet.Put(SwFormatFlySplit(true));
+    pDoc->SetAttr(aSet, *pFly);
+    pWrtShell->EndAllAction();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    // We have 2 pages:
+    CPPUNIT_ASSERT(pPage1->GetNext());
+}
 
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWithTable)
 {
@@ -235,38 +282,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyRow)
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyEnable)
 {
     // Given a document with a table in a textframe:
-    createSwDoc();
-    SwDocShell* pDocShell = getSwDocShell();
-    SwDoc* pDoc = getSwDoc();
-    SwPageDesc aStandard(pDoc->GetPageDesc(0));
-    SwFormatFrameSize aPageSize(aStandard.GetMaster().GetFrameSize());
-    // 5cm for the page height, 2cm are the top and bottom margins, so 1cm remains for the body
-    // frame:
-    aPageSize.SetHeight(2834);
-    aStandard.GetMaster().SetFormatAttr(aPageSize);
-    pDoc->ChgPageDesc(0, aStandard);
-    // Insert a table:
-    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
-    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
-    pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/1);
-    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
-    pWrtShell->SelAll();
-    // Wrap it in a text frame:
-    SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
-    pWrtShell->StartAllAction();
-    aMgr.InsertFlyFrame(RndStdIds::FLY_AT_PARA, aMgr.GetPos(), aMgr.GetSize());
-    pWrtShell->EndAllAction();
-
-    // When allowing the text frame to split:
-    pWrtShell->StartAllAction();
-    SwFrameFormats& rFlys = *pDoc->GetSpzFrameFormats();
-    SwFrameFormat* pFly = rFlys[0];
-    SwAttrSet aSet(pFly->GetAttrSet());
-    aSet.Put(SwFormatFlySplit(true));
-    pDoc->SetAttr(aSet, *pFly);
-    pWrtShell->EndAllAction();
+    Create1x2SplitFly();
 
     // Then make sure that the layout is updated and we have 2 pages:
+    SwDoc* pDoc = getSwDoc();
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
     CPPUNIT_ASSERT(pPage1);
@@ -548,43 +567,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyFollowHorizontalPosition)
 CPPUNIT_TEST_FIXTURE(Test, testCursorTraversal)
 {
     // Given a document with a multi-page floating table:
-    createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwPageDesc aStandard(pDoc->GetPageDesc(0));
-    SwFormatFrameSize aPageSize(aStandard.GetMaster().GetFrameSize());
-    // 5cm for the page height, 2cm are the top and bottom margins, so 1cm remains for the body
-    // frame:
-    aPageSize.SetHeight(2834);
-    aStandard.GetMaster().SetFormatAttr(aPageSize);
-    pDoc->ChgPageDesc(0, aStandard);
-    // Insert a table:
-    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
-    pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/1);
-    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
-    pWrtShell->GoPrevCell();
-    pWrtShell->Insert("A1");
-    pWrtShell->GoNextCell();
-    pWrtShell->Insert("A2");
-    // Select cell:
-    pWrtShell->SelAll();
-    // Select table:
-    pWrtShell->SelAll();
-    // Wrap the table in a text frame:
-    SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
-    pWrtShell->StartAllAction();
-    aMgr.InsertFlyFrame(RndStdIds::FLY_AT_PARA, aMgr.GetPos(), aMgr.GetSize());
-    pWrtShell->EndAllAction();
-    // Allow the text frame to split:
-    pWrtShell->StartAllAction();
-    SwFrameFormats& rFlys = *pDoc->GetSpzFrameFormats();
-    SwFrameFormat* pFly = rFlys[0];
-    SwAttrSet aSet(pFly->GetAttrSet());
-    aSet.Put(SwFormatFlySplit(true));
-    pDoc->SetAttr(aSet, *pFly);
-    pWrtShell->EndAllAction();
+    Create1x2SplitFly();
 
     // When going from A1 to A2:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->GotoTable("Table1");
     SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     CPPUNIT_ASSERT_EQUAL(OUString("A1"), pTextNode->GetText());
@@ -597,6 +583,28 @@ CPPUNIT_TEST_FIXTURE(Test, testCursorTraversal)
     // - Actual  : A1
     // i.e. the cursor didn't get from A1 to A2.
     CPPUNIT_ASSERT_EQUAL(OUString("A2"), pTextNode->GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyRowDelete)
+{
+    // Given a document with a multi-page floating table:
+    Create1x2SplitFly();
+
+    // When deleting the row of A2:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GotoTable("Table1");
+    pWrtShell->Down(/*bSelect=*/false);
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    // We delete the right row:
+    CPPUNIT_ASSERT_EQUAL(OUString("A2"), pTextNode->GetText());
+    pWrtShell->DeleteRow();
+
+    // Then make sure we only have 1 page:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    CPPUNIT_ASSERT(!pPage1->GetNext());
 }
 }
 

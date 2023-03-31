@@ -549,6 +549,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
         const bool bTakeShortcut = !IsIdle() && !IsComplete() && IsShortCut(pPage);
 
         m_pRoot->DeleteEmptySct();
+        m_pRoot->DeleteEmptyFlys();
         if (lcl_isLayoutLooping()) return;
 
         if (!bTakeShortcut)
