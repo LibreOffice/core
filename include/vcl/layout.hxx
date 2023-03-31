@@ -647,11 +647,6 @@ private:
     {
         m_aResizeHdl.Call(GetOutputSizePixel());
     }
-    virtual void MouseMove(const MouseEvent& rMEvt) override
-    {
-        if (!m_aMouseMotionHdl.Call(rMEvt))
-            Control::MouseMove(rMEvt);
-    }
     virtual void KeyInput(const KeyEvent& rKEvt) override
     {
         if (!m_aKeyPressHdl.Call(rKEvt))
@@ -710,6 +705,11 @@ public:
     {
         if (!m_aMouseReleaseHdl.Call(rMEvt))
             Control::MouseButtonUp(rMEvt);
+    }
+    virtual void MouseMove(const MouseEvent& rMEvt) override
+    {
+        if (!m_aMouseMotionHdl.Call(rMEvt))
+            Control::MouseMove(rMEvt);
     }
     virtual OUString GetSurroundingText() const override;
     virtual Selection GetSurroundingTextSelection() const override;

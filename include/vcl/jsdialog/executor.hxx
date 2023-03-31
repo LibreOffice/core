@@ -66,6 +66,21 @@ public:
         rDrawingArea.dblclick(rPos);
     }
 
+    static void trigger_mouse_up(weld::DrawingArea& rDrawingArea, const Point& rPos)
+    {
+        rDrawingArea.mouse_up(rPos);
+    }
+
+    static void trigger_mouse_down(weld::DrawingArea& rDrawingArea, const Point& rPos)
+    {
+        rDrawingArea.mouse_down(rPos);
+    }
+
+    static void trigger_mouse_move(weld::DrawingArea& rDrawingArea, const Point& rPos)
+    {
+        rDrawingArea.mouse_move(rPos);
+    }
+
     static void trigger_selected(weld::MenuButton& rButton, const OUString& rIdent)
     {
         rButton.signal_selected(rIdent);
