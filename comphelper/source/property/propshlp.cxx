@@ -162,19 +162,12 @@ OPropertySetHelper::createPropertySetInfo(IPropertyArrayHelper& rProperties)
 // XPropertySet
 void OPropertySetHelper::setPropertyValue(const OUString& rPropertyName, const Any& rValue)
 {
-    std::unique_lock aGuard(m_aMutex);
-    setPropertyValueImpl(aGuard, rPropertyName, rValue);
-}
-
-void OPropertySetHelper::setPropertyValueImpl(std::unique_lock<std::mutex>& rGuard,
-                                              const OUString& rPropertyName, const Any& rValue)
-{
     // get the map table
     IPropertyArrayHelper& rPH = getInfoHelper();
     // map the name to the handle
     sal_Int32 nHandle = rPH.getHandleByName(rPropertyName);
-    // call the method of the XFastPropertySet interface
-    setFastPropertyValueImpl(rGuard, nHandle, rValue);
+    std::unique_lock aGuard(m_aMutex);
+    setFastPropertyValueImpl(aGuard, nHandle, rValue);
 }
 
 // XPropertySet

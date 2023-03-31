@@ -163,8 +163,6 @@ public:
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 protected:
     // override setValue methods to handle properties of FontDescriptor
-    // css::beans::XPropertySet
-    virtual void setPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, const OUString& aPropertyName, const css::uno::Any& aValue ) override;
     // css::beans::XFastPropertySet
     void setFastPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const css::uno::Any& aValue ) override;
     css::beans::PropertyState getPropertyStateImpl( std::unique_lock<std::mutex>& rGuard, const OUString& PropertyName );

@@ -201,7 +201,7 @@ namespace toolkit
                 }
             }
 
-            setPropertyValueImpl( rGuard, GetPropertyName( BASEPROPERTY_TEXT ), Any( sStringValue ) );
+            setFastPropertyValueImpl( rGuard, BASEPROPERTY_TEXT, Any( sStringValue ) );
         }
         catch( const Exception& )
         {

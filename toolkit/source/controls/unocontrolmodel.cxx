@@ -1002,7 +1002,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
     {
         css::uno::Any aValue;
         aValue <<= *pFD;
-        setPropertyValueImpl( aGuard, GetPropertyName( BASEPROPERTY_FONTDESCRIPTOR ), aValue );
+        setFastPropertyValueImpl( aGuard, BASEPROPERTY_FONTDESCRIPTOR, aValue );
     }
 }
 
@@ -1208,17 +1208,6 @@ void UnoControlModel::getFastPropertyValue( std::unique_lock<std::mutex>& /*rGua
     {
         OSL_FAIL( "getFastPropertyValue - invalid Property!" );
     }
-}
-
-// css::beans::XPropertySet
-void UnoControlModel::setPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, const OUString& rPropertyName, const css::uno::Any& rValue )
-{
-    sal_Int32 nPropId = static_cast<sal_Int32>(GetPropertyId( rPropertyName ));
-    DBG_ASSERT( nPropId, "Invalid ID in UnoControlModel::setPropertyValue" );
-    if( !nPropId )
-        throw css::beans::UnknownPropertyException(rPropertyName);
-
-    setFastPropertyValueImpl( rGuard, nPropId, rValue );
 }
 
 // css::beans::XFastPropertySet

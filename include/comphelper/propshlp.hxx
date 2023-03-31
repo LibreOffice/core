@@ -184,10 +184,6 @@ protected:
      */
     ~OPropertySetHelper();
 
-    /** Override this if you need to do something special during setPropertyValue */
-    virtual void setPropertyValueImpl(std::unique_lock<std::mutex>& rGuard,
-                                      const ::rtl::OUString& rPropertyName,
-                                      const css::uno::Any& aValue);
     /** Override this if you need to do something special during setFastPropertyValue */
     virtual void setFastPropertyValueImpl(std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle,
                                           const css::uno::Any& rValue);
