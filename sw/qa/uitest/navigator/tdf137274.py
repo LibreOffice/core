@@ -12,6 +12,12 @@ from uitest.uihelper.common import get_state_as_dict
 
 class tdf137274(UITestCase):
 
+    def get_item(self, xTree, name):
+        for i in xTree.getChildren():
+            xItem = xTree.getChild(i)
+            if name == get_state_as_dict(xItem)['Text']:
+                return xItem
+
     def test_tdf137274(self):
 
         with self.ui_test.create_doc_in_start_center("writer"):
@@ -36,7 +42,7 @@ class tdf137274(UITestCase):
             xNavigatorPanel = self.ui_test.wait_until_child_is_available('NavigatorPanel')
 
             xContentTree = xNavigatorPanel.getChild("contenttree")
-            xComments = xContentTree.getChild('10')
+            xComments = self.get_item(xContentTree, 'Comments')
             self.assertEqual('Comments', get_state_as_dict(xComments)['Text'])
 
             xComments.executeAction("EXPAND", tuple())
@@ -53,7 +59,7 @@ class tdf137274(UITestCase):
             self.ui_test.wait_until_child_is_available('Comment2')
 
             # xComments needs reassigned after content tree change
-            xComments = xContentTree.getChild('10')
+            xComments = self.get_item(xContentTree, 'Comments')
             self.assertEqual('Comments', get_state_as_dict(xComments)['Text'])
 
             xComments.executeAction("EXPAND", tuple())
