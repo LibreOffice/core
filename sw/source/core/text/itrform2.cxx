@@ -2728,12 +2728,12 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         if( GetTextFrame()->getFramePrintArea().Left() < 0 )
             nFrameLeft += GetTextFrame()->getFramePrintArea().Left();
         if( aInter.Left() < nFrameLeft )
-            aInter.Left( nFrameLeft );
+            aInter.Left(nFrameLeft); // both sets left and reduces width
 
         tools::Long nAddMar = 0;
-        if ( m_pFrame->IsRightToLeft() )
+        if (GetTextFrame()->IsRightToLeft())
         {
-            nAddMar = m_pFrame->getFrameArea().Right() - Right();
+            nAddMar = GetTextFrame()->getFrameArea().Right() - Right();
             if ( nAddMar < 0 )
                 nAddMar = 0;
         }
