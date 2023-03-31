@@ -1259,12 +1259,6 @@ css::uno::Reference< css::beans::XPropertySetInfo > UnoControlModel::getProperty
     return css::uno::Reference< css::beans::XPropertySetInfo >();
 }
 
-void UnoControlModel::setPropertyValues( const css::uno::Sequence< OUString >& rPropertyNames, const css::uno::Sequence< css::uno::Any >& Values )
-{
-    std::unique_lock aGuard( m_aMutex );
-    setPropertyValuesImpl(aGuard, rPropertyNames, Values);
-}
-
 void UnoControlModel::setPropertyValuesImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< OUString >& rPropertyNames, const css::uno::Sequence< css::uno::Any >& Values )
 {
     sal_Int32 nProps = rPropertyNames.getLength();
