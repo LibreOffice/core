@@ -22,7 +22,7 @@
 
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/awt/XGraphics.hpp>
-#include <com/sun/star/awt/XWindowPeer.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
 #include <vcl/toolkit/unowrap.hxx>
@@ -51,8 +51,8 @@ public:
     virtual void        ReleaseAllGraphics( OutputDevice* pOutDev ) override;
 
     // Window
-    virtual css::uno::Reference< css::awt::XWindowPeer> GetWindowInterface( vcl::Window* pWindow ) override;
-    virtual void        SetWindowInterface( vcl::Window* pWindow, const css::uno::Reference< css::awt::XWindowPeer> & xIFace ) override;
+    virtual css::uno::Reference< css::awt::XVclWindowPeer> GetWindowInterface( vcl::Window* pWindow ) override;
+    virtual void        SetWindowInterface( vcl::Window* pWindow, const css::uno::Reference< css::awt::XVclWindowPeer> & xIFace ) override;
     virtual VclPtr<vcl::Window> GetWindow(const css::uno::Reference<css::awt::XWindow>& rxWindow) override;
 
     // Menu

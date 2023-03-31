@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/awt/XWindowPeer.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
@@ -50,7 +50,7 @@ vcl::Window* getWindowFromXUIElement( const css::uno::Reference< css::ui::XUIEle
 SystemWindow* getTopSystemWindow( const css::uno::Reference< css::awt::XWindow >& xWindow );
 bool equalRectangles( const css::awt::Rectangle& rRect1, const css::awt::Rectangle& rRect2 );
 bool lcl_checkUIElement(const css::uno::Reference< css::ui::XUIElement >& xUIElement,css::awt::Rectangle& _rPosSize, css::uno::Reference< css::awt::XWindow >& _xWindow);
-css::uno::Reference< css::awt::XWindowPeer > createToolkitWindow( const css::uno::Reference< css::uno::XComponentContext >& rxContext, const css::uno::Reference< css::awt::XWindowPeer >& rParent, const char* pService );
+css::uno::Reference< css::awt::XVclWindowPeer > createToolkitWindow( const css::uno::Reference< css::uno::XComponentContext >& rxContext, const css::uno::Reference< css::awt::XVclWindowPeer >& rParent, const char* pService );
 WindowAlign ImplConvertAlignment( css::ui::DockingArea aAlignment );
 std::u16string_view getElementTypeFromResourceURL( std::u16string_view aResourceURL );
 void parseResourceURL( std::u16string_view aResourceURL, OUString& aElementType, OUString& aElementName );

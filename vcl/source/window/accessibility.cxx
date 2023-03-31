@@ -31,7 +31,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
-#include <com/sun/star/awt/XWindowPeer.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
 
 #include <sal/log.hxx>
 

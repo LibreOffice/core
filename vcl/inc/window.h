@@ -64,7 +64,7 @@ namespace com::sun::star {
     }
 
     namespace awt {
-        class XWindowPeer;
+        class XVclWindowPeer;
         class XWindow;
     }
     namespace uno {
@@ -280,7 +280,7 @@ public:
     OUString            maQuickHelpText;
     OUString            maID;
     InputContext        maInputContext;
-    css::uno::Reference< css::awt::XWindowPeer > mxWindowPeer;
+    css::uno::Reference< css::awt::XVclWindowPeer > mxWindowPeer;
     css::uno::Reference< css::accessibility::XAccessible > mxAccessible;
     std::shared_ptr< VclSizeGroup > m_xSizeGroup;
     std::vector<VclPtr<FixedText>> m_aMnemonicLabels;

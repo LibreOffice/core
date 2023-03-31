@@ -30,6 +30,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>

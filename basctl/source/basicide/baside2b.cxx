@@ -2091,10 +2091,10 @@ void ComplexEditorWindow::SetLineNumberDisplay(bool b)
     Resize();
 }
 
-uno::Reference< awt::XWindowPeer >
+uno::Reference< awt::XVclWindowPeer >
 EditorWindow::GetComponentInterface(bool bCreate)
 {
-    uno::Reference< awt::XWindowPeer > xPeer(
+    uno::Reference< awt::XVclWindowPeer > xPeer(
         Window::GetComponentInterface(false));
     if (!xPeer.is() && bCreate)
     {

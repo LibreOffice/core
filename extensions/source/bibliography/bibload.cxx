@@ -23,6 +23,7 @@
 #include <svl/itemprop.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>

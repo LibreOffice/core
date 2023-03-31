@@ -32,6 +32,7 @@
 
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/UnoControlDialog.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/resource/StringResource.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>

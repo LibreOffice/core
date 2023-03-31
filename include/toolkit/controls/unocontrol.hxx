@@ -77,8 +77,7 @@ class TOOLKIT_DLLPUBLIC UnoControl :    public UnoControl_Base
 private:
     ::osl::Mutex    maMutex;
 
-    css::uno::Reference< css::awt::XWindowPeer >      mxPeer;
-    css::uno::Reference< css::awt::XVclWindowPeer >   mxVclWindowPeer; // just to avoid the query_interface thing
+    css::uno::Reference< css::awt::XVclWindowPeer >  mxVclWindowPeer;
 
 protected:
     EventListenerMultiplexer            maDisposeListeners;
@@ -112,7 +111,7 @@ protected:
     virtual void                                                                updateFromModel();
     void                                                                        peerCreated();
     bool                                                                        ImplCheckLocalize( OUString& _rPossiblyLocalizable );
-    css::uno::Reference< css::awt::XWindowPeer >      ImplGetCompatiblePeer();
+    css::uno::Reference< css::awt::XVclWindowPeer >      ImplGetCompatiblePeer();
     virtual void                                                                ImplSetPeerProperty( const OUString& rPropName, const css::uno::Any& rVal );
     virtual void                                                                PrepareWindowDescriptor( css::awt::WindowDescriptor& rDesc );
     virtual void                                                                ImplModelPropertiesChanged( const css::uno::Sequence< css::beans::PropertyChangeEvent >& rEvents );
@@ -123,10 +122,9 @@ protected:
     void DisposeAccessibleContext(css::uno::Reference<
             css::lang::XComponent> const& xContext);
 
-    void setPeer( const css::uno::Reference< css::awt::XWindowPeer >& _xPeer)
+    void setPeer( const css::uno::Reference< css::awt::XVclWindowPeer >& _xPeer)
     {
-        mxPeer = _xPeer;
-        mxVclWindowPeer = css::uno::Reference< css::awt::XVclWindowPeer >(mxPeer,css::uno::UNO_QUERY); // just to avoid the query_interface thing
+        mxVclWindowPeer = _xPeer;
     }
 
     virtual bool   requiresNewPeer( const OUString& _rPropertyName ) const;
@@ -219,6 +217,8 @@ public:
 
     // XStyleSettingsSupplier
     virtual css::uno::Reference< css::awt::XStyleSettings > SAL_CALL getStyleSettings() override;
+
+    css::uno::Reference< css::awt::XVclWindowPeer > getVclWindowPeer();
 
 protected:
     // css::beans::XPropertiesChangeListener

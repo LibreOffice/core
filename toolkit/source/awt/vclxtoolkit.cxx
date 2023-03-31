@@ -1843,7 +1843,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 
     SolarMutexGuard aSolarGuard;
 
-    css::uno::Reference< css::awt::XWindowPeer > xRef;
+    css::uno::Reference< css::awt::XVclWindowPeer > xRef;
 
     VclPtr<vcl::Window> pParent;
     if ( rDescriptor.Parent.is() )
@@ -1991,7 +1991,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( con
         pChildWindow.reset(VclPtr<WorkWindow>::Create(nullptr, Parent));
     }
 
-    css::uno::Reference< css::awt::XWindowPeer > xPeer;
+    css::uno::Reference< css::awt::XVclWindowPeer > xPeer;
     if ( pChildWindow )
     {
         rtl::Reference<VCLXTopWindow> pPeer = new VCLXTopWindow;

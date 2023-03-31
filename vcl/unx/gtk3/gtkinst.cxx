@@ -49,6 +49,7 @@
 #if !GTK_CHECK_VERSION(4, 0, 0)
 #include "a11y/atkwrapper.hxx"
 #endif
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>

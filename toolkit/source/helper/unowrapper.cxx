@@ -144,9 +144,9 @@ css::uno::Reference< css::awt::XToolkit> UnoWrapper::GetVCLToolkit()
     return mxToolkit;
 }
 
-css::uno::Reference< css::awt::XWindowPeer> UnoWrapper::GetWindowInterface( vcl::Window* pWindow )
+css::uno::Reference< css::awt::XVclWindowPeer> UnoWrapper::GetWindowInterface( vcl::Window* pWindow )
 {
-    css::uno::Reference< css::awt::XWindowPeer> xPeer = pWindow->GetWindowPeer();
+    css::uno::Reference< css::awt::XVclWindowPeer> xPeer = pWindow->GetWindowPeer();
     if ( xPeer )
         return xPeer;
 
@@ -161,7 +161,7 @@ VclPtr<vcl::Window> UnoWrapper::GetWindow(const css::uno::Reference<css::awt::XW
     return VCLUnoHelper::GetWindow(rWindow);
 }
 
-void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, const css::uno::Reference< css::awt::XWindowPeer> & xIFace )
+void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, const css::uno::Reference< css::awt::XVclWindowPeer> & xIFace )
 {
     VCLXWindow* pVCLXWindow = dynamic_cast<VCLXWindow*>( xIFace.get() );
 
@@ -176,7 +176,7 @@ void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, const css::uno::Refer
     }
     else
     {
-        css::uno::Reference< css::awt::XWindowPeer> xPeer = pWindow->GetWindowPeer();
+        css::uno::Reference< css::awt::XVclWindowPeer> xPeer = pWindow->GetWindowPeer();
         if( xPeer.is() )
         {
             bool bSameInstance( pVCLXWindow == dynamic_cast< VCLXWindow* >( xPeer.get() ));

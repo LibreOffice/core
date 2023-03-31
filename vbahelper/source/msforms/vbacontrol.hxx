@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/awt/XWindowPeer.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/script/ScriptEvent.hpp>
 #include <ooo/vba/msforms/XControl.hpp>
 
@@ -50,7 +50,7 @@ protected:
     css::uno::Reference< css::frame::XModel > m_xModel;
 
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::awt::XWindowPeer > getWindowPeer();
+    css::uno::Reference< css::awt::XVclWindowPeer > getWindowPeer();
     void fireChangeEvent();
     void fireClickEvent();
 public:

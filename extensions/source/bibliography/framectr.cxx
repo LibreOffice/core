@@ -30,6 +30,7 @@
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/XTextComponent.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/form/XConfirmDeleteListener.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

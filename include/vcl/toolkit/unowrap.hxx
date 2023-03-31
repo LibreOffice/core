@@ -37,7 +37,7 @@ namespace com::sun::star::awt {
     class XPopupMenu;
     class XToolkit;
     class XWindow;
-    class XWindowPeer;
+    class XVclWindowPeer;
 }
 namespace com::sun::star::accessibility {
     class XAccessible;
@@ -56,8 +56,8 @@ public:
     virtual void                ReleaseAllGraphics( OutputDevice* pOutDev ) = 0;
 
     // Window
-    virtual css::uno::Reference<css::awt::XWindowPeer> GetWindowInterface( vcl::Window* pWindow ) = 0;
-    virtual void                SetWindowInterface( vcl::Window* pWindow, const css::uno::Reference< css::awt::XWindowPeer > & xIFace ) = 0;
+    virtual css::uno::Reference<css::awt::XVclWindowPeer> GetWindowInterface( vcl::Window* pWindow ) = 0;
+    virtual void                SetWindowInterface( vcl::Window* pWindow, const css::uno::Reference< css::awt::XVclWindowPeer > & xIFace ) = 0;
     virtual VclPtr<vcl::Window> GetWindow(const css::uno::Reference<css::awt::XWindow>& rxWindow) = 0;
 
     // PopupMenu

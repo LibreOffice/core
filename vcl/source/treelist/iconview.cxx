@@ -235,7 +235,7 @@ css::uno::Reference<css::accessibility::XAccessible> IconView::CreateAccessible(
         if (auto xAccParent = pParent->GetAccessible())
         {
             // need to be done here to get the vclxwindow later on in the accessible
-            css::uno::Reference<css::awt::XWindowPeer> xHoldAlive(GetComponentInterface());
+            css::uno::Reference<css::awt::XVclWindowPeer> xHoldAlive(GetComponentInterface());
             return pImpl->m_aFactoryAccess.getFactory().createAccessibleIconView(*this, xAccParent);
         }
     }

@@ -25,13 +25,13 @@
 
 namespace com::sun::star::awt
 {
-class XWindowPeer;
+class XVclWindowPeer;
 }
 class TextView;
 
 namespace basctl
 {
-css::uno::Reference<css::awt::XWindowPeer> createTextWindowPeer(TextView& view);
+css::uno::Reference<css::awt::XVclWindowPeer> createTextWindowPeer(TextView& view);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -154,7 +154,7 @@ bool lcl_checkUIElement(const uno::Reference< ui::XUIElement >& xUIElement, awt:
     return bRet;
 }
 
-uno::Reference< awt::XWindowPeer > createToolkitWindow( const uno::Reference< uno::XComponentContext >& rxContext, const uno::Reference< awt::XWindowPeer >& rParent, const char* pService )
+uno::Reference< awt::XVclWindowPeer > createToolkitWindow( const uno::Reference< uno::XComponentContext >& rxContext, const uno::Reference< awt::XVclWindowPeer >& rParent, const char* pService )
 {
     uno::Reference< awt::XToolkit2 > xToolkit = awt::Toolkit::create( rxContext );
 
@@ -169,8 +169,9 @@ uno::Reference< awt::XWindowPeer > createToolkitWindow( const uno::Reference< un
 
     // create an awt window
     uno::Reference< awt::XWindowPeer > xPeer = xToolkit->createWindow( aDescriptor );
-
-    return xPeer;
+    uno::Reference< awt::XVclWindowPeer > xVclPeer(xPeer, uno::UNO_QUERY);
+    assert(xVclPeer || !xPeer);
+    return xVclPeer;
 }
 
 // convert alignment constant to vcl's WindowAlign type

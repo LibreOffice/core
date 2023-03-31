@@ -369,7 +369,7 @@ UnoControlContainer::UnoControlContainer()
     mpControls.reset(new UnoControlHolderList);
 }
 
-UnoControlContainer::UnoControlContainer(const uno::Reference< awt::XWindowPeer >& xP )
+UnoControlContainer::UnoControlContainer(const uno::Reference< awt::XVclWindowPeer >& xP )
     :maCListeners( *this )
 {
     setPeer( xP );

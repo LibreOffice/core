@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/awt/XWindowPeer.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/UnreachableStateException.hpp>

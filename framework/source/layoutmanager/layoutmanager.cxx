@@ -431,7 +431,7 @@ void LayoutManager::implts_reset( bool bAttached )
             if ( bAttached )
             {
                 xToolbarManager->attach( xFrame, xModCfgMgr, xDokCfgMgr, xPersistentWindowState );
-                uno::Reference< awt::XWindowPeer > xParent( xContainerWindow, UNO_QUERY );
+                uno::Reference< awt::XVclWindowPeer > xParent( xContainerWindow, UNO_QUERY );
                 xToolbarManager->setParentWindow( xParent );
                 if ( bAutomaticToolbars )
                     xToolbarManager->createStaticToolbars();
@@ -1373,7 +1373,7 @@ void LayoutManager::implts_reparentChildWindows()
     aWriteLock.reset();
     ToolbarLayoutManager* pToolbarManager = m_xToolbarManager.get();
     if ( pToolbarManager )
-        pToolbarManager->setParentWindow( uno::Reference< awt::XWindowPeer >( xContainerWindow, uno::UNO_QUERY ));
+        pToolbarManager->setParentWindow( uno::Reference< awt::XVclWindowPeer >( xContainerWindow, uno::UNO_QUERY ));
     aWriteLock.clear();
 }
 
@@ -2788,7 +2788,7 @@ void SAL_CALL LayoutManager::disposing( const lang::EventObject& rEvent )
             ToolbarLayoutManager* pToolbarManager = m_xToolbarManager.get();
             if (pToolbarManager)
             {
-                uno::Reference<awt::XWindowPeer> aEmptyWindowPeer;
+                uno::Reference<awt::XVclWindowPeer> aEmptyWindowPeer;
                 pToolbarManager->setParentWindow(aEmptyWindowPeer);
             }
             impl_clearUpMenuBar();

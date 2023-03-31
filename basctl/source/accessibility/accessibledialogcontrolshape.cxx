@@ -22,6 +22,7 @@
 #include <dlgeddef.hxx>
 #include <dlgedview.hxx>
 #include <dlgedobj.hxx>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>

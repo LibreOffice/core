@@ -65,7 +65,7 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-uno::Reference< css::awt::XWindowPeer >
+uno::Reference< css::awt::XVclWindowPeer >
 ScVbaControl::getWindowPeer()
 {
     uno::Reference< drawing::XControlShape > xControlShape( m_xControl, uno::UNO_QUERY );
@@ -76,23 +76,27 @@ ScVbaControl::getWindowPeer()
     {
         // would seem to be a Userform control
         uno::Reference< awt::XControl > xControl( m_xControl, uno::UNO_QUERY_THROW );
-        xWinPeer =  xControl->getPeer();
-        return xWinPeer;
+        xWinPeer = xControl->getPeer();
     }
-    // form control
-    xControlModel.set( xControlShape->getControl(), uno::UNO_SET_THROW );
+    else
+    {
+        // form control
+        xControlModel.set( xControlShape->getControl(), uno::UNO_SET_THROW );
 
-    uno::Reference< view::XControlAccess > xControlAccess( m_xModel->getCurrentController(), uno::UNO_QUERY_THROW );
-    try
-    {
-        uno::Reference< awt::XControl > xControl = xControlAccess->getControl( xControlModel );
-        xWinPeer =  xControl->getPeer();
+        uno::Reference< view::XControlAccess > xControlAccess( m_xModel->getCurrentController(), uno::UNO_QUERY_THROW );
+        try
+        {
+            uno::Reference< awt::XControl > xControl = xControlAccess->getControl( xControlModel );
+            xWinPeer =  xControl->getPeer();
+        }
+        catch(const uno::Exception&)
+        {
+            throw uno::RuntimeException( "The Control does not exist" );
+        }
     }
-    catch(const uno::Exception&)
-    {
-        throw uno::RuntimeException( "The Control does not exist" );
-    }
-    return xWinPeer;
+    uno::Reference< css::awt::XVclWindowPeer > xVclWinPeer(xWinPeer, uno::UNO_QUERY);
+    assert(xVclWinPeer || !xWinPeer);
+    return xVclWinPeer;
 }
 
 namespace {

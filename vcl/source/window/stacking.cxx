@@ -29,6 +29,7 @@
 #include <brdwin.hxx>
 
 #include <com/sun/star/awt/XTopWindow.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

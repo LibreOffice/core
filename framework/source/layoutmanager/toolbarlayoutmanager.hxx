@@ -67,7 +67,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
                      const css::uno::Reference< css::ui::XUIConfigurationManager >& xDocCfgMgr,
                      const css::uno::Reference< css::container::XNameAccess >& xPersistentWindowState );
 
-        void setParentWindow( const css::uno::Reference< css::awt::XWindowPeer >& xParentWindow );
+        void setParentWindow( const css::uno::Reference< css::awt::XVclWindowPeer >& xParentWindow );
         void setDockingAreaOffsets(const ::tools::Rectangle& rOffsets);
 
         void resetDockingArea();
