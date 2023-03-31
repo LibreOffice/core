@@ -116,25 +116,26 @@ public:
      */
     virtual css::uno::Any SAL_CALL
     getPropertyValue(const ::rtl::OUString& aPropertyName) override final;
+
     /** Ignored if the property is not bound. */
     virtual void SAL_CALL addPropertyChangeListener(
         const ::rtl::OUString& aPropertyName,
-        const css::uno::Reference<css::beans::XPropertyChangeListener>& aListener) override;
+        const css::uno::Reference<css::beans::XPropertyChangeListener>& aListener) override final;
 
     /** Ignored if the property is not bound. */
     virtual void SAL_CALL removePropertyChangeListener(
         const ::rtl::OUString& aPropertyName,
-        const css::uno::Reference<css::beans::XPropertyChangeListener>& aListener) override;
+        const css::uno::Reference<css::beans::XPropertyChangeListener>& aListener) override final;
 
     /** Ignored if the property is not constrained. */
     virtual void SAL_CALL addVetoableChangeListener(
         const ::rtl::OUString& aPropertyName,
-        const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
+        const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override final;
 
     /** Ignored if the property is not constrained. */
     virtual void SAL_CALL removeVetoableChangeListener(
         const ::rtl::OUString& aPropertyName,
-        const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
+        const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override final;
 
     /**
        Throw UnknownPropertyException or PropertyVetoException if the property with the name
@@ -158,18 +159,18 @@ public:
                       const css::uno::Sequence<css::uno::Any>& Values) override;
 
     virtual css::uno::Sequence<css::uno::Any> SAL_CALL
-    getPropertyValues(const css::uno::Sequence<::rtl::OUString>& PropertyNames) override;
+    getPropertyValues(const css::uno::Sequence<::rtl::OUString>& PropertyNames) override final;
 
     virtual void SAL_CALL addPropertiesChangeListener(
         const css::uno::Sequence<::rtl::OUString>& PropertyNames,
-        const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override;
+        const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final;
 
     virtual void SAL_CALL removePropertiesChangeListener(
-        const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override;
+        const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final;
 
     virtual void SAL_CALL firePropertiesChangeEvent(
         const css::uno::Sequence<::rtl::OUString>& PropertyNames,
-        const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override;
+        const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final;
 
     /**
        The property sequence is created in the call. The interface isn't used after the call.
