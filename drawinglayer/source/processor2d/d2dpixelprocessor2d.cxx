@@ -48,6 +48,7 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/invertprimitive2d.hxx>
+#include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/converters.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -817,6 +818,47 @@ void D2DPixelProcessor2D::processPolygonHairlinePrimitive2D(
         increaseError();
 }
 
+bool D2DPixelProcessor2D::drawPolyPolygonColorTransformed(
+    const basegfx::B2DHomMatrix& rTansformation, const basegfx::B2DPolyPolygon& rPolyPolygon,
+    const basegfx::BColor& rColor)
+{
+    std::shared_ptr<SystemDependentData_ID2D1PathGeometry> pSystemDependentData_ID2D1PathGeometry(
+        getOrCreateFillGeometry(rPolyPolygon));
+
+    if (pSystemDependentData_ID2D1PathGeometry)
+    {
+        sal::systools::COMReference<ID2D1TransformedGeometry> pTransformedGeometry;
+        const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
+        basegfx::B2DHomMatrix aTansformation(getViewInformation2D().getObjectToViewTransformation()
+                                             * rTansformation);
+        HRESULT hr(aID2D1GlobalFactoryProvider.getID2D1Factory()->CreateTransformedGeometry(
+            pSystemDependentData_ID2D1PathGeometry->getID2D1PathGeometry(),
+            D2D1::Matrix3x2F(aTansformation.a(), aTansformation.b(), aTansformation.c(),
+                             aTansformation.d(), aTansformation.e() + fAAOffset,
+                             aTansformation.f() + fAAOffset),
+            &pTransformedGeometry));
+
+        if (SUCCEEDED(hr) && pTransformedGeometry)
+        {
+            const basegfx::BColor aFillColor(maBColorModifierStack.getModifiedColor(rColor));
+            const D2D1::ColorF aD2DColor(aFillColor.getRed(), aFillColor.getGreen(),
+                                         aFillColor.getBlue());
+
+            sal::systools::COMReference<ID2D1SolidColorBrush> pColorBrush;
+            hr = getRenderTarget()->CreateSolidColorBrush(aD2DColor, &pColorBrush);
+
+            if (SUCCEEDED(hr) && pColorBrush)
+            {
+                getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
+                getRenderTarget()->FillGeometry(pTransformedGeometry, pColorBrush);
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 void D2DPixelProcessor2D::processPolyPolygonColorPrimitive2D(
     const primitive2d::PolyPolygonColorPrimitive2D& rPolyPolygonColorPrimitive2D)
 {
@@ -829,41 +871,8 @@ void D2DPixelProcessor2D::processPolyPolygonColorPrimitive2D(
         return;
     }
 
-    bool bDone(false);
-    std::shared_ptr<SystemDependentData_ID2D1PathGeometry> pSystemDependentData_ID2D1PathGeometry(
-        getOrCreateFillGeometry(rPolyPolygon));
-
-    if (pSystemDependentData_ID2D1PathGeometry)
-    {
-        sal::systools::COMReference<ID2D1TransformedGeometry> pTransformedGeometry;
-        const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
-        const basegfx::B2DHomMatrix& rObjectToView(
-            getViewInformation2D().getObjectToViewTransformation());
-        HRESULT hr(aID2D1GlobalFactoryProvider.getID2D1Factory()->CreateTransformedGeometry(
-            pSystemDependentData_ID2D1PathGeometry->getID2D1PathGeometry(),
-            D2D1::Matrix3x2F(rObjectToView.a(), rObjectToView.b(), rObjectToView.c(),
-                             rObjectToView.d(), rObjectToView.e() + fAAOffset,
-                             rObjectToView.f() + fAAOffset),
-            &pTransformedGeometry));
-
-        if (SUCCEEDED(hr) && pTransformedGeometry)
-        {
-            const basegfx::BColor aFillColor(
-                maBColorModifierStack.getModifiedColor(rPolyPolygonColorPrimitive2D.getBColor()));
-            const D2D1::ColorF aD2DColor(aFillColor.getRed(), aFillColor.getGreen(),
-                                         aFillColor.getBlue());
-
-            sal::systools::COMReference<ID2D1SolidColorBrush> pColorBrush;
-            hr = getRenderTarget()->CreateSolidColorBrush(aD2DColor, &pColorBrush);
-
-            if (SUCCEEDED(hr) && pColorBrush)
-            {
-                getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
-                getRenderTarget()->FillGeometry(pTransformedGeometry, pColorBrush);
-                bDone = true;
-            }
-        }
-    }
+    const bool bDone(drawPolyPolygonColorTransformed(basegfx::B2DHomMatrix(), rPolyPolygon,
+                                                     rPolyPolygonColorPrimitive2D.getBColor()));
 
     if (!bDone)
         increaseError();
@@ -1912,6 +1921,37 @@ void D2DPixelProcessor2D::processFillGraphicPrimitive2D(
         increaseError();
 }
 
+void D2DPixelProcessor2D::processFillGradientPrimitive2D(
+    const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D)
+{
+    // draw all-covering initial BG polygon 1st
+    bool bDone(drawPolyPolygonColorTransformed(
+        basegfx::B2DHomMatrix(),
+        basegfx::B2DPolyPolygon(
+            basegfx::utils::createPolygonFromRect(rFillGradientPrimitive2D.getOutputRange())),
+        rFillGradientPrimitive2D.getOuterColor()));
+
+    if (bDone)
+    {
+        const basegfx::B2DPolyPolygon aForm(rFillGradientPrimitive2D.getUnitPolygon());
+
+        // paint solid fill steps by providing callback as lambda
+        auto aCallback([&aForm, &bDone, this](const basegfx::B2DHomMatrix& rMatrix,
+                                              const basegfx::BColor& rColor) {
+            if (bDone)
+            {
+                bDone = drawPolyPolygonColorTransformed(rMatrix, aForm, rColor);
+            }
+        });
+
+        // call value generator to trigger callbacks
+        rFillGradientPrimitive2D.generateMatricesAndColors(aCallback);
+    }
+
+    if (!bDone)
+        increaseError();
+}
+
 void D2DPixelProcessor2D::processInvertPrimitive2D(
     const primitive2d::InvertPrimitive2D& rInvertPrimitive2D)
 {
@@ -2122,6 +2162,12 @@ void D2DPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
         {
             processFillGraphicPrimitive2D(
                 static_cast<const primitive2d::FillGraphicPrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D:
+        {
+            processFillGradientPrimitive2D(
+                static_cast<const primitive2d::FillGradientPrimitive2D&>(rCandidate));
             break;
         }
 

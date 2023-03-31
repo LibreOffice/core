@@ -46,6 +46,14 @@ class FilledRectanglePrimitive2D;
 class SingleLinePrimitive2D;
 class FillGraphicPrimitive2D;
 class InvertPrimitive2D;
+class FillGradientPrimitive2D;
+}
+
+namespace basegfx
+{
+class B2DHomMatrix;
+class B2DPolyPolygon;
+class BColor;
 }
 
 struct ID2D1RenderTarget;
@@ -94,6 +102,8 @@ class DRAWINGLAYER_DLLPUBLIC D2DPixelProcessor2D : public BaseProcessor2D
     void processFillGraphicPrimitive2D(
         const primitive2d::FillGraphicPrimitive2D& rFillGraphicPrimitive2D);
     void processInvertPrimitive2D(const primitive2d::InvertPrimitive2D& rInvertPrimitive2D);
+    void processFillGradientPrimitive2D(
+        const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D);
 
     // common helpers
     sal::systools::COMReference<ID2D1Bitmap>
@@ -102,6 +112,9 @@ class DRAWINGLAYER_DLLPUBLIC D2DPixelProcessor2D : public BaseProcessor2D
     implCreateAlpha_B2DBitmap(const primitive2d::TransparencePrimitive2D& rTransCandidate,
                               const basegfx::B2DRange& rVisibleRange,
                               D2D1_MATRIX_3X2_F& rMaskScale);
+    bool drawPolyPolygonColorTransformed(const basegfx::B2DHomMatrix& rTansformation,
+                                         const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                         const basegfx::BColor& rColor);
 
     /*  the local processor for BasePrimitive2D-Implementation based primitives,
         called from the common process()-implementation
