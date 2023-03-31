@@ -1173,7 +1173,19 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     }
     if( sTableName.isEmpty() )
     {
-        sTableName = pDoc->GetUniqueTableName();
+        // Optimization: use import's own map to create unique names, because
+        // SwDoc::GetUniqueTableName scans all the already present tables,
+        // builds a bitset using rather complex rules, and that has quadratic
+        // complexity. Try once, then fallback to SwDoc::GetUniqueTableName
+        auto& tableNameMap = rImport.GetTableNameMap();
+        sal_Int32 nextIx = ++tableNameMap[aName];
+        OUString test = aName.isEmpty()
+                                  ? OUString(rImport.GetDefTableName() + OUString::number(nextIx))
+                                  : OUString(aName + "_" + OUString::number(nextIx));
+        if (const SwTableFormat* pExisting = pDoc->FindTableFormatByName(test); !pExisting)
+            sTableName = test;
+        else
+            sTableName = pDoc->GetUniqueTableName();
         GetImport().GetTextImport()
             ->GetRenameMap().Add( XML_TEXT_RENAME_TYPE_TABLE, aName, sTableName );
     }

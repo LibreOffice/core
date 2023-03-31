@@ -84,6 +84,10 @@ class SwXMLImport: public SvXMLImport
 
     SwDoc*      m_pDoc; // cached for getDoc()
 
+    // Optimization for new table name lookup
+    OUString m_sDefTableName; // See STR_TABLE_DEFNAME
+    std::map<OUString, sal_uInt32> m_aTableNameMap; // Last used indices for duplicating table names
+
     void                    InitItemImport();
     void                    FinitItemImport();
     void                    UpdateTextCollConditions( SwDoc *pDoc );
@@ -163,6 +167,9 @@ public:
 
     const SwDoc* getDoc() const;
     SwDoc* getDoc();
+
+    const OUString& GetDefTableName() { return m_sDefTableName; }
+    std::map<OUString, sal_uInt32>& GetTableNameMap() { return m_aTableNameMap; }
 };
 
 inline const SvXMLImportItemMapper& SwXMLImport::GetTableItemMapper() const
