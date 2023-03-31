@@ -324,7 +324,8 @@ SwXMLImport::SwXMLImport(
     m_bBlock( false ),
     m_bOrganizerMode( false ),
     m_bInititedXForms( false ),
-    m_pDoc( nullptr )
+    m_pDoc( nullptr ),
+    m_sDefTableName(SwResId(STR_TABLE_DEFNAME))
 {
     InitItemImport();
 }
