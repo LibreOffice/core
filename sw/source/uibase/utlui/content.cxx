@@ -5346,7 +5346,9 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
         break;
         case ContentTypeId::BOOKMARK:
         {
+            m_pActiveShell->StartAction();
             m_pActiveShell->GotoMark(pCnt->GetName());
+            m_pActiveShell->EndAction();
         }
         break;
         case ContentTypeId::REGION    :
