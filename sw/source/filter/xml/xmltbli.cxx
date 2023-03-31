@@ -53,6 +53,7 @@
 #include <swtable.hxx>
 #include <swtblfmt.hxx>
 #include <pam.hxx>
+#include <unoprnms.hxx>
 #include <unotbl.hxx>
 #include <unotextrange.hxx>
 #include <cellatr.hxx>
@@ -1207,6 +1208,8 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     if( xTable.is() )
     {
         xTable->initialize( 1, 1 );
+        if (auto xPropSet = xTable.query<css::beans::XPropertySet>())
+            xPropSet->setPropertyValue(UNO_NAME_TABLE_NAME, css::uno::Any(sTableName));
 
         try
         {
@@ -1245,8 +1248,6 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     OSL_ENSURE( pTable, "table missing" );
     m_pTableNode = pTable->GetTableNode();
     OSL_ENSURE( m_pTableNode, "table node missing" );
-
-    pTableFrameFormat->SetFormatName( sTableName );
 
     SwTableLine *pLine1 = m_pTableNode->GetTable().GetTabLines()[0U];
     m_pBox1 = pLine1->GetTabBoxes()[0U];
