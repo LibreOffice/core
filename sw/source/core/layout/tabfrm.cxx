@@ -3826,6 +3826,7 @@ void SwTabFrame::Cut()
     {
         OSL_ENSURE( !pUp->IsFootnoteFrame(), "Table in Footnote." );
         SwSectionFrame *pSct = nullptr;
+        SwFlyFrame *pFly = nullptr;
         // #126020# - adjust check for empty section
         // #130797# - correct fix #126020#
         if ( !pUp->Lower() && pUp->IsInSct() &&
@@ -3836,6 +3837,16 @@ void SwTabFrame::Cut()
             {
                 pSct->DelEmpty( false );
                 pSct->InvalidateSize_();
+            }
+        }
+        else if (!pUp->Lower() && pUp->IsInFly() &&
+                !(pFly = pUp->FindFlyFrame())->ContainsContent() &&
+                !pFly->ContainsAny())
+        {
+            if (pUp == pFly && pFly->IsFlySplitAllowed())
+            {
+                auto pFlyAtContent = static_cast<SwFlyAtContentFrame*>(pFly);
+                pFlyAtContent->DelEmpty();
             }
         }
         // table-in-footnote: delete empty footnote frames (like SwContentFrame::Cut)

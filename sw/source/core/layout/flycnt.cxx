@@ -1624,6 +1624,25 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
     return pLayLeaf;
 }
 
+void SwRootFrame::DeleteEmptyFlys_()
+{
+    assert(mpFlyDestroy);
+
+    while (!mpFlyDestroy->empty())
+    {
+        SwFlyFrame* pFly = *mpFlyDestroy->begin();
+        mpFlyDestroy->erase( mpFlyDestroy->begin() );
+        if (!pFly->getFrameArea().HasArea() && !pFly->ContainsContent()
+            && !pFly->IsDeleteForbidden())
+        {
+            SwTextFrame* pFlyAnchor = pFly->FindAnchorCharFrame();
+            SwFrame::DestroyFrame(pFly);
+            // So that JoinFrame() is called on the precede of the anchor if it has any.
+            pFlyAnchor->InvalidateSize();
+        }
+    }
+}
+
 const SwFlyAtContentFrame* SwFlyAtContentFrame::GetPrecede() const
 {
     return static_cast<const SwFlyAtContentFrame*>(SwFlowFrame::GetPrecede());
@@ -1632,6 +1651,37 @@ const SwFlyAtContentFrame* SwFlyAtContentFrame::GetPrecede() const
 SwFlyAtContentFrame* SwFlyAtContentFrame::GetPrecede()
 {
     return static_cast<SwFlyAtContentFrame*>(SwFlowFrame::GetPrecede());
+}
+
+void SwFlyAtContentFrame::DelEmpty()
+{
+    SwFlyAtContentFrame* pMaster = IsFollow() ? GetPrecede() : nullptr;
+    if (pMaster)
+    {
+        pMaster->SetFollow(GetFollow());
+    }
+    SetFollow(nullptr);
+
+    {
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+        aFrm.Height(0);
+    }
+    InvalidateObjRectWithSpaces();
+
+    if(getRootFrame())
+    {
+        getRootFrame()->InsertEmptyFly(this);
+    }
+}
+
+void SwRootFrame::InsertEmptyFly(SwFlyFrame* pDel)
+{
+    if (!mpFlyDestroy)
+    {
+        mpFlyDestroy.reset(new SwFlyDestroyList);
+    }
+
+    mpFlyDestroy->insert(pDel);
 }
 
 SwLayoutFrame* SwFrame::GetPrevFlyLeaf()

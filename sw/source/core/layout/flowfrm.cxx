@@ -64,6 +64,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
+#include <flyfrms.hxx>
 
 bool SwFlowFrame::s_bMoveBwdJump = false;
 
