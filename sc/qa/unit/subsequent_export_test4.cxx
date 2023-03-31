@@ -17,6 +17,7 @@
 #include <attrib.hxx>
 #include <stlpool.hxx>
 #include <formulacell.hxx>
+#include <postit.hxx>
 #include <validat.hxx>
 #include <scresid.hxx>
 #include <globstr.hrc>
@@ -32,6 +33,7 @@
 #include <tools/fldunit.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
+#include <svx/svdocapt.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
@@ -1537,6 +1539,48 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testShapeStyles)
         Color nColor;
         xShape->getPropertyValue("FillColor") >>= nColor;
         CPPUNIT_ASSERT_EQUAL(COL_RED, nColor);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testCommentStyles)
+{
+    createScDoc("ods/comment.ods");
+
+    {
+        ScDocument* pDoc = getScDoc();
+
+        ScAddress aPos(0, 0, 0);
+        ScPostIt* pNote = pDoc->GetNote(aPos);
+        CPPUNIT_ASSERT(pNote);
+
+        pNote->ShowCaption(aPos, true);
+        auto pCaption = pNote->GetCaption();
+        CPPUNIT_ASSERT(pCaption);
+
+        auto pStyleSheet = &pDoc->GetStyleSheetPool()->Make("MyStyle1", SfxStyleFamily::Frame);
+        pCaption->SetStyleSheet(static_cast<SfxStyleSheet*>(pStyleSheet), true);
+
+        // Hidden comments use different code path on import
+        pNote->ShowCaption(aPos, false);
+    }
+
+    saveAndReload("calc8");
+
+    {
+        ScDocument aDoc;
+        aDoc.InitDrawLayer();
+        aDoc.TransferTab(*getScDoc(), 0, 0);
+
+        ScAddress aPos(0, 0, 0);
+        ScPostIt* pNote = aDoc.GetNote(aPos);
+        CPPUNIT_ASSERT(pNote);
+
+        pNote->ShowCaption(aPos, true);
+        auto pCaption = pNote->GetCaption();
+        CPPUNIT_ASSERT(pCaption);
+
+        // Check that the style was imported, and survived copying
+        CPPUNIT_ASSERT_EQUAL(OUString("MyStyle1"), pCaption->GetStyleSheet()->GetName());
     }
 }
 

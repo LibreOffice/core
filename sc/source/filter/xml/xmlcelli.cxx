@@ -838,6 +838,16 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
     if( mxAnnotationData->mxShape.is() && mxAnnotationData->mxShapes.is() )
     {
         OSL_ENSURE( mxAnnotationData->mxShapes.get() == xShapes.get(), "ScXMLTableRowCellContext::SetAnnotation - different drawing pages" );
+
+        /*  Don't attempt to get the style from the SdrObject,
+            as it might be a default assigned one. */
+        auto pStyle = rXMLImport.GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(
+            XmlStyleFamily::SD_GRAPHICS_ID, mxAnnotationData->maStyleName);
+        OUString aStyleName = pStyle ? pStyle->GetParentName() : mxAnnotationData->maStyleName;
+        assert(!rXMLImport.GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(
+            XmlStyleFamily::SD_GRAPHICS_ID, aStyleName));
+        aStyleName = rXMLImport.GetStyleDisplayName(XmlStyleFamily::SD_GRAPHICS_ID, aStyleName);
+
         SdrObject* pObject = SdrObject::getSdrObjectFromXShape(mxAnnotationData->mxShape);
         OSL_ENSURE( pObject, "ScXMLTableRowCellContext::SetAnnotation - cannot get SdrObject from shape" );
 
@@ -880,13 +890,13 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
                 if(!comphelper::LibreOfficeKit::isActive())
                 {
                     pNote = ScNoteUtil::CreateNoteFromObjectData( *pDoc, rPos,
-                        std::move(aItemSet), *pOutlinerObj,
+                        std::move(aItemSet), aStyleName, *pOutlinerObj,
                         aCaptionRect, mxAnnotationData->mbShown );
                 }
                 else
                 {
                     pNote = ScNoteUtil::CreateNoteFromObjectData( *pDoc, rPos,
-                        std::move(aItemSet), *pOutlinerObj,
+                        std::move(aItemSet), aStyleName, *pOutlinerObj,
                         aCaptionRect, false );
                 }
 

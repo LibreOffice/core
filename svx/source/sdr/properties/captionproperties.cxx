@@ -94,6 +94,11 @@ namespace sdr::properties
 
             // this was set by TextProperties::ForceDefaultAttributes(),
             // reset to default
+            if (static_cast<SdrCaptionObj&>(GetSdrObject()).GetSpecialTextBoxShadow())
+            {
+                mxItemSet->ClearItem(XATTR_FILLCOLOR);
+                mxItemSet->ClearItem(XATTR_FILLSTYLE);
+            }
             mxItemSet->ClearItem(XATTR_LINESTYLE);
         }
 } // end of namespace

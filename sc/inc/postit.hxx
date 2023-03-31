@@ -216,6 +216,8 @@ public:
             formatting attributes of the caption object. This function takes
             ownership of the passed item set.
 
+        @param rStyleName  Drawing style associated with the caption object.
+
         @param rOutlinerObj  An outliner object containing (formatted) text
             for the caption object.
 
@@ -229,7 +231,7 @@ public:
      */
     static ScPostIt*    CreateNoteFromObjectData(
                             ScDocument& rDoc, const ScAddress& rPos,
-                            SfxItemSet&& oItemSet,
+                            SfxItemSet&& oItemSet, const OUString& rStyleName,
                             const OutlinerParaObject& rOutlinerObj,
                             const tools::Rectangle& rCaptionRect, bool bShown );
 

@@ -47,6 +47,7 @@
 
 #include <document.hxx>
 #include <docpool.hxx>
+#include <stlpool.hxx>
 #include <patattr.hxx>
 #include <drwlayer.hxx>
 #include <userdat.hxx>
@@ -89,9 +90,9 @@ void ScCaptionUtil::SetCaptionLayer( SdrCaptionObj& rCaption, bool bShown )
 
 void ScCaptionUtil::SetBasicCaptionSettings( SdrCaptionObj& rCaption, bool bShown )
 {
-    SetCaptionLayer( rCaption, bShown );
     rCaption.SetFixedTail();
     rCaption.SetSpecialTextBoxShadow();
+    SetCaptionLayer( rCaption, bShown );
 }
 
 void ScCaptionUtil::SetCaptionUserData( SdrCaptionObj& rCaption, const ScAddress& rPos )
@@ -458,6 +459,7 @@ struct ScCaptionInitData
 {
     std::optional< SfxItemSet > moItemSet;  /// Caption object formatting.
     std::optional< OutlinerParaObject > mxOutlinerObj; /// Text object with all text portion formatting.
+    OUString            maStyleName;        /// Drawing style associated with the caption object.
     OUString            maSimpleText;       /// Simple text without formatting.
     Point               maCaptionOffset;    /// Caption position relative to cell corner.
     Size                maCaptionSize;      /// Size of the caption object.
@@ -694,6 +696,12 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
     else
         maNoteData.mxCaption->SetText( xInitData->maSimpleText );
 
+    if (!xInitData->maStyleName.isEmpty())
+    {
+        if (auto pStyleSheet = mrDoc.GetStyleSheetPool()->Find(xInitData->maStyleName, SfxStyleFamily::Frame))
+            maNoteData.mxCaption->SetStyleSheet(static_cast<SfxStyleSheet*>(pStyleSheet), true);
+    }
+
     // copy all items or set default items; reset shadow items
     ScCaptionUtil::SetDefaultItems( *maNoteData.mxCaption, mrDoc, xInitData->moItemSet ? &*xInitData->moItemSet : nullptr );
 
@@ -749,6 +757,14 @@ void ScPostIt::CreateCaption( const ScAddress& rPos, const SdrCaptionObj* pCapti
         if( OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject() )
             maNoteData.mxCaption->SetOutlinerParaObject( *pOPO );
         // copy formatting items (after text has been copied to apply font formatting)
+        if (auto pStyleSheet = pCaption->GetStyleSheet())
+        {
+            auto pPool = mrDoc.GetStyleSheetPool();
+            pPool->CopyStyleFrom(pStyleSheet->GetPool(), pStyleSheet->GetName(), pStyleSheet->GetFamily(), true);
+
+            if (auto pDestStyleSheet = pPool->Find(pStyleSheet->GetName(), pStyleSheet->GetFamily()))
+                maNoteData.mxCaption->SetStyleSheet(static_cast<SfxStyleSheet*>(pDestStyleSheet), true);
+        }
         maNoteData.mxCaption->SetMergedItemSetAndBroadcast( pCaption->GetMergedItemSet() );
         // move textbox position relative to new cell, copy textbox size
         tools::Rectangle aCaptRect = pCaption->GetLogicRect();
@@ -854,6 +870,8 @@ rtl::Reference<SdrCaptionObj> ScNoteUtil::CreateTempCaption(
         if( OutlinerParaObject* pOPO = pNoteCaption->GetOutlinerParaObject() )
             pCaption->SetOutlinerParaObject( *pOPO );
         // set formatting (must be done after setting text) and resize the box to fit the text
+        if (auto pStyleSheet = pNoteCaption->GetStyleSheet())
+            pCaption->SetStyleSheet(pStyleSheet, true);
         pCaption->SetMergedItemSetAndBroadcast( pNoteCaption->GetMergedItemSet() );
         tools::Rectangle aCaptRect( pCaption->GetLogicRect().TopLeft(), pNoteCaption->GetLogicRect().GetSize() );
         pCaption->SetLogicRect( aCaptRect );
@@ -896,7 +914,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
 }
 
 ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
-        ScDocument& rDoc, const ScAddress& rPos, SfxItemSet&& rItemSet,
+        ScDocument& rDoc, const ScAddress& rPos, SfxItemSet&& rItemSet, const OUString& rStyleName,
         const OutlinerParaObject& rOutlinerObj, const tools::Rectangle& rCaptionRect,
         bool bShown )
 {
@@ -905,6 +923,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
     ScCaptionInitData& rInitData = *aNoteData.mxInitData;
     rInitData.moItemSet.emplace(std::move(rItemSet));
     rInitData.mxOutlinerObj = rOutlinerObj;
+    rInitData.maStyleName = rStyleName;
 
     // convert absolute caption position to relative position
     rInitData.mbDefaultPosSize = rCaptionRect.IsEmpty();
