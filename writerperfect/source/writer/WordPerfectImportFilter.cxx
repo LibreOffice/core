@@ -167,18 +167,15 @@ WordPerfectImportFilter::setTargetDocument(const Reference<css::lang::XComponent
 OUString SAL_CALL
 WordPerfectImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descriptor)
 {
-    libwpd::WPDConfidence confidence = libwpd::WPD_CONFIDENCE_NONE;
-    OUString sTypeName;
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 location = nLength;
-    const css::beans::PropertyValue* pValue = Descriptor.getConstArray();
     Reference<XInputStream> xInputStream;
     for (sal_Int32 i = 0; i < nLength; i++)
     {
-        if (pValue[i].Name == "TypeName")
+        if (Descriptor[i].Name == "TypeName")
             location = i;
-        else if (pValue[i].Name == "InputStream")
-            pValue[i].Value >>= xInputStream;
+        else if (Descriptor[i].Name == "InputStream")
+            Descriptor[i].Value >>= xInputStream;
     }
 
     if (!xInputStream.is())
@@ -186,13 +183,10 @@ WordPerfectImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& D
 
     WPXSvInputStream input(xInputStream);
 
-    confidence = libwpd::WPDocument::isFileFormatSupported(&input);
-
+    OUString sTypeName;
+    libwpd::WPDConfidence confidence = libwpd::WPDocument::isFileFormatSupported(&input);
     if (confidence == libwpd::WPD_CONFIDENCE_EXCELLENT
         || confidence == libwpd::WPD_CONFIDENCE_SUPPORTED_ENCRYPTION)
-        sTypeName = "writer_WordPerfect_Document";
-
-    if (!sTypeName.isEmpty())
     {
         if (location == nLength)
         {
@@ -200,6 +194,7 @@ WordPerfectImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& D
             Descriptor.getArray()[location].Name = "TypeName";
         }
 
+        sTypeName = "writer_WordPerfect_Document";
         Descriptor.getArray()[location].Value <<= sTypeName;
     }
 
