@@ -12,6 +12,12 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
 class tdf134960_hyperlinks(UITestCase):
 
+    def get_item(self, xTree, name):
+        for i in xTree.getChildren():
+            xItem = xTree.getChild(i)
+            if name == get_state_as_dict(xItem)['Text']:
+                return xItem
+
     def launch_sidebar(self, xWriterEdit):
 
         self.xUITest.executeCommand(".uno:Sidebar")
@@ -22,7 +28,7 @@ class tdf134960_hyperlinks(UITestCase):
         xNavigatorPanel = self.ui_test.wait_until_child_is_available('NavigatorPanel')
 
         xContentTree = xNavigatorPanel.getChild("contenttree")
-        xHyperlinks = xContentTree.getChild('7')
+        xHyperlinks = self.get_item(xContentTree, 'Hyperlinks')
         self.assertEqual('Hyperlinks', get_state_as_dict(xHyperlinks)['Text'])
 
         xHyperlinks.executeAction("EXPAND", tuple())

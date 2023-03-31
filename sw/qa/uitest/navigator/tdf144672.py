@@ -13,6 +13,12 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
 class tdf144672(UITestCase):
 
+    def get_item(self, xTree, name):
+        for i in xTree.getChildren():
+            xItem = xTree.getChild(i)
+            if name == get_state_as_dict(xItem)['Text']:
+                return xItem
+
     def test_Tdf144672(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf144672.odt")):
 
@@ -28,14 +34,14 @@ class tdf144672(UITestCase):
 
             xContentTree = xNavigatorPanel.getChild("contenttree")
 
-            xReferences = xContentTree.getChild('8')
+            xReferences = self.get_item(xContentTree, 'References')
             self.assertEqual('References', get_state_as_dict(xReferences)['Text'])
 
             # tdf#129625: Without the fix in place, this test would have failed with
             # AssertionError: 'true' != 'false'
             self.assertEqual('true', get_state_as_dict(xReferences)['IsSemiTransparent'])
 
-            xIndexes = xContentTree.getChild('9')
+            xIndexes = self.get_item(xContentTree, 'Indexes')
             self.assertEqual('Indexes', get_state_as_dict(xIndexes)['Text'])
             self.assertEqual('false', get_state_as_dict(xIndexes)['IsSemiTransparent'])
 
