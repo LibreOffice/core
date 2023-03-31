@@ -1176,7 +1176,8 @@ public:
                                 const SwTableAutoFormat* pTAFormat = nullptr,
                                 const std::vector<sal_uInt16> *pColArr = nullptr,
                                 bool bCalledFromShell = false,
-                                bool bNewModel = true );
+                                bool bNewModel = true,
+                                const OUString& rTableName = {} );
 
     // If index is in a table, return TableNode, else 0.
     static SwTableNode* IsIdxInTable( const SwNodeIndex& rIdx );
