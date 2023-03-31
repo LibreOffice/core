@@ -13,6 +13,12 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
 class tdf40427(UITestCase):
 
+  def get_item(self, xTree, name):
+    for i in xTree.getChildren():
+        xItem = xTree.getChild(i)
+        if name == get_state_as_dict(xItem)['Text']:
+            return xItem
+
   def test_tdf40427(self):
     with self.ui_test.load_file(get_url_for_data_file("tdf40427_SectionPositions.odt")) as document:
         xMainWindow = self.xUITest.getTopFocusWindow()
@@ -44,7 +50,7 @@ class tdf40427(UITestCase):
         xNavigatorPanel = self.ui_test.wait_until_child_is_available('NavigatorPanel')
 
         xContentTree = xNavigatorPanel.getChild("contenttree")
-        xSections = xContentTree.getChild('6')
+        xSections = self.get_item(xContentTree, 'Sections')
         self.assertEqual('Sections', get_state_as_dict(xSections)['Text'])
         xSections.executeAction("EXPAND", ())
 

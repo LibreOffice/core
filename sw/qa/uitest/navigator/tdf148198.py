@@ -13,6 +13,12 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
 class tdf148198(UITestCase):
 
+    def get_item(self, xTree, name):
+        for i in xTree.getChildren():
+            xItem = xTree.getChild(i)
+            if name == get_state_as_dict(xItem)['Text']:
+                return xItem
+
     def test_tdf148198(self):
         sHyperlink0 = 'a hyperlink with an anchor, different character styles, a footnote1, a field This is a bookmark, and a rsid'
         sHyperlink1 = 'another hyperlink'
@@ -28,7 +34,7 @@ class tdf148198(UITestCase):
             xNavigatorPanel = self.ui_test.wait_until_child_is_available('NavigatorPanel')
 
             xContentTree = xNavigatorPanel.getChild('contenttree')
-            xHyperlinks = xContentTree.getChild('7')
+            xHyperlinks = self.get_item(xContentTree, 'Hyperlinks')
             self.assertEqual('Hyperlinks', get_state_as_dict(xHyperlinks)['Text'])
 
             xHyperlinks.executeAction('EXPAND', tuple())
@@ -45,7 +51,7 @@ class tdf148198(UITestCase):
             xNavigatorPanel = self.ui_test.wait_until_child_is_available('NavigatorPanel')
 
             xContentTree = xNavigatorPanel.getChild('contenttree')
-            xHyperlinks = xContentTree.getChild('7')
+            xHyperlinks = self.get_item(xContentTree, 'Hyperlinks')
             self.assertEqual('Hyperlinks', get_state_as_dict(xHyperlinks)['Text'])
 
             xHyperlinks.executeAction('EXPAND', tuple())

@@ -13,6 +13,12 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
 class tdf149916(UITestCase):
 
+    def get_item(self, xTree, name):
+        for i in xTree.getChildren():
+            xItem = xTree.getChild(i)
+            if name == get_state_as_dict(xItem)['Text']:
+                return xItem
+
     def test_tdf149916(self):
 
         with self.ui_test.load_file(get_url_for_data_file('tdf149916.odt')):
@@ -26,7 +32,7 @@ class tdf149916(UITestCase):
             xNavigatorPanel = self.ui_test.wait_until_child_is_available('NavigatorPanel')
 
             xContentTree = xNavigatorPanel.getChild('contenttree')
-            xFields = xContentTree.getChild('12')
+            xFields = self.get_item(xContentTree, 'Fields')
             self.assertEqual('Fields', get_state_as_dict(xFields)['Text'])
 
             xFields.executeAction('EXPAND', tuple())

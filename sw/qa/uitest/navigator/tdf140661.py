@@ -12,6 +12,12 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
 class tdf140661(UITestCase):
 
+    def get_item(self, xTree, name):
+        for i in xTree.getChildren():
+            xItem = xTree.getChild(i)
+            if name == get_state_as_dict(xItem)['Text']:
+                return xItem
+
     def launch_navigator(self, bIsBeforeUngroup):
         xMainWindow = self.xUITest.getTopFocusWindow()
         xWriterEdit = xMainWindow.getChild("writer_edit")
@@ -24,7 +30,7 @@ class tdf140661(UITestCase):
         xNavigatorPanel = self.ui_test.wait_until_child_is_available('NavigatorPanel')
 
         xContentTree = xNavigatorPanel.getChild("contenttree")
-        xDrawings = xContentTree.getChild('11')
+        xDrawings = self.get_item(xContentTree, 'Drawing objects')
         self.assertEqual('Drawing objects', get_state_as_dict(xDrawings)['Text'])
 
         xDrawings.executeAction("EXPAND", tuple())
