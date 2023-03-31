@@ -37,78 +37,6 @@ class ScMacrosTest : public UnoApiXmlTest
 {
 public:
     ScMacrosTest();
-
-    void testStarBasic();
-    void testMSP();
-    void testPasswordProtectedStarBasic();
-    void testTdf142391();
-    void testTdf114427();
-    void testRowColumn();
-    void testTdf104902();
-    void testTdf64639();
-    void testTdf142033();
-    void testPasswordProtectedUnicodeString();
-    void testPasswordProtectedArrayInUserType();
-    void testTdf131296_legacy();
-    void testTdf131296_new();
-    void testTdf46119();
-    void testTdf128218();
-    void testTdf71271();
-    void testTdf43003();
-    void testTdf75263();
-    void testTdf133887();
-    void testTdf133889();
-    void testTdf144970();
-    void testTdf138646();
-    void testTdf105558();
-    void testTdf143582();
-    void testTdf144085();
-    void testTdf125800();
-    void testTdf130307();
-    void testTdf146742();
-    void testMacroButtonFormControlXlsxExport();
-    void testTdf107572();
-    void testShapeLayerId();
-    void testFunctionAccessIndirect();
-    void testTdf147122();
-
-    CPPUNIT_TEST_SUITE(ScMacrosTest);
-    CPPUNIT_TEST(testStarBasic);
-    CPPUNIT_TEST(testMSP);
-    CPPUNIT_TEST(testPasswordProtectedStarBasic);
-    CPPUNIT_TEST(testTdf142391);
-    CPPUNIT_TEST(testTdf114427);
-    CPPUNIT_TEST(testRowColumn);
-    CPPUNIT_TEST(testTdf104902);
-    CPPUNIT_TEST(testTdf64639);
-    CPPUNIT_TEST(testTdf142033);
-    CPPUNIT_TEST(testPasswordProtectedUnicodeString);
-    CPPUNIT_TEST(testPasswordProtectedArrayInUserType);
-    CPPUNIT_TEST(testTdf131296_legacy);
-    CPPUNIT_TEST(testTdf131296_new);
-    CPPUNIT_TEST(testTdf46119);
-    CPPUNIT_TEST(testTdf128218);
-    CPPUNIT_TEST(testTdf128218);
-    CPPUNIT_TEST(testTdf71271);
-    CPPUNIT_TEST(testTdf43003);
-    CPPUNIT_TEST(testTdf75263);
-    CPPUNIT_TEST(testTdf133887);
-    CPPUNIT_TEST(testTdf133889);
-    CPPUNIT_TEST(testTdf144970);
-    CPPUNIT_TEST(testTdf138646);
-    CPPUNIT_TEST(testTdf105558);
-    CPPUNIT_TEST(testTdf143582);
-    CPPUNIT_TEST(testTdf144085);
-    CPPUNIT_TEST(testTdf125800);
-    CPPUNIT_TEST(testTdf130307);
-    CPPUNIT_TEST(testTdf146742);
-    CPPUNIT_TEST(testMacroButtonFormControlXlsxExport);
-    CPPUNIT_TEST(testTdf107572);
-    CPPUNIT_TEST(testShapeLayerId);
-    CPPUNIT_TEST(testFunctionAccessIndirect);
-    CPPUNIT_TEST(testTdf147122);
-
-    CPPUNIT_TEST_SUITE_END();
 };
 
 // I suppose you could say this test doesn't really belong here, OTOH
@@ -117,7 +45,7 @@ public:
 // this the problem this way. Perhaps in the future there will be some sort
 // of slowcheck tests ( requiring a full document environment in the scripting
 // module, we could move the test there then ) - relates to fdo#67547
-void ScMacrosTest::testMSP()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testMSP)
 {
     loadFromURL(u"MasterScriptProviderProblem.ods");
 
@@ -129,7 +57,7 @@ void ScMacrosTest::testMSP()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("TestMSP ( for fdo#67547) failed", OUString("OK"), sResult);
 }
 
-void ScMacrosTest::testPasswordProtectedStarBasic()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testPasswordProtectedStarBasic)
 {
     loadFromURL(u"testTypePassword.ods");
 
@@ -161,7 +89,7 @@ void ScMacrosTest::testPasswordProtectedStarBasic()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Far Method script did not change the value of Sheet1.C1", OUString("success"), aValue);
 }
 
-void ScMacrosTest::testTdf142391()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf142391)
 {
     loadFromURL(u"tdf142391.ods");
 
@@ -192,7 +120,7 @@ void ScMacrosTest::testTdf142391()
                                  OUString("success"), aValue);
 }
 
-void ScMacrosTest::testStarBasic()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testStarBasic)
 {
     loadFromURL(u"StarBasic.ods");
 
@@ -207,7 +135,7 @@ void ScMacrosTest::testStarBasic()
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("script did not change the value of Sheet1.A1",2.0, aValue, 0.00001);
 }
 
-void ScMacrosTest::testRowColumn()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testRowColumn)
 {
     loadFromURL(u"StarBasic.ods");
 
@@ -227,7 +155,7 @@ void ScMacrosTest::testRowColumn()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4001), nWidth);
 }
 
-void ScMacrosTest::testTdf146742()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf146742)
 {
     loadFromURL(u"tdf146742.ods");
 
@@ -249,7 +177,7 @@ void ScMacrosTest::testTdf146742()
     CPPUNIT_ASSERT_EQUAL(OUString("FALSE"), rDoc.GetString(ScAddress(1,1,0)));
 }
 
-void ScMacrosTest::testMacroButtonFormControlXlsxExport()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testMacroButtonFormControlXlsxExport)
 {
     // Given a button form control with an associated macro:
     loadFromURL(u"macro-button-form-control.xlsm");
@@ -272,7 +200,7 @@ void ScMacrosTest::testMacroButtonFormControlXlsxExport()
     assertXPath(pWorkbookDoc, "//x:workbook/definedNames", 0);
 }
 
-void ScMacrosTest::testTdf104902()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf104902)
 {
     loadFromURL(u"tdf104902.ods");
 
@@ -296,7 +224,7 @@ void ScMacrosTest::testTdf104902()
     CPPUNIT_ASSERT_EQUAL(OUString(u"string with" + OUStringChar(u'\xA') + u"newlines"), rDoc.GetString(ScAddress(0, 1, 0)));
 }
 
-void ScMacrosTest::testTdf64639()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf64639)
 {
     loadFromURL(u"tdf64639.ods");
 
@@ -325,7 +253,7 @@ void ScMacrosTest::testTdf64639()
     }
 }
 
-void ScMacrosTest::testTdf142033()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf142033)
 {
     loadFromURL(u"tdf142033.ods");
 
@@ -351,7 +279,7 @@ void ScMacrosTest::testTdf142033()
     CPPUNIT_ASSERT_EQUAL(OUString(u"string with" + OUStringChar(u'\xA') + u"newlines"), rDoc.GetString(ScAddress(1,1,0)));
 }
 
-void ScMacrosTest::testPasswordProtectedUnicodeString()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testPasswordProtectedUnicodeString)
 {
     const OUString sCorrectString(u"English Русский 中文");
     static const OUStringLiteral sMacroURL(
@@ -392,7 +320,7 @@ void ScMacrosTest::testPasswordProtectedUnicodeString()
     }
 }
 
-void ScMacrosTest::testPasswordProtectedArrayInUserType()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testPasswordProtectedArrayInUserType)
 {
     static const OUStringLiteral sMacroURL(
         u"vnd.sun.Star.script:Protected.Module1.TestMyType?language=Basic&location=document");
@@ -432,7 +360,7 @@ void ScMacrosTest::testPasswordProtectedArrayInUserType()
     }
 }
 
-void ScMacrosTest::testTdf114427()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf114427)
 {
     loadFromURL(u"tdf114427.ods");
 
@@ -448,7 +376,7 @@ void ScMacrosTest::testTdf114427()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDraws->getCount());
 }
 
-void ScMacrosTest::testTdf131296_legacy()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf131296_legacy)
 {
     // For legacy password-protected library images, we must correctly get the constants' values,
     // and also - for Integer - the type.
@@ -473,7 +401,7 @@ void ScMacrosTest::testTdf131296_legacy()
     }
 }
 
-void ScMacrosTest::testTdf131296_new()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf131296_new)
 {
     // For new password-protected library images, we must correctly get both the constants' values
     // and their types.
@@ -499,7 +427,7 @@ void ScMacrosTest::testTdf131296_new()
     }
 }
 
-void ScMacrosTest::testTdf46119()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf46119)
 {
     loadFromURL(u"tdf46119.ods");
 
@@ -527,7 +455,7 @@ void ScMacrosTest::testTdf46119()
     CPPUNIT_ASSERT_EQUAL(OUString("0.366"), rDoc.GetString(ScAddress(4, 27, 0)));
 }
 
-void ScMacrosTest::testTdf128218()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf128218)
 {
     loadFromURL(u"tdf128218.ods");
 
@@ -543,7 +471,7 @@ void ScMacrosTest::testTdf128218()
     CPPUNIT_ASSERT_EQUAL(OUString("Double"), aReturnValue);
 }
 
-void ScMacrosTest::testTdf71271()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf71271)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
 
@@ -569,7 +497,7 @@ void ScMacrosTest::testTdf71271()
     }
 }
 
-void ScMacrosTest::testTdf43003()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf43003)
 {
     loadFromURL(u"tdf43003.ods");
 
@@ -588,7 +516,7 @@ void ScMacrosTest::testTdf43003()
 }
 
 
-void ScMacrosTest::testTdf75263()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf75263)
 {
     loadFromURL(u"tdf75263.xlsm");
 
@@ -619,7 +547,7 @@ void ScMacrosTest::testTdf75263()
     }
 }
 
-void ScMacrosTest::testTdf133887()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf133887)
 {
     loadFromURL(u"tdf133887.ods");
 
@@ -643,7 +571,7 @@ void ScMacrosTest::testTdf133887()
     CPPUNIT_ASSERT_EQUAL(6.75, aReturnValue);
 }
 
-void ScMacrosTest::testTdf133889()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf133889)
 {
     loadFromURL(u"tdf133889.ods");
 
@@ -667,7 +595,7 @@ void ScMacrosTest::testTdf133889()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100000), aReturnValue);
 }
 
-void ScMacrosTest::testTdf143582()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf143582)
 {
     loadFromURL(u"tdf143582.ods");
 
@@ -682,7 +610,7 @@ void ScMacrosTest::testTdf143582()
     CPPUNIT_ASSERT_EQUAL(OUString("Test6"), aReturnValue);
 }
 
-void ScMacrosTest::testTdf144085()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf144085)
 {
     loadFromURL(u"tdf144085.ods");
 
@@ -697,7 +625,7 @@ void ScMacrosTest::testTdf144085()
     CPPUNIT_ASSERT_EQUAL(OUString("$Sheet1.$B$5:$E$17"), aReturnValue);
 }
 
-void ScMacrosTest::testTdf125800()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf125800)
 {
     loadFromURL(u"tdf125800.ods");
 
@@ -729,7 +657,7 @@ void ScMacrosTest::testTdf125800()
     CPPUNIT_ASSERT_EQUAL(ScConditionMode::Direct, pCondition->GetOperation());
 }
 
-void ScMacrosTest::testTdf130307()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf130307)
 {
     loadFromURL(u"tdf130307.ods");
 
@@ -742,7 +670,7 @@ void ScMacrosTest::testTdf130307()
     CPPUNIT_ASSERT_EQUAL(OUString("Sheet1Sheet2"), aReturnValue);
 }
 
-void ScMacrosTest::testTdf144970()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf144970)
 {
     loadFromURL(u"tdf144970.ods");
 
@@ -770,7 +698,7 @@ void ScMacrosTest::testTdf144970()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
 }
 
-void ScMacrosTest::testTdf138646()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf138646)
 {
     loadFromURL(u"tdf138646.ods");
 
@@ -804,7 +732,7 @@ void ScMacrosTest::testTdf138646()
     }
 }
 
-void ScMacrosTest::testTdf105558()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf105558)
 {
     loadFromURL(u"tdf105558.ods");
 
@@ -821,7 +749,7 @@ void ScMacrosTest::testTdf105558()
     CPPUNIT_ASSERT_EQUAL(5.5, rDoc.GetValue(ScAddress(0, 0, 0)));
 }
 
-void ScMacrosTest::testTdf107572()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf107572)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
 
@@ -874,7 +802,7 @@ void ScMacrosTest::testTdf107572()
     }
 }
 
-void ScMacrosTest::testShapeLayerId()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testShapeLayerId)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
 
@@ -908,7 +836,7 @@ void ScMacrosTest::testShapeLayerId()
     CPPUNIT_ASSERT_EQUAL(Any(OUString("0 Expected runtime error happened")), aRet);
 }
 
-void ScMacrosTest::testFunctionAccessIndirect()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testFunctionAccessIndirect)
 {
     OUString aFileName = loadFromURL(u"tdf120161.ods"); // just some document with known values in cells
 
@@ -925,7 +853,7 @@ void ScMacrosTest::testFunctionAccessIndirect()
     CPPUNIT_ASSERT_EQUAL(css::uno::Any(OUString("a1")), aResult);
 }
 
-void ScMacrosTest::testTdf147122()
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf147122)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
 
@@ -961,8 +889,6 @@ ScMacrosTest::ScMacrosTest()
       : UnoApiXmlTest("/sc/qa/extras/testdocuments")
 {
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(ScMacrosTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
