@@ -340,7 +340,8 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
                                    const SwTableAutoFormat* pTAFormat,
                                    const std::vector<sal_uInt16> *pColArr,
                                    bool bCalledFromShell,
-                                   bool bNewModel )
+                                   bool bNewModel,
+                                   const OUString& rTableName )
 {
     assert(nRows && "Table without line?");
     assert(nCols && "Table without rows?");
@@ -357,7 +358,9 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
             pColArr = nullptr;
     }
 
-    OUString aTableName = GetUniqueTableName();
+    OUString aTableName = rTableName;
+    if (aTableName.isEmpty() || FindTableFormatByName(aTableName) != nullptr)
+        aTableName = GetUniqueTableName();
 
     if( GetIDocumentUndoRedo().DoesUndo() )
     {

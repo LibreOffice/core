@@ -2121,11 +2121,28 @@ SwXTextTable::attach(const uno::Reference<text::XTextRange> & xTextRange)
             pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
             aPam.DeleteMark();
         }
+
+        OUString tableName;
+        if (const::uno::Any* pName;
+            m_pImpl->m_pTableProps->GetProperty(FN_UNO_TABLE_NAME, 0, pName))
+        {
+            tableName = pName->get<OUString>();
+        }
+        else if (!m_pImpl->m_sTableName.isEmpty())
+        {
+            sal_uInt16 nIndex = 1;
+            tableName = m_pImpl->m_sTableName;
+            while (pDoc->FindTableFormatByName(tableName, true) && nIndex < USHRT_MAX)
+                tableName = m_pImpl->m_sTableName + OUString::number(nIndex++);
+        }
+
         pTable = pDoc->InsertTable(SwInsertTableOptions( SwInsertTableFlags::Headline | SwInsertTableFlags::DefaultBorder | SwInsertTableFlags::SplitLayout, 0 ),
                 *aPam.GetPoint(),
                 m_pImpl->m_nRows,
                 m_pImpl->m_nColumns,
-                text::HoriOrientation::FULL);
+                text::HoriOrientation::FULL,
+                nullptr, nullptr, false, true,
+                tableName);
         if(pTable)
         {
             // here, the properties of the descriptor need to be analyzed
@@ -2135,20 +2152,6 @@ SwXTextTable::attach(const uno::Reference<text::XTextRange> & xTextRange)
 
             m_pImpl->SetFrameFormat(*pTableFormat);
 
-            if (!m_pImpl->m_sTableName.isEmpty())
-            {
-                sal_uInt16 nIndex = 1;
-                OUString sTmpNameIndex(m_pImpl->m_sTableName);
-                while(pDoc->FindTableFormatByName(sTmpNameIndex, true) && nIndex < USHRT_MAX)
-                {
-                    sTmpNameIndex = m_pImpl->m_sTableName + OUString::number(nIndex++);
-                }
-                pDoc->SetTableName( *pTableFormat, sTmpNameIndex);
-            }
-
-            const::uno::Any* pName;
-            if (m_pImpl->m_pTableProps->GetProperty(FN_UNO_TABLE_NAME, 0, pName))
-                setName(pName->get<OUString>());
             m_pImpl->m_pTableProps.reset();
         }
         pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
