@@ -6331,6 +6331,24 @@ void SalInstanceDrawingArea::dblclick(const Point& rPos)
     m_xDrawingArea->MouseButtonUp(aEvent);
 }
 
+void SalInstanceDrawingArea::mouse_up(const Point& rPos)
+{
+    MouseEvent aEvent(rPos, 0, MouseEventModifiers::NONE, MOUSE_LEFT, 0);
+    m_xDrawingArea->MouseButtonUp(aEvent);
+}
+
+void SalInstanceDrawingArea::mouse_down(const Point& rPos)
+{
+    MouseEvent aEvent(rPos, 0, MouseEventModifiers::NONE, MOUSE_LEFT, 0);
+    m_xDrawingArea->MouseButtonDown(aEvent);
+}
+
+void SalInstanceDrawingArea::mouse_move(const Point& rPos)
+{
+    MouseEvent aEvent(rPos, 0, MouseEventModifiers::NONE, MOUSE_LEFT, 0);
+    m_xDrawingArea->MouseMove(aEvent);
+}
+
 IMPL_LINK(SalInstanceDrawingArea, PaintHdl, target_and_area, aPayload, void)
 {
     m_aDrawHdl.Call(aPayload);

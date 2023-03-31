@@ -2356,6 +2356,12 @@ private:
     virtual void click(const Point&) = 0;
 
     virtual void dblclick(const Point&){};
+
+    virtual void mouse_up(const Point&){};
+
+    virtual void mouse_down(const Point&){};
+
+    virtual void mouse_move(const Point&){};
 };
 
 enum class Placement

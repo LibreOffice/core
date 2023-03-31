@@ -193,7 +193,8 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
             auto pArea = dynamic_cast<weld::DrawingArea*>(pWidget);
             if (pArea)
             {
-                if (sAction == "click" || sAction == "dblclick")
+                if (sAction == "click" || sAction == "dblclick" || sAction == "mousemove"
+                    || sAction == "mousedown" || sAction == "mouseup")
                 {
                     OUString sClickData = rData["data"];
                     int nSeparatorPos = sClickData.indexOf(';');
@@ -206,23 +207,28 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                         if (nClickPosX.empty() || nClickPosY.empty())
                             return true;
 
-                        double posX = o3tl::toDouble(nClickPosX);
-                        double posY = o3tl::toDouble(nClickPosY);
+                        double fPosX = o3tl::toDouble(nClickPosX);
+                        double fPosY = o3tl::toDouble(nClickPosY);
                         OutputDevice& rRefDevice = pArea->get_ref_device();
                         // We send OutPutSize for the drawing area bitmap
                         // get_size_request is not necessarily updated
                         // therefore it may be incorrect.
                         Size size = rRefDevice.GetOutputSizePixel();
-                        posX = posX * size.Width();
-                        posY = posY * size.Height();
+                        fPosX = fPosX * size.Width();
+                        fPosY = fPosY * size.Height();
+
                         if (sAction == "click")
-                            LOKTrigger::trigger_click(*pArea, Point(posX, posY));
-                        else
-                            LOKTrigger::trigger_dblclick(*pArea, Point(posX, posY));
-                        return true;
+                            LOKTrigger::trigger_click(*pArea, Point(fPosX, fPosY));
+                        else if (sAction == "dblclick")
+                            LOKTrigger::trigger_dblclick(*pArea, Point(fPosX, fPosY));
+                        else if (sAction == "mouseup")
+                            LOKTrigger::trigger_mouse_up(*pArea, Point(fPosX, fPosY));
+                        else if (sAction == "mousedown")
+                            LOKTrigger::trigger_mouse_down(*pArea, Point(fPosX, fPosY));
+                        else if (sAction == "mousemove")
+                            LOKTrigger::trigger_mouse_move(*pArea, Point(fPosX, fPosY));
                     }
 
-                    LOKTrigger::trigger_click(*pArea, Point(10, 10));
                     return true;
                 }
                 else if (sAction == "keypress")

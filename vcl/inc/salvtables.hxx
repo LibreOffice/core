@@ -1332,6 +1332,12 @@ public:
     virtual void click(const Point& rPos) override;
 
     virtual void dblclick(const Point& rPos) override;
+
+    virtual void mouse_up(const Point& rPos) override;
+
+    virtual void mouse_down(const Point& rPos) override;
+
+    virtual void mouse_move(const Point& rPos) override;
 };
 
 class SalInstanceToolbar : public SalInstanceWidget, public virtual weld::Toolbar
