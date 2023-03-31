@@ -5503,6 +5503,19 @@ void SwFootnoteContFrame::PaintLine( const SwRect& rRect,
                 rInf.GetLineStyle() );
 }
 
+void SwFootnoteContFrame::dumpAsXml(xmlTextWriterPtr writer) const
+{
+    (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("ftncont"));
+    dumpAsXmlAttributes(writer);
+
+    (void)xmlTextWriterStartElement(writer, BAD_CAST("infos"));
+    dumpInfosAsXml(writer);
+    (void)xmlTextWriterEndElement(writer);
+    dumpChildrenAsXml(writer);
+
+    (void)xmlTextWriterEndElement(writer);
+}
+
 /// Paints the separator line for inside columns
 void SwLayoutFrame::PaintColLines( const SwRect &rRect, const SwFormatCol &rFormatCol,
                                  const SwPageFrame *pPage ) const

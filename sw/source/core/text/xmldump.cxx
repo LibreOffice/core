@@ -174,9 +174,6 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
 
     switch ( GetType(  ) )
     {
-    case SwFrameType::FtnCont:
-        name = "ftncont";
-        break;
     case SwFrameType::Ftn:
         name = "ftn";
         break;
