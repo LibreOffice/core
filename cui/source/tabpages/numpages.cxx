@@ -1482,7 +1482,7 @@ void SvxNumOptionsTabPage::InitControls()
     {
         if (!sFirstCharFmt.isEmpty())
             m_xCharFmtLB->set_active_text(sFirstCharFmt);
-        else
+        else if (m_xCharFmtLB->get_count())
             m_xCharFmtLB->set_active(0);
     }
     else
