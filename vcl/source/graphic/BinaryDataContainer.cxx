@@ -30,6 +30,18 @@ size_t BinaryDataContainer::calculateHash() const
     return nSeed;
 }
 
+css::uno::Sequence<sal_Int8> BinaryDataContainer::getCopyAsByteSequence() const
+{
+    if (isEmpty())
+        return css::uno::Sequence<sal_Int8>();
+
+    css::uno::Sequence<sal_Int8> aData(getSize());
+
+    std::copy(mpData->cbegin(), mpData->cend(), aData.getArray());
+
+    return aData;
+}
+
 SvMemoryStream BinaryDataContainer::getMemoryStream()
 {
     return SvMemoryStream(mpData ? mpData->data() : nullptr, getSize(), StreamMode::READ);

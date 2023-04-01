@@ -196,10 +196,8 @@ void VectorGraphicData::ensureSequenceAndRange()
     {
         case VectorGraphicDataType::Svg:
         {
-            css::uno::Sequence<sal_Int8> aDataSequence(maDataContainer.getSize());
-            std::copy(maDataContainer.cbegin(), maDataContainer.cend(), aDataSequence.getArray());
+            css::uno::Sequence<sal_Int8> aDataSequence = maDataContainer.getCopyAsByteSequence();
             const uno::Reference<io::XInputStream> xInputStream(new comphelper::SequenceInputStream(aDataSequence));
-
 
             const uno::Reference< graphic::XSvgParser > xSvgParser = graphic::SvgTools::create(xContext);
 
@@ -213,8 +211,7 @@ void VectorGraphicData::ensureSequenceAndRange()
         {
             const uno::Reference< graphic::XEmfParser > xEmfParser = graphic::EmfTools::create(xContext);
 
-            css::uno::Sequence<sal_Int8> aDataSequence(maDataContainer.getSize());
-            std::copy(maDataContainer.cbegin(), maDataContainer.cend(), aDataSequence.getArray());
+            css::uno::Sequence<sal_Int8> aDataSequence = maDataContainer.getCopyAsByteSequence();
             const uno::Reference<io::XInputStream> xInputStream(new comphelper::SequenceInputStream(aDataSequence));
 
             if (xInputStream.is())

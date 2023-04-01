@@ -12,6 +12,7 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/uno/Sequence.hxx>
 #include <tools/stream.hxx>
 #include <vcl/dllapi.h>
 
@@ -44,15 +45,13 @@ public:
     size_t getSize() const;
     bool isEmpty() const;
     const sal_uInt8* getData() const;
+    css::uno::Sequence<sal_Int8> getCopyAsByteSequence() const;
 
     // Returns the data as a stream open for reading
     SvMemoryStream getMemoryStream();
     std::size_t writeToStream(SvStream& rStream) const;
 
     size_t calculateHash() const;
-
-    auto cbegin() const { return mpData->cbegin(); }
-    auto cend() const { return mpData->cend(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
