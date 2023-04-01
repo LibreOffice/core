@@ -39,7 +39,7 @@ public:
     void                        SetServiceName( std::u16string_view rServiceName );
 
     /** @return  The help ID of the function with given built-in name or 0 if not found. */
-    OString                GetHelpId( const OUString& rFuncName ) const;
+    OUString                GetHelpId( const OUString& rFuncName ) const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

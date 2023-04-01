@@ -41,7 +41,7 @@ private:
     SvxAnchorIds        nAnchorCtrls;
     Link<SvxSwFrameValidation&,void> aValidateLink;
 
-    virtual void        PageCreated(const OString& rId, SfxTabPage &rPage) override;
+    virtual void        PageCreated(const OUString& rId, SfxTabPage &rPage) override;
 
 public:
     SvxTransformTabDialog(weld::Window* pParent, const SfxItemSet* pAttr,

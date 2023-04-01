@@ -292,10 +292,10 @@ void SwInputWindow::ShowWin()
     }
 }
 
-void SwInputWindow::MenuHdl(std::string_view command)
+void SwInputWindow::MenuHdl(std::u16string_view command)
 {
     if (!command.empty())
-        mxEdit->replace_selection(OUString::fromUtf8(command) + " ");
+        mxEdit->replace_selection(OUString::Concat(command) + " ");
 }
 
 IMPL_LINK_NOARG(SwInputWindow, DropdownClickHdl, ToolBox *, void)

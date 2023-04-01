@@ -923,7 +923,7 @@ static void LOKSendSpellPopupMenu(const weld::Menu& rMenu, LanguageType nGuessLa
     {
         for(int i = 0; i < nSuggestions; ++i)
         {
-            OString sItemId = OString::number(MN_ALTSTART + i);
+            OUString sItemId = OUString::number(MN_ALTSTART + i);
             OUString sText = rMenu.get_label(sItemId);
             aItemTree.put("text", sText.toUtf8().getStr());
             aItemTree.put("type", "command");
@@ -1170,7 +1170,7 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
         return true;
     }
 
-    OString sId = xPopupMenu->popup_at_rect(pPopupParent, aTempRect);
+    OUString sId = xPopupMenu->popup_at_rect(pPopupParent, aTempRect);
 
     aPaM2 = pImpEditView->pEditEngine->pImpEditEngine->CreateEditPaM(aP2);
     aPaM = pImpEditView->pEditEngine->pImpEditEngine->CreateEditPaM(aP);

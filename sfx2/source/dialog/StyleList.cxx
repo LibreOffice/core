@@ -94,7 +94,7 @@ public:
 
 StyleList::StyleList(weld::Builder* pBuilder, SfxBindings* pBindings,
                      SfxCommonTemplateDialog_Impl* Parent, weld::Container* pC,
-                     OString treeviewname, OString flatviewname)
+                     OUString treeviewname, OUString flatviewname)
     : m_bHierarchical(false)
     , m_bAllowReParentDrop(false)
     , m_bNewByExampleDisabled(false)
@@ -289,7 +289,7 @@ void StyleList::FilterSelect(sal_uInt16 nActFilter, bool bsetFilter)
 IMPL_LINK(StyleList, SetFamily, sal_uInt16, nId, void)
 {
     if (m_nActFamily != 0xFFFF)
-        m_pParentDialog->CheckItem(OString::number(m_nActFamily), false);
+        m_pParentDialog->CheckItem(OUString::number(m_nActFamily), false);
     m_nActFamily = nId;
     if (nId != 0xFFFF)
     {
@@ -1339,12 +1339,12 @@ void StyleList::ShowMenu(const CommandEvent& rCEvt)
 {
     CreateContextMenu();
     weld::TreeView* pTreeView = m_xTreeBox->get_visible() ? m_xTreeBox.get() : m_xFmtLb.get();
-    OString sCommand(
+    OUString sCommand(
         mxMenu->popup_at_rect(pTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1, 1))));
     MenuSelect(sCommand);
 }
 
-void StyleList::MenuSelect(const OString& rIdent)
+void StyleList::MenuSelect(const OUString& rIdent)
 {
     sLastItemIdent = rIdent;
     if (sLastItemIdent.isEmpty())
@@ -1670,7 +1670,7 @@ void StyleList::Update()
     // current region not within the allowed region or default
     if (m_nActFamily == 0xffff || nullptr == (pItem = m_pFamilyState[m_nActFamily - 1].get()))
     {
-        m_pParentDialog->CheckItem(OString::number(m_nActFamily), false);
+        m_pParentDialog->CheckItem(OUString::number(m_nActFamily), false);
         const size_t nFamilyCount = m_xStyleFamilies->size();
         size_t n;
         for (n = 0; n < nFamilyCount; n++)
@@ -1685,7 +1685,7 @@ void StyleList::Update()
     else if (bDocChanged)
     {
         // other DocShell -> all new
-        m_pParentDialog->CheckItem(OString::number(m_nActFamily));
+        m_pParentDialog->CheckItem(OUString::number(m_nActFamily));
         m_nActFilter = static_cast<sal_uInt16>(m_aLoadFactoryStyleFilter.Call(pDocShell));
         m_pParentDialog->IsUpdate(*this);
         if (0xffff == m_nActFilter)
@@ -1704,7 +1704,7 @@ void StyleList::Update()
     else
     {
         // other filters for automatic
-        m_pParentDialog->CheckItem(OString::number(m_nActFamily));
+        m_pParentDialog->CheckItem(OUString::number(m_nActFamily));
         const SfxStyleFamilyItem* pStyleItem = GetFamilyItem();
         if (pStyleItem
             && SfxStyleSearchBits::Auto == pStyleItem->GetFilterList()[m_nActFilter].nFlags

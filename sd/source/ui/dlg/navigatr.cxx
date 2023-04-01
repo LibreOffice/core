@@ -249,20 +249,20 @@ IMPL_LINK(SdNavigatorWin, CommandHdl, const CommandEvent&, rCEvt, bool)
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(&rTreeView,
                                             "modules/sdraw/ui/navigatorcontextmenu.ui"));
     std::unique_ptr<weld::Menu> xPop = xBuilder->weld_menu("navmenu");
-    OString sCommand = xPop->popup_at_rect(&rTreeView,
+    OUString sCommand = xPop->popup_at_rect(&rTreeView,
                                            tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
     if (!sCommand.isEmpty())
         ExecuteContextMenuAction(sCommand);
     return true;
 }
 
-void SdNavigatorWin::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry)
+void SdNavigatorWin::ExecuteContextMenuAction(std::u16string_view rSelectedPopupEntry)
 {
-    if (rSelectedPopupEntry == "rename")
+    if (rSelectedPopupEntry == u"rename")
         GetObjects().start_editing();
 }
 
-IMPL_LINK(SdNavigatorWin, SelectToolboxHdl, const OString&, rCommand, void)
+IMPL_LINK(SdNavigatorWin, SelectToolboxHdl, const OUString&, rCommand, void)
 {
     PageJump ePage = PAGE_NONE;
 
@@ -287,7 +287,7 @@ IMPL_LINK(SdNavigatorWin, SelectToolboxHdl, const OString&, rCommand, void)
     }
 }
 
-IMPL_LINK(SdNavigatorWin, DropdownClickToolBoxHdl, const OString&, rCommand, void)
+IMPL_LINK(SdNavigatorWin, DropdownClickToolBoxHdl, const OUString&, rCommand, void)
 {
     if (!mxToolbox->get_menu_item_active(rCommand))
         return;
@@ -297,12 +297,12 @@ IMPL_LINK(SdNavigatorWin, DropdownClickToolBoxHdl, const OString&, rCommand, voi
         NavDocInfo* pInfo = GetDocInfo();
         if( ( pInfo && !pInfo->HasName() ) || !mxTlbObjects->IsLinkableSelected() )
         {
-            mxDragModeMenu->set_sensitive(OString::number(NAVIGATOR_DRAGTYPE_LINK), false);
-            mxDragModeMenu->set_sensitive(OString::number(NAVIGATOR_DRAGTYPE_URL), false);
+            mxDragModeMenu->set_sensitive(OUString::number(NAVIGATOR_DRAGTYPE_LINK), false);
+            mxDragModeMenu->set_sensitive(OUString::number(NAVIGATOR_DRAGTYPE_URL), false);
             meDragType = NAVIGATOR_DRAGTYPE_EMBEDDED;
         }
 
-        mxDragModeMenu->set_active(OString::number(meDragType), true);
+        mxDragModeMenu->set_active(OUString::number(meDragType), true);
     }
     else if (rCommand == "shapes")
     {
@@ -475,7 +475,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl, weld::ComboBox&, void)
 /**
  * Set DrageType and set image accordingly to it.
  */
-IMPL_LINK(SdNavigatorWin, MenuSelectHdl, const OString&, rIdent, void)
+IMPL_LINK(SdNavigatorWin, MenuSelectHdl, const OUString&, rIdent, void)
 {
     sal_uInt32 nMenuId = rIdent.toUInt32();
 
@@ -498,7 +498,7 @@ IMPL_LINK(SdNavigatorWin, MenuSelectHdl, const OString&, rIdent, void)
         mxTlbObjects->set_selection_mode(SelectionMode::Multiple);
 }
 
-IMPL_LINK( SdNavigatorWin, ShapeFilterCallback, const OString&, rIdent, void )
+IMPL_LINK( SdNavigatorWin, ShapeFilterCallback, const OUString&, rIdent, void )
 {
     bool bShowAllShapes(mxTlbObjects->GetShowAllShapes());
     if (rIdent == "named")

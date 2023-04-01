@@ -47,7 +47,7 @@ ShapeParagraphDialog::ShapeParagraphDialog(weld::Window* pParent,
     AddTabPage("labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
 }
 
-void ShapeParagraphDialog::PageCreated(const OString& rId, SfxTabPage& rPage)
+void ShapeParagraphDialog::PageCreated(const OUString& rId, SfxTabPage& rPage)
 {
     if (rId == "labelTP_TABULATOR")
     {

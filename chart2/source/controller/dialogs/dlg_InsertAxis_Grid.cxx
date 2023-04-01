@@ -37,8 +37,8 @@ SchAxisDlg::SchAxisDlg(weld::Window* pWindow,
               OUString("modules/schart/ui/insertaxisdlg.ui") :
               OUString("modules/schart/ui/insertgriddlg.ui"),
           bAxisDlg ?
-              OString("InsertAxisDialog") :
-              OString("InsertGridDialog"))
+              OUString("InsertAxisDialog") :
+              OUString("InsertGridDialog"))
     , m_xCbPrimaryX(m_xBuilder->weld_check_button("primaryX"))
     , m_xCbPrimaryY(m_xBuilder->weld_check_button("primaryY"))
     , m_xCbPrimaryZ(m_xBuilder->weld_check_button("primaryZ"))

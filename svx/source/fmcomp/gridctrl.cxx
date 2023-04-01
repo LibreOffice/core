@@ -2424,7 +2424,7 @@ void DbGridControl::PreExecuteRowContextMenu(weld::Menu& rMenu)
     rMenu.set_visible("undo", bCanUndo);
 }
 
-void DbGridControl::PostExecuteRowContextMenu(const OString& rExecutionResult)
+void DbGridControl::PostExecuteRowContextMenu(const OUString& rExecutionResult)
 {
     if (rExecutionResult == "delete")
     {

@@ -52,7 +52,7 @@ namespace dbaui
     using namespace ::dbtools;
 
     OCommonBehaviourTabPage::OCommonBehaviourTabPage(weld::Container* pPage, weld::DialogController* pController,
-        const OUString& rUIXMLDescription, const OString& rId, const SfxItemSet& rCoreAttrs,
+        const OUString& rUIXMLDescription, const OUString& rId, const SfxItemSet& rCoreAttrs,
         OCommonBehaviourTabPageFlags nControlFlags)
         : OGenericAdministrationPage(pPage, pController, rUIXMLDescription, rId, rCoreAttrs)
         , m_nControlFlags(nControlFlags)

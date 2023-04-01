@@ -32,7 +32,7 @@
 
 namespace sc::sidebar {
 
-CellLineStylePopup::CellLineStylePopup(weld::Toolbar* pParent, const OString& rId, SfxDispatcher* pDispatcher)
+CellLineStylePopup::CellLineStylePopup(weld::Toolbar* pParent, const OUString& rId, SfxDispatcher* pDispatcher)
     : WeldToolbarPopup(nullptr, pParent, "modules/scalc/ui/floatinglinestyle.ui", "FloatingLineStyle")
     , maToolButton(pParent, rId)
     , mpDispatcher(pDispatcher)

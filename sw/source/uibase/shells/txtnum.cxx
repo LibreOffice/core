@@ -195,7 +195,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxNumBulletTabDialog(pParent, &aSet, GetShell()));
         const SfxStringItem* pPageItem = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
         if ( pPageItem )
-            pDlg->SetCurPageId( OUStringToOString( pPageItem->GetValue(), RTL_TEXTENCODING_UTF8 ) );
+            pDlg->SetCurPageId( pPageItem->GetValue() );
 
         auto pRequest = std::make_shared<SfxRequest>(rReq);
         rReq.Ignore(); // the 'old' request is not relevant any more

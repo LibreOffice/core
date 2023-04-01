@@ -41,7 +41,7 @@ ShapeFontDialog::ShapeFontDialog(weld::Window* pParent, const SfxItemSet* pAttr,
     AddTabPage("position", RID_SVXPAGE_CHAR_POSITION );
 }
 
-void ShapeFontDialog::PageCreated(const OString& rId, SfxTabPage& rPage)
+void ShapeFontDialog::PageCreated(const OUString& rId, SfxTabPage& rPage)
 {
     SfxAllItemSet aSet( *( GetInputSetImpl()->GetPool() ) );
     if (rId == "font")

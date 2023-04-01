@@ -88,7 +88,7 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
     ExtMgrDialog*   m_pParent;
 
     void            SetButtonStatus( const TEntry_Impl& rEntry );
-    OString         ShowPopupMenu( const Point &rPos, const tools::Long nPos );
+    OUString        ShowPopupMenu( const Point &rPos, const tools::Long nPos );
 
 public:
     explicit ExtBoxWithBtns_Impl(std::unique_ptr<weld::ScrolledWindow> xScroll);
@@ -200,7 +200,7 @@ bool ExtBoxWithBtns_Impl::Command(const CommandEvent& rCEvt)
 
     const Point aMousePos(rCEvt.GetMousePosPixel());
     const auto nPos = PointToPos(aMousePos);
-    OString sCommand = ShowPopupMenu(aMousePos, nPos);
+    OUString sCommand = ShowPopupMenu(aMousePos, nPos);
 
     if (sCommand == "CMD_ENABLE")
         m_pParent->enablePackage( GetEntryData( nPos )->m_xPackage, true );
@@ -221,7 +221,7 @@ bool ExtBoxWithBtns_Impl::Command(const CommandEvent& rCEvt)
     return true;
 }
 
-OString ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const tools::Long nPos )
+OUString ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const tools::Long nPos )
 {
     if ( nPos >= static_cast<tools::Long>(getItemCount()) )
         return "CMD_NONE";

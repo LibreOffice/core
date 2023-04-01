@@ -483,7 +483,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 }
                 else if (pItem)
                 {
-                    pDlg->SetCurPageId(OUStringToOString(pItem->GetValue(), RTL_TEXTENCODING_UTF8));
+                    pDlg->SetCurPageId(pItem->GetValue());
                 }
 
                 sal_uInt16 nRet = pDlg->Execute();

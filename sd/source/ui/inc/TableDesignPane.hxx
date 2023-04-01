@@ -79,7 +79,7 @@ public:
     void CloneStyle();
     void ResetStyle();
     void DeleteStyle();
-    void EditStyle(std::string_view rCommand);
+    void EditStyle(const OUString& rCommand);
 
 private:
     void addListener();

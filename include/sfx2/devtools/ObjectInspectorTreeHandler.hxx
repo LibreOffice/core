@@ -84,12 +84,12 @@ public:
     DECL_LINK(PopupMenuHandler, const CommandEvent&, bool);
 
     // callback when a button is clicked on a toolbar
-    DECL_LINK(ToolbarButtonClicked, const OString&, void);
+    DECL_LINK(ToolbarButtonClicked, const OUString&, void);
 
     // callback when a page is entered or left on the notebook bar for
     // different categories
-    DECL_LINK(NotebookEnterPage, const OString&, void);
-    DECL_LINK(NotebookLeavePage, const OString&, bool);
+    DECL_LINK(NotebookEnterPage, const OUString&, void);
+    DECL_LINK(NotebookLeavePage, const OUString&, bool);
 
     DECL_LINK(HeaderBarClick, int, void);
 

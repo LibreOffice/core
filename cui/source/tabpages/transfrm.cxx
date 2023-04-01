@@ -93,7 +93,7 @@ SvxTransformTabDialog::SvxTransformTabDialog(weld::Window* pParent, const SfxIte
 }
 
 
-void SvxTransformTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
+void SvxTransformTabDialog::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {
     if (rId == "RID_SVXPAGE_POSITION_SIZE")
     {
@@ -386,11 +386,11 @@ SvxSlantTabPage::SvxSlantTabPage(weld::Container* pPage, weld::DialogController*
 {
     for (int i = 0; i < 2; ++i)
     {
-        m_aControlGroups[i] = m_xBuilder->weld_widget("controlgroups" + OString::number(i+1));
-        m_aControlGroupX[i] = m_xBuilder->weld_widget("controlgroupx" + OString::number(i+1));
-        m_aControlX[i] = m_xBuilder->weld_metric_spin_button("controlx" + OString::number(i+1), FieldUnit::CM);
-        m_aControlGroupY[i] = m_xBuilder->weld_widget("controlgroupy" + OString::number(i+1));
-        m_aControlY[i] = m_xBuilder->weld_metric_spin_button("controly" + OString::number(i+1), FieldUnit::CM);
+        m_aControlGroups[i] = m_xBuilder->weld_widget("controlgroups" + OUString::number(i+1));
+        m_aControlGroupX[i] = m_xBuilder->weld_widget("controlgroupx" + OUString::number(i+1));
+        m_aControlX[i] = m_xBuilder->weld_metric_spin_button("controlx" + OUString::number(i+1), FieldUnit::CM);
+        m_aControlGroupY[i] = m_xBuilder->weld_widget("controlgroupy" + OUString::number(i+1));
+        m_aControlY[i] = m_xBuilder->weld_metric_spin_button("controly" + OUString::number(i+1), FieldUnit::CM);
     }
 
     // this page needs ExchangeSupport

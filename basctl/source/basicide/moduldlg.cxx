@@ -211,7 +211,7 @@ OrganizeDialog::OrganizeDialog(weld::Window* pParent, const css::uno::Reference<
 
     SetCurrentEntry(xDocFrame);
 
-    OString sPage;
+    OUString sPage;
     if (tabId == 0)
         sPage = "modules";
     else if (tabId == 1)
@@ -225,7 +225,7 @@ OrganizeDialog::OrganizeDialog(weld::Window* pParent, const css::uno::Reference<
         pDispatcher->Execute( SID_BASICIDE_STOREALLMODULESOURCES );
 }
 
-IMPL_LINK(OrganizeDialog, ActivatePageHdl, const OString&, rPage, void)
+IMPL_LINK(OrganizeDialog, ActivatePageHdl, const OUString&, rPage, void)
 {
     if (rPage == "modules")
         m_xModulePage->ActivatePage();
@@ -239,7 +239,7 @@ OrganizeDialog::~OrganizeDialog()
 {
 }
 
-OrganizePage::OrganizePage(weld::Container* pParent, const OUString& rUIFile, const OString &rName, OrganizeDialog* pDialog)
+OrganizePage::OrganizePage(weld::Container* pParent, const OUString& rUIFile, const OUString &rName, OrganizeDialog* pDialog)
     : m_pDialog(pDialog)
     , m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
     , m_xContainer(m_xBuilder->weld_container(rName))
@@ -563,8 +563,8 @@ public:
 };
 
 // ObjectPage
-ObjectPage::ObjectPage(weld::Container* pParent, const OString &rName, BrowseMode nMode, OrganizeDialog* pDialog)
-    : OrganizePage(pParent, "modules/BasicIDE/ui/" + OStringToOUString(rName, RTL_TEXTENCODING_UTF8).toAsciiLowerCase() + ".ui",
+ObjectPage::ObjectPage(weld::Container* pParent, const OUString &rName, BrowseMode nMode, OrganizeDialog* pDialog)
+    : OrganizePage(pParent, "modules/BasicIDE/ui/" + rName.toAsciiLowerCase() + ".ui",
         rName, pDialog)
     , m_xBasicBox(new SbTreeListBox(m_xBuilder->weld_tree_view("library"), pDialog->getDialog()))
     , m_xEditButton(m_xBuilder->weld_button("edit"))

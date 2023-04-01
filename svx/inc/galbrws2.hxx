@@ -150,7 +150,7 @@ public:
     static css::uno::Reference< css::frame::XFrame > GetFrame();
     const css::uno::Reference< css::util::XURLTransformer >& GetURLTransformer() const { return m_xTransformer; }
 
-    void Execute(std::string_view rIdent);
+    void Execute(std::u16string_view rIdent);
     void DispatchAdd(const css::uno::Reference<css::frame::XDispatch> &rxDispatch,
                      const css::util::URL &rURL);
 

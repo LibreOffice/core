@@ -60,7 +60,7 @@ namespace dbp
     class OGridPage : public OControlWizardPage
     {
     public:
-        OGridPage(weld::Container* pPage, OGridWizard* pWizard, const OUString& rUIXMLDescription, const OString& rID)
+        OGridPage(weld::Container* pPage, OGridWizard* pWizard, const OUString& rUIXMLDescription, const OUString& rID)
             : OControlWizardPage(pPage, pWizard, rUIXMLDescription, rID)
         {
         }

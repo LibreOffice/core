@@ -151,7 +151,7 @@ protected:
     // abstraction layers are: Unicode<->MapIndex<->Pixel
     Point           MapIndexToPixel( int) const;
     DECL_DLLPRIVATE_LINK(VscrollHdl, weld::ScrolledWindow&, void);
-    void ContextMenuSelect(std::string_view rIdent);
+    void ContextMenuSelect(std::u16string_view rIdent);
 
     void            init();
     tools::Rectangle       getGridRectangle(const Point &rPointUL, const Size &rOutputSize) const;

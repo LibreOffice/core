@@ -21,7 +21,7 @@ class SignatureLineDialogBase : public weld::GenericDialogController
 {
 public:
     SignatureLineDialogBase(weld::Widget* pParent, css::uno::Reference<css::frame::XModel> xModel,
-                            const OUString& rUIFile, const OString& rDialogId);
+                            const OUString& rUIFile, const OUString& rDialogId);
 
     virtual short run() override;
 

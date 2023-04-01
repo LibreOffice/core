@@ -47,7 +47,7 @@ SbaSbAttrDlg::~SbaSbAttrDlg()
 {
 }
 
-void SbaSbAttrDlg::PageCreated(const OString& rPageId, SfxTabPage& rTabPage)
+void SbaSbAttrDlg::PageCreated(const OUString& rPageId, SfxTabPage& rTabPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     if (rPageId == "format")

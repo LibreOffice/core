@@ -34,7 +34,7 @@ namespace rptui
 
 ORptPageDialog::ORptPageDialog(weld::Window* pParent, const SfxItemSet* pAttr, const OUString &rDialog)
     : SfxTabDialogController(pParent, "modules/dbreport/ui/" +
-        rDialog.toAsciiLowerCase() + ".ui", rDialog.toUtf8(), pAttr)
+        rDialog.toAsciiLowerCase() + ".ui", rDialog, pAttr)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
@@ -63,7 +63,7 @@ ORptPageDialog::ORptPageDialog(weld::Window* pParent, const SfxItemSet* pAttr, c
         RemoveTabPage("asianlayout");
 }
 
-void ORptPageDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
+void ORptPageDialog::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     if (rId == "background")

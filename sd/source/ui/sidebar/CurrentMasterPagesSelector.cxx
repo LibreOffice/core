@@ -189,7 +189,7 @@ void CurrentMasterPagesSelector::UpdateSelection()
     }
 }
 
-void CurrentMasterPagesSelector::ExecuteCommand(const OString &rIdent)
+void CurrentMasterPagesSelector::ExecuteCommand(const OUString &rIdent)
 {
     if (rIdent == "delete")
     {

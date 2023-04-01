@@ -61,7 +61,7 @@ namespace pcr
     class HelpIdUrl
     {
     public:
-        static OString getHelpId( std::u16string_view _rHelpURL );
+        static OUString getHelpId( std::u16string_view _rHelpURL );
         static OUString getHelpURL( std::u16string_view );
     };
 

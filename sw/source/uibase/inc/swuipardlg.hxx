@@ -28,7 +28,7 @@ class SwParaDlg final : public SfxTabDialogController
     SwView& m_rView;
     bool m_bDrawParaDlg;
 
-    void PageCreated(const OString& rId, SfxTabPage& rPage) override;
+    void PageCreated(const OUString& rId, SfxTabPage& rPage) override;
 
 public:
     SwParaDlg(weld::Window *pParent,
@@ -37,7 +37,7 @@ public:
               sal_uInt8 nDialogMode,
               const OUString *pCollName,
               bool bDraw = false,
-              const OString& sDefPage = OString());
+              const OUString& sDefPage = {});
     virtual ~SwParaDlg() override;
 };
 

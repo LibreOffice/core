@@ -89,7 +89,7 @@ OUString retrieveToolbarNameFromHelpURL( vcl::Window* pWindow )
         ToolBox* pToolBox = dynamic_cast<ToolBox *>( pWindow );
         if ( pToolBox )
         {
-            aToolbarName = OStringToOUString( pToolBox->GetHelpId(), RTL_TEXTENCODING_UTF8 );
+            aToolbarName = pToolBox->GetHelpId();
             sal_Int32 i = aToolbarName.lastIndexOf( ':' );
             if ( !aToolbarName.isEmpty() && ( i > 0 ) && (( i + 1 ) < aToolbarName.getLength() ))
                 aToolbarName = aToolbarName.copy( i+1 ); // Remove ".HelpId:" protocol from toolbar name

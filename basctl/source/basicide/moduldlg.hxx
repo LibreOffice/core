@@ -115,7 +115,7 @@ protected:
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xContainer;
 
-    OrganizePage(weld::Container* pParent, const OUString& rUIFile, const OString &rName, OrganizeDialog* pDialog);
+    OrganizePage(weld::Container* pParent, const OUString& rUIFile, const OUString &rName, OrganizeDialog* pDialog);
     virtual ~OrganizePage();
 
 public:
@@ -147,7 +147,7 @@ class ObjectPage final : public OrganizePage
     void                EndTabDialog();
 
 public:
-    ObjectPage(weld::Container* pParent, const OString& rName, BrowseMode nMode, OrganizeDialog* pDialog);
+    ObjectPage(weld::Container* pParent, const OUString& rName, BrowseMode nMode, OrganizeDialog* pDialog);
     virtual ~ObjectPage() override;
 
     void                SetCurrentEntry(const EntryDescriptor& rDesc) { m_xBasicBox->SetCurrentEntry(rDesc); }
@@ -206,7 +206,7 @@ private:
     std::unique_ptr<ObjectPage> m_xDialogPage;
     std::unique_ptr<LibPage> m_xLibPage;
 
-    DECL_LINK(ActivatePageHdl, const OString&, void);
+    DECL_LINK(ActivatePageHdl, const OUString&, void);
 
     void SetCurrentEntry(const css::uno::Reference<css::frame::XFrame>& xDocFrame);
 

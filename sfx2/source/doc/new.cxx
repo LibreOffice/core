@@ -271,7 +271,7 @@ SfxNewFileDialog::SfxNewFileDialog(weld::Window *pParent, SfxNewFileDialogMode n
     }
 
     OUString sExtraData;
-    SvtViewOptions aDlgOpt(EViewType::Dialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+    SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
     if (aDlgOpt.Exists())
     {
         css::uno::Any aUserItem = aDlgOpt.GetUserItem("UserItem");
@@ -307,7 +307,7 @@ SfxNewFileDialog::SfxNewFileDialog(weld::Window *pParent, SfxNewFileDialogMode n
 
 SfxNewFileDialog::~SfxNewFileDialog()
 {
-    SvtViewOptions aDlgOpt(EViewType::Dialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+    SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
     aDlgOpt.SetUserItem("UserItem", css::uno::Any(m_xMoreBt->get_expanded() ? OUString("Y") : OUString("N")));
 }
 

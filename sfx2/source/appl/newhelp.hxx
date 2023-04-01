@@ -52,7 +52,7 @@ protected:
 
 public:
     HelpTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* _pIdxWin,
-        const OString& rID, const OUString& rUIXMLDescription);
+        const OUString& rID, const OUString& rUIXMLDescription);
     virtual ~HelpTabPage_Impl() override;
 };
 
@@ -201,7 +201,7 @@ private:
     DECL_LINK(CommandHdl, const CommandEvent&, bool);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
-    void DoAction(std::string_view rAction);
+    void DoAction(std::u16string_view rAction);
 
 public:
     BookmarksTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* pIdxWin);
@@ -243,14 +243,14 @@ private:
 
     void                Initialize();
     void                SetActiveFactory();
-    HelpTabPage_Impl*   GetPage(std::string_view );
+    HelpTabPage_Impl*   GetPage(std::u16string_view );
 
     inline ContentTabPage_Impl*     GetContentPage();
     inline IndexTabPage_Impl*       GetIndexPage();
     inline SearchTabPage_Impl*      GetSearchPage();
     inline BookmarksTabPage_Impl*   GetBookmarksPage();
 
-    DECL_LINK(ActivatePageHdl, const OString&, void);
+    DECL_LINK(ActivatePageHdl, const OUString&, void);
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
     DECL_LINK(InitHdl, Timer *, void);
     DECL_LINK(SelectFactoryHdl, Timer *, void);
@@ -398,7 +398,7 @@ public:
     const css::uno::Reference < css::frame::XFrame2 >&
                             getFrame() const { return xFrame; }
 
-    void                    SetSelectHdl(const Link<const OString&, void>& rLink) { xToolBox->connect_clicked(rLink); }
+    void                    SetSelectHdl(const Link<const OUString&, void>& rLink) { xToolBox->connect_clicked(rLink); }
     void                    ToggleIndex( bool bOn );
     void                    SelectSearchText( const OUString& rSearchText, bool _bIsFullWordSearch );
     void                    SetPageStyleHeaderOff() const;
@@ -449,7 +449,7 @@ friend class SfxHelpIndexWindow_Impl;
     void                ShowStartPage();
     void                Split();
 
-    DECL_LINK(SelectHdl, const OString&, void);
+    DECL_LINK(SelectHdl, const OUString&, void);
     DECL_LINK(OpenHdl, LinkParamNone*, void);
     DECL_LINK(SelectFactoryHdl, SfxHelpIndexWindow_Impl*, void);
     DECL_LINK(ChangeHdl, HelpListener_Impl&, void);
@@ -469,7 +469,7 @@ public:
 
     void                SetFactory( const OUString& rFactory );
     void                SetHelpURL( std::u16string_view rURL );
-    void                DoAction(std::string_view rAction);
+    void                DoAction(std::u16string_view rAction);
     void                CloseWindow();
 
     weld::Container*    GetContainer() { return m_xHelpTextWindow.get(); }

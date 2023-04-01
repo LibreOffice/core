@@ -77,7 +77,7 @@ namespace dbp
     class OLCPage : public OControlWizardPage
     {
     public:
-        OLCPage(weld::Container* pPage, OListComboWizard* pWizard, const OUString& rUIXMLDescription, const OString& rID)
+        OLCPage(weld::Container* pPage, OListComboWizard* pWizard, const OUString& rUIXMLDescription, const OUString& rID)
             : OControlWizardPage(pPage, pWizard, rUIXMLDescription, rID)
     {
     }

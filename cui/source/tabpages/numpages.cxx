@@ -1796,14 +1796,14 @@ IMPL_LINK(SvxNumOptionsTabPage, BulRelSizeHdl_Impl, weld::MetricSpinButton&, rFi
     SetModified();
 }
 
-IMPL_LINK(SvxNumOptionsTabPage, GraphicHdl_Impl, const OString&, rIdent, void)
+IMPL_LINK(SvxNumOptionsTabPage, GraphicHdl_Impl, const OUString&, rIdent, void)
 {
     OUString                aGrfName;
     Size                    aSize;
     bool                bSucc(false);
     SvxOpenGraphicDialog aGrfDlg(CuiResId(RID_CUISTR_EDIT_GRAPHIC), GetFrameWeld());
 
-    OString sNumber;
+    OUString sNumber;
     if (rIdent.startsWith("gallery", &sNumber))
     {
         auto idx = sNumber.toUInt32();

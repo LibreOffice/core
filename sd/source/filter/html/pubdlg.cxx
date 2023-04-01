@@ -58,7 +58,7 @@ const sal_uInt16 nMagic = sal_uInt16(0x1977);
 constexpr OUStringLiteral KEY_QUALITY = u"JPG-EXPORT-QUALITY";
 
 // The Help-IDs of the pages
-const char* const aPageHelpIds[NOOFPAGES] =
+constexpr rtl::OUStringConstExpr aPageHelpIds[NOOFPAGES] =
 {
     HID_SD_HTMLEXPORT_PAGE1,
     HID_SD_HTMLEXPORT_PAGE2,

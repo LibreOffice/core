@@ -37,7 +37,7 @@ namespace dbaui
         std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
 
     protected:
-        virtual void PageCreated(const OString& rId, SfxTabPage& _rPage) override;
+        virtual void PageCreated(const OUString& rId, SfxTabPage& _rPage) override;
         virtual short Ok() override;
 
     public:

@@ -1414,7 +1414,7 @@ Size MetricField::CalcMinimumSize() const
     return calcMinimumSize(*this, *this);
 }
 
-bool MetricField::set_property(const OString &rKey, const OUString &rValue)
+bool MetricField::set_property(const OUString &rKey, const OUString &rValue)
 {
     if (rKey == "digits")
         SetDecimalDigits(rValue.toInt32());

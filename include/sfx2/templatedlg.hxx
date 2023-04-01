@@ -65,8 +65,8 @@ protected:
 
     DECL_DLLPRIVATE_LINK(TVItemStateHdl, const ThumbnailViewItem*, void);
 
-    DECL_DLLPRIVATE_LINK(MenuSelectHdl, const OString&, void);
-    void DefaultTemplateMenuSelectHdl(std::string_view rIdent);
+    DECL_DLLPRIVATE_LINK(MenuSelectHdl, const OUString&, void);
+    void DefaultTemplateMenuSelectHdl(std::u16string_view rIdent);
 
     DECL_DLLPRIVATE_LINK(OpenRegionHdl, void*, void);
     DECL_DLLPRIVATE_LINK(CreateContextMenuHdl, ThumbnailViewItem*, void);

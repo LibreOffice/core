@@ -21,7 +21,8 @@
 
 ScrollAdaptor::ScrollAdaptor(vcl::Window* pWin, bool bHoriz)
     : InterimItemWindow(pWin, "svt/ui/scrollbars.ui", "ScrollBars")
-    , m_xScrollBar(m_xBuilder->weld_scrollbar(bHoriz ? "horizontal" : "vertical"))
+    , m_xScrollBar(
+          m_xBuilder->weld_scrollbar(bHoriz ? OUString("horizontal") : OUString("vertical")))
     , m_bHori(bHoriz)
 {
     m_xScrollBar->show();

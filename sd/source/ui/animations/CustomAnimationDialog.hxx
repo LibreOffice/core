@@ -118,7 +118,7 @@ class STLPropertySet;
 class CustomAnimationDialog : public weld::GenericDialogController
 {
 public:
-    CustomAnimationDialog(weld::Window* pParent, std::unique_ptr<STLPropertySet> pSet, const OString& Page);
+    CustomAnimationDialog(weld::Window* pParent, std::unique_ptr<STLPropertySet> pSet, const OUString& Page);
     virtual ~CustomAnimationDialog() override;
 
     STLPropertySet* getResultSet();

@@ -314,7 +314,7 @@ OUString ContentTabPage_Impl::GetSelectedEntry() const
 
 // class HelpTabPage_Impl ------------------------------------------------
 HelpTabPage_Impl::HelpTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* pIdxWin,
-    const OString& rID, const OUString& rUIXMLDescription)
+    const OUString& rID, const OUString& rUIXMLDescription)
     : BuilderPage(pParent, nullptr, rUIXMLDescription, rID)
     , m_pIdxWin(pIdxWin)
 {
@@ -1080,11 +1080,11 @@ bool SearchTabPage_Impl::OpenKeyword( const OUString& rKeyword )
 
 // class BookmarksTabPage_Impl -------------------------------------------
 
-void BookmarksTabPage_Impl::DoAction(std::string_view rAction)
+void BookmarksTabPage_Impl::DoAction(std::u16string_view rAction)
 {
-    if (rAction == "display")
+    if (rAction == u"display")
         aDoubleClickHdl.Call(nullptr);
-    else if (rAction == "rename")
+    else if (rAction == u"rename")
     {
         sal_Int32 nPos = m_xBookmarksBox->get_selected_index();
         if (nPos != -1)
@@ -1101,7 +1101,7 @@ void BookmarksTabPage_Impl::DoAction(std::string_view rAction)
             }
         }
     }
-    else if (rAction == "delete")
+    else if (rAction == u"delete")
     {
         sal_Int32 nPos = m_xBookmarksBox->get_selected_index();
         if (nPos != -1)
@@ -1126,7 +1126,7 @@ IMPL_LINK(BookmarksTabPage_Impl, CommandHdl, const CommandEvent&, rCEvt, bool)
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xBookmarksBox.get(), "sfx/ui/bookmarkmenu.ui"));
     std::unique_ptr<weld::Menu> xMenu = xBuilder->weld_menu("menu");
 
-    OString sIdent = xMenu->popup_at_rect(m_xBookmarksBox.get(), ::tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
+    OUString sIdent = xMenu->popup_at_rect(m_xBookmarksBox.get(), ::tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
     if (!sIdent.isEmpty())
         DoAction(sIdent);
     return true;
@@ -1138,7 +1138,7 @@ IMPL_LINK(BookmarksTabPage_Impl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
     if (KEY_DELETE == nCode && m_xBookmarksBox->n_children() > 0)
     {
-        DoAction("delete");
+        DoAction(u"delete");
         bHandled = true;
     }
     return bHandled;
@@ -1268,7 +1268,7 @@ void SfxHelpWindow_Impl::loadHelpContent(const OUString& sHelpURL, bool bAddToHi
         LeaveWait();
 }
 
-IMPL_LINK(SfxHelpIndexWindow_Impl, ActivatePageHdl, const OString&, rPage, void)
+IMPL_LINK(SfxHelpIndexWindow_Impl, ActivatePageHdl, const OUString&, rPage, void)
 {
     GetPage(rPage)->Activate();
 }
@@ -1289,11 +1289,11 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl(SfxHelpWindow_Impl* _pParent, w
     GetSearchPage();
     GetBookmarksPage();
 
-    OString sPageId("index");
+    OUString sPageId("index");
     SvtViewOptions aViewOpt( EViewType::TabDialog, CONFIGNAME_INDEXWIN );
     if ( aViewOpt.Exists() )
     {
-        OString sSavedPageId = aViewOpt.GetPageID();
+        OUString sSavedPageId = aViewOpt.GetPageID();
         if (m_xTabCtrl->get_page_index(sSavedPageId) != -1)
             sPageId = sSavedPageId;
     }
@@ -1363,17 +1363,17 @@ void SfxHelpIndexWindow_Impl::SetActiveFactory()
     }
 }
 
-HelpTabPage_Impl* SfxHelpIndexWindow_Impl::GetPage(std::string_view  rName)
+HelpTabPage_Impl* SfxHelpIndexWindow_Impl::GetPage(std::u16string_view  rName)
 {
     HelpTabPage_Impl* pPage = nullptr;
 
-    if (rName == "contents")
+    if (rName == u"contents")
         pPage = GetContentPage();
-    else if (rName == "index")
+    else if (rName == u"index")
         pPage = GetIndexPage();
-    else if (rName == "find")
+    else if (rName == u"find")
         pPage = GetSearchPage();
-    else if (rName == "bookmarks")
+    else if (rName == u"bookmarks")
         pPage = GetBookmarksPage();
 
     assert(pPage && "SfxHelpIndexWindow_Impl::GetCurrentPage(): no current page");
@@ -1414,7 +1414,7 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, KeywordHdl, IndexTabPage_Impl&, void)
     if( !bIndex)
         bIndex = xIPage->HasKeywordIgnoreCase();
     // then set index or search page as current.
-    OString sPageId = bIndex ? "index" : "find";
+    OUString sPageId = bIndex ? OUString("index") : OUString("find");
     if (sPageId != m_xTabCtrl->get_current_page_ident())
         m_xTabCtrl->set_current_page(sPageId);
 
@@ -1462,7 +1462,7 @@ OUString SfxHelpIndexWindow_Impl::GetSelectedEntry() const
 {
     OUString sRet;
 
-    OString sName(m_xTabCtrl->get_current_page_ident());
+    OUString sName(m_xTabCtrl->get_current_page_ident());
 
     if (sName == "contents")
     {
@@ -1512,7 +1512,7 @@ void SfxHelpIndexWindow_Impl::ClearSearchPage()
 
 void SfxHelpIndexWindow_Impl::GrabFocusBack()
 {
-    OString sName(m_xTabCtrl->get_current_page_ident());
+    OUString sName(m_xTabCtrl->get_current_page_ident());
 
     if (sName == "contents" && xCPage)
         xCPage->SetFocusOnBox();
@@ -1527,7 +1527,7 @@ void SfxHelpIndexWindow_Impl::GrabFocusBack()
 bool SfxHelpIndexWindow_Impl::HasFocusOnEdit() const
 {
     bool bRet = false;
-    OString sName(m_xTabCtrl->get_current_page_ident());
+    OUString sName(m_xTabCtrl->get_current_page_ident());
     if (sName == "index" && xIPage)
         bRet = xIPage->HasFocusOnEdit();
     else if (sName == "find" && xSPage)
@@ -1538,7 +1538,7 @@ bool SfxHelpIndexWindow_Impl::HasFocusOnEdit() const
 OUString SfxHelpIndexWindow_Impl::GetSearchText() const
 {
     OUString sRet;
-    OString sName(m_xTabCtrl->get_current_page_ident());
+    OUString sName(m_xTabCtrl->get_current_page_ident());
     if (sName == "find" && xSPage)
         sRet = xSPage->GetSearchText();
     return sRet;
@@ -1547,7 +1547,7 @@ OUString SfxHelpIndexWindow_Impl::GetSearchText() const
 bool SfxHelpIndexWindow_Impl::IsFullWordSearch() const
 {
     bool bRet = false;
-    OString sName(m_xTabCtrl->get_current_page_ident());
+    OUString sName(m_xTabCtrl->get_current_page_ident());
     if (sName == "find" && xSPage)
         bRet = xSPage->IsFullWordSearch();
     return bRet;
@@ -1562,7 +1562,7 @@ void SfxHelpIndexWindow_Impl::OpenKeyword( const OUString& rKeyword )
 
 void SfxHelpIndexWindow_Impl::SelectExecutableEntry()
 {
-    OString sName(m_xTabCtrl->get_current_page_ident());
+    OUString sName(m_xTabCtrl->get_current_page_ident());
     if (sName == "index" && xIPage )
         xIPage->SelectExecutableEntry();
 }
@@ -2293,7 +2293,7 @@ void SfxHelpWindow_Impl::ShowStartPage()
     loadHelpContent(SfxHelpWindow_Impl::buildHelpURL(xIndexWin->GetFactory(), u"/start", u""));
 }
 
-IMPL_LINK(SfxHelpWindow_Impl, SelectHdl, const OString&, rCurItem, void)
+IMPL_LINK(SfxHelpWindow_Impl, SelectHdl, const OUString&, rCurItem, void)
 {
     bGrabFocusToToolBox = pTextWin->GetToolBox().has_focus();
     DoAction(rCurItem);
@@ -2483,7 +2483,7 @@ bool SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         if ( ( rKeyCode.IsMod2() && ( KEY_LEFT == nKey || KEY_RIGHT == nKey ) ) ||
              ( !rKeyCode.GetModifier() && KEY_BACKSPACE == nKey && !xIndexWin->HasFocusOnEdit() ) )
         {
-            DoAction( rKeyCode.GetCode() == KEY_RIGHT ? "forward" : "backward" );
+            DoAction( rKeyCode.GetCode() == KEY_RIGHT ? u"forward" : u"backward" );
             bHandled = true;
         }
         else if ( rKeyCode.IsMod1() && ( KEY_F4 == nKey || KEY_W == nKey ) )
@@ -2522,43 +2522,43 @@ void SfxHelpWindow_Impl::SetHelpURL( std::u16string_view rURL )
         SetFactory( aObj.GetHost() );
 }
 
-void SfxHelpWindow_Impl::DoAction(std::string_view  rActionId)
+void SfxHelpWindow_Impl::DoAction(std::u16string_view  rActionId)
 {
-    if (rActionId == "index")
+    if (rActionId == u"index")
     {
         bIndex = !bIndex;
         MakeLayout();
         pTextWin->ToggleIndex( bIndex );
     }
-    else if (rActionId == "start")
+    else if (rActionId == u"start")
     {
         ShowStartPage();
     }
-    else if (rActionId == "backward" || rActionId == "forward")
+    else if (rActionId == u"backward" || rActionId == u"forward")
     {
         URL aURL;
         aURL.Complete = ".uno:Backward";
-        if (rActionId == "forward")
+        if (rActionId == u"forward")
             aURL.Complete = ".uno:Forward";
         Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
         xTrans->parseStrict(aURL);
         pHelpInterceptor->dispatch( aURL, Sequence < PropertyValue >() );
     }
-    else if (rActionId == "searchdialog")
+    else if (rActionId == u"searchdialog")
     {
         pTextWin->DoSearch();
     }
-    else if (rActionId == "print" || rActionId == "sourceview" || rActionId == "copy" || rActionId == "selectionmode")
+    else if (rActionId == u"print" || rActionId == u"sourceview" || rActionId == u"copy" || rActionId == u"selectionmode")
     {
         Reference < XDispatchProvider > xProv = pTextWin->getFrame();
         if ( xProv.is() )
         {
             URL aURL;
-            if (rActionId == "print")
+            if (rActionId == u"print")
                 aURL.Complete = ".uno:Print";
-            else if (rActionId == "sourceview")
+            else if (rActionId == u"sourceview")
                 aURL.Complete = ".uno:SourceView";
-            else if (rActionId == "copy")
+            else if (rActionId == u"copy")
                 aURL.Complete = ".uno:Copy";
             else // rActionId == "selectionmode"
                 aURL.Complete = ".uno:SelectTextMode";
@@ -2569,7 +2569,7 @@ void SfxHelpWindow_Impl::DoAction(std::string_view  rActionId)
                 xDisp->dispatch( aURL, Sequence < PropertyValue >() );
         }
     }
-    else if (rActionId == "bookmarks")
+    else if (rActionId == u"bookmarks")
     {
         OUString aURL = pHelpInterceptor->GetCurrentURL();
         if ( !aURL.isEmpty() )

@@ -467,7 +467,7 @@ SvtFileDialog::~SvtFileDialog()
     {
         // save window state
         SvtViewOptions aDlgOpt( EViewType::Dialog, m_xImpl->m_aIniKey );
-        aDlgOpt.SetWindowState(OStringToOUString(m_xDialog->get_window_state(vcl::WindowDataMask::All), RTL_TEXTENCODING_UTF8));
+        aDlgOpt.SetWindowState(m_xDialog->get_window_state(vcl::WindowDataMask::All));
         OUString sUserData = m_xFileView->GetConfigString();
         aDlgOpt.SetUserItem( "UserData",
                              Any( sUserData ) );
@@ -1783,7 +1783,7 @@ void SvtFileDialog::InitSize()
 
     if ( aDlgOpt.Exists() )
     {
-        m_xDialog->set_window_state(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_UTF8));
+        m_xDialog->set_window_state(aDlgOpt.GetWindowState());
 
         Any aUserData = aDlgOpt.GetUserItem( "UserData");
         OUString sCfgStr;

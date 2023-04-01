@@ -492,7 +492,7 @@ GalleryThemeProperties::GalleryThemeProperties(weld::Widget* pParent,
     m_xDialog->set_title(aText);
 }
 
-void GalleryThemeProperties::PageCreated(const OString& rId, SfxTabPage &rPage)
+void GalleryThemeProperties::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {
     if (rId == "general")
         static_cast<TPGalleryThemeGeneral&>( rPage ).SetXChgData( pData );

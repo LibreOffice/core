@@ -13,7 +13,7 @@
 namespace dbaui
 {
 OChildWindow::OChildWindow(weld::Container* pParent, const OUString& rUIXMLDescription,
-                           const OString& rID)
+                           const OUString& rID)
     : m_xBuilder(Application::CreateBuilder(pParent, rUIXMLDescription))
     , m_xContainer(m_xBuilder->weld_container(rID))
 {

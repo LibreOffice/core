@@ -315,7 +315,7 @@ int ViewTabBar::GetHeight() const
             // set each page width-request to the size it takes to fit the notebook allocation
             for (int nIndex = 1, nPageCount = rNotebook.get_n_pages(); nIndex <= nPageCount; ++nIndex)
             {
-                OString sIdent(OString::number(nIndex));
+                OUString sIdent(OUString::number(nIndex));
                 weld::Container* pContainer = rNotebook.get_page(sIdent);
                 pContainer->set_size_request(nPageWidth, -1);
             }
@@ -450,7 +450,7 @@ void ViewTabBar::UpdateTabBarButtons()
     int nIndex = 1;
     for (const auto& rTab : maTabBarButtons)
     {
-        OString sIdent(OString::number(nIndex));
+        OUString sIdent(OUString::number(nIndex));
         // Create a new tab when there are not enough.
         if (nPageCount < nIndex)
             rNotebook.append_page(sIdent, rTab.ButtonLabel);
@@ -472,7 +472,7 @@ void ViewTabBar::UpdateTabBarButtons()
 
     // Delete tabs that are no longer used.
     for (; nIndex<=nPageCount; ++nIndex)
-        rNotebook.remove_page(OString::number(nIndex));
+        rNotebook.remove_page(OUString::number(nIndex));
 
     int nWidthReq = rNotebook.get_preferred_size().Width();
     // The excess width over the page request that the notebook uses we will
@@ -520,7 +520,7 @@ IMPL_LINK(TabBarControl, NotebookSizeAllocHdl, const Size&, rSize, void)
     mnAllocatedWidth = rSize.Width();
 }
 
-IMPL_LINK(TabBarControl, ActivatePageHdl, const OString&, rPage, void)
+IMPL_LINK(TabBarControl, ActivatePageHdl, const OUString&, rPage, void)
 {
     if (!mpViewTabBar->ActivatePage(mxTabControl->get_page_index(rPage)))
     {

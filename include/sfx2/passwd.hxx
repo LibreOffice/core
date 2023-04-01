@@ -105,13 +105,13 @@ public:
         m_xPassword2Box->set_label(i_rText);
     }
     void SetMinLen(sal_uInt16 Len);
-    void SetEditHelpId(const OString& rId)
+    void SetEditHelpId(const OUString& rId)
     {
         m_xPassword1ED->set_help_id(rId);
     }
     /* tdf#60874 we need a custom help ID for the Confirm
        field of the Protect Document window */
-    void SetConfirmHelpId(const OString& rId)
+    void SetConfirmHelpId(const OUString& rId)
     {
         m_xConfirm1ED->set_help_id(rId);
     }

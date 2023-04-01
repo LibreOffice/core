@@ -49,7 +49,7 @@ public:
         rIconView.signal_item_activated();
     }
 
-    static void trigger_clicked(weld::Toolbar& rToolbar, const OString& rIdent)
+    static void trigger_clicked(weld::Toolbar& rToolbar, const OUString& rIdent)
     {
         rToolbar.signal_clicked(rIdent);
     }
@@ -88,12 +88,12 @@ public:
         rArea.m_aCommandHdl.Call(rCmd);
     }
 
-    static void enter_page(weld::Notebook& rNotebook, const OString& rPage)
+    static void enter_page(weld::Notebook& rNotebook, const OUString& rPage)
     {
         rNotebook.m_aEnterPageHdl.Call(rPage);
     }
 
-    static void leave_page(weld::Notebook& rNotebook, const OString& rPage)
+    static void leave_page(weld::Notebook& rNotebook, const OUString& rPage)
     {
         rNotebook.m_aLeavePageHdl.Call(rPage);
     }
@@ -102,15 +102,15 @@ public:
 namespace jsdialog
 {
 // type used to store key-value pairs to put in the generated messages
-typedef std::unordered_map<std::string, OUString> ActionDataMap;
+typedef std::unordered_map<OString, OUString> ActionDataMap;
 
 /// execute action on a widget
-VCL_DLLPUBLIC bool ExecuteAction(const std::string& nWindowId, const OString& rWidget,
+VCL_DLLPUBLIC bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget,
                                  StringMap& rData);
 /// send full update message to the client
-VCL_DLLPUBLIC void SendFullUpdate(const std::string& nWindowId, const OString& rWidget);
+VCL_DLLPUBLIC void SendFullUpdate(const OUString& nWindowId, const OUString& rWidget);
 /// send action message to the client
-VCL_DLLPUBLIC void SendAction(const std::string& nWindowId, const OString& rWidget,
+VCL_DLLPUBLIC void SendAction(const OUString& nWindowId, const OUString& rWidget,
                               std::unique_ptr<ActionDataMap> pData);
 VCL_DLLPUBLIC StringMap jsonToStringMap(const char* pJSON);
 };

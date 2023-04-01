@@ -144,7 +144,7 @@ namespace dbaui
             @return
                 The new tree.
         */
-        std::unique_ptr<DBTreeViewBase> createSimpleTree(const OString& rHelpId, ElementType eType);
+        std::unique_ptr<DBTreeViewBase> createSimpleTree(const OUString& rHelpId, ElementType eType);
 
         DECL_LINK( OnEntryDoubleClick,    weld::TreeView&, bool );
         DECL_LINK( OnEntrySelChange,      LinkParamNone*, void );
@@ -154,7 +154,7 @@ namespace dbaui
         DECL_LINK( OnDeleteEntry,         LinkParamNone*, void );
 
         DECL_LINK(OnDropdownClickHdl, weld::Toggleable&, void);
-        DECL_LINK(MenuSelectHdl, const OString&, void);
+        DECL_LINK(MenuSelectHdl, const OUString&, void);
 
         OAppBorderWindow& getBorderWin() const { return m_rBorderWin; }
 

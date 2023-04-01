@@ -55,7 +55,7 @@ private:
     ::rtl::Reference<ViewTabBar> mpViewTabBar;
     int mnAllocatedWidth;
 
-    DECL_LINK(ActivatePageHdl, const OString&, void);
+    DECL_LINK(ActivatePageHdl, const OUString&, void);
     DECL_LINK(NotebookSizeAllocHdl, const Size&, void);
 };
 

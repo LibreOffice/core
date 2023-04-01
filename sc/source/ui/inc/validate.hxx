@@ -150,7 +150,7 @@ class ScValidationDlg
     typedef ScRefHdlrControllerImpl<SfxTabDialogController, false> ScValidationDlgBase;
 
     ScTabViewShell * m_pTabVwSh;
-    OString m_sValuePageId;
+    OUString m_sValuePageId;
     bool    m_bOwnRefHdlr:1;
     bool    m_bRefInputting:1;
 

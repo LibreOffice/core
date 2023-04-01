@@ -1907,7 +1907,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
     }
     else if (!mpWindowImpl->maHelpRequestHdl.IsSet() || mpWindowImpl->maHelpRequestHdl.Call(*this))
     {
-        OUString aStrHelpId( OStringToOUString( GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
+        OUString aStrHelpId( GetHelpId() );
         if ( aStrHelpId.isEmpty() && ImplGetParent() )
             ImplGetParent()->RequestHelp( rHEvt );
         else
@@ -3096,7 +3096,7 @@ const Wallpaper& Window::GetDisplayBackground() const
 
 const OUString& Window::GetHelpText() const
 {
-    OUString aStrHelpId( OStringToOUString( GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
+    OUString aStrHelpId( GetHelpId() );
     bool bStrHelpId = !aStrHelpId.isEmpty();
 
     if ( !mpWindowImpl->maHelpText.getLength() && bStrHelpId )

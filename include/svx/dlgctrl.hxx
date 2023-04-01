@@ -44,7 +44,7 @@ class SAL_WARN_UNUSED SvxTabPage : public SfxTabPage
 {
 
 public:
-    SvxTabPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet &rAttrSet)
+    SvxTabPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OUString& rID, const SfxItemSet &rAttrSet)
         : SfxTabPage(pPage, pController, rUIXMLDescription, rID, &rAttrSet)
     {
     }

@@ -585,7 +585,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
     }
 }
 
-void OFieldDescControl::InitializeControl(OPropListBoxCtrl* _pControl,const OString& _sHelpId,bool _bAddChangeHandler)
+void OFieldDescControl::InitializeControl(OPropListBoxCtrl* _pControl,const OUString& _sHelpId,bool _bAddChangeHandler)
 {
     if ( _bAddChangeHandler )
         _pControl->GetComboBox().connect_changed(LINK(this,OFieldDescControl,ChangeHdl));
@@ -593,7 +593,7 @@ void OFieldDescControl::InitializeControl(OPropListBoxCtrl* _pControl,const OStr
     InitializeControl(_pControl->GetWidget(), _sHelpId);
 }
 
-void OFieldDescControl::InitializeControl(weld::Widget* pControl,const OString& _sHelpId)
+void OFieldDescControl::InitializeControl(weld::Widget* pControl,const OUString& _sHelpId)
 {
     pControl->set_help_id(_sHelpId);
     pControl->connect_focus_in(LINK(this, OFieldDescControl, OnControlFocusGot));
@@ -606,7 +606,7 @@ void OFieldDescControl::InitializeControl(weld::Widget* pControl,const OString& 
     }
 }
 
-std::unique_ptr<OPropNumericEditCtrl> OFieldDescControl::CreateNumericControl(const OString& rId, TranslateId pHelpId, short _nProperty, const OString& _sHelpId)
+std::unique_ptr<OPropNumericEditCtrl> OFieldDescControl::CreateNumericControl(const OUString& rId, TranslateId pHelpId, short _nProperty, const OUString& _sHelpId)
 {
     auto xControl = std::make_unique<OPropNumericEditCtrl>(
             m_xBuilder->weld_spin_button(rId), pHelpId, _nProperty);

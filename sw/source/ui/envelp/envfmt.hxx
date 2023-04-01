@@ -45,15 +45,15 @@ class SwEnvFormatPage : public SfxTabPage
     std::unique_ptr<weld::CustomWeld> m_xPreview;
 
     DECL_LINK(ModifyHdl, weld::MetricSpinButton&, void);
-    DECL_LINK(AddrEditHdl, const OString&, void);
-    DECL_LINK(SendEditHdl, const OString&, void);
+    DECL_LINK(AddrEditHdl, const OUString&, void);
+    DECL_LINK(SendEditHdl, const OUString&, void);
     DECL_LINK(FormatHdl, weld::ComboBox&, void);
 
     void SetMinMax();
 
     SfxItemSet* GetCollItemSet(SwTextFormatColl const* pColl, bool bSender);
 
-    void Edit(std::string_view rIdent, bool bSender);
+    void Edit(std::u16string_view rIdent, bool bSender);
 
     SwEnvDlg* GetParentSwEnvDlg() { return m_pDialog; }
 

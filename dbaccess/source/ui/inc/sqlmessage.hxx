@@ -106,7 +106,7 @@ public:
                 const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = nullptr );
 
     void set_title(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
-    void add_button(const OUString& rText, int nResponse, const OString& rHelpId = OString()) { m_xDialog->add_button(rText, nResponse, rHelpId); }
+    void add_button(const OUString& rText, int nResponse, const OUString& rHelpId = {}) { m_xDialog->add_button(rText, nResponse, rHelpId); }
     void set_default_response(int nResponse) { m_xDialog->set_default_response(nResponse); }
 
     virtual ~OSQLMessageBox() override;

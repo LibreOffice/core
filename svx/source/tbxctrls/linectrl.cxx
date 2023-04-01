@@ -76,12 +76,10 @@ void SAL_CALL SvxLineStyleToolBoxControl::statusChanged( const frame::FeatureSta
     if (!getToolboxId(nId, &pToolBox) && !m_pToolbar)
         return;
 
-    OString sId(m_aCommandURL.toUtf8());
-
     if ( rEvent.FeatureURL.Complete == m_aCommandURL )
     {
         if (m_pToolbar)
-            m_pToolbar->set_item_sensitive(sId, rEvent.IsEnabled);
+            m_pToolbar->set_item_sensitive(m_aCommandURL, rEvent.IsEnabled);
         else
             pToolBox->EnableItem( nId, rEvent.IsEnabled );
     }
@@ -109,7 +107,7 @@ void SAL_CALL SvxLineStyleToolBoxControl::statusChanged( const frame::FeatureSta
             if (m_pToolbar)
             {
                 Graphic aGraf(aEmpty);
-                m_pToolbar->set_item_image(sId, aGraf.GetXGraphic());
+                m_pToolbar->set_item_image(m_aCommandURL, aGraf.GetXGraphic());
             }
             else
                 pToolBox->SetItemImage(nId, Image(aEmpty));
@@ -120,7 +118,7 @@ void SAL_CALL SvxLineStyleToolBoxControl::statusChanged( const frame::FeatureSta
             if (m_pToolbar)
             {
                 Graphic aGraf(xList->GetBitmapForUISolidLine());
-                m_pToolbar->set_item_image(sId, aGraf.GetXGraphic());
+                m_pToolbar->set_item_image(m_aCommandURL, aGraf.GetXGraphic());
             }
             else
                 pToolBox->SetItemImage(nId, Image(xList->GetBitmapForUISolidLine()));
@@ -129,7 +127,7 @@ void SAL_CALL SvxLineStyleToolBoxControl::statusChanged( const frame::FeatureSta
             if (m_pToolbar)
             {
                 Graphic aGraf(xList->GetUiBitmap(nIndex - 2));
-                m_pToolbar->set_item_image(sId, aGraf.GetXGraphic());
+                m_pToolbar->set_item_image(m_aCommandURL, aGraf.GetXGraphic());
             }
             else
                 pToolBox->SetItemImage(nId, Image(xList->GetUiBitmap(nIndex - 2)));
@@ -144,8 +142,7 @@ void SAL_CALL SvxLineStyleToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
     if (m_pToolbar)
     {
         // Toggle the popup also when toolbutton is activated
-        const OString aId(m_aCommandURL.toUtf8());
-        m_pToolbar->set_menu_item_active(aId, !m_pToolbar->get_menu_item_active(aId));
+        m_pToolbar->set_menu_item_active(m_aCommandURL, !m_pToolbar->get_menu_item_active(m_aCommandURL));
     }
     else
     {
@@ -161,7 +158,7 @@ void SvxLineStyleToolBoxControl::initialize( const css::uno::Sequence<css::uno::
     if (m_pToolbar)
     {
         mxPopoverContainer.reset(new ToolbarPopupContainer(m_pToolbar));
-        m_pToolbar->set_item_popover(m_aCommandURL.toUtf8(), mxPopoverContainer->getTopLevel());
+        m_pToolbar->set_item_popover(m_aCommandURL, mxPopoverContainer->getTopLevel());
     }
 
     ToolBox* pToolBox = nullptr;
@@ -450,8 +447,7 @@ void SAL_CALL SvxLineEndToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
     if (m_pToolbar)
     {
         // Toggle the popup also when toolbutton is activated
-        const OString aId(m_aCommandURL.toUtf8());
-        m_pToolbar->set_menu_item_active(aId, !m_pToolbar->get_menu_item_active(aId));
+        m_pToolbar->set_menu_item_active(m_aCommandURL, !m_pToolbar->get_menu_item_active(m_aCommandURL));
     }
     else
     {
@@ -467,7 +463,7 @@ void SvxLineEndToolBoxControl::initialize( const css::uno::Sequence<css::uno::An
     if (m_pToolbar)
     {
         mxPopoverContainer.reset(new ToolbarPopupContainer(m_pToolbar));
-        m_pToolbar->set_item_popover(m_aCommandURL.toUtf8(), mxPopoverContainer->getTopLevel());
+        m_pToolbar->set_item_popover(m_aCommandURL, mxPopoverContainer->getTopLevel());
     }
 
     ToolBox* pToolBox = nullptr;

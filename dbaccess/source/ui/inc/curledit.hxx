@@ -43,7 +43,7 @@ public:
 public:
     bool get_visible() const { return m_xEntry->get_visible(); }
     void connect_changed(const Link<weld::Entry&, void>& rLink) { m_xEntry->connect_changed(rLink); }
-    void set_help_id(const OString& rName) { m_xEntry->set_help_id(rName); }
+    void set_help_id(const OUString& rName) { m_xEntry->set_help_id(rName); }
     void hide()
     {
         m_xEntry->hide();

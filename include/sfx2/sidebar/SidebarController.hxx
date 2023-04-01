@@ -259,8 +259,8 @@ private:
         weld::Menu& rMainButton,
         weld::Menu& rSubMenu,
         const ::std::vector<TabBar::DeckMenuData>& rMenuData) const;
-    DECL_DLLPRIVATE_LINK(OnMenuItemSelected, const OString&, void);
-    DECL_DLLPRIVATE_LINK(OnSubMenuItemSelected, const OString&, void);
+    DECL_DLLPRIVATE_LINK(OnMenuItemSelected, const OUString&, void);
+    DECL_DLLPRIVATE_LINK(OnSubMenuItemSelected, const OUString&, void);
     void BroadcastPropertyChange();
 
     /** The close of the deck changes the width of the child window.

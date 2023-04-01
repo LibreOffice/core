@@ -16,7 +16,7 @@ namespace dbaui
 class OChildWindow
 {
 protected:
-    OChildWindow(weld::Container* pParent, const OUString& rUIXMLDescription, const OString& rID);
+    OChildWindow(weld::Container* pParent, const OUString& rUIXMLDescription, const OUString& rID);
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xContainer;
 
@@ -29,7 +29,7 @@ public:
 
     void Enable(bool bEnable) { m_xContainer->set_sensitive(bEnable); }
 
-    void SetHelpId(const OString& rHelpId) { m_xContainer->set_help_id(rHelpId); }
+    void SetHelpId(const OUString& rHelpId) { m_xContainer->set_help_id(rHelpId); }
 
     void Show() { m_xContainer->show(); }
 };

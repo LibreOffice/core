@@ -225,7 +225,7 @@ HeaderFooterDialog::~HeaderFooterDialog()
 {
 }
 
-IMPL_LINK(HeaderFooterDialog, ActivatePageHdl, const OString&, rIdent, void)
+IMPL_LINK(HeaderFooterDialog, ActivatePageHdl, const OUString&, rIdent, void)
 {
     mxPBApply->set_visible(rIdent == "slides");
     mxPBApply->set_sensitive(mpCurrentPage != nullptr);
@@ -256,14 +256,14 @@ short HeaderFooterDialog::run()
 
 void HeaderFooterDialog::ApplyToAll()
 {
-    OString tabId = mxTabCtrl->get_current_page_ident();
+    OUString tabId = mxTabCtrl->get_current_page_ident();
     apply(true, tabId == "slides");
     m_xDialog->response(RET_OK);
 }
 
 void HeaderFooterDialog::Apply()
 {
-    OString tabId = mxTabCtrl->get_current_page_ident();
+    OUString tabId = mxTabCtrl->get_current_page_ident();
     apply(false, tabId == "slides");
     m_xDialog->response(RET_OK);
 }

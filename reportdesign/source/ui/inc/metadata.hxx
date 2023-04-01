@@ -53,7 +53,7 @@ namespace rptui
         // IPropertyInfoService
         static sal_Int32                    getPropertyId(const OUString& _rName);
         static OUString                     getPropertyTranslation(sal_Int32 _nId);
-        static OString                      getPropertyHelpId(sal_Int32 _nId);
+        static OUString                     getPropertyHelpId(sal_Int32 _nId);
         static PropUIFlags                  getPropertyUIFlags(sal_Int32 _nId);
         static void                         getExcludeProperties(::std::vector< css::beans::Property >& _rExcludeProperties,const css::uno::Reference< css::inspection::XPropertyHandler >& _xFormComponentHandler);
 
@@ -84,7 +84,7 @@ namespace rptui
     class HelpIdUrl
     {
     public:
-        static OUString getHelpURL( std::string_view _sHelpId );
+        static OUString getHelpURL( std::u16string_view _sHelpId );
     };
 
 

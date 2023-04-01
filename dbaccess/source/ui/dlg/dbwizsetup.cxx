@@ -460,7 +460,7 @@ std::unique_ptr<BuilderPage> ODbTypeWizDialogSetup::createPage(WizardState _nSta
 {
     std::unique_ptr<OGenericAdministrationPage> xPage;
 
-    OString sIdent(OString::number(_nState));
+    OUString sIdent(OUString::number(_nState));
     weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
 
     switch(_nState)

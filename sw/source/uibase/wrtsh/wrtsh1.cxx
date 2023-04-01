@@ -442,10 +442,10 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                 {
                     SfxSlotPool* pSlotPool = SW_MOD()->GetSlotPool();
                     const SfxSlot* pSlot = pSlotPool->GetSlot(nSlotId);
-                    OString aCmd = OString::Concat(".uno:") + pSlot->GetUnoName();
+                    OUString aCmd = pSlot->GetCommand();
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     ScopedVclPtr<SfxAbstractInsertObjectDialog> pDlg(pFact->CreateInsertObjectDialog(GetFrameWeld(mxDoc->GetDocShell()),
-                                OUString::fromUtf8( aCmd ), xStor, &aServerList));
+                                aCmd, xStor, &aServerList));
                     if (pDlg)
                     {
                         pDlg->Execute();

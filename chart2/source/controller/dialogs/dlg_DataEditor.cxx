@@ -74,7 +74,7 @@ DataEditor::~DataEditor()
 }
 
 // react on click (or keypress) on toolbar icon
-IMPL_LINK(DataEditor, ToolboxHdl, const OString&, rId, void)
+IMPL_LINK(DataEditor, ToolboxHdl, const OUString&, rId, void)
 {
     if (rId == "InsertRow")
         m_xBrwData->InsertRow();

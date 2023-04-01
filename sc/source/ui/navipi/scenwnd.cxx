@@ -127,7 +127,7 @@ IMPL_LINK(ScScenarioWindow, ContextMenuHdl, const CommandEvent&, rCEvt, bool)
             {
                 std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xLbScenario.get(), "modules/scalc/ui/scenariomenu.ui"));
                 std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("menu"));
-                OString sIdent(xPopup->popup_at_rect(m_xLbScenario.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
+                OUString sIdent(xPopup->popup_at_rect(m_xLbScenario.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
                 if (sIdent == "delete")
                     DeleteScenario();
                 else if (sIdent == "edit")

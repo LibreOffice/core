@@ -70,7 +70,7 @@ using namespace com::sun::star;
 
 ScUnoAddInFuncData::ScUnoAddInFuncData( const OUString& rNam, const OUString& rLoc,
                                         OUString aDesc,
-                                        sal_uInt16 nCat, OString sHelp,
+                                        sal_uInt16 nCat, OUString sHelp,
                                         uno::Reference<reflection::XIdlMethod> xFunc,
                                         uno::Any aO,
                                         tools::Long nAC, const ScAddInArgDesc* pAD,
@@ -528,7 +528,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                     }
                 }
 
-                OString sHelpId = aHelpIdGenerator.GetHelpId( pFuncNameArray[nFuncPos] );
+                OUString sHelpId = aHelpIdGenerator.GetHelpId( pFuncNameArray[nFuncPos] );
 
                 uno::Reference<reflection::XIdlMethod> xFunc;       // remains empty
                 uno::Any aObject;                                   // also empty
@@ -862,7 +862,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                     sal_uInt16 nCategory = lcl_GetCategory(
                             xAddIn->getProgrammaticCategoryName( aFuncU ) );
 
-                    OString sHelpId = aHelpIdGenerator.GetHelpId( aFuncU );
+                    OUString sHelpId = aHelpIdGenerator.GetHelpId( aFuncU );
 
                     OUString aLocalName;
                     try

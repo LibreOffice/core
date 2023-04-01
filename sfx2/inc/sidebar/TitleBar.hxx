@@ -59,7 +59,7 @@ protected:
 
     virtual void HandleToolBoxItemClick() = 0;
 
-    DECL_LINK(SelectionHandler, const OString&, void);
+    DECL_LINK(SelectionHandler, const OUString&, void);
 
 private:
     void SetBackground();

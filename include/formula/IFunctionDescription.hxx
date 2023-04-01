@@ -92,7 +92,7 @@ namespace formula
         virtual void fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const = 0;
         virtual void initArgumentInfo() const = 0;
         virtual OUString getSignature() const = 0;
-        virtual OString getHelpId() const = 0;
+        virtual OUString getHelpId() const = 0;
         virtual bool isHidden() const = 0;
 
         // parameter

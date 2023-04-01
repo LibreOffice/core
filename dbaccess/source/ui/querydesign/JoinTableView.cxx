@@ -1122,7 +1122,7 @@ void OJoinTableView::executePopup(const Point& rPos, VclPtr<OTableConnection>& r
     weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "dbaccess/ui/joinviewmenu.ui"));
     std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
-    OString sIdent = xContextMenu->popup_at_rect(pPopupParent, aRect);
+    OUString sIdent = xContextMenu->popup_at_rect(pPopupParent, aRect);
     if (sIdent == "delete")
         RemoveConnection(rSelConnection, true);
     else if (sIdent == "edit")

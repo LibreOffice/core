@@ -63,13 +63,13 @@
 SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
                                                  SfxStyleSheetBase& rBase,
                                                  SfxStyleFamily nRegion,
-                                                 const OString& sPage,
+                                                 const OUString& sPage,
                                                  SwWrtShell* pActShell,
                                                  bool bNew)
     : SfxStyleDialogController(pParent,
                                "modules/swriter/ui/templatedialog" +
                                    OUString::number(static_cast<sal_uInt16>(nRegion)) + ".ui",
-                               "TemplateDialog" + OString::number(static_cast<sal_uInt16>(nRegion)),
+                               "TemplateDialog" + OUString::number(static_cast<sal_uInt16>(nRegion)),
                                rBase)
     , m_nType(nRegion)
     , m_pWrtShell(pActShell)
@@ -267,7 +267,7 @@ void SwTemplateDlgController::RefreshInputSet()
     pInSet->SetParent( &GetStyleSheet().GetItemSet() );
 }
 
-void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage )
+void SwTemplateDlgController::PageCreated(const OUString& rId, SfxTabPage &rPage )
 {
     // set style's and metric's names
     OUString sNumCharFormat, sBulletCharFormat;

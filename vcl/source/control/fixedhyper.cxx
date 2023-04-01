@@ -150,7 +150,7 @@ void FixedHyperlink::SetText(const OUString& rNewDescription)
     m_nTextLen = GetOutDev()->GetCtrlTextWidth(GetText());
 }
 
-bool FixedHyperlink::set_property(const OString &rKey, const OUString &rValue)
+bool FixedHyperlink::set_property(const OUString &rKey, const OUString &rValue)
 {
     if (rKey == "uri")
         SetURL(rValue);

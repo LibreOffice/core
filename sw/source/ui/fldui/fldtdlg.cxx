@@ -127,13 +127,13 @@ void SwFieldDlg::Close()
 
 void SwFieldDlg::Initialize(SfxChildWinInfo const *pInfo)
 {
-    OString aWinState = pInfo->aWinState;
+    OUString aWinState = pInfo->aWinState;
     if (aWinState.isEmpty())
         return;
     m_xDialog->set_window_state(aWinState);
 }
 
-SfxItemSet* SwFieldDlg::CreateInputItemSet(const OString& rID)
+SfxItemSet* SwFieldDlg::CreateInputItemSet(const OUString& rID)
 {
     SwDocShell *const pDocSh(static_cast<SwDocShell*>(SfxObjectShell::Current()));
     if (rID == "docinfo" && pDocSh) // might not have a shell if the dialog is restored on startup
@@ -196,22 +196,22 @@ void SwFieldDlg::ReInitDlg()
                                 || !rSh.HasReadonlySel())
                             &&  !SwCursorShell::PosInsideInputField(*rSh.GetCursor()->GetPoint()));
 
-    ReInitTabPage("document");
-    ReInitTabPage("variables");
-    ReInitTabPage("docinfo");
+    ReInitTabPage(u"document");
+    ReInitTabPage(u"variables");
+    ReInitTabPage(u"docinfo");
 
     if (!m_bHtmlMode)
     {
-        ReInitTabPage("ref");
-        ReInitTabPage("functions");
-        ReInitTabPage("database");
+        ReInitTabPage(u"ref");
+        ReInitTabPage(u"functions");
+        ReInitTabPage(u"database");
     }
 
     m_pChildWin->SetOldDocShell(pDocSh);
 }
 
 // newly initialise TabPage after Doc-Switch
-void SwFieldDlg::ReInitTabPage(std::string_view rPageId, bool bOnlyActivate)
+void SwFieldDlg::ReInitTabPage(std::u16string_view rPageId, bool bOnlyActivate)
 {
     SwFieldPage* pPage = static_cast<SwFieldPage*>(GetTabPage(rPageId));
     if (pPage)
@@ -232,12 +232,12 @@ void SwFieldDlg::Activate()
                             &&  !SwCursorShell::PosInsideInputField(*rSh.GetCursor()->GetPoint()));
 
 
-    ReInitTabPage("variables", true);
+    ReInitTabPage(u"variables", true);
 
     if( !bHtmlMode )
     {
-        ReInitTabPage("ref", true);
-        ReInitTabPage("functions", true);
+        ReInitTabPage(u"ref", true);
+        ReInitTabPage(u"functions", true);
     }
 }
 
@@ -267,7 +267,7 @@ void SwFieldDlg::ActivateDatabasePage()
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     m_bDataBaseMode = true;
     ShowPage("database");
-    SfxTabPage* pDBPage = GetTabPage("database");
+    SfxTabPage* pDBPage = GetTabPage(u"database");
     if( pDBPage )
     {
         static_cast<SwFieldDBPage*>(pDBPage)->ActivateMailMergeAddress();
@@ -286,7 +286,7 @@ void SwFieldDlg::ShowReferencePage()
     ShowPage("ref");
 }
 
-void SwFieldDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
+void SwFieldDlg::PageCreated(const OUString& rId, SfxTabPage& rPage)
 {
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     if (rId != "database")

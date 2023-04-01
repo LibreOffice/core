@@ -154,7 +154,7 @@ BitmapEx AbstractScDataFormDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractScDataFormDlg_Impl::GetScreenshotId() const
+OUString AbstractScDataFormDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -220,7 +220,7 @@ BitmapEx AbstractScMoveTableDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractScMoveTableDlg_Impl::GetScreenshotId() const
+OUString AbstractScMoveTableDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -345,7 +345,7 @@ BitmapEx AbstractScImportAsciiDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractScImportAsciiDlg_Impl::GetScreenshotId() const
+OUString AbstractScImportAsciiDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -376,7 +376,7 @@ BitmapEx AbstractScColRowLabelDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractScColRowLabelDlg_Impl::GetScreenshotId() const
+OUString AbstractScColRowLabelDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -392,7 +392,7 @@ BitmapEx AbstractScDataPilotDatabaseDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractScDataPilotDatabaseDlg_Impl::GetScreenshotId() const
+OUString AbstractScDataPilotDatabaseDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -428,7 +428,7 @@ BitmapEx AbstractScDataPilotSourceTypeDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractScDataPilotSourceTypeDlg_Impl::GetScreenshotId() const
+OUString AbstractScDataPilotSourceTypeDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -469,7 +469,7 @@ BitmapEx AbstractScDeleteCellDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractScDeleteCellDlg_Impl::GetScreenshotId() const
+OUString AbstractScDeleteCellDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -490,7 +490,7 @@ BitmapEx AbstractScDeleteContentsDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractScDeleteContentsDlg_Impl::GetScreenshotId() const
+OUString AbstractScDeleteContentsDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -606,7 +606,7 @@ BitmapEx AbstractScInsertContentsDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractScInsertContentsDlg_Impl::GetScreenshotId() const
+OUString AbstractScInsertContentsDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -652,7 +652,7 @@ BitmapEx AbstractScInsertTableDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractScInsertTableDlg_Impl::GetScreenshotId() const
+OUString AbstractScInsertTableDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -765,7 +765,7 @@ BitmapEx AbstractScNameCreateDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractScNameCreateDlg_Impl::GetScreenshotId() const
+OUString AbstractScNameCreateDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -849,7 +849,7 @@ void AbstractScShowTabDlg_Impl::Insert( const OUString& rString, bool bSelected 
 
 void    AbstractScShowTabDlg_Impl::SetDescription(
                 const OUString& rTitle, const OUString& rFixedText,
-                const OString& sDlgHelpId, const OString& sLbHelpId )
+                const OUString& sDlgHelpId, const OUString& sLbHelpId )
 {
     m_xDlg->SetDescription( rTitle, rFixedText, sDlgHelpId, sLbHelpId );
 }
@@ -871,7 +871,7 @@ void AbstractScGoToTabDlg_Impl::Insert( const OUString& rString, bool bSelected 
 
 void    AbstractScGoToTabDlg_Impl::SetDescription(
                 const OUString& rTitle, const OUString& rEntryLabel, const OUString& rListLabel,
-                const OString& rDlgHelpId, const OString& rEnHelpId, const OString& rLbHelpId )
+                const OUString& rDlgHelpId, const OUString& rEnHelpId, const OUString& rLbHelpId )
 {
     m_xDlg->SetDescription( rTitle, rEntryLabel, rListLabel, rDlgHelpId, rEnHelpId, rLbHelpId );
 }
@@ -897,7 +897,7 @@ BitmapEx AbstractScStringInputDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractScStringInputDlg_Impl::GetScreenshotId() const
+OUString AbstractScStringInputDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -913,7 +913,7 @@ BitmapEx AbstractScTabBgColorDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractScTabBgColorDlg_Impl::GetScreenshotId() const
+OUString AbstractScTabBgColorDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -949,7 +949,7 @@ BitmapEx AbstractScTextImportOptionsDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractScTextImportOptionsDlg_Impl::GetScreenshotId() const
+OUString AbstractScTextImportOptionsDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -964,7 +964,7 @@ bool ScAbstractTabController_Impl::StartExecuteAsync(AsyncContext &rCtx)
     return SfxTabDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
-void ScAbstractTabController_Impl::SetCurPageId( const OString &rName )
+void ScAbstractTabController_Impl::SetCurPageId( const OUString &rName )
 {
     m_xDlg->SetCurPageId( rName );
 }
@@ -990,12 +990,12 @@ void ScAbstractTabController_Impl::SetText( const OUString& rStr )
     m_xDlg->set_title(rStr);
 }
 
-std::vector<OString> ScAbstractTabController_Impl::getAllPageUIXMLDescriptions() const
+std::vector<OUString> ScAbstractTabController_Impl::getAllPageUIXMLDescriptions() const
 {
     return m_xDlg->getAllPageUIXMLDescriptions();
 }
 
-bool ScAbstractTabController_Impl::selectPageByUIXMLDescription(const OString& rUIXMLDescription)
+bool ScAbstractTabController_Impl::selectPageByUIXMLDescription(const OUString& rUIXMLDescription)
 {
     return m_xDlg->selectPageByUIXMLDescription(rUIXMLDescription);
 }
@@ -1005,7 +1005,7 @@ BitmapEx ScAbstractTabController_Impl::createScreenshot() const
     return m_xDlg->createScreenshot();
 }
 
-OString ScAbstractTabController_Impl::GetScreenshotId() const
+OUString ScAbstractTabController_Impl::GetScreenshotId() const
 {
     return m_xDlg->GetScreenshotId();
 }
@@ -1015,7 +1015,7 @@ bool ScAsyncTabController_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContex
     return SfxTabDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
-void ScAsyncTabController_Impl::SetCurPageId( const OString &rName )
+void ScAsyncTabController_Impl::SetCurPageId( const OUString &rName )
 {
     m_xDlg->SetCurPageId( rName );
 }
@@ -1146,7 +1146,7 @@ VclPtr<AbstractScLinkedAreaDlg> ScAbstractDialogFactory_Impl::CreateScLinkedArea
 }
 
 VclPtr<AbstractScMetricInputDlg> ScAbstractDialogFactory_Impl::CreateScMetricInputDlg(weld::Window* pParent,
-                                                                const OString& sDialogName,
+                                                                const OUString& sDialogName,
                                                                 tools::Long            nCurrent,
                                                                 tools::Long            nDefault,
                                                                 FieldUnit       eFUnit,
@@ -1231,8 +1231,8 @@ VclPtr<AbstractScGoToTabDlg> ScAbstractDialogFactory_Impl::CreateScGoToTabDlg(we
 }
 
 VclPtr<AbstractScStringInputDlg> ScAbstractDialogFactory_Impl::CreateScStringInputDlg(weld::Window* pParent,
-        const OUString& rTitle, const OUString& rEditTitle, const OUString& rDefault, const OString& rHelpId,
-        const OString& rEditHelpId)
+        const OUString& rTitle, const OUString& rEditTitle, const OUString& rDefault, const OUString& rHelpId,
+        const OUString& rEditHelpId)
 {
     return VclPtr<AbstractScStringInputDlg_Impl>::Create(std::make_unique<ScStringInputDlg>(pParent, rTitle, rEditTitle,
                 rDefault, rHelpId, rEditHelpId));

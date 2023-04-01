@@ -187,7 +187,7 @@ void SvtViewOptions::SetWindowState( const OUString& sState )
 
 //  public method
 
-OString SvtViewOptions::GetPageID() const
+OUString SvtViewOptions::GetPageID() const
 {
     // Safe impossible cases.
     // These call isn't allowed for dialogs, tab-pages or windows!
@@ -207,13 +207,13 @@ OString SvtViewOptions::GetPageID() const
             TOOLS_WARN_EXCEPTION("unotools", "Unexpected exception");
         }
 
-    return sID.toUtf8();
+    return sID;
 }
 
 
 //  public method
 
-void SvtViewOptions::SetPageID(std::string_view rID)
+void SvtViewOptions::SetPageID(const OUString& rID)
 {
     // Safe impossible cases.
     // These call isn't allowed for dialogs, tab-pages or windows!
@@ -224,7 +224,7 @@ void SvtViewOptions::SetPageID(std::string_view rID)
         css::uno::Reference< css::beans::XPropertySet > xNode(
             impl_getSetNode(m_sViewName, true),
             css::uno::UNO_QUERY_THROW);
-        xNode->setPropertyValue(PROPERTY_PAGEID, css::uno::Any(OUString::fromUtf8(rID)));
+        xNode->setPropertyValue(PROPERTY_PAGEID, css::uno::Any(rID));
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
     catch(const css::uno::Exception&)

@@ -62,13 +62,13 @@ bool VclAbstractDialog::StartExecuteAsync(AsyncContext&)
     return false;
 }
 
-std::vector<OString> VclAbstractDialog::getAllPageUIXMLDescriptions() const
+std::vector<OUString> VclAbstractDialog::getAllPageUIXMLDescriptions() const
 {
     // default has no pages
-    return std::vector<OString>();
+    return {};
 }
 
-bool VclAbstractDialog::selectPageByUIXMLDescription(const OString& /*rUIXMLDescription*/)
+bool VclAbstractDialog::selectPageByUIXMLDescription(const OUString& /*rUIXMLDescription*/)
 {
     // default cannot select a page (which is okay, return true)
     return true;

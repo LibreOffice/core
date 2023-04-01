@@ -986,7 +986,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    if (!GetImpl()->canConvertCurrentSelectionToControl_Lock("ConvertToFixed"))
+                    if (!GetImpl()->canConvertCurrentSelectionToControl_Lock(u"ConvertToFixed"))
                         // if it cannot be converted to a fixed text, it is no single control
                         rSet.DisableItem( nWhich );
                 }

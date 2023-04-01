@@ -96,9 +96,9 @@ struct FmGridHeaderData
     Reference< XInterface > xDroppedResultSet;
 };
 
-static void InsertMenuItem(weld::Menu& rMenu, int nMenuPos, std::string_view id, const OUString& rText, const OUString& rImgId)
+static void InsertMenuItem(weld::Menu& rMenu, int nMenuPos, const OUString& id, const OUString& rText, const OUString& rImgId)
 {
-    rMenu.insert(nMenuPos, OUString::fromUtf8(id), rText, &rImgId, nullptr, nullptr, TRISTATE_INDET);
+    rMenu.insert(nMenuPos, id, rText, &rImgId, nullptr, nullptr, TRISTATE_INDET);
 }
 
 FmGridHeader::FmGridHeader( BrowseBox* pParent, WinBits nWinBits)
@@ -407,7 +407,7 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
         Reference< XPropertySet >  xCol, xSecondCol;
 
         // Create Column based on type, default textfield
-        std::vector<OString> aPossibleTypes;
+        std::vector<OUString> aPossibleTypes;
         std::vector<OUString> aImgResId;
         std::vector<TranslateId> aStrResId;
 
@@ -503,14 +503,14 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
         bool bDateNTimeCol = false;
         if (!aPossibleTypes.empty())
         {
-            OString sPreferredType = aPossibleTypes[0];
+            OUString sPreferredType = aPossibleTypes[0];
             if ((m_pImpl->nDropAction == DND_ACTION_LINK) && (aPossibleTypes.size() > 1))
             {
                 std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "svx/ui/colsmenu.ui"));
                 std::unique_ptr<weld::Menu> xTypeMenu(xBuilder->weld_menu("insertmenu"));
 
                 int nMenuPos = 0;
-                std::vector<OString>::const_iterator iter;
+                std::vector<OUString>::const_iterator iter;
                 std::vector<TranslateId>::const_iterator striter;
                 std::vector<OUString>::const_iterator imgiter;
                 for (iter = aPossibleTypes.begin(), imgiter = aImgResId.begin(), striter = aStrResId.begin();
@@ -521,7 +521,7 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
 
                 ::tools::Rectangle aRect(m_pImpl->aDropPosPixel, Size(1,1));
                 weld::Window* pParent = weld::GetPopupParent(*this, aRect);
-                OString sResult = xTypeMenu->popup_at_rect(pParent, aRect);
+                OUString sResult = xTypeMenu->popup_at_rect(pParent, aRect);
                 if (!sResult.isEmpty())
                     sPreferredType = sResult;
             }
@@ -534,7 +534,7 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
                 if (bDateNTimeCol)
                     sPreferredType = nColCount ? FM_COL_DATEFIELD : FM_COL_TIMEFIELD;
 
-                sFieldService = OUString::fromUtf8(sPreferredType);
+                sFieldService = sPreferredType;
                 Reference< XPropertySet >  xThisRoundCol;
                 if ( !sFieldService.isEmpty() )
                     xThisRoundCol = xFactory->createColumn(sFieldService);
@@ -815,7 +815,7 @@ enum InspectorAction { eOpenInspector, eCloseInspector, eUpdateInspector, eNone 
 
 }
 
-void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const weld::Menu& rMenu, const OString& rExecutionResult)
+void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const weld::Menu& rMenu, const OUString& rExecutionResult)
 {
     Reference< css::container::XIndexContainer >  xCols(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns());
     sal_uInt16 nPos = GetModelColumnPos(nColId);
@@ -1030,7 +1030,7 @@ void FmGridHeader::triggerColumnContextMenu( const ::Point& _rPreferredPos )
     // execute the menu
     ::tools::Rectangle aRect(_rPreferredPos, Size(1,1));
     weld::Window* pParent = weld::GetPopupParent(*this, aRect);
-    OString sResult = xContextMenu->popup_at_rect(pParent, aRect);
+    OUString sResult = xContextMenu->popup_at_rect(pParent, aRect);
 
     // let derivatives handle the result
     PostExecuteColumnContextMenu(nColId, *xContextMenu, sResult);

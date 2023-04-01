@@ -83,12 +83,12 @@ namespace svt::uno
         return WizardShell_Base::run();
     }
 
-    OString WizardShell::getPageIdentForState(WizardState nState) const
+    OUString WizardShell::getPageIdentForState(WizardState nState) const
     {
-        return OString::number(impl_stateToPageId(nState));
+        return OUString::number(impl_stateToPageId(nState));
     }
 
-    WizardState WizardShell::getStateFromPageIdent(const OString& rIdent) const
+    WizardState WizardShell::getStateFromPageIdent(const OUString& rIdent) const
     {
         return impl_pageIdToState(rIdent.toInt32());
     }
@@ -197,7 +197,7 @@ namespace svt::uno
 
         sal_Int16 nPageId = impl_stateToPageId(i_nState);
 
-        OString sIdent(OString::number(nPageId));
+        OUString sIdent(OUString::number(nPageId));
         weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
 
         auto xPage = std::make_unique<EmptyPage>(pPageContainer, this);

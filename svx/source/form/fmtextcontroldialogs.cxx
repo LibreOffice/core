@@ -40,7 +40,7 @@ namespace svx
         AddTabPage("position", RID_SVXPAGE_CHAR_POSITION);
     }
 
-    void TextControlCharAttribDialog::PageCreated(const OString& rId, SfxTabPage& rPage)
+    void TextControlCharAttribDialog::PageCreated(const OUString& rId, SfxTabPage& rPage)
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
 

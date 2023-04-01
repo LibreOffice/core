@@ -663,7 +663,7 @@ IMPL_LINK(ScCheckListMenuControl, CommandHdl, const CommandEvent&, rCEvt, bool)
     mxContextMenu->set_sensitive("less", mnCheckListVisibleRows > 4);
     mxContextMenu->set_sensitive("more", mnCheckListVisibleRows < 42);
 
-    OString sCommand = mxContextMenu->popup_at_rect(mpChecks, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
+    OUString sCommand = mxContextMenu->popup_at_rect(mpChecks, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
     if (sCommand.isEmpty())
         return true;
 

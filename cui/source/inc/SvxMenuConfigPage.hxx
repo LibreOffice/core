@@ -33,15 +33,15 @@ private:
     DECL_LINK(ContentContextMenuHdl, const CommandEvent&, bool);
     DECL_LINK(FunctionContextMenuHdl, const CommandEvent&, bool);
 
-    DECL_LINK(GearHdl, const OString&, void);
+    DECL_LINK(GearHdl, const OUString&, void);
 
     DECL_LINK(SelectCategory, weld::ComboBox&, void);
 
     DECL_LINK(AddCommandHdl, weld::Button&, void);
     DECL_LINK(RemoveCommandHdl, weld::Button&, void);
 
-    DECL_LINK(InsertHdl, const OString&, void);
-    DECL_LINK(ModifyItemHdl, const OString&, void);
+    DECL_LINK(InsertHdl, const OUString&, void);
+    DECL_LINK(ModifyItemHdl, const OUString&, void);
     DECL_LINK(ResetMenuHdl, weld::Button&, void);
 
     DECL_LINK(MenuEntriesSizeAllocHdl, const Size&, void);

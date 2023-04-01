@@ -1555,7 +1555,7 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
         // test if break point is enabled...
         std::unique_ptr<weld::Menu> xBrkPropMenu = xUIBuilder->weld_menu("breakmenu");
         xBrkPropMenu->set_active("active", pBrk->bEnabled);
-        OString sCommand = xBrkPropMenu->popup_at_rect(pPopupParent, aRect);
+        OUString sCommand = xBrkPropMenu->popup_at_rect(pPopupParent, aRect);
         if (sCommand == "active")
         {
             pBrk->bEnabled = !pBrk->bEnabled;
@@ -1573,7 +1573,7 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
     else
     {
         std::unique_ptr<weld::Menu> xBrkListMenu = xUIBuilder->weld_menu("breaklistmenu");
-        OString sCommand = xBrkListMenu->popup_at_rect(pPopupParent, aRect);
+        OUString sCommand = xBrkListMenu->popup_at_rect(pPopupParent, aRect);
         if (sCommand == "manage")
         {
             BreakPointDialog aBrkDlg(pPopupParent, GetBreakPoints());

@@ -609,16 +609,16 @@ IMPL_LINK_NOARG(LayoutMenu, StateChangeHandler, const OUString&, void)
     InvalidateContent();
 }
 
-void LayoutMenu::OnMenuItemSelected(std::string_view ident)
+void LayoutMenu::OnMenuItemSelected(std::u16string_view ident)
 {
     if (ident.empty())
         return;
 
-    if (ident == "apply")
+    if (ident == u"apply")
     {
         AssignLayoutToSelectedSlides(GetSelectedAutoLayout());
     }
-    else if (ident == "insert")
+    else if (ident == u"insert")
     {
         // Add arguments to this slot and forward it to the main view
         // shell.

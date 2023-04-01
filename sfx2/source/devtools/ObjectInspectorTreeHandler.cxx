@@ -1113,7 +1113,7 @@ IMPL_LINK(ObjectInspectorTreeHandler, PopupMenuHandler, const CommandEvent&, rCo
             mpObjectInspectorWidgets->mpPropertiesTreeView.get(), "sfx/ui/devtoolsmenu.ui"));
         std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("inspect_menu"));
 
-        OString sCommand(
+        OUString sCommand(
             xMenu->popup_at_rect(mpObjectInspectorWidgets->mpPropertiesTreeView.get(),
                                  tools::Rectangle(rCommandEvent.GetMousePosPixel(), Size(1, 1))));
 
@@ -1126,7 +1126,7 @@ IMPL_LINK(ObjectInspectorTreeHandler, PopupMenuHandler, const CommandEvent&, rCo
     return true;
 }
 
-IMPL_LINK(ObjectInspectorTreeHandler, ToolbarButtonClicked, const OString&, rSelectionId, void)
+IMPL_LINK(ObjectInspectorTreeHandler, ToolbarButtonClicked, const OUString&, rSelectionId, void)
 {
     if (rSelectionId == "inspect")
     {
@@ -1153,7 +1153,7 @@ IMPL_LINK(ObjectInspectorTreeHandler, ToolbarButtonClicked, const OString&, rSel
     }
 }
 
-IMPL_LINK(ObjectInspectorTreeHandler, NotebookEnterPage, const OString&, rPageId, void)
+IMPL_LINK(ObjectInspectorTreeHandler, NotebookEnterPage, const OUString&, rPageId, void)
 {
     uno::Any aAny = maInspectionStack.back();
     if (!aAny.hasValue())
@@ -1190,7 +1190,7 @@ IMPL_LINK(ObjectInspectorTreeHandler, NotebookEnterPage, const OString&, rPageId
     }
 }
 
-IMPL_LINK(ObjectInspectorTreeHandler, NotebookLeavePage, const OString&, rPageId, bool)
+IMPL_LINK(ObjectInspectorTreeHandler, NotebookLeavePage, const OUString&, rPageId, bool)
 {
     if (rPageId == "object_inspector_interfaces_tab")
     {

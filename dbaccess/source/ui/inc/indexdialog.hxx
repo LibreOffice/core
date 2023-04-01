@@ -74,7 +74,7 @@ namespace dbaui
         void IndexSelected();
 
         DECL_LINK( OnIndexSelected, weld::TreeView&, void );
-        DECL_LINK( OnIndexAction, const OString&, void );
+        DECL_LINK( OnIndexAction, const OUString&, void );
         DECL_LINK( OnEntryEditing, const weld::TreeIter&, bool );
         DECL_LINK( OnEntryEdited, const IterString&, bool );
         DECL_LINK( OnModifiedClick, weld::Toggleable&, void );

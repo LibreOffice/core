@@ -26,7 +26,7 @@ public:
         SfxBindings* pB, SfxChildWindow* pCW,
         weld::Window* pParent, ScViewData& rViewData,
         const OUString& rUIXMLDescription,
-        const OString& rID);
+        const OUString& rID);
 
     virtual ~ScStatisticsInputOutputDialog() override;
 

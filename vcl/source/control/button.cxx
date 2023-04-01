@@ -540,7 +540,7 @@ bool Button::IsSmallSymbol () const
     return mpButtonData->mbSmallSymbol;
 }
 
-bool Button::set_property(const OString &rKey, const OUString &rValue)
+bool Button::set_property(const OUString &rKey, const OUString &rValue)
 {
     if (rKey == "image-position")
     {
@@ -1756,7 +1756,7 @@ Size PushButton::GetOptimalSize() const
     return CalcMinimumSize();
 }
 
-bool PushButton::set_property(const OString &rKey, const OUString &rValue)
+bool PushButton::set_property(const OUString &rKey, const OUString &rValue)
 {
     if (rKey == "has-default")
     {
@@ -2738,7 +2738,7 @@ void RadioButton::SetState( bool bCheck )
     }
 }
 
-bool RadioButton::set_property(const OString &rKey, const OUString &rValue)
+bool RadioButton::set_property(const OUString &rKey, const OUString &rValue)
 {
     if (rKey == "active")
         SetState(toBool(rValue));
@@ -3605,7 +3605,7 @@ void CheckBox::SetState( TriState eState )
     }
 }
 
-bool CheckBox::set_property(const OString &rKey, const OUString &rValue)
+bool CheckBox::set_property(const OUString &rKey, const OUString &rValue)
 {
     if (rKey == "active")
         SetState(toBool(rValue) ? TRISTATE_TRUE : TRISTATE_FALSE);

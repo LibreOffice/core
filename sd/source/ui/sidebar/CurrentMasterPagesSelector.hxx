@@ -64,7 +64,7 @@ protected:
     virtual OUString GetContextMenuUIFile() const override;
 
     virtual void ProcessPopupMenu(weld::Menu& rMenu) override;
-    virtual void ExecuteCommand(const OString &rIdent) override;
+    virtual void ExecuteCommand(const OUString &rIdent) override;
 
 private:
     virtual void LateInit() override;

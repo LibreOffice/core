@@ -90,7 +90,7 @@ void PanelTitleBar::SetMoreOptionsCommand(const OUString& rsCommandName,
     if (msMoreOptionsCommand.isEmpty())
         return;
 
-    msIdent = msMoreOptionsCommand.toUtf8();
+    msIdent = msMoreOptionsCommand;
     mxToolBox->set_item_ident(0, msIdent);
 
     Reference<lang::XComponent> xComponent(mxController, UNO_QUERY);

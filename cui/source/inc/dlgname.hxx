@@ -66,7 +66,7 @@ public:
         m_xBtnOK->set_tooltip_text(rLink.Call(*this));
     }
 
-    void SetEditHelpId(const OString& aHelpId) { m_xEdtName->set_help_id(aHelpId); }
+    void SetEditHelpId(const OUString& aHelpId) { m_xEdtName->set_help_id(aHelpId); }
 };
 
 /** #i68101#

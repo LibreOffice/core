@@ -131,10 +131,10 @@ private:
     vcl::EnumContext                        maContext;
     SfxBindings*                            mpBindings;
 
-    DECL_LINK(TbxCellBorderSelectHdl, const OString&, void);
-    DECL_LINK(TbxCellBorderMenuHdl, const OString&, void);
-    DECL_LINK(TbxLineStyleSelectHdl, const OString&, void);
-    DECL_LINK(TbxLineStyleMenuHdl, const OString&, void);
+    DECL_LINK(TbxCellBorderSelectHdl, const OUString&, void);
+    DECL_LINK(TbxCellBorderMenuHdl, const OUString&, void);
+    DECL_LINK(TbxLineStyleSelectHdl, const OUString&, void);
+    DECL_LINK(TbxLineStyleMenuHdl, const OUString&, void);
 
     void Initialize();
     void SetStyleIcon();

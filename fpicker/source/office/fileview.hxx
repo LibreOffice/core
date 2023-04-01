@@ -82,8 +82,8 @@ public:
     bool                    GetParentURL( OUString& _rParentURL ) const;
     void                    CreatedFolder( const OUString& rUrl, const OUString& rNewFolder );
 
-    void                    set_help_id(const OString& rHelpId);
-    OString                 get_help_id() const;
+    void                    set_help_id(const OUString& rHelpId);
+    OUString                get_help_id() const;
 
     void                    grab_focus();
     bool                    has_focus() const;

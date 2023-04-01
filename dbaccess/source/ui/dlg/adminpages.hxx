@@ -94,7 +94,7 @@ namespace dbaui
         css::uno::Reference< css::uno::XComponentContext >
                                    m_xORB;
     public:
-        OGenericAdministrationPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OString& rId, const SfxItemSet& rAttrSet);
+        OGenericAdministrationPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OUString& rId, const SfxItemSet& rAttrSet);
         /// set a handler which gets called every time something on the page has been modified
         void SetModifiedHandler(const Link<OGenericAdministrationPage const *, void>& _rHandler) { m_aModifiedHandler = _rHandler; }
 

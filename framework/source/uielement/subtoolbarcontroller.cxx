@@ -499,7 +499,7 @@ void SubToolBarController::initialize( const css::uno::Sequence< css::uno::Any >
     if (m_pToolbar)
     {
         mxPopoverContainer.reset(new ToolbarPopupContainer(m_pToolbar));
-        m_pToolbar->set_item_popover(m_aCommandURL.toUtf8(), mxPopoverContainer->getTopLevel());
+        m_pToolbar->set_item_popover(m_aCommandURL, mxPopoverContainer->getTopLevel());
     }
 
     updateImage();

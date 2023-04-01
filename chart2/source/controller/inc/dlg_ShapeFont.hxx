@@ -33,7 +33,7 @@ public:
                     const ViewElementListProvider* pViewElementListProvider);
 
 private:
-    virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
+    virtual void PageCreated(const OUString& rId, SfxTabPage& rPage) override;
 
     const ViewElementListProvider* m_pViewElementListProvider;
 };

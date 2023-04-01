@@ -209,16 +209,16 @@ void MediaControlBase::UpdateToolBoxes(const MediaItem& rMediaItem)
     }
 }
 
-void MediaControlBase::SelectPlayToolBoxItem( MediaItem& aExecItem, MediaItem const & aItem, std::string_view rId)
+void MediaControlBase::SelectPlayToolBoxItem( MediaItem& aExecItem, MediaItem const & aItem, std::u16string_view rId)
 {
-    if (rId == "apply")
+    if (rId == u"apply")
     {
         MediaFloater* pFloater = avmedia::getMediaFloater();
 
         if( pFloater )
             pFloater->dispatchCurrentURL();
     }
-    else if (rId == "play")
+    else if (rId == u"play")
     {
         aExecItem.setState( MediaState::Play );
 
@@ -229,24 +229,24 @@ void MediaControlBase::SelectPlayToolBoxItem( MediaItem& aExecItem, MediaItem co
 
         UpdatePlayState(aExecItem);
     }
-    else if (rId == "pause")
+    else if (rId == u"pause")
     {
         aExecItem.setState( MediaState::Pause );
 
         UpdatePlayState(aExecItem);
     }
-    else if (rId == "stop")
+    else if (rId == u"stop")
     {
         aExecItem.setState( MediaState::Stop );
         aExecItem.setTime( 0.0 );
 
         UpdatePlayState(aExecItem);
     }
-    else if (rId == "mute")
+    else if (rId == u"mute")
     {
         aExecItem.setMute( mxMuteToolBox->get_item_active("mute") );
     }
-    else if (rId == "loop")
+    else if (rId == u"loop")
     {
         aExecItem.setLoop( mxPlayToolBox->get_item_active("loop") );
     }

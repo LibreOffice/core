@@ -99,7 +99,7 @@ protected:
     virtual ~AbstractSdInsertLayerDlg() override = default;
 public:
     virtual void    GetAttr( SfxItemSet& rOutAttrs ) = 0;
-    virtual void    SetHelpId( const OString& rHelpId ) = 0;
+    virtual void    SetHelpId( const OUString& rHelpId ) = 0;
 };
 
 class AbstractSdInsertPagesObjsDlg : public VclAbstractDialog

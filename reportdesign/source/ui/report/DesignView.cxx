@@ -136,7 +136,7 @@ void ODesignView::dispose()
     if ( m_xAddField )
     {
         SvtViewOptions aDlgOpt( EViewType::Window, UID_RPT_RPT_APP_VIEW );
-        aDlgOpt.SetWindowState(OStringToOUString(m_xAddField->getDialog()->get_window_state(vcl::WindowDataMask::All), RTL_TEXTENCODING_ASCII_US));
+        aDlgOpt.SetWindowState(m_xAddField->getDialog()->get_window_state(vcl::WindowDataMask::All));
 
         if (m_xAddField->getDialog()->get_visible())
             m_xAddField->response(RET_CANCEL);
@@ -145,8 +145,8 @@ void ODesignView::dispose()
     }
     if ( m_xReportExplorer )
     {
-        SvtViewOptions aDlgOpt(EViewType::Window, OStringToOUString(m_xReportExplorer->get_help_id(), RTL_TEXTENCODING_UTF8));
-        aDlgOpt.SetWindowState(OStringToOUString(m_xReportExplorer->getDialog()->get_window_state(vcl::WindowDataMask::All), RTL_TEXTENCODING_ASCII_US));
+        SvtViewOptions aDlgOpt(EViewType::Window, m_xReportExplorer->get_help_id());
+        aDlgOpt.SetWindowState(m_xReportExplorer->getDialog()->get_window_state(vcl::WindowDataMask::All));
 
         if (m_xReportExplorer->getDialog()->get_visible())
             m_xReportExplorer->response(RET_CANCEL);
@@ -475,9 +475,9 @@ void ODesignView::toggleReportExplorer()
     {
         OReportController& rReportController = getController();
         m_xReportExplorer = std::make_shared<ONavigator>(GetFrameWeld(), rReportController);
-        SvtViewOptions aDlgOpt(EViewType::Window, OStringToOUString(m_xReportExplorer->get_help_id(), RTL_TEXTENCODING_UTF8));
+        SvtViewOptions aDlgOpt(EViewType::Window, m_xReportExplorer->get_help_id());
         if ( aDlgOpt.Exists() )
-            m_xReportExplorer->getDialog()->set_window_state(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
+            m_xReportExplorer->getDialog()->set_window_state(aDlgOpt.GetWindowState());
     }
 
     if (!m_xReportExplorer->getDialog()->get_visible())
@@ -515,7 +515,7 @@ void ODesignView::toggleAddField()
         m_xAddField->SetCreateHdl(LINK( &rReportController, OReportController, OnCreateHdl ) );
         SvtViewOptions aDlgOpt( EViewType::Window, UID_RPT_RPT_APP_VIEW );
         if ( aDlgOpt.Exists() )
-            m_xAddField->getDialog()->set_window_state(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
+            m_xAddField->getDialog()->set_window_state(aDlgOpt.GetWindowState());
         m_xAddField->Update();
     }
     if (!m_xAddField->getDialog()->get_visible())

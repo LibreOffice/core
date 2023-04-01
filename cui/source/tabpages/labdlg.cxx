@@ -474,7 +474,7 @@ SvxCaptionTabDialog::SvxCaptionTabDialog(weld::Window* pParent, const SdrView* p
         SvxCaptionTabPage::GetRanges );
 }
 
-void SvxCaptionTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
+void SvxCaptionTabDialog::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {
     if (rId == "RID_SVXPAGE_POSITION_SIZE")
     {

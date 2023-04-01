@@ -59,7 +59,7 @@ SvxSearchFormatDialog::~SvxSearchFormatDialog()
 {
 }
 
-void SvxSearchFormatDialog::PageCreated(const OString& rId, SfxTabPage& rPage)
+void SvxSearchFormatDialog::PageCreated(const OUString& rId, SfxTabPage& rPage)
 {
     if (rId == "font")
     {

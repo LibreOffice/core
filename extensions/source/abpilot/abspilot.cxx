@@ -361,7 +361,7 @@ namespace abp
 
     std::unique_ptr<BuilderPage> OAddressBookSourcePilot::createPage(WizardState _nState)
     {
-        OString sIdent(OString::number(_nState));
+        OUString sIdent(OUString::number(_nState));
         weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
 
         std::unique_ptr<vcl::OWizardPage> xRet;

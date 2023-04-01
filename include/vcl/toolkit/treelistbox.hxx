@@ -468,7 +468,7 @@ public:
 
     void set_min_width_in_chars(sal_Int32 nChars);
 
-    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
+    virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
 
     VCL_DLLPRIVATE void SetCollapsedNodeBmp( const Image& );
     VCL_DLLPRIVATE void SetExpandedNodeBmp( const Image& );

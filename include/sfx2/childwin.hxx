@@ -62,7 +62,7 @@ struct SAL_DLLPUBLIC_RTTI SfxChildWinInfo
 {
     OUString            aExtraString;
     OUString            aModule;
-    OString             aWinState;
+    OUString            aWinState;
     Point               aPos;
     Size                aSize;
     SfxChildWindowFlags nFlags;

@@ -44,7 +44,7 @@ ScCharDlg::ScCharDlg(weld::Window* pParent, const SfxItemSet* pAttr, const SfxOb
         RemoveTabPage("background");
 }
 
-void ScCharDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
+void ScCharDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     if (rId == "font")
@@ -79,7 +79,7 @@ ScParagraphDlg::ScParagraphDlg(weld::Window* pParent, const SfxItemSet* pAttr)
     AddTabPage("labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
 }
 
-void ScParagraphDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
+void ScParagraphDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {
     if (rId == "labelTP_TABULATOR")
     {

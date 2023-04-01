@@ -41,7 +41,7 @@ namespace rptui
     {
         OUString        sName;
         OUString        sTranslation;
-        OString         sHelpId;
+        OUString         sHelpId;
         sal_Int32       nId;
         PropUIFlags     nUIFlags;
 
@@ -49,13 +49,13 @@ namespace rptui
                         OUString               aName,
                         sal_Int32              _nId,
                         OUString               aTranslation,
-                        OString                _sHelpId,
+                        OUString                _sHelpId,
                         PropUIFlags            _nUIFlags);
     };
 
 
     OPropertyInfoImpl::OPropertyInfoImpl(OUString _aName, sal_Int32 _nId,
-                                   OUString aString, OString sHid, PropUIFlags _nUIFlags)
+                                   OUString aString, OUString sHid, PropUIFlags _nUIFlags)
        :sName(std::move(_aName))
        ,sTranslation(std::move(aString))
        ,sHelpId(std::move(sHid))
@@ -157,10 +157,10 @@ namespace rptui
     }
 
 
-    OString OPropertyInfoService::getPropertyHelpId(sal_Int32 _nId)
+    OUString OPropertyInfoService::getPropertyHelpId(sal_Int32 _nId)
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
-        return pInfo ? pInfo->sHelpId : OString();
+        return pInfo ? pInfo->sHelpId : OUString();
     }
 
 

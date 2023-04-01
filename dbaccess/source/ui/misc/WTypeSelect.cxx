@@ -389,7 +389,7 @@ IMPL_LINK(OWizTypeSelectList, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (bCheckOk)
         xContextMenu->set_active("primarykey", true);
 
-    OString sCommand(xContextMenu->popup_at_rect(m_xControl.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
+    OUString sCommand(xContextMenu->popup_at_rect(m_xControl.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
     if (sCommand != "primarykey")
         return true;
 

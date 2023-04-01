@@ -30,7 +30,7 @@
 
 namespace sw::annotation {
 
-IMPL_LINK(SwAnnotationWin, SelectHdl, const OString&, rIdent, void)
+IMPL_LINK(SwAnnotationWin, SelectHdl, const OUString&, rIdent, void)
 {
     if (rIdent.isEmpty())
         return;

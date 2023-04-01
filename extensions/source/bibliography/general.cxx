@@ -823,7 +823,7 @@ IMPL_LINK(BibGeneralPage, GainFocusHdl, weld::Widget&, rWidget, void)
 }
 
 template<class Target> void BibGeneralPage::AddControlWithError(const OUString& rColumnName, const OUString& rColumnUIName,
-    Target& rWidget, OUString& rErrorString, const OString& rHelpId)
+    Target& rWidget, OUString& rErrorString, const OUString& rHelpId)
 {
     rWidget.set_help_id(rHelpId);
     rWidget.connect_focus_in(LINK(this, BibGeneralPage, GainFocusHdl));

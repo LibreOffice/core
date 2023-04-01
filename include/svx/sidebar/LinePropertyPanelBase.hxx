@@ -127,7 +127,7 @@ private:
 
     void Initialize();
 
-    DECL_DLLPRIVATE_LINK(ToolboxWidthSelectHdl, const OString&, void);
+    DECL_DLLPRIVATE_LINK(ToolboxWidthSelectHdl, const OUString&, void);
     DECL_DLLPRIVATE_LINK(ChangeTransparentHdl, weld::MetricSpinButton&, void);
     DECL_DLLPRIVATE_LINK(ChangeEdgeStyleHdl, weld::ComboBox&, void);
     DECL_DLLPRIVATE_LINK(ChangeCapStyleHdl, weld::ComboBox&, void);

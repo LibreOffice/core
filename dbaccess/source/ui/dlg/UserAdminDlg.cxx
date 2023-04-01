@@ -108,7 +108,7 @@ namespace dbaui
             m_pImpl->saveChanges(*GetOutputItemSet());
         return nRet;
     }
-    void OUserAdminDlg::PageCreated(const OString& rId, SfxTabPage& _rPage)
+    void OUserAdminDlg::PageCreated(const OUString& rId, SfxTabPage& _rPage)
     {
         // register ourself as modified listener
         static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory( m_pImpl->getORB() );

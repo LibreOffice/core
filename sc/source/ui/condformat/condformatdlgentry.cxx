@@ -82,7 +82,7 @@ void ScCondFrmtEntry::SetIndex(sal_Int32 nIndex)
     mxFtCondNr->set_label(sLabel);
 
     // tdf#124412: uitest
-    mxFtCondition->set_buildable_name(sLabel.toUtf8());
+    mxFtCondition->set_buildable_name(sLabel);
 }
 
 void ScCondFrmtEntry::Select()

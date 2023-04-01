@@ -20,7 +20,7 @@
 
 ScStatisticsTwoVariableDialog::ScStatisticsTwoVariableDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                    weld::Window* pParent, ScViewData& rViewData, const OUString& rUIXMLDescription, const OString& rID)
+                    weld::Window* pParent, ScViewData& rViewData, const OUString& rUIXMLDescription, const OUString& rID)
     : ScAnyRefDlgController(pSfxBindings, pChildWindow, pParent, rUIXMLDescription, rID)
     , mxVariable1RangeLabel(m_xBuilder->weld_label("variable1-range-label"))
     , mxVariable1RangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("variable1-range-edit")))

@@ -218,7 +218,7 @@ std::unique_ptr<BuilderPage> ODbTypeWizDialog::createPage(WizardState _nState)
     TranslateId pStringId = STR_PAGETITLE_ADVANCED;
     std::unique_ptr<BuilderPage> xPage;
 
-    OString sIdent(OString::number(_nState));
+    OUString sIdent(OUString::number(_nState));
     weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
 
     switch(_nState)

@@ -98,8 +98,8 @@ public:
 
     void            set_sensitive(bool bSensitive) { mxControl->set_sensitive(bSensitive); }
     void            connect_changed(const Link<weld::ComboBox&, void>& rLink) { mxControl->connect_changed(rLink); }
-    OString         get_buildable_name() const { return mxControl->get_buildable_name(); }
-    void            set_buildable_name(const OString& rId){ mxControl->set_buildable_name(rId); }
+    OUString        get_buildable_name() const { return mxControl->get_buildable_name(); }
+    void            set_buildable_name(const OUString& rId){ mxControl->set_buildable_name(rId); }
 };
 
 class SW_DLLPUBLIC SwNumFormatTreeView final : public SwNumFormatBase
@@ -132,8 +132,8 @@ public:
     void            set_visible(bool bVisible) { mxControl->set_visible(bVisible); }
     void            select(int nPos) { mxControl->select(nPos); }
     void            connect_row_activated(const Link<weld::TreeView&, bool>& rLink) { mxControl->connect_row_activated(rLink); }
-    OString         get_buildable_name() const { return mxControl->get_buildable_name(); }
-    void            set_buildable_name(const OString& rId){ mxControl->set_buildable_name(rId); }
+    OUString        get_buildable_name() const { return mxControl->get_buildable_name(); }
+    void            set_buildable_name(const OUString& rId){ mxControl->set_buildable_name(rId); }
 };
 
 #endif

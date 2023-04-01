@@ -171,7 +171,7 @@ friend class InputEdit;
 
     virtual void    Resize() override;
     virtual void    Click() override;
-    void MenuHdl(std::string_view command);
+    void MenuHdl(std::u16string_view command);
     DECL_LINK( DropdownClickHdl, ToolBox*, void );
     void            ApplyFormula();
     void            CancelFormula();

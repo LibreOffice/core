@@ -25,7 +25,7 @@ public:
     ScStatisticsTwoVariableDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
         weld::Window* pParent, ScViewData& rViewData,
-        const OUString& rUIXMLDescription, const OString& rID);
+        const OUString& rUIXMLDescription, const OUString& rID);
 
     virtual ~ScStatisticsTwoVariableDialog() override;
 

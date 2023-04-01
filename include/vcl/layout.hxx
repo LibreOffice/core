@@ -97,7 +97,7 @@ public:
     {
         return m_bVerticalContainer;
     }
-    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
+    virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
     virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 protected:
     virtual sal_uInt16 getDefaultAccessibleRole() const override;
@@ -213,7 +213,7 @@ public:
         , m_eLayoutStyle(VclButtonBoxStyle::Default)
     {
     }
-    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
+    virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
     virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 protected:
     virtual Size calculateRequisition() const override;
@@ -362,7 +362,7 @@ public:
     {
         return m_nColumnSpacing;
     }
-    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
+    virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) VclBin : public VclContainer
@@ -460,7 +460,7 @@ public:
     virtual void dispose() override;
     virtual vcl::Window *get_child() override;
     virtual const vcl::Window *get_child() const override;
-    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
+    virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
     bool get_expanded() const;
     void set_expanded(bool bExpanded);
     void set_label(const OUString& rLabel);
@@ -488,7 +488,7 @@ public:
     virtual void dispose() override;
     virtual vcl::Window *get_child() override;
     virtual const vcl::Window *get_child() const override;
-    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
+    virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     bool HasVisibleBorder() const { return m_eDrawFrameStyle != DrawFrameStyle::NONE; }
     ScrollBar& getVertScrollBar() { return *m_pVScroll; }
@@ -614,7 +614,7 @@ public:
     {
         return m_eMode;
     }
-    void set_property(const OString &rKey, const OUString &rValue);
+    void set_property(const OUString &rKey, const OUString &rValue);
 };
 
 class VCL_DLLPUBLIC VclDrawingArea final : public Control

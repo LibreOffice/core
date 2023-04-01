@@ -275,7 +275,7 @@ public:
     tools::Long                mnY;
     tools::Long                mnAbsScreenX;
     Point               maPos;
-    OString             maHelpId;
+    OUString            maHelpId;
     OUString            maHelpText;
     OUString            maQuickHelpText;
     OUString            maID;

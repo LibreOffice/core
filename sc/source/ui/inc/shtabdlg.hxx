@@ -35,7 +35,7 @@ public:
 
     /** Sets dialog title, fixed text for listbox and help IDs. */
     void SetDescription(const OUString& rTitle, const OUString& rFixedText,
-                        const OString& nDlgHelpId, const OString& nLbHelpId);
+                        const OUString& nDlgHelpId, const OUString& nLbHelpId);
 
     /** Inserts a string into the weld::TreeView. */
     void Insert(const OUString& rString, bool bSelected);

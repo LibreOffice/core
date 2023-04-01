@@ -33,8 +33,8 @@ SvxBorderBackgroundDlg::SvxBorderBackgroundDlg(weld::Window *pParent,
             ? OUString("cui/ui/borderareatransparencydialog.ui")
             : OUString("cui/ui/borderbackgrounddialog.ui"),
         bEnableDrawingLayerFillStyles
-            ? OString("BorderAreaTransparencyDialog")
-            : OString("BorderBackgroundDialog"),
+            ? OUString("BorderAreaTransparencyDialog")
+            : OUString("BorderBackgroundDialog"),
         &rCoreSet)
     , mbEnableBackgroundSelector(bEnableSelector)
 {
@@ -51,7 +51,7 @@ SvxBorderBackgroundDlg::SvxBorderBackgroundDlg(weld::Window *pParent,
     }
 }
 
-void SvxBorderBackgroundDlg::PageCreated(const OString& rPageId, SfxTabPage& rTabPage)
+void SvxBorderBackgroundDlg::PageCreated(const OUString& rPageId, SfxTabPage& rTabPage)
 {
     if (rPageId == "background")
     {

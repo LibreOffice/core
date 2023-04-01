@@ -33,7 +33,7 @@
 SfxStyleDialogController::SfxStyleDialogController
 (
     weld::Window* pParent,           // Parent
-    const OUString& rUIXMLDescription, const OString& rID,
+    const OUString& rUIXMLDescription, const OUString& rID,
     SfxStyleSheetBase& rStyle  // stylesheet to be processed
 )
     : SfxTabDialogController(pParent, rUIXMLDescription, rID, &rStyle.GetItemSet(), true)
@@ -86,7 +86,7 @@ short SfxStyleDialogController::Ok()
 */
 IMPL_LINK_NOARG(SfxStyleDialogController, CancelHdl, weld::Button&, void)
 {
-    SfxTabPage* pPage = GetTabPage("organizer");
+    SfxTabPage* pPage = GetTabPage(u"organizer");
 
     const SfxItemSet* pInSet = GetInputSetImpl();
     SfxWhichIter aIter(*pInSet);

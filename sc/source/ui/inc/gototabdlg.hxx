@@ -31,8 +31,8 @@ public:
 
     /** Sets dialog title, label texts and help IDs. */
     void SetDescription(const OUString& rTitle, const OUString& rEntryLabel,
-                        const OUString& rListLabel, const OString& rDlgHelpId,
-                        const OString& rEnHelpId, const OString& rLbHelpId);
+                        const OUString& rListLabel, const OUString& rDlgHelpId,
+                        const OUString& rEnHelpId, const OUString& rLbHelpId);
 
     /** Inserts a string into the weld::TreeView. */
     void Insert(const OUString& rString, bool bSelected);

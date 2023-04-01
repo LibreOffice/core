@@ -236,7 +236,7 @@ SvxConfigDialog::SvxConfigDialog(weld::Window * pParent, const SfxItemSet* pInSe
 #endif
 }
 
-void SvxConfigDialog::ActivatePage(const OString& rPage)
+void SvxConfigDialog::ActivatePage(const OUString& rPage)
 {
     SfxTabDialogController::ActivatePage(rPage);
     GetResetButton()->set_visible(rPage != "keyboard");
@@ -257,7 +257,7 @@ void SvxConfigDialog::SetFrame(const css::uno::Reference<css::frame::XFrame>& xF
         RemoveTabPage("keyboard");
 }
 
-void SvxConfigDialog::PageCreated(const OString &rId, SfxTabPage& rPage)
+void SvxConfigDialog::PageCreated(const OUString &rId, SfxTabPage& rPage)
 {
     if (rId == "menus" || rId == "keyboard" || rId == "notebookbar"
         || rId == "toolbars" || rId == "contextmenus")

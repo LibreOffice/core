@@ -132,7 +132,7 @@ namespace vcl
         void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
         const Size&         GetPageSizePixel() const { return maPageSize; }
 
-        void            SetRoadmapHelpId( const OString& _rId );
+        void            SetRoadmapHelpId( const OUString& _rId );
         void            SetRoadmapBitmap( const BitmapEx& maBitmap );
 
         void            InsertRoadmapItem(int nIndex, const OUString& rLabel, int nId, bool bEnabled);

@@ -202,7 +202,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 
         const beans::PropertyValue& rProp = pPropsVal[0];
         const OUString& rName = rProp.Name;
-        if ( nCount == 1 && rName == OUString( pSlot->pUnoName, strlen( pSlot->pUnoName ), RTL_TEXTENCODING_UTF8 ) )
+        if ( nCount == 1 && rName == pSlot->pUnoName )
         {
             // there is only one parameter and its name matches the name of the property,
             // so it's either a simple property or a complex property in one single UNO struct
@@ -242,8 +242,8 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 for ( nSub=0; nSub<nSubCount; nSub++ )
                 {
                     // search sub item by name
-                    OString aStr = OString::Concat(pSlot->pUnoName) + "." + pType->aAttrib[nSub].pName;
-                    if ( rPropValue.Name.equalsAsciiL(aStr.getStr(), aStr.getLength()) )
+                    OUString aStr = pSlot->pUnoName + "." + OUString::createFromAscii(pType->aAttrib[nSub].pName);
+                    if ( rPropValue.Name == aStr )
                     {
                         sal_uInt8 nSubId = static_cast<sal_uInt8>(static_cast<sal_Int8>(pType->aAttrib[nSub].nAID));
                         if ( bConvertTwips )
@@ -884,7 +884,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
     else
     {
         // transform parameter "OptionsPageURL" of slot "OptionsTreeDialog"
-        if ( "OptionsTreeDialog" == OUString( pSlot->pUnoName, strlen(pSlot->pUnoName), RTL_TEXTENCODING_UTF8 ) )
+        if ( "OptionsTreeDialog" == pSlot->pUnoName )
         {
             auto pProp = std::find_if(rArgs.begin(), rArgs.end(),
                 [](const PropertyValue& rProp) { return rProp.Name == "OptionsPageURL"; });
@@ -1299,7 +1299,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
             sal_uInt16 nSubCount = pType->nAttribs;
             if ( !nSubCount )
             {
-                pValue[nActProp].Name = OUString::createFromAscii(pSlot->pUnoName) ;
+                pValue[nActProp].Name = pSlot->pUnoName;
                 if ( !pItem->QueryValue( pValue[nActProp].Value ) )
                 {
                     SAL_WARN( "sfx", "Item not convertible: " << nSlotId );
@@ -1315,7 +1315,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                         nSubId |= CONVERT_TWIPS;
 
                     DBG_ASSERT(( pType->aAttrib[n-1].nAID ) <= 127, "Member ID out of range" );
-                    pValue[nActProp].Name = OUString::createFromAscii( pSlot->pUnoName ) +
+                    pValue[nActProp].Name = pSlot->pUnoName +
                         "." +
                         OUString::createFromAscii( pType->aAttrib[n-1].pName );
                     if ( !pItem->QueryValue( pValue[nActProp++].Value, nSubId ) )

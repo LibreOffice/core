@@ -72,7 +72,7 @@ protected:
 
 public:
     SwFieldPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription,
-        const OString& rID, const SfxItemSet *pAttrSet);
+        const OUString& rID, const SfxItemSet *pAttrSet);
 
     virtual ~SwFieldPage() override;
 

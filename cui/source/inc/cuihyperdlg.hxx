@@ -67,7 +67,7 @@ private:
 
     std::vector< std::unique_ptr<IconChoicePageData> > maPageList;
 
-    OString msCurrentPageId;
+    OUString msCurrentPageId;
 
     const SfxItemSet*       pSet;
     std::unique_ptr<SfxItemSet>     pOutSet;
@@ -87,17 +87,17 @@ private:
     std::unique_ptr<weld::Button> m_xHelpBtn;
     std::unique_ptr<weld::Button> m_xResetBtn;
 
-    DECL_LINK( ChosePageHdl_Impl, const OString&, void );
+    DECL_LINK( ChosePageHdl_Impl, const OUString&, void );
 
-    IconChoicePageData*     GetPageData ( std::string_view rId );
+    IconChoicePageData*     GetPageData ( std::u16string_view rId );
 
-    void                    SwitchPage( const OString& rId );
+    void                    SwitchPage( const OUString& rId );
 
     DECL_LINK( ResetHdl, weld::Button&, void) ;
     DECL_LINK (ClickOkHdl_Impl, weld::Button&, void );
     DECL_LINK (ClickApplyHdl_Impl, weld::Button&, void );
 
-    IconChoicePage*         GetTabPage( std::string_view rPageId )
+    IconChoicePage*         GetTabPage( std::u16string_view rPageId )
                                 { return GetPageData(rPageId)->xPage.get(); }
 
     void                    ActivatePageImpl ();
@@ -113,11 +113,11 @@ public:
     virtual ~SvxHpLinkDlg () override;
 
     // interface
-    void AddTabPage(const OString &rId, CreatePage pCreateFunc /* != NULL */);
+    void AddTabPage(const OUString &rId, CreatePage pCreateFunc /* != NULL */);
 
-    void                SetCurPageId( const OString& rId ) { msCurrentPageId = rId; SwitchPage(rId ); }
-    const OString &     GetCurPageId() const       { return msCurrentPageId; }
-    void                ShowPage( const OString& rId );
+    void                SetCurPageId( const OUString& rId ) { msCurrentPageId = rId; SwitchPage(rId ); }
+    const OUString&     GetCurPageId() const       { return msCurrentPageId; }
+    void                ShowPage( const OUString& rId );
 
     /// gives via map converted local slots if applicable
     WhichRangesContainer GetInputRanges( const SfxItemPool& );

@@ -35,14 +35,14 @@ StringMap jsonToStringMap(const char* pJSON)
     return aArgs;
 }
 
-void SendFullUpdate(const std::string& nWindowId, const OString& rWidget)
+void SendFullUpdate(const OUString& nWindowId, const OUString& rWidget)
 {
     weld::Widget* pWidget = JSInstanceBuilder::FindWeldWidgetsMap(nWindowId, rWidget);
     if (auto pJSWidget = dynamic_cast<BaseJSWidget*>(pWidget))
         pJSWidget->sendFullUpdate();
 }
 
-void SendAction(const std::string& nWindowId, const OString& rWidget,
+void SendAction(const OUString& nWindowId, const OUString& rWidget,
                 std::unique_ptr<ActionDataMap> pData)
 {
     weld::Widget* pWidget = JSInstanceBuilder::FindWeldWidgetsMap(nWindowId, rWidget);
@@ -50,7 +50,7 @@ void SendAction(const std::string& nWindowId, const OString& rWidget,
         pJSWidget->sendAction(std::move(pData));
 }
 
-bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringMap& rData)
+bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, StringMap& rData)
 {
     weld::Widget* pWidget = JSInstanceBuilder::FindWeldWidgetsMap(nWindowId, rWidget);
 
@@ -91,7 +91,7 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                 {
                     sal_Int32 page = o3tl::toInt32(rData["data"]);
 
-                    OString aCurrentPage = pNotebook->get_current_page_ident();
+                    OUString aCurrentPage = pNotebook->get_current_page_ident();
                     LOKTrigger::leave_page(*pNotebook, aCurrentPage);
                     pNotebook->set_current_page(page);
                     LOKTrigger::enter_page(*pNotebook, pNotebook->get_page_ident(page));
@@ -326,27 +326,24 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
             {
                 if (sAction == "click")
                 {
-                    LOKTrigger::trigger_clicked(
-                        *pToolbar, OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US));
+                    LOKTrigger::trigger_clicked(*pToolbar, rData["data"]);
                     return true;
                 }
                 else if (sAction == "togglemenu")
                 {
-                    OString sId = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
+                    const OUString& sId = rData["data"];
                     bool bIsActive = pToolbar->get_menu_item_active(sId);
                     pToolbar->set_menu_item_active(sId, !bIsActive);
                     return true;
                 }
                 else if (sAction == "closemenu")
                 {
-                    OString sId = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
-                    pToolbar->set_menu_item_active(sId, false);
+                    pToolbar->set_menu_item_active(rData["data"], false);
                     return true;
                 }
                 else if (sAction == "openmenu")
                 {
-                    OString sId = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
-                    pToolbar->set_menu_item_active(sId, true);
+                    pToolbar->set_menu_item_active(rData["data"], true);
                     return true;
                 }
             }

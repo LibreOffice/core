@@ -248,7 +248,7 @@ protected:
     static Color    TestColorsVisible(const Color &FontCol, const Color &BackCol);
     void            UserDrawEntry(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const tools::Rectangle& rTextRect, const OUString &rStyleName, const std::vector<ScriptInfo>& rScriptChanges);
     void            SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 nItem, const tools::Rectangle& rRect, std::u16string_view rStyleName, bool bIsNotSelected);
-    DECL_LINK(MenuSelectHdl, const OString&, void);
+    DECL_LINK(MenuSelectHdl, const OUString&, void);
     DECL_STATIC_LINK(SvxStyleBox_Base, ShowMoreHdl, void*, void);
 };
 
@@ -934,7 +934,7 @@ void SvxStyleBox_Base::ReleaseFocus()
         m_xFrame->getContainerWindow()->setFocus();
 }
 
-IMPL_LINK(SvxStyleBox_Base, MenuSelectHdl, const OString&, rMenuIdent, void)
+IMPL_LINK(SvxStyleBox_Base, MenuSelectHdl, const OUString&, rMenuIdent, void)
 {
     if (m_nLastItemWithMenu < 0 || m_nLastItemWithMenu >= m_xWidget->get_count())
         return;
@@ -1355,11 +1355,11 @@ void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 
     if (!bIsNotSelected)
     {
         if (nItem == 0 || nItem == m_xWidget->get_count() - 1)
-            m_xWidget->set_item_menu(OString::number(nItem), nullptr);
+            m_xWidget->set_item_menu(OUString::number(nItem), nullptr);
         else
         {
             m_nLastItemWithMenu = nItem;
-            m_xWidget->set_item_menu(OString::number(nItem), m_xMenu.get());
+            m_xWidget->set_item_menu(OUString::number(nItem), m_xMenu.get());
         }
     }
 
@@ -3308,7 +3308,7 @@ void SvxStyleToolBoxControl::statusChanged( const css::frame::FeatureStateEvent&
     SolarMutexGuard aGuard;
 
     if (m_pToolbar)
-        m_pToolbar->set_item_sensitive(m_aCommandURL.toUtf8(), rEvent.IsEnabled);
+        m_pToolbar->set_item_sensitive(m_aCommandURL, rEvent.IsEnabled);
     else
     {
         ToolBox* pToolBox = nullptr;
@@ -3404,7 +3404,7 @@ void SvxFontNameToolBoxControl::statusChanged( const css::frame::FeatureStateEve
     m_pBox->statusChanged_Impl(rEvent);
 
     if (m_pToolbar)
-        m_pToolbar->set_item_sensitive(m_aCommandURL.toUtf8(), rEvent.IsEnabled);
+        m_pToolbar->set_item_sensitive(m_aCommandURL, rEvent.IsEnabled);
     else
     {
         ToolBox* pToolBox = nullptr;
@@ -3537,13 +3537,11 @@ void SvxColorToolBoxControl::initialize( const css::uno::Sequence<css::uno::Any>
     auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(getCommandURL(), getModuleName());
     OUString aCommandLabel = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
 
-    OString aId(m_aCommandURL.toUtf8());
-
     if (m_pToolbar)
     {
         mxPopoverContainer.reset(new ToolbarPopupContainer(m_pToolbar));
-        m_pToolbar->set_item_popover(aId, mxPopoverContainer->getTopLevel());
-        m_xBtnUpdater.reset(new svx::ToolboxButtonColorUpdater(m_nSlotId, aId, m_pToolbar, !m_bSplitButton, aCommandLabel, m_xFrame));
+        m_pToolbar->set_item_popover(m_aCommandURL, mxPopoverContainer->getTopLevel());
+        m_xBtnUpdater.reset(new svx::ToolboxButtonColorUpdater(m_nSlotId, m_aCommandURL, m_pToolbar, !m_bSplitButton, aCommandLabel, m_xFrame));
         return;
     }
 
@@ -3610,15 +3608,13 @@ std::unique_ptr<WeldToolbarPopup> SvxColorToolBoxControl::weldPopupWindow()
 {
     EnsurePaletteManager();
 
-    const OString aId(m_aCommandURL.toUtf8());
-
     auto xPopover = std::make_unique<ColorWindow>(
                         m_aCommandURL,
                         m_xPaletteManager,
                         m_aColorStatus,
                         m_nSlotId,
                         m_xFrame,
-                        MenuOrToolMenuButton(m_pToolbar, aId),
+                        MenuOrToolMenuButton(m_pToolbar, m_aCommandURL),
                         [this] { return GetParentFrame(); },
                         m_aColorSelectFunction);
 
@@ -3677,7 +3673,7 @@ void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent&
     if ( rEvent.FeatureURL.Complete == m_aCommandURL )
     {
         if (m_pToolbar)
-            m_pToolbar->set_item_sensitive(m_aCommandURL.toUtf8(), rEvent.IsEnabled);
+            m_pToolbar->set_item_sensitive(m_aCommandURL, rEvent.IsEnabled);
         else
             pToolBox->EnableItem( nId, rEvent.IsEnabled );
     }
@@ -3691,7 +3687,7 @@ void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent&
     else if ( rEvent.State >>= bValue )
     {
         if (m_pToolbar)
-            m_pToolbar->set_item_active(m_aCommandURL.toUtf8(), bValue);
+            m_pToolbar->set_item_active(m_aCommandURL, bValue);
         else if (pToolBox)
             pToolBox->CheckItem( nId, bValue );
     }
@@ -3704,8 +3700,7 @@ void SvxColorToolBoxControl::execute(sal_Int16 /*nSelectModifier*/)
         if (m_pToolbar)
         {
             // Toggle the popup also when toolbutton is activated
-            const OString aId(m_aCommandURL.toUtf8());
-            m_pToolbar->set_menu_item_active(aId, !m_pToolbar->get_menu_item_active(aId));
+            m_pToolbar->set_menu_item_active(m_aCommandURL, !m_pToolbar->get_menu_item_active(m_aCommandURL));
         }
         else
         {
@@ -3785,8 +3780,7 @@ void SAL_CALL SvxFrameToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
     if (m_pToolbar)
     {
         // Toggle the popup also when toolbutton is activated
-        const OString aId(m_aCommandURL.toUtf8());
-        m_pToolbar->set_menu_item_active(aId, !m_pToolbar->get_menu_item_active(aId));
+        m_pToolbar->set_menu_item_active(m_aCommandURL, !m_pToolbar->get_menu_item_active(m_aCommandURL));
     }
     else
     {
@@ -3802,7 +3796,7 @@ void SvxFrameToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any
     if (m_pToolbar)
     {
         mxPopoverContainer.reset(new ToolbarPopupContainer(m_pToolbar));
-        m_pToolbar->set_item_popover(m_aCommandURL.toUtf8(), mxPopoverContainer->getTopLevel());
+        m_pToolbar->set_item_popover(m_aCommandURL, mxPopoverContainer->getTopLevel());
     }
 
     ToolBox* pToolBox = nullptr;
@@ -4010,7 +4004,7 @@ void SvxCurrencyToolBoxControl::initialize( const css::uno::Sequence< css::uno::
     if (m_pToolbar)
     {
         mxPopoverContainer.reset(new ToolbarPopupContainer(m_pToolbar));
-        m_pToolbar->set_item_popover(m_aCommandURL.toUtf8(), mxPopoverContainer->getTopLevel());
+        m_pToolbar->set_item_popover(m_aCommandURL, mxPopoverContainer->getTopLevel());
         return;
     }
 
@@ -4446,7 +4440,7 @@ MenuOrToolMenuButton::MenuOrToolMenuButton(weld::MenuButton* pMenuButton)
 {
 }
 
-MenuOrToolMenuButton::MenuOrToolMenuButton(weld::Toolbar* pToolbar, OString aIdent)
+MenuOrToolMenuButton::MenuOrToolMenuButton(weld::Toolbar* pToolbar, OUString aIdent)
     : m_pMenuButton(nullptr)
     , m_pToolbar(pToolbar)
     , m_aIdent(std::move(aIdent))

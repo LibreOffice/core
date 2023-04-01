@@ -47,9 +47,9 @@ class SwOutlineTabDialog final : public SfxTabDialogController
 
     DECL_LINK(CancelHdl, weld::Button&, void);
     DECL_LINK(FormHdl, weld::Toggleable&, void);
-    DECL_LINK(MenuSelectHdl, const OString&, void);
+    DECL_LINK(MenuSelectHdl, const OUString&, void);
 
-    virtual void    PageCreated(const OString& rPageId, SfxTabPage& rPage) override;
+    virtual void    PageCreated(const OUString& rPageId, SfxTabPage& rPage) override;
     virtual short   Ok() override;
 
 public:

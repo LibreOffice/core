@@ -1391,7 +1391,7 @@ SwInsertSectionTabDialog::~SwInsertSectionTabDialog()
 {
 }
 
-void SwInsertSectionTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
+void SwInsertSectionTabDialog::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {
     if (rId == "section")
         static_cast<SwInsertSectionTabPage&>(rPage).SetWrtShell(m_rWrtSh);
@@ -2037,7 +2037,7 @@ SwSectionPropertyTabDialog::~SwSectionPropertyTabDialog()
 {
 }
 
-void SwSectionPropertyTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
+void SwSectionPropertyTabDialog::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {
     if (rId == "background")
     {

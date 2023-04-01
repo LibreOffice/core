@@ -3267,7 +3267,7 @@ void SvxRuler::Notify(SfxBroadcaster&, const SfxHint& rHint)
     }
 }
 
-void SvxRuler::MenuSelect(std::string_view ident)
+void SvxRuler::MenuSelect(std::u16string_view ident)
 {
     if (ident.empty())
         return;
@@ -3275,7 +3275,7 @@ void SvxRuler::MenuSelect(std::string_view ident)
     SetUnit(vcl::EnglishStringToMetric(ident));
 }
 
-void SvxRuler::TabMenuSelect(std::string_view rIdent)
+void SvxRuler::TabMenuSelect(std::u16string_view rIdent)
 {
     if (rIdent.empty())
         return;
@@ -3337,8 +3337,8 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
                 Color aFillColor(xDev->GetSettings().GetStyleSettings().GetShadowColor());
                 DrawTab(*xDev, aFillColor, aPt, nStyle);
 
-                OString sId(OString::number(i + 1));
-                xMenu->insert(-1, OUString::fromUtf8(sId), SvxResId(RID_SVXSTR_RULER_TAB[i]),
+                OUString sId(OUString::number(i + 1));
+                xMenu->insert(-1, sId, SvxResId(RID_SVXSTR_RULER_TAB[i]),
                               nullptr, xDev.get(), nullptr, TRISTATE_TRUE);
                 xMenu->set_active(sId, i == mpTabs[mxRulerImpl->nIdx + TAB_GAP].nStyle);
             }
@@ -3352,7 +3352,7 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
             bool bReduceMetric = bool(nFlags & SvxRulerSupportFlags::REDUCED_METRIC);
             for ( sal_uInt16 i = nCount; i; --i )
             {
-                OString sIdent = xMenu->get_id(i - 1);
+                OUString sIdent = xMenu->get_id(i - 1);
                 FieldUnit eMenuUnit = vcl::EnglishStringToMetric(sIdent);
                 xMenu->set_active(sIdent, eMenuUnit == eUnit);
                 if( bReduceMetric )

@@ -2897,7 +2897,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 // for example disable header
                 SwView& rTempView = GetView();
 
-                OString sPageId;
+                OUString sPageId;
                 switch (nSlot)
                 {
                     case FN_FORMAT_PAGE_COLUMN_DLG:
@@ -2908,7 +2908,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                         break;
                     case FN_FORMAT_PAGE_DLG:
                         if (pItem)
-                          sPageId = OUStringToOString(static_cast<const SfxStringItem*>(pItem)->GetValue(), RTL_TEXTENCODING_UTF8);
+                          sPageId = static_cast<const SfxStringItem*>(pItem)->GetValue();
                         break;
                 }
                 rTempView.GetDocShell()->FormatPage(rReq.GetFrameWeld(), rPageDesc.GetName(), sPageId, rSh, &rReq);

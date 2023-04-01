@@ -101,41 +101,41 @@ class FunctionPopup_Impl
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Menu> m_xMenu;
     sal_uInt32        m_nSelected;
-    static sal_uInt16 id_to_function(std::string_view rIdent);
-    static OString function_to_id(sal_uInt16 nFunc);
+    static sal_uInt16 id_to_function(std::u16string_view rIdent);
+    static OUString function_to_id(sal_uInt16 nFunc);
 public:
     explicit FunctionPopup_Impl(sal_uInt32 nCheckEncoded);
-    OString Execute(weld::Window* pParent, const tools::Rectangle& rRect)
+    OUString Execute(weld::Window* pParent, const tools::Rectangle& rRect)
     {
         return m_xMenu->popup_at_rect(pParent, rRect);
     }
-    sal_uInt32 GetSelected(std::string_view curident) const;
+    sal_uInt32 GetSelected(std::u16string_view curident) const;
 };
 
 }
 
-sal_uInt16 FunctionPopup_Impl::id_to_function(std::string_view rIdent)
+sal_uInt16 FunctionPopup_Impl::id_to_function(std::u16string_view rIdent)
 {
-    if (rIdent == "avg")
+    if (rIdent == u"avg")
         return PSZ_FUNC_AVG;
-    else if (rIdent == "counta")
+    else if (rIdent == u"counta")
         return PSZ_FUNC_COUNT2;
-    else if (rIdent == "count")
+    else if (rIdent == u"count")
         return PSZ_FUNC_COUNT;
-    else if (rIdent == "max")
+    else if (rIdent == u"max")
         return PSZ_FUNC_MAX;
-    else if (rIdent == "min")
+    else if (rIdent == u"min")
         return PSZ_FUNC_MIN;
-    else if (rIdent == "sum")
+    else if (rIdent == u"sum")
         return PSZ_FUNC_SUM;
-    else if (rIdent == "selection")
+    else if (rIdent == u"selection")
         return PSZ_FUNC_SELECTION_COUNT;
-    else if (rIdent == "none")
+    else if (rIdent == u"none")
         return PSZ_FUNC_NONE;
     return 0;
 }
 
-OString FunctionPopup_Impl::function_to_id(sal_uInt16 nFunc)
+OUString FunctionPopup_Impl::function_to_id(sal_uInt16 nFunc)
 {
     switch (nFunc)
     {
@@ -156,7 +156,7 @@ OString FunctionPopup_Impl::function_to_id(sal_uInt16 nFunc)
         case PSZ_FUNC_NONE:
             return "none";
     }
-    return OString();
+    return {};
 }
 
 FunctionPopup_Impl::FunctionPopup_Impl(sal_uInt32 nCheckEncoded)
@@ -169,7 +169,7 @@ FunctionPopup_Impl::FunctionPopup_Impl(sal_uInt32 nCheckEncoded)
             m_xMenu->set_active(function_to_id(nCheck), true);
 }
 
-sal_uInt32 FunctionPopup_Impl::GetSelected(std::string_view curident) const
+sal_uInt32 FunctionPopup_Impl::GetSelected(std::u16string_view curident) const
 {
     sal_uInt32 nSelected = m_nSelected;
     sal_uInt16 nCurItemId = id_to_function(curident);
@@ -401,7 +401,7 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
         tools::Rectangle aRect(rCEvt.GetMousePosPixel(), Size(1,1));
         weld::Window* pParent = weld::GetPopupParent(GetStatusBar(), aRect);
         FunctionPopup_Impl aMenu(nSelect);
-        OString sIdent = aMenu.Execute(pParent, aRect);
+        OUString sIdent = aMenu.Execute(pParent, aRect);
         if (!sIdent.isEmpty())
         {
             nSelect = aMenu.GetSelected(sIdent);

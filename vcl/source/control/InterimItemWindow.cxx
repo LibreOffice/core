@@ -13,7 +13,7 @@
 #include <window.h>
 
 InterimItemWindow::InterimItemWindow(vcl::Window* pParent, const OUString& rUIXMLDescription,
-                                     const OString& rID, bool bAllowCycleFocusOut,
+                                     const OUString& rID, bool bAllowCycleFocusOut,
                                      sal_uInt64 nLOKWindowId)
     : Control(pParent, WB_TABSTOP)
     , m_pWidget(nullptr) // inheritors are expected to call InitControlBase

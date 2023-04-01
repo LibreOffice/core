@@ -335,9 +335,9 @@ SfxDispatchController_Impl::SfxDispatchController_Impl(
     , bMasterSlave( false )
     , bVisible( true )
 {
-    if ( aDispatchURL.Protocol == "slot:" && pSlot->pUnoName )
+    if ( aDispatchURL.Protocol == "slot:" && !pSlot->pUnoName.isEmpty() )
     {
-        aDispatchURL.Complete = ".uno:" + OUString::createFromAscii(pSlot->pUnoName);
+        aDispatchURL.Complete = pSlot->GetCommand();
         Reference< XURLTransformer > xTrans( URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
         xTrans->parseStrict( aDispatchURL );
     }
@@ -655,7 +655,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                         sal_Int32 nIndex = lNewArgs.getLength();
                         lNewArgs.realloc( nIndex+1 );
                         auto plNewArgs = lNewArgs.getArray();
-                        plNewArgs[nIndex].Name   = OUString::createFromAscii( pSlot->pUnoName );
+                        plNewArgs[nIndex].Name   = pSlot->pUnoName;
                         plNewArgs[nIndex].Value  <<= SfxDispatchController_Impl::getSlaveCommand( aDispatchURL );
                     }
 

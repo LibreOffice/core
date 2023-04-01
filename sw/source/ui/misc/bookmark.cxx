@@ -424,7 +424,7 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS,
     // restore dialog size
     SvtViewOptions aDlgOpt(EViewType::Dialog, "BookmarkDialog");
     if (aDlgOpt.Exists())
-        m_xDialog->set_window_state(aDlgOpt.GetWindowState().toUtf8());
+        m_xDialog->set_window_state(aDlgOpt.GetWindowState());
 
     if (pSelected)
     {
@@ -443,8 +443,8 @@ SwInsertBookmarkDlg::~SwInsertBookmarkDlg()
 {
     // tdf#146261 - Remember size of bookmark dialog
     SvtViewOptions aDlgOpt(EViewType::Dialog, "BookmarkDialog");
-    OString sWindowState = m_xDialog->get_window_state(vcl::WindowDataMask::PosSize);
-    aDlgOpt.SetWindowState(OUString::fromUtf8(sWindowState));
+    OUString sWindowState = m_xDialog->get_window_state(vcl::WindowDataMask::PosSize);
+    aDlgOpt.SetWindowState(sWindowState);
 }
 
 IMPL_LINK(SwInsertBookmarkDlg, HeaderBarClick, int, nColumn, void)

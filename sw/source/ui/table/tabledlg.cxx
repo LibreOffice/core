@@ -1227,7 +1227,7 @@ SwTableTabDlg::SwTableTabDlg(weld::Window* pParent, const SfxItemSet* pItemSet, 
     AddTabPage("borders", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BORDER), nullptr);
 }
 
-void  SwTableTabDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
+void  SwTableTabDlg::PageCreated(const OUString& rId, SfxTabPage& rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     if (rId == "background")

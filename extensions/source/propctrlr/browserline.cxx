@@ -90,7 +90,7 @@ namespace pcr
         }
     }
 
-    void OBrowserLine::SetComponentHelpIds(const OString& rHelpId)
+    void OBrowserLine::SetComponentHelpIds(const OUString& rHelpId)
     {
         if (m_pControlWindow)
             m_pControlWindow->set_help_id(rHelpId);

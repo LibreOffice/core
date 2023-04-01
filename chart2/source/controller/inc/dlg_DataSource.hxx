@@ -52,8 +52,8 @@ public:
     virtual void setValidPage( BuilderPage * pTabPage ) override;
 
 private:
-    DECL_LINK(ActivatePageHdl, const OString&, void);
-    DECL_LINK(DeactivatePageHdl, const OString&, bool);
+    DECL_LINK(ActivatePageHdl, const OUString&, void);
+    DECL_LINK(DeactivatePageHdl, const OUString&, bool);
 
     std::unique_ptr< ChartTypeTemplateProvider >  m_apDocTemplateProvider;
     std::unique_ptr< DialogModel >                m_apDialogModel;

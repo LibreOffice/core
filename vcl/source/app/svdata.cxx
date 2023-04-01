@@ -22,6 +22,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <o3tl/string_view.hxx>
 #include <unotools/resmgr.hxx>
 #include <sal/log.hxx>
 
@@ -280,12 +281,12 @@ const FieldUnitStringList& ImplGetFieldUnits()
 
 namespace vcl
 {
-    FieldUnit EnglishStringToMetric(std::string_view rEnglishMetricString)
+    FieldUnit EnglishStringToMetric(std::u16string_view rEnglishMetricString)
     {
         sal_uInt32 nUnits = SAL_N_ELEMENTS(SV_FUNIT_STRINGS);
         for (sal_uInt32 i = 0; i < nUnits; ++i)
         {
-            if (rEnglishMetricString == SV_FUNIT_STRINGS[i].first.mpId)
+            if (o3tl::equalsAscii(rEnglishMetricString, SV_FUNIT_STRINGS[i].first.mpId))
                 return SV_FUNIT_STRINGS[i].second;
         }
         return FieldUnit::NONE;

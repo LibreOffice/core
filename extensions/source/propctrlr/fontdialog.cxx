@@ -556,7 +556,7 @@ namespace pcr
         delete pFontList;
     }
 
-    void ControlCharacterDialog::PageCreated(const OString& rId, SfxTabPage& rPage)
+    void ControlCharacterDialog::PageCreated(const OUString& rId, SfxTabPage& rPage)
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
         if (rId == "font")

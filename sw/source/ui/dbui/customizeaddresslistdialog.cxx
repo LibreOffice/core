@@ -154,7 +154,7 @@ void SwCustomizeAddressListDialog::UpdateButtons()
 }
 
 SwAddRenameEntryDialog::SwAddRenameEntryDialog(
-        weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID,
+        weld::Window* pParent, const OUString& rUIXMLDescription, const OUString& rID,
         const std::vector< OUString >& rCSVHeader)
     : SfxDialogController(pParent, rUIXMLDescription, rID)
     , m_rCSVHeader(rCSVHeader)

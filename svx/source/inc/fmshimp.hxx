@@ -414,17 +414,17 @@ public:
     SAL_DLLPRIVATE static void GetConversionMenu_Lock(weld::Menu& rMenu);
 
     /// checks whether a given control conversion slot can be applied to the current selection
-    SAL_DLLPRIVATE bool canConvertCurrentSelectionToControl_Lock(std::string_view rIdent);
+    SAL_DLLPRIVATE bool canConvertCurrentSelectionToControl_Lock(std::u16string_view rIdent);
     /// enables or disables all conversion slots in a menu, according to the current selection
     SAL_DLLPRIVATE void checkControlConversionSlotsForCurrentSelection_Lock(weld::Menu& rMenu);
     /// executes a control conversion slot for a given object
-    SAL_DLLPRIVATE bool executeControlConversionSlot_Lock(const css::uno::Reference< css::form::XFormComponent >& _rxObject, std::string_view rIdent);
+    SAL_DLLPRIVATE bool executeControlConversionSlot_Lock(const css::uno::Reference< css::form::XFormComponent >& _rxObject, std::u16string_view rIdent);
     /** executes a control conversion slot for the current selection
         @precond canConvertCurrentSelectionToControl( <arg>_nSlotId</arg> ) must return <TRUE/>
     */
-    SAL_DLLPRIVATE void executeControlConversionSlot_Lock(std::string_view rIdent);
+    SAL_DLLPRIVATE void executeControlConversionSlot_Lock(std::u16string_view rIdent);
     /// checks whether the given slot id denotes a control conversion slot
-    SAL_DLLPRIVATE static bool isControlConversionSlot(std::string_view rIdent);
+    SAL_DLLPRIVATE static bool isControlConversionSlot(std::u16string_view rIdent);
 
     SAL_DLLPRIVATE void ExecuteTextAttribute_Lock(SfxRequest& _rReq);
     SAL_DLLPRIVATE void GetTextAttributeState_Lock(SfxItemSet& _rSet);
@@ -519,7 +519,7 @@ public:
     */
     SAL_DLLPRIVATE bool    IsFormSlotEnabled( sal_Int32 _nSlot, css::form::runtime::FeatureState* _pCompleteState ) const;
 
-    SAL_DLLPRIVATE static OString SlotToIdent(sal_uInt16 nSlot);
+    SAL_DLLPRIVATE static OUString SlotToIdent(sal_uInt16 nSlot);
 
 private:
     DECL_DLLPRIVATE_LINK( OnLoadForms_Lock, void*, void );

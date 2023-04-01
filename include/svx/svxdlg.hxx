@@ -165,8 +165,8 @@ public:
     virtual void    GetName( OUString& rName ) = 0;
     virtual void    SetCheckNameHdl( const Link<AbstractSvxNameDialog&,bool>& rLink, bool bCheckImmediately = false ) = 0;
     virtual void    SetCheckNameTooltipHdl( const Link<AbstractSvxNameDialog&,OUString>& rLink ) = 0;
-    virtual void    SetEditHelpId(const OString&) = 0;
-    virtual void    SetHelpId( const OString& ) = 0;
+    virtual void    SetEditHelpId(const OUString&) = 0;
+    virtual void    SetHelpId( const OUString& ) = 0;
     virtual void    SetText( const OUString& rStr ) = 0;
 };
 
@@ -443,7 +443,7 @@ public:
 
     virtual std::shared_ptr<SvxAbstractNewTableDialog> CreateSvxNewTableDialog(weld::Window* pParent) = 0;
 
-    virtual VclPtr<SvxAbstractInsRowColDlg> CreateSvxInsRowColDlg(weld::Window* pParent, bool bCol, const OString& rHelpId) = 0;
+    virtual VclPtr<SvxAbstractInsRowColDlg> CreateSvxInsRowColDlg(weld::Window* pParent, bool bCol, const OUString& rHelpId) = 0;
 };
 
 #endif

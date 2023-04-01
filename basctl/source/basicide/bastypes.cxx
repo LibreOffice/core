@@ -313,7 +313,7 @@ WinBits const DockingWindow::StyleBits =
     WB_BORDER | WB_3DLOOK | WB_CLIPCHILDREN |
     WB_MOVEABLE | WB_SIZEABLE | WB_DOCKABLE;
 
-DockingWindow::DockingWindow(vcl::Window* pParent, const OUString& rUIXMLDescription, const OString& rID)
+DockingWindow::DockingWindow(vcl::Window* pParent, const OUString& rUIXMLDescription, const OUString& rID)
     : ResizableDockingWindow(pParent)
     , m_xBuilder(Application::CreateInterimBuilder(m_xBox.get(), rUIXMLDescription, true))
     , pLayout(nullptr)

@@ -360,7 +360,7 @@ public:
 
     static void UpdateNumberFormatter( const SvxNumberInfoItem&  rInfoItem );
 
-    void    ExecuteCellFormatDlg( SfxRequest& rReq, const OString &rTabPage);
+    void    ExecuteCellFormatDlg( SfxRequest& rReq, const OUString &rTabPage);
 
     bool    GetFunction( OUString& rFuncStr, FormulaError nErrCode );
 

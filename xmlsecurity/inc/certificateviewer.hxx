@@ -52,7 +52,7 @@ private:
     std::unique_ptr<CertificateViewerDetailsTP> mxDetailsPage;
     std::unique_ptr<CertificateViewerCertPathTP> mxPathId;
 
-    DECL_LINK(ActivatePageHdl, const OString&, void);
+    DECL_LINK(ActivatePageHdl, const OUString&, void);
 
 public:
     CertificateViewer(weld::Window* pParent, const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const css::uno::Reference< css::security::XCertificate >& rXCert, bool bCheckForPrivateKey, CertificateChooser* pParentChooser);
@@ -68,7 +68,7 @@ protected:
 
 public:
     CertificateViewerTP(weld::Container* pParent, const OUString& rUIXMLDescription,
-                        const OString& rID, CertificateViewer* pDlg);
+                        const OUString& rID, CertificateViewer* pDlg);
 };
 
 class CertificateViewerGeneralTP : public CertificateViewerTP

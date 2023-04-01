@@ -89,7 +89,7 @@ public:
     */
     virtual void        KeyInput( const KeyEvent& rKEvt ) override;
 
-    virtual bool        set_property(const OString &rKey, const OUString &rValue) override;
+    virtual bool        set_property(const OUString &rKey, const OUString &rValue) override;
 
 
     /** sets m_aClickHdl with rLink.

@@ -230,7 +230,7 @@ class SwInsertSectionTabDialog final : public SfxTabDialogController
     SwWrtShell&     m_rWrtSh;
     std::unique_ptr<SwSectionData> m_pSectionData;
 
-    virtual void    PageCreated(const OString& rId, SfxTabPage &rPage) override;
+    virtual void    PageCreated(const OUString& rId, SfxTabPage &rPage) override;
     virtual short   Ok() override;
 public:
     SwInsertSectionTabDialog(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh);
@@ -244,7 +244,7 @@ class SwSectionPropertyTabDialog final : public SfxTabDialogController
 {
     SwWrtShell& m_rWrtSh;
 
-    virtual void    PageCreated(const OString& rId, SfxTabPage &rPage) override;
+    virtual void    PageCreated(const OUString& rId, SfxTabPage &rPage) override;
 public:
     SwSectionPropertyTabDialog(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh);
     virtual ~SwSectionPropertyTabDialog() override;

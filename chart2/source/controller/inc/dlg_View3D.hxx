@@ -41,7 +41,7 @@ public:
     virtual short run() override;
 
 private:
-    DECL_LINK(ActivatePageHdl, const OString&, void);
+    DECL_LINK(ActivatePageHdl, const OUString&, void);
 
     ControllerLockHelper m_aControllerLocker;
 

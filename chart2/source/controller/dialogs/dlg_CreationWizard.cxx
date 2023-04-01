@@ -95,7 +95,7 @@ std::unique_ptr<BuilderPage> CreationWizard::createPage(WizardState nState)
 {
     std::unique_ptr<vcl::OWizardPage> xRet;
 
-    OString sIdent(OString::number(nState));
+    OUString sIdent(OUString::number(nState));
     weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
 
     switch( nState )

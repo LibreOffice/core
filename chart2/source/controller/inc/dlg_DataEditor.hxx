@@ -63,7 +63,7 @@ private:
     VclPtr<DataBrowser> m_xBrwData;
 
     /// handles actions of the toolbox
-    DECL_LINK( ToolboxHdl, const OString&, void );
+    DECL_LINK( ToolboxHdl, const OUString&, void );
     /// is called, if the cursor of the table has moved
     DECL_LINK( BrowserCursorMovedHdl, DataBrowser*, void);
 };

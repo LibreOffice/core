@@ -52,7 +52,7 @@ public:
     void SetDelEnabled( bool enabled );
     void updateView( );
 
-    void set_help_id(const OString& rHelpId) { mxImpl->set_help_id(rHelpId); }
+    void set_help_id(const OUString& rHelpId) { mxImpl->set_help_id(rHelpId); }
 
 private:
 

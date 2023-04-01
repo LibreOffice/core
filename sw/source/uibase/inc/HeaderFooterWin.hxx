@@ -86,12 +86,12 @@ public:
 
     bool IsEmptyHeaderFooter( ) const;
 
-    void ExecuteCommand(std::string_view rIdent);
+    void ExecuteCommand(std::u16string_view rIdent);
 
 private:
     DECL_LINK(FadeHandler, Timer *, void);
     DECL_LINK(ClickHdl, weld::Button&, void);
-    DECL_LINK(SelectHdl, const OString&, void);
+    DECL_LINK(SelectHdl, const OUString&, void);
     void PaintButton();
 };
 

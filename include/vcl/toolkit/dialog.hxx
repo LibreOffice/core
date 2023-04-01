@@ -92,7 +92,7 @@ public:
 
 protected:
     explicit        Dialog( WindowType nType );
-    explicit        Dialog( vcl::Window* pParent, std::u16string_view rID, const OUString& rUIXMLDescription);
+    explicit        Dialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription);
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
     virtual void    settingOptimalLayoutSize(Window *pBox) override;
 
@@ -115,7 +115,7 @@ public:
     virtual void    PixelInvalidate(const tools::Rectangle* pRectangle) override;
 
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
-    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
+    virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
     VclButtonBox* get_action_area() { return mpActionArea; }
     VclBox* get_content_area() { return mpContentArea; }
 

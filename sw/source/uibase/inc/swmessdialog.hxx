@@ -18,7 +18,7 @@ protected:
     std::unique_ptr<weld::Entry> m_xEdit;
     std::unique_ptr<weld::Button> m_xOKPB;
 public:
-    SwMessageAndEditDialog(weld::Window* pParent, const OString& rID,
+    SwMessageAndEditDialog(weld::Window* pParent, const OUString& rID,
         const OUString& rUIXMLDescription);
 };
 

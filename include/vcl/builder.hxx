@@ -56,8 +56,8 @@ namespace com::sun::star::frame { class XFrame; }
 struct ComboBoxTextItem
 {
     OUString m_sItem;
-    OString m_sId;
-    ComboBoxTextItem(OUString sItem, OString sId)
+    OUString m_sId;
+    ComboBoxTextItem(OUString sItem, OUString sId)
         : m_sItem(std::move(sItem))
         , m_sId(std::move(sId))
     {
@@ -68,14 +68,14 @@ struct ComboBoxTextItem
 class VCL_DLLPUBLIC VclBuilder
 {
 public:
-    typedef std::map<OString, OUString> stringmap;
-    typedef std::map<OString, std::pair<OString, OString>> accelmap;
+    typedef std::map<OUString, OUString> stringmap;
+    typedef std::map<OUString, std::pair<OUString, OUString>> accelmap;
     /// These functions create a new widget with parent pParent and return it in rRet
     typedef void (*customMakeWidget)(VclPtr<vcl::Window> &rRet, const VclPtr<vcl::Window> &pParent, stringmap &rVec);
 
 public:
     VclBuilder(vcl::Window* pParent, const OUString& sUIRootDir, const OUString& sUIFile,
-               OString sID = OString(),
+               OUString sID = {},
                css::uno::Reference<css::frame::XFrame> xFrame
                = css::uno::Reference<css::frame::XFrame>(),
                bool bLegacy = true,
@@ -84,15 +84,15 @@ public:
     ///releases references and disposes all children.
     void disposeBuilder();
     //sID must exist and be of type T
-    template <typename T> T* get(VclPtr<T>& ret, const OString& sID);
+    template <typename T> T* get(VclPtr<T>& ret, const OUString& sID);
 
     //sID may not exist, but must be of type T if it does
-    template <typename T = vcl::Window> T* get(const OString& sID);
+    template <typename T = vcl::Window> T* get(const OUString& sID);
 
     vcl::Window*    get_widget_root();
 
     //sID may not exist
-    PopupMenu*      get_menu(std::string_view sID);
+    PopupMenu*      get_menu(std::u16string_view sID);
 
     //release ownership of pWindow, i.e. don't delete it
     void            drop_ownership(const vcl::Window *pWindow);
@@ -104,7 +104,7 @@ public:
     void            setDeferredProperties();
 
     /// return UI-File name (without '.ui')
-    const OString& getUIFile() const
+    const OUString& getUIFile() const
     {
         return m_sHelpRoot;
     }
@@ -140,10 +140,10 @@ private:
 
     struct WinAndId
     {
-        OString m_sID;
+        OUString m_sID;
         VclPtr<vcl::Window> m_pWindow;
         PackingData m_aPackingData;
-        WinAndId(OString sId, vcl::Window *pWindow, bool bVertical)
+        WinAndId(OUString sId, vcl::Window *pWindow, bool bVertical)
             : m_sID(std::move(sId))
             , m_pWindow(pWindow)
             , m_aPackingData(bVertical)
@@ -154,17 +154,17 @@ private:
 
     struct MenuAndId
     {
-        OString m_sID;
+        OUString m_sID;
         VclPtr<Menu> m_pMenu;
-        MenuAndId(OString sId, Menu *pMenu);
+        MenuAndId(OUString sId, Menu *pMenu);
     };
     std::vector<MenuAndId> m_aMenus;
 
     struct StringPair
     {
-        OString m_sID;
-        OString m_sValue;
-        StringPair(OString sId, OString sValue)
+        OUString m_sID;
+        OUString m_sValue;
+        StringPair(OUString sId, OUString sValue)
             : m_sID(std::move(sId))
             , m_sValue(std::move(sValue))
         {
@@ -173,9 +173,9 @@ private:
 
     struct UStringPair
     {
-        OString m_sID;
+        OUString m_sID;
         OUString m_sValue;
-        UStringPair(OString sId, OUString sValue)
+        UStringPair(OUString sId, OUString sValue)
             : m_sID(std::move(sId))
             , m_sValue(std::move(sValue))
         {
@@ -186,10 +186,10 @@ private:
 
     struct ButtonImageWidgetMap
     {
-        OString m_sID;
+        OUString m_sID;
         OUString m_sValue;
         bool m_bRadio;
-        ButtonImageWidgetMap(OString sId, OUString sValue, bool bRadio)
+        ButtonImageWidgetMap(OUString sId, OUString sValue, bool bRadio)
             : m_sID(std::move(sId))
             , m_sValue(std::move(sValue))
             , m_bRadio(bRadio)
@@ -204,10 +204,10 @@ private:
 
     struct ComboBoxModelMap
     {
-        OString m_sID;
+        OUString m_sID;
         OUString m_sValue;
         sal_Int32 m_nActiveId;
-        ComboBoxModelMap(OString sId, OUString sValue, sal_Int32 nActiveId)
+        ComboBoxModelMap(OUString sId, OUString sValue, sal_Int32 nActiveId)
             : m_sID(std::move(sId))
             , m_sValue(std::move(sValue))
             , m_nActiveId(nActiveId)
@@ -221,29 +221,29 @@ private:
         std::vector<row> m_aEntries;
     };
 
-    const ListStore* get_model_by_name(const OString& sID) const;
+    const ListStore* get_model_by_name(const OUString& sID) const;
     void     mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId);
     void     mungeModel(ComboBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId);
     void     mungeModel(SvTabListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId);
 
     typedef stringmap TextBuffer;
-    const TextBuffer* get_buffer_by_name(const OString& sID) const;
+    const TextBuffer* get_buffer_by_name(const OUString& sID) const;
 
     static void     mungeTextBuffer(VclMultiLineEdit &rTarget, const TextBuffer &rTextBuffer);
 
     typedef stringmap Adjustment;
-    const Adjustment* get_adjustment_by_name(const OString& sID) const;
+    const Adjustment* get_adjustment_by_name(const OUString& sID) const;
 
     static void     mungeAdjustment(NumericFormatter &rTarget, const Adjustment &rAdjustment);
     static void     mungeAdjustment(FormattedField &rTarget, const Adjustment &rAdjustment);
     static void     mungeAdjustment(ScrollBar &rTarget, const Adjustment &rAdjustment);
     static void     mungeAdjustment(Slider &rTarget, const Adjustment &rAdjustment);
 
-    typedef std::map<OString, int> ImageSizeMap;
+    typedef std::map<OUString, int> ImageSizeMap;
 
     struct SizeGroup
     {
-        std::vector<OString> m_aWidgets;
+        std::vector<OUString> m_aWidgets;
         stringmap m_aProperties;
         SizeGroup() {}
     };
@@ -256,17 +256,17 @@ private:
         std::vector<RadioButtonGroupMap> m_aGroupMaps;
 
         std::vector<ComboBoxModelMap> m_aModelMaps;
-        std::map<OString, ListStore> m_aModels;
+        std::map<OUString, ListStore> m_aModels;
 
         std::vector<TextBufferMap> m_aTextBufferMaps;
-        std::map<OString, TextBuffer> m_aTextBuffers;
+        std::map<OUString, TextBuffer> m_aTextBuffers;
 
         std::vector<WidgetAdjustmentMap> m_aNumericFormatterAdjustmentMaps;
         std::vector<WidgetAdjustmentMap> m_aFormattedFormatterAdjustmentMaps;
         std::vector<WidgetAdjustmentMap> m_aScrollAdjustmentMaps;
         std::vector<WidgetAdjustmentMap> m_aSliderAdjustmentMaps;
 
-        std::map<OString, Adjustment> m_aAdjustments;
+        std::map<OUString, Adjustment> m_aAdjustments;
 
         std::vector<ButtonImageWidgetMap> m_aButtonImageWidgetMaps;
         ImageSizeMap m_aImageSizeMap;
@@ -292,8 +292,8 @@ private:
         ParserState();
     };
 
-    OString     m_sID;
-    OString     m_sHelpRoot;
+    OUString    m_sID;
+    OUString    m_sHelpRoot;
     ResHookProc m_pStringReplace;
     VclPtr<vcl::Window> m_pParent;
     bool        m_bToplevelHasDeferredInit;
@@ -302,8 +302,8 @@ private:
     bool        m_bLegacy;
     std::unique_ptr<ParserState> m_pParserState;
 
-    vcl::Window *get_by_name(std::string_view sID);
-    void        delete_by_name(const OString& sID);
+    vcl::Window *get_by_name(std::u16string_view sID);
+    void        delete_by_name(const OUString& sID);
 
     class sortIntoBestTabTraversalOrder
     {
@@ -322,25 +322,25 @@ private:
 
 private:
     VclPtr<vcl::Window> insertObject(vcl::Window *pParent,
-                    const OString &rClass, const OString &rID,
+                    const OUString &rClass, const OUString &rID,
                     stringmap &rProps, stringmap &rPangoAttributes,
                     stringmap &rAtkProps);
 
     VclPtr<vcl::Window> makeObject(vcl::Window *pParent,
-                    const OString &rClass, const OString &rID,
+                    const OUString &rClass, const OUString &rID,
                     stringmap &rVec);
 
-    void        connectNumericFormatterAdjustment(const OString &id, const OUString &rAdjustment);
-    void        connectFormattedFormatterAdjustment(const OString &id, const OUString &rAdjustment);
+    void        connectNumericFormatterAdjustment(const OUString &id, const OUString &rAdjustment);
+    void        connectFormattedFormatterAdjustment(const OUString &id, const OUString &rAdjustment);
 
     static int  getImageSize(const stringmap &rMap);
 
-    void        extractGroup(const OString &id, stringmap &rVec);
-    void        extractModel(const OString &id, stringmap &rVec);
-    void        extractBuffer(const OString &id, stringmap &rVec);
-    static bool extractAdjustmentToMap(const OString &id, stringmap &rVec, std::vector<WidgetAdjustmentMap>& rAdjustmentMap);
-    void        extractButtonImage(const OString &id, stringmap &rMap, bool bRadio);
-    void        extractMnemonicWidget(const OString &id, stringmap &rMap);
+    void        extractGroup(const OUString &id, stringmap &rVec);
+    void        extractModel(const OUString &id, stringmap &rVec);
+    void        extractBuffer(const OUString &id, stringmap &rVec);
+    static bool extractAdjustmentToMap(const OUString &id, stringmap &rVec, std::vector<WidgetAdjustmentMap>& rAdjustmentMap);
+    void        extractButtonImage(const OUString &id, stringmap &rMap, bool bRadio);
+    void        extractMnemonicWidget(const OUString &id, stringmap &rMap);
 
     // either pParent or pAtkProps must be set, pParent for a child of a widget, pAtkProps for
     // collecting the atk info for a GtkMenuItem
@@ -348,7 +348,7 @@ private:
     VclPtr<vcl::Window> handleObject(vcl::Window *pParent, stringmap *pAtkProps, xmlreader::XmlReader &reader);
     void        handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
     static std::vector<vcl::EnumContext::Context> handleStyle(xmlreader::XmlReader &reader, int &nPriority);
-    static OString getStyleClass(xmlreader::XmlReader &reader);
+    static OUString getStyleClass(xmlreader::XmlReader &reader);
     void        applyPackingProperty(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        collectProperty(xmlreader::XmlReader &reader, stringmap &rVec) const;
     static void collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
@@ -359,8 +359,8 @@ private:
     void        insertMenuObject(
                    Menu *pParent,
                    PopupMenu *pSubMenu,
-                   const OString &rClass,
-                   const OString &rID,
+                   const OUString &rClass,
+                   const OUString &rID,
                    stringmap &rProps,
                    stringmap &rAtkProps,
                    accelmap &rAccels);
@@ -368,10 +368,10 @@ private:
     void        handleMenuChild(Menu *pParent, xmlreader::XmlReader &reader);
     void        handleMenuObject(Menu *pParent, xmlreader::XmlReader &reader);
 
-    void        handleListStore(xmlreader::XmlReader &reader, const OString &rID, std::string_view rClass);
-    void        handleRow(xmlreader::XmlReader &reader, const OString &rID);
+    void        handleListStore(xmlreader::XmlReader &reader, const OUString &rID, std::u16string_view rClass);
+    void        handleRow(xmlreader::XmlReader &reader, const OUString &rID);
     void        handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &reader);
-    VclPtr<Menu> handleMenu(xmlreader::XmlReader &reader, const OString &rID, bool bMenuBar);
+    VclPtr<Menu> handleMenu(xmlreader::XmlReader &reader, const OUString &rID, bool bMenuBar);
     std::vector<ComboBoxTextItem> handleItems(xmlreader::XmlReader &reader) const;
 
     void        handleSizeGroup(xmlreader::XmlReader &reader);
@@ -388,9 +388,9 @@ private:
     static vcl::Window* prepareWidgetOwnScrolling(vcl::Window *pParent, WinBits &rWinStyle);
     void        cleanupWidgetOwnScrolling(vcl::Window *pScrollParent, vcl::Window *pWindow, stringmap &rMap);
 
-    void        set_response(std::string_view sID, short nResponse);
+    void        set_response(std::u16string_view sID, short nResponse);
 
-    OString         get_by_window(const vcl::Window *pWindow) const;
+    OUString        get_by_window(const vcl::Window *pWindow) const;
     void            delete_by_window(vcl::Window *pWindow);
 };
 
@@ -414,11 +414,11 @@ namespace BuilderUtils
     VCL_DLLPUBLIC void reorderWithinParent(vcl::Window &rWindow, sal_uInt16 nNewPosition);
 
     //Convert an accessibility role name to accessibility role number
-    VCL_DLLPUBLIC sal_Int16 getRoleFromName(const OString& roleName);
+    VCL_DLLPUBLIC sal_Int16 getRoleFromName(const OUString& roleName);
 }
 
 template <typename T>
-inline T* VclBuilder::get(VclPtr<T>& ret, const OString& sID)
+inline T* VclBuilder::get(VclPtr<T>& ret, const OUString& sID)
 {
     vcl::Window *w = get_by_name(sID);
     SAL_WARN_IF(!w, "vcl.layout", "widget \"" << sID << "\" not found in .ui");
@@ -432,7 +432,7 @@ inline T* VclBuilder::get(VclPtr<T>& ret, const OString& sID)
 
 //sID may not exist, but must be of type T if it does
 template <typename T>
-inline T* VclBuilder::get(const OString& sID)
+inline T* VclBuilder::get(const OUString& sID)
 {
     vcl::Window *w = get_by_name(sID);
     SAL_WARN_IF(w && !dynamic_cast<T*>(w),

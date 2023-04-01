@@ -791,7 +791,7 @@ IMPL_LINK(MacroChooser, ContextMenuHdl, const CommandEvent&, rCEvt, bool)
     xDropMenu->set_active("alphabetically", m_xMacroBox->get_sort_order());
     xDropMenu->set_active("properorder", !m_xMacroBox->get_sort_order());
 
-    OString sCommand(xPopup->popup_at_rect(m_xMacroBox.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
+    OUString sCommand(xPopup->popup_at_rect(m_xMacroBox.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
     if (sCommand == "alphabetically")
     {
         m_xMacroBox->make_sorted();

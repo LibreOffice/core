@@ -82,7 +82,7 @@ struct BasicStatus
 class DockingWindow : public ResizableDockingWindow
 {
 public:
-    DockingWindow(vcl::Window* pParent, const OUString& rUIXMLDescription, const OString& rID);
+    DockingWindow(vcl::Window* pParent, const OUString& rUIXMLDescription, const OUString& rID);
     DockingWindow(Layout* pParent);
     virtual ~DockingWindow() override;
     virtual void dispose() override;
@@ -237,7 +237,7 @@ public:
     void            SetName( const OUString& aName ) { m_aName = aName; }
 
     virtual void OnNewDocument ();
-    virtual OString GetHid () const = 0;
+    virtual OUString GetHid () const = 0;
     virtual ItemType GetType () const = 0;
     void InsertLibInfo () const;
     bool Is (ScriptDocument const&, std::u16string_view, std::u16string_view, ItemType, bool bFindSuspended);

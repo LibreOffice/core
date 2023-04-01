@@ -38,7 +38,7 @@ constexpr OUStringLiteral USERITEM_NAME = u"UserItem";
 class SfxModelessDialog_Impl : public SfxListener
 {
 public:
-    OString aWinState;
+    OUString aWinState;
     SfxChildWindow* pMgr;
     bool            bClosing;
     void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
@@ -74,7 +74,7 @@ void SfxModelessDialogController::Initialize(SfxChildWinInfo const *pInfo)
 
 SfxModelessDialogController::SfxModelessDialogController(SfxBindings* pBindinx,
     SfxChildWindow *pCW, weld::Window *pParent, const OUString& rUIXMLDescription,
-    const OString& rID)
+    const OUString& rID)
     : SfxDialogController(pParent, rUIXMLDescription, rID)
 {
     Init(pBindinx, pCW);
@@ -201,7 +201,7 @@ void SfxModelessDialogController::Close()
 }
 
 SfxDialogController::SfxDialogController(weld::Widget* pParent, const OUString& rUIFile,
-                                         const OString& rDialogId)
+                                         const OUString& rDialogId)
     : GenericDialogController(pParent, rUIFile, rDialogId,
                                     comphelper::LibreOfficeKit::isActive()
                                     && SfxViewShell::Current()
@@ -223,7 +223,7 @@ IMPL_STATIC_LINK_NOARG(SfxDialogController, InstallLOKNotifierHdl, void*, vcl::I
 }
 
 SfxSingleTabDialogController::SfxSingleTabDialogController(weld::Widget *pParent, const SfxItemSet* pSet,
-    const OUString& rUIXMLDescription, const OString& rID)
+    const OUString& rUIXMLDescription, const OUString& rID)
     : SfxOkDialogController(pParent, rUIXMLDescription, rID)
     , m_pInputSet(pSet)
     , m_xContainer(m_xDialog->weld_content_area())
@@ -250,7 +250,7 @@ void SfxSingleTabDialogController::SetTabPage(std::unique_ptr<SfxTabPage> xTabPa
         return;
 
     // First obtain the user data, only then Reset()
-    OUString sConfigId = OStringToOUString(m_xSfxPage->GetConfigId(), RTL_TEXTENCODING_UTF8);
+    OUString sConfigId = m_xSfxPage->GetConfigId();
     SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);
     Any aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
     OUString sUserData;
@@ -266,7 +266,7 @@ void SfxSingleTabDialogController::SetTabPage(std::unique_ptr<SfxTabPage> xTabPa
         m_xDialog->set_title(sTitle);
 
     // Dialog receives the HelpId of TabPage if there is any
-    OString sHelpId(m_xSfxPage->GetHelpId());
+    OUString sHelpId(m_xSfxPage->GetHelpId());
     if (!sHelpId.isEmpty())
         m_xDialog->set_help_id(sHelpId);
 }
@@ -309,8 +309,7 @@ IMPL_LINK_NOARG(SfxSingleTabDialogController, OKHdl_Impl, weld::Button&, void)
         m_xSfxPage->FillUserData();
         OUString sData(m_xSfxPage->GetUserData());
 
-        OUString sConfigId = OStringToOUString(m_xSfxPage->GetConfigId(),
-            RTL_TEXTENCODING_UTF8);
+        OUString sConfigId = m_xSfxPage->GetConfigId();
         SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);
         aPageOpt.SetUserItem( USERITEM_NAME, Any( sData ) );
         m_xDialog->response(RET_OK);

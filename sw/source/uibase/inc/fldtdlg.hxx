@@ -39,10 +39,10 @@ class SwFieldDlg final : public SfxTabDialogController
     bool                m_bClosing;
     std::unique_ptr<SfxItemSet> mxInputItemSet;
 
-    virtual SfxItemSet* CreateInputItemSet(const OString& rId) override;
-    virtual void        PageCreated(const OString& rId, SfxTabPage& rPage) override;
+    virtual SfxItemSet* CreateInputItemSet(const OUString& rId) override;
+    virtual void        PageCreated(const OUString& rId, SfxTabPage& rPage) override;
 
-    void                ReInitTabPage(std::string_view rPageId,
+    void                ReInitTabPage(std::u16string_view rPageId,
                                       bool bOnlyActivate = false);
 
 public:

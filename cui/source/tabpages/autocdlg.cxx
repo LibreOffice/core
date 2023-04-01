@@ -167,7 +167,7 @@ IMPL_LINK_NOARG(OfaAutoCorrDlg, SelectLanguageHdl, weld::ComboBox&, void)
     if(eNewLang == eLastDialogLanguage)
         return;
 
-    OString sPageId = GetCurPageId();
+    OUString sPageId = GetCurPageId();
     if (sPageId == "replace")
     {
         OfaAutocorrReplacePage* pPage = static_cast<OfaAutocorrReplacePage*>(GetTabPage(sPageId));

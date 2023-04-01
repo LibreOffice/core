@@ -343,7 +343,7 @@ namespace svt
         CallModifyHdls();
     }
 
-    ControlBase::ControlBase(BrowserDataWin* pParent, const OUString& rUIXMLDescription, const OString& rID)
+    ControlBase::ControlBase(BrowserDataWin* pParent, const OUString& rUIXMLDescription, const OUString& rID)
         : InterimItemWindow(pParent, rUIXMLDescription, rID)
     {
     }

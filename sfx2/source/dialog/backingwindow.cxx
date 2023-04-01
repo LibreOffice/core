@@ -210,7 +210,7 @@ BackingWindow::BackingWindow(vcl::Window* i_pParent)
 IMPL_LINK(BackingWindow, ClickHelpHdl, weld::Button&, rButton, void)
 {
     if (Help* pHelp = Application::GetHelp())
-        pHelp->Start(OUString::fromUtf8(m_xContainer->get_help_id()), &rButton);
+        pHelp->Start(m_xContainer->get_help_id(), &rButton);
 }
 
 BackingWindow::~BackingWindow()
@@ -643,7 +643,7 @@ IMPL_LINK( BackingWindow, ClickHdl, weld::Button&, rButton, void )
     }
 }
 
-IMPL_LINK (BackingWindow, MenuSelectHdl, const OString&, rId, void)
+IMPL_LINK (BackingWindow, MenuSelectHdl, const OUString&, rId, void)
 {
     if (rId == "clear_all")
     {

@@ -182,7 +182,7 @@ class GalleryThemeProperties : public SfxTabDialogController
 {
     ExchangeData*   pData;
 
-    virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
+    virtual void PageCreated(const OUString& rId, SfxTabPage &rPage) override;
 
 public:
     GalleryThemeProperties(weld::Widget* pParent, ExchangeData* pData, SfxItemSet const * pItemSet);

@@ -170,7 +170,7 @@ public:
     using Window::GetQuickHelpText;
     const OUString&     GetQuickHelpText( sal_uInt16 nItemId ) const;
 
-    void                SetHelpId( sal_uInt16 nItemId, const OString& rHelpId );
+    void                SetHelpId( sal_uInt16 nItemId, const OUString& rHelpId );
 
     void                StartProgressMode( const OUString& rText );
     void                SetProgressValue( sal_uInt16 nPercent );

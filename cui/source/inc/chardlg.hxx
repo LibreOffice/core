@@ -39,7 +39,7 @@ protected:
 
     bool                m_bPreviewBackgroundToCharacter;
 
-    SvxCharBasePage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rAttrSet);
+    SvxCharBasePage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OUString& rID, const SfxItemSet& rAttrSet);
 
     void SetPrevFontWidthScale( const SfxItemSet& rSet );
     void SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );

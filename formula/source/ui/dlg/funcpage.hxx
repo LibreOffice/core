@@ -46,7 +46,7 @@ private:
     const IFunctionManager*  m_pFunctionManager;
 
     ::std::vector< TFunctionDesc >  aLRUList;
-    OString    m_aHelpId;
+    OUString    m_aHelpId;
 
     void impl_addFunctions(const IFunctionCategory* _pCategory);
 

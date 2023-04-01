@@ -76,7 +76,7 @@ public:
     OUString            get_active_text() const { return m_xWidget->get_active_text(); }
     void                grab_focus() { m_xWidget->grab_focus(); }
     void                set_sensitive(bool bSensitive) { m_xWidget->set_sensitive(bSensitive); }
-    void                set_help_id(const OString& rHelpId) { m_xWidget->set_help_id(rHelpId); }
+    void                set_help_id(const OUString& rHelpId) { m_xWidget->set_help_id(rHelpId); }
     void                select_entry_region(int nStartPos, int nEndPos) { m_xWidget->select_entry_region(nStartPos, nEndPos); }
     Size                get_preferred_size() const { return m_xWidget->get_preferred_size(); }
 

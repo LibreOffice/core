@@ -71,7 +71,7 @@ MacroSecurity::MacroSecurity(weld::Window* pParent,
     m_xOkBtn->connect_clicked(LINK(this, MacroSecurity, OkBtnHdl));
 }
 
-IMPL_LINK(MacroSecurity, ActivatePageHdl, const OString&, rPage, void)
+IMPL_LINK(MacroSecurity, ActivatePageHdl, const OUString&, rPage, void)
 {
     if (rPage == "SecurityLevelPage")
         m_xLevelTP->ActivatePage();
@@ -80,7 +80,7 @@ IMPL_LINK(MacroSecurity, ActivatePageHdl, const OString&, rPage, void)
 }
 
 MacroSecurityTP::MacroSecurityTP(weld::Container* pParent, const OUString& rUIXMLDescription,
-                                 const OString& rID, MacroSecurity* pDlg)
+                                 const OUString& rID, MacroSecurity* pDlg)
     : m_xBuilder(Application::CreateBuilder(pParent, rUIXMLDescription))
     , m_xContainer(m_xBuilder->weld_container(rID))
     , m_pDlg(pDlg)

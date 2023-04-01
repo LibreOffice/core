@@ -85,13 +85,13 @@ void LoginDialog::SetRequest()
     OUString aRequest;
     if (m_xAccountFT->get_visible() && !m_realm.isEmpty())
     {
-        std::unique_ptr<weld::Label> xText(m_xBuilder->weld_label(oldPwd ? "wrongloginrealm" : "loginrealm"));
+        std::unique_ptr<weld::Label> xText(m_xBuilder->weld_label(oldPwd ? OUString("wrongloginrealm") : OUString("loginrealm")));
         aRequest = xText->get_label();
         aRequest = aRequest.replaceAll("%2", m_realm);
     }
     else
     {
-        std::unique_ptr<weld::Label> xText(m_xBuilder->weld_label(oldPwd ? "wrongrequestinfo" : "requestinfo"));
+        std::unique_ptr<weld::Label> xText(m_xBuilder->weld_label(oldPwd ? OUString("wrongrequestinfo") : OUString("requestinfo")));
         aRequest = xText->get_label();
     }
     aRequest = aRequest.replaceAll("%1", m_server);

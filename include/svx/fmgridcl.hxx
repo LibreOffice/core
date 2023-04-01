@@ -66,7 +66,7 @@ protected:
                                                 weld::Menu& rShowMenu);
     /** After executing the context menu for a column this method is called.
     */
-    virtual void    PostExecuteColumnContextMenu(sal_uInt16 nColId, const weld::Menu& rMenu, const OString& rExecutionResult);
+    virtual void    PostExecuteColumnContextMenu(sal_uInt16 nColId, const weld::Menu& rMenu, const OUString& rExecutionResult);
 
     // DropTargetHelper
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;

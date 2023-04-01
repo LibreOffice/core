@@ -193,8 +193,8 @@ public:
     void grab_focus() { mxTreeView->grab_focus(); }
     bool has_focus() const { return mxTreeView->has_focus(); }
 
-    void set_help_id(const OString& rHelpId) { mxTreeView->set_help_id(rHelpId); }
-    OString get_help_id() const { return mxTreeView->get_help_id(); }
+    void set_help_id(const OUString& rHelpId) { mxTreeView->set_help_id(rHelpId); }
+    OUString get_help_id() const { return mxTreeView->get_help_id(); }
 
     bool IsEditingActive() const { return mbEditing; }
 
@@ -229,7 +229,7 @@ public:
     DECL_LINK(EditedEntryHdl, const IterString&, bool);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
-    void            ExecuteContextMenuAction(std::string_view rSelectedPopentry);
+    void            ExecuteContextMenuAction(std::u16string_view rSelectedPopentry);
 };
 
 }
@@ -570,18 +570,18 @@ IMPL_LINK(ViewTabListBox_Impl, CommandHdl, const CommandEvent&, rCEvt, bool)
         auto xContextMenu = xBuilder->weld_menu("menu");
         xContextMenu->set_visible("delete", bEnableDelete);
         xContextMenu->set_visible("rename", bEnableRename);
-        OString sCommand(xContextMenu->popup_at_rect(mxTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
+        OUString sCommand(xContextMenu->popup_at_rect(mxTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
         ExecuteContextMenuAction(sCommand);
     }
 
     return true;
 }
 
-void ViewTabListBox_Impl::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry)
+void ViewTabListBox_Impl::ExecuteContextMenuAction(std::u16string_view rSelectedPopupEntry)
 {
-    if (rSelectedPopupEntry == "delete")
+    if (rSelectedPopupEntry == u"delete")
         DeleteEntries();
-    else if (rSelectedPopupEntry == "rename")
+    else if (rSelectedPopupEntry == u"rename")
     {
         std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->make_iterator();
         if (mxTreeView->get_selected(xEntry.get()))
@@ -914,12 +914,12 @@ bool SvtFileView::GetParentURL( OUString& rParentURL ) const
     return bRet;
 }
 
-OString SvtFileView::get_help_id() const
+OUString SvtFileView::get_help_id() const
 {
     return mpImpl->mxView->get_help_id();
 }
 
-void SvtFileView::set_help_id(const OString& rHelpId)
+void SvtFileView::set_help_id(const OUString& rHelpId)
 {
     mpImpl->mxView->set_help_id(rHelpId);
 }

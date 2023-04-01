@@ -47,7 +47,7 @@ SwFootNoteOptionDlg::SwFootNoteOptionDlg(weld::Window *pParent, SwWrtShell &rS)
     AddTabPage("endnotes",  SwEndNoteOptionPage::Create, nullptr);
 }
 
-void SwFootNoteOptionDlg::PageCreated(const OString& /*rId*/, SfxTabPage &rPage)
+void SwFootNoteOptionDlg::PageCreated(const OUString& /*rId*/, SfxTabPage &rPage)
 {
     static_cast<SwEndNoteOptionPage&>(rPage).SetShell(m_rSh);
 }
@@ -55,10 +55,10 @@ void SwFootNoteOptionDlg::PageCreated(const OString& /*rId*/, SfxTabPage &rPage)
 IMPL_LINK(SwFootNoteOptionDlg, OkHdl, weld::Button&, rBtn, void)
 {
     SfxItemSetFixed<1, 1> aDummySet(m_rSh.GetAttrPool());
-    SfxTabPage *pPage = GetTabPage("footnotes");
+    SfxTabPage *pPage = GetTabPage(u"footnotes");
     if ( pPage )
         pPage->FillItemSet( &aDummySet );
-    pPage = GetTabPage("endnotes");
+    pPage = GetTabPage(u"endnotes");
     if ( pPage )
         pPage->FillItemSet( &aDummySet );
     SfxTabDialogController::OkHdl(rBtn);
@@ -68,7 +68,7 @@ SwEndNoteOptionPage::SwEndNoteOptionPage(weld::Container* pPage, weld::DialogCon
     const SfxItemSet &rSet)
     : SfxTabPage(pPage, pController,
         bEN ? OUString("modules/swriter/ui/endnotepage.ui") : OUString("modules/swriter/ui/footnotepage.ui"),
-        bEN ? OString("EndnotePage") : OString("FootnotePage"),
+        bEN ? OUString("EndnotePage") : OUString("FootnotePage"),
         &rSet)
     , m_pSh(nullptr)
     , m_bPosDoc(false)

@@ -54,7 +54,7 @@ class SvxLineTabDialog final : public SfxTabDialogController
     sal_Int32           nPosDashLb;
     sal_Int32           nPosLineEndLb;
 
-    virtual void        PageCreated(const OString& rId, SfxTabPage &rPage) override;
+    virtual void        PageCreated(const OUString& rId, SfxTabPage &rPage) override;
 
     virtual short       Ok() override;
     DECL_LINK(CancelHdlImpl, weld::Button&, void);
@@ -170,7 +170,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xSymbolRatioCB;
 
     // handler for gallery popup menu button + size
-    DECL_LINK(GraphicHdl_Impl, const OString&, void);
+    DECL_LINK(GraphicHdl_Impl, const OUString&, void);
     DECL_LINK(SizeHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(MenuCreateHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(RatioHdl_Impl, weld::Toggleable&, void);

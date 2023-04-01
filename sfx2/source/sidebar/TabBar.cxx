@@ -267,7 +267,7 @@ TabBar::Item::~Item()
     mrTabBar.GetContainer()->move(mxButton.get(), nullptr);
 }
 
-IMPL_LINK_NOARG(TabBar::Item, HandleClick, const OString&, void)
+IMPL_LINK_NOARG(TabBar::Item, HandleClick, const OUString&, void)
 {
     // tdf#143146 copy the functor and arg before calling
     // GrabFocusToDocument which may destroy this object
@@ -363,13 +363,13 @@ IMPL_LINK_NOARG(TabBar, OnToolboxClicked, weld::Toggleable&, void)
 
     for (int i = mxMainMenu->n_children() - 1; i >= 0; --i)
     {
-        OString sIdent = mxMainMenu->get_id(i);
+        OUString sIdent = mxMainMenu->get_id(i);
         if (sIdent.startsWith("select"))
             mxMainMenu->remove(sIdent);
     }
     for (int i = mxSubMenu->n_children() - 1; i >= 0; --i)
     {
-        OString sIdent = mxSubMenu->get_id(i);
+        OUString sIdent = mxSubMenu->get_id(i);
         if (sIdent.indexOf("customize") != -1)
             mxSubMenu->remove(sIdent);
     }

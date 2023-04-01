@@ -58,16 +58,16 @@ constexpr OUStringLiteral TM_SETTING_LASTFOLDER = u"LastFolder";
 constexpr OUStringLiteral TM_SETTING_LASTAPPLICATION = u"LastApplication";
 constexpr OUStringLiteral TM_SETTING_VIEWMODE = u"ViewMode";
 
-#define MNI_ACTION_NEW_FOLDER "new"
-#define MNI_ACTION_RENAME_FOLDER "rename"
-#define MNI_ACTION_DELETE_FOLDER "delete"
-#define MNI_ACTION_DEFAULT   "default"
-#define MNI_ACTION_DEFAULT_WRITER   "default_writer"
-#define MNI_ACTION_DEFAULT_CALC   "default_calc"
-#define MNI_ACTION_DEFAULT_IMPRESS   "default_impress"
-#define MNI_ACTION_DEFAULT_DRAW   "default_draw"
-#define MNI_ACTION_IMPORT   "import_template"
-#define MNI_ACTION_EXTENSIONS   "extensions"
+constexpr OUStringLiteral MNI_ACTION_NEW_FOLDER = u"new";
+constexpr OUStringLiteral MNI_ACTION_RENAME_FOLDER = u"rename";
+constexpr OUStringLiteral MNI_ACTION_DELETE_FOLDER = u"delete";
+constexpr OUStringLiteral MNI_ACTION_DEFAULT   = u"default";
+constexpr OUStringLiteral MNI_ACTION_DEFAULT_WRITER   = u"default_writer";
+constexpr OUStringLiteral MNI_ACTION_DEFAULT_CALC   = u"default_calc";
+constexpr OUStringLiteral MNI_ACTION_DEFAULT_IMPRESS   = u"default_impress";
+constexpr OUStringLiteral MNI_ACTION_DEFAULT_DRAW   = u"default_draw";
+constexpr OUStringLiteral MNI_ACTION_IMPORT   = u"import_template";
+constexpr OUStringLiteral MNI_ACTION_EXTENSIONS = u"extensions";
 #define MNI_ALL_APPLICATIONS 0
 #define MNI_WRITER           1
 #define MNI_CALC             2
@@ -508,7 +508,7 @@ IMPL_LINK(SfxTemplateManagerDlg, TVItemStateHdl, const ThumbnailViewItem*, pItem
         OnTemplateState(pItem);
 }
 
-IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, const OString&, rIdent, void)
+IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, const OUString&, rIdent, void)
 {
     if (rIdent == MNI_ACTION_NEW_FOLDER)
         OnCategoryNew();
@@ -532,7 +532,7 @@ IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, const OString&, rIdent, void)
         ExtensionsActionHdl();
 }
 
-void SfxTemplateManagerDlg::DefaultTemplateMenuSelectHdl(std::string_view rIdent)
+void SfxTemplateManagerDlg::DefaultTemplateMenuSelectHdl(std::u16string_view rIdent)
 {
     SvtModuleOptions aModOpt;
     OUString aFactoryURL;

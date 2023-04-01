@@ -312,7 +312,7 @@ OUString OptimizerDialog::getStateDisplayName(vcl::WizardTypes::WizardState nSta
 
 std::unique_ptr<BuilderPage> OptimizerDialog::createPage(vcl::WizardTypes::WizardState nState)
 {
-    OString sIdent(OString::number(nState));
+    OUString sIdent(OUString::number(nState));
     weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
 
     std::unique_ptr<vcl::OWizardPage> xRet;

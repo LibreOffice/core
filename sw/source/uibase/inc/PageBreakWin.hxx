@@ -50,7 +50,7 @@ public:
     virtual bool Contains(const Point &rDocPt) const override;
     virtual void SetReadonly(bool bReadonly) override;
 
-    void execute(std::string_view rIdent);
+    void execute(std::u16string_view rIdent);
 
     virtual FactoryFunction GetUITestFactory() const override;
 
@@ -84,7 +84,7 @@ private:
     DECL_LINK( FadeHandler, Timer *, void );
     /// Hide the button when the menu is toggled closed, e.g by clicking outside
     DECL_LINK(ToggleHdl, weld::Toggleable&, void);
-    DECL_LINK(SelectHdl, const OString&, void);
+    DECL_LINK(SelectHdl, const OUString&, void);
     void PaintButton();
 };
 

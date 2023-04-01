@@ -84,7 +84,7 @@ namespace pcr
 
         const OUString&     GetEntryName() const { return m_sEntryName; }
 
-        void                SetComponentHelpIds(const OString& rHelpId);
+        void                SetComponentHelpIds(const OUString& rHelpId);
 
         void                SetTitle(const OUString& rString );
         void                FullFillTitleString();

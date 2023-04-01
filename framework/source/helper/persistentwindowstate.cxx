@@ -216,9 +216,7 @@ OUString PersistentWindowState::implst_getWindowStateFromWindow(const css::uno::
         if ( pWindow && pWindow->IsSystemWindow() )
         {
             vcl::WindowDataMask const nMask = vcl::WindowDataMask::All & ~vcl::WindowDataMask::Minimized;
-            sWindowState = OStringToOUString(
-                            static_cast<SystemWindow*>(pWindow.get())->GetWindowState(nMask),
-                            RTL_TEXTENCODING_UTF8);
+            sWindowState = static_cast<SystemWindow*>(pWindow.get())->GetWindowState(nMask);
         }
         // <- SOLAR SAFE ------------------------
     }
@@ -256,9 +254,9 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
     if (pWorkWindow->IsMinimized())
         return;
 
-    OUString sOldWindowState = OStringToOUString( pSystemWindow->GetWindowState(), RTL_TEXTENCODING_ASCII_US );
+    OUString sOldWindowState = pSystemWindow->GetWindowState();
     if ( sOldWindowState != sWindowState )
-        pSystemWindow->SetWindowState(OUStringToOString(sWindowState,RTL_TEXTENCODING_UTF8));
+        pSystemWindow->SetWindowState(sWindowState);
     // <- SOLAR SAFE ------------------------
 }
 

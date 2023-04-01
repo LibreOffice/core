@@ -28,7 +28,7 @@ class VCL_DLLPUBLIC NotebookBar final : public Control, public VclBuilderContain
 {
 friend class NotebookBarContextChangeEventListener;
 public:
-    NotebookBar(Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
+    NotebookBar(Window* pParent, const OUString& rID, const OUString& rUIXMLDescription,
                 const css::uno::Reference<css::frame::XFrame>& rFrame,
                 const NotebookBarAddonsItem& aNotebookBarAddonsItem);
     virtual ~NotebookBar() override;

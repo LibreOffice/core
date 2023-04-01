@@ -160,7 +160,7 @@ IMPL_LINK_NOARG(SvxLineTabDialog, CancelHdlImpl, weld::Button&, void)
     m_xDialog->response(RET_CANCEL);
 }
 
-void SvxLineTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
+void SvxLineTabDialog::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {
     if (rId == "RID_SVXPAGE_LINE")
     {

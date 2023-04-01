@@ -25,7 +25,7 @@ ScStringInputDlg::ScStringInputDlg(weld::Window* pParent,
                                    const OUString& rTitle,
                                    const OUString& rEditTitle,
                                    const OUString& rDefault,
-                                   const OString& rHelpId, const OString& rEditHelpId)
+                                   const OUString& rHelpId, const OUString& rEditHelpId)
     : GenericDialogController(pParent, "modules/scalc/ui/inputstringdialog.ui",
             "InputStringDialog")
     , m_xLabel(m_xBuilder->weld_label("description_label"))

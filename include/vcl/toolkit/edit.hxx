@@ -233,7 +233,7 @@ public:
     virtual OUString GetSurroundingText() const override;
     virtual Selection GetSurroundingTextSelection() const override;
     virtual bool DeleteSurroundingText(const Selection& rSelection) override;
-    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
+    virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
 
     void SetTextFilter(TextFilter* pFilter) { mpFilterText = pFilter; }
 

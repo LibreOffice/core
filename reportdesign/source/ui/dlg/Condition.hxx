@@ -103,7 +103,7 @@ namespace rptui
         void SetBackgroundDropdownClick();
         void SetForegroundDropdownClick();
 
-        DECL_LINK( OnFormatAction, const OString&, void );
+        DECL_LINK( OnFormatAction, const OUString&, void );
         DECL_LINK( OnConditionAction, weld::Button&, void );
 
     public:
@@ -141,7 +141,7 @@ namespace rptui
 
         ::rptui::OReportController& getController() const { return m_rController; }
 
-        static sal_uInt16 mapToolbarItemToSlotId(std::string_view rItemId);
+        static sal_uInt16 mapToolbarItemToSlotId(std::u16string_view rItemId);
 
         css::uno::Reference<css::awt::XWindow> GetXWindow() const { return m_pDialog->GetXWindow(); }
 

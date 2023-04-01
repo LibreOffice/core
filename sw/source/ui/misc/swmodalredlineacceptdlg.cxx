@@ -32,7 +32,7 @@ SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(weld::Window *pParent)
 
     m_xImplDlg.reset(new SwRedlineAcceptDlg(m_xDialog, m_xBuilder.get(), m_xContentArea.get(), true));
 
-    SvtViewOptions aDlgOpt(EViewType::Dialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+    SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
     if (aDlgOpt.Exists())
     {
         css::uno::Any aUserItem = aDlgOpt.GetUserItem("UserItem");
@@ -49,7 +49,7 @@ SwModalRedlineAcceptDlg::~SwModalRedlineAcceptDlg()
 
     OUString sExtraData;
     m_xImplDlg->FillInfo(sExtraData);
-    SvtViewOptions aDlgOpt(EViewType::Dialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+    SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
     aDlgOpt.SetUserItem("UserItem", css::uno::Any(sExtraData));
 
     m_xDialog->set_modal(false);

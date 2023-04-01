@@ -1424,7 +1424,7 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                     // All actions which change the number of rows must be run asynchronously
                     // otherwise there may be problems between the Context menu and the Browser
                     m_nDataPos = GetCurRow();
-                    OString sIdent = xContextMenu->popup_at_rect(pPopupParent, aRect);
+                    OUString sIdent = xContextMenu->popup_at_rect(pPopupParent, aRect);
                     if (sIdent == "cut")
                         cut();
                     else if (sIdent == "copy")

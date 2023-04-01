@@ -1045,7 +1045,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 }
 
                 xHelper->GUIStoreModel( GetModel(),
-                                       OUString::createFromAscii( pSlot->GetUnoName() ),
+                                       pSlot->GetUnoName(),
                                        aDispatchArgs,
                                        bPreselectPassword,
                                        GetDocumentSignatureState(),

@@ -150,7 +150,7 @@ IMPL_LINK_NOARG(AreaTransparencyGradientPopup, ModifiedTrgrHdl_Impl, weld::Metri
     ExecuteValueModify( nStartCol, nEndCol );
 }
 
-IMPL_LINK_NOARG(AreaTransparencyGradientPopup, Left_Click45_Impl, const OString&, void)
+IMPL_LINK_NOARG(AreaTransparencyGradientPopup, Left_Click45_Impl, const OUString&, void)
 {
     sal_uInt8 nStartCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(mxMtrTrgrStartValue->get_value(FieldUnit::PERCENT)) * 255) / 100);
     sal_uInt8 nEndCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(mxMtrTrgrEndValue->get_value(FieldUnit::PERCENT)) * 255) / 100);
@@ -162,7 +162,7 @@ IMPL_LINK_NOARG(AreaTransparencyGradientPopup, Left_Click45_Impl, const OString&
     ExecuteValueModify(nStartCol, nEndCol);
 }
 
-IMPL_LINK_NOARG(AreaTransparencyGradientPopup, Right_Click45_Impl, const OString&, void)
+IMPL_LINK_NOARG(AreaTransparencyGradientPopup, Right_Click45_Impl, const OUString&, void)
 {
     sal_uInt8 nStartCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(mxMtrTrgrStartValue->get_value(FieldUnit::PERCENT)) * 255) / 100);
     sal_uInt8 nEndCol = static_cast<sal_uInt8>((static_cast<sal_uInt16>(mxMtrTrgrEndValue->get_value(FieldUnit::PERCENT)) * 255) / 100);

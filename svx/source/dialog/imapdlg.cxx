@@ -148,7 +148,7 @@ SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, weld::Windo
     m_xCbbTarget->connect_focus_out( LINK( this, SvxIMapDlg, URLLoseFocusHdl ) );
 
     m_xTbxIMapDlg1->connect_clicked( LINK( this, SvxIMapDlg, TbxClickHdl ) );
-    OString sSelect("TBI_SELECT");
+    OUString sSelect("TBI_SELECT");
     m_xTbxIMapDlg1->set_item_active(sSelect, true);
     TbxClickHdl(sSelect);
 
@@ -267,7 +267,7 @@ void SvxIMapDlg::UpdateLink( const Graphic& rGraphic, const ImageMap* pImageMap,
 
 // Click-handler for ToolBox
 
-IMPL_LINK(SvxIMapDlg, TbxClickHdl, const OString&, rNewItemId, void)
+IMPL_LINK(SvxIMapDlg, TbxClickHdl, const OUString&, rNewItemId, void)
 {
     if (rNewItemId == "TBI_APPLY")
     {
@@ -466,28 +466,28 @@ bool SvxIMapDlg::DoSave()
     return bRet;
 }
 
-void SvxIMapDlg::SetActiveTool(std::string_view rId)
+void SvxIMapDlg::SetActiveTool(std::u16string_view rId)
 {
-    m_xTbxIMapDlg1->set_item_active("TBI_SELECT", rId == "TBI_SELECT");
-    m_xTbxIMapDlg1->set_item_active("TBI_RECT", rId == "TBI_RECT");
-    m_xTbxIMapDlg1->set_item_active("TBI_CIRCLE", rId == "TBI_CIRCLE");
-    m_xTbxIMapDlg1->set_item_active("TBI_POLY", rId == "TBI_POLY");
-    m_xTbxIMapDlg1->set_item_active("TBI_FREEPOLY", rId == "TBI_FREEPOLY");
+    m_xTbxIMapDlg1->set_item_active("TBI_SELECT", rId == u"TBI_SELECT");
+    m_xTbxIMapDlg1->set_item_active("TBI_RECT", rId == u"TBI_RECT");
+    m_xTbxIMapDlg1->set_item_active("TBI_CIRCLE", rId == u"TBI_CIRCLE");
+    m_xTbxIMapDlg1->set_item_active("TBI_POLY", rId == u"TBI_POLY");
+    m_xTbxIMapDlg1->set_item_active("TBI_FREEPOLY", rId == u"TBI_FREEPOLY");
 
-    m_xTbxIMapDlg1->set_item_active("TBI_POLYINSERT", rId == "TBI_POLYINSERT");
+    m_xTbxIMapDlg1->set_item_active("TBI_POLYINSERT", rId == u"TBI_POLYINSERT");
     m_xTbxIMapDlg1->set_item_active("TBI_POLYDELETE", false);
 
-    bool bMove = rId == "TBI_POLYMOVE"
-                || ( rId == "TBI_POLYEDIT"
+    bool bMove = rId == u"TBI_POLYMOVE"
+                || ( rId == u"TBI_POLYEDIT"
                 && !m_xTbxIMapDlg1->get_item_active("TBI_POLYINSERT")
                 && !m_xTbxIMapDlg1->get_item_active("TBI_POLYDELETE") );
 
     m_xTbxIMapDlg1->set_item_active("TBI_POLYMOVE", bMove );
 
-    bool bEditMode = ( rId == "TBI_POLYEDIT" )
-                    || ( rId == "TBI_POLYMOVE")
-                    || ( rId == "TBI_POLYINSERT")
-                    || ( rId == "TBI_POLYDELETE" );
+    bool bEditMode = ( rId == u"TBI_POLYEDIT" )
+                    || ( rId == u"TBI_POLYMOVE")
+                    || ( rId == u"TBI_POLYINSERT")
+                    || ( rId == u"TBI_POLYDELETE" );
 
     m_xTbxIMapDlg1->set_item_active("TBI_POLYEDIT", bEditMode);
 }

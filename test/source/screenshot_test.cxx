@@ -24,15 +24,15 @@
 
 
 namespace {
-    void splitHelpId( const OString& rHelpId, OUString& rDirname, OUString &rBasename )
+    void splitHelpId( const OUString& rHelpId, OUString& rDirname, OUString &rBasename )
     {
         sal_Int32 nIndex = rHelpId.lastIndexOf( '/' );
 
         if( nIndex > 0 )
-            rDirname = OStringToOUString( rHelpId.subView( 0, nIndex ), RTL_TEXTENCODING_UTF8 );
+            rDirname = rHelpId.subView( 0, nIndex );
 
         if( rHelpId.getLength() > nIndex+1 )
-            rBasename= OStringToOUString( rHelpId.subView( nIndex+1 ), RTL_TEXTENCODING_UTF8 );
+            rBasename = rHelpId.subView( nIndex+1 );
     }
 }
 
@@ -71,7 +71,7 @@ void ScreenshotTest::setUp()
     }
 }
 
-void ScreenshotTest::implSaveScreenshot(const BitmapEx& rScreenshot, const OString& rScreenshotId)
+void ScreenshotTest::implSaveScreenshot(const BitmapEx& rScreenshot, const OUString& rScreenshotId)
 {
     OUString aDirname, aBasename;
     splitHelpId(rScreenshotId, aDirname, aBasename);
@@ -102,7 +102,7 @@ void ScreenshotTest::saveScreenshot(VclAbstractDialog const & rDialog)
 
     if (!aScreenshot.IsEmpty())
     {
-        const OString aScreenshotId = rDialog.GetScreenshotId();
+        const OUString aScreenshotId = rDialog.GetScreenshotId();
 
         if (!aScreenshotId.isEmpty())
         {
@@ -118,7 +118,7 @@ void ScreenshotTest::saveScreenshot(weld::Window& rDialog)
 
     if (!aScreenshot.IsEmpty())
     {
-        const OString aScreenshotId = rDialog.get_help_id();
+        const OUString aScreenshotId = rDialog.get_help_id();
         assert(!aScreenshotId.isEmpty());
         implSaveScreenshot(aScreenshot, aScreenshotId);
     }
@@ -138,7 +138,7 @@ VclPtr<VclAbstractDialog> ScreenshotTest::createDialogByName(const OString& rNam
 
 void ScreenshotTest::dumpDialogToPath(VclAbstractDialog& rDialog)
 {
-    const std::vector<OString> aPageDescriptions(rDialog.getAllPageUIXMLDescriptions());
+    const std::vector<OUString> aPageDescriptions(rDialog.getAllPageUIXMLDescriptions());
 
     if (!aPageDescriptions.empty())
     {
@@ -171,14 +171,14 @@ void ScreenshotTest::dumpDialogToPath(weld::Builder& rBuilder)
     {
         for (int i = 0; i < nPages; ++i)
         {
-            OString sIdent(xTabCtrl->get_page_ident(i));
+            OUString sIdent(xTabCtrl->get_page_ident(i));
             xTabCtrl->set_current_page(sIdent);
             if (xTabCtrl->get_current_page_ident() == sIdent)
             {
-                OString sOrigHelpId(xDialog->get_help_id());
+                OUString sOrigHelpId(xDialog->get_help_id());
                 // skip empty pages
                 weld::Container* pPage = xTabCtrl->get_page(sIdent);
-                OString sBuildableName(pPage->get_buildable_name());
+                OUString sBuildableName(pPage->get_buildable_name());
                 if (!sBuildableName.isEmpty() && !sBuildableName.startsWith("__"))
                     xDialog->set_help_id(pPage->get_help_id());
                 saveScreenshot(*xDialog);

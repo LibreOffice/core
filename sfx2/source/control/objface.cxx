@@ -209,8 +209,7 @@ const SfxSlot* SfxInterface::GetSlot( const OUString& rCommand ) const
 
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
-        if ( (pSlots+n)->pUnoName &&
-             aCommand.compareToIgnoreAsciiCaseAscii( (pSlots+n)->GetUnoName() ) == 0 )
+        if ( aCommand.equalsIgnoreAsciiCase( (pSlots+n)->GetUnoName() ) )
             return pSlots+n;
     }
 

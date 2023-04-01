@@ -386,7 +386,7 @@ IMPL_LINK_NOARG(AnimationWindow, ClickRbtHdl, weld::Toggleable&, void)
 IMPL_LINK(AnimationWindow, ClickHelpHdl, weld::Button&, rButton, void)
 {
     if (Help* pHelp = Application::GetHelp())
-        pHelp->Start(OUString::fromUtf8(m_xContainer->get_help_id()), &rButton);
+        pHelp->Start(m_xContainer->get_help_id(), &rButton);
 }
 
 IMPL_LINK( AnimationWindow, ClickGetObjectHdl, weld::Button&, rBtn, void )

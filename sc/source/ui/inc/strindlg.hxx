@@ -32,7 +32,7 @@ public:
         const OUString& rTitle,
         const OUString& rEditTitle,
         const OUString& rDefault,
-        const OString& sHelpId, const OString& sEditHelpId);
+        const OUString& sHelpId, const OUString& sEditHelpId);
 
     OUString GetInputString() const
     {

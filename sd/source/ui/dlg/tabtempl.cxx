@@ -75,7 +75,7 @@ SdTabTemplateDlg::SdTabTemplateDlg(weld::Window* pParent,
         RemoveTabPage("asiantypo");
 }
 
-void SdTabTemplateDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
+void SdTabTemplateDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     if (rId == "line")

@@ -33,7 +33,7 @@ class HeaderFooterTabPage;
 class HeaderFooterDialog : public weld::GenericDialogController
 {
 private:
-    DECL_LINK( ActivatePageHdl, const OString&, void );
+    DECL_LINK( ActivatePageHdl, const OUString&, void );
     DECL_LINK( ClickApplyToAllHdl, weld::Button&, void );
     DECL_LINK( ClickApplyHdl, weld::Button&, void );
     DECL_LINK( ClickCancelHdl, weld::Button&, void );

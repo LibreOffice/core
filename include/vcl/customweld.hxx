@@ -90,7 +90,7 @@ public:
     bool IsRTLEnabled() const { return m_pDrawingArea->get_direction(); }
     void ReleaseMouse() { m_pDrawingArea->grab_remove(); }
     void SetPointer(PointerStyle ePointerStyle) { m_pDrawingArea->set_cursor(ePointerStyle); }
-    void SetHelpId(const OString& rHelpId) { m_pDrawingArea->set_help_id(rHelpId); }
+    void SetHelpId(const OUString& rHelpId) { m_pDrawingArea->set_help_id(rHelpId); }
     void SetAccessibleName(const OUString& rName) { m_pDrawingArea->set_accessible_name(rName); }
     void SetInputContext(const InputContext& rInputContext)
     {
@@ -162,7 +162,7 @@ private:
     DECL_DLLPRIVATE_LINK(DoDeleteSurrounding, const Selection&, bool);
 
 public:
-    CustomWeld(weld::Builder& rBuilder, const OString& rDrawingId,
+    CustomWeld(weld::Builder& rBuilder, const OUString& rDrawingId,
                CustomWidgetController& rWidgetController);
     void queue_draw() { m_xDrawingArea->queue_draw(); }
     void queue_draw_area(int x, int y, int width, int height)
@@ -183,7 +183,7 @@ public:
     void set_visible(bool bVisible) { m_xDrawingArea->set_visible(bVisible); }
     void set_grid_left_attach(int nAttach) { m_xDrawingArea->set_grid_left_attach(nAttach); }
     int get_grid_left_attach() const { return m_xDrawingArea->get_grid_left_attach(); }
-    void set_help_id(const OString& rHelpId) { m_xDrawingArea->set_help_id(rHelpId); }
+    void set_help_id(const OUString& rHelpId) { m_xDrawingArea->set_help_id(rHelpId); }
     void set_tooltip_text(const OUString& rTip) { m_xDrawingArea->set_tooltip_text(rTip); }
 };
 }

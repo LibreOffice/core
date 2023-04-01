@@ -50,36 +50,36 @@ class SelectionTypePopup
     weld::Window* m_pPopupParent;
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Menu> m_xMenu;
-    static OString state_to_id(sal_uInt16 nState);
+    static OUString state_to_id(sal_uInt16 nState);
 public:
     SelectionTypePopup(weld::Window* pPopupParent, sal_uInt16 nCurrent);
     OUString GetItemTextForState(sal_uInt16 nState) { return m_xMenu->get_label(state_to_id(nState)); }
-    OString popup_at_rect(const tools::Rectangle& rRect)
+    OUString popup_at_rect(const tools::Rectangle& rRect)
     {
         return m_xMenu->popup_at_rect(m_pPopupParent, rRect);
     }
-    void HideSelectionType(const OString& rIdent)
+    void HideSelectionType(const OUString& rIdent)
     {
         m_xMenu->remove(rIdent);
     }
-    static sal_uInt16 id_to_state(std::string_view ident);
+    static sal_uInt16 id_to_state(std::u16string_view ident);
 };
 
 }
 
-sal_uInt16 SelectionTypePopup::id_to_state(std::string_view ident)
+sal_uInt16 SelectionTypePopup::id_to_state(std::u16string_view ident)
 {
-    if (ident == "block")
+    if (ident == u"block")
         return 3;
-    else if (ident == "adding")
+    else if (ident == u"adding")
         return 2;
-    else if (ident == "extending")
+    else if (ident == u"extending")
         return 1;
     else // fall through
         return 0;
 }
 
-OString SelectionTypePopup::state_to_id(sal_uInt16 nState)
+OUString SelectionTypePopup::state_to_id(sal_uInt16 nState)
 {
     switch (nState)
     {
@@ -149,7 +149,7 @@ bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
             aPop.HideSelectionType("block");
     }
 
-    OString sIdent = aPop.popup_at_rect(aRect);
+    OUString sIdent = aPop.popup_at_rect(aRect);
     if (!sIdent.isEmpty())
     {
         sal_uInt16 nNewState = SelectionTypePopup::id_to_state(sIdent);

@@ -350,7 +350,7 @@ void SvxSuperContourDlg::UpdateGraphic( const Graphic& rGraphic, bool _bGraphicL
 
 // Click handler for ToolBox
 
-IMPL_LINK(SvxSuperContourDlg, Tbx1ClickHdl, const OString&, rId, void)
+IMPL_LINK(SvxSuperContourDlg, Tbx1ClickHdl, const OUString&, rId, void)
 {
     if (rId == "TBI_APPLY")
     {
@@ -456,18 +456,18 @@ IMPL_LINK(SvxSuperContourDlg, Tbx1ClickHdl, const OString&, rId, void)
     m_xContourWnd->QueueIdleUpdate();
 }
 
-void SvxSuperContourDlg::SetActiveTool(std::string_view rId)
+void SvxSuperContourDlg::SetActiveTool(std::u16string_view rId)
 {
-    m_xTbx1->set_item_active("TBI_SELECT", rId == "TBI_SELECT");
-    m_xTbx1->set_item_active("TBI_RECT", rId == "TBI_RECT");
-    m_xTbx1->set_item_active("TBI_CIRCLE", rId == "TBI_CIRCLE");
-    m_xTbx1->set_item_active("TBI_POLY", rId == "TBI_POLY");
+    m_xTbx1->set_item_active("TBI_SELECT", rId == u"TBI_SELECT");
+    m_xTbx1->set_item_active("TBI_RECT", rId == u"TBI_RECT");
+    m_xTbx1->set_item_active("TBI_CIRCLE", rId == u"TBI_CIRCLE");
+    m_xTbx1->set_item_active("TBI_POLY", rId == u"TBI_POLY");
 }
 
-void SvxSuperContourDlg::SetActivePoly(std::string_view rId)
+void SvxSuperContourDlg::SetActivePoly(std::u16string_view rId)
 {
-    m_xTbx1->set_item_active("TBI_POLYMOVE", rId == "TBI_POLYMOVE");
-    m_xTbx1->set_item_active("TBI_POLYINSERT", rId == "TBI_POLYINSERT");
+    m_xTbx1->set_item_active("TBI_POLYMOVE", rId == u"TBI_POLYMOVE");
+    m_xTbx1->set_item_active("TBI_POLYINSERT", rId == u"TBI_POLYINSERT");
 }
 
 IMPL_LINK( SvxSuperContourDlg, MousePosHdl, GraphCtrl*, pWnd, void )
@@ -575,10 +575,10 @@ IMPL_LINK( SvxSuperContourDlg, StateHdl, GraphCtrl*, pWnd, void )
         switch( pWnd->GetPolyEditMode() )
         {
             case SID_BEZIER_MOVE:
-                SetActivePoly("TBI_POLYMOVE");
+                SetActivePoly(u"TBI_POLYMOVE");
                 break;
             case SID_BEZIER_INSERT:
-                SetActivePoly("TBI_POLYINSERT");
+                SetActivePoly(u"TBI_POLYINSERT");
                 break;
             default:
                 break;
@@ -587,7 +587,7 @@ IMPL_LINK( SvxSuperContourDlg, StateHdl, GraphCtrl*, pWnd, void )
     else
     {
         m_xTbx1->set_item_active("TBI_POLYEDIT", false);
-        SetActivePoly("TBI_POLYMOVE");
+        SetActivePoly(u"TBI_POLYMOVE");
         pWnd->SetPolyEditMode( 0 );
     }
 }

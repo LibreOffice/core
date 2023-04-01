@@ -69,7 +69,7 @@ ScAttrDlg::~ScAttrDlg()
 {
 }
 
-void ScAttrDlg::PageCreated(const OString& rPageId, SfxTabPage& rTabPage)
+void ScAttrDlg::PageCreated(const OUString& rPageId, SfxTabPage& rTabPage)
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));

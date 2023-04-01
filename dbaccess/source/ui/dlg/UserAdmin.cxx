@@ -131,7 +131,7 @@ OUserAdmin::OUserAdmin(weld::Container* pPage, weld::DialogController* pControll
     m_xUSER->connect_changed(LINK(this, OUserAdmin, ListDblClickHdl));
 }
 
-IMPL_LINK(OUserAdmin, MenuSelectHdl, const OString&, rIdent, void)
+IMPL_LINK(OUserAdmin, MenuSelectHdl, const OUString&, rIdent, void)
 {
     try
     {

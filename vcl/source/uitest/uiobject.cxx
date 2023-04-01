@@ -1616,7 +1616,7 @@ void VerticalTabControlUIObject::execute(const OUString& rAction,
         {
             auto itr = rParameters.find("POS");
             sal_uInt32 nPos = itr->second.toUInt32();
-            OString xid = mxTabControl->GetPageId(nPos);
+            OUString xid = mxTabControl->GetPageId(nPos);
             mxTabControl->SetCurPageId(xid);
         }
     }
@@ -1629,7 +1629,7 @@ StringMap VerticalTabControlUIObject::get_state()
     StringMap aMap = WindowUIObject::get_state();
     aMap["PageCount"] = OUString::number(mxTabControl->GetPageCount());
 
-    OString nPageId = mxTabControl->GetCurPageId();
+    OUString nPageId = mxTabControl->GetCurPageId();
     aMap["CurrPageTitel"] = mxTabControl->GetPageText(nPageId);
     aMap["CurrPagePos"] = OUString::number(mxTabControl->GetPagePos(nPageId));
 
@@ -1724,7 +1724,7 @@ StringMap MenuButtonUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
     aMap["Label"] = mxMenuButton->GetDisplayText();
-    aMap["CurrentItem"] = OUString::createFromAscii(mxMenuButton->GetCurItemIdent());
+    aMap["CurrentItem"] = mxMenuButton->GetCurItemIdent();
     return aMap;
 }
 

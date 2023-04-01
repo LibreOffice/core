@@ -322,7 +322,7 @@ short AbstractAuthMarkFloatDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-void AbstractTabController_Impl::SetCurPageId( const OString &rName )
+void AbstractTabController_Impl::SetCurPageId( const OUString &rName )
 {
     m_xDlg->SetCurPageId( rName );
 }
@@ -475,7 +475,7 @@ bool AbstractDropDownFieldDialog_Impl::NextButtonPressed() const
     return m_xDlg->NextButtonPressed();
 }
 
-void AbstractSwLabDlg_Impl::SetCurPageId( const OString &rName )
+void AbstractSwLabDlg_Impl::SetCurPageId( const OUString &rName )
 {
     m_xDlg->SetCurPageId( rName );
 }
@@ -530,7 +530,7 @@ std::unique_ptr<SwTableAutoFormat> AbstractSwAutoFormatDlg_Impl::FillAutoFormatO
     return m_xDlg->FillAutoFormatOfIndex();
 }
 
-void AbstractSwFieldDlg_Impl::SetCurPageId( const OString &rName )
+void AbstractSwFieldDlg_Impl::SetCurPageId( const OUString &rName )
 {
     m_xDlg->SetCurPageId( rName );
 }
@@ -652,7 +652,7 @@ OUString AbstractInsFootNoteDlg_Impl::GetStr()
     return m_xDlg->GetStr();
 }
 
-void AbstractInsFootNoteDlg_Impl::SetHelpId(const OString& rHelpId)
+void AbstractInsFootNoteDlg_Impl::SetHelpId(const OUString& rHelpId)
 {
     m_xDlg->set_help_id(rHelpId);
 }
@@ -1012,7 +1012,7 @@ SwLabDlgMethod SwAbstractDialogFactory_Impl::GetSwLabDlgStaticMethod ()
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwParaDlg(weld::Window *pParent, SwView& rVw,
                                                                            const SfxItemSet& rCoreSet,
                                                                            bool bDraw ,
-                                                                           const OString& sDefPage)
+                                                                           const OUString& sDefPage)
 {
     return VclPtr<AbstractTabController_Impl>::Create(std::make_shared<SwParaDlg>(pParent, rVw, rCoreSet, DLG_STD, nullptr, bDraw, sDefPage));
 }
@@ -1112,7 +1112,7 @@ VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateFrameTabDialog(
                                                 SfxViewFrame& rFrame, weld::Window *pParent,
                                                 const SfxItemSet& rCoreSet,
                                                 bool        bNewFrame,
-                                                const OString&  sDefPage )
+                                                const OUString&  sDefPage )
 {
     return VclPtr<AbstractTabController_Impl>::Create(std::make_shared<SwFrameDlg>(rFrame, pParent, rCoreSet, bNewFrame, rDialogType, false/*bFormat*/, sDefPage, nullptr));
 }
@@ -1121,7 +1121,7 @@ VclPtr<SfxAbstractApplyTabDialog> SwAbstractDialogFactory_Impl::CreateTemplateDi
                                                 weld::Window *pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 SfxStyleFamily      nRegion,
-                                                const OString&      sPage,
+                                                const OUString&     sPage,
                                                 SwWrtShell*         pActShell,
                                                 bool                bNew )
 {

@@ -108,7 +108,7 @@ class SvxAreaTabDialog final : public SfxTabDialogController
     ChangeType          mnGradientListState;
     ChangeType          mnHatchingListState;
 
-    virtual void        PageCreated(const OString& rId, SfxTabPage &rPage) override;
+    virtual void        PageCreated(const OUString& rId, SfxTabPage &rPage) override;
 
     virtual short       Ok() override;
     DECL_LINK(CancelHdlImpl, weld::Button&, void);

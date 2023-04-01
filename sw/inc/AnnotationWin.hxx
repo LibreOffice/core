@@ -220,7 +220,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         DECL_DLLPRIVATE_LINK(ScrollHdl, weld::ScrolledWindow&, void);
         DECL_DLLPRIVATE_LINK(DeleteHdl, void*, void);
         DECL_DLLPRIVATE_LINK(ToggleHdl, weld::Toggleable&, void);
-        DECL_DLLPRIVATE_LINK(SelectHdl, const OString&, void);
+        DECL_DLLPRIVATE_LINK(SelectHdl, const OUString&, void);
         DECL_DLLPRIVATE_LINK(KeyInputHdl, const KeyEvent&, bool);
         DECL_DLLPRIVATE_LINK(MouseMoveHdl, const MouseEvent&, bool);
 

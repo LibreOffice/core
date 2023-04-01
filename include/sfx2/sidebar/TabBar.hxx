@@ -109,7 +109,7 @@ private:
     public:
         Item(TabBar& rTabBar);
         ~Item();
-        DECL_LINK(HandleClick, const OString&, void);
+        DECL_LINK(HandleClick, const OUString&, void);
         std::unique_ptr<weld::Toolbar> mxButton;
         OUString msDeckId;
         ::std::function<void (const OUString& rsDeckId)> maDeckActivationFunctor;

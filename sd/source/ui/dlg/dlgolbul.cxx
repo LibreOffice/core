@@ -125,7 +125,7 @@ OutlineBulletDlg::~OutlineBulletDlg()
 {
 }
 
-void OutlineBulletDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
+void OutlineBulletDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {
     if (!m_pSdView)
         return;

@@ -65,7 +65,7 @@ namespace dbp
         weld::ComboBox* m_pList;
 
     public:
-        OMaybeListSelectionPage(weld::Container* pPage, OControlWizard* pWizard, const OUString& rUIXMLDescription, const OString& rID);
+        OMaybeListSelectionPage(weld::Container* pPage, OControlWizard* pWizard, const OUString& rUIXMLDescription, const OUString& rID);
         virtual ~OMaybeListSelectionPage() override;
 
     protected:

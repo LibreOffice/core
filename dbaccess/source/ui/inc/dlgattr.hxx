@@ -34,7 +34,7 @@ namespace dbaui
         SbaSbAttrDlg(weld::Widget* pParent, const SfxItemSet*, SvNumberFormatter*, bool bHasFormat);
         virtual ~SbaSbAttrDlg() override;
 
-        virtual void  PageCreated(const OString& rPageId, SfxTabPage& rTabPage) override;
+        virtual void  PageCreated(const OUString& rPageId, SfxTabPage& rTabPage) override;
     };
 }   // namespace dbaui
 

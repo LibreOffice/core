@@ -413,7 +413,7 @@ void SAL_CALL FontHeightToolBoxControl::statusChanged(
         }
 
         if (m_pToolbar)
-            m_pToolbar->set_item_sensitive(m_aCommandURL.toUtf8(), rEvent.IsEnabled);
+            m_pToolbar->set_item_sensitive(m_aCommandURL, rEvent.IsEnabled);
         else
         {
             ToolBox* pToolBox = nullptr;

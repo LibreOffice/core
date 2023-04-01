@@ -709,7 +709,7 @@ void IMapWindow::DoPropertyDialog()
     UpdateInfo( true );
 }
 
-void IMapWindow::MenuSelectHdl(const OString& rId)
+void IMapWindow::MenuSelectHdl(const OUString& rId)
 {
     if (rId == "url")
         DoPropertyDialog();

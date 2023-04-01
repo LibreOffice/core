@@ -94,7 +94,7 @@ public:
         weld::Container* pParent,
         SvxHpLinkDlg* pDlg,
         const OUString& rUIXMLDescription,
-        const OString& rID,
+        const OUString& rID,
         const SfxItemSet* pItemSet
     );
     virtual ~SvxHyperlinkTabPageBase () override;

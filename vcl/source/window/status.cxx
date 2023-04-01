@@ -65,7 +65,7 @@ struct ImplStatusItem
     OUString                            maText;
     OUString                            maHelpText;
     OUString                            maQuickHelpText;
-    OString                             maHelpId;
+    OUString                            maHelpId;
     void*                               mpUserData;
     bool                                mbVisible;
     OUString                            maAccessibleName;
@@ -1292,7 +1292,7 @@ const OUString& StatusBar::GetHelpText( sal_uInt16 nItemId ) const
             if ( !pItem->maCommand.isEmpty() )
                 pItem->maHelpText = pHelp->GetHelpText( pItem->maCommand, this );
             if ( pItem->maHelpText.isEmpty() && !pItem->maHelpId.isEmpty() )
-                pItem->maHelpText = pHelp->GetHelpText( OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
+                pItem->maHelpText = pHelp->GetHelpText( pItem->maHelpId, this );
         }
     }
 
@@ -1317,7 +1317,7 @@ const OUString& StatusBar::GetQuickHelpText( sal_uInt16 nItemId ) const
     return pItem->maQuickHelpText;
 }
 
-void StatusBar::SetHelpId( sal_uInt16 nItemId, const OString& rHelpId )
+void StatusBar::SetHelpId( sal_uInt16 nItemId, const OUString& rHelpId )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 

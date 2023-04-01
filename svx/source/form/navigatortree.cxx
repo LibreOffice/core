@@ -452,7 +452,7 @@ namespace svxform
                         xContextMenu->set_active("controlfocus", pFormModel->GetAutoControlFocus());
                     }
 
-                    OString sIdent = xContextMenu->popup_at_rect(m_xTreeView.get(), tools::Rectangle(ptWhere, ::Size(1, 1)));
+                    OUString sIdent = xContextMenu->popup_at_rect(m_xTreeView.get(), tools::Rectangle(ptWhere, ::Size(1, 1)));
                     if (sIdent == "form")
                     {
                         OUString aStr(SvxResId(RID_STR_FORM));

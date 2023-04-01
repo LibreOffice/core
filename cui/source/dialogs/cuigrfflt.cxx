@@ -124,7 +124,7 @@ void CuiGraphicPreviewWindow::Resize()
 }
 
 GraphicFilterDialog::GraphicFilterDialog(weld::Window* pParent,
-    const OUString& rUIXMLDescription, const OString& rID,
+    const OUString& rUIXMLDescription, const OUString& rID,
     const Graphic& rGraphic)
     : GenericDialogController(pParent, rUIXMLDescription, rID)
     , maTimer("cui GraphicFilterDialog maTimer")

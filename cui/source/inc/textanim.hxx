@@ -96,7 +96,7 @@ class SvxTextTabDialog : public SfxTabDialogController
 private:
     const SdrView*      pView;
 
-    virtual void        PageCreated(const OString& rId, SfxTabPage &rPage) override;
+    virtual void        PageCreated(const OUString& rId, SfxTabPage &rPage) override;
 
 public:
     SvxTextTabDialog(weld::Window* pParent, const SfxItemSet* pAttr, const SdrView* pView);

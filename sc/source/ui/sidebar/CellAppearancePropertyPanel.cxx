@@ -36,8 +36,8 @@
 using namespace css;
 using namespace css::uno;
 
-constexpr OStringLiteral SETBORDERSTYLE = "SetBorderStyle";
-constexpr OStringLiteral LINESTYLE = "LineStyle";
+constexpr OUStringLiteral SETBORDERSTYLE = u"SetBorderStyle";
+constexpr OUStringLiteral LINESTYLE = u"LineStyle";
 
 // namespace open
 
@@ -140,12 +140,12 @@ void CellAppearancePropertyPanel::Initialize()
     mxTBLineColor->set_sensitive(false);
 }
 
-IMPL_LINK_NOARG(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, const OString&, void)
+IMPL_LINK_NOARG(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, const OUString&, void)
 {
     mxTBCellBorder->set_menu_item_active(SETBORDERSTYLE, !mxTBCellBorder->get_menu_item_active(SETBORDERSTYLE));
 }
 
-IMPL_LINK_NOARG(CellAppearancePropertyPanel, TbxCellBorderMenuHdl, const OString&, void)
+IMPL_LINK_NOARG(CellAppearancePropertyPanel, TbxCellBorderMenuHdl, const OUString&, void)
 {
     if (!mxTBCellBorder->get_menu_item_active(SETBORDERSTYLE))
         return;
@@ -157,12 +157,12 @@ IMPL_LINK_NOARG(CellAppearancePropertyPanel, TbxCellBorderMenuHdl, const OString
     mxCellBorderPopoverContainer->getPopover()->GrabFocus();
 }
 
-IMPL_LINK_NOARG(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, const OString&, void)
+IMPL_LINK_NOARG(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, const OUString&, void)
 {
     mxTBLineStyle->set_menu_item_active(LINESTYLE, !mxTBLineStyle->get_menu_item_active(LINESTYLE));
 }
 
-IMPL_LINK_NOARG(CellAppearancePropertyPanel, TbxLineStyleMenuHdl, const OString&, void)
+IMPL_LINK_NOARG(CellAppearancePropertyPanel, TbxLineStyleMenuHdl, const OUString&, void)
 {
     if (!mxTBLineStyle->get_menu_item_active(LINESTYLE))
         return;

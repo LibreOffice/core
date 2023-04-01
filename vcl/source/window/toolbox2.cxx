@@ -1349,7 +1349,7 @@ const OUString& ToolBox::GetHelpText( ToolBoxItemId nItemId ) const
     return ImplGetHelpText( nItemId );
 }
 
-void ToolBox::SetHelpId( ToolBoxItemId nItemId, const OString& rHelpId )
+void ToolBox::SetHelpId( ToolBoxItemId nItemId, const OUString& rHelpId )
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 

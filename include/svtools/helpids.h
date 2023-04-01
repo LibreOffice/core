@@ -19,31 +19,31 @@
 
 #pragma once
 
-#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 
-inline constexpr OStringLiteral HID_FILEDLG_LINK_CB = "SVT_HID_FILEDLG_LINK_CB";
-inline constexpr OStringLiteral HID_FILEDLG_PREVIEW_CB = "SVT_HID_FILEDLG_PREVIEW_CB";
-inline constexpr OStringLiteral HID_FILEDLG_STANDARD = "SVT_HID_FILEDLG_STANDARD";
+inline constexpr OUStringLiteral HID_FILEDLG_LINK_CB = u"SVT_HID_FILEDLG_LINK_CB";
+inline constexpr OUStringLiteral HID_FILEDLG_PREVIEW_CB = u"SVT_HID_FILEDLG_PREVIEW_CB";
+inline constexpr OUStringLiteral HID_FILEDLG_STANDARD = u"SVT_HID_FILEDLG_STANDARD";
 
 // help ids for the different modi of the file picker dialog
-inline constexpr OStringLiteral HID_FILESAVE_LEVELUP = "SVT_HID_FILESAVE_LEVELUP";
-inline constexpr OStringLiteral HID_FILESAVE_CREATEDIRECTORY = "SVT_HID_FILESAVE_CREATEDIRECTORY";
-inline constexpr OStringLiteral HID_FILESAVE_FILEVIEW = "SVT_HID_FILESAVE_FILEVIEW";
-inline constexpr OStringLiteral HID_FILESAVE_TEMPLATE = "SVT_HID_FILESAVE_TEMPLATE";
-inline constexpr OStringLiteral HID_FILESAVE_FILEURL = "SVT_HID_FILESAVE_FILEURL";
-inline constexpr OStringLiteral HID_FILESAVE_FILETYPE = "SVT_HID_FILESAVE_FILETYPE";
-inline constexpr OStringLiteral HID_FILESAVE_DOSAVE = "SVT_HID_FILESAVE_DOSAVE";
-inline constexpr OStringLiteral HID_FILESAVE_AUTOEXTENSION = "SVT_HID_FILESAVE_AUTOEXTENSION";
-inline constexpr OStringLiteral HID_FILESAVE_SAVEWITHPASSWORD = "SVT_HID_FILESAVE_SAVEWITHPASSWORD";
-inline constexpr OStringLiteral HID_FILESAVE_CUSTOMIZEFILTER = "SVT_HID_FILESAVE_CUSTOMIZEFILTER";
-inline constexpr OStringLiteral HID_FILESAVE_SELECTION = "SVT_HID_FILESAVE_SELECTION";
-inline constexpr OStringLiteral HID_FILESAVE_DIALOG = "SVT_HID_FILESAVE_DIALOG";
-inline constexpr OStringLiteral HID_FILESAVE_DOPLAY = "SVT_HID_FILESAVE_DOPLAY";
+inline constexpr OUStringLiteral HID_FILESAVE_LEVELUP = u"SVT_HID_FILESAVE_LEVELUP";
+inline constexpr OUStringLiteral HID_FILESAVE_CREATEDIRECTORY = u"SVT_HID_FILESAVE_CREATEDIRECTORY";
+inline constexpr OUStringLiteral HID_FILESAVE_FILEVIEW = u"SVT_HID_FILESAVE_FILEVIEW";
+inline constexpr OUStringLiteral HID_FILESAVE_TEMPLATE = u"SVT_HID_FILESAVE_TEMPLATE";
+inline constexpr OUStringLiteral HID_FILESAVE_FILEURL = u"SVT_HID_FILESAVE_FILEURL";
+inline constexpr OUStringLiteral HID_FILESAVE_FILETYPE = u"SVT_HID_FILESAVE_FILETYPE";
+inline constexpr OUStringLiteral HID_FILESAVE_DOSAVE = u"SVT_HID_FILESAVE_DOSAVE";
+inline constexpr OUStringLiteral HID_FILESAVE_AUTOEXTENSION = u"SVT_HID_FILESAVE_AUTOEXTENSION";
+inline constexpr OUStringLiteral HID_FILESAVE_SAVEWITHPASSWORD = u"SVT_HID_FILESAVE_SAVEWITHPASSWORD";
+inline constexpr OUStringLiteral HID_FILESAVE_CUSTOMIZEFILTER = u"SVT_HID_FILESAVE_CUSTOMIZEFILTER";
+inline constexpr OUStringLiteral HID_FILESAVE_SELECTION = u"SVT_HID_FILESAVE_SELECTION";
+inline constexpr OUStringLiteral HID_FILESAVE_DIALOG = u"SVT_HID_FILESAVE_DIALOG";
+inline constexpr OUStringLiteral HID_FILESAVE_DOPLAY = u"SVT_HID_FILESAVE_DOPLAY";
 
-inline constexpr OStringLiteral HID_FILEOPEN_LEVELUP = "SVT_HID_FILEOPEN_LEVELUP";
-inline constexpr OStringLiteral HID_FILEOPEN_READONLY = "SVT_HID_FILEOPEN_READONLY";
-inline constexpr OStringLiteral HID_FILEOPEN_VERSION = "SVT_HID_FILEOPEN_VERSION";
-inline constexpr OStringLiteral HID_FILEOPEN_IMAGE_TEMPLATE = "SVT_HID_FILEOPEN_IMAGE_TEMPLATE";
-inline constexpr OStringLiteral HID_FILEOPEN_IMAGE_ANCHOR = "SVT_HID_FILEOPEN_IMAGE_ANCHOR";
+inline constexpr OUStringLiteral HID_FILEOPEN_LEVELUP = u"SVT_HID_FILEOPEN_LEVELUP";
+inline constexpr OUStringLiteral HID_FILEOPEN_READONLY = u"SVT_HID_FILEOPEN_READONLY";
+inline constexpr OUStringLiteral HID_FILEOPEN_VERSION = u"SVT_HID_FILEOPEN_VERSION";
+inline constexpr OUStringLiteral HID_FILEOPEN_IMAGE_TEMPLATE = u"SVT_HID_FILEOPEN_IMAGE_TEMPLATE";
+inline constexpr OUStringLiteral HID_FILEOPEN_IMAGE_ANCHOR = u"SVT_HID_FILEOPEN_IMAGE_ANCHOR";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

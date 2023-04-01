@@ -626,7 +626,7 @@ void ScCsvGrid::ScrollVertRel( ScMoveMode eDir )
 
 void ScCsvGrid::ExecutePopup( const Point& rPos )
 {
-    OString sItemId = mxPopup->popup_at_rect(GetDrawingArea(), tools::Rectangle(rPos, Size(1, 1)));
+    OUString sItemId = mxPopup->popup_at_rect(GetDrawingArea(), tools::Rectangle(rPos, Size(1, 1)));
     if (!sItemId.isEmpty())   // empty = cancelled
         Execute(CSVCMD_SETCOLUMNTYPE, sItemId.toInt32());
 }

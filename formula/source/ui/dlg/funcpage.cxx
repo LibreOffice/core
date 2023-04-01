@@ -194,7 +194,7 @@ IMPL_LINK_NOARG(FuncPage, SelTreeViewHdl, weld::TreeView&, void)
     const IFunctionDescription* pDesc = GetFuncDesc(GetFunction());
     if (pDesc)
     {
-        const OString sHelpId = pDesc->getHelpId();
+        const OUString sHelpId = pDesc->getHelpId();
         if (!sHelpId.isEmpty())
             m_xLbFunction->set_help_id(sHelpId);
     }

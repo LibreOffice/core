@@ -403,7 +403,7 @@ bool SQLEditView::Command(const CommandEvent& rCEvt)
         xContextMenu->set_visible("undo", false);
         xContextMenu->set_visible("specialchar", vcl::GetGetSpecialCharsFunction() != nullptr);
 
-        OString sCommand = xContextMenu->popup_at_rect(pPopupParent, aRect);
+        OUString sCommand = xContextMenu->popup_at_rect(pPopupParent, aRect);
 
         if (sCommand == "cut")
             pEditView->Cut();

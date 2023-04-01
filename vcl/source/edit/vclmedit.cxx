@@ -785,13 +785,13 @@ void TextWindow::Command( const CommandEvent& rCEvt )
         {
             bEnableUndo = false;
         }
-        pPopup->EnableItem(pPopup->GetItemId("cut"), bEnableCut);
-        pPopup->EnableItem(pPopup->GetItemId("copy"), bEnableCopy);
-        pPopup->EnableItem(pPopup->GetItemId("delete"), bEnableDelete);
-        pPopup->EnableItem(pPopup->GetItemId("paste"), bEnablePaste);
-        pPopup->EnableItem(pPopup->GetItemId("specialchar"), bEnableSpecialChar);
-        pPopup->EnableItem(pPopup->GetItemId("undo"), bEnableUndo);
-        pPopup->ShowItem(pPopup->GetItemId("specialchar"), !vcl::GetGetSpecialCharsFunction());
+        pPopup->EnableItem(pPopup->GetItemId(u"cut"), bEnableCut);
+        pPopup->EnableItem(pPopup->GetItemId(u"copy"), bEnableCopy);
+        pPopup->EnableItem(pPopup->GetItemId(u"delete"), bEnableDelete);
+        pPopup->EnableItem(pPopup->GetItemId(u"paste"), bEnablePaste);
+        pPopup->EnableItem(pPopup->GetItemId(u"specialchar"), bEnableSpecialChar);
+        pPopup->EnableItem(pPopup->GetItemId(u"undo"), bEnableUndo);
+        pPopup->ShowItem(pPopup->GetItemId(u"specialchar"), !vcl::GetGetSpecialCharsFunction());
 
         mbActivePopup = true;
         Point aPos = rCEvt.GetMousePosPixel();
@@ -802,7 +802,7 @@ void TextWindow::Command( const CommandEvent& rCEvt )
             aPos = Point( aSize.Width()/2, aSize.Height()/2 );
         }
         sal_uInt16 n = pPopup->Execute( this, aPos );
-        OString sCommand = pPopup->GetItemIdent(n);
+        OUString sCommand = pPopup->GetItemIdent(n);
         if (sCommand == "undo")
         {
             mpExtTextView->Undo();
@@ -1484,7 +1484,7 @@ FactoryFunction VclMultiLineEdit::GetUITestFactory() const
     return MultiLineEditUIObject::create;
 }
 
-bool VclMultiLineEdit::set_property(const OString &rKey, const OUString &rValue)
+bool VclMultiLineEdit::set_property(const OUString &rKey, const OUString &rValue)
 {
     if (rKey == "cursor-visible")
         EnableCursor(toBool(rValue));

@@ -229,7 +229,7 @@ public:
     void                    SetLast( sal_Int64 nNewLast, FieldUnit eInUnit );
     sal_Int64               GetLast( FieldUnit eOutUnit ) const;
 
-    virtual bool            set_property(const OString &rKey, const OUString &rValue) override;
+    virtual bool            set_property(const OUString &rKey, const OUString &rValue) override;
     virtual void            dispose() override;
 
     virtual void DumpAsPropertyTree(tools::JsonWriter&) override;

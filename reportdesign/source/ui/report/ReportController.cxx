@@ -297,8 +297,8 @@ void OReportController::disposing()
     }
     if ( m_xGroupsFloater )
     {
-        SvtViewOptions aDlgOpt(EViewType::Window, OStringToOUString(m_xGroupsFloater->get_help_id(), RTL_TEXTENCODING_UTF8));
-        aDlgOpt.SetWindowState(OStringToOUString(m_xGroupsFloater->getDialog()->get_window_state(vcl::WindowDataMask::All), RTL_TEXTENCODING_ASCII_US));
+        SvtViewOptions aDlgOpt(EViewType::Window, m_xGroupsFloater->get_help_id());
+        aDlgOpt.SetWindowState(m_xGroupsFloater->getDialog()->get_window_state(vcl::WindowDataMask::All));
         if (m_xGroupsFloater->getDialog()->get_visible())
             m_xGroupsFloater->response(RET_CANCEL);
         m_xGroupsFloater.reset();
@@ -2542,9 +2542,9 @@ void OReportController::openSortingAndGroupingDialog()
     if (!m_xGroupsFloater)
     {
         m_xGroupsFloater = std::make_shared<OGroupsSortingDialog>(getFrameWeld(), !isEditable(), this);
-        SvtViewOptions aDlgOpt(EViewType::Window, OStringToOUString(m_xGroupsFloater->get_help_id(), RTL_TEXTENCODING_UTF8));
+        SvtViewOptions aDlgOpt(EViewType::Window, m_xGroupsFloater->get_help_id());
         if ( aDlgOpt.Exists() )
-            m_xGroupsFloater->getDialog()->set_window_state(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
+            m_xGroupsFloater->getDialog()->set_window_state(aDlgOpt.GetWindowState());
     }
     if (isUiVisible())
     {

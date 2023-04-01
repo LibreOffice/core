@@ -167,7 +167,7 @@ namespace svt
     class SVT_DLLPUBLIC ControlBase : public InterimItemWindow
     {
     public:
-        ControlBase(BrowserDataWin* pParent, const OUString& rUIXMLDescription, const OString& rID);
+        ControlBase(BrowserDataWin* pParent, const OUString& rUIXMLDescription, const OUString& rID);
 
         virtual void SetEditableReadOnly(bool bReadOnly);
 

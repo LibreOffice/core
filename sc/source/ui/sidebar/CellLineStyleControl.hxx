@@ -43,7 +43,7 @@ private:
     DECL_LINK(PBClickHdl, weld::Button&, void);
 
 public:
-    CellLineStylePopup(weld::Toolbar* pParent, const OString& rId, SfxDispatcher* pDispatcher);
+    CellLineStylePopup(weld::Toolbar* pParent, const OUString& rId, SfxDispatcher* pDispatcher);
     void SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal_uInt16 dis);
     virtual void GrabFocus() override;
     virtual ~CellLineStylePopup() override;

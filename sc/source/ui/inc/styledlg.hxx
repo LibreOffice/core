@@ -32,7 +32,7 @@ public:
                bool bPage);
 
 protected:
-    virtual void PageCreated(const OString& rPageId, SfxTabPage& rTabPage) override;
+    virtual void PageCreated(const OUString& rPageId, SfxTabPage& rTabPage) override;
     virtual void RefreshInputSet() override;
 
 private:
@@ -47,7 +47,7 @@ public:
                    SdrView* pView);
 
 protected:
-    virtual void PageCreated(const OString& rPageId, SfxTabPage& rTabPage) override;
+    virtual void PageCreated(const OUString& rPageId, SfxTabPage& rTabPage) override;
     virtual void RefreshInputSet() override;
 
 private:

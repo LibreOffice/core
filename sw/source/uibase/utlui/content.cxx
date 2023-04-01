@@ -1400,7 +1400,7 @@ static bool lcl_InsertExpandCollapseAllItem(const weld::TreeView& rContentTree, 
 {
     if (rContentTree.iter_has_child(rEntry) || rContentTree.get_children_on_demand(rEntry))
     {
-        rPop.set_label(OString::number(800), IsAllExpanded(rContentTree, rEntry) ? SwResId(STR_COLLAPSEALL) : SwResId(STR_EXPANDALL));
+        rPop.set_label(OUString::number(800), IsAllExpanded(rContentTree, rEntry) ? SwResId(STR_COLLAPSEALL) : SwResId(STR_EXPANDALL));
         return false;
     }
     return true;
@@ -1408,9 +1408,9 @@ static bool lcl_InsertExpandCollapseAllItem(const weld::TreeView& rContentTree, 
 
 static void lcl_SetOutlineContentEntriesSensitivities(SwContentTree* pThis, const weld::TreeView& rContentTree, const weld::TreeIter& rEntry, weld::Menu& rPop)
 {
-    rPop.set_sensitive(OString::number(TOGGLE_OUTLINE_CONTENT_VISIBILITY), false);
-    rPop.set_sensitive(OString::number(HIDE_OUTLINE_CONTENT_VISIBILITY), false);
-    rPop.set_sensitive(OString::number(SHOW_OUTLINE_CONTENT_VISIBILITY), false);
+    rPop.set_sensitive(OUString::number(TOGGLE_OUTLINE_CONTENT_VISIBILITY), false);
+    rPop.set_sensitive(OUString::number(HIDE_OUTLINE_CONTENT_VISIBILITY), false);
+    rPop.set_sensitive(OUString::number(SHOW_OUTLINE_CONTENT_VISIBILITY), false);
 
     // todo: multi selection
     if (rContentTree.count_selected_rows() > 1)
@@ -1423,7 +1423,7 @@ static void lcl_SetOutlineContentEntriesSensitivities(SwContentTree* pThis, cons
         if (pSh->GetViewOptions()->IsTreatSubOutlineLevelsAsContent())
         {
             if (!bIsRoot)
-                rPop.set_sensitive(OString::number(TOGGLE_OUTLINE_CONTENT_VISIBILITY), true);
+                rPop.set_sensitive(OUString::number(TOGGLE_OUTLINE_CONTENT_VISIBILITY), true);
             return;
         }
     }
@@ -1522,11 +1522,11 @@ static void lcl_SetOutlineContentEntriesSensitivities(SwContentTree* pThis, cons
                 break; // mixed so no need to continue
         }
 
-        rPop.set_sensitive(OString::number(HIDE_OUTLINE_CONTENT_VISIBILITY), bHasUnfolded);
-        rPop.set_sensitive(OString::number(SHOW_OUTLINE_CONTENT_VISIBILITY), bHasFolded);
+        rPop.set_sensitive(OUString::number(HIDE_OUTLINE_CONTENT_VISIBILITY), bHasUnfolded);
+        rPop.set_sensitive(OUString::number(SHOW_OUTLINE_CONTENT_VISIBILITY), bHasFolded);
     }
 
-    rPop.set_sensitive(OString::number(TOGGLE_OUTLINE_CONTENT_VISIBILITY), !bIsRoot);
+    rPop.set_sensitive(OUString::number(TOGGLE_OUTLINE_CONTENT_VISIBILITY), !bIsRoot);
 }
 
 IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
@@ -1569,15 +1569,15 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     for(int i = 1; i <= 3; ++i)
         xSubPopOutlineTracking->append_radio(OUString::number(i + 10), m_aContextStrings[IDX_STR_OUTLINE_TRACKING + i]);
-    xSubPopOutlineTracking->set_active(OString::number(10 + m_nOutlineTracking), true);
+    xSubPopOutlineTracking->set_active(OUString::number(10 + m_nOutlineTracking), true);
 
     for (int i = 1; i <= MAXLEVEL; ++i)
         xSubPop1->append_radio(OUString::number(i + 100), OUString::number(i));
-    xSubPop1->set_active(OString::number(100 + m_nOutlineLevel), true);
+    xSubPop1->set_active(OUString::number(100 + m_nOutlineLevel), true);
 
     for (int i=0; i < 3; ++i)
         xSubPop2->append_radio(OUString::number(i + 201), m_aContextStrings[IDX_STR_HYPERLINK + i]);
-    xSubPop2->set_active(OString::number(201 + static_cast<int>(GetParentWindow()->GetRegionDropMode())), true);
+    xSubPop2->set_active(OUString::number(201 + static_cast<int>(GetParentWindow()->GetRegionDropMode())), true);
 
     // Insert the list of the open files
     {
@@ -1590,7 +1590,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                                                              IDX_STR_INACTIVE] + ")";
         xSubPop3->append_radio(OUString::number(nId), sInsert);
         if (State::CONSTANT == m_eState && m_pActiveShell == &pView->GetWrtShell())
-            xSubPop3->set_active(OString::number(nId), true);
+            xSubPop3->set_active(OUString::number(nId), true);
         pView = SwModule::GetNextView(pView);
         nId++;
     }
@@ -1604,9 +1604,9 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         xSubPop3->append_radio(OUString::number(nId), sHiddenEntry);
     }
     if (State::ACTIVE == m_eState)
-        xSubPop3->set_active(OString::number(--nId), true);
+        xSubPop3->set_active(OUString::number(--nId), true);
     else if (State::HIDDEN == m_eState)
-        xSubPop3->set_active(OString::number(nId), true);
+        xSubPop3->set_active(OUString::number(nId), true);
     }
 
     std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
@@ -1675,7 +1675,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             xPop->set_active("sort", pType->GetSortType());
         }
 
-        OString aIdent;
+        OUString aIdent;
         switch (nContentType)
         {
             case ContentTypeId::TABLE:
@@ -1836,7 +1836,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                     if (!pBase->IsTOXBaseInReadonly())
                         bRemoveEditEntry = false;
 
-                    xPop->set_active(OString::number(405), SwEditShell::IsTOXBaseReadonly(*pBase));
+                    xPop->set_active(OUString::number(405), SwEditShell::IsTOXBaseReadonly(*pBase));
                 }
                 else if(ContentTypeId::TABLE == nContentType)
                 {
@@ -1846,8 +1846,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                     bool bFull = false;
                     OUString sTableName = weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry))->GetName();
                     bool bProt = m_pActiveShell->HasTableAnyProtection( &sTableName, &bFull );
-                    xPop->set_sensitive(OString::number(403), !bFull);
-                    xPop->set_sensitive(OString::number(404), bProt);
+                    xPop->set_sensitive(OUString::number(403), !bFull);
+                    xPop->set_sensitive(OUString::number(404), bProt);
                 }
                 else if(ContentTypeId::REGION == nContentType)
                 {
@@ -1892,30 +1892,30 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     }
 
     if (bRemoveToggleExpandEntry)
-        xPop->remove(OString::number(800));
+        xPop->remove(OUString::number(800));
 
     if (bRemoveGotoEntry)
-        xPop->remove(OString::number(900));
+        xPop->remove(OUString::number(900));
 
     if (bRemoveSelectEntry)
-        xPop->remove(OString::number(805));
+        xPop->remove(OUString::number(805));
 
     if (bRemoveChapterEntries)
     {
-        xPop->remove(OString::number(801));
-        xPop->remove(OString::number(802));
-        xPop->remove(OString::number(803));
-        xPop->remove(OString::number(804));
+        xPop->remove(OUString::number(801));
+        xPop->remove(OUString::number(802));
+        xPop->remove(OUString::number(803));
+        xPop->remove(OUString::number(804));
     }
 
     if (bRemoveSendOutlineEntry)
-        xPop->remove(OString::number(700));
+        xPop->remove(OUString::number(700));
 
     if (bRemovePostItEntries)
     {
-        xPop->remove(OString::number(600));
-        xPop->remove(OString::number(601));
-        xPop->remove(OString::number(602));
+        xPop->remove(OUString::number(600));
+        xPop->remove(OUString::number(601));
+        xPop->remove(OUString::number(602));
     }
 
     if (bRemoveDeleteChapterEntry)
@@ -1958,20 +1958,20 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             bRemoveDeleteFieldEntry;
 
     if (bRemoveRenameEntry)
-        xPop->remove(OString::number(502));
+        xPop->remove(OUString::number(502));
 
     if (bRemoveIndexEntries)
     {
-        xPop->remove(OString::number(401));
-        xPop->remove(OString::number(402));
-        xPop->remove(OString::number(405));
+        xPop->remove(OUString::number(401));
+        xPop->remove(OUString::number(402));
+        xPop->remove(OUString::number(405));
     }
 
     if (bRemoveUnprotectEntry)
-        xPop->remove(OString::number(404));
+        xPop->remove(OUString::number(404));
 
     if (bRemoveEditEntry)
-        xPop->remove(OString::number(403));
+        xPop->remove(OUString::number(403));
 
     if (bRemoveToggleExpandEntry &&
             bRemoveSendOutlineEntry)
@@ -1995,19 +1995,19 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (!bOutline)
     {
         xSubPop1.reset();
-        xPop->remove(OString::number(1)); // outline level menu
+        xPop->remove(OUString::number(1)); // outline level menu
     }
     if (!bOutline || State::HIDDEN == m_eState)
     {
         xSubPopOutlineTracking.reset();
-        xPop->remove(OString::number(4)); // outline tracking menu
+        xPop->remove(OUString::number(4)); // outline tracking menu
     }
     if (!bOutline || State::HIDDEN == m_eState ||
             !m_pActiveShell->GetViewOptions()->IsShowOutlineContentVisibilityButton() ||
             m_pActiveShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount() == 0)
     {
         xSubPopOutlineContent.reset();
-        xPop->remove(OString::number(5)); // outline folding menu
+        xPop->remove(OUString::number(5)); // outline folding menu
         xPop->remove("separator3");
     }
 
@@ -2058,7 +2058,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     }
     xPop->set_sensitive("collapseallcategories", bSetSensitiveCollapseAllCategories);
 
-    OString sCommand = xPop->popup_at_rect(m_xTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
+    OUString sCommand = xPop->popup_at_rect(m_xTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
     if (!sCommand.isEmpty())
         ExecuteContextMenuAction(sCommand);
 
@@ -3220,14 +3220,14 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
     }
 }
 
-void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren)
+void SwContentTree::ExecCommand(std::u16string_view rCmd, bool bOutlineWithChildren)
 {
     MakeAllOutlineContentTemporarilyVisible a(GetWrtShell()->GetDoc());
 
-    const bool bUp = rCmd == "chapterup";
-    const bool bUpDown = bUp || rCmd == "chapterdown";
-    const bool bLeft = rCmd == "promote";
-    const bool bLeftRight = bLeft || rCmd == "demote";
+    const bool bUp = rCmd == u"chapterup";
+    const bool bUpDown = bUp || rCmd == u"chapterdown";
+    const bool bLeft = rCmd == u"promote";
+    const bool bLeftRight = bLeft || rCmd == u"demote";
     if (!bUpDown && !bLeftRight)
         return;
     if (GetWrtShell()->GetView().GetDocShell()->IsReadOnly() ||
@@ -4436,13 +4436,13 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
                 else if (aCode.IsMod1())
                 {
                     if (aCode.GetCode() == KEY_LEFT)
-                        ExecCommand("promote", !aCode.IsShift());
+                        ExecCommand(u"promote", !aCode.IsShift());
                     else if (aCode.GetCode() == KEY_RIGHT)
-                        ExecCommand("demote", !aCode.IsShift());
+                        ExecCommand(u"demote", !aCode.IsShift());
                     else if (aCode.GetCode() == KEY_UP)
-                        ExecCommand("chapterup", !aCode.IsShift());
+                        ExecCommand(u"chapterup", !aCode.IsShift());
                     else if (aCode.GetCode() == KEY_DOWN)
-                        ExecCommand("chapterdown", !aCode.IsShift());
+                        ExecCommand(u"chapterdown", !aCode.IsShift());
                     else if (aCode.GetCode() == KEY_C)
                         CopyOutlineSelections();
                     else
@@ -4556,7 +4556,7 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
     return sEntry;
 }
 
-void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
+void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry)
 {
     if (rSelectedPopupEntry == "copy")
     {
@@ -4576,7 +4576,7 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
     }
 
     {
-        std::map<OString, ContentTypeId> mPopupEntryToContentTypeId
+        std::map<OUString, ContentTypeId> mPopupEntryToContentTypeId
         {
             {"tabletracking", ContentTypeId::TABLE},
             {"frametracking", ContentTypeId::FRAME},
@@ -4755,16 +4755,16 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
             ExpandOrCollapseAll(*m_xTreeView, *xFirst);
             break;
         case 801:
-            ExecCommand("chapterup", true);
+            ExecCommand(u"chapterup", true);
             break;
         case 802:
-            ExecCommand("chapterdown", true);
+            ExecCommand(u"chapterdown", true);
             break;
         case 803:
-            ExecCommand("promote", true);
+            ExecCommand(u"promote", true);
             break;
         case 804:
-            ExecCommand("demote", true);
+            ExecCommand(u"demote", true);
             break;
         case 805: // select document content
         {

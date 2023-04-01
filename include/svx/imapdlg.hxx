@@ -104,7 +104,7 @@ class SVX_DLLPUBLIC SvxIMapDlg final : public SfxModelessDialogController
     std::unique_ptr<weld::Label> m_xStbStatus3;
     std::unique_ptr<weld::CustomWeld> m_xIMapWndWeld;
 
-    DECL_DLLPRIVATE_LINK( TbxClickHdl, const OString&, void );
+    DECL_DLLPRIVATE_LINK( TbxClickHdl, const OUString&, void );
     DECL_DLLPRIVATE_LINK( InfoHdl, IMapWindow&, void );
     DECL_DLLPRIVATE_LINK( MousePosHdl, GraphCtrl*, void );
     DECL_DLLPRIVATE_LINK( GraphSizeHdl, GraphCtrl*, void );
@@ -118,7 +118,7 @@ class SVX_DLLPUBLIC SvxIMapDlg final : public SfxModelessDialogController
     void                URLModify();
     void                DoOpen();
     bool                DoSave();
-    void                SetActiveTool(std::string_view rId);
+    void                SetActiveTool(std::u16string_view rId);
 
 public:
 

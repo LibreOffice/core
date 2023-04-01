@@ -9,7 +9,7 @@
 
 #include <swmessdialog.hxx>
 
-SwMessageAndEditDialog::SwMessageAndEditDialog(weld::Window* pParent, const OString& rID,
+SwMessageAndEditDialog::SwMessageAndEditDialog(weld::Window* pParent, const OUString& rID,
         const OUString& rUIXMLDescription)
     : MessageDialogController(pParent, rUIXMLDescription, rID, "grid")
     , m_xEdit(m_xBuilder->weld_entry("edit"))

@@ -156,7 +156,7 @@ SdParagraphDlg::SdParagraphDlg(weld::Window* pParent, const SfxItemSet* pAttr)
     AddTabPage("labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
 }
 
-void SdParagraphDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
+void SdParagraphDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     if (rId == "labelTP_PARA_STD")

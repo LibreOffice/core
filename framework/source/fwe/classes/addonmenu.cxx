@@ -124,9 +124,9 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame,
         {
             nInsSepAfterPos += ( pHelpMenu->GetItemCount() - nItemCount );
             if ( pHelpMenu->GetItemType( nInsSepAfterPos ) != MenuItemType::SEPARATOR )
-                pHelpMenu->InsertSeparator(OString(), nInsSepAfterPos);
+                pHelpMenu->InsertSeparator({}, nInsSepAfterPos);
         }
-        pHelpMenu->InsertSeparator(OString(), nItemCount);
+        pHelpMenu->InsertSeparator({}, nItemCount);
     }
 }
 
@@ -171,7 +171,7 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
 
             if ( pAddonPopupMenu->GetItemCount() > 0 )
             {
-                pMergeMenuBar->InsertItem( nId, aTitle, MenuItemBits::NONE, OString(), nInsertPos++ );
+                pMergeMenuBar->InsertItem( nId, aTitle, MenuItemBits::NONE, {}, nInsertPos++);
                 pMergeMenuBar->SetPopupMenu( nId, pAddonPopupMenu );
 
                 // Store the command URL into the VCL menu bar for later identification
@@ -233,12 +233,12 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
                 // have already one before us
                 nElements = 0;
                 bInsertSeparator = false;
-                pCurrentMenu->InsertSeparator(OString(), nInsPos);
+                pCurrentMenu->InsertSeparator({}, nInsPos);
                 nInsPos = AddonMenuManager::GetNextPos( nInsPos );
             }
 
             sal_uInt16 nId = nUniqueMenuId++;
-            pCurrentMenu->InsertItem(nId, aTitle, MenuItemBits::NONE, OString(), nInsPos);
+            pCurrentMenu->InsertItem(nId, aTitle, MenuItemBits::NONE, {}, nInsPos);
             nInsPos = AddonMenuManager::GetNextPos( nInsPos );
 
             ++nElements;

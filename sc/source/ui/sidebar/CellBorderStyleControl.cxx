@@ -38,7 +38,7 @@ namespace sc::sidebar {
 #define FRM_VALID_OUTER     0x0f
 #define FRM_VALID_ALL       0xff
 
-CellBorderStylePopup::CellBorderStylePopup(weld::Toolbar* pParent, const OString& rId, SfxDispatcher* pDispatcher)
+CellBorderStylePopup::CellBorderStylePopup(weld::Toolbar* pParent, const OUString& rId, SfxDispatcher* pDispatcher)
     : WeldToolbarPopup(nullptr, pParent, "modules/scalc/ui/floatingborderstyle.ui", "FloatingBorderStyle")
     , maToolButton(pParent, rId)
     , mpDispatcher(pDispatcher)
@@ -69,7 +69,7 @@ void CellBorderStylePopup::Initialize()
     mxTBBorder4->connect_clicked ( LINK(this, CellBorderStylePopup, TB4SelectHdl) );
 }
 
-IMPL_LINK(CellBorderStylePopup, TB1SelectHdl, const OString&, rId, void)
+IMPL_LINK(CellBorderStylePopup, TB1SelectHdl, const OUString&, rId, void)
 {
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
@@ -128,7 +128,7 @@ IMPL_LINK(CellBorderStylePopup, TB1SelectHdl, const OString&, rId, void)
     maToolButton.set_inactive();
 }
 
-IMPL_LINK(CellBorderStylePopup, TB2and3SelectHdl, const OString&, rId, void)
+IMPL_LINK(CellBorderStylePopup, TB2and3SelectHdl, const OUString&, rId, void)
 {
     if (rId == "diagup")
     {
@@ -215,7 +215,7 @@ IMPL_LINK(CellBorderStylePopup, TB2and3SelectHdl, const OString&, rId, void)
     maToolButton.set_inactive();
 }
 
-IMPL_LINK(CellBorderStylePopup, TB4SelectHdl, const OString&, rId, void)
+IMPL_LINK(CellBorderStylePopup, TB4SelectHdl, const OUString&, rId, void)
 {
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );

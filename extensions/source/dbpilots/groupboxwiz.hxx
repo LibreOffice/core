@@ -65,7 +65,7 @@ namespace dbp
     class OGBWPage : public OControlWizardPage
     {
     public:
-        OGBWPage(weld::Container* pPage, OControlWizard* pWizard, const OUString& rUIXMLDescription, const OString& rID)
+        OGBWPage(weld::Container* pPage, OControlWizard* pWizard, const OUString& rUIXMLDescription, const OUString& rID)
             : OControlWizardPage(pPage, pWizard, rUIXMLDescription, rID)
     {
     }

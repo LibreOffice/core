@@ -653,8 +653,8 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, HelpHdl_Impl, weld::Widget&, bool)
         OptionsPageInfo* pPageInfo = weld::fromId<OptionsPageInfo*>(xTreeLB->get_id(*xCurrentPageEntry));
         if (pPageInfo->m_xPage)
         {
-            OString sHelpId(pPageInfo->m_xPage->GetHelpId());
-            pHelp->Start(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), m_xDialog.get());
+            OUString sHelpId(pPageInfo->m_xPage->GetHelpId());
+            pHelp->Start(sHelpId, m_xDialog.get());
             return false;
         }
     }
@@ -985,7 +985,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     pNewPage = pPageInfo->m_xPage.get();
 
     // fdo#58170 use current page's layout child HelpId, unless there isn't a current page
-    OString sHelpId(pNewPage ? pNewPage->GetHelpId() : OString());
+    OUString sHelpId(pNewPage ? pNewPage->GetHelpId() : OUString());
     if (sHelpId.isEmpty())
         sHelpId = HID_OFADLG_TREELISTBOX;
     xTreeLB->set_help_id(sHelpId);

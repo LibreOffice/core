@@ -263,7 +263,7 @@ static SvxBreak lcl_GetBreakItem(const SwContentFrame* pCnt)
     return eBreak;
 }
 
-IMPL_LINK(SwPageBreakWin, SelectHdl, const OString&, rIdent, void)
+IMPL_LINK(SwPageBreakWin, SelectHdl, const OUString&, rIdent, void)
 {
     SwFrameControlPtr pFrameControl = m_pEditWin->GetFrameControlsManager().GetControl(FrameControlType::PageBreak, m_pFrame);
 
@@ -275,7 +275,7 @@ IMPL_LINK(SwPageBreakWin, SelectHdl, const OString&, rIdent, void)
         Fade( false );
 }
 
-void SwBreakDashedLine::execute(std::string_view rIdent)
+void SwBreakDashedLine::execute(std::u16string_view rIdent)
 {
     const SwPageFrame* pPageFrame = SwFrameMenuButtonBase::GetPageFrame(m_pFrame);
     // Is there a PageBefore break on this page?
@@ -292,7 +292,7 @@ void SwBreakDashedLine::execute(std::string_view rIdent)
         ePrevBreak = lcl_GetBreakItem( pPrevCnt );
     }
 
-    if (pCnt && rIdent == "edit")
+    if (pCnt && rIdent == u"edit")
     {
         SwWrtShell& rSh = m_pEditWin->GetView().GetWrtShell();
         bool bOldLock = rSh.IsViewLocked();
@@ -334,7 +334,7 @@ void SwBreakDashedLine::execute(std::string_view rIdent)
         rSh.LockView( bOldLock );
         m_pEditWin->GrabFocus( );
     }
-    else if (pCnt && rIdent == "delete")
+    else if (pCnt && rIdent == u"delete")
     {
         SwContentNode& rNd = pCnt->IsTextFrame()
             ? *static_cast<SwTextFrame*>(pCnt)->GetTextNodeFirst()

@@ -56,14 +56,14 @@ private:
     weld::MenuButton* m_pMenuButton;
     // or
     weld::Toolbar* m_pToolbar;
-    OString m_aIdent;
+    OUString m_aIdent;
     // or
     SvxColorToolBoxControl* m_pControl;
     VclPtr<ToolBox> m_xToolBox;
     ToolBoxItemId m_nId;
 public:
     MenuOrToolMenuButton(weld::MenuButton* pMenuButton);
-    MenuOrToolMenuButton(weld::Toolbar* pToolbar, OString sIdent);
+    MenuOrToolMenuButton(weld::Toolbar* pToolbar, OUString sIdent);
     MenuOrToolMenuButton(SvxColorToolBoxControl* pControl, ToolBox* pToolbar, ToolBoxItemId nId);
     ~MenuOrToolMenuButton();
 

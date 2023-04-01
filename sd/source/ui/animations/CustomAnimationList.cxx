@@ -1209,14 +1209,14 @@ IMPL_LINK(CustomAnimationList, CommandHdl, const CommandEvent&, rCEvt, bool)
     xMenu->set_sensitive("options", nEntries == 1);
     xMenu->set_sensitive("timing", nEntries == 1);
 
-    OString sCommand = xMenu->popup_at_rect(mxTreeView.get(), ::tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
+    OUString sCommand = xMenu->popup_at_rect(mxTreeView.get(), ::tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
     if (!sCommand.isEmpty())
         ExecuteContextMenuAction(sCommand);
 
     return true;
 }
 
-void CustomAnimationList::ExecuteContextMenuAction(const OString& rIdent)
+void CustomAnimationList::ExecuteContextMenuAction(const OUString& rIdent)
 {
     mpController->onContextMenu(rIdent);
 }

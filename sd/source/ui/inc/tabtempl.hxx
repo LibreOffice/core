@@ -43,7 +43,7 @@ private:
     XDashListRef          pDashList;
     XLineEndListRef       pLineEndList;
 
-    virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
+    virtual void PageCreated(const OUString& rId, SfxTabPage &rPage) override;
     virtual void RefreshInputSet() override;
 
 public:

@@ -30,7 +30,7 @@ private:
     std::unique_ptr<weld::RadioButton> m_xAfterBtn;
 
 public:
-    SvxInsRowColDlg(weld::Window* pParent, bool bCol, const OString& rHelpId);
+    SvxInsRowColDlg(weld::Window* pParent, bool bCol, const OUString& rHelpId);
 
     virtual short Execute() override;
 

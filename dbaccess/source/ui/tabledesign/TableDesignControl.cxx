@@ -116,7 +116,7 @@ void OTableRowView::Command(const CommandEvent& rEvt)
                 sal_Int32 nSelectRowCount = GetSelectRowCount();
                 xContextMenu->set_sensitive("cut", nSelectRowCount != 0);
                 xContextMenu->set_sensitive("copy", nSelectRowCount  != 0);
-                OString sIdent = xContextMenu->popup_at_rect(pPopupParent, aRect);
+                OUString sIdent = xContextMenu->popup_at_rect(pPopupParent, aRect);
                 if (sIdent == "cut")
                     cut();
                 else if (sIdent == "copy")

@@ -34,13 +34,13 @@ namespace pcr
     //= HelpIdUrl
 
 
-    OString HelpIdUrl::getHelpId( std::u16string_view _rHelpURL )
+    OUString HelpIdUrl::getHelpId( std::u16string_view _rHelpURL )
     {
         INetURLObject aHID( _rHelpURL );
         if ( aHID.GetProtocol() == INetProtocol::Hid )
-              return OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 );
+            return aHID.GetURLPath();
         else
-            return OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
+            return OUString(_rHelpURL);
     }
 
 

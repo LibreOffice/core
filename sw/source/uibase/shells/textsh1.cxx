@@ -186,7 +186,7 @@ static void sw_CharDialog(SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,
         {
             const SfxStringItem* pItem = (*pReq).GetArg<SfxStringItem>(FN_PARAM_1);
             if (pItem)
-                pDlg->SetCurPageId(OUStringToOString(pItem->GetValue(), RTL_TEXTENCODING_UTF8));
+                pDlg->SetCurPageId(pItem->GetValue());
         }
     }
 
@@ -1520,9 +1520,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
             if ( bUseDialog && GetActiveView() )
             {
-                OString sDefPage;
+                OUString sDefPage;
                 if (pItem)
-                    sDefPage = OUStringToOString(static_cast<const SfxStringItem*>(pItem)->GetValue(), RTL_TEXTENCODING_UTF8);
+                    sDefPage = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 pDlg.reset(pFact->CreateSwParaDlg(GetView().GetFrameWeld(), GetView(), aCoreSet, false, sDefPage));

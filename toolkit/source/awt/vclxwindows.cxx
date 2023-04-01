@@ -2236,7 +2236,7 @@ void SAL_CALL VCLXDialog::setHelpId( const OUString& rId )
     SolarMutexGuard aGuard;
     VclPtr< vcl::Window > pWindow = GetWindow();
     if ( pWindow )
-        pWindow->SetHelpId( OUStringToOString( rId, RTL_TEXTENCODING_UTF8 ) );
+        pWindow->SetHelpId( rId );
 }
 
 void VCLXDialog::setTitle( const OUString& Title )

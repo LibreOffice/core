@@ -483,7 +483,7 @@ bool SwOneExampleFrame::CreatePopup(const Point& rPt)
     {
         OUString sTemp = unicode::formatPercent(nZoomValues[i],
             Application::GetSettings().GetUILanguageTag());
-        OString sIdent = "zoom" + OString::number(nZoomValues[i]);
+        OUString sIdent = "zoom" + OUString::number(nZoomValues[i]);
         xPop->set_label(sIdent, sTemp);
         if (nZoom == nZoomValues[i])
             xPop->set_active(sIdent, true);
@@ -494,10 +494,10 @@ bool SwOneExampleFrame::CreatePopup(const Point& rPt)
     return true;
 }
 
-void SwOneExampleFrame::PopupHdl(std::string_view rId)
+void SwOneExampleFrame::PopupHdl(std::u16string_view rId)
 {
-    std::string_view sZoomValue;
-    if (o3tl::starts_with(rId, "zoom", &sZoomValue))
+    std::u16string_view sZoomValue;
+    if (o3tl::starts_with(rId, u"zoom", &sZoomValue))
     {
         sal_Int16 nZoom = o3tl::toInt32(sZoomValue);
         uno::Reference< view::XViewSettingsSupplier >  xSettings(m_xController, uno::UNO_QUERY);

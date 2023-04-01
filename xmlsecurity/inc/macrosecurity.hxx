@@ -40,7 +40,7 @@ private:
     std::unique_ptr<MacroSecurityTP> m_xLevelTP;
     std::unique_ptr<MacroSecurityTP> m_xTrustSrcTP;
 
-    DECL_LINK(ActivatePageHdl, const OString&, void);
+    DECL_LINK(ActivatePageHdl, const OUString&, void);
     DECL_LINK(OkBtnHdl, weld::Button&, void);
 public:
     MacroSecurity(weld::Window* pParent,
@@ -61,7 +61,7 @@ protected:
     MacroSecurity* m_pDlg;
 public:
     MacroSecurityTP(weld::Container* pParent, const OUString& rUIXMLDescription,
-                    const OString& rID, MacroSecurity* pDlg);
+                    const OUString& rID, MacroSecurity* pDlg);
     virtual ~MacroSecurityTP();
 
     virtual void ActivatePage();

@@ -141,9 +141,9 @@ public:
     const OUString          m_aTitle2;
     FormulaHelper           m_aFormulaHelper;
 
-    OString                 m_aEditHelpId;
+    OUString                m_aEditHelpId;
 
-    OString                 m_aOldHelp;
+    OUString                 m_aOldHelp;
     bool                    m_bMakingTree;  // in method of constructing tree
 
     bool                    m_bEditFlag;
@@ -869,7 +869,7 @@ void FormulaDlg_Impl::FillControls( bool &rbNext, bool &rbPrev)
             m_xFtEditName->set_label( m_pFuncDesc->getFunctionName() );
             m_xFtEditName->show();
             m_xParaWinBox->show();
-            const OString aHelpId = m_pFuncDesc->getHelpId();
+            const OUString aHelpId = m_pFuncDesc->getHelpId();
             if ( !aHelpId.isEmpty() )
                 m_xMEdit->set_help_id(aHelpId);
         }

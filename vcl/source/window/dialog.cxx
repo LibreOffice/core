@@ -571,13 +571,13 @@ void Dialog::doDeferredInit(WinBits nBits)
     mbIsDeferredInit = false;
 }
 
-Dialog::Dialog(vcl::Window* pParent, std::u16string_view rID, const OUString& rUIXMLDescription)
+Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription)
     : SystemWindow(WindowType::DIALOG, "vcl::Dialog maLayoutIdle")
     , mnInitFlag(InitFlag::Default)
 {
     ImplLOKNotifier(pParent);
     ImplInitDialogData();
-    loadUI(pParent, OUStringToOString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription);
+    loadUI(pParent, rID, rUIXMLDescription);
 }
 
 Dialog::Dialog(vcl::Window* pParent, WinBits nStyle, InitFlag eFlag)
@@ -1421,7 +1421,7 @@ void Dialog::Resize()
     }
 }
 
-bool Dialog::set_property(const OString &rKey, const OUString &rValue)
+bool Dialog::set_property(const OUString &rKey, const OUString &rValue)
 {
     if (rKey == "border-width")
         set_border_width(rValue.toInt32());
@@ -1713,7 +1713,7 @@ void Dialog::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
             rJsonWriter.put("collapsed", true);
     }
 
-    OUString sDialogId = OStringToOUString(GetHelpId(), RTL_TEXTENCODING_ASCII_US);
+    OUString sDialogId = GetHelpId();
     sal_Int32 nStartPos = sDialogId.lastIndexOf('/');
     nStartPos = nStartPos >= 0 ? nStartPos + 1 : 0;
     rJsonWriter.put("dialogid", sDialogId.copy(nStartPos));

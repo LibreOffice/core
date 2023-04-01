@@ -36,7 +36,7 @@ private:
 
 public:
     ORptPageDialog(weld::Window* pParent, const SfxItemSet* pAttr, const OUString& rDialog);
-    virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
+    virtual void PageCreated(const OUString& rId, SfxTabPage& rPage) override;
 };
 
 } // namespace rptui

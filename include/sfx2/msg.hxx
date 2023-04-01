@@ -202,9 +202,30 @@ public:
     SfxDisableFlags           nDisableFlags; // DisableFlags that need to be
                                              // present, so that the Slot
                                              // can be enabled
-    const char*     pUnoName;      // UnoName for the Slots
+    OUString     pUnoName;      // UnoName for the Slots
 
 public:
+
+    template <size_t N>
+    SfxSlot(sal_uInt16 sId, SfxGroupId gId, SfxSlotMode flags, sal_uInt16 masterSlotId,
+            sal_uInt16 value, SfxExecFunc exec, SfxStateFunc state, const SfxType* type,
+            const SfxSlot* nextSlot, const SfxFormalArgument* firstArgDef, sal_uInt16 argDefCount,
+            SfxDisableFlags disableFlags, const char (&literal)[N])
+        : nSlotId(sId)
+        , nGroupId(gId)
+        , nFlags(flags)
+        , nMasterSlotId(masterSlotId)
+        , nValue(value)
+        , fnExec(exec)
+        , fnState(state)
+        , pType(type)
+        , pNextSlot(nextSlot)
+        , pFirstArgDef(firstArgDef)
+        , nArgDefCount(argDefCount)
+        , nDisableFlags(disableFlags)
+        , pUnoName(literal)
+    {
+    }
 
     SfxSlotKind         GetKind() const;
     sal_uInt16          GetSlotId() const;
@@ -213,9 +234,8 @@ public:
     SfxGroupId          GetGroupId() const;
     sal_uInt16          GetWhich( const SfxItemPool &rPool ) const;
     const SfxType*  GetType() const { return pType; }
-    const char*     GetUnoName() const { return pUnoName; }
-    SFX2_DLLPUBLIC OString    GetCommand() const;
-    SFX2_DLLPUBLIC OUString    GetCommandString() const;
+    const OUString&     GetUnoName() const { return pUnoName; }
+    SFX2_DLLPUBLIC OUString GetCommand() const;
 
     sal_uInt16          GetFormalArgumentCount() const { return nArgDefCount; }
     const SfxFormalArgument& GetFormalArgument( sal_uInt16 nNo ) const

@@ -79,7 +79,7 @@ protected:
 
 public:
 
-    GraphicFilterDialog(weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID, const Graphic& rGraphic);
+    GraphicFilterDialog(weld::Window* pParent, const OUString& rUIXMLDescription, const OUString& rID, const Graphic& rGraphic);
     virtual Graphic GetFilteredGraphic(const Graphic& rGraphic, double fScaleX, double fScaleY) = 0;
 };
 

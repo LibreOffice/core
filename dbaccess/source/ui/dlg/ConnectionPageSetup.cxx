@@ -61,7 +61,7 @@ namespace dbaui
         return std::make_unique<OConnectionTabPageSetup>(pPage, pController, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, TranslateId(), TranslateId(), STR_COMMONURL);
     }
 
-    OConnectionTabPageSetup::OConnectionTabPageSetup(weld::Container* pPage, weld::DialogController* pController, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs, TranslateId pHelpTextResId, TranslateId pHeaderResId, TranslateId pUrlResId)
+    OConnectionTabPageSetup::OConnectionTabPageSetup(weld::Container* pPage, weld::DialogController* pController, const OUString& _rUIXMLDescription, const OUString& _rId, const SfxItemSet& _rCoreAttrs, TranslateId pHelpTextResId, TranslateId pHeaderResId, TranslateId pUrlResId)
         : OConnectionHelper(pPage, pController, _rUIXMLDescription, _rId, _rCoreAttrs)
         , m_xHelpText(m_xBuilder->weld_label("helptext"))
         , m_xHeaderText(m_xBuilder->weld_label("header"))

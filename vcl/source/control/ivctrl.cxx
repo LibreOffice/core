@@ -430,7 +430,7 @@ css::uno::Reference< XAccessible > SvtIconChoiceCtrl::CreateAccessible()
 
 struct VerticalTabPageData
 {
-    OString sId;
+    OUString sId;
     SvxIconChoiceCtrlEntry* pEntry;
     VclPtr<vcl::Window> xPage;      ///< the TabPage itself
 };
@@ -505,7 +505,7 @@ VerticalTabPageData* VerticalTabControl::GetPageData(const SvxIconChoiceCtrlEntr
     return pRet;
 }
 
-VerticalTabPageData* VerticalTabControl::GetPageData(std::string_view rId) const
+VerticalTabPageData* VerticalTabControl::GetPageData(std::u16string_view rId) const
 {
     VerticalTabPageData* pRet = nullptr;
     for (auto & pData : maPageList)
@@ -519,9 +519,9 @@ VerticalTabPageData* VerticalTabControl::GetPageData(std::string_view rId) const
     return pRet;
 }
 
-void VerticalTabControl::SetCurPageId(const OString& rId)
+void VerticalTabControl::SetCurPageId(const OUString& rId)
 {
-    OString sOldPageId = GetCurPageId();
+    OUString sOldPageId = GetCurPageId();
     if (sOldPageId == rId)
         return;
 
@@ -544,15 +544,15 @@ void VerticalTabControl::SetCurPageId(const OString& rId)
         ActivatePage();
         pNewData->xPage->Show();
     }
-    collectUIInformation(get_id(),OStringToOUString(m_sCurrentPageId,RTL_TEXTENCODING_UTF8));
+    collectUIInformation(get_id(),m_sCurrentPageId);
 }
 
-const OString & VerticalTabControl::GetPageId(sal_uInt16 nIndex) const
+const OUString & VerticalTabControl::GetPageId(sal_uInt16 nIndex) const
 {
     return maPageList[nIndex]->sId;
 }
 
-void VerticalTabControl::InsertPage(const rtl::OString &rIdent, const rtl::OUString& rLabel, const Image& rImage,
+void VerticalTabControl::InsertPage(const rtl::OUString &rIdent, const rtl::OUString& rLabel, const Image& rImage,
                                     const rtl::OUString& rTooltip, VclPtr<vcl::Window> xPage, int nPos)
 {
     SvxIconChoiceCtrlEntry* pEntry = m_xChooser->InsertEntry(rLabel, rImage);
@@ -579,7 +579,7 @@ void VerticalTabControl::InsertPage(const rtl::OString &rIdent, const rtl::OUStr
     pNew->xPage->Hide();
 }
 
-void VerticalTabControl::RemovePage(std::string_view rPageId)
+void VerticalTabControl::RemovePage(std::u16string_view rPageId)
 {
     for (auto it = maPageList.begin(), end = maPageList.end(); it != end; ++it)
     {
@@ -595,7 +595,7 @@ void VerticalTabControl::RemovePage(std::string_view rPageId)
     }
 }
 
-sal_uInt16 VerticalTabControl::GetPagePos(std::string_view rPageId) const
+sal_uInt16 VerticalTabControl::GetPagePos(std::u16string_view rPageId) const
 {
     VerticalTabPageData* pData = GetPageData(rPageId);
     if (!pData)
@@ -603,7 +603,7 @@ sal_uInt16 VerticalTabControl::GetPagePos(std::string_view rPageId) const
     return m_xChooser->GetEntryListPos(pData->pEntry);
 }
 
-VclPtr<vcl::Window> VerticalTabControl::GetPage(std::string_view rPageId) const
+VclPtr<vcl::Window> VerticalTabControl::GetPage(std::u16string_view rPageId) const
 {
     VerticalTabPageData* pData = GetPageData(rPageId);
     if (!pData)
@@ -611,7 +611,7 @@ VclPtr<vcl::Window> VerticalTabControl::GetPage(std::string_view rPageId) const
     return pData->xPage;
 }
 
-OUString VerticalTabControl::GetPageText(std::string_view rPageId) const
+OUString VerticalTabControl::GetPageText(std::u16string_view rPageId) const
 {
     VerticalTabPageData* pData = GetPageData(rPageId);
     if (!pData)
@@ -619,7 +619,7 @@ OUString VerticalTabControl::GetPageText(std::string_view rPageId) const
     return pData->pEntry->GetText();
 }
 
-void VerticalTabControl::SetPageText(std::string_view rPageId, const OUString& rText)
+void VerticalTabControl::SetPageText(std::u16string_view rPageId, const OUString& rText)
 {
     VerticalTabPageData* pData = GetPageData(rPageId);
     if (!pData)

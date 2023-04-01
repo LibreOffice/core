@@ -28,8 +28,8 @@
 #include <stack>
 #include "wizimpldata.hxx"
 
-constexpr OStringLiteral HID_WIZARD_NEXT = "SVT_HID_WIZARD_NEXT";
-constexpr OStringLiteral HID_WIZARD_PREVIOUS = "SVT_HID_WIZARD_PREVIOUS";
+constexpr OUStringLiteral HID_WIZARD_NEXT = u"SVT_HID_WIZARD_NEXT";
+constexpr OUStringLiteral HID_WIZARD_PREVIOUS = u"SVT_HID_WIZARD_PREVIOUS";
 
 #define WIZARDDIALOG_BUTTON_OFFSET_Y        6
 #define WIZARDDIALOG_BUTTON_DLGOFFSET_X     6
@@ -39,7 +39,7 @@ constexpr OStringLiteral HID_WIZARD_PREVIOUS = "SVT_HID_WIZARD_PREVIOUS";
 namespace vcl
 {
     //= WizardPageImplData
-    OWizardPage::OWizardPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OString& rID)
+    OWizardPage::OWizardPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OUString& rID)
         : BuilderPage(pPage, pController, rUIXMLDescription, rID)
     {
     }
@@ -894,12 +894,12 @@ namespace vcl
         implUpdateTitle();
     }
 
-    OString WizardMachine::getPageIdentForState(WizardTypes::WizardState nState) const
+    OUString WizardMachine::getPageIdentForState(WizardTypes::WizardState nState) const
     {
-        return OString::number(nState);
+        return OUString::number(nState);
     }
 
-    WizardTypes::WizardState WizardMachine::getStateFromPageIdent(const OString& rIdent) const
+    WizardTypes::WizardState WizardMachine::getStateFromPageIdent(const OUString& rIdent) const
     {
         return rIdent.toInt32();
     }

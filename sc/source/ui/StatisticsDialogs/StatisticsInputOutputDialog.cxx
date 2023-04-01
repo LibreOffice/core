@@ -48,7 +48,7 @@ ScRangeList ScStatisticsInputOutputDialog::MakeRowRangeList(SCTAB aTab, ScAddres
 
 ScStatisticsInputOutputDialog::ScStatisticsInputOutputDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                    weld::Window* pParent, ScViewData& rViewData, const OUString& rUIXMLDescription, const OString& rID)
+                    weld::Window* pParent, ScViewData& rViewData, const OUString& rUIXMLDescription, const OUString& rID)
     : ScAnyRefDlgController(pSfxBindings, pChildWindow, pParent, rUIXMLDescription, rID)
     , mxInputRangeLabel(m_xBuilder->weld_label("input-range-label"))
     , mxInputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("input-range-edit")))

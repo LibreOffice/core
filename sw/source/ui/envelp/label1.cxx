@@ -72,7 +72,7 @@ void SwLabDlg::ReplaceGroup_( const OUString &rMake )
     m_aLstGroup = rMake;
 }
 
-void SwLabDlg::PageCreated(const OString &rId, SfxTabPage &rPage)
+void SwLabDlg::PageCreated(const OUString &rId, SfxTabPage &rPage)
 {
     if (rId == "labels")
     {

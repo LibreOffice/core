@@ -69,7 +69,8 @@ IMPL_LINK(DevelopmentToolDockingWindow, DocumentModelTreeViewSelectionHandler, w
         maObjectInspectorTreeHandler.introspect(xObject);
 }
 
-IMPL_LINK(DevelopmentToolDockingWindow, DomToolbarButtonClicked, const OString&, rSelectionId, void)
+IMPL_LINK(DevelopmentToolDockingWindow, DomToolbarButtonClicked, const OUString&, rSelectionId,
+          void)
 {
     if (rSelectionId == "dom_refresh_button")
     {

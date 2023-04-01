@@ -189,7 +189,7 @@ namespace svxform
         std::unique_ptr<weld::TreeView> m_xItemList;
         std::unique_ptr<weld::TreeIter> m_xScratchIter;
 
-        o3tl::sorted_vector<OString> m_aRemovedMenuEntries;
+        o3tl::sorted_vector<OUString> m_aRemovedMenuEntries;
 
         DataTreeDropTarget m_aDropHelper;
 
@@ -207,14 +207,14 @@ namespace svxform
         OUString                    m_sInstanceURL;
         bool                        m_bLinkOnce;
 
-        DECL_LINK(TbxSelectHdl, const OString&, void);
+        DECL_LINK(TbxSelectHdl, const OUString&, void);
         DECL_LINK(ItemSelectHdl, weld::TreeView&, void);
         DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
         DECL_LINK(PopupMenuHdl, const CommandEvent&, bool);
 
         void                        AddChildren(const weld::TreeIter* _pParent,
                                                 const css::uno::Reference< css::xml::dom::XNode >& _xNode);
-        bool                        DoToolBoxAction(std::string_view rToolBoxID);
+        bool                        DoToolBoxAction(std::u16string_view rToolBoxID);
         void                        AddEntry(std::unique_ptr<ItemNode> _pNewNode, bool _bIsElement, weld::TreeIter* pRet = nullptr);
         void                        AddEntry(const css::uno::Reference< css::beans::XPropertySet >& _rPropSet, weld::TreeIter* pRet = nullptr);
         void                        EditEntry( const css::uno::Reference< css::beans::XPropertySet >& _rPropSet );
@@ -224,7 +224,7 @@ namespace svxform
 
         void                        DeleteAndClearTree();
 
-        void                        SetMenuEntrySensitive(const OString& rIdent, bool bSensitive);
+        void                        SetMenuEntrySensitive(const OUString& rIdent, bool bSensitive);
 
     public:
         XFormsPage(weld::Container* pParent, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup);
@@ -235,7 +235,7 @@ namespace svxform
         void                 ClearModel();
         OUString             LoadInstance(const css::uno::Sequence< css::beans::PropertyValue >& _xPropSeq);
 
-        bool                 DoMenuAction(std::string_view rMenuID);
+        bool                 DoMenuAction(std::u16string_view rMenuID);
         void                 EnableMenuItems();
         void                 SelectFirstEntry();
 
@@ -287,22 +287,22 @@ namespace svxform
                                     m_xFrameModel;
 
         DECL_LINK(            ModelSelectListBoxHdl, weld::ComboBox&, void );
-        DECL_LINK(            MenuSelectHdl, const OString&, void );
+        DECL_LINK(            MenuSelectHdl, const OUString&, void );
         DECL_LINK(            MenuActivateHdl, weld::Toggleable&, void );
-        DECL_LINK(            ActivatePageHdl, const OString&, void);
+        DECL_LINK(            ActivatePageHdl, const OUString&, void);
         DECL_LINK(            UpdateHdl, Timer *, void);
         void ModelSelectHdl(const weld::ComboBox*);
-        OString                     GetCurrentPage() const;
-        XFormsPage*                 GetPage(const OString& rCurId);
+        OUString                     GetCurrentPage() const;
+        XFormsPage*                 GetPage(const OUString& rCurId);
         void                        LoadModels();
-        void                        SetPageModel(const OString& rCurId);
+        void                        SetPageModel(const OUString& rCurId);
         void                        ClearAllPageModels( bool bClearPages );
         void                        InitPages();
         void                        CreateInstancePage( const css::uno::Sequence< css::beans::PropertyValue >& _xPropSeq );
         bool                        HasFirstInstancePage() const;
-        OString                     GetNewPageId() const;
+        OUString                     GetNewPageId() const;
 
-        static bool                 IsAdditionalPage(std::string_view rIdent);
+        static bool                 IsAdditionalPage(std::u16string_view rIdent);
 
     public:
         DataNavigatorWindow(vcl::Window* pParent, weld::Builder& rBuilder, SfxBindings const * pBindings);

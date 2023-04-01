@@ -525,7 +525,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
     } // while ( nWitch )
 }
 
-void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName)
+void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OUString &rName)
 {
     ScDocument& rDoc = GetViewData().GetDocument();
 

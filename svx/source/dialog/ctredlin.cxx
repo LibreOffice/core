@@ -450,7 +450,7 @@ IMPL_LINK( SvxTPView, PbClickHdl, weld::Button&, rPushB, void)
     }
 }
 
-SvxTPage::SvxTPage(weld::Container* pParent, const OUString& rUIXMLDescription, const OString& rID)
+SvxTPage::SvxTPage(weld::Container* pParent, const OUString& rUIXMLDescription, const OUString& rID)
     : m_xBuilder(Application::CreateBuilder(pParent, rUIXMLDescription))
     , m_xContainer(m_xBuilder->weld_container(rID))
 {
@@ -976,7 +976,7 @@ void SvxAcceptChgCtr::ShowFilterPage()
     m_xTabCtrl->set_current_page("filter");
 }
 
-IMPL_LINK(SvxAcceptChgCtr, ActivatePageHdl, const OString&, rPage, void)
+IMPL_LINK(SvxAcceptChgCtr, ActivatePageHdl, const OUString&, rPage, void)
 {
     if (rPage == "filter")
     {
@@ -990,7 +990,7 @@ IMPL_LINK(SvxAcceptChgCtr, ActivatePageHdl, const OString&, rPage, void)
     }
 }
 
-IMPL_LINK(SvxAcceptChgCtr, DeactivatePageHdl, const OString&, rPage, bool)
+IMPL_LINK(SvxAcceptChgCtr, DeactivatePageHdl, const OUString&, rPage, bool)
 {
     if (rPage == "filter")
         m_xTPFilter->DeactivatePage();

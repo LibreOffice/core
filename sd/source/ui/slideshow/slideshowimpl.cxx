@@ -2004,7 +2004,7 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
                     OUString sId(OUString::number(CM_SLIDES + nPageNumber));
                     xPageMenu->append_check(sId, pPage->GetName());
                     if (nPageNumber == nCurrentSlideNumber)
-                        xPageMenu->set_active(sId.toUtf8(), true);
+                        xPageMenu->set_active(sId, true);
                 }
             }
         }
@@ -2048,7 +2048,7 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
         }
 
         if (nWidth == mdUserPaintStrokeWidth)
-            xWidthMenu->set_active(OString::number(nWidth), true);
+            xWidthMenu->set_active(OUString::number(nWidth), true);
     }
 
     ::tools::Rectangle aRect(maPopupMousePos, Size(1,1));
@@ -2062,31 +2062,31 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
         resume();
 }
 
-void SlideshowImpl::ContextMenuSelectHdl(std::string_view rMenuId)
+void SlideshowImpl::ContextMenuSelectHdl(std::u16string_view rMenuId)
 {
-    if (rMenuId == "prev")
+    if (rMenuId == u"prev")
     {
         gotoPreviousSlide();
         mbWasPaused = false;
     }
-    else if(rMenuId == "next")
+    else if(rMenuId == u"next")
     {
         gotoNextSlide();
         mbWasPaused = false;
     }
-    else if (rMenuId == "first")
+    else if (rMenuId == u"first")
     {
         gotoFirstSlide();
         mbWasPaused = false;
     }
-    else if (rMenuId == "last")
+    else if (rMenuId == u"last")
     {
         gotoLastSlide();
         mbWasPaused = false;
     }
-    else if (rMenuId == "black" || rMenuId == "white")
+    else if (rMenuId == u"black" || rMenuId == u"white")
     {
-        const Color aBlankColor(rMenuId == "white" ? COL_WHITE : COL_BLACK);
+        const Color aBlankColor(rMenuId == u"white" ? COL_WHITE : COL_BLACK);
         if( mbWasPaused )
         {
             if( mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_BLANK )
@@ -2106,7 +2106,7 @@ void SlideshowImpl::ContextMenuSelectHdl(std::string_view rMenuId)
             mbWasPaused = true;
         }
     }
-    else if (rMenuId == "color")
+    else if (rMenuId == u"color")
     {
         //Open a color picker based on SvColorDialog
         ::Color aColor( ColorTransparency, mnUserPaintColor );
@@ -2120,42 +2120,42 @@ void SlideshowImpl::ContextMenuSelectHdl(std::string_view rMenuId)
         }
         mbWasPaused = false;
     }
-    else if (rMenuId == "4")
+    else if (rMenuId == u"4")
     {
         setPenWidth(4.0);
         mbWasPaused = false;
     }
-    else if (rMenuId == "100")
+    else if (rMenuId == u"100")
     {
         setPenWidth(100.0);
         mbWasPaused = false;
     }
-    else if (rMenuId == "150")
+    else if (rMenuId == u"150")
     {
         setPenWidth(150.0);
         mbWasPaused = false;
     }
-    else if (rMenuId == "200")
+    else if (rMenuId == u"200")
     {
         setPenWidth(200.0);
         mbWasPaused = false;
     }
-    else if (rMenuId == "400")
+    else if (rMenuId == u"400")
     {
         setPenWidth(400.0);
         mbWasPaused = false;
     }
-    else if (rMenuId == "erase")
+    else if (rMenuId == u"erase")
     {
         setEraseAllInk(true);
         mbWasPaused = false;
     }
-    else if (rMenuId == "pen")
+    else if (rMenuId == u"pen")
     {
         setUsePen(!mbUsePen);
         mbWasPaused = false;
     }
-    else if (rMenuId == "edit")
+    else if (rMenuId == u"edit")
     {
         // When in autoplay mode (pps/ppsx), offer editing of the presentation
         // Turn autostart off, else Impress will close when exiting the Presentation
@@ -2169,7 +2169,7 @@ void SlideshowImpl::ContextMenuSelectHdl(std::string_view rMenuId)
         }
         endPresentation();
     }
-    else if (rMenuId == "end")
+    else if (rMenuId == u"end")
     {
         // in case the user cancels the presentation, switch to current slide
         // in edit mode

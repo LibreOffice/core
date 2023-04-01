@@ -53,7 +53,7 @@ public:
         std::shared_ptr<MasterPageContainer> pContainer,
         css::uno::Reference<css::ui::XSidebar> xSidebar,
         const OUString& rUIFileName,
-        const OString& rValueSetName);
+        const OUString& rValueSetName);
     virtual ~MasterPagesSelector() override;
 
     virtual void LateInit();
@@ -66,7 +66,7 @@ public:
     */
     void ClearPageSet();
 
-    void SetHelpId( const OString& aId );
+    void SetHelpId( const OUString& aId );
 
     /** Mark the preview that belongs to the given index as not up-to-date
         anymore with respect to page content or preview size.
@@ -151,7 +151,7 @@ protected:
     virtual OUString GetContextMenuUIFile() const;
 
     virtual void ProcessPopupMenu(weld::Menu& rMenu);
-    virtual void ExecuteCommand(const OString& rIdent);
+    virtual void ExecuteCommand(const OUString& rIdent);
 
 private:
     css::uno::Reference<css::ui::XSidebar> mxSidebar;

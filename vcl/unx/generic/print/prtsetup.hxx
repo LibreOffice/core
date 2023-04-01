@@ -45,7 +45,7 @@ class RTSDialog : public weld::GenericDialogController
     std::unique_ptr<RTSPaperPage> m_xPaperPage;
     std::unique_ptr<RTSDevicePage> m_xDevicePage;
 
-    DECL_LINK(ActivatePage, const OString&, void);
+    DECL_LINK(ActivatePage, const OUString&, void);
     DECL_LINK(ClickButton, weld::Button&, void);
 
     // helper functions

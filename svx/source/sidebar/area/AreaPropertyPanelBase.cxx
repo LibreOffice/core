@@ -37,7 +37,7 @@
 using namespace css;
 using namespace css::uno;
 
-constexpr OStringLiteral SIDEBARGRADIENT = "sidebargradient";
+constexpr OUStringLiteral SIDEBARGRADIENT = u"sidebargradient";
 
 namespace svx::sidebar {
 
@@ -180,7 +180,7 @@ void AreaPropertyPanelBase::Initialize()
     mxBmpImport->connect_clicked( LINK(this, AreaPropertyPanelBase, ClickImportBitmapHdl));
 }
 
-IMPL_LINK_NOARG(AreaPropertyPanelBase, ToolbarHdl_Impl, const OString&, void)
+IMPL_LINK_NOARG(AreaPropertyPanelBase, ToolbarHdl_Impl, const OUString&, void)
 {
     mxBTNGradient->set_menu_item_active(SIDEBARGRADIENT, !mxBTNGradient->get_menu_item_active(SIDEBARGRADIENT));
 }

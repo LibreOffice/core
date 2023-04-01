@@ -287,7 +287,7 @@ public:
         m_pToolBar->SetText( rName );
     }
 
-    virtual void SetHelpId(const OString& rHelpId) override
+    virtual void SetHelpId(const OUString& rHelpId) override
     {
         m_pToolBar->SetHelpId( rHelpId );
     }
@@ -383,8 +383,8 @@ IMPL_LINK_NOARG(VclToolBarManager, Click, ToolBox*, void)
 
 class WeldToolBarManager : public ToolBarManagerImpl
 {
-    DECL_LINK(Click, const OString&, void);
-    DECL_LINK(ToggleMenuHdl, const OString&, void);
+    DECL_LINK(Click, const OUString&, void);
+    DECL_LINK(ToggleMenuHdl, const OUString&, void);
 
 public:
     WeldToolBarManager(weld::Toolbar* pToolbar,
@@ -417,16 +417,15 @@ public:
                             const OUString& rLabel,
                             ToolBoxItemBits /*nItemBits*/) override
     {
-        OString sId = OUStringToOString(rCommandURL, RTL_TEXTENCODING_UTF8);
-        m_aCommandToId[sId] = nId;
-        m_aIdToCommand[nId] = sId;
-        m_aCommandOrder.push_back(sId);
+        m_aCommandToId[rCommandURL] = nId;
+        m_aIdToCommand[nId] = rCommandURL;
+        m_aCommandOrder.push_back(rCommandURL);
 
         m_pWeldedToolBar->insert_item(m_aCommandOrder.size(), rCommandURL);
-        m_pWeldedToolBar->set_item_tooltip_text(sId, rTooltip);
-        m_pWeldedToolBar->set_item_label( sId, rLabel );
-        m_pWeldedToolBar->set_item_sensitive( sId, true );
-        m_pWeldedToolBar->set_item_active( sId, false );
+        m_pWeldedToolBar->set_item_tooltip_text(rCommandURL, rTooltip);
+        m_pWeldedToolBar->set_item_label(rCommandURL, rLabel);
+        m_pWeldedToolBar->set_item_sensitive(rCommandURL, true);
+        m_pWeldedToolBar->set_item_active(rCommandURL, false);
     }
 
     virtual void InsertSeparator() override
@@ -450,7 +449,7 @@ public:
 
     virtual OUString GetItemCommand(ToolBoxItemId nId) override
     {
-        return OStringToOUString(m_aIdToCommand[nId], RTL_TEXTENCODING_UTF8);
+        return m_aIdToCommand[nId];
     }
 
     virtual sal_uInt16 GetItemCount() override
@@ -462,21 +461,19 @@ public:
 
     virtual void HideItem(ToolBoxItemId /*nId*/, const OUString& rCommandURL) override
     {
-        OString sId = OUStringToOString(rCommandURL, RTL_TEXTENCODING_UTF8);
-        m_pWeldedToolBar->set_item_visible(sId, false);
+        m_pWeldedToolBar->set_item_visible(rCommandURL, false);
     }
 
     virtual bool IsItemVisible(ToolBoxItemId /*nId*/, const OUString& rCommandURL) override
     {
-        OString sId = OUStringToOString(rCommandURL, RTL_TEXTENCODING_UTF8);
-        return m_pWeldedToolBar->get_item_visible(sId);
+        return m_pWeldedToolBar->get_item_visible(rCommandURL);
     }
 
     virtual void Clear() override {}
 
     virtual void SetName(const OUString& /*rName*/) override {}
 
-    virtual void SetHelpId(const OString& /*rHelpId*/) override {}
+    virtual void SetHelpId(const OUString& /*rHelpId*/) override {}
 
     virtual bool WillUsePopupMode() override { return true; }
 
@@ -501,8 +498,7 @@ public:
                               const OUString& rCommandURL,
                               const Image& rImage) override
     {
-        OString sId = OUStringToOString(rCommandURL, RTL_TEXTENCODING_UTF8);
-        m_pWeldedToolBar->set_item_image(sId, Graphic(rImage).GetXGraphic());
+        m_pWeldedToolBar->set_item_image(rCommandURL, Graphic(rImage).GetXGraphic());
     }
 
     virtual void UpdateSize() override {}
@@ -514,18 +510,18 @@ private:
     weld::Builder* m_pBuilder;
     ToolBarManager* m_pManager;
     ToolBoxItemId m_nCurrentId;
-    std::map<const OString, ToolBoxItemId> m_aCommandToId;
-    std::map<ToolBoxItemId, OString> m_aIdToCommand;
-    std::vector<OString> m_aCommandOrder;
+    std::map<const OUString, ToolBoxItemId> m_aCommandToId;
+    std::map<ToolBoxItemId, OUString> m_aIdToCommand;
+    std::vector<OUString> m_aCommandOrder;
 };
 
-IMPL_LINK(WeldToolBarManager, Click, const OString&, rCommand, void)
+IMPL_LINK(WeldToolBarManager, Click, const OUString&, rCommand, void)
 {
     m_nCurrentId = m_aCommandToId[rCommand];
     m_pManager->OnClick(true);
 }
 
-IMPL_LINK(WeldToolBarManager, ToggleMenuHdl, const OString&, rCommand, void)
+IMPL_LINK(WeldToolBarManager, ToggleMenuHdl, const OUString&, rCommand, void)
 {
     m_nCurrentId = m_aCommandToId[rCommand];
     m_pManager->OnDropdownClick(false);
@@ -607,7 +603,7 @@ void ToolBarManager::Init()
     sal_Int32 idx = m_aResourceName.lastIndexOf('/');
     idx++; // will become 0 if '/' not found: use full string
     std::u16string_view aToolbarName = m_aResourceName.subView( idx );
-    OString aHelpIdAsString = ".HelpId:" + OUStringToOString( aToolbarName, RTL_TEXTENCODING_UTF8 );
+    OUString aHelpIdAsString = ".HelpId:" + OUString::Concat(aToolbarName);
     m_pImpl->SetHelpId( aHelpIdAsString );
 
     m_aAsyncUpdateControllersTimer.SetTimeout( 50 );

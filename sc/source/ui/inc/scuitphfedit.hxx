@@ -110,7 +110,7 @@ private:
     DECL_LINK( ListHdl_Impl, weld::ComboBox&, void);
     DECL_LINK( ListToggleHdl_Impl, weld::ComboBox&, void);
     DECL_LINK( ClickHdl, weld::Button&, void );
-    DECL_LINK( MenuHdl, const OString&, void );
+    DECL_LINK( MenuHdl, const OUString&, void );
 };
 
 class ScFirstHeaderEditPage : public ScHFEditPage

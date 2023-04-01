@@ -19,9 +19,9 @@
 
 #pragma once
 
-#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 
-inline constexpr OStringLiteral HID_EXTENSION_MANAGER_LISTBOX_ENABLE = "DESKTOP_HID_EXTENSION_MANAGER_LISTBOX_ENABLE";
-inline constexpr OStringLiteral HID_EXTENSION_MANAGER_LISTBOX_DISABLE = "DESKTOP_HID_EXTENSION_MANAGER_LISTBOX_DISABLE";
+inline constexpr OUStringLiteral HID_EXTENSION_MANAGER_LISTBOX_ENABLE = u"DESKTOP_HID_EXTENSION_MANAGER_LISTBOX_ENABLE";
+inline constexpr OUStringLiteral HID_EXTENSION_MANAGER_LISTBOX_DISABLE = u"DESKTOP_HID_EXTENSION_MANAGER_LISTBOX_DISABLE";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

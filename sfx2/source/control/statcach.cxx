@@ -242,7 +242,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
                 // get the slot - even if it is disabled on the dispatcher
                 pSlot = SfxSlotPool::GetSlotPool( rDispat.GetFrame() ).GetSlot( nId );
 
-            if ( !pSlot || !pSlot->pUnoName )
+            if ( !pSlot || pSlot->pUnoName.isEmpty() )
             {
                 bSlotDirty = false;
                 bCtrlDirty = true;
@@ -253,7 +253,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
             css::util::URL aURL;
             OUString aCmd = ".uno:";
             aURL.Protocol = aCmd;
-            aURL.Path = OUString::createFromAscii( pSlot->GetUnoName() );
+            aURL.Path = pSlot->GetUnoName();
             aCmd += aURL.Path;
             aURL.Complete = aCmd;
             aURL.Main = aCmd;

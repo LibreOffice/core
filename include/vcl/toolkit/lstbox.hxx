@@ -251,7 +251,7 @@ public:
 
     void setMaxWidthChars(sal_Int32 nWidth);
 
-    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
+    virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
 
     virtual FactoryFunction GetUITestFactory() const override;
 

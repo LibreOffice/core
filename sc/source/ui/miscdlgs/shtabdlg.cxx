@@ -34,7 +34,7 @@ ScShowTabDlg::ScShowTabDlg(weld::Window* pParent)
 ScShowTabDlg::~ScShowTabDlg() {}
 
 void ScShowTabDlg::SetDescription(const OUString& rTitle, const OUString& rFixedText,
-                                  const OString& rDlgHelpId, const OString& sLbHelpId)
+                                  const OUString& rDlgHelpId, const OUString& sLbHelpId)
 {
     m_xDialog->set_title(rTitle);
     m_xFrame->set_label(rFixedText);

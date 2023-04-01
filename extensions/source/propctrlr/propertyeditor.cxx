@@ -65,7 +65,7 @@ namespace pcr
         int nCount = m_xTabControl->get_n_pages();
         for (int i = nCount - 1; i >= 0; --i)
         {
-            OString sID = m_xTabControl->get_page_ident(i);
+            OUString sID = m_xTabControl->get_page_ident(i);
             m_xTabControl->remove_page(sID);
         }
 
@@ -116,12 +116,12 @@ namespace pcr
         return const_cast<OPropertyEditor*>(this)->getPage(rPageId);
     }
 
-    sal_uInt16 OPropertyEditor::AppendPage(const OUString& rText, const OString& rHelpId)
+    sal_uInt16 OPropertyEditor::AppendPage(const OUString& rText, const OUString& rHelpId)
     {
         // obtain a new id
         sal_uInt16 nId = m_nNextId++;
         // insert the id
-        OString sIdent = OString::number(nId);
+        OUString sIdent = OUString::number(nId);
         m_xTabControl->append_page(sIdent, rText);
 
         // create a new page
@@ -140,7 +140,7 @@ namespace pcr
         return nId;
     }
 
-    void OPropertyEditor::SetHelpId( const OString& rHelpId )
+    void OPropertyEditor::SetHelpId( const OUString& rHelpId )
     {
         m_xTabControl->set_help_id(rHelpId);
     }
@@ -152,13 +152,13 @@ namespace pcr
             return;
 
         m_aShownPages.erase(aPagePos);
-        OString sIdent(OString::number(nID));
+        OUString sIdent(OUString::number(nID));
         m_xTabControl->remove_page(sIdent);
     }
 
     void OPropertyEditor::SetPage(sal_uInt16 nId)
     {
-        m_xTabControl->set_current_page(OString::number(nId));
+        m_xTabControl->set_current_page(OUString::number(nId));
     }
 
     sal_uInt16 OPropertyEditor::GetCurPage() const
@@ -290,7 +290,7 @@ namespace pcr
     {
         assert((m_aHiddenPages.find(nPageId) != m_aHiddenPages.end() ||
                 m_aShownPages.find(nPageId) != m_aShownPages.end()) && "page doesn't exist");
-        OString sIdent(OString::number(nPageId));
+        OUString sIdent(OUString::number(nPageId));
         if (!bShow)
         {
             auto aPagePos = m_aShownPages.find(nPageId);
@@ -347,12 +347,12 @@ namespace pcr
         return xControl;
     }
 
-    IMPL_LINK(OPropertyEditor, OnPageActivate, const OString&, rNewPage, void)
+    IMPL_LINK(OPropertyEditor, OnPageActivate, const OUString&, rNewPage, void)
     {
         m_aPageActivationHandler.Call(rNewPage);
     }
 
-    IMPL_LINK(OPropertyEditor, OnPageDeactivate, const OString&, rIdent, bool)
+    IMPL_LINK(OPropertyEditor, OnPageDeactivate, const OUString&, rIdent, bool)
     {
         // commit the data on the current (to-be-deactivated) tab page
         // (79404)

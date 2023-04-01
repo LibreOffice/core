@@ -593,7 +593,7 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, weld::Menu& r
     rMenu.insert_separator(nPos++, "separator2");
 }
 
-void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const weld::Menu& rMenu, const OString& rExecutionResult)
+void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const weld::Menu& rMenu, const OUString& rExecutionResult)
 {
     if (rExecutionResult == "colwidth")
         static_cast<SbaGridControl*>(GetParent())->SetColWidth(nColId);
@@ -790,7 +790,7 @@ void SbaGridControl::SetBrowserAttrs()
     }
 }
 
-void SbaGridControl::PostExecuteRowContextMenu(const OString& rExecutionResult)
+void SbaGridControl::PostExecuteRowContextMenu(const OUString& rExecutionResult)
 {
     if (rExecutionResult == "tableattr")
         SetBrowserAttrs();

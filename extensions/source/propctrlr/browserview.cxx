@@ -35,7 +35,7 @@ namespace pcr
         m_xPropBox->setPageActivationHandler(LINK(this, OPropertyBrowserView, OnPageActivation));
     }
 
-    IMPL_LINK(OPropertyBrowserView, OnPageActivation, const OString&, rNewPage, void)
+    IMPL_LINK(OPropertyBrowserView, OnPageActivation, const OUString&, rNewPage, void)
     {
         m_nActivePage = rNewPage.toUInt32();
         m_aPageActivationHandler.Call(nullptr);

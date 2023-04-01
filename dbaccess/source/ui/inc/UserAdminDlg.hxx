@@ -47,7 +47,7 @@ namespace dbaui
         css::uno::Reference< css::sdbc::XConnection>          m_xConnection;
         bool          m_bOwnConnection;
     protected:
-        virtual void PageCreated(const OString& rId, SfxTabPage& _rPage) override;
+        virtual void PageCreated(const OUString& rId, SfxTabPage& _rPage) override;
     public:
         OUserAdminDlg(weld::Window* pParent, SfxItemSet* pItems,
                       const css::uno::Reference< css::uno::XComponentContext >& rxORB,

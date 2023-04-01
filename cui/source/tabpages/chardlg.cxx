@@ -132,7 +132,7 @@ inline SvxFont& SvxCharBasePage::GetPreviewCTLFont()
     return m_aPreviewWin.GetCTLFont();
 }
 
-SvxCharBasePage::SvxCharBasePage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rItemset)
+SvxCharBasePage::SvxCharBasePage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OUString& rID, const SfxItemSet& rItemset)
     : SfxTabPage(pPage, pController, rUIXMLDescription, rID, &rItemset)
     , m_bPreviewBackgroundToCharacter( false )
 {

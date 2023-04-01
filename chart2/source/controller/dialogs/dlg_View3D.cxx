@@ -57,7 +57,7 @@ View3DDialog::View3DDialog(weld::Window* pParent, const rtl::Reference<::chart::
     m_xTabControl->set_current_page(m_nLastPageId);
 }
 
-IMPL_LINK(View3DDialog, ActivatePageHdl, const OString&, rPage, void)
+IMPL_LINK(View3DDialog, ActivatePageHdl, const OUString&, rPage, void)
 {
     if (rPage == "appearance")
         m_xAppearance->ActivatePage();

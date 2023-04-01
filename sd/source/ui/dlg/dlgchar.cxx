@@ -44,7 +44,7 @@ SdCharDlg::SdCharDlg(weld::Window* pParent, const SfxItemSet* pAttr,
     AddTabPage("RID_SVXPAGE_BKG", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
 }
 
-void SdCharDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
+void SdCharDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     if (rId == "RID_SVXPAGE_CHAR_NAME")

@@ -67,7 +67,7 @@ SvxFormatCellsDialog::SvxFormatCellsDialog(weld::Window* pParent, const SfxItemS
         RemoveTabPage("asian");
 }
 
-void SvxFormatCellsDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
+void SvxFormatCellsDialog::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {
     if (rId == "area")
     {

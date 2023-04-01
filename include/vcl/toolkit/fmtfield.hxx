@@ -41,7 +41,7 @@ public:
     virtual void Last() override;
     // Default Implementation: Current double is set to the first or last value
 
-    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
+    virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
 public:
     virtual void SetText( const OUString& rStr ) override;
     virtual void SetText( const OUString& rStr, const Selection& rNewSelection ) override;

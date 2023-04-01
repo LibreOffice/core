@@ -368,7 +368,7 @@ void DockingWindow::doDeferredInit(WinBits nBits)
     mbIsDeferredInit = false;
 }
 
-void DockingWindow::loadUI(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
+void DockingWindow::loadUI(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription,
     const css::uno::Reference<css::frame::XFrame> &rFrame)
 {
     mbIsDeferredInit = true;
@@ -376,7 +376,7 @@ void DockingWindow::loadUI(vcl::Window* pParent, const OString& rID, const OUStr
     m_pUIBuilder.reset( new VclBuilder(this, AllSettings::GetUIRootDir(), rUIXMLDescription, rID, rFrame) );
 }
 
-DockingWindow::DockingWindow(vcl::Window* pParent, const OString& rID,
+DockingWindow::DockingWindow(vcl::Window* pParent, const OUString& rID,
     const OUString& rUIXMLDescription, const char* pIdleDebugName,
     const css::uno::Reference<css::frame::XFrame> &rFrame)
     : Window(WindowType::DOCKINGWINDOW),
@@ -1089,7 +1089,7 @@ SystemWindow* DockingWindow::GetFloatingWindow() const
 
 DropdownDockingWindow::DropdownDockingWindow(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame, bool bTearable)
     : DockingWindow(pParent,
-                    !bTearable ? OString("InterimDockParent") : OString("InterimTearableParent"),
+                    !bTearable ? OUString("InterimDockParent") : OUString("InterimTearableParent"),
                     !bTearable ? OUString("vcl/ui/interimdockparent.ui") : OUString("vcl/ui/interimtearableparent.ui"),
                     "vcl::DropdownDockingWindow maLayoutIdle",
                     rFrame)

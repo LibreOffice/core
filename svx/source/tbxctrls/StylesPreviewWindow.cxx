@@ -130,8 +130,8 @@ bool StylesPreviewWindow_Base::Command(const CommandEvent& rEvent)
     std::unique_ptr<weld::Builder> xBuilder(
         Application::CreateBuilder(m_xStylesView.get(), "svx/ui/stylemenu.ui"));
     std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
-    OString rIdent = xMenu->popup_at_rect(m_xStylesView.get(),
-                                          tools::Rectangle(rEvent.GetMousePosPixel(), Size(1, 1)));
+    OUString rIdent = xMenu->popup_at_rect(m_xStylesView.get(),
+                                           tools::Rectangle(rEvent.GetMousePosPixel(), Size(1, 1)));
     if (rIdent == "update" || rIdent == "edit")
     {
         css::uno::Sequence<css::beans::PropertyValue> aArgs(0);

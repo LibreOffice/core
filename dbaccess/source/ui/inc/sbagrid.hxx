@@ -163,7 +163,7 @@ namespace dbaui
         virtual void    PreExecuteColumnContextMenu(sal_uInt16 nColId, weld::Menu& rMenu,
                                                     weld::Menu& rInsertMenu, weld::Menu& rChangeMenu,
                                                     weld::Menu& rShowMenu) override;
-        virtual void    PostExecuteColumnContextMenu(sal_uInt16 nColId, const weld::Menu& rMenu, const OString& rExecutionResult) override;
+        virtual void    PostExecuteColumnContextMenu(sal_uInt16 nColId, const weld::Menu& rMenu, const OUString& rExecutionResult) override;
 
     private:
         // DragSourceHelper overridables
@@ -254,7 +254,7 @@ namespace dbaui
 
         // DbGridControl overridables
         virtual void PreExecuteRowContextMenu(weld::Menu& rMenu) override;
-        virtual void PostExecuteRowContextMenu(const OString& rExecutionResult) override;
+        virtual void PostExecuteRowContextMenu(const OUString& rExecutionResult) override;
 
         // DbGridControl overridables
         virtual void onRowChange() override;

@@ -187,9 +187,8 @@ void SAL_CALL PopupWindowController::statusChanged( const frame::FeatureStateEve
 
     if (m_pToolbar)
     {
-        OString sId = m_aCommandURL.toUtf8();
-        m_pToolbar->set_item_active(sId, bValue);
-        m_pToolbar->set_item_sensitive(sId, rEvent.IsEnabled);
+        m_pToolbar->set_item_active(m_aCommandURL, bValue);
+        m_pToolbar->set_item_sensitive(m_aCommandURL, rEvent.IsEnabled);
         return;
     }
 
@@ -248,7 +247,7 @@ void SAL_CALL PopupWindowController::click()
 {
     if (m_pToolbar)
     {
-        if (m_pToolbar->get_menu_item_active(m_aCommandURL.toUtf8()))
+        if (m_pToolbar->get_menu_item_active(m_aCommandURL))
             createPopupWindow();
         else
             mxPopoverContainer->unsetPopover();
@@ -260,7 +259,7 @@ void SAL_CALL PopupWindowController::click()
 void PopupWindowController::EndPopupMode()
 {
     if (m_pToolbar)
-        m_pToolbar->set_menu_item_active(m_aCommandURL.toUtf8(), false);
+        m_pToolbar->set_menu_item_active(m_aCommandURL, false);
     else if (mxInterimPopover)
         mxInterimPopover->EndPopupMode();
 }

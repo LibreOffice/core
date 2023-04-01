@@ -1513,13 +1513,13 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, std::unique_ptr<SfxPoolI
     if ( xDisp.is() || !pCache )
     {
         const SfxSlot* pSlot = SfxSlotPool::GetSlotPool( pDispatcher->GetFrame() ).GetSlot( nSlot );
-        if ( !pSlot || !pSlot->pUnoName )
+        if ( !pSlot || pSlot->pUnoName.isEmpty() )
             return SfxItemState::DISABLED;
 
         css::util::URL aURL;
         OUString aCmd( ".uno:" );
         aURL.Protocol = aCmd;
-        aURL.Path = OUString::createFromAscii(pSlot->GetUnoName());
+        aURL.Path = pSlot->GetUnoName();
         aCmd += aURL.Path;
         aURL.Complete = aCmd;
         aURL.Main = aCmd;

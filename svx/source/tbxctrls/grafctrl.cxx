@@ -210,7 +210,7 @@ ImplGrafControl::ImplGrafControl(
 
     SetBackground( Wallpaper() ); // transparent background
 
-    mxField->set_help_id(OUStringToOString(rCmd, RTL_TEXTENCODING_UTF8));
+    mxField->set_help_id(rCmd);
     mxField->get_widget().connect_key_press(LINK(this, ImplGrafControl, KeyInputHdl));
     mxField->connect_value_changed(LINK(this, ImplGrafControl, ValueChangedHdl));
 

@@ -61,7 +61,7 @@ BitmapEx SdAbstractGenericDialog_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString SdAbstractGenericDialog_Impl::GetScreenshotId() const
+OUString SdAbstractGenericDialog_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -167,7 +167,7 @@ BitmapEx AbstractHeaderFooterDialog_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractHeaderFooterDialog_Impl::GetScreenshotId() const
+OUString AbstractHeaderFooterDialog_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -198,7 +198,7 @@ BitmapEx AbstractBreakDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractBreakDlg_Impl::GetScreenshotId() const
+OUString AbstractBreakDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -219,7 +219,7 @@ BitmapEx AbstractMasterLayoutDialog_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractMasterLayoutDialog_Impl::GetScreenshotId() const
+OUString AbstractMasterLayoutDialog_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -235,7 +235,7 @@ BitmapEx AbstractCopyDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractCopyDlg_Impl::GetScreenshotId() const
+OUString AbstractCopyDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -251,7 +251,7 @@ BitmapEx AbstractSdCustomShowDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractSdCustomShowDlg_Impl::GetScreenshotId() const
+OUString AbstractSdCustomShowDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -261,7 +261,7 @@ short SdAbstractTabController_Impl::Execute()
     return m_xDlg->run();
 }
 
-void SdAbstractTabController_Impl::SetCurPageId( const OString &rName )
+void SdAbstractTabController_Impl::SetCurPageId( const OUString &rName )
 {
     m_xDlg->SetCurPageId( rName );
 }
@@ -298,12 +298,12 @@ BitmapEx SdAbstractTabController_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString SdAbstractTabController_Impl::GetScreenshotId() const
+OUString SdAbstractTabController_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
 
-void AbstractBulletDialog_Impl::SetCurPageId( const OString& rName )
+void AbstractBulletDialog_Impl::SetCurPageId( const OUString& rName )
 {
     m_xDlg->SetCurPageId( rName );
 }
@@ -334,12 +334,12 @@ BitmapEx AbstractBulletDialog_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractBulletDialog_Impl::GetScreenshotId() const
+OUString AbstractBulletDialog_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
 
-void SdPresLayoutTemplateDlg_Impl::SetCurPageId( const OString& rName )
+void SdPresLayoutTemplateDlg_Impl::SetCurPageId( const OUString& rName )
 {
     m_xDlg->SetCurPageId( rName );
 }
@@ -370,7 +370,7 @@ BitmapEx SdPresLayoutTemplateDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString SdPresLayoutTemplateDlg_Impl::GetScreenshotId() const
+OUString SdPresLayoutTemplateDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -391,7 +391,7 @@ BitmapEx AbstractSdModifyFieldDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractSdModifyFieldDlg_Impl::GetScreenshotId() const
+OUString AbstractSdModifyFieldDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -427,7 +427,7 @@ BitmapEx AbstractSdSnapLineDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractSdSnapLineDlg_Impl::GetScreenshotId() const
+OUString AbstractSdSnapLineDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -437,7 +437,7 @@ void AbstractSdInsertLayerDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
     m_xDlg->GetAttr(rOutAttrs);
 }
 
-void AbstractSdInsertLayerDlg_Impl::SetHelpId( const OString& rHelpId )
+void AbstractSdInsertLayerDlg_Impl::SetHelpId( const OUString& rHelpId )
 {
     m_xDlg->set_help_id(rHelpId);
 }
@@ -448,7 +448,7 @@ BitmapEx AbstractSdInsertLayerDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractSdInsertLayerDlg_Impl::GetScreenshotId() const
+OUString AbstractSdInsertLayerDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -474,7 +474,7 @@ BitmapEx AbstractSdInsertPagesObjsDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractSdInsertPagesObjsDlg_Impl::GetScreenshotId() const
+OUString AbstractSdInsertPagesObjsDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -505,7 +505,7 @@ BitmapEx AbstractMorphDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractMorphDlg_Impl::GetScreenshotId() const
+OUString AbstractMorphDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -521,7 +521,7 @@ BitmapEx AbstractSdStartPresDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractSdStartPresDlg_Impl::GetScreenshotId() const
+OUString AbstractSdStartPresDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -537,7 +537,7 @@ BitmapEx AbstractSdPresLayoutDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractSdPresLayoutDlg_Impl::GetScreenshotId() const
+OUString AbstractSdPresLayoutDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -563,7 +563,7 @@ BitmapEx AbstractSdVectorizeDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractSdVectorizeDlg_Impl::GetScreenshotId() const
+OUString AbstractSdVectorizeDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }
@@ -579,7 +579,7 @@ BitmapEx AbstractSdPublishingDlg_Impl::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString AbstractSdPublishingDlg_Impl::GetScreenshotId() const
+OUString AbstractSdPublishingDlg_Impl::GetScreenshotId() const
 {
     return m_xDlg->get_help_id();
 }

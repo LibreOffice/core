@@ -332,7 +332,7 @@ void SfxRequest_Impl::Record
     if(!xRecorder.is())
         return;
 
-    OUString aCmd = ".uno:" + OUString::createFromAscii( pSlot->GetUnoName() );
+    OUString aCmd = pSlot->GetCommand();
 
     uno::Reference< container::XIndexReplace > xReplace( xRecorder, uno::UNO_QUERY );
     if ( xReplace.is() && aCmd == ".uno:InsertText" )
@@ -573,10 +573,10 @@ void SfxRequest::Done_Impl
 
     // recordable?
     // new Recording uses UnoName!
-    SAL_WARN_IF( !pImpl->pSlot->pUnoName, "sfx", "Recording not exported slot: "
+    SAL_WARN_IF( pImpl->pSlot->pUnoName.isEmpty(), "sfx", "Recording not exported slot: "
                     << pImpl->pSlot->GetSlotId() );
 
-    if ( !pImpl->pSlot->pUnoName ) // playing it safe
+    if ( pImpl->pSlot->pUnoName.isEmpty() ) // playing it safe
         return;
 
     // often required values

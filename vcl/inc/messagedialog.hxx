@@ -42,7 +42,7 @@ private:
 public:
     MessageDialog(vcl::Window* pParent, OUString aMessage, VclMessageType eMessageType,
                   VclButtonsType eButtonsType);
-    virtual bool set_property(const OString& rKey, const OUString& rValue) override;
+    virtual bool set_property(const OUString& rKey, const OUString& rValue) override;
     OUString const& get_primary_text() const;
     OUString const& get_secondary_text() const;
     void set_primary_text(const OUString& rPrimaryString);

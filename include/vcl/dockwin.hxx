@@ -159,7 +159,7 @@ protected:
 
     SAL_DLLPRIVATE void DoInitialLayout();
 
-    void loadUI(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
+    void loadUI(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription,
                 const css::uno::Reference<css::frame::XFrame> &rFrame);
 
 public:
@@ -174,7 +174,7 @@ protected:
     DockingWindow( WindowType nType, const char* pIdleDebugName = "vcl::DockingWindow maLayoutIdle");
 public:
     DockingWindow(vcl::Window* pParent, WinBits nStyle, const char* pIdleDebugName = "vcl::DockingWindow maLayoutIdle");
-    DockingWindow(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
+    DockingWindow(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription,
         const char* pIdleDebugName = "vcl::DockingWindow maLayoutIdle",
         const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
     virtual ~DockingWindow() override;

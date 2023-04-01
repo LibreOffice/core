@@ -205,7 +205,7 @@ Sequence< frame::DispatchInformation > SAL_CALL SfxAppDispatchProvider::getConfi
                     if ( pSfxSlot->GetMode() & nMode )
                     {
                         frame::DispatchInformation aCmdInfo;
-                        aCmdInfo.Command = ".uno:" + OUString::createFromAscii(pSfxSlot->GetUnoName());
+                        aCmdInfo.Command = pSfxSlot->GetCommand();
                         aCmdInfo.GroupId = nCommandGroup;
                         aCmdVector.push_back( aCmdInfo );
                     }

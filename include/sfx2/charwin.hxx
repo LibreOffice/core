@@ -64,7 +64,7 @@ public:
     void setClearClickHdl(const Link<SvxCharView*,void> &rLink);
     void setClearAllClickHdl(const Link<SvxCharView*,void> &rLink);
 
-    void ContextMenuSelect(std::string_view rIdent);
+    void ContextMenuSelect(std::u16string_view rIdent);
 };
 
 #endif

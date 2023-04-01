@@ -127,7 +127,7 @@ class BibGeneralPage : public InterimItemWindow
     bool                        AddXControl(const OUString& rName, weld::ComboBox& rList);
 
     template<class Target> void AddControlWithError(const OUString& rColumnName, const OUString& rColumnUIName,
-        Target& rWidget, OUString& rErrorString, const OString& rHelpId);
+        Target& rWidget, OUString& rErrorString, const OUString& rHelpId);
 
     void SaveChanges();
 

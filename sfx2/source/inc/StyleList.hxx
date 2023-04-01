@@ -63,7 +63,7 @@ class StyleList final : public SfxListener
 public:
     // Constructor
     StyleList(weld::Builder* pBuilder, SfxBindings* pBindings, SfxCommonTemplateDialog_Impl* Parent,
-              weld::Container* pC, OString treeviewname, OString flatviewname);
+              weld::Container* pC, OUString treeviewname, OUString flatviewname);
 
     // Destructor
     ~StyleList();
@@ -144,7 +144,7 @@ private:
     sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt, const DropTargetHelper& rHelper);
     void DropHdl(const OUString& rStyle, const OUString& rParent);
 
-    void MenuSelect(const OString& rIdent);
+    void MenuSelect(const OUString& rIdent);
     void PrepareMenu(const Point& rPos);
     void ShowMenu(const CommandEvent& rCEvt);
     void CreateContextMenu();
@@ -232,7 +232,7 @@ private:
 
     std::unique_ptr<Idle> pIdle;
 
-    OString sLastItemIdent;
+    OUString sLastItemIdent;
     SfxModule* m_Module;
     sal_uInt16 m_nModifier;
     weld::Container* m_pContainer;

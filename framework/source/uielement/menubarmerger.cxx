@@ -216,11 +216,11 @@ bool MenuBarMerger::MergeMenuItems(
         {
             if ( rMenuItem.aURL == SEPARATOR_STRING )
             {
-                pMenu->InsertSeparator(OString(), nPos+nModIndex+nIndex);
+                pMenu->InsertSeparator({}, nPos + nModIndex + nIndex);
             }
             else
             {
-                pMenu->InsertItem(nItemId, rMenuItem.aTitle, MenuItemBits::NONE, OString(), nPos+nModIndex+nIndex);
+                pMenu->InsertItem(nItemId, rMenuItem.aTitle, MenuItemBits::NONE, {}, nPos + nModIndex + nIndex);
                 pMenu->SetItemCommand( nItemId, rMenuItem.aURL );
                 if ( !rMenuItem.aSubMenu.empty() )
                 {

@@ -89,7 +89,7 @@ class SvxSuperContourDlg
     std::unique_ptr<weld::CustomWeld> m_xStbStatusColorWeld;
     std::unique_ptr<weld::CustomWeld> m_xContourWndWeld;
 
-    DECL_LINK( Tbx1ClickHdl, const OString&, void );
+    DECL_LINK( Tbx1ClickHdl, const OUString&, void );
     DECL_LINK( MousePosHdl, GraphCtrl*, void );
     DECL_LINK( GraphSizeHdl, GraphCtrl*, void );
     DECL_LINK( UpdateHdl, Timer *, void );
@@ -100,8 +100,8 @@ class SvxSuperContourDlg
     DECL_LINK( WorkplaceClickHdl, ContourWindow&, void );
     DECL_LINK( CancelHdl, weld::Button&, void );
 
-    void SetActiveTool(std::string_view rId);
-    void SetActivePoly(std::string_view rId);
+    void SetActiveTool(std::u16string_view rId);
+    void SetActivePoly(std::u16string_view rId);
 
     SfxBindings& GetBindings() { return *mpBindings; }
 

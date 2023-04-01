@@ -252,7 +252,7 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
     if (mxText)
     {
         mxText->set_size_request(400, mxText->get_height_rows(10));
-        OUString aHelpId = OStringToOUString( mrParentDialog.get_help_id(), RTL_TEXTENCODING_UTF8 );
+        OUString aHelpId = mrParentDialog.get_help_id();
         Size aSizeCm = Application::GetDefaultDevice()->PixelToLogic(maParentDialogSize, MapMode(MapUnit::MapCM));
         maMainMarkupText = lcl_ParagraphWithImage( aHelpId, aSizeCm );
         mxText->set_text( maMainMarkupText );
@@ -276,7 +276,7 @@ IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, saveButtonHandler, weld::Button&, 
     // 'save screenshot...' pressed, offer to save maParentDialogBitmap
     // as PNG image, use *.id file name as screenshot file name offering
     // get a suggestion for the filename from buildable name
-    OString aDerivedFileName = mrParentDialog.get_buildable_name();
+    OUString aDerivedFileName = mrParentDialog.get_buildable_name();
 
     auto xFileDlg = std::make_unique<sfx2::FileDialogHelper>(ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                                                              FileDialogFlags::NONE, mpParentWindow);
@@ -293,7 +293,7 @@ IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, saveButtonHandler, weld::Button&, 
 
     xFilePicker->appendFilter("*.png", "*.png");
     xFilePicker->setCurrentFilter("*.png");
-    xFilePicker->setDefaultName(OStringToOUString(aDerivedFileName, RTL_TEXTENCODING_UTF8));
+    xFilePicker->setDefaultName(aDerivedFileName);
     xFilePicker->setMultiSelectionMode(false);
 
     if (xFilePicker->execute() != ui::dialogs::ExecutableDialogResults::OK)
@@ -546,10 +546,7 @@ bool ScreenshotAnnotationDlg_Impl::MouseButtonUp()
 
         OUStringBuffer aBookmarks(maMainMarkupText);
         for (auto&& rCandidate : maSelected)
-        {
-            OUString aHelpId = OStringToOUString( rCandidate->GetHelpId(), RTL_TEXTENCODING_UTF8 );
-            aBookmarks.append(lcl_Bookmark( aHelpId ));
-        }
+            aBookmarks.append(lcl_Bookmark(rCandidate->GetHelpId()));
 
         mxText->set_text( aBookmarks.makeStringAndClear() );
         bRepaint = true;

@@ -271,7 +271,7 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, UpdateStyles_Hdl, StyleFlags, nFlags, vo
 
     if (nFlags & StyleFlags::UpdateFamily) // Update view type list (Hierarchical, All, etc.
     {
-        CheckItem(OString::number(nActFamily)); // check Button in Toolbox
+        CheckItem(OUString::number(nActFamily)); // check Button in Toolbox
 
         mxFilterLb->freeze();
         mxFilterLb->clear();
@@ -522,13 +522,13 @@ void SfxCommonTemplateDialog_Impl::FamilySelect(sal_uInt16 nEntry, StyleList&, b
     assert((0 < nEntry && nEntry <= MAX_FAMILIES) || 0xffff == nEntry);
     if( nEntry != nActFamily || bPreviewRefresh )
     {
-        CheckItem(OString::number(nActFamily), false);
+        CheckItem(OUString::number(nActFamily), false);
         nActFamily = nEntry;
         m_aStyleList.FamilySelect(nEntry);
     }
 }
 
-void SfxCommonTemplateDialog_Impl::ActionSelect(const OString& rEntry, StyleList& rStyleList)
+void SfxCommonTemplateDialog_Impl::ActionSelect(const OUString& rEntry, StyleList& rStyleList)
 {
     if (rEntry == "watercan")
     {
@@ -715,13 +715,13 @@ void SfxTemplateDialog_Impl::Initialize()
 
 void SfxTemplateDialog_Impl::EnableFamilyItem(sal_uInt16 nId, bool bEnable)
 {
-    m_xActionTbL->set_item_sensitive(OString::number(nId), bEnable);
+    m_xActionTbL->set_item_sensitive(OUString::number(nId), bEnable);
 }
 
 // Insert element into dropdown filter "Frame Styles", "List Styles", etc.
 void SfxTemplateDialog_Impl::InsertFamilyItem(sal_uInt16 nId, const SfxStyleFamilyItem &rItem)
 {
-    OString sHelpId;
+    OUString sHelpId;
     switch( rItem.GetFamily() )
     {
         case SfxStyleFamily::Char:     sHelpId = ".uno:CharStyle"; break;
@@ -733,7 +733,7 @@ void SfxTemplateDialog_Impl::InsertFamilyItem(sal_uInt16 nId, const SfxStyleFami
         default: OSL_FAIL("unknown StyleFamily"); break;
     }
 
-    OString sId(OString::number(nId));
+    OUString sId(OUString::number(nId));
     m_xActionTbL->set_item_visible(sId, true);
     m_xActionTbL->set_item_icon_name(sId, rItem.GetImage());
     m_xActionTbL->set_item_tooltip_text(sId, rItem.GetText());
@@ -763,14 +763,14 @@ SfxTemplateDialog_Impl::~SfxTemplateDialog_Impl()
     m_xActionTbR.reset();
 }
 
-void SfxTemplateDialog_Impl::EnableItem(const OString& rMesId, bool bCheck)
+void SfxTemplateDialog_Impl::EnableItem(const OUString& rMesId, bool bCheck)
 {
     if (rMesId == "watercan" && !bCheck && IsCheckedItem("watercan"))
         Execute_Impl(SID_STYLE_WATERCAN, "", "", 0, m_aStyleList);
     m_xActionTbR->set_item_sensitive(rMesId, bCheck);
 }
 
-void SfxTemplateDialog_Impl::CheckItem(const OString &rMesId, bool bCheck)
+void SfxTemplateDialog_Impl::CheckItem(const OUString &rMesId, bool bCheck)
 {
     if (rMesId == "watercan")
     {
@@ -781,19 +781,19 @@ void SfxTemplateDialog_Impl::CheckItem(const OString &rMesId, bool bCheck)
         m_xActionTbL->set_item_active(rMesId, bCheck);
 }
 
-bool SfxTemplateDialog_Impl::IsCheckedItem(const OString& rMesId)
+bool SfxTemplateDialog_Impl::IsCheckedItem(const OUString& rMesId)
 {
     if (rMesId == "watercan")
         return m_xActionTbR->get_item_active("watercan");
     return m_xActionTbL->get_item_active(rMesId);
 }
 
-IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxLSelect, const OString&, rEntry, void)
+IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxLSelect, const OUString&, rEntry, void)
 {
     FamilySelect(rEntry.toUInt32(), m_aStyleList);
 }
 
-IMPL_LINK(SfxTemplateDialog_Impl, ToolBoxRSelect, const OString&, rEntry, void)
+IMPL_LINK(SfxTemplateDialog_Impl, ToolBoxRSelect, const OUString&, rEntry, void)
 {
     if (rEntry == "newmenu")
         m_xActionTbR->set_menu_item_active(rEntry, !m_xActionTbR->get_menu_item_active(rEntry));
@@ -819,7 +819,7 @@ void SfxTemplateDialog_Impl::FillToolMenu()
     m_xToolMenu->append("load", sLabel);
 }
 
-IMPL_LINK(SfxTemplateDialog_Impl, ToolMenuSelectHdl, const OString&, rMenuId, void)
+IMPL_LINK(SfxTemplateDialog_Impl, ToolMenuSelectHdl, const OUString&, rMenuId, void)
 {
     if (rMenuId.isEmpty())
         return;
@@ -865,7 +865,7 @@ sal_Int8 SfxTemplateDialog_Impl::AcceptToolbarDrop(const AcceptDropEvent& rEvt, 
     if (nIndex >= m_nActionTbLVisible)
         nIndex = m_nActionTbLVisible - 1;
 
-    OString sIdent = m_xActionTbL->get_item_ident(nIndex);
+    OUString sIdent = m_xActionTbL->get_item_ident(nIndex);
     if (!sIdent.isEmpty() && !m_xActionTbL->get_item_active(sIdent))
         ToolBoxLSelect(sIdent);
 

@@ -132,7 +132,7 @@ IMPL_LINK_NOARG( MediaPlaybackPanel, TimeoutHdl, Timer*, void)
     mpBindings->Invalidate(SID_AVMEDIA_TOOLBOX);
 }
 
-IMPL_LINK( MediaPlaybackPanel, PlayToolBoxSelectHdl, const OString&, rId, void)
+IMPL_LINK( MediaPlaybackPanel, PlayToolBoxSelectHdl, const OUString&, rId, void)
 {
     MediaItem aItem(SID_AVMEDIA_TOOLBOX);
 

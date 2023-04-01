@@ -91,12 +91,12 @@ ToolbarUnoDispatcher::ToolbarUnoDispatcher(weld::Toolbar& rToolbar, weld::Builde
 
     for (int i = 0, nItems = rToolbar.get_n_items(); i < nItems; ++i)
     {
-        OString sIdent(rToolbar.get_item_ident(i));
+        OUString sIdent(rToolbar.get_item_ident(i));
         if (!sIdent.startsWith(".uno:"))
             continue;
-        OUString sCommand = OUString::fromUtf8(sIdent);
+        OUString sCommand = sIdent;
         if (bRTL && lcl_RTLizeCommandURL(sCommand))
-            rToolbar.set_item_ident(i, sCommand.toUtf8());
+            rToolbar.set_item_ident(i, sCommand);
 
         auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(sCommand, aModuleName);
         OUString aLabel(vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
@@ -135,19 +135,19 @@ ToolbarUnoDispatcher::GetControllerForCommand(const OUString& rCommand) const
     return css::uno::Reference<css::frame::XToolbarController>();
 }
 
-IMPL_LINK(ToolbarUnoDispatcher, SelectHdl, const OString&, rCommand, void)
+IMPL_LINK(ToolbarUnoDispatcher, SelectHdl, const OUString&, rCommand, void)
 {
     css::uno::Reference<css::frame::XToolbarController> xController(
-        GetControllerForCommand(OUString::fromUtf8(rCommand)));
+        GetControllerForCommand(rCommand));
 
     if (xController.is())
         xController->execute(0);
 }
 
-IMPL_LINK(ToolbarUnoDispatcher, ToggleMenuHdl, const OString&, rCommand, void)
+IMPL_LINK(ToolbarUnoDispatcher, ToggleMenuHdl, const OUString&, rCommand, void)
 {
     css::uno::Reference<css::frame::XToolbarController> xController(
-        GetControllerForCommand(OUString::fromUtf8(rCommand)));
+        GetControllerForCommand(rCommand));
 
     if (xController.is())
         xController->click();
@@ -160,9 +160,8 @@ IMPL_LINK_NOARG(ToolbarUnoDispatcher, ChangedIconSizeHandler, LinkParamNone*, vo
 
     for (int i = 0, nItems = m_pToolbar->get_n_items(); i < nItems; ++i)
     {
-        OString sIdent(m_pToolbar->get_item_ident(i));
-        auto xImage(vcl::CommandInfoProvider::GetXGraphicForCommand(OUString::fromUtf8(sIdent),
-                                                                    m_xFrame, eSize));
+        OUString sIdent(m_pToolbar->get_item_ident(i));
+        auto xImage(vcl::CommandInfoProvider::GetXGraphicForCommand(sIdent, m_xFrame, eSize));
         m_pToolbar->set_item_image(sIdent, xImage);
     }
 
@@ -197,7 +196,7 @@ void ToolbarUnoDispatcher::dispose()
     }
 
     m_xImageController->dispose();
-    m_pToolbar->connect_clicked(Link<const OString&, void>());
+    m_pToolbar->connect_clicked(Link<const OUString&, void>());
     m_pToolbar = nullptr;
     m_pBuilder = nullptr;
 }

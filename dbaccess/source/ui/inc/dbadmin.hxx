@@ -49,7 +49,7 @@ class ODbAdminDialog final : public SfxTabDialogController, public IItemSetHelpe
 private:
     std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
 
-    OString             m_sMainPageID;
+    OUString             m_sMainPageID;
 
 public:
     /** ctor. The itemset given should have been created by <method>createItemSet</method> and should be destroyed
@@ -89,9 +89,9 @@ public:
 
 private:
     // adds a new detail page and remove all the old ones
-    void addDetailPage(const OString& rPageId, TranslateId pTextId, CreateTabPage pCreateFunc);
+    void addDetailPage(const OUString& rPageId, TranslateId pTextId, CreateTabPage pCreateFunc);
 
-    virtual void PageCreated(const OString& rId, SfxTabPage& _rPage) override;
+    virtual void PageCreated(const OUString& rId, SfxTabPage& _rPage) override;
     virtual short Ok() override;
 
     /// select a datasource with a given name, adjust the item set accordingly, and everything like that ..

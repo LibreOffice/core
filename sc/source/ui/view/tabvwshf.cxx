@@ -386,7 +386,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     OUString      aErrMsg ( ScResId( STR_INVALIDTABNAME ) );
                     OUString aName;
                     OUString      aDlgTitle;
-                    OString sHelpId;
+                    OUString sHelpId;
 
                     switch ( nSlot )
                     {

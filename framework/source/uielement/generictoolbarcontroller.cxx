@@ -184,9 +184,7 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
 
     if ( m_pToolbar )
     {
-        OString sId = m_aCommandURL.toUtf8();
-
-        m_pToolbar->set_item_sensitive(sId, Event.IsEnabled);
+        m_pToolbar->set_item_sensitive(m_aCommandURL, Event.IsEnabled);
 
         bool        bValue;
         OUString    aStrValue;
@@ -195,21 +193,21 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
         if ( Event.State >>= bValue )
         {
             // Boolean, treat it as checked/unchecked
-            m_pToolbar->set_item_active(sId, bValue);
+            m_pToolbar->set_item_active(m_aCommandURL, bValue);
         }
         else if ( Event.State >>= aStrValue )
         {
-            m_pToolbar->set_item_label(sId, aStrValue);
+            m_pToolbar->set_item_label(m_aCommandURL, aStrValue);
         }
         else if ( aImageItem.PutValue( Event.State, 0 ) && aImageItem.IsMirrored() != m_bMirrored )
         {
-            m_pToolbar->set_item_image_mirrored(sId, aImageItem.IsMirrored());
+            m_pToolbar->set_item_image_mirrored(m_aCommandURL, aImageItem.IsMirrored());
             auto xGraphic(vcl::CommandInfoProvider::GetXGraphicForCommand(m_aCommandURL, m_xFrame, m_pToolbar->get_icon_size()));
-            m_pToolbar->set_item_image(sId, xGraphic);
+            m_pToolbar->set_item_image(m_aCommandURL, xGraphic);
             m_bMirrored = !m_bMirrored;
         }
         else
-            m_pToolbar->set_item_active(sId, false);
+            m_pToolbar->set_item_active(m_aCommandURL, false);
 
         return;
     }
@@ -394,12 +392,12 @@ void ImageOrientationController::statusChanged(const css::frame::FeatureStateEve
     {
         for (int i = 0, nCount = m_pToolbar->get_n_items(); i < nCount; ++i)
         {
-            OString aCommand = m_pToolbar->get_item_ident(i);
-            if (vcl::CommandInfoProvider::IsMirrored(OUString::fromUtf8(aCommand), getModuleName()))
+            OUString aCommand = m_pToolbar->get_item_ident(i);
+            if (vcl::CommandInfoProvider::IsMirrored(aCommand, getModuleName()))
             {
                 m_pToolbar->set_item_image_mirrored(aCommand, m_bMirrored);
                 auto xGraphic(vcl::CommandInfoProvider::GetXGraphicForCommand(
-                    OUString::fromUtf8(aCommand), m_xFrame, m_pToolbar->get_icon_size()));
+                    aCommand, m_xFrame, m_pToolbar->get_icon_size()));
                 m_pToolbar->set_item_image(aCommand, xGraphic);
             }
         }

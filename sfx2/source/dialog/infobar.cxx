@@ -340,7 +340,7 @@ void SfxInfoBarWindow::Update(const OUString& sPrimaryMessage, const OUString& s
     Invalidate();
 }
 
-IMPL_LINK_NOARG(SfxInfoBarWindow, CloseHandler, const OString&, void)
+IMPL_LINK_NOARG(SfxInfoBarWindow, CloseHandler, const OUString&, void)
 {
     static_cast<SfxInfoBarContainerWindow*>(GetParent())->removeInfoBar(this);
 }

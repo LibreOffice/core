@@ -53,7 +53,7 @@ SvxTextTabDialog::SvxTextTabDialog(weld::Window* pParent, const SfxItemSet* pAtt
 |*
 \************************************************************************/
 
-void SvxTextTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
+void SvxTextTabDialog::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {
     if (rId != "RID_SVXPAGE_TEXTATTR")
         return;

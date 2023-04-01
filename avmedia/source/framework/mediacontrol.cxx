@@ -156,7 +156,7 @@ IMPL_LINK( MediaControl, implVolumeHdl, weld::Scale&, rSlider, void )
     update();
 }
 
-IMPL_LINK( MediaControl, implSelectHdl, const OString&, rIdent, void )
+IMPL_LINK( MediaControl, implSelectHdl, const OUString&, rIdent, void )
 {
     MediaItem aExecItem;
     if (rIdent == "open")

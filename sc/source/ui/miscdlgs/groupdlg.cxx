@@ -28,8 +28,8 @@ ScGroupDlg::ScGroupDlg(weld::Window* pParent, bool bUngroup, bool bRows)
             OUString("modules/scalc/ui/groupdialog.ui")
     ,
         bUngroup ?
-            OString("UngroupDialog") :
-            OString("GroupDialog"))
+            OUString("UngroupDialog") :
+            OUString("GroupDialog"))
     , m_xBtnRows(m_xBuilder->weld_radio_button("rows"))
     , m_xBtnCols(m_xBuilder->weld_radio_button("cols"))
 {

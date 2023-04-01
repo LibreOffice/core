@@ -1115,7 +1115,7 @@ public:
 struct TextInfo
 {
     ToxAuthorityField nToxField;
-    const char* pHelpId;
+    const OUString pHelpId;
 };
 
 }
@@ -1185,7 +1185,7 @@ SwAuthorMarkPane::SwAuthorMarkPane(weld::DialogController &rDialog, weld::Builde
     , m_xTitleFI(rBuilder.weld_label("title"))
     , m_xEntryED(rBuilder.weld_entry("entryed"))
     , m_xEntryLB(rBuilder.weld_combo_box("entrylb"))
-    , m_xActionBT(rBuilder.weld_button(m_bNewEntry ? OString("insert") : OString("modify")))
+    , m_xActionBT(rBuilder.weld_button(m_bNewEntry ? OUString("insert") : OUString("modify")))
     , m_xCloseBT(rBuilder.weld_button("close"))
     , m_xCreateEntryPB(rBuilder.weld_button("new"))
     , m_xEditEntryPB(rBuilder.weld_button("edit"))

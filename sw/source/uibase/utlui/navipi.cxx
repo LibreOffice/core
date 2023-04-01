@@ -191,7 +191,7 @@ void SwNavigationPI::UsePage()
 }
 
 // Select handler of the toolboxes
-IMPL_LINK(SwNavigationPI, ToolBoxSelectHdl, const OString&, rCommand, void)
+IMPL_LINK(SwNavigationPI, ToolBoxSelectHdl, const OUString&, rCommand, void)
 {
     SwView *pView = GetCreateView();
     if (!pView)
@@ -330,7 +330,7 @@ IMPL_LINK(SwNavigationPI, ToolBoxSelectHdl, const OString&, rCommand, void)
 }
 
 // Click handler of the toolboxes
-IMPL_LINK(SwNavigationPI, ToolBoxClickHdl, const OString&, rCommand, void)
+IMPL_LINK(SwNavigationPI, ToolBoxClickHdl, const OUString&, rCommand, void)
 {
     if (!m_xGlobalToolBox->get_menu_item_active(rCommand))
         return;
@@ -341,7 +341,7 @@ IMPL_LINK(SwNavigationPI, ToolBoxClickHdl, const OString&, rCommand, void)
         m_xGlobalTree->TbxMenuHdl(rCommand, *m_xInsertMenu);
 }
 
-IMPL_LINK(SwNavigationPI, ToolBox6DropdownClickHdl, const OString&, rCommand, void)
+IMPL_LINK(SwNavigationPI, ToolBox6DropdownClickHdl, const OUString&, rCommand, void)
 {
     if (!m_xContent6ToolBox->get_menu_item_active(rCommand))
         return;
@@ -363,7 +363,7 @@ IMPL_LINK(SwNavigationPI, ToolBox6DropdownClickHdl, const OString&, rCommand, vo
     }
 }
 
-IMPL_LINK(SwNavigationPI, DropModeMenuSelectHdl, const OString&, rIdent, void)
+IMPL_LINK(SwNavigationPI, DropModeMenuSelectHdl, const OUString&, rIdent, void)
 {
     if (rIdent == "hyperlink")
         SetRegionDropMode(RegionMode::NONE);
@@ -373,18 +373,18 @@ IMPL_LINK(SwNavigationPI, DropModeMenuSelectHdl, const OString&, rIdent, void)
         SetRegionDropMode(RegionMode::EMBEDDED);
 }
 
-IMPL_LINK(SwNavigationPI, GlobalMenuSelectHdl, const OString&, rIdent, void)
+IMPL_LINK(SwNavigationPI, GlobalMenuSelectHdl, const OUString&, rIdent, void)
 {
     m_xGlobalTree->ExecuteContextMenuAction(rIdent);
 }
 
-IMPL_LINK(SwNavigationPI, ToolBox5DropdownClickHdl, const OString&, rCommand, void)
+IMPL_LINK(SwNavigationPI, ToolBox5DropdownClickHdl, const OUString&, rCommand, void)
 {
     if (!m_xContent5ToolBox->get_menu_item_active(rCommand))
         return;
 
     if (rCommand == "headings")
-        m_xHeadingsMenu->set_active(OString::number(m_xContentTree->GetOutlineLevel()), true);
+        m_xHeadingsMenu->set_active(OUString::number(m_xContentTree->GetOutlineLevel()), true);
 }
 
 // Action-Handler Edit:
@@ -631,7 +631,7 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     m_xGlobalTree->set_selection_mode(SelectionMode::Multiple);
 
 //  Handler
-    Link<const OString&, void> aLk = LINK(this, SwNavigationPI, ToolBoxSelectHdl);
+    Link<const OUString&, void> aLk = LINK(this, SwNavigationPI, ToolBoxSelectHdl);
     m_xContent1ToolBox->connect_clicked(aLk);
     m_xContent3ToolBox->connect_clicked(aLk);
     m_xContent5ToolBox->connect_clicked(aLk);
@@ -833,7 +833,7 @@ void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
     }
 }
 
-IMPL_LINK( SwNavigationPI, HeadingsMenuSelectHdl, const OString&, rMenuId, void )
+IMPL_LINK( SwNavigationPI, HeadingsMenuSelectHdl, const OUString&, rMenuId, void )
 {
     if (!rMenuId.isEmpty())
         m_xContentTree->SetOutlineLevel(rMenuId.toUInt32());

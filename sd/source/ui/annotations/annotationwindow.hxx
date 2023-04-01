@@ -92,7 +92,7 @@ private:
     std::unique_ptr<weld::MenuButton> mxMenuButton;
 
     DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
-    DECL_LINK(MenuItemSelectedHdl, const OString&, void);
+    DECL_LINK(MenuItemSelectedHdl, const OUString&, void);
 
     void FillMenuButton();
     void InitControls();

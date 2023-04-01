@@ -297,7 +297,7 @@ void AnnotationWindow::InitControls()
     mxTextControl->GrabFocus();
 }
 
-IMPL_LINK(AnnotationWindow, MenuItemSelectedHdl, const OString&, rIdent, void)
+IMPL_LINK(AnnotationWindow, MenuItemSelectedHdl, const OUString&, rIdent, void)
 {
     SfxDispatcher* pDispatcher = mpDocShell->GetViewShell()->GetViewFrame()->GetDispatcher();
     if (!pDispatcher)

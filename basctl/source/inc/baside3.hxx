@@ -107,7 +107,7 @@ public:
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
-    virtual OString GetHid () const override;
+    virtual OUString GetHid () const override;
     virtual ItemType GetType () const override;
 };
 

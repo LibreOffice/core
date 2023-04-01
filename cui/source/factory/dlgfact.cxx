@@ -165,7 +165,7 @@ void AbstractSvxCharacterMapDialog_Impl::SetText(const OUString& rStr)
     m_xDlg->set_title(rStr);
 }
 
-void CuiAbstractTabController_Impl::SetCurPageId( const OString &rName )
+void CuiAbstractTabController_Impl::SetCurPageId( const OUString &rName )
 {
     m_xDlg->SetCurPageId( rName );
 }
@@ -191,12 +191,12 @@ void CuiAbstractTabController_Impl::SetText( const OUString& rStr )
     m_xDlg->set_title(rStr);
 }
 
-std::vector<OString> CuiAbstractTabController_Impl::getAllPageUIXMLDescriptions() const
+std::vector<OUString> CuiAbstractTabController_Impl::getAllPageUIXMLDescriptions() const
 {
     return m_xDlg->getAllPageUIXMLDescriptions();
 }
 
-bool CuiAbstractTabController_Impl::selectPageByUIXMLDescription(const OString& rUIXMLDescription)
+bool CuiAbstractTabController_Impl::selectPageByUIXMLDescription(const OUString& rUIXMLDescription)
 {
     return m_xDlg->selectPageByUIXMLDescription(rUIXMLDescription);
 }
@@ -206,7 +206,7 @@ BitmapEx CuiAbstractTabController_Impl::createScreenshot() const
     return m_xDlg->createScreenshot();
 }
 
-OString CuiAbstractTabController_Impl::GetScreenshotId() const
+OUString CuiAbstractTabController_Impl::GetScreenshotId() const
 {
     return m_xDlg->GetScreenshotId();
 }
@@ -466,7 +466,7 @@ bool AbstractSvxSearchSimilarityDialog_Impl::IsRelaxed()
 }
 
 // AbstractSvxTransformTabDialog implementations just forwards everything to the dialog
-void AbstractSvxTransformTabDialog_Impl::SetCurPageId( const OString& rName )
+void AbstractSvxTransformTabDialog_Impl::SetCurPageId( const OUString& rName )
 {
     m_xDlg->SetCurPageId( rName );
 }
@@ -498,7 +498,7 @@ void AbstractSvxTransformTabDialog_Impl::SetValidateFramePosLink( const Link<Svx
 }
 
 // AbstractSvxCaptionDialog implementations just forwards everything to the dialog
-void AbstractSvxCaptionDialog_Impl::SetCurPageId( const OString& rName )
+void AbstractSvxCaptionDialog_Impl::SetCurPageId( const OUString& rName )
 {
     m_xDlg->SetCurPageId(rName);
 }
@@ -571,12 +571,12 @@ void AbstractSvxNameDialog_Impl::SetCheckNameTooltipHdl( const Link<AbstractSvxN
         m_xDlg->SetCheckNameTooltipHdl( Link<SvxNameDialog&,OUString>());
 }
 
-void AbstractSvxNameDialog_Impl::SetEditHelpId(const OString& rHelpId)
+void AbstractSvxNameDialog_Impl::SetEditHelpId(const OUString& rHelpId)
 {
     m_xDlg->SetEditHelpId(rHelpId);
 }
 
-void AbstractSvxNameDialog_Impl::SetHelpId(const OString& rHelpId)
+void AbstractSvxNameDialog_Impl::SetHelpId(const OUString& rHelpId)
 {
     m_xDlg->set_help_id(rHelpId);
 }
@@ -691,7 +691,7 @@ Graphic AbstractGraphicFilterDialog_Impl::GetFilteredGraphic(const Graphic& rGra
 }
 
 // AbstractSvxAreaTabDialog implementations just forwards everything to the dialog
-void AbstractSvxAreaTabDialog_Impl::SetCurPageId( const OString& rName )
+void AbstractSvxAreaTabDialog_Impl::SetCurPageId( const OUString& rName )
 {
     m_xDlg->SetCurPageId( rName );
 }
@@ -1409,7 +1409,7 @@ VclPtr<SfxAbstractInsertObjectDialog> AbstractDialogFactory_Impl::CreateInsertOb
 
     if ( pDlg )
     {
-        pDlg->SetHelpId( OUStringToOString( rCommand, RTL_TEXTENCODING_UTF8 ) );
+        pDlg->SetHelpId(rCommand);
         return VclPtr<AbstractInsertObjectDialog_Impl>::Create( std::move(pDlg) );
     }
     return nullptr;
@@ -1421,7 +1421,7 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateEditObjectDialog(wel
     if ( rCommand == ".uno:InsertObjectFloatingFrame" )
     {
         auto pDlg = std::make_unique<SfxInsertFloatingFrameDialog>(pParent, xObj);
-        pDlg->SetHelpId( OUStringToOString( rCommand, RTL_TEXTENCODING_UTF8 ) );
+        pDlg->SetHelpId(rCommand);
         return VclPtr<AbstractInsertObjectDialog_Impl>::Create( std::move(pDlg) );
     }
     return nullptr;
@@ -1460,7 +1460,7 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateOptionsDialog(weld::
     return VclPtr<CuiAbstractController_Impl>::Create(std::make_unique<OfaTreeOptionsDialog>(pParent, rExtensionId));
 }
 
-VclPtr<SvxAbstractInsRowColDlg> AbstractDialogFactory_Impl::CreateSvxInsRowColDlg(weld::Window* pParent, bool bCol, const OString& rHelpId)
+VclPtr<SvxAbstractInsRowColDlg> AbstractDialogFactory_Impl::CreateSvxInsRowColDlg(weld::Window* pParent, bool bCol, const OUString& rHelpId)
 {
     return VclPtr<SvxInsRowColDlg>::Create(pParent, bCol, rHelpId);
 }

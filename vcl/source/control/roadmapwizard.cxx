@@ -224,7 +224,7 @@ namespace vcl
         Dialog::dispose();
     }
 
-    void RoadmapWizard::SetRoadmapHelpId( const OString& _rId )
+    void RoadmapWizard::SetRoadmapHelpId( const OUString& _rId )
     {
         m_xRoadmapImpl->pRoadmap->SetHelpId( _rId );
     }
@@ -234,7 +234,7 @@ namespace vcl
         m_xRoadmapImpl->pRoadmap->SetRoadmapBitmap(rBmp);
     }
 
-    void RoadmapWizardMachine::SetRoadmapHelpId(const OString& rId)
+    void RoadmapWizardMachine::SetRoadmapHelpId(const OUString& rId)
     {
         m_xAssistant->set_page_side_help_id(rId);
     }
@@ -453,7 +453,7 @@ namespace vcl
                     WizardTypes::WizardState nRequiredState = rActivePath[ nItemIndex ];
                     if ( nPresentItemId != nRequiredState )
                     {
-                        m_xAssistant->set_page_title(OString::number(nPresentItemId), "");
+                        m_xAssistant->set_page_title(OUString::number(nPresentItemId), "");
                         bInsertItem = true;
                     }
                 }
@@ -471,7 +471,7 @@ namespace vcl
                 GetOrCreatePage(nState);
             }
 
-            OString sIdent(getPageIdentForState(nState));
+            OUString sIdent(getPageIdentForState(nState));
             m_xAssistant->set_page_index(sIdent, nItemIndex);
             m_xAssistant->set_page_title(sIdent, getStateDisplayName(nState));
 
@@ -638,7 +638,7 @@ namespace vcl
             m_xRoadmapImpl->pRoadmap->SelectRoadmapItemByID( getCurrentState() );
     }
 
-    IMPL_LINK(RoadmapWizardMachine, OnRoadmapItemSelected, const OString&, rCurItemId, bool)
+    IMPL_LINK(RoadmapWizardMachine, OnRoadmapItemSelected, const OUString&, rCurItemId, bool)
     {
         WizardTypes::WizardState nSelectedState = getStateFromPageIdent(rCurItemId);
 
@@ -814,7 +814,7 @@ namespace vcl
         rJsonWriter.put("type", "dialog");
         rJsonWriter.put("title", GetText());
 
-        OUString sDialogId = OStringToOUString(GetHelpId(), RTL_TEXTENCODING_ASCII_US);
+        OUString sDialogId = GetHelpId();
         sal_Int32 nStartPos = sDialogId.lastIndexOf('/');
         nStartPos = nStartPos >= 0 ? nStartPos + 1 : 0;
         rJsonWriter.put("dialogid", sDialogId.copy(nStartPos));

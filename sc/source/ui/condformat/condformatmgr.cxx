@@ -102,7 +102,7 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(weld::Window* pParent, ScDocument
 
     SvtViewOptions aDlgOpt(EViewType::Dialog, "CondFormatDialog");
     if (aDlgOpt.Exists())
-        m_xDialog->set_window_state(aDlgOpt.GetWindowState().toUtf8());
+        m_xDialog->set_window_state(aDlgOpt.GetWindowState());
 
     UpdateButtonSensitivity();
 }
@@ -111,9 +111,7 @@ ScCondFormatManagerDlg::~ScCondFormatManagerDlg()
 {
    // tdf#101285 - Remember position of dialog
     SvtViewOptions aDlgOpt(EViewType::Dialog, "CondFormatDialog");
-    OString sWindowState
-        = m_xDialog->get_window_state(vcl::WindowDataMask::Pos);
-    aDlgOpt.SetWindowState(OUString::fromUtf8(sWindowState));
+    aDlgOpt.SetWindowState(m_xDialog->get_window_state(vcl::WindowDataMask::Pos));
 }
 
 std::unique_ptr<ScConditionalFormatList> ScCondFormatManagerDlg::GetConditionalFormatList()

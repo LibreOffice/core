@@ -39,7 +39,7 @@ void SvxLineSpacingToolBoxControl::initialize(const css::uno::Sequence<css::uno:
     if (m_pToolbar)
     {
         mxPopoverContainer.reset(new ToolbarPopupContainer(m_pToolbar));
-        m_pToolbar->set_item_popover(m_aCommandURL.toUtf8(), mxPopoverContainer->getTopLevel());
+        m_pToolbar->set_item_popover(m_aCommandURL, mxPopoverContainer->getTopLevel());
     }
 
     ToolBox* pToolBox = nullptr;
@@ -53,8 +53,8 @@ void SAL_CALL SvxLineSpacingToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
     if (m_pToolbar)
     {
         // Toggle the popup also when toolbutton is activated
-        const OString aId(m_aCommandURL.toUtf8());
-        m_pToolbar->set_menu_item_active(aId, !m_pToolbar->get_menu_item_active(aId));
+        m_pToolbar->set_menu_item_active(m_aCommandURL,
+                                         !m_pToolbar->get_menu_item_active(m_aCommandURL));
     }
     else
     {

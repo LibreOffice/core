@@ -86,7 +86,7 @@ public:
                      std::unique_ptr<weld::Menu> xMenu,
                      SvtFileDialog* pDlg);
 
-    void set_help_id(const OString& rHelpId) { m_xToolbar->set_help_id(rHelpId); }
+    void set_help_id(const OUString& rHelpId) { m_xToolbar->set_help_id(rHelpId); }
     void show() { m_xToolbar->show(); }
 
     void FillURLMenu();
@@ -95,8 +95,8 @@ public:
 
 private:
 
-    DECL_LINK(SelectHdl, const OString&, void);
-    DECL_LINK(ClickHdl, const OString&, void);
+    DECL_LINK(SelectHdl, const OUString&, void);
+    DECL_LINK(ClickHdl, const OUString&, void);
 };
 
 class SvtURLBox;

@@ -25,7 +25,7 @@ class ScMetricInputDlg : public weld::GenericDialogController
 {
 public:
     ScMetricInputDlg( weld::Window*   pParent,
-                      const OString& sDialogName,
+                      const OUString& sDialogName,
                       tools::Long           nCurrent,
                       tools::Long           nDefault,
                       FieldUnit      eFUnit,

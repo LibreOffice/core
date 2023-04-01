@@ -43,7 +43,7 @@ ScMatrixComparisonGenerator::ScMatrixComparisonGenerator(
                                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
                                     weld::Window* pParent, ScViewData& rViewData,
                                     const OUString& rUiXmlDescription,
-                                    const OString& rID)
+                                    const OUString& rID)
     : ScStatisticsInputOutputDialog(pSfxBindings, pChildWindow, pParent, rViewData, rUiXmlDescription, rID)
 {}
 

@@ -4657,28 +4657,25 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
 
     try
     {
-        OString sControlId = OUStringToOString(aMap["id"], RTL_TEXTENCODING_ASCII_US);
+        OUString sControlId = aMap["id"];
 
         // dialogs send own id but notebookbar and sidebar controls are remembered by SfxViewShell id
-        bool bFoundWeldedControl = jsdialog::ExecuteAction(std::to_string(nWindowId), sControlId, aMap);
-        if (!bFoundWeldedControl)
-            bFoundWeldedControl = jsdialog::ExecuteAction(std::to_string(nCurrentShellId) + "sidebar", sControlId, aMap);
-        if (!bFoundWeldedControl)
-            bFoundWeldedControl = jsdialog::ExecuteAction(std::to_string(nCurrentShellId) + "notebookbar", sControlId, aMap);
-        if (!bFoundWeldedControl)
-            bFoundWeldedControl = jsdialog::ExecuteAction(std::to_string(nCurrentShellId) + "formulabar", sControlId, aMap);
-        if (!bFoundWeldedControl && !SfxViewShell::Current())
-        {
-            // this is needed for dialogs shown before document is loaded: MacroWarning dialog, etc...
-            // these dialogs are created with WindowId "0"
-            bFoundWeldedControl = jsdialog::ExecuteAction("0", sControlId, aMap);
-        }
-
-        if (bFoundWeldedControl)
+        if (jsdialog::ExecuteAction(OUString::number(nWindowId), sControlId, aMap))
+            return;
+        auto sCurrentShellId = OUString::number(nCurrentShellId);
+        if (jsdialog::ExecuteAction(sCurrentShellId + "sidebar", sControlId, aMap))
+            return;
+        if (jsdialog::ExecuteAction(sCurrentShellId + "notebookbar", sControlId, aMap))
+            return;
+        if (jsdialog::ExecuteAction(sCurrentShellId + "formulabar", sControlId, aMap))
+            return;
+        // this is needed for dialogs shown before document is loaded: MacroWarning dialog, etc...
+        // these dialogs are created with WindowId "0"
+        if (!SfxViewShell::Current() && jsdialog::ExecuteAction("0", sControlId, aMap))
             return;
 
         // force resend - used in mobile-wizard
-        jsdialog::SendFullUpdate(std::to_string(nCurrentShellId) + "sidebar", "Panel");
+        jsdialog::SendFullUpdate(sCurrentShellId + "sidebar", "Panel");
 
     } catch(...) {}
 }

@@ -150,7 +150,7 @@ class BibToolBar:   public ToolBox
         std::unique_ptr<weld::Builder> xBuilder;
         std::unique_ptr<weld::Menu> xPopupMenu;
         sal_uInt16              nMenuId;
-        OString                 sSelMenuItem;
+        OUString                 sSelMenuItem;
         OUString                aQueryField;
         Link<void*,void>        aLayoutManager;
         sal_Int16               nSymbolsSize;

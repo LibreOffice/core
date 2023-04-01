@@ -173,7 +173,7 @@ namespace svxform
         for (const auto& rRemove : m_aRemovedMenuEntries)
             m_xMenu->remove(rRemove);
         EnableMenuItems();
-        OString sCommand = m_xMenu->popup_at_rect(m_xItemList.get(), tools::Rectangle(aPos, Size(1,1)));
+        OUString sCommand = m_xMenu->popup_at_rect(m_xItemList.get(), tools::Rectangle(aPos, Size(1,1)));
         if (!sCommand.isEmpty())
             DoMenuAction(sCommand);
         m_xMenu.reset();
@@ -248,7 +248,7 @@ namespace svxform
         m_pParent->move(m_xContainer.get(), nullptr);
     }
 
-    IMPL_LINK(XFormsPage, TbxSelectHdl, const OString&, rIdent, void)
+    IMPL_LINK(XFormsPage, TbxSelectHdl, const OUString&, rIdent, void)
     {
         DoToolBoxAction(rIdent);
     }
@@ -387,13 +387,13 @@ namespace svxform
         }
     }
 
-    bool XFormsPage::DoToolBoxAction(std::string_view rToolBoxID)
+    bool XFormsPage::DoToolBoxAction(std::u16string_view rToolBoxID)
     {
         bool bHandled = false;
         bool bIsDocModified = false;
         m_pNaviWin->DisableNotify( true );
 
-        if (rToolBoxID == "additem" || rToolBoxID == "addelement" || rToolBoxID == "addattribute")
+        if (rToolBoxID == u"additem" || rToolBoxID == u"addelement" || rToolBoxID == u"addattribute")
         {
             bHandled = true;
             Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
@@ -444,7 +444,7 @@ namespace svxform
                     DBG_ASSERT( pParentNode, "XFormsPage::DoToolBoxAction(): no parent node" );
                     xParentNode = pParentNode->m_xNode;
                     Reference< css::xml::dom::XNode > xNewNode;
-                    if (rToolBoxID == "addelement")
+                    if (rToolBoxID == u"addelement")
                     {
                         try
                         {
@@ -486,7 +486,7 @@ namespace svxform
                         if ( xNewNode.is() )
                              xPNode = xNewNode->getParentNode();
                         // attributes don't have parents in the DOM model
-                        DBG_ASSERT( rToolBoxID  == "addattribute"
+                        DBG_ASSERT( rToolBoxID  == u"addattribute"
                                     || xPNode.is(), "XFormsPage::DoToolboxAction(): node not added" );
                     }
                     catch ( Exception const & )
@@ -574,7 +574,7 @@ namespace svxform
                 }
             }
         }
-        else if (rToolBoxID == "edit")
+        else if (rToolBoxID == u"edit")
         {
             bHandled = true;
 
@@ -670,7 +670,7 @@ namespace svxform
                 }
             }
         }
-        else if (rToolBoxID == "delete")
+        else if (rToolBoxID == u"delete")
         {
             bHandled = true;
             if ( DGTInstance == m_eGroup && !m_sInstanceURL.isEmpty() )
@@ -972,7 +972,7 @@ namespace svxform
 
         sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
         if (nCode == KEY_DELETE)
-            bHandled = DoMenuAction("delete");
+            bHandled = DoMenuAction(u"delete");
 
         return bHandled;
     }
@@ -1169,12 +1169,12 @@ namespace svxform
         return sRet;
     }
 
-    bool XFormsPage::DoMenuAction(std::string_view rMenuID)
+    bool XFormsPage::DoMenuAction(std::u16string_view rMenuID)
     {
         return DoToolBoxAction(rMenuID);
     }
 
-    void XFormsPage::SetMenuEntrySensitive(const OString& rIdent, bool bSensitive)
+    void XFormsPage::SetMenuEntrySensitive(const OUString& rIdent, bool bSensitive)
     {
         if (m_aRemovedMenuEntries.find(rIdent) != m_aRemovedMenuEntries.end())
             return;
@@ -1288,7 +1288,7 @@ namespace svxform
     {
         // handler
         m_xModelsBox->connect_changed( LINK( this, DataNavigatorWindow, ModelSelectListBoxHdl ) );
-        Link<const OString&, void> aLink1 = LINK( this, DataNavigatorWindow, MenuSelectHdl );
+        Link<const OUString&, void> aLink1 = LINK( this, DataNavigatorWindow, MenuSelectHdl );
         m_xModelBtn->connect_selected(aLink1);
         m_xInstanceBtn->connect_selected(aLink1);
         Link<weld::Toggleable&,void> aLink2 = LINK( this, DataNavigatorWindow, MenuActivateHdl );
@@ -1299,11 +1299,11 @@ namespace svxform
         m_aUpdateTimer.SetInvokeHandler( LINK( this, DataNavigatorWindow, UpdateHdl ) );
 
         // init tabcontrol
-        OString sPageId("instance");
+        OUString sPageId("instance");
         SvtViewOptions aViewOpt( EViewType::TabDialog, CFGNAME_DATANAVIGATOR );
         if ( aViewOpt.Exists() )
         {
-            OString sNewPageId = aViewOpt.GetPageID();
+            OUString sNewPageId = aViewOpt.GetPageID();
             if (m_xTabCtrl->get_page_index(sNewPageId) != -1)
                 sPageId = sNewPageId;
             aViewOpt.GetUserItem(CFGNAME_SHOWDETAILS) >>= m_bShowDetails;
@@ -1371,7 +1371,7 @@ namespace svxform
         }
     }
 
-    IMPL_LINK(DataNavigatorWindow, MenuSelectHdl, const OString&, rIdent, void)
+    IMPL_LINK(DataNavigatorWindow, MenuSelectHdl, const OUString&, rIdent, void)
     {
         bool bIsDocModified = false;
         Reference< css::xforms::XFormsUIHelper1 > xUIHelper;
@@ -1528,7 +1528,7 @@ namespace svxform
             AddInstanceDialog aDlg(GetFrameWeld(), false);
             if (aDlg.run() == RET_OK)
             {
-                OString sPageId = GetNewPageId(); // ModelSelectHdl will cause a page of this id to be created
+                OUString sPageId = GetNewPageId(); // ModelSelectHdl will cause a page of this id to be created
 
                 OUString sName = aDlg.GetName();
                 if (sName.isEmpty())
@@ -1560,7 +1560,7 @@ namespace svxform
         }
         else if (rIdent == "instancesedit")
         {
-            OString sIdent = GetCurrentPage();
+            OUString sIdent = GetCurrentPage();
             XFormsPage* pPage = GetPage(sIdent);
             if ( pPage )
             {
@@ -1595,7 +1595,7 @@ namespace svxform
         }
         else if (rIdent == "instancesremove")
         {
-            OString sIdent = GetCurrentPage();
+            OUString sIdent = GetCurrentPage();
             XFormsPage* pPage = GetPage(sIdent);
             if (pPage)
             {
@@ -1661,16 +1661,16 @@ namespace svxform
             SetDocModified();
     }
 
-    bool DataNavigatorWindow::IsAdditionalPage(std::string_view rIdent)
+    bool DataNavigatorWindow::IsAdditionalPage(std::u16string_view rIdent)
     {
-        return o3tl::starts_with(rIdent, "additional");
+        return o3tl::starts_with(rIdent, u"additional");
     }
 
     IMPL_LINK( DataNavigatorWindow, MenuActivateHdl, weld::Toggleable&, rBtn, void )
     {
         if (m_xInstanceBtn.get() == &rBtn)
         {
-            OString sIdent(m_xTabCtrl->get_current_page_ident());
+            OUString sIdent(m_xTabCtrl->get_current_page_ident());
             bool bIsInstPage = (IsAdditionalPage(sIdent) || sIdent == "instance");
             m_xInstanceBtn->set_item_sensitive( "instancesedit", bIsInstPage );
             m_xInstanceBtn->set_item_sensitive( "instancesremove",
@@ -1688,7 +1688,7 @@ namespace svxform
         }
     }
 
-    IMPL_LINK(DataNavigatorWindow, ActivatePageHdl, const OString&, rIdent, void)
+    IMPL_LINK(DataNavigatorWindow, ActivatePageHdl, const OUString&, rIdent, void)
     {
         XFormsPage* pPage = GetPage(rIdent);
         if (!pPage)
@@ -1702,7 +1702,7 @@ namespace svxform
         ModelSelectHdl( nullptr );
     }
 
-    XFormsPage* DataNavigatorWindow::GetPage(const OString& rCurId)
+    XFormsPage* DataNavigatorWindow::GetPage(const OUString& rCurId)
     {
         XFormsPage* pPage = nullptr;
         if (rCurId == "submissions")
@@ -1739,7 +1739,7 @@ namespace svxform
         return pPage;
     }
 
-    OString DataNavigatorWindow::GetCurrentPage() const
+    OUString DataNavigatorWindow::GetCurrentPage() const
     {
         return m_xTabCtrl->get_current_page_ident();
     }
@@ -1798,7 +1798,7 @@ namespace svxform
         }
     }
 
-    void DataNavigatorWindow::SetPageModel(const OString& rIdent)
+    void DataNavigatorWindow::SetPageModel(const OUString& rIdent)
     {
         OUString sModel(m_xModelsBox->get_active_text());
         try
@@ -1913,7 +1913,7 @@ namespace svxform
         if (pProp != _xPropSeq.end())
             pProp->Value >>= sInstName;
 
-        OString sPageId = GetNewPageId();
+        OUString sPageId = GetNewPageId();
         if ( sInstName.isEmpty() )
         {
             SAL_WARN( "svx.form", "DataNavigatorWindow::CreateInstancePage(): instance without name" );
@@ -1927,15 +1927,15 @@ namespace svxform
         return m_xTabCtrl->get_page_ident(0) == "instance";
     }
 
-    OString DataNavigatorWindow::GetNewPageId() const
+    OUString DataNavigatorWindow::GetNewPageId() const
     {
         int nMax = 0;
 
         int nCount = m_xTabCtrl->get_n_pages();
         for (int i = 0; i < nCount; ++i)
         {
-            OString sIdent = m_xTabCtrl->get_page_ident(i);
-            OString sNumber;
+            OUString sIdent = m_xTabCtrl->get_page_ident(i);
+            OUString sNumber;
             if (!sIdent.startsWith("additional", &sNumber))
                 continue;
             int nPageId = sNumber.toInt32();
@@ -1943,7 +1943,7 @@ namespace svxform
                 nMax = nPageId;
         }
 
-        return "additional" + OString::number(nMax + 1);
+        return "additional" + OUString::number(nMax + 1);
     }
 
     void DataNavigatorWindow::SetDocModified()

@@ -509,10 +509,10 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 const uno::Reference < embed::XEmbeddedObject > xObj( rSh.GetOleRef() );
                 aSet.Put( SfxBoolItem( FN_OLE_IS_MATH, xObj.is() && SotExchange::IsMath( xObj->getClassID() ) ) );
 
-                OString sDefPage;
+                OUString sDefPage;
                 const SfxStringItem* pDlgItem;
                 if(pArgs && (pDlgItem = pArgs->GetItemIfSet(FN_FORMAT_FRAME_DLG, false)))
-                    sDefPage = OUStringToOString(pDlgItem->GetValue(), RTL_TEXTENCODING_UTF8);
+                    sDefPage = pDlgItem->GetValue();
 
                 aSet.Put(SfxFrameItem( SID_DOCFRAME, &GetView().GetViewFrame().GetFrame()));
                 FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( &GetView()) != nullptr );

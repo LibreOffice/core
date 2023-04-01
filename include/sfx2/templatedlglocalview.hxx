@@ -50,7 +50,7 @@ public:
                      bool bShowCategoryInTooltip);
 
 private:
-    void ContextMenuSelectHdl(std::string_view rIdent);
+    void ContextMenuSelectHdl(std::u16string_view rIdent);
 
     void insertFilteredItems();
 

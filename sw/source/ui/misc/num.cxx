@@ -890,7 +890,7 @@ SwSvxNumBulletTabDialog::~SwSvxNumBulletTabDialog()
 {
 }
 
-void SwSvxNumBulletTabDialog::PageCreated(const OString& rPageId, SfxTabPage& rPage)
+void SwSvxNumBulletTabDialog::PageCreated(const OUString& rPageId, SfxTabPage& rPage)
 {
     // set styles' names and metric
     OUString sNumCharFormat, sBulletCharFormat;

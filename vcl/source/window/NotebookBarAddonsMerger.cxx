@@ -142,7 +142,7 @@ void MergeNotebookBarAddons(vcl::Window* pParent, const VclBuilder::customMakeWi
     }
 }
 
-void MergeNotebookBarMenuAddons(Menu* pPopupMenu, sal_Int16 nItemId, const OString& sItemIdName,
+void MergeNotebookBarMenuAddons(Menu* pPopupMenu, sal_Int16 nItemId, const OUString& sItemIdName,
                                 NotebookBarAddonsItem& aNotebookBarAddonsItem)
 {
     std::vector<Image> aImageVec = aNotebookBarAddonsItem.aImageValues;

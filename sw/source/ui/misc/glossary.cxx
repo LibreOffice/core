@@ -544,7 +544,7 @@ IMPL_LINK_NOARG( SwGlossaryDlg, EnableHdl, weld::Toggleable&, void )
     m_xEditBtn->set_item_visible("import", bIsGroup && !m_bIsOld && !m_pGlossaryHdl->IsReadOnly() );
 }
 
-IMPL_LINK(SwGlossaryDlg, MenuHdl, const OString&, rItemIdent, void)
+IMPL_LINK(SwGlossaryDlg, MenuHdl, const OUString&, rItemIdent, void)
 {
     if (rItemIdent == "edit")
     {

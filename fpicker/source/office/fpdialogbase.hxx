@@ -59,7 +59,7 @@ inline constexpr OUStringLiteral FILEDIALOG_FILTER_ALL = u"*.*";
 class SvtFileDialog_Base : public weld::GenericDialogController, public ::svt::IFilePickerController
 {
 public:
-    SvtFileDialog_Base(weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID)
+    SvtFileDialog_Base(weld::Window* pParent, const OUString& rUIXMLDescription, const OUString& rID)
         : weld::GenericDialogController(pParent, rUIXMLDescription, rID)
     {
     }

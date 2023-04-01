@@ -322,7 +322,7 @@ void ParaWin::SetFunctionDesc(const IFunctionDescription* pFDesc)
         pFuncDesc->fillVisibleArgumentMapping(aVisibleArgMapping);
         m_xSlider->set_vpolicy(VclPolicyType::NEVER);
         m_xSlider->set_size_request(-1, -1);
-        OString sHelpId = pFuncDesc->getHelpId();
+        OUString sHelpId = pFuncDesc->getHelpId();
         m_xContainer->set_help_id(sHelpId);
         m_xEdArg1->GetWidget()->set_help_id(sHelpId);
         m_xEdArg2->GetWidget()->set_help_id(sHelpId);

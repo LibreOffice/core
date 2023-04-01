@@ -30,11 +30,10 @@
 
 namespace rptui
 {
-    OUString HelpIdUrl::getHelpURL( std::string_view sHelpId )
+    OUString HelpIdUrl::getHelpURL( std::u16string_view sHelpId )
     {
-        OUString aTmp( OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8) );
-        DBG_ASSERT( INetURLObject( aTmp ).GetProtocol() == INetProtocol::NotValid, "Wrong HelpId!" );
-        return INET_HID_SCHEME + aTmp;
+        DBG_ASSERT( INetURLObject(sHelpId).GetProtocol() == INetProtocol::NotValid, "Wrong HelpId!" );
+        return INET_HID_SCHEME + sHelpId;
     }
 
     using namespace com::sun::star::uno;
@@ -161,7 +160,7 @@ namespace rptui
         {
             const char* programmaticName;
             TranslateId uiNameResId;
-            OString    helpId;
+            OUString    helpId;
         } aCategories[] = {
             { "General",    RID_STR_PROPPAGE_DEFAULT,   HID_RPT_PROPDLG_TAB_GENERAL },
             { "Data",       RID_STR_PROPPAGE_DATA,      HID_RPT_PROPDLG_TAB_DATA },

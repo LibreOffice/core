@@ -188,7 +188,7 @@ void OAddFieldWindow::Update()
         // ListBox loeschen
         m_xListBox->clear();
         m_aListBoxData.clear();
-        const OString aIds[] = { "up", "down" };
+        const OUString aIds[] = { "up", "down" };
         for (size_t j = 0; j< std::size(aIds); ++j)
             m_xActions->set_item_sensitive(aIds[j], false);
 
@@ -319,7 +319,7 @@ IMPL_LINK_NOARG( OAddFieldWindow, OnDoubleClickHdl, weld::TreeView&, bool )
     return true;
 }
 
-IMPL_LINK(OAddFieldWindow, OnSortAction, const OString&, rCurItem, void)
+IMPL_LINK(OAddFieldWindow, OnSortAction, const OUString&, rCurItem, void)
 {
     if (rCurItem == "insert")
     {
@@ -327,7 +327,7 @@ IMPL_LINK(OAddFieldWindow, OnSortAction, const OString&, rCurItem, void)
         return;
     }
 
-    const OString aIds[] = { "up", "down" };
+    const OUString aIds[] = { "up", "down" };
 
     if (rCurItem == "delete")
     {

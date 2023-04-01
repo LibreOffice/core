@@ -35,7 +35,7 @@ private:
 
 public:
     SfxStyleDialogController(weld::Window* pParent,
-        const OUString& rUIXMLDescription, const OString& rID, SfxStyleSheetBase&);
+        const OUString& rUIXMLDescription, const OUString& rID, SfxStyleSheetBase&);
 
     virtual ~SfxStyleDialogController() override;
 

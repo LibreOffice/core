@@ -854,7 +854,7 @@ void SAL_CALL PrevNextScrollToolboxController::statusChanged( const css::frame::
     if (rEvent.FeatureURL.Path == "NavElement")
     {
         if (m_pToolbar)
-            m_pToolbar->set_item_tooltip_text(m_aCommandURL.toUtf8(), lcl_GetScrollToolTip(meType != PrevNextScrollToolboxController::PREVIOUS));
+            m_pToolbar->set_item_tooltip_text(m_aCommandURL, lcl_GetScrollToolTip(meType != PrevNextScrollToolboxController::PREVIOUS));
         else
         {
             ToolBox* pToolBox = nullptr;
@@ -866,7 +866,7 @@ void SAL_CALL PrevNextScrollToolboxController::statusChanged( const css::frame::
     else if (rEvent.FeatureURL.Path == "ScrollToPrevious" || rEvent.FeatureURL.Path == "ScrollToNext")
     {
         if (m_pToolbar)
-            m_pToolbar->set_item_sensitive(m_aCommandURL.toUtf8(), rEvent.IsEnabled);
+            m_pToolbar->set_item_sensitive(m_aCommandURL, rEvent.IsEnabled);
         else
         {
             ToolBox* pToolBox = nullptr;

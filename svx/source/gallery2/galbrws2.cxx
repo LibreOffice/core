@@ -113,7 +113,7 @@ private:
     static void Execute( const CommandInfo &rCmdInfo,
                   const css::uno::Sequence< css::beans::PropertyValue > &rArguments );
 
-    void MenuSelectHdl(std::string_view rIdent);
+    void MenuSelectHdl(std::u16string_view rIdent);
     void BackgroundMenuSelectHdl(sal_uInt16 nId);
 public:
     GalleryThemePopup(weld::Widget* pParent,
@@ -287,7 +287,7 @@ void GalleryThemePopup::ExecutePopup(weld::Widget* pParent, const ::Point &rPos)
     MenuSelectHdl(mxPopupMenu->popup_at_rect(pParent, tools::Rectangle(rPos, Size(1,1))));
 }
 
-void GalleryThemePopup::MenuSelectHdl(std::string_view rIdent)
+void GalleryThemePopup::MenuSelectHdl(std::u16string_view rIdent)
 {
     if (rIdent.empty())
         return;
@@ -299,7 +299,7 @@ void GalleryThemePopup::MenuSelectHdl(std::string_view rIdent)
         return;
     }
 
-    if (rIdent == "add")
+    if (rIdent == u"add")
     {
         const CommandInfoMap::const_iterator it = m_aCommandInfo.find( SID_GALLERY_FORMATS );
         if (it != m_aCommandInfo.end())
@@ -526,7 +526,7 @@ bool GalleryBrowser2::KeyInput(const KeyEvent& rKEvt)
 
     if (!ViewBoxHasFocus() && nItemId && mpCurTheme)
     {
-        OString sExecuteIdent;
+        OUString sExecuteIdent;
         INetURLObject       aURL;
 
         mpCurTheme->GetURL( nItemId - 1, aURL );
@@ -1086,7 +1086,7 @@ void GalleryBrowser2::DispatchAdd(
         pInfo.release();
 }
 
-void GalleryBrowser2::Execute(std::string_view rIdent)
+void GalleryBrowser2::Execute(std::u16string_view rIdent)
 {
     Point       aSelPos;
     const sal_uInt32 nItemId = ImplGetSelectedItemId( nullptr, aSelPos );
@@ -1096,9 +1096,9 @@ void GalleryBrowser2::Execute(std::string_view rIdent)
 
     mnCurActionPos = nItemId - 1;
 
-    if (rIdent == "preview")
+    if (rIdent == u"preview")
         SetMode( ( GALLERYBROWSERMODE_PREVIEW != GetMode() ) ? GALLERYBROWSERMODE_PREVIEW : meLastMode );
-    else if (rIdent == "delete")
+    else if (rIdent == u"delete")
     {
         if (!mpCurTheme->IsReadOnly())
         {
@@ -1110,7 +1110,7 @@ void GalleryBrowser2::Execute(std::string_view rIdent)
             }
         }
     }
-    else if (rIdent == "title")
+    else if (rIdent == u"title")
     {
         std::unique_ptr<SgaObject> pObj = mpCurTheme->AcquireObject( mnCurActionPos );
 
@@ -1135,11 +1135,11 @@ void GalleryBrowser2::Execute(std::string_view rIdent)
             }
         }
     }
-    else if (rIdent == "copy")
+    else if (rIdent == u"copy")
     {
         mpCurTheme->CopyToClipboard(*GetViewWindow(), mnCurActionPos);
     }
-    else if (rIdent == "paste")
+    else if (rIdent == u"paste")
     {
         if( !mpCurTheme->IsReadOnly() )
         {

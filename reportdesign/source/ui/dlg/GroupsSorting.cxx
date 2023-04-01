@@ -971,7 +971,7 @@ IMPL_LINK_NOARG(OGroupsSortingDialog, OnWidgetFocusLost, weld::Widget&, void)
     }
 }
 
-IMPL_LINK(OGroupsSortingDialog, OnFormatAction, const OString&, rCommand, void)
+IMPL_LINK(OGroupsSortingDialog, OnFormatAction, const OUString&, rCommand, void)
 {
     if ( !m_xFieldExpression )
         return;

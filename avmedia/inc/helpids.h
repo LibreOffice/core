@@ -19,18 +19,18 @@
 
 #pragma once
 
-#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 
-inline constexpr OStringLiteral HID_AVMEDIA_TOOLBOXITEM_PLAY                       = "AVMEDIA_HID_AVMEDIA_TOOLBOXITEM_PLAY";
-inline constexpr OStringLiteral HID_AVMEDIA_TOOLBOXITEM_PAUSE                      = "AVMEDIA_HID_AVMEDIA_TOOLBOXITEM_PAUSE";
-inline constexpr OStringLiteral HID_AVMEDIA_TOOLBOXITEM_STOP                       = "AVMEDIA_HID_AVMEDIA_TOOLBOXITEM_STOP";
-inline constexpr OStringLiteral HID_AVMEDIA_TOOLBOXITEM_MUTE                       = "AVMEDIA_HID_AVMEDIA_TOOLBOXITEM_MUTE";
-inline constexpr OStringLiteral HID_AVMEDIA_TOOLBOXITEM_LOOP                       = "AVMEDIA_HID_AVMEDIA_TOOLBOXITEM_LOOP";
-inline constexpr OStringLiteral HID_AVMEDIA_TOOLBOXITEM_OPEN                       = "AVMEDIA_HID_AVMEDIA_TOOLBOXITEM_OPEN";
-inline constexpr OStringLiteral HID_AVMEDIA_TOOLBOXITEM_INSERT                     = "AVMEDIA_HID_AVMEDIA_TOOLBOXITEM_INSERT";
-inline constexpr OStringLiteral HID_AVMEDIA_ZOOMLISTBOX                            = "AVMEDIA_HID_AVMEDIA_ZOOMLISTBOX";
-inline constexpr OStringLiteral HID_AVMEDIA_TIMEEDIT                               = "AVMEDIA_HID_AVMEDIA_TIMEEDIT";
-inline constexpr OStringLiteral HID_AVMEDIA_VOLUMESLIDER                           = "AVMEDIA_HID_AVMEDIA_VOLUMESLIDER";
-inline constexpr OStringLiteral HID_AVMEDIA_PLAYERWINDOW                           = "AVMEDIA_HID_AVMEDIA_PLAYERWINDOW";
+inline constexpr OUStringLiteral HID_AVMEDIA_TOOLBOXITEM_PLAY   = u"AVMEDIA_HID_AVMEDIA_TOOLBOXITEM_PLAY";
+inline constexpr OUStringLiteral HID_AVMEDIA_TOOLBOXITEM_PAUSE  = u"AVMEDIA_HID_AVMEDIA_TOOLBOXITEM_PAUSE";
+inline constexpr OUStringLiteral HID_AVMEDIA_TOOLBOXITEM_STOP   = u"AVMEDIA_HID_AVMEDIA_TOOLBOXITEM_STOP";
+inline constexpr OUStringLiteral HID_AVMEDIA_TOOLBOXITEM_MUTE   = u"AVMEDIA_HID_AVMEDIA_TOOLBOXITEM_MUTE";
+inline constexpr OUStringLiteral HID_AVMEDIA_TOOLBOXITEM_LOOP   = u"AVMEDIA_HID_AVMEDIA_TOOLBOXITEM_LOOP";
+inline constexpr OUStringLiteral HID_AVMEDIA_TOOLBOXITEM_OPEN   = u"AVMEDIA_HID_AVMEDIA_TOOLBOXITEM_OPEN";
+inline constexpr OUStringLiteral HID_AVMEDIA_TOOLBOXITEM_INSERT = u"AVMEDIA_HID_AVMEDIA_TOOLBOXITEM_INSERT";
+inline constexpr OUStringLiteral HID_AVMEDIA_ZOOMLISTBOX        = u"AVMEDIA_HID_AVMEDIA_ZOOMLISTBOX";
+inline constexpr OUStringLiteral HID_AVMEDIA_TIMEEDIT           = u"AVMEDIA_HID_AVMEDIA_TIMEEDIT";
+inline constexpr OUStringLiteral HID_AVMEDIA_VOLUMESLIDER       = u"AVMEDIA_HID_AVMEDIA_VOLUMESLIDER";
+inline constexpr OUStringLiteral HID_AVMEDIA_PLAYERWINDOW       = u"AVMEDIA_HID_AVMEDIA_PLAYERWINDOW";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

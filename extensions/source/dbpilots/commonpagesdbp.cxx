@@ -343,7 +343,7 @@ namespace dbp
         lcl_fillEntries(*m_xTable, aQueryNames, BMP_QUERY, CommandType::QUERY);
     }
 
-    OMaybeListSelectionPage::OMaybeListSelectionPage(weld::Container* pPage, OControlWizard* pWizard, const OUString& rUIXMLDescription, const OString& rID)
+    OMaybeListSelectionPage::OMaybeListSelectionPage(weld::Container* pPage, OControlWizard* pWizard, const OUString& rUIXMLDescription, const OUString& rID)
         : OControlWizardPage(pPage, pWizard, rUIXMLDescription, rID)
         , m_pYes(nullptr)
         , m_pNo(nullptr)

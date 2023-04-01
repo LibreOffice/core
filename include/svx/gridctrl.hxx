@@ -347,7 +347,7 @@ protected:
     virtual void PreExecuteRowContextMenu(weld::Menu& rMenu);
     /** After executing the context menu for a row this method is called.
     */
-    virtual void PostExecuteRowContextMenu(const OString& rExecutionResult);
+    virtual void PostExecuteRowContextMenu(const OUString& rExecutionResult);
 
     /// @throws css::uno::RuntimeException
     void DataSourcePropertyChanged(const css::beans::PropertyChangeEvent& evt);

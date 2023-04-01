@@ -100,14 +100,14 @@ class SwNavigationPI final : public PanelLayout
     void FillBox();
 
     DECL_LINK( DocListBoxSelectHdl, weld::ComboBox&, void );
-    DECL_LINK( ToolBoxSelectHdl, const OString&, void );
-    DECL_LINK( ToolBoxClickHdl, const OString&, void );
-    DECL_LINK( ToolBox5DropdownClickHdl, const OString&, void );
-    DECL_LINK( ToolBox6DropdownClickHdl, const OString&, void );
+    DECL_LINK( ToolBoxSelectHdl, const OUString&, void );
+    DECL_LINK( ToolBoxClickHdl, const OUString&, void );
+    DECL_LINK( ToolBox5DropdownClickHdl, const OUString&, void );
+    DECL_LINK( ToolBox6DropdownClickHdl, const OUString&, void );
     DECL_LINK( DoneLink, SfxPoolItem const *, void );
-    DECL_LINK( DropModeMenuSelectHdl, const OString&, void );
-    DECL_LINK( HeadingsMenuSelectHdl, const OString&, void );
-    DECL_LINK( GlobalMenuSelectHdl, const OString&, void );
+    DECL_LINK( DropModeMenuSelectHdl, const OUString&, void );
+    DECL_LINK( HeadingsMenuSelectHdl, const OUString&, void );
+    DECL_LINK( GlobalMenuSelectHdl, const OUString&, void );
     DECL_LINK( ChangePageHdl, Timer*, void );
     DECL_LINK( PageEditModifyHdl, weld::SpinButton&, void );
     DECL_LINK( EditActionHdl, weld::Entry&, bool );

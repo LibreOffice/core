@@ -27,7 +27,7 @@ namespace dbaui
 
 DlgSize::DlgSize(weld::Window* pParent, sal_Int32 nVal, bool bRow, sal_Int32 _nAlternativeStandard )
     : GenericDialogController(pParent, bRow ? OUString("dbaccess/ui/rowheightdialog.ui") : OUString("dbaccess/ui/colwidthdialog.ui"),
-                              bRow ? OString("RowHeightDialog") : OString("ColWidthDialog"))
+                              bRow ? OUString("RowHeightDialog") : OUString("ColWidthDialog"))
     , m_nPrevValue(nVal)
     , m_xMF_VALUE(m_xBuilder->weld_metric_spin_button("value", FieldUnit::CM))
     , m_xCB_STANDARD(m_xBuilder->weld_check_button("automatic"))

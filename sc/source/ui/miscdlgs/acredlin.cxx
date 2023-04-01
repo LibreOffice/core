@@ -1600,7 +1600,7 @@ IMPL_LINK(ScAcceptChgDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     int nSortedCol = rTreeView.get_sort_column();
     for (sal_Int32 i = 0; i < 5; ++i)
-        m_xSortMenu->set_active("calcsort" + OString::number(i), i == nSortedCol);
+        m_xSortMenu->set_active("calcsort" + OUString::number(i), i == nSortedCol);
 
     m_xPopup->set_sensitive("calcedit", false);
 
@@ -1615,7 +1615,7 @@ IMPL_LINK(ScAcceptChgDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
         }
     }
 
-    OString sCommand = m_xPopup->popup_at_rect(&rTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
+    OUString sCommand = m_xPopup->popup_at_rect(&rTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
 
     if (!sCommand.isEmpty())
     {

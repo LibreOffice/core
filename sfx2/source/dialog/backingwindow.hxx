@@ -94,7 +94,7 @@ class BackingWindow : public InterimItemWindow
     DECL_LINK(FilterHdl, weld::ComboBox&, void);
     DECL_LINK(ClickHdl, weld::Button&, void);
     DECL_LINK(ClickHelpHdl, weld::Button&, void);
-    DECL_LINK(MenuSelectHdl, const OString&, void);
+    DECL_LINK(MenuSelectHdl, const OUString&, void);
     DECL_LINK(ExtLinkClickHdl, weld::Button&, void);
     DECL_LINK(CreateContextMenuHdl, ThumbnailViewItem*, void);
     DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*, void);

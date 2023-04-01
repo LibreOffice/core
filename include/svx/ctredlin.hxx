@@ -138,7 +138,7 @@ protected:
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xContainer;
 public:
-    SvxTPage(weld::Container* pParent, const OUString& rUIXMLDescription, const OString& rID);
+    SvxTPage(weld::Container* pParent, const OUString& rUIXMLDescription, const OUString& rID);
     virtual ~SvxTPage();
     virtual void ActivatePage();
     void Show() { m_xContainer->show(); }
@@ -321,8 +321,8 @@ private:
     std::unique_ptr<SvxTPFilter> m_xTPFilter;
     std::unique_ptr<SvxTPView> m_xTPView;
 
-    DECL_DLLPRIVATE_LINK(ActivatePageHdl, const OString&, void);
-    DECL_DLLPRIVATE_LINK(DeactivatePageHdl, const OString&, bool);
+    DECL_DLLPRIVATE_LINK(ActivatePageHdl, const OUString&, void);
+    DECL_DLLPRIVATE_LINK(DeactivatePageHdl, const OUString&, bool);
 
 public:
     SvxAcceptChgCtr(weld::Container* pParent);

@@ -84,7 +84,7 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         aDateField.SetFormat( SvxDateFormat::F );    // Dienstag, 13.Februar 1996
         m_xPopup->append_radio(OUString::number(nID++), aDateField.GetFormatted(*pNumberFormatter, eLanguage));
 
-        m_xPopup->set_active(OString::number(static_cast<sal_uInt16>( pDateField->GetFormat() ) + 1), true); // - 2 + 3 !
+        m_xPopup->set_active(OUString::number(static_cast<sal_uInt16>( pDateField->GetFormat() ) + 1), true); // - 2 + 3 !
     }
     else if( auto pTimeField = dynamic_cast< const SvxExtTimeField *>( m_pField ) )
     {
@@ -117,7 +117,7 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         //SvxTimeFormat::HH12_MM_SS_AMPM, // 01:49:38 PM
         //SvxTimeFormat::HH12_MM_SS_00_AMPM // 01:49:38.78 PM
 
-        m_xPopup->set_active(OString::number(static_cast<sal_uInt16>( pTimeField->GetFormat() ) + 1), true); // - 2 + 3 !
+        m_xPopup->set_active(OUString::number(static_cast<sal_uInt16>( pTimeField->GetFormat() ) + 1), true); // - 2 + 3 !
     }
     else if( auto pFileField = dynamic_cast< const SvxExtFileField *>( m_pField ) )
     {
@@ -133,7 +133,7 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         m_xPopup->append_radio(OUString::number(nID++), SdResId(STR_FILEFORMAT_PATH));
         m_xPopup->append_radio(OUString::number(nID++), SdResId(STR_FILEFORMAT_NAME));
 
-        m_xPopup->set_active(OString::number(static_cast<sal_uInt16>( pFileField->GetFormat() ) + 3), true);
+        m_xPopup->set_active(OUString::number(static_cast<sal_uInt16>( pFileField->GetFormat() ) + 3), true);
     }
     else if( auto pAuthorField = dynamic_cast< const SvxAuthorField *>( m_pField ) )
     {
@@ -149,13 +149,13 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
             aAuthorField.SetFormat( static_cast<SvxAuthorFormat>(i) );
             m_xPopup->append_radio(OUString::number(nID++), aAuthorField.GetFormatted());
         }
-        m_xPopup->set_active(OString::number(static_cast<sal_uInt16>( pAuthorField->GetFormat() ) + 3), true);
+        m_xPopup->set_active(OUString::number(static_cast<sal_uInt16>( pAuthorField->GetFormat() ) + 3), true);
     }
 }
 
 void SdFieldPopup::Execute(weld::Window* pParent, const tools::Rectangle& rRect)
 {
-    OString sIdent = m_xPopup->popup_at_rect(pParent, rRect);
+    OUString sIdent = m_xPopup->popup_at_rect(pParent, rRect);
     if (sIdent.isEmpty())
         return;
 
@@ -169,7 +169,7 @@ void SdFieldPopup::Execute(weld::Window* pParent, const tools::Rectangle& rRect)
         int nCount = m_xPopup->n_children();
         for (int i = 3; i < nCount; i++)
             m_xPopup->set_active(
-                OString::number(i), sIdent == std::string_view(OString::number(i)));
+                OUString::number(i), sIdent == std::u16string_view(OUString::number(i)));
     }
 }
 
@@ -196,7 +196,7 @@ SvxFieldData* SdFieldPopup::GetField()
 
         for( i = 3; i < nCount; i++ )
         {
-            if (m_xPopup->get_active(OString::number(i)))
+            if (m_xPopup->get_active(OUString::number(i)))
                 break;
         }
         eFormat = static_cast<SvxDateFormat>( i - 1 );
@@ -228,7 +228,7 @@ SvxFieldData* SdFieldPopup::GetField()
 
         for( i = 3; i < nCount; i++ )
         {
-            if (m_xPopup->get_active(OString::number(i)))
+            if (m_xPopup->get_active(OUString::number(i)))
                 break;
         }
         eFormat = static_cast<SvxTimeFormat>( i - 1 );
@@ -261,7 +261,7 @@ SvxFieldData* SdFieldPopup::GetField()
 
         for( i = 3; i < nCount; i++ )
         {
-            if (m_xPopup->get_active(OString::number(i)))
+            if (m_xPopup->get_active(OUString::number(i)))
                 break;
         }
         eFormat = static_cast<SvxFileFormat>( i - 3 );
@@ -297,7 +297,7 @@ SvxFieldData* SdFieldPopup::GetField()
 
         for( i = 3; i < nCount; i++ )
         {
-            if (m_xPopup->get_active(OString::number(i)))
+            if (m_xPopup->get_active(OUString::number(i)))
                 break;
         }
         eFormat = static_cast<SvxAuthorFormat>( i - 3 );

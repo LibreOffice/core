@@ -99,7 +99,7 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
     }
     ::tools::Rectangle aRect(rCEvt.GetMousePosPixel(), Size(1, 1));
     weld::Window* pParent = weld::GetPopupParent(GetStatusBar(), aRect);
-    OString sResult = xPopup->popup_at_rect(pParent, aRect);
+    OUString sResult = xPopup->popup_at_rect(pParent, aRect);
     if (!sResult.isEmpty())
     {
         SfxUInt16Item aBookmark( FN_STAT_BOOKMARK, aBookmarkIdx[sResult.toUInt32()] );

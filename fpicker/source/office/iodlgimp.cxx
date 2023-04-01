@@ -101,7 +101,7 @@ void SvtUpButton_Impl::FillURLMenu()
     }
 }
 
-IMPL_LINK(SvtUpButton_Impl, SelectHdl, const OString&, rId, void)
+IMPL_LINK(SvtUpButton_Impl, SelectHdl, const OUString&, rId, void)
 {
     sal_uInt32 nId = rId.toUInt32();
     if (nId)
@@ -113,7 +113,7 @@ IMPL_LINK(SvtUpButton_Impl, SelectHdl, const OString&, rId, void)
     }
 }
 
-IMPL_LINK_NOARG(SvtUpButton_Impl, ClickHdl, const OString&, void)
+IMPL_LINK_NOARG(SvtUpButton_Impl, ClickHdl, const OUString&, void)
 {
     m_pDlg->PrevLevel_Impl();
 }

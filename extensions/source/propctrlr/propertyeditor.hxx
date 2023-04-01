@@ -57,7 +57,7 @@ namespace pcr
         IPropertyLineListener*      m_pListener;
         IPropertyControlObserver*   m_pObserver;
         sal_uInt16                  m_nNextId;
-        Link<const OString&,void>   m_aPageActivationHandler;
+        Link<const OUString&,void>   m_aPageActivationHandler;
         bool                        m_bHasHelpSection;
 
         MapStringToPageId           m_aPropertyPageIds;
@@ -75,8 +75,8 @@ namespace pcr
         bool                        HasHelpSection() const { return m_bHasHelpSection; }
         void                        SetHelpText( const OUString& _rHelpText );
 
-        void                        SetHelpId( const OString& sHelpId );
-        sal_uInt16                  AppendPage( const OUString& r, const OString& _rHelpId );
+        void                        SetHelpId( const OUString& sHelpId );
+        sal_uInt16                  AppendPage( const OUString& r, const OUString& _rHelpId );
         void                        SetPage( sal_uInt16 );
         void                        RemovePage(sal_uInt16 nID);
         sal_uInt16                  GetCurPage() const;
@@ -95,7 +95,7 @@ namespace pcr
         void                        RemoveEntry( const OUString& _rName );
         void                        ChangeEntry( const OLineDescriptor& );
 
-        void                        setPageActivationHandler(const Link<const OString&,void>& _rHdl) { m_aPageActivationHandler = _rHdl; }
+        void                        setPageActivationHandler(const Link<const OUString&,void>& _rHdl) { m_aPageActivationHandler = _rHdl; }
 
         Size                        get_preferred_size() const;
 
@@ -122,8 +122,8 @@ namespace pcr
         void    enableHelpSection( OBrowserPage& _rPage, const void* );
         static void setHelpSectionText( OBrowserPage& _rPage, const void* _pPointerToOUString );
 
-        DECL_LINK(OnPageDeactivate, const OString&, bool);
-        DECL_LINK(OnPageActivate, const OString&, void);
+        DECL_LINK(OnPageDeactivate, const OUString&, bool);
+        DECL_LINK(OnPageActivate, const OUString&, void);
     };
 
 

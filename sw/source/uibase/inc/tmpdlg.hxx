@@ -40,13 +40,13 @@ public:
     SwTemplateDlgController(weld::Window* pParent,
                     SfxStyleSheetBase&  rBase,
                     SfxStyleFamily      nRegion,
-                    const OString&      sPage,
+                    const OUString&      sPage,
                     SwWrtShell*         pActShell,
                     bool                bNew);
 
     virtual void RefreshInputSet() override;
 
-    virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
+    virtual void PageCreated(const OUString& rId, SfxTabPage &rPage) override;
     virtual short Ok() override;
 };
 

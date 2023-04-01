@@ -409,7 +409,7 @@ namespace dbaui
         updateToolbox();
     }
 
-    IMPL_LINK(DbaIndexDialog, OnIndexAction, const OString&, rClicked, void)
+    IMPL_LINK(DbaIndexDialog, OnIndexAction, const OUString&, rClicked, void)
     {
         if (rClicked == "ID_INDEX_NEW")
             OnNewIndex();

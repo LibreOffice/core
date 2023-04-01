@@ -16,7 +16,7 @@ class VCL_DLLPUBLIC BuilderPage
 {
 public:
     BuilderPage(weld::Widget* pParent, weld::DialogController* pController,
-                const OUString& rUIXMLDescription, const OString& rID, bool bIsMobile = false);
+                const OUString& rUIXMLDescription, const OUString& rID, bool bIsMobile = false);
     virtual ~BuilderPage() COVERITY_NOEXCEPT_FALSE;
 
     /* The title of the page, in an Assistant the dialog may append this page title to the
@@ -33,8 +33,8 @@ public:
     virtual void Activate();
     virtual void Deactivate();
 
-    void SetHelpId(const OString& rHelpId) { m_xContainer->set_help_id(rHelpId); }
-    OString GetHelpId() const { return m_xContainer->get_help_id(); }
+    void SetHelpId(const OUString& rHelpId) { m_xContainer->set_help_id(rHelpId); }
+    OUString GetHelpId() const { return m_xContainer->get_help_id(); }
 
 protected:
     weld::DialogController* m_pDialogController;

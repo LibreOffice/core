@@ -321,7 +321,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
             if (sName.isEmpty() && m_xBasePool)
                 sName = SfxStyleDialogController::GenerateUnusedName(*m_xBasePool, nFamily);
 
-            Edit(rReq.GetFrameWeld(), sName, sParent, nFamily, nMask, true, OString(), nullptr, &rReq, nSlot);
+            Edit(rReq.GetFrameWeld(), sName, sParent, nFamily, nMask, true, {}, nullptr, &rReq, nSlot);
         }
         break;
 
@@ -492,7 +492,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 switch(nSlot)
                 {
                     case SID_STYLE_EDIT:
-                        Edit(rReq.GetFrameWeld(), aParam, OUString(), nFamily, nMask, false, OString(), pActShell);
+                        Edit(rReq.GetFrameWeld(), aParam, {}, nFamily, nMask, false, {}, pActShell);
                         break;
                     case SID_STYLE_DELETE:
                         Delete(aParam, nFamily);
@@ -759,7 +759,7 @@ void SwDocShell::Edit(
     const SfxStyleFamily nFamily,
     SfxStyleSearchBits nMask,
     const bool bNew,
-    const OString& sPage,
+    const OUString& sPage,
     SwWrtShell* pActShell,
     SfxRequest* pReq,
     sal_uInt16 nSlot)
@@ -1650,7 +1650,7 @@ void SwDocShell::LoadStyles_( SfxObjectShell& rSource, bool bPreserveCurrentDocu
 void SwDocShell::FormatPage(
     weld::Window* pDialogParent,
     const OUString& rPage,
-    const OString& rPageId,
+    const OUString& rPageId,
     SwWrtShell& rActShell,
     SfxRequest* pRequest)
 {

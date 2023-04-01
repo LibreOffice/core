@@ -68,7 +68,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractScAutoFormatDlg_Impl : public AbstractScAutoFormatDlg
@@ -98,7 +98,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractScCondFormatManagerDlg_Impl : public AbstractScCondFormatManagerDlg
@@ -131,7 +131,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractScDataPilotSourceTypeDlg_Impl  :public AbstractScDataPilotSourceTypeDlg
@@ -152,7 +152,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractScDataPilotServiceDlg_Impl : public AbstractScDataPilotServiceDlg
@@ -186,7 +186,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 //for dataform
@@ -202,7 +202,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractScDeleteContentsDlg_Impl : public AbstractScDeleteContentsDlg
@@ -219,7 +219,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractScFillSeriesDlg_Impl:public AbstractScFillSeriesDlg
@@ -289,7 +289,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractScInsertTableDlg_Impl : public AbstractScInsertTableDlg
@@ -311,7 +311,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractScSelEntryDlg_Impl : public AbstractScSelEntryDlg
@@ -378,7 +378,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractScNameCreateDlg_Impl : public AbstractScNameCreateDlg
@@ -394,7 +394,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractScNamePasteDlg_Impl : public AbstractScNamePasteDlg
@@ -516,7 +516,7 @@ public:
     virtual short Execute() override;
     virtual bool StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
     virtual void Insert( const OUString& rString, bool bSelected ) override;
-    virtual void SetDescription(const OUString& rTitle, const OUString& rFixedText, const OString& sDlgHelpId, const OString& sLbHelpId) override;
+    virtual void SetDescription(const OUString& rTitle, const OUString& rFixedText, const OUString& sDlgHelpId, const OUString& sLbHelpId) override;
     virtual OUString GetEntry(sal_Int32 nPos) const override;
     virtual std::vector<sal_Int32> GetSelectedRows() const override;
 };
@@ -533,7 +533,7 @@ public:
     virtual bool StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
     virtual void Insert( const OUString& rString, bool bSelected ) override;
     virtual void SetDescription(const OUString& rTitle, const OUString& rEntryLabel, const OUString& rListLabel,
-                                const OString& rDlgHelpId, const OString& rEnHelpId, const OString& rLbHelpId) override;
+                                const OUString& rDlgHelpId, const OUString& rEnHelpId, const OUString& rLbHelpId) override;
     virtual OUString GetSelectedEntry() const override;
 };
 
@@ -561,7 +561,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractScTabBgColorDlg_Impl :  public AbstractScTabBgColorDlg
@@ -577,7 +577,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractScImportOptionsDlg_Impl : public AbstractScImportOptionsDlg
@@ -608,7 +608,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class ScAbstractTabController_Impl : public SfxAbstractTabDialog
@@ -621,17 +621,17 @@ public:
     }
     virtual short Execute() override;
     virtual bool  StartExecuteAsync(AsyncContext &rCtx) override;
-    virtual void                SetCurPageId( const OString &rName ) override;
+    virtual void                SetCurPageId( const OUString &rName ) override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
     virtual WhichRangesContainer GetInputRanges( const SfxItemPool& pItem ) override;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
     virtual void        SetText( const OUString& rStr ) override;
 
     // screenshotting
-    virtual std::vector<OString> getAllPageUIXMLDescriptions() const override;
-    virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override;
+    virtual std::vector<OUString> getAllPageUIXMLDescriptions() const override;
+    virtual bool selectPageByUIXMLDescription(const OUString& rUIXMLDescription) override;
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class ScAsyncTabController_Impl : public ScAsyncTabController
@@ -644,7 +644,7 @@ public:
     }
     virtual bool  StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
-    virtual void                SetCurPageId( const OString &rName ) override;
+    virtual void                SetCurPageId( const OUString &rName ) override;
 };
 
 //AbstractDialogFactory_Impl implementations
@@ -714,7 +714,7 @@ public:
     virtual VclPtr<AbstractScLinkedAreaDlg> CreateScLinkedAreaDlg(weld::Widget* pParent) override;
 
     virtual VclPtr<AbstractScMetricInputDlg> CreateScMetricInputDlg(weld::Window* pParent,
-                                                                const OString&  sDialogName,
+                                                                const OUString&  sDialogName,
                                                                 tools::Long            nCurrent,
                                                                 tools::Long            nDefault,
                                                                 FieldUnit       eFUnit,
@@ -765,8 +765,8 @@ public:
                                                                     const OUString& rTitle,
                                                                     const OUString& rEditTitle,
                                                                     const OUString& rDefault,
-                                                                    const OString& rHelpId,
-                                                                    const OString& rEditHelpId) override;
+                                                                    const OUString& rHelpId,
+                                                                    const OUString& rEditHelpId) override;
 
     virtual VclPtr<AbstractScTabBgColorDlg> CreateScTabBgColorDlg(weld::Window* pParent,
                                                                   const OUString& rTitle, //Dialog Title

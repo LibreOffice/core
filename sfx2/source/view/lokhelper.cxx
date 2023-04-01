@@ -526,10 +526,9 @@ namespace {
             const SfxSlot* pSlot = SfxSlotPool::GetSlotPool(pShell->GetFrame()).GetSlot(nWhich);
             if (pSlot)
             {
-                const char* pName = pSlot->GetUnoName();
-                if (pName)
+                if (!pSlot->GetUnoName().isEmpty())
                 {
-                    return ".uno:" + OStringToOUString(pName, RTL_TEXTENCODING_ASCII_US);
+                    return pSlot->GetCommand();
                 }
             }
         }

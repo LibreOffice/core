@@ -851,7 +851,7 @@ void CustomAnimationPane::onDoubleClick()
     showOptions();
 }
 
-void CustomAnimationPane::onContextMenu(const OString &rIdent)
+void CustomAnimationPane::onContextMenu(const OUString &rIdent)
 {
     if (rIdent == "onclick")
         onChangeStart( EffectNodeType::ON_CLICK );
@@ -1606,7 +1606,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet const * pResultSet, ST
     }
 }
 
-void CustomAnimationPane::showOptions(const OString& rPage)
+void CustomAnimationPane::showOptions(const OUString& rPage)
 {
     std::unique_ptr<STLPropertySet> xSet = createSelectionSet();
 

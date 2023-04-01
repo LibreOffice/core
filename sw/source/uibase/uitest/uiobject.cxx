@@ -229,7 +229,7 @@ void PageBreakUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
     if (rAction == "DELETE" || rAction == "EDIT")
-        mxPageBreakUIObject->execute(rAction.toAsciiLowerCase().toUtf8());
+        mxPageBreakUIObject->execute(rAction.toAsciiLowerCase());
     else
         WindowUIObject::execute(rAction, rParameters);
 }

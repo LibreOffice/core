@@ -1056,8 +1056,8 @@ public:
     void                                SetQuickHelpText( const OUString& rHelpText );
     const OUString&                     GetQuickHelpText() const;
 
-    void                                SetHelpId( const OString& );
-    const OString&                      GetHelpId() const;
+    void                                SetHelpId( const OUString& );
+    const OUString&                     GetHelpId() const;
 
     sal_uInt16                          GetChildCount() const;
     vcl::Window*                        GetChild( sal_uInt16 nChild ) const;
@@ -1384,14 +1384,14 @@ public:
      *
      * @return false if property is unknown
      */
-    virtual bool set_property(const OString &rKey, const OUString &rValue);
+    virtual bool set_property(const OUString &rKey, const OUString &rValue);
 
     /*
      * Sets a font attribute
      *
      * @return false if attribute is unknown
      */
-    bool set_font_attribute(const OString &rKey, std::u16string_view rValue);
+    bool set_font_attribute(const OUString &rKey, std::u16string_view rValue);
 
     /*
      * Adds this widget to the xGroup VclSizeGroup

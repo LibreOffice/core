@@ -75,7 +75,7 @@ private:
     DECL_LINK( OnControlFocusGot, LinkParamNone*, void );
 
     DECL_LINK( LBChangeHdl, weld::ComboBox&, void );
-    DECL_LINK( OnFormatAction, const OString&, void );
+    DECL_LINK( OnFormatAction, const OUString&, void );
 
     /** returns the groups
         @return the groups which now have to check which one changes

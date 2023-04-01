@@ -211,7 +211,7 @@ OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEve
 {
     //!!! todo: cache the help strings (here or TRA)
 
-    OString sHelpId;
+    OUString sHelpId;
     // mapping from element id -> help id
     switch ( aEvent.ElementId )
     {
@@ -274,7 +274,7 @@ OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEve
     OUString aHelpText;
     Help* pHelp = Application::GetHelp();
     if ( pHelp )
-        aHelpText = pHelp->GetHelpText(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), static_cast<weld::Widget*>(nullptr));
+        aHelpText = pHelp->GetHelpText(sHelpId, static_cast<weld::Widget*>(nullptr));
     return aHelpText;
 }
 

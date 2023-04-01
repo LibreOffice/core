@@ -46,7 +46,7 @@ namespace dbaui
     struct BooleanSettingDesc
     {
         std::unique_ptr<weld::CheckButton>& xControl; // the dialog's control which displays this setting
-        OString     sControlId;         // the widget name of the control in the .ui
+        OUString    sControlId;         // the widget name of the control in the .ui
         sal_uInt16  nItemId;            // the ID of the item (in an SfxItemSet) which corresponds to this setting
         bool        bInvertedDisplay;   // true if and only if the checkbox is checked when the item is sal_False, and vice versa
         bool        bOptionalBool;      // type is OptionalBool
@@ -410,7 +410,7 @@ namespace dbaui
         return nRet;
     }
 
-    void AdvancedSettingsDialog::PageCreated(const OString& rId, SfxTabPage& _rPage)
+    void AdvancedSettingsDialog::PageCreated(const OUString& rId, SfxTabPage& _rPage)
     {
         // register ourself as modified listener
         static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory( getORB() );

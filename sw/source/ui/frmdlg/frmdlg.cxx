@@ -47,11 +47,11 @@ SwFrameDlg::SwFrameDlg(const SfxViewFrame& rViewFrame,
                        bool                bNewFrame,
                        const OUString&     sResType,
                        bool                bFormat,
-                       const OString&      sDefPage,
+                       const OUString&     sDefPage,
                        const OUString*     pStr)
 
     : SfxTabDialogController(pParent, "modules/swriter/ui/" + sResType.toAsciiLowerCase() + ".ui",
-                             sResType.toUtf8(), &rCoreSet, pStr != nullptr)
+                             sResType, &rCoreSet, pStr != nullptr)
     , m_bFormat(bFormat)
     , m_bNew(bNewFrame)
     , m_rSet(rCoreSet)
@@ -123,7 +123,7 @@ SwFrameDlg::~SwFrameDlg()
 {
 }
 
-void SwFrameDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
+void SwFrameDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     if (rId == "type")

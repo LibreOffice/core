@@ -28,8 +28,8 @@ ScGoToTabDlg::ScGoToTabDlg(weld::Window* pParent)
 ScGoToTabDlg::~ScGoToTabDlg() {}
 
 void ScGoToTabDlg::SetDescription(const OUString& rTitle, const OUString& rEntryLabel,
-                                  const OUString& rListLabel, const OString& rDlgHelpId,
-                                  const OString& rEnHelpId, const OString& rLbHelpId)
+                                  const OUString& rListLabel, const OUString& rDlgHelpId,
+                                  const OUString& rEnHelpId, const OUString& rLbHelpId)
 {
     m_xDialog->set_title(rTitle);
     m_xFrameMask->set_label(rEntryLabel);

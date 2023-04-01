@@ -122,7 +122,7 @@ private:
 
     DECL_LINK(OKPressed, weld::Button&, void);
 
-    virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
+    virtual void PageCreated(const OUString& rId, SfxTabPage& rPage) override;
 
 public:
     SchAttribTabDlg(weld::Window* pParent, const SfxItemSet* pAttr,

@@ -44,7 +44,7 @@ class SwLabDlg final : public SfxTabDialogController
     bool       m_bLabel;
     void          ReplaceGroup_( const OUString &rMake );
 
-    virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
+    virtual void PageCreated(const OUString& rId, SfxTabPage &rPage) override;
 public:
 
     SwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,

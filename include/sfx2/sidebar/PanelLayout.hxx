@@ -35,7 +35,7 @@ private:
     DECL_DLLPRIVATE_LINK(DumpAsPropertyTreeHdl, tools::JsonWriter&, void);
 
 public:
-    PanelLayout(weld::Widget* pParent, const OString& rID, const OUString& rUIXMLDescription);
+    PanelLayout(weld::Widget* pParent, const OUString& rID, const OUString& rUIXMLDescription);
 
     void SetPanel(sfx2::sidebar::Panel* pPanel);
 

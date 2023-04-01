@@ -596,9 +596,9 @@ IMPL_LINK(ScContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                     if (bHiddenDoc)
                         sActive = sId;
                 }
-                xDocMenu->set_active(sActive.toUtf8(), true);
+                xDocMenu->set_active(sActive, true);
 
-                OString sIdent = xPop->popup_at_rect(m_xTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1, 1)));
+                OUString sIdent = xPop->popup_at_rect(m_xTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1, 1)));
                 if (sIdent == "hyperlink")
                     pParentWindow->SetDropMode(0);
                 else if (sIdent == "link")

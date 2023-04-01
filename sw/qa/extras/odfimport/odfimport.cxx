@@ -843,8 +843,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSpellmenuRedline)
     // Make sure that if we show the spellcheck popup menu (for the current
     // document, which contains redlines), then the last two entries will be
     // always 'go to next/previous change'.
-    CPPUNIT_ASSERT_EQUAL(OString("next"), rMenu.GetItemIdent(rMenu.GetItemId(rMenu.GetItemCount() - 2)));
-    CPPUNIT_ASSERT_EQUAL(OString("prev"), rMenu.GetItemIdent(rMenu.GetItemId(rMenu.GetItemCount() - 1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("next"), rMenu.GetItemIdent(rMenu.GetItemId(rMenu.GetItemCount() - 2)));
+    CPPUNIT_ASSERT_EQUAL(OUString("prev"), rMenu.GetItemIdent(rMenu.GetItemId(rMenu.GetItemCount() - 1)));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf107776)

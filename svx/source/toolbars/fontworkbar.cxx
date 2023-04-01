@@ -178,7 +178,7 @@ static void SetFontWorkShapeTypeState( SdrView const * pSdrView, SfxItemSet& rSe
 // we enter something which never occurs here (hopefully).)
 static SfxSlot aFontworkBarSlots_Impl[] =
 {
-    { 0, SfxGroupId::NONE, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, SfxDisableFlags::NONE, nullptr }
+    { 0, SfxGroupId::NONE, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, SfxDisableFlags::NONE, "" }
 };
 
 SFX_IMPL_INTERFACE(FontworkBar, SfxShell)

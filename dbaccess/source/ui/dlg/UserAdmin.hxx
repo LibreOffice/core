@@ -46,7 +46,7 @@ class OUserAdmin final : public OGenericAdministrationPage
 
     // methods
     DECL_LINK(ListDblClickHdl, weld::ComboBox&, void);
-    DECL_LINK(MenuSelectHdl, const OString&, void);
+    DECL_LINK(MenuSelectHdl, const OUString&, void);
 
     void        FillUserNames();
 

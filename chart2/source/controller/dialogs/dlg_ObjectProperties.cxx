@@ -497,7 +497,7 @@ SchAttribTabDlg::~SchAttribTabDlg()
 {
 }
 
-void SchAttribTabDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
+void SchAttribTabDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     if (rId == "border")

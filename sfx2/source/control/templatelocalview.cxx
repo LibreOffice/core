@@ -193,13 +193,13 @@ TemplateContainerItem* TemplateLocalView::getRegion(std::u16string_view rName)
     return nullptr;
 }
 
-void TemplateLocalView::ContextMenuSelectHdl(std::string_view  rIdent)
+void TemplateLocalView::ContextMenuSelectHdl(std::u16string_view  rIdent)
 {
-    if (rIdent == "open")
+    if (rIdent == u"open")
         maOpenTemplateHdl.Call(maSelectedItem);
-    else if (rIdent == "edit")
+    else if (rIdent == u"edit")
         maEditTemplateHdl.Call(maSelectedItem);
-    else if (rIdent == "rename")
+    else if (rIdent == u"rename")
     {
         InputDialog aTitleEditDlg(GetDrawingArea(), SfxResId(STR_RENAME_TEMPLATE));
         OUString sOldTitle = maSelectedItem->getTitle();
@@ -233,7 +233,7 @@ void TemplateLocalView::ContextMenuSelectHdl(std::string_view  rIdent)
             maSelectedItem->setTitle(sNewTitle);
         }
     }
-    else if (rIdent == "delete")
+    else if (rIdent == u"delete")
     {
         std::unique_ptr<weld::MessageDialog> xQueryDlg(Application::CreateMessageDialog(GetDrawingArea(), VclMessageType::Question, VclButtonsType::YesNo,
                                                        SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE)));
@@ -243,7 +243,7 @@ void TemplateLocalView::ContextMenuSelectHdl(std::string_view  rIdent)
         maDeleteTemplateHdl.Call(maSelectedItem);
         reload();
     }
-    else if (rIdent == "default")
+    else if (rIdent == u"default")
         maDefaultTemplateHdl.Call(maSelectedItem);
 }
 

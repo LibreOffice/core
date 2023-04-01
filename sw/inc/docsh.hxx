@@ -134,7 +134,7 @@ class SW_DLLPUBLIC SwDocShell
         const SfxStyleFamily nFamily,
         SfxStyleSearchBits nMask,
         const bool bNew,
-        const OString& sPageId,
+        const OUString& sPageId,
         SwWrtShell* pActShell,
         SfxRequest* pRequest = nullptr,
         sal_uInt16 nSlot = 0);
@@ -268,7 +268,7 @@ public:
     void FormatPage(
         weld::Window* pDialogParent,
         const OUString& rPage,
-        const OString& rPageId,
+        const OUString& rPageId,
         SwWrtShell& rActShell,
         SfxRequest* pRequest = nullptr);
 

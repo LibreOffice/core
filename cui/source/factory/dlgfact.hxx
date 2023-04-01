@@ -122,17 +122,17 @@ DECL_ABSTDLG_CLASS_UNIQUE(CuiAbstractSingleTabController, SfxAbstractDialog, Sfx
 
 // CuiAbstractTabController_Impl
 DECL_ABSTDLG_CLASS_SHARED_ASYNC(CuiAbstractTabController, SfxAbstractTabDialog, SfxTabDialogController)
-    virtual void                SetCurPageId( const OString &rName ) override;
+    virtual void                SetCurPageId( const OUString &rName ) override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
     virtual WhichRangesContainer GetInputRanges( const SfxItemPool& pItem ) override;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
     virtual void        SetText( const OUString& rStr ) override;
 
     // screenshotting
-    virtual std::vector<OString> getAllPageUIXMLDescriptions() const override;
-    virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override;
+    virtual std::vector<OUString> getAllPageUIXMLDescriptions() const override;
+    virtual bool selectPageByUIXMLDescription(const OUString& rUIXMLDescription) override;
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 // AbstractHangulHanjaConversionDialog_Impl
@@ -235,7 +235,7 @@ DECL_ABSTDLG_CLASS(AbstractSvxJSearchOptionsDialog,SvxJSearchOptionsDialog)
 // AbstractSvxTransformTabDialog_Impl
 DECL_ABSTDLG_CLASS_ASYNC(AbstractSvxTransformTabDialog,SvxTransformTabDialog)
     virtual void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink ) override;
-    virtual void                SetCurPageId( const OString& rName ) override;
+    virtual void                SetCurPageId( const OUString& rName ) override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
     virtual WhichRangesContainer GetInputRanges( const SfxItemPool& pItem ) override;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
@@ -245,7 +245,7 @@ DECL_ABSTDLG_CLASS_ASYNC(AbstractSvxTransformTabDialog,SvxTransformTabDialog)
 // AbstractSvxCaptionDialog_Impl
 DECL_ABSTDLG_CLASS_ASYNC(AbstractSvxCaptionDialog,SvxCaptionTabDialog)
     virtual void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink ) override;
-    virtual void                SetCurPageId( const OString& rName ) override;
+    virtual void                SetCurPageId( const OUString& rName ) override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
     virtual WhichRangesContainer GetInputRanges( const SfxItemPool& pItem ) override;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
@@ -268,9 +268,9 @@ DECL_ABSTDLG_CLASS(AbstractSvxNameDialog,SvxNameDialog)
     virtual void    GetName( OUString& rName ) override ;
     virtual void    SetCheckNameHdl( const Link<AbstractSvxNameDialog&,bool>& rLink, bool bCheckImmediately = false ) override ;
     virtual void    SetCheckNameTooltipHdl( const Link<AbstractSvxNameDialog&, OUString>& rLink ) override ;
-    virtual void    SetEditHelpId(const OString&) override ;
+    virtual void    SetEditHelpId(const OUString&) override ;
     //from class Window
-    virtual void    SetHelpId( const OString& ) override ;
+    virtual void    SetHelpId( const OUString& ) override ;
     virtual void    SetText( const OUString& rStr ) override ;
 
 private:
@@ -334,7 +334,7 @@ DECL_ABSTDLG_CLASS(AbstractGraphicFilterDialog,GraphicFilterDialog)
 
 // AbstractSvxAreaTabDialog_Impl
 DECL_ABSTDLG_CLASS_ASYNC(AbstractSvxAreaTabDialog,SvxAreaTabDialog)
-    virtual void SetCurPageId(const OString& rName) override;
+    virtual void SetCurPageId(const OUString& rName) override;
     virtual const SfxItemSet* GetOutputItemSet() const override;
     virtual WhichRangesContainer GetInputRanges( const SfxItemPool& pItem ) override;
     virtual void SetInputSet(const SfxItemSet* pInSet) override;
@@ -586,7 +586,7 @@ public:
     virtual VclPtr<VclAbstractDialog>          CreateOptionsDialog(
         weld::Window* pParent, const OUString& rExtensionId ) override;
 
-    virtual VclPtr<SvxAbstractInsRowColDlg> CreateSvxInsRowColDlg(weld::Window* pParent, bool bCol, const OString& rHelpId) override;
+    virtual VclPtr<SvxAbstractInsRowColDlg> CreateSvxInsRowColDlg(weld::Window* pParent, bool bCol, const OUString& rHelpId) override;
 
     virtual VclPtr<AbstractPasswordToOpenModifyDialog> CreatePasswordToOpenModifyDialog(weld::Window* pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify) override;
 

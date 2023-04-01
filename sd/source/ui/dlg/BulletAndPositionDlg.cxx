@@ -783,14 +783,14 @@ IMPL_LINK(SvxBulletAndPositionDlg, BulRelSizeHdl_Impl, weld::MetricSpinButton&, 
     SetModified();
 }
 
-IMPL_LINK(SvxBulletAndPositionDlg, GraphicHdl_Impl, const OString&, rIdent, void)
+IMPL_LINK(SvxBulletAndPositionDlg, GraphicHdl_Impl, const OUString&, rIdent, void)
 {
     OUString aGrfName;
     Size aSize;
     bool bSucc(false);
     SvxOpenGraphicDialog aGrfDlg(SdResId(RID_SVXSTR_EDIT_GRAPHIC), p_Window);
 
-    OString sNumber;
+    OUString sNumber;
     if (rIdent.startsWith("gallery", &sNumber))
     {
         auto idx = sNumber.toUInt32();

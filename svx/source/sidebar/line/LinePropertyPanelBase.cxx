@@ -31,7 +31,7 @@
 using namespace css;
 using namespace css::uno;
 
-constexpr OStringLiteral SELECTWIDTH = "SelectWidth";
+constexpr OUStringLiteral SELECTWIDTH = u"SelectWidth";
 
 namespace svx::sidebar {
 
@@ -377,7 +377,7 @@ IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeCapStyleHdl, weld::ComboBox&, void)
     setLineCap(pItem.get());
 }
 
-IMPL_LINK_NOARG(LinePropertyPanelBase, ToolboxWidthSelectHdl, const OString&, void)
+IMPL_LINK_NOARG(LinePropertyPanelBase, ToolboxWidthSelectHdl, const OUString&, void)
 {
     mxTBWidth->set_menu_item_active(SELECTWIDTH, !mxTBWidth->get_menu_item_active(SELECTWIDTH));
 }

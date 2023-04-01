@@ -142,7 +142,7 @@ private:
     sal_uInt16 mnHighlightedItemPos; // for native menus: keeps track of the highlighted item
     MenuFlags nMenuFlags;
     sal_uInt16 nSelectedId;
-    OString sSelectedIdent;
+    OUString sSelectedIdent;
 
     // for output:
     sal_uInt16 nImgOrChkPos;
@@ -194,7 +194,7 @@ protected:
 
     SAL_DLLPRIVATE MenuItemData* NbcInsertItem(sal_uInt16 nId, MenuItemBits nBits,
                                                const OUString& rStr, Menu* pMenu,
-                                               size_t nPos, const OString &rIdent);
+                                               size_t nPos, const OUString &rIdent);
 
     /// Close the 'pStartedFrom' menu window.
     virtual void ClosePopup(Menu* pMenu) = 0;
@@ -229,18 +229,18 @@ public:
 
     void InsertItem(sal_uInt16 nItemId, const OUString& rStr,
                     MenuItemBits nItemBits = MenuItemBits::NONE,
-                    const OString &rIdent = OString(),
+                    const OUString &rIdent = {},
                     sal_uInt16 nPos = MENU_APPEND);
     void InsertItem(sal_uInt16 nItemId, const Image& rImage,
                     MenuItemBits nItemBits = MenuItemBits::NONE,
-                    const OString &rIdent = OString(),
+                    const OUString &rIdent = {},
                     sal_uInt16 nPos = MENU_APPEND);
     void InsertItem(sal_uInt16 nItemId,
                     const OUString& rString, const Image& rImage,
                     MenuItemBits nItemBits = MenuItemBits::NONE,
-                    const OString &rIdent = OString(),
+                    const OUString &rIdent = {},
                     sal_uInt16 nPos = MENU_APPEND);
-    void InsertSeparator(const OString &rIdent = OString(), sal_uInt16 nPos = MENU_APPEND);
+    void InsertSeparator(const OUString &rIdent = {}, sal_uInt16 nPos = MENU_APPEND);
     void RemoveItem( sal_uInt16 nPos );
     void Clear();
 
@@ -251,12 +251,12 @@ public:
 
     sal_uInt16 GetItemCount() const;
     sal_uInt16 GetItemId(sal_uInt16 nPos) const;
-    sal_uInt16 GetItemId(std::string_view rIdent) const;
+    sal_uInt16 GetItemId(std::u16string_view rIdent) const;
     sal_uInt16 GetItemPos( sal_uInt16 nItemId ) const;
-    OString GetItemIdent(sal_uInt16 nItemId) const;
+    OUString GetItemIdent(sal_uInt16 nItemId) const;
     MenuItemType GetItemType( sal_uInt16 nPos ) const;
     sal_uInt16 GetCurItemId() const { return nSelectedId;}
-    OString const & GetCurItemIdent() const { return sSelectedIdent; }
+    OUString const & GetCurItemIdent() const { return sSelectedIdent; }
     void SetItemBits( sal_uInt16 nItemId, MenuItemBits nBits );
     MenuItemBits GetItemBits( sal_uInt16 nItemId ) const;
 
@@ -270,13 +270,13 @@ public:
     vcl::KeyCode GetAccelKey( sal_uInt16 nItemId ) const;
 
     void CheckItem( sal_uInt16 nItemId, bool bCheck = true );
-    void CheckItem( std::string_view rIdent, bool bCheck = true );
+    void CheckItem( std::u16string_view rIdent, bool bCheck = true );
     bool IsItemChecked( sal_uInt16 nItemId ) const;
 
     virtual void SelectItem(sal_uInt16 nItemId) = 0;
 
     void EnableItem( sal_uInt16 nItemId, bool bEnable = true );
-    void EnableItem(std::string_view rIdent, bool bEnable = true)
+    void EnableItem(std::u16string_view rIdent, bool bEnable = true)
     {
         EnableItem(GetItemId(rIdent), bEnable);
     }
@@ -311,8 +311,8 @@ public:
     void SetHelpCommand( sal_uInt16 nItemId, const OUString& rString );
     OUString GetHelpCommand( sal_uInt16 nItemId ) const;
 
-    void SetHelpId( sal_uInt16 nItemId, const OString& rHelpId );
-    OString GetHelpId( sal_uInt16 nItemId ) const;
+    void SetHelpId( sal_uInt16 nItemId, const OUString& rHelpId );
+    OUString GetHelpId( sal_uInt16 nItemId ) const;
 
     void SetActivateHdl( const Link<Menu *, bool>& rLink )
     {

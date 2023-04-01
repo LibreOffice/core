@@ -32,7 +32,7 @@ public:
         bool bEnableSelector,
         bool bEnableDrawingLayerFillStyles);
 protected:
-    virtual void PageCreated(const OString& rPageId, SfxTabPage& rTabPage) override;
+    virtual void PageCreated(const OUString& rPageId, SfxTabPage& rTabPage) override;
 
 private:
     bool        mbEnableBackgroundSelector : 1;         ///< for Border/Background

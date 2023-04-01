@@ -180,7 +180,7 @@ void Edit::setMaxWidthChars(sal_Int32 nWidth)
     }
 }
 
-bool Edit::set_property(const OString &rKey, const OUString &rValue)
+bool Edit::set_property(const OUString &rKey, const OUString &rValue)
 {
     if (rKey == "width-chars")
         SetWidthInChars(rValue.toInt32());
@@ -1999,18 +1999,18 @@ void Edit::Command( const CommandEvent& rCEvt )
             bEnablePaste = bData;
         }
 
-        pPopup->EnableItem(pPopup->GetItemId("cut"), bEnableCut);
-        pPopup->EnableItem(pPopup->GetItemId("copy"), bEnableCopy);
-        pPopup->EnableItem(pPopup->GetItemId("delete"), bEnableDelete);
-        pPopup->EnableItem(pPopup->GetItemId("paste"), bEnablePaste);
-        pPopup->EnableItem(pPopup->GetItemId("specialchar"), bEnableSpecialChar);
+        pPopup->EnableItem(pPopup->GetItemId(u"cut"), bEnableCut);
+        pPopup->EnableItem(pPopup->GetItemId(u"copy"), bEnableCopy);
+        pPopup->EnableItem(pPopup->GetItemId(u"delete"), bEnableDelete);
+        pPopup->EnableItem(pPopup->GetItemId(u"paste"), bEnablePaste);
+        pPopup->EnableItem(pPopup->GetItemId(u"specialchar"), bEnableSpecialChar);
         pPopup->EnableItem(
-            pPopup->GetItemId("undo"),
+            pPopup->GetItemId(u"undo"),
             std::u16string_view(maUndoText)
                 != std::u16string_view(maText.getStr(), maText.getLength()));
         bool bAllSelected = maSelection.Min() == 0 && maSelection.Max() == maText.getLength();
-        pPopup->EnableItem(pPopup->GetItemId("selectall"), !bAllSelected);
-        pPopup->ShowItem(pPopup->GetItemId("specialchar"), pImplFncGetSpecialChars != nullptr);
+        pPopup->EnableItem(pPopup->GetItemId(u"selectall"), !bAllSelected);
+        pPopup->ShowItem(pPopup->GetItemId(u"specialchar"), pImplFncGetSpecialChars != nullptr);
 
         mbActivePopup = true;
         Selection aSaveSel = GetSelection(); // if someone changes selection in Get/LoseFocus, e.g. URL bar
@@ -2023,7 +2023,7 @@ void Edit::Command( const CommandEvent& rCEvt )
         }
         sal_uInt16 n = pPopup->Execute( this, aPos );
         SetSelection( aSaveSel );
-        OString sCommand = pPopup->GetItemIdent(n);
+        OUString sCommand = pPopup->GetItemIdent(n);
         if (sCommand == "undo")
         {
             Undo();
@@ -2733,7 +2733,7 @@ VclPtr<PopupMenu> Edit::CreatePopupMenu()
 {
     if (!mpUIBuilder)
         mpUIBuilder.reset(new VclBuilder(nullptr, AllSettings::GetUIRootDir(), "vcl/ui/editmenu.ui", ""));
-    VclPtr<PopupMenu> pPopup = mpUIBuilder->get_menu("menu");
+    VclPtr<PopupMenu> pPopup = mpUIBuilder->get_menu(u"menu");
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     if (rStyleSettings.GetHideDisabledMenuItems())
         pPopup->SetMenuFlags( MenuFlags::HideDisabledEntries );
@@ -2741,13 +2741,13 @@ VclPtr<PopupMenu> Edit::CreatePopupMenu()
         pPopup->SetMenuFlags ( MenuFlags::AlwaysShowDisabledEntries );
     if (rStyleSettings.GetContextMenuShortcuts())
     {
-        pPopup->SetAccelKey(pPopup->GetItemId("undo"), vcl::KeyCode( KeyFuncType::UNDO));
-        pPopup->SetAccelKey(pPopup->GetItemId("cut"), vcl::KeyCode( KeyFuncType::CUT));
-        pPopup->SetAccelKey(pPopup->GetItemId("copy"), vcl::KeyCode( KeyFuncType::COPY));
-        pPopup->SetAccelKey(pPopup->GetItemId("paste"), vcl::KeyCode( KeyFuncType::PASTE));
-        pPopup->SetAccelKey(pPopup->GetItemId("delete"), vcl::KeyCode( KeyFuncType::DELETE));
-        pPopup->SetAccelKey(pPopup->GetItemId("selectall"), vcl::KeyCode( KEY_A, false, true, false, false));
-        pPopup->SetAccelKey(pPopup->GetItemId("specialchar"), vcl::KeyCode( KEY_S, true, true, false, false));
+        pPopup->SetAccelKey(pPopup->GetItemId(u"undo"), vcl::KeyCode( KeyFuncType::UNDO));
+        pPopup->SetAccelKey(pPopup->GetItemId(u"cut"), vcl::KeyCode( KeyFuncType::CUT));
+        pPopup->SetAccelKey(pPopup->GetItemId(u"copy"), vcl::KeyCode( KeyFuncType::COPY));
+        pPopup->SetAccelKey(pPopup->GetItemId(u"paste"), vcl::KeyCode( KeyFuncType::PASTE));
+        pPopup->SetAccelKey(pPopup->GetItemId(u"delete"), vcl::KeyCode( KeyFuncType::DELETE));
+        pPopup->SetAccelKey(pPopup->GetItemId(u"selectall"), vcl::KeyCode( KEY_A, false, true, false, false));
+        pPopup->SetAccelKey(pPopup->GetItemId(u"specialchar"), vcl::KeyCode( KEY_S, true, true, false, false));
     }
     return pPopup;
 }

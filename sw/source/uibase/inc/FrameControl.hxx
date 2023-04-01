@@ -68,7 +68,7 @@ protected:
 
 public:
     SwFrameMenuButtonBase(SwEditWin* pEditWin, const SwFrame* pFrame,
-                          const OUString& rUIXMLDescription, const OString& rID);
+                          const OUString& rUIXMLDescription, const OUString& rID);
 
     virtual const SwFrame* GetFrame()   override { return m_pFrame; }
     virtual SwEditWin*   GetEditWin() override { return m_pEditWin; }

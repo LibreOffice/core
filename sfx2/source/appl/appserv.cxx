@@ -1703,7 +1703,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
             Reference< frame::XDispatchProvider > xProv = drawing::ModuleDispatcher::create( xContext );
 
-            OUString aCmd = OUString::createFromAscii( GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName() );
+            OUString aCmd = GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName();
             Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
             Sequence < beans::PropertyValue > aSeq;
             if ( rReq.GetArgs() )
@@ -1723,7 +1723,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
             Reference< frame::XDispatchProvider > xProv = text::ModuleDispatcher::create( xContext );
 
-            OUString aCmd = OUString::createFromAscii( GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName() );
+            OUString aCmd = GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName();
             Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
             Sequence < beans::PropertyValue > aSeq;
             if ( rReq.GetArgs() )

@@ -116,11 +116,11 @@ namespace svx
     class ToolboxButtonColorUpdater final : public ToolboxButtonColorUpdaterBase
     {
     public:
-        ToolboxButtonColorUpdater(sal_uInt16 nSlotId, const OString& rTbxBtnId, weld::Toolbar* ptrTbx, bool bWideButton,
+        ToolboxButtonColorUpdater(sal_uInt16 nSlotId, const OUString& rTbxBtnId, weld::Toolbar* ptrTbx, bool bWideButton,
                                   const OUString& rCommandLabel, const css::uno::Reference<css::frame::XFrame>& rFrame);
 
     private:
-        OString msBtnId;
+        OUString msBtnId;
         weld::Toolbar* mpTbx;
 
         virtual void SetQuickHelpText(const OUString& rText) override;

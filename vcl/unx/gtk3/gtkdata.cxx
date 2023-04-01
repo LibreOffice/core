@@ -888,37 +888,37 @@ namespace {
 
 struct ButtonOrder
 {
-    std::string_view m_aType;
+    std::u16string_view m_aType;
     int m_nPriority;
 };
 
 }
 
-int getButtonPriority(std::string_view rType)
+int getButtonPriority(std::u16string_view rType)
 {
     static const size_t N_TYPES = 8;
     static const ButtonOrder aDiscardCancelSave[N_TYPES] =
     {
-        { "discard", 0 },
-        { "cancel", 1 },
-        { "close", 1 },
-        { "no", 2 },
-        { "open", 3 },
-        { "save", 3 },
-        { "yes", 3 },
-        { "ok", 3 }
+        { u"discard", 0 },
+        { u"cancel", 1 },
+        { u"close", 1 },
+        { u"no", 2 },
+        { u"open", 3 },
+        { u"save", 3 },
+        { u"yes", 3 },
+        { u"ok", 3 }
     };
 
     static const ButtonOrder aSaveDiscardCancel[N_TYPES] =
     {
-        { "open", 0 },
-        { "save", 0 },
-        { "yes", 0 },
-        { "ok", 0 },
-        { "discard", 1 },
-        { "no", 1 },
-        { "cancel", 2 },
-        { "close", 2 }
+        { u"open", 0 },
+        { u"save", 0 },
+        { u"yes", 0 },
+        { u"ok", 0 },
+        { u"discard", 1 },
+        { u"no", 1 },
+        { u"cancel", 2 },
+        { u"close", 2 }
     };
 
     const ButtonOrder* pOrder = &aDiscardCancelSave[0];

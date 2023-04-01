@@ -118,11 +118,11 @@ void SvxCharView::createContextMenu()
     Invalidate();
 }
 
-void SvxCharView::ContextMenuSelect(std::string_view rMenuId)
+void SvxCharView::ContextMenuSelect(std::u16string_view rMenuId)
 {
-    if (rMenuId == "clearchar")
+    if (rMenuId == u"clearchar")
         maClearClickHdl.Call(this);
-    else if (rMenuId == "clearallchar")
+    else if (rMenuId == u"clearallchar")
         maClearAllClickHdl.Call(this);
 }
 

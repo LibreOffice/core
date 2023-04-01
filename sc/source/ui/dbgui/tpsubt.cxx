@@ -64,8 +64,8 @@ ScTpSubTotalGroup::ScTpSubTotalGroup(weld::Container* pPage, weld::DialogControl
     Init();
 
     // UI tests
-    mxLbGroup->set_buildable_name(mxLbGroup->get_buildable_name() + OString::number(rTabNumber));
-    mxLbColumns->set_buildable_name(mxLbColumns->get_buildable_name() + OString::number(rTabNumber));
+    mxLbGroup->set_buildable_name(mxLbGroup->get_buildable_name() + OUString::number(rTabNumber));
+    mxLbColumns->set_buildable_name(mxLbColumns->get_buildable_name() + OUString::number(rTabNumber));
 }
 
 ScTpSubTotalGroup::~ScTpSubTotalGroup()

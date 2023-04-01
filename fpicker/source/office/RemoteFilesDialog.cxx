@@ -124,7 +124,7 @@ RemoteFilesDialog::~RemoteFilesDialog()
     if( !m_sIniKey.isEmpty() )
     {
         SvtViewOptions aDlgOpt( EViewType::Dialog, m_sIniKey );
-        aDlgOpt.SetWindowState(OStringToOUString(m_xDialog->get_window_state(vcl::WindowDataMask::All), RTL_TEXTENCODING_UTF8));
+        aDlgOpt.SetWindowState(m_xDialog->get_window_state(vcl::WindowDataMask::All));
 
         Size aSize(m_xDialog->get_size());
 
@@ -236,7 +236,7 @@ void RemoteFilesDialog::InitSize()
     if( !aDlgOpt.Exists() )
         return;
 
-    m_xDialog->set_window_state(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_UTF8));
+    m_xDialog->set_window_state(aDlgOpt.GetWindowState());
 
     Any aUserData = aDlgOpt.GetUserItem( "UserData" );
     OUString sCfgStr;
@@ -566,9 +566,9 @@ IMPL_LINK_NOARG( RemoteFilesDialog, SelectServiceHdl, weld::ComboBox&, void )
     }
 }
 
-IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, const OString&, rIdent, void )
+IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, const OUString&, rIdent, void )
 {
-    OString sIdent(rIdent);
+    OUString sIdent(rIdent);
     if( sIdent == "edit_service"  && m_xServices_lb->get_count() > 0 )
     {
         int nSelected = m_xServices_lb->get_active();

@@ -96,7 +96,7 @@ public:
 
       @return   help id of the function
     */
-    virtual OString getHelpId() const override ;
+    virtual OUString getHelpId() const override ;
 
     /** Returns whether function is hidden and not offered in the Function
         Wizard unless used in an expression.
@@ -223,7 +223,7 @@ public:
     sal_uInt16            nArgCount;              /**< All parameter count, suppressed and unsuppressed */
     sal_uInt16            nVarArgsStart;          /**< Start of variable arguments, for numbering */
     sal_uInt16            nVarArgsLimit;          /**< Limit maximum of (variable) arguments, for numbering */
-    OString               sHelpId;                /**< HelpId of function */
+    OUString              sHelpId;                /**< HelpId of function */
     bool                  bIncomplete         :1; /**< Incomplete argument info (set for add-in info from configuration) */
     bool                  mbHidden            :1; /**< Whether function is hidden */
 };

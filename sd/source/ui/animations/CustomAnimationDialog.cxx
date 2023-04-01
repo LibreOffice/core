@@ -329,7 +329,7 @@ public:
     virtual Any getValue() override;
     virtual void setValue( const Any& rValue, const OUString& ) override;
 
-    DECL_LINK(implMenuSelectHdl, const OString& rIdent, void);
+    DECL_LINK(implMenuSelectHdl, const OUString& rIdent, void);
 
 private:
     Link<LinkParamNone*,void> maModifyHdl;
@@ -364,7 +364,7 @@ IMPL_LINK_NOARG(SdCharHeightPropertyBox, EditModifyHdl, weld::MetricSpinButton&,
     maModifyHdl.Call(nullptr);
 }
 
-IMPL_LINK(SdCharHeightPropertyBox, implMenuSelectHdl, const OString&, rIdent, void)
+IMPL_LINK(SdCharHeightPropertyBox, implMenuSelectHdl, const OUString&, rIdent, void)
 {
     sal_Int32 nValue = rIdent.toInt32();
     mxMetric->set_value(nValue, FieldUnit::PERCENT);
@@ -396,7 +396,7 @@ public:
     virtual Any getValue() override;
     virtual void setValue( const Any& rValue, const OUString& rPresetId  ) override;
 
-    DECL_LINK(implMenuSelectHdl, const OString&, void);
+    DECL_LINK(implMenuSelectHdl, const OUString&, void);
     DECL_LINK(implModifyHdl, weld::MetricSpinButton&, void);
 
     void updateMenu();
@@ -439,7 +439,7 @@ void SdTransparencyPropertyBox::updateMenu()
 {
     sal_Int64 nValue = mxMetric->get_value(FieldUnit::PERCENT);
     for (sal_uInt16 i = 25; i < 101; i += 25)
-        mxControl->set_item_active(OString::number(i), nValue == i);
+        mxControl->set_item_active(OUString::number(i), nValue == i);
 }
 
 IMPL_LINK_NOARG(SdTransparencyPropertyBox, implModifyHdl, weld::MetricSpinButton&, void)
@@ -448,7 +448,7 @@ IMPL_LINK_NOARG(SdTransparencyPropertyBox, implModifyHdl, weld::MetricSpinButton
     maModifyHdl.Call(nullptr);
 }
 
-IMPL_LINK(SdTransparencyPropertyBox, implMenuSelectHdl, const OString&, rIdent, void)
+IMPL_LINK(SdTransparencyPropertyBox, implMenuSelectHdl, const OUString&, rIdent, void)
 {
     auto nValue = rIdent.toInt32();
     if (nValue != mxMetric->get_value(FieldUnit::PERCENT))
@@ -485,7 +485,7 @@ public:
     virtual Any getValue() override;
     virtual void setValue( const Any& rValue, const OUString& ) override;
 
-    DECL_LINK(implMenuSelectHdl, const OString&, void);
+    DECL_LINK(implMenuSelectHdl, const OUString&, void);
     DECL_LINK(implModifyHdl, weld::MetricSpinButton&, void);
 
     void updateMenu();
@@ -538,7 +538,7 @@ IMPL_LINK_NOARG(SdRotationPropertyBox, implModifyHdl, weld::MetricSpinButton&, v
     maModifyHdl.Call(nullptr);
 }
 
-IMPL_LINK(SdRotationPropertyBox, implMenuSelectHdl, const OString&, rIdent, void)
+IMPL_LINK(SdRotationPropertyBox, implMenuSelectHdl, const OUString&, rIdent, void)
 {
     auto nValue = mxMetric->get_value(FieldUnit::DEGREE);
     bool bDirection = nValue >= 0;
@@ -588,7 +588,7 @@ public:
     virtual Any getValue() override;
     virtual void setValue( const Any& rValue, const OUString& ) override;
 
-    DECL_LINK(implMenuSelectHdl, const OString&, void);
+    DECL_LINK(implMenuSelectHdl, const OUString&, void);
     DECL_LINK(implModifyHdl, weld::MetricSpinButton&, void);
 
     void updateMenu();
@@ -641,7 +641,7 @@ IMPL_LINK_NOARG(SdScalePropertyBox, implModifyHdl, weld::MetricSpinButton&, void
     maModifyHdl.Call(nullptr);
 }
 
-IMPL_LINK(SdScalePropertyBox, implMenuSelectHdl, const OString&, rIdent, void)
+IMPL_LINK(SdScalePropertyBox, implMenuSelectHdl, const OUString&, rIdent, void)
 {
     auto nValue = mxMetric->get_value(FieldUnit::PERCENT);
 
@@ -770,7 +770,7 @@ public:
     virtual Any getValue() override;
     virtual void setValue( const Any& rValue, const OUString& ) override;
 
-    DECL_LINK(implMenuSelectHdl, const OString&, void);
+    DECL_LINK(implMenuSelectHdl, const OUString&, void);
 
     void update();
 
@@ -819,7 +819,7 @@ void SdFontStylePropertyBox::update()
     mxEdit->set_font(aFont);
 }
 
-IMPL_LINK(SdFontStylePropertyBox, implMenuSelectHdl, const OString&, rIdent, void)
+IMPL_LINK(SdFontStylePropertyBox, implMenuSelectHdl, const OUString&, rIdent, void)
 {
     if (rIdent == "bold")
     {
@@ -1942,7 +1942,7 @@ IMPL_LINK_NOARG(CustomAnimationTextAnimTabPage, implSelectHdl, weld::ComboBox&, 
     updateControlStates();
 }
 
-CustomAnimationDialog::CustomAnimationDialog(weld::Window* pParent, std::unique_ptr<STLPropertySet> pSet, const OString& rPage)
+CustomAnimationDialog::CustomAnimationDialog(weld::Window* pParent, std::unique_ptr<STLPropertySet> pSet, const OUString& rPage)
     : GenericDialogController(pParent, "modules/simpress/ui/customanimationproperties.ui", "CustomAnimationProperties")
     , mxSet(std::move(pSet))
     , mxTabControl(m_xBuilder->weld_notebook("tabcontrol"))

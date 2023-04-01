@@ -141,15 +141,13 @@ namespace {
     {
     }
 
-    OUString lcl_getHelpURL( std::string_view sHelpId )
+    OUString lcl_getHelpURL( std::u16string_view sHelpId )
     {
         OUStringBuffer aBuffer;
-        OUString aTmp(
-            OStringToOUString( sHelpId, RTL_TEXTENCODING_UTF8 ) );
-        INetURLObject aHID( aTmp );
+        INetURLObject aHID(sHelpId);
         if ( aHID.GetProtocol() == INetProtocol::NotValid )
             aBuffer.append( INET_HID_SCHEME );
-        aBuffer.append( aTmp );
+        aBuffer.append(sHelpId);
         return aBuffer.makeStringAndClear();
     }
 
@@ -235,13 +233,13 @@ namespace {
         m_bInitialized = true;
     }
 
-    OString lcl_getHelpId( std::u16string_view _rHelpURL )
+    OUString lcl_getHelpId( const OUString& _rHelpURL )
     {
         INetURLObject aHID( _rHelpURL );
         if ( aHID.GetProtocol() == INetProtocol::Hid )
-            return OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 );
+            return aHID.GetURLPath();
         else
-            return OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
+            return _rHelpURL;
     }
 
     std::unique_ptr<weld::DialogController> Wizard::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)

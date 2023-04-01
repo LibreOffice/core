@@ -55,7 +55,7 @@ public:
     OUString            maHelpText;
     OUString            maAccessibleName;
     OUString            maAccessibleDescription;
-    OString             maTabName;
+    OUString             maTabName;
     tools::Rectangle    maRect;
     sal_uInt16          mnLine;
     bool                mbFullVisible;
@@ -664,7 +664,7 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
     if ( pOldPage )
     {
         if ( mbRestoreHelpId )
-            pCtrlParent->SetHelpId( OString() );
+            pCtrlParent->SetHelpId({});
     }
 
     if ( pPage )
@@ -1485,7 +1485,7 @@ void TabControl::Command( const CommandEvent& rCEvt )
                 aMenu->InsertItem(item.id(), item.maText, MenuItemBits::CHECKABLE | MenuItemBits::RADIOCHECK);
                 if (item.id() == mnCurPageId)
                     aMenu->CheckItem(item.id());
-                aMenu->SetHelpId(item.id(), OString());
+                aMenu->SetHelpId(item.id(), {});
             }
 
             sal_uInt16 nId = aMenu->Execute( this, aMenuPos );
@@ -1820,7 +1820,7 @@ sal_uInt16 TabControl::GetPageId( const Point& rPos ) const
     return (it != rList.end()) ? it->id() : 0;
 }
 
-sal_uInt16 TabControl::GetPageId( const OString& rName ) const
+sal_uInt16 TabControl::GetPageId( const OUString& rName ) const
 {
     const auto &rList = mpTabCtrlData->maItemList;
     const auto it = std::find_if(rList.begin(), rList.end(), [&rName](const auto &item) {
@@ -2006,7 +2006,7 @@ OUString TabControl::GetAccessibleDescription( sal_uInt16 nPageId ) const
     return pItem->maHelpText;
 }
 
-void TabControl::SetPageName( sal_uInt16 nPageId, const OString& rName ) const
+void TabControl::SetPageName( sal_uInt16 nPageId, const OUString& rName ) const
 {
     ImplTabItem* pItem = ImplGetItem( nPageId );
 
@@ -2014,14 +2014,14 @@ void TabControl::SetPageName( sal_uInt16 nPageId, const OString& rName ) const
         pItem->maTabName = rName;
 }
 
-OString TabControl::GetPageName( sal_uInt16 nPageId ) const
+OUString TabControl::GetPageName( sal_uInt16 nPageId ) const
 {
     ImplTabItem* pItem = ImplGetItem( nPageId );
 
     if (pItem)
         return pItem->maTabName;
 
-    return OString();
+    return {};
 }
 
 void TabControl::SetPageImage( sal_uInt16 i_nPageId, const Image& i_rImage )
@@ -2203,7 +2203,7 @@ std::vector<sal_uInt16> TabControl::GetPageIDs() const
     return aIDs;
 }
 
-bool TabControl::set_property(const OString &rKey, const OUString &rValue)
+bool TabControl::set_property(const OUString &rKey, const OUString &rValue)
 {
     if (rKey == "show-tabs")
     {

@@ -106,7 +106,7 @@ void InterimToolbarPopup::EndPopupMode()
 
 WeldToolbarPopup::WeldToolbarPopup(css::uno::Reference<css::frame::XFrame> xFrame,
                                    weld::Widget* pParent, const OUString& rUIFile,
-                                   const OString& rId)
+                                   const OUString& rId)
     : m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
     , m_xTopLevel(m_xBuilder->weld_popover(rId))
     , m_xContainer(m_xBuilder->weld_container("container"))

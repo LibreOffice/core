@@ -429,16 +429,13 @@ Size SalInstanceWidget::get_pixel_size(const OUString& rText) const
 
 vcl::Font SalInstanceWidget::get_font() { return m_xWidget->GetPointFont(*m_xWidget->GetOutDev()); }
 
-OString SalInstanceWidget::get_buildable_name() const { return m_xWidget->get_id().toUtf8(); }
+OUString SalInstanceWidget::get_buildable_name() const { return m_xWidget->get_id(); }
 
-void SalInstanceWidget::set_buildable_name(const OString& rId)
-{
-    return m_xWidget->set_id(OUString::fromUtf8(rId));
-}
+void SalInstanceWidget::set_buildable_name(const OUString& rId) { return m_xWidget->set_id(rId); }
 
-void SalInstanceWidget::set_help_id(const OString& rId) { return m_xWidget->SetHelpId(rId); }
+void SalInstanceWidget::set_help_id(const OUString& rId) { return m_xWidget->SetHelpId(rId); }
 
-OString SalInstanceWidget::get_help_id() const { return m_xWidget->GetHelpId(); }
+OUString SalInstanceWidget::get_help_id() const { return m_xWidget->GetHelpId(); }
 
 void SalInstanceWidget::set_grid_left_attach(int nAttach)
 {
@@ -868,7 +865,7 @@ Image createImage(const VirtualDevice& rDevice)
     return Image(rDevice.GetBitmapEx(Point(), rDevice.GetOutputSizePixel()));
 }
 
-sal_uInt16 insert_to_menu(sal_uInt16 nLastId, PopupMenu* pMenu, int pos, std::u16string_view rId,
+sal_uInt16 insert_to_menu(sal_uInt16 nLastId, PopupMenu* pMenu, int pos, const OUString& rId,
                           const OUString& rStr, const OUString* pIconName,
                           const VirtualDevice* pImageSurface,
                           const css::uno::Reference<css::graphic::XGraphic>& rImage,
@@ -884,8 +881,7 @@ sal_uInt16 insert_to_menu(sal_uInt16 nLastId, PopupMenu* pMenu, int pos, std::u1
     else
         nBits = MenuItemBits::NONE;
 
-    pMenu->InsertItem(nNewid, rStr, nBits, OUStringToOString(rId, RTL_TEXTENCODING_UTF8),
-                      pos == -1 ? MENU_APPEND : pos);
+    pMenu->InsertItem(nNewid, rStr, nBits, rId, pos == -1 ? MENU_APPEND : pos);
     if (pIconName)
     {
         pMenu->SetItemImage(nNewid, createImage(*pIconName));
@@ -910,8 +906,8 @@ SalInstanceMenu::SalInstanceMenu(PopupMenu* pMenu, bool bTakeOwnership)
     m_nLastId = nCount ? pMenu->GetItemId(nCount - 1) : 0;
     m_xMenu->SetSelectHdl(LINK(this, SalInstanceMenu, SelectMenuHdl));
 }
-OString SalInstanceMenu::popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect,
-                                       weld::Placement ePlace)
+OUString SalInstanceMenu::popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect,
+                                        weld::Placement ePlace)
 {
     SalInstanceWidget* pVclWidget = dynamic_cast<SalInstanceWidget*>(pParent);
     assert(pVclWidget);
@@ -923,31 +919,31 @@ OString SalInstanceMenu::popup_at_rect(weld::Widget* pParent, const tools::Recta
     m_xMenu->Execute(pVclWidget->getWidget(), rRect, eFlags);
     return m_xMenu->GetCurItemIdent();
 }
-void SalInstanceMenu::set_sensitive(const OString& rIdent, bool bSensitive)
+void SalInstanceMenu::set_sensitive(const OUString& rIdent, bool bSensitive)
 {
     m_xMenu->EnableItem(rIdent, bSensitive);
 }
-bool SalInstanceMenu::get_sensitive(const OString& rIdent) const
+bool SalInstanceMenu::get_sensitive(const OUString& rIdent) const
 {
     return m_xMenu->IsItemEnabled(m_xMenu->GetItemId(rIdent));
 }
-void SalInstanceMenu::set_active(const OString& rIdent, bool bActive)
+void SalInstanceMenu::set_active(const OUString& rIdent, bool bActive)
 {
     m_xMenu->CheckItem(rIdent, bActive);
 }
-bool SalInstanceMenu::get_active(const OString& rIdent) const
+bool SalInstanceMenu::get_active(const OUString& rIdent) const
 {
     return m_xMenu->IsItemChecked(m_xMenu->GetItemId(rIdent));
 }
-void SalInstanceMenu::set_label(const OString& rIdent, const OUString& rLabel)
+void SalInstanceMenu::set_label(const OUString& rIdent, const OUString& rLabel)
 {
     m_xMenu->SetItemText(m_xMenu->GetItemId(rIdent), rLabel);
 }
-OUString SalInstanceMenu::get_label(const OString& rIdent) const
+OUString SalInstanceMenu::get_label(const OUString& rIdent) const
 {
     return m_xMenu->GetItemText(m_xMenu->GetItemId(rIdent));
 }
-void SalInstanceMenu::set_visible(const OString& rIdent, bool bShow)
+void SalInstanceMenu::set_visible(const OUString& rIdent, bool bShow)
 {
     m_xMenu->ShowItem(m_xMenu->GetItemId(rIdent), bShow);
 }
@@ -963,14 +959,14 @@ void SalInstanceMenu::insert(int pos, const OUString& rId, const OUString& rStr,
 void SalInstanceMenu::insert_separator(int pos, const OUString& rId)
 {
     auto nInsertPos = pos == -1 ? MENU_APPEND : pos;
-    m_xMenu->InsertSeparator(rId.toUtf8(), nInsertPos);
+    m_xMenu->InsertSeparator(rId, nInsertPos);
 }
-void SalInstanceMenu::remove(const OString& rId)
+void SalInstanceMenu::remove(const OUString& rId)
 {
     m_xMenu->RemoveItem(m_xMenu->GetItemPos(m_xMenu->GetItemId(rId)));
 }
 int SalInstanceMenu::n_children() const { return m_xMenu->GetItemCount(); }
-OString SalInstanceMenu::get_id(int pos) const
+OUString SalInstanceMenu::get_id(int pos) const
 {
     return m_xMenu->GetItemIdent(m_xMenu->GetItemId(pos));
 }
@@ -1005,50 +1001,50 @@ SalInstanceToolbar::SalInstanceToolbar(ToolBox* pToolBox, SalInstanceBuilder* pB
     m_xToolBox->SetDropdownClickHdl(LINK(this, SalInstanceToolbar, DropdownClick));
 }
 
-void SalInstanceToolbar::set_item_sensitive(const OString& rIdent, bool bSensitive)
+void SalInstanceToolbar::set_item_sensitive(const OUString& rIdent, bool bSensitive)
 {
-    m_xToolBox->EnableItem(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), bSensitive);
+    m_xToolBox->EnableItem(m_xToolBox->GetItemId(rIdent), bSensitive);
 }
 
-bool SalInstanceToolbar::get_item_sensitive(const OString& rIdent) const
+bool SalInstanceToolbar::get_item_sensitive(const OUString& rIdent) const
 {
-    return m_xToolBox->IsItemEnabled(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)));
+    return m_xToolBox->IsItemEnabled(m_xToolBox->GetItemId(rIdent));
 }
 
-void SalInstanceToolbar::set_item_visible(const OString& rIdent, bool bVisible)
+void SalInstanceToolbar::set_item_visible(const OUString& rIdent, bool bVisible)
 {
-    m_xToolBox->ShowItem(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), bVisible);
+    m_xToolBox->ShowItem(m_xToolBox->GetItemId(rIdent), bVisible);
 }
 
-void SalInstanceToolbar::set_item_help_id(const OString& rIdent, const OString& rHelpId)
+void SalInstanceToolbar::set_item_help_id(const OUString& rIdent, const OUString& rHelpId)
 {
-    m_xToolBox->SetHelpId(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), rHelpId);
+    m_xToolBox->SetHelpId(m_xToolBox->GetItemId(rIdent), rHelpId);
 }
 
-bool SalInstanceToolbar::get_item_visible(const OString& rIdent) const
+bool SalInstanceToolbar::get_item_visible(const OUString& rIdent) const
 {
-    return m_xToolBox->IsItemVisible(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)));
+    return m_xToolBox->IsItemVisible(m_xToolBox->GetItemId(rIdent));
 }
 
-void SalInstanceToolbar::set_item_active(const OString& rIdent, bool bActive)
+void SalInstanceToolbar::set_item_active(const OUString& rIdent, bool bActive)
 {
-    ToolBoxItemId nItemId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
+    ToolBoxItemId nItemId = m_xToolBox->GetItemId(rIdent);
     m_xToolBox->CheckItem(nItemId, bActive);
 }
 
-bool SalInstanceToolbar::get_item_active(const OString& rIdent) const
+bool SalInstanceToolbar::get_item_active(const OUString& rIdent) const
 {
-    return m_xToolBox->IsItemChecked(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)));
+    return m_xToolBox->IsItemChecked(m_xToolBox->GetItemId(rIdent));
 }
 
-void SalInstanceToolbar::set_menu_item_active(const OString& rIdent, bool bActive)
+void SalInstanceToolbar::set_menu_item_active(const OUString& rIdent, bool bActive)
 {
-    ToolBoxItemId nItemId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
+    ToolBoxItemId nItemId = m_xToolBox->GetItemId(rIdent);
     assert(m_xToolBox->GetItemBits(nItemId) & ToolBoxItemBits::DROPDOWN);
 
     if (bActive)
     {
-        m_sStartShowIdent = m_xToolBox->GetItemCommand(nItemId).toUtf8();
+        m_sStartShowIdent = m_xToolBox->GetItemCommand(nItemId);
         signal_toggle_menu(m_sStartShowIdent);
     }
 
@@ -1076,9 +1072,9 @@ void SalInstanceToolbar::set_menu_item_active(const OString& rIdent, bool bActiv
     m_sStartShowIdent.clear();
 }
 
-bool SalInstanceToolbar::get_menu_item_active(const OString& rIdent) const
+bool SalInstanceToolbar::get_menu_item_active(const OUString& rIdent) const
 {
-    ToolBoxItemId nItemId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
+    ToolBoxItemId nItemId = m_xToolBox->GetItemId(rIdent);
     assert(m_xToolBox->GetItemBits(nItemId) & ToolBoxItemBits::DROPDOWN);
 
     if (rIdent == m_sStartShowIdent)
@@ -1099,7 +1095,7 @@ bool SalInstanceToolbar::get_menu_item_active(const OString& rIdent) const
     return false;
 }
 
-void SalInstanceToolbar::set_item_popover(const OString& rIdent, weld::Widget* pPopover)
+void SalInstanceToolbar::set_item_popover(const OUString& rIdent, weld::Widget* pPopover)
 {
     SalInstanceWidget* pPopoverWidget = dynamic_cast<SalInstanceWidget*>(pPopover);
 
@@ -1110,7 +1106,7 @@ void SalInstanceToolbar::set_item_popover(const OString& rIdent, weld::Widget* p
         pFloat->EnableDocking();
     }
 
-    ToolBoxItemId nId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
+    ToolBoxItemId nId = m_xToolBox->GetItemId(rIdent);
     auto xOldFloat = m_aFloats[nId];
     if (xOldFloat)
     {
@@ -1120,13 +1116,13 @@ void SalInstanceToolbar::set_item_popover(const OString& rIdent, weld::Widget* p
     m_aMenus[nId] = nullptr;
 }
 
-void SalInstanceToolbar::set_item_menu(const OString& rIdent, weld::Menu* pMenu)
+void SalInstanceToolbar::set_item_menu(const OUString& rIdent, weld::Menu* pMenu)
 {
     SalInstanceMenu* pInstanceMenu = dynamic_cast<SalInstanceMenu*>(pMenu);
 
     PopupMenu* pPopup = pInstanceMenu ? pInstanceMenu->getMenu() : nullptr;
 
-    ToolBoxItemId nId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
+    ToolBoxItemId nId = m_xToolBox->GetItemId(rIdent);
     m_aMenus[nId] = pPopup;
     m_aFloats[nId] = nullptr;
 }
@@ -1145,14 +1141,14 @@ void SalInstanceToolbar::insert_separator(int pos, const OUString& /*rId*/)
 
 int SalInstanceToolbar::get_n_items() const { return m_xToolBox->GetItemCount(); }
 
-OString SalInstanceToolbar::get_item_ident(int nIndex) const
+OUString SalInstanceToolbar::get_item_ident(int nIndex) const
 {
-    return m_xToolBox->GetItemCommand(m_xToolBox->GetItemId(nIndex)).toUtf8();
+    return m_xToolBox->GetItemCommand(m_xToolBox->GetItemId(nIndex));
 }
 
-void SalInstanceToolbar::set_item_ident(int nIndex, const OString& rIdent)
+void SalInstanceToolbar::set_item_ident(int nIndex, const OUString& rIdent)
 {
-    return m_xToolBox->SetItemCommand(m_xToolBox->GetItemId(nIndex), OUString::fromUtf8(rIdent));
+    return m_xToolBox->SetItemCommand(m_xToolBox->GetItemId(nIndex), rIdent);
 }
 
 void SalInstanceToolbar::set_item_label(int nIndex, const OUString& rLabel)
@@ -1160,41 +1156,38 @@ void SalInstanceToolbar::set_item_label(int nIndex, const OUString& rLabel)
     m_xToolBox->SetItemText(m_xToolBox->GetItemId(nIndex), rLabel);
 }
 
-OUString SalInstanceToolbar::get_item_label(const OString& rIdent) const
+OUString SalInstanceToolbar::get_item_label(const OUString& rIdent) const
 {
-    return m_xToolBox->GetItemText(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)));
+    return m_xToolBox->GetItemText(m_xToolBox->GetItemId(rIdent));
 }
 
-void SalInstanceToolbar::set_item_label(const OString& rIdent, const OUString& rLabel)
+void SalInstanceToolbar::set_item_label(const OUString& rIdent, const OUString& rLabel)
 {
-    m_xToolBox->SetItemText(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), rLabel);
+    m_xToolBox->SetItemText(m_xToolBox->GetItemId(rIdent), rLabel);
 }
 
-void SalInstanceToolbar::set_item_icon_name(const OString& rIdent, const OUString& rIconName)
+void SalInstanceToolbar::set_item_icon_name(const OUString& rIdent, const OUString& rIconName)
 {
-    m_xToolBox->SetItemImage(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)),
-                             Image(StockImage::Yes, rIconName));
+    m_xToolBox->SetItemImage(m_xToolBox->GetItemId(rIdent), Image(StockImage::Yes, rIconName));
 }
 
-void SalInstanceToolbar::set_item_image_mirrored(const OString& rIdent, bool bMirrored)
+void SalInstanceToolbar::set_item_image_mirrored(const OUString& rIdent, bool bMirrored)
 {
-    m_xToolBox->SetItemImageMirrorMode(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)),
-                                       bMirrored);
+    m_xToolBox->SetItemImageMirrorMode(m_xToolBox->GetItemId(rIdent), bMirrored);
 }
 
-void SalInstanceToolbar::set_item_image(const OString& rIdent,
+void SalInstanceToolbar::set_item_image(const OUString& rIdent,
                                         const css::uno::Reference<css::graphic::XGraphic>& rIcon)
 {
-    m_xToolBox->SetItemImage(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), Image(rIcon));
+    m_xToolBox->SetItemImage(m_xToolBox->GetItemId(rIdent), Image(rIcon));
 }
 
-void SalInstanceToolbar::set_item_image(const OString& rIdent, VirtualDevice* pDevice)
+void SalInstanceToolbar::set_item_image(const OUString& rIdent, VirtualDevice* pDevice)
 {
     if (pDevice)
-        m_xToolBox->SetItemImage(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)),
-                                 createImage(*pDevice));
+        m_xToolBox->SetItemImage(m_xToolBox->GetItemId(rIdent), createImage(*pDevice));
     else
-        m_xToolBox->SetItemImage(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), Image());
+        m_xToolBox->SetItemImage(m_xToolBox->GetItemId(rIdent), Image());
 }
 
 void SalInstanceToolbar::set_item_image(int nIndex,
@@ -1208,14 +1201,14 @@ void SalInstanceToolbar::set_item_tooltip_text(int nIndex, const OUString& rTip)
     m_xToolBox->SetQuickHelpText(m_xToolBox->GetItemId(nIndex), rTip);
 }
 
-void SalInstanceToolbar::set_item_tooltip_text(const OString& rIdent, const OUString& rTip)
+void SalInstanceToolbar::set_item_tooltip_text(const OUString& rIdent, const OUString& rTip)
 {
-    m_xToolBox->SetQuickHelpText(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), rTip);
+    m_xToolBox->SetQuickHelpText(m_xToolBox->GetItemId(rIdent), rTip);
 }
 
-OUString SalInstanceToolbar::get_item_tooltip_text(const OString& rIdent) const
+OUString SalInstanceToolbar::get_item_tooltip_text(const OUString& rIdent) const
 {
-    return m_xToolBox->GetQuickHelpText(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)));
+    return m_xToolBox->GetQuickHelpText(m_xToolBox->GetItemId(rIdent));
 }
 
 vcl::ImageType SalInstanceToolbar::get_icon_size() const { return m_xToolBox->GetImageSize(); }
@@ -1261,13 +1254,13 @@ SalInstanceToolbar::~SalInstanceToolbar()
 IMPL_LINK_NOARG(SalInstanceToolbar, ClickHdl, ToolBox*, void)
 {
     ToolBoxItemId nItemId = m_xToolBox->GetCurItemId();
-    signal_clicked(m_xToolBox->GetItemCommand(nItemId).toUtf8());
+    signal_clicked(m_xToolBox->GetItemCommand(nItemId));
 }
 
 IMPL_LINK_NOARG(SalInstanceToolbar, DropdownClick, ToolBox*, void)
 {
     ToolBoxItemId nItemId = m_xToolBox->GetCurItemId();
-    set_menu_item_active(m_xToolBox->GetItemCommand(nItemId).toUtf8(), true);
+    set_menu_item_active(m_xToolBox->GetItemCommand(nItemId), true);
 }
 
 IMPL_LINK(SalInstanceToolbar, MenuToggleListener, VclWindowEvent&, rEvent, void)
@@ -1279,7 +1272,7 @@ IMPL_LINK(SalInstanceToolbar, MenuToggleListener, VclWindowEvent&, rEvent, void)
             if (rEvent.GetWindow() == rFloat.second)
             {
                 ToolBoxItemId nItemId = rFloat.first;
-                signal_toggle_menu(m_xToolBox->GetItemCommand(nItemId).toUtf8());
+                signal_toggle_menu(m_xToolBox->GetItemCommand(nItemId));
                 break;
             }
         }
@@ -1678,14 +1671,14 @@ bool SalInstanceWindow::is_default_widget(const weld::Widget* pCandidate) const
     return pWidget && pWidget->GetStyle() & WB_DEFBUTTON;
 }
 
-void SalInstanceWindow::set_window_state(const OString& rStr)
+void SalInstanceWindow::set_window_state(const OUString& rStr)
 {
     SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(m_xWindow.get());
     assert(pSysWin);
     pSysWin->SetWindowState(rStr);
 }
 
-OString SalInstanceWindow::get_window_state(vcl::WindowDataMask nMask) const
+OUString SalInstanceWindow::get_window_state(vcl::WindowDataMask nMask) const
 {
     SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(m_xWindow.get());
     assert(pSysWin);
@@ -1879,7 +1872,7 @@ int SalInstanceDialog::run()
 
 void SalInstanceDialog::response(int nResponse) { m_xDialog->EndDialog(nResponse); }
 
-void SalInstanceDialog::add_button(const OUString& rText, int nResponse, const OString& rHelpId)
+void SalInstanceDialog::add_button(const OUString& rText, int nResponse, const OUString& rHelpId)
 {
     VclButtonBox* pBox = m_xDialog->get_action_area();
     VclPtr<PushButton> xButton(
@@ -2004,11 +1997,11 @@ weld::Container* SalInstanceMessageDialog::weld_message_area()
     return new SalInstanceContainer(m_xMessageDialog->get_message_area(), m_pBuilder, false);
 }
 
-int SalInstanceAssistant::find_page(std::string_view rIdent) const
+int SalInstanceAssistant::find_page(std::u16string_view rIdent) const
 {
     for (size_t i = 0; i < m_aAddedPages.size(); ++i)
     {
-        if (m_aAddedPages[i]->get_id().toUtf8() == rIdent)
+        if (m_aAddedPages[i]->get_id() == rIdent)
             return i;
     }
     return -1;
@@ -2040,12 +2033,12 @@ int SalInstanceAssistant::get_current_page() const { return find_id(m_xWizard->G
 
 int SalInstanceAssistant::get_n_pages() const { return m_aAddedPages.size(); }
 
-OString SalInstanceAssistant::get_page_ident(int nPage) const
+OUString SalInstanceAssistant::get_page_ident(int nPage) const
 {
-    return m_aAddedPages[nPage]->get_id().toUtf8();
+    return m_aAddedPages[nPage]->get_id();
 }
 
-OString SalInstanceAssistant::get_current_page_ident() const
+OUString SalInstanceAssistant::get_current_page_ident() const
 {
     return get_page_ident(get_current_page());
 }
@@ -2075,7 +2068,7 @@ void SalInstanceAssistant::set_current_page(int nPage)
     enable_notify_events();
 }
 
-void SalInstanceAssistant::set_current_page(const OString& rIdent)
+void SalInstanceAssistant::set_current_page(const OUString& rIdent)
 {
     int nIndex = find_page(rIdent);
     if (nIndex == -1)
@@ -2083,7 +2076,7 @@ void SalInstanceAssistant::set_current_page(const OString& rIdent)
     set_current_page(nIndex);
 }
 
-void SalInstanceAssistant::set_page_index(const OString& rIdent, int nNewIndex)
+void SalInstanceAssistant::set_page_index(const OUString& rIdent, int nNewIndex)
 {
     int nOldIndex = find_page(rIdent);
 
@@ -2108,11 +2101,11 @@ void SalInstanceAssistant::set_page_index(const OString& rIdent, int nNewIndex)
     enable_notify_events();
 }
 
-weld::Container* SalInstanceAssistant::append_page(const OString& rIdent)
+weld::Container* SalInstanceAssistant::append_page(const OUString& rIdent)
 {
     VclPtrInstance<TabPage> xPage(m_xWizard);
     VclPtrInstance<VclGrid> xGrid(xPage);
-    xPage->set_id(OUString::fromUtf8(rIdent));
+    xPage->set_id(rIdent);
     xPage->Show();
     xGrid->set_hexpand(true);
     xGrid->set_vexpand(true);
@@ -2129,7 +2122,7 @@ weld::Container* SalInstanceAssistant::append_page(const OString& rIdent)
     return m_aPages.back().get();
 }
 
-OUString SalInstanceAssistant::get_page_title(const OString& rIdent) const
+OUString SalInstanceAssistant::get_page_title(const OUString& rIdent) const
 {
     int nIndex = find_page(rIdent);
     if (nIndex == -1)
@@ -2137,7 +2130,7 @@ OUString SalInstanceAssistant::get_page_title(const OString& rIdent) const
     return m_aAddedPages[nIndex]->GetText();
 }
 
-void SalInstanceAssistant::set_page_title(const OString& rIdent, const OUString& rTitle)
+void SalInstanceAssistant::set_page_title(const OUString& rIdent, const OUString& rTitle)
 {
     int nIndex = find_page(rIdent);
     if (nIndex == -1)
@@ -2151,7 +2144,7 @@ void SalInstanceAssistant::set_page_title(const OString& rIdent, const OUString&
     }
 }
 
-void SalInstanceAssistant::set_page_sensitive(const OString& rIdent, bool bSensitive)
+void SalInstanceAssistant::set_page_sensitive(const OUString& rIdent, bool bSensitive)
 {
     int nIndex = find_page(rIdent);
     if (nIndex == -1)
@@ -2165,7 +2158,7 @@ void SalInstanceAssistant::set_page_sensitive(const OString& rIdent, bool bSensi
     }
 }
 
-void SalInstanceAssistant::set_page_side_help_id(const OString& rHelpId)
+void SalInstanceAssistant::set_page_side_help_id(const OUString& rHelpId)
 {
     m_xWizard->SetRoadmapHelpId(rHelpId);
 }
@@ -2606,17 +2599,17 @@ int SalInstanceNotebook::get_current_page() const
     return m_xNotebook->GetPagePos(m_xNotebook->GetCurPageId());
 }
 
-OString SalInstanceNotebook::get_page_ident(int nPage) const
+OUString SalInstanceNotebook::get_page_ident(int nPage) const
 {
     return m_xNotebook->GetPageName(m_xNotebook->GetPageId(nPage));
 }
 
-OString SalInstanceNotebook::get_current_page_ident() const
+OUString SalInstanceNotebook::get_current_page_ident() const
 {
     return m_xNotebook->GetPageName(m_xNotebook->GetCurPageId());
 }
 
-int SalInstanceNotebook::get_page_index(const OString& rIdent) const
+int SalInstanceNotebook::get_page_index(const OUString& rIdent) const
 {
     sal_uInt16 nPageId = m_xNotebook->GetPageId(rIdent);
     sal_uInt16 nPageIndex = m_xNotebook->GetPagePos(nPageId);
@@ -2625,7 +2618,7 @@ int SalInstanceNotebook::get_page_index(const OString& rIdent) const
     return nPageIndex;
 }
 
-weld::Container* SalInstanceNotebook::get_page(const OString& rIdent) const
+weld::Container* SalInstanceNotebook::get_page(const OUString& rIdent) const
 {
     int nPageIndex = get_page_index(rIdent);
     if (nPageIndex == -1)
@@ -2645,12 +2638,12 @@ void SalInstanceNotebook::set_current_page(int nPage)
     m_xNotebook->SetCurPageId(m_xNotebook->GetPageId(nPage));
 }
 
-void SalInstanceNotebook::set_current_page(const OString& rIdent)
+void SalInstanceNotebook::set_current_page(const OUString& rIdent)
 {
     m_xNotebook->SetCurPageId(m_xNotebook->GetPageId(rIdent));
 }
 
-void SalInstanceNotebook::remove_page(const OString& rIdent)
+void SalInstanceNotebook::remove_page(const OUString& rIdent)
 {
     sal_uInt16 nPageId = m_xNotebook->GetPageId(rIdent);
     sal_uInt16 nPageIndex = m_xNotebook->GetPagePos(nPageId);
@@ -2670,7 +2663,7 @@ void SalInstanceNotebook::remove_page(const OString& rIdent)
     }
 }
 
-void SalInstanceNotebook::insert_page(const OString& rIdent, const OUString& rLabel, int nPos)
+void SalInstanceNotebook::insert_page(const OUString& rIdent, const OUString& rLabel, int nPos)
 {
     sal_uInt16 nPageCount = m_xNotebook->GetPageCount();
     sal_uInt16 nLastPageId = nPageCount ? m_xNotebook->GetPageId(nPageCount - 1) : 0;
@@ -2698,12 +2691,12 @@ void SalInstanceNotebook::insert_page(const OString& rIdent, const OUString& rLa
 
 int SalInstanceNotebook::get_n_pages() const { return m_xNotebook->GetPageCount(); }
 
-OUString SalInstanceNotebook::get_tab_label_text(const OString& rIdent) const
+OUString SalInstanceNotebook::get_tab_label_text(const OUString& rIdent) const
 {
     return m_xNotebook->GetPageText(m_xNotebook->GetPageId(rIdent));
 }
 
-void SalInstanceNotebook::set_tab_label_text(const OString& rIdent, const OUString& rText)
+void SalInstanceNotebook::set_tab_label_text(const OUString& rIdent, const OUString& rText)
 {
     return m_xNotebook->SetPageText(m_xNotebook->GetPageId(rIdent), rText);
 }
@@ -2761,14 +2754,14 @@ public:
         return m_xNotebook->GetPagePos(m_xNotebook->GetCurPageId());
     }
 
-    virtual OString get_page_ident(int nPage) const override
+    virtual OUString get_page_ident(int nPage) const override
     {
         return m_xNotebook->GetPageId(nPage);
     }
 
-    virtual OString get_current_page_ident() const override { return m_xNotebook->GetCurPageId(); }
+    virtual OUString get_current_page_ident() const override { return m_xNotebook->GetCurPageId(); }
 
-    virtual int get_page_index(const OString& rIdent) const override
+    virtual int get_page_index(const OUString& rIdent) const override
     {
         sal_uInt16 nPageIndex = m_xNotebook->GetPagePos(rIdent);
         if (nPageIndex == TAB_PAGE_NOTFOUND)
@@ -2776,7 +2769,7 @@ public:
         return nPageIndex;
     }
 
-    virtual weld::Container* get_page(const OString& rIdent) const override
+    virtual weld::Container* get_page(const OUString& rIdent) const override
     {
         int nPageIndex = get_page_index(rIdent);
         if (nPageIndex == -1)
@@ -2794,12 +2787,12 @@ public:
         m_xNotebook->SetCurPageId(m_xNotebook->GetPageId(nPage));
     }
 
-    virtual void set_current_page(const OString& rIdent) override
+    virtual void set_current_page(const OUString& rIdent) override
     {
         m_xNotebook->SetCurPageId(rIdent);
     }
 
-    virtual void remove_page(const OString& rIdent) override
+    virtual void remove_page(const OUString& rIdent) override
     {
         sal_uInt16 nPageIndex = m_xNotebook->GetPagePos(rIdent);
         if (nPageIndex == TAB_PAGE_NOTFOUND)
@@ -2809,7 +2802,7 @@ public:
             m_aPages.erase(m_aPages.begin() + nPageIndex);
     }
 
-    virtual void insert_page(const OString& rIdent, const OUString& rLabel, int nPos) override
+    virtual void insert_page(const OUString& rIdent, const OUString& rLabel, int nPos) override
     {
         VclPtrInstance<VclGrid> xGrid(m_xNotebook->GetPageParent());
         xGrid->set_hexpand(true);
@@ -2826,12 +2819,12 @@ public:
 
     virtual int get_n_pages() const override { return m_xNotebook->GetPageCount(); }
 
-    virtual void set_tab_label_text(const OString& rIdent, const OUString& rText) override
+    virtual void set_tab_label_text(const OUString& rIdent, const OUString& rText) override
     {
         return m_xNotebook->SetPageText(rIdent, rText);
     }
 
-    virtual OUString get_tab_label_text(const OString& rIdent) const override
+    virtual OUString get_tab_label_text(const OUString& rIdent) const override
     {
         return m_xNotebook->GetPageText(rIdent);
     }
@@ -3005,16 +2998,16 @@ void SalInstanceMenuButton::insert_item(int pos, const OUString& rId, const OUSt
 void SalInstanceMenuButton::insert_separator(int pos, const OUString& rId)
 {
     auto nInsertPos = pos == -1 ? MENU_APPEND : pos;
-    m_xMenuButton->GetPopupMenu()->InsertSeparator(rId.toUtf8(), nInsertPos);
+    m_xMenuButton->GetPopupMenu()->InsertSeparator(rId, nInsertPos);
 }
 
-void SalInstanceMenuButton::set_item_sensitive(const OString& rIdent, bool bSensitive)
+void SalInstanceMenuButton::set_item_sensitive(const OUString& rIdent, bool bSensitive)
 {
     PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
     pMenu->EnableItem(rIdent, bSensitive);
 }
 
-void SalInstanceMenuButton::remove_item(const OString& rId)
+void SalInstanceMenuButton::remove_item(const OUString& rId)
 {
     PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
     pMenu->RemoveItem(pMenu->GetItemPos(pMenu->GetItemId(rId)));
@@ -3026,25 +3019,25 @@ void SalInstanceMenuButton::clear()
     pMenu->Clear();
 }
 
-void SalInstanceMenuButton::set_item_active(const OString& rIdent, bool bActive)
+void SalInstanceMenuButton::set_item_active(const OUString& rIdent, bool bActive)
 {
     PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
     pMenu->CheckItem(rIdent, bActive);
 }
 
-void SalInstanceMenuButton::set_item_label(const OString& rIdent, const OUString& rText)
+void SalInstanceMenuButton::set_item_label(const OUString& rIdent, const OUString& rText)
 {
     PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
     pMenu->SetItemText(pMenu->GetItemId(rIdent), rText);
 }
 
-OUString SalInstanceMenuButton::get_item_label(const OString& rIdent) const
+OUString SalInstanceMenuButton::get_item_label(const OUString& rIdent) const
 {
     PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
     return pMenu->GetItemText(pMenu->GetItemId(rIdent));
 }
 
-void SalInstanceMenuButton::set_item_visible(const OString& rIdent, bool bShow)
+void SalInstanceMenuButton::set_item_visible(const OUString& rIdent, bool bShow)
 {
     PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
     pMenu->ShowItem(pMenu->GetItemId(rIdent), bShow);
@@ -6883,7 +6876,7 @@ public:
 
     virtual void set_mru_entries(const OUString&) override { assert(false && "not implemented"); }
 
-    virtual void set_item_menu(const OString&, weld::Menu*) override
+    virtual void set_item_menu(const OUString&, weld::Menu*) override
     {
         assert(false && "not implemented");
     }
@@ -7033,11 +7026,11 @@ SalInstanceBuilder::SalInstanceBuilder(vcl::Window* pParent, const OUString& rUI
                                        const OUString& rUIFile,
                                        const css::uno::Reference<css::frame::XFrame>& rFrame)
     : weld::Builder()
-    , m_xBuilder(new VclBuilder(pParent, rUIRoot, rUIFile, OString(), rFrame, false))
+    , m_xBuilder(new VclBuilder(pParent, rUIRoot, rUIFile, {}, rFrame, false))
 {
 }
 
-std::unique_ptr<weld::MessageDialog> SalInstanceBuilder::weld_message_dialog(const OString& id)
+std::unique_ptr<weld::MessageDialog> SalInstanceBuilder::weld_message_dialog(const OUString& id)
 {
     MessageDialog* pMessageDialog = m_xBuilder->get<MessageDialog>(id);
     std::unique_ptr<weld::MessageDialog> pRet(
@@ -7051,7 +7044,7 @@ std::unique_ptr<weld::MessageDialog> SalInstanceBuilder::weld_message_dialog(con
     return pRet;
 }
 
-std::unique_ptr<weld::Dialog> SalInstanceBuilder::weld_dialog(const OString& id)
+std::unique_ptr<weld::Dialog> SalInstanceBuilder::weld_dialog(const OUString& id)
 {
     Dialog* pDialog = m_xBuilder->get<Dialog>(id);
     std::unique_ptr<weld::Dialog> pRet(pDialog ? new SalInstanceDialog(pDialog, this, false)
@@ -7065,7 +7058,7 @@ std::unique_ptr<weld::Dialog> SalInstanceBuilder::weld_dialog(const OString& id)
     return pRet;
 }
 
-std::unique_ptr<weld::Assistant> SalInstanceBuilder::weld_assistant(const OString& id)
+std::unique_ptr<weld::Assistant> SalInstanceBuilder::weld_assistant(const OUString& id)
 {
     vcl::RoadmapWizard* pDialog = m_xBuilder->get<vcl::RoadmapWizard>(id);
     std::unique_ptr<weld::Assistant> pRet(pDialog ? new SalInstanceAssistant(pDialog, this, false)
@@ -7108,31 +7101,31 @@ std::unique_ptr<weld::Window> SalInstanceBuilder::create_screenshot_window()
     return std::unique_ptr<weld::Dialog>(new SalInstanceDialog(xDialog, this, false));
 }
 
-std::unique_ptr<weld::Widget> SalInstanceBuilder::weld_widget(const OString& id)
+std::unique_ptr<weld::Widget> SalInstanceBuilder::weld_widget(const OUString& id)
 {
     vcl::Window* pWidget = m_xBuilder->get(id);
     return pWidget ? std::make_unique<SalInstanceWidget>(pWidget, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::Container> SalInstanceBuilder::weld_container(const OString& id)
+std::unique_ptr<weld::Container> SalInstanceBuilder::weld_container(const OUString& id)
 {
     vcl::Window* pContainer = m_xBuilder->get(id);
     return pContainer ? std::make_unique<SalInstanceContainer>(pContainer, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::Box> SalInstanceBuilder::weld_box(const OString& id)
+std::unique_ptr<weld::Box> SalInstanceBuilder::weld_box(const OUString& id)
 {
     VclBox* pContainer = m_xBuilder->get<VclBox>(id);
     return pContainer ? std::make_unique<SalInstanceBox>(pContainer, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::Paned> SalInstanceBuilder::weld_paned(const OString& id)
+std::unique_ptr<weld::Paned> SalInstanceBuilder::weld_paned(const OUString& id)
 {
     VclPaned* pPaned = m_xBuilder->get<VclPaned>(id);
     return pPaned ? std::make_unique<SalInstancePaned>(pPaned, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::Frame> SalInstanceBuilder::weld_frame(const OString& id)
+std::unique_ptr<weld::Frame> SalInstanceBuilder::weld_frame(const OUString& id)
 {
     VclFrame* pFrame = m_xBuilder->get<VclFrame>(id);
     std::unique_ptr<weld::Frame> pRet(pFrame ? new SalInstanceFrame(pFrame, this, false) : nullptr);
@@ -7140,7 +7133,7 @@ std::unique_ptr<weld::Frame> SalInstanceBuilder::weld_frame(const OString& id)
 }
 
 std::unique_ptr<weld::ScrolledWindow>
-SalInstanceBuilder::weld_scrolled_window(const OString& id, bool bUserManagedScrolling)
+SalInstanceBuilder::weld_scrolled_window(const OUString& id, bool bUserManagedScrolling)
 {
     VclScrolledWindow* pScrolledWindow = m_xBuilder->get<VclScrolledWindow>(id);
     return pScrolledWindow ? std::make_unique<SalInstanceScrolledWindow>(
@@ -7148,7 +7141,7 @@ SalInstanceBuilder::weld_scrolled_window(const OString& id, bool bUserManagedScr
                            : nullptr;
 }
 
-std::unique_ptr<weld::Notebook> SalInstanceBuilder::weld_notebook(const OString& id)
+std::unique_ptr<weld::Notebook> SalInstanceBuilder::weld_notebook(const OUString& id)
 {
     vcl::Window* pNotebook = m_xBuilder->get(id);
     if (!pNotebook)
@@ -7162,89 +7155,89 @@ std::unique_ptr<weld::Notebook> SalInstanceBuilder::weld_notebook(const OString&
     return nullptr;
 }
 
-std::unique_ptr<weld::Button> SalInstanceBuilder::weld_button(const OString& id)
+std::unique_ptr<weld::Button> SalInstanceBuilder::weld_button(const OUString& id)
 {
     Button* pButton = m_xBuilder->get<Button>(id);
     return pButton ? std::make_unique<SalInstanceButton>(pButton, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::MenuButton> SalInstanceBuilder::weld_menu_button(const OString& id)
+std::unique_ptr<weld::MenuButton> SalInstanceBuilder::weld_menu_button(const OUString& id)
 {
     MenuButton* pButton = m_xBuilder->get<MenuButton>(id);
     return pButton ? std::make_unique<SalInstanceMenuButton>(pButton, this, false) : nullptr;
 }
 
 std::unique_ptr<weld::MenuToggleButton>
-SalInstanceBuilder::weld_menu_toggle_button(const OString& id)
+SalInstanceBuilder::weld_menu_toggle_button(const OUString& id)
 {
     MenuToggleButton* pButton = m_xBuilder->get<MenuToggleButton>(id);
     return pButton ? std::make_unique<SalInstanceMenuToggleButton>(pButton, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::LinkButton> SalInstanceBuilder::weld_link_button(const OString& id)
+std::unique_ptr<weld::LinkButton> SalInstanceBuilder::weld_link_button(const OUString& id)
 {
     FixedHyperlink* pButton = m_xBuilder->get<FixedHyperlink>(id);
     return pButton ? std::make_unique<SalInstanceLinkButton>(pButton, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::ToggleButton> SalInstanceBuilder::weld_toggle_button(const OString& id)
+std::unique_ptr<weld::ToggleButton> SalInstanceBuilder::weld_toggle_button(const OUString& id)
 {
     PushButton* pToggleButton = m_xBuilder->get<PushButton>(id);
     return pToggleButton ? std::make_unique<SalInstanceToggleButton>(pToggleButton, this, false)
                          : nullptr;
 }
 
-std::unique_ptr<weld::RadioButton> SalInstanceBuilder::weld_radio_button(const OString& id)
+std::unique_ptr<weld::RadioButton> SalInstanceBuilder::weld_radio_button(const OUString& id)
 {
     RadioButton* pRadioButton = m_xBuilder->get<RadioButton>(id);
     return pRadioButton ? std::make_unique<SalInstanceRadioButton>(pRadioButton, this, false)
                         : nullptr;
 }
 
-std::unique_ptr<weld::CheckButton> SalInstanceBuilder::weld_check_button(const OString& id)
+std::unique_ptr<weld::CheckButton> SalInstanceBuilder::weld_check_button(const OUString& id)
 {
     CheckBox* pCheckButton = m_xBuilder->get<CheckBox>(id);
     return pCheckButton ? std::make_unique<SalInstanceCheckButton>(pCheckButton, this, false)
                         : nullptr;
 }
 
-std::unique_ptr<weld::Scale> SalInstanceBuilder::weld_scale(const OString& id)
+std::unique_ptr<weld::Scale> SalInstanceBuilder::weld_scale(const OUString& id)
 {
     Slider* pSlider = m_xBuilder->get<Slider>(id);
     return pSlider ? std::make_unique<SalInstanceScale>(pSlider, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::ProgressBar> SalInstanceBuilder::weld_progress_bar(const OString& id)
+std::unique_ptr<weld::ProgressBar> SalInstanceBuilder::weld_progress_bar(const OUString& id)
 {
     ::ProgressBar* pProgress = m_xBuilder->get<::ProgressBar>(id);
     return pProgress ? std::make_unique<SalInstanceProgressBar>(pProgress, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::Spinner> SalInstanceBuilder::weld_spinner(const OString& id)
+std::unique_ptr<weld::Spinner> SalInstanceBuilder::weld_spinner(const OUString& id)
 {
     Throbber* pThrobber = m_xBuilder->get<Throbber>(id);
     return pThrobber ? std::make_unique<SalInstanceSpinner>(pThrobber, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::Image> SalInstanceBuilder::weld_image(const OString& id)
+std::unique_ptr<weld::Image> SalInstanceBuilder::weld_image(const OUString& id)
 {
     FixedImage* pImage = m_xBuilder->get<FixedImage>(id);
     return pImage ? std::make_unique<SalInstanceImage>(pImage, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::Calendar> SalInstanceBuilder::weld_calendar(const OString& id)
+std::unique_ptr<weld::Calendar> SalInstanceBuilder::weld_calendar(const OUString& id)
 {
     Calendar* pCalendar = m_xBuilder->get<Calendar>(id);
     return pCalendar ? std::make_unique<SalInstanceCalendar>(pCalendar, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::Entry> SalInstanceBuilder::weld_entry(const OString& id)
+std::unique_ptr<weld::Entry> SalInstanceBuilder::weld_entry(const OUString& id)
 {
     Edit* pEntry = m_xBuilder->get<Edit>(id);
     return pEntry ? std::make_unique<SalInstanceEntry>(pEntry, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::SpinButton> SalInstanceBuilder::weld_spin_button(const OString& id)
+std::unique_ptr<weld::SpinButton> SalInstanceBuilder::weld_spin_button(const OUString& id)
 {
     FormattedField* pSpinButton = m_xBuilder->get<FormattedField>(id);
     return pSpinButton ? std::make_unique<SalInstanceSpinButton>(pSpinButton, this, false)
@@ -7252,7 +7245,7 @@ std::unique_ptr<weld::SpinButton> SalInstanceBuilder::weld_spin_button(const OSt
 }
 
 std::unique_ptr<weld::MetricSpinButton>
-SalInstanceBuilder::weld_metric_spin_button(const OString& id, FieldUnit eUnit)
+SalInstanceBuilder::weld_metric_spin_button(const OUString& id, FieldUnit eUnit)
 {
     std::unique_ptr<weld::SpinButton> xButton(weld_spin_button(id));
     if (xButton)
@@ -7264,14 +7257,14 @@ SalInstanceBuilder::weld_metric_spin_button(const OString& id, FieldUnit eUnit)
 }
 
 std::unique_ptr<weld::FormattedSpinButton>
-SalInstanceBuilder::weld_formatted_spin_button(const OString& id)
+SalInstanceBuilder::weld_formatted_spin_button(const OUString& id)
 {
     FormattedField* pSpinButton = m_xBuilder->get<FormattedField>(id);
     return pSpinButton ? std::make_unique<SalInstanceFormattedSpinButton>(pSpinButton, this, false)
                        : nullptr;
 }
 
-std::unique_ptr<weld::ComboBox> SalInstanceBuilder::weld_combo_box(const OString& id)
+std::unique_ptr<weld::ComboBox> SalInstanceBuilder::weld_combo_box(const OUString& id)
 {
     vcl::Window* pWidget = m_xBuilder->get(id);
     ::ComboBox* pComboBox = dynamic_cast<::ComboBox*>(pWidget);
@@ -7283,8 +7276,8 @@ std::unique_ptr<weld::ComboBox> SalInstanceBuilder::weld_combo_box(const OString
 }
 
 std::unique_ptr<weld::EntryTreeView>
-SalInstanceBuilder::weld_entry_tree_view(const OString& containerid, const OString& entryid,
-                                         const OString& treeviewid)
+SalInstanceBuilder::weld_entry_tree_view(const OUString& containerid, const OUString& entryid,
+                                         const OUString& treeviewid)
 {
     vcl::Window* pContainer = m_xBuilder->get(containerid);
     return pContainer ? std::make_unique<SalInstanceEntryTreeView>(pContainer, this, false,
@@ -7293,38 +7286,38 @@ SalInstanceBuilder::weld_entry_tree_view(const OString& containerid, const OStri
                       : nullptr;
 }
 
-std::unique_ptr<weld::TreeView> SalInstanceBuilder::weld_tree_view(const OString& id)
+std::unique_ptr<weld::TreeView> SalInstanceBuilder::weld_tree_view(const OUString& id)
 {
     SvTabListBox* pTreeView = m_xBuilder->get<SvTabListBox>(id);
     return pTreeView ? std::make_unique<SalInstanceTreeView>(pTreeView, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::IconView> SalInstanceBuilder::weld_icon_view(const OString& id)
+std::unique_ptr<weld::IconView> SalInstanceBuilder::weld_icon_view(const OUString& id)
 {
     IconView* pIconView = m_xBuilder->get<IconView>(id);
     return pIconView ? std::make_unique<SalInstanceIconView>(pIconView, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::Label> SalInstanceBuilder::weld_label(const OString& id)
+std::unique_ptr<weld::Label> SalInstanceBuilder::weld_label(const OUString& id)
 {
     Control* pLabel = m_xBuilder->get<Control>(id);
     return pLabel ? std::make_unique<SalInstanceLabel>(pLabel, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::TextView> SalInstanceBuilder::weld_text_view(const OString& id)
+std::unique_ptr<weld::TextView> SalInstanceBuilder::weld_text_view(const OUString& id)
 {
     VclMultiLineEdit* pTextView = m_xBuilder->get<VclMultiLineEdit>(id);
     return pTextView ? std::make_unique<SalInstanceTextView>(pTextView, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::Expander> SalInstanceBuilder::weld_expander(const OString& id)
+std::unique_ptr<weld::Expander> SalInstanceBuilder::weld_expander(const OUString& id)
 {
     VclExpander* pExpander = m_xBuilder->get<VclExpander>(id);
     return pExpander ? std::make_unique<SalInstanceExpander>(pExpander, this, false) : nullptr;
 }
 
 std::unique_ptr<weld::DrawingArea>
-SalInstanceBuilder::weld_drawing_area(const OString& id, const a11yref& rA11yImpl,
+SalInstanceBuilder::weld_drawing_area(const OUString& id, const a11yref& rA11yImpl,
                                       FactoryFunction pUITestFactoryFunction, void* pUserData)
 {
     VclDrawingArea* pDrawingArea = m_xBuilder->get<VclDrawingArea>(id);
@@ -7334,13 +7327,13 @@ SalInstanceBuilder::weld_drawing_area(const OString& id, const a11yref& rA11yImp
                : nullptr;
 }
 
-std::unique_ptr<weld::Menu> SalInstanceBuilder::weld_menu(const OString& id)
+std::unique_ptr<weld::Menu> SalInstanceBuilder::weld_menu(const OUString& id)
 {
     PopupMenu* pMenu = m_xBuilder->get_menu(id);
     return pMenu ? std::make_unique<SalInstanceMenu>(pMenu, true) : nullptr;
 }
 
-std::unique_ptr<weld::Popover> SalInstanceBuilder::weld_popover(const OString& id)
+std::unique_ptr<weld::Popover> SalInstanceBuilder::weld_popover(const OUString& id)
 {
     DockingWindow* pDockingWindow = m_xBuilder->get<DockingWindow>(id);
     std::unique_ptr<weld::Popover> pRet(
@@ -7354,13 +7347,13 @@ std::unique_ptr<weld::Popover> SalInstanceBuilder::weld_popover(const OString& i
     return pRet;
 }
 
-std::unique_ptr<weld::Toolbar> SalInstanceBuilder::weld_toolbar(const OString& id)
+std::unique_ptr<weld::Toolbar> SalInstanceBuilder::weld_toolbar(const OUString& id)
 {
     ToolBox* pToolBox = m_xBuilder->get<ToolBox>(id);
     return pToolBox ? std::make_unique<SalInstanceToolbar>(pToolBox, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::Scrollbar> SalInstanceBuilder::weld_scrollbar(const OString& id)
+std::unique_ptr<weld::Scrollbar> SalInstanceBuilder::weld_scrollbar(const OUString& id)
 {
     ScrollBar* pScrollbar = m_xBuilder->get<ScrollBar>(id);
     return pScrollbar ? std::make_unique<SalInstanceScrollbar>(pScrollbar, this, false) : nullptr;
@@ -7371,11 +7364,11 @@ std::unique_ptr<weld::SizeGroup> SalInstanceBuilder::create_size_group()
     return std::make_unique<SalInstanceSizeGroup>();
 }
 
-OString SalInstanceBuilder::get_current_page_help_id() const
+OUString SalInstanceBuilder::get_current_page_help_id() const
 {
     vcl::Window* pCtrl = m_xBuilder->get("tabcontrol");
     if (!pCtrl)
-        return OString();
+        return {};
     VclPtr<vcl::Window> xTabPage;
     if (pCtrl->GetType() == WindowType::TABCONTROL)
     {
@@ -7391,7 +7384,7 @@ OString SalInstanceBuilder::get_current_page_help_id() const
     pTabChild = pTabChild ? pTabChild->GetWindow(GetWindowType::FirstChild) : nullptr;
     if (pTabChild)
         return pTabChild->GetHelpId();
-    return OString();
+    return {};
 }
 
 SalInstanceBuilder::~SalInstanceBuilder()
@@ -7428,7 +7421,7 @@ void SalInstanceWindow::help()
         pWidget = m_xWindow;
     if (comphelper::LibreOfficeKit::isActive() && m_xWindow->GetFocusedWindow())
         pWidget = m_xWindow->GetFocusedWindow().get();
-    OString sHelpId = pWidget->GetHelpId();
+    OUString sHelpId = pWidget->GetHelpId();
     while (sHelpId.isEmpty())
     {
         pWidget = pWidget->GetParent();
@@ -7453,7 +7446,7 @@ void SalInstanceWindow::help()
     // was the original id
     if (m_pBuilder && sHelpId.endsWith("/help"))
     {
-        OString sPageId = m_pBuilder->get_current_page_help_id();
+        OUString sPageId = m_pBuilder->get_current_page_help_id();
         if (!sPageId.isEmpty())
             sHelpId = sPageId;
         else
@@ -7471,12 +7464,12 @@ void SalInstanceWindow::help()
             }
         }
     }
-    pHelp->Start(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), pSource);
+    pHelp->Start(sHelpId, pSource);
 }
 
 //iterate upwards through the hierarchy from this widgets through its parents
 //calling func with their helpid until func returns true or we run out of parents
-void SalInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OString&)>& func)
+void SalInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OUString&)>& func)
 {
     vcl::Window* pParent = m_xWidget;
     while ((pParent = pParent->GetParent()))

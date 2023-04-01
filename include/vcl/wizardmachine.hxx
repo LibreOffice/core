@@ -79,7 +79,7 @@ namespace vcl
     class VCL_DLLPUBLIC OWizardPage : public BuilderPage, public IWizardPageController
     {
     public:
-        OWizardPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OString& rID);
+        OWizardPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OUString& rID);
         virtual ~OWizardPage() override;
 
         // IWizardPageController overridables
@@ -302,8 +302,8 @@ namespace vcl
         */
         void                    getStateHistory(std::vector<WizardTypes::WizardState>& out_rHistory);
 
-        virtual OString         getPageIdentForState(WizardTypes::WizardState nState) const;
-        virtual WizardTypes::WizardState getStateFromPageIdent(const OString& rIdent) const;
+        virtual OUString         getPageIdentForState(WizardTypes::WizardState nState) const;
+        virtual WizardTypes::WizardState getStateFromPageIdent(const OUString& rIdent) const;
 
     public:
         class AccessGuard

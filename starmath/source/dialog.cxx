@@ -423,7 +423,7 @@ void SmFontSizeDialog::WriteTo(SmFormat &rFormat) const
     rFormat.RequestApplyChanges();
 }
 
-IMPL_LINK(SmFontTypeDialog, MenuSelectHdl, const OString&, rIdent, void)
+IMPL_LINK(SmFontTypeDialog, MenuSelectHdl, const OUString&, rIdent, void)
 {
     SmFontPickListBox *pActiveListBox;
 
@@ -582,19 +582,19 @@ const FieldMinMax pMinMaxData[10][4] =
 SmCategoryDesc::SmCategoryDesc(weld::Builder& rBuilder, sal_uInt16 nCategoryIdx)
 {
     ++nCategoryIdx;
-    std::unique_ptr<weld::Label> xTitle(rBuilder.weld_label(OString::number(nCategoryIdx)+"title"));
+    std::unique_ptr<weld::Label> xTitle(rBuilder.weld_label(OUString::number(nCategoryIdx)+"title"));
     if (xTitle)
     {
         Name = xTitle->get_label();
     }
     for (int i = 0; i < 4; ++i)
     {
-        std::unique_ptr<weld::Label> xLabel(rBuilder.weld_label(OString::number(nCategoryIdx)+"label"+OString::number(i+1)));
+        std::unique_ptr<weld::Label> xLabel(rBuilder.weld_label(OUString::number(nCategoryIdx)+"label"+OUString::number(i+1)));
 
         if (xLabel)
         {
             Strings[i] = xLabel->get_label();
-            Graphics[i] = rBuilder.weld_widget(OString::number(nCategoryIdx)+"image"+OString::number(i+1));
+            Graphics[i] = rBuilder.weld_widget(OUString::number(nCategoryIdx)+"image"+OUString::number(i+1));
         }
         else
         {
@@ -637,7 +637,7 @@ IMPL_LINK( SmDistanceDialog, GetFocusHdl, weld::Widget&, rControl, void )
     m_pCurrentImage->show();
 }
 
-IMPL_LINK(SmDistanceDialog, MenuSelectHdl, const OString&, rId, void)
+IMPL_LINK(SmDistanceDialog, MenuSelectHdl, const OUString&, rId, void)
 {
     assert(rId.startsWith("menuitem"));
     SetCategory(rId.replaceFirst("menuitem", "").toInt32() - 1);
@@ -672,17 +672,18 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
     // array to convert category- and metricfield-number in help ids.
     // 0 is used in case of unused combinations.
     assert(NOCATEGORIES == 10 && "Sm : array doesn't fit into the number of categories");
-    static const char * aCatMf2Hid[10][4] =
+    static constexpr OUStringLiteral EMPTY(u"");
+    static constexpr rtl::OUStringConstExpr aCatMf2Hid[10][4] =
     {
-        { HID_SMA_DEFAULT_DIST,         HID_SMA_LINE_DIST,          HID_SMA_ROOT_DIST, nullptr },
-        { HID_SMA_SUP_DIST,             HID_SMA_SUB_DIST ,          nullptr, nullptr },
-        { HID_SMA_NUMERATOR_DIST,       HID_SMA_DENOMINATOR_DIST,   nullptr, nullptr },
-        { HID_SMA_FRACLINE_EXCWIDTH,    HID_SMA_FRACLINE_LINEWIDTH, nullptr, nullptr },
-        { HID_SMA_UPPERLIMIT_DIST,      HID_SMA_LOWERLIMIT_DIST,    nullptr, nullptr },
-        { HID_SMA_BRACKET_EXCHEIGHT,    HID_SMA_BRACKET_DIST,       nullptr, HID_SMA_BRACKET_EXCHEIGHT2 },
-        { HID_SMA_MATRIXROW_DIST,       HID_SMA_MATRIXCOL_DIST,     nullptr, nullptr },
-        { HID_SMA_ATTRIBUT_DIST,        HID_SMA_INTERATTRIBUT_DIST, nullptr, nullptr },
-        { HID_SMA_OPERATOR_EXCHEIGHT,   HID_SMA_OPERATOR_DIST,      nullptr, nullptr },
+        { HID_SMA_DEFAULT_DIST,         HID_SMA_LINE_DIST,          HID_SMA_ROOT_DIST, EMPTY },
+        { HID_SMA_SUP_DIST,             HID_SMA_SUB_DIST ,          EMPTY, EMPTY },
+        { HID_SMA_NUMERATOR_DIST,       HID_SMA_DENOMINATOR_DIST,   EMPTY, EMPTY },
+        { HID_SMA_FRACLINE_EXCWIDTH,    HID_SMA_FRACLINE_LINEWIDTH, EMPTY, EMPTY },
+        { HID_SMA_UPPERLIMIT_DIST,      HID_SMA_LOWERLIMIT_DIST,    EMPTY, EMPTY },
+        { HID_SMA_BRACKET_EXCHEIGHT,    HID_SMA_BRACKET_DIST,       EMPTY, HID_SMA_BRACKET_EXCHEIGHT2 },
+        { HID_SMA_MATRIXROW_DIST,       HID_SMA_MATRIXCOL_DIST,     EMPTY, EMPTY },
+        { HID_SMA_ATTRIBUT_DIST,        HID_SMA_INTERATTRIBUT_DIST, EMPTY, EMPTY },
+        { HID_SMA_OPERATOR_EXCHEIGHT,   HID_SMA_OPERATOR_DIST,      EMPTY, EMPTY },
         { HID_SMA_LEFTBORDER_DIST,      HID_SMA_RIGHTBORDER_DIST,   HID_SMA_UPPERBORDER_DIST, HID_SMA_LOWERBORDER_DIST }
     };
 
@@ -710,7 +711,7 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
         if (nActiveCategory == 5)
             bScaleAllBrackets = m_xCheckBox1->get_active();
 
-        m_xMenuButton->set_item_active("menuitem" + OString::number(nActiveCategory + 1), false);
+        m_xMenuButton->set_item_active("menuitem" + OUString::number(nActiveCategory + 1), false);
     }
 
     // activation/deactivation of the associated controls depending on the chosen category
@@ -722,7 +723,7 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
 
         // To determine which Controls should be active, the existence
         // of an associated HelpID is checked
-        bActive = aCatMf2Hid[nCategory][i] != nullptr;
+        bActive = !aCatMf2Hid[nCategory][i].asView().empty();
 
         pFT->set_visible(bActive);
         pFT->set_sensitive(bActive);
@@ -769,7 +770,7 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
         m_xMetricField4->set_sensitive( bChecked );
     }
 
-    m_xMenuButton->set_item_active("menuitem" + OString::number(nCategory + 1), true);
+    m_xMenuButton->set_item_active("menuitem" + OUString::number(nCategory + 1), true);
     m_xFrame->set_label(m_xCategories[nCategory]->GetName());
 
     nActiveCategory = nCategory;

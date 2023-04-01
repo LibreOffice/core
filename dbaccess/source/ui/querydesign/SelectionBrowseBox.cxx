@@ -1953,7 +1953,7 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
                     weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
                     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "dbaccess/ui/querycolmenu.ui"));
                     std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
-                    OString sIdent = xContextMenu->popup_at_rect(pPopupParent, aRect);
+                    OUString sIdent = xContextMenu->popup_at_rect(pPopupParent, aRect);
                     if (sIdent == "delete")
                        RemoveField(nColId);
                     else if (sIdent == "width")
@@ -1973,7 +1973,7 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
                     xContextMenu->set_active("alias", m_bVisibleRow[BROW_COLUMNALIAS_ROW]);
                     xContextMenu->set_active("distinct", static_cast<OQueryController&>(getDesignView()->getController()).isDistinct());
 
-                    OString sIdent = xContextMenu->popup_at_rect(pPopupParent, aRect);
+                    OUString sIdent = xContextMenu->popup_at_rect(pPopupParent, aRect);
                     if (sIdent == "functions")
                     {
                         SetRowVisible(BROW_FUNCTION_ROW, !IsRowVisible(BROW_FUNCTION_ROW));
@@ -2536,7 +2536,7 @@ void OSelectionBrowseBox::enableControl(const OTableFieldDescRef& _rEntry,Window
     _pControl->EnableInput(bEnable);
 }
 
-void OSelectionBrowseBox::setTextCellContext(const OTableFieldDescRef& _rEntry,const OUString& _sText,const OString& _sHelpId)
+void OSelectionBrowseBox::setTextCellContext(const OTableFieldDescRef& _rEntry,const OUString& _sText,const OUString& _sHelpId)
 {
     weld::Entry& rEntry = m_pTextCell->get_widget();
     rEntry.set_text(_sText);

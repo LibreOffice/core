@@ -72,7 +72,7 @@ public:
     // ICustomAnimationListController
     virtual void onSelect() override;
     virtual void onDoubleClick() override;
-    virtual void onContextMenu(const OString& rIdent) override;
+    virtual void onContextMenu(const OUString& rIdent) override;
     virtual void onDragNDropComplete( std::vector< CustomAnimationEffectPtr > pEffectsDragged, CustomAnimationEffectPtr pEffectInsertBefore ) override;
 
     void addUndo();
@@ -87,7 +87,7 @@ private:
     void updateControls();
     void updateMotionPathTags();
 
-    void showOptions(const OString& sPage = OString());
+    void showOptions(const OUString& sPage = {});
     void moveSelection( bool bUp );
     void onPreview( bool bForcePreview );
 

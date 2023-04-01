@@ -18,7 +18,7 @@ using namespace css::uno;
 using namespace css::frame;
 
 SignatureLineDialogBase::SignatureLineDialogBase(weld::Widget* pParent, Reference<XModel> xModel,
-                                                 const OUString& rUIFile, const OString& rDialogId)
+                                                 const OUString& rUIFile, const OUString& rDialogId)
     : GenericDialogController(pParent, rUIFile, rDialogId)
     , m_xModel(std::move(xModel))
 {

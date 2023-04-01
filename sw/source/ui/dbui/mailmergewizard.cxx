@@ -86,7 +86,7 @@ SwMailMergeWizard::~SwMailMergeWizard()
 
 std::unique_ptr<BuilderPage> SwMailMergeWizard::createPage(WizardState _nState)
 {
-    OString sIdent(OString::number(_nState));
+    OUString sIdent(OUString::number(_nState));
     weld::Container* pPageContainer = m_xAssistant->append_page(sIdent);
 
     std::unique_ptr<vcl::OWizardPage> xRet;
@@ -237,7 +237,7 @@ void SwMailMergeWizard::UpdateRoadmap()
             case MM_ADDRESSBLOCKPAGE:
                 bEnable = !m_bDocumentLoad && bEnableOutputTypePage;
                 // update page title for email vs letter
-                m_xAssistant->set_page_title(OString::number(MM_ADDRESSBLOCKPAGE), getStateDisplayName(MM_ADDRESSBLOCKPAGE));
+                m_xAssistant->set_page_title(OUString::number(MM_ADDRESSBLOCKPAGE), getStateDisplayName(MM_ADDRESSBLOCKPAGE));
             break;
             case MM_GREETINGSPAGE:
                 bEnable = !m_bDocumentLoad && bEnableOutputTypePage &&

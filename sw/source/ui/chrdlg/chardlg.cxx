@@ -98,7 +98,7 @@ SwCharDlg::~SwCharDlg()
 }
 
 // set FontList
-void SwCharDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
+void SwCharDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     if (rId == "font")

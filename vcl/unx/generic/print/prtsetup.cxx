@@ -90,7 +90,7 @@ RTSDialog::~RTSDialog()
 {
 }
 
-IMPL_LINK(RTSDialog, ActivatePage, const OString&, rPage, void)
+IMPL_LINK(RTSDialog, ActivatePage, const OUString&, rPage, void)
 {
     if (rPage == "paper")
         m_xPaperPage->update();

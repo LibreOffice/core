@@ -98,14 +98,14 @@ private:
                         pArgDescs;
     tools::Long                nCallerPos;
     sal_uInt16          nCategory;
-    OString             sHelpId;
+    OUString            sHelpId;
     mutable ::std::vector< LocalizedName > maCompNames;
     mutable bool        bCompInitialized;
 
 public:
                 ScUnoAddInFuncData( const OUString& rNam, const OUString& rLoc,
                                     OUString aDesc,
-                                    sal_uInt16 nCat, OString ,
+                                    sal_uInt16 nCat, OUString ,
                                     css::uno::Reference< css::reflection::XIdlMethod> aFunc,
                                     css::uno::Any aO,
                                     tools::Long nAC, const ScAddInArgDesc* pAD,
@@ -125,7 +125,7 @@ public:
     tools::Long                    GetCallerPos() const        { return nCallerPos; }
     const OUString&         GetDescription() const      { return aDescription; }
     sal_uInt16              GetCategory() const         { return nCategory; }
-    const OString&          GetHelpId() const           { return sHelpId; }
+    const OUString&         GetHelpId() const           { return sHelpId; }
 
     const ::std::vector< LocalizedName >&  GetCompNames() const;
     bool                    GetExcelName( const LanguageTag& rDestLang, OUString& rRetExcelName,

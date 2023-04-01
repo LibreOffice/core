@@ -71,7 +71,7 @@ void ScSortKeyWindow::AddSortKey( sal_uInt16 nItemNumber )
         if ( m_aSortKeyItems.size() > 0 )
         {
             pSortKeyItem->m_xLbSort->set_buildable_name(
-                pSortKeyItem->m_xLbSort->get_buildable_name() + OString::number(m_aSortKeyItems.size() + 1));
+                pSortKeyItem->m_xLbSort->get_buildable_name() + OUString::number(m_aSortKeyItems.size() + 1));
         }
     }
 

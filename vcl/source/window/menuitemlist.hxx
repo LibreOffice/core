@@ -42,8 +42,8 @@ struct MenuItemData
     OUString        aTipHelpText;           // TipHelp-String (eg, expanded filenames)
     OUString        aCommandStr;            // CommandString
     OUString        aHelpCommandStr;        // Help command string (to reference external help)
-    OString         sIdent;
-    OString         aHelpId;                // Help-Id
+    OUString        sIdent;
+    OUString        aHelpId;                // Help-Id
     void*           nUserValue;             // User value
     MenuUserDataReleaseFunction aUserValueReleaseFunc;   // called when MenuItemData is destroyed
     Image           aImage;                 // Image
@@ -116,9 +116,9 @@ public:
                         const OUString& rStr,
                         Menu* pMenu,
                         size_t nPos,
-                        const OString &rIdent
+                        const OUString &rIdent
                     );
-    void            InsertSeparator(const OString &rIdent, size_t nPos);
+    void            InsertSeparator(const OUString &rIdent, size_t nPos);
     void            Remove( size_t nPos );
     void            Clear();
 

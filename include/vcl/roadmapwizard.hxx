@@ -64,7 +64,7 @@ namespace vcl
         RoadmapWizardMachine(weld::Window* _pParent);
         virtual ~RoadmapWizardMachine( ) override;
 
-        void            SetRoadmapHelpId( const OString& _rId );
+        void            SetRoadmapHelpId( const OUString& _rId );
 
         // returns whether a given state is enabled
         bool            isStateEnabled(WizardTypes::WizardState nState) const;
@@ -174,7 +174,7 @@ namespace vcl
         virtual OUString  getStateDisplayName(WizardTypes::WizardState nState) const;
 
     private:
-        DECL_DLLPRIVATE_LINK( OnRoadmapItemSelected, const OString&, bool );
+        DECL_DLLPRIVATE_LINK( OnRoadmapItemSelected, const OUString&, bool );
 
         /** updates the roadmap control to show the given path, as far as possible
             (modulo conflicts with other paths)

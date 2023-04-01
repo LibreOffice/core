@@ -407,15 +407,13 @@ namespace svx
 
         OUString lcl_getUnoSlotName( SfxSlotId _nSlotId )
         {
-            OUString sSlotUnoName;
-
             SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool();
             const SfxSlot* pSlot = rSlotPool.GetSlot( _nSlotId );
 
-            const char* pAsciiUnoName = nullptr;
+            OUString sUnoName;
             if ( pSlot )
             {
-                pAsciiUnoName = pSlot->GetUnoName();
+                sUnoName = pSlot->GetCommand();
             }
             else
             {
@@ -423,22 +421,18 @@ namespace svx
                 // we nevertheless need to transport via UNO mechanisms, so we need a name
                 switch ( _nSlotId )
                 {
-                case SID_ATTR_PARA_HANGPUNCTUATION: pAsciiUnoName = "AllowHangingPunctuation"; break;
-                case SID_ATTR_PARA_FORBIDDEN_RULES: pAsciiUnoName = "ApplyForbiddenCharacterRules"; break;
-                case SID_ATTR_PARA_SCRIPTSPACE: pAsciiUnoName = "UseScriptSpacing"; break;
+                case SID_ATTR_PARA_HANGPUNCTUATION: sUnoName = ".uno:AllowHangingPunctuation"; break;
+                case SID_ATTR_PARA_FORBIDDEN_RULES: sUnoName = ".uno:ApplyForbiddenCharacterRules"; break;
+                case SID_ATTR_PARA_SCRIPTSPACE: sUnoName = ".uno:UseScriptSpacing"; break;
                 }
             }
 
-            if ( pAsciiUnoName )
-            {
-                sSlotUnoName = ".uno:" + OUString::createFromAscii( pAsciiUnoName );
-            }
-            else
+            if (sUnoName.isEmpty())
             {
                 SAL_WARN( "svx", "lcl_getUnoSlotName: invalid slot id, or invalid slot, or no UNO name! "
                         "(slot id: " << _nSlotId << ")");
             }
-            return sSlotUnoName;
+            return sUnoName;
         }
 
 

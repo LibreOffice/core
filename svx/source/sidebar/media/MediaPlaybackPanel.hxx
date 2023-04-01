@@ -67,7 +67,7 @@ private:
         const sal_uInt16 /*nSId*/,
         boost::property_tree::ptree& /*rState*/) override {};
 
-    DECL_LINK(PlayToolBoxSelectHdl, const OString&, void);
+    DECL_LINK(PlayToolBoxSelectHdl, const OUString&, void);
     DECL_LINK(VolumeSlideHdl, weld::Scale&, void);
     DECL_LINK(SeekHdl, weld::Scale&, void);
 

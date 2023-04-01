@@ -285,7 +285,7 @@ namespace dbaui
     void ORelationControl::InitController( CellControllerRef& /*rController*/, sal_Int32 nRow, sal_uInt16 nColumnId )
     {
 
-        OString sHelpId( HID_RELATIONDIALOG_LEFTFIELDCELL );
+        OUString sHelpId( HID_RELATIONDIALOG_LEFTFIELDCELL );
 
         Reference< XPropertySet> xDef;
         switch ( getColumnIdent(nColumnId) )

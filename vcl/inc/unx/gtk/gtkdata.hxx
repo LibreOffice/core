@@ -193,8 +193,8 @@ inline GdkGLContext* surface_create_gl_context(GdkSurface* pSurface)
 #endif
 }
 
-void set_buildable_id(GtkBuildable* pWidget, const OString& rId);
-OString get_buildable_id(GtkBuildable* pWidget);
+void set_buildable_id(GtkBuildable* pWidget, const OUString& rId);
+OUString get_buildable_id(GtkBuildable* pWidget);
 
 void container_remove(GtkWidget* pContainer, GtkWidget* pChild);
 void container_add(GtkWidget* pContainer, GtkWidget* pChild);
@@ -203,7 +203,7 @@ void container_add(GtkWidget* pContainer, GtkWidget* pChild);
 typedef GtkClipboard GdkClipboard;
 #endif
 
-int getButtonPriority(std::string_view rType);
+int getButtonPriority(std::u16string_view rType);
 
 class GtkSalTimer final : public SalTimer
 {

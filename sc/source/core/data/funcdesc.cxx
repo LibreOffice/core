@@ -74,7 +74,7 @@ struct ScFuncDescCore
     /*
      * Help ID, HID_FUNC_...
      */
-    const char* pHelpId;
+    OUString pHelpId;
     /*
      * Number of parameters. VAR_ARGS if variable number, or
      * VAR_ARGS+number if number of fixed parameters and variable
@@ -333,7 +333,7 @@ void ScFuncDesc::initArgumentInfo()  const
     }
 }
 
-OString ScFuncDesc::getHelpId() const
+OUString ScFuncDesc::getHelpId() const
 {
     return sHelpId;
 }

@@ -282,7 +282,7 @@ void VCLXMenu::insertItem(
     std::unique_lock aGuard( maMutex );
 
     if ( mpMenu )
-        mpMenu->InsertItem(nItemId, aText, static_cast<MenuItemBits>(nItemStyle), OString(), nPos);
+        mpMenu->InsertItem(nItemId, aText, static_cast<MenuItemBits>(nItemStyle), {}, nPos);
 }
 
 void VCLXMenu::removeItem(
@@ -430,7 +430,7 @@ void VCLXMenu::insertSeparator(
     std::unique_lock aGuard( maMutex );
 
     if ( mpMenu )
-        mpMenu->InsertSeparator(OString(), nPos);
+        mpMenu->InsertSeparator({}, nPos);
 }
 
 void VCLXMenu::setDefaultItem(

@@ -32,9 +32,9 @@ class ScHFEditDlg : public SfxTabDialogController
 protected:
     ScHFEditDlg(weld::Window* pParent,
         const SfxItemSet& rCoreSet, std::u16string_view rPageStyle,
-        const OUString& rUIXMLDescription, const OString& rID);
+        const OUString& rUIXMLDescription, const OUString& rID);
 public:
-    virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
+    virtual void PageCreated(const OUString& rId, SfxTabPage& rPage) override;
 };
 
 class ScHFEditHeaderDlg : public ScHFEditDlg

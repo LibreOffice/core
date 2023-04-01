@@ -23,7 +23,7 @@
 #include <vcl/weldutils.hxx>
 
 BuilderPage::BuilderPage(weld::Widget* pParent, weld::DialogController* pController,
-                         const OUString& rUIXMLDescription, const OString& rID, bool bIsMobile)
+                         const OUString& rUIXMLDescription, const OUString& rID, bool bIsMobile)
     : m_pDialogController(pController)
     , m_xBuilder(Application::CreateBuilder(pParent, rUIXMLDescription, bIsMobile))
     , m_xContainer(m_xBuilder->weld_container(rID))
@@ -49,7 +49,7 @@ DialogController::~DialogController() COVERITY_NOEXCEPT_FALSE {}
 Dialog* GenericDialogController::getDialog() { return m_xDialog.get(); }
 
 GenericDialogController::GenericDialogController(weld::Widget* pParent, const OUString& rUIFile,
-                                                 const OString& rDialogId, bool bMobile)
+                                                 const OUString& rDialogId, bool bMobile)
     : m_xBuilder(Application::CreateBuilder(pParent, rUIFile, bMobile))
     , m_xDialog(m_xBuilder->weld_dialog(rDialogId))
 {
@@ -60,8 +60,8 @@ GenericDialogController::~GenericDialogController() COVERITY_NOEXCEPT_FALSE {}
 Dialog* MessageDialogController::getDialog() { return m_xDialog.get(); }
 
 MessageDialogController::MessageDialogController(weld::Widget* pParent, const OUString& rUIFile,
-                                                 const OString& rDialogId,
-                                                 const OString& rRelocateId)
+                                                 const OUString& rDialogId,
+                                                 const OUString& rRelocateId)
     : m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
     , m_xDialog(m_xBuilder->weld_message_dialog(rDialogId))
     , m_xContentArea(m_xDialog->weld_message_area())
@@ -85,7 +85,7 @@ MessageDialogController::~MessageDialogController()
 }
 
 AssistantController::AssistantController(weld::Widget* pParent, const OUString& rUIFile,
-                                         const OString& rDialogId)
+                                         const OUString& rDialogId)
     : m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
     , m_xAssistant(m_xBuilder->weld_assistant(rDialogId))
 {

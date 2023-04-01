@@ -68,14 +68,14 @@ CertificateViewer::CertificateViewer(weld::Window* _pParent,
     mxTabCtrl->set_current_page("general");
 }
 
-IMPL_LINK(CertificateViewer, ActivatePageHdl, const OString&, rPage, void)
+IMPL_LINK(CertificateViewer, ActivatePageHdl, const OUString&, rPage, void)
 {
     if (rPage == "path")
         mxPathId->ActivatePage();
 }
 
 CertificateViewerTP::CertificateViewerTP(weld::Container* pParent, const OUString& rUIXMLDescription,
-                                         const OString& rID, CertificateViewer* pDlg)
+                                         const OUString& rID, CertificateViewer* pDlg)
     : mxBuilder(Application::CreateBuilder(pParent, rUIXMLDescription))
     , mxContainer(mxBuilder->weld_container(rID))
     , mpDlg(pDlg)

@@ -45,7 +45,7 @@ protected:
 
 public:
     WeldToolbarPopup(css::uno::Reference<css::frame::XFrame> xFrame,
-                     weld::Widget* pParent, const OUString& rUIFile, const OString& rId);
+                     weld::Widget* pParent, const OUString& rUIFile, const OUString& rId);
     virtual ~WeldToolbarPopup();
     weld::Container* getTopLevel() { return m_xTopLevel.get(); }
     weld::Container* getContainer() { return m_xContainer.get(); }

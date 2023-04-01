@@ -191,9 +191,9 @@ OUString FunctionDescription::getSignature() const
     return m_xFunctionDescription->getSignature();
 }
 
-OString FunctionDescription::getHelpId() const
+OUString FunctionDescription::getHelpId() const
 {
-    return OString();
+    return {};
 }
 
 bool FunctionDescription::isHidden() const

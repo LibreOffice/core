@@ -565,21 +565,15 @@ void SfxShell::SetVerbs(const css::uno::Sequence < css::embed::VerbDescriptor >&
         if (nSlotId > SID_VERB_END)
             break;
 
-        SfxSlot *pNewSlot = new SfxSlot;
-        pNewSlot->nSlotId = nSlotId;
-        pNewSlot->nGroupId = SfxGroupId::NONE;
-
-        // Verb slots must be executed asynchronously, so that they can be
-        // destroyed while executing.
-        pNewSlot->nFlags = SfxSlotMode::ASYNCHRON | SfxSlotMode::CONTAINER;
-        pNewSlot->nMasterSlotId = 0;
-        pNewSlot->nValue = 0;
-        pNewSlot->fnExec = SFX_STUB_PTR(SfxShell,VerbExec);
-        pNewSlot->fnState = SFX_STUB_PTR(SfxShell,VerbState);
-        pNewSlot->pType = nullptr; // HACK(SFX_TYPE(SfxVoidItem)) ???
-        pNewSlot->nArgDefCount = 0;
-        pNewSlot->pFirstArgDef = nullptr;
-        pNewSlot->pUnoName = nullptr;
+        SfxSlot* pNewSlot = new SfxSlot(
+            nSlotId, SfxGroupId::NONE,
+            // Verb slots must be executed asynchronously, so that they can be
+            // destroyed while executing.
+            SfxSlotMode::ASYNCHRON | SfxSlotMode::CONTAINER,
+            0, 0,
+            SFX_STUB_PTR(SfxShell, VerbExec), SFX_STUB_PTR(SfxShell, VerbState),
+            nullptr, // HACK(SFX_TYPE(SfxVoidItem)) ???
+            nullptr, nullptr, 0, SfxDisableFlags::NONE, "");
 
         if (!pImpl->aSlotArr.empty())
         {

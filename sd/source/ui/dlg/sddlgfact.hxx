@@ -77,7 +77,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractMasterLayoutDialog_Impl : public VclAbstractDialog
@@ -90,7 +90,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractBreakDlg_Impl : public VclAbstractDialog
@@ -103,7 +103,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractCopyDlg_Impl : public AbstractCopyDlg
@@ -120,7 +120,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractSdCustomShowDlg_Impl : public AbstractSdCustomShowDlg
@@ -137,7 +137,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class SdAbstractTabController_Impl : public SfxAbstractTabDialog
@@ -150,7 +150,7 @@ public:
     }
     virtual short Execute() override;
     virtual bool  StartExecuteAsync(AsyncContext &rCtx) override;
-    virtual void                SetCurPageId( const OString &rName ) override;
+    virtual void                SetCurPageId( const OUString &rName ) override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
     virtual WhichRangesContainer GetInputRanges( const SfxItemPool& pItem ) override;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
@@ -158,7 +158,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractBulletDialog_Impl : public SfxAbstractTabDialog
@@ -171,7 +171,7 @@ public:
     }
     virtual short Execute() override;
     virtual bool  StartExecuteAsync(AsyncContext &rCtx) override;
-    virtual void                SetCurPageId( const OString& rName ) override;
+    virtual void                SetCurPageId( const OUString& rName ) override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
     virtual WhichRangesContainer GetInputRanges( const SfxItemPool& pItem ) override;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
@@ -179,7 +179,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class SdPresLayoutTemplateDlg_Impl : public SfxAbstractTabDialog
@@ -192,7 +192,7 @@ public:
     }
     virtual short Execute() override;
     virtual bool  StartExecuteAsync(AsyncContext &rCtx) override;
-    virtual void                SetCurPageId( const OString& rName ) override;
+    virtual void                SetCurPageId( const OUString& rName ) override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
     virtual WhichRangesContainer GetInputRanges( const SfxItemPool& pItem ) override;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
@@ -200,7 +200,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractSdModifyFieldDlg_Impl : public AbstractSdModifyFieldDlg
@@ -218,7 +218,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractSdSnapLineDlg_Impl : public AbstractSdSnapLineDlg
@@ -239,7 +239,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractSdInsertLayerDlg_Impl : public AbstractSdInsertLayerDlg
@@ -253,11 +253,11 @@ public:
     }
     virtual short   Execute() override;
     virtual void    GetAttr( SfxItemSet& rOutAttrs ) override ;
-    virtual void    SetHelpId( const OString& rHelpId ) override ;
+    virtual void    SetHelpId( const OUString& rHelpId ) override ;
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractSdInsertPagesObjsDlg_Impl : public AbstractSdInsertPagesObjsDlg
@@ -276,7 +276,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractMorphDlg_Impl : public AbstractMorphDlg
@@ -296,7 +296,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractSdStartPresDlg_Impl : public AbstractSdStartPresDlg
@@ -313,7 +313,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractSdPresLayoutDlg_Impl : public AbstractSdPresLayoutDlg
@@ -330,7 +330,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class SdAbstractSfxDialog_Impl : public SfxAbstractDialog
@@ -361,7 +361,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractSdPublishingDlg_Impl :public AbstractSdPublishingDlg
@@ -378,7 +378,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 class AbstractHeaderFooterDialog_Impl :public AbstractHeaderFooterDialog
@@ -395,7 +395,7 @@ public:
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
-    virtual OString GetScreenshotId() const override;
+    virtual OUString GetScreenshotId() const override;
 };
 
 //AbstractDialogFactory_Impl implementations

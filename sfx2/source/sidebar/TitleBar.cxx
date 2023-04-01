@@ -70,7 +70,7 @@ void TitleBar::SetIcon(const css::uno::Reference<css::graphic::XGraphic>& rIcon)
     mxAddonImage->set_visible(rIcon.is());
 }
 
-IMPL_LINK_NOARG(TitleBar, SelectionHandler, const OString&, void)
+IMPL_LINK_NOARG(TitleBar, SelectionHandler, const OUString&, void)
 {
     HandleToolBoxItemClick();
 }

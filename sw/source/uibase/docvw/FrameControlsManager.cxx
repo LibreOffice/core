@@ -202,7 +202,7 @@ void SwFrameControlsManager::SetContentControlAliasButton(SwContentControl* pCon
 }
 
 SwFrameMenuButtonBase::SwFrameMenuButtonBase(SwEditWin* pEditWin, const SwFrame* pFrame,
-                                             const OUString& rUIXMLDescription, const OString& rID)
+                                             const OUString& rUIXMLDescription, const OUString& rID)
     : InterimItemWindow(pEditWin, rUIXMLDescription, rID)
     , m_pEditWin(pEditWin)
     , m_pFrame(pFrame)

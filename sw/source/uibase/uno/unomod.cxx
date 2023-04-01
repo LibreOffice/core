@@ -728,7 +728,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
             if ( aHID.GetProtocol() != INetProtocol::Hid )
                 throw IllegalArgumentException ();
 
-            m_pView->GetEditWin().SetHelpId( OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 ) );
+            m_pView->GetEditWin().SetHelpId( aHID.GetURLPath() );
         }
         break;
         case HANDLE_VIEWSET_HORI_RULER_METRIC:
@@ -903,7 +903,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
 
             bBool = false;
             SwEditWin &rEditWin = m_pView->GetEditWin();
-            OUString sHelpURL = INET_HID_SCHEME + OUString::fromUtf8( rEditWin.GetHelpId() );
+            OUString sHelpURL = INET_HID_SCHEME + rEditWin.GetHelpId();
             rValue <<= sHelpURL;
         }
         break;

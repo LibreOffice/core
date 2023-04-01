@@ -40,7 +40,7 @@ class ICustomAnimationListController
 public:
     virtual void onSelect() = 0;
     virtual void onDoubleClick() = 0;
-    virtual void onContextMenu(const OString &rIdent) = 0;
+    virtual void onContextMenu(const OUString &rIdent) = 0;
     virtual void onDragNDropComplete( std::vector< CustomAnimationEffectPtr > pEffectsDragged, CustomAnimationEffectPtr pEffectInsertBefore ) = 0;
     virtual ~ICustomAnimationListController() {}
 };
@@ -139,7 +139,7 @@ private:
     DECL_STATIC_LINK(CustomAnimationList, CustomRenderHdl, weld::TreeView::render_args, void);
     DECL_STATIC_LINK(CustomAnimationList, CustomGetSizeHdl, weld::TreeView::get_size_args, Size);
 
-    void ExecuteContextMenuAction(const OString& rSelectedPopupEntry);
+    void ExecuteContextMenuAction(const OUString& rSelectedPopupEntry);
 
     /** appends the given effect to the list*/
     void append( CustomAnimationEffectPtr pEffect );

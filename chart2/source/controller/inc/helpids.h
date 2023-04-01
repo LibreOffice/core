@@ -19,14 +19,14 @@
 
 #pragma once
 
-#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 
-inline constexpr OStringLiteral HID_SCH_WIN_DOCUMENT = "CHART2_HID_SCH_WIN_DOCUMENT";
-inline constexpr OStringLiteral HID_SCH_ERROR_BARS_FROM_DATA = "CHART2_SCH_ERROR_BARS_FROM_DATA";
+inline constexpr OUStringLiteral HID_SCH_WIN_DOCUMENT = u"CHART2_HID_SCH_WIN_DOCUMENT";
+inline constexpr OUStringLiteral HID_SCH_ERROR_BARS_FROM_DATA = u"CHART2_SCH_ERROR_BARS_FROM_DATA";
 
 
 
-inline constexpr OStringLiteral HID_SCH_WIZARD_ROADMAP = "CHART2_HID_SCH_WIZARD_ROADMAP";
-inline constexpr OStringLiteral HID_SCH_DATA_SERIES_LABEL = "CHART2_HID_SCH_DATA_SERIES_LABEL";
+inline constexpr OUStringLiteral HID_SCH_WIZARD_ROADMAP = u"CHART2_HID_SCH_WIZARD_ROADMAP";
+inline constexpr OUStringLiteral HID_SCH_DATA_SERIES_LABEL = u"CHART2_HID_SCH_DATA_SERIES_LABEL";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

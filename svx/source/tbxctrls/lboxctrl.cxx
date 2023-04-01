@@ -245,7 +245,7 @@ void SvxUndoRedoControl::initialize( const css::uno::Sequence< css::uno::Any >& 
         if (pToolBox)
             pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWN | pToolBox->GetItemBits(nId));
         if (m_pToolbar)
-            aDefaultTooltip = m_pToolbar->get_item_tooltip_text(m_aCommandURL.toUtf8());
+            aDefaultTooltip = m_pToolbar->get_item_tooltip_text(m_aCommandURL);
         else
             aDefaultTooltip = pToolBox->GetQuickHelpText(nId);
     }
@@ -281,7 +281,7 @@ void SAL_CALL SvxUndoRedoControl::statusChanged(const css::frame::FeatureStateEv
     if (!rEvent.IsEnabled)
     {
         if (m_pToolbar)
-            m_pToolbar->set_item_tooltip_text(m_aCommandURL.toUtf8(), aDefaultTooltip);
+            m_pToolbar->set_item_tooltip_text(m_aCommandURL, aDefaultTooltip);
         else
             pToolBox->SetQuickHelpText(nId, aDefaultTooltip);
         return;
@@ -291,7 +291,7 @@ void SAL_CALL SvxUndoRedoControl::statusChanged(const css::frame::FeatureStateEv
     if (rEvent.State >>= aQuickHelpText)
     {
         if (m_pToolbar)
-            m_pToolbar->set_item_tooltip_text(m_aCommandURL.toUtf8(), aQuickHelpText);
+            m_pToolbar->set_item_tooltip_text(m_aCommandURL, aQuickHelpText);
         else
             pToolBox->SetQuickHelpText(nId, aQuickHelpText);
     }

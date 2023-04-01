@@ -45,7 +45,7 @@ SwParaDlg::SwParaDlg(weld::Window *pParent,
                     sal_uInt8 nDialogMode,
                     const OUString *pTitle,
                     bool bDraw,
-                    const OString& sDefPage)
+                    const OUString& sDefPage)
     : SfxTabDialogController(pParent,
                  "modules/swriter/ui/paradialog.ui",
                  "ParagraphPropertiesDialog",
@@ -146,7 +146,7 @@ SwParaDlg::~SwParaDlg()
 {
 }
 
-void SwParaDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
+void SwParaDlg::PageCreated(const OUString& rId, SfxTabPage& rPage)
 {
     SwWrtShell& rSh = m_rView.GetWrtShell();
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));

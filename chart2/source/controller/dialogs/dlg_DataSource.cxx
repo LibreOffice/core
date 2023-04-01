@@ -126,7 +126,7 @@ short DataSourceDialog::run()
     return nResult;
 }
 
-IMPL_LINK(DataSourceDialog, ActivatePageHdl, const OString&, rPage, void)
+IMPL_LINK(DataSourceDialog, ActivatePageHdl, const OUString&, rPage, void)
 {
     if (rPage == "range")
         m_xRangeChooserTabPage->Activate();
@@ -135,7 +135,7 @@ IMPL_LINK(DataSourceDialog, ActivatePageHdl, const OString&, rPage, void)
 }
 
 // allow/disallow user to leave page
-IMPL_LINK_NOARG(DataSourceDialog, DeactivatePageHdl, const OString&, bool)
+IMPL_LINK_NOARG(DataSourceDialog, DeactivatePageHdl, const OUString&, bool)
 {
     return m_bTogglingEnabled;
 }

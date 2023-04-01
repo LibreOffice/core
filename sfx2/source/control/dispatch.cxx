@@ -1749,7 +1749,7 @@ boost::property_tree::ptree fillPopupMenu(Menu* pMenu)
             {
                 const SfxSlot *pSlot = SFX_SLOTPOOL().GetSlot(nItemId);
                 if (pSlot)
-                    aCommandURL = pSlot->GetCommandString();
+                    aCommandURL = pSlot->GetCommand();
             }
 
             const OUString aItemText = pMenu->GetItemText(nItemId);

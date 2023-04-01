@@ -59,7 +59,7 @@ namespace pcr
             std::vector< css::beans::NamedValue >& _out_properties );
 
     protected:
-        virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
+        virtual void PageCreated(const OUString& rId, SfxTabPage& rPage) override;
     };
 
 }   // namespace pcr

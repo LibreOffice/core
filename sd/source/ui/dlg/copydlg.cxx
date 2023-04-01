@@ -71,7 +71,7 @@ CopyDlg::CopyDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* 
 
 CopyDlg::~CopyDlg()
 {
-    SvtViewOptions aDlgOpt(EViewType::Dialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+    SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
     OUString sStr =
         OUString::number(m_xNumFldCopies->get_value()) + OUStringChar(TOKEN) +
         OUString::number(m_xMtrFldMoveX->get_value(FieldUnit::NONE)) + OUStringChar(TOKEN) +
@@ -107,7 +107,7 @@ void CopyDlg::Reset()
     m_xMtrFldHeight->set_range(-nRectHeight, nPageHeight, FieldUnit::MM_100TH);
 
     OUString aStr;
-    SvtViewOptions aDlgOpt(EViewType::Dialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+    SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
     if (aDlgOpt.Exists())
     {
         css::uno::Any aUserItem = aDlgOpt.GetUserItem("UserItem");

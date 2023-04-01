@@ -37,7 +37,7 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage(weld::Container* pPage,
 {
     for (sal_uInt32 i = 0; i < MAX_DEFAULT_PERSONAS; ++i)
     {
-        OString sDefaultId("default" + OString::number(i));
+        OUString sDefaultId("default" + OUString::number(i));
         m_vDefaultPersonaImages[i] = m_xBuilder->weld_toggle_button(sDefaultId);
         m_vDefaultPersonaImages[i]->connect_clicked(
             LINK(this, SvxPersonalizationTabPage, DefaultPersona));

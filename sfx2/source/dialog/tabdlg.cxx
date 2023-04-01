@@ -55,14 +55,14 @@ namespace {
 
 struct Data_Impl
 {
-    OString sId;                  // The ID
+    OUString sId;                 // The ID
     CreateTabPage fnCreatePage;   // Pointer to Factory
     GetTabPageRanges fnGetRanges; // Pointer to Ranges-Function
     std::unique_ptr<SfxTabPage> xTabPage;         // The TabPage itself
     bool bRefresh;                // Flag: Page must be re-initialized
 
     // Constructor
-    Data_Impl( const OString& rId, CreateTabPage fnPage,
+    Data_Impl( const OUString& rId, CreateTabPage fnPage,
                GetTabPageRanges fnRanges ) :
 
         sId         ( rId ),
@@ -106,7 +106,7 @@ struct TabDlg_Impl
     }
 };
 
-static Data_Impl* Find( const SfxTabDlgData_Impl& rArr, std::string_view rId, sal_uInt16* pPos = nullptr)
+static Data_Impl* Find( const SfxTabDlgData_Impl& rArr, std::u16string_view rId, sal_uInt16* pPos = nullptr)
 {
     const sal_uInt16 nCount = rArr.size();
 
@@ -137,7 +137,7 @@ css::uno::Reference< css::frame::XFrame > SfxTabPage::GetFrame() const
     return css::uno::Reference< css::frame::XFrame >();
 }
 
-SfxTabPage::SfxTabPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet *rAttrSet)
+SfxTabPage::SfxTabPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OUString& rID, const SfxItemSet *rAttrSet)
     : BuilderPage(pPage, pController, rUIXMLDescription, rID,
                     comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current()
                     && SfxViewShell::Current()->isLOKMobilePhone())
@@ -286,11 +286,11 @@ SfxOkDialogController* SfxTabPage::GetDialogController() const
     return pImpl->mpSfxDialogController;
 }
 
-OString SfxTabPage::GetHelpId() const
+OUString SfxTabPage::GetHelpId() const
 {
     if (m_xContainer)
         return m_xContainer->get_help_id();
-    return OString();
+    return {};
 }
 
 weld::Window* SfxTabPage::GetFrameWeld() const
@@ -310,7 +310,7 @@ const SfxItemSet* SfxTabPage::GetDialogExampleSet() const
 SfxTabDialogController::SfxTabDialogController
 (
     weld::Widget* pParent,              // Parent Window
-    const OUString& rUIXMLDescription, const OString& rID, // Dialog .ui path, Dialog Name
+    const OUString& rUIXMLDescription, const OUString& rID, // Dialog .ui path, Dialog Name
     const SfxItemSet* pItemSet,   // Itemset with the data;
                                   // can be NULL, when Pages are onDemand
     bool bEditFmt                 // when yes -> additional Button for standard
@@ -509,12 +509,12 @@ IMPL_LINK_NOARG(SfxTabDialogController, BaseFmtHdl, weld::Button&, void)
     pDataObject->xTabPage->pImpl->mbStandard = true;
 }
 
-IMPL_LINK(SfxTabDialogController, ActivatePageHdl, const OString&, rPage, void)
+IMPL_LINK(SfxTabDialogController, ActivatePageHdl, const OUString&, rPage, void)
 {
     ActivatePage(rPage);
 }
 
-void SfxTabDialogController::ActivatePage(const OString& rPage)
+void SfxTabDialogController::ActivatePage(const OUString& rPage)
 /*  [Description]
 
     Handler that is called by StarView for switching to a different page.
@@ -548,12 +548,12 @@ void SfxTabDialogController::ActivatePage(const OString& rPage)
         m_xResetBtn->show();
 }
 
-IMPL_LINK(SfxTabDialogController, DeactivatePageHdl, const OString&, rPage, bool)
+IMPL_LINK(SfxTabDialogController, DeactivatePageHdl, const OUString&, rPage, bool)
 {
     return DeactivatePage(rPage);
 }
 
-bool SfxTabDialogController::DeactivatePage(std::string_view aPage)
+bool SfxTabDialogController::DeactivatePage(std::u16string_view aPage)
 /*  [Description]
 
     Handler that is called by StarView before leaving a page.
@@ -626,7 +626,7 @@ bool SfxTabDialogController::DeactivatePage(std::string_view aPage)
 
 bool SfxTabDialogController::PrepareLeaveCurrentPage()
 {
-    const OString sId = m_xTabCtrl->get_current_page_ident();
+    const OUString sId = m_xTabCtrl->get_current_page_ident();
     Data_Impl* pDataObject = Find(m_pImpl->aData, sId);
     DBG_ASSERT( pDataObject, "Id not known" );
     SfxTabPage* pPage = pDataObject ? pDataObject->xTabPage.get() : nullptr;
@@ -725,9 +725,7 @@ SfxTabDialogController::~SfxTabDialogController()
             if ( !aPageData.isEmpty() )
             {
                 // save settings of all pages (user data)
-                OUString sConfigId = OStringToOUString(elem->xTabPage->GetConfigId(),
-                    RTL_TEXTENCODING_UTF8);
-                SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);
+                SvtViewOptions aPageOpt(EViewType::TabPage, elem->xTabPage->GetConfigId());
                 aPageOpt.SetUserItem( USERITEM_NAME, Any( aPageData ) );
             }
 
@@ -821,7 +819,7 @@ void SfxTabDialogController::PageCreated
 */
 
 (
-    const OString&, // Id of the created page
+    const OUString&, // Id of the created page
     SfxTabPage&     // Reference to the created page
 )
 {
@@ -830,7 +828,7 @@ void SfxTabDialogController::PageCreated
 void SfxTabDialogController::SavePosAndId()
 {
     // save settings (screen position and current page)
-    SvtViewOptions aDlgOpt(EViewType::TabDialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+    SvtViewOptions aDlgOpt(EViewType::TabDialog, m_xDialog->get_help_id());
     aDlgOpt.SetPageID(m_xTabCtrl->get_current_page_ident());
 }
 
@@ -838,14 +836,14 @@ void SfxTabDialogController::SavePosAndId()
     Adds a page to the dialog. The Name must correspond to an entry in the
     TabControl in the dialog .ui
 */
-void SfxTabDialogController::AddTabPage(const OString &rName /* Page ID */,
+void SfxTabDialogController::AddTabPage(const OUString &rName /* Page ID */,
                                         CreateTabPage pCreateFunc  /* Pointer to the Factory Method */,
                                         GetTabPageRanges pRangesFunc /* Pointer to the Method for querying Ranges onDemand */)
 {
     m_pImpl->aData.push_back(new Data_Impl(rName, pCreateFunc, pRangesFunc));
 }
 
-void SfxTabDialogController::AddTabPage(const OString &rName /* Page ID */,
+void SfxTabDialogController::AddTabPage(const OUString &rName /* Page ID */,
                                         sal_uInt16 nPageCreateId /* Identifier of the Factory Method to create the page */)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
@@ -860,7 +858,7 @@ void SfxTabDialogController::AddTabPage(const OString &rName /* Page ID */,
     counterpart in the TabControl in the resource of the dialogue.
 */
 
-void SfxTabDialogController::AddTabPage(const OString &rName, /* Page ID */
+void SfxTabDialogController::AddTabPage(const OUString &rName, /* Page ID */
                                         const OUString& rRiderText,
                                         CreateTabPage pCreateFunc  /* Pointer to the Factory Method */)
 {
@@ -869,7 +867,7 @@ void SfxTabDialogController::AddTabPage(const OString &rName, /* Page ID */
     AddTabPage(rName, pCreateFunc, nullptr);
 }
 
-void SfxTabDialogController::AddTabPage(const OString &rName, const OUString& rRiderText,
+void SfxTabDialogController::AddTabPage(const OUString &rName, const OUString& rRiderText,
                                         sal_uInt16 nPageCreateId /* Identifier of the Factory Method to create the page */)
 {
     assert(!m_xTabCtrl->get_page(rName) && "Double Page-Ids in the Tabpage");
@@ -882,7 +880,7 @@ void SfxTabDialogController::AddTabPage(const OString &rName, const OUString& rR
     Default implementation of the virtual Method.
     This is called when pages create their sets onDemand.
 */
-SfxItemSet* SfxTabDialogController::CreateInputItemSet(const OString&)
+SfxItemSet* SfxTabDialogController::CreateInputItemSet(const OUString&)
 {
     SAL_WARN( "sfx.dialog", "CreateInputItemSet not implemented" );
     m_xItemSet = std::make_unique<SfxAllItemSet>(SfxGetpApp()->GetPool());
@@ -901,8 +899,7 @@ void SfxTabDialogController::CreatePages()
         else
             pDataObject->xTabPage = (pDataObject->fnCreatePage)(pPage, this, CreateInputItemSet(pDataObject->sId));
         pDataObject->xTabPage->SetDialogController(this);
-        OUString sConfigId = OStringToOUString(pDataObject->xTabPage->GetConfigId(), RTL_TEXTENCODING_UTF8);
-        SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);
+        SvtViewOptions aPageOpt(EViewType::TabPage, pDataObject->xTabPage->GetConfigId());
         OUString sUserData;
         Any aUserItem = aPageOpt.GetUserItem(USERITEM_NAME);
         OUString aTemp;
@@ -948,7 +945,7 @@ void SfxTabDialogController::setPreviewsToSamePlace()
         m_xSizeGroup->add_widget(rGrid.get());
 }
 
-void SfxTabDialogController::RemoveTabPage(const OString& rId)
+void SfxTabDialogController::RemoveTabPage(const OUString& rId)
 
 /*  [Description]
 
@@ -969,9 +966,7 @@ void SfxTabDialogController::RemoveTabPage(const OString& rId)
             if ( !aPageData.isEmpty() )
             {
                 // save settings of this page (user data)
-                OUString sConfigId = OStringToOUString(pDataObject->xTabPage->GetConfigId(),
-                    RTL_TEXTENCODING_UTF8);
-                SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);
+                SvtViewOptions aPageOpt(EViewType::TabPage, pDataObject->xTabPage->GetConfigId());
                 aPageOpt.SetUserItem( USERITEM_NAME, Any( aPageData ) );
             }
 
@@ -1000,7 +995,7 @@ void SfxTabDialogController::Start_Impl()
     // something that the sort dialog in calc depends on
     if (m_sAppPageId.isEmpty())
     {
-        SvtViewOptions aDlgOpt(EViewType::TabDialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+        SvtViewOptions aDlgOpt(EViewType::TabDialog, m_xDialog->get_help_id());
         if (aDlgOpt.Exists())
             m_xTabCtrl->set_current_page(aDlgOpt.GetPageID());
     }
@@ -1010,7 +1005,7 @@ void SfxTabDialogController::Start_Impl()
     m_pImpl->bStarted = true;
 }
 
-void SfxTabDialogController::SetCurPageId(const OString& rIdent)
+void SfxTabDialogController::SetCurPageId(const OUString& rIdent)
 {
     m_sAppPageId = rIdent;
     m_xTabCtrl->set_current_page(m_sAppPageId);
@@ -1020,13 +1015,13 @@ void SfxTabDialogController::SetCurPageId(const OString& rIdent)
 
     The TabPage is activated with the specified Id.
 */
-void SfxTabDialogController::ShowPage(const OString& rIdent)
+void SfxTabDialogController::ShowPage(const OUString& rIdent)
 {
     SetCurPageId(rIdent);
     ActivatePage(rIdent);
 }
 
-OString SfxTabDialogController::GetCurPageId() const
+OUString SfxTabDialogController::GetCurPageId() const
 {
     return m_xTabCtrl->get_current_page_ident();
 }
@@ -1085,7 +1080,7 @@ void SfxTabDialogController::RemoveStandardButton()
     m_xBaseFmtBtn->hide();
 }
 
-SfxTabPage* SfxTabDialogController::GetTabPage(std::string_view rPageId) const
+SfxTabPage* SfxTabDialogController::GetTabPage(std::u16string_view rPageId) const
 
 /*  [Description]
 
@@ -1124,17 +1119,17 @@ bool SfxTabDialogController::Apply()
     return bApplied;
 }
 
-std::vector<OString> SfxTabDialogController::getAllPageUIXMLDescriptions() const
+std::vector<OUString> SfxTabDialogController::getAllPageUIXMLDescriptions() const
 {
     int nPages = m_xTabCtrl->get_n_pages();
-    std::vector<OString> aRet;
+    std::vector<OUString> aRet;
     aRet.reserve(nPages);
     for (int i = 0; i < nPages; ++i)
         aRet.push_back(m_xTabCtrl->get_page_ident(i));
     return aRet;
 }
 
-bool SfxTabDialogController::selectPageByUIXMLDescription(const OString& rUIXMLDescription)
+bool SfxTabDialogController::selectPageByUIXMLDescription(const OUString& rUIXMLDescription)
 {
     ShowPage(rUIXMLDescription);
     return m_xTabCtrl->get_current_page_ident() == rUIXMLDescription;
@@ -1152,14 +1147,14 @@ BitmapEx SfxTabDialogController::createScreenshot() const
     return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
-OString SfxTabDialogController::GetScreenshotId() const
+OUString SfxTabDialogController::GetScreenshotId() const
 {
-    const OString sId = m_xTabCtrl->get_current_page_ident();
+    const OUString sId = m_xTabCtrl->get_current_page_ident();
     Data_Impl* pDataObject = Find(m_pImpl->aData, sId);
     SfxTabPage* pPage = pDataObject ? pDataObject->xTabPage.get() : nullptr;
     if (pPage)
     {
-        OString sHelpId(pPage->GetHelpId());
+        OUString sHelpId(pPage->GetHelpId());
         if (!sHelpId.isEmpty())
             return sHelpId;
     }

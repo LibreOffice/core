@@ -27,7 +27,7 @@ class SwFootNoteOptionDlg final : public SfxTabDialogController
 {
     SwWrtShell& m_rSh;
 
-    virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
+    virtual void PageCreated(const OUString& rId, SfxTabPage& rPage) override;
 
     DECL_LINK(OkHdl, weld::Button&, void);
 

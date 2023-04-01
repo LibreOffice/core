@@ -286,7 +286,7 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
     if (!rInfo.aModule.isEmpty())
         sName = rInfo.aModule + "/" + sName;
     SvtViewOptions aWinOpt(EViewType::Window, sName);
-    aWinOpt.SetWindowState(OStringToOUString(rInfo.aWinState, RTL_TEXTENCODING_UTF8));
+    aWinOpt.SetWindowState(rInfo.aWinState);
 
     css::uno::Sequence < css::beans::NamedValue > aSeq
         { { "Data", css::uno::Any(aWinData) } };
@@ -371,7 +371,7 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
         aSeq[0].Value >>= aTmp;
 
     OUString aWinData( aTmp );
-    rInfo.aWinState = OUStringToOString(xWinOpt->GetWindowState(), RTL_TEXTENCODING_UTF8);
+    rInfo.aWinState = xWinOpt->GetWindowState();
 
     if ( aWinData.isEmpty() )
         return;

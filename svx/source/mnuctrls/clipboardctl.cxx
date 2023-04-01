@@ -78,7 +78,7 @@ void SvxClipBoardControl::CreatePopupWindow()
 
         ::tools::Rectangle aRect(rBox.GetItemRect(nId));
         weld::Window* pParent = weld::GetPopupParent(rBox, aRect);
-        OString sResult = xPopup->popup_at_rect(pParent, aRect);
+        OUString sResult = xPopup->popup_at_rect(pParent, aRect);
 
         rBox.SetItemDown( nId, false );
 

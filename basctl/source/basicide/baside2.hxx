@@ -387,7 +387,7 @@ public:
     virtual void Deactivating () override;
 
     virtual void OnNewDocument () override;
-    virtual OString GetHid () const override;
+    virtual OUString GetHid () const override;
     virtual ItemType GetType () const override;
     virtual bool HasActiveEditor () const override;
 

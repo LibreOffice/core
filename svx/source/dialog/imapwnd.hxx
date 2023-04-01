@@ -91,7 +91,7 @@ class IMapWindow final : public GraphCtrl
     std::unique_ptr<IMapDropTargetHelper> mxDropTargetHelper;
     std::unique_ptr<weld::Menu> mxPopupMenu;
 
-    void                MenuSelectHdl(const OString& rId);
+    void                MenuSelectHdl(const OUString& rId);
 
     // GraphCtrl
     virtual bool        MouseButtonUp(const MouseEvent& rMEvt) override;

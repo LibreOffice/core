@@ -76,9 +76,9 @@ class SAL_WARN_UNUSED SvxFontWorkDialog final : public SfxDockingWindow
     SfxBindings&    rBindings;
     Idle            aInputIdle;
 
-    OString         m_sLastStyleTbxId;
-    OString         m_sLastAdjustTbxId;
-    OString         m_sLastShadowTbxId;
+    OUString         m_sLastStyleTbxId;
+    OUString         m_sLastAdjustTbxId;
+    OUString         m_sLastShadowTbxId;
 
     tools::Long            nSaveShadowX;
     tools::Long            nSaveShadowY;
@@ -105,9 +105,9 @@ class SAL_WARN_UNUSED SvxFontWorkDialog final : public SfxDockingWindow
     friend class SvxFontWorkChildWindow;
     friend class SvxFontWorkControllerItem;
 
-    DECL_LINK( SelectStyleHdl_Impl, const OString&, void );
-    DECL_LINK( SelectAdjustHdl_Impl, const OString&, void );
-    DECL_LINK( SelectShadowHdl_Impl, const OString&, void );
+    DECL_LINK( SelectStyleHdl_Impl, const OUString&, void );
+    DECL_LINK( SelectAdjustHdl_Impl, const OUString&, void );
+    DECL_LINK( SelectShadowHdl_Impl, const OUString&, void );
 
     DECL_LINK( ModifyInputHdl_Impl, weld::MetricSpinButton&, void );
     DECL_LINK( InputTimeoutHdl_Impl, Timer*, void );

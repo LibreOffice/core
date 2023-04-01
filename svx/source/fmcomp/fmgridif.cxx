@@ -1836,7 +1836,7 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value)
         INetURLObject aHID( sHelpURL );
         if ( aHID.GetProtocol() == INetProtocol::Hid )
             sHelpURL = aHID.GetURLPath();
-        pGrid->SetHelpId( OUStringToOString( sHelpURL, RTL_TEXTENCODING_UTF8 ) );
+        pGrid->SetHelpId( sHelpURL );
     }
     else if ( PropertyName == FM_PROP_DISPLAYSYNCHRON )
     {

@@ -848,7 +848,7 @@ void TmpRepositoryCommandEnv::update(uno::Any const& /*Status */) {}
 
 void TmpRepositoryCommandEnv::pop() {}
 
-IMPL_LINK(AdditionsDialog, GearHdl, const OString&, rIdent, void)
+IMPL_LINK(AdditionsDialog, GearHdl, const OUString&, rIdent, void)
 {
     if (rIdent == "gear_sort_voting")
     {

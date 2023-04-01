@@ -71,7 +71,7 @@ MenuItemData* MenuItemList::Insert(
     const OUString& rStr,
     Menu* pMenu,
     size_t nPos,
-    const OString &rIdent
+    const OUString &rIdent
 )
 {
     MenuItemData* pData     = new MenuItemData( rStr );
@@ -104,7 +104,7 @@ MenuItemData* MenuItemList::Insert(
     return pData;
 }
 
-void MenuItemList::InsertSeparator(const OString &rIdent, size_t nPos)
+void MenuItemList::InsertSeparator(const OUString &rIdent, size_t nPos)
 {
     MenuItemData* pData     = new MenuItemData;
     pData->nId              = 0;

@@ -48,7 +48,7 @@ namespace sd::sidebar {
     /** menu entry that is executed as default action when the left mouse button is
         clicked over a master page.
     */
-constexpr OStringLiteral gsDefaultClickAction = "applyselect";
+constexpr OUStringLiteral gsDefaultClickAction = u"applyselect";
 
 MasterPagesSelector::MasterPagesSelector (
     weld::Widget* pParent,
@@ -57,7 +57,7 @@ MasterPagesSelector::MasterPagesSelector (
     std::shared_ptr<MasterPageContainer> pContainer,
     css::uno::Reference<css::ui::XSidebar> xSidebar,
     const OUString& rUIFileName,
-    const OString& rValueSetName)
+    const OUString& rValueSetName)
     : PanelLayout( pParent, "MasterPagePanel", rUIFileName ),
       mpContainer(std::move(pContainer)),
       mxPreviewValueSet(new PreviewValueSet),
@@ -212,7 +212,7 @@ void MasterPagesSelector::ProcessPopupMenu(weld::Menu& rMenu)
         rMenu.set_sensitive("large", false);
 }
 
-void MasterPagesSelector::ExecuteCommand(const OString &rIdent)
+void MasterPagesSelector::ExecuteCommand(const OUString &rIdent)
 {
     if (rIdent == "applyall")
     {
@@ -537,7 +537,7 @@ void MasterPagesSelector::ClearPageSet()
     mxPreviewValueSet->Clear();
 }
 
-void MasterPagesSelector::SetHelpId( const OString& aId )
+void MasterPagesSelector::SetHelpId( const OUString& aId )
 {
     const ::osl::MutexGuard aGuard (maMutex);
 

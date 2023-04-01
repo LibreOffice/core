@@ -389,7 +389,7 @@ friend class SfxDockingWindow;
     sal_uInt16          nDockPos;
     bool                bNewLine;
     bool                bDockingPrevented;
-    OString             aWinState;
+    OUString            aWinState;
 
     explicit            SfxDockingWindow_Impl(SfxDockingWindow *pBase);
     SfxChildAlignment   GetLastAlignment() const
@@ -760,7 +760,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     required because the docking is implemented in Sfx through SfxChildWindows.
 */
 SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
-    vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
+    vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription)
     : ResizableDockingWindow(pParent)
     , pBindings(pBindinx)
     , pMgr(pCW)

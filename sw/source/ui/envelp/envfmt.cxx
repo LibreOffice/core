@@ -159,17 +159,17 @@ IMPL_LINK( SwEnvFormatPage, ModifyHdl, weld::MetricSpinButton&, rEdit, void )
     }
 }
 
-IMPL_LINK(SwEnvFormatPage, AddrEditHdl, const OString&, rIdent, void)
+IMPL_LINK(SwEnvFormatPage, AddrEditHdl, const OUString&, rIdent, void)
 {
     Edit(rIdent, false);
 }
 
-IMPL_LINK(SwEnvFormatPage, SendEditHdl, const OString&, rIdent, void)
+IMPL_LINK(SwEnvFormatPage, SendEditHdl, const OUString&, rIdent, void)
 {
     Edit(rIdent, true);
 }
 
-void SwEnvFormatPage::Edit(std::string_view rIdent, bool bSender)
+void SwEnvFormatPage::Edit(std::u16string_view rIdent, bool bSender)
 {
     SwWrtShell* pSh = GetParentSwEnvDlg()->m_pSh;
     OSL_ENSURE(pSh, "Shell missing");
@@ -178,7 +178,7 @@ void SwEnvFormatPage::Edit(std::string_view rIdent, bool bSender)
         bSender ? RES_POOLCOLL_SEND_ADDRESS : RES_POOLCOLL_ENVELOPE_ADDRESS));
     OSL_ENSURE(pColl, "Text collection missing");
 
-    if (o3tl::starts_with(rIdent, "character"))
+    if (o3tl::starts_with(rIdent, u"character"))
     {
         SfxItemSet *pCollSet = GetCollItemSet(pColl, bSender);
 
@@ -197,7 +197,7 @@ void SwEnvFormatPage::Edit(std::string_view rIdent, bool bSender)
             pCollSet->Put(aOutputSet);
         }
     }
-    else if (o3tl::starts_with(rIdent, "paragraph"))
+    else if (o3tl::starts_with(rIdent, u"paragraph"))
     {
         SfxItemSet *pCollSet = GetCollItemSet(pColl, bSender);
 

@@ -129,9 +129,9 @@ private:
     DECL_LINK(DocumentSelectHdl, weld::ComboBox&, void);
     DECL_LINK(ExecuteRowHdl, weld::Entry&, bool);
     DECL_LINK(ExecuteColHdl, weld::Entry&, bool);
-    DECL_LINK(ToolBoxSelectHdl, const OString&, void);
-    DECL_LINK(ToolBoxDropdownClickHdl, const OString&, void);
-    DECL_LINK(MenuSelectHdl, const OString&, void);
+    DECL_LINK(ToolBoxSelectHdl, const OUString&, void);
+    DECL_LINK(ToolBoxDropdownClickHdl, const OUString&, void);
+    DECL_LINK(MenuSelectHdl, const OUString&, void);
     DECL_LINK(FormatRowOutputHdl, weld::SpinButton&, void);
     DECL_LINK(ParseRowInputHdl, int*, bool);
 

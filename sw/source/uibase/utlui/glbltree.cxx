@@ -290,7 +290,7 @@ IMPL_LINK(SwGlobalTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         xPopup->set_sensitive("editcontent", bool(nEnableFlags & MenuEnableFlags::Edit));
         xPopup->set_sensitive("deleteentry", bool(nEnableFlags & MenuEnableFlags::Delete));
 
-        OString sCommand = xPopup->popup_at_rect(m_xTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
+        OUString sCommand = xPopup->popup_at_rect(m_xTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
         if (!sCommand.isEmpty())
             ExecuteContextMenuAction(sCommand);
 
@@ -299,17 +299,17 @@ IMPL_LINK(SwGlobalTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     return bPop;
 }
 
-void SwGlobalTree::TbxMenuHdl(std::string_view rCommand, weld::Menu& rMenu)
+void SwGlobalTree::TbxMenuHdl(std::u16string_view rCommand, weld::Menu& rMenu)
 {
     const MenuEnableFlags nEnableFlags = GetEnableFlags();
-    if (rCommand == "insert")
+    if (rCommand == u"insert")
     {
         rMenu.set_sensitive("insertindex", bool(nEnableFlags & MenuEnableFlags::InsertIdx));
         rMenu.set_sensitive("insertfile", bool(nEnableFlags & MenuEnableFlags::InsertFile));
         rMenu.set_sensitive("insertnewfile", bool(nEnableFlags & MenuEnableFlags::InsertFile));
         rMenu.set_sensitive("inserttext", bool(nEnableFlags & MenuEnableFlags::InsertText));
     }
-    else if (rCommand == "update")
+    else if (rCommand == u"update")
     {
         rMenu.set_sensitive("updatesel", bool(nEnableFlags & MenuEnableFlags::UpdateSel));
     }
@@ -568,7 +568,7 @@ void SwGlobalTree::EditContent(const SwGlblDocContent* pCont )
     }
 }
 
-void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry)
+void SwGlobalTree::ExecuteContextMenuAction(std::u16string_view rSelectedPopupEntry)
 {
     bool bUpdateHard = false;
 
@@ -582,7 +582,7 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
         oContCopy.emplace(pCont->GetDocPos());
     SfxDispatcher& rDispatch = *m_pActiveShell->GetView().GetViewFrame().GetDispatcher();
     sal_uInt16 nSlot = 0;
-    if (rSelectedPopupEntry == "updatesel")
+    if (rSelectedPopupEntry == u"updatesel")
     {
         // Two passes: first update the areas, then the directories.
         m_xTreeView->selected_foreach([this](weld::TreeIter& rSelEntry){
@@ -603,20 +603,20 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
 
         bUpdateHard = true;
     }
-    else if (rSelectedPopupEntry == "updateindex")
+    else if (rSelectedPopupEntry == u"updateindex")
     {
         nSlot = FN_UPDATE_TOX;
         bUpdateHard = true;
     }
-    else if (rSelectedPopupEntry == "updatelinks" || rSelectedPopupEntry == "updateall")
+    else if (rSelectedPopupEntry == u"updatelinks" || rSelectedPopupEntry == u"updateall")
     {
         m_pActiveShell->GetLinkManager().UpdateAllLinks(true, false, nullptr);
-        if (rSelectedPopupEntry == "updateall")
+        if (rSelectedPopupEntry == u"updateall")
             nSlot = FN_UPDATE_TOX;
         pCont = nullptr;
         bUpdateHard = true;
     }
-    else if (rSelectedPopupEntry == "editcontent")
+    else if (rSelectedPopupEntry == u"editcontent")
     {
         OSL_ENSURE(pCont, "edit without entry ? " );
         if (pCont)
@@ -624,7 +624,7 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
             EditContent(pCont);
         }
     }
-    else if (rSelectedPopupEntry == "editlink")
+    else if (rSelectedPopupEntry == u"editlink")
     {
         OSL_ENSURE(pCont, "edit without entry ? " );
         if (pCont)
@@ -635,7 +635,7 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
                     { &aName });
         }
     }
-    else if (rSelectedPopupEntry == "deleteentry")
+    else if (rSelectedPopupEntry == u"deleteentry")
     {
         // If several entries selected, then after each delete the array
         // must be refilled. So you do not have to remember anything,
@@ -657,7 +657,7 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
         m_pActiveShell->EndAction();
         pCont = nullptr;
     }
-    else if (rSelectedPopupEntry == "insertindex")
+    else if (rSelectedPopupEntry == u"insertindex")
     {
         if(oContCopy)
         {
@@ -688,13 +688,13 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
             pCont = nullptr;
         }
     }
-    else if (rSelectedPopupEntry == "insertfile")
+    else if (rSelectedPopupEntry == u"insertfile")
     {
         m_oDocContent = std::move(oContCopy);
         InsertRegion( &*m_oDocContent );
         pCont = nullptr;
     }
-    else if (rSelectedPopupEntry == "insertnewfile")
+    else if (rSelectedPopupEntry == u"insertnewfile")
     {
         SfxViewFrame& rGlobFrame = m_pActiveShell->GetView().GetViewFrame();
         SwGlobalFrameListener_Impl aFrameListener(rGlobFrame);
@@ -753,7 +753,7 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
             }
         }
     }
-    else if (rSelectedPopupEntry == "inserttext")
+    else if (rSelectedPopupEntry == u"inserttext")
     {
         if (pCont)
             m_pActiveShell->InsertGlobalDocContent(*pCont);
@@ -764,7 +764,7 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
         }
         m_pActiveShell->GetView().GetEditWin().GrabFocus();
     }
-    else if (rSelectedPopupEntry == "update")
+    else if (rSelectedPopupEntry == u"update")
         pCont = nullptr;
 
     if (pCont)
@@ -839,12 +839,12 @@ void SwGlobalTree::HideTree()
     m_xTreeView->hide();
 }
 
-void SwGlobalTree::ExecCommand(std::string_view rCmd)
+void SwGlobalTree::ExecCommand(std::u16string_view rCmd)
 {
     int nEntry = m_xTreeView->get_selected_index();
     if (nEntry == -1)
         return;
-    if (rCmd == "edit")
+    if (rCmd == u"edit")
     {
         const SwGlblDocContent* pCont = weld::fromId<const SwGlblDocContent*>(
                                                 m_xTreeView->get_id(nEntry));
@@ -857,13 +857,13 @@ void SwGlobalTree::ExecCommand(std::string_view rCmd)
             bool bMove = false;
             int nSource = nEntry;
             int nDest = nSource;
-            if (rCmd == "movedown")
+            if (rCmd == u"movedown")
             {
                 int nEntryCount = m_xTreeView->n_children();
                 bMove = nEntryCount > nSource + 1;
                 nDest+= 2;
             }
-            else if (rCmd == "moveup")
+            else if (rCmd == u"moveup")
             {
                 bMove = 0 != nSource;
                 nDest--;

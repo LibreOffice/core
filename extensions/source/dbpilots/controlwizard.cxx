@@ -72,7 +72,7 @@ namespace dbp
         OAccessRegulator() { }
     };
 
-    OControlWizardPage::OControlWizardPage(weld::Container* pPage, OControlWizard* pWizard, const OUString& rUIXMLDescription, const OString& rID)
+    OControlWizardPage::OControlWizardPage(weld::Container* pPage, OControlWizard* pWizard, const OUString& rUIXMLDescription, const OUString& rID)
         : OControlWizardPage_Base(pPage, pWizard, rUIXMLDescription, rID)
         , m_pDialog(pWizard)
     {

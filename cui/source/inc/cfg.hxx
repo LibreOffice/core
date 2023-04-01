@@ -69,12 +69,12 @@ class SvxConfigDialog : public SfxTabDialogController
 private:
     css::uno::Reference< css::frame::XFrame > m_xFrame;
 
-    virtual void ActivatePage(const OString& rPage) override;
+    virtual void ActivatePage(const OUString& rPage) override;
 
 public:
     SvxConfigDialog(weld::Window*, const SfxItemSet*);
 
-    virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
+    virtual void PageCreated(const OUString& rId, SfxTabPage &rPage) override;
     void SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame);
 };
 

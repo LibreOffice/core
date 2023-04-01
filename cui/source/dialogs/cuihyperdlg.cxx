@@ -222,7 +222,7 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, ClickApplyHdl_Impl, weld::Button&, void)
 |************************************************************************/
 void SvxHpLinkDlg::SetPage ( SvxHyperlinkItem const * pItem )
 {
-    OString sPageId("internet");
+    OUString sPageId("internet");
 
     OUString aStrURL(pItem->GetURL());
     INetURLObject aURL(aStrURL);

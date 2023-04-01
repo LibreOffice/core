@@ -196,7 +196,7 @@ SwOutlineTabDialog::~SwOutlineTabDialog()
 {
 }
 
-void SwOutlineTabDialog::PageCreated(const OString& rPageId, SfxTabPage& rPage)
+void SwOutlineTabDialog::PageCreated(const OUString& rPageId, SfxTabPage& rPage)
 {
     if (rPageId == "position")
     {
@@ -227,11 +227,11 @@ IMPL_LINK_NOARG(SwOutlineTabDialog, FormHdl, weld::Toggleable&, void)
         const SwNumRulesWithName *pRules = m_pChapterNumRules->GetRules(i);
         if (!pRules)
             continue;
-        m_xMenuButton->set_item_label("form" + OString::number(i + 1), pRules->GetName());
+        m_xMenuButton->set_item_label("form" + OUString::number(i + 1), pRules->GetName());
     }
 }
 
-IMPL_LINK(SwOutlineTabDialog, MenuSelectHdl, const OString&, rIdent, void)
+IMPL_LINK(SwOutlineTabDialog, MenuSelectHdl, const OUString&, rIdent, void)
 {
     sal_uInt8 nLevelNo = 0;
 
@@ -271,7 +271,7 @@ IMPL_LINK(SwOutlineTabDialog, MenuSelectHdl, const OString&, rIdent, void)
             const OUString aName(aDlg.GetName());
             m_pChapterNumRules->ApplyNumRules( SwNumRulesWithName(
                     *m_xNumRule, aName ), aDlg.GetCurEntryPos() );
-            m_xMenuButton->set_item_label("form" + OString::number(aDlg.GetCurEntryPos() + 1), aName);
+            m_xMenuButton->set_item_label("form" + OUString::number(aDlg.GetCurEntryPos() + 1), aName);
         }
         return;
     }
@@ -283,7 +283,7 @@ IMPL_LINK(SwOutlineTabDialog, MenuSelectHdl, const OString&, rIdent, void)
         {
             pRules->ResetNumRule(m_rWrtSh, *m_xNumRule);
             m_xNumRule->SetRuleType( OUTLINE_RULE );
-            SfxTabPage* pOutlinePage = GetTabPage("numbering");
+            SfxTabPage* pOutlinePage = GetTabPage(u"numbering");
             assert(pOutlinePage);
             static_cast<SwOutlineSettingsTabPage*>(pOutlinePage)->SetNumRule(m_xNumRule.get());
         }

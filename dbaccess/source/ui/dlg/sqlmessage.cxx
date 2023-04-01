@@ -482,7 +482,7 @@ void OSQLMessageBox::impl_createStandardButtons( MessBoxStyle _nStyle )
     else
         aTmp = m_sHelpURL;
 
-    m_xDialog->set_help_id(OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8));
+    m_xDialog->set_help_id(aTmp);
 }
 
 void OSQLMessageBox::impl_addDetailsButton()

@@ -44,12 +44,12 @@ private:
 
 protected:
 
-    IconChoicePage(weld::Container* pParent, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet* pItemSet);
+    IconChoicePage(weld::Container* pParent, const OUString& rUIXMLDescription, const OUString& rID, const SfxItemSet* pItemSet);
 
 public:
     virtual ~IconChoicePage();
 
-    OString GetHelpId() const { return xContainer->get_help_id(); }
+    OUString GetHelpId() const { return xContainer->get_help_id(); }
 
     const SfxItemSet&   GetItemSet() const { return *pSet; }
 
@@ -67,12 +67,12 @@ public:
 /// Data-structure for pages in dialog
 struct IconChoicePageData
 {
-    OString sId;
+    OUString sId;
     std::unique_ptr<IconChoicePage> xPage;      ///< the TabPage itself
     bool bRefresh;          ///< Flag: page has to be newly initialized
 
     // constructor
-    IconChoicePageData(OString aId, std::unique_ptr<IconChoicePage> xInPage)
+    IconChoicePageData(OUString aId, std::unique_ptr<IconChoicePage> xInPage)
         : sId(std::move(aId))
         , xPage(std::move(xInPage))
         , bRefresh(false)

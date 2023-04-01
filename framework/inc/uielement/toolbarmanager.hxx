@@ -82,7 +82,7 @@ public:
     virtual bool IsItemVisible(ToolBoxItemId nId, const OUString& rCommandURL) = 0;
     virtual void Clear() = 0;
     virtual void SetName(const OUString& rName) = 0;
-    virtual void SetHelpId(const OString& rHelpId) = 0;
+    virtual void SetHelpId(const OUString& rHelpId) = 0;
     virtual bool WillUsePopupMode() = 0;
     virtual bool IsReallyVisible() = 0;
     virtual void SetIconSize(ToolBoxButtonSize eSize) = 0;

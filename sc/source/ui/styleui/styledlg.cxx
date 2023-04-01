@@ -47,8 +47,8 @@ ScStyleDlg::ScStyleDlg(weld::Window* pParent,
                           OUString("modules/scalc/ui/pagetemplatedialog.ui") :
                           OUString("modules/scalc/ui/paratemplatedialog.ui"),
                         bPage ?
-                          OString("PageTemplateDialog") :
-                          OString("ParaTemplateDialog"),
+                          OUString("PageTemplateDialog") :
+                          OUString("ParaTemplateDialog"),
                         rStyleBase )
     , m_bPage(bPage)
 {
@@ -80,7 +80,7 @@ ScStyleDlg::ScStyleDlg(weld::Window* pParent,
     }
 }
 
-void ScStyleDlg::PageCreated(const OString& rPageId, SfxTabPage& rTabPage)
+void ScStyleDlg::PageCreated(const OUString& rPageId, SfxTabPage& rTabPage)
 {
     if (m_bPage)
     {
@@ -162,7 +162,7 @@ ScDrawStyleDlg::ScDrawStyleDlg(weld::Window* pParent, SfxStyleSheetBase& rStyleB
         RemoveTabPage("asiantypo");
 }
 
-void ScDrawStyleDlg::PageCreated(const OString& rPageId, SfxTabPage& rTabPage)
+void ScDrawStyleDlg::PageCreated(const OUString& rPageId, SfxTabPage& rTabPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     SdrModel& rModel = mpView->GetModel();

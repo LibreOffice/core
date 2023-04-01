@@ -33,7 +33,7 @@ ScHFEditDlg::ScHFEditDlg(weld::Window* pParent,
                          const SfxItemSet& rCoreSet,
                          std::u16string_view rPageStyle,
                          const OUString& rUIXMLDescription,
-                         const OString& rID)
+                         const OUString& rID)
     :   SfxTabDialogController(pParent, rUIXMLDescription, rID, &rCoreSet)
 {
     eNumType = rCoreSet.Get(ATTR_PAGE).GetNumType();
@@ -253,7 +253,7 @@ ScHFEditActiveDlg::ScHFEditActiveDlg(
     }
 }
 
-void ScHFEditDlg::PageCreated(const OString& /* rId */, SfxTabPage& rPage)
+void ScHFEditDlg::PageCreated(const OUString& /* rId */, SfxTabPage& rPage)
 {
     // Can only be a ScHFEditPage...
 

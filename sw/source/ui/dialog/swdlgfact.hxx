@@ -288,7 +288,7 @@ public:
     }
     virtual short Execute() override;
     virtual bool  StartExecuteAsync(AsyncContext &rCtx) override;
-    virtual void                SetCurPageId( const OString &rName ) override;
+    virtual void                SetCurPageId( const OUString &rName ) override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
     virtual WhichRangesContainer GetInputRanges( const SfxItemPool& pItem ) override;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
@@ -381,7 +381,7 @@ public:
     {
     }
     virtual short Execute() override;
-    virtual void                SetCurPageId( const OString &rName ) override;
+    virtual void                SetCurPageId( const OUString &rName ) override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
     virtual WhichRangesContainer GetInputRanges( const SfxItemPool& pItem ) override;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
@@ -427,7 +427,7 @@ public:
     }
     virtual short Execute() override;
     virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
-    virtual void                SetCurPageId( const OString &rName ) override;
+    virtual void                SetCurPageId( const OUString &rName ) override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
     virtual WhichRangesContainer GetInputRanges( const SfxItemPool& pItem ) override;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
@@ -528,7 +528,7 @@ public:
     virtual bool            IsEndNote() override;
     virtual OUString        GetStr() override;
     //from class Window
-    virtual void    SetHelpId( const OString& sHelpId ) override;
+    virtual void    SetHelpId( const OUString& sHelpId ) override;
     virtual void    SetText( const OUString& rStr ) override;
 };
 
@@ -756,7 +756,7 @@ public:
                                                     SwView& rVw,
                                                     const SfxItemSet& rCoreSet,
                                                     bool bDraw,
-                                                    const OString& sDefPage = OString()) override;
+                                                    const OUString& sDefPage = {}) override;
 
     virtual VclPtr<VclAbstractDialog> CreateSwAutoMarkDialog(weld::Window *pParent, SwWrtShell &rSh) override;
     virtual VclPtr<AbstractSwSelGlossaryDlg> CreateSwSelGlossaryDlg(weld::Window *pParent, const OUString &rShortName) override;
@@ -786,12 +786,12 @@ public:
                                                 SfxViewFrame& rFrame, weld::Window *pParent,
                                                 const SfxItemSet& rCoreSet,
                                                 bool bNewFrame  = true,
-                                                const OString& sDefPage = OString()) override;
+                                                const OUString& sDefPage = {}) override;
     virtual VclPtr<SfxAbstractApplyTabDialog>  CreateTemplateDialog(
                                                 weld::Window *pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 SfxStyleFamily      nRegion,
-                                                const OString&      sPage,
+                                                const OUString&     sPage,
                                                 SwWrtShell*         pActShell,
                                                 bool                bNew) override;
     virtual VclPtr<AbstractGlossaryDlg>        CreateGlossaryDlg(SfxViewFrame& rViewFrame,

@@ -283,7 +283,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< Property
 
 ImpPDFTabSecurityPage* ImpPDFTabDialog::getSecurityPage() const
 {
-    SfxTabPage* pSecurityPage = GetTabPage("security");
+    SfxTabPage* pSecurityPage = GetTabPage(u"security");
     if (pSecurityPage)
     {
         return static_cast<ImpPDFTabSecurityPage*>(pSecurityPage);
@@ -293,7 +293,7 @@ ImpPDFTabSecurityPage* ImpPDFTabDialog::getSecurityPage() const
 
 ImpPDFTabOpnFtrPage * ImpPDFTabDialog::getOpenPage() const
 {
-    SfxTabPage* pOpenPage = GetTabPage("initialview");
+    SfxTabPage* pOpenPage = GetTabPage(u"initialview");
     if (pOpenPage)
     {
         return static_cast<ImpPDFTabOpnFtrPage*>(pOpenPage);
@@ -303,7 +303,7 @@ ImpPDFTabOpnFtrPage * ImpPDFTabDialog::getOpenPage() const
 
 ImpPDFTabLinksPage* ImpPDFTabDialog::getLinksPage() const
 {
-    SfxTabPage* pLinksPage = GetTabPage("links");
+    SfxTabPage* pLinksPage = GetTabPage(u"links");
     if (pLinksPage)
     {
         return static_cast<ImpPDFTabLinksPage*>(pLinksPage);
@@ -314,7 +314,7 @@ ImpPDFTabLinksPage* ImpPDFTabDialog::getLinksPage() const
 
 ImpPDFTabGeneralPage* ImpPDFTabDialog::getGeneralPage() const
 {
-    SfxTabPage* pGeneralPage = GetTabPage("general");
+    SfxTabPage* pGeneralPage = GetTabPage(u"general");
     if (pGeneralPage)
     {
         return static_cast<ImpPDFTabGeneralPage*>(pGeneralPage);
@@ -387,7 +387,7 @@ ImpPDFTabDialog::~ImpPDFTabDialog()
     maConfigI18N.WriteModifiedConfig();
 }
 
-void ImpPDFTabDialog::PageCreated(const OString& rId, SfxTabPage& rPage)
+void ImpPDFTabDialog::PageCreated(const OUString& rId, SfxTabPage& rPage)
 {
     if (rId == "general")
         static_cast<ImpPDFTabGeneralPage&>(rPage).SetFilterConfigItem(this);
@@ -417,17 +417,17 @@ void ImpPDFTabDialog::PageCreated(const OString& rId, SfxTabPage& rPage)
 Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 {
     // updating the FilterData sequence and storing FilterData to configuration
-    if (ImpPDFTabGeneralPage* pPage = static_cast<ImpPDFTabGeneralPage*>(GetTabPage("general")))
+    if (ImpPDFTabGeneralPage* pPage = static_cast<ImpPDFTabGeneralPage*>(GetTabPage(u"general")))
         pPage->GetFilterConfigItem(this);
-    if (ImpPDFTabViewerPage* pPage = static_cast<ImpPDFTabViewerPage*>(GetTabPage("userinterface")))
+    if (ImpPDFTabViewerPage* pPage = static_cast<ImpPDFTabViewerPage*>(GetTabPage(u"userinterface")))
         pPage->GetFilterConfigItem(this);
-    if (ImpPDFTabOpnFtrPage* pPage = static_cast<ImpPDFTabOpnFtrPage*>(GetTabPage("initialview")))
+    if (ImpPDFTabOpnFtrPage* pPage = static_cast<ImpPDFTabOpnFtrPage*>(GetTabPage(u"initialview")))
         pPage->GetFilterConfigItem(this);
-    if (ImpPDFTabLinksPage* pPage = static_cast<ImpPDFTabLinksPage*>(GetTabPage("links")))
+    if (ImpPDFTabLinksPage* pPage = static_cast<ImpPDFTabLinksPage*>(GetTabPage(u"links")))
         pPage->GetFilterConfigItem(this);
-    if (ImpPDFTabSecurityPage* pPage = static_cast<ImpPDFTabSecurityPage*>( GetTabPage("security")))
+    if (ImpPDFTabSecurityPage* pPage = static_cast<ImpPDFTabSecurityPage*>( GetTabPage(u"security")))
         pPage->GetFilterConfigItem(this);
-    if (ImpPDFTabSigningPage* pPage = static_cast<ImpPDFTabSigningPage*>(GetTabPage("digitalsignatures")))
+    if (ImpPDFTabSigningPage* pPage = static_cast<ImpPDFTabSigningPage*>(GetTabPage(u"digitalsignatures")))
         pPage->GetFilterConfigItem(this);
 
     // prepare the items to be returned

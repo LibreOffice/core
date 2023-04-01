@@ -79,7 +79,7 @@ SdPageDlg::SdPageDlg(SfxObjectShell const* pDocSh, weld::Window* pParent, const 
     }
 }
 
-void SdPageDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
+void SdPageDlg::PageCreated(const OUString& rId, SfxTabPage& rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     if (rId == "RID_SVXPAGE_PAGE")

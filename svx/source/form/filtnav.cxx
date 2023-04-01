@@ -1526,7 +1526,7 @@ IMPL_LINK(FmFilterNavigator, PopupMenuHdl, const CommandEvent&, rEvt, bool)
                 xContextMenu->remove("isnotnull");
             }
 
-            OString sIdent = xContextMenu->popup_at_rect(m_xTreeView.get(), tools::Rectangle(aWhere, ::Size(1, 1)));
+            OUString sIdent = xContextMenu->popup_at_rect(m_xTreeView.get(), tools::Rectangle(aWhere, ::Size(1, 1)));
             if (sIdent == "edit")
             {
                 m_xTreeView->start_editing(*xClicked);

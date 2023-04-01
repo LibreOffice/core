@@ -1400,7 +1400,7 @@ void ModulWindow::OnNewDocument ()
     m_aXEditorWindow->SetLineNumberDisplay(bLineNumbers);
 }
 
-OString ModulWindow::GetHid () const
+OUString ModulWindow::GetHid () const
 {
     return HID_BASICIDE_MODULWINDOW;
 }

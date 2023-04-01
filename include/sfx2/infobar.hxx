@@ -104,7 +104,7 @@ public:
     void SetCommandHandler(weld::Button& rBtn, const OUString& aCommand);
 
 private:
-    DECL_DLLPRIVATE_LINK(CloseHandler, const OString&, void);
+    DECL_DLLPRIVATE_LINK(CloseHandler, const OUString&, void);
 };
 
 class SfxInfoBarContainerWindow final : public vcl::Window

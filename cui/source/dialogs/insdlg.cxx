@@ -72,7 +72,7 @@ uno::Reference< io::XInputStream > InsertObjectDialog_Impl::GetIconIfIconified( 
 }
 
 InsertObjectDialog_Impl::InsertObjectDialog_Impl(weld::Window* pParent,
-    const OUString& rUIXMLDescription, const OString& rID,
+    const OUString& rUIXMLDescription, const OUString& rID,
     css::uno::Reference < css::embed::XStorage > xStorage)
     : GenericDialogController(pParent, rUIXMLDescription, rID)
     , m_xStorage(std::move( xStorage ))

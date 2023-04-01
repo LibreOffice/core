@@ -1204,7 +1204,7 @@ IMPL_LINK(SvxScriptSelectorDialog, ContextMenuHdl, const CommandEvent&, rCEvt, b
     xDropMenu->set_active("alphabetically", xTreeView.get_sort_order());
     xDropMenu->set_active("properorder", !xTreeView.get_sort_order());
 
-    OString sCommand(xPopup->popup_at_rect(&xTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
+    OUString sCommand(xPopup->popup_at_rect(&xTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
     if (sCommand == "alphabetically")
     {
         xTreeView.make_sorted();

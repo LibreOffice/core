@@ -32,7 +32,7 @@ private:
     DECL_LINK(SelectToolbarEntry, weld::TreeView&, void);
     DECL_LINK(MoveHdl, weld::Button&, void);
 
-    DECL_LINK(GearHdl, const OString&, void);
+    DECL_LINK(GearHdl, const OUString&, void);
 
     DECL_LINK(SelectCategory, weld::ComboBox&, void);
 
@@ -42,8 +42,8 @@ private:
     DECL_LINK(AddCommandHdl, weld::Button&, void);
     DECL_LINK(RemoveCommandHdl, weld::Button&, void);
 
-    DECL_LINK(InsertHdl, const OString&, void);
-    DECL_LINK(ModifyItemHdl, const OString&, void);
+    DECL_LINK(InsertHdl, const OUString&, void);
+    DECL_LINK(ModifyItemHdl, const OUString&, void);
     DECL_LINK(ResetToolbarHdl, weld::Button&, void);
 
     virtual void ListModified() override;

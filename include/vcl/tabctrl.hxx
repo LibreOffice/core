@@ -130,7 +130,7 @@ public:
     sal_uInt16          GetPageCount() const;
     sal_uInt16          GetPageId( sal_uInt16 nPos ) const;
     sal_uInt16 GetPageId(const Point& rPos) const;
-    sal_uInt16          GetPageId( const OString& rName ) const;
+    sal_uInt16          GetPageId( const OUString& rName ) const;
 
     void SetCurPageId(sal_uInt16 nPageId);
     sal_uInt16          GetCurPageId() const;
@@ -146,8 +146,8 @@ public:
     void                SetHelpText( sal_uInt16 nPageId, const OUString& rText );
     const OUString&     GetHelpText( sal_uInt16 nPageId ) const;
 
-    void                SetPageName( sal_uInt16 nPageId, const OString& rName ) const;
-    OString             GetPageName( sal_uInt16 nPageId ) const;
+    void                SetPageName( sal_uInt16 nPageId, const OUString& rName ) const;
+    OUString            GetPageName( sal_uInt16 nPageId ) const;
 
     void SetAccessibleName( sal_uInt16 nItemId, const OUString& rStr );
     OUString GetAccessibleName( sal_uInt16 nItemId ) const;
@@ -189,7 +189,7 @@ public:
 
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
 
-    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
+    virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
 
     virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 };

@@ -33,7 +33,7 @@ class LocaleDataWrapper;
 
 namespace vcl
 {
-VCL_DLLPUBLIC FieldUnit EnglishStringToMetric(std::string_view rEnglishMetricString);
+VCL_DLLPUBLIC FieldUnit EnglishStringToMetric(std::u16string_view rEnglishMetricString);
 
 VCL_DLLPUBLIC bool TextToValue(const OUString& rStr, double& rValue, sal_Int64 nBaseValue,
                                sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper,

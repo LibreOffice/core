@@ -588,7 +588,7 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const vcl::Window* p
     OUString sRealCommand = vcl::CommandInfoProvider::GetRealCommandForCommand(aProperties);
     OUString sHelpText = SfxHelp_Impl::GetHelpText( sRealCommand.isEmpty() ? aCommandURL : sRealCommand, sModuleName );
 
-    OString aNewHelpId;
+    OUString aNewHelpId;
 
     if (pWindow && sHelpText.isEmpty())
     {
@@ -597,7 +597,7 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const vcl::Window* p
         while ( pParent )
         {
             aNewHelpId = pParent->GetHelpId();
-            sHelpText = SfxHelp_Impl::GetHelpText( OStringToOUString(aNewHelpId, RTL_TEXTENCODING_UTF8), sModuleName );
+            sHelpText = SfxHelp_Impl::GetHelpText( aNewHelpId, sModuleName );
             if (!sHelpText.isEmpty())
                 pParent = nullptr;
             else
@@ -615,8 +615,7 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const vcl::Window* p
             sModuleName + ": " + aCommandURL;
         if ( !aNewHelpId.isEmpty() )
         {
-            sHelpText += " - " +
-                OStringToOUString(aNewHelpId, RTL_TEXTENCODING_UTF8);
+            sHelpText += " - " + aNewHelpId;
         }
     }
 
@@ -630,7 +629,7 @@ OUString SfxHelp::GetHelpText(const OUString& aCommandURL, const weld::Widget* p
     OUString sRealCommand = vcl::CommandInfoProvider::GetRealCommandForCommand(aProperties);
     OUString sHelpText = SfxHelp_Impl::GetHelpText( sRealCommand.isEmpty() ? aCommandURL : sRealCommand, sModuleName );
 
-    OString aNewHelpId;
+    OUString aNewHelpId;
 
     if (pWidget && sHelpText.isEmpty())
     {
@@ -639,7 +638,7 @@ OUString SfxHelp::GetHelpText(const OUString& aCommandURL, const weld::Widget* p
         while (xParent)
         {
             aNewHelpId = xParent->get_help_id();
-            sHelpText = SfxHelp_Impl::GetHelpText( OStringToOUString(aNewHelpId, RTL_TEXTENCODING_UTF8), sModuleName );
+            sHelpText = SfxHelp_Impl::GetHelpText( aNewHelpId, sModuleName );
             if (!sHelpText.isEmpty())
                 xParent.reset();
             else
@@ -657,8 +656,7 @@ OUString SfxHelp::GetHelpText(const OUString& aCommandURL, const weld::Widget* p
             sModuleName + ": " + aCommandURL;
         if ( !aNewHelpId.isEmpty() )
         {
-            sHelpText += " - " +
-                OStringToOUString(aNewHelpId, RTL_TEXTENCODING_UTF8);
+            sHelpText += " - " + aNewHelpId;
         }
     }
 
@@ -1079,8 +1077,8 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow)
                 vcl::Window* pParent = pWindow->GetParent();
                 while ( pParent )
                 {
-                    OString aHelpId = pParent->GetHelpId();
-                    aHelpURL = CreateHelpURL( OStringToOUString(aHelpId, RTL_TEXTENCODING_UTF8), aHelpModuleName );
+                    OUString aHelpId = pParent->GetHelpId();
+                    aHelpURL = CreateHelpURL( aHelpId, aHelpModuleName );
 
                     if ( !SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
                     {
@@ -1253,10 +1251,10 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
             {
                 bool bUseFinalFallback = true;
                 // no help found -> try ids of parents.
-                pWidget->help_hierarchy_foreach([&aHelpModuleName, &aHelpURL, &bUseFinalFallback](const OString& rHelpId){
+                pWidget->help_hierarchy_foreach([&aHelpModuleName, &aHelpURL, &bUseFinalFallback](const OUString& rHelpId){
                     if (rHelpId.isEmpty())
                         return false;
-                    aHelpURL = CreateHelpURL( OStringToOUString(rHelpId, RTL_TEXTENCODING_UTF8), aHelpModuleName);
+                    aHelpURL = CreateHelpURL(rHelpId, aHelpModuleName);
                     bool bFinished = !SfxContentHelper::IsHelpErrorDocument(aHelpURL);
                     if (bFinished)
                         bUseFinalFallback = false;

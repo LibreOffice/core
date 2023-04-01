@@ -101,11 +101,11 @@ void SvxPresetListBox::FillPresetListBox(XPatternList& pList, sal_uInt32 nStartI
     FillPresetListBoxImpl<XPatternList, XBitmapEntry>(pList, nStartIndex);
 }
 
-void SvxPresetListBox::OnMenuItemSelected(std::string_view rIdent)
+void SvxPresetListBox::OnMenuItemSelected(std::u16string_view rIdent)
 {
-    if (rIdent == "rename")
+    if (rIdent == u"rename")
         maRenameHdl.Call(this);
-    else if (rIdent == "delete")
+    else if (rIdent == u"delete")
         maDeleteHdl.Call(this);
 }
 

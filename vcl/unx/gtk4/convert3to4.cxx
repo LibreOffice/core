@@ -24,8 +24,8 @@ typedef std::pair<css::uno::Reference<css::xml::dom::XNode>, OUString> named_nod
 
 bool sortButtonNodes(const named_node& rA, const named_node& rB)
 {
-    OString sA(rA.second.toUtf8());
-    OString sB(rB.second.toUtf8());
+    OUString sA(rA.second);
+    OUString sB(rB.second);
     //order within groups according to platform rules
     return getButtonPriority(sA) < getButtonPriority(sB);
 }

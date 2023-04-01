@@ -72,7 +72,7 @@ void SvxMacroTabPage_::EnableButtons()
 }
 
 SvxMacroTabPage_::SvxMacroTabPage_(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription,
-    const OString& rID, const SfxItemSet& rAttrSet)
+    const OUString& rID, const SfxItemSet& rAttrSet)
     : SfxTabPage(pPage, pController, rUIXMLDescription, rID, &rAttrSet)
     , m_nAssignedEvents(0)
     , bDocModified(false)

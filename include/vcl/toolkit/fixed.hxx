@@ -71,7 +71,7 @@ public:
     static Size     getTextDimensions(Control const *pControl, const OUString &rTxt, tools::Long nMaxWidth);
     Size            CalcMinimumSize(tools::Long nMaxWidth = 0x7fffffff) const;
     virtual Size    GetOptimalSize() const override;
-    virtual bool    set_property(const OString &rKey, const OUString &rValue) override;
+    virtual bool    set_property(const OUString &rKey, const OUString &rValue) override;
     void            set_mnemonic_widget(vcl::Window *pWindow);
     vcl::Window*    get_mnemonic_widget() const { return m_pMnemonicWindow; }
 };
@@ -171,7 +171,7 @@ public:
     const Image&    GetImage() const { return maImage; }
 
     const Image&    GetModeImage( ) const { return maImage;}
-    virtual bool    set_property(const OString &rKey, const OUString &rValue) override;
+    virtual bool    set_property(const OUString &rKey, const OUString &rValue) override;
 
     static Image loadThemeImage(const OUString &rFileName);
 

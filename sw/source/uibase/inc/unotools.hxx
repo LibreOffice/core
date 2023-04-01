@@ -59,7 +59,7 @@ class SW_DLLPUBLIC SwOneExampleFrame final : public weld::CustomWidgetController
     bool            m_bIsInitialized;
 
     DECL_DLLPRIVATE_LINK( TimeoutHdl, Timer*, void );
-    void PopupHdl(std::string_view rId);
+    void PopupHdl(std::u16string_view rId);
 
     SAL_DLLPRIVATE void  CreateControl();
     SAL_DLLPRIVATE void  DisposeControl();

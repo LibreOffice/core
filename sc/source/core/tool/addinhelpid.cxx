@@ -24,7 +24,7 @@
 struct ScUnoAddInHelpId
 {
     const char*             pFuncName;
-    const char*             sHelpId;
+    OUString                sHelpId;
 };
 
 // Help IDs for Analysis AddIn. MUST BE SORTED for binary search.
@@ -183,10 +183,10 @@ void ScUnoAddInHelpIdGenerator::SetServiceName( std::u16string_view rServiceName
     nArrayCount = nSize / sizeof( ScUnoAddInHelpId );
 }
 
-OString ScUnoAddInHelpIdGenerator::GetHelpId( const OUString& rFuncName ) const
+OUString ScUnoAddInHelpIdGenerator::GetHelpId( const OUString& rFuncName ) const
 {
     if( !pCurrHelpIds || !nArrayCount )
-        return OString();
+        return {};
 
     const ScUnoAddInHelpId* pFirst = pCurrHelpIds;
     const ScUnoAddInHelpId* pLast = pCurrHelpIds + nArrayCount - 1;
@@ -203,7 +203,7 @@ OString ScUnoAddInHelpIdGenerator::GetHelpId( const OUString& rFuncName ) const
             pFirst = pMiddle + 1;
     }
 
-    return OString();
+    return {};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

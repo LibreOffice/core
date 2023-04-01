@@ -424,7 +424,7 @@ sal_uInt16 BibToolBar::InsertFilterItem(const OUString& rMenuEntry)
 
 void BibToolBar::SelectFilterItem(sal_uInt16 nId)
 {
-    OString sId = OString::number(nId);
+    OUString sId = OUString::number(nId);
     xPopupMenu->set_active(sId, true);
     sSelMenuItem = sId;
     aQueryField = MnemonicGenerator::EraseAllMnemonicChars(xPopupMenu->get_label(sId));
@@ -521,7 +521,7 @@ IMPL_LINK_NOARG(BibToolBar, MenuHdl, ToolBox*, void)
 
     tools::Rectangle aRect(GetItemRect(nTBC_BT_AUTOFILTER));
     weld::Window* pParent = weld::GetPopupParent(*this, aRect);
-    OString sId = xPopupMenu->popup_at_rect(pParent, aRect);
+    OUString sId = xPopupMenu->popup_at_rect(pParent, aRect);
 
     if (!sId.isEmpty())
     {

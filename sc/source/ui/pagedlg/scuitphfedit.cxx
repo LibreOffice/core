@@ -753,7 +753,7 @@ IMPL_LINK( ScHFEditPage, ClickHdl, weld::Button&, rBtn, void )
     m_pEditFocus->GrabFocus();
 }
 
-IMPL_LINK(ScHFEditPage, MenuHdl, const OString&, rSelectedId, void)
+IMPL_LINK(ScHFEditPage, MenuHdl, const OUString&, rSelectedId, void)
 {
     if (!m_pEditFocus)
         return;

@@ -553,7 +553,7 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
 {
     OSL_ENSURE(E_TABLE != _eType,"E_TABLE isn't allowed.");
 
-    OString sHelpId;
+    OUString sHelpId;
     switch( _eType )
     {
         case E_FORM:
@@ -670,7 +670,7 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
     }
 }
 
-std::unique_ptr<DBTreeViewBase> OAppDetailPageHelper::createSimpleTree(const OString& rHelpId, ElementType eType)
+std::unique_ptr<DBTreeViewBase> OAppDetailPageHelper::createSimpleTree(const OUString& rHelpId, ElementType eType)
 {
     const bool bSQLType = eType == E_TABLE || eType == E_QUERY;
     std::unique_ptr<DBTreeViewBase> xTreeView(new DBTreeView(m_xBox.get(), bSQLType));
@@ -1079,7 +1079,7 @@ namespace
             if (!rEvent.IsEnabled)
             {
                 const OUString &rURL = rEvent.FeatureURL.Complete;
-                m_rMBPreview.remove_item(rURL.toUtf8());
+                m_rMBPreview.remove_item(rURL);
             }
         }
 
@@ -1152,13 +1152,13 @@ IMPL_LINK_NOARG(OAppDetailPageHelper, OnDropdownClickHdl, weld::Toggleable&, voi
         xComponent->dispose();
 }
 
-IMPL_LINK(OAppDetailPageHelper, MenuSelectHdl, const OString&, rIdent, void)
+IMPL_LINK(OAppDetailPageHelper, MenuSelectHdl, const OUString&, rIdent, void)
 {
     if (rIdent.isEmpty())
         return;
 
     css::util::URL aURL;
-    aURL.Complete = OUString::fromUtf8(rIdent);
+    aURL.Complete = rIdent;
 
     Reference<XDispatchProvider> xProvider(getBorderWin().getView()->getAppController().getFrame(), UNO_QUERY);
     Reference<XDispatch> xDisp = xProvider->queryDispatch(aURL, "_self", 0);

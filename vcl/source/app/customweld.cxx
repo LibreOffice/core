@@ -18,7 +18,7 @@ IMPL_LINK_NOARG(CustomWidgetController, DragBeginHdl, weld::DrawingArea&, bool)
     return StartDrag();
 }
 
-CustomWeld::CustomWeld(weld::Builder& rBuilder, const OString& rDrawingId,
+CustomWeld::CustomWeld(weld::Builder& rBuilder, const OUString& rDrawingId,
                        CustomWidgetController& rWidgetController)
     : m_rWidgetController(rWidgetController)
     , m_xDrawingArea(rBuilder.weld_drawing_area(rDrawingId, rWidgetController.CreateAccessible(),

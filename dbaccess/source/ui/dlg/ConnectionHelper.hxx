@@ -38,7 +38,7 @@ namespace dbaui
         bool            m_bUserGrabFocus;
 
     public:
-        OConnectionHelper(weld::Container* pPage, weld::DialogController* pController, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs);
+        OConnectionHelper(weld::Container* pPage, weld::DialogController* pController, const OUString& _rUIXMLDescription, const OUString& _rId, const SfxItemSet& _rCoreAttrs);
         virtual ~OConnectionHelper() override;
 
         OUString     m_eType;          // the type can't be changed in this class, so we hold it as member.

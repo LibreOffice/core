@@ -1550,7 +1550,7 @@ void ComboBox::setMaxWidthChars(sal_Int32 nWidth)
     }
 }
 
-bool ComboBox::set_property(const OString &rKey, const OUString &rValue)
+bool ComboBox::set_property(const OUString &rKey, const OUString &rValue)
 {
     if (rKey == "width-chars")
         SetWidthInChars(rValue.toInt32());

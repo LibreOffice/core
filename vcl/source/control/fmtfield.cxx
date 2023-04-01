@@ -1160,7 +1160,7 @@ void FormattedField::SetText(const OUString& rStr, const Selection& rNewSelectio
     SetSelection(rNewSelection);
 }
 
-bool FormattedField::set_property(const OString &rKey, const OUString &rValue)
+bool FormattedField::set_property(const OUString &rKey, const OUString &rValue)
 {
     if (rKey == "digits")
         GetFormatter().SetDecimalDigits(rValue.toInt32());

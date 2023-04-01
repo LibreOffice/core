@@ -34,7 +34,7 @@ public:
     virtual ~ScAttrDlg() override;
 
 protected:
-    virtual void PageCreated(const OString& rPageId, SfxTabPage& rTabPage) override;
+    virtual void PageCreated(const OUString& rPageId, SfxTabPage& rTabPage) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

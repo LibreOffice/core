@@ -189,7 +189,7 @@ public:
     // the drop down window container
     ImplListBoxWindow* GetMainWindow() const;
 
-    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
+    virtual bool set_property(const OUString &rKey, const OUString &rValue) override;
 
     virtual FactoryFunction GetUITestFactory() const override;
 

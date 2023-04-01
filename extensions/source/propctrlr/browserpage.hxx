@@ -37,7 +37,7 @@ namespace pcr
         explicit OBrowserPage(weld::Container* pParent, weld::Container* pContainer);
         ~OBrowserPage();
 
-        void SetHelpId(const OString& rHelpId) { m_xContainer->set_help_id(rHelpId); }
+        void SetHelpId(const OUString& rHelpId) { m_xContainer->set_help_id(rHelpId); }
 
         OBrowserListBox& getListBox() { return *m_xListBox; }
         const OBrowserListBox& getListBox() const { return *m_xListBox; }

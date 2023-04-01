@@ -94,14 +94,14 @@ bool MenuWindow::ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu const * pMen
             // is an id available, then call help with the id, otherwise
             // use help-index
             OUString aCommand = pMenu->GetItemCommand( nId );
-            OString aHelpId(  pMenu->GetHelpId( nId ) );
+            OUString aHelpId(  pMenu->GetHelpId( nId ) );
             if( aHelpId.isEmpty() )
                 aHelpId = OOO_HELP_INDEX;
 
             if ( !aCommand.isEmpty() )
                 pHelp->Start(aCommand);
             else
-                pHelp->Start(OStringToOUString(aHelpId, RTL_TEXTENCODING_UTF8));
+                pHelp->Start(aHelpId);
         }
         bDone = true;
     }

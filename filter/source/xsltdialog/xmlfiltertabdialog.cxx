@@ -68,7 +68,7 @@ bool XMLFilterTabDialog::onOk()
     mpXSLTPage->FillInfo( mpNewInfo.get() );
     mpBasicPage->FillInfo( mpNewInfo.get() );
 
-    OString sErrorPage;
+    OUString sErrorPage;
     TranslateId pErrorId;
     weld::Widget* pFocusWindow = nullptr;
     OUString aReplace1;

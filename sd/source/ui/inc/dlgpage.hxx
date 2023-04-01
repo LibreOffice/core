@@ -42,7 +42,7 @@ public:
 
     SdPageDlg(SfxObjectShell const * pDocSh, weld::Window* pParent, const SfxItemSet* pAttr, bool bAreaPage, bool bIsImpressDoc, bool bIsImpressMaster);
 
-    virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
+    virtual void PageCreated(const OUString& rId, SfxTabPage& rPage) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -117,9 +117,9 @@ namespace dbaui
         void                UpdateFormatSample(OFieldDescription const * pFieldDescr);
 
         bool                isTextFormat(const OFieldDescription* _pFieldDescr,sal_uInt32& _nFormatKey) const;
-        std::unique_ptr<OPropNumericEditCtrl> CreateNumericControl(const OString& rId, TranslateId pHelpId, short _nProperty, const OString& _sHelpId);
-        void                InitializeControl(weld::Widget* _pControl,const OString& _sHelpId);
-        void                InitializeControl(OPropListBoxCtrl* _pControl,const OString& _sHelpId,bool _bAddChangeHandler);
+        std::unique_ptr<OPropNumericEditCtrl> CreateNumericControl(const OUString& rId, TranslateId pHelpId, short _nProperty, const OUString& _sHelpId);
+        void                InitializeControl(weld::Widget* _pControl,const OUString& _sHelpId);
+        void                InitializeControl(OPropListBoxCtrl* _pControl,const OUString& _sHelpId,bool _bAddChangeHandler);
 
         bool                IsFocusInEditableWidget() const;
 
@@ -165,7 +165,7 @@ namespace dbaui
         void                SetReadOnly( bool bReadOnly );
 
         void                Enable(bool bEnable) { m_xContainer->set_sensitive(bEnable); }
-        void                SetHelpId(const OString& rId) { m_xContainer->set_help_id(rId); }
+        void                SetHelpId(const OUString& rId) { m_xContainer->set_help_id(rId); }
 
         virtual bool        isCutAllowed() override;
         virtual bool        isCopyAllowed() override;

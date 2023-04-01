@@ -37,8 +37,8 @@ private:
     weld::Builder* m_pBuilder;
     bool m_bSideBar;
 
-    DECL_DLLPRIVATE_LINK(SelectHdl, const OString&, void);
-    DECL_DLLPRIVATE_LINK(ToggleMenuHdl, const OString&, void);
+    DECL_DLLPRIVATE_LINK(SelectHdl, const OUString&, void);
+    DECL_DLLPRIVATE_LINK(ToggleMenuHdl, const OUString&, void);
     DECL_DLLPRIVATE_LINK(ChangedIconSizeHandler, LinkParamNone*, void);
 
     void CreateController(const OUString& rCommand);

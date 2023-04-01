@@ -504,9 +504,9 @@ void AssignmentPersistentData::ImplCommit()
             for (sal_Int32 column=0; column<2; ++column)
             {
                 // the label
-                m_pImpl->pFieldLabels[row * 2 + column] = m_xBuilder->weld_label("label" + OString::number(row * 2 + column));
+                m_pImpl->pFieldLabels[row * 2 + column] = m_xBuilder->weld_label("label" + OUString::number(row * 2 + column));
                 // the listbox
-                m_pImpl->pFields[row * 2 + column] = m_xBuilder->weld_combo_box("box" + OString::number(row * 2 + column));
+                m_pImpl->pFields[row * 2 + column] = m_xBuilder->weld_combo_box("box" + OUString::number(row * 2 + column));
                 m_pImpl->pFields[row * 2 + column]->connect_changed(LINK(this, AddressBookSourceDialog, OnFieldSelect));
             }
         }

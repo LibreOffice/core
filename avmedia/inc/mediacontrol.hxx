@@ -57,7 +57,7 @@ private:
                         DECL_LINK(implTimeHdl, weld::Scale&, void);
                         DECL_LINK(implTimeEndHdl, Timer*, void);
                         DECL_LINK(implVolumeHdl, weld::Scale&, void);
-                        DECL_LINK(implSelectHdl, const OString&, void);
+                        DECL_LINK(implSelectHdl, const OUString&, void);
                         DECL_LINK(implZoomSelectHdl, weld::ComboBox&, void);
                         DECL_LINK(implTimeoutHdl, Timer*, void);
 

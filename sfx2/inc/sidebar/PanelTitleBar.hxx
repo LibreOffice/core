@@ -60,7 +60,7 @@ private:
     css::uno::Reference<css::frame::XToolbarController> mxController;
 
     Panel* mpPanel;
-    OString msIdent;
+    OUString msIdent;
     OUString msMoreOptionsCommand;
 };
 

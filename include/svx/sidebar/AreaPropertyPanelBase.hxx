@@ -159,7 +159,7 @@ protected:
     DECL_DLLPRIVATE_LINK(ModifyTransparentHdl_Impl, weld::MetricSpinButton&, void);
     DECL_DLLPRIVATE_LINK(ModifyTransSliderHdl, weld::Scale&, void);
     DECL_DLLPRIVATE_LINK(ClickImportBitmapHdl, weld::Button&, void);
-    DECL_DLLPRIVATE_LINK(ToolbarHdl_Impl, const OString&, void);
+    DECL_DLLPRIVATE_LINK(ToolbarHdl_Impl, const OUString&, void);
 
     void ImpUpdateTransparencies();
     void SetTransparency(sal_uInt16 nVal);

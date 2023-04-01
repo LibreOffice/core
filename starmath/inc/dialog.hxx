@@ -141,7 +141,7 @@ class SmFontTypeDialog final : public weld::GenericDialogController
     std::unique_ptr<weld::MenuButton> m_xMenuButton;
     std::unique_ptr<weld::Button> m_xDefaultButton;
 
-    DECL_LINK(MenuSelectHdl, const OString&, void);
+    DECL_LINK(MenuSelectHdl, const OUString&, void);
     DECL_LINK(DefaultButtonClickHdl, weld::Button&, void);
 
 public:
@@ -205,7 +205,7 @@ class SmDistanceDialog final : public weld::GenericDialogController
     bool            bScaleAllBrackets;
 
     DECL_LINK(GetFocusHdl, weld::Widget&, void);
-    DECL_LINK(MenuSelectHdl, const OString&, void);
+    DECL_LINK(MenuSelectHdl, const OUString&, void);
     DECL_LINK(DefaultButtonClickHdl, weld::Button&, void);
     DECL_LINK(CheckBoxClickHdl, weld::Toggleable&, void);
 

@@ -161,7 +161,7 @@ private:
     void AddService();
 
     DECL_LINK ( SelectServiceHdl, weld::ComboBox&, void );
-    DECL_LINK ( EditServiceMenuHdl, const OString&, void );
+    DECL_LINK ( EditServiceMenuHdl, const OUString&, void );
 
     DECL_LINK( DoubleClickHdl, SvtFileView*, bool );
     DECL_LINK( SelectHdl, SvtFileView*, void );

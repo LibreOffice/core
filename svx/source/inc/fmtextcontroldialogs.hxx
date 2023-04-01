@@ -35,7 +35,7 @@ namespace svx
         TextControlCharAttribDialog(weld::Window* pParent, const SfxItemSet& rCoreSet, SvxFontListItem aFontList);
 
     private:
-        virtual void PageCreated(const OString& rId, SfxTabPage& _rPage) override;
+        virtual void PageCreated(const OUString& rId, SfxTabPage& _rPage) override;
     };
 
     class TextControlParaAttribDialog final : public SfxTabDialogController

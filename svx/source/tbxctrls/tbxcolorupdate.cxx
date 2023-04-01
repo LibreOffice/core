@@ -248,9 +248,9 @@ namespace svx
         return sColorName;
     }
 
-    ToolboxButtonColorUpdater::ToolboxButtonColorUpdater(sal_uInt16 nSlotId, const OString& rTbxBtnId, weld::Toolbar* ptrTbx, bool bWideButton,
+    ToolboxButtonColorUpdater::ToolboxButtonColorUpdater(sal_uInt16 nSlotId, const OUString& rTbxBtnId, weld::Toolbar* ptrTbx, bool bWideButton,
                                                          const OUString& rCommandLabel, const css::uno::Reference<css::frame::XFrame>& rFrame)
-        : ToolboxButtonColorUpdaterBase(bWideButton, rCommandLabel, OUString::fromUtf8(rTbxBtnId), rFrame)
+        : ToolboxButtonColorUpdaterBase(bWideButton, rCommandLabel, rTbxBtnId, rFrame)
         , msBtnId(rTbxBtnId)
         , mpTbx(ptrTbx)
     {

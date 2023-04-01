@@ -629,7 +629,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             if (pDlg)
             {
                 if (pItem)
-                    pDlg->SetCurPageId(OUStringToOString(static_cast<const SfxStringItem *>(pItem)->GetValue(), RTL_TEXTENCODING_UTF8));
+                    pDlg->SetCurPageId(static_cast<const SfxStringItem *>(pItem)->GetValue());
 
                 auto pRequest = std::make_shared<SfxRequest>(rReq);
                 rReq.Ignore(); // the 'old' request is not relevant any more

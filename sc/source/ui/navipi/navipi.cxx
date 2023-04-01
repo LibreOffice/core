@@ -188,7 +188,7 @@ IMPL_LINK(ScNavigatorDlg, DocumentSelectHdl, weld::ComboBox&, rListBox, void)
     m_xLbEntries->SelectDoc(aDocName);
 }
 
-IMPL_LINK(ScNavigatorDlg, ToolBoxSelectHdl, const OString&, rSelId, void)
+IMPL_LINK(ScNavigatorDlg, ToolBoxSelectHdl, const OUString&, rSelId, void)
 {
     //  Switch the mode?
     if (rSelId == "contents" || rSelId == "scenarios")
@@ -231,7 +231,7 @@ IMPL_LINK(ScNavigatorDlg, ToolBoxSelectHdl, const OString&, rSelId, void)
     }
 }
 
-IMPL_LINK(ScNavigatorDlg, ToolBoxDropdownClickHdl, const OString&, rCommand, void)
+IMPL_LINK(ScNavigatorDlg, ToolBoxDropdownClickHdl, const OUString&, rCommand, void)
 {
     if (!m_xTbxCmd2->get_menu_item_active(rCommand))
         return;
@@ -255,13 +255,13 @@ IMPL_LINK(ScNavigatorDlg, ToolBoxDropdownClickHdl, const OString&, rCommand, voi
     }
 }
 
-IMPL_LINK(ScNavigatorDlg, MenuSelectHdl, const OString&, rIdent, void)
+IMPL_LINK(ScNavigatorDlg, MenuSelectHdl, const OUString&, rIdent, void)
 {
-    if (rIdent == "hyperlink")
+    if (rIdent == u"hyperlink")
         SetDropMode(0);
-    else if (rIdent == "link")
+    else if (rIdent == u"link")
         SetDropMode(1);
-    else if (rIdent == "copy")
+    else if (rIdent == u"copy")
         SetDropMode(2);
 }
 

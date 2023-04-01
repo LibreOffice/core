@@ -70,7 +70,7 @@ public:
     virtual void fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const override ;
     virtual void initArgumentInfo()  const override;
     virtual OUString getSignature() const override ;
-    virtual OString getHelpId() const override ;
+    virtual OUString getHelpId() const override ;
     virtual bool isHidden() const override;
     virtual sal_uInt32 getParameterCount() const override ;
     virtual sal_uInt32 getVarArgsStart() const override;

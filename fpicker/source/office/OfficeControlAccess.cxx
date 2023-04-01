@@ -182,20 +182,19 @@ namespace svt
         if (aHID.GetProtocol() == INetProtocol::Hid)
             sHelpID = aHID.GetURLPath();
 
-        // URLs should always be UTF8 encoded and escaped
-        OString sID( OUStringToOString( sHelpID, RTL_TEXTENCODING_UTF8 ) );
+        // URLs should always be escaped
         if (IsFileViewWidget(pControl))
         {
             // the file view "overrides" the SetHelpId
-            m_pFileView->set_help_id(sID);
+            m_pFileView->set_help_id(sHelpID);
         }
         else
-            pControl->set_help_id(sID);
+            pControl->set_help_id(sHelpID);
     }
 
     OUString OControlAccess::getHelpURL(weld::Widget const * pControl) const
     {
-        OString aHelpId = pControl->get_help_id();
+        OUString aHelpId = pControl->get_help_id();
         if (IsFileViewWidget(pControl))
         {
             // the file view "overrides" the SetHelpId
@@ -203,11 +202,10 @@ namespace svt
         }
 
         OUString sHelpURL;
-        OUString aTmp( OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ) );
-        INetURLObject aHID( aTmp );
+        INetURLObject aHID(aHelpId);
         if ( aHID.GetProtocol() == INetProtocol::NotValid )
             sHelpURL = INET_HID_SCHEME;
-        sHelpURL += aTmp;
+        sHelpURL += aHelpId;
         return sHelpURL;
     }
 

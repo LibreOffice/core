@@ -833,15 +833,15 @@ int SpellDialog::InitUserDicts()
 
 IMPL_LINK_NOARG(SpellDialog, AddToDictClickHdl, weld::Button&, void)
 {
-    AddToDictionaryExecute(OString::number(1));
+    AddToDictionaryExecute(OUString::number(1));
 }
 
-IMPL_LINK(SpellDialog, AddToDictSelectHdl, const OString&, rIdent, void)
+IMPL_LINK(SpellDialog, AddToDictSelectHdl, const OUString&, rIdent, void)
 {
     AddToDictionaryExecute(rIdent);
 }
 
-void SpellDialog::AddToDictionaryExecute(const OString& rItemId)
+void SpellDialog::AddToDictionaryExecute(const OUString& rItemId)
 {
     auto xGuard(std::make_unique<UndoChangeGroupGuard>(*m_xSentenceED));
 
@@ -1526,7 +1526,7 @@ void SentenceEditWindow_Impl::Init(weld::Toolbar* pToolbar)
     m_pToolbar->connect_clicked(LINK(this,SentenceEditWindow_Impl,ToolbarHdl));
 }
 
-IMPL_LINK(SentenceEditWindow_Impl, ToolbarHdl, const OString&, rCurItemId, void)
+IMPL_LINK(SentenceEditWindow_Impl, ToolbarHdl, const OUString&, rCurItemId, void)
 {
     if (rCurItemId == "paste")
     {

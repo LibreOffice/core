@@ -37,7 +37,7 @@ public:
 
     virtual ~SwCharDlg() override;
 
-    virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
+    virtual void PageCreated(const OUString& rId, SfxTabPage &rPage) override;
 };
 
 class SwCharURLPage final : public SfxTabPage

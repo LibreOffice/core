@@ -57,7 +57,7 @@ namespace dbaui
     public:
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;
 
-        OCommonBehaviourTabPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OString& rId, const SfxItemSet& _rCoreAttrs, OCommonBehaviourTabPageFlags nControlFlags);
+        OCommonBehaviourTabPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OUString& rId, const SfxItemSet& _rCoreAttrs, OCommonBehaviourTabPageFlags nControlFlags);
     protected:
 
         virtual ~OCommonBehaviourTabPage() override;

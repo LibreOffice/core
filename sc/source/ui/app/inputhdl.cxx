@@ -1804,7 +1804,7 @@ void ScInputHandler::LOKSendFormulabarUpdate(EditView* pActiveView,
     (*pData)["selection"] = aSelection;
 
     sal_uInt64 nCurrentShellId = reinterpret_cast<sal_uInt64>(pActiveViewSh);
-    std::string sWindowId = std::to_string(nCurrentShellId) + "formulabar";
+    OUString sWindowId = OUString::number(nCurrentShellId) + "formulabar";
     jsdialog::SendAction(sWindowId, "sc_input_window", std::move(pData));
 }
 

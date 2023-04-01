@@ -534,8 +534,7 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
 {
     // Can be used to remember the last set of redaction targets?
     OUString sExtraData;
-    SvtViewOptions aDlgOpt(EViewType::Dialog,
-                           OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+    SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
 
     if (aDlgOpt.Exists())
     {
@@ -586,8 +585,7 @@ SfxAutoRedactDialog::~SfxAutoRedactDialog()
     if (m_aTableTargets.empty())
     {
         // Clear the dialog data
-        SvtViewOptions aDlgOpt(EViewType::Dialog,
-                               OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+        SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
         aDlgOpt.Delete();
         return;
     }
@@ -612,8 +610,7 @@ SfxAutoRedactDialog::~SfxAutoRedactDialog()
         OUString sUserDataStr(OUString::fromUtf8(aStream.str().c_str()));
 
         // Store the dialog data
-        SvtViewOptions aDlgOpt(EViewType::Dialog,
-                               OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+        SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
         aDlgOpt.SetUserItem("UserItem", css::uno::Any(sUserDataStr));
 
         if (!m_bTargetsCopied)

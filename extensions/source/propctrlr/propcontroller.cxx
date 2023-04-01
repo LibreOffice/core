@@ -1111,7 +1111,7 @@ namespace pcr
             {
                 weld::Widget* m_pControlWindow = pTunnel->getWidget();
                 if (m_pControlWindow)
-                    m_pControlWindow->set_buildable_name(m_pControlWindow->get_buildable_name() + "-" + _rDescriptor.DisplayName.toUtf8());
+                    m_pControlWindow->set_buildable_name(m_pControlWindow->get_buildable_name() + "-" + _rDescriptor.DisplayName);
             }
 
         }
@@ -1178,7 +1178,7 @@ namespace pcr
                     // this category does not yet exist. This is allowed, as an inspector model might be lazy, and not provide
                     // any category information of its own. In this case, we have a fallback ...
                     m_aPageIds[ aDescriptor.Category ] =
-                        getPropertyBox().AppendPage( aDescriptor.Category, OString() );
+                        getPropertyBox().AppendPage(aDescriptor.Category, {});
                     nTargetPageId = impl_getPageIdForCategory_nothrow( aDescriptor.Category );
                 }
 

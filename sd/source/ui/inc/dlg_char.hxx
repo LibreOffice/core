@@ -32,7 +32,7 @@ class SdCharDlg : public SfxTabDialogController
 private:
     const SfxObjectShell& rDocShell;
 
-    virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
+    virtual void PageCreated(const OUString& rId, SfxTabPage& rPage) override;
 
 public:
     SdCharDlg(weld::Window* pParent, const SfxItemSet* pAttr, const SfxObjectShell* pDocShell);

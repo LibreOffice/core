@@ -77,10 +77,10 @@ public:
     virtual bool StartExecuteAsync(AsyncContext &);
 
     // Screenshot interface
-    virtual std::vector<OString> getAllPageUIXMLDescriptions() const;
-    virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription);
+    virtual std::vector<OUString> getAllPageUIXMLDescriptions() const;
+    virtual bool selectPageByUIXMLDescription(const OUString& rUIXMLDescription);
     virtual BitmapEx createScreenshot() const;
-    virtual OString GetScreenshotId() const { return OString(); };
+    virtual OUString GetScreenshotId() const { return {}; };
 };
 
 class VCL_DLLPUBLIC VclAbstractTerminatedDialog : public VclAbstractDialog

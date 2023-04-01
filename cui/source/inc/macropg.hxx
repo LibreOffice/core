@@ -71,7 +71,7 @@ protected:
     bool bDocModified, bAppEvents, bInitialized;
     std::vector< EventDisplayName > aDisplayNames;
 
-    SvxMacroTabPage_(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rItemSet);
+    SvxMacroTabPage_(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OUString& rID, const SfxItemSet& rItemSet);
 
     void                        EnableButtons();
     static css::uno::Any  GetPropsByName( const OUString& eventName, EventsHash& eventsHash );

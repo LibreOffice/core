@@ -238,19 +238,19 @@ void SvxShowCharSet::createContextMenu()
     Invalidate();
 }
 
-void SvxShowCharSet::ContextMenuSelect(std::string_view rIdent)
+void SvxShowCharSet::ContextMenuSelect(std::u16string_view rIdent)
 {
     sal_UCS4 cChar = GetSelectCharacter();
     OUString aOUStr(&cChar, 1);
 
-    if (rIdent == "insert")
+    if (rIdent == u"insert")
         aDoubleClkHdl.Call(this);
-    else if (rIdent == "add" || rIdent == "remove")
+    else if (rIdent == u"add" || rIdent == u"remove")
     {
         updateFavCharacterList(aOUStr, mxVirDev->GetFont().GetFamilyName());
         aFavClickHdl.Call(this);
     }
-    else if (rIdent == "copy")
+    else if (rIdent == u"copy")
         CopyToClipboard(aOUStr);
 }
 

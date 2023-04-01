@@ -140,7 +140,7 @@ SwEnvDlg::~SwEnvDlg()
     m_pSenderSet.reset();
 }
 
-void SwEnvDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
+void SwEnvDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {
     if (rId == "printer")
     {

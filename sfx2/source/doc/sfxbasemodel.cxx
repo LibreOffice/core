@@ -3586,10 +3586,7 @@ static void ConvertSlotsToCommands( SfxObjectShell const * pDoc, Reference< cont
                 const SfxSlot* pSlot = pModule->GetSlotPool()->GetSlot( nSlot );
                 if ( pSlot )
                 {
-                    OUStringBuffer aStrBuf( ".uno:"  );
-                    aStrBuf.appendAscii( pSlot->GetUnoName() );
-
-                    aCommand = aStrBuf.makeStringAndClear();
+                    aCommand = pSlot->GetCommand();
                     aSeqPropValue.getArray()[nIndex].Value <<= aCommand;
                     rToolbarDefinition->replaceByIndex( i, Any( aSeqPropValue ));
                 }
