@@ -42,9 +42,28 @@ css::uno::Sequence<sal_Int8> BinaryDataContainer::getCopyAsByteSequence() const
     return aData;
 }
 
-SvMemoryStream BinaryDataContainer::getMemoryStream()
+namespace
 {
-    return SvMemoryStream(mpData ? mpData->data() : nullptr, getSize(), StreamMode::READ);
+/*
+ * Hold a reference on the internal state in case we swap out
+ * and free the vector while someone holds an SvStream pointer.
+ */
+class ReferencedMemoryStream : public SvMemoryStream
+{
+    std::shared_ptr<std::vector<sal_uInt8>> mpData;
+
+public:
+    ReferencedMemoryStream(const std::shared_ptr<std::vector<sal_uInt8>>& rData)
+        : SvMemoryStream(rData ? rData->data() : nullptr, rData->size(), StreamMode::READ)
+        , mpData(rData)
+    {
+    }
+};
+}
+
+std::shared_ptr<SvStream> BinaryDataContainer::getAsStream()
+{
+    return std::make_shared<ReferencedMemoryStream>(mpData);
 }
 
 std::size_t BinaryDataContainer::writeToStream(SvStream& rStream) const

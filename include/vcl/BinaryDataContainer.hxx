@@ -47,8 +47,10 @@ public:
     const sal_uInt8* getData() const;
     css::uno::Sequence<sal_Int8> getCopyAsByteSequence() const;
 
-    // Returns the data as a stream open for reading
-    SvMemoryStream getMemoryStream();
+    // Returns the data as a readonly stream open for reading
+    std::shared_ptr<SvStream> getAsStream();
+
+    /// writes the contents to the given stream
     std::size_t writeToStream(SvStream& rStream) const;
 
     size_t calculateHash() const;
