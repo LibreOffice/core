@@ -1632,9 +1632,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
                     && !rVectorGraphicDataPtr->getBinaryDataContainer().isEmpty()
                     && !bIsEMF)
                 {
-                    auto & aDataContainer = rVectorGraphicDataPtr->getBinaryDataContainer();
-                    rTempStm->WriteBytes(aDataContainer.getData(), aDataContainer.getSize());
-
+                    rVectorGraphicDataPtr->getBinaryDataContainer().writeToStream(*rTempStm);
                     if (rTempStm->GetError())
                     {
                         nStatus = ERRCODE_GRFILTER_IOERROR;
@@ -1673,9 +1671,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
                     && rVectorGraphicDataPtr->getType() == VectorGraphicDataType::Emf
                     && !rVectorGraphicDataPtr->getBinaryDataContainer().isEmpty())
                 {
-                    auto & aDataContainer = rVectorGraphicDataPtr->getBinaryDataContainer();
-                    rTempStm->WriteBytes(aDataContainer.getData(), aDataContainer.getSize());
-
+                    rVectorGraphicDataPtr->getBinaryDataContainer().writeToStream(*rTempStm);
                     if (rTempStm->GetError())
                     {
                         nStatus = ERRCODE_GRFILTER_IOERROR;
@@ -1743,9 +1739,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
                     && rVectorGraphicDataPtr->getType()  ==  VectorGraphicDataType::Svg
                     && !rVectorGraphicDataPtr->getBinaryDataContainer().isEmpty())
                 {
-                    auto & aDataContainer = rVectorGraphicDataPtr->getBinaryDataContainer();
-                    rTempStm->WriteBytes(aDataContainer.getData(), aDataContainer.getSize());
-
+                    rVectorGraphicDataPtr->getBinaryDataContainer().writeToStream(*rTempStm);
                     if( rTempStm->GetError() )
                     {
                         nStatus = ERRCODE_GRFILTER_IOERROR;
