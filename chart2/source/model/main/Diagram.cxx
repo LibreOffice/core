@@ -354,6 +354,12 @@ uno::Reference< chart2::XLegend > SAL_CALL Diagram::getLegend()
     return m_xLegend;
 }
 
+rtl::Reference< ::chart::Legend > Diagram::getLegend2() const
+{
+    MutexGuard aGuard( m_aMutex );
+    return m_xLegend;
+}
+
 void SAL_CALL Diagram::setLegend( const uno::Reference< chart2::XLegend >& xNewLegend )
 {
     auto pLegend = dynamic_cast<Legend*>(xNewLegend.get());
@@ -606,6 +612,12 @@ uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > SAL_CALL Diagram::g
     return comphelper::containerToSequence<uno::Reference< chart2::XCoordinateSystem >>( m_aCoordSystems );
 }
 
+Diagram::tCoordinateSystemContainerType Diagram::getBaseCoordinateSystems() const
+{
+    MutexGuard aGuard( m_aMutex );
+    return m_aCoordSystems;
+}
+
 void SAL_CALL Diagram::setCoordinateSystems(
     const Sequence< Reference< chart2::XCoordinateSystem > >& aCoordinateSystems )
 {
@@ -772,7 +784,13 @@ void SAL_CALL Diagram::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) co
 
 uno::Reference<chart2::XDataTable> SAL_CALL Diagram::getDataTable()
 {
-    MutexGuard aGuard(m_aMutex);
+    MutexGuard aGuard( m_aMutex );
+    return m_xDataTable;
+}
+
+rtl::Reference<::chart::DataTable> Diagram::getDataTableRef() const
+{
+    MutexGuard aGuard( m_aMutex );
     return m_xDataTable;
 }
 

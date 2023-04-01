@@ -552,9 +552,9 @@ rtl::Reference< ::chart::BaseCoordinateSystem > AxisHelper::getCoordinateSystemB
 {
     if(!xDiagram.is())
         return nullptr;
-    auto & rCooSysList = xDiagram->getBaseCoordinateSystems();
-    if(0<=nIndex && o3tl::make_unsigned(nIndex) < rCooSysList.size())
-        return rCooSysList[nIndex];
+    auto aCooSysList = xDiagram->getBaseCoordinateSystems();
+    if(0<=nIndex && o3tl::make_unsigned(nIndex) < aCooSysList.size())
+        return aCooSysList[nIndex];
     return nullptr;
 }
 

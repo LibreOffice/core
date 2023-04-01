@@ -163,19 +163,15 @@ public:
         std::vector< rtl::Reference< ::chart::BaseCoordinateSystem > >
         tCoordinateSystemContainerType;
 
-    const tCoordinateSystemContainerType & getBaseCoordinateSystems() { return m_aCoordSystems; }
+    tCoordinateSystemContainerType getBaseCoordinateSystems() const;
     void setCoordinateSystems(
         const std::vector< rtl::Reference< ::chart::BaseCoordinateSystem > >& aCoordinateSystems );
 
-    const rtl::Reference< ::chart::Legend > & getLegend2() const { return m_xLegend; }
+    rtl::Reference< ::chart::Legend > getLegend2() const;
     void setLegend(const rtl::Reference< ::chart::Legend > &);
 
     void setDataTable(const rtl::Reference<::chart::DataTable>& xNewDataTable);
-
-    rtl::Reference<::chart::DataTable> const& getDataTableRef() const
-    {
-        return m_xDataTable;
-    };
+    rtl::Reference<::chart::DataTable> getDataTableRef() const;
 
     DiagramPositioningMode getDiagramPositioningMode();
 

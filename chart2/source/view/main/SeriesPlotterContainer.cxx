@@ -180,11 +180,11 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
 
     //iterate through all coordinate systems
     uno::Reference<XColorScheme> xColorScheme(xDiagram->getDefaultColorScheme());
-    auto& rCooSysList = xDiagram->getBaseCoordinateSystems();
+    auto aCooSysList = xDiagram->getBaseCoordinateSystems();
     sal_Int32 nGlobalSeriesIndex = 0; //for automatic symbols
-    for (std::size_t nCS = 0; nCS < rCooSysList.size(); ++nCS)
+    for (std::size_t nCS = 0; nCS < aCooSysList.size(); ++nCS)
     {
-        rtl::Reference<BaseCoordinateSystem> xCooSys(rCooSysList[nCS]);
+        rtl::Reference<BaseCoordinateSystem> xCooSys(aCooSysList[nCS]);
         VCoordinateSystem* pVCooSys
             = SeriesPlotterContainer::addCooSysToList(m_rVCooSysList, xCooSys, rChartModel);
         // Let's check whether the secondary Y axis is visible

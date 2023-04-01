@@ -81,9 +81,9 @@ rtl::Reference< BaseCoordinateSystem > ChartModelHelper::getFirstCoordinateSyste
     rtl::Reference< Diagram > xDiagram = xModel->getFirstChartDiagram();
     if( xDiagram.is() )
     {
-        auto& rCooSysSeq( xDiagram->getBaseCoordinateSystems() );
-        if( !rCooSysSeq.empty() )
-            return rCooSysSeq[0];
+        auto aCooSysSeq( xDiagram->getBaseCoordinateSystems() );
+        if( !aCooSysSeq.empty() )
+            return aCooSysSeq[0];
     }
     return nullptr;
 }
