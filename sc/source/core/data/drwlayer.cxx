@@ -1935,8 +1935,8 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
         {
             // Copy style sheet
             auto pStyleSheet = pOldObject->GetStyleSheet();
-            if (pStyleSheet && !bSameDoc && pClipDoc)
-                pDoc->GetStyleSheetPool()->CopyStyleFrom(pClipDoc->GetStyleSheetPool(),
+            if (pStyleSheet && !bSameDoc)
+                pDoc->GetStyleSheetPool()->CopyStyleFrom(pClipModel->GetStyleSheetPool(),
                     pStyleSheet->GetName(), pStyleSheet->GetFamily(), true);
 
             // Clone to target SdrModel
