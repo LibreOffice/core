@@ -20,6 +20,7 @@
 #include <config_wasm_strip.h>
 
 #include <utility>
+#include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <vcl/svapp.hxx>
@@ -135,18 +136,11 @@ bool SvxShowCharSet::MouseButtonDown(const MouseEvent& rMEvt)
 
         if ( !(rMEvt.GetClicks() % 2) )
             aDoubleClkHdl.Call( this );
+
+        return true;
     }
 
-    if (rMEvt.IsRight())
-    {
-        Point aPosition (rMEvt.GetPosPixel());
-        int nIndex = PixelToMapIndex( rMEvt.GetPosPixel() );
-        // Fire the focus event
-        SelectIndex( nIndex, true);
-        createContextMenu(aPosition);
-    }
-
-    return true;
+    return CustomWidgetController::MouseButtonDown(rMEvt);
 }
 
 bool SvxShowCharSet::MouseButtonUp(const MouseEvent& rMEvt)
@@ -185,6 +179,35 @@ bool SvxShowCharSet::MouseMove(const MouseEvent& rMEvt)
     }
 
     return true;
+}
+
+bool SvxShowCharSet::Command(const CommandEvent& rCEvt)
+{
+    if (rCEvt.GetCommand() == CommandEventId::ContextMenu)
+    {
+        Point aPosition;
+        if (rCEvt.IsMouseEvent())
+        {
+            aPosition = rCEvt.GetMousePosPixel();
+            int nIndex = PixelToMapIndex(aPosition);
+            // Fire the focus event
+            SelectIndex(nIndex, true);
+        }
+        else
+        {
+            svx::SvxShowCharSetItem* pItem = ImplGetItem(nSelectedIndex);
+            if (!pItem)
+                return true;
+
+            // position context menu at centre of currently selected item
+            aPosition = MapIndexToPixel(nSelectedIndex);
+            aPosition.AdjustX(pItem->maRect.GetWidth() / 2);
+            aPosition.AdjustY(pItem->maRect.GetHeight() / 2);
+        }
+        createContextMenu(aPosition);
+        return true;
+    }
+    return weld::CustomWidgetController::Command(rCEvt);
 }
 
 sal_uInt16 SvxShowCharSet::GetRowPos(sal_uInt16 _nPos)

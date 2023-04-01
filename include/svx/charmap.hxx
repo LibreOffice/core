@@ -111,6 +111,7 @@ private:
     virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual void GetFocus() override;
     virtual void LoseFocus() override;
+    virtual bool Command(const CommandEvent& rCEvt) override;
 
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
     virtual FactoryFunction GetUITestFactory() const override;
