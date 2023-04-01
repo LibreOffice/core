@@ -34,6 +34,7 @@
 #include <i18nlangtag/lang.h>
 
 #include <tools/lineend.hxx>
+#include <tools/fontenum.hxx>
 
 #include <editeng/eedata.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -501,7 +502,7 @@ public:
     virtual OUString  GetUndoComment( sal_uInt16 nUndoId ) const;
     virtual bool    SpellNextDocument();
     virtual void    FieldClicked( const SvxFieldItem& rField );
-    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, boost::optional<Color>& rTxtColor, boost::optional<Color>& rFldColor );
+    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, boost::optional<Color>& rTxtColor, boost::optional<Color>& rFldColor, boost::optional<FontLineStyle>& rFldLineStyle );
 
     // override this if access to bullet information needs to be provided
     virtual const SvxNumberFormat * GetNumberFormat( sal_Int32 nPara ) const;

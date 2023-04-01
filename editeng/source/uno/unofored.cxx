@@ -153,9 +153,9 @@ bool SvxEditEngineForwarder::IsValid() const
     return rEditEngine.GetUpdateMode();
 }
 
-OUString SvxEditEngineForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, boost::optional<Color>& rpTxtColor, boost::optional<Color>& rpFldColor )
+OUString SvxEditEngineForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, boost::optional<Color>& rpTxtColor, boost::optional<Color>& rpFldColor, boost::optional<FontLineStyle>& rpFldLineStyle )
 {
-    return rEditEngine.CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
+    return rEditEngine.CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor, rpFldLineStyle );
 }
 
 void SvxEditEngineForwarder::FieldClicked( const SvxFieldItem& rField )

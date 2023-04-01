@@ -25,6 +25,7 @@
 #include <boost/optional.hpp>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
+#include <tools/fontenum.hxx>
 
 class SvxFont;
 class SvxFontItem;
@@ -366,6 +367,7 @@ class EditCharAttribField: public EditCharAttrib
     OUString   aFieldValue;
     boost::optional<Color>  mxTxtColor;
     boost::optional<Color>  mxFldColor;
+    boost::optional<FontLineStyle> mxFldLineStyle;
 
     EditCharAttribField& operator = ( const EditCharAttribField& rAttr ) = delete;
 
@@ -381,6 +383,7 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
     boost::optional<Color>&   GetTextColor()      { return mxTxtColor; }
     boost::optional<Color>&   GetFieldColor()     { return mxFldColor; }
+    boost::optional<FontLineStyle>& GetFldLineStyle() { return mxFldLineStyle; }
 
     const OUString& GetFieldValue() const { return aFieldValue;}
     void SetFieldValue(const OUString& rVal);

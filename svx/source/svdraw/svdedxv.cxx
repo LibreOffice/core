@@ -1014,13 +1014,18 @@ IMPL_LINK(SdrObjEditView, ImpOutlinerCalcFieldValueHdl, EditFieldInfo*, pFI, voi
     {
         boost::optional<Color> pTxtCol;
         boost::optional<Color> pFldCol;
+        boost::optional<FontLineStyle> pFldLineStyle;
         bOk = pTextObj->CalcFieldValue(pFI->GetField(), pFI->GetPara(), pFI->GetPos(), true,
-                                       pTxtCol, pFldCol, rStr);
+                                       pTxtCol, pFldCol, pFldLineStyle, rStr);
         if (bOk)
         {
             if (pTxtCol)
             {
                 pFI->SetTextColor(*pTxtCol);
+            }
+            if (pFldLineStyle)
+            {
+                pFI->SetFontLineStyle(*pFldLineStyle);
             }
             if (pFldCol)
             {

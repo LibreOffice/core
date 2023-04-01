@@ -24,7 +24,7 @@ class ClassificationEditEngine final : public EditEngine
 public:
     ClassificationEditEngine(SfxItemPool* pItemPool);
 
-    virtual OUString CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, boost::optional<Color>& rTxtColor, boost::optional<Color>& rFldColor) override;
+    virtual OUString CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, boost::optional<Color>& rTxtColor, boost::optional<Color>& rFldColor, boost::optional<FontLineStyle>& rFldLineStyle) override;
 };
 
 class SVX_DLLPUBLIC ClassificationEditView final : public WeldEditView

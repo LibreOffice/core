@@ -236,7 +236,8 @@ public:
 
     virtual OUString CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos,
                                     boost::optional<Color>& rpTxtColor,
-                                    boost::optional<Color>& rpFldColor) override;
+                                    boost::optional<Color>& rpFldColor,
+                                    boost::optional<FontLineStyle>& rpFldLineStyle) override;
     virtual void FieldClicked(const SvxFieldItem&) override;
     virtual bool IsValid() const override;
 
@@ -899,10 +900,12 @@ bool WeldTextForwarder::IsValid() const
 
 OUString WeldTextForwarder::CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara,
                                            sal_Int32 nPos, boost::optional<Color>& rpTxtColor,
-                                           boost::optional<Color>& rpFldColor)
+                                           boost::optional<Color>& rpFldColor,
+                                           boost::optional<FontLineStyle>& rpFldLineStyle)
 {
     EditEngine* pEditEngine = m_rEditAcc.GetEditEngine();
-    return pEditEngine ? pEditEngine->CalcFieldValue(rField, nPara, nPos, rpTxtColor, rpFldColor)
+    return pEditEngine ? pEditEngine->CalcFieldValue(rField, nPara, nPos, rpTxtColor, rpFldColor,
+                                                     rpFldLineStyle)
                        : OUString();
 }
 
