@@ -19,16 +19,7 @@ UNO3_GETIMPLEMENTATION_IMPL(UnoBinaryDataContainer);
 
 css::uno::Sequence<sal_Int8> SAL_CALL UnoBinaryDataContainer::getCopyAsByteSequence()
 {
-    if (maBinaryDataContainer.isEmpty())
-        return css::uno::Sequence<sal_Int8>();
-
-    size_t nSize = maBinaryDataContainer.getSize();
-
-    css::uno::Sequence<sal_Int8> aData(nSize);
-
-    std::copy(maBinaryDataContainer.cbegin(), maBinaryDataContainer.cend(), aData.getArray());
-
-    return aData;
+    return maBinaryDataContainer.getAsSequence();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
