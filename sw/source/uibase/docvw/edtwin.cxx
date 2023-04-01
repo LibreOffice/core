@@ -726,7 +726,7 @@ inline void SwEditWin::EnterArea()
  */
 void SwEditWin::InsFrame(sal_uInt16 nCols)
 {
-    StdDrawMode( SdrObjKind::NONE, false );
+    StdDrawMode(SdrObjKind::NewFrame, false);
     m_bInsFrame = true;
     m_nInsFrameColCount = nCols;
 }

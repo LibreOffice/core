@@ -261,7 +261,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
         }
         else
         {
-            if (SdrObjKind::NONE == nDrawMode)
+            if (SdrObjKind::NewFrame == nDrawMode)
             {
                 SwRewriter aRewriter;
 
@@ -275,7 +275,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                 CreateDefaultObjectAtPosWithSize(aPnt, Size(1000, 1000));
             }
 
-            if (SdrObjKind::NONE == nDrawMode)   // Text border inserted
+            if (SdrObjKind::NewFrame == nDrawMode)   // Text border inserted
             {
                 uno::Reference< frame::XDispatchRecorder > xRecorder =
                     m_pSh->GetView().GetViewFrame().GetBindings().GetRecorder();
@@ -303,7 +303,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                         m_pSh->SetFlyFrameAttr( aSet );
                 }
             }
-            if (m_pWin->GetSdrDrawMode() == SdrObjKind::NONE)
+            if (m_pWin->GetSdrDrawMode() == SdrObjKind::NewFrame)
             {
                 m_pSh->EndUndo();
             }

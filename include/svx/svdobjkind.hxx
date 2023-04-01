@@ -141,7 +141,8 @@ enum class SdrObjKind : sal_uInt16
     ReportDesignSubReport = 506,
 
     // writer, arbitrarily place at 600
-    SwFlyDrawObjIdentifier = 601
+    SwFlyDrawObjIdentifier = 601,
+    NewFrame = 602
 };
 
 inline constexpr bool IsInventorE3D(SdrObjKind e)

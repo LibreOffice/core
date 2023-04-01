@@ -3197,6 +3197,9 @@ rtl::Reference<SdrObject> SdrObjFactory::CreateObjectFromFactory(SdrModel& rSdrM
 namespace
 {
 
+// SdrObject subclass, which represents an empty object of a
+// certain type (kind).
+template <SdrObjKind OBJECT_KIND, SdrInventor OBJECT_INVENTOR>
 class EmptyObject final : public SdrObject
 {
 private:
@@ -3221,17 +3224,17 @@ public:
 
     SdrInventor GetObjInventor() const override
     {
-        return SdrInventor::Default;
+        return OBJECT_INVENTOR;
     }
 
     SdrObjKind GetObjIdentifier() const override
     {
-        return SdrObjKind::NONE;
+        return OBJECT_KIND;
     }
 
     void NbcRotate(const Point& /*rRef*/, Degree100 /*nAngle*/, double /*sinAngle*/, double /*cosAngle*/) override
     {
-        assert(false);
+        assert(false); // should not be called for this kind of objects
     }
 };
 
@@ -3329,7 +3332,7 @@ rtl::Reference<SdrObject> SdrObjFactory::MakeNewObject(
                 }
             }
             break;
-            case SdrObjKind::NONE: pObj = new EmptyObject(rSdrModel); break;
+            case SdrObjKind::NONE: pObj = nullptr; break;
             case SdrObjKind::Group       : pObj=new SdrObjGroup(rSdrModel);                 break;
             case SdrObjKind::Polygon       : pObj=new SdrPathObj(rSdrModel, SdrObjKind::Polygon       ); break;
             case SdrObjKind::PolyLine       : pObj=new SdrPathObj(rSdrModel, SdrObjKind::PolyLine       ); break;
@@ -3352,7 +3355,11 @@ rtl::Reference<SdrObject> SdrObjFactory::MakeNewObject(
             case SdrObjKind::Media      : pObj=new SdrMediaObj(rSdrModel);               break;
 #endif
             case SdrObjKind::Table      : pObj=new sdr::table::SdrTableObj(rSdrModel);   break;
-            default: break;
+            case SdrObjKind::NewFrame: // used for frame creation in writer
+                pObj = new EmptyObject<SdrObjKind::NewFrame, SdrInventor::Default>(rSdrModel);
+                break;
+            default:
+                break;
         }
     }
 

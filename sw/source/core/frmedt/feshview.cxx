@@ -2070,7 +2070,7 @@ bool SwFEShell::ImpEndCreate()
         }
     }
 
-    if( SdrInventor::Default == rSdrObj.GetObjInventor() && rSdrObj.GetObjIdentifier() == SdrObjKind::NONE )
+    if (SdrInventor::Default == rSdrObj.GetObjInventor() && rSdrObj.GetObjIdentifier() == SdrObjKind::NewFrame)
     {
         // For OBJ_NONE a fly is inserted.
         const tools::Long nWidth = rBound.Right()  - rBound.Left();

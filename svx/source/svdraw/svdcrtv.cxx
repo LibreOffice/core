@@ -414,7 +414,7 @@ bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, SdrObjKind nIdent, cons
                 // object should not be created. Since it is possible to use it as a helper
                 // object (e.g. in letting the user define an area with the interactive
                 // construction) at least no items should be set at that object.
-                if(nInvent != SdrInventor::Default || nIdent != SdrObjKind::NONE)
+                if(nInvent != SdrInventor::Default || nIdent != SdrObjKind::NewFrame)
                 {
                     mpCurrentCreate->SetMergedItemSet(maDefaultAttr);
                 }
@@ -734,11 +734,11 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
         // overlay objects instead.
         bool bUseSolidDragging(IsSolidDragging());
 
-        // #i101648# check if dragged object is a naked SdrObject (not
-        // a derivation). This is e.g. used in SW Frame construction
-        // as placeholder. Do not use SolidDragging for naked SdrObjects,
-        // they cannot have a valid optical representation
-        if(bUseSolidDragging && SdrObjKind::NONE == mpCurrentCreate->GetObjIdentifier())
+        // #i101648# check if dragged object is a SdrObjKind::NewFrame.
+        // This is e.g. used in SW Frame construction as placeholder.
+        // Do not use SolidDragging for SdrObjKind::NewFrame kind of objects,
+        // they cannot have a valid optical representation.
+        if (bUseSolidDragging && SdrObjKind::NewFrame == mpCurrentCreate->GetObjIdentifier())
         {
             bUseSolidDragging = false;
         }
