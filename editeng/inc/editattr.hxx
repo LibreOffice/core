@@ -24,6 +24,7 @@
 #include <optional>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
+#include <tools/fontenum.hxx>
 
 class SvxFont;
 class SvxFontItem;
@@ -343,6 +344,7 @@ class EditCharAttribField final : public EditCharAttrib
     OUString   aFieldValue;
     std::optional<Color>  mxTxtColor;
     std::optional<Color>  mxFldColor;
+    std::optional<FontLineStyle> mxFldLineStyle;
 
     EditCharAttribField& operator = ( const EditCharAttribField& rAttr ) = delete;
 
@@ -358,6 +360,7 @@ public:
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
     std::optional<Color>&   GetTextColor()      { return mxTxtColor; }
     std::optional<Color>&   GetFieldColor()     { return mxFldColor; }
+    std::optional<FontLineStyle>& GetFldLineStyle() { return mxFldLineStyle; }
 
     const OUString& GetFieldValue() const { return aFieldValue;}
     void SetFieldValue(const OUString& rVal);

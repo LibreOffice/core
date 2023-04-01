@@ -329,6 +329,8 @@ void EditCharAttribField::SetFont( SvxFont& rFont, OutputDevice* )
     }
     if ( mxTxtColor )
         rFont.SetColor( *mxTxtColor );
+    if ( mxFldLineStyle )
+        rFont.SetUnderline( *mxFldLineStyle );
 }
 
 
@@ -342,6 +344,7 @@ void EditCharAttribField::Reset()
     aFieldValue.clear();
     mxTxtColor.reset();
     mxFldColor.reset();
+    mxFldLineStyle.reset();
 }
 
 EditCharAttribField::EditCharAttribField( const EditCharAttribField& rAttr )
@@ -351,6 +354,7 @@ EditCharAttribField::EditCharAttribField( const EditCharAttribField& rAttr )
     // Use this constructor only for temporary Objects, Item is not pooled.
     mxTxtColor = rAttr.mxTxtColor;
     mxFldColor = rAttr.mxFldColor;
+    mxFldLineStyle = rAttr.mxFldLineStyle;
 }
 
 EditCharAttribField::~EditCharAttribField()
@@ -371,6 +375,11 @@ bool EditCharAttribField::operator == ( const EditCharAttribField& rAttr ) const
     if ( ( mxFldColor && !rAttr.mxFldColor ) || ( !mxFldColor && rAttr.mxFldColor ) )
         return false;
     if ( ( mxFldColor && rAttr.mxFldColor ) && ( *mxFldColor != *rAttr.mxFldColor ) )
+        return false;
+
+    if ( ( mxFldLineStyle && !rAttr.mxFldLineStyle ) || ( !mxFldLineStyle && rAttr.mxFldLineStyle ) )
+        return false;
+    if ( ( mxFldLineStyle && rAttr.mxFldLineStyle ) && ( *mxFldLineStyle != *rAttr.mxFldLineStyle ) )
         return false;
 
     return true;

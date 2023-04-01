@@ -142,7 +142,7 @@ public:
     virtual OutlinerParaObject* GetOutlinerParaObject() const override;
 
     virtual bool CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos,
-        bool bEdit, std::optional<Color>& rpTxtColor, std::optional<Color>& rpFldColor, OUString& rRet) const override;
+        bool bEdit, std::optional<Color>& rpTxtColor, std::optional<Color>& rpFldColor, std::optional<FontLineStyle>& rpFldLineStyle, OUString& rRet) const override;
 
     // #i97878#
     virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const override;

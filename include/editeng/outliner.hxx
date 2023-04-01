@@ -502,6 +502,7 @@ private:
 
     std::optional<Color> mxTxtColor;
     std::optional<Color> mxFldColor;
+    std::optional<FontLineStyle> mxFldLineStyle;
 
     OUString            aRepresentation;
 
@@ -530,6 +531,9 @@ public:
 
     std::optional<Color> const & GetFieldColor() const { return mxFldColor; }
     void            SetFieldColor( std::optional<Color> xCol ) { mxFldColor = xCol; }
+
+    std::optional<FontLineStyle> const& GetFontLineStyle() const { return mxFldLineStyle; }
+    void            SetFontLineStyle( std::optional<FontLineStyle> xLineStyle ) { mxFldLineStyle = xLineStyle; }
 
     sal_Int32       GetPara() const { return nPara; }
     sal_Int32       GetPos() const { return nPos; }
@@ -897,7 +901,7 @@ public:
     bool            UpdateFields();
     void            RemoveFields( const std::function<bool ( const SvxFieldData* )>& isFieldData = [] (const SvxFieldData* ){return true;} );
 
-    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rTxtColor, std::optional<Color>& rFldColor );
+    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rTxtColor, std::optional<Color>& rFldColor, std::optional<FontLineStyle>& rFldLineStyle );
 
     void            SetSpeller( css::uno::Reference< css::linguistic2::XSpellChecker1 > const &xSpeller );
     css::uno::Reference< css::linguistic2::XSpellChecker1 > const &

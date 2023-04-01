@@ -39,6 +39,7 @@
 #include <editeng/adjustitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/justifyitem.hxx>
+#include <editeng/udlnitem.hxx>
 
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
@@ -3062,7 +3063,7 @@ bool ImpEditEngine::UpdateFields()
                 if (!aStatus.MarkNonUrlFields() && !aStatus.MarkUrlFields())
                     ;   // nothing marked
                 else if (aStatus.MarkNonUrlFields() && aStatus.MarkUrlFields())
-                    rField.GetFieldColor() = GetColorConfig().GetColorValue( svtools::WRITERFIELDSHADINGS ).nColor;
+                    rField.GetFieldColor() = GetColorConfig().GetColorValue(svtools::WRITERFIELDSHADINGS).nColor;
                 else
                 {
                     bool bURL = false;
@@ -3078,7 +3079,7 @@ bool ImpEditEngine::UpdateFields()
                 const OUString aFldValue =
                     GetEditEnginePtr()->CalcFieldValue(
                         static_cast<const SvxFieldItem&>(*rField.GetItem()),
-                        nPara, rField.GetStart(), rField.GetTextColor(), rField.GetFieldColor());
+                        nPara, rField.GetStart(), rField.GetTextColor(), rField.GetFieldColor(), rField.GetFldLineStyle() );
 
                 rField.SetFieldValue(aFldValue);
                 if (rField != aCurrent)

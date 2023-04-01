@@ -121,7 +121,7 @@ namespace accessibility
         //XTextCopy
         void        CopyText(const SvxTextForwarder& ) override {}
 
-        OUString    CalcFieldValue( const SvxFieldItem& /*rField*/, sal_Int32 /*nPara*/, sal_Int32 /*nPos*/, std::optional<Color>& /*rpTxtColor*/, std::optional<Color>& /*rpFldColor*/ ) override
+        OUString    CalcFieldValue( const SvxFieldItem& /*rField*/, sal_Int32 /*nPara*/, sal_Int32 /*nPos*/, std::optional<Color>& /*rpTxtColor*/, std::optional<Color>& /*rpFldColor*/, std::optional<FontLineStyle>& /*rpFldLineStyle*/ ) override
         {
             return  OUString();
         }

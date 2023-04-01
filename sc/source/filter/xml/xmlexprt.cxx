@@ -3020,7 +3020,7 @@ void writeContent(
     if (pField)
     {
         // Write a field item.
-        OUString aFieldVal = ScEditUtil::GetCellFieldValue(*pField, rExport.GetDocument(), nullptr);
+        OUString aFieldVal = ScEditUtil::GetCellFieldValue(*pField, rExport.GetDocument(), nullptr, nullptr);
         switch (pField->GetClassId())
         {
             case text::textfield::Type::URL:

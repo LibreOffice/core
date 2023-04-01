@@ -40,6 +40,7 @@
 #include <tools/lineend.hxx>
 #include <tools/degree.hxx>
 #include <tools/long.hxx>
+#include <tools/fontenum.hxx>
 
 #include <editeng/eedata.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -524,7 +525,7 @@ public:
     virtual bool    SpellNextDocument();
     /** @return true, when click was consumed. false otherwise. */
     virtual bool    FieldClicked( const SvxFieldItem& rField );
-    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rTxtColor, std::optional<Color>& rFldColor );
+    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rTxtColor, std::optional<Color>& rFldColor, std::optional<FontLineStyle>& rFldLineStyle );
 
     // override this if access to bullet information needs to be provided
     virtual const SvxNumberFormat * GetNumberFormat( sal_Int32 nPara ) const;

@@ -213,7 +213,7 @@ std::unique_ptr<EditTextObject> ScEditUtil::Clone( const EditTextObject& rObj, S
 }
 
 OUString ScEditUtil::GetCellFieldValue(
-    const SvxFieldData& rFieldData, const ScDocument* pDoc, std::optional<Color>* ppTextColor )
+    const SvxFieldData& rFieldData, const ScDocument* pDoc, std::optional<Color>* ppTextColor, std::optional<FontLineStyle>* ppFldLineStyle )
 {
     OUString aRet;
     switch (rFieldData.GetClassId())
@@ -241,6 +241,9 @@ OUString ScEditUtil::GetCellFieldValue(
 
             if (ppTextColor)
                 *ppTextColor = SC_MOD()->GetColorConfig().GetColorValue(eEntry).nColor;
+
+            if (ppFldLineStyle)
+                *ppFldLineStyle = FontLineStyle::LINESTYLE_SINGLE;
         }
         break;
         case text::textfield::Type::EXTENDED_TIME:
@@ -836,7 +839,8 @@ ScHeaderEditEngine::ScHeaderEditEngine( SfxItemPool* pEnginePoolP )
 
 OUString ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
                                     sal_Int32 /* nPara */, sal_Int32 /* nPos */,
-                                    std::optional<Color>& /* rTxtColor */, std::optional<Color>& /* rFldColor */ )
+                                    std::optional<Color>& /* rTxtColor */, std::optional<Color>& /* rFldColor */,
+                                    std::optional<FontLineStyle>& /*rFldLineStyle*/ )
 {
     const SvxFieldData* pFieldData = rField.GetField();
     if (!pFieldData)
@@ -900,14 +904,15 @@ ScFieldEditEngine::ScFieldEditEngine(
 
 OUString ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
                                     sal_Int32 /* nPara */, sal_Int32 /* nPos */,
-                                    std::optional<Color>& rTxtColor, std::optional<Color>& /* rFldColor */ )
+                                    std::optional<Color>& rTxtColor, std::optional<Color>& /* rFldColor */,
+                                    std::optional<FontLineStyle>& rFldLineStyle )
 {
     const SvxFieldData* pFieldData = rField.GetField();
 
     if (!pFieldData)
         return " ";
 
-    return ScEditUtil::GetCellFieldValue(*pFieldData, mpDoc, &rTxtColor);
+    return ScEditUtil::GetCellFieldValue(*pFieldData, mpDoc, &rTxtColor, &rFldLineStyle);
 }
 
 bool ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField )

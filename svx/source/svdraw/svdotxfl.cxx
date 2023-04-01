@@ -20,7 +20,7 @@
 #include <svx/svdotext.hxx>
 
 bool SdrTextObj::CalcFieldValue(const SvxFieldItem& /*rField*/, sal_Int32 /*nPara*/, sal_uInt16 /*nPos*/,
-    bool /*bEdit*/, std::optional<Color>& /*rpTxtColor*/, std::optional<Color>& /*rpFldColor*/, OUString& /*rRet*/) const
+    bool /*bEdit*/, std::optional<Color>& /*rpTxtColor*/, std::optional<Color>& /*rpFldColor*/, std::optional<FontLineStyle>& /*rpFldLineStyle*/, OUString& /*rRet*/) const
 {
     return false;
 }

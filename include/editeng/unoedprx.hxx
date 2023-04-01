@@ -23,6 +23,7 @@
 #include <config_options.h>
 #include <memory>
 #include <svl/SfxBroadcaster.hxx>
+#include <tools/fontenum.hxx>
 #include <editeng/unoedsrc.hxx>
 
 #include <editeng/editdata.hxx>
@@ -55,7 +56,7 @@ public:
 
     virtual SfxItemPool*    GetPool() const override;
 
-    virtual OUString        CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rpTxtColor, std::optional<Color>& rpFldColor ) override;
+    virtual OUString        CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rpTxtColor, std::optional<Color>& rpFldColor, std::optional<FontLineStyle>& rpFldLineStyle ) override;
     virtual void            FieldClicked( const SvxFieldItem& rField ) override;
 
     virtual bool            IsValid() const override;

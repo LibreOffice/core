@@ -634,7 +634,7 @@ void Outliner::AddText( const OutlinerParaObject& rPObj, bool bAppend )
     pEditEngine->SetUpdateLayout( bUpdate );
 }
 
-OUString Outliner::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rpTxtColor, std::optional<Color>& rpFldColor )
+OUString Outliner::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rpTxtColor, std::optional<Color>& rpFldColor, std::optional<FontLineStyle>& rpFldLineStyle )
 {
     if ( !aCalcFieldValueHdl.IsSet() )
         return OUString( ' ' );
@@ -648,6 +648,11 @@ OUString Outliner::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, 
     if ( aFldInfo.GetTextColor() )
     {
         rpTxtColor = *aFldInfo.GetTextColor();
+    }
+
+    if ( aFldInfo.GetFontLineStyle() )
+    {
+        rpFldLineStyle = *aFldInfo.GetFontLineStyle();
     }
 
     if (aFldInfo.GetFieldColor())

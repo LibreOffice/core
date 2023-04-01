@@ -21,7 +21,7 @@ class ClassificationEditEngine final : public EditEngine
 public:
     ClassificationEditEngine(SfxItemPool* pItemPool);
 
-    virtual OUString CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rTxtColor, std::optional<Color>& rFldColor) override;
+    virtual OUString CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rTxtColor, std::optional<Color>& rFldColor, std::optional<FontLineStyle>& rFldLineStyle) override;
 };
 
 class ClassificationEditView final : public WeldEditView
