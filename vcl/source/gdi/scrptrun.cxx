@@ -41,6 +41,7 @@
 #include <sal/config.h>
 
 #include <rtl/character.hxx>
+#include <unicode/uchar.h>
 #include <unicode/utypes.h>
 #include <unicode/uscript.h>
 
@@ -119,14 +120,21 @@ struct PairIndices
 
 };
 
-// There are three Unicode script codes for Japanese text, but only one
-// OpenType script tag, so we want to keep them in one run as splitting is
-// pointless for the purpose of OpenType shaping.
 UScriptCode getScript(UChar32 ch, UErrorCode* status)
 {
+    // tdf#154549
+    // Make combining marks inherit the script of their bases, regardless of
+    // their own script.
+    if (u_getIntPropertyValue(ch, UCHAR_GENERAL_CATEGORY) == U_NON_SPACING_MARK)
+        return USCRIPT_INHERITED;
+
     UScriptCode script = uscript_getScript(ch, status);
     if (U_FAILURE(*status))
         return script;
+
+    // There are three Unicode script codes for Japanese text, but only one
+    // OpenType script tag, so we want to keep them in one run as splitting is
+    // pointless for the purpose of OpenType shaping.
     if (script == USCRIPT_KATAKANA || script == USCRIPT_KATAKANA_OR_HIRAGANA)
         return USCRIPT_HIRAGANA;
     return script;
