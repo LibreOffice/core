@@ -63,6 +63,8 @@ bool SvxSearchCharSet::KeyInput(const KeyEvent& rKEvt)
 
     switch (aCode.GetCode())
     {
+        case KEY_RETURN:
+            return SvxShowCharSet::KeyInput(rKEvt);
         case KEY_SPACE:
             aDoubleClkHdl.Call(this);
             return true;
@@ -92,7 +94,6 @@ bool SvxSearchCharSet::KeyInput(const KeyEvent& rKEvt)
             break;
         case KEY_TAB:   // some fonts have a character at these unicode control codes
         case KEY_ESCAPE:
-        case KEY_RETURN:
             bRet = false;
             tmpSelected = - 1;  // mark as invalid
             break;

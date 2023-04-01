@@ -69,6 +69,7 @@ public:
     void                    createContextMenu();
 
     void            SetDoubleClickHdl( const Link<SvxShowCharSet*,void>& rLink ) { aDoubleClkHdl = rLink; }
+    void            SetReturnKeyPressHdl( const Link<SvxShowCharSet*,void>& rLink ) { m_aReturnKeypressHdl = rLink; }
     void            SetSelectHdl( const Link<SvxShowCharSet*,void>& rHdl ) { aSelectHdl = rHdl; }
     void            SetHighlightHdl( const Link<SvxShowCharSet*,void>& rHdl ) { aHighHdl = rHdl; }
     void            SetPreSelectHdl( const Link<SvxShowCharSet*,void>& rHdl ) { aPreSelectHdl = rHdl; }
@@ -110,7 +111,6 @@ private:
     virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual void GetFocus() override;
     virtual void LoseFocus() override;
-    virtual bool KeyInput(const KeyEvent&) override;
 
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
     virtual FactoryFunction GetUITestFactory() const override;
@@ -119,6 +119,7 @@ protected:
     typedef std::map<sal_Int32, std::shared_ptr<svx::SvxShowCharSetItem> > ItemsMap;
     ItemsMap        m_aItems;
     Link<SvxShowCharSet*,void>     aDoubleClkHdl;
+    Link<SvxShowCharSet*,void>     m_aReturnKeypressHdl;
     Link<SvxShowCharSet*,void>     aSelectHdl;
     Link<SvxShowCharSet*,void>     aFavClickHdl;
     Link<SvxShowCharSet*,void>     aHighHdl;
@@ -146,6 +147,7 @@ protected:
 
 
 protected:
+    virtual bool KeyInput(const KeyEvent&) override;
     virtual void            DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, int n2);
     void            InitSettings(vcl::RenderContext& rRenderContext);
     // abstraction layers are: Unicode<->MapIndex<->Pixel

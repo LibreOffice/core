@@ -129,6 +129,7 @@ private:
     DECL_DLLPRIVATE_LINK(CharSelectHdl, SvxShowCharSet*, void);
     DECL_DLLPRIVATE_LINK(CharHighlightHdl, SvxShowCharSet*, void);
     DECL_DLLPRIVATE_LINK(CharPreSelectHdl, SvxShowCharSet*, void);
+    DECL_DLLPRIVATE_LINK(ReturnKeypressOnCharHdl, SvxShowCharSet*, void);
     DECL_DLLPRIVATE_LINK(FavClickHdl, SvxShowCharSet*, void);
     DECL_DLLPRIVATE_LINK(SearchCharHighlightHdl, SvxShowCharSet*, void);
     DECL_DLLPRIVATE_LINK(DecimalCodeChangeHdl, weld::Entry&, void);

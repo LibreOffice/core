@@ -509,12 +509,14 @@ void SvxCharacterMap::init()
     m_xOKBtn->show();
 
     m_xShowSet->SetDoubleClickHdl( LINK( this, SvxCharacterMap, CharDoubleClickHdl ) );
+    m_xShowSet->SetReturnKeyPressHdl(LINK(this, SvxCharacterMap, ReturnKeypressOnCharHdl));
     m_xShowSet->SetSelectHdl( LINK( this, SvxCharacterMap, CharSelectHdl ) );
     m_xShowSet->SetHighlightHdl( LINK( this, SvxCharacterMap, CharHighlightHdl ) );
     m_xShowSet->SetPreSelectHdl( LINK( this, SvxCharacterMap, CharPreSelectHdl ) );
     m_xShowSet->SetFavClickHdl( LINK( this, SvxCharacterMap, FavClickHdl ) );
 
     m_xSearchSet->SetDoubleClickHdl( LINK( this, SvxCharacterMap, CharDoubleClickHdl ) );
+    m_xSearchSet->SetReturnKeyPressHdl(LINK(this, SvxCharacterMap, ReturnKeypressOnCharHdl));
     m_xSearchSet->SetSelectHdl( LINK( this, SvxCharacterMap, CharSelectHdl ) );
     m_xSearchSet->SetHighlightHdl( LINK( this, SvxCharacterMap, SearchCharHighlightHdl ) );
     m_xSearchSet->SetPreSelectHdl( LINK( this, SvxCharacterMap, CharPreSelectHdl ) );
@@ -939,6 +941,12 @@ IMPL_LINK(SvxCharacterMap, CharDoubleClickHdl, SvxShowCharSet*, pCharSet, void)
 IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl, SvxShowCharSet*, void)
 {
     m_xOKBtn->set_sensitive(true);
+}
+
+IMPL_LINK(SvxCharacterMap, ReturnKeypressOnCharHdl, SvxShowCharSet*, pCharSet, void)
+{
+    insertSelectedCharacter(pCharSet);
+    m_xDialog->response(RET_OK);
 }
 
 IMPL_LINK_NOARG(SvxCharacterMap, InsertClickHdl, weld::Button&, void)
