@@ -1230,10 +1230,7 @@ bool ImpGraphic::swapOutGraphic(SvStream& rStream)
                 }
 
                 rStream.WriteUInt32(maVectorGraphicData->getBinaryDataContainer().getSize());
-
-                rStream.WriteBytes(
-                    maVectorGraphicData->getBinaryDataContainer().getData(),
-                    maVectorGraphicData->getBinaryDataContainer().getSize());
+                maVectorGraphicData->getBinaryDataContainer().writeToStream(rStream);
             }
             else if (mpAnimation)
             {

@@ -35,4 +35,15 @@ SvMemoryStream BinaryDataContainer::getMemoryStream()
     return SvMemoryStream(mpData ? mpData->data() : nullptr, getSize(), StreamMode::READ);
 }
 
+std::size_t BinaryDataContainer::writeToStream(SvStream& rStream) const
+{
+    return rStream.WriteBytes(getData(), getSize());
+}
+
+size_t BinaryDataContainer::getSize() const { return mpData ? mpData->size() : 0; }
+
+bool BinaryDataContainer::isEmpty() const { return !mpData || mpData->empty(); }
+
+const sal_uInt8* BinaryDataContainer::getData() const { return mpData ? mpData->data() : nullptr; }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

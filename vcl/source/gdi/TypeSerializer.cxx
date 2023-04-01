@@ -387,8 +387,8 @@ void TypeSerializer::writeGraphic(const Graphic& rGraphic)
 
                     sal_uInt32 nSize = pVectorGraphicData->getBinaryDataContainer().getSize();
                     mrStream.WriteUInt32(nSize);
-                    mrStream.WriteBytes(pVectorGraphicData->getBinaryDataContainer().getData(),
-                                        nSize);
+                    pVectorGraphicData->getBinaryDataContainer().writeToStream(mrStream);
+
                     // For backwards compatibility, used to serialize path
                     mrStream.WriteUniOrByteString(u"", mrStream.GetStreamCharSet());
                 }

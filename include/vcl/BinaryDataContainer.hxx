@@ -41,16 +41,17 @@ public:
 
     BinaryDataContainer& operator=(BinaryDataContainer&& rBinaryDataContainer) noexcept = default;
 
-    size_t getSize() const { return mpData ? mpData->size() : 0; }
-    bool isEmpty() const { return !mpData || mpData->empty(); }
-    const sal_uInt8* getData() const { return mpData ? mpData->data() : nullptr; }
+    size_t getSize() const;
+    bool isEmpty() const;
+    const sal_uInt8* getData() const;
+
     // Returns the data as a stream open for reading
     SvMemoryStream getMemoryStream();
+    std::size_t writeToStream(SvStream& rStream) const;
 
     size_t calculateHash() const;
 
     auto cbegin() const { return mpData->cbegin(); }
-
     auto cend() const { return mpData->cend(); }
 };
 

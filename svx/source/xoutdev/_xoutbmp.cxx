@@ -207,8 +207,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
 
         if (pOStm)
         {
-            auto& rDataContainer = rGraphic.getVectorGraphicData()->getBinaryDataContainer();
-            pOStm->WriteBytes(rDataContainer.getData(), rDataContainer.getSize());
+            rGraphic.getVectorGraphicData()->getBinaryDataContainer().writeToStream(*pOStm);
             aMedium.Commit();
 
             if (!aMedium.GetError())
