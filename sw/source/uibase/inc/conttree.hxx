@@ -100,6 +100,7 @@ class SwContentTree final : public SfxListener
     o3tl::enumarray<ContentTypeId,std::unique_ptr<SwContentType>>  m_aHiddenContentArr;
     OUString            m_aContextStrings[CONTEXT_COUNT + 1];
     OUString            m_sInvisible;
+    OUString            m_sSelectedItem;  // last selected item (only bookmarks yet)
 
     SwWrtShell*         m_pHiddenShell;   // dropped Doc
     SwWrtShell*         m_pActiveShell;   // the active or a const. open view

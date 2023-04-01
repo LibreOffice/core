@@ -3890,6 +3890,7 @@ void SwContentTree::UpdateTracking()
             if (pCursor && ppBookmark != pMarkAccess->getBookmarksEnd() &&
                     !(m_bIsRoot && m_nRootType != ContentTypeId::BOOKMARK))
             {
+                OUString sBookmarkName;
                 SwPosition* pCursorPoint = pCursor->GetPoint();
                 while (ppBookmark != pMarkAccess->getBookmarksEnd())
                 {
@@ -3897,12 +3898,31 @@ void SwContentTree::UpdateTracking()
                             *pCursorPoint >= (*ppBookmark)->GetMarkStart() &&
                             *pCursorPoint <= (*ppBookmark)->GetMarkEnd())
                     {
-                        lcl_SelectByContentTypeAndName(this, *m_xTreeView,
-                                                       SwResId(STR_CONTENT_TYPE_BOOKMARK),
-                                                       (*ppBookmark)->GetName());
-                        return;
+                        sBookmarkName = (*ppBookmark)->GetName();
+                        // keep previously selected bookmark instead
+                        // of selecting a different bookmark inside of it
+                        if (sBookmarkName == m_sSelectedItem)
+                            break;
+                    }
+                    else if (!sBookmarkName.isEmpty() &&
+                        *pCursorPoint < (*ppBookmark)->GetMarkStart())
+                    {
+                        // don't search a different bookmark inside the
+                        // previous one, if the starting position of the next bookmarks
+                        // is after the cursor position (assuming that the
+                        // bookmark iterator jumps inside the same text by positions)
+                        break;
                     }
                     ++ppBookmark;
+                }
+
+                if (!sBookmarkName.isEmpty())
+                {
+                    // select the bookmark
+                    lcl_SelectByContentTypeAndName(this, *m_xTreeView,
+                                                       SwResId(STR_CONTENT_TYPE_BOOKMARK),
+                                                       sBookmarkName);
+                    return;
                 }
             }
         }
@@ -5315,6 +5335,7 @@ void SwContentTree::CopyOutlineSelections()
 void SwContentTree::GotoContent(const SwContent* pCnt)
 {
     m_nLastGotoContentWasOutlinePos = SwOutlineNodes::npos;
+    m_sSelectedItem = "";
     lcl_AssureStdModeAtShell(m_pActiveShell);
     switch(m_nLastSelType = pCnt->GetParent()->GetType())
     {
@@ -5349,6 +5370,7 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
             m_pActiveShell->StartAction();
             m_pActiveShell->GotoMark(pCnt->GetName());
             m_pActiveShell->EndAction();
+            m_sSelectedItem = pCnt->GetName();
         }
         break;
         case ContentTypeId::REGION    :
