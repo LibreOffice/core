@@ -46,10 +46,11 @@ css::uno::Sequence<sal_Int8> BinaryDataContainer::getAsSequence() const
 class ReferencedMemoryStream : public SvMemoryStream
 {
     std::shared_ptr<std::vector<sal_uInt8>> mpData;
+
 public:
-    ReferencedMemoryStream(const std::shared_ptr<std::vector<sal_uInt8>> &rData)
-        : SvMemoryStream(rData ? rData->data() : nullptr, rData->size(), StreamMode::READ),
-          mpData(rData)
+    ReferencedMemoryStream(const std::shared_ptr<std::vector<sal_uInt8>>& rData)
+        : SvMemoryStream(rData ? rData->data() : nullptr, rData->size(), StreamMode::READ)
+        , mpData(rData)
     {
     }
 };
@@ -59,25 +60,15 @@ std::shared_ptr<SvStream> BinaryDataContainer::getAsStream()
     return std::make_shared<ReferencedMemoryStream>(mpData);
 }
 
-std::size_t BinaryDataContainer::writeToStream(SvStream &rStream) const
+std::size_t BinaryDataContainer::writeToStream(SvStream& rStream) const
 {
     return rStream.WriteBytes(getData(), getSize());
 }
 
-size_t BinaryDataContainer::getSize() const
-{
-    return mpData ? mpData->size() : 0;
-}
+size_t BinaryDataContainer::getSize() const { return mpData ? mpData->size() : 0; }
 
-bool BinaryDataContainer::isEmpty() const
-{
-    return !mpData || mpData->empty();
-}
+bool BinaryDataContainer::isEmpty() const { return !mpData || mpData->empty(); }
 
-const sal_uInt8* BinaryDataContainer::getData() const
-{
-    return mpData ? mpData->data() : nullptr;
-}
-
+const sal_uInt8* BinaryDataContainer::getData() const { return mpData ? mpData->data() : nullptr; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
