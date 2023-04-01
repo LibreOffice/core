@@ -636,18 +636,21 @@ namespace sw
         }
         while (!startedFields.empty())
         {
-            SwPosition const& rStart(std::get<0>(startedFields.top())->GetMarkStart());
-            std::pair<SwNodeOffset, sal_Int32> const pos(
-                    rStart.GetNodeIndex(), rStart.GetContentIndex());
-            auto it = std::lower_bound(rBreaks.begin(), rBreaks.end(), pos);
-            assert(it == rBreaks.end() || *it != pos);
-            rBreaks.insert(it, pos);
+            if (const sw::mark::IFieldmark* pMark = std::get<0>(startedFields.top()))
+            {
+                SwPosition const& rStart(pMark->GetMarkStart());
+                std::pair<SwNodeOffset, sal_Int32> const pos(
+                        rStart.GetNodeIndex(), rStart.GetContentIndex());
+                auto it = std::lower_bound(rBreaks.begin(), rBreaks.end(), pos);
+                assert(it == rBreaks.end() || *it != pos);
+                rBreaks.insert(it, pos);
+            }
             if (std::get<1>(startedFields.top()))
             {
                 std::pair<SwNodeOffset, sal_Int32> const posSep(
                     std::get<2>(startedFields.top()),
                     std::get<3>(startedFields.top()));
-                it = std::lower_bound(rBreaks.begin(), rBreaks.end(), posSep);
+                auto it = std::lower_bound(rBreaks.begin(), rBreaks.end(), posSep);
                 assert(it == rBreaks.end() || *it != posSep);
                 rBreaks.insert(it, posSep);
             }
