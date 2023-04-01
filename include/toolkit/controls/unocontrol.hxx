@@ -42,11 +42,11 @@
 
 struct UnoControlComponentInfos
 {
-    bool    bVisible;
-    bool    bEnable;
-    tools::Long        nX, nY, nWidth, nHeight;
-    sal_uInt16  nFlags;
+    tools::Long nX, nY, nWidth, nHeight;
     float       nZoomX, nZoomY;
+    sal_uInt16  nFlags;
+    bool        bVisible;
+    bool        bEnable;
 
     UnoControlComponentInfos()
     {
