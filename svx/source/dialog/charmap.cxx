@@ -68,7 +68,6 @@ SvxShowCharSet::SvxShowCharSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWi
     , nX(0)
     , nY(0)
     , maFontSize(0, 0)
-    , maPosition(0,0)
     , mbRecalculateFont(true)
     , mbUpdateForeground(true)
     , mbUpdateBackground(true)
@@ -141,11 +140,10 @@ bool SvxShowCharSet::MouseButtonDown(const MouseEvent& rMEvt)
     if (rMEvt.IsRight())
     {
         Point aPosition (rMEvt.GetPosPixel());
-        maPosition = aPosition;
         int nIndex = PixelToMapIndex( rMEvt.GetPosPixel() );
         // Fire the focus event
         SelectIndex( nIndex, true);
-        createContextMenu();
+        createContextMenu(aPosition);
     }
 
     return true;
@@ -221,7 +219,7 @@ bool SvxShowCharSet::isFavChar(const OUString& sTitle, const OUString& rFont)
     return isFavCharTitleExists && isFavCharFontExists;
 }
 
-void SvxShowCharSet::createContextMenu()
+void SvxShowCharSet::createContextMenu(const Point& rPosition)
 {
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDrawingArea(), "svx/ui/charsetmenu.ui"));
     std::unique_ptr<weld::Menu> xItemMenu(xBuilder->weld_menu("charsetmenu"));
@@ -233,7 +231,7 @@ void SvxShowCharSet::createContextMenu()
     else
         xItemMenu->set_visible("remove", false);
 
-    ContextMenuSelect(xItemMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(maPosition, Size(1,1))));
+    ContextMenuSelect(xItemMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(rPosition, Size(1,1))));
     GrabFocus();
     Invalidate();
 }

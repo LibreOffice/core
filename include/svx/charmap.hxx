@@ -66,7 +66,7 @@ public:
 
     void                    SelectCharacter( sal_UCS4 cNew );
     virtual sal_UCS4        GetSelectCharacter() const;
-    void                    createContextMenu();
+    void                    createContextMenu(const Point& rPosition);
 
     void            SetDoubleClickHdl( const Link<SvxShowCharSet*,void>& rLink ) { aDoubleClkHdl = rLink; }
     void            SetReturnKeyPressHdl( const Link<SvxShowCharSet*,void>& rLink ) { m_aReturnKeypressHdl = rLink; }
@@ -139,7 +139,6 @@ protected:
 
     FontCharMapRef  mxFontCharMap;
     Size            maFontSize;
-    Point           maPosition;
 
     bool mbRecalculateFont  : 1;
     bool mbUpdateForeground : 1;
