@@ -793,10 +793,10 @@
       </node>
       <node oor:name=".uno:InsertIndexesEntry" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Index Entry...</value>
-        </prop>
-        <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Insert Index Entry</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Index Entry...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1836,7 +1836,13 @@
       </node>
       <node oor:name=".uno:IndexEntryDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Edit Index Entry</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Index Entry...</value>
+        </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Edit Index Entry...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
