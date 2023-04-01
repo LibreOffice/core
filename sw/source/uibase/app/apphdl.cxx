@@ -80,6 +80,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
@@ -984,9 +985,15 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, Con
                 {
                     SwViewOption aNewOptions = *pSwView->GetWrtShell().GetViewOptions();
                     aNewOptions.SetThemeName(m_pColorConfig->GetCurrentSchemeName());
-                    aNewOptions.SetColorConfig(*m_pColorConfig);
+                    SwViewColors aViewColors(*m_pColorConfig);
+                    aNewOptions.SetColorConfig(aViewColors);
                     pSwView->GetWrtShell().ApplyViewOptions(aNewOptions);
                     pViewShell->GetWindow()->Invalidate();
+                    if (bOnlyInvalidateCurrentView)
+                    {
+                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR,
+                            aViewColors.m_aAppBackgroundColor.AsRGBHexString().toUtf8().getStr());
+                    }
                 }
             }
             if (bOnlyInvalidateCurrentView)
