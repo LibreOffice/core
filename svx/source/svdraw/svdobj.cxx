@@ -3194,6 +3194,49 @@ rtl::Reference<SdrObject> SdrObjFactory::CreateObjectFromFactory(SdrModel& rSdrM
     return nullptr;
 }
 
+namespace
+{
+
+class EmptyObject final : public SdrObject
+{
+private:
+    virtual ~EmptyObject() override
+    {}
+
+public:
+    EmptyObject(SdrModel& rSdrModel)
+        : SdrObject(rSdrModel)
+    {
+    }
+
+    EmptyObject(SdrModel& rSdrModel, EmptyObject const& rSource)
+        : SdrObject(rSdrModel, rSource)
+    {
+    }
+
+    rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override
+    {
+        return new EmptyObject(rTargetModel, *this);
+    }
+
+    SdrInventor GetObjInventor() const override
+    {
+        return SdrInventor::Default;
+    }
+
+    SdrObjKind GetObjIdentifier() const override
+    {
+        return SdrObjKind::NONE;
+    }
+
+    void NbcRotate(const Point& /*rRef*/, Degree100 /*nAngle*/, double /*sinAngle*/, double /*cosAngle*/) override
+    {
+        assert(false);
+    }
+};
+
+} // end anonymous namespace
+
 rtl::Reference<SdrObject> SdrObjFactory::MakeNewObject(
     SdrModel& rSdrModel,
     SdrInventor nInventor,
@@ -3286,7 +3329,7 @@ rtl::Reference<SdrObject> SdrObjFactory::MakeNewObject(
                 }
             }
             break;
-            case SdrObjKind::NONE       : pObj = nullptr; break;
+            case SdrObjKind::NONE: pObj = new EmptyObject(rSdrModel); break;
             case SdrObjKind::Group       : pObj=new SdrObjGroup(rSdrModel);                 break;
             case SdrObjKind::Polygon       : pObj=new SdrPathObj(rSdrModel, SdrObjKind::Polygon       ); break;
             case SdrObjKind::PolyLine       : pObj=new SdrPathObj(rSdrModel, SdrObjKind::PolyLine       ); break;
