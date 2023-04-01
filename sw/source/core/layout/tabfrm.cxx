@@ -3377,10 +3377,51 @@ SwTwips SwTabFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
 
     return nDist;
 }
+void SwTabFrame::Invalidate(SwTabFrameInvFlags eInvFlags)
+{
+    if(eInvFlags == SwTabFrameInvFlags::NONE)
+        return;
+    SwPageFrame* pPage = FindPageFrame();
+    InvalidatePage(pPage);
+    if(eInvFlags & SwTabFrameInvFlags::InvalidatePrt)
+        InvalidatePrt_();
+    if(eInvFlags & SwTabFrameInvFlags::InvalidatePos)
+        InvalidatePos_();
+    SwFrame* pTmp = GetIndNext();
+    if(nullptr != pTmp)
+    {
+        if(eInvFlags & SwTabFrameInvFlags::InvalidateIndNextPrt)
+        {
+            pTmp->InvalidatePrt_();
+            if(pTmp->IsContentFrame())
+                pTmp->InvalidatePage(pPage);
+        }
+        if(eInvFlags & SwTabFrameInvFlags::SetIndNextCompletePaint)
+            pTmp->SetCompletePaint();
+    }
+    if(eInvFlags & SwTabFrameInvFlags::InvalidatePrevPrt && nullptr != (pTmp = GetPrev()))
+    {
+        pTmp->InvalidatePrt_();
+        if(pTmp->IsContentFrame())
+            pTmp->InvalidatePage(pPage);
+    }
+    if(eInvFlags & SwTabFrameInvFlags::InvalidateBrowseWidth)
+    {
+        if(pPage && pPage->GetUpper() && !IsFollow())
+            static_cast<SwRootFrame*>(pPage->GetUpper())->InvalidateBrowseWidth();
+    }
+    if(eInvFlags & SwTabFrameInvFlags::InvalidateNextPos)
+        InvalidateNextPos();
+}
 
 void SwTabFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+    if(rHint.GetId() == SfxHintId::SwTableHeadingChange)
+    {
+        HandleTableHeadlineChange();
+        return;
+    }
+    else if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     SwTabFrameInvFlags eInvFlags = SwTabFrameInvFlags::NONE;
@@ -3407,41 +3448,34 @@ void SwTabFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
     }
     else
         UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
+    Invalidate(eInvFlags);
+}
 
-    if(eInvFlags == SwTabFrameInvFlags::NONE)
+void SwTabFrame::HandleTableHeadlineChange()
+{
+    if(!IsFollow())
         return;
+    // Delete remaining headlines:
+    SwRowFrame* pLowerRow = nullptr;
+    while(nullptr != (pLowerRow = static_cast<SwRowFrame*>(Lower())) && pLowerRow->IsRepeatedHeadline())
+    {
+        pLowerRow->Cut();
+        SwFrame::DestroyFrame(pLowerRow);
+    }
 
-    SwPageFrame* pPage = FindPageFrame();
-    InvalidatePage(pPage);
-    if(eInvFlags & SwTabFrameInvFlags::InvalidatePrt)
-        InvalidatePrt_();
-    if(eInvFlags & SwTabFrameInvFlags::InvalidatePos)
-        InvalidatePos_();
-    SwFrame* pTmp = GetIndNext();
-    if(nullptr != pTmp)
+    // insert new headlines
+    const sal_uInt16 nNewRepeat = GetTable()->GetRowsToRepeat();
+    auto& rLines = GetTable()->GetTabLines();
+    for(sal_uInt16 nIdx = 0; nIdx < nNewRepeat; ++nIdx)
     {
-        if(eInvFlags & SwTabFrameInvFlags::InvalidateIndNextPrt)
+        SwRowFrame* pHeadline = new SwRowFrame(*rLines[nIdx], this);
         {
-            pTmp->InvalidatePrt_();
-            if(pTmp->IsContentFrame())
-                pTmp->InvalidatePage(pPage);
+            sw::FlyCreationSuppressor aSuppressor;
+            pHeadline->SetRepeatedHeadline(true);
         }
-        if(eInvFlags & SwTabFrameInvFlags::SetIndNextCompletePaint)
-            pTmp->SetCompletePaint();
+        pHeadline->Paste(this, pLowerRow);
     }
-    if(eInvFlags & SwTabFrameInvFlags::InvalidatePrevPrt && nullptr != (pTmp = GetPrev()))
-    {
-        pTmp->InvalidatePrt_();
-        if(pTmp->IsContentFrame())
-            pTmp->InvalidatePage( pPage );
-    }
-    if(eInvFlags & SwTabFrameInvFlags::InvalidateBrowseWidth)
-    {
-        if(pPage && pPage->GetUpper() && !IsFollow())
-            static_cast<SwRootFrame*>(pPage->GetUpper())->InvalidateBrowseWidth();
-    }
-    if(eInvFlags & SwTabFrameInvFlags::InvalidateNextPos)
-        InvalidateNextPos();
+    Invalidate(SwTabFrameInvFlags::InvalidatePrt);
 }
 
 void SwTabFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
@@ -3452,33 +3486,6 @@ void SwTabFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     switch( nWhich )
     {
-        case RES_TBLHEADLINECHG:
-            if ( IsFollow() )
-            {
-                // Delete remaining headlines:
-                SwRowFrame* pLowerRow = nullptr;
-                while ( nullptr != ( pLowerRow = static_cast<SwRowFrame*>(Lower()) ) && pLowerRow->IsRepeatedHeadline() )
-                {
-                    pLowerRow->Cut();
-                    SwFrame::DestroyFrame(pLowerRow);
-                }
-
-                // insert new headlines
-                const sal_uInt16 nNewRepeat = GetTable()->GetRowsToRepeat();
-                auto& rLines = GetTable()->GetTabLines();
-                for ( sal_uInt16 nIdx = 0; nIdx < nNewRepeat; ++nIdx )
-                {
-                    SwRowFrame* pHeadline = new SwRowFrame(*rLines[nIdx], this);
-                    {
-                        sw::FlyCreationSuppressor aSuppressor;
-                        pHeadline->SetRepeatedHeadline(true);
-                    }
-                    pHeadline->Paste( this, pLowerRow );
-                }
-            }
-            rInvFlags |= SwTabFrameInvFlags::InvalidatePrt;
-            break;
-
         case RES_FRM_SIZE:
         case RES_HORI_ORIENT:
             rInvFlags |= SwTabFrameInvFlags::InvalidatePrt | SwTabFrameInvFlags::InvalidateBrowseWidth;

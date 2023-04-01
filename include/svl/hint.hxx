@@ -151,6 +151,7 @@ enum class SfxHintId {
     SwDescriptionChanged,
     SwDocPosUpdate,
     SwDocPosUpdateAtIndex,
+    SwTableHeadingChange,
 
     ThisIsAnSdrHint
 };

@@ -115,6 +115,8 @@ class SW_DLLPUBLIC SwTabFrame final: public SwLayoutFrame, public SwFlowFrame
         const SfxPoolItem*, SwTabFrameInvFlags &,
         SwAttrSetChg *pa = nullptr,
         SwAttrSetChg *pb = nullptr );
+    void Invalidate(SwTabFrameInvFlags);
+    void HandleTableHeadlineChange();
 
     virtual bool ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool &rReformat ) override;
 

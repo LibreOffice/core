@@ -256,6 +256,11 @@ public:
     const bool m_isHidden;
     SectionHidden(const bool isHidden = true) : SfxHint(SfxHintId::SwSectionHidden), m_isHidden(isHidden) {};
 };
+class TableHeadingChange final: public SfxHint
+{
+public:
+    TableHeadingChange() : SfxHint(SfxHintId::SwTableHeadingChange) {};
+};
 }
 
 class SwUpdateAttr final : public SwMsgPoolItem

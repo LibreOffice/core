@@ -2891,8 +2891,7 @@ void SwDoc::SetRowsToRepeat( SwTable &rTable, sal_uInt16 nSet )
     }
 
     rTable.SetRowsToRepeat(nSet);
-    const SwMsgPoolItem aChg(RES_TBLHEADLINECHG);
-    rTable.GetFrameFormat()->CallSwClientNotify(sw::LegacyModifyHint(&aChg, &aChg));
+    rTable.GetFrameFormat()->CallSwClientNotify(sw::TableHeadingChange());
     getIDocumentState().SetModified();
 }
 
