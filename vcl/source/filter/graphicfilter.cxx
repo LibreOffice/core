@@ -914,8 +914,8 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
             Size aLogicSize;
             if (eLinkType == GfxLinkType::NativeGif)
             {
-                SvMemoryStream aMemoryStream(aGraphicContent.getMemoryStream());
-                bAnimated = IsGIFAnimated(aMemoryStream, aLogicSize);
+                std::shared_ptr<SvStream> pMemoryStream = aGraphicContent.getAsStream();
+                bAnimated = IsGIFAnimated(*pMemoryStream, aLogicSize);
                 if (!pSizeHint && aLogicSize.getWidth() && aLogicSize.getHeight())
                 {
                     pSizeHint = &aLogicSize;
@@ -954,8 +954,8 @@ ErrCode GraphicFilter::readPNG(SvStream & rStream, Graphic & rGraphic, GfxLinkTy
     if (auto aMSGifChunk = vcl::PngImageReader::getMicrosoftGifChunk(rStream);
         !aMSGifChunk.isEmpty())
     {
-        SvMemoryStream aIStrm(aMSGifChunk.getMemoryStream());
-        ImportGIF(aIStrm, rGraphic);
+        std::shared_ptr<SvStream> pIStrm(aMSGifChunk.getAsStream());
+        ImportGIF(*pIStrm, rGraphic);
         rLinkType = GfxLinkType::NativeGif;
         rpGraphicContent = aMSGifChunk;
         return aReturnCode;
