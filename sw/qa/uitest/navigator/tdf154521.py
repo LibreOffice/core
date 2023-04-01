@@ -38,12 +38,6 @@ class tdf154521(UITestCase):
         global selectionChangedResult
         with self.ui_test.create_doc_in_start_center("writer") as xDoc:
 
-            # type "foo", and create a bookmark on it
-
-            self.xUITest.executeCommand(".uno:Escape")
-
-            # click on the bookmark name in the Navigator
-
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 
@@ -53,6 +47,10 @@ class tdf154521(UITestCase):
             xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
             xToolBar = xNavigatorPanel.getChild("content5")
             xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "0"})) # 'root' button
+
+            # type "foo", and create a bookmark on it
+
+            self.xUITest.executeCommand(".uno:Escape")
 
             xDoc.Text.insertString(xDoc.Text.getStart(), "foo", False)
             self.xUITest.executeCommand(".uno:SelectAll")
