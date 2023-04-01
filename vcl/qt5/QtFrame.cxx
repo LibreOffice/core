@@ -619,7 +619,16 @@ void QtFrame::SetModal(bool bModal)
 
         // modality change is only effective if the window is hidden
         if (bWasVisible)
+        {
             pChild->hide();
+            if (QGuiApplication::platformName() == "xcb")
+            {
+                SAL_WARN("vcl.qt", "SetModal called after Show - apply delay");
+                // tdf#152979 give QXcbConnection some time to avoid
+                // "qt.qpa.xcb: internal error:  void QXcbWindow::setNetWmStateOnUnmappedWindow() called on mapped window"
+                QThread::msleep(100);
+            }
+        }
 
         pChild->setWindowModality(bModal ? Qt::WindowModal : Qt::NonModal);
 
