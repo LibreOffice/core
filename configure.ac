@@ -3387,10 +3387,10 @@ if test "$_os" = "WINNT"; then
         BITNESS_OVERRIDE=64
     fi
 fi
-AC_SUBST(WINDOWS_SDK_ARCH)
-if test "$_os" = "iOS" -o "$build_cpu" != "$host_cpu"; then
+if test "$_os" = "iOS"; then
     cross_compiling="yes"
 fi
+
 if test "$cross_compiling" = "yes"; then
     export CROSS_COMPILING=TRUE
 else
@@ -4877,7 +4877,6 @@ if test "$cross_compiling" = "yes"; then
         bin/odfvalidator.sh.in \
         bin/officeotron.sh.in \
         instsetoo_native/util/openoffice.lst.in \
-        setup_native/source/packinfo/finals_instsetoo.txt.in \
         config_host/*.in \
         sysui/desktop/macosx/Info.plist.in) \
     | (cd CONF-FOR-BUILD && tar xf -)
@@ -13119,7 +13118,6 @@ AC_CONFIG_FILES([config_host.mk
                  bin/odfvalidator.sh
                  bin/officeotron.sh
                  instsetoo_native/util/openoffice.lst
-                 setup_native/source/packinfo/finals_instsetoo.txt
                  sysui/desktop/macosx/Info.plist])
 AC_CONFIG_HEADERS([config_host/config_buildid.h])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
