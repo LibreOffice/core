@@ -162,7 +162,7 @@ void ScStyleSheetPool::CopyStyleFrom( SfxStyleSheetBasePool* pSrcPool,
             rDestSet.Put( SvxSetItem( ATTR_PAGE_FOOTERSET, aDestSub ) );
         }
     }
-    else    // cell styles
+    else if ( eFamily == SfxStyleFamily::Para )
     {
         // number format exchange list has to be handled here, too
 
