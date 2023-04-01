@@ -51,7 +51,7 @@ public:
     std::shared_ptr<SvStream> getAsStream();
 
     /// writes the contents to the given stream
-    std::size_t writeToStream(SvStream &rStream) const;
+    std::size_t writeToStream(SvStream& rStream) const;
 
     size_t calculateHash() const;
 };
