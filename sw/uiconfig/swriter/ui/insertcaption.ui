@@ -177,7 +177,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes" context="insertcaption|separator_label">Separator:</property>
+                        <property name="label" translatable="yes" context="insertcaption|separator_label">Before caption:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">separator_edit</property>
                       </object>
@@ -224,9 +224,10 @@
                         <property name="activates_default">True</property>
                         <property name="text" translatable="yes" context="insertcaption|separator_edit">: </property>
                         <property name="truncate-multiline">True</property>
+                        <property name="tooltip-text" translatable="yes" context="insertcaption|separator_edit|tooltip_text">Enter optional text characters to appear after the caption category and number and before the caption text.</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="separator_edit-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="insertcaption|extended_tip|separator_edit">Enter optional text characters to appear between the number and the caption text.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="insertcaption|extended_tip|separator_edit">Enter optional text characters to appear after the caption category and number and before the caption text. The optional text characters are not inserted if no caption text is given.</property>
                           </object>
                         </child>
                       </object>
