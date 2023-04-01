@@ -398,8 +398,8 @@ bool SvxShowCharSet::KeyInput(const KeyEvent& rKEvt)
     switch (aCode.GetCode())
     {
         case KEY_SPACE:
-            aSelectHdl.Call( this );
-            break;
+            aDoubleClkHdl.Call(this);
+            return true;
         case KEY_LEFT:
             --tmpSelected;
             break;
@@ -785,6 +785,7 @@ void SvxShowCharSet::SelectIndex(int nNewIndex, bool bFocus)
             aNewAny <<= AccessibleStateType::SELECTED;
             pItem->m_xItem->fireEvent( AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
         }
+        aSelectHdl.Call(this);
 #endif
     }
     aHighHdl.Call( this );
