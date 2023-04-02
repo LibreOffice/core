@@ -307,7 +307,7 @@ void SwUserFieldType::SetContent( const OUString& rStr, sal_uInt32 nFormat )
             SetValue(fValue);
             LanguageTag aContentLanguage(GetFieldTypeLanguage());
             m_aContentLang = aContentLanguage.getBcp47();
-            m_aContent = DoubleToString(fValue, nFormat);
+            m_aContent = DoubleToString(fValue, aContentLanguage.getLanguageType());
         }
     }
 

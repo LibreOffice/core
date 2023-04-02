@@ -195,7 +195,8 @@ CalcOp* FindOperator( const OUString& rSrch )
                               OperatorCompare ));
 }
 
-static LanguageType GetDocAppScriptLang( SwDoc const & rDoc )
+// static
+LanguageType SwCalc::GetDocAppScriptLang( SwDoc const & rDoc )
 {
     TypedWhichId<SvxLanguageItem> nWhich =
                GetWhichOfScript( RES_CHRATR_LANGUAGE,
