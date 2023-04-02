@@ -366,11 +366,11 @@
                     <property name="can-focus">True</property>
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="key1cb-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|key1cb">Makes the current selection a subentry of the word that you enter here. For example, if you select “cold”, and enter “weather” as the 1st key, the index entry will be “weather, cold”.</property>
-                      </object>
-                    </child>
+                  </object>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="key1cb-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|key1cb">Makes the current selection a subentry of the word that you enter here. For example, if you select “cold”, and enter “weather” as the 1st key, the index entry will be “weather, cold”.</property>
                   </object>
                 </child>
               </object>
@@ -407,11 +407,11 @@
                     <property name="can-focus">True</property>
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="key2cb-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|key2cb">Makes the current selection a sub-subentry of the 1st key. For example, if you select “cold”, and enter “weather” as the 1st key and “winter” as the 2nd key, the index entry will be “weather, winter, cold”.</property>
-                      </object>
-                    </child>
+                  </object>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="key2cb-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|key2cb">Makes the current selection a sub-subentry of the 1st key. For example, if you select “cold”, and enter “weather” as the 1st key and “winter” as the 2nd key, the index entry will be “weather, winter, cold”.</property>
                   </object>
                 </child>
               </object>
