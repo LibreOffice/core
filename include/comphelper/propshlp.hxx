@@ -66,24 +66,6 @@ public:
     */
     OPropertySetHelper(bool bIgnoreRuntimeExceptionsWhileFiring);
 
-    /** Constructor.
-
-        @param i_pFireEvents
-                        additional event notifier
-
-        @param bIgnoreRuntimeExceptionsWhileFiring
-                        indicates whether occurring RuntimeExceptions will be
-                        ignored when firing notifications
-                        (vetoableChange(), propertyChange())
-                        to listeners.
-                        PropertyVetoExceptions may still be thrown.
-                        This flag is useful in an inter-process scenario when
-                        remote bridges may break down
-                        (firing DisposedExceptions).
-    */
-    OPropertySetHelper(cppu::IEventNotificationHook* i_pFireEvents,
-                       bool bIgnoreRuntimeExceptionsWhileFiring = false);
-
     /**
        Only returns a reference to XMultiPropertySet, XFastPropertySet, XPropertySet and
        XEventListener.
@@ -316,7 +298,6 @@ private:
      */
     comphelper::OInterfaceContainerHelper4<css::beans::XVetoableChangeListener>
         maVetoableChangeListeners;
-    cppu::IEventNotificationHook* const m_pFireEvents = nullptr;
     std::vector<sal_Int32> m_handles;
     std::vector<css::uno::Any> m_newValues;
     std::vector<css::uno::Any> m_oldValues;

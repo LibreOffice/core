@@ -109,13 +109,6 @@ OPropertySetHelper::OPropertySetHelper(bool bIgnoreRuntimeExceptionsWhileFiring)
 {
 }
 
-OPropertySetHelper::OPropertySetHelper(cppu::IEventNotificationHook* i_pFireEvents,
-                                       bool bIgnoreRuntimeExceptionsWhileFiring)
-    : m_pFireEvents(i_pFireEvents)
-    , m_bIgnoreRuntimeExceptionsWhileFiring(bIgnoreRuntimeExceptionsWhileFiring)
-{
-}
-
 /**
  * You must call disposing before.
  */
@@ -524,12 +517,6 @@ void OPropertySetHelper::fire(std::unique_lock<std::mutex>& rGuard, sal_Int32* p
 {
     if (!m_bFireEvents)
         return;
-
-    if (m_pFireEvents)
-    {
-        m_pFireEvents->fireEvents(pnHandles, nHandles, bVetoable,
-                                  m_bIgnoreRuntimeExceptionsWhileFiring);
-    }
 
     // Only fire, if one or more properties changed
     if (!nHandles)
