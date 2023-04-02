@@ -25,7 +25,7 @@
 
 #include <vcl/dllapi.h>
 
-#include <hb-icu.h>
+#include <unicode/uscript.h>
 
 #include <vector>
 

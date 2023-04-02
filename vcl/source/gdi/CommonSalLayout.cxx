@@ -39,6 +39,7 @@
 #include <unicode/uchar.h>
 #include <hb-ot.h>
 #include <hb-graphite2.h>
+#include <hb-icu.h>
 
 #include <memory>
 
