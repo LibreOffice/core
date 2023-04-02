@@ -667,9 +667,9 @@ sal_Int32 valueOfInt                               ( IMPL_RTL_STRCODE* pStr,
 {
     assert(pStr);
     assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
+    const auto* const pStart = pStr;
     char    aBuf[maxLen];
     char*   pBuf = aBuf;
-    sal_Int32   nLen = 0;
     using uT = std::make_unsigned_t<T>;
     uT nValue;
 
@@ -684,7 +684,6 @@ sal_Int32 valueOfInt                               ( IMPL_RTL_STRCODE* pStr,
         {
             *pStr = '-';
             pStr++;
-            nLen++;
             nValue = n == std::numeric_limits<T>::min() ? static_cast<uT>(n) : -n;
         }
         else
@@ -707,17 +706,10 @@ sal_Int32 valueOfInt                               ( IMPL_RTL_STRCODE* pStr,
     while ( nValue > 0 );
 
     /* copy the values in the right direction into the destination buffer */
-    do
-    {
-        pBuf--;
-        *pStr = *pBuf;
-        pStr++;
-        nLen++;
-    }
-    while ( pBuf != aBuf );
+    pStr = std::reverse_copy(aBuf, pBuf, pStr);
     *pStr = 0;
 
-    return nLen;
+    return pStr - pStart;
 }
 
 /* ----------------------------------------------------------------------- */
