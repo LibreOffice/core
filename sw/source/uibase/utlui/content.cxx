@@ -3220,9 +3220,11 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
     }
 }
 
+// Handler for outline entry up/down left/right movement
 void SwContentTree::ExecCommand(std::u16string_view rCmd, bool bOutlineWithChildren)
 {
-    MakeAllOutlineContentTemporarilyVisible a(GetWrtShell()->GetDoc());
+    if (m_xTreeView->count_selected_rows() == 0)
+        return;
 
     const bool bUp = rCmd == u"chapterup";
     const bool bUpDown = bUp || rCmd == u"chapterdown";
@@ -3237,18 +3239,18 @@ void SwContentTree::ExecCommand(std::u16string_view rCmd, bool bOutlineWithChild
         return;
     }
 
-    m_bIgnoreDocChange = true;
-
     SwWrtShell *const pShell = GetWrtShell();
-    sal_Int8 nActOutlineLevel = m_nOutlineLevel;
-    SwOutlineNodes::size_type nActPos = pShell->GetOutlinePos(nActOutlineLevel);
+
+    const SwNodes& rNodes = pShell->GetNodes();
+    const SwOutlineNodes::size_type nOutlineNdsSize = rNodes.GetOutLineNds().size();
 
     std::vector<SwTextNode*> selectedOutlineNodes;
     std::vector<std::unique_ptr<weld::TreeIter>> selected;
 
-    m_xTreeView->selected_foreach([this, pShell, &bLeftRight, &bOutlineWithChildren, &selected, &selectedOutlineNodes](weld::TreeIter& rEntry){
+    m_xTreeView->selected_foreach([&](weld::TreeIter& rEntry){
         // it's possible to select the root node too which is a really bad idea
-        bool bSkip = lcl_IsContentType(rEntry, *m_xTreeView);
+        if (lcl_IsContentType(rEntry, *m_xTreeView))
+            return false;
         // filter out children of selected parents so they don't get promoted
         // or moved twice (except if there is Ctrl modifier, since in that
         // case children are re-parented)
@@ -3259,48 +3261,49 @@ void SwContentTree::ExecCommand(std::u16string_view rCmd, bool bOutlineWithChild
             {
                 if (m_xTreeView->iter_compare(*selected.back(), *xParent) == 0)
                 {
-                    bSkip = true;
-                    break;
+                    return false;
                 }
             }
         }
-        if (!bSkip)
+        selected.emplace_back(m_xTreeView->make_iterator(&rEntry));
+
+        // Use the outline node position in the SwOutlineNodes array. Bad things
+        // happen if the tree entry position is used and it doesn't match the node position
+        // in SwOutlineNodes, which is usually the case for outline nodes in frames.
+        const SwOutlineNodes::size_type nPos
+                = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(rEntry))->GetOutlinePos();
+        if (nPos < nOutlineNdsSize)
         {
-            selected.emplace_back(m_xTreeView->make_iterator(&rEntry));
-            const SwNodes& rNodes = pShell->GetNodes();
-            const size_t nPos = GetAbsPos(rEntry) - 1;
-            if (nPos < rNodes.GetOutLineNds().size())
+            SwNode* pNode = rNodes.GetOutLineNds()[ nPos ];
+            if (pNode)
             {
-                SwNode* pNode = rNodes.GetOutLineNds()[ nPos ];
-                if (pNode)
-                {
-                    selectedOutlineNodes.push_back(pNode->GetTextNode());
-                }
+                selectedOutlineNodes.push_back(pNode->GetTextNode());
             }
         }
         return false;
     });
+
+    if (!selected.size())
+        return;
 
     if (bUpDown && !bUp)
     {   // to move down, start at the end!
         std::reverse(selected.begin(), selected.end());
     }
 
-    SwOutlineNodes::difference_type nDirLast = bUp ? -1 : 1;
+    m_bIgnoreDocChange = true;
+
+    SwOutlineNodes::size_type nActPos;
     bool bStartedAction = false;
+
+    MakeAllOutlineContentTemporarilyVisible a(GetWrtShell()->GetDoc());
+
     for (auto const& pCurrentEntry : selected)
     {
-        assert(pCurrentEntry && lcl_IsContent(*pCurrentEntry, *m_xTreeView));
-        if (lcl_IsContent(*pCurrentEntry, *m_xTreeView))
-        {
-            assert(dynamic_cast<SwContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*pCurrentEntry))));
-            if ((m_bIsRoot && m_nRootType == ContentTypeId::OUTLINE) ||
-                weld::fromId<SwContent*>(m_xTreeView->get_id(*pCurrentEntry))->GetParent()->GetType()
-                                            ==  ContentTypeId::OUTLINE)
-            {
-                nActPos = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*pCurrentEntry))->GetOutlinePos();
-            }
-        }
+        nActPos = weld::fromId<SwOutlineContent*>(
+                    m_xTreeView->get_id(*pCurrentEntry))->GetOutlinePos();
+
+        // outline nodes in frames and tables are not up/down moveable
         if (nActPos == SwOutlineNodes::npos || (bUpDown && !pShell->IsOutlineMovable(nActPos)))
         {
             continue;
@@ -3312,161 +3315,26 @@ void SwContentTree::ExecCommand(std::u16string_view rCmd, bool bOutlineWithChild
             pShell->StartUndo(bLeftRight ? SwUndoId::OUTLINE_LR : SwUndoId::OUTLINE_UD);
             bStartedAction = true;
         }
+
         pShell->GotoOutline( nActPos); // If text selection != box selection
         pShell->Push();
+
         if (bUpDown)
         {
             // move outline position up/down (outline position promote/demote)
-            pShell->MakeOutlineSel(nActPos, nActPos, bOutlineWithChildren);
-            const size_t nEntryAbsPos(GetAbsPos(*pCurrentEntry));
             SwOutlineNodes::difference_type nDir = bUp ? -1 : 1;
-            if (!bOutlineWithChildren && ((nDir == -1 && nActPos > 0) ||
-                       (nDir == 1 && nEntryAbsPos < GetEntryCount() - 2)))
+            if ((nDir == -1 && nActPos > 0) || (nDir == 1 && nActPos < nOutlineNdsSize - 1))
             {
-                pShell->MoveOutlinePara( nDir );
-                // Set cursor back to the current position
-                pShell->GotoOutline( nActPos + nDir);
-            }
-            else if (bOutlineWithChildren)
-            {
-                SwOutlineNodes::size_type nActEndPos = nActPos;
-                std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator(pCurrentEntry.get()));
-                assert(dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*pCurrentEntry))));
-                const auto nActLevel = weld::fromId<SwOutlineContent*>(
-                        m_xTreeView->get_id(*pCurrentEntry))->GetOutlineLevel();
-                bool bEntry = m_xTreeView->iter_next(*xEntry);
-                while (bEntry && lcl_IsContent(*xEntry, *m_xTreeView))
+                // make outline selection for use by MoveOutlinePara
+                pShell->MakeOutlineSel(nActPos, nActPos, bOutlineWithChildren);
+                if (pShell->MoveOutlinePara(nDir))
                 {
-                    assert(dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xEntry))));
-                    if (nActLevel >= weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xEntry))->GetOutlineLevel())
-                        break;
-                    nActEndPos = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xEntry))->GetOutlinePos();
-                    bEntry = m_xTreeView->iter_next(*xEntry);
-                }
-                if (nDir == 1) // move down
-                {
-                    std::unique_ptr<weld::TreeIter> xNextSibling(m_xTreeView->make_iterator(pCurrentEntry.get()));
-                    if (m_xTreeView->iter_next_sibling(*xNextSibling) && m_xTreeView->is_selected(*xNextSibling))
-                        nDir = nDirLast;
-                    else
-                    {
-                    // If the last entry is to be moved we're done
-                    if (bEntry && lcl_IsContent(*xEntry, *m_xTreeView))
-                    {
-                        // xEntry now points to the entry following the last
-                        // selected entry.
-                        SwOutlineNodes::size_type nDest = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xEntry))->GetOutlinePos();
-                        // here needs to found the next entry after next.
-                        // The selection must be inserted in front of that.
-                        while (bEntry)
-                        {
-                            bEntry = m_xTreeView->iter_next(*xEntry);
-                            assert(!bEntry || !lcl_IsContent(*xEntry, *m_xTreeView)||
-                                   dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xEntry))));
-                            // nDest++ may only executed if bEntry
-                            if (bEntry)
-                            {
-                                if (!lcl_IsContent(*xEntry, *m_xTreeView))
-                                    break;
-                                else if (nActLevel >= weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xEntry))->GetOutlineLevel())
-                                {
-                                    // nDest needs adjusted if there are selected entries (including ancestral lineage)
-                                    // immediately before the current moved entry.
-                                    std::unique_ptr<weld::TreeIter> xTmp(m_xTreeView->make_iterator(xEntry.get()));
-                                    bool bTmp = m_xTreeView->iter_previous(*xTmp);
-                                    while (bTmp && lcl_IsContent(*xTmp, *m_xTreeView) &&
-                                           nActLevel < weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xTmp))->GetOutlineLevel())
-                                    {
-                                        while (bTmp && lcl_IsContent(*xTmp, *m_xTreeView) && !m_xTreeView->is_selected(*xTmp) &&
-                                               nActLevel < weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xTmp))->GetOutlineLevel())
-                                        {
-                                            bTmp = m_xTreeView->iter_parent(*xTmp);
-                                        }
-                                        if (!bTmp || !m_xTreeView->is_selected(*xTmp))
-                                            break;
-                                        bTmp = m_xTreeView->iter_previous(*xTmp);
-                                        nDest = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xTmp))->GetOutlinePos();
-                                    }
-                                    std::unique_ptr<weld::TreeIter> xPrevSibling(m_xTreeView->make_iterator(xEntry.get()));
-                                    if (!m_xTreeView->iter_previous_sibling(*xPrevSibling) || !m_xTreeView->is_selected(*xPrevSibling))
-                                        break;
-                                }
-                                else
-                                {
-                                    nDest = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xEntry))->GetOutlinePos();
-                                }
-                            }
-                        }
-                        nDirLast = nDir = nDest - nActEndPos;
-                        // If no entry was found that allows insertion before
-                        // it, we just move it to the end.
-                    }
-                    else
-                        nDirLast = nDir = 0;
-                    }
-                }
-                else // move up
-                {
-                    std::unique_ptr<weld::TreeIter> xPrevSibling(m_xTreeView->make_iterator(pCurrentEntry.get()));
-                    if (m_xTreeView->iter_previous_sibling(*xPrevSibling) && m_xTreeView->is_selected(*xPrevSibling))
-                        nDir = nDirLast;
-                    else
-                    {
-                        SwOutlineNodes::size_type nDest = nActPos;
-                        bEntry = true;
-                        m_xTreeView->copy_iterator(*pCurrentEntry, *xEntry);
-                        while (bEntry && nDest)
-                        {
-                            bEntry = m_xTreeView->iter_previous(*xEntry);
-                            assert(!bEntry || !lcl_IsContent(*xEntry, *m_xTreeView) ||
-                                   dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xEntry))));
-                            if (bEntry && lcl_IsContent(*xEntry, *m_xTreeView))
-                            {
-                                nDest = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xEntry))->GetOutlinePos();
-                            }
-                            else
-                            {
-                                nDest = 0; // presumably?
-                            }
-                            if (bEntry)
-                            {
-                                if (!lcl_IsContent(*xEntry, *m_xTreeView))
-                                    break;
-                                else if (nActLevel >= weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xEntry))->GetOutlineLevel())
-                                {
-                                    // nDest needs adjusted if there are selected entries immediately
-                                    // after the level change.
-                                    std::unique_ptr<weld::TreeIter> xTmp(m_xTreeView->make_iterator(xEntry.get()));
-                                    bool bTmp = m_xTreeView->iter_next(*xTmp);
-                                    while (bTmp && lcl_IsContent(*xTmp, *m_xTreeView) &&
-                                           nActLevel < weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xTmp))->GetOutlineLevel() &&
-                                           m_xTreeView->is_selected(*xTmp))
-                                    {
-                                        nDest = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xTmp))->GetOutlinePos();
-                                        const auto nLevel = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xTmp))->GetOutlineLevel();
-                                        // account for selected entries' descendent lineage
-                                        bTmp = m_xTreeView->iter_next(*xTmp);
-                                        while (bTmp && lcl_IsContent(*xTmp, *m_xTreeView) &&
-                                               nLevel < weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xTmp))->GetOutlineLevel())
-                                        {
-                                            nDest = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xTmp))->GetOutlinePos();
-                                            bTmp = m_xTreeView->iter_next(*xTmp);
-                                        }
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                        nDirLast = nDir = nDest - nActPos;
-                    }
-                }
-                if (nDir)
-                {
-                    pShell->MoveOutlinePara( nDir );
                     // Set cursor back to the current position
                     pShell->GotoOutline(nActPos + nDir);
                 }
             }
+
+            pShell->ClearMark();
         }
         else
         {
@@ -3510,7 +3378,6 @@ void SwContentTree::ExecCommand(std::u16string_view rCmd, bool bOutlineWithChild
             }
         }
 
-        pShell->ClearMark();
         pShell->Pop(SwCursorShell::PopMode::DeleteCurrent); // Cursor is now back at the current heading.
     }
 
@@ -3532,42 +3399,38 @@ void SwContentTree::ExecCommand(std::u16string_view rCmd, bool bOutlineWithChild
         Display(true);
         m_xTreeView->vadjustment_set_value(nOldScrollPos);
 
-        // reselect entries
-        const SwOutlineNodes::size_type nCurrPos = pShell->GetOutlinePos(MAXLEVEL);
-        std::unique_ptr<weld::TreeIter> xListEntry(m_xTreeView->make_iterator());
-        m_xTreeView->get_iter_first(*xListEntry);
-        while (m_xTreeView->iter_next(*xListEntry) && lcl_IsContent(*xListEntry, *m_xTreeView))
-        {
-            assert(dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xListEntry))));
-            if (weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xListEntry))->GetOutlinePos() == nCurrPos)
-            {
-                std::unique_ptr<weld::TreeIter> xParent(m_xTreeView->make_iterator(xListEntry.get()));
-                if (m_xTreeView->iter_parent(*xParent) && !m_xTreeView->get_row_expanded(*xParent))
-                    m_xTreeView->expand_row(*xParent);
-                m_xTreeView->set_cursor(*xListEntry); // unselect all entries, make entry visible, set focus, and select
-                Select();
-                break;
-            }
-        }
-
         if (m_bIsRoot)
         {
-            const SwOutlineNodes& rOutLineNds = pShell->GetNodes().GetOutLineNds();
+            // reselect entries, do this only when in outline content navigation mode
+            const SwOutlineNodes& rOutlineNds = pShell->GetNodes().GetOutLineNds();
             for (SwTextNode* pNode : selectedOutlineNodes)
             {
-                SwOutlineNodes::const_iterator aFndIt = rOutLineNds.find(pNode);
-                if(aFndIt == rOutLineNds.end())
-                    continue;
-                const size_t nFndPos = aFndIt - rOutLineNds.begin();
-                std::unique_ptr<weld::TreeIter> xEntry = GetEntryAtAbsPos(nFndPos + 1);
-                if (xEntry)
-                {
-                    m_xTreeView->select(*xEntry);
-                    std::unique_ptr<weld::TreeIter> xParent(m_xTreeView->make_iterator(xEntry.get()));
-                    if (m_xTreeView->iter_parent(*xParent) && !m_xTreeView->get_row_expanded(*xParent))
-                        m_xTreeView->expand_row(*xParent);
-                }
+                m_xTreeView->all_foreach([this, &rOutlineNds, pNode](weld::TreeIter& rEntry){
+                    if (lcl_IsContentType(rEntry, *m_xTreeView))
+                        return false;
+                    SwOutlineNodes::size_type nPos = weld::fromId<SwOutlineContent*>(
+                                m_xTreeView->get_id(rEntry))->GetOutlinePos();
+                    if (pNode == rOutlineNds[nPos]->GetTextNode())
+                    {
+                        std::unique_ptr<weld::TreeIter> xParent(m_xTreeView->make_iterator(&rEntry));
+                        if (m_xTreeView->iter_parent(*xParent)
+                                && !m_xTreeView->get_row_expanded(*xParent))
+                        {
+                            m_xTreeView->expand_row(*xParent);
+                        }
+                        m_xTreeView->select(rEntry);
+                        return true;
+                    }
+                    return false;
+                });
             }
+        }
+        else
+        {
+            m_pActiveShell->GetView().GetEditWin().GrabFocus();
+            m_bIgnoreDocChange = false;
+            UpdateTracking();
+            grab_focus();
         }
     }
     m_bIgnoreDocChange = false;
