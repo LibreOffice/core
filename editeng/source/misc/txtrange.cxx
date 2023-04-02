@@ -192,11 +192,12 @@ tools::Long SvxBoundArgs::CalcMax( const Point& rPt1, const Point& rPt2,
     }
     else
         nB = nStart;
-    nB *= nB;
-    nB += nDa * nDa;
-    nB = sqrt( nB );
+
+    nB = std::hypot(nB, nDa);
+
     if (nB == 0) // avoid div / 0
         return 0;
+
     nB = nRange + nDa * ( nFarRange - nRange ) / nB;
 
     bool bNote;

@@ -80,9 +80,6 @@ static const char *KeyStr( KeySym n ) { return Null( XKeysymToString( n ) ); }
 
 static const char *GetAtomName( Display *d, Atom a )
 { return Null( XGetAtomName( d, a ) ); }
-
-static double Hypothenuse( tools::Long w, tools::Long h )
-{ return sqrt( static_cast<double>((w*w)+(h*h)) ); }
 #endif
 
 static int ColorDiff( int r, int g, int b )
@@ -2207,7 +2204,7 @@ void SalDisplay::PrintInfo() const
     SAL_INFO( "vcl", "Screen" );
     SAL_INFO( "vcl", "\tResolution/Size   \t" << aResolution_.A() << "*" << aResolution_.B()
             << " " << m_aScreens[m_nXDefaultScreen.getXScreen()].m_aSize.Width() << "*" << m_aScreens[m_nXDefaultScreen.getXScreen()].m_aSize.Height()
-            << " " << (Hypothenuse( DisplayWidthMM ( pDisp_, m_nXDefaultScreen.getXScreen() ),
+            << " " << (std::hypot( DisplayWidthMM ( pDisp_, m_nXDefaultScreen.getXScreen() ),
                           DisplayHeightMM( pDisp_, m_nXDefaultScreen.getXScreen() ) ) / 25.4 ) << "\"" );
     SAL_INFO( "vcl", "\tBlack&White       \t" << GetColormap(m_nXDefaultScreen).GetBlackPixel() << " "
             << GetColormap(m_nXDefaultScreen).GetWhitePixel() );
