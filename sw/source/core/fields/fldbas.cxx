@@ -809,6 +809,7 @@ void SwFormulaField::SetFormula(const OUString& rStr)
     {
         sal_Int32 nPos = 0;
         double fTmpValue;
+        // Uses the SwCalc document locale.
         if( SwCalc::Str2Double( rStr, nPos, fTmpValue, GetDoc() ) )
             SwValueField::SetValue( fTmpValue );
     }
@@ -826,7 +827,10 @@ void SwFormulaField::SetExpandedFormula( const OUString& rStr )
         {
             SwValueField::SetValue(fTmpValue);
 
-            m_sFormula = static_cast<SwValueFieldType *>(GetTyp())->DoubleToString(fTmpValue, nFormat);
+            // Will get reinterpreted by SwCalc when updating fields, so use
+            // the proper locale.
+            m_sFormula = static_cast<SwValueFieldType *>(GetTyp())->DoubleToString( fTmpValue,
+                    SwCalc::GetDocAppScriptLang( *GetDoc()));
             return;
         }
     }

@@ -1006,8 +1006,15 @@ IMPL_LINK(SwFieldVarPage, TBClickHdl, weld::Button&, rBox, void)
                 {
                     if (nNumFormatPos != -1)
                     {
-                        sal_uLong nNumberFormat = nNumFormatPos == 0 ? 0 : m_xNumFormatLB->GetFormat();
-                        if (nNumberFormat)
+                        // The first listbox entry is Text and second is
+                        // Formula and both are SAL_MAX_UINT32 :-/ but only if
+                        // not another yet unlisted of Additional Formats was
+                        // selected that may claim the top position :-/
+                        sal_uInt32 nNumberFormat = m_xNumFormatLB->GetFormat();
+                        const bool bText = (nNumFormatPos == 0 && nNumberFormat == SAL_MAX_UINT32);
+                        if (bText)
+                            nNumberFormat = 0;
+                        if (nNumberFormat && nNumberFormat != SAL_MAX_UINT32)
                         {   // Switch language to office-language because Kalkulator expects
                             // String in office format and it should be fed into dialog like
                             // that
@@ -1015,7 +1022,7 @@ IMPL_LINK(SwFieldVarPage, TBClickHdl, weld::Button&, rBox, void)
                         }
                         static_cast<SwUserFieldType*>(pType)->SetContent(m_xValueED->get_text(), nNumberFormat);
                         static_cast<SwUserFieldType*>(pType)->SetType(
-                            nNumFormatPos == 0 ? nsSwGetSetExpType::GSE_STRING : nsSwGetSetExpType::GSE_EXPR );
+                                bText ? nsSwGetSetExpType::GSE_STRING : nsSwGetSetExpType::GSE_EXPR );
                     }
                 }
                 else
@@ -1049,8 +1056,16 @@ IMPL_LINK(SwFieldVarPage, TBClickHdl, weld::Button&, rBox, void)
 
                     if (nNumFormatPos != -1)
                     {
-                        aType.SetType(nNumFormatPos == 0 ? nsSwGetSetExpType::GSE_STRING : nsSwGetSetExpType::GSE_EXPR);
-                        aType.SetContent( sValue, nNumFormatPos == 0 ? 0 : m_xNumFormatLB->GetFormat() );
+                        // The first listbox entry is Text and second is
+                        // Formula and both are SAL_MAX_UINT32 :-/ but only if
+                        // not another yet unlisted of Additional Formats was
+                        // selected that may claim the top position :-/
+                        sal_uInt32 nNumberFormat = m_xNumFormatLB->GetFormat();
+                        const bool bText = (nNumFormatPos == 0 && nNumberFormat == SAL_MAX_UINT32);
+                        if (bText)
+                            nNumberFormat = 0;
+                        aType.SetType(bText ? nsSwGetSetExpType::GSE_STRING : nsSwGetSetExpType::GSE_EXPR);
+                        aType.SetContent( sValue, nNumberFormat );
                         m_xSelectionLB->append_text(sName);
                         m_xSelectionLB->select_text(sName);
                         GetFieldMgr().InsertFieldType( aType ); // Userfld new

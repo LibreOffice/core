@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <vector>
+#include <i18nlangtag/lang.h>
 #include <basic/sbxvar.hxx>
 #include <unotools/syslocale.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -259,6 +260,8 @@ public:
                                 double& rVal );
     static bool Str2Double( const OUString& rStr, sal_Int32& rPos,
                                 double& rVal, SwDoc const *const pDoc );
+
+    static LanguageType GetDocAppScriptLang( SwDoc const & rDoc );
 
     SW_DLLPUBLIC static bool IsValidVarName( const OUString& rStr,
                                     OUString* pValidName = nullptr );
