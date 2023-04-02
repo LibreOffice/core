@@ -120,6 +120,7 @@ SwUndoFormatAttr::SwUndoFormatAttr( SfxItemSet&& rOldSet,
     , m_sFormatName ( rChgFormat.GetName() )
     // #i56253#
     , m_oOldSet( std::move( rOldSet ) )
+    , m_nAnchorContentOffset( 0 )
     , m_nNodeIndex( 0 )
     , m_nFormatWhich( rChgFormat.Which() )
     , m_bSaveDrawPt( bSaveDrawPt )
@@ -134,6 +135,7 @@ SwUndoFormatAttr::SwUndoFormatAttr( const SfxPoolItem& rItem, SwFormat& rChgForm
     : SwUndo( SwUndoId::INSFMTATTR, rChgFormat.GetDoc() )
     , m_sFormatName(rChgFormat.GetName())
     , m_oOldSet( rChgFormat.GetAttrSet().CloneAsValue( false ) )
+    , m_nAnchorContentOffset( 0 )
     , m_nNodeIndex( 0 )
     , m_nFormatWhich( rChgFormat.Which() )
     , m_bSaveDrawPt( bSaveDrawPt )
