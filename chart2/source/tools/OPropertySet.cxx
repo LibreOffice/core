@@ -408,7 +408,7 @@ Sequence< beans::PropertyState > OPropertySet::GetPropertyStatesByHandle(
 
 void OPropertySet::SetPropertyToDefault( sal_Int32 nHandle )
 {
-    tPropertyMap::iterator aFoundIter( m_aProperties.find( nHandle ) );
+    auto aFoundIter( m_aProperties.find( nHandle ) );
 
     if( m_aProperties.end() != aFoundIter )
     {
@@ -434,7 +434,7 @@ bool OPropertySet::GetPropertyValueByHandle(
 {
     bool bResult = false;
 
-    tPropertyMap::const_iterator aFoundIter( m_aProperties.find( nHandle ) );
+    auto aFoundIter( m_aProperties.find( nHandle ) );
 
     if( m_aProperties.end() != aFoundIter )
     {

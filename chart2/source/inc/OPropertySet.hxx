@@ -29,7 +29,7 @@
 #include <com/sun/star/style/XStyleSupplier.hpp>
 #include "charttoolsdllapi.hxx"
 
-#include <map>
+#include <unordered_map>
 
 namespace property
 {
@@ -224,8 +224,7 @@ private:
     bool SetStyle( const css::uno::Reference< css::style::XStyle > & xStyle );
 
     bool m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault;
-    typedef std::map< sal_Int32, css::uno::Any > tPropertyMap;
-    tPropertyMap    m_aProperties;
+    std::unordered_map< sal_Int32, css::uno::Any >    m_aProperties;
     css::uno::Reference< css::style::XStyle > m_xStyle;
 };
 
