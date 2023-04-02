@@ -729,7 +729,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL Diagram::getPropertySetInfo()
 }
 
 // ____ XFastPropertySet ____
-void SAL_CALL Diagram::setFastPropertyValue( sal_Int32 nHandle, const Any& rValue )
+void SAL_CALL Diagram::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
 {
     //special treatment for some 3D properties
     if( nHandle == PROP_DIAGRAM_PERSPECTIVE )
@@ -754,7 +754,7 @@ void SAL_CALL Diagram::setFastPropertyValue( sal_Int32 nHandle, const Any& rValu
         }
     }
     else
-        ::property::OPropertySet::setFastPropertyValue( nHandle, rValue );
+        ::property::OPropertySet::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 }
 
 void SAL_CALL Diagram::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
