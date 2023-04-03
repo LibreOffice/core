@@ -67,8 +67,8 @@
 #include "std_inputstream.hxx"
 #include "std_outputstream.hxx"
 
-#define OUSTR_TO_STDSTR(s) std::string( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
-#define STD_TO_OUSTR( str ) OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )
+#define OUSTR_TO_STDSTR(s) std::string( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ) )
+#define STD_TO_OUSTR( str ) OStringToOUString( str, RTL_TEXTENCODING_UTF8 )
 
 using namespace com::sun::star;
 
@@ -191,7 +191,7 @@ namespace
             uno::Sequence< sal_Bool > seqValue;
             value >>= seqValue;
             std::transform(std::cbegin(seqValue), std::cend(seqValue), std::back_inserter(values),
-                [](const bool nValue) -> std::string { return OUSTR_TO_STDSTR( OUString::boolean( nValue ) ); });
+                [](const bool nValue) -> std::string { return std::string( OString::boolean( nValue ) ); });
             type = libcmis::PropertyType::Bool;
         }
         else if ( prop.Type == CMIS_TYPE_INTEGER )
@@ -199,7 +199,7 @@ namespace
             uno::Sequence< sal_Int64 > seqValue;
             value >>= seqValue;
             std::transform(std::cbegin(seqValue), std::cend(seqValue), std::back_inserter(values),
-                [](const sal_Int64 nValue) -> std::string { return OUSTR_TO_STDSTR( OUString::number( nValue ) ); });
+                [](const sal_Int64 nValue) -> std::string { return std::string( OString::number( nValue ) ); });
             type = libcmis::PropertyType::Integer;
         }
         else if ( prop.Type == CMIS_TYPE_DECIMAL )
@@ -207,7 +207,7 @@ namespace
             uno::Sequence< double > seqValue;
             value >>= seqValue;
             std::transform(std::cbegin(seqValue), std::cend(seqValue), std::back_inserter(values),
-                [](const double fValue) -> std::string { return OUSTR_TO_STDSTR( OUString::number( fValue ) ); });
+                [](const double fValue) -> std::string { return std::string( OString::number( fValue ) ); });
             type = libcmis::PropertyType::Decimal;
         }
         else if ( prop.Type == CMIS_TYPE_DATETIME )
