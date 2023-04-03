@@ -146,7 +146,7 @@ public:
     virtual void transform_translate(const Point& rOffset) override;
 };
 
-// Flys that are bound to LayoutFrames and not to Content
+/// Flys that are bound to layout frames (to-frame) and not to/as content
 class SwFlyLayFrame final: public SwFlyFreeFrame
 {
 public:
@@ -158,7 +158,7 @@ public:
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 };
 
-// Flys that are bound to Content but not in Content
+/// Flys that are anchored to content (at-para, at-char) but not in content (as-char).
 class SW_DLLPUBLIC SwFlyAtContentFrame final: public SwFlyFreeFrame, public SwFlowFrame
 {
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
@@ -205,7 +205,7 @@ public:
     void dumpAsXmlAttributes(xmlTextWriterPtr pWriter) const override;
 };
 
-// Flys that are bound to a character in Content
+/// Flys that are anchored as a character in the content.
 class SwFlyInContentFrame final: public SwFlyFrame
 {
     Point m_aRef;  // relative to this point AbsPos is being calculated
