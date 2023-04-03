@@ -33,6 +33,7 @@
 #include <splitcelldlg.hxx>
 #include <cuiimapwnd.hxx>
 #include <cui/cuicharmap.hxx>
+#include <cui/dlgname.hxx>
 #include <srchxtra.hxx>
 #include <textanim.hxx>
 #include <autocdlg.hxx>
@@ -47,7 +48,6 @@
 #include <cuisrchdlg.hxx>
 #include <cuitbxform.hxx>
 #include <optdict.hxx>
-#include <dlgname.hxx>
 #include <multipat.hxx>
 #include <cuihyperdlg.hxx>
 #include <cuifmsearch.hxx>

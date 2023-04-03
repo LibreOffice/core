@@ -27,6 +27,7 @@
 
 #include <cfgutil.hxx>
 #include <cui/cuicharmap.hxx>
+#include <cui/dlgname.hxx>
 #include <cuifmsearch.hxx>
 #include <cuigaldlg.hxx>
 #include <cuigrfflt.hxx>
@@ -35,7 +36,6 @@
 #include <cuisrchdlg.hxx>
 #include <cuitabarea.hxx>
 #include <cuitbxform.hxx>
-#include <dlgname.hxx>
 #include <DiagramDialog.hxx>
 #include <hangulhanjadlg.hxx>
 #include <hyphen.hxx>

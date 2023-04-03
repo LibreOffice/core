@@ -20,6 +20,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include <cui/dlgname.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/commandevent.hxx>
@@ -33,8 +34,6 @@
 #include <dialmgr.hxx>
 
 #include <comphelper/processfactory.hxx>
-
-#include <dlgname.hxx>
 
 SvxMenuConfigPage::SvxMenuConfigPage(weld::Container* pPage, weld::DialogController* pController,
                                      const SfxItemSet& rSet, bool bIsMenuBar)

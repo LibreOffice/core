@@ -38,9 +38,8 @@
 #include <SvxConfigPageHelper.hxx>
 #include <dialmgr.hxx>
 
+#include <cui/dlgname.hxx>
 #include <comphelper/processfactory.hxx>
-
-#include <dlgname.hxx>
 
 SvxToolbarConfigPage::SvxToolbarConfigPage(weld::Container* pPage,
                                            weld::DialogController* pController,

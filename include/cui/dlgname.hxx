@@ -18,10 +18,12 @@
  */
 #pragma once
 
+#include "cuidllapi.h"
+
 #include <vcl/weld.hxx>
 
 /// Dialog for editing a name
-class SvxNameDialog : public weld::GenericDialogController
+class CUI_DLLPUBLIC SvxNameDialog : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::Entry> m_xEdtName;
