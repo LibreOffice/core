@@ -264,6 +264,44 @@ namespace basegfx
 
     namespace utils
     {
+        /* Tooling method to linearly blend the Colors contained in
+           a given ColorStop vector against a given Color using the
+           given intensity values.
+           The intensity values fStartIntensity, fEndIntensity are
+           in the range of [0.0 .. 1.0] and describe how much the
+           blend is supposed to be done at the start color position
+           and the end color position resprectively, where 0.0 means
+           to fully use the given BlendColor, 1.0 means to not change
+           the existing color in the ColorStop.
+           Every color entry in the given ColorStop is blended
+           relative to it's StopPosition, interpolating the
+           given intensities with the range [0.0 .. 1.0] to do so.
+        */
+        void blendColorStopsToIntensity(ColorStops& rColorStops, double fStartIntensity, double fEndIntensity, const basegfx::BColor& rBlendColor)
+        {
+            // no entries, done
+            if (rColorStops.empty())
+                return;
+
+            // correct intensities (maybe assert when input was wrong)
+            fStartIntensity = std::max(std::min(1.0, fStartIntensity), 0.0);
+            fEndIntensity = std::max(std::min(1.0, fEndIntensity), 0.0);
+
+            // all 100%, no real blend, done
+            if (basegfx::fTools::equal(fStartIntensity, 1.0) && basegfx::fTools::equal(fEndIntensity, 1.0))
+                return;
+
+            // blend relative to StopOffset position
+            for (auto& candidate : rColorStops)
+            {
+                const double fOffset(candidate.getStopOffset());
+                const double fIntensity((fStartIntensity * (1.0 - fOffset)) + (fEndIntensity * fOffset));
+                candidate = basegfx::ColorStop(
+                    fOffset,
+                    basegfx::interpolate(rBlendColor, candidate.getStopColor(), fIntensity));
+            }
+        }
+
         /* Tooling method to check if a ColorStop vector is defined
            by a single color. It returns true if this is the case.
            If true is returned, rSingleColor contains that single
