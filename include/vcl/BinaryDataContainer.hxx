@@ -53,6 +53,9 @@ public:
     /// writes the contents to the given stream
     std::size_t writeToStream(SvStream& rStream) const;
 
+    /// return the in-memory size in bytes as of now.
+    std::size_t getSizeBytes() const;
+
     size_t calculateHash() const;
 };
 

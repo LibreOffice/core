@@ -85,6 +85,9 @@ public:
     sal_uInt32          GetDataSize() const { return maDataContainer.getSize(); }
     const sal_uInt8*    GetData() const;
 
+    /// return the in-memory size as of now.
+    size_t              getSizeBytes() const { return maDataContainer.getSizeBytes(); }
+
     const BinaryDataContainer& getDataContainer() const
     {
         return maDataContainer;
