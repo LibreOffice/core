@@ -699,7 +699,7 @@
                                     <property name="draw-indicator">True</property>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="keepratio-atkobject">
-                                        <property name="AtkObject::accessible-description" translatable="yes" context="bulletandposition|extended_tip|keepratio">Check this box to preserve the height to width ratio of the graphic bullet.</property>
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="bulletandposition|extended_tip|keepratio">Check this box to preserve the height-to-width ratio of the graphic bullet.</property>
                                       </object>
                                     </child>
                                   </object>
