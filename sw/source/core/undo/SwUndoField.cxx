@@ -57,11 +57,10 @@ SwPosition SwUndoField::GetPosition()
 SwUndoFieldFromDoc::SwUndoFieldFromDoc(const SwPosition & rPos,
                          const SwField & rOldField,
                          const SwField & rNewField,
-                         const SwMsgPoolItem * _pHint, bool _bUpdate)
+                         bool _bUpdate)
     : SwUndoField(rPos)
     , m_pOldField(rOldField.CopyField())
     , m_pNewField(rNewField.CopyField())
-    , m_pHint(_pHint)
     , m_bUpdate(_bUpdate)
 {
     OSL_ENSURE(m_pOldField, "No old field!");
@@ -80,7 +79,7 @@ void SwUndoFieldFromDoc::UndoImpl(::sw::UndoRedoContext &)
 
     if (pField)
     {
-        m_pDoc->getIDocumentFieldsAccess().UpdateField(pTextField, *m_pOldField, m_pHint, m_bUpdate);
+        m_pDoc->getIDocumentFieldsAccess().UpdateField(pTextField, *m_pOldField, m_bUpdate);
     }
 }
 
@@ -91,7 +90,7 @@ void SwUndoFieldFromDoc::DoImpl()
 
     if (pField)
     {
-        m_pDoc->getIDocumentFieldsAccess().UpdateField(pTextField, *m_pNewField, m_pHint, m_bUpdate);
+        m_pDoc->getIDocumentFieldsAccess().UpdateField(pTextField, *m_pNewField, m_bUpdate);
         SwFormatField* pDstFormatField = const_cast<SwFormatField*>(&pTextField->GetFormatField());
 
         if (m_pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Postit, OUString(), false) == pDstFormatField->GetField()->GetTyp())

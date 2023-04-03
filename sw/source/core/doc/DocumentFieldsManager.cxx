@@ -491,10 +491,9 @@ void DocumentFieldsManager::PutValueToField(const SwPosition & rPos,
     pField->PutValue(rVal, nWhich);
 }
 
-bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & rSrcField,
-                      const SwMsgPoolItem * pMsgHint,
-                      bool bUpdateFields)
+bool DocumentFieldsManager::UpdateField(SwTextField* pDstTextField, SwField& rSrcField, bool bUpdateFields)
 {
+    //static const sw::RefmarkFieldUpdate aRefMarkHint;
     OSL_ENSURE(pDstTextField, "no field to update!");
 
     bool bTableSelBreak = false;
@@ -510,9 +509,7 @@ bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & r
         if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
             SwPosition aPosition( pDstTextField->GetTextNode(), pDstTextField->GetStart() );
-
-            m_rDoc.GetIDocumentUndoRedo().AppendUndo(
-                std::make_unique<SwUndoFieldFromDoc>( aPosition, *pDstField, rSrcField, pMsgHint, bUpdateFields) );
+            m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoFieldFromDoc>(aPosition, *pDstField, rSrcField, bUpdateFields));
         }
 
         pDstFormatField->SetField(rSrcField.CopyField());
@@ -574,7 +571,7 @@ bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & r
             [[fallthrough]];
 
         default:
-            pDstFormatField->UpdateTextNode(nullptr, pMsgHint);
+            pDstFormatField->ForceUpdateTextNode();
         }
 
         // The fields we can calculate here are being triggered for an update
@@ -711,7 +708,7 @@ void DocumentFieldsManager::UpdateTableFields(const SwTable* pTable)
                 }
                 oCalc->SetCalcError( SwCalcError::NONE );
             }
-            pFormatField->UpdateTextNode(nullptr, nullptr);
+            pFormatField->ForceUpdateTextNode();
         }
     }
 

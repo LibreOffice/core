@@ -244,10 +244,9 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
     }
     else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
-        auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
-        if( !mpTextField )
+        if(!mpTextField)
             return;
-        UpdateTextNode(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
+        UpdateTextNode(rHint);
     }
     else if (rHint.GetId() == SfxHintId::SwFindFormatForField)
     {
@@ -395,8 +394,13 @@ void SwFormatField::UpdateDocPos(const SwTwips nDocPos)
 
     pTextNd->UpdateDocPos(nDocPos, mpTextField->GetStart());
 }
-void SwFormatField::UpdateTextNode(const SfxPoolItem* pOld, const SfxPoolItem* pNew)
+void SwFormatField::UpdateTextNode(const SfxHint& rHint)
 {
+    if(SfxHintId::SwLegacyModify != rHint.GetId())
+        return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+    auto pOld = pLegacy->m_pOld;
+    auto pNew = pLegacy->m_pNew;
     if (pOld == nullptr && pNew == nullptr)
     {
         ForceUpdateTextNode();
@@ -429,14 +433,6 @@ void SwFormatField::UpdateTextNode(const SfxPoolItem* pOld, const SfxPoolItem* p
         case RES_ATTRSET_CHG:
         case RES_FMT_CHG:
             break;
-        case RES_REFMARKFLD_UPDATE:
-            // update GetRef fields
-            if(SwFieldIds::GetRef == mpField->GetTyp()->Which())
-            {
-                // #i81002#
-                static_cast<SwGetRefField*>(mpField.get())->UpdateField( mpTextField );
-            }
-        [[fallthrough]];
         default:
             {
                 auto pType = mpField->GetTyp();

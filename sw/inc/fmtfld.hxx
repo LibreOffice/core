@@ -168,7 +168,7 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
     void ForceUpdateTextNode();
-    void UpdateTextNode(const SfxPoolItem* pOld, const SfxPoolItem* pNew);
+    void UpdateTextNode(const SfxHint& rHint);
     void UpdateDocPos(const SwTwips nDocPos);
 };
 

@@ -320,7 +320,7 @@ void SwAnnotationWin::UpdateData()
             SwTextField *const pTextField = mpFormatField->GetTextField();
             SwPosition aPosition( pTextField->GetTextNode(), pTextField->GetStart() );
             rUndoRedo.AppendUndo(
-                std::make_unique<SwUndoFieldFromDoc>(aPosition, *pOldField, *mpField, nullptr, true));
+                std::make_unique<SwUndoFieldFromDoc>(aPosition, *pOldField, *mpField, true));
         }
         // so we get a new layout of notes (anchor position is still the same and we would otherwise not get one)
         mrMgr.SetLayout();
@@ -474,7 +474,7 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject const & rText)
         SwTextField *const pTextField = mpFormatField->GetTextField();
         SwPosition aPosition( pTextField->GetTextNode(), pTextField->GetStart() );
         rUndoRedo.AppendUndo(
-            std::make_unique<SwUndoFieldFromDoc>(aPosition, *pOldField, *mpField, nullptr, true));
+            std::make_unique<SwUndoFieldFromDoc>(aPosition, *pOldField, *mpField, true));
     }
     mpOutliner->SetModifyHdl( LINK( this, SwAnnotationWin, ModifyHdl ) );
     mpOutliner->ClearModifyFlag();

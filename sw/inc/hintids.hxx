@@ -432,7 +432,6 @@ constexpr TypedWhichId<SwPtrMsgPoolItem> RES_OBJECTDYING(RES_FORMAT_MSG_BEGIN); 
 constexpr TypedWhichId<SwFormatChg> RES_FMT_CHG(168);
 constexpr TypedWhichId<SwAttrSetChg> RES_ATTRSET_CHG(169);
 constexpr TypedWhichId<SwUpdateAttr> RES_UPDATE_ATTR(170);
-constexpr TypedWhichId<SwPtrMsgPoolItem> RES_REFMARKFLD_UPDATE(171);
 constexpr TypedWhichId<SwAutoFormatGetDocNode> RES_AUTOFMT_DOCNODE(176);
 constexpr TypedWhichId<SwMsgPoolItem> RES_HIDDENPARA_PRINT(178);
 constexpr TypedWhichId<SwVirtPageNumInfo> RES_VIRTPAGENUM_INFO(180);

@@ -206,10 +206,6 @@ void SwEditShell::UpdateOneField(SwField &rField)
         SwPaM* pCursor = GetCursor();
         SwTextField *pTextField;
         SwFormatField *pFormatField;
-        static const SwMsgPoolItem aRefMarkHint(RES_REFMARKFLD_UPDATE);
-        const SwMsgPoolItem* pRefMarkHint = SwFieldIds::GetRef == rField.GetTyp()->Which() // is this conditional even needed?
-            ? &aRefMarkHint
-            : nullptr;
 
         if ( !pCursor->IsMultiSelection() && !pCursor->HasMark())
         {
@@ -223,7 +219,6 @@ void SwEditShell::UpdateOneField(SwField &rField)
                 GetDoc()->getIDocumentFieldsAccess().UpdateField(
                     pTextField,
                     rField,
-                    pRefMarkHint,
                     true);
             }
         }
@@ -278,7 +273,6 @@ void SwEditShell::UpdateOneField(SwField &rField)
                         bTableSelBreak = GetDoc()->getIDocumentFieldsAccess().UpdateField(
                             pTextField,
                             rField,
-                            pRefMarkHint,
                             false);
                     }
                     // The search area is reduced by the found area:

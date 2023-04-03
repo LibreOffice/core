@@ -43,7 +43,7 @@ public:
     virtual void UpdateFields(bool bCloseDB) override;
     virtual void InsDeletedFieldType(SwFieldType &) override;
     virtual void PutValueToField(const SwPosition & rPos, const css::uno::Any& rVal, sal_uInt16 nWhich) override;
-    virtual bool UpdateField(SwTextField * rDstFormatField, SwField & rSrcField, const SwMsgPoolItem * pMsgHint, bool bUpdateTableFields) override;
+    virtual bool UpdateField(SwTextField* rDstFormatField, SwField& rSrcField, bool bUpdateTableFields) override;
     virtual void UpdateRefFields() override;
     virtual void UpdateTableFields(const SwTable* pTable) override;
     virtual void UpdateExpFields(SwTextField* pField, bool bUpdateRefFields) override;
