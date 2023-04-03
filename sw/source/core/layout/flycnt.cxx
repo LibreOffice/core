@@ -1660,6 +1660,14 @@ void SwFlyAtContentFrame::DelEmpty()
     {
         pMaster->SetFollow(GetFollow());
     }
+
+    SwFlyAtContentFrame* pFollow = GetFollow();
+    if (pFollow)
+    {
+        // I'll be deleted, so invalidate the position of my follow, so it can move up.
+        pFollow->InvalidatePos();
+    }
+
     SetFollow(nullptr);
 
     {

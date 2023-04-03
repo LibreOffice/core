@@ -606,6 +606,29 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyRowDelete)
     CPPUNIT_ASSERT(pPage1);
     CPPUNIT_ASSERT(!pPage1->GetNext());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFly1stRowDelete)
+{
+    // Given a document with a multi-page floating table:
+    Create1x2SplitFly();
+
+    // When deleting the row of A1:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GotoTable("Table1");
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    // We delete the right row:
+    CPPUNIT_ASSERT_EQUAL(OUString("A1"), pTextNode->GetText());
+    pWrtShell->DeleteRow();
+
+    // Then make sure we only have 1 page:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    // Without the accompanying fix in place, this test would have failed, the follow fly was still
+    // on page 2.
+    CPPUNIT_ASSERT(!pPage1->GetNext());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
