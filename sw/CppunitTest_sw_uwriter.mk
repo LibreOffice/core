@@ -30,6 +30,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uwriter, \
 	$(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
     comphelper \
+    cui \
     cppu \
     cppuhelper \
     $(call gb_Helper_optional,DBCONNECTIVITY, \

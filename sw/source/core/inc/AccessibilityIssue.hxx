@@ -59,6 +59,9 @@ public:
     bool canGotoIssue() const override;
     void gotoIssue() const override;
 
+    bool canQuickFixIssue() const override;
+    void quickFixIssue() const override;
+
     sal_Int32 getStart() { return m_nStart; }
     sal_Int32 getEnd() { return m_nEnd; }
     SwNode* getNode() { return m_pNode; }

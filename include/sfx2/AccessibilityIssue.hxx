@@ -11,7 +11,10 @@
 #pragma once
 
 #include <sfx2/dllapi.h>
+
+#include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>
+
 #include <vector>
 #include <memory>
 
@@ -46,8 +49,15 @@ public:
     virtual bool canGotoIssue() const = 0;
     virtual void gotoIssue() const = 0;
 
+    virtual bool canQuickFixIssue() const = 0;
+    virtual void quickFixIssue() const = 0;
+
+    virtual void setParent(weld::Window* pParent) { m_pParent = pParent; }
+
     AccessibilityIssueID m_eIssueID;
     OUString m_aIssueText;
+
+    weld::Window* m_pParent;
 };
 
 class SFX2_DLLPUBLIC AccessibilityIssueCollection

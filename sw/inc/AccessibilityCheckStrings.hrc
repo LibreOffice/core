@@ -41,6 +41,8 @@
 #define STR_STYLE_NO_LANGUAGE           NC_("STR_STYLE_NO_LANGUAGE", "Style “%STYLE_NAME%” has no language set.")
 #define STR_DOCUMENT_TITLE              NC_("STR_DOCUMENT_TITLE", "Document title is not set.")
 
+#define STR_ENTER_ALT                   NC_("STR_ENTER_ALT", "Enter alternative text:")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -9,9 +9,12 @@
  */
 
 #include <AccessibilityIssue.hxx>
+#include <AccessibilityCheckStrings.hrc>
+#include <swtypes.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <comphelper/lok.hxx>
+#include <cui/dlgname.hxx>
 
 namespace sw
 {
@@ -77,6 +80,36 @@ void AccessibilityIssue::gotoIssue() const
             pWrtShell->EndAllAction();
             if (comphelper::LibreOfficeKit::isActive())
                 pWrtShell->ShowCursor();
+        }
+        break;
+        default:
+            break;
+    }
+}
+
+bool AccessibilityIssue::canQuickFixIssue() const
+{
+    return m_eIssueObject == IssueObject::GRAPHIC || m_eIssueObject == IssueObject::OLE;
+}
+
+void AccessibilityIssue::quickFixIssue() const
+{
+    if (!m_pDoc)
+        return;
+
+    switch (m_eIssueObject)
+    {
+        case IssueObject::GRAPHIC:
+        case IssueObject::OLE:
+        {
+            OUString aDesc = SwResId(STR_ENTER_ALT);
+            SvxNameDialog aNameDialog(m_pParent, "", aDesc);
+            if (aNameDialog.run() == RET_OK)
+            {
+                SwFlyFrameFormat* pFlyFormat
+                    = const_cast<SwFlyFrameFormat*>(m_pDoc->FindFlyByName(m_sObjectID));
+                m_pDoc->SetFlyFrameTitle(*pFlyFormat, aNameDialog.GetName());
+            }
         }
         break;
         default:
