@@ -62,7 +62,7 @@ class tdf154545(UITestCase):
 
             # check selected nested bookmark in Navigator
 
-            # This never occured: Navigator didn't track nested bookmarks
+            # This never occurred: Navigator didn't track nested bookmarks
             self.ui_test.wait_until_property_is_updated(xContentTree, "SelectEntryText", "Bookmark 2")
             # This was Bookmark 1
             self.assertEqual(get_state_as_dict(xContentTree)["SelectEntryText"], "Bookmark 2")
