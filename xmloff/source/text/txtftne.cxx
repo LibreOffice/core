@@ -97,7 +97,7 @@ void XMLTextParagraphExport::exportTextFootnote(
         {
             XMLTextCharStyleNamesElementExport aCharStylesExport(
                 GetExport(), bIsUICharStyle &&
-                             aCharStyleNamesPropInfoCache.hasProperty(
+                             m_aCharStyleNamesPropInfoCache.hasProperty(
                                                     rPropSet ), bHasAutoStyle,
                 rPropSet, gsCharStyleNames );
             if( !sStyle.isEmpty() )

@@ -113,7 +113,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
         {
             // if we have a mute section, ignore all its children
             // (all previous ones)
-            if (pSectionExport->IsMuteSection(aCurrent))
+            if (m_pSectionExport->IsMuteSection(aCurrent))
                 aOldStack.clear();
 
             aOldStack.push_back(aCurrent);
@@ -127,7 +127,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
         {
             // if we have a mute section, ignore all its children
             // (all previous ones)
-            if (pSectionExport->IsMuteSection(aCurrent))
+            if (m_pSectionExport->IsMuteSection(aCurrent))
             {
                 aNewStack.clear();
                 bMute = true;
@@ -160,18 +160,18 @@ void XMLTextParagraphExport::exportListAndSectionChange(
             while ((aOldForward != aOldStack.end()) &&
                    (*aOldForward != *aOld))
             {
-                if ( !bAutoStyles && (nullptr != pRedlineExport) )
-                    pRedlineExport->ExportStartOrEndRedline(*aOldForward,
+                if ( !bAutoStyles && (nullptr != m_pRedlineExport) )
+                    m_pRedlineExport->ExportStartOrEndRedline(*aOldForward,
                                                                 false);
-                pSectionExport->ExportSectionEnd(*aOldForward, bAutoStyles);
+                m_pSectionExport->ExportSectionEnd(*aOldForward, bAutoStyles);
                 ++aOldForward;
             }
             if (aOldForward != aOldStack.end())
             {
-                if ( !bAutoStyles && (nullptr != pRedlineExport) )
-                    pRedlineExport->ExportStartOrEndRedline(*aOldForward,
+                if ( !bAutoStyles && (nullptr != m_pRedlineExport) )
+                    m_pRedlineExport->ExportStartOrEndRedline(*aOldForward,
                                                             false);
-                pSectionExport->ExportSectionEnd(*aOldForward, bAutoStyles);
+                m_pSectionExport->ExportSectionEnd(*aOldForward, bAutoStyles);
             }
         }
 
@@ -179,9 +179,9 @@ void XMLTextParagraphExport::exportListAndSectionChange(
         // (order: oldest to newest)
         while (aNew != aNewStack.rend())
         {
-            if ( !bAutoStyles && (nullptr != pRedlineExport) )
-                pRedlineExport->ExportStartOrEndRedline(*aNew, true);
-            pSectionExport->ExportSectionStart(*aNew, bAutoStyles);
+            if ( !bAutoStyles && (nullptr != m_pRedlineExport) )
+                m_pRedlineExport->ExportStartOrEndRedline(*aNew, true);
+            m_pSectionExport->ExportSectionStart(*aNew, bAutoStyles);
             ++aNew;
         }
 

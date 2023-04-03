@@ -98,7 +98,7 @@ void XMLTextParagraphExport::exportStyleAttributes(
                                           GetExport().EncodeStyleName( sName ) );
         }
     }
-    if( bProgress )
+    if( m_bProgress )
     {
         ProgressBarHelper *pProgress = GetExport().GetProgressBarHelper();
         pProgress->SetValue( pProgress->GetValue()+2 );
@@ -113,8 +113,8 @@ void XMLTextParagraphExport::exportNumStyles( bool bUsed )
 
 void XMLTextParagraphExport::exportTextStyles( bool bUsed, bool bProg )
 {
-    bool bOldProg = bProgress;
-    bProgress = bProg;
+    bool bOldProg = m_bProgress;
+    m_bProgress = bProg;
 
     Reference < lang::XMultiServiceFactory > xFactory (GetExport().GetModel(), UNO_QUERY);
     if (xFactory.is())
@@ -147,7 +147,7 @@ void XMLTextParagraphExport::exportTextStyles( bool bUsed, bool bProg )
                        bUsed, XmlStyleFamily::TEXT_TEXT );
     // get shape export to make sure the frame family is added correctly.
     GetExport().GetShapeExport();
-    exportStyleFamily( "FrameStyles", OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), xFramePropMapper,
+    exportStyleFamily( "FrameStyles", OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), m_xFramePropMapper,
                        bUsed, XmlStyleFamily::TEXT_FRAME);
     exportNumStyles( bUsed );
     if( !IsBlockMode() )
@@ -158,7 +158,7 @@ void XMLTextParagraphExport::exportTextStyles( bool bUsed, bool bProg )
         aLineNumberingExport.Export();
     }
 
-    bProgress = bOldProg;
+    m_bProgress = bOldProg;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
