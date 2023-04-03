@@ -86,7 +86,7 @@ namespace desktop {
             return m_aRectangle.IsEmpty();
         }
 
-        static RectangleAndPart Create(const std::string& rPayload);
+        static RectangleAndPart Create(const OString& rPayload);
         /// Makes sure a rectangle is valid (apparently some code does not like negative coordinates for example).
         static tools::Rectangle SanitizedRectangle(tools::Long nLeft, tools::Long nTop, tools::Long nWidth, tools::Long nHeight);
         static tools::Rectangle SanitizedRectangle(const tools::Rectangle& rect);
@@ -100,7 +100,7 @@ namespace desktop {
         virtual ~CallbackFlushHandler() override;
         virtual void Invoke() override;
         // TODO This should be dropped and the binary libreOfficeKitViewCallback() variants should be called?
-        void queue(const int type, const char* data);
+        void queue(const int type, const OString& data);
 
         /// Disables callbacks on this handler. Must match with identical count
         /// of enableCallbacks. Used during painting and changing views.
@@ -117,8 +117,8 @@ namespace desktop {
         void setViewId( int viewId ) { m_viewId = viewId; }
 
         // SfxLockCallbackInterface
-        virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) override;
-        virtual void libreOfficeKitViewCallbackWithViewId(int nType, const char* pPayload, int nViewId) override;
+        virtual void libreOfficeKitViewCallback(int nType, const OString& pPayload) override;
+        virtual void libreOfficeKitViewCallbackWithViewId(int nType, const OString& pPayload, int nViewId) override;
         virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) override;
         virtual void libreOfficeKitViewUpdatedCallback(int nType) override;
         virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) override;
@@ -128,13 +128,13 @@ namespace desktop {
     private:
         struct CallbackData
         {
-            CallbackData(const char* payload)
-                : PayloadString(payload ? payload : "(nil)")
+            CallbackData(OString payload)
+                : PayloadString(payload)
             {
             }
 
-            CallbackData(const char* payload, int viewId)
-                : PayloadString(payload ? payload : "(nil)")
+            CallbackData(OString payload, int viewId)
+                : PayloadString(payload)
                 , PayloadObject(viewId)
             {
             }
@@ -149,7 +149,7 @@ namespace desktop {
             { // PayloadString will be done on demand
             }
 
-            const std::string& getPayload() const;
+            const OString& getPayload() const;
             /// Update a RectangleAndPart object and update PayloadString if necessary.
             void updateRectangleAndPart(const RectangleAndPart& rRectAndPart);
             /// Return the parsed RectangleAndPart instance.
@@ -165,7 +165,7 @@ namespace desktop {
 
             bool isEmpty() const
             {
-                return PayloadString.empty() && PayloadObject.which() == 0;
+                return PayloadString.isEmpty() && PayloadObject.which() == 0;
             }
             void clear()
             {
@@ -180,7 +180,7 @@ namespace desktop {
             bool isCached() const { return PayloadObject.which() != 0; }
 
         private:
-            mutable std::string PayloadString;
+            mutable OString PayloadString;
 
             /// The parsed payload cache. Update validate() when changing this.
             mutable boost::variant<boost::blank, RectangleAndPart, boost::property_tree::ptree, int> PayloadObject;
@@ -204,9 +204,9 @@ namespace desktop {
             so we split the queue in 2 to make the scanning cache friendly. */
         queue_type1 m_queue1;
         queue_type2 m_queue2;
-        std::map<int, std::string> m_states;
-        std::unordered_map<std::string, std::string> m_lastStateChange;
-        std::unordered_map<int, std::unordered_map<int, std::string>> m_viewStates;
+        std::map<int, OString> m_states;
+        std::unordered_map<OString, OString> m_lastStateChange;
+        std::unordered_map<int, std::unordered_map<int, OString>> m_viewStates;
 
         // For some types only the last message matters (see isUpdatedType()) or only the last message
         // per each viewId value matters (see isUpdatedTypePerViewId()), so instead of using push model

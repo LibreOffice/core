@@ -1331,8 +1331,8 @@ void ScUndoPrintRange::DoChange(bool bUndo)
         else
             pNewRanges->GetPrintRangesInfo(aJsonWriter);
 
-        const std::string message = aJsonWriter.extractAsStdString();
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_PRINT_RANGES, message.c_str());
+        const OString message = aJsonWriter.finishAndGetAsOString();
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_PRINT_RANGES, message);
     }
 
     pDocShell->PostPaint( ScRange(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab), PaintPartFlags::Grid );

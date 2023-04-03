@@ -1484,7 +1484,7 @@ void SfxViewShell::libreOfficeKitViewInvalidateTilesCallback(const tools::Rectan
             "SfxViewShell::libreOfficeKitViewInvalidateTilesCallback no callback set!");
 }
 
-void SfxViewShell::libreOfficeKitViewCallbackWithViewId(int nType, const char* pPayload, int nViewId) const
+void SfxViewShell::libreOfficeKitViewCallbackWithViewId(int nType, const OString& pPayload, int nViewId) const
 {
     if (ignoreLibreOfficeKitViewCallback(nType, pImpl.get()))
         return;
@@ -1497,7 +1497,7 @@ void SfxViewShell::libreOfficeKitViewCallbackWithViewId(int nType, const char* p
             << lokCallbackTypeToString(nType) << ": [" << pPayload << ']');
 }
 
-void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) const
+void SfxViewShell::libreOfficeKitViewCallback(int nType, const OString& pPayload) const
 {
     if (ignoreLibreOfficeKitViewCallback(nType, pImpl.get()))
         return;

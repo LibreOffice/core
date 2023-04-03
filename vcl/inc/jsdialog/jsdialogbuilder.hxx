@@ -111,7 +111,7 @@ class JSDialogNotifyIdle final : public Idle
     // used to generate JSON
     VclPtr<vcl::Window> m_aContentWindow;
     OUString m_sTypeOfJSON;
-    std::string m_LastNotificationMessage;
+    OString m_LastNotificationMessage;
     bool m_bForce;
 
     std::deque<JSDialogMessageInfo> m_aMessageQueue;

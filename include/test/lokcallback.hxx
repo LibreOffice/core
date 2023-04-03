@@ -31,8 +31,8 @@ public:
     void clear();
     /// Set the view id of the associated SfxViewShell.
     void setLOKViewId(int viewId) { m_viewId = viewId; }
-    virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) override;
-    virtual void libreOfficeKitViewCallbackWithViewId(int nType, const char* pPayload,
+    virtual void libreOfficeKitViewCallback(int nType, const rtl::OString& pPayload) override;
+    virtual void libreOfficeKitViewCallbackWithViewId(int nType, const rtl::OString& pPayload,
                                                       int nViewId) override;
     virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart,
                                                            int nMode) override;

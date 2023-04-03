@@ -43,11 +43,11 @@ void JsonWriterTest::test1()
         aJson.put("int", static_cast<sal_Int32>(12));
     }
 
-    std::unique_ptr<char, o3tl::free_delete> result(aJson.extractData());
+    OString result(aJson.finishAndGetAsOString());
 
-    CPPUNIT_ASSERT_EQUAL(std::string("{ \"node\": { \"oustring\": \"val1\", "
-                                     "\"charptr\": \"val3\", \"int\": 12}}"),
-                         std::string(result.get()));
+    CPPUNIT_ASSERT_EQUAL(OString("{ \"node\": { \"oustring\": \"val1\", "
+                                 "\"charptr\": \"val3\", \"int\": 12}}"),
+                         result);
 }
 
 void JsonWriterTest::test2()
@@ -69,12 +69,12 @@ void JsonWriterTest::test2()
         }
     }
 
-    std::unique_ptr<char, o3tl::free_delete> result(aJson.extractData());
+    OString result(aJson.finishAndGetAsOString());
 
-    CPPUNIT_ASSERT_EQUAL(std::string("{ \"node\": { \"field1\": \"val1\", \"field2\": \"val2\", "
-                                     "\"node\": { \"field3\": \"val3\", \"node\": { \"field4\": "
-                                     "\"val4\", \"field5\": \"val5\"}}}}"),
-                         std::string(result.get()));
+    CPPUNIT_ASSERT_EQUAL(OString("{ \"node\": { \"field1\": \"val1\", \"field2\": \"val2\", "
+                                 "\"node\": { \"field3\": \"val3\", \"node\": { \"field4\": "
+                                 "\"val4\", \"field5\": \"val5\"}}}}"),
+                         result);
 }
 
 void JsonWriterTest::testArray()
@@ -86,10 +86,9 @@ void JsonWriterTest::testArray()
         aJson.putSimpleValue("bar");
     }
 
-    std::unique_ptr<char, o3tl::free_delete> aResult(aJson.extractData());
+    OString aResult(aJson.finishAndGetAsOString());
 
-    CPPUNIT_ASSERT_EQUAL(std::string("{ \"items\": [ \"foo\", \"bar\"]}"),
-                         std::string(aResult.get()));
+    CPPUNIT_ASSERT_EQUAL(OString("{ \"items\": [ \"foo\", \"bar\"]}"), aResult);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(JsonWriterTest);

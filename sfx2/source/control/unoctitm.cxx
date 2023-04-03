@@ -542,7 +542,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         aTree.put("message", "Blocked feature");
         aTree.put("viewID", SfxViewShell::Current()->GetViewShellId().get());
 
-        SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_COMMAND_BLOCKED, aTree.extractData());
+        SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_COMMAND_BLOCKED, aTree.finishAndGetAsOString());
         return;
     }
 

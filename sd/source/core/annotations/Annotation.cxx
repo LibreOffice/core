@@ -340,7 +340,7 @@ const SdPage* getAnnotationPage(const uno::Reference<office::XAnnotation>& xAnno
 
 namespace
 {
-std::string lcl_LOKGetCommentPayload(CommentNotificationType nType, uno::Reference<office::XAnnotation> const & rxAnnotation)
+OString lcl_LOKGetCommentPayload(CommentNotificationType nType, uno::Reference<office::XAnnotation> const & rxAnnotation)
 {
     ::tools::JsonWriter aJsonWriter;
     {
@@ -368,7 +368,7 @@ std::string lcl_LOKGetCommentPayload(CommentNotificationType nType, uno::Referen
             aJsonWriter.put("rectangle", sRectangle.getStr());
         }
     }
-    return aJsonWriter.extractData();
+    return aJsonWriter.finishAndGetAsOString();
 }
 } // anonymous ns
 
@@ -378,8 +378,8 @@ void LOKCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewSh
     if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())
         return ;
 
-    std::string aPayload = lcl_LOKGetCommentPayload(nType, rxAnnotation);
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, aPayload.c_str());
+    OString aPayload = lcl_LOKGetCommentPayload(nType, rxAnnotation);
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, aPayload);
 }
 
 void LOKCommentNotifyAll(CommentNotificationType nType, uno::Reference<office::XAnnotation> const & rxAnnotation)
@@ -388,12 +388,12 @@ void LOKCommentNotifyAll(CommentNotificationType nType, uno::Reference<office::X
     if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())
         return ;
 
-    std::string aPayload = lcl_LOKGetCommentPayload(nType, rxAnnotation);
+    OString aPayload = lcl_LOKGetCommentPayload(nType, rxAnnotation);
 
     const SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, aPayload.c_str());
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, aPayload);
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }

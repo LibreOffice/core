@@ -1233,8 +1233,7 @@ void SidebarController::RequestCloseDeck()
             aJsonWriter.put("type", "dockingwindow");
             aJsonWriter.put("text", mpParentWindow->GetText());
             aJsonWriter.put("enabled", false);
-            const std::string message = aJsonWriter.extractAsStdString();
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, aJsonWriter.finishAndGetAsOString());
         }
         else if (pViewShell)
         {
@@ -1242,8 +1241,7 @@ void SidebarController::RequestCloseDeck()
             aJsonWriter.put("id", mpParentWindow->get_id());
             aJsonWriter.put("action", "close");
             aJsonWriter.put("jsontype", "sidebar");
-            const std::string message = aJsonWriter.extractAsStdString();
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, aJsonWriter.finishAndGetAsOString());
         }
     }
 

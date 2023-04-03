@@ -517,29 +517,29 @@ static void unoAnyToJson(tools::JsonWriter& rJson, const char * pNodeName, const
     }
 }
 
-static int lcl_getViewId(const std::string& payload);
+static int lcl_getViewId(std::string_view payload);
 
 namespace desktop {
 
-RectangleAndPart RectangleAndPart::Create(const std::string& rPayload)
+RectangleAndPart RectangleAndPart::Create(const OString& rPayload)
 {
     RectangleAndPart aRet;
-    if (rPayload.compare(0, 5, "EMPTY") == 0) // payload starts with "EMPTY"
+    if (rPayload.startsWith("EMPTY")) // payload starts with "EMPTY"
     {
         aRet.m_aRectangle = tools::Rectangle(0, 0, SfxLokHelper::MaxTwips, SfxLokHelper::MaxTwips);
         if (comphelper::LibreOfficeKit::isPartInInvalidation())
         {
-            int nSeparatorPos = rPayload.find(',', 6);
+            int nSeparatorPos = rPayload.indexOf(',', 6);
             bool bHasMode = nSeparatorPos > 0;
             if (bHasMode)
             {
-                aRet.m_nPart = std::stol(rPayload.substr(6, nSeparatorPos - 6));
-                assert(rPayload.length() > o3tl::make_unsigned(nSeparatorPos));
-                aRet.m_nMode = std::stol(rPayload.substr(nSeparatorPos + 1));
+                aRet.m_nPart = o3tl::toInt32(rPayload.subView(6, nSeparatorPos - 6));
+                assert(rPayload.getLength() > nSeparatorPos);
+                aRet.m_nMode = o3tl::toInt32(rPayload.subView(nSeparatorPos + 1));
             }
             else
             {
-                aRet.m_nPart = std::stol(rPayload.substr(6));
+                aRet.m_nPart = o3tl::toInt32(rPayload.subView(6));
                 aRet.m_nMode = 0;
             }
         }
@@ -548,8 +548,8 @@ RectangleAndPart RectangleAndPart::Create(const std::string& rPayload)
     }
 
     // Read '<left>, <top>, <width>, <height>[, <part>, <mode>]'. C++ streams are simpler but slower.
-    const char* pos = rPayload.c_str();
-    const char* end = rPayload.c_str() + rPayload.size();
+    const char* pos = rPayload.getStr();
+    const char* end = rPayload.getStr() + rPayload.getLength();
     tools::Long nLeft = rtl_str_toInt64_WithLength(pos, 10, end - pos);
     while( *pos != ',' )
         ++pos;
@@ -622,9 +622,9 @@ tools::Rectangle RectangleAndPart::SanitizedRectangle(const tools::Rectangle& re
     return SanitizedRectangle(rect.Left(), rect.Top(), rect.getOpenWidth(), rect.getOpenHeight());
 }
 
-const std::string& CallbackFlushHandler::CallbackData::getPayload() const
+const OString& CallbackFlushHandler::CallbackData::getPayload() const
 {
-    if(PayloadString.empty())
+    if(PayloadString.isEmpty())
     {
         // Do to-string conversion on demand, as many calls will get dropped without
         // needing the string.
@@ -667,7 +667,7 @@ void CallbackFlushHandler::CallbackData::setJson(const boost::property_tree::ptr
     std::stringstream aJSONStream;
     constexpr bool bPretty = false; // Don't waste time and bloat logs.
     boost::property_tree::write_json(aJSONStream, rTree, bPretty);
-    PayloadString = boost::trim_copy(aJSONStream.str());
+    PayloadString = OString(o3tl::trim(aJSONStream.str()));
 
     PayloadObject = rTree;
 }
@@ -706,7 +706,7 @@ bool CallbackFlushHandler::CallbackData::validate() const
             std::stringstream aJSONStream;
             boost::property_tree::write_json(aJSONStream, getJson(), false);
             const std::string aExpected = boost::trim_copy(aJSONStream.str());
-            return aExpected == getPayload();
+            return getPayload() == std::string_view(aExpected);
         }
 
         // View id.
@@ -764,7 +764,7 @@ static bool isUpdatedTypePerViewId(int type)
     }
 }
 
-static int lcl_getViewId(const std::string& payload)
+static int lcl_getViewId(std::string_view payload)
 {
     // this is a cheap way how to get the viewId from a JSON message; proper
     // parsing is terribly expensive, and we just need the viewId here
@@ -783,7 +783,7 @@ static int lcl_getViewId(const std::string& payload)
     }
 
     if (numberPos < payload.length() && payload[numberPos] >= '0' && payload[numberPos] <= '9')
-        return strtol(payload.substr(numberPos).c_str(), nullptr, 10);
+        return o3tl::toInt32(payload.substr(numberPos));
 
     return 0;
 }
@@ -1597,13 +1597,13 @@ void CallbackFlushHandler::resetUpdatedTypePerViewId( int nType, int nViewId )
     }
 }
 
-void CallbackFlushHandler::libreOfficeKitViewCallback(int nType, const char* pPayload)
+void CallbackFlushHandler::libreOfficeKitViewCallback(int nType, const OString& pPayload)
 {
     CallbackData callbackData(pPayload);
     queue(nType, callbackData);
 }
 
-void CallbackFlushHandler::libreOfficeKitViewCallbackWithViewId(int nType, const char* pPayload, int nViewId)
+void CallbackFlushHandler::libreOfficeKitViewCallbackWithViewId(int nType, const OString& pPayload, int nViewId)
 {
     CallbackData callbackData(pPayload, nViewId);
     queue(nType, callbackData);
@@ -1654,7 +1654,7 @@ void CallbackFlushHandler::libreOfficeKitViewAddPendingInvalidateTiles()
     startTimer();
 }
 
-void CallbackFlushHandler::queue(const int type, const char* data)
+void CallbackFlushHandler::queue(const int type, const OString& data)
 {
     CallbackData callbackData(data);
     queue(type, callbackData);
@@ -1709,9 +1709,9 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
 
     // Suppress invalid payloads.
     if (type == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
-        aCallbackData.getPayload().find(", 0, 0, ") != std::string::npos &&
-        aCallbackData.getPayload().find("\"hyperlink\":\"\"") == std::string::npos &&
-        aCallbackData.getPayload().find("\"hyperlink\": {}") == std::string::npos)
+        aCallbackData.getPayload().indexOf(", 0, 0, ") != -1 &&
+        aCallbackData.getPayload().indexOf("\"hyperlink\":\"\"") == -1 &&
+        aCallbackData.getPayload().indexOf("\"hyperlink\": {}") == -1)
     {
         // The cursor position is often the relative coordinates of the widget
         // issuing it, instead of the absolute one that we expect.
@@ -1843,8 +1843,8 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
                 // deleting the duplicate of visible cursor message can cause hyperlink popup not to show up on second/or more click on the same place.
                 // If the hyperlink is not empty we can bypass that to show the popup
                 const bool hyperLinkException = type == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
-                    aCallbackData.getPayload().find("\"hyperlink\":\"\"") == std::string::npos &&
-                    aCallbackData.getPayload().find("\"hyperlink\": {}") == std::string::npos;
+                    aCallbackData.getPayload().indexOf("\"hyperlink\":\"\"") == -1 &&
+                    aCallbackData.getPayload().indexOf("\"hyperlink\": {}") == -1;
                 if(!hyperLinkException)
                 {
                     const int nViewId = aCallbackData.getViewId();
@@ -1866,16 +1866,16 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             case LOK_CALLBACK_STATE_CHANGED:
             {
                 // Compare the state name=value and overwrite earlier entries with same name.
-                const auto pos = aCallbackData.getPayload().find('=');
-                if (pos != std::string::npos)
+                const auto pos = aCallbackData.getPayload().indexOf('=');
+                if (pos != -1)
                 {
-                    const std::string name = aCallbackData.getPayload().substr(0, pos + 1);
+                    const std::string_view name = aCallbackData.getPayload().subView(0, pos + 1);
                     // This is needed because otherwise it creates some problems when
                     // a save occurs while a cell is still edited in Calc.
                     if (name != ".uno:ModifiedStatus=")
                     {
                         removeAll(type, [&name] (const CallbackData& elemData) {
-                                return (elemData.getPayload().compare(0, name.size(), name) == 0);
+                                return elemData.getPayload().startsWith(name);
                             }
                         );
                     }
@@ -1893,7 +1893,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
                 // remove only selection ranges and 'EMPTY' messages
                 // always send 'INPLACE' and 'INPLACE EXIT' messages
                 removeAll(type, [] (const CallbackData& elemData)
-                    { return (elemData.getPayload().find("INPLACE") == std::string::npos); });
+                    { return (elemData.getPayload().indexOf("INPLACE") == -1); });
             }
             break;
         }
@@ -2055,9 +2055,9 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
 
 bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackData)
 {
-    const std::string& payload = aCallbackData.getPayload();
+    const OString& payload = aCallbackData.getPayload();
 
-    boost::property_tree::ptree& aTree = aCallbackData.setJson(payload);
+    boost::property_tree::ptree& aTree = aCallbackData.setJson(payload.getStr());
     const unsigned nLOKWindowId = aTree.get<unsigned>("id", 0);
     const std::string aAction = aTree.get<std::string>("action", "");
     if (aAction == "invalidate")
@@ -2299,7 +2299,7 @@ void CallbackFlushHandler::enqueueUpdatedType( int type, const SfxViewShell* vie
     std::optional<OString> payload = viewShell->getLOKPayload( type, viewId );
     if(!payload)
         return; // No actual payload to send.
-    CallbackData callbackData(payload->getStr(), viewId);
+    CallbackData callbackData(*payload, viewId);
     m_queue1.emplace_back(type);
     m_queue2.emplace_back(callbackData);
     SAL_INFO("lok", "Queued updated [" << type << "]: [" << callbackData.getPayload()
@@ -2341,13 +2341,13 @@ void CallbackFlushHandler::Invoke()
         // common code-path for events on this view:
         if (viewId == -1)
         {
-            size_t idx;
+            sal_Int32 idx;
             // key-value pairs
             if (type == LOK_CALLBACK_STATE_CHANGED &&
-                (idx = payload.find('=')) != std::string::npos)
+                (idx = payload.indexOf('=')) != -1)
             {
-                std::string key = payload.substr(0, idx);
-                std::string value = payload.substr(idx+1);
+                OString key = payload.copy(0, idx);
+                OString value = payload.copy(idx+1);
                 const auto stateIt = m_lastStateChange.find(key);
                 if (stateIt != m_lastStateChange.end())
                 {
@@ -2409,7 +2409,7 @@ void CallbackFlushHandler::Invoke()
             }
         }
 
-        m_pCallback(type, payload.c_str(), m_pData);
+        m_pCallback(type, payload.getStr(), m_pData);
     }
 
     m_queue1.clear();
@@ -4357,7 +4357,7 @@ static char* getPostIts(LibreOfficeKitDocument* pThis)
     }
     tools::JsonWriter aJsonWriter;
     pDoc->getPostIts(aJsonWriter);
-    return aJsonWriter.extractData();
+    return strdup(aJsonWriter.finishAndGetAsOString().getStr());
 }
 
 /// Returns the JSON representation of the positions of all the comments in the document
@@ -4372,7 +4372,7 @@ static char* getPostItsPos(LibreOfficeKitDocument* pThis)
     }
     tools::JsonWriter aJsonWriter;
     pDoc->getPostItsPos(aJsonWriter);
-    return aJsonWriter.extractData();
+    return strdup(aJsonWriter.finishAndGetAsOString().getStr());
 }
 
 static char* getRulerState(LibreOfficeKitDocument* pThis)
@@ -4386,7 +4386,7 @@ static char* getRulerState(LibreOfficeKitDocument* pThis)
     }
     tools::JsonWriter aJsonWriter;
     pDoc->getRulerState(aJsonWriter);
-    return aJsonWriter.extractData();
+    return strdup(aJsonWriter.finishAndGetAsOString().getStr());
 }
 
 static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nCharCode, int nKeyCode)
@@ -4635,7 +4635,7 @@ public:
         }
 
         unoAnyToJson(aJson, "result", rEvent.Result);
-        mpCallback->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.extractData());
+        mpCallback->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
     }
 
     virtual void SAL_CALL disposing(const css::lang::EventObject&) override {}
@@ -4829,7 +4829,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
             tools::JsonWriter aJson;
             aJson.put("commandName", pCommand);
             aJson.put("success", bResult);
-            pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.extractData());
+            pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
             return;
         }
 
@@ -4867,7 +4867,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
                 aJson.put("type", "string");
                 aJson.put("value", "unmodified");
             }
-            pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.extractData());
+            pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
             return;
         }
     }
@@ -6049,7 +6049,7 @@ static char* getTrackedChanges(LibreOfficeKitDocument* pThis)
         pDoc->getTrackedChanges(aJson);
     }
 
-    return aJson.extractData();
+    return strdup(aJson.finishAndGetAsOString().getStr());
 }
 
 
@@ -6064,7 +6064,7 @@ static char* getTrackedChangeAuthors(LibreOfficeKitDocument* pThis)
     }
     tools::JsonWriter aJsonWriter;
     pDoc->getTrackedChangeAuthors(aJsonWriter);
-    return aJsonWriter.extractData();
+    return strdup(aJsonWriter.finishAndGetAsOString().getStr());
 }
 
 static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCommand)
@@ -6170,7 +6170,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
 
         tools::JsonWriter aJsonWriter;
         pDoc->getRowColumnHeaders(aRectangle, aJsonWriter);
-        return aJsonWriter.extractData();
+        return strdup(aJsonWriter.finishAndGetAsOString().getStr());
     }
     else if (o3tl::starts_with(aCommand, aSheetGeometryData))
     {
@@ -6236,7 +6236,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
         // Ignore command's deprecated parameters.
         tools::JsonWriter aJsonWriter;
         pDoc->getCellCursor(aJsonWriter);
-        return aJsonWriter.extractData();
+        return strdup(aJsonWriter.finishAndGetAsOString().getStr());
     }
     else if (o3tl::starts_with(aCommand, aFontSubset))
     {
@@ -6246,7 +6246,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     {
         tools::JsonWriter aJsonWriter;
         pDoc->getCommandValues(aJsonWriter, aCommand);
-        return aJsonWriter.extractData();
+        return strdup(aJsonWriter.finishAndGetAsOString().getStr());
     }
     else
     {
@@ -7011,7 +7011,7 @@ static char* lo_getFilterTypes(LibreOfficeKit* pThis)
         }
     }
 
-    return aJson.extractData();
+    return strdup(aJson.finishAndGetAsOString().getStr());
 }
 
 static void lo_setOptionalFeatures(LibreOfficeKit* pThis, unsigned long long const features)

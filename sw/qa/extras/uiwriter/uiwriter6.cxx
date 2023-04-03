@@ -1481,9 +1481,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf65535)
 
     tools::JsonWriter aJsonWriter;
     pTextDoc->getPostIts(aJsonWriter);
-    char* pChar = aJsonWriter.extractData();
-    std::stringstream aStream(pChar);
-    free(pChar);
+    OString pChar = aJsonWriter.finishAndGetAsOString();
+    std::stringstream aStream(pChar.getStr());
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
     OString sCommentText;

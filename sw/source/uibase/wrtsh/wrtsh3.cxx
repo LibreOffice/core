@@ -108,9 +108,9 @@ bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentContro
             {
                 tools::JsonWriter aJson;
                 aJson.put("action", "change-picture");
-                std::unique_ptr<char, o3tl::free_delete> pJson(aJson.extractData());
+                OString pJson(aJson.finishAndGetAsOString());
                 GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CONTENT_CONTROL,
-                                                              pJson.get());
+                                                              pJson);
             }
             else
             {

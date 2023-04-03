@@ -2578,7 +2578,7 @@ void DesktopLOKTest::testCommentsAddEditDeleteDraw()
         tools::JsonWriter aJson;
         addParameter(aJson, "Text", "string", "Comment");
         addParameter(aJson, "Author", "string", "LOK User1");
-        aCommandArgs = aJson.extractAsOString();
+        aCommandArgs = aJson.finishAndGetAsOString();
     }
 
     pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", aCommandArgs.getStr(), false);
@@ -2593,7 +2593,7 @@ void DesktopLOKTest::testCommentsAddEditDeleteDraw()
         tools::JsonWriter aJson;
         addParameter(aJson, "Id", "string", OString::number(nCommentId1));
         addParameter(aJson, "Text", "string", "Edited comment");
-        aCommandArgs = aJson.extractAsOString();
+        aCommandArgs = aJson.finishAndGetAsOString();
     }
 
     pDocument->pClass->postUnoCommand(pDocument, ".uno:EditAnnotation", aCommandArgs.getStr(), false);
@@ -2607,7 +2607,7 @@ void DesktopLOKTest::testCommentsAddEditDeleteDraw()
     {
         tools::JsonWriter aJson;
         addParameter(aJson, "Id", "string", OString::number(nCommentId1));
-        aCommandArgs = aJson.extractAsOString();
+        aCommandArgs = aJson.finishAndGetAsOString();
     }
     pDocument->pClass->postUnoCommand(pDocument, ".uno:DeleteAnnotation", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();

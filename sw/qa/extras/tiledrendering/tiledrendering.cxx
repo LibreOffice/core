@@ -1756,7 +1756,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineColors)
     // Assert that info about exactly one author is returned.
     tools::JsonWriter aJsonWriter;
     pXTextDocument->getTrackedChangeAuthors(aJsonWriter);
-    std::stringstream aStream(aJsonWriter.extractAsOString().getStr());
+    std::stringstream aStream(aJsonWriter.finishAndGetAsOString().getStr());
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTree.get_child("authors").size());

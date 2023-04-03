@@ -42,6 +42,7 @@ class TOOLS_DLLPUBLIC JsonWriter
     int mSpaceAllocated;
     int mStartNodeCount;
     bool mbFirstFieldInNode;
+    bool mbClosed; // cannot add to it anymore
 
 public:
     JsonWriter();
@@ -75,11 +76,9 @@ public:
     /// This assumes that this data belongs at this point in the stream, and is valid, and properly encoded
     void putRaw(std::string_view);
 
-    /** Hands ownership of the underlying storage buffer to the caller,
-     * after this no more document modifications may be written. */
-    char* extractData() { return extractDataImpl().first; }
-    OString extractAsOString();
-    std::string extractAsStdString();
+    /** Closes the tags, and returns data.
+     * After this no more document modifications may be written. */
+    OString finishAndGetAsOString();
 
     /** returns true if the current JSON data matches the string */
     bool isDataEquals(std::string_view) const;
@@ -90,7 +89,7 @@ private:
     void endStruct();
     void addCommaBeforeField();
     void writeEscapedOUString(const OUString& rPropVal);
-    std::pair<char*, int> extractDataImpl();
+    void closeDocument();
     void ensureSpace(int noMoreBytesRequired);
     void ensureSpaceAndWriteNameColon(std::string_view name, int valSize);
     void putLiteral(std::string_view propName, std::string_view propValue);

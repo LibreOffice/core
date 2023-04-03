@@ -47,15 +47,16 @@ inline void TestLokCallbackWrapper::callCallback(int nType, const char* pPayload
     startTimer();
 }
 
-void TestLokCallbackWrapper::libreOfficeKitViewCallback(int nType, const char* pPayload)
+void TestLokCallbackWrapper::libreOfficeKitViewCallback(int nType, const rtl::OString& pPayload)
 {
-    callCallback(nType, pPayload, NO_VIEWID);
+    callCallback(nType, pPayload.getStr(), NO_VIEWID);
 }
 
-void TestLokCallbackWrapper::libreOfficeKitViewCallbackWithViewId(int nType, const char* pPayload,
+void TestLokCallbackWrapper::libreOfficeKitViewCallbackWithViewId(int nType,
+                                                                  const rtl::OString& pPayload,
                                                                   int nViewId)
 {
-    callCallback(nType, pPayload, nViewId);
+    callCallback(nType, pPayload.getStr(), nViewId);
 }
 
 void TestLokCallbackWrapper::libreOfficeKitViewInvalidateTilesCallback(

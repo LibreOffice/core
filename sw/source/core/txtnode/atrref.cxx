@@ -138,7 +138,7 @@ SwTextRefMark::~SwTextRefMark()
         aJson.put("DeleteField", fieldCommand);
     }
 
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.extractData());
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
 }
 
 const sal_Int32* SwTextRefMark::GetEnd() const

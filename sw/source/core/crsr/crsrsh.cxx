@@ -2157,9 +2157,8 @@ void SwCursorShell::sendLOKCursorUpdates()
         }
     }
 
-    char* pChar = aJsonWriter.extractData();
+    OString pChar = aJsonWriter.finishAndGetAsOString();
     GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TABLE_SELECTED, pChar);
-    free(pChar);
 }
 
 void SwCursorShell::RefreshBlockCursor()

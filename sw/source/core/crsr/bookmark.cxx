@@ -438,7 +438,7 @@ namespace sw::mark
             aJson.put("DeleteBookmark", fieldCommand);
         }
 
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.extractData());
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
     }
 
     void Bookmark::InitDoc(SwDoc& io_rDoc,
@@ -603,7 +603,7 @@ namespace sw::mark
             aJson.put("DeleteTextFormField", fieldCommand);
         }
 
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.extractData());
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
     }
 
     void TextFieldmark::InitDoc(SwDoc& io_rDoc,

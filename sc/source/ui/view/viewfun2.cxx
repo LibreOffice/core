@@ -1136,8 +1136,8 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
             pNewRanges->GetPrintRangesInfo(aJsonWriter);
 
             SfxViewShell* pViewShell = GetViewData().GetViewShell();
-            const std::string message = aJsonWriter.extractAsStdString();
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_PRINT_RANGES, message.c_str());
+            const OString message = aJsonWriter.finishAndGetAsOString();
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_PRINT_RANGES, message);
         }
 
         pDocSh->GetUndoManager()->AddUndoAction(

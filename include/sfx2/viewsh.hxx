@@ -370,8 +370,8 @@ public:
     /// dump view state for diagnostics
     void dumpLibreOfficeKitViewState(rtl::OStringBuffer &rState);
     /// Invokes the registered callback, if there are any.
-    virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) const override;
-    virtual void libreOfficeKitViewCallbackWithViewId(int nType, const char* pPayload, int nViewId) const override;
+    virtual void libreOfficeKitViewCallback(int nType, const OString& pPayload) const override;
+    virtual void libreOfficeKitViewCallbackWithViewId(int nType, const OString& pPayload, int nViewId) const override;
     virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) const override;
     virtual void libreOfficeKitViewUpdatedCallback(int nType) const override;
     virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) const override;

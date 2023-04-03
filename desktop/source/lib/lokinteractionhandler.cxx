@@ -120,9 +120,9 @@ void LOKInteractionHandler::postError(css::task::InteractionClassification class
 
     std::size_t nView = SfxViewShell::Current() ? SfxLokHelper::getView() : 0;
     if (m_pLOKDocument && m_pLOKDocument->mpCallbackFlushHandlers.count(nView))
-        m_pLOKDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_ERROR, aJson.extractAsOString().getStr());
+        m_pLOKDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_ERROR, aJson.finishAndGetAsOString());
     else if (m_pLOKit->mpCallback)
-        m_pLOKit->mpCallback(LOK_CALLBACK_ERROR, aJson.extractAsOString().getStr(), m_pLOKit->mpCallbackData);
+        m_pLOKit->mpCallback(LOK_CALLBACK_ERROR, aJson.finishAndGetAsOString().getStr(), m_pLOKit->mpCallbackData);
 }
 
 namespace {

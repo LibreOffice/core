@@ -324,14 +324,14 @@ void Application::notifyWindow(vcl::LOKWindowId /*nLOKWindowId*/,
     SAL_WARN("vcl", "Invoked not implemented method: Application::notifyWindow");
 }
 
-void Application::libreOfficeKitViewCallback(int nType, const char* pPayload) const
+void Application::libreOfficeKitViewCallback(int nType, const OString& pPayload) const
 {
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
     if (m_pCallback)
     {
-        m_pCallback(nType, pPayload, m_pCallbackData);
+        m_pCallback(nType, pPayload.getStr(), m_pCallbackData);
     }
 }
 
@@ -1868,7 +1868,7 @@ void dumpState(rtl::OStringBuffer &rState)
         pWin->DumpAsPropertyTree(props);
 
         rState.append("\n\tWindow: ");
-        rState.append(props.extractAsOString());
+        rState.append(props.finishAndGetAsOString());
 
         pWin = Application::GetNextTopLevelWindow( pWin );
     }

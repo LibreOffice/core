@@ -71,7 +71,7 @@ void JSDialogNotifyIdle::send(tools::JsonWriter& aJsonWriter)
 {
     if (!m_aNotifierWindow)
     {
-        free(aJsonWriter.extractData());
+        aJsonWriter.finishAndGetAsOString();
         return;
     }
 
@@ -81,18 +81,17 @@ void JSDialogNotifyIdle::send(tools::JsonWriter& aJsonWriter)
         if (m_bForce || !aJsonWriter.isDataEquals(m_LastNotificationMessage))
         {
             m_bForce = false;
-            m_LastNotificationMessage = aJsonWriter.extractAsStdString();
-            pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG,
-                                                  m_LastNotificationMessage.c_str());
+            m_LastNotificationMessage = aJsonWriter.finishAndGetAsOString();
+            pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, m_LastNotificationMessage);
         }
         else
         {
-            free(aJsonWriter.extractData());
+            aJsonWriter.finishAndGetAsOString();
         }
     }
     else
     {
-        free(aJsonWriter.extractData());
+        aJsonWriter.finishAndGetAsOString();
     }
 }
 
@@ -1276,8 +1275,8 @@ JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMe
         xMessageDialog->DumpAsPropertyTree(aJsonWriter);
         aJsonWriter.put("id", xMessageDialog->GetLOKWindowId());
         aJsonWriter.put("jsontype", "dialog");
-        std::unique_ptr<char[], o3tl::free_delete> message(aJsonWriter.extractData());
-        pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.get());
+        OString message(aJsonWriter.finishAndGetAsOString());
+        pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message);
 
         OUString sWindowId = OUString::number(xMessageDialog->GetLOKWindowId());
         InsertWindowToMap(sWindowId);

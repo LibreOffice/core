@@ -24,6 +24,7 @@ JsonWriter::JsonWriter()
     , mSpaceAllocated(DEFAULT_BUFFER_SIZE)
     , mStartNodeCount(0)
     , mbFirstFieldInNode(true)
+    , mbClosed(false)
 {
     *mPos = '{';
     ++mPos;
@@ -35,7 +36,7 @@ JsonWriter::JsonWriter()
 
 JsonWriter::~JsonWriter()
 {
-    assert(!mpBuffer && "forgot to extract data?");
+    assert(mbClosed && "forgot to extract data?");
     free(mpBuffer);
 }
 
@@ -314,7 +315,7 @@ void JsonWriter::addCommaBeforeField()
 
 void JsonWriter::ensureSpace(int noMoreBytesRequired)
 {
-    assert(mpBuffer && "already extracted data");
+    assert(!mbClosed && "already extracted data");
     int currentUsed = mPos - mpBuffer;
     if (currentUsed + noMoreBytesRequired >= mSpaceAllocated)
     {
@@ -351,36 +352,19 @@ void JsonWriter::putLiteral(std::string_view propName, std::string_view propValu
     validate();
 }
 
-/** Hands ownership of the underlying storage buffer to the caller,
-  * after this no more document modifications may be written. */
-std::pair<char*, int> JsonWriter::extractDataImpl()
+OString JsonWriter::finishAndGetAsOString()
 {
     assert(mStartNodeCount == 0 && "did not close all nodes");
-    assert(mpBuffer && "data already extracted");
+    assert(!mbClosed && "data already extracted");
     ensureSpace(2);
     // add closing brace
     *mPos = '}';
     ++mPos;
     // null-terminate
     *mPos = 0;
-    const int sz = mPos - mpBuffer;
-    mPos = nullptr;
-    return { std::exchange(mpBuffer, nullptr), sz };
-}
+    mbClosed = true;
 
-OString JsonWriter::extractAsOString()
-{
-    auto[pChar, sz] = extractDataImpl();
-    OString ret(pChar, sz);
-    free(pChar);
-    return ret;
-}
-
-std::string JsonWriter::extractAsStdString()
-{
-    auto[pChar, sz] = extractDataImpl();
-    std::string ret(pChar, sz);
-    free(pChar);
+    OString ret(mpBuffer, mPos - mpBuffer);
     return ret;
 }
 

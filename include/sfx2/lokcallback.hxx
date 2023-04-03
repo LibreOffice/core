@@ -13,6 +13,7 @@
 
 namespace rtl
 {
+class OString;
 class OStringBuffer;
 }
 namespace tools
@@ -32,9 +33,10 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI SfxLokCallbackInterface
 public:
     virtual ~SfxLokCallbackInterface() {}
     // LibreOfficeKitCallback equivalent.
-    virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) = 0;
+    virtual void libreOfficeKitViewCallback(int nType, const rtl::OString& pPayload) = 0;
     // Callback that explicitly provides view id (which is also included in the payload).
-    virtual void libreOfficeKitViewCallbackWithViewId(int nType, const char* pPayload, int nViewId)
+    virtual void libreOfficeKitViewCallbackWithViewId(int nType, const rtl::OString& pPayload,
+                                                      int nViewId)
         = 0;
     // LOK_CALLBACK_INVALIDATE_TILES
     // nPart is either part, -1 for all-parts, or INT_MIN if

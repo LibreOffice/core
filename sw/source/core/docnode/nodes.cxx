@@ -2451,7 +2451,7 @@ void SwNodes::RemoveNode( SwNodeOffset nDelPos, SwNodeOffset nSz, bool bDel )
                 aJson.put("DeleteSection", fieldCommand);
             }
 
-            SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.extractData());
+            SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
 
         }
     }
