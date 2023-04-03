@@ -756,23 +756,16 @@ namespace drawinglayer::primitive2d
                                 }
                             }
 
-                            if(aXGradient.GetStartIntens() != 100 || aXGradient.GetEndIntens() != 100)
+                            if (aXGradient.GetStartIntens() != 100 || aXGradient.GetEndIntens() != 100)
                             {
                                 // Need to do the (old, crazy) blend against black for a
                                 // used intensity, but now for all ColorStops relative to their
                                 // offsets, where 0 means black and 100 means original color
-                                const double fStartIntensity(aXGradient.GetStartIntens() * 0.01);
-                                const double fEndIntensity(aXGradient.GetEndIntens() * 0.01);
-                                const basegfx::BColor aBlack;
-
-                                for (auto& candidate : aColorStops)
-                                {
-                                    const double fOffset(candidate.getStopOffset());
-                                    const double fIntensity((fStartIntensity * (1.0 - fOffset)) + (fEndIntensity * fOffset));
-                                    candidate = basegfx::ColorStop(
-                                        fOffset,
-                                        basegfx::interpolate(aBlack, candidate.getStopColor(), fIntensity));
-                                }
+                                basegfx::utils::blendColorStopsToIntensity(
+                                    aColorStops,
+                                    aXGradient.GetStartIntens() * 0.01,
+                                    aXGradient.GetEndIntens() * 0.01,
+                                    basegfx::BColor()); // COL_BLACK
                             }
 
                             aGradient = attribute::FillGradientAttribute(
@@ -919,8 +912,8 @@ namespace drawinglayer::primitive2d
             if((pGradientItem = rSet.GetItemIfSet(XATTR_FILLFLOATTRANSPARENCE))
                 && pGradientItem->IsEnabled())
             {
-                // test if float transparence is completely transparent
-                const XGradient& rGradient = pGradientItem->GetGradientValue();
+                // test if float transparency is completely transparent
+                const XGradient& rGradient(pGradientItem->GetGradientValue());
                 basegfx::BColor aSingleColor;
                 const bool bSingleColor(basegfx::utils::isSingleColor(rGradient.GetColorStops(), aSingleColor));
                 const bool bCompletelyTransparent(bSingleColor && basegfx::fTools::equal(aSingleColor.luminance(), 1.0));
@@ -930,15 +923,33 @@ namespace drawinglayer::primitive2d
                 // normal fill attributes, XFILL_NONE will be used.
                 // create nothing when not transparent: use normal fill, no need t create a FillGradientAttribute.
                 // Both cases are optimizations, always creating FillGradientAttribute will work, too
-                if(!bNotTransparent && !bCompletelyTransparent)
+                if (!bNotTransparent && !bCompletelyTransparent)
                 {
+                    basegfx::ColorStops aColorStops(rGradient.GetColorStops());
+
+                    if (rGradient.GetStartIntens() != 100 || rGradient.GetEndIntens() != 100)
+                    {
+                        // this may also be set for transparence, so need to take care of it
+                        basegfx::utils::blendColorStopsToIntensity(
+                            aColorStops,
+                            rGradient.GetStartIntens() * 0.01,
+                            rGradient.GetEndIntens() * 0.01,
+                            basegfx::BColor()); // COL_BLACK
+                    }
+
                     return attribute::FillGradientAttribute(
                         XGradientStyleToGradientStyle(rGradient.GetGradientStyle()),
                         static_cast<double>(rGradient.GetBorder()) * 0.01,
                         static_cast<double>(rGradient.GetXOffset()) * 0.01,
                         static_cast<double>(rGradient.GetYOffset()) * 0.01,
                         toRadians(rGradient.GetAngle()),
-                        rGradient.GetColorStops());
+                        aColorStops,
+                        // oops - the gradientStepCount was missing here. If we want to use
+                        // a combination of gradient & transparencyGradient to represent
+                        // imported gradients of formats which do originally support transparency
+                        // in gradients, then the gradient has to be exactly defined the same,
+                        // including the (evtl. used) gradientStepCount
+                        rSet.Get(XATTR_GRADIENTSTEPCOUNT).GetValue());
                 }
             }
 
