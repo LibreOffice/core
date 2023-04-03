@@ -202,7 +202,7 @@ namespace basegfx
            The intensity values fStartIntensity, fEndIntensity are
            in the range of [0.0 .. 1.0] and describe how much the
            blend is supposed to be done at the start color position
-           and the end color position resprectively, where 0.0 means
+           and the end color position respectively, where 0.0 means
            to fully use the given BlendColor, 1.0 means to not change
            the existing color in the ColorStop.
            Every color entry in the given ColorStop is blended
