@@ -581,16 +581,11 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, weld::ComboBox&, rBox, void )
     for( i = 0; i < MAXLEVEL; ++i)
         m_pCollNames[i] = m_aSaveCollNames[i];
 
-    if(aCollName == m_aNoFormatName)
-        m_pCollNames[nTmpLevel].clear();
-    else
-    {
-        m_pCollNames[nTmpLevel] = aCollName;
-                // template already in use?
-        for( i = 0; i < MAXLEVEL; ++i)
-            if(i != nTmpLevel && m_pCollNames[i] == aCollName )
-                m_pCollNames[i].clear();
-    }
+    m_pCollNames[nTmpLevel] = aCollName;
+            // template already in use?
+    for( i = 0; i < MAXLEVEL; ++i)
+        if(i != nTmpLevel && m_pCollNames[i] == aCollName )
+            m_pCollNames[i].clear();
 
     // search the oldname and put it into the current entries
     if( !sOldName.isEmpty() )
