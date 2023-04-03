@@ -1216,6 +1216,39 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_2a)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf154549)
+{
+// FIXME: On Windows, the number of chars is 4 instead of 3
+#ifndef _WIN32
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    saveAsPDF(u"tdf154549.odt");
+
+    // Parse the export result with pdfium.
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pPdfTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pPdfTextPage);
+
+    int nChars = pPdfTextPage->countChars();
+
+    CPPUNIT_ASSERT_EQUAL(3, nChars);
+
+    std::vector<sal_uInt32> aChars(nChars);
+    for (int i = 0; i < nChars; i++)
+        aChars[i] = pPdfTextPage->getUnicode(i);
+    OUString aActualText(aChars.data(), aChars.size());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: ִبي
+    // - Actual  : بִي
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\u05B4\u0628\u064A"), aActualText);
+#endif
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf150846)
 {
     // Without the fix in place, this test would have failed with
