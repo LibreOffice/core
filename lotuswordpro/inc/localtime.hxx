@@ -53,8 +53,7 @@
  *
  *
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LOCALTIME_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LOCALTIME_HXX
+#pragma once
 
 #include <tools/long.hxx>
 
@@ -82,7 +81,5 @@ struct LtTm
 };
 bool LtgGmTime(tools::Long rtime, LtTm& rtm);
 bool LtgLocalTime(tools::Long rtime, LtTm& rtm);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -53,8 +53,7 @@
  *
  *
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_LWPATOMHOLDER_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_LWPATOMHOLDER_HXX
+#pragma once
 
 #include <config_lgpl.h>
 #include "lwpdefs.hxx"
@@ -80,7 +79,5 @@ public:
     inline bool HasValue() const;
 };
 inline bool LwpAtomHolder::HasValue() const { return (m_nAtom != BAD_ATOM); }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
