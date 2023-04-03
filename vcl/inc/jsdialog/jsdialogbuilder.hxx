@@ -110,7 +110,7 @@ class JSDialogNotifyIdle final : public Idle
     VclPtr<vcl::Window> m_aNotifierWindow;
     // used to generate JSON
     VclPtr<vcl::Window> m_aContentWindow;
-    const OUString& m_sTypeOfJSON;
+    OUString m_sTypeOfJSON;
     std::string m_LastNotificationMessage;
     bool m_bForce;
 
