@@ -14593,7 +14593,7 @@ else
                 AC_MSG_ERROR([jq not found])
             fi
             if test -z "$SYSTEMD_ESCAPE"; then
-                AC_MSG_ERROR([syystemd-escape not found])
+                AC_MSG_ERROR([systemd-escape not found])
             fi
             if test -z "$SYSTEMD_RUN"; then
                 AC_MSG_ERROR([systemd-run not found])
