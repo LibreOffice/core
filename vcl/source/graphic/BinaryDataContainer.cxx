@@ -74,6 +74,8 @@ std::size_t BinaryDataContainer::writeToStream(SvStream& rStream) const
 
 size_t BinaryDataContainer::getSize() const { return mpData ? mpData->size() : 0; }
 
+size_t BinaryDataContainer::getSizeBytes() const { return getSize(); }
+
 bool BinaryDataContainer::isEmpty() const { return !mpData || mpData->empty(); }
 
 const sal_uInt8* BinaryDataContainer::getData() const { return mpData ? mpData->data() : nullptr; }

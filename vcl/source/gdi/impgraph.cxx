@@ -999,6 +999,9 @@ sal_uLong ImpGraphic::getSizeBytes() const
             break;
     }
 
+    if (mpGfxLink)
+        mnSizeBytes += mpGfxLink->getSizeBytes();
+
     return mnSizeBytes;
 }
 
@@ -1431,6 +1434,8 @@ void ImpGraphic::dumpState(rtl::OStringBuffer &rState)
     rState.append(static_cast<sal_Int32>(meType));
     rState.append("\tsize:\t");
     rState.append(static_cast<sal_Int64>(mnSizeBytes));
+    rState.append("\tgfxl:\t");
+    rState.append(static_cast<sal_Int64>(mpGfxLink ? mpGfxLink->getSizeBytes() : -1));
     rState.append("\t");
     rState.append(static_cast<sal_Int32>(maSwapInfo.maSizePixel.Width()));
     rState.append("x");
