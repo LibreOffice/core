@@ -88,6 +88,8 @@ void SwContentControlButton::MouseButtonDown(const MouseEvent&) { StartPopup(); 
 
 void SwContentControlButton::StartPopup()
 {
+    if (m_xPopup) // tdf#152257 already launched, don't relaunch
+        return;
     LaunchPopup();
     Invalidate();
 }
