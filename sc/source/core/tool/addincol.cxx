@@ -360,7 +360,8 @@ void ScUnoAddInCollection::ReadConfiguration()
 
     ScAddInCfg& rAddInConfig = SC_MOD()->GetAddInCfg();
 
-    // additional, temporary config item for the compatibility names
+    // Additional, temporary config item for the display names and
+    // compatibility names.
     ScLinkConfigItem aAllLocalesConfig( CFGPATH_ADDINS, ConfigItemMode::AllLocales );
     // CommitLink is not used (only reading values)
 
@@ -441,6 +442,35 @@ void ScUnoAddInCollection::ReadConfiguration()
                     nCategory = lcl_GetCategory( aCategoryName );
                 }
 
+                // get English display name
+
+                OUString aDisplayNamePath(aFuncPropPath + CFGSTR_DISPLAYNAME);
+                uno::Sequence<OUString> aDisplayNamePropNames( &aDisplayNamePath, 1 );
+
+                uno::Sequence<uno::Any> aDisplayNameProperties = aAllLocalesConfig.GetProperties( aDisplayNamePropNames );
+                if ( aDisplayNameProperties.getLength() == 1 )
+                {
+                    uno::Sequence<beans::PropertyValue> aLocalEntries;
+                    if ( aDisplayNameProperties[0] >>= aLocalEntries )
+                    {
+                        for ( const beans::PropertyValue& rConfig : std::as_const(aLocalEntries) )
+                        {
+                            // PropertyValue name is the locale ("convert" from
+                            // string to canonicalize).
+                            OUString aLocale( LanguageTag( rConfig.Name, true).getBcp47( false));
+                            // PropertyValue value is the localized value (string in this case).
+                            OUString aName;
+                            rConfig.Value >>= aName;
+                            // Accept 'en' and 'en-...' but prefer 'en-US'.
+                            if (aLocale == "en-US" && !aName.isEmpty())
+                                aEnglishName = aName;
+                            else if (aEnglishName.isEmpty() && (aLocale == "en" || aLocale.startsWith("en-")))
+                                aEnglishName = aName;
+                        }
+                    }
+                }
+                bool bNeedEnglish = aEnglishName.isEmpty();
+
                 // get compatibility names
 
                 ::std::vector<ScUnoAddInFuncData::LocalizedName> aCompNames;
@@ -457,17 +487,23 @@ void ScUnoAddInCollection::ReadConfiguration()
                         for ( const beans::PropertyValue& rConfig : std::as_const(aLocalEntries) )
                         {
                             // PropertyValue name is the locale ("convert" from
-                            // string to canonicalize)
+                            // string to canonicalize).
                             OUString aLocale( LanguageTag( rConfig.Name, true).getBcp47( false));
-                            // PropertyValue value is the localized value (string in this case)
+                            // PropertyValue value is the localized value (string in this case).
                             OUString aName;
                             rConfig.Value >>= aName;
-                            aCompNames.emplace_back( aLocale, aName);
-                            // Accept 'en' and 'en-...' but prefer 'en-US'.
-                            if (aLocale == "en-US")
-                                aEnglishName = aName;
-                            else if (aEnglishName.isEmpty() && (aLocale == "en" || aLocale.startsWith("en-")))
-                                aEnglishName = aName;
+                            if (!aName.isEmpty())
+                            {
+                                aCompNames.emplace_back( aLocale, aName);
+                                if (bNeedEnglish)
+                                {
+                                    // Accept 'en' and 'en-...' but prefer 'en-US'.
+                                    if (aLocale == "en-US")
+                                        aEnglishName = aName;
+                                    else if (aEnglishName.isEmpty() && (aLocale == "en" || aLocale.startsWith("en-")))
+                                        aEnglishName = aName;
+                                }
+                            }
                         }
                     }
                 }
