@@ -677,8 +677,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
     m_pDoc->GetName( m_aBlock.aStart.Tab(), aTabName );
     rDestDoc.RenameTab( 0, aTabName );
 
-    if (m_pDoc->GetDrawLayer() || m_pDoc->HasNotes())
-        pDocSh->MakeDrawLayer();
+    pDocSh->MakeDrawLayer();
 
     rDestDoc.CopyStdStylesFrom(*m_pDoc);
 
