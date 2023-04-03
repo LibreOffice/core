@@ -489,6 +489,10 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                         {
                             if (static_cast<SdrOle2Obj*>(pObj)->GetObjRef().is())
                             {
+                                // release so if ActivateObject launches a warning dialog, then that dialog
+                                // can get mouse events
+                                if (pWindow->IsMouseCaptured())
+                                    pWindow->ReleaseMouse();
                                 rViewShell.ActivateObject(static_cast<SdrOle2Obj*>(pObj), css::embed::EmbedVerbs::MS_OLEVERB_PRIMARY);
                             }
                         }

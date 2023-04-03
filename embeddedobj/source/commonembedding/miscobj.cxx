@@ -37,7 +37,6 @@
 
 #include <utility>
 #include <vcl/weld.hxx>
-#include <unotools/resmgr.hxx>
 #include <vcl/stdtext.hxx>
 #include <strings.hrc>
 #include <osl/file.hxx>
@@ -346,7 +345,7 @@ void OCommonEmbeddedObject::PostEvent_Impl( const OUString& aEventName )
 }
 
 
-static int ShowMsgDialog( TranslateId Msg, const OUString& sFileName )
+int OCommonEmbeddedObject::ShowMsgDialog(TranslateId Msg, const OUString& sFileName)
 {
     std::locale aResLocale = Translate::Create( "emo" );
     OUString aMsg  = Translate::get( Msg, aResLocale );
@@ -356,7 +355,7 @@ static int ShowMsgDialog( TranslateId Msg, const OUString& sFileName )
     osl::FileBase::getSystemPathFromFileURL( sFileName, aTemp );
 
     aMsg = aMsg.replaceFirst( "%{filename}", aTemp );
-    weld::Window* pParent = Application::GetFrameWeld( nullptr );
+    weld::Window* pParent = Application::GetFrameWeld(m_xClientWindow);
 
     std::unique_ptr<weld::MessageDialog> xQueryBox (Application::CreateMessageDialog( pParent,
         VclMessageType::Warning, VclButtonsType::NONE, aMsg ) );
@@ -431,7 +430,7 @@ void OCommonEmbeddedObject::handleLinkedOLE( CopyBackToOLELink eState )
             OUString aMsg;
             osl::FileBase::getSystemPathFromFileURL( SrcName, aMsg );
             aMsg = ex.Message + "\n\n" + aMsg;
-            weld::Window* pParent = Application::GetFrameWeld( nullptr );
+            weld::Window* pParent = Application::GetFrameWeld(m_xClientWindow);
             std::unique_ptr<weld::MessageDialog> xQueryBox( Application::CreateMessageDialog( pParent,
                                                      VclMessageType::Error, VclButtonsType::Ok, aMsg ) );
 

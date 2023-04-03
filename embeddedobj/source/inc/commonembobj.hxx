@@ -41,6 +41,7 @@
 #include <map>
 #include <memory>
 #include <svtools/filechangedchecker.hxx>
+#include <unotools/resmgr.hxx>
 
 namespace com::sun::star {
     namespace embed {
@@ -250,6 +251,8 @@ private:
     static OUString GetBaseURLFrom_Impl(
                     const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
                     const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs );
+
+    int ShowMsgDialog(TranslateId Msg, const OUString& sFileName);
 
 public:
     OCommonEmbeddedObject(
