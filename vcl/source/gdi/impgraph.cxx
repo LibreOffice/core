@@ -1253,6 +1253,9 @@ bool ImpGraphic::swapOutGraphic(SvStream& rStream)
             break;
     }
 
+    if (mpGfxLink)
+        mpGfxLink->getDataContainer().swapOut();
+
     return true;
 }
 

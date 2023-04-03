@@ -13,6 +13,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/uno/Sequence.hxx>
+#include <unotools/tempfile.hxx>
 #include <tools/stream.hxx>
 #include <vcl/dllapi.h>
 
@@ -26,9 +27,11 @@
  */
 class VCL_DLLPUBLIC BinaryDataContainer final
 {
-private:
-    // the binary data
-    std::shared_ptr<std::vector<sal_uInt8>> mpData;
+    struct Impl;
+
+    std::shared_ptr<Impl> mpImpl;
+
+    void ensureSwappedIn() const;
 
 public:
     BinaryDataContainer() = default;
@@ -55,6 +58,9 @@ public:
 
     /// return the in-memory size in bytes as of now.
     std::size_t getSizeBytes() const;
+
+    /// swap out to disk for now
+    void swapOut() const;
 
     size_t calculateHash() const;
 };
