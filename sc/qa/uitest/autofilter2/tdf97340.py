@@ -29,11 +29,14 @@ class tdf97340(UITestCase):
 
             xsearchEdit = xFloatWindow.getChild("search_edit")
             xsearchEdit.executeAction("TYPE", mkPropertyValues({"TEXT":" "}))
+            self.ui_test.wait_until_property_is_updated(xTreeList, "Children", str(0))
             self.assertEqual(0, len(xTreeList.getChildren()))
 
             xsearchEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "BACKSPACE"}))
 
             #tdf#133785, without the fix in place, it would have been 0
+            self.ui_test.wait_until_property_is_updated(xTreeList, "Children", str(8))
+            # Number of children differs due to xTreeList.getChildren() returns only direct descendants
             self.assertEqual(2, len(xTreeList.getChildren()))
             self.assertEqual("2016", get_state_as_dict(xTreeList.getChild('0'))['Text'])
             self.assertEqual("2017", get_state_as_dict(xTreeList.getChild('1'))['Text'])

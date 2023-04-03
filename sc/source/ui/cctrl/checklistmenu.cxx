@@ -507,6 +507,7 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
     , mbIsPoppedUp(false)
     , maOpenTimer(this)
     , maCloseTimer(this)
+    , maSearchEditTimer("ScCheckListMenuControl maSearchEditTimer")
 {
     mxTreeChecks->set_clicks_to_toggle(1);
     mxListChecks->set_clicks_to_toggle(1);
@@ -583,6 +584,9 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
     // bulk_insert_for_each
     mxTreeChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
     mxListChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
+
+    maSearchEditTimer.SetTimeout(EDIT_UPDATEDATA_TIMEOUT);
+    maSearchEditTimer.SetInvokeHandler(LINK(this, ScCheckListMenuControl, SearchEditTimeoutHdl));
 }
 
 void ScCheckListMenuControl::GrabFocus()
@@ -612,6 +616,7 @@ void ScCheckListMenuControl::DropPendingEvents()
 
 ScCheckListMenuControl::~ScCheckListMenuControl()
 {
+    maSearchEditTimer.Stop();
     EndPopupMode();
     for (auto& rMenuItem : maMenuItems)
         rMenuItem.mxSubMenuWin.reset();
@@ -739,7 +744,7 @@ namespace
     }
 }
 
-IMPL_LINK_NOARG(ScCheckListMenuControl, EdModifyHdl, weld::Entry&, void)
+IMPL_LINK_NOARG(ScCheckListMenuControl, SearchEditTimeoutHdl, Timer*, void)
 {
     OUString aSearchText = mxEdSearch->get_text();
     aSearchText = ScGlobal::getCharClass().lowercase( aSearchText );
@@ -873,6 +878,11 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, EdModifyHdl, weld::Entry&, void)
         mxBtnUnselectSingle->set_sensitive(!bEmptySet);
         mxBtnOk->set_sensitive(!bEmptySet);
     }
+}
+
+IMPL_LINK_NOARG(ScCheckListMenuControl, EdModifyHdl, weld::Entry&, void)
+{
+    maSearchEditTimer.Start();
 }
 
 IMPL_LINK_NOARG(ScCheckListMenuControl, EdActivateHdl, weld::Entry&, bool)

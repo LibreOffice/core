@@ -233,6 +233,8 @@ private:
 
     DECL_LINK(PopupModeEndHdl, weld::Popover&, void);
 
+    DECL_LINK(SearchEditTimeoutHdl, Timer*, void);
+
     DECL_LINK(EdModifyHdl, weld::Entry&, void);
     DECL_LINK(EdActivateHdl, weld::Entry&, bool);
 
@@ -321,6 +323,8 @@ private:
 
     SubMenuItemData   maOpenTimer;
     SubMenuItemData   maCloseTimer;
+
+    Timer maSearchEditTimer;
 };
 
 class ScListSubMenuControl final
