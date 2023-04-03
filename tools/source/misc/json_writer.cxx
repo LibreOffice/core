@@ -39,23 +39,12 @@ JsonWriter::~JsonWriter()
     free(mpBuffer);
 }
 
-ScopedJsonWriterNode JsonWriter::startNode(const char* pNodeName)
+ScopedJsonWriterNode JsonWriter::startNode(std::string_view pNodeName)
 {
-    auto len = strlen(pNodeName);
-    ensureSpace(len + 8);
+    putLiteral(pNodeName, "{ ");
 
-    addCommaBeforeField();
-
-    *mPos = '"';
-    ++mPos;
-    memcpy(mPos, pNodeName, len);
-    mPos += len;
-    memcpy(mPos, "\": { ", 5);
-    mPos += 5;
     mStartNodeCount++;
     mbFirstFieldInNode = true;
-
-    validate();
 
     return ScopedJsonWriterNode(*this);
 }
@@ -72,23 +61,12 @@ void JsonWriter::endNode()
     validate();
 }
 
-ScopedJsonWriterArray JsonWriter::startArray(const char* pNodeName)
+ScopedJsonWriterArray JsonWriter::startArray(std::string_view pNodeName)
 {
-    auto len = strlen(pNodeName);
-    ensureSpace(len + 8);
+    putLiteral(pNodeName, "[ ");
 
-    addCommaBeforeField();
-
-    *mPos = '"';
-    ++mPos;
-    memcpy(mPos, pNodeName, len);
-    mPos += len;
-    memcpy(mPos, "\": [ ", 5);
-    mPos += 5;
     mStartNodeCount++;
     mbFirstFieldInNode = true;
-
-    validate();
 
     return ScopedJsonWriterArray(*this);
 }
@@ -187,6 +165,9 @@ static bool writeEscapedSequence(sal_uInt32 ch, char*& pos)
 
 void JsonWriter::writeEscapedOUString(const OUString& rPropVal)
 {
+    *mPos = '"';
+    ++mPos;
+
     // Convert from UTF-16 to UTF-8 and perform escaping
     sal_Int32 i = 0;
     while (i < rPropVal.getLength())
@@ -228,50 +209,30 @@ void JsonWriter::writeEscapedOUString(const OUString& rPropVal)
         }
     }
 
+    *mPos = '"';
+    ++mPos;
+
     validate();
 }
 
-void JsonWriter::put(const char* pPropName, const OUString& rPropVal)
+void JsonWriter::put(std::string_view pPropName, const OUString& rPropVal)
 {
-    auto nPropNameLength = strlen(pPropName);
-    // But values can be any UTF-8,
+    // Values can be any UTF-8,
     // if the string only contains of 0x2028, it will be expanded 6 times (see writeEscapedSequence)
-    auto nWorstCasePropValLength = rPropVal.getLength() * 6;
-    ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
-
-    addCommaBeforeField();
-
-    *mPos = '"';
-    ++mPos;
-    memcpy(mPos, pPropName, nPropNameLength);
-    mPos += nPropNameLength;
-    memcpy(mPos, "\": \"", 4);
-    mPos += 4;
+    auto nWorstCasePropValLength = rPropVal.getLength() * 6 + 2;
+    ensureSpaceAndWriteNameColon(pPropName, nWorstCasePropValLength);
 
     writeEscapedOUString(rPropVal);
-
-    *mPos = '"';
-    ++mPos;
-
-    validate();
 }
 
-void JsonWriter::put(const char* pPropName, std::string_view rPropVal)
+void JsonWriter::put(std::string_view pPropName, std::string_view rPropVal)
 {
-    // we assume property names are ascii
-    auto nPropNameLength = strlen(pPropName);
-    // escaping can double the length
-    auto nWorstCasePropValLength = rPropVal.size() * 2;
-    ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
-
-    addCommaBeforeField();
+    // escaping can double the length, plus quotes
+    auto nWorstCasePropValLength = rPropVal.size() * 2 + 2;
+    ensureSpaceAndWriteNameColon(pPropName, nWorstCasePropValLength);
 
     *mPos = '"';
     ++mPos;
-    memcpy(mPos, pPropName, nPropNameLength);
-    mPos += nPropNameLength;
-    memcpy(mPos, "\": \"", 4);
-    mPos += 4;
 
     // copy and perform escaping
     for (size_t i = 0; i < rPropVal.size(); ++i)
@@ -311,92 +272,19 @@ void JsonWriter::put(const char* pPropName, std::string_view rPropVal)
     validate();
 }
 
-void JsonWriter::put(const char* pPropName, sal_Int64 nPropVal)
+void JsonWriter::put(std::string_view pPropName, bool nPropVal)
 {
-    auto nPropNameLength = strlen(pPropName);
-    auto nWorstCasePropValLength = 32;
-    ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
-
-    addCommaBeforeField();
-
-    *mPos = '"';
-    ++mPos;
-    memcpy(mPos, pPropName, nPropNameLength);
-    mPos += nPropNameLength;
-    memcpy(mPos, "\": ", 3);
-    mPos += 3;
-
-    // clang-format off
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH // sprintf (macOS 13 SDK)
-    mPos += sprintf(mPos, "%" SAL_PRIdINT64, nPropVal);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
-    // clang-format on
-
-    validate();
-}
-
-void JsonWriter::put(const char* pPropName, double fPropVal)
-{
-    OString sPropVal = rtl::math::doubleToString(fPropVal, rtl_math_StringFormat_F, 12, '.');
-    auto nPropNameLength = strlen(pPropName);
-    ensureSpace(nPropNameLength + sPropVal.getLength() + 8);
-
-    addCommaBeforeField();
-
-    *mPos = '"';
-    ++mPos;
-    memcpy(mPos, pPropName, nPropNameLength);
-    mPos += nPropNameLength;
-    memcpy(mPos, "\": ", 3);
-    mPos += 3;
-
-    memcpy(mPos, sPropVal.getStr(), sPropVal.getLength());
-    mPos += sPropVal.getLength();
-
-    validate();
-}
-
-void JsonWriter::put(const char* pPropName, bool nPropVal)
-{
-    auto nPropNameLength = strlen(pPropName);
-    ensureSpace(nPropNameLength + 5 + 8);
-
-    addCommaBeforeField();
-
-    *mPos = '"';
-    ++mPos;
-    memcpy(mPos, pPropName, nPropNameLength);
-    mPos += nPropNameLength;
-    memcpy(mPos, "\": ", 3);
-    mPos += 3;
-
-    const char* pVal;
-    if (nPropVal)
-        pVal = "true";
-    else
-        pVal = "false";
-    memcpy(mPos, pVal, strlen(pVal));
-    mPos += strlen(pVal);
-
-    validate();
+    putLiteral(pPropName, nPropVal ? std::string_view("true") : std::string_view("false"));
 }
 
 void JsonWriter::putSimpleValue(const OUString& rPropVal)
 {
-    auto nWorstCasePropValLength = rPropVal.getLength() * 3;
+    auto nWorstCasePropValLength = rPropVal.getLength() * 6;
     ensureSpace(nWorstCasePropValLength + 4);
 
     addCommaBeforeField();
 
-    *mPos = '"';
-    ++mPos;
-
     writeEscapedOUString(rPropVal);
-
-    *mPos = '"';
-    ++mPos;
-
-    validate();
 }
 
 void JsonWriter::putRaw(std::string_view rRawBuf)
@@ -439,6 +327,30 @@ void JsonWriter::ensureSpace(int noMoreBytesRequired)
     }
 }
 
+void JsonWriter::ensureSpaceAndWriteNameColon(std::string_view name, int valSize)
+{
+    // we assume property names are ascii
+    ensureSpace(name.size() + valSize + 6);
+
+    addCommaBeforeField();
+
+    *mPos = '"';
+    ++mPos;
+    memcpy(mPos, name.data(), name.size());
+    mPos += name.size();
+    memcpy(mPos, "\": ", 3);
+    mPos += 3;
+}
+
+void JsonWriter::putLiteral(std::string_view propName, std::string_view propValue)
+{
+    ensureSpaceAndWriteNameColon(propName, propValue.size());
+    memcpy(mPos, propValue.data(), propValue.size());
+    mPos += propValue.size();
+
+    validate();
+}
+
 /** Hands ownership of the underlying storage buffer to the caller,
   * after this no more document modifications may be written. */
 std::pair<char*, int> JsonWriter::extractDataImpl()
@@ -472,10 +384,9 @@ std::string JsonWriter::extractAsStdString()
     return ret;
 }
 
-bool JsonWriter::isDataEquals(const std::string& s) const
+bool JsonWriter::isDataEquals(std::string_view s) const
 {
-    return s.length() == static_cast<size_t>(mPos - mpBuffer)
-           && memcmp(s.data(), mpBuffer, s.length()) == 0;
+    return std::string_view(mpBuffer, static_cast<size_t>(mPos - mpBuffer)) == s;
 }
 
 } // namespace tools
