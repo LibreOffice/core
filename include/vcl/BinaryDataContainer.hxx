@@ -56,6 +56,9 @@ public:
     /// return the in-memory size in bytes as of now.
     std::size_t getSizeBytes() const;
 
+    /// swap out to disk for now
+    void swapOut() const;
+
     size_t calculateHash() const;
 };
 

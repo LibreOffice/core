@@ -73,4 +73,9 @@ bool BinaryDataContainer::isEmpty() const { return !mpData || mpData->empty(); }
 
 const sal_uInt8* BinaryDataContainer::getData() const { return mpData ? mpData->data() : nullptr; }
 
+void BinaryDataContainer::swapOut() const
+{
+    // FIXME: swap out the data to disk - and force it in again in above methods.
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
