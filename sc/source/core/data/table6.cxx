@@ -257,7 +257,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
         pFCell->SetMatColsRows( nMatCols, nMatRows );
         aCol[nCol].SetFormulaCell(nRow, pFCell);
     }
-    else if (aString.indexOf('\n') != -1 && eCellType != CELLTYPE_FORMULA)
+    else if (eCellType != CELLTYPE_FORMULA && aString.indexOf('\n') != -1)
     {
         ScFieldEditEngine& rEngine = rDocument.GetEditEngine();
         rEngine.SetTextCurrentDefaults(aString);
