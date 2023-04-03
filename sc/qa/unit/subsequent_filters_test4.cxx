@@ -1347,6 +1347,9 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testImportCrashes)
     testImportCrash("xlsx/tdf121887.xlsx"); // 'Maximum number of rows per sheet' warning
     testImportCrash("xlsm/tdf111974.xlsm");
     testImportCrash("ods/tdf149679.ods");
+#if !defined(_WIN32) //FIXME tdf#154587
+    testImportCrash("xlsx/tdf124525.xlsx");
+#endif
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf129681)
