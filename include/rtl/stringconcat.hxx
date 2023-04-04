@@ -393,6 +393,13 @@ struct OStringNumber< double >
     OStringNumber(number_t d) { length = rtl_str_valueOfDouble(buf, d); }
 };
 
+template<>
+struct OStringNumber< bool >
+    : public StringNumberBase<char, bool, RTL_STR_MAX_VALUEOFBOOLEAN>
+{
+    OStringNumber(number_t b) { length = rtl_str_valueOfBoolean(buf, b); }
+};
+
 /**
  @internal
 
@@ -437,6 +444,13 @@ struct OUStringNumber< double >
     : public StringNumberBase<sal_Unicode, double, RTL_USTR_MAX_VALUEOFDOUBLE>
 {
     OUStringNumber(number_t d) { length = rtl_ustr_valueOfDouble(buf, d); }
+};
+
+template<>
+struct OUStringNumber< bool >
+    : public StringNumberBase<sal_Unicode, bool, RTL_USTR_MAX_VALUEOFBOOLEAN>
+{
+    OUStringNumber(number_t b) { length = rtl_ustr_valueOfBoolean(buf, b); }
 };
 
 template< typename C, typename T, std::size_t nBufSize >

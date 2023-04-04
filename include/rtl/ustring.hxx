@@ -3186,6 +3186,9 @@ public:
         return boolean(b);
     }
 
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
+    static OUStringNumber<bool> boolean(bool b) { return OUStringNumber<bool>(b); }
+#else
     /**
       Returns the string representation of the boolean argument.
 
@@ -3202,6 +3205,7 @@ public:
         sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFBOOLEAN];
         return OUString(aBuf, rtl_ustr_valueOfBoolean(aBuf, b));
     }
+#endif
 
     /**
       Returns the string representation of the char argument.

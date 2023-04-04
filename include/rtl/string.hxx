@@ -2125,6 +2125,9 @@ public:
         return boolean(b);
     }
 
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
+    static OStringNumber<bool> boolean(bool b) { return OStringNumber<bool>(b); }
+#else
     /**
       Returns the string representation of the boolean argument.
 
@@ -2141,6 +2144,7 @@ public:
         char aBuf[RTL_STR_MAX_VALUEOFBOOLEAN];
         return OString(aBuf, rtl_str_valueOfBoolean(aBuf, b));
     }
+#endif
 
     /**
       Returns the string representation of the char argument.
