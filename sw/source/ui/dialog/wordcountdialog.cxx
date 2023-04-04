@@ -87,7 +87,7 @@ void SwWordCountFloatDlg::showCJK(bool bShowCJK)
 {
     m_xCurrentCjkcharsFT->set_visible(bShowCJK);
     m_xDocCjkcharsFT->set_visible(bShowCJK);
-    if (m_xCjkcharsLabelFT2)
+    if (IS_MOBILE_PHONE && m_xCjkcharsLabelFT2)
         m_xCjkcharsLabelFT2->set_visible(bShowCJK);
     m_xCjkcharsLabelFT->set_visible(bShowCJK);
 }
@@ -96,7 +96,7 @@ void SwWordCountFloatDlg::showStandardizedPages(bool bShowStandardizedPages)
 {
     m_xCurrentStandardizedPagesFT->set_visible(bShowStandardizedPages);
     m_xDocStandardizedPagesFT->set_visible(bShowStandardizedPages);
-    if (m_xStandardizedPagesLabelFT2)
+    if (IS_MOBILE_PHONE && m_xStandardizedPagesLabelFT2)
         m_xStandardizedPagesLabelFT2->set_visible(bShowStandardizedPages);
     m_xStandardizedPagesLabelFT->set_visible(bShowStandardizedPages);
 }
