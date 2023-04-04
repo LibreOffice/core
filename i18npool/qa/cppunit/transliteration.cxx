@@ -68,9 +68,7 @@ public:
         trans->loadModuleNew({ css::i18n::TransliterationModulesNew_NumToTextUpper_zh_CN }, {});
         trans->loadModuleNew({ css::i18n::TransliterationModulesNew_NumToTextLower_zh_TW }, {});
         trans->loadModuleNew({ css::i18n::TransliterationModulesNew_NumToTextUpper_zh_TW }, {});
-#if 0 //TODO: currently broken
-        trans->loadModuleNew({css::i18n::TransliterationModulesNew_NumToTextFormalHangul_ko}, {});
-#endif
+        trans->loadModuleNew({ css::i18n::TransliterationModulesNew_NumToTextFormalHangul_ko }, {});
         trans->loadModuleNew({ css::i18n::TransliterationModulesNew_NumToTextFormalLower_ko }, {});
         trans->loadModuleNew({ css::i18n::TransliterationModulesNew_NumToTextFormalUpper_ko }, {});
         trans->loadModuleNew({ css::i18n::TransliterationModulesNew_NumToTextInformalHangul_ko },
@@ -102,9 +100,7 @@ public:
                              {});
         trans->loadModuleNew({ css::i18n::TransliterationModulesNew_TextToNumInformalUpper_ko },
                              {});
-#if 0 //TODO: currently broken
-        trans->loadModuleNew({css::i18n::TransliterationModulesNew_CharToNumLower_zh_CN}, {});
-#endif
+        trans->loadModuleNew({ css::i18n::TransliterationModulesNew_CharToNumLower_zh_CN }, {});
         trans->loadModuleNew({ css::i18n::TransliterationModulesNew_CharToNumUpper_zh_CN }, {});
         trans->loadModuleNew({ css::i18n::TransliterationModulesNew_CharToNumLower_zh_TW }, {});
         trans->loadModuleNew({ css::i18n::TransliterationModulesNew_CharToNumUpper_zh_TW }, {});
