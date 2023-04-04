@@ -655,7 +655,7 @@ namespace basegfx
             // or if we can re-use from last time.
             // If this scope is not entered, we do not need the binary search. It's
             // only a single buffered entry, and only used when more than three
-            // ColorStops exist, but makes a huge difference compared with acessing
+            // ColorStops exist, but makes a huge difference compared with accessing
             // the sorted ColorStop vector each time.
             // NOTE: with this simple change I get very high hit rates, e.g. rotating
             //       a donut with gradient test '1' hit rate is at 0.99909440357755486
