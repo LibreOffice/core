@@ -1239,7 +1239,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf41652NBSPWidth)
     }
 
     // Assert left aligned NBSP for the legacy file is larger than zero
-    CPPUNIT_ASSERT(nSectionAfterNBSPX_legacy_leftAligned > 0);
+    CPPUNIT_ASSERT_GREATER(sal_Int32(0), nSectionAfterNBSPX_legacy_leftAligned);
     // Assert both NBSPs have same width for the legacy file
     CPPUNIT_ASSERT_EQUAL(nSectionAfterNBSPX_legacy_leftAligned,
                          nSectionAfterNBSPX_legacy_justified);
@@ -1253,8 +1253,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf41652NBSPWidth)
     CPPUNIT_ASSERT_EQUAL(nSectionAfterNBSPX_optionDisabled_leftAligned,
                          nSectionAfterNBSPX_optionEnabled_leftAligned);
     // Assert justified NBSP is wider for the enabled file
-    CPPUNIT_ASSERT(nSectionAfterNBSPX_optionDisabled_justified
-                   < nSectionAfterNBSPX_optionEnabled_justified);
+    CPPUNIT_ASSERT_GREATER(nSectionAfterNBSPX_optionDisabled_justified,
+                           nSectionAfterNBSPX_optionEnabled_justified);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
