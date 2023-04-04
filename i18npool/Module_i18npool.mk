@@ -45,6 +45,7 @@ $(eval $(call gb_Module_add_check_targets,i18npool,\
 	CppunitTest_i18npool_textsearch \
 	CppunitTest_i18npool_calendar \
 	CppunitTest_i18npool_defaultnumberingprovider \
+	CppunitTest_i18npool_transliteration \
 ))
 
 # vim: set noet sw=4 ts=4:
