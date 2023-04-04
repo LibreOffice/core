@@ -78,6 +78,7 @@ namespace drawinglayer::texture
         , mnRequestedSteps(nRequestedSteps)
         , mnColorStops(rColorStops)
         , mfBorder(fBorder)
+        , maLastColorStopRange()
         {
         }
 
@@ -265,7 +266,7 @@ namespace drawinglayer::texture
 
             // texture-back-transform X/Y -> t [0.0..1.0] and determine color
             const double fScaler(basegfx::utils::getLinearGradientAlpha(rUV, maGradientInfo));
-            rBColor = basegfx::utils::modifyBColor(mnColorStops, fScaler, mnRequestedSteps);
+            rBColor = basegfx::utils::modifyBColor(mnColorStops, fScaler, mnRequestedSteps, maLastColorStopRange);
         }
 
         GeoTexSvxGradientAxial::GeoTexSvxGradientAxial(
@@ -392,7 +393,7 @@ namespace drawinglayer::texture
             const double fScaler(basegfx::utils::getAxialGradientAlpha(rUV, maGradientInfo));
 
                 // we use the reverse ColorSteps here, so mirror scaler value
-            rBColor = basegfx::utils::modifyBColor(mnColorStops, 1.0 - fScaler, mnRequestedSteps);
+            rBColor = basegfx::utils::modifyBColor(mnColorStops, 1.0 - fScaler, mnRequestedSteps, maLastColorStopRange);
         }
 
 
@@ -484,7 +485,7 @@ namespace drawinglayer::texture
 
             // texture-back-transform X/Y -> t [0.0..1.0] and determine color
             const double fScaler(basegfx::utils::getRadialGradientAlpha(rUV, maGradientInfo));
-            rBColor = basegfx::utils::modifyBColor(mnColorStops, fScaler, mnRequestedSteps);
+            rBColor = basegfx::utils::modifyBColor(mnColorStops, fScaler, mnRequestedSteps, maLastColorStopRange);
         }
 
 
@@ -585,7 +586,7 @@ namespace drawinglayer::texture
 
             // texture-back-transform X/Y -> t [0.0..1.0] and determine color
             const double fScaler(basegfx::utils::getEllipticalGradientAlpha(rUV, maGradientInfo));
-            rBColor = basegfx::utils::modifyBColor(mnColorStops, fScaler, mnRequestedSteps);
+            rBColor = basegfx::utils::modifyBColor(mnColorStops, fScaler, mnRequestedSteps, maLastColorStopRange);
         }
 
 
@@ -679,7 +680,7 @@ namespace drawinglayer::texture
 
             // texture-back-transform X/Y -> t [0.0..1.0] and determine color
             const double fScaler(basegfx::utils::getSquareGradientAlpha(rUV, maGradientInfo));
-            rBColor = basegfx::utils::modifyBColor(mnColorStops, fScaler, mnRequestedSteps);
+            rBColor = basegfx::utils::modifyBColor(mnColorStops, fScaler, mnRequestedSteps, maLastColorStopRange);
         }
 
 
@@ -780,7 +781,7 @@ namespace drawinglayer::texture
 
             // texture-back-transform X/Y -> t [0.0..1.0] and determine color
             const double fScaler(basegfx::utils::getRectangularGradientAlpha(rUV, maGradientInfo));
-            rBColor = basegfx::utils::modifyBColor(mnColorStops, fScaler, mnRequestedSteps);
+            rBColor = basegfx::utils::modifyBColor(mnColorStops, fScaler, mnRequestedSteps, maLastColorStopRange);
         }
 
 

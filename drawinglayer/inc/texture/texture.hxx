@@ -52,6 +52,10 @@ namespace drawinglayer::texture
             basegfx::ColorStops                 mnColorStops;
             double                              mfBorder;
 
+            // provide a single buffer entry used for gradient texture
+            // mapping, see ::modifyBColor implementations
+            mutable basegfx::ColorStopRange     maLastColorStopRange;
+
             // check if we need last-ColorStop-correction
             bool checkPenultimate();
 
