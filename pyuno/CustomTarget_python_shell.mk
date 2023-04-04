@@ -17,7 +17,7 @@ $(eval $(call gb_CustomTarget_register_targets,pyuno/python_shell,\
 ifeq ($(OS),MACOSX)
 pyuno_PYTHON_SHELL_VERSION:=$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)
 else
-pyuno_PYTHON_SHELL_VERSION:=3.7.7
+pyuno_PYTHON_SHELL_VERSION:=$(PYTHON_VERSION)
 endif
 
 $(call gb_CustomTarget_get_workdir,pyuno/python_shell)/python.sh : \

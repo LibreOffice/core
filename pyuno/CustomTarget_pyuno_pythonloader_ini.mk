@@ -22,15 +22,15 @@ $(call gb_CustomTarget_get_workdir,pyuno/pythonloader_ini)/$(call gb_Helper_get_
                 printf 'PYUNO_LOADER_PYTHONHOME=%s\n' \
                     $(if $(filter MACOSX,$(OS)), \
                         '$$ORIGIN/../Frameworks/LibreOfficePython.framework', \
-                        '$$ORIGIN/python-core-3.7.7') &&) \
+                        '$$ORIGIN/python-core-$(PYTHON_VERSION)') &&) \
             printf 'PYUNO_LOADER_PYTHONPATH=%s$$ORIGIN\n' \
                 $(if $(SYSTEM_PYTHON), \
                     '', \
                     $(if $(filter MACOSX,$(OS)), \
                         '$(foreach dir,/ /lib-dynload /lib-tk /site-packages,$(patsubst %/,%,$$ORIGIN/../Frameworks/LibreOfficePython.framework/Versions/Current/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)$(dir))) ', \
                     $(if $(filter WNT,$(OS)), \
-                        '$(foreach dir,/ /site-packages,$(patsubst %/,%,$$ORIGIN/python-core-3.7.7/lib$(dir))) ', \
-                        '$(foreach dir,/ /lib-dynload /lib-tk /site-packages,$(patsubst %/,%,$$ORIGIN/python-core-3.7.7/lib$(dir))) '))) \
+                        '$(foreach dir,/ /site-packages,$(patsubst %/,%,$$ORIGIN/python-core-$(PYTHON_VERSION)/lib$(dir))) ', \
+                        '$(foreach dir,/ /lib-dynload /lib-tk /site-packages,$(patsubst %/,%,$$ORIGIN/python-core-$(PYTHON_VERSION)/lib$(dir))) '))) \
         ) > $@
 
 # vim: set noet sw=4 ts=4:

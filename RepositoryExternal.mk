@@ -4014,7 +4014,7 @@ $(call gb_ExternalExecutable_add_dependencies,python,$(call gb_GeneratedPackage_
 
 else
 
-$(call gb_ExternalExecutable_set_internal,python,$(INSTROOT)/$(LIBO_BIN_FOLDER)/$(if $(filter WNT,$(OS)),python-core-3.7.7/bin/python.exe,python.bin))
+$(call gb_ExternalExecutable_set_internal,python,$(INSTROOT)/$(LIBO_BIN_FOLDER)/$(if $(filter WNT,$(OS)),python-core-$(PYTHON_VERSION)/bin/python.exe,python.bin))
 $(call gb_ExternalExecutable_set_precommand,python,$(subst $$,$$$$,$(gb_Python_PRECOMMAND)))
 $(call gb_ExternalExecutable_add_dependencies,python,$(call gb_Package_get_target_for_build,python3))
 

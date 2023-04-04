@@ -48,10 +48,10 @@ ifneq ($(ENABLE_DBGUTIL),TRUE)
 			$(INSTDIR)/program/soffice.bin \
 			$(INSTDIR)/program/unopkg.bin \
 			$(INSTDIR)/program/pyuno.pyd \
-			$(INSTDIR)/$(LIBO_BIN_FOLDER)/python-core-3.7.7/bin/*.exe \
-			$(INSTDIR)/$(LIBO_BIN_FOLDER)/python-core-3.7.7/lib/*.dll \
-			$(INSTDIR)/$(LIBO_BIN_FOLDER)/python-core-3.7.7/lib/*.pyd \
-			$(INSTDIR)/$(LIBO_BIN_FOLDER)/python-core-3.7.7/lib/distutils/command/*.exe \
+			$(INSTDIR)/$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/bin/*.exe \
+			$(INSTDIR)/$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/*.dll \
+			$(INSTDIR)/$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/*.pyd \
+			$(INSTDIR)/$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/distutils/command/*.exe \
 			$(INSTDIR)/program/shlxthdl/*.dll \
 			$(INSTDIR)/sdk/cli/*.dll \
 			$(INSTDIR)/sdk/bin/*.exe \

@@ -350,7 +350,7 @@ endef
 gb_UIMenubarTarget_UIMenubarTarget_platform :=
 
 # Python
-gb_Python_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME="$(INSTDIR)/program/python-core-3.7.7" PYTHONPATH="$${PYPATH:+$$PYPATH:}$(INSTDIR)/program/python-core-3.7.7/lib:$(INSTDIR)/program/python-core-3.7.7/lib/lib-dynload:$(INSTDIR)/program"
+gb_Python_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME="$(INSTDIR)/program/python-core-$(PYTHON_VERSION)" PYTHONPATH="$${PYPATH:+$$PYPATH:}$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/lib:$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/lib/lib-dynload:$(INSTDIR)/program"
 gb_Python_INSTALLED_EXECUTABLE := /bin/sh $(INSTROOT)/program/python
 # this is passed to gdb as executable when running tests
 gb_Python_INSTALLED_EXECUTABLE_GDB := $(INSTROOT)/program/python.bin
