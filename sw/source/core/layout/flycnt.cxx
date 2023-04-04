@@ -1635,10 +1635,7 @@ void SwRootFrame::DeleteEmptyFlys_()
         if (!pFly->getFrameArea().HasArea() && !pFly->ContainsContent()
             && !pFly->IsDeleteForbidden())
         {
-            SwTextFrame* pFlyAnchor = pFly->FindAnchorCharFrame();
             SwFrame::DestroyFrame(pFly);
-            // So that JoinFrame() is called on the precede of the anchor if it has any.
-            pFlyAnchor->InvalidateSize();
         }
     }
 }
@@ -1655,6 +1652,16 @@ SwFlyAtContentFrame* SwFlyAtContentFrame::GetPrecede()
 
 void SwFlyAtContentFrame::DelEmpty()
 {
+    SwTextFrame* pAnchor = FindAnchorCharFrame();
+    if (pAnchor)
+    {
+        if (SwFlowFrame* pAnchorPrecede = pAnchor->GetPrecede())
+        {
+            // The anchor has a precede: invalidate it so that JoinFrame() is called on it.
+            pAnchorPrecede->GetFrame().InvalidateSize();
+        }
+    }
+
     SwFlyAtContentFrame* pMaster = IsFollow() ? GetPrecede() : nullptr;
     if (pMaster)
     {

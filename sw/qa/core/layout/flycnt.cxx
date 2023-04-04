@@ -629,6 +629,32 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFly1stRowDelete)
     // on page 2.
     CPPUNIT_ASSERT(!pPage1->GetNext());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFly3rdRowDelete)
+{
+    // Given a document with a floattable, split on 3 pages:
+    SwModelTestBase::FlySplitGuard aGuard;
+    createSwDoc("floattable-3pages.docx");
+
+    // When deleting the row of A3:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GotoTable("Table1");
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Down(/*bSelect=*/false);
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    // We delete the right row:
+    CPPUNIT_ASSERT_EQUAL(OUString("A3"), pTextNode->GetText());
+    pWrtShell->DeleteRow();
+
+    // Then make sure we only have 2 pages:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
+    // Without the accompanying fix in place, this test would have failed, page 3 was not deleted.
+    CPPUNIT_ASSERT(!pPage2->GetNext());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

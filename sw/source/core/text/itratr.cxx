@@ -1507,7 +1507,7 @@ bool SwTextFrame::HasNonLastSplitFlyDrawObj() const
         // Nominally all flys are anchored in the master; see if this fly is effectively anchored in
         // us.
         SwTextFrame* pFlyAnchor = pFly->FindAnchorCharFrame();
-        if (pFlyAnchor != pAnchor)
+        if (pFlyAnchor != this)
         {
             continue;
         }
