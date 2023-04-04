@@ -188,7 +188,7 @@ static void ApplyFont(cairo_t* cr, const CairoFontsCache::CacheId& rId, double n
     if (nGlyphRotation)
         cairo_matrix_rotate(&m, toRadian(Degree10(nGlyphRotation * 900)));
 
-    const FreetypeFontInstance& rInstance = static_cast<FreetypeFontInstance&>(rLayout.GetFont());
+    const LogicalFontInstance& rInstance = rLayout.GetFont();
     if (rInstance.NeedsArtificialItalic())
     {
         cairo_matrix_t shear;
@@ -200,10 +200,23 @@ static void ApplyFont(cairo_t* cr, const CairoFontsCache::CacheId& rId, double n
     cairo_set_font_matrix(cr, &m);
 }
 
-void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGraphics& rGraphics)
+static CairoFontsCache::CacheId makeCacheId(const GenericSalLayout& rLayout)
 {
     const FreetypeFontInstance& rInstance = static_cast<FreetypeFontInstance&>(rLayout.GetFont());
     const FreetypeFont& rFont = rInstance.GetFreetypeFont();
+
+    FT_Face aFace = rFont.GetFtFace();
+    CairoFontsCache::CacheId aId;
+    aId.maFace = aFace;
+    aId.mpOptions = rFont.GetFontOptions();
+    aId.mbEmbolden = rInstance.NeedsArtificialBold();
+
+    return aId;
+}
+
+void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGraphics& rGraphics)
+{
+    const LogicalFontInstance& rInstance = rLayout.GetFont();
 
     const bool bResolutionIndependentLayoutEnabled = rLayout.GetTextRenderModeForResolutionIndependentLayout();
 
@@ -358,11 +371,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         mnTextColor.GetGreen()/255.0,
         mnTextColor.GetBlue()/255.0);
 
-    FT_Face aFace = rFont.GetFtFace();
-    CairoFontsCache::CacheId aId;
-    aId.maFace = aFace;
-    aId.mpOptions = rFont.GetFontOptions();
-    aId.mbEmbolden = rInstance.NeedsArtificialBold();
+    CairoFontsCache::CacheId aId = makeCacheId(rLayout);
 
     std::vector<int>::const_iterator aEnd = glyph_extrarotation.end();
     std::vector<int>::const_iterator aStart = glyph_extrarotation.begin();
