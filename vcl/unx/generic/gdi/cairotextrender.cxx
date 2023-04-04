@@ -285,7 +285,8 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         cairo_glyphs.push_back(aGlyph);
     }
 
-    if (cairo_glyphs.empty())
+    const size_t nGlyphs = cairo_glyphs.size();
+    if (!nGlyphs)
         return;
 
     const vcl::font::FontSelectPattern& rFSD = rInstance.GetFontSelectPattern();
@@ -303,14 +304,6 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         return;
     }
 
-    int nRatio = nWidth * 10 / nHeight;
-    if (nRatio >= 5120)
-    {
-        // as seen with freetype 2.12.1, so cairo surface status is "fail"
-        SAL_WARN("vcl", "rendering text would fail with stretch of: " << nRatio / 10.0);
-        return;
-    }
-
 #if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
     if (nHeight > 8000)
     {
@@ -323,7 +316,78 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         SAL_WARN("vcl", "rendering text would use > 2G Memory: " << nWidth);
         return;
     }
+#endif
 
+    clipRegion(cr);
+
+    cairo_set_source_rgb(cr,
+        mnTextColor.GetRed()/255.0,
+        mnTextColor.GetGreen()/255.0,
+        mnTextColor.GetBlue()/255.0);
+
+    int nRatio = nWidth * 10 / nHeight;
+
+    // tdf#132112 excessive stretch of underbrace and overbrace can trigger freetype into an error, which propogates to cairo
+    // and once a cairo surface is in an error state, that cannot be cleared and all subsequent drawing fails, so bodge that
+    // with a high degree of stretch we draw the brace without stretch to a temp surface and stretch that to give a far
+    // poorer visual result, but one that can be rendered.
+    if (nGlyphs == 1 && nRatio > 100 && (cairo_glyphs[0].index == 974 || cairo_glyphs[0].index == 975) &&
+        rFSD.maTargetName == "OpenSymbol" && !glyph_extrarotation.back() && !rLayout.GetOrientation())
+    {
+        CairoFontsCache::CacheId aId = makeCacheId(rLayout);
+        aId.mbVerticalMetrics = false;
+
+        ApplyFont(cr, aId, nWidth, nHeight, 0, rLayout);
+        cairo_text_extents_t stretched_extents;
+        cairo_glyph_extents(cr, cairo_glyphs.data(), nGlyphs, &stretched_extents);
+
+        ApplyFont(cr, aId, nHeight, nHeight, 0, rLayout);
+        cairo_text_extents_t unstretched_extents;
+        cairo_glyph_extents(cr, cairo_glyphs.data(), nGlyphs, &unstretched_extents);
+
+        cairo_surface_t *target = cairo_get_target(cr);
+        cairo_surface_t *temp_surface = cairo_surface_create_similar(target, cairo_surface_get_content(target),
+                                                                     unstretched_extents.width, unstretched_extents.height);
+        cairo_t *temp_cr = cairo_create(temp_surface);
+        cairo_glyph_t glyph;
+        glyph.x = -unstretched_extents.x_bearing;
+        glyph.y = -unstretched_extents.y_bearing;
+        glyph.index = cairo_glyphs[0].index;
+
+        ApplyFont(temp_cr, aId, nHeight, nHeight, 0, rLayout);
+
+        cairo_set_source_rgb(temp_cr,
+            mnTextColor.GetRed()/255.0,
+            mnTextColor.GetGreen()/255.0,
+            mnTextColor.GetBlue()/255.0);
+
+        cairo_show_glyphs(temp_cr, &glyph, 1);
+        cairo_destroy(temp_cr);
+
+        cairo_set_source_surface(cr, temp_surface, cairo_glyphs[0].x, cairo_glyphs[0].y + stretched_extents.y_bearing);
+
+        cairo_pattern_t* sourcepattern = cairo_get_source(cr);
+        cairo_matrix_t matrix;
+        cairo_pattern_get_matrix(sourcepattern, &matrix);
+        cairo_matrix_scale(&matrix, unstretched_extents.width / stretched_extents.width, 1);
+        cairo_pattern_set_matrix(sourcepattern, &matrix);
+
+        cairo_rectangle(cr, cairo_glyphs[0].x, cairo_glyphs[0].y + stretched_extents.y_bearing, stretched_extents.width, stretched_extents.height);
+        cairo_fill(cr);
+
+        cairo_surface_destroy(temp_surface);
+
+        return;
+    }
+
+    if (nRatio >= 5120)
+    {
+        // as seen with freetype 2.12.1, so cairo surface status is "fail"
+        SAL_WARN("vcl", "rendering text would fail with stretch of: " << nRatio / 10.0);
+        return;
+    }
+
+#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
     if (__lsan_disable)
         __lsan_disable();
 #endif
@@ -363,13 +427,6 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         else if (pFontOptions)
             cairo_set_font_options(cr, pFontOptions);
     }
-
-    clipRegion(cr);
-
-    cairo_set_source_rgb(cr,
-        mnTextColor.GetRed()/255.0,
-        mnTextColor.GetGreen()/255.0,
-        mnTextColor.GetBlue()/255.0);
 
     CairoFontsCache::CacheId aId = makeCacheId(rLayout);
 
