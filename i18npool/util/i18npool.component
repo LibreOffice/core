@@ -226,7 +226,7 @@
       constructor="i18npool_CharToNumLower_ko_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.CharToNumLower_zh_CN">
+  <implementation name="com.sun.star.i18n.Transliteration.CharToNumLower_zh_CN"
       constructor="i18npool_CharToNumLower_zh_CN_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
@@ -354,7 +354,7 @@
   <implementation name="com.sun.star.i18n.Transliteration.NumToTextDiZi_zh">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.NumToTextFormalHangul_ko">
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextFormalHangul_ko"
       constructor="i18npool_NumToTextFormalHangul_ko_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
@@ -380,7 +380,7 @@
       constructor="i18npool_NumToTextFullwidth_zh_TW_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.NumToTextHangulCircledJamo_ko">
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextHangulCircledJamo_ko"
       constructor="i18npool_NumToTextHangulCircledJamo_ko_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
