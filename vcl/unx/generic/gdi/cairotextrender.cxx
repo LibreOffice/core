@@ -361,20 +361,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         cairo_matrix_scale(&m, nWidth, nHeight);
 
         if (nGlyphRotation)
-        {
             cairo_matrix_rotate(&m, toRadian(Degree10(nGlyphRotation * 900)));
-
-            cairo_matrix_t em_square;
-            cairo_matrix_init_identity(&em_square);
-            cairo_get_matrix(cr, &em_square);
-
-            cairo_matrix_scale(&em_square, aFace->units_per_EM,
-                aFace->units_per_EM);
-            cairo_set_matrix(cr, &em_square);
-
-            cairo_matrix_init_identity(&em_square);
-            cairo_set_matrix(cr, &em_square);
-        }
 
         if (rInstance.NeedsArtificialItalic())
         {
