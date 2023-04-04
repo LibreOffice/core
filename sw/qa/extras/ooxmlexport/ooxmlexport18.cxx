@@ -146,6 +146,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf146984_anchorInShape, "tdf146984_anchorInShape.d
     assertXPath(pLayout, "//page[2]//anchored", 2);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf127622_framePr, "tdf127622_framePr.docx")
+{
+    // All the paragraphs end up with the same frame definition, so put them all in one frame
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf154129_framePr1, "tdf154129_framePr1.docx")
 {
     for (size_t i = 1; i < 4; ++i)

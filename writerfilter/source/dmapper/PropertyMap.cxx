@@ -2128,27 +2128,6 @@ ParagraphProperties::ParagraphProperties()
 {
 }
 
-bool ParagraphProperties::operator==( const ParagraphProperties& rCompare ) const
-{
-    return ( m_bFrameMode  == rCompare.m_bFrameMode &&
-             m_nDropCap    == rCompare.m_nDropCap &&
-             m_nLines      == rCompare.m_nLines &&
-             m_w           == rCompare.m_w &&
-             m_h           == rCompare.m_h &&
-             m_nWrap       == rCompare.m_nWrap &&
-             m_hAnchor     == rCompare.m_hAnchor &&
-             m_vAnchor     == rCompare.m_vAnchor &&
-             m_x           == rCompare.m_x &&
-             m_bxValid     == rCompare.m_bxValid &&
-             m_y           == rCompare.m_y &&
-             m_byValid     == rCompare.m_byValid &&
-             m_hSpace      == rCompare.m_hSpace &&
-             m_vSpace      == rCompare.m_vSpace &&
-             m_hRule       == rCompare.m_hRule &&
-             m_xAlign      == rCompare.m_xAlign &&
-             m_yAlign      == rCompare.m_yAlign );
-}
-
 void ParagraphProperties::ResetFrameProperties()
 {
     m_bFrameMode     = false;

@@ -1578,10 +1578,9 @@ static void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& r
 }
 
 
-static void lcl_AddRangeAndStyle(
+static void lcl_AddRange(
     ParagraphPropertiesPtr const & pToBeSavedProperties,
     uno::Reference< text::XTextAppend > const& xTextAppend,
-    const PropertyMapPtr& pPropertyMap,
     TextAppendContext const & rAppendContext)
 {
     uno::Reference<text::XParagraphCursor> xParaCursor(
@@ -1590,16 +1589,6 @@ static void lcl_AddRangeAndStyle(
     xParaCursor->gotoStartOfParagraph( false );
 
     pToBeSavedProperties->SetStartingRange(xParaCursor->getStart());
-    if(pPropertyMap)
-    {
-        std::optional<PropertyMap::Property> aParaStyle = pPropertyMap->getProperty(PROP_PARA_STYLE_NAME);
-        if( aParaStyle )
-        {
-            OUString sName;
-            aParaStyle->second >>= sName;
-            pToBeSavedProperties->SetParaStyleName(sName);
-        }
-    }
 }
 
 
@@ -1608,28 +1597,19 @@ constexpr sal_Int32 DEFAULT_FRAME_MIN_WIDTH = 0;
 constexpr sal_Int32 DEFAULT_FRAME_MIN_HEIGHT = 0;
 constexpr sal_Int32 DEFAULT_VALUE = 0;
 
-void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
+std::vector<css::beans::PropertyValue>
+DomainMapper_Impl::MakeFrameProperties(const ParagraphProperties& rProps)
 {
-    if (m_aTextAppendStack.empty())
-        return;
-    TextAppendContext& rAppendContext = m_aTextAppendStack.top();
-    // n#779642: ignore fly frame inside table as it could lead to messy situations
-    if (!rAppendContext.pLastParagraphProperties)
-        return;
-    if (!rAppendContext.pLastParagraphProperties->IsFrameMode())
-        return;
-    if (!hasTableManager())
-        return;
-    if (getTableManager().isInTable())
-        return;
+    std::vector<beans::PropertyValue> aFrameProperties;
+
     try
     {
         // A paragraph's properties come from direct formatting or somewhere in the style hierarchy
         std::vector<const ParagraphProperties*> vProps;
-        vProps.emplace_back(rAppendContext.pLastParagraphProperties.get());
+        vProps.emplace_back(&rProps);
         sal_Int8 nSafetyLimit = 16;
-        StyleSheetEntryPtr pStyle = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(
-            rAppendContext.pLastParagraphProperties->GetParaStyleName());
+        StyleSheetEntryPtr pStyle
+            = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(rProps.GetParaStyleName());
         while (nSafetyLimit-- && pStyle && pStyle->m_pProperties)
         {
             vProps.emplace_back(&pStyle->m_pProperties->props());
@@ -1638,9 +1618,8 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 break;
             pStyle = GetStyleSheetTable()->FindStyleSheetByISTD(pStyle->m_sBaseStyleIdentifier);
         }
-        SAL_WARN_IF(!nSafetyLimit,"writerfilter.dmapper","Inherited style loop likely: early exit");
+        SAL_WARN_IF(!nSafetyLimit, "writerfilter.dmapper", "Inheritance loop likely: early exit");
 
-        std::vector<beans::PropertyValue> aFrameProperties;
 
         sal_Int32 nWidth = -1;
         for (const auto pProp : vProps)
@@ -1816,37 +1795,56 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
         aFrameProperties.push_back(comphelper::makePropertyValue(
             getPropertyName(PROP_BOTTOM_MARGIN),
             nVertOrient == text::VertOrientation::BOTTOM ? 0 : nBottomDist));
-
-        if (const std::optional<sal_Int16> nDirection = PopFrameDirection())
-        {
-            aFrameProperties.push_back(
-                comphelper::makePropertyValue(getPropertyName(PROP_FRM_DIRECTION), *nDirection));
-        }
-
-        // If there is no fill, the Word default is 100% transparency.
-        // Otherwise CellColorHandler has priority, and this setting
-        // will be ignored.
-        aFrameProperties.push_back(comphelper::makePropertyValue(
-            getPropertyName(PROP_BACK_COLOR_TRANSPARENCY), sal_Int32(100)));
-
-        uno::Sequence<beans::PropertyValue> aGrabBag(comphelper::InitPropertySequence(
-            { { "ParaFrameProperties",
-                uno::Any(rAppendContext.pLastParagraphProperties->IsFrameMode()) } }));
-        aFrameProperties.push_back(comphelper::makePropertyValue("FrameInteropGrabBag", aGrabBag));
-
-        lcl_MoveBorderPropertiesToFrame(aFrameProperties,
-                                        rAppendContext.pLastParagraphProperties->GetStartingRange(),
-                                        rAppendContext.pLastParagraphProperties->GetEndingRange());
-
-        //frame conversion has to be executed after table conversion
-        RegisterFrameConversion(
-            rAppendContext.pLastParagraphProperties->GetStartingRange(),
-            rAppendContext.pLastParagraphProperties->GetEndingRange(),
-            std::move(aFrameProperties) );
     }
-    catch( const uno::Exception& )
+    catch (const uno::Exception&)
     {
     }
+
+    return aFrameProperties;
+}
+
+void DomainMapper_Impl::CheckUnregisteredFrameConversion()
+{
+    if (m_aTextAppendStack.empty())
+        return;
+    TextAppendContext& rAppendContext = m_aTextAppendStack.top();
+    // n#779642: ignore fly frame inside table as it could lead to messy situations
+    if (!rAppendContext.pLastParagraphProperties)
+        return;
+    if (!rAppendContext.pLastParagraphProperties->IsFrameMode())
+        return;
+    if (!hasTableManager())
+        return;
+    if (getTableManager().isInTable())
+        return;
+
+    std::vector<beans::PropertyValue> aFrameProperties
+        = MakeFrameProperties(*rAppendContext.pLastParagraphProperties);
+
+    if (const std::optional<sal_Int16> nDirection = PopFrameDirection())
+    {
+        aFrameProperties.push_back(
+            comphelper::makePropertyValue(getPropertyName(PROP_FRM_DIRECTION), *nDirection));
+    }
+
+    // If there is no fill, the Word default is 100% transparency.
+    // Otherwise CellColorHandler has priority, and this setting
+    // will be ignored.
+    aFrameProperties.push_back(comphelper::makePropertyValue(
+        getPropertyName(PROP_BACK_COLOR_TRANSPARENCY), sal_Int32(100)));
+
+    uno::Sequence<beans::PropertyValue> aGrabBag(comphelper::InitPropertySequence(
+        { { "ParaFrameProperties", uno::Any(true) } }));
+    aFrameProperties.push_back(comphelper::makePropertyValue("FrameInteropGrabBag", aGrabBag));
+
+    lcl_MoveBorderPropertiesToFrame(aFrameProperties,
+                                    rAppendContext.pLastParagraphProperties->GetStartingRange(),
+                                    rAppendContext.pLastParagraphProperties->GetEndingRange());
+
+    //frame conversion has to be executed after table conversion, not now
+    RegisterFrameConversion(rAppendContext.pLastParagraphProperties->GetStartingRange(),
+                            rAppendContext.pLastParagraphProperties->GetEndingRange(),
+                            std::move(aFrameProperties));
 }
 
 /// Check if the style or its parent has a list id, recursively.
@@ -2219,6 +2217,16 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
               old _and_ new DropCap must not occur
              */
 
+            // The paragraph style is vital to knowing all the frame properties.
+            std::optional<PropertyMap::Property> aParaStyle
+                = pPropertyMap->getProperty(PROP_PARA_STYLE_NAME);
+            if (aParaStyle)
+            {
+                OUString sName;
+                aParaStyle->second >>= sName;
+                pParaContext->props().SetParaStyleName(sName);
+            }
+
             bool bIsDropCap =
                 pParaContext->props().IsFrameMode() &&
                 sal::static_int_cast<Id>(pParaContext->props().GetDropCap()) != NS_ooxml::LN_Value_doc_ST_DropCap_none;
@@ -2255,7 +2263,9 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     if( pParaContext->props().IsFrameMode() )
                         pToBeSavedProperties = new ParagraphProperties(pParaContext->props());
                 }
-                else if(*rAppendContext.pLastParagraphProperties == pParaContext->props() )
+                else if (pParaContext->props().IsFrameMode()
+                         && MakeFrameProperties(*rAppendContext.pLastParagraphProperties)
+                             == MakeFrameProperties(pParaContext->props()))
                 {
                     //handles (7)
                     rAppendContext.pLastParagraphProperties->SetEndingRange(rAppendContext.xInsertPosition.is() ? rAppendContext.xInsertPosition : xTextAppend->getEnd());
@@ -2270,7 +2280,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     if ( !bIsDropCap && pParaContext->props().IsFrameMode() )
                     {
                         pToBeSavedProperties = new ParagraphProperties(pParaContext->props());
-                        lcl_AddRangeAndStyle(pToBeSavedProperties, xTextAppend, pPropertyMap, rAppendContext);
+                        lcl_AddRange(pToBeSavedProperties, xTextAppend, rAppendContext);
                     }
                 }
             }
@@ -2281,7 +2291,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 if( !bIsDropCap && pParaContext->props().IsFrameMode() )
                 {
                     pToBeSavedProperties = new ParagraphProperties(pParaContext->props());
-                    lcl_AddRangeAndStyle(pToBeSavedProperties, xTextAppend, pPropertyMap, rAppendContext);
+                    lcl_AddRange(pToBeSavedProperties, xTextAppend, rAppendContext);
                 }
             }
             std::vector<beans::PropertyValue> aProperties;
