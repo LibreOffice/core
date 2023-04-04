@@ -683,6 +683,19 @@ DECLARE_RTFEXPORT_TEST(testTdf113202, "tdf113202.rtf")
     CPPUNIT_ASSERT(getProperty<bool>(getParagraph(4), "ParaContextMargin"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf153195, "tdf153195.rtf")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+
+    // Table margin test (cannot be set to exact value, it jumps between -1991 and -1983)
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(-2182),
+                                 getProperty<sal_Int32>(xTables->getByIndex(0), "LeftMargin"), 10);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(-2182),
+                                 getProperty<sal_Int32>(xTables->getByIndex(1), "LeftMargin"), 10);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
