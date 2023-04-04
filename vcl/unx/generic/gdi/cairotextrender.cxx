@@ -372,9 +372,6 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
                 aFace->units_per_EM);
             cairo_set_matrix(cr, &em_square);
 
-            cairo_font_extents_t font_extents;
-            cairo_font_extents(cr, &font_extents);
-
             cairo_matrix_init_identity(&em_square);
             cairo_set_matrix(cr, &em_square);
         }
