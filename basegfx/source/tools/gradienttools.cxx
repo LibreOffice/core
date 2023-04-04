@@ -700,7 +700,7 @@ namespace basegfx
             }
 
 
-            // calculate number of steps and adapted proportinal
+            // calculate number of steps and adapted proportional
             // range for scaler in [0.0 .. 1.0]
             const double fAdaptedScaler((fScaler - rLastColorStopRange.mfOffsetStart) /
                 (rLastColorStopRange.mfOffsetEnd - rLastColorStopRange.mfOffsetStart));
