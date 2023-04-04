@@ -162,6 +162,44 @@ CairoTextRender::~CairoTextRender()
     cairo_font_options_destroy(mpRoundGlyphPosOffOptions);
 }
 
+static void ApplyFont(cairo_t* cr, const CairoFontsCache::CacheId& rId, double nWidth, double nHeight, int nGlyphRotation,
+                      const GenericSalLayout& rLayout)
+{
+    cairo_font_face_t* font_face = CairoFontsCache::FindCachedFont(rId);
+    if (!font_face)
+    {
+        const FontConfigFontOptions *pOptions = rId.mpOptions;
+        FcPattern *pPattern = pOptions->GetPattern();
+        font_face = cairo_ft_font_face_create_for_pattern(pPattern);
+        CairoFontsCache::CacheFont(font_face, rId);
+    }
+    cairo_set_font_face(cr, font_face);
+
+    cairo_set_font_size(cr, nHeight);
+
+    cairo_matrix_t m;
+    cairo_matrix_init_identity(&m);
+
+    if (rLayout.GetOrientation())
+        cairo_matrix_rotate(&m, toRadian(rLayout.GetOrientation()));
+
+    cairo_matrix_scale(&m, nWidth, nHeight);
+
+    if (nGlyphRotation)
+        cairo_matrix_rotate(&m, toRadian(Degree10(nGlyphRotation * 900)));
+
+    const FreetypeFontInstance& rInstance = static_cast<FreetypeFontInstance&>(rLayout.GetFont());
+    if (rInstance.NeedsArtificialItalic())
+    {
+        cairo_matrix_t shear;
+        cairo_matrix_init_identity(&shear);
+        shear.xy = -shear.xx * ARTIFICIAL_ITALIC_SKEW;
+        cairo_matrix_multiply(&m, &shear, &m);
+    }
+
+    cairo_set_font_matrix(cr, &m);
+}
+
 void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGraphics& rGraphics)
 {
     const FreetypeFontInstance& rInstance = static_cast<FreetypeFontInstance&>(rLayout.GetFont());
@@ -326,8 +364,6 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     aId.mpOptions = rFont.GetFontOptions();
     aId.mbEmbolden = rInstance.NeedsArtificialBold();
 
-    cairo_matrix_t m;
-
     std::vector<int>::const_iterator aEnd = glyph_extrarotation.end();
     std::vector<int>::const_iterator aStart = glyph_extrarotation.begin();
     std::vector<int>::const_iterator aI = aStart;
@@ -341,37 +377,9 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         size_t nLen = std::distance(aI, aNext);
 
         aId.mbVerticalMetrics = nGlyphRotation != 0.0;
-        cairo_font_face_t* font_face = CairoFontsCache::FindCachedFont(aId);
-        if (!font_face)
-        {
-            const FontConfigFontOptions *pOptions = aId.mpOptions;
-            FcPattern *pPattern = pOptions->GetPattern();
-            font_face = cairo_ft_font_face_create_for_pattern(pPattern);
-            CairoFontsCache::CacheFont(font_face, aId);
-        }
-        cairo_set_font_face(cr, font_face);
 
-        cairo_set_font_size(cr, nHeight);
+        ApplyFont(cr, aId, nWidth, nHeight, nGlyphRotation, rLayout);
 
-        cairo_matrix_init_identity(&m);
-
-        if (rLayout.GetOrientation())
-            cairo_matrix_rotate(&m, toRadian(rLayout.GetOrientation()));
-
-        cairo_matrix_scale(&m, nWidth, nHeight);
-
-        if (nGlyphRotation)
-            cairo_matrix_rotate(&m, toRadian(Degree10(nGlyphRotation * 900)));
-
-        if (rInstance.NeedsArtificialItalic())
-        {
-            cairo_matrix_t shear;
-            cairo_matrix_init_identity(&shear);
-            shear.xy = -shear.xx * ARTIFICIAL_ITALIC_SKEW;
-            cairo_matrix_multiply(&m, &shear, &m);
-        }
-
-        cairo_set_font_matrix(cr, &m);
         cairo_show_glyphs(cr, &cairo_glyphs[nStartIndex], nLen);
         if (cairo_status(cr) != CAIRO_STATUS_SUCCESS)
         {
