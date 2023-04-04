@@ -10579,6 +10579,9 @@ void PDFWriterImpl::beginStructureElementMCSeq()
 {
     if( m_bEmitStructure &&
         m_nCurrentStructElement > 0 && // StructTreeRoot
+        // Document = SwPageFrame => this is not *inside* the page content
+        // stream so do not emit MCID!
+        m_aStructure[m_nCurrentStructElement].m_eType != PDFWriter::Document &&
         ! m_aStructure[ m_nCurrentStructElement ].m_bOpenMCSeq // already opened sequence
         )
     {
