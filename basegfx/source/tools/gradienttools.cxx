@@ -607,7 +607,8 @@ namespace basegfx
         BColor modifyBColor(
             const ColorStops& rColorStops,
             double fScaler,
-            sal_uInt32 nRequestedSteps)
+            sal_uInt32 nRequestedSteps,
+            ColorStopRange& rLastColorStopRange)
         {
             // no color at all, done
             if (rColorStops.empty())
@@ -650,56 +651,69 @@ namespace basegfx
                     nSteps > 1 ? floor(fScaler * nSteps) / double(nSteps - 1) : fScaler);
             }
 
-            // access needed spot in sorted array using binary search
-            // NOTE: This *seems* slow(er) when developing compared to just
-            //       looping/accessing, but that's just due to the extensive
-            //       debug test code created by the stl. In a pro version,
-            //       all is good/fast as expected
-            const auto upperBound(
-                std::upper_bound(
-                    rColorStops.begin(),
-                    rColorStops.end(),
-                    ColorStop(fScaler),
-                    [](const ColorStop& x, const ColorStop& y) { return x.getStopOffset() < y.getStopOffset(); }));
+            // check if we need to newly populate the needed interpolation data
+            // or if we can re-use from last time.
+            // If this scope is not entered, we do not need the binary search. It's
+            // only a single buffered entry, and only used when more than three
+            // ColorStops exist, but makes a huge difference compared with acessing
+            // the sorted ColorStop vector each time.
+            // NOTE: with this simple change I get very high hit rates, e.g. rotating
+            //       a donut with gradient test '1' hit rate is at 0.99909440357755486
+            if (rLastColorStopRange.mfOffsetStart == rLastColorStopRange.mfOffsetEnd
+                || fScaler < rLastColorStopRange.mfOffsetStart
+                || fScaler > rLastColorStopRange.mfOffsetEnd)
+            {
+                // access needed spot in sorted array using binary search
+                // NOTE: This *seems* slow(er) when developing compared to just
+                //       looping/accessing, but that's just due to the extensive
+                //       debug test code created by the stl. In a pro version,
+                //       all is good/fast as expected
+                const auto upperBound(
+                    std::upper_bound(
+                        rColorStops.begin(),
+                        rColorStops.end(),
+                        ColorStop(fScaler),
+                        [](const ColorStop& x, const ColorStop& y) { return x.getStopOffset() < y.getStopOffset(); }));
 
-            // no upper bound, done
-            if (rColorStops.end() == upperBound)
-                return rColorStops.back().getStopColor();
+                // no upper bound, done
+                if (rColorStops.end() == upperBound)
+                    return rColorStops.back().getStopColor();
 
-            // lower bound is one entry back
-            const auto lowerBound(upperBound - 1);
+                // lower bound is one entry back, access that
+                const auto lowerBound(upperBound - 1);
 
-            // no lower bound, done
-            if (rColorStops.end() == lowerBound)
-                return rColorStops.back().getStopColor();
+                // no lower bound, done
+                if (rColorStops.end() == lowerBound)
+                    return rColorStops.back().getStopColor();
 
-            // we have lower and upper bound, get colors
-            const BColor aCStart(lowerBound->getStopColor());
-            const BColor aCEnd(upperBound->getStopColor());
+                // when there are just two color steps this cannot happen, but when using
+                // a range of colors this *may* be used inside the range to represent
+                // single-colored regions inside a ColorRange. Use that color & done
+                if (lowerBound->getStopColor() == upperBound->getStopColor())
+                    return rLastColorStopRange.maColorStart;
 
-            // when there are just two color steps this cannot happen, but when using
-            // a range of colors this *may* be used inside the range to represent
-            // single-colored regions inside a ColorRange. Use that color & done
-            if (aCStart == aCEnd)
-                return aCStart;
+                // we have lower and upper bound, get colors and offsets
+                rLastColorStopRange.maColorStart = lowerBound->getStopColor();
+                rLastColorStopRange.maColorEnd = upperBound->getStopColor();
+                rLastColorStopRange.mfOffsetStart = lowerBound->getStopOffset();
+                rLastColorStopRange.mfOffsetEnd = upperBound->getStopOffset();
+            }
 
-            // calculate number of steps
+
+            // calculate number of steps and adapted proportinal
+            // range for scaler in [0.0 .. 1.0]
+            const double fAdaptedScaler((fScaler - rLastColorStopRange.mfOffsetStart) /
+                (rLastColorStopRange.mfOffsetEnd - rLastColorStopRange.mfOffsetStart));
             const sal_uInt32 nSteps(
                 calculateNumberOfSteps(
                     nRequestedSteps,
-                    aCStart,
-                    aCEnd));
-
-            // get offsets and scale to new [0.0 .. 1.0] relative range for
-            // partial outer range
-            const double fOffsetStart(lowerBound->getStopOffset());
-            const double fOffsetEnd(upperBound->getStopOffset());
-            const double fAdaptedScaler((fScaler - fOffsetStart) / (fOffsetEnd - fOffsetStart));
+                    rLastColorStopRange.maColorStart,
+                    rLastColorStopRange.maColorEnd));
 
             // interpolate & evtl. apply steps
             return interpolate(
-                aCStart,
-                aCEnd,
+                rLastColorStopRange.maColorStart,
+                rLastColorStopRange.maColorEnd,
                 nSteps > 1 ? floor(fAdaptedScaler * nSteps) / double(nSteps - 1) : fAdaptedScaler);
         }
 

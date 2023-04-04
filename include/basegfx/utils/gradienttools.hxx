@@ -194,6 +194,23 @@ namespace basegfx
         }
     };
 
+    // helper data struct to support buffering entries in
+    // gradient texture mapping, see usages for more info
+    struct UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) ColorStopRange
+    {
+        basegfx::BColor     maColorStart;
+        basegfx::BColor     maColorEnd;
+        double              mfOffsetStart;
+        double              mfOffsetEnd;
+
+        ColorStopRange()
+        : maColorStart()
+        , maColorEnd()
+        , mfOffsetStart(0.0)
+        , mfOffsetEnd(0.0)
+        {}
+    };
+
     namespace utils
     {
         /* Tooling method to linearly blend the Colors contained in
@@ -293,7 +310,8 @@ namespace basegfx
         BASEGFX_DLLPUBLIC BColor modifyBColor(
             const ColorStops& rColorStops,
             double fScaler,
-            sal_uInt32 nRequestedSteps);
+            sal_uInt32 nRequestedSteps,
+            ColorStopRange& rLastColorStopRange);
 
         /* Helper to calculate numberOfSteps needed to represent
            gradient for the given two colors:
