@@ -6555,7 +6555,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
     tools::Long nSizeYPix;
     mrViewData.GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
 
-    if (bLayoutRTL)
+    if (bLayoutRTL && !comphelper::LibreOfficeKit::isActive())
         aFillPos.AdjustX( -(nSizeXPix - 2 + (aFillHandleSize.Width() / 2)) );
     else
         aFillPos.AdjustX(nSizeXPix - (aFillHandleSize.Width() / 2) );
