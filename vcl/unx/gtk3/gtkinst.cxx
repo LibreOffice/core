@@ -14046,6 +14046,7 @@ private:
 #if !GTK_CHECK_VERSION(4, 0, 0)
     gulong m_nPopupMenuSignalId;
     gulong m_nKeyPressSignalId;
+    gulong m_nCrossingSignalid;
 #endif
     gulong m_nQueryTooltipSignalId;
     GtkAdjustment* m_pVAdjustment;
@@ -14727,6 +14728,28 @@ private:
         return false;
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    // tdf#154565 ignore the crossing event if it was triggered ultimately by a
+    // key stroke which is likely from exiting the search box. This way we can
+    // avoid the problem that with hover-selection that after return is used in
+    // the search box, selecting a matching row, that during teardown of the
+    // widget the box is hidden, and the crossing notification triggers
+    // selection of a different row under the mouse. If needs be this could be
+    // refined further to only happen for a specific key or other details of
+    // the triggering event
+    static gboolean signalCrossing(GtkWidget*, GdkEventCrossing*, gpointer)
+    {
+        if (GdkEvent *pEvent = gtk_get_current_event())
+        {
+            const bool bCrossingTriggeredByKeyStroke = gdk_event_get_event_type(pEvent) == GDK_KEY_PRESS;
+            gdk_event_free(pEvent);
+            return bCrossingTriggeredByKeyStroke;
+        }
+
+        return false;
+    }
+#endif
+
 public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pTreeView), pBuilder, bTakeOwnership)
@@ -14750,6 +14773,7 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         , m_nPopupMenuSignalId(g_signal_connect(pTreeView, "popup-menu", G_CALLBACK(signalPopupMenu), this))
         , m_nKeyPressSignalId(g_signal_connect(pTreeView, "key-press-event", G_CALLBACK(signalKeyPress), this))
+        , m_nCrossingSignalid(g_signal_connect(pTreeView, "enter-notify-event", G_CALLBACK(signalCrossing), this))
 #endif
         , m_nQueryTooltipSignalId(0)
         , m_pVAdjustment(gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(pTreeView)))
@@ -16677,6 +16701,7 @@ public:
         if (m_nQueryTooltipSignalId)
             g_signal_handler_disconnect(m_pTreeView, m_nQueryTooltipSignalId);
 #if !GTK_CHECK_VERSION(4, 0, 0)
+        g_signal_handler_disconnect(m_pTreeView, m_nCrossingSignalid);
         g_signal_handler_disconnect(m_pTreeView, m_nKeyPressSignalId);
         g_signal_handler_disconnect(m_pTreeView, m_nPopupMenuSignalId);
 #endif
