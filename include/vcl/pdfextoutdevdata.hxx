@@ -270,7 +270,7 @@ public:
     sal_Int32 CreateLink(const tools::Rectangle& rRect, OUString const& rAltText, sal_Int32 nPageNr = -1);
 
     /// Create a Screen annotation.
-    sal_Int32 CreateScreen(const tools::Rectangle& rRect, OUString const& rAltText, sal_Int32 nPageNr, SdrObject const* pObj);
+    sal_Int32 CreateScreen(const tools::Rectangle& rRect, OUString const& rAltText, OUString const& rMimeType, sal_Int32 nPageNr, SdrObject const* pObj);
 
     /// Get back the annotations created for one SdrObject.
     ::std::vector<sal_Int32> const& GetScreenAnnotIds(SdrObject const* pObj) const;

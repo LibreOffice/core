@@ -200,12 +200,15 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
                 rWriter.Push(PushFlags::MAPMODE);
                 rWriter.SetMapMode(mParaMapModes.front());
                 mParaMapModes.pop_front();
-                mParaIds.push_back(rWriter.CreateScreen(mParaRects.front(), mParaInts.front(), mParaOUStrings.front()));
+                OUString const altText(mParaOUStrings.front());
+                mParaOUStrings.pop_front();
+                OUString const mimeType(mParaOUStrings.front());
+                mParaOUStrings.pop_front();
+                mParaIds.push_back(rWriter.CreateScreen(mParaRects.front(), mParaInts.front(), altText, mimeType));
                 // resolve AnnotIds structural attribute
                 rWriter.SetLinkPropertyID(mParaIds.back(), sal_Int32(mParaIds.size()-1));
                 mParaRects.pop_front();
                 mParaInts.pop_front();
-                mParaOUStrings.pop_front();
                 rWriter.Pop();
             }
             break;
@@ -704,13 +707,16 @@ sal_Int32 PDFExtOutDevData::CreateLink(const tools::Rectangle& rRect, OUString c
     return mpGlobalSyncData->mCurId++;
 }
 
-sal_Int32 PDFExtOutDevData::CreateScreen(const tools::Rectangle& rRect, OUString const& rAltText, sal_Int32 nPageNr, SdrObject const*const pObj)
+sal_Int32 PDFExtOutDevData::CreateScreen(const tools::Rectangle& rRect,
+        OUString const& rAltText, OUString const& rMimeType,
+        sal_Int32 nPageNr, SdrObject const*const pObj)
 {
     mpGlobalSyncData->mActions.push_back(PDFExtOutDevDataSync::CreateScreen);
     mpGlobalSyncData->mParaRects.push_back(rRect);
     mpGlobalSyncData->mParaMapModes.push_back(mrOutDev.GetMapMode());
     mpGlobalSyncData->mParaInts.push_back(nPageNr);
     mpGlobalSyncData->mParaOUStrings.push_back(rAltText);
+    mpGlobalSyncData->mParaOUStrings.push_back(rMimeType);
     auto const ret(mpGlobalSyncData->mCurId++);
     m_ScreenAnnotations[pObj].push_back(ret);
     return ret;

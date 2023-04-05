@@ -480,11 +480,13 @@ struct PDFScreen : public PDFAnnotation
     /// alternative text description
     OUString m_AltText;
     sal_Int32 m_nStructParent;
+    OUString m_MimeType;
 
-    PDFScreen(OUString const& rAltText)
+    PDFScreen(OUString const& rAltText, OUString const& rMimeType)
         : m_nTempFileObject(0)
         , m_AltText(rAltText)
         , m_nStructParent(-1)
+        , m_MimeType(rMimeType)
     {
     }
 };
@@ -1316,7 +1318,7 @@ public:
     void      setLinkPropertyId( sal_Int32 nLinkId, sal_Int32 nPropertyId );
 
     // screens
-    sal_Int32 createScreen(const tools::Rectangle& rRect, sal_Int32 nPageNr, OUString const& rAltText);
+    sal_Int32 createScreen(const tools::Rectangle& rRect, sal_Int32 nPageNr, OUString const& rAltText, OUString const& rMimeType);
     void setScreenURL(sal_Int32 nScreenId, const OUString& rURL);
     void setScreenStream(sal_Int32 nScreenId, const OUString& rURL);
 

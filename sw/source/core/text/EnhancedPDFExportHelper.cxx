@@ -2036,11 +2036,12 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         xShapePropSet->getPropertyValue("MediaURL") >>= aMediaURL;
                         if (!aMediaURL.isEmpty())
                         {
+                            OUString const mimeType(xShapePropSet->getPropertyValue("MediaMimeType").get<OUString>());
                             const SwPageFrame* pCurrPage = mrSh.GetLayout()->GetPageAtPos(aSnapRect.Center());
                             tools::Rectangle aPDFRect(SwRectToPDFRect(pCurrPage, aSnapRect.SVRect()));
                             for (sal_Int32 nScreenPageNum : aScreenPageNums)
                             {
-                                sal_Int32 nScreenId = pPDFExtOutDevData->CreateScreen(aPDFRect, altText, nScreenPageNum, pObject);
+                                sal_Int32 nScreenId = pPDFExtOutDevData->CreateScreen(aPDFRect, altText, mimeType, nScreenPageNum, pObject);
                                 if (aMediaURL.startsWith("vnd.sun.star.Package:"))
                                 {
                                     // Embedded media.

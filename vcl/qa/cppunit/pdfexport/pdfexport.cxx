@@ -3610,6 +3610,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testMediaShapeAnnot)
     CPPUNIT_ASSERT(pR);
     auto pC = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pR->LookupElement("C"));
     CPPUNIT_ASSERT(pC);
+    auto pCT = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pC->LookupElement("CT"));
+    CPPUNIT_ASSERT_EQUAL(OString("video/webm"), pCT->GetValue());
     auto pD = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pC->LookupElement("D"));
     CPPUNIT_ASSERT(pD);
     auto pDesc = dynamic_cast<vcl::filter::PDFHexStringElement*>(pD->LookupElement("Desc"));

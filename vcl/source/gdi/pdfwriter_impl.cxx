@@ -3616,8 +3616,8 @@ bool PDFWriterImpl::emitScreenAnnotations()
         // Allow playing the video via a tempfile.
         aLine.append("/P <</TF (TEMPACCESS)>>");
         // ISO 14289-1:2014, Clause: 7.18.6.2
-        // Until the real MIME type (instead of application/vnd.sun.star.media) is available here.
-        aLine.append("/CT (video/mp4)");
+        aLine.append("/CT ");
+        appendLiteralStringEncrypt(rScreen.m_MimeType, rScreen.m_nObject, aLine);
         // ISO 14289-1:2014, Clause: 7.18.6.2
         // Alt text is a "Multi-language Text Array"
         aLine.append(" /Alt [ () ");
@@ -10383,7 +10383,7 @@ sal_Int32 PDFWriterImpl::createLink(const tools::Rectangle& rRect, sal_Int32 nPa
     return nRet;
 }
 
-sal_Int32 PDFWriterImpl::createScreen(const tools::Rectangle& rRect, sal_Int32 nPageNr, OUString const& rAltText)
+sal_Int32 PDFWriterImpl::createScreen(const tools::Rectangle& rRect, sal_Int32 nPageNr, OUString const& rAltText, OUString const& rMimeType)
 {
     if (nPageNr < 0)
         nPageNr = m_nCurrentPage;
@@ -10393,7 +10393,7 @@ sal_Int32 PDFWriterImpl::createScreen(const tools::Rectangle& rRect, sal_Int32 n
 
     sal_Int32 nRet = m_aScreens.size();
 
-    m_aScreens.emplace_back(rAltText);
+    m_aScreens.emplace_back(rAltText, rMimeType);
     m_aScreens.back().m_nObject = createObject();
     m_aScreens.back().m_nPage = nPageNr;
     m_aScreens.back().m_aRect = rRect;
