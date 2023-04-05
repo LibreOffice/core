@@ -229,7 +229,7 @@
         <property name="draw-indicator">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="showlist-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="validationcriteriapage|extended_tip|showlist">Shows a list of all valid strings or values to select from. The list can also be opened by selecting the cell and pressing Ctrl+D.</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="validationcriteriapage|extended_tip|showlist">Shows a list of all valid strings or values to select from.</property>
           </object>
         </child>
       </object>
