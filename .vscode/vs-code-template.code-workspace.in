@@ -59,7 +59,20 @@
 				"prefix": "tdf#",
 				"url": "https://bugs.documentfoundation.org/show_bug.cgi?id=<num>"
 			}
-		]
+		],
+		"terminal.integrated.profiles.windows": {
+			"Cygwin": {
+				"path": "@CYGWIN_BASH@",
+				"args": [
+					"--login"
+				],
+				// prevent changing to $(HOME)
+				"env": {
+					"CHERE_INVOKING": "1"
+				}
+			}
+		},
+		"terminal.integrated.defaultProfile.windows": "Cygwin"
 	},
 	"tasks": {
 		"version": "2.0.0",
@@ -137,26 +150,26 @@
 					}
 				],
 				"externalConsole": false,
-				"MIMode": "gdb",
-				"setupCommands": [
-					{
-						"description": "Enable pretty-printing for gdb",
-						"text": "-enable-pretty-printing",
-						"ignoreFailures": true
-					},
-					{
-						"description": "Mark pretty-printers (in solenv/gdb) safe",
-						"text": "add-auto-load-safe-path @INSTROOT@",
-						"ignoreFailures": true
-					},
-					{
-						"description": "Mark pretty-printers bootstrap (in instdir/program) safe",
-						"text": "add-auto-load-safe-path @INSTROOT@",
-						"ignoreFailures": true
-					},
-				],
 				"linux": {
+					"MIMode": "gdb",
 					"miDebuggerPath": "gdb"
+					"setupCommands": [
+						{
+							"description": "Enable pretty-printing for gdb",
+							"text": "-enable-pretty-printing",
+							"ignoreFailures": true
+						},
+						{
+							"description": "Mark pretty-printers (in solenv/gdb) safe",
+							"text": "add-auto-load-safe-path @SRC_ROOT@/solenv/gdb",
+							"ignoreFailures": true
+						},
+						{
+							"description": "Mark pretty-printers bootstrap (in instdir/program) safe",
+							"text": "add-auto-load-safe-path @INSTROOT@",
+							"ignoreFailures": true
+						},
+					]
 				},
 				"osx": {
 					"program": "@INSTROOT@/MacOS/soffice",
@@ -168,6 +181,9 @@
 							"ignoreFailures": false
 						}
 					]
+				},
+				"windows": {
+					"type": "cppvsdbg"
 				},
 				"preLaunchTask": "full make"
 			},
@@ -192,26 +208,26 @@
 					}
 				],
 				"externalConsole": false,
-				"MIMode": "gdb",
-				"setupCommands": [
-					{
-						"description": "Enable pretty-printing for gdb",
-						"text": "-enable-pretty-printing",
-						"ignoreFailures": true
-					},
-					{
-						"description": "Mark pretty-printers (in solenv/gdb) safe",
-						"text": "add-auto-load-safe-path ${workspaceFolder:srcdir}",
-						"ignoreFailures": true
-					},
-					{
-						"description": "Mark pretty-printers bootstrap (in instdir/program) safe",
-						"text": "add-auto-load-safe-path @INSTROOT@",
-						"ignoreFailures": true
-					},
-				],
 				"linux": {
+					"MIMode": "gdb",
 					"miDebuggerPath": "gdb"
+					"setupCommands": [
+						{
+							"description": "Enable pretty-printing for gdb",
+							"text": "-enable-pretty-printing",
+							"ignoreFailures": true
+						},
+						{
+							"description": "Mark pretty-printers (in solenv/gdb) safe",
+							"text": "add-auto-load-safe-path @SRC_ROOT@/solenv/gdb",
+							"ignoreFailures": true
+						},
+						{
+							"description": "Mark pretty-printers bootstrap (in instdir/program) safe",
+							"text": "add-auto-load-safe-path @INSTROOT@",
+							"ignoreFailures": true
+						},
+					]
 				},
 				"osx": {
 					"program": "@INSTROOT@/MacOS/soffice",
@@ -223,6 +239,9 @@
 							"ignoreFailures": false
 						}
 					]
+				},
+				"windows": {
+					"type": "cppvsdbg"
 				}
 			}
 		],

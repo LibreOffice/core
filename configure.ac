@@ -14676,10 +14676,13 @@ if test -n "$TMPDIR"; then
 else
     TEMP_DIRECTORY="/tmp"
 fi
+CYGWIN_BASH="C:/cygwin64/bin/bash.exe"
 if test "$build_os" = "cygwin"; then
     TEMP_DIRECTORY=`cygpath -m "$TEMP_DIRECTORY"`
+    CYGWIN_BASH=`cygpath -m /usr/bin/bash`
 fi
 AC_SUBST(TEMP_DIRECTORY)
+AC_SUBST(CYGWIN_BASH)
 
 # setup the PATH for the environment
 if test -n "$LO_PATH_FOR_BUILD"; then
