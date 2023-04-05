@@ -20,12 +20,13 @@
 
 #include <comphelper/compbase.hxx>
 
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 
 namespace sd::sidebar {
 
 typedef comphelper::WeakComponentImplHelper <
-    css::ui::XUIElementFactory
+    css::ui::XUIElementFactory, css::lang::XServiceInfo
     > PanelFactoryInterfaceBase;
 
 class PanelFactory final
@@ -42,6 +43,10 @@ public:
     css::uno::Reference<css::ui::XUIElement> SAL_CALL createUIElement (
         const OUString& rsResourceURL,
         const css::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
+
+    OUString SAL_CALL getImplementationName() override;
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 } // end of namespace sd::sidebar

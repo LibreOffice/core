@@ -35,6 +35,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/weldutils.hxx>
 
 using namespace css;
@@ -126,6 +127,18 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
         xFrame,
         std::move(xControl),
         aLayoutSize);
+}
+
+OUString PanelFactory::getImplementationName() {
+    return "org.openoffice.comp.Draw.framework.PanelFactory";
+}
+
+sal_Bool PanelFactory::supportsService(OUString const & ServiceName) {
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> PanelFactory::getSupportedServiceNames() {
+    return {"com.sun.star.drawing.framework.PanelFactory"};
 }
 
 } // end of namespace sd::sidebar
