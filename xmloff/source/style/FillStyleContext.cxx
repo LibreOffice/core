@@ -17,20 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "FillStyleContext.hxx"
+
+#include <TransGradientStyle.hxx>
+
+#include <com/sun/star/awt/ColorStop.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/awt/XBitmap.hpp>
-#include "FillStyleContext.hxx"
+#include <com/sun/star/rendering/RGBColor.hpp>
+
+#include <comphelper/sequence.hxx>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/GradientStyle.hxx>
 #include <xmloff/HatchStyle.hxx>
 #include <xmloff/ImageStyle.hxx>
-#include <TransGradientStyle.hxx>
 #include <xmloff/MarkerStyle.hxx>
 #include <xmloff/DashStyle.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
+
+#include <vector>
 
 using namespace ::com::sun::star;
 
@@ -48,10 +58,29 @@ XMLGradientStyleContext::~XMLGradientStyleContext()
 {
 }
 
+css::uno::Reference<css::xml::sax::XFastContextHandler> XMLGradientStyleContext::createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
+{
+    if (nElement == XML_ELEMENT(LO_EXT, xmloff::token::XML_GRADIENT_STOP))
+        return new XMLGradientStopContext(GetImport(), nElement, xAttrList, maColorStopVec);
+
+    return nullptr;
+}
+
 void XMLGradientStyleContext::endFastElement(sal_Int32 )
 {
-    uno::Reference< container::XNameContainer > xGradient( GetImport().GetGradientHelper() );
+    // correcting invalid StopOffset values is done at the model. Therefore we import them here
+    // without any change.
+    if (!maColorStopVec.empty())
+    {
+        awt::Gradient2 aGradient;
+        maAny >>= aGradient;
+        aGradient.ColorStops = comphelper::containerToSequence(maColorStopVec);
+        maAny <<= aGradient;
+    }
 
+    uno::Reference< container::XNameContainer > xGradient( GetImport().GetGradientHelper() );
     try
     {
         if(xGradient.is())
@@ -75,6 +104,67 @@ bool XMLGradientStyleContext::IsTransient() const
     return true;
 }
 
+XMLGradientStopContext::XMLGradientStopContext(
+    SvXMLImport& rImport, sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    std::vector<awt::ColorStop>& rColorStopVec)
+:   SvXMLStyleContext(rImport)
+{
+    if(nElement != XML_ELEMENT(LO_EXT, xmloff::token::XML_GRADIENT_STOP))
+        return;
+
+    double fOffset = -1.0;
+    OUString sColorType;
+    OUString sColorValue;
+    // First collect all attributes
+    for (auto &aIter : sax_fastparser::castToFastAttributeList(xAttrList))
+    {
+        switch(aIter.getToken())
+        {
+        case XML_ELEMENT(SVG, xmloff::token::XML_OFFSET): // needed??
+        case XML_ELEMENT(SVG_COMPAT, xmloff::token::XML_OFFSET):
+            if (!::sax::Converter::convertDouble(fOffset, aIter.toView()))
+                return;
+            break;
+        case XML_ELEMENT(LO_EXT, xmloff::token::XML_COLOR_VALUE):
+            sColorValue = aIter.toString();
+            if (sColorValue.isEmpty())
+                return;
+            break;
+        case XML_ELEMENT(LO_EXT, xmloff::token::XML_COLOR_TYPE):
+            sColorType = aIter.toString();
+            if (sColorType.isEmpty())
+                return;
+            break;
+        default:
+            XMLOFF_WARN_UNKNOWN("xmloff.style", aIter);
+        }
+    }
+
+    // As of LO 7.6.0 only "rgb" is implemented.
+    if (sColorType != u"rgb")
+        return;
+
+    // Type "rgb" requires kind color-value="#rrggbb".
+    ::Color aColor;
+    if (!::sax::Converter::convertColor(aColor, sColorValue))
+        return;
+
+    // All attribute values OK. Generate ColorStop.
+    css::rendering::RGBColor aRGBColor;
+    aRGBColor.Red = aColor.GetRed() / 255.0;
+    aRGBColor.Green = aColor.GetGreen() / 255.0;
+    aRGBColor.Blue = aColor.GetBlue() / 255.0;
+
+    awt::ColorStop aColorStop;
+    aColorStop.StopOffset = fOffset;
+    aColorStop.StopColor = aRGBColor;
+    rColorStopVec.push_back(aColorStop);
+}
+
+XMLGradientStopContext::~XMLGradientStopContext()
+{
+}
 
 XMLHatchStyleContext::XMLHatchStyleContext( SvXMLImport& rImport, sal_Int32 /*nElement*/,
                                             const uno::Reference< xml::sax::XFastAttributeList >& xAttrList)
@@ -205,9 +295,29 @@ XMLTransGradientStyleContext::~XMLTransGradientStyleContext()
 {
 }
 
+css::uno::Reference<css::xml::sax::XFastContextHandler> XMLTransGradientStyleContext::createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
+{
+    if (nElement == XML_ELEMENT(LO_EXT, xmloff::token::XML_OPACITY_STOP))
+        return new XMLTransparencyStopContext(GetImport(), nElement, xAttrList, maColorStopVec);
+
+    return nullptr;
+}
+
 void XMLTransGradientStyleContext::endFastElement(sal_Int32 )
 {
     uno::Reference< container::XNameContainer > xTransGradient( GetImport().GetTransGradientHelper() );
+
+    // correcting invalid StopOffset values is done at the model. Therefore we import them here
+    // without any change.
+    if (!maColorStopVec.empty())
+    {
+        awt::Gradient2 aGradient;
+        maAny >>= aGradient;
+        aGradient.ColorStops = comphelper::containerToSequence(maColorStopVec);
+        maAny <<= aGradient;
+    }
 
     try
     {
@@ -232,6 +342,53 @@ bool XMLTransGradientStyleContext::IsTransient() const
     return true;
 }
 
+XMLTransparencyStopContext::XMLTransparencyStopContext(
+    SvXMLImport& rImport, sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    std::vector<awt::ColorStop>& rColorStopVec)
+:   SvXMLStyleContext(rImport)
+{
+    if(nElement != XML_ELEMENT(LO_EXT, xmloff::token::XML_OPACITY_STOP))
+        return;
+
+    double fOffset = -1.0;
+    css::rendering::RGBColor aRGBColor; // transparency is handled as gray color
+    for (auto &aIter : sax_fastparser::castToFastAttributeList(xAttrList))
+    {
+        switch(aIter.getToken())
+        {
+        case XML_ELEMENT(SVG, xmloff::token::XML_OFFSET): // needed??
+        case XML_ELEMENT(SVG_COMPAT, xmloff::token::XML_OFFSET):
+            if (!::sax::Converter::convertDouble(fOffset, aIter.toView()))
+                return;
+            break;
+        case XML_ELEMENT(SVG, xmloff::token::XML_STOP_OPACITY):
+        case XML_ELEMENT(SVG_COMPAT, xmloff::token::XML_STOP_OPACITY):
+            {
+                double fOpacity = 1.0;
+                if (!::sax::Converter::convertDouble(fOpacity, aIter.toView()))
+                    return;
+                // Transparency is gray, full transparent is (1|1|1).
+                double fGrayComponent = std::clamp<double>(1.0 - fOpacity, 0.0, 1.0);
+                aRGBColor.Red = fGrayComponent;
+                aRGBColor.Green = fGrayComponent;
+                aRGBColor.Blue = fGrayComponent;
+            }
+            break;
+        default:
+            XMLOFF_WARN_UNKNOWN("xmloff.style", aIter);
+        }
+    }
+
+    awt::ColorStop aColorStop;
+    aColorStop.StopOffset = fOffset;
+    aColorStop.StopColor = aRGBColor;
+    rColorStopVec.push_back(aColorStop);
+}
+
+XMLTransparencyStopContext::~XMLTransparencyStopContext()
+{
+}
 
 XMLMarkerStyleContext::XMLMarkerStyleContext( SvXMLImport& rImport, sal_Int32 /*nElement*/,
                                               const uno::Reference< xml::sax::XFastAttributeList >& xAttrList)

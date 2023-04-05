@@ -19,22 +19,21 @@
 
 #include <TransGradientStyle.hxx>
 
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 
-#include <sax/tools/converter.hxx>
 #include <comphelper/documentconstants.hxx>
-
-#include <xmloff/namespacemap.hxx>
-#include <xmloff/xmluconv.hxx>
-#include <xmloff/xmlnamespace.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <sax/tools/converter.hxx>
 #include <tools/color.hxx>
-#include <xmloff/xmltkmap.hxx>
+#include <xmloff/namespacemap.hxx>
+#include <xmloff/xmlement.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/xmlement.hxx>
+#include <xmloff/xmlnamespace.hxx>
+#include <xmloff/xmltkmap.hxx>
+#include <xmloff/xmluconv.hxx>
 
 using namespace ::com::sun::star;
 
@@ -65,7 +64,7 @@ void XMLTransGradientStyleImport::importXML(
 {
     OUString aDisplayName;
 
-    awt::Gradient aGradient;
+    awt::Gradient2 aGradient;
     aGradient.XOffset = 0;
     aGradient.YOffset = 0;
     aGradient.StartIntensity = 100;
@@ -170,7 +169,7 @@ void XMLTransGradientStyleExport::exportXML(
     const OUString& rStrName,
     const uno::Any& rValue )
 {
-    awt::Gradient aGradient;
+    awt::Gradient2 aGradient;
 
     if( rStrName.isEmpty() )
         return;
@@ -237,10 +236,37 @@ void XMLTransGradientStyleExport::exportXML(
     aStrValue = aOut.makeStringAndClear();
     rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_BORDER, aStrValue );
 
-    // Do Write
+    // ctor writes start tag. End-tag is written by destructor at block end.
     SvXMLElementExport rElem( rExport,
                               XML_NAMESPACE_DRAW, XML_OPACITY,
                               true, false );
+
+    // Write child elements <loext:opacity-stop>
+    // Do not export in standard ODF 1.3 or older.
+    if ((rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED) == 0)
+        return;
+    sal_Int32 nCount = aGradient.ColorStops.getLength();
+    if (nCount == 0)
+        return;
+    double fPreviousOffset = 0.0;
+    for (auto& aCandidate : aGradient.ColorStops)
+    {
+        // Attribute svg:offset. Make sure offsets are increasing.
+        double fOffset = std::clamp<double>(aCandidate.StopOffset, 0.0, 1.0);
+        if (fOffset < fPreviousOffset)
+            fOffset = fPreviousOffset;
+        rExport.AddAttribute(XML_NAMESPACE_SVG, XML_OFFSET, OUString::number(fOffset));
+        fPreviousOffset = fOffset;
+
+        // Attribute svg:stop-opacity, data type zeroToOneDecimal
+        rendering::RGBColor aDecimalColor = aCandidate.StopColor;
+        // transparency is encoded as gray, 1.0 corresponds to full transparent
+        double fOpacity = std::clamp<double>(1.0 - aDecimalColor.Red, 0.0, 1.0);
+        rExport.AddAttribute(XML_NAMESPACE_SVG, XML_STOP_OPACITY, OUString::number(fOpacity));
+
+        // write opacity stop element
+        SvXMLElementExport aStopElement(rExport, XML_NAMESPACE_LO_EXT, XML_OPACITY_STOP, true, true);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

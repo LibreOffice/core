@@ -3517,6 +3517,11 @@ namespace xmloff::token {
 
         XML_MAY_BREAK_BETWEEN_PAGES,
 
+        XML_GRADIENT_STOP, // multi-color-gradient
+        XML_OPACITY_STOP,
+        XML_COLOR_VALUE,
+        XML_COLOR_TYPE,
+
         XML_TOKEN_END
     };
 

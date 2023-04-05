@@ -19,22 +19,21 @@
 
 #include <xmloff/GradientStyle.hxx>
 
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 
-#include <sax/tools/converter.hxx>
 #include <comphelper/documentconstants.hxx>
-
-#include <xmloff/namespacemap.hxx>
-#include <xmloff/xmluconv.hxx>
-#include <xmloff/xmlnamespace.hxx>
-#include <xmloff/xmltoken.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-#include <xmloff/xmltkmap.hxx>
+#include <sax/tools/converter.hxx>
+#include <xmloff/namespacemap.hxx>
+#include <xmloff/xmlement.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/xmlement.hxx>
+#include <xmloff/xmlnamespace.hxx>
+#include <xmloff/xmltkmap.hxx>
+#include <xmloff/xmltoken.hxx>
+#include <xmloff/xmluconv.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -64,7 +63,7 @@ void XMLGradientStyleImport::importXML(
 {
     OUString aDisplayName;
 
-    awt::Gradient aGradient;
+    awt::Gradient2 aGradient;
     aGradient.Style = css::awt::GradientStyle_LINEAR;
     aGradient.StartColor = 0;
     aGradient.EndColor = 0;
@@ -158,7 +157,7 @@ void XMLGradientStyleExport::exportXML(
     const OUString& rStrName,
     const uno::Any& rValue )
 {
-    awt::Gradient aGradient;
+    awt::Gradient2 aGradient;
 
     if( rStrName.isEmpty() )
         return;
@@ -230,9 +229,42 @@ void XMLGradientStyleExport::exportXML(
     aStrValue = aOut.makeStringAndClear();
     rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_BORDER, aStrValue );
 
-    // Do Write
+    // ctor writes start tag. End-tag is written by destructor at block end.
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_GRADIENT,
                           true, false );
+
+    // Write child elements <loext:gradient-stop>
+    // Do not export in standard ODF 1.3 or older.
+    if ((rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED) == 0)
+        return;
+    sal_Int32 nCount = aGradient.ColorStops.getLength();
+    if (nCount == 0)
+        return;
+
+    double fPreviousOffset = 0.0;
+    for (auto& aCandidate : aGradient.ColorStops)
+    {
+        // Attribute svg:offset. Make sure offsets are increasing.
+        double fOffset = std::clamp<double>(aCandidate.StopOffset, 0.0, 1.0);
+        if (fOffset < fPreviousOffset)
+            fOffset = fPreviousOffset;
+        rExport.AddAttribute(XML_NAMESPACE_SVG, XML_OFFSET, OUString::number(fOffset));
+        fPreviousOffset = fOffset;
+
+        // As of LO 7.6.0 only color-type="rgb" is implemented.
+        rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_COLOR_TYPE, u"rgb");
+
+        // Attribute loext:color-value, data type color, that is #rrggbb.
+        rendering::RGBColor aDecimalColor = aCandidate.StopColor;
+        ::Color aToolsColor(std::clamp<sal_uInt8>(std::round(aDecimalColor.Red * 255.0), 0, 255),
+                            std::clamp<sal_uInt8>(std::round(aDecimalColor.Green * 255.0), 0, 255),
+                            std::clamp<sal_uInt8>(std::round(aDecimalColor.Blue * 255.0), 0, 255));
+        rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_COLOR_VALUE,
+                             rtl::OUStringChar('#') + aToolsColor.AsRGBHexString());
+
+        // write gradient stop element
+        SvXMLElementExport aStopElement(rExport, XML_NAMESPACE_LO_EXT, XML_GRADIENT_STOP, true, true);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -3260,4 +3260,8 @@ alias
 tag
 fill-use-slide-background
 may-break-between-pages
+gradient-stop
+opacity-stop
+color-value
+color-type
 TOKEN_END_DUMMY
