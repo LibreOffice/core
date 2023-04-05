@@ -1805,15 +1805,16 @@ void SwTextShell::Execute(SfxRequest &rReq)
         if(SfxItemState::SET <= aSet.GetItemState( RES_TXTATR_INETFMT ))
         {
             const SwFormatINetFormat& rINetFormat = aSet.Get(RES_TXTATR_INETFMT);
-            if( nSlot == SID_COPY_HYPERLINK_LOCATION )
+            if (nSlot == SID_OPEN_HYPERLINK)
+            {
+                rWrtSh.ClickToINetAttr(rINetFormat);
+            }
+            else if (nSlot == SID_COPY_HYPERLINK_LOCATION)
             {
                 OUString hyperlinkLocation = rINetFormat.GetValue();
                 ::uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetView().GetEditWin().GetClipboard();
-
                 vcl::unohelper::TextDataObject::CopyStringTo(hyperlinkLocation, xClipboard, SfxViewShell::Current());
             }
-            else
-                rWrtSh.ClickToINetAttr(rINetFormat);
         }
         else
         {
@@ -1821,19 +1822,23 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if (pField && pField->GetTyp()->Which() == SwFieldIds::TableOfAuthorities)
             {
                 const auto& rAuthorityField = *static_cast<const SwAuthorityField*>(pField);
-                if (!rAuthorityField.UseTargetURL() && rAuthorityField.HasURL())
+                if ((!rAuthorityField.UseTargetURL() && rAuthorityField.HasURL())
+                    || (rAuthorityField.UseTargetURL() && rAuthorityField.HasTargetURL()))
                 {
                     // Bibliography entry with URL also provides a hyperlink.
                     const OUString& rURL
-                        = rAuthorityField.GetAuthEntry()->GetAuthorField(AUTH_FIELD_URL);
-                    ::LoadURL(rWrtSh, rURL, LoadUrlFlags::NewView, /*rTargetFrameName=*/OUString());
-                }
-                else if (rAuthorityField.UseTargetURL() && rAuthorityField.HasTargetURL())
-                {
-                    // Bibliography entry with URL also provides a hyperlink.
-                    const OUString& rURL
-                        = rAuthorityField.GetAuthEntry()->GetAuthorField(AUTH_FIELD_TARGET_URL);
-                    ::LoadURL(rWrtSh, rURL, LoadUrlFlags::NewView, /*rTargetFrameName=*/OUString());
+                        = rAuthorityField.GetAuthEntry()->GetAuthorField(
+                            rAuthorityField.UseTargetURL() ? AUTH_FIELD_TARGET_URL : AUTH_FIELD_URL);
+
+                    if (nSlot == SID_OPEN_HYPERLINK)
+                    {
+                        ::LoadURL(rWrtSh, rURL, LoadUrlFlags::NewView, /*rTargetFrameName=*/OUString());
+                    }
+                    else if (nSlot == SID_COPY_HYPERLINK_LOCATION)
+                    {
+                        ::uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetView().GetEditWin().GetClipboard();
+                        vcl::unohelper::TextDataObject::CopyStringTo(rURL, xClipboard, SfxViewShell::Current());
+                    }
                 }
             }
         }
@@ -2500,7 +2505,6 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 break;
 
             case SID_EDIT_HYPERLINK:
-            case SID_COPY_HYPERLINK_LOCATION:
                 {
                     SfxItemSetFixed<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT> aSet(GetPool());
                     rSh.GetCurAttr(aSet);
@@ -2550,7 +2554,8 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             case FN_SELECTION_MODE_BLOCK :
                     rSet.Put(SfxBoolItem(nWhich, (nWhich == FN_SELECTION_MODE_DEFAULT) != rSh.IsBlockMode()));
             break;
-            case  SID_OPEN_HYPERLINK:
+            case SID_COPY_HYPERLINK_LOCATION:
+            case SID_OPEN_HYPERLINK:
             {
                 SfxItemSetFixed<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT> aSet(GetPool());
                 rSh.GetCurAttr(aSet);

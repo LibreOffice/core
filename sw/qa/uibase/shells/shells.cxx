@@ -192,14 +192,66 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testBibliographyUrlContextMenu)
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     SfxDispatcher* pDispatcher = pDocShell->GetViewShell()->GetViewFrame().GetDispatcher();
     css::uno::Any aState;
-    SfxItemState eState = pDispatcher->QueryState(SID_OPEN_HYPERLINK, aState);
+    SfxItemState eStateOpen = pDispatcher->QueryState(SID_OPEN_HYPERLINK, aState);
+    SfxItemState eStateCopy = pDispatcher->QueryState(SID_COPY_HYPERLINK_LOCATION, aState);
 
-    // Then the "open hyperlink" menu item should be visible:
+    // Then the "open hyperlink" and "copy hyperlink location" menu items should be visible:
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 32 (SfxItemState::DEFAULT)
     // - Actual  : 1 (SfxItemState::DISABLED)
     // i.e. the menu item was not visible for biblio entry fields with an URL.
-    CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, eState);
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, eStateOpen);
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, eStateCopy);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testProtectedFieldsCopyHyperlinkLocation)
+{
+    // Given a test document document that contains:
+    //      - generic url
+    //      - empty line
+    //      - bibliography mark
+    //      - empty line
+    //      - generic url
+    //      - empty line
+    //      - bibliography table heading
+    //      - bibliography entry containing only url
+    //      - empty line
+    createSwDoc("protectedLinkCopy.fodt");
+
+    // Copy generic hyperlink
+    dispatchCommand(mxComponent, ".uno:CopyHyperlinkLocation", {});
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    // Assert generic hyperlink was correctly copied and pasted
+    CPPUNIT_ASSERT_EQUAL(OUString("http://reset.url/1"), getParagraph(2)->getString());
+
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    dispatchCommand(mxComponent, ".uno:GoLeft", {});
+    // Copy bibliography mark hyperlink
+    dispatchCommand(mxComponent, ".uno:CopyHyperlinkLocation", {});
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    // Assert bibliography mark hyperlink was correctly copied and pasted
+    CPPUNIT_ASSERT_EQUAL(OUString("https://test.url/1"), getParagraph(4)->getString());
+
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    dispatchCommand(mxComponent, ".uno:GoLeft", {});
+    // Copy generic hyperlink
+    dispatchCommand(mxComponent, ".uno:CopyHyperlinkLocation", {});
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    // Assert generic hyperlink was correctly copied and pasted
+    CPPUNIT_ASSERT_EQUAL(OUString("http://reset.url/2"), getParagraph(6)->getString());
+
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    dispatchCommand(mxComponent, ".uno:GoLeft", {});
+    // Copy bibliography table hyperlink
+    dispatchCommand(mxComponent, ".uno:CopyHyperlinkLocation", {});
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    // Assert bibliography table entry hyperlink was correctly copied and pasted
+    CPPUNIT_ASSERT_EQUAL(OUString("https://test.url/1"), getParagraph(9)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testBibliographyLocalCopyContextMenu)
