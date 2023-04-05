@@ -293,7 +293,8 @@
   <implementation name="com.sun.star.i18n.Transliteration.LOWERCASE_UPPERCASE">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.NumToCharEastIndic_ar">
+  <implementation name="com.sun.star.i18n.Transliteration.NumToCharEastIndic_ar"
+      constructor="i18npool_NumToCharEastIndic_ar_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
   <implementation name="com.sun.star.i18n.Transliteration.NumToCharFullwidth">
@@ -338,7 +339,8 @@
   <implementation name="com.sun.star.i18n.Transliteration.NumToChar_th">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.NumToTextAIUFullWidth_ja_JP">
+  <implementation name="com.sun.star.i18n.Transliteration.NumToTextAIUFullWidth_ja_JP"
+      constructor="i18npool_NumToTextAIUFullWidth_ja_JP_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
   <implementation name="com.sun.star.i18n.Transliteration.NumToTextAIUHalfWidth_ja_JP"
