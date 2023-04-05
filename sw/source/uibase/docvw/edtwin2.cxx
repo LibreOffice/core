@@ -575,14 +575,11 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                             const auto pAuthorityField = static_cast<const SwAuthorityField*>(pField);
                             sText = pAuthorityField->GetAuthority(rSh.GetLayout());
 
-                            if (!pAuthorityField->UseTargetURL() && pAuthorityField->HasURL())
+                            if (auto t = pAuthorityField->GetTargetType();
+                                t == SwAuthorityField::TargetType::UseDisplayURL
+                                || t == SwAuthorityField::TargetType::UseTargetURL)
                             {
                                 const OUString& rURL = pAuthorityField->GetAbsoluteURL();
-                                sText += "\n" + SfxHelp::GetURLHelpText(rURL);
-                            }
-                            else if (pAuthorityField->UseTargetURL() && pAuthorityField->HasTargetURL())
-                            {
-                                const OUString& rURL = pAuthorityField->GetAbsoluteTargetURL();
                                 sText += "\n" + SfxHelp::GetURLHelpText(rURL);
                             }
 

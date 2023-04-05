@@ -226,8 +226,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport4)
         comphelper::makePropertyValue("Identifier", OUString("AT")),
         comphelper::makePropertyValue("Author", OUString("Author")),
         comphelper::makePropertyValue("Title", OUString("Title")),
+        comphelper::makePropertyValue("TargetType", OUString("1")), // 1 == UseTargetURL
         comphelper::makePropertyValue("TargetURL", OUString("#page=1")),
-        comphelper::makePropertyValue("UseTargetURL", OUString("true")),
     };
     xField->setPropertyValue("Fields", uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -262,7 +262,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport5)
         comphelper::makePropertyValue("Identifier", OUString("AT")),
         comphelper::makePropertyValue("Author", OUString("Author")),
         comphelper::makePropertyValue("Title", OUString("Title")),
-        comphelper::makePropertyValue("UseTargetURL", OUString("true")),
+        comphelper::makePropertyValue("TargetType", OUString("3")), // 3 == BibliographyTableRow
     };
     xField->setPropertyValue("Fields", uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -309,7 +309,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport6)
         comphelper::makePropertyValue("Identifier", OUString("AT")),
         comphelper::makePropertyValue("Author", OUString("AuthorName")),
         comphelper::makePropertyValue("Title", OUString("Title")),
-        comphelper::makePropertyValue("UseTargetURL", OUString("true")),
+        comphelper::makePropertyValue("TargetType", OUString("3")), // 3 == BibliographyTableRow
     };
     xField->setPropertyValue("Fields", uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);

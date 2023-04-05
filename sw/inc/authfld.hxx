@@ -167,6 +167,16 @@ class SW_DLLPUBLIC SwAuthorityField final : public SwField
     virtual std::unique_ptr<SwField> Copy() const override;
 
 public:
+    enum TargetType : sal_uInt16
+    {
+        UseDisplayURL           = 0,
+        UseTargetURL            = 1,
+        None                    = 2,
+        BibliographyTableRow    = 3,
+        // BibliographyTablePage   = 4, // TODO: implement
+    };
+
+
     /// For internal use only, in general continue using ExpandField() instead.
     OUString ConditionalExpandAuthIdentifier(SwRootFrame const* pLayout) const;
 
@@ -199,13 +209,17 @@ public:
     OUString GetAuthority(const SwRootFrame *pLayout,
                           const SwForm *pTOX = nullptr) const;
 
-    bool UseTargetURL() const;
-
-    bool HasURL() const;
+    /**
+     * Returns which target should be used when the entry
+     *   (the standalone field, such as '[ASDF]', not in the table) is clicked.
+     */
+    TargetType GetTargetType() const;
+    /**
+     * Returns absolute target URL in case there is one (GetTargetType() should be checked).
+     *   If there isn't one, the result is undefined.
+     */
     OUString GetAbsoluteURL() const;
 
-    bool HasTargetURL() const;
-    OUString GetAbsoluteTargetURL() const;
     /**
      * Returns full URI for the URL, relative if specified
      * \param   bRelative   whether the path should be relative (when dealing with local files)

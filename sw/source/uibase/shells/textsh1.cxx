@@ -1812,6 +1812,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         if(SfxItemState::SET <= aSet.GetItemState( RES_TXTATR_INETFMT ))
         {
             const SwFormatINetFormat& rINetFormat = aSet.Get(RES_TXTATR_INETFMT);
+
             if (nSlot == SID_OPEN_HYPERLINK)
             {
                 rWrtSh.ClickToINetAttr(rINetFormat);
@@ -1829,22 +1830,26 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if (pField && pField->GetTyp()->Which() == SwFieldIds::TableOfAuthorities)
             {
                 const auto& rAuthorityField = *static_cast<const SwAuthorityField*>(pField);
-                if ((!rAuthorityField.UseTargetURL() && rAuthorityField.HasURL())
-                    || (rAuthorityField.UseTargetURL() && rAuthorityField.HasTargetURL()))
+                OUString targetURL = "";
+                
+                if (auto targetType = rAuthorityField.GetTargetType();
+                    targetType == SwAuthorityField::TargetType::UseDisplayURL
+                    || targetType == SwAuthorityField::TargetType::UseTargetURL)
                 {
                     // Bibliography entry with URL also provides a hyperlink.
-                    const OUString& rURL
-                        = rAuthorityField.GetAuthEntry()->GetAuthorField(
-                            rAuthorityField.UseTargetURL() ? AUTH_FIELD_TARGET_URL : AUTH_FIELD_URL);
-
+                    targetURL = rAuthorityField.GetAbsoluteURL();
+                }
+                
+                if (targetURL.getLength() > 0)
+                {
                     if (nSlot == SID_OPEN_HYPERLINK)
                     {
-                        ::LoadURL(rWrtSh, rURL, LoadUrlFlags::NewView, /*rTargetFrameName=*/OUString());
+                        ::LoadURL(rWrtSh, targetURL, LoadUrlFlags::NewView, /*rTargetFrameName=*/OUString());
                     }
                     else if (nSlot == SID_COPY_HYPERLINK_LOCATION)
                     {
                         ::uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetView().GetEditWin().GetClipboard();
-                        vcl::unohelper::TextDataObject::CopyStringTo(rURL, xClipboard, SfxViewShell::Current());
+                        vcl::unohelper::TextDataObject::CopyStringTo(targetURL, xClipboard, SfxViewShell::Current());
                     }
                 }
             }
@@ -2571,12 +2576,14 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 SwField* pField = rSh.GetCurField();
                 if (pField && pField->GetTyp()->Which() == SwFieldIds::TableOfAuthorities)
                 {
-                    // Bibliography entry with URL also provides a hyperlink.
                     const auto& rAuthorityField = *static_cast<const SwAuthorityField*>(pField);
-                    if (!rAuthorityField.UseTargetURL())
-                        bAuthorityFieldURL = rAuthorityField.HasURL();
-                    else
-                        bAuthorityFieldURL = rAuthorityField.HasTargetURL();
+                    if (auto targetType = rAuthorityField.GetTargetType();
+                        targetType == SwAuthorityField::TargetType::UseDisplayURL
+                        || targetType == SwAuthorityField::TargetType::UseTargetURL)
+                    {
+                        // Check if the Bibliography entry has a target URL
+                        bAuthorityFieldURL = rAuthorityField.GetAbsoluteURL().getLength() > 0;
+                    }
                 }
                 if (SfxItemState::SET > aSet.GetItemState(RES_TXTATR_INETFMT, false)
                     && !bAuthorityFieldURL)

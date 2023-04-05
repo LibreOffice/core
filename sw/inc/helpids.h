@@ -76,9 +76,9 @@ inline constexpr OUStringLiteral HID_AUTH_FIELD_CUSTOM4 = u"SW_HID_AUTH_FIELD_CU
 inline constexpr OUStringLiteral HID_AUTH_FIELD_CUSTOM5 = u"SW_HID_AUTH_FIELD_CUSTOM5";
 inline constexpr OUStringLiteral HID_AUTH_FIELD_ISBN = u"SW_HID_AUTH_FIELD_ISBN";
 inline constexpr OUStringLiteral HID_AUTH_FIELD_LOCAL_URL = u"SW_HID_AUTH_FIELD_LOCAL_URL";
+inline constexpr OUStringLiteral HID_AUTH_FIELD_TARGET_TYPE = u"SW_HID_AUTH_FIELD_TARGET_TYPE";
 inline constexpr OUStringLiteral HID_AUTH_FIELD_TARGET_URL = u"SW_HID_AUTH_FIELD_TARGET_URL";
-inline constexpr OUStringLiteral HID_AUTH_FIELD_USE_TARGET_URL
-    = u"SW_HID_AUTH_FIELD_USE_TARGET_URL";
+
 
 inline constexpr OUStringLiteral HID_BUSINESS_FMT_PAGE = u"SW_HID_BUSINESS_FMT_PAGE";
 inline constexpr OUStringLiteral HID_BUSINESS_FMT_PAGE_CONT = u"SW_HID_BUSINESS_FMT_PAGE_CONT";

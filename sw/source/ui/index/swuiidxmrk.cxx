@@ -1093,13 +1093,15 @@ class SwCreateAuthEntryDlg_Impl : public weld::GenericDialogController
     std::unique_ptr<weld::Button> m_xLocalBrowseButton;
     std::unique_ptr<weld::CheckButton> m_xLocalPageCB;
     std::unique_ptr<weld::SpinButton> m_xLocalPageSB;
-    std::unique_ptr<weld::CheckButton> m_xUseTargetURLCB;
+    std::unique_ptr<weld::ComboBox> m_xTargetTypeListBox;
+    weld::Entry* m_xTargetURLField;
 
     DECL_LINK(IdentifierHdl, weld::ComboBox&, void);
     DECL_LINK(ShortNameHdl, weld::Entry&, void);
     DECL_LINK(EnableHdl, weld::ComboBox&, void);
     DECL_LINK(BrowseHdl, weld::Button&, void);
     DECL_LINK(PageNumHdl, weld::Toggleable&, void);
+    DECL_LINK(TargetTypeHdl, weld::ComboBox&, void);
 
 public:
     SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
@@ -1150,7 +1152,7 @@ const TextInfo aTextInfoArr[] =
     {AUTH_FIELD_ANNOTE,          HID_AUTH_FIELD_ANNOTE          },
     {AUTH_FIELD_NOTE,            HID_AUTH_FIELD_NOTE            },
     {AUTH_FIELD_URL,             HID_AUTH_FIELD_URL             },
-    {AUTH_FIELD_USE_TARGET_URL,  HID_AUTH_FIELD_USE_TARGET_URL  },
+    {AUTH_FIELD_TARGET_TYPE,     HID_AUTH_FIELD_TARGET_TYPE     },
     {AUTH_FIELD_TARGET_URL,      HID_AUTH_FIELD_TARGET_URL      },
     {AUTH_FIELD_LOCAL_URL,       HID_AUTH_FIELD_LOCAL_URL       },
     {AUTH_FIELD_CUSTOM1,         HID_AUTH_FIELD_CUSTOM1         },
@@ -1572,8 +1574,8 @@ namespace
         STR_AUTH_FIELD_CUSTOM5,
         STR_AUTH_FIELD_ISBN,
         STR_AUTH_FIELD_LOCAL_URL,
+        STR_AUTH_FIELD_TARGET_TYPE,
         STR_AUTH_FIELD_TARGET_URL,
-        STR_AUTH_FIELD_USE_TARGET_URL,
     };
 }
 
@@ -1662,33 +1664,43 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
             m_xIdentifierBox->set_help_id(aCurInfo.pHelpId);
             m_aFixedTexts.back()->set_mnemonic_widget(m_xIdentifierBox.get());
         }
-        else if (AUTH_FIELD_USE_TARGET_URL == aCurInfo.nToxField)
+        else if (AUTH_FIELD_TARGET_TYPE == aCurInfo.nToxField)
         {
-            m_pBoxes[nIndex] = m_aBuilders.back()->weld_box("togglebox");
-
+            m_xTargetTypeListBox = m_aBuilders.back()->weld_combo_box("listbox-target-type");
             if (bLeft)
-                m_aOrigContainers.back()->move(m_pBoxes[nIndex].get(), m_xLeft.get());
+                m_aOrigContainers.back()->move(m_xTargetTypeListBox.get(), m_xLeft.get());
             else
-                m_aOrigContainers.back()->move(m_pBoxes[nIndex].get(), m_xRight.get());
+                m_aOrigContainers.back()->move(m_xTargetTypeListBox.get(), m_xRight.get());
 
-            m_pBoxes[nIndex]->set_grid_left_attach(1);
-            m_pBoxes[nIndex]->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
-            m_pBoxes[nIndex]->set_hexpand(true);
-
-            m_xUseTargetURLCB = m_aBuilders.back()->weld_check_button("usetargeturlcb");
-            m_xUseTargetURLCB->set_active(m_bNewEntryMode
-                                          || pFields[aCurInfo.nToxField].toAsciiLowerCase() == "true");
-            m_xUseTargetURLCB->set_grid_left_attach(1);
-            m_xUseTargetURLCB->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
-            m_xUseTargetURLCB->set_hexpand(true);
-            m_xUseTargetURLCB->show();
-            m_xUseTargetURLCB->set_help_id(aCurInfo.pHelpId);
-            m_aFixedTexts.back()->set_mnemonic_widget(m_xUseTargetURLCB.get());
+            if(!pFields[aCurInfo.nToxField].isEmpty())
+            {
+                m_xTargetTypeListBox->set_active(pFields[aCurInfo.nToxField].toInt32());
+            }
+            else if(m_bNewEntryMode)
+            {
+                // For new documents, set value to "BibliographyTableRow"
+                m_xTargetTypeListBox->set_active(SwAuthorityField::TargetType::BibliographyTableRow);
+            }
+            m_xTargetTypeListBox->set_grid_left_attach(1);
+            m_xTargetTypeListBox->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
+            m_xTargetTypeListBox->set_hexpand(true);
+            m_xTargetTypeListBox->show();
+            m_xTargetTypeListBox->connect_changed(LINK(this, SwCreateAuthEntryDlg_Impl, TargetTypeHdl));
+            m_xTargetTypeListBox->set_help_id(aCurInfo.pHelpId);
+            m_aFixedTexts.back()->set_mnemonic_widget(m_xTargetTypeListBox.get());
         }
         else
         {
             m_pBoxes[nIndex] = m_aBuilders.back()->weld_box("vbox");
             m_pEdits[nIndex] = m_aBuilders.back()->weld_entry("entry");
+
+            if (AUTH_FIELD_TARGET_URL == aCurInfo.nToxField)
+            {
+                m_xTargetURLField = m_pEdits[nIndex].get();
+                m_xTargetURLField->set_sensitive(
+                    m_xTargetTypeListBox->get_active() == SwAuthorityField::TargetType::UseTargetURL);
+            }
+
             if (bLeft)
                 m_aOrigContainers.back()->move(m_pBoxes[nIndex].get(), m_xLeft.get());
             else
@@ -1777,10 +1789,10 @@ OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) cons
         return m_xIdentifierBox->get_active_text();
     }
 
-    if (AUTH_FIELD_USE_TARGET_URL == eField)
+    if (AUTH_FIELD_TARGET_TYPE == eField)
     {
-        assert(m_xUseTargetURLCB && "No UseTargetURL");
-        return (m_xUseTargetURLCB->get_active() ? OUString("true") : OUString("false"));
+        assert(m_xTargetTypeListBox && "No TargetType ListBox");
+        return OUString::number(m_xTargetTypeListBox->get_active());
     }
 
     for(int nIndex = 0; nIndex < AUTH_FIELD_END; nIndex++)
@@ -1843,6 +1855,11 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, EnableHdl, weld::ComboBox&, rBox, void)
     m_xOKBT->set_sensitive(m_bNameAllowed && rBox.get_active() != -1);
     m_xLocalBrowseButton->show();
 };
+
+IMPL_LINK(SwCreateAuthEntryDlg_Impl, TargetTypeHdl, weld::ComboBox&, rBox, void)
+{
+    m_xTargetURLField->set_sensitive(rBox.get_active() == SwAuthorityField::TargetType::UseTargetURL);
+}
 
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, BrowseHdl, weld::Button&, rButton, void)
 {

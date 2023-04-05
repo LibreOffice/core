@@ -3473,8 +3473,8 @@ namespace xmloff::token {
         TOKEN("margin-gutter", XML_MARGIN_GUTTER),
 
         TOKEN("local-url", XML_LOCAL_URL),
+        TOKEN("target-type", XML_TARGET_TYPE),
         TOKEN("target-url", XML_TARGET_URL),
-        TOKEN("use-target-url", XML_USE_TARGET_URL),
 
         TOKEN("dir",                 XML_DIR ),
         TOKEN("displaystyle",        XML_DISPLAYSTYLE ),

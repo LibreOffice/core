@@ -414,23 +414,18 @@ void SwWrtShell::ClickToField(const SwField& rField, bool bExecHyperlinks)
             Point vStartPoint = GetCursor_()->GetPtPos();
             const SwAuthorityField* pField = static_cast<const SwAuthorityField*>(&rField);
 
-            if (!pField->UseTargetURL() && pField->HasURL())
+            if (auto targetType = pField->GetTargetType();
+                targetType == SwAuthorityField::TargetType::UseDisplayURL
+                || targetType == SwAuthorityField::TargetType::UseTargetURL)
             {
-                // Since user didn't opt in to use Target URL, open standard URL
-
-                const OUString& rURL = pField->GetAbsoluteURL();
-                ::LoadURL(*this, rURL, LoadUrlFlags::NewView, /*rTargetFrameName=*/OUString());
+                // Since the user selected target type with URL, try to use it if not empty
+                if (const OUString& rURL = pField->GetAbsoluteURL();
+                    rURL.getLength() > 0)
+                    ::LoadURL(*this, rURL, LoadUrlFlags::NewView, /*rTargetFrameName=*/OUString());
             }
-            else if (pField->UseTargetURL() && pField->HasTargetURL())
+            else if (targetType == SwAuthorityField::TargetType::BibliographyTableRow)
             {
-                // Since user opted in to use Target URL and field has Target URL, use it
-
-                const OUString& rURL = pField->GetAbsoluteTargetURL();
-                ::LoadURL(*this, rURL, LoadUrlFlags::NewView, /*rTargetFrameName=*/OUString());
-            }
-            else if (pField->UseTargetURL())
-            {
-                // Since user opted in to use Target URL but the field doesn't have Target URL,
+                // Since the user selected to target Bibliography Table Row,
                 //  try finding matching bibliography table line
 
                 const bool bWasViewLocked = IsViewLocked();

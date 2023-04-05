@@ -133,8 +133,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBibliographyTargetURL1)
     uno::Sequence<beans::PropertyValue> aFields = {
         comphelper::makePropertyValue("Identifier", OUString("AT")),
         comphelper::makePropertyValue("URL", OUString("https://display.url/test1.pdf#page=1")),
+        comphelper::makePropertyValue("TargetType", OUString("1")),
         comphelper::makePropertyValue("TargetURL", OUString("https://target.url/test2.pdf#page=2")),
-        comphelper::makePropertyValue("UseTargetURL", OUString("true")),
     };
     xField->setPropertyValue("Fields", uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -165,8 +165,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBibliographyTargetURL1)
     CPPUNIT_ASSERT_EQUAL(OUString("https://target.url/test2.pdf#page=2"),
                          aMap["TargetURL"].get<OUString>());
 
-    CPPUNIT_ASSERT(aMap.find("UseTargetURL") != aMap.end());
-    CPPUNIT_ASSERT_EQUAL(OUString("true"), aMap["UseTargetURL"].get<OUString>());
+    CPPUNIT_ASSERT(aMap.find("TargetType") != aMap.end());
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), aMap["TargetType"].get<OUString>());
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentTableBorder)

@@ -639,37 +639,16 @@ OUString SwAuthorityField::GetAuthority(const SwRootFrame* pLayout, const SwForm
     return aText;
 }
 
-bool SwAuthorityField::UseTargetURL() const
+SwAuthorityField::TargetType SwAuthorityField::GetTargetType() const
 {
-    const OUString& rValue = GetAuthEntry()->GetAuthorField(AUTH_FIELD_USE_TARGET_URL);
-    return rValue.toAsciiLowerCase() == "true";
-}
-
-bool SwAuthorityField::HasURL() const
-{
-    const OUString& rURL = GetAuthEntry()->GetAuthorField(AUTH_FIELD_URL);
-    return !rURL.isEmpty();
+    return SwAuthorityField::TargetType(GetAuthEntry()->GetAuthorField(AUTH_FIELD_TARGET_TYPE).toInt32());
 }
 
 OUString SwAuthorityField::GetAbsoluteURL() const
 {
-    const OUString& rURL = GetAuthEntry()->GetAuthorField(AUTH_FIELD_URL);
-    SwDoc* pDoc = static_cast<SwAuthorityFieldType*>(GetTyp())->GetDoc();
-    SwDocShell* pDocShell = pDoc->GetDocShell();
-    OUString aBasePath = pDocShell->getDocumentBaseURL();
-    return INetURLObject::GetAbsURL(aBasePath, rURL, INetURLObject::EncodeMechanism::WasEncoded,
-                                    INetURLObject::DecodeMechanism::WithCharset);
-}
-
-bool SwAuthorityField::HasTargetURL() const
-{
-    const OUString& rURL = GetAuthEntry()->GetAuthorField(AUTH_FIELD_TARGET_URL);
-    return !rURL.isEmpty();
-}
-
-OUString SwAuthorityField::GetAbsoluteTargetURL() const
-{
-    const OUString& rURL = GetAuthEntry()->GetAuthorField(AUTH_FIELD_TARGET_URL);
+    const OUString& rURL = GetAuthEntry()->GetAuthorField(
+        GetTargetType() == SwAuthorityField::TargetType::UseDisplayURL
+            ? AUTH_FIELD_URL : AUTH_FIELD_TARGET_URL);
     SwDoc* pDoc = static_cast<SwAuthorityFieldType*>(GetTyp())->GetDoc();
     SwDocShell* pDocShell = pDoc->GetDocShell();
     OUString aBasePath = pDocShell->getDocumentBaseURL();
@@ -779,8 +758,8 @@ const char* const aFieldNames[] =
     "Custom5",
     "ISBN",
     "LocalURL",
+    "TargetType",
     "TargetURL",
-    "UseTargetURL"
 };
 
 void SwAuthEntry::dumpAsXml(xmlTextWriterPtr pWriter) const

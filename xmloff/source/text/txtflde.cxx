@@ -2713,8 +2713,8 @@ void XMLTextFieldExport::ProcessBibliographyData(
                     sStr = GetExport().GetRelativeReference(sStr);
                 }
                 sal_uInt16 nPrefix = XML_NAMESPACE_TEXT;
-                if (eElement == XML_LOCAL_URL || eElement == XML_TARGET_URL
-                    || eElement == XML_USE_TARGET_URL)
+                if (eElement == XML_LOCAL_URL || eElement == XML_TARGET_TYPE
+                    || eElement == XML_TARGET_URL)
                 {
                     nPrefix = XML_NAMESPACE_LO_EXT;
                 }
@@ -3415,13 +3415,13 @@ enum XMLTokenEnum XMLTextFieldExport::MapBibliographyFieldName(std::u16string_vi
     {
         eName = XML_LOCAL_URL;
     }
+    else if (sName == u"TargetType")
+    {
+        eName = XML_TARGET_TYPE;
+    }
     else if (sName == u"TargetURL")
     {
         eName = XML_TARGET_URL;
-    }
-    else if (sName == u"UseTargetURL")
-    {
-        eName = XML_USE_TARGET_URL;
     }
     else
     {

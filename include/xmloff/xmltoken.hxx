@@ -3469,8 +3469,8 @@ namespace xmloff::token {
         XML_MARGIN_GUTTER,
 
         XML_LOCAL_URL,
+        XML_TARGET_TYPE,
         XML_TARGET_URL,
-        XML_USE_TARGET_URL,
 
         // Math ml
         XML_DIR,

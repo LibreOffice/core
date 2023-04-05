@@ -3113,11 +3113,11 @@ const char* XMLBibliographyFieldImportContext::MapBibliographyFieldName(
         case XML_LOCAL_URL:
             pName = "LocalURL";
             break;
+        case XML_TARGET_TYPE:
+            pName = "TargetType";
+            break;
         case XML_TARGET_URL:
             pName = "TargetURL";
-            break;
-        case XML_USE_TARGET_URL:
-            pName = "UseTargetURL";
             break;
         default:
             assert(false && "Unknown bibliography info data");

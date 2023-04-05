@@ -2470,12 +2470,16 @@ void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()
         const auto& rAuthorityField
             = *static_cast<const SwAuthorityField*>(pFormatField->GetField());
 
-        if ((!rAuthorityField.UseTargetURL() && rAuthorityField.HasURL())
-            || (rAuthorityField.UseTargetURL() && rAuthorityField.HasTargetURL()))
+        if (auto targetType = rAuthorityField.GetTargetType();
+            targetType == SwAuthorityField::TargetType::UseDisplayURL
+            || targetType == SwAuthorityField::TargetType::UseTargetURL)
         {
-            // Since the conditions indicate usage of a URL link to it
-            const OUString& rURL = rAuthorityField.GetAuthEntry()->GetAuthorField(
-                rAuthorityField.UseTargetURL() ? AUTH_FIELD_TARGET_URL : AUTH_FIELD_URL);
+            // Since the target type specifies to use an URL, link to it
+            const OUString& rURL = rAuthorityField.GetAbsoluteURL();
+            if (rURL.getLength() == 0)
+            {
+                continue;
+            }
 
             const SwTextNode& rTextNode = pFormatField->GetTextField()->GetTextNode();
             if (!lcl_TryMoveToNonHiddenField(mrSh, rTextNode, *pFormatField))
@@ -2503,9 +2507,9 @@ void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()
             }
             mrSh.SwCursorShell::ClearMark();
         }
-        else if (rAuthorityField.UseTargetURL())
+        else if (targetType == SwAuthorityField::TargetType::BibliographyTableRow)
         {
-            // Since the bibliography mark doesn't have target URL, try linking to a bibliography table
+            // As the target type specifies, try linking to a bibliography table row
             sal_Int32 nDestId = -1;
 
             std::unordered_map<const SwTOXBase*, OUString> vFormattedFieldStrings;
