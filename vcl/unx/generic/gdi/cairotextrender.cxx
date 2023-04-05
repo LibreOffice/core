@@ -327,7 +327,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
 
     int nRatio = nWidth * 10 / nHeight;
 
-    // tdf#132112 excessive stretch of underbrace and overbrace can trigger freetype into an error, which propogates to cairo
+    // tdf#132112 excessive stretch of underbrace and overbrace can trigger freetype into an error, which propagates to cairo
     // and once a cairo surface is in an error state, that cannot be cleared and all subsequent drawing fails, so bodge that
     // with a high degree of stretch we draw the brace without stretch to a temp surface and stretch that to give a far
     // poorer visual result, but one that can be rendered.
