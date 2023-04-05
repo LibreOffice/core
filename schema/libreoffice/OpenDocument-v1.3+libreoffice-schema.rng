@@ -1974,7 +1974,28 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       </rng:element>
     </rng:define>
 
-  </rng:include>
+    <!-- Belongs to project MCGR (Armin Le Grand) LO 7.6 -->
+    <rng:define name="draw-gradient">
+      <rng:element name="draw:gradient">
+        <rng:ref name="common-draw-gradient-attlist"/>
+        <rng:ref name="draw-gradient-attlist"/>
+        <rng:zeroOrMore>
+          <rng:ref name="loext-gradient-stop"/>
+        </rng:zeroOrMore>
+      </rng:element>
+    </rng:define>
+    <!-- Belongs to project MCGR (Armin Le Grand) LO 7.6 -->
+    <rng:define name="draw-opacity">
+      <rng:element name="draw:opacity">
+        <rng:ref name="common-draw-gradient-attlist"/>
+        <rng:ref name="draw-opacity-attlist"/>
+        <rng:zeroOrMore>
+          <rng:ref name="loext-opacity-stop"/>
+        </rng:zeroOrMore>
+      </rng:element>
+    </rng:define>
+
+   </rng:include>
 
     <!-- TODO no proposal -->
   <rng:define name="loext-p">
@@ -3530,6 +3551,55 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         <rng:ref name="boolean"/>
       </rng:attribute>
     </rng:optional>
+  </rng:define>
+
+  <!-- Belongs to project MCGR (Armin Le Grand) LO 7.6
+       Intended to be used for theme colors too  -->
+  <rng:define name="common-complex-color-attributes">
+    <rng:choice>
+      <rng:group>
+        <rng:attribute name="loext:color-type">
+          <rng:value>rgb</rng:value>
+        </rng:attribute>
+        <rng:attribute name="loext:color-value">
+          <rng:ref name="color"/>
+        </rng:attribute>
+      </rng:group>
+      <rng:group>
+        <rng:attribute name="loext:color-type">
+          <rng:value>theme</rng:value>
+        </rng:attribute>
+        <rng:attribute name="loext:color-value">
+        <!-- will become <rng:ref name="themeColorId"/>
+             when theme color related attributes are renamed -->
+          <rng:ref name="theme-color"/>
+        </rng:attribute>
+      </rng:group>
+    </rng:choice>
+  </rng:define>
+
+  <!-- Belongs to project MCGR (Armin Le Grand) LO 7.6 -->
+  <rng:define name="loext-gradient-stop">
+    <rng:element name="loext:gradient-stop">
+      <rng:attribute name="svg:offset">
+        <rng:ref name="zeroToOneDecimal"/>
+      </rng:attribute>
+      <rng:ref name="common-complex-color-attributes"/>
+      <rng:empty/>
+    </rng:element>
+  </rng:define>
+
+  <!-- Belongs to project MCGR (Armin Le Grand) LO 7.6 -->
+  <rng:define name="loext-opacity-stop">
+    <rng:element name="loext:opacity-stop">
+      <rng:attribute name="svg:offset">
+        <rng:ref name="zeroToOneDecimal"/>
+      </rng:attribute>
+      <rng:attribute name="svg:stop-opacity">
+        <rng:ref name="zeroToOneDecimal"/>
+      </rng:attribute>
+      <rng:empty/>
+    </rng:element>
   </rng:define>
 
 </rng:grammar>

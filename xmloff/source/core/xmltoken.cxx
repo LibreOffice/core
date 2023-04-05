@@ -3522,6 +3522,11 @@ namespace xmloff::token {
 
         TOKEN("may-break-between-pages", XML_MAY_BREAK_BETWEEN_PAGES),
 
+        TOKEN("gradient-stop", XML_GRADIENT_STOP),
+        TOKEN("opacity-stop", XML_OPACITY_STOP),
+        TOKEN("color-value", XML_COLOR_VALUE),
+        TOKEN("color-type", XML_COLOR_TYPE),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, std::nullopt,               XML_TOKEN_END }
 #else
