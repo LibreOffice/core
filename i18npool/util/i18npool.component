@@ -513,9 +513,6 @@
   <implementation name="com.sun.star.i18n.Transliteration.ignoreIterationMark_ja_JP">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.ignoreKana">
-    <service name="com.sun.star.i18n.Transliteration.l10n"/>
-  </implementation>
   <implementation name="com.sun.star.i18n.Transliteration.ignoreKiKuFollowedBySa_ja_JP">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
