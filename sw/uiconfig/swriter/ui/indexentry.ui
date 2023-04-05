@@ -529,10 +529,15 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="no-show-all">True</property>
-                        <property name="tooltip-text" translatable="yes" context="indexentry|applytoallcb|tooltip_text">Add an index entry to any other occurrences of the selected text specified in “Entry”.</property>
+                        <property name="tooltip-text" translatable="yes" context="indexentry|applytoallcb|tooltip_text">Add an index entry to any other occurrences of the text selected into “Entry”.</property>
                         <property name="halign">start</property>
                         <property name="use-underline">True</property>
                         <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="applytoallcb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|applytoallcb">Add an index entry to any other occurrences of the text selected into “Entry”. For a modified entry, the match is conducted on the original selection, but the modified entry is inserted, and will appear in the index.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
