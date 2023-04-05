@@ -180,9 +180,10 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
+                    <property name="tooltip-text" translatable="yes" context="outlinenumberingpage|tooltip_text|style">Select the paragraph style to assign to the selected outline level. Select [None] to skip the outline level.</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="style-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|style">Select the paragraph style to assign to the selected outline level.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|style">Select the paragraph style to assign to the selected outline level. Select [None] to skip the outline level.</property>
                       </object>
                     </child>
                   </object>
