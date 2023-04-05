@@ -1043,7 +1043,7 @@ public:
     bool IsInComments() const { return m_bIsInComments; };
 
     std::vector<css::beans::PropertyValue> MakeFrameProperties(const ParagraphProperties& rProps);
-    void CheckUnregisteredFrameConversion( );
+    void CheckUnregisteredFrameConversion(bool bPreventOverlap = false);
 
     void RegisterFrameConversion(css::uno::Reference<css::text::XTextRange> const& xFrameStartRange,
                                  css::uno::Reference<css::text::XTextRange> const& xFrameEndRange,

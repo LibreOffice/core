@@ -152,6 +152,35 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127622_framePr, "tdf127622_framePr.docx")
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf105035_framePrB, "tdf105035_framePrB.docx")
+{
+    // The paragraphs have different frame definitions, so they must be in separate frames,
+    // and the frames must not overlap - even though their vertical positions are identical.
+    const auto& pLayout = parseLayoutDump();
+    sal_Int32 n1stFlyBottom
+        = getXPath(pLayout, "//page[1]//anchored/fly[1]/infos/bounds", "bottom").toInt32();
+    sal_Int32 n2ndFlyTop
+        = getXPath(pLayout, "//page[1]//anchored/fly[2]/infos/bounds", "top").toInt32();
+    CPPUNIT_ASSERT_GREATER(n1stFlyBottom, n2ndFlyTop); //Top is greater than bottom
+
+    // Impossible layout TODO: the textboxes are in the wrong order.
+    OUString sTextBox1("Preparation of Papers for IEEE TRANSACTIONS and JOURNALS (November 2012)");
+    CPPUNIT_ASSERT_MESSAGE("DID YOU FIX ME? Wow - I didn't think this would be possible!",
+        !getXPathContent(pLayout, "//page[1]//anchored/fly[1]/txt").startsWith(sTextBox1));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf105035_framePrC, "tdf105035_framePrC.docx")
+{
+    // The paragraphs have different frame definitions, so they must be in separate frames,
+    // and the frames DO overlap this time.
+    const auto& pLayout = parseLayoutDump();
+    sal_Int32 n1stFlyTop
+        = getXPath(pLayout, "//page[1]//anchored/fly[1]/infos/bounds", "top").toInt32();
+    sal_Int32 n2ndFlyTop
+        = getXPath(pLayout, "//page[1]//anchored/fly[2]/infos/bounds", "top").toInt32();
+    CPPUNIT_ASSERT_EQUAL(n1stFlyTop, n2ndFlyTop); //both frames start at the same position
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf154129_framePr1, "tdf154129_framePr1.docx")
 {
     for (size_t i = 1; i < 4; ++i)

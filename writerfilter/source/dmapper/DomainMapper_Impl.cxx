@@ -1803,7 +1803,7 @@ DomainMapper_Impl::MakeFrameProperties(const ParagraphProperties& rProps)
     return aFrameProperties;
 }
 
-void DomainMapper_Impl::CheckUnregisteredFrameConversion()
+void DomainMapper_Impl::CheckUnregisteredFrameConversion(bool bPreventOverlap)
 {
     if (m_aTextAppendStack.empty())
         return;
@@ -1826,6 +1826,9 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion()
         aFrameProperties.push_back(
             comphelper::makePropertyValue(getPropertyName(PROP_FRM_DIRECTION), *nDirection));
     }
+
+    if (bPreventOverlap)
+        aFrameProperties.push_back(comphelper::makePropertyValue("AllowOverlap", uno::Any(false)));
 
     // If there is no fill, the Word default is 100% transparency.
     // Otherwise CellColorHandler has priority, and this setting
@@ -2263,24 +2266,97 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     if( pParaContext->props().IsFrameMode() )
                         pToBeSavedProperties = new ParagraphProperties(pParaContext->props());
                 }
-                else if (pParaContext->props().IsFrameMode()
-                         && MakeFrameProperties(*rAppendContext.pLastParagraphProperties)
-                             == MakeFrameProperties(pParaContext->props()))
-                {
-                    //handles (7)
-                    rAppendContext.pLastParagraphProperties->SetEndingRange(rAppendContext.xInsertPosition.is() ? rAppendContext.xInsertPosition : xTextAppend->getEnd());
-                    bKeepLastParagraphProperties = true;
-                }
                 else
                 {
-                    //handles (8)(9) and completes (6)
-                    CheckUnregisteredFrameConversion( );
-
-                    // If different frame properties are set on this paragraph, keep them.
-                    if ( !bIsDropCap && pParaContext->props().IsFrameMode() )
+                    const bool bIsFrameMode(pParaContext->props().IsFrameMode());
+                    std::vector<beans::PropertyValue> aCurrFrameProperties;
+                    std::vector<beans::PropertyValue> aPrevFrameProperties;
+                    if (bIsFrameMode)
                     {
-                        pToBeSavedProperties = new ParagraphProperties(pParaContext->props());
-                        lcl_AddRange(pToBeSavedProperties, xTextAppend, rAppendContext);
+                        aCurrFrameProperties = MakeFrameProperties(pParaContext->props());
+                        aPrevFrameProperties
+                            = MakeFrameProperties(*rAppendContext.pLastParagraphProperties);
+                    }
+
+                    if (bIsFrameMode && aPrevFrameProperties == aCurrFrameProperties)
+                    {
+                        //handles (7)
+                        rAppendContext.pLastParagraphProperties->SetEndingRange(
+                            rAppendContext.xInsertPosition.is() ? rAppendContext.xInsertPosition
+                                                                : xTextAppend->getEnd());
+                        bKeepLastParagraphProperties = true;
+                    }
+                    else
+                    {
+                        // handles (8)(9) and completes (6)
+
+                        // RTF has an \overlap flag (which we ignore so far)
+                        // but DOCX has nothing like that for framePr
+                        // Always allow overlap in the RTF case - so there can be no regression.
+
+                        // In MSO UI, there is no setting for AllowOverlap for this kind of frame.
+                        // Although they CAN overlap with other anchored things,
+                        // they do not _easily_ overlap with other framePr's,
+                        // so when one frame follows another (8), don't let the first be overlapped.
+                        bool bPreventOverlap = !IsRTFImport() && bIsFrameMode && !bIsDropCap;
+
+                        // Preventing overlap is emulation - so deny overlap as little as possible.
+                        sal_Int16 nVertOrient = text::VertOrientation::NONE;
+                        sal_Int16 nVertOrientRelation = text::RelOrientation::FRAME;
+                        sal_Int32 nCurrVertPos = 0;
+                        sal_Int32 nPrevVertPos = 0;
+                        for (size_t i = 0; bPreventOverlap && i < aCurrFrameProperties.size(); ++i)
+                        {
+                            if (aCurrFrameProperties[i].Name == "VertOrientRelation")
+                            {
+                                aCurrFrameProperties[i].Value >>= nVertOrientRelation;
+                                if (nVertOrientRelation != text::RelOrientation::FRAME)
+                                    bPreventOverlap = false;
+                            }
+                            else if (aCurrFrameProperties[i].Name == "VertOrient")
+                            {
+                                aCurrFrameProperties[i].Value >>= nVertOrient;
+                                if (nVertOrient != text::VertOrientation::NONE)
+                                    bPreventOverlap = false;
+                            }
+                            else if (aCurrFrameProperties[i].Name == "VertOrientPosition")
+                            {
+                                aCurrFrameProperties[i].Value >>= nCurrVertPos;
+                                // arbitrary value. Assume it must be less than 1st line height
+                                if (nCurrVertPos > 20 || nCurrVertPos < -20)
+                                    bPreventOverlap = false;
+                            }
+                        }
+                        for (size_t i = 0; bPreventOverlap && i < aPrevFrameProperties.size(); ++i)
+                        {
+                            if (aPrevFrameProperties[i].Name == "VertOrientRelation")
+                            {
+                                aPrevFrameProperties[i].Value >>= nVertOrientRelation;
+                                if (nVertOrientRelation != text::RelOrientation::FRAME)
+                                    bPreventOverlap = false;
+                            }
+                            else if (aPrevFrameProperties[i].Name == "VertOrient")
+                            {
+                                aPrevFrameProperties[i].Value >>= nVertOrient;
+                                if (nVertOrient != text::VertOrientation::NONE)
+                                    bPreventOverlap = false;
+                            }
+                            else if (aPrevFrameProperties[i].Name == "VertOrientPosition")
+                            {
+                                aPrevFrameProperties[i].Value >>= nPrevVertPos;
+                                if (nPrevVertPos != nCurrVertPos)
+                                    bPreventOverlap = false;
+                            }
+                        }
+
+                        CheckUnregisteredFrameConversion(bPreventOverlap);
+
+                        // If different frame properties are set on this paragraph, keep them.
+                        if (!bIsDropCap && bIsFrameMode)
+                        {
+                            pToBeSavedProperties = new ParagraphProperties(pParaContext->props());
+                            lcl_AddRange(pToBeSavedProperties, xTextAppend, rAppendContext);
+                        }
                     }
                 }
             }
