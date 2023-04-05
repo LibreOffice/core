@@ -1165,7 +1165,6 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
             pPDFControl->TextFont.SetFontSize(aFontSize);
 
             mpPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::Form);
-            OUString const& rAltText(rControlPrimitive.GetAltText());
             vcl::PDFWriter::StructAttributeValue role;
             switch (pPDFControl->Type)
             {
@@ -1185,6 +1184,7 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
             // ISO 14289-1:2014, Clause: 7.18.4
             mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Role, role);
             // ISO 14289-1:2014, Clause: 7.18.1
+            OUString const& rAltText(rControlPrimitive.GetAltText());
             if (!rAltText.isEmpty())
             {
                 mpPDFExtOutDevData->SetAlternateText(rAltText);
@@ -1201,6 +1201,22 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
             // PDF export did not work, try simple output.
             // Fallback to printer output by not setting bDoProcessRecursively
             // to false.
+        }
+    }
+
+    if (!bDoProcessRecursively)
+    {
+        return;
+    }
+
+    if (mpPDFExtOutDevData)
+    { // no corresponding PDF Form, use Figure instead
+        mpPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::Figure);
+        mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Placement, vcl::PDFWriter::Block);
+        OUString const& rAltText(rControlPrimitive.GetAltText());
+        if (!rAltText.isEmpty())
+        {
+            mpPDFExtOutDevData->SetAlternateText(rAltText);
         }
     }
 
@@ -1247,6 +1263,11 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
     if (bDoProcessRecursively)
     {
         process(rControlPrimitive);
+    }
+
+    if (mpPDFExtOutDevData)
+    {
+        mpPDFExtOutDevData->EndStructureElement();
     }
 }
 
