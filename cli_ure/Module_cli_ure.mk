@@ -10,7 +10,7 @@
 $(eval $(call gb_Module_Module,cli_ure))
 
 ifeq ($(COM),MSC)
-ifneq ($(CPUNAME),AARCH64)
+ifneq ($(CPUNAME)_$(CROSS_COMPILING),AARCH64_TRUE)
 $(eval $(call gb_Module_add_targets,cli_ure,\
 	CliLibrary_cli_basetypes \
 	CliLibrary_cli_ure \
