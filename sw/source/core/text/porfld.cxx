@@ -419,7 +419,11 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
             {
                 pField->SetFont( std::make_unique<SwFont>( *rInf.GetFont() ) );
             }
-            pField->SetFollow( true );
+            if (Compress())
+            {   // empty this will be deleted in SwLineLayout::CalcLine()
+                // anyway so make sure pField doesn't have a stale flag
+                pField->SetFollow( true );
+            }
             if (pField->Compress())
             {   // empty pField will be deleted in SwLineLayout::CalcLine()
                 // anyway so make sure this one doesn't have a stale flag
@@ -524,10 +528,10 @@ SwNumberPortion::SwNumberPortion( const OUString &rExpand,
                                   const bool bCntr,
                                   const sal_uInt16 nMinDst,
                                   const bool bLabelAlignmentPosAndSpaceModeActive )
-        : SwFieldPortion( rExpand, std::move(pFont) ),
-          m_nFixWidth(0),
-          m_nMinDist( nMinDst ),
-          mbLabelAlignmentPosAndSpaceModeActive( bLabelAlignmentPosAndSpaceModeActive )
+    : SwFieldPortion(rExpand, std::move(pFont), false, TextFrameIndex(0))
+    , m_nFixWidth(0)
+    , m_nMinDist(nMinDst)
+    , mbLabelAlignmentPosAndSpaceModeActive(bLabelAlignmentPosAndSpaceModeActive)
 {
     SetWhichPor( PortionType::Number );
     SetLeft( bLft );
