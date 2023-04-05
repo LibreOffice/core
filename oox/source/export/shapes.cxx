@@ -321,16 +321,6 @@ uno::Reference<io::XInputStream> GetOLEObjectStream(
 
 namespace oox::drawingml {
 
-#define GETA(propName) \
-    GetProperty( rXPropSet, #propName)
-
-#define GETAD(propName) \
-    ( GetPropertyAndState( rXPropSet, rXPropState, #propName, eState ) && eState == beans::PropertyState_DIRECT_VALUE )
-
-#define GET(variable, propName) \
-    if ( GETA(propName) ) \
-        mAny >>= variable;
-
 ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ShapeHashMap* pShapeMap, XmlFilterBase* pFB, DocumentType eDocumentType, DMLTextExport* pTextExport, bool bUserShapes )
     : DrawingML( std::move(pFS), pFB, eDocumentType, pTextExport )
     , m_nEmbeddedObjects(0)
@@ -746,7 +736,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     bool bHasGeometrySeq(false);
     Sequence< PropertyValue > aGeometrySeq;
     OUString sShapeType("non-primitive"); // default in ODF
-    if (GETA(CustomShapeGeometry))
+    if (GetProperty(rXPropSet, "CustomShapeGeometry"))
     {
         SAL_INFO("oox.shape", "got custom shape geometry");
         if (mAny >>= aGeometrySeq)
@@ -816,7 +806,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     if (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes)
     {
         bool bUseBackground = false;
-        if (GETA(FillUseSlideBackground))
+        if (GetProperty(rXPropSet, "FillUseSlideBackground"))
             mAny >>= bUseBackground;
         if (bUseBackground)
             mpFS->startElementNS(mnXmlNamespace, XML_sp, XML_useBgFill, "1");
@@ -824,7 +814,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
             mpFS->startElementNS(mnXmlNamespace, XML_sp);
 
         bool isVisible = true ;
-        if( GETA (Visible))
+        if( GetProperty(rXPropSet, "Visible"))
         {
             mAny >>= isVisible;
         }
@@ -834,7 +824,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
             OString::number(GetShapeID(xShape) == -1 ? GetNewShapeID(xShape) : GetShapeID(xShape)),
             XML_name, GetShapeName(xShape), XML_hidden, sax_fastparser::UseIf("1", !isVisible));
 
-        if( GETA( URL ) )
+        if( GetProperty(rXPropSet, "URL") )
         {
             OUString sURL;
             mAny >>= sURL;
@@ -850,10 +840,10 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         }
 
         OUString sBookmark;
-        if (GETA(Bookmark))
+        if (GetProperty(rXPropSet, "Bookmark"))
             mAny >>= sBookmark;
 
-        if (GETA(OnClick))
+        if (GetProperty(rXPropSet, "OnClick"))
         {
             OUString sPPAction;
             presentation::ClickAction eClickAction = presentation::ClickAction_NONE;
@@ -1687,7 +1677,8 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
     Reference< XShape > rXShapeB;
     PropertyState eState;
     ConnectorType eConnectorType = ConnectorType_STANDARD;
-    GET(eConnectorType, EdgeKind);
+    if (GetProperty(rXPropSet, "EdgeKind"))
+        mAny >>= eConnectorType;
 
     switch( eConnectorType ) {
         case ConnectorType_CURVE:
@@ -1703,19 +1694,24 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
             break;
     }
 
-    if( GETAD( EdgeStartPoint ) ) {
+    if (GetPropertyAndState( rXPropSet, rXPropState, "EdgeStartPoint", eState ) && eState == beans::PropertyState_DIRECT_VALUE )
+    {
         mAny >>= aStartPoint;
-        if( GETAD( EdgeEndPoint ) ) {
+        if (GetPropertyAndState( rXPropSet, rXPropState, "EdgeEndPoint", eState ) && eState == beans::PropertyState_DIRECT_VALUE )
             mAny >>= aEndPoint;
-        }
     }
-    GET( rXShapeA, EdgeStartConnection );
-    GET( rXShapeB, EdgeEndConnection );
+    if (GetProperty(rXPropSet, "EdgeStartConnection"))
+        mAny >>= rXShapeA;
+    if (GetProperty(rXPropSet, "EdgeEndConnection"))
+        mAny >>= rXShapeB;
 
-    GET(nStartGlueId, StartGluePointIndex);
+    if (GetProperty(rXPropSet, "StartGluePointIndex"))
+        mAny >>= nStartGlueId;
     if (nStartGlueId != -1)
         nStartGlueId = lcl_GetGluePointId(nStartGlueId);
-    GET(nEndGlueId, EndGluePointIndex);
+
+    if (GetProperty(rXPropSet, "EndGluePointIndex"))
+        mAny >>= nEndGlueId;
     if (nEndGlueId != -1)
         nEndGlueId = lcl_GetGluePointId(nEndGlueId);
 
