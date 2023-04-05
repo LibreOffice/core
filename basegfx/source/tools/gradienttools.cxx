@@ -686,12 +686,6 @@ namespace basegfx
                 if (rColorStops.end() == lowerBound)
                     return rColorStops.back().getStopColor();
 
-                // when there are just two color steps this cannot happen, but when using
-                // a range of colors this *may* be used inside the range to represent
-                // single-colored regions inside a ColorRange. Use that color & done
-                if (lowerBound->getStopColor() == upperBound->getStopColor())
-                    return rLastColorStopRange.maColorStart;
-
                 // we have lower and upper bound, get colors and offsets
                 rLastColorStopRange.maColorStart = lowerBound->getStopColor();
                 rLastColorStopRange.maColorEnd = upperBound->getStopColor();
@@ -699,6 +693,11 @@ namespace basegfx
                 rLastColorStopRange.mfOffsetEnd = upperBound->getStopOffset();
             }
 
+            // when there are just two color steps this cannot happen, but when using
+            // a range of colors this *may* be used inside the range to represent
+            // single-colored regions inside a ColorRange. Use that color & done
+            if (rLastColorStopRange.maColorStart == rLastColorStopRange.maColorEnd)
+                return rLastColorStopRange.maColorStart;
 
             // calculate number of steps and adapted proportinal
             // range for scaler in [0.0 .. 1.0]
