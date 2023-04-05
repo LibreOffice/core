@@ -87,8 +87,8 @@ public:
     explicit inline Any(rtl::OUStringConcat<T1, T2> && value);
     template<typename T1, typename T2>
     explicit Any(rtl::OUStringConcat<T1, T2> const &) = delete;
-    template<typename T> explicit inline Any(rtl::OUStringNumber<T> && value);
-    template<typename T> explicit Any(rtl::OUStringNumber<T> const &) = delete;
+    template<std::size_t nBufSize> explicit inline Any(rtl::StringNumber<sal_Unicode, nBufSize> && value);
+    template<std::size_t nBufSize> explicit Any(rtl::StringNumber<sal_Unicode, nBufSize> const &) = delete;
     template <std::size_t N> explicit inline Any(const rtl::OUStringLiteral<N>& value);
 #endif
 

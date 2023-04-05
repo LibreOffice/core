@@ -92,15 +92,15 @@ void test::oustring::StringConcat::checkConcat()
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringConcat< rtl::OUStringConcatMarker, const sal_Unicode[ 4 ] >, const char[ 4 ] > )), typeid( OUString::Concat( d3 ) + "bar" ));
 
     CPPUNIT_ASSERT_EQUAL( OUString( "num10" ), OUString( OUString( "num" ) + OUString::number( 10 )));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, OUStringNumber< int > > )), typeid( OUString( "num" ) + OUString::number( 10 )));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, StringNumber< sal_Unicode, RTL_USTR_MAX_VALUEOFINT32 > > )), typeid( OUString( "num" ) + OUString::number( 10 )));
     CPPUNIT_ASSERT_EQUAL( OUString( "num10" ), OUString( OUString( "num" ) + OUString::number( 10L )));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, OUStringNumber< long long > > )), typeid( OUString( "num" ) + OUString::number( 10L )));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, StringNumber< sal_Unicode, RTL_USTR_MAX_VALUEOFINT64 > > )), typeid( OUString( "num" ) + OUString::number( 10L )));
     CPPUNIT_ASSERT_EQUAL( OUString( "num10" ), OUString( OUString( "num" ) + OUString::number( 10ULL )));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, OUStringNumber< unsigned long long > > )), typeid( OUString( "num" ) + OUString::number( 10ULL )));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, StringNumber< sal_Unicode, RTL_USTR_MAX_VALUEOFUINT64 > > )), typeid( OUString( "num" ) + OUString::number( 10ULL )));
     CPPUNIT_ASSERT_EQUAL( OUString( "num10.5" ), OUString( OUString( "num" ) + OUString::number( 10.5f )));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, OUStringNumber< float > > )), typeid( OUString( "num" ) + OUString::number( 10.5f )));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, StringNumber< sal_Unicode, RTL_USTR_MAX_VALUEOFFLOAT > > )), typeid( OUString( "num" ) + OUString::number( 10.5f )));
     CPPUNIT_ASSERT_EQUAL( OUString( "num10.5" ), OUString( OUString( "num" ) + OUString::number( 10.5 )));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, OUStringNumber< double > > )), typeid( OUString( "num" ) + OUString::number( 10.5 )));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, StringNumber< sal_Unicode, RTL_USTR_MAX_VALUEOFDOUBLE > > )), typeid( OUString( "num" ) + OUString::number( 10.5 )));
 }
 
 void test::oustring::StringConcat::checkConcatAsciiL()

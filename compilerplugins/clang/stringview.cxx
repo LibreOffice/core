@@ -196,9 +196,7 @@ void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
                 break;
             }
             loplugin::TypeCheck tc(t);
-            if (tc.RvalueReference().Struct("StringNumberBase").Namespace("rtl").GlobalNamespace()
-                || tc.RvalueReference().Struct("OStringNumber").Namespace("rtl").GlobalNamespace()
-                || tc.RvalueReference().Struct("OUStringNumber").Namespace("rtl").GlobalNamespace()
+            if (tc.RvalueReference().Struct("StringNumber").Namespace("rtl").GlobalNamespace()
                 || tc.ClassOrStruct("basic_string_view").StdNamespace())
             {
                 argType = expr->getArg(0)->IgnoreImplicit()->getType();

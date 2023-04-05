@@ -509,8 +509,8 @@ public:
      @overload
      @internal
     */
-    template< typename T, std::size_t N >
-    OUString( StringNumberBase< sal_Unicode, T, N >&& n )
+    template< std::size_t N >
+    OUString( OUStringNumber< N >&& n )
         : OUString( n.buf, n.length )
     {}
 #endif
@@ -656,8 +656,8 @@ public:
     }
     template<std::size_t N> OUString & operator =(OUStringLiteral<N> &&) = delete;
 
-    template <typename T, std::size_t N>
-    OUString & operator =(StringNumberBase<sal_Unicode, T, N> && n) {
+    template <std::size_t N>
+    OUString & operator =(OUStringNumber<N> && n) {
         // n.length should never be zero, so no need to add an optimization for that case
         rtl_uString_newFromStr_WithLength(&pData, n.buf, n.length);
         return *this;
@@ -788,8 +788,8 @@ public:
      @overload
      @internal
     */
-    template< typename T, std::size_t N >
-    OUString& operator+=( StringNumberBase< sal_Unicode, T, N >&& n ) & {
+    template< std::size_t N >
+    OUString& operator+=( OUStringNumber< N >&& n ) & {
         sal_Int32 l = n.length;
         if( l == 0 )
             return *this;
@@ -800,8 +800,8 @@ public:
         pData->length = l;
         return *this;
     }
-    template<typename T, std::size_t N> void operator +=(
-        StringNumberBase<sal_Unicode, T, N> &&) && = delete;
+    template<std::size_t N> void operator +=(
+        OUStringNumber<N> &&) && = delete;
 #endif
 
     /**
@@ -3058,37 +3058,37 @@ public:
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 
-    static OUStringNumber< int > number( int i, sal_Int16 radix = 10 )
+    static auto number( int i, sal_Int16 radix = 10 )
     {
-        return OUStringNumber< int >( i, radix );
+        return OUStringNumber<RTL_USTR_MAX_VALUEOFINT32>(rtl_ustr_valueOfInt32, i, radix);
     }
-    static OUStringNumber< long long > number( long long ll, sal_Int16 radix = 10 )
+    static auto number( long long ll, sal_Int16 radix = 10 )
     {
-        return OUStringNumber< long long >( ll, radix );
+        return OUStringNumber<RTL_USTR_MAX_VALUEOFINT64>(rtl_ustr_valueOfInt64, ll, radix);
     }
-    static OUStringNumber< unsigned long long > number( unsigned long long ll, sal_Int16 radix = 10 )
+    static auto number( unsigned long long ll, sal_Int16 radix = 10 )
     {
-        return OUStringNumber< unsigned long long >( ll, radix );
+        return OUStringNumber<RTL_USTR_MAX_VALUEOFUINT64>(rtl_ustr_valueOfUInt64, ll, radix);
     }
-    static OUStringNumber< unsigned long long > number( unsigned int i, sal_Int16 radix = 10 )
+    static auto number( unsigned int i, sal_Int16 radix = 10 )
     {
         return number( static_cast< unsigned long long >( i ), radix );
     }
-    static OUStringNumber< long long > number( long i, sal_Int16 radix = 10)
+    static auto number( long i, sal_Int16 radix = 10)
     {
         return number( static_cast< long long >( i ), radix );
     }
-    static OUStringNumber< unsigned long long > number( unsigned long i, sal_Int16 radix = 10 )
+    static auto number( unsigned long i, sal_Int16 radix = 10 )
     {
         return number( static_cast< unsigned long long >( i ), radix );
     }
-    static OUStringNumber< float > number( float f )
+    static auto number( float f )
     {
-        return OUStringNumber< float >( f );
+        return OUStringNumber<RTL_USTR_MAX_VALUEOFFLOAT>(rtl_ustr_valueOfFloat, f);
     }
-    static OUStringNumber< double > number( double d )
+    static auto number( double d )
     {
-        return OUStringNumber< double >( d );
+        return OUStringNumber<RTL_USTR_MAX_VALUEOFDOUBLE>(rtl_ustr_valueOfDouble, d);
     }
 #else
     /**
@@ -3170,6 +3170,12 @@ public:
     }
 #endif
 
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
+    static auto boolean(bool b)
+    {
+        return OUStringNumber<RTL_USTR_MAX_VALUEOFBOOLEAN>(rtl_ustr_valueOfBoolean, b);
+    }
+#else
     /**
       Returns the string representation of the sal_Bool argument.
 
@@ -3186,9 +3192,6 @@ public:
         return boolean(b);
     }
 
-#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
-    static OUStringNumber<bool> boolean(bool b) { return OUStringNumber<bool>(b); }
-#else
     /**
       Returns the string representation of the boolean argument.
 

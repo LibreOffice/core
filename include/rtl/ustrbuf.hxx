@@ -243,8 +243,8 @@ public:
      @overload
      @internal
     */
-    template< typename T, std::size_t N >
-    OUStringBuffer( StringNumberBase< sal_Unicode, T, N >&& n )
+    template< std::size_t N >
+    OUStringBuffer( OUStringNumber< N >&& n )
         : pData(NULL)
         , nCapacity( n.length + 16 )
     {
@@ -381,8 +381,8 @@ public:
     }
 
     /** @overload @internal */
-    template<typename T, std::size_t N>
-    OUStringBuffer & operator =(StringNumberBase<sal_Unicode, T, N> && n)
+    template<std::size_t N>
+    OUStringBuffer & operator =(OUStringNumber<N> && n)
     {
         *this = OUStringBuffer( std::move( n ) );
         return *this;
@@ -723,8 +723,8 @@ public:
      @overload
      @internal
     */
-    template< typename T, std::size_t N >
-    OUStringBuffer& append( StringNumberBase< sal_Unicode, T, N >&& c )
+    template< std::size_t N >
+    OUStringBuffer& append( OUStringNumber< N >&& c )
     {
         return append( c.buf, c.length );
     }
@@ -1041,8 +1041,8 @@ public:
      @overload
      @internal
     */
-    template <typename T, std::size_t N>
-    OUStringBuffer& insert(sal_Int32 offset, StringNumberBase<sal_Unicode, T, N>&& c)
+    template <std::size_t N>
+    OUStringBuffer& insert(sal_Int32 offset, OUStringNumber<N>&& c)
     {
         return insert(offset, c.buf, c.length);
     }

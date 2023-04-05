@@ -257,8 +257,8 @@ public:
      @overload
      @internal
     */
-    template< typename T, std::size_t N >
-    OStringBuffer( StringNumberBase< char, T, N >&& n )
+    template< std::size_t N >
+    OStringBuffer( OStringNumber< N >&& n )
         : OStringBuffer( n.buf, n.length)
     {}
 #endif
@@ -345,8 +345,8 @@ public:
     }
 
     /** @overload @internal */
-    template<typename T, std::size_t N>
-    OStringBuffer & operator =(StringNumberBase<char, T, N> && n)
+    template<std::size_t N>
+    OStringBuffer & operator =(OStringNumber<N> && n)
     {
         *this = OStringBuffer( std::move ( n ));
         return *this;
@@ -629,8 +629,8 @@ public:
      @overload
      @internal
     */
-    template< typename T, std::size_t N >
-    OStringBuffer& append( StringNumberBase< char, T, N >&& c )
+    template< std::size_t N >
+    OStringBuffer& append( OStringNumber< N >&& c )
     {
         return append( c.buf, c.length );
     }

@@ -84,8 +84,8 @@ template<typename T1, typename T2>
 Any::Any(rtl::OUStringConcat<T1, T2> && value):
     Any(rtl::OUString(std::move(value)))
 {}
-template<typename T>
-Any::Any(rtl::OUStringNumber<T> && value): Any(rtl::OUString(std::move(value))) {}
+template<std::size_t nBufSize>
+Any::Any(rtl::StringNumber<sal_Unicode, nBufSize> && value): Any(rtl::OUString(std::move(value))) {}
 template <std::size_t N>
 Any::Any(const rtl::OUStringLiteral<N>& value): Any(rtl::OUString(value)) {}
 #endif
@@ -254,8 +254,8 @@ template<typename T1, typename T2>
 Any toAny(rtl::OUStringConcat<T1, T2> && value)
 { return Any(std::move(value)); }
 
-template<typename T>
-Any toAny(rtl::OUStringNumber<T> && value)
+template<std::size_t nBufSize>
+Any toAny(rtl::StringNumber<sal_Unicode, nBufSize> && value)
 { return Any(std::move(value)); }
 
 template<typename T> bool fromAny(Any const & any, T * value) {
@@ -304,8 +304,8 @@ inline void operator <<= ( Any & rAny, rtl::OUStringConcat< C1, C2 >&& value )
 }
 template<typename T1, typename T2>
 void operator <<=(Any &, rtl::OUStringConcat<T1, T2> const &) = delete;
-template< class C >
-inline void operator <<= ( Any & rAny, rtl::OUStringNumber< C >&& value )
+template< std::size_t nBufSize >
+inline void operator <<= ( Any & rAny, rtl::StringNumber< sal_Unicode, nBufSize >&& value )
 {
     const rtl::OUString str( std::move(value) );
     const Type & rType = ::cppu::getTypeFavourUnsigned(&str);
@@ -313,8 +313,8 @@ inline void operator <<= ( Any & rAny, rtl::OUStringNumber< C >&& value )
         &rAny, const_cast< rtl::OUString * >( &str ), rType.getTypeLibType(),
         cpp_acquire, cpp_release );
 }
-template<typename T>
-void operator <<=(Any &, rtl::OUStringNumber<T> const &) = delete;
+template<std::size_t nBufSize>
+void operator <<=(Any &, rtl::StringNumber<sal_Unicode, nBufSize> const &) = delete;
 #endif
 
 #if defined LIBO_INTERNAL_ONLY

@@ -324,17 +324,23 @@ template <typename T1, typename T2> auto Concat2View(OUStringConcat<T1, T2> cons
 
 /**
 * O(U)StringNumber implementation
+
+Objects returned by O(U)String::number(), instead of O(U)String. These objects keep a representation of the number() operation.
+
+If you get a build error related to this class, you most probably need to explicitly convert the result of calling
+O(U)String::number() to O(U)String.
 */
 
-template <typename C, typename Number, std::size_t nBufSize> struct StringNumberBase
+template <typename C, std::size_t nBufSize> struct StringNumber
 {
-    using number_t = Number;
-    using base_t = StringNumberBase;
+    template <typename Func, typename... Args,
+              std::enable_if_t<std::is_invocable_r_v<sal_Int32, Func, C*, Args...>, int> = 0>
+    StringNumber(Func func, Args... args) { length = func(buf, args...); }
     // O(U)String::number(value).getStr() is very common (writing xml code, ...),
     // so implement that one also here, to avoid having to explicitly convert
     // to O(U)String in all such places
     const C* getStr() const SAL_RETURNS_NONNULL { return buf; }
-    StringNumberBase&& toAsciiUpperCase() &&
+    StringNumber&& toAsciiUpperCase() &&
     {
         if constexpr (sizeof(C) == sizeof(char))
             rtl_str_toAsciiUpperCase_WithLength(buf, length);
@@ -347,121 +353,15 @@ template <typename C, typename Number, std::size_t nBufSize> struct StringNumber
     sal_Int32 length;
 };
 
-/**
- @internal
+template<std::size_t nBufSize> using OStringNumber = StringNumber<char, nBufSize>;
+template<std::size_t nBufSize> using OUStringNumber = StringNumber<sal_Unicode, nBufSize>;
 
-Objects returned by OString::number(), instead of OString. These objects keep a representation of the number() operation.
-
-If you get a build error related to this class, you most probably need to explicitly convert the result of calling
-OString::number() to OString.
-*/
-template< typename T >
-struct OStringNumber;
-
-template<>
-struct OStringNumber< int >
-    : public StringNumberBase<char, int, RTL_STR_MAX_VALUEOFINT32>
+template< typename C, std::size_t nBufSize >
+struct ToStringHelper< StringNumber< C, nBufSize > >
 {
-    OStringNumber(number_t i, sal_Int16 radix) { length = rtl_str_valueOfInt32(buf, i, radix); }
+    static std::size_t length( const StringNumber< C, nBufSize >& n ) { return n.length; }
+    C* operator()( C* buffer, const StringNumber< C, nBufSize >& n ) const SAL_RETURNS_NONNULL { return addDataHelper( buffer, n.buf, n.length ); }
 };
-
-template<>
-struct OStringNumber< long long >
-    : public StringNumberBase<char, long long, RTL_STR_MAX_VALUEOFINT64>
-{
-    OStringNumber(number_t i, sal_Int16 radix) { length = rtl_str_valueOfInt64(buf, i, radix); }
-};
-
-template<>
-struct OStringNumber< unsigned long long >
-    : public StringNumberBase<char, unsigned long long, RTL_STR_MAX_VALUEOFUINT64>
-{
-    OStringNumber(number_t i, sal_Int16 radix) { length = rtl_str_valueOfUInt64(buf, i, radix); }
-};
-
-template<>
-struct OStringNumber< float >
-    : public StringNumberBase<char, float, RTL_STR_MAX_VALUEOFFLOAT>
-{
-    OStringNumber(number_t f) { length = rtl_str_valueOfFloat(buf, f); }
-};
-
-template<>
-struct OStringNumber< double >
-    : public StringNumberBase<char, double, RTL_STR_MAX_VALUEOFDOUBLE>
-{
-    OStringNumber(number_t d) { length = rtl_str_valueOfDouble(buf, d); }
-};
-
-template<>
-struct OStringNumber< bool >
-    : public StringNumberBase<char, bool, RTL_STR_MAX_VALUEOFBOOLEAN>
-{
-    OStringNumber(number_t b) { length = rtl_str_valueOfBoolean(buf, b); }
-};
-
-/**
- @internal
-
-Objects returned by OUString::number(), instead of OUString. These objects keep a representation of the number() operation.
-
-If you get a build error related to this class, you most probably need to explicitly convert the result of calling
-OUString::number() to OUString.
-*/
-template< typename T >
-struct OUStringNumber;
-
-template<>
-struct OUStringNumber< int >
-    : public StringNumberBase<sal_Unicode, int, RTL_USTR_MAX_VALUEOFINT32>
-{
-    OUStringNumber(number_t i, sal_Int16 radix) { length = rtl_ustr_valueOfInt32(buf, i, radix); }
-};
-
-template<>
-struct OUStringNumber< long long >
-    : public StringNumberBase<sal_Unicode, long long, RTL_USTR_MAX_VALUEOFINT64>
-{
-    OUStringNumber(number_t i, sal_Int16 radix) { length = rtl_ustr_valueOfInt64(buf, i, radix); }
-};
-
-template<>
-struct OUStringNumber< unsigned long long >
-    : public StringNumberBase<sal_Unicode, unsigned long long, RTL_USTR_MAX_VALUEOFUINT64>
-{
-    OUStringNumber(number_t i, sal_Int16 radix) { length = rtl_ustr_valueOfUInt64(buf, i, radix); }
-};
-
-template<>
-struct OUStringNumber< float >
-    : public StringNumberBase<sal_Unicode, float, RTL_USTR_MAX_VALUEOFFLOAT>
-{
-    OUStringNumber(number_t f) { length = rtl_ustr_valueOfFloat(buf, f); }
-};
-
-template<>
-struct OUStringNumber< double >
-    : public StringNumberBase<sal_Unicode, double, RTL_USTR_MAX_VALUEOFDOUBLE>
-{
-    OUStringNumber(number_t d) { length = rtl_ustr_valueOfDouble(buf, d); }
-};
-
-template<>
-struct OUStringNumber< bool >
-    : public StringNumberBase<sal_Unicode, bool, RTL_USTR_MAX_VALUEOFBOOLEAN>
-{
-    OUStringNumber(number_t b) { length = rtl_ustr_valueOfBoolean(buf, b); }
-};
-
-template< typename C, typename T, std::size_t nBufSize >
-struct ToStringHelper< StringNumberBase< C, T, nBufSize > >
-{
-    static std::size_t length( const StringNumberBase< C, T, nBufSize >& n ) { return n.length; }
-    C* operator()( C* buffer, const StringNumberBase< C, T, nBufSize >& n ) const SAL_RETURNS_NONNULL { return addDataHelper( buffer, n.buf, n.length ); }
-};
-
-template<typename T> struct ToStringHelper<OStringNumber<T>> : public ToStringHelper<typename OStringNumber<T>::base_t> {};
-template<typename T> struct ToStringHelper<OUStringNumber<T>> : public ToStringHelper<typename OUStringNumber<T>::base_t> {};
 
 template<typename C> struct ToStringHelper<std::basic_string_view<C>> {
     static constexpr std::size_t length(std::basic_string_view<C> s) { return s.size(); }
