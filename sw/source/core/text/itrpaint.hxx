@@ -31,7 +31,7 @@ class SwTextPainter : public SwTextCursor
 {
     bool m_bPaintDrop;
 
-    SwLinePortion *CalcPaintOfst( const SwRect &rPaint );
+    SwLinePortion *CalcPaintOfst(const SwRect &rPaint, bool& rbSkippedNumPortions);
     void CheckSpecialUnderline( const SwLinePortion* pPor,
                                 tools::Long nAdjustBaseLine = 0 );
 protected:
