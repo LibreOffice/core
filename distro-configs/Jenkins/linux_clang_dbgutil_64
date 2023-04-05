@@ -8,3 +8,4 @@
 --enable-odk
 --disable-dconf
 --enable-python=internal
+--enable-atspi-tests

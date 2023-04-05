@@ -82,6 +82,12 @@ ifneq ($(ENABLE_GTK3),)
 $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_gtk3 \
 ))
+
+ifneq ($(ENABLE_ATSPI_TESTS),)
+$(eval $(call gb_Module_add_check_targets,vcl,\
+    CppunitTest_vcl_gtk3_a11y \
+))
+endif
 endif
 
 ifneq ($(ENABLE_GTK4),)

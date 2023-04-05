@@ -30,6 +30,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/accessibility/XAccessibleText.hpp>
 
 class OOO_DLLPUBLIC_TEST AccessibilityTools
 {
@@ -258,6 +259,7 @@ private:
     static OUString debugName(css::accessibility::XAccessible* xacc);
     static OUString debugName(const css::accessibility::AccessibleEventObject* evobj);
     static OUString debugName(css::accessibility::XAccessibleAction* xAct);
+    static OUString debugName(css::accessibility::XAccessibleText* xTxt);
 };
 
 CPPUNIT_NS_BEGIN

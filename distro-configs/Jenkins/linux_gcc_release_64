@@ -7,3 +7,4 @@ CXX=/opt/rh/devtoolset-7/root/usr/bin/g++
 --enable-mergelibs
 --disable-dconf
 --enable-python=internal
+--enable-atspi-tests

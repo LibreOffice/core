@@ -700,6 +700,12 @@ OUString AccessibilityTools::debugName(accessibility::XAccessibleAction* xAct)
     return r.makeStringAndClear();
 }
 
+OUString AccessibilityTools::debugName(accessibility::XAccessibleText* xTxt)
+{
+    uno::Reference<accessibility::XAccessibleContext> xCtx(xTxt, uno::UNO_QUERY);
+    return debugName(xCtx.get());
+}
+
 OUString AccessibilityTools::debugName(const accessibility::AccessibleEventObject* evobj)
 {
     return "(AccessibleEventObject) { id=" + getEventIdName(evobj->EventId)

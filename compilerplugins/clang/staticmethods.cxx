@@ -184,7 +184,9 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
             .GlobalNamespace())
         || (fdc.Function("Read_Majority").Class("SwWW8ImplReader")
             .GlobalNamespace())
-        || fdc.Function("Ignore").Class("SwWrtShell").GlobalNamespace())
+        || fdc.Function("Ignore").Class("SwWrtShell").GlobalNamespace()
+        || (cdc.Class("AttributesChecker").AnonymousNamespace().GlobalNamespace()
+            && startsWith(pCXXMethodDecl->getNameAsString(), "check")))
     {
         return true;
     }
