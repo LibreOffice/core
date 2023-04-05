@@ -319,10 +319,10 @@ void View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
 #endif
     }
 
-    InsertMediaObj( realURL, "application/vnd.sun.star.media", rAction, rPos, rSize );
+    InsertMediaObj(realURL, rAction, rPos, rSize);
 }
 
-SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rMimeType, sal_Int8& rAction,
+SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, sal_Int8& rAction,
                                    const Point& rPos, const Size& rSize )
 {
     SdrEndTextEdit();
@@ -341,7 +341,7 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
     if( mnAction == DND_ACTION_LINK && pPV && dynamic_cast< SdrMediaObj *>( pPickObj ) )
     {
         pNewMediaObj = SdrObject::Clone(static_cast<SdrMediaObj&>(*pPickObj), pPickObj->getSdrModelFromSdrObject());
-        pNewMediaObj->setURL( rMediaURL, ""/*TODO?*/, rMimeType );
+        pNewMediaObj->setURL(rMediaURL, ""/*TODO?*/);
 
         BegUndo(SdResId(STR_UNDO_DRAGDROP));
         ReplaceObjectAtView(pPickObj, *pPV, pNewMediaObj.get());
@@ -388,7 +388,7 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
 
         if (pNewMediaObj)
         {
-            pNewMediaObj->setURL( rMediaURL, referer, rMimeType );
+            pNewMediaObj->setURL(rMediaURL, referer);
 
             if( pPickObj )
             {

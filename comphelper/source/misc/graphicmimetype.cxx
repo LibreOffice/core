@@ -18,6 +18,10 @@
  */
 
 #include <comphelper/graphicmimetype.hxx>
+#include <comphelper/mediamimetype.hxx>
+
+#include <map>
+#include <set>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -166,6 +170,70 @@ char const* GraphicMimeTypeHelper::GetExtensionForConvertDataFormat(ConvertDataF
     }
     return pExt;
 }
+
+static auto GetMediaMimes() -> std::map<OString, OString> const&
+{
+    static std::map<OString, OString> const mimes = {
+        { "mp4", "video/mp4" },
+        { "ts", "video/MP2T" },
+        { "mpeg", "video/mpeg" },
+        { "mpg", "video/mpeg" },
+        { "mkv", "video/x-matroska" },
+        { "webm", "video/webm" },
+        { "ogv", "video/ogg" },
+        { "mov", "video/quicktime" },
+        { "wmv", "video/x-ms-wmv" },
+        { "avi", "video/x-msvideo" },
+        { "m4a", "audio/mp4" },
+        { "aac", "audio/aac" },
+        { "mp3", "audio/mpeg" }, // https://bugs.chromium.org/p/chromium/issues/detail?id=227004
+        { "ogg", "audio/ogg" },
+        { "oga", "audio/ogg" },
+        { "opus", "audio/ogg" },
+        { "flac", "audio/flac" }, // missing at IANA?
+        // note there is RFC 2631 but i got the impression that vnd.wave
+        // requires specifying the codec in the container; also this page
+        // says "Historic" whatever that means:
+        // https://www.iana.org/assignments/wave-avi-codec-registry/wave-avi-codec-registry.xhtml
+        { "wav", "audio/x-wav" },
+    };
+    return mimes;
 }
+
+auto IsMediaMimeType(::std::string_view const rMimeType) -> bool
+{
+    return IsMediaMimeType(OStringToOUString(rMimeType, RTL_TEXTENCODING_UTF8));
+}
+
+auto IsMediaMimeType(OUString const& rMimeType) -> bool
+{
+    static std::set<OUString> mimes;
+    if (mimes.empty())
+    {
+        auto const& rMap(GetMediaMimes());
+        for (auto const& it : rMap)
+        {
+            mimes.insert(OStringToOUString(it.second, RTL_TEXTENCODING_UTF8));
+        }
+    }
+    return rMimeType == AVMEDIA_MIMETYPE_COMMON || mimes.find(rMimeType) != mimes.end();
+}
+
+auto GuessMediaMimeType(::std::u16string_view rFileName) -> OUString
+{
+    if (auto const i = rFileName.rfind('.'); i != ::std::string_view::npos)
+    {
+        OString const ext(OUStringToOString(rFileName.substr(i + 1), RTL_TEXTENCODING_UTF8));
+        auto const& rMap(GetMediaMimes());
+        auto const it(rMap.find(ext));
+        if (it != rMap.end())
+        {
+            return OStringToOUString(it->second, RTL_TEXTENCODING_ASCII_US);
+        }
+    }
+    return OUString();
+}
+
+} // namespace comphelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

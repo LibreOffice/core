@@ -22,6 +22,7 @@
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/base64.hxx>
+#include <comphelper/mediamimetype.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -1493,7 +1494,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameContext::c
                     {
                         if( aIter.getToken() == XML_ELEMENT(DRAW, XML_MIME_TYPE) )
                         {
-                            if( aIter.toView() == "application/vnd.sun.star.media" )
+                            if (::comphelper::IsMediaMimeType(aIter.toView()))
                                 bMedia = true;
 
                             // leave this loop

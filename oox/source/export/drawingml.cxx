@@ -1425,6 +1425,11 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
 #else
     OUString aMimeType("none");
 #endif
+    if (aMimeType.startsWith("audio/"))
+    {
+        eMediaType = Relationship::AUDIO;
+    }
+    else
     if (aMimeType == "application/vnd.sun.star.media")
     {
         // try to set something better

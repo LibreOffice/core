@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <comphelper/mediamimetype.hxx>
+
 #include <unotools/resmgr.hxx>
 
 #ifdef _WIN32
@@ -30,9 +32,6 @@
 #define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.comp.avmedia.Manager_GStreamer"
 #endif
 #endif
-
-// Mime types
-inline constexpr OUStringLiteral AVMEDIA_MIMETYPE_COMMON = u"application/vnd.sun.star.media";
 
 inline OUString AvmResId(TranslateId aId)
 {

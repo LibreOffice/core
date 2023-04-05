@@ -172,7 +172,7 @@ public:
     void                    InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
                                             const Point& rPos, const Size& rSize,
                                             bool const bLink );
-    SdrMediaObj*            InsertMediaObj( const OUString& rURL, const OUString& rMimeType, sal_Int8& rAction,
+    SdrMediaObj*            InsertMediaObj(const OUString& rURL, sal_Int8& rAction,
                                             const Point& rPos, const Size& rSize );
 
     bool PasteRTFTable( const ::tools::SvRef<SotTempStream>& xStm, SdrPage* pPage, SdrInsertFlags nPasteOptions );

@@ -36,6 +36,7 @@
 
 #include <ucbhelper/content.hxx>
 
+#include <comphelper/mediamimetype.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <mediamisc.hxx>
@@ -237,6 +238,7 @@ bool MediaItem::setURL(const OUString& rURL, const OUString& rTempURL, const OUS
         m_pImpl->m_URL = rURL;
         m_pImpl->m_TempFileURL = rTempURL;
         m_pImpl->m_Referer = rReferer;
+        setMimeType(::comphelper::GuessMediaMimeType(GetFilename(rURL)));
     }
     return bChanged;
 }
@@ -447,10 +449,9 @@ CreateStream(uno::Reference<embed::XStorage> const& xStorage,
     uno::Reference< beans::XPropertySet > const xStreamProps(xStream,
         uno::UNO_QUERY);
     if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
-        xStreamProps->setPropertyValue("MediaType", uno::Any(OUString(
-            //FIXME how to detect real media type?
-            //but currently xmloff has this one hardcoded anyway...
-            "application/vnd.sun.star.media")));
+        OUString const guessed(::comphelper::GuessMediaMimeType(filename));
+        xStreamProps->setPropertyValue("MediaType",
+            uno::Any(guessed.isEmpty() ? AVMEDIA_MIMETYPE_COMMON : guessed));
         xStreamProps->setPropertyValue( // turn off compression
             "Compressed", uno::Any(false));
     }

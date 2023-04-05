@@ -61,6 +61,7 @@
 #include <sax/tools/converter.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/mediamimetype.hxx>
 
 #include <xmloff/families.hxx>
 #include<xmloff/xmlnamespace.hxx>
@@ -2890,7 +2891,7 @@ void SdXMLPluginShapeContext::startFastElement (sal_Int32 /*nElement*/,
     {
         if( aIter.getToken() == XML_ELEMENT(DRAW, XML_MIME_TYPE) )
         {
-            if( aIter.toView() == "application/vnd.sun.star.media" )
+            if (::comphelper::IsMediaMimeType(aIter.toView()))
                 mbMedia = true;
             // leave this loop
             break;
@@ -3335,7 +3336,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLFrameShapeContext
                 mxImplContext = nullptr;
                 return new SvXMLImportContext(GetImport());
             }
-            else if (pPluginContext && pPluginContext->getMimeType() == "application/vnd.sun.star.media")
+            else if (pPluginContext && ::comphelper::IsMediaMimeType(pPluginContext->getMimeType()))
             {
                 // The media may have a preview, import it.
                 bMedia = true;

@@ -168,7 +168,7 @@ void MediaWindowImpl::dispose()
     Control::dispose();
 }
 
-uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rURL, const OUString& rReferer, const OUString* pMimeType)
+uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rURL, const OUString& rReferer, const OUString*)
 {
     uno::Reference<media::XPlayer> xPlayer;
 
@@ -180,7 +180,8 @@ uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rUR
         return xPlayer;
     }
 
-    if (!pMimeType || *pMimeType == AVMEDIA_MIMETYPE_COMMON)
+    // currently there isn't anything else, throw any mime type to the media players
+    //if (!pMimeType || *pMimeType == AVMEDIA_MIMETYPE_COMMON)
     {
         uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
         if (Application::GetToolkitName() == "gtk4")
@@ -397,7 +398,7 @@ void MediaWindowImpl::stopPlayingInternal(bool bStop)
 
 void MediaWindowImpl::onURLChanged()
 {
-    if (m_sMimeType == AVMEDIA_MIMETYPE_COMMON)
+    //if (m_sMimeType == AVMEDIA_MIMETYPE_COMMON)
     {
         mpChildWindow.disposeAndClear();
         mpChildWindow.reset(VclPtr<MediaChildWindow>::Create(this));

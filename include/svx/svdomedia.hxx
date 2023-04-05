@@ -58,7 +58,7 @@ public:
 
         virtual void                AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrinkOnly = false ) override;
 
-        void                        setURL( const OUString& rURL, const OUString& rReferer, const OUString& rMimeType = OUString() );
+        void                        setURL(const OUString& rURL, const OUString& rReferer);
         const OUString&      getURL() const;
 
         /// Returns the URL to the temporary extracted media file.

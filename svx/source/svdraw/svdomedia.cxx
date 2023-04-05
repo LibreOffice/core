@@ -252,12 +252,10 @@ void SdrMediaObj::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrin
     SetLogicRect( tools::Rectangle( aPos, aSize ) );
 }
 
-void SdrMediaObj::setURL( const OUString& rURL, const OUString& rReferer, const OUString& rMimeType )
+void SdrMediaObj::setURL(const OUString& rURL, const OUString& rReferer)
 {
     ::avmedia::MediaItem aURLItem;
 #if HAVE_FEATURE_AVMEDIA
-    if( !rMimeType.isEmpty() )
-        m_xImpl->m_MediaProperties.setMimeType(rMimeType);
     aURLItem.setURL( rURL, "", rReferer );
 #else
     (void) rMimeType;
