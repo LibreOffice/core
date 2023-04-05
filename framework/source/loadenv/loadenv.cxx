@@ -322,7 +322,16 @@ void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XCompon
         nUpdateMode = css::document::UpdateDocMode::ACCORDING_TO_CONFIG;
         try
         {
-            xInteractionHandler.set( css::task::InteractionHandler::createWithParent( i_rxContext, nullptr ), css::uno::UNO_QUERY_THROW );
+            // tdf#154308 At least for the case the document is launched from the StartCenter, put that StartCenter as the
+            // parent for any dialogs that may appear during typedetection (once load starts a permanent frame will be set
+            // anyway and used as dialog parent, which will be this one if the startcenter was running)
+            css::uno::Reference<css::frame::XFramesSupplier> xSupplier = css::frame::Desktop::create(i_rxContext);
+            FrameListAnalyzer aTasksAnalyzer(xSupplier, css::uno::Reference<css::frame::XFrame>(), FrameAnalyzerFlags::BackingComponent);
+            css::uno::Reference<css::awt::XWindow> xDialogParent(aTasksAnalyzer.m_xBackingComponent ?
+                                                                 aTasksAnalyzer.m_xBackingComponent->getContainerWindow() :
+                                                                 nullptr);
+
+            xInteractionHandler.set( css::task::InteractionHandler::createWithParent(i_rxContext, xDialogParent), css::uno::UNO_QUERY_THROW );
         }
         catch(const css::uno::RuntimeException&) {throw;}
         catch(const css::uno::Exception&       ) {      }
