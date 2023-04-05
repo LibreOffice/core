@@ -1650,20 +1650,17 @@ static void lcl_GetConnectorAdjustValue(const Reference<XShape>& xShape, tools::
     }
 }
 
-static sal_Int32 lcl_GetGluePointId(const Reference<XShape>& xShape, sal_Int32& nGluePointId)
+static sal_Int32 lcl_GetGluePointId(sal_Int32 nGluePointId)
 {
-    uno::Reference<drawing::XGluePointsSupplier> xSupplier(xShape, uno::UNO_QUERY);
-    uno::Reference<container::XIdentifierAccess> xGluePoints(xSupplier->getGluePoints(),
-                                                             uno::UNO_QUERY);
     if (nGluePointId > 3)
-        nGluePointId -= 4;
+        return nGluePointId - 4;
     else
     {
         // change id of the bounding box (1 <-> 3)
         if (nGluePointId == 1)
-            nGluePointId = 3; // Right
+            return 3; // Right
         else if (nGluePointId == 3)
-            nGluePointId = 1; // Left
+            return 1; // Left
     }
 
     return nGluePointId;
@@ -1717,10 +1714,10 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
 
     GET(nStartGlueId, StartGluePointIndex);
     if (nStartGlueId != -1)
-        lcl_GetGluePointId(rXShapeA, nStartGlueId);
+        nStartGlueId = lcl_GetGluePointId(nStartGlueId);
     GET(nEndGlueId, EndGluePointIndex);
     if (nEndGlueId != -1)
-        lcl_GetGluePointId(rXShapeB, nEndGlueId);
+        nEndGlueId = lcl_GetGluePointId(nEndGlueId);
 
     // Position is relative to group in Word, but relative to anchor of group in API.
     if (GetDocumentType() == DOCUMENT_DOCX && !mbUserShapes && m_xParent.is())
