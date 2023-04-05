@@ -241,9 +241,15 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes" context="insertcaption|num_separator">Numbering separator:</property>
+                        <property name="label" translatable="yes" context="insertcaption|num_separator">After number:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">num_separator_edit</property>
+                        <property name="tooltip-text" translatable="yes" context="insertcaption|num_separator|tooltip_text">Enter optional text to appear after caption number. “Caption order” (in Options) must be “Numbering first”.</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="num_separator-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="insertcaption|extended_tip|num_separator">Enter optional text to appear after the caption number. Only available when “Numbering first” is selected for “Caption order” in Options.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
