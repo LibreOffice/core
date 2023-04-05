@@ -89,8 +89,7 @@ public:
     bool SetPosAtStartEnd( SwPosition& rPos ) const;
     bool IsVisible() const override
     {
-        SwPtrMsgPoolItem aInfo(RES_CONTENT_VISIBLE, nullptr);
-        return GetFormat() && !GetFormat()->GetInfo(aInfo) && aInfo.pObject;
+        return GetFormat() && GetFormat()->IsVisible();
     }
 };
 

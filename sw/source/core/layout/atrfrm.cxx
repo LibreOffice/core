@@ -3189,25 +3189,6 @@ SwAnchoredObject* SwFlyFrameFormat::GetAnchoredObj() const
     }
 }
 
-bool SwFlyFrameFormat::GetInfo( SfxPoolItem& rInfo ) const
-{
-    bool bRet = true;
-    switch( rInfo.Which() )
-    {
-    case RES_CONTENT_VISIBLE:
-        {
-            static_cast<SwPtrMsgPoolItem&>(rInfo).pObject = SwIterator<SwFrame,SwFormat>( *this ).First();
-        }
-        bRet = false;
-        break;
-
-    default:
-        bRet = SwFrameFormat::GetInfo( rInfo );
-        break;
-    }
-    return bRet;
-}
-
 // #i73249#
 void SwFlyFrameFormat::SetObjTitle( const OUString& rTitle, bool bBroadcast )
 {
@@ -3659,6 +3640,11 @@ void SwFrameFormat::MoveTableBox(SwTableBox& rTableBox, const SwFrameFormat* pOl
         SwClientNotify(*this, sw::LegacyModifyHint(&rOld, &rNew));
 }
 
+
+bool SwFrameFormat::IsVisible() const
+{
+    return SwIterator<SwFrame, SwFrameFormat>(*this).First();
+};
 
 namespace sw {
 

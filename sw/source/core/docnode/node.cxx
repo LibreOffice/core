@@ -1564,31 +1564,23 @@ SwContentNode *SwContentNode::JoinNext()
     return this;
 }
 
+
 /// Get info from Modify
 bool SwContentNode::GetInfo( SfxPoolItem& rInfo ) const
 {
     switch( rInfo.Which() )
     {
+    case RES_FINDNEARESTNODE:
+        if( GetAttr( RES_PAGEDESC ).GetPageDesc() )
+            static_cast<SwFindNearestNode&>(rInfo).CheckNode( *this );
+        return true;
     case RES_AUTOFMT_DOCNODE:
         if( &GetNodes() == static_cast<SwAutoFormatGetDocNode&>(rInfo).pNodes )
         {
             return false;
         }
         break;
-
-    case RES_FINDNEARESTNODE:
-        if( GetAttr( RES_PAGEDESC ).GetPageDesc() )
-            static_cast<SwFindNearestNode&>(rInfo).CheckNode( *this );
-        return true;
-
-    case RES_CONTENT_VISIBLE:
-        {
-            static_cast<SwPtrMsgPoolItem&>(rInfo).pObject =
-                SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(*this).First();
-        }
-        return false;
     }
-
     return sw::BroadcastingModify::GetInfo( rInfo );
 }
 

@@ -183,6 +183,7 @@ public:
 
     virtual void SetFormatName( const OUString& rNewName, bool bBroadcast=false ) override;
     void MoveTableBox(SwTableBox& rTableBox, const SwFrameFormat* pOldFormat);
+    virtual bool IsVisible() const;
 };
 
 // The FlyFrame-Format
@@ -218,8 +219,6 @@ public:
     SwAnchoredObject* GetAnchoredObj() const;
 
     virtual Graphic MakeGraphic( ImageMap* pMap = nullptr, const sal_uInt32 nMaximumQuadraticPixels = 500000, const std::optional<Size>& rTargetDPI = std::nullopt ) override;
-
-    virtual bool GetInfo( SfxPoolItem& rInfo ) const override;
 
     OUString GetObjTitle() const;
     void SetObjTitle( const OUString& rTitle, bool bBroadcast = false );

@@ -2358,13 +2358,8 @@ bool SwWrtShell::IsOutlineContentVisible(const size_t nPos)
         }
         if (aIdx.GetNode().IsSectionNode())
         {
-            const SwSectionFormat* pFormat =
-                    aIdx.GetNode().GetSectionNode()->GetSection().GetFormat();
-            if (!pFormat)
-                return false;
-            SwPtrMsgPoolItem aAskItem(RES_CONTENT_VISIBLE, nullptr);
-            pFormat->GetInfo(aAskItem);
-            return aAskItem.pObject;
+            const auto pFormat = aIdx.GetNode().GetSectionNode()->GetSection().GetFormat();
+            return pFormat && pFormat->IsVisible();
         }
     }
 

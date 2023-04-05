@@ -438,7 +438,6 @@ constexpr TypedWhichId<SwVirtPageNumInfo> RES_VIRTPAGENUM_INFO(180);
 constexpr TypedWhichId<SwPtrMsgPoolItem> RES_REMOVE_UNO_OBJECT(181);
 // empty
 constexpr TypedWhichId<SwFindNearestNode> RES_FINDNEARESTNODE(184);
-constexpr TypedWhichId<SwPtrMsgPoolItem> RES_CONTENT_VISIBLE(185);
 constexpr sal_uInt16 RES_FORMAT_MSG_END(190);
 
 // An ID for the RTF-reader. The stylesheets are treated like attributes,

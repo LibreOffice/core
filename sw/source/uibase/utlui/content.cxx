@@ -421,7 +421,6 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
 {
     std::unique_ptr<SwContentArr> pOldMember;
     size_t nOldMemberCount = 0;
-    SwPtrMsgPoolItem aAskItem( RES_CONTENT_VISIBLE, nullptr );
     if(m_pMember && pbContentChanged)
     {
         pOldMember = std::move(m_pMember);
@@ -507,8 +506,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                         nYPos = getYPos(*pTable->GetTableNode());
                 }
                 auto pCnt = std::make_unique<SwContent>(this, rTableFormat.GetName(), nYPos);
-                if( !rTableFormat.GetInfo( aAskItem ) &&
-                        !aAskItem.pObject )     // not visible
+                if(!rTableFormat.IsVisible())
                     pCnt->SetInvisible();
                 m_pMember->insert(std::move(pCnt));
             }
@@ -558,8 +556,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 {
                     pCnt = new SwContent(this, sFrameName, nYPos);
                 }
-                if( !pFrameFormat->GetInfo( aAskItem ) &&
-                    !aAskItem.pObject )     // not visible
+                if(!pFrameFormat->IsVisible())
                     pCnt->SetInvisible();
                 m_pMember->insert(std::unique_ptr<SwContent>(pCnt));
             }
@@ -793,8 +790,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
 
                     std::unique_ptr<SwContent> pCnt(new SwRegionContent(this, sSectionName,
                             nLevel, m_bAlphabeticSort ? 0 : getYPos(pNodeIndex->GetNode())));
-                    if( !pFormat->GetInfo( aAskItem ) &&
-                        !aAskItem.pObject )     // not visible
+                    if(!pFormat->IsVisible())
                         pCnt->SetInvisible();
                     m_pMember->insert(std::move(pCnt));
                 }

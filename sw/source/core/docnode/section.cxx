@@ -810,39 +810,31 @@ void SwSectionFormat::SetXTextSection(rtl::Reference<SwXTextSection> const& xTex
     m_wXTextSection = xTextSection.get();
 }
 
-// Get info from the Format
-bool SwSectionFormat::GetInfo( SfxPoolItem& rInfo ) const
+bool SwSectionFormat::IsVisible() const
 {
-    switch( rInfo.Which() )
+    if(SwFrameFormat::IsVisible())
+        return true;
+    SwIterator<SwSectionFormat,SwSectionFormat> aFormatIter(*this);
+    for(SwSectionFormat* pChild = aFormatIter.First(); pChild; pChild = aFormatIter.Next())
+        if(pChild->IsVisible())
+            return true;
+    return false;
+}
+
+// Get info from the Format
+bool SwSectionFormat::GetInfo(SfxPoolItem& rInfo) const
+{
+    if(rInfo.Which() == RES_FINDNEARESTNODE)
     {
-    case RES_FINDNEARESTNODE:
-        if( GetFormatAttr( RES_PAGEDESC ).GetPageDesc() )
+        if(GetFormatAttr( RES_PAGEDESC ).GetPageDesc())
         {
             const SwSectionNode* pNd = GetSectionNode();
-            if( pNd )
-                static_cast<SwFindNearestNode&>(rInfo).CheckNode( *pNd );
+            if(pNd)
+                static_cast<SwFindNearestNode&>(rInfo).CheckNode(*pNd);
         }
         return true;
-
-    case RES_CONTENT_VISIBLE:
-        {
-            SwFrame* pFrame = SwIterator<SwFrame,SwFormat>(*this).First();
-            // if the current section has no own frame search for the children
-            if(!pFrame)
-            {
-                SwIterator<SwSectionFormat,SwSectionFormat> aFormatIter(*this);
-                SwSectionFormat* pChild = aFormatIter.First();
-                while(pChild && !pFrame)
-                {
-                    pFrame = SwIterator<SwFrame,SwFormat>(*pChild).First();
-                    pChild = aFormatIter.Next();
-                }
-            }
-            static_cast<SwPtrMsgPoolItem&>(rInfo).pObject = pFrame;
-        }
-        return false;
     }
-    return sw::BroadcastingModify::GetInfo( rInfo );
+    return sw::BroadcastingModify::GetInfo(rInfo);
 }
 
 static bool lcl_SectionCmpPos( const SwSection *pFirst, const SwSection *pSecond)

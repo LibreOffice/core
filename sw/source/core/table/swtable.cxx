@@ -2250,10 +2250,6 @@ bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
                 static_cast<SwFindNearestNode&>(rInfo).CheckNode( *
                     m_TabSortContentBoxes[0]->GetSttNd()->FindTableNode() );
             break;
-
-        case RES_CONTENT_VISIBLE:
-            static_cast<SwPtrMsgPoolItem&>(rInfo).pObject = SwIterator<SwFrame,SwFormat>( *GetFrameFormat() ).First();
-            return false;
     }
     return true;
 }

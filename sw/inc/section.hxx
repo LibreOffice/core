@@ -299,6 +299,8 @@ public:
     // Get information from Format.
     virtual bool GetInfo( SfxPoolItem& ) const override;
 
+    virtual bool IsVisible() const override;
+
     SwSection* GetSection() const;
     inline SwSectionFormat* GetParent() const;
     inline SwSection* GetParentSection() const;
