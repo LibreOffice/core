@@ -542,6 +542,7 @@ vscode-ide-integration: $(BUILDDIR)/vs-code.code-workspace vim-ide-integration
 
 # ToDo: there probably is a way to have it at least create the compile-commands.json file
 # for the vim/vs-code integration without building the registry stuff
+Rdb:| fetch
 gbuildtojson: Rdb
 
 $(BUILDDIR)/vs-code.code-workspace: $(BUILDDIR)/vs-code.code-workspace.template
