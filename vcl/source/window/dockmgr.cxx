@@ -821,8 +821,7 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
     if( pParentToolBox->IsKeyEvent() )
         nFlags |= FloatWinPopupFlags::GrabFocus;
 
-    GetWindow()->Show(true, ShowFlags::NoFocusChange | ShowFlags::NoActivate);
-    mpFloatWin->StartPopupMode( pParentToolBox, nFlags );
+    mpFloatWin->StartPopupMode( pParentToolBox, nFlags | FloatWinPopupFlags::MakeClientWindowVisibleBeforePopup);
 
     if( pParentToolBox->IsKeyEvent() )
     {
@@ -839,8 +838,7 @@ void ImplDockingWindowWrapper::StartPopupMode( const tools::Rectangle& rRect, Fl
         return;
 
     ImplPreparePopupMode();
-    GetWindow()->Show(true, ShowFlags::NoFocusChange | ShowFlags::NoActivate);
-    mpFloatWin->StartPopupMode( rRect, nFlags );
+    mpFloatWin->StartPopupMode( rRect, nFlags | FloatWinPopupFlags::MakeClientWindowVisibleBeforePopup);
 }
 
 IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd, FloatingWindow*, void)
