@@ -4254,7 +4254,7 @@ void ScInterpreter::ScRank( bool bAverage )
     else
     {
         if ( fVal < aSortArray[ 0 ] || fVal > aSortArray[ nSize - 1 ] )
-            PushNoValue();
+            PushError( FormulaError::NotAvailable);
         else
         {
             double fLastPos = 0;
@@ -4279,7 +4279,11 @@ void ScInterpreter::ScRank( bool bAverage )
             }
             if ( !bFinished )
                 fLastPos = i;
-            if ( !bAverage )
+            if (fFirstPos <= 0)
+            {
+                PushError( FormulaError::NotAvailable);
+            }
+            else if ( !bAverage )
             {
                 if ( bAscending )
                     PushDouble( fFirstPos );
