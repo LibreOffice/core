@@ -51,7 +51,7 @@ struct TextBodyProperties
     /// Normal autofit: font scale (default: 100%).
     sal_Int32 mnFontScale = 100000;
     OUString msHorzOverflow;
-    OUString msVertOverflow;
+    std::optional< sal_Int32 > moVertOverflow{};
 
     std::array<std::optional<sal_Int32>, 4> maTextDistanceValues;
 
