@@ -725,7 +725,7 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                     // First look for the largest segment in the gradient.
                     GradientFillProperties::GradientStopMap::iterator aIt(aGradientStops.begin());
                     double nWidestWidth = -1;
-                    GradientFillProperties::GradientStopMap::iterator aWidestSegmentStart;
+                    GradientFillProperties::GradientStopMap::iterator aWidestSegmentStart(aIt);
                     ++aIt;
                     while( aIt != aGradientStops.end() )
                     {
