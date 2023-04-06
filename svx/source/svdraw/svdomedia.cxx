@@ -258,7 +258,6 @@ void SdrMediaObj::setURL(const OUString& rURL, const OUString& rReferer)
 #if HAVE_FEATURE_AVMEDIA
     aURLItem.setURL( rURL, "", rReferer );
 #else
-    (void) rMimeType;
     (void) rURL;
     (void) rReferer;
 #endif
