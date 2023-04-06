@@ -422,7 +422,6 @@ void DocxAttributeOutput::TableDefinition(
             {
                 m_pSerializer->singleElementNS(XML_w, XML_tblpPr, attrListTablePos);
             }
-            attrListTablePos = nullptr;
         }
         else
             SAL_WARN("sw.ww8", "DocxAttributeOutput::TableDefinition: unhandled property: "
@@ -586,33 +585,31 @@ void DocxAttributeOutput::TableBackgrounds(
     {
         rtl::Reference<sax_fastparser::FastAttributeList> pAttrList;
 
-        for (const auto& rGrabBagElement : rGrabBag)
+        for (const auto & [ name, val ] : rGrabBag)
         {
-            if (!rGrabBagElement.second.has<OUString>())
+            if (!val.has<OUString>())
                 continue;
 
-            OString sValue
-                = OUStringToOString(rGrabBagElement.second.get<OUString>(), RTL_TEXTENCODING_UTF8);
-            if (rGrabBagElement.first == "themeFill")
-                AddToAttrList(pAttrList, FSNS(XML_w, XML_themeFill), sValue.getStr());
-            else if (rGrabBagElement.first == "themeFillTint")
-                AddToAttrList(pAttrList, FSNS(XML_w, XML_themeFillTint), sValue.getStr());
-            else if (rGrabBagElement.first == "themeFillShade")
-                AddToAttrList(pAttrList, FSNS(XML_w, XML_themeFillShade), sValue.getStr());
-            else if (rGrabBagElement.first == "fill")
-                AddToAttrList(pAttrList, FSNS(XML_w, XML_fill), sValue.getStr());
-            else if (rGrabBagElement.first == "themeColor")
-                AddToAttrList(pAttrList, FSNS(XML_w, XML_themeColor), sValue.getStr());
-            else if (rGrabBagElement.first == "themeTint")
-                AddToAttrList(pAttrList, FSNS(XML_w, XML_themeTint), sValue.getStr());
-            else if (rGrabBagElement.first == "themeShade")
-                AddToAttrList(pAttrList, FSNS(XML_w, XML_themeShade), sValue.getStr());
-            else if (rGrabBagElement.first == "color")
-                AddToAttrList(pAttrList, FSNS(XML_w, XML_color), sValue.getStr());
-            else if (rGrabBagElement.first == "val")
-                AddToAttrList(pAttrList, FSNS(XML_w, XML_val), sValue.getStr());
+            if (name == "themeFill")
+                AddToAttrList(pAttrList, FSNS(XML_w, XML_themeFill), val.get<OUString>());
+            else if (name == "themeFillTint")
+                AddToAttrList(pAttrList, FSNS(XML_w, XML_themeFillTint), val.get<OUString>());
+            else if (name == "themeFillShade")
+                AddToAttrList(pAttrList, FSNS(XML_w, XML_themeFillShade), val.get<OUString>());
+            else if (name == "fill")
+                AddToAttrList(pAttrList, FSNS(XML_w, XML_fill), val.get<OUString>());
+            else if (name == "themeColor")
+                AddToAttrList(pAttrList, FSNS(XML_w, XML_themeColor), val.get<OUString>());
+            else if (name == "themeTint")
+                AddToAttrList(pAttrList, FSNS(XML_w, XML_themeTint), val.get<OUString>());
+            else if (name == "themeShade")
+                AddToAttrList(pAttrList, FSNS(XML_w, XML_themeShade), val.get<OUString>());
+            else if (name == "color")
+                AddToAttrList(pAttrList, FSNS(XML_w, XML_color), val.get<OUString>());
+            else if (name == "val")
+                AddToAttrList(pAttrList, FSNS(XML_w, XML_val), val.get<OUString>());
         }
-        m_pSerializer->singleElementNS(XML_w, XML_shd, pAttrList.get());
+        m_pSerializer->singleElementNS(XML_w, XML_shd, pAttrList);
     }
 }
 

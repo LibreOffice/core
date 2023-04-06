@@ -113,7 +113,7 @@ public:
 
     void write( double value );
     void write( std::u16string_view s, bool bEscape = false );
-    void write( const OString& s, bool bEscape = false );
+    void write( std::string_view s, bool bEscape = false );
     void write( const char* pStr, sal_Int32 nLen, bool bEscape = false );
 
     // strings with _xHHHH_ are escaped with _x005F unless this is disabled

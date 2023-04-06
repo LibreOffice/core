@@ -853,10 +853,10 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         }
         attrList->add(XML_behindDoc, bOpaque ? "0" : "1");
 
-        attrList->add(XML_distT, OString::number(TwipsToEMU(nDistT)).getStr());
-        attrList->add(XML_distB, OString::number(TwipsToEMU(nDistB)).getStr());
-        attrList->add(XML_distL, OString::number(TwipsToEMU(nDistL)).getStr());
-        attrList->add(XML_distR, OString::number(TwipsToEMU(nDistR)).getStr());
+        attrList->add(XML_distT, OString::number(TwipsToEMU(nDistT)));
+        attrList->add(XML_distB, OString::number(TwipsToEMU(nDistB)));
+        attrList->add(XML_distL, OString::number(TwipsToEMU(nDistL)));
+        attrList->add(XML_distR, OString::number(TwipsToEMU(nDistR)));
 
         attrList->add(XML_simplePos, "0");
         attrList->add(XML_locked, "0");
@@ -889,8 +889,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         {
             OUString sAnchorId = lclGetAnchorIdFromGrabBag(pObj);
             if (!sAnchorId.isEmpty())
-                attrList->addNS(XML_wp14, XML_anchorId,
-                                OUStringToOString(sAnchorId, RTL_TEXTENCODING_UTF8));
+                attrList->addNS(XML_wp14, XML_anchorId, sAnchorId);
         }
 
         m_pImpl->getSerializer()->startElementNS(XML_wp, XML_anchor, attrList);
@@ -1097,16 +1096,15 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         // nDist is forced to zero above and ignored by Word anyway, so write 0 directly.
         rtl::Reference<sax_fastparser::FastAttributeList> aAttrList
             = sax_fastparser::FastSerializerHelper::createAttrList();
-        aAttrList->add(XML_distT, OString::number(0).getStr());
-        aAttrList->add(XML_distB, OString::number(0).getStr());
-        aAttrList->add(XML_distL, OString::number(0).getStr());
-        aAttrList->add(XML_distR, OString::number(0).getStr());
+        aAttrList->add(XML_distT, OString::number(0));
+        aAttrList->add(XML_distB, OString::number(0));
+        aAttrList->add(XML_distL, OString::number(0));
+        aAttrList->add(XML_distR, OString::number(0));
         if (pObj)
         {
             OUString sAnchorId = lclGetAnchorIdFromGrabBag(pObj);
             if (!sAnchorId.isEmpty())
-                aAttrList->addNS(XML_wp14, XML_anchorId,
-                                 OUStringToOString(sAnchorId, RTL_TEXTENCODING_UTF8));
+                aAttrList->addNS(XML_wp14, XML_anchorId, sAnchorId);
         }
         m_pImpl->getSerializer()->startElementNS(XML_wp, XML_inline, aAttrList);
     }
@@ -1392,18 +1390,16 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
 
     rtl::Reference<sax_fastparser::FastAttributeList> pDocPrAttrList
         = sax_fastparser::FastSerializerHelper::createAttrList();
-    pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
-    pDocPrAttrList->add(XML_name, OUStringToOString(pSdrObject->GetName(), RTL_TEXTENCODING_UTF8));
+    pDocPrAttrList->add(XML_id, OString::number(nAnchorId));
+    pDocPrAttrList->add(XML_name, pSdrObject->GetName());
     if (!pSdrObject->GetTitle().isEmpty())
-        pDocPrAttrList->add(XML_title,
-                            OUStringToOString(pSdrObject->GetTitle(), RTL_TEXTENCODING_UTF8));
+        pDocPrAttrList->add(XML_title, pSdrObject->GetTitle());
     if (!pSdrObject->GetDescription().isEmpty())
-        pDocPrAttrList->add(XML_descr,
-                            OUStringToOString(pSdrObject->GetDescription(), RTL_TEXTENCODING_UTF8));
+        pDocPrAttrList->add(XML_descr, pSdrObject->GetDescription());
     if (!pSdrObject->IsVisible()
         && pFrameFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
 
-        pDocPrAttrList->add(XML_hidden, OString::number(1).getStr());
+        pDocPrAttrList->add(XML_hidden, OString::number(1));
 
     pFS->startElementNS(XML_wp, XML_docPr, pDocPrAttrList);
     OUString sHyperlink = pSdrObject->getHyperlink();
@@ -1796,9 +1792,8 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
 
         rtl::Reference<sax_fastparser::FastAttributeList> pDocPrAttrList
             = sax_fastparser::FastSerializerHelper::createAttrList();
-        pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
-        pDocPrAttrList->add(XML_name,
-                            OUStringToOString(rFrameFormat.GetName(), RTL_TEXTENCODING_UTF8));
+        pDocPrAttrList->add(XML_id, OString::number(nAnchorId));
+        pDocPrAttrList->add(XML_name, rFrameFormat.GetName());
 
         pFS->startElementNS(XML_wp, XML_docPr, pDocPrAttrList);
 
@@ -2094,8 +2089,7 @@ void DocxSdrExport::writeVMLTextFrame(ww8::Frame const* pParentFrame, bool bText
     {
         OUString sAnchorId = lclGetAnchorIdFromGrabBag(pObject);
         if (!sAnchorId.isEmpty())
-            m_pImpl->getFlyAttrList()->addNS(XML_w14, XML_anchorId,
-                                             OUStringToOString(sAnchorId, RTL_TEXTENCODING_UTF8));
+            m_pImpl->getFlyAttrList()->addNS(XML_w14, XML_anchorId, sAnchorId);
 
         uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pObject)->getUnoShape(),
                                                uno::UNO_QUERY);
@@ -2104,8 +2098,7 @@ void DocxSdrExport::writeVMLTextFrame(ww8::Frame const* pParentFrame, bool bText
         if (xShapeProps.is())
             xShapeProps->getPropertyValue("HyperLinkURL") >>= sHyperlink;
         if (!sHyperlink.isEmpty())
-            m_pImpl->getFlyAttrList()->add(XML_href,
-                                           OUStringToOString(sHyperlink, RTL_TEXTENCODING_UTF8));
+            m_pImpl->getFlyAttrList()->add(XML_href, sHyperlink);
     }
     rtl::Reference<FastAttributeList> xFlyAttrList(m_pImpl->getFlyAttrList());
     m_pImpl->getFlyAttrList().clear();

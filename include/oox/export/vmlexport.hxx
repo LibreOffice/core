@@ -158,7 +158,7 @@ protected:
     ///
     /// This should be called from within StartShape() to ensure that the
     /// added attribute is preserved.
-    void                AddShapeAttribute( sal_Int32 nAttribute, const OString& sValue );
+    void AddShapeAttribute(sal_Int32 nAttribute, std::string_view sValue);
 
     using EscherEx::StartShape;
     using EscherEx::EndShape;

@@ -99,9 +99,9 @@ namespace sax_fastparser {
 
     }
 
-    void FastSaxSerializer::write( const OString& sOutput, bool bEscape )
+    void FastSaxSerializer::write( std::string_view sOutput, bool bEscape )
     {
-        write( sOutput.getStr(), sOutput.getLength(), bEscape );
+        write( sOutput.data(), sOutput.length(), bEscape );
     }
 
     /** Characters not allowed in XML 1.0

@@ -126,12 +126,8 @@ public:
         { endElement( FSNS( namespaceTokenId, elementTokenId ) ); }
 
     void singleElement(sal_Int32 elementTokenId, const rtl::Reference<FastAttributeList>& xAttrList);
-    void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, rtl::Reference<FastAttributeList> const & xAttrList)
-        { singleElement(FSNS( namespaceTokenId, elementTokenId), xAttrList); }
 
     void startElement(sal_Int32 elementTokenId, const rtl::Reference<FastAttributeList>& xAttrList);
-    void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, rtl::Reference<FastAttributeList> const & xAttrList)
-        { startElement( FSNS( namespaceTokenId, elementTokenId ), xAttrList ); }
 
     FastSerializerHelper* write(const char* value);
     FastSerializerHelper* write(const OString& value);

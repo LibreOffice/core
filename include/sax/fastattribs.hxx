@@ -62,14 +62,13 @@ class SAX_DLLPUBLIC FastTokenHandlerBase :
     /**
      * Client method to attempt the use of this interface if possible.
      * @xTokenHandler - the token lookup interface
-     * @pStr - string buffer to lookup
-     * @nLength - optional length of chars in that buffer
+     * @str - string buffer to lookup
      *
-     * @return Tokenized form of pStr
+     * @return Tokenized form of str
      */
     static sal_Int32 getTokenFromChars(
                          const FastTokenHandlerBase *pTokenHandler,
-                         const char *pStr, size_t nLength );
+                         std::string_view str );
 };
 
 
@@ -88,11 +87,17 @@ public:
     }
     void add( const FastAttributeList& );
     void add( const css::uno::Reference<css::xml::sax::XFastAttributeList>& );
-    void add( sal_Int32 nToken, const char* pValue );
-    void add( sal_Int32 nToken, const char* pValue, size_t nValueLength );
-    void add( sal_Int32 nToken, const OString& rValue );
+    void add( sal_Int32 nToken, std::string_view value );
     void add( sal_Int32 nToken, std::u16string_view sValue ); // Converts to UTF-8
-    void addNS( sal_Int32 nNamespaceToken, sal_Int32 nToken, const OString& rValue );
+    template <typename C, typename T1, typename T2>
+    void add( sal_Int32 nToken, rtl::StringConcat<C, T1, T2>&& value) { add(nToken, Concat2View(value)); }
+    template <typename Val, typename... Rest, std::enable_if_t<(sizeof...(Rest) > 0), int> = 0>
+    void add( sal_Int32 nToken, Val&& val, Rest&&... rest )
+    {
+        add(nToken, std::forward<Val>(val));
+        add(std::forward<Rest>(rest)...);
+    }
+    void addNS( sal_Int32 nNamespaceToken, sal_Int32 nToken, std::string_view sValue );
     void addNS( sal_Int32 nNamespaceToken, sal_Int32 nToken, std::u16string_view sValue );
     // note: rQName is *namespace-prefixed*
     void addUnknown( const OUString& rNamespaceURL, const OString& rQName, const OString& value );
