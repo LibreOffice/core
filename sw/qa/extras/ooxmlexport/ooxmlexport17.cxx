@@ -988,6 +988,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148132, "tdf148132.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf154481, "tdf154481.docx")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Missing pages!", 7, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf149200)
 {
     loadAndSave("tdf149200.docx");

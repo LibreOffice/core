@@ -4906,6 +4906,15 @@ void DomainMapper_Impl::PushTextBoxContent()
     if (m_bIsInTextBox)
         return;
 
+    // tdf#154481: check for TOC creation with empty field stack,
+    // and close TOC, unless pages will lost. FIXME.
+    if (IsInTOC() && m_aFieldStack.size() == 0)
+    {
+        m_bStartTOC = false;
+        SAL_WARN("writerfilter.dmapper",
+                 "broken TOC creation in textbox, but field stack is empty, so closing TOC!");
+    }
+
     try
     {
         uno::Reference<text::XTextFrame> xTBoxFrame(
