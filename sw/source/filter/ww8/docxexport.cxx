@@ -1895,11 +1895,6 @@ void DocxExport::WriteMainText()
     // setup the namespaces
     m_pDocumentFS->startElementNS( XML_w, XML_document, MainXmlNamespaces());
 
-    if ( getenv("SW_DEBUG_DOM") )
-    {
-        m_rDoc.dumpAsXml();
-    }
-
     // reset the incrementing linked-textboxes chain ID before re-saving.
     m_nLinkedTextboxesChainId=0;
     m_aLinkedTextboxesHelper.clear();
