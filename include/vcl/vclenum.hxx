@@ -341,10 +341,11 @@ enum class FloatWinPopupFlags
     NoMouseUpClose       = 0x000200,
     GrabFocus            = 0x000400,
     NoHorzPlacement      = 0x000800,
+    MakeClientWindowVisibleBeforePopup  = 0x001000,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<FloatWinPopupFlags> : is_typed_flags<FloatWinPopupFlags, 0x0fff> {};
+    template<> struct typed_flags<FloatWinPopupFlags> : is_typed_flags<FloatWinPopupFlags, 0x1fff> {};
 }
 
 // Flags for Window::Show()
