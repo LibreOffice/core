@@ -232,7 +232,8 @@ constexpr TypedWhichId<SvXMLAttrContainerItem>     SDRATTR_XMLATTRIBUTES        
 constexpr TypedWhichId<SdrTextFixedCellHeightItem> SDRATTR_TEXT_USEFIXEDCELLHEIGHT (SDRATTR_MISC_FIRST +23);     /*   1121 */ /*   1121 */ /*   1104 */             /* Pool V2 */
 constexpr TypedWhichId<SdrOnOffItem>               SDRATTR_TEXT_WORDWRAP           (SDRATTR_MISC_FIRST +24);     /*   1122 */ /*   1122 */ /*   1105 */             /* Pool V2 */
 constexpr TypedWhichId<SfxStringItem>              SDRATTR_TEXT_CHAINNEXTNAME      (SDRATTR_MISC_FIRST +25);     /*   1123 */ /*   1123 */ /*   1106 */             /* Pool V2 */
-constexpr sal_uInt16                               SDRATTR_MISC_LAST               (SDRATTR_TEXT_CHAINNEXTNAME); /* 1125   */ /* 1125   */ /* 1108   */ /* Pool V1: 1056 */
+constexpr TypedWhichId<SdrOnOffItem>               SDRATTR_TEXT_CLIPVERTOVERFLOW   (SDRATTR_MISC_FIRST +26);
+constexpr sal_uInt16                               SDRATTR_MISC_LAST               (SDRATTR_TEXT_CLIPVERTOVERFLOW); /* 1126   */ /* 1125   */ /* 1108   */ /* Pool V1: 1056 */
 
 constexpr sal_uInt16                              SDRATTR_EDGE_FIRST         (SDRATTR_MISC_LAST + 1);    /* 1127   */ /* Pool V4 */
 constexpr TypedWhichId<SdrEdgeKindItem>           SDRATTR_EDGEKIND           (SDRATTR_EDGE_FIRST + 0);   /*   1127 */ /* Pool V4 */

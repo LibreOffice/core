@@ -124,6 +124,7 @@ inline constexpr OUStringLiteral UNO_NAME_TEXT_WRITINGMODE = u"TextWritingMode";
 inline constexpr OUStringLiteral UNO_NAME_TEXT_FONTINDEPENDENTLINESPACING = u"FontIndependentLineSpacing";
 inline constexpr OUStringLiteral UNO_NAME_TEXT_WORDWRAP = u"TextWordWrap";
 inline constexpr OUStringLiteral UNO_NAME_TEXT_CHAINNEXTNAME = u"TextChainNextName";
+inline constexpr OUStringLiteral UNO_NAME_TEXT_CLIPVERTOVERFLOW = u"TextClipVerticalOverflow";
 
 inline constexpr OUStringLiteral UNO_NAME_MEASUREKIND = u"MeasureKind";
 inline constexpr OUStringLiteral UNO_NAME_MEASURETEXTHPOS = u"MeasureTextHorizontalPosition";

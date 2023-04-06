@@ -1103,19 +1103,21 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         }
     }
 
+    const double fFreeVerticalSpace(aAnchorTextRange.getHeight() - aOutlinerScale.getY());
+    bool bClipVerticalTextOverflow = fFreeVerticalSpace < 0
+                                     && GetObjectItemSet().Get(SDRATTR_TEXT_CLIPVERTOVERFLOW).GetValue();
     // correct vertical translation using the now known text size
-    if(SDRTEXTVERTADJUST_CENTER == eVAdj || SDRTEXTVERTADJUST_BOTTOM == eVAdj)
+    if((SDRTEXTVERTADJUST_CENTER == eVAdj || SDRTEXTVERTADJUST_BOTTOM == eVAdj)
+       && !bClipVerticalTextOverflow)
     {
-        const double fFree(aAnchorTextRange.getHeight() - aOutlinerScale.getY());
-
         if(SDRTEXTVERTADJUST_CENTER == eVAdj)
         {
-            aAdjustTranslate.setY(fFree / 2.0);
+            aAdjustTranslate.setY(fFreeVerticalSpace / 2.0);
         }
 
         if(SDRTEXTVERTADJUST_BOTTOM == eVAdj)
         {
-            aAdjustTranslate.setY(fFree);
+            aAdjustTranslate.setY(fFreeVerticalSpace);
         }
     }
 
@@ -1159,6 +1161,8 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
 
     // create ClipRange (if needed)
     basegfx::B2DRange aClipRange;
+    if(bClipVerticalTextOverflow)
+        aClipRange = {0, 0, std::numeric_limits<double>::max(), aAnchorTextRange.getHeight()};
 
     // now break up text primitives.
     impTextBreakupHandler aConverter(rOutliner);
