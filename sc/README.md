@@ -51,8 +51,8 @@ extra list of the Help system, functions that support Wildcards or Regular
 Expressions *and* depend on the setting under
 Tools -> Options -> Calc -> Calculate are those that in ODF OpenFormula (ODFF)
 are defined to depend on the HOST-USE-REGULAR-EXPRESSIONS or HOST-USE-WILDCARDS
-properties, see
-https://docs.oasis-open.org/office/v1.2/os/OpenDocument-v1.2-os-part2.html
+properties, see ODF v1.3 part4 3.4 Host-Defined Behaviors
+https://docs.oasis-open.org/office/OpenDocument/v1.3/os/part4-formula/OpenDocument-v1.3-os-part4-formula.html#__RefHeading__1017868_715980110
 
 * Database Functions
   * DAVERAGE
