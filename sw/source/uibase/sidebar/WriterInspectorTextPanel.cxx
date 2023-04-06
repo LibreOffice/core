@@ -70,6 +70,10 @@ WriterInspectorTextPanel::WriterInspectorTextPanel(weld::Widget* pParent)
     {
         m_oldLink = m_pShell->GetChgLnk();
         m_pShell->SetChgLnk(LINK(this, WriterInspectorTextPanel, AttrChangedNotify));
+
+        // tdf#154629 listen to know if the shell destructs before this panel does,
+        // which can happen on entering print preview
+        m_pShell->Add(this);
     }
 
     // Update panel on start
@@ -80,10 +84,24 @@ WriterInspectorTextPanel::WriterInspectorTextPanel(weld::Widget* pParent)
     updateEntries(aStore, m_nParIdx);
 }
 
+void WriterInspectorTextPanel::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
+{
+    if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    {
+        const sw::LegacyModifyHint& rLegacy = static_cast<const sw::LegacyModifyHint&>(rHint);
+        if (rLegacy.GetWhich() == RES_OBJECTDYING)
+            m_pShell = nullptr;
+    }
+    SwClient::SwClientNotify(rModify, rHint);
+}
+
 WriterInspectorTextPanel::~WriterInspectorTextPanel()
 {
     if (m_pShell)
+    {
         m_pShell->SetChgLnk(m_oldLink);
+        m_pShell->Remove(this);
+    }
 }
 
 static OUString PropertyNametoRID(const OUString& rName)

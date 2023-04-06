@@ -19,12 +19,13 @@
 #pragma once
 
 #include <svx/sidebar/InspectorTextPanel.hxx>
+#include <calbck.hxx>
 
 class SwWrtShell;
 
 namespace sw::sidebar
 {
-class WriterInspectorTextPanel final : public svx::sidebar::InspectorTextPanel
+class WriterInspectorTextPanel final : public svx::sidebar::InspectorTextPanel, public SwClient
 {
 public:
     static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent);
@@ -40,6 +41,8 @@ private:
 
     // attributes have changed
     DECL_LINK(AttrChangedNotify, LinkParamNone*, void);
+
+    virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
 };
 
 } // end of namespace svx::sidebar
