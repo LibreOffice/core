@@ -973,27 +973,27 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFor
 
 bool DocxAttributeOutput::TextBoxIsFramePr(const SwFrameFormat& rFrameFormat)
 {
-    uno::Reference< drawing::XShape > xShape;
-    const SdrObject* pSdrObj = rFrameFormat.FindRealSdrObject();
-    if (pSdrObj)
-        xShape.set(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY);
-    uno::Reference< beans::XPropertySet > xPropertySet(xShape, uno::UNO_QUERY);
-    uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
-    if (xPropertySet.is())
-        xPropSetInfo = xPropertySet->getPropertySetInfo();
-    uno::Any aFrameProperties ;
-    if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
-    {
-        uno::Sequence< beans::PropertyValue > propList;
-        xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= propList;
-        auto pProp = std::find_if(std::cbegin(propList), std::cend(propList),
-            [](const beans::PropertyValue& rProp) { return rProp.Name == "ParaFrameProperties"; });
-        if (pProp != std::cend(propList))
-            aFrameProperties = pProp->Value;
-    }
-    bool bFrameProperties = false;
-    aFrameProperties >>= bFrameProperties;
-    return bFrameProperties;
+    SdrObject* pSdrObj = const_cast<SdrObject*>(rFrameFormat.FindRealSdrObject());
+    if (!pSdrObj)
+        return false;
+
+    uno::Reference<beans::XPropertySet> xPropertySet(pSdrObj->getUnoShape(), uno::UNO_QUERY);
+    if (!xPropertySet.is())
+        return false;
+
+    uno::Reference<beans::XPropertySetInfo> xPropSetInfo(xPropertySet->getPropertySetInfo());
+    if (!xPropSetInfo.is() || !xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
+        return false;
+
+    bool bRet = false;
+    uno::Sequence<beans::PropertyValue> propList;
+    xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= propList;
+    auto pProp = std::find_if(std::cbegin(propList), std::cend(propList),
+        [](const beans::PropertyValue& rProp) { return rProp.Name == "ParaFrameProperties"; });
+    if (pProp != std::cend(propList))
+        pProp->Value >>= bRet;
+
+    return bRet;
 }
 
 void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner )

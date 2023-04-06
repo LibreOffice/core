@@ -1227,7 +1227,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
 }
 
 // bPrev is set whether Reformat.Start() was called because of Prev().
-// Else, wo don't know whether we can limit the repaint or not.
+// Else, we don't know whether we can limit the repaint or not.
 bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
 {
     OSL_ENSURE( ! IsVertical() || IsSwapped(),
