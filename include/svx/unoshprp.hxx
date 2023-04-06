@@ -327,6 +327,7 @@
     { UNO_NAME_TEXT_VERTADJUST,       SDRATTR_TEXT_VERTADJUST,        cppu::UnoType<css::drawing::TextVerticalAdjust>::get(),    0,      0},\
     { UNO_NAME_TEXT_WORDWRAP,         SDRATTR_TEXT_WORDWRAP,          cppu::UnoType<bool>::get(),        0,      0}, \
     { UNO_NAME_TEXT_CHAINNEXTNAME,    SDRATTR_TEXT_CHAINNEXTNAME,     ::cppu::UnoType<OUString>::get(),        0,      0}, \
+    { UNO_NAME_TEXT_CLIPVERTOVERFLOW, SDRATTR_TEXT_CLIPVERTOVERFLOW,  cppu::UnoType<bool>::get(),              0,      0}, \
     { u"TextColumns",                     OWN_ATTR_TEXTCOLUMNS,           cppu::UnoType<css::text::XTextColumns>::get(), 0, 0 }, \
     SVX_UNOEDIT_CHAR_PROPERTIES, \
     SVX_UNOEDIT_PARA_PROPERTIES,
