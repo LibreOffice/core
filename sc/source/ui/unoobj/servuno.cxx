@@ -425,7 +425,11 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             xRet.set(static_cast<style::XStyle*>(new ScStyleObj( nullptr, SfxStyleFamily::Page, OUString() )));
             break;
         case Type::GRAPHICSTYLE:
-            xRet.set(static_cast<style::XStyle*>(new ScStyleObj( nullptr, SfxStyleFamily::Frame, OUString() )));
+            if (pDocShell)
+            {
+                pDocShell->MakeDrawLayer();
+                xRet.set(static_cast<style::XStyle*>(new ScStyleObj( nullptr, SfxStyleFamily::Frame, OUString() )));
+            }
             break;
         case Type::AUTOFORMAT:
             xRet.set(static_cast<container::XIndexAccess*>(new ScAutoFormatObj( SC_AFMTOBJ_INVALID )));

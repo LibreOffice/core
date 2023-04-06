@@ -227,6 +227,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                 SfxItemPool* pItemPool = &GetPool()->GetPool();
                 if (dynamic_cast<SdrItemPool*>(pItemPool) == nullptr)
                     pItemPool = pItemPool->GetSecondaryPool();
+                assert(pItemPool);
 
                 pSet = new SfxItemSetFixed<
                         XATTR_LINE_FIRST, XATTR_LINE_LAST,
