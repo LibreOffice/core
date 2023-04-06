@@ -147,7 +147,7 @@ protected:
     // write access to pRegisteredIn shall be granted only to the object itself (protected access)
     SwModify* GetRegisteredInNonConst() const { return m_pRegisteredIn; }
 
-    // when overriding this, you MUST call SwClient::SwClientModify() in the override!
+    // when overriding this, you MUST call SwClient::SwClientNotify() in the override!
     virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
 
 public:
