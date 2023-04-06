@@ -549,6 +549,50 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testPageViewDrawLayerClip)
     // i.e. the 2nd page had a line shape from the first page's footer.
     CPPUNIT_ASSERT_EQUAL(2, pPage2->getObjectCount());
 }
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testClipVerticalTextOverflow)
+{
+    // File contains a slide with 4 rectangle shapes with text inside
+    // each have <a:bodyPr vertOverflow="clip">
+    // 1-) Text overflowing the rectangle
+    // 2-) Text not overflowing the rectangle
+    // 3-) (Vertical text) Text overflowing the rectangle
+    // 4-) (Vertical text) Text not overflowing the rectangle
+    loadFromURL(u"clip-vertical-overflow.pptx");
+
+    SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+    xmlDocUniquePtr pDocument = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+
+    // Test vertically overflowing text
+    // Without the accompanying fix in place, this test would have failed with:
+    // equality assertion failed
+    // - Expected: 6
+    // - Actual  : 13
+    // - In <>, XPath contents of child does not match
+    // i.e. the vertically overflowing text wasn't clipped & overflowing text
+    // was drawn anyways.
+    assertXPathContent(pDocument, "count((//sdrblocktext)[4]//textsimpleportion)", "6");
+
+    // make sure text is aligned correctly after the overflowing text is clipped
+    assertXPath(pDocument, "((//sdrblocktext)[4]//textsimpleportion)[1]", "y", "3749");
+    assertXPath(pDocument, "((//sdrblocktext)[4]//textsimpleportion)[6]", "y", "7559");
+
+    // make sure the text that isn't overflowing is still aligned properly
+    assertXPathContent(pDocument, "count((//sdrblocktext)[5]//textsimpleportion)", "3");
+    assertXPath(pDocument, "((//sdrblocktext)[5]//textsimpleportion)[1]", "y", "5073");
+    assertXPath(pDocument, "((//sdrblocktext)[5]//textsimpleportion)[3]", "y", "6597");
+
+    // Test vertically overflowing text, with vertical text direction
+    assertXPathContent(pDocument, "count((//sdrblocktext)[6]//textsimpleportion)", "12");
+    // make sure text is aligned correctly after the overflowing text is clipped
+    assertXPath(pDocument, "((//sdrblocktext)[6]//textsimpleportion)[1]", "x", "13093");
+    assertXPath(pDocument, "((//sdrblocktext)[6]//textsimpleportion)[12]", "x", "4711");
+
+    // make sure the text that isn't overflowing is still aligned properly
+    assertXPathContent(pDocument, "count((//sdrblocktext)[7]//textsimpleportion)", "3");
+    assertXPath(pDocument, "((//sdrblocktext)[7]//textsimpleportion)[1]", "x", "25417");
+    assertXPath(pDocument, "((//sdrblocktext)[7]//textsimpleportion)[3]", "x", "23893");
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

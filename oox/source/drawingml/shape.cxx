@@ -1910,9 +1910,8 @@ Reference< XShape > const & Shape::createAndInsert(
                 auto sHorzOverflow = getTextBody()->getTextProperties().msHorzOverflow;
                 if (!sHorzOverflow.isEmpty())
                     putPropertyToGrabBag("horzOverflow", uno::Any(getTextBody()->getTextProperties().msHorzOverflow));
-                auto nVertOverflow = getTextBody()->getTextProperties().msVertOverflow;
-                if (!nVertOverflow.isEmpty())
-                    putPropertyToGrabBag("vertOverflow", uno::Any(getTextBody()->getTextProperties().msVertOverflow));
+                if (XML_ellipsis == getTextBody()->getTextProperties().moVertOverflow)
+                    putPropertyToGrabBag("vertOverflow", uno::Any(OUString{"ellipsis"}));
             }
 
             // Note that the script oox/source/drawingml/customshapes/generatePresetsData.pl looks

@@ -3866,6 +3866,11 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
             }
         }
 
+        if (!sVertOverflow && GetProperty(rXPropSet, "TextClipVerticalOverflow") && mAny.get<bool>())
+        {
+            sVertOverflow = "clip";
+        }
+
         mpFS->startElementNS( (nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr,
                                XML_numCol, sax_fastparser::UseIf(OString::number(nCols), nCols > 0),
                                XML_spcCol, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nColSpacing)), nCols > 0 && nColSpacing >= 0),

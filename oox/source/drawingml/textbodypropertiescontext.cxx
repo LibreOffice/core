@@ -83,7 +83,19 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
   // ST_TextHorzOverflowType
     mrTextBodyProp.msHorzOverflow = rAttribs.getStringDefaulted(XML_horzOverflow);
     // ST_TextVertOverflowType
-    mrTextBodyProp.msVertOverflow = rAttribs.getStringDefaulted(XML_vertOverflow);
+    if( rAttribs.hasAttribute(XML_vertOverflow) )
+    {
+        mrTextBodyProp.moVertOverflow = rAttribs.getToken(XML_vertOverflow);
+        switch( mrTextBodyProp.moVertOverflow.value_or(XML_overflow) )
+        {
+            case XML_ellipsis:
+            case XML_clip:
+                mrTextBodyProp.maPropertyMap.setProperty(PROP_TextClipVerticalOverflow, true);
+                break;
+            default:
+                break;
+        }
+    }
 
     // ST_TextColumnCount
     if (const sal_Int32 nColumns = rAttribs.getInteger(XML_numCol, 0); nColumns > 0)
