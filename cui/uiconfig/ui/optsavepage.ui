@@ -67,6 +67,25 @@
                 <property name="top_attach">0</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkCheckButton" id="load_anyuser">
+                <property name="label" translatable="yes" context="optsavepage|load_anyuser">Load view position with the document even if it was saved by a different user</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_underline">True</property>
+                <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="load_anyuser-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="load_anyuser">Loads the view position settings saved in a document with the document even if it was saved by a different user.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
           </object>
         </child>
         <child type="label">

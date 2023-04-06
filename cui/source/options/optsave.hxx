@@ -41,6 +41,7 @@ class SvxSaveTabPage : public SfxTabPage
 private:
     std::unique_ptr<SvxSaveTabPage_Impl>    pImpl;
 
+    std::unique_ptr<weld::CheckButton> m_xLoadViewPosAnyUserCB;
     std::unique_ptr<weld::CheckButton> m_xLoadUserSettingsCB;
     std::unique_ptr<weld::CheckButton> m_xLoadDocPrinterCB;
     std::unique_ptr<weld::CheckButton> m_xDocInfoCB;

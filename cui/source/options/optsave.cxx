@@ -36,6 +36,7 @@
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <officecfg/Office/Common.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/docfilt.hxx>
 #include <svtools/restartdialog.hxx>
@@ -78,6 +79,7 @@ SvxSaveTabPage_Impl::SvxSaveTabPage_Impl() : bInitialized( false )
 SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
     : SfxTabPage( pPage, pController, "cui/ui/optsavepage.ui", "OptSavePage", &rCoreSet )
     , pImpl(new SvxSaveTabPage_Impl)
+    , m_xLoadViewPosAnyUserCB(m_xBuilder->weld_check_button("load_anyuser"))
     , m_xLoadUserSettingsCB(m_xBuilder->weld_check_button("load_settings"))
     , m_xLoadDocPrinterCB(m_xBuilder->weld_check_button("load_docprinter"))
     , m_xDocInfoCB(m_xBuilder->weld_check_button("docinfo"))
@@ -228,6 +230,10 @@ bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
 {
     auto xChanges = comphelper::ConfigurationChanges::create();
     bool bModified = false, bRequestRestart = false;
+    if (m_xLoadViewPosAnyUserCB->get_state_changed_from_saved())
+    {
+        officecfg::Office::Common::Load::ViewPositionForAnyUser::set(m_xLoadViewPosAnyUserCB->get_active(), xChanges);
+    }
     if(m_xLoadUserSettingsCB->get_state_changed_from_saved())
         officecfg::Office::Common::Load::UserDefinedSettings::set(m_xLoadUserSettingsCB->get_active(), xChanges);
 
@@ -371,6 +377,9 @@ static bool isODFFormat( std::u16string_view sFilter )
 
 void SvxSaveTabPage::Reset( const SfxItemSet* )
 {
+    m_xLoadViewPosAnyUserCB->set_active(officecfg::Office::Common::Load::ViewPositionForAnyUser::get());
+    m_xLoadViewPosAnyUserCB->save_state();
+    m_xLoadViewPosAnyUserCB->set_sensitive(!officecfg::Office::Common::Load::ViewPositionForAnyUser::isReadOnly());
     m_xLoadUserSettingsCB->set_active(officecfg::Office::Common::Load::UserDefinedSettings::get());
     m_xLoadUserSettingsCB->save_state();
     m_xLoadUserSettingsCB->set_sensitive(!officecfg::Office::Common::Load::UserDefinedSettings::isReadOnly());
