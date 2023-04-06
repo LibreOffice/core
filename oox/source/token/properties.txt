@@ -545,6 +545,7 @@ TextAutoGrowHeight
 TextBox
 TextBreak
 TextCameraZRotateAngle
+TextClipVerticalOverflow
 TextColor
 TextColumns
 TextContourFrame
