@@ -95,6 +95,7 @@ public:
     void testInput();
     void testColumnIterator();
     void testTdf66613();
+    void testTdf113027();
     void testTdf90698();
     void testTdf114406();
     void testTdf93951();
@@ -246,6 +247,7 @@ public:
     CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testColumnIterator);
     CPPUNIT_TEST(testTdf66613);
+    CPPUNIT_TEST(testTdf113027);
     CPPUNIT_TEST(testTdf90698);
     CPPUNIT_TEST(testTdf114406);
     CPPUNIT_TEST(testTdf93951);
@@ -699,6 +701,32 @@ void Test::testTdf66613()
 
     m_pDoc->DeleteTab(nFirstTab);
     m_pDoc->DeleteTab(nSecondTab);
+}
+
+void Test::testTdf113027()
+{
+    // Insert some sheets including a whitespace in their name and switch the grammar to R1C1
+    CPPUNIT_ASSERT(m_pDoc->InsertTab(0, "Sheet 1"));
+    CPPUNIT_ASSERT(m_pDoc->InsertTab(1, "Sheet 2"));
+    FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+
+    // Add a formula containing a remote reference, i.e., to another sheet
+    const ScAddress aScAddress(0, 0, 0);
+    const OUString aFormula = "='Sheet 2'!RC";
+    m_pDoc->SetString(aScAddress, aFormula);
+
+    // Switch from relative to absolute cell reference
+    ScRefFinder aFinder(aFormula, aScAddress, *m_pDoc, m_pDoc->GetAddressConvention());
+    aFinder.ToggleRel(0, aFormula.getLength());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: ='Sheet 2'!R1C1
+    // - Actual  : ='Sheet 2'!RC
+    // i.e. the cell reference was not changed from relative to absolute
+    CPPUNIT_ASSERT_EQUAL(OUString("='Sheet 2'!R1C1"), aFinder.GetText());
+
+    m_pDoc->DeleteTab(0);
+    m_pDoc->DeleteTab(1);
 }
 
 void Test::testTdf90698()
