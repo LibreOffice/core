@@ -1166,6 +1166,10 @@ void SwView::WriteUserData( OUString &rUserData, bool bBrowse )
 
 static bool lcl_IsOwnDocument( SwView& rView )
 {
+    if (::officecfg::Office::Common::Load::ViewPositionForAnyUser::get())
+    {
+        return true;
+    }
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
         rView.GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
     uno::Reference<document::XDocumentProperties> xDocProps

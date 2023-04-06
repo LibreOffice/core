@@ -29,6 +29,7 @@
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <officecfg/Office/Common.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/docfilt.hxx>
 #include <unotools/optionsdlg.hxx>
@@ -69,6 +70,7 @@ SvxSaveTabPage_Impl::SvxSaveTabPage_Impl() : bInitialized( false )
 SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
     : SfxTabPage( pPage, pController, "cui/ui/optsavepage.ui", "OptSavePage", &rCoreSet )
     , pImpl(new SvxSaveTabPage_Impl)
+    , m_xLoadViewPosAnyUserCB(m_xBuilder->weld_check_button("load_anyuser"))
     , m_xLoadUserSettingsCB(m_xBuilder->weld_check_button("load_settings"))
     , m_xLoadDocPrinterCB(m_xBuilder->weld_check_button("load_docprinter"))
     , m_xDocInfoCB(m_xBuilder->weld_check_button("docinfo"))
@@ -215,6 +217,13 @@ bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
 {
     bool bModified = false;
     SvtSaveOptions aSaveOpt;
+    if (m_xLoadViewPosAnyUserCB->get_state_changed_from_saved())
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Load::ViewPositionForAnyUser::set(m_xLoadViewPosAnyUserCB->get_active(), pBatch);
+        pBatch->commit();
+    }
     if(m_xLoadUserSettingsCB->get_state_changed_from_saved())
     {
         aSaveOpt.SetLoadUserSettings(m_xLoadUserSettingsCB->get_active());
@@ -353,6 +362,9 @@ static bool isODFFormat( const OUString& sFilter )
 void SvxSaveTabPage::Reset( const SfxItemSet* )
 {
     SvtSaveOptions aSaveOpt;
+    m_xLoadViewPosAnyUserCB->set_active(officecfg::Office::Common::Load::ViewPositionForAnyUser::get());
+    m_xLoadViewPosAnyUserCB->save_state();
+    m_xLoadViewPosAnyUserCB->set_sensitive(!officecfg::Office::Common::Load::ViewPositionForAnyUser::isReadOnly());
     m_xLoadUserSettingsCB->set_active(aSaveOpt.IsLoadUserSettings());
     m_xLoadUserSettingsCB->save_state();
     m_xLoadUserSettingsCB->set_sensitive(!aSaveOpt.IsReadOnly(SvtSaveOptions::EOption::UseUserData));

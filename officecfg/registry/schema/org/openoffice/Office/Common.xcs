@@ -2503,6 +2503,14 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="ViewPositionForAnyUser" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Determines if the view position of the document is loaded with
+          a document even if it was saved by a different user.
+          </desc>
+        </info>
+        <value>false</value>
+      </prop>
       <prop oor:name="ShowOfficeUpdateDialog" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Specifies whether the office update dialog should be shown in
