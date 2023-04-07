@@ -244,12 +244,6 @@
                         <property name="label" translatable="yes" context="insertcaption|num_separator">After number:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">num_separator_edit</property>
-                        <property name="tooltip-text" translatable="yes" context="insertcaption|num_separator|tooltip_text">Enter optional text to appear after caption number. “Caption order” (in Options) must be “Numbering first”.</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="num_separator-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="insertcaption|extended_tip|num_separator">Enter optional text to appear after the caption number. Only available when “Numbering first” is selected for “Caption order” in Options.</property>
-                          </object>
-                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -264,9 +258,10 @@
                         <property name="activates_default">True</property>
                         <property name="text" translatable="yes" context="insertcaption|num_separator_edit">. </property>
                         <property name="truncate-multiline">True</property>
+                        <property name="tooltip-text" translatable="yes" context="insertcaption|num_separator_edit|tooltip_text">When “Caption order” (in Options) is “Numbering first”, enter optional text to appear after caption number.</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="num_separator_edit-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="insertcaption|extended_tip|num_separator_edit">Type the text that you want to appear after the caption number.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="insertcaption|extended_tip|num_separator_edit">Enter optional text to appear after the caption number. Only available when “Numbering first” is selected for “Caption order” in Options.</property>
                           </object>
                         </child>
                       </object>
