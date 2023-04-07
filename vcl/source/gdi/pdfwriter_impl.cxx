@@ -50,6 +50,7 @@
 #include <rtl/digest.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/xmlencode.hxx>
 #include <sal/log.hxx>
 #include <svl/urihelper.hxx>
 #include <tools/fract.hxx>
@@ -5285,43 +5286,11 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     return nOIObject;
 }
 
-// formats the string for the XML stream
-void escapeStringXML(const OUString& rStr, OUString &rValue)
+static void lcl_assignMeta(std::u16string_view aValue, OString& aMeta)
 {
-    const sal_Unicode* pUni = rStr.getStr();
-    int nLen = rStr.getLength();
-    for( ; nLen; nLen--, pUni++ )
+    if (!aValue.empty())
     {
-        switch( *pUni )
-        {
-        case u'&':
-            rValue += "&amp;";
-        break;
-        case u'<':
-            rValue += "&lt;";
-        break;
-        case u'>':
-            rValue += "&gt;";
-        break;
-        case u'\'':
-            rValue += "&apos;";
-        break;
-        case u'"':
-            rValue += "&quot;";
-        break;
-        default:
-            rValue += OUStringChar( *pUni );
-            break;
-        }
-    }
-}
-
-static void lcl_assignMeta(const OUString& aValue, OString& aMeta)
-{
-    if (!aValue.isEmpty())
-    {
-        OUString aTempString;
-        escapeStringXML(aValue, aTempString);
+        OUString aTempString = rtl::encodeForXml(aValue);
         aMeta = OUStringToOString(aTempString, RTL_TEXTENCODING_UTF8);
     }
 }
