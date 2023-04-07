@@ -62,7 +62,7 @@ namespace dbaui
         return const_iterator( this, aBaseIter );
     }
 
-    OCharsetDisplay::const_iterator OCharsetDisplay::findIanaName(const OUString& _rIanaName) const
+    OCharsetDisplay::const_iterator OCharsetDisplay::findIanaName(std::u16string_view _rIanaName) const
     {
         OCharsetMap::const_iterator aBaseIter = OCharsetMap::findIanaName(_rIanaName);
         return const_iterator( this, aBaseIter );

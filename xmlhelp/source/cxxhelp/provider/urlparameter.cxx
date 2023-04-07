@@ -102,7 +102,7 @@ OString URLParameter::getByName( const char* par )
     else if( strcmp( par,"HelpPrefix" ) == 0 )
         val = m_aPrefix;
 
-    return OString( val.getStr(),val.getLength(),RTL_TEXTENCODING_UTF8 );
+    return OUStringToOString( val, RTL_TEXTENCODING_UTF8 );
 }
 
 
@@ -255,7 +255,7 @@ void URLParameter::readHelpDataFile()
         if( !pHdf )
             break;
 
-        OString keyStr( m_aId.getStr(),m_aId.getLength(),RTL_TEXTENCODING_UTF8 );
+        OString keyStr = OUStringToOString( m_aId,RTL_TEXTENCODING_UTF8 );
         bSuccess = pHdf->getValueForKey( keyStr, aHDFData );
         if( bSuccess )
         {

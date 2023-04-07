@@ -34,7 +34,7 @@ namespace dbaui
         }
     }
 
-    void CharSetListBox::SelectEntryByIanaName( const OUString& _rIanaName )
+    void CharSetListBox::SelectEntryByIanaName( std::u16string_view _rIanaName )
     {
         OCharsetDisplay::const_iterator aFind = m_aCharSets.findIanaName( _rIanaName );
         if (aFind == m_aCharSets.end())

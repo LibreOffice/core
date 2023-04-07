@@ -43,7 +43,7 @@ namespace dbaui
 
         // various find operations
         const_iterator findEncoding(const rtl_TextEncoding _eEncoding) const;
-        const_iterator findIanaName(const OUString& _rIanaName) const;
+        const_iterator findIanaName(std::u16string_view _rIanaName) const;
         const_iterator findDisplayName(const OUString& _rDisplayName) const;
 
         /// get access to the first element of the charset collection

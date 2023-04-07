@@ -860,8 +860,7 @@ OString ODbDataSourceAdministrationHelper::translatePropertyId( sal_Int32 _nId )
             aString = indirectPos->second;
     }
 
-    OString aReturn( aString.getStr(), aString.getLength(), RTL_TEXTENCODING_ASCII_US );
-    return aReturn;
+    return OUStringToOString( aString, RTL_TEXTENCODING_ASCII_US );
 }
 template<class T> static bool checkItemType(const SfxPoolItem* pItem){ return dynamic_cast<const T*>(pItem) != nullptr;}
 

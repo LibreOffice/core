@@ -39,14 +39,14 @@ class DateTimeHelper
 private:
     static sal_Int32 convertMonthToInt(std::u16string_view month);
 
-    static bool ISO8601_To_DateTime (const OUString&,
+    static bool ISO8601_To_DateTime (std::u16string_view,
         css::util::DateTime& );
 
-    static bool RFC2068_To_DateTime (const OUString&,
+    static bool RFC2068_To_DateTime (std::u16string_view,
         css::util::DateTime& );
 
 public:
-    static bool convert (const OUString&,
+    static bool convert (std::u16string_view,
         css::util::DateTime& );
 };
 

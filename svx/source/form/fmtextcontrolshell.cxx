@@ -559,7 +559,7 @@ namespace svx
             else
                 sUnoSlotName = "<unknown>";
             OString sUnoSlotNameAscii = "\"" +
-                OString( sUnoSlotName.getStr(), sUnoSlotName.getLength(), RTL_TEXTENCODING_ASCII_US ) +
+                OUStringToOString( sUnoSlotName, RTL_TEXTENCODING_ASCII_US ) +
                 "\"";
 #endif
 

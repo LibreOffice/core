@@ -186,7 +186,7 @@ namespace chelp {
 
         void setActiveText( const OUString& Module,
                             const OUString& Language,
-                            const OUString& Id,
+                            std::u16string_view Id,
                             OStringBuffer& buffer );
 
         /**

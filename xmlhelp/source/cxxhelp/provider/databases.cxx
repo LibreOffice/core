@@ -626,7 +626,7 @@ void KeywordInfo::KeywordElement::init( Databases const *pDatabases,helpdatafile
 
         if( pHdf )
         {
-            OString idi( id[i].getStr(),id[i].getLength(),RTL_TEXTENCODING_UTF8 );
+            OString idi = OUStringToOString( id[i], RTL_TEXTENCODING_UTF8 );
             bool bSuccess = pHdf->getValueForKey( idi, aHDFData );
             if( bSuccess )
                 pData = aHDFData.getData();
@@ -1041,13 +1041,13 @@ void Databases::cascadingStylesheet( const OUString& Language,
 
 void Databases::setActiveText( const OUString& Module,
                                const OUString& Language,
-                               const OUString& Id,
+                               std::u16string_view Id,
                                OStringBuffer& buffer )
 {
     DataBaseIterator aDbIt( m_xContext, *this, Module, Language, true );
 
     // #i84550 Cache information about failed ids
-    OString id( Id.getStr(),Id.getLength(),RTL_TEXTENCODING_UTF8 );
+    OString id = OUStringToOString( Id, RTL_TEXTENCODING_UTF8 );
     EmptyActiveTextSet::iterator it = m_aEmptyActiveTextSet.find( id );
     bool bFoundAsEmpty = ( it != m_aEmptyActiveTextSet.end() );
     helpdatafileproxy::HDFData aHDFData;

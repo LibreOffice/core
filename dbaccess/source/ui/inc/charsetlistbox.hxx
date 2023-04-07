@@ -32,7 +32,7 @@ namespace dbaui
     public:
         CharSetListBox(std::unique_ptr<weld::ComboBox> xControl);
 
-        void    SelectEntryByIanaName( const OUString& _rIanaName );
+        void    SelectEntryByIanaName( std::u16string_view _rIanaName );
         bool    StoreSelectedCharSet( SfxItemSet& _rSet, const sal_uInt16 _nItemId );
 
         weld::ComboBox* get_widget() { return m_xControl.get(); }

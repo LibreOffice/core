@@ -73,7 +73,7 @@ namespace dbtools
         /** find the given IANA name in the map.
             @return the <em>end</em> iterator if the IANA name could not be found.
         */
-        CharsetIterator findIanaName(const OUString& _rIanaName) const;
+        CharsetIterator findIanaName(std::u16string_view _rIanaName) const;
 
         /// get access to the first element of the charset collection
         CharsetIterator begin() const;

@@ -25,10 +25,10 @@ using namespace com::sun::star::util;
 
 using namespace http_dav_ucp;
 
-bool DateTimeHelper::ISO8601_To_DateTime (const OUString& s,
+bool DateTimeHelper::ISO8601_To_DateTime (std::u16string_view s,
     DateTime& dateTime)
 {
-    OString aDT (s.getStr(), s.getLength(), RTL_TEXTENCODING_ASCII_US);
+    OString aDT = OUStringToOString(s, RTL_TEXTENCODING_ASCII_US);
 
     int year, month, day, hours, minutes, off_hours, off_minutes, fix;
     double seconds;
@@ -155,7 +155,7 @@ sal_Int32 DateTimeHelper::convertMonthToInt(std::u16string_view month)
         return 0;
 }
 
-bool DateTimeHelper::RFC2068_To_DateTime (const OUString& s,
+bool DateTimeHelper::RFC2068_To_DateTime (std::u16string_view s,
     DateTime& dateTime)
 {
     int year;
@@ -166,10 +166,10 @@ bool DateTimeHelper::RFC2068_To_DateTime (const OUString& s,
     char string_month[3 + 1];
     char string_day[3 + 1];
 
-    sal_Int32 found = s.indexOf (',');
-    if (found != -1)
+    size_t found = s.find(',');
+    if (found != std::u16string_view::npos)
     {
-        OString aDT (s.getStr(), s.getLength(), RTL_TEXTENCODING_ASCII_US);
+        OString aDT = OUStringToOString(s, RTL_TEXTENCODING_ASCII_US);
 
         // RFC 1123
         found = sscanf (aDT.getStr(), "%3s, %2d %3s %4d %2d:%2d:%2d GMT",
@@ -184,7 +184,7 @@ bool DateTimeHelper::RFC2068_To_DateTime (const OUString& s,
     }
     else
     {
-        OString aDT (s.getStr(), s.getLength(), RTL_TEXTENCODING_ASCII_US);
+        OString aDT = OUStringToOString(s, RTL_TEXTENCODING_ASCII_US);
 
         // ANSI C's asctime () format
         found = sscanf (aDT.getStr(), "%3s %3s %d %2d:%2d:%2d %4d",
@@ -245,7 +245,7 @@ bool DateTimeHelper::RFC2068_To_DateTime (const OUString& s,
     return found;
 }
 
-bool DateTimeHelper::convert (const OUString& s, DateTime& dateTime)
+bool DateTimeHelper::convert (std::u16string_view s, DateTime& dateTime)
 {
     if (ISO8601_To_DateTime (s, dateTime))
         return true;

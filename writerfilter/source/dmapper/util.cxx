@@ -44,7 +44,7 @@ std::string XTextRangeToString(uno::Reference<text::XTextRange> const& textRange
             result += ")";
         }
 
-        OString aOStr(aOUStr.getStr(), aOUStr.getLength(), RTL_TEXTENCODING_ASCII_US);
+        OString aOStr = OUStringToOString(aOUStr, RTL_TEXTENCODING_ASCII_US);
 
         result = aOStr.getStr();
     }

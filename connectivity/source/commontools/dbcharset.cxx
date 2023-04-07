@@ -93,15 +93,15 @@ namespace dbtools
     }
 
 
-    OCharsetMap::CharsetIterator    OCharsetMap::findIanaName(const OUString& _rIanaName) const
+    OCharsetMap::CharsetIterator    OCharsetMap::findIanaName(std::u16string_view _rIanaName) const
     {
         ensureConstructed( );
 
         rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
-        if ( !_rIanaName.isEmpty() )
+        if ( !_rIanaName.empty() )
         {
             // byte string conversion
-            OString sMimeByteString( _rIanaName.getStr(), _rIanaName.getLength(), RTL_TEXTENCODING_ASCII_US );
+            OString sMimeByteString = OUStringToOString( _rIanaName, RTL_TEXTENCODING_ASCII_US );
             // look up
             eEncoding = rtl_getTextEncodingFromMimeCharset( sMimeByteString.getStr() );
 
