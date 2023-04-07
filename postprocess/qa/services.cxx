@@ -365,14 +365,10 @@ void Test::createInstance(
 #endif
     } else if (name == "com.sun.star.ui.dialogs.FolderPicker") {
         // FolderPicker is a wrapper returning either a platform-specific or the
-        // generic OfficeFolderPicker:
-#if defined(_WIN32)
-        expImpl = "com.sun.star.ui.dialogs.Win32FolderPicker";
-        expServs = {"com.sun.star.ui.dialogs.SystemFolderPicker"};
-#else
+        // generic OfficeFolderPicker. In headless mode it is always the
+        // generic one.
         expImpl = "com.sun.star.svtools.OfficeFolderPicker";
         expServs = {"com.sun.star.ui.dialogs.OfficeFolderPicker"};
-#endif
     } else if (expImpl == "com.sun.star.comp.Calc.SpreadsheetDocument") {
         expImpl = "ScModelObj";
     } else if (expImpl == "com.sun.star.comp.Draw.DrawingDocument"

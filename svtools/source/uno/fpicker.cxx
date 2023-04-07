@@ -48,6 +48,13 @@ static OUString FilePicker_getSystemPickerServiceName()
 #endif
 }
 
+// Ensure that we use not the system file dialogs as headless mode relies on
+// Application::EnableHeadlessMode() which only works for VCL dialogs
+static bool UseSystemFileDialog()
+{
+    return !Application::IsHeadlessModeEnabled() && officecfg::Office::Common::Misc::UseSystemFileDialog::get();
+}
+
 Reference< css::uno::XInterface > FilePicker_CreateInstance (
     Reference< css::uno::XComponentContext > const & context)
 {
@@ -57,7 +64,7 @@ Reference< css::uno::XInterface > FilePicker_CreateInstance (
         return xResult;
 
     Reference< css::lang::XMultiComponentFactory > xFactory (context->getServiceManager());
-    if (xFactory.is() && officecfg::Office::Common::Misc::UseSystemFileDialog::get())
+    if (xFactory.is() && UseSystemFileDialog())
     {
         xResult.set( Application::createFilePicker( context ) );
 
@@ -125,7 +132,7 @@ Reference< css::uno::XInterface > FolderPicker_CreateInstance (
         return xResult;
 
     Reference< css::lang::XMultiComponentFactory > xFactory (context->getServiceManager());
-    if (xFactory.is() && officecfg::Office::Common::Misc::UseSystemFileDialog::get())
+    if (xFactory.is() && UseSystemFileDialog())
     {
         xResult.set( Application::createFolderPicker( context ) );
         if (!xResult.is())

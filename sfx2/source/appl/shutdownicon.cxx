@@ -138,11 +138,15 @@ void ShutdownIcon::deInitSystray()
     m_bInitialized = false;
 }
 
+static bool UseSystemFileDialog()
+{
+    return !Application::IsHeadlessModeEnabled() && officecfg::Office::Common::Misc::UseSystemFileDialog::get();
+}
 
 ShutdownIcon::ShutdownIcon( css::uno::Reference< XComponentContext > xContext ) :
     m_bVeto ( false ),
     m_bListenForTermination ( false ),
-    m_bSystemDialogs(officecfg::Office::Common::Misc::UseSystemFileDialog::get()),
+    m_bSystemDialogs(UseSystemFileDialog()),
     m_xContext(std::move( xContext )),
     m_bInitialized( false )
 {
@@ -241,7 +245,7 @@ void ShutdownIcon::StartFileDialog()
 {
     ::SolarMutexGuard aGuard;
 
-    bool bDirty = ( m_bSystemDialogs != officecfg::Office::Common::Misc::UseSystemFileDialog::get() );
+    bool bDirty = m_bSystemDialogs != UseSystemFileDialog();
 
     if ( m_pFileDlg && bDirty )
     {
@@ -382,7 +386,7 @@ IMPL_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused*/, vo
     // This fix is dependent on the dialog settings. Destroying the dialog here will
     // crash the non-native dialog implementation! Therefore make this dependent on
     // the settings.
-    if ( officecfg::Office::Common::Misc::UseSystemFileDialog::get() )
+    if (UseSystemFileDialog())
     {
         m_pFileDlg.reset();
     }

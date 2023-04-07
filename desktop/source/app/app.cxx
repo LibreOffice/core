@@ -1227,14 +1227,12 @@ struct ExecuteGlobals
 {
     Reference < css::document::XDocumentEventListener > xGlobalBroadcaster;
     bool bRestartRequested;
-    bool bUseSystemFileDialog;
     std::unique_ptr<SvtCTLOptions> pCTLLanguageOptions;
     std::unique_ptr<SvtPathOptions> pPathOptions;
     rtl::Reference< JVMloadThread > xJVMloadThread;
 
     ExecuteGlobals()
     : bRestartRequested( false )
-    , bUseSystemFileDialog( true )
     {}
 };
 
@@ -1511,18 +1509,6 @@ int Desktop::Main()
         }
     }
 
-    if ( rCmdLineArgs.IsHeadless() )
-    {
-        // Ensure that we use not the system file dialogs as
-        // headless mode relies on Application::EnableHeadlessMode()
-        // which does only work for VCL dialogs!!
-        pExecGlobals->bUseSystemFileDialog = officecfg::Office::Common::Misc::UseSystemFileDialog::get();
-        std::shared_ptr< comphelper::ConfigurationChanges > xChanges(
-                comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::UseSystemFileDialog::set( false, xChanges );
-        xChanges->commit();
-    }
-
     pExecGlobals->bRestartRequested = xRestartManager->isRestartRequested(true);
     if ( !pExecGlobals->bRestartRequested )
     {
@@ -1635,16 +1621,7 @@ int Desktop::doShutdown()
     if ( pExecGlobals->bRestartRequested )
         SetRestartState();
 
-    // Restore old value
     const CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
-    if ( rCmdLineArgs.IsHeadless() )
-    {
-        std::shared_ptr< comphelper::ConfigurationChanges > xChanges(
-                comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::UseSystemFileDialog::set( pExecGlobals->bUseSystemFileDialog, xChanges );
-        xChanges->commit();
-    }
-
     OUString pidfileName = rCmdLineArgs.GetPidfileName();
     if ( !pidfileName.isEmpty() )
     {
