@@ -94,6 +94,7 @@
 #include <o3tl/unit_conversion.hxx>
 
 #include <rtl/strbuf.hxx>
+#include <rtl/xmlencode.hxx>
 #include <osl/diagnose.h>
 
 using namespace css;
@@ -1076,7 +1077,7 @@ void SwHTMLWriter::PrepareFontList( const SvxFontItem& rFontItem,
         while( nStrPos != -1 )
         {
             OUString aName = rName.getToken( 0, ';', nStrPos );
-            aName = comphelper::string::strip(aName, ' ');
+            aName = rtl::encodeForXml(comphelper::string::strip(aName, ' '));
             if( aName.isEmpty() )
                 continue;
 

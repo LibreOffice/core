@@ -1230,8 +1230,6 @@ The following structure describes the permissions used in PDF security
     static OString GetDateTime();
 };
 
-VCL_DLLPUBLIC void escapeStringXML( const OUString& rStr, OUString &rValue);
-
 }
 
 #endif // INCLUDED_VCL_PDFWRITER_HXX

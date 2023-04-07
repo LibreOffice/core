@@ -21,6 +21,7 @@
 #include <comphelper/string.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
+#include <rtl/xmlencode.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>
 #include <fmtfld.hxx>
@@ -513,7 +514,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
             OString sOut =
                 "<" OOO_STRING_SVTOOLS_HTML_comment
                 " " +
-                OUStringToOString(sComment, RTL_TEXTENCODING_UTF8) +
+                OUStringToOString(rtl::encodeForXml(sComment), RTL_TEXTENCODING_UTF8) +
                 " -->";
             rWrt.Strm().WriteOString( sOut );
         }

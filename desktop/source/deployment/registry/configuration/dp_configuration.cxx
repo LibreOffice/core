@@ -31,6 +31,7 @@
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/xmlencode.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <ucbhelper/content.hxx>
@@ -566,39 +567,6 @@ BackendImpl::PackageImpl::isRegistered_(
 }
 
 
-OUString encodeForXml( std::u16string_view text )
-{
-    // encode conforming xml:
-    size_t len = text.size();
-    OUStringBuffer buf;
-    for ( size_t pos = 0; pos < len; ++pos )
-    {
-        sal_Unicode c = text[ pos ];
-        switch (c) {
-        case '<':
-            buf.append( "&lt;" );
-            break;
-        case '>':
-            buf.append( "&gt;" );
-            break;
-        case '&':
-            buf.append( "&amp;" );
-            break;
-        case '\'':
-            buf.append( "&apos;" );
-            break;
-        case '\"':
-            buf.append( "&quot;" );
-            break;
-        default:
-            buf.append( c );
-            break;
-        }
-    }
-    return buf.makeStringAndClear();
-}
-
-
 OUString replaceOrigin(
     OUString const & url, std::u16string_view destFolder, Reference< XCommandEnvironment > const & xCmdEnv, Reference< XComponentContext > const & xContext, bool & out_replaced)
 {
@@ -651,7 +619,7 @@ OUString replaceOrigin(
             if (origin.isEmpty()) {
                 // encode only once
                 origin = OUStringToOString(
-                    encodeForXml( url.subView( 0, url.lastIndexOf( '/' ) ) ),
+                    rtl::encodeForXml( url.subView( 0, url.lastIndexOf( '/' ) ) ),
                     // xxx todo: encode always for UTF-8? => lookup doc-header?
                     RTL_TEXTENCODING_UTF8 );
             }
