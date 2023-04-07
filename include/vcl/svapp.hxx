@@ -1243,20 +1243,6 @@ public:
 
     ///@}
 
-    /** @name Event Testing Mode
-    */
-
-    /** Enables event testing mode.
-
-    */
-    static void                 EnableEventTestingMode();
-
-    /** Determines if event testing mode is enabled
-
-     @return True if event testing mode is enabled, false if not.
-    */
-    static bool                 IsEventTestingModeEnabled();
-
     /** Set safe mode to enabled */
     static void                 EnableSafeMode();
 

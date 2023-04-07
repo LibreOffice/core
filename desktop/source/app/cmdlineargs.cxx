@@ -326,10 +326,6 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             {
                 setHeadless();
             }
-            else if ( oArg == "eventtesting" )
-            {
-                m_eventtesting = true;
-            }
             else if ( oArg == "safe-mode" )
             {
                 m_safemode = true;
@@ -707,7 +703,6 @@ void CommandLineArgs::InitParamValues()
     m_invisible = true;
     m_headless = true;
 #endif
-    m_eventtesting = false;
     m_quickstart = false;
     m_noquickstart = false;
     m_terminateafterinit = false;

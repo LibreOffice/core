@@ -60,12 +60,11 @@ class CommandLineArgs
         bool                IsMinimized() const { return m_minimized;}
         bool                IsInvisible() const
         {
-            return m_invisible || (m_headless && !m_eventtesting);
+            return m_invisible || m_headless;
         }
         bool                IsNoRestore() const { return m_norestore;}
         bool                IsNoDefault() const { return m_nodefault;}
         bool                IsHeadless() const { return m_headless;}
-        bool                IsEventTesting() const { return m_eventtesting;}
         bool                IsQuickstart() const { return m_quickstart;}
         bool                IsNoQuickstart() const { return m_noquickstart;}
         bool                IsTerminateAfterInit() const { return m_terminateafterinit;}
@@ -131,7 +130,6 @@ class CommandLineArgs
         bool m_invisible;
         bool m_norestore;
         bool m_headless;
-        bool m_eventtesting;
         bool m_quickstart;
         bool m_noquickstart;
         bool m_terminateafterinit;

@@ -339,92 +339,6 @@ void Application::notifyInvalidation(tools::Rectangle const* /*pRect*/) const
 {
 }
 
-namespace
-{
-    VclPtr<vcl::Window> GetEventWindow()
-    {
-        VclPtr<vcl::Window> xWin(Application::GetFirstTopLevelWindow());
-        while (xWin)
-        {
-            if (xWin->IsVisible())
-                break;
-            xWin.reset(Application::GetNextTopLevelWindow(xWin));
-        }
-        return xWin;
-    }
-
-    bool InjectKeyEvent(SvStream& rStream)
-    {
-        VclPtr<vcl::Window> xWin(GetEventWindow());
-        if (!xWin)
-            return false;
-
-        // skip the first available cycle and insert on the next one when we
-        // are trying the initial event, flagged by a triggered but undeleted
-        // mpEventTestingIdle
-        ImplSVData* pSVData = ImplGetSVData();
-        if (pSVData->maAppData.mpEventTestingIdle)
-        {
-            delete pSVData->maAppData.mpEventTestingIdle;
-            pSVData->maAppData.mpEventTestingIdle = nullptr;
-            return false;
-        }
-
-        sal_uInt16 nCode, nCharCode;
-        rStream.ReadUInt16(nCode);
-        rStream.ReadUInt16(nCharCode);
-        if (!rStream.good())
-            return false;
-
-        KeyEvent aVCLKeyEvt(nCharCode, nCode);
-        Application::PostKeyEvent(VclEventId::WindowKeyInput, xWin.get(), &aVCLKeyEvt);
-        Application::PostKeyEvent(VclEventId::WindowKeyUp, xWin.get(), &aVCLKeyEvt);
-        return true;
-    }
-
-    void CloseDialogsAndQuit()
-    {
-        Application::EndAllPopups();
-        Application::EndAllDialogs();
-        Application::PostUserEvent( LINK( nullptr, ImplSVAppData, ImplPrepareExitMsg ) );
-    }
-}
-
-IMPL_LINK_NOARG(ImplSVAppData, VclEventTestingHdl, Timer *, void)
-{
-    if (Application::AnyInput())
-    {
-        mpEventTestingIdle->Start();
-    }
-    else
-    {
-        Application::PostUserEvent( LINK( nullptr, ImplSVAppData, ImplVclEventTestingHdl ) );
-    }
-}
-
-IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplVclEventTestingHdl, void*, void )
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    SAL_INFO("vcl.eventtesting", "EventTestLimit is " << pSVData->maAppData.mnEventTestLimit);
-    if (pSVData->maAppData.mnEventTestLimit == 0)
-    {
-        delete pSVData->maAppData.mpEventTestInput;
-        SAL_INFO("vcl.eventtesting", "Event Limit reached, exiting" << pSVData->maAppData.mnEventTestLimit);
-        CloseDialogsAndQuit();
-    }
-    else
-    {
-        if (InjectKeyEvent(*pSVData->maAppData.mpEventTestInput))
-            --pSVData->maAppData.mnEventTestLimit;
-        if (!pSVData->maAppData.mpEventTestInput->good())
-        {
-            SAL_INFO("vcl.eventtesting", "Event Input exhausted, exit next cycle");
-            pSVData->maAppData.mnEventTestLimit = 0;
-        }
-        Application::PostUserEvent( LINK( nullptr, ImplSVAppData, ImplVclEventTestingHdl ) );
-    }
-}
-
 IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplPrepareExitMsg, void*, void )
 {
     //now close top level frames
@@ -436,16 +350,6 @@ void Application::Execute()
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mbInAppExecute = true;
     pSVData->maAppData.mbAppQuit = false;
-
-    if (Application::IsEventTestingModeEnabled())
-    {
-        pSVData->maAppData.mnEventTestLimit = 50;
-        pSVData->maAppData.mpEventTestingIdle = new Idle("eventtesting");
-        pSVData->maAppData.mpEventTestingIdle->SetInvokeHandler(LINK(&(pSVData->maAppData), ImplSVAppData, VclEventTestingHdl));
-        pSVData->maAppData.mpEventTestingIdle->SetPriority(TaskPriority::HIGH_IDLE);
-        pSVData->maAppData.mpEventTestInput = new SvFileStream("eventtesting", StreamMode::READ);
-        pSVData->maAppData.mpEventTestingIdle->Start();
-    }
 
     int nExitCode = 0;
     if (!pSVData->mpDefInst->DoExecute(nExitCode))
@@ -1693,18 +1597,6 @@ void Application::EnableConsoleOnly()
 {
     EnableHeadlessMode(true);
     EnableBitmapRendering();
-}
-
-static bool bEventTestingMode = false;
-
-bool Application::IsEventTestingModeEnabled()
-{
-    return bEventTestingMode;
-}
-
-void Application::EnableEventTestingMode()
-{
-    bEventTestingMode = true;
 }
 
 static bool bSafeMode = false;

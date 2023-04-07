@@ -589,7 +589,7 @@ bool Desktop::QueryExit()
     {
         xPropertySet->setPropertyValue( SUSPEND_QUICKSTARTVETO, Any(false) );
     }
-    else if (!Application::IsEventTestingModeEnabled())
+    else
     {
         FlushConfiguration();
         try
@@ -1511,7 +1511,7 @@ int Desktop::Main()
         }
     }
 
-    if ( rCmdLineArgs.IsHeadless() || rCmdLineArgs.IsEventTesting() )
+    if ( rCmdLineArgs.IsHeadless() )
     {
         // Ensure that we use not the system file dialogs as
         // headless mode relies on Application::EnableHeadlessMode()
@@ -1637,7 +1637,7 @@ int Desktop::doShutdown()
 
     // Restore old value
     const CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
-    if ( rCmdLineArgs.IsHeadless() || rCmdLineArgs.IsEventTesting() )
+    if ( rCmdLineArgs.IsHeadless() )
     {
         std::shared_ptr< comphelper::ConfigurationChanges > xChanges(
                 comphelper::ConfigurationChanges::create());

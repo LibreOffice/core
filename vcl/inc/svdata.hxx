@@ -167,16 +167,10 @@ struct ImplSVAppData
     bool mbRenderToBitmaps = false; // set via svp / headless plugin
     bool m_bUseSystemLoop = false;
 
-    SvFileStream*       mpEventTestInput = nullptr;
-    Idle*               mpEventTestingIdle = nullptr;
-    int                 mnEventTestLimit = 0;
-
     DECL_STATIC_LINK(ImplSVAppData, ImplQuitMsg, void*, void);
     DECL_STATIC_LINK(ImplSVAppData, ImplPrepareExitMsg, void*, void);
     DECL_STATIC_LINK(ImplSVAppData, ImplEndAllDialogsMsg, void*, void);
     DECL_STATIC_LINK(ImplSVAppData, ImplEndAllPopupsMsg, void*, void);
-    DECL_STATIC_LINK(ImplSVAppData, ImplVclEventTestingHdl, void*, void);
-    DECL_LINK(VclEventTestingHdl, Timer*, void);
 };
 
 /// Cache multiple scalings for the same bitmap

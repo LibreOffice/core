@@ -197,8 +197,7 @@ sal_Bool SAL_CALL Desktop::terminate()
 
     css::lang::EventObject                                aEvent             ( static_cast< ::cppu::OWeakObject* >(this) );
     bool                                                  bAskQuickStart     = !m_bSuspendQuickstartVeto;
-    const bool bRestartableMainLoop = Application::IsEventTestingModeEnabled() ||
-                                      comphelper::LibreOfficeKit::isActive();
+    const bool bRestartableMainLoop = comphelper::LibreOfficeKit::isActive();
     aGuard.clear();
 
     // Allow using of any UI ... because Desktop.terminate() was designed as UI functionality in the past.
