@@ -93,6 +93,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 #include <rtl/strbuf.hxx>
+#include <rtl/xmlencode.hxx>
 
 using namespace css;
 using editeng::SvxBorderLine;
@@ -1114,7 +1115,7 @@ void SwHTMLWriter::PrepareFontList( const SvxFontItem& rFontItem,
         while( nStrPos != -1 )
         {
             OUString aName = rName.getToken( 0, ';', nStrPos );
-            aName = comphelper::string::strip(aName, ' ');
+            aName = rtl::encodeForXml(comphelper::string::strip(aName, ' '));
             if( aName.isEmpty() )
                 continue;
 
