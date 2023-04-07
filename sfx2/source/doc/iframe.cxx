@@ -24,6 +24,7 @@
 #include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -199,9 +200,11 @@ sal_Bool SAL_CALL IFrameObject::load(
         if ( xFramesSupplier.is() )
             mxFrame->setCreator( xFramesSupplier );
 
+        uno::Reference<task::XInteractionHandler> xInteractionHandler(task::InteractionHandler::createWithParent(mxContext, xWin));
         uno::Sequence < beans::PropertyValue > aProps{
             comphelper::makePropertyValue("PluginMode", sal_Int16(2)),
-            comphelper::makePropertyValue("ReadOnly", true)
+            comphelper::makePropertyValue("ReadOnly", true),
+            comphelper::makePropertyValue("InteractionHandler", xInteractionHandler)
         };
         uno::Reference < frame::XDispatch > xDisp = mxFrame->queryDispatch( aTargetURL, "_self", 0 );
         if ( xDisp.is() )
