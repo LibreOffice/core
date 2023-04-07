@@ -469,6 +469,11 @@ std::unique_ptr<XMLPropertyHandler> XMLPropertyHandlerFactory::CreatePropertyHan
         case XML_TYPE_TEXT_VERTICAL_POS:
             pPropHdl.reset(new XMLConstantsPropertyHandler( pXML_VertPos_Enum, XML_TOKEN_INVALID ));
         break;
+        case XML_TYPE_TEXT_OVERFLOW_BEHAVIOR:
+            // auto-create-new-frame isn't properly implemented yet. It just means don't clip.
+            pPropHdl.reset(new XMLNamedBoolPropertyHdl(GetXMLToken(XML_CLIP),
+                                                       GetXMLToken(XML_AUTO_CREATE_NEW_FRAME)));
+            break;
 
     }
 
