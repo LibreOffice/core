@@ -40,6 +40,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/xmlencode.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/numeric.hxx>
@@ -5885,43 +5886,11 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     return nOIObject;
 }
 
-// formats the string for the XML stream
-void escapeStringXML(const OUString& rStr, OUString &rValue)
+static void lcl_assignMeta(std::u16string_view aValue, OString& aMeta)
 {
-    const sal_Unicode* pUni = rStr.getStr();
-    int nLen = rStr.getLength();
-    for( ; nLen; nLen--, pUni++ )
+    if (!aValue.empty())
     {
-        switch( *pUni )
-        {
-        case u'&':
-            rValue += "&amp;";
-        break;
-        case u'<':
-            rValue += "&lt;";
-        break;
-        case u'>':
-            rValue += "&gt;";
-        break;
-        case u'\'':
-            rValue += "&apos;";
-        break;
-        case u'"':
-            rValue += "&quot;";
-        break;
-        default:
-            rValue += OUStringChar( *pUni );
-            break;
-        }
-    }
-}
-
-static void lcl_assignMeta(const OUString& aValue, OString& aMeta)
-{
-    if (!aValue.isEmpty())
-    {
-        OUString aTempString;
-        escapeStringXML(aValue, aTempString);
+        OUString aTempString = comphelper::string::encodeForXml(aValue);
         aMeta = OUStringToOString(aTempString, RTL_TEXTENCODING_UTF8);
     }
 }

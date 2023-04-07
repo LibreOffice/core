@@ -23,6 +23,7 @@
 
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/xmlencode.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/whiter.hxx>
 #include <editeng/boxitem.hxx>
@@ -1076,7 +1077,7 @@ void SwHTMLWriter::PrepareFontList( const SvxFontItem& rFontItem,
         while( nStrPos != -1 )
         {
             OUString aName = rName.getToken( 0, ';', nStrPos );
-            aName = comphelper::string::strip(aName, ' ');
+            aName = comphelper::string::encodeForXml(comphelper::string::strip(aName, ' '));
             if( aName.isEmpty() )
                 continue;
 
