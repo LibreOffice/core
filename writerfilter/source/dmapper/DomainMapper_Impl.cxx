@@ -51,6 +51,7 @@
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XLineNumberingProperties.hpp>
 #include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/text/LabelFollow.hpp>
 #include <com/sun/star/text/PageNumberType.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -60,6 +61,7 @@
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
+#include <com/sun/star/text/XChapterNumberingSupplier.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XParagraphCursor.hpp>
 #include <com/sun/star/text/XRedline.hpp>
@@ -6479,6 +6481,9 @@ void DomainMapper_Impl::handleToc
 
         }
 
+        uno::Reference<container::XIndexAccess> xChapterNumberingRules;
+        if (auto xSupplier = GetTextDocument().query<text::XChapterNumberingSupplier>())
+            xChapterNumberingRules = xSupplier->getChapterNumberingRules();
         uno::Reference<container::XNameContainer> xStyles;
         if (auto xStylesSupplier = GetTextDocument().query<style::XStyleFamiliesSupplier>())
         {
@@ -6497,13 +6502,32 @@ void DomainMapper_Impl::handleToc
 
             // Get the tab stops coming from the styles; store to the level definitions
             uno::Sequence<style::TabStop> tabStops;
-            if (xStyles)
+            if (xChapterNumberingRules && xStyles)
             {
-                OUString style;
-                xTOC->getPropertyValue("ParaStyleLevel" + OUString::number(nLevel)) >>= style;
-                uno::Reference<beans::XPropertySet> xStyle;
-                if (xStyles->getByName(style) >>= xStyle)
-                    xStyle->getPropertyValue("ParaTabStops") >>= tabStops;
+                // This relies on the chapter numbering rules already defined
+                // (see ListDef::CreateNumberingRules)
+                uno::Sequence<beans::PropertyValue> props;
+                xChapterNumberingRules->getByIndex(nLevel - 1) >>= props;
+                bool bHasNumbering = false;
+                bool bUseTabStop = false;
+                for (const auto& propval : props)
+                {
+                    // We rely on PositionAndSpaceMode being always equal to LABEL_ALIGNMENT,
+                    // because ListDef::CreateNumberingRules doesn't create legacy lists
+                    if (propval.Name == "NumberingType")
+                        bHasNumbering = propval.Value != style::NumberingType::NUMBER_NONE;
+                    else if (propval.Name == "LabelFollowedBy")
+                        bUseTabStop = propval.Value == text::LabelFollow::LISTTAB;
+                    // Do not use FirstLineIndent property from the rules, because it is unreliable
+                }
+                if (bHasNumbering && bUseTabStop)
+                {
+                    OUString style;
+                    xTOC->getPropertyValue("ParaStyleLevel" + OUString::number(nLevel)) >>= style;
+                    uno::Reference<beans::XPropertySet> xStyle;
+                    if (xStyles->getByName(style) >>= xStyle)
+                        xStyle->getPropertyValue("ParaTabStops") >>= tabStops;
+                }
             }
 
             uno::Sequence< beans::PropertyValues > aNewLevel = lcl_createTOXLevelHyperlinks(
