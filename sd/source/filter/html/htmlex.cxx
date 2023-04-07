@@ -22,6 +22,7 @@
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
+#include <rtl/xmlencode.hxx>
 #include <sal/log.hxx>
 #include <rtl/tencinfo.h>
 #include <comphelper/processfactory.hxx>
@@ -281,10 +282,10 @@ OUString HtmlState::SetLink( const OUString& aLink, const OUString& aTarget )
 
     if (!aLink.isEmpty())
     {
-        aStr += "<a href=\"" + aLink;
+        aStr += "<a href=\"" + rtl::encodeForXml(aLink);
         if (!aTarget.isEmpty())
         {
-            aStr += "\" target=\"" + aTarget;
+            aStr += "\" target=\"" + rtl::encodeForXml(aTarget);
         }
         aStr += "\">";
         mbLink = true;

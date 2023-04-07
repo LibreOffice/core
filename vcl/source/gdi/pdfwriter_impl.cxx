@@ -45,6 +45,7 @@
 #include <osl/thread.h>
 #include <rtl/digest.h>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/xmlencode.hxx>
 #include <sal/log.hxx>
 #include <svl/urihelper.hxx>
 #include <tools/fract.hxx>
@@ -5325,37 +5326,6 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     return nOIObject;
 }
 
-// formats the string for the XML stream
-static void escapeStringXML( const OUString& rStr, OUString &rValue)
-{
-    const sal_Unicode* pUni = rStr.getStr();
-    int nLen = rStr.getLength();
-    for( ; nLen; nLen--, pUni++ )
-    {
-        switch( *pUni )
-        {
-        case u'&':
-            rValue += "&amp;";
-        break;
-        case u'<':
-            rValue += "&lt;";
-        break;
-        case u'>':
-            rValue += "&gt;";
-        break;
-        case u'\'':
-            rValue += "&apos;";
-        break;
-        case u'"':
-            rValue += "&quot;";
-        break;
-        default:
-            rValue += OUStringChar( *pUni );
-            break;
-        }
-    }
-}
-
 // emits the document metadata
 sal_Int32 PDFWriterImpl::emitDocumentMetadata()
 {
@@ -5404,8 +5374,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
                 aMetadataStream.append( "   <dc:title>\n" );
                 aMetadataStream.append( "    <rdf:Alt>\n" );
                 aMetadataStream.append( "     <rdf:li xml:lang=\"x-default\">" );
-                OUString aTitle;
-                escapeStringXML( m_aContext.DocumentInfo.Title, aTitle );
+                OUString aTitle = rtl::encodeForXml( m_aContext.DocumentInfo.Title );
                 aMetadataStream.append( OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 )  );
                 aMetadataStream.append( "</rdf:li>\n" );
                 aMetadataStream.append( "    </rdf:Alt>\n" );
@@ -5416,8 +5385,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
                 aMetadataStream.append( "   <dc:creator>\n" );
                 aMetadataStream.append( "    <rdf:Seq>\n" );
                 aMetadataStream.append( "     <rdf:li>" );
-                OUString aAuthor;
-                escapeStringXML( m_aContext.DocumentInfo.Author, aAuthor );
+                OUString aAuthor = rtl::encodeForXml( m_aContext.DocumentInfo.Author );
                 aMetadataStream.append( OUStringToOString( aAuthor , RTL_TEXTENCODING_UTF8 )  );
                 aMetadataStream.append( "</rdf:li>\n" );
                 aMetadataStream.append( "    </rdf:Seq>\n" );
@@ -5429,8 +5397,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
                 aMetadataStream.append( "   <dc:description>\n" );
                 aMetadataStream.append( "    <rdf:Alt>\n" );
                 aMetadataStream.append( "     <rdf:li xml:lang=\"x-default\">" );
-                OUString aSubject;
-                escapeStringXML( m_aContext.DocumentInfo.Subject, aSubject );
+                OUString aSubject = rtl::encodeForXml( m_aContext.DocumentInfo.Subject );
                 aMetadataStream.append( OUStringToOString( aSubject , RTL_TEXTENCODING_UTF8 )  );
                 aMetadataStream.append( "</rdf:li>\n" );
                 aMetadataStream.append( "    </rdf:Alt>\n" );
@@ -5448,16 +5415,14 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
             if( !m_aContext.DocumentInfo.Producer.isEmpty() )
             {
                 aMetadataStream.append( "   <pdf:Producer>" );
-                OUString aProducer;
-                escapeStringXML( m_aContext.DocumentInfo.Producer, aProducer );
+                OUString aProducer = rtl::encodeForXml( m_aContext.DocumentInfo.Producer );
                 aMetadataStream.append( OUStringToOString( aProducer , RTL_TEXTENCODING_UTF8 )  );
                 aMetadataStream.append( "</pdf:Producer>\n" );
             }
             if( !m_aContext.DocumentInfo.Keywords.isEmpty() )
             {
                 aMetadataStream.append( "   <pdf:Keywords>" );
-                OUString aKeywords;
-                escapeStringXML( m_aContext.DocumentInfo.Keywords, aKeywords );
+                OUString aKeywords = rtl::encodeForXml( m_aContext.DocumentInfo.Keywords );
                 aMetadataStream.append( OUStringToOString( aKeywords , RTL_TEXTENCODING_UTF8 )  );
                 aMetadataStream.append( "</pdf:Keywords>\n" );
             }
@@ -5469,8 +5434,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
         if( !m_aContext.DocumentInfo.Creator.isEmpty() )
         {
             aMetadataStream.append( "   <xmp:CreatorTool>" );
-            OUString aCreator;
-            escapeStringXML( m_aContext.DocumentInfo.Creator, aCreator );
+            OUString aCreator = rtl::encodeForXml( m_aContext.DocumentInfo.Creator );
             aMetadataStream.append( OUStringToOString( aCreator , RTL_TEXTENCODING_UTF8 )  );
             aMetadataStream.append( "</xmp:CreatorTool>\n" );
         }

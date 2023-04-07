@@ -23,6 +23,7 @@
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmltokn.h>
+#include <rtl/xmlencode.hxx>
 #include <osl/diagnose.h>
 #include <fmtfld.hxx>
 #include <doc.hxx>
@@ -513,7 +514,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
             OString sOut =
                 "<" OOO_STRING_SVTOOLS_HTML_comment
                 " " +
-                OUStringToOString(sComment, static_cast<SwHTMLWriter&>(rWrt).m_eDestEnc) +
+                OUStringToOString(rtl::encodeForXml(sComment), static_cast<SwHTMLWriter&>(rWrt).m_eDestEnc) +
                 " -->";
             rWrt.Strm().WriteOString( sOut );
         }
