@@ -146,6 +146,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "NumberingRules",                 XML_NAMESPACE_TEXT, XML_LIST_STYLE_NAME,        XML_TYPE_STRING, CTF_SD_NUMBERINGRULES_NAME ),
     GMAP( "TextWordWrap",                   XML_NAMESPACE_FO,   XML_WRAP_OPTION,            XML_TYPE_WRAP_OPTION, 0 ),
     GMAP( "TextChainNextName",              XML_NAMESPACE_DRAW,   XML_CHAIN_NEXT_NAME,      XML_TYPE_STRING, 0 ),
+    GMAP( "TextClipVerticalOverflow",       XML_NAMESPACE_STYLE, XML_OVERFLOW_BEHAVIOR,     XML_TYPE_TEXT_OVERFLOW_BEHAVIOR, 0 ),
 
     GMAP( "TextColumns",                    XML_NAMESPACE_STYLE, XML_COLUMNS, XML_TYPE_TEXT_COLUMNS|MID_FLAG_ELEMENT_ITEM, CTF_TEXTCOLUMNS ),
 
