@@ -4104,13 +4104,19 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
                         }
                     }
 
-                    // delete rows without track changes
+                    // delete original rows/columns, except in track changes mode
+                    // TODO remove all the columns, not only the first one
                     if ( !bNeedTrack )
                     {
                         for (sal_Int32 nDeleted = 0; nDeleted < nSelRows; ++nDeleted)
+                        {
                             pDispatch->Execute(bTableCol
                                 ? FN_TABLE_DELETE_COL
                                 : FN_TABLE_DELETE_ROW, SfxCallMode::SYNCHRON);
+
+                            if ( bTableCol )
+                                break;
+                        }
                     }
                 }
             }
