@@ -350,6 +350,8 @@ protected:
                                          ".uno:CharEndPreviewFontName",
                                          aArgs );
     }
+
+    bool            CheckFontIsAvailable(std::u16string_view fontname);
     void            CheckAndMarkUnknownFont();
 
 public:
@@ -1755,16 +1757,21 @@ void SvxFontNameBox_Base::FillList()
     m_xWidget->select_entry_region(nStartPos, nEndPos);
 }
 
+bool SvxFontNameBox_Base::CheckFontIsAvailable(std::u16string_view fontname)
+{
+    lcl_GetDocFontList(&pFontList, this);
+    return pFontList && pFontList->IsAvailable(fontname);
+}
+
 void SvxFontNameBox_Base::CheckAndMarkUnknownFont()
 {
     if (mbCheckingUnknownFont) //tdf#117537 block rentry
         return;
     mbCheckingUnknownFont = true;
     OUString fontname = m_xWidget->get_active_text();
-    lcl_GetDocFontList( &pFontList, this );
-    // If the font is unknown, show it in italic.
+    // tdf#154680 If a font is set and that font is unknown, show it in italic.
     vcl::Font font = m_xWidget->get_entry_font();
-    if( pFontList != nullptr && pFontList->IsAvailable( fontname ))
+    if (fontname.isEmpty() || CheckFontIsAvailable(fontname))
     {
         if( font.GetItalic() != ITALIC_NONE )
         {
