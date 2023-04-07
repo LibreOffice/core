@@ -395,6 +395,19 @@ SwEditRegionDlg::SwEditRegionDlg(weld::Window* pParent, SwWrtShell& rWrtSh)
 
     m_xTree->show();
     bDontCheckPasswd = false;
+
+    if(comphelper::LibreOfficeKit::isActive())
+    {
+        m_xBuilder->weld_label("label8")->hide(); // Link
+        m_xFileCB->hide();
+        m_xDDECB->hide();
+        m_xDDECommandFT->hide();
+        m_xFileNameFT->hide();
+        m_xFileNameED->hide();
+        m_xFilePB->hide();
+        m_xSubRegionFT->hide();
+        m_xSubRegionED->hide();
+    }
 }
 
 bool SwEditRegionDlg::CheckPasswd(weld::ToggleButton* pBox)
