@@ -204,6 +204,7 @@ author-initials
 author-name
 auto
 auto-complete
+auto-create-new-frame
 auto-grow-height
 auto-grow-width
 auto-reload
@@ -1368,6 +1369,7 @@ outline-level-style
 outline-style
 outset
 outside
+overflow-behavior
 overlap
 overlay
 p

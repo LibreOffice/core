@@ -611,6 +611,7 @@ inline constexpr OUStringLiteral PROP_TextAutoGrowWidth = u"TextAutoGrowWidth";
 inline constexpr OUStringLiteral PROP_TextBreak = u"TextBreak";
 inline constexpr OUStringLiteral PROP_TextCanOverlap = u"TextCanOverlap";
 inline constexpr OUStringLiteral PROP_TextChainNextName = u"TextChainNextName";
+inline constexpr OUStringLiteral PROP_TextClipVerticalOverflow = u"TextClipVerticalOverflow";
 inline constexpr OUStringLiteral PROP_TextColor = u"TextColor";
 inline constexpr OUStringLiteral PROP_TextColumns = u"TextColumns";
 inline constexpr OUStringLiteral PROP_TextContourFrame = u"TextContourFrame";
