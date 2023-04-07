@@ -142,11 +142,10 @@ void ShutdownIcon::deInitSystray()
 ShutdownIcon::ShutdownIcon( css::uno::Reference< XComponentContext > xContext ) :
     m_bVeto ( false ),
     m_bListenForTermination ( false ),
-    m_bSystemDialogs( false ),
+    m_bSystemDialogs(officecfg::Office::Common::Misc::UseSystemFileDialog::get()),
     m_xContext(std::move( xContext )),
     m_bInitialized( false )
 {
-    m_bSystemDialogs = officecfg::Office::Common::Misc::UseSystemFileDialog::get();
 }
 
 ShutdownIcon::~ShutdownIcon()
