@@ -1059,7 +1059,7 @@
 #define FMT_REF_PAGE_PGDSC                      NC_("FMT_REF_PAGE_PGDSC", "Page number (styled)")
 #define FMT_REF_ONLYNUMBER                      NC_("FMT_REF_ONLYNUMBER", "Category and Number")
 #define FMT_REF_ONLYCAPTION                     NC_("FMT_REF_ONLYCAPTION", "Caption Text")
-#define FMT_REF_ONLYSEQNO                       NC_("FMT_REF_ONLYSEQNO", "Numbering")
+#define FMT_REF_ONLYSEQNO                       NC_("FMT_REF_ONLYSEQNO", "Number")
 #define FMT_REF_NUMBER                          NC_("FMT_REF_NUMBER", "Number")
 #define FMT_REF_NUMBER_NO_CONTEXT               NC_("FMT_REF_NUMBER_NO_CONTEXT", "Number (no context)")
 #define FMT_REF_NUMBER_FULL_CONTEXT             NC_("FMT_REF_NUMBER_FULL_CONTEXT", "Number (full context)")
