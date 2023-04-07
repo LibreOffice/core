@@ -1010,7 +1010,7 @@ static void lcl_sendLOKDocumentBackground(const ScViewData* pViewData)
     const Color& rColor = rBackground.GetColor();
 
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR, rColor.AsRGBHexString().toUtf8().getStr());
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR, rColor.AsRGBHexString().toUtf8());
 }
 
 void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int nTileTwipWidth_, int nTileTwipHeight_)

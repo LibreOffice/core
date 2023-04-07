@@ -437,7 +437,7 @@ void ScTabControl::SwitchToPageId(sal_uInt16 nId)
     {
         // notify LibreOfficeKit about changed page
         OString aPayload = OString::number(nId - 1);
-        pViewData->GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+        pViewData->GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload);
     }
 }
 

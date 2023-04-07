@@ -452,7 +452,7 @@ namespace svt
             DBG_ASSERT( bKnownSetting,
                 OString(
                     "OCommonPicker::initialize: unknown argument \""
-                    + OString(sSettingName.getStr(), sSettingName.getLength(), osl_getThreadTextEncoding())
+                    + OUStringToOString(sSettingName, osl_getThreadTextEncoding())
                     + "\"!").getStr() );
         }
     }

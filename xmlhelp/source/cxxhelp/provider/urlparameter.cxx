@@ -737,14 +737,12 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
         parString[last++] = "System";
         parString[last++] = "'" + urlParam->getByName( "System" ) + "'";
         parString[last++] = "productname";
-        parString[last++] = "'" + OString(
-            pDatabases->getProductName().getStr(),
-            pDatabases->getProductName().getLength(),
+        parString[last++] = "'" + OUStringToOString(
+            pDatabases->getProductName(),
             RTL_TEXTENCODING_UTF8 ) + "'";
         parString[last++] = "productversion";
         parString[last++] = "'" +
-            OString(  pDatabases->getProductVersion().getStr(),
-                          pDatabases->getProductVersion().getLength(),
+            OUStringToOString(  pDatabases->getProductVersion(),
                           RTL_TEXTENCODING_UTF8 ) + "'";
 
         parString[last++] = "imgtheme";
@@ -829,9 +827,8 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 
         OUString xslURL = pDatabases->getInstallPathAsURL();
 
-        OString xslURLascii = OString(
-                xslURL.getStr(),
-                xslURL.getLength(),
+        OString xslURLascii = OUStringToOString(
+                xslURL,
                 RTL_TEXTENCODING_UTF8) +
             "main_transform.xsl";
 

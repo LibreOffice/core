@@ -1521,7 +1521,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                         OUString sPayload = ".uno:TableRowHeight=" + sHeight;
 
                         GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                            OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US).getStr());
+                            OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US));
                     }
                 }
                 break;
@@ -1545,7 +1545,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                     OUString sPayload = ".uno:TableColumWidth=" + sWidth;
 
                     GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                        OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US).getStr());
+                        OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US));
                 }
 
                 break;

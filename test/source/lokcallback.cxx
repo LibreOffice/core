@@ -160,7 +160,7 @@ void TestLokCallbackWrapper::flushLOKData()
     {
         std::optional<OString> payload = viewShell->getLOKPayload(type, m_viewId);
         if (payload)
-            libreOfficeKitViewCallback(type, payload->getStr());
+            libreOfficeKitViewCallback(type, *payload);
     }
     for (const PerViewIdData& data : updatedTypesPerViewId)
     {
@@ -170,7 +170,7 @@ void TestLokCallbackWrapper::flushLOKData()
         assert(viewShell != nullptr);
         std::optional<OString> payload = viewShell->getLOKPayload(data.type, data.viewId);
         if (payload)
-            libreOfficeKitViewCallbackWithViewId(data.type, payload->getStr(), data.viewId);
+            libreOfficeKitViewCallbackWithViewId(data.type, *payload, data.viewId);
     }
 }
 

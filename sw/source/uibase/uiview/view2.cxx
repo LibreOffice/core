@@ -1017,10 +1017,9 @@ void SwView::Execute(SfxRequest &rReq)
             {
                 if (comphelper::LibreOfficeKit::isActive())
                 {
-                    OString aPayload(".uno:CurrentTrackedChangeId=");
                     sal_uInt32 nRedlineId = pNext->GetId();
-                    aPayload += OString::number(nRedlineId);
-                    libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload.getStr());
+                    OString aPayload(".uno:CurrentTrackedChangeId=" + OString::number(nRedlineId));
+                    libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload);
                 }
 
                 m_pWrtShell->SetInSelect();
@@ -1037,10 +1036,9 @@ void SwView::Execute(SfxRequest &rReq)
             {
                 if (comphelper::LibreOfficeKit::isActive())
                 {
-                    OString aPayload(".uno:CurrentTrackedChangeId=");
                     sal_uInt32 nRedlineId = pPrev->GetId();
-                    aPayload += OString::number(nRedlineId);
-                    libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload.getStr());
+                    OString aPayload(".uno:CurrentTrackedChangeId=" + OString::number(nRedlineId));
+                    libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload);
                 }
 
                 m_pWrtShell->SetInSelect();

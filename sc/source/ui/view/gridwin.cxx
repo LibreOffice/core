@@ -2433,7 +2433,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                     double fPPTX = pViewShell->GetViewData().GetPPTX();
                     int mouseX = aPos.X() / fPPTX;
                     OString aMsg(aUrl.toUtf8() + " coordinates: " + aCursor + ", " + OString::number(mouseX));
-                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aMsg.getStr());
+                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aMsg);
                 } else
                     ScGlobal::OpenURL(aUrl, aTarget);
             }
@@ -5024,7 +5024,7 @@ void ScGridWindow::notifyKitCellFollowJump( ) const
 {
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
 
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SC_FOLLOW_JUMP, getCellCursor().getStr());
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SC_FOLLOW_JUMP, getCellCursor());
 }
 
 void ScGridWindow::UpdateListValPos( bool bVisible, const ScAddress& rPos )
@@ -5827,7 +5827,7 @@ void ScGridWindow::notifyKitCellCursor() const
 {
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
 
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, getCellCursor().getStr());
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, getCellCursor());
     if (bListValButton && aListValPos == mrViewData.GetCurPos())
         updateLOKValListButton(true, aListValPos);
     std::vector<tools::Rectangle> aRects;
@@ -6119,8 +6119,8 @@ void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRect
     if (!aBoundingBox.IsEmpty())
         sBoundingBoxString = aBoundingBox.toString();
     OString aRectListString = rectanglesToString(rLogicRects);
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, sBoundingBoxString.getStr());
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectListString.getStr());
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, sBoundingBoxString);
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectListString);
 
     if (bInPrintTwips)
     {
@@ -6147,7 +6147,7 @@ void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRect
         pGrid->GetPixelRectsFor(mrViewData.GetMarkData() /* ours */, aPixelRects);
         auto aOtherLogicRects = convertPixelToLogical(pOther->GetViewData(), aPixelRects, aDummyBBox);
         SfxLokHelper::notifyOtherView(pViewShell, pOther, LOK_CALLBACK_TEXT_VIEW_SELECTION,
-                                      "selection", rectanglesToString(aOtherLogicRects).getStr());
+                                      "selection", rectanglesToString(aOtherLogicRects));
     }
 }
 
@@ -6189,8 +6189,8 @@ void ScGridWindow::updateOtherKitSelections() const
             if (!aBoundingBox.IsEmpty())
                 sBoundingBoxString = aBoundingBox.toString();
 
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, sBoundingBoxString.getStr());
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectsString.getStr());
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, sBoundingBoxString);
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectsString);
         }
         else
             SfxLokHelper::notifyOtherView(it, pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION,
@@ -6220,7 +6220,7 @@ void updateLibreOfficeKitAutoFill(const ScViewData& rViewData, tools::Rectangle 
     }
 
     ScTabViewShell* pViewShell = rViewData.GetViewShell();
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_AUTO_FILL_AREA, sRectangleString.getStr());
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_AUTO_FILL_AREA, sRectangleString);
 }
 
 } //end anonymous namespace
@@ -6752,8 +6752,8 @@ void ScGridWindow::UpdateDragRectOverlay()
             if (!aBoundingBox.IsEmpty())
                 sBoundingBoxString = aBoundingBox.toString();
 
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, sBoundingBoxString.getStr());
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectsString.getStr());
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, sBoundingBoxString);
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectsString);
         }
     }
 

@@ -134,7 +134,7 @@ void XmlWriter::attribute(const OString& name, const OString& value)
 
 void XmlWriter::attribute(const OString& name, std::u16string_view value)
 {
-    attribute(name, OUStringToOString(value, RTL_TEXTENCODING_UTF8).getStr());
+    attribute(name, OUStringToOString(value, RTL_TEXTENCODING_UTF8));
 }
 
 void XmlWriter::attribute(const OString& name, const sal_Int32 aNumber)

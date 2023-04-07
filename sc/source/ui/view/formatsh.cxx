@@ -1812,7 +1812,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                         {
                             OUString sPayload = ".uno:NumberFormat=" + aFormat;
                             GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                                OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US).getStr());
+                                OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US));
                         }
                     }
                     else

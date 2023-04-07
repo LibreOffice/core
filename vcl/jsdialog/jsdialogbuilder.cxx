@@ -194,7 +194,7 @@ JSDialogNotifyIdle::generateActionMessage(VclPtr<vcl::Window> pWindow,
         aJsonWriter->put("control_id", pWindow->get_id());
 
         for (auto it = pData->begin(); it != pData->end(); it++)
-            aJsonWriter->put(it->first.getStr(), it->second);
+            aJsonWriter->put(it->first, it->second);
     }
 
     return aJsonWriter;

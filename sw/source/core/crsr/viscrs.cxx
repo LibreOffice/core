@@ -228,7 +228,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         {
             m_nPageLastTime = nPage;
             OString aPayload = OString::number(nPage - 1);
-            m_pCursorShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+            m_pCursorShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload);
         }
 
         // This may get called often, so instead of sending data on each update, just notify
@@ -986,7 +986,7 @@ void SwShellCursor::Show(SfxViewShell const * pViewShell)
     }
     else
     {
-        GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
+        GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect);
         SfxLokHelper::notifyOtherViews(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
     }
 }

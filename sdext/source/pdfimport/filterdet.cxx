@@ -591,7 +591,7 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
                                 {
                                     OString aIsoPwd = OUStringToOString( io_rPwd,
                                                                                    RTL_TEXTENCODING_ISO_8859_1 );
-                                    bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
+                                    bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd );
                                 }
                                 if( ! bAuthenticated )
                                 {
@@ -616,7 +616,7 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
                                         bEntered = getPassword( xIntHdl, io_rPwd, ! bEntered, aDocName );
                                         OString aIsoPwd = OUStringToOString( io_rPwd,
                                                                                        RTL_TEXTENCODING_ISO_8859_1 );
-                                        bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
+                                        bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd );
                                     } while( bEntered && ! bAuthenticated );
                                 }
 

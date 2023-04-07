@@ -1024,13 +1024,13 @@ namespace sw::mark
 
         // Placeholder text
         sPayload.append("\"placeholderText\": \"" + OUStringToOString(SwResId(STR_DROP_DOWN_EMPTY_LIST), RTL_TEXTENCODING_UTF8) + "\"}}");
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_FORM_FIELD_BUTTON, sPayload.toString().getStr());
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_FORM_FIELD_BUTTON, sPayload.toString());
     }
 
     void DropDownFieldmark::SendLOKHideMessage(const SfxViewShell* pViewShell)
     {
-        OString sPayload = "{\"action\": \"hide\", \"type\": \"drop-down\"}";
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_FORM_FIELD_BUTTON, sPayload.getStr());
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_FORM_FIELD_BUTTON,
+            "{\"action\": \"hide\", \"type\": \"drop-down\"}");
     }
 
     DateFieldmark::DateFieldmark(const SwPaM& rPaM)

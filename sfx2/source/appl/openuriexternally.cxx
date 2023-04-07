@@ -58,7 +58,7 @@ void URITools::openURI(const OUString& sURI, bool bHandleSystemShellExecuteExcep
         if (SfxViewShell* pViewShell = SfxViewShell::Current())
         {
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED,
-                                                   sURI.toUtf8().getStr());
+                                                   sURI.toUtf8());
         }
         delete this;
         return;

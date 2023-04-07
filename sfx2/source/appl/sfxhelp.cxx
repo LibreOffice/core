@@ -723,13 +723,13 @@ static bool impl_showOnlineHelp(const OUString& rURL, weld::Widget* pDialogParen
         if(SfxViewShell* pViewShell = SfxViewShell::Current())
         {
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED,
-                                                   aHelpLink.toUtf8().getStr());
+                                                   aHelpLink.toUtf8());
             return true;
         }
         else if (GetpApp())
         {
             GetpApp()->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED,
-                                                   aHelpLink.toUtf8().getStr());
+                                                   aHelpLink.toUtf8());
             return true;
         }
 

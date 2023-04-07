@@ -997,7 +997,7 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, Con
                     if (bOnlyInvalidateCurrentView)
                     {
                         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR,
-                            aViewColors.m_aAppBackgroundColor.AsRGBHexString().toUtf8().getStr());
+                            aViewColors.m_aAppBackgroundColor.AsRGBHexString().toUtf8());
                     }
                 }
             }

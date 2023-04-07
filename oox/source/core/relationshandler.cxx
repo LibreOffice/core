@@ -40,12 +40,16 @@ namespace {
         'file.xml'              -> '_rels/file.xml.rels'
         ''                      -> '_rels/.rels'
  */
-OUString lclGetRelationsPath( const OUString& rFragmentPath )
+OUString lclGetRelationsPath( std::u16string_view rFragmentPath )
 {
-    sal_Int32 nPathLen = ::std::max< sal_Int32 >( rFragmentPath.lastIndexOf( '/' ) + 1, 0 );
-    return OUString::Concat(std::u16string_view(rFragmentPath.getStr(), nPathLen )) +    // file path including slash
+    size_t nPathLen = rFragmentPath.rfind( '/' );
+    if (nPathLen == std::u16string_view::npos)
+        nPathLen = 0;
+    else
+        ++nPathLen;
+    return OUString::Concat(rFragmentPath.substr(0, nPathLen)) +    // file path including slash
         "_rels/" +                                // additional '_rels/' path
-        std::u16string_view(rFragmentPath.getStr() + nPathLen) +  // file name after path
+        rFragmentPath.substr(nPathLen) +  // file name after path
         ".rels";                                 // '.rels' suffix
 }
 

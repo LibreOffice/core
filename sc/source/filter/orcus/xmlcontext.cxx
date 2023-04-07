@@ -236,8 +236,8 @@ void ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
             OUString aTabName;
             mrDoc.GetName(rLink.maPos.Tab(), aTabName);
             filter.set_cell_link(
-                rLink.maPath.getStr(),
-                OUStringToOString(aTabName, RTL_TEXTENCODING_UTF8).getStr(),
+                rLink.maPath,
+                aTabName.toUtf8(),
                 rLink.maPos.Row(), rLink.maPos.Col());
         }
 
@@ -247,7 +247,7 @@ void ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
             OUString aTabName;
             mrDoc.GetName(rLink.maPos.Tab(), aTabName);
             filter.start_range(
-                OUStringToOString(aTabName, RTL_TEXTENCODING_UTF8).getStr(),
+                aTabName.toUtf8(),
                 rLink.maPos.Row(), rLink.maPos.Col());
 
             std::for_each(rLink.maFieldPaths.begin(), rLink.maFieldPaths.end(),

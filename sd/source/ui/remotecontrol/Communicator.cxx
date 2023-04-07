@@ -78,7 +78,7 @@ void Communicator::execute()
                 OUStringToOString( ::comphelper::DocumentInfo::getDocumentTitle( xFrame->getController()->getModel() ), RTL_TEXTENCODING_UTF8 ) +
                 "\n\n";
 
-            pTransmitter->addMessage( aBuffer.getStr(), Transmitter::PRIORITY_LOW );
+            pTransmitter->addMessage( aBuffer, Transmitter::PRIORITY_LOW );
         }
         else
         {

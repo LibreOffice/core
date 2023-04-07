@@ -1280,7 +1280,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
 
     OUString payload = aBuffer.makeStringAndClear();
     if (const SfxViewShell* pViewShell = pViewFrame->GetViewShell())
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, payload.toUtf8().getStr());
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, payload.toUtf8());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

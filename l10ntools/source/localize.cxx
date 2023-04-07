@@ -153,7 +153,7 @@ void InitPoFile(
 
     //Add header to the po file
     PoOfstream aPoOutPut;
-    aPoOutPut.open(rOutPath.getStr());
+    aPoOutPut.open(rOutPath);
     if (!aPoOutPut.isOpen())
     {
         std::cerr

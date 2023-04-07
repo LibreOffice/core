@@ -776,7 +776,7 @@ void ScHTMLExport::WriteTables()
 
         // BORDER=0, we do the styling of the cells in <TD>
         aByteStrOut.append(" " OOO_STRING_SVTOOLS_HTML_O_border "=\"0\"");
-        IncIndent(1); TAG_ON_LF( aByteStrOut.makeStringAndClear().getStr() );
+        IncIndent(1); TAG_ON_LF( aByteStrOut.makeStringAndClear() );
 
         // --- <COLGROUP> ----
         {
@@ -795,7 +795,7 @@ void ScHTMLExport::WriteTables()
                 {
                     if( nSpan != 0 )
                     {
-                        TAG_ON(lcl_getColGroupString(nSpan, nWidth).getStr());
+                        TAG_ON(lcl_getColGroupString(nSpan, nWidth));
                         TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_colgroup );
                     }
                     nWidth = ToPixel( pDoc->GetColWidth( nCol, nTab ) );
@@ -807,7 +807,7 @@ void ScHTMLExport::WriteTables()
             }
             if( nSpan )
             {
-                TAG_ON(lcl_getColGroupString(nSpan, nWidth).getStr());
+                TAG_ON(lcl_getColGroupString(nSpan, nWidth));
                 TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_colgroup );
             }
         }
@@ -871,7 +871,7 @@ void ScHTMLExport::WriteTables()
                         " "
                         OOO_STRING_SVTOOLS_HTML_O_clear "="
                         OOO_STRING_SVTOOLS_HTML_AL_left);
-                TAG_ON_LF( aByteStrOut.makeStringAndClear().getStr() );
+                TAG_ON_LF( aByteStrOut.makeStringAndClear() );
             }
         }
 
@@ -1106,7 +1106,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
     aStrTD.append(HTMLOutFuncs::CreateTableDataOptionsValNum(bValueData, fVal,
         nFormat, *pFormatter, &aNonConvertibleChars));
 
-    TAG_ON(aStrTD.makeStringAndClear().getStr());
+    TAG_ON(aStrTD.makeStringAndClear());
 
     //write the note for this as the first thing in the tag
     ScPostIt* pNote = pDoc->HasNote(aPos) ? pDoc->GetNote(aPos) : nullptr;
@@ -1115,7 +1115,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
         //create the comment indicator
         OString aStr = OOO_STRING_SVTOOLS_HTML_anchor " "
             OOO_STRING_SVTOOLS_HTML_O_class "=\"comment-indicator\"";
-        TAG_ON(aStr.getStr());
+        TAG_ON(aStr);
         TAG_OFF(OOO_STRING_SVTOOLS_HTML_anchor);
         OUT_LF();
 
@@ -1173,7 +1173,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
             aStr.append(" " OOO_STRING_SVTOOLS_HTML_O_color "="
                 + lcl_makeHTMLColorTriplet(aColor));
         }
-        TAG_ON(aStr.makeStringAndClear().getStr());
+        TAG_ON(aStr.makeStringAndClear());
     }
 
     OUString aURL;
@@ -1193,7 +1193,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
     {
         OString aURLStr = HTMLOutFuncs::ConvertStringToHTML(aURL, &aNonConvertibleChars);
         OString aStr = OOO_STRING_SVTOOLS_HTML_anchor " " OOO_STRING_SVTOOLS_HTML_O_href "=\"" + aURLStr + "\"";
-        TAG_ON(aStr.getStr());
+        TAG_ON(aStr);
     }
 
     OUString aStrOut;

@@ -2114,7 +2114,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
             GetFrameWin()->LeaveWait();
             if (!bIsApi)
             {
-                GetViewData().GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_NOT_FOUND, pSearchItem->GetSearchString().toUtf8().getStr());
+                GetViewData().GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_NOT_FOUND, pSearchItem->GetSearchString().toUtf8());
                 SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::NotFound);
             }
 
@@ -2197,7 +2197,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                 boost::property_tree::write_json(aStream, aTree);
                 OString aPayload = aStream.str().c_str();
                 SfxViewShell* pViewShell = GetViewData().GetViewShell();
-                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload);
 
                 // Trigger LOK_CALLBACK_TEXT_SELECTION now.
                 MarkDataChanged();

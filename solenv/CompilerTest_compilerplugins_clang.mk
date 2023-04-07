@@ -93,6 +93,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/typedefparam \
     compilerplugins/clang/test/typeidcomparison \
     compilerplugins/clang/test/unnecessarycatchthrow \
+    compilerplugins/clang/test/unnecessarygetstr \
     compilerplugins/clang/test/unnecessaryoverride \
     compilerplugins/clang/test/unnecessaryoverride-dtor \
     compilerplugins/clang/test/unnecessaryparen \

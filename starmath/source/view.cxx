@@ -2391,11 +2391,11 @@ void SmViewShell::SendCaretToLOK() const
     if (const auto& payload = getLOKPayload(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, nViewId))
     {
         libreOfficeKitViewCallbackWithViewId(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR,
-                                             payload->getStr(), nViewId);
+                                             *payload, nViewId);
     }
     if (const auto& payload = getLOKPayload(LOK_CALLBACK_TEXT_SELECTION, nViewId))
     {
-        libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, payload->getStr());
+        libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, *payload);
     }
 }
 

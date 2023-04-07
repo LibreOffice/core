@@ -5190,7 +5190,7 @@ static bool getFromTransferable(
     }
 
     datatransfer::DataFlavor aFlavor;
-    aFlavor.MimeType = OUString::fromUtf8(aMimeType.getStr());
+    aFlavor.MimeType = OUString::fromUtf8(aMimeType);
     if (aMimeType == "text/plain;charset=utf-16")
         aFlavor.DataType = cppu::UnoType<OUString>::get();
     else
@@ -7005,7 +7005,7 @@ static char* lo_getFilterTypes(LibreOfficeKit* pThis)
             OUString aValue;
             if (it != std::cend(aValues) && (it->Value >>= aValue) && !aValue.isEmpty())
             {
-                auto typeNode = aJson.startNode(rType.toUtf8().getStr());
+                auto typeNode = aJson.startNode(rType.toUtf8());
                 aJson.put("MediaType", aValue.toUtf8());
             }
         }

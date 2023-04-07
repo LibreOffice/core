@@ -34,7 +34,7 @@ OString OOO_DLLPUBLIC_TEST getTextSelection(
     }
 
     datatransfer::DataFlavor aFlavor;
-    aFlavor.MimeType = OUString::fromUtf8(mimeType.getStr());
+    aFlavor.MimeType = OUString::fromUtf8(mimeType);
     if (mimeType == "text/plain;charset=utf-16")
         aFlavor.DataType = cppu::UnoType<OUString>::get();
     else

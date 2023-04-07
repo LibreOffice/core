@@ -338,7 +338,7 @@ void ScInputHandler::SendReferenceMarks( const SfxViewShell* pViewShell,
 
     OString aPayload = ss.str().c_str();
     pViewShell->libreOfficeKitViewCallback(
-                LOK_CALLBACK_REFERENCE_MARKS, aPayload.getStr() );
+                LOK_CALLBACK_REFERENCE_MARKS, aPayload );
 }
 
 void ScInputHandler::InitRangeFinder( const OUString& rFormula )
@@ -1454,7 +1454,7 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
             aPayload[nLen - 1] = ']';
 
             OString s = aPayload.makeStringAndClear();
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CALC_FUNCTION_LIST, s.getStr());
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CALC_FUNCTION_LIST, s);
         }
         // not tunnel tooltips in the lok case
         return;
@@ -2739,7 +2739,7 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
             if (pActiveViewSh)
             {
                 // TODO: deprecated?
-                pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aText.toUtf8().getStr());
+                pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aText.toUtf8());
             }
         }
     }
@@ -4259,7 +4259,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
 
                         ScInputHandler::LOKSendFormulabarUpdate(pActiveView, pActiveViewSh, aString, aSel);
                         // TODO: deprecated?
-                        pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aString.toUtf8().getStr());
+                        pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aString.toUtf8());
                     }
                 }
 
@@ -4307,7 +4307,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                     }
 
                     if (comphelper::LibreOfficeKit::isActive() && pActiveViewSh)
-                        pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_ADDRESS, aPosStr.toUtf8().getStr());
+                        pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_ADDRESS, aPosStr.toUtf8());
                 }
 
                 if (bStopEditing) {

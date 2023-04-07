@@ -2446,7 +2446,7 @@ void SwCursorShell::ShowCursor()
     if (comphelper::LibreOfficeKit::isActive())
     {
         const OString aPayload = OString::boolean(m_bSVCursorVis);
-        GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload.getStr());
+        GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload);
         SfxLokHelper::notifyOtherViews(GetSfxViewShell(), LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
     }
 
@@ -2468,7 +2468,7 @@ void SwCursorShell::HideCursor()
     if (comphelper::LibreOfficeKit::isActive())
     {
         OString aPayload = OString::boolean(m_bSVCursorVis);
-        GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload.getStr());
+        GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload);
         SfxLokHelper::notifyOtherViews(GetSfxViewShell(), LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
     }
 }

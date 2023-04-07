@@ -721,7 +721,7 @@ void OHTMLImportExport::WriteTables()
             "=1";
 
     IncIndent(1);
-    HTMLOutFuncs::Out_AsciiTag(*m_pStream, aStrOut.getStr());
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, aStrOut);
 
     FontOn();
 
@@ -883,7 +883,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat, sal_Int32 nWidthPixel, sal
         }
     }
 
-    HTMLOutFuncs::Out_AsciiTag(*m_pStream, aStrTD.getStr());
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, aStrTD);
 
     FontOn();
 

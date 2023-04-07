@@ -2380,8 +2380,8 @@ void SvxTableController::updateSelectionOverlay()
 
     if(SfxViewShell* pViewShell = SfxViewShell::Current())
     {
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, aSelection.toString().getStr());
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aSelection.toString().getStr());
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, aSelection.toString());
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aSelection.toString());
     }
 }
 

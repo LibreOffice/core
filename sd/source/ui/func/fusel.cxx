@@ -280,7 +280,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 if (comphelper::LibreOfficeKit::isActive())
                 {
                     SfxViewShell& rSfxViewShell = mpViewShell->GetViewShellBase();
-                    rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aVEvt.mpURLField->GetURL().toUtf8().getStr());
+                    rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aVEvt.mpURLField->GetURL().toUtf8());
                     return true;
                 }
 

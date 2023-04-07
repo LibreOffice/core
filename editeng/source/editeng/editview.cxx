@@ -524,7 +524,7 @@ void EditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bActivat
             return;
 
         static const OString aPayload = OString::boolean(true);
-        pImpEditView->mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload.getStr());
+        pImpEditView->mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload);
         pImpEditView->mpViewShell->NotifyOtherViews(LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
     }
 }
@@ -542,7 +542,7 @@ void EditView::HideCursor(bool bDeactivate)
             return;
 
         OString aPayload = OString::boolean(false);
-        pImpEditView->mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload.getStr());
+        pImpEditView->mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload);
         pImpEditView->mpViewShell->NotifyOtherViews(LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
     }
 }

@@ -1149,7 +1149,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
         {
             // We have a new selection, so both pViewShell and the
             // other views want to know about it.
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelectionText.getStr());
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelectionText);
             SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionTextView);
         }
 

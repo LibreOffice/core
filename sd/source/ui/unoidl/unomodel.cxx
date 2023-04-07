@@ -2505,7 +2505,7 @@ void SdXImpressDocument::getPostIts(::tools::JsonWriter& rJsonWriter)
         {
             sal_uInt32 nID = sd::getAnnotationId(xAnnotation);
             OString nodeName = "comment" + OString::number(nID);
-            auto commentNode = rJsonWriter.startNode(nodeName.getStr());
+            auto commentNode = rJsonWriter.startNode(nodeName);
             rJsonWriter.put("id", nID);
             rJsonWriter.put("author", xAnnotation->getAuthor());
             rJsonWriter.put("dateTime", utl::toISO8601(xAnnotation->getDateTime()));

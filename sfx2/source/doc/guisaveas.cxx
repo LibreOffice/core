@@ -1809,8 +1809,7 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
         if ( SfxViewShell* pShell = SfxViewShell::Current() )
         {
             OUString sURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-            pShell->libreOfficeKitViewCallback( LOK_CALLBACK_EXPORT_FILE,
-                OUStringToOString(sURL, RTL_TEXTENCODING_UTF8).getStr() );
+            pShell->libreOfficeKitViewCallback( LOK_CALLBACK_EXPORT_FILE, sURL.toUtf8() );
         }
     }
 

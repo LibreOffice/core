@@ -107,7 +107,7 @@ void ScPrintRangeSaver::GetPrintRangesInfo(tools::JsonWriter& rPrintRanges) cons
                 (nLast == nIdx ? std::string_view("]") : std::string_view("], ")));
         }
 
-        rPrintRanges.putRaw(aRanges.getStr());
+        rPrintRanges.putRaw(aRanges);
     }
 }
 

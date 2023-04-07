@@ -359,7 +359,7 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingInplace()
         }
 
         OString str = (m_bNegativeX ? lcl_negateRectX(aRect) : aRect).toString() + ", \"INPLACE\"";
-        pViewShell->libreOfficeKitViewCallback( LOK_CALLBACK_GRAPHIC_SELECTION, str.getStr() );
+        pViewShell->libreOfficeKitViewCallback( LOK_CALLBACK_GRAPHIC_SELECTION, str );
     }
 
 }

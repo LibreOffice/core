@@ -422,7 +422,7 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
             if (mpLOKSpecialPositioning)
                 aPayload += ":: " + sRefPoint;
 
-            mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aPayload.getStr());
+            mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aPayload);
 
             tools::Rectangle& rEnd = aRectangles.back();
             tools::Rectangle aEnd(rEnd.Right() - 1, rEnd.Top(), rEnd.Right(), rEnd.Bottom());
@@ -431,7 +431,7 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
             if (mpLOKSpecialPositioning)
                 aPayload += ":: " + sRefPoint;
 
-            mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, aPayload.getStr());
+            mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, aPayload);
         }
 
         if (mpOtherShell)
@@ -442,7 +442,7 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
         }
         else
         {
-            mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangle.getStr());
+            mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangle);
             mpViewShell->NotifyOtherViews(LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRectangle);
         }
 

@@ -999,7 +999,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus)
             // notify LibreOfficeKit about changed page
             OString aPayload = OString::number(nSelectedPage);
             if (SfxViewShell* pViewShell = GetViewShell())
-                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload);
         }
 
         rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetDoc() ) );

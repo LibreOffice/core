@@ -713,13 +713,11 @@ OUString FTPURL::ren(const OUString& NewTitle)
     // post request
     OUString OldTitle = net_title();
     OString renamefrom = "RNFR " +
-        OString(OldTitle.getStr(),
-                     OldTitle.getLength(),
+        OUStringToOString(OldTitle,
                      RTL_TEXTENCODING_UTF8);
 
     OString renameto = "RNTO " +
-        OString(NewTitle.getStr(),
-                     NewTitle.getLength(),
+        OUStringToOString(NewTitle,
                      RTL_TEXTENCODING_UTF8);
 
     struct curl_slist *slist = nullptr;

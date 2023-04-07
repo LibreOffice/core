@@ -572,7 +572,7 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
     // unless we are jumping to a TOC mark.
     if (comphelper::LibreOfficeKit::isActive() && !rURL.startsWith("#"))
     {
-        rVSh.GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, rURL.toUtf8().getStr());
+        rVSh.GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, rURL.toUtf8());
         return;
     }
 

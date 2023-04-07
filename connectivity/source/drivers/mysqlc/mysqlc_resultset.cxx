@@ -509,8 +509,7 @@ DateTime SAL_CALL OResultSet::getTimestamp(sal_Int32 column)
     OString sVal = m_aRows[m_nRowPosition][column - 1];
 
     // YY-MM-DD HH:MM:SS
-    std::vector<OString> dateAndTime
-        = lcl_split(std::string_view(sVal.getStr(), getDataLength(column)), ' ');
+    std::vector<OString> dateAndTime = lcl_split(sVal.subView(0, getDataLength(column)), ' ');
 
     auto dateParts = lcl_split(dateAndTime.at(0), '-');
     auto timeParts = lcl_split(dateAndTime.at(1), ':');

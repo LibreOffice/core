@@ -929,7 +929,7 @@ static bool checkEncryption( std::u16string_view                           i_rPa
                     {
                         OString aIsoPwd = OUStringToOString( io_rPwd,
                                                                        RTL_TEXTENCODING_ISO_8859_1 );
-                        bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
+                        bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd );
                     }
                     if( bAuthenticated )
                         bSuccess = true;
@@ -943,7 +943,7 @@ static bool checkEncryption( std::u16string_view                           i_rPa
                                 bEntered = getPassword( i_xIHdl, io_rPwd, ! bEntered, i_rDocName );
                                 OString aIsoPwd = OUStringToOString( io_rPwd,
                                                                                RTL_TEXTENCODING_ISO_8859_1 );
-                                bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
+                                bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd );
                             } while( bEntered && ! bAuthenticated );
                         }
 

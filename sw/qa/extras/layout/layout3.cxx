@@ -169,8 +169,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf122878)
     for (sal_Int32 i = 1; i <= nFirstPageParaCount; ++i)
     {
         const OString xPath = "/root/page[1]/body/txt[" + OString::number(i) + "]/infos/bounds";
-        const sal_Int32 nTxtBottom = getXPath(pXmlDoc, xPath.getStr(), "top").toInt32()
-                                     + getXPath(pXmlDoc, xPath.getStr(), "height").toInt32();
+        const sal_Int32 nTxtBottom = getXPath(pXmlDoc, xPath, "top").toInt32()
+                                     + getXPath(pXmlDoc, xPath, "height").toInt32();
         // No body paragraphs should overlap the table in the footer
         CPPUNIT_ASSERT_MESSAGE(OString("testing paragraph #" + OString::number(i)).getStr(),
                                nTxtBottom <= nTblTop);

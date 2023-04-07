@@ -901,7 +901,7 @@ void Edit::ImplSetText( const OUString& rText, const Selection* pNewSelection )
 {
     // we delete text by "selecting" the old text completely then calling InsertText; this is flicker free
     if ( ( rText.getLength() > mnMaxTextLen ) ||
-         ( std::u16string_view(rText) == std::u16string_view(maText.getStr(), maText.getLength())
+         ( std::u16string_view(rText) == std::u16string_view(maText)
            && (!pNewSelection || (*pNewSelection == maSelection)) ) )
         return;
 
@@ -2006,8 +2006,7 @@ void Edit::Command( const CommandEvent& rCEvt )
         pPopup->EnableItem(pPopup->GetItemId(u"specialchar"), bEnableSpecialChar);
         pPopup->EnableItem(
             pPopup->GetItemId(u"undo"),
-            std::u16string_view(maUndoText)
-                != std::u16string_view(maText.getStr(), maText.getLength()));
+            std::u16string_view(maUndoText) != std::u16string_view(maText));
         bool bAllSelected = maSelection.Min() == 0 && maSelection.Max() == maText.getLength();
         pPopup->EnableItem(pPopup->GetItemId(u"selectall"), !bAllSelected);
         pPopup->ShowItem(pPopup->GetItemId(u"specialchar"), pImplFncGetSpecialChars != nullptr);
