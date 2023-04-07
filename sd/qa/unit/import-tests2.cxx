@@ -178,6 +178,7 @@ public:
     void testTdf144092TableHeight();
     void testTdf151547TransparentWhiteText();
     void testTdf149588TransparentSolidFill();
+    void testOverflowBehaviorClip();
 
     CPPUNIT_TEST_SUITE(SdImportTest2);
 
@@ -248,6 +249,7 @@ public:
     CPPUNIT_TEST(testTdf144092TableHeight);
     CPPUNIT_TEST(testTdf151547TransparentWhiteText);
     CPPUNIT_TEST(testTdf149588TransparentSolidFill);
+    CPPUNIT_TEST(testOverflowBehaviorClip);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2064,8 +2066,29 @@ void SdImportTest2::testTdf149588TransparentSolidFill()
     xDocShRef->DoClose();
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest2);
+void SdImportTest2::testOverflowBehaviorClip()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/style-overflow-behavior-clip.fodp"),
+        FODP);
+    {
+        uno::Reference<beans::XPropertySet> xPropSet(getShapeFromPage(0, 0, xDocShRef));
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: 1
+        // - Actual  : 0
+        CPPUNIT_ASSERT_EQUAL(true,
+                             xPropSet->getPropertyValue("TextClipVerticalOverflow").get<bool>());
+    }
 
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP);
+    {
+        uno::Reference<beans::XPropertySet> xPropSet(getShapeFromPage(0, 0, xDocShRef));
+        CPPUNIT_ASSERT_EQUAL(true,
+                             xPropSet->getPropertyValue("TextClipVerticalOverflow").get<bool>());
+    }
+}
+
+CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest2);
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
