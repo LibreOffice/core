@@ -1059,8 +1059,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154319)
     };
 
     // tdf#154360: check tab stops between the number and the entry text
+    // The last (10th) level does not correspont to any MS level (only 9 levels there)
     constexpr sal_Int32 levelTabStops[]
-        = { 776, 1270, 1270, 1270, 1270, 1270, 1270, 1270, 1270, 1270 };
+        = { 776, 1270, 1270, 1270, 1270, 1270, 1270, 1270, 1270, -1 };
 
     //start with level 1, 0 is the header level
     for (sal_Int32 nLevel = 1; nLevel < xLevelFormats->getCount(); ++nLevel)
@@ -1068,27 +1069,80 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154319)
         css::uno::Sequence<css::beans::PropertyValues> aLevel;
         xLevelFormats->getByIndex(nLevel) >>= aLevel;
 
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aLevel.getLength());
+        sal_Int32 nTabStop = levelTabStops[nLevel - 1];
+        sal_Int32 nExpectedTokens = nTabStop < 0 ? 8 : 9;
+        CPPUNIT_ASSERT_EQUAL(nExpectedTokens, aLevel.getLength());
+        sal_Int32 nIndex = 0;
+
+        checkPropVal(OUString("TokenHyperlinkStart"), aLevel[nIndex++], "TokenType", nLevel);
+
+        checkPropVal(OUString("TokenEntryNumber"), aLevel[nIndex++], "TokenType", nLevel);
+
+        if (nTabStop >= 0)
+        {
+            checkPropVal(OUString("TokenTabStop"), aLevel[nIndex], "TokenType", nLevel);
+            checkPropVal(levelTabStops[nLevel - 1], aLevel[nIndex++], "TabStopPosition", nLevel);
+        }
+
+        checkPropVal(OUString("TokenEntryText"), aLevel[nIndex++], "TokenType", nLevel);
+
+        checkPropVal(OUString("TokenTabStop"), aLevel[nIndex++], "TokenType", nLevel);
+
+        checkPropVal(OUString("TokenChapterInfo"), aLevel[nIndex++], "TokenType", nLevel);
+
+        checkPropVal(OUString("TokenText"), aLevel[nIndex], "TokenType", nLevel);
+        checkPropVal(OUString("\""), aLevel[nIndex++], "Text", nLevel);
+
+        checkPropVal(OUString("TokenPageNumber"), aLevel[nIndex++], "TokenType", nLevel);
+
+        checkPropVal(OUString("TokenHyperlinkEnd"), aLevel[nIndex++], "TokenType", nLevel);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf154695)
+{
+    createSwDoc("tdf154695-ToC_no_numbers.docx");
+
+    css::uno::Reference<css::text::XDocumentIndexesSupplier> xSupplier(mxComponent,
+                                                                       css::uno::UNO_QUERY_THROW);
+    auto xIndexes = xSupplier->getDocumentIndexes();
+    css::uno::Reference<css::beans::XPropertySet> xTOCIndex(xIndexes->getByIndex(0),
+                                                            css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::container::XIndexReplace> xLevelFormats;
+    CPPUNIT_ASSERT(xTOCIndex->getPropertyValue("LevelFormat") >>= xLevelFormats);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), xLevelFormats->getCount());
+
+    const auto checkPropVal = [](const auto& expected, const css::beans::PropertyValues& entry,
+                                 const OUString& name, sal_Int32 level) {
+        auto it
+            = std::find_if(entry.begin(), entry.end(),
+                           [&name](const css::beans::PropertyValue& p) { return p.Name == name; });
+        OString msg = "Property: " + name.toUtf8() + ", level: " + OString::number(level);
+        CPPUNIT_ASSERT_MESSAGE(msg.getStr(), it != entry.end());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), css::uno::Any(expected), it->Value);
+    };
+
+    //start with level 1, 0 is the header level
+    for (sal_Int32 nLevel = 1; nLevel < xLevelFormats->getCount(); ++nLevel)
+    {
+        css::uno::Sequence<css::beans::PropertyValues> aLevel;
+        xLevelFormats->getByIndex(nLevel) >>= aLevel;
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aLevel.getLength());
 
         checkPropVal(OUString("TokenHyperlinkStart"), aLevel[0], "TokenType", nLevel);
 
         checkPropVal(OUString("TokenEntryNumber"), aLevel[1], "TokenType", nLevel);
 
-        checkPropVal(OUString("TokenTabStop"), aLevel[2], "TokenType", nLevel);
-        checkPropVal(levelTabStops[nLevel - 1], aLevel[2], "TabStopPosition", nLevel);
+        // There's no tab stop between [#E] and [E]!
 
-        checkPropVal(OUString("TokenEntryText"), aLevel[3], "TokenType", nLevel);
+        checkPropVal(OUString("TokenEntryText"), aLevel[2], "TokenType", nLevel);
 
-        checkPropVal(OUString("TokenTabStop"), aLevel[4], "TokenType", nLevel);
+        checkPropVal(OUString("TokenTabStop"), aLevel[3], "TokenType", nLevel);
 
-        checkPropVal(OUString("TokenChapterInfo"), aLevel[5], "TokenType", nLevel);
+        checkPropVal(OUString("TokenPageNumber"), aLevel[4], "TokenType", nLevel);
 
-        checkPropVal(OUString("TokenText"), aLevel[6], "TokenType", nLevel);
-        checkPropVal(OUString("\""), aLevel[6], "Text", nLevel);
-
-        checkPropVal(OUString("TokenPageNumber"), aLevel[7], "TokenType", nLevel);
-
-        checkPropVal(OUString("TokenHyperlinkEnd"), aLevel[8], "TokenType", nLevel);
+        checkPropVal(OUString("TokenHyperlinkEnd"), aLevel[5], "TokenType", nLevel);
     }
 }
 
