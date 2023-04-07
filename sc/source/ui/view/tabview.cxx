@@ -1187,7 +1187,7 @@ void ScTabView::ScrollHdl(ScrollAdaptor* pScroll)
                 // horizontal scroll wheel or trackpad swipe events, most
                 // vertical scroll wheel or trackpad swipe events will trigger
                 // the anti-jitter code because nScrollPos and nPrevDragPos
-                // will be equal and nDelta will be overriden and set to zero.
+                // will be equal and nDelta will be overridden and set to zero.
                 // So, only use the anti-jitter code for mouse drag events.
                 if ( eType == ScrollType::Drag )
                 {
