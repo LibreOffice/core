@@ -19,6 +19,7 @@
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <comphelper/string.hxx>
+#include <comphelper/xmlencode.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
 #include <osl/diagnose.h>
@@ -510,7 +511,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
             OString sOut =
                 "<" OOO_STRING_SVTOOLS_HTML_comment
                 " " +
-                OUStringToOString(sComment, RTL_TEXTENCODING_UTF8) +
+                OUStringToOString(comphelper::string::encodeForXml(sComment), RTL_TEXTENCODING_UTF8) +
                 " -->";
             rWrt.Strm().WriteOString( sOut );
         }

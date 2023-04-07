@@ -27,6 +27,7 @@
 #include <rtl/tencinfo.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/xmlencode.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
 #include <unotools/pathoptions.hxx>
@@ -289,10 +290,10 @@ OUString HtmlState::SetLink( const OUString& aLink, const OUString& aTarget )
 
     if (!aLink.isEmpty())
     {
-        aStr += "<a href=\"" + aLink;
+        aStr += "<a href=\"" + comphelper::string::encodeForXml(aLink);
         if (!aTarget.isEmpty())
         {
-            aStr += "\" target=\"" + aTarget;
+            aStr += "\" target=\"" + comphelper::string::encodeForXml(aTarget);
         }
         aStr += "\">";
         mbLink = true;
