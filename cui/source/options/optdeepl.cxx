@@ -32,8 +32,15 @@ OptDeeplTabPage::~OptDeeplTabPage() {}
 
 void OptDeeplTabPage::Reset(const SfxItemSet*)
 {
-    m_xAPIUrl->set_text(*officecfg::Office::Linguistic::Translation::Deepl::ApiURL::get());
-    m_xAuthKey->set_text(*officecfg::Office::Linguistic::Translation::Deepl::AuthKey::get());
+    std::optional<OUString> oDeeplAPIUrl
+        = officecfg::Office::Linguistic::Translation::Deepl::ApiURL::get();
+    if (oDeeplAPIUrl && !oDeeplAPIUrl->isEmpty())
+        m_xAPIUrl->set_text(*officecfg::Office::Linguistic::Translation::Deepl::ApiURL::get());
+
+    std::optional<OUString> oDeeplAuthKey
+        = officecfg::Office::Linguistic::Translation::Deepl::AuthKey::get();
+    if (oDeeplAuthKey && !oDeeplAuthKey->isEmpty())
+        m_xAuthKey->set_text(*officecfg::Office::Linguistic::Translation::Deepl::AuthKey::get());
 }
 
 bool OptDeeplTabPage::FillItemSet(SfxItemSet*)
