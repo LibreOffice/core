@@ -48,6 +48,7 @@
 #include <document.hxx>
 #include <docpool.hxx>
 #include <stlpool.hxx>
+#include <stylehelper.hxx>
 #include <patattr.hxx>
 #include <drwlayer.hxx>
 #include <userdat.hxx>
@@ -923,7 +924,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
     ScCaptionInitData& rInitData = *aNoteData.mxInitData;
     rInitData.moItemSet.emplace(std::move(rItemSet));
     rInitData.mxOutlinerObj = rOutlinerObj;
-    rInitData.maStyleName = rStyleName;
+    rInitData.maStyleName = ScStyleNameConversion::ProgrammaticToDisplayName(rStyleName, SfxStyleFamily::Frame);
 
     // convert absolute caption position to relative position
     rInitData.mbDefaultPosSize = rCaptionRect.IsEmpty();
