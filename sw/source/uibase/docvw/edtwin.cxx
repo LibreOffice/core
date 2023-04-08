@@ -1930,7 +1930,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                     else if (!rSh.IsCursorInParagraphMetadataField())
                     {
-                        rSh.InfoReadOnlyDialog();
+                        rSh.InfoReadOnlyDialog(false);
                         eKeyState = SwKeyState::End;
                     }
                     break;
@@ -2084,7 +2084,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                     else if (!rSh.IsCursorInParagraphMetadataField())
                     {
-                        rSh.InfoReadOnlyDialog();
+                        rSh.InfoReadOnlyDialog(false);
                         eKeyState = SwKeyState::End;
                     }
                     break;

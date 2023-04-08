@@ -332,7 +332,7 @@ bool SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
                 bDone = pEditView && pEditView->PostKeyEvent(rKeyEvt);
             }
             else
-                mrDocView.GetWrtShell().InfoReadOnlyDialog();
+                mrDocView.GetWrtShell().InfoReadOnlyDialog(false);
         }
         if (bDone)
             mrSidebarWin.ResizeIfNecessary( aOldHeight, mrSidebarWin.GetPostItTextHeight() );

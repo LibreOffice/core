@@ -2627,14 +2627,14 @@ void SwWrtShell::MakeAllFoldedOutlineContentVisible(bool bMakeVisible)
     GetView().GetDocShell()->Broadcast(SfxHint(SfxHintId::DocChanged));
 }
 
-bool SwWrtShell::GetAttrOutlineContentVisible(const size_t nPos)
+bool SwWrtShell::GetAttrOutlineContentVisible(const size_t nPos) const
 {
     bool bVisibleAttr = true;
     GetNodes().GetOutLineNds()[nPos]->GetTextNode()->GetAttrOutlineContentVisible(bVisibleAttr);
     return bVisibleAttr;
 }
 
-bool SwWrtShell::HasFoldedOutlineContentSelected()
+bool SwWrtShell::HasFoldedOutlineContentSelected() const
 {
     for(const SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
@@ -2656,7 +2656,7 @@ bool SwWrtShell::HasFoldedOutlineContentSelected()
     return false;
 }
 
-void SwWrtShell::InfoReadOnlyDialog(bool bAsync)
+void SwWrtShell::InfoReadOnlyDialog(bool bAsync) const
 {
     if (bAsync)
     {
@@ -2685,6 +2685,22 @@ void SwWrtShell::InfoReadOnlyDialog(bool bAsync)
         }
         xInfo->run();
     }
+}
+
+bool SwWrtShell::WarnHiddenSectionDialog() const
+{
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(
+        GetView().GetFrameWeld(), "modules/swriter/ui/warnhiddensectiondialog.ui"));
+    std::unique_ptr<weld::MessageDialog> xQuery(
+        xBuilder->weld_message_dialog("WarnHiddenSectionDialog"));
+    if (GetViewOptions()->IsShowOutlineContentVisibilityButton()
+        && HasFoldedOutlineContentSelected())
+    {
+        xQuery->set_primary_text(SwResId(STR_INFORODLG_FOLDED_PRIMARY));
+        xQuery->set_secondary_text(SwResId(STR_INFORODLG_FOLDED_SECONDARY));
+    }
+
+    return (RET_YES == xQuery->run());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

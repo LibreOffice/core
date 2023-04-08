@@ -309,6 +309,8 @@ public:
     /** Is in something protected (readonly) or selection contains
        something protected. */
     bool HasReadonlySel(bool bFormView, bool isReplace) const;
+    /** Is there hidden sections in the selected area. */
+    bool HasHiddenSections() const;
 
     bool ContainsPosition(const SwPosition & rPos) const
     {

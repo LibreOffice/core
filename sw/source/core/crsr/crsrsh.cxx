@@ -3402,6 +3402,7 @@ bool SwCursorShell::HasReadonlySel(bool const isReplace) const
     {
         if ( m_pTableCursor != nullptr )
         {
+            // TODO: handling when a table cell (cells) is selected
             bRet = m_pTableCursor->HasReadOnlyBoxSel()
                    || m_pTableCursor->HasReadonlySel(GetViewOptions()->IsFormView(), isReplace);
         }
@@ -3417,6 +3418,38 @@ bool SwCursorShell::HasReadonlySel(bool const isReplace) const
             }
         }
     }
+    return bRet;
+}
+
+bool SwCursorShell::HasHiddenSections() const
+{
+    // Treat selections that span over start or end of paragraph of an outline node
+    // with folded outline content as read-only.
+    if (GetViewOptions()->IsShowOutlineContentVisibilityButton())
+    {
+        SwWrtShell* pWrtSh = GetDoc()->GetDocShell()->GetWrtShell();
+        if (pWrtSh && pWrtSh->HasFoldedOutlineContentSelected())
+            return true;
+    }
+    bool bRet = false;
+
+    if ( m_pTableCursor != nullptr )
+    {
+        bRet = m_pTableCursor->HasHiddenBoxSel()
+               || m_pTableCursor->HasHiddenSections();
+    }
+    else
+    {
+        for(const SwPaM& rCursor : m_pCurrentCursor->GetRingContainer())
+        {
+            if (rCursor.HasHiddenSections())
+            {
+                bRet = true;
+                break;
+            }
+        }
+    }
+
     return bRet;
 }
 

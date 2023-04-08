@@ -785,7 +785,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 if (rWrtSh.HasReadonlySel() && !rWrtSh.CursorInsideInputField())
                 {
                     // Only break if there's something to do; don't nag with the dialog otherwise
-                    rWrtSh.InfoReadOnlyDialog();
+                    rWrtSh.InfoReadOnlyDialog(false);
                     break;
                 }
                 SwRewriter aRewriter;

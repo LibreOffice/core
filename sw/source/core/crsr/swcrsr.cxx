@@ -2623,4 +2623,18 @@ bool SwTableCursor::HasReadOnlyBoxSel() const
     return bRet;
 }
 
+bool SwTableCursor::HasHiddenBoxSel() const
+{
+    bool bRet = false;
+    for (size_t n = m_SelectedBoxes.size(); n; )
+    {
+        if (m_SelectedBoxes[--n]->GetFrameFormat()->IsHidden())
+        {
+            bRet = true;
+            break;
+        }
+    }
+    return bRet;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

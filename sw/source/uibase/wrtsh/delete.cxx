@@ -283,10 +283,7 @@ bool SwWrtShell::DelLeft()
     if( !bRet && bSwap )
         SwCursorShell::SwapPam();
     CloseMark( bRet );
-    if (!bRet)
-    {   // false indicates HasReadonlySel failed
-        InfoReadOnlyDialog();
-    }
+
     return bRet;
 }
 
@@ -402,10 +399,6 @@ bool SwWrtShell::DelRight(bool const isReplaceHeuristic)
         SwCursorShell::Right(1, SwCursorSkipMode::Cells);
         bRet = Delete(true);
         CloseMark( bRet );
-        if (!bRet)
-        {   // false indicates HasReadonlySel failed
-            InfoReadOnlyDialog();
-        }
         break;
 
     case SelectionType::Frame:

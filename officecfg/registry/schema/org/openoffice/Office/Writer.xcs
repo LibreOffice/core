@@ -1084,6 +1084,14 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="ShowWarningHiddenSection" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Not accessible via user interface -->
+          <info>
+            <desc>Enables the writer to prevent the display of a warning dialog for hidden text (sections, etc) deletion.</desc>
+            <label>Show warning dialog for hidden text deletion</label>
+          </info>
+          <value>true</value>
+        </prop>
         <prop oor:name="DefaultAnchor" oor:type="xs:int" oor:nillable="false">
           <!-- UIHints: Tools - Options - Writer - View - Default Anchor -->
           <info>

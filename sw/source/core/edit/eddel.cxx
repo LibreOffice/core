@@ -27,6 +27,8 @@
 #include <undobj.hxx>
 #include <SwRewriter.hxx>
 #include <osl/diagnose.h>
+#include <wrtsh.hxx>
+#include <officecfg/Office/Writer.hxx>
 
 #include <strings.hrc>
 #include <vector>
@@ -128,8 +130,17 @@ bool SwEditShell::Delete(bool const isArtificialSelection)
     bool bRet = false;
     if ( !HasReadonlySel() || CursorInsideInputField() )
     {
-        StartAllAction();
+        if (HasHiddenSections() &&
+            officecfg::Office::Writer::Content::Display::ShowWarningHiddenSection::get())
+        {
+            if (!WarnHiddenSectionDialog())
+            {
+                bRet = RemoveParagraphMetadataFieldAtCursor();
+                return bRet;
+            }
+        }
 
+        StartAllAction();
         bool bUndo = GetCursor()->GetNext() != GetCursor();
         if( bUndo ) // more than one selection?
         {
@@ -155,6 +166,10 @@ bool SwEditShell::Delete(bool const isArtificialSelection)
     else
     {
         bRet = RemoveParagraphMetadataFieldAtCursor();
+        if (!bRet)
+        {
+            InfoReadOnlyDialog(false);
+        }
     }
 
     return bRet;

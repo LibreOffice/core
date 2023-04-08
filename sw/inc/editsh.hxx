@@ -81,6 +81,7 @@ class SwLineNumberInfo;
 class SwAuthEntry;
 class SwRewriter;
 class SwView;
+class SwWrtShell;
 struct SwConversionArgs;
 struct SvxSwAutoFormatFlags;
 struct SwInsertTableOptions;
@@ -622,6 +623,19 @@ public:
 
     /// Apply ViewOptions with Start-/EndAction.
     virtual void ApplyViewOptions( const SwViewOption &rOpt ) override;
+
+    /// Selected area has readonly content
+    virtual void InfoReadOnlyDialog(bool /*bAsync*/) const
+    {
+        // override in SwWrtShell
+    }
+
+    /// Selected area has hidden content
+    virtual bool WarnHiddenSectionDialog() const
+    {
+        // override in SwWrtShell
+        return true;
+    }
 
     /** Query text within selection. */
     void GetSelectedText( OUString &rBuf,

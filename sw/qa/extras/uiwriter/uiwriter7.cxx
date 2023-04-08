@@ -1801,6 +1801,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf151605)
     std::shared_ptr<comphelper::ConfigurationChanges> batch(
         comphelper::ConfigurationChanges::create());
     officecfg::Office::Writer::FilterFlags::ASCII::IncludeHiddenText::set(false, batch);
+    officecfg::Office::Writer::Content::Display::ShowWarningHiddenSection::set(false, batch);
     batch->commit();
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
@@ -1817,6 +1818,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf151605)
 
     // re-enable it
     officecfg::Office::Writer::FilterFlags::ASCII::IncludeHiddenText::set(true, batch);
+    officecfg::Office::Writer::Content::Display::ShowWarningHiddenSection::set(true, batch);
     batch->commit();
 }
 
