@@ -938,7 +938,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf154599_MovingColumn)
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
-    // Create a table with less columns, than row
+    // Create a table with less columns than row
     SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
     (void)&pWrtShell->InsertTable(TableOpt, 4, 3);
 
