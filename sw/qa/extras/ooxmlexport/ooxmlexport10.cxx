@@ -548,6 +548,20 @@ DECLARE_OOXMLEXPORT_TEST(testLibreOfficeHang, "frame-wrap-auto.docx")
     // fdo#72775
     // This was text::WrapTextMode_NONE.
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_DYNAMIC, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
+
+    // tdf#154703 top/bottom margins should not be duplicated from paragraph(s)
+    uno::Reference<text::XTextRange> xTextRange(getShape(1), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextRange->getText();
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), getParagraphOfText(1, xText)->getString());
+
+    sal_Int32 nFrame = getProperty<sal_Int32>(getShape(1), "TopBorderDistance");
+    sal_Int32 nPara = getProperty<sal_Int32>(getParagraphOfText(1, xText), "TopBorderDistance");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(143), nFrame + nPara);
+    // NOTE: left/right are different because of compat flag INVERT_BORDER_SPACING]
+    nFrame = getProperty<sal_Int32>(getShape(1), "LeftBorderDistance");
+    nPara = getProperty<sal_Int32>(getParagraphOfText(1, xText), "LeftBorderDistance");
+    CPPUNIT_ASSERT_EQUAL(nFrame, nPara);
+    CPPUNIT_ASSERT(nPara);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testI124106, "i124106.docx")
