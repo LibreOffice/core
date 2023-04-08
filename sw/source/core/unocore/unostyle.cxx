@@ -1076,8 +1076,7 @@ void XStyleFamily::insertByName(const OUString& rName, const uno::Any& rElement)
     OUString sStyleName;
     SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId());
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.family());
-    SfxStyleSheetBase* pUINameBase = m_pBasePool->Find(sStyleName, m_rEntry.family());
-    if(pBase || pUINameBase)
+    if (pBase)
         throw container::ElementExistException();
     if(rElement.getValueType().getTypeClass() != uno::TypeClass_INTERFACE)
         throw lang::IllegalArgumentException();
