@@ -87,6 +87,7 @@
 #include <docpool.hxx>
 #include <detfunc.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <clipparam.hxx>
 
 #include <memory>
 #include <algorithm>
@@ -1785,19 +1786,18 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const tools::Rec
     ScDrawLayer* pDestModel = nullptr;
     SdrPage* pDestPage = nullptr;
 
+    ScRange aClipRange = lcl_getClipRangeFromClipDoc(pClipDoc, nTab);
+
     SdrObjListIter aIter( pSrcPage, SdrIterMode::Flat );
     SdrObject* pOldObject = aIter.Next();
     while (pOldObject)
     {
-        tools::Rectangle aObjRect = pOldObject->GetCurrentBoundRect();
-
-        bool bObjectInArea = rRange.Contains(aObjRect);
+        // Catch objects where the object itself is inside the rectangle to be copied.
+        bool bObjectInArea = rRange.Contains(pOldObject->GetCurrentBoundRect());
+        // Catch objects whose anchor is inside the rectangle to be copied.
         const ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pOldObject);
         if (pObjData)
-        {
-            ScRange aClipRange = lcl_getClipRangeFromClipDoc(pClipDoc, nTab);
             bObjectInArea = bObjectInArea || aClipRange.Contains(pObjData->maStart);
-        }
 
         // do not copy internal objects (detective) and note captions
         if (bObjectInArea && pOldObject->GetLayer() != SC_LAYER_INTERN
@@ -1822,10 +1822,35 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const tools::Rec
             {
                 // Clone to target SdrModel
                 rtl::Reference<SdrObject> pNewObject(pOldObject->CloneSdrObject(*pDestModel));
-
                 uno::Reference< chart2::XChartDocument > xOldChart( ScChartHelper::GetChartFromSdrObject( pOldObject ) );
                 if(!xOldChart.is())//#i110034# do not move charts as they lose all their data references otherwise
-                    pNewObject->NbcMove(Size(0,0));
+                {
+                    if (pObjData)
+                    {
+                        // The object is anchored to cell. The position is determined by the start
+                        // address. Copying into the clipboard does not change the anchor.
+                        // ToDo: Adapt Offset relative to anchor cell size for cell anchored.
+                        // ToDo: Adapt Offset and size for cell-anchored with resize objects.
+                        // ToDo: Exclude object from resize if disallowed at object.
+                    }
+                    else
+                    {
+                        // The object is anchored to page. We make its position so, that the
+                        // cell behind the object will have the same address in clipboard document as
+                        // in source document. So we will be able to reconstruct the original cell
+                        // address from position when pasting the object.
+                        tools::Rectangle aObjRect = pOldObject->GetSnapRect();
+                        ScRange aPseudoAnchor
+                            = pDoc->GetRange(nTab, aObjRect, true /*bHiddenAsZero*/);
+                        tools::Rectangle aSourceCellRect
+                            = GetCellRect(*pDoc, aPseudoAnchor.aStart, false /*bMergedCell*/);
+                        tools::Rectangle aDestCellRect
+                            = GetCellRect(*pClipDoc, aPseudoAnchor.aStart, false);
+                        Point aMove = aDestCellRect.TopLeft() - aSourceCellRect.TopLeft();
+                        pNewObject->NbcMove(Size(aMove.getX(), aMove.getY()));
+                    }
+                }
+
                 pDestPage->InsertObject( pNewObject.get() );
 
                 //  no undo needed in clipboard document
@@ -1884,8 +1909,9 @@ static bool lcl_MoveRanges( ::std::vector< ScRangeList >& rRangesVector, const S
     return bChanged;
 }
 
-void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const tools::Rectangle& rSourceRange,
-                                    const ScAddress& rDestPos, const tools::Rectangle& rDestRange )
+void ScDrawLayer::CopyFromClip(ScDrawLayer* pClipModel, SCTAB nSourceTab,
+                               const ScRange& rSourceRange, const ScAddress& rDestPos,
+                               const ScRange& rDestRange, bool bTransposing)
 {
     OSL_ENSURE( pDoc, "ScDrawLayer::CopyFromClip without document" );
     if ( !pDoc )
@@ -1900,14 +1926,6 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
         return;
     }
 
-    bool bMirrorObj = ( rSourceRange.Left() < 0 && rSourceRange.Right() < 0 &&
-                        rDestRange.Left()   > 0 && rDestRange.Right()   > 0 ) ||
-                      ( rSourceRange.Left() > 0 && rSourceRange.Right() > 0 &&
-                        rDestRange.Left()   < 0 && rDestRange.Right()   < 0 );
-    tools::Rectangle aMirroredSource = rSourceRange;
-    if ( bMirrorObj )
-        MirrorRectRTL( aMirroredSource );
-
     SCTAB nDestTab = rDestPos.Tab();
 
     SdrPage* pSrcPage = pClipModel->GetPage(static_cast<sal_uInt16>(nSourceTab));
@@ -1916,168 +1934,334 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
     if ( !pSrcPage || !pDestPage )
         return;
 
+    ScDocument* pClipDoc = pClipModel->GetDocument();
+    if (!pClipDoc)
+        return; // Can this happen? And if yes, what to do?
+
     SdrObjListIter aIter( pSrcPage, SdrIterMode::Flat );
     SdrObject* pOldObject = aIter.Next();
+    if (!pOldObject)
+        return; // no objects at all. Nothing to do.
 
-    ScDocument* pClipDoc = pClipModel->GetDocument();
     //  a clipboard document and its source share the same document item pool,
     //  so the pointers can be compared to see if this is copy&paste within
     //  the same document
-    bool bSameDoc = pDoc && pClipDoc && pDoc->GetPool() == pClipDoc->GetPool();
-    bool bDestClip = pDoc && pDoc->IsClipboard();
+    bool bSameDoc = pDoc->GetPool() == pClipDoc->GetPool();
+    bool bDestClip = pDoc->IsClipboard(); // Happens while transposing. ToDo: Other cases?
 
     //#i110034# charts need correct sheet names for xml range conversion during load
     //so the target sheet name is temporarily renamed (if we have any SdrObjects)
     OUString aDestTabName;
     bool bRestoreDestTabName = false;
-    if( pOldObject && !bSameDoc && !bDestClip )
+    if (!bSameDoc && !bDestClip)
     {
-        if( pDoc && pClipDoc )
+        OUString aSourceTabName;
+        if (pClipDoc->GetName(nSourceTab, aSourceTabName) && pDoc->GetName(nDestTab, aDestTabName)
+            && aSourceTabName != aDestTabName && pDoc->ValidNewTabName(aSourceTabName))
         {
-            OUString aSourceTabName;
-            if( pClipDoc->GetName( nSourceTab, aSourceTabName )
-                && pDoc->GetName( nDestTab, aDestTabName ) )
-            {
-                if( aSourceTabName != aDestTabName &&
-                    pDoc->ValidNewTabName(aSourceTabName) )
-                {
-                    bRestoreDestTabName = pDoc->RenameTab( nDestTab, aSourceTabName );
-                }
-            }
+            bRestoreDestTabName = pDoc->RenameTab( nDestTab, aSourceTabName );
         }
     }
 
-    // first mirror, then move
-    Size aMove( rDestRange.Left() - aMirroredSource.Left(), rDestRange.Top() - aMirroredSource.Top() );
+    SCTAB nClipTab = bRestoreDestTabName ? nDestTab : nSourceTab;
+    ScRange aClipRange = lcl_getClipRangeFromClipDoc(pClipDoc, nClipTab);
 
-    tools::Long nDestWidth = rDestRange.GetWidth();
-    tools::Long nDestHeight = rDestRange.GetHeight();
-    tools::Long nSourceWidth = rSourceRange.GetWidth();
-    tools::Long nSourceHeight = rSourceRange.GetHeight();
-
-    tools::Long nWidthDiff = nDestWidth - nSourceWidth;
-    tools::Long nHeightDiff = nDestHeight - nSourceHeight;
-
-    Fraction aHorFract(1,1);
-    Fraction aVerFract(1,1);
-    bool bResize = false;
-    // sizes can differ by 1 from twips->1/100mm conversion for equal cell sizes,
-    // don't resize to empty size when pasting into hidden columns or rows
-    if ( std::abs(nWidthDiff) > 1 && nDestWidth > 1 && nSourceWidth > 1 )
-    {
-        aHorFract = Fraction( nDestWidth, nSourceWidth );
-        bResize = true;
-    }
-    if ( std::abs(nHeightDiff) > 1 && nDestHeight > 1 && nSourceHeight > 1 )
-    {
-        aVerFract = Fraction( nDestHeight, nSourceHeight );
-        bResize = true;
-    }
-    Point aRefPos = rDestRange.TopLeft();       // for resizing (after moving)
+    // We are going to make all rectangle calculations on LTR, so determine whether doc is RTL.
+    bool bSourceRTL = pClipDoc->IsLayoutRTL(nSourceTab);
+    bool bDestRTL = pDoc->IsLayoutRTL(nDestTab);
 
     while (pOldObject)
     {
-        tools::Rectangle aObjRect = pOldObject->GetCurrentBoundRect();
+        // ToDO: Can this happen? Such objects should not be in the clipboard document.
         // do not copy internal objects (detective) and note captions
-
-        SCTAB nClipTab = bRestoreDestTabName ? nDestTab : nSourceTab;
-        ScRange aClipRange = lcl_getClipRangeFromClipDoc(pClipDoc, nClipTab);
-
-        bool bObjectInArea = rSourceRange.Contains(aObjRect);
-        const ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pOldObject);
-        if (pObjData) // Consider images anchored to the copied cell
-            bObjectInArea = bObjectInArea || aClipRange.Contains(pObjData->maStart);
-        if (bObjectInArea && (pOldObject->GetLayer() != SC_LAYER_INTERN)
-            && !IsNoteCaption(pOldObject))
+        if ((pOldObject->GetLayer() == SC_LAYER_INTERN) || IsNoteCaption(pOldObject))
         {
-            // Copy style sheet
-            auto pStyleSheet = pOldObject->GetStyleSheet();
-            if (pStyleSheet && !bSameDoc)
-                pDoc->GetStyleSheetPool()->CopyStyleFrom(pClipModel->GetStyleSheetPool(),
-                    pStyleSheet->GetName(), pStyleSheet->GetFamily(), true);
+            pOldObject = aIter.Next();
+            continue;
+        }
 
-            // Clone to target SdrModel
-            rtl::Reference<SdrObject> pNewObject(pOldObject->CloneSdrObject(*this));
+        // 'aIter' considers all objects on pSrcPage. But ScDocument::CopyBlockFromClip, which is used
+        // for filtered data, acts not on the total range but only on parts of it. So we need to look,
+        // whether an object is really contained in the current rSourceRange.
+        // For cell anchored objects we use the start address of the anchor, for page anchored objects
+        // we use the cell range behind the bounding box of the shape.
+        ScAddress aSrcObjStart;
+        const ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pOldObject);
+        if (pObjData) // Object is anchored to cell.
+        {
+            aSrcObjStart = (*pObjData).maStart;
+        }
+        else // Object is anchored to page.
+        {
+            aSrcObjStart = pClipDoc->GetRange(nClipTab, pOldObject->GetCurrentBoundRect()).aStart;
+        }
+        if (!rSourceRange.Contains(aSrcObjStart))
+        {
+            pOldObject = aIter.Next();
+            continue;
+        }
+        // If object is anchored to a filtered cell, we will not copy it, because filtered rows are
+        // eliminated in paste. Copying would produce hidden objects which can only be accessed per
+        // macro.
+        if (pObjData && pClipDoc->RowFiltered((*pObjData).maStart.Row(), nSourceTab))
+        {
+            pOldObject = aIter.Next();
+            continue;
+        }
 
-            if ( bMirrorObj )
-                MirrorRTL( pNewObject.get() );        // first mirror, then move
+        // Copy style sheet
+        auto pStyleSheet = pOldObject->GetStyleSheet();
+        if (pStyleSheet && !bSameDoc)
+            pDoc->GetStyleSheetPool()->CopyStyleFrom(pClipModel->GetStyleSheetPool(),
+                                                     pStyleSheet->GetName(),
+                                                     pStyleSheet->GetFamily(), true);
 
-            pNewObject->NbcMove( aMove );
-            if ( bResize )
-                pNewObject->NbcResize( aRefPos, aHorFract, aVerFract );
+        rtl::Reference<SdrObject> pNewObject(pOldObject->CloneSdrObject(*this));
+        tools::Rectangle aObjRect = pOldObject->GetSnapRect();
+        if (bSourceRTL)
+        {
+            MirrorRTL(pNewObject.get()); // We make the calculations in LTR.
+            MirrorRectRTL(aObjRect);
+        }
 
-            pDestPage->InsertObject( pNewObject.get() );
+        bool bCanResize = IsResizeWithCell(*pOldObject) && !pOldObject->IsResizeProtect();
+        // We do not resize charts or other OLE objects and do not resize when transposing.
+        bCanResize &= pOldObject->GetObjIdentifier() != SdrObjKind::OLE2;
+        bCanResize &= !bTransposing && !pClipDoc->GetClipParam().isTransposed();
+        if (bCanResize)
+        {
+            // Filtered rows are eliminated on paste. Filtered cols do not exist as of May 2023.
+            // Collapsed or hidden rows/cols are shown on paste.
+            // Idea: First calculate top left cell and bottom right cell of pasted object. Then
+            // calculate the object corners inside these cell and from that build new snap rectangle.
+            // We assume that pObjData is valid and pObjData and aObjRect correspond to each other
+            // in the source document.
+
+            // Start cell of object in source and destination. The case of a filtered start cell is
+            // already excluded above. aSrcObjStart = (*pObjData).maStart is already done above.
+            // If filtered rows exist in the total range, the range was divided into blocks which
+            // do not contain filtered rows. So the rows between start of aSourceRange and object
+            // start row do not contain filtered rows.
+            SCROW nStartRowDiff = aSrcObjStart.Row() - rSourceRange.aStart.Row();
+            SCCOL nStartColDiff = aSrcObjStart.Col() - rSourceRange.aStart.Col();
+            ScAddress aDestObjStart = rDestRange.aStart;
+            aDestObjStart.IncCol(nStartColDiff);
+            aDestObjStart.IncRow(nStartRowDiff);
+
+            // End cell of object in source and destination. We look at the amount of rows/cols to be
+            // added to get object end cell from object start cell.
+            ScAddress aSrcObjEnd = (*pObjData).maEnd;
+            SCCOL nColsToAdd = aSrcObjEnd.Col() - aSrcObjStart.Col();
+            SCROW nRowsToAdd
+                = pClipDoc->CountNonFilteredRows(aSrcObjStart.Row(), aSrcObjEnd.Row(), nSourceTab)
+                  - 1;
+            ScAddress aDestObjEnd = aDestObjStart;
+            aDestObjEnd.IncCol(nColsToAdd);
+            aDestObjEnd.IncRow(nRowsToAdd);
+
+            // Position of object inside start and end cell in source. We describe the distance from
+            // cell corner to object corner as ratio of offset to cell width/height.
+            // We cannot use GetCellRect method, because that uses bHiddenAsZero=true.
+            Point aSrcObjTopLeftOffset = (*pObjData).maStartOffset;
+            tools::Rectangle aSrcStartRect
+                = pClipDoc->GetMMRect(aSrcObjStart.Col(), aSrcObjStart.Row(), aSrcObjStart.Col(),
+                                      aSrcObjStart.Row(), nSourceTab, false /*bHiddenAsZero*/);
+            if (bSourceRTL)
+                MirrorRectRTL(aSrcStartRect);
+            double fStartXRatio
+                = aSrcStartRect.getOpenWidth() == 0
+                      ? 1.0
+                      : double(aSrcObjTopLeftOffset.X()) / double(aSrcStartRect.getOpenWidth());
+            double fStartYRatio
+                = aSrcStartRect.getOpenHeight() == 0
+                      ? 1.0
+                      : double(aSrcObjTopLeftOffset.Y()) / double(aSrcStartRect.getOpenHeight());
+
+            Point aSrcObjBottomRightOffset = (*pObjData).maEndOffset;
+            tools::Rectangle aSrcEndRect
+                = pClipDoc->GetMMRect(aSrcObjEnd.Col(), aSrcObjEnd.Row(), aSrcObjEnd.Col(),
+                                      aSrcObjEnd.Row(), nSourceTab, false /*bHiddenAsZero*/);
+            if (bSourceRTL)
+                MirrorRectRTL(aSrcEndRect);
+            double fEndXRatio
+                = aSrcEndRect.getOpenWidth() == 0
+                      ? 1.0
+                      : double(aSrcObjBottomRightOffset.X()) / double(aSrcEndRect.getOpenWidth());
+            double fEndYRatio
+                = aSrcEndRect.getOpenHeight() == 0
+                      ? 1.0
+                      : double(aSrcObjBottomRightOffset.Y()) / double(aSrcEndRect.getOpenHeight());
+            // The end cell given in pObjData might be filtered. In that case the object is cut at
+            // the lower cell edge. The offset is as large as the cell.
+            if (pClipDoc->RowFiltered(aSrcObjEnd.Row(), nSourceTab))
+                fEndYRatio = 1.0;
+
+            // Position of object inside start and end cell in destination
+            tools::Rectangle aDestStartRect
+                = GetCellRect(*pDoc, aDestObjStart, false /*bMergedCell*/);
+            if (bDestRTL)
+                MirrorRectRTL(aDestStartRect);
+            Point aDestObjTopLeftOffset(fStartXRatio * aDestStartRect.getOpenWidth(),
+                                        fStartYRatio * aDestStartRect.getOpenHeight());
+            Point aDestObjTopLeft = aDestStartRect.TopLeft() + aDestObjTopLeftOffset;
+
+            tools::Rectangle aDestEndRect = GetCellRect(*pDoc, aDestObjEnd, false /*bMergedCell*/);
+            if (bDestRTL)
+                MirrorRectRTL(aDestEndRect);
+            Point aDestObjBottomRightOffset(fEndXRatio * aDestEndRect.getOpenWidth(),
+                                            fEndYRatio * aDestEndRect.getOpenHeight());
+            Point aDestObjBottomRight = aDestEndRect.TopLeft() + aDestObjBottomRightOffset;
+
+            // Fit new object into destination rectangle
+            tools::Rectangle aNewObjRect(aDestObjTopLeft, aDestObjBottomRight);
+            aNewObjRect = lcl_makeSafeRectangle(aNewObjRect);
+            if (pNewObject->GetObjIdentifier() == SdrObjKind::CustomShape)
+                pNewObject->AdjustToMaxRect(aNewObjRect);
+            else
+                pNewObject->SetSnapRect(aNewObjRect);
+        }
+        else
+        {
+            // We determine the MM-distance of the new object from its start cell in destination from
+            // the ratio of offset to cell width/height. Thus the object still starts in this cell
+            // even if the destination cell has different size. Otherwise we might lose objects when
+            // transposing.
+
+            // Start Cell address in source and destination
+            SCCOLROW nStartRowDiff = pClipDoc->CountNonFilteredRows(rSourceRange.aStart.Row(),
+                                                                    aSrcObjStart.Row(), nSourceTab)
+                                     - 1;
+            SCCOLROW nStartColDiff = aSrcObjStart.Col() - rSourceRange.aStart.Col();
+            if (bTransposing)
+                std::swap(nStartRowDiff, nStartColDiff);
+            ScAddress aDestObjStart = rDestRange.aStart;
+            aDestObjStart.IncCol(nStartColDiff);
+            aDestObjStart.IncRow(nStartRowDiff);
+
+            // Position of object inside start cell in source.
+            tools::Rectangle aSrcStartRect
+                = pClipDoc->GetMMRect(aSrcObjStart.Col(), aSrcObjStart.Row(), aSrcObjStart.Col(),
+                                      aSrcObjStart.Row(), nSourceTab, false /*bHiddenAsZero*/);
+            if (bSourceRTL)
+                MirrorRectRTL(aSrcStartRect);
+            Point aSrcObjTopLeftOffset = pObjData ? (*pObjData).maStartOffset
+                                                  : aObjRect.TopLeft() - aSrcStartRect.TopLeft();
+
+            double fStartXRatio
+                = aSrcStartRect.getOpenWidth() == 0
+                      ? 1.0
+                      : double(aSrcObjTopLeftOffset.X()) / double(aSrcStartRect.getOpenWidth());
+            double fStartYRatio
+                = aSrcStartRect.getOpenHeight() == 0
+                      ? 1.0
+                      : double(aSrcObjTopLeftOffset.Y()) / double(aSrcStartRect.getOpenHeight());
+
+            // Position of object inside start cell in destination
+            tools::Rectangle aDestStartRect
+                = GetCellRect(*pDoc, aDestObjStart, false /*bMergedCell*/);
+            if (bDestRTL)
+                MirrorRectRTL(aDestStartRect);
+            Point aDestObjTopLeftOffset(fStartXRatio * aDestStartRect.getOpenWidth(),
+                                        fStartYRatio * aDestStartRect.getOpenHeight());
+            Point aDestObjTopLeft = aDestStartRect.TopLeft() + aDestObjTopLeftOffset;
+
+            // Move new object to new position
+            Point aMoveBy = aDestObjTopLeft - aObjRect.TopLeft();
+            pNewObject->NbcMove(Size(aMoveBy.getX(), aMoveBy.getY()));
+        }
+
+        if (bDestRTL)
+            MirrorRTL(pNewObject.get());
+
+        // Changing object position or size does not automatically change its anchor.
+        if (IsCellAnchored(*pOldObject))
+            SetCellAnchoredFromPosition(*pNewObject, *pDoc, nDestTab,
+                                        IsResizeWithCell(*pOldObject));
+
+        // InsertObject includes broadcasts
+        // MakeNameUnique makes the pasted objects accessible via Navigator.
+        if (bDestClip)
+            pDestPage->InsertObject(pNewObject.get());
+        else
+        {
             if (bRecording)
-                AddCalcUndo( std::make_unique<SdrUndoInsertObj>( *pNewObject ) );
+                pDoc->EnableUndo(false);
+            pDestPage->InsertObjectThenMakeNameUnique(pNewObject.get());
+            if (bRecording)
+                pDoc->EnableUndo(true);
+        }
 
-            //#i110034# handle chart data references (after InsertObject)
+        if (bRecording)
+            AddCalcUndo(std::make_unique<SdrUndoInsertObj>(*pNewObject));
 
-            if ( pNewObject->GetObjIdentifier() == SdrObjKind::OLE2 )
+        //#i110034# handle chart data references (after InsertObject)
+        if (pNewObject->GetObjIdentifier() == SdrObjKind::OLE2)
+        {
+            uno::Reference<embed::XEmbeddedObject> xIPObj
+                = static_cast<SdrOle2Obj*>(pNewObject.get())->GetObjRef();
+            uno::Reference<embed::XClassifiedObject> xClassified = xIPObj;
+            SvGlobalName aObjectClassName;
+            if (xClassified.is())
             {
-                uno::Reference< embed::XEmbeddedObject > xIPObj = static_cast<SdrOle2Obj*>(pNewObject.get())->GetObjRef();
-                uno::Reference< embed::XClassifiedObject > xClassified = xIPObj;
-                SvGlobalName aObjectClassName;
-                if ( xClassified.is() )
+                try
                 {
-                    try {
-                        aObjectClassName = SvGlobalName( xClassified->getClassID() );
-                    } catch( uno::Exception& )
-                    {
-                        // TODO: handle error?
-                    }
+                    aObjectClassName = SvGlobalName(xClassified->getClassID());
                 }
-
-                if ( xIPObj.is() && SotExchange::IsChart( aObjectClassName ) )
+                catch (uno::Exception&)
                 {
-                    uno::Reference< chart2::XChartDocument > xNewChart( ScChartHelper::GetChartFromSdrObject( pNewObject.get() ) );
-                    if( xNewChart.is() && !xNewChart->hasInternalDataProvider() )
-                    {
-                        OUString aChartName = static_cast<SdrOle2Obj*>(pNewObject.get())->GetPersistName();
-                        ::std::vector< ScRangeList > aRangesVector;
-                        pDoc->GetChartRanges( aChartName, aRangesVector, *pDoc );
-                        if( !aRangesVector.empty() )
-                        {
-                            bool bInSourceRange = false;
-                            if ( pClipDoc )
-                            {
-                                bInSourceRange = lcl_IsAllInRange( aRangesVector, aClipRange );
-                            }
+                    // TODO: handle error?
+                }
+            }
 
-                            // always lose references when pasting into a clipboard document (transpose)
-                            if ( ( bInSourceRange || bSameDoc ) && !bDestClip )
+            if (xIPObj.is() && SotExchange::IsChart(aObjectClassName))
+            {
+                uno::Reference<chart2::XChartDocument> xNewChart(
+                    ScChartHelper::GetChartFromSdrObject(pNewObject.get()));
+                if (xNewChart.is() && !xNewChart->hasInternalDataProvider())
+                {
+                    OUString aChartName
+                        = static_cast<SdrOle2Obj*>(pNewObject.get())->GetPersistName();
+                    ::std::vector<ScRangeList> aRangesVector;
+                    pDoc->GetChartRanges(aChartName, aRangesVector, *pDoc);
+                    if (!aRangesVector.empty())
+                    {
+                        bool bInSourceRange = false;
+                        bInSourceRange = lcl_IsAllInRange(aRangesVector, aClipRange);
+
+                        // always lose references when pasting into a clipboard document (transpose)
+                        if ((bInSourceRange || bSameDoc) && !bDestClip)
+                        {
+                            if (bInSourceRange)
                             {
-                                if ( bInSourceRange )
+                                if (rDestPos != aClipRange.aStart)
                                 {
-                                    if ( rDestPos != aClipRange.aStart )
-                                    {
-                                        //  update the data ranges to the new (copied) position
-                                        if ( lcl_MoveRanges( aRangesVector, aClipRange, rDestPos, *pDoc ) )
-                                            pDoc->SetChartRanges( aChartName, aRangesVector );
-                                    }
-                                }
-                                else
-                                {
-                                    //  leave the ranges unchanged
+                                    //  update the data ranges to the new (copied) position
+                                    if (lcl_MoveRanges(aRangesVector, aClipRange, rDestPos, *pDoc))
+                                        pDoc->SetChartRanges(aChartName, aRangesVector);
                                 }
                             }
                             else
                             {
-                                //  pasting into a new document without the complete source data
-                                //  -> break connection to source data and switch to own data
-
-                                uno::Reference< chart::XChartDocument > xOldChartDoc( ScChartHelper::GetChartFromSdrObject( pOldObject ), uno::UNO_QUERY );
-                                uno::Reference< chart::XChartDocument > xNewChartDoc( xNewChart, uno::UNO_QUERY );
-                                if( xOldChartDoc.is() && xNewChartDoc.is() )
-                                    xNewChartDoc->attachData( xOldChartDoc->getData() );
-
-                                //  (see ScDocument::UpdateChartListenerCollection, PastingDrawFromOtherDoc)
+                                //  leave the ranges unchanged
                             }
+                        }
+                        else
+                        {
+                            //  pasting into a new document without the complete source data
+                            //  -> break connection to source data and switch to own data
+                            uno::Reference<chart::XChartDocument> xOldChartDoc(
+                                ScChartHelper::GetChartFromSdrObject(pOldObject), uno::UNO_QUERY);
+                            uno::Reference<chart::XChartDocument> xNewChartDoc(xNewChart,
+                                                                               uno::UNO_QUERY);
+                            if (xOldChartDoc.is() && xNewChartDoc.is())
+                                xNewChartDoc->attachData(xOldChartDoc->getData());
+
+                            //  (see ScDocument::UpdateChartListenerCollection, PastingDrawFromOtherDoc)
                         }
                     }
                 }
             }
         }
-
         pOldObject = aIter.Next();
     }
 

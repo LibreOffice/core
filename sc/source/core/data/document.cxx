@@ -2409,13 +2409,14 @@ void ScDocument::TransposeClip(ScDocument* pTransClip, InsertDeleteFlags nFlags,
                     //  (mpDrawLayer in the original clipboard document is set only if there
                     //  are drawing objects to copy)
 
+                    // ToDo: Loop over blocks of non-filtered rows in case of filtered rows exist.
                     pTransClip->InitDrawLayer();
-                    tools::Rectangle aSourceRect = GetMMRect( aClipRange.aStart.Col(), aClipRange.aStart.Row(),
-                                                        aClipRange.aEnd.Col(), aClipRange.aEnd.Row(), i );
-                    tools::Rectangle aDestRect = pTransClip->GetMMRect( 0, 0,
-                            static_cast<SCCOL>(aClipRange.aEnd.Row() - aClipRange.aStart.Row()),
-                            static_cast<SCROW>(aClipRange.aEnd.Col() - aClipRange.aStart.Col()), i );
-                    pTransClip->mpDrawLayer->CopyFromClip( mpDrawLayer.get(), i, aSourceRect, ScAddress(0,0,i), aDestRect );
+                    ScAddress aTransposedEnd(
+                        static_cast<SCCOL>(aClipRange.aEnd.Row() - aClipRange.aStart.Row() + aClipRange.aStart.Col()),
+                        static_cast<SCROW>(aClipRange.aEnd.Col() - aClipRange.aStart.Col() + aClipRange.aStart.Row()), i);
+                    ScRange aDestRange(aClipRange.aStart, aTransposedEnd);
+                    ScAddress aDestStart = aClipRange.aStart;
+                    pTransClip->mpDrawLayer->CopyFromClip(mpDrawLayer.get(), i, aClipRange, aDestStart, aDestRange, true);
                 }
             }
         }
@@ -2690,12 +2691,10 @@ void ScDocument::CopyBlockFromClip(
                     //  For GetMMRect, the row heights in the target document must already be valid
                     //  (copied in an extra step before pasting, or updated after pasting cells, but
                     //  before pasting objects).
-
-                    tools::Rectangle aSourceRect = rCxt.getClipDoc()->GetMMRect(
-                                    nCol1-nDx, nRow1-nDy, nCol2-nDx, nRow2-nDy, nClipTab );
-                    tools::Rectangle aDestRect = GetMMRect( nCol1, nRow1, nCol2, nRow2, i );
-                    mpDrawLayer->CopyFromClip(rCxt.getClipDoc()->mpDrawLayer.get(), nClipTab, aSourceRect,
-                                                ScAddress( nCol1, nRow1, i ), aDestRect );
+                    ScRange aSourceRange(nCol1 - nDx, nRow1 - nDy, nClipTab, nCol2 - nDx, nRow2 - nDy, nClipTab);
+                    ScRange aDestRange(nCol1, nRow1, i, nCol2, nRow2, i);
+                    mpDrawLayer->CopyFromClip(rCxt.getClipDoc()->mpDrawLayer.get(), nClipTab, aSourceRange,
+                                                ScAddress( nCol1, nRow1, i ), aDestRange);
                 }
             }
 

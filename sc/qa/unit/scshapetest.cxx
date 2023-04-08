@@ -999,6 +999,53 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testLargeAnchorOffset)
     CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aOldPos, aNewPos, 1);
 }
 
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf139083_copy_without_resize)
+{
+    // Load a document, which has a shape anchored to cell B2, but without 'resize with cell'.
+    // When the range B2:B3 is copied and pasted to D5, then the copied shape should keep its size.
+    createScDoc("ods/tdf139083_copy_without_resize.ods");
+
+    // Get document
+    ScDocument* pDoc = getScDoc();
+
+    // Copy cells B2:B3. They have row height 2cm and column width 3cm.
+    goToCell("$B$2:$B$3");
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    // Paste to D5. There are row height 0.5cm and column width 1cm.
+    goToCell("$D$5");
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    // Make sure original and pasted shape have the same size.
+    // Size of original shape is 2001x3002, without fix size of pasted shape was 668x750.
+    SdrObject* pObjOrig = lcl_getSdrObjectWithAssert(*pDoc, 0); // original shape
+    SdrObject* pObjPasted = lcl_getSdrObjectWithAssert(*pDoc, 1); // pasted shape
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2001, pObjOrig->GetSnapRect().GetWidth(), 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3002, pObjOrig->GetSnapRect().GetHeight(), 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2001, pObjPasted->GetSnapRect().GetWidth(), 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3002, pObjPasted->GetSnapRect().GetHeight(), 1);
+}
+
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf155093_double_names)
+{
+    // Load a document, which has a shape in range B6:C14 with name "myArrow". When the range was
+    // copied and pasted, then the copied shape got the same name and thus was not accessible with
+    // Navigator.
+    createScDoc("ods/tdf155093_double_names.ods");
+    ScDocument* pDoc = getScDoc();
+
+    // Copy and paste
+    goToCell("$B$6:$C$14");
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    goToCell("$D$16");
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    // Make sure original and pasted shape have different names.
+    SdrObject* pObjOrig = lcl_getSdrObjectWithAssert(*pDoc, 0); // original shape
+    SdrObject* pObjPasted = lcl_getSdrObjectWithAssert(*pDoc, 1); // pasted shape
+    CPPUNIT_ASSERT(pObjOrig->GetName() != pObjPasted->GetName());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

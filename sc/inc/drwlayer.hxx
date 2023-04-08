@@ -156,8 +156,9 @@ public:
 
     void            CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const tools::Rectangle& rRange );
     void            CopyFromClip( ScDrawLayer* pClipModel,
-                                    SCTAB nSourceTab, const tools::Rectangle& rSourceRange,
-                                    const ScAddress& rDestPos, const tools::Rectangle& rDestRange );
+                                    SCTAB nSourceTab, const ScRange& rSourceRange,
+                                    const ScAddress& rDestPos, const ScRange& rDestRange,
+                                    bool bTransposing = false);
 
     void            SetPageSize(sal_uInt16 nPageNo, const Size& rSize, bool bUpdateNoteCaptionPos,
                                 const ScObjectHandling eObjectHandling = ScObjectHandling::RecalcPosMode);
