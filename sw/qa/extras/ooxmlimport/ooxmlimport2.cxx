@@ -1059,7 +1059,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154319)
     };
 
     // tdf#154360: check tab stops between the number and the entry text
-    // The last (10th) level does not correspont to any MS level (only 9 levels there)
+    // The last (10th) level does not correspond to any MS level (only 9 levels there)
     constexpr sal_Int32 levelTabStops[]
         = { 776, 1270, 1270, 1270, 1270, 1270, 1270, 1270, 1270, -1 };
 
