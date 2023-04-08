@@ -1527,9 +1527,10 @@ static void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& r
             beans::PropertyValue aValue;
             aValue.Name = sPropertyName;
             aValue.Value = xTextRangeProperties->getPropertyValue(sPropertyName);
-            rFrameProperties.push_back(aValue);
             if( nProperty < 4 )
                 xTextRangeProperties->setPropertyValue( sPropertyName, uno::Any(table::BorderLine2()));
+            if (aValue.Value.hasValue())
+                rFrameProperties.push_back(aValue);
         }
     }
     catch( const uno::Exception& )

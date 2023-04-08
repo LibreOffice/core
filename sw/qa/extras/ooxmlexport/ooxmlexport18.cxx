@@ -147,6 +147,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154129_framePr1, "tdf154129_framePr1.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePr, "tdf154703_framePr.docx")
+{
+    // the frame conversion had been failing, so it imported as plain text only.
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak, "tdf153613_anchoredAfterPgBreak.docx")
 {
     const auto& pLayout = parseLayoutDump();
