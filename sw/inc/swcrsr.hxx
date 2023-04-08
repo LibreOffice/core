@@ -281,6 +281,8 @@ public:
     SwCursor* MakeBoxSels( SwCursor* pCurrentCursor );
     // Any boxes protected?
     bool HasReadOnlyBoxSel() const;
+    // Any boxes hidden?
+    bool HasHiddenBoxSel() const;
 
     // Has table cursor been changed? If so, save new values immediately.
     bool IsCursorMovedUpdate();

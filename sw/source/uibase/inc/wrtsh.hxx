@@ -490,6 +490,9 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     /// Inserts a new annotation/comment at the current cursor position / selection.
     void InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq);
 
+    virtual void InfoReadOnlyDialog() const override;
+    virtual bool WarnHiddenSectionDialog() const override;
+
 private:
 
     SAL_DLLPRIVATE void  OpenMark();

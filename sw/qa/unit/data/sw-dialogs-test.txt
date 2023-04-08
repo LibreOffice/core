@@ -199,6 +199,7 @@ modules/swriter/ui/tokenwidget.ui
 modules/swriter/ui/viewoptionspage.ui
 modules/swriter/ui/warndatasourcedialog.ui
 modules/swriter/ui/warnemaildialog.ui
+modules/swriter/ui/warnhiddensectiondialog.ui
 modules/swriter/ui/wordcount.ui
 modules/swriter/ui/wrapdialog.ui
 modules/swriter/ui/wrappage.ui

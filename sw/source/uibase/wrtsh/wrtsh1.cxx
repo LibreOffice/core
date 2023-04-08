@@ -48,6 +48,7 @@
 #include <editeng/svxacorr.hxx>
 #include <editeng/ulspitem.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/svapp.hxx>
 #include <sfx2/printer.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -1994,6 +1995,26 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
             pSwFormatField = aIter.Next();
         }
     }
+}
+
+void SwWrtShell::InfoReadOnlyDialog() const
+{
+    std::unique_ptr<weld::Builder>
+        xBuilder(Application::CreateBuilder(GetView().GetFrameWeld(),
+            "modules/swriter/ui/inforeadonlydialog.ui"));
+    std::unique_ptr<weld::MessageDialog>
+        xInfo(xBuilder->weld_message_dialog("InfoReadonlyDialog"));
+    xInfo->run();
+}
+
+bool SwWrtShell::WarnHiddenSectionDialog() const
+{
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(
+        GetView().GetFrameWeld(), "modules/swriter/ui/warnhiddensectiondialog.ui"));
+    std::unique_ptr<weld::MessageDialog> xQuery(
+        xBuilder->weld_message_dialog("WarnHiddenSectionDialog"));
+
+    return (RET_YES == xQuery->run());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

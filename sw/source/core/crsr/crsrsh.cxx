@@ -3346,6 +3346,7 @@ bool SwCursorShell::HasReadonlySel(bool const isReplace) const
     {
         if ( m_pTableCursor != nullptr )
         {
+            // TODO: handling when a table cell (cells) is selected
             bRet = m_pTableCursor->HasReadOnlyBoxSel()
                    || m_pTableCursor->HasReadonlySel(GetViewOptions()->IsFormView(), isReplace);
         }
@@ -3361,6 +3362,31 @@ bool SwCursorShell::HasReadonlySel(bool const isReplace) const
             }
         }
     }
+    return bRet;
+}
+
+bool SwCursorShell::HasHiddenSections() const
+{
+    bool bRet = false;
+
+    if ( m_pTableCursor != nullptr )
+    {
+        // TODO: handling when a table cell (cells) is selected
+        bRet = m_pTableCursor->HasHiddenBoxSel()
+               || m_pTableCursor->HasHiddenSections();
+    }
+    else
+    {
+        for(const SwPaM& rCursor : m_pCurrentCursor->GetRingContainer())
+        {
+            if (rCursor.HasHiddenSections())
+            {
+                bRet = true;
+                break;
+            }
+        }
+    }
+
     return bRet;
 }
 

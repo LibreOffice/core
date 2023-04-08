@@ -790,6 +790,49 @@ bool SwPaM::HasReadonlySel(bool bFormView, bool const isReplace) const
     return bRet;
 }
 
+bool SwPaM::HasHiddenSections() const
+{
+    bool bRet = false;
+
+    if (HasMark() && GetPoint()->nNode != GetMark()->nNode)
+    {
+        sal_uLong nSttIdx = GetMark()->nNode.GetIndex(),
+            nEndIdx = GetPoint()->nNode.GetIndex();
+        if (nEndIdx <= nSttIdx)
+        {
+            sal_uLong nTmp = nSttIdx;
+            nSttIdx = nEndIdx;
+            nEndIdx = nTmp;
+        }
+
+        // If a hidden section should be between nodes, then the
+        // selection needs to contain already x nodes.
+        // (TextNd, SectNd, TextNd, EndNd, TextNd )
+        if (nSttIdx + 3 < nEndIdx)
+        {
+            const SwSectionFormats& rFormats = GetDoc()->GetSections();
+            for (SwSectionFormats::size_type n = rFormats.size(); n;)
+            {
+                const SwSectionFormat* pFormat = rFormats[--n];
+                if (pFormat->GetSection()->IsHidden())
+                {
+                    const SwFormatContent& rContent = pFormat->GetContent(false);
+                    OSL_ENSURE(rContent.GetContentIdx(), "where is the SectionNode?");
+                    sal_uLong nIdx = rContent.GetContentIdx()->GetIndex();
+                    if (nSttIdx <= nIdx && nEndIdx >= nIdx
+                        && rContent.GetContentIdx()->GetNode().GetNodes().IsDocNodes())
+                    {
+                        bRet = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    return bRet;
+}
+
 /// This function returns the next node in direction of search. If there is no
 /// left or the next is out of the area, then a null-pointer is returned.
 /// @param rbFirst If <true> then first time request. If so than the position of

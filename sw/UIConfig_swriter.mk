@@ -288,6 +288,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/viewoptionspage \
 	sw/uiconfig/swriter/ui/warndatasourcedialog \
 	sw/uiconfig/swriter/ui/warnemaildialog \
+	sw/uiconfig/swriter/ui/warnhiddensectiondialog \
 	sw/uiconfig/swriter/ui/watermarkdialog \
 	sw/uiconfig/swriter/ui/wordcount \
 	sw/uiconfig/swriter/ui/wrapdialog \

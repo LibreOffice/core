@@ -270,9 +270,7 @@ void SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
             }
             else
             {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui"));
-                std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("InfoReadonlyDialog"));
-                xQuery->run();
+                mrDocView.GetWrtShell().InfoReadOnlyDialog();
             }
         }
         if (bDone)

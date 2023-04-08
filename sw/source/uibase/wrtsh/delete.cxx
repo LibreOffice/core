@@ -279,12 +279,7 @@ bool SwWrtShell::DelLeft()
     if( !bRet && bSwap )
         SwCursorShell::SwapPam();
     CloseMark( bRet );
-    if (!bRet)
-    {   // false indicates HasReadonlySel failed
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetView().GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xInfo(xBuilder->weld_message_dialog("InfoReadonlyDialog"));
-        xInfo->run();
-    }
+
     return bRet;
 }
 
@@ -400,12 +395,6 @@ bool SwWrtShell::DelRight(bool const isReplaceHeuristic)
         SwCursorShell::Right(1, CRSR_SKIP_CELLS);
         bRet = Delete(true);
         CloseMark( bRet );
-        if (!bRet)
-        {   // false indicates HasReadonlySel failed
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetView().GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui"));
-            std::unique_ptr<weld::MessageDialog> xInfo(xBuilder->weld_message_dialog("InfoReadonlyDialog"));
-            xInfo->run();
-        }
         break;
 
     case SelectionType::Frame:

@@ -479,6 +479,7 @@ public:
     // Cursor is placed in something that is protected or selection contains
     // something that is protected.
     bool HasReadonlySel(bool isReplace = false) const;
+    bool HasHiddenSections() const;
 
     // Can the cursor be set to read only ranges?
     bool IsReadOnlyAvailable() const { return m_bSetCursorInReadOnly; }
