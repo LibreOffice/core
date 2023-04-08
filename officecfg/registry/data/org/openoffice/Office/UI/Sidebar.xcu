@@ -89,7 +89,7 @@
           <value>A11yCheckDeck</value>
         </prop>
         <prop oor:name="IconURL" oor:type="xs:string">
-          <value>private:graphicrepository/cmd/lc_adddirect.png</value>
+          <value>private:graphicrepository/sfx2/res/symphony/sidebar-a11y-large.png</value>
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">

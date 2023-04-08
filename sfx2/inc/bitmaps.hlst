@@ -28,6 +28,7 @@ inline constexpr OUStringLiteral CLOSEDOC = u"sfx2/res/closedoc.png";
 #define GRIP                                "sfx2/res/grip.png"
 #define OPEN_MORE                           "sfx2/res/symphony/open_more.png"
 #define MOREBUTTON                          "sfx2/res/symphony/morebutton.png"
+#define SIDEBAR_ACCESSIBILITY_LARGE         "sfx2/res/symphony/sidebar-a11y-large.png"
 #define SIDEBAR_ANIMATION_LARGE             "sfx2/res/symphony/sidebar-animation-large.png"
 #define SIDEBAR_ELEMENTS_LARGE              "sfx2/res/symphony/sidebar-elements-large.png"
 #define SIDEBAR_GALLERY_LARGE               "sfx2/res/symphony/sidebar-gallery-large.png"
