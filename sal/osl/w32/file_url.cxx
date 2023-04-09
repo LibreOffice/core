@@ -502,8 +502,10 @@ static std::optional<OUString> osl_decodeURL_(const OString& sUTF8)
         }
     }
 
-    return bValidEncoded ? OUString(aBuffer.getStr(), aBuffer.getLength(), RTL_TEXTENCODING_UTF8)
-                         : std::optional<OUString>();
+    if (!bValidEncoded)
+        return std::nullopt;
+
+    return OStringToOUString(aBuffer, RTL_TEXTENCODING_UTF8);
 }
 
 static OUString osl_encodeURL_(std::u16string_view sURL)

@@ -3082,7 +3082,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         {
                             OString aVal = m_pParser->getContext().getIntlKeywordAscii(IParseContext::InternationalKeyCode::And);
                             OUString aCompText = aRow[rFieldInfo.xText] + " "  +
-                                OUString(aVal.getStr(),aVal.getLength(),RTL_TEXTENCODING_ASCII_US) + " " +
+                                OStringToOUString(aVal, RTL_TEXTENCODING_ASCII_US) + " " +
                                 ::comphelper::getString(rRefValue.Value);
                             aRow[rFieldInfo.xText] = aCompText;
                         }
