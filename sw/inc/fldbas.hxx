@@ -442,6 +442,8 @@ public:
     OUString        ExpandValue(const double& rVal, sal_uInt32 nFormat, LanguageType nLng) const;
     OUString        DoubleToString(const double &rVal, LanguageType eLng) const;
     OUString        DoubleToString(const double &rVal, sal_uInt32 nFormat) const;
+    /// Query input or formatted value for dialog.
+    OUString        GetInputOrDateTime( const OUString& rInput, const double& rVal, sal_uInt32 nFormat ) const;
 };
 
 class SW_DLLPUBLIC SwValueField : public SwField
@@ -489,6 +491,9 @@ public:
 
     void                    SetExpandedFormula(const OUString& rStr);
     OUString                GetExpandedFormula() const;
+
+    /// Query formula or formatted value for dialog.
+    OUString                GetInputOrDateTime() const;
 };
 
 #endif // INCLUDED_SW_INC_FLDBAS_HXX

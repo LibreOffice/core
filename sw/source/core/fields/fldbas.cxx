@@ -24,6 +24,7 @@
 #include <libxml/xmlwriter.h>
 
 #include <rtl/math.hxx>
+#include <comphelper/string.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -648,6 +649,22 @@ OUString SwValueFieldType::DoubleToString( const double &rVal,
                                     pFormatter->GetNumDecimalSep()[0], true );
 }
 
+OUString SwValueFieldType::GetInputOrDateTime( const OUString& rInput, const double& rVal, sal_uInt32 nFormat ) const
+{
+    if (nFormat && nFormat != SAL_MAX_UINT32 && UseFormat())
+    {
+        SvNumberFormatter* pFormatter = m_pDoc->GetNumberFormatter();
+        const SvNumberformat* pEntry = pFormatter->GetEntry(nFormat);
+        if (pEntry && (pEntry->GetType() & SvNumFormatType::DATETIME))
+        {
+            OUString aEdit;
+            pFormatter->GetInputLineString( rVal, nFormat, aEdit);
+            return aEdit;
+        }
+    }
+    return rInput;
+}
+
 SwValueField::SwValueField( SwValueFieldType* pFieldType, sal_uInt32 nFormat,
                             LanguageType nLng, const double fVal )
     : SwField(pFieldType, nFormat, nLng)
@@ -859,6 +876,26 @@ OUString SwFormulaField::GetExpandedFormula() const
     }
     else
         return GetFormula();
+}
+
+OUString SwFormulaField::GetInputOrDateTime() const
+{
+    // GetFormula() leads to problems with date formats because only the
+    // number string without formatting is returned (additionally that may or
+    // may not use a localized decimal separator due to the convoluted handling
+    // of "formula"). It must be used for expressions though because otherwise
+    // with GetPar2() only the value calculated by SwCalc would be displayed
+    // (instead of test2 = test + 1).
+    // Force a formatted edit value for date+time formats, assuming they are
+    // not editable calculated expressions if the formula doesn't contain
+    // arithmetic operators or assignment.
+
+    const OUString aFormula( GetFormula());
+
+    if (comphelper::string::indexOfAny( aFormula, u"=+-*/", 0) == -1)
+        return static_cast<SwValueFieldType*>(GetTyp())->GetInputOrDateTime( aFormula, GetValue(), GetFormat());
+
+    return aFormula;
 }
 
 OUString SwField::GetDescription() const

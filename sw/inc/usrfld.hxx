@@ -52,8 +52,10 @@ public:
 
     OUString                Expand(sal_uInt32 nFormat, sal_uInt16 nSubType, LanguageType nLng);
 
-    OUString                GetContent( sal_uInt32 nFormat = 0 );
+    OUString                GetContent( sal_uInt32 nFormat = 0 ) const;
            void             SetContent( const OUString& rStr, sal_uInt32 nFormat = 0 );
+
+    OUString                GetInputOrDateTime( sal_uInt32 nFormat ) const;
 
     inline bool             IsValid() const;
 

@@ -275,7 +275,12 @@ double SwUserFieldType::GetValue( SwCalc& rCalc )
     return m_nValue;
 }
 
-OUString SwUserFieldType::GetContent( sal_uInt32 nFormat )
+OUString SwUserFieldType::GetInputOrDateTime( sal_uInt32 nFormat ) const
+{
+    return static_cast<const SwValueFieldType*>(this)->GetInputOrDateTime( m_aContent, GetValue(), nFormat);
+}
+
+OUString SwUserFieldType::GetContent( sal_uInt32 nFormat ) const
 {
     if (nFormat && nFormat != SAL_MAX_UINT32)
     {

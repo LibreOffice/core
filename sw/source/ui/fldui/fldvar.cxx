@@ -225,6 +225,19 @@ IMPL_LINK( SwFieldVarPage, SubTypeListBoxHdl, weld::TreeView&, rBox, void )
     SubTypeHdl(&rBox);
 }
 
+static inline sal_uInt32 lcl_getUsedNumFormat( const SwNumFormatTreeView& rNumFormatLB, bool& rbText )
+{
+    sal_uInt32 nNumberFormat = 0;
+    const sal_Int32 nNumFormatPos = rNumFormatLB.get_selected_index();
+    if (nNumFormatPos != -1)
+    {
+        nNumberFormat = rNumFormatLB.GetFormat();
+        if ((rbText = (nNumFormatPos == 0 && nNumberFormat == SAL_MAX_UINT32)))
+            nNumberFormat = 0;
+    }
+    return nNumberFormat;
+}
+
 void SwFieldVarPage::SubTypeHdl(const weld::TreeView* pBox)
 {
     SwFieldTypesEnum nTypeId = static_cast<SwFieldTypesEnum>(m_xTypeLB->get_id(GetTypeSel()).toUInt32());
@@ -277,11 +290,19 @@ void SwFieldVarPage::SubTypeHdl(const weld::TreeView* pBox)
                             m_xNumFormatLB->select(0);
                         }
                         else
-                            m_xValueED->set_text(pType->GetContent());
+                        {
+                            bool bText = false;
+                            const sal_uInt32 nNumberFormat = lcl_getUsedNumFormat( *m_xNumFormatLB, bText);
+                            m_xValueED->set_text(pType->GetInputOrDateTime(nNumberFormat));
+                        }
                     }
                 }
                 else
-                    m_xValueED->set_text(pType->GetContent());
+                {
+                    bool bText = false;
+                    const sal_uInt32 nNumberFormat = lcl_getUsedNumFormat( *m_xNumFormatLB, bText);
+                    m_xValueED->set_text(pType->GetInputOrDateTime(nNumberFormat));
+                }
             }
             else
             {
@@ -336,12 +357,7 @@ void SwFieldVarPage::SubTypeHdl(const weld::TreeView* pBox)
             }
             if (GetCurField() != nullptr && IsFieldEdit())
             {
-                // GetFormula leads to problems with date formats because
-                // only the numeric value without formatting is returned.
-                // It must be used though because otherwise in GetPar2 only
-                // the value calculated by Kalkulator would be displayed
-                // (instead of test2 = test + 1)
-                m_xValueED->set_text(static_cast<SwSetExpField*>(GetCurField())->GetFormula());
+                m_xValueED->set_text(static_cast<SwSetExpField*>(GetCurField())->GetInputOrDateTime());
             }
             m_xValueED->SetDropEnable(true);
             break;
@@ -1010,10 +1026,8 @@ IMPL_LINK(SwFieldVarPage, TBClickHdl, weld::Button&, rBox, void)
                         // Formula and both are SAL_MAX_UINT32 :-/ but only if
                         // not another yet unlisted of Additional Formats was
                         // selected that may claim the top position :-/
-                        sal_uInt32 nNumberFormat = m_xNumFormatLB->GetFormat();
-                        const bool bText = (nNumFormatPos == 0 && nNumberFormat == SAL_MAX_UINT32);
-                        if (bText)
-                            nNumberFormat = 0;
+                        bool bText = false;
+                        sal_uInt32 nNumberFormat = lcl_getUsedNumFormat( *m_xNumFormatLB, bText);
                         if (nNumberFormat && nNumberFormat != SAL_MAX_UINT32)
                         {   // Switch language to office-language because Kalkulator expects
                             // String in office format and it should be fed into dialog like
@@ -1060,10 +1074,8 @@ IMPL_LINK(SwFieldVarPage, TBClickHdl, weld::Button&, rBox, void)
                         // Formula and both are SAL_MAX_UINT32 :-/ but only if
                         // not another yet unlisted of Additional Formats was
                         // selected that may claim the top position :-/
-                        sal_uInt32 nNumberFormat = m_xNumFormatLB->GetFormat();
-                        const bool bText = (nNumFormatPos == 0 && nNumberFormat == SAL_MAX_UINT32);
-                        if (bText)
-                            nNumberFormat = 0;
+                        bool bText = false;
+                        sal_uInt32 nNumberFormat = lcl_getUsedNumFormat( *m_xNumFormatLB, bText);
                         aType.SetType(bText ? nsSwGetSetExpType::GSE_STRING : nsSwGetSetExpType::GSE_EXPR);
                         aType.SetContent( sValue, nNumberFormat );
                         m_xSelectionLB->append_text(sName);
