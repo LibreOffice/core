@@ -1174,15 +1174,13 @@ void ElementDescriptor::readEvents()
             if (descr.AddListenerParam.isEmpty())
             {
                 // detection of event-name
-                OString listenerType( OUStringToOString( descr.ListenerType, RTL_TEXTENCODING_ASCII_US ) );
-                OString eventMethod( OUStringToOString( descr.EventMethod, RTL_TEXTENCODING_ASCII_US ) );
                 StringTriple const * p = g_pEventTranslations;
                 while (p->first)
                 {
-                    if (0 == ::rtl_str_compare( p->second, eventMethod.getStr() ) &&
-                        0 == ::rtl_str_compare( p->first, listenerType.getStr() ))
+                    if (descr.EventMethod.equalsAscii(p->second) &&
+                        descr.ListenerType.equalsAscii(p->first))
                     {
-                        aEventName = OUString( p->third, ::rtl_str_getLength( p->third ), RTL_TEXTENCODING_ASCII_US );
+                        aEventName = OStringToOUString( p->third, RTL_TEXTENCODING_ASCII_US );
                         break;
                     }
                     ++p;
