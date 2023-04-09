@@ -486,6 +486,7 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
             {
                 // use awt::Gradient2, prepare ColorStops
                 awt::Gradient2 aGradient;
+                assert(aGradient.ColorStops.get() && "cid#1524676 aGradient.ColorStops._pSequence won't be null here");
                 basegfx::ColorStops aColorStops;
                 basegfx::ColorStops aTransparencyStops;
                 bool bContainsTransparency(false);
