@@ -210,6 +210,7 @@ static CairoFontsCache::CacheId makeCacheId(const GenericSalLayout& rLayout)
     aId.maFace = aFace;
     aId.mpOptions = rFont.GetFontOptions();
     aId.mbEmbolden = rInstance.NeedsArtificialBold();
+    aId.mbVerticalMetrics = false;
 
     return aId;
 }
@@ -335,7 +336,6 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         rFSD.maTargetName == "OpenSymbol" && !glyph_extrarotation.back() && !rLayout.GetOrientation())
     {
         CairoFontsCache::CacheId aId = makeCacheId(rLayout);
-        aId.mbVerticalMetrics = false;
 
         ApplyFont(cr, aId, nWidth, nHeight, 0, rLayout);
         cairo_text_extents_t stretched_extents;
