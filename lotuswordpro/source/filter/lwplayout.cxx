@@ -370,7 +370,7 @@ bool LwpVirtualLayout::IsStyleLayout()
 LwpVirtualLayout* LwpVirtualLayout::FindChildByType(LWP_LAYOUT_TYPE eType)
 {
     LwpObjectID* pID = &GetChildHead();
-    LwpVirtualLayout* pPrevLayout = nullptr;
+    o3tl::sorted_vector<LwpVirtualLayout*> aSeen;
 
     while (pID && !pID->IsNull())
     {
@@ -378,13 +378,12 @@ LwpVirtualLayout* LwpVirtualLayout::FindChildByType(LWP_LAYOUT_TYPE eType)
         if (!pLayout)
             break;
 
-        if (pPrevLayout && pLayout == pPrevLayout)
+        bool bAlreadySeen = !aSeen.insert(pLayout).second;
+        if (bAlreadySeen)
         {
             SAL_WARN("lwp", "loop in layout");
             break;
         }
-
-        pPrevLayout = pLayout;
 
         if (pLayout->GetLayoutType() == eType)
             return pLayout;
