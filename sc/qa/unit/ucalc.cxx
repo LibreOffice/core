@@ -28,6 +28,8 @@
 
 #include <docfunc.hxx>
 #include <funcdesc.hxx>
+#include <globstr.hrc>
+#include <scresid.hxx>
 
 #include <columniterator.hxx>
 #include <scopetools.hxx>
@@ -4777,6 +4779,22 @@ CPPUNIT_TEST_FIXTURE(Test, testShiftCells)
 
     CPPUNIT_ASSERT_MESSAGE("there should be NO note", !m_pDoc->HasNote(5, 3, 0));
     CPPUNIT_ASSERT_MESSAGE("there should be a note", m_pDoc->HasNote(4, 3, 0));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testNoteDefaultStyle)
+{
+    m_pDoc->InsertTab(0, "PostIts");
+
+    // We need a drawing layer in order to create caption objects.
+    m_pDoc->InitDrawLayer(m_xDocShell.get());
+
+    auto pNote = m_pDoc->GetOrCreateNote({0, 0, 0});
+    auto pCaption = pNote->GetCaption();
+
+    CPPUNIT_ASSERT(pCaption);
+    CPPUNIT_ASSERT_EQUAL(ScResId(STR_STYLENAME_NOTE), pCaption->GetStyleSheet()->GetName());
 
     m_pDoc->DeleteTab(0);
 }

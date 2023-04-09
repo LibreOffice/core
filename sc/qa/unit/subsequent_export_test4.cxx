@@ -26,6 +26,7 @@
 #include <editeng/postitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -1553,12 +1554,14 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCommentStyles)
         ScPostIt* pNote = pDoc->GetNote(aPos);
         CPPUNIT_ASSERT(pNote);
 
-        pNote->ShowCaption(aPos, true);
         auto pCaption = pNote->GetCaption();
         CPPUNIT_ASSERT(pCaption);
 
         auto pStyleSheet = &pDoc->GetStyleSheetPool()->Make("MyStyle1", SfxStyleFamily::Frame);
-        pCaption->SetStyleSheet(static_cast<SfxStyleSheet*>(pStyleSheet), true);
+        auto& rSet = pStyleSheet->GetItemSet();
+        rSet.Put(SvxFontHeightItem(1129, 100, EE_CHAR_FONTHEIGHT));
+
+        pCaption->SetStyleSheet(static_cast<SfxStyleSheet*>(pStyleSheet), false);
 
         // Hidden comments use different code path on import
         pNote->ShowCaption(aPos, false);
@@ -1575,12 +1578,14 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCommentStyles)
         ScPostIt* pNote = aDoc.GetNote(aPos);
         CPPUNIT_ASSERT(pNote);
 
-        pNote->ShowCaption(aPos, true);
-        auto pCaption = pNote->GetCaption();
+        auto pCaption = pNote->GetOrCreateCaption(aPos);
         CPPUNIT_ASSERT(pCaption);
 
         // Check that the style was imported, and survived copying
         CPPUNIT_ASSERT_EQUAL(OUString("MyStyle1"), pCaption->GetStyleSheet()->GetName());
+        // Check that the style formatting is in effect
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(1129),
+                             pCaption->GetMergedItemSet().Get(EE_CHAR_FONTHEIGHT).GetHeight());
     }
 }
 

@@ -25,6 +25,7 @@
 
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <sot/exchange.hxx>
 #include <svx/objfac3d.hxx>
@@ -41,6 +42,16 @@
 #include <svx/svdundo.hxx>
 #include <svx/sdsxyitm.hxx>
 #include <svx/svxids.hrc>
+#include <svx/sxcecitm.hxx>
+#include <svx/sdshitm.hxx>
+#include <svx/sdtditm.hxx>
+#include <svx/sdtagitm.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xlineit0.hxx>
+#include <svx/xlnstit.hxx>
+#include <svx/xlnstwit.hxx>
+#include <svx/xlnstcit.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <editeng/unolingu.hxx>
 #include <svx/drawitem.hxx>
@@ -73,6 +84,8 @@
 #include <charthelper.hxx>
 #include <table.hxx>
 #include <stlpool.hxx>
+#include <docpool.hxx>
+#include <detfunc.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <memory>
@@ -348,6 +361,52 @@ void ScDrawLayer::CreateDefaultStyles()
     // Default
     auto pSheet = &GetStyleSheetPool()->Make(ScResId(STR_STYLENAME_STANDARD), SfxStyleFamily::Frame, SfxStyleSearchBits::ScStandard);
     SetDefaultStyleSheet(static_cast<SfxStyleSheet*>(pSheet));
+
+    // Note
+    pSheet = &GetStyleSheetPool()->Make(ScResId(STR_STYLENAME_NOTE), SfxStyleFamily::Frame, SfxStyleSearchBits::ScStandard);
+
+    // caption tail arrow
+    ::basegfx::B2DPolygon aTriangle;
+    aTriangle.append(::basegfx::B2DPoint(10.0, 0.0));
+    aTriangle.append(::basegfx::B2DPoint(0.0, 30.0));
+    aTriangle.append(::basegfx::B2DPoint(20.0, 30.0));
+    aTriangle.setClosed(true);
+
+    auto pSet = &pSheet->GetItemSet();
+    pSet->Put(XLineStartItem(OUString(), ::basegfx::B2DPolyPolygon(aTriangle)).checkForUniqueItem(this));
+    pSet->Put(XLineStartWidthItem(200));
+    pSet->Put(XLineStartCenterItem(false));
+    pSet->Put(XLineStyleItem(drawing::LineStyle_SOLID));
+    pSet->Put(XFillStyleItem(drawing::FillStyle_SOLID));
+    pSet->Put(XFillColorItem(OUString(), ScDetectiveFunc::GetCommentColor()));
+    pSet->Put(SdrCaptionEscDirItem(SdrCaptionEscDir::BestFit));
+
+    // shadow
+    /* SdrShadowItem has false, instead the shadow is set for the rectangle
+       only with SetSpecialTextBoxShadow() when the object is created. */
+    pSet->Put(makeSdrShadowItem(false));
+    pSet->Put(makeSdrShadowXDistItem(100));
+    pSet->Put(makeSdrShadowYDistItem(100));
+
+    // text attributes
+    pSet->Put(makeSdrTextLeftDistItem(100));
+    pSet->Put(makeSdrTextRightDistItem(100));
+    pSet->Put(makeSdrTextUpperDistItem(100));
+    pSet->Put(makeSdrTextLowerDistItem(100));
+    pSet->Put(makeSdrTextAutoGrowWidthItem(false));
+    pSet->Put(makeSdrTextAutoGrowHeightItem(true));
+
+    // text formatting
+    SfxItemSet aEditSet(GetItemPool());
+    ScPatternAttr::FillToEditItemSet(aEditSet, pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN).GetItemSet());
+
+    pSet->Put(aEditSet.Get(EE_CHAR_FONTINFO));
+    pSet->Put(aEditSet.Get(EE_CHAR_FONTINFO_CJK));
+    pSet->Put(aEditSet.Get(EE_CHAR_FONTINFO_CTL));
+
+    pSet->Put(aEditSet.Get(EE_CHAR_FONTHEIGHT));
+    pSet->Put(aEditSet.Get(EE_CHAR_FONTHEIGHT_CJK));
+    pSet->Put(aEditSet.Get(EE_CHAR_FONTHEIGHT_CTL));
 }
 
 void ScDrawLayer::UseHyphenator()

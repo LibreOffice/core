@@ -59,6 +59,10 @@
 #include <userdat.hxx>
 #include <validat.hxx>
 #include <formulacell.hxx>
+#include <globstr.hrc>
+#include <scresid.hxx>
+#include <undostyl.hxx>
+#include <stlpool.hxx>
 #include <docpool.hxx>
 #include <patattr.hxx>
 #include <scmod.hxx>
@@ -105,22 +109,6 @@ public:
     void        SetMaxLevel( sal_uInt16 nVal )      { nMaxLevel = nVal; }
     sal_uInt16      GetMaxLevel() const             { return nMaxLevel; }
 };
-
-namespace {
-
-class ScCommentData
-{
-public:
-                        ScCommentData( ScDocument& rDoc, SdrModel* pModel );
-
-    SfxItemSet&         GetCaptionSet() { return aCaptionSet; }
-    void                UpdateCaptionSet( const SfxItemSet& rItemSet );
-
-private:
-    SfxItemSet          aCaptionSet;
-};
-
-}
 
 Color ScDetectiveFunc::nArrowColor = Color(0);
 Color ScDetectiveFunc::nErrorColor = Color(0);
@@ -191,80 +179,6 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
     aCircleSet.Put( XLineColorItem( OUString(), ScDetectiveFunc::GetErrorColor() ) );
     aCircleSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
     aCircleSet.Put( XLineWidthItem( 55 ) ); // 54 = 1 Pixel
-}
-
-ScCommentData::ScCommentData( ScDocument& rDoc, SdrModel* pModel ) :
-    aCaptionSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END, EE_ITEMS_START, EE_ITEMS_END> )
-{
-    basegfx::B2DPolygon aTriangle;
-    aTriangle.append(basegfx::B2DPoint(10.0, 0.0));
-    aTriangle.append(basegfx::B2DPoint(0.0, 30.0));
-    aTriangle.append(basegfx::B2DPoint(20.0, 30.0));
-    aTriangle.setClosed(true);
-
-    aCaptionSet.Put( XLineStartItem( OUString(), basegfx::B2DPolyPolygon(aTriangle)));
-    aCaptionSet.Put( XLineStartWidthItem( 200 ) );
-    aCaptionSet.Put( XLineStartCenterItem( false ) );
-    aCaptionSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
-    Color aYellow( ScDetectiveFunc::GetCommentColor() );
-    aCaptionSet.Put( XFillColorItem( OUString(), aYellow ) );
-
-    //  shadow
-    //  SdrShadowItem has sal_False, instead the shadow is set for the rectangle
-    //  only with SetSpecialTextBoxShadow when the object is created
-    //  (item must be set to adjust objects from older files)
-    aCaptionSet.Put( makeSdrShadowItem( false ) );
-    aCaptionSet.Put( makeSdrShadowXDistItem( 100 ) );
-    aCaptionSet.Put( makeSdrShadowYDistItem( 100 ) );
-
-    //  text attributes
-    aCaptionSet.Put( makeSdrTextLeftDistItem( 100 ) );
-    aCaptionSet.Put( makeSdrTextRightDistItem( 100 ) );
-    aCaptionSet.Put( makeSdrTextUpperDistItem( 100 ) );
-    aCaptionSet.Put( makeSdrTextLowerDistItem( 100 ) );
-
-    aCaptionSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
-    aCaptionSet.Put( makeSdrTextAutoGrowHeightItem( true ) );
-
-    //  do use the default cell style, so the user has a chance to
-    //  modify the font for the annotations
-    rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN).FillEditItemSet( &aCaptionSet );
-
-    // support the best position for the tail connector now that
-    // that notes can be resized and repositioned.
-    aCaptionSet.Put( SdrCaptionEscDirItem( SdrCaptionEscDir::BestFit) );
-}
-
-void ScCommentData::UpdateCaptionSet( const SfxItemSet& rItemSet )
-{
-    SfxWhichIter aWhichIter( rItemSet );
-    const SfxPoolItem* pPoolItem = nullptr;
-
-    for( sal_uInt16 nWhich = aWhichIter.FirstWhich(); nWhich > 0; nWhich = aWhichIter.NextWhich() )
-    {
-        if(aWhichIter.GetItemState(false, &pPoolItem) == SfxItemState::SET)
-        {
-            switch(nWhich)
-            {
-                case SDRATTR_SHADOW:
-                    // use existing Caption default - appears that setting this
-                    // to true screws up the tail appearance. See also comment
-                    // for default setting above.
-                break;
-                case SDRATTR_SHADOWXDIST:
-                    // use existing Caption default - svx sets a value of 35
-                    // but default 100 gives a better appearance.
-                break;
-                case SDRATTR_SHADOWYDIST:
-                    // use existing Caption default - svx sets a value of 35
-                    // but default 100 gives a better appearance.
-                break;
-
-                default:
-                    aCaptionSet.Put(*pPoolItem);
-           }
-        }
-    }
 }
 
 void ScDetectiveFunc::Modified()
@@ -1458,46 +1372,27 @@ void ScDetectiveFunc::GetAllSuccs(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
 
 void ScDetectiveFunc::UpdateAllComments( ScDocument& rDoc )
 {
-    //  for all caption objects, update attributes and SpecialTextBoxShadow flag
-    //  (on all tables - nTab is ignored!)
-
-    //  no undo actions, this is refreshed after undo
-
     ScDrawLayer* pModel = rDoc.GetDrawLayer();
     if (!pModel)
         return;
 
-    for( SCTAB nObjTab = 0, nTabCount = rDoc.GetTableCount(); nObjTab < nTabCount; ++nObjTab )
-    {
-        SdrPage* pPage = pModel->GetPage( static_cast< sal_uInt16 >( nObjTab ) );
-        OSL_ENSURE( pPage, "Page ?" );
-        if( pPage )
-        {
-            SdrObjListIter aIter( pPage, SdrIterMode::Flat );
-            for( SdrObject* pObject = aIter.Next(); pObject; pObject = aIter.Next() )
-            {
-                if ( ScDrawObjData* pData = ScDrawLayer::GetNoteCaptionData( pObject, nObjTab ) )
-                {
-                    ScPostIt* pNote = rDoc.GetNote( pData->maStart );
-                    // caption should exist, we iterate over drawing objects...
-                    OSL_ENSURE( pNote && (pNote->GetCaption() == pObject), "ScDetectiveFunc::UpdateAllComments - invalid cell note" );
-                    if( pNote )
-                    {
-                        ScCommentData aData( rDoc, pModel );
-                        SfxItemSet aAttrColorSet = pObject->GetMergedItemSet();
-                        aAttrColorSet.Put( XFillColorItem( OUString(), GetCommentColor() ) );
-                        aData.UpdateCaptionSet( aAttrColorSet );
-                        pObject->SetMergedItemSetAndBroadcast( aData.GetCaptionSet() );
-                        if( SdrCaptionObj* pCaption = dynamic_cast< SdrCaptionObj* >( pObject ) )
-                        {
-                            pCaption->SetSpecialTextBoxShadow();
-                            pCaption->SetFixedTail();
-                        }
-                    }
-                }
-            }
-        }
-    }
+    auto pStyleSheet = rDoc.GetStyleSheetPool()->Find(ScResId(STR_STYLENAME_NOTE), SfxStyleFamily::Frame);
+    if (!pStyleSheet)
+        return;
+
+    ScStyleSaveData aOldData, aNewData;
+    aOldData.InitFromStyle(pStyleSheet);
+
+    auto& rSet = pStyleSheet->GetItemSet();
+    rSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
+    rSet.Put(XFillColorItem(OUString(), ScDetectiveFunc::GetCommentColor()));
+    static_cast<SfxStyleSheet*>(pStyleSheet)->Broadcast(SfxHint(SfxHintId::DataChanged));
+
+    aNewData.InitFromStyle(pStyleSheet);
+
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(rDoc.GetDocumentShell());
+    pDocSh->GetUndoManager()->AddUndoAction(
+        std::make_unique<ScUndoModifyStyle>(pDocSh, pStyleSheet->GetFamily(), aOldData, aNewData));
 }
 
 void ScDetectiveFunc::UpdateAllArrowColors()

@@ -66,7 +66,6 @@
 #include <hints.hxx>
 #include <detdata.hxx>
 #include <dpobject.hxx>
-#include <detfunc.hxx>
 #include <scmod.hxx>
 #include <dociter.hxx>
 #include <progress.hxx>
@@ -5056,12 +5055,6 @@ void ScDocument::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool b
         if (a)
             a->StyleSheetChanged
                 ( pStyleSheet, bRemoved, pDev, nPPTX, nPPTY, rZoomX, rZoomY );
-    }
-
-    if ( pStyleSheet && pStyleSheet->GetName() == ScResId(STR_STYLENAME_STANDARD) )
-    {
-        //  update attributes for all note objects
-        ScDetectiveFunc::UpdateAllComments( *this );
     }
 }
 

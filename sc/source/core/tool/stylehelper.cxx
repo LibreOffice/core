@@ -102,6 +102,7 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( SfxStyleFamily nType )
         static ScDisplayNameMap const aGraphicMap[]
         {
             { ScResId( STR_STYLENAME_STANDARD ), OUString(SC_STYLE_PROG_STANDARD) },
+            { ScResId( STR_STYLENAME_NOTE ), "Note" },
             //  last entry remains empty
             { OUString(), OUString() },
         };
