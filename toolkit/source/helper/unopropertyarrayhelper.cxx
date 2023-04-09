@@ -64,17 +64,17 @@ css::uno::Sequence< css::beans::Property > UnoPropertyArrayHelper::getProperties
 {
     // Sort by names ...
 
-    std::map<sal_Int32, sal_uInt16> aSortedPropsIds;
+    std::map<OUString, sal_uInt16> aSortedPropsIds;
     for (const auto& rId : maIDs)
     {
         sal_uInt16 nId = sal::static_int_cast< sal_uInt16 >(rId);
-        aSortedPropsIds[ 1+GetPropertyOrderNr( nId ) ] = nId;
+        aSortedPropsIds.emplace(GetPropertyName( nId ), nId);
 
         if ( nId == BASEPROPERTY_FONTDESCRIPTOR )
         {
             // single properties ...
             for ( sal_uInt16 i = BASEPROPERTY_FONTDESCRIPTORPART_START; i <= BASEPROPERTY_FONTDESCRIPTORPART_END; i++ )
-                aSortedPropsIds[ 1+GetPropertyOrderNr( i ) ]  = i;
+                aSortedPropsIds.emplace(GetPropertyName( i ), i);
         }
     }
 
@@ -86,7 +86,7 @@ css::uno::Sequence< css::beans::Property > UnoPropertyArrayHelper::getProperties
     for ( const auto& rPropIds : aSortedPropsIds )
     {
         sal_uInt16 nId = rPropIds.second;
-        pProps[n].Name = GetPropertyName( nId );
+        pProps[n].Name = rPropIds.first;
         pProps[n].Handle = nId;
         pProps[n].Type = *GetPropertyType( nId );
         pProps[n].Attributes = GetPropertyAttribs( nId );

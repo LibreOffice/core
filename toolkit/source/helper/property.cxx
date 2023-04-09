@@ -36,6 +36,7 @@
 #include <algorithm>
 #include <string_view>
 #include <utility>
+#include <unordered_map>
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
@@ -51,16 +52,14 @@ namespace {
 
 struct ImplPropertyInfo
 {
-    OUString                 aName;
     sal_uInt16               nPropId;
     css::uno::Type           aType;
     sal_Int16                nAttribs;
     bool                     bDependsOnOthers;   // eg. VALUE depends on MIN/MAX and must be set after MIN/MAX.
 
-    ImplPropertyInfo( OUString theName, sal_uInt16 nId, const css::uno::Type& rType,
+    ImplPropertyInfo( sal_uInt16 nId, const css::uno::Type& rType,
                         sal_Int16 nAttrs, bool bDepends = false )
-         : aName(std::move(theName))
-         , nPropId(nId)
+         : nPropId(nId)
          , aType(rType)
          , nAttribs(nAttrs)
          , bDependsOnOthers(bDepends)
@@ -72,20 +71,21 @@ struct ImplPropertyInfo
 }
 
 #define DECL_PROP_1( asciiname, id, type, attrib1 ) \
-    ImplPropertyInfo( asciiname, BASEPROPERTY_##id, cppu::UnoType<type>::get(), css::beans::PropertyAttribute::attrib1 )
+    { asciiname, ImplPropertyInfo( BASEPROPERTY_##id, cppu::UnoType<type>::get(), css::beans::PropertyAttribute::attrib1 ) }
 #define DECL_PROP_2( asciiname, id, type, attrib1, attrib2 ) \
-    ImplPropertyInfo( asciiname, BASEPROPERTY_##id, cppu::UnoType<type>::get(), css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2 )
+    { asciiname, ImplPropertyInfo( BASEPROPERTY_##id, cppu::UnoType<type>::get(), css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2 ) }
 #define DECL_PROP_3( asciiname, id, type, attrib1, attrib2, attrib3 ) \
-    ImplPropertyInfo( asciiname, BASEPROPERTY_##id, cppu::UnoType<type>::get(), css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2 | css::beans::PropertyAttribute::attrib3 )
+    { asciiname, ImplPropertyInfo( BASEPROPERTY_##id, cppu::UnoType<type>::get(), css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2 | css::beans::PropertyAttribute::attrib3 ) }
 
 #define DECL_DEP_PROP_2( asciiname, id, type, attrib1, attrib2 ) \
-    ImplPropertyInfo( asciiname, BASEPROPERTY_##id, cppu::UnoType<type>::get(), css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2, true )
+    { asciiname, ImplPropertyInfo( BASEPROPERTY_##id, cppu::UnoType<type>::get(), css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2, true ) }
 #define DECL_DEP_PROP_3( asciiname, id, type, attrib1, attrib2, attrib3 ) \
-    ImplPropertyInfo( asciiname, BASEPROPERTY_##id, cppu::UnoType<type>::get(), css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2 | css::beans::PropertyAttribute::attrib3, true )
+    { asciiname, ImplPropertyInfo( BASEPROPERTY_##id, cppu::UnoType<type>::get(), css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2 | css::beans::PropertyAttribute::attrib3, true ) }
 
-static ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
+typedef std::unordered_map<OUString, ImplPropertyInfo> ImpPropertyInfoMap;
+static const ImpPropertyInfoMap & ImplGetPropertyInfos()
 {
-    static ImplPropertyInfo aImplPropertyInfos [] = {
+    static const ImpPropertyInfoMap aImplPropertyInfos {
         DECL_PROP_2     ( "AccessibleName",         ACCESSIBLENAME,         OUString,       BOUND, MAYBEDEFAULT ),
         DECL_PROP_3     ( "Align",                  ALIGN,                  sal_Int16,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
         DECL_PROP_2     ( "Autocomplete",           AUTOCOMPLETE,           bool,           BOUND, MAYBEDEFAULT ),
@@ -272,85 +272,37 @@ static ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
         DECL_PROP_3     ( "ActiveSelectionTextColor",         ACTIVE_SEL_TEXT_COLOR,         sal_Int32, BOUND, MAYBEDEFAULT, MAYBEVOID ),
         DECL_PROP_3     ( "InactiveSelectionTextColor",       INACTIVE_SEL_TEXT_COLOR,       sal_Int32, BOUND, MAYBEDEFAULT, MAYBEVOID ),
     };
-    rElementCount = SAL_N_ELEMENTS(aImplPropertyInfos);
     return aImplPropertyInfos;
-}
-
-namespace {
-
-struct ImplPropertyInfoCompareFunctor
-{
-    bool operator()(const ImplPropertyInfo& lhs,const ImplPropertyInfo& rhs) const
-    {
-        return lhs.aName.compareTo(rhs.aName) < 0;
-    }
-    bool operator()(const ImplPropertyInfo& lhs,std::u16string_view rhs)  const
-    {
-        return lhs.aName.compareTo(rhs) < 0;
-    }
-};
-
-}
-
-static void ImplAssertValidPropertyArray()
-{
-    static bool bSorted = false;
-    if( !bSorted )
-    {
-        sal_uInt16 nElements;
-        ImplPropertyInfo* pInfo = ImplGetPropertyInfos( nElements );
-        ::std::sort(pInfo, pInfo+nElements,ImplPropertyInfoCompareFunctor());
-        bSorted = true;
-    }
 }
 
 sal_uInt16 GetPropertyId( const OUString& rPropertyName )
 {
-    ImplAssertValidPropertyArray();
-
-    sal_uInt16 nElements;
-    ImplPropertyInfo* pInfo = ImplGetPropertyInfos( nElements );
-    ImplPropertyInfo* pInf = ::std::lower_bound(pInfo,pInfo+nElements,rPropertyName,ImplPropertyInfoCompareFunctor());
-/*
-        (ImplPropertyInfo*)
-                                bsearch( &aSearch, pInfo, nElements, sizeof( ImplPropertyInfo ), ImplPropertyInfoCompare );
-*/
-
-    return ( pInf && pInf != (pInfo+nElements) && pInf->aName == rPropertyName) ? pInf->nPropId: 0;
+    const ImpPropertyInfoMap & rMap = ImplGetPropertyInfos();
+    auto it = rMap.find(rPropertyName);
+    return it != rMap.end() ? it->second.nPropId : 0;
 }
 
 static const ImplPropertyInfo* ImplGetImplPropertyInfo( sal_uInt16 nPropertyId )
 {
-    ImplAssertValidPropertyArray();
+    const ImpPropertyInfoMap & rMap = ImplGetPropertyInfos();
 
-    sal_uInt16 nElements;
-    ImplPropertyInfo* pInfo = ImplGetPropertyInfos( nElements );
-    sal_uInt16 n;
-    for ( n = 0; n < nElements && pInfo[n].nPropId != nPropertyId; ++n)
-        ;
-
-    return (n < nElements) ? &pInfo[n] : nullptr;
-}
-
-sal_uInt16 GetPropertyOrderNr( sal_uInt16 nPropertyId )
-{
-    ImplAssertValidPropertyArray();
-
-    sal_uInt16 nElements;
-    ImplPropertyInfo* pInfo = ImplGetPropertyInfos( nElements );
-    for ( sal_uInt16 n = nElements; n; )
-    {
-        if ( pInfo[--n].nPropId == nPropertyId )
-            return n;
-    }
-    return 0xFFFF;
+    for (auto const & rPair : rMap)
+        if (rPair.second.nPropId == nPropertyId)
+            return &rPair.second;
+    return nullptr;
 }
 
 const OUString& GetPropertyName( sal_uInt16 nPropertyId )
 {
-    const ImplPropertyInfo* pImplPropertyInfo = ImplGetImplPropertyInfo( nPropertyId );
-    assert(pImplPropertyInfo && "Invalid PropertyId!");
-    return pImplPropertyInfo->aName;
+    const ImpPropertyInfoMap & rMap = ImplGetPropertyInfos();
+
+    for (auto const & rPair : rMap)
+        if (rPair.second.nPropId == nPropertyId)
+            return rPair.first;
+
+    assert(false && "Invalid PropertyId!");
+    static const OUString EMPTY;
+    return EMPTY;
 }
 
 const css::uno::Type* GetPropertyType( sal_uInt16 nPropertyId )
