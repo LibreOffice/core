@@ -52,15 +52,15 @@ namespace {
 
 struct ImplPropertyInfo
 {
-    sal_uInt16               nPropId;
     css::uno::Type           aType;
+    sal_uInt16               nPropId;
     sal_Int16                nAttribs;
     bool                     bDependsOnOthers;   // eg. VALUE depends on MIN/MAX and must be set after MIN/MAX.
 
     ImplPropertyInfo( sal_uInt16 nId, const css::uno::Type& rType,
                         sal_Int16 nAttrs, bool bDepends = false )
-         : nPropId(nId)
-         , aType(rType)
+         : aType(rType)
+         , nPropId(nId)
          , nAttribs(nAttrs)
          , bDependsOnOthers(bDepends)
      {
