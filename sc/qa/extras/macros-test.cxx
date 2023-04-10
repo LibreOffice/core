@@ -911,6 +911,43 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf147122)
     CPPUNIT_ASSERT_EQUAL(Any(OUString("This is a test")), aRet);
 }
 
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf116127)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+
+    css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
+    auto xLibs = xDocScr->getBasicLibraries();
+    auto xLibrary = xLibs->createLibrary("TestLibrary");
+    xLibrary->insertByName(
+        "TestModule",
+        uno::Any(OUString(
+            "Function TestClearContents\n"
+            // Insert test string into cell A1
+            "  oActiveSheet = ThisComponent.CurrentController.ActiveSheet\n"
+            "  oActiveCell = oActiveSheet.getCellRangeByName(\"A1\")\n"
+            "  oActiveCell.setString(\"Italic Test\")\n"
+            // Create a text cursor and and change the first letter to italic
+            "  oCursor = oActiveCell.Text.createTextCursor()\n"
+            "  oCursor.gotoStart(False)\n"
+            "  oCursor.goRight(1, True)\n"
+            "  oCursor.CharPosture = com.sun.star.awt.FontSlant.ITALIC\n"
+            // Clear contents using EDITATTR cell flag to clear the italic char posture
+            "  oActiveCell.clearContents(com.sun.star.sheet.CellFlags.EDITATTR)\n"
+            // Check the char posture of the first letter
+            "  oCursor.gotoStart(False)\n"
+            "  oCursor.goRight(1, True)\n"
+            "  TestClearContents = oCursor.CharPosture <> com.sun.star.awt.FontSlant.ITALIC\n"
+            "End Function\n")));
+
+    Any aRet = executeMacro("vnd.sun.Star.script:TestLibrary.TestModule.TestClearContents?"
+                            "language=Basic&location=document");
+    // Without the fix in place, this test would have failed with
+    // - Expected : true
+    // - Actual   : false
+    // i.e. the formatting within parts of the cell contents (EDITATTR) were not deleted
+    CPPUNIT_ASSERT_EQUAL(Any(true), aRet);
+}
+
 ScMacrosTest::ScMacrosTest()
       : UnoApiXmlTest("/sc/qa/extras/testdocuments")
 {
