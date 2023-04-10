@@ -75,42 +75,36 @@ static bool lcl_IsInSameTableBox( SwNodes const & _rNds,
 
     // determine index to be checked. Its assumed that a previous/next exist.
     SwNodeIndex aChkIdx( _rNd );
+
+    // determine index of previous/next - skip hidden ones, which are
+    // inside the table.
+    // If found one is before/after table, this one isn't in the same
+    // table box as <_rNd>.
+    for(;;)
     {
-        // determine index of previous/next - skip hidden ones, which are
-        // inside the table.
-        // If found one is before/after table, this one isn't in the same
-        // table box as <_rNd>.
-        bool bFound = false;
-        do
+        if ( _bPrev
+                ? !SwNodes::GoPrevSection( &aChkIdx, false, false )
+                : !_rNds.GoNextSection( &aChkIdx, false, false ) )
         {
-            if ( _bPrev
-                 ? !SwNodes::GoPrevSection( &aChkIdx, false, false )
-                 : !_rNds.GoNextSection( &aChkIdx, false, false ) )
-            {
-                OSL_FAIL( "<lcl_IsInSameTableBox(..)> - no previous/next!" );
-                return false;
-            }
-            else
-            {
-                if ( aChkIdx < pTableNd->GetIndex() ||
-                     aChkIdx > pTableNd->EndOfSectionNode()->GetIndex() )
-                {
-                    return false;
-                }
-                else
-                {
-                    // check, if found one isn't inside a hidden section, which
-                    // is also inside the table.
-                    SwSectionNode* pSectNd = aChkIdx.GetNode().FindSectionNode();
-                    if ( !pSectNd ||
-                         pSectNd->GetIndex() < pTableNd->GetIndex() ||
-                         !pSectNd->GetSection().IsHiddenFlag() )
-                    {
-                        bFound = true;
-                    }
-                }
-            }
-        } while ( !bFound );
+            OSL_FAIL( "<lcl_IsInSameTableBox(..)> - no previous/next!" );
+            return false;
+        }
+
+        if ( aChkIdx < pTableNd->GetIndex() ||
+                aChkIdx > pTableNd->EndOfSectionNode()->GetIndex() )
+        {
+            return false;
+        }
+
+        // check, if found one isn't inside a hidden section, which
+        // is also inside the table.
+        SwSectionNode* pSectNd = aChkIdx.GetNode().FindSectionNode();
+        if ( !pSectNd ||
+                pSectNd->GetIndex() < pTableNd->GetIndex() ||
+                !pSectNd->GetSection().IsHiddenFlag() )
+        {
+            break;
+        }
     }
 
     // Find the Box's StartNode
