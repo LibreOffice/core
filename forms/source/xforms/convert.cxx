@@ -21,6 +21,7 @@
 #include "convert.hxx"
 
 #include <sstream>
+#include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <tools/date.hxx>
@@ -49,6 +50,36 @@ namespace
 
     Any lcl_toAny_OUString( const OUString& rStr )
     { return Any(rStr); }
+
+    OUString lcl_toXSD_bool( const Any& rAny )
+    { bool b = false; rAny >>= b; return b ? OUString("true") : OUString("false"); }
+
+    Any lcl_toAny_bool( const OUString& rStr )
+    {
+        bool b = ( rStr == "true"  ||  rStr == "1" );
+        return Any( b );
+    }
+
+    OUString lcl_toXSD_double( const Any& rAny )
+    {
+        double f = 0.0;
+        rAny >>= f;
+
+        return std::isfinite( f )
+            ? rtl::math::doubleToUString( f, rtl_math_StringFormat_Automatic,
+                                        rtl_math_DecimalPlaces_Max, '.',
+                                        true )
+            : OUString();
+    }
+
+
+    Any lcl_toAny_double( const OUString& rString )
+    {
+        rtl_math_ConversionStatus eStatus;
+        double f = rtl::math::stringToDouble(
+            rString, '.', ',', &eStatus );
+        return ( eStatus == rtl_math_ConversionStatus_Ok ) ? Any( f ) : Any();
+    }
 
     void lcl_appendInt32ToBuffer( const sal_Int32 _nValue, OUStringBuffer& _rBuffer, sal_Int16 _nMinDigits )
     {
@@ -231,6 +262,8 @@ namespace
 void Convert::init()
 {
     maMap[ cppu::UnoType<OUString>::get() ] = Convert_t(&lcl_toXSD_OUString, &lcl_toAny_OUString);
+    maMap[ cppu::UnoType<bool>::get() ] = Convert_t(&lcl_toXSD_bool, &lcl_toAny_bool);
+    maMap[ cppu::UnoType<double>::get() ] = Convert_t(&lcl_toXSD_double, &lcl_toAny_double);
     maMap[ cppu::UnoType<css::util::Date>::get() ] = Convert_t( &lcl_toXSD_UNODate, &lcl_toAny_UNODate );
     maMap[ cppu::UnoType<css::util::Time>::get() ] = Convert_t( &lcl_toXSD_UNOTime, &lcl_toAny_UNOTime );
     maMap[ cppu::UnoType<css::util::DateTime>::get() ] = Convert_t( &lcl_toXSD_UNODateTime, &lcl_toAny_UNODateTime );
