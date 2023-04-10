@@ -30,7 +30,8 @@ published interface XSheetOperation: com::sun::star::uno::XInterface
 {
 
     /** computes a general function based on all cells in the current
-        cell range(s).
+        cell range(s), excluding values from filtered and hidden rows
+        and hidden columns as done for the status bar.
 
         @param nFunction
             is the function used to compute the result.
