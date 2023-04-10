@@ -1029,7 +1029,7 @@ IMPL_LINK(SwFieldVarPage, TBClickHdl, weld::Button&, rBox, void)
                         bool bText = false;
                         sal_uInt32 nNumberFormat = lcl_getUsedNumFormat( *m_xNumFormatLB, bText);
                         if (nNumberFormat && nNumberFormat != SAL_MAX_UINT32)
-                        {   // Switch language to office-language because Kalkulator expects
+                        {   // Switch language to office-language because calculator expects
                             // String in office format and it should be fed into dialog like
                             // that
                             nNumberFormat = SwValueField::GetSystemFormat(pSh->GetNumberFormatter(), nNumberFormat);
@@ -1151,7 +1151,7 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
 
         if (nFormat && nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND && m_xNumFormatLB->IsAutomaticLanguage())
         {
-            // Switch language to office language because Kalkulator expects
+            // Switch language to office language because calculator expects
             // String in office format and it should be fed into the dialog
             // like that
             SwWrtShell *pSh = GetWrtShell();
