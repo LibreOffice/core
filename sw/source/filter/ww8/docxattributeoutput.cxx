@@ -1019,7 +1019,12 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
             ww8::Frame aFrame = m_aFramesOfParagraph.top()[nIndex];
             const SwFrameFormat& rFrameFormat = aFrame.GetFrameFormat();
 
-            if (!TextBoxIsFramePr(rFrameFormat) || m_bWritingHeaderFooter)
+            if (!m_bWritingHeaderFooter && TextBoxIsFramePr(rFrameFormat))
+            {
+                std::shared_ptr<ww8::Frame> pFramePr = std::make_shared<ww8::Frame>(aFrame);
+                aFramePrTextbox.push_back(pFramePr);
+            }
+            else
             {
                 if (m_aRunSdt.m_bStartedSdt)
                 {
@@ -1073,11 +1078,6 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
                 m_pSerializer->endElementNS(XML_mc, XML_AlternateContent);
                 m_pSerializer->endElementNS( XML_w, XML_r );
                 m_bParagraphFrameOpen = false;
-            }
-            else
-            {
-                std::shared_ptr<ww8::Frame> pFramePr = std::make_shared<ww8::Frame>(aFrame);
-                aFramePrTextbox.push_back(pFramePr);
             }
 
             nFrames = m_aFramesOfParagraph.size() ? m_aFramesOfParagraph.top().size() : 0;
