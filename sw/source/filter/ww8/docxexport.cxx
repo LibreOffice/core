@@ -526,8 +526,10 @@ ErrCode DocxExport::ExportDocument_Impl()
     // init sections
     m_pSections.reset(new MSWordSections( *this ));
 
+    auto& rGraphicExportCache = oox::drawingml::GraphicExportCache::get();
+
     // Make sure images are counted from one, even when exporting multiple documents.
-    oox::drawingml::DrawingML::PushExportGraphics();
+    rGraphicExportCache.push();
 
     WriteMainText();
 
@@ -555,7 +557,8 @@ ErrCode DocxExport::ExportDocument_Impl()
     m_aLinkedTextboxesHelper.clear();   //final cleanup
     m_pStyles.reset();
     m_pSections.reset();
-    oox::drawingml::DrawingML::PopExportGraphics();
+
+    rGraphicExportCache.pop();
 
     return ERRCODE_NONE;
 }

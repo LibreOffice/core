@@ -1025,7 +1025,10 @@ bool XclExpXmlStream::exportDocument()
     // Instead, write via XOutputStream instance.
     tools::SvRef<SotStorage> rStorage = static_cast<SotStorage*>(nullptr);
     drawingml::DrawingML::ResetMlCounters();
-    drawingml::DrawingML::PushExportGraphics();
+
+    auto& rGraphicExportCache = drawingml::GraphicExportCache::get();
+
+    rGraphicExportCache.push();
 
     XclExpRootData aData(
         EXC_BIFF8, *pShell->GetMedium (), rStorage, rDoc,
@@ -1144,7 +1147,7 @@ bool XclExpXmlStream::exportDocument()
         xStatusIndicator->end();
     mpRoot = nullptr;
 
-    drawingml::DrawingML::PopExportGraphics();
+    rGraphicExportCache.pop();
 
     return true;
 }

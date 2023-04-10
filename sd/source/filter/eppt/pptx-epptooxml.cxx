@@ -430,7 +430,9 @@ bool PowerPointExport::importDocument() noexcept
 
 bool PowerPointExport::exportDocument()
 {
-    DrawingML::PushExportGraphics();
+    auto& rGraphicExportCache = drawingml::GraphicExportCache::get();
+    rGraphicExportCache.push();
+
     maShapeMap.clear();
 
     mXModel = getModel();
@@ -514,7 +516,8 @@ bool PowerPointExport::exportDocument()
 
     commitStorage();
 
-    DrawingML::PopExportGraphics();
+    rGraphicExportCache.pop();
+
     maShapeMap.clear();
     maAuthors.clear();
     maRelId.clear();

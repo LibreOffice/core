@@ -193,6 +193,12 @@ bool URLTransformer::isExternalURL(const OUString& rURL) const
     return bExternal;
 }
 
+GraphicExportCache& GraphicExportCache::get()
+{
+    static GraphicExportCache staticGraphicExportCache;
+    return staticGraphicExportCache;
+}
+
 static css::uno::Any getLineDash( const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rDashName )
     {
         css::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, css::uno::UNO_QUERY);
@@ -237,12 +243,8 @@ void WriteGradientPath(const awt::Gradient& rGradient, const FSHelperPtr& pFS, c
 }
 
 // not thread safe
-std::stack<sal_Int32> DrawingML::mnImageCounter;
-std::stack<sal_Int32> DrawingML::mnWdpImageCounter;
-std::stack<std::map<OUString, OUString>> DrawingML::maWdpCache;
 sal_Int32 DrawingML::mnDrawingMLCount = 0;
 sal_Int32 DrawingML::mnVmlCount = 0;
-std::stack<std::unordered_map<BitmapChecksum, OUString>> DrawingML::maExportGraphics;
 
 sal_Int16 DrawingML::GetScriptType(const OUString& rStr)
 {
@@ -272,24 +274,6 @@ void DrawingML::ResetMlCounters()
 {
     mnDrawingMLCount = 0;
     mnVmlCount = 0;
-}
-
-void DrawingML::PushExportGraphics()
-{
-    mnImageCounter.push(1);
-    maExportGraphics.emplace();
-
-    mnWdpImageCounter.push(1);
-    maWdpCache.emplace();
-}
-
-void DrawingML::PopExportGraphics()
-{
-    mnImageCounter.pop();
-    maExportGraphics.pop();
-
-    mnWdpImageCounter.pop();
-    maWdpCache.pop();
 }
 
 bool DrawingML::GetProperty( const Reference< XPropertySet >& rXPropertySet, const OUString& aName )
@@ -1264,12 +1248,8 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
     OUString sPath;
 
     // tdf#74670 tdf#91286 Save image only once
-    if (!maExportGraphics.empty())
-    {
-        auto aIterator = maExportGraphics.top().find(aChecksum);
-        if (aIterator != maExportGraphics.top().end())
-            sPath = aIterator->second;
-    }
+    GraphicExportCache& rGraphicExportCache = GraphicExportCache::get();
+    sPath = rGraphicExportCache.findExportGraphics(aChecksum);
 
     if (sPath.isEmpty())
     {
@@ -1354,10 +1334,11 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
             }
         }
 
+        sal_Int32 nImageCount = rGraphicExportCache.nextImageCount();
         Reference<XOutputStream> xOutStream = mpFB->openFragmentStream(
             OUStringBuffer()
                 .appendAscii(GetComponentDir())
-                .append("/media/image" + OUString::number(mnImageCounter.top()))
+                .append("/media/image" + OUString::number(nImageCount))
                 .appendAscii(pExtension)
                 .makeStringAndClear(),
             sMediaType);
@@ -1373,12 +1354,11 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
         sPath = OUStringBuffer()
                     .appendAscii(sRelationCompPrefix.getStr())
                     .appendAscii(sRelPathToMedia.getStr())
-                    .append(static_cast<sal_Int32>(mnImageCounter.top()++))
+                    .append(nImageCount)
                     .appendAscii(pExtension)
                     .makeStringAndClear();
 
-        if (!maExportGraphics.empty())
-            maExportGraphics.top()[aChecksum] = sPath;
+        rGraphicExportCache.addExportGraphics(aChecksum, sPath);
     }
 
     sRelId = mpFB->addRelation( mpFS->getOutputStream(),
@@ -1448,14 +1428,15 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
 
     if (bEmbed)
     {
+        sal_Int32  nImageCount = GraphicExportCache::get().nextImageCount();
+
+        OUString sFileName = OUStringBuffer()
+            .appendAscii(GetComponentDir())
+            .append("/media/media" + OUString::number(nImageCount) + aExtension)
+            .makeStringAndClear();
+
         // copy the video stream
-        Reference<XOutputStream> xOutStream = mpFB->openFragmentStream(OUStringBuffer()
-                                                                       .appendAscii(GetComponentDir())
-                                                                       .append("/media/media" +
-                                                                            OUString::number(mnImageCounter.top()) +
-                                                                            aExtension)
-                                                                       .makeStringAndClear(),
-                                                                       aMimeType);
+        Reference<XOutputStream> xOutStream = mpFB->openFragmentStream(sFileName, aMimeType);
 
         uno::Reference<io::XInputStream> xInputStream(pMediaObj->GetInputStream());
         comphelper::OStorageHelper::CopyInputToOutput(xInputStream, xOutStream);
@@ -1464,7 +1445,7 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
 
         // create the relation
         OUString aPath = OUStringBuffer().appendAscii(GetRelationCompPrefix())
-                                         .append("media/media" + OUString::number(mnImageCounter.top()++) + aExtension)
+                                         .append("media/media" + OUString::number(nImageCount) + aExtension)
                                          .makeStringAndClear();
         aVideoFileRelId = mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(eMediaType), aPath);
         aMediaRelId = mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(Relationship::MEDIA), aPath);
@@ -5837,33 +5818,28 @@ void DrawingML::WriteArtisticEffect( const Reference< XPropertySet >& rXPropSet 
 
 OString DrawingML::WriteWdpPicture( const OUString& rFileId, const Sequence< sal_Int8 >& rPictureData )
 {
-    if (!maWdpCache.empty())
-    {
-        std::map<OUString, OUString>::iterator aCachedItem = maWdpCache.top().find(rFileId);
-        if (aCachedItem != maWdpCache.top().end())
-            return OUStringToOString(aCachedItem->second, RTL_TEXTENCODING_UTF8);
-    }
+    auto& rGraphicExportCache = GraphicExportCache::get();
 
-    OUString sFileName = "media/hdphoto" + OUString::number( mnWdpImageCounter.top()++ ) + ".wdp";
-    Reference< XOutputStream > xOutStream = mpFB->openFragmentStream( OUStringBuffer()
-                                                                      .appendAscii( GetComponentDir() )
-                                                                      .append( "/" + sFileName )
-                                                                      .makeStringAndClear(),
-                                                                      "image/vnd.ms-photo" );
-    OUString sId;
+    OUString aId = rGraphicExportCache.findWdpID(rFileId);
+    if (!aId.isEmpty())
+        return OUStringToOString(aId, RTL_TEXTENCODING_UTF8);
+
+    sal_Int32 nWdpImageCount = rGraphicExportCache.nextWdpImageCount();
+    OUString sFileName = "media/hdphoto" + OUString::number(nWdpImageCount) + ".wdp";
+    OUString sFragment = OUStringBuffer().appendAscii(GetComponentDir()).append( "/" + sFileName).makeStringAndClear();
+    Reference< XOutputStream > xOutStream = mpFB->openFragmentStream(sFragment, "image/vnd.ms-photo");
     xOutStream->writeBytes( rPictureData );
     xOutStream->closeOutput();
 
-    sId = mpFB->addRelation( mpFS->getOutputStream(),
+    aId = mpFB->addRelation( mpFS->getOutputStream(),
                              oox::getRelationship(Relationship::HDPHOTO),
                              OUStringBuffer()
                              .appendAscii( GetRelationCompPrefix() )
                              .append( sFileName ) );
 
-    if (!maWdpCache.empty())
-        maWdpCache.top()[rFileId] = sId;
+    rGraphicExportCache.addToWdpCache(rFileId, aId);
 
-    return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
+    return OUStringToOString(aId, RTL_TEXTENCODING_UTF8);
 }
 
 void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape, int nDiagramId)

@@ -139,16 +139,99 @@ protected:
     virtual ~DMLTextExport() {}
 };
 
+class OOX_DLLPUBLIC GraphicExportCache
+{
+private:
+    std::stack<sal_Int32> mnImageCounter;
+    std::stack<std::unordered_map<BitmapChecksum, OUString>> maExportGraphics;
+    std::stack<sal_Int32> mnWdpImageCounter;
+    std::stack<std::map<OUString, OUString>> maWdpCache;
+
+    GraphicExportCache() = default;
+public:
+    static GraphicExportCache& get();
+
+    void push()
+    {
+        mnImageCounter.push(1);
+        maExportGraphics.emplace();
+        mnWdpImageCounter.push(1);
+        maWdpCache.emplace();
+    }
+
+    void pop()
+    {
+        mnImageCounter.pop();
+        maExportGraphics.pop();
+        mnWdpImageCounter.pop();
+        maWdpCache.pop();
+    }
+
+    bool hasExportGraphics()
+    {
+        return !maExportGraphics.empty();
+    }
+
+    void addExportGraphics(BitmapChecksum aChecksum, OUString const& sPath)
+    {
+        maExportGraphics.top()[aChecksum] = sPath;
+    }
+
+    OUString findExportGraphics(BitmapChecksum aChecksum)
+    {
+        OUString sPath;
+        if (!hasExportGraphics())
+            return sPath;
+
+        auto aIterator = maExportGraphics.top().find(aChecksum);
+        if (aIterator != maExportGraphics.top().end())
+            sPath = aIterator->second;
+        return sPath;
+    }
+
+    sal_Int32 nextImageCount()
+    {
+        sal_Int32 nCount = mnImageCounter.top();
+        mnImageCounter.top()++;
+        return nCount;
+    }
+
+    bool hasWdpCache()
+    {
+        return !maWdpCache.empty();
+    }
+
+    OUString findWdpID(OUString const& rFileId)
+    {
+        OUString aPath;
+        if (!hasWdpCache())
+            return aPath;
+        auto aCachedItem = maWdpCache.top().find(rFileId);
+        if (aCachedItem != maWdpCache.top().end())
+            aPath = aCachedItem->second;
+        return aPath;
+    }
+
+    void addToWdpCache(OUString const& rFileId, OUString const& rId)
+    {
+        if (hasWdpCache())
+            maWdpCache.top()[rFileId] = rId;
+    }
+
+    sal_Int32 nextWdpImageCount()
+    {
+        sal_Int32 nCount = mnWdpImageCounter.top();
+        mnWdpImageCounter.top()++;
+        return nCount;
+    }
+};
+
 class OOX_DLLPUBLIC DrawingML
 {
 
 private:
-    static std::stack<sal_Int32> mnImageCounter;
-    static std::stack<sal_Int32> mnWdpImageCounter;
-    static std::stack<std::map<OUString, OUString>> maWdpCache;
     static sal_Int32 mnDrawingMLCount;
     static sal_Int32 mnVmlCount;
-    static std::stack<std::unordered_map<BitmapChecksum, OUString>> maExportGraphics;
 
     /// To specify where write eg. the images to (like 'ppt', or 'word' - according to the OPC).
     DocumentType meDocumentType;
@@ -349,9 +432,6 @@ public:
     sal_Int32 getBulletMarginIndentation (const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,sal_Int16 nLevel, std::u16string_view propName);
 
     static void ResetMlCounters();
-
-    static void PushExportGraphics();
-    static void PopExportGraphics();
 
     static sal_Int32 getNewDrawingUniqueId() { return ++mnDrawingMLCount; }
     static sal_Int32 getNewVMLUniqueId() { return ++mnVmlCount; }
