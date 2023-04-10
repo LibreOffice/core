@@ -510,7 +510,7 @@ void SmGraphicWidget::SetIsCursorVisible(bool bVis)
     {
         mrViewShell.SendCaretToLOK();
         mrViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE,
-                                               OString::boolean(bVis).getStr());
+                                               OString::boolean(bVis));
     }
 }
 
@@ -2181,7 +2181,7 @@ public:
         if (comphelper::LibreOfficeKit::isActive())
             if (auto pViewShell = GetViewShell_Impl())
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE,
-                                                       OString::boolean(false).getStr());
+                                                       OString::boolean(false));
 
         SfxBaseController::dispose();
     }

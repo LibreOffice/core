@@ -79,17 +79,17 @@
 #endif
 
 // presentation namespaces
-#define PNMSS         FSNS(XML_xmlns, XML_a),   OUStringToOString(this->getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8).getStr(), \
-                      FSNS(XML_xmlns, XML_p),   OUStringToOString(this->getNamespaceURL(OOX_NS(ppt)), RTL_TEXTENCODING_UTF8).getStr(), \
-                      FSNS(XML_xmlns, XML_r),   OUStringToOString(this->getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr(), \
-                      FSNS(XML_xmlns, XML_p14), OUStringToOString(this->getNamespaceURL(OOX_NS(p14)), RTL_TEXTENCODING_UTF8).getStr(), \
-                      FSNS(XML_xmlns, XML_p15), OUStringToOString(this->getNamespaceURL(OOX_NS(p15)), RTL_TEXTENCODING_UTF8).getStr(), \
-                      FSNS(XML_xmlns, XML_mc),  OUStringToOString(this->getNamespaceURL(OOX_NS(mce)), RTL_TEXTENCODING_UTF8).getStr()
+#define PNMSS         FSNS(XML_xmlns, XML_a),   this->getNamespaceURL(OOX_NS(dml)), \
+                      FSNS(XML_xmlns, XML_p),   this->getNamespaceURL(OOX_NS(ppt)), \
+                      FSNS(XML_xmlns, XML_r),   this->getNamespaceURL(OOX_NS(officeRel)), \
+                      FSNS(XML_xmlns, XML_p14), this->getNamespaceURL(OOX_NS(p14)), \
+                      FSNS(XML_xmlns, XML_p15), this->getNamespaceURL(OOX_NS(p15)), \
+                      FSNS(XML_xmlns, XML_mc),  this->getNamespaceURL(OOX_NS(mce))
 
 // presentationPr namespace
-#define PPRNMSS       FSNS(XML_xmlns, XML_a),   OUStringToOString(this->getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8).getStr(), \
-                      FSNS(XML_xmlns, XML_r),   OUStringToOString(this->getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr(), \
-                      FSNS(XML_xmlns, XML_p),   OUStringToOString(this->getNamespaceURL(OOX_NS(ppt)), RTL_TEXTENCODING_UTF8).getStr()
+#define PPRNMSS       FSNS(XML_xmlns, XML_a),   this->getNamespaceURL(OOX_NS(dml)), \
+                      FSNS(XML_xmlns, XML_r),   this->getNamespaceURL(OOX_NS(officeRel)), \
+                      FSNS(XML_xmlns, XML_p),   this->getNamespaceURL(OOX_NS(ppt))
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
@@ -1338,10 +1338,10 @@ void PowerPointExport::WriteModifyVerifier()
                     XML_cryptProviderType, "rsaAES",
                     XML_cryptAlgorithmClass, "hash",
                     XML_cryptAlgorithmType, "typeAny",
-                    XML_cryptAlgorithmSid, OString::number(nAlgorithmSid).getStr(),
-                    XML_spinCount, OString::number(nCount).getStr(),
-                    XML_saltData, sSalt.toUtf8().getStr(),
-                    XML_hashData, sHash.toUtf8().getStr());
+                    XML_cryptAlgorithmSid, OString::number(nAlgorithmSid),
+                    XML_spinCount, OString::number(nCount),
+                    XML_saltData, sSalt,
+                    XML_hashData, sHash);
         }
     }
 }
@@ -1802,7 +1802,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceShape(
     mpFS->startElementNS(XML_p, XML_nvSpPr);
     const OString aPlaceholderID("PlaceHolder " + OString::number(mnShapeIdMax++));
     GetFS()->singleElementNS(XML_p, XML_cNvPr, XML_id, OString::number(mnShapeIdMax), XML_name,
-                             aPlaceholderID.getStr());
+                             aPlaceholderID);
 
     mpFS->startElementNS(XML_p, XML_cNvSpPr);
     mpFS->singleElementNS(XML_a, XML_spLocks, XML_noGrp, "1");
@@ -1869,7 +1869,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceTextBody(
                 aSlideNum = OUString::number(nSlideNum);
             }
             OString aUUID(comphelper::xml::generateGUIDString());
-            mpFS->startElementNS(XML_a, XML_fld, XML_id, aUUID.getStr(), XML_type, "slidenum");
+            mpFS->startElementNS(XML_a, XML_fld, XML_id, aUUID, XML_type, "slidenum");
             mpFS->startElementNS(XML_a, XML_t);
             mpFS->writeEscaped(aSlideNum);
             mpFS->endElementNS(XML_a, XML_t);
@@ -1910,7 +1910,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceTextBody(
             if(!bIsDateTimeFixed)
             {
                 OString aUUID(comphelper::xml::generateGUIDString());
-                mpFS->startElementNS(XML_a, XML_fld, XML_id, aUUID.getStr(), XML_type, aDateTimeType);
+                mpFS->startElementNS(XML_a, XML_fld, XML_id, aUUID, XML_type, aDateTimeType);
             }
             else
             {

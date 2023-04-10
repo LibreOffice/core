@@ -954,8 +954,8 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             // SWG:
             if ( nEsc )
             {
-                rOutput.WriteCharPtr( "{\\*\\updnprop" ).WriteCharPtr( OString::number(
-                    nProp100).getStr() ).WriteChar( '}' );
+                rOutput.WriteCharPtr( "{\\*\\updnprop" ).WriteOString( OString::number(
+                    nProp100) ).WriteChar( '}' );
             }
             tools::Long nUpDown = nFontHeight * std::abs( nEsc ) / 100;
             if ( nEsc < 0 )

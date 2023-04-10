@@ -143,9 +143,9 @@ writerfilter::Reference<BinaryObj>::Pointer_t RTFValue::getBinary()
 std::string RTFValue::toString() const
 {
     if (!m_sValue.isEmpty() || m_bForceString)
-        return OUStringToOString(m_sValue, RTL_TEXTENCODING_UTF8).getStr();
+        return std::string(OUStringToOString(m_sValue, RTL_TEXTENCODING_UTF8));
 
-    return OString::number(m_nValue).getStr();
+    return std::string(OString::number(m_nValue));
 }
 #endif
 

@@ -55,12 +55,10 @@ TokenMap::TokenMap() :
     int i = 0;
     for( auto& rTokenName : maTokenNamesUtf8 )
     {
-        const char* pStr = *ppcTokenName;
-        int nStrLen = strlen(pStr);
+        std::string_view pStr = *ppcTokenName;
         rTokenName = uno::Sequence< sal_Int8 >(
-                    reinterpret_cast< const sal_Int8* >( pStr ), nStrLen );
-        maTokenNames[i++] = OUString( pStr,
-                    nStrLen, RTL_TEXTENCODING_UTF8 );
+                    reinterpret_cast< const sal_Int8* >( pStr.data() ), pStr.length() );
+        maTokenNames[i++] = OStringToOUString( pStr, RTL_TEXTENCODING_UTF8 );
         ++ppcTokenName;
     }
 }

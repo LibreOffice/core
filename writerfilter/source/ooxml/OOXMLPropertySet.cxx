@@ -650,7 +650,7 @@ int OOXMLUniversalMeasureValue::getInt() const
 #ifdef DBG_UTIL
 std::string OOXMLUniversalMeasureValue::toString() const
 {
-    return OString::number(mnValue).getStr();
+    return std::string(OString::number(mnValue));
 }
 #endif
 
@@ -680,7 +680,7 @@ int OOXMLMeasurementOrPercentValue::getInt() const
 #ifdef DBG_UTIL
 std::string OOXMLMeasurementOrPercentValue::toString() const
 {
-    return OString::number(mnValue).getStr();
+    return std::string(OString::number(mnValue));
 }
 #endif
 

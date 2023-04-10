@@ -692,12 +692,12 @@ void ExcTable::WriteXml( XclExpXmlStream& rStrm )
     rStrm.PushStream( pWorksheet );
 
     pWorksheet->startElement( XML_worksheet,
-        XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
-        FSNS(XML_xmlns, XML_r), rStrm.getNamespaceURL(OOX_NS(officeRel)).toUtf8(),
-        FSNS(XML_xmlns, XML_xdr), "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing", // rStrm.getNamespaceURL(OOX_NS(xm)).toUtf8() -> "http://schemas.microsoft.com/office/excel/2006/main",
-        FSNS(XML_xmlns, XML_x14), rStrm.getNamespaceURL(OOX_NS(xls14Lst)).toUtf8(),
-        FSNS(XML_xmlns, XML_xr2), rStrm.getNamespaceURL(OOX_NS(xr2)).toUtf8(),
-        FSNS(XML_xmlns, XML_mc), rStrm.getNamespaceURL(OOX_NS(mce)).toUtf8());
+        XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)),
+        FSNS(XML_xmlns, XML_r), rStrm.getNamespaceURL(OOX_NS(officeRel)),
+        FSNS(XML_xmlns, XML_xdr), "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing", // rStrm.getNamespaceURL(OOX_NS(xm)) -> "http://schemas.microsoft.com/office/excel/2006/main",
+        FSNS(XML_xmlns, XML_x14), rStrm.getNamespaceURL(OOX_NS(xls14Lst)),
+        FSNS(XML_xmlns, XML_xr2), rStrm.getNamespaceURL(OOX_NS(xr2)),
+        FSNS(XML_xmlns, XML_mc), rStrm.getNamespaceURL(OOX_NS(mce)));
 
     SetCurrScTab( mnScTab );
     if (mxCellTable)
@@ -835,8 +835,8 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
 
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
     rWorkbook->startElement( XML_workbook,
-            XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
-            FSNS(XML_xmlns, XML_r), rStrm.getNamespaceURL(OOX_NS(officeRel)).toUtf8() );
+            XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)),
+            FSNS(XML_xmlns, XML_r), rStrm.getNamespaceURL(OOX_NS(officeRel)) );
     rWorkbook->singleElement( XML_fileVersion,
             XML_appName, "Calc"
             // OOXTODO: XML_codeName
@@ -848,14 +848,14 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
     if (bHasPasswordHash)
         rWorkbook->singleElement(XML_fileSharing,
                 XML_userName, sUserName,
-                XML_reservationPassword, OString::number(nWriteProtHash, 16).getStr());
+                XML_reservationPassword, OString::number(nWriteProtHash, 16));
     else if (bHasPasswordInfo)
         rWorkbook->singleElement(XML_fileSharing,
                 XML_userName, sUserName,
-                XML_algorithmName, sAlgorithm.toUtf8().getStr(),
-                XML_hashValue, sHash.toUtf8().getStr(),
-                XML_saltValue, sSalt.toUtf8().getStr(),
-                XML_spinCount, OString::number(nCount).getStr());
+                XML_algorithmName, sAlgorithm,
+                XML_hashValue, sHash,
+                XML_saltValue, sSalt,
+                XML_spinCount, OString::number(nCount));
 
     if( !maTableList.IsEmpty() )
     {

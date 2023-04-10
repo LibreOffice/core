@@ -1083,10 +1083,10 @@ void DocxExport::WriteSettings()
                     FSNS(XML_w, XML_cryptProviderType), "rsaAES",
                     FSNS(XML_w, XML_cryptAlgorithmClass), "hash",
                     FSNS(XML_w, XML_cryptAlgorithmType), "typeAny",
-                    FSNS(XML_w, XML_cryptAlgorithmSid), OString::number(nAlgorithmSid).getStr(),
-                    FSNS(XML_w, XML_cryptSpinCount), OString::number(nCount).getStr(),
-                    FSNS(XML_w, XML_hash), sHash.toUtf8().getStr(),
-                    FSNS(XML_w, XML_salt), sSalt.toUtf8().getStr());
+                    FSNS(XML_w, XML_cryptAlgorithmSid), OString::number(nAlgorithmSid),
+                    FSNS(XML_w, XML_cryptSpinCount), OString::number(nCount),
+                    FSNS(XML_w, XML_hash), sHash,
+                    FSNS(XML_w, XML_salt), sSalt);
         }
     }
 
@@ -1176,7 +1176,7 @@ void DocxExport::WriteSettings()
         pFS->singleElementNS(XML_w, XML_dataType,
             FSNS( XML_w, XML_val ), "textFile" );
         pFS->singleElementNS( XML_w, XML_query,
-            FSNS( XML_w, XML_val ), OUStringToOString( sDataSource, RTL_TEXTENCODING_UTF8 ).getStr() );
+            FSNS( XML_w, XML_val ), sDataSource );
         pFS->endElementNS( XML_w, XML_mailMerge );
     }
 

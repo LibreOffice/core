@@ -1240,7 +1240,7 @@ void XclExpTbxControlObj::SaveXml( XclExpXmlStream& rStrm )
             pDrawing->startElement(FSNS(XML_xdr, XML_nvSpPr));
             {
                 pDrawing->singleElement(FSNS(XML_xdr, XML_cNvPr),
-                    XML_id, OString::number(mnShapeId).getStr(),
+                    XML_id, OString::number(mnShapeId),
                     XML_name, msCtrlName, // control name
                     XML_descr, msLabel, // description as alt text
                     XML_hidden, mbVisible ? "0" : "1");
@@ -1453,7 +1453,7 @@ void XclExpTbxControlObj::SaveSheetXml(XclExpXmlStream& rStrm, const OUString& a
 
             rWorksheet->startElement(
                 XML_control,
-                XML_shapeId, OString::number(mnShapeId).getStr(),
+                XML_shapeId, OString::number(mnShapeId),
                 FSNS(XML_r, XML_id), aIdFormControlPr,
                 XML_name, msLabel); // text to display with checkbox button
 
@@ -1498,15 +1498,14 @@ void XclExpTbxControlObj::SaveSheetXml(XclExpXmlStream& rStrm, const OUString& a
                                      rStrm.getNamespaceURL(OOX_NS(mce)));
             rWorksheet->startElement(FSNS(XML_mc, XML_Choice), XML_Requires, "x14");
 
-            rWorksheet->startElement(XML_control, XML_shapeId, OString::number(mnShapeId).getStr(),
+            rWorksheet->startElement(XML_control, XML_shapeId, OString::number(mnShapeId),
                                      FSNS(XML_r, XML_id), aIdFormControlPr, XML_name, msCtrlName);
 
-            OString aMacroName = GetMacroName().toUtf8();
+            OUString aMacroName = GetMacroName();
             // Omit the macro attribute if it would be empty.
-            const char* pMacroName = aMacroName.isEmpty() ? nullptr : aMacroName.getStr();
             rWorksheet->startElement(XML_controlPr, XML_defaultSize, "0", XML_print,
                                      mbPrint ? "true" : "false", XML_autoFill, "0", XML_autoPict,
-                                     "0", XML_macro, pMacroName);
+                                     "0", XML_macro, sax_fastparser::UseIf(aMacroName, !aMacroName.isEmpty()));
 
             rWorksheet->startElement(XML_anchor, XML_moveWithCells, "true", XML_sizeWithCells,
                                      "false");

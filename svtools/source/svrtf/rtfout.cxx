@@ -155,8 +155,7 @@ SvStream& Out_Char(SvStream& rStream, sal_Unicode c,
                             *pUCMode = nLen;
                         }
                         rStream.WriteCharPtr( "\\u" )
-                           .WriteCharPtr( OString::number(
-                                static_cast<sal_Int32>(c)).getStr() );
+                           .WriteInt32AsString(c);
                     }
 
                     for (sal_Int32 nI = 0; nI < nLen; ++nI)

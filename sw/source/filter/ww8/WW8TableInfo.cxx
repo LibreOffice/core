@@ -1276,7 +1276,7 @@ std::string WW8TableCellGrid::toString()
     while (aTopsIt != getRowTopsEnd())
     {
         sResult += "<row y=\"";
-        sResult += OString::number(*aTopsIt).getStr();
+        sResult += OString::number(*aTopsIt);
         sResult += "\">";
 
         CellInfoMultiSet::const_iterator aCellIt = getCellsBegin(*aTopsIt);

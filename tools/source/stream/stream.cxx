@@ -1361,15 +1361,13 @@ void SvStream::RefreshBuffer()
 
 SvStream& SvStream::WriteInt32AsString(sal_Int32 nInt32)
 {
-    auto const buffer = OString::number(nInt32);
-    WriteBytes(buffer.getStr(), buffer.length);
+    WriteOString(OString::number(nInt32));
     return *this;
 }
 
 SvStream& SvStream::WriteUInt32AsString(sal_uInt32 nUInt32)
 {
-    auto const buffer = OString::number(nUInt32);
-    WriteBytes(buffer.getStr(), buffer.length);
+    WriteOString(OString::number(nUInt32));
     return *this;
 }
 

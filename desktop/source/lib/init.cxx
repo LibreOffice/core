@@ -490,18 +490,18 @@ static bool extractLinks(const uno::Reference< container::XNameAccess >& xLinks,
     return bIsTarget;
 }
 
-static void unoAnyToJson(tools::JsonWriter& rJson, const char * pNodeName, const uno::Any& anyItem)
+static void unoAnyToJson(tools::JsonWriter& rJson, std::string_view pNodeName, const uno::Any& anyItem)
 {
     auto aNode = rJson.startNode(pNodeName);
     OUString aType = anyItem.getValueTypeName();
-    rJson.put("type", aType.toUtf8().getStr());
+    rJson.put("type", aType);
 
     if (aType == "string")
-        rJson.put("value", anyItem.get<OUString>().toUtf8().getStr());
+        rJson.put("value", anyItem.get<OUString>());
     else if (aType == "unsigned long")
-        rJson.put("value", OString::number(anyItem.get<sal_uInt32>()).getStr());
+        rJson.put("value", OString::number(anyItem.get<sal_uInt32>()));
     else if (aType == "long")
-        rJson.put("value", OString::number(anyItem.get<sal_Int32>()).getStr());
+        rJson.put("value", OString::number(anyItem.get<sal_Int32>()));
     else if (aType == "[]any")
     {
         uno::Sequence<uno::Any> aSeq;
@@ -511,7 +511,7 @@ static void unoAnyToJson(tools::JsonWriter& rJson, const char * pNodeName, const
 
             for (auto i = 0; i < aSeq.getLength(); ++i)
             {
-                unoAnyToJson(rJson, OString::number(i).getStr(), aSeq[i]);
+                unoAnyToJson(rJson, OString::number(i), aSeq[i]);
             }
         }
     }

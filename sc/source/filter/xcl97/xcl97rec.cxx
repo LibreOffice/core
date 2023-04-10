@@ -1591,10 +1591,10 @@ void ExcEScenario::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
     rWorkbook->startElement( XML_scenario,
-            XML_name,       XclXmlUtils::ToOString( sName ).getStr(),
+            XML_name,       XclXmlUtils::ToOString( sName ),
             XML_locked,     ToPsz( bProtected ),
             // OOXTODO: XML_hidden,
-            XML_count,      OString::number(  aCells.size() ).getStr(),
+            XML_count,      OString::number(  aCells.size() ),
             XML_user,       XESTRING_TO_PSZ( sUserName ),
             XML_comment,    XESTRING_TO_PSZ( sComment ) );
 

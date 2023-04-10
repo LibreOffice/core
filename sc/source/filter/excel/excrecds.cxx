@@ -439,7 +439,7 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
         aPH = rPH;
 
     Sequence<sal_Int8> aHash = pTabProtect->getPasswordHash(PASSHASH_XL);
-    OString sHash;
+    std::optional<OString> sHash;
     if (aHash.getLength() >= 2)
     {
         sHash = OString::number(
@@ -449,12 +449,12 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
     }
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->singleElement( XML_sheetProtection,
-        XML_algorithmName, aPH.maAlgorithmName.isEmpty() ? nullptr : aPH.maAlgorithmName.toUtf8().getStr(),
-        XML_hashValue, aPH.maHashValue.isEmpty() ? nullptr : aPH.maHashValue.toUtf8().getStr(),
-        XML_saltValue, aPH.maSaltValue.isEmpty() ? nullptr : aPH.maSaltValue.toUtf8().getStr(),
-        XML_spinCount, aPH.mnSpinCount ? OString::number( aPH.mnSpinCount).getStr() : nullptr,
+        XML_algorithmName, sax_fastparser::UseIf(aPH.maAlgorithmName, !aPH.maAlgorithmName.isEmpty()),
+        XML_hashValue, sax_fastparser::UseIf(aPH.maHashValue, !aPH.maHashValue.isEmpty()),
+        XML_saltValue, sax_fastparser::UseIf(aPH.maSaltValue, !aPH.maSaltValue.isEmpty()),
+        XML_spinCount, sax_fastparser::UseIf(OString::number(aPH.mnSpinCount), aPH.mnSpinCount != 0),
         XML_sheet,  ToPsz( true ),
-        XML_password, sHash.isEmpty()? nullptr : sHash.getStr(),
+        XML_password, sHash,
         XML_objects, pTabProtect->isOptionEnabled( ScTableProtection::OBJECTS ) ? nullptr : ToPsz( true ),
         XML_scenarios, pTabProtect->isOptionEnabled( ScTableProtection::SCENARIOS ) ? nullptr : ToPsz( true ),
         XML_formatCells, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_CELLS ) ? ToPsz( false ) : nullptr,
@@ -481,17 +481,17 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
         SAL_WARN_IF( rProt.maSecurityDescriptorXML.isEmpty() && !rProt.maSecurityDescriptor.empty(),
                 "sc.filter", "XclExpSheetProtection::SaveXml: losing BIFF security descriptor");
         rWorksheet->singleElement( XML_protectedRange,
-                XML_name, rProt.maTitle.isEmpty() ? nullptr : rProt.maTitle.toUtf8().getStr(),
-                XML_securityDescriptor, rProt.maSecurityDescriptorXML.isEmpty() ? nullptr : rProt.maSecurityDescriptorXML.toUtf8().getStr(),
+                XML_name, sax_fastparser::UseIf(rProt.maTitle, !rProt.maTitle.isEmpty()),
+                XML_securityDescriptor, sax_fastparser::UseIf(rProt.maSecurityDescriptorXML, !rProt.maSecurityDescriptorXML.isEmpty()),
                 /* XXX 'password' is not part of OOXML, but Excel2013
                  * writes it if loaded from BIFF, in which case
                  * 'algorithmName', 'hashValue', 'saltValue' and
                  * 'spinCount' are absent; so do we if it was present. */
-                XML_password, rProt.mnPasswordVerifier ? OString::number( rProt.mnPasswordVerifier, 16).getStr() : nullptr,
-                XML_algorithmName, rProt.maPasswordHash.maAlgorithmName.isEmpty() ? nullptr : rProt.maPasswordHash.maAlgorithmName.toUtf8().getStr(),
-                XML_hashValue, rProt.maPasswordHash.maHashValue.isEmpty() ? nullptr : rProt.maPasswordHash.maHashValue.toUtf8().getStr(),
-                XML_saltValue, rProt.maPasswordHash.maSaltValue.isEmpty() ? nullptr : rProt.maPasswordHash.maSaltValue.toUtf8().getStr(),
-                XML_spinCount, rProt.maPasswordHash.mnSpinCount ? OString::number( rProt.maPasswordHash.mnSpinCount).getStr() : nullptr,
+                XML_password, sax_fastparser::UseIf(OString::number(rProt.mnPasswordVerifier, 16), rProt.mnPasswordVerifier != 0),
+                XML_algorithmName, sax_fastparser::UseIf(rProt.maPasswordHash.maAlgorithmName, !rProt.maPasswordHash.maAlgorithmName.isEmpty()),
+                XML_hashValue, sax_fastparser::UseIf(rProt.maPasswordHash.maHashValue, !rProt.maPasswordHash.maHashValue.isEmpty()),
+                XML_saltValue, sax_fastparser::UseIf(rProt.maPasswordHash.maSaltValue, !rProt.maPasswordHash.maSaltValue.isEmpty()),
+                XML_spinCount, sax_fastparser::UseIf(OString::number(rProt.maPasswordHash.mnSpinCount), rProt.maPasswordHash.mnSpinCount != 0),
                 XML_sqref, rProt.maRangeList.is() ? XclXmlUtils::ToOString( rStrm.GetRoot().GetDoc(), *rProt.maRangeList).getStr() : nullptr);
     }
     rWorksheet->endElement( XML_protectedRanges);
@@ -888,14 +888,13 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
 
             for (const auto& rMultiValue : maMultiValues)
             {
-                OString aStr = OUStringToOString(rMultiValue.first, RTL_TEXTENCODING_UTF8);
                 if( !rMultiValue.second )
                 {
-                    const char* pz = aStr.getStr();
-                    rWorksheet->singleElement(XML_filter, XML_val, pz);
+                    rWorksheet->singleElement(XML_filter, XML_val, rMultiValue.first);
                 }
                 else
                 {
+                    OString aStr = OUStringToOString(rMultiValue.first, RTL_TEXTENCODING_UTF8);
                     rtl::Reference<sax_fastparser::FastAttributeList> pAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
                     sal_Int32 aDateGroup[3] = { XML_year, XML_month, XML_day };
                     sal_Int32 idx = 0;
@@ -1166,12 +1165,12 @@ void ExcAutoFilterRecs::SaveXml( XclExpXmlStream& rStrm )
                                           XML_ref, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(),
                                                                           std::get<0>(rSortCriteria)),
                                           XML_descending, "1",
-                                          XML_customList, std::get<1>(rSortCriteria).toUtf8().getStr());
+                                          XML_customList, std::get<1>(rSortCriteria));
             else
                 rWorksheet->singleElement(XML_sortCondition,
                                           XML_ref, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(),
                                                                           std::get<0>(rSortCriteria)),
-                                          XML_customList, std::get<1>(rSortCriteria).toUtf8().getStr());
+                                          XML_customList, std::get<1>(rSortCriteria));
         }
 
         rWorksheet->endElement(XML_sortState);
