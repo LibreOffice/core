@@ -723,7 +723,7 @@ void DrawingML::WriteGrabBagGradientFill( const Sequence< PropertyValue >& aGrad
                 rProp.Value >>= aTransformations;
         }
         // write stop
-        mpFS->startElementNS(XML_a, XML_gs, XML_pos, OString::number(nPos * 100000.0).getStr());
+        mpFS->startElementNS(XML_a, XML_gs, XML_pos, OString::number(nPos * 100000.0));
         if( sSchemeClr.isEmpty() )
         {
             // Calculate alpha value (see oox/source/drawingml/color.cxx : getTransparency())
@@ -2836,7 +2836,7 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
         {
             mpFS->startElementNS(XML_a, XML_br);
             mpFS->singleElementNS(XML_a, XML_rPr, XML_sz,
-                                  OString::number(nFontSize * 100).getStr());
+                                  OString::number(nFontSize * 100));
             mpFS->endElementNS(XML_a, XML_br);
         }
         else
@@ -5306,91 +5306,91 @@ void DrawingML::WriteShapeEffect( std::u16string_view sName, const Sequence< Pro
                 {
                     sal_Int64 nVal = 0;
                     rOuterShdwProp.Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_blurRad, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_blurRad, OString::number( nVal ) );
                 }
                 else if( rOuterShdwProp.Name == "dir" )
                 {
                     sal_Int32 nVal = 0;
                     rOuterShdwProp.Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_dir, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_dir, OString::number( nVal ) );
                 }
                 else if( rOuterShdwProp.Name == "dist" )
                 {
                     sal_Int32 nVal = 0;
                     rOuterShdwProp.Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_dist, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_dist, OString::number( nVal ) );
                 }
                 else if( rOuterShdwProp.Name == "kx" )
                 {
                     sal_Int32 nVal = 0;
                     rOuterShdwProp.Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_kx, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_kx, OString::number( nVal ) );
                 }
                 else if( rOuterShdwProp.Name == "ky" )
                 {
                     sal_Int32 nVal = 0;
                     rOuterShdwProp.Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_ky, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_ky, OString::number( nVal ) );
                 }
                 else if( rOuterShdwProp.Name == "rotWithShape" )
                 {
                     sal_Int32 nVal = 0;
                     rOuterShdwProp.Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_rotWithShape, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_rotWithShape, OString::number( nVal ) );
                 }
                 else if( rOuterShdwProp.Name == "sx" )
                 {
                     sal_Int32 nVal = 0;
                     rOuterShdwProp.Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_sx, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_sx, OString::number( nVal ) );
                 }
                 else if( rOuterShdwProp.Name == "sy" )
                 {
                     sal_Int32 nVal = 0;
                     rOuterShdwProp.Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_sy, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_sy, OString::number( nVal ) );
                 }
                 else if( rOuterShdwProp.Name == "rad" )
                 {
                     sal_Int64 nVal = 0;
                     rOuterShdwProp.Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_rad, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_rad, OString::number( nVal ) );
                 }
                 else if( rOuterShdwProp.Name == "endA" )
                 {
                     sal_Int32 nVal = 0;
                     rOuterShdwProp.Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_endA, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_endA, OString::number( nVal ) );
                 }
                 else if( rOuterShdwProp.Name == "endPos" )
                 {
                     sal_Int32 nVal = 0;
                     rOuterShdwProp.Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_endPos, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_endPos, OString::number( nVal ) );
                 }
                 else if( rOuterShdwProp.Name == "fadeDir" )
                 {
                     sal_Int32 nVal = 0;
                     rOuterShdwProp.Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_fadeDir, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_fadeDir, OString::number( nVal ) );
                 }
                 else if( rOuterShdwProp.Name == "stA" )
                 {
                     sal_Int32 nVal = 0;
                     rOuterShdwProp.Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_stA, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_stA, OString::number( nVal ) );
                 }
                 else if( rOuterShdwProp.Name == "stPos" )
                 {
                     sal_Int32 nVal = 0;
                     rOuterShdwProp.Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_stPos, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_stPos, OString::number( nVal ) );
                 }
                 else if( rOuterShdwProp.Name == "grow" )
                 {
                     sal_Int32 nVal = 0;
                     rOuterShdwProp.Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_grow, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_grow, OString::number( nVal ) );
                 }
             }
         }
@@ -5679,13 +5679,13 @@ void DrawingML::Write3DEffects( const Reference< XPropertySet >& xPropSet, bool 
         {
             float fVal = 0;
             rEffectProp.Value >>= fVal;
-            aCameraAttrList->add( XML_fov, OString::number( fVal * 60000 ).getStr() );
+            aCameraAttrList->add( XML_fov, OString::number( fVal * 60000 ) );
         }
         else if( rEffectProp.Name == "zoom" )
         {
             float fVal = 1;
             rEffectProp.Value >>= fVal;
-            aCameraAttrList->add( XML_zoom, OString::number( fVal * 100000 ).getStr() );
+            aCameraAttrList->add( XML_zoom, OString::number( fVal * 100000 ) );
         }
         else if( rEffectProp.Name == "rotLat" ||
                 rEffectProp.Name == "rotLon" ||
@@ -5699,7 +5699,7 @@ void DrawingML::Write3DEffects( const Reference< XPropertySet >& xPropSet, bool 
                 nToken = XML_lon;
             else if( rEffectProp.Name == "rotRev" )
                 nToken = XML_rev;
-            aCameraRotationAttrList->add( nToken, OString::number( nVal ).getStr() );
+            aCameraRotationAttrList->add( nToken, OString::number( nVal ) );
             bCameraRotationPresent = true;
         }
     }
@@ -5732,7 +5732,7 @@ void DrawingML::Write3DEffects( const Reference< XPropertySet >& xPropSet, bool 
                 nToken = XML_lon;
             else if( rLightRigProp.Name == "rotRev" )
                 nToken = XML_rev;
-            aLightRigRotationAttrList->add( nToken, OString::number( nVal ).getStr() );
+            aLightRigRotationAttrList->add( nToken, OString::number( nVal ) );
             bLightRigRotationPresent = true;
         }
     }
@@ -5791,7 +5791,7 @@ void DrawingML::Write3DEffects( const Reference< XPropertySet >& xPropSet, bool 
                 nToken = XML_contourW;
             else if( rShape3DProp.Name == "z" )
                 nToken = XML_z;
-            aShape3DAttrList->add( nToken, OString::number( nVal ).getStr() );
+            aShape3DAttrList->add( nToken, OString::number( nVal ) );
         }
         else if( rShape3DProp.Name == "prstMaterial" )
         {
@@ -5835,7 +5835,7 @@ void DrawingML::Write3DEffects( const Reference< XPropertySet >& xPropSet, bool 
                         nToken = XML_w;
                     else if( rBevelProp.Name == "h" )
                         nToken = XML_h;
-                    aBevelAttrList->add( nToken, OString::number( nVal ).getStr() );
+                    aBevelAttrList->add( nToken, OString::number( nVal ) );
                 }
                 else  if( rBevelProp.Name == "prst" )
                 {
@@ -5939,7 +5939,7 @@ void DrawingML::WriteArtisticEffect( const Reference< XPropertySet >& rXPropSet 
         {
             sal_Int32 nVal = 0;
             rAttr.Value >>= nVal;
-            aAttrList->add( nToken, OString::number( nVal ).getStr() );
+            aAttrList->add( nToken, OString::number( nVal ) );
         }
         else if( rAttr.Name == "OriginalGraphic" )
         {
@@ -6049,7 +6049,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     // generate a unique id
     rtl::Reference<sax_fastparser::FastAttributeList> pDocPrAttrList
         = sax_fastparser::FastSerializerHelper::createAttrList();
-    pDocPrAttrList->add(XML_id, OString::number(nDiagramId).getStr());
+    pDocPrAttrList->add(XML_id, OString::number(nDiagramId));
     OString sName = "Diagram" + OString::number(nDiagramId);
     pDocPrAttrList->add(XML_name, sName);
 

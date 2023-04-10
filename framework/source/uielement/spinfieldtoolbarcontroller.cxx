@@ -256,7 +256,7 @@ void SpinfieldToolbarController::executeControlCommand( const css::frame::Contro
                 double      fValue;
                 bool        bFloat( false );
                 if ( impl_getValue( arg.Value, nValue, fValue, bFloat ))
-                    aStep = bFloat ? OUString( OUString::number( fValue )) :
+                    aStep = bFloat ? OUString::number( fValue ) :
                                      OUString( OUString::number( nValue ));
                 break;
             }
@@ -274,7 +274,7 @@ void SpinfieldToolbarController::executeControlCommand( const css::frame::Contro
 
                 if ( impl_getValue( arg.Value, nValue, fValue, bFloat ))
                 {
-                    aValue = bFloat ? OUString( OUString::number( fValue )) :
+                    aValue = bFloat ? OUString::number( fValue ) :
                                       OUString( OUString::number( nValue ));
                     bFloatValue = bFloat;
                 }
@@ -295,18 +295,18 @@ void SpinfieldToolbarController::executeControlCommand( const css::frame::Contro
             {
                 if ( aName == "Value" )
                 {
-                    aValue = bFloat ? OUString( OUString::number( fValue )) :
+                    aValue = bFloat ? OUString::number( fValue ) :
                                       OUString( OUString::number( nValue ));
                     bFloatValue = bFloat;
                 }
                 else if ( aName == "Step" )
-                    aStep = bFloat ? OUString( OUString::number( fValue )) :
+                    aStep = bFloat ? OUString::number( fValue ) :
                                      OUString( OUString::number( nValue ));
                 else if ( aName == "LowerLimit" )
-                    aMin = bFloat ? OUString( OUString::number( fValue )) :
+                    aMin = bFloat ? OUString::number( fValue ) :
                                     OUString( OUString::number( nValue ));
                 else if ( aName == "UpperLimit" )
-                    aMax = bFloat ? OUString( OUString::number( fValue )) :
+                    aMax = bFloat ? OUString::number( fValue ) :
                                     OUString( OUString::number( nValue ));
             }
             else if ( aName == "OutputFormat" )
@@ -323,7 +323,7 @@ void SpinfieldToolbarController::executeControlCommand( const css::frame::Contro
                 double      fValue;
                 bool        bFloat( false );
                 if ( impl_getValue( arg.Value, nValue, fValue, bFloat ))
-                    aMin = bFloat ? OUString( OUString::number( fValue )) :
+                    aMin = bFloat ? OUString::number( fValue ) :
                                     OUString( OUString::number( nValue ));
                 break;
             }
@@ -339,7 +339,7 @@ void SpinfieldToolbarController::executeControlCommand( const css::frame::Contro
                 double      fValue;
                 bool        bFloat( false );
                 if ( impl_getValue( arg.Value, nValue, fValue, bFloat ))
-                    aMax = bFloat ? OUString( OUString::number( fValue )) :
+                    aMax = bFloat ? OUString::number( fValue ) :
                                     OUString( OUString::number( nValue ));
                 break;
             }

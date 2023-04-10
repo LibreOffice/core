@@ -40,6 +40,7 @@
 #include <type_traits>
 #endif
 
+#include "rtl/math.h"
 #include "rtl/textenc.h"
 #include "rtl/string.h"
 #include "rtl/stringutils.hxx"
@@ -2021,14 +2022,6 @@ public:
     {
         return number( static_cast< unsigned long long >( i ), radix );
     }
-    static auto number( float f )
-    {
-        return OStringNumber<RTL_STR_MAX_VALUEOFFLOAT>(rtl_str_valueOfFloat, f);
-    }
-    static auto number( double d )
-    {
-        return OStringNumber<RTL_STR_MAX_VALUEOFDOUBLE>(rtl_str_valueOfDouble, d);
-    }
 #else
     /**
       Returns the string representation of the integer argument.
@@ -2077,6 +2070,7 @@ public:
         char aBuf[RTL_STR_MAX_VALUEOFUINT64];
         return OString(aBuf, rtl_str_valueOfUInt64(aBuf, ll, radix));
     }
+#endif
 
     /**
       Returns the string representation of the float argument.
@@ -2089,8 +2083,15 @@ public:
     */
     static OString number( float f )
     {
-        char aBuf[RTL_STR_MAX_VALUEOFFLOAT];
-        return OString(aBuf, rtl_str_valueOfFloat(aBuf, f));
+        rtl_String* pNew = NULL;
+        // Same as rtl::str::valueOfFP, used for rtl_str_valueOfFloat
+        rtl_math_doubleToString(&pNew, NULL, 0, f, rtl_math_StringFormat_G,
+                                RTL_STR_MAX_VALUEOFFLOAT - SAL_N_ELEMENTS("-x.E-xxx") + 1, '.',
+                                NULL, 0, true);
+        if (pNew == NULL)
+            throw std::bad_alloc();
+
+        return OString(pNew, SAL_NO_ACQUIRE);
     }
 
     /**
@@ -2104,10 +2105,16 @@ public:
     */
     static OString number( double d )
     {
-        char aBuf[RTL_STR_MAX_VALUEOFDOUBLE];
-        return OString(aBuf, rtl_str_valueOfDouble(aBuf, d));
+        rtl_String* pNew = NULL;
+        // Same as rtl::str::valueOfFP, used for rtl_str_valueOfDouble
+        rtl_math_doubleToString(&pNew, NULL, 0, d, rtl_math_StringFormat_G,
+                                RTL_STR_MAX_VALUEOFDOUBLE - SAL_N_ELEMENTS("-x.E-xxx") + 1, '.',
+                                NULL, 0, true);
+        if (pNew == NULL)
+            throw std::bad_alloc();
+
+        return OString(pNew, SAL_NO_ACQUIRE);
     }
-#endif
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     static auto boolean(bool b)

@@ -113,9 +113,9 @@ void test::ostring::StringConcat::checkConcat()
     CPPUNIT_ASSERT_EQUAL( OString( "num10" ), OString( OString( "num" ) + OString::number( 10ULL )));
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, StringNumber< char, RTL_STR_MAX_VALUEOFUINT64 > > )), typeid( OString( "num" ) + OString::number( 10ULL )));
     CPPUNIT_ASSERT_EQUAL( OString( "num10.5" ), OString( OString( "num" ) + OString::number( 10.5f )));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, StringNumber< char, RTL_STR_MAX_VALUEOFFLOAT > > )), typeid( OString( "num" ) + OString::number( 10.5f )));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, OString > )), typeid( OString( "num" ) + OString::number( 10.5f )));
     CPPUNIT_ASSERT_EQUAL( OString( "num10.5" ), OString( OString( "num" ) + OString::number( 10.5 )));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, StringNumber< char, RTL_STR_MAX_VALUEOFDOUBLE > > )), typeid( OString( "num" ) + OString::number( 10.5 )));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, OString > )), typeid( OString( "num" ) + OString::number( 10.5 )));
 }
 
 void test::ostring::StringConcat::checkEnsureCapacity()
