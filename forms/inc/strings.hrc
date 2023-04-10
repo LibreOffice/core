@@ -71,7 +71,7 @@
 #define RID_STR_DATATYPE_BOOLEAN                    NC_("RID_STR_DATATYPE_BOOLEAN", "True/False (Boolean)")
 #define RID_STR_DATATYPE_DECIMAL                    NC_("RID_STR_DATATYPE_DECIMAL", "Decimal")
 #define RID_STR_DATATYPE_FLOAT                      NC_("RID_STR_DATATYPE_FLOAT", "Floating point")
-#define RID_STR_DATATYPE_DOUBLE                     NC_("RID_STR_DATATYPE_DOUBLE", "Double")
+#define RID_STR_DATATYPE_DOUBLE                     NC_("RID_STR_DATATYPE_DOUBLE", "Double precision")
 #define RID_STR_DATATYPE_DATE                       NC_("RID_STR_DATATYPE_DATE", "Date")
 #define RID_STR_DATATYPE_TIME                       NC_("RID_STR_DATATYPE_TIME", "Time")
 #define RID_STR_DATATYPE_DATETIME                   NC_("RID_STR_DATATYPE_DATETIME", "Date and Time")
