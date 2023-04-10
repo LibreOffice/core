@@ -1216,29 +1216,15 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
 
 const char* DrawingML::GetComponentDir() const
 {
-    switch ( meDocumentType )
-    {
-        case DOCUMENT_DOCX: return "word";
-        case DOCUMENT_PPTX: return "ppt";
-        case DOCUMENT_XLSX: return "xl";
-    }
-
-    return "unknown";
+    return getComponentDir(meDocumentType);
 }
 
 const char* DrawingML::GetRelationCompPrefix() const
 {
-    switch ( meDocumentType )
-    {
-        case DOCUMENT_DOCX: return "";
-        case DOCUMENT_PPTX:
-        case DOCUMENT_XLSX: return "../";
-    }
-
-    return "unknown";
+    return getRelationCompPrefix(meDocumentType);
 }
 
-OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
+OUString GraphicExport::write(const Graphic& rGraphic , bool bRelPathToMedia)
 {
     GfxLink aLink = rGraphic.GetGfxLink ();
     BitmapChecksum aChecksum = rGraphic.GetChecksum();
@@ -1335,9 +1321,9 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
         }
 
         sal_Int32 nImageCount = rGraphicExportCache.nextImageCount();
-        Reference<XOutputStream> xOutStream = mpFB->openFragmentStream(
+        Reference<XOutputStream> xOutStream = mpFilterBase->openFragmentStream(
             OUStringBuffer()
-                .appendAscii(GetComponentDir())
+                .appendAscii(getComponentDir(meDocumentType))
                 .append("/media/image" + OUString::number(nImageCount))
                 .appendAscii(pExtension)
                 .makeStringAndClear(),
@@ -1350,7 +1336,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
         if (bRelPathToMedia)
             sRelationCompPrefix = "../";
         else
-            sRelationCompPrefix = GetRelationCompPrefix();
+            sRelationCompPrefix = getRelationCompPrefix(meDocumentType);
         sPath = OUStringBuffer()
                     .appendAscii(sRelationCompPrefix.getStr())
                     .appendAscii(sRelPathToMedia.getStr())
@@ -1361,11 +1347,17 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
         rGraphicExportCache.addExportGraphics(aChecksum, sPath);
     }
 
-    sRelId = mpFB->addRelation( mpFS->getOutputStream(),
+    sRelId = mpFilterBase->addRelation( mpFS->getOutputStream(),
                                 oox::getRelationship(Relationship::IMAGE),
                                 sPath );
 
     return sRelId;
+}
+
+OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
+{
+    GraphicExport exporter(mpFS, mpFB, meDocumentType);
+    return exporter.write(rGraphic, bRelPathToMedia);
 }
 
 void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::drawing::XShape>& xShape)

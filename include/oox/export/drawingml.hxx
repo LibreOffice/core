@@ -139,6 +139,30 @@ protected:
     virtual ~DMLTextExport() {}
 };
 
+constexpr const char* getComponentDir(DocumentType eDocumentType)
+{
+    switch (eDocumentType)
+    {
+        case DOCUMENT_DOCX: return "word";
+        case DOCUMENT_PPTX: return "ppt";
+        case DOCUMENT_XLSX: return "xl";
+    }
+
+    return "";
+}
+
+constexpr const char* getRelationCompPrefix(DocumentType eDocumentType)
+{
+    switch (eDocumentType)
+    {
+        case DOCUMENT_DOCX: return "";
+        case DOCUMENT_PPTX:
+        case DOCUMENT_XLSX: return "../";
+    }
+
+    return "";
+}
+
 class OOX_DLLPUBLIC GraphicExportCache
 {
 private:
@@ -224,6 +248,22 @@ public:
         mnWdpImageCounter.top()++;
         return nCount;
     }
+};
+
+class GraphicExport
+{
+    sax_fastparser::FSHelperPtr mpFS;
+    oox::core::XmlFilterBase* mpFilterBase;
+    DocumentType meDocumentType;
+
+public:
+    GraphicExport(sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFilterBase, DocumentType eDocumentType)
+        : mpFS(pFS)
+        , mpFilterBase(pFilterBase)
+        , meDocumentType(eDocumentType)
+    {}
+
+    OUString write(const Graphic& rGraphic, bool bRelPathToMedia);
 };
 
 class OOX_DLLPUBLIC DrawingML
