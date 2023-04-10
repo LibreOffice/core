@@ -91,7 +91,7 @@ namespace chelp {
             //running into a later problem with strings >= 255
             const char* pTitle = m_ptr + 3 + m_ptr[0] +  static_cast<sal_Int32>(m_ptr[ 1+ static_cast<sal_Int32>(m_ptr[0]) ]);
 
-            return OStringToOUString(pTitle, strlen(pTitle), RTL_TEXTENCODING_UTF8);
+            return OStringToOUString(pTitle, RTL_TEXTENCODING_UTF8);
         }
 
 

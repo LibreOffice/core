@@ -2713,7 +2713,7 @@ OUString GtkSalFrame::GetKeyName( sal_uInt16 nKeyCode )
     KeyCodeToGdkKey(nKeyCode, &nGtkKeyCode, &nGtkModifiers );
 
     gchar* pName = gtk_accelerator_get_label(nGtkKeyCode, nGtkModifiers);
-    OUString aRet = OStringToOUString(pName, strlen(pName), RTL_TEXTENCODING_UTF8);
+    OUString aRet = OStringToOUString(pName, RTL_TEXTENCODING_UTF8);
     g_free(pName);
     return aRet;
 }
@@ -4859,7 +4859,7 @@ public:
             OUString aStr;
             gchar *pText = reinterpret_cast<gchar*>(gtk_selection_data_get_text(m_pData));
             if (pText)
-                aStr = OStringToOUString(pText, strlen(pText), RTL_TEXTENCODING_UTF8);
+                aStr = OStringToOUString(pText, RTL_TEXTENCODING_UTF8);
             g_free(pText);
             aRet <<= aStr.replaceAll("\r\n", "\n");
         }
