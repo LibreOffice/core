@@ -110,9 +110,9 @@ bool SvStreamOutputOperators::VisitCallExpr( const CallExpr* callExpr )
         else if( arg0 == "const double &" )
             newIOMethod = "WriteDouble";
         else if( arg0 == "const char *" )
-            newIOMethod = "WriteCharPtr";
+            newIOMethod = "WriteOString";
         else if( arg0 == "char *" )
-            newIOMethod = "WriteCharPtr";
+            newIOMethod = "WriteOString";
         else if( arg0 == "const unsigned char *" )
             newIOMethod = "WriteUCharPtr";
         else if( arg0 == "unsigned char *" )

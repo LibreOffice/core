@@ -1233,7 +1233,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
             while ( nPos != -1 )
             {
                 if( nPos )
-                    rWrt.Strm().WriteCharPtr( SAL_NEWLINE_STRING );
+                    rWrt.Strm().WriteOString( SAL_NEWLINE_STRING );
                 OUString aLine = sVal.getToken( 0, 0x0A, nPos );
                 HTMLOutFuncs::Out_String( rWrt.Strm(), aLine );
             }

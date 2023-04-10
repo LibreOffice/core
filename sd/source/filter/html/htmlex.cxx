@@ -2959,7 +2959,7 @@ bool HtmlExport::CreateImageNumberFile()
     ErrCode nErr = aFile.createStream(aFull, pStr);
     if(nErr == ERRCODE_NONE)
     {
-        pStr->WriteCharPtr( "1" );
+        pStr->WriteOString( "1" );
         aFile.close();
     }
 

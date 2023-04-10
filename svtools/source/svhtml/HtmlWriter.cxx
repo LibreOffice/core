@@ -48,7 +48,7 @@ void HtmlWriter::start(const OString& aElement)
     {
         for(size_t i = 0; i < maElementStack.size() - 1; i++)
         {
-            mrStream.WriteCharPtr("  ");
+            mrStream.WriteOString("  ");
         }
     }
 
@@ -67,9 +67,9 @@ void HtmlWriter::endAttribute()
 {
     if (mbElementOpen)
     {
-        mrStream.WriteCharPtr("/>");
+        mrStream.WriteOString("/>");
         if (mbPrettyPrint)
-            mrStream.WriteCharPtr("\n");
+            mrStream.WriteOString("\n");
         mbElementOpen = false;
     }
 }
@@ -94,9 +94,9 @@ void HtmlWriter::end()
 {
     if (mbElementOpen && !mbCharactersWritten)
     {
-        mrStream.WriteCharPtr("/>");
+        mrStream.WriteOString("/>");
         if (mbPrettyPrint)
-            mrStream.WriteCharPtr("\n");
+            mrStream.WriteOString("\n");
     }
     else
     {
@@ -104,14 +104,14 @@ void HtmlWriter::end()
         {
             for(size_t i = 0; i < maElementStack.size() - 1; i++)
             {
-                mrStream.WriteCharPtr("  ");
+                mrStream.WriteOString("  ");
             }
         }
-        mrStream.WriteCharPtr("</");
+        mrStream.WriteOString("</");
         mrStream.WriteOString(Concat2View(maNamespace + maElementStack.back()));
-        mrStream.WriteCharPtr(">");
+        mrStream.WriteOString(">");
         if (mbPrettyPrint)
-            mrStream.WriteCharPtr("\n");
+            mrStream.WriteOString("\n");
     }
     maElementStack.pop_back();
     mbElementOpen = false;
@@ -168,7 +168,7 @@ void HtmlWriter::attribute(std::string_view aAttribute)
 void HtmlWriter::characters(std::string_view rChars)
 {
     if (!mbCharactersWritten)
-        mrStream.WriteCharPtr(">");
+        mrStream.WriteOString(">");
     mrStream.WriteOString(rChars);
     mbCharactersWritten = true;
 }

@@ -79,8 +79,8 @@ SdrTableRtfExporter::SdrTableRtfExporter( SvStream& rStrm, SdrTableObj& rObj )
 
 void SdrTableRtfExporter::Write()
 {
-    mrStrm.WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RTF );
-    mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ANSI ).WriteCharPtr( SAL_NEWLINE_STRING );
+    mrStrm.WriteChar( '{' ).WriteOString( OOO_STRING_SVTOOLS_RTF_RTF );
+    mrStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_ANSI ).WriteOString( SAL_NEWLINE_STRING );
 
     Reference< XTableColumns > xColumns( mxTable->getColumns() );
     const sal_Int32 nColCount = xColumns->getCount();
@@ -117,7 +117,7 @@ void SdrTableRtfExporter::Write()
         TOOLS_WARN_EXCEPTION("svx", "");
     }
 
-    mrStrm.WriteChar( '}' ).WriteCharPtr( SAL_NEWLINE_STRING );
+    mrStrm.WriteChar( '}' ).WriteOString( SAL_NEWLINE_STRING );
 }
 
 void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sal_Int32 nRow, const std::vector< sal_Int32 >& aColumnStart )
@@ -125,8 +125,8 @@ void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sa
     sal_Int32 nRowHeight = 0;
     xRowSet->getPropertyValue( gsSize ) >>= nRowHeight;
 
-    mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TROWD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRGAPH ).WriteCharPtr( "30" ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRLEFT ).WriteCharPtr( "-30" );
-    mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRRH ).WriteOString( OString::number(nRowHeight) );
+    mrStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_TROWD ).WriteOString( OOO_STRING_SVTOOLS_RTF_TRGAPH ).WriteOString( "30" ).WriteOString( OOO_STRING_SVTOOLS_RTF_TRLEFT ).WriteOString( "-30" );
+    mrStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_TRRH ).WriteOString( OString::number(nRowHeight) );
 
     const sal_Int32 nColCount = mxTable->getColumnCount();
     for( sal_Int32 nCol = 0; nCol < nColCount; nCol++ )
@@ -136,11 +136,11 @@ void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sa
         if( !xCell.is() )
             continue;
 
-        mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELLX ).WriteOString( OString::number(aColumnStart[nCol]) );
+        mrStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_CELLX ).WriteOString( OString::number(aColumnStart[nCol]) );
         if ( (nCol & 0x0F) == 0x0F )
-            mrStrm.WriteCharPtr( SAL_NEWLINE_STRING );        // prevent long lines
+            mrStrm.WriteOString( SAL_NEWLINE_STRING );        // prevent long lines
     }
-    mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PARD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PLAIN ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_INTBL ).WriteCharPtr( SAL_NEWLINE_STRING );
+    mrStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_PARD ).WriteOString( OOO_STRING_SVTOOLS_RTF_PLAIN ).WriteOString( OOO_STRING_SVTOOLS_RTF_INTBL ).WriteOString( SAL_NEWLINE_STRING );
 
     sal_uInt64 nStrmPos = mrStrm.Tell();
     for( sal_Int32 nCol = 0; nCol < nColCount; nCol++ )
@@ -148,11 +148,11 @@ void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sa
         WriteCell( nCol, nRow );
         if ( mrStrm.Tell() - nStrmPos > 255 )
         {
-            mrStrm.WriteCharPtr( SAL_NEWLINE_STRING );
+            mrStrm.WriteOString( SAL_NEWLINE_STRING );
             nStrmPos = mrStrm.Tell();
         }
     }
-    mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ROW ).WriteCharPtr( SAL_NEWLINE_STRING );
+    mrStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_ROW ).WriteOString( SAL_NEWLINE_STRING );
 }
 
 
@@ -162,7 +162,7 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
 
     if( !xCell.is() || xCell->isMerged() )
     {
-        mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELL );
+        mrStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_CELL );
         return ;
     }
 
@@ -204,30 +204,30 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
         case SDRTEXTHORZADJUST_LEFT:
         default:                        pChar = OOO_STRING_SVTOOLS_RTF_QL;  break;
     }
-    mrStrm.WriteCharPtr( pChar );
+    mrStrm.WriteOString( pChar );
 
     if ( rWeightItem.GetWeight() >= WEIGHT_BOLD )
     {   // bold
         bResetAttr = true;
-        mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_B );
+        mrStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_B );
     }
     if ( rPostureItem.GetPosture() != ITALIC_NONE )
     {   // italic
         bResetAttr = true;
-        mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_I );
+        mrStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_I );
     }
     if ( rUnderlineItem.GetLineStyle() != LINESTYLE_NONE )
     {   // underline
         bResetAttr = true;
-        mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_UL );
+        mrStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_UL );
     }
 
     mrStrm.WriteChar( ' ' );
     RTFOutFuncs::Out_String( mrStrm, aContent );
-    mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELL );
+    mrStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_CELL );
 
     if ( bResetAttr )
-        mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PLAIN );
+        mrStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_PLAIN );
 }
 
 }

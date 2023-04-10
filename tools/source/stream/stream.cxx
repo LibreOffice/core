@@ -1047,12 +1047,6 @@ SvStream& SvStream::WriteDouble ( const double& r )
     return *this;
 }
 
-SvStream& SvStream::WriteCharPtr( const char* pBuf )
-{
-    WriteBytes( pBuf, strlen(pBuf) );
-    return *this;
-}
-
 SvStream& SvStream::WriteStream( SvStream& rStream )
 {
     const sal_uInt32 cBufLen = 0x8000;
@@ -1361,14 +1355,12 @@ void SvStream::RefreshBuffer()
 
 SvStream& SvStream::WriteInt32AsString(sal_Int32 nInt32)
 {
-    WriteOString(OString::number(nInt32));
-    return *this;
+    return WriteOString(OString::number(nInt32));
 }
 
 SvStream& SvStream::WriteUInt32AsString(sal_uInt32 nUInt32)
 {
-    WriteOString(OString::number(nUInt32));
-    return *this;
+    return WriteOString(OString::number(nUInt32));
 }
 
 #define CRYPT_BUFSIZE 1024

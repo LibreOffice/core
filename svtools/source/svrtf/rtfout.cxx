@@ -43,7 +43,7 @@ SvStream& Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLen )
             *pStr += 39;
         nHex >>= 4;
     }
-    return rStream.WriteCharPtr( pStr );
+    return rStream.WriteOString( pStr );
 }
 
 // Ideally, this function should work on (sal_uInt32) Unicode scalar values
@@ -69,13 +69,13 @@ SvStream& Out_Char(SvStream& rStream, sal_Unicode c,
         // written
         break;
     case 0xA0:
-        rStream.WriteCharPtr( "\\~" );
+        rStream.WriteOString( "\\~" );
         break;
     case 0xAD:
-        rStream.WriteCharPtr( "\\-" );
+        rStream.WriteOString( "\\-" );
         break;
     case 0x2011:
-        rStream.WriteCharPtr( "\\_" );
+        rStream.WriteOString( "\\_" );
         break;
     case '\n':
         pStr = OOO_STRING_SVTOOLS_RTF_LINE;
@@ -150,17 +150,17 @@ SvStream& Out_Char(SvStream& rStream, sal_Unicode c,
                         {
                             // #i47831# add an additional whitespace, so that
                             // "document whitespaces" are not ignored.;
-                            rStream.WriteCharPtr( "\\uc" )
-                               .WriteOString( OString::number(nLen) ).WriteCharPtr( " " );
+                            rStream.WriteOString( "\\uc" )
+                               .WriteOString( OString::number(nLen) ).WriteOString( " " );
                             *pUCMode = nLen;
                         }
-                        rStream.WriteCharPtr( "\\u" )
+                        rStream.WriteOString( "\\u" )
                            .WriteInt32AsString(c);
                     }
 
                     for (sal_Int32 nI = 0; nI < nLen; ++nI)
                     {
-                        rStream.WriteCharPtr( "\\'" );
+                        rStream.WriteOString( "\\'" );
                         Out_Hex(rStream, sConverted[nI], 2);
                     }
                 }
@@ -170,7 +170,7 @@ SvStream& Out_Char(SvStream& rStream, sal_Unicode c,
     }
 
     if (pStr)
-        rStream.WriteCharPtr( pStr ).WriteChar( ' ' );
+        rStream.WriteOString( pStr ).WriteChar( ' ' );
 
     return rStream;
 }
@@ -184,7 +184,7 @@ SvStream& RTFOutFuncs::Out_String( SvStream& rStream, std::u16string_view rStr,
     for (size_t n = 0; n < rStr.size(); ++n)
         Out_Char(rStream, rStr[n], &nUCMode, eDestEnc);
     if (nUCMode != 1)
-      rStream.WriteCharPtr( "\\uc1" ).WriteCharPtr( " " ); // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;
+      rStream.WriteOString( "\\uc1" ).WriteOString( " " ); // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;
     return rStream;
 }
 

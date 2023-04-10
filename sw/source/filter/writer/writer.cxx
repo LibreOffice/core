@@ -55,7 +55,7 @@ namespace
         if (bNeg)
             aBuf[--i] = '-';
 
-        return rStrm.WriteCharPtr( &aBuf[i] );
+        return rStrm.WriteOString( &aBuf[i] );
     }
 }
 

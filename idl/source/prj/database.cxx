@@ -519,7 +519,7 @@ struct WriteDep
     explicit WriteDep(SvFileStream & rStream) : m_rStream(rStream) { }
     void operator() (std::u16string_view rItem)
     {
-        m_rStream.WriteCharPtr( " \\\n " );
+        m_rStream.WriteOString( " \\\n " );
         m_rStream.WriteOString( OUStringToOString(rItem, RTL_TEXTENCODING_UTF8) );
     }
 };
@@ -533,7 +533,7 @@ struct WriteDummy
     void operator() (std::u16string_view rItem)
     {
         m_rStream.WriteOString( OUStringToOString(rItem, RTL_TEXTENCODING_UTF8) );
-        m_rStream.WriteCharPtr( " :\n\n" );
+        m_rStream.WriteOString( " :\n\n" );
     }
 };
 
@@ -543,9 +543,9 @@ void SvIdlDataBase::WriteDepFile(
         SvFileStream & rStream, std::u16string_view rTarget)
 {
     rStream.WriteOString( OUStringToOString(rTarget, RTL_TEXTENCODING_UTF8) );
-    rStream.WriteCharPtr( " :" );
+    rStream.WriteOString( " :" );
     ::std::for_each(m_DepFiles.begin(), m_DepFiles.end(), WriteDep(rStream));
-    rStream.WriteCharPtr( "\n\n" );
+    rStream.WriteOString( "\n\n" );
     ::std::for_each(m_DepFiles.begin(), m_DepFiles.end(), WriteDummy(rStream));
 }
 

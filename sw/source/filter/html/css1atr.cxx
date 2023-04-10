@@ -1692,12 +1692,12 @@ static SwHTMLWriter& OutCSS1_SwPageDesc( SwHTMLWriter& rWrt, const SwPageDesc& r
     {
         rWrt.OutNewLine();
         OString sTmp(OUStringToOString(aSelector, RTL_TEXTENCODING_UTF8));
-        rWrt.Strm().WriteOString( sTmp ).WriteCharPtr( " {" );
+        rWrt.Strm().WriteOString( sTmp ).WriteOString( " {" );
         rWrt.m_bFirstCSS1Property = false;
     }
 
     if( !rWrt.m_bFirstCSS1Property )
-        rWrt.Strm().WriteCharPtr( sCSS1_rule_end );
+        rWrt.Strm().WriteOString( sCSS1_rule_end );
 
     return rWrt;
 }
@@ -1716,7 +1716,7 @@ static SwHTMLWriter& OutCSS1_SwFootnoteInfo( SwHTMLWriter& rWrt, const SwEndNote
                              &aSelector );
         rWrt.OutCSS1_PropertyAscii( sCSS1_P_font_size,
                                         sHTML_FTN_fontheight );
-        rWrt.Strm().WriteCharPtr( sCSS1_rule_end );
+        rWrt.Strm().WriteOString( sCSS1_rule_end );
     }
 
     const SwCharFormat *pSymCharFormat = rInfo.GetCharFormat( *pDoc );
@@ -2761,7 +2761,7 @@ static void OutCSS1_SwFormatDropAttrs( SwHTMLWriter& rHWrt,
     else if( pDCCharFormat )
         rHWrt.OutCSS1_SfxItemSet( pDCCharFormat->GetAttrSet() );
     else if( (rHWrt.m_nCSS1OutMode & CSS1_OUTMODE_ANY_OFF) == CSS1_OUTMODE_RULE_OFF )
-        rHWrt.Strm().WriteCharPtr( sCSS1_rule_end );
+        rHWrt.Strm().WriteOString( sCSS1_rule_end );
 
 }
 
@@ -3664,7 +3664,7 @@ SwHTMLWriter& OutCSS1_HintSpanTag( SwHTMLWriter& rWrt, const SfxPoolItem& rHt )
     Out( aCSS1AttrFnTab, rHt, rWrt );
 
     if( !rWrt.m_bFirstCSS1Property  && rWrt.m_bTagOn )
-        rWrt.Strm().WriteCharPtr( sCSS1_span_tag_end );
+        rWrt.Strm().WriteOString( sCSS1_span_tag_end );
 
     return rWrt;
 }

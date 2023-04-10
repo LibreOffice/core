@@ -838,7 +838,7 @@ void Updater::log(const char* pMessage)
     OUString aUpdateLog = getUpdateInfoLog();
     SvFileStream aLog(aUpdateLog, StreamMode::STD_READWRITE);
     aLog.Seek(aLog.Tell() + aLog.remainingSize()); // make sure we are at the end
-    aLog.WriteCharPtr(pMessage);
+    aLog.WriteOString(pMessage);
 }
 
 OUString Updater::getBuildID()

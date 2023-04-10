@@ -320,13 +320,13 @@ bool ODatabaseImportExport::Read()
 bool ORTFImportExport::Write()
 {
     ODatabaseImportExport::Write();
-    m_pStream->WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RTF );
-    m_pStream->WriteCharPtr(OOO_STRING_SVTOOLS_RTF_ANSI);
+    m_pStream->WriteChar( '{' ).WriteOString( OOO_STRING_SVTOOLS_RTF_RTF );
+    m_pStream->WriteOString(OOO_STRING_SVTOOLS_RTF_ANSI);
     if (sal_uInt32 nCpg = rtl_getWindowsCodePageFromTextEncoding(m_eDestEnc); nCpg && nCpg != 65001)
     {
-        m_pStream->WriteCharPtr(OOO_STRING_SVTOOLS_RTF_ANSICPG).WriteUInt32AsString(nCpg);
+        m_pStream->WriteOString(OOO_STRING_SVTOOLS_RTF_ANSICPG).WriteUInt32AsString(nCpg);
     }
-    m_pStream->WriteCharPtr(SAL_NEWLINE_STRING);
+    m_pStream->WriteOString(SAL_NEWLINE_STRING);
 
     bool bBold          = ( css::awt::FontWeight::BOLD     == m_aFont.Weight );
     bool bItalic        = ( css::awt::FontSlant_ITALIC     == m_aFont.Slant );
@@ -344,37 +344,37 @@ bool ORTFImportExport::Write()
         aFonts = OUStringToOString(aName, RTL_TEXTENCODING_MS_1252);
     }
 
-    m_pStream->WriteCharPtr( "{\\fonttbl" );
+    m_pStream->WriteOString( "{\\fonttbl" );
     if (!aFonts.isEmpty())
     {
         sal_Int32 nIdx{0};
         sal_Int32 nTok{-1}; // to compensate pre-increment
         do {
-            m_pStream->WriteCharPtr( "\\f" );
+            m_pStream->WriteOString( "\\f" );
             m_pStream->WriteInt32AsString(++nTok);
-            m_pStream->WriteCharPtr( "\\fcharset0\\fnil " );
+            m_pStream->WriteOString( "\\fcharset0\\fnil " );
             m_pStream->WriteOString( o3tl::getToken(aFonts, 0, ';', nIdx) );
             m_pStream->WriteChar( ';' );
         } while (nIdx>=0);
     }
     m_pStream->WriteChar( '}' ) ;
-    m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
+    m_pStream->WriteOString( SAL_NEWLINE_STRING );
     // write the rtf color table
-    m_pStream->WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_COLORTBL ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RED );
+    m_pStream->WriteChar( '{' ).WriteOString( OOO_STRING_SVTOOLS_RTF_COLORTBL ).WriteOString( OOO_STRING_SVTOOLS_RTF_RED );
     m_pStream->WriteUInt32AsString(aColor.GetRed());
-    m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_GREEN );
+    m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_GREEN );
     m_pStream->WriteUInt32AsString(aColor.GetGreen());
-    m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_BLUE );
+    m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_BLUE );
     m_pStream->WriteUInt32AsString(aColor.GetBlue());
 
-    m_pStream->WriteCharPtr( ";\\red255\\green255\\blue255;\\red192\\green192\\blue192;}" )
-                .WriteCharPtr( SAL_NEWLINE_STRING );
+    m_pStream->WriteOString( ";\\red255\\green255\\blue255;\\red192\\green192\\blue192;}" )
+                .WriteOString( SAL_NEWLINE_STRING );
 
     static char const aCell1[] = "\\clbrdrl\\brdrs\\brdrcf0\\clbrdrt\\brdrs\\brdrcf0\\clbrdrb\\brdrs\\brdrcf0\\clbrdrr\\brdrs\\brdrcf0\\clshdng10000\\clcfpat2\\cellx";
 
-    m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TROWD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRGAPH );
+    m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_TROWD ).WriteOString( OOO_STRING_SVTOOLS_RTF_TRGAPH );
     m_pStream->WriteInt32AsString(40);
-    m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
+    m_pStream->WriteOString( SAL_NEWLINE_STRING );
 
     if(m_xObject.is())
     {
@@ -393,14 +393,14 @@ bool ORTFImportExport::Write()
 
         for( sal_Int32 i=1; i<=nCount; ++i )
         {
-            m_pStream->WriteCharPtr( aCell1 );
+            m_pStream->WriteOString( aCell1 );
             m_pStream->WriteInt32AsString(i*CELL_X);
-            m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
+            m_pStream->WriteOString( SAL_NEWLINE_STRING );
         }
 
         // column description
-        m_pStream->WriteChar( '{' ).WriteCharPtr( SAL_NEWLINE_STRING );
-        m_pStream->WriteCharPtr( "\\trrh-270\\pard\\intbl" );
+        m_pStream->WriteChar( '{' ).WriteOString( SAL_NEWLINE_STRING );
+        m_pStream->WriteOString( "\\trrh-270\\pard\\intbl" );
 
         std::unique_ptr<OString[]> pHorzChar(new OString[nCount]);
 
@@ -430,28 +430,28 @@ bool ORTFImportExport::Write()
 
             pHorzChar[i-1] = pChar; // to avoid to always rummage in the ITEMSET later on
 
-            m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
+            m_pStream->WriteOString( SAL_NEWLINE_STRING );
             m_pStream->WriteChar( '{' );
-            m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_QC );   // column header always centered
+            m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_QC );   // column header always centered
 
-            if ( bBold )        m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_B );
-            if ( bItalic )      m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_I );
-            if ( bUnderline )   m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_UL );
-            if ( bStrikeout )   m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_STRIKE );
+            if ( bBold )        m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_B );
+            if ( bItalic )      m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_I );
+            if ( bUnderline )   m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_UL );
+            if ( bStrikeout )   m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_STRIKE );
 
-            m_pStream->WriteCharPtr( "\\fs20\\f0\\cf0\\cb2" );
+            m_pStream->WriteOString( "\\fs20\\f0\\cf0\\cb2" );
             m_pStream->WriteChar( ' ' );
             RTFOutFuncs::Out_String(*m_pStream, sColumnName, m_eDestEnc);
 
-            m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELL );
+            m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_CELL );
             m_pStream->WriteChar( '}' );
-            m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
-            m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PARD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_INTBL );
+            m_pStream->WriteOString( SAL_NEWLINE_STRING );
+            m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_PARD ).WriteOString( OOO_STRING_SVTOOLS_RTF_INTBL );
         }
 
-        m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ROW );
-        m_pStream->WriteCharPtr( SAL_NEWLINE_STRING ).WriteChar( '}' );
-        m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
+        m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_ROW );
+        m_pStream->WriteOString( SAL_NEWLINE_STRING ).WriteChar( '}' );
+        m_pStream->WriteOString( SAL_NEWLINE_STRING );
 
         sal_Int32 k=1;
         sal_Int32 kk=0;
@@ -488,7 +488,7 @@ bool ORTFImportExport::Write()
         }
     }
 
-    m_pStream->WriteChar( '}' ).WriteCharPtr( SAL_NEWLINE_STRING );
+    m_pStream->WriteChar( '}' ).WriteOString( SAL_NEWLINE_STRING );
     m_pStream->WriteUChar( 0 );
     return ((*m_pStream).GetError() == ERRCODE_NONE);
 }
@@ -496,17 +496,17 @@ bool ORTFImportExport::Write()
 void ORTFImportExport::appendRow(OString const * pHorzChar,sal_Int32 _nColumnCount,sal_Int32& k,sal_Int32& kk)
 {
     ++kk;
-    m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TROWD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRGAPH );
+    m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_TROWD ).WriteOString( OOO_STRING_SVTOOLS_RTF_TRGAPH );
     m_pStream->WriteInt32AsString(40);
-    m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
+    m_pStream->WriteOString( SAL_NEWLINE_STRING );
 
     static char const aCell2[] = "\\clbrdrl\\brdrs\\brdrcf2\\clbrdrt\\brdrs\\brdrcf2\\clbrdrb\\brdrs\\brdrcf2\\clbrdrr\\brdrs\\brdrcf2\\clshdng10000\\clcfpat1\\cellx";
 
     for ( sal_Int32 i=1; i<=_nColumnCount; ++i )
     {
-        m_pStream->WriteCharPtr( aCell2 );
+        m_pStream->WriteOString( aCell2 );
         m_pStream->WriteInt32AsString(i*CELL_X);
-        m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
+        m_pStream->WriteOString( SAL_NEWLINE_STRING );
     }
 
     const bool bBold            = ( css::awt::FontWeight::BOLD     == m_aFont.Weight );
@@ -516,19 +516,19 @@ void ORTFImportExport::appendRow(OString const * pHorzChar,sal_Int32 _nColumnCou
     Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
 
     m_pStream->WriteChar( '{' );
-    m_pStream->WriteCharPtr( "\\trrh-270\\pard\\intbl" );
+    m_pStream->WriteOString( "\\trrh-270\\pard\\intbl" );
     for ( sal_Int32 i=1; i <= _nColumnCount; ++i )
     {
-        m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
+        m_pStream->WriteOString( SAL_NEWLINE_STRING );
         m_pStream->WriteChar( '{' );
         m_pStream->WriteOString( pHorzChar[i-1] );
 
-        if ( bBold )        m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_B );
-        if ( bItalic )      m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_I );
-        if ( bUnderline )   m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_UL );
-        if ( bStrikeout )   m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_STRIKE );
+        if ( bBold )        m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_B );
+        if ( bItalic )      m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_I );
+        if ( bUnderline )   m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_UL );
+        if ( bStrikeout )   m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_STRIKE );
 
-        m_pStream->WriteCharPtr( "\\fs20\\f1\\cf0\\cb1 " );
+        m_pStream->WriteOString( "\\fs20\\f1\\cf0\\cb1 " );
 
         try
         {
@@ -543,12 +543,12 @@ void ORTFImportExport::appendRow(OString const * pHorzChar,sal_Int32 _nColumnCou
             SAL_WARN("dbaccess.ui","RTF WRITE!");
         }
 
-        m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELL );
+        m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_CELL );
         m_pStream->WriteChar( '}' );
-        m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
-        m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PARD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_INTBL );
+        m_pStream->WriteOString( SAL_NEWLINE_STRING );
+        m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_PARD ).WriteOString( OOO_STRING_SVTOOLS_RTF_INTBL );
     }
-    m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ROW ).WriteCharPtr( SAL_NEWLINE_STRING );
+    m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_ROW ).WriteOString( SAL_NEWLINE_STRING );
     m_pStream->WriteChar( '}' );
     ++k;
 }
@@ -591,13 +591,13 @@ bool OHTMLImportExport::Write()
     ODatabaseImportExport::Write();
     if(m_xObject.is())
     {
-        m_pStream->WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_doctype ).WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_doctype5 ).WriteChar( '>' ).WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( SAL_NEWLINE_STRING );
-        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_html).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+        m_pStream->WriteChar( '<' ).WriteOString( OOO_STRING_SVTOOLS_HTML_doctype ).WriteChar( ' ' ).WriteOString( OOO_STRING_SVTOOLS_HTML_doctype5 ).WriteChar( '>' ).WriteOString( SAL_NEWLINE_STRING ).WriteOString( SAL_NEWLINE_STRING );
+        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_html).WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
         WriteHeader();
-        m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+        m_pStream->WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
         WriteBody();
-        m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
-        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_html, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+        m_pStream->WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
+        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_html, false).WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
 
         return ((*m_pStream).GetError() == ERRCODE_NONE);
     }
@@ -629,52 +629,52 @@ void OHTMLImportExport::WriteHeader()
     }
 
     IncIndent(1);
-    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_head).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_head).WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
 
     SfxFrameHTMLWriter::Out_DocInfo( (*m_pStream), OUString(),
         xDocProps, sIndent );
-    m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+    m_pStream->WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
     IncIndent(-1);
-    m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
-    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_head, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+    m_pStream->WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_head, false).WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
 }
 
 void OHTMLImportExport::WriteBody()
 {
     IncIndent(1);
-    m_pStream->WriteCharPtr( "<" ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_style ).WriteCharPtr( " " ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_type ).WriteCharPtr( "=\"text/css\">" );
+    m_pStream->WriteOString( "<" ).WriteOString( OOO_STRING_SVTOOLS_HTML_style ).WriteOString( " " ).WriteOString( OOO_STRING_SVTOOLS_HTML_O_type ).WriteOString( "=\"text/css\">" );
 
-    m_pStream->WriteCharPtr( "<!-- " );
-    m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
-    m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body ).WriteCharPtr( " { " ).WriteCharPtr( "font-family: " ).WriteChar( '"' ).WriteOString( OUStringToOString(m_aFont.Name, osl_getThreadTextEncoding()) ).WriteChar( '\"' );
+    m_pStream->WriteOString( "<!-- " );
+    m_pStream->WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
+    m_pStream->WriteOString( OOO_STRING_SVTOOLS_HTML_body ).WriteOString( " { " ).WriteOString( "font-family: " ).WriteChar( '"' ).WriteOString( OUStringToOString(m_aFont.Name, osl_getThreadTextEncoding()) ).WriteChar( '\"' );
         // TODO : think about the encoding of the font name
-    m_pStream->WriteCharPtr( "; " ).WriteCharPtr( "font-size: " );
+    m_pStream->WriteOString( "; " ).WriteOString( "font-size: " );
     m_pStream->WriteInt32AsString(m_aFont.Height);
     m_pStream->WriteChar( '}' );
 
-    m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
-    m_pStream->WriteCharPtr( " -->" );
+    m_pStream->WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
+    m_pStream->WriteOString( " -->" );
     IncIndent(-1);
-    m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
-    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_style, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
-    m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+    m_pStream->WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_style, false).WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
+    m_pStream->WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
 
     // default Textcolour black
-    m_pStream->WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body ).WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_text ).WriteChar( '=' );
+    m_pStream->WriteChar( '<' ).WriteOString( OOO_STRING_SVTOOLS_HTML_body ).WriteChar( ' ' ).WriteOString( OOO_STRING_SVTOOLS_HTML_O_text ).WriteChar( '=' );
     ::Color aColor;
     if(m_xObject.is())
         m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= aColor;
     HTMLOutFuncs::Out_Color( (*m_pStream), aColor );
 
-    m_pStream->WriteCharPtr( " " OOO_STRING_SVTOOLS_HTML_O_bgcolor "=" );
+    m_pStream->WriteOString( " " OOO_STRING_SVTOOLS_HTML_O_bgcolor "=" );
     HTMLOutFuncs::Out_Color( (*m_pStream), aColor );
 
     m_pStream->WriteChar( '>' );
-    m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+    m_pStream->WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
 
     WriteTables();
 
-    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_body, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_body, false).WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
 }
 
 void OHTMLImportExport::WriteTables()
@@ -734,14 +734,14 @@ void OHTMLImportExport::WriteTables()
     HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_caption, false);
 
     FontOff();
-    m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+    m_pStream->WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
     // </FONT>
 
     IncIndent(1);
-    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_thead).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_thead).WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
 
     IncIndent(1);
-    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tablerow).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tablerow).WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
 
     if(m_xObject.is())
     {
@@ -785,11 +785,11 @@ void OHTMLImportExport::WriteTables()
         }
 
         IncIndent(-1);
-        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tablerow, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
-        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_thead, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tablerow, false).WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
+        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_thead, false).WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
 
         IncIndent(1);
-        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tbody).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tbody).WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
 
         // 2. and now the data
         Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
@@ -797,7 +797,7 @@ void OHTMLImportExport::WriteTables()
         while(m_xResultSet->next())
         {
             IncIndent(1);
-            HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tablerow).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+            HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tablerow).WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
 
             for(sal_Int32 i=1;i<=aNames.getLength();++i)
             {
@@ -821,24 +821,24 @@ void OHTMLImportExport::WriteTables()
                 }
                 WriteCell(pFormat[i-1],pColWidth[i-1],nHeight,pHorJustify[i-1],aValue,OOO_STRING_SVTOOLS_HTML_tabledata);
             }
-            HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tablerow, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+            HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tablerow, false).WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
         }
     }
     else
     {
         IncIndent(-1);
-        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tablerow, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
-        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_thead, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tablerow, false).WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
+        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_thead, false).WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
 
         IncIndent(1);
-        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tbody).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+        HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tbody).WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
     }
 
     IncIndent(-1);
-    m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
-    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tbody, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+    m_pStream->WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tbody, false).WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
     IncIndent(-1);
-    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_table, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_table, false).WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
 }
 
 void OHTMLImportExport::WriteCell( sal_Int32 nFormat, sal_Int32 nWidthPixel, sal_Int32 nHeightPixel, const char* pChar,
@@ -909,7 +909,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat, sal_Int32 nWidthPixel, sal
 
     FontOff();
 
-    HTMLOutFuncs::Out_AsciiTag(*m_pStream, pHtmlTag, false).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
+    HTMLOutFuncs::Out_AsciiTag(*m_pStream, pHtmlTag, false).WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());
 }
 
 void OHTMLImportExport::FontOn()
@@ -938,7 +938,7 @@ void OHTMLImportExport::FontOn()
         m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= aColor;
 
     HTMLOutFuncs::Out_Color( (*m_pStream), aColor );
-    m_pStream->WriteCharPtr( ">" );
+    m_pStream->WriteOString( ">" );
 }
 
 inline void OHTMLImportExport::FontOff()

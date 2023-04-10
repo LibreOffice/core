@@ -624,10 +624,10 @@ SwDocShell* SwModelTestBase::getSwDocShell()
 
 void SwModelTestBase::WrapReqifFromTempFile(SvMemoryStream& rStream)
 {
-    rStream.WriteCharPtr("<reqif-xhtml:html xmlns:reqif-xhtml=\"http://www.w3.org/1999/xhtml\">\n");
+    rStream.WriteOString("<reqif-xhtml:html xmlns:reqif-xhtml=\"http://www.w3.org/1999/xhtml\">\n");
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     rStream.WriteStream(aFileStream);
-    rStream.WriteCharPtr("</reqif-xhtml:html>\n");
+    rStream.WriteOString("</reqif-xhtml:html>\n");
     rStream.Seek(0);
 }
 

@@ -291,7 +291,7 @@ OString WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, SvStream* pStream, sa
         if (++nBreak == nLimit)
         {
             if (pStream)
-                pStream->WriteCharPtr(SAL_NEWLINE_STRING);
+                pStream->WriteOString(SAL_NEWLINE_STRING);
             else
                 aRet.append(SAL_NEWLINE_STRING);
             nBreak = 0;

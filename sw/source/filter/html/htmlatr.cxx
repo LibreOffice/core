@@ -613,7 +613,7 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
         // output a line break (without indentation) at the beginning of the
         // paragraph, only
         rInfo.aToken.clear();   // don't output an end tag
-        rWrt.Strm().WriteCharPtr( SAL_NEWLINE_STRING );
+        rWrt.Strm().WriteOString( SAL_NEWLINE_STRING );
 
         return;
     }
@@ -2496,7 +2496,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
                                 // be used as a replacement.
                                 for (sal_Int32 i = 0; i < *rWrt.m_nLeadingTabWidth; ++i)
                                 {
-                                    rWrt.Strm().WriteCharPtr("&#160;");
+                                    rWrt.Strm().WriteOString("&#160;");
                                 }
                                 bConsumed = true;
                             }
@@ -2548,7 +2548,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
         {
             // If the last paragraph of a table cell is empty and we export
             // for the MS-IE, we write a &nbsp; instead of a <BR>
-            rWrt.Strm().WriteChar( '&' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_S_nbsp ).WriteChar( ';' );
+            rWrt.Strm().WriteChar( '&' ).WriteOString( OOO_STRING_SVTOOLS_HTML_S_nbsp ).WriteChar( ';' );
         }
         else
         {
@@ -2727,7 +2727,7 @@ static SwHTMLWriter& OutHTML_SvxFont( SwHTMLWriter& rWrt, const SfxPoolItem& rHt
                            " " OOO_STRING_SVTOOLS_HTML_O_style "=\"font-family: ";
             rWrt.Strm().WriteOString(sOut);
             HTMLOutFuncs::Out_String(rWrt.Strm(), aNames)
-                .WriteCharPtr("\">");
+                .WriteOString("\">");
         }
         else
         {
@@ -2735,7 +2735,7 @@ static SwHTMLWriter& OutHTML_SvxFont( SwHTMLWriter& rWrt, const SfxPoolItem& rHt
                 OOO_STRING_SVTOOLS_HTML_O_face "=\"";
             rWrt.Strm().WriteOString( sOut );
             HTMLOutFuncs::Out_String( rWrt.Strm(), aNames )
-               .WriteCharPtr( "\">" );
+               .WriteOString( "\">" );
         }
     }
     else
@@ -3056,7 +3056,7 @@ SwHTMLWriter& OutHTML_INetFormat( SwHTMLWriter& rWrt, const SwFormatINetFormat& 
     if( bEvents )
         HTMLOutFuncs::Out_Events( rWrt.Strm(), *pMacTable, aAnchorEventTable,
                                   rWrt.m_bCfgStarBasic );
-    rWrt.Strm().WriteCharPtr( ">" );
+    rWrt.Strm().WriteOString( ">" );
 
     return rWrt;
 }

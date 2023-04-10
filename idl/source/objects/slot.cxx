@@ -353,7 +353,7 @@ void SvMetaSlot::WriteSlotStubs( std::string_view rShellName,
         if ( !bIn )
         {
             rList.push_back( aMethodName );
-            rOutStm.WriteCharPtr( "SFX_EXEC_STUB(" )
+            rOutStm.WriteOString( "SFX_EXEC_STUB(" )
                    .WriteOString( rShellName )
                    .WriteChar( ',' )
                    .WriteOString( aMethodName )
@@ -378,7 +378,7 @@ void SvMetaSlot::WriteSlotStubs( std::string_view rShellName,
     if ( !bIn )
     {
         rList.push_back( aMethodName );
-        rOutStm.WriteCharPtr( "SFX_STATE_STUB(" )
+        rOutStm.WriteOString( "SFX_STATE_STUB(" )
                .WriteOString( rShellName )
                .WriteChar( ',' )
                .WriteOString( aMethodName )
@@ -392,13 +392,13 @@ void SvMetaSlot::WriteSlot( std::string_view rShellName, sal_uInt16 nCount,
                             size_t nStart,
                             SvIdlDataBase & rBase, SvStream & rOutStm )
 {
-    rOutStm.WriteCharPtr( "// Slot Nr. " )
+    rOutStm.WriteOString( "// Slot Nr. " )
        .WriteOString( OString::number(nListPos) )
-       .WriteCharPtr( " : " );
+       .WriteOString( " : " );
     OString aSlotIdValue(OString::number(GetSlotId().GetValue()));
     rOutStm.WriteOString( aSlotIdValue ) << endl;
     WriteTab( rOutStm, 1 );
-    rOutStm.WriteCharPtr( "SFX_NEW_SLOT_ARG( " ).WriteOString( rShellName ).WriteChar( ',' ) ;
+    rOutStm.WriteOString( "SFX_NEW_SLOT_ARG( " ).WriteOString( rShellName ).WriteChar( ',' ) ;
 
     rOutStm.WriteOString( rSlotId ).WriteChar( ',' );
 
@@ -406,7 +406,7 @@ void SvMetaSlot::WriteSlot( std::string_view rShellName, sal_uInt16 nCount,
     if( !GetGroupId().isEmpty() )
         rOutStm.WriteOString( GetGroupId() );
     else
-        rOutStm.WriteCharPtr( "SfxGroupId::NONE" );
+        rOutStm.WriteOString( "SfxGroupId::NONE" );
     rOutStm.WriteChar( ',' ) << endl;
     WriteTab( rOutStm, 4 );
 
@@ -444,9 +444,9 @@ void SvMetaSlot::WriteSlot( std::string_view rShellName, sal_uInt16 nCount,
 
     assert(pNextSlot);
 
-    rOutStm.WriteCharPtr( "&a" ).WriteOString( rShellName ).WriteCharPtr( "Slots_Impl[" )
+    rOutStm.WriteOString( "&a" ).WriteOString( rShellName ).WriteOString( "Slots_Impl[" )
        .WriteOString( OString::number(pNextSlot->GetListPos()) )
-       .WriteCharPtr( "] /*Offset Next*/, " ) << endl;
+       .WriteOString( "] /*Offset Next*/, " ) << endl;
 
     WriteTab( rOutStm, 4 );
 
@@ -454,22 +454,22 @@ void SvMetaSlot::WriteSlot( std::string_view rShellName, sal_uInt16 nCount,
     if( !GetExecMethod().isEmpty() &&
         GetExecMethod() != "NoExec")
     {
-        rOutStm.WriteCharPtr( "SFX_STUB_PTR(" ).WriteOString( rShellName ).WriteChar( ',' )
+        rOutStm.WriteOString( "SFX_STUB_PTR(" ).WriteOString( rShellName ).WriteChar( ',' )
                .WriteOString( GetExecMethod() ).WriteChar( ')' );
     }
     else
-        rOutStm.WriteCharPtr( "SFX_STUB_PTR_EXEC_NONE" );
+        rOutStm.WriteOString( "SFX_STUB_PTR_EXEC_NONE" );
     rOutStm.WriteChar( ',' );
 
     // write StateMethod, with standard name if not specified
     if( !GetStateMethod().isEmpty() &&
         GetStateMethod() != "NoState")
     {
-        rOutStm.WriteCharPtr( "SFX_STUB_PTR(" ).WriteOString( rShellName ).WriteChar( ',' )
+        rOutStm.WriteOString( "SFX_STUB_PTR(" ).WriteOString( rShellName ).WriteChar( ',' )
                .WriteOString( GetStateMethod() ).WriteChar( ')' );
     }
     else
-        rOutStm.WriteCharPtr( "SFX_STUB_PTR_STATE_NONE" );
+        rOutStm.WriteOString( "SFX_STUB_PTR_STATE_NONE" );
 
     rOutStm.WriteChar( ',' ) << endl;
     WriteTab( rOutStm, 4 );
@@ -501,12 +501,12 @@ void SvMetaSlot::WriteSlot( std::string_view rShellName, sal_uInt16 nCount,
         rOutStm.WriteOString( MakeSlotName( SvHash_Container() ) ).WriteChar( '|' );
     if ( GetReadOnlyDoc() )
         rOutStm.WriteOString( MakeSlotName( SvHash_ReadOnlyDoc() ) ).WriteChar( '|' );
-    rOutStm.WriteCharPtr( "SfxSlotMode::NONE" );
+    rOutStm.WriteOString( "SfxSlotMode::NONE" );
 
     rOutStm.WriteChar( ',' ) << endl;
     WriteTab( rOutStm, 4 );
     if ( GetDisableFlags().isEmpty() )
-        rOutStm.WriteCharPtr( "SfxDisableFlags::NONE" );
+        rOutStm.WriteOString( "SfxDisableFlags::NONE" );
     else
         rOutStm.WriteOString( GetDisableFlags() );
 
@@ -529,14 +529,14 @@ void SvMetaSlot::WriteSlot( std::string_view rShellName, sal_uInt16 nCount,
             rBase.aUsedTypes.push_back( pT );
     }
     else
-        rOutStm.WriteCharPtr( "SfxVoidItem not defined" );
+        rOutStm.WriteOString( "SfxVoidItem not defined" );
 
     {
         rOutStm.WriteChar( ',' ) << endl;
         WriteTab( rOutStm, 4 );
         rOutStm
            .WriteOString( OString::number(nCount) )
-           .WriteCharPtr( "/*Offset*/, " );
+           .WriteOString( "/*Offset*/, " );
 
         if( IsMethod() )
         {
@@ -544,27 +544,27 @@ void SvMetaSlot::WriteSlot( std::string_view rShellName, sal_uInt16 nCount,
             size_t nSCount = pType->GetAttrCount();
             rOutStm
                .WriteOString( OString::number(nSCount) )
-               .WriteCharPtr( "/*Count*/," );
+               .WriteOString( "/*Count*/," );
         }
         else
-            rOutStm.WriteCharPtr( "0," );
+            rOutStm.WriteOString( "0," );
 
-        rOutStm.WriteCharPtr( " " );
+        rOutStm.WriteOString( " " );
 
         // Method/Property flags
         if( IsMethod() )
-            rOutStm.WriteCharPtr( "SfxSlotMode::METHOD|" );
+            rOutStm.WriteOString( "SfxSlotMode::METHOD|" );
 
-        rOutStm.WriteCharPtr( "SfxSlotMode::NONE" );
+        rOutStm.WriteOString( "SfxSlotMode::NONE" );
     }
 
     {
-        rOutStm.WriteCharPtr( ",\"" );
+        rOutStm.WriteOString( ",\"" );
         rOutStm.WriteOString( GetName() );
-        rOutStm.WriteCharPtr( "\"" );
+        rOutStm.WriteOString( "\"" );
     }
 
-    rOutStm.WriteCharPtr( " )," ) << endl;
+    rOutStm.WriteOString( " )," ) << endl;
 }
 
 sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rOutStm ) const
@@ -584,13 +584,13 @@ sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rO
         SvMetaAttribute * pPar  = rList[n];
         SvMetaType * pPType     = pPar->GetType();
         WriteTab( rOutStm, 1 );
-        rOutStm.WriteCharPtr("{ (const SfxType*) &a")
+        rOutStm.WriteOString("{ (const SfxType*) &a")
             // item type
-           .WriteOString(pPType->GetName()).WriteCharPtr("_Impl, ")
+           .WriteOString(pPType->GetName()).WriteOString("_Impl, ")
             // parameter name
-           .WriteCharPtr("\"").WriteOString(pPar->GetName()).WriteCharPtr("\", ")
+           .WriteOString("\"").WriteOString(pPar->GetName()).WriteOString("\", ")
             // slot id
-           .WriteOString(pPar->GetSlotId().getString()).WriteCharPtr(" },") << endl;
+           .WriteOString(pPar->GetSlotId().getString()).WriteOString(" },") << endl;
         if( !SvIdlDataBase::FindType( pPType, rBase.aUsedTypes ) )
             rBase.aUsedTypes.push_back( pPType );
     }

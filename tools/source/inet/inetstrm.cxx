@@ -42,9 +42,9 @@ int INetMIMEMessageStream::GetHeaderLine(char* pData, sal_uInt32 nSize)
             {
                 // NYI: Folding long lines.
                 maMsgBuffer.WriteOString( aHeader.GetName() );
-                maMsgBuffer.WriteCharPtr( ": " );
+                maMsgBuffer.WriteOString( ": " );
                 maMsgBuffer.WriteOString( aHeader.GetValue() );
-                maMsgBuffer.WriteCharPtr( "\r\n" );
+                maMsgBuffer.WriteOString( "\r\n" );
             }
         }
 

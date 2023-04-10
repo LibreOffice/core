@@ -510,9 +510,9 @@ SvStream& HTMLOutFuncs::Out_AsciiTag( SvStream& rStream, std::string_view rStr,
                                       bool bOn )
 {
     if(bOn)
-        rStream.WriteCharPtr("<");
+        rStream.WriteOString("<");
     else
-        rStream.WriteCharPtr("</");
+        rStream.WriteOString("</");
 
     rStream.WriteOString(rStr).WriteChar('>');
 
@@ -565,19 +565,19 @@ SvStream& HTMLOutFuncs::Out_Hex( SvStream& rStream, sal_uInt32 nHex, sal_uInt8 n
             *pStr += 39;
         nHex >>= 4;
     }
-    return rStream.WriteCharPtr( pStr );
+    return rStream.WriteOString( pStr );
 }
 
 
 SvStream& HTMLOutFuncs::Out_Color( SvStream& rStream, const Color& rColor, bool bXHTML )
 {
-    rStream.WriteCharPtr( "\"" );
+    rStream.WriteOString( "\"" );
     if (bXHTML)
-        rStream.WriteCharPtr( "color: " );
-    rStream.WriteCharPtr( "#" );
+        rStream.WriteOString( "color: " );
+    rStream.WriteOString( "#" );
     if( rColor == COL_AUTO )
     {
-        rStream.WriteCharPtr( "000000" );
+        rStream.WriteOString( "000000" );
     }
     else
     {
@@ -614,7 +614,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
     rStream.WriteOString( sOut );
     sOut.setLength(0);
     Out_String( rStream, rOutName );
-    rStream.WriteCharPtr( "\">" );
+    rStream.WriteOString( "\">" );
 
     for( size_t i=0; i<rIMap.GetIMapObjectCount(); i++ )
     {
@@ -695,9 +695,9 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
             if( pShape )
             {
                 if( pDelim )
-                    rStream.WriteCharPtr( pDelim );
+                    rStream.WriteOString( pDelim );
                 if( pIndentArea )
-                    rStream.WriteCharPtr( pIndentArea );
+                    rStream.WriteOString( pIndentArea );
 
                 sOut.append(OString::Concat("<") + OOO_STRING_SVTOOLS_HTML_area
                         " " OOO_STRING_SVTOOLS_HTML_O_shape
@@ -718,7 +718,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     Out_String( rStream, aURL ).WriteChar( '\"' );
                 }
                 else
-                    rStream.WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_nohref );
+                    rStream.WriteOString( OOO_STRING_SVTOOLS_HTML_O_nohref );
 
                 const OUString& rObjName = pObj->GetName();
                 if( !rObjName.isEmpty() )
@@ -762,9 +762,9 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
     }
 
     if( pDelim )
-        rStream.WriteCharPtr( pDelim );
+        rStream.WriteOString( pDelim );
     if( pIndentMap )
-        rStream.WriteCharPtr( pIndentMap );
+        rStream.WriteOString( pIndentMap );
     Out_AsciiTag( rStream, OOO_STRING_SVTOOLS_HTML_map, false );
 
     return rStream;
@@ -825,12 +825,12 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
 
     if( !rSource.empty() || pSBLibrary || pSBModule )
     {
-        rStrm.WriteCharPtr( SAL_NEWLINE_STRING );
+        rStrm.WriteOString( SAL_NEWLINE_STRING );
 
         if( JAVASCRIPT != eScriptType )
         {
-            rStrm.WriteCharPtr( "<!--" )
-                 .WriteCharPtr( SAL_NEWLINE_STRING );
+            rStrm.WriteOString( "<!--" )
+                 .WriteOString( SAL_NEWLINE_STRING );
         }
 
         if( STARBASIC == eScriptType )
@@ -839,7 +839,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
             {
                 sOut.append("' " OOO_STRING_SVTOOLS_HTML_SB_library " " +
                             OUStringToOString(*pSBLibrary, RTL_TEXTENCODING_UTF8));
-                rStrm.WriteOString( sOut ).WriteCharPtr( SAL_NEWLINE_STRING );
+                rStrm.WriteOString( sOut ).WriteOString( SAL_NEWLINE_STRING );
                 sOut.setLength(0);
             }
 
@@ -847,7 +847,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
             {
                 sOut.append("' " OOO_STRING_SVTOOLS_HTML_SB_module " " +
                         OUStringToOString(*pSBModule, RTL_TEXTENCODING_UTF8));
-                rStrm.WriteOString( sOut ).WriteCharPtr( SAL_NEWLINE_STRING );
+                rStrm.WriteOString( sOut ).WriteOString( SAL_NEWLINE_STRING );
                 sOut.setLength(0);
             }
         }
@@ -857,16 +857,16 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
             // we write the module in ANSI-charset, but with
             // the system new line.
             const OString sSource(OUStringToOString(rSource, RTL_TEXTENCODING_UTF8));
-            rStrm.WriteOString( sSource ).WriteCharPtr( SAL_NEWLINE_STRING );
+            rStrm.WriteOString( sSource ).WriteOString( SAL_NEWLINE_STRING );
         }
-        rStrm.WriteCharPtr( SAL_NEWLINE_STRING );
+        rStrm.WriteOString( SAL_NEWLINE_STRING );
 
         if( JAVASCRIPT != eScriptType )
         {
             // MIB/MM: if it is not StarBasic, a // could be wrong.
             // As the comment is removed during reading, it is not helping us...
-            rStrm.WriteCharPtr( STARBASIC == eScriptType ? "' -->" : "// -->" )
-                 .WriteCharPtr( SAL_NEWLINE_STRING );
+            rStrm.WriteOString( STARBASIC == eScriptType ? "' -->" : "// -->" )
+                 .WriteOString( SAL_NEWLINE_STRING );
         }
     }
 

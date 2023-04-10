@@ -66,9 +66,9 @@ static OUString getCacheFolder()
 
 static void writeToLog(SvStream& stream, const char* key, const char* value)
 {
-    stream.WriteCharPtr(key);
-    stream.WriteCharPtr(": ");
-    stream.WriteCharPtr(value);
+    stream.WriteOString(key);
+    stream.WriteOString(": ");
+    stream.WriteOString(value);
     stream.WriteChar('\n');
 }
 

@@ -921,7 +921,7 @@ void ImageMap::Write( SvStream& rOStm ) const
     rOStm.SetEndian( SvStreamEndian::LITTLE );
 
     // write MagicCode
-    rOStm.WriteCharPtr( IMAPMAGIC );
+    rOStm.WriteOString( IMAPMAGIC );
     rOStm.WriteUInt16( IMAGE_MAP_VERSION );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aImageName, eEncoding);
     write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, ""); //dummy

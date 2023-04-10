@@ -191,8 +191,8 @@ OUString getCacheFolder()
 
 void writeToLog(SvStream& rStrm, const char* pKey, std::u16string_view rVal)
 {
-    rStrm.WriteCharPtr(pKey);
-    rStrm.WriteCharPtr(": ");
+    rStrm.WriteOString(pKey);
+    rStrm.WriteOString(": ");
     rStrm.WriteOString(OUStringToOString(rVal, RTL_TEXTENCODING_UTF8));
     rStrm.WriteChar('\n');
 }

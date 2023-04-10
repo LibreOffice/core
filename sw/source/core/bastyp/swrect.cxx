@@ -192,7 +192,7 @@ SvStream& WriteSwRect(SvStream &rStream, const SwRect &rRect)
             WriteChar('/').WriteInt32(rRect.Left()).
             WriteChar(',').WriteInt32(rRect.Width()).
             WriteChar('x').WriteInt32(rRect.Height()).
-            WriteCharPtr("] ");
+            WriteOString("] ");
     return rStream;
 }
 #endif

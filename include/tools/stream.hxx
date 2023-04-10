@@ -260,7 +260,6 @@ public:
     SvStream&       WriteUChar( unsigned char nChar );
     SvStream&       WriteFloat( float nFloat );
     SvStream&       WriteDouble( const double& rDouble );
-    SvStream&       WriteCharPtr( const char* pBuf );
 
     SvStream&       WriteUInt32AsString( sal_uInt32 nUInt32 );
     SvStream&       WriteInt32AsString( sal_Int32 nInt32 );

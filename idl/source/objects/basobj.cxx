@@ -27,14 +27,14 @@
 void SvMetaObject::WriteTab( SvStream & rOutStm, sal_uInt16 nTab )
 {
     while( nTab-- )
-        rOutStm.WriteCharPtr( "    " );
+        rOutStm.WriteOString( "    " );
 }
 
 void SvMetaObject::WriteStars( SvStream & rOutStm )
 {
     rOutStm.WriteChar( '/' );
     for( int i = 6; i > 0; i-- )
-        rOutStm.WriteCharPtr( "**********" );
+        rOutStm.WriteOString( "**********" );
     rOutStm.WriteChar( '/' ) << endl;
 }
 

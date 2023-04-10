@@ -572,19 +572,19 @@ SbxInfo::SbxInfo( OUString a, sal_uInt32 n )
 void SbxVariable::Dump( SvStream& rStrm, bool bFill )
 {
     OString aBNameStr(OUStringToOString(GetName( SbxNameType::ShortTypes ), RTL_TEXTENCODING_ASCII_US));
-    rStrm.WriteCharPtr( "Variable( " )
-         .WriteOString( OString::number(reinterpret_cast<sal_IntPtr>(this)) ).WriteCharPtr( "==" )
+    rStrm.WriteOString( "Variable( " )
+         .WriteOString( OString::number(reinterpret_cast<sal_IntPtr>(this)) ).WriteOString( "==" )
          .WriteOString( aBNameStr );
     OString aBParentNameStr(OUStringToOString(GetParent()->GetName(), RTL_TEXTENCODING_ASCII_US));
     if ( GetParent() )
     {
-        rStrm.WriteCharPtr( " in parent '" ).WriteOString( aBParentNameStr ).WriteCharPtr( "'" );
+        rStrm.WriteOString( " in parent '" ).WriteOString( aBParentNameStr ).WriteOString( "'" );
     }
     else
     {
-        rStrm.WriteCharPtr( " no parent" );
+        rStrm.WriteOString( " no parent" );
     }
-    rStrm.WriteCharPtr( " ) " );
+    rStrm.WriteOString( " ) " );
 
     // output also the object at object-vars
     if ( GetValues_Impl().eType == SbxOBJECT &&
@@ -592,7 +592,7 @@ void SbxVariable::Dump( SvStream& rStrm, bool bFill )
             GetValues_Impl().pObj != this &&
             GetValues_Impl().pObj != GetParent() )
     {
-        rStrm.WriteCharPtr( " contains " );
+        rStrm.WriteOString( " contains " );
         static_cast<SbxObject*>(GetValues_Impl().pObj)->Dump( rStrm, bFill );
     }
     else

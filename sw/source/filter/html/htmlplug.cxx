@@ -1406,7 +1406,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameForma
                 const OUString& rValue = rCommand.GetArgument();
                 rWrt.Strm().WriteChar( ' ' );
                 HTMLOutFuncs::Out_String( rWrt.Strm(), rName );
-                rWrt.Strm().WriteCharPtr( "=\"" );
+                rWrt.Strm().WriteOString( "=\"" );
                 HTMLOutFuncs::Out_String( rWrt.Strm(), rValue ).WriteChar( '\"' );
             }
             else if( SwHtmlOptType::PARAM == nType )
@@ -1436,7 +1436,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameForma
             sOut.append("\" " OOO_STRING_SVTOOLS_HTML_O_value "=\"");
             rWrt.Strm().WriteOString( sOut );
             sOut.setLength(0);
-            HTMLOutFuncs::Out_String( rWrt.Strm(), rValue ).WriteCharPtr( "\">" );
+            HTMLOutFuncs::Out_String( rWrt.Strm(), rValue ).WriteOString( "\">" );
         }
 
         rWrt.DecIndentLevel(); // indent the applet content
@@ -1464,7 +1464,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameForma
                 const OUString& rValue = rCommand.GetArgument();
                 rWrt.Strm().WriteChar( ' ' );
                 HTMLOutFuncs::Out_String( rWrt.Strm(), rName );
-                rWrt.Strm().WriteCharPtr( "=\"" );
+                rWrt.Strm().WriteOString( "=\"" );
                 HTMLOutFuncs::Out_String( rWrt.Strm(), rValue ).WriteChar( '\"' );
             }
         }

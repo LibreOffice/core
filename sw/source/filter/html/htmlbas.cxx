@@ -285,11 +285,11 @@ void SwHTMLWriter::OutBasic(const SwHTMLWriter & rHTMLWrt)
                 Strm().WriteOString( sOut );
                 // Entities aren't welcome here
                 Strm().WriteOString( OUStringToOString(sLang, RTL_TEXTENCODING_UTF8) )
-                   .WriteCharPtr( "\">" );
+                   .WriteOString( "\">" );
             }
 
             const OUString& rModName = pModule->GetName();
-            Strm().WriteCharPtr( SAL_NEWLINE_STRING );   // don't indent!
+            Strm().WriteOString( SAL_NEWLINE_STRING );   // don't indent!
             HTMLOutFuncs::OutScript( Strm(), GetBaseURL(), pModule->GetSource32(),
                                      sLang, STARBASIC, OUString(),
                                      &rLibName, &rModName );

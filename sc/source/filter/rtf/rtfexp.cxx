@@ -56,23 +56,23 @@ ScRTFExport::~ScRTFExport()
 
 void ScRTFExport::Write()
 {
-    rStrm.WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RTF );
-    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ANSI ).WriteCharPtr( SAL_NEWLINE_STRING );
+    rStrm.WriteChar( '{' ).WriteOString( OOO_STRING_SVTOOLS_RTF_RTF );
+    rStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_ANSI ).WriteOString( SAL_NEWLINE_STRING );
 
     // Data
     for ( SCTAB nTab = aRange.aStart.Tab(); nTab <= aRange.aEnd.Tab(); nTab++ )
     {
         if ( nTab > aRange.aStart.Tab() )
-            rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PAR );
+            rStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_PAR );
         WriteTab( nTab );
     }
 
-    rStrm.WriteChar( '}' ).WriteCharPtr( SAL_NEWLINE_STRING );
+    rStrm.WriteChar( '}' ).WriteOString( SAL_NEWLINE_STRING );
 }
 
 void ScRTFExport::WriteTab( SCTAB nTab )
 {
-    rStrm.WriteChar( '{' ).WriteCharPtr( SAL_NEWLINE_STRING );
+    rStrm.WriteChar( '{' ).WriteOString( SAL_NEWLINE_STRING );
     if ( pDoc->HasTable( nTab ) )
     {
         memset( &pCellX[0], 0, (pDoc->MaxCol()+2) * sizeof(sal_uLong) );
@@ -89,13 +89,13 @@ void ScRTFExport::WriteTab( SCTAB nTab )
             WriteRow( nTab, nRow );
         }
     }
-    rStrm.WriteChar( '}' ).WriteCharPtr( SAL_NEWLINE_STRING );
+    rStrm.WriteChar( '}' ).WriteOString( SAL_NEWLINE_STRING );
 }
 
 void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
 {
-    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TROWD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRGAPH ).WriteCharPtr( "30" ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRLEFT ).WriteCharPtr( "-30" );
-    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRRH ).WriteOString( OString::number(pDoc->GetRowHeight(nRow, nTab)) );
+    rStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_TROWD ).WriteOString( OOO_STRING_SVTOOLS_RTF_TRGAPH ).WriteOString( "30" ).WriteOString( OOO_STRING_SVTOOLS_RTF_TRLEFT ).WriteOString( "-30" );
+    rStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_TRRH ).WriteOString( OString::number(pDoc->GetRowHeight(nRow, nTab)) );
     SCCOL nCol;
     SCCOL nEndCol = aRange.aEnd.Col();
     for ( nCol = aRange.aStart.Col(); nCol <= nEndCol; nCol++ )
@@ -107,12 +107,12 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
         const char* pChar;
 
         if ( rMergeAttr.GetColMerge() != 0 )
-            rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CLMGF );
+            rStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_CLMGF );
         else
         {
             const ScMergeFlagAttr& rMergeFlagAttr = pAttr->GetItem( ATTR_MERGE_FLAG );
             if ( rMergeFlagAttr.IsHorOverlapped() )
-                rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CLMRG );
+                rStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_CLMRG );
         }
 
         switch( rVerJustifyItem.GetValue() )
@@ -124,13 +124,13 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
             default:                           pChar = nullptr;           break;
         }
         if ( pChar )
-            rStrm.WriteCharPtr( pChar );
+            rStrm.WriteOString( pChar );
 
-        rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELLX ).WriteOString( OString::number(pCellX[nCol+1]) );
+        rStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_CELLX ).WriteOString( OString::number(pCellX[nCol+1]) );
         if ( (nCol & 0x0F) == 0x0F )
-            rStrm.WriteCharPtr( SAL_NEWLINE_STRING ); // Do not let lines get too long
+            rStrm.WriteOString( SAL_NEWLINE_STRING ); // Do not let lines get too long
     }
-    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PARD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PLAIN ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_INTBL ).WriteCharPtr( SAL_NEWLINE_STRING );
+    rStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_PARD ).WriteOString( OOO_STRING_SVTOOLS_RTF_PLAIN ).WriteOString( OOO_STRING_SVTOOLS_RTF_INTBL ).WriteOString( SAL_NEWLINE_STRING );
 
     sal_uInt64 nStrmPos = rStrm.Tell();
     for ( nCol = aRange.aStart.Col(); nCol <= nEndCol; nCol++ )
@@ -138,11 +138,11 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
         WriteCell( nTab, nRow, nCol );
         if ( rStrm.Tell() - nStrmPos > 255 )
         {   // Do not let lines get too long
-            rStrm.WriteCharPtr( SAL_NEWLINE_STRING );
+            rStrm.WriteOString( SAL_NEWLINE_STRING );
             nStrmPos = rStrm.Tell();
         }
     }
-    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ROW ).WriteCharPtr( SAL_NEWLINE_STRING );
+    rStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_ROW ).WriteOString( SAL_NEWLINE_STRING );
 }
 
 void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
@@ -152,7 +152,7 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
     const ScMergeFlagAttr& rMergeFlagAttr = pAttr->GetItem( ATTR_MERGE_FLAG );
     if ( rMergeFlagAttr.IsHorOverlapped() )
     {
-        rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELL );
+        rStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_CELL );
         return ;
     }
 
@@ -204,30 +204,30 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
         case SvxCellHorJustify::Repeat:
         default:                        pChar = OOO_STRING_SVTOOLS_RTF_QL;  break;
     }
-    rStrm.WriteCharPtr( pChar );
+    rStrm.WriteOString( pChar );
 
     if ( rWeightItem.GetWeight() >= WEIGHT_BOLD )
     {   // bold
         bResetAttr = true;
-        rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_B );
+        rStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_B );
     }
     if ( rPostureItem.GetPosture() != ITALIC_NONE )
     {   // italic
         bResetAttr = true;
-        rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_I );
+        rStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_I );
     }
     if ( rUnderlineItem.GetLineStyle() != LINESTYLE_NONE )
     {   // underline
         bResetAttr = true;
-        rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_UL );
+        rStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_UL );
     }
 
     rStrm.WriteChar( ' ' );
     RTFOutFuncs::Out_String( rStrm, aContent );
-    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELL );
+    rStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_CELL );
 
     if ( bResetAttr )
-        rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PLAIN );
+        rStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_PLAIN );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -753,11 +753,11 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aEncURL );
         const char* const pDelim = "&#255;";
         if( !aFilter.isEmpty() || !aSection.isEmpty() || bURLContainsDelim )
-            rHTMLWrt.Strm().WriteCharPtr( pDelim );
+            rHTMLWrt.Strm().WriteOString( pDelim );
         if( !aFilter.isEmpty() )
             HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aFilter );
         if( !aSection.isEmpty() || bURLContainsDelim  )
-                rHTMLWrt.Strm().WriteCharPtr( pDelim );
+                rHTMLWrt.Strm().WriteOString( pDelim );
         if( !aSection.isEmpty() )
         {
             aSection = aSection.replaceAll(u"%", u"%25");
@@ -1222,7 +1222,7 @@ void SwHTMLWriter::OutAnchor( const OUString& rName )
         sOut.append(OOO_STRING_SVTOOLS_HTML_O_name "=\"");
         Strm().WriteOString( sOut );
         sOut.setLength(0);
-        HTMLOutFuncs::Out_String( Strm(), rName ).WriteCharPtr( "\">" );
+        HTMLOutFuncs::Out_String( Strm(), rName ).WriteOString( "\">" );
     }
     else
     {
@@ -1231,7 +1231,7 @@ void SwHTMLWriter::OutAnchor( const OUString& rName )
         sOut.append(OOO_STRING_SVTOOLS_HTML_O_id "=\"");
         Strm().WriteOString( sOut );
         sOut.setLength(0);
-        HTMLOutFuncs::Out_String( Strm(), rName.replace(' ', '_') ).WriteCharPtr( "\">" );
+        HTMLOutFuncs::Out_String( Strm(), rName.replace(' ', '_') ).WriteOString( "\">" );
     }
     HTMLOutFuncs::Out_AsciiTag( Strm(), Concat2View(GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor), false );
 }
@@ -1395,8 +1395,8 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic 
             {
                 m_nWarn = WARN_SWG_POOR_LOAD;
             }
-            Strm().WriteCharPtr( " " OOO_STRING_SVTOOLS_HTML_O_background "=\"" );
-            Strm().WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_data ":" );
+            Strm().WriteOString( " " OOO_STRING_SVTOOLS_HTML_O_background "=\"" );
+            Strm().WriteOString( OOO_STRING_SVTOOLS_HTML_O_data ":" );
             HTMLOutFuncs::Out_String( Strm(), aGraphicInBase64 ).WriteChar( '\"' );
         }
     }
@@ -1407,9 +1407,9 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic 
             CopyLocalFileToINet( GraphicURL );
         }
         OUString s( URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), GraphicURL));
-        Strm().WriteCharPtr(" " OOO_STRING_SVTOOLS_HTML_O_background "=\"" );
+        Strm().WriteOString(" " OOO_STRING_SVTOOLS_HTML_O_background "=\"" );
         HTMLOutFuncs::Out_String( Strm(), s );
-        Strm().WriteCharPtr("\"");
+        Strm().WriteOString("\"");
 
     }
 }
@@ -1532,14 +1532,14 @@ void SwHTMLWriter::OutNewLine( bool bCheck )
 {
     if( !bCheck || (Strm().Tell()-m_nLastLFPos) > m_nIndentLvl )
     {
-        Strm().WriteCharPtr( SAL_NEWLINE_STRING );
+        Strm().WriteOString( SAL_NEWLINE_STRING );
         m_nLastLFPos = Strm().Tell();
     }
 
     if( m_nIndentLvl && m_nIndentLvl <= MAX_INDENT_LEVEL)
     {
         sIndentTabs[m_nIndentLvl] = 0;
-        Strm().WriteCharPtr( sIndentTabs );
+        Strm().WriteOString( sIndentTabs );
         sIndentTabs[m_nIndentLvl] = '\t';
     }
 }

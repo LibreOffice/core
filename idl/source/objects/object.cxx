@@ -266,19 +266,19 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 {
     WriteStars( rOutStm );
     // define class
-    rOutStm.WriteCharPtr( "#ifdef ShellClass_" ).WriteOString( GetName() ) << endl;
-    rOutStm.WriteCharPtr( "#undef ShellClass" ) << endl;
-    rOutStm.WriteCharPtr( "#undef ShellClass_" ).WriteOString( GetName() ) << endl;
-    rOutStm.WriteCharPtr( "#define ShellClass " ).WriteOString( GetName() ) << endl;
+    rOutStm.WriteOString( "#ifdef ShellClass_" ).WriteOString( GetName() ) << endl;
+    rOutStm.WriteOString( "#undef ShellClass" ) << endl;
+    rOutStm.WriteOString( "#undef ShellClass_" ).WriteOString( GetName() ) << endl;
+    rOutStm.WriteOString( "#define ShellClass " ).WriteOString( GetName() ) << endl;
 
     // no slotmaps get written for interfaces
     if( GetMetaTypeType() != MetaTypeType::Shell )
     {
-        rOutStm.WriteCharPtr( "#endif" ) << endl << endl;
+        rOutStm.WriteOString( "#endif" ) << endl << endl;
         return;
     }
     // write parameter array
-    rOutStm.WriteCharPtr("static SfxFormalArgument a").WriteOString(GetName()).WriteCharPtr("Args_Impl[] =") << endl;
+    rOutStm.WriteOString("static SfxFormalArgument a").WriteOString(GetName()).WriteOString("Args_Impl[] =") << endl;
     rOutStm.WriteChar('{') << endl;
 
     std::vector<sal_uInt32> aSuperList;
@@ -301,10 +301,10 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     {
         // at least one dummy
         WriteTab( rOutStm, 1 );
-        rOutStm.WriteCharPtr("{ (const SfxType*) &aSfxVoidItem_Impl, 0, 0 }" ) << endl;
+        rOutStm.WriteOString("{ (const SfxType*) &aSfxVoidItem_Impl, 0, 0 }" ) << endl;
     }
     rOutStm << endl;
-    rOutStm.WriteCharPtr( "};" ) << endl << endl;
+    rOutStm.WriteOString( "};" ) << endl << endl;
 
     std::vector<OString> aStringList;
     WriteSlotStubs( GetName(), aSlotList, aStringList, rOutStm );
@@ -313,7 +313,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     rOutStm << endl;
 
     // write slotmap
-    rOutStm.WriteCharPtr("static SfxSlot a").WriteOString(GetName()).WriteCharPtr("Slots_Impl[] =") << endl;
+    rOutStm.WriteOString("static SfxSlot a").WriteOString(GetName()).WriteOString("Slots_Impl[] =") << endl;
     rOutStm.WriteChar( '{' ) << endl;
 
     // write all attributes
@@ -324,15 +324,15 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     {
         // at least one dummy
         WriteTab( rOutStm, 1 );
-        rOutStm.WriteCharPtr( "SFX_SLOT_ARG(" ).WriteOString( GetName() )
-               .WriteCharPtr( ", 0, SfxGroupId::NONE, " )
-               .WriteCharPtr( "SFX_STUB_PTR_EXEC_NONE," )
-               .WriteCharPtr( "SFX_STUB_PTR_STATE_NONE," )
-               .WriteCharPtr( "SfxSlotMode::NONE, SfxVoidItem, 0, 0, \"\", SfxSlotMode::NONE )" ) << endl;
+        rOutStm.WriteOString( "SFX_SLOT_ARG(" ).WriteOString( GetName() )
+               .WriteOString( ", 0, SfxGroupId::NONE, " )
+               .WriteOString( "SFX_STUB_PTR_EXEC_NONE," )
+               .WriteOString( "SFX_STUB_PTR_STATE_NONE," )
+               .WriteOString( "SfxSlotMode::NONE, SfxVoidItem, 0, 0, \"\", SfxSlotMode::NONE )" ) << endl;
     }
     rOutStm << endl;
-    rOutStm.WriteCharPtr( "};" ) << endl;
-    rOutStm.WriteCharPtr( "#endif" ) << endl << endl;
+    rOutStm.WriteOString( "};" ) << endl;
+    rOutStm.WriteOString( "#endif" ) << endl << endl;
 
     for( size_t i = 0, n = aSlotList.size(); i < n; ++i )
     {

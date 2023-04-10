@@ -436,7 +436,7 @@ public:
     void log(std::string_view rKey, std::string_view rValue)
     {
         maStream.WriteOString(rKey);
-        maStream.WriteCharPtr(": ");
+        maStream.WriteOString(": ");
         maStream.WriteOString(rValue);
         maStream.WriteChar('\n');
     }

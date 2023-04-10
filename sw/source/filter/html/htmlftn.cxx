@@ -362,7 +362,7 @@ void SwHTMLWriter::OutFootEndNotes()
             " " OOO_STRING_SVTOOLS_HTML_O_id "=\"";
         Strm().WriteOString( sOut );
         HTMLOutFuncs::Out_String( Strm(), sFootnoteName );
-        Strm().WriteCharPtr( "\">" );
+        Strm().WriteOString( "\">" );
 
         m_bLFPossible = true;
         IncIndentLevel();   // indent content of <DIV>
@@ -542,7 +542,7 @@ static void lcl_html_outFootEndNoteInfo( SwHTMLWriter& rWrt, OUString const *pPa
         "\" " OOO_STRING_SVTOOLS_HTML_O_content "=\"";
     rWrt.Strm().WriteOString( sOut );
     HTMLOutFuncs::Out_String( rWrt.Strm(), aContent.makeStringAndClear() );
-    rWrt.Strm().WriteCharPtr( "\">" );
+    rWrt.Strm().WriteOString( "\">" );
 }
 
 void SwHTMLWriter::OutFootEndNoteInfo()

@@ -228,13 +228,13 @@ bool HexFmt::Flush()
 
 void HexFmt::OpenString()
 {
-    o->WriteCharPtr("<\n");
+    o->WriteOString("<\n");
 }
 
 void HexFmt::CloseString()
 {
     Flush();
-    o->WriteCharPtr("00\n>\n");
+    o->WriteOString("00\n>\n");
 }
 
 void HexFmt::BlockWrite(const void *ptr, sal_uInt32 size)
@@ -252,7 +252,7 @@ void HexFmt::BlockWrite(const void *ptr, sal_uInt32 size)
         buffer[bufpos++] = toHex(Ch & 0xF);
         if (bufpos == HFORMAT_LINELEN) {
             Flush();
-            o->WriteCharPtr("\n");
+            o->WriteOString("\n");
         }
 
     }
@@ -1628,16 +1628,16 @@ SFErrCodes CreateT3FromTTGlyphs(TrueTypeFont *ttf, SvStream *outf, const char *f
     char buf[bufmax];
 
     snprintf(buf, bufmax, h01, GetInt16(table, 0), GetUInt16(table, 2), GetInt16(table, 4), GetUInt16(table, 6));
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax, h02, modname, modver, modextra);
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax, h09, ttf->psname.getStr());
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
 
     snprintf(buf, bufmax, "%s", h10);
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax, h11, fname);
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
 /*    snprintf(buf, bufmax,  h12, 4000000); */
 
     /* XUID generation:
@@ -1651,29 +1651,29 @@ SFErrCodes CreateT3FromTTGlyphs(TrueTypeFont *ttf, SvStream *outf, const char *f
      */
 
     snprintf(buf, bufmax,  h17, rtl_crc32(0, ttf->ptr, ttf->fsize), nGlyphs, rtl_crc32(0, glyphArray, nGlyphs * 2), rtl_crc32(0, encoding, nGlyphs));
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax,  "%s", h13);
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax,  h14, XUnits(UPEm, GetInt16(table, 36)), XUnits(UPEm, GetInt16(table, 38)), XUnits(UPEm, GetInt16(table, 40)), XUnits(UPEm, GetInt16(table, 42)));
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax,  "%s", h15);
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
 
     for (i = 0; i < nGlyphs; i++) {
         snprintf(buf, bufmax,  h16, encoding[i], i);
-        outf->WriteCharPtr(buf);
+        outf->WriteOString(buf);
     }
 
     snprintf(buf, bufmax,  h30, nGlyphs+1);
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax,  "%s", h31);
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax,  "%s", h32);
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
 
     for (i = 0; i < nGlyphs; i++) {
         snprintf(buf, bufmax,  h33, i);
-        outf->WriteCharPtr(buf);
+        outf->WriteOString(buf);
         int r = GetTTGlyphOutline(ttf, glyphArray[i] < ttf->glyphCount() ? glyphArray[i] : 0, pa, &metrics, nullptr);
 
         if (r > 0) {
@@ -1692,7 +1692,7 @@ SFErrCodes CreateT3FromTTGlyphs(TrueTypeFont *ttf, SvStream *outf, const char *f
                 XUnits(UPEm, metrics.yMin),
                 XUnits(UPEm, metrics.xMax),
                 XUnits(UPEm, metrics.yMax));
-        outf->WriteCharPtr(buf);
+        outf->WriteOString(buf);
 
         for (j = 0; j < n; j++)
         {
@@ -1700,22 +1700,22 @@ SFErrCodes CreateT3FromTTGlyphs(TrueTypeFont *ttf, SvStream *outf, const char *f
             {
                 case PS_MOVETO:
                     snprintf(buf, bufmax,  "\t%d %d moveto\n", XUnits(UPEm, path[j].x1), XUnits(UPEm, path[j].y1));
-                    outf->WriteCharPtr(buf);
+                    outf->WriteOString(buf);
                     break;
 
                 case PS_LINETO:
                     snprintf(buf, bufmax,  "\t%d %d lineto\n", XUnits(UPEm, path[j].x1), XUnits(UPEm, path[j].y1));
-                    outf->WriteCharPtr(buf);
+                    outf->WriteOString(buf);
                     break;
 
                 case PS_CURVETO:
                     snprintf(buf, bufmax,  "\t%d %d %d %d %d %d curveto\n", XUnits(UPEm, path[j].x1), XUnits(UPEm, path[j].y1), XUnits(UPEm, path[j].x2), XUnits(UPEm, path[j].y2), XUnits(UPEm, path[j].x3), XUnits(UPEm, path[j].y3));
-                    outf->WriteCharPtr(buf);
+                    outf->WriteOString(buf);
                     break;
 
                 case PS_CLOSEPATH:
                     snprintf(buf, bufmax,  "\tclosepath\n");
-                    outf->WriteCharPtr(buf);
+                    outf->WriteOString(buf);
                     break;
                 case PS_NOOP:
                     break;
@@ -1724,21 +1724,21 @@ SFErrCodes CreateT3FromTTGlyphs(TrueTypeFont *ttf, SvStream *outf, const char *f
         if (n > 0)
         {
             snprintf(buf, bufmax,  "\tfill\n");     /* if glyph is not a whitespace character */
-            outf->WriteCharPtr(buf);
+            outf->WriteOString(buf);
         }
 
         snprintf(buf, bufmax,  "%s", h34);
-        outf->WriteCharPtr(buf);
+        outf->WriteOString(buf);
 
         path.reset();
     }
     snprintf(buf, bufmax,  "%s", h35);
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
 
     snprintf(buf, bufmax,  "%s", h40);
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax,  h41, fname);
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
 
     return SFErrCodes::Ok;
 }
@@ -2056,7 +2056,7 @@ static void DumpSfnts(SvStream *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
 
     std::unique_ptr<sal_uInt32[]> offs(new sal_uInt32[numTables]);
 
-    outf->WriteCharPtr("/sfnts [");
+    outf->WriteOString("/sfnts [");
     h.OpenString();
     h.BlockWrite(sfntP, 12);                         /* stream out the Offset Table    */
     h.BlockWrite(sfntP+12, 16 * numTables);          /* stream out the Table Directory */
@@ -2125,7 +2125,7 @@ static void DumpSfnts(SvStream *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
         h.BlockWrite(pad, (4 - (len & 3)) & 3);
     }
     h.CloseString();
-    outf->WriteCharPtr("] def\n");
+    outf->WriteOString("] def\n");
 }
 
 SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
@@ -2205,57 +2205,57 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     char buf[bufmax];
 
     snprintf(buf, bufmax,  "%%!PS-TrueTypeFont-%d.%d-%d.%d\n", static_cast<int>(ver), static_cast<int>(ver & 0xFF), static_cast<int>(rev>>16), static_cast<int>(rev & 0xFFFF));
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax,  "%%%%Creator: %s %s %s\n", modname, modver, modextra);
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax,  "%%- Font subset generated from a source font file: '%s'\n", ttf->fileName().data());
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax,  "%%- Original font name: %s\n", ttf->psname.getStr());
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax,  "%%- Original font family: %s\n", ttf->family.getStr());
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax,  "%%- Original font sub-family: %s\n", ttf->subfamily.getStr());
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax,  "11 dict begin\n");
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax,  "/FontName (%s) cvn def\n", psname);
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax,  "/PaintType 0 def\n");
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax,  "/FontMatrix [1 0 0 1 0 0] def\n");
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax,  "/FontBBox [%d %d %d %d] def\n", XUnits(UPEm, GetInt16(headP, HEAD_xMin_offset)), XUnits(UPEm, GetInt16(headP, HEAD_yMin_offset)), XUnits(UPEm, GetInt16(headP, HEAD_xMax_offset)), XUnits(UPEm, GetInt16(headP, HEAD_yMax_offset)));
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax,  "/FontType 42 def\n");
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax,  "/Encoding 256 array def\n");
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax,  "    0 1 255 {Encoding exch /.notdef put} for\n");
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
 
     for (i = 1; i<nGlyphs; i++) {
         snprintf(buf, bufmax,  "Encoding %d /glyph%u put\n", encoding[i], gID[i]);
-        outf->WriteCharPtr(buf);
+        outf->WriteOString(buf);
     }
     snprintf(buf, bufmax,  "/XUID [103 0 1 16#%08X %u 16#%08X 16#%08X] def\n", static_cast<unsigned int>(rtl_crc32(0, ttf->ptr, ttf->fsize)), static_cast<unsigned int>(nGlyphs), static_cast<unsigned int>(rtl_crc32(0, glyphArray, nGlyphs * 2)), static_cast<unsigned int>(rtl_crc32(0, encoding, nGlyphs)));
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
 
     DumpSfnts(outf, aOutBuffer.data(), aOutBuffer.size());
 
     /* dump charstrings */
     snprintf(buf, bufmax,  "/CharStrings %d dict dup begin\n", nGlyphs);
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     snprintf(buf, bufmax,  "/.notdef 0 def\n");
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
     for (i = 1; i < nGlyfCount; i++) {
         snprintf(buf, bufmax, "/glyph%d %d def\n", i, i);
-        outf->WriteCharPtr(buf);
+        outf->WriteOString(buf);
     }
     snprintf(buf, bufmax,  "end readonly def\n");
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
 
     snprintf(buf, bufmax,  "FontName currentdict end definefont pop\n");
-    outf->WriteCharPtr(buf);
+    outf->WriteOString(buf);
 
     return SFErrCodes::Ok;
 }
