@@ -328,9 +328,9 @@ std::unordered_set<OUString> XMLFontAutoStylePool::getUsedFontList()
                     if (xStyle->isInUse())
                     {
                         uno::Reference<beans::XPropertySet> xPropertySet(xStyle, UNO_QUERY);
-                        if (xPropertySet.is())
+                        uno::Reference<beans::XPropertySetInfo> xInfo(xPropertySet ? xPropertySet->getPropertySetInfo() : nullptr);
+                        if (xInfo)
                         {
-                            uno::Reference<beans::XPropertySetInfo> xInfo(xPropertySet->getPropertySetInfo());
                             if (m_bEmbedLatinScript && xInfo->hasPropertyByName("CharFontName"))
                             {
                                 OUString sCharFontName;
