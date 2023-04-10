@@ -20,9 +20,11 @@
 #ifndef INCLUDED_HWPFILTER_SOURCE_HWPEQ_H
 #define INCLUDED_HWPFILTER_SOURCE_HWPEQ_H
 
-#include "mzstring.h"
+#include <sal/config.h>
 
-void eq2latex(MzString& mstr, char const* str);
+#include <rtl/string.hxx>
+
+void eq2latex(OString& outs, char const* s);
 
 #endif // INCLUDED_HWPFILTER_SOURCE_HWPEQ_H
 

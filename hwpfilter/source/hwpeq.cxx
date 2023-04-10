@@ -27,7 +27,6 @@
 #include <istream>
 #include <sstream>
 
-#include "mzstring.h"
 #include "hwpeq.h"
 #include <sal/types.h>
 #include <sal/macros.h>
@@ -52,17 +51,11 @@ static bool IS_BINARY(std::istream::int_type ch) {
         && strchr("+-<=>", std::istream::traits_type::to_char_type(ch));
 }
 
-#ifdef _WIN32
-#define STRICMP stricmp
-#else
-#define STRICMP strcasecmp
-#endif
-
 // sub and sup script status
 enum { SCRIPT_NONE, SCRIPT_SUB, SCRIPT_SUP, SCRIPT_ALL};
 
-static int  eq_word(MzString& outs, std::istream *strm, int script = SCRIPT_NONE);
-static bool eq_sentence(MzString& outs, std::istream *strm, const char *end = nullptr);
+static int  eq_word(OString& outs, std::istream *strm, int script = SCRIPT_NONE);
+static bool eq_sentence(OString& outs, std::istream *strm, const char *end = nullptr);
 
 namespace {
 
@@ -410,21 +403,21 @@ static const hwpeq *lookup_eqn(char const *str)
 }
 
 /* If only the first character is uppercase or all characters are uppercase, change to lowercase */
-static void make_keyword( char *keyword, const char *token)
+static void make_keyword( char *keyword, std::string_view token)
 {
     char* ptr;
     bool result = true;
-    int len = strlen(token);
+    int len = token.length();
     assert(keyword);
 
     if( 255 < len )
     {
         len = 255;
     }
-    memcpy(keyword, token, len);
+    memcpy(keyword, token.data(), len);
     keyword[len] = 0;
 
-    if( (token[0] & 0x80) || rtl::isAsciiLowerCase(static_cast<unsigned char>(token[0])) || strlen(token) < 2 )
+    if( (token[0] & 0x80) || rtl::isAsciiLowerCase(static_cast<unsigned char>(token[0])) || token.length() < 2 )
         return;
 
     bool capital = rtl::isAsciiUpperCase(
@@ -456,14 +449,14 @@ namespace {
 
 // token reading function
 struct eq_stack {
-  MzString  white;
-  MzString  token;
+  OString  white;
+  OString  token;
   std::istream   *strm;
 
   eq_stack() { strm = nullptr; };
   bool state(std::istream const *s) {
-    if( strm != s) { white = nullptr; token = nullptr; }
-    return token.length() != 0;
+    if( strm != s) { white.clear(); token.clear(); }
+    return token.getLength() != 0;
   }
 };
 
@@ -471,10 +464,10 @@ struct eq_stack {
 
 static eq_stack *stk = nullptr;
 
-static void push_token(MzString const &white, MzString const &token, std::istream *strm)
+static void push_token(OString const &white, OString const &token, std::istream *strm)
 {
   // one time stack
-  assert(stk->token.length() == 0);
+  assert(stk->token.getLength() == 0);
 
   stk->white = white;
   stk->token = token;
@@ -486,20 +479,20 @@ static void push_token(MzString const &white, MzString const &token, std::istrea
  *
  * control char, control sequence, binary sequence,
  * alphabet string, single character */
-static int next_token(MzString &white, MzString &token, std::istream *strm)
+static int next_token(OString &white, OString &token, std::istream *strm)
 {
   std::istream::int_type ch = 0;
 
   if( stk->state(strm) ) {
     white = stk->white;
     token = stk->token;
-    stk->token = nullptr;
-    stk->white = nullptr;
-    return token.length();
+    stk->token.clear();
+    stk->white.clear();
+    return token.getLength();
   }
 
-  token = nullptr;
-  white = nullptr;
+  token.clear();
+  white.clear();
   if( !strm->good() )
     return 0;
   ch = strm->get();
@@ -510,7 +503,7 @@ static int next_token(MzString &white, MzString &token, std::istream *strm)
   if( IS_WS(ch) ) {
     do
     {
-        white << static_cast<char>(ch);
+        white += OStringChar(static_cast<char>(ch));
         ch = strm->get();
     } while (IS_WS(ch));
   }
@@ -519,11 +512,11 @@ static int next_token(MzString &white, MzString &token, std::istream *strm)
       || (ch != std::istream::traits_type::eof() && rtl::isAsciiAlpha(ch)) )
   {
     if( ch == '\\' ) {
-      token << static_cast<char>(ch);
+      token += OStringChar(static_cast<char>(ch));
       ch = strm->get();
     }
     do {
-      token << static_cast<char>(ch);
+      token += OStringChar(static_cast<char>(ch));
       ch = strm->get();
     } while( ch != std::istream::traits_type::eof()
              && (ch & 0x80 || rtl::isAsciiAlpha(ch)) ) ;
@@ -531,24 +524,24 @@ static int next_token(MzString &white, MzString &token, std::istream *strm)
     /* special treatment of sub, sub, over, atop
        The reason for this is that affect next_state().
      */
-    if( !STRICMP("sub", token) || !STRICMP("from", token) ||
-    !STRICMP("sup", token) || !STRICMP("to", token) ||
-    !STRICMP("over", token) || !STRICMP("atop", token) ||
-    !STRICMP("left", token) || !STRICMP("right", token) )
+    if( token.equalsIgnoreAsciiCase("sub") || token.equalsIgnoreAsciiCase("from") ||
+    token.equalsIgnoreAsciiCase("sup") || token.equalsIgnoreAsciiCase("to") ||
+    token.equalsIgnoreAsciiCase("over") || token.equalsIgnoreAsciiCase("atop") ||
+    token.equalsIgnoreAsciiCase("left") || token.equalsIgnoreAsciiCase("right") )
     {
       char buf[256];
       make_keyword(buf, token);
       token = buf;
     }
-    if( !token.compare("sub") || !token.compare("from") )
+    if( token == "sub" || token == "from" )
       token = "_";
-    if( !token.compare("sup") || !token.compare("to") )
+    if( token == "sup" || token == "to" )
       token = "^";
   }
   else if( IS_BINARY(ch) ) {
     do
     {
-        token << static_cast<char>(ch);
+        token += OStringChar(static_cast<char>(ch));
         ch = strm->get();
     }
     while( IS_BINARY(ch) );
@@ -556,24 +549,24 @@ static int next_token(MzString &white, MzString &token, std::istream *strm)
   }
   else if( ch != std::istream::traits_type::eof() && rtl::isAsciiDigit(ch) ) {
     do {
-        token << static_cast<char>(ch);
+        token += OStringChar(static_cast<char>(ch));
         ch = strm->get();
     } while( ch != std::istream::traits_type::eof() && rtl::isAsciiDigit(ch) );
     strm->putback(static_cast<char>(ch));
   }
   else
-    token << static_cast<char>(ch);
+    token += OStringChar(static_cast<char>(ch));
 
-  return token.length();
+  return token.getLength();
 }
 
-static std::istream::int_type read_white_space(MzString& outs, std::istream *strm)
+static std::istream::int_type read_white_space(OString& outs, std::istream *strm)
 {
   std::istream::int_type result;
 
   if( stk->state(strm) ) {
-    outs << stk->white;
-    stk->white = nullptr;
+    outs += stk->white;
+    stk->white.clear();
     result = std::istream::traits_type::to_int_type(stk->token[0]);
   }
   else {
@@ -583,7 +576,7 @@ static std::istream::int_type read_white_space(MzString& outs, std::istream *str
         ch = strm->get();
         if (!IS_WS(ch))
             break;
-        outs << static_cast<char>(ch);
+        outs += OStringChar(static_cast<char>(ch));
     }
     strm->putback(static_cast<char>(ch));
     result = ch;
@@ -605,37 +598,37 @@ static std::istream::int_type read_white_space(MzString& outs, std::istream *str
       a over b -> {a} over {b}
  */
 
-static int eq_word(MzString& outs, std::istream *strm, int status)
+static int eq_word(OString& outs, std::istream *strm, int status)
 {
-  MzString  token, white, state;
+  OString  token, white, state;
   int       result;
   char      keyword[256];
   const hwpeq *eq;
 
   next_token(white, token, strm);
-  if (token.length() <= 0)
+  if (token.getLength() <= 0)
       return 0;
   result = token[0];
 
-  if( token.compare("{") == 0 ) {
-    state << white << token;
+  if( token == "{" ) {
+    state += white + token;
     eq_sentence(state, strm, "}");
   }
-  else if( token.compare("left") == 0 ) {
-    state << white << token;
+  else if( token == "left" ) {
+    state += white + token;
     next_token(white, token, strm);
-    state << white << token;
+    state += white + token;
 
     eq_sentence(state, strm, "right");
 
     next_token(white, token, strm);
-    state << white << token;
+    state += white + token;
   }
   else {
     /* Normal token */
     int script_status = SCRIPT_NONE;
     while( true ) {
-      state << white << token;
+      state += white + token;
       make_keyword(keyword, token);
       if( token[0] == '^' )
         script_status |= SCRIPT_SUP;
@@ -648,9 +641,9 @@ static int eq_word(MzString& outs, std::istream *strm, int status)
         int nargs = eq->nargs;
         while( nargs-- ) {
           const std::istream::int_type ch = read_white_space(state, strm);
-          if( ch != '{' ) state << '{';
+          if( ch != '{' ) state += OStringChar('{');
           eq_word(state, strm, script_status);
-          if( ch != '{' ) state << '}';
+          if( ch != '{' ) state += OStringChar('}');
         }
       }
 
@@ -659,52 +652,52 @@ static int eq_word(MzString& outs, std::istream *strm, int status)
       // end loop and restart with this
       if( (token[0] == '^' && status && !(status & SCRIPT_SUP)) ||
           (token[0] == '_' && status && !(status & SCRIPT_SUB)) ||
-          strcmp("over", token) == 0 || strcmp("atop", token) == 0 ||
+          "over" == token || "atop" == token ||
           strchr("{}#&`", token[0]) ||
-          (!strchr("^_", token[0]) && white.length()) )
+          (!strchr("^_", token[0]) && white.getLength()) )
       {
         push_token(white, token, strm);
         break;
       }
     }
   }
-  outs << state;
+  outs += state;
 
   return result;
 }
 
-static bool eq_sentence(MzString& outs, std::istream *strm, const char *end)
+static bool eq_sentence(OString& outs, std::istream *strm, const char *end)
 {
-  MzString  state;
-  MzString  white, token;
+  OString  state;
+  OString  white, token;
   bool      multiline = false;
 
   read_white_space(outs, strm);
   while( eq_word(state, strm) ) {
     if( !next_token(white, token, strm) ||
-    (end && strcmp(token.c_str(), end) == 0) )
+    (end && token == end) )
     {
-      state << white << token;
+      state += white + token;
       break;
     }
     push_token(white, token, strm);
-    if( !token.compare("atop") || !token.compare("over") )
-      outs << '{' << state << '}';
+    if( token == "atop" || token == "over" )
+      outs += OStringChar('{') + state + OStringChar('}');
     else {
-      if( !token.compare("#") )
+      if( token == "#" )
         multiline = true;
-      outs << state;
+      outs += state;
     }
-    state =  nullptr;
+    state.clear();
     read_white_space(outs, strm);
   }
-  outs << state;
+  outs += state;
   return multiline;
 }
 
-static char eq2ltxconv(MzString& sstr, std::istream *strm, const char *sentinel)
+static char eq2ltxconv(OString& sstr, std::istream *strm, const char *sentinel)
 {
-  MzString  white, token;
+  OString  white, token;
   char      key[256];
   std::istream::int_type ch;
   int       result;
@@ -729,67 +722,67 @@ static char eq2ltxconv(MzString& sstr, std::istream *strm, const char *sentinel)
     }
 
     if( token[0] == '{' ) { // grouping
-      sstr << white << token;
+      sstr += white + token;
       eq2ltxconv(sstr, strm, "}");
-      sstr << '}';
+      sstr += OStringChar('}');
     }
     else if( eq && (eq->flag & EQ_ENV) ) {
       next_token(white, token, strm);
       if( token[0] != '{' )
         return 0;
-      sstr << "\\begin" << "{" << eq->key << "}" << SAL_NEWLINE_STRING ;
+      sstr += OString::Concat("\\begin{") + eq->key + "}" SAL_NEWLINE_STRING ;
       eq2ltxconv(sstr, strm, "}");
-      if( sstr[sstr.length() - 1] != '\n' )
-        sstr << SAL_NEWLINE_STRING ;
-      sstr << "\\end" << "{" << eq->key << "}" << SAL_NEWLINE_STRING ;
+      if( sstr[sstr.getLength() - 1] != '\n' )
+        sstr += SAL_NEWLINE_STRING ;
+      sstr += OString::Concat("\\end{") + eq->key + "}" SAL_NEWLINE_STRING ;
     }
     else if( eq && (eq->flag & EQ_ATOP) ) {
-      if( sstr.length() == 0 )
-        sstr << '{';
+      if( sstr.getLength() == 0 )
+        sstr += OStringChar('{');
       else {
-        int pos  = sstr.rfind('}');
+        int pos  = sstr.lastIndexOf('}');
         if( 0 < pos)
-          sstr.replace(pos, ' ');
+          sstr = sstr.replaceAt(pos, 1, " ");
       }
-      sstr << token;
+      sstr += token;
       for (;;)
       {
         ch = strm->get();
         if ( ch == std::istream::traits_type::eof() || !IS_WS(ch) )
             break;
-        sstr << static_cast<char>(ch);
+        sstr += OStringChar(static_cast<char>(ch));
       }
       if( ch != '{' )
-        sstr << "{}";
+        sstr += "{}";
       else {
         eq2ltxconv(sstr, strm, "}");
-        sstr << '}';
+        sstr += OStringChar('}');
       }
     }
     else
-      sstr << white << token;
+      sstr += white + token;
   }
   return token[0];
 }
 
-void eq2latex(MzString& outs, char const *s)
+void eq2latex(OString& outs, char const *s)
 {
   assert(s);
   if( stk == nullptr )
     stk = new eq_stack;
 
-  MzString  tstr;
+  OString  tstr;
 
   std::istringstream tstrm(s);
   bool eqnarray = eq_sentence(tstr, &tstrm);
-  std::istringstream strm(tstr.c_str());
+  std::istringstream strm(tstr.getStr());
 
   if( eqnarray )
-    outs << "\\begin{array}{rllll}" << SAL_NEWLINE_STRING;
+    outs += "\\begin{array}{rllll}" SAL_NEWLINE_STRING;
   eq2ltxconv(outs, &strm, nullptr);
-  outs << SAL_NEWLINE_STRING;
+  outs += SAL_NEWLINE_STRING;
   if( eqnarray )
-    outs << "\\end{array}" << SAL_NEWLINE_STRING;
+    outs += "\\end{array}" SAL_NEWLINE_STRING;
   delete stk;
   stk = nullptr;
 }

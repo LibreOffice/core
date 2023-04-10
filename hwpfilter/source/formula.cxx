@@ -20,7 +20,6 @@
 #include "formula.h"
 #include "grammar.hxx"
 
-#include "mzstring.h"
 #include "nodes.h"
 #include "mapping.h"
 #include "hwpeq.h"
@@ -569,22 +568,21 @@ void Formula::parse()
      Node *res = nullptr;
      if( !eq ) return;
 
-     MzString a;
+     OString a;
      // fprintf(stderr,"\n\n[BEFORE]\n[%s]\n",eq);
      eq2latex(a,eq);
 
-     int idx=a.find(sal::static_int_cast<char>(0xff));
-     while(idx){
+     int idx=a.indexOf('\xff');
+     while(idx >= 0){
            //printf("idx = [%d]\n",idx);
-           a.replace(idx,0x20);
-           if((idx = a.find(sal::static_int_cast<char>(0xff),idx+1)) < 0)
-                break;
+           a = a.replaceAt(idx, 1, "\x20");
+           idx = a.indexOf('\xff', idx + 1);
      }
 
-     char *buf = static_cast<char *>(malloc(a.length()+1));
+     char *buf = static_cast<char *>(malloc(a.getLength()+1));
      bool bStart = false;
      int i, j;
-     for( i = 0, j=0 ; i < a.length() ; i++){ // rtrim and ltrim 32 10 13
+     for( i = 0, j=0 ; i < a.getLength() ; i++){ // rtrim and ltrim 32 10 13
            if( bStart ){
                 buf[j++] = a[i];
            }
@@ -605,7 +603,7 @@ void Formula::parse()
      }
      // fprintf(stderr,"\n\n[RESULT]\n[%s]\n",a.c_str());
      if( buf[0] != '\0' )
-           res = mainParse( a.c_str() );
+           res = mainParse( a.getStr() );
      else
            res = nullptr;
      free(buf);

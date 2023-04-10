@@ -60,7 +60,6 @@ $(eval $(call gb_Library_add_exception_objects,hwp,\
     hwpfilter/source/hwpread \
     hwpfilter/source/hwpreader \
     hwpfilter/source/lexer \
-    hwpfilter/source/mzstring \
     hwpfilter/source/solver \
 ))
 

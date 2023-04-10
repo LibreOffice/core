@@ -523,7 +523,7 @@ static void getOutlineNumStr(int style, int level, int num, hchar * hstr)
     if (fmt & NUM)
     {
         auto const numbuf = OString::number(num);
-        str2hstr(numbuf.getStr(), hstr);
+        str2hstr(numbuf.buf, hstr);
         hstr += numbuf.length;
     }
     else if (fmt & (U_ROM | L_ROM))
