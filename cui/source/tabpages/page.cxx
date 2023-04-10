@@ -921,8 +921,8 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl, weld::Widget&, void)
         }
         m_xPaperTrayBox->append(OUString::number(i), aName);
     }
-    m_xPaperTrayBox->set_active_text(aOldName);
     m_xPaperTrayBox->thaw();
+    m_xPaperTrayBox->set_active_text(aOldName);
 
     // tdf#123650 explicitly grab-focus after the modification otherwise gtk loses track
     // of there the focus should be
