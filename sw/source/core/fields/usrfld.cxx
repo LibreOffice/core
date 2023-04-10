@@ -348,7 +348,7 @@ void SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             m_nValue = fVal;
             LanguageTag aContentLanguage(GetFieldTypeLanguage());
             m_aContentLang = aContentLanguage.getBcp47();
-            m_aContent = DoubleToString(m_nValue, static_cast<sal_uInt16>(GetFieldTypeLanguage()));
+            m_aContent = DoubleToString(m_nValue, aContentLanguage.getLanguageType());
         }
         break;
     case FIELD_PROP_PAR2:
