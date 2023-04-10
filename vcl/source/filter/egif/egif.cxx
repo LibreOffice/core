@@ -392,7 +392,7 @@ void GIFWriter::WriteImageExtension( tools::Long nTimer, Disposal eDisposal )
     m_rGIF.WriteUChar( 0x04 );
     m_rGIF.WriteUChar( cFlags );
     m_rGIF.WriteUInt16( nDelay );
-    m_rGIF.WriteUChar( m_pAcc->GetBestPaletteIndex( BMP_COL_TRANS ) );
+    m_rGIF.WriteUChar( static_cast<sal_uInt8>(m_pAcc->GetBestPaletteIndex( BMP_COL_TRANS )) );
     m_rGIF.WriteUChar( 0x00 );
 
     if( m_rGIF.GetError() )
