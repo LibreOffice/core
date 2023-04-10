@@ -4082,7 +4082,7 @@ void DocxAttributeOutput::ParagraphStyle( sal_uInt16 nStyle )
 }
 
 static void impl_borderLine( FSHelperPtr const & pSerializer, sal_Int32 elementToken, const SvxBorderLine* pBorderLine, sal_uInt16 nDist,
-                             bool bWriteShadow, const table::BorderLine2* rStyleProps = nullptr )
+                             bool bWriteShadow, const table::BorderLine2* pStyleProps = nullptr)
 {
     // Compute val attribute value
     // Can be one of:
@@ -4153,7 +4153,7 @@ static void impl_borderLine( FSHelperPtr const & pSerializer, sal_Int32 elementT
                 break;
         }
     }
-    else if ( !rStyleProps || !rStyleProps->LineWidth )
+    else if (!pStyleProps || !pStyleProps->LineWidth)
         // no line, and no line set by the style either:
         // there is no need to write the property
         return;
@@ -4161,11 +4161,14 @@ static void impl_borderLine( FSHelperPtr const & pSerializer, sal_Int32 elementT
     // compare the properties with the theme properties before writing them:
     // if they are equal, it means that they were style-defined and there is
     // no need to write them.
-    if( rStyleProps != nullptr && pBorderLine && !pBorderLine->isEmpty() &&
-            pBorderLine->GetBorderLineStyle() == static_cast<SvxBorderLineStyle>(rStyleProps->LineStyle) &&
-            pBorderLine->GetColor() == Color(ColorTransparency, rStyleProps->Color) &&
-            pBorderLine->GetWidth() == o3tl::toTwips(rStyleProps->LineWidth, o3tl::Length::mm100) )
+    if (pStyleProps && pBorderLine && !pBorderLine->isEmpty()
+        && pBorderLine->GetBorderLineStyle()
+               == static_cast<SvxBorderLineStyle>(pStyleProps->LineStyle)
+        && pBorderLine->GetColor() == Color(ColorTransparency, pStyleProps->Color)
+        && pBorderLine->GetWidth() == o3tl::toTwips(pStyleProps->LineWidth, o3tl::Length::mm100))
+    {
         return;
+    }
 
     rtl::Reference<FastAttributeList> pAttr = FastSerializerHelper::createAttrList();
     pAttr->add( FSNS( XML_w, XML_val ), pVal );
