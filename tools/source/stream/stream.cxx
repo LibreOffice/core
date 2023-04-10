@@ -1353,16 +1353,6 @@ void SvStream::RefreshBuffer()
     m_isIoRead = m_isIoWrite = false;
 }
 
-SvStream& SvStream::WriteInt32AsString(sal_Int32 nInt32)
-{
-    return WriteOString(OString::number(nInt32));
-}
-
-SvStream& SvStream::WriteUInt32AsString(sal_uInt32 nUInt32)
-{
-    return WriteOString(OString::number(nUInt32));
-}
-
 #define CRYPT_BUFSIZE 1024
 
 /// Encrypt and write

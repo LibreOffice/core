@@ -255,7 +255,7 @@ sal_Int32 PDFDocument::WriteAppearanceObject(tools::Rectangle& rSignatureRectang
 
     // Write the object content.
     SvMemoryStream aEditBuffer;
-    aEditBuffer.WriteUInt32AsString(nAppearanceId);
+    aEditBuffer.WriteNumberAsString(nAppearanceId);
     aEditBuffer.WriteOString(" 0 obj\n");
     aEditBuffer.WriteOString("<</Type/XObject\n/Subtype/Form\n");
 
@@ -269,9 +269,9 @@ sal_Int32 PDFDocument::WriteAppearanceObject(tools::Rectangle& rSignatureRectang
     }
 
     aEditBuffer.WriteOString("/BBox[0 0 ");
-    aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getOpenWidth()));
+    aEditBuffer.WriteNumberAsString(rSignatureRectangle.getOpenWidth());
     aEditBuffer.WriteOString(" ");
-    aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getOpenHeight()));
+    aEditBuffer.WriteNumberAsString(rSignatureRectangle.getOpenHeight());
     aEditBuffer.WriteOString("]\n/Length ");
 
     // Add the object to the doc-level edit buffer and update the offset.
@@ -282,7 +282,7 @@ sal_Int32 PDFDocument::WriteAppearanceObject(tools::Rectangle& rSignatureRectang
     {
         nLength = PDFObjectCopier::copyPageStreams(aContentStreams, aStream, bCompressed);
     }
-    aEditBuffer.WriteOString(OString::number(nLength));
+    aEditBuffer.WriteNumberAsString(nLength);
     if (bCompressed)
     {
         aEditBuffer.WriteOString(" /Filter/FlateDecode");
@@ -321,29 +321,29 @@ sal_Int32 PDFDocument::WriteAnnotObject(PDFObjectElement const& rFirstPage, sal_
     aAnnotEntry.SetOffset(m_aEditBuffer.Tell());
     aAnnotEntry.SetDirty(true);
     m_aXRef[nAnnotId] = aAnnotEntry;
-    m_aEditBuffer.WriteUInt32AsString(nAnnotId);
+    m_aEditBuffer.WriteNumberAsString(nAnnotId);
     m_aEditBuffer.WriteOString(" 0 obj\n");
     m_aEditBuffer.WriteOString("<</Type/Annot/Subtype/Widget/F 132\n");
     m_aEditBuffer.WriteOString("/Rect[0 0 ");
-    m_aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getOpenWidth()));
+    m_aEditBuffer.WriteNumberAsString(rSignatureRectangle.getOpenWidth());
     m_aEditBuffer.WriteOString(" ");
-    m_aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getOpenHeight()));
+    m_aEditBuffer.WriteNumberAsString(rSignatureRectangle.getOpenHeight());
     m_aEditBuffer.WriteOString("]\n");
     m_aEditBuffer.WriteOString("/FT/Sig\n");
     m_aEditBuffer.WriteOString("/P ");
-    m_aEditBuffer.WriteUInt32AsString(rFirstPage.GetObjectValue());
+    m_aEditBuffer.WriteNumberAsString(rFirstPage.GetObjectValue());
     m_aEditBuffer.WriteOString(" 0 R\n");
     m_aEditBuffer.WriteOString("/T(Signature");
-    m_aEditBuffer.WriteUInt32AsString(nNextSignature);
+    m_aEditBuffer.WriteNumberAsString(nNextSignature);
     m_aEditBuffer.WriteOString(")\n");
     m_aEditBuffer.WriteOString("/V ");
-    m_aEditBuffer.WriteUInt32AsString(nSignatureId);
+    m_aEditBuffer.WriteNumberAsString(nSignatureId);
     m_aEditBuffer.WriteOString(" 0 R\n");
     m_aEditBuffer.WriteOString("/DV ");
-    m_aEditBuffer.WriteUInt32AsString(nSignatureId);
+    m_aEditBuffer.WriteNumberAsString(nSignatureId);
     m_aEditBuffer.WriteOString(" 0 R\n");
     m_aEditBuffer.WriteOString("/AP<<\n/N ");
-    m_aEditBuffer.WriteInt32AsString(nAppearanceId);
+    m_aEditBuffer.WriteNumberAsString(nAppearanceId);
     m_aEditBuffer.WriteOString(" 0 R\n>>\n");
     m_aEditBuffer.WriteOString(">>\nendobj\n\n");
 
@@ -368,7 +368,7 @@ bool PDFDocument::WritePageObject(PDFObjectElement& rFirstPage, sal_Int32 nAnnot
         m_aXRef[nAnnotsId].SetType(XRefEntryType::NOT_COMPRESSED);
         m_aXRef[nAnnotsId].SetOffset(m_aEditBuffer.Tell());
         m_aXRef[nAnnotsId].SetDirty(true);
-        m_aEditBuffer.WriteUInt32AsString(nAnnotsId);
+        m_aEditBuffer.WriteNumberAsString(nAnnotsId);
         m_aEditBuffer.WriteOString(" 0 obj\n[");
 
         // Write existing references.
@@ -387,12 +387,12 @@ bool PDFDocument::WritePageObject(PDFObjectElement& rFirstPage, sal_Int32 nAnnot
 
             if (i)
                 m_aEditBuffer.WriteOString(" ");
-            m_aEditBuffer.WriteUInt32AsString(pReference->GetObjectValue());
+            m_aEditBuffer.WriteNumberAsString(pReference->GetObjectValue());
             m_aEditBuffer.WriteOString(" 0 R");
         }
         // Write our reference.
         m_aEditBuffer.WriteOString(" ");
-        m_aEditBuffer.WriteUInt32AsString(nAnnotId);
+        m_aEditBuffer.WriteNumberAsString(nAnnotId);
         m_aEditBuffer.WriteOString(" 0 R");
 
         m_aEditBuffer.WriteOString("]\nendobj\n\n");
@@ -408,7 +408,7 @@ bool PDFDocument::WritePageObject(PDFObjectElement& rFirstPage, sal_Int32 nAnnot
         }
         m_aXRef[nFirstPageId].SetOffset(m_aEditBuffer.Tell());
         m_aXRef[nFirstPageId].SetDirty(true);
-        m_aEditBuffer.WriteUInt32AsString(nFirstPageId);
+        m_aEditBuffer.WriteNumberAsString(nFirstPageId);
         m_aEditBuffer.WriteOString(" 0 obj\n");
         m_aEditBuffer.WriteOString("<<");
         auto pAnnotsArray = dynamic_cast<PDFArrayElement*>(pAnnots);
@@ -419,7 +419,7 @@ bool PDFDocument::WritePageObject(PDFObjectElement& rFirstPage, sal_Int32 nAnnot
                                          + rFirstPage.GetDictionaryOffset(),
                                      rFirstPage.GetDictionaryLength());
             m_aEditBuffer.WriteOString("/Annots[");
-            m_aEditBuffer.WriteUInt32AsString(nAnnotId);
+            m_aEditBuffer.WriteNumberAsString(nAnnotId);
             m_aEditBuffer.WriteOString(" 0 R]");
         }
         else
@@ -436,7 +436,7 @@ bool PDFDocument::WritePageObject(PDFObjectElement& rFirstPage, sal_Int32 nAnnot
                                          + rFirstPage.GetDictionaryOffset(),
                                      nAnnotsBeforeEndLength);
             m_aEditBuffer.WriteOString(" ");
-            m_aEditBuffer.WriteUInt32AsString(nAnnotId);
+            m_aEditBuffer.WriteNumberAsString(nAnnotId);
             m_aEditBuffer.WriteOString(" 0 R");
             // Length of Annots end -> end of the dictionary.
             sal_uInt64 nAnnotsAfterEndLength = rFirstPage.GetDictionaryOffset()
@@ -499,7 +499,7 @@ bool PDFDocument::WriteCatalogObject(sal_Int32 nAnnotId, PDFReferenceElement*& p
         m_aXRef[nAcroFormId].SetType(XRefEntryType::NOT_COMPRESSED);
         m_aXRef[nAcroFormId].SetOffset(m_aEditBuffer.Tell());
         m_aXRef[nAcroFormId].SetDirty(true);
-        m_aEditBuffer.WriteUInt32AsString(nAcroFormId);
+        m_aEditBuffer.WriteNumberAsString(nAcroFormId);
         m_aEditBuffer.WriteOString(" 0 obj\n");
 
         // If this is nullptr, then the AcroForm object is not in an object stream.
@@ -539,7 +539,7 @@ bool PDFDocument::WriteCatalogObject(sal_Int32 nAnnotId, PDFReferenceElement*& p
 
         // Append our reference at the end of the Fields array.
         m_aEditBuffer.WriteOString(" ");
-        m_aEditBuffer.WriteUInt32AsString(nAnnotId);
+        m_aEditBuffer.WriteNumberAsString(nAnnotId);
         m_aEditBuffer.WriteOString(" 0 R");
 
         // Length of Fields end -> end of the object dictionary.
@@ -569,7 +569,7 @@ bool PDFDocument::WriteCatalogObject(sal_Int32 nAnnotId, PDFReferenceElement*& p
         auto pAcroFormDictionary = dynamic_cast<PDFDictionaryElement*>(pAcroForm);
         m_aXRef[nCatalogId].SetOffset(m_aEditBuffer.Tell());
         m_aXRef[nCatalogId].SetDirty(true);
-        m_aEditBuffer.WriteUInt32AsString(nCatalogId);
+        m_aEditBuffer.WriteNumberAsString(nCatalogId);
         m_aEditBuffer.WriteOString(" 0 obj\n");
         m_aEditBuffer.WriteOString("<<");
         if (!pAcroFormDictionary)
@@ -579,7 +579,7 @@ bool PDFDocument::WriteCatalogObject(sal_Int32 nAnnotId, PDFReferenceElement*& p
                                          + pCatalog->GetDictionaryOffset(),
                                      pCatalog->GetDictionaryLength());
             m_aEditBuffer.WriteOString("/AcroForm<</Fields[\n");
-            m_aEditBuffer.WriteUInt32AsString(nAnnotId);
+            m_aEditBuffer.WriteNumberAsString(nAnnotId);
             m_aEditBuffer.WriteOString(" 0 R\n]/SigFlags 3>>\n");
         }
         else
@@ -608,7 +608,7 @@ bool PDFDocument::WriteCatalogObject(sal_Int32 nAnnotId, PDFReferenceElement*& p
                                          + pCatalog->GetDictionaryOffset(),
                                      nFieldsBeforeEndLength);
             m_aEditBuffer.WriteOString(" ");
-            m_aEditBuffer.WriteUInt32AsString(nAnnotId);
+            m_aEditBuffer.WriteNumberAsString(nAnnotId);
             m_aEditBuffer.WriteOString(" 0 R");
             // Length of Fields end -> end of the Catalog dictionary.
             sal_uInt64 nFieldsAfterEndLength = pCatalog->GetDictionaryOffset()
@@ -700,7 +700,7 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
             aXRefStream.WriteBytes(aFilteredLine.data(), aFilteredLine.size());
         }
 
-        m_aEditBuffer.WriteUInt32AsString(nXRefStreamId);
+        m_aEditBuffer.WriteNumberAsString(nXRefStreamId);
         m_aEditBuffer.WriteOString(
             " 0 obj\n<</DecodeParms<</Columns 5/Predictor 12>>/Filter/FlateDecode");
 
@@ -730,7 +730,7 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
             if (!rXRef.second.GetDirty())
                 continue;
 
-            m_aEditBuffer.WriteUInt32AsString(rXRef.first);
+            m_aEditBuffer.WriteNumberAsString(rXRef.first);
             m_aEditBuffer.WriteOString(" 1 ");
         }
         m_aEditBuffer.WriteOString("] ");
@@ -740,9 +740,9 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
         if (pInfo)
         {
             m_aEditBuffer.WriteOString("/Info ");
-            m_aEditBuffer.WriteUInt32AsString(pInfo->GetObjectValue());
+            m_aEditBuffer.WriteNumberAsString(pInfo->GetObjectValue());
             m_aEditBuffer.WriteOString(" ");
-            m_aEditBuffer.WriteUInt32AsString(pInfo->GetGenerationValue());
+            m_aEditBuffer.WriteNumberAsString(pInfo->GetGenerationValue());
             m_aEditBuffer.WriteOString(" R ");
         }
 
@@ -760,25 +760,25 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
             aStream.Seek(0);
             aXRefStream.WriteStream(aStream);
         }
-        m_aEditBuffer.WriteUInt32AsString(aXRefStream.GetSize());
+        m_aEditBuffer.WriteNumberAsString(aXRefStream.GetSize());
 
         if (!m_aStartXRefs.empty())
         {
             // Write location of the previous cross-reference section.
             m_aEditBuffer.WriteOString("/Prev ");
-            m_aEditBuffer.WriteUInt32AsString(m_aStartXRefs.back());
+            m_aEditBuffer.WriteNumberAsString(m_aStartXRefs.back());
         }
 
         // Root.
         m_aEditBuffer.WriteOString("/Root ");
-        m_aEditBuffer.WriteUInt32AsString(pRoot->GetObjectValue());
+        m_aEditBuffer.WriteNumberAsString(pRoot->GetObjectValue());
         m_aEditBuffer.WriteOString(" ");
-        m_aEditBuffer.WriteUInt32AsString(pRoot->GetGenerationValue());
+        m_aEditBuffer.WriteNumberAsString(pRoot->GetGenerationValue());
         m_aEditBuffer.WriteOString(" R ");
 
         // Size.
         m_aEditBuffer.WriteOString("/Size ");
-        m_aEditBuffer.WriteUInt32AsString(m_aXRef.size());
+        m_aEditBuffer.WriteNumberAsString(m_aXRef.size());
 
         m_aEditBuffer.WriteOString("/Type/XRef/W[1 3 1]>>\nstream\n");
         aXRefStream.Seek(0);
@@ -796,7 +796,7 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
             if (!rXRef.second.GetDirty())
                 continue;
 
-            m_aEditBuffer.WriteUInt32AsString(nObject);
+            m_aEditBuffer.WriteNumberAsString(nObject);
             m_aEditBuffer.WriteOString(" 1\n");
             OStringBuffer aBuffer = OString::number(static_cast<sal_Int32>(nOffset));
             while (aBuffer.getLength() < 10)
@@ -810,19 +810,19 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
 
         // Write the trailer.
         m_aEditBuffer.WriteOString("trailer\n<</Size ");
-        m_aEditBuffer.WriteUInt32AsString(m_aXRef.size());
+        m_aEditBuffer.WriteNumberAsString(m_aXRef.size());
         m_aEditBuffer.WriteOString("/Root ");
-        m_aEditBuffer.WriteUInt32AsString(pRoot->GetObjectValue());
+        m_aEditBuffer.WriteNumberAsString(pRoot->GetObjectValue());
         m_aEditBuffer.WriteOString(" ");
-        m_aEditBuffer.WriteUInt32AsString(pRoot->GetGenerationValue());
+        m_aEditBuffer.WriteNumberAsString(pRoot->GetGenerationValue());
         m_aEditBuffer.WriteOString(" R\n");
         auto pInfo = dynamic_cast<PDFReferenceElement*>(m_pTrailer->Lookup("Info"));
         if (pInfo)
         {
             m_aEditBuffer.WriteOString("/Info ");
-            m_aEditBuffer.WriteUInt32AsString(pInfo->GetObjectValue());
+            m_aEditBuffer.WriteNumberAsString(pInfo->GetObjectValue());
             m_aEditBuffer.WriteOString(" ");
-            m_aEditBuffer.WriteUInt32AsString(pInfo->GetGenerationValue());
+            m_aEditBuffer.WriteNumberAsString(pInfo->GetGenerationValue());
             m_aEditBuffer.WriteOString(" R\n");
         }
         auto pID = dynamic_cast<PDFArrayElement*>(m_pTrailer->Lookup("ID"));
@@ -847,7 +847,7 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
         {
             // Write location of the previous cross-reference section.
             m_aEditBuffer.WriteOString("/Prev ");
-            m_aEditBuffer.WriteUInt32AsString(m_aStartXRefs.back());
+            m_aEditBuffer.WriteNumberAsString(m_aStartXRefs.back());
         }
 
         m_aEditBuffer.WriteOString(">>\n");
@@ -907,7 +907,7 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
 
     // Write startxref.
     m_aEditBuffer.WriteOString("startxref\n");
-    m_aEditBuffer.WriteUInt32AsString(nXRefOffset);
+    m_aEditBuffer.WriteNumberAsString(nXRefOffset);
     m_aEditBuffer.WriteOString("\n%%EOF\n");
 
     // Finalize the signature, now that we know the total file size.

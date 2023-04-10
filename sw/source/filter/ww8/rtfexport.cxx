@@ -572,8 +572,7 @@ void RtfExport::WriteInfo()
 
 void RtfExport::WriteUserPropType(int nType)
 {
-    Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_PROPTYPE);
-    OutULong(nType);
+    Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_PROPTYPE).WriteNumberAsString(nType);
 }
 
 void RtfExport::WriteUserPropValue(const OUString& rValue)
@@ -751,8 +750,8 @@ void RtfExport::WritePageDescTable()
             .WriteOString(SAL_NEWLINE_STRING)
             .WriteChar('{')
             .WriteOString(OOO_STRING_SVTOOLS_RTF_PGDSC);
-        OutULong(n).WriteOString(OOO_STRING_SVTOOLS_RTF_PGDSCUSE);
-        OutULong(static_cast<sal_uLong>(rPageDesc.ReadUseOn()));
+        Strm().WriteNumberAsString(n).WriteOString(OOO_STRING_SVTOOLS_RTF_PGDSCUSE);
+        Strm().WriteNumberAsString(static_cast<sal_uLong>(rPageDesc.ReadUseOn()));
 
         OutPageDescription(rPageDesc, false);
 
@@ -762,7 +761,7 @@ void RtfExport::WritePageDescTable()
             if (rPageDesc.GetFollow() == &m_rDoc.GetPageDesc(--i))
                 break;
         Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_PGDSCNXT);
-        OutULong(i).WriteChar(' ');
+        Strm().WriteNumberAsString(i).WriteChar(' ');
         Strm()
             .WriteOString(msfilter::rtfutil::OutString(rPageDesc.GetName(), m_eDefaultEncoding))
             .WriteOString(";}");
@@ -784,7 +783,8 @@ ErrCode RtfExport::ExportDocument_Impl()
         .WriteChar('1')
         .WriteOString(OOO_STRING_SVTOOLS_RTF_ANSI);
     Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_DEFF);
-    OutULong(m_aFontHelper.GetId(m_rDoc.GetAttrPool().GetDefaultItem(RES_CHRATR_FONT)));
+    Strm().WriteNumberAsString(
+        m_aFontHelper.GetId(m_rDoc.GetAttrPool().GetDefaultItem(RES_CHRATR_FONT)));
     // If this not exist, MS don't understand our ansi characters (0x80-0xff).
     Strm().WriteOString("\\adeflang1025");
 
@@ -812,14 +812,14 @@ ErrCode RtfExport::ExportDocument_Impl()
     // Automatic hyphenation: it's a global setting in Word, it's a paragraph setting in Writer.
     // Set it's value to "auto" and disable on paragraph level, if no hyphenation is used there.
     Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_HYPHAUTO);
-    OutULong(1);
+    Strm().WriteOString("1");
 
     // Zoom
     SwViewShell* pViewShell(m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell());
     if (pViewShell && pViewShell->GetViewOptions()->GetZoomType() == SvxZoomType::PERCENT)
     {
         Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_VIEWSCALE);
-        OutULong(pViewShell->GetViewOptions()->GetZoom());
+        Strm().WriteNumberAsString(pViewShell->GetViewOptions()->GetZoom());
     }
     // Record changes?
     if (RedlineFlags::On & m_nOrigRedlineFlags)
@@ -886,7 +886,7 @@ ErrCode RtfExport::ExportDocument_Impl()
                         .WriteChar('{')
                         .WriteOString(OOO_STRING_SVTOOLS_RTF_IGNORE)
                         .WriteOString(OOO_STRING_SVTOOLS_RTF_PGDSCNO);
-                    OutULong(nPosInDoc).WriteChar('}');
+                    Strm().WriteNumberAsString(nPosInDoc).WriteChar('}');
                 }
             }
         }
@@ -904,29 +904,31 @@ ErrCode RtfExport::ExportDocument_Impl()
             {
                 Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_PAPERH);
                 Size a4 = SvxPaperInfo::GetPaperSize(PAPER_A4);
-                OutULong(a4.Height()).WriteOString(OOO_STRING_SVTOOLS_RTF_PAPERW);
-                OutULong(a4.Width());
+                Strm().WriteNumberAsString(a4.Height()).WriteOString(OOO_STRING_SVTOOLS_RTF_PAPERW);
+                Strm().WriteNumberAsString(a4.Width());
             }
             else
             {
                 Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_PAPERH);
-                OutULong(rSz.GetHeight()).WriteOString(OOO_STRING_SVTOOLS_RTF_PAPERW);
-                OutULong(rSz.GetWidth());
+                Strm()
+                    .WriteNumberAsString(rSz.GetHeight())
+                    .WriteOString(OOO_STRING_SVTOOLS_RTF_PAPERW);
+                Strm().WriteNumberAsString(rSz.GetWidth());
             }
         }
 
         {
             const SvxLRSpaceItem& rLR = rFormatPage.GetLRSpace();
             Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_MARGL);
-            OutLong(rLR.GetLeft()).WriteOString(OOO_STRING_SVTOOLS_RTF_MARGR);
-            OutLong(rLR.GetRight());
+            Strm().WriteNumberAsString(rLR.GetLeft()).WriteOString(OOO_STRING_SVTOOLS_RTF_MARGR);
+            Strm().WriteNumberAsString(rLR.GetRight());
         }
 
         {
             const SvxULSpaceItem& rUL = rFormatPage.GetULSpace();
             Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_MARGT);
-            OutLong(rUL.GetUpper()).WriteOString(OOO_STRING_SVTOOLS_RTF_MARGB);
-            OutLong(rUL.GetLower());
+            Strm().WriteNumberAsString(rUL.GetUpper()).WriteOString(OOO_STRING_SVTOOLS_RTF_MARGB);
+            Strm().WriteNumberAsString(rUL.GetLower());
         }
 
         Strm()
@@ -935,7 +937,7 @@ ErrCode RtfExport::ExportDocument_Impl()
         m_pAttrOutput->SectFootnoteEndnotePr();
         // All sections are unlocked by default
         Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_SECTUNLOCKED);
-        OutLong(1);
+        Strm().WriteOString("1");
         OutPageDescription(rPageDesc, true); // Changed bCheckForFirstPage to true so headers
         // following title page are correctly added - i13107
         if (pSttPgDsc)
@@ -962,7 +964,7 @@ ErrCode RtfExport::ExportDocument_Impl()
         const char* pOut = FTNPOS_CHAPTER == rFootnoteInfo.m_ePos ? OOO_STRING_SVTOOLS_RTF_ENDDOC
                                                                   : OOO_STRING_SVTOOLS_RTF_FTNBJ;
         Strm().WriteOString(pOut).WriteOString(OOO_STRING_SVTOOLS_RTF_FTNSTART);
-        OutLong(rFootnoteInfo.m_nFootnoteOffset + 1);
+        Strm().WriteNumberAsString(rFootnoteInfo.m_nFootnoteOffset + 1);
 
         switch (rFootnoteInfo.m_eNum)
         {
@@ -1009,7 +1011,7 @@ ErrCode RtfExport::ExportDocument_Impl()
             .WriteOString(OOO_STRING_SVTOOLS_RTF_AENDDOC)
             .WriteOString(OOO_STRING_SVTOOLS_RTF_AFTNRSTCONT)
             .WriteOString(OOO_STRING_SVTOOLS_RTF_AFTNSTART);
-        OutLong(rEndNoteInfo.m_nFootnoteOffset + 1);
+        Strm().WriteNumberAsString(rEndNoteInfo.m_nFootnoteOffset + 1);
 
         switch (rEndNoteInfo.m_aFormat.GetNumberingType())
         {
@@ -1180,10 +1182,6 @@ OString RtfExport::getStream()
 
 void RtfExport::resetStream() { m_pStream.reset(); }
 
-SvStream& RtfExport::OutULong(sal_uLong nVal) { return Writer::OutULong(Strm(), nVal); }
-
-SvStream& RtfExport::OutLong(tools::Long nVal) { return Writer::OutLong(Strm(), nVal); }
-
 void RtfExport::OutUnicode(const char* pToken, const OUString& rContent, bool bUpr)
 {
     if (rContent.isEmpty())
@@ -1202,11 +1200,11 @@ void RtfExport::OutUnicode(const char* pToken, const OUString& rContent, bool bU
 void RtfExport::OutDateTime(const char* pStr, const util::DateTime& rDT)
 {
     Strm().WriteChar('{').WriteOString(pStr).WriteOString(OOO_STRING_SVTOOLS_RTF_YR);
-    OutULong(rDT.Year).WriteOString(OOO_STRING_SVTOOLS_RTF_MO);
-    OutULong(rDT.Month).WriteOString(OOO_STRING_SVTOOLS_RTF_DY);
-    OutULong(rDT.Day).WriteOString(OOO_STRING_SVTOOLS_RTF_HR);
-    OutULong(rDT.Hours).WriteOString(OOO_STRING_SVTOOLS_RTF_MIN);
-    OutULong(rDT.Minutes).WriteChar('}');
+    Strm().WriteNumberAsString(rDT.Year).WriteOString(OOO_STRING_SVTOOLS_RTF_MO);
+    Strm().WriteNumberAsString(rDT.Month).WriteOString(OOO_STRING_SVTOOLS_RTF_DY);
+    Strm().WriteNumberAsString(rDT.Day).WriteOString(OOO_STRING_SVTOOLS_RTF_HR);
+    Strm().WriteNumberAsString(rDT.Hours).WriteOString(OOO_STRING_SVTOOLS_RTF_MIN);
+    Strm().WriteNumberAsString(rDT.Minutes).WriteChar('}');
 }
 
 sal_uInt16 RtfExport::GetColor(const Color& rColor) const
@@ -1407,9 +1405,9 @@ void RtfExport::OutColorTable()
         if (n || COL_AUTO != rCol)
         {
             Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_RED);
-            OutULong(rCol.GetRed()).WriteOString(OOO_STRING_SVTOOLS_RTF_GREEN);
-            OutULong(rCol.GetGreen()).WriteOString(OOO_STRING_SVTOOLS_RTF_BLUE);
-            OutULong(rCol.GetBlue());
+            Strm().WriteNumberAsString(rCol.GetRed()).WriteOString(OOO_STRING_SVTOOLS_RTF_GREEN);
+            Strm().WriteNumberAsString(rCol.GetGreen()).WriteOString(OOO_STRING_SVTOOLS_RTF_BLUE);
+            Strm().WriteNumberAsString(rCol.GetBlue());
         }
         Strm().WriteChar(';');
     }

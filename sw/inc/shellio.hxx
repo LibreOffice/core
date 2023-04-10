@@ -461,10 +461,6 @@ public:
 
     // Stream-specific routines. Do not use in storage-writer!
 
-    // Optimizing output on stream.
-    static SvStream& OutLong( SvStream& rStrm, tools::Long nVal );
-    static SvStream& OutULong( SvStream& rStrm, sal_uLong nVal );
-
     void SetStream(SvStream *const pStream);
     SvStream& Strm();
 

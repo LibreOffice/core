@@ -151,11 +151,11 @@ SvStream& Out_Char(SvStream& rStream, sal_Unicode c,
                             // #i47831# add an additional whitespace, so that
                             // "document whitespaces" are not ignored.;
                             rStream.WriteOString( "\\uc" )
-                               .WriteOString( OString::number(nLen) ).WriteOString( " " );
+                               .WriteNumberAsString( nLen ).WriteOString( " " );
                             *pUCMode = nLen;
                         }
                         rStream.WriteOString( "\\u" )
-                           .WriteInt32AsString(c);
+                           .WriteNumberAsString(c);
                     }
 
                     for (sal_Int32 nI = 0; nI < nLen; ++nI)

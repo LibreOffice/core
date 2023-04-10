@@ -38,27 +38,6 @@
 
 using namespace css;
 
-namespace
-{
-    SvStream& lcl_OutLongExt( SvStream& rStrm, sal_uLong nVal, bool bNeg )
-    {
-        char aBuf[28];
-
-        int i = SAL_N_ELEMENTS(aBuf);
-        aBuf[--i] = 0;
-        do
-        {
-            aBuf[--i] = '0' + static_cast<char>(nVal % 10);
-            nVal /= 10;
-        } while (nVal);
-
-        if (bNeg)
-            aBuf[--i] = '-';
-
-        return rStrm.WriteOString( &aBuf[i] );
-    }
-}
-
 typedef std::multimap<SwNodeOffset, const ::sw::mark::IMark*> SwBookmarkNodeTable;
 
 struct Writer_Impl
@@ -220,20 +199,6 @@ SvStream& Writer::Strm()
 void Writer::SetStream(SvStream *const pStream)
 {
     m_pImpl->m_pStream = pStream;
-}
-
-SvStream& Writer::OutLong( SvStream& rStrm, tools::Long nVal )
-{
-    const bool bNeg = nVal < 0;
-    if (bNeg)
-        nVal = -nVal;
-
-    return lcl_OutLongExt(rStrm, static_cast<sal_uLong>(nVal), bNeg);
-}
-
-SvStream& Writer::OutULong( SvStream& rStrm, sal_uLong nVal )
-{
-    return lcl_OutLongExt(rStrm, nVal, false);
 }
 
 ErrCode Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )

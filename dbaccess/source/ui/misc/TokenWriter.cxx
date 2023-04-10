@@ -324,7 +324,7 @@ bool ORTFImportExport::Write()
     m_pStream->WriteOString(OOO_STRING_SVTOOLS_RTF_ANSI);
     if (sal_uInt32 nCpg = rtl_getWindowsCodePageFromTextEncoding(m_eDestEnc); nCpg && nCpg != 65001)
     {
-        m_pStream->WriteOString(OOO_STRING_SVTOOLS_RTF_ANSICPG).WriteUInt32AsString(nCpg);
+        m_pStream->WriteOString(OOO_STRING_SVTOOLS_RTF_ANSICPG).WriteNumberAsString(nCpg);
     }
     m_pStream->WriteOString(SAL_NEWLINE_STRING);
 
@@ -351,7 +351,7 @@ bool ORTFImportExport::Write()
         sal_Int32 nTok{-1}; // to compensate pre-increment
         do {
             m_pStream->WriteOString( "\\f" );
-            m_pStream->WriteInt32AsString(++nTok);
+            m_pStream->WriteNumberAsString(++nTok);
             m_pStream->WriteOString( "\\fcharset0\\fnil " );
             m_pStream->WriteOString( o3tl::getToken(aFonts, 0, ';', nIdx) );
             m_pStream->WriteChar( ';' );
@@ -361,11 +361,11 @@ bool ORTFImportExport::Write()
     m_pStream->WriteOString( SAL_NEWLINE_STRING );
     // write the rtf color table
     m_pStream->WriteChar( '{' ).WriteOString( OOO_STRING_SVTOOLS_RTF_COLORTBL ).WriteOString( OOO_STRING_SVTOOLS_RTF_RED );
-    m_pStream->WriteUInt32AsString(aColor.GetRed());
+    m_pStream->WriteNumberAsString(aColor.GetRed());
     m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_GREEN );
-    m_pStream->WriteUInt32AsString(aColor.GetGreen());
+    m_pStream->WriteNumberAsString(aColor.GetGreen());
     m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_BLUE );
-    m_pStream->WriteUInt32AsString(aColor.GetBlue());
+    m_pStream->WriteNumberAsString(aColor.GetBlue());
 
     m_pStream->WriteOString( ";\\red255\\green255\\blue255;\\red192\\green192\\blue192;}" )
                 .WriteOString( SAL_NEWLINE_STRING );
@@ -373,7 +373,7 @@ bool ORTFImportExport::Write()
     static char const aCell1[] = "\\clbrdrl\\brdrs\\brdrcf0\\clbrdrt\\brdrs\\brdrcf0\\clbrdrb\\brdrs\\brdrcf0\\clbrdrr\\brdrs\\brdrcf0\\clshdng10000\\clcfpat2\\cellx";
 
     m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_TROWD ).WriteOString( OOO_STRING_SVTOOLS_RTF_TRGAPH );
-    m_pStream->WriteInt32AsString(40);
+    m_pStream->WriteOString("40");
     m_pStream->WriteOString( SAL_NEWLINE_STRING );
 
     if(m_xObject.is())
@@ -394,7 +394,7 @@ bool ORTFImportExport::Write()
         for( sal_Int32 i=1; i<=nCount; ++i )
         {
             m_pStream->WriteOString( aCell1 );
-            m_pStream->WriteInt32AsString(i*CELL_X);
+            m_pStream->WriteNumberAsString(i*CELL_X);
             m_pStream->WriteOString( SAL_NEWLINE_STRING );
         }
 
@@ -497,7 +497,7 @@ void ORTFImportExport::appendRow(OString const * pHorzChar,sal_Int32 _nColumnCou
 {
     ++kk;
     m_pStream->WriteOString( OOO_STRING_SVTOOLS_RTF_TROWD ).WriteOString( OOO_STRING_SVTOOLS_RTF_TRGAPH );
-    m_pStream->WriteInt32AsString(40);
+    m_pStream->WriteOString("40");
     m_pStream->WriteOString( SAL_NEWLINE_STRING );
 
     static char const aCell2[] = "\\clbrdrl\\brdrs\\brdrcf2\\clbrdrt\\brdrs\\brdrcf2\\clbrdrb\\brdrs\\brdrcf2\\clbrdrr\\brdrs\\brdrcf2\\clshdng10000\\clcfpat1\\cellx";
@@ -505,7 +505,7 @@ void ORTFImportExport::appendRow(OString const * pHorzChar,sal_Int32 _nColumnCou
     for ( sal_Int32 i=1; i<=_nColumnCount; ++i )
     {
         m_pStream->WriteOString( aCell2 );
-        m_pStream->WriteInt32AsString(i*CELL_X);
+        m_pStream->WriteNumberAsString(i*CELL_X);
         m_pStream->WriteOString( SAL_NEWLINE_STRING );
     }
 
@@ -649,7 +649,7 @@ void OHTMLImportExport::WriteBody()
     m_pStream->WriteOString( OOO_STRING_SVTOOLS_HTML_body ).WriteOString( " { " ).WriteOString( "font-family: " ).WriteChar( '"' ).WriteOString( OUStringToOString(m_aFont.Name, osl_getThreadTextEncoding()) ).WriteChar( '\"' );
         // TODO : think about the encoding of the font name
     m_pStream->WriteOString( "; " ).WriteOString( "font-size: " );
-    m_pStream->WriteInt32AsString(m_aFont.Height);
+    m_pStream->WriteNumberAsString(m_aFont.Height);
     m_pStream->WriteChar( '}' );
 
     m_pStream->WriteOString(SAL_NEWLINE_STRING).WriteOString(GetIndentStr());

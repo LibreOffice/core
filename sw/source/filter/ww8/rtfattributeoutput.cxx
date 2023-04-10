@@ -1277,16 +1277,16 @@ void RtfAttributeOutput::SectionLineNumbering(sal_uLong nRestartNo,
                                               const SwLineNumberInfo& rLnNumInfo)
 {
     m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_LINEMOD);
-    m_rExport.OutLong(rLnNumInfo.GetCountBy());
+    m_rExport.Strm().WriteNumberAsString(rLnNumInfo.GetCountBy());
     m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_LINEX);
-    m_rExport.OutLong(rLnNumInfo.GetPosFromLeft());
+    m_rExport.Strm().WriteNumberAsString(rLnNumInfo.GetPosFromLeft());
     if (!rLnNumInfo.IsRestartEachPage())
         m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_LINECONT);
 
     if (nRestartNo > 0)
     {
         m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_LINESTARTS);
-        m_rExport.OutLong(nRestartNo);
+        m_rExport.Strm().WriteNumberAsString(nRestartNo);
     }
 }
 
@@ -1482,10 +1482,10 @@ void RtfAttributeOutput::NumberingDefinition(sal_uInt16 nId, const SwNumRule& /*
 {
     m_rExport.Strm().WriteChar('{').WriteOString(OOO_STRING_SVTOOLS_RTF_LISTOVERRIDE);
     m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_LISTID);
-    m_rExport.OutULong(nId);
+    m_rExport.Strm().WriteNumberAsString(nId);
     m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_LISTOVERRIDECOUNT).WriteChar('0');
     m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_LS);
-    m_rExport.OutULong(nId).WriteChar('}');
+    m_rExport.Strm().WriteNumberAsString(nId).WriteChar('}');
 }
 
 void RtfAttributeOutput::StartAbstractNumbering(sal_uInt16 nId)
@@ -1494,14 +1494,14 @@ void RtfAttributeOutput::StartAbstractNumbering(sal_uInt16 nId)
         .WriteChar('{')
         .WriteOString(OOO_STRING_SVTOOLS_RTF_LIST)
         .WriteOString(OOO_STRING_SVTOOLS_RTF_LISTTEMPLATEID);
-    m_rExport.OutULong(nId);
+    m_rExport.Strm().WriteNumberAsString(nId);
     m_nListId = nId;
 }
 
 void RtfAttributeOutput::EndAbstractNumbering()
 {
     m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_LISTID);
-    m_rExport.OutULong(m_nListId).WriteChar('}').WriteOString(SAL_NEWLINE_STRING);
+    m_rExport.Strm().WriteNumberAsString(m_nListId).WriteChar('}').WriteOString(SAL_NEWLINE_STRING);
 }
 
 void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart,
@@ -1618,7 +1618,7 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart,
             break;
     }
     m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_LEVELNFC);
-    m_rExport.OutULong(nVal);
+    m_rExport.Strm().WriteNumberAsString(nVal);
 
     switch (eAdjust)
     {
@@ -1633,7 +1633,7 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart,
             break;
     }
     m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_LEVELJC);
-    m_rExport.OutULong(nVal);
+    m_rExport.Strm().WriteNumberAsString(nVal);
 
     // bullet
     if (nNumberingType == SVX_NUM_BITMAP && pBrush)
@@ -1642,15 +1642,15 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart,
         if (nIndex != -1)
         {
             m_rExport.Strm().WriteOString(LO_STRING_SVTOOLS_RTF_LEVELPICTURE);
-            m_rExport.OutULong(nIndex);
+            m_rExport.Strm().WriteNumberAsString(nIndex);
         }
     }
 
     m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_LEVELSTARTAT);
-    m_rExport.OutULong(nStart);
+    m_rExport.Strm().WriteNumberAsString(nStart);
 
     m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_LEVELFOLLOW);
-    m_rExport.OutULong(nFollow);
+    m_rExport.Strm().WriteNumberAsString(nFollow);
 
     // leveltext group
     m_rExport.Strm().WriteChar('{').WriteOString(OOO_STRING_SVTOOLS_RTF_LEVELTEXT).WriteChar(' ');
@@ -1660,7 +1660,7 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart,
         m_rExport.Strm().WriteOString("\\'01");
         sal_Unicode cChar = rNumberingString[0];
         m_rExport.Strm().WriteOString("\\u");
-        m_rExport.OutULong(cChar);
+        m_rExport.Strm().WriteNumberAsString(cChar);
         m_rExport.Strm().WriteOString(" ?");
     }
     else
@@ -1688,7 +1688,7 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart,
         if (pFont)
         {
             m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_F);
-            m_rExport.OutULong(m_rExport.m_aFontHelper.GetId(*pFont));
+            m_rExport.Strm().WriteNumberAsString(m_rExport.m_aFontHelper.GetId(*pFont));
         }
         m_rExport.OutputItemSet(*pOutSet, false, true, i18n::ScriptType::LATIN,
                                 m_rExport.m_bExportModeRTF);
@@ -1697,8 +1697,8 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart,
     }
 
     m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_FI);
-    m_rExport.OutLong(nFirstLineIndex).WriteOString(OOO_STRING_SVTOOLS_RTF_LI);
-    m_rExport.OutLong(nIndentAt);
+    m_rExport.Strm().WriteNumberAsString(nFirstLineIndex).WriteOString(OOO_STRING_SVTOOLS_RTF_LI);
+    m_rExport.Strm().WriteNumberAsString(nIndentAt);
 
     m_rExport.Strm().WriteChar('}');
     if (nLevel > 8)
@@ -2074,7 +2074,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
             if (const SdrObject* pObject = rFrame.GetFrameFormat().FindRealSdrObject())
             {
                 m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_SHPZ);
-                m_rExport.OutULong(pObject->GetOrdNum());
+                m_rExport.Strm().WriteNumberAsString(pObject->GetOrdNum());
             }
 
             m_rExport.Strm().WriteOString(m_aRunText.makeStringAndClear());
@@ -3429,11 +3429,11 @@ void RtfAttributeOutput::FormatSurround(const SwFormatSurround& rSurround)
             nWr = 4; // tight
 
         m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_SHPWR);
-        m_rExport.OutLong(nWr);
+        m_rExport.Strm().WriteNumberAsString(nWr);
         if (oWrk)
         {
             m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_SHPWRK);
-            m_rExport.OutLong(*oWrk);
+            m_rExport.Strm().WriteNumberAsString(*oWrk);
         }
     }
 }
@@ -3480,11 +3480,11 @@ void RtfAttributeOutput::FormatVertOrientation(const SwFormatVertOrient& rFlyVer
     }
 
     m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_SHPTOP);
-    m_rExport.OutLong(rFlyVert.GetPos());
+    m_rExport.Strm().WriteNumberAsString(rFlyVert.GetPos());
     if (m_pFlyFrameSize)
     {
         m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_SHPBOTTOM);
-        m_rExport.OutLong(rFlyVert.GetPos() + m_pFlyFrameSize->Height());
+        m_rExport.Strm().WriteNumberAsString(rFlyVert.GetPos() + m_pFlyFrameSize->Height());
     }
 }
 
@@ -3527,11 +3527,11 @@ void RtfAttributeOutput::FormatHorizOrientation(const SwFormatHoriOrient& rFlyHo
     }
 
     m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_SHPLEFT);
-    m_rExport.OutLong(rFlyHori.GetPos());
+    m_rExport.Strm().WriteNumberAsString(rFlyHori.GetPos());
     if (m_pFlyFrameSize)
     {
         m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_SHPRIGHT);
-        m_rExport.OutLong(rFlyHori.GetPos() + m_pFlyFrameSize->Width());
+        m_rExport.Strm().WriteNumberAsString(rFlyHori.GetPos() + m_pFlyFrameSize->Width());
     }
 }
 
@@ -3720,7 +3720,7 @@ void RtfAttributeOutput::FormatColumns_Impl(sal_uInt16 nCols, const SwFormatCol&
                                             SwTwips nPageSize)
 {
     m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_COLS);
-    m_rExport.OutLong(nCols);
+    m_rExport.Strm().WriteNumberAsString(nCols);
 
     if (rCol.GetLineAdj() != COLADJ_NONE)
         m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_LINEBETCOL);
@@ -3728,7 +3728,7 @@ void RtfAttributeOutput::FormatColumns_Impl(sal_uInt16 nCols, const SwFormatCol&
     if (bEven)
     {
         m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_COLSX);
-        m_rExport.OutLong(rCol.GetGutterWidth(true));
+        m_rExport.Strm().WriteNumberAsString(rCol.GetGutterWidth(true));
     }
     else
     {
@@ -3736,15 +3736,16 @@ void RtfAttributeOutput::FormatColumns_Impl(sal_uInt16 nCols, const SwFormatCol&
         for (sal_uInt16 n = 0; n < nCols;)
         {
             m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_COLNO);
-            m_rExport.OutLong(n + 1);
+            m_rExport.Strm().WriteNumberAsString(n + 1);
 
             m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_COLW);
-            m_rExport.OutLong(rCol.CalcPrtColWidth(n, nPageSize));
+            m_rExport.Strm().WriteNumberAsString(rCol.CalcPrtColWidth(n, nPageSize));
 
             if (++n != nCols)
             {
                 m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_COLSR);
-                m_rExport.OutLong(rColumns[n - 1].GetRight() + rColumns[n].GetLeft());
+                m_rExport.Strm().WriteNumberAsString(rColumns[n - 1].GetRight()
+                                                     + rColumns[n].GetLeft());
             }
         }
     }
@@ -3992,7 +3993,7 @@ void RtfAttributeOutput::FontAlternateName(const OUString& rName) const
 void RtfAttributeOutput::FontCharset(sal_uInt8 nCharSet) const
 {
     m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_FCHARSET);
-    m_rExport.OutULong(nCharSet);
+    m_rExport.Strm().WriteNumberAsString(nCharSet);
     m_rExport.Strm().WriteChar(' ');
     m_rExport.SetCurrentEncoding(rtl_getTextEncodingFromWindowsCharset(nCharSet));
 }
@@ -4023,7 +4024,7 @@ void RtfAttributeOutput::FontFamilyType(FontFamily eFamily, const wwFont& rFont)
         default:
             break;
     }
-    m_rExport.OutULong(m_rExport.m_aFontHelper.GetId(rFont)).WriteOString(pStr);
+    m_rExport.Strm().WriteNumberAsString(m_rExport.m_aFontHelper.GetId(rFont)).WriteOString(pStr);
 }
 
 /// Font pitch.
@@ -4043,7 +4044,7 @@ void RtfAttributeOutput::FontPitchType(FontPitch ePitch) const
         default:
             break;
     }
-    m_rExport.OutULong(nVal);
+    m_rExport.Strm().WriteNumberAsString(nVal);
 }
 
 static void lcl_AppendSP(OStringBuffer& rBuffer, const char cName[], const OUString& rValue,
@@ -4461,9 +4462,9 @@ void RtfAttributeOutput::BulletDefinition(int /*nId*/, const Graphic& rGraphic, 
     m_rExport.Strm().WriteOString("{" OOO_STRING_SVTOOLS_RTF_PICT OOO_STRING_SVTOOLS_RTF_PNGBLIP);
 
     m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_PICWGOAL);
-    m_rExport.OutULong(aSize.Width());
+    m_rExport.Strm().WriteNumberAsString(aSize.Width());
     m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_PICHGOAL);
-    m_rExport.OutULong(aSize.Height());
+    m_rExport.Strm().WriteNumberAsString(aSize.Height());
 
     m_rExport.Strm().WriteOString(SAL_NEWLINE_STRING);
     const sal_uInt8* pGraphicAry = nullptr;

@@ -261,8 +261,8 @@ public:
     SvStream&       WriteFloat( float nFloat );
     SvStream&       WriteDouble( const double& rDouble );
 
-    SvStream&       WriteUInt32AsString( sal_uInt32 nUInt32 );
-    SvStream&       WriteInt32AsString( sal_Int32 nInt32 );
+    template <typename N>
+    SvStream&       WriteNumberAsString( N n ) { return WriteOString(OString::number(n)); }
 
     std::size_t     ReadBytes( void* pData, std::size_t nSize );
     std::size_t     WriteBytes( const void* pData, std::size_t nSize );
