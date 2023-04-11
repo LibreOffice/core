@@ -186,8 +186,8 @@ public:
     OString getStream();
     /// Return back to the real stream.
     void resetStream();
-    void OutUnicode(const char* pToken, const OUString& rContent, bool bUpr = false);
-    void OutDateTime(const char* pStr, const css::util::DateTime& rDT);
+    void OutUnicode(std::string_view pToken, std::u16string_view rContent, bool bUpr = false);
+    void OutDateTime(std::string_view pStr, const css::util::DateTime& rDT);
     void OutPageDescription(const SwPageDesc& rPgDsc, bool bCheckForFirstPage);
 
     sal_uInt16 GetColor(const Color& rColor) const;
@@ -211,7 +211,7 @@ private:
     /// Writes a single user property type.
     void WriteUserPropType(int nType);
     /// Writes a single user property value.
-    void WriteUserPropValue(const OUString& rValue);
+    void WriteUserPropValue(std::u16string_view rValue);
     /// Writes the userprops group: user defined document properties.
     void WriteUserProps();
     /// Writes document variables

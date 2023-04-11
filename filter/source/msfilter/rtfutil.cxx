@@ -210,12 +210,11 @@ OString OutChar(sal_Unicode c, int* pUCMode, rtl_TextEncoding eDestEnc, bool* pS
     return aBuf.makeStringAndClear();
 }
 
-OString OutString(const OUString& rStr, rtl_TextEncoding eDestEnc, bool bUnicode)
+OString OutString(std::u16string_view rStr, rtl_TextEncoding eDestEnc, bool bUnicode)
 {
-    SAL_INFO("filter.ms", __func__ << ", rStr = '" << rStr << "'");
     OStringBuffer aBuf;
     int nUCMode = 1;
-    for (sal_Int32 n = 0; n < rStr.getLength(); ++n)
+    for (size_t n = 0; n < rStr.size(); ++n)
         aBuf.append(OutChar(rStr[n], &nUCMode, eDestEnc, nullptr, bUnicode));
     if (nUCMode != 1)
     {
@@ -240,7 +239,7 @@ static bool TryOutString(std::u16string_view rStr, rtl_TextEncoding eDestEnc)
     return true;
 }
 
-OString OutStringUpr(const char* pToken, const OUString& rStr, rtl_TextEncoding eDestEnc)
+OString OutStringUpr(std::string_view pToken, std::u16string_view rStr, rtl_TextEncoding eDestEnc)
 {
     if (TryOutString(rStr, eDestEnc))
         return OString::Concat("{") + pToken + " " + OutString(rStr, eDestEnc) + "}";

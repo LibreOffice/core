@@ -2703,7 +2703,7 @@ void DocxAttributeOutput::DoWriteCmd( std::u16string_view rCmd )
     std::u16string_view sCmd = o3tl::trim(rCmd);
     if (o3tl::starts_with(sCmd, u"SEQ"))
     {
-        OUString sSeqName( o3tl::trim(msfilter::util::findQuotedText(sCmd, "SEQ ", '\\')) );
+        OUString sSeqName( o3tl::trim(msfilter::util::findQuotedText(sCmd, u"SEQ ", '\\')) );
         m_aSeqBookmarksNames[sSeqName].push_back(m_sLastOpenedBookmark);
     }
     // Write the Field command

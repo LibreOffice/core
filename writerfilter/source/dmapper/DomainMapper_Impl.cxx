@@ -4637,7 +4637,7 @@ static OUString lcl_ParseFormat( const OUString& rCommand )
             // turn date \@ MM into date \@"MM"
             command = OUString::Concat(rCommand.subView(0, delimPos + 2)) + "\"" + o3tl::trim(rCommand.subView(delimPos + 2)) + "\"";
         }
-        return OUString(msfilter::util::findQuotedText(command, "\\@\"", '\"'));
+        return OUString(msfilter::util::findQuotedText(command, u"\\@\"", '\"'));
     }
 
     return OUString();
@@ -7317,7 +7317,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     // command looks like: " SEQ Table \* ARABIC "
                     OUString sCmd(pContext->GetCommand());
                     // find the sequence name, e.g. "SEQ"
-                    std::u16string_view sSeqName = msfilter::util::findQuotedText(sCmd, "SEQ ", '\\');
+                    std::u16string_view sSeqName = msfilter::util::findQuotedText(sCmd, u"SEQ ", '\\');
                     sSeqName = o3tl::trim(sSeqName);
 
                     // create a sequence field master using the sequence name

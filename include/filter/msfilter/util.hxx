@@ -86,7 +86,7 @@ MSFILTER_DLLPUBLIC OUString CreateDOCXStyleId(std::u16string_view aName);
  *
  * Example: SEQ "Figure" \someoption -> "Figure"
  */
-MSFILTER_DLLPUBLIC std::u16string_view findQuotedText( std::u16string_view rCommand, const char* cStartQuote, const sal_Unicode uEndQuote );
+MSFILTER_DLLPUBLIC std::u16string_view findQuotedText( std::u16string_view rCommand, std::u16string_view cStartQuote, const sal_Unicode uEndQuote );
 
 class MSFILTER_DLLPUBLIC WW8ReadFieldParams
 {

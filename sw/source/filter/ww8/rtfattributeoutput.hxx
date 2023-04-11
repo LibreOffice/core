@@ -226,7 +226,7 @@ public:
                    const OUString& rNumberingString,
                    const SvxBrushItem* pBrush) override; //For i120928,to export graphic of bullet
 
-    void WriteField_Impl(const SwField* pField, ww::eField eType, const OUString& rFieldCmd,
+    void WriteField_Impl(const SwField* pField, ww::eField eType, std::u16string_view rFieldCmd,
                          FieldFlags nMode);
     void WriteBookmarks_Impl(std::vector<OUString>& rStarts, std::vector<OUString>& rEnds);
     void WriteAnnotationMarks_Impl(std::vector<OUString>& rStarts, std::vector<OUString>& rEnds);
@@ -663,13 +663,13 @@ public:
 
     // These are used by wwFont::WriteRtf()
     /// Start the font.
-    void StartFont(const OUString& rFamilyName) const;
+    void StartFont(std::u16string_view rFamilyName) const;
 
     /// End the font.
     void EndFont() const;
 
     /// Alternate name for the font.
-    void FontAlternateName(const OUString& rName) const;
+    void FontAlternateName(std::u16string_view rName) const;
 
     /// Font charset.
     void FontCharset(sal_uInt8 nCharSet) const;

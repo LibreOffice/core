@@ -331,14 +331,13 @@ OUString CreateDOCXStyleId(std::u16string_view const aName)
 }
 
 std::u16string_view findQuotedText( std::u16string_view rCommand,
-                const char* cStartQuote, const sal_Unicode uEndQuote )
+                std::u16string_view sStartQuote, const sal_Unicode uEndQuote )
 {
     std::u16string_view sRet;
-    OUString sStartQuote( OUString::createFromAscii(cStartQuote) );
     size_t nStartIndex = rCommand.find( sStartQuote );
     if( nStartIndex != std::u16string_view::npos )
     {
-        sal_Int32 nStartLength = sStartQuote.getLength();
+        sal_Int32 nStartLength = sStartQuote.size();
         size_t nEndIndex = rCommand.find( uEndQuote, nStartIndex + nStartLength);
         if( nEndIndex != std::u16string_view::npos && nEndIndex > nStartIndex )
         {

@@ -1706,10 +1706,10 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart,
 }
 
 void RtfAttributeOutput::WriteField_Impl(const SwField* const pField, ww::eField /*eType*/,
-                                         const OUString& rFieldCmd, FieldFlags nMode)
+                                         std::u16string_view rFieldCmd, FieldFlags nMode)
 {
     // If there are no field instructions, don't export it as a field.
-    bool bHasInstructions = !rFieldCmd.isEmpty();
+    bool bHasInstructions = !rFieldCmd.empty();
     if (FieldFlags::All == nMode)
     {
         if (bHasInstructions)
@@ -3959,7 +3959,7 @@ MSWordExportBase& RtfAttributeOutput::GetExport() { return m_rExport; }
 // These are used by wwFont::WriteRtf()
 
 /// Start the font.
-void RtfAttributeOutput::StartFont(const OUString& rFamilyName) const
+void RtfAttributeOutput::StartFont(std::u16string_view rFamilyName) const
 {
     // write the font name hex-encoded, but without Unicode - Word at least
     // cannot read *both* Unicode and fallback as written by OutString
@@ -3975,7 +3975,7 @@ void RtfAttributeOutput::EndFont() const
 }
 
 /// Alternate name for the font.
-void RtfAttributeOutput::FontAlternateName(const OUString& rName) const
+void RtfAttributeOutput::FontAlternateName(std::u16string_view rName) const
 {
     m_rExport.Strm()
         .WriteChar('{')
@@ -4047,7 +4047,7 @@ void RtfAttributeOutput::FontPitchType(FontPitch ePitch) const
     m_rExport.Strm().WriteNumberAsString(nVal);
 }
 
-static void lcl_AppendSP(OStringBuffer& rBuffer, const char cName[], const OUString& rValue,
+static void lcl_AppendSP(OStringBuffer& rBuffer, std::string_view cName, std::u16string_view rValue,
                          const RtfExport& rExport)
 {
     rBuffer.append("{" OOO_STRING_SVTOOLS_RTF_SP "{"); // "{\sp{"
@@ -4088,7 +4088,7 @@ static OString ExportPICT(const SwFlyFrameFormat* pFlyFrameFormat, const Size& r
                 MirrorGraph eMirror = pAttrSet->Get(RES_GRFATR_MIRRORGRF).GetValue();
                 if (eMirror == MirrorGraph::Vertical || eMirror == MirrorGraph::Both)
                     // Mirror on the vertical axis is a horizontal flip.
-                    lcl_AppendSP(aRet, "fFlipH", "1", rExport);
+                    lcl_AppendSP(aRet, "fFlipH", u"1", rExport);
             }
 
             aRet.append("}"); //"}"

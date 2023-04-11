@@ -575,7 +575,7 @@ void RtfExport::WriteUserPropType(int nType)
     Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_PROPTYPE).WriteNumberAsString(nType);
 }
 
-void RtfExport::WriteUserPropValue(const OUString& rValue)
+void RtfExport::WriteUserPropValue(std::u16string_view rValue)
 {
     Strm().WriteOString("{" OOO_STRING_SVTOOLS_RTF_STATICVAL " ");
     Strm().WriteOString(msfilter::rtfutil::OutString(rValue, m_eDefaultEncoding));
@@ -1182,9 +1182,9 @@ OString RtfExport::getStream()
 
 void RtfExport::resetStream() { m_pStream.reset(); }
 
-void RtfExport::OutUnicode(const char* pToken, const OUString& rContent, bool bUpr)
+void RtfExport::OutUnicode(std::string_view pToken, std::u16string_view rContent, bool bUpr)
 {
-    if (rContent.isEmpty())
+    if (rContent.empty())
         return;
 
     if (!bUpr)
@@ -1197,7 +1197,7 @@ void RtfExport::OutUnicode(const char* pToken, const OUString& rContent, bool bU
         Strm().WriteOString(msfilter::rtfutil::OutStringUpr(pToken, rContent, m_eCurrentEncoding));
 }
 
-void RtfExport::OutDateTime(const char* pStr, const util::DateTime& rDT)
+void RtfExport::OutDateTime(std::string_view pStr, const util::DateTime& rDT)
 {
     Strm().WriteChar('{').WriteOString(pStr).WriteOString(OOO_STRING_SVTOOLS_RTF_YR);
     Strm().WriteNumberAsString(rDT.Year).WriteOString(OOO_STRING_SVTOOLS_RTF_MO);
