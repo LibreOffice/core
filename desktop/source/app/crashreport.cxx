@@ -198,8 +198,7 @@ OUString CrashReporter::getLoggedUnoCommands()
 
     for( auto& unocommand: maloggedUnoCommands)
     {
-        aUnoCommandBuffer.append(aCommandSeperator);
-        aUnoCommandBuffer.append(unocommand);
+        aUnoCommandBuffer.append(aCommandSeperator + unocommand);
         aCommandSeperator=",";
     }
     return aUnoCommandBuffer.makeStringAndClear();
