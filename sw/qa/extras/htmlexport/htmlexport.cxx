@@ -2464,6 +2464,22 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf153923)
     assertXPath(pDoc, "/html/body//dd");
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTdf153923_ReqIF)
+{
+    createSwDoc("TableWithIndent.fodt");
+    ExportToReqif();
+
+    SvMemoryStream aStream;
+    WrapReqifFromTempFile(aStream);
+    xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "//reqif-xhtml:table");
+    // There should be no 'dd' or 'dl' tags, used as a hack for table indentation
+    assertXPath(pDoc, "//reqif-xhtml:dl", 0);
+    assertXPath(pDoc, "//reqif-xhtml:dd", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIfTransparentTifImg)
 {
     // reqIf export must keep the TIF encoding of the image
