@@ -22,10 +22,12 @@
 
 namespace o3tl
 {
-// Like OUString::equalsIgnoreAsciiCase, but for two std::u16string_view:
-inline bool equalsAscii(std::u16string_view s1, const char* s2)
+// Like OUString::equalsAscii, but for std::u16string_view:
+inline bool equalsAscii(std::u16string_view s1, std::string_view s2)
 {
-    return rtl_ustr_ascii_compare_WithLength(s1.data(), s1.size(), s2) == 0;
+    return s1.size() == s2.size()
+           && rtl_ustr_ascii_shortenedCompare_WithLength(s1.data(), s1.size(), s2.data(), s2.size())
+                  == 0;
 }
 
 // Like OUString::equalsAsciiL, but for std::u16string_view:
