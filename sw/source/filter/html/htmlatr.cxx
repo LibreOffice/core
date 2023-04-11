@@ -136,6 +136,7 @@ void SwHTMLWriter::OutAndSetDefList( sal_uInt16 nNewLvl )
             if( m_bLFPossible )
                 OutNewLine();
             HTMLOutFuncs::Out_AsciiTag( Strm(), Concat2View(GetNamespace() + OOO_STRING_SVTOOLS_HTML_deflist) );
+            HTMLOutFuncs::Out_AsciiTag( Strm(), Concat2View(GetNamespace() + OOO_STRING_SVTOOLS_HTML_dd) );
             IncIndentLevel();
             m_bLFPossible = true;
         }
@@ -147,6 +148,7 @@ void SwHTMLWriter::OutAndSetDefList( sal_uInt16 nNewLvl )
             DecIndentLevel();
             if( m_bLFPossible )
                 OutNewLine();
+            HTMLOutFuncs::Out_AsciiTag( Strm(), Concat2View(GetNamespace() + OOO_STRING_SVTOOLS_HTML_dd), false );
             HTMLOutFuncs::Out_AsciiTag( Strm(), Concat2View(GetNamespace() + OOO_STRING_SVTOOLS_HTML_deflist), false );
             m_bLFPossible = true;
         }
