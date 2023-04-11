@@ -52,7 +52,6 @@
 #include <com/sun/star/io/XInputStream.hpp>
 
 
-using com::sun::star::lang::XUnoTunnel;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::ucb::SimpleFileAccess;

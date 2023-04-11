@@ -47,7 +47,6 @@ namespace frm
     using ::com::sun::star::beans::PropertyExistException;
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::beans::XMultiPropertySet;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::uno::RuntimeException;

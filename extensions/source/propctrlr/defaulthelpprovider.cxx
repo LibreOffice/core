@@ -47,7 +47,6 @@ namespace pcr
     using ::com::sun::star::ucb::AlreadyInitializedException;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::awt::XWindow;
 
     DefaultHelpProvider::DefaultHelpProvider()

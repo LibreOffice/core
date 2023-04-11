@@ -34,14 +34,12 @@ namespace frm
 
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::frame::XModel;
-    using ::com::sun::star::ui::XImageManager;
     using ::com::sun::star::ui::XUIConfigurationManagerSupplier;
     using ::com::sun::star::ui::XUIConfigurationManager;
     using ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier;

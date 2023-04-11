@@ -29,7 +29,6 @@ namespace pcr
 {
 
 
-    using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Any;

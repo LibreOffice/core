@@ -43,12 +43,10 @@ namespace pcr
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::inspection::XPropertyControl;
     using ::com::sun::star::inspection::XPropertyControlContext;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::graphic::GraphicProvider;
     using ::com::sun::star::graphic::XGraphicProvider;
     using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::graphic::XGraphic;
 
     namespace PropertyLineElement = ::com::sun::star::inspection::PropertyLineElement;

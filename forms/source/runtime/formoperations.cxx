@@ -86,7 +86,6 @@ namespace frm
     using namespace ::com::sun::star::sdbc;
     using ::com::sun::star::form::XForm;
     using ::com::sun::star::ucb::AlreadyInitializedException;
-    using ::com::sun::star::util::XModifyBroadcaster;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::beans::PropertyChangeEvent;

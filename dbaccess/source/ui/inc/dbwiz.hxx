@@ -37,7 +37,6 @@ namespace com::sun::star {
 }
 
 using vcl::WizardTypes::WizardState;
-using vcl::WizardTypes::CommitPageReason;
 
 namespace dbaccess
 {

@@ -73,14 +73,11 @@ using ::com::sun::star::drawing::TextVerticalAdjust;
 #endif
 
 namespace oox {
-using ::com::sun::star::container::XIndexReplace;
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
-using ::com::sun::star::drawing::TextHorizontalAdjust;
-using ::com::sun::star::drawing::TextVerticalAdjust;
 
 namespace {
 

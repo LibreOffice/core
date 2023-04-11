@@ -38,7 +38,6 @@ namespace com::sun::star {
 }
 
 using vcl::WizardTypes::WizardState;
-using vcl::WizardTypes::CommitPageReason;
 using vcl::RoadmapWizardTypes::PathId;
 
 namespace dbaui
