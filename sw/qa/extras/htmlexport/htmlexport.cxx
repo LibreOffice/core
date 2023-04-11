@@ -2460,8 +2460,9 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf153923)
     // Without the fix in place, this would fail
     CPPUNIT_ASSERT(pDoc);
 
+    assertXPath(pDoc, "/html/body//dl", 3);
     // The 'dd' tag was not closed
-    assertXPath(pDoc, "/html/body//dd");
+    assertXPath(pDoc, "/html/body//dd", 3);
 }
 
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTdf153923_ReqIF)
