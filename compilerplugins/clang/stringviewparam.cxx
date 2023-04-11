@@ -141,7 +141,8 @@ DeclRefExpr const* relevantCXXMemberCallExpr(CXXMemberCallExpr const* expr)
             || n == "indexOf" || n == "lastIndexOf" || n == "compareTo" || n == "match"
             || n == "trim" || n == "toInt32" || n == "toUInt32" || n == "toInt64" || n == "toDouble"
             || n == "equalsIgnoreAsciiCase" || n == "compareToIgnoreAsciiCase" || n == "getToken"
-            || n == "copy" || n == "equalsAscii" || n == "matchIgnoreAsciiCase")
+            || n == "copy" || n == "equalsAscii" || n == "equalsAsciiL"
+            || n == "matchIgnoreAsciiCase")
         {
             good = true;
         }

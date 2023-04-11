@@ -39,6 +39,7 @@
 #include <tools/debug.hxx>
 #include <utility>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 
 namespace basctl
 {
@@ -107,7 +108,7 @@ void LocalizationMgr::handleTranslationbar ()
 // TODO: -> export from toolkit
 
 
-static bool isLanguageDependentProperty( const OUString& aName )
+static bool isLanguageDependentProperty( std::u16string_view aName )
 {
     static struct Prop
     {
@@ -126,7 +127,7 @@ static bool isLanguageDependentProperty( const OUString& aName )
     };
 
     for (Prop const* pProp = vProp; pProp->sName; ++pProp)
-        if (aName.equalsAsciiL(pProp->sName, pProp->nNameLength))
+        if (o3tl::equalsAscii(aName, std::string_view(pProp->sName, pProp->nNameLength)))
             return true;
     return false;
 }

@@ -365,7 +365,7 @@ bool StringView::VisitCXXMemberCallExpr(CXXMemberCallExpr const* expr)
     {
         auto const dc = loplugin::DeclCheck(expr->getMethodDecl());
         if (dc.Function("toInt32") || dc.Function("toUInt32") || dc.Function("toInt64")
-            || dc.Function("toDouble") || dc.Function("equalsAscii")
+            || dc.Function("toDouble") || dc.Function("equalsAscii") || dc.Function("equalsAsciiL")
             || dc.Function("equalsIgnoreAsciiCase") || dc.Function("compareToIgnoreAsciiCase")
             || dc.Function("matchIgnoreAsciiCase") || dc.Function("trim")
             || dc.Function("startsWith") || dc.Function("endsWith") || dc.Function("match"))
