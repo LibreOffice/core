@@ -13,7 +13,6 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
-#include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -27,19 +26,13 @@
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 
 #include <tools/UnitConversion.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
-#include <unotools/streamwrap.hxx>
-#include <comphelper/propertysequence.hxx>
 #include <svx/svdpage.hxx>
-#include <unotools/ucbstreamhelper.hxx>
-#include <o3tl/string_view.hxx>
 
 #include <drawdoc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
@@ -70,24 +63,6 @@ public:
             return pResetter;
         }
         return nullptr;
-    }
-
-protected:
-    /// Copy&paste helper.
-    bool paste(std::u16string_view rFilename, const uno::Reference<text::XTextRange>& xTextRange)
-    {
-        uno::Reference<document::XFilter> xFilter(m_xSFactory->createInstance("com.sun.star.comp.Writer.WriterFilter"), uno::UNO_QUERY_THROW);
-        uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
-        xImporter->setTargetDocument(mxComponent);
-        std::unique_ptr<SvStream> pStream = utl::UcbStreamHelper::CreateStream(m_directories.getURLFromSrc(u"/sw/qa/extras/ooxmlexport/data/") + rFilename, StreamMode::READ);
-        uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
-        uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
-        {
-            {"InputStream", uno::Any(xStream)},
-            {"InputMode", uno::Any(true)},
-            {"TextInsertModeRange", uno::Any(xTextRange)},
-        }));
-        return xFilter->filter(aDescriptor);
     }
 };
 
@@ -1160,7 +1135,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94374)
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
     // This failed: it wasn't possible to insert a DOCX document into an existing Writer one.
-    CPPUNIT_ASSERT(paste(u"tdf94374.docx", xEnd));
+    paste(u"ooxmlexport/data/tdf94374.docx", "com.sun.star.comp.Writer.WriterFilter", xEnd);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf83300, "tdf83300.docx")

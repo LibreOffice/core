@@ -156,7 +156,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo62044)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste(u"rtfexport/data/fdo62044-paste.rtf", xEnd);
+    paste(u"rtfexport/data/fdo62044-paste.rtf", "com.sun.star.comp.Writer.RtfFilter", xEnd);
 
     uno::Reference<beans::XPropertySet> xPropertySet(
         getStyles("ParagraphStyles")->getByName("Heading 1"), uno::UNO_QUERY);

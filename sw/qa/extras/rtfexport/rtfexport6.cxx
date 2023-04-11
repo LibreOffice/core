@@ -146,7 +146,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf90260Nopar)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste(u"rtfexport/data/tdf90260-nopar.rtf", xEnd);
+    paste(u"rtfexport/data/tdf90260-nopar.rtf", "com.sun.star.comp.Writer.RtfFilter", xEnd);
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
 }
 
@@ -324,7 +324,7 @@ CPPUNIT_TEST_FIXTURE(Test, testClassificatonPasteLevels)
     // Classified source and classified destination, but internal only has a
     // higher level than confidential: nothing should happen.
     OUString aOld = xText->getString();
-    paste(u"rtfexport/data/classification-yes.rtf", xEnd);
+    paste(u"rtfexport/data/classification-yes.rtf", "com.sun.star.comp.Writer.RtfFilter", xEnd);
     CPPUNIT_ASSERT_EQUAL(aOld, xText->getString());
 }
 

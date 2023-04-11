@@ -54,11 +54,11 @@ SwModelTestBase::FlySplitGuard::~FlySplitGuard()
     pChanges->commit();
 }
 
-void SwModelTestBase::paste(std::u16string_view aFilename,
+void SwModelTestBase::paste(std::u16string_view aFilename, OUString aInstance,
                             uno::Reference<text::XTextRange> const& xTextRange)
 {
-    uno::Reference<document::XFilter> xFilter(
-        m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XFilter> xFilter(m_xSFactory->createInstance(aInstance),
+                                              uno::UNO_QUERY_THROW);
     uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
     xImporter->setTargetDocument(mxComponent);
     std::unique_ptr<SvStream> pStream = utl::UcbStreamHelper::CreateStream(

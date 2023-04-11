@@ -104,7 +104,7 @@ protected:
     virtual OUString getTestName() { return OUString(); }
 
     /// Copy&paste helper.
-    void paste(std::u16string_view aFilename, css::uno::Reference<css::text::XTextRange> const& xTextRange);
+    void paste(std::u16string_view aFilename, OUString aInstance, css::uno::Reference<css::text::XTextRange> const& xTextRange);
 
 public:
     /// Temporarily enables DOCX::ImportFloatingTableAsSplitFly.
