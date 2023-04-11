@@ -71,7 +71,6 @@ namespace xmloff
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::text;
     using namespace ::comphelper;
-    using ::com::sun::star::xml::sax::XAttributeList;
 
 #define PROPID_VALUE            1
 #define PROPID_CURRENT_VALUE    2

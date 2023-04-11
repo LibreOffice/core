@@ -41,7 +41,6 @@ using namespace ::xmloff::token;
 
 using ::com::sun::star::container::XNameReplace;
 using ::com::sun::star::document::XEventsSupplier;
-using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;

@@ -32,7 +32,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
-using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::container::XNameReplace;
 using ::com::sun::star::document::XEventsSupplier;

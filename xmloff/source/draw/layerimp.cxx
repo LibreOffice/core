@@ -45,7 +45,6 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
-using ::xmloff::token::IsXMLToken;
 
 namespace {
 

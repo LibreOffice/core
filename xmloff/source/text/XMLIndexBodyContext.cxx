@@ -24,7 +24,6 @@
 #include <rtl/ustring.hxx>
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::xml::sax::XAttributeList;
 
 
 XMLIndexBodyContext::XMLIndexBodyContext( SvXMLImport& rImport ) :

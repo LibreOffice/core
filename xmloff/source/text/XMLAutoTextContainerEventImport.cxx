@@ -31,9 +31,7 @@
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::container::XNameReplace;
-using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_EVENT_LISTENERS;
 
 

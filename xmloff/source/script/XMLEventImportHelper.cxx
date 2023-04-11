@@ -25,9 +25,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlerror.hxx>
 
-using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
 
 XMLEventImportHelper::XMLEventImportHelper() :
     pEventNameMap(new NameMap)

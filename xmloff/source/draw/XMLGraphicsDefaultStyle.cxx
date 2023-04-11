@@ -43,7 +43,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
 
-using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_TEXT_PROPERTIES;
 using ::xmloff::token::XML_GRAPHIC_PROPERTIES;
 using ::xmloff::token::XML_PARAGRAPH_PROPERTIES;

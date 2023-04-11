@@ -34,7 +34,6 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 
-using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::xforms::XModel2;
 
 using namespace com::sun::star::uno;

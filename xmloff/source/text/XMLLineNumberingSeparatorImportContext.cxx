@@ -30,8 +30,6 @@
 
 using namespace ::com::sun::star::uno;
 
-using ::com::sun::star::xml::sax::XAttributeList;
-using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_INCREMENT;
 
 

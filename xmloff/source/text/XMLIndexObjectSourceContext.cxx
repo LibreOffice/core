@@ -36,8 +36,6 @@
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
-using ::com::sun::star::xml::sax::XAttributeList;
-using ::xmloff::token::IsXMLToken;
 using namespace ::xmloff::token;
 
 

@@ -27,7 +27,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_MASTER_PAGE;
 
 

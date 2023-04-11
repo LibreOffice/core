@@ -37,7 +37,6 @@ using ::com::sun::star::uno::Type;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::document::XEventsSupplier;
 using ::com::sun::star::container::XNameReplace;
-using ::com::sun::star::lang::XMultiServiceFactory;
 using ::xmloff::token::XML_AUTO_TEXT_EVENTS;
 
 XMLAutoTextEventImport::XMLAutoTextEventImport(

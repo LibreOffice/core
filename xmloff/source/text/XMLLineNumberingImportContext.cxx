@@ -39,7 +39,6 @@ using namespace ::com::sun::star::style;
 using namespace ::xmloff::token;
 
 using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::xml::sax::XFastAttributeList;
 using ::com::sun::star::text::XLineNumberingProperties;
 

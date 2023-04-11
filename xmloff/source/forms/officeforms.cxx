@@ -38,7 +38,6 @@ namespace xmloff
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::xml;
     using ::xmloff::token::XML_FORMS;
-    using ::com::sun::star::xml::sax::XAttributeList;
     using ::com::sun::star::xml::sax::XFastAttributeList;
 
     //= OFormsRootImport

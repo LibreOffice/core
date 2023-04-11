@@ -39,7 +39,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
-using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::xml::sax::XFastAttributeList;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::XPropertySet;

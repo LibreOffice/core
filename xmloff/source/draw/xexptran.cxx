@@ -36,8 +36,6 @@
 
 using namespace ::com::sun::star;
 
-using std::make_unique;
-
 // parsing help functions for simple chars
 static void Imp_SkipSpaces(std::u16string_view rStr, sal_Int32& rPos, const sal_Int32 nLen)
 {

@@ -52,7 +52,6 @@ using ::com::sun::star::container::XIndexContainer;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::document::XEventsSupplier;

@@ -37,7 +37,6 @@ using namespace ::xmloff::token;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::text::XTextCursor;
 using namespace ::com::sun::star;
-using ::com::sun::star::xml::sax::XAttributeList;
 
 
 XMLChangedRegionImportContext::XMLChangedRegionImportContext(SvXMLImport& rImport) :

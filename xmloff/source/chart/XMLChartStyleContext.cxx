@@ -32,7 +32,6 @@
 #include "XMLChartPropertyContext.hxx"
 
 using namespace com::sun::star;
-using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_DATA_STYLE_NAME;
 using ::xmloff::token::XML_PERCENTAGE_DATA_STYLE_NAME;
 using ::xmloff::token::XML_TEXT_PROPERTIES;
