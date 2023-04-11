@@ -5129,20 +5129,20 @@ sax_fastparser::FSHelperPtr DrawingML::CreateOutputStream (
     const OUString& sFullStream,
     std::u16string_view sRelativeStream,
     const Reference< XOutputStream >& xParentRelation,
-    const char* sContentType,
-    const char* sRelationshipType,
+    const OUString& sContentType,
+    const OUString& sRelationshipType,
     OUString* pRelationshipId )
 {
     OUString sRelationshipId;
     if (xParentRelation.is())
-        sRelationshipId = GetFB()->addRelation( xParentRelation, OUString::createFromAscii( sRelationshipType), sRelativeStream );
+        sRelationshipId = GetFB()->addRelation( xParentRelation, sRelationshipType, sRelativeStream );
     else
-        sRelationshipId = GetFB()->addRelation( OUString::createFromAscii( sRelationshipType ), sRelativeStream );
+        sRelationshipId = GetFB()->addRelation( sRelationshipType, sRelativeStream );
 
     if( pRelationshipId )
         *pRelationshipId = sRelationshipId;
 
-    sax_fastparser::FSHelperPtr p = GetFB()->openFragmentStreamWithSerializer( sFullStream, OUString::createFromAscii( sContentType ) );
+    sax_fastparser::FSHelperPtr p = GetFB()->openFragmentStreamWithSerializer( sFullStream, sContentType );
 
     return p;
 }

@@ -859,7 +859,7 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
             sRelativeStream,
             pFS->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.drawingml.chart+xml",
-            OUStringToOString(oox::getRelationship(Relationship::CHART), RTL_TEXTENCODING_UTF8).getStr(),
+            oox::getRelationship(Relationship::CHART),
             &sId );
 
     XmlFilterBase* pFB = GetFB();
@@ -1081,7 +1081,7 @@ void ChartExport::exportAdditionalShapes( const Reference< css::chart::XChartDoc
                 sRelativeStream,
                 GetFS()->getOutputStream(),
                 "application/vnd.openxmlformats-officedocument.drawingml.chartshapes+xml",
-                OUStringToOString(oox::getRelationship(Relationship::CHARTUSERSHAPES), RTL_TEXTENCODING_UTF8).getStr(),
+                oox::getRelationship(Relationship::CHARTUSERSHAPES),
                 &sId);
 
             GetFS()->singleElementNS(XML_c, XML_userShapes, FSNS(XML_r, XML_id), sId);

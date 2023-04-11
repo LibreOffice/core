@@ -380,8 +380,8 @@ public:
                                         const OUString& sFullStream,
                                         std::u16string_view sRelativeStream,
                                         const css::uno::Reference< css::io::XOutputStream >& xParentRelation,
-                                        const char* sContentType,
-                                        const char* sRelationshipType,
+                                        const OUString& sContentType,
+                                        const OUString& sRelationshipType,
                                         OUString* pRelationshipId );
 
 };
