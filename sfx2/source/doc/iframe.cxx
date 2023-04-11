@@ -33,10 +33,12 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <svl/itemprop.hxx>
+#include <sfx2/docfile.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxdlg.hxx>
@@ -164,13 +166,18 @@ sal_Bool SAL_CALL IFrameObject::load(
         uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( mxContext ) );
         xTrans->parseStrict( aTargetURL );
 
+        uno::Reference<frame::XFramesSupplier> xParentFrame = xFrame->getCreator();
+        SfxObjectShell* pDoc = SfxMacroLoader::GetObjectShell(xParentFrame);
+
         if (INetURLObject(aTargetURL.Complete).GetProtocol() == INetProtocol::Macro)
         {
-            uno::Reference<frame::XFramesSupplier> xParentFrame = xFrame->getCreator();
-            SfxObjectShell* pDoc = SfxMacroLoader::GetObjectShell(xParentFrame);
             if (pDoc && !pDoc->AdjustMacroMode())
                 return false;
         }
+
+        OUString sReferer;
+        if (pDoc && pDoc->HasName())
+            sReferer = pDoc->GetMedium()->GetName();
 
         DBG_ASSERT( !mxFrame.is(), "Frame already existing!" );
         VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
@@ -194,11 +201,11 @@ sal_Bool SAL_CALL IFrameObject::load(
         if ( xFramesSupplier.is() )
             mxFrame->setCreator( xFramesSupplier );
 
-        uno::Sequence < beans::PropertyValue > aProps(2);
-        aProps[0].Name = "PluginMode";
-        aProps[0].Value <<= sal_Int16(2);
-        aProps[1].Name = "ReadOnly";
-        aProps[1].Value <<= true;
+        uno::Sequence < beans::PropertyValue > aProps{
+            comphelper::makePropertyValue("PluginMode", sal_Int16(2)),
+            comphelper::makePropertyValue("ReadOnly", true),
+            comphelper::makePropertyValue("Referer", sReferer)
+        };
         uno::Reference < frame::XDispatch > xDisp = mxFrame->queryDispatch( aTargetURL, "_self", 0 );
         if ( xDisp.is() )
             xDisp->dispatch( aTargetURL, aProps );
