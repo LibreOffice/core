@@ -19,11 +19,12 @@
 #ifndef INCLUDED_SW_INC_SWTBLFMT_HXX
 #define INCLUDED_SW_INC_SWTBLFMT_HXX
 
+#include "swdllapi.h"
 #include "frmfmt.hxx"
 
 #include <tools/solar.h>
 
-class SAL_DLLPUBLIC_RTTI SwTableFormat final : public SwFrameFormat
+class SW_DLLPUBLIC SwTableFormat final : public SwFrameFormat
 {
     friend class SwDoc;
 

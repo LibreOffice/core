@@ -1260,7 +1260,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf128959)
                 "portion", "amet commodo magna eros quis urna.");
 
     // Also check that the widow control for the paragraph is not turned off:
-    SwFrameFormats& rTableFormats = *pDocument->GetTableFrameFormats();
+    sw::TableFrameFormats& rTableFormats = *pDocument->GetTableFrameFormats();
     SwFrameFormat* pTableFormat = rTableFormats[0];
     SwTable* pTable = SwTable::FindTable(pTableFormat);
     const SwTableBox* pCell = pTable->GetTableBox("A1");

@@ -3875,8 +3875,8 @@ OUString SwDoc::GetUniqueTableName() const
 
     for( size_t n = 0; n < mpTableFrameFormatTable->size(); ++n )
     {
-        const SwFrameFormat* pFormat = (*mpTableFrameFormatTable)[ n ];
-        if( !pFormat->IsDefault() && IsUsed( *pFormat )  &&
+        const SwTableFormat* pFormat = (*mpTableFrameFormatTable)[ n ];
+        if( !pFormat->IsDefault() && IsUsed( *pFormat ) &&
             pFormat->GetName().startsWith( aName ) )
         {
             // Get number and set the Flag
@@ -4451,11 +4451,11 @@ void SwDoc::UnProtectTables( const SwPaM& rPam )
 
     bool bChgd = false, bHasSel = rPam.HasMark() ||
                                     rPam.GetNext() != &rPam;
-    SwFrameFormats& rFormats = *GetTableFrameFormats();
+    sw::TableFrameFormats& rFormats = *GetTableFrameFormats();
     SwTable* pTable;
     const SwTableNode* pTableNd;
     for( auto n = rFormats.size(); n ; )
-        if( nullptr != (pTable = SwTable::FindTable( rFormats[ --n ] )) &&
+        if( nullptr != (pTable = SwTable::FindTable( rFormats[ --n ])) &&
             nullptr != (pTableNd = pTable->GetTableNode() ) &&
             pTableNd->GetNodes().IsDocNodes() )
         {

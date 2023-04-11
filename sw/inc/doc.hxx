@@ -34,6 +34,7 @@
 #include <editeng/numitem.hxx>
 #include "tox.hxx"
 #include "frmfmt.hxx"
+#include "frameformats.hxx"
 #include "charfmt.hxx"
 #include "docary.hxx"
 #include "charformats.hxx"
@@ -163,6 +164,7 @@ namespace sw {
     class DocumentLayoutManager;
     class DocumentStylePoolManager;
     class DocumentExternalDataManager;
+    template<class T> class FrameFormats;
     class GrammarContact;
     class OnlineAccessibilityCheck;
 }
@@ -248,7 +250,7 @@ class SW_DLLPUBLIC SwDoc final
     std::unique_ptr<SwCharFormats>     mpCharFormatTable;
     std::unique_ptr<SwFrameFormats>    mpSpzFrameFormatTable;
     std::unique_ptr<SwSectionFormats>  mpSectionFormatTable;
-    std::unique_ptr<SwFrameFormats>    mpTableFrameFormatTable; //< For tables
+    std::unique_ptr<sw::TableFrameFormats>    mpTableFrameFormatTable; //< For tables
     std::unique_ptr<SwTextFormatColls> mpTextFormatCollTable;   //< FormatCollections
     std::unique_ptr<SwGrfFormatColls>  mpGrfFormatCollTable;
 
@@ -819,10 +821,10 @@ public:
                                     SwGrfFormatColl *pDerivedFrom);
 
     // Table formatting
-    const SwFrameFormats* GetTableFrameFormats() const  { return mpTableFrameFormatTable.get(); }
-          SwFrameFormats* GetTableFrameFormats()        { return mpTableFrameFormatTable.get(); }
+    const sw::TableFrameFormats* GetTableFrameFormats() const  { return mpTableFrameFormatTable.get(); }
+          sw::TableFrameFormats* GetTableFrameFormats()        { return mpTableFrameFormatTable.get(); }
     size_t GetTableFrameFormatCount( bool bUsed ) const;
-    SwFrameFormat& GetTableFrameFormat(size_t nFormat, bool bUsed ) const;
+    SwTableFormat& GetTableFrameFormat(size_t nFormat, bool bUsed ) const;
     SwTableFormat* MakeTableFrameFormat(const OUString &rFormatName, SwFrameFormat *pDerivedFrom);
     void        DelTableFrameFormat( SwTableFormat* pFormat );
     SwTableFormat* FindTableFormatByName( const OUString& rName, bool bAll = false ) const;

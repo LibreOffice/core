@@ -236,7 +236,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCenteredTableCSSImport)
 
     // Then make sure that the table is centered:
     SwDoc* pDoc = getSwDoc();
-    const SwFrameFormats& rTableFormats = *pDoc->GetTableFrameFormats();
+    const sw::TableFrameFormats& rTableFormats = *pDoc->GetTableFrameFormats();
     const SwFrameFormat* pTableFormat = rTableFormats[0];
     sal_Int16 eHoriOrient = pTableFormat->GetHoriOrient().GetHoriOrient();
     // Without the accompanying fix in place, this test would have failed with:

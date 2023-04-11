@@ -4420,7 +4420,7 @@ sal_Bool SAL_CALL SwXTextTableStyle::isInUse()
 
     SwAutoFormatGetDocNode aGetHt( &m_pDocShell->GetDoc()->GetNodes() );
 
-    for (SwFrameFormat* const & pFormat : *m_pDocShell->GetDoc()->GetTableFrameFormats())
+    for (const SwTableFormat* pFormat : *m_pDocShell->GetDoc()->GetTableFrameFormats())
     {
         if (!pFormat->GetInfo(aGetHt))
         {

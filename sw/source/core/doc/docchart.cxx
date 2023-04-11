@@ -81,10 +81,8 @@ void SwDoc::DoUpdateAllCharts()
     if( !pVSh )
         return;
 
-    const SwFrameFormats& rTableFormats = *GetTableFrameFormats();
-    for( size_t n = 0; n < rTableFormats.size(); ++n )
+    for(const SwTableFormat* pFormat: *GetTableFrameFormats())
     {
-        const SwFrameFormat* pFormat = rTableFormats[ n ];
         if( SwTable* pTmpTable = SwTable::FindTable( pFormat ) )
             if( const SwTableNode* pTableNd = pTmpTable->GetTableNode() )
                 if( pTableNd->GetNodes().IsDocNodes() )
@@ -157,10 +155,8 @@ void SwDoc::SetTableName( SwFrameFormat& rTableFormat, const OUString &rNewName 
     bool bNameFound = rNewName.isEmpty();
     if( !bNameFound )
     {
-        const SwFrameFormats& rTable = *GetTableFrameFormats();
-        for( size_t i = rTable.size(); i; )
+        for(const SwTableFormat* pFormat: *GetTableFrameFormats())
         {
-            const SwFrameFormat* pFormat = rTable[ --i ];
             if( !pFormat->IsDefault() &&
                 pFormat->GetName() == rNewName && IsUsed( *pFormat ) )
             {

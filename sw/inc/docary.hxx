@@ -49,6 +49,7 @@ public:
 
     // default linear search implementation, some subclasses will override with a more efficient search
     virtual SwFormat* FindFormatByName(const OUString& rName) const;
+    virtual void Rename(const SwFrameFormat&, const OUString&) {};
 
     SwFormatsBase() = default;
     SwFormatsBase(SwFormatsBase const &) = default;

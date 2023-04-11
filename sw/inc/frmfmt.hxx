@@ -53,8 +53,11 @@ namespace sw
             : SfxHint(SfxHintId::SwFindSdrObject), m_rpObject(rpObject) {};
         virtual ~FindSdrObjectHint() override;
     };
+    template<class T> class FrameFormats;
 }
+class SwFormatsBase;
 class SwFrameFormats;
+class SwTableFormat;
 
 /// Style of a layout element.
 class SW_DLLPUBLIC SwFrameFormat
@@ -64,6 +67,7 @@ class SW_DLLPUBLIC SwFrameFormat
     friend class SwPageDesc;    ///< Is allowed to call protected CTor.
     friend class ::sw::DocumentLayoutManager; ///< Is allowed to call protected CTor.
     friend class SwFrameFormats;     ///< Is allowed to update the list backref.
+    friend class sw::FrameFormats<SwTableFormat*>;     ///< Is allowed to update the list backref.
     friend class SwTextBoxHelper;
     friend class SwUndoFlyBase; ///< calls SetOtherTextBoxFormat
 
@@ -73,7 +77,7 @@ class SW_DLLPUBLIC SwFrameFormat
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maFillAttributes;
 
     // The assigned SwFrmFmt list.
-    SwFrameFormats *m_ffList;
+    SwFormatsBase* m_ffList;
 
     std::shared_ptr< SwTextBoxNode > m_pOtherTextBoxFormats;
 

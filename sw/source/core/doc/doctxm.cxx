@@ -1619,9 +1619,8 @@ void SwTOXBaseSection::UpdateTable(const SwTextNode* pOwnChapterNode,
 {
     SwDoc* pDoc = GetFormat()->GetDoc();
     SwNodes& rNds = pDoc->GetNodes();
-    const SwFrameFormats& rArr = *pDoc->GetTableFrameFormats();
 
-    for( auto pFrameFormat : rArr )
+    for(SwTableFormat* pFrameFormat: *pDoc->GetTableFrameFormats())
     {
         ::SetProgressState( 0, pDoc->GetDocShell() );
 

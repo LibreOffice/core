@@ -736,7 +736,7 @@ void SwDoc::DelFrameFormat( SwFrameFormat *pFormat, bool bBroadcast )
 
 void SwDoc::DelTableFrameFormat( SwTableFormat *pFormat )
 {
-    SwFrameFormats::const_iterator it = mpTableFrameFormatTable->find( pFormat );
+    auto it = mpTableFrameFormatTable->find( pFormat );
     OSL_ENSURE( it != mpTableFrameFormatTable->end(), "Format not found," );
     mpTableFrameFormatTable->erase( it );
     delete pFormat;
@@ -775,7 +775,7 @@ size_t SwDoc::GetTableFrameFormatCount(bool bUsed) const
 
     SwAutoFormatGetDocNode aGetHt(&GetNodes());
     size_t nCount = 0;
-    for (SwFrameFormat* const & pFormat : *mpTableFrameFormatTable)
+    for (const SwTableFormat* pFormat: *mpTableFrameFormatTable)
     {
         if (!pFormat->GetInfo(aGetHt))
             nCount++;
@@ -783,18 +783,18 @@ size_t SwDoc::GetTableFrameFormatCount(bool bUsed) const
     return nCount;
 }
 
-SwFrameFormat& SwDoc::GetTableFrameFormat(size_t nFormat, bool bUsed) const
+SwTableFormat& SwDoc::GetTableFrameFormat(size_t nFormat, bool bUsed) const
 {
     if (!bUsed)
     {
-        return *((*mpTableFrameFormatTable)[nFormat]);
+        return *const_cast<SwTableFormat*>((*mpTableFrameFormatTable)[nFormat]);
     }
 
     SwAutoFormatGetDocNode aGetHt(&GetNodes());
 
     size_t index = 0;
 
-    for (SwFrameFormat* const & pFormat : *mpTableFrameFormatTable)
+    for(SwTableFormat* pFormat: *mpTableFrameFormatTable)
     {
         if (!pFormat->GetInfo(aGetHt))
         {
@@ -2174,4 +2174,15 @@ void SwFrameFormats::newDefault( const_iterator const& position )
     m_PosIndex.relocate( begin(), position );
 }
 
+void SwFrameFormats::Rename(const SwFrameFormat& rFormat, const OUString& rNewName)
+{
+    iterator it = find(const_cast<SwFrameFormat*>(&rFormat));
+    assert(end() != it);
+    const auto sOldName = rFormat.GetName();
+    auto fRenamer = [rNewName](SwFormat* pFormat) { pFormat->SwFormat::SetFormatName(rNewName, false); };
+    auto fRenamerUndo = [sOldName](SwFormat* pFormat) { pFormat->SwFormat::SetFormatName(sOldName, false); };
+    bool const renamed = m_PosIndex.modify(it, fRenamer, fRenamerUndo);
+    assert(renamed);
+    (void)renamed; // unused in NDEBUG
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

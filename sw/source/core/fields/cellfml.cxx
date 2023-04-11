@@ -748,11 +748,11 @@ OUString SwTableFormula::ScanString( FnScanFormula fnFormula, const SwTable& rTa
 
 const SwTable* SwTableFormula::FindTable( SwDoc& rDoc, std::u16string_view rNm )
 {
-    const SwFrameFormats& rTableFormats = *rDoc.GetTableFrameFormats();
+    const sw::TableFrameFormats& rTableFormats = *rDoc.GetTableFrameFormats();
     const SwTable* pTmpTable = nullptr, *pRet = nullptr;
     for( auto nFormatCnt = rTableFormats.size(); nFormatCnt; )
     {
-        SwFrameFormat* pFormat = rTableFormats[ --nFormatCnt ];
+        SwTableFormat* pFormat = rTableFormats[ --nFormatCnt ];
         // if we are called from Sw3Writer, a number is dependent on the format name
         SwTableBox* pFBox;
         if ( rNm == o3tl::getToken(pFormat->GetName(), 0, 0x0a) &&

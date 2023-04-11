@@ -488,12 +488,11 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
         case ContentTypeId::TABLE     :
         {
             const size_t nCount = m_pWrtShell->GetTableFrameFormatCount(true);
-            const SwFrameFormats* pFrameFormats = m_pWrtShell->GetDoc()->GetTableFrameFormats();
+            const sw::TableFrameFormats* pFrameFormats = m_pWrtShell->GetDoc()->GetTableFrameFormats();
             SwAutoFormatGetDocNode aGetHt(&m_pWrtShell->GetNodes());
             for(size_t n = 0, i = 0; i < nCount + n; ++i)
             {
-                const SwTableFormat& rTableFormat =
-                        *static_cast<SwTableFormat*>(pFrameFormats->GetFormat(i));
+                const SwTableFormat& rTableFormat = *(*pFrameFormats)[i];
                 if (rTableFormat.GetInfo(aGetHt))  // skip deleted tables
                 {
                     n++;
@@ -5445,10 +5444,8 @@ void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
             }
             else if (nType == ContentTypeId::TABLE)
             {
-                if (const SwFrameFormats* pFrameFormats =
-                        m_pActiveShell->GetDoc()->GetTableFrameFormats())
-                    if (const SwFrameFormat* pFrameFormat =
-                            pFrameFormats->FindFormatByName(pCnt->GetName()))
+                if (const sw::TableFrameFormats* pFrameFormats = m_pActiveShell->GetDoc()->GetTableFrameFormats())
+                    if (const SwTableFormat* pFrameFormat = pFrameFormats->FindFrameFormatByName(pCnt->GetName()))
                     {
                         SwTable* pTable = SwTable::FindTable(pFrameFormat);
                         if (pTable)
@@ -5545,13 +5542,11 @@ void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
             {
                 std::vector<const SwNode*> aNodesArr;
                 const size_t nCount = m_pActiveShell->GetTableFrameFormatCount(false);
-                const SwFrameFormats* pFrameFormats =
-                        m_pActiveShell->GetDoc()->GetTableFrameFormats();
+                const sw::TableFrameFormats& rTableFormats = *m_pActiveShell->GetDoc()->GetTableFrameFormats();
                 SwAutoFormatGetDocNode aGetHt(&m_pActiveShell->GetNodes());
                 for(size_t i = 0; i < nCount; ++i)
                 {
-                    if (const SwTableFormat* pTableFormat =
-                            static_cast<SwTableFormat*>(pFrameFormats->GetFormat(i)))
+                    if (const SwTableFormat* pTableFormat = rTableFormats[i])
                         if (!pTableFormat->GetInfo(aGetHt))  // skip deleted tables
                         {
                             SwTable* pTable = SwTable::FindTable(pTableFormat);

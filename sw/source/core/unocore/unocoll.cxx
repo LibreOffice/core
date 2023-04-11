@@ -874,7 +874,7 @@ uno::Any SAL_CALL SwXTextTables::getByIndex(sal_Int32 nInputIndex)
     size_t nIndex = static_cast<size_t>(nInputIndex);
     size_t nCurrentIndex = 0;
 
-    for (SwFrameFormat* const & pFormat : *GetDoc()->GetTableFrameFormats())
+    for(SwTableFormat* pFormat: *GetDoc()->GetTableFrameFormats())
     {
         if (!pFormat->GetInfo(aGetHt))
         {

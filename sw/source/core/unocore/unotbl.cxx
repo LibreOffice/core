@@ -2972,10 +2972,10 @@ void SwXTextTable::setName(const OUString& rName)
     if(pFormat)
     {
         const OUString aOldName( pFormat->GetName() );
-        const SwFrameFormats* pFrameFormats = pFormat->GetDoc()->GetTableFrameFormats();
+        const sw::TableFrameFormats* pFrameFormats = pFormat->GetDoc()->GetTableFrameFormats();
         for (size_t i = pFrameFormats->size(); i;)
         {
-            const SwFrameFormat* pTmpFormat = (*pFrameFormats)[--i];
+            const SwTableFormat* pTmpFormat = (*pFrameFormats)[--i];
             if( !pTmpFormat->IsDefault() &&
                 pTmpFormat->GetName() == rName &&
                             pFormat->GetDoc()->IsUsed( *pTmpFormat ))

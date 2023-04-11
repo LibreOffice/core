@@ -236,7 +236,7 @@ SwDoc::SwDoc()
     mpCharFormatTable( new SwCharFormats ),
     mpSpzFrameFormatTable( new SwFrameFormats() ),
     mpSectionFormatTable( new SwSectionFormats ),
-    mpTableFrameFormatTable( new SwFrameFormats() ),
+    mpTableFrameFormatTable( new sw::TableFrameFormats() ),
     mpTextFormatCollTable( new SwTextFormatColls() ),
     mpGrfFormatCollTable( new SwGrfFormatColls() ),
     mpTOXTypes( new SwTOXTypes ),

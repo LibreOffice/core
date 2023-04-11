@@ -2608,17 +2608,9 @@ SwFrameFormat::~SwFrameFormat()
 void SwFrameFormat::SetFormatName( const OUString& rNewName, bool bBroadcast )
 {
     if (m_ffList != nullptr) {
-        SwFrameFormats::iterator it = m_ffList->find( this );
-        assert( m_ffList->end() != it );
         SAL_INFO_IF(m_aFormatName == rNewName, "sw.core", "SwFrmFmt not really renamed, as both names are equal");
-
-        // As it's a non-unique list, rename should never fail!
         sw::NameChanged aHint(m_aFormatName, rNewName);
-        bool const renamed =
-            m_ffList->m_PosIndex.modify( it,
-                change_name( rNewName ), change_name( m_aFormatName ) );
-        assert(renamed);
-        (void)renamed; // unused in NDEBUG
+        m_ffList->Rename(*this, rNewName);
         if (bBroadcast) {
             GetNotifier().Broadcast(aHint);
         }

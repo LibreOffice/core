@@ -256,10 +256,10 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc& rDoc, const SwNodeIndex& rIdx ) const
     OUString sTableName( GetTable().GetFrameFormat()->GetName() );
     if( !rDoc.IsCopyIsMove() )
     {
-        const SwFrameFormats& rTableFormats = *rDoc.GetTableFrameFormats();
+        const sw::TableFrameFormats& rTableFormats = *rDoc.GetTableFrameFormats();
         for( size_t n = rTableFormats.size(); n; )
         {
-            const SwFrameFormat* pFormat = rTableFormats[--n];
+            const SwTableFormat* pFormat = rTableFormats[--n];
             if (pFormat->GetName() == sTableName && rDoc.IsUsed(*pFormat))
             {
                 sTableName = rDoc.GetUniqueTableName();

@@ -179,7 +179,7 @@ bool SwEditShell::CopySelToDoc( SwDoc& rInsDoc )
             if( bCpyTableNm )
             {
                 const OUString rTableName = pTableNd->GetTable().GetFrameFormat()->GetName();
-                const SwFrameFormats& rTableFormats = *rInsDoc.GetTableFrameFormats();
+                const sw::TableFrameFormats& rTableFormats = *rInsDoc.GetTableFrameFormats();
                 for( auto n = rTableFormats.size(); n; )
                     if( rTableFormats[ --n ]->GetName() == rTableName )
                     {
