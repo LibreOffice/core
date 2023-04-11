@@ -1150,7 +1150,8 @@ static AquaSalFrame* getMouseContainerFrame()
             if ( !mbKeyHandled && !mpLastMarkedText && mpLastEvent && [mpLastEvent type] == NSEventTypeKeyDown && [mpLastEvent isARepeat] )
             {
                 NSString *pChars = [mpLastEvent characters];
-                [self insertText:pChars replacementRange:NSMakeRange( 0, [pChars length] )];
+                if ( pChars )
+                    [self insertText:pChars replacementRange:NSMakeRange( 0, [pChars length] )];
             }
             // tdf#42437 Enable press-and-hold special character input method
             // Emulate the press-and-hold behavior of the TextEdit application
@@ -1966,7 +1967,32 @@ static AquaSalFrame* getMouseContainerFrame()
     // the returned position won't be anywhere near the text cursor. So,
     // dispatch an empty SalEvent::ExtTextInput event, fetch the position,
     // and then dispatch a SalEvent::EndExtTextInput event.
-    bool bNeedsExtTextInput = ( mbInKeyInput && !mpLastMarkedText && mpLastEvent && [mpLastEvent type] == NSEventTypeKeyDown && [mpLastEvent isARepeat] );
+    NSString *pNewMarkedText = nullptr;
+    NSString *pChars = [mpLastEvent characters];
+    bool bNeedsExtTextInput = ( pChars && mbInKeyInput && !mpLastMarkedText && mpLastEvent && [mpLastEvent type] == NSEventTypeKeyDown && [mpLastEvent isARepeat] );
+    if ( bNeedsExtTextInput )
+    {
+        // tdf#154708 Preserve selection for repeating Shift-arrow on Japanese keyboard
+        // Skip the posting of SalEvent::ExtTextInput and
+        // SalEvent::EndExtTextInput events for private use area characters.
+        NSUInteger nLen = [pChars length];
+        unichar pBuf[ nLen + 1 ];
+        NSUInteger nBufLen = 0;
+        for ( NSUInteger i = 0; i < nLen; i++ )
+        {
+            unichar aChar = [pChars characterAtIndex:i];
+            if ( aChar >= 0xf700 && aChar < 0xf780 )
+                continue;
+
+            pBuf[nBufLen++] = aChar;
+        }
+        pBuf[nBufLen] = 0;
+
+        pNewMarkedText = [NSString stringWithCharacters:pBuf length:nBufLen];
+        if (!pNewMarkedText || ![pNewMarkedText length])
+            bNeedsExtTextInput = false;
+    }
+
     if ( bNeedsExtTextInput )
     {
         SalExtTextInputEvent aInputEvent;
@@ -1994,11 +2020,10 @@ static AquaSalFrame* getMouseContainerFrame()
         // input method so set the mbTextInputWantsNonRepeatKeyDown flag to
         // indicate that the characters need to be deleted if the input method
         // replaces the committed characters.
-        NSString *pChars = [mpLastEvent characters];
-        if ( pChars )
+        if ( pNewMarkedText )
         {
             [self unmarkText];
-            mpLastMarkedText = [[NSAttributedString alloc] initWithString:pChars];
+            mpLastMarkedText = [[NSAttributedString alloc] initWithString:pNewMarkedText];
             mSelectedRange = mMarkedRange = NSMakeRange( 0, [mpLastMarkedText length] );
             mbTextInputWantsNonRepeatKeyDown = YES;
         }
