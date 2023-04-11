@@ -18,47 +18,59 @@
 #include <sax/fshelper.hxx>
 #include <sax/fastattribs.hxx>
 #include <unordered_map>
+#include <oox/export/drawingml.hxx>
 
 namespace oox
 {
+namespace
+{
+void writeRelativeRectangle(sax_fastparser::FSHelperPtr pFS, sal_Int32 nToken,
+                            model::RelativeRectangle const& rRelativeRectangle)
+{
+    pFS->singleElementNS(XML_a, nToken, XML_l, OString::number(rRelativeRectangle.mnLeft), XML_t,
+                         OString::number(rRelativeRectangle.mnTop), XML_r,
+                         OString::number(rRelativeRectangle.mnRight), XML_b,
+                         OString::number(rRelativeRectangle.mnBottom));
+}
+} // end anonymous namespace
+
 ThemeExport::ThemeExport(oox::core::XmlFilterBase* pFilterBase)
     : mpFilterBase(pFilterBase)
-
 {
 }
 
 void ThemeExport::write(OUString const& rPath, model::Theme const& rTheme)
 {
-    sax_fastparser::FSHelperPtr pFS = mpFilterBase->openFragmentStreamWithSerializer(
+    mpFS = mpFilterBase->openFragmentStreamWithSerializer(
         rPath, "application/vnd.openxmlformats-officedocument.theme+xml");
 
     OUString aThemeName = rTheme.GetName();
 
-    pFS->startElementNS(XML_a, XML_theme, FSNS(XML_xmlns, XML_a),
-                        mpFilterBase->getNamespaceURL(OOX_NS(dml)), XML_name, aThemeName);
+    mpFS->startElementNS(XML_a, XML_theme, FSNS(XML_xmlns, XML_a),
+                         mpFilterBase->getNamespaceURL(OOX_NS(dml)), XML_name, aThemeName);
 
-    pFS->startElementNS(XML_a, XML_themeElements);
+    mpFS->startElementNS(XML_a, XML_themeElements);
 
     const model::ColorSet* pColorSet = rTheme.GetColorSet();
 
-    pFS->startElementNS(XML_a, XML_clrScheme, XML_name, pColorSet->getName());
-    writeColorSet(pFS, rTheme);
-    pFS->endElementNS(XML_a, XML_clrScheme);
+    mpFS->startElementNS(XML_a, XML_clrScheme, XML_name, pColorSet->getName());
+    writeColorSet(rTheme);
+    mpFS->endElementNS(XML_a, XML_clrScheme);
 
     model::FontScheme const& rFontScheme = rTheme.getFontScheme();
-    pFS->startElementNS(XML_a, XML_fontScheme, XML_name, rFontScheme.getName());
-    writeFontScheme(pFS, rFontScheme);
-    pFS->endElementNS(XML_a, XML_fontScheme);
+    mpFS->startElementNS(XML_a, XML_fontScheme, XML_name, rFontScheme.getName());
+    writeFontScheme(rFontScheme);
+    mpFS->endElementNS(XML_a, XML_fontScheme);
 
     model::FormatScheme const& rFormatScheme = rTheme.getFormatScheme();
-    pFS->startElementNS(XML_a, XML_fmtScheme);
-    writeFormatScheme(pFS, rFormatScheme);
-    pFS->endElementNS(XML_a, XML_fmtScheme);
+    mpFS->startElementNS(XML_a, XML_fmtScheme);
+    writeFormatScheme(rFormatScheme);
+    mpFS->endElementNS(XML_a, XML_fmtScheme);
 
-    pFS->endElementNS(XML_a, XML_themeElements);
-    pFS->endElementNS(XML_a, XML_theme);
+    mpFS->endElementNS(XML_a, XML_themeElements);
+    mpFS->endElementNS(XML_a, XML_theme);
 
-    pFS->endDocument();
+    mpFS->endDocument();
 }
 
 namespace
@@ -80,104 +92,99 @@ void fillAttrList(rtl::Reference<sax_fastparser::FastAttributeList> const& pAttr
 
 } // end anonymous ns
 
-bool ThemeExport::writeFontScheme(sax_fastparser::FSHelperPtr pFS,
-                                  model::FontScheme const& rFontScheme)
+bool ThemeExport::writeFontScheme(model::FontScheme const& rFontScheme)
 {
-    pFS->startElementNS(XML_a, XML_majorFont);
+    mpFS->startElementNS(XML_a, XML_majorFont);
 
     {
         auto aAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
         fillAttrList(aAttrList, rFontScheme.getMajorLatin());
-        pFS->singleElementNS(XML_a, XML_latin, aAttrList);
+        mpFS->singleElementNS(XML_a, XML_latin, aAttrList);
     }
     {
         auto aAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
         fillAttrList(aAttrList, rFontScheme.getMajorAsian());
-        pFS->singleElementNS(XML_a, XML_ea, aAttrList);
+        mpFS->singleElementNS(XML_a, XML_ea, aAttrList);
     }
     {
         auto aAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
         fillAttrList(aAttrList, rFontScheme.getMajorComplex());
-        pFS->singleElementNS(XML_a, XML_cs, aAttrList);
+        mpFS->singleElementNS(XML_a, XML_cs, aAttrList);
     }
 
-    pFS->endElementNS(XML_a, XML_majorFont);
+    mpFS->endElementNS(XML_a, XML_majorFont);
 
-    pFS->startElementNS(XML_a, XML_minorFont);
+    mpFS->startElementNS(XML_a, XML_minorFont);
 
     {
         auto aAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
         fillAttrList(aAttrList, rFontScheme.getMinorLatin());
-        pFS->singleElementNS(XML_a, XML_latin, aAttrList);
+        mpFS->singleElementNS(XML_a, XML_latin, aAttrList);
     }
     {
         auto aAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
         fillAttrList(aAttrList, rFontScheme.getMinorAsian());
-        pFS->singleElementNS(XML_a, XML_ea, aAttrList);
+        mpFS->singleElementNS(XML_a, XML_ea, aAttrList);
     }
     {
         auto aAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
         fillAttrList(aAttrList, rFontScheme.getMinorComplex());
-        pFS->singleElementNS(XML_a, XML_cs, aAttrList);
+        mpFS->singleElementNS(XML_a, XML_cs, aAttrList);
     }
 
-    pFS->endElementNS(XML_a, XML_minorFont);
+    mpFS->endElementNS(XML_a, XML_minorFont);
 
     return true;
 }
 
-namespace
+void ThemeExport::writeColorTransformations(
+    std::vector<model::Transformation> const& rTransformations)
 {
-void writeColorTransformations(sax_fastparser::FSHelperPtr pFS,
-                               std::vector<model::Transformation> const& rTransformations)
-{
-    static std::unordered_map<model::TransformationType, sal_Int32> constTransformationTypeTokenMap
-        = {
-              { model::TransformationType::Tint, XML_tint },
-              { model::TransformationType::Shade, XML_shade },
-              { model::TransformationType::LumMod, XML_lumMod },
-              { model::TransformationType::LumOff, XML_lumOff },
-          };
+    static std::unordered_map<model::TransformationType, sal_Int32> constTransformTypeTokenMap = {
+        { model::TransformationType::Tint, XML_tint },
+        { model::TransformationType::Shade, XML_shade },
+        { model::TransformationType::LumMod, XML_lumMod },
+        { model::TransformationType::LumOff, XML_lumOff },
+    };
 
     for (model::Transformation const& rTransformation : rTransformations)
     {
-        auto iterator = constTransformationTypeTokenMap.find(rTransformation.meType);
-        if (iterator != constTransformationTypeTokenMap.end())
+        auto iterator = constTransformTypeTokenMap.find(rTransformation.meType);
+        if (iterator != constTransformTypeTokenMap.end())
         {
             sal_Int32 nToken = iterator->second;
-            pFS->singleElementNS(XML_a, nToken, XML_val,
-                                 OString::number(rTransformation.mnValue * 10));
+            mpFS->singleElementNS(XML_a, nToken, XML_val,
+                                  OString::number(rTransformation.mnValue * 10));
         }
     }
 }
 
-void writeColorRGB(sax_fastparser::FSHelperPtr pFS, model::ColorDefinition const& rColorDefinition)
+void ThemeExport::writeColorRGB(model::ColorDefinition const& rColorDefinition)
 {
     auto aColor = rColorDefinition.getRGBColor();
-    pFS->startElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(sal_Int32(aColor)));
-    pFS->endElementNS(XML_a, XML_srgbClr);
+    mpFS->startElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(sal_Int32(aColor)));
+    mpFS->endElementNS(XML_a, XML_srgbClr);
 }
 
-void writeColorCRGB(sax_fastparser::FSHelperPtr pFS, model::ColorDefinition const& rColorDefinition)
+void ThemeExport::writeColorCRGB(model::ColorDefinition const& rColorDefinition)
 {
-    pFS->startElementNS(XML_a, XML_scrgbClr, XML_r, OString::number(rColorDefinition.mnComponent1),
-                        XML_g, OString::number(rColorDefinition.mnComponent2), XML_b,
-                        OString::number(rColorDefinition.mnComponent3));
-    writeColorTransformations(pFS, rColorDefinition.maTransformations);
-    pFS->endElementNS(XML_a, XML_scrgbClr);
+    mpFS->startElementNS(XML_a, XML_scrgbClr, XML_r, OString::number(rColorDefinition.mnComponent1),
+                         XML_g, OString::number(rColorDefinition.mnComponent2), XML_b,
+                         OString::number(rColorDefinition.mnComponent3));
+    writeColorTransformations(rColorDefinition.maTransformations);
+    mpFS->endElementNS(XML_a, XML_scrgbClr);
 }
 
-void writeColorHSL(sax_fastparser::FSHelperPtr pFS, model::ColorDefinition const& rColorDefinition)
+void ThemeExport::writeColorHSL(model::ColorDefinition const& rColorDefinition)
 {
-    pFS->startElementNS(XML_a, XML_hslClr, XML_hue, OString::number(rColorDefinition.mnComponent1),
-                        XML_sat, OString::number(rColorDefinition.mnComponent2), XML_lum,
-                        OString::number(rColorDefinition.mnComponent3));
-    writeColorTransformations(pFS, rColorDefinition.maTransformations);
-    pFS->endElementNS(XML_a, XML_hslClr);
+    mpFS->startElementNS(XML_a, XML_hslClr, XML_hue, OString::number(rColorDefinition.mnComponent1),
+                         XML_sat, OString::number(rColorDefinition.mnComponent2), XML_lum,
+                         OString::number(rColorDefinition.mnComponent3));
+    writeColorTransformations(rColorDefinition.maTransformations);
+    mpFS->endElementNS(XML_a, XML_hslClr);
 }
 
-void writeColorScheme(sax_fastparser::FSHelperPtr pFS,
-                      model::ColorDefinition const& rColorDefinition)
+void ThemeExport::writeColorScheme(model::ColorDefinition const& rColorDefinition)
 {
     static std::unordered_map<model::ThemeColorType, const char*> constThemeColorTypeTokenMap
         = { { model::ThemeColorType::Dark1, "dk1" },
@@ -196,14 +203,13 @@ void writeColorScheme(sax_fastparser::FSHelperPtr pFS,
     if (iterator != constThemeColorTypeTokenMap.end())
     {
         const char* sValue = iterator->second;
-        pFS->startElementNS(XML_a, XML_schemeClr, XML_val, sValue);
-        writeColorTransformations(pFS, rColorDefinition.maTransformations);
-        pFS->endElementNS(XML_a, XML_schemeClr);
+        mpFS->startElementNS(XML_a, XML_schemeClr, XML_val, sValue);
+        writeColorTransformations(rColorDefinition.maTransformations);
+        mpFS->endElementNS(XML_a, XML_schemeClr);
     }
 }
 
-void writeColorSystem(sax_fastparser::FSHelperPtr pFS,
-                      model::ColorDefinition const& rColorDefinition)
+void ThemeExport::writeColorSystem(model::ColorDefinition const& rColorDefinition)
 {
     static std::unordered_map<model::SystemColorType, const char*> constThemeColorTypeTokenMap = {
         { model::SystemColorType::DarkShadow3D, "3dDkShadow" },
@@ -241,85 +247,74 @@ void writeColorSystem(sax_fastparser::FSHelperPtr pFS,
     if (iterator != constThemeColorTypeTokenMap.end())
     {
         const char* sValue = iterator->second;
-        pFS->startElementNS(XML_a, XML_sysClr, XML_val, sValue);
+        mpFS->startElementNS(XML_a, XML_sysClr, XML_val, sValue);
         //XML_lastClr
-        writeColorTransformations(pFS, rColorDefinition.maTransformations);
-        pFS->endElementNS(XML_a, XML_schemeClr);
+        writeColorTransformations(rColorDefinition.maTransformations);
+        mpFS->endElementNS(XML_a, XML_schemeClr);
     }
 }
 
-void writeColorPlaceholder(sax_fastparser::FSHelperPtr pFS,
-                           model::ColorDefinition const& rColorDefinition)
+void ThemeExport::writeColorPlaceholder(model::ColorDefinition const& rColorDefinition)
 {
-    pFS->startElementNS(XML_a, XML_schemeClr, XML_val, "phClr");
-    writeColorTransformations(pFS, rColorDefinition.maTransformations);
-    pFS->endElementNS(XML_a, XML_schemeClr);
+    mpFS->startElementNS(XML_a, XML_schemeClr, XML_val, "phClr");
+    writeColorTransformations(rColorDefinition.maTransformations);
+    mpFS->endElementNS(XML_a, XML_schemeClr);
 }
 
-void writeColorDefinition(sax_fastparser::FSHelperPtr pFS,
-                          model::ColorDefinition const& rColorDefinition)
+void ThemeExport::writeColorDefinition(model::ColorDefinition const& rColorDefinition)
 {
     switch (rColorDefinition.meType)
     {
         case model::ColorType::Unused:
             break;
         case model::ColorType::RGB:
-            writeColorRGB(pFS, rColorDefinition);
+            writeColorRGB(rColorDefinition);
             break;
         case model::ColorType::CRGB:
-            writeColorCRGB(pFS, rColorDefinition);
+            writeColorCRGB(rColorDefinition);
             break;
         case model::ColorType::HSL:
-            writeColorHSL(pFS, rColorDefinition);
+            writeColorHSL(rColorDefinition);
             break;
         case model::ColorType::Scheme:
-            writeColorScheme(pFS, rColorDefinition);
+            writeColorScheme(rColorDefinition);
             break;
         case model::ColorType::Palette:
             break;
         case model::ColorType::System:
-            writeColorSystem(pFS, rColorDefinition);
+            writeColorSystem(rColorDefinition);
             break;
         case model::ColorType::Placeholder:
-            writeColorPlaceholder(pFS, rColorDefinition);
+            writeColorPlaceholder(rColorDefinition);
             break;
     }
 }
 
-void writeSolidFill(sax_fastparser::FSHelperPtr pFS, model::SolidFill const& rSolidFill)
+void ThemeExport::writeSolidFill(model::SolidFill const& rSolidFill)
 {
-    pFS->startElementNS(XML_a, XML_solidFill);
-    writeColorDefinition(pFS, rSolidFill.maColorDefinition);
-    pFS->endElementNS(XML_a, XML_solidFill);
+    mpFS->startElementNS(XML_a, XML_solidFill);
+    writeColorDefinition(rSolidFill.maColorDefinition);
+    mpFS->endElementNS(XML_a, XML_solidFill);
 }
 
-void writeRelativeRectangle(sax_fastparser::FSHelperPtr pFS, sal_Int32 nToken,
-                            model::RelativeRectangle const& rRelativeRectangle)
+void ThemeExport::writeGradientFill(model::GradientFill const& rGradientFill)
 {
-    pFS->singleElementNS(XML_a, nToken, XML_l, OString::number(rRelativeRectangle.mnLeft), XML_t,
-                         OString::number(rRelativeRectangle.mnTop), XML_r,
-                         OString::number(rRelativeRectangle.mnRight), XML_b,
-                         OString::number(rRelativeRectangle.mnBottom));
-}
-
-void writeGradientFill(sax_fastparser::FSHelperPtr pFS, model::GradientFill const& rGradientFill)
-{
-    pFS->startElementNS(XML_a, XML_gradFill);
-    pFS->startElementNS(XML_a, XML_gsLst);
+    mpFS->startElementNS(XML_a, XML_gradFill);
+    mpFS->startElementNS(XML_a, XML_gsLst);
     for (auto const& rStop : rGradientFill.maGradientStops)
     {
-        pFS->startElementNS(XML_a, XML_gs, XML_pos,
-                            OString::number(sal_Int32(rStop.mfPosition * 100000.0)));
-        writeColorDefinition(pFS, rStop.maColor);
-        pFS->endElementNS(XML_a, XML_gs);
+        mpFS->startElementNS(XML_a, XML_gs, XML_pos,
+                             OString::number(sal_Int32(rStop.mfPosition * 100000.0)));
+        writeColorDefinition(rStop.maColor);
+        mpFS->endElementNS(XML_a, XML_gs);
     }
-    pFS->endElementNS(XML_a, XML_gsLst);
+    mpFS->endElementNS(XML_a, XML_gsLst);
 
     if (rGradientFill.meGradientType == model::GradientType::Linear)
     {
-        pFS->singleElementNS(XML_a, XML_lin, XML_ang,
-                             OString::number(rGradientFill.maLinearGradient.mnAngle), XML_scaled,
-                             rGradientFill.maLinearGradient.mbScaled ? "1" : "0");
+        mpFS->singleElementNS(XML_a, XML_lin, XML_ang,
+                              OString::number(rGradientFill.maLinearGradient.mnAngle), XML_scaled,
+                              rGradientFill.maLinearGradient.mbScaled ? "1" : "0");
     }
     else
     {
@@ -341,16 +336,16 @@ void writeGradientFill(sax_fastparser::FSHelperPtr pFS, model::GradientFill cons
 
         if (!sPathType.isEmpty())
         {
-            pFS->startElementNS(XML_a, XML_path, XML_path, sPathType);
-            writeRelativeRectangle(pFS, XML_fillToRect, rGradientFill.maFillToRectangle);
-            pFS->endElementNS(XML_a, XML_path);
+            mpFS->startElementNS(XML_a, XML_path, XML_path, sPathType);
+            writeRelativeRectangle(mpFS, XML_fillToRect, rGradientFill.maFillToRectangle);
+            mpFS->endElementNS(XML_a, XML_path);
         }
     }
-    writeRelativeRectangle(pFS, XML_tileRect, rGradientFill.maTileRectangle);
-    pFS->endElementNS(XML_a, XML_gradFill);
+    writeRelativeRectangle(mpFS, XML_tileRect, rGradientFill.maTileRectangle);
+    mpFS->endElementNS(XML_a, XML_gradFill);
 }
 
-void writePatternFill(sax_fastparser::FSHelperPtr pFS, model::PatternFill const& rPatternFill)
+void ThemeExport::writePatternFill(model::PatternFill const& rPatternFill)
 {
     OString sPresetType;
     switch (rPatternFill.mePatternPreset)
@@ -523,20 +518,22 @@ void writePatternFill(sax_fastparser::FSHelperPtr pFS, model::PatternFill const&
 
     if (!sPresetType.isEmpty())
     {
-        pFS->startElementNS(XML_a, XML_pattFill, XML_prst, sPresetType);
+        mpFS->startElementNS(XML_a, XML_pattFill, XML_prst, sPresetType);
 
-        pFS->startElementNS(XML_a, XML_fgClr);
-        writeColorDefinition(pFS, rPatternFill.maForegroundColor);
-        pFS->endElementNS(XML_a, XML_fgClr);
+        mpFS->startElementNS(XML_a, XML_fgClr);
+        writeColorDefinition(rPatternFill.maForegroundColor);
+        mpFS->endElementNS(XML_a, XML_fgClr);
 
-        pFS->startElementNS(XML_a, XML_bgClr);
-        writeColorDefinition(pFS, rPatternFill.maBackgroundColor);
-        pFS->endElementNS(XML_a, XML_bgClr);
+        mpFS->startElementNS(XML_a, XML_bgClr);
+        writeColorDefinition(rPatternFill.maBackgroundColor);
+        mpFS->endElementNS(XML_a, XML_bgClr);
 
-        pFS->endElementNS(XML_a, XML_pattFill);
+        mpFS->endElementNS(XML_a, XML_pattFill);
     }
 }
 
+namespace
+{
 OString convertFlipMode(model::FlipMode eFlipMode)
 {
     switch (eFlipMode)
@@ -580,47 +577,43 @@ OString convertRectangleAlignment(model::RectangleAlignment eFlipMode)
     }
     return {};
 }
+} // end anonymous ns
 
-void writeBlip(sax_fastparser::FSHelperPtr pFS, model::BlipFill const& /*rBlipFill*/)
+void ThemeExport::writeBlip(model::BlipFill const& /*rBlipFil*/) {}
+
+void ThemeExport::writeBlipFill(model::BlipFill const& rBlipFill)
 {
-    // TODO - reuse WriteXGraphicBlip
-    pFS->startElementNS(XML_a, XML_blip);
-    pFS->endElementNS(XML_a, XML_blip);
-}
+    mpFS->startElementNS(XML_a, XML_blipFill, XML_rotWithShape,
+                         rBlipFill.mbRotateWithShape ? "1" : "0"
+                         /*XML_dpi*/);
 
-void writeBlipFill(sax_fastparser::FSHelperPtr pFS, model::BlipFill const& rBlipFill)
-{
-    pFS->startElementNS(XML_a, XML_blipFill, XML_rotWithShape,
-                        rBlipFill.mbRotateWithShape ? "1" : "0"
-                        /*XML_dpi*/);
+    writeBlip(rBlipFill);
 
-    writeBlip(pFS, rBlipFill);
-
-    writeRelativeRectangle(pFS, XML_srcRect, rBlipFill.maClipRectangle);
+    writeRelativeRectangle(mpFS, XML_srcRect, rBlipFill.maClipRectangle);
 
     if (rBlipFill.meMode == model::BitmapMode::Tile)
     {
         OString aFlipMode = convertFlipMode(rBlipFill.meTileFlipMode);
         OString aAlignment = convertRectangleAlignment(rBlipFill.meTileAlignment);
 
-        pFS->startElementNS(XML_a, XML_tile, XML_tx, OString::number(rBlipFill.mnTileOffsetX),
-                            XML_ty, OString::number(rBlipFill.mnTileOffsetY), XML_sx,
-                            OString::number(rBlipFill.mnTileScaleX), XML_sy,
-                            OString::number(rBlipFill.mnTileScaleY), XML_flip, aFlipMode, XML_algn,
-                            aAlignment);
-        pFS->endElementNS(XML_a, XML_tile);
+        mpFS->startElementNS(XML_a, XML_tile, XML_tx, OString::number(rBlipFill.mnTileOffsetX),
+                             XML_ty, OString::number(rBlipFill.mnTileOffsetY), XML_sx,
+                             OString::number(rBlipFill.mnTileScaleX), XML_sy,
+                             OString::number(rBlipFill.mnTileScaleY), XML_flip, aFlipMode, XML_algn,
+                             aAlignment);
+        mpFS->endElementNS(XML_a, XML_tile);
     }
     else if (rBlipFill.meMode == model::BitmapMode::Stretch)
     {
-        pFS->startElementNS(XML_a, XML_stretch);
-        writeRelativeRectangle(pFS, XML_fillRect, rBlipFill.maFillRectangle);
-        pFS->endElementNS(XML_a, XML_stretch);
+        mpFS->startElementNS(XML_a, XML_stretch);
+        writeRelativeRectangle(mpFS, XML_fillRect, rBlipFill.maFillRectangle);
+        mpFS->endElementNS(XML_a, XML_stretch);
     }
 
-    pFS->endElementNS(XML_a, XML_blipFill);
+    mpFS->endElementNS(XML_a, XML_blipFill);
 }
 
-void writeFillStyle(sax_fastparser::FSHelperPtr pFS, model::FillStyle const& rFillStyle)
+void ThemeExport::writeFillStyle(model::FillStyle const& rFillStyle)
 {
     switch (rFillStyle.mpFill->meType)
     {
@@ -628,36 +621,36 @@ void writeFillStyle(sax_fastparser::FSHelperPtr pFS, model::FillStyle const& rFi
         case model::FillType::Solid:
         {
             auto* pSolidFill = static_cast<model::SolidFill*>(rFillStyle.mpFill.get());
-            writeSolidFill(pFS, *pSolidFill);
+            writeSolidFill(*pSolidFill);
         }
         break;
         case model::FillType::Gradient:
         {
             auto* pGradientFill = static_cast<model::GradientFill*>(rFillStyle.mpFill.get());
-            writeGradientFill(pFS, *pGradientFill);
+            writeGradientFill(*pGradientFill);
         }
         break;
         case model::FillType::Pattern:
         {
             auto* pPatternFill = static_cast<model::PatternFill*>(rFillStyle.mpFill.get());
-            writePatternFill(pFS, *pPatternFill);
+            writePatternFill(*pPatternFill);
         }
         break;
         case model::FillType::Blip:
         {
             auto* pBlipFill = static_cast<model::BlipFill*>(rFillStyle.mpFill.get());
-            writeBlipFill(pFS, *pBlipFill);
+            writeBlipFill(*pBlipFill);
         }
         break;
     }
 }
 
-void writeBackgroundFillStyle(sax_fastparser::FSHelperPtr pFS, model::FillStyle const& rFillStyle)
+void ThemeExport::writeBackgroundFillStyle(model::FillStyle const& rFillStyle)
 {
-    writeFillStyle(pFS, rFillStyle);
+    writeFillStyle(rFillStyle);
 }
 
-void writeLineStyle(sax_fastparser::FSHelperPtr pFS, model::LineStyle const& rLineStyle)
+void ThemeExport::writeLineStyle(model::LineStyle const& rLineStyle)
 {
     OString sCap;
     switch (rLineStyle.meCapType)
@@ -710,10 +703,10 @@ void writeLineStyle(sax_fastparser::FSHelperPtr pFS, model::LineStyle const& rLi
             break;
     }
 
-    pFS->startElementNS(XML_a, XML_ln, XML_w, OString::number(rLineStyle.mnWidth), XML_cap,
-                        sax_fastparser::UseIf(sCap, !sCap.isEmpty()), XML_cmpd,
-                        sax_fastparser::UseIf(sCompoundLine, !sCompoundLine.isEmpty()), XML_algn,
-                        sax_fastparser::UseIf(sPenAlign, !sPenAlign.isEmpty()));
+    mpFS->startElementNS(XML_a, XML_ln, XML_w, OString::number(rLineStyle.mnWidth), XML_cap,
+                         sax_fastparser::UseIf(sCap, !sCap.isEmpty()), XML_cmpd,
+                         sax_fastparser::UseIf(sCompoundLine, !sCompoundLine.isEmpty()), XML_algn,
+                         sax_fastparser::UseIf(sPenAlign, !sPenAlign.isEmpty()));
 
     if (rLineStyle.maLineDash.mePresetType != model::PresetDashType::Unset)
     {
@@ -756,7 +749,7 @@ void writeLineStyle(sax_fastparser::FSHelperPtr pFS, model::LineStyle const& rLi
             case model::PresetDashType::Unset:
                 break;
         }
-        pFS->singleElementNS(XML_a, XML_prstDash, XML_val, sPresetType);
+        mpFS->singleElementNS(XML_a, XML_prstDash, XML_val, sPresetType);
     }
 
     if (rLineStyle.maLineJoin.meType != model::LineJoinType::Unset)
@@ -764,15 +757,15 @@ void writeLineStyle(sax_fastparser::FSHelperPtr pFS, model::LineStyle const& rLi
         switch (rLineStyle.maLineJoin.meType)
         {
             case model::LineJoinType::Round:
-                pFS->singleElementNS(XML_a, XML_round);
+                mpFS->singleElementNS(XML_a, XML_round);
                 break;
             case model::LineJoinType::Bevel:
-                pFS->singleElementNS(XML_a, XML_bevel);
+                mpFS->singleElementNS(XML_a, XML_bevel);
                 break;
             case model::LineJoinType::Miter:
             {
                 sal_Int32 nMiterLimit = rLineStyle.maLineJoin.mnMiterLimit;
-                pFS->singleElementNS(
+                mpFS->singleElementNS(
                     XML_a, XML_miter, XML_lim,
                     sax_fastparser::UseIf(OString::number(nMiterLimit), nMiterLimit > 0));
             }
@@ -782,65 +775,62 @@ void writeLineStyle(sax_fastparser::FSHelperPtr pFS, model::LineStyle const& rLi
         }
     }
 
-    pFS->endElementNS(XML_a, XML_ln);
+    mpFS->endElementNS(XML_a, XML_ln);
 }
 
-void writeEffectStyle(sax_fastparser::FSHelperPtr pFS, model::EffectStyle const& /*rEffectStyle*/)
+void ThemeExport::writeEffectStyle(model::EffectStyle const& /*rEffectStyle*/)
 {
-    pFS->startElementNS(XML_a, XML_effectStyle);
-    pFS->singleElementNS(XML_a, XML_effectLst);
-    pFS->endElementNS(XML_a, XML_effectStyle);
+    mpFS->startElementNS(XML_a, XML_effectStyle);
+    mpFS->singleElementNS(XML_a, XML_effectLst);
+    mpFS->endElementNS(XML_a, XML_effectStyle);
 }
 
-} // end anonymous ns
-
-bool ThemeExport::writeFormatScheme(sax_fastparser::FSHelperPtr pFS,
-                                    model::FormatScheme const& rFormatScheme)
+bool ThemeExport::writeFormatScheme(model::FormatScheme const& rFormatScheme)
 {
     // Format Scheme: 3 or more per list but only 3 will be used currently
 
     // Fill Style List
     rFormatScheme.ensureFillStyleList();
-    pFS->startElementNS(XML_a, XML_fillStyleLst);
+    mpFS->startElementNS(XML_a, XML_fillStyleLst);
     for (auto const& rFillStyle : rFormatScheme.getFillStyleList())
     {
-        writeFillStyle(pFS, rFillStyle);
+        writeFillStyle(rFillStyle);
     }
-    pFS->endElementNS(XML_a, XML_fillStyleLst);
+    mpFS->endElementNS(XML_a, XML_fillStyleLst);
 
     // Line Style List
     rFormatScheme.ensureLineStyleList();
-    pFS->startElementNS(XML_a, XML_lnStyleLst);
+    mpFS->startElementNS(XML_a, XML_lnStyleLst);
     for (auto const& rLineStyle : rFormatScheme.getLineStyleList())
     {
-        writeLineStyle(pFS, rLineStyle);
+        writeLineStyle(rLineStyle);
     }
-    pFS->endElementNS(XML_a, XML_lnStyleLst);
+    mpFS->endElementNS(XML_a, XML_lnStyleLst);
 
     // Effect Style List
     rFormatScheme.ensureEffectStyleList();
-    pFS->startElementNS(XML_a, XML_effectStyleLst);
+    mpFS->startElementNS(XML_a, XML_effectStyleLst);
     {
         for (auto const& rEffectStyle : rFormatScheme.getEffectStyleList())
         {
-            writeEffectStyle(pFS, rEffectStyle);
+            writeEffectStyle(rEffectStyle);
         }
     }
-    pFS->endElementNS(XML_a, XML_effectStyleLst);
+    mpFS->endElementNS(XML_a, XML_effectStyleLst);
 
     // Background Fill Style List
     rFormatScheme.ensureBackgroundFillStyleList();
-    pFS->startElementNS(XML_a, XML_bgFillStyleLst);
+    mpFS->startElementNS(XML_a, XML_bgFillStyleLst);
     for (auto const& rFillStyle : rFormatScheme.getBackgroundFillStyleList())
     {
-        writeBackgroundFillStyle(pFS, rFillStyle);
+        writeBackgroundFillStyle(rFillStyle);
     }
-    pFS->endElementNS(XML_a, XML_bgFillStyleLst);
+    mpFS->endElementNS(XML_a, XML_bgFillStyleLst);
 
     return true;
 }
 
-bool ThemeExport::writeColorSet(sax_fastparser::FSHelperPtr pFS, model::Theme const& rTheme)
+bool ThemeExport::writeColorSet(model::Theme const& rTheme)
 {
     static std::unordered_map<sal_Int32, model::ThemeColorType> constTokenMap
         = { { XML_dk1, model::ThemeColorType::Dark1 },
@@ -868,9 +858,9 @@ bool ThemeExport::writeColorSet(sax_fastparser::FSHelperPtr pFS, model::Theme co
     {
         model::ThemeColorType eColorType = constTokenMap[nToken];
         Color aColor = pColorSet->getColor(eColorType);
-        pFS->startElementNS(XML_a, nToken);
-        pFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(sal_Int32(aColor)));
-        pFS->endElementNS(XML_a, nToken);
+        mpFS->startElementNS(XML_a, nToken);
+        mpFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(sal_Int32(aColor)));
+        mpFS->endElementNS(XML_a, nToken);
     }
 
     return true;
