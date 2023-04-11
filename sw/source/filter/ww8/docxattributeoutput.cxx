@@ -597,6 +597,18 @@ void FramePrHelper::SetFrame(ww8::Frame* pFrame)
 {
     assert(!pFrame || !m_pFrame);
     m_pFrame = pFrame;
+    if (m_pFrame)
+    {
+        m_bUseFrameBackground = true;
+    }
+}
+
+bool FramePrHelper::UseFrameBackground()
+{
+    if (!m_pFrame)
+        return false;
+
+    return m_bUseFrameBackground;
 }
 
 void SdtBlockHelper::DeleteAndResetTheLists()
@@ -1403,6 +1415,7 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
     {
         rtl::Reference<FastAttributeList> xAttrList = std::move( m_pBackgroundAttrList );
         m_pSerializer->singleElementNS( XML_w, XML_shd, xAttrList );
+        m_aFramePr.SetUseFrameBackground(false);
     }
 }
 
@@ -1535,6 +1548,26 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
         const Size aSize = m_aFramePr.Frame()->GetSize();
         PopulateFrameProperties(&rFrameFormat, aSize);
         FormatBox(rFrameFormat.GetBox());
+
+        if (m_aFramePr.UseFrameBackground())
+        {
+            // The frame is usually imported as 100% transparent. Ignore in that case.
+            // Background only exports as fully opaque. Emulate - ignore transparency more than 50%
+            const SwAttrSet& rSet = rFrameFormat.GetAttrSet();
+            const XFillStyleItem* pFillStyle(rSet.GetItem<XFillStyleItem>(XATTR_FILLSTYLE));
+            if (pFillStyle && pFillStyle->GetValue() != drawing::FillStyle_NONE)
+            {
+                std::unique_ptr<SvxBrushItem> pBrush(
+                    getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
+                if (pBrush->GetColor().GetAlpha() > 127) // more opaque than transparent
+                {
+                    FormatBackground(*pBrush);
+                    WriteCollectedParagraphProperties();
+                }
+            }
+        }
+        // reset to true in preparation for the next paragraph in the frame
+        m_aFramePr.SetUseFrameBackground(true);
     }
 
     m_pSerializer->endElementNS( XML_w, XML_pPr );

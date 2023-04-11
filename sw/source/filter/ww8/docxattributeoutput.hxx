@@ -130,14 +130,18 @@ struct TableReference
 class FramePrHelper
 {
     ww8::Frame* m_pFrame;
+    bool m_bUseFrameBackground;
 
 public:
     FramePrHelper()
         : m_pFrame(nullptr)
+        , m_bUseFrameBackground(true)
     {}
 
     ww8::Frame* Frame() { return m_pFrame; }
     void SetFrame(ww8::Frame* pSet);
+    bool UseFrameBackground();
+    void SetUseFrameBackground(bool bSet) { m_bUseFrameBackground = bSet; }
 };
 
 class SdtBlockHelper
