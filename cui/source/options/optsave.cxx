@@ -36,7 +36,6 @@
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <officecfg/Office/Common.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/docfilt.hxx>
 #include <svtools/restartdialog.hxx>
