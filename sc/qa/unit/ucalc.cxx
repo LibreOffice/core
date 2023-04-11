@@ -69,6 +69,8 @@
 
 class ScUndoPaste;
 class ScUndoCut;
+using ::std::cerr;
+using ::std::endl;
 
 namespace {
 

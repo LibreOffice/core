@@ -48,6 +48,9 @@
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
+using ::std::cout;
+using ::std::cerr;
+using ::std::endl;
 
 FormulaGrammarSwitch::FormulaGrammarSwitch(ScDocument* pDoc, formula::FormulaGrammar::Grammar eGrammar) :
     mpDoc(pDoc), meOldGrammar(pDoc->GetGrammar())

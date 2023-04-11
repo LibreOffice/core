@@ -51,7 +51,6 @@ using namespace ::xmloff::token;
 using ::com::sun::star::text::XTextCursor;
 using ::com::sun::star::text::XTextRange;
 using ::com::sun::star::text::XWordCursor;
-using ::com::sun::star::lang::XUnoTunnel;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
 // collision with tools/DateTime: use UNO DateTime as util::DateTime

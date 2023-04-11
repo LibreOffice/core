@@ -31,6 +31,9 @@
 #include <vector>
 
 using namespace formula;
+using ::std::vector;
+using ::std::cerr;
+using ::std::endl;
 
 namespace
 {

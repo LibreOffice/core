@@ -26,7 +26,6 @@ class SwView;
 class SwMailMergeConfigItem;
 
 using vcl::WizardTypes::WizardState;
-using vcl::WizardTypes::CommitPageReason;
 
 #define MM_DOCUMENTSELECTPAGE   0
 #define MM_OUTPUTTYPETPAGE      1

@@ -100,7 +100,6 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::container;
 
 using beans::PropertyValue;
-using beans::XMultiPropertySet;
 using beans::UnknownPropertyException;
 using beans::PropertyState_DIRECT_VALUE;
 

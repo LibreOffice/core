@@ -32,6 +32,9 @@
 
 #include <memory>
 
+using ::std::cerr;
+using ::std::endl;
+
 class TestCopyPaste : public ScUcalcTestBase
 {
 protected:

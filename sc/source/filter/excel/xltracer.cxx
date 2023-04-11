@@ -22,9 +22,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <address.hxx>
 
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::beans::PropertyValue;
-
 XclTracer::XclTracer(std::u16string_view /*rDocUrl*/)
     : mbEnabled(false)
     , maFirstTimes(eTraceLength, true)

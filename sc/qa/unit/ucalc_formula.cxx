@@ -30,6 +30,8 @@
 #include <vector>
 
 using namespace formula;
+using ::std::cerr;
+using ::std::endl;
 
 namespace {
 void setExpandRefs(bool bExpand)

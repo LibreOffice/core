@@ -20,9 +20,6 @@
 #include "xmlitmap.hxx"
 #include <xmloff/xmlimp.hxx>
 
-using ::xmloff::token::IsXMLToken;
-using ::xmloff::token::XML_TOKEN_INVALID;
-
 SvXMLItemMapEntries::~SvXMLItemMapEntries()
 {
 }

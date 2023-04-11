@@ -49,7 +49,6 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::xml::sax::XAttributeList;
 
 /**
  * Determine whether this table is an external reference cache from its

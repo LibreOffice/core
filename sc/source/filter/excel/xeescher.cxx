@@ -80,7 +80,6 @@ using ::com::sun::star::lang::XServiceInfo;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::drawing::XShapes;
-using ::com::sun::star::frame::XModel;
 using ::com::sun::star::awt::XControlModel;
 using ::com::sun::star::form::binding::XBindableValue;
 using ::com::sun::star::form::binding::XListEntrySink;

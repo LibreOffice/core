@@ -28,9 +28,5 @@
 #include <sal/types.h>
 
 using namespace ::com::sun::star;
-using ::std::cout;
-using ::std::cerr;
-using ::std::endl;
-using ::std::vector;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

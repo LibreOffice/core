@@ -47,7 +47,6 @@ namespace svt::table
     using css::uno::Any;
     using css::style::VerticalAlignment_TOP;
     using css::style::VerticalAlignment;
-    using css::uno::WeakReference;
     using css::awt::grid::GridDataEvent;
     using css::awt::grid::XSortableGridData;
     using css::beans::Pair;

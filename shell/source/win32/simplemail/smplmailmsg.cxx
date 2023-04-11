@@ -21,9 +21,7 @@
 #include <osl/file.h>
 #include "smplmailmsg.hxx"
 
-using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Sequence;
-using com::sun::star::lang::IllegalArgumentException;
 
 using namespace cppu;
 

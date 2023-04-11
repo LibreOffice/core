@@ -31,6 +31,9 @@
 #include <svx/svdpage.hxx>
 #include <rtl/math.hxx>
 
+using ::std::cerr;
+using ::std::endl;
+
 class TestSort : public ScUcalcTestBase
 {
 protected:

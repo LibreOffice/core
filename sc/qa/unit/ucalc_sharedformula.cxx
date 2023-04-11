@@ -26,6 +26,9 @@
 #include <memory>
 #include <string_view>
 
+using ::std::cerr;
+using ::std::endl;
+
 class TestSharedFormula : public ScUcalcTestBase
 {
 };

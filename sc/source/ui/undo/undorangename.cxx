@@ -16,8 +16,6 @@
 #include <memory>
 #include <utility>
 
-using ::std::unique_ptr;
-
 ScUndoAllRangeNames::ScUndoAllRangeNames(
     ScDocShell* pDocSh,
     const std::map<OUString, ScRangeName*>& rOldNames,

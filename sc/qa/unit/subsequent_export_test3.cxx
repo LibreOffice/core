@@ -37,6 +37,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using ::std::cerr;
+using ::std::endl;
 
 class ScExportTest3 : public ScModelTestBase
 {
