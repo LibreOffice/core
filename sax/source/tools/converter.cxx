@@ -913,32 +913,6 @@ void Converter::convertDuration(OUStringBuffer& rBuffer,
     rBuffer.append( 'S');
 }
 
-static std::u16string_view trim(std::u16string_view in) {
-  auto left = in.begin();
-  for (;; ++left) {
-    if (left == in.end())
-      return std::u16string_view();
-    if (!isspace(*left))
-      break;
-  }
-  auto right = in.end() - 1;
-  for (; right > left && isspace(*right); --right);
-  return std::u16string_view(&*left, std::distance(left, right) + 1);
-}
-
-static std::string_view trim(std::string_view in) {
-  auto left = in.begin();
-  for (;; ++left) {
-    if (left == in.end())
-      return std::string_view();
-    if (!isspace(*left))
-      break;
-  }
-  auto right = in.end() - 1;
-  for (; right > left && isspace(*right); --right);
-  return std::string_view(&*left, std::distance(left, right) + 1);
-}
-
 /** helper function of Converter::convertDuration */
 template<typename V>
 static bool convertDurationHelper(double& rfTime, V pStr)
@@ -1068,7 +1042,7 @@ static bool convertDurationHelper(double& rfTime, V pStr)
 bool Converter::convertDuration(double& rfTime,
                                 std::string_view rString)
 {
-    std::string_view aTrimmed = trim(rString);
+    std::string_view aTrimmed = o3tl::trim(rString);
     const char* pStr = aTrimmed.data();
 
     return convertDurationHelper(rfTime, pStr);
@@ -1429,14 +1403,14 @@ static bool convertDurationHelper(util::Duration& rDuration, V string)
 bool Converter::convertDuration(util::Duration& rDuration,
                                 std::u16string_view rString)
 {
-    return convertDurationHelper(rDuration, trim(rString));
+    return convertDurationHelper(rDuration, o3tl::trim(rString));
 }
 
 /** convert ISO8601 "duration" string to util::Duration */
 bool Converter::convertDuration(util::Duration& rDuration,
                                 std::string_view rString)
 {
-    return convertDurationHelper(rDuration, trim(rString));
+    return convertDurationHelper(rDuration, o3tl::trim(rString));
 }
 
 static void
@@ -1824,7 +1798,7 @@ static bool lcl_parseDateTime(
 {
     bool bSuccess = true;
 
-    string = trim(string);
+    string = o3tl::trim(string);
 
     bool isNegative(false);
     sal_Int32 nYear(0);
