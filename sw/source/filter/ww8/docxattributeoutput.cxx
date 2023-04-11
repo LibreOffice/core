@@ -575,6 +575,12 @@ OString DocxAttributeOutput::convertToOOXMLHoriOrientRel(sal_Int16 nOrientRel)
     }
 }
 
+void FramePrHelper::SetFrame(ww8::Frame* pFrame)
+{
+    assert(!pFrame || !m_pFrame);
+    m_pFrame = pFrame;
+}
+
 void SdtBlockHelper::DeleteAndResetTheLists()
 {
     if (m_pTokenChildren.is() )
@@ -1099,9 +1105,9 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     for ( const auto & pFrame : aFramePrTextbox )
     {
         DocxTableExportContext aTableExportContext(*this);
-        m_pCurrentFrame = pFrame.get();
+        m_aFramePr.SetFrame(pFrame.get());
         m_rExport.SdrExporter().writeOnlyTextOfFrame(pFrame.get());
-        m_pCurrentFrame = nullptr;
+        m_aFramePr.SetFrame(nullptr);
     }
 
     m_pSerializer->mergeTopMarks(Tag_StartParagraph_2, sax_fastparser::MergeMarks::PREPEND);
@@ -1477,16 +1483,14 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
     m_pSerializer->mergeTopMarks(Tag_InitCollectedRunProperties);
     m_pSerializer->endElementNS( XML_w, XML_rPr );
 
-    if (!m_bWritingHeaderFooter && m_pCurrentFrame)
+    if (!m_bWritingHeaderFooter && m_aFramePr.Frame())
     {
-        const SwFrameFormat& rFrameFormat = m_pCurrentFrame->GetFrameFormat();
-        const SvxBoxItem& rBox = rFrameFormat.GetBox();
-        if (TextBoxIsFramePr(rFrameFormat))
-        {
-            const Size aSize = m_pCurrentFrame->GetSize();
-            PopulateFrameProperties(&rFrameFormat, aSize);
-            FormatBox(rBox);
-        }
+        const SwFrameFormat& rFrameFormat = m_aFramePr.Frame()->GetFrameFormat();
+        assert(TextBoxIsFramePr(rFrameFormat) && "by definition, because Frame()");
+
+        const Size aSize = m_aFramePr.Frame()->GetSize();
+        PopulateFrameProperties(&rFrameFormat, aSize);
+        FormatBox(rFrameFormat.GetBox());
     }
 
     m_pSerializer->endElementNS( XML_w, XML_pPr );
@@ -9852,7 +9856,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_nNextAnnotationMarkId( 0 ),
       m_nEmbedFlyLevel(0),
       m_pMoveRedlineData(nullptr),
-      m_pCurrentFrame( nullptr ),
       m_bParagraphOpened( false ),
       m_bParagraphFrameOpen( false ),
       m_bIsFirstParagraph( true ),
