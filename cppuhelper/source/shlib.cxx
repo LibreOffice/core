@@ -57,7 +57,7 @@ css::uno::Environment cppuhelper::detail::getEnvironment(
             for (sal_Int32 i = 0; i != -1;) {
                 std::string_view imp(o3tl::getToken(imps, 0, ';', i));
                 //TODO: this assumes UNO_ENV_LOG only contains ASCII characters:
-                if (o3tl::equalsAsciiL(implementation, imp))
+                if (o3tl::equalsAscii(implementation, imp))
                 {
                     n += ":log";
                     break;

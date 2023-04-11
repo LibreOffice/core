@@ -131,7 +131,7 @@ bool ServiceDecl::supportsService( std::u16string_view name ) const
     sal_Int32 nIndex = 0;
     do {
         std::string_view const token( o3tl::getToken(str, 0, cDelim, nIndex ) );
-        if (o3tl::equalsAsciiL(name, token))
+        if (o3tl::equalsAscii(name, token))
             return true;
     }
     while (nIndex >= 0);
