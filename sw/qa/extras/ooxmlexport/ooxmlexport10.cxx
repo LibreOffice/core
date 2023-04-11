@@ -520,7 +520,7 @@ DECLARE_OOXMLEXPORT_TEST(testLibreOfficeHang, "frame-wrap-auto.docx")
 
     sal_Int32 nFrame = getProperty<sal_Int32>(getShape(1), "TopBorderDistance");
     sal_Int32 nPara = getProperty<sal_Int32>(getParagraphOfText(1, xText), "TopBorderDistance");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(143), nFrame + nPara);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(141), nFrame + nPara);
     // NOTE: left/right are different because of compat flag INVERT_BORDER_SPACING]
     nFrame = getProperty<sal_Int32>(getShape(1), "LeftBorderDistance");
     nPara = getProperty<sal_Int32>(getParagraphOfText(1, xText), "LeftBorderDistance");

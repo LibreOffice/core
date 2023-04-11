@@ -130,16 +130,22 @@ struct TableReference
 class FramePrHelper
 {
     ww8::Frame* m_pFrame;
+    sal_Int32 m_nTableDepth;
+    bool m_bUseFrameBorders;
     bool m_bUseFrameBackground;
 
 public:
     FramePrHelper()
         : m_pFrame(nullptr)
+        , m_nTableDepth(0)
+        , m_bUseFrameBorders(true)
         , m_bUseFrameBackground(true)
     {}
 
     ww8::Frame* Frame() { return m_pFrame; }
-    void SetFrame(ww8::Frame* pSet);
+    void SetFrame(ww8::Frame* pSet, sal_Int32 nTableDepth = -1);
+    bool UseFrameBorders(sal_Int32 nTableDepth);
+    void SetUseFrameBorders(bool bSet) { m_bUseFrameBorders = bSet; }
     bool UseFrameBackground();
     void SetUseFrameBackground(bool bSet) { m_bUseFrameBackground = bSet; }
 };

@@ -1563,10 +1563,9 @@ static void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& r
                 xTextRangeProperties->setPropertyValue( sPropertyName, uno::Any(table::BorderLine2()));
             else if (nProperty > 5)
             {
-                // Do not duplicate the top/bottom border spacing.
-                // [NOTE: left/right need to be duplicated because of INVERT_BORDER_SPACING]
-                // Hack: a minimal distance is given so left/right shading extends to the edge.
-                xTextRangeProperties->setPropertyValue( sPropertyName, uno::Any(sal_Int32(1)));
+                // Do not duplicate the top6/bottom7 border spacing.
+                // left4/right5 need to be duplicated because of INVERT_BORDER_SPACING
+                aValue.Value <<= sal_Int32(0);
             }
             if (aValue.Value.hasValue())
                 rFrameProperties.push_back(aValue);

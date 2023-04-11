@@ -575,14 +575,24 @@ OString DocxAttributeOutput::convertToOOXMLHoriOrientRel(sal_Int16 nOrientRel)
     }
 }
 
-void FramePrHelper::SetFrame(ww8::Frame* pFrame)
+void FramePrHelper::SetFrame(ww8::Frame* pFrame, sal_Int32 nTableDepth)
 {
     assert(!pFrame || !m_pFrame);
     m_pFrame = pFrame;
+    m_nTableDepth = nTableDepth;
     if (m_pFrame)
     {
+        m_bUseFrameBorders = true;
         m_bUseFrameBackground = true;
     }
+}
+
+bool FramePrHelper::UseFrameBorders(sal_Int32 nTableDepth)
+{
+    if (!m_pFrame || m_nTableDepth < nTableDepth)
+        return false;
+
+    return m_bUseFrameBorders;
 }
 
 bool FramePrHelper::UseFrameBackground()
@@ -1117,7 +1127,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     for ( const auto & pFrame : aFramePrTextbox )
     {
         DocxTableExportContext aTableExportContext(*this);
-        m_aFramePr.SetFrame(pFrame.get());
+        m_aFramePr.SetFrame(pFrame.get(), !m_xTableWrt ? -1 : m_tableReference.m_nTableDepth);
         m_rExport.SdrExporter().writeOnlyTextOfFrame(pFrame.get());
         m_aFramePr.SetFrame(nullptr);
     }
@@ -1503,7 +1513,10 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
 
         const Size aSize = m_aFramePr.Frame()->GetSize();
         PopulateFrameProperties(&rFrameFormat, aSize);
-        FormatBox(rFrameFormat.GetBox());
+
+        // if the paragraph itself never called FormatBox, do so now
+        if (m_aFramePr.UseFrameBorders(!m_xTableWrt ? -1 : m_tableReference.m_nTableDepth))
+            FormatBox(rFrameFormat.GetBox());
 
         if (m_aFramePr.UseFrameBackground())
         {
@@ -1522,7 +1535,9 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
                 }
             }
         }
+
         // reset to true in preparation for the next paragraph in the frame
+        m_aFramePr.SetUseFrameBorders(true);
         m_aFramePr.SetUseFrameBackground(true);
     }
 
@@ -4163,7 +4178,8 @@ static void impl_borders( FSHelperPtr const & pSerializer,
                           const SvxBoxItem& rBox,
                           const OutputBorderOptions& rOptions,
                           std::map<SvxBoxItemLine,
-                          css::table::BorderLine2> &rTableStyleConf )
+                          css::table::BorderLine2> &rTableStyleConf,
+                          ww8::Frame* pFramePr = nullptr)
 {
     static const SvxBoxItemLine aBorders[] =
     {
@@ -4241,6 +4257,34 @@ static void impl_borders( FSHelperPtr const & pSerializer,
             {
                 nDist = rBox.GetDistance(*pBrd);
             }
+        }
+
+        if (pFramePr)
+        {
+            assert(rOptions.bWriteDistance && !rOptions.pDistances);
+
+            // In addition to direct properties, and paragraph styles,
+            // for framePr-floated paragraphs the frame borders also affect the exported values.
+
+            // For border spacing, there is a special situation to consider
+            // because a compat setting ignores left/right paragraph spacing on layout.
+            const SwFrameFormat& rFormat = pFramePr->GetFrameFormat();
+            const SvxBoxItem& rFramePrBox = rFormat.GetBox();
+            const IDocumentSettingAccess& rIDSA = rFormat.GetDoc()->getIDocumentSettingAccess();
+            if (rIDSA.get(DocumentSettingId::INVERT_BORDER_SPACING)
+                && (*pBrd == SvxBoxItemLine::LEFT || *pBrd == SvxBoxItemLine::RIGHT))
+            {
+                // only the frame's border spacing affects layout - so use that value instead.
+                nDist = rFramePrBox.GetDistance(*pBrd);
+            }
+            else
+            {
+                nDist += rFramePrBox.GetDistance(*pBrd);
+            }
+
+            // Unless the user added a paragraph border, the border normally comes from the frame.
+            if (!pLn)
+                pLn = rFramePrBox.GetLine(*pBrd);
         }
 
         impl_borderLine( pSerializer, aXmlElements[i], pLn, nDist, bWriteShadow, aStyleProps );
@@ -9518,11 +9562,14 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         aStyleBorders[ SvxBoxItemLine::LEFT ] = SvxBoxItem::SvxLineToLine(pInherited->GetLeft(), false);
         aStyleBorders[ SvxBoxItemLine::RIGHT ] = SvxBoxItem::SvxLineToLine(pInherited->GetRight(), false);
     }
-
-    impl_borders( m_pSerializer, rBox, aOutputBorderOptions, aStyleBorders );
+    bool bUseFrame = m_aFramePr.UseFrameBorders(!m_xTableWrt ? -1 : m_tableReference.m_nTableDepth);
+    impl_borders(m_pSerializer, rBox, aOutputBorderOptions, aStyleBorders,
+                 bUseFrame ? m_aFramePr.Frame() : nullptr);
 
     // Close the paragraph's borders tag
     m_pSerializer->endElementNS( XML_w, XML_pBdr );
+
+    m_aFramePr.SetUseFrameBorders(false);
 }
 
 void DocxAttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFormatCol& rCol, bool bEven, SwTwips nPageSize )

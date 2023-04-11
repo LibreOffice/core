@@ -1138,7 +1138,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131420)
 {
     loadAndSave("tdf131420.docx");
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:pPr/w:pBdr[2]");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:pPr/w:pBdr/w:top");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf80526_word_wrap, "tdf80526_word_wrap.docx")
