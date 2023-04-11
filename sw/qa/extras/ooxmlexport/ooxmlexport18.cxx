@@ -200,6 +200,28 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePr, "tdf154703_framePr.docx")
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePr2, "tdf154703_framePr2.rtf")
+{
+    // framePr frames are always imported as fully transparent
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(getShape(1), "FillTransparence"));
+
+    if (!isExported())
+    {
+        // Fill the frame with a red background. It should be transferred on export to the paragraph
+        uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
+        xFrame->setPropertyValue("FillColor", uno::Any(COL_RED));
+        xFrame->setPropertyValue("FillTransparence", uno::Any(static_cast<sal_Int32>(0)));
+
+        return;
+    }
+
+    // exported: framed paragraphs without a background should now have a red background
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "//w:body/w:p[1]/w:pPr/w:shd", "fill", "800000");
+    assertXPath(pXmlDoc, "//w:body/w:p[2]/w:pPr/w:shd", "fill", "548DD4"); // was blue already, no change
+    assertXPath(pXmlDoc, "//w:body/w:p[3]/w:pPr/w:shd", "fill", "800000");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_anchoredAfterPgBreak, "tdf153613_anchoredAfterPgBreak.docx")
 {
     const auto& pLayout = parseLayoutDump();
