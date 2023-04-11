@@ -1024,7 +1024,8 @@ SwHTMLWriter& OutHTML_SwTableNode( SwHTMLWriter& rWrt, SwTableNode & rNode,
         break;
     }
 
-    if( bCheckDefList )
+    // In ReqIF case, do not emulate indentation with fake description list
+    if( bCheckDefList && !rWrt.mbReqIF )
     {
         OSL_ENSURE( !rWrt.GetNumInfo().GetNumRule() ||
                 rWrt.GetNextNumInfo(),
