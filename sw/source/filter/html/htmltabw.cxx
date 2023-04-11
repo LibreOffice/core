@@ -1048,16 +1048,8 @@ SwHTMLWriter& OutHTML_SwTableNode( SwHTMLWriter& rWrt, SwTableNode & rNode,
         }
     }
 
-    if( !pFlyFrameFormat && nNewDefListLvl != rWrt.m_nDefListLvl )
+    if( !pFlyFrameFormat && !rWrt.mbReqIF && nNewDefListLvl != rWrt.m_nDefListLvl )
         rWrt.OutAndSetDefList( nNewDefListLvl );
-
-    if( nNewDefListLvl )
-    {
-        if( rWrt.m_bLFPossible )
-            rWrt.OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_dd) );
-        rWrt.IncIndentLevel();
-    }
 
     // eFlyHoriOri and eTabHoriOri now only contain the values of
     // LEFT/CENTER and RIGHT!
@@ -1182,15 +1174,6 @@ SwHTMLWriter& OutHTML_SwTableNode( SwHTMLWriter& rWrt, SwTableNode & rNode,
 
     // move Pam behind the table
     rWrt.m_pCurrentPam->GetPoint()->Assign( *rNode.EndOfSectionNode() );
-
-    if (nNewDefListLvl)
-    {
-        rWrt.DecIndentLevel();
-        if (rWrt.m_bLFPossible)
-            rWrt.OutNewLine();
-        // close the dd element
-        HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_dd), false);
-    }
 
     if( bPreserveForm )
     {

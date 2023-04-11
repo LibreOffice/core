@@ -473,6 +473,7 @@ public:
 
     void OutBasic(const SwHTMLWriter& rHTMLWrt);
 
+    // Used to indent inner blocks using dl/dd tags
     void OutAndSetDefList( sal_uInt16 nNewLvl );
 
     void OutStyleSheet( const SwPageDesc& rPageDesc );
