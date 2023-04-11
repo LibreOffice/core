@@ -39,133 +39,15 @@ public:
         : BootstrapFixture(true, false)
     {
     }
-
-    void testVirtualDevice();
-    void testUseAfterDispose();
-    void testPrinterBackgroundColor();
-    void testWindowBackgroundColor();
-    void testGetReadableFontColorPrinter();
-    void testGetReadableFontColorWindow();
-    void testDrawInvertedBitmap();
-    void testDrawBlackBitmap();
-    void testDrawWhiteBitmap();
-    void testDrawGrayBitmap();
-    void testDrawBitmap();
-    void testDrawScaleBitmap();
-    void testDrawScalePartBitmap();
-    void testDrawTransformedBitmapEx();
-    void testDrawTransformedBitmapExFlip();
-    void testRTL();
-    void testRTLGuard();
-    void testDefaultFillColor();
-    void testTransparentFillColor();
-    void testFillColor();
-    void testDefaultLineColor();
-    void testTransparentLineColor();
-    void testLineColor();
-    void testFont();
-    void testTransparentFont();
-    void testDefaultRefPoint();
-    void testRefPoint();
-    void testRasterOp();
-    void testOutputFlag();
-    void testAntialias();
-    void testDrawMode();
-    void testLayoutMode();
-    void testDigitLanguage();
-    void testStackFunctions();
-    void testSystemTextColor();
-    void testShouldDrawWavePixelAsRect();
-    void testGetWaveLineSize();
-    void testErase();
-    void testDrawPixel();
-    void testDrawLine();
-    void testDrawRect();
-    void testDrawArc();
-    void testDrawEllipse();
-    void testDrawPie();
-    void testDrawChord();
-    void testDrawCheckered();
-    void testDrawBorder();
-    void testDrawWaveLine();
-    void testDrawPolyLine();
-    void testDrawPolygon();
-    void testDrawPolyPolygon();
-    void testDrawGradient_drawmode();
-    void testDrawGradient_rect_linear();
-    void testDrawGradient_rect_axial();
-    void testDrawGradient_polygon_linear();
-    void testDrawGradient_polygon_axial();
-    void testDrawGradient_rect_complex();
-
-    CPPUNIT_TEST_SUITE(VclOutdevTest);
-    CPPUNIT_TEST(testVirtualDevice);
-    CPPUNIT_TEST(testUseAfterDispose);
-    CPPUNIT_TEST(testPrinterBackgroundColor);
-    CPPUNIT_TEST(testWindowBackgroundColor);
-    CPPUNIT_TEST(testDrawInvertedBitmap);
-    CPPUNIT_TEST(testDrawBlackBitmap);
-    CPPUNIT_TEST(testDrawWhiteBitmap);
-    CPPUNIT_TEST(testDrawGrayBitmap);
-    CPPUNIT_TEST(testDrawBitmap);
-    CPPUNIT_TEST(testDrawScaleBitmap);
-    CPPUNIT_TEST(testDrawScalePartBitmap);
-    CPPUNIT_TEST(testGetReadableFontColorPrinter);
-    CPPUNIT_TEST(testGetReadableFontColorWindow);
-    CPPUNIT_TEST(testDrawTransformedBitmapEx);
-    CPPUNIT_TEST(testDrawTransformedBitmapExFlip);
-    CPPUNIT_TEST(testRTL);
-    CPPUNIT_TEST(testRTLGuard);
-    CPPUNIT_TEST(testDefaultFillColor);
-    CPPUNIT_TEST(testTransparentFillColor);
-    CPPUNIT_TEST(testFillColor);
-    CPPUNIT_TEST(testDefaultLineColor);
-    CPPUNIT_TEST(testTransparentLineColor);
-    CPPUNIT_TEST(testLineColor);
-    CPPUNIT_TEST(testFont);
-    CPPUNIT_TEST(testTransparentFont);
-    CPPUNIT_TEST(testDefaultRefPoint);
-    CPPUNIT_TEST(testRefPoint);
-    CPPUNIT_TEST(testRasterOp);
-    CPPUNIT_TEST(testOutputFlag);
-    CPPUNIT_TEST(testAntialias);
-    CPPUNIT_TEST(testDrawMode);
-    CPPUNIT_TEST(testLayoutMode);
-    CPPUNIT_TEST(testDigitLanguage);
-    CPPUNIT_TEST(testStackFunctions);
-    CPPUNIT_TEST(testSystemTextColor);
-    CPPUNIT_TEST(testShouldDrawWavePixelAsRect);
-    CPPUNIT_TEST(testGetWaveLineSize);
-    CPPUNIT_TEST(testErase);
-    CPPUNIT_TEST(testDrawPixel);
-    CPPUNIT_TEST(testDrawLine);
-    CPPUNIT_TEST(testDrawRect);
-    CPPUNIT_TEST(testDrawArc);
-    CPPUNIT_TEST(testDrawEllipse);
-    CPPUNIT_TEST(testDrawPie);
-    CPPUNIT_TEST(testDrawChord);
-    CPPUNIT_TEST(testDrawCheckered);
-    CPPUNIT_TEST(testDrawBorder);
-    CPPUNIT_TEST(testDrawWaveLine);
-    CPPUNIT_TEST(testDrawPolyLine);
-    CPPUNIT_TEST(testDrawPolygon);
-    CPPUNIT_TEST(testDrawPolyPolygon);
-    CPPUNIT_TEST(testDrawGradient_drawmode);
-    CPPUNIT_TEST(testDrawGradient_rect_linear);
-    CPPUNIT_TEST(testDrawGradient_rect_axial);
-    CPPUNIT_TEST(testDrawGradient_polygon_linear);
-    CPPUNIT_TEST(testDrawGradient_polygon_axial);
-    CPPUNIT_TEST(testDrawGradient_rect_complex);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void VclOutdevTest::testGetReadableFontColorPrinter()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testGetReadableFontColorPrinter)
 {
     ScopedVclPtrInstance<Printer> pPrinter;
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, pPrinter->GetReadableFontColor(COL_WHITE, COL_WHITE));
 }
 
-void VclOutdevTest::testGetReadableFontColorWindow()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testGetReadableFontColorWindow)
 {
     ScopedVclPtrInstance<vcl::Window> pWindow(nullptr, WB_APP | WB_STDWORK);
     CPPUNIT_ASSERT_EQUAL(COL_WHITE,
@@ -176,20 +58,20 @@ void VclOutdevTest::testGetReadableFontColorWindow()
                          pWindow->GetOutDev()->GetReadableFontColor(COL_BLACK, COL_BLACK));
 }
 
-void VclOutdevTest::testPrinterBackgroundColor()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testPrinterBackgroundColor)
 {
     ScopedVclPtrInstance<Printer> pPrinter;
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, pPrinter->GetBackgroundColor());
 }
 
-void VclOutdevTest::testWindowBackgroundColor()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testWindowBackgroundColor)
 {
     ScopedVclPtrInstance<vcl::Window> pWindow(nullptr, WB_APP | WB_STDWORK);
     pWindow->SetBackground(Wallpaper(COL_WHITE));
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, pWindow->GetBackgroundColor());
 }
 
-void VclOutdevTest::testVirtualDevice()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testVirtualDevice)
 {
 // TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
 #ifndef MACOSX
@@ -244,7 +126,7 @@ void VclOutdevTest::testVirtualDevice()
 #endif
 }
 
-void VclOutdevTest::testUseAfterDispose()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testUseAfterDispose)
 {
     // Create a virtual device, enable map mode then dispose it.
     ScopedVclPtrInstance<VirtualDevice> pVDev;
@@ -259,7 +141,7 @@ void VclOutdevTest::testUseAfterDispose()
     pVDev->GetViewTransformation();
 }
 
-void VclOutdevTest::testDrawInvertedBitmap()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawInvertedBitmap)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
@@ -282,7 +164,7 @@ void VclOutdevTest::testDrawInvertedBitmap()
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, 0), Size(10, 10)), pRectAction->GetRect());
 }
 
-void VclOutdevTest::testDrawBlackBitmap()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawBlackBitmap)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
@@ -327,7 +209,7 @@ void VclOutdevTest::testDrawBlackBitmap()
     CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_BLACK), rColor);
 }
 
-void VclOutdevTest::testDrawWhiteBitmap()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawWhiteBitmap)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
@@ -371,7 +253,7 @@ void VclOutdevTest::testDrawWhiteBitmap()
     CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_WHITE), rColor);
 }
 
-void VclOutdevTest::testDrawBitmap()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawBitmap)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
@@ -389,7 +271,7 @@ void VclOutdevTest::testDrawBitmap()
     CPPUNIT_ASSERT_EQUAL(Point(0, 0), pBmpAction->GetPoint());
 }
 
-void VclOutdevTest::testDrawScaleBitmap()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawScaleBitmap)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
@@ -408,7 +290,7 @@ void VclOutdevTest::testDrawScaleBitmap()
     CPPUNIT_ASSERT_EQUAL(Size(10, 10), pBmpScaleAction->GetSize());
 }
 
-void VclOutdevTest::testDrawScalePartBitmap()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawScalePartBitmap)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
@@ -429,7 +311,7 @@ void VclOutdevTest::testDrawScalePartBitmap()
     CPPUNIT_ASSERT_EQUAL(Size(10, 10), pBmpScalePartAction->GetDestSize());
 }
 
-void VclOutdevTest::testDrawGrayBitmap()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawGrayBitmap)
 {
     // draw a red 1x1 bitmap
     Bitmap aBmp(Size(1, 1), vcl::PixelFormat::N24_BPP);
@@ -456,7 +338,7 @@ void VclOutdevTest::testDrawGrayBitmap()
     }
 }
 
-void VclOutdevTest::testDrawTransformedBitmapEx()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawTransformedBitmapEx)
 {
     // Create a virtual device, and connect a metafile to it.
     // Also create a 16x16 bitmap.
@@ -520,7 +402,7 @@ void VclOutdevTest::testDrawTransformedBitmapEx()
     }
 }
 
-void VclOutdevTest::testDrawTransformedBitmapExFlip()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawTransformedBitmapExFlip)
 {
     // Create a virtual device, and connect a metafile to it.
     // Also create a 16x16 bitmap.
@@ -571,7 +453,7 @@ void VclOutdevTest::testDrawTransformedBitmapExFlip()
     CPPUNIT_ASSERT_EQUAL_MESSAGE(ss.str(), COL_BLACK, Color(aColor));
 }
 
-void VclOutdevTest::testRTL()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testRTL)
 {
     ScopedVclPtrInstance<vcl::Window> pWindow(nullptr, WB_APP | WB_STDWORK);
     pWindow->EnableRTL();
@@ -583,7 +465,7 @@ void VclOutdevTest::testRTL()
     CPPUNIT_ASSERT(pBuffer->IsRTLEnabled());
 }
 
-void VclOutdevTest::testRTLGuard()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testRTLGuard)
 {
     ScopedVclPtrInstance<vcl::Window> pWindow(nullptr, WB_APP | WB_STDWORK);
     pWindow->EnableRTL();
@@ -595,7 +477,7 @@ void VclOutdevTest::testRTLGuard()
     CPPUNIT_ASSERT(aGuard.GetRenderContext()->IsRTLEnabled());
 }
 
-void VclOutdevTest::testDefaultFillColor()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDefaultFillColor)
 {
     // Create a virtual device, and connect a metafile to it.
     ScopedVclPtrInstance<VirtualDevice> pVDev;
@@ -616,7 +498,7 @@ void VclOutdevTest::testDefaultFillColor()
     CPPUNIT_ASSERT_EQUAL(Color(), rColor);
 }
 
-void VclOutdevTest::testTransparentFillColor()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testTransparentFillColor)
 {
     // Create a virtual device, and connect a metafile to it.
     ScopedVclPtrInstance<VirtualDevice> pVDev;
@@ -637,7 +519,7 @@ void VclOutdevTest::testTransparentFillColor()
     CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, rColor);
 }
 
-void VclOutdevTest::testFillColor()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testFillColor)
 {
     // Create a virtual device, and connect a metafile to it.
     ScopedVclPtrInstance<VirtualDevice> pVDev;
@@ -658,7 +540,7 @@ void VclOutdevTest::testFillColor()
     CPPUNIT_ASSERT_EQUAL(COL_RED, rColor);
 }
 
-void VclOutdevTest::testDefaultLineColor()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDefaultLineColor)
 {
     // Create a virtual device, and connect a metafile to it.
     ScopedVclPtrInstance<VirtualDevice> pVDev;
@@ -679,7 +561,7 @@ void VclOutdevTest::testDefaultLineColor()
     CPPUNIT_ASSERT_EQUAL(Color(), rColor);
 }
 
-void VclOutdevTest::testTransparentLineColor()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testTransparentLineColor)
 {
     // Create a virtual device, and connect a metafile to it.
     ScopedVclPtrInstance<VirtualDevice> pVDev;
@@ -700,7 +582,7 @@ void VclOutdevTest::testTransparentLineColor()
     CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, rColor);
 }
 
-void VclOutdevTest::testLineColor()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testLineColor)
 {
     // Create a virtual device, and connect a metafile to it.
     ScopedVclPtrInstance<VirtualDevice> pVDev;
@@ -721,7 +603,7 @@ void VclOutdevTest::testLineColor()
     CPPUNIT_ASSERT_EQUAL(COL_RED, rColor);
 }
 
-void VclOutdevTest::testFont()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testFont)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
 
@@ -768,7 +650,7 @@ void VclOutdevTest::testFont()
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, pTextColorAction->GetColor());
 }
 
-void VclOutdevTest::testTransparentFont()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testTransparentFont)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
 
@@ -790,7 +672,7 @@ void VclOutdevTest::testTransparentFont()
     CPPUNIT_ASSERT_EQUAL(nActionsExpected, aMtf.GetActionSize());
 }
 
-void VclOutdevTest::testDefaultRefPoint()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDefaultRefPoint)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
 
@@ -808,7 +690,7 @@ void VclOutdevTest::testDefaultRefPoint()
     CPPUNIT_ASSERT_EQUAL(Point(), pRefPointAction->GetRefPoint());
 }
 
-void VclOutdevTest::testRefPoint()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testRefPoint)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
 
@@ -826,7 +708,7 @@ void VclOutdevTest::testRefPoint()
     CPPUNIT_ASSERT_EQUAL(Point(10, 20), pRefPointAction->GetRefPoint());
 }
 
-void VclOutdevTest::testRasterOp()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testRasterOp)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
 
@@ -845,7 +727,7 @@ void VclOutdevTest::testRasterOp()
     CPPUNIT_ASSERT_EQUAL(RasterOp::Invert, pRasterOpAction->GetRasterOp());
 }
 
-void VclOutdevTest::testOutputFlag()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testOutputFlag)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
 
@@ -858,7 +740,7 @@ void VclOutdevTest::testOutputFlag()
     CPPUNIT_ASSERT(!pVDev->IsDeviceOutputNecessary());
 }
 
-void VclOutdevTest::testAntialias()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testAntialias)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
 
@@ -869,7 +751,7 @@ void VclOutdevTest::testAntialias()
     CPPUNIT_ASSERT_EQUAL(AntialiasingFlags::Enable, pVDev->GetAntialiasing());
 }
 
-void VclOutdevTest::testDrawMode()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawMode)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
 
@@ -880,7 +762,7 @@ void VclOutdevTest::testDrawMode()
     CPPUNIT_ASSERT_EQUAL(DrawModeFlags::BlackLine, pVDev->GetDrawMode());
 }
 
-void VclOutdevTest::testLayoutMode()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testLayoutMode)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
 
@@ -900,7 +782,7 @@ void VclOutdevTest::testLayoutMode()
                          pLayoutModeAction->GetLayoutMode());
 }
 
-void VclOutdevTest::testDigitLanguage()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDigitLanguage)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
 
@@ -919,7 +801,7 @@ void VclOutdevTest::testDigitLanguage()
     CPPUNIT_ASSERT_EQUAL(LANGUAGE_GERMAN, pTextLanguageAction->GetTextLanguage());
 }
 
-void VclOutdevTest::testStackFunctions()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testStackFunctions)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     GDIMetaFile aMtf;
@@ -976,7 +858,7 @@ void VclOutdevTest::testStackFunctions()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default ref point", Point(0, 0), pVDev->GetRefPoint());
 }
 
-void VclOutdevTest::testSystemTextColor()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testSystemTextColor)
 {
     {
         ScopedVclPtrInstance<VirtualDevice> pVDev;
@@ -1029,7 +911,7 @@ public:
 };
 }
 
-void VclOutdevTest::testShouldDrawWavePixelAsRect()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testShouldDrawWavePixelAsRect)
 {
     ScopedVclPtrInstance<WaveLineTester> pTestOutDev;
 
@@ -1039,7 +921,7 @@ void VclOutdevTest::testShouldDrawWavePixelAsRect()
     CPPUNIT_ASSERT(pTestOutDev->testShouldDrawWavePixelAsRect(10));
 }
 
-void VclOutdevTest::testGetWaveLineSize()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testGetWaveLineSize)
 {
     {
         ScopedVclPtrInstance<WaveLineTester> pTestOutDev;
@@ -1066,7 +948,7 @@ void VclOutdevTest::testGetWaveLineSize()
     }
 }
 
-void VclOutdevTest::testErase()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testErase)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     GDIMetaFile aMtf;
@@ -1096,7 +978,7 @@ void VclOutdevTest::testErase()
                                  pAction->GetType());
 }
 
-void VclOutdevTest::testDrawPixel()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawPixel)
 {
     {
         ScopedVclPtrInstance<VirtualDevice> pVDev;
@@ -1140,7 +1022,7 @@ void VclOutdevTest::testDrawPixel()
     }
 }
 
-void VclOutdevTest::testDrawLine()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawLine)
 {
     {
         ScopedVclPtrInstance<VirtualDevice> pVDev;
@@ -1200,7 +1082,7 @@ void VclOutdevTest::testDrawLine()
     }
 }
 
-void VclOutdevTest::testDrawRect()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawRect)
 {
     {
         ScopedVclPtrInstance<VirtualDevice> pVDev;
@@ -1238,7 +1120,7 @@ void VclOutdevTest::testDrawRect()
     }
 }
 
-void VclOutdevTest::testDrawEllipse()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawEllipse)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     GDIMetaFile aMtf;
@@ -1255,7 +1137,7 @@ void VclOutdevTest::testDrawEllipse()
                                  pEllipseAction->GetRect());
 }
 
-void VclOutdevTest::testDrawPie()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawPie)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     GDIMetaFile aMtf;
@@ -1276,7 +1158,7 @@ void VclOutdevTest::testDrawPie()
                                  pPieAction->GetEndPoint());
 }
 
-void VclOutdevTest::testDrawChord()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawChord)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     GDIMetaFile aMtf;
@@ -1296,7 +1178,7 @@ void VclOutdevTest::testDrawChord()
                                  pChordAction->GetEndPoint());
 }
 
-void VclOutdevTest::testDrawArc()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawArc)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     GDIMetaFile aMtf;
@@ -1316,7 +1198,7 @@ void VclOutdevTest::testDrawArc()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Arc end point wrong", Point(12, 13), pArcAction->GetEndPoint());
 }
 
-void VclOutdevTest::testDrawCheckered()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawCheckered)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     GDIMetaFile aMtf;
@@ -1754,7 +1636,7 @@ void VclOutdevTest::testDrawCheckered()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not pop", MetaActionType::POP, pAction->GetType());
 }
 
-void VclOutdevTest::testDrawBorder()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawBorder)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     GDIMetaFile aMtf;
@@ -1790,7 +1672,7 @@ void VclOutdevTest::testDrawBorder()
                                  pRectAction->GetRect());
 }
 
-void VclOutdevTest::testDrawWaveLine()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawWaveLine)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     GDIMetaFile aMtf;
@@ -1804,7 +1686,7 @@ void VclOutdevTest::testDrawWaveLine()
                                  pAction->GetType());
 }
 
-void VclOutdevTest::testDrawPolyLine()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawPolyLine)
 {
     {
         ScopedVclPtrInstance<VirtualDevice> pVDev;
@@ -1918,7 +1800,7 @@ void VclOutdevTest::testDrawPolyLine()
     }
 }
 
-void VclOutdevTest::testDrawPolygon()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawPolygon)
 {
     {
         ScopedVclPtrInstance<VirtualDevice> pVDev;
@@ -1974,7 +1856,7 @@ static tools::PolyPolygon createPolyPolygon()
     return aPolyPolygon;
 }
 
-void VclOutdevTest::testDrawPolyPolygon()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawPolyPolygon)
 {
     {
         ScopedVclPtrInstance<VirtualDevice> pVDev;
@@ -2097,7 +1979,7 @@ static size_t ClipGradientTest(GDIMetaFile& rMtf, size_t nIndex)
     return nIndex;
 }
 
-void VclOutdevTest::testDrawGradient_drawmode()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawGradient_drawmode)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     GDIMetaFile aMtf;
@@ -2130,7 +2012,7 @@ void VclOutdevTest::testDrawGradient_drawmode()
                                  MetaActionType::POP, pAction->GetType());
 }
 
-void VclOutdevTest::testDrawGradient_rect_linear()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawGradient_rect_linear)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     GDIMetaFile aMtf;
@@ -2151,7 +2033,7 @@ void VclOutdevTest::testDrawGradient_rect_linear()
                                  pAction->GetType());
 }
 
-void VclOutdevTest::testDrawGradient_rect_axial()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawGradient_rect_axial)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     GDIMetaFile aMtf;
@@ -2172,7 +2054,7 @@ void VclOutdevTest::testDrawGradient_rect_axial()
                                  pAction->GetType());
 }
 
-void VclOutdevTest::testDrawGradient_polygon_linear()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawGradient_polygon_linear)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     GDIMetaFile aMtf;
@@ -2190,7 +2072,7 @@ void VclOutdevTest::testDrawGradient_polygon_linear()
     ClipGradientTest(aMtf, INITIAL_SETUP_ACTION_COUNT);
 }
 
-void VclOutdevTest::testDrawGradient_polygon_axial()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawGradient_polygon_axial)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     GDIMetaFile aMtf;
@@ -2208,7 +2090,7 @@ void VclOutdevTest::testDrawGradient_polygon_axial()
     ClipGradientTest(aMtf, INITIAL_SETUP_ACTION_COUNT);
 }
 
-void VclOutdevTest::testDrawGradient_rect_complex()
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawGradient_rect_complex)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     GDIMetaFile aMtf;
@@ -2227,8 +2109,6 @@ void VclOutdevTest::testDrawGradient_rect_complex()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a gradient action (rectangle area)", MetaActionType::GRADIENT,
                                  pAction->GetType());
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(VclOutdevTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
