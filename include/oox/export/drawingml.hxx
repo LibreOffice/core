@@ -263,7 +263,8 @@ public:
         , meDocumentType(eDocumentType)
     {}
 
-    OUString write(const Graphic& rGraphic, bool bRelPathToMedia);
+    OUString writeToStorage(Graphic const& rGraphic, bool bRelPathToMedia = false);
+    OUString writeBlip(Graphic const& rGraphic , bool bRelPathToMedia = false);
 };
 
 class OOX_DLLPUBLIC DrawingML

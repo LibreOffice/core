@@ -2000,7 +2000,7 @@ void PowerPointExport::WriteTheme(sal_Int32 nThemeNum, model::Theme* pTheme)
         return;
     OUString sThemePath = "ppt/theme/theme" + OUString::number(nThemeNum + 1) + ".xml";
 
-    oox::ThemeExport aThemeExport(this);
+    oox::ThemeExport aThemeExport(this, DOCUMENT_PPTX);
 
     aThemeExport.write(sThemePath, *pTheme);
 }
