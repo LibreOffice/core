@@ -64,7 +64,8 @@ public:
                 if (!(tc2.Class("OString").Namespace("rtl").GlobalNamespace()
                       || tc2.Class("OUString").Namespace("rtl").GlobalNamespace()
                       || tc2.Class("OStringBuffer").Namespace("rtl").GlobalNamespace()
-                      || tc2.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()))
+                      || tc2.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
+                      || tc2.ClassOrStruct("StringNumber").Namespace("rtl").GlobalNamespace()))
                     continue;
                 if (!loplugin::DeclCheck(e->getMethodDecl()).Function("getStr"))
                     continue;
@@ -89,7 +90,8 @@ public:
                 if (!(tc2.Class("OString").Namespace("rtl").GlobalNamespace()
                       || tc2.Class("OUString").Namespace("rtl").GlobalNamespace()
                       || tc2.Class("OStringBuffer").Namespace("rtl").GlobalNamespace()
-                      || tc2.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()))
+                      || tc2.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
+                      || tc2.ClassOrStruct("StringNumber").Namespace("rtl").GlobalNamespace()))
                     continue;
                 if (!loplugin::DeclCheck(e->getMethodDecl()).Function("getStr"))
                     continue;

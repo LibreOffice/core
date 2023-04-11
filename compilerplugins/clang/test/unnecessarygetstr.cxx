@@ -30,6 +30,10 @@ void test1(Foo& foo)
     f1(true, s.getStr());
     // expected-error@+1 {{unnecessary call to 'getStr' when passing to OString arg [loplugin:unnecessarygetstr]}}
     foo.f1(true, s.getStr());
+    // expected-error@+1 {{unnecessary call to 'getStr' when passing to OString arg [loplugin:unnecessarygetstr]}}
+    foo.f1(true, OString::boolean(true).getStr());
+    // expected-error@+1 {{unnecessary call to 'getStr' when passing to OString arg [loplugin:unnecessarygetstr]}}
+    foo.f1(true, OString::number(12).getStr());
 
     // avoid false +
     OString aVal = "xx";
@@ -51,5 +55,9 @@ void test2(Foo2& foo)
     f2(true, s.getStr());
     // expected-error@+1 {{unnecessary call to 'getStr' when passing to string_view arg [loplugin:unnecessarygetstr]}}
     foo.f2(true, s.getStr());
+    // expected-error@+1 {{unnecessary call to 'getStr' when passing to string_view arg [loplugin:unnecessarygetstr]}}
+    foo.f2(true, OString::boolean(true).getStr());
+    // expected-error@+1 {{unnecessary call to 'getStr' when passing to string_view arg [loplugin:unnecessarygetstr]}}
+    foo.f2(true, OString::number(12).getStr());
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
