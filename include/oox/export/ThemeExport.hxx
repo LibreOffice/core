@@ -12,12 +12,22 @@
 #include <sal/config.h>
 #include <oox/dllapi.h>
 #include <oox/core/xmlfilterbase.hxx>
+#include <oox/export/utils.hxx>
 
 namespace model
 {
 class Theme;
 class FontScheme;
 class FormatScheme;
+class EffectStyle;
+class LineStyle;
+class FillStyle;
+class BlipFill;
+class PatternFill;
+class GradientFill;
+class SolidFill;
+struct ColorDefinition;
+struct Transformation;
 }
 
 namespace oox
@@ -26,6 +36,7 @@ class OOX_DLLPUBLIC ThemeExport
 {
 private:
     oox::core::XmlFilterBase* mpFilterBase;
+    sax_fastparser::FSHelperPtr mpFS;
 
 public:
     ThemeExport(oox::core::XmlFilterBase* pFilterBase);
@@ -33,11 +44,27 @@ public:
     void write(OUString const& rPath, model::Theme const& rTheme);
 
 private:
-    static bool writeColorSet(sax_fastparser::FSHelperPtr pFS, model::Theme const& rTheme);
-    static bool writeFontScheme(sax_fastparser::FSHelperPtr pFS,
-                                model::FontScheme const& rFontScheme);
-    static bool writeFormatScheme(sax_fastparser::FSHelperPtr pFS,
-                                  model::FormatScheme const& rFormatScheme);
+    bool writeColorSet(model::Theme const& rTheme);
+    bool writeFontScheme(model::FontScheme const& rFontScheme);
+    bool writeFormatScheme(model::FormatScheme const& rFormatScheme);
+
+    void writeEffectStyle(model::EffectStyle const& rEffectStyle);
+    void writeLineStyle(model::LineStyle const& rLineStyle);
+    void writeBackgroundFillStyle(model::FillStyle const& rFillStyle);
+    void writeFillStyle(model::FillStyle const& rFillStyle);
+    void writeBlipFill(model::BlipFill const& rBlipFill);
+    static void writeBlip(model::BlipFill const& rBlipFil);
+    void writePatternFill(model::PatternFill const& rPatternFill);
+    void writeGradientFill(model::GradientFill const& rGradientFill);
+    void writeSolidFill(model::SolidFill const& rSolidFill);
+    void writeColorDefinition(model::ColorDefinition const& rColorDefinition);
+    void writeColorPlaceholder(model::ColorDefinition const& rColorDefinition);
+    void writeColorSystem(model::ColorDefinition const& rColorDefinition);
+    void writeColorScheme(model::ColorDefinition const& rColorDefinition);
+    void writeColorHSL(model::ColorDefinition const& rColorDefinition);
+    void writeColorCRGB(model::ColorDefinition const& rColorDefinition);
+    void writeColorRGB(model::ColorDefinition const& rColorDefinition);
+    void writeColorTransformations(std::vector<model::Transformation> const& rTransformations);
 };
 
 } // end namespace oox
