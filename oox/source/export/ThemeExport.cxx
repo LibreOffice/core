@@ -34,8 +34,10 @@ void writeRelativeRectangle(sax_fastparser::FSHelperPtr pFS, sal_Int32 nToken,
 }
 } // end anonymous namespace
 
-ThemeExport::ThemeExport(oox::core::XmlFilterBase* pFilterBase)
+ThemeExport::ThemeExport(oox::core::XmlFilterBase* pFilterBase,
+                         oox::drawingml::DocumentType eDocumentType)
     : mpFilterBase(pFilterBase)
+    , meDocumentType(eDocumentType)
 {
 }
 
@@ -579,7 +581,14 @@ OString convertRectangleAlignment(model::RectangleAlignment eFlipMode)
 }
 } // end anonymous ns
 
-void ThemeExport::writeBlip(model::BlipFill const& /*rBlipFil*/) {}
+void ThemeExport::writeBlip(model::BlipFill const& rBlipFil)
+{
+    if (!rBlipFil.mxGraphic.is())
+        return;
+    oox::drawingml::GraphicExport aExporter(mpFS, mpFilterBase, meDocumentType);
+    Graphic aGraphic(rBlipFil.mxGraphic);
+    aExporter.writeBlip(aGraphic, false);
+}
 
 void ThemeExport::writeBlipFill(model::BlipFill const& rBlipFill)
 {

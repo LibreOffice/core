@@ -1224,7 +1224,23 @@ const char* DrawingML::GetRelationCompPrefix() const
     return getRelationCompPrefix(meDocumentType);
 }
 
-OUString GraphicExport::write(const Graphic& rGraphic , bool bRelPathToMedia)
+OUString GraphicExport::writeBlip(Graphic const& rGraphic , bool bRelPathToMedia)
+{
+    OUString sRelId;
+
+    sRelId = writeToStorage(rGraphic, bRelPathToMedia);
+
+    mpFS->startElementNS(XML_a, XML_blip, FSNS(XML_r, XML_embed), sRelId);
+
+    //WriteImageBrightnessContrastTransparence(rXPropSet);
+    //WriteArtisticEffect(rXPropSet);
+
+    mpFS->endElementNS(XML_a, XML_blip);
+
+    return sRelId;
+}
+
+OUString GraphicExport::writeToStorage(const Graphic& rGraphic , bool bRelPathToMedia)
 {
     GfxLink aLink = rGraphic.GetGfxLink ();
     BitmapChecksum aChecksum = rGraphic.GetChecksum();
@@ -1357,7 +1373,7 @@ OUString GraphicExport::write(const Graphic& rGraphic , bool bRelPathToMedia)
 OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
 {
     GraphicExport exporter(mpFS, mpFB, meDocumentType);
-    return exporter.write(rGraphic, bRelPathToMedia);
+    return exporter.writeToStorage(rGraphic, bRelPathToMedia);
 }
 
 void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::drawing::XShape>& xShape)

@@ -36,10 +36,11 @@ class OOX_DLLPUBLIC ThemeExport
 {
 private:
     oox::core::XmlFilterBase* mpFilterBase;
+    oox::drawingml::DocumentType meDocumentType;
     sax_fastparser::FSHelperPtr mpFS;
 
 public:
-    ThemeExport(oox::core::XmlFilterBase* pFilterBase);
+    ThemeExport(oox::core::XmlFilterBase* pFilterBase, oox::drawingml::DocumentType eDocumentType);
 
     void write(OUString const& rPath, model::Theme const& rTheme);
 
@@ -53,7 +54,7 @@ private:
     void writeBackgroundFillStyle(model::FillStyle const& rFillStyle);
     void writeFillStyle(model::FillStyle const& rFillStyle);
     void writeBlipFill(model::BlipFill const& rBlipFill);
-    static void writeBlip(model::BlipFill const& rBlipFil);
+    void writeBlip(model::BlipFill const& rBlipFill);
     void writePatternFill(model::PatternFill const& rPatternFill);
     void writeGradientFill(model::GradientFill const& rGradientFill);
     void writeSolidFill(model::SolidFill const& rSolidFill);
