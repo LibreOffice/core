@@ -41,7 +41,6 @@ namespace chart
 {
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Reference;
 
 DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWrapper
         , const OUString& rObjectCID

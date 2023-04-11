@@ -32,8 +32,6 @@ using namespace ::com::sun::star;
 
 namespace chart::impl
 {
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::frame::XModel;
     using ::com::sun::star::lang::DisposedException;
 
 UndoElement::UndoElement( OUString i_actionString, rtl::Reference<::chart::ChartModel> i_documentModel, std::shared_ptr< ChartModelClone > i_modelClone )

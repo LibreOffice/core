@@ -32,8 +32,6 @@ using namespace connectivity::mozab;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::lang::XSingleServiceFactory;
-using ::com::sun::star::lang::XMultiServiceFactory;
 
 MozillaBootstrap::MozillaBootstrap()
     : OMozillaBootstrap_BASE(m_aMutex)

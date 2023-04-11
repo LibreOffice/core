@@ -34,7 +34,6 @@
 
 #include <comphelper/servicehelper.hxx>
 
-using ::com::sun::star::uno::Reference;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 

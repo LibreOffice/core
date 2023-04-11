@@ -30,11 +30,9 @@
 
 namespace connectivity::mysqlc
 {
-using ::com::sun::star::sdbc::SQLException;
 using ::com::sun::star::sdbc::XResultSetMetaData;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Type;
 
 #if defined MYSQL_VERSION_ID && (MYSQL_VERSION_ID >= 80000) && !defined MARIADB_BASE_VERSION

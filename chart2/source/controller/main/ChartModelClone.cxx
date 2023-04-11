@@ -51,10 +51,6 @@ namespace chart
     using ::com::sun::star::chart2::XInternalDataProvider;
     using ::com::sun::star::chart2::XAnyDescriptionAccess;
     using ::com::sun::star::view::XSelectionSupplier;
-    using ::com::sun::star::lang::XComponent;
-    using ::com::sun::star::chart2::XTitled;
-    using ::com::sun::star::util::XModifiable;
-    using ::com::sun::star::chart2::data::XDataSource;
     using ::com::sun::star::chart2::data::XLabeledDataSequence;
 
     // = helper

@@ -36,10 +36,8 @@
 
 namespace connectivity::mysqlc
 {
-using ::com::sun::star::sdbc::SQLException;
 using ::com::sun::star::sdbc::SQLWarning;
 using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Type;
 
 typedef ::cppu::WeakComponentImplHelper3<css::sdbc::XWarningsSupplier, css::util::XCancellable,

@@ -31,8 +31,6 @@ namespace chart
 {
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::WeakReference;
 
 DragMethod_Base::DragMethod_Base( DrawViewWrapper& rDrawViewWrapper
                                              , OUString aObjectCID

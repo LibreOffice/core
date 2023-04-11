@@ -40,9 +40,7 @@
 
 namespace connectivity::mysqlc
 {
-using ::com::sun::star::sdbc::SQLException;
 using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::RuntimeException;
 
 /*
         **  OResultSet

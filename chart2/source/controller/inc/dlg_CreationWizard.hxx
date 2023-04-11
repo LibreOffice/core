@@ -37,7 +37,6 @@ class XComponentContext;
 }
 
 using vcl::WizardTypes::WizardState;
-using vcl::WizardTypes::CommitPageReason;
 
 namespace chart
 {

@@ -60,14 +60,8 @@
 
 using namespace css;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::XComponentContext;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::Exception;
-using ::com::sun::star::graphic::GraphicProvider;
-using ::com::sun::star::graphic::XGraphicProvider;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::graphic::XGraphic;
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -30,10 +30,6 @@
 
 namespace connectivity::mysqlc
 {
-using ::com::sun::star::sdbc::SQLException;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::RuntimeException;
-
 struct MySqlFieldInfo
 {
     OUString columnName;
