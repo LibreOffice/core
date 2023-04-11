@@ -28,8 +28,6 @@
 #include <memory>
 #include <string_view>
 
-namespace
-{
 using namespace css;
 using namespace css::uno;
 using namespace css::io;
@@ -39,106 +37,15 @@ using drawinglayer::primitive2d::Primitive2DContainer;
 
 class Test : public UnoApiXmlTest
 {
-    const OString aXPathPrefix = "/primitive2D/metafile/transform/";
-
-    void testPolyPolygon();
-    void TestDrawImagePointsTypeBitmap();
-    void TestDrawString();
-    void TestDrawStringAlign();
-    void TestDrawStringTransparent();
-    void TestDrawStringWithBrush();
-    void TestDrawLine();
-    void TestDrawLineWithCaps();
-    void TestDrawLineWithDash();
-    void TestLinearGradient();
-    void TestTextMapMode();
-    void TestEnglishMapMode();
-    void TestRectangleWithModifyWorldTransform();
-    void TestArcStartPointEqualEndPoint();
-    void TestArcInsideWronglyDefinedRectangle();
-    void TestChordWithModifyWorldTransform();
-    void TestEllipseWithSelectClipPath();
-    void TestEllipseXformIntersectClipRect();
-    void TestSetArcDirection();
-    void TestDrawPolyLine16WithClip();
-    void TestFillRegion();
-    void TestEmfPlusBrushPathGradientWithBlendColors();
-    void TestEmfPlusGetDC();
-    void TestEmfPlusSave();
-    void TestEmfPlusDrawPathWithCustomCap();
-    void TestEmfPlusDrawPathWithMiterLimit();
-    void TestEmfPlusFillClosedCurve();
-    void TestExtTextOutOpaqueAndClipTransform();
-    void TestNegativeWinOrg();
-
-    void TestBitBltStretchBltWMF();
-    void TestExtTextOutOpaqueAndClipWMF();
-    void TestPaletteWMF();
-    void TestRestoreDCWMF();
-    void TestRoundrectWMF();
-    void TestStretchDIBWMF();
-    void TestMoveToLineToWMF();
-    void TestPolylinetoCloseStroke();
-    void TestPolyLineWidth();
-
-    void TestRestoreDC();
-    void TestRoundRect();
-    void TestCreatePen();
-    void TestPdfInEmf();
-
-    Primitive2DSequence parseEmf(std::u16string_view aSource);
-
 public:
     Test()
         : UnoApiXmlTest("/emfio/qa/cppunit/emf/data/")
     {
     }
 
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(testPolyPolygon);
-    CPPUNIT_TEST(TestDrawImagePointsTypeBitmap);
-    CPPUNIT_TEST(TestDrawString);
-    CPPUNIT_TEST(TestDrawStringAlign);
-    CPPUNIT_TEST(TestDrawStringTransparent);
-    CPPUNIT_TEST(TestDrawStringWithBrush);
-    CPPUNIT_TEST(TestDrawLine);
-    CPPUNIT_TEST(TestDrawLineWithCaps);
-    CPPUNIT_TEST(TestDrawLineWithDash);
-    CPPUNIT_TEST(TestLinearGradient);
-    CPPUNIT_TEST(TestTextMapMode);
-    CPPUNIT_TEST(TestEnglishMapMode);
-    CPPUNIT_TEST(TestRectangleWithModifyWorldTransform);
-    CPPUNIT_TEST(TestArcStartPointEqualEndPoint);
-    CPPUNIT_TEST(TestArcInsideWronglyDefinedRectangle);
-    CPPUNIT_TEST(TestChordWithModifyWorldTransform);
-    CPPUNIT_TEST(TestEllipseWithSelectClipPath);
-    CPPUNIT_TEST(TestEllipseXformIntersectClipRect);
-    CPPUNIT_TEST(TestSetArcDirection);
-    CPPUNIT_TEST(TestDrawPolyLine16WithClip);
-    CPPUNIT_TEST(TestFillRegion);
-    CPPUNIT_TEST(TestEmfPlusBrushPathGradientWithBlendColors);
-    CPPUNIT_TEST(TestEmfPlusGetDC);
-    CPPUNIT_TEST(TestEmfPlusSave);
-    CPPUNIT_TEST(TestEmfPlusDrawPathWithCustomCap);
-    CPPUNIT_TEST(TestEmfPlusDrawPathWithMiterLimit);
-    CPPUNIT_TEST(TestEmfPlusFillClosedCurve);
-    CPPUNIT_TEST(TestExtTextOutOpaqueAndClipTransform);
-    CPPUNIT_TEST(TestNegativeWinOrg);
+    const OString aXPathPrefix = "/primitive2D/metafile/transform/";
 
-    CPPUNIT_TEST(TestBitBltStretchBltWMF);
-    CPPUNIT_TEST(TestExtTextOutOpaqueAndClipWMF);
-    CPPUNIT_TEST(TestPaletteWMF);
-    CPPUNIT_TEST(TestRestoreDCWMF);
-    CPPUNIT_TEST(TestRoundrectWMF);
-    CPPUNIT_TEST(TestStretchDIBWMF);
-    CPPUNIT_TEST(TestMoveToLineToWMF);
-    CPPUNIT_TEST(TestPolylinetoCloseStroke);
-    CPPUNIT_TEST(TestPolyLineWidth);
-    CPPUNIT_TEST(TestRestoreDC);
-    CPPUNIT_TEST(TestRoundRect);
-    CPPUNIT_TEST(TestCreatePen);
-    CPPUNIT_TEST(TestPdfInEmf);
-    CPPUNIT_TEST_SUITE_END();
+    Primitive2DSequence parseEmf(std::u16string_view aSource);
 };
 
 Primitive2DSequence Test::parseEmf(std::u16string_view aSource)
@@ -162,7 +69,7 @@ Primitive2DSequence Test::parseEmf(std::u16string_view aSource)
     return xEmfParser->getDecomposition(aInputStream, aPath, aEmptyValues);
 }
 
-void Test::testPolyPolygon()
+CPPUNIT_TEST_FIXTURE(Test, testPolyPolygon)
 {
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/fdo79679-2.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
@@ -205,7 +112,7 @@ void Test::testPolyPolygon()
     assertXPath(pDocument, aXPathPrefix + "mask/pointarray[1]/point", "y", "1129");
 }
 
-void Test::TestDrawImagePointsTypeBitmap()
+CPPUNIT_TEST_FIXTURE(Test, testDrawImagePointsTypeBitmap)
 {
     // tdf#142941 EMF+ file with ObjectTypeImage, FillRects, DrawImagePoints ,records
     // The test is checking the position of displaying bitmap with too large SrcRect
@@ -236,7 +143,7 @@ void Test::TestDrawImagePointsTypeBitmap()
         "bb3438,b73237,b63338,b33035,b63338");
 }
 
-void Test::TestDrawString()
+CPPUNIT_TEST_FIXTURE(Test, testDrawString)
 {
 #if HAVE_MORE_FONTS
     // EMF+ file with only one DrawString Record
@@ -258,7 +165,7 @@ void Test::TestDrawString()
 #endif
 }
 
-void Test::TestDrawStringAlign()
+CPPUNIT_TEST_FIXTURE(Test, testDrawStringAlign)
 {
 #if HAVE_MORE_FONTS
     // EMF+ DrawString with alignment (StringAlignmentNear, StringAlignmentFar, StringAlignmentCenter)
@@ -327,7 +234,7 @@ void Test::TestDrawStringAlign()
 #endif
 }
 
-void Test::TestDrawStringTransparent()
+CPPUNIT_TEST_FIXTURE(Test, testDrawStringTransparent)
 {
 #if HAVE_MORE_FONTS
     // EMF+ file with one DrawString Record with transparency
@@ -356,7 +263,7 @@ void Test::TestDrawStringTransparent()
 #endif
 }
 
-void Test::TestDrawStringWithBrush()
+CPPUNIT_TEST_FIXTURE(Test, testDrawStringWithBrush)
 {
     // tdf#142975 EMF+ with records: DrawString, Brush and Font
     Primitive2DSequence aSequence
@@ -376,7 +283,7 @@ void Test::TestDrawStringWithBrush()
                 "TIMES NEW ROMAN");
 }
 
-void Test::TestDrawLine()
+CPPUNIT_TEST_FIXTURE(Test, testDrawLine)
 {
     // EMF+ with records: DrawLine
     // The line is colored and has a specified width, therefore a polypolygonstroke primitive is the optimal choice
@@ -398,7 +305,7 @@ void Test::TestDrawLine()
                 "path", "m55.5192348773662 403.573503917507 874.352660545936-345.821325648415");
 }
 
-void Test::TestDrawLineWithCaps()
+CPPUNIT_TEST_FIXTURE(Test, testDrawLineWithCaps)
 {
     // EMF+ with records: DrawLine
     // Test lines with different caps styles and arrows
@@ -452,7 +359,7 @@ void Test::TestDrawLineWithCaps()
                 "path", "m0-1 1 1-0.5 0.5v0.5h-1v-0.5l-0.5-0.5z");
 }
 
-void Test::TestDrawLineWithDash()
+CPPUNIT_TEST_FIXTURE(Test, testDrawLineWithDash)
 {
     // EMF+ with records: DrawLine, ScaleWorldTransform, RotateWorldTransform
     // Test lines with different dash styles, different line arrows and different World Rotation
@@ -507,7 +414,7 @@ void Test::TestDrawLineWithDash()
                 "0.0764-0.3244 0.2165-0.2165 0.3244-0.0764 0.3827z");
 }
 
-void Test::TestLinearGradient()
+CPPUNIT_TEST_FIXTURE(Test, testLinearGradient)
 {
     // EMF+ file with LinearGradient brush
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestLinearGradient.emf");
@@ -547,7 +454,7 @@ void Test::TestLinearGradient()
         "m7615.75822989746 0.216110019646294h7615.75822989746v7610.21611001965h-7615.75822989746z");
 }
 
-void Test::TestTextMapMode()
+CPPUNIT_TEST_FIXTURE(Test, testTextMapMode)
 {
     // EMF with records: SETMAPMODE with MM_TEXT MapMode, POLYLINE16, EXTCREATEPEN, EXTTEXTOUTW
     // MM_TEXT is mapped to one device pixel. Positive x is to the right; positive y is down.
@@ -583,7 +490,7 @@ void Test::TestTextMapMode()
     assertXPath(pDocument, aXPathPrefix + "polygonstroke[20]/line", "width", "11");
 }
 
-void Test::TestEnglishMapMode()
+CPPUNIT_TEST_FIXTURE(Test, testEnglishMapMode)
 {
     // EMF image with records: SETMAPMODE with MM_ENGLISH MapMode, STROKEANDFILLPATH, EXTTEXTOUTW, SETTEXTALIGN, STRETCHDIBITS
     // MM_LOENGLISH is mapped to 0.01 inch. Positive x is to the right; positive y is up.M
@@ -625,7 +532,7 @@ void Test::TestEnglishMapMode()
         "12699,1058 16933,1058 16933,2118 15346,2118 15346,6349 14287,6349 14287,2118 12699,2118");
 }
 
-void Test::TestRectangleWithModifyWorldTransform()
+CPPUNIT_TEST_FIXTURE(Test, testRectangleWithModifyWorldTransform)
 {
     // EMF image with records: EXTCREATEPEN, SELECTOBJECT, MODIFYWORLDTRANSFORM, RECTANGLE
 
@@ -646,7 +553,7 @@ void Test::TestRectangleWithModifyWorldTransform()
                        "1042,417 1960,946 2313,1556 1395,1028");
 }
 
-void Test::TestChordWithModifyWorldTransform()
+CPPUNIT_TEST_FIXTURE(Test, testChordWithModifyWorldTransform)
 {
     // EMF import test with records: CHORD, MODIFYWORLDTRANSFORM, EXTCREATEPEN, SELECTOBJECT
     Primitive2DSequence aSequence
@@ -666,7 +573,7 @@ void Test::TestChordWithModifyWorldTransform()
                        "575,716 608,704 654,725 720,700 753,688 819,664 853,652 919,628");
 }
 
-void Test::TestArcStartPointEqualEndPoint()
+CPPUNIT_TEST_FIXTURE(Test, testArcStartPointEqualEndPoint)
 {
     // i73608 EMF import test where StartPoint == EndPoint. It should draw full circle
     // Records: SETMAPMODE, SETWINDOWEXTEX, SETWINDOWORGEX, EXTSELECTCLIPRGN, INTERSECTCLIPRECT, MOVETOEX, ARC
@@ -716,7 +623,7 @@ void Test::TestArcStartPointEqualEndPoint()
         "11434,22715 11529,22794 11621,22875 11711,22959 11800,23045");
 }
 
-void Test::TestArcInsideWronglyDefinedRectangle()
+CPPUNIT_TEST_FIXTURE(Test, testArcInsideWronglyDefinedRectangle)
 {
     // tdf#142268 EMF import test with records: ARC
     Primitive2DSequence aSequence
@@ -742,7 +649,7 @@ void Test::TestArcInsideWronglyDefinedRectangle()
         "1460,740 1450,760");
 }
 
-void Test::TestEllipseWithSelectClipPath()
+CPPUNIT_TEST_FIXTURE(Test, testEllipseWithSelectClipPath)
 {
     // EMF import test with records: RECTANGLE, BEGINPATH, ENDPATH, ELLIPSE
     Primitive2DSequence aSequence
@@ -773,7 +680,7 @@ void Test::TestEllipseWithSelectClipPath()
                        "353,353 2825,353 2825,1410 353,1410");
 }
 
-void Test::TestEllipseXformIntersectClipRect()
+CPPUNIT_TEST_FIXTURE(Test, testEllipseXformIntersectClipRect)
 {
     // EMF import test with records: EXTCREATEPEN, CREATEBRUSHINDIRECT, MODIFYWORLDTRANSFORM, INTERSECTCLIPRECT, ELLIPSE
     Primitive2DSequence aSequence
@@ -830,7 +737,7 @@ void Test::TestEllipseXformIntersectClipRect()
         "3625,320 3625,320");
 }
 
-void Test::TestSetArcDirection()
+CPPUNIT_TEST_FIXTURE(Test, testSetArcDirection)
 {
     // EMF import test with records: SETARCDIRECTION, ARC, PIE
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestSetArcDirection.emf");
@@ -876,7 +783,7 @@ void Test::TestSetArcDirection()
         "2980,1560 2980,1630 2970,1700 2970,1770 2960,1840 2940,1910 2920,1980");
 }
 
-void Test::TestDrawPolyLine16WithClip()
+CPPUNIT_TEST_FIXTURE(Test, testDrawPolyLine16WithClip)
 {
     // EMF image with records:
     // CREATEBRUSHINDIRECT, FILLRGN, BEGINPATH, POLYGON16, SELECTCLIPPATH, MODIFYWORLDTRANSFORM, SELECTOBJECT
@@ -906,7 +813,7 @@ void Test::TestDrawPolyLine16WithClip()
                        "0,793 3969,4230");
 }
 
-void Test::TestFillRegion()
+CPPUNIT_TEST_FIXTURE(Test, testFillRegion)
 {
     // EMF import with records: CREATEBRUSHINDIRECT, FILLRGN. The SETICMMODE is also used.
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestFillRegion.emf");
@@ -929,7 +836,7 @@ void Test::TestFillRegion()
     assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline[1]", "color", "#000000");
 }
 
-void Test::TestPolylinetoCloseStroke()
+CPPUNIT_TEST_FIXTURE(Test, testPolylinetoCloseStroke)
 {
     // EMF import with records: BEGINPATH, ARC, ENDPATH, STROKEPATH, EXTCREATEPEN.
     Primitive2DSequence aSequence
@@ -956,7 +863,7 @@ void Test::TestPolylinetoCloseStroke()
     assertXPath(pDocument, aXPathPrefix + "polygonhairline[2]", "color", "#000000");
 }
 
-void Test::TestEmfPlusBrushPathGradientWithBlendColors()
+CPPUNIT_TEST_FIXTURE(Test, testEmfPlusBrushPathGradientWithBlendColors)
 {
     // tdf#131506 EMF+ records: FillRects, Brush with PathGradient and BlendColor, FillRects
     Primitive2DSequence aSequence
@@ -974,7 +881,7 @@ void Test::TestEmfPlusBrushPathGradientWithBlendColors()
     assertXPath(pDocument, aXPathPrefix + "svgradialgradient", "spreadmethod", "pad");
 }
 
-void Test::TestEmfPlusGetDC()
+CPPUNIT_TEST_FIXTURE(Test, testEmfPlusGetDC)
 {
     // tdf#147818 EMF+ records: GetDC, DrawPath, FillRects
     Primitive2DSequence aSequence = parseEmf(u"emfio/qa/cppunit/emf/data/TestEmfPlusGetDC.emf");
@@ -1013,7 +920,7 @@ void Test::TestEmfPlusGetDC()
     assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow", 13);
 }
 
-void Test::TestEmfPlusSave()
+CPPUNIT_TEST_FIXTURE(Test, testEmfPlusSave)
 {
     // tdf#147818 EMF+ records: Save, Restore, SetWorldTransform, FillRects, SetClipRegion
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestEmfPlusSave.emf");
@@ -1038,7 +945,7 @@ void Test::TestEmfPlusSave()
                        "12832.6557236512,4907.54325697157");
 }
 
-void Test::TestEmfPlusDrawPathWithCustomCap()
+CPPUNIT_TEST_FIXTURE(Test, testEmfPlusDrawPathWithCustomCap)
 {
     // tdf#142261 EMF+ records: DrawPath, SetWorldTransform, Object (Brush, Pen, Path)
     // Check if CustomEndCap is displayed correctly
@@ -1062,7 +969,7 @@ void Test::TestEmfPlusDrawPathWithCustomCap()
                 "m-1.5 3 1.5-3 1.5 3z");
 }
 
-void Test::TestEmfPlusDrawPathWithMiterLimit()
+CPPUNIT_TEST_FIXTURE(Test, testEmfPlusDrawPathWithMiterLimit)
 {
     // tdf#142261 EMF+ records: DrawPath, TranslateWorldTransform, Object (Brush, Pen, Path)
     // Check if Miter is correctly set for Lines
@@ -1110,7 +1017,7 @@ void Test::TestEmfPlusDrawPathWithMiterLimit()
     assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[3]/stroke", 0);
 }
 
-void Test::TestEmfPlusFillClosedCurve()
+CPPUNIT_TEST_FIXTURE(Test, testEmfPlusFillClosedCurve)
 {
     // tdf#143876 EMF+ records: SetWorldTransform, FillClosedCurve, DrawClosedCurve
     Primitive2DSequence aSequence
@@ -1156,7 +1063,7 @@ void Test::TestEmfPlusFillClosedCurve()
                 "93140617344 2116.68310446856z");
 }
 
-void Test::TestExtTextOutOpaqueAndClipTransform()
+CPPUNIT_TEST_FIXTURE(Test, testExtTextOutOpaqueAndClipTransform)
 {
     // tdf#142495 EMF records: SETBKCOLOR, SELECTOBJECT, EXTTEXTOUTW, MODIFYWORLDTRANSFORM, CREATEFONTINDIRECT.
     Primitive2DSequence aSequence
@@ -1210,7 +1117,7 @@ void Test::TestExtTextOutOpaqueAndClipTransform()
                 "#000000");
 }
 
-void Test::TestNegativeWinOrg()
+CPPUNIT_TEST_FIXTURE(Test, testNegativeWinOrg)
 {
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestNegativeWinOrg.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
@@ -1228,7 +1135,7 @@ void Test::TestNegativeWinOrg()
     assertXPath(pDocument, aXPathPrefix + "mask/group[1]/mask/polypolygon", "maxy", "644");
 }
 
-void Test::TestBitBltStretchBltWMF()
+CPPUNIT_TEST_FIXTURE(Test, testBitBltStretchBltWMF)
 {
     // tdf#55058 tdf#142722 WMF records: BITBLT, STRETCHBLT.
     Primitive2DSequence aSequence
@@ -1270,7 +1177,7 @@ void Test::TestBitBltStretchBltWMF()
                 "720000,721c1c,723838,725555,727171,72728d,55728d,39728d,1d728d,00728d");
 }
 
-void Test::TestExtTextOutOpaqueAndClipWMF()
+CPPUNIT_TEST_FIXTURE(Test, testExtTextOutOpaqueAndClipWMF)
 {
     // tdf#53004 WMF records: SETBKCOLOR, SELECTOBJECT, EXTTEXTOUT, CREATEBRUSHINDIRECT.
     Primitive2DSequence aSequence
@@ -1321,7 +1228,7 @@ void Test::TestExtTextOutOpaqueAndClipWMF()
 #endif
 }
 
-void Test::TestPaletteWMF()
+CPPUNIT_TEST_FIXTURE(Test, testPaletteWMF)
 {
     // WMF import with records: CREATEPALETTE, SELECTOBJECT, CREATEPENINDIRECT, CREATEBRUSHINDIRECT, ELLIPSE.
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/wmf/data/TestPalette.wmf");
@@ -1351,7 +1258,7 @@ void Test::TestPaletteWMF()
     assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "width", "132");
 }
 
-void Test::TestRestoreDCWMF()
+CPPUNIT_TEST_FIXTURE(Test, testRestoreDCWMF)
 {
     // WMF records: RESTOREDC, SAVEDC, CREATEBRUSHINDIRECT, RECTANGLE.
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/wmf/data/TestRestoreDC.wmf");
@@ -1379,7 +1286,7 @@ void Test::TestRestoreDCWMF()
     assertXPath(pDocument, aXPathPrefix + "polygonhairline[3]", "color", "#000000");
 }
 
-void Test::TestRoundrectWMF()
+CPPUNIT_TEST_FIXTURE(Test, testRoundrectWMF)
 {
     // WMF records: ROUNDRECT, SETBKCOLOR, CREATEBRUSHINDIRECT
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/wmf/data/TestRoundRect.wmf");
@@ -1420,7 +1327,7 @@ void Test::TestRoundrectWMF()
     assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "width", "143");
 }
 
-void Test::TestStretchDIBWMF()
+CPPUNIT_TEST_FIXTURE(Test, testStretchDIBWMF)
 {
     // WMF records: STRETCHDIB
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/wmf/data/TestStretchDIB.wmf");
@@ -1445,7 +1352,7 @@ void Test::TestStretchDIBWMF()
                 "720000,721c1c,723838,725555,727171,72728d,55728d,39728d,1d728d,00728d");
 }
 
-void Test::TestMoveToLineToWMF()
+CPPUNIT_TEST_FIXTURE(Test, testMoveToLineToWMF)
 {
     // tdf#89331 WMF records: MOTETO, LINETO, CREATEPENINDIRECT.
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/wmf/data/TestLineTo.wmf");
@@ -1462,7 +1369,7 @@ void Test::TestMoveToLineToWMF()
     assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "linecap", "ROUND");
 }
 
-void Test::TestPolyLineWidth()
+CPPUNIT_TEST_FIXTURE(Test, testPolyLineWidth)
 {
     // EMF import with records: CREATEPEN, ROUNDRECT.
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestPolyLineWidth.emf");
@@ -1481,7 +1388,7 @@ void Test::TestPolyLineWidth()
     assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "width", "71");
 }
 
-void Test::TestRestoreDC()
+CPPUNIT_TEST_FIXTURE(Test, testRestoreDC)
 {
     // EMF records: SAVEDC, RESTOREDC, POLYGON16, MODIFYWORLDTRANSFORM
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestRestoreDC.emf");
@@ -1498,7 +1405,7 @@ void Test::TestRestoreDC()
                        "1148,4354 1148,5835 6091,5835 6091,4354");
 }
 
-void Test::TestRoundRect()
+CPPUNIT_TEST_FIXTURE(Test, testRoundRect)
 {
     // EMF import with records: CREATEPEN, ROUNDRECT.
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestRoundRect.emf");
@@ -1549,7 +1456,7 @@ void Test::TestRoundRect()
     assertXPath(pDocument, aXPathPrefix + "polygonstroke[2]/line", "color", "#ff0000");
 }
 
-void Test::TestCreatePen()
+CPPUNIT_TEST_FIXTURE(Test, testCreatePen)
 {
     // Check import of EMF image with records: RESTOREDC, SAVEDC, MOVETOEX, LINETO, POLYLINE16, EXTTEXTOUTW with DxBuffer
     // The CREATEPEN record is used with PS_COSMETIC line style, and in this case width must be set to 0
@@ -1604,7 +1511,7 @@ void Test::TestCreatePen()
     assertXPath(pDocument, aXPathPrefix + "mask/pointarray[1]/point", "y", "8918");
 }
 
-void Test::TestPdfInEmf()
+CPPUNIT_TEST_FIXTURE(Test, testPdfInEmf)
 {
     if (!vcl::pdf::PDFiumLibrary::get())
     {
@@ -1642,9 +1549,6 @@ void Test::TestPdfInEmf()
     Size size = aBitmapEx.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(0),
                          aBitmapEx.GetAlpha(size.Width() / 2, size.Height() / 2));
-}
-
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
