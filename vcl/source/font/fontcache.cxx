@@ -152,7 +152,7 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFont
 
         // if we're substituting from or to a symbol font we may need a symbol
         // conversion table
-        if( pFontData->IsMicrosoftSymbolEncoded() || aFontSelData.IsMicrosoftSymbolEncoded() )
+        if( pFontData->IsMicrosoftSymbolEncoded() || aFontSelData.IsMicrosoftSymbolEncoded() || IsOpenSymbol(aFontSelData.maSearchName) )
         {
             if( aFontSelData.maTargetName != aFontSelData.maSearchName )
                 pFontInstance->mpConversion = ConvertChar::GetRecodeData( aFontSelData.maTargetName, aFontSelData.maSearchName );
