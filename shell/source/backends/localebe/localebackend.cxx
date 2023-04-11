@@ -123,8 +123,7 @@ namespace /* private */
         CFStringRef sref = ImplGetAppPreference(pref);
         CFStringGuard srefGuard(sref);
 
-        OUStringBuffer aLocaleBuffer;
-        aLocaleBuffer.append("en-US"); // initialize with fallback value
+        OUStringBuffer aLocaleBuffer("en-US"); // initialize with fallback value
 
         if (sref != nullptr)
         {
