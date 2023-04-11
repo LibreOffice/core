@@ -4483,20 +4483,12 @@ SCROW ScDocument::CountVisibleRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) c
     return maTabs[nTab]->CountVisibleRows(nStartRow, nEndRow);
 }
 
-SCROW ScDocument::CountHiddenRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) const
+SCCOL ScDocument::CountVisibleCols(SCROW nStartCol, SCROW nEndCol, SCTAB nTab) const
 {
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
         return 0;
 
-    return maTabs[nTab]->CountHiddenRows(nStartRow, nEndRow);
-}
-
-SCCOL ScDocument::CountHiddenCols(SCROW nStartCol, SCROW nEndCol, SCTAB nTab) const
-{
-    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
-        return 0;
-
-    return maTabs[nTab]->CountHiddenCols(nStartCol, nEndCol);
+    return maTabs[nTab]->CountVisibleCols(nStartCol, nEndCol);
 }
 
 bool ScDocument::RowFiltered(SCROW nRow, SCTAB nTab, SCROW* pFirstRow, SCROW* pLastRow) const

@@ -671,8 +671,11 @@ void lcl_SetLogicRectFromAnchor(SdrObject* pObj, ScDrawObjData& rAnchor, ScDocum
     // tdf#154005: Handle hidden row/col: remove hidden row/cols size from the ScDrawObjData shape size in case of forms
     if (pObj->GetObjIdentifier() == SdrObjKind::OBJ_UNO && pObj->GetObjInventor() == SdrInventor::FmForm)
     {
-        nHiddenRows = pDoc->CountHiddenRows(rAnchor.maStart.Row(), rAnchor.maEnd.Row(), rAnchor.maStart.Tab());
-        nHiddenCols = pDoc->CountHiddenCols(rAnchor.maStart.Col(), rAnchor.maEnd.Col(), rAnchor.maStart.Tab());
+        nHiddenRows = ((rAnchor.maEnd.Row() - rAnchor.maStart.Row()) + 1) -
+            (pDoc->CountVisibleRows(rAnchor.maStart.Row(), rAnchor.maEnd.Row(), rAnchor.maStart.Tab()));
+
+        nHiddenCols = ((rAnchor.maEnd.Col() - rAnchor.maStart.Col()) + 1) -
+            (pDoc->CountVisibleCols(rAnchor.maStart.Col(), rAnchor.maEnd.Col(), rAnchor.maStart.Tab()));
     }
 
     // In case of a vertical mirrored custom shape, LibreOffice uses internally an additional 180deg
