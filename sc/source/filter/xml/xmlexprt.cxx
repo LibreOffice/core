@@ -3474,10 +3474,8 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
     if( rMyCell.bHasShape && !rMyCell.aShapeList.empty() && pDoc )
     {
         awt::Point aPoint;
-        // Hiding row or col does not change the shape geometry.
         tools::Rectangle aRect = pDoc->GetMMRect(rMyCell.maCellAddress.Col(), rMyCell.maCellAddress.Row(),
-            rMyCell.maCellAddress.Col(), rMyCell.maCellAddress.Row(), rMyCell.maCellAddress.Tab(),
-            false /*bHiddenAsZero*/);
+            rMyCell.maCellAddress.Col(), rMyCell.maCellAddress.Row(), rMyCell.maCellAddress.Tab());
         bool bNegativePage = pDoc->IsNegativePage(rMyCell.maCellAddress.Tab());
         if (bNegativePage)
             aPoint.X = aRect.Right();

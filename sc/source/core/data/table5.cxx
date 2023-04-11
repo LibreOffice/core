@@ -586,8 +586,7 @@ bool ScTable::SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden)
 
     // Cell anchored objects might change visibility
     ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
-    if (pDrawLayer)
-    {
+    if (pDrawLayer) {
         std::vector<SdrObject*> aRowDrawObjects;
         aRowDrawObjects = pDrawLayer->GetObjectsAnchoredToRows(GetTab(), nStartRow, nEndRow);
         for (auto aObj : aRowDrawObjects)

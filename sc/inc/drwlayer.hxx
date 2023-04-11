@@ -136,7 +136,6 @@ public:
 
     void            MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
                                 SCCOL nDx,SCROW nDy, bool bInsDel, bool bUpdateNoteCaptionPos );
-    void InitializeCellAnchoredObj(SdrObject* pObj, ScDrawObjData& rData);
     void            RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegativePage, bool bUpdateNoteCaptionPos );
 
     bool            HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow );
