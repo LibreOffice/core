@@ -277,7 +277,7 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
             else
                 nValue = rAttribs.getInteger(XML_val, 0);
 
-            mpColorDefinition->maTransformations.push_back({eType, sal_Int16(nValue / 10.0)});
+            mpColorDefinition->maTransformations.push_back({eType, sal_Int16(nValue / 10)});
         }
     }
 
