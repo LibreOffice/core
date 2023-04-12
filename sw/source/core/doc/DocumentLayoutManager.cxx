@@ -464,11 +464,11 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         pDest->MakeFrames();
 
     // If the draw format has a TextBox, then copy its fly format as well.
-    if (rSource.Which() == RES_DRAWFRMFMT && rSource.GetOtherTextBoxFormats())
+    if (rSource.Which() == RES_DRAWFRMFMT && rSource.GetOtherTextBoxFormat())
     {
         auto pObj = rSource.FindRealSdrObject();
-        auto pTextBoxNd = std::make_shared<SwTextBoxNode>(SwTextBoxNode(pDest));
-        pDest->SetOtherTextBoxFormats(pTextBoxNd);
+        auto pTextBoxNd = new SwTextBoxNode(pDest);
+        pDest->SetOtherTextBoxFormat(pTextBoxNd);
 
         if (pObj)
         {
@@ -515,7 +515,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
                         && pNewObj->getChildrenOfSdrObject()->GetObj(it))
                         pNewObj = pNewObj->getChildrenOfSdrObject()->GetObj(it);
                     pTextBoxNd->AddTextBox(pNewObj, pDestTextBox);
-                    pDestTextBox->SetOtherTextBoxFormats(pTextBoxNd);
+                    pDestTextBox->SetOtherTextBoxFormat(pTextBoxNd);
                 }
 
                 if (!bIsGroupObj)
