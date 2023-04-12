@@ -33,6 +33,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <svl/poolitem.hxx>
 #include <mutex>
+#include <vcl/window.hxx>
 
 #include "itemholder2.hxx"
 
@@ -443,10 +444,14 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         default:
             int nAppMod;
             switch (MiscSettings::GetAppColorMode()) {
-                case 0: nAppMod = clLight; break; // UseDarkMode() ? clDark : clLight; break;
+                default:
+                    if (MiscSettings::GetUseDarkMode())
+                        nAppMod = clDark;
+                    else
+                        nAppMod = clLight;
+                    break;
                 case 1: nAppMod = clLight; break;
                 case 2: nAppMod = clDark; break;
-                default: nAppMod = clLight;
             }
             aRet = cAutoColors[eEntry][nAppMod];
     }
