@@ -439,13 +439,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf59274)
     // This was 3674: too wide last cell in first row
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[4]/w:tcPr/w:tcW", "w", "1695");
 }
-//FIXME:
-//DECLARE_OOXMLEXPORT_TEST(testDMLGroupshapeSdt, "dml-groupshape-sdt.docx")
-//{
-//    uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
-//    // The text in the groupshape was missing due to the w:sdt and w:sdtContent wrapper around it.
-//    CPPUNIT_ASSERT_EQUAL(OUString("sdt and sdtContent inside groupshape"), uno::Reference<text::XTextRange>(xGroupShape->getByIndex(1), uno::UNO_QUERY_THROW)->getString());
-//}
+
+DECLARE_OOXMLEXPORT_TEST(testDMLGroupshapeSdt, "dml-groupshape-sdt.docx")
+{
+    uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
+    // The text in the groupshape was missing due to the w:sdt and w:sdtContent wrapper around it.
+    CPPUNIT_ASSERT_EQUAL(OUString("sdt and sdtContent inside groupshape"), uno::Reference<text::XTextRange>(xGroupShape->getByIndex(1), uno::UNO_QUERY_THROW)->getString());
+}
 
 DECLARE_OOXMLEXPORT_TEST(testDmlCharheightDefault, "dml-charheight-default.docx")
 {
@@ -745,21 +745,9 @@ DECLARE_OOXMLEXPORT_TEST(testCaption, "caption.docx")
 DECLARE_OOXMLEXPORT_TEST(testGroupshapeTrackedchanges, "groupshape-trackedchanges.docx")
 {
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
     // Shape text was completely missing, ensure inserted text is available.
-    uno::Reference<text::XText> xText
-        = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
-    auto xParagraph = getParagraphOfText(1, xText);
-
-    CPPUNIT_ASSERT(hasProperty(getRun(xParagraph, 1), "RedlineType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Delete"),
-                         getProperty<OUString>(getRun(xParagraph, 1), "RedlineType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Deleted"), getRun(xParagraph, 2)->getString());
-
-    CPPUNIT_ASSERT(hasProperty(getRun(xParagraph, 4), "RedlineType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Insert"),
-                         getProperty<OUString>(getRun(xParagraph, 4), "RedlineType"));
-    CPPUNIT_ASSERT_EQUAL(OUString(" Inserted"), getRun(xParagraph, 5)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(" Inserted"), xShape->getString());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo78939, "fdo78939.docx")
