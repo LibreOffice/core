@@ -30,6 +30,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
 
     if (// cui
         rUIFile == u"cui/ui/areatabpage.ui"
+        || rUIFile == u"cui/ui/areadialog.ui"
         || rUIFile == u"cui/ui/asiantypography.ui"
         || rUIFile == u"cui/ui/borderpage.ui"
         || rUIFile == u"cui/ui/bulletandposition.ui"
