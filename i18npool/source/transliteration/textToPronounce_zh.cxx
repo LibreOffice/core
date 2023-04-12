@@ -21,6 +21,7 @@
 
 #include <com/sun/star/i18n/MultipleCharsOutputException.hpp>
 #include <com/sun/star/i18n/TransliterationType.hpp>
+#include <o3tl/temporary.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -43,7 +44,7 @@ TextToPronounce_zh::getPronounce(const sal_Unicode ch)
     if (idx) {
         sal_uInt16 address = idx[0][ch>>8];
         if (address != 0xFFFF)
-            return reinterpret_cast<sal_Unicode *>(
+            return reinterpret_cast<sal_Unicode const *>(
                 &idx[2][idx[1][address + (ch & 0xFF)]]);
     }
     return emptyString;
@@ -126,8 +127,8 @@ TextToPronounce_zh::equals( const OUString & str1, sal_Int32 pos1, sal_Int32 nCo
 
 extern "C" {
 
-sal_uInt16** get_collator_data_zh_zhuyin();
-sal_uInt16** get_collator_data_zh_pinyin();
+sal_uInt16 const ** get_zh_zhuyin(sal_Int16 & max_index);
+sal_uInt16 const ** get_zh_pinyin(sal_Int16 & max_index);
 
 }
 
@@ -137,7 +138,7 @@ TextToPinyin_zh_CN::TextToPinyin_zh_CN() :
 #ifndef DISABLE_DYNLOADING
     TextToPronounce_zh("get_zh_pinyin")
 #else
-    TextToPronounce_zh(get_collator_data_zh_pinyin)
+    TextToPronounce_zh(get_zh_pinyin)
 #endif
 {
         transliterationName = "ChineseCharacterToPinyin";
@@ -148,7 +149,7 @@ TextToChuyin_zh_TW::TextToChuyin_zh_TW() :
 #ifndef DISABLE_DYNLOADING
     TextToPronounce_zh("get_zh_zhuyin")
 #else
-    TextToPronounce_zh(get_collator_data_zh_zhuyin)
+    TextToPronounce_zh(get_zh_zhuyin)
 #endif
 {
         transliterationName = "ChineseCharacterToChuyin";
@@ -170,17 +171,17 @@ TextToPronounce_zh::TextToPronounce_zh(const char* func_name)
         &thisModule, lib.pData, SAL_LOADMODULE_DEFAULT );
     idx=nullptr;
     if (hModule) {
-        sal_uInt16** (*function)() = reinterpret_cast<sal_uInt16** (*)()>(osl_getFunctionSymbol(hModule, OUString::createFromAscii(func_name).pData));
+        sal_uInt16 const ** (*function)(sal_Int16 &) = reinterpret_cast<sal_uInt16 const ** (*)(sal_Int16 &)>(osl_getFunctionSymbol(hModule, OUString::createFromAscii(func_name).pData));
         if (function)
-            idx=function();
+            idx=function(o3tl::temporary(sal_Int16()));
     }
 }
 
 #else
 
-TextToPronounce_zh::TextToPronounce_zh(sal_uInt16 ** (*function)())
+TextToPronounce_zh::TextToPronounce_zh(sal_uInt16 const ** (*function)(sal_Int16 &))
 {
-    idx = function();
+    idx = function(o3tl::temporary(sal_Int16()));
 }
 
 #endif

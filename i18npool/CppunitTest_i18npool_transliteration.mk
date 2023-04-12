@@ -27,4 +27,6 @@ $(eval $(call gb_CppunitTest_use_sdk_api,i18npool_transliteration))
 
 $(eval $(call gb_CppunitTest_use_ure,i18npool_transliteration))
 
+$(call gb_CppunitTest_get_target,i18npool_transliteration): $(call gb_Library_get_target,index_data)
+
 # vim: set noet sw=4 ts=4:
