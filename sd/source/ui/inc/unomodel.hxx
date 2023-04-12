@@ -133,7 +133,7 @@ public:
 
     static rtl::Reference< SdXImpressDocument > GetModel( SdDrawDocument const & rDoc );
 
-    // intern
+    // internal
     bool operator==( const SdXImpressDocument& rModel ) const { return mpDoc == rModel.mpDoc; }
     bool operator!=( const SdXImpressDocument& rModel ) const { return mpDoc != rModel.mpDoc; }
 
@@ -406,7 +406,7 @@ public:
     virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
-    // intern
+    // internal
     /// @throws std::exception
     SdPage* FindPage( std::u16string_view rName ) const;
 };

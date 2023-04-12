@@ -97,7 +97,7 @@ class SdXCustomPresentationAccess : public ::cppu::WeakImplHelper< css::containe
 private:
     SdXImpressDocument& mrModel;
 
-    // intern
+    // internal
     inline SdCustomShowList* GetCustomShowList() const noexcept;
     SdCustomShow * getSdCustomShow( std::u16string_view Name ) const noexcept;
 

@@ -163,7 +163,7 @@ namespace abp
         */
         bool    hasTable( const OUString& _rTableName ) const;
 
-        /// return the intern data source object
+        /// return the internal data source object
         css::uno::Reference< css::beans::XPropertySet > getDataSource() const;
 
 

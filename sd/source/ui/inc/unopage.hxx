@@ -93,7 +93,7 @@ public:
     SdGenericDrawPage(SdXImpressDocument* pModel, SdPage* pInPage, const SvxItemPropertySet* pSet);
     virtual ~SdGenericDrawPage() noexcept override;
 
-    // intern
+    // internal
     bool isValid() const { return (SvxDrawPage::mpPage != nullptr) && (mpModel != nullptr); }
 
     SdPage* GetPage() const { return static_cast<SdPage*>(SvxDrawPage::mpPage); }
@@ -286,7 +286,7 @@ public:
     SdPageLinkTargets( SdGenericDrawPage* pUnoPage ) noexcept;
     virtual ~SdPageLinkTargets() noexcept override;
 
-    // intern
+    // internal
     SdrObject* FindObject( std::u16string_view rName ) const noexcept;
 
     // XServiceInfo

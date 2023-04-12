@@ -48,7 +48,7 @@ public:
     SdLayer(SdLayerManager* pLayerManager_, SdrLayer* pSdrLayer_);
     virtual ~SdLayer() noexcept override;
 
-    // intern
+    // internal
     SdrLayer* GetSdrLayer() const noexcept { return pLayer; }
 
     // XServiceInfo

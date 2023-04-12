@@ -2815,7 +2815,7 @@ Any SAL_CALL SdMasterPage::getByIndex( sal_Int32 Index )
     return SdGenericDrawPage::getByIndex(Index);
 }
 
-// intern
+// internal
 void SdMasterPage::setBackground( const Any& rValue )
 {
     // we need at least a beans::XPropertySet
