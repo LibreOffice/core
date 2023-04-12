@@ -61,8 +61,8 @@ void lclGetSettingColors(Color& rBackgroundColor, Color& rTextColor)
     }
     else
     {
-        rBackgroundColor = COL_WHITE;
-        rTextColor = COL_BLACK;
+        rBackgroundColor = rStyleSettings.GetFaceColor();
+        rTextColor = rStyleSettings.GetLabelTextColor();
     }
 }
 
