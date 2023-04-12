@@ -45,6 +45,7 @@ class FmPropBrw final : public SfxModelessDialogController, public SfxController
     weld::Window*   m_pParent;
     ImplSVEvent*    m_nAsyncGetFocusId;
     OUString        m_sLastActivePage;
+    std::unique_ptr<weld::Box> m_xDialogBox;
     std::unique_ptr<weld::Container> m_xContainer;
     css::uno::Reference< css::uno::XComponentContext >
                     m_xInspectorContext;
