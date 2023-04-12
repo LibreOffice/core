@@ -55,6 +55,7 @@
 extern CComModule _Module;
 #include <atlcom.h>
 #include <atlctl.h>
+#undef min
 
 #if defined __clang__
 #pragma clang diagnostic pop

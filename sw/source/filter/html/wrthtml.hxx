@@ -478,15 +478,13 @@ public:
 
     void OutStyleSheet( const SwPageDesc& rPageDesc );
 
-    inline void OutCSS1_PropertyAscii( const char *pProp,
-                                       const char *pVal );
-    inline void OutCSS1_PropertyAscii( const char *pProp,
+    inline void OutCSS1_PropertyAscii( std::string_view pProp,
                                        std::string_view rVal );
-    inline void OutCSS1_Property( const char *pProp, const OUString& rVal );
-    void OutCSS1_Property( const char *pProp, std::string_view pVal,
+    inline void OutCSS1_Property( std::string_view pProp, const OUString& rVal );
+    void OutCSS1_Property( std::string_view pProp, std::string_view pVal,
                            const OUString *pSVal, std::optional<sw::Css1Background> oBackground = std::nullopt );
-    void OutCSS1_UnitProperty( const char *pProp, tools::Long nVal );
-    void OutCSS1_PixelProperty( const char *pProp, tools::Long nVal, bool bVert );
+    void OutCSS1_UnitProperty( std::string_view pProp, tools::Long nVal );
+    void OutCSS1_PixelProperty( std::string_view pProp, tools::Long nVal, bool bVert );
     void OutCSS1_SfxItemSet( const SfxItemSet& rItemSet, bool bDeep=true );
 
     // events of BODY tag from SFX configuration
@@ -630,19 +628,13 @@ inline bool SwHTMLWriter::IsCSS1Script( sal_uInt16 n ) const
     return CSS1_OUTMODE_ANY_SCRIPT == nScript || n == nScript;
 }
 
-inline void SwHTMLWriter::OutCSS1_PropertyAscii( const char *pProp,
-                                                 const char *pVal )
-{
-    OutCSS1_Property( pProp, pVal, nullptr );
-}
-
-inline void SwHTMLWriter::OutCSS1_PropertyAscii( const char *pProp,
+inline void SwHTMLWriter::OutCSS1_PropertyAscii( std::string_view pProp,
                                                  std::string_view rVal )
 {
     OutCSS1_Property( pProp, rVal, nullptr );
 }
 
-inline void SwHTMLWriter::OutCSS1_Property( const char *pProp,
+inline void SwHTMLWriter::OutCSS1_Property( std::string_view pProp,
                                             const OUString& rVal )
 {
     OutCSS1_Property( pProp, std::string_view(), &rVal );

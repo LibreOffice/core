@@ -254,7 +254,7 @@ public:
 
 }
 
-void SwHTMLWriter::OutCSS1_Property( const char *pProp,
+void SwHTMLWriter::OutCSS1_Property( std::string_view pProp,
                                      std::string_view sVal,
                                      const OUString *pSVal,
                                      std::optional<sw::Css1Background> oMode )
@@ -262,7 +262,7 @@ void SwHTMLWriter::OutCSS1_Property( const char *pProp,
     OString aPropertyValue(sVal);
     if (aPropertyValue.isEmpty() && pSVal)
     {
-        aPropertyValue = pSVal->toUtf8();
+        aPropertyValue = OUStringToOString(*pSVal, RTL_TEXTENCODING_UTF8);
     }
     if (IgnorePropertyForReqIF(mbReqIF, pProp, aPropertyValue, oMode))
         return;
@@ -373,10 +373,7 @@ void SwHTMLWriter::OutCSS1_Property( const char *pProp,
     else
     {
         // for STYLE-Tag print string directly
-        if( !sVal.empty() )
-            sOut.append(sVal);
-        else if( pSVal )
-            sOut.append(OUStringToOString(*pSVal, RTL_TEXTENCODING_UTF8));
+        sOut.append(aPropertyValue);
     }
 
     if (!sOut.isEmpty())
@@ -395,7 +392,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, tools::Long nVal,
 
     o3tl::Length eTo;
     int nFac; // used to get specific number of decimals
-    const char *pUnit;
+    std::string_view pUnit;
     switch( eUnit )
     {
     case FieldUnit::MM_100TH:
@@ -461,14 +458,14 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, tools::Long nVal,
     rOut.append(pUnit);
 }
 
-void SwHTMLWriter::OutCSS1_UnitProperty( const char *pProp, tools::Long nVal )
+void SwHTMLWriter::OutCSS1_UnitProperty( std::string_view pProp, tools::Long nVal )
 {
     OStringBuffer sOut;
     AddUnitPropertyValue(sOut, nVal, m_eCSS1Unit);
     OutCSS1_PropertyAscii(pProp, sOut);
 }
 
-void SwHTMLWriter::OutCSS1_PixelProperty( const char *pProp, tools::Long nVal,
+void SwHTMLWriter::OutCSS1_PixelProperty( std::string_view pProp, tools::Long nVal,
                                           bool bVert )
 {
     OString sOut(OString::number(ToPixel(nVal,bVert)) + sCSS1_UNIT_px);
@@ -1124,7 +1121,7 @@ void SwHTMLWriter::PrepareFontList( const SvxFontItem& rFontItem,
     if( bContainsKeyword || !bGeneric )
         return;
 
-    const char *pStr = nullptr;
+    std::string_view pStr;
     switch( rFontItem.GetFamily() )
     {
     case FAMILY_ROMAN:      pStr = sCSS1_PV_serif;      break;
@@ -1136,7 +1133,7 @@ void SwHTMLWriter::PrepareFontList( const SvxFontItem& rFontItem,
         ;
     }
 
-    if( pStr )
+    if( !pStr.empty() )
     {
         if( !rNames.isEmpty() )
             rNames += ", ";
@@ -1616,14 +1613,14 @@ static SwHTMLWriter& OutCSS1_SwPageDesc( SwHTMLWriter& rWrt, const SwPageDesc& r
 
     if( bPseudo )
     {
-        const char *pPseudo = nullptr;
+        std::string_view pPseudo;
         switch( rPageDesc.GetPoolFormatId() )
         {
         case RES_POOLPAGE_FIRST:    pPseudo = sCSS1_first;  break;
         case RES_POOLPAGE_LEFT:     pPseudo = sCSS1_left;   break;
         case RES_POOLPAGE_RIGHT:    pPseudo = sCSS1_right;  break;
         }
-        if( pPseudo )
+        if( !pPseudo.empty() )
             aSelector += ":" + OStringToOUString( pPseudo, RTL_TEXTENCODING_ASCII_US );
     }
 
@@ -1864,7 +1861,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
                 if( !(nFrameOpts & HtmlFrmOpts::Align) )
                 {
                     // float
-                    const char *pStr = text::HoriOrientation::RIGHT==rHoriOri.GetHoriOrient()
+                    std::string_view pStr = text::HoriOrientation::RIGHT==rHoriOri.GetHoriOrient()
                             ? sCSS1_PV_right
                             : sCSS1_PV_left;
                     OutCSS1_PropertyAscii( sCSS1_P_float, pStr );
@@ -2219,8 +2216,8 @@ static SwHTMLWriter& OutCSS1_SvxTextLn_SvxCrOut_SvxBlink( SwHTMLWriter& rWrt,
                     const SvxBlinkItem *pBItem )
 {
     bool bNone = false;
+    OStringBuffer sOut;
 
-    const char *pUStr = nullptr;
     if( pUItem )
     {
         switch( pUItem->GetLineStyle() )
@@ -2237,13 +2234,12 @@ static SwHTMLWriter& OutCSS1_SvxTextLn_SvxCrOut_SvxBlink( SwHTMLWriter& rWrt,
                 // a STYLE-Options, and must not be written as Hint
                 OSL_ENSURE( !rWrt.IsCSS1Source(CSS1_OUTMODE_HINT) || rWrt.mbReqIF,
                         "write underline as Hint?" );
-                pUStr = sCSS1_PV_underline;
+                sOut.append(sCSS1_PV_underline);
             }
             break;
         }
     }
 
-    const char *pOStr = nullptr;
     if( pOItem )
     {
         switch( pOItem->GetLineStyle() )
@@ -2260,13 +2256,14 @@ static SwHTMLWriter& OutCSS1_SvxTextLn_SvxCrOut_SvxBlink( SwHTMLWriter& rWrt,
                 // a STYLE-Options, and must not be written as Hint
                 OSL_ENSURE( !rWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
                         "write overline as Hint?" );
-                pOStr = sCSS1_PV_overline;
+                if (!sOut.isEmpty())
+                    sOut.append(' ');
+                sOut.append(sCSS1_PV_overline);
             }
             break;
         }
     }
 
-    const char *pCOStr = nullptr;
     if( pCOItem )
     {
         switch( pCOItem->GetStrikeout() )
@@ -2283,13 +2280,14 @@ static SwHTMLWriter& OutCSS1_SvxTextLn_SvxCrOut_SvxBlink( SwHTMLWriter& rWrt,
                 // a STYLE-Options, and must not be written as Hint
                 OSL_ENSURE( !rWrt.IsCSS1Source(CSS1_OUTMODE_HINT) || rWrt.mbReqIF,
                         "write crossedOut as Hint?" );
-                pCOStr = sCSS1_PV_line_through;
+                if (!sOut.isEmpty())
+                    sOut.append(' ');
+                sOut.append(sCSS1_PV_line_through);
             }
             break;
         }
     }
 
-    const char *pBStr = nullptr;
     if( pBItem )
     {
         if( !pBItem->GetValue() )
@@ -2302,33 +2300,10 @@ static SwHTMLWriter& OutCSS1_SvxTextLn_SvxCrOut_SvxBlink( SwHTMLWriter& rWrt,
             // a STYLE-Options, and must not be written as Hint
             OSL_ENSURE( !rWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
                     "write blink as Hint?" );
-            pBStr = sCSS1_PV_blink;
+            if (!sOut.isEmpty())
+                sOut.append(' ');
+            sOut.append(sCSS1_PV_blink);
         }
-    }
-
-    OStringBuffer sOut;
-    if( pUStr )
-        sOut.append(pUStr);
-
-    if( pOStr )
-    {
-        if (!sOut.isEmpty())
-            sOut.append(' ');
-        sOut.append(pOStr);
-    }
-
-    if( pCOStr )
-    {
-        if (!sOut.isEmpty())
-            sOut.append(' ');
-        sOut.append(pCOStr);
-    }
-
-    if( pBStr )
-    {
-        if (!sOut.isEmpty())
-            sOut.append(' ');
-        sOut.append(pBStr);
     }
 
     if (!sOut.isEmpty())
@@ -2460,7 +2435,7 @@ static SwHTMLWriter& OutCSS1_SvxPosture( SwHTMLWriter& rWrt, const SfxPoolItem& 
     if( !rWrt.IsCSS1Script( nScript ) )
         return rWrt;
 
-    const char *pStr = nullptr;
+    std::string_view pStr;
     switch( static_cast<const SvxPostureItem&>(rHt).GetPosture() )
     {
     case ITALIC_NONE:       pStr = sCSS1_PV_normal;     break;
@@ -2479,7 +2454,7 @@ static SwHTMLWriter& OutCSS1_SvxPosture( SwHTMLWriter& rWrt, const SfxPoolItem& 
         ;
     }
 
-    if( pStr )
+    if( !pStr.empty() )
         rWrt.OutCSS1_PropertyAscii( sCSS1_P_font_style, pStr );
 
     return rWrt;
@@ -2586,7 +2561,7 @@ static SwHTMLWriter& OutCSS1_SvxFontWeight( SwHTMLWriter& rWrt, const SfxPoolIte
     if( !rWrt.IsCSS1Script( nScript ) )
         return rWrt;
 
-    const char *pStr = nullptr;
+    std::string_view pStr;
     switch( static_cast<const SvxWeightItem&>(rHt).GetWeight() )
     {
     case WEIGHT_ULTRALIGHT: pStr = sCSS1_PV_extra_light;    break;
@@ -2609,7 +2584,7 @@ static SwHTMLWriter& OutCSS1_SvxFontWeight( SwHTMLWriter& rWrt, const SfxPoolIte
         pStr = sCSS1_PV_normal;
     }
 
-    if( pStr )
+    if( !pStr.empty() )
         rWrt.OutCSS1_PropertyAscii( sCSS1_P_font_weight, pStr );
 
     return rWrt;
@@ -2686,7 +2661,7 @@ static SwHTMLWriter& OutCSS1_SvxAdjust( SwHTMLWriter& rWrt, const SfxPoolItem& r
         !rWrt.m_bNoAlign)
         return rWrt;
 
-    const char* pStr = nullptr;
+    std::string_view pStr;
     switch( static_cast<const SvxAdjustItem&>(rHt).GetAdjust() )
     {
     case SvxAdjust::Left:   pStr = sCSS1_PV_left;       break;
@@ -2697,7 +2672,7 @@ static SwHTMLWriter& OutCSS1_SvxAdjust( SwHTMLWriter& rWrt, const SfxPoolItem& r
         ;
     }
 
-    if( pStr )
+    if( !pStr.empty() )
         rWrt.OutCSS1_PropertyAscii( sCSS1_P_text_align, pStr );
 
     return rWrt;
@@ -2705,7 +2680,7 @@ static SwHTMLWriter& OutCSS1_SvxAdjust( SwHTMLWriter& rWrt, const SfxPoolItem& r
 
 static SwHTMLWriter& OutCSS1_SvxFormatSplit( SwHTMLWriter& rWrt, const SfxPoolItem& rHt )
 {
-    const char *pStr = static_cast<const SvxFormatSplitItem&>(rHt).GetValue()
+    std::string_view pStr = static_cast<const SvxFormatSplitItem&>(rHt).GetValue()
                             ? sCSS1_PV_auto
                             : sCSS1_PV_avoid;
     rWrt.OutCSS1_PropertyAscii( sCSS1_P_page_break_inside, pStr );
@@ -2715,7 +2690,7 @@ static SwHTMLWriter& OutCSS1_SvxFormatSplit( SwHTMLWriter& rWrt, const SfxPoolIt
 
 static SwHTMLWriter& OutCSS1_SwFormatLayoutSplit( SwHTMLWriter& rWrt, const SfxPoolItem& rHt )
 {
-    const char *pStr = static_cast<const SwFormatLayoutSplit&>(rHt).GetValue()
+    std::string_view pStr = static_cast<const SwFormatLayoutSplit&>(rHt).GetValue()
                             ? sCSS1_PV_auto
                             : sCSS1_PV_avoid;
     rWrt.OutCSS1_PropertyAscii( sCSS1_P_page_break_inside, pStr );
@@ -2972,8 +2947,8 @@ static SwHTMLWriter& OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( SwHTMLW
     if( !rWrt.IsHTMLMode(HTMLMODE_PRINT_EXT) )
         return rWrt;
 
-    const char *pBreakBefore = nullptr;
-    const char *pBreakAfter = nullptr;
+    std::string_view pBreakBefore;
+    std::string_view pBreakAfter;
 
     if( pKeepItem )
     {
@@ -2985,7 +2960,7 @@ static SwHTMLWriter& OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( SwHTMLW
         {
         case SvxBreak::NONE:
             pBreakBefore = sCSS1_PV_auto;
-            if( !pBreakAfter )
+            if( pBreakAfter.empty() )
                 pBreakAfter = sCSS1_PV_auto;
             break;
 
@@ -3013,7 +2988,7 @@ static SwHTMLWriter& OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( SwHTMLW
             default:                    pBreakBefore = sCSS1_PV_always; break;
             }
         }
-        else if( !pBreakBefore )
+        else if( pBreakBefore.empty() )
         {
             pBreakBefore = sCSS1_PV_auto;
         }
@@ -3023,10 +2998,10 @@ static SwHTMLWriter& OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( SwHTMLW
         // No page break when writing only a fragment.
         return rWrt;
 
-    if( pBreakBefore )
+    if( !pBreakBefore.empty() )
         rWrt.OutCSS1_PropertyAscii( sCSS1_P_page_break_before,
                                         pBreakBefore );
-    if( pBreakAfter )
+    if( !pBreakAfter.empty() )
         rWrt.OutCSS1_PropertyAscii( sCSS1_P_page_break_after,
                                         pBreakAfter );
 
@@ -3124,7 +3099,7 @@ static SwHTMLWriter& OutCSS1_SvxBrush( SwHTMLWriter& rWrt, const SfxPoolItem& rH
         return rWrt;
 
     // if necessary, add the orientation of the Graphic
-    const char *pRepeat = nullptr, *pHori = nullptr, *pVert = nullptr;
+    std::string_view pRepeat, pHori, pVert;
     if( pGrf || !aLink.isEmpty() )
     {
         if( GPOS_TILED==ePos )
@@ -3181,7 +3156,7 @@ static SwHTMLWriter& OutCSS1_SvxBrush( SwHTMLWriter& rWrt, const SfxPoolItem& rH
                 ;
             }
 
-            if( pHori || pVert )
+            if( !pHori.empty() || !pVert.empty() )
                 pRepeat = sCSS1_PV_no_repeat;
         }
     }
@@ -3219,16 +3194,16 @@ static SwHTMLWriter& OutCSS1_SvxBrush( SwHTMLWriter& rWrt, const SfxPoolItem& rH
                              aLink) + ")";
             }
 
-            if( pRepeat )
+            if( !pRepeat.empty() )
             {
                 sOut += " " + OStringToOUString(pRepeat, RTL_TEXTENCODING_ASCII_US);
             }
 
-            if( pHori )
+            if( !pHori.empty() )
             {
                 sOut += " " + OStringToOUString(pHori, RTL_TEXTENCODING_ASCII_US);
             }
-            if( pVert )
+            if( !pVert.empty() )
             {
                 sOut += " " + OStringToOUString(pVert, RTL_TEXTENCODING_ASCII_US);
             }
@@ -3247,7 +3222,7 @@ static SwHTMLWriter& OutCSS1_SvxBrush( SwHTMLWriter& rWrt, const SfxPoolItem& rH
 }
 
 static void OutCSS1_SvxBorderLine( SwHTMLWriter& rWrt,
-                                   const char *pProperty,
+                                   std::string_view pProperty,
                                    const SvxBorderLine *pLine )
 {
     if( !pLine || pLine->isEmpty() )
@@ -3400,7 +3375,7 @@ static SwHTMLWriter& OutCSS1_SvxFrameDirection( SwHTMLWriter& rWrt, const SfxPoo
 
     SvxFrameDirection nDir =
         static_cast< const SvxFrameDirectionItem& >( rHt ).GetValue();
-    const char* pStr = nullptr;
+    std::string_view pStr;
     switch( nDir )
     {
     case SvxFrameDirection::Horizontal_LR_TB:
@@ -3417,7 +3392,7 @@ static SwHTMLWriter& OutCSS1_SvxFrameDirection( SwHTMLWriter& rWrt, const SfxPoo
     default: break;
     }
 
-    if( pStr )
+    if( !pStr.empty() )
         rWrt.OutCSS1_PropertyAscii( sCSS1_P_direction, pStr );
 
     return rWrt;

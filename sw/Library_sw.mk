@@ -536,7 +536,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/filter/basflt/shellio \
     sw/source/filter/html/SwAppletImpl \
     sw/source/filter/html/css1atr \
-    sw/source/filter/html/css1kywd \
     sw/source/filter/html/htmlatr \
     sw/source/filter/html/htmlbas \
     sw/source/filter/html/htmlcss1 \

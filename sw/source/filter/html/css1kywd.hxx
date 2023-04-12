@@ -20,197 +20,202 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_HTML_CSS1KYWD_HXX
 #define INCLUDED_SW_SOURCE_FILTER_HTML_CSS1KYWD_HXX
 
-extern const char* const sCSS_mimetype;
+#include <sal/config.h>
 
-extern const char* const sCSS1_page;
+#include <string_view>
 
-extern const char* const sCSS1_link;
-extern const char* const sCSS1_visited;
-extern const char* const sCSS1_first_letter;
+constexpr inline std::string_view sCSS_mimetype = "text/css";
 
-extern const char* const sCSS1_left;
-extern const char* const sCSS1_right;
-extern const char* const sCSS1_first;
+constexpr inline std::string_view sCSS1_page = "page";
+//constexpr inline std::string_view sCSS1_media = "media";
 
-extern const char* const sCSS1_url;
+constexpr inline std::string_view sCSS1_link = "link";
+constexpr inline std::string_view sCSS1_visited = "visited";
+constexpr inline std::string_view sCSS1_first_letter = "first-letter";
 
-extern const char* const sCSS1_UNIT_pt;
-extern const char* const sCSS1_UNIT_mm;
-extern const char* const sCSS1_UNIT_cm;
-extern const char* const sCSS1_UNIT_pc;
-extern const char* const sCSS1_UNIT_inch;
-extern const char* const sCSS1_UNIT_px;
+constexpr inline std::string_view sCSS1_left = "left";
+constexpr inline std::string_view sCSS1_right = "right";
+constexpr inline std::string_view sCSS1_first = "first";
+
+constexpr inline std::string_view sCSS1_url = "url";
+
+constexpr inline std::string_view sCSS1_UNIT_pt = "pt";
+constexpr inline std::string_view sCSS1_UNIT_mm = "mm";
+constexpr inline std::string_view sCSS1_UNIT_cm = "cm";
+constexpr inline std::string_view sCSS1_UNIT_pc = "pc";
+constexpr inline std::string_view sCSS1_UNIT_inch = "in";
+constexpr inline std::string_view sCSS1_UNIT_px = "px";
 
 // Strings for font properties
 
-extern const char* const sCSS1_P_font_family;
+constexpr inline std::string_view sCSS1_P_font_family = "font-family";
 
-extern const char* const sCSS1_PV_serif;
-extern const char* const sCSS1_PV_sans_serif;
-extern const char* const sCSS1_PV_cursive;
-extern const char* const sCSS1_PV_fantasy;
-extern const char* const sCSS1_PV_monospace;
+constexpr inline std::string_view sCSS1_PV_serif = "serif";
+constexpr inline std::string_view sCSS1_PV_sans_serif = "sans-serif";
+constexpr inline std::string_view sCSS1_PV_cursive = "cursive";
+constexpr inline std::string_view sCSS1_PV_fantasy = "fantasy";
+constexpr inline std::string_view sCSS1_PV_monospace = "monospace";
 
-extern const char* const sCSS1_P_font_style;
+constexpr inline std::string_view sCSS1_P_font_style = "font-style";
 
-extern const char* const sCSS1_PV_normal;
-extern const char* const sCSS1_PV_italic;
-extern const char* const sCSS1_PV_oblique;
+constexpr inline std::string_view sCSS1_PV_normal = "normal";
+constexpr inline std::string_view sCSS1_PV_italic = "italic";
+constexpr inline std::string_view sCSS1_PV_oblique = "oblique";
 
-extern const char* const sCSS1_P_font_variant;
+constexpr inline std::string_view sCSS1_P_font_variant = "font-variant";
 
-//extern const char* const sCSS1_PV_normal;
-extern const char* const sCSS1_PV_small_caps;
+//constexpr inline std::string_view sCSS1_PV_normal = "normal";
+constexpr inline std::string_view sCSS1_PV_small_caps = "small-caps";
 
-extern const char* const sCSS1_P_text_transform;
+constexpr inline std::string_view sCSS1_P_text_transform = "text-transform";
 
-extern const char* const sCSS1_PV_capitalize;
-extern const char* const sCSS1_PV_uppercase;
-extern const char* const sCSS1_PV_lowercase;
+constexpr inline std::string_view sCSS1_PV_capitalize = "capitalize";
+constexpr inline std::string_view sCSS1_PV_uppercase = "uppercase";
+constexpr inline std::string_view sCSS1_PV_lowercase = "lowercase";
 
-extern const char* const sCSS1_P_font_weight;
+constexpr inline std::string_view sCSS1_P_font_weight = "font-weight";
 
-extern const char* const sCSS1_PV_extra_light;
-extern const char* const sCSS1_PV_light;
-extern const char* const sCSS1_PV_demi_light;
-//extern const char* const sCSS1_PV_medium;
-extern const char* const sCSS1_PV_demi_bold;
-extern const char* const sCSS1_PV_bold;
-extern const char* const sCSS1_PV_extra_bold;
+constexpr inline std::string_view sCSS1_PV_extra_light = "extra-light";
+constexpr inline std::string_view sCSS1_PV_light = "light";
+constexpr inline std::string_view sCSS1_PV_demi_light = "demi-light";
+//constexpr inline std::string_view sCSS1_PV_medium = "medium";
+constexpr inline std::string_view sCSS1_PV_demi_bold = "demi-bold";
+constexpr inline std::string_view sCSS1_PV_bold = "bold";
+constexpr inline std::string_view sCSS1_PV_extra_bold = "extra-bold";
 
-extern const char* const sCSS1_P_font_size;
+constexpr inline std::string_view sCSS1_P_font_size = "font-size";
 
-extern const char* const sCSS1_P_font;
+constexpr inline std::string_view sCSS1_P_font = "font";
 
 // Strings for color and background properties
 
-extern const char* const sCSS1_P_color;
+constexpr inline std::string_view sCSS1_P_color = "color";
 
-extern const char* const sCSS1_P_background;
-extern const char* const sCSS1_P_background_color;
+constexpr inline std::string_view sCSS1_P_background = "background";
+constexpr inline std::string_view sCSS1_P_background_color = "background-color";
 
-extern const char* const sCSS1_PV_transparent;
+constexpr inline std::string_view sCSS1_PV_transparent = "transparent";
 
-extern const char* const sCSS1_PV_repeat;
-extern const char* const sCSS1_PV_no_repeat;
+constexpr inline std::string_view sCSS1_PV_repeat = "repeat";
+constexpr inline std::string_view sCSS1_PV_no_repeat = "no-repeat";
 
-extern const char* const sCSS1_PV_top;
-extern const char* const sCSS1_PV_middle;
-extern const char* const sCSS1_PV_bottom;
+constexpr inline std::string_view sCSS1_PV_top = "top";
+constexpr inline std::string_view sCSS1_PV_middle = "middle";
+constexpr inline std::string_view sCSS1_PV_bottom = "bottom";
 
-extern const char* const sCSS1_PV_scroll;
+constexpr inline std::string_view sCSS1_PV_scroll = "scroll";
 
 // Strings for text properties
 
-extern const char* const sCSS1_P_letter_spacing;
+constexpr inline std::string_view sCSS1_P_letter_spacing = "letter-spacing";
 
-extern const char* const sCSS1_P_text_decoration;
+constexpr inline std::string_view sCSS1_P_text_decoration = "text-decoration";
 
-extern const char* const sCSS1_PV_none;
-extern const char* const sCSS1_PV_underline;
-extern const char* const sCSS1_PV_overline;
-extern const char* const sCSS1_PV_line_through;
-extern const char* const sCSS1_PV_blink;
+constexpr inline std::string_view sCSS1_PV_none = "none";
+constexpr inline std::string_view sCSS1_PV_underline = "underline";
+constexpr inline std::string_view sCSS1_PV_overline = "overline";
+constexpr inline std::string_view sCSS1_PV_line_through = "line-through";
+constexpr inline std::string_view sCSS1_PV_blink = "blink";
 
-extern const char* const sCSS1_P_text_align;
+constexpr inline std::string_view sCSS1_P_text_align = "text-align";
 
-extern const char* const sCSS1_PV_left;
-extern const char* const sCSS1_PV_center;
-extern const char* const sCSS1_PV_right;
-extern const char* const sCSS1_PV_justify;
+constexpr inline std::string_view sCSS1_PV_left = "left";
+constexpr inline std::string_view sCSS1_PV_center = "center";
+constexpr inline std::string_view sCSS1_PV_right = "right";
+constexpr inline std::string_view sCSS1_PV_justify = "justify";
 
-extern const char* const sCSS1_P_text_indent;
+constexpr inline std::string_view sCSS1_P_text_indent = "text-indent";
 
-extern const char* const sCSS1_P_line_height;
+constexpr inline std::string_view sCSS1_P_line_height = "line-height";
 
-extern const char* const sCSS1_P_list_style_type;
+constexpr inline std::string_view sCSS1_P_list_style_type = "list-style-type";
 
 // Strings for box properties
 
-extern const char* const sCSS1_P_margin_left;
-extern const char* const sCSS1_P_margin_right;
-extern const char* const sCSS1_P_margin_top;
-extern const char* const sCSS1_P_margin_bottom;
-extern const char* const sCSS1_P_margin;
+constexpr inline std::string_view sCSS1_P_margin_left = "margin-left";
+constexpr inline std::string_view sCSS1_P_margin_right = "margin-right";
+constexpr inline std::string_view sCSS1_P_margin_top = "margin-top";
+constexpr inline std::string_view sCSS1_P_margin_bottom = "margin-bottom";
+constexpr inline std::string_view sCSS1_P_margin = "margin";
 
-extern const char* const sCSS1_P_padding_top;
-extern const char* const sCSS1_P_padding_bottom;
-extern const char* const sCSS1_P_padding_left;
-extern const char* const sCSS1_P_padding_right;
-extern const char* const sCSS1_P_padding;
+constexpr inline std::string_view sCSS1_P_padding_top = "padding-top";
+constexpr inline std::string_view sCSS1_P_padding_bottom = "padding-bottom";
+constexpr inline std::string_view sCSS1_P_padding_left = "padding-left";
+constexpr inline std::string_view sCSS1_P_padding_right = "padding-right";
+constexpr inline std::string_view sCSS1_P_padding = "padding";
 
-extern const char* const sCSS1_PV_auto;
+constexpr inline std::string_view sCSS1_PV_auto = "auto";
 
-extern const char* const sCSS1_P_border_left_width;
-extern const char* const sCSS1_P_border_right_width;
-extern const char* const sCSS1_P_border_top_width;
-extern const char* const sCSS1_P_border_bottom_width;
-extern const char* const sCSS1_P_border_width;
-extern const char* const sCSS1_P_border_color;
-extern const char* const sCSS1_P_border_style;
-extern const char* const sCSS1_P_border_left;
-extern const char* const sCSS1_P_border_right;
-extern const char* const sCSS1_P_border_top;
-extern const char* const sCSS1_P_border_bottom;
-extern const char* const sCSS1_P_border;
+constexpr inline std::string_view sCSS1_P_border_left_width = "border-left-width";
+constexpr inline std::string_view sCSS1_P_border_right_width = "border-right-width";
+constexpr inline std::string_view sCSS1_P_border_top_width = "border-top-width";
+constexpr inline std::string_view sCSS1_P_border_bottom_width = "border-bottom-width";
+constexpr inline std::string_view sCSS1_P_border_width = "border-width";
+constexpr inline std::string_view sCSS1_P_border_color = "border-color";
+constexpr inline std::string_view sCSS1_P_border_style = "border-style";
+constexpr inline std::string_view sCSS1_P_border_left = "border-left";
+constexpr inline std::string_view sCSS1_P_border_right = "border-right";
+constexpr inline std::string_view sCSS1_P_border_top = "border-top";
+constexpr inline std::string_view sCSS1_P_border_bottom = "border-bottom";
+constexpr inline std::string_view sCSS1_P_border = "border";
 
-//extern const char* const sCSS1_PV_none;
-extern const char* const sCSS1_PV_dotted;
-extern const char* const sCSS1_PV_dashed;
-extern const char* const sCSS1_PV_solid;
-extern const char* const sCSS1_PV_double;
-extern const char* const sCSS1_PV_groove;
-extern const char* const sCSS1_PV_ridge;
-extern const char* const sCSS1_PV_inset;
-extern const char* const sCSS1_PV_outset;
+//constexpr inline std::string_view sCSS1_PV_none = "none";
+constexpr inline std::string_view sCSS1_PV_dotted = "dotted";
+constexpr inline std::string_view sCSS1_PV_dashed = "dashed";
+constexpr inline std::string_view sCSS1_PV_solid = "solid";
+constexpr inline std::string_view sCSS1_PV_double = "double";
+constexpr inline std::string_view sCSS1_PV_groove = "groove";
+constexpr inline std::string_view sCSS1_PV_ridge = "ridge";
+constexpr inline std::string_view sCSS1_PV_inset = "inset";
+constexpr inline std::string_view sCSS1_PV_outset = "outset";
 
-extern const char* const sCSS1_P_width;
-extern const char* const sCSS1_P_max_width;
+constexpr inline std::string_view sCSS1_P_width = "width";
+constexpr inline std::string_view sCSS1_P_max_width = "max-width";
 
-extern const char* const sCSS1_P_height;
+constexpr inline std::string_view sCSS1_P_height = "height";
 
-extern const char* const sCSS1_P_float;
+constexpr inline std::string_view sCSS1_P_float = "float";
 
-extern const char* const sCSS1_P_column_count;
-extern const char* const sCSS1_P_dir;
+constexpr inline std::string_view sCSS1_P_column_count = "column-count";
+constexpr inline std::string_view sCSS1_P_dir = "dir";
 
 // Strings for positioning
 
-extern const char* const sCSS1_P_position;
+constexpr inline std::string_view sCSS1_P_position = "position";
 
-extern const char* const sCSS1_PV_absolute;
+constexpr inline std::string_view sCSS1_PV_absolute = "absolute";
 
-extern const char* const sCSS1_P_left;
+constexpr inline std::string_view sCSS1_P_left = "left";
 
-extern const char* const sCSS1_P_top;
+constexpr inline std::string_view sCSS1_P_top = "top";
 
 // Strings for printing extensions
 
-extern const char* const sCSS1_P_page_break_before;
-extern const char* const sCSS1_P_page_break_after;
-extern const char* const sCSS1_P_page_break_inside;
-extern const char* const sCSS1_P_size;
-extern const char* const sCSS1_P_widows;
-extern const char* const sCSS1_P_visibility;
-extern const char* const sCSS1_P_orphans;
-//extern const char* const sCSS1_P_marks;
+constexpr inline std::string_view sCSS1_P_page_break_before = "page-break-before";
+constexpr inline std::string_view sCSS1_P_page_break_after = "page-break-after";
+constexpr inline std::string_view sCSS1_P_page_break_inside = "page-break-inside";
+constexpr inline std::string_view sCSS1_P_size = "size";
+constexpr inline std::string_view sCSS1_P_widows = "widows";
+constexpr inline std::string_view sCSS1_P_visibility = "visibility";
+constexpr inline std::string_view sCSS1_P_orphans = "orphans";
+//constexpr inline std::string_view sCSS1_P_marks = "marks";
 
-extern const char* const sCSS1_PV_always;
-extern const char* const sCSS1_PV_avoid;
+constexpr inline std::string_view sCSS1_PV_always = "always";
+constexpr inline std::string_view sCSS1_PV_avoid = "avoid";
 
-extern const char* const sCSS1_PV_portrait;
-extern const char* const sCSS1_PV_landscape;
+constexpr inline std::string_view sCSS1_PV_portrait = "portrait";
+constexpr inline std::string_view sCSS1_PV_landscape = "landscape";
 
-//extern const char* const sCSS1_PV_crop;
-//extern const char* const sCSS1_PV_cross;
+//constexpr inline std::string_view sCSS1_PV_crop = "crop";
+//constexpr inline std::string_view sCSS1_PV_cross = "cross";
 
-extern const char* const sCSS1_P_so_language;
-extern const char* const sCSS1_P_direction;
-extern const char* const sCSS1_PV_ltr;
-extern const char* const sCSS1_PV_rtl;
-extern const char* const sCSS1_PV_inherit;
+constexpr inline std::string_view sCSS1_P_so_language = "so-language";
+constexpr inline std::string_view sCSS1_P_direction = "direction";
+constexpr inline std::string_view sCSS1_PV_ltr = "ltr";
+constexpr inline std::string_view sCSS1_PV_rtl = "rtl";
+constexpr inline std::string_view sCSS1_PV_inherit = "inherit";
 
-extern const char* const sCSS1_P_display;
+constexpr inline std::string_view sCSS1_P_display = "display";
 
 #endif
 

@@ -35,6 +35,7 @@
 #include <utility>
 
 #if defined LIBO_INTERNAL_ONLY
+#include <algorithm>
 #include <string_view>
 #include <type_traits>
 #endif
@@ -47,6 +48,7 @@
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 #include "config_global.h"
+#include "o3tl/safeint.hxx"
 #include "rtl/stringconcat.hxx"
 #endif
 
@@ -1307,6 +1309,15 @@ public:
         return rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length, asciiStr ) == 0;
     }
 
+#if defined LIBO_INTERNAL_ONLY
+    bool equalsIgnoreAsciiCaseAscii( std::string_view asciiStr ) const
+    {
+        return o3tl::make_unsigned(pData->length) == asciiStr.length()
+               && rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+                      pData->buffer, pData->length, asciiStr.data(), asciiStr.length()) == 0;
+    }
+#endif
+
     /**
       Compares two ASCII strings ignoring case
 
@@ -1329,6 +1340,18 @@ public:
     {
         return rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length, asciiStr );
     }
+
+#if defined LIBO_INTERNAL_ONLY
+    sal_Int32 compareToIgnoreAsciiCaseAscii( std::string_view asciiStr ) const
+    {
+        sal_Int32 nMax = std::min<size_t>(asciiStr.length(), std::numeric_limits<sal_Int32>::max());
+        sal_Int32 result = rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+            pData->buffer, pData->length, asciiStr.data(), nMax);
+        if (result == 0 && o3tl::make_unsigned(pData->length) < asciiStr.length())
+            result = -1;
+        return result;
+    }
+#endif
 
     /**
       Perform an ASCII lowercase comparison of two strings.
