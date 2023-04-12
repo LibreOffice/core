@@ -3978,10 +3978,37 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             // up to down, if the cursor is there in its last table row
             const SwSelBoxes& rBoxes = rSrcSh.GetTableCursor()->GetSelectedBoxes();
             const SwTableNode* pTableNd = rSh.IsCursorInTable();
-            sal_Int32 nSelRows = !rBoxes.back()
-                ? 0
-                : pTableNd->GetTable().GetTabLines().GetPos( rBoxes.back()->GetUpper() ) -
-                  pTableNd->GetTable().GetTabLines().GetPos( rBoxes.front()->GetUpper() ) + 1;
+            const SwTableLines& rLines = pTableNd->GetTable().GetTabLines();
+            const SwStartNode& rDelPos = rBoxes.back()
+                    ? *rBoxes.front()->GetSttNd()
+                    : *pTableNd->GetStartNode();
+
+            // count selected rows or columns
+            sal_Int32 nSelRowOrCols = 0;
+            if ( rBoxes.back() )
+            {
+                if ( bTableCol )
+                {
+                    // selected column count is the count of the cells
+                    // in the first row of the selection
+                    auto nLine = rLines.GetPos( rBoxes.front()->GetUpper() );
+                    for (auto pBox : rBoxes)
+                    {
+                        // cell is in the next row
+                        if ( nLine != rLines.GetPos( pBox->GetUpper() ) )
+                            break;
+                        ++nSelRowOrCols;
+                    }
+                }
+                else
+                {
+                   // selected row count is the difference of the row number of the
+                   // first and the last cell of the selection
+                   nSelRowOrCols = rLines.GetPos( rBoxes.back()->GetUpper() ) -
+                                   rLines.GetPos( rBoxes.front()->GetUpper() ) + 1;
+                }
+            }
+
             bool bSelUpToDown = rBoxes.back() && rBoxes.back()->GetUpper() ==
                            rSh.GetCursor()->GetPointNode().GetTableBox()->GetUpper();
 
@@ -4038,7 +4065,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
                 const SwTableBox* pBoxStt = rSh.GetCursor()->GetPointNode().GetTableBox();
                 SwTableLine* pLine = pBoxStt ? const_cast<SwTableLine*>( pBoxStt->GetUpper()): nullptr;
 
-                for (sal_Int32 nDeleted = 0; bNeedTrack && nDeleted < nSelRows;)
+                for (sal_Int32 nDeleted = 0; bNeedTrack && nDeleted < nSelRowOrCols;)
                 {
                     // move up text cursor (note: "true" is important for the layout level)
                     if ( !rSh.Up(false) )
@@ -4072,12 +4099,14 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
                         rSh.getIDocumentMarkAccess()->deleteMark( pMarkMoveFrom );
                     }
 
-                    // set all row as tracked deletion, otherwise go to the first moved row
-                    if ( bNeedTrack || ( bSelUpToDown && nSelRows > 1 ) )
+                    // tracked table row moving: set original rows as tracked deletion,
+                    // otherwise delete original rows/columns (tracking column deletion
+                    // and insertion is not supported yet)
+                    if ( !bTableCol && bNeedTrack )
                     {
                         pLine = nullptr;
 
-                        for (sal_Int32 nDeleted = 0; nDeleted < nSelRows - int(!bNeedTrack);)
+                        for (sal_Int32 nDeleted = 0; nDeleted < nSelRowOrCols;)
                         {
                             const SwTableBox* pBox = rSh.GetCursor()->GetPointNode().GetTableBox();
 
@@ -4087,10 +4116,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
                             if ( pBox->GetUpper() != pLine )
                             {
                                 pLine = const_cast<SwTableLine*>(pBox->GetUpper());
-                                if (bNeedTrack)
-                                    pDispatch->Execute(bTableCol
-                                        ? FN_TABLE_DELETE_COL
-                                        : FN_TABLE_DELETE_ROW, SfxCallMode::SYNCHRON);
+                                pDispatch->Execute(FN_TABLE_DELETE_ROW, SfxCallMode::SYNCHRON);
                                 ++nDeleted;
                             }
 
@@ -4103,19 +4129,17 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
                                 break;
                         }
                     }
-
-                    // delete original rows/columns, except in track changes mode
-                    // TODO remove all the columns, not only the first one
-                    if ( !bNeedTrack )
+                    else
                     {
-                        for (sal_Int32 nDeleted = 0; nDeleted < nSelRows; ++nDeleted)
+                        // set cursor in the first cell of the original selection
+                        rSh.GetCursor()->DeleteMark();
+                        rSh.GetCursor()->GetPoint()->Assign( rDelPos.GetIndex() + 1);
+
+                        for (sal_Int32 nDeleted = 0; nDeleted < nSelRowOrCols; ++nDeleted)
                         {
                             pDispatch->Execute(bTableCol
                                 ? FN_TABLE_DELETE_COL
                                 : FN_TABLE_DELETE_ROW, SfxCallMode::SYNCHRON);
-
-                            if ( bTableCol )
-                                break;
                         }
                     }
                 }

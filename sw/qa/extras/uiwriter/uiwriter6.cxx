@@ -992,6 +992,62 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf154599_MovingColumn)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable1->getColumns()->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf154771_MovingMultipleColumns)
+{
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // Create a table with less columns than rows
+    SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
+    (void)&pWrtShell->InsertTable(TableOpt, 5, 4);
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTableNames = xTablesSupplier->getTextTables();
+    CPPUNIT_ASSERT(xTableNames->hasByName("Table1"));
+    uno::Reference<text::XTextTable> xTable1(xTableNames->getByName("Table1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xTable1->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable1->getColumns()->getCount());
+
+    // without redlining
+    CPPUNIT_ASSERT_MESSAGE("redlining should be off",
+                           !pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    // Move first two columns of the table before column D by drag & drop
+
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwFrame* pPage = pLayout->Lower();
+    SwFrame* pBody = pPage->GetLower();
+    SwFrame* pTable = pBody->GetLower();
+    SwFrame* pRow1 = pTable->GetLower();
+    SwFrame* pCellA1 = pRow1->GetLower();
+    SwFrame* pCellB1 = pCellA1->GetNext();
+    SwFrame* pCellD1 = pCellB1->GetNext()->GetNext();
+    const SwRect& rCellA1Rect = pCellA1->getFrameArea();
+    const SwRect& rCellB1Rect = pCellB1->getFrameArea();
+    const SwRect& rCellD1Rect = pCellD1->getFrameArea();
+    Point ptTo(rCellD1Rect.Left() + rCellD1Rect.Width() / 2,
+               rCellD1Rect.Top() + rCellD1Rect.Height() / 2);
+    // select first two table columns by using
+    // the middle point of the top border of column A
+    // and middle point of the top border of column B
+    Point ptColumnA(rCellA1Rect.Left() + rCellA1Rect.Width() / 2, rCellA1Rect.Top() - 5);
+    const Point ptColumnB(rCellB1Rect.Left() + rCellB1Rect.Width() / 2, rCellB1Rect.Top() - 5);
+    pWrtShell->SelectTableRowCol(ptColumnA, &ptColumnB);
+
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    xTransfer->PrivateDrop(*pWrtShell, ptTo, /*bMove=*/true, /*bXSelection=*/true);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xTable1->getRows()->getCount());
+    // This was 5 before the fix (only the first selected column was moved, the
+    // other ones were copied instead of moving)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable1->getColumns()->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115132)
 {
     createSwDoc();
