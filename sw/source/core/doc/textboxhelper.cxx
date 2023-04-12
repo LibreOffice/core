@@ -359,8 +359,7 @@ SwFrameFormat* SwTextBoxHelper::getOtherTextBoxFormat(uno::Reference<drawing::XS
         return nullptr;
 
     SwFrameFormat* pFormat = pShape->GetFrameFormat();
-    return getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT,
-                                 SdrObject::getSdrObjectFromXShape(xShape));
+    return getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT);
 }
 
 uno::Reference<text::XTextFrame>
@@ -381,11 +380,9 @@ SwTextBoxHelper::getUnoTextFrame(uno::Reference<drawing::XShape> const& xShape)
     return {};
 }
 
-template <typename T>
-static void lcl_queryInterface(const SwFrameFormat* pShape, uno::Any& rAny, SdrObject* pObj)
+template <typename T> static void lcl_queryInterface(const SwFrameFormat* pShape, uno::Any& rAny)
 {
-    if (SwFrameFormat* pFormat
-        = SwTextBoxHelper::getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT, pObj))
+    if (SwFrameFormat* pFormat = SwTextBoxHelper::getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT))
     {
         uno::Reference<T> const xInterface(
             SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat), uno::UNO_QUERY);
@@ -393,22 +390,21 @@ static void lcl_queryInterface(const SwFrameFormat* pShape, uno::Any& rAny, SdrO
     }
 }
 
-uno::Any SwTextBoxHelper::queryInterface(const SwFrameFormat* pShape, const uno::Type& rType,
-                                         SdrObject* pObj)
+uno::Any SwTextBoxHelper::queryInterface(const SwFrameFormat* pShape, const uno::Type& rType)
 {
     uno::Any aRet;
 
     if (rType == cppu::UnoType<css::text::XTextAppend>::get())
     {
-        lcl_queryInterface<text::XTextAppend>(pShape, aRet, pObj);
+        lcl_queryInterface<text::XTextAppend>(pShape, aRet);
     }
     else if (rType == cppu::UnoType<css::text::XText>::get())
     {
-        lcl_queryInterface<text::XText>(pShape, aRet, pObj);
+        lcl_queryInterface<text::XText>(pShape, aRet);
     }
     else if (rType == cppu::UnoType<css::text::XTextRange>::get())
     {
-        lcl_queryInterface<text::XTextRange>(pShape, aRet, pObj);
+        lcl_queryInterface<text::XTextRange>(pShape, aRet);
     }
 
     return aRet;
@@ -1304,25 +1300,6 @@ std::optional<bool> SwTextBoxHelper::isAnchorTypeDifferent(const SwFrameFormat* 
     return bRet;
 }
 
-bool SwTextBoxHelper::syncTextBoxSize(SwFrameFormat* pShape, SdrObject* pObj)
-{
-    if (!pShape || !pObj)
-        return false;
-
-    if (auto pTextBox = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT, pObj))
-    {
-        const auto& rSize = getTextRectangle(pObj, false).GetSize();
-        if (!rSize.IsEmpty())
-        {
-            SwFormatFrameSize aSize(pTextBox->GetFrameSize());
-            aSize.SetSize(rSize);
-            return pTextBox->SetFormatAttr(aSize);
-        }
-    }
-
-    return false;
-}
-
 bool SwTextBoxHelper::isTextBoxShapeHasValidTextFrame(const SwFrameFormat* pShape)
 {
     if (pShape && pShape->Which() == RES_DRAWFRMFMT)
@@ -1395,41 +1372,6 @@ bool SwTextBoxHelper::DoTextBoxZOrderCorrection(SwFrameFormat* pShape, const Sdr
                         "No Valid SdrObject for the shape!");
 
     return false;
-}
-
-void SwTextBoxHelper::synchronizeGroupTextBoxProperty(bool pFunc(SwFrameFormat*, SdrObject*),
-                                                      SwFrameFormat* pShape, SdrObject* pObj)
-{
-    if (auto pChildren = pObj->getChildrenOfSdrObject())
-    {
-        for (size_t i = 0; i < pChildren->GetObjCount(); ++i)
-            synchronizeGroupTextBoxProperty(pFunc, pShape, pChildren->GetObj(i));
-    }
-    else
-    {
-        (*pFunc)(pShape, pObj);
-    }
-}
-
-std::vector<SwFrameFormat*> SwTextBoxHelper::CollectTextBoxes(SdrObject* pGroupObject,
-                                                              SwFrameFormat* pFormat)
-{
-    std::vector<SwFrameFormat*> vRet;
-    if (auto pChildren = pGroupObject->getChildrenOfSdrObject())
-    {
-        for (size_t i = 0; i < pChildren->GetObjCount(); ++i)
-        {
-            auto pChildTextBoxes = CollectTextBoxes(pChildren->GetObj(i), pFormat);
-            for (auto& rChildTextBox : pChildTextBoxes)
-                vRet.push_back(rChildTextBox);
-        }
-    }
-    else
-    {
-        if (isTextBox(pFormat, RES_DRAWFRMFMT, pGroupObject))
-            vRet.push_back(getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT, pGroupObject));
-    }
-    return vRet;
 }
 
 SwTextBoxNode::SwTextBoxNode(SwFrameFormat* pOwnerShape)
@@ -1554,15 +1496,5 @@ void SwTextBoxNode::SetTextBoxInactive(const SdrObject* pDrawObject)
 }
 
 bool SwTextBoxNode::IsGroupTextBox() const { return m_pTextBoxes.size() > 1; }
-
-std::map<SdrObject*, SwFrameFormat*> SwTextBoxNode::GetAllTextBoxes() const
-{
-    std::map<SdrObject*, SwFrameFormat*> aRet;
-    for (auto& rElem : m_pTextBoxes)
-    {
-        aRet.emplace(rElem.m_pDrawObject, rElem.m_pTextBoxFormat);
-    }
-    return aRet;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

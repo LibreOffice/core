@@ -1250,8 +1250,10 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                     // use geometry of drawing object
                     aObjRect = pGroupObj->GetSnapRect();
 
-                    SwTextBoxHelper::synchronizeGroupTextBoxProperty(&SwTextBoxHelper::changeAnchor, GetFormat(), &const_cast<SdrObject&>(rObj));
-                    SwTextBoxHelper::synchronizeGroupTextBoxProperty(&SwTextBoxHelper::syncTextBoxSize, GetFormat(), &const_cast<SdrObject&>(rObj));
+                    for (size_t i = 0; i < pGroupObj->getChildrenOfSdrObject()->GetObjCount(); ++i )
+                    {
+                        SwTextBoxHelper::doTextBoxPositioning(GetFormat(), pGroupObj->getChildrenOfSdrObject()->GetObj(i));
+                    }
 
                 }
                 SwTwips nXPosDiff(0);
