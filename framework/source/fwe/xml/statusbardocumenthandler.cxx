@@ -101,7 +101,6 @@ static void ExtractStatusbarItemParameters(
         if ( rEntry.Name == ITEM_DESCRIPTOR_COMMANDURL )
         {
             rEntry.Value >>= rCommandURL;
-            rCommandURL = rCommandURL.intern();
         }
         else if ( rEntry.Name == ITEM_DESCRIPTOR_HELPURL )
         {

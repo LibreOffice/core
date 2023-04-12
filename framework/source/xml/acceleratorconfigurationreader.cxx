@@ -101,7 +101,7 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const OUString&      
             switch(eAttribute)
             {
                 case E_ATTRIBUTE_URL :
-                    sCommand = sValue.intern();
+                    sCommand = sValue;
                     break;
 
                 case E_ATTRIBUTE_KEYCODE :

@@ -894,7 +894,7 @@ void ScXMLExport::ExportExternalRefCacheStyles()
     // Export each unique number format used in the external ref cache.
     vector<sal_uInt32> aNumFmts;
     pRefMgr->getAllCachedNumberFormats(aNumFmts);
-    const OUString aDefaultStyle = OUString("Default").intern();
+    static constexpr OUStringLiteral aDefaultStyle(u"Default");
     for (const auto& rNumFmt : aNumFmts)
     {
         sal_Int32 nNumFmt = static_cast<sal_Int32>(rNumFmt);
@@ -904,7 +904,7 @@ void ScXMLExport::ExportExternalRefCacheStyles()
         uno::Any aVal;
         aVal <<= nNumFmt;
         vector<XMLPropertyState> aProps;
-        aVal <<= aDefaultStyle;
+        aVal <<= OUString(aDefaultStyle);
         aProps.emplace_back(nEntryIndex, aVal);
 
         OUString aName;

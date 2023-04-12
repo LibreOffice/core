@@ -843,8 +843,8 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
             }
             else
             {
-                // Commit the string.  Use intern() to ref-count it.
-                *(*_rRow)[i] = OUString::intern(pData, static_cast<sal_Int32>(nLastPos+1), m_eEncoding);
+                // Commit the string
+                *(*_rRow)[i] = OUString(pData, static_cast<sal_Int32>(nLastPos+1), m_eEncoding);
             }
         } // if (nType == DataType::CHAR || nType == DataType::VARCHAR)
         else if ( DataType::TIMESTAMP == nType )
@@ -928,7 +928,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
                 continue;
             }
 
-            OUString aStr = OUString::intern(pData+nPos1, nPos2-nPos1+1, m_eEncoding);
+            OUString aStr(pData+nPos1, nPos2-nPos1+1, m_eEncoding);
 
             switch (nType)
             {

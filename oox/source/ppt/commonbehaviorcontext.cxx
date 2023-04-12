@@ -83,9 +83,9 @@ namespace oox::ppt {
                     if(msCurrentAttribute.equalsAscii( attrConv->mpMSName ) )
                     {
                         Attribute attr;
-                        attr.name = OUString::intern( attrConv->mpAPIName,
-                                                             strlen(attrConv->mpAPIName),
-                                                             RTL_TEXTENCODING_ASCII_US );
+                        attr.name = OUString( attrConv->mpAPIName,
+                                              strlen(attrConv->mpAPIName),
+                                              RTL_TEXTENCODING_ASCII_US );
                         attr.type = attrConv->meAttribute;
                         maAttributes.push_back( attr );
                         SAL_INFO("oox.ppt", "OOX: attrName is " << msCurrentAttribute << " -> " << attrConv->mpAPIName );

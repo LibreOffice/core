@@ -707,8 +707,8 @@ void CURI::initFromConstant(const sal_Int16 i_Constant)
             throw css::lang::IllegalArgumentException(
                 "CURI::initialize: invalid URIs constant argument", *this, 0);
     }
-    m_Namespace = OUString::createFromAscii(ns).intern();
-    m_LocalName = OUString::createFromAscii(ln).intern();
+    m_Namespace = OUString::createFromAscii(ns);
+    m_LocalName = OUString::createFromAscii(ln);
 }
 
 // css::lang::XInitialization:

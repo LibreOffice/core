@@ -1838,8 +1838,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         p->rINetAttr.GetINetFormat().GetValue(),
                         INetURLObject::DecodeMechanism::Unambiguous ) );
 
-                    // We have to distinguish between intern and real URLs
-                    const bool bIntern = '#' == aURL[0];
+                    // We have to distinguish between internal and real URLs
+                    const bool bInternal = '#' == aURL[0];
 
                     // GetCursor_() is a SwShellCursor, which is derived from
                     // SwSelPaintRects, therefore the rectangles of the current
@@ -1856,7 +1856,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                     // Create the destination for internal links:
                     sal_Int32 nDestId = -1;
-                    if ( bIntern )
+                    if ( bInternal )
                     {
                         aURL = aURL.copy( 1 );
                         mrSh.SwCursorShell::ClearMark();
@@ -1882,7 +1882,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         }
                     }
 
-                    if ( !bIntern || -1 != nDestId )
+                    if ( !bInternal || -1 != nDestId )
                     {
                         // #i44368# Links in Header/Footer
                         const bool bHeaderFooter = pDoc->IsInHeaderFooter( *pTNd );
@@ -1909,14 +1909,14 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                                 s_aLinkIdMap.push_back( aLinkEntry );
 
                                 // Connect Link and Destination:
-                                if ( bIntern )
+                                if ( bInternal )
                                     pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
                                 else
                                     pPDFExtOutDevData->SetLinkURL( nLinkId, aURL );
 
                                 // #i44368# Links in Header/Footer
                                 if ( bHeaderFooter )
-                                    MakeHeaderFooterLinks(*pPDFExtOutDevData, *pTNd, rLinkRect, nDestId, aURL, bIntern, altText);
+                                    MakeHeaderFooterLinks(*pPDFExtOutDevData, *pTNd, rLinkRect, nDestId, aURL, bInternal, altText);
                             }
                         }
                     }
@@ -1943,11 +1943,11 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 OUString aURL( pItem->GetURL() );
                 if (aURL.isEmpty())
                     continue;
-                const bool bIntern = '#' == aURL[0];
+                const bool bInternal = '#' == aURL[0];
 
                 // Create the destination for internal links:
                 sal_Int32 nDestId = -1;
-                if ( bIntern )
+                if ( bInternal )
                 {
                     aURL = aURL.copy( 1 );
                     mrSh.SwCursorShell::ClearMark();
@@ -1972,7 +1972,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     }
                 }
 
-                if ( !bIntern || -1 != nDestId )
+                if ( !bInternal || -1 != nDestId )
                 {
                     Point aNullPt;
                     const SwRect aLinkRect = pFrameFormat->FindLayoutRect( false, &aNullPt );
@@ -1988,7 +1988,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             pPDFExtOutDevData->CreateLink(aRect, formatName, aLinkPageNum);
 
                         // Connect Link and Destination:
-                        if ( bIntern )
+                        if ( bInternal )
                             pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
                         else
                             pPDFExtOutDevData->SetLinkURL( nLinkId, aURL );
@@ -2002,7 +2002,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             {
                                 const SwTextNode* pTNd = pAnchorNode->GetTextNode();
                                 if ( pTNd )
-                                    MakeHeaderFooterLinks(*pPDFExtOutDevData, *pTNd, aLinkRect, nDestId, aURL, bIntern, formatName);
+                                    MakeHeaderFooterLinks(*pPDFExtOutDevData, *pTNd, aLinkRect, nDestId, aURL, bInternal, formatName);
                             }
                         }
                     }
@@ -2358,8 +2358,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
         for ( const auto& rBookmark : rBookmarks )
         {
             OUString aBookmarkName( rBookmark.aBookmark );
-            const bool bIntern = '#' == aBookmarkName[0];
-            if ( bIntern )
+            const bool bInternal = '#' == aBookmarkName[0];
+            if ( bInternal )
             {
                 aBookmarkName = aBookmarkName.copy( 1 );
                 JumpToSwMark( &mrSh, aBookmarkName );
@@ -2632,7 +2632,7 @@ void SwEnhancedPDFExportHelper::MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rP
                                                        const SwRect& rLinkRect,
                                                        sal_Int32 nDestId,
                                                        const OUString& rURL,
-                                                       bool bIntern,
+                                                       bool bInternal,
                                                        OUString const& rContent) const
 {
     // We assume, that the primary link has just been exported. Therefore
@@ -2663,7 +2663,7 @@ void SwEnhancedPDFExportHelper::MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rP
                     rPDFExtOutDevData.CreateLink(aRect, rContent, aHFLinkPageNum);
 
                 // Connect Link and Destination:
-                if ( bIntern )
+                if ( bInternal )
                     rPDFExtOutDevData.SetLinkDest( nHFLinkId, nDestId );
                 else
                     rPDFExtOutDevData.SetLinkURL( nHFLinkId, rURL );

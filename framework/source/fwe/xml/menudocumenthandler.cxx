@@ -121,7 +121,6 @@ static void ExtractMenuParameters( const Sequence< PropertyValue >& rProp,
         if ( p.Name == ITEM_DESCRIPTOR_COMMANDURL )
         {
             p.Value >>= rCommandURL;
-            rCommandURL = rCommandURL.intern();
         }
         else if ( p.Name == ITEM_DESCRIPTOR_HELPURL )
         {
@@ -200,7 +199,7 @@ void ReadMenuDocumentHandlerBase::initPropertyCommon(
     pProps[5].Name = m_aType;
 
     // Common values
-    pProps[0].Value <<= rCommandURL.intern();
+    pProps[0].Value <<= rCommandURL;
     pProps[1].Value <<= rHelpId;
     pProps[2].Value <<= Reference< XIndexContainer >();
     pProps[3].Value <<= rLabel;

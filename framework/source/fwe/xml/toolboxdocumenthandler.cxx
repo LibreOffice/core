@@ -65,10 +65,7 @@ static void ExtractToolbarParameters( const Sequence< PropertyValue >& rProp,
     for ( const PropertyValue& rEntry : rProp )
     {
         if ( rEntry.Name == ITEM_DESCRIPTOR_COMMANDURL )
-        {
             rEntry.Value >>= rCommandURL;
-            rCommandURL = rCommandURL.intern();
-        }
         else if ( rEntry.Name == ITEM_DESCRIPTOR_LABEL )
             rEntry.Value >>= rLabel;
         else if ( rEntry.Name == ITEM_DESCRIPTOR_TYPE )
@@ -284,7 +281,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
                         case TB_ATTRIBUTE_URL:
                         {
                             bAttributeURL   = true;
-                            aCommandURL     = xAttribs->getValueByIndex( n ).intern();
+                            aCommandURL     = xAttribs->getValueByIndex( n );
                         }
                         break;
 
