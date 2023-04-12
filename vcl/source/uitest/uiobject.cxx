@@ -1224,6 +1224,7 @@ StringMap ComboBoxUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
     aMap["SelectedText"] = mxComboBox->GetSelected();
+    aMap["EntryCount"] = OUString::number(mxComboBox->GetEntryCount());
     return aMap;
 }
 

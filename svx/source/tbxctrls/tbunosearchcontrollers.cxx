@@ -24,6 +24,7 @@
 #include <vector>
 
 #include <config_feature_desktop.h>
+#include <officecfg/Office/Common.hxx>
 
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
@@ -72,8 +73,6 @@ constexpr OUStringLiteral COMMAND_UPSEARCH = u".uno:UpSearch";
 constexpr OUStringLiteral COMMAND_FINDALL = u".uno:FindAll";
 constexpr OUStringLiteral COMMAND_MATCHCASE = u".uno:MatchCase";
 constexpr OUStringLiteral COMMAND_SEARCHFORMATTED = u".uno:SearchFormattedDisplayString";
-
-const sal_Int32       REMEMBER_SIZE = 10;
 
 class CheckButtonItemWindow final : public InterimItemWindow
 {
@@ -214,6 +213,11 @@ FindTextFieldControl::FindTextFieldControl( vcl::Window* pParent,
 
     m_xWidget->set_size_request(250, -1);
     SetSizePixel(m_xWidget->get_preferred_size());
+
+    // tdf#154269 - respect FindReplaceRememberedSearches expert option
+    m_nRememberSize = officecfg::Office::Common::Misc::FindReplaceRememberedSearches::get();
+    if (m_nRememberSize < 1)
+        m_nRememberSize = 1;
 }
 
 void FindTextFieldControl::Remember_Impl(const OUString& rStr)
@@ -226,8 +230,8 @@ void FindTextFieldControl::Remember_Impl(const OUString& rStr)
             return;
     }
 
-    if (nCount == REMEMBER_SIZE)
-        m_xWidget->remove(REMEMBER_SIZE-1);
+    if (nCount == m_nRememberSize)
+        m_xWidget->remove(m_nRememberSize - 1);
 
     m_xWidget->insert_text(0, rStr);
 }
