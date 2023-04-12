@@ -807,8 +807,13 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         if ( [ self accessibleValue ] ) {
             [ AquaA11yValueWrapper addAttributeNamesTo: attributeNames ];
         }
-        [ nativeSubrole release ];
-        [ title release ];
+        if ( nativeSubrole ) {
+            [ nativeSubrole release ];
+        }
+        if ( title ) {
+            [ title release ];
+        }
+        // Related: tdf#153374 Don't release autoreleased attributeNames
         return attributeNames;
     } catch ( DisposedException & ) { // Object is no longer available
         if ( nativeSubrole ) {
@@ -817,11 +822,10 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         if ( title ) {
             [ title release ];
         }
-        if ( attributeNames ) {
-            [ attributeNames release ];
-        }
+        // Related: tdf#153374 Don't release autoreleased attributeNames
+        // Also, return an autoreleased empty array instead of a retained array.
         [ AquaA11yFactory removeFromWrapperRepositoryFor: [ self accessibleContext ] ];
-        return [ [ NSArray alloc ] init ];
+        return [ NSArray array ];
     }
 }
 
