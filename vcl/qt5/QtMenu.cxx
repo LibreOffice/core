@@ -478,7 +478,8 @@ void QtMenu::DoFullMenuUpdate(Menu* pMenuBar)
         const bool bShowDisabled
             = bool(pMenuBar->GetMenuFlags() & MenuFlags::AlwaysShowDisabledEntries)
               || !bool(pMenuBar->GetMenuFlags() & MenuFlags::HideDisabledEntries);
-        const bool bVisible = bShowDisabled || mpVCLMenu->IsItemEnabled(pSalMenuItem->mnId);
+        const bool bVisible = pSalMenuItem->mbVisible
+                              && (bShowDisabled || mpVCLMenu->IsItemEnabled(pSalMenuItem->mnId));
         pSalMenuItem->getAction()->setVisible(bVisible);
 
         if (pSalMenuItem->mpSubMenu != nullptr)
