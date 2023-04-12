@@ -89,7 +89,6 @@ void Test::Create1x2SplitFly()
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWithTable)
 {
     // Given a document with a multi-page floating table:
-    SwModelTestBase::FlySplitGuard aGuard;
     createSwDoc("floattable.docx");
 
     // When laying out that document:
