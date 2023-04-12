@@ -261,7 +261,6 @@ SalData::SalData()
     mpFirstObject = nullptr;    // pointer of first object window
     mpFirstVD = nullptr;        // first VirDev
     mpFirstPrinter = nullptr;   // first printing printer
-    mpHDCCache = nullptr;       // Cache for three DC's
     mh50Bmp = nullptr;          // 50% Bitmap
     mh50Brush = nullptr;        // 50% Brush
     int i;

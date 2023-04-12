@@ -134,10 +134,6 @@ void ImplInitSalGDI()
     pSalData->mhStockBrushAry[3]        = CreateSolidBrush( pSalData->maStockBrushColorAry[3] );
     pSalData->mnStockBrushCount = 4;
 
-    // initialize cache of device contexts
-    pSalData->mpHDCCache = new HDCCache[ CACHESIZE_HDC ];
-    memset( pSalData->mpHDCCache, 0, CACHESIZE_HDC * sizeof( HDCCache ) );
-
     // initialize temporary font lists
     pSalData->mpSharedTempFontItem = nullptr;
     pSalData->mpOtherTempFontItem = nullptr;
@@ -318,7 +314,6 @@ void ImplFreeSalGDI()
     }
 
     ImplClearHDCCache( pSalData );
-    delete[] pSalData->mpHDCCache;
 
     // delete Ditherpalette, if existing
     if ( pSalData->mhDitherPal )
@@ -511,7 +506,7 @@ void WinSalGraphics::setHDC(HDC aNew)
 HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp )
 {
     SalData*    pSalData = GetSalData();
-    HDCCache*   pC = &pSalData->mpHDCCache[ nID ];
+    HDCCache*   pC = &pSalData->maHDCCache[ nID ];
 
     if( !pC->mhDC )
     {
@@ -543,7 +538,7 @@ HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp )
 void ImplReleaseCachedDC( sal_uLong nID )
 {
     SalData*    pSalData = GetSalData();
-    HDCCache*   pC = &pSalData->mpHDCCache[ nID ];
+    HDCCache*   pC = &pSalData->maHDCCache[ nID ];
 
     if ( pC->mhActBmp )
         SelectObject( pC->mhDC, pC->mhSelBmp );
@@ -553,7 +548,7 @@ void ImplClearHDCCache( SalData* pData )
 {
     for( sal_uLong i = 0; i < CACHESIZE_HDC; i++ )
     {
-        HDCCache* pC = &pData->mpHDCCache[ i ];
+        HDCCache* pC = &pData->maHDCCache[ i ];
 
         if( pC->mhDC )
         {

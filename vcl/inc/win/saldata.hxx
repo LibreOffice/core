@@ -21,6 +21,7 @@
 
 #include <config_features.h>
 
+#include <array>
 #include <memory>
 #include <osl/module.h>
 
@@ -52,6 +53,21 @@ class SkiaControlsCache;
 #define MAX_STOCKPEN            4
 #define MAX_STOCKBRUSH          4
 #define SAL_CLIPRECT_COUNT      16
+
+#define CACHESIZE_HDC       3
+#define CACHED_HDC_1        0
+#define CACHED_HDC_2        1
+#define CACHED_HDC_DRAW     2
+#define CACHED_HDC_DEFEXT   64
+
+struct HDCCache
+{
+    HDC         mhDC = 0;
+    HPALETTE    mhDefPal = 0;
+    HBITMAP     mhDefBmp = 0;
+    HBITMAP     mhSelBmp = 0;
+    HBITMAP     mhActBmp = 0;
+};
 
 struct SalIcon
 {
@@ -96,7 +112,7 @@ public:
     WinSalObject*           mpFirstObject;          // pointer of first object window
     WinSalVirtualDevice*    mpFirstVD;              // first VirDev
     WinSalPrinter*          mpFirstPrinter;         // first printing printer
-    HDCCache*               mpHDCCache;             // Cache for three DC's
+    std::array<HDCCache, CACHESIZE_HDC> maHDCCache; // Cache for three DC's
     HBITMAP                 mh50Bmp;                // 50% Bitmap
     HBRUSH                  mh50Brush;              // 50% Brush
     COLORREF                maStockPenColorAry[MAX_STOCKPEN];
@@ -138,21 +154,6 @@ struct SalShlData
 };
 
 extern SalShlData aSalShlData;
-
-#define CACHESIZE_HDC       3
-#define CACHED_HDC_1        0
-#define CACHED_HDC_2        1
-#define CACHED_HDC_DRAW     2
-#define CACHED_HDC_DEFEXT   64
-
-struct HDCCache
-{
-    HDC         mhDC;
-    HPALETTE    mhDefPal;
-    HBITMAP     mhDefBmp;
-    HBITMAP     mhSelBmp;
-    HBITMAP     mhActBmp;
-};
 
 void ImplClearHDCCache( SalData* pData );
 HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp = nullptr );
