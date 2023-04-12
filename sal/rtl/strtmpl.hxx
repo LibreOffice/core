@@ -35,6 +35,7 @@
 #include "strimp.hxx"
 
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <rtl/character.hxx>
@@ -151,24 +152,6 @@ inline sal_Int16 implGetDigit(sal_Unicode ch, sal_Int16 nRadix)
     else if ((ch >= 'A') && (ch <= 'Z'))
         n = ch - 'A' + 10;
     return (n < nRadix) ? n : -1;
-}
-
-inline bool implIsWhitespace(sal_Unicode c)
-{
-    /* Space or Control character? */
-    if ((c <= 32) && c)
-        return true;
-
-    /* Only in the General Punctuation area Space or Control characters are included? */
-    if ((c < 0x2000) || (c > 0x206F))
-        return false;
-
-    if (((c >= 0x2000) && (c <= 0x200B)) ||    /* All Spaces           */
-        (c == 0x2028) ||                       /* LINE SEPARATOR       */
-        (c == 0x2029))                         /* PARAGRAPH SEPARATOR  */
-        return true;
-
-    return false;
 }
 
 /* ======================================================================= */
@@ -384,10 +367,9 @@ sal_Int32 indexOfChar_WithLength                             ( const IMPL_RTL_ST
     if (nLen <= 0)
         return -1;
     // take advantage of builtin optimisations
-    using my_string_view = std::basic_string_view<IMPL_RTL_STRCODE>;
-    my_string_view v(pStr, nLen);
-    typename my_string_view::size_type idx = v.find(c);
-    return idx == my_string_view::npos ? -1 : idx;
+    std::basic_string_view v(pStr, nLen);
+    auto idx = v.find(c);
+    return idx == v.npos ? -1 : idx;
 }
 
 /* ----------------------------------------------------------------------- */
@@ -430,10 +412,9 @@ sal_Int32 lastIndexOfChar_WithLength                             ( const IMPL_RT
 {
     assert(nLen >= 0);
     // take advantage of builtin optimisations
-    using my_string_view = std::basic_string_view<IMPL_RTL_STRCODE>;
-    my_string_view v(pStr, nLen);
-    typename my_string_view::size_type idx = v.rfind(c);
-    return idx == my_string_view::npos ? -1 : idx;
+    std::basic_string_view v(pStr, nLen);
+    auto idx = v.rfind(c);
+    return idx == v.npos ? -1 : idx;
 }
 
 /* ----------------------------------------------------------------------- */
@@ -484,10 +465,9 @@ sal_Int32 indexOfStr_WithLength                             ( const IMPL_RTL_STR
     if ( nSubLen == 0 )
         return -1;
     // take advantage of builtin optimisations
-    using my_string_view = std::basic_string_view<IMPL_RTL_STRCODE>;
-    my_string_view v(pStr, nStrLen);
+    std::basic_string_view v(pStr, nStrLen);
     auto idx = nSubLen == 1 ? v.find(*pSubStr) : v.find(pSubStr, 0, nSubLen);
-    return idx == my_string_view::npos ? -1 : idx;
+    return idx == v.npos ? -1 : idx;
 }
 
 inline sal_Int32 indexOfStr_WithLength(const sal_Unicode* pStr, sal_Int32 nStrLen,
@@ -547,11 +527,10 @@ sal_Int32 lastIndexOfStr_WithLength                             ( const IMPL_RTL
     if ( nSubLen == 0 )
         return -1;
     // take advantage of builtin optimisations
-    using my_string_view = std::basic_string_view<IMPL_RTL_STRCODE>;
-    my_string_view v(pStr, nStrLen);
-    my_string_view needle(pSubStr, nSubLen);
-    typename my_string_view::size_type idx = v.rfind(needle);
-    return idx == my_string_view::npos ? -1 : idx;
+    std::basic_string_view v(pStr, nStrLen);
+    std::basic_string_view needle(pSubStr, nSubLen);
+    auto idx = v.rfind(needle);
+    return idx == v.npos ? -1 : idx;
 }
 
 /* ----------------------------------------------------------------------- */
@@ -564,41 +543,10 @@ template <class S, class Replacer> void replaceChars(S str, Replacer replacer)
 
 /* ----------------------------------------------------------------------- */
 
-template <typename IMPL_RTL_STRCODE> sal_Int32 trim_WithLength(IMPL_RTL_STRCODE*, sal_Int32);
-
-template <typename IMPL_RTL_STRCODE> sal_Int32 trim( IMPL_RTL_STRCODE* pStr )
-{
-    return trim_WithLength( pStr, getLength( pStr ) );
-}
-
-/* ----------------------------------------------------------------------- */
-
-template <typename IMPL_RTL_STRCODE>
-std::basic_string_view<IMPL_RTL_STRCODE> trimView( IMPL_RTL_STRCODE* pStr, sal_Int32 nLen )
-{
-    assert(nLen >= 0);
-    sal_Int32 nPreSpaces    = 0;
-    sal_Int32 nPostSpaces   = 0;
-    sal_Int32 nIndex        = nLen-1;
-
-    while ( (nPreSpaces < nLen) && implIsWhitespace( IMPL_RTL_USTRCODE(*(pStr+nPreSpaces)) ) )
-        nPreSpaces++;
-
-    while ( (nIndex > nPreSpaces) && implIsWhitespace( IMPL_RTL_USTRCODE(*(pStr+nIndex)) ) )
-    {
-        nPostSpaces++;
-        nIndex--;
-    }
-
-    return { pStr + nPreSpaces, static_cast<size_t>(nLen - nPostSpaces - nPreSpaces) };
-}
-
-/* ----------------------------------------------------------------------- */
-
 template <typename IMPL_RTL_STRCODE>
 sal_Int32 trim_WithLength( IMPL_RTL_STRCODE* pStr, sal_Int32 nLen )
 {
-    const auto view = trimView(pStr, nLen);
+    const auto view = o3tl::trim(std::basic_string_view(pStr, nLen));
 
     if (static_cast<sal_Int32>(view.size()) != nLen)
     {
@@ -609,6 +557,13 @@ sal_Int32 trim_WithLength( IMPL_RTL_STRCODE* pStr, sal_Int32 nLen )
     }
 
     return nLen;
+}
+
+/* ----------------------------------------------------------------------- */
+
+template <typename IMPL_RTL_STRCODE> sal_Int32 trim( IMPL_RTL_STRCODE* pStr )
+{
+    return trim_WithLength( pStr, getLength( pStr ) );
 }
 
 /* ----------------------------------------------------------------------- */
@@ -775,7 +730,7 @@ template <typename T, class S> T toInt(S str, sal_Int16 nRadix)
     const auto end = str.end();
 
     /* Skip whitespaces */
-    while (pStr != end && implIsWhitespace(IMPL_RTL_USTRCODE(*pStr)))
+    while (pStr != end && o3tl::internal::implIsWhitespace(IMPL_RTL_USTRCODE(*pStr)))
         pStr++;
     if (pStr == end)
         return 0;
@@ -1274,7 +1229,7 @@ void newTrim                                ( IMPL_RTL_STRINGDATA** ppThis,
                                               IMPL_RTL_STRINGDATA* pStr )
 {
     assert(pStr);
-    const auto view = trimView(pStr->buffer, pStr->length);
+    const auto view = o3tl::trim(std::basic_string_view(pStr->buffer, pStr->length));
 
     if (static_cast<sal_Int32>(view.size()) == pStr->length)
         assign(ppThis, pStr);

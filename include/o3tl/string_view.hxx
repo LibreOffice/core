@@ -362,7 +362,6 @@ constexpr bool ends_with(std::u16string_view sv, std::u16string_view x,
 
 namespace internal
 {
-// copy of implIsWhitespace from sal/rtl/strtmpl.hxx
 inline bool implIsWhitespace(sal_Unicode c)
 {
     /* Space or Control character? */
@@ -370,12 +369,11 @@ inline bool implIsWhitespace(sal_Unicode c)
         return true;
 
     /* Only in the General Punctuation area Space or Control characters are included? */
-    if ((c < 0x2000) || (c > 0x206F))
+    if ((c < 0x2000) || (c > 0x2029))
         return false;
 
-    if (((c >= 0x2000) && (c <= 0x200B)) || /* All Spaces           */
-        (c == 0x2028) || /* LINE SEPARATOR       */
-        (c == 0x2029)) /* PARAGRAPH SEPARATOR  */
+    if ((c <= 0x200B) || /* U+2000 - U+200B All Spaces */
+        (c >= 0x2028)) /* U+2028 LINE SEPARATOR, U+2029 PARAGRAPH SEPARATOR */
         return true;
 
     return false;
@@ -383,47 +381,41 @@ inline bool implIsWhitespace(sal_Unicode c)
 } // namespace internal
 
 // Like OUString::trim, but for std::u16string_view:
-// copy of the trimView code from sal/rtl/strtmpl.hxx
 inline std::u16string_view trim(std::u16string_view str)
 {
-    sal_Int32 nLen = str.size();
-    sal_Int32 nPreSpaces = 0;
-    sal_Int32 nPostSpaces = 0;
-    sal_Int32 nIndex = str.size() - 1;
+    size_t nFirst = 0;
+    size_t nLast = str.size();
 
-    while ((nPreSpaces < nLen) && internal::implIsWhitespace(*(str.data() + nPreSpaces)))
-        nPreSpaces++;
+    while ((nFirst < nLast) && internal::implIsWhitespace(str.data()[nFirst]))
+        ++nFirst;
 
-    while ((nIndex > nPreSpaces) && internal::implIsWhitespace(*(str.data() + nIndex)))
-    {
-        nPostSpaces++;
-        nIndex--;
-    }
+    if (nFirst == nLast)
+        return {};
 
-    return std::u16string_view{ str.data() + nPreSpaces,
-                                static_cast<size_t>(nLen - nPostSpaces - nPreSpaces) };
+    do
+        --nLast;
+    while (internal::implIsWhitespace(str.data()[nLast]));
+
+    return { str.data() + nFirst, nLast - nFirst + 1 };
 }
 
 // Like OString::trim, but for std::string_view:
-// copy of the trimView code from sal/rtl/strtmpl.hxx
 inline std::string_view trim(std::string_view str)
 {
-    sal_Int32 nLen = str.size();
-    sal_Int32 nPreSpaces = 0;
-    sal_Int32 nPostSpaces = 0;
-    sal_Int32 nIndex = str.size() - 1;
+    size_t nFirst = 0;
+    size_t nLast = str.size();
 
-    while ((nPreSpaces < nLen) && internal::implIsWhitespace(*(str.data() + nPreSpaces)))
-        nPreSpaces++;
+    while ((nFirst < nLast) && internal::implIsWhitespace(str.data()[nFirst]))
+        ++nFirst;
 
-    while ((nIndex > nPreSpaces) && internal::implIsWhitespace(*(str.data() + nIndex)))
-    {
-        nPostSpaces++;
-        nIndex--;
-    }
+    if (nFirst == nLast)
+        return {};
 
-    return std::string_view{ str.data() + nPreSpaces,
-                             static_cast<size_t>(nLen - nPostSpaces - nPreSpaces) };
+    do
+        --nLast;
+    while (internal::implIsWhitespace(str.data()[nLast]));
+
+    return { str.data() + nFirst, nLast - nFirst + 1 };
 }
 
 // Like OString::toInt32, but for std::string_view:
