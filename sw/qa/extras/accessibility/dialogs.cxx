@@ -38,13 +38,6 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestSpecialCharactersDialo
 
         CPPUNIT_ASSERT(dialog.tabTo(accessibility::AccessibleRole::TABLE_CELL, u"©"));
 
-        /* here there is a bug that the "insert" action is not working right away, even though we
-         * have the right character selected.  Move around the table to actually trigger the
-         * selection logic.
-         * See https://bugs.documentfoundation.org/show_bug.cgi?id=153806 */
-        dialog.postKeyEventAsync(0, awt::Key::RIGHT);
-        dialog.postKeyEventAsync(0, awt::Key::LEFT);
-
         /* there was a focus issue in this dialog: the table holding the characters always had the
          * selected element as focused, even when tabbing outside.
          * Fixed with https://gerrit.libreoffice.org/c/core/+/147660.
