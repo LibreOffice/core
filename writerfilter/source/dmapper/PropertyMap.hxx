@@ -324,9 +324,6 @@ private:
                                    sal_uInt32 nLineWidth,
                                    DomainMapper_Impl& rDM_Impl );
 
-    // Determines if conversion of a given floating table is wanted or not.
-    bool FloatingTableConversion( const DomainMapper_Impl& rDM_Impl, FloatingTableInfo& rInfo );
-
     /// Increases paragraph spacing according to Word 2013+ needs if necessary.
     void HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl& rDM_Impl);
 
