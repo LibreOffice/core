@@ -49,6 +49,18 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <value xml:lang="en-US">.uno:Copy</value>
         </prop>
       </node>
+      <node oor:name="PAGEDOWN_SHIFT_MOD1" oor:op="replace">
+        <prop oor:name="Command">
+          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          <value xml:lang="en-US">.uno:ZoomMinus</value>
+        </prop>
+      </node>
+      <node oor:name="PAGEUP_SHIFT_MOD1" oor:op="replace">
+        <prop oor:name="Command">
+          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          <value xml:lang="en-US">.uno:ZoomPlus</value>
+        </prop>
+      </node>
       <node oor:name="C_MOD1_MOD2" oor:op="replace">
         <prop oor:name="Command">
           <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -1149,12 +1161,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="en-US">.uno:GoDownBlockSel</value>
           </prop>
         </node>
-        <node oor:name="PAGEDOWN_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:JumpToNextTableSel</value>
-          </prop>
-        </node>
         <node oor:name="PAGEUP" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -1165,12 +1171,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:GoUpBlockSel</value>
-          </prop>
-        </node>
-        <node oor:name="PAGEUP_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:JumpToPrevTableSel</value>
           </prop>
         </node>
         <node oor:name="P_SHIFT_MOD1" oor:op="replace">
@@ -2699,12 +2699,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="en-US">.uno:PageDownSel</value>
           </prop>
         </node>
-        <node oor:name="PAGEDOWN_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:JumpToFootnoteArea</value>
-          </prop>
-        </node>
         <node oor:name="PAGEUP" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -4185,12 +4179,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="en-US">.uno:PageDownSel</value>
           </prop>
         </node>
-        <node oor:name="PAGEDOWN_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:JumpToFootnoteArea</value>
-          </prop>
-        </node>
         <node oor:name="PAGEUP" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -4989,12 +4977,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="en-US">.uno:PageDownSel</value>
           </prop>
         </node>
-        <node oor:name="PAGEDOWN_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:JumpToFootnoteArea</value>
-          </prop>
-        </node>
         <node oor:name="PAGEUP" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -5755,12 +5737,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:PageDownSel</value>
-          </prop>
-        </node>
-        <node oor:name="PAGEDOWN_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:JumpToFootnoteArea</value>
           </prop>
         </node>
         <node oor:name="PAGEUP" oor:op="replace">
@@ -6617,12 +6593,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="en-US">.uno:PageDownSel</value>
           </prop>
         </node>
-        <node oor:name="PAGEDOWN_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:JumpToFootnoteArea</value>
-          </prop>
-        </node>
         <node oor:name="PAGEDOWN_SHIFT_MOD2" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -7462,12 +7432,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:PageDownSel</value>
-          </prop>
-        </node>
-        <node oor:name="PAGEDOWN_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:JumpToFootnoteArea</value>
           </prop>
         </node>
         <node oor:name="PAGEUP" oor:op="replace">
