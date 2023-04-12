@@ -109,7 +109,7 @@ DECLARE_OOXMLEXPORT_TEST(testGroupshapeTextbox, "groupshape-textbox.docx")
     // The DML export does not, make sure it stays that way.
     CPPUNIT_ASSERT_EQUAL(OUString("first"), xShape->getString());
     // This was 16, i.e. inheriting doc default char height didn't work.
-    CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(getParagraphOfText(1, xShape->getText()), "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(xShape, "CharHeight"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testGroupshapePicture, "groupshape-picture.docx")
@@ -1223,8 +1223,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxTablePosition)
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblpPr", "tblpX", "3494");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblpPr", "tblpY", "4611");
 }
-#if 0
-// FIXME:
+
 CPPUNIT_TEST_FIXTURE(Test, testUnderlineGroupShapeText)
 {
     loadAndSave("tdf123351_UnderlineGroupSapeText.docx");
@@ -1277,7 +1276,7 @@ CPPUNIT_TEST_FIXTURE(Test, testUnderlineGroupShapeText)
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[32]/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor"
         "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[2]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "val", "single");
 }
-#endif
+
 CPPUNIT_TEST_FIXTURE(Test, testUnderlineColorGroupedShapes)
 {
     loadAndSave("tdf132491_UnderlineColorGroupedShapes.docx");

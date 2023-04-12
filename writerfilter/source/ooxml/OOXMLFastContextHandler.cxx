@@ -1725,10 +1725,6 @@ void OOXMLFastContextHandlerShape::setToken(Token_t nToken)
 
     mrShapeContext->setRelationFragmentPath(mpParserState->getTarget());
 
-    // Floating tables (table inside a textframe) have issues with fullWPG,
-    // so disable the fullWPGsupport in tables until that issue is not fixed.
-    mrShapeContext->setFullWPGSupport(!mnTableDepth);
-
     auto xGraphicMapper = getDocument()->getGraphicMapper();
 
     if (xGraphicMapper.is())
