@@ -66,9 +66,9 @@ bool IsFlySplitAllowed()
     bool bRet
         = officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::get();
 
-    if (!bRet)
+    if (bRet)
     {
-        bRet = getenv("SW_FORCE_FLY_SPLIT") != nullptr;
+        bRet = getenv("SW_DISABLE_FLY_SPLIT") == nullptr;
     }
 
     return bRet;

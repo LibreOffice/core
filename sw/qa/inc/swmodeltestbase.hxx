@@ -110,6 +110,7 @@ public:
     /// Temporarily enables DOCX::ImportFloatingTableAsSplitFly.
     class SWQAHELPER_DLLPUBLIC FlySplitGuard
     {
+        bool m_bOldValue = false;
     public:
         FlySplitGuard();
         ~FlySplitGuard();
