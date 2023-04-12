@@ -2443,7 +2443,6 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType == gsTextFieldSep)
             {
-                Reference<text::XFormField> const xFormField(xPropSet->getPropertyValue(gsBookmark), UNO_QUERY);
                 if (!bAutoStyles)
                 {
                     if (GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
