@@ -309,12 +309,49 @@ enum class RectangleAlignment
     BottomRight
 };
 
-enum class ColorEffectType
+enum class BlipEffectType
 {
     None,
+    AlphaBiLevel,
+    AlphaCeiling,
+    AlphaFloor,
+    AlphaInverse,
+    AlphaModulate,
+    AlphaModulateFixed,
+    AlphaReplace,
     BiLevel,
+    Blur,
+    ColorChange,
+    ColorReplace,
+    DuoTone,
+    FillOverlay,
     Grayscale,
-    ColorChange
+    HSL,
+    Luminance,
+    Tint,
+};
+
+class BlipEffect
+{
+public:
+    BlipEffectType meType = BlipEffectType::None;
+
+    sal_Int32 mnThreshold = 0; // AlphaBiLevel, BiLevel
+    ColorDefinition maColor1; // AlphaInverse, ColorReplace, DuoTone, ColorChange (from)
+    ColorDefinition maColor2; // DuoTone, ColorChange (to)
+    sal_Int32 mnAmount = 0; // AlphaModulateFixed, Tint
+    sal_Int32 mnRadius = 0; // Blur
+    bool mbGrow = false; // Blur
+    sal_Int32 mnAlpha = 0; // AlphaReplace
+    bool mbUseAlpha = false; // ColorChange
+    sal_Int32 mnHue = 0; // HSL, Tint
+    sal_Int32 mnSaturation = 0; // HSL
+    sal_Int32 mnLuminance = 0; // HSL
+    sal_Int32 mnBrightness = 0; // Luminance
+    sal_Int32 mnContrast = 0; // Luminance
+
+    ColorDefinition& getColorFrom() { return maColor1; }
+    ColorDefinition& getColorTo() { return maColor2; }
 };
 
 class DOCMODEL_DLLPUBLIC BlipFill : public Fill
@@ -333,13 +370,7 @@ public:
     RectangleAlignment meTileAlignment = RectangleAlignment::TopLeft;
 
     css::uno::Reference<css::graphic::XGraphic> mxGraphic;
-
-    ColorEffectType meColorEffectType = ColorEffectType::None;
-
-    sal_Int32 mnBiLevelThreshold = 0;
-    ColorDefinition maColorFrom;
-    ColorDefinition maColorTo;
-    bool mbUseAlpha = false;
+    std::vector<BlipEffect> maBlipEffects;
 
     BlipFill()
         : Fill(FillType::Blip)
