@@ -593,8 +593,8 @@ void DomainMapper_Impl::RemoveDummyParaForTableInSection()
 }
 void DomainMapper_Impl::AddDummyParaForTableInSection()
 {
-    // Shapes and textboxes can't have sections.
-    if (IsInShape() || m_bIsInTextBox)
+    // Shapes can't have sections.
+    if (IsInShape())
         return;
 
     if (!m_aTextAppendStack.empty())
@@ -3770,13 +3770,9 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             {
                 try
                 {
-                    uno::Reference<text::XTextRange> xFrame(xShapes->getByIndex(i), uno::UNO_QUERY);
-                    uno::Reference<beans::XPropertySet> xFramePropertySet;
-                    if (xFrame)
-                        xFramePropertySet.set(xFrame, uno::UNO_QUERY_THROW);
-                    uno::Reference<beans::XPropertySet> xShapePropertySet(xShapes->getByIndex(i), uno::UNO_QUERY_THROW);
-
-                    comphelper::SequenceAsHashMap aGrabBag( xShapePropertySet->getPropertyValue("CharInteropGrabBag") );
+                    uno::Reference<text::XTextRange> xFrame(xShapes->getByIndex(i), uno::UNO_QUERY_THROW);
+                    uno::Reference<beans::XPropertySet> xSyncedPropertySet(xFrame, uno::UNO_QUERY_THROW);
+                    comphelper::SequenceAsHashMap aGrabBag( xSyncedPropertySet->getPropertyValue("CharInteropGrabBag") );
 
                     // only VML import has checked for style. Don't apply default parastyle properties to other imported shapes
                     // - except for fontsize - to maintain compatibility with previous versions of LibreOffice.
@@ -3804,7 +3800,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                             PROP_CHAR_COLOR,
                             PROP_PARA_ADJUST
                         };
-                        const uno::Reference<beans::XPropertyState> xShapePropertyState(xShapePropertySet, uno::UNO_QUERY_THROW);
+                        const uno::Reference<beans::XPropertyState> xSyncedPropertyState(xSyncedPropertySet, uno::UNO_QUERY_THROW);
                         for ( const auto& eId : eIds )
                         {
                             try
@@ -3813,16 +3809,11 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                                     continue;
 
                                 const OUString sPropName = getPropertyName(eId);
-                                if ( beans::PropertyState_DEFAULT_VALUE == xShapePropertyState->getPropertyState(sPropName) )
+                                if ( beans::PropertyState_DEFAULT_VALUE == xSyncedPropertyState->getPropertyState(sPropName) )
                                 {
                                     const uno::Any aProp = GetPropertyFromStyleSheet(eId, pEntry, /*bDocDefaults=*/true, /*bPara=*/true);
-                                    if (aProp.hasValue())
-                                    {
-                                        if (xFrame)
-                                            xFramePropertySet->setPropertyValue(sPropName, aProp);
-                                        else
-                                            xShapePropertySet->setPropertyValue(sPropName, aProp);
-                                    }
+                                    if ( aProp.hasValue() )
+                                        xSyncedPropertySet->setPropertyValue( sPropName, aProp );
                                 }
                             }
                             catch (const uno::Exception&)

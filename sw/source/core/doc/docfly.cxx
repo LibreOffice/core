@@ -920,10 +920,11 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     pNd->InsertItem( aFormat, aPos.nContent.GetIndex(), 0 );
 
                     // Has a textbox attached to the format? Sync it as well!
-                    if (pContact->GetFormat() && pContact->GetFormat()->GetOtherTextBoxFormats())
+                    if (SwTextBoxHelper::getOtherTextBoxFormat(pContact->GetFormat(),
+                                                               RES_DRAWFRMFMT))
                     {
-                        SwTextBoxHelper::synchronizeGroupTextBoxProperty(
-                            SwTextBoxHelper::changeAnchor, pContact->GetFormat(), pObj);
+                        SwTextBoxHelper::syncFlyFrameAttr(*pContact->GetFormat(),
+                                                          pContact->GetFormat()->GetAttrSet(), pObj);
                     }
                 }
                 break;
