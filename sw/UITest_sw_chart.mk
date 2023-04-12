@@ -10,3 +10,7 @@ $(eval $(call   gb_UITest_UITest,sw_chart))
 $(eval $(call gb_UITest_add_modules,sw_chart,$(SRCDIR)/sw/qa/uitest,\
 	chart/ \
 ))
+
+$(eval $(call gb_UITest_use_oneprocess,sw_chart))
+
+# vim: set noet sw=4 ts=4:
