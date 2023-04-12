@@ -381,18 +381,18 @@ OUString SotExchange::GetFormatMimeType( SotClipboardFormatId nFormat )
 |*
 *************************************************************************/
 
-SotClipboardFormatId SotExchange::GetFormatIdFromMimeType( const OUString& rMimeType )
+SotClipboardFormatId SotExchange::GetFormatIdFromMimeType( std::u16string_view rMimeType )
 {
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl();
     for( SotClipboardFormatId i = SotClipboardFormatId::STRING; i <= SotClipboardFormatId::FILE_LIST;  ++i )
-        if( rMimeType.equals( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
+        if( rMimeType == pFormatArray_Impl[ static_cast<int>(i) ].pMimeType )
             return i;
 
     // BM: the chart format 105 ("StarChartDocument 5.0") was written
     // only into 5.1 chart documents - in 5.0 and 5.2 it was 42 ("StarChart 5.0")
     // The registry only contains the entry for the 42 format id.
     for( SotClipboardFormatId i = SotClipboardFormatId::RTF; i <= SotClipboardFormatId::USER_END;  ++i )
-        if( rMimeType.equals( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
+        if( rMimeType == pFormatArray_Impl[ static_cast<int>(i) ].pMimeType )
             return ( (i == SotClipboardFormatId::STARCHARTDOCUMENT_50)
                      ? SotClipboardFormatId::STARCHART_50
                      : i );

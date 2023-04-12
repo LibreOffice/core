@@ -306,7 +306,7 @@ namespace dbaui
             @param  _bListAction
                 When <TRUE/> a list action will be created.
         */
-        void            clearEntryFunctionField(const OUString& _sFieldName,OTableFieldDescRef const & _pEntry, bool& _bListAction,sal_uInt16 _nColumnId);
+        void            clearEntryFunctionField(std::u16string_view _sFieldName,OTableFieldDescRef const & _pEntry, bool& _bListAction,sal_uInt16 _nColumnId);
 
         /** remove or insert the necessary function types
             @param  _pEntry

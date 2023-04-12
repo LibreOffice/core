@@ -221,10 +221,10 @@ OUString convertName2SQLName(const OUString& rName, std::u16string_view _rSpecia
     return aNewName.makeStringAndClear();
 }
 
-OUString quoteName(const OUString& _rQuote, const OUString& _rName)
+OUString quoteName(std::u16string_view _rQuote, const OUString& _rName)
 {
     OUString sName = _rName;
-    if( !_rQuote.isEmpty() && _rQuote.toChar() != ' ')
+    if( !_rQuote.empty() && _rQuote[0] != ' ')
         sName = _rQuote + _rName + _rQuote;
     return sName;
 }

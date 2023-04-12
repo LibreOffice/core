@@ -333,7 +333,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
     }
 }
 
-OUString SwHTMLParser::StripQueryFromPath(const OUString& rBase, const OUString& rPath)
+OUString SwHTMLParser::StripQueryFromPath(std::u16string_view rBase, const OUString& rPath)
 {
     if (!comphelper::isFileUrl(rBase))
         return rPath;

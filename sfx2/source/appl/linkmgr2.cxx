@@ -506,7 +506,7 @@ SotClipboardFormatId LinkManager::RegisterStatusInfoId()
     return nFormat;
 }
 
-bool LinkManager::GetGraphicFromAny(const OUString& rMimeType,
+bool LinkManager::GetGraphicFromAny(std::u16string_view rMimeType,
                                     const css::uno::Any & rValue,
                                     Graphic& rGraphic,
                                     weld::Window* pParentWin)

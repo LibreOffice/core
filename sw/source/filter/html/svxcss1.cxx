@@ -56,6 +56,7 @@
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 
 #include <hintids.hxx>
 
@@ -866,11 +867,11 @@ void SvxCSS1Parser::ParseStyleOption( const OUString& rIn,
 }
 
 bool SvxCSS1Parser::GetEnum( const CSS1PropertyEnum *pPropTable,
-                          const OUString &rValue, sal_uInt16& rEnum )
+                          std::u16string_view rValue, sal_uInt16& rEnum )
 {
     while( pPropTable->pName )
     {
-        if( !rValue.equalsIgnoreAsciiCaseAscii( pPropTable->pName ) )
+        if( !o3tl::equalsIgnoreAsciiCase( rValue, pPropTable->pName ) )
             pPropTable++;
         else
             break;

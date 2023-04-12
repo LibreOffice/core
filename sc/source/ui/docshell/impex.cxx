@@ -284,7 +284,7 @@ void ScImportExport::EndPaste(bool bAutoRowHeight)
 
 }
 
-bool ScImportExport::ExportData( const OUString& rMimeType,
+bool ScImportExport::ExportData( std::u16string_view rMimeType,
                                  css::uno::Any & rValue )
 {
     SvMemoryStream aStrm;

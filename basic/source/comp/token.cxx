@@ -22,6 +22,7 @@
 
 #include <basic/sberrors.hxx>
 #include <sal/macros.h>
+#include <o3tl/string_view.hxx>
 #include <basiccharclass.hxx>
 #include <token.hxx>
 
@@ -558,11 +559,11 @@ bool SbiTokenizer::MayBeLabel( bool bNeedsColon )
 }
 
 
-OUString SbiTokenizer::GetKeywordCase( const OUString& sKeyword )
+OUString SbiTokenizer::GetKeywordCase( std::u16string_view sKeyword )
 {
     for( auto& rTok : aTokTable_Basic )
     {
-        if( sKeyword.equalsIgnoreAsciiCaseAscii(rTok.s) )
+        if( o3tl::equalsIgnoreAsciiCase(sKeyword, rTok.s) )
             return OStringToOUString(rTok.s, RTL_TEXTENCODING_ASCII_US);
     }
     return OUString();

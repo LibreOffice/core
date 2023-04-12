@@ -130,7 +130,7 @@ public:
         { return t >= FIRSTKWD && t <= LASTKWD; }
     static bool IsExtra( SbiToken t )
         { return t >= FIRSTEXTRA; }
-    static OUString GetKeywordCase( const OUString& sKeyword );
+    static OUString GetKeywordCase( std::u16string_view sKeyword );
 };
 
 

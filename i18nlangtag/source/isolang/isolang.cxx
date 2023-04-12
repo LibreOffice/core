@@ -18,6 +18,7 @@
  */
 
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 
@@ -87,7 +88,7 @@ struct IsoLanguageScriptCountryEntry
 
         We don't have OUString::startsWithIgnoreAsciiCaseAscii()
      */
-    bool startsInIgnoreAsciiCase( const OUString & rStr ) const;
+    bool startsInIgnoreAsciiCase( std::u16string_view aStr ) const;
 };
 
 struct Bcp47CountryEntry
@@ -830,9 +831,9 @@ css::lang::Locale IsoLanguageScriptCountryEntry::getLocale() const
     return lang::Locale( I18NLANGTAG_QLT, OUString::createFromAscii( maCountry), getTagString());
 }
 
-bool IsoLanguageScriptCountryEntry::startsInIgnoreAsciiCase( const OUString & rStr ) const
+bool IsoLanguageScriptCountryEntry::startsInIgnoreAsciiCase( std::u16string_view aStr ) const
 {
-    return rStr.matchIgnoreAsciiCaseAsciiL( maLanguageScript, strlen( maLanguageScript) );
+    return o3tl::matchIgnoreAsciiCase(aStr, std::string_view(maLanguageScript) );
 }
 
 OUString Bcp47CountryEntry::getTagString() const
@@ -1208,12 +1209,12 @@ css::lang::Locale MsLangId::Conversion::lookupFallbackLocale(
 
 
 // static
-LanguageType MsLangId::Conversion::convertPrivateUseToLanguage( const OUString& rPriv )
+LanguageType MsLangId::Conversion::convertPrivateUseToLanguage( std::u16string_view rPriv )
 {
     for (const IsoLangOtherEntry* pPrivateEntry = aImplPrivateUseEntries;
             pPrivateEntry->mnLang != LANGUAGE_DONTKNOW; ++pPrivateEntry)
     {
-        if ( rPriv.equalsIgnoreAsciiCaseAscii( pPrivateEntry->mpLanguage ) )
+        if ( o3tl::equalsIgnoreAsciiCase(rPriv, pPrivateEntry->mpLanguage ) )
             return pPrivateEntry->mnLang;
     }
     return LANGUAGE_DONTKNOW;

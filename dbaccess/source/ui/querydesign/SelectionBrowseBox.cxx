@@ -69,9 +69,9 @@ using namespace ::com::sun::star::accessibility;
 
 namespace
 {
-    bool isFieldNameAsterisk(const OUString& _sFieldName )
+    bool isFieldNameAsterisk(std::u16string_view _sFieldName )
     {
-        bool bAsterisk = _sFieldName.isEmpty() || _sFieldName.toChar() == '*';
+        bool bAsterisk = _sFieldName.empty() || _sFieldName[0] == '*';
         if ( !bAsterisk )
         {
             sal_Int32 nTokenCount = comphelper::string::getTokenCount(_sFieldName, '.');
@@ -576,7 +576,7 @@ void OSelectionBrowseBox::notifyFunctionFieldChanged(const OUString& _sOldFuncti
     RowModified(GetBrowseRow(BROW_FUNCTION_ROW), _nColumnId);
 }
 
-void OSelectionBrowseBox::clearEntryFunctionField(const OUString& _sFieldName,OTableFieldDescRef const & _pEntry, bool& _bListAction,sal_uInt16 _nColumnId)
+void OSelectionBrowseBox::clearEntryFunctionField(std::u16string_view _sFieldName,OTableFieldDescRef const & _pEntry, bool& _bListAction,sal_uInt16 _nColumnId)
 {
     if ( !(isFieldNameAsterisk( _sFieldName ) && (!_pEntry->isNoneFunction() || _pEntry->IsGroupBy())) )
         return;

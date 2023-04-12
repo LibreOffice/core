@@ -97,7 +97,7 @@ namespace
                                     bool bHaving,
                                     bool _bAddOrOnOneLine);
 
-    OUString quoteTableAlias(bool _bQuote, const OUString& _sAliasName, const OUString& _sQuote)
+    OUString quoteTableAlias(bool _bQuote, const OUString& _sAliasName, std::u16string_view _sQuote)
     {
         OUString sRet;
         if ( _bQuote && !_sAliasName.isEmpty() )

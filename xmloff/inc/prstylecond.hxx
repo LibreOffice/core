@@ -19,6 +19,6 @@
 
 #include <rtl/ustring.hxx>
 
-OUString GetParaStyleCondExternal(OUString const&);
+OUString GetParaStyleCondExternal(std::u16string_view);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

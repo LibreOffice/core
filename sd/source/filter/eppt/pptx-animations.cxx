@@ -18,6 +18,7 @@
  */
 
 #include <o3tl/any.hxx>
+#include <o3tl/string_view.hxx>
 #include <oox/token/tokens.hxx>
 #include "epptooxml.hxx"
 #include <sax/fshelper.hxx>
@@ -508,13 +509,14 @@ public:
 };
 
 /// Returns if rURL has an extension which is an audio format.
-bool IsAudioURL(const OUString& rURL)
+bool IsAudioURL(std::u16string_view rURL)
 {
-    return rURL.endsWithIgnoreAsciiCase(".wav") || rURL.endsWithIgnoreAsciiCase(".m4a");
+    return o3tl::endsWithIgnoreAsciiCase(rURL, ".wav")
+           || o3tl::endsWithIgnoreAsciiCase(rURL, ".m4a");
 }
 
 /// Returns if rURL has an extension which is a video format.
-bool IsVideoURL(const OUString& rURL) { return rURL.endsWithIgnoreAsciiCase(".mp4"); }
+bool IsVideoURL(std::u16string_view rURL) { return o3tl::endsWithIgnoreAsciiCase(rURL, ".mp4"); }
 }
 
 namespace oox::core

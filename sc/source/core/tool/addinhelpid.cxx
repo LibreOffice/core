@@ -19,6 +19,7 @@
 
 #include <addinhelpid.hxx>
 #include <helpids.h>
+#include <o3tl/string_view.hxx>
 
 // A struct containing the built-in function name and the built-in help ID.
 struct ScUnoAddInHelpId
@@ -183,7 +184,7 @@ void ScUnoAddInHelpIdGenerator::SetServiceName( std::u16string_view rServiceName
     nArrayCount = nSize / sizeof( ScUnoAddInHelpId );
 }
 
-OUString ScUnoAddInHelpIdGenerator::GetHelpId( const OUString& rFuncName ) const
+OUString ScUnoAddInHelpIdGenerator::GetHelpId( std::u16string_view rFuncName ) const
 {
     if( !pCurrHelpIds || !nArrayCount )
         return {};
@@ -194,7 +195,7 @@ OUString ScUnoAddInHelpIdGenerator::GetHelpId( const OUString& rFuncName ) const
     while( pFirst <= pLast )
     {
         const ScUnoAddInHelpId* pMiddle = pFirst + (pLast - pFirst) / 2;
-        sal_Int32 nResult = rFuncName.compareToAscii( pMiddle->pFuncName );
+        sal_Int32 nResult = o3tl::compareToAscii( rFuncName, pMiddle->pFuncName );
         if( !nResult )
             return pMiddle->sHelpId;
         else if( nResult < 0 )

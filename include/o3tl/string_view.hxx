@@ -30,6 +30,12 @@ inline bool equalsAscii(std::u16string_view s1, std::string_view s2)
                   == 0;
 }
 
+// Like OUString::compareToAscii, but for std::u16string_view and std::string_view:
+inline int compareToAscii(std::u16string_view s1, std::string_view s2)
+{
+    return rtl_ustr_asciil_reverseCompare_WithLength(s1.data(), s1.size(), s2.data(), s2.size());
+};
+
 // Like OUString::equalsIgnoreAsciiCase, but for two std::u16string_view:
 inline bool equalsIgnoreAsciiCase(std::u16string_view s1, std::u16string_view s2)
 {
@@ -40,6 +46,14 @@ inline bool equalsIgnoreAsciiCase(std::u16string_view s1, std::u16string_view s2
     return rtl_ustr_compareIgnoreAsciiCase_WithLength(s1.data(), s1.size(), s2.data(), s2.size())
            == 0;
 };
+
+inline bool equalsIgnoreAsciiCase(std::u16string_view s1, std::string_view s2)
+{
+    return s1.size() == s2.size()
+           && (rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(s1.data(), s1.size(),
+                                                                         s2.data(), s2.size())
+               == 0);
+}
 
 inline bool equalsIgnoreAsciiCase(std::string_view s1, std::string_view s2)
 {
@@ -64,6 +78,41 @@ inline bool matchIgnoreAsciiCase(std::u16string_view s1, std::u16string_view s2,
     return rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength(
                s1.data() + fromIndex, s1.size() - fromIndex, s2.data(), s2.size(), s2.size())
            == 0;
+}
+
+// Like OUString::matchIgnoreAsciiCase, but for std::u16string_view and std::string_view:
+inline bool matchIgnoreAsciiCase(std::u16string_view s1, std::string_view s2,
+                                 sal_Int32 fromIndex = 0)
+{
+    return rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
+               s1.data() + fromIndex, s1.size() - fromIndex, s2.data(), s2.size())
+           == 0;
+}
+
+// Like OUString::endsWithIgnoreAsciiCase, but for std::u16string_view
+inline bool endsWithIgnoreAsciiCase(std::u16string_view s1, std::u16string_view s2,
+                                    std::u16string_view* rest = nullptr)
+{
+    auto const b = s2.size() <= s1.size() && matchIgnoreAsciiCase(s1, s2, s1.size() - s2.size());
+    if (b && rest != nullptr)
+    {
+        *rest = s1.substr(0, s1.size() - s2.size());
+    }
+    return b;
+}
+
+inline bool endsWithIgnoreAsciiCase(std::u16string_view s1, std::string_view s2,
+                                    std::u16string_view* rest = nullptr)
+{
+    auto const b = s2.size() <= s1.size()
+                   && rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+                          s1.data() + s1.size() - s2.size(), s2.size(), s2.data(), s2.size())
+                          == 0;
+    if (b && rest != nullptr)
+    {
+        *rest = s1.substr(0, s1.size() - s2.size());
+    }
+    return b;
 }
 
 // Similar to O[U]String::getToken, returning the first token of a std::[u16]string_view starting
@@ -456,6 +505,7 @@ inline double toDouble(std::string_view str)
 {
     return rtl_math_stringToDouble(str.data(), str.data() + str.size(), '.', 0, nullptr, nullptr);
 }
-}
+
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

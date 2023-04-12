@@ -101,7 +101,7 @@ using namespace ::com::sun::star::container;
 using namespace ::cppu;
 using namespace ::sfx2;
 
-void SetTemplate_Impl( const OUString &rFileName,
+void SetTemplate_Impl( std::u16string_view rFileName,
                         const OUString &rLongName,
                         SfxObjectShell *pDoc)
 {

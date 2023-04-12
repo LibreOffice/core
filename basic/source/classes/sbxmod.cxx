@@ -1735,7 +1735,7 @@ void SbModule::GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache)
 }
 
 
-OUString SbModule::GetKeywordCase( const OUString& sKeyword )
+OUString SbModule::GetKeywordCase( std::u16string_view sKeyword )
 {
     return SbiParser::GetKeywordCase( sKeyword );
 }

@@ -367,7 +367,7 @@ namespace dbtools
 
     /** quote the given name with the given quote string.
     */
-    OOO_DLLPUBLIC_DBTOOLS OUString quoteName(const OUString& _rQuote, const OUString& _rName);
+    OOO_DLLPUBLIC_DBTOOLS OUString quoteName(std::u16string_view _rQuote, const OUString& _rName);
 
     /** quote the given table name (which may contain a catalog and a schema) according to the rules provided by the meta data
     */

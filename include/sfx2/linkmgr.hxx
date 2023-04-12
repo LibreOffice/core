@@ -157,7 +157,7 @@ public:
 
     // if the mimetype says graphic/bitmap/gdimetafile then get the
     // graphic from the Any. Return says no errors
-    bool GetGraphicFromAny(const OUString& rMimeType,
+    bool GetGraphicFromAny(std::u16string_view rMimeType,
                            const css::uno::Any & rValue,
                            Graphic& rGrf,
                            weld::Window* pParentWin);

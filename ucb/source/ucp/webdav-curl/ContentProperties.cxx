@@ -25,6 +25,7 @@
 #include "DateTimeHelper.hxx"
 #include "webdavprovider.hxx"
 #include "ContentProperties.hxx"
+#include <o3tl/string_view.hxx>
 
 using namespace com::sun::star;
 using namespace http_dav_ucp;
@@ -490,8 +491,7 @@ void ContentProperties::addProperty( const OUString & rName,
 
 namespace
 {
-    bool isCachable( OUString const & rName,
-                     bool isCaseSensitive )
+    bool isCachable( std::u16string_view rName, bool isCaseSensitive )
     {
         const OUString aNonCachableProps [] =
         {
@@ -518,11 +518,11 @@ namespace
         {
             if ( isCaseSensitive )
             {
-                if ( rName.equals( aNonCachableProps[ n ] ) )
+                if ( rName == aNonCachableProps[ n ] )
                     return false;
             }
             else
-                if ( rName.equalsIgnoreAsciiCase( aNonCachableProps[ n ] ) )
+                if ( o3tl::equalsIgnoreAsciiCase( rName, aNonCachableProps[ n ] ) )
                     return false;
         }
         return true;

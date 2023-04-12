@@ -26,6 +26,7 @@
 
 #include <rtl/ustring.hxx>
 #include <cppunit/TestAssert.h>
+#include <o3tl/string_view.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -350,12 +351,14 @@ void XSpreadsheets2::importSheetToCopy()
     xDestSheet.set( xDestSheetIndexAccess->getByIndex(nDestPosEffective), UNO_QUERY_THROW);
 }
 
-bool XSpreadsheets2::isExternalReference(const OUString& aDestContent, std::u16string_view aSrcContent )
+bool XSpreadsheets2::isExternalReference(std::u16string_view aDestContent, std::u16string_view aSrcContent )
 {
-    CPPUNIT_ASSERT(aDestContent.startsWith("'file://"));
+    CPPUNIT_ASSERT(o3tl::starts_with(aDestContent, u"'file://"));
 
-    return  (aDestContent.endsWithIgnoreAsciiCase(aSrcContent) // same cell address
-            && aDestContent.indexOf(gaSrcFileName)>0); // contains source file name
+    if (!o3tl::endsWithIgnoreAsciiCase(aDestContent, aSrcContent)) // same cell address
+        return false;
+    size_t nPos = aDestContent.find(gaSrcFileName);
+    return nPos != std::u16string_view::npos && nPos > 0; // contains source file name
 }
 
 }

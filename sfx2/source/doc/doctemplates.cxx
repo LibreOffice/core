@@ -271,7 +271,7 @@ private:
                                                                 Content& aNewFolder );
     static OUString         CreateNewUniqueFileWithPrefix( std::u16string_view aPath,
                                                                 const OUString& aPrefix,
-                                                                const OUString& aExt );
+                                                                std::u16string_view aExt );
 
     std::vector< beans::StringPair > ReadUINamesForTemplateDir_Impl( std::u16string_view aUserPath );
     bool                    UpdateUINamesForTemplateDir_Impl( std::u16string_view aUserPath,
@@ -841,7 +841,7 @@ bool SfxDocTplService::CreateNewUniqueFolderWithPrefix( std::u16string_view aPat
 
 OUString SfxDocTplService::CreateNewUniqueFileWithPrefix( std::u16string_view aPath,
                                                                         const OUString& aPrefix,
-                                                                        const OUString& aExt )
+                                                                        std::u16string_view aExt )
 {
     OUString aNewFileURL;
     INetURLObject aDirPath( aPath );
@@ -858,7 +858,7 @@ OUString SfxDocTplService::CreateNewUniqueFileWithPrefix( std::u16string_view aP
             OUString aTryName = aPrefix;
             if ( nInd )
                 aTryName += OUString::number( nInd );
-            if ( aExt.toChar() != '.' )
+            if ( aExt.empty() || aExt[0] != '.' )
                 aTryName += ".";
             aTryName += aExt;
 

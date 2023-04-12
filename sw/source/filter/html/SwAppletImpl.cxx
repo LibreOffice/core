@@ -26,6 +26,7 @@
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/classids.hxx>
 #include <com/sun/star/uno/Any.hxx>
+#include <o3tl/string_view.hxx>
 #include <svtools/embedhlp.hxx>
 #include <tools/globname.hxx>
 #include <tools/urlobj.hxx>
@@ -33,75 +34,75 @@
 
 using namespace com::sun::star;
 
-SwHtmlOptType SwApplet_Impl::GetOptionType( const OUString& rName, bool bApplet )
+SwHtmlOptType SwApplet_Impl::GetOptionType( std::u16string_view rName, bool bApplet )
 {
     SwHtmlOptType nType = bApplet ? SwHtmlOptType::PARAM : SwHtmlOptType::TAG;
 
-    switch( rName.toChar() )
+    switch( rName[0] )
     {
     case 'A':
     case 'a':
-        if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_align ) ||
-            rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_alt ) )
+        if( o3tl::equalsIgnoreAsciiCase( rName, OOO_STRING_SVTOOLS_HTML_O_align ) ||
+            o3tl::equalsIgnoreAsciiCase( rName, OOO_STRING_SVTOOLS_HTML_O_alt ) )
             nType = SwHtmlOptType::IGNORE;
         else if( bApplet &&
-                 (rName == "ARCHIVE" || rName == "ARCHIVES" ) )
+                 (rName == u"ARCHIVE" || rName == u"ARCHIVES" ) )
             nType = SwHtmlOptType::TAG;
         break;
     case 'C':
     case 'c':
-        if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_class ) ||
-            (bApplet && (rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_code ) ||
-                         rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_codebase ))) )
+        if( o3tl::equalsIgnoreAsciiCase( rName, OOO_STRING_SVTOOLS_HTML_O_class ) ||
+            (bApplet && (o3tl::equalsIgnoreAsciiCase( rName, OOO_STRING_SVTOOLS_HTML_O_code ) ||
+                         o3tl::equalsIgnoreAsciiCase( rName, OOO_STRING_SVTOOLS_HTML_O_codebase ))) )
             nType = SwHtmlOptType::IGNORE;
         break;
     case 'H':
     case 'h':
-        if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_height ) )
+        if( o3tl::equalsIgnoreAsciiCase( rName, OOO_STRING_SVTOOLS_HTML_O_height ) )
             nType = SwHtmlOptType::SIZE;
-        else if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_hspace ) ||
-            (!bApplet && rName.equalsIgnoreAsciiCase( OOO_STRING_SW_HTML_O_Hidden )) )
+        else if( o3tl::equalsIgnoreAsciiCase( rName, OOO_STRING_SVTOOLS_HTML_O_hspace ) ||
+            (!bApplet && o3tl::equalsIgnoreAsciiCase( rName, OOO_STRING_SW_HTML_O_Hidden )) )
             nType = SwHtmlOptType::IGNORE;
         break;
     case 'I':
     case 'i':
-        if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_id ) )
+        if( o3tl::equalsIgnoreAsciiCase( rName, OOO_STRING_SVTOOLS_HTML_O_id ) )
             nType = SwHtmlOptType::IGNORE;
         break;
     case 'M':
     case 'm':
-        if( bApplet && rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_mayscript ) )
+        if( bApplet && o3tl::equalsIgnoreAsciiCase( rName, OOO_STRING_SVTOOLS_HTML_O_mayscript ) )
             nType = SwHtmlOptType::IGNORE;
         break;
     case 'N':
     case 'n':
-        if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_name ) )
+        if( o3tl::equalsIgnoreAsciiCase( rName, OOO_STRING_SVTOOLS_HTML_O_name ) )
             nType = SwHtmlOptType::IGNORE;
         break;
     case 'O':
     case 'o':
-        if( bApplet && rName == "OBJECT" )
+        if( bApplet && rName == u"OBJECT" )
             nType = SwHtmlOptType::TAG;
         break;
     case 'S':
     case 's':
-        if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_style ) ||
-            (!bApplet && rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_src )) )
+        if( o3tl::equalsIgnoreAsciiCase( rName, OOO_STRING_SVTOOLS_HTML_O_style ) ||
+            (!bApplet && o3tl::equalsIgnoreAsciiCase( rName, OOO_STRING_SVTOOLS_HTML_O_src )) )
             nType = SwHtmlOptType::IGNORE;
         break;
     case 'T':
     case 't':
-        if( !bApplet && rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_type ) )
+        if( !bApplet && o3tl::equalsIgnoreAsciiCase( rName, OOO_STRING_SVTOOLS_HTML_O_type ) )
             nType = SwHtmlOptType::IGNORE;
         break;
     case 'V':
     case 'v':
-        if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_vspace ) )
+        if( o3tl::equalsIgnoreAsciiCase( rName, OOO_STRING_SVTOOLS_HTML_O_vspace ) )
             nType = SwHtmlOptType::IGNORE;
         break;
     case 'W':
     case 'w':
-        if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_width ) )
+        if( o3tl::equalsIgnoreAsciiCase( rName, OOO_STRING_SVTOOLS_HTML_O_width ) )
             nType = SwHtmlOptType::SIZE;
         break;
     }

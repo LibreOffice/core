@@ -261,7 +261,7 @@ public:
 
         /** Convert x-... privateuse, used by convertLocaleToLanguageImpl(Locale) */
         I18NLANGTAG_DLLPRIVATE static LanguageType convertPrivateUseToLanguage(
-                const OUString& rPriv );
+                std::u16string_view rPriv );
 
         /** Used by LanguageTag::canonicalize() */
         I18NLANGTAG_DLLPRIVATE static css::lang::Locale getOverride(

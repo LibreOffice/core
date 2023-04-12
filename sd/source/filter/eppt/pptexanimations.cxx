@@ -1515,7 +1515,7 @@ void AnimationExporter::exportAnimateSet( SvStream& rStrm, const Reference< XAni
     exportAnimateTarget( rStrm, xNode, 0, nAfterEffectType );
 }
 
-sal_uInt32 AnimationExporter::GetValueTypeForAttributeName( const OUString& rAttributeName )
+sal_uInt32 AnimationExporter::GetValueTypeForAttributeName( std::u16string_view rAttributeName )
 {
     sal_uInt32 nValueType = 0;
 
@@ -1555,7 +1555,7 @@ sal_uInt32 AnimationExporter::GetValueTypeForAttributeName( const OUString& rAtt
     const Entry* pPtr = &lcl_attributeMap[ 0 ];
     while( pPtr->pName )
     {
-        if ( rAttributeName.equalsIgnoreAsciiCaseAscii( pPtr->pName ) )
+        if ( o3tl::equalsIgnoreAsciiCase( rAttributeName, pPtr->pName ) )
         {
             nValueType = pPtr->nType;
             break;

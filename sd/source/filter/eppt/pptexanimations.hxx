@@ -125,7 +125,7 @@ public:
         static void GetUserData( const css::uno::Sequence< css::beans::NamedValue >& rUserData, const css::uno::Any ** pAny, std::size_t nLen );
         static sal_uInt32 TranslatePresetSubType( const sal_uInt32 nPresetClass, const sal_uInt32 nPresetId, std::u16string_view rPresetSubType );
         static sal_uInt32 GetPresetID( std::u16string_view aPreset, sal_uInt32 nAPIPresetClass, bool& bPresetId );
-        static sal_uInt32 GetValueTypeForAttributeName( const OUString& rAttributeName );
+        static sal_uInt32 GetValueTypeForAttributeName( std::u16string_view rAttributeName );
 
     static const char* FindTransitionName( const sal_Int16 nType, const sal_Int16 nSubType, const bool bDirection );
     static css::uno::Reference< css::drawing::XShape > getTargetElementShape( const css::uno::Any& rAny, sal_Int32& rBegin, sal_Int32& rEnd, bool& rParagraphTarget );

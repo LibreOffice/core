@@ -418,7 +418,7 @@ public:
     void                        SetUseThumbnailSave( bool _bNew );
     void                        SetLoadReadonly( bool _bReadonly );
     void                        SetSaveVersionOnClose( bool bSet );
-    void                        ResetFromTemplate( const OUString& rTemplateName, const OUString& rFileName );
+    void                        ResetFromTemplate( const OUString& rTemplateName, std::u16string_view rFileName );
 
     // TODO/LATER: the following two methods should be replaced by Get/SetModifPasswordInfo in future
     sal_uInt32                  GetModifyPasswordHash() const;

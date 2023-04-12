@@ -308,7 +308,7 @@ static void lcl_SaveSeparators(
     aItem.PutProperties(aNames, aValues);
 }
 
-ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatName,
+ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aDatName,
                                    SvStream* pInStream, ScImportAsciiCall eCall)
     : GenericDialogController(pParent, "modules/scalc/ui/textimportcsv.ui", "TextImportCsvDialog")
     , mpDatStream(pInStream)
@@ -353,7 +353,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
         case SC_IMPORTFILE:
             if (!comphelper::LibreOfficeKit::isActive())
             {
-                aName += " - [" + aDatName + "]";
+                aName += OUString::Concat(" - [") + aDatName + "]";
                 m_xDialog->set_title(aName);
             }
             break;
@@ -362,7 +362,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
     }
 
     // To be able to prefill the correct values based on the file extension
-    bool bIsTSV = (aDatName.endsWithIgnoreAsciiCase(".tsv") || aDatName.endsWithIgnoreAsciiCase(".tab"));
+    bool bIsTSV = (o3tl::endsWithIgnoreAsciiCase(aDatName, ".tsv") || o3tl::endsWithIgnoreAsciiCase(aDatName, ".tab"));
 
     // Default options are set in officecfg/registry/schema/org/openoffice/Office/Calc.xcs
     OUString sFieldSeparators(",;\t");

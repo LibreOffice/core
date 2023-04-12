@@ -28,7 +28,7 @@
 namespace comphelper
 {
 // Return true iff url is an absolute URL of "file" scheme:
-COMPHELPER_DLLPUBLIC bool isFileUrl(OUString const& url);
+COMPHELPER_DLLPUBLIC bool isFileUrl(std::u16string_view url);
 }
 
 #endif

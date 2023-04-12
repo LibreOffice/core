@@ -137,12 +137,11 @@ DeclRefExpr const* relevantCXXMemberCallExpr(CXXMemberCallExpr const* expr)
     else if (auto const i = d->getIdentifier())
     {
         auto const n = i->getName();
-        if (n == "endsWith" || n == "isEmpty" || n == "startsWith" || n == "subView"
-            || n == "indexOf" || n == "lastIndexOf" || n == "compareTo" || n == "match"
-            || n == "trim" || n == "toInt32" || n == "toUInt32" || n == "toInt64" || n == "toDouble"
-            || n == "equalsIgnoreAsciiCase" || n == "compareToIgnoreAsciiCase" || n == "getToken"
-            || n == "copy" || n == "equalsAscii" || n == "equalsAsciiL"
-            || n == "matchIgnoreAsciiCase")
+        if (!(n == "getLength" || n == "getStr" || n == "convertToString" || n == "replace"
+              || n == "replaceAll" || n == "replaceAt" || n == "replaceFirst"
+              || n == "toAsciiLowerCase" || n == "toAsciiUpperCase" || n == "toUtf8"
+              || n == "iterateCodePoints" || n == "startsWithIgnoreAsciiCase" || n == "toUInt64"
+              || n == "toFloat" || n == "toBoolean"))
         {
             good = true;
         }

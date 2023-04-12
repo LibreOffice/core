@@ -45,7 +45,7 @@ class SwApplet_Impl
     OUString   m_sAlt;
 
 public:
-    static SwHtmlOptType GetOptionType( const OUString& rName, bool bApplet );
+    static SwHtmlOptType GetOptionType( std::u16string_view rName, bool bApplet );
     SwApplet_Impl( SfxItemPool& rPool );
     SwApplet_Impl( SfxItemSet aSet ): m_aItemSet (std::move(aSet)) {}
     ~SwApplet_Impl();

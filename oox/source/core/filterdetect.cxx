@@ -35,6 +35,7 @@
 
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <o3tl/string_view.hxx>
 #include <utility>
 
 using namespace ::com::sun::star;
@@ -175,9 +176,9 @@ void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
     }
 }
 
-OUString FilterDetectDocHandler::getFilterNameFromContentType( std::u16string_view rContentType, const OUString& rFileName )
+OUString FilterDetectDocHandler::getFilterNameFromContentType( std::u16string_view rContentType, std::u16string_view rFileName )
 {
-    bool bDocm = rFileName.endsWithIgnoreAsciiCase(".docm");
+    bool bDocm = o3tl::endsWithIgnoreAsciiCase(rFileName, ".docm");
 
     if( rContentType == u"application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" && !bDocm )
     {

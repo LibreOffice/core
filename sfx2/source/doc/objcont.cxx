@@ -569,7 +569,7 @@ bool SfxObjectShell::IsHelpDocument() const
     return (pFilter && pFilter->GetFilterName() == "writer_web_HTML_help");
 }
 
-void SfxObjectShell::ResetFromTemplate( const OUString& rTemplateName, const OUString& rFileName )
+void SfxObjectShell::ResetFromTemplate( const OUString& rTemplateName, std::u16string_view rFileName )
 {
     // only care about resetting this data for LibreOffice formats otherwise
     if ( !IsOwnStorageFormat( *GetMedium())  )

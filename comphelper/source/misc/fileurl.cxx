@@ -21,7 +21,11 @@
 
 #include <comphelper/fileurl.hxx>
 #include <rtl/ustring.hxx>
+#include <o3tl/string_view.hxx>
 
-bool comphelper::isFileUrl(OUString const& url) { return url.startsWithIgnoreAsciiCase("file:"); }
+bool comphelper::isFileUrl(std::u16string_view url)
+{
+    return o3tl::matchIgnoreAsciiCase(url, "file:");
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -96,7 +96,7 @@ class JobURL
 
     private:
 
-        static bool implst_split( const OUString& sPart           ,
+        static bool implst_split( std::u16string_view sPart           ,
                                       const char*        pPartIdentifier ,
                                             sal_Int32        nPartLength     ,
                                             OUString& rPartValue      ,

@@ -144,7 +144,7 @@ public:
     bool ImportStream( SvStream&, const OUString& rBaseURL, SotClipboardFormatId );
     bool ExportStream( SvStream&, const OUString& rBaseURL, SotClipboardFormatId );
 
-    bool ExportData( const OUString& rMimeType,
+    bool ExportData( std::u16string_view rMimeType,
                      css::uno::Any & rValue  );
 
     // after import

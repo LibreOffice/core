@@ -454,11 +454,11 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
     assert(m_xHandler.is()); // can't do anything without that
 }
 
-static sal_Int16 lcl_getUnit( const OUString& rValue )
+static sal_Int16 lcl_getUnit( std::u16string_view rValue )
 {
-    if( rValue.endsWithIgnoreAsciiCase( "cm" ) )
+    if( o3tl::endsWithIgnoreAsciiCase( rValue, "cm" ) )
         return util::MeasureUnit::CM;
-    else if ( rValue.endsWithIgnoreAsciiCase( "mm" ) )
+    else if ( o3tl::endsWithIgnoreAsciiCase( rValue, "mm" ) )
         return util::MeasureUnit::MM;
     else
         return util::MeasureUnit::INCH;

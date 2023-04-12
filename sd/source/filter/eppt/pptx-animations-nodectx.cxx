@@ -23,6 +23,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <o3tl/any.hxx>
+#include <o3tl/string_view.hxx>
+
 using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::drawing::XShape;
@@ -49,13 +51,14 @@ bool isValidTarget(const Any& rTarget)
     return (rTarget >>= aParagraphTarget) && aParagraphTarget.Shape.is();
 }
 
-bool IsAudioURL(const OUString& rURL)
+bool IsAudioURL(std::u16string_view rURL)
 {
-    return rURL.endsWithIgnoreAsciiCase(".wav") || rURL.endsWithIgnoreAsciiCase(".m4a");
+    return o3tl::endsWithIgnoreAsciiCase(rURL, ".wav")
+           || o3tl::endsWithIgnoreAsciiCase(rURL, ".m4a");
 }
 
 /// Returns if rURL has an extension which is a video format.
-bool IsVideoURL(const OUString& rURL) { return rURL.endsWithIgnoreAsciiCase(".mp4"); }
+bool IsVideoURL(std::u16string_view rURL) { return o3tl::endsWithIgnoreAsciiCase(rURL, ".mp4"); }
 
 bool initCondList(const Any& rAny, std::vector<Cond>& rList, bool bIsMainSeqChild)
 {

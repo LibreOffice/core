@@ -135,7 +135,7 @@ public:
     void     GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache);
     const SbxArrayRef& GetMethods() const { return pMethods;}
     SbMethod*       FindMethod( const OUString&, SbxClassType );
-    static OUString GetKeywordCase( const OUString& sKeyword );
+    static OUString GetKeywordCase( std::u16string_view sKeyword );
 };
 
 typedef tools::SvRef<SbModule> SbModuleRef;

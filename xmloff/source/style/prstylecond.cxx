@@ -68,11 +68,11 @@ const ConditionMap g_ConditionMap[] =
     { "NumberingLevel10",       XML_LIST_LEVEL,     10 }
 };
 
-OUString GetParaStyleCondExternal( OUString const &internal)
+OUString GetParaStyleCondExternal( std::u16string_view internal)
 {
     for (size_t i = 0; i < SAL_N_ELEMENTS(g_ConditionMap); ++i)
     {
-        if (internal.compareToAscii( g_ConditionMap[i].aInternal ) == 0)
+        if (o3tl::equalsAscii(internal, g_ConditionMap[i].aInternal ))
         {
             OUString aResult = GetXMLToken( g_ConditionMap[i].nExternal ) +
                     "()";

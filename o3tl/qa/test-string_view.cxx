@@ -699,6 +699,37 @@ private:
             o3tl::getToken(suTokenStr, 0, ';', n);
             // should not GPF with negative index
         }
+        {
+            CPPUNIT_ASSERT_MESSAGE("compareToAscii",
+                                   OUString(u"aaa").compareToAscii("aa")
+                                       > 0); // just for comparison to following line
+            CPPUNIT_ASSERT_MESSAGE("compareToAscii", o3tl::compareToAscii(u"aaa", "aa") > 0);
+
+            OUString aa(u"aa");
+            CPPUNIT_ASSERT_MESSAGE("compareToAscii",
+                                   aa.compareToAscii("aaa")
+                                       < 0); // just for comparison to following line
+            CPPUNIT_ASSERT_MESSAGE("compareToAscii", o3tl::compareToAscii(u"aa", "aaa") < 0);
+
+            CPPUNIT_ASSERT_MESSAGE(
+                "equalsIgnoreAsciiCase",
+                aa.equalsIgnoreAsciiCase("AA")); // just for comparison to following line
+            CPPUNIT_ASSERT_MESSAGE("equalsIgnoreAsciiCase",
+                                   o3tl::equalsIgnoreAsciiCase(u"aa", "AA"));
+
+            CPPUNIT_ASSERT_MESSAGE(
+                "matchIgnoreAsciiCase",
+                aa.matchIgnoreAsciiCase("a")); // just for comparison to following line
+            CPPUNIT_ASSERT_MESSAGE("matchIgnoreAsciiCase", o3tl::matchIgnoreAsciiCase(u"aa", "a"));
+
+            CPPUNIT_ASSERT_MESSAGE(
+                "endsWithIgnoreAsciiCase",
+                aa.endsWithIgnoreAsciiCase("a")); // just for comparison to following line
+            CPPUNIT_ASSERT_MESSAGE("endsWithIgnoreAsciiCase",
+                                   o3tl::endsWithIgnoreAsciiCase(u"aa", "a"));
+            CPPUNIT_ASSERT_MESSAGE("endsWithIgnoreAsciiCase",
+                                   o3tl::endsWithIgnoreAsciiCase(u"aa", u"a"));
+        }
     }
 };
 

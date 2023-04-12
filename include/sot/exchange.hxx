@@ -120,7 +120,7 @@ public:
     static bool         GetFormatDataFlavor( SotClipboardFormatId nFormat, css::datatransfer::DataFlavor& rFlavor );
     static OUString     GetFormatMimeType( SotClipboardFormatId nFormat );
     static bool         IsInternal( const SvGlobalName& );
-    static SotClipboardFormatId   GetFormatIdFromMimeType( const OUString& rMimeType );
+    static SotClipboardFormatId   GetFormatIdFromMimeType( std::u16string_view rMimeType );
 
     // same for XTransferable interface
     static sal_uInt8   GetExchangeAction(

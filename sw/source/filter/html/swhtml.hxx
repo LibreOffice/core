@@ -667,7 +667,7 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
 
     // <SDFIELD>
 public:
-    static SvxNumType GetNumType( const OUString& rStr, SvxNumType eDfltType );
+    static SvxNumType GetNumType( std::u16string_view rStr, SvxNumType eDfltType );
 private:
     void NewField();
     void EndField();
@@ -953,7 +953,7 @@ public:
     void NotifyMacroEventRead();
 
     /// Strips query and fragment from a URL path if base URL is a file:// one.
-    static OUString StripQueryFromPath(const OUString& rBase, const OUString& rPath);
+    static OUString StripQueryFromPath(std::u16string_view rBase, const OUString& rPath);
 };
 
 struct SwPendingData

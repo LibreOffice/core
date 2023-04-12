@@ -20,6 +20,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <docsh.hxx>
 #include <IDocumentFieldsAccess.hxx>
@@ -196,12 +197,12 @@ HTMLOptionEnum<SwFileNameFormat> const aHTMLFileNameFieldFormatTable[] =
     { nullptr,                          SwFileNameFormat(0) }
 };
 
-SvxNumType SwHTMLParser::GetNumType( const OUString& rStr, SvxNumType nDfltType )
+SvxNumType SwHTMLParser::GetNumType( std::u16string_view rStr, SvxNumType nDfltType )
 {
     const HTMLOptionEnum<SvxNumType> *pOptEnums = aHTMLPageNumFieldFormatTable;
     while( pOptEnums->pName )
     {
-        if( rStr.equalsIgnoreAsciiCaseAscii( pOptEnums->pName ) )
+        if( o3tl::equalsIgnoreAsciiCase( rStr, pOptEnums->pName ) )
             return pOptEnums->nValue;
         pOptEnums++;
     }

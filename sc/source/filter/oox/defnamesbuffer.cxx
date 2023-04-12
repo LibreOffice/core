@@ -107,10 +107,10 @@ sal_Unicode lclGetBuiltinIdFromPrefixedName( std::u16string_view aModelName )
 }
 
 /** returns the built-in name identifier from a built-in base name, e.g. 'Print_Area'. */
-sal_Unicode lclGetBuiltinIdFromBaseName( const OUString& rModelName )
+sal_Unicode lclGetBuiltinIdFromBaseName( std::u16string_view rModelName )
 {
     for( sal_Unicode cBuiltinId = 0; cBuiltinId < SAL_N_ELEMENTS( sppcBaseNames ); ++cBuiltinId )
-        if( rModelName.equalsIgnoreAsciiCaseAscii( sppcBaseNames[ cBuiltinId ] ) )
+        if( o3tl::equalsIgnoreAsciiCase( rModelName, sppcBaseNames[ cBuiltinId ] ) )
             return cBuiltinId;
     return BIFF_DEFNAME_UNKNOWN;
 }

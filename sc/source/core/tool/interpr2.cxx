@@ -22,6 +22,7 @@
 
 #include <comphelper/string.hxx>
 #include <o3tl/float_int_conversion.hxx>
+#include <o3tl/string_view.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/objsh.hxx>
@@ -3218,7 +3219,7 @@ void ScInterpreter::ScHyperLink()
     http://ec.europa.eu/economy_finance/euro/adoption/conversion/
     http://ec.europa.eu/economy_finance/euro/countries/
  */
-static bool lclConvertMoney( const OUString& aSearchUnit, double& rfRate, int& rnDec )
+static bool lclConvertMoney( std::u16string_view aSearchUnit, double& rfRate, int& rnDec )
 {
     struct ConvertInfo
     {
@@ -3251,7 +3252,7 @@ static bool lclConvertMoney( const OUString& aSearchUnit, double& rfRate, int& r
     };
 
     for (const auto & i : aConvertTable)
-        if ( aSearchUnit.equalsIgnoreAsciiCaseAscii( i.pCurrText ) )
+        if ( o3tl::equalsIgnoreAsciiCase( aSearchUnit, i.pCurrText ) )
         {
             rfRate = i.fRate;
             rnDec  = i.nDec;

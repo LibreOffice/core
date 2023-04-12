@@ -490,14 +490,14 @@ const CharSetNameMap *GetCharSetNameMap()
 /*
  Get a rtl_TextEncoding from its name
  */
-rtl_TextEncoding CharSetFromName(const OUString& rChrSetStr)
+rtl_TextEncoding CharSetFromName(std::u16string_view rChrSetStr)
 {
     const CharSetNameMap *pStart = GetCharSetNameMap();
     rtl_TextEncoding nRet = pStart->eCode;
 
     for(const CharSetNameMap *pMap = pStart; pMap->pName; ++pMap)
     {
-        if(rChrSetStr.equalsIgnoreAsciiCaseAscii(pMap->pName))
+        if(o3tl::equalsIgnoreAsciiCase(rChrSetStr, pMap->pName))
         {
             nRet = pMap->eCode;
             break;
@@ -549,7 +549,7 @@ void SwAsciiOptions::ReadUserData( std::u16string_view rStr )
     sal_Int32 nToken = 0;
     std::u16string_view sToken = o3tl::getToken(rStr, 0, ',', nToken); // 1. Charset name
     if (!sToken.empty())
-        m_eCharSet = CharSetFromName(OUString(sToken));
+        m_eCharSet = CharSetFromName(sToken);
     if (nToken >= 0 && !(sToken = o3tl::getToken(rStr, 0, ',', nToken)).empty()) // 2. Line ending type
     {
         if (o3tl::equalsIgnoreAsciiCase(sToken, u"CRLF"))
