@@ -843,12 +843,6 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testSemiTransparentText)
     CPPUNIT_ASSERT_EQUAL(nTransparence, nActual);
 }
 
-CPPUNIT_TEST_FIXTURE(SwModelTestBase, testTdf147485)
-{
-    // Before the fix this was impossible.
-    load(DATA_DIRECTORY, "Tdf147485.docx");
-}
-
 CPPUNIT_TEST_FIXTURE(SwModelTestBase, testUserField)
 {
     // Create an in-memory empty document with a user field.

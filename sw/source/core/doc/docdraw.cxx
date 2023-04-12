@@ -225,7 +225,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
 #endif
             // Before the format will be killed, save its textbox for later use.
             if (auto pShapeFormat = pContact->GetFormat())
-                if (auto pTextBoxNode = pShapeFormat->GetOtherTextBoxFormats())
+                if (auto pTextBoxNode = pShapeFormat->GetOtherTextBoxFormat())
                     for (const auto& rTextBoxElement : pTextBoxNode->GetAllTextBoxes())
                         vSavedTextBoxes.emplace(rTextBoxElement);
 
@@ -255,15 +255,14 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
 
         // Add the saved textboxes to the new format.
-        auto pTextBoxNode = std::make_shared<SwTextBoxNode>(
-            SwTextBoxNode(static_cast<SwFrameFormat*>(pFormat)));
+        auto pTextBoxNode = new SwTextBoxNode(pFormat);
         for (const auto& pTextBoxEntry : vSavedTextBoxes)
         {
             pTextBoxNode->AddTextBox(const_cast<SdrObject*>(pTextBoxEntry.first),
                                      pTextBoxEntry.second);
-            pTextBoxEntry.second->SetOtherTextBoxFormats(pTextBoxNode);
+            pTextBoxEntry.second->SetOtherTextBoxFormat(pTextBoxNode);
         }
-        pFormat->SetOtherTextBoxFormats(pTextBoxNode);
+        pFormat->SetOtherTextBoxFormat(pTextBoxNode);
         vSavedTextBoxes.clear();
 
         rDrawView.GroupMarked();
@@ -303,7 +302,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
     return pNewContact;
 }
 
-static void lcl_CollectTextBoxesForSubGroupObj(SwFrameFormat* pTargetFormat, std::shared_ptr<SwTextBoxNode> pTextBoxNode,
+static void lcl_CollectTextBoxesForSubGroupObj(SwFrameFormat* pTargetFormat, SwTextBoxNode* pTextBoxNode,
                                                SdrObject* pSourceObjs)
 {
     if (auto pChildrenObjs = pSourceObjs->getChildrenOfSdrObject())
@@ -313,12 +312,12 @@ static void lcl_CollectTextBoxesForSubGroupObj(SwFrameFormat* pTargetFormat, std
     {
         if (auto pTextBox = pTextBoxNode->GetTextBox(pSourceObjs))
         {
-            if (!pTargetFormat->GetOtherTextBoxFormats())
+            if (!pTargetFormat->GetOtherTextBoxFormat())
             {
-                pTargetFormat->SetOtherTextBoxFormats(std::make_shared<SwTextBoxNode>(SwTextBoxNode(pTargetFormat)));
+                pTargetFormat->SetOtherTextBoxFormat(new SwTextBoxNode(pTargetFormat));
             }
-            pTargetFormat->GetOtherTextBoxFormats()->AddTextBox(pSourceObjs, pTextBox);
-            pTextBox->SetOtherTextBoxFormats(pTargetFormat->GetOtherTextBoxFormats());
+            pTargetFormat->GetOtherTextBoxFormat()->AddTextBox(pSourceObjs, pTextBox);
+            pTextBox->SetOtherTextBoxFormat(pTargetFormat->GetOtherTextBoxFormat());
         }
     }
 }
@@ -352,9 +351,9 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                 {
                     SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
 
-                    std::shared_ptr<SwTextBoxNode> pTextBoxNode;
+                    SwTextBoxNode* pTextBoxNode = nullptr;
                     if (auto pGroupFormat = pContact->GetFormat())
-                        pTextBoxNode = pGroupFormat->GetOtherTextBoxFormats();
+                        pTextBoxNode = pGroupFormat->GetOtherTextBoxFormat();
 
                     SwFormatAnchor aAnch( pContact->GetFormat()->GetAnchor() );
                     SdrObjList *pLst = pObjGroup->GetSubList();
@@ -379,10 +378,10 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                             {
                                 if (auto pTextBoxFormat = pTextBoxNode->GetTextBox(pSubObj))
                                 {
-                                    auto pNewTextBoxNode =std::make_shared<SwTextBoxNode>(SwTextBoxNode(pFormat));
+                                    auto pNewTextBoxNode = new SwTextBoxNode(pFormat);
                                     pNewTextBoxNode->AddTextBox(pSubObj, pTextBoxFormat);
-                                    pFormat->SetOtherTextBoxFormats(pNewTextBoxNode);
-                                    pTextBoxFormat->SetOtherTextBoxFormats(pNewTextBoxNode);
+                                    pFormat->SetOtherTextBoxFormat(pNewTextBoxNode);
+                                    pTextBoxFormat->SetOtherTextBoxFormat(pNewTextBoxNode);
                                 }
                             }
                             else

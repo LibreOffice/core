@@ -74,7 +74,7 @@ class SW_DLLPUBLIC SwFrameFormat
     // The assigned SwFrmFmt list.
     SwFrameFormats *m_ffList;
 
-    std::shared_ptr< SwTextBoxNode > m_pOtherTextBoxFormats;
+    SwTextBoxNode* m_pOtherTextBoxFormat;
 
     struct change_name
     {
@@ -102,8 +102,8 @@ protected:
 
 public:
 
-    const std::shared_ptr< SwTextBoxNode >& GetOtherTextBoxFormats() const { return m_pOtherTextBoxFormats; };
-    void SetOtherTextBoxFormats(const std::shared_ptr<SwTextBoxNode>& rNew) { m_pOtherTextBoxFormats = rNew; };
+    SwTextBoxNode* GetOtherTextBoxFormat() const { return m_pOtherTextBoxFormat; };
+    void SetOtherTextBoxFormat(SwTextBoxNode* pNew) { m_pOtherTextBoxFormat = pNew; };
 
     virtual ~SwFrameFormat() override;
 
