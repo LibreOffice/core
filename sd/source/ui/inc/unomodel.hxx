@@ -284,6 +284,9 @@ public:
     /// @see vcl::ITiledRenderable::setPaintTextEdit().
     virtual void setPaintTextEdit(bool bPaint) override { mbPaintTextEdit = bPaint; }
 
+    /// @see vcl::ITiledRenderable::getViewRenderState().
+    OString getViewRenderState() override;
+
     // XComponent
 
     /** This dispose implementation releases the resources held by the

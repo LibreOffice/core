@@ -8,15 +8,35 @@
  */
 
 #include <DrawViewShell.hxx>
+#include <ViewShellBase.hxx>
 #include <sdmod.hxx>
 
 #include <comphelper/lok.hxx>
+#include <comphelper/servicehelper.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <unomodel.hxx>
 
 namespace sd {
 
 void DrawViewShell::ConfigurationChanged( utl::ConfigurationBroadcaster* pCb, ConfigurationHints )
 {
-    ConfigureAppBackgroundColor( dynamic_cast<svtools::ColorConfig*>(pCb) );
+    svtools::ColorConfig *pColorConfig = dynamic_cast<svtools::ColorConfig*>(pCb);
+    ConfigureAppBackgroundColor(pColorConfig);
+    SfxViewShell* pCurrentShell = SfxViewShell::Current();
+    if (comphelper::LibreOfficeKit::isActive() && pCurrentShell)
+    {
+        DrawViewShell* pCurrentDrawShell = nullptr;
+        ViewShellBase* pShellBase = dynamic_cast<ViewShellBase*>(pCurrentShell);
+        if(pShellBase)
+            pCurrentDrawShell = dynamic_cast<DrawViewShell*>(pShellBase->GetMainViewShell().get());
+        pCurrentDrawShell->maViewOptions.mnDocBackgroundColor = pColorConfig->GetColorValue(svtools::DOCCOLOR).nColor;
+        SdXImpressDocument* pDoc = comphelper::getFromUnoTunnel<SdXImpressDocument>(pCurrentShell->GetCurrentDocument());
+        SfxLokHelper::notifyViewRenderState(pCurrentShell, pDoc);
+        Color aFillColor(pColorConfig->GetColorValue(svtools::APPBACKGROUND).nColor);
+        SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR,
+                    aFillColor.AsRGBHexString().toUtf8().getStr());
+    }
 }
 
 void DrawViewShell::ConfigureAppBackgroundColor( svtools::ColorConfig *pColorConfig )
@@ -29,7 +49,7 @@ void DrawViewShell::ConfigureAppBackgroundColor( svtools::ColorConfig *pColorCon
     // tdf#87905 Use darker background color for master view
     if (meEditMode == EditMode::MasterPage)
         aFillColor.DecreaseLuminance( 64 );
-    mnAppBackgroundColor = aFillColor;
+    maViewOptions.mnAppBackgroundColor = aFillColor;
 }
 
 }

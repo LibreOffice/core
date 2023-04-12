@@ -2232,6 +2232,7 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
     {
         if(SdrPageView* pSdrPageView = pDrawView->GetSdrPageView())
         {
+            pSdrPageView->SetApplicationDocumentColor(pViewSh->GetViewOptions().mnDocBackgroundColor);
             patchedPageWindow = pSdrPageView->FindPageWindow(*getDocWindow()->GetOutDev());
             temporaryPaintWindow.reset(new SdrPaintWindow(*pDrawView, rDevice));
             if (patchedPageWindow)
@@ -2298,6 +2299,19 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
     LokControlHandler::paintControlTile(pPage, pDrawView, *pActiveWin, rDevice, aOutputSize, aTileRect);
 
     comphelper::LibreOfficeKit::setTiledPainting(false);
+}
+
+OString SdXImpressDocument::getViewRenderState()
+{
+    OStringBuffer aState;
+    DrawViewShell* pView = GetViewShell();
+    if (pView)
+    {
+        const SdViewOptions& pVOpt = pView->GetViewOptions();
+        if (pVOpt.msColorSchemeName == u"COLOR_SCHEME_LIBREOFFICE_DARK")
+            aState.append('D');
+    }
+    return aState.makeStringAndClear();
 }
 
 void SdXImpressDocument::selectPart(int nPart, int nSelect)

@@ -51,6 +51,8 @@
 #include <vcl/cursor.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/vclevent.hxx>
+#include <vcl/BitmapReadAccess.hxx>
+#include <vcl/virdev.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <chrono>
@@ -120,6 +122,7 @@ public:
     void testTdf115873();
     void testTdf115873Group();
     void testCutSelectionChange();
+    void testThemeViewSeparation();
     void testRegenerateDiagram();
     void testLanguageAllText();
     void testInsertDeletePageInvalidation();
@@ -179,6 +182,7 @@ public:
     CPPUNIT_TEST(testTdf115873);
     CPPUNIT_TEST(testTdf115873Group);
     CPPUNIT_TEST(testCutSelectionChange);
+    CPPUNIT_TEST(testThemeViewSeparation);
     CPPUNIT_TEST(testRegenerateDiagram);
     CPPUNIT_TEST(testLanguageAllText);
     CPPUNIT_TEST(testInsertDeletePageInvalidation);
@@ -2532,6 +2536,65 @@ void SdTiledRenderingTest::testCutSelectionChange()
 
     // Selection is removed
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), m_aSelection.size());
+}
+
+// Helper function to get a tile to a bitmap and check the pixel color
+static void assertTilePixelColor(SdXImpressDocument* pXTextDocument, int nPixelX, int nPixelY, Color aColor)
+{
+    size_t nCanvasSize = 1024;
+    size_t nTileSize = 256;
+    std::vector<unsigned char> aPixmap(nCanvasSize * nCanvasSize * 4, 0);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasSize, nCanvasSize),
+            Fraction(1.0), Point(), aPixmap.data());
+    pXTextDocument->paintTile(*pDevice, nCanvasSize, nCanvasSize, 0, 0, 15360, 7680);
+    pDevice->EnableMapMode(false);
+    Bitmap aBitmap = pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
+    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    Color aActualColor(pAccess->GetPixel(nPixelX, nPixelY));
+    CPPUNIT_ASSERT_EQUAL(aColor, aActualColor);
+}
+
+// Test that changing the theme in one view doesn't change it in the other view
+void SdTiledRenderingTest::testThemeViewSeparation()
+{
+    SdXImpressDocument* pXTextDocument = createDoc("dummy.odp");
+    int nFirstViewId = SfxLokHelper::getView();
+    ViewCallback aView1;
+    // First view is at light mode
+    assertTilePixelColor(pXTextDocument, 255, 255, COL_WHITE);
+    // Create second view
+    SfxLokHelper::createView();
+    int nSecondViewId = SfxLokHelper::getView();
+    ViewCallback aView2;
+    // Set second view to dark mode
+    {
+        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+            {
+                { "NewTheme", uno::Any(OUString("COLOR_SCHEME_LIBREOFFICE_DARK")) },
+            }
+        );
+        dispatchCommand(mxComponent, ".uno:ChangeTheme", aPropertyValues);
+    }
+    assertTilePixelColor(pXTextDocument, 255, 255, Color(0x1c, 0x1c, 0x1c));
+    // First view still in light mode
+    SfxLokHelper::setView(nFirstViewId);
+    assertTilePixelColor(pXTextDocument, 255, 255, COL_WHITE);
+    // Second view still in dark mode
+    SfxLokHelper::setView(nSecondViewId);
+    assertTilePixelColor(pXTextDocument, 255, 255, Color(0x1c, 0x1c, 0x1c));
+    // Switch second view back to light mode
+    {
+        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+            {
+                { "NewTheme", uno::Any(OUString("COLOR_SCHEME_LIBREOFFICE_AUTOMATIC")) },
+            }
+        );
+        dispatchCommand(mxComponent, ".uno:ChangeTheme", aPropertyValues);
+    }
+    // Now in light mode
+    assertTilePixelColor(pXTextDocument, 255, 255, COL_WHITE);
 }
 
 void SdTiledRenderingTest::testRegenerateDiagram()

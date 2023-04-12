@@ -401,7 +401,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
     if (GetDoc())
     {
         ConfigureAppBackgroundColor();
-        mpDrawView->SetApplicationBackgroundColor( mnAppBackgroundColor );
+        mpDrawView->SetApplicationBackgroundColor( GetViewOptions().mnAppBackgroundColor );
     }
 
     ViewShell::MouseMove(rMEvt, pWin);
