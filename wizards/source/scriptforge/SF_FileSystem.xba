@@ -1588,6 +1588,9 @@ Try:
 		&apos; Get selected file
 		iAccept = .Execute()
 		If iAccept = com.sun.star.ui.dialogs.ExecutableDialogResults.OK Then sFile = .getSelectedFiles()(0)
+
+		&apos;	Do not reuse a FilePicker, side effects observed (a.o. TDF#154462)
+		.dispose()
 	End With
 
 Finally:
