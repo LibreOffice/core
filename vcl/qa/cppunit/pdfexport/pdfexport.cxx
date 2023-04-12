@@ -212,7 +212,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107868)
 
     // Import the bugdoc and print to PDF.
     loadFromURL(u"tdf107868.odt");
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Reference<view::XPrintable> xPrintable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPrintable.is());
     uno::Sequence<beans::PropertyValue> aOptions(comphelper::InitPropertySequence(
@@ -452,7 +451,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testSofthyphenPos)
 
     // Import the bugdoc and print to PDF.
     loadFromURL(u"softhyphen_pdf.odt");
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Reference<view::XPrintable> xPrintable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPrintable.is());
     uno::Sequence<beans::PropertyValue> aOptions(comphelper::InitPropertySequence(
