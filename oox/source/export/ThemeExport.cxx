@@ -581,13 +581,13 @@ OString convertRectangleAlignment(model::RectangleAlignment eFlipMode)
 }
 } // end anonymous ns
 
-void ThemeExport::writeBlip(model::BlipFill const& rBlipFil)
+void ThemeExport::writeBlip(model::BlipFill const& rBlipFill)
 {
-    if (!rBlipFil.mxGraphic.is())
+    if (!rBlipFill.mxGraphic.is())
         return;
     oox::drawingml::GraphicExport aExporter(mpFS, mpFilterBase, meDocumentType);
-    Graphic aGraphic(rBlipFil.mxGraphic);
-    aExporter.writeBlip(aGraphic, false);
+    Graphic aGraphic(rBlipFill.mxGraphic);
+    aExporter.writeBlip(aGraphic, rBlipFill.maBlipEffects, false);
 }
 
 void ThemeExport::writeBlipFill(model::BlipFill const& rBlipFill)

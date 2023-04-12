@@ -264,7 +264,7 @@ public:
     {}
 
     OUString writeToStorage(Graphic const& rGraphic, bool bRelPathToMedia = false);
-    OUString writeBlip(Graphic const& rGraphic , bool bRelPathToMedia = false);
+    OUString writeBlip(Graphic const& rGraphic, std::vector<model::BlipEffect> const& rEffects, bool bRelPathToMedia = false);
 };
 
 class OOX_DLLPUBLIC DrawingML

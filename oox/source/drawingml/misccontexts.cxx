@@ -253,8 +253,9 @@ ColorChangeContext::ColorChangeContext( ContextHandler2Helper const & rParent,
     mbUseAlpha = rAttribs.getBool( XML_useA, true );
     if (mpBlipFill)
     {
-        mpBlipFill->meColorEffectType = model::ColorEffectType::ColorChange;
-        mpBlipFill->mbUseAlpha = mbUseAlpha;
+        auto& rEffect = mpBlipFill->maBlipEffects.emplace_back();
+        rEffect.meType = model::BlipEffectType::ColorChange;
+        rEffect.mbUseAlpha = mbUseAlpha;
     }
 }
 
@@ -272,11 +273,17 @@ ContextHandlerRef ColorChangeContext::onCreateContext(
     {
         case A_TOKEN(clrFrom):
             if (mpBlipFill)
-                pColorDefinition = &mpBlipFill->maColorFrom;
+            {
+                auto& rEffect = mpBlipFill->maBlipEffects.back();
+                pColorDefinition = &rEffect.getColorFrom();
+            }
             return new ColorContext(*this, mrBlipProps.maColorChangeFrom, pColorDefinition);
         case A_TOKEN(clrTo):
             if (mpBlipFill)
-                pColorDefinition = &mpBlipFill->maColorTo;
+            {
+                auto& rEffect = mpBlipFill->maBlipEffects.back();
+                pColorDefinition = &rEffect.getColorTo();
+            }
             return new ColorContext(*this, mrBlipProps.maColorChangeTo, pColorDefinition);
     }
     return nullptr;
@@ -325,12 +332,16 @@ ContextHandlerRef BlipContext::onCreateContext(
     {
         case A_TOKEN( biLevel ):
         {
-            mrBlipProps.moBiLevelThreshold = rAttribs.getInteger( XML_thresh );
+            sal_Int32 nTreshold = rAttribs.getInteger(XML_thresh, 0);
+
+            mrBlipProps.moBiLevelThreshold = nTreshold;
             mrBlipProps.moColorEffect = getBaseToken(nElement);
+
             if (mpBlipFill)
             {
-                mpBlipFill->meColorEffectType = model::ColorEffectType::BiLevel;
-                mpBlipFill->mnBiLevelThreshold = rAttribs.getInteger(XML_thresh, 0);
+                auto& rEffect = mpBlipFill->maBlipEffects.emplace_back();
+                rEffect.meType = model::BlipEffectType::BiLevel;
+                rEffect.mnThreshold = nTreshold;
             }
         }
         break;
@@ -340,7 +351,8 @@ ContextHandlerRef BlipContext::onCreateContext(
             mrBlipProps.moColorEffect = getBaseToken( nElement );
             if (mpBlipFill)
             {
-                mpBlipFill->meColorEffectType = model::ColorEffectType::Grayscale;
+                auto& rEffect = mpBlipFill->maBlipEffects.emplace_back();
+                rEffect.meType = model::BlipEffectType::Grayscale;
             }
         }
         break;
@@ -360,11 +372,25 @@ ContextHandlerRef BlipContext::onCreateContext(
         {
             mrBlipProps.moBrightness = rAttribs.getInteger( XML_bright );
             mrBlipProps.moContrast = rAttribs.getInteger( XML_contrast );
+
+            if (mpBlipFill)
+            {
+                auto& rEffect = mpBlipFill->maBlipEffects.emplace_back();
+                rEffect.meType = model::BlipEffectType::Luminance;
+                rEffect.mnBrightness = rAttribs.getInteger(XML_bright, 0);
+                rEffect.mnContrast = rAttribs.getInteger(XML_contrast, 0);
+            }
         }
         break;
         case A_TOKEN( alphaModFix ):
         {
             mrBlipProps.moAlphaModFix = rAttribs.getInteger(XML_amt);
+            if (mpBlipFill)
+            {
+                auto& rEffect = mpBlipFill->maBlipEffects.emplace_back();
+                rEffect.meType = model::BlipEffectType::AlphaModulateFixed;
+                rEffect.mnAmount = rAttribs.getInteger(XML_amt, 100 * 1000);
+            }
         }
         break;
     }

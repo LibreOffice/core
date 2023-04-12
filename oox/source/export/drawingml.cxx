@@ -1475,7 +1475,7 @@ const char* DrawingML::GetRelationCompPrefix() const
     return getRelationCompPrefix(meDocumentType);
 }
 
-OUString GraphicExport::writeBlip(Graphic const& rGraphic , bool bRelPathToMedia)
+OUString GraphicExport::writeBlip(Graphic const& rGraphic, std::vector<model::BlipEffect> const& rEffects, bool bRelPathToMedia)
 {
     OUString sRelId;
 
@@ -1483,8 +1483,114 @@ OUString GraphicExport::writeBlip(Graphic const& rGraphic , bool bRelPathToMedia
 
     mpFS->startElementNS(XML_a, XML_blip, FSNS(XML_r, XML_embed), sRelId);
 
-    //WriteImageBrightnessContrastTransparence(rXPropSet);
-    //WriteArtisticEffect(rXPropSet);
+    for (auto const& rEffect : rEffects)
+    {
+        switch (rEffect.meType)
+        {
+            case model::BlipEffectType::AlphaBiLevel:
+            {
+                mpFS->singleElementNS(XML_a, XML_alphaBiLevel, XML_thresh, OString::number(rEffect.mnThreshold));
+            }
+            break;
+            case model::BlipEffectType::AlphaCeiling:
+            {
+                mpFS->singleElementNS(XML_a, XML_alphaCeiling);
+            }
+            break;
+            case model::BlipEffectType::AlphaFloor:
+            {
+                mpFS->singleElementNS(XML_a, XML_alphaFloor);
+            }
+            break;
+            case model::BlipEffectType::AlphaInverse:
+            {
+                mpFS->singleElementNS(XML_a, XML_alphaInv);
+                // TODO: export rEffect.maColor1
+            }
+            break;
+            case model::BlipEffectType::AlphaModulate:
+            {
+                mpFS->singleElementNS(XML_a, XML_alphaMod);
+                // TODO
+            }
+            break;
+            case model::BlipEffectType::AlphaModulateFixed:
+            {
+                mpFS->singleElementNS(XML_a, XML_alphaModFix, XML_amt, OString::number(rEffect.mnAmount));
+            }
+            break;
+            case model::BlipEffectType::AlphaReplace:
+            {
+                mpFS->singleElementNS(XML_a, XML_alphaRepl, XML_a, OString::number(rEffect.mnAlpha));
+            }
+            break;
+            case model::BlipEffectType::BiLevel:
+            {
+                mpFS->singleElementNS(XML_a, XML_biLevel, XML_thresh, OString::number(rEffect.mnThreshold));
+            }
+            break;
+            case model::BlipEffectType::Blur:
+            {
+                mpFS->singleElementNS(XML_a, XML_blur,
+                    XML_rad, OString::number(rEffect.mnRadius),
+                    XML_grow, rEffect.mbGrow ? "1" : "0");
+            }
+            break;
+            case model::BlipEffectType::ColorChange:
+            {
+                mpFS->startElementNS(XML_a, XML_clrChange, XML_useA, rEffect.mbUseAlpha ? "1" : "0");
+                mpFS->endElementNS(XML_a, XML_clrChange);
+            }
+            break;
+            case model::BlipEffectType::ColorReplace:
+            {
+                mpFS->startElementNS(XML_a, XML_clrRepl);
+                mpFS->endElementNS(XML_a, XML_clrRepl);
+            }
+            break;
+            case model::BlipEffectType::DuoTone:
+            {
+                mpFS->startElementNS(XML_a, XML_duotone);
+                mpFS->endElementNS(XML_a, XML_duotone);
+            }
+            break;
+            case model::BlipEffectType::FillOverlay:
+            {
+                mpFS->singleElementNS(XML_a, XML_fillOverlay);
+            }
+            break;
+            case model::BlipEffectType::Grayscale:
+            {
+                mpFS->singleElementNS(XML_a, XML_grayscl);
+            }
+            break;
+            case model::BlipEffectType::HSL:
+            {
+                mpFS->singleElementNS(XML_a, XML_hsl,
+                    XML_hue, OString::number(rEffect.mnHue),
+                    XML_sat, OString::number(rEffect.mnSaturation),
+                    XML_lum, OString::number(rEffect.mnLuminance));
+            }
+            break;
+            case model::BlipEffectType::Luminance:
+            {
+                mpFS->singleElementNS(XML_a, XML_lum,
+                    XML_bright, OString::number(rEffect.mnBrightness),
+                    XML_contrast, OString::number(rEffect.mnContrast));
+            }
+            break;
+            case model::BlipEffectType::Tint:
+            {
+                mpFS->singleElementNS(XML_a, XML_tint,
+                    XML_hue, OString::number(rEffect.mnHue),
+                    XML_amt, OString::number(rEffect.mnAmount));
+            }
+            break;
+
+            default:
+                break;
+        }
+    }
 
     mpFS->endElementNS(XML_a, XML_blip);
 
