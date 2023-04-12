@@ -725,13 +725,13 @@ void DeleteFields(SfxRequest& rReq, SwWrtShell& rWrtSh)
     }
 
     SwDoc* pDoc = rWrtSh.GetDoc();
-    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::DELBOOKMARK, nullptr);
+    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::DELETE_FIELDS, nullptr);
     rWrtSh.StartAction();
     comphelper::ScopeGuard g(
         [&rWrtSh]
         {
             rWrtSh.EndAction();
-            rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::DELBOOKMARK, nullptr);
+            rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::DELETE_FIELDS, nullptr);
         });
 
     std::vector<const SwFormatRefMark*> aRemovals;

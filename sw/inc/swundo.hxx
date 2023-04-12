@@ -175,6 +175,7 @@ enum class SwUndoId
     DELETE_BOOKMARKS,                  // 143
     UPDATE_FIELD,                      // 144
     UPDATE_FIELDS,                     // 145
+    DELETE_FIELDS,                     // 146
 };
 
 OUString GetUndoComment(SwUndoId eId);
