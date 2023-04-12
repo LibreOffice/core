@@ -161,6 +161,7 @@ public:
 
     // css::beans::XMultiPropertySet
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< css::uno::Any >& Values ) override;
 protected:
     // override setValue methods to handle properties of FontDescriptor
     // css::beans::XFastPropertySet
