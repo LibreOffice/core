@@ -1369,13 +1369,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                     aSet.Put(aSyncSet);
                     aSet.Put(pSdrObj->GetMergedItem(RES_FRM_SIZE));
                     SwTextBoxHelper::syncFlyFrameAttr(*GetFormat(), aSet, pSdrObj);
-
-                    SwTextBoxHelper::synchronizeGroupTextBoxProperty(
-                        &SwTextBoxHelper::changeAnchor, GetFormat(),
-                        GetFormat()->FindRealSdrObject());
-                    SwTextBoxHelper::synchronizeGroupTextBoxProperty(
-                        &SwTextBoxHelper::syncTextBoxSize, GetFormat(),
-                        GetFormat()->FindRealSdrObject());
+                    SwTextBoxHelper::changeAnchor(GetFormat(), pSdrObj);
                 }
                 else
                     SwTextBoxHelper::syncFlyFrameAttr(*GetFormat(), aSyncSet, GetFormat()->FindRealSdrObject());

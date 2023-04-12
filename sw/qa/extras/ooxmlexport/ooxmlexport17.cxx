@@ -21,7 +21,6 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
 
 
 #include <comphelper/configuration.hxx>
@@ -30,7 +29,6 @@
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/propertyvalue.hxx>
 
-#include <queue>
 #include <swmodeltestbase.hxx>
 #include <unotxdoc.hxx>
 
@@ -391,53 +389,6 @@ CPPUNIT_TEST_FIXTURE(Test, testDontAddNewStyles)
 DECLARE_OOXMLEXPORT_TEST(testTdf126287, "tdf126287.docx")
 {
     CPPUNIT_ASSERT_EQUAL(2, getPages());
-}
-
-DECLARE_OOXMLEXPORT_TEST(TestWPGZOrder, "testWPGZOrder.docx")
-{
-    // Check if the load failed.
-    CPPUNIT_ASSERT(mxComponent);
-
-    // Get the WPG
-    uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY_THROW);
-    uno::Reference<beans::XPropertySet> xGroupProperties(xGroup, uno::UNO_QUERY_THROW);
-
-    // Initialize a queue for subgroups
-    std::queue<uno::Reference<drawing::XShapes>> xGroupList;
-    xGroupList.push(xGroup);
-
-    // Every textbox shall be visible.
-    while (xGroupList.size())
-    {
-        // Get the first group
-        xGroup = xGroupList.front();
-        xGroupList.pop();
-        for (sal_Int32 i = 0; i < xGroup->getCount(); ++i)
-        {
-            // Get the child shape
-            uno::Reference<beans::XPropertySet> xChildShapeProperties(xGroup->getByIndex(i),
-                uno::UNO_QUERY_THROW);
-            // Check for textbox
-            if (!xChildShapeProperties->getPropertyValue("TextBox").get<bool>())
-            {
-                // Is this a Group Shape? Put it into the queue.
-                uno::Reference<drawing::XShapes> xInnerGroup(xGroup->getByIndex(i), uno::UNO_QUERY);
-                if (xInnerGroup)
-                    xGroupList.push(xInnerGroup);
-                continue;
-            }
-
-            // Get the textbox properties
-            uno::Reference<beans::XPropertySet> xTextBoxFrameProperties(
-                xChildShapeProperties->getPropertyValue("TextBoxContent"), uno::UNO_QUERY_THROW);
-
-            // Assert that the textbox ZOrder greater than the groupshape
-            CPPUNIT_ASSERT_GREATER(xGroupProperties->getPropertyValue("ZOrder").get<long>(),
-                xTextBoxFrameProperties->getPropertyValue("ZOrder").get<long>());
-            // Before the fix, this failed because that was less, and the textboxes were covered.
-        }
-
-    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf123642_BookmarkAtDocEnd, "tdf123642.docx")
