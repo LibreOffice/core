@@ -268,7 +268,7 @@ void Window::StartTracking( StartTrackingFlags nFlags )
     if ( !mpWindowImpl->mbUseFrameData &&
          (nFlags & (StartTrackingFlags::ScrollRepeat | StartTrackingFlags::ButtonRepeat)) )
     {
-        pSVData->mpWinData->mpTrackTimer = new AutoTimer("vcl::Window pSVData->mpWinData->mpTrackTimer");
+        pSVData->mpWinData->mpTrackTimer.reset(new AutoTimer("vcl::Window pSVData->mpWinData->mpTrackTimer"));
 
         if ( nFlags & StartTrackingFlags::ScrollRepeat )
             pSVData->mpWinData->mpTrackTimer->SetTimeout( MouseSettings::GetScrollRepeat() );
@@ -304,10 +304,7 @@ void Window::EndTracking( TrackingEventFlags nFlags )
         return;
 
     if ( !mpWindowImpl->mbUseFrameData && pSVData->mpWinData->mpTrackTimer )
-    {
-        delete pSVData->mpWinData->mpTrackTimer;
-        pSVData->mpWinData->mpTrackTimer = nullptr;
-    }
+        pSVData->mpWinData->mpTrackTimer.reset();
 
     mpWindowImpl->mpFrameData->mpTrackWin = pSVData->mpWinData->mpTrackWin = nullptr;
     pSVData->mpWinData->mnTrackFlags  = StartTrackingFlags::NONE;

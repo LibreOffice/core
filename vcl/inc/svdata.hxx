@@ -258,7 +258,7 @@ struct ImplSVWinData
     std::vector<VclPtr<Dialog>> mpExecuteDialogs;           ///< Stack of dialogs that are Execute()'d - the last one is the top most one.
     VclPtr<vcl::Window>     mpExtTextInputWin;              // Window, which is in ExtTextInput
     VclPtr<vcl::Window>     mpTrackWin;                     // window, that is in tracking mode
-    AutoTimer*              mpTrackTimer = nullptr;         // tracking timer
+    std::unique_ptr<AutoTimer> mpTrackTimer;                // tracking timer
     std::vector<Image>      maMsgBoxImgList;                // ImageList for MessageBox
     VclPtr<vcl::Window>     mpAutoScrollWin;                // window, that is in AutoScrollMode mode
     VclPtr<vcl::Window>     mpLastWheelWindow;              // window, that last received a mouse wheel event
