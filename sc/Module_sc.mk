@@ -46,6 +46,7 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 	CppunitTest_sc_ucalc_condformat \
 	CppunitTest_sc_ucalc_copypaste \
 	CppunitTest_sc_ucalc_datatransformation \
+	CppunitTest_sc_ucalc_document_themes \
 	CppunitTest_sc_ucalc_formula \
 	CppunitTest_sc_ucalc_parallelism \
 	CppunitTest_sc_ucalc_pivottable \

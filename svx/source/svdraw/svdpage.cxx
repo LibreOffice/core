@@ -1224,7 +1224,7 @@ SdrPageProperties::SdrPageProperties(SdrPage& rSdrPage)
         maProperties.Put(XFillStyleItem(drawing::FillStyle_NONE));
     }
 
-    if (rSdrPage.getSdrModelFromSdrPage().IsWriter() || rSdrPage.IsMasterPage())
+    //if (rSdrPage.getSdrModelFromSdrPage().IsWriter() || rSdrPage.IsMasterPage())
     {
         mpTheme.reset(new model::Theme("Office Theme"));
         auto const* pColorSet = svx::ColorSets::get().getColorSet(u"LibreOffice");
