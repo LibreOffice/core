@@ -180,9 +180,9 @@ void ImplInitSalGDI()
 
             pSalData->mhDitherDIB = GlobalAlloc( GMEM_FIXED, sizeof( BITMAPINFOHEADER ) + 192 );
             pSalData->mpDitherDIB = static_cast<BYTE*>(GlobalLock( pSalData->mhDitherDIB ));
-            pSalData->mpDitherDiff = new tools::Long[ 256 ];
-            pSalData->mpDitherLow = new BYTE[ 256 ];
-            pSalData->mpDitherHigh = new BYTE[ 256 ];
+            pSalData->mpDitherDiff.reset(new tools::Long[ 256 ]);
+            pSalData->mpDitherLow.reset(new BYTE[ 256 ]);
+            pSalData->mpDitherHigh.reset(new BYTE[ 256 ]);
             pSalData->mpDitherDIBData = pSalData->mpDitherDIB + sizeof( BITMAPINFOHEADER );
             memset( pSalData->mpDitherDIB, 0, sizeof( BITMAPINFOHEADER ) );
 
@@ -254,9 +254,9 @@ void ImplInitSalGDI()
 
             pSalData->mhDitherDIB = GlobalAlloc( GMEM_FIXED, nSize );
             pSalData->mpDitherDIB = static_cast<BYTE*>(GlobalLock( pSalData->mhDitherDIB ));
-            pSalData->mpDitherDiff = new tools::Long[ 256 ];
-            pSalData->mpDitherLow = new BYTE[ 256 ];
-            pSalData->mpDitherHigh = new BYTE[ 256 ];
+            pSalData->mpDitherDiff.reset(new tools::Long[ 256 ]);
+            pSalData->mpDitherLow.reset(new BYTE[ 256 ]);
+            pSalData->mpDitherHigh.reset(new BYTE[ 256 ]);
             pSalData->mpDitherDIBData = pSalData->mpDitherDIB + sizeof( BITMAPINFOHEADER ) + ( 256 * sizeof( short ) );
             memset( pSalData->mpDitherDIB, 0, sizeof( BITMAPINFOHEADER ) );
 
@@ -333,9 +333,9 @@ void ImplFreeSalGDI()
         GlobalUnlock( pSalData->mhDitherDIB );
         GlobalFree( pSalData->mhDitherDIB );
         pSalData->mhDitherDIB = nullptr;
-        delete[] pSalData->mpDitherDiff;
-        delete[] pSalData->mpDitherLow;
-        delete[] pSalData->mpDitherHigh;
+        pSalData->mpDitherDiff.reset();
+        pSalData->mpDitherLow.reset();
+        pSalData->mpDitherHigh.reset();
     }
 
     DeleteSysColorList();

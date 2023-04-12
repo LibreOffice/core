@@ -86,9 +86,9 @@ public:
     HGLOBAL                 mhDitherDIB;            // dither memory handle
     BYTE*                   mpDitherDIB;            // dither memory
     BYTE*                   mpDitherDIBData;        // beginning of DIB data
-    tools::Long*            mpDitherDiff;           // Dither mapping table
-    BYTE*                   mpDitherLow;            // Dither mapping table
-    BYTE*                   mpDitherHigh;           // Dither mapping table
+    std::unique_ptr<tools::Long[]> mpDitherDiff;    // Dither mapping table
+    std::unique_ptr<BYTE[]> mpDitherLow;            // Dither mapping table
+    std::unique_ptr<BYTE[]> mpDitherHigh;           // Dither mapping table
     HHOOK                   mhSalObjMsgHook;        // hook to get interesting msg for SalObject
     HWND                    mhWantLeaveMsg;         // window handle, that want a MOUSELEAVE message
     AutoTimer*              mpMouseLeaveTimer;      // Timer for MouseLeave Test
