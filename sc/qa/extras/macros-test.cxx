@@ -926,7 +926,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf116127)
             "  oActiveSheet = ThisComponent.CurrentController.ActiveSheet\n"
             "  oActiveCell = oActiveSheet.getCellRangeByName(\"A1\")\n"
             "  oActiveCell.setString(\"Italic Test\")\n"
-            // Create a text cursor and and change the first letter to italic
+            // Create a text cursor and change the first letter to italic
             "  oCursor = oActiveCell.Text.createTextCursor()\n"
             "  oCursor.gotoStart(False)\n"
             "  oCursor.goRight(1, True)\n"
