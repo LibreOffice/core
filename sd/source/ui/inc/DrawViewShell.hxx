@@ -28,6 +28,7 @@
 #include <unotools/caserotate.hxx>
 #include <unotools/options.hxx>
 #include <sddllapi.h>
+#include <viewopt.hxx>
 
 namespace svx::sidebar { class SelectionChangeHandler; }
 namespace com::sun::star::lang { class XEventListener; }
@@ -373,6 +374,7 @@ public:
 
     bool IsInSwitchPage() const { return mbIsInSwitchPage; }
 
+    const SdViewOptions& GetViewOptions() const { return maViewOptions; }
     //move this method to ViewShell.
     //void  NotifyAccUpdate();
 protected:
@@ -498,8 +500,7 @@ private:
     ::std::unique_ptr< AnnotationManager > mpAnnotationManager;
     ::std::unique_ptr< ViewOverlayManager > mpViewOverlayManager;
     std::vector<std::unique_ptr<SdrExternalToolEdit>> m_ExternalEdits;
-    // The colour of the area behind the slide (used to be called "Wiese")
-    Color mnAppBackgroundColor;
+    SdViewOptions maViewOptions;
 };
 
     /// Merge the background properties together and deposit the result in rMergeAttr
