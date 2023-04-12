@@ -1081,7 +1081,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf122323_largeSwingAngle)
     // the end angle and used it modulo 360, no full ellipse was drawn.
     loadFromURL(u"tdf122323_swingAngle_larger360deg.pptx");
     uno::Reference<drawing::XShape> xShape(getShape(0));
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     SdrObjCustomShape& rSdrObjCustomShape(
         static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
     EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
