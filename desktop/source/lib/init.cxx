@@ -26,8 +26,14 @@
 #include <postmac.h>
 #endif
 
+#undef HAVE_MALLOC_TRIM
+
 #ifdef LINUX
 #include <fcntl.h>
+#if defined __GLIBC__
+#  include <malloc.h>
+#  define HAVE_MALLOC_TRIM
+#endif
 #endif
 
 #ifdef ANDROID
@@ -3153,6 +3159,12 @@ static char* lo_extractRequest(LibreOfficeKit* /*pThis*/, const char* pFilePath)
 static void lo_trimMemory(LibreOfficeKit* /* pThis */, int nTarget)
 {
     vcl::lok::trimMemory(nTarget);
+    if (nTarget > 1000)
+    {
+#ifdef HAVE_MALLOC_TRIM
+        malloc_trim(0);
+#endif
+    }
 }
 
 static void lo_registerCallback (LibreOfficeKit* pThis,
