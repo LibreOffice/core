@@ -160,7 +160,6 @@ next_priority:
                         || !strcmp( pTask->GetDebugName(), "desktop::Desktop m_firstRunTimer" )
                         || !strcmp( pTask->GetDebugName(), "DrawWorkStartupTimer" )
                         || !strcmp( pTask->GetDebugName(), "editeng::ImpEditEngine aOnlineSpellTimer" )
-                        || !strcmp( pTask->GetDebugName(), "ImplHandleMouseMsg SalData::mpMouseLeaveTimer" )
                         || !strcmp( pTask->GetDebugName(), "sc ScModule IdleTimer" )
                         || !strcmp( pTask->GetDebugName(), "sd::CacheConfiguration maReleaseTimer" )
                         || !strcmp( pTask->GetDebugName(), "svtools::GraphicCache maReleaseTimer" )

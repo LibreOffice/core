@@ -256,7 +256,6 @@ SalData::SalData()
     mpDitherHigh = nullptr;     // Dither mapping table
     mhSalObjMsgHook = nullptr;  // hook to get interesting msg for SalObject
     mhWantLeaveMsg = nullptr;   // window handle, that want a MOUSELEAVE message
-    mpMouseLeaveTimer = nullptr; // Timer for MouseLeave Test
     mpInstance = nullptr;  // pointer of first instance
     mpFirstFrame = nullptr;     // pointer of first frame
     mpFirstObject = nullptr;    // pointer of first object window

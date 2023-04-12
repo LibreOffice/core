@@ -91,7 +91,6 @@ public:
     std::unique_ptr<BYTE[]> mpDitherHigh;           // Dither mapping table
     HHOOK                   mhSalObjMsgHook;        // hook to get interesting msg for SalObject
     HWND                    mhWantLeaveMsg;         // window handle, that want a MOUSELEAVE message
-    AutoTimer*              mpMouseLeaveTimer;      // Timer for MouseLeave Test
     WinSalInstance*         mpInstance;
     WinSalFrame*            mpFirstFrame;           // pointer of first frame
     WinSalObject*           mpFirstObject;          // pointer of first object window
@@ -200,8 +199,6 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 #define SAL_OBJECT_CLASSNAMEW       L"SALOBJECT"
 #define SAL_OBJECT_CHILDCLASSNAMEW  L"SALOBJECTCHILD"
 #define SAL_COM_CLASSNAMEW          L"SALCOMWND"
-
-#define SAL_MOUSELEAVE_TIMEOUT      300
 
 // wParam == bWait; lParam == 0
 #define SAL_MSG_THREADYIELD         (WM_USER+111)
