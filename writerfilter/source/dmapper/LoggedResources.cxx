@@ -147,10 +147,6 @@ void LoggedStream::endShape()
 #endif
 }
 
-void LoggedStream::startTextBoxContent() { lcl_startTextBoxContent(); }
-
-void LoggedStream::endTextBoxContent() { lcl_endTextBoxContent(); }
-
 void LoggedStream::text(const sal_uInt8* data, size_t len)
 {
 #ifdef DBG_UTIL
