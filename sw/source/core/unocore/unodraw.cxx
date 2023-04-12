@@ -1164,22 +1164,19 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             }
             else if (pEntry->nWID == FN_TEXT_BOX)
             {
-                auto pObj = SdrObject::getSdrObjectFromXShape(mxShape);
                 if (pEntry->nMemberId == MID_TEXT_BOX)
                 {
                     bool bValue(false);
                     aValue >>= bValue;
-
                     if (bValue)
-                        SwTextBoxHelper::create(pFormat, pObj);
+                        SwTextBoxHelper::create(pFormat, GetSvxShape()->GetSdrObject());
                     else
-                        SwTextBoxHelper::destroy(pFormat, pObj);
+                        SwTextBoxHelper::destroy(pFormat, GetSvxShape()->GetSdrObject());
                 }
                 else if (pEntry->nMemberId == MID_TEXT_BOX_CONTENT)
                 {
-                    if (aValue.getValueType()
-                        == cppu::UnoType<uno::Reference<text::XTextFrame>>::get())
-                        SwTextBoxHelper::set(pFormat, pObj,
+                    if (aValue.getValueType() == cppu::UnoType<uno::Reference<text::XTextFrame>>::get())
+                        SwTextBoxHelper::set(pFormat, GetSvxShape()->GetSdrObject(),
                                              aValue.get<uno::Reference<text::XTextFrame>>());
                     else
                         SAL_WARN( "sw.uno", "This is not a TextFrame!" );
@@ -1355,21 +1352,10 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     }
                     if( bSetAttr )
                         pFormat->SetFormatAttr(aSet);
-
-                    // If this property is an anchor change, and there is a group shape with textboxes
-                    // do anchor sync in time unless the anchor sync in the porfly will cause crash during
-                    // layout calculation (When importing an inline shape in docx via dmapper).
-                    if (pFormat->Which() == RES_DRAWFRMFMT && pFormat->GetOtherTextBoxFormats()
-                        && pFormat->GetOtherTextBoxFormats()->GetTextBoxCount()
-                               > o3tl::make_unsigned(1))
-                        SwTextBoxHelper::synchronizeGroupTextBoxProperty(
-                            SwTextBoxHelper::changeAnchor, pFormat,
-                            SdrObject::getSdrObjectFromXShape(mxShape));
                 }
                 else
                     pFormat->SetFormatAttr(aSet);
             }
-
             // We have a pFormat and a pEntry as well: try to sync TextBox property.
             SwTextBoxHelper::syncProperty(pFormat, pEntry->nWID, pEntry->nMemberId, aValue,
                                           SdrObject::getSdrObjectFromXShape(mxShape));
