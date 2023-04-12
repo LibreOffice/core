@@ -1131,8 +1131,6 @@ public:
     /// If the next tab should be ignored, used for footnotes.
     bool m_bCheckFirstFootnoteTab;
     bool m_bIgnoreNextTab;
-    /// Pending floating tables: they may be converted to text frames at the section end.
-    std::vector<FloatingTableInfo> m_aPendingFloatingTables;
 
     /// Paragraphs with anchored objects in the current section.
     std::vector<AnchoredObjectsInfo> m_aAnchoredObjectAnchors;

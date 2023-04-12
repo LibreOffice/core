@@ -2577,10 +2577,6 @@ bool SwWW8ImplReader::FloatingTableConversion(WW8PLCFx_Cp_FKP* pPap)
 {
     // This is ww8 version of the code deciding if the table needs to be
     // in a floating frame.
-    // For OOXML code, see SectionPropertyMap::FloatingTableConversion in
-    // writerfilter/source/dmapper/PropertyMap.cxx
-    // The two should do ~same, so if you make changes here, please check
-    // that the other is in sync.
 
     // Note that this is just a list of heuristics till sw core can have a
     // table that is floating and can span over multiple pages at the same

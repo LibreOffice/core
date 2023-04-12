@@ -59,22 +59,6 @@
 #include <utility>
 #endif
 
-namespace
-{
-bool IsFlySplitAllowed()
-{
-    bool bRet
-        = officecfg::Office::Writer::Filter::Import::DOCX::ImportFloatingTableAsSplitFly::get();
-
-    if (bRet)
-    {
-        bRet = getenv("SW_DISABLE_FLY_SPLIT") == nullptr;
-    }
-
-    return bRet;
-}
-}
-
 namespace writerfilter::dmapper {
 
 using namespace ::com::sun::star;
@@ -375,29 +359,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         comphelper::SequenceAsHashMap aGrabBag;
 
-        if (nullptr != m_rDMapper_Impl.getTableManager().getCurrentTableRealPosition())
-        {
-            TablePositionHandler *pTablePositions = m_rDMapper_Impl.getTableManager().getCurrentTableRealPosition();
-
-            uno::Sequence< beans::PropertyValue  > aGrabBagTS{
-                comphelper::makePropertyValue("bottomFromText", pTablePositions->getBottomFromText()),
-                comphelper::makePropertyValue("horzAnchor", pTablePositions->getHorzAnchor()),
-                comphelper::makePropertyValue("leftFromText", pTablePositions->getLeftFromText()),
-                comphelper::makePropertyValue("rightFromText", pTablePositions->getRightFromText()),
-                comphelper::makePropertyValue("tblpX", pTablePositions->getX()),
-                comphelper::makePropertyValue("tblpXSpec", pTablePositions->getXSpec()),
-                comphelper::makePropertyValue("tblpY", pTablePositions->getY()),
-                comphelper::makePropertyValue("tblpYSpec", pTablePositions->getYSpec()),
-                comphelper::makePropertyValue("topFromText", pTablePositions->getTopFromText()),
-                comphelper::makePropertyValue("vertAnchor", pTablePositions->getVertAnchor())
-            };
-
-            if (!IsFlySplitAllowed())
-            {
-                aGrabBag["TablePosition"] <<= aGrabBagTS;
-            }
-        }
-        else if (bConvertToFloatingInFootnote)
+        if (bConvertToFloatingInFootnote)
         {
             // define empty "TablePosition" to avoid export temporary floating
             aGrabBag["TablePosition"] = uno::Any();
@@ -1587,10 +1549,8 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                     comphelper::makePropertyValue("IsFollowingTextFlow", true));
             }
 
-            if (IsFlySplitAllowed())
-            {
-                aFrameProperties.push_back(comphelper::makePropertyValue("IsSplitAllowed", true));
-            }
+            // A text frame created for floating tables is always allowed to split.
+            aFrameProperties.push_back(comphelper::makePropertyValue("IsSplitAllowed", true));
 
             // In case the document ends with a table, we're called after
             // SectionPropertyMap::CloseSectionGroup(), so we'll have no idea
@@ -1605,35 +1565,25 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
             m_aTableProperties->getValue(TablePropertyMap::TABLE_WIDTH, nTableWidth);
             sal_Int32 nTableWidthType = text::SizeType::FIX;
             m_aTableProperties->getValue(TablePropertyMap::TABLE_WIDTH_TYPE, nTableWidthType);
-            // Split flys don't need to go via m_aPendingFloatingTables.
-            if (m_rDMapper_Impl.GetSectionContext() && nestedTableLevel <= 1 && !m_rDMapper_Impl.IsInHeaderFooter() && !IsFlySplitAllowed())
+            // m_xText points to the body text, get the current xText from m_rDMapper_Impl, in case e.g. we would be in a header.
+            uno::Reference<text::XTextAppendAndConvert> xTextAppendAndConvert(m_rDMapper_Impl.GetTopTextAppend(), uno::UNO_QUERY);
+            // Only execute the conversion if the table is not anchored at
+            // the start of an outer table cell, that's not yet
+            // implemented.
+            // Multi-page floating tables works if an outer/toplevel table is floating, but not
+            // when an inner table would float.
+            bool bToplevelSplitFly = nestedTableLevel <= 1;
+            if (xTextAppendAndConvert.is() && (!bTableStartsAtCellStart || bToplevelSplitFly))
             {
-                m_rDMapper_Impl.m_aPendingFloatingTables.emplace_back(xStart, xEnd,
-                                comphelper::containerToSequence(aFrameProperties),
-                                nTableWidth, nTableWidthType, bConvertToFloating);
-            }
-            else
-            {
-                // m_xText points to the body text, get the current xText from m_rDMapper_Impl, in case e.g. we would be in a header.
-                uno::Reference<text::XTextAppendAndConvert> xTextAppendAndConvert(m_rDMapper_Impl.GetTopTextAppend(), uno::UNO_QUERY);
-                // Only execute the conversion if the table is not anchored at
-                // the start of an outer table cell, that's not yet
-                // implemented.
-                // Multi-page floating tables works if an outer/toplevel table is floating, but not
-                // when an inner table would float.
-                bool bToplevelSplitFly = IsFlySplitAllowed() && nestedTableLevel <= 1;
-                if (xTextAppendAndConvert.is() && (!bTableStartsAtCellStart || bToplevelSplitFly))
-                {
-                    std::deque<css::uno::Any> aFramedRedlines = m_rDMapper_Impl.m_aStoredRedlines[StoredRedlines::FRAME];
-                    std::vector<sal_Int32> redPos, redLen;
-                    std::vector<OUString> redCell;
-                    std::vector<OUString> redTable;
-                    BeforeConvertToTextFrame(aFramedRedlines, redPos, redLen, redCell, redTable);
+                std::deque<css::uno::Any> aFramedRedlines = m_rDMapper_Impl.m_aStoredRedlines[StoredRedlines::FRAME];
+                std::vector<sal_Int32> redPos, redLen;
+                std::vector<OUString> redCell;
+                std::vector<OUString> redTable;
+                BeforeConvertToTextFrame(aFramedRedlines, redPos, redLen, redCell, redTable);
 
-                    xTextAppendAndConvert->convertToTextFrame(xStart, xEnd, comphelper::containerToSequence(aFrameProperties));
+                xTextAppendAndConvert->convertToTextFrame(xStart, xEnd, comphelper::containerToSequence(aFrameProperties));
 
-                    AfterConvertToTextFrame(m_rDMapper_Impl, aFramedRedlines, redPos, redLen, redCell, redTable);
-                }
+                AfterConvertToTextFrame(m_rDMapper_Impl, aFramedRedlines, redPos, redLen, redCell, redTable);
             }
         }
 
