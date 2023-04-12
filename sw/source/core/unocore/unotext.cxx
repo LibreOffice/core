@@ -2199,7 +2199,13 @@ lcl_ApplyCellProperties(
         {
             try
             {
-                xCellPS->setPropertyValue(rName, rValue);
+                static const std::initializer_list<std::u16string_view> vDenylist = {
+                    u"LeftMargin",
+                };
+                if (std::find(vDenylist.begin(), vDenylist.end(), rName) == vDenylist.end())
+                {
+                    xCellPS->setPropertyValue(rName, rValue);
+                }
             }
             catch (const uno::Exception&)
             {
